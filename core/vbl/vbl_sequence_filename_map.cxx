@@ -22,7 +22,7 @@
 #include <vbl/vbl_reg_exp.h>
 #include <vbl/vbl_file_iterator.h>
 
-static bool debug = 1;
+const bool debug = 0;
 
 static
 struct {
@@ -310,9 +310,12 @@ void vbl_sequence_filename_map::parse()
 
 vcl_ostream& vbl_sequence_filename_map::print (vcl_ostream& s) const
 {
-  s << vbl_sprintf("vbl_sequence_filename_map : %s%s%s [%i:%i:%i]",
-                   image_dir_.c_str(), basename_.c_str(), index_format_.c_str(), image_extension_.c_str(),
-                   indices_[0], indices_[1] - indices_[0], indices_.back());
+  s << "vbl_sequence_filename_map : " << image_dir_ << basename_ << index_format_ << image_extension_ << " ";
+  s << "[" << indices_[0] << ":" << indices_[1] - indices_[0] << ":" << indices_.back() << "]" << vcl_endl;
+
+//  s << vbl_sprintf("vbl_sequence_filename_map : %s%s%s [%i:%i:%i]",
+//                   image_dir_.c_str(), basename_.c_str(), index_format_.c_str(), image_extension_.c_str(),
+//                   indices_[0], indices_[1] - indices_[0], indices_.back());
   return s;
 }
 
