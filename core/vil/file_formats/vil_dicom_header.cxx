@@ -10,6 +10,7 @@
 
 #include "vil2_dicom_header.h"
 #include <vil2/vil2_stream.h>
+#include <vcl_iostream.h>
 
 //================================================================
 // Default constructor
