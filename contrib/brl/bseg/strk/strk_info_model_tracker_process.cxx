@@ -6,7 +6,7 @@
 #include <vnl/vnl_matlab_print2.h>
 #include <vtol/vtol_topology_object.h>
 #include <vtol/vtol_vertex.h>
-#include <vtol/Vtol_edge.h>
+#include <vtol/vtol_edge.h>
 #include <vtol/vtol_vertex_2d.h>
 #include <vtol/vtol_face_2d.h>
 #include <vil1/vil1_memory_image_of.h>
