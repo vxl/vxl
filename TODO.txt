@@ -17,10 +17,10 @@ entry in the CHANGES.txt file as well.
 
 * upgrade netlib to use LAPACK instead of LINPACK
 
-vnl_algo uses the netlib library to provide good numerical algorithms. At
-the time, it was though that the much newer LAPACK was better than the
-LINPACK library. However, it was faster to get something working with
-LINPACK, since it had less dependencies than LAPACK. Now, LAPACK's
+vnl_algo uses the netlib library to provide good numerical algorithms.
+During VNL's design, it was though that the much newer LAPACK was better
+than the LINPACK library. However, it was faster to get something working
+with LINPACK, since it had less dependencies than LAPACK. Now, LAPACK's
 superiority is undisputed. LAPACK is faster, and more accurate.
 
 Note that vnl does not use BLAS, but does its own vector and matrix
