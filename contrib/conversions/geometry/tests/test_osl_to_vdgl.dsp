@@ -122,6 +122,11 @@ LINK32=link.exe
 # Begin Group "Source Files"
 # Begin Source File
 
+SOURCE=.\test_driver.cxx
+
+# End Source File
+# Begin Source File
+
 SOURCE=.\test_osl_to_vdgl.cxx
 
 # End Source File
