@@ -10,6 +10,7 @@ MINI_PROG_SOURCES += vnl_polyroots.cxx
 MINI_PROG_SOURCES += vnl_rosenbrock.cxx
 MINI_PROG_SOURCES += vnl_svd.cxx
 MINI_PROG_SOURCES += vnl_lsqr_test.cxx
+MINI_PROG_SOURCES += vnl_svd_economy.cxx
 
 ################################
 include ${IUEROOT}/config/top.mk
