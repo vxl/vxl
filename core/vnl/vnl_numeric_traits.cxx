@@ -1,6 +1,6 @@
 //-*- c++ -*-------------------------------------------------------------------
 #ifdef __GNUC__
-#pragma implementation "numeric_traits.h"
+#pragma implementation "vnl_numeric_traits.h"
 #endif
 //
 // Class: vnl_numeric_traits
@@ -12,7 +12,7 @@
 //-----------------------------------------------------------------------------
 
 #include <vnl/vnl_numeric_traits.h>
-#include <vcl/vcl_complex.h>
+#include <vnl/vnl_complex.h>
 
 //#if defined(VCL_SUNPRO_CC)
 //# define signed 
@@ -26,9 +26,10 @@
 # define VCL_STATIC_CONST_REINIT_INT(x) = x
 #endif
 
-#if defined(VCL_VC60) //WIN32)
-# define VCL_IMPLEMENT_STATIC_CONSTS 1
-# define VCL_STATIC_CONST_REINIT_INT(x) = x
+#if defined(_MSC_VER)
+// VC60
+#define VCL_IMPLEMENT_STATIC_CONSTS 1
+#define VCL_STATIC_CONST_REINIT_INT(x) = x
 #endif
 
 #if VCL_IMPLEMENT_STATIC_CONSTS
@@ -76,9 +77,9 @@ const double vnl_numeric_traits<double>::one VCL_STATIC_CONST_REINIT_INT(1.0);
 //--------------------------------------------------------------------------------
 
 // declaring these const crashes 2.7.2
-vcl_complex<double> vnl_numeric_traits<vcl_complex<double> >::zero = 0.0;
-vcl_complex<double> vnl_numeric_traits<vcl_complex<double> >::one = 1.0;
+vnl_double_complex vnl_numeric_traits<vnl_double_complex >::zero = 0.0;
+vnl_double_complex vnl_numeric_traits<vnl_double_complex >::one = 1.0;
 
-vcl_complex<float> vnl_numeric_traits<vcl_complex<float> >::zero = 0.0;
-vcl_complex<float> vnl_numeric_traits<vcl_complex<float> >::one = 1.0;
+vnl_float_complex vnl_numeric_traits<vnl_float_complex >::zero = 0.0;
+vnl_float_complex vnl_numeric_traits<vnl_float_complex >::one = 1.0;
 

@@ -31,7 +31,7 @@
 
 typedef size_t	    vcl_size_t;
 // fixme this needs configging
-#ifndef VCL_WIN32
+#ifndef _MSC_VER
 typedef ssize_t	    vcl_ssize_t;
 typedef uid_t	    vcl_uid_t;
 typedef gid_t	    vcl_gid_t;
@@ -56,12 +56,12 @@ typedef int         vcl_intptr_t;
 
 // sys/stat.h:
 #include <sys/stat.h>
-#ifdef VCL_WIN32
+#ifdef _MSC_VER
 typedef struct _stat vcl_stat_t;
 #else
 typedef struct stat vcl_stat_t;
 #endif
-#ifndef VCL_WIN32
+#ifndef _MSC_VER
 typedef mode_t vcl_mode_t;
 #else
 typedef int vcl_mode_t;

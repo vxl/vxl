@@ -84,10 +84,10 @@ public:
   }
 
   // iterators
-  typedef vnl_vector<T>::iterator iterator;
+  typedef typename vnl_vector<T>::iterator iterator;
   inline iterator begin() { return diagonal_.begin(); }
   inline iterator end() { return diagonal_.end(); }
-  typedef vnl_vector<T>::const_iterator const_iterator;
+  typedef typename vnl_vector<T>::const_iterator const_iterator;
   inline const_iterator begin() const { return diagonal_.begin(); }
   inline const_iterator end() const { return diagonal_.end(); }
 

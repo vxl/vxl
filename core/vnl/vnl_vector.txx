@@ -595,7 +595,7 @@ T cos_angle(vnl_vector<T> const& a, vnl_vector<T> const& b) {
   T a_b = sqrt( a.squared_magnitude() * b.squared_magnitude() );
   return T(ab)/T(a_b);
 #else
-  double/*abs_t*/ a_b = sqrt( a.squared_magnitude() * b.squared_magnitude() );
+  double/*abs_t*/ a_b = sqrt( double(a.squared_magnitude() * b.squared_magnitude()) );
   return T( ab * abs_t(1.0 / a_b) );
 #endif
 }

@@ -32,15 +32,15 @@ bool vnl_math_isfinite(const vcl_complex<float>&);
 bool vnl_math_isfinite(const vcl_complex<double>&);
 
 // abs
-inline float    vnl_math_abs(vnl_complex<float> const& x) { return ::abs(x); }
-inline double   vnl_math_abs(vnl_complex<double> const& x) { return ::abs(x); }
+inline float    vnl_math_abs(vnl_complex<float> const& x) { return std::abs(x); }
+inline double   vnl_math_abs(vnl_complex<double> const& x) { return std::abs(x); }
 
 // sqr (square)
 inline vnl_complex<float>  vnl_math_sqr(vnl_complex<float> const& x) { return x*x; }
 inline vnl_complex<double> vnl_math_sqr(vnl_complex<double> const& x) { return x*x; }
 
 // squared_magnitude
-inline float    vnl_math_squared_magnitude(vnl_complex<float> const& x) { return ::norm(x); }
-inline double   vnl_math_squared_magnitude(vnl_complex<double> const& x) { return ::norm(x); }
+inline float    vnl_math_squared_magnitude(vnl_complex<float> const& x) { return std::norm(x); }
+inline double   vnl_math_squared_magnitude(vnl_complex<double> const& x) { return std::norm(x); }
 
 #endif

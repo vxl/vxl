@@ -17,9 +17,9 @@
 # include <vcl/gcc-libstdcxx-v3/vcl_map.txx>
 #elif defined(VCL_SUNPRO_CC)
 # include <vcl/sunpro/vcl_map.txx>
-//#elif defined(VCL_SGI_CC)
-//# include <vcl/sgi/vcl_map.txx>
-#elif defined(VCL_WIN32)
+#elif defined(VCL_SGI_CC)
+# include <vcl/sgi/vcl_map.txx>
+#elif defined(_MSC_VER)
 # include <vcl/win32/vcl_map.txx>
 #else
   error "USE_NATIVE_STL with unknown compiler"

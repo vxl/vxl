@@ -152,16 +152,16 @@ inline float    vnl_math_squared_magnitude(float x) { return x*x; }
 inline double   vnl_math_squared_magnitude(double x) { return x*x; }
 
 // squareroot
-inline float  vnl_math_sqrt(float x) { return (float)sqrt(x); }
-inline double vnl_math_sqrt(double x) { return sqrt(x); }
+inline float  vnl_math_sqrt(float x) { return (float)sqrt((double)x); }
+inline double vnl_math_sqrt(double x) { return sqrt((double)x); }
 
 // cuberoot
 inline float  vnl_math_cuberoot(float a) { return float((a<0) ? -exp(log(-a)/3) : exp(log(a)/3)); }
 inline double vnl_math_cuberoot(double a) { return (a<0) ? -exp(log(-a)/3) : exp(log(a)/3); }
 
 // hypotenuse
-inline double vnl_math_hypot(int x, int y) { return sqrt(x*x + y*y); }
-inline float  vnl_math_hypot(float x, float y) { return (float)sqrt(x*x + y*y); }
+inline double vnl_math_hypot(int x, int y) { return sqrt((double)(x*x + y*y)); }
+inline float  vnl_math_hypot(float x, float y) { return (float)sqrt(double(x*x + y*y)); }
 inline double vnl_math_hypot(double x, double y) { return sqrt(x*x + y*y); }
 
 #endif 

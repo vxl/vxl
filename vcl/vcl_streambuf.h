@@ -21,9 +21,6 @@
 # include <streambuf.h>
 # define vcl_streambuf streambuf
 
-#elif defined(VCL_SGI_CC) // <= 7
-# include <iostream.h>
-# define vcl_streambuf streambuf
 
 #else
 # include <streambuf>

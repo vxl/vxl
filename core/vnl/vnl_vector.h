@@ -131,7 +131,7 @@ public:
   vnl_vector<T>& update (vnl_vector<T> const&, unsigned int start=0);
 
   // norms etc
-  typedef vnl_c_vector<T>::abs_t abs_t;
+  typedef typename vnl_c_vector<T>::abs_t abs_t;
   abs_t squared_magnitude() const { return vnl_c_vector<T>::two_nrm2(begin(), size()); }
   abs_t magnitude() const { return two_norm(); }
   abs_t one_norm() const { return vnl_c_vector<T>::one_norm(begin(), size()); }
@@ -318,7 +318,7 @@ inline void vnl_vector<T>::set_t(T const& tt){
 template <class T> vcl_ostream& operator<< (vcl_ostream &, vnl_vector<T> const&);
 template <class T> vcl_istream& operator>> (vcl_istream &, vnl_vector<T>      &);
 
-#if defined(VCL_SGI_CC) || defined(VCL_GCC_27)
+#if  defined(VCL_GCC_27)
 // The emulation STL provides operator!= in vcl_functional.h; it's wrong, but
 // these compilers are old so let them be.
 #else // ISO:

@@ -8,7 +8,7 @@
 #include <vcl/vcl_iostream.h>
 
 // include compiler header.
-#if defined(VCL_GCC_27) || defined(VCL_GCC_WITH_LIBSTDCXX_V2) || defined(VCL_SGI_CC)
+#if defined(VCL_GCC_27) || defined(VCL_GCC_WITH_LIBSTDCXX_V2) 
 # include <strstream.h>
 #else // -------------------- ISO
 # include <strstream>

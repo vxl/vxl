@@ -6,7 +6,7 @@
 
 #include <vnl/vnl_math.h>
 
-#if defined(VCL_WIN32)
+#if defined(_MSC_VER)
 # include <Float.h> // for 'isnan' and 'finite'
 // # define isnan _isnan
 # define finite _finite
@@ -63,14 +63,14 @@ bool vnl_math_isnan(double x)
 // -- Return true if x is neither NaN nor Inf.
 bool vnl_math_isfinite(double x) 
 {
-#if defined(VCL_WIN32)
+#if defined(_MSC_VER)
   return finite(x) != 0; // quell performance warning -- fsm
 #else
   return finite(x);
 #endif
 }
 
-#if defined(VCL_WIN32)
+#if defined(_MSC_VER)
 inline bool isnan(double x)
 {
   return !(x == x);

@@ -17,8 +17,8 @@
 # include <vcl/gcc-libstdcxx-v3/vcl_utility.txx>
 #elif defined(VCL_SUNPRO_CC)
 # include <vcl/sunpro/vcl_utility.txx>
-//#elif defined(VCL_SGI_CC)
-//# include <vcl/sgi/vcl_utility.txx>
+#elif defined(VCL_SGI_CC)
+# include <vcl/sgi/vcl_utility.txx>
 #elif defined(VCL_WIN32)
 # include <vcl/win32/vcl_utility.txx>
 #else

@@ -169,7 +169,7 @@ public:
   void scale_column(unsigned col, T value);
   
   // norms etc. see vnl_c_vector<T> for the meaning of the norms.
-  typedef vnl_c_vector<T>::abs_t abs_t;
+  typedef typename vnl_c_vector<T>::abs_t abs_t;
   abs_t fro_norm() const { return vnl_c_vector<T>::two_norm(begin(), size()); }
   abs_t one_norm() const { return vnl_c_vector<T>::one_norm(begin(), size()); }
   abs_t inf_norm() const { return vnl_c_vector<T>::inf_norm(begin(), size()); }
@@ -372,7 +372,7 @@ inline vnl_matrix<T> operator* (T const& value, vnl_matrix<T> const& m) {
 
 //--------------------------------------------------------------------------------
 
-#if defined(VCL_SGI_CC) || defined(VCL_GCC_27)
+#if defined(VCL_GCC_27)
 // The emulation STL provides operator!= in vcl_functional.h; it's wrong, but
 // these compilers are old so let them be.
 #else // ISO:

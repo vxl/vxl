@@ -553,7 +553,7 @@ T cos_angle (vnl_matrix<T> const& a, vnl_matrix<T> const& b) {
   //  Look, goddamit, abs_t is right.  If your compiler can't deal 
   //  with it, ifdef that baby outta there.   My compiler is cleverer than
   //  yours, and can't handle that whole double thing.
-  abs_t a_b = (abs_t)sqrt( vnl_math_abs(inner_product(a,a) * inner_product(b,b)) );
+  abs_t a_b = (abs_t)sqrt( (double)vnl_math_abs(inner_product(a,a) * inner_product(b,b)) );
 
   return T( ab / a_b);
 }
@@ -637,7 +637,7 @@ void vnl_matrix<T>::normalize_rows()
       vnl_numeric_traits<vnl_numeric_traits<T>::abs_t>::real_t scale = 1.0/sqrt(norm);
       for (unsigned j = 0; j < this->num_cols; j++) {
         // FIXME need correct rounding here
-#ifdef VCL_WIN32
+#if defined(VCL_WIN32) || defined(VCL_SGI_CC_7)
         this->data[i][j] *= scale;
 #else
         this->data[i][j] = T(this->data[i][j] * scale);
@@ -661,7 +661,7 @@ void vnl_matrix<T>::normalize_columns()
       vnl_numeric_traits<vnl_numeric_traits<T>::abs_t>::real_t scale = 1.0/sqrt(norm);
       for (unsigned i = 0; i < this->num_rows; i++) {
         // FIXME need correct rounding here
-#ifdef VCL_WIN32
+#if defined (VCL_WIN32) || defined(VCL_SGI_CC_7)
         this->data[i][j] *= scale;
 #else
         this->data[i][j] = T(this->data[i][j] * scale);
@@ -1339,11 +1339,6 @@ void vnl_matrix<T>::inplace_transpose()
   this->num_cols = m;
 }
 
-#if VCL_CAN_DO_STATIC_TEMPLATE_MEMBER
-template <class T>
-char * vnl_matrix<T>::print_format = 0;
-#endif
-
 //--------------------------------------------------------------------------------
 
 #if defined (VCL_SUNPRO_CC)
@@ -1351,16 +1346,8 @@ char * vnl_matrix<T>::print_format = 0;
 # define VCL_INSTANTIATE_INLINE(fn_decl) template  fn_decl
 #endif
 
-// complain to fsm@robots.ox.ac.uk about this.
-#if defined(__sgi) && (_COMPILER_VERSION == 721)
-# undef VCL_INSTANTIATE_STATIC_TEMPLATE_MEMBER
-# undef VCL_UNINSTANTIATE_STATIC_TEMPLATE_MEMBER
-# define VCL_INSTANTIATE_STATIC_TEMPLATE_MEMBER(x) /* */
-# define VCL_UNINSTANTIATE_STATIC_TEMPLATE_MEMBER(x) /* */
-#endif
-
-#define VNL_MATRIX_INSTANTIATE(T) \
-VCL_INSTANTIATE_STATIC_TEMPLATE_MEMBER(char * vnl_matrix<T >::print_format = 0); \
+#define VNL_MATRIX_INSTANTIATE_internal(T) \
+VCL_INSTANTIATE_STATIC_TEMPLATE_MEMBER(template <> char * vnl_matrix<T >::print_format = 0); \
 template class vnl_matrix<T >; \
 VCL_UNINSTANTIATE_STATIC_TEMPLATE_MEMBER(vnl_matrix<T >::print_format); \
 template vnl_matrix<T > operator-(T const &, vnl_matrix<T > const &); \
@@ -1375,3 +1362,19 @@ template int vnl_inplace_transpose(T*, int*, int*, int*, int*, int*, int*); \
 template ostream & operator<<(ostream &, vnl_matrix<T > const &); \
 template istream & operator>>(istream &, vnl_matrix<T >       &); \
 VCL_INSTANTIATE_INLINE(bool operator!=(vnl_matrix<T > const &, vnl_matrix<T > const &))
+
+// macro for types which have no operator<(), such as bool (on SGI CC).
+#define VNL_MATRIX_INSTANTIATE_no_ordering(T) \
+VNL_MATRIX_INSTANTIATE_internal(T)
+
+// float, double
+#define VNL_MATRIX_INSTANTIATE_floating_real(T) \
+VNL_MATRIX_INSTANTIATE_internal(T)
+
+// complex<float>, complex<double>
+#define VNL_MATRIX_INSTANTIATE_floating_complex(T) \
+VNL_MATRIX_INSTANTIATE_no_ordering(T)
+
+// (signed|unsigned) (char|short|int|long)
+#define VNL_MATRIX_INSTANTIATE_integral(T) \
+VNL_MATRIX_INSTANTIATE_internal(T)

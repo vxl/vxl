@@ -1,6 +1,11 @@
 //-*- c++ -*-------------------------------------------------------------------
 #ifndef vcl_iosfwd_h_
 #define vcl_iosfwd_h_
+#include <iosfwd>
+ using std::istream;
+ using std::ostream;
+ using std::ifstream;
+ using std::ofstream;
 
 // ANSI standard iostream forward decls.
 // You can't write "class ostream" and expect it to work
@@ -9,7 +14,7 @@
 
 #if !VCL_USE_NATIVE_STL
 # if defined(VCL_WIN32)
-#  include <iostream.h>
+//#  include <iostream.h>
 # else
 class istream;
 class ostream;
@@ -17,7 +22,7 @@ class ifstream;
 class ofstream;
 # endif
 
-#elif defined(VCL_GCC_EGCS)
+#elif defined(VCL_GCC_EGCS) || defined(VCL_SGI_CC)
 # include <iosfwd>
 
 #elif defined(VCL_SUNPRO_CC_50)

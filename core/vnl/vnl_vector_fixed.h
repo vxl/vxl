@@ -150,12 +150,13 @@ public:
   friend vnl_vector_fixed<T,n> operator+ VCL_STL_NULL_TMPL_ARGS (T const, vnl_vector_fixed<T,n> const &);
   friend vnl_vector_fixed<T,n> operator- VCL_STL_NULL_TMPL_ARGS (T const, vnl_vector_fixed<T,n> const &);
   friend vnl_vector_fixed<T,n> operator* VCL_STL_NULL_TMPL_ARGS (T const, vnl_vector_fixed<T,n> const &);
+#endif
+#endif
+
   friend vnl_vector_fixed<T,n> element_product VCL_STL_NULL_TMPL_ARGS (vnl_vector_fixed<T,n> const&,
 								       vnl_vector_fixed<T,n> const&);
   friend vnl_vector_fixed<T,n> element_quotient VCL_STL_NULL_TMPL_ARGS (vnl_vector_fixed<T,n> const&,
 									vnl_vector_fixed<T,n> const&);
-#endif
-#endif
 
 public:
   // void these methods on vnl_vector_fixed, since they deallocate the underlying
@@ -202,7 +203,7 @@ vnl_vector_fixed<T,n> element_quotient (vnl_vector_fixed<T,n> const& a,
 #endif
 
 
-#if defined(VCL_GCC_27)
+#if defined(VCL_GCC_27) || defined(VCL_SGI_CC_7)
 template <class T, int n>
 inline 
 ostream &operator<<(ostream &os, vnl_vector_fixed<T, n> const &v) {

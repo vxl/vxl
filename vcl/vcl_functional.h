@@ -54,7 +54,7 @@
 
 // Fixes for SunPro and VisualC++ native STL :
 #if VCL_USE_NATIVE_STL
-# if defined(VCL_SUNPRO_CC) || defined (VCL_WIN32)
+# if defined(VCL_SUNPRO_CC) || defined (_MSC_VER)
 // Select1st and Select2nd are extensions: they are not part of the standard.
 // fsm: So why do we need them?
 template <class _Pair>

@@ -67,7 +67,7 @@ template <class T>
 class vnl_sparse_matrix {
 public:
   typedef vnl_sparse_matrix_pair<T> pair_t;
-#if defined(VCL_GCC_295) || defined(VCL_EGCS) || defined(VCL_GCC_27) // it barfs -- fsm
+#if defined(VCL_GCC_295) || defined(VCL_EGCS) || defined(VCL_GCC_27) || defined(VCL_SGI_CC)// it barfs -- fsm
   typedef vcl_vector < VCL_SUNPRO_ALLOCATOR_HACK(/*typename*/ pair_t ) > row ; 
   typedef vcl_vector < VCL_SUNPRO_ALLOCATOR_HACK(/*typename*/ row ) > vnl_sparse_matrix_elements;
 #else
@@ -165,7 +165,7 @@ protected:
 
   // internal iterator
   unsigned int itr_row;
-  row::iterator itr_cur;  
+  typename row::iterator itr_cur;  
   bool itr_isreset;
 };
 

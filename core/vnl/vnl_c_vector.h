@@ -20,23 +20,17 @@
 //
 //-----------------------------------------------------------------------------
 
+#include <vcl/vcl_compiler.h>
 #include <vcl/vcl_cmath.h>     // sqrt()
 #include <vnl/vnl_numeric_traits.h>
-
-// avoid messing about with aux_* functions for gcc 2.7 -- fsm
-template <class T, class S> void vnl_c_vector_two_norm_squared(T const *p, unsigned n, S *out);
-template <class T, class S> void vnl_c_vector_one_norm(T const *p, unsigned n, S *out);
-template <class T, class S> void vnl_c_vector_two_norm(T const *p, unsigned n, S *out);
-template <class T, class S> void vnl_c_vector_inf_norm(T const *p, unsigned n, S *out);
 
 template <class T>
 class vnl_c_vector {
 public:
-  typedef vnl_numeric_traits<T>::abs_t abs_t;
+  typedef typename vnl_numeric_traits<T>::abs_t abs_t;
 
   static T sum(const T* v, unsigned n);
-  static inline abs_t squared_magnitude(T const *p, unsigned n) 
-    { abs_t val; vnl_c_vector_two_norm_squared(p, n, &val); return val; }
+  static inline abs_t squared_magnitude(T const *p, unsigned n) { return two_nrm2(p,n); }
   static void normalize(T *, unsigned n);
   static void apply(T const *, unsigned, T (*f)(T), T* v_out);
   static void apply(T const *, unsigned, T (*f)(const T&), T* v_out);
@@ -60,26 +54,32 @@ public:
   static T mean(T const *p, unsigned n) { return sum(p,n)/T(n); }
 
   // one_norm : sum of abs values
-  // two_norm : sqrt of sum of squared abs values
-  // inf_norm : max of abs values
   // two_nrm2 : sum of squared abs values
+  // two_norm : sqrt of sum of squared abs values
   // rms_norm : sqrt of mean sum of squared abs values
+  // inf_norm : max of abs values
   static inline abs_t one_norm(T const *p, unsigned n) 
-    { abs_t val; vnl_c_vector_one_norm(p, n, &val); return val; }
-  static inline abs_t two_norm(T const *p, unsigned n) 
-    { abs_t val; vnl_c_vector_two_norm(p, n, &val); return val; }
-  static inline abs_t inf_norm(T const *p, unsigned n) 
-    { abs_t val; vnl_c_vector_inf_norm(p, n, &val); return val; }
+    { one_norm_aux(p,n); return aux_var; }
   static inline abs_t two_nrm2(T const *p, unsigned n) 
-    { abs_t val; vnl_c_vector_two_norm_squared(p, n, &val); return val; }
+    { two_nrm2_aux(p,n); return aux_var; }
+  static inline abs_t two_norm(T const *p, unsigned n) 
+    { two_nrm2_aux(p,n); return abs_t(sqrt((double)aux_var)); }
   static inline abs_t rms_norm(T const *p, unsigned n) 
-    { abs_t val; vnl_c_vector_two_norm_squared(p, n, &val); return abs_t(sqrt(val/n)); }
+    { two_nrm2_aux(p,n); return abs_t(sqrt((double)aux_var/n)); }
+  static inline abs_t inf_norm(T const *p, unsigned n) 
+    { inf_norm_aux(p,n); return aux_var; }
 
   // Memory allocation
   static T** allocate_Tptr(int n);
   static T*  allocate_T(int n);
   static void deallocate(T**, int n_when_allocated);
   static void deallocate(T*, int n_when_allocated);
+
+private:
+  static abs_t aux_var;
+  static void one_norm_aux(T const *, unsigned );
+  static void two_nrm2_aux(T const *, unsigned );
+  static void inf_norm_aux(T const *, unsigned );
 };
 
 #endif   // DO NOT ADD CODE AFTER THIS LINE! END OF DEFINITION FOR CLASS vnl_c_vector.
