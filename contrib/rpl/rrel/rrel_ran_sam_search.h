@@ -3,9 +3,9 @@
 
 //:
 // \file
+// \brief Random sampling search for minimization of a robust objective function
 // \author Chuck Stewart (stewart@cs.rpi.edu)
 // \date March 2001
-// Random sampling search for minimization of a robust objective function.
 
 #include <vnl/vnl_vector.h>
 #include <mbl/mbl_mz_random.h>
@@ -19,8 +19,8 @@ class rrel_estimation_problem;
 //  The code organization follows the design of the rrel
 //  library where there is a separation between objective function
 //  (M-estimator, LMS, etc), search technique, and estimation problem.
-//  See discussion in rrel_estimation_base.
-//  
+//  See discussion in rrel_estimation_problem.
+//
 //  The algorithm implemented was discovered independently by Fischler
 //  and Bolles in the CACM RANSAC paper from 1981 and Rousseeuw in a
 //  Journal of the American Statistical Association paper from 1984.
@@ -76,7 +76,7 @@ public:
 
   //:  Get the scale estimate.
   double scale() const { return scale_; }
-  
+
   //:  Get the parameter estimate.
   const vnl_vector<double>& params() const { return params_; }
 
@@ -93,10 +93,10 @@ private:
   //  Random sampling functions.  Don't call directly.  These are
   //  public for test purposes.
   // ------------------------------------------------------------
-  
-  //: Calculate number of samples --- non-unique matching estimation problems 
+
+  //: Calculate number of samples --- non-unique matching estimation problems
   void calc_num_samples( const rrel_estimation_problem* problem );
-  
+
   //: Determine the next random sample, filling in the "sample" vector.
   void next_sample( unsigned int taken, unsigned int num_points, vcl_vector<int>& sample,
                     unsigned int points_per_sample );
