@@ -21,10 +21,13 @@ template<class T>
 inline vil2_image_view<T> vil3d_slice_ji(const vil3d_image_view<T> &im, unsigned k)
 {
   assert(k<im.nk());
+	// Tweak ensure contiguous check works for 1 plane images
+	vcl_ptrdiff_t pstep = im.planestep();
+	if (im.nplanes()==1) pstep=im.ni()*im.nj();
   return vil2_image_view<T>(im.memory_chunk(),
                             im.origin_ptr()+k*im.kstep(),
                             im.nj(),im.ni(),im.nplanes(),
-                            im.jstep(),im.istep(),im.planestep());
+                            im.jstep(),im.istep(),pstep);
 }
 
 //: Return a 2D view of slice k of 3D image aligned as (i,j)
@@ -35,10 +38,13 @@ template<class T>
 inline vil2_image_view<T> vil3d_slice_ij(const vil3d_image_view<T> &im, unsigned k)
 {
   assert(k<im.nk());
+	// Tweak ensure contiguous check works for 1 plane images
+	vcl_ptrdiff_t pstep = im.planestep();
+	if (im.nplanes()==1) pstep=im.ni()*im.nj();
   return vil2_image_view<T>(im.memory_chunk(),
                             im.origin_ptr()+k*im.kstep(),
                             im.ni(),im.nj(),im.nplanes(),
-                            im.istep(),im.jstep(),im.planestep());
+                            im.istep(),im.jstep(),pstep);
 }
 
 //: Return a 2D view of slice i of 3D image aligned as (j,k)
@@ -49,10 +55,13 @@ template<class T>
 inline vil2_image_view<T> vil3d_slice_jk(const vil3d_image_view<T> &im, unsigned i)
 {
   assert(i<im.ni());
+	// Tweak ensure contiguous check works for 1 plane images
+	vcl_ptrdiff_t pstep = im.planestep();
+	if (im.nplanes()==1) pstep=im.nj()*im.nk();
   return vil2_image_view<T>(im.memory_chunk(),
                             im.origin_ptr()+i*im.istep(),
                             im.nj(),im.nk(),im.nplanes(),
-                            im.jstep(),im.kstep(),im.planestep());
+                            im.jstep(),im.kstep(),pstep);
 }
 
 //: Return a 2D view of slice i of 3D image aligned as (k,j)
@@ -63,10 +72,13 @@ template<class T>
 inline vil2_image_view<T> vil3d_slice_kj(const vil3d_image_view<T> &im, unsigned i)
 {
   assert(i<im.ni());
+	// Tweak ensure contiguous check works for 1 plane images
+	vcl_ptrdiff_t pstep = im.planestep();
+	if (im.nplanes()==1) pstep=im.nj()*im.nk();
   return vil2_image_view<T>(im.memory_chunk(),
                             im.origin_ptr()+i*im.istep(),
                             im.nk(),im.nj(),im.nplanes(),
-                            im.kstep(),im.jstep(),im.planestep());
+                            im.kstep(),im.jstep(),pstep);
 }
 
 //: Return a 2D view of slice j of 3D image aligned as (k,i)
@@ -77,10 +89,13 @@ template<class T>
 inline vil2_image_view<T> vil3d_slice_ki(const vil3d_image_view<T> &im, unsigned j)
 {
   assert(j<im.nj());
+	// Tweak ensure contiguous check works for 1 plane images
+	vcl_ptrdiff_t pstep = im.planestep();
+	if (im.nplanes()==1) pstep=im.ni()*im.nk();
   return vil2_image_view<T>(im.memory_chunk(),
                             im.origin_ptr()+j*im.jstep(),
                             im.nk(),im.ni(),im.nplanes(),
-                            im.kstep(),im.istep(),im.planestep());
+                            im.kstep(),im.istep(),pstep);
 }
 
 //: Return a 2D view of slice j of 3D image aligned as (i,k)
@@ -91,10 +106,13 @@ template<class T>
 inline vil2_image_view<T> vil3d_slice_ik(const vil3d_image_view<T> &im, unsigned j)
 {
   assert(j<im.nj());
+	// Tweak ensure contiguous check works for 1 plane images
+	vcl_ptrdiff_t pstep = im.planestep();
+	if (im.nplanes()==1) pstep=im.ni()*im.nk();
   return vil2_image_view<T>(im.memory_chunk(),
                             im.origin_ptr()+j*im.jstep(),
                             im.ni(),im.nk(),im.nplanes(),
-                            im.istep(),im.kstep(),im.planestep());
+                            im.istep(),im.kstep(),pstep);
 }
 
 #endif // vil3d_slice_h_

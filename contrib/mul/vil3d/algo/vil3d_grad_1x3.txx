@@ -55,6 +55,24 @@ void vil3d_grad_1x3(const vil3d_image_view<srcT>& src,
   }
 }
 
+//: Compute square gradient magnitude of 3D image
+//  Use (-0.5,0,+0.5) filters in i,j,k
+template<class srcT, class destT>
+void vil3d_grad_1x3_mag_sq(const vil3d_image_view<srcT>& src,
+                    vil3d_image_view<destT>& grad_mag2)
+{
+  unsigned np = src.nplanes();
+  unsigned ni = src.ni();
+  unsigned nj = src.nj();
+  unsigned nk = src.nk();
+  grad_mag2.set_size(ni,nj,nk,np);
+  for (unsigned p=0;p<np;++p)
+  {
+    vil3d_image_view<destT> grad_plane = vil3d_plane(grad_mag2,p);
+    vil3d_grad_1x3_mag_sq_1plane(vil3d_plane(src,p),grad_plane);
+  }
+}
+
 
 #undef vil3d_GRAD_1X3_INSTANTIATE
 #define vil3d_GRAD_1X3_INSTANTIATE(srcT, destT) \
@@ -63,6 +81,8 @@ template void vil3d_grad_1x3(const vil3d_image_view< srcT >& src, \
 template void vil3d_grad_1x3(const vil3d_image_view< srcT >& src, \
                                    vil3d_image_view<destT >& grad_i, \
                                    vil3d_image_view<destT >& grad_j, \
-                                   vil3d_image_view<destT>& grad_k)
+                                   vil3d_image_view<destT>& grad_k); \
+template void vil3d_grad_1x3_mag_sq(const vil3d_image_view<srcT>& src, \
+                                   vil3d_image_view<destT>& grad_mag2)
 
 #endif
