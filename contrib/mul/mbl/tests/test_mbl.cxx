@@ -19,6 +19,7 @@
 #include "test_lru_cache.cxx"
 #include "test_thin_plate_spline_2d.cxx"
 #include "test_clamped_plate_spline_2d.cxx"
+#include "test_data_wrapper_mixer.cxx"
 
 #undef TESTMAIN
 #define TESTMAIN(x) int main() \
@@ -41,6 +42,7 @@ void run_test_mbl()
   test_thin_plate_spline_2d();
   test_clamped_plate_spline_2d();
   test_histogram();
+  test_data_wrapper_mixer();
 }
 
 TESTMAIN(run_test_mbl);
