@@ -144,8 +144,6 @@ void mil_image_2d_of<T>::set_n_planes(int n)
 template<class T>
 void mil_image_2d_of<T>::setValidRegion(int xlo, int xhi, int ylo, int yhi)
 {
-  assert(xlo>=0);
-  assert(ylo>=0);
   resize(xhi-xlo,yhi-ylo);
   world2im_.set_translation(-xlo,-ylo);
 }
