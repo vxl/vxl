@@ -1,4 +1,4 @@
-// This is vxl/vcsl/vcsl_matrix.h
+// This is core/vcsl/vcsl_matrix.h
 #ifndef vcsl_matrix_h
 #define vcsl_matrix_h
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
@@ -13,12 +13,12 @@
 // 2000/07/19 François BERTEL Creation.
 // 2002/01/22 Peter Vanroose - return type of execute() and inverse() changed to non-ptr
 // 2002/01/28 Peter Vanroose - vcl_vector member matrix_ changed to non-ptr
+// 2002/12/30 Peter Vanroose - removed unused and commented out member _vector
 // \endverbatim
 
 #include <vcsl/vcsl_matrix_param.h>
 #include <vcsl/vcsl_matrix_sptr.h>
 #include <vcsl/vcsl_spatial_transformation.h>
-#include <vcl_vector.h>
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_matrix.h>
 
@@ -26,10 +26,6 @@ class vcsl_matrix
   :public vcsl_spatial_transformation
 {
  public:
-#if 0
-  //: Direction vector variation along the time
-  vcl_vector<vnl_vector<double> *> _vector;
-#endif
 
   //***************************************************************************
   // Constructors/Destructor
