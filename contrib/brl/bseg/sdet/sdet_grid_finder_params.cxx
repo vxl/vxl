@@ -19,29 +19,46 @@ sdet_grid_finder_params(const sdet_grid_finder_params& gfp)
              gfp.n_lines_y_,
              gfp.spacing_,
              gfp.thresh_,
-             gfp.angle_tol_);
+             gfp.angle_tol_,
+             gfp.verbose_,
+             gfp.debug_state_);
 }
 
 sdet_grid_finder_params::
 sdet_grid_finder_params(const int n_lines_x, const int n_lines_y, 
                         const double spacing, const int thresh,
-                        const float angle_tol)
+                        const float angle_tol, bool verbose,
+                        int debug_state)
 {
-  InitParams(n_lines_x, n_lines_y, spacing, thresh, angle_tol);
+  InitParams(n_lines_x, n_lines_y, spacing, thresh, angle_tol, verbose,
+             debug_state);
 }
-
+void 
+sdet_grid_finder_params::get_debug_choices(vcl_vector<vcl_string>& choices)
+{
+  choices.clear();
+  choices.push_back("NO_DEBUG");
+  choices.push_back("VANISHING_POINT");
+  choices.push_back("AFFINE_GROUP_BEFORE_SKEW_SCALE");
+  choices.push_back("AFFINE_GROUP_AFTER_SKEW_SCALE");
+  choices.push_back("TRANS_PERIM_LINES"); 
+  choices.push_back("AFFINE_GROUP_AFTER_TRANS");
+}
 void sdet_grid_finder_params::InitParams(const int n_lines_x,
                                          const int n_lines_y,
                                          const double spacing,
                                          const int thresh,
-                                         const float angle_tol)
-                                       
+                                         const float angle_tol,
+                                         bool verbose,
+                                         int debug_state)
 {
   n_lines_x_=n_lines_x;
   n_lines_y_=n_lines_y;
   spacing_=spacing;
   thresh_ = thresh;
   angle_tol_ = angle_tol;
+  verbose_ = verbose;
+  debug_state_ = debug_state;
 }
 
 //-----------------------------------------------------------------------------
