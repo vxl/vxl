@@ -5,10 +5,10 @@
 #include <vil/vil_load.h>
 
 
-static void test_image_histogram()
+static void test_image_histogram(int argc, char* argv[])
 {
   // Get the image
-  vil_image_view_base_sptr  vivb = vil_load("cam0013.tif");
+  vil_image_view_base_sptr  vivb = vil_load(argc<2 ? "cam0013.tif" : argv[1]);
 
   if (vivb)
   {
@@ -20,4 +20,4 @@ static void test_image_histogram()
 }
 
 
-TESTMAIN(test_image_histogram);
+TESTMAIN_ARGS(test_image_histogram);
