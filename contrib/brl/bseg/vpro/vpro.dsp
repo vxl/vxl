@@ -105,9 +105,6 @@ SOURCE=.\Templates/vbl_smart_ptr+vpro_video_process-.cxx
 SOURCE=.\vpro_capture_process.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\vpro_curve_tracking_process.cxx
-# End Source File
-# Begin Source File
 SOURCE=.\vpro_edge_line_process.cxx
 # End Source File
 # Begin Source File
@@ -169,9 +166,6 @@ SOURCE=.\vpro_ihs_process.cxx
 # PROP Default_Filter "h;txx"
 # Begin Source File
 SOURCE=.\vpro_capture_process.h
-# End Source File
-# Begin Source File
-SOURCE=.\vpro_curve_tracking_process.h
 # End Source File
 # Begin Source File
 SOURCE=.\vpro_edge_line_process.h
