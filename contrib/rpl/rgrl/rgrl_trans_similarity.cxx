@@ -196,7 +196,7 @@ write( vcl_ostream& os ) const
   os << "SIMILARITY\n"
   // parameters
      << t().size() << vcl_endl
-     << A() << t() << ' ' << from_centre_ << vcl_endl;
+     << A_ << trans_ << ' ' << from_centre_ << vcl_endl;
 }
 
 void

@@ -158,8 +158,8 @@ write( vcl_ostream& os ) const
   // tag
   os << "TRANSLATION\n"
   // parameters
-     << t().size() << vcl_endl
-     << t() << ' ' << from_centre_ << vcl_endl;
+     << trans_.size() << vcl_endl
+     << trans_ << ' ' << from_centre_ << vcl_endl;
 }
 
 void

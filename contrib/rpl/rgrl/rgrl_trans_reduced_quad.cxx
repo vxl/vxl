@@ -315,7 +315,7 @@ write( vcl_ostream& os ) const
   os << "REDUCED_QUADRATIC\n"
   // parameters
      << t().size() << vcl_endl
-     << Q()<< A() << t() << ' ' << from_centre_ << vcl_endl;
+     << Q_<< A_ << trans_ << ' ' << from_centre_ << vcl_endl;
 }
 
 void

@@ -259,8 +259,8 @@ write( vcl_ostream& os ) const
   // tag
   os << "RIGID\n"
   // parameters
-     << t().size() << vcl_endl
-     << R() << t() << vcl_endl;
+     << trans_.size() << vcl_endl
+     << R_ << trans_ << vcl_endl;
 }
 
 void
