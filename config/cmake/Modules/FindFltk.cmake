@@ -1,0 +1,14 @@
+# try to find fltk, using the FindFLTK.cmake file from CMake
+
+IF (NOT HAS_FLTK)
+  INCLUDE(${CMAKE_ROOT}/Modules/FindFLTK.cmake)
+
+  IF (FLTK_INCLUDE_PATH)
+    IF (FLTK_LIBRARY)
+      INCLUDE_DIRECTORIES(${FLTK_INCLUDE_PATH})
+      LINK_LIBRARIES(${FLTK_LIBRARY})
+      SET(HAS_FLTK "YES")
+    ENDIF (FLTK_LIBRARY)
+  ENDIF (FLTK_INCLUDE_PATH)
+
+ENDIF (NOT HAS_FLTK)
