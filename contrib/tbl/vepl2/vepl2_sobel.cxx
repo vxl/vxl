@@ -1,6 +1,6 @@
 // This is tbl/vepl2/vepl2_sobel.cxx
 #include "vepl2_sobel.h"
-#include <vepl2/accessors/vipl_accessors_vil2_image_view_base.h>
+#include <vepl2/accessors/vipl_accessors_vil_image_view_base.h>
 #include <vipl/vipl_sobel.h>
 #include <vil/vil_image_view.h>
 #include <vil/vil_pixel_format.h>

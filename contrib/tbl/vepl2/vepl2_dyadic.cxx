@@ -1,6 +1,6 @@
 // This is tbl/vepl2/vepl2_dyadic.cxx
 #include "vepl2_dyadic.h"
-#include <vepl2/accessors/vipl_accessors_vil2_image_view_base.h>
+#include <vepl2/accessors/vipl_accessors_vil_image_view_base.h>
 #include <vipl/vipl_dyadic.h>
 #include <vil/vil_image_view.h>
 #include <vil/vil_pixel_format.h>

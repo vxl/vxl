@@ -1,7 +1,7 @@
 // This is tbl/vepl2/vepl2_gaussian_convolution.cxx
 #include "vepl2_gaussian_convolution.h"
 #include <vcl_iostream.h>
-#include <vepl2/accessors/vipl_accessors_vil2_image_view_base.h>
+#include <vepl2/accessors/vipl_accessors_vil_image_view_base.h>
 #include <vipl/vipl_gaussian_convolution.h>
 #include <vil/vil_image_view.h>
 #include <vil/vil_pixel_format.h>

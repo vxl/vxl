@@ -1,5 +1,5 @@
 #include "vepl2_dilate_disk.h"
-#include <vepl2/accessors/vipl_accessors_vil2_image_view_base.h>
+#include <vepl2/accessors/vipl_accessors_vil_image_view_base.h>
 #include <vipl/vipl_dilate_disk.h>
 #include <vil/vil_image_view.h>
 #include <vil/vil_pixel_format.h>

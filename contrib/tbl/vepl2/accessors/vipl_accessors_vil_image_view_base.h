@@ -1,5 +1,5 @@
-#ifndef vipl_accessors_vil2_image_view_base_h_
-#define vipl_accessors_vil2_image_view_base_h_
+#ifndef vipl_accessors_vil_image_view_base_h_
+#define vipl_accessors_vil_image_view_base_h_
 #include <vil/vil_image_view_base.h>
 
 #undef FILTER_IMPTR_DEC_REFCOUNT
@@ -20,7 +20,7 @@ T getpixel(vil_image_view_base const& i, int x, int y, T); \
 void setpixel(vil_image_view_base& i, int x, int y, T e)
 
 #ifdef INSTANTIATE_TEMPLATES
-#include "vipl_accessors_vil2_image_view_base.txx"
+#include "vipl_accessors_vil_image_view_base.txx"
 #endif
 
-#endif // vipl_accessors_vil2_image_view_base_h_
+#endif // vipl_accessors_vil_image_view_base_h_

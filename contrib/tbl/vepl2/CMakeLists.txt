@@ -21,9 +21,9 @@ SET(vepl2_sources
 
  vepl2_convert.txx              vepl2_convert.h
 
- accessors/vipl_accessors_vil2_image_view_base.h
- accessors/vipl_accessors_vil2_image_view_base.txx
- section/vipl_filterable_section_container_generator_vil2_image_view_base.txx
+ accessors/vipl_accessors_vil_image_view_base.h
+ accessors/vipl_accessors_vil_image_view_base.txx
+ section/vipl_filterable_section_container_generator_vil_image_view_base.txx
 )
 
 AUX_SOURCE_DIRECTORY(Templates vepl2_sources)

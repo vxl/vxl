@@ -1,8 +1,8 @@
-#ifndef vipl_accessors_vil2_image_view_base_txx_
-#define vipl_accessors_vil2_image_view_base_txx_
+#ifndef vipl_accessors_vil_image_view_base_txx_
+#define vipl_accessors_vil_image_view_base_txx_
 
-#include "vipl_accessors_vil2_image_view_base.h"
-#include <vepl2/section/vipl_filterable_section_container_generator_vil2_image_view_base.txx>
+#include "vipl_accessors_vil_image_view_base.h"
+#include <vepl2/section/vipl_filterable_section_container_generator_vil_image_view_base.txx>
 #include <vil/vil_rgb.h>
 #include <vil/vil_image_view.h>
 #include <vcl_config_compiler.h>
@@ -157,4 +157,4 @@ template void fsetpixel(vil_image_view_base&, int, int, T);\
 template T getpixel(vil_image_view_base const&, int, int, T);\
 template void setpixel(vil_image_view_base&, int, int, T)
 
-#endif // vipl_accessors_vil2_image_view_base_txx_
+#endif // vipl_accessors_vil_image_view_base_txx_

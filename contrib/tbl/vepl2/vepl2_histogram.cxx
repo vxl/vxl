@@ -2,7 +2,7 @@
 #include "vepl2_histogram.h"
 #include <vcl_iostream.h>
 #include <vipl/accessors/vipl_accessors_vcl_vector.h>
-#include <vepl2/accessors/vipl_accessors_vil2_image_view_base.h>
+#include <vepl2/accessors/vipl_accessors_vil_image_view_base.h>
 #include <vipl/vipl_histogram.h>
 #include <vil/vil_pixel_format.h>
 #include <vxl_config.h> // for vxl_byte
