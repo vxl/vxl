@@ -88,7 +88,7 @@ struct vgui_pixel_bgr<8,8,8>
   GLubyte R;
   vgui_pixel_bgr<8,8,8>() {}
   vgui_pixel_bgr<8,8,8>( vxl_byte red, vxl_byte green, vxl_byte blue, vxl_byte /*alpha*/ = 0 )
-  : R(red), G(green), B(blue) {}
+  : B(blue), G(green), R(red) {}
 };
 typedef vgui_pixel_bgr<8,8,8> vgui_pixel_bgr888;
 
@@ -101,7 +101,7 @@ struct vgui_pixel_rgba<5,5,5,1>
   GLushort A:1;
   vgui_pixel_rgba<5,5,5,1>() { }
   vgui_pixel_rgba<5,5,5,1>( vxl_byte red, vxl_byte green, vxl_byte blue, vxl_byte alpha )
-  : R(red>>3), G(green>>3), B(blue>>3), A(alpha) {}
+  : B(blue>>3), G(green>>3), R(red>>3), A(alpha) {}
 };
 typedef vgui_pixel_rgba<5,5,5,1> vgui_pixel_bgra5551;
 
@@ -127,7 +127,7 @@ struct vgui_pixel_abgr<8,8,8,8>
   GLubyte R;
   vgui_pixel_abgr<8,8,8,8>() { }
   vgui_pixel_abgr<8,8,8,8>( vxl_byte red, vxl_byte green, vxl_byte blue, vxl_byte alpha )
-  : R(red), G(green), B(blue), A(alpha) {}
+  : A(alpha), B(blue), G(green), R(red) {}
 };
 typedef vgui_pixel_abgr<8,8,8,8> vgui_pixel_abgr8888;
 
@@ -140,7 +140,7 @@ struct vgui_pixel_bgra<8,8,8,8>
   GLubyte A;
   vgui_pixel_bgra<8,8,8,8>() { }
   vgui_pixel_bgra<8,8,8,8>( vxl_byte red, vxl_byte green, vxl_byte blue, vxl_byte alpha )
-  : R(red), G(green), B(blue), A(alpha) {}
+  : B(blue), G(green), R(red), A(alpha) {}
 };
 typedef vgui_pixel_bgra<8,8,8,8> vgui_pixel_bgra8888;
 
