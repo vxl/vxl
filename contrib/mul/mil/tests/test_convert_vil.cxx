@@ -30,8 +30,8 @@ void test_convert_vil()
 
   // Convert Image
   vil_memory_image_of<float> vil_image;
-  mil_gmil2gvil(vil_image, in_image);
-  mil_gvil2gmil(out_image, vil_image);
+  mil_convert_vil_gm2gv(vil_image, in_image);
+  mil_convert_vil_gv2gm(out_image, vil_image);
 
 
   // Calc Total difference over all pixels
@@ -72,8 +72,8 @@ void test_convert_vil()
 
   // Convert Image
   vil_memory_image_of<vil_rgb_byte> c_vil_image;
-  mil_cmil2cvil(c_vil_image, c_in_image);
-  mil_cvil2cmil(c_out_image, c_vil_image);
+  mil_convert_vil_cm2cv(c_vil_image, c_in_image);
+  mil_convert_vil_cv2cm(c_out_image, c_vil_image);
 
   // Calc Total difference over all pixels
   double diff4=0;
