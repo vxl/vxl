@@ -2,7 +2,7 @@
   fsm@robots.ox.ac.uk
 */
 #ifdef __GNUC__
-#pragma implementation "vnl_generalized_schur"
+#pragma implementation
 #endif
 #include "vnl_generalized_schur.h"
 
