@@ -7,9 +7,7 @@
 #include "vnl_determinant.h"
 
 #include <vcl_cassert.h>
-
 #include <vnl/vnl_matrix.h>
-#include <vnl/vnl_complex.h>
 #include <vnl/algo/vnl_qr.h>
 
 template <class T>
@@ -45,10 +43,12 @@ T vnl_determinant(vnl_matrix<T> const &M) {
 // it can be called whatever it likes.
 #define VNL_ALGO_DETERMINANT_INSTANTIATE(T) \
 template T vnl_determinant(T const * const *, unsigned); \
-template T vnl_determinant(vnl_matrix<T> const &);
+template T vnl_determinant(vnl_matrix<T > const &);
+
+#include <vcl_complex.h>
 
 // QR only works for floating point data types.
 VNL_ALGO_DETERMINANT_INSTANTIATE(float);
 VNL_ALGO_DETERMINANT_INSTANTIATE(double);
-VNL_ALGO_DETERMINANT_INSTANTIATE(vnl_float_complex);
-VNL_ALGO_DETERMINANT_INSTANTIATE(vnl_double_complex);
+VNL_ALGO_DETERMINANT_INSTANTIATE(vcl_complex<float>);
+VNL_ALGO_DETERMINANT_INSTANTIATE(vcl_complex<double>);

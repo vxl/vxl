@@ -5,9 +5,9 @@
 #include <vcl_cassert.h>
 #include <vnl/algo/vnl_complex_eigensystem.h>
 
-void vnl_cpoly_roots::compute(vnl_vector<vnl_double_complex> const &a) {
+void vnl_cpoly_roots::compute(vnl_vector<vcl_complex<double> > const &a) {
   // construct companion matrix
-  vnl_matrix<vnl_double_complex> comp(N, N);
+  vnl_matrix<vcl_complex<double> > comp(N, N);
   comp.fill(0);
   for (unsigned i=0; i<N-1; ++i)
     comp(i+1, i) = 1;
@@ -20,7 +20,7 @@ void vnl_cpoly_roots::compute(vnl_vector<vnl_double_complex> const &a) {
 				  false).W; // the eigenvalues.
 }
 
-vnl_cpoly_roots::vnl_cpoly_roots(vnl_vector<vnl_double_complex> const & a)
+vnl_cpoly_roots::vnl_cpoly_roots(vnl_vector<vcl_complex<double> > const & a)
   : solns(a.size())
   , N(a.size()) // degree
 {
@@ -33,9 +33,9 @@ vnl_cpoly_roots::vnl_cpoly_roots(vnl_vector<double> const & a_real,
   , N(a_real.size()) // degree
 {
   assert(a_real.size() == a_imag.size());
-  vnl_vector<vnl_double_complex> a(N);
+  vnl_vector<vcl_complex<double> > a(N);
   for (unsigned i=0; i<N; ++i)
-    a[i] = vnl_double_complex(a_real[i], a_imag[i]);
+    a[i] = vcl_complex<double>(a_real[i], a_imag[i]);
 
   //cerr << "a = " << a << endl;
   compute(a);

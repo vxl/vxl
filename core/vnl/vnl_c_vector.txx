@@ -9,6 +9,7 @@
 #include "vnl_c_vector.h"
 #include <vcl_cmath.h>     // sqrt()
 #include <vnl/vnl_math.h>
+#include <vnl/vnl_complex.h>
 #include <vnl/vnl_complex_traits.h>
 #include <vnl/vnl_numeric_traits.h>
 

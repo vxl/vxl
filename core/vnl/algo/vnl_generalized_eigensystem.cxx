@@ -10,8 +10,8 @@
 #include "vnl_generalized_eigensystem.h"
 
 #include <vcl_iostream.h>
+#include <vcl_complex.h>
 
-#include <vnl/vnl_complex.h>
 #include <vnl/vnl_fortran_copy.h>
 #include <vnl/vnl_matlab_print.h>
 #include <vnl/algo/vnl_symmetric_eigensystem.h>

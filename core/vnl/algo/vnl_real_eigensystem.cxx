@@ -44,19 +44,19 @@ vnl_real_eigensystem::vnl_real_eigensystem(vnl_matrix<double> const & M):
 
   // Copy out eigenvalues and eigenvectors
   for(int c = 0; c < n; ++c) {
-    D(c,c) = vnl_double_complex(wr[c], wi[c]);
+    D(c,c) = vcl_complex<double>(wr[c], wi[c]);
     if (wi[c] != 0) {
       // Complex -- copy conjugates and inc c.
-      D(c+1, c+1) = vnl_double_complex(wr[c], -wi[c]);
+      D(c+1, c+1) = vcl_complex<double>(wr[c], -wi[c]);
       for(int r = 0; r < n; ++r) {
-	V(r, c) = vnl_double_complex(devout(c,r), devout(c+1,r));
-	V(r, c+1) = vnl_double_complex(devout(c,r), -devout(c+1,r));
+	V(r, c) = vcl_complex<double>(devout(c,r), devout(c+1,r));
+	V(r, c+1) = vcl_complex<double>(devout(c,r), -devout(c+1,r));
       }
       
       ++c;
     } else
       for(int r = 0; r < n; ++r) {
-	V(r, c) = vnl_double_complex(devout(c,r), 0);
+	V(r, c) = vcl_complex<double>(devout(c,r), 0);
 	Vreal(r,c) = devout(c,r);
       }
   }
