@@ -4,19 +4,19 @@
 #undef TESTMAIN
 #define TESTMAIN(x)
 
-#include <mil/tests/test_normalise_image_2d.cxx> 
-#include <mil/tests/test_convert_vil.cxx> 
-#include <mil/tests/test_byte_image_2d_io.cxx>
-#include <mil/tests/test_transform_2d.cxx>
-#include <mil/tests/test_image_2d_of.cxx>
-#include <mil/tests/test_bilin_interp_2d.cxx>
-#include <mil/tests/test_sample_profile_2d.cxx>
-#include <mil/tests/test_gauss_reduce_2d.cxx>
-#include <mil/tests/test_gaussian_pyramid_builder_2d.cxx>
-#include <mil/tests/test_gaussian_pyramid_builder_2d_general.cxx>
-#include <mil/tests/test_algo_exp_filter_1d.cxx>
-#include <mil/tests/test_algo_line_filter.cxx>
-#include <mil/tests/test_algo_grad_filter_2d.cxx>
+#include "test_normalise_image_2d.cxx"
+#include "test_convert_vil.cxx"
+#include "test_byte_image_2d_io.cxx"
+#include "test_transform_2d.cxx"
+#include "test_image_2d_of.cxx"
+#include "test_bilin_interp_2d.cxx"
+#include "test_sample_profile_2d.cxx"
+#include "test_gauss_reduce_2d.cxx"
+#include "test_gaussian_pyramid_builder_2d.cxx"
+#include "test_gaussian_pyramid_builder_2d_general.cxx"
+#include "test_algo_exp_filter_1d.cxx"
+#include "test_algo_line_filter.cxx"
+#include "test_algo_grad_filter_2d.cxx"
 
 #undef TESTMAIN
 #define TESTMAIN(x) int main() \
