@@ -4,7 +4,7 @@
 #include <rrel/rrel_muse_table.h>
 
 #include <vnl/vnl_math.h>
-#include <vnl/vnl_numeric_limits.h>
+#include <vcl_limits.h>
 
 #include <vcl_iostream.h>
 #include <vcl_vector.h>
@@ -147,7 +147,7 @@ rrel_muset_obj::internal_fcn( vect_const_iter begin, vect_const_iter end,
     if( at_start ) {
       vcl_cerr << "WARNING:  There were NO values of k with stable estimates.\n"
                << "          Setting sigma = +Infinity\n";
-      sigma_est = vnl_numeric_limits<double>::infinity();
+      sigma_est = vcl_numeric_limits<double>::infinity();
       return;
     }
 
@@ -214,7 +214,7 @@ rrel_muset_obj::internal_fcn( vect_const_iter begin, vect_const_iter end,
     if( at_start ) {
       vcl_cerr << "WARNING:  There were NO values of k with stable estimates.\n"
                << "          Setting sigma = +Infinity\n";
-      sigma_est = vnl_numeric_limits<double>::infinity();
+      sigma_est = vcl_numeric_limits<double>::infinity();
       return;
     }
 
@@ -271,7 +271,7 @@ rrel_muset_obj::internal_fcn( vect_const_iter begin, vect_const_iter end,
     if( at_start ) {
       vcl_cerr << "WARNING:  There were NO values of k with stable estimates.\n"
                << "          Setting sigma = +Infinity\n";
-      sigma_est = vnl_numeric_limits<double>::infinity();
+      sigma_est = vcl_numeric_limits<double>::infinity();
       return;
     }
 

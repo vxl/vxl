@@ -12,14 +12,6 @@ When someone works on or completes one of these tasks, make a note of
 that in this file.  If that marks a significant improvement, make an
 entry in the CHANGES.txt file as well.
 
-############################################################################
-
-* vnl_numeric_limits specializations seem to be wrong
-
-From Brad King: Several values in vnl_numeric_limits specializations
-seem to be wrong.  For example, unsigned short has a min_exponent of
--31 and a max_exponent of 31.  The return types from min/max methods
-are also inconsistent with the numeric type.
 
 ############################################################################
 

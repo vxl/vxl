@@ -1,3 +1,7 @@
+
+        vnl_numeric_limits is deprecated in favour of vcl_numeric_limits.
+        vbl_basic_tuple, vbl_basic_relation, etc. are deprecated since we have no decent explanation of how to use them.
+
 vxl 1.0.0	- October 2003
 
 	Support for MSVC 7
