@@ -2,4 +2,6 @@ SOURCE_FILES(mil_sources
   mil_algo_exp_filter_1d.h
   mil_algo_exp_filter_2d.h
   mil_algo_exp_filter_2d.txx
+  mil_algo_line_filter.h
+  mil_algo_line_filter.txx
 )
