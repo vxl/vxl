@@ -22,7 +22,6 @@ vgui_drag_tableau::vgui_drag_tableau()
 }
 
 //----------------------------------------------------------------------------
-//: Constructor - don't use this, use vgui_drag_tableau_new.
 //: Destructor - called by vgui_drag_tableau_sptr.
 vgui_drag_tableau::~vgui_drag_tableau()
 {
