@@ -5,6 +5,7 @@
 
 #include <vsl/vsl_indent.h>
 #include <vcl_sstream.h>
+#include <vcl_iostream.h>
 #include <vcl_string.h>
 #include <vcl_cctype.h>
 
@@ -79,14 +80,13 @@ mbl_read_props_type mbl_read_props(vcl_istream &afs)
 
     afs >> label;
 
-    // vcl_cout << "debug label " << label << vcl_endl;
-    // vcl_cout << "debug peek() " << afs.peek() << vcl_endl;
-
+    // vcl_cout << "debug label " << label << vcl_endl
+    //          << "debug peek() " << afs.peek() << vcl_endl;
   }
 
   vcl_string last_label( label );
 
-  do 
+  do
   {
     if (label.substr(0,2) =="//")
     {
@@ -150,7 +150,7 @@ mbl_read_props_type mbl_read_props(vcl_istream &afs)
           }
           vcl_cerr << "ERROR: mbl_read_props. Could not find colon ':'"
                    << " separator while reading line "
-                   << label << " " << str1 << '\n';
+                   << label << ' ' << str1 << '\n';
           return props;
         }
       }

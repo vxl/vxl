@@ -10,6 +10,7 @@
 #include <vcl_cassert.h>
 #include <vcl_cmath.h>   // for vcl_sqrt(float)
 #include <vcl_cstdlib.h> // for vcl_abs(int)
+#include <vcl_iostream.h>
 
 vdgl_edgel_chain::vdgl_edgel_chain()
 {
@@ -68,19 +69,19 @@ bool vdgl_edgel_chain::add_edgels( const vcl_vector<vdgl_edgel> &es, int index)
   else if (es_.size()== 0)
     es_= es;
   else
-    {
-      vcl_vector<vdgl_edgel> temp;
-      for (int i=0; i< index; i++)
-        temp.push_back( es_[i]);
+  {
+    vcl_vector<vdgl_edgel> temp;
+    for (int i=0; i< index; i++)
+      temp.push_back( es_[i]);
 
-      for (unsigned int i=0; i< es.size(); i++)
-        temp.push_back( es[i]);
+    for (unsigned int i=0; i< es.size(); i++)
+      temp.push_back( es[i]);
 
-      for (unsigned int i=index; i< es_.size(); i++)
-        temp.push_back( es_[i]);
+    for (unsigned int i=index; i< es_.size(); i++)
+      temp.push_back( es_[i]);
 
-      es_= temp;
-    }
+    es_= temp;
+  }
 
   // let friends know that chain has changed
   notify_change();
@@ -150,48 +151,48 @@ bool vdgl_edgel_chain::line_gen(double xs, double ys, double xe, double ye,
   const double pix_edge = 1.0; //We are working at scale = 1.0
   static double xi=0.0, yi=0.0;
   if (init)
-    {
-      xi = xs;
-      yi = ys;
-      x = (double)(unsigned int)(xi/pix_edge);
-      y = (double)(unsigned int)(yi/pix_edge);
-      init = false;
-      return true;
-    }
+  {
+    xi = xs;
+    yi = ys;
+    x = (double)(unsigned int)(xi/pix_edge);
+    y = (double)(unsigned int)(yi/pix_edge);
+    init = false;
+    return true;
+  }
   if (done) return false;
   double dx = xe-xs;
   double dy = ye-ys;
   double mag = vcl_sqrt(dx*dx + dy*dy);
   if (mag<pix_edge)//Can't reach the next pixel under any circumstances
-    {             //so just output the target, xe, ye.
-      x = (double)(unsigned int)xe;
-      y = (double)(unsigned int)ye;
-      done = true;
-      return true;
-    }
+  {                //so just output the target, xe, ye.
+    x = (double)(unsigned int)xe;
+    y = (double)(unsigned int)ye;
+    done = true;
+    return true;
+  }
   double delta = (0.5*pix_edge)/mag; //move in 1/2 pixel increments
   //Previous pixel location
   int xp = int(xi/pix_edge);
   int yp = int(yi/pix_edge);
   //Increment along the line until the motion is greater than one pixel
   for (int i = 0; i<3; i++)
+  {
+    xi += dx*delta;
+    yi += dy*delta;
+    //Check for end of segment, make sure we emit the end of the segment
+    if ((xe>=xs&&xi>xe)||(xe<=xs&&xi<xe)||(ye>=ys&&yi>ye)||(ye<=ys&&yi<ye))
     {
-      xi += dx*delta;
-      yi += dy*delta;
-      //Check for end of segment, make sure we emit the end of the segment
-      if ((xe>=xs&&xi>xe)||(xe<=xs&&xi<xe)||(ye>=ys&&yi>ye)||(ye<=ys&&yi<ye))
-        {
-          x = xe; y = ye;
-          done = true;
-          return true;
-        }
-      //Check if we have advanced by more than .5 pixels
-      x = (xi/pix_edge);
-      y = (yi/pix_edge);
-      double dx1 = (double)(int(x)-xp), dy1 = (double)(int(y)-yp);
-      if (vcl_abs(dx1)>(.5*pix_edge)||vcl_abs(dy1)>(.5*pix_edge))
-        return true;
+      x = xe; y = ye;
+      done = true;
+      return true;
     }
+    //Check if we have advanced by more than .5 pixels
+    x = (xi/pix_edge);
+    y = (yi/pix_edge);
+    double dx1 = (double)(int(x)-xp), dy1 = (double)(int(y)-yp);
+    if (vcl_abs(dx1)>(.5*pix_edge)||vcl_abs(dy1)>(.5*pix_edge))
+      return true;
+  }
   vcl_cout << "in vdgl_edgel_chain::line_gen(..) - shouldn't happen\n";
   return false;
 }
@@ -199,10 +200,10 @@ bool vdgl_edgel_chain::line_gen(double xs, double ys, double xe, double ye,
 bool operator==( const vdgl_edgel_chain &ec1, const vdgl_edgel_chain &ec2)
 {
   int size1 = ec1.size(), size2 = ec2.size();
-  if(size1 != size2)
+  if (size1 != size2)
     return false;
-  for(int i = 0; i<size1; i++)
-    if(!(ec1[i] == ec2[i]))
+  for (int i = 0; i<size1; i++)
+    if (!(ec1[i] == ec2[i]))
       return false;
   return true;
 }
@@ -221,38 +222,37 @@ void vdgl_edgel_chain::b_write(vsl_b_ostream &os) const
 {
   vsl_b_write(os, version());
   vsl_b_write(os, es_.size());
-  for(unsigned int i = 0; i<es_.size(); i++)
-    {
-        vsl_b_write(os, es_[i].get_x());
-        vsl_b_write(os, es_[i].get_y());
-        vsl_b_write(os, es_[i].get_grad());
-        vsl_b_write(os, es_[i].get_theta());
-    }
+  for (unsigned int i = 0; i<es_.size(); i++)
+  {
+    vsl_b_write(os, es_[i].get_x());
+    vsl_b_write(os, es_[i].get_y());
+    vsl_b_write(os, es_[i].get_grad());
+    vsl_b_write(os, es_[i].get_theta());
+  }
 }
 //: Binary load self from stream (not typically used)
 void vdgl_edgel_chain::b_read(vsl_b_istream &is)
 {
-  if(!is)
+  if (!is)
     return;
   short ver;
   vsl_b_read(is, ver);
-  switch(ver)
+  switch (ver)
   {
-  case 1:
+   case 1:
+   {
+    int size =0; vsl_b_read(is, size);
+    for (int i = 0; i<size; i++)
     {
-      int size =0; 
-      vsl_b_read(is, size);
-      for(int i = 0; i<size; i++)
-        {
-          double x=0, y=0, grad=-1, theta=0;
-          vsl_b_read(is, x);
-          vsl_b_read(is, y);
-          vsl_b_read(is, grad);
-          vsl_b_read(is, theta);
-          vdgl_edgel e(x, y, grad, theta);
-          this->add_edgel(e);
-        }
+      double x=0, y=0, grad=-1, theta=0;
+      vsl_b_read(is, x);
+      vsl_b_read(is, y);
+      vsl_b_read(is, grad);
+      vsl_b_read(is, theta);
+      vdgl_edgel e(x, y, grad, theta);
+      this->add_edgel(e);
     }
+   }
   }
 }
 //: Return IO version number;

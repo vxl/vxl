@@ -1,6 +1,7 @@
 //:
 // \file
 #include "strk_epi_point.h"
+#include <vcl_iostream.h>
 
 // constructors
 strk_epi_point::strk_epi_point(vgl_point_2d<double> &p,

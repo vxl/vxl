@@ -3,7 +3,7 @@
 #pragma implementation
 #endif
 //:
-//  \file
+// \file
 
 #include "vimt_image.h"
 #if VCL_CXX_HAS_HEADER_TYPEINFO
@@ -11,6 +11,8 @@
 #endif
 #include <vsl/vsl_indent.h>
 #include <vsl/vsl_binary_loader.h>
+#include <vcl_iostream.h>
+
 //=======================================================================
 
 short vimt_image::version_no() const

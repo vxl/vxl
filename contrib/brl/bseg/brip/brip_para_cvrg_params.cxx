@@ -2,6 +2,7 @@
 // \file
 #include <brip/brip_para_cvrg_params.h>
 #include <vcl_sstream.h>
+#include <vcl_iostream.h>
 
 //------------------------------------------------------------------------
 // Constructors
@@ -15,9 +16,9 @@ brip_para_cvrg_params::brip_para_cvrg_params(const brip_para_cvrg_params& pdp)
 }
 
 brip_para_cvrg_params::brip_para_cvrg_params(float sigma, float thresh,
-                                       float gauss_tail, int proj_width,
-                                       int proj_height, int sup_radius,
-                                       bool verbose)
+                                             float gauss_tail, int proj_width,
+                                             int proj_height, int sup_radius,
+                                             bool verbose)
 {
   InitParams(sigma, thresh, gauss_tail, proj_width, proj_height,
              sup_radius, verbose);

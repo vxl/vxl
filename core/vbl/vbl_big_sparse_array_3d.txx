@@ -5,6 +5,7 @@
 #include "vbl_big_sparse_array_3d.h"
 #include <vcl_cassert.h>
 #include <vcl_utility.h> // for vcl_pair<T,bool>
+#include <vcl_iostream.h>
 
 // locals
 inline ulonglong bigencode(unsigned i, unsigned j, unsigned k)
@@ -40,8 +41,9 @@ template <class T>
 T& vbl_big_sparse_array_3d<T>::operator() (unsigned i, unsigned j, unsigned k)
 {
 #ifdef DEBUG
-  vcl_cout << "{vbl_big_sparse_array_3d(" << i << ',' << j << ',' << k << ") - "
-           << "storage[" << bigencode(i,j,k) << "] - " << storage_[bigencode(i,j,k)] << "}\n";
+  vcl_cout << "{vbl_big_sparse_array_3d(" << i << ',' << j << ',' << k
+           << ") - storage[" << bigencode(i,j,k) << "] - "
+           << storage_[bigencode(i,j,k)] << "}\n";
 #endif
   return storage_[bigencode(i,j,k)];
 }
@@ -51,8 +53,9 @@ T const& vbl_big_sparse_array_3d<T>::operator() (unsigned i, unsigned j, unsigne
 {
   typename Map::const_iterator p = storage_.find(bigencode(i,j,k));
 #ifdef DEBUG
-  vcl_cout << "{vbl_big_sparse_array_3d(" << i << ',' << j << ',' << k << ") - "
-           << "storage[" << bigencode(i,j,k) << "] - " << storage_[bigencode(i,j,k)] << "}\n";
+  vcl_cout << "{vbl_big_sparse_array_3d(" << i << ',' << j << ',' << k
+           << ") - storage[" << bigencode(i,j,k) << "] - "
+           << storage_[bigencode(i,j,k)] << "}\n";
 #endif
   assert(p != storage_.end());
   return (*p).second;

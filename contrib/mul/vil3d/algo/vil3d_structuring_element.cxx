@@ -6,6 +6,7 @@
 // \author Tim Cootes
 
 #include <vcl_cassert.h>
+#include <vcl_iostream.h>
 
   //: Define elements { (p_i[a],p_j[a],p_k[a]) }
 vil3d_structuring_element::vil3d_structuring_element(const vcl_vector<int>& p_i,
@@ -51,10 +52,10 @@ void vil3d_structuring_element::set_to_sphere(double r)
   double r2 = r*r;
   int r0 = int(r+1);
   for (int k=-r0;k<=r0;++k)
-   for (int j=-r0;j<=r0;++j)
-    for (int i=-r0;i<=r0;++i)
-      if (i*i+j*j+k*k<r2) 
-      { px.push_back(i); py.push_back(j); pz.push_back(k); }
+    for (int j=-r0;j<=r0;++j)
+      for (int i=-r0;i<=r0;++i)
+        if (i*i+j*j+k*k<r2)
+        { px.push_back(i); py.push_back(j); pz.push_back(k); }
   set(px,py,pz);
 }
 
@@ -110,9 +111,9 @@ void vil3d_structuring_element::set_to_line_k(int klo, int khi)
 vcl_ostream& operator<<(vcl_ostream& os, const vil3d_structuring_element& element)
 {
   os<<"Bounds ["
-    <<element.min_i()<<","<<element.max_i()<<"]["
-    <<element.min_j()<<","<<element.max_j()<<"]["
-    <<element.min_k()<<","<<element.max_k()<<"] Points: ";
+    <<element.min_i()<<','<<element.max_i()<<"]["
+    <<element.min_j()<<','<<element.max_j()<<"]["
+    <<element.min_k()<<','<<element.max_k()<<"] Points: ";
   for (unsigned int a=0;a<element.p_i().size();++a)
   {
     os<<'('<<element.p_i()[a]<<','

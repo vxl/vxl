@@ -1,4 +1,5 @@
 #include "brip_region_pixel.h"
+#include <vcl_iostream.h>
 
 vcl_ostream& operator<<(vcl_ostream& s, brip_region_pixel const& sd)
 {

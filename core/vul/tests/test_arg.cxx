@@ -8,6 +8,7 @@
 
 #include <vul/vul_arg.h>
 #include <vcl_cstring.h> // needed for strcmp()
+#include <vcl_iostream.h>
 #include <vcl_list.h>
 #include <vcl_algorithm.h>
 #include <testlib/testlib_test.h>

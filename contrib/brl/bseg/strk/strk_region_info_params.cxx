@@ -6,6 +6,7 @@
 //
 //-----------------------------------------------------------------------------
 #include <vcl_sstream.h>
+#include <vcl_iostream.h>
 
 //------------------------------------------------------------------------
 // Constructors
@@ -21,8 +22,7 @@ strk_region_info_params(const strk_region_info_params& tp)
              tp.min_gradient_,
              tp.parzen_sigma_,
              tp.verbose_,
-             tp.debug_
-             );
+             tp.debug_);
 }
 
 strk_region_info_params::
@@ -71,7 +71,7 @@ bool strk_region_info_params::SanityCheck()
   vcl_stringstream msg;
   bool valid = true;
 
-   msg << vcl_ends;
+  msg << vcl_ends;
 
   SetErrorMsg(msg.str().c_str());
   return valid;

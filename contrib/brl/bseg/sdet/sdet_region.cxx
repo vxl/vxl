@@ -4,10 +4,11 @@
 #include <vsol/vsol_polygon_2d.h>
 #include <bsol/bsol_algs.h>
 #include <sdet/sdet_region.h>
+#include <vcl_iostream.h>
 
 sdet_region::sdet_region()
 {
- boundary_valid_ = false;
+  boundary_valid_ = false;
   region_label_ = 0;
 }
 

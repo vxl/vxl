@@ -3,11 +3,12 @@
 #pragma implementation
 #endif
 //:
-//  \file
+// \file
 
 #include "mil_image_pyramid.h"
 
 #include <vcl_cassert.h>
+#include <vcl_iostream.h>
 #include <mil/mil_image.h>
 
 //=======================================================================
@@ -121,8 +122,8 @@ vcl_vector<mil_image*>& mil_image_pyramid::data()
 void mil_image_pyramid::setWidths(double base_pixel_width,
                                   double scale_step)
 {
-     base_pixel_width_ = base_pixel_width;
-     scale_step_ = scale_step;
+    base_pixel_width_ = base_pixel_width;
+    scale_step_ = scale_step;
 }
 
 void mil_image_pyramid::print_summary(vcl_ostream& os) const

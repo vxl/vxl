@@ -6,6 +6,7 @@
 //
 //-----------------------------------------------------------------------------
 #include <vcl_sstream.h>
+#include <vcl_iostream.h>
 
 //------------------------------------------------------------------------
 // Constructors
@@ -67,7 +68,7 @@ bool btom_slice_simulator_params::SanityCheck()
     valid = false;
   }
 
-   msg << vcl_ends;
+  msg << vcl_ends;
 
   SetErrorMsg(msg.str().c_str());
   return valid;

@@ -6,6 +6,7 @@
 // \author Tim Cootes
 
 #include <vcl_cmath.h>
+#include <vcl_iostream.h>
 #include <vcl_cassert.h>
 #include <vsl/vsl_vector_io.h>
 
@@ -111,16 +112,16 @@ void mbl_histogram::b_read(vsl_b_istream& bfs)
 
   switch (file_version_no)
   {
-  case 1:
+   case 1:
     vsl_b_read(bfs,n_obs_);
     vsl_b_read(bfs,n_below_);
     vsl_b_read(bfs,n_above_);
     vsl_b_read(bfs,bins_);
     vsl_b_read(bfs,freq_);
     break;
-  default :
-    vcl_cerr << "I/O ERROR: mbl_histogram::b_read(vsl_b_istream&) \n";
-    vcl_cerr << "           Unknown version number "<< file_version_no << "\n";
+   default:
+    vcl_cerr << "I/O ERROR: mbl_histogram::b_read(vsl_b_istream&)\n"
+             << "           Unknown version number "<< file_version_no << '\n';
     bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
     return;
   }
@@ -140,7 +141,7 @@ void mbl_histogram::print_summary(vcl_ostream& os) const
     os << n_obs_ << " observations.\n"
        << "    < "<<bins_[0]<<"   "<<n_below_<<vcl_endl;
     for (int i=0;i<n;++i)
-      os<<"  ["<<bins_[i]<<","<<bins_[i+1]<<")  "<<freq_[i]<<vcl_endl;
+      os<<"  ["<<bins_[i]<<','<<bins_[i+1]<<")  "<<freq_[i]<<vcl_endl;
     os << "   >= "<<bins_[n]<<"   "<<n_above_<<vcl_endl;
   }
 }

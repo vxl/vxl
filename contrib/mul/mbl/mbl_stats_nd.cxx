@@ -7,6 +7,7 @@
 
 #include <vcl_cmath.h>
 #include <vcl_cassert.h>
+#include <vcl_iostream.h>
 #include <vnl/io/vnl_io_vector.h>
 
 mbl_stats_nd::mbl_stats_nd()

@@ -2,6 +2,7 @@
   fsm
 */
 #include <vcl_cstdlib.h>
+#include <vcl_iostream.h>
 
 #include <vgui/vgui.h>
 #include <vgui/vgui_window.h>

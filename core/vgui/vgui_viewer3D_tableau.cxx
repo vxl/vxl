@@ -16,14 +16,13 @@
 #include "vgui_viewer3D_tableau.h"
 
 #include <vcl_cmath.h>
-
+#include <vcl_iostream.h>
 #include <vbl/vbl_bool_ostream.h>
 
 #include <vgui/vgui_gl.h>
 #include <vgui/vgui_glu.h>
 #include <vgui/internals/trackball.h>
 #include <vgui/vgui.h>
-//#include <vgui/vgui_3D.h>
 #include <vgui/vgui_event.h>
 
 struct vgui_viewer3D_tableau_spin {

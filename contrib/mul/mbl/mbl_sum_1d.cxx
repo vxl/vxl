@@ -6,6 +6,7 @@
 // \author Tim Cootes
 
 #include <vcl_cmath.h>
+#include <vcl_iostream.h>
 
 mbl_sum_1d::mbl_sum_1d()
 {
@@ -56,13 +57,13 @@ void mbl_sum_1d::b_read(vsl_b_istream& bfs)
 
   switch (file_version_no)
   {
-  case 1:
+   case 1:
     vsl_b_read(bfs,n_obs_);
     vsl_b_read(bfs,sum_);
     break;
-  default :
-    vcl_cerr << "I/O ERROR: mbl_sum_1d::b_read(vsl_b_istream&) \n";
-    vcl_cerr << "           Unknown version number "<< file_version_no << "\n";
+   default:
+    vcl_cerr << "I/O ERROR: mbl_sum_1d::b_read(vsl_b_istream&)\n"
+             << "           Unknown version number "<< file_version_no << '\n';
     bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
     return;
   }

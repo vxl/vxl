@@ -6,6 +6,7 @@
 //
 //-----------------------------------------------------------------------------
 #include <vcl_sstream.h>
+#include <vcl_iostream.h>
 
 //------------------------------------------------------------------------
 // Constructors
@@ -22,8 +23,7 @@ strk_epipolar_grouper_params(const strk_epipolar_grouper_params& tp)
              tp.elv_max_,
              tp.Ns_,
              tp.angle_thresh_,
-             tp.dummy4_
-             );
+             tp.dummy4_);
 }
 
 strk_epipolar_grouper_params::
@@ -46,15 +46,14 @@ strk_epipolar_grouper_params(const float eu,
              dummy4);
 }
 
-void strk_epipolar_grouper_params::InitParams(
-                                     float eu,
-                                     float ev,
-                                     int elu,
-                                     int elv_min,
-                                     int elv_max,
-                                     int Ns,
-                                     float angle_thresh,
-                                     bool  dummy4)
+void strk_epipolar_grouper_params::InitParams(float eu,
+                                              float ev,
+                                              int elu,
+                                              int elv_min,
+                                              int elv_max,
+                                              int Ns,
+                                              float angle_thresh,
+                                              bool dummy4)
 {
   eu_ = eu;
   ev_ = ev;
@@ -77,7 +76,7 @@ bool strk_epipolar_grouper_params::SanityCheck()
   vcl_stringstream msg;
   bool valid = true;
 
-   msg << vcl_ends;
+  msg << vcl_ends;
 
   SetErrorMsg(msg.str().c_str());
   return valid;

@@ -6,6 +6,7 @@
 //
 //-----------------------------------------------------------------------------
 #include <vcl_sstream.h>
+#include <vcl_iostream.h>
 
 //------------------------------------------------------------------------
 // Constructors
@@ -44,7 +45,7 @@ bool vpro_motion_params::SanityCheck()
   vcl_stringstream msg;
   bool valid = true;
 
-   msg << vcl_ends;
+  msg << vcl_ends;
 
   SetErrorMsg(msg.str().c_str());
   return valid;

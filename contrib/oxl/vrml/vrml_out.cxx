@@ -10,6 +10,7 @@
 #include <vcl_functional.h>
 #include <vcl_fstream.h>
 #include <vcl_map.h>
+#include <vcl_iostream.h>
 #include <vul/vul_printf.h>
 
 // Default ctor

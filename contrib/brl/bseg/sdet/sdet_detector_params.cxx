@@ -3,6 +3,7 @@
 #include "sdet_detector_params.h"
 #include <vcl_string.h>
 #include <vcl_sstream.h>
+#include <vcl_iostream.h>
 
 //------------------------------------------------------------------------
 // Constructors

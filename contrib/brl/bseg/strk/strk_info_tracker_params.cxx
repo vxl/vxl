@@ -6,6 +6,7 @@
 //
 //-----------------------------------------------------------------------------
 #include <vcl_sstream.h>
+#include <vcl_iostream.h>
 
 //------------------------------------------------------------------------
 // Constructors
@@ -27,8 +28,7 @@ strk_info_tracker_params(const strk_info_tracker_params& tp)
              tp.use_background_,
              tp.renyi_joint_entropy_,
              tp.verbose_,
-             tp.debug_
-             );
+             tp.debug_);
 }
 
 strk_info_tracker_params::
@@ -101,7 +101,7 @@ bool strk_info_tracker_params::SanityCheck()
   vcl_stringstream msg;
   bool valid = true;
 
-   msg << vcl_ends;
+  msg << vcl_ends;
 
   SetErrorMsg(msg.str().c_str());
   return valid;
@@ -109,20 +109,20 @@ bool strk_info_tracker_params::SanityCheck()
 
 vcl_ostream& operator << (vcl_ostream& os, const strk_info_tracker_params& tp)
 {
-  os << "strk_info_tracker_params:" << vcl_endl << "[---" << vcl_endl;
-  os << "n_samples " << tp.n_samples_ << vcl_endl;
-  os << "search_radius " << tp.search_radius_ << vcl_endl;
-  os << "angle_range " << tp.angle_range_ << vcl_endl;
-  os << "scale_range " << tp.scale_range_ << vcl_endl;
-  os << "sigma " << tp.sigma_ << vcl_endl;
-  os << "gradient_info " << tp.gradient_info_ << vcl_endl;
-  os << "color_info " << tp.color_info_ << vcl_endl;
-  os << "min_gradient " << tp.min_gradient_ << vcl_endl;
-  os << "parzen_sigma " << tp.parzen_sigma_ << vcl_endl;
-  os << "use background model " << tp.use_background_ << vcl_endl;
-  os << "renyi joint entropy " << tp.renyi_joint_entropy_ << vcl_endl;
-  os << "verbose " << tp.verbose_ << vcl_endl;
-  os << "debug " << tp.debug_ << vcl_endl;
-  os << "---]" << vcl_endl;
-  return os;
+  return
+  os << "strk_info_tracker_params:" << vcl_endl << "[---\n"
+     << "n_samples " << tp.n_samples_ << vcl_endl
+     << "search_radius " << tp.search_radius_ << vcl_endl
+     << "angle_range " << tp.angle_range_ << vcl_endl
+     << "scale_range " << tp.scale_range_ << vcl_endl
+     << "sigma " << tp.sigma_ << vcl_endl
+     << "gradient_info " << tp.gradient_info_ << vcl_endl
+     << "color_info " << tp.color_info_ << vcl_endl
+     << "min_gradient " << tp.min_gradient_ << vcl_endl
+     << "parzen_sigma " << tp.parzen_sigma_ << vcl_endl
+     << "use background model " << tp.use_background_ << vcl_endl
+     << "renyi joint entropy " << tp.renyi_joint_entropy_ << vcl_endl
+     << "verbose " << tp.verbose_ << vcl_endl
+     << "debug " << tp.debug_ << vcl_endl
+     << "---]" << vcl_endl;
 }

@@ -3,6 +3,7 @@
 // \file
 
 #include <vcl_cassert.h>
+#include <vcl_iostream.h>
 #include <vnl/vnl_math.h>
 #include <vnl/vnl_numeric_traits.h>
 #include <bmrf/bmrf_epi_point.h>
@@ -633,41 +634,42 @@ void bmrf_epi_seg::b_read(vsl_b_istream &is)
     return;
   short ver;
   vsl_b_read(is, ver);
-  switch(ver)
+  switch (ver)
   {
    case 1:
+   {
+    int n=0; vsl_b_read(is, n);
+    seg_.clear();
+    for (int i=0; i<n; i++)
     {
-      int n=0; vsl_b_read(is, n);
-      seg_.clear();
-      for (int i=0; i<n; i++)
-      {
-        bmrf_epi_point_sptr ep = new bmrf_epi_point();
-        ep->b_read(is);
-        this->seg_.push_back(ep);
-      }
-      int m; vsl_b_read(is, m);
-      this->int_alpha_.resize(m);
-      this->left_ds_.resize(m);
-      this->left_int_.resize(m);
-      this->right_ds_.resize(m);
-      this->right_int_.resize(m);
-      for (int i=0; i<m; i++)
-      {
-        vsl_b_read(is, this->int_alpha_[i]);
-        vsl_b_read(is, this->left_ds_[i]);
-        vsl_b_read(is, this->left_int_[i]);
-        vsl_b_read(is, this->right_ds_[i]);
-        vsl_b_read(is, this->right_int_[i]);
-      }
-      break;
+      bmrf_epi_point_sptr ep = new bmrf_epi_point();
+      ep->b_read(is);
+      this->seg_.push_back(ep);
     }
+    int m; vsl_b_read(is, m);
+    this->int_alpha_.resize(m);
+    this->left_ds_.resize(m);
+    this->left_int_.resize(m);
+    this->right_ds_.resize(m);
+    this->right_int_.resize(m);
+    for (int i=0; i<m; i++)
+    {
+      vsl_b_read(is, this->int_alpha_[i]);
+      vsl_b_read(is, this->left_ds_[i]);
+      vsl_b_read(is, this->left_int_[i]);
+      vsl_b_read(is, this->right_ds_[i]);
+      vsl_b_read(is, this->right_int_[i]);
+    }
+    break;
+   }
    default:
-     vcl_cerr << "I/O ERROR: bmrf_epi_seg::b_read(vsl_b_istream&)\n"
-              << "           Unknown version number "<< ver << '\n';
-     is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
-     return;
+    vcl_cerr << "I/O ERROR: bmrf_epi_seg::b_read(vsl_b_istream&)\n"
+             << "           Unknown version number "<< ver << '\n';
+    is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+    return;
   }
 }
+
 //: Return IO version number;
 short bmrf_epi_seg::version() const
 {
@@ -696,6 +698,7 @@ vcl_ostream&  operator<<(vcl_ostream& s, bmrf_epi_seg const& epi_seg)
 {
   int n = epi_seg.n_pts();
   bmrf_epi_seg& es = const_cast<bmrf_epi_seg &>(epi_seg);//cast away const
+  return
   s << "Epi Segment[" << n <<"]\n"
     << "alpha:[" << es.min_alpha() << ' ' << es.max_alpha() << "]\n"
     << "s:[" << es.min_s() << ' ' << es.max_s() << "]\n"
@@ -705,7 +708,6 @@ vcl_ostream&  operator<<(vcl_ostream& s, bmrf_epi_seg const& epi_seg)
     << ' ' << es.max_left_int() << "]("<< es.left_int_sd()<< ")\n"
     << "right_int:[" << es.min_right_int() << ' ' << es.avg_right_int()
     << ' ' << es.max_right_int() << "]("<< es.right_int_sd()<< ")\n";
-  return s;
 }
 
 //: Binary save bmrf_epi_seg to stream.
@@ -735,4 +737,3 @@ vsl_b_read(vsl_b_istream &is, bmrf_epi_seg_sptr& eps)
   else
     eps = 0;
 }
-

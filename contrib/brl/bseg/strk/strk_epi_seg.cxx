@@ -6,6 +6,7 @@
 #include <vnl/vnl_math.h>
 #include <vnl/vnl_numeric_traits.h>
 #include <strk/strk_epi_point.h>
+#include <vcl_iostream.h>
 
 // constructors
 strk_epi_seg::strk_epi_seg()

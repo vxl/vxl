@@ -7,9 +7,8 @@
 #include <vgui/vgui_event.h>
 #include <vgui/vgui_menu.h>
 #include <vgui/vgui_clear_tableau.h>
-//#include <vgui/vgui_matrix_state.h>
 #include <vgui/vgui_tview_launcher_tableau.h>
-
+#include <vcl_iostream.h>
 
 vgui_event_condition vgui_shell_tableau_bindings::default_quit  = vgui_event_condition( vgui_key('q'), vgui_ALT );
 vgui_event_condition vgui_shell_tableau_bindings::default_close = vgui_event_condition( vgui_key('w'), vgui_ALT );

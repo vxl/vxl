@@ -4,16 +4,17 @@
 #endif
 //:
 // \file
-// \author
-// Author: Geoffrey Cross, Oxford RRG
-// Created: 20 May 99
-// Modifications:
+// \author Geoffrey Cross, Oxford RRG
+// \date 20 May 99
+// \verbatim
+//  Modifications:
 //   990520 Geoff Initial version.
-//
+// \endverbatim
 //-----------------------------------------------------------------------------
 
-#include <vcl_cassert.h>
 #include "Voxel.h"
+#include <vcl_iostream.h>
+#include <vcl_cassert.h>
 
 #if 0
 bool operator==( const Voxel &a, const Voxel &b)
@@ -24,7 +25,7 @@ bool operator==( const Voxel &a, const Voxel &b)
 
 vcl_ostream &operator<<( vcl_ostream &os, const Voxel &a)
 {
-  return os << a.depth << " " << a.x << " " << a.y << " " << a.z;
+  return os << a.depth << ' ' << a.x << ' ' << a.y << ' ' << a.z;
 }
 
 bool operator<( Voxel & /* v1 */, Voxel & /* v2 */)

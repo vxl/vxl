@@ -6,6 +6,7 @@
 // \author Tim Cootes
 
 #include <vcl_cassert.h>
+#include <vcl_iostream.h>
 
 //: Define elements { (p_i[k],p_j[k]) }
 vil_structuring_element::vil_structuring_element(const vcl_vector<int>& p_i,

@@ -6,7 +6,7 @@
 
 #include "mbl_table.h"
 #include <vcl_cstdlib.h>
-
+#include <vcl_iostream.h>
 
 //==================================================================================
 //! Constructor

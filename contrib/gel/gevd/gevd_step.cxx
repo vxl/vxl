@@ -23,6 +23,7 @@
 //\endverbatim
 
 #include <vcl_vector.h>
+#include <vcl_iostream.h>
 #include <vnl/vnl_math.h>
 #include <gevd/gevd_noise.h>
 #include <gevd/gevd_float_operators.h>
@@ -77,9 +78,9 @@ const int FRAME = 4; // 3 for NMS and extension, 4 for contour
 gevd_step::gevd_step(float smooth_sigma, // width of filter dG
                      float noise_sigma,   // sensor/texture intensity noise -[0 1]
                      float contour_factor, float junction_factor)
-  :smoothSigma(smooth_sigma), noiseSigma(noise_sigma),
-   contourFactor(contour_factor), junctionFactor(junction_factor),
-   filterFactor(2)              // factor from gevd_float_operators::Gradient
+  : smoothSigma(smooth_sigma), noiseSigma(noise_sigma),
+    contourFactor(contour_factor), junctionFactor(junction_factor),
+    filterFactor(2)              // factor from gevd_float_operators::Gradient
 {
   if (smoothSigma < 0.5)        // no guarrantee for 2-pixel separation
     vcl_cerr << "gevd_step::gevd_step -- too small smooth_sigma: "
@@ -369,7 +370,7 @@ gevd_step::RecoverJunctions(const gevd_bufferxy& image,
   // 1. Find end points of dangling contours
   //const int length0 = xmax/kmax*ymax/kmax/4;// 25% size
   //const float growth = 2;     // growth ratio of the arrays
- 
+
   vcl_vector<int> ndir; //  ndir.set_growth_ratio(growth);
   vcl_vector<int> xloc; //  xloc.set_growth_ratio(growth); // dynamic array instead of long lists
   vcl_vector<int> yloc; //  yloc.set_growth_ratio(growth);

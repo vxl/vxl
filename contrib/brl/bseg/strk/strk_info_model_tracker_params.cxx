@@ -6,6 +6,7 @@
 //
 //-----------------------------------------------------------------------------
 #include <vcl_sstream.h>
+#include <vcl_iostream.h>
 
 //------------------------------------------------------------------------
 // Constructors
@@ -41,8 +42,7 @@ strk_info_model_tracker_params(const int n_samples,
                                const float short_arm_tip_angle_range,
                                const float sigma,
                                const bool gradient_info,
-                               const bool verbose
-                               )
+                               const bool verbose)
 {
   InitParams(n_samples,
              stem_trans_radius,

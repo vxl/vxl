@@ -6,6 +6,7 @@
 //
 //-----------------------------------------------------------------------------
 #include <vcl_sstream.h>
+#include <vcl_iostream.h>
 
 //------------------------------------------------------------------------
 // Constructors
@@ -54,7 +55,7 @@ bool sdet_fit_lines_params::SanityCheck()
     msg << "ERROR: a line fit should be better than one pixel rms\n";
     valid = false;
   }
-   msg << vcl_ends;
+  msg << vcl_ends;
 
   SetErrorMsg(msg.str().c_str());
   return valid;
@@ -62,9 +63,9 @@ bool sdet_fit_lines_params::SanityCheck()
 
 vcl_ostream& operator << (vcl_ostream& os, const sdet_fit_lines_params& flp)
 {
+  return
   os << "sdet_fit_lines_params:\n[---\n"
      << "min fit length " << flp.min_fit_length_ << vcl_endl
      << "rms distance tolerance" << flp.rms_distance_ << vcl_endl
      << "---]\n";
-  return os;
 }

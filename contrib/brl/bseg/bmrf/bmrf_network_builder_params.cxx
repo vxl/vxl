@@ -6,6 +6,7 @@
 //
 //-----------------------------------------------------------------------------
 #include <vcl_sstream.h>
+#include <vcl_iostream.h>
 
 //------------------------------------------------------------------------
 // Constructors
@@ -22,17 +23,17 @@ bmrf_network_builder_params(const bmrf_network_builder_params& tp)
              tp.elv_max_,
              tp.Ns_,
              tp.max_delta_recip_s_
-             );
+            );
 }
 
 bmrf_network_builder_params::
 bmrf_network_builder_params(const float eu,
-                             const float ev,
-                             const int elu,
-                             const int elv_min,
-                             const int elv_max,
-                             const int Ns,
-                             const float gamma_max)
+                            const float ev,
+                            const int elu,
+                            const int elv_min,
+                            const int elv_max,
+                            const int Ns,
+                            const float gamma_max)
 {
   InitParams(eu,
              ev,
@@ -43,14 +44,13 @@ bmrf_network_builder_params(const float eu,
              gamma_max);
 }
 
-void bmrf_network_builder_params::InitParams(
-                                     float eu,
-                                     float ev,
-                                     int elu,
-                                     int elv_min,
-                                     int elv_max,
-                                     int Ns,
-                                     float max_delta_recip_s)
+void bmrf_network_builder_params::InitParams(float eu,
+                                             float ev,
+                                             int elu,
+                                             int elv_min,
+                                             int elv_max,
+                                             int Ns,
+                                             float max_delta_recip_s)
 {
   eu_ = eu;
   ev_ = ev;
@@ -72,7 +72,7 @@ bool bmrf_network_builder_params::SanityCheck()
   vcl_stringstream msg;
   bool valid = true;
 
-   msg << vcl_ends;
+  msg << vcl_ends;
 
   SetErrorMsg(msg.str().c_str());
   return valid;

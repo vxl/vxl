@@ -3,6 +3,7 @@
 // miscellaneous io operators
 
 #include "io.h"
+#include <vcl_iostream.h>
 
 template <class T>
 vcl_ostream &operator <<(vcl_ostream &os, const vnl_vector<T> &vec)
@@ -13,7 +14,7 @@ vcl_ostream &operator <<(vcl_ostream &os, const vnl_vector<T> &vec)
   vcl_cout << "<Vector: ";
   for (iter=vec.begin(); iter!=end_iter; iter++)
   {
-    vcl_cout << " " << *iter;
+    vcl_cout << ' ' << *iter;
   }
   vcl_cout << "> ";
 
@@ -29,7 +30,7 @@ vcl_ostream &operator <<(vcl_ostream &os, const vcl_vector<T> &vec)
   vcl_cout << "<Vector: ";
   for (iter=vec.begin(); iter!=end_iter; iter++)
   {
-    vcl_cout << " " << *iter;
+    vcl_cout << ' ' << *iter;
   }
   vcl_cout << "> ";
 
@@ -45,7 +46,7 @@ vcl_ostream &operator<<(vcl_ostream &os, const vcl_map<T, S> &omap)
   os << "<Map: ";
   for (iter=omap.begin(); iter!=end_iter; iter++)
   {
-    os << " <" << (*iter).first << ", " << (*iter).second << ">";
+    os << " <" << (*iter).first << ", " << (*iter).second << '>';
   }
   os << "> ";
 
@@ -61,7 +62,7 @@ vcl_ostream &operator <<(vcl_ostream &os, const vcl_set<T> &vec)
   os << "<Set: ";
   for (iter=vec.begin(); iter!=end_iter; iter++)
   {
-    os << " " << *iter;
+    os << ' ' << *iter;
   }
   os << "> ";
 

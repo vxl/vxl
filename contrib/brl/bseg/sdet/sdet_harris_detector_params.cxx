@@ -6,6 +6,7 @@
 //
 //-----------------------------------------------------------------------------
 #include <vcl_sstream.h>
+#include <vcl_iostream.h>
 
 //------------------------------------------------------------------------
 // Constructors
@@ -20,7 +21,7 @@ sdet_harris_detector_params(const sdet_harris_detector_params& hdp)
              hdp.n_,
              hdp.percent_corners_,
              hdp.scale_factor_
-             );
+            );
 }
 
 sdet_harris_detector_params::
@@ -29,7 +30,7 @@ sdet_harris_detector_params(const float sigma,
                             const int n,
                             const float percent_corners,
                             const float scale_factor
-                            )
+                           )
 {
   InitParams(sigma, thresh, n, percent_corners, scale_factor);
 }
@@ -39,7 +40,7 @@ void sdet_harris_detector_params::InitParams(float sigma,
                                              int n,
                                              float percent_corners,
                                              float scale_factor
-                                             )
+                                            )
 {
   sigma_= sigma;
   thresh_ = thresh;
@@ -84,7 +85,7 @@ bool sdet_harris_detector_params::SanityCheck()
     msg << "ERROR: scale factor out of range";
     valid = false;
   }
-   msg << vcl_ends;
+  msg << vcl_ends;
 
   SetErrorMsg(msg.str().c_str());
   return valid;

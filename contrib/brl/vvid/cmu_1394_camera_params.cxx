@@ -1,5 +1,6 @@
 // This is brl/vvid/cmu_1394_camera_params.cxx
 #include "cmu_1394_camera_params.h"
+#include <vcl_iostream.h>
 
 cmu_1394_camera_params::~cmu_1394_camera_params()
 {

@@ -8,6 +8,7 @@
 #include "vimt_image_pyramid.h"
 
 #include <vcl_cassert.h>
+#include <vcl_iostream.h>
 #include <vimt/vimt_image.h>
 
 //=======================================================================
@@ -126,8 +127,8 @@ vcl_vector<vimt_image*>& vimt_image_pyramid::data()
 void vimt_image_pyramid::set_widths(double base_pixel_width,
                                     double scale_step)
 {
-     base_pixel_width_ = base_pixel_width;
-     scale_step_ = scale_step;
+    base_pixel_width_ = base_pixel_width;
+    scale_step_ = scale_step;
 }
 
 void vimt_image_pyramid::print_summary(vcl_ostream& os) const

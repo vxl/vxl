@@ -7,7 +7,7 @@
 //-----------------------------------------------------------------------------
 
 #include <vil1/vil1_image.h>
-
+#include <vcl_iostream.h>
 #include <gevd/gevd_float_operators.h>
 #include <gevd/gevd_step.h>
 #include <gevd/gevd_bufferxy.h>
@@ -34,11 +34,11 @@ sdet_detector::sdet_detector(sdet_detector_params& params)
 sdet_detector::sdet_detector(vil1_image img, float smoothSigma, float noiseSigma,
                              float contour_factor, float junction_factor, int min_length,
                              float maxgap, float min_jump)
-  :  image(img), noise(noiseSigma), edgel(NULL), direction(NULL),
-     locationx(NULL), locationy(NULL), grad_mag(NULL),
-     angle(NULL), junctionx(NULL), junctiony(NULL), njunction(0),
-     vertices(NULL), edges(NULL),
-     filterFactor(2), hysteresisFactor(2.0), noiseThreshold(0.0)
+  : image(img), noise(noiseSigma), edgel(NULL), direction(NULL),
+    locationx(NULL), locationy(NULL), grad_mag(NULL),
+    angle(NULL), junctionx(NULL), junctiony(NULL), njunction(0),
+    vertices(NULL), edges(NULL),
+    filterFactor(2), hysteresisFactor(2.0), noiseThreshold(0.0)
 {
   sdet_detector_params::smooth = smoothSigma;
   sdet_detector_params::contourFactor = contour_factor;
@@ -256,16 +256,16 @@ gevd_bufferxy* sdet_detector::GetBufferFromImage()
   if (image_float_buf) return image_float_buf;
   //Tests for validity
   if (!image)
-    {
-      vcl_cout << "In sdet_detector::GetBufferFromImage() - no image\n";
-      return 0;
-    }
+  {
+    vcl_cout << "In sdet_detector::GetBufferFromImage() - no image\n";
+    return 0;
+  }
   if (image.components()!=1)
-    {
-      vcl_cout << "In sdet_detector::GetBufferFromImage()"
-               << " - not exactly one component\n";
-      return 0;
-    }
+  {
+    vcl_cout << "In sdet_detector::GetBufferFromImage() -"
+             << " not exactly one component\n";
+    return 0;
+  }
 
 #if 0 // TargetJr
   RectROI* roi = image->GetROI(); // find user-selected region of interest
@@ -280,30 +280,30 @@ gevd_bufferxy* sdet_detector::GetBufferFromImage()
 
 #if 0 // commented out
   if (image->GetPixelType() == Image::FLOAT)
-    {
-      image->GetSection(image_float_buf->GetBuffer(),
-                        roi->GetOrigX(), roi->GetOrigY(), sizex, sizey);
-      return image_float_buf;
-    }
+  {
+    image->GetSection(image_float_buf->GetBuffer(),
+                      roi->GetOrigX(), roi->GetOrigY(), sizex, sizey);
+    return image_float_buf;
+  }
 #endif
 
-   gevd_bufferxy image_buf(sizex, sizey, image.bits_per_component());
+  gevd_bufferxy image_buf(sizex, sizey, image.bits_per_component());
 
 #if 0 // commented out
   image->GetSection(image_buf.GetBuffer(),      // copy bytes image into buf
                     roi->GetOrigX(), roi->GetOrigY(), sizex, sizey);
 #endif
 
-   image.get_section(image_buf.GetBuffer(),     // copy bytes image into buf
-                     0, 0, sizex, sizey);
+  image.get_section(image_buf.GetBuffer(),     // copy bytes image into buf
+                    0, 0, sizex, sizey);
 
-   if (! gevd_float_operators::BufferToFloat(image_buf, *image_float_buf))
-     {
-       delete image_float_buf;
-       image_float_buf = 0;
-     }
+  if (! gevd_float_operators::BufferToFloat(image_buf, *image_float_buf))
+  {
+    delete image_float_buf;
+    image_float_buf = 0;
+  }
 
-   return image_float_buf;
+  return image_float_buf;
 }
 
 void sdet_detector::print(vcl_ostream &strm) const
@@ -316,7 +316,7 @@ void sdet_detector::print(vcl_ostream &strm) const
        << "    filterfactor " << filterFactor << vcl_endl
        << "    hysteresisfactor " << hysteresisFactor << vcl_endl
        << "    noiseThreshold " << noiseThreshold << vcl_endl
-       << "    smooth " <<   smooth << vcl_endl // Smoothing kernal sigma
+       << "    smooth " <<   smooth << vcl_endl // Smoothing kernel sigma
        << "    noise_weight " <<   noise_weight << vcl_endl //The weight between sensor noise and texture noise
        << "    noise_multiplier " <<   noise_multiplier << vcl_endl // The overal noise threshold scale factor
        << "    automatic_threshold " <<   automatic_threshold << vcl_endl // Determine the threshold values from image

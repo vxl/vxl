@@ -6,6 +6,7 @@
 //
 //-----------------------------------------------------------------------------
 #include <vcl_sstream.h>
+#include <vcl_iostream.h>
 
 //------------------------------------------------------------------------
 // Constructors
@@ -86,6 +87,7 @@ bool brct_volume_processor_params::SanityCheck()
 
 vcl_ostream& operator<< (vcl_ostream& os, const brct_volume_processor_params& vp)
 {
+  return
   os << "brct_volume_processor_params:\n[---\n"
      << "xmin " << vp.xmin_ << vcl_endl
      << "xmax " << vp.xmax_ << vcl_endl
@@ -96,5 +98,4 @@ vcl_ostream& operator<< (vcl_ostream& os, const brct_volume_processor_params& vp
      << "cube_edge_length " << vp.cube_edge_length_ << vcl_endl
      << "cell thresh " << vp.cell_thresh_ << vcl_endl
      << "---]" << vcl_endl;
-  return os;
 }

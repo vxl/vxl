@@ -6,6 +6,7 @@
 //
 //-----------------------------------------------------------------------------
 #include <vcl_sstream.h>
+#include <vcl_iostream.h>
 
 //------------------------------------------------------------------------
 // Constructors
@@ -20,8 +21,7 @@ strk_tracker_params(const strk_tracker_params& tp)
              tp.angle_range_,
              tp.scale_range_,
              tp.sigma_,
-             tp.gradient_info_
-             );
+             tp.gradient_info_);
 }
 
 strk_tracker_params::
@@ -66,7 +66,7 @@ bool strk_tracker_params::SanityCheck()
   vcl_stringstream msg;
   bool valid = true;
 
-   msg << vcl_ends;
+  msg << vcl_ends;
 
   SetErrorMsg(msg.str().c_str());
   return valid;

@@ -6,6 +6,7 @@
 //
 //-----------------------------------------------------------------------------
 #include <vcl_sstream.h>
+#include <vcl_iostream.h>
 
 //------------------------------------------------------------------------
 // Constructors
@@ -26,7 +27,7 @@ brct_plane_sweeper_params(const brct_plane_sweeper_params& sp)
              sp.corr_sigma_,
              sp.intensity_thresh_,
              (sdet_harris_detector_params) sp.hdp_
-             );
+            );
 }
 
 brct_plane_sweeper_params::
@@ -90,7 +91,7 @@ bool brct_plane_sweeper_params::SanityCheck()
   return valid;
 }
 
-vcl_ostream& operator << (vcl_ostream& os, const brct_plane_sweeper_params& sp)
+vcl_ostream& operator<<(vcl_ostream& os, const brct_plane_sweeper_params& sp)
 {
   return
   os << "brct_plane_sweeper_params:\n[---\n"

@@ -8,6 +8,7 @@
 
 #include "gst_polygon_2d.h"
 #include "gst_vertex_2d_sptr.h"
+#include <vcl_iostream.h>
 
 bool gst_polygon_2d::check_validity() const
 {
@@ -75,14 +76,14 @@ double gst_polygon_2d::area() const
   double a= 0;
 
   for (unsigned int i=0; i< edges_.size(); ++i)
-    {
-      int ip1=((i+1)==edges_.size())?0:(i+1);
+  {
+    int ip1=((i+1)==edges_.size())?0:(i+1);
 
-      double dp= edges_[i]->get_start()->get_x()* edges_[ip1]->get_start()->get_y()
-               - edges_[i]->get_start()->get_x()* edges_[ip1]->get_start()->get_x();
+    double dp = edges_[i]->get_start()->get_x()* edges_[ip1]->get_start()->get_y()
+              - edges_[i]->get_start()->get_x()* edges_[ip1]->get_start()->get_x();
 
-      a+= dp;
-    }
+    a+= dp;
+  }
 
   return a/2;
 }
@@ -97,20 +98,20 @@ bool gst_polygon_2d::inside( const double x, const double y) const
   bool c= false;
 
   for (unsigned int i=0, j= edges_.size()-1; i< edges_.size(); j= i++)
+  {
+    if ((((edges_[i]->get_start()->get_y()<= y) &&
+          (y< edges_[j]->get_start()->get_y())) ||
+         ((edges_[j]->get_start()->get_y()<= y) &&
+          (y< edges_[i]->get_start()->get_y()))) &&
+        (x< (edges_[j]->get_start()->get_x() -
+             edges_[i]->get_start()->get_x()) * (y -
+                                                 edges_[i]->get_start()->get_y()) /
+         (edges_[j]->get_start()->get_y() - edges_[i]->get_start()->get_y()) +
+         edges_[i]->get_start()->get_x()))
     {
-      if ((((edges_[i]->get_start()->get_y()<= y) &&
-            (y< edges_[j]->get_start()->get_y())) ||
-           ((edges_[j]->get_start()->get_y()<= y) &&
-            (y< edges_[i]->get_start()->get_y()))) &&
-          (x< (edges_[j]->get_start()->get_x() -
-               edges_[i]->get_start()->get_x()) * (y -
-                                                   edges_[i]->get_start()->get_y()) /
-           (edges_[j]->get_start()->get_y() - edges_[i]->get_start()->get_y()) +
-           edges_[i]->get_start()->get_x()))
-        {
-          c=!c;
-        }
+      c=!c;
     }
+  }
 
   return c;
 }
@@ -124,7 +125,7 @@ bool gst_polygon_2d::inside( const gst_vertex_2d_sptr v) const
 vcl_ostream &operator<<( vcl_ostream &os, gst_polygon_2d &p)
 {
   for (unsigned int i=0; i< p.edges_.size(); i++)
-    os << (*p.edges_[i]) << " ";
+    os << (*p.edges_[i]) << ' ';
 
   return os << vcl_endl;
 }
