@@ -29,11 +29,13 @@
 //   Axy/2 Ayy   Ay/2
 //   Ax/2  Ay/2  Ao
 // ]
-struct vsl_conic_as_matrix {
+class vsl_conic_as_matrix {
   vnl_double_3x3 A_;
   
+ public:
   vsl_conic_as_matrix(double cx, double cy, double rx, double ry, double theta);
   vsl_conic_as_matrix(const vnl_matrix<double>& A) : A_(A){}
+  vnl_double_3x3 A() const { return A_; }
 };
 
 #endif   // DO NOT ADD CODE AFTER THIS LINE! END OF DEFINITION FOR CLASS vsl_conic_as_matrix.

@@ -123,7 +123,7 @@ vsl_conic_points::vsl_conic_points(vsl_conic_as_matrix const& conic,
   segment_ends.reserve(4);
 
   // Compute homography mapping conic to unit circle.
-  vnl_symmetric_eigensystem<double>  eig(conic.A_);
+  vnl_symmetric_eigensystem<double>  eig(conic.A());
   
   if (eig.D(0,0) > 0 || eig.D(2,2) < 0)
     // Imaginary

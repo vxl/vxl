@@ -28,10 +28,12 @@ JPEG_Decompressor::JPEG_Decompressor(int fd)
   init(fd);
 }
 
+#ifndef WIN32 // FIXME: cannot be sure ifstream has an fd() method
 JPEG_Decompressor::JPEG_Decompressor(ifstream& f)
 {
   init(f.rdbuf()->fd());
 }
+#endif
 
 void JPEG_Decompressor::init(int fd)
 {
