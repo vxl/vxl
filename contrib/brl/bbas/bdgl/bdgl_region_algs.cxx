@@ -112,6 +112,9 @@ bool bdgl_region_algs::merge(vdgl_digital_region_sptr const& r1,
     Im[j] = I2[i];
   }
   rm = new vdgl_digital_region(n, Xm, Ym, Im);
+  delete[] Xm;
+  delete[] Ym;
+  delete[] Im;
   return true;
 }
 

@@ -18,6 +18,9 @@ static void test_region_algs()
   }
 
   vdgl_digital_region_sptr r1 = new vdgl_digital_region(n1, X1, Y1, I1);
+  delete[] X1;
+  delete[] Y1;
+  delete[] I1;
 
   float* X2 = new float[n2];
   float* Y2 = new float[n2];
@@ -27,6 +30,9 @@ static void test_region_algs()
     X2[i] = 3.0f*i; Y2[i] = -6.0f*i; I2[i]= 100*i;
   }
   vdgl_digital_region_sptr r2 = new vdgl_digital_region(n2, X2, Y2, I2);
+  delete[] X2;
+  delete[] Y2;
+  delete[] I2;
 
   vdgl_digital_region_sptr rm;
   bdgl_region_algs::merge(r1, r2, rm);
