@@ -75,7 +75,6 @@ ELSE (WIN32)
   )
 
   FIND_PATH(OPENGL_xmesa_INCLUDE_DIR GL/xmesa.h
-    ${OPENGL_INCLUDE_DIR}
     /usr/share/doc/NVIDIA_GLX-1.0/include
     /usr/include
     /usr/local/include
@@ -93,9 +92,21 @@ ELSE (WIN32)
           /usr/X11R6/lib
   )
 
+  # On Unix OpenGL most certainly always requires X11.
+  # Feel free to tighten up these conditions if you don't 
+  # think this is always true.
+
+  IF (OPENGL_gl_LIBRARY)
+    INCLUDE( ${MODULE_PATH}/NewCMake/FindX11.cmake )
+    IF (X11_FOUND)
+      SET (OPENGL_LIBRARIES ${X11_LIBRARIES})
+    ENDIF (X11_FOUND)
+  ENDIF (OPENGL_gl_LIBRARY)
+
   FIND_LIBRARY(OPENGL_glu_LIBRARY
     NAMES MesaGLU GLU
-    PATHS /usr/lib
+    PATHS ${OPENGL_gl_LIBRARY}
+          /usr/lib
           /usr/local/lib
           /opt/graphics/OpenGL/lib
           /usr/openwin/lib
@@ -104,10 +115,9 @@ ELSE (WIN32)
 
 ENDIF (WIN32)
 
-
 SET( OPENGL_FOUND "NO" )
-IF( OPENGL_INCLUDE_DIR )
-  IF( OPENGL_gl_LIBRARY )
+IF(OPENGL_INCLUDE_DIR)
+  IF(OPENGL_gl_LIBRARY)
 
     IF(OPENGL_xmesa_INCLUDE_DIR)
       SET( OPENGL_XMESA_FOUND "YES" )
@@ -115,36 +125,39 @@ IF( OPENGL_INCLUDE_DIR )
       SET( OPENGL_XMESA_FOUND "NO" )
     ENDIF(OPENGL_xmesa_INCLUDE_DIR)
 
+    SET( OPENGL_LIBRARIES  ${OPENGL_gl_LIBRARY} ${OPENGL_LIBRARIES})
     IF(OPENGL_glu_LIBRARY)
       SET( OPENGL_GLU_FOUND "YES" )
-      SET( OPENGL_LIBRARIES  ${OPENGL_glu_LIBRARY} )
+      SET( OPENGL_LIBRARIES ${OPENGL_glu_LIBRARY} ${OPENGL_LIBRARIES} )
     ELSE(OPENGL_glu_LIBRARY)
       SET( OPENGL_GLU_FOUND "NO" )
     ENDIF(OPENGL_glu_LIBRARY)
 
     SET( OPENGL_FOUND "YES" )
-    SET( OPENGL_LIBRARIES  ${OPENGL_LIBRARIES} ${OPENGL_gl_LIBRARY} )
 
-    # On Unix OpenGL most certainly always requires X11.
-    # Feel free to tighten up these conditions if you don't think this
-    # is always true.
-    IF( UNIX )
-    IF( NOT CYGWIN )
-      INCLUDE( ${MODULE_PATH}/NewCMake/FindX11.cmake )
-      IF( X11_FOUND )
-        SET (OPENGL_LIBRARIES ${OPENGL_LIBRARIES} ${X11_LIBRARIES})
-      ENDIF( X11_FOUND )
-    ENDIF( NOT CYGWIN )
-    ENDIF( UNIX )
+    # The following deprecated settings are for backwards 
+    # compatibility with CMake1.4
 
-
-
-#The following deprecated settings are for backwards compatibility with CMake1.4
     SET (OPENGL_LIBRARY ${OPENGL_LIBRARIES})
     SET (OPENGL_INCLUDE_PATH ${OPENGL_INCLUDE_DIR})
 
-  ENDIF( OPENGL_gl_LIBRARY )
-ENDIF( OPENGL_INCLUDE_DIR )
+  ENDIF(OPENGL_gl_LIBRARY)
+
+  SET(OPENGL_INCLUDE_PATH ${OPENGL_INCLUDE_DIR})
+
+ENDIF(OPENGL_INCLUDE_DIR)
+
+# On OSX, OpenGL is always there - this will need refining for those 
+# using OpenGL with X11
+
+IF (APPLE)
+  SET (OPENGL_FOUND "YES")
+  SET (OPENGL_GLU_FOUND "YES")
+  SET (OPENGL_LIBRARIES "-framework AGL -framework OpenGL" CACHE STRING "OpenGL lib for OSX")
+  SET (OPENGL_LIBRARY ${OPENGL_LIBRARIES} CACHE STRING "OpenGL lib for OSX (for CMake 1.4)")
+  SET (OPENGL_gl_LIBRARY "-framework OpenGL" CACHE STRING "OpenGL lib for OSX")
+  SET (OPENGL_glu_LIBRARY "-framework AGL" CACHE STRING "AGL lib for OSX")
+ENDIF (APPLE)
 
 MARK_AS_ADVANCED(
   OPENGL_INCLUDE_DIR
