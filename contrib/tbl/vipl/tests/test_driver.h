@@ -4,6 +4,7 @@
 #include <vil/vil_image.h>
 #include <mil/mil_image_2d_of.h>
 #include <vcl_string.h>
+#include <vcl_iostream.h>
 #include <testlib/testlib_test.h>
 
 // create an 8 bit test image
