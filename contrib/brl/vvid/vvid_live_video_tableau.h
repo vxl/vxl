@@ -60,6 +60,10 @@ class vvid_live_video_tableau : public vgui_image_tableau
   void get_camera_mono_image(vil1_memory_image_of<unsigned char>& im,
                              int pix_sample_interval = 1);
 
+  // return current cached images with no resampling
+  vil1_memory_image_of< vil1_rgb<unsigned char> > get_rgb_frame(){ return rgb_frame_; }
+  vil1_memory_image_of<unsigned char> get_mono_frame(){ return mono_frame_; }
+
   //: Access to current cached camera frames
   // Both styles of image access are supported
 
