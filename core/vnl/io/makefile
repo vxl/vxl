@@ -8,7 +8,12 @@ SOURCES += vnl_io_nonlinear_minimizer.cxx
 SOURCES += vnl_io_real_polynomial.cxx
 SOURCES += vnl_io_real_npolynomial.cxx
 
-MANPAGE_SOURCES += vgl_point_2d.txx
+MANPAGE_SOURCES += vnl_io_diag_matrix.txx
+MANPAGE_SOURCES += vnl_io_matrix.txx
+MANPAGE_SOURCES += vnl_io_matrix_fixed.txx
+MANPAGE_SOURCES += vnl_io_sparse_matrix.txx
+MANPAGE_SOURCES += vnl_io_vector.txx
+MANPAGE_SOURCES += vnl_io_vector_fixed.txx
 
 ifndef NOTEST
 SUBDIRS += tests
