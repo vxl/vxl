@@ -2,25 +2,25 @@
 @cindex CMake
 @cindex CMakeLists.txt files
 
-VXL uses the CMake configuration system to generate Makefiles and MSVS
-Project files.  There are other build systems as well, but most users
-use CMake.  This section shows by example how to write
-@file{CMakeLists.txt} CMake files for VXL.  The intent here is to show
-how to write these configuration files and to give detailed reasons
-for the various methods used in these files in VXL.  This section
-should be used in conjunction with the CMake User's Manual
+VXL uses the CMake configuration system to generate Makefiles (for GNU
+Make or NMake) and MSVS Project files.  There are other build systems
+as well, but most users use CMake.  This section shows by example how
+to write @file{CMakeLists.txt} CMake files for VXL.  The intent here
+is to show how to write these configuration files and to give detailed
+reasons for the various methods used in these files in VXL.  This
+section should be used in conjunction with the CMake User's Manual
 (@uref{http://www.cmake.org}).
 
 CMake is available from @uref{http://www.cmake.org} where you'll find
 pre-compiled versions and instructions for getting the source code
 from an anonymous CVS server.  VXL is designed to be configured by the
 latest released version of CMake.  At the time of writing, this is
-version 1.4.3.  From CVS, you can use the tag @code{LatestRelease}.
+version 1.4.5.  From CVS, you can use the tag @code{LatestRelease}.
 Cmake documentation can be found at
 @uref{http://www.cmake.org/HTML/Documentation.html}.
 
-You can choose not to build certain portions of the source tree by
-setting the options in CMake.
+You can choose not to build certain portions of the VXL source tree by
+setting options in CMake.
 
 Examples given below are for simple applications and libraries.
 Guidelines for the top level VXL @file{CMakeLists.txt} file and
@@ -33,6 +33,9 @@ this document to show how the @file{CMakeLists.txt} files should be
 constructed and to be verbose about the reasons, and to also be a
 style guide for these files.
 
+It is recommended that the build directory be separate from the source
+directory.
+
 @subsection Example 1: An application that uses VXL libraries
 
 A single, complete @file{CMakeLists.txt} file follows, for a fictional
@@ -44,11 +47,12 @@ prefixed by '#' in CMake.
 # This sample CMakeLists.txt file will configure an application named
 # foobar that is built from foo.cxx, bar.cxx and some header files.
 
-# The ADD_EXECUTABLE command configures a new executable.  The first
-# argument to ADD_EXECUTABLE is the name of the executable file
-# (without the possible .exe suffix) that you want to generate.  The
-# rest of the arguments, up to the closing ")", are file names, where
-# spaces, comments and newlines may be used at will.
+# The ADD_EXECUTABLE command configures a new executable.  There may
+# be any number of these commands in the file.  The first argument to
+# ADD_EXECUTABLE is the name of the executable file (without the
+# possible .exe suffix) that you want to generate.  The rest of the
+# arguments, up to the closing ")", are file names, where spaces,
+# comments and newlines may be used at will.
 
 # Always give the filename suffix for source files in the
 # ADD_EXECUTABLE and ADD_LIBRARY commands.  CMake will try to guess
@@ -56,9 +60,9 @@ prefixed by '#' in CMake.
 # files, or other files with the same name but different suffix, are
 # present in the source directory.
 
-# In addition to the C/C++ source files, all header files are included
-# in the ADD_EXECUTABLE command so that they become part of the
-# project in MS Visual Studio.  List all header files for this
+# In addition to the C and C++ source files, all header files are
+# included in the ADD_EXECUTABLE command so that they become part of
+# the project in MS Visual Studio.  List all header files for this
 # application, but not headers from other libraries you are using.
 # The reason for this is that users of a GUI build system like MSVS
 # will then see every source file in the file list, and can click on
@@ -72,7 +76,9 @@ prefixed by '#' in CMake.
 # parent directory, cf. vxl/vil/file_formats).  Template instantiation
 # files residing in Templates subdirectories are not included
 # specifically in any CMakeLists.txt file, but are included via the
-# AUX_SOURCE_DIRECTORY CMake command (used in example 2, below).
+# AUX_SOURCE_DIRECTORY CMake command.  The AUX_SOURCE_DIRECTORY
+# command is demonstrated in Example 2, in which a library is built,
+# but can also be used for executables.
 
 # Finally, we get to an actual CMake command.
 
@@ -82,20 +88,25 @@ ADD_EXECUTABLE( foobar
   bar.cxx bar.h
 )
 
-# If this executable is using libraries other than vcl and those in
-# core-VXL, then an INCLUDE_DIRECTORIES is needed so that include
-# files will be found (vcl and vxl are automatically included via the
-# top level VXL CMakeLists.txt file).  This line is needed to include
-# files from the gel section.
+# If this executable is using libraries other than vcl, then an
+# INCLUDE_DIRECTORIES is needed so that include files will be found
+# (vcl is automatically included via the top level VXL CMakeLists.txt
+# file).  This line is needed to include files from the vxl and gel
+# sections.  Most executables will, of course, need to include the vxl
+# sections.
 
-INCLUDE_DIRECTORIES( ${allvxl_SOURCE_DIR}/gel )
+INCLUDE_DIRECTORIES(
+  ${allvxl_SOURCE_DIR}/vxl
+  ${allvxl_SOURCE_DIR}/gel
+)
 
 # For INCLUDE_DIRECTORIES, the preferred practice is to specify a
-# directory one level below ${allvxl_SOURCE_DIR} as an include
+# directory exactly one level below ${allvxl_SOURCE_DIR} as an include
 # directory, and then the further qualify include files in the source
 # code with commands like #include <vsol/vsol_box_2d.h>.  Do not do
-# the following.
+# either of the following.
 
+# NO # INCLUDE_DIRECTORIES( ${allvxl_SOURCE_DIR} )
 # NO # INCLUDE_DIRECTORIES( ${allvxl_SOURCE_DIR}/gel/vsol )
 
 # Indicate which VXL libraries foobar depends on with the
@@ -132,6 +143,14 @@ TARGET_LINK_LIBRARIES( foobar vnl_algo vul vil vcl )
 
 INCLUDE( ${MODULE_PATH}/FindZLIB.cmake )
 
+# Use AUX_SOURCE_DIRECTORY when there are .cxx files in a Templates
+# directory that instantiate templates in .txx files.  This command
+# causes each file in the subdirectory Templates to be added to a list
+# of source files, in this case the list is "foobar_instantiate".
+# This list will be included in the main list of sources below.
+
+AUX_SOURCE_DIRECTORY( Templates vfbl_instantiate )
+
 # For this library the list of source files will be built up with SET
 # commands.  Before CMake 1.4 the SOURCE_FILES command was used for
 # this purpose, but SOURCE_FILES is now deprecated and the SET command
@@ -152,6 +171,7 @@ SET( vfbl_sources
   vfbl_foo.cxx vfbl_foo.h
   vfbl_bar.cxx vfbl_bar.h
   vfbl_baz.txx vfbl_baz.h
+  ${vfbl_instantiate}
 )
 
 # Include the source file vfbl_zip.cxx when building the library only
@@ -180,15 +200,11 @@ ADD_LIBRARY( vfbl ${vfbl_sources} )
 # files in the CMake CVS snapshot, but not available in the current
 # release of CMake.
 
-# The variable
-# XXX_FOUND is set to "YES" if the package is available and undefined
-# or "NO" if it is not.
-# If the package is available, XXX_INCLUDE_DIR and
-# XXX_LIBRARIES variables are set, and you must use them in
-# INCLUDE_DIRECTORIES and TARGET_LINK_LIBRARIES commands as shown
-# below.
-
-
+# The variable XXX_FOUND is set to "YES" if the package is available
+# and undefined or "NO" if it is not.  If the package is available,
+# XXX_INCLUDE_DIR and XXX_LIBRARIES variables are set, and you must
+# use them in INCLUDE_DIRECTORIES and TARGET_LINK_LIBRARIES commands
+# as shown below.
 
 IF( ZLIB_FOUND )
   INCLUDE_DIRECTORIES( ${ZLIB_INCLUDE_DIR} )
@@ -196,20 +212,18 @@ IF( ZLIB_FOUND )
   TARGET_LINK_LIBRARIES( vfbl ${ZLIB_LIBRARIES} )
 ENDIF( ZLIB_FOUND )
 
-# Use AUX_SOURCE_DIRECTORY when there are .cxx files in a Templates
-# directory that instantiate templates in .txx files.  This command
-# causes each file in the subdirectory Templates to be added to a list
-# of source files, in this case the list is "foobar_sources".
+# As in Example 1, we will configure to include VXL header files.
 
-AUX_SOURCE_DIRECTORY( Templates foobar_sources )
+INCLUDE_DIRECTORIES( ${allvxl_SOURCE_DIR}/vxl )
 
-# Just as in example 1, use the TARGET_LINK_LIBRARIES command to
+# Just as in Example 1, use the TARGET_LINK_LIBRARIES command to
 # specify each library that is directly used by this library.  CMake
 # will remember that vfbl needs these libraries. When an application
 # links with vfbl, CMake will automatically make sure it is linked
-# with each of these libraries. This linking is
-# recursive, so that for example, the vcl in the line below is
-# unnecessary - using vul and vil will ensure that vcl is used.
+# with each of these libraries.  This linking is recursive, so that
+# for example, the vcl in the line below is unnecessary - using vul
+# and vil will ensure that vcl is used.  However, it is still a good
+# practice to specify vcl here is the library directly uses vcl.
 
 TARGET_LINK_LIBRARIES( vfbl vnl_algo vul vil vcl )
 
@@ -230,6 +244,69 @@ IF( BUILD_EXAMPLES )
   SUBDIRS( examples )
 ENDIF( BUILD_EXAMPLES )
 
+@end example
+
+@subsection Example 3: Building outside of the VXL tree
+
+It is a good practice to keep your local source code which uses VXL,
+but will not become part of VXL, outside of the VXL source tree.
+CMake offers support for the configuration of a local build tree that
+will use the VXL build tree.  The CMake commands below, used at the
+beginning of the top-level @file{CMakeLists.txt} in your local source
+code tree will make it easy for your tree to use VXL.
+
+@example
+
+# For applications not in the VXL source tree, you first need to
+# define where VXL is installed (the binary installation, not the
+# source).
+
+SET( VXL_BINARY_PATH /usr/local/vxl-1.0-beta2/bin )
+
+# Your local source tree must have its own project name.
+
+PROJECT( foobar )
+
+# UseVXL.cmake holds all the necessary definitions that CMake needs to
+# use VXL.
+
+INCLUDE( ${VXL_BINARY_PATH}/UseVXL.cmake )
+
+# The rest of this CMakeLists.txt file could contain commands as seen
+# in the previous examples, or might just be SUBDIRS commands.
+
+@end example
+
+@subsection CMake Pearls
+
+You can tell CMake to be a bit more picky and to warn about the use of
+deprecated syntax with the following command.
+
+@example
+CMAKE_MINIMUM_REQUIRED( VERSION 1.4 )
+@end example
+
+If your programs or libraries are to use libraries that are outside of
+the VXL tree and outside of the normal system locations, you must tell
+CMake where to find the include files and libraries with commands such
+as these.
+
+@example
+INCLUDE_DIRECTORIES( /usr/local/include/libgimp )
+LINK_DIRECTORIES( /usr/local/lib/gimp )
+@end example
+
+If your are building in a tree outside of the VXL tree, as in Example
+3, and want libraries installed to a specific directory, you can use
+one of these commands.  Here ``foobar'' is the name of the project
+(see Example 3).
+
+@example
+SET( LIBRARY_OUTPUT_PATH ${foobar_BINARY_DIR}/lib )
+@end example
+or
+@example
+SET( LIBRARY_OUTPUT_PATH /usr/local/lib )
 @end example
 
 @subsection CMake Variables and Preprocessor Macros
