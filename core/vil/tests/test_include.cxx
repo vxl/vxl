@@ -34,6 +34,7 @@
 #include <vil/algo/vil_blob_finder.h>
 #include <vil/algo/vil_trace_4con_boundary.h>
 #include <vil/algo/vil_trace_8con_boundary.h>
+#include <vil/algo/vil_region_finder.h>
 #include <vil/vil_bicub_interp.h>
 #include <vil/vil_bilin_interp.h>
 #include <vil/vil_clamp.h>

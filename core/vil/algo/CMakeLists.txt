@@ -37,6 +37,7 @@ SET( vil_algo_sources
   vil_blob_finder.cxx         vil_blob_finder.h
   vil_distance_transform.cxx  vil_distance_transform.h
   vil_corners.cxx             vil_corners.h
+  vil_region_finder.txx       vil_region_finder.h
 )
 
 AUX_SOURCE_DIRECTORY(Templates vil_algo_sources)
