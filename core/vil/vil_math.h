@@ -4,9 +4,71 @@
 //  \brief Various mathematical manipulations of 2D images
 //  \author Tim Cootes
 
-#include <vil2/vil2_image_view.h>
 #include <vcl_cassert.h>
 #include <vcl_cmath.h>
+#include <vil2/vil2_image_view.h>
+#include <vil2/vil2_view_as.h>
+#include <vil2/vil2_plane.h>
+
+
+
+//: Compute minimum and maximum values over view
+template<class T>
+inline void vil2_math_value_range(T& min_value, T& max_value,const vil2_image_view<T>& view)
+{
+  if (view.size()==0)
+  {
+    min_value = 0;
+    max_value = 0;
+    return;
+  }
+
+  min_value = *(view.top_left_ptr());
+  max_value = min_value;
+
+  unsigned ni = view.ni(), istep=view.istep();
+  unsigned nj = view.nj(), jstep=view.jstep();
+  unsigned np = view.nplanes(), pstep = view.planestep();
+
+  for (unsigned p=0;p<np;++p)
+    for (unsigned j=0;j<nj;++j)
+      for (unsigned i=0;i<ni;++i)
+      {
+        const T pixel = view(i,j,p);
+        if (pixel<min_value)
+          min_value=pixel;
+        else
+          if (pixel>max_value)
+            max_value=pixel;
+      }
+}
+
+
+//: Compute minimum and maximum values over view
+VCL_DEFINE_SPECIALIZATION
+inline void vil2_math_value_range(vil_rgb<vxl_byte>& min_value, vil_rgb<vxl_byte>& max_value,
+                      const vil2_image_view<vil_rgb<vxl_byte> >& rgb_view)
+{
+  vil2_image_view<vxl_byte> plane_view = vil2_view_as_planes(rgb_view);
+  // Get range for each plane in turn
+  vil2_math_value_range(min_value.r,max_value.r,vil2_plane(plane_view,0));
+  vil2_math_value_range(min_value.g,max_value.g,vil2_plane(plane_view,1));
+  vil2_math_value_range(min_value.b,max_value.b,vil2_plane(plane_view,2));
+}
+
+//: Compute minimum and maximum values over view
+VCL_DEFINE_SPECIALIZATION
+inline void vil2_math_value_range(vil_rgb<float>& min_value, vil_rgb<float>& max_value,
+                      const vil2_image_view<vil_rgb<float> >& rgb_view)
+{
+  vil2_image_view<float> plane_view = vil2_view_as_planes(rgb_view);
+  // Get range for each plane in turn
+  vil2_math_value_range(min_value.r,max_value.r,vil2_plane(plane_view,0));
+  vil2_math_value_range(min_value.g,max_value.g,vil2_plane(plane_view,1));
+  vil2_math_value_range(min_value.b,max_value.b,vil2_plane(plane_view,2));
+}
+
+
 
 //: Sum of elements in plane p of image
 // \relates vil2_image_view

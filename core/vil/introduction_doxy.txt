@@ -150,7 +150,6 @@ vil2_image_view<vxl_byte> filtered_image = vil2_transpose(tmp_image2);
 * - vil2_fill(view,value)   : Fills view with value
 * - vil2_fill_row(view,j,value) : Fills row j with value
 * - vil2_fill_col(view,i,value) : Fills col i with value
-* - vil2_value_range(minv,maxv,view) : Gets range of values in view
 *
 * \section image_src Image sources
 * The vil2_image_resource class is an abstract base class for image data, views of which can be

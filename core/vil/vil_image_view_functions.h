@@ -33,10 +33,4 @@ void vil2_fill_row(vil2_image_view<T>& view, unsigned j, T value);
 template<class T>
 void vil2_fill_col(vil2_image_view<T>& view, unsigned i, T value);
 
-//: Compute minimum and maximum values over view
-//  O(n).
-// \relates vil2_image_view
-template<class T>
-void vil2_value_range(T& min_value, T& max_value,const vil2_image_view<T>& view);
-
 #endif // vil2_image_view_fns_h_
