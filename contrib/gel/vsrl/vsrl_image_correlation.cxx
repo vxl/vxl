@@ -567,7 +567,7 @@ void vsrl_image_correlation::get_correlation_stats(int x, int y, double &mean, d
   double sum_z=0;
   double sum_zz=0;
 
-  // cover all posible correlations
+  // cover all possible correlations
 
   for (int delta=0-correlation_range_;delta<correlation_range_+1;delta++)
   {

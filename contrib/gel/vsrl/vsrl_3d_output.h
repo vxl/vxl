@@ -3,7 +3,7 @@
 
 // this program will take the disparity between two images and
 // compute a 3d output for the data. If (u,v) -> (u + d, v) then
-// one posible set of cameral could be P1 =(1000,0100,0010) and P2
+// one possible set of cameras could be P1 =(1000,0100,0010) and P2
 // would equal P2=(1010,0100,0010). In this way the point in space
 // would be X=(u,v,d,1) it turns out that (u,v,1) = P1 X and
 // (u,v+d,1) = P2 X. This means that X is within a projective
@@ -68,7 +68,6 @@ class vsrl_3d_output
   bool non_valid_point(int x, int y); // identifies non valid points
 
   void  write_disparity_image(char *filename,vsrl_diffusion *diff);
-
 };
 
 #endif // vsrl_3d_output_h

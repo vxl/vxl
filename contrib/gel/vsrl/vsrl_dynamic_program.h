@@ -44,14 +44,14 @@ class vsrl_dynamic_program
 
  protected:
 
- // this structure will keep track of posible assignments
+ // this structure will keep track of possible assignments
   struct assignment_node{
     int index1; // the first token of this assignment
     int index2; // the second token of this assignment
     int prior_index1; // the first token of the prior assignment
     int prior_index2; // the second token of the prior assignment
     double cost; // the cost of this assignment
-    double num_null1; // the number of consecuative null assignments for this assignment
+    double num_null1; // the number of consecutive null assignments for this assignment
   };
 
   token_list list1_; // the first set of tokens

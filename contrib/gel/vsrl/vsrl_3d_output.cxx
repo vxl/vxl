@@ -222,7 +222,7 @@ void vsrl_3d_output::write_output(char *filename)
   vcl_vector<int> vert2;
   vcl_vector<int> vert3;
 
-  // make all posible triangles
+  // make all possible triangles
 
   for (int y=0;y<height-1;y++) {
     int y2=y+1;
