@@ -26,11 +26,11 @@ const double DEGENERACY_THRESHOLD = 0.00001;  // FSM. see below.
 
 //-----------------------------------------------------------------------------
 //
-//: @{ Compute a plane-plane projectivity using linear least squares.
+//: Compute a plane-plane projectivity using linear least squares.
 // Returns false if the calculation fails or there are fewer than four point
 // matches in the list.  The algorithm finds the nullvector of the $2 n \times 9$ design
 // matrix:
-// \[
+// \f\[
 // \left(\begin{array}{ccccccccc}
 // 0 & 0 & 0 &        x_1 z_1' & y_1 z_1' & z_1 z_1' & -x_1 y_1' & -y_1 y_1' & -z_1 y_1' \cr
 // x_1 z_1' & y_1 z_1' & z_1 z_1' & 0 & 0 & 0 & -x_1 x_1' & -y_1 x_1' & -z_1 x_1' \cr
@@ -38,14 +38,13 @@ const double DEGENERACY_THRESHOLD = 0.00001;  // FSM. see below.
 // 0 & 0 & 0 &        x_n z_n' & y_n z_n' & z_n z_n' & -x_n y_n' & -y_n y_n' & -z_n y_n'\cr
 // x_n z_n' & y_n z_n' & z_n z_n' & 0 & 0 & 0 & -x_n x_n' & -y_n x_n' & -z_n x_n'
 // \end{array}\right)
-// \]
-// If {\tt allow\_ideal\_points} was set at construction, the $3 \times 9$ version which
+// \f\]
+// If \t allow_ideal_points was set at construction, the $3 \times 9$ version which
 // allows for ideal points is used.
-// @}
 
 bool
-HMatrix2DComputeLinear::compute_p(const vcl_vector<HomgPoint2D>& inpoints1,
-                                  const vcl_vector<HomgPoint2D>& inpoints2,
+HMatrix2DComputeLinear::compute_p(vcl_vector<HomgPoint2D> const& inpoints1,
+                                  vcl_vector<HomgPoint2D> const& inpoints2,
                                   HMatrix2D *H)
 {
   // tm_tmatrix_linear_nonrobust_trivecs
