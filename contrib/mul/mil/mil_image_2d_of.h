@@ -225,21 +225,4 @@ public:
     virtual void b_read(vsl_b_istream& bfs);
 };
 
-
-// Comment out the following until we can work out how to get it
-// to work properly under VisualC++ (which appears not to
-// suppress the generation of the default object code, leading
-// to an error at link time (multiple versions of object)
-#if 0
-
-//: Specialise the is_a() for vil_byte
-template<> vcl_string mil_image_2d_of<vil_byte>::is_a() const;
-
-//: Specialise the is_a() for int
-template<> vcl_string mil_image_2d_of<int>::is_a() const;
-
-//: Specialise the is_a() for float
-template<> vcl_string mil_image_2d_of<float>::is_a() const;
-#endif
-
 #endif // mil_image_2d_of_h_
