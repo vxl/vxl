@@ -16,11 +16,13 @@ SOURCE_FILES(vipl_sources
   vipl_x_gradient.h
   vipl_y_gradient.h
   accessors/vipl_accessors_vil_image.h
+  accessors/vipl_accessors_vcl_vector.h
   filter/vipl_filter.h
   filter/vipl_filter_2d.h
   filter/vipl_filter_abs.h
   filter/vipl_filter_helper.h
   filter/vipl_trivial_pixeliter.h
+  section/vipl_filterable_section_container_generator_vcl_vector.h
   section/vipl_section_container.h
   section/vipl_section_descriptor.h
   section/vipl_section_descriptor_2d.h
@@ -28,6 +30,7 @@ SOURCE_FILES(vipl_sources
   vipl_with_section/accessors/vipl_accessors_section.h
   vipl_with_vbl_array_2d/accessors/vipl_accessors_vbl_array_2d.h
   vipl_with_vnl_matrix/accessors/vipl_accessors_vnl_matrix.h
+  vipl_with_vnl_matrix/accessors/vipl_accessors_vnl_vector.h
 
   vipl_add_random_noise.txx
   vipl_convert.txx
@@ -46,9 +49,11 @@ SOURCE_FILES(vipl_sources
   vipl_x_gradient.txx
   vipl_y_gradient.txx
   accessors/vipl_accessors_vil_image.txx
+  accessors/vipl_accessors_vcl_vector.txx
   filter/vipl_filter.txx
   filter/vipl_filter_2d.txx
   section/vipl_filterable_section_container_generator_vil_image.txx
+  section/vipl_filterable_section_container_generator_vcl_vector.txx
   section/vipl_section_container.txx
   section/vipl_section_descriptor.txx
   section/vipl_section_descriptor_2d.txx
@@ -56,7 +61,9 @@ SOURCE_FILES(vipl_sources
   vipl_with_section/vipl_filterable_section_container_generator_section.txx
   vipl_with_vbl_array_2d/vipl_filterable_section_container_generator_vbl_array_2d.txx
   vipl_with_vnl_matrix/vipl_filterable_section_container_generator_vnl_matrix.txx
+  vipl_with_vnl_matrix/vipl_filterable_section_container_generator_vnl_vector.txx
   vipl_with_section/accessors/vipl_accessors_section.txx
   vipl_with_vbl_array_2d/accessors/vipl_accessors_vbl_array_2d.txx
   vipl_with_vnl_matrix/accessors/vipl_accessors_vnl_matrix.txx
+  vipl_with_vnl_matrix/accessors/vipl_accessors_vnl_vector.txx
 )
