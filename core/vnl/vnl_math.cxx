@@ -18,7 +18,9 @@
 # define isnan _isnan
 #elif VXL_IEEEFP_HAS_FINITE
 # include <ieeefp.h>
-# define finitef finite
+# ifndef finitef
+#  define finitef finite
+# endif
 
 #elif VXL_MATH_HAS_FINITE
 # include <math.h>  // dont_vxl_filter: this is *not* supposed to be <cmath>
