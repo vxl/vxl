@@ -17,6 +17,7 @@ MANPAGE_SOURCES += mil3d_image_3d_of.txx
 MANPAGE_SOURCES += mil3d_sample_profile_3d.txx
 MANPAGE_SOURCES += mil3d_trilin_interp_3d.h
 MANPAGE_SOURCES += mil3d_gaussian_pyramid_builder_3d.txx
+MANPAGE_SOURCES += mil3d_sample_grid_3d.txx
 
 ifndef NOTEST
  SUBDIRS += tests
