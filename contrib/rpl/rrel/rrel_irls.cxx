@@ -142,9 +142,13 @@ rrel_irls::estimate( const rrel_estimation_problem* problem,
     vcl_cout << "Initial estimate: " << params_ << ", scale = " << scale_ <<  vcl_endl;
 
   assert( params_initialized_ && scale_initialized_ );
-  if ( scale_ <= 0 ) {
+  if ( scale_ <= 1e-8 ) {
+    scale_ = 0.0;
+    converged_ = true;
     vcl_cerr << "rrel_irls::estimate: initial scale is zero - cannot estimate" << vcl_endl;
-    return false;
+    // usually, This means that it already has an exact fitting.
+    // Thus, no harm if return true
+    return true;
   }
     
 
@@ -192,8 +196,8 @@ rrel_irls::estimate( const rrel_estimation_problem* problem,
         scale_ = rrel_util_median_abs_dev_scale( residuals.begin(), residuals.end(), num_for_fit );
       }
       if ( trace_level_ >= 1 ) vcl_cout << "Scale estimated: " << scale_ << vcl_endl;
-      if ( scale_ <= 0 ) {  //  fit exact enough to yield 0 scale estimate
-        scale_ = 0;
+      if ( scale_ <= 1e-8 ) {  //  fit exact enough to yield 0 scale estimate
+        scale_ = 0.0;
         converged_ = true;
         vcl_cerr << "rrel_irls::estimate:  scale has gone to 0.\n";
         break;
