@@ -1,16 +1,15 @@
 #ifndef vsrl_step_diffusion_h
 #define vsrl_step_diffusion_h
-
 //:
-//  \file
+// \file
 
 #include <vsrl/vsrl_diffusion.h>
 
-//: this class will take the results of a dense matcher and use difusion to get rid of "steps" in the data
+//: this class will take the results of a dense matcher and use diffusion to get rid of "steps" in the data
 
 class vsrl_step_diffusion : public vsrl_diffusion
 {
-public:
+ public:
 
   // constructor
   vsrl_step_diffusion(vsrl_dense_matcher *matcher);
@@ -30,7 +29,7 @@ public:
   void clear_borders(int width);
 
   // diffuse over the steps
-  void difuse_disparity();
+  void diffuse_disparity();
 };
 
 #endif

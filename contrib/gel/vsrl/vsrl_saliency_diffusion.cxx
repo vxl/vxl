@@ -32,7 +32,7 @@ void vsrl_saliency_diffusion::set_saliency(vsrl_token_saliency *saliency)
   saliency_ = saliency;
 }
 
-void vsrl_saliency_diffusion::difuse_disparity(int num_iter)
+void vsrl_saliency_diffusion::diffuse_disparity(int num_iter)
 {
   // OK we want to use diffusion so that disparity
   // will propogate from stong regions of salienct
@@ -58,7 +58,7 @@ void vsrl_saliency_diffusion::difuse_disparity(int num_iter)
 
      write_image("/projects/IUP2/peter_tu/tmp/fig",dif_num,mstar1);
 
-     // start to difuse
+     // start to diffuse
 
      int dif_range = 5; // The range that we are will to diffuse over
 
@@ -89,7 +89,7 @@ void vsrl_saliency_diffusion::difuse_disparity(int num_iter)
            }
            if (N!=0)
            {
-             // we have some information: store the difused value
+             // we have some information: store the diffused value
              (*mstar2)(x,y)=sum/N;
            }
          }
@@ -123,14 +123,14 @@ void vsrl_saliency_diffusion::execute(int num_iter)
 {
   // execute the disparity stuff
 
-  // modify the intitial disparity_matrix using the results of
+  // modify the initial disparity_matrix using the results of
   // the saliency object
 
   if (saliency_)
     consider_saliency();
 
   // run a diffusion algorithm
-  difuse_disparity(num_iter);
+  diffuse_disparity(num_iter);
 }
 
 void vsrl_saliency_diffusion::consider_saliency()

@@ -33,7 +33,7 @@ class vsrl_saliency_diffusion : public vsrl_diffusion
  protected:
 
   // diffuse over the steps
-  void difuse_disparity(int num_iter);
+  void diffuse_disparity(int num_iter);
 
   // modify based on the the pixel saliency measures
   void consider_saliency();

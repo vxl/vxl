@@ -132,9 +132,9 @@ void vsrl_step_diffusion::clear_borders(int width)
 }
 
 
-void vsrl_step_diffusion::difuse_disparity()
+void vsrl_step_diffusion::diffuse_disparity()
 {
-  // OK we now want to use a difusion operator to try
+  // OK we now want to use a diffusion operator to try
   // and smooth over the steps that seem to crop up
   // all over the place.
 
@@ -210,7 +210,7 @@ void vsrl_step_diffusion::difuse_disparity()
            }
          }
          sum=sum/N;
-         // store the difused value
+         // store the diffused value
          (*mstar2)(x,y)=sum;
        }
      }
@@ -240,5 +240,5 @@ void vsrl_step_diffusion::execute()
 
   // run a diffusion algorithm
 
-   difuse_disparity();
+   diffuse_disparity();
 }
