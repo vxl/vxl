@@ -5,4 +5,6 @@
 * provides a framework for generating a single test driver that will
 * run a bunch of tests, thus minimising the number of test executables
 * generated.
+*
+* testlib_root_dir() can be used to find golden data files.
 */
