@@ -87,18 +87,18 @@ void test_network()
 
   TEST("Testing purge()",the_network->purge(),false);
 
-  double depth_order[] = {0.4, 0.3, 0.2, 0.1, 0.5};
+  bmrf_node_sptr depth_order[] = {node_4, node_3, node_2, node_1, node_5};
   bool depth_check = true;
   bmrf_network::depth_iterator d_itr = the_network->depth_begin(node_4);
   for(int i=0; d_itr != the_network->depth_end(); ++d_itr, ++i)
-    depth_check = ((*d_itr)->probability() == depth_order[i]) && depth_check;
+    depth_check = ((*d_itr) == depth_order[i]) && depth_check;
   TEST("Testing depth_iterator", depth_check, true);
 
-  double breadth_order[] = {0.4, 0.3, 0.2, 0.5, 0.1};
+  bmrf_node_sptr breadth_order[] = {node_4, node_3, node_2, node_5, node_1};
   bool breadth_check = true;
   bmrf_network::breadth_iterator b_itr = the_network->breadth_begin(node_4);
-  for(int i=0; b_itr != the_network->breadth_end(); ++b_itr, ++i)
-    breadth_check = ((*b_itr)->probability() == breadth_order[i]) && breadth_check;
+  for(int i=0; b_itr != the_network->breadth_end(); ++b_itr, ++i) 
+    breadth_check = ((*b_itr) == breadth_order[i]) && breadth_check;
   TEST("Testing breadth_iterator", breadth_check, true);
 
   bmrf_epipole ep(-16,432);
