@@ -229,7 +229,7 @@ public:
 template <class T>
 inline
 vcl_ostream& operator<<(vcl_ostream& s, vil2_image_view<T> const& i) {
-  return i.print(s);
+  i.print(s); return s;
 }
 
 #endif // vil_image_view_h_

@@ -16,7 +16,7 @@
 #include <vcl_string.h>
 #include <vil/vil_image.h> // for vil_component_format
 #include <vil2/vil2_smart_ptr.h>
-
+#include <vil2/vil2_pixel_format.h>
 
 class vil2_image_view_base;
 

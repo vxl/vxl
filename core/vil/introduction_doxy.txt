@@ -153,6 +153,7 @@ vil2_image_view<vil_byte> filtered_image = vil2_transpose(tmp_image2);
 * Some simple algorithms for manipulation images are included in the algo sub-directory.
 * Examples include
 * - vil2_algo_sobel_3x3 - to generate X/Y gradient images using 3x3 Sobel operators
+* - vil2_algo_gauss_reduce - smooth and sub-sample to produce half sized image
 *
 * \section reg_im Registered images
 * These meet two needs, a common base class for 2D and 3D images, and a means of
