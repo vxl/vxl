@@ -1,0 +1,66 @@
+//:
+// \file
+//  This example program shows a typical use of the gaussian convolution filter
+//  on a ubyte image.  The input image (argv[1]) must be ubyte, and in that
+//  case its convolved with a gaussian kernel and the result is written to
+//  argv[2] which is always a PGM file image.
+//  Uses vipl_gaussian_convolution<vnl_matrix<ubyte>,vnl_matrix<ubyte>,ubyte,ubyte>.
+//  The conversion between vil_image and the in-memory vnl_matrix<ubyte>
+//  is done explicitly.
+//
+// \author Peter Vanroose, K.U.Leuven, ESAT/PSI
+// \date   April 2002
+//
+#include <vnl/vnl_matrix.h>
+#include <vil/vil_pixel.h>
+#include <vil/vil_memory_image_of.h>
+
+#include <vipl/vipl_with_vnl_matrix/accessors/vipl_accessors_vnl_matrix.h>
+#include <vipl/vipl_gaussian_convolution.h>
+
+typedef unsigned char ubyte;
+
+typedef vnl_matrix<ubyte> img_type;
+
+// for I/O:
+#include <vil/vil_load.h>
+#include <vil/vil_save.h>
+#include <vcl_iostream.h>
+
+int
+main(int argc, char** argv) {
+  if (argc < 3) { vcl_cerr << "Syntax: example_gaussian_convolution file_in file_out [sigma]\n"; return 1; }
+
+  // The input image:
+  vil_image in = vil_load(argv[1]);
+  if (vil_pixel_format(in) != VIL_BYTE) { vcl_cerr << "Please use a ubyte image as input\n"; return 2; }
+
+  // The output image:
+  vil_memory_image_of<ubyte> out(in);
+
+  // The image sizes:
+  int xs = in.width();
+  int ys = in.height();
+
+  // The value of sigma: (default is 5)
+  float sigma = (argc < 4) ? 5.0f : atof(argv[3]);
+
+  img_type src(ys,xs);
+  img_type dst(ys,xs);
+
+  // set the input image:
+  in.get_section(src.begin(),0,0,xs,ys);
+
+  // The filter:
+  vipl_gaussian_convolution<img_type,img_type,ubyte,ubyte VCL_DFL_TMPL_ARG(vipl_trivial_pixeliter)> op(sigma);
+  op.put_in_data_ptr(&src);
+  op.put_out_data_ptr(&dst);
+  op.filter();
+
+  // Write output:
+  out.put_section(dst.begin(),0,0,xs,ys);
+  vil_save(out, argv[2], "pnm");
+  vcl_cout << "Written image of type PGM to " << argv[2] << vcl_endl;
+
+  return 0;
+}

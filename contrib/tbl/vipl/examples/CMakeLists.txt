@@ -24,6 +24,7 @@ ADD_EXECUTABLE(vipl_example4_threshold example4_threshold.cxx)
 # B. using vnl_matrix<T> as 2D storage class:
 ADD_EXECUTABLE(vipl_example3_threshold example3_threshold.cxx)
 ADD_EXECUTABLE(vipl_example_median example_median.cxx)
+ADD_EXECUTABLE(vipl_example_gaussian_convolution example_gaussian_convolution.cxx)
 
 # C. using vbl_array_2d<T> as 2D storage class:
 ADD_EXECUTABLE(vipl_example_gradient_mag example_gradient_mag.cxx)
