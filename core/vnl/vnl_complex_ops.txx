@@ -1,11 +1,11 @@
-// This is vxl/vnl/vnl_complex_ops.txx
+// This is core/vnl/vnl_complex_ops.txx
 #ifndef vnl_complex_ops_txx_
 #define vnl_complex_ops_txx_
 //:
 // \file
 // \author fsm
 // This is the implementation file for the following three header files:
-// vnl_complexify.h vnl_real.h vnl_complex.h
+// vnl_complexify.h vnl_real.h vnl_imag.h
 
 #include "vnl_complexify.h"
 #include "vnl_real.h"
