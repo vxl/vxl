@@ -33,9 +33,9 @@ class vgui_window;
 class vvid_live_video_manager : public vgui_wrapper_tableau
 {
  public:
-  vvid_live_video_manager(unsigned num_cameras=2);
+  vvid_live_video_manager();
   ~vvid_live_video_manager();
-  static vvid_live_video_manager *instance(unsigned num_cameras=2);
+  static vvid_live_video_manager *instance();
 
   //:post construction actions
   void init();

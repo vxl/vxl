@@ -37,11 +37,11 @@
 vvid_live_video_manager *vvid_live_video_manager::instance_ = 0;
 
 
-vvid_live_video_manager *vvid_live_video_manager::instance(unsigned num_cameras)
+vvid_live_video_manager *vvid_live_video_manager::instance()
 {
   if (!instance_)
     {
-      instance_ = new vvid_live_video_manager(num_cameras);
+      instance_ = new vvid_live_video_manager();
       instance_->init();
     }
   return vvid_live_video_manager::instance_;
@@ -51,15 +51,14 @@ vvid_live_video_manager *vvid_live_video_manager::instance(unsigned num_cameras)
 // constructors/destructor
 //
 vvid_live_video_manager::
-vvid_live_video_manager(unsigned num_cameras) :
+vvid_live_video_manager() :
   cp_(cmu_1394_camera_params()),
   histogram_(false),
   width_(960),
   height_(480),
   win_(0),
   video_process_(0),
-  init_successful_(false),
-  num_cameras_(num_cameras)
+  init_successful_(false)
 {}
 
 vvid_live_video_manager::~vvid_live_video_manager()
@@ -72,6 +71,13 @@ void vvid_live_video_manager::init()
 {
   //Determine the number of active cameras
   // for now we assume use a pre-defined _N_views
+  cmu_1394_camera cam;
+  num_cameras_ = cam.GetNumberCameras();
+  vcl_cout << "Number of Cameras Detected: " << num_cameras_ << vcl_endl;
+  if(num_cameras_ <= 0){
+    vcl_cerr << "Exiting - no cameras detected" << vcl_endl;
+    vcl_exit(0);
+  }
 
   vgui_grid_tableau_sptr grid = vgui_grid_tableau_new(num_cameras_,2);
   grid->set_grid_size_changeable(true);
