@@ -107,6 +107,16 @@ protected:
   Type data_[2];
 };
 
+
+//: Return d * that
+// This function assumes that scalar multiplication for this Type is commutative.
+template <class Type>
+vgl_point_2d<Type> operator*(Type d, const vgl_point_2d<Type>& that)
+{
+  return that*d;
+}
+
+
 //: Write <vgl_point_2d x,y> to stream
 template <class Type>
 vcl_ostream&  operator<<(vcl_ostream& s, const vgl_point_2d<Type>& p) {
