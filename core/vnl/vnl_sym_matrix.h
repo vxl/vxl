@@ -24,6 +24,11 @@ export
 template <class T>
 class vnl_sym_matrix
 {
+
+  //: Resize matrix to n by n.
+  // \deprecated. This has been intentionally poisoned. Use set_size instead.
+  inline void resize(int n) {set_size(n);}
+
  public:
   //: Construct an empty symmetic matrix.
   vnl_sym_matrix(): data_(0), index_(0), nn_(0) {}
@@ -106,7 +111,9 @@ class vnl_sym_matrix
   inline vnl_matrix<T> as_matrix() const;
 
   //: Resize matrix to n by n.
-  inline void resize(int n);
+  // You will loose any existing data.
+  inline void set_size(int n);
+
 
   //: Return pointer to the lower triangular elements as a contiguous 1D C array;
   T*       data_block()       { return data_; }
@@ -193,7 +200,7 @@ inline vnl_matrix<T> vnl_sym_matrix<T>::as_matrix() const
 
 
 template <class T>
-inline void vnl_sym_matrix<T>::resize(int n)
+inline void vnl_sym_matrix<T>::set_size(int n)
 {
   if (n == (int)nn_) return;
 

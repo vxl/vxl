@@ -50,7 +50,7 @@ vnl_sym_matrix<T>& vnl_sym_matrix<T>::operator=(vnl_sym_matrix<T> const& that)
 {
   if (&that == this) return *this;
 
-  resize(that.rows());
+  set_size(that.rows());
   update(that);
   return *this;
 }
