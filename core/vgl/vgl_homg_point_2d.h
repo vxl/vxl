@@ -23,49 +23,49 @@
 #include <vcl_cassert.h>
 
 //: Represents a homogeneous 2D point
-template <class Type>
+template <class T>
 class vgl_homg_point_2d
 {
   // the data associated with this point
-  Type x_;
-  Type y_;
-  Type w_;
+  T x_;
+  T y_;
+  T w_;
 
  public:
 
   // Constructors/Initializers/Destructor------------------------------------
 
   //: Default constructor with (0,0,1)
-  inline vgl_homg_point_2d() : x_(0), y_(0), w_((Type)1) {}
+  inline vgl_homg_point_2d() : x_(0), y_(0), w_((T)1) {}
 
   //: Construct from two (nonhomogeneous) or three (homogeneous) Types.
-  inline vgl_homg_point_2d(Type px, Type py, Type pw = (Type)1)
+  inline vgl_homg_point_2d(T px, T py, T pw = (T)1)
     : x_(px), y_(py), w_(pw) {}
 
   //: Construct from homogeneous 3-array.
-  inline vgl_homg_point_2d(const Type v[3]) : x_(v[0]), y_(v[1]), w_(v[2]) {}
+  inline vgl_homg_point_2d(const T v[3]) : x_(v[0]), y_(v[1]), w_(v[2]) {}
 
   //: Construct point at infinity from direction vector.
-  inline vgl_homg_point_2d(vgl_vector_2d<Type>const& v) : x_(v.x()), y_(v.y()), w_(0) {}
+  inline vgl_homg_point_2d(vgl_vector_2d<T>const& v) : x_(v.x()), y_(v.y()), w_(0) {}
 
-  //: Construct from (non-homogeneous) vgl_point_2d<Type>
-  inline explicit vgl_homg_point_2d(vgl_point_2d<Type> const& p)
-    : x_(p.x()), y_(p.y()), w_((Type)1) {}
+  //: Construct from (non-homogeneous) vgl_point_2d<T>
+  inline explicit vgl_homg_point_2d(vgl_point_2d<T> const& p)
+    : x_(p.x()), y_(p.y()), w_((T)1) {}
 
   //: Construct from 2 lines (intersection).
-  vgl_homg_point_2d(vgl_homg_line_2d<Type> const& l1,
-                    vgl_homg_line_2d<Type> const& l2);
+  vgl_homg_point_2d(vgl_homg_line_2d<T> const& l1,
+                    vgl_homg_line_2d<T> const& l2);
 
 #if 0
   // Default copy constructor
-  inline vgl_homg_point_2d(const vgl_homg_point_2d<Type>& p)
+  inline vgl_homg_point_2d(const vgl_homg_point_2d<T>& p)
     : x_(p.x()), y_(p.y()), w_(p.w()) {}
 
   // Destructor
   inline ~vgl_homg_point_2d() {}
 
   // Default assignment operator
-  inline vgl_homg_point_2d<Type>& operator=(vgl_homg_point_2d<Type>const& p)
+  inline vgl_homg_point_2d<T>& operator=(vgl_homg_point_2d<T>const& p)
   {
     set(p.x(),p.y(),p.w());
     return *this;
@@ -73,30 +73,30 @@ class vgl_homg_point_2d
 #endif
 
   //: the comparison operator
-  inline bool operator==(vgl_homg_point_2d<Type> const& p) const
+  inline bool operator==(vgl_homg_point_2d<T> const& p) const
   {
     return (this==&p) ||
            (x()*p.w()==w()*p.x() && y()*p.w()==w()*p.y() && y()*p.x()==x()*p.y());
   }
 
-  inline bool operator!=(vgl_homg_point_2d<Type> const& other)const{return !operator==(other);}
+  inline bool operator!=(vgl_homg_point_2d<T> const& other)const{return !operator==(other);}
 
   // Data Access-------------------------------------------------------------
 
-  inline Type x() const { return x_; }
-  inline Type y() const { return y_; }
-  inline Type w() const { return w_; }
+  inline T x() const { return x_; }
+  inline T y() const { return y_; }
+  inline T w() const { return w_; }
 
   //: Set \a x,y,w
   // Note that it does not make sense to set \a x, \a y or \a w individually.
-  inline void set(Type px, Type py, Type pw = (Type)1)
+  inline void set(T px, T py, T pw = (T)1)
   { x_ = px, y_ = py, w_ = pw; }
 
-  inline void set(Type const p[3]) { x_ = p[0]; y_ = p[1]; w_ = p[2]; }
+  inline void set(T const p[3]) { x_ = p[0]; y_ = p[1]; w_ = p[2]; }
 
   //: Return true iff the point is at infinity (an ideal point).
   // The method checks whether |w| <= tol * max(|x|,|y|)
-  inline bool ideal(Type tol = (Type)0) const
+  inline bool ideal(T tol = (T)0) const
   {
 #define vgl_Abs(x) (x<0?-x:x) // avoid #include of vcl_cmath.h AND vcl_cstdlib.h
     return vgl_Abs(w()) <= tol * vgl_Abs(x()) ||
@@ -109,63 +109,63 @@ class vgl_homg_point_2d
 
 //: Write "<vgl_homg_point_2d (x,y,w) >" to stream
 // \relates vgl_homg_point_2d
-template <class Type>
-vcl_ostream& operator<<(vcl_ostream& s, vgl_homg_point_2d<Type> const& p);
+template <class T>
+vcl_ostream& operator<<(vcl_ostream& s, vgl_homg_point_2d<T> const& p);
 
 //: Read x y w from stream
 // \relates vgl_homg_point_2d
-template <class Type>
-vcl_istream& operator>>(vcl_istream& s, vgl_homg_point_2d<Type>& p);
+template <class T>
+vcl_istream& operator>>(vcl_istream& s, vgl_homg_point_2d<T>& p);
 
 //  +-+-+ homg_point_2d arithmetic +-+-+
 
 //: Return true iff the point is at infinity (an ideal point).
 // The method checks whether |w| <= tol * max(|x|,|y|)
 // \relates vgl_homg_point_2d
-template <class Type> inline
-bool is_ideal(vgl_homg_point_2d<Type> const& p, Type tol=(Type)0){return p.ideal(tol);}
+template <class T> inline
+bool is_ideal(vgl_homg_point_2d<T> const& p, T tol=(T)0){return p.ideal(tol);}
 
 //: The difference of two points is the vector from second to first point
 // This function is only valid if the points are not at infinity.
 // \relates vgl_homg_point_2d
-template <class Type> inline
-vgl_vector_2d<Type> operator-(vgl_homg_point_2d<Type> const& p1,
-                              vgl_homg_point_2d<Type> const& p2)
+template <class T> inline
+vgl_vector_2d<T> operator-(vgl_homg_point_2d<T> const& p1,
+                           vgl_homg_point_2d<T> const& p2)
 {
   assert(p1.w() && p2.w());
-  return vgl_vector_2d<Type>(p1.x()/p1.w()-p2.x()/p2.w(),
-                             p1.y()/p1.w()-p2.y()/p2.w());
+  return vgl_vector_2d<T>(p1.x()/p1.w()-p2.x()/p2.w(),
+                          p1.y()/p1.w()-p2.y()/p2.w());
 }
 
 //: Adding a vector to a point gives a new point at the end of that vector
 // If the point is at infinity, nothing happens.
 // Note that vector + point is not defined!  It's always point + vector.
 // \relates vgl_homg_point_2d
-template <class Type> inline
-vgl_homg_point_2d<Type> operator+(vgl_homg_point_2d<Type> const& p,
-                                  vgl_vector_2d<Type> const& v)
-{ return vgl_homg_point_2d<Type>(p.x()+v.x()*p.w(), p.y()+v.y()*p.w(), p.w()); }
+template <class T> inline
+vgl_homg_point_2d<T> operator+(vgl_homg_point_2d<T> const& p,
+                               vgl_vector_2d<T> const& v)
+{ return vgl_homg_point_2d<T>(p.x()+v.x()*p.w(), p.y()+v.y()*p.w(), p.w()); }
 
 //: Adding a vector to a point gives the point at the end of that vector
 // If the point is at infinity, nothing happens.
 // \relates vgl_homg_point_2d
-template <class Type> inline
-vgl_homg_point_2d<Type>& operator+=(vgl_homg_point_2d<Type>& p,
-                                    vgl_vector_2d<Type> const& v)
+template <class T> inline
+vgl_homg_point_2d<T>& operator+=(vgl_homg_point_2d<T>& p,
+                                 vgl_vector_2d<T> const& v)
 { p.set(p.x()+v.x()*p.w(), p.y()+v.y()*p.w(), p.w()); return p; }
 
 //: Subtracting a vector from a point is the same as adding the inverse vector
 // \relates vgl_homg_point_2d
-template <class Type> inline
-vgl_homg_point_2d<Type> operator-(vgl_homg_point_2d<Type> const& p,
-                                  vgl_vector_2d<Type> const& v)
+template <class T> inline
+vgl_homg_point_2d<T> operator-(vgl_homg_point_2d<T> const& p,
+                               vgl_vector_2d<T> const& v)
 { return p + (-v); }
 
 //: Subtracting a vector from a point is the same as adding the inverse vector
 // \relates vgl_homg_point_2d
-template <class Type> inline
-vgl_homg_point_2d<Type>& operator-=(vgl_homg_point_2d<Type>& p,
-                                    vgl_vector_2d<Type> const& v)
+template <class T> inline
+vgl_homg_point_2d<T>& operator-=(vgl_homg_point_2d<T>& p,
+                                 vgl_vector_2d<T> const& v)
 { return p += (-v); }
 
 //  +-+-+ homg_point_2d geometry +-+-+
@@ -194,10 +194,10 @@ double cross_ratio(vgl_homg_point_2d<T>const& p1, vgl_homg_point_2d<T>const& p2,
 
 //: Are three points collinear, i.e., do they lie on a common line?
 // \relates vgl_homg_point_2d
-template <class Type> inline
-bool collinear(vgl_homg_point_2d<Type> const& p1,
-               vgl_homg_point_2d<Type> const& p2,
-               vgl_homg_point_2d<Type> const& p3)
+template <class T> inline
+bool collinear(vgl_homg_point_2d<T> const& p1,
+               vgl_homg_point_2d<T> const& p2,
+               vgl_homg_point_2d<T> const& p3)
 {
   return (p1.x()*p2.y()-p1.y()*p2.x())*p3.w()
         +(p3.x()*p1.y()-p3.y()*p1.x())*p2.w()
@@ -209,24 +209,24 @@ bool collinear(vgl_homg_point_2d<Type> const& p1,
 //  This is the coordinate of p3 in the affine 1D reference frame (p1,p2).
 //  If p3=p1, the ratio is 0; if p1=p3, the ratio is 1.
 //  The mid point of p1 and p2 has ratio 0.5.
-//  Note that the return type is double, not Type, since the ratio of e.g.
+//  Note that the return type is double, not T, since the ratio of e.g.
 //  two vgl_vector_2d<int> need not be an int.
 // \relates vgl_homg_point_2d
-template <class Type> inline
-double ratio(vgl_homg_point_2d<Type> const& p1,
-             vgl_homg_point_2d<Type> const& p2,
-             vgl_homg_point_2d<Type> const& p3)
+template <class T> inline
+double ratio(vgl_homg_point_2d<T> const& p1,
+             vgl_homg_point_2d<T> const& p2,
+             vgl_homg_point_2d<T> const& p3)
 { return (p3-p1)/(p2-p1); }
 
 //: Return the point at a given ratio wrt two other points.
 //  By default, the mid point (ratio=0.5) is returned.
-//  Note that the third argument is Type, not double, so the midpoint of e.g.
+//  Note that the third argument is T, not double, so the midpoint of e.g.
 //  two vgl_homg_point_2d<int> is not a valid concept.  But the reflection point
 //  of p2 wrt p1 is: in that case f=-1.
-template <class Type> inline
-vgl_homg_point_2d<Type> midpoint(vgl_homg_point_2d<Type> const& p1,
-                                 vgl_homg_point_2d<Type> const& p2,
-                                 Type f = (Type)0.5)
+template <class T> inline
+vgl_homg_point_2d<T> midpoint(vgl_homg_point_2d<T> const& p1,
+                              vgl_homg_point_2d<T> const& p2,
+                              T f = (T)0.5)
 { return p1 + f*(p2-p1); }
 
 
@@ -235,26 +235,26 @@ vgl_homg_point_2d<Type> midpoint(vgl_homg_point_2d<Type> const& p1,
 // Invalid when both points are at infinity.
 // If only one point is at infinity, that point is returned.
 // \relates vgl_homg_point_2d
-template <class Type> inline
-vgl_homg_point_2d<Type> centre(vgl_homg_point_2d<Type> const& p1,
-                               vgl_homg_point_2d<Type> const& p2)
+template <class T> inline
+vgl_homg_point_2d<T> centre(vgl_homg_point_2d<T> const& p1,
+                               vgl_homg_point_2d<T> const& p2)
 {
-  return vgl_homg_point_2d<Type>(p1.x()*p2.w() + p2.x()*p1.w() ,
+  return vgl_homg_point_2d<T>(p1.x()*p2.w() + p2.x()*p1.w() ,
                                  p1.y()*p2.w() + p2.y()*p1.w() ,
                                  p1.w()*p2.w()*2 );
 }
 
 //: Return the point at the centre of gravity of a set of given points.
-// There are no rounding errors when Type is e.g. int, if all w() are 1.
+// There are no rounding errors when T is e.g. int, if all w() are 1.
 // \relates vgl_homg_point_2d
-template <class Type> inline
-vgl_homg_point_2d<Type> centre(vcl_vector<vgl_homg_point_2d<Type> > const& v)
+template <class T> inline
+vgl_homg_point_2d<T> centre(vcl_vector<vgl_homg_point_2d<T> > const& v)
 {
   int n=v.size();
   assert(n>0); // it is *not* correct to return the point (0,0) when n==0.
-  Type x = 0, y = 0;
+  T x = 0, y = 0;
   for (int i=0; i<n; ++i) x+=v[i].x()/v[i].w(), y+=v[i].y()/v[i].w();
-  return vgl_homg_point_2d<Type>(x,y,(Type)n);
+  return vgl_homg_point_2d<T>(x,y,(T)n);
 }
 
 #define VGL_HOMG_POINT_2D_INSTANTIATE(T) extern "please include vgl/vgl_homg_point_2d.txx first"
