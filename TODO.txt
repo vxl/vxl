@@ -43,7 +43,7 @@ thread.
 * upgrade netlib to use LAPACK instead of LINPACK
 
 vnl_algo uses the netlib library to provide good numerical algorithms.
-During VNL's design, it was though that the much newer LAPACK was better
+During VNL's design, it was thought that the much newer LAPACK was better
 than the LINPACK library. However, it was faster to get something working
 with LINPACK, since it had less dependencies than LAPACK. Now, LAPACK's
 superiority is undisputed. LAPACK is faster, and more accurate. It is
@@ -81,6 +81,15 @@ matrix-matrix operations - where MKL's knowledge of cache behaviour
 may help more than vnl's knowledge of the matrix data organisation.
 See https://sourceforge.net/mailarchive/message.php?msg_id=3628964 for
 more details.
+
+Some compiler optimsers (gcc's notably) appear to break bits of netlib.
+Different versions of gcc (or even the same version of gcc on different
+computers) break different bits of netlib, so turning optimisation off
+for all of netlib has too high a price. It would be worth testing the
+builds of various bits of netlib in the configuration and adjusting
+optimiser values until tests are passed. It is certainly not worth
+doing any of this before moving from linpack to lapack.
+
 Ian Scott.
 
 ############################################################################
