@@ -111,11 +111,25 @@ inline vgl_point_2d<Type> operator+(vgl_point_2d<Type> const& p,
   return vgl_point_2d<Type>(p.x()+v.x(), p.y()+v.y());
 }
 
+//: Adding a vector to a point gives the point at the end of that vector
+template <class Type>
+inline vgl_point_2d<Type>& operator+=(vgl_point_2d<Type>& p,
+                                      vgl_vector_2d<Type> const& v) {
+  p.set(p.x()+v.x(), p.y()+v.y()); return p;
+}
+
 //: Subtracting a vector from a point is the same as adding the inverse vector
 template <class Type>
 inline vgl_point_2d<Type> operator-(vgl_point_2d<Type> const& p,
                                     vgl_vector_2d<Type> const& v) {
   return p + (-v);
+}
+
+//: Subtracting a vector from a point is the same as adding the inverse vector
+template <class Type>
+inline vgl_point_2d<Type>& operator-=(vgl_point_2d<Type>& p,
+                                      vgl_vector_2d<Type> const& v) {
+  return p += (-v);
 }
 
 //  +-+-+ point_2d geometry +-+-+
