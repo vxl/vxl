@@ -41,7 +41,7 @@ TESTS += test_real_polynomial.cxx
 TESTS += test_sym_matrix.cxx
 TESTS += test_amoeba.cxx
 TESTS += test_bignum.cxx
-TESTS += test_finite_field.cxx
+TESTS += test_finite.cxx
 
 #######################################
 include ${IUEROOT}/config/top-params.mk
@@ -51,7 +51,7 @@ ifeq "$(TJ_GCC30)" "1"
 # gcc 3.0 needs too much virtual memory with optimisation
 FLAGS_test_rational.cxx += -O1
 FLAGS_test_bignum.cxx += -O1
-FLAGS_test_finite_field.cxx += -O0
+FLAGS_test_finite.cxx += -O0
 endif
 
 IULIBS += -lvnl-algo -lvnl -lvpl -lvul -ltestlib # vpl_unlink used in test_matlab; vul_timer used

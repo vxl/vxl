@@ -63,14 +63,18 @@ SOURCES += vnl_real_npolynomial.cxx
 #SOURCES += vnl_binary.cxx # deprecated: use vsl instead
 
 # alternative number representations
+
+# Rational number arithmetic; represented by two long integers
 SOURCES += vnl_rational.cxx
+# Arbitrary precision integers
 SOURCES += vnl_bignum.cxx
-MANPAGE_SOURCES += vnl_finite_field_number.h
+# Finite field and finite ring numbers and arithmetic
+MANPAGE_SOURCES += vnl_finite.h
+# p-adic numbers are actually a limit case in n of GF(p^n): cannot implement
 #MANPAGE_SOURCES += vnl_padic_field_number.txx
 
 #misc header files
 MANPAGE_SOURCES += vnl_T_n.h
-MANPAGE_SOURCES += vnl_binary.h
 MANPAGE_SOURCES += vnl_config.h
 MANPAGE_SOURCES += vnl_double_2x2.h
 MANPAGE_SOURCES += vnl_double_3x3.h
