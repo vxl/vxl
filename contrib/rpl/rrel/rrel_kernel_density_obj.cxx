@@ -6,17 +6,19 @@
 #include <vcl_iostream.h>
 #include <vcl_cassert.h>
 
-inline void shft2(double &a, double &b, const double c)
-{
-  a = b;
-  b = c;
-}
+namespace {
+  inline void shft2(double &a, double &b, const double c)
+  {
+    a = b;
+    b = c;
+  }
 
-inline void shft3(double &a, double &b, double &c, const double d)
-{
-  a = b;
-  b = c;
-  c = d;
+  inline void shft3(double &a, double &b, double &c, const double d)
+  {
+    a = b;
+    b = c;
+    c = d;
+  }
 }
 
 rrel_kernel_density_obj::rrel_kernel_density_obj(rrel_kernel_scale_type scale_type)
@@ -53,6 +55,8 @@ double
 rrel_kernel_density_obj::best_x(vect_const_iter res_begin, vect_const_iter res_end,
                                 double prior_scale) const
 {
+  //Golden Section Search is adapted from "Numerical Recipes in C++"
+  //to find x that minimumizes -1*kernel_density.
   const double R = 0.61803399, C = 1.0 - R; //The golden ratios.
   double f1, f2, x0, x1, x2, x3;
   double tol = 1.0e-9;
@@ -98,62 +102,6 @@ rrel_kernel_density_obj::best_x(vect_const_iter res_begin, vect_const_iter res_e
   else
     return x2;
 }
-//  {
-//    unsigned int n = res_end - res_begin;
-//    double h = bandwidth(res_begin, res_end, prior_scale); 
-//    assert(h!=0);
-//    double f = 0;
-
-//    vect_const_iter begin = res_begin;
-//    const unsigned int IMAX = 100;
-//    const double eps = 1.0e-09;
-//    unsigned int count = 0;
-
-//    vect_const_iter mloc = vcl_min_element(res_begin, res_end);
-//    double min = *mloc - h;
-//    mloc = vcl_max_element(res_begin, res_end);
-//    double max = *mloc + h;
-//    vcl_vector<double> res(res_begin, res_end);
-//    vcl_vector<double>::iterator loc = res.begin() + n / 2;
-//    vcl_nth_element(res.begin(), loc, res.end());
-//    double median = *loc;
-
-//    //initial guess
-//    double x = median;
-//    double dx = 0;
-
-//    double rtn;
-//    while ( count < IMAX ) {
-//      ++count;
-//      double f = 0;
-//      double f_prime = 0;
-//      double f_double_prime = 0;
-//      for ( begin=res_begin; begin != res_end; ++begin ) {
-//        f += kernel_function ( ( *begin - x ) / h );
-//        f_prime += kernel_prime ( ( *begin - x ) / h , h );
-//        f_double_prime += kernel_double_prime ( ( *begin - x ) / h , h );
-//      }
-
-//      if (f_double_prime == 0) {
-//        vcl_cerr << "f_double_prime=0, x=" << x << ", min=" << min << ", max=" << max << vcl_endl;
-//      }
-//      if (f > max_f) {
-//        max_f = f;
-//        rtn = x;
-//      }
-//      assert(f_double_prime!=0);
-//      //maximize f
-//      dx = f_prime / vnl_math_abs(f_double_prime);
-//      if (vnl_math_abs(dx) < eps) return x;
-//      x += dx;
-
-//      // Out of the range [min, max], f, f_prime, and f_double_prime are zero.
-//      if (x > max)  { vcl_cerr << x << " > " << max << vcl_endl; x = 0.5*(min+median); }
-//      if (x < min)  { vcl_cerr << x << " < " << min << vcl_endl; x = 0.5*(max+median); }
-//    }
-//    vcl_cerr << "Warning : rrel_kernel_density_obj : maximum number of iterations exceeded. " << vcl_endl;
-//    return x;
-//  }
 
 double 
 rrel_kernel_density_obj::bandwidth(vect_const_iter res_begin, vect_const_iter res_end,
@@ -225,26 +173,7 @@ rrel_kernel_density_obj::kernel_function(double u) const
     return 0;
 
   double t = 1 - u * u;
-  const double c = 1.09375;
-  return c * t * t * t;
-}
-
-double
-rrel_kernel_density_obj::kernel_prime(double u, double h) const
-{
-  if (vnl_math_abs(u) > 1)
-    return 0;
-  double d = 1 - u*u;
-  return 6.5625 / h * u * d * d;
-}
-
-double
-rrel_kernel_density_obj::kernel_double_prime(double u, double h) const
-{
-  if (vnl_math_abs(u) > 1)
-    return 0;
-  double d = u*u;
-  return -6.5625 / (h * h) * (1 - d) * (1 - 5 * d);
+  return 1.09375 * t * t * t;
 }
 
 
