@@ -98,7 +98,7 @@ protected:
   // different pointer sizes.
   
   //: The type of the serialisation records
-  typedef vcl_map<void *, vcl_pair<unsigned long, int> >
+  typedef vcl_map<void *, vcl_pair<unsigned long, int>, vcl_less<void *> >
     serialisation_records_type; 
 
   //: The serialisation records
@@ -118,18 +118,14 @@ public:
   //: Create this adaptor from a file.
   // The adapter will delete the internal stream automatically on destruction.
   vsl_b_ofstream(vcl_string &filename,
-// std::ios_base::openmode is a bitmask type [27.2.1.4]
-// Bitwise OR on bitmask types give bitmask types [17.3.2.1.2]
-// So the SGI compiler is wrong when it gives an int.
-// "int" is wrong because there is no implicit cast to enum.
-    vcl_ios_openmode mode = vcl_ios_openmode(vcl_ios_out | vcl_ios_trunc)):
+    vcl_ios_openmode mode = vcl_ios_out | vcl_ios_trunc):
     vsl_b_ostream(new vcl_ofstream(filename.c_str(),
       mode | vcl_ios_binary)) {}
 
   //: Create this adaptor from a file.
   // The adapter will delete the internal stream automatically on destruction.
   vsl_b_ofstream(char *filename,
-    vcl_ios_openmode mode = vcl_ios_openmode(vcl_ios_out | vcl_ios_trunc)):
+    vcl_ios_openmode mode = vcl_ios_out | vcl_ios_trunc):
     vsl_b_ostream(new vcl_ofstream(filename, mode | vcl_ios_binary)) {}
 
   //: Virtual destructor.
@@ -203,7 +199,7 @@ protected:
   vcl_istream *is_;
 
   //: The type of the serialisation records.
-  typedef vcl_map<unsigned long, vcl_pair<void *, int> >
+  typedef vcl_map<unsigned long, vcl_pair<void *, int>, vcl_less<unsigned long> >
     serialisation_records_type;
   
   //: The serialisation records,
