@@ -10,7 +10,9 @@
 
 #include <mil/mil_image_io.h>
 #include <mil/mil_image_2d_of.h>
+#include <vil/vil_byte.h>
 
+class vil_image;
 
 class mil_image;
 
@@ -26,6 +28,10 @@ private:
 	vcl_string colour_;
 
 	vcl_string guessFileType(const vcl_string& path) const;
+
+	void copyAsGrey(vil_image&);
+	void copyGreyToRGB(vil_image&);
+	void copyAsRGB(vil_image&);
 public:
 
 		//: Dflt ctor
