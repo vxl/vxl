@@ -26,6 +26,8 @@ AUX_SOURCE_DIRECTORY(Templates vsrl_sources)
 INCLUDE( ${MODULE_PATH}/UseVGUI.cmake )
 
 IF (HAS_VGUI)
+ INCLUDE_DIRECTORIES(${VXLCORE_INCLUDE_DIR})
+
  SET(vsrl_sources ${vsrl_sources}
   vsrl_point_picker.cxx         vsrl_point_picker.h    vsrl_point_picker_sptr.h
   vsrl_menus.h vsrl_menus.cxx
@@ -53,9 +55,11 @@ IF (HAS_VGUI)
  ENDIF( EXISTS ${vxl_SOURCE_DIR}/contrib/tbl/vepl/CMakeLists.txt )
 ENDIF (HAS_VGUI)
 
-TARGET_LINK_LIBRARIES(vsrl vtol vdgl vgl vil1 vnl mvl vgel rsdl)
+TARGET_LINK_LIBRARIES(vsrl vtol vdgl vgl vil1 vnl vgel rsdl)
 
+# vgel uses mvl from oxl:
 INCLUDE_DIRECTORIES(${OXL_INCLUDE_DIR})
+# rsdl is in rpl:
 INCLUDE_DIRECTORIES(${RPL_INCLUDE_DIR})
 
 IF (BUILD_EXAMPLES)
