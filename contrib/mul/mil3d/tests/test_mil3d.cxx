@@ -8,6 +8,7 @@
 #include "test_transform_3d.cxx"
 #include "test_trilin_interp_3d.cxx"
 #include "test_sample_profile_3d.cxx"
+#include "test_gaussian_pyramid_builder_3d.cxx"
 
 #undef TESTMAIN
 #define TESTMAIN(x) int main() \
@@ -19,6 +20,7 @@ void run_test_mil()
   test_transform_3d();
   test_trilin_interp_3d();
   test_sample_profile_3d();
+  test_gaussian_pyramid_builder_3d();
 }
 
 TESTMAIN(run_test_mil);
