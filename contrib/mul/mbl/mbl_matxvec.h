@@ -7,9 +7,9 @@
 
 //:
 // \file
+// \brief Various specialised versions of simple linear algebra operators.
 // \author Tim Cootes
 // \date 3-Oct-97
-// \brief Various specialised versions of simple linear algebra operators.
 // Modifications
 // \verbatim
 // TFC    Revised version 3-Oct-97

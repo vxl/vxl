@@ -6,11 +6,14 @@
 
 //:
 // \file
+// \brief Interface for Multi-variate Principle Component gaussian PDF Builder.
 // \author Ian Scott
 // \date 21-Jul-2000
-// \brief Interface for Multi-variate Principle Component gaussian PDF Builder.
+//
+// \verbatim
 // Modifications
 // 23 April 2001 IMS - Ported to VXL
+// \endverbatim
 
 
 //=======================================================================
