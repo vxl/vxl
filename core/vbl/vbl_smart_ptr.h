@@ -165,6 +165,7 @@ inline ostream& operator<< (ostream& os, vbl_smart_ptr<T> const& r)
   return os << r.ptr();
 }
 
-#define VBL_SMART_PTR_INSTANTIATE(T) "error, see .txx file"
+#define VBL_SMART_PTR_INSTANTIATE(T) \
+extern "please include vbl/vbl_smart_ptr.txx instead"
 
 #endif

@@ -7,7 +7,7 @@
 # include <vcl/emulation/vcl_list.h>
 #else
 # ifdef __GNUC__
-#  include_next <list.h>
+#  include <list.h>
 #  define vcl_list list
 # else
 // Native STL, not GCC:

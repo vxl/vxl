@@ -1,15 +1,15 @@
 VXL := 1
 
-################################
+#######################################
 include ${IUEROOT}/config/top-params.mk
-################################
+#######################################
 
 USES := vxl
 
 LIBRARY := vcl
 VERSION := 1.0
 
-ifneq (1, $(NOTEST))
+ifndef NOTEST
 SUBDIRS = tests
 endif
 
@@ -23,6 +23,6 @@ endif
 
 DEFINES += -DBUILDING_VCL_DLL
 
-################################
+######################################
 include ${IUEROOT}/config/top-rules.mk
-################################
+######################################

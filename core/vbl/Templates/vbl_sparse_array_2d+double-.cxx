@@ -7,4 +7,4 @@
 #include <vbl/vbl_sparse_array_2d.txx>
 #include <vcl/vcl_vector.h>
 
-VBL_SPARSE_ARRAY_2D_INSTANTIATE(double)
+VBL_SPARSE_ARRAY_2D_INSTANTIATE(double);

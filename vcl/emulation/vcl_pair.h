@@ -39,7 +39,7 @@
 #ifndef vcl_emulation_pair_h
 #define vcl_emulation_pair_h
 
-#include <vcl/emulation/vcl_bool.h>
+#include "vcl_bool.h"
 
 #undef struct
 template <class T1, class T2>
@@ -75,4 +75,5 @@ inline vcl_pair<T1, T2> make_pair(const T1& x, const T2& y) {
     return vcl_pair<T1, T2>(x, y);
 }
 
+#define VCL_PAIR_INSTANTIATE(T1, T2) extern "please include vcl_pair.txx"
 #endif // vcl_emulation_pair_h

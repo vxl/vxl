@@ -38,13 +38,13 @@
 #ifndef vcl_emulation_hash_map_h
 #define vcl_emulation_hash_map_h
 
-#include <vcl/emulation/vcl_hashtable.h>
+#include "vcl_hashtable.h"
 
 __BEGIN_STL_FULL_NAMESPACE
 # define  vcl_hash_map      __WORKAROUND_RENAME(vcl_hash_map)
 # define  vcl_hash_multimap __WORKAROUND_RENAME(vcl_hash_multimap)
 
-template <class Key, class T, VCL_DFL_TMPL_PARAM_STLDECL(HashFcn,hash<Key>),
+template <class Key, class T, VCL_DFL_TMPL_PARAM_STLDECL(HashFcn,vcl_hash<Key>),
           VCL_DFL_TMPL_PARAM_STLDECL(EqualKey,vcl_equal_to<Key>),
           VCL_DFL_TYPE_PARAM_STLDECL(Alloc,vcl_alloc) >
 class vcl_hash_map
@@ -149,7 +149,7 @@ public:
 };
 
 
-template <class Key, class T, VCL_DFL_TMPL_PARAM_STLDECL(HashFcn,hash<Key>),
+template <class Key, class T, VCL_DFL_TMPL_PARAM_STLDECL(HashFcn,vcl_hash<Key>),
           VCL_DFL_TMPL_PARAM_STLDECL(EqualKey,vcl_equal_to<Key>),
           VCL_DFL_TYPE_PARAM_STLDECL(Alloc,vcl_alloc) >
 class vcl_hash_multimap
@@ -365,4 +365,5 @@ inline bool operator==(const vcl_hash_multimap<Key, T, HashFcn,EqualKey>& hm1,
 
 # endif /* __STL_DEFAULT_TYPE_PARAM */
 
+#define VCL_HASH_MAP_INSTANTIATE(Key, Value, Hash, Comp) extern "please include vcl_hash_map.txx"
 #endif // vcl_emulation_hash_map_h

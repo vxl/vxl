@@ -1,6 +1,9 @@
-// -*- c++ -*-
+#ifndef vcl_emulation_hash_map_txx_
+#define vcl_emulation_hash_map_txx_
 #include <vcl/vcl_compiler.h>
-#include "vcl_hash.txx"
+#include "vcl_algorithm.txx"
+#include "vcl_iterator.txx"
+#include "vcl_vector.txx"
 #include "vcl_pair.txx"
 
 /////////////////////////////////////////////////////////////////////////////
@@ -46,27 +49,29 @@ VCL_HASHTABLE_INSTANTIATE(T, HTPair, vcl_select1st<HTPair >, Hash, Comp, TAG)
 
 // --- HASH TABLE ---
 #define VCL_HASHTABLE_INSTANTIATE(Key, Value, GetKey, Hash, Compare, TAG)\
-template class vcl_hashtable<Value, Key, Hash, GetKey, Compare, vcl_alloc >; \
-template class __hashtable_base< Value, vcl_alloc >; \
-template class __hashtable_iterator<Value, Key, Hash, GetKey, Compare, vcl_alloc >; \
-typedef __hashtable_iterator<Value, Key, Hash, GetKey, Compare, vcl_alloc > HTIter ## TAG; \
-VCL_UNARY_INSTANTIATE(Hash)\
-VCL_UNARY_INSTANTIATE(Compare)\
-VCL_UNARY_INSTANTIATE(GetKey)\
-VCL_ITER_FWD_INSTANTIATE(HTIter ## TAG) \
-VCL_PAIR_INSTANTIATE(HTIter ## TAG, bool) \
-VCL_PAIR_INSTANTIATE(HTIter ## TAG, HTIter ## TAG) \
-template class __hashtable_const_iterator<Value, Key, Hash, GetKey, Compare, vcl_alloc >; \
-typedef __hashtable_const_iterator<Value, Key, Hash, GetKey, Compare, vcl_alloc > HTIterc ## TAG; \
-VCL_ITER_FWD_INSTANTIATE(HTIterc ## TAG) \
-VCL_INSTANTIATE_INLINE(void distance(HTIterc ## TAG, HTIterc ## TAG, size_t&))\
-VCL_INSTANTIATE_INLINE(void __distance(HTIterc ## TAG, HTIterc ## TAG const &, size_t &, forward_iterator_tag)) \
-VCL_PAIR_INSTANTIATE(HTIterc ## TAG, bool) \
-VCL_PAIR_INSTANTIATE(HTIterc ## TAG, HTIterc ## TAG) \
-template class __hashtable_node<Value> ; \
-typedef __hashtable_node<Value> HTNode ## TAG; \
-typedef __hashtable_node<Value>* HTNodeP ## TAG; \
-VCL_UNARY_INSTANTIATE(HTNodeP ## TAG)\
-VCL_UNARY_INSTANTIATE(HTNodeP ## TAG *)\
-VCL_CONTAINABLE_INSTANTIATE(HTNodeP ## TAG) \
+template class vcl_hashtable<Value, Key, Hash, GetKey, Compare, vcl_alloc >;\
+template class __hashtable_base< Value, vcl_alloc >;\
+template class __hashtable_iterator<Value, Key, Hash, GetKey, Compare, vcl_alloc >;\
+typedef __hashtable_iterator<Value, Key, Hash, GetKey, Compare, vcl_alloc > HTIter ## TAG;\
+VCL_UNARY_INSTANTIATE(Hash);\
+VCL_UNARY_INSTANTIATE(Compare);\
+VCL_UNARY_INSTANTIATE(GetKey);\
+VCL_ITER_FWD_INSTANTIATE(HTIter ## TAG);\
+VCL_PAIR_INSTANTIATE(HTIter ## TAG, bool);\
+VCL_PAIR_INSTANTIATE(HTIter ## TAG, HTIter ## TAG);\
+template class __hashtable_const_iterator<Value, Key, Hash, GetKey, Compare, vcl_alloc >;\
+typedef __hashtable_const_iterator<Value, Key, Hash, GetKey, Compare, vcl_alloc > HTIterc ## TAG;\
+VCL_ITER_FWD_INSTANTIATE(HTIterc ## TAG);\
+VCL_INSTANTIATE_INLINE(void distance(HTIterc ## TAG, HTIterc ## TAG, size_t&));\
+VCL_INSTANTIATE_INLINE(void __distance(HTIterc ## TAG, HTIterc ## TAG const &, size_t &, forward_iterator_tag));\
+VCL_PAIR_INSTANTIATE(HTIterc ## TAG, bool);\
+VCL_PAIR_INSTANTIATE(HTIterc ## TAG, HTIterc ## TAG);\
+template class __hashtable_node<Value>;\
+typedef __hashtable_node<Value> HTNode ## TAG;\
+typedef __hashtable_node<Value>* HTNodeP ## TAG;\
+VCL_UNARY_INSTANTIATE(HTNodeP ## TAG);\
+VCL_UNARY_INSTANTIATE(HTNodeP ## TAG *);\
+VCL_CONTAINABLE_INSTANTIATE(HTNodeP ## TAG);\
 VCL_VECTOR_INSTANTIATE(HTNodeP ## TAG)
+
+#endif // vcl_emulation_hash_map_txx_

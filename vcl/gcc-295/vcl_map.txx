@@ -8,7 +8,7 @@
 #define VCL_MAP_INSTANTIATE_MT_InputIterator(maptype, Key, T, Comp, InputIterator)\
 template maptype<Key, T, Comp >::maptype(InputIterator, InputIterator);\
 template maptype<Key, T, Comp >::maptype(InputIterator first, InputIterator last, Comp const&);\
-template void maptype<Key, T, Comp >::insert(InputIterator first, InputIterator last);
+template void maptype<Key, T, Comp >::insert(InputIterator first, InputIterator last)
 
 
 //template class _Rb_tree<Key, pair<Key const, T>, _Select1st<pair<Key const, T> >, Comp >;

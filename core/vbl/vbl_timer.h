@@ -11,11 +11,10 @@
 //
 // .NAME vbl_timer - A timing facility for C++.
 // .LIBRARY vbl
-// .HEADER System Interface Classes
+// .HEADER Basics package
 // .INCLUDE vbl/vbl_timer.h
-// .FILE vbl/vbl_timer.C
-// .FILE vbl/vbl_timer.h
-// .EXAMPLE examples/ex_Timer.C
+// .FILE vbl/vbl_timer.cxx
+// .EXAMPLE vbl/examples/vbl_timer.cxx
 //
 //
 // .SECTION Description

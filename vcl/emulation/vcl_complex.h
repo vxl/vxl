@@ -2,7 +2,7 @@
 #define vcl_emulation_complex_h
 #define VCL_COMPLEX_AVAILABLE
 
-#include <math.h>
+#include <vcl/vcl_cmath.h>
 #include <vcl/vcl_compiler.h>
 
 // The Sunpro 4.2 compiler has a bug that it will not instantiate
@@ -15,7 +15,7 @@
 #endif
 #endif
 
-#include <vcl/emulation/vcl_function.h> // for op!=
+#include "vcl_function.h" // for op!=
 #include <iostream.h>
 
 // implementation of class vcl_complex<FLOAT>, copied from g++ 2.7.2 - PVR
@@ -454,4 +454,5 @@ inline vcl_complex<float> operator*(const vcl_complex<float>& c, double d)
   return vcl_complex<float>(c.real() * f, c.imag() * f);
 }
 
+#define VCL_COMPLEX_INSTANTIATE(FLOAT) extern "please include vcl_complex.txx"
 #endif // vcl_emulation_complex_h

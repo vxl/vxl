@@ -2,6 +2,7 @@
 #define vcl_complex_h_
 
 #include <vcl/vcl_compiler.h>
+#include <vcl/vcl_cmath.h>
 
 /** File: vcl_complex.h
  
@@ -65,20 +66,11 @@ inline complex<double> operator*(double const& b, vcl_complex<float> const& a) {
 #else
 // all emulation :
 # include <vcl/emulation/vcl_complex.h>
-# if defined(VCL_SGI_CC_7)
-# include <iostream.h>
-template <class T> inline istream &operator>>(istream &is, vcl_complex<T> &z) 
-{ abort(); T r(0), i(0); is >> r >> i; z=vcl_complex<T>(r,i); return is; } // fsm
-# endif
 #endif
 
 
 // At this point we have vcl_complex<T>, so this should work for all compilers :
 typedef vcl_complex<double> vcl_double_complex;
 typedef vcl_complex<float> vcl_float_complex;
-
-
-// bogus instantiation macro.
-# define VCL_COMPLEX_INSTANTIATE(T) extern "you must include vcl_complex.txx instead"
 
 #endif

@@ -2,8 +2,6 @@
 
 #include <vcl/vcl_compiler.h>
 
-#undef VCL_DEQUE_INSTANTIATE
-
 #if !VCL_USE_NATIVE_STL
 # include <vcl/emulation/vcl_deque.txx>
 #else

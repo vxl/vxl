@@ -2,8 +2,6 @@
 
 #include <vcl/vcl_compiler.h>
 
-#undef VCL_SET_INSTANTIATE
-
 #if !VCL_USE_NATIVE_STL
 # include <vcl/emulation/vcl_set.txx>
 #else

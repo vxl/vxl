@@ -216,7 +216,9 @@ vbl_rgb<double> operator/(const vbl_rgb<T>& a, double b)
   return vbl_rgb<double>(a.R / b, a.G / b, a.B / b);
 }
 
-#define VBL_RGB_INSTANTIATE(T)  "error, see .txx file"
-#define VBL_RGB_INSTANTIATE_LS(T) "error, see .txx file"
+#define VBL_RGB_INSTANTIATE(T) \
+extern "please include vbl/vbl_rgb.txx instead"
+#define VBL_RGB_INSTANTIATE_LS(T) \
+extern "please include vbl/vbl_rgb.txx instead"
 
 #endif   // DO NOT ADD CODE AFTER THIS LINE! END OF DEFINITION FOR CLASS vbl_rgb.

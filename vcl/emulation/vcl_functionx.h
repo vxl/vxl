@@ -15,7 +15,7 @@
 #ifndef vcl_emulation_functionx_h
 #define vcl_emulation_functionx_h
 
-#include <vcl/emulation/vcl_function.h>
+#include "vcl_function.h"
 
 // This header provides various non-standard functional extensions
 // Some of them have to be specializations.

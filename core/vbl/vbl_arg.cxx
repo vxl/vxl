@@ -19,9 +19,6 @@
 #include <vbl/vbl_printf.h>
 #include <vbl/vbl_sprintf.h>
 
-//#include <math.h>
-extern "C" double floor(double);
-
 //
 static vbl_arg_info_list& current_list(void)
 {
@@ -367,7 +364,7 @@ int parse(vbl_arg<int>* arg, char ** argv)
     return -1;
   }
   
-  if (v != floor(v)) {
+  if (v != int(v)) {
     cerr << "vbl_arg_parse: Expected integer: saw " << argv[0] << endl;
     return -1;
   }

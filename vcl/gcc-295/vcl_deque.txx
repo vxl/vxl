@@ -5,6 +5,6 @@
 #include <vcl/vcl_deque.h>
 
 #define VCL_DEQUE_INSTANTIATE(T) \
-template class deque<T >;
+template class vcl_deque<T >
 
 #endif

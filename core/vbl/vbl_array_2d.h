@@ -65,6 +65,6 @@ protected:
 template<class Type> 
 ostream& operator<< (ostream& os, const vbl_array_2d<Type> &v);
 
-#define VBL_ARRAY_2D_INSTANTIATE "error, see .txx file"
+#define VBL_ARRAY_2D_INSTANTIATE extern "please include vbl/vbl_array_2d.txx instead"
 
 #endif // vbl_array_2d_h_

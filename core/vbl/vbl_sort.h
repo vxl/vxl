@@ -83,7 +83,8 @@ void vbl_qsort_descending(vcl_vector<T>& v)
   qsort(v.begin(), v.size(), sizeof v[0], vbl_sort_helper<T>::descend);
 }
 
-#define VBL_SORT_INSTANTIATE(T) "error, see .txx file"
+#define VBL_SORT_INSTANTIATE(T) \
+extern "please include vbl/vbl_sort.txx instead"
 
 #endif
 

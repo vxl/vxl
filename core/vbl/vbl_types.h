@@ -12,7 +12,7 @@
 //     boolean, true, false, u_char, nil, os_boolean, os_bool,
 //     PI, MAXCHAR.
 
-#include <math.h>
+#include <vcl/vcl_cmath.h>
 
 /* ------------------------------------ */
 /*      DEFINE BASIC TYPES              */

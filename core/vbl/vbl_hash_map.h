@@ -72,6 +72,7 @@ public:
   }
 };
 
-#define VBL_HASHTABLE_INSTANTIATE "error, see .txx file"
+#define VBL_HASHTABLE_INSTANTIATE \
+extern "please include vbl/vbl_hash_map.txx instead"
 
 #endif // vbl_hash_map_h_

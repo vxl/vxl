@@ -53,8 +53,8 @@
 #define vcl_emulation_deque_h
 
 #include <stddef.h>
-#include <vcl/emulation/vcl_algobase.h>
-#include <vcl/emulation/vcl_alloc.h>
+#include "vcl_algobase.h"
+#include "vcl_alloc.h"
 
 # if defined ( __STL_USE_ABBREVS )
 #  define __deque_iterator         vcl_dQIt
@@ -932,4 +932,5 @@ template <class T, class Alloc>
 inline void swap(__deque__<T,Alloc>& a, __deque__<T,Alloc>& b) { a.swap(b); }
 # endif
 
+#define VCL_DEQUE_INSTANTIATE(T) extern "please include vcl_deque.txx"
 #endif // vcl_emulation_deque_h

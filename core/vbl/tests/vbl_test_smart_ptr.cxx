@@ -60,12 +60,12 @@ class SmartPointerSubclass : public SmartPointerTest
 #include <vcl/vcl_algorithm.txx>
 #include <vbl/vbl_smart_ptr.txx>
 
-VBL_SMART_PTR_INSTANTIATE(SmartPointerTest)
-VBL_SMART_PTR_INSTANTIATE(SmartPointerSubclass)
+VBL_SMART_PTR_INSTANTIATE(SmartPointerTest);
+VBL_SMART_PTR_INSTANTIATE(SmartPointerSubclass);
 
-VCL_OPERATOR_NE_INSTANTIATE(vbl_smart_ptr<SmartPointerTest>)
-VCL_CONTAINABLE_INSTANTIATE(vbl_smart_ptr<SmartPointerTest>)
-VCL_LIST_INSTANTIATE(vbl_smart_ptr<SmartPointerTest>)
+VCL_OPERATOR_NE_INSTANTIATE(vbl_smart_ptr<SmartPointerTest>);
+VCL_CONTAINABLE_INSTANTIATE(vbl_smart_ptr<SmartPointerTest>);
+VCL_LIST_INSTANTIATE(vbl_smart_ptr<SmartPointerTest>);
 
 typedef vbl_smart_ptr<SmartPointerTest> SmartPointerTest_ref;
 typedef vbl_smart_ptr<SmartPointerSubclass> SmartPointerSubclass_ref;

@@ -76,8 +76,10 @@ inline ostream& operator << (ostream& s, const vbl_sparse_array_3d<T>& a)
 }
 
 
-#define VBL_SPARSE_ARRAY_3D_INSTANTIATE_base(T) "error, see .txx file"
-#define VBL_SPARSE_ARRAY_3D_INSTANTIATE(T) "error, see .txx file"
+#define VBL_SPARSE_ARRAY_3D_INSTANTIATE_base(T) \
+extern "please include vbl/vbl_sparse_array_3d.txx instead"
+#define VBL_SPARSE_ARRAY_3D_INSTANTIATE(T) \
+extern "please include vbl/vbl_sparse_array_3d.txx instead"
 
 #endif   // DO NOT ADD CODE AFTER THIS LINE! END OF DEFINITION FOR CLASS vbl_sparse_array_3d.
 

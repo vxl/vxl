@@ -59,7 +59,7 @@ ostream& vbl_sparse_array_2d<T>::print(ostream& out) const
 
 #undef VBL_SPARSE_ARRAY_2D_INSTANTIATE_base
 #define VBL_SPARSE_ARRAY_2D_INSTANTIATE_base(T)\
-template class vbl_sparse_array_2d<T>;
+template class vbl_sparse_array_2d<T>
 
 #undef VBL_SPARSE_ARRAY_2D_INSTANTIATE 
 #define VBL_SPARSE_ARRAY_2D_INSTANTIATE(T) \

@@ -83,7 +83,9 @@ private:
 template <class T> ostream & operator<<(ostream &,const vbl_array_3d<T> &);
 template <class T> istream & operator>>(istream &,vbl_array_3d<T> &);
 
-#define VBL_ARRAY_3D_INSTANTIATE "error, see .txx file"
-#define VBL_ARRAY_3D_IO_INSTANTIATE "error, see .txx file"
+#define VBL_ARRAY_3D_INSTANTIATE \
+extern "please include vbl/vbl_array_3d.txx instead"
+#define VBL_ARRAY_3D_IO_INSTANTIATE \
+extern "please include vbl/vbl_array_3d.txx instead"
 
 #endif

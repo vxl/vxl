@@ -66,9 +66,10 @@ public:
 #include <vbl/vbl_smart_ptr.txx>
 #include <vcl/vcl_compiler.h>
 #include <vcl/vcl_list.txx>
+#include <vcl/vcl_algorithm.txx>
 
-VCL_OPERATOR_NE_INSTANTIATE(vbl_smart_ptr<example_sp>)
-VCL_CONTAINABLE_INSTANTIATE(vbl_smart_ptr<example_sp>)
+VCL_OPERATOR_NE_INSTANTIATE(vbl_smart_ptr<example_sp>);
+VCL_CONTAINABLE_INSTANTIATE(vbl_smart_ptr<example_sp>);
 VCL_LIST_INSTANTIATE(vbl_smart_ptr<example_sp>);
 
 // end of list+vbl_smart_ptr+example_sp-.cxx

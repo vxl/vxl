@@ -5,6 +5,6 @@
 */
 
 #define VCL_BASIC_STRING_INSTANTIATE(charT, Traits) \
-/* wibble */;
+/* wibble */
 
 #endif

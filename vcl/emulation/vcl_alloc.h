@@ -44,7 +44,7 @@
 
 #include <stddef.h>
 #include <stdlib.h>
-#include <vcl/emulation/vcl_string.h>
+#include "vcl_string.h"
 #include <assert.h>
 
 #ifndef __RESTRICT
@@ -56,7 +56,7 @@
 #  define _NOTHREADS
 #endif
 
-#include <vcl/emulation/vcl_bool.h>
+#include "vcl_bool.h"
 
 #if !defined ( __STL_NO_EXCEPTIONS )
 # if defined (__STL_BAD_ALLOC_DEFINED)
@@ -804,7 +804,7 @@ typedef malloc_alloc multithreaded_alloc;
 # endif /* ! __STL_USE_NEWALLOC */
 
 # if defined ( __STL_USE_DEFALLOC )
-#  include <vcl/emulation/vcl_defalloc.h>
+#  include "vcl_defalloc.h"
 # endif
 
 #endif // vcl_emulation_alloc_h

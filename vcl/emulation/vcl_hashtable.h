@@ -59,9 +59,9 @@
 #include <stdlib.h>
 #include <stddef.h>
 
-#include <vcl/vcl_algorithm.h>
-#include <vcl/vcl_function.h>
-#include <vcl/vcl_vector.h>
+#include "vcl_algorithm.h"
+#include "vcl_function.h"
+#include "vcl_vector.h"
 
 #if defined ( __STL_USE_ABBREVS )
 # define __hashtable_iterator         vcl_hTIt

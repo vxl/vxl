@@ -7,7 +7,7 @@
 # include <vcl/emulation/vcl_utility.h>
 #else
 # ifdef __GNUC__
-#  include_next <function.h>
+#  include <function.h>
 #  define vcl_utility utility
 # else
 #  include <utility>

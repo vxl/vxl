@@ -1,3 +1,6 @@
+#ifndef vcl_gcc295_complex_txx_
+#define vcl_gcc295_complex_txx_
+  
 #include <vcl/vcl_complex.h>
 
 #include <std/complext.cc> 
@@ -44,3 +47,5 @@ VCL_COMPLEX_INSTANTIATE_INLINE(FLOAT abs (complex<FLOAT >const&));		\
 VCL_COMPLEX_INSTANTIATE_INLINE(FLOAT norm (complex<FLOAT >const&)); \
 template ostream& operator<<(ostream &, complex<FLOAT > const &); \
 template istream& operator>>(istream &, complex<FLOAT >&)
+
+#endif // vcl_gcc295_complex_txx_

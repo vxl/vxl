@@ -23,8 +23,7 @@ template void fill(vector<T >::iterator, vector<T >::iterator, T const &); \
 template vector<T >::iterator fill_n(vector<T >::iterator, vector<T >::size_type, T const &);\
 VCL_VECTOR_STLINST_uninitialized_copy(vector<T >::iterator, vector<T >::iterator, vector<T >::size_type);\
 VCL_VECTOR_STLINST_uninitialized_copy(vector<T >::const_iterator, vector<T >::iterator, vector<T >::size_type);\
-template class vector<T >;
-
-/*VCL_FIND_INSTANTIATE(vector<T >::iterator, T)*/;
+/*VCL_FIND_INSTANTIATE(vector<T >::iterator, T);*/\
+template class vector<T >
 
 #endif

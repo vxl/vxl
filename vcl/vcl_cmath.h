@@ -6,6 +6,14 @@
 
 #include <vcl/vcl_compiler.h>
 
+#if defined(sparc) && defined(sun) && defined(unix) && defined(__SVR4)
+// Peter.Vanroose@esat.kuleuven.ac.be : on solaris 2.6, if __EXTENSIONS__
+// is defined, or _XOPEN_SOURCE is undefined, /usr/include/math.h includes
+// the file /usr/include/floatingpoint.h , which contains errors.
+// And we don't need whatever is in there, so pretend the file was included.
+#define _FLOATINGPOINT_H
+#endif
+
 // Include system math.h :
 #include <math.h>
 

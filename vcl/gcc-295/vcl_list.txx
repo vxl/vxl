@@ -9,9 +9,7 @@
 #define VCL_LIST_INSTANTIATE_MT_InputIterator(T, InputIterator) \
 template list<T >::list(InputIterator first, InputIterator last); \
 template void list<T >::insert(list<T >::iterator, InputIterator, InputIterator); \
-/* fsm */ \
-template void list<T >::_M_insert_dispatch(list<T >::iterator, InputIterator, InputIterator, __false_type); \
-;
+template void list<T >::_M_insert_dispatch(list<T >::iterator, InputIterator, InputIterator, __false_type)
 //PVr removed(for gcc 2.95): template void list<T >::range_initialize(InputIterator first, InputIterator last);
 
 //#else

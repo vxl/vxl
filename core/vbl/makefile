@@ -16,7 +16,8 @@ LIBRARY := vbl
 VERSION := 1.0
 
 ifndef NOTEST
-SUBDIRS = tests
+SUBDIRS += tests
+SUBDIRS += examples
 endif
 
 SOURCES += vbl_arg.cxx  # if this is in a .txx file, gcc 2.95 will not generate any code.

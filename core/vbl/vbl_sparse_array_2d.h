@@ -94,9 +94,11 @@ inline ostream& operator << (ostream& s, const vbl_sparse_array_2d<T>& a) {
 
 #include <vcl/vcl_compiler.h>
 
-#define VBL_SPARSE_ARRAY_2D_INSTANTIATE_base(T) "error, see .txx file"
+#define VBL_SPARSE_ARRAY_2D_INSTANTIATE_base(T) \
+extern "please include vbl/vbl_sparse_array_2d.txx instead"
 
-#define VBL_SPARSE_ARRAY_2D_INSTANTIATE(T) "error"
+#define VBL_SPARSE_ARRAY_2D_INSTANTIATE(T) \
+extern "please include vbl/vbl_sparse_array_2d.txx instead"
 
 #endif   // DO NOT ADD CODE AFTER THIS LINE! END OF DEFINITION FOR CLASS vbl_sparse_array_2d.
 

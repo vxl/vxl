@@ -75,7 +75,8 @@ inline ostream& operator << (ostream& s, const vbl_sparse_array<T>& a)
   return a.print(s);
 }
 
-#define VBL_SPARSE_ARRAY_INSTANTIATE(T) "error, see .txx file"
+#define VBL_SPARSE_ARRAY_INSTANTIATE(T) \
+extern "please include vbl/vbl_sparse_array.txx instead"
 
 #endif   // DO NOT ADD CODE AFTER THIS LINE! END OF DEFINITION FOR CLASS vbl_sparse_array.
 

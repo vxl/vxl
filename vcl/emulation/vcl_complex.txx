@@ -1,3 +1,5 @@
+#ifndef vcl_emulation_complex_txx_
+#define vcl_emulation_complex_txx_
 //-*- c++ -*-------------------------------------------------------------------
 //
 // Module: complex
@@ -9,12 +11,13 @@
 //-----------------------------------------------------------------------------
 #include <vcl/vcl_compiler.h>
 
-// This assumes that emulation/complex.cxx is included implies emulation/complex.h included
+// This assumes that emulation/vcl_complex.cxx is included 
+// implies emulation/vcl_complex.h included
 #include "vcl_complex.h"
 
 #ifdef __SUNPRO_CC
 #undef VCL_INSTANTIATE_INLINE
-#define VCL_INSTANTIATE_INLINE(fn_decl)  template  fn_decl ;
+#define VCL_INSTANTIATE_INLINE(fn_decl)  template  fn_decl
 #endif
 
 #undef VCL_COMPLEX_INSTANTIATE
@@ -49,4 +52,6 @@ VCL_INSTANTIATE_INLINE(vcl_complex<FLOAT > log (vcl_complex<FLOAT >const&));	\
 VCL_INSTANTIATE_INLINE(FLOAT arg (vcl_complex<FLOAT >const&));		\
 VCL_INSTANTIATE_INLINE(FLOAT abs (vcl_complex<FLOAT >const&));		\
 VCL_INSTANTIATE_INLINE(FLOAT norm (vcl_complex<FLOAT >const&));         \
-VCL_INSTANTIATE_INLINE(FLOAT conj (vcl_complex<FLOAT >const&));
+VCL_INSTANTIATE_INLINE(FLOAT conj (vcl_complex<FLOAT >const&))
+
+#endif // vcl_emulation_complex_txx_

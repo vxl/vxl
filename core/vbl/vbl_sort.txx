@@ -1,7 +1,4 @@
 //-*- c++ -*-------------------------------------------------------------------
-#ifdef __GNUC__
-#pragma implementation "vbl_sort.h"
-#endif
 //
 // Class: vbl_sort
 // Author: Andrew W. Fitzgibbon, Oxford RRG
@@ -65,7 +62,7 @@ int vbl_sort::int_descending(const int& a, const int& b)
 #define VBL_SORT_INSTANTIATE(T)\
 template struct vbl_sort_helper<T>;\
 template void vbl_qsort_ascending(T*,int);\
-template void vbl_qsort_descending(T*,int);
+template void vbl_qsort_descending(T*,int)
 
 
 VBL_SORT_INSTANTIATE(int);

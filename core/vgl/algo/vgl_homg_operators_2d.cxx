@@ -17,7 +17,7 @@
 #include <vgl/vgl_homg_point_2d.h>
 
 #include <vgl/algo/vgl_homg_operators_2d.h>
-
+#include <vnl/vnl_numeric_limits.h> // for infinity
 
 //-----------------------------------------------------------------------------
 
@@ -122,8 +122,7 @@ double vgl_homg_operators_2d<Type>::distance_squared (const vgl_homg_point_2d<Ty
 
   if (z1 == 0 || z2 == 0) {
     cerr << "vgl_homg_operators_2d<Type>::distance_squared() -- point at infinity";
-    //return Homg::infinity;
-    return 10000000; // TODO make an infinity for homg operators 
+    return vnl_numeric_limits<Type>::infinity();
   }
 
   double scale1 = 1.0/z1;

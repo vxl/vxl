@@ -1,7 +1,3 @@
-#ifdef __GNUC__
-#pragma instantiate "vbl_rgb.h"
-#endif
-
 #include <vcl/vcl_compiler.h>
 #include <vbl/vbl_rgb.h>
 #undef VBL_RGB_INSTANTIATE
@@ -13,18 +9,18 @@
 #undef VBL_RGB_INSTANTIATE
 #define VBL_RGB_INSTANTIATE(T) \
 template struct vbl_rgb<T>; \
-VCL_INSTANTIATE_INLINE(vbl_rgb<T> max(const vbl_rgb<T>& a, const vbl_rgb<T>& b)) \
-VCL_INSTANTIATE_INLINE(vbl_rgb<T> min(const vbl_rgb<T>& a, const vbl_rgb<T>& b)) \
-VCL_INSTANTIATE_INLINE(vbl_rgb<T> average(const vbl_rgb<T>& a, const vbl_rgb<T>& b)) \
-VCL_INSTANTIATE_INLINE(vbl_rgb<T> operator+(const vbl_rgb<T>& a, const vbl_rgb<T>& b)) \
-VCL_INSTANTIATE_INLINE(vbl_rgb<double> operator/(const vbl_rgb<T>& a, double b)) \
-VCL_INSTANTIATE_INLINE(vbl_rgb<double> operator*(const vbl_rgb<T>& a, double b)) \
-VCL_INSTANTIATE_INLINE(vbl_rgb<double> operator*(double b, const vbl_rgb<T>& a)) \
+VCL_INSTANTIATE_INLINE(vbl_rgb<T> max(const vbl_rgb<T>& a, const vbl_rgb<T>& b)); \
+VCL_INSTANTIATE_INLINE(vbl_rgb<T> min(const vbl_rgb<T>& a, const vbl_rgb<T>& b)); \
+VCL_INSTANTIATE_INLINE(vbl_rgb<T> average(const vbl_rgb<T>& a, const vbl_rgb<T>& b)); \
+VCL_INSTANTIATE_INLINE(vbl_rgb<T> operator+(const vbl_rgb<T>& a, const vbl_rgb<T>& b)); \
+VCL_INSTANTIATE_INLINE(vbl_rgb<double> operator/(const vbl_rgb<T>& a, double b)); \
+VCL_INSTANTIATE_INLINE(vbl_rgb<double> operator*(const vbl_rgb<T>& a, double b)); \
+VCL_INSTANTIATE_INLINE(vbl_rgb<double> operator*(double b, const vbl_rgb<T>& a))
 
 // must do << separately for byte specialization
 #undef VBL_RGB_INSTANTIATE_LS
 #define VBL_RGB_INSTANTIATE_LS(T)\
-VCL_INSTANTIATE_INLINE(ostream& operator<<(ostream&, const vbl_rgb<T>& ));
+VCL_INSTANTIATE_INLINE(ostream& operator<<(ostream&, const vbl_rgb<T>& ))
  
 #if VCL_CAN_DO_PARTIAL_SPECIALIZATION
 // declare partial specialization, for those compilers which can take it :

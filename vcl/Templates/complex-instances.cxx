@@ -6,7 +6,7 @@
 #include <vcl/vcl_complex.txx> 
 
 #if !VCL_USE_NATIVE_COMPLEX
-  VCL_COMPLEX_INSTANTIATE(float)
+  VCL_COMPLEX_INSTANTIATE(float);
   VCL_COMPLEX_INSTANTIATE(double);
 #elif defined(VCL_GCC_295)
 # include <vcl/vcl_iostream.h> 
