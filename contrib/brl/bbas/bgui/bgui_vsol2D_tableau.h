@@ -10,7 +10,6 @@
 //
 //   Default styles are defined for each geometry object soview.
 //   Users can change the default style by using the set_*_style commands,
-//   
 //
 // \verbatim
 //  Modifications:
@@ -25,11 +24,13 @@
 #include <vsol/vsol_point_2d_sptr.h>
 #include <vsol/vsol_line_2d_sptr.h>
 #include <vsol/vsol_polyline_2d_sptr.h>
+#if 0
 #include <vsol/vsol_conic_2d_sptr.h>
 #include <vsol/vsol_polygon_2d_sptr.h>
 #include <vsol/vsol_rectangle_2d_sptr.h>
 #include <vsol/vsol_triangle_2d_sptr.h>
 #include <vsol/vsol_group_2d_sptr.h>
+#endif
 
 #include <vdgl/vdgl_digital_curve_sptr.h>
 #include <vdgl/vdgl_edgel_chain_sptr.h>
@@ -66,19 +67,19 @@ class bgui_vsol2D_tableau : public vgui_easy2D_tableau
   bgui_vsol_soview2D_point*
     add_vsol_point_2d(vsol_point_2d_sptr const& p);
 
-  //: display for vsol_line_2d 
-  bgui_vsol_soview2D_line_seg* 
+  //: display for vsol_line_2d
+  bgui_vsol_soview2D_line_seg*
     add_vsol_line_2d(vsol_line_2d_sptr const& line);
-  
-  //: display for vsol_polyline_2d 
-  bgui_vsol_soview2D_polyline* 
+
+  //: display for vsol_polyline_2d
+  bgui_vsol_soview2D_polyline*
     add_vsol_polyline_2d(vsol_polyline_2d_sptr const& pline);
 
-  //: display for digital_curve 
+  //: display for digital_curve
   bgui_vsol_soview2D_digital_curve*
     add_digital_curve(vdgl_digital_curve_sptr const& dc);
 
-  //: display for digital_curve 
+  //: display for digital_curve
   bgui_vsol_soview2D_dotted_digital_curve*
     add_dotted_digital_curve(vdgl_digital_curve_sptr const& dc);
 
@@ -111,7 +112,7 @@ class bgui_vsol2D_tableau : public vgui_easy2D_tableau
   void set_digital_curve_style(const float r, const float g, const float b,
                                const float line_width);
 
-  void set_dotted_digital_curve_style(const float r, const float g, 
+  void set_dotted_digital_curve_style(const float r, const float g,
                                       const float b,
                                       const float line_width,
                                       const float point_radius);

@@ -10,27 +10,28 @@
 #include <vsol/vsol_point_2d.h>
 #include <vsol/vsol_line_2d.h>
 #include <vsol/vsol_polyline_2d.h>
-#include <vsol/vsol_conic_2d.h>
 #include <vsol/vsol_polygon_2d.h>
-#include <vsol/vsol_rectangle_2d.h>
-#include <vsol/vsol_triangle_2d.h>
-#include <vsol/vsol_group_2d.h>
 #include <vdgl/vdgl_digital_curve.h>
 #include <vdgl/vdgl_interpolator.h>
 #include <vdgl/vdgl_edgel_chain.h>
+#if 0 // not needed for now
+#include <vsol/vsol_conic_2d.h>
+#include <vsol/vsol_group_2d.h>
+#include <vsol/vsol_rectangle_2d.h>
+#include <vsol/vsol_triangle_2d.h>
+#endif // 0
 
 #include <bgui/bgui_vsol_soview2D.h>
 
 #include <vgui/vgui_soview2D.h>
-#include <vgui/vgui_style.h>
 
 //--------------------------------------------------------------------------
 //: vsol_point_2d view
 //--------------------------------------------------------------------------
 vcl_ostream& bgui_vsol_soview2D_point::print(vcl_ostream& s) const
 {
-s << "[bgui_vsol_soview2D_point " << x << "," << y << " ";
-s << " "; return vgui_soview2D::print(s) << "]";
+  s << "[bgui_vsol_soview2D_point " << x << "," << y << " ";
+  return vgui_soview2D::print(s) << "]";
 }
 
 //--------------------------------------------------------------------------
