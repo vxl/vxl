@@ -17,11 +17,10 @@
 //   Mark Johnson June 13, 2003      Stopped using interior class functions to
 //                                   highlight objects. Added support for
 //                                   specifying colors of individual objects.
-//   Mark Johnson June 20, 2003      Added support for 'linked' digital curve. 
+//   Mark Johnson June 20, 2003      Added support for 'linked' digital curve.
 // \endverbatim
 //-----------------------------------------------------------------------------
 #include <vcl_vector.h>
-#include <vcl_map.h>
 #include <vgui/vgui_style.h>
 
 #include <vsol/vsol_spatial_object_2d_sptr.h>
@@ -57,10 +56,10 @@ class bgui_linked_vsol2D_tableau : public bgui_easy2D_tableau
   bgui_linked_vsol2D_tableau(const char* n="unnamed");
 
   bgui_linked_vsol2D_tableau(vgui_image_tableau_sptr const& it,
-                      const char* n="unnamed");
+                             const char* n="unnamed");
 
   bgui_linked_vsol2D_tableau(vgui_tableau_sptr const& t,
-                      const char* n="unnamed");
+                             const char* n="unnamed");
 
   ~bgui_linked_vsol2D_tableau();
 
@@ -77,18 +76,18 @@ class bgui_linked_vsol2D_tableau : public bgui_easy2D_tableau
 
   bgui_vsol_soview2D_point*
     add_vsol_point_2d(vsol_point_2d_sptr const& p);
-  
+
   //: display for vsol_line_2d
   bgui_linked_vsol_soview2D_line_seg*
     add_vsol_line_2d(vsol_line_2d_sptr const& line,
                      const float r,
                      const float g,
-                     const float b, 
+                     const float b,
                      const float line_width);
 
   bgui_linked_vsol_soview2D_line_seg*
     add_vsol_line_2d(vsol_line_2d_sptr const& line);
-  
+
   //: display for vsol_polyline_2d
   bgui_linked_vsol_soview2D_polyline*
     add_vsol_polyline_2d(vsol_polyline_2d_sptr const& pline,
@@ -99,7 +98,7 @@ class bgui_linked_vsol2D_tableau : public bgui_easy2D_tableau
 
   bgui_linked_vsol_soview2D_polyline*
     add_vsol_polyline_2d(vsol_polyline_2d_sptr const& pline);
-         
+
   //: display for digital_curve
   bgui_linked_vsol_soview2D_digital_curve*
     add_digital_curve(vdgl_digital_curve_sptr const& dc,
@@ -110,7 +109,7 @@ class bgui_linked_vsol2D_tableau : public bgui_easy2D_tableau
 
   bgui_linked_vsol_soview2D_digital_curve*
     add_digital_curve(vdgl_digital_curve_sptr const& dc);
-  
+
   //: display for digital_curve
   bgui_vsol_soview2D_dotted_digital_curve*
     add_dotted_digital_curve(vdgl_digital_curve_sptr const& dc,
@@ -124,14 +123,14 @@ class bgui_linked_vsol2D_tableau : public bgui_easy2D_tableau
     add_dotted_digital_curve(vdgl_digital_curve_sptr const& dc);
 
   void add_spatial_object(vsol_spatial_object_2d_sptr const& sos);
-  
+
   void add_spatial_object(vsol_spatial_object_2d_sptr const& sos,
                           const float r,
                           const float g,
                           const float b,
                           const float line_width,
                           const float point_radius);
-  
+
   //: display methods for vectors of vsol classes (not grouped)
   void add_spatial_objects(vcl_vector<vsol_spatial_object_2d_sptr> const& sos);
 
@@ -204,7 +203,7 @@ struct bgui_linked_vsol2D_tableau_new : public bgui_linked_vsol2D_tableau_sptr
   bgui_linked_vsol2D_tableau_new(const char* n="unnamed") :
     base(new bgui_linked_vsol2D_tableau(n)) { }
   bgui_linked_vsol2D_tableau_new(vgui_image_tableau_sptr const& it,
-                          const char* n="unnamed") :
+                                 const char* n="unnamed") :
     base(new bgui_linked_vsol2D_tableau(it,n)) { }
 
   bgui_linked_vsol2D_tableau_new(vgui_tableau_sptr const& t, const char* n="unnamed")
