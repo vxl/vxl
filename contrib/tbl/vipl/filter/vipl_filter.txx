@@ -407,8 +407,8 @@ template < class ImgIn, class ImgOut, class DataIn, class DataOut, int Arity, cl
     int ibs = image_border_size();
     int end = insecp()->curr_sec_end(axis);
     int st = insecp()->curr_sec_start(axis);
-    if (st > end){ // swap hack in case people get it wrong....
-      int temp = end; end = st; st = temp;
+    if (st > end){ // hack in case people get it wrong....
+      end = st;
     }
     end -= ibs;
 #ifdef DEBUG
@@ -437,8 +437,8 @@ template < class ImgIn, class ImgOut, class DataIn, class DataOut, int Arity, cl
     int ibs = image_border_size();
     int end = secp()->curr_sec_end(axis);
     int st = secp()->curr_sec_start(axis);
-    if (st > end){ // swap hack in case people get it wrong....
-      int temp = end; end = st; st = temp;
+    if (st > end){ // hack in case people get it wrong....
+      end = st;
     }
     end -= ibs;
 #ifdef DEBUG
