@@ -5,6 +5,7 @@
 #define TESTMAIN(x)
 
 
+#include <mbl/tests/test_stochastic_data_collector.cxx>
 #include <mbl/tests/test_k_means.cxx>
 #include <mbl/tests/test_mz_random.cxx>
 #include <mbl/tests/test_matrix_products.cxx>
@@ -16,6 +17,7 @@
 
 void run_test_mbl()
 {
+  test_stochastic_data_collector();
   test_k_means();
   test_mz_random();
   test_matrix_products();

@@ -6,8 +6,8 @@
 
 //:
 // \file
-// \author Tim Cootes
 // \brief Templated base class for objects which collect sets of data.
+// \author Tim Cootes
 
 #include <vsl/vsl_binary_io.h>
 #include <vcl_string.h>
@@ -38,7 +38,7 @@ public:
   virtual void record(const T& v) =0;
 
   //: Return object describing stored data
-  virtual mbl_data_wrapper<T >& vectorData() = 0;
+  virtual mbl_data_wrapper<T >& data_wrapper() = 0;
 };
 
 //: Copy all the data from a mbl_data_wrapper<vnl_vector<double> > into a mbl_data_collector
