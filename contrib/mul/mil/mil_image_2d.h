@@ -51,6 +51,10 @@ public:
 
     //: Depth of image (set to 1 for 2D images)
     virtual int nz() const { return 1; }
+
+    //: Does the name of the class match the argument?
+	virtual bool is_class(vcl_string const& s) const
+	{ return (s=="mil_image_2d"); }
 };
 
 #endif // mil_image_2d_h_
