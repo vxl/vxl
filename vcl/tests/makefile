@@ -1,8 +1,7 @@
 TESTMAIN = vcl_tests.cxx
-TESTS += vcl_tests.cxx
 # All tests are called from vcl_tests.cxx
-SOURCES += test_vcl_rel_ops.cxx
-SOURCES += test_vcl_compiler.cxx
+#SOURCES += test_vcl_rel_ops.cxx
+TESTS   += test_vcl_compiler.cxx
 SOURCES += test_vcl_headers.cxx
 SOURCES += test_vcl_iterator.cxx
 SOURCES += test_vcl_iostream.cxx
