@@ -189,7 +189,7 @@ class vtol_face : public vtol_topology_object
   //: Does `this' share an edge with `f' ?
   // Comparison of edge pointers, not geometric values
   //---------------------------------------------------------------------------
-  virtual bool shares_edge_with(vtol_face &f);
+  virtual bool shares_edge_with(vtol_face_sptr const& f);
 
   //: have the inherited classes copy the geometry
   virtual void copy_geometry(const vtol_face &other)=0;
