@@ -283,12 +283,11 @@ bool vtol_block_3d::operator==(const vtol_block_3d& bl) const
 
 bool vtol_block_3d::operator==(const vsol_spatial_object_3d& obj) const
 {
-  if ((obj.spatial_type() == vsol_spatial_object_3d::TOPOLOGYOBJECT) &&
-      (((vtol_topology_object_3d&)obj).topology_type() == vtol_topology_object_3d::BLOCK))
-    return (vtol_block_3d &)*this == (vtol_block_3d&) (vtol_topology_object_3d&) obj;
-  else return false;
-
-  return true;
+  return
+   obj.spatial_type() == vsol_spatial_object_3d::TOPOLOGYOBJECT &&
+   ((vtol_topology_object_3d const&)obj).topology_type() == vtol_topology_object_3d::BLOCK
+  ? *this == (vtol_block_3d const&) (vtol_topology_object_3d const&) obj
+  : false;
 }
 
 /*
