@@ -1,7 +1,7 @@
 #ifndef vil_stream_url_h_
 #define vil_stream_url_h_
 #ifdef __GNUC__
-#pragma interface "vil_stream_url"
+#pragma interface
 #endif
 /*
   fsm@robots.ox.ac.uk
