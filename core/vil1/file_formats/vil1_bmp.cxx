@@ -59,6 +59,7 @@ vil_bmp_generic_image::vil_bmp_generic_image(vil_stream* is)
   //, freds_colormap(0)
   //, local_color_map_(0)
 {
+  is_->ref();
   read_header();
 }
 
