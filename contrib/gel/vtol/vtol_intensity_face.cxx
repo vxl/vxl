@@ -89,6 +89,7 @@ vtol_intensity_face::vtol_intensity_face(vtol_face_2d_sptr const& face, int npts
 //Default Destructor
 vtol_intensity_face::~vtol_intensity_face()
 {
+  delete region_;
 }
 
 

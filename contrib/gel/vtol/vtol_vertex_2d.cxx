@@ -129,7 +129,10 @@ double vtol_vertex_2d::y(void) const
 void vtol_vertex_2d::set_x(const double new_x)
 {
   // Must allocate here, since this pointer will be unref()ed by destructor
+#if 0
   point_=new vsol_point_2d(new_x,point_->y());
+#endif
+  point_->set_x(new_x);
   this->touch(); //Timestamp update
 }
 
@@ -139,7 +142,10 @@ void vtol_vertex_2d::set_x(const double new_x)
 void vtol_vertex_2d::set_y(const double new_y)
 {
   // Must allocate here, since this pointer will be unref()ed by destructor
+#if 0
   point_=new vsol_point_2d(point_->x(),new_y);
+#endif
+  point_->set_y(new_y);
   this->touch(); //Timestamp update
 }
 

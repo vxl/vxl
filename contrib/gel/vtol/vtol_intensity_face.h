@@ -31,6 +31,8 @@
 //                    - added get_min() & get_max() pass-throughs
 //                    - restored perimeter() API
 //                    - added topology_type() override (INTENSITYFACE)
+//   14-Nov-2003 - Joe Mundy - removed leak since the region_ was not being
+//                             deleted
 // \endverbatim
 //
 //-------------------------------------------------------------------------

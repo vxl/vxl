@@ -19,7 +19,9 @@
 //      generic.  Note this is distance, NOT squared distance.
 //   LEG May 2000. ported to vxl
 //   JLM November 2002 - added local bounding_box method
-//   Dec. 2002, Peter Vanroose -interface change: vtol objects -> smart pointers
+//  Dec. 2002, Peter Vanroose -interface change: vtol objects -> smart pointers
+//  JLM November 2003 - set_x and set_y were creating a new point_ which
+//                      invalidated curve endpoint geometry.
 // \endverbatim
 
 #include <vcl_iosfwd.h>
