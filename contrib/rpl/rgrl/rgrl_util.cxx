@@ -581,7 +581,6 @@ rgrl_util_irls( rgrl_match_set_sptr              match_set,
                 rgrl_convergence_tester   const& conv_tester,
                 rgrl_estimator_sptr              estimator,
                 rgrl_transformation_sptr       & estimate,
-                double                         & error,
                 unsigned int                     debug_flag )
 {
   rgrl_set_of<rgrl_match_set_sptr> match_sets;
