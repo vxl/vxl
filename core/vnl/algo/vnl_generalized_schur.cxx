@@ -63,10 +63,44 @@ bool vnl_generalized_schur/*<double>*/(vnl_matrix<double> *A,
   R->inplace_transpose();
   delete [] work;
 
-  if (info != 0) {
-    vcl_clog << __FILE__ ": info = " << info << vcl_endl;
+  if (info == 0) {
+    // ok
+    return true;
+  }
+  else {
+    // These return codes are taken from dgges.f:
+    //*          = 0:  successful exit
+    //*          < 0:  if INFO = -i, the i-th argument had an illegal value.
+    //*          = 1,...,N:
+    //*                The QZ iteration failed.  (A,B) are not in Schur
+    //*                form, but ALPHAR(j), ALPHAI(j), and BETA(j) should
+    //*                be correct for j=INFO+1,...,N.
+    //*          > N:  =N+1: other than QZ iteration failed in DHGEQZ.
+    //*                =N+2: after reordering, roundoff changed values of
+    //*                      some complex eigenvalues so that leading
+    //*                      eigenvalues in the Generalized Schur form no
+    //*                      longer satisfy DELZTG=.TRUE.  This could also
+    //*                      be caused due to scaling.
+    //*                =N+3: reordering failed in DTGSEN.
+    vcl_cerr << __FILE__ ": info = " << info << ", something went wrong:" << vcl_endl;
+    if (info < 0) {
+      vcl_cerr << __FILE__ ": (internal error) the " << (-info) << "th argument had an illegal value" << vcl_endl;
+    }
+    else if (1 <= info && info <= n) {
+      vcl_cerr << __FILE__ ": the QZ iteration failed, but the last " << (n - info) << " eigenvalues may be correct" << vcl_endl;
+    }
+    else if (info == n+1) {
+      vcl_cerr << __FILE__ ": something went wrong in DHGEQZ" << vcl_endl;
+    }
+    else if (info == n+2) {
+      vcl_cerr << __FILE__ ": roundoff error -- maybe due to poor scaling" << vcl_endl;
+    }
+    else if (info == n+3) {
+      vcl_cerr << __FILE__ ": reordering failed in DTGSEN" << vcl_endl;
+    }
+    else {
+      vcl_cerr << __FILE__ ": unknown error" << vcl_endl;
+    }
     return false;
   }
-  else
-    return true;
 }
