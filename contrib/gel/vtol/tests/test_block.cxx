@@ -18,13 +18,13 @@
 #include <vtol/vtol_block.h>
 #include <vtol/vtol_block_sptr.h>
 
-#define Assert(x) do { if (x) vcl_cout << "test PASSED\n"; else vcl_cerr << "test FAILED [" #x "]\n"; } while (0)
+#define Assert(x) do { if (x) vcl_cout << "test PASSED\n"; else vcl_cout << "test FAILED [" #x "]\n"; } while (0)
 
 
 int main(int, char **)
 {
 
-  vcl_cerr << "testing block" << vcl_endl;
+  vcl_cout << "testing block" << vcl_endl;
 
   vtol_vertex_2d_sptr v1 = new vtol_vertex_2d(0.0,0.0);
   vtol_vertex_2d_sptr v2 = new vtol_vertex_2d(1.0,1.0);
@@ -115,7 +115,7 @@ int main(int, char **)
   Assert(b1->valid_inferior_type(*tc1));
   Assert(tc1->valid_superior_type(*b1));
 
-  vcl_cerr << "Finished testing block" << vcl_endl;
+  vcl_cout << "Finished testing block" << vcl_endl;
   return 0;
 }
 

@@ -14,12 +14,12 @@
 #include <vtol/vtol_face_2d_sptr.h>
 #include <vtol/vtol_face_sptr.h>
 
-#define Assert(x) do { if (x) vcl_cout << "test PASSED\n"; else vcl_cerr << "test FAILED [" #x "]\n"; } while (0)
+#define Assert(x) do { if (x) vcl_cout << "test PASSED\n"; else vcl_cout << "test FAILED [" #x "]\n"; } while (0)
 
 
 int main(int, char **)
 {
-  vcl_cerr << "testing face 2d" << vcl_endl;
+  vcl_cout << "testing face 2d" << vcl_endl;
 
   vtol_vertex_2d_sptr v1 = new vtol_vertex_2d(0.0,0.0);
   vtol_vertex_2d_sptr v2 = new vtol_vertex_2d(1.0,1.0);
@@ -101,7 +101,7 @@ int main(int, char **)
   Assert(f1->get_num_edges()==4);
   Assert(f1->shares_edge_with(*new_f));
 
-  vcl_cerr << "Finished testing face 2d " << vcl_endl;
+  vcl_cout << "Finished testing face 2d " << vcl_endl;
   return 0;
 }
 

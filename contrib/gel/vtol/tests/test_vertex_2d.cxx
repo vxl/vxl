@@ -7,14 +7,14 @@
 #include <vtol/vtol_edge_sptr.h>
 
 
-#define Assert(x) do { if (x) vcl_cout << "test PASSED\n"; else vcl_cerr << "test FAILED [" #x "]\n"; } while (0)
+#define Assert(x) do { if (x) vcl_cout << "test PASSED\n"; else vcl_cout << "test FAILED [" #x "]\n"; } while (0)
 
 
 int main(int, char **)
 {
   // we want to test the methods on vtol_vertex_2d
 
-  vcl_cerr << "Testing vertex 2d" << vcl_endl;
+  vcl_cout << "Testing vertex 2d" << vcl_endl;
 
   vtol_vertex_2d_sptr v1=new vtol_vertex_2d(1.0,2.0);
   Assert(v1->x()==1.0);
@@ -157,7 +157,7 @@ int main(int, char **)
   Assert(!(v1v->valid_superior_type(*(new_edge))));
   Assert(!(v1v->valid_inferior_type(*(new_edge))));
 
-  vcl_cerr << "finished testing vertex 2d" << vcl_endl;
+  vcl_cout << "finished testing vertex 2d" << vcl_endl;
   return 0;
 }
 
