@@ -64,8 +64,8 @@ public: \
   bool read_data(T * const *) // no ; here, please. SunPro 5.0 barfs.
 fsm_declare_methods(float);
 fsm_declare_methods(double);
-fsm_declare_methods(vcl_float_complex);
-fsm_declare_methods(vcl_double_complex);
+fsm_declare_methods(vcl_complex<float>);
+fsm_declare_methods(vcl_complex<double>);
 #undef fsm_declare_methods
   
 private:
