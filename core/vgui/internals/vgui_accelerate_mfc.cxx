@@ -99,28 +99,28 @@ vidfmt::vidfmt()
     switch(dib_hdr->biCompression) {
     case BI_BITFIELDS: {
         DWORD * fields = (DWORD*) ((char*)dib_hdr + dib_hdr->biSize);
-        if (debug) printf("masks [%08x %08x %08x] ", fields[0], fields[1], fields[2]);
+        if (debug) vul_printf(vcl_cerr, "masks [%08x %08x %08x] ", fields[0], fields[1], fields[2]);
         switch (fields[0])
         {
         case 0xf800:
           gl_type = GL_UNSIGNED_SHORT_5_6_5;
           gl_format = GL_RGB;
-            if (debug) printf("    (565 BGR pixel alignment)");
+            if (debug) vul_printf(vcl_cerr, "    (565 BGR pixel alignment)");
             break;
         case 0x7c00:
           gl_type = GL_UNSIGNED_SHORT_5_5_5_1;
           gl_format = GL_RGB;
-            if (debug) printf("    (555 BGR pixel alignment)");
+            if (debug) vul_printf(vcl_cerr, "    (555 BGR pixel alignment)");
             break;
         case 0xff0000:
           gl_type = GL_UNSIGNED_BYTE;
           gl_format = GL_BGR;
-            if (debug) printf("    (888 BGR pixel alignment)");
+            if (debug) vul_printf(vcl_cerr, "    (888 BGR pixel alignment)");
             break;
         case 0x0000ff:
           gl_type = GL_UNSIGNED_BYTE;
           gl_format = GL_RGB;
-            if (debug) printf("    (888 RGB pixel alignment)");
+            if (debug) vul_printf(vcl_cerr, "    (888 RGB pixel alignment)");
             break;
         default:
             vul_printf(vcl_cerr, "vgui_accelerate_mfc:    (Unknown pixel alignment %x:%x:%x)\n",
@@ -136,7 +136,7 @@ vidfmt::vidfmt()
     default:
       vcl_abort();
     }
-    if (debug) printf("\n");
+    if (debug) vul_printf(vcl_cerr, "\n");
 
     // awf: OK, the above doesn't work on my win2k laptop.
     // write an rgb into a bitmap and have a gander...
@@ -178,12 +178,12 @@ vidfmt::vidfmt()
       case 0xf800:
         gl_type = GL_UNSIGNED_SHORT_5_6_5;
         gl_format = GL_RGB;
-        if (debug) printf("    (565 BGR pixel alignment)");
+        if (debug) vul_printf(vcl_cerr, "    (565 BGR pixel alignment)");
         break;
       case 0x7c00:
         gl_type = GL_UNSIGNED_SHORT_5_5_5_1;
         gl_format = GL_RGB;
-        if (debug) printf("    (555 BGR pixel alignment)");
+        if (debug) vul_printf(vcl_cerr, "    (555 BGR pixel alignment)");
         break;
       default:
         vul_printf(vcl_cerr, "vgui_accelerate_mfc:    (Unknown redmask %02x)\n", redmask);
