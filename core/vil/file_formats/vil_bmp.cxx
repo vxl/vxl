@@ -381,21 +381,25 @@ bool vil_bmp_image::put_view(const vil_image_view_base& view,
 
   unsigned bypp = nplanes();
   unsigned rowlen = ni() * bypp;
-  rowlen += (3-(rowlen+3)%4); // round up to a multiple of 4
+  unsigned padlen = (3-(rowlen+3)%4); // round row length up to a multiple of 4
+  vxl_byte padding[3]={0, 0, 0};
 
   if ((view2.planestep() == -1||nplanes()==1)&&
       view2.istep()==(int)view2.nplanes())
   {
     for (unsigned y=0; y<view2.nj(); ++y)
     {
-      is_->seek(bit_map_start+(y+y0)*rowlen+x0*bypp);
+      is_->seek(bit_map_start+(y+y0)*(rowlen+padlen)+x0*bypp);
       is_->write(&view2(0,view2.nj()-y-1,view2.nplanes()-1), rowlen);
+      if (padlen !=0) is_->write(padding, padlen);
     }
   }
   else
   {
+    rowlen=padlen;
     assert(nplanes()==3);
-    vxl_byte* buf = new vxl_byte[rowlen];
+    vxl_byte* buf = new vxl_byte[rowlen+padlen];
+    for (unsigned i=rowlen; i<rowlen+padlen; ++i) buf[i]=0;
     for (unsigned j=0; j<view2.nj(); ++j)
     {
       vxl_byte* b = buf;
@@ -405,8 +409,8 @@ bool vil_bmp_image::put_view(const vil_image_view_base& view,
         *(b++) = view2(i, view2.nj()-j-1, 1);
         *(b++) = view2(i, view2.nj()-j-1, 0);
       }
-      is_->seek(bit_map_start+(j+y0)*rowlen+x0*bypp);
-      is_->write(buf, rowlen);
+      is_->seek(bit_map_start+(j+y0)*(rowlen+padlen)+x0*bypp);
+      is_->write(buf, rowlen+padlen);
     }
     delete [] buf;
   }
