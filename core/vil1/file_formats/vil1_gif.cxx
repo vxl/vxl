@@ -6,6 +6,7 @@
 #endif
 #include "vil_gif.h"
 
+#include <vcl_cassert.h>
 #include <vcl_iostream.h>
 #include <vcl_iomanip.h>
 
