@@ -99,7 +99,7 @@ unsigned vil2_pixel_format_sizeof_components(enum vil2_pixel_format f);
 //: Return the number of components in pixel format f
 unsigned vil2_pixel_format_num_components(enum vil2_pixel_format f);
 
-//: Return the number of components in pixel format f
+//: Return the format of each component of pixel format f
 vil2_pixel_format vil2_pixel_format_component_format(enum vil2_pixel_format f);
 
 //: Output a pretty string representing the pixel format.
