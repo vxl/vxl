@@ -91,7 +91,22 @@ bool test_image_equal(char const* type_name,
     TEST("image headers are identical", true, true);
     return true;
   }
+  vcl_cout << "istep()=" << image2.istep() << ", jstep()=" << image2.jstep()
+           << ", planestep()=" << image2.planestep() << '\n' << vcl_flush;
+  TEST("istep is non-zero", image2.istep()==0, false);
+  TEST("|istep| is at most 3xheight",  3*sizey2+image2.istep()>=0 && 3*sizey2-image2.istep()>=0, true);
+  TEST("jstep is non-zero", image2.jstep()==0, false);
+  TEST("|jstep| is at most 3xwidth", 3+3*sizex2+image2.jstep()>=0 && 3+3*sizex2-image2.jstep()>=0, true);
+  // The "+3" is there to allow for "row word alignment", e.g. with the BMP format.
+  TEST("planestep is non-zero", image2.planestep()==0, false);
+  TEST("|planestep| is at most widthxheight",
+       (3+sizex2)*sizey2+image2.planestep()>=0 && (3+sizex2)*sizey2-image2.planestep()>=0, true);
 
+  if (100*sizex2+image2.jstep()<0 || 100*sizex2-image2.jstep()<0)
+  {
+    vcl_cout << "*** Something is terribly wrong with image2's jstep() ***\n";
+    return false;
+  }
   int bad = 0;
   for (int p=0; p < planes; ++p)
   {
@@ -335,7 +350,6 @@ vil_image_view<vxl_byte> CreateTest3planeImage(int wd, int ht)
   return image;
 }
 
-
 // create a float-pixel test image
 vil_image_view<float> CreateTestfloatImage(int wd, int ht)
 {
@@ -369,9 +383,6 @@ void test_vil_save_image_resource()
     vpl_unlink(out_path);
 #endif
 }
-
-
-
 
 
 MAIN( test_save_load_image )
