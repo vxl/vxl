@@ -1,4 +1,4 @@
-// This is vxl/vnl/algo/vnl_symmetric_eigensystem.cxx
+// This is core/vnl/algo/vnl_symmetric_eigensystem.cxx
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif

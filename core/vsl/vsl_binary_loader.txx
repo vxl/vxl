@@ -1,4 +1,4 @@
-// This is vxl/vsl/vsl_binary_loader.txx
+// This is core/vsl/vsl_binary_loader.txx
 #ifndef vsl_binary_loader_txx_
 #define vsl_binary_loader_txx_
 //:
@@ -23,16 +23,16 @@ vsl_binary_loader<BaseClass>& vsl_binary_loader<BaseClass>::instance()
 template<class BaseClass>
 void vsl_binary_loader<BaseClass>::make_empty()
 {
-    for (unsigned int i=0; i<object_.size(); ++i)
-      delete object_[i];
-    object_.resize(0);
+  for (unsigned int i=0; i<object_.size(); ++i)
+    delete object_[i];
+  object_.resize(0);
 }
 
 template<class BaseClass>
 vsl_binary_loader<BaseClass>::~vsl_binary_loader()
 {
-    make_empty();
-    instance_=0;
+  make_empty();
+  instance_=0;
 }
 
 // IO for  pointers to BaseClass:
@@ -57,8 +57,8 @@ void vsl_binary_loader<BaseClass>::load_object( vsl_b_istream& is, BaseClass*& b
     return;
   }
 
-  unsigned int i;
-  for (i=0; (i<object_.size()) && !(object_[i]->is_a()==name); i++);
+  unsigned int i = 0;
+  while (i<object_.size() && !(object_[i]->is_a()==name)) ++i;
 
   if (i<object_.size())
   {
@@ -67,9 +67,9 @@ void vsl_binary_loader<BaseClass>::load_object( vsl_b_istream& is, BaseClass*& b
   }
   else
   {
-    vcl_cerr << "\n I/O ERROR: " << is_a() << "::load_object: ";
-    vcl_cerr << "class name <" << name << "> not in list of loaders"<<vcl_endl;
-    vcl_cerr << object_.size()<<" valid loaders: "<<vcl_endl;
+    vcl_cerr << "\n I/O ERROR: " << is_a() << "::load_object: "
+             << "class name <" << name << "> not in list of loaders\n"
+             << object_.size()<<" valid loaders:\n";
     for (unsigned int j=0; j<object_.size(); ++j)
       vcl_cerr << object_[j]->is_a() << vcl_endl;
     is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
@@ -127,6 +127,5 @@ template class vsl_binary_loader<T >
 VSL_BINARY_LOADER_WITH_SPECIALIZATION_INSTANTIATE(T); \
 VCL_INSTANTIATE_INLINE(void vsl_b_read( vsl_b_istream& bfs, T*& b)); \
 template void vsl_b_write(vsl_b_ostream& bfs, const T* b)
-
 
 #endif // vsl_binary_loader_txx_
