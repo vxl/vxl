@@ -62,6 +62,7 @@ char const* vil_viff_file_format::tag() const
 vil_viff_generic_image::vil_viff_generic_image(vil_stream* is)
   : is_(is)
 {
+  is_->ref();
   read_header();
 }
 
@@ -81,7 +82,13 @@ vil_viff_generic_image::vil_viff_generic_image(vil_stream* is, int planes,
     bits_per_component_(bits_per_component),
     format_(format), endian_consistent_(true)
 {
+  is_->ref();
   write_header();
+}
+
+vil_viff_generic_image::~vil_viff_generic_image()
+{
+  is_->unref();
 }
 
 bool vil_viff_generic_image::read_header()

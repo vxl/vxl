@@ -108,6 +108,7 @@ char const* vil_mit_file_format::tag() const
 vil_mit_generic_image::vil_mit_generic_image(vil_stream* is):
   is_(is)
 {
+  is_->ref();
   read_header();
 }
 
@@ -124,6 +125,7 @@ vil_mit_generic_image::vil_mit_generic_image(vil_stream* is, int planes,
 					     vil_component_format format):
   is_(is)
 {
+  is_->ref();
   width_ = width;
   height_ = height;
   components_ = components;
@@ -144,6 +146,11 @@ vil_mit_generic_image::vil_mit_generic_image(vil_stream* is, int planes,
   }
 
   write_header();
+}
+
+vil_mit_generic_image::~vil_mit_generic_image()
+{
+  is_->unref();
 }
 
 bool vil_mit_generic_image::read_header()

@@ -246,6 +246,7 @@ vil_png_generic_image::vil_png_generic_image(vil_stream* is):
   vs_(is),
   p(new vil_png_structures(true))
 {
+  vs_->ref();
   read_header();
 }
 
@@ -256,19 +257,20 @@ vil_png_generic_image::vil_png_generic_image(vil_stream* is, int planes,
 					       int bits_per_component,
 					       vil_component_format format):
   vs_(is),
+  width_(width),
+  height_(height),
+  components_(components),
+  bits_per_component_(bits_per_component),
   p(new vil_png_structures(false))
 {
-  width_ = width;
-  height_ = height;
-  components_ = components;
-  bits_per_component_ = bits_per_component;
-
+  vs_->ref();
   write_header();
 }
 
 vil_png_generic_image::~vil_png_generic_image()
 {
   delete p;
+  vs_->unref();
 }
 
 char const* vil_png_generic_image::file_format() const

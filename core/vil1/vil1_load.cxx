@@ -40,9 +40,9 @@ vil_image vil_load_raw(char const* filename)
 
   vil_image img = vil_load_raw(is);
   
-  if (! is) {
+  if (! img) {
     cerr << "vil_load: Failed to load [" << filename << "]" << endl;
-    return img;
+    delete is;
   }
   
   return img;
@@ -54,9 +54,7 @@ vil_image vil_load(char const* filename)
   if (!filename || !*filename)
     return 0;
 
-  vil_image i = vil_load_raw(filename);
+  return vil_load_raw(filename);
 //  bool flipud;
 //  if (i.get_property("flipud", &flipud) && flipud)    i = vil_flipud(i);
-  
-  return i;
 }

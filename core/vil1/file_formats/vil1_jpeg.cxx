@@ -70,7 +70,9 @@ vil_image_impl *vil_jpeg_file_format::make_output_image(vil_stream *vs,
 vil_jpeg_generic_image::vil_jpeg_generic_image(vil_stream *s) 
   : jc(0)
   , jd(new vil_jpeg_decompressor(s))
+  , stream(s)
 {
+  stream->ref();
 }
 
 vil_jpeg_generic_image::vil_jpeg_generic_image(vil_stream *s,
@@ -82,7 +84,9 @@ vil_jpeg_generic_image::vil_jpeg_generic_image(vil_stream *s,
 					       vil_component_format format)
   : jc(new vil_jpeg_compressor(s))
   , jd(0)
+  , stream(s)
 { 
+  stream->ref();
   // warn
   if (planes != 1)
     cerr << __FILE__ " : prototype has != 1 planes. ignored" << endl;
@@ -108,6 +112,8 @@ vil_jpeg_generic_image::~vil_jpeg_generic_image() {
   if (jc)
     delete jc;
   jc = 0;
+  stream->unref();
+  stream = 0;
 }
 
 //--------------------------------------------------------------------------------
