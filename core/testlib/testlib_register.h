@@ -1,6 +1,5 @@
 #ifndef TESTLIB_REGISTER_H_
 #define TESTLIB_REGISTER_H_
-
 //:
 // \file
 // \author Amitha Perera
@@ -23,7 +22,6 @@
 // \endverbatim
 // See the vxl tests for further examples (such as vil/tests).
 
-#include <vcl_vector.h>
 #include <vcl_string.h>
 
 #if 0 // ifdef VCL_VC - gives compiler errors - PVr
@@ -64,4 +62,4 @@ void testlib_register_test(const vcl_string &, TestMainFunction);
      return retval; \
    }
 
-#endif
+#endif // TESTLIB_REGISTER_H_
