@@ -105,6 +105,18 @@ SOURCE=.\Templates/vbl_smart_ptr+strk_art_info_model-.cxx
 SOURCE=.\Templates/vbl_smart_ptr+strk_tracking_face_2d-.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\Templates/vbl_smart_ptr+strk_epi_point-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vbl_smart_ptr+strk_epi_seg-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vcl_vector+strk_epi_point_sptr-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vcl_vector+strk_epi_seg_sptr-.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\strk_art_model_display_process.cxx
 # End Source File
 # Begin Source File
@@ -142,6 +154,21 @@ SOURCE=.\strk_tracker_params.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\strk_tracking_face_2d.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\strk_epi_point.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\strk_epi_seg.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\strk_epipolar_grouper.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\strk_epipolar_grouper_params.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\strk_epipolar_grouper_process.cxx
 # End Source File
 # End Group
 # Begin Group "Header Files"
@@ -190,6 +217,27 @@ SOURCE=.\strk_tracking_face_2d.h
 # End Source File
 # Begin Source File
 SOURCE=.\strk_tracking_face_2d_sptr.h
+# End Source File
+# Begin Source File
+SOURCE=.\strk_epi_point.h
+# End Source File
+# Begin Source File
+SOURCE=.\strk_epi_point_sptr.h
+# End Source File
+# Begin Source File
+SOURCE=.\strk_epi_seg.h
+# End Source File
+# Begin Source File
+SOURCE=.\strk_epi_seg_sptr.h
+# End Source File
+# Begin Source File
+SOURCE=.\strk_epipolar_grouper.h
+# End Source File
+# Begin Source File
+SOURCE=.\strk_epipolar_grouper_params.h
+# End Source File
+# Begin Source File
+SOURCE=.\strk_epipolar_grouper_process.h
 # End Source File
 # End Group
 # End Target
