@@ -10,9 +10,9 @@
 #include <vtol/vtol_list_functions.h>
 
 
-vtol_edge *vtol_one_chain::edge(int i) const
+vtol_edge_sptr vtol_one_chain::edge(int i) const
 {
-  return (vtol_edge *)(inferiors_[i].ptr());
+  return inferiors_[i]->cast_to_edge();
 }
 
 //***************************************************************************
@@ -139,7 +139,7 @@ vtol_one_chain::copy_with_arrays(topology_list &verts,
 
   for (chain_list::const_iterator hi=hierarchy_infs->begin();hi!=hierarchy_infs->end();++hi)
     {
-      vtol_one_chain *oldone=(vtol_one_chain *)((*hi)->clone().ptr());
+      vtol_one_chain *oldone=(*hi)->clone()->cast_to_topology_object()->cast_to_one_chain();
       result->link_chain_inferior(*(oldone->copy_with_arrays(verts,edges)));
     }
 
@@ -264,7 +264,7 @@ vcl_vector<vtol_vertex*> *vtol_one_chain::compute_vertices(void)
 
   // This macro adds the subchain vertices to the verts list.
 
-  SUBCHAIN_INF(verts,vtol_one_chain,vtol_vertex,compute_vertices);
+  SUBCHAIN_INF(verts,one_chain,vtol_vertex,compute_vertices);
 }
 
 
@@ -306,7 +306,7 @@ vcl_vector<vtol_zero_chain*> *vtol_one_chain::compute_zero_chains(void)
 
   // This macro adds the subchain zerochains to the zchs list.
 
-  SUBCHAIN_INF(zchs,vtol_one_chain,vtol_zero_chain,compute_zero_chains);
+  SUBCHAIN_INF(zchs,one_chain,vtol_zero_chain,compute_zero_chains);
 }
 
 //---------------------------------------------------------------------------
@@ -314,7 +314,7 @@ vcl_vector<vtol_zero_chain*> *vtol_one_chain::compute_zero_chains(void)
 //---------------------------------------------------------------------------
 vcl_vector<vtol_edge*> *vtol_one_chain::outside_boundary_compute_edges(void)
 {
-  COPY_INF(vtol_edge);
+  COPY_INF(edge);
 }
 
 
@@ -344,7 +344,7 @@ vcl_vector<vtol_edge*> *vtol_one_chain::compute_edges(void)
 
   // This macro adds the subchain zerochains to the zchs list.
 
-  SUBCHAIN_INF(edges, vtol_one_chain,  vtol_edge, compute_edges);
+  SUBCHAIN_INF(edges,one_chain,vtol_edge,compute_edges);
 }
 
 //---------------------------------------------------------------------------

@@ -62,7 +62,7 @@ void vtol_topology_io::write(vcl_list<vtol_topology_object_sptr> &topo_objects,
     vertex_list::iterator vi;
     for (vi=vl->begin();vi!=vl->end();vi++)
     {
-      vertices.push_back((*vi).ptr());
+      vertices.push_back((*vi)->cast_to_vertex());
     }
 
     delete vl;
@@ -76,7 +76,7 @@ void vtol_topology_io::write(vcl_list<vtol_topology_object_sptr> &topo_objects,
     zero_chain_list::iterator zci;
     for (zci=zcl->begin();zci!=zcl->end();zci++)
     {
-      zero_chains.push_back((*zci).ptr());
+      zero_chains.push_back((*zci)->cast_to_zero_chain());
     }
 
     delete zcl;
@@ -90,7 +90,7 @@ void vtol_topology_io::write(vcl_list<vtol_topology_object_sptr> &topo_objects,
     edge_list::iterator ei;
     for (ei=el->begin();ei!=el->end();ei++)
     {
-      edges.push_back((*ei).ptr());
+      edges.push_back((*ei)->cast_to_edge());
     }
 
     delete el;
@@ -104,7 +104,7 @@ void vtol_topology_io::write(vcl_list<vtol_topology_object_sptr> &topo_objects,
     one_chain_list::iterator oci;
     for (oci=ocl->begin();oci!=ocl->end();oci++)
     {
-      one_chains.push_back((*oci).ptr());
+      one_chains.push_back((*oci)->cast_to_one_chain());
     }
 
     delete ocl;
@@ -118,7 +118,7 @@ void vtol_topology_io::write(vcl_list<vtol_topology_object_sptr> &topo_objects,
     face_list::iterator fi;
     for (fi=fl->begin();fi!=fl->end();fi++)
     {
-      faces.push_back((*fi).ptr());
+      faces.push_back((*fi)->cast_to_face());
     }
 
     delete fl;
@@ -132,7 +132,7 @@ void vtol_topology_io::write(vcl_list<vtol_topology_object_sptr> &topo_objects,
     two_chain_list::iterator tci;
     for (tci=tcl->begin();tci!=tcl->end();tci++)
     {
-      two_chains.push_back((*tci).ptr());
+      two_chains.push_back((*tci)->cast_to_two_chain());
     }
 
     delete tcl;
@@ -146,7 +146,7 @@ void vtol_topology_io::write(vcl_list<vtol_topology_object_sptr> &topo_objects,
     block_list::iterator bi;
     for (bi=bl->begin();bi!=bl->end();bi++)
     {
-      blocks.push_back((*bi).ptr());
+      blocks.push_back((*bi)->cast_to_block());
     }
 
     delete bl;

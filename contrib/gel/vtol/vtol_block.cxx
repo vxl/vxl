@@ -177,7 +177,7 @@ vertex_list *vtol_block::outside_boundary_vertices(void)
 
 vcl_vector<vtol_vertex *> *vtol_block::outside_boundary_compute_vertices(void)
 {
-  OUTSIDE_BOUNDARY(vtol_vertex, vtol_two_chain, compute_vertices);
+  OUTSIDE_BOUNDARY(vtol_vertex,two_chain,compute_vertices);
 }
 
 //: get vertex list
@@ -207,8 +207,7 @@ zero_chain_list *vtol_block::outside_boundary_zero_chains(void)
 vcl_vector<vtol_zero_chain *> *
 vtol_block::outside_boundary_compute_zero_chains(void)
 {
-  OUTSIDE_BOUNDARY(vtol_zero_chain,vtol_two_chain,
-                   compute_zero_chains);
+  OUTSIDE_BOUNDARY(vtol_zero_chain,two_chain,compute_zero_chains);
 }
 
 //: get zero chains
@@ -238,7 +237,7 @@ edge_list *vtol_block::outside_boundary_edges(void)
 
 vcl_vector<vtol_edge *> *vtol_block::outside_boundary_compute_edges(void)
 {
- OUTSIDE_BOUNDARY(vtol_edge,vtol_two_chain,compute_edges);
+  OUTSIDE_BOUNDARY(vtol_edge,two_chain,compute_edges);
 }
 
 //: get edges
@@ -267,7 +266,7 @@ one_chain_list *vtol_block::outside_boundary_one_chains(void)
 vcl_vector<vtol_one_chain *> *
 vtol_block::outside_boundary_compute_one_chains(void)
 {
-  OUTSIDE_BOUNDARY(vtol_one_chain,vtol_two_chain,compute_one_chains);
+  OUTSIDE_BOUNDARY(vtol_one_chain,two_chain,compute_one_chains);
 }
 
 //: get the one chains
@@ -295,7 +294,7 @@ face_list *vtol_block::outside_boundary_faces(void)
 
 vcl_vector<vtol_face *> *vtol_block::outside_boundary_compute_faces(void)
 {
-  OUTSIDE_BOUNDARY(vtol_face,vtol_two_chain,compute_faces);
+  OUTSIDE_BOUNDARY(vtol_face,two_chain,compute_faces);
 }
 
 //: get the faces
@@ -324,7 +323,7 @@ two_chain_list *vtol_block::outside_boundary_two_chains(void)
 vcl_vector<vtol_two_chain *> *
 vtol_block::outside_boundary_compute_two_chains(void)
 {
-  OUTSIDE_BOUNDARY(vtol_two_chain,vtol_two_chain,compute_two_chains);
+  OUTSIDE_BOUNDARY(vtol_two_chain,two_chain,compute_two_chains);
 }
 
 //: get the two chains
@@ -423,7 +422,7 @@ void vtol_block::print(vcl_ostream &strm) const
 }
 
 void vtol_block::describe(vcl_ostream &strm,
-                             int blanking) const
+                          int blanking) const
 {
   for (int i=0; i<blanking; ++i) strm << ' ';
   print(strm);

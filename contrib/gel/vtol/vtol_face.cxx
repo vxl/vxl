@@ -90,7 +90,7 @@ vertex_list *vtol_face::outside_boundary_vertices(void)
 
 vcl_vector<vtol_vertex*> *vtol_face::outside_boundary_compute_vertices(void)
 {
-  OUTSIDE_BOUNDARY(vtol_vertex,vtol_one_chain,compute_vertices);
+  OUTSIDE_BOUNDARY(vtol_vertex,one_chain,compute_vertices);
 }
 
 //:
@@ -109,7 +109,7 @@ vcl_vector<vtol_vertex*> *vtol_face::compute_vertices(void)
 
 vcl_vector<vtol_zero_chain*> *vtol_face::outside_boundary_compute_zero_chains(void)
 {
-  OUTSIDE_BOUNDARY(vtol_zero_chain, vtol_one_chain,compute_zero_chains);
+  OUTSIDE_BOUNDARY(vtol_zero_chain,one_chain,compute_zero_chains);
 }
 
 
@@ -144,7 +144,7 @@ vcl_vector<vtol_zero_chain*> *vtol_face::compute_zero_chains(void)
 
 vcl_vector<vtol_edge*> *vtol_face::outside_boundary_compute_edges(void)
 {
-  OUTSIDE_BOUNDARY(vtol_edge,vtol_one_chain, compute_edges);
+  OUTSIDE_BOUNDARY(vtol_edge,one_chain,compute_edges);
 }
 
 //---------------------------------------------------------------------------
@@ -187,7 +187,7 @@ one_chain_list *vtol_face::outside_boundary_one_chains(void)
 
 vcl_vector<vtol_one_chain*> *vtol_face::outside_boundary_compute_one_chains(void)
 {
-  COPY_INF(vtol_one_chain);
+  COPY_INF(one_chain);
 }
 
 
@@ -264,17 +264,8 @@ bool vtol_face::operator==(const vtol_face &other) const
   if (!compare_geometry(other))
     return false;
 
-#if 0
-  if ( (surface_.ptr()&&other.surface_.ptr()==0)
-     ||(other.surface_.ptr()&&surface_.ptr()!=0))
-    return false;
-  if (surface_.ptr() && *surface_!=*(other.surface_))
-    return false;
-#endif
-
   if (numinf()!=other.numinf())
     return false;
-
 
   topology_list::const_iterator ti1;
   topology_list::const_iterator ti2;

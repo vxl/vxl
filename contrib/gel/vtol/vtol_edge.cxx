@@ -255,7 +255,7 @@ vcl_vector<vtol_vertex *> *vtol_edge::compute_vertices(void)
 //: Returns the vtol_zero_chain list of the vtol_edge. This list is the Inferiors of the edge.
 vcl_vector<vtol_zero_chain *> *vtol_edge::compute_zero_chains(void)
 {
-  COPY_INF(vtol_zero_chain);
+  COPY_INF(zero_chain);
 }
 
 //: Returns a list with itself as the only element. This utility is used in Inferior/Superior accessing methods.

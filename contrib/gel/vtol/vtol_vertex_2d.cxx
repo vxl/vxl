@@ -21,8 +21,7 @@ vtol_vertex_2d::vtol_vertex_2d(void)
 }
 
 //---------------------------------------------------------------------------
-//: Constructor from a point (the point is not copied)
-// Require: new_point.ptr()!=0
+//: Constructor from a point (the point is copied)
 //---------------------------------------------------------------------------
 vtol_vertex_2d::vtol_vertex_2d(vsol_point_2d &new_point)
 {
@@ -92,7 +91,7 @@ vsol_point_2d_sptr vtol_vertex_2d::point(void) const
 
 //---------------------------------------------------------------------------
 //: Set the point (the point is not copied)
-// Require: new_point.ptr()!=0
+// Require: new_point!=0
 //---------------------------------------------------------------------------
 void vtol_vertex_2d::set_point(vsol_point_2d_sptr const& new_point)
 {
@@ -172,7 +171,7 @@ void vtol_vertex_2d::describe(vcl_ostream &strm,
 //-----------------------------------------------------------------------------
 //: Create a line edge from `this' and `other' only if this edge does not exist.
 //  Otherwise it just returns the existing edge.
-// Require: other.ptr()!=0 and other.ptr()!=this
+// Require: other!=*this
 //-----------------------------------------------------------------------------
 vtol_edge_sptr vtol_vertex_2d::new_edge(vtol_vertex &other)
 {
@@ -180,7 +179,6 @@ vtol_edge_sptr vtol_vertex_2d::new_edge(vtol_vertex &other)
   assert(other2d!=0);
 
   // require
-  //  assert(other.ptr()!=0);
   assert(&other != this);
 
   // awf: load vrml speed up by factor of 2 using this loop.

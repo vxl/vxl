@@ -688,6 +688,7 @@ bool vtol_cycle_processor::classify_path(vcl_vector<vtol_edge_2d_sptr>& path_edg
     set_cw(chain);//cw chain (hole boundary)
   return true;
 }
+
 void vtol_cycle_processor::print_edge(vtol_edge_2d_sptr& e)
 {
   if (!e)
@@ -805,9 +806,9 @@ void vtol_cycle_processor::compute_cycles()
                  eit != edges_.end(); eit++)
               if (touched(*eit)&&used(*eit))
                 removed_edges.push_back(*eit);
-            for(vcl_vector<vtol_edge_2d_sptr>::iterator 
-                  eit = removed_edges.begin(); eit != removed_edges.end();
-                eit++)
+            for (vcl_vector<vtol_edge_2d_sptr>::iterator 
+                 eit = removed_edges.begin(); eit != removed_edges.end();
+                 ++eit)
               edge_2d_erase(edges_,*eit);
 
             this->set_bridge_vars();
@@ -930,6 +931,7 @@ static void clear_flags(vcl_vector<vtol_edge_sptr>& s, unsigned int flag)
        eit != s.end(); eit++)
     (*eit)->unset_user_flag(flag);
 }
+
 static void set_flags(vcl_vector<vtol_edge_sptr>& s, unsigned int flag)
 {
   for (vcl_vector<vtol_edge_sptr>::iterator eit = s.begin();
@@ -983,6 +985,7 @@ bool vtol_cycle_processor::intersect_edges(vcl_vector<vtol_edge_sptr>& s1,
   clear_flags(s2, flag2);
   return s1_and_s2.size()>0;
 }
+
 //---------------------------------------------------------------------------
 //: This method scans the edge sets s1, s2 and computes their set difference.
 // i.e, s1 with any edges also in s2 removed. If the difference
@@ -1028,6 +1031,7 @@ bool vtol_cycle_processor::difference_edges(vcl_vector<vtol_edge_sptr>& s1,
   clear_flags(s2, flag2);
   return s1_minus_s2.size()>0;
 }
+
 //--------------------------------------------------------------------
 //: mark all vertices as used if they are incident on exactly two edges.
 // Vertices that are not incident two edges are output in the vector, bad_verts.
@@ -1044,7 +1048,6 @@ bool vtol_cycle_processor::corrupt_boundary(vcl_vector<vtol_edge_2d_sptr>& edges
       return false;
     }
   //setup vertex flags
-  vtol_vertex_sptr first_v = first_e->v1();
   unsigned int f1=VSOL_FLAG4, f2=VSOL_FLAG5, f3=VSOL_FLAG6;
   //Initialize Flags
   for (;eit != edges.end(); eit++)
@@ -1118,6 +1121,7 @@ bool vtol_cycle_processor::corrupt_boundary(vcl_vector<vtol_edge_2d_sptr>& edges
     }
   return bad;
 }
+
 //--------------------------------------------------------------------
 //:
 //    Input is a set of edges that do not form cycles. There is a

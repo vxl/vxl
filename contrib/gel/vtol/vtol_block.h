@@ -88,7 +88,7 @@ class vtol_block
   {
     return
       (inferiors_.size() > 0)
-      ? (vtol_two_chain*)(inferiors_[0].ptr())
+      ? inferiors_[0]->cast_to_two_chain()
       : 0;
   }
 

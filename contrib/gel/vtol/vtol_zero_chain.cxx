@@ -1,7 +1,6 @@
 #include "vtol_zero_chain.h"
-
 //:
-//  \file
+// \file
 
 #include <vcl_cassert.h>
 #include <vtol/vtol_macros.h>
@@ -21,18 +20,14 @@ vtol_zero_chain::vtol_zero_chain(void)
 
 //---------------------------------------------------------------------------
 //: Constructor from two vertices (to make an edge creation easier)
-// Require: v1.ptr()!=0 and v2.ptr()!=0 and v1.ptr()!=v2.ptr()
+// Require: v1!=v2
 //---------------------------------------------------------------------------
 vtol_zero_chain::vtol_zero_chain(vtol_vertex &v1,
                                  vtol_vertex &v2)
 {
   // require
-  //  assert(v1.ptr()!=0);
-  //assert(v2.ptr()!=0);
   assert(&v1!=&v2);
-
   link_inferior(v1);
-
   link_inferior(v2);
 }
 
@@ -129,7 +124,7 @@ int vtol_zero_chain::length(void) const
 //: get list of vertices
 vcl_vector<vtol_vertex*>* vtol_zero_chain::compute_vertices(void)
 {
-  COPY_INF(vtol_vertex);
+  COPY_INF(vertex);
 }
 
 //: get list of zero chains

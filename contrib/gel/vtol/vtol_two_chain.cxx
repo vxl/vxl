@@ -465,7 +465,7 @@ vcl_vector<vtol_vertex *> *vtol_two_chain::compute_vertices(void)
   // Set current position to the end
   // verts->set_position(verts->size()-1); - not sure what is supposed to happen here
 
-  SUBCHAIN_INF(verts,vtol_two_chain,vtol_vertex,compute_vertices);
+  SUBCHAIN_INF(verts,two_chain,vtol_vertex,compute_vertices);
 }
 
 //: outside boundary zero chains
@@ -497,7 +497,7 @@ vcl_vector<vtol_zero_chain*> *vtol_two_chain::compute_zero_chains(void)
   vcl_vector<vtol_zero_chain*> *zchs;
   zchs=outside_boundary_compute_zero_chains();
 
-  SUBCHAIN_INF(zchs,vtol_two_chain,vtol_zero_chain,compute_zero_chains);
+  SUBCHAIN_INF(zchs,two_chain,vtol_zero_chain,compute_zero_chains);
 }
 
 //: outside boundary edges
@@ -528,7 +528,7 @@ vcl_vector<vtol_edge*> *vtol_two_chain::compute_edges(void)
   vcl_vector<vtol_edge*> *edgs;
   edgs=outside_boundary_compute_edges();
 
-  SUBCHAIN_INF(edgs, vtol_two_chain, vtol_edge, compute_edges);
+  SUBCHAIN_INF(edgs,two_chain,vtol_edge,compute_edges);
 }
 
 //: outside one chains
@@ -554,7 +554,7 @@ vcl_vector<vtol_one_chain*> *vtol_two_chain::compute_one_chains(void)
 {
   vcl_vector<vtol_one_chain*> *onechs;
   onechs=outside_boundary_compute_one_chains();
-  SUBCHAIN_INF(onechs, vtol_two_chain, vtol_one_chain, compute_one_chains);
+  SUBCHAIN_INF(onechs,two_chain,vtol_one_chain,compute_one_chains);
 }
 
 //: outside faces
@@ -574,7 +574,7 @@ face_list *vtol_two_chain::outside_boundary_faces(void)
 // outside faces
 vcl_vector<vtol_face*> *vtol_two_chain::outside_boundary_compute_faces(void)
 {
- COPY_INF(vtol_face);
+ COPY_INF(face);
 }
 
 //: faces
@@ -582,7 +582,7 @@ vcl_vector<vtol_face*> *vtol_two_chain::compute_faces(void)
 {
   vcl_vector<vtol_face*> *facs;
   facs=outside_boundary_compute_faces();
-  SUBCHAIN_INF(facs, vtol_two_chain, vtol_face, compute_faces);
+  SUBCHAIN_INF(facs,two_chain,vtol_face,compute_faces);
 }
 
 //: list of blocks

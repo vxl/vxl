@@ -65,7 +65,7 @@ vtol_chain::is_chain_inferior(const vtol_chain &chain_inferior) const
 
   for (i=chain_inferiors_.begin();
        i!=chain_inferiors_.end() && (*i).ptr()!=&chain_inferior;
-       i++)
+       ++i)
     ;
   return i!=chain_inferiors_.end();
 }

@@ -39,7 +39,7 @@ vtol_face_2d::vtol_face_2d(const vtol_face_2d &other)
   for (vertex_list::iterator vi=verts->begin();vi!=verts->end();++vi,++i)
     {
       vtol_vertex_sptr v=(*vi);
-      newverts[i]=v->clone().ptr()->cast_to_topology_object();
+      newverts[i]=v->clone()->cast_to_topology_object();
       v->set_id(i);
     }
   int j=0;
@@ -58,11 +58,10 @@ vtol_face_2d::vtol_face_2d(const vtol_face_2d &other)
          }
       // make the topology and geometry match
       vtol_edge_sptr newedge=new vtol_edge_2d(*(V1->cast_to_vertex()->cast_to_vertex_2d()),
-                                            *(V2->cast_to_vertex()->cast_to_vertex_2d()));
+                                              *(V2->cast_to_vertex()->cast_to_vertex_2d()));
 
 
-      //newedges[j]=(vtol_topology_object_2d*)(newedge.ptr());
-      newedges[j]=newedge.ptr();
+      newedges[j]=newedge->cast_to_topology_object();
       e->set_id(j);
     }
   // This is a deep copy of the vtol_face_2d.
@@ -77,7 +76,7 @@ vtol_face_2d::vtol_face_2d(const vtol_face_2d &other)
   delete verts;
   set_surface(0);
   if (oldf->surface_)
-    set_surface((vsol_region_2d*)(oldf->surface_->clone().ptr()));
+    set_surface(oldf->surface_->clone()->cast_to_region());
 }
 
 //---------------------------------------------------------------------------
@@ -122,7 +121,7 @@ vtol_face_2d::copy_with_arrays(topology_list &verts,
       newface->link_inferior(*onech);
     }
   if (surface_)
-    newface->set_surface((vsol_region_2d*)(surface_->clone().ptr()));
+    newface->set_surface(surface_->clone()->cast_to_region());
   return newface;
 }
 
@@ -135,7 +134,7 @@ vtol_face *vtol_face_2d::shallow_copy_with_no_links(void) const
   result=new vtol_face_2d;
   result->set_surface(0);
   if (surface_)
-    result->set_surface((vsol_region_2d*)(surface_->clone().ptr()));
+    result->set_surface(surface_->clone()->cast_to_region());
   return result;
 }
 
@@ -273,15 +272,12 @@ bool vtol_face_2d::operator==(const vtol_face_2d &other) const
 {
   if (this==&other) return true;
 
-
-  if ( (surface_.ptr() && other.surface_.ptr()==0)
-     ||(other.surface_.ptr() && surface_.ptr()==0))
+  if ( (surface_ && ! other.surface_)
+     ||(other.surface_ && ! surface_))
     return false;
 
-
-  if (surface_.ptr() && *surface_!=*(other.surface_))
+  if (surface_ && *surface_!=*(other.surface_))
     return false;
-
 
   if (numinf()!=other.numinf())
     return false;
@@ -291,10 +287,8 @@ bool vtol_face_2d::operator==(const vtol_face_2d &other) const
 
   for (ti1=inferiors()->begin(),ti2=other.inferiors()->begin();
        ti1!=inferiors()->end(); ++ti1,++ti2)
-    {
-      if (!(*(*ti1)== *(*ti2)))
-        return false;
-    }
+    if (!(*(*ti1)== *(*ti2)))
+      return false;
 
   return true;
 }

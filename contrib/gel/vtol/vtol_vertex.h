@@ -119,15 +119,14 @@ public:
   //---------------------------------------------------------------------------
   virtual bool is_connected(const vtol_vertex &v2);
 
+  // methods that will be defined by inherited classes
+
   //---------------------------------------------------------------------------
   //: Create a line edge from `this' and `other' only if this edge does not exist.
   //  Otherwise it just returns the existing edge
-  //  REQUIRE: other.ptr()!=0 and other.ptr()!=this
+  //  REQUIRE: other!=*this
   //---------------------------------------------------------------------------
 
-  // methods that will be defined by inherited classes
-
-  //: create a new edge from these two veritces
   virtual vtol_edge_sptr new_edge(vtol_vertex &other)=0;
 
   //: check to see if the vertex is part of the edge
