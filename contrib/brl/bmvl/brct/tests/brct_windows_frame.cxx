@@ -1,8 +1,10 @@
+// This is brl/bmvl/brct/tests/brct_windows_frame.cxx
+#include "brct_windows_frame.h"
+#include "brct_menus.h"
 //:
 // \file
 // \author Kongbin Kang
 
-#include "brct_windows_frame.h"
 #include <vcl_cstdlib.h> // for vcl_exit()
 #include <vcl_iostream.h>
 #include <vcl_sstream.h>
@@ -24,7 +26,6 @@
 #include <vgl/vgl_homg_point_2d.h>
 #include <vgl/algo/vgl_homg_operators_2d.h>
 #include <vil1/vil1_load.h>
-#include "brct_menus.h"
 
 //static live_video_manager instance
 brct_windows_frame *brct_windows_frame::instance_ = 0;
@@ -170,7 +171,7 @@ void brct_windows_frame::remove_curve2d()
 void brct_windows_frame::add_curve3d(vcl_vector<vgl_point_3d<double> >& pts)
 {
   int size = pts.size();
-  if(size > 1){
+  if (size > 1){
     curves_3d_.resize(size-1);
     instance_->tab_3d_->set_foreground(1, 1, 1);
     for (int i=0; i<size-1; i++)
