@@ -1,4 +1,5 @@
 #include <vcl_vector.h>
+#include <vcl_string.h>
 #include <vcl_iostream.h>
 
 #include <vil/vil_image.h>
@@ -14,12 +15,20 @@ int main( int argc, char **argv)
 {
   vgel_kl_params kl_params;
   kl_params.numpoints=500;
-  
+
   vcl_vector<vil_image> images;
 
-  vil_image im0= vil_load("c:/geoff/images/skull/a.000.jpg");
-  vil_image im1= vil_load("c:/geoff/images/skull/a.001.jpg");
-  vil_image im2= vil_load("c:/geoff/images/skull/a.002.jpg");
+  if (argc < 4)
+    vcl_cerr << "Warning: you should give three image file names as command line arguments\n";
+
+  vcl_string file0 = (argc > 1) ? argv[1] : "c:/geoff/images/skull/a.000.jpg";
+  vcl_string file1 = (argc > 2) ? argv[2] : "c:/geoff/images/skull/a.001.jpg";
+  vcl_string file2 = (argc > 3) ? argv[3] : "c:/geoff/images/skull/a.002.jpg";
+
+  vil_image im0= vil_load(file0.c_str());
+  vil_image im1= vil_load(file1.c_str());
+  vil_image im2= vil_load(file2.c_str());
+  if (!im0 || !im1 || !im2) return 1; // error return on failing file open
 
   images.push_back( im0);
   images.push_back( im1);
@@ -41,9 +50,9 @@ int main( int argc, char **argv)
   matched_points->get( 1,pts2);
   matched_points->get( 2,pts3);
 
-  vcl_cerr << pts1.size() << " " 
-	   << pts2.size() << " "
-	   << pts3.size() << vcl_endl;
-  
+  vcl_cerr << pts1.size() << " "
+           << pts2.size() << " "
+           << pts3.size() << vcl_endl;
+
   return 0;
 }
