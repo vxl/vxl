@@ -642,7 +642,8 @@ vnl_matrix_fixed<T,m,n> operator+( const vnl_matrix_fixed<T,m,n>& mat, T s )
 
 template <class T, unsigned m, unsigned n>
 inline
-vnl_matrix_fixed<T,m,n> operator+( T s, const vnl_matrix_fixed<T,m,n>& mat )
+vnl_matrix_fixed<T,m,n> operator+( const T& s,
+                                   const vnl_matrix_fixed<T,m,n>& mat )
 {
   vnl_matrix_fixed<T,m,n> r;
   vnl_matrix_fixed<T,m,n>::add( mat.data_block(), s, r.data_block() );
@@ -669,7 +670,8 @@ vnl_matrix_fixed<T,m,n> operator-( const vnl_matrix_fixed<T,m,n>& mat, T s )
 
 template <class T, unsigned m, unsigned n>
 inline
-vnl_matrix_fixed<T,m,n> operator-( T s, const vnl_matrix_fixed<T,m,n>& mat )
+vnl_matrix_fixed<T,m,n> operator-( const T& s,
+                                   const vnl_matrix_fixed<T,m,n>& mat )
 {
   vnl_matrix_fixed<T,m,n> r;
   vnl_matrix_fixed<T,m,n>::sub( s, mat.data_block(), r.data_block() );
@@ -687,7 +689,8 @@ vnl_matrix_fixed<T,m,n> operator*( const vnl_matrix_fixed<T,m,n>& mat, T s )
 
 template <class T, unsigned m, unsigned n>
 inline
-vnl_matrix_fixed<T,m,n> operator*( T s, const vnl_matrix_fixed<T,m,n>& mat )
+vnl_matrix_fixed<T,m,n> operator*( const T& s,
+                                   const vnl_matrix_fixed<T,m,n>& mat )
 {
   vnl_matrix_fixed<T,m,n> r;
   vnl_matrix_fixed<T,m,n>::mul( mat.data_block(), s, r.data_block() );

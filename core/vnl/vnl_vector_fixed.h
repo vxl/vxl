@@ -506,7 +506,8 @@ inline vnl_vector_fixed<T,n> operator+( const vnl_vector_fixed<T,n>& v, T s )
 //:
 // \relates vnl_vector_fixed
 template<class T, unsigned int n>
-inline vnl_vector_fixed<T,n> operator+( T s, const vnl_vector_fixed<T,n>& v )
+inline vnl_vector_fixed<T,n> operator+( const T& s,
+                                        const vnl_vector_fixed<T,n>& v )
 {
   vnl_vector_fixed<T,n> r;
   vnl_vector_fixed<T,n>::add( v.data_block(), s, r.data_block() );
@@ -526,7 +527,8 @@ inline vnl_vector_fixed<T,n> operator-( const vnl_vector_fixed<T,n>& v, T s )
 //:
 // \relates vnl_vector_fixed
 template<class T, unsigned int n>
-inline vnl_vector_fixed<T,n> operator-( T s, const vnl_vector_fixed<T,n>& v )
+inline vnl_vector_fixed<T,n> operator-( const T& s,
+                                        const vnl_vector_fixed<T,n>& v )
 {
   vnl_vector_fixed<T,n> r;
   vnl_vector_fixed<T,n>::sub( s, v.data_block(), r.data_block() );
@@ -546,7 +548,8 @@ inline vnl_vector_fixed<T,n> operator*( const vnl_vector_fixed<T,n>& v, T s )
 //:
 // \relates vnl_vector_fixed
 template<class T, unsigned int n>
-inline vnl_vector_fixed<T,n> operator*( T s, const vnl_vector_fixed<T,n>& v )
+inline vnl_vector_fixed<T,n> operator*( const T& s,
+                                        const vnl_vector_fixed<T,n>& v )
 {
   vnl_vector_fixed<T,n> r;
   vnl_vector_fixed<T,n>::mul( v.data_block(), s, r.data_block() );
