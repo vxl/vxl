@@ -43,7 +43,7 @@ static void test_base_sptr()
   base_sptr a = new base_impl (5);
   TEST("p == a", p == a, false);
   TEST("p != a", p != a, true);
-  TEST("!p", (!p)?true:false, false);
+  TEST("!p", !p, false);
   TEST("bool(p)", bool(p), true);
 
   // Get a smart pointer as the return value of a function :
