@@ -149,7 +149,7 @@ bool vgui_glut_slab::queue_peek(vgui_event *e, int pos)
   //vgui_glut_slab.cxx: In method `bool vgui_glut_slab::queue_peek(class vgui_event *, int)':
   //vgui_glut_slab.cxx:144: warning: argument `int pos' might be clobbered by `longjmp' or `vfork'
   service_glut_events();
-  if (pos > queue.size())
+  if (pos < 0 || pos > int(queue.size()))
     return false;
   else {
     for (vcl_list<vgui_event>::iterator i=queue.begin(); i!=queue.end(); ++i)
