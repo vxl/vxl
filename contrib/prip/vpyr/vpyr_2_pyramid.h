@@ -70,7 +70,7 @@ class vpyr_2_pyramid
   vpyr_2_pyramid();
   //vpyr_2_pyramid(const vpyr_2_pyramid &right);
 
-  ~vpyr_2_pyramid();
+  virtual ~vpyr_2_pyramid();
 
   //vpyr_2_pyramid & operator=(const vpyr_2_pyramid &right);
 

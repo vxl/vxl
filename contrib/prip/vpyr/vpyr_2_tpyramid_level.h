@@ -33,7 +33,7 @@ class vpyr_2_tpyramid_level: public vpyr_2_pyramid_level<D>,
   typedef vpyr_2_tpyramid_level<V,E,F,D> self_type;
 
   //:
-  typedef vmap_2_tmap< typename V::base_type, typename E::base_type, typename F::base_type ,typename D::base_type > base_map_type ;
+  typedef vmap_2_tmap<typename V::base_type,typename E::base_type,typename F::base_type,typename D::base_type> base_map_type;
 
   //:
   typedef vpyr_2_tpyramid<self_type> pyramid_type ;
@@ -203,12 +203,10 @@ class vpyr_2_tpyramid_level: public vpyr_2_pyramid_level<D>,
       : _Base(arg),
       vertex_sequence(arg),
       edge_sequence(arg),
-      face_sequence(arg)
-  {}
+      face_sequence(arg)                     {}
 
   //:
-  ~vpyr_2_tpyramid_level()
-  {}
+  virtual ~vpyr_2_tpyramid_level() {}
 
   //:
   int index() const

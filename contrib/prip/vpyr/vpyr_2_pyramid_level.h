@@ -1,7 +1,6 @@
 // This is prip/vpyr/vpyr_2_pyramid_level.h
 #ifndef vpyr_2_pyramid_level_h_
 #define vpyr_2_pyramid_level_h_
-
 //:
 // \file
 // \brief provides the class for handling/defining levels of a combinatorial pyramid.
@@ -88,13 +87,10 @@ class vpyr_2_pyramid_level : public vmap_ptr_sequence< typename D::base_type >
   vpyr_2_pyramid_level(const self_type & arg)
       : dart_sequence(arg),
       _level_index(arg._level_index),
-      _pyramid(arg._pyramid)
-
-  {}
+      _pyramid(arg._pyramid)                 {}
 
   //:
-  ~vpyr_2_pyramid_level()
-  {}
+  virtual ~vpyr_2_pyramid_level() {}
 
   //: Returns the number of darts.
   int nb_darts () const

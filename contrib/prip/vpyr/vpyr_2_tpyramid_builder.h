@@ -1,7 +1,6 @@
 // This is prip/vpyr/vpyr_2_tpyramid_builder.h
 #ifndef vpyr_bu_builder_h_
 #define vpyr_bu_builder_h_
-
 //:
 // \file
 // \brief defines a class building pyramids.
@@ -37,7 +36,7 @@ class vpyr_bu_builder
   vpyr_bu_builder();
 
   //:
-  ~vpyr_bu_builder();
+  virtual ~vpyr_bu_builder();
 
   //:
   template <class M >

@@ -1,7 +1,6 @@
 // This is prip/vpyr/vpyr_2_tpyramid.h
 #ifndef vpyr_2_tpyramid_h_
 #define vpyr_2_tpyramid_h_
-
 //:
 // \file
 // \brief defines a topological pyramid class.
@@ -90,7 +89,7 @@ class vpyr_2_tpyramid : public vpyr_2_pyramid<TLevel>
   //vpyr_2_tpyramid(const self_type &right);
 
   //:
-  ~vpyr_2_tpyramid();
+  virtual ~vpyr_2_tpyramid();
 
   //self_type & operator=(const self_type &right);
 
@@ -127,7 +126,6 @@ class vpyr_2_tpyramid : public vpyr_2_pyramid<TLevel>
     return _Base::level_below(type, above) ;
   }
 };
-
 
 #include "vpyr_2_tpyramid.txx"
 

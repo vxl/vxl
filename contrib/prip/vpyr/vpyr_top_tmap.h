@@ -1,7 +1,6 @@
 // This is prip/vpyr/vpyr_top_tmap.h
 #ifndef vpyr_top_tmap_h_
 #define vpyr_top_tmap_h_
-
 //:
 // \file
 // \brief defines a class building pyramids.
@@ -11,7 +10,6 @@
 // \verbatim
 //  06 May 2004 Jocelyn Marchadier
 // \endverbatim
-
 
 #include <vmap/vmap_2_tmap.h>
 
@@ -39,7 +37,7 @@ class vpyr_top_tmap : public vmap_2_tmap<V,E,F,D>
   }
 
   //:
-  ~vpyr_top_tmap();
+  virtual ~vpyr_top_tmap();
 
   //:
   template <class M >
