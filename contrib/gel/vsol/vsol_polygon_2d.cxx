@@ -320,3 +320,4 @@ vsl_b_read(vsl_b_istream &is, vsol_polygon_2d* &p)
   else
     p = 0;
 }
+
