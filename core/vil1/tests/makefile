@@ -15,6 +15,7 @@ TESTS += test_memory_image.cxx
 TESTS += test_memory_image_of.cxx
 TESTS += test_write_endian.cxx
 TESTS += test_interpolate.cxx
+TESTS += test_flipud.cxx
 
 IULIBS = -lvil -lvpl
 
