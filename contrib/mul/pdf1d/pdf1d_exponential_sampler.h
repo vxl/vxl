@@ -44,11 +44,11 @@ class pdf1d_exponential_sampler :public pdf1d_sampler
 
   //: Reseeds the internal random number generator
   // To achieve quasi-random initialisation use;
-  // \verbatim
+  // \code
   // #include <vcl_ctime.h>
   // ..
   // sampler.reseed(vcl_time(0));
-  // \endverbatim
+  // \endcode
   virtual void reseed(unsigned long);
 
 

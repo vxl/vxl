@@ -24,10 +24,10 @@ vcl_vector<unsigned> mbl_combination_begin(const vcl_vector<unsigned>& n)
 //
 //  This allows stepping through all possible combinations of sets integers {x[i]}
 //  using
-// \verbatim
+// \code
 //  vcl_vector<unsigned> x = mbl_combination_begin(n);
 //  do { ...}  while (mbl_combination_next(x,n));
-// \endverbatim
+// \endcode
 inline
 bool mbl_combination_next(vcl_vector<unsigned>& x, const vcl_vector<unsigned>& n)
 {

@@ -7,9 +7,9 @@
 // \date Based on code written 7-May-92
 //
 // \verbatim 
-// Modifications
+//  Modifications
+//   Converted to vxl by gvw, soblamemewhydontcha!
 //   1.1   Tim   New version 4-Nov-98
-// Converted to vxl by gvw, soblamemewhydontcha!
 // \endverbatim
 
 //: Asks question and waits for an answer from standard input.
@@ -23,21 +23,23 @@
 // \return reply: The answer or a default
 //
 //   Example: 
-// \verbatim 
 // a)
+// \code 
 // const int N_max_len = 20;
 // char* Name[N_max_len];
 // mbl_read_str(Name,N_max_len,"Enter Name","Fred");
+// \endcode
 // 
 // b) If default_str = current reply, then reply
 //   is only overwritten if a different
 //   vcl_string given.
 // 
+// \code 
 // const int N_max_len = 20;
 // char* Name[N_max_len];
 // strcpy(Name,"Freddy");
 // mbl_read_str(Name,N_max_len,"Enter Name",Name);
-// \endverbatim
+// \endcode
 
 char* mbl_read_str(char *reply, int max_str_len, 
                    const char *q_str, const char *default_str);

@@ -65,12 +65,12 @@ void mbl_index_sort(const vcl_vector<T>& data, vcl_vector<int>& index)
 // so long as T container.operator[](index) const is defined.
 // 
 // For example, a simple index sort can be done as follows.
-// \verbatim
+// \code
 //  vcl_vector data<double> (n);
 //  vcl_vector index<unsigned> (n/2);
 //  ...
 //  vcl_sort(index.begin(), index.end(), mbl_index_sort_cmp<double>(data));
-// \endverbatim
+// \endcode
 template <class T, class INDEX=unsigned, class CONT = vcl_vector<T>,
   class CMP=vcl_less<T> >
   struct mbl_index_sort_cmp: public vcl_binary_function<INDEX, INDEX, bool>

@@ -57,9 +57,9 @@ class vil3d_image_resource
   //
   // If you want to fill an existing view (e.g. a window onto some other image),
   // then use
-  // \verbatim
+  // \code
   // vil3d_reformat(data->get_view(..), window);
-  //\endverbatim
+  //\endcode
   virtual vil3d_image_view_base_sptr get_view(unsigned i0, unsigned ni,
                                               unsigned j0, unsigned nj,
                                               unsigned k0, unsigned nk) const

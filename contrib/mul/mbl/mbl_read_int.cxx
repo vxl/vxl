@@ -23,10 +23,10 @@
 //                  Otherwise waits for another input.
 // - References:    -
 // - Example:
-// \verbatim
+// \code
 //    int new_scale = mbl_read_int("Scale?",5);
 //    int new_scale = mbl_read_int("Scale?",5,min_scale,max_scale);
-// \endverbatim
+// \endcode
 
 #include "mbl_read_int.h"
 #include <vcl_cstdio.h> // for fgets()

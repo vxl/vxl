@@ -25,8 +25,10 @@
 //      Otherwise waits for another input.
 // - References: -
 // - Example: 
+// \code
 //    new_scale = mbl_read_double("Scale?",1.00);
 //    double new_scale = mbl_read_double("Scale?",1.00,min_scale,max_scale);
+// \endcode
 
 double mbl_read_double(char* q_str, double default_d);
 double mbl_read_double(char* q_str, double default_d, double min_d, double max_d);

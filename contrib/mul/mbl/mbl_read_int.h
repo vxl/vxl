@@ -25,8 +25,10 @@
 //                  Otherwise waits for another input.
 // - References:    -
 // - Example:
+// \code
 //    int new_scale = mbl_read_int("Scale?",5);
 //    int new_scale = mbl_read_int("Scale?",5,min_scale,max_scale);
+// \endcode
 
 int mbl_read_int(char* q_str, int default_int);
 int mbl_read_int(char* q_str, int default_int, int min_int, int max_int);

@@ -19,14 +19,14 @@
 // The complement() function returns the integers not in the subset.
 //
 // The following code snippet runs process_data() on all possible subsets:
-// \verbatim
+// \code
 //  mbl_select_n_from_m selector(3,5);
 //  if (selector.reset())
 //  do
 //  {
 //    process_data(selector.subset());
 //  } while selector.next();
-// \endverbatim
+// \endcode
 class mbl_select_n_from_m
 {
  private:
