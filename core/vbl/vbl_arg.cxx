@@ -155,25 +155,25 @@ void vbl_arg_info_list::include(vbl_arg_info_list& l)
 void vbl_arg_info_list::display_help( char const*progname)
 {
   if (progname)
-    vcl_cout << "Usage: " << progname << " ";
+    vcl_cerr << "Usage: " << progname << " ";
   else
-    vcl_cout << "Usage: aprog ";
+    vcl_cerr << "Usage: aprog ";
 
   // Print "prog [-a int] string string"
   for ( int i=0; i< nargs; i++) {
     if (args[i]->option()) {
-      vcl_cout << "[";
-      vcl_cout << args[i]->option();
+      vcl_cerr << "[";
+      vcl_cerr << args[i]->option();
       if (strlen(args[i]->type_)> 0)
-        vcl_cout << " " << args[i]->type_;
-      vcl_cout << "] ";
+        vcl_cerr << " " << args[i]->type_;
+      vcl_cerr << "] ";
     } else {
       // options without switches are required.
-      vcl_cout << args[i]->type_ << " ";
+      vcl_cerr << args[i]->type_ << " ";
     }
   }
 
-  vcl_cout << vcl_endl << vcl_endl;
+  vcl_cerr << vcl_endl << vcl_endl;
 
   // Find longest option, type name, or default
   int maxl_option  = 8; // Length of "REQUIRED"
