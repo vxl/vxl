@@ -30,7 +30,9 @@ public:
   //: get current file size
   unsigned size() const { return tailpos_; }
 
-  // this does not change the current position
+  //: Read or write n bytes at position pos.
+  // This does not change the current position.
+  // When read=false, buf is actually a "char const *".
   vil_streampos m_transfer(char *buf, vil_streampos pos, vil_streampos n, bool read);
 
   // implement virtual vil_stream interface:
