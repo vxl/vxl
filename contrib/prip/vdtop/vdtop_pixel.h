@@ -8,7 +8,8 @@
 // \date 06/05/2004
 //
 // \verbatim
-//  06 May 2004 Jocelyn Marchadier
+//  Modifications
+//   06 May 2004 Jocelyn Marchadier
 // \endverbatim
 
 #include "vdtop_8_neighborhood_mask.h"
@@ -49,7 +50,7 @@ class vdtop_pixel
 
   self_type operator+(vdtop_freeman_code code) const
   {
-    return self_type(img,position_+(code.di()*img_->istep()+code.dj()*img_->jstep())) ;
+    return self_type(img_,position_+(code.di()*img_->istep()+code.dj()*img_->jstep())) ;
   }
 
   T& value()
