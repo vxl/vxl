@@ -112,7 +112,7 @@ double method6(vil2_image_view<imT>& image, int n_loops)
   for (int n=0;n<n_loops;++n)
   {
    unsigned ni=image.ni(),nj=image.nj();
-   int istep=image.istep(), jstep=image.jstep();
+   int jstep=image.jstep();
     imT* row = image.top_left_ptr();
     for (unsigned j=0;j<nj;++j,row += jstep)
     {
@@ -133,7 +133,7 @@ double method7(vil2_image_view<imT>& image, int n_loops)
   imT* raster_ptrs[NJ];
 
   {
-    unsigned ni=image.ni(),nj=image.nj();
+    unsigned nj=image.nj();
     for (unsigned j=0;j<nj;++j)
       (raster_ptrs)[j] = & image(0,j);
   }
