@@ -10,6 +10,7 @@ TESTS += test_bounding_box.cxx
 TESTS += test_dist.cxx
 TESTS += test_kd_tree.cxx
 TESTS += test_point.cxx
+TESTS += test_bins.cxx
 
 MINI_PROG_SOURCES += test_include.cxx
 
