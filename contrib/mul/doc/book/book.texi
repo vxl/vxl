@@ -225,7 +225,7 @@ class my_class @{
 @end smallexample
 
 You can find the doxygen output at
-@uref{http://www.isbe.man.ac.uk/public_vxl_doc/index.html, The Public VXL Documentation site}.
+@uref{http://paine.wiau.man.ac.uk/pub/doc_vxl/index.html, The VXL Documentation site}.
 
 @section The Design and Evolution of mul
 
