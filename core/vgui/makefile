@@ -140,7 +140,14 @@ SOURCES += internals/vgui_dialog_impl.cxx
 SOURCES += vgui_statusbuf.cxx
 SOURCES += vgui_statusbar.cxx
 
-#
+# vil2 support
+SOURCES += vgui_vil2_section_buffer.cxx
+MANPAGE_SOURCES += vgui_vil2_image_renderer.txx
+MANPAGE_SOURCES += vgui_vil2_image_tableau.txx
+MANPAGE_SOURCES += vgui_vil2_image_tableau_sptr.h
+MANPAGE_SOURCES += vgui_vil2_section_buffer_apply.txx
+
+# internals
 SOURCES += internals/vgui_invert_homg4x4.cxx
 SOURCES += internals/vgui_back_project.cxx
 SOURCES += internals/vgui_un_project.cxx
@@ -161,6 +168,7 @@ MANPAGE_SOURCES += vgui_glx.h
 # Mesa-X11 accelerated functions using Hermes
 SOURCES += internals/vgui_accelerate.cxx
 SOURCES += internals/vgui_accelerate_tag.cxx
+MANPAGE_SOURCES += internals/vgui_gl_selection_macros.h
 ifeq (1,$(HAS_X11))
 SOURCES += internals/vgui_accelerate_x11.cxx
 else
@@ -176,11 +184,11 @@ AUX_SOURCE_DIRECTORY += vrml/Templates
 
 ifeq ($(HAS_GLUT),1)
 SOURCES += vgui_glut.cxx
-SOURCES += impl/glut/vgui_glut_adaptor.cxx	
-SOURCES += impl/glut/vgui_glut_impl.cxx	
-SOURCES += impl/glut/vgui_glut_popup_impl.cxx	
-SOURCES += impl/glut/vgui_glut_tag.cxx	
-SOURCES += impl/glut/vgui_glut_window.cxx	
+SOURCES += impl/glut/vgui_glut_adaptor.cxx
+SOURCES += impl/glut/vgui_glut_impl.cxx
+SOURCES += impl/glut/vgui_glut_popup_impl.cxx
+SOURCES += impl/glut/vgui_glut_tag.cxx
+SOURCES += impl/glut/vgui_glut_window.cxx
 MANPAGE_SOURCES += impl/glut/menu_hack.h
 ifeq ($(HAS_X11),1)
 SOURCES += impl/glut/menu_hack_X11.cxx
@@ -193,24 +201,24 @@ endif
 ifeq ($(HAS_GTKGLAREA),1)
 INCDIRS += $(GTKGLAREA_INC_DIR)
 DEFINES += $(GTKCONFIGCFLAGS)
-SOURCES += impl/gtk/vgui_gtk.cxx	
-SOURCES += impl/gtk/vgui_gtk_adaptor.cxx	
-SOURCES += impl/gtk/vgui_gtk_dialog_impl.cxx	
-SOURCES += impl/gtk/vgui_gtk_statusbar.cxx	
-SOURCES += impl/gtk/vgui_gtk_tag.cxx	
-SOURCES += impl/gtk/vgui_gtk_utils.cxx	
-SOURCES += impl/gtk/vgui_gtk_window.cxx	
+SOURCES += impl/gtk/vgui_gtk.cxx
+SOURCES += impl/gtk/vgui_gtk_adaptor.cxx
+SOURCES += impl/gtk/vgui_gtk_dialog_impl.cxx
+SOURCES += impl/gtk/vgui_gtk_statusbar.cxx
+SOURCES += impl/gtk/vgui_gtk_tag.cxx
+SOURCES += impl/gtk/vgui_gtk_utils.cxx
+SOURCES += impl/gtk/vgui_gtk_window.cxx
 AUX_SOURCE_DIRECTORY += impl/gtk/Templates
 endif
 
 ifeq ($(HAS_QGL), 1)
-SOURCES += impl/qt/vgui_qt.cxx	
-SOURCES += impl/qt/vgui_qt_adaptor.cxx	
-SOURCES += impl/qt/vgui_qt_dialog_impl.cxx	
-SOURCES += impl/qt/vgui_qt_menu.cxx	
-SOURCES += impl/qt/vgui_qt_statusbar.cxx	
-SOURCES += impl/qt/vgui_qt_tag.cxx	
-SOURCES += impl/qt/vgui_qt_window.cxx	
+SOURCES += impl/qt/vgui_qt.cxx
+SOURCES += impl/qt/vgui_qt_adaptor.cxx
+SOURCES += impl/qt/vgui_qt_dialog_impl.cxx
+SOURCES += impl/qt/vgui_qt_menu.cxx
+SOURCES += impl/qt/vgui_qt_statusbar.cxx
+SOURCES += impl/qt/vgui_qt_tag.cxx
+SOURCES += impl/qt/vgui_qt_window.cxx
 
 CPPEXT = cxx
 HPPEXT = h
@@ -229,18 +237,18 @@ endif
 endif
 
 ifeq ($(HAS_MFC), 1)
-SOURCES += impl/mfc/vgui_mfc.cxx	
-SOURCES += impl/mfc/vgui_mfc_adaptor.cxx	
-SOURCES += impl/mfc/vgui_mfc_app.cxx	
-SOURCES += impl/mfc/vgui_mfc_app_init.cxx	
-SOURCES += impl/mfc/vgui_mfc_dialog_impl.cxx	
-SOURCES += impl/mfc/vgui_mfc_doc.cxx	
-SOURCES += impl/mfc/vgui_mfc_mainfrm.cxx	
-SOURCES += impl/mfc/vgui_mfc_statusbar.cxx	
-SOURCES += impl/mfc/vgui_mfc_tag.cxx	
-SOURCES += impl/mfc/vgui_mfc_utils.cxx	
-SOURCES += impl/mfc/vgui_mfc_view.cxx	
-SOURCES += impl/mfc/vgui_mfc_window.cxx	
+SOURCES += impl/mfc/vgui_mfc.cxx
+SOURCES += impl/mfc/vgui_mfc_adaptor.cxx
+SOURCES += impl/mfc/vgui_mfc_app.cxx
+SOURCES += impl/mfc/vgui_mfc_app_init.cxx
+SOURCES += impl/mfc/vgui_mfc_dialog_impl.cxx
+SOURCES += impl/mfc/vgui_mfc_doc.cxx
+SOURCES += impl/mfc/vgui_mfc_mainfrm.cxx
+SOURCES += impl/mfc/vgui_mfc_statusbar.cxx
+SOURCES += impl/mfc/vgui_mfc_tag.cxx
+SOURCES += impl/mfc/vgui_mfc_utils.cxx
+SOURCES += impl/mfc/vgui_mfc_view.cxx
+SOURCES += impl/mfc/vgui_mfc_window.cxx
 endif
 
 # This file uses the -DVGUI_USE_* preprocessor definitions set by
