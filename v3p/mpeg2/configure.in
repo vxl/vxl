@@ -1,14 +1,16 @@
 dnl Process this file with autoconf to produce a configure script.
 AC_PREREQ(2.52)
 AC_INIT
-AC_CONFIG_SRCDIR([src/mpeg2dec.c])
-AC_CONFIG_AUX_DIR(autotools)
-AC_CONFIG_FILES([Makefile autotools/Makefile include/Makefile test/Makefile
-    doc/Makefile src/Makefile libmpeg2/Makefile libvo/Makefile vc++/Makefile])
+dnl AC_CONFIG_SRCDIR([src/mpeg2dec.c]) dnl this file not in vxl/v3p
+AC_CONFIG_SRCDIR([libmpeg2/mpeg2_internal.h]) dnl new magic file in vxl/v3p
+dnl AC_CONFIG_AUX_DIR(autotools) dnl not needed for VXL
+dnl for VXL, this configure script will not make makefiles, just config.h
+dnl AC_CONFIG_FILES([Makefile autotools/Makefile include/Makefile test/Makefile
+dnl     doc/Makefile src/Makefile libmpeg2/Makefile libvo/Makefile vc++/Makefile])
 AM_INIT_AUTOMAKE([mpeg2dec],[0.2.1])
 AM_CONFIG_HEADER(include/config.h)
 AM_MAINTAINER_MODE
-AC_CANONICAL_HOST
+dnl AC_CANONICAL_HOST dnl not needed for VXL
 if test x"$host_alias" = x""; then host_alias="$host"; fi
 
 dnl Checks for compiler
@@ -80,9 +82,9 @@ else
 fi
 
 dnl Checks for libtool - this must be done after we set cflags
-AC_DISABLE_SHARED
-AC_LIBTOOL_WIN32_DLL
-AC_PROG_LIBTOOL
+dnl AC_DISABLE_SHARED dnl not needed in VXL
+dnl AC_LIBTOOL_WIN32_DLL dnl not needed in VXL
+dnl AC_PROG_LIBTOOL dnl not needed in VXL
 
 dnl Checks for libraries.
 
@@ -105,7 +107,7 @@ AC_TYPE_SIGNAL
 
 builtin([include],[libmpeg2/configure.incl])
 builtin([include],[libvo/configure.incl])
-builtin([include],[src/configure.incl])
+dnl builtin([include],[src/configure.incl]) dnl VXL does not use the src dir
 
 AC_ARG_ENABLE([warnings],
     [  --disable-warnings      do not treat warnings as errors])

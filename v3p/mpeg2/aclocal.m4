@@ -107,7 +107,7 @@ dnl Usage:
 dnl AM_INIT_AUTOMAKE(package,version, [no-define])
 
 AC_DEFUN(AM_INIT_AUTOMAKE,
-[AC_REQUIRE([AC_PROG_INSTALL])
+[dnl AC_REQUIRE([AC_PROG_INSTALL]) dnl for VXL install not required
 PACKAGE=[$1]
 AC_SUBST(PACKAGE)
 VERSION=[$2]
