@@ -18,3 +18,14 @@ include $(IUEROOT)/vxl/vnl/client.mk
 ####################################
 include ${IUEROOT}/config/top.mk
 ################################
+
+all:
+	$(SHELL) -x ./time_fastops.mk
+
+speeds: $(RELOBJDIR)/time_fastops_O_M1
+
+$(RELOBJDIR)/time_fastops_O_M1: time_fastops.cxx
+	$(COMPILE.c++) -O2 -DOPTIMIZED -DMETHOD=1 $<
+	$(MAKE_EXE)
+	$@
+
