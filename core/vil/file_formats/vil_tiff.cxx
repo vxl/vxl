@@ -526,10 +526,10 @@ bool vil2_tiff_image::write_header()
   p->rows_per_strip = 1;
   TIFFSetField(p->tif, TIFFTAG_ROWSPERSTRIP, p->rows_per_strip);
 
-  int samplesperpixel = components_;
+  unsigned int samplesperpixel = components_;
   TIFFSetField(p->tif, TIFFTAG_SAMPLESPERPIXEL, samplesperpixel);
 
-  int bitspersample = bits_per_component_;
+  unsigned int bitspersample = bits_per_component_;
   TIFFSetField(p->tif, TIFFTAG_BITSPERSAMPLE, bitspersample);
 
   p->planar_config = PLANARCONFIG_CONTIG;
@@ -645,7 +645,7 @@ vil2_image_view_base_sptr vil2_tiff_image::get_copy_view(unsigned i0,
     unsigned strip_max = j1 / p->rows_per_strip;
     assert(strip_max <= p->numberofstrips);
     // Get each strip
-    int pixel_bit_size = components_ * bits_per_component_;
+    unsigned int pixel_bit_size = components_ * bits_per_component_;
     vil2_memory_chunk_sptr buf = new vil2_memory_chunk(pixel_bit_size*nj*ni, pixel_format());
     {
       for (unsigned long strip_id = strip_min; strip_id <= strip_max; ++strip_id) {
@@ -654,26 +654,26 @@ vil2_image_view_base_sptr vil2_tiff_image::get_copy_view(unsigned i0,
         unsigned long strip_min_row = strip_id * p->rows_per_strip;
         unsigned long strip_max_row = strip_min_row + p->rows_per_strip - 1;
 
-        long ymin = (long)strip_min_row;
+        unsigned long ymin = strip_min_row;
         if (ymin < j0) ymin = j0;
-        long ymax = (long)strip_max_row;
-        if (ymax > j1) ymax = j1;
+        unsigned long ymax = strip_max_row;
+        if (ymax > (unsigned)j1) ymax = j1;
 
         // printf("reading strip %d, y  = %d .. %d\n", strip_id, ymin, ymax);
-        for (long y = ymin; y <= ymax; ++y) {
+        for (unsigned long y = ymin; y <= ymax; ++y) {
           unsigned char* in_row = p->buf + (y - strip_min_row) * p->scanlinesize;
           unsigned char* out_row = (unsigned char*)buf->data() + ((y - j0) * ni * pixel_bit_size + 7) / 8;
           vcl_memcpy(out_row, in_row + (i0 * pixel_bit_size + 7) / 8, (ni * pixel_bit_size + 7) / 8);
         }
       }
     }
-    if (bits_per_component_ ==8)
+    if (bits_per_component_ == 8)
       return new vil2_image_view<vxl_byte>(buf, (const vxl_byte*)buf->data(), ni, nj,
         components_, components_, components_*ni, 1);
-    else if (bits_per_component_ ==16)
+    else if (bits_per_component_ == 16)
       return new vil2_image_view<vxl_uint_16>(buf, (const vxl_uint_16*)buf->data(), ni, nj,
         components_, components_, components_*ni, 1);
-    else if (bits_per_component_ ==32)
+    else if (bits_per_component_ == 32)
       return new vil2_image_view<vxl_uint_32>(buf, (const vxl_uint_32*)buf->data(), ni, nj,
         components_, components_, components_*ni, 1);
     else {
@@ -720,19 +720,19 @@ bool vil2_tiff_image::put_view(const vil2_image_view_base &im,
   unsigned strip_max = jend / p->rows_per_strip;
   assert(strip_max <= p->numberofstrips);
   // Put each strip
-  int pixel_byte_size = components_ * bits_per_component_ / 8;
+  unsigned int pixel_byte_size = components_ * bits_per_component_ / 8;
   for (unsigned long strip_id = strip_min; strip_id <= strip_max; ++strip_id) {
     // Strip contains some rows...
     unsigned long strip_min_row = strip_id * p->rows_per_strip;
     unsigned long strip_max_row = strip_min_row + p->rows_per_strip - 1;
 
-    long ymin = (long)strip_min_row;
+    unsigned long ymin = strip_min_row;
     if (ymin < j0) ymin = j0;
-    long ymax = (long)strip_max_row;
-    if (ymax > jend) ymax = jend;
+    unsigned long ymax = strip_max_row;
+    if (ymax > (unsigned)jend) ymax = jend;
 
     // printf("writing strip %d, y  = %d .. %d\n", strip_id, ymin, ymax);
-    for (long y = ymin; y <= ymax; ++y) {
+    for (unsigned long y = ymin; y <= ymax; ++y) {
       unsigned char* file_row = p->buf + (y - strip_min_row) * p->scanlinesize
         + i0 * pixel_byte_size;
 

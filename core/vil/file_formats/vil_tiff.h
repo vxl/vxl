@@ -1,4 +1,4 @@
-// This is vxl/vil2/file_formats/vil2_tiff.h
+// This is core/vil2/file_formats/vil2_tiff.h
 #ifndef vil2_tiff_file_format_h_
 #define vil2_tiff_file_format_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
@@ -39,11 +39,11 @@ class vil2_tiff_image : public vil2_image_resource
 {
   vil2_tiff_structures* p;
 
-  int width_;
-  int height_;
+  unsigned int width_;
+  unsigned int height_;
 
-  int components_;
-  int bits_per_component_;
+  unsigned int components_;
+  unsigned int bits_per_component_;
 
   bool read_header();
   bool write_header();
