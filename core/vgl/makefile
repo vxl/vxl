@@ -35,6 +35,8 @@ MANPAGE_SOURCES += vgl_box_3d.txx
 MANPAGE_SOURCES += vgl_homg_line_3d_2_points.txx
 MANPAGE_SOURCES += vgl_line_segment_2d.txx
 MANPAGE_SOURCES += vgl_line_segment_3d.txx
+MANPAGE_SOURCES += vgl_vector_2d.txx
+MANPAGE_SOURCES += vgl_vector_3d.txx
 
 SUBDIRS += algo
 
