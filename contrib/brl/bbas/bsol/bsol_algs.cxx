@@ -171,9 +171,28 @@ vsol_polygon_2d_sptr bsol_algs::poly_from_box(vsol_box_2d_sptr const& box)
   vsol_point_2d_sptr pc = new vsol_point_2d(box->get_max_x(), box->get_max_y());
   vsol_point_2d_sptr pd = new vsol_point_2d(box->get_min_x(), box->get_max_y());
   pts.push_back(pa);   pts.push_back(pb);
-  pts.push_back(pc);   pts.push_back(pd);
+  pts.push_back(pc);   pts.push_back(pd); pts.push_back(pa);
   return new vsol_polygon_2d(pts);
 }
+//:construct a vsol_polygon from a vgl_polygon
+vsol_polygon_2d_sptr bsol_algs::poly_from_vgl(vgl_polygon<double> const& poly)
+{
+  vsol_polygon_2d_sptr out;
+  vcl_vector<vsol_point_2d_sptr> pts;
+  if(poly.num_sheets() != 1)
+    return out;
+  vcl_vector<vgl_point_2d<double> > sheet = poly[0];
+  for(vcl_vector<vgl_point_2d<double> >::iterator pit = sheet.begin();
+      pit != sheet.end(); pit++)
+    {
+      vsol_point_2d_sptr p = new vsol_point_2d((*pit).x(), (*pit).y());
+      pts.push_back(p);
+    }
+  out = new vsol_polygon_2d(pts);
+  return out;
+}
+
+
 //:find the closest point to p in a set of points
 vsol_point_2d_sptr
 bsol_algs::closest_point(vsol_point_2d_sptr const& p,
@@ -268,10 +287,7 @@ void bsol_algs::print(vsol_box_2d_sptr const& b)
 {
   if (!b)
     return;
-  double xmin = b->get_min_x(), ymin = b->get_min_y();
-  double xmax = b->get_max_x(), ymax = b->get_max_y();
-  vcl_cout << "vsol_box_2d[(" << xmin << ' ' << ymin << ")<("
-           << xmax << ' ' << ymax << ")]\n";
+  vcl_cout << *b << '\n';
 }
 
 void bsol_algs::print(vsol_box_3d_sptr const& b)
@@ -280,15 +296,18 @@ void bsol_algs::print(vsol_box_3d_sptr const& b)
     return;
   double xmin = b->get_min_x(), ymin = b->get_min_y(), zmin = b->get_min_z();
   double xmax = b->get_max_x(), ymax = b->get_max_y(), zmax = b->get_max_z();
+
   vcl_cout << "vsol_box_2d[(" << xmin << ' ' << ymin << ' ' << zmin << ")<("
            << xmax << ' ' << ymax << ' ' << zmax << ")]\n";
+
+
 }
 
 void bsol_algs::print(vsol_point_2d_sptr const& p)
 {
   if (!p)
     return;
-  vcl_cout << "vsol_point_2d[ " << p->x() << ' ' << p->y() <<  " ]\n";
+  vcl_cout << *p << '\n';
 }
 
 void bsol_algs::print(vsol_point_3d_sptr const& p)

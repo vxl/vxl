@@ -15,6 +15,7 @@
 //
 //-----------------------------------------------------------------------------
 #include <vbl/vbl_bounding_box.h>
+#include <vgl/vgl_polygon.h>
 #include <vsol/vsol_point_2d_sptr.h>
 #include <vsol/vsol_point_3d_sptr.h>
 #include <vsol/vsol_box_2d_sptr.h>
@@ -61,6 +62,10 @@ class bsol_algs
   //: Is a point inside the box
   static bool in(vsol_box_3d_sptr const & a, const double x, const double y,
                  const double z);
+
+  //:construct a vsol_polygon from a vgl_polygon
+  static vsol_polygon_2d_sptr poly_from_vgl(vgl_polygon<double> const& poly);
+
 
   //:construct a vsol_polygon from a vsol_box
   static vsol_polygon_2d_sptr poly_from_box(vsol_box_2d_sptr const& box);
