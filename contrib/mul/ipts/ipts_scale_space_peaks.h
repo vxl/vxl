@@ -31,7 +31,7 @@ inline bool ipts_is_above_3x3(T value, const T* im,
 //: Find local maxima in position and scale above given threshold
 //  Points returned in a 3D point, given world coords + scale value
 template<class T>
-void ipts_scale_space_peaks_2d(vcl_vector<vgl_point_3d<double> >& peak_pts,
+inline void ipts_scale_space_peaks_2d(vcl_vector<vgl_point_3d<double> >& peak_pts,
                                const vimt_image_2d_of<T>& image_below,
                                const vimt_image_2d_of<T>& image,
                                const vimt_image_2d_of<T>& image_above,
@@ -92,16 +92,90 @@ void ipts_scale_space_peaks_2d(vcl_vector<vgl_point_3d<double> >& peak_pts,
   }
 }
 
+//: Find local maxima in image0 and check against in image1
+//  Returned points will be above all their neighbours and
+//  those in nearby positions in image1
+template<class T>
+inline void ipts_scale_space_peaks_2d(vcl_vector<vgl_point_2d<double> >& peak_pts,
+                               vcl_vector<T>& peak_values,
+                               const vimt_image_2d_of<T>& image0,
+                               const vimt_image_2d_of<T>& image1,
+                               T threshold)
+{
+  vcl_vector<vgl_point_2d<double> > peak_pts0;
+  vcl_vector<T> peak_values0;
+  vimt_find_world_peaks_3x3(peak_pts0,peak_values0,image0);
+
+  // Check that each point is above equivalent pixels in image1
+  peak_pts.resize(0);
+  peak_values.resize(0);
+  vimt_transform_2d w2i1  = image1.world2im();
+  unsigned ni2 = image1.image().ni()-2;
+  unsigned nj2 = image1.image().nj()-2;
+  vcl_ptrdiff_t istep = image1.image().istep(), jstep=image1.image().jstep();
+  for (unsigned i=0;i<peak_pts0.size();++i)
+  {
+    if (peak_values0[i]>threshold)
+    {
+      vgl_point_2d<double> p1 = w2i1(peak_pts0[i]);
+      if (p1.x()>0.5 && p1.y()>0.5 && p1.x()<ni2 && p1.y()<nj2)
+      {
+        const T* pixel=&image1.image()(int(p1.x()+0.5),int(p1.y()+0.5));
+        if (ipts_is_above_3x3(peak_values0[i],pixel,istep,jstep))
+        {
+          peak_pts.push_back(peak_pts0[i]);
+          peak_values.push_back(peak_values0[i]);
+        }
+      }
+    }
+  }
+}
+
+//: Find local maxima in image0 and check against in image1
+//  Returned points will be above all their neighbours and
+//  those in nearby positions in image1
+template<class T>
+inline void ipts_scale_space_peaks_2d(vcl_vector<vgl_point_3d<double> >& peak_pts,
+                               const vimt_image& image0,
+                               const vimt_image& image1,
+                               T threshold)
+{
+  const vimt_image_2d_of<T>& im0 =
+                dynamic_cast<const vimt_image_2d_of<T>&>(image0);
+  const vimt_image_2d_of<T>& im1 =
+                dynamic_cast<const vimt_image_2d_of<T>&>(image1);
+  vcl_vector<vgl_point_2d<double> > peak_pts0;
+  vcl_vector<T> peak_values0;
+
+  ipts_scale_space_peaks_2d(peak_pts0,peak_values0,im0,im1,threshold);
+
+  // Estimate scaling factor between images (assumed isotropic)
+  vgl_vector_2d<double> dx(1,0),dw;
+  dw = im0.world2im().delta(vgl_point_2d<double>(0,0),dx);
+  double scale = 1.0/vcl_sqrt(dw.x()*dw.x()+dw.y()*dw.y());
+
+  for (unsigned i=0;i<peak_pts0.size();++i)
+  {
+    vgl_point_3d<double> p(peak_pts0[i].x(),peak_pts0[i].y(),scale);
+    peak_pts.push_back(p);
+  }
+}
+
 //: Find local maxima in position and scale above a threshold
 //  Points returned in a 3D point, given world coords + scale value
 //  Note that image_pyr is assumed to contain images of type
 //  vimt_image_2d_of<T> - threshold indicates the typing.
 template<class T>
-void ipts_scale_space_peaks_2d(vcl_vector<vgl_point_3d<double> >& peak_pts,
+inline void ipts_scale_space_peaks_2d(vcl_vector<vgl_point_3d<double> >& peak_pts,
                                const vimt_image_pyramid& image_pyr,
                                T threshold)
 {
   peak_pts.resize(0);
+
+  // Look for peaks at the finest scale (comparing to those at the scale above)
+  if (image_pyr.n_levels()>1)
+    ipts_scale_space_peaks_2d(peak_pts,image_pyr(0),image_pyr(1),threshold);
+
   for (int L=image_pyr.lo()+1;L<image_pyr.hi();++L)
   {
     const vimt_image_2d_of<T>& im_below =

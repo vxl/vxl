@@ -24,7 +24,7 @@ void ipts_entropy_pyramid(const vimt_image_2d_of<vxl_byte>& image,
   pyr_builder.set_scale_step(scale_step);
   pyr_builder.build(smooth_pyramid,image);
 
-  ipts_entropy_pyramid(smooth_pyramid,entropy_pyramid,half_width);
+  ipts_entropy_pyramid(smooth_pyramid,entropy_pyramid,half_width,0,255);
 }
 
 //: Compute corner strength at each level of a scale space pyramid
@@ -35,7 +35,7 @@ void ipts_entropy_pyramid(const vimt_image_2d_of<vxl_byte>& image,
 //  likely corners
 void ipts_entropy_pyramid(const vimt_image_pyramid& smooth_pyramid,
                          vimt_image_pyramid& entropy_pyramid,
-                         unsigned half_width)
+                         unsigned half_width, int min_v, int max_v)
 {
   if (smooth_pyramid.n_levels()==0) return;
 
@@ -63,7 +63,7 @@ void ipts_entropy_pyramid(const vimt_image_pyramid& smooth_pyramid,
             = static_cast<const vimt_image_2d_of<vxl_byte>&>(smooth_pyramid(i));
     vimt_image_2d_of<float>& entropy_im
             = static_cast<vimt_image_2d_of<float>&>(entropy_pyramid(i));
-    ipts_local_entropy(smooth_im.image(),entropy_im.image(),half_width);
+    ipts_local_entropy(smooth_im.image(),entropy_im.image(),half_width,min_v,max_v);
 
     entropy_im.set_world2im(translate*smooth_im.world2im());
   }

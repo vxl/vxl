@@ -6,6 +6,7 @@ SET(ipts_sources
     ipts_local_entropy.cxx ipts_local_entropy.h
     ipts_corner_pyramid.cxx ipts_corner_pyramid.h
     ipts_entropy_pyramid.cxx ipts_entropy_pyramid.h
+    ipts_orientation_pyramid.cxx ipts_orientation_pyramid.h
 )
 AUX_SOURCE_DIRECTORY(Templates ipts_sources)
 
