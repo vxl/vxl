@@ -19,7 +19,7 @@ bool vipl_add_random_noise <ImgIn,ImgOut,DataIn,DataOut,PixelItr> :: section_app
                  : vnl_sample_uniform(-maxdev_,maxdev_); // TODO - implement exponential noise
       DataOut p = fgetpixel(in_data(),i,j,DataIn(0)), q = DataOut(rnd);
       if (!clipping_ && rnd+p < 0)
-        setpixel(out_data(), i, j, DataOut(0));
+        setpixel(out_data(), i, j, (DataOut)0);
       else if (!clipping_ && rnd+p > vnl_numeric_traits<DataOut>::maxval)
         setpixel(out_data(), i, j, vnl_numeric_traits<DataOut>::maxval);
       else
