@@ -24,6 +24,33 @@
 //-----------------------------------------------------------------------------
 
 template <class Type>
+inline static vgl_homg_line_2d<Type> cross(const vgl_homg_point_2d<Type>& p1,
+                                           const vgl_homg_point_2d<Type>& p2)
+{
+  return vgl_homg_line_2d<Type> (p1.y() * p2.w() - p1.w() * p2.y(),
+                                 p1.w() * p2.x() - p1.x() * p2.w(),
+                                 p1.x() * p2.y() - p1.y() * p2.x());
+}
+
+template <class Type>
+inline static vgl_homg_point_2d<Type> cross(const vgl_homg_line_2d<Type>& l1,
+                                            const vgl_homg_line_2d<Type>& l2)
+{
+  return vgl_homg_point_2d<Type> (l1.b() * l2.c() - l1.c() * l2.b(),
+                                  l1.c() * l2.a() - l1.a() * l2.c(),
+                                  l1.a() * l2.b() - l1.b() * l2.a());
+}
+
+template <class Type>
+inline static double dot(vgl_homg_line_2d<Type> const& l,
+                         vgl_homg_point_2d<Type> const& p)
+{
+  return l.a()*p.x() + l.b()+p.y() + l.c()*p.w();
+}
+
+//-----------------------------------------------------------------------------
+
+template <class Type>
 vnl_vector<Type> vgl_homg_operators_2d<Type>::get_vector(vgl_homg_point_2d<Type> const& p)
 {
   // make a vnl_vector for the point p
@@ -47,68 +74,6 @@ vnl_vector<Type> vgl_homg_operators_2d<Type>::get_vector(vgl_homg_line_2d<Type> 
   v.put(2,l.c());
 
   return v;
-}
-
-
-//: Cross product of two vgl_homg_point_2d<Type>s
-template <class Type>
-vgl_homg_line_2d<Type> vgl_homg_operators_2d<Type>::cross(const vgl_homg_point_2d<Type>& a,
-                                                          const vgl_homg_point_2d<Type>& b)
-{
-  double x1 = a.x();
-  double y1 = a.y();
-  double w1 = a.w();
-
-  double x2 = b.x();
-  double y2 = b.y();
-  double w2 = b.w();
-
-  return vgl_homg_line_2d<Type> (y1 * w2 - w1 * y2,
-                                 w1 * x2 - x1 * w2,
-                                 x1 * y2 - y1 * x2);
-}
-
-template <class Type>
-vgl_homg_point_2d<Type> vgl_homg_operators_2d<Type>::cross(const vgl_homg_line_2d<Type>& a,
-                                                           const vgl_homg_line_2d<Type>& b)
-{
-  double x1 = a.a();
-  double y1 = a.b();
-  double w1 = a.c();
-
-  double x2 = b.a();
-  double y2 = b.b();
-  double w2 = b.c();
-
-  return vgl_homg_point_2d<Type> (y1 * w2 - w1 * y2,
-                                  w1 * x2 - x1 * w2,
-                                  x1 * y2 - y1 * x2);
-}
-
-//-----------------------------------------------------------------------------
-//: Dot product of two vgl_homg_point_2d<Type>s
-template <class Type>
-double
-vgl_homg_operators_2d<Type>::dot(vgl_homg_point_2d<Type> const& a,
-                                 vgl_homg_point_2d<Type> const& b)
-{
-  double x1 = a.x();
-  double y1 = a.y();
-  double w1 = a.w();
-
-  double x2 = b.x();
-  double y2 = b.y();
-  double w2 = b.w();
-
-  return x1*x2 + y1*y2 + w1*w2;
-}
-
-template <class Type>
-double
-vgl_homg_operators_2d<Type>::dot(vgl_homg_line_2d<Type> const&l,
-                                 vgl_homg_point_2d<Type> const& p)
-{
-  return l.a()*p.x() + l.b()+p.y() + l.c()*p.w();
 }
 
 //-----------------------------------------------------------------------------
@@ -141,16 +106,16 @@ void vgl_homg_operators_2d<Type>::unitize(vgl_homg_point_2d<Type>& a)
 template <class Type>
 double
 vgl_homg_operators_2d<Type>::distance_squared(
-                                  const vgl_homg_point_2d<Type>& point1,
-                                  const vgl_homg_point_2d<Type>& point2)
+                                  const vgl_homg_point_2d<Type>& p1,
+                                  const vgl_homg_point_2d<Type>& p2)
 {
-  double x1 = point1.x();
-  double y1 = point1.y();
-  double z1 = point1.w();
+  double x1 = p1.x();
+  double y1 = p1.y();
+  double z1 = p1.w();
 
-  double x2 = point2.x();
-  double y2 = point2.y();
-  double z2 = point2.w();
+  double x2 = p2.x();
+  double y2 = p2.y();
+  double z2 = p2.w();
 
   if (z1 == 0 || z2 == 0) {
     vcl_cerr << "vgl_homg_operators_2d<Type>::distance_squared() -- point at infinity";
@@ -184,8 +149,9 @@ vgl_homg_operators_2d<Type>::perp_dist_squared(
   }
 
   double numerator = vnl_math_sqr (dot(line, point));
-  double denominator = (vnl_math_sqr (line.a()) + vnl_math_sqr(line.b())) *
-    vnl_math_sqr (point.w());
+  if (numerator == 0) return 0.0; // efficiency
+  double denominator = (vnl_math_sqr (line.a()) + vnl_math_sqr(line.b()))
+                       * vnl_math_sqr (point.w());
 
   return numerator / denominator;
 }
@@ -261,10 +227,10 @@ vgl_homg_operators_2d<Type>::angle_between_oriented_lines(
 
 template <class Type>
 vgl_homg_line_2d<Type>
-vgl_homg_operators_2d<Type>::join (const vgl_homg_point_2d<Type>& point1,
-                                   const vgl_homg_point_2d<Type>& point2)
+vgl_homg_operators_2d<Type>::join (const vgl_homg_point_2d<Type>& p1,
+                                   const vgl_homg_point_2d<Type>& p2)
 {
-  return cross(point1, point2);
+  return cross(p1,p2);
 }
 
 //-----------------------------------------------------------------------------
@@ -276,23 +242,16 @@ vgl_homg_operators_2d<Type>::join (const vgl_homg_point_2d<Type>& point1,
 
 template <class Type>
 vgl_homg_line_2d<Type>
-vgl_homg_operators_2d<Type>::join_oriented(const vgl_homg_point_2d<Type>&point1,
-                                           const vgl_homg_point_2d<Type>&point2)
+vgl_homg_operators_2d<Type>::join_oriented(const vgl_homg_point_2d<Type>&p1,
+                                           const vgl_homg_point_2d<Type>&p2)
 {
-  double x1 = point1.x();
-  double y1 = point1.y();
-  double w1 = point1.w();
-  int s1 = w1 < 0;
-
-  double x2 = point2.x();
-  double y2 = point2.y();
-  double w2 = point2.w();
-  int s2 = w2 < 0;
+  int s1 = p1.w() < 0;
+  int s2 = p2.w() < 0;
 
   if (s1 ^ s2)
-    return vgl_homg_line_2d<Type>(-y1 * w2 + w1 * y2, -w1 * x2 + x1 * w2, -x1 * y2 + y1 * x2);
+    return cross(p2,p1);
   else
-    return vgl_homg_line_2d<Type>( y1 * w2 - w1 * y2,  w1 * x2 - x1 * w2,  x1 * y2 - y1 * x2);
+    return cross(p1,p2);
 }
 
 //-----------------------------------------------------------------------------
@@ -302,10 +261,10 @@ vgl_homg_operators_2d<Type>::join_oriented(const vgl_homg_point_2d<Type>&point1,
 
 template <class Type>
 vgl_homg_point_2d<Type>
-vgl_homg_operators_2d<Type>::intersection ( const vgl_homg_line_2d<Type>& line1,
-                                            const vgl_homg_line_2d<Type>& line2)
+vgl_homg_operators_2d<Type>::intersection ( const vgl_homg_line_2d<Type>& l1,
+                                            const vgl_homg_line_2d<Type>& l2)
 {
-  return cross(line1, line2);
+  return cross(l1,l2);
 }
 
 //-----------------------------------------------------------------------------
@@ -322,11 +281,11 @@ vgl_homg_operators_2d<Type>::intersection ( const vgl_homg_line_2d<Type>& line1,
 
 template <class Type>
 vgl_homg_line_2d<Type>
-vgl_homg_operators_2d<Type>::perp_line_through_point ( const vgl_homg_line_2d<Type>& line,
-                                                       const vgl_homg_point_2d<Type>& point)
+vgl_homg_operators_2d<Type>::perp_line_through_point ( const vgl_homg_line_2d<Type>& l,
+                                                       const vgl_homg_point_2d<Type>& p)
 {
-  vgl_homg_point_2d<Type> direction(line.a(), line.b(), 0);
-  return cross(direction, point);
+  vgl_homg_point_2d<Type> d(l.a(), l.b(), 0);
+  return cross(d, p);
 }
 
 //-----------------------------------------------------------------------------
@@ -437,12 +396,12 @@ double vgl_homg_operators_2d<Type>::perp_distance_squared(const vgl_homg_line_2d
 //                      p1 - p4   p2 - p4      (p1-p4)(p2-p3)
 //
 // In principle, any single nonhomogeneous coordinate from the four points
-// can be used as parameters for CrossRatio (but of course the same for all
+// can be used as parameters for cross_ratio (but of course the same for all
 // points). The most reliable answer will be obtained when the coordinate with
 // the largest spacing is used, i.e., the one with smallest slope.
 //
 template <class Type>
-double vgl_homg_operators_2d<Type>::CrossRatio(const vgl_homg_point_2d<Type>& a,
+double vgl_homg_operators_2d<Type>::cross_ratio(const vgl_homg_point_2d<Type>& a,
                                                const vgl_homg_point_2d<Type>& b,
                                                const vgl_homg_point_2d<Type>& c,
                                                const vgl_homg_point_2d<Type>& d)
@@ -456,7 +415,7 @@ double vgl_homg_operators_2d<Type>::CrossRatio(const vgl_homg_point_2d<Type>& a,
   double n = (x>y) ? (x1*w3-x3*w1)*(x2*w4-x4*w2) : (y1*w3-y3*w1)*(y2*w4-y4*w2);
   double m = (x>y) ? (x1*w4-x4*w1)*(x2*w3-x3*w2) : (y1*w4-y4*w1)*(y2*w3-y3*w2);
   if (n == 0 && m == 0)
-    vcl_cerr << "CrossRatio not defined: three of the given points coincide\n";
+    vcl_cerr << "cross ratio not defined: three of the given points coincide\n";
   return n/m;
 }
 
@@ -464,7 +423,7 @@ double vgl_homg_operators_2d<Type>::CrossRatio(const vgl_homg_point_2d<Type>& a,
 // If cross ratio cr is given (default: -1), the generalized conjugate point
 // returned is such that ((x1,x2;x3,answer)) = cr.
 template <class Type>
-vgl_homg_point_2d<Type> vgl_homg_operators_2d<Type>::Conjugate(
+vgl_homg_point_2d<Type> vgl_homg_operators_2d<Type>::conjugate(
                                   const vgl_homg_point_2d<Type>& a,
                                   const vgl_homg_point_2d<Type>& b,
                                   const vgl_homg_point_2d<Type>& c,
