@@ -178,6 +178,9 @@ SOURCE=.\image_database.cxx
 # Begin Source File
 SOURCE=.\polygon_mesh.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\CardinalSpline.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter ""
@@ -211,9 +214,11 @@ SOURCE=.\io.txx
 # Begin Source File
 SOURCE=.\polygon_mesh.h
 # End Source File
+# Begin Source File
+SOURCE=.\CardinalSpline.h
+# End Source File
 # End Group
 # PROP Default_Filter "ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe"
 # End Group
 # End Target
 # End Project
-
