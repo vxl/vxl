@@ -16,6 +16,7 @@ SOURCE_FILES( vul_sources
   vul_sequence_filename_map.h
   vul_sprintf.h
   vul_string.h
+  vul_temp_filename.h
   vul_test.h
   vul_timer.h
   vul_timestamp.h
