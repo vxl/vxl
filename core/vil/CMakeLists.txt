@@ -3,6 +3,7 @@
 INCLUDE(${MODULE_PATH}/FindPNG.cmake)
 IF(PNG_FOUND)
   INCLUDE_DIRECTORIES( ${PNG_INCLUDE_DIR})
+  ADD_DEFINITIONS( ${PNG_DEFINITIONS} )
   SET( HAS_PNG 1 )
   SET( vil_sources ${vil_sources}
     file_formats/vil_png.cxx file_formats/vil_png.h
