@@ -19,7 +19,9 @@ rsdl_point::rsdl_point( unsigned int Nc, unsigned int Na )
 
 rsdl_point::rsdl_point( const_iterator c_begin, const_iterator c_end,
                         const_iterator a_begin, const_iterator a_end )
-  : Nc_( c_end - c_begin ), Na_( a_end - a_begin ), data_( new double[ Nc_ + Na_ ] )
+  : Nc_( unsigned(c_end - c_begin) ),
+    Na_( unsigned(a_end - a_begin) ),
+    data_( new double[ Nc_ + Na_ ] )
 {
   for ( unsigned int i=0; i<Nc_; ++i ) data_[ i ] = * ( c_begin + i );
   for ( unsigned int j=0; j<Na_; ++j ) data_[ Nc_ +j ]= * ( a_begin + j );
