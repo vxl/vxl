@@ -26,6 +26,7 @@
 #include "bmrf_node.h"
 #include "bmrf_network_sptr.h"
 #include "bmrf_epi_seg_sptr.h"
+#include "bmrf_epipole.h"
 
 //: The MRF network
 class bmrf_network : public vbl_ref_count
@@ -76,6 +77,12 @@ class bmrf_network : public vbl_ref_count
   //: Returns the probability that the entire network is correct
   double probability();
 
+  //: Set the epipole for frame \p frame
+  void set_epipole(const bmrf_epipole& epipole, int frame);
+
+  //: Access the epipole for frame \p frame
+  const bmrf_epipole& epipole(int frame) const;
+
   //: Returns the beginning const iterator to the map of nodes in frame \p frame
   // \note if \p frame is negative the iterator will cover all frames
   seg_node_map::const_iterator begin(int frame = -1) const;
@@ -103,6 +110,9 @@ class bmrf_network : public vbl_ref_count
 
   //: The map from frame number to list of nodes in that frame
   frame_node_map nodes_from_frame_;
+
+  //: The vector of epipoles (for each frame)
+  vcl_vector<bmrf_epipole> epipoles_;
 
  public:
   class iterator

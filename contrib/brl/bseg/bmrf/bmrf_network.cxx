@@ -137,6 +137,30 @@ bmrf_network::probability()
 }
 
 
+//: Set the epipole for frame \p frame
+void
+bmrf_network::set_epipole(const bmrf_epipole& epipole, int frame)
+{
+  // for now we assume that there is only one epipole for the
+  // entire sequence.  This function should be update if this
+  // assumption changes
+  if(epipoles_.empty())
+    epipoles_.resize(1);
+  epipoles_[0] = epipole;
+}
+
+
+//: Access the epipole for frame \p frame
+const bmrf_epipole&
+bmrf_network::epipole(int frame) const
+{
+  // for now we assume that there is only one epipole for the
+  // entire sequence.  This function should be update if this
+  // assumption changes
+  return epipoles_.front();
+}
+
+
 //: Returns the beginning const iterator to the nodes in frame \param frame
 bmrf_network::seg_node_map::const_iterator
 bmrf_network::begin( int frame ) const
