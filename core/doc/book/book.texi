@@ -298,7 +298,7 @@ or @LaTeX{}, so we are keeping an eye on formats such as @emph{DocBook}.
 
 @subsection Automatically generated documentation
 @cindex documentation, automatically generated
-@cindex doxygen
+@cindex Doxygen
 
 Although the human-written @vxl{} book is the first source, the definitive
 authority on what a class or function does must be the source code
@@ -540,7 +540,7 @@ into more detail, but for the moment, include standard headers such as
 
 Because most vxl programs use images in some form, here's an example of
 loading an image, and printing the pixel value at (100,100).  It assumes
-the image is grayscale, and does no error checking.
+the image is greyscale, and does no error checking.
 
 @example
 #include <vcl_iostream.h>
@@ -935,7 +935,7 @@ int f()
 @end smallexample
 
 Of course, you should also document the effect of your macro in
-the function doxygen markup (or class level if appropriate.)
+the function Doxygen markup (or class level if appropriate.)
 
 @section Notes
 @subsection Forward Declaration of vcl Classes
@@ -1340,7 +1340,7 @@ C++ @emph{can} be like Matlab, but faster and more powerful.
 
 The numerics library, @code{vnl} is intended to provide an environment for
 numerical programming which combines the ease of use of packages like
-Mathematica and MatLab with the speed of C and the elegance of C++.
+Mathematica and Matlab with the speed of C and the elegance of C++.
 It provides a C++ interface to the high-quality Fortran routines
 made available in the public domain by numerical analysis researchers.
 
@@ -1407,7 +1407,7 @@ supported.  Some very brief examples follow, but for the most part the
 usage of the @code{vnl_vector} and @code{vnl_matrix} classes is (we hope)
 obvious and intuitive.
 
-Using these is easy, and is often modelled on matlab.  For example, this
+Using these is easy, and is often modelled on Matlab.  For example, this
 declares a 3x4 matrix of @code{double}:
 @example
 #include <vnl/vnl_matrix.h>
