@@ -81,6 +81,11 @@ public:
 
 private:
 
+  // The smart pointer classes need access to the internal classes so
+  // that we can have smart pointers to the internal classes.
+  friend class vbl_smart_ptr< edgel_chain >;
+  friend class vbl_smart_ptr< region_type >;
+
   //: A node in the graph of vertices.
   //
   // The links correspond to edges between the vertices. Each vertex
