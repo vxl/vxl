@@ -348,7 +348,7 @@ FMatrix HomgMetric::image_to_homg_F(const FMatrix& F, const HomgMetric& c1, cons
   return FMatrix(C2.transpose() * F.get_matrix() * C1);
 }
 
-//: Decondition a planar homogaphy.
+//: Decondition a planar homography.
 HMatrix2D HomgMetric::homg_to_image_H(const HMatrix2D& H, const HomgMetric& c1, const HomgMetric& c2)
 {
   if (!c1.is_linear()) warning("homg_to_image_H") << "ImageMetric for image 1 is nonlinear\n";
@@ -359,7 +359,7 @@ HMatrix2D HomgMetric::homg_to_image_H(const HMatrix2D& H, const HomgMetric& c1, 
   return HMatrix2D(C2 * H.get_matrix() * C1i);
 }
 
-//: Condition a planar homogaphy.
+//: Condition a planar homography.
 HMatrix2D HomgMetric::image_to_homg_H(const HMatrix2D& H, const HomgMetric& c1, const HomgMetric& c2)
 {
   if (!c1.is_linear()) warning("image_to_homg_H") << "ImageMetric for image 1 is nonlinear\n";
