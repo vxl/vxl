@@ -236,8 +236,10 @@ void vgui_cache_wizard::TexImage2D_Brownie(vil_image img)
   // 8bit greyscale
   GLenum format,type;
   vgui_accelerate::instance()->vgui_choose_cache_format(&format,&type);
+
+  vil_pixel_format_t pixel_format = vil_pixel_format(img);
   
-  if (vil_pixel_format(img) == VIL_BYTE) {
+  if (pixel_format == VIL_BYTE) {
     fsm_macro_begin(GLubyte, "8 bit greyscale");
     fsm_macro_magic(GL_RGB,      GL_UNSIGNED_BYTE,        vgui_pixel_rgb888);
     fsm_macro_magic(GL_RGBA,     GL_UNSIGNED_BYTE,        vgui_pixel_rgba8888);
@@ -254,7 +256,7 @@ void vgui_cache_wizard::TexImage2D_Brownie(vil_image img)
   }
   
   // 24bit rgb
-  else if (vil_pixel_format(img) == VIL_RGB_BYTE) {
+  else if (pixel_format == VIL_RGB_BYTE) {
     fsm_macro_begin(vgui_pixel_rgb888, "24 bit RGB");
     fsm_macro_magic(GL_RGB,      GL_UNSIGNED_BYTE,        vgui_pixel_rgb888);
     fsm_macro_magic(GL_RGBA,     GL_UNSIGNED_BYTE,        vgui_pixel_rgba8888);
@@ -271,7 +273,7 @@ void vgui_cache_wizard::TexImage2D_Brownie(vil_image img)
   }
   
   // 32bit rgba
-  else if (vil_pixel_format(img) == VIL_RGBA_BYTE) {
+  else if (pixel_format == VIL_RGBA_BYTE) {
     fsm_macro_begin(vgui_pixel_rgba8888, "32 bit RGBA");
     fsm_macro_magic(GL_RGB,      GL_UNSIGNED_BYTE,        vgui_pixel_rgb888);
     fsm_macro_magic(GL_RGBA,     GL_UNSIGNED_BYTE,        vgui_pixel_rgba8888);
