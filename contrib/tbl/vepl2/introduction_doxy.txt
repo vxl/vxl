@@ -1,0 +1,24 @@
+// The following text is included in the main documentation page by doxygen
+/*! \mainpage vepl2 : Easy Image Processing Library
+* This library essentially just provides wrappers around the templated IP
+* classes of the \c vipl library, but limited to images of type \c vil2_image_view_base .
+*
+* For every class in \c vipl , there is a function in \c vepl2 with the same
+* name (after substituting "vipl" by "vepl2"), which returns a \c vil2_image_view_base,
+* whose first argument is a \c vil2_image_view_base (the input image), and where the
+* possible extra arguments are identical to the arguments of the constructor of
+* the corresponding \c vipl class.
+*
+* To get an idea of how to use these functions, have a look at the example
+* programs in \c tbl/vepl2/examples/ .  The examples are worked out, in the
+* sense that they also take care of loading and saving the images and possibly
+* reading the filter parameters from standard input.  Ignoring this, the use of
+* a particular IP filter is just a single line: e.g.:
+* \verbatim
+*   vil2_image_view_base im1 = vil2_load("filename"); // assume "ubyte" image
+*   vil2_image_view_base im2 = vepl2_gradient_mag(im1);
+*   vil2_image_view_base im3 = vepl2_median(im2, 1.5); // median filter with radius 1.5
+*   vil2_image_view_base im4 = vepl2_threshold(im3, 59,0,255); // binary clipping at 59
+*   vil2_save(im4, "edges_image.pgm", "pnm");
+* \endverbatim
+*/
