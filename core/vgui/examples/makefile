@@ -1,6 +1,6 @@
 USES += core
 include ../config.mk
-include ${IUEROOT}/core/vidl/config.mk
+include ${IUEROOT}/core/vidl_vil1/config.mk
 
 MINI_PROG_SOURCES += basic01_display_image.cxx
 MINI_PROG_SOURCES += basic01a_multiple_panes.cxx
