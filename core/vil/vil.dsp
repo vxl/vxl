@@ -219,6 +219,12 @@ SOURCE=.\Templates/vil2_image_view_functions+uint_16-.cxx
 SOURCE=.\Templates/vil2_image_view_functions+vil_rgb+byte--.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\Templates/vil2_image_view+vil_rgb+double--.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vil2_image_view+vil_rgba+byte--.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\vil2_memory_image.cxx
 # End Source File
 # Begin Source File
