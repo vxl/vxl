@@ -19,12 +19,12 @@
 // Assumes dest and src same size (nx)
 template <class srcT, class destT, class kernelT, class accumT>
 inline void vil_correlate_1d(const srcT* src0, unsigned nx, vcl_ptrdiff_t s_step,
-                              destT* dest0, vcl_ptrdiff_t d_step,
-                              const kernelT* kernel,
-                              vcl_ptrdiff_t k_lo, vcl_ptrdiff_t k_hi,
-                              accumT ac,
-                              vil_convolve_boundary_option start_option,
-                              vil_convolve_boundary_option end_option)
+                             destT* dest0, vcl_ptrdiff_t d_step,
+                             const kernelT* kernel,
+                             vcl_ptrdiff_t k_lo, vcl_ptrdiff_t k_hi,
+                             accumT ac,
+                             vil_convolve_boundary_option start_option,
+                             vil_convolve_boundary_option end_option)
 {
   // Deal with start (fill elements 0..1-k_lo of dest)
   vil_convolve_edge_1d(src0,nx,s_step,dest0,d_step,kernel,-k_hi,-k_lo,-1,ac,start_option);
@@ -44,25 +44,25 @@ inline void vil_correlate_1d(const srcT* src0, unsigned nx, vcl_ptrdiff_t s_step
 
   // Deal with end  (reflect data and kernel!)
   vil_convolve_edge_1d(src0+(nx-1)*s_step,nx,-s_step,
-                        dest0+(nx-1)*d_step,-d_step,
-                        kernel,k_lo,k_hi,1,ac,end_option);
+                       dest0+(nx-1)*d_step,-d_step,
+                       kernel,k_lo,k_hi,1,ac,end_option);
 }
 
 //: correlate kernel[i] (i in [k_lo,k_hi]) with srcT in i-direction
 // On exit dest_im(i,j) = sum src(i+x,j)*kernel(x)  (x=k_lo..k_hi)
-// \note  This function doen not reverse the kernel. If you want the
+// \note  This function does not reverse the kernel. If you want the
 // kernel reversed, use vil_convolve_1d instead.
 // \param kernel should point to tap 0.
 // \param dest_im will be resized to size of src_im.
 // \relates vil_image_view
 template <class srcT, class destT, class kernelT, class accumT>
 inline void vil_correlate_1d(const vil_image_view<srcT>& src_im,
-                              vil_image_view<destT>& dest_im,
-                              const kernelT* kernel,
-                              vcl_ptrdiff_t k_lo, vcl_ptrdiff_t k_hi,
-                              accumT ac,
-                              vil_convolve_boundary_option start_option,
-                              vil_convolve_boundary_option end_option)
+                             vil_image_view<destT>& dest_im,
+                             const kernelT* kernel,
+                             vcl_ptrdiff_t k_lo, vcl_ptrdiff_t k_hi,
+                             accumT ac,
+                             vil_convolve_boundary_option start_option,
+                             vil_convolve_boundary_option end_option)
 {
   unsigned ni = src_im.ni();
   unsigned nj = src_im.nj();
@@ -120,9 +120,9 @@ class vil_correlate_1d_resource : public vil_image_resource
   //: Construct a correlate filter.
   // You can't create one of these directly, use vil_correlate_1d instead
   vil_correlate_1d_resource(const vil_image_resource_sptr& src,
-                             const kernelT* kernel, vcl_ptrdiff_t k_lo, vcl_ptrdiff_t k_hi,
-                             vil_convolve_boundary_option start_option,
-                             vil_convolve_boundary_option end_option)  :
+                            const kernelT* kernel, vcl_ptrdiff_t k_lo, vcl_ptrdiff_t k_hi,
+                            vil_convolve_boundary_option start_option,
+                            vil_convolve_boundary_option end_option)  :
       src_(src), kernel_(kernel), klo_(k_lo), khi_(k_hi),
       start_option_(start_option), end_option_(end_option)
     {
@@ -139,7 +139,7 @@ class vil_correlate_1d_resource : public vil_image_resource
 
  public:
   virtual vil_image_view_base_sptr get_copy_view(unsigned i0, unsigned ni,
-                                                  unsigned j0, unsigned nj) const
+                                                 unsigned j0, unsigned nj) const
   {
     if (i0 + ni > src_->ni() || j0 + nj > src_->nj())  return 0;
     const unsigned lsrc = (unsigned)vcl_max(0,int(i0) + klo_); // lhs of input window
@@ -204,7 +204,7 @@ class vil_correlate_1d_resource : public vil_image_resource
 };
 
 //: Create an image_resource object which correlate kernel[x] x in [k_lo,k_hi] with srcT
-// \note  This function doen not reverse the kernel. If you want the
+// \note  This function does not reverse the kernel. If you want the
 // kernel reversed, use vil_convolve_1d instead.
 // \param kernel should point to tap 0.
 // \relates vil_image_resource
