@@ -11,11 +11,11 @@ int main()
   }
   vcl_catch (const char* e) {
     vcl_cout << "caught " << e << ". Good." << vcl_endl;
-    result = 1;
+    result = 0;
   }
   vcl_catch_all {
     vcl_cout << "caught nuffink. Bad. " << vcl_endl;
-    result = 0;
+    result = 1;
   }
   return result;
 }
