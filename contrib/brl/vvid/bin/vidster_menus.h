@@ -4,6 +4,8 @@
 //:
 // \file
 // \brief the setup for menus for vidster
+//  This is essentially a namespace for static methods;
+//  there is no public constructor
 // \author
 //   J.L. Mundy
 //
@@ -12,6 +14,7 @@
 //   J.L. Mundy October 7, 2002    Initial version.
 // \endverbatim
 //--------------------------------------------------------------------------------
+
 class vidster_menus
 {
  public:
@@ -21,6 +24,7 @@ class vidster_menus
   static void stop_live_video_callback();
   static vgui_menu get_menu();
  private:
-  vidster_menus(){};
+  vidster_menus() {}
 };
+
 #endif // vidster_menus_h_

@@ -4,6 +4,8 @@
 //:
 // \file
 // \brief the setup for tomg_menus for bmvv
+//  This is essentially a namespace for static methods;
+//  there is no public constructor
 // \author
 //   J.L. Mundy
 //
@@ -16,7 +18,7 @@
 class bmvv_tomg_menus
 {
  public:
-BMVV_DLL_DATA  static void quit_callback();
+  BMVV_DLL_DATA  static void quit_callback();
   BMVV_DLL_DATA static void load_image_callback();
   BMVV_DLL_DATA static void save_sinogram_callback();
   BMVV_DLL_DATA static void clear_display_callback();

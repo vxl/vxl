@@ -4,6 +4,8 @@
 //:
 // \file
 // \brief the setup for menus for videx
+//  This is essentially a namespace for static methods;
+//  there is no public constructor
 // \author
 //   J.L. Mundy
 //
@@ -24,6 +26,6 @@ class videx_menus
   static void capture_sequence_callback();
   static vgui_menu get_menu();
  private:
-  videx_menus(){};
+  videx_menus() {}
 };
 #endif // videx_menus_h_

@@ -4,6 +4,8 @@
 //:
 // \file
 // \brief the setup for vidfpl_menus for the video file player
+//  This is essentially a namespace for static methods;
+//  there is no public constructor
 // \author
 //   J.L. Mundy
 //
@@ -12,6 +14,7 @@
 //   J.L. Mundy Oct 05, 2002    Initial version.
 // \endverbatim
 //--------------------------------------------------------------------------------
+
 //: Menu callbacks are represented as static methods
 //  The key method is ::get_menu, which does the work of
 //  assembing the menu bar for the main executable 
@@ -37,6 +40,7 @@ class vidfpl_menus
   static void quit_callback();
   static vgui_menu get_menu();
  private:
-  vidfpl_menus(){};
+  vidfpl_menus() {}
 };
+
 #endif // vidfpl_menus_h_
