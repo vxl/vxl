@@ -53,6 +53,7 @@ vil2_pixel_format_macro(vil_rgb<signed char>,    VIL2_PIXEL_FORMAT_RGB_SIGNED_CH
 vil2_pixel_format_macro(vil_rgb<float>,          VIL2_PIXEL_FORMAT_RGB_DOUBLE)
 vil2_pixel_format_macro(vil_rgb<double>,         VIL2_PIXEL_FORMAT_RGB_FLOAT)
 
+#undef vil2_pixel_format_macro
 
 inline
 vcl_ostream & operator << (vcl_ostream &os, vil2_pixel_format f)
