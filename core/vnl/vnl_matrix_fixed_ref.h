@@ -216,7 +216,7 @@ class vnl_matrix_fixed_ref : public vnl_matrix<T>
   }
 
   //: Resizing a vnl_matrix_ref fails.
-  bool resize (unsigned int, unsigned int) { return 0; }
+  bool resize (unsigned int, unsigned int) { return false; }
 
  private:
   // You can't assign one of these from a matrix, cos' you don't have any space
