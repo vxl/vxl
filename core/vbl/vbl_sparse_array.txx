@@ -1,5 +1,7 @@
 // This is vxl/vbl/vbl_sparse_array.txx
 
+// deprecated
+#include <vcl_deprecated.h>
 #include <vbl/vbl_sparse_array_1d.txx>
 
 #undef VBL_SPARSE_ARRAY_INSTANTIATE
