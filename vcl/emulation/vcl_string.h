@@ -405,7 +405,7 @@ class vcl_basic_string
     { return find_last_not_of (s, pos, traits::length (s)); }
   size_type find_last_not_of (charT c, size_type pos = npos) const;
 
-//: Extract substring of length n chars staring at pos (written "this[pos..pos+n]")
+//: Extract substring of length n chars starting at pos (written "this[pos..pos+n]")
   vcl_basic_string substr (size_type pos = 0, size_type n = npos) const
     { return vcl_basic_string (*this, pos, n); }
 
