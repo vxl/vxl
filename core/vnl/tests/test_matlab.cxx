@@ -69,7 +69,7 @@ static void test_matlab()
       vcl_ifstream f(file);
 
       vnl_matlab_readhdr vh(f);
-      fsm_assert( vh != 0);
+      fsm_assert( vh?true:false );
       fsm_assert( vh.is_single());
       fsm_assert( vh.rows() == (int)v.size());
       fsm_assert( vh.cols() == 1);
@@ -80,7 +80,7 @@ static void test_matlab()
       fsm_assert(v_ == v);
 
       vnl_matlab_readhdr Mh(f);
-      fsm_assert( Mh != 0);
+      fsm_assert( Mh?true:false );
       fsm_assert(!Mh.is_single());
       fsm_assert( Mh.rows() == (int)M.rows());
       fsm_assert( Mh.cols() == (int)M.cols());
