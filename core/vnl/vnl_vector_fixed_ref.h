@@ -139,38 +139,38 @@ class vnl_vector_fixed_ref_const
   typedef typename vnl_c_vector<T>::abs_t abs_t;
 
   //: Return sum of squares of elements
-  abs_t squared_magnitude() const { return vnl_c_vector<T>::two_nrm2(begin(), size()); }
+  abs_t squared_magnitude() const { return vnl_c_vector<T>::two_nrm2(begin(), n); }
 
   //: Return magnitude (length) of vector
   abs_t magnitude() const { return two_norm(); }
 
   //: Return sum of absolute values of the elements
-  abs_t one_norm() const { return vnl_c_vector<T>::one_norm(begin(), size()); }
+  abs_t one_norm() const { return vnl_c_vector<T>::one_norm(begin(), n); }
 
   //: Return sqrt of sum of squares of values of elements
-  abs_t two_norm() const { return vnl_c_vector<T>::two_norm(begin(), size()); }
+  abs_t two_norm() const { return vnl_c_vector<T>::two_norm(begin(), n); }
 
   //: Return largest absolute element value
-  abs_t inf_norm() const { return vnl_c_vector<T>::inf_norm(begin(), size()); }
+  abs_t inf_norm() const { return vnl_c_vector<T>::inf_norm(begin(), n); }
 
 
   // These next 6 functions are should really be helper functions since they aren't
   // really proper functions on a vector in a philosophical sense.
 
   //: Root Mean Squares of values
-  abs_t rms     () const { return vnl_c_vector<T>::rms_norm(begin(), size()); }
+  abs_t rms     () const { return vnl_c_vector<T>::rms_norm(begin(), n); }
 
   //: Smallest value
-  T min_value () const { return vnl_c_vector<T>::min_value(begin(), size()); }
+  T min_value () const { return vnl_c_vector<T>::min_value(begin(), n); }
 
   //: Largest value
-  T max_value () const { return vnl_c_vector<T>::max_value(begin(), size()); }
+  T max_value () const { return vnl_c_vector<T>::max_value(begin(), n); }
 
   //: Mean of values in vector
-  T mean() const { return vnl_c_vector<T>::mean(begin(), size()); }
+  T mean() const { return vnl_c_vector<T>::mean(begin(), n); }
 
   //: Sum of values in a vector
-  T sum() const { return vnl_c_vector<T>::sum(begin(), size()); }
+  T sum() const { return vnl_c_vector<T>::sum(begin(), n); }
 
 
   //: Check that size()==sz if not, abort();
@@ -299,7 +299,7 @@ class vnl_vector_fixed_ref : public vnl_vector_fixed_ref_const<T,n>
 
   // this is the only point where the const_cast happens
   // the base class is used to store the pointer, so that conversion is not neccesary
-  T * data_block() const { return const_cast<T*>(data_); }
+  T * data_block() const { return const_cast<T*>(this->data_); }
 
   vnl_vector_fixed_ref(vnl_vector_fixed<T,n>& rhs) : base(rhs.data_block()) {}
 
@@ -307,13 +307,13 @@ class vnl_vector_fixed_ref : public vnl_vector_fixed_ref_const<T,n>
 
   //: Copy operator
   vnl_vector_fixed_ref<T,n> const & operator=( const vnl_vector_fixed<T,n>& rhs ) const {
-    vcl_memcpy( data_block(), rhs.data_block(), size() * sizeof(T) );
+    vcl_memcpy( data_block(), rhs.data_block(), n * sizeof(T) );
     return *this;
   }
 
   //: Copy operator
   vnl_vector_fixed_ref<T,n> const& operator=( const vnl_vector_fixed_ref_const<T,n>& rhs ) const {
-    vcl_memcpy( data_block(), rhs.data_block(), size() * sizeof(T) );
+    vcl_memcpy( data_block(), rhs.data_block(), n * sizeof(T) );
     return *this;
   }
 
