@@ -13,6 +13,9 @@
 //   J.L. Mundy December 26, 2002    Initial version.
 // \endverbatim
 //--------------------------------------------------------------------------------
+
+#include <vgui/vgui_menu.h>
+
 class basic_menus
 {
  public:
