@@ -164,7 +164,7 @@ void vgui_tview::draw_icons(vgui_tableau_sptr const& parent, float x, float y) {
       glVertex2f(start_x+offset_x,ny-(icon_height));
       glEnd();
 
-      if (*i != 0)
+      if (*i)
         draw_icons(*i, start_x+offset_x, ny);
       offset_x+=spacing;
     }
@@ -324,7 +324,7 @@ bool vgui_tview::handle(const vgui_event& e) {
     active_icon = t;
 
     //cerr << "icon is " << (void*) t << endl;
-    if (t != 0) {
+    if (t) {
       vcl_cerr << "---------" << vcl_endl;
       //cerr << "| type : " << strip_preceeding_numerals(typeid(*t).name()) << endl;
       vcl_cerr << "| type_name   : " << t->type_name() << vcl_endl;
