@@ -10,6 +10,8 @@ USES += vxl tbl
 LIBRARY := vipl_with_vnl_matrix
 VERSION := 1.0
 
+MANPAGE_SOURCES += accessors/vipl_accessors_vnl_matrix.txx
+
 ################################
 include ${IUEROOT}/config/top.mk
 ################################
