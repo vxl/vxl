@@ -489,6 +489,304 @@ SOURCE=.\vipl_with_vnl_matrix/Templates/vipl_threshold+vnl_matrix+uchar-.vnl_mat
 
 # End Source File
 # End Group
+# Begin Group "Header Files"
+# PROP Default_Filter ""
+# Begin Source File
+
+SOURCE=.\accessors/vipl_accessors_vil_image.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\accessors/vipl_accessors_vil_image.txx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\filter/vipl_filter.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\filter/vipl_filter.txx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\filter/vipl_filter_2d.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\filter/vipl_filter_2d.txx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\filter/vipl_filter_abs.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\section/vipl_section_container.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\section/vipl_section_container.txx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\section/vipl_section_descriptor.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\section/vipl_section_descriptor.txx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\section/vipl_section_descriptor_2d.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\section/vipl_section_descriptor_2d.txx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\section/vipl_section_iterator.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\section/vipl_section_iterator.txx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vipl_add_random_noise.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vipl_add_random_noise.txx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vipl_convert.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vipl_convert.txx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vipl_dilate_disk.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vipl_dilate_disk.txx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vipl_dyadic.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vipl_dyadic.txx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vipl_erode_disk.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vipl_erode_disk.txx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vipl_gaussian_convolution.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vipl_gaussian_convolution.txx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vipl_gradient_dir.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vipl_gradient_dir.txx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vipl_gradient_mag.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vipl_gradient_mag.txx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vipl_histogram.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vipl_histogram.txx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vipl_median.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vipl_median.txx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vipl_moment.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vipl_moment.txx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vipl_monadic.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vipl_monadic.txx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vipl_sobel.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vipl_sobel.txx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vipl_threshold.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vipl_threshold.txx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vipl_with_section/accessors/vipl_accessors_section.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vipl_with_section/accessors/vipl_accessors_section.txx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vipl_with_vbl_array_2d/accessors/vipl_accessors_vbl_array_2d.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vipl_with_vbl_array_2d/accessors/vipl_accessors_vbl_array_2d.txx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vipl_with_vnl_matrix/accessors/vipl_accessors_vnl_matrix.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vipl_with_vnl_matrix/accessors/vipl_accessors_vnl_matrix.txx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vipl_x_gradient.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vipl_x_gradient.txx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vipl_y_gradient.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vipl_y_gradient.txx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\filter/vipl_filter_helper.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\filter/vipl_trivial_pixeliter.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\section/vipl_filterable_section_container_generator_vil_image.txx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vipl_with_section/vipl_filterable_section_container_generator_section.txx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vipl_with_vbl_array_2d/vipl_filterable_section_container_generator_vbl_array_2d.txx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vipl_with_vnl_matrix/vipl_filterable_section_container_generator_vnl_matrix.txx
+
+# End Source File
+# End Group
 # PROP Default_Filter "ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe"
 # End Group
 # End Target
