@@ -9,7 +9,6 @@ SOURCES += mil_algo_exp_filter_1d.cxx
 MANPAGE_SOURCES += mil_algo_exp_filter_2d.txx
 MANPAGE_SOURCES += mil_algo_line_filter.txx
 MANPAGE_SOURCES += mil_algo_grad_filter_2d.txx
-SOURCES += mil_algo_gaussian_filter.cxx
 MANPAGE_SOURCES += mil_algo_gaussian_filter.txx
 
 ################################
