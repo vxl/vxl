@@ -1,6 +1,5 @@
 #ifndef rgrl_matcher_h_
 #define rgrl_matcher_h_
-
 //:
 // \file
 // \brief  Abstract base class to compute matches for a particular feature type. Multiple matches are allowed for each feature.
@@ -21,13 +20,13 @@ class rgrl_scale;
 class rgrl_matcher
   : public rgrl_object
 {
-public:
+ public:
   virtual ~rgrl_matcher();
 
   //: Build the matches with a view (old interface)
   //
   virtual
-  rgrl_match_set_sptr 
+  rgrl_match_set_sptr
   compute_matches( rgrl_feature_set const&    from_features,
                    rgrl_feature_set const&    to_features,
                    rgrl_view const&           current_view,
@@ -37,8 +36,7 @@ public:
   //: Build the matches with a view (new interface)
   //
   //  Current xform is embedded in the view
-  virtual
-  rgrl_match_set_sptr 
+  rgrl_match_set_sptr
   compute_matches( rgrl_feature_set const&    from_features,
                    rgrl_feature_set const&    to_features,
                    rgrl_view const&           current_view,
@@ -46,8 +44,7 @@ public:
 
   //: Build the matches without a view
   //
-  virtual
-  rgrl_match_set_sptr 
+  rgrl_match_set_sptr
   compute_matches( rgrl_feature_set const&    from_features,
                    rgrl_feature_set const&    to_features,
                    rgrl_transformation const& current_xform,
@@ -56,7 +53,6 @@ public:
 
   // Defines type-related functions
   rgrl_type_macro( rgrl_matcher, rgrl_object );
-
 };
 
 #endif
