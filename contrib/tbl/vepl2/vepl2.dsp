@@ -114,7 +114,7 @@ SOURCE=.\Templates/vepl2_convert+short-.cxx
 SOURCE=.\Templates/vepl2_convert+uchar-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vepl2_convert+vil_rgb+uchar--.cxx
+SOURCE=.\Templates/vepl2_convert+vil1_rgb+uchar--.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\vepl2_add_random_noise.cxx
@@ -216,17 +216,16 @@ SOURCE=.\vepl2_x_gradient.h
 SOURCE=.\vepl2_y_gradient.h
 # End Source File
 # Begin Source File
-SOURCE=.\accessors/vipl_accessors_vil2_image_view_base.h
+SOURCE=.\accessors/vipl_accessors_vil_image_view_base.h
 # End Source File
 # Begin Source File
-SOURCE=.\accessors/vipl_accessors_vil2_image_view_base.txx
+SOURCE=.\accessors/vipl_accessors_vil_image_view_base.txx
 # End Source File
 # Begin Source File
-SOURCE=.\section/vipl_filterable_section_container_generator_vil2_image_view_base.txx
+SOURCE=.\section/vipl_filterable_section_container_generator_vil_image_view_base.txx
 # End Source File
 # End Group
 # PROP Default_Filter "ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe"
 # End Group
 # End Target
 # End Project
-

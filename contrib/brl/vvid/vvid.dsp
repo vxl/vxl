@@ -13,37 +13,13 @@ SOURCE=.\cmu_1394_camera.cxx
 SOURCE=.\cmu_1394_camera_params.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vbl_smart_ptr+vvid_live_video_frame-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vbl_smart_ptr+vvid_video_process-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vcl_vector+vvid_live_video_frame_sptr-.cxx
-# End Source File
-# Begin Source File
 SOURCE=.\Templates/vcl_vector+vvid_live_video_tableau_sptr-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\vvid_curve_tracking_process.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\vvid_epipolar_space_process.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\vvid_file_manager.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\vvid_live_video_frame.cxx
-# End Source File
-# Begin Source File
 SOURCE=.\vvid_live_video_manager.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\vvid_video_process.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\vvid_edge_process.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\vvid_live_stereo_manager.cxx
@@ -52,34 +28,7 @@ SOURCE=.\vvid_live_stereo_manager.cxx
 SOURCE=.\vvid_live_video_tableau.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\vvid_region_process.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\vvid_capture_process.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\vvid_frame_diff_process.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\vvid_motion_process.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\vvid_lucas_kanade_process.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\vvid_harris_corner_process.cxx
-# End Source File
-# Begin Source File
 SOURCE=.\vvid_frame_trail.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\vvid_edge_line_process.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\vvid_grid_finder_process.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\vvid_line_fit_process.cxx
 # End Source File
 # End Group
 # Begin Group "Header Files"
@@ -91,31 +40,10 @@ SOURCE=.\cmu_1394_camera.h
 SOURCE=.\cmu_1394_camera_params.h
 # End Source File
 # Begin Source File
-SOURCE=.\vvid_curve_tracking_process.h
-# End Source File
-# Begin Source File
-SOURCE=.\vvid_epipolar_space_process.h
-# End Source File
-# Begin Source File
 SOURCE=.\vvid_file_manager.h
 # End Source File
 # Begin Source File
-SOURCE=.\vvid_live_video_frame.h
-# End Source File
-# Begin Source File
-SOURCE=.\vvid_live_video_frame_sptr.h
-# End Source File
-# Begin Source File
 SOURCE=.\vvid_live_video_manager.h
-# End Source File
-# Begin Source File
-SOURCE=.\vvid_video_process.h
-# End Source File
-# Begin Source File
-SOURCE=.\vvid_video_process_sptr.h
-# End Source File
-# Begin Source File
-SOURCE=.\vvid_edge_process.h
 # End Source File
 # Begin Source File
 SOURCE=.\vvid_live_stereo_manager.h
@@ -124,37 +52,10 @@ SOURCE=.\vvid_live_stereo_manager.h
 SOURCE=.\vvid_live_video_tableau.h
 # End Source File
 # Begin Source File
-SOURCE=.\vvid_region_process.h
-# End Source File
-# Begin Source File
 SOURCE=.\vvid_live_video_tableau_sptr.h
 # End Source File
 # Begin Source File
-SOURCE=.\vvid_capture_process.h
-# End Source File
-# Begin Source File
-SOURCE=.\vvid_frame_diff_process.h
-# End Source File
-# Begin Source File
-SOURCE=.\vvid_motion_process.h
-# End Source File
-# Begin Source File
-SOURCE=.\vvid_lucas_kanade_process.h
-# End Source File
-# Begin Source File
-SOURCE=.\vvid_harris_corner_process.h
-# End Source File
-# Begin Source File
 SOURCE=.\vvid_frame_trail.h
-# End Source File
-# Begin Source File
-SOURCE=.\vvid_edge_line_process.h
-# End Source File
-# Begin Source File
-SOURCE=.\vvid_grid_finder_process.h
-# End Source File
-# Begin Source File
-SOURCE=.\vvid_line_fit_process.h
 # End Source File
 # End Group
 # End Target

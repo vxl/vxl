@@ -99,201 +99,124 @@ LIB32=link.exe -lib
 # Begin Group "Source Files"
 # PROP Default_Filter ""
 # Begin Source File
-
 SOURCE=.\Templates/vepl_convert+double-.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\Templates/vepl_convert+float-.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\Templates/vepl_convert+int-.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\Templates/vepl_convert+short-.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\Templates/vepl_convert+uchar-.cxx
-
 # End Source File
 # Begin Source File
-
-SOURCE=.\Templates/vepl_convert+vil_rgb+uchar--.cxx
-
+SOURCE=.\Templates/vepl_convert+vil1_rgb+uchar--.cxx
 # End Source File
 # Begin Source File
-
 SOURCE=.\vepl_add_random_noise.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vepl_dilate_disk.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vepl_dyadic.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vepl_erode_disk.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vepl_gaussian_convolution.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vepl_gradient_dir.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vepl_gradient_mag.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vepl_histogram.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vepl_median.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vepl_moment.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vepl_monadic.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vepl_sobel.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vepl_threshold.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vepl_x_gradient.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vepl_y_gradient.cxx
-
 # End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter ""
 # Begin Source File
-
 SOURCE=.\vepl_add_random_noise.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vepl_convert.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vepl_convert.txx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vepl_dilate_disk.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vepl_dyadic.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vepl_erode_disk.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vepl_gaussian_convolution.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vepl_gradient_dir.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vepl_gradient_mag.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vepl_histogram.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vepl_median.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vepl_moment.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vepl_monadic.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vepl_sobel.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vepl_threshold.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vepl_x_gradient.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vepl_y_gradient.h
-
 # End Source File
 # End Group
 # PROP Default_Filter "ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe"
 # End Group
 # End Target
 # End Project
-

@@ -105,118 +105,118 @@ SOURCE=.\filter/vipl_filter_abs.cxx
 SOURCE=.\Templates/vipl_accessors_vcl_vector+uint-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vipl_filter_2d+vil_image.vcl_vector+uint-.uchar.uint.cxx
+SOURCE=.\Templates/vipl_filter_2d+vil1_image.vcl_vector+uint-.uchar.uint.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vipl_histogram+vil_image.vcl_vector+uint-.uchar.uint-.cxx
+SOURCE=.\Templates/vipl_histogram+vil1_image.vcl_vector+uint-.uchar.uint-.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\vipl_with_vnl_matrix/Templates/vipl_accessors_vnl_vector+uint-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\vipl_with_vnl_matrix/Templates/vipl_filter_2d+vil_image.vnl_vector+uint-.uchar.uint.cxx
+SOURCE=.\vipl_with_vnl_matrix/Templates/vipl_filter_2d+vil1_image.vnl_vector+uint-.uchar.uint.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\vipl_with_vnl_matrix/Templates/vipl_histogram+vil_image.vnl_vector+uint-.uchar.uint-.cxx
+SOURCE=.\vipl_with_vnl_matrix/Templates/vipl_histogram+vil1_image.vnl_vector+uint-.uchar.uint-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vipl_accessors_vil_image+double-.cxx
+SOURCE=.\Templates/vipl_accessors_vil1_image+double-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vipl_accessors_vil_image+float-.cxx
+SOURCE=.\Templates/vipl_accessors_vil1_image+float-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vipl_accessors_vil_image+int-.cxx
+SOURCE=.\Templates/vipl_accessors_vil1_image+int-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vipl_accessors_vil_image+short-.cxx
+SOURCE=.\Templates/vipl_accessors_vil1_image+short-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vipl_accessors_vil_image+uchar-.cxx
+SOURCE=.\Templates/vipl_accessors_vil1_image+uchar-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vipl_accessors_vil_image+ushort-.cxx
+SOURCE=.\Templates/vipl_accessors_vil1_image+ushort-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vipl_accessors_vil_image+vil_rgb+uchar--.cxx
+SOURCE=.\Templates/vipl_accessors_vil1_image+vil1_rgb+uchar--.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vipl_add_random_noise+vil_image.vil_image.uchar.uchar-.cxx
+SOURCE=.\Templates/vipl_add_random_noise+vil1_image.vil1_image.uchar.uchar-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vipl_convert+vil_image.vil_image.double.uchar-.cxx
+SOURCE=.\Templates/vipl_convert+vil1_image.vil1_image.double.uchar-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vipl_convert+vil_image.vil_image.float.uchar-.cxx
+SOURCE=.\Templates/vipl_convert+vil1_image.vil1_image.float.uchar-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vipl_convert+vil_image.vil_image.int.uchar-.cxx
+SOURCE=.\Templates/vipl_convert+vil1_image.vil1_image.int.uchar-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vipl_convert+vil_image.vil_image.short.uchar-.cxx
+SOURCE=.\Templates/vipl_convert+vil1_image.vil1_image.short.uchar-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vipl_convert+vil_image.vil_image.uchar.uchar-.cxx
+SOURCE=.\Templates/vipl_convert+vil1_image.vil1_image.uchar.uchar-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vipl_convert+vil_image.vil_image.vil_rgb+uchar-.uchar-.cxx
+SOURCE=.\Templates/vipl_convert+vil1_image.vil1_image.vil1_rgb+uchar-.uchar-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vipl_dilate_disk+vil_image.vil_image.uchar.uchar-.cxx
+SOURCE=.\Templates/vipl_dilate_disk+vil1_image.vil1_image.uchar.uchar-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vipl_dyadic+vil_image.vil_image.float.float-.cxx
+SOURCE=.\Templates/vipl_dyadic+vil1_image.vil1_image.float.float-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vipl_erode_disk+vil_image.vil_image.float.float-.cxx
+SOURCE=.\Templates/vipl_erode_disk+vil1_image.vil1_image.float.float-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vipl_erode_disk+vil_image.vil_image.uchar.uchar-.cxx
+SOURCE=.\Templates/vipl_erode_disk+vil1_image.vil1_image.uchar.uchar-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vipl_erode_disk+vil_image.vil_image.ushort.ushort-.cxx
+SOURCE=.\Templates/vipl_erode_disk+vil1_image.vil1_image.ushort.ushort-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vipl_filter_2d+vil_image.vil_image.double.uchar-.cxx
+SOURCE=.\Templates/vipl_filter_2d+vil1_image.vil1_image.double.uchar-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vipl_filter_2d+vil_image.vil_image.float.float-.cxx
+SOURCE=.\Templates/vipl_filter_2d+vil1_image.vil1_image.float.float-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vipl_filter_2d+vil_image.vil_image.float.uchar-.cxx
+SOURCE=.\Templates/vipl_filter_2d+vil1_image.vil1_image.float.uchar-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vipl_filter_2d+vil_image.vil_image.int.uchar-.cxx
+SOURCE=.\Templates/vipl_filter_2d+vil1_image.vil1_image.int.uchar-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vipl_filter_2d+vil_image.vil_image.short.short-.cxx
+SOURCE=.\Templates/vipl_filter_2d+vil1_image.vil1_image.short.short-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vipl_filter_2d+vil_image.vil_image.short.uchar-.cxx
+SOURCE=.\Templates/vipl_filter_2d+vil1_image.vil1_image.short.uchar-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vipl_filter_2d+vil_image.vil_image.uchar.float-.cxx
+SOURCE=.\Templates/vipl_filter_2d+vil1_image.vil1_image.uchar.float-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vipl_filter_2d+vil_image.vil_image.uchar.uchar-.cxx
+SOURCE=.\Templates/vipl_filter_2d+vil1_image.vil1_image.uchar.uchar-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vipl_filter_2d+vil_image.vil_image.ushort.ushort-.cxx
+SOURCE=.\Templates/vipl_filter_2d+vil1_image.vil1_image.ushort.ushort-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vipl_filter_2d+vil_image.vil_image.vil_rgb+uchar-.uchar-.cxx
+SOURCE=.\Templates/vipl_filter_2d+vil1_image.vil1_image.vil1_rgb+uchar-.uchar-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vipl_gradient_mag+vil_image.vil_image.uchar.uchar-.cxx
+SOURCE=.\Templates/vipl_gradient_mag+vil1_image.vil1_image.uchar.uchar-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vipl_median+vil_image.vil_image.uchar.uchar-.cxx
+SOURCE=.\Templates/vipl_median+vil1_image.vil1_image.uchar.uchar-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vipl_moment+vil_image.vil_image.uchar.float-.cxx
+SOURCE=.\Templates/vipl_moment+vil1_image.vil1_image.uchar.float-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vipl_monadic+vil_image.vil_image.float.float-.cxx
+SOURCE=.\Templates/vipl_monadic+vil1_image.vil1_image.float.float-.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\Templates/vipl_section_container+double-.cxx
@@ -237,7 +237,7 @@ SOURCE=.\Templates/vipl_section_container+uchar-.cxx
 SOURCE=.\Templates/vipl_section_container+ushort-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vipl_section_container+vil_rgb+uchar--.cxx
+SOURCE=.\Templates/vipl_section_container+vil1_rgb+uchar--.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\Templates/vipl_section_descriptor+double-.cxx
@@ -258,7 +258,7 @@ SOURCE=.\Templates/vipl_section_descriptor+uchar-.cxx
 SOURCE=.\Templates/vipl_section_descriptor+ushort-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vipl_section_descriptor+vil_rgb+uchar--.cxx
+SOURCE=.\Templates/vipl_section_descriptor+vil1_rgb+uchar--.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\Templates/vipl_section_iterator+double-.cxx
@@ -279,22 +279,22 @@ SOURCE=.\Templates/vipl_section_iterator+uchar-.cxx
 SOURCE=.\Templates/vipl_section_iterator+ushort-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vipl_section_iterator+vil_rgb+uchar--.cxx
+SOURCE=.\Templates/vipl_section_iterator+vil1_rgb+uchar--.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vipl_sobel+vil_image.vil_image.uchar.uchar-.cxx
+SOURCE=.\Templates/vipl_sobel+vil1_image.vil1_image.uchar.uchar-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vipl_threshold+vil_image.vil_image.float.float-.cxx
+SOURCE=.\Templates/vipl_threshold+vil1_image.vil1_image.float.float-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vipl_threshold+vil_image.vil_image.uchar.uchar-.cxx
+SOURCE=.\Templates/vipl_threshold+vil1_image.vil1_image.uchar.uchar-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vipl_threshold+vil_image.vil_image.ushort.ushort-.cxx
+SOURCE=.\Templates/vipl_threshold+vil1_image.vil1_image.ushort.ushort-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vipl_x_gradient+vil_image.vil_image.uchar.uchar-.cxx
+SOURCE=.\Templates/vipl_x_gradient+vil1_image.vil1_image.uchar.uchar-.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\vipl_with_section/Templates/vipl_accessors_section+int.2-.cxx
@@ -303,7 +303,7 @@ SOURCE=.\vipl_with_section/Templates/vipl_accessors_section+int.2-.cxx
 SOURCE=.\vipl_with_section/Templates/vipl_accessors_section+uchar.2-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\vipl_with_section/Templates/vipl_accessors_section+vil_rgb+uchar-.2-.cxx
+SOURCE=.\vipl_with_section/Templates/vipl_accessors_section+vil1_rgb+uchar-.2-.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\vipl_with_section/Templates/vipl_erode_disk+section+uchar.2-.section+uchar.2-.uchar.uchar-.cxx
@@ -315,7 +315,7 @@ SOURCE=.\vipl_with_section/Templates/vipl_filter_2d+section+uchar.2-.section+int
 SOURCE=.\vipl_with_section/Templates/vipl_filter_2d+section+uchar.2-.section+uchar.2-.uchar.uchar-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\vipl_with_section/Templates/vipl_filter_2d+section+vil_rgb+uchar-.2-.section+vil_rgb+uchar-.2-.vil_rgb+uchar-.vil_rgb+uchar--.cxx
+SOURCE=.\vipl_with_section/Templates/vipl_filter_2d+section+vil1_rgb+uchar-.2-.section+vil1_rgb+uchar-.2-.vil1_rgb+uchar-.vil1_rgb+uchar--.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\vipl_with_section/Templates/vipl_histogram+section+uchar.2-.section+int.2-.uchar.int-.cxx
@@ -324,7 +324,7 @@ SOURCE=.\vipl_with_section/Templates/vipl_histogram+section+uchar.2-.section+int
 SOURCE=.\vipl_with_section/Templates/vipl_threshold+section+uchar.2-.section+uchar.2-.uchar.uchar-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\vipl_with_section/Templates/vipl_x_gradient+section+vil_rgb+uchar-.2-.section+vil_rgb+uchar-.2-.vil_rgb+uchar-.vil_rgb+uchar--.cxx
+SOURCE=.\vipl_with_section/Templates/vipl_x_gradient+section+vil1_rgb+uchar-.2-.section+vil1_rgb+uchar-.2-.vil1_rgb+uchar-.vil1_rgb+uchar--.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\vipl_with_vbl_array_2d/Templates/vipl_accessors_vbl_array_2d+uchar-.cxx
@@ -387,268 +387,268 @@ SOURCE=.\vipl_with_section/Templates/vipl_filter_2d+section+uchar.2-.vcl_vector+
 SOURCE=.\vipl_with_section/Templates/vipl_histogram+section+uchar.2-.vcl_vector+uint-.uchar.uint-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vipl_add_random_noise+vil_image.vil_image.double.double-.cxx
+SOURCE=.\Templates/vipl_add_random_noise+vil1_image.vil1_image.double.double-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vipl_add_random_noise+vil_image.vil_image.float.float-.cxx
+SOURCE=.\Templates/vipl_add_random_noise+vil1_image.vil1_image.float.float-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vipl_convert+vil_image.vil_image.double.double--.cxx
+SOURCE=.\Templates/vipl_convert+vil1_image.vil1_image.double.double--.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vipl_convert+vil_image.vil_image.double.float--.cxx
+SOURCE=.\Templates/vipl_convert+vil1_image.vil1_image.double.float--.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vipl_convert+vil_image.vil_image.double.int--.cxx
+SOURCE=.\Templates/vipl_convert+vil1_image.vil1_image.double.int--.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vipl_convert+vil_image.vil_image.double.short--.cxx
+SOURCE=.\Templates/vipl_convert+vil1_image.vil1_image.double.short--.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vipl_convert+vil_image.vil_image.double.vil_rgb+uchar---.cxx
+SOURCE=.\Templates/vipl_convert+vil1_image.vil1_image.double.vil1_rgb+uchar---.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vipl_convert+vil_image.vil_image.float.double--.cxx
+SOURCE=.\Templates/vipl_convert+vil1_image.vil1_image.float.double--.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vipl_convert+vil_image.vil_image.float.float--.cxx
+SOURCE=.\Templates/vipl_convert+vil1_image.vil1_image.float.float--.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vipl_convert+vil_image.vil_image.float.int--.cxx
+SOURCE=.\Templates/vipl_convert+vil1_image.vil1_image.float.int--.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vipl_convert+vil_image.vil_image.float.short--.cxx
+SOURCE=.\Templates/vipl_convert+vil1_image.vil1_image.float.short--.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vipl_convert+vil_image.vil_image.float.vil_rgb+uchar---.cxx
+SOURCE=.\Templates/vipl_convert+vil1_image.vil1_image.float.vil1_rgb+uchar---.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vipl_convert+vil_image.vil_image.uchar.double--.cxx
+SOURCE=.\Templates/vipl_convert+vil1_image.vil1_image.uchar.double--.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vipl_convert+vil_image.vil_image.uchar.float--.cxx
+SOURCE=.\Templates/vipl_convert+vil1_image.vil1_image.uchar.float--.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vipl_convert+vil_image.vil_image.uchar.int--.cxx
+SOURCE=.\Templates/vipl_convert+vil1_image.vil1_image.uchar.int--.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vipl_convert+vil_image.vil_image.uchar.short--.cxx
+SOURCE=.\Templates/vipl_convert+vil1_image.vil1_image.uchar.short--.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vipl_convert+vil_image.vil_image.uchar.vil_rgb+uchar---.cxx
+SOURCE=.\Templates/vipl_convert+vil1_image.vil1_image.uchar.vil1_rgb+uchar---.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vipl_convert+vil_image.vil_image.vil_rgb+uchar-.double--.cxx
+SOURCE=.\Templates/vipl_convert+vil1_image.vil1_image.vil1_rgb+uchar-.double--.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vipl_convert+vil_image.vil_image.vil_rgb+uchar-.float--.cxx
+SOURCE=.\Templates/vipl_convert+vil1_image.vil1_image.vil1_rgb+uchar-.float--.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vipl_convert+vil_image.vil_image.vil_rgb+uchar-.int--.cxx
+SOURCE=.\Templates/vipl_convert+vil1_image.vil1_image.vil1_rgb+uchar-.int--.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vipl_convert+vil_image.vil_image.vil_rgb+uchar-.short--.cxx
+SOURCE=.\Templates/vipl_convert+vil1_image.vil1_image.vil1_rgb+uchar-.short--.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vipl_convert+vil_image.vil_image.vil_rgb+uchar-.vil_rgb+uchar---.cxx
+SOURCE=.\Templates/vipl_convert+vil1_image.vil1_image.vil1_rgb+uchar-.vil1_rgb+uchar---.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vipl_dilate_disk+vil_image.vil_image.double.double--.cxx
+SOURCE=.\Templates/vipl_dilate_disk+vil1_image.vil1_image.double.double--.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vipl_dilate_disk+vil_image.vil_image.float.float--.cxx
+SOURCE=.\Templates/vipl_dilate_disk+vil1_image.vil1_image.float.float--.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vipl_dyadic+vil_image.vil_image.double.double--.cxx
+SOURCE=.\Templates/vipl_dyadic+vil1_image.vil1_image.double.double--.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vipl_dyadic+vil_image.vil_image.uchar.uchar--.cxx
+SOURCE=.\Templates/vipl_dyadic+vil1_image.vil1_image.uchar.uchar--.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vipl_dyadic+vil_image.vil_image.vil_rgb+uchar-.vil_rgb+uchar---.cxx
+SOURCE=.\Templates/vipl_dyadic+vil1_image.vil1_image.vil1_rgb+uchar-.vil1_rgb+uchar---.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vipl_erode_disk+vil_image.vil_image.double.double--.cxx
+SOURCE=.\Templates/vipl_erode_disk+vil1_image.vil1_image.double.double--.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vipl_filter+vil_image.vil_image.double.double-.cxx
+SOURCE=.\Templates/vipl_filter+vil1_image.vil1_image.double.double-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vipl_filter+vil_image.vil_image.double.float-.cxx
+SOURCE=.\Templates/vipl_filter+vil1_image.vil1_image.double.float-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vipl_filter+vil_image.vil_image.double.int-.cxx
+SOURCE=.\Templates/vipl_filter+vil1_image.vil1_image.double.int-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vipl_filter+vil_image.vil_image.double.short-.cxx
+SOURCE=.\Templates/vipl_filter+vil1_image.vil1_image.double.short-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vipl_filter+vil_image.vil_image.double.vil_rgb+uchar--.cxx
+SOURCE=.\Templates/vipl_filter+vil1_image.vil1_image.double.vil1_rgb+uchar--.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vipl_filter+vil_image.vil_image.float.double-.cxx
+SOURCE=.\Templates/vipl_filter+vil1_image.vil1_image.float.double-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vipl_filter+vil_image.vil_image.float.float-.cxx
+SOURCE=.\Templates/vipl_filter+vil1_image.vil1_image.float.float-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vipl_filter+vil_image.vil_image.float.int-.cxx
+SOURCE=.\Templates/vipl_filter+vil1_image.vil1_image.float.int-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vipl_filter+vil_image.vil_image.float.short-.cxx
+SOURCE=.\Templates/vipl_filter+vil1_image.vil1_image.float.short-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vipl_filter+vil_image.vil_image.float.vil_rgb+uchar--.cxx
+SOURCE=.\Templates/vipl_filter+vil1_image.vil1_image.float.vil1_rgb+uchar--.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vipl_filter+vil_image.vil_image.short.short-.cxx
+SOURCE=.\Templates/vipl_filter+vil1_image.vil1_image.short.short-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vipl_filter+vil_image.vil_image.uchar.double-.cxx
+SOURCE=.\Templates/vipl_filter+vil1_image.vil1_image.uchar.double-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vipl_filter+vil_image.vil_image.uchar.int-.cxx
+SOURCE=.\Templates/vipl_filter+vil1_image.vil1_image.uchar.int-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vipl_filter+vil_image.vil_image.uchar.short-.cxx
+SOURCE=.\Templates/vipl_filter+vil1_image.vil1_image.uchar.short-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vipl_filter+vil_image.vil_image.uchar.uchar-.cxx
+SOURCE=.\Templates/vipl_filter+vil1_image.vil1_image.uchar.uchar-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vipl_filter+vil_image.vil_image.uchar.vil_rgb+uchar--.cxx
+SOURCE=.\Templates/vipl_filter+vil1_image.vil1_image.uchar.vil1_rgb+uchar--.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vipl_filter+vil_image.vil_image.vil_rgb+uchar-.double-.cxx
+SOURCE=.\Templates/vipl_filter+vil1_image.vil1_image.vil1_rgb+uchar-.double-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vipl_filter+vil_image.vil_image.vil_rgb+uchar-.float-.cxx
+SOURCE=.\Templates/vipl_filter+vil1_image.vil1_image.vil1_rgb+uchar-.float-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vipl_filter+vil_image.vil_image.vil_rgb+uchar-.int-.cxx
+SOURCE=.\Templates/vipl_filter+vil1_image.vil1_image.vil1_rgb+uchar-.int-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vipl_filter+vil_image.vil_image.vil_rgb+uchar-.short-.cxx
+SOURCE=.\Templates/vipl_filter+vil1_image.vil1_image.vil1_rgb+uchar-.short-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vipl_filter+vil_image.vil_image.vil_rgb+uchar-.uchar-.cxx
+SOURCE=.\Templates/vipl_filter+vil1_image.vil1_image.vil1_rgb+uchar-.uchar-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vipl_filter+vil_image.vil_image.vil_rgb+uchar-.vil_rgb+uchar--.cxx
+SOURCE=.\Templates/vipl_filter+vil1_image.vil1_image.vil1_rgb+uchar-.vil1_rgb+uchar--.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vipl_filter_2d+vil_image.vcl_vector+uint-.double.uint.cxx
+SOURCE=.\Templates/vipl_filter_2d+vil1_image.vcl_vector+uint-.double.uint.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vipl_filter_2d+vil_image.vcl_vector+uint-.float.uint.cxx
+SOURCE=.\Templates/vipl_filter_2d+vil1_image.vcl_vector+uint-.float.uint.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vipl_filter_2d+vil_image.vcl_vector+uint-.ushort.uint.cxx
+SOURCE=.\Templates/vipl_filter_2d+vil1_image.vcl_vector+uint-.ushort.uint.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vipl_gaussian_convolution+vil_image.vil_image.double.double--.cxx
+SOURCE=.\Templates/vipl_gaussian_convolution+vil1_image.vil1_image.double.double--.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vipl_gaussian_convolution+vil_image.vil_image.float.float--.cxx
+SOURCE=.\Templates/vipl_gaussian_convolution+vil1_image.vil1_image.float.float--.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vipl_gaussian_convolution+vil_image.vil_image.uchar.uchar--.cxx
+SOURCE=.\Templates/vipl_gaussian_convolution+vil1_image.vil1_image.uchar.uchar--.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vipl_gradient_dir+vil_image.vil_image.double.double--.cxx
+SOURCE=.\Templates/vipl_gradient_dir+vil1_image.vil1_image.double.double--.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vipl_gradient_dir+vil_image.vil_image.float.float--.cxx
+SOURCE=.\Templates/vipl_gradient_dir+vil1_image.vil1_image.float.float--.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vipl_gradient_dir+vil_image.vil_image.uchar.uchar--.cxx
+SOURCE=.\Templates/vipl_gradient_dir+vil1_image.vil1_image.uchar.uchar--.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vipl_gradient_mag+vil_image.vil_image.double.double--.cxx
+SOURCE=.\Templates/vipl_gradient_mag+vil1_image.vil1_image.double.double--.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vipl_gradient_mag+vil_image.vil_image.float.float--.cxx
+SOURCE=.\Templates/vipl_gradient_mag+vil1_image.vil1_image.float.float--.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vipl_histogram+vil_image.vcl_vector+uint-.double.uint-.cxx
+SOURCE=.\Templates/vipl_histogram+vil1_image.vcl_vector+uint-.double.uint-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vipl_histogram+vil_image.vcl_vector+uint-.float.uint-.cxx
+SOURCE=.\Templates/vipl_histogram+vil1_image.vcl_vector+uint-.float.uint-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vipl_histogram+vil_image.vcl_vector+uint-.ushort.uint-.cxx
+SOURCE=.\Templates/vipl_histogram+vil1_image.vcl_vector+uint-.ushort.uint-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vipl_histogram+vil_image.vil_image.double.double--.cxx
+SOURCE=.\Templates/vipl_histogram+vil1_image.vil1_image.double.double--.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vipl_histogram+vil_image.vil_image.float.float--.cxx
+SOURCE=.\Templates/vipl_histogram+vil1_image.vil1_image.float.float--.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vipl_histogram+vil_image.vil_image.uchar.uchar--.cxx
+SOURCE=.\Templates/vipl_histogram+vil1_image.vil1_image.uchar.uchar--.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vipl_median+vil_image.vil_image.double.double--.cxx
+SOURCE=.\Templates/vipl_median+vil1_image.vil1_image.double.double--.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vipl_median+vil_image.vil_image.float.float--.cxx
+SOURCE=.\Templates/vipl_median+vil1_image.vil1_image.float.float--.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vipl_moment+vil_image.vil_image.double.double--.cxx
+SOURCE=.\Templates/vipl_moment+vil1_image.vil1_image.double.double--.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vipl_moment+vil_image.vil_image.float.float--.cxx
+SOURCE=.\Templates/vipl_moment+vil1_image.vil1_image.float.float--.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vipl_moment+vil_image.vil_image.uchar.uchar--.cxx
+SOURCE=.\Templates/vipl_moment+vil1_image.vil1_image.uchar.uchar--.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vipl_monadic+vil_image.vil_image.double.double--.cxx
+SOURCE=.\Templates/vipl_monadic+vil1_image.vil1_image.double.double--.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vipl_monadic+vil_image.vil_image.uchar.uchar--.cxx
+SOURCE=.\Templates/vipl_monadic+vil1_image.vil1_image.uchar.uchar--.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vipl_sobel+vil_image.vil_image.double.double--.cxx
+SOURCE=.\Templates/vipl_sobel+vil1_image.vil1_image.double.double--.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vipl_sobel+vil_image.vil_image.float.float--.cxx
+SOURCE=.\Templates/vipl_sobel+vil1_image.vil1_image.float.float--.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vipl_sobel+vil_image.vil_image.vil_rgb+uchar-.vil_rgb+uchar---.cxx
+SOURCE=.\Templates/vipl_sobel+vil1_image.vil1_image.vil1_rgb+uchar-.vil1_rgb+uchar---.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vipl_threshold+vil_image.vil_image.double.double--.cxx
+SOURCE=.\Templates/vipl_threshold+vil1_image.vil1_image.double.double--.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vipl_x_gradient+vil_image.vil_image.double.double--.cxx
+SOURCE=.\Templates/vipl_x_gradient+vil1_image.vil1_image.double.double--.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vipl_x_gradient+vil_image.vil_image.float.float--.cxx
+SOURCE=.\Templates/vipl_x_gradient+vil1_image.vil1_image.float.float--.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vipl_x_gradient+vil_image.vil_image.vil_rgb+uchar-.vil_rgb+uchar---.cxx
+SOURCE=.\Templates/vipl_x_gradient+vil1_image.vil1_image.vil1_rgb+uchar-.vil1_rgb+uchar---.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vipl_y_gradient+vil_image.vil_image.double.double--.cxx
+SOURCE=.\Templates/vipl_y_gradient+vil1_image.vil1_image.double.double--.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vipl_y_gradient+vil_image.vil_image.float.float--.cxx
+SOURCE=.\Templates/vipl_y_gradient+vil1_image.vil1_image.float.float--.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vipl_y_gradient+vil_image.vil_image.uchar.uchar--.cxx
+SOURCE=.\Templates/vipl_y_gradient+vil1_image.vil1_image.uchar.uchar--.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vipl_y_gradient+vil_image.vil_image.vil_rgb+uchar-.vil_rgb+uchar---.cxx
+SOURCE=.\Templates/vipl_y_gradient+vil1_image.vil1_image.vil1_rgb+uchar-.vil1_rgb+uchar---.cxx
 # End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter ""
 # Begin Source File
-SOURCE=.\accessors/vipl_accessors_vil_image.h
+SOURCE=.\accessors/vipl_accessors_vil1_image.h
 # End Source File
 # Begin Source File
-SOURCE=.\accessors/vipl_accessors_vil_image.txx
+SOURCE=.\accessors/vipl_accessors_vil1_image.txx
 # End Source File
 # Begin Source File
 SOURCE=.\filter/vipl_filter.h
@@ -810,7 +810,7 @@ SOURCE=.\filter/vipl_filter_helper.h
 SOURCE=.\filter/vipl_trivial_pixeliter.h
 # End Source File
 # Begin Source File
-SOURCE=.\section/vipl_filterable_section_container_generator_vil_image.txx
+SOURCE=.\section/vipl_filterable_section_container_generator_vil1_image.txx
 # End Source File
 # Begin Source File
 SOURCE=.\vipl_with_section/vipl_filterable_section_container_generator_section.txx
@@ -839,8 +839,6 @@ SOURCE=.\vipl_with_vnl_matrix/accessors/vipl_accessors_vnl_vector.txx
 # Begin Source File
 SOURCE=.\vipl_with_vnl_matrix/vipl_filterable_section_container_generator_vnl_vector.txx
 # End Source File
-# End Group
-# PROP Default_Filter "ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe"
 # End Group
 # End Target
 # End Project

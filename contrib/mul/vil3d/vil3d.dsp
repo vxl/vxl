@@ -132,10 +132,10 @@ SOURCE=.\Templates/vil3d_image_view+bool-.cxx
 SOURCE=.\vil3d_image_view_base.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vil2_smart_ptr+vil3d_header_data-.cxx
+SOURCE=.\Templates/vil_smart_ptr+vil3d_header_data-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vil2_smart_ptr+vil3d_image_view_base-.cxx
+SOURCE=.\Templates/vil_smart_ptr+vil3d_image_view_base-.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\file_formats/vil3d_gipl_format.cxx
@@ -150,7 +150,7 @@ SOURCE=.\vil3d_header_data.cxx
 SOURCE=.\vil3d_load.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vil2_smart_ptr+vil3d_image_resource-.cxx
+SOURCE=.\Templates/vil_smart_ptr+vil3d_image_resource-.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\Templates/vil3d_copy+bool-.cxx
