@@ -29,7 +29,7 @@ void test_convolve_2d_byte()
   vimt_find_world_peaks_3x3(w_peaks,fit_image);
 
   TEST("Number of peaks",w_peaks.size(),1);
-  TEST_NEAR("Peak 0",(w_peaks[0]-vgl_point_2d<double>(3,7)).length(),0,0.5);
+  TEST_NEAR("Peak 0",(w_peaks[0]-vgl_point_2d<double>(3,7)).sqr_length(),0,1e-12);
 
   vcl_cout<<"Sample a diagonal image and look for peaks in that."<<vcl_endl;
 
@@ -50,7 +50,7 @@ void test_convolve_2d_byte()
   TEST("Number of peaks",w_peaks2.size(),1);
   if (w_peaks2.size()>0)
   {
-    TEST_NEAR("Peak 0",(w_peaks2[0]-vgl_point_2d<double>(3,7)).length(),0,0.5);
+    TEST_NEAR("Peak 0",(w_peaks2[0]-vgl_point_2d<double>(3,7)).sqr_length(),0,1e-12);
   }
 }
 

@@ -295,7 +295,7 @@ static void test_plane_3d()
   vgl_vector_3d<double> d1 = pl2.normal();
   vgl_vector_3d<double> d2 = vgl_vector_3d<double>(0,0.6,0.8);
   vcl_cout << d1 << vcl_endl;
-  TEST_NEAR("normal", (d1-d2).length(), 0.0, 1e-12);
+  TEST_NEAR("normal", (d1-d2).sqr_length(), 0.0, 1e-12);
 
   vgl_point_3d<double> p1(1,0,0), p2(0,1,0), p3(0,0,1);
   vgl_plane_3d<double> pl(p1,p2,p3); // plane through 3 points

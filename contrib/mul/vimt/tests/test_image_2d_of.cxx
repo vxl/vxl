@@ -69,7 +69,7 @@ void test_image_2d_byte_functions()
   TEST("Height",image1.image().nj(),4);
 
   vgl_point_2d<double> p0 = image1.world2im().inverse()(0,0);
-  TEST_NEAR("Transform",(p0-vgl_point_2d<double>(1,2)).length(),0,1e-6);
+  TEST_NEAR("Transform",(p0-vgl_point_2d<double>(1,2)).sqr_length(),0,1e-12);
 }
 
 MAIN( test_image_2d_of )

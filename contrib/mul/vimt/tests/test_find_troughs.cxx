@@ -16,8 +16,8 @@ void test_find_troughs_byte()
   vimt_find_image_troughs_3x3(im_troughs,image0.image());
 
   TEST("Number of troughs",im_troughs.size(),2);
-  TEST_NEAR("Peak 0",(im_troughs[0]-vgl_point_2d<unsigned>(7,5)).length(),0,1e-6);
-  TEST_NEAR("Peak 1",(im_troughs[1]-vgl_point_2d<unsigned>(3,7)).length(),0,1e-6);
+  TEST_NEAR("Peak 0",(im_troughs[0]-vgl_point_2d<unsigned>(7,5)).sqr_length(),0,1e-12);
+  TEST_NEAR("Peak 1",(im_troughs[1]-vgl_point_2d<unsigned>(3,7)).sqr_length(),0,1e-12);
 
   vcl_vector<vgl_point_2d<double> > w_troughs;
   vimt_transform_2d w2i;
@@ -26,8 +26,8 @@ void test_find_troughs_byte()
   vimt_find_world_troughs_3x3(w_troughs,image0);
 
   TEST("Number of troughs",w_troughs.size(),2);
-  TEST_NEAR("Peak 0",(w_troughs[0]-vgl_point_2d<double>(5,2)).length(),0,1e-6);
-  TEST_NEAR("Peak 1",(w_troughs[1]-vgl_point_2d<double>(1,4)).length(),0,1e-6);
+  TEST_NEAR("Peak 0",(w_troughs[0]-vgl_point_2d<double>(5,2)).sqr_length(),0,1e-12);
+  TEST_NEAR("Peak 1",(w_troughs[1]-vgl_point_2d<double>(1,4)).sqr_length(),0,1e-12);
 }
 
 MAIN( test_find_troughs )
