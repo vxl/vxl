@@ -80,7 +80,7 @@ bool vgl_polygon<T>::contains(T x, T y) const
   bool c = false;
   for (unsigned int s=0; s < sheets_.size(); ++s)
   {
-    vgl_polygon<T>::sheet_t const& pgon = sheets_[s];
+    sheet_t const& pgon = sheets_[s];
     int n = pgon.size();
     for (int i = 0, j = n-1; i < n; j = i++)
       if ((((pgon[i].y()<=y) && (y<pgon[j].y())) || ((pgon[j].y()<=y) && (y<pgon[i].y()))) &&
