@@ -1,0 +1,253 @@
+// <begin copyright notice>
+// ---------------------------------------------------------------------------
+//
+//                   Copyright (c) 1997 TargetJr Consortium
+//               GE Corporate Research and Development (GE CRD)
+//                             1 Research Circle
+//                            Niskayuna, NY 12309
+//                            All Rights Reserved
+//              Reproduction rights limited as described below.
+//                               
+//      Permission to use, copy, modify, distribute, and sell this software
+//      and its documentation for any purpose is hereby granted without fee,
+//      provided that (i) the above copyright notice and this permission
+//      notice appear in all copies of the software and related documentation,
+//      (ii) the name TargetJr Consortium (represented by GE CRD), may not be
+//      used in any advertising or publicity relating to the software without
+//      the specific, prior written permission of GE CRD, and (iii) any
+//      modifications are clearly marked and summarized in a change history
+//      log.
+//       
+//      THE SOFTWARE IS PROVIDED "AS IS" AND WITHOUT WARRANTY OF ANY KIND,
+//      EXPRESS, IMPLIED OR OTHERWISE, INCLUDING WITHOUT LIMITATION, ANY
+//      WARRANTY OF MERCHANTABILITY OR FITNESS FOR A PARTICULAR PURPOSE.
+//      IN NO EVENT SHALL THE TARGETJR CONSORTIUM BE LIABLE FOR ANY SPECIAL,
+//      INCIDENTAL, INDIRECT OR CONSEQUENTIAL DAMAGES OF ANY KIND OR ANY
+//      DAMAGES WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS,
+//      WHETHER OR NOT ADVISED OF THE POSSIBILITY OF SUCH DAMAGES, OR ON
+//      ANY THEORY OF LIABILITY ARISING OUT OF OR IN CONNECTION WITH THE
+//      USE OR PERFORMANCE OF THIS SOFTWARE.
+//
+// ---------------------------------------------------------------------------
+// <end copyright notice>
+//-----------------------------------------------------------------------------
+//
+// Class : gevd_detector_params.C
+//
+// See gevd_detector_params.h
+//
+//-----------------------------------------------------------------------------
+
+#include "gevd_detector_params.h"
+
+#include <strstream.h>
+//#include <Basics/types.h>	// Gets AttributeValuePair
+
+//------------------------------------------------------------------------
+// -- Constructors
+//
+
+gevd_detector_params::gevd_detector_params(const gevd_detector_params& dp)
+{
+  InitParams(dp.smooth, dp.noise_weight, dp.noise_multiplier,
+	     dp.automatic_threshold, dp.aggressive_junction_closure,
+	     dp.minLength, dp.maxGap, dp.minJump, dp.contourFactor,
+	     dp.junctionFactor, dp.junctionp, dp.spacingp, dp.borderp,
+	     dp.depth, dp.corner_angle, dp.separation, dp.min_corner_length,
+	     dp.cycle, dp.ndimension);
+}
+
+gevd_detector_params::gevd_detector_params(float smooth_sigma, float noise_w,
+			       float noise_m, bool automatic_t,
+			       int aggressive_jc, int minl,  
+			       float maxgp, float minjmp,
+			       float contour_f, float junction_f,
+			       bool recover_j, bool equal_spacing, 
+			       bool follow_b,  float default_d,
+			       float ang, float sep, int min_corner_len,
+			       int cyc, int ndim)
+{
+  InitParams(smooth_sigma, noise_w, noise_m, automatic_t,
+	     aggressive_jc, minl, maxgp, minjmp,
+	     contour_f, junction_f, recover_j, equal_spacing, 
+	     follow_b, default_d, ang, sep, min_corner_len,
+	     cyc, ndim);
+}
+
+void gevd_detector_params::InitParams(float smooth_sigma, float noise_w,
+				float noise_m, bool automatic_t,
+				int aggressive_jc, int minl,  
+				float maxgp, float minjmp,
+				float contour_f, float junction_f,
+				bool recover_j, bool equal_spacing, 
+				bool follow_b,  float default_d,
+				float ang, float sep, int min_corner_len,
+				int cyc, int ndim)
+{			       
+  //Step contour parameters
+  smooth = smooth_sigma;
+  noise_weight = noise_w;
+  noise_multiplier = noise_m;
+  automatic_threshold = automatic_t;
+  aggressive_junction_closure = aggressive_jc;
+  minLength = minl;
+  spacingp = equal_spacing;
+  borderp = follow_b;
+  depth = default_d;
+  //Corner parameters
+  corner_angle = ang;
+  separation = sep;
+  min_corner_length = min_corner_len;
+  cycle = cyc;
+  ndimension = ndim;
+  // The remaining parameters are set according to the state of
+  // Agressive junction closure.  If the value is <0 then the
+  // state of junction parameters is derived from the constructor
+  // arguments.  If the value is >0 then the variable is assumed to
+  // be a bool and the parameters are determined from computation.
+
+  if(aggressive_junction_closure<0)
+    {
+      junctionp = recover_j;
+      contourFactor = contour_f;
+      junctionFactor = junction_f;
+      maxGap = maxgp;
+      minJump = minjmp;
+    }
+
+  // Perform the sanity check anyway.
+  SanityCheck();
+}
+
+//-----------------------------------------------------------------------------
+//
+// -- Checks that parameters are within acceptable bounds.  This method is always called after a parameter modifier has changed the params.
+// 
+bool gevd_detector_params::SanityCheck()
+{
+  if (aggressive_junction_closure >0 )
+    {
+      junctionp = true;
+      contourFactor = noise_multiplier;
+      junctionFactor = .5*noise_multiplier;
+      maxGap = 4;
+      minJump = .1;
+    }
+  if (aggressive_junction_closure == 0)
+    {
+      junctionp = true;
+      contourFactor = noise_multiplier;
+      junctionFactor = 1.5*noise_multiplier;
+      maxGap = 2.2;
+      minJump = 1.0;
+    }
+
+  strstream msg;
+  bool valid = true;
+  if (smooth <= 0)  	// Standard deviation of the smoothing kernel
+  {
+    msg << "ERROR: Value of gaussian smoothing sigma is too low <=0" << ends;
+    smooth = 1.0;
+    valid = false;
+  }
+  if (noise_weight < 0 || noise_weight > 1.0)  	// Noise weighting factor
+  {
+    msg << "ERROR: Value of noise weight must be [0 1.0]" << ends;
+    noise_weight = .5;
+    valid = false;
+  }
+  if (noise_multiplier <= 0)	// The over all noise scale factor
+  {
+    msg << "ERROR: Value of noise scale factor is too low <=" << ends;
+    noise_multiplier = 1.0;
+    valid = false;
+  }
+
+  if (minLength <= 3)	// Edgel chain length
+  {
+    msg << "ERROR: Value of minimum chain length is too low <= 3" << ends;
+    minLength = 3;
+    valid = false;
+  }
+
+  if (maxGap <= 0)	// Chain gaps to jump
+  {
+    msg << "ERROR: Value of maximum gap is too low <0" << ends;
+    maxGap = 2.2;
+    valid = false;
+  }
+
+  if (minJump <= 0)	// Jump to close a junction
+  {
+    msg << "ERROR: Value of min jump junction is too low <0" << ends;
+    maxGap = 1.0;
+    valid = false;
+  }
+
+  if (contourFactor <= 0)	// Threshold in following a contour
+  {
+    msg << "ERROR: Value of contour factor is too low <0" << ends;
+    contourFactor = 1.0;
+    valid = false;
+  }
+
+  if (junctionFactor<= 0)	// Threshold in following a junction
+  {
+    msg << "ERROR: Value of junction factor is too low <0" << ends;
+    maxGap = 1.5;
+    valid = false;
+  }
+  if(corner_angle < 5.0)
+    {
+      msg << "ERROR: Value of corner angle is too low <5" << ends;
+    }
+
+  if(separation < 1.0)
+    {
+      msg << "ERROR: Value of corner separation is too low <1" << ends;
+    }
+
+  if(min_corner_length < 5)
+    {
+      msg << "ERROR: Value of minimum chain length too low <5" << ends;
+    }
+
+  if(cycle > 10)
+    {
+      msg << "ERROR: Value of number of corners in a 1-cycle is too "
+	   << "high > 10" << ends;
+    }
+
+  if(ndimension > 3)
+    {
+      msg << "ERROR: Value of corner spatial dimension is too large >3" 
+	   << ends;
+    }
+  msg << ends;
+  SetErrorMsg(msg.str());
+  delete [] msg.str();
+  return valid;
+}
+
+//------------------------------------------------------------
+// -- Describe the parameters to a parameter modifier.
+void gevd_detector_params::Describe(ParamModifier& mod)
+{
+//   static UIChoice JunctionClosure[] =
+//   {
+//     UIChoicePair("Default",-1),
+//     UIChoicePair("Weak",0),
+//     UIChoicePair("Aggressive",1),
+//     UIChoice_finish
+//   };
+
+//   // These are the parameters which the user is likely to want to set.
+//   mod.Name("EdgeDetector Parameters(VanDuc)");
+//   mod.AddParam("Sigma", smooth);
+//   mod.AddParam("Noise Weight", noise_weight);
+//   mod.AddParam("Noise Multiplier", noise_multiplier);
+//   mod.AddParam("Automatic Threshold", automatic_threshold, 
+// 	       ParamModifier::OnOff);
+//   mod.AddParam("Junction Closure", aggressive_junction_closure,
+// 	       JunctionClosure);
+}

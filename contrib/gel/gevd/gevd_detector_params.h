@@ -1,0 +1,173 @@
+// <begin copyright notice>
+// ---------------------------------------------------------------------------
+//
+//                   Copyright (c) 1997 TargetJr Consortium
+//               GE Corporate Research and Development (GE CRD)
+//                             1 Research Circle
+//                            Niskayuna, NY 12309
+//                            All Rights Reserved
+//              Reproduction rights limited as described below.
+//                               
+//      Permission to use, copy, modify, distribute, and sell this software
+//      and its documentation for any purpose is hereby granted without fee,
+//      provided that (i) the above copyright notice and this permission
+//      notice appear in all copies of the software and related documentation,
+//      (ii) the name TargetJr Consortium (represented by GE CRD), may not be
+//      used in any advertising or publicity relating to the software without
+//      the specific, prior written permission of GE CRD, and (iii) any
+//      modifications are clearly marked and summarized in a change history
+//      log.
+//       
+//      THE SOFTWARE IS PROVIDED "AS IS" AND WITHOUT WARRANTY OF ANY KIND,
+//      EXPRESS, IMPLIED OR OTHERWISE, INCLUDING WITHOUT LIMITATION, ANY
+//      WARRANTY OF MERCHANTABILITY OR FITNESS FOR A PARTICULAR PURPOSE.
+//      IN NO EVENT SHALL THE TARGETJR CONSORTIUM BE LIABLE FOR ANY SPECIAL,
+//      INCIDENTAL, INDIRECT OR CONSEQUENTIAL DAMAGES OF ANY KIND OR ANY
+//      DAMAGES WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS,
+//      WHETHER OR NOT ADVISED OF THE POSSIBILITY OF SUCH DAMAGES, OR ON
+//      ANY THEORY OF LIABILITY ARISING OUT OF OR IN CONNECTION WITH THE
+//      USE OR PERFORMANCE OF THIS SOFTWARE.
+//
+// ---------------------------------------------------------------------------
+// <end copyright notice>
+//-*- c++ -*-------------------------------------------------------------------
+#ifndef _gevd_detector_params_h_
+#define _gevd_detector_params_h_
+//
+// .NAME gevd_detector_params - non-display-based interface class
+// .LIBRARY Detection
+// .HEADER Segmentation package
+// .INCLUDE Detection/gevd_detector_params.h
+// .FILE gevd_detector_params.h
+// .FILE gevd_detector_params.C
+//
+// .SECTION Description
+//
+// The parameter mixin for VanDuc's edge detector.
+//
+//  float smooth : The standard deviation of the Gaussian smoothing kernel.
+//
+//  float noise_weight: A weighting factor that determines the relative 
+//                     proportion of sensor noise level and texture noise level
+//                     as measured in a ROI in the center of the image. The 
+//                     nominal value of 0.5 gives equal weight to both.
+//
+//  float noise_multiplier: Overall scale factor for noise
+//
+//  bool automatic_threshold: If true then the noise level is determined from
+//                            image measurements.
+//
+//  float filterFactor:  An overall scale factor for determining 
+//                       gradient threshold Nominally 2.0.
+//
+//  float contourFactor, junctionFactor: Scale factors for determining the
+//                                       gradient threshold. Nominally 1.0.
+//                                       contourFactor is in effect for edgels
+//                                       on contours (boundaries). 
+//                                       junctionFactor is in effect during the
+//                                       extension of contours at endpoints.
+//			                 To extend contours aggressively, use a
+//                                       low value of junctionFactor, i.e., .5.
+//  
+
+//  bool  junctionp:  If true, then recover junctions by extending contours.
+//                    Nominally true.
+//
+//  Contour Following:
+//  float hysteresisFactor:	A scale factor which is multiplied by the
+//                              image noise level to determine the minimum
+//                              gradient threshold in following an edgel contour.
+//                              Nominally 2.0.
+//
+//  int minLength:              The minimum length contour to constructed.
+//
+//  float minJump:		A scale factor which is multiplied by the
+//                              image noise level to determine the gradient 
+//                              threshold at a junction. Nominally 1.0.
+//
+//  float maxGap:               The width of a gap which can be crossed in 
+//                              forming a junction with another edgel contour.
+//                              Nominally sqrt(5) = 2.24.
+//
+//  bool spacingp:              If true, then equalize the sub-pixel locations
+//                              of each edgel by averaging the adjacent left
+//                              a right neighbor locations. Nominally true.
+//
+//  bool borderp:               If true, insert virtual contours at the border
+//                              to close regions. Nominally false.
+//
+//  float depth:	        In the case of range images set the third coor-
+//                              dinate of edgel locations is set to the image depth.
+//                              For intensity images this parameter is the default
+//                              constant depth value.  Nominally 0.0.
+// 
+// .SECTION Author:
+//             Joseph L. Mundy - November 1997
+//             GE Corporate Research and Development
+//
+// .SECTION Modifications : <None>
+
+//-----------------------------------------------------------------------------
+//#include <Basics/ParamMixin.h>
+#include "gevd_param_mixin.h"
+
+class gevd_detector_params : public gevd_param_mixin
+{
+  public :
+
+  gevd_detector_params(float smooth_sigma = 1.0, float noise_w = 0.5,
+		 float noise_m = 1, bool automatic_t = true,
+		 int aggressive_jc = -1, int minl = 6,  
+		 float maxgp = 2.23606, float minjmp = 1.0,
+		 float contour_f = 1.0, float junction_f = 1.5,
+		 bool recover_j = true, bool equal_spacing=true, 
+		 bool follow_b = false,  float default_d = 0,
+		 float ang = 10, float sep = 1, int min_corner_len = 5,
+		 int cyc = 2, int ndim = 2);
+
+  gevd_detector_params(const gevd_detector_params& old_params);
+  ~gevd_detector_params(){};
+
+  bool SanityCheck();
+  void Describe(ParamModifier& mod);
+
+protected:
+  void InitParams(float smooth_sigma, float noise_w,
+		  float noise_m, bool automatic_t,
+		  int aggressive_jc, int minl,  
+		  float maxgp, float minjmp,
+		  float contour_f, float junction_f,
+		  bool recover_j, bool equal_spacing, 
+		  bool follow_b,  float default_d,
+		  float ang = 10, float sep = 1, int min_corner_len = 5,
+		  int cyc = 2, int ndim = 2);
+
+public:
+  //
+  // Parameters for detecting edgel chains
+  //
+  float smooth; // Smoothing kernal sigma
+  float noise_weight; //The weight between sensor noise and texture noise
+  float noise_multiplier; // The overal noise threshold scale factor
+  bool   automatic_threshold; // Determine the threshold values from image
+  int aggressive_junction_closure; //Close junctions agressively
+  int minLength;                // minimum chain length
+  float contourFactor; //Threshold along contours 
+  float junctionFactor; //Threshold at junctions
+  float filterFactor;	// ratio of sensor to texture noise
+  bool junctionp; // recover missing junctions
+  float minJump;		// change in strength at junction
+  float maxGap;                // Bridge small gaps up to max_gap across.
+  bool spacingp; // equalize spacing?
+  bool borderp; // insert virtual border for closure?
+  float depth;	// default depth of edgel point coordinates
+  //
+  // Parameters for corner detection on edgel chains
+  //
+  float corner_angle; // smallest angle at corner
+  float separation; // |mean1-mean2|/sigma
+  int min_corner_length; // min length to find corners
+  int cycle; // number of corners in a cycle
+  int ndimension; // spatial dimension of edgel chains.
+};
+#endif
