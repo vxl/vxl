@@ -48,7 +48,7 @@ vil_nitf_message_header_v20::vil_nitf_message_header_v20()
 vil_nitf_message_header_v20::vil_nitf_message_header_v20(const vil_nitf_message_header& h)
 {
     Init();
-    Copy((vil_nitf_message_header*)&h);
+    Copy(&h);
 }
 
 vil_nitf_message_header_v20::vil_nitf_message_header_v20(vil_nitf_message_header_v20 const& h)
@@ -517,8 +517,8 @@ StatusCode vil_nitf_message_header_v20::Write(vil_stream* file)
              file->write(MSDEVT, vcl_strlen(MSDEVT))  < 40) ||
             !PutInt(buffer, MSCOP,   5, file)             ||
             !PutInt(buffer, MSCPYS,  5, file)             ||
-            !((ENCRYP==NOTENCRYPTED && file->write((char*)"0", 1)==1)  ||
-              (ENCRYP==ENCRYPTED    && file->write((char*)"1", 1)==1)) ||
+            !((ENCRYP==NOTENCRYPTED && file->write((const char*)"0", 1)==1)  ||
+              (ENCRYP==ENCRYPTED    && file->write((const char*)"1", 1)==1)) ||
             file->write(ONAME,  vcl_strlen(ONAME))   < 27 ||
             file->write(OPHONE, vcl_strlen(OPHONE))  < 18 ||
             !PutInt(buffer, ML,    12, file)              ||
