@@ -22,6 +22,7 @@
 #include <vnl/vnl_matrix.h>
 #include <vdgl/vdgl_digital_curve_sptr.h>
 #include <vgl/vgl_point_3d.h>
+#include <bbas/bugl/bugl_gaussian_point_3d.h>
 
 class kalman_filter
 {
@@ -76,7 +77,7 @@ class kalman_filter
 
  private:
    //: position and confidence of feature samples
-  vcl_vector<vnl_double_3> curve_3d_;
+  vcl_vector<bugl_gaussian_point_3d<double> > curve_3d_;
   vcl_vector<double> prob_;
 
   vcl_vector<vnl_matrix<double> > observes_;

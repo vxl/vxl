@@ -220,9 +220,10 @@ void kalman_filter::init_state_vector()
   prob_.resize(num_points_);
   for (int i=0; i<num_points_; i++)
   {
-    curve_3d_[i][0] = pts_3d[i].x();
-    curve_3d_[i][1] = pts_3d[i].y();
-    curve_3d_[i][2] = pts_3d[i].z();
+    vnl_double_3x3 Sigma;
+    Sigma.set_identity();
+    bugl_gaussian_point_3d<double> p3d(pts_3d[i].x(), pts_3d[i].y(), pts_3d[i].z(), Sigma);
+    curve_3d_[i] = p3d;
 
     prob_[i] = 1.0/num_points_;
   }
@@ -364,7 +365,7 @@ void kalman_filter::update_observes(const vnl_double_3x4 &P, int iframe)
   vnl_matrix<double> t(2, num_points_);
   for (int i=0; i<num_points_; i++)
   {
-    vgl_point_3d<double> X(curve_3d_[i][0], curve_3d_[i][1], curve_3d_[i][2]);
+    vgl_point_3d<double> X(curve_3d_[i].x(), curve_3d_[i].y(), curve_3d_[i].z());
     vgl_point_2d<double> x = brct_algos::projection_3d_point(X, P);
     vgl_point_2d<double> u = brct_algos::closest_point(curves_[iframe], x);
 
@@ -388,7 +389,7 @@ void kalman_filter::update_confidence()
 
     for (int f = 0; f<cur_pos_; ++f)
     {
-      vgl_point_3d<double> X(curve_3d_[i][0], curve_3d_[i][1], curve_3d_[i][2]);
+      vgl_point_3d<double> X(curve_3d_[i].x(), curve_3d_[i].y(), curve_3d_[i].z());
       vgl_point_2d<double> x = brct_algos::projection_3d_point(X, cams[f]);
       vgl_point_2d<double> u = brct_algos::closest_point(curves_[f], x);
 
@@ -432,8 +433,9 @@ void kalman_filter::inc()
   {
     vnl_double_3 X;
 
-    for (int j=0; j<3; j++)
-      X[j] = curve_3d_[i][j];
+    X[0] = curve_3d_[i].x();
+    X[1] = curve_3d_[i].y();
+    X[2] = curve_3d_[i].z();
 
     vnl_matrix_fixed<double, 2, 6> H = get_H_matrix(P, X);
 
@@ -504,9 +506,7 @@ void kalman_filter::inc()
     }
 
     vgl_point_3d<double> X3d = brct_algos::bundle_reconstruct_3d_point(pts, Ps);
-    curve_3d_[i][0] = X3d.x();
-    curve_3d_[i][1] = X3d.y();
-    curve_3d_[i][2] = X3d.z();
+    curve_3d_[i].set(X3d.x(), X3d.y(), X3d.z());
   }
 
   // update confidence level for each points
@@ -634,9 +634,9 @@ vcl_vector<vgl_point_3d<double> > kalman_filter::get_local_pts()
 
   for (int i=0; i<num_points_; i++)
   {
-    xc += curve_3d_[i][0];
-    yc += curve_3d_[i][1];
-    zc += curve_3d_[i][2];
+    xc += curve_3d_[i].x();
+    yc += curve_3d_[i].y();
+    zc += curve_3d_[i].z();
   }
 
   xc /= num_points_;
@@ -644,7 +644,7 @@ vcl_vector<vgl_point_3d<double> > kalman_filter::get_local_pts()
   zc /= num_points_;
 
   for (int i=0; i<num_points_; i++)
-    pts[i].set(curve_3d_[i][0]-xc, curve_3d_[i][1]-yc, curve_3d_[i][2]-zc);
+    pts[i].set(curve_3d_[i].x()-xc, curve_3d_[i].y()-yc, curve_3d_[i].z()-zc);
 
   return pts;
 }
@@ -707,8 +707,8 @@ vnl_matrix<double> kalman_filter::get_predicted_curve()
   vnl_matrix<double> t(2, num_points_);
   for (int i=0; i<num_points_; i++)
   {
-    vgl_point_3d<double> X(curve_3d_[i][0], curve_3d_[i][1], curve_3d_[i][2]);
-    vgl_point_2d<double> x = brct_algos::projection_3d_point(X, P);
+   // vgl_point_3d<double> X(curve_3d_[i][0], curve_3d_[i][1], curve_3d_[i][2]);
+    vgl_point_2d<double> x = brct_algos::projection_3d_point(curve_3d_[i], P);
 
     t[0][i] = x.x();
     t[1][i] = x.y();
@@ -726,8 +726,8 @@ vcl_vector<vgl_point_2d<double> > kalman_filter::get_back_projection()
 
   for (int i=0; i<num_points_; i++)
   {
-    vgl_point_3d<double> X(curve_3d_[i][0], curve_3d_[i][1], curve_3d_[i][2]);
-    t[i] = brct_algos::projection_3d_point(X, P);
+    //vgl_point_3d<double> X(curve_3d_[i][0], curve_3d_[i][1], curve_3d_[i][2]);
+    t[i] = brct_algos::projection_3d_point(curve_3d_[i], P);
   }
 
   return t;
