@@ -7,11 +7,13 @@
 #include <vcl_cmath.h>
 #include <vcl_cassert.h>
 #include <vnl/vnl_matrix.h>
+#include <vnl/vnl_math.h>
 #include <vnl/algo/vnl_svd.h>
 #include <rrel/rrel_m_est_obj.h>
 
 #include "rgrl_match_set.h"
 #include "rgrl_scale.h"
+#include "rgrl_transformation.h"
 
 rgrl_weighter_m_est::
 rgrl_weighter_m_est( vcl_auto_ptr<rrel_m_est_obj>  m_est,
@@ -117,4 +119,85 @@ compute_weights( rgrl_scale const&  scales,
       }
     }
   }
+}
+
+double 
+rgrl_weighter_m_est::
+aux_sum_weighted_residuals( rgrl_scale const&  scale,
+                            rgrl_match_set&    match_set,
+                            rgrl_transformation const&  xform )
+{
+  typedef rgrl_match_set::from_iterator  from_iter;
+  typedef from_iter::to_iterator         to_iter;
+
+  if ( match_set.from_size() > 0) {
+    match_set.remap_from_features( xform );
+    compute_weights( scale, match_set );
+  }
+  
+  double weighted_sum = 0;
+  
+  for ( from_iter fitr = match_set.from_begin(); fitr != match_set.from_end(); ++fitr ){
+      if ( fitr.size() == 0 )  continue;
+      
+      rgrl_feature_sptr mapped_from = fitr.mapped_from_feature();
+      for ( to_iter titr = fitr.begin(); titr != fitr.end(); ++titr ) {
+        //  for each match with a "to" image feature
+        rgrl_feature_sptr to_feature = titr.to_feature();
+        double geometric_err = to_feature->geometric_error( *mapped_from );
+        
+        weighted_sum += vnl_math_sqr(geometric_err) * titr.geometric_weight();
+      }
+  }
+  
+  return weighted_sum;
+}
+
+double
+rgrl_weighter_m_est::
+aux_sum_rho_values( rgrl_scale const&  scale,
+                    rgrl_match_set&    match_set,
+                    rgrl_transformation const&  xform )
+{
+  typedef rgrl_match_set::from_iterator  from_iter;
+  typedef from_iter::to_iterator         to_iter;
+
+  if ( match_set.from_size() == 0 ) return 0;
+
+  double sum_rho = 0;
+
+  for ( from_iter fitr = match_set.from_begin(); fitr != match_set.from_end(); ++fitr ){
+      if ( fitr.size() == 0 )  continue;
+      
+      rgrl_feature_sptr mapped_from = fitr.from_feature()->transform( xform );
+      for ( to_iter titr = fitr.begin(); titr != fitr.end(); ++titr ) {
+        //  for each match with a "to" image feature
+        rgrl_feature_sptr to_feature = titr.to_feature();
+        double geometric_err = to_feature->geometric_error( *mapped_from );
+        
+        sum_rho += m_est_->rho(geometric_err, scale.geometric_scale());
+      }
+  }
+  
+  return sum_rho;
+}
+
+double 
+rgrl_weighter_m_est::
+aux_neg_log_likelihood( rgrl_scale const&  scale,
+                        rgrl_match_set&    match_set,
+                        rgrl_transformation const&  xform )
+{
+  typedef rgrl_match_set::from_iterator  from_iter;
+  typedef from_iter::to_iterator         to_iter;
+
+  int n = 0;
+
+  for ( from_iter fitr = match_set.from_begin(); fitr != match_set.from_end(); ++fitr ){
+    n += fitr.size();
+  }
+
+  double sum_rho_values = aux_sum_rho_values(scale, match_set, xform);
+  double geometric_scale = scale.geometric_scale();
+  return -( n*vcl_log(geometric_scale) + sum_rho_values );
 }

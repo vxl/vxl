@@ -6,10 +6,13 @@
 // \brief  Base class to compute weights.  Main function is pure virtual.
 // \author Chuck Stewart
 // \date   25 Nov 2002
+#include <vcl_cassert.h>
 
 #include "rgrl_scale_sptr.h"
 #include "rgrl_match_set_sptr.h"
 #include "rgrl_object.h"
+
+class rgrl_transformation;
 
 //: Compute the weights based on the scales and matches.
 //
@@ -29,6 +32,20 @@ public:
 
   // Defines type-related functions
   rgrl_type_macro( rgrl_weighter,  rgrl_object);
+
+  // Auxiliary functions related to the m_est
+  virtual double 
+  aux_sum_weighted_residuals( rgrl_scale const&  scale,
+                              rgrl_match_set&    match_set,
+                              rgrl_transformation const&  xform ){ assert(0); return 0;}
+  virtual double
+  aux_sum_rho_values( rgrl_scale const&  scale,
+                      rgrl_match_set&    match_set,
+                      rgrl_transformation const&  xform){ assert(0); return 0 ;}
+  virtual double 
+  aux_neg_log_likelihood( rgrl_scale const&  scale,
+                          rgrl_match_set&    match_set,
+                          rgrl_transformation const&  xform ){ assert(0); return 0;}
 };
 
 #endif

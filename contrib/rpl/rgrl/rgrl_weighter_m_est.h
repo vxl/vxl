@@ -22,6 +22,7 @@
 
 #include <vcl_memory.h>
 class rrel_m_est_obj;
+class rgrl_transformation;
 
 #include "rgrl_weighter.h"
 
@@ -37,11 +38,25 @@ class rgrl_weighter_m_est
   ~rgrl_weighter_m_est();
 
   void
-  compute_weights( rgrl_scale const&  scales,
+  compute_weights( rgrl_scale const&  scale,
                    rgrl_match_set&    match_set ) const;
 
   // Defines type-related functions
   rgrl_type_macro( rgrl_weighter_m_est, rgrl_weighter );
+
+  // Auxiliary functions related to the m_est
+  double 
+  aux_sum_weighted_residuals( rgrl_scale const&  scale,
+                              rgrl_match_set&    match_set,
+                              rgrl_transformation const&  xform );
+  double
+  aux_sum_rho_values( rgrl_scale const&  scale,
+                      rgrl_match_set&    match_set,
+                      rgrl_transformation const&  xform);
+  double 
+  aux_neg_log_likelihood( rgrl_scale const&  scale,
+                          rgrl_match_set&    match_set,
+                          rgrl_transformation const&  xform );
 
  protected:
   vcl_auto_ptr<rrel_m_est_obj> m_est_;
