@@ -1,4 +1,4 @@
-#ifdef __GNUG__
+#ifdef __GNUC__
 #pragma implementation
 #endif
 
@@ -25,12 +25,7 @@ extern "C" int finite(double);
 
 #else
 #warning finite() is not declared on this platform
-static
-bool finite(double x)
-{
-  *(int*)0 = 1; // how to abort() without #include :)
-  return false;
-}
+#define VNL_HAS_NO_FINITE
 #endif
 
 #ifdef VCL_SUNPRO_CC_50
@@ -96,7 +91,7 @@ bool vnl_math_isnan(long double x) { return ((*(int*)(&x)) & 0x7ff00000L) == 0x7
 # endif
 #endif
 
-#ifndef VNL_HAS_NO_FINITE // is currently not defined
+#ifndef VNL_HAS_NO_FINITE
 //: Return true if x is neither NaN nor Inf.
 bool vnl_math_isfinite(float x) { return finite(x) != 0; }
 //: Return true if x is neither NaN nor Inf.
@@ -104,10 +99,16 @@ bool vnl_math_isfinite(double x) { return finite(x) != 0; }
 //: Return true if x is neither NaN nor Inf.
 bool vnl_math_isfinite(long double x) { return finite(x) != 0; }
 #else
-// Assume IEEE floating point number representation AND bigendian or 32-bit
+# if !defined(_INT_64BIT_) || VCL_BIG_ENDIAN
+// Assume IEEE floating point number representation AND big endian or 32-bit
 bool vnl_math_isfinite(float x) { return ((*(int*)(&x)) & 0x7f800000L) != 0x7f800000L; }
 bool vnl_math_isfinite(double x) { return ((*(int*)(&x)) & 0x7ff00000L) != 0x7ff00000L; }
 bool vnl_math_isfinite(long double x) { return ((*(int*)(&x)) & 0x7ff00000L) != 0x7ff00000L; }
+# else
+bool vnl_math_isfinite(float x) { return (((int*)(&x))[1] & 0x7f800000L) != 0x7f800000L; }
+bool vnl_math_isfinite(double x) { return (((int*)(&x))[1] & 0x7ff00000L) != 0x7ff00000L; }
+bool vnl_math_isfinite(long double x) { return (((int*)(&x))[1] & 0x7ff00000L) != 0x7ff00000L; }
+# endif
 #endif
 
 #if defined(_MSC_VER)
@@ -117,32 +118,39 @@ inline bool isnan(double x)
 }
 #endif
 
+#ifndef VNL_HAS_NO_FINITE
 //: Return true if x is inf
 bool vnl_math_isinf(float x) { return !finite(x) && !isnan(x); }
 //: Return true if x is inf
 bool vnl_math_isinf(double x) { return !finite(x) && !isnan(x); }
 //: Return true if x is inf
 bool vnl_math_isinf(long double x) { return !finite(x) && !isnan(x); }
+#else
+# if !defined(_INT_64BIT_) || VCL_BIG_ENDIAN
+// Assume IEEE floating point number representation AND bigendian or 32-bit
+bool vnl_math_isinf(float x) { return ((*(int*)(&x)) & 0x7f800000L) == 0x7f800000L && ((*(int*)(&x)) & 0x007fffffL); }
+bool vnl_math_isinf(double x) { return ((*(int*)(&x)) & 0x7ff00000L) == 0x7ff00000L && ((*(int*)(&x)) & 0x007fffffL); }
+bool vnl_math_isinf(long double x) { return ((*(int*)(&x)) & 0x7ff00000L) == 0x7ff00000L && ((*(int*)(&x)) & 0x007fffffL); }
+# else
+bool vnl_math_isinf(float x) { return (((int*)(&x))[1] & 0x7f800000L) == 0x7f800000L && (((int*)(&x))[1] & 0x007fffffL); }
+bool vnl_math_isinf(double x) { return (((int*)(&x))[1] & 0x7ff00000L) == 0x7ff00000L && (((int*)(&x))[1] & 0x007fffffL); }
+bool vnl_math_isinf(long double x) { return (((int*)(&x))[1] & 0x7ff00000L) == 0x7ff00000L && (((int*)(&x))[1] & 0x007fffffL); }
+# endif
+#endif
 
 //----------------------------------------------------------------------
 
-#ifdef _INT_64BIT_
-// Type-accessible infinities for use in templates.
-template <class T> T vnl_huge_val(T);
-double   vnl_huge_val(double) { return HUGE_VAL; }
-float    vnl_huge_val(float)  { return HUGE_VAL; }
-long int vnl_huge_val(long int) { return 0x7fffffffffffffff; }
-int      vnl_huge_val(int)    { return 0x7fffffffffffffff; }
-short    vnl_huge_val(short)  { return 0x7fff; }
-char     vnl_huge_val(char)   { return 0x7f; }
-#else
 //: Type-accessible infinities for use in templates.
 template <class T> T vnl_huge_val(T);
 double vnl_huge_val(double) { return HUGE_VAL; }
 float  vnl_huge_val(float)  { return (float)HUGE_VAL; }
+#ifdef _INT_64BIT_
+long int vnl_huge_val(long int) { return 0x7fffffffffffffff; }
+int    vnl_huge_val(int)    { return 0x7fffffffffffffff; }
+#else
 int    vnl_huge_val(int)    { return 0x7fffffff; }
+#endif
 short  vnl_huge_val(short)  { return 0x7fff; }
 char   vnl_huge_val(char)   { return 0x7f; }
-#endif
 
 //----------------------------------------------------------------------
