@@ -9,7 +9,7 @@
 # already been used, so do not edit here...
 
 # variables to REPLACE
-# 
+#
 # /I "$(VXLROOT)/vcl/config.win32" /I "$(VXLROOT)/v3p/zlib" == include path
 #   -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE -DHAS_ZLIB == compiler defines
 # $(VXLROOT)/lib/ == override in output directory
@@ -20,16 +20,16 @@
 CFG=png - Win32 Debug
 !MESSAGE This is not a valid makefile. To build this project using NMAKE,
 !MESSAGE use the Export Makefile command and run
-!MESSAGE 
+!MESSAGE
 !MESSAGE NMAKE /f "png.mak".
-!MESSAGE 
+!MESSAGE
 !MESSAGE You can specify a configuration when running NMAKE
 !MESSAGE by defining the macro CFG on the command line. For example:
-!MESSAGE 
+!MESSAGE
 !MESSAGE NMAKE /f "png.mak" CFG="png - Win32 Debug"
-!MESSAGE 
+!MESSAGE
 !MESSAGE Possible choices for configuration are:
-!MESSAGE 
+!MESSAGE
 !MESSAGE "png - Win32 Debug" (based on "Win32 (x86) Static Library")
 !MESSAGE "png - Win32 Release" (based on "Win32 (x86) Static Library")
 # Begin Project
@@ -89,7 +89,7 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LIB32=link.exe -lib
 # ADD BASE LIB32 /nologo
-!ENDIF 
+!ENDIF
 
 # Begin Target
 
@@ -99,102 +99,61 @@ LIB32=link.exe -lib
 # Begin Group "Source Files"
 # PROP Default_Filter ""
 # Begin Source File
-
 SOURCE=.\png.c
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\pngerror.c
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\pngget.c
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\pngmem.c
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\pngpread.c
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\pngread.c
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\pngrio.c
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\pngrtran.c
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\pngrutil.c
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\pngset.c
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\pngtrans.c
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\pngwio.c
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\pngwrite.c
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\pngwtran.c
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\pngwutil.c
-
 # End Source File
 # End Group
 # Begin Group "Header Files"
-
 # PROP Default_Filter "h;hpp;hxx;hm;inl"
 # Begin Source File
-
 SOURCE=.\png.h
-
 # End Source File
 # Begin Source File
-
-SOURCE=.\pngasmrd.h
-
-# End Source File
-# Begin Source File
-
 SOURCE=.\pngconf.h
-
 # End Source File
 # End Group
 # PROP Default_Filter "ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe"
 # End Group
 # End Target
 # End Project
-
