@@ -38,6 +38,7 @@ TESTS += test_algo_gauss_filter.cxx
 TESTS += test_algo_line_filter.cxx
 TESTS += test_algo_correlate_1d.cxx
 TESTS += test_algo_correlate_2d.cxx
+TESTS += test_algo_threshold.cxx
 
 include ${IUEROOT}/mul/mbl/config.mk
 include ${IUEROOT}/mul/mil/config.mk
