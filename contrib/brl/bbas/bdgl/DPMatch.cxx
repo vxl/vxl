@@ -548,29 +548,23 @@ double DPMatch::computeEpipolarCost(int i, int /* ip */, int j, int /* jp */)
 
 double DPMatch::computeIntervalCost(int i, int ip, int j, int jp)
 {
-  R1_=10;
+  R1_ = 10;
   curve1_.stretchCost(i,ip,ds1_);
   curve2_.stretchCost(j,jp,ds2_);
   curve1_.bendCost(i,ip,dt1_);
   curve2_.bendCost(j,jp,dt2_);
-  double C=0.0;
-  double w=0.2;/*0.2;*/
-  if (ep_pt.x()<-1e4)
-    C=0.0;
-  else
-    C=0.4;
+  double w = 0.2;
+  double C = ep_pt.x()<-1e4 ? 0.0 : 0.4;
 
-  double delta=1;
+  double delta = 1.0;
   double dE=computeEpipolarCost(i,ip, j,  jp);
-//double dF = vcl_fabs(ds1_ - ds2_);
-//double dK = vcl_fabs(dt1_ - dt2_);
 
-  double cost = // 0.0*dF + 0.0*R1_*dK +
+  double cost = // 0.0*vcl_fabs(ds1_ - ds2_) + 0.0*R1_*vcl_fabs(dt1_ - dt2_) +
                 C*R1_*vcl_pow(vcl_sqrt(dE)/delta,5)/(1+vcl_pow(vcl_sqrt(dE)/delta,5));
 
   if (ip==0 || jp==0)
     cost*=w;
-  if (i==n_-1|| j==m_-1)
+  if (i+1==n_ || j+1==m_)
     cost*=w;
 
   return cost;
