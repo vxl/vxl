@@ -21,8 +21,8 @@ vtol_edge_2d::vtol_edge_2d(vtol_vertex_2d_sptr const& new_v1,
                            vtol_vertex_2d_sptr const& new_v2,
                            vsol_curve_2d_sptr const& new_curve)
 {
-  assert(new_v1); v1_=new_v1->cast_to_vertex();
-  assert(new_v2); v2_=new_v2->cast_to_vertex();
+  assert(new_v1?true:false); v1_=new_v1->cast_to_vertex();
+  assert(new_v2?true:false); v2_=new_v2->cast_to_vertex();
   if (!new_curve)
     curve_=new vsol_line_2d(new_v1->point(),new_v2->point());
   else
