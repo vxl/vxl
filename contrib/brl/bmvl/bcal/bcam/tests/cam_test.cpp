@@ -4,17 +4,32 @@
 #include <bmvl/bcal/bcam/camera_graph.h>
 #include <bmvl/bcal/bcam/euclidean_transformation.h> 
 
-int main()
+void testing_graph()
 {
+  vcl_cerr<<"\n--------------testing graph -------------\n";
+  camera_graph<calibrate_plane, zhang_camera_node, euclidean_transformation> cg;
+
+  // add three vertex from source point.
+  int source_id = cg.get_source_id();
+  cg.add_vertex(source_id);
+  cg.add_vertex(source_id);
+  cg.add_vertex(source_id);
+
+  cg.print();
+}
+
+void testing_linear_calibration()
+{
+  vcl_cerr<<"\n--------------testing calibration -------------\n";
 
   camera_graph<calibrate_plane, zhang_camera_node, euclidean_transformation> cg;
   
   // initialize the template plane
-  cg.getSource()->readData("Model.txt");
+  cg.get_source()->readData("Model.txt");
 
   // add a camera with 5 views into a graph
   int camID = cg.add_vertex();
-  cg.print();
+  int source_id = cg.get_source_id();
 
   // create time beats. 
   vcl_vector<double> t_beats(5);
@@ -23,8 +38,18 @@ int main()
   t_beats[2] = 2;
   t_beats[3] = 3;
   t_beats[4] = 4;
+  
+  // set beats on camera node
   cg.get_vertex(camID)->set_beat(t_beats);
 
+  // set beats on translation
+  euclidean_transformation *trans = cg.get_edge(source_id, camID);
+  assert(trans);
+  trans->set_beat(t_beats);
+
+  cg.print();
+
+  // read feature point for each view
   cg.get_vertex(camID)->readData("data1.txt" , 0);
   cg.get_vertex(camID)->readData("data2.txt" , 1);
   cg.get_vertex(camID)->readData("data3.txt" , 2);
@@ -37,6 +62,15 @@ int main()
   lc.setCameraGraph(&cg);
   lc.calibrate();
 
+  cg.print();
+}
+
+int main()
+{
+
+  testing_graph();
+  testing_linear_calibration();
+ 
   return 0;
 }
 
