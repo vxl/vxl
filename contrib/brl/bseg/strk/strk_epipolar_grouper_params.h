@@ -17,7 +17,6 @@
 class strk_epipolar_grouper_params : public gevd_param_mixin
 {
  public:
-	 
   strk_epipolar_grouper_params(const float eu = -610.071,
                                const float ev = 237.358,
                                const int  elu = 1000,
@@ -26,7 +25,7 @@ class strk_epipolar_grouper_params : public gevd_param_mixin
                                const int Ns = 10,
                                const float angle_thresh = 7.0,
                                const bool  dummy4 = false
-                               );
+                              );
 
  strk_epipolar_grouper_params(const strk_epipolar_grouper_params& old_params);
  ~strk_epipolar_grouper_params(){}
@@ -52,7 +51,7 @@ class strk_epipolar_grouper_params : public gevd_param_mixin
   float ev_;   //row position of the epipole
   int elu_; //col position of the epipolar parameter space
   int elv_min_; // minimum row position of the epipolar space
-  int elv_max_; // maximun col position of the epipolar space
+  int elv_max_; // maximum col position of the epipolar space
   int Ns_;   // number of samples in the s dimension of an unbounded region
   float angle_thresh_;   // reject epipolar intersections close to parallel
   bool  dummy4_;  // dummy param
