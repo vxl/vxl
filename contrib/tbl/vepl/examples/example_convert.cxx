@@ -19,15 +19,14 @@
 #include <vil1/vil1_load.h>
 #include <vil1/vil1_save.h>
 #include <vcl_iostream.h>
-#include <vil1/vil1_rgb.h>
 #include <vil1/vil1_memory_image_of.txx>
 
 #include <vxl_config.h> // for vxl_byte
 
 class rgbcell: public vil1_rgb<vxl_byte>
 {
-public:
-  rgbcell() {};
+ public:
+  rgbcell() {}
   rgbcell(double x): vil1_rgb<vxl_byte>(vxl_byte(x)) {}
 };
 
