@@ -24,7 +24,6 @@
 #include "vgui_section_buffer.h"
 
 #include <vcl_cassert.h>
-#include <vcl_cstdlib.h> // abort()
 #include <vcl_cstring.h> // memmove()
 #include <vcl_iostream.h>
 #include <vcl_vector.h>
