@@ -242,7 +242,7 @@ char const* vil_dicom_image::file_format() const
   return vil_dicom_format_tag;
 }
 
-vil_dicom_image::vil_dicom_image(vil_stream* vs, unsigned ni, unsigned nj,
+vil_dicom_image::vil_dicom_image(vil_stream* /*vs*/, unsigned ni, unsigned nj,
                                  unsigned nplanes, vil_pixel_format format)
 {
   assert(!"vil_dicom_image doesn't yet support output");
@@ -769,7 +769,7 @@ read_header( DcmObject* f, vil_dicom_header_info& i )
 namespace
 {
   template<class InT>
-  vcl_auto_ptr<DiInputPixel>
+  void
   convert_src_type( InT const*,
                     DcmPixelData* pixels,
                     unsigned num_samples,
@@ -777,23 +777,22 @@ namespace
                     Uint16 stored,
                     Uint16 high,
                     Uint16 rep,
+                    vcl_auto_ptr<DiInputPixel>& pixel_data,
                     vil_pixel_format& act_format )
   {
     typedef vcl_auto_ptr<DiInputPixel> OutType;
     if( rep == 0 && stored <= 8 ) {
       act_format = VIL_PIXEL_FORMAT_BYTE;
-      return OutType( new DiInputPixelTemplate<InT,Uint8>( pixels, alloc, stored, high, 0, num_samples ) );
+      pixel_data.reset( new DiInputPixelTemplate<InT,Uint8>( pixels, alloc, stored, high, 0, num_samples ) );
     } else if( rep == 0 && stored <= 16 ) {
       act_format = VIL_PIXEL_FORMAT_UINT_16;
-      return OutType( new DiInputPixelTemplate<InT,Uint16>( pixels, alloc, stored, high, 0, num_samples ) );
+      pixel_data.reset( new DiInputPixelTemplate<InT,Uint16>( pixels, alloc, stored, high, 0, num_samples ) );
     } else if( rep == 1 && stored <= 8 ) {
       act_format = VIL_PIXEL_FORMAT_SBYTE;
-      return OutType( new DiInputPixelTemplate<InT,Sint8>( pixels, alloc, stored, high, 0, num_samples ) );
+      pixel_data.reset( new DiInputPixelTemplate<InT,Sint8>( pixels, alloc, stored, high, 0, num_samples ) );
     } else if( rep == 1 && stored <= 16 ) {
       act_format = VIL_PIXEL_FORMAT_INT_16;
-      return OutType( new DiInputPixelTemplate<InT,Sint16>( pixels, alloc, stored, high, 0, num_samples ) );
-    } else {
-      return OutType();
+      pixel_data.reset( new DiInputPixelTemplate<InT,Sint16>( pixels, alloc, stored, high, 0, num_samples ) );
     }
   }
 
@@ -839,9 +838,9 @@ read_pixels_into_buffer( DcmPixelData* pixels,
   //
   vcl_auto_ptr<DiInputPixel> pixel_data;
   if( pixels->getVR() == EVR_OW ) {
-    pixel_data = convert_src_type( (Uint16*)0, pixels, num_samples, alloc, stored, high, rep, act_format );
+    convert_src_type( (Uint16*)0, pixels, num_samples, alloc, stored, high, rep, pixel_data, act_format );
   } else {
-    pixel_data = convert_src_type( (Uint8*)0, pixels, num_samples, alloc, stored, high, rep, act_format );
+    convert_src_type( (Uint8*)0, pixels, num_samples, alloc, stored, high, rep, pixel_data, act_format );
   }
 
   // On error, return without doing anything
