@@ -122,7 +122,7 @@ vnl_alloc::free_list[VNL_ALLOC_NFREELISTS]
   0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
   0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
 };
-// The 16 zeros are necessary to make version 4.1 of the SunPro
+// The 32 zeros are necessary to make version 4.1 of the SunPro
 // compiler happy.  Otherwise it appears to allocate too little
 // space for the array.
 
