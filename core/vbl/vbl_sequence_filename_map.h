@@ -29,7 +29,6 @@
 //
 //-----------------------------------------------------------------------------
 
-#include <vcl/vcl_compiler.h>
 #include <vcl/vcl_iosfwd.h>
 #include <vcl/vcl_string.h>
 #include <vcl/vcl_vector.h>

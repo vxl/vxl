@@ -15,7 +15,6 @@
 // .SECTION Modifications :
 //
 //-----------------------------------------------------------------------------
-#include <vcl/vcl_compiler.h>
 #include <vbl/vbl_basic_tuple.h>
 
 //: A tuple used to select in vbl_basic_relation

@@ -15,7 +15,6 @@
 // .SECTION Modifications : None Yet
 //
 //-----------------------------------------------------------------------------
-#include <vcl/vcl_compiler.h>
 #include <vcl/vcl_cassert.h>
 #include <vcl/vcl_string.h>
 #include <vcl/vcl_iosfwd.h>

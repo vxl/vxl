@@ -6,8 +6,8 @@
 #if defined(VCL_SGI_CC)
 // urgh! there is no rdbuf() method for *setting* the
 // stream buffer.
-#include <memory.h>
-#include <stddef.h>
+# include <memory.h>
+# include <stddef.h>
 # define private public
 # define protected public
 # include <iostream.h>

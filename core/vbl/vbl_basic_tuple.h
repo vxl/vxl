@@ -17,7 +17,6 @@
 //-----------------------------------------------------------------------------
 
 #include <vcl/vcl_iostream.h>
-#include <vcl/vcl_compiler.h>
 #include <vbl/vbl_basic_optional.h>
 #include <vbl/vbl_protection_traits.h>
 

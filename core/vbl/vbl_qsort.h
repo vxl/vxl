@@ -10,6 +10,7 @@
 //: Collection of common predicates for library sort routines
 
 #include <vcl/vcl_cstdlib.h>
+#include <vcl/vcl_algorithm.h>
 #include <vcl/vcl_vector.h>
 
 int vbl_qsort_double_ascending(double const&, double const&);
@@ -61,7 +62,11 @@ template <class T>
 inline
 void vbl_qsort_ascending(vcl_vector<T>& v)
 {
+#ifdef WIN32
+  vcl_sort(v.begin(), v.end(), std::less<T>());
+#else
   qsort(v.begin(), v.size(), sizeof v[0], vbl_qsort_helper<T>::ascend);
+#endif
 }
 
 // -- Sort an STL vector into descending order, using the standard comparison
@@ -70,7 +75,11 @@ template <class T>
 inline
 void vbl_qsort_descending(vcl_vector<T>& v)
 {
+#ifdef WIN32
+  vcl_sort(v.begin(), v.end(), vcl_greater<T>());
+#else
   qsort(v.begin(), v.size(), sizeof v[0], vbl_qsort_helper<T>::descend);
+#endif
 }
 
 // -- Sort STL vector.

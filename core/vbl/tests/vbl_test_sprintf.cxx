@@ -1,4 +1,3 @@
-#include <vcl/vcl_compiler.h>
 #include <vbl/vbl_sprintf.h>
 #include <vcl/vcl_iostream.h>
 

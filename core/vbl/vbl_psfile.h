@@ -4,7 +4,6 @@
 #include <vcl/vcl_fstream.h>
 #include <vcl/vcl_iostream.h>
 #include <vcl/vcl_string.h>
-//objectionfsm #include <vbl/vbl_types.h>
 
 class vbl_psfile: public ofstream
 {
@@ -96,5 +95,3 @@ private: /*even more*/
 };
 
 #endif
-// _vbl_psfile_h
-

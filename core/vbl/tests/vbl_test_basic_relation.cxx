@@ -6,7 +6,6 @@
 //
 //-----------------------------------------------------------------------------
 
-#include <vcl/vcl_compiler.h>
 #include <vcl/vcl_list.h>
 #include <vcl/vcl_iostream.h>
 #include <vcl/vcl_string.h>
