@@ -9,7 +9,8 @@
 #include <vcl_cassert.h>
 #include <vsl/vsl_indent.h>
 #include <vimt/vimt_image_2d_of.h>
-#include <vil2/vil2_image_view_functions.h>
+#include <vil2/vil2_print.h>
+#include <vil2/vil2_crop.h>
 #include <vsl/vsl_vector_io.h>
 
 //=======================================================================
@@ -77,7 +78,7 @@ vimt_image_2d_of<T> vimt_image_2d_of<T>::window(unsigned x0, unsigned nx,
 {
   vimt_transform_2d trans;
   trans.set_translation(-double(x0),-double(y0));
-  return vimt_image_2d_of<T>(vil2_window(image_,x0,ny,y0,ny),trans*world2im_);
+  return vimt_image_2d_of<T>(vil2_crop(image_,x0,ny,y0,ny),trans*world2im_);
 }
 
 
