@@ -26,8 +26,10 @@ SOURCES += gevd_clean_edgels.cxx
 MANPAGE_SOURCES += gevd_pixel.h
 MANPAGE_SOURCES += gevd_xpixel.h
 SOURCES += gevd_edgel_regions.cxx
-SOURCES += gevd_intensity_face.cxx
+#SOURCES += gevd_intensity_face.cxx
 SOURCES += gevd_region_edge.cxx
+SOURCES += gevd_region_proc.cxx
+SOURCES += gevd_region_proc_params.cxx
 
 ifeq "$(TJ_GCC30)$(optimize)" "1-O2"
 # gcc 3.0 needs too much virtual memory with -O2
