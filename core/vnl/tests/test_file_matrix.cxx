@@ -21,7 +21,7 @@ void test_file_matrix()
   H /= H[0][0];
 
   vnl_matlab_print(vcl_cout, H, "H");
-  TEST("file_matrix 3x3", H(0,0), 1.0);
+  vnl_test_assert_near("file_matrix 3x3", H(0,0), 1.0);
 }
 
 TESTMAIN(test_file_matrix);
