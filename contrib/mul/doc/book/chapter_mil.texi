@@ -1,4 +1,3 @@
-
 @chapsummary
 Set of image classes which use pointers to act as views of other images.
 @endchapsummary
@@ -54,9 +53,9 @@ The image hierarchy is (or will be) as follows:
 @smallexample
  mil_image
     - mil_image_2d
-	  - mil_image_2d_of<T>
+    - mil_image_2d_of<T>
     - mil_image_2d
-	  - mil_image_3d_of<T>
+    - mil_image_3d_of<T>
 @end smallexample
 
 mil_image_2d classes contain a transformation object, mil_transform_2d, which gives
@@ -79,9 +78,9 @@ As an example of usage (a single plane grey-scale image)
   // Fill values of the image
   for (int y=0;y<image0.nx();++y)
      for (int x=0;x<image0.nx();++x)
-	 {
-	   image0(x,y) = x+y;
-	 }
+     {
+       image0(x,y) = x+y;
+     }
 
   image0.printAll(vcl_cout);
 @end example
@@ -96,9 +95,9 @@ Multiple plane images can be easily created
   for (int i=0;i<image0.nPlanes();++i)
     for (int y=0;y<image0.nx();++y)
        for (int x=0;x<image0.nx();++x)
-	   {
-	     image0(x,y,i) = x+y;
-	   }
+       {
+         image0(x,y,i) = x+y;
+       }
 
   image0.printAll(vcl_cout);
 @end example
@@ -119,16 +118,16 @@ It can probably be tweaked to go even faster, but at the expense of readability.
   for (int i=0;i<n_planes;++i)
   {
     T* row = image0.plane(i);
-	for (int y=0;y<ny;++y)
-	{
-	  T* px = row;
-	  for (int x=0;x<nx;++x)
-	  {
-	    sum += *px;
-		px += xstep;
-	  }
-	  row += ystep;
-	}
+    for (int y=0;y<ny;++y)
+    {
+      T* px = row;
+      for (int x=0;x<nx;++x)
+      {
+        sum += *px;
+        px += xstep;
+      }
+      row += ystep;
+    }
   }
 @end example
 
@@ -188,9 +187,9 @@ To sample along a profile (points p+i.u, where i=[0..n-1]) use
 
 @smallexample
   mil_image_2d_of<vil_byte> image(100,100);
-	vnl_vector<double> vec;
-	vgl_point_2d<double> p;
-	vgl_vector_2d<double> u;
+  vnl_vector<double> vec;
+  vgl_point_2d<double> p;
+  vgl_vector_2d<double> u;
 
   mil_sample_profile_2d(vec,image,p,u,n);
 @end smallexample

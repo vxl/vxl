@@ -10,29 +10,31 @@ int main()
   vul_test_start("Temporary filename");
 
   {
-    vul_test_begin("Writing to temporary filename");
-
     vcl_string filename = vul_temp_filename();
+    vcl_cout << "vul_temp_filename() returns '" << filename << "'\n";
 
     vcl_ofstream ostr( filename.c_str() );
-    bool status_good = ostr.good();
-    // Under Windows, an open file cannot be unlinked.
+    TEST("Creating temporary file", ostr.good(), true);
+
+    // Writing to temporary file:
+    ostr << 1;
     ostr.close();
-    if( vpl_unlink( filename.c_str() ) == -1) {
-      vcl_cerr << "Unlink failed!" << vcl_endl;
-      status_good=false;
-    }
-    
-    vul_test_perform( status_good );
+    // now reading back, to see if the file really exists:
+    vcl_ifstream istr( filename.c_str() );
+    TEST("Opening temporary file", istr.good(), true);
+    int i=0; istr >> i;
+    TEST("Writing to temporary file", i, 1);
+
+    TEST("Removing temporary file", vpl_unlink(filename.c_str()) == -1, false);
   }
 
   {
-    vul_test_begin("Testing multiple calls");
-
     vcl_string filename1 = vul_temp_filename();
+    vcl_cout << "vul_temp_filename() returns '" << filename1 << "'\n";
     vcl_string filename2 = vul_temp_filename();
+    vcl_cout << "vul_temp_filename() returns '" << filename2 << "'\n";
 
-    vul_test_perform( filename1 != filename2 );
+    TEST("Testing multiple calls", filename1 == filename2, false);
   }
 
   return vul_test_summary();
