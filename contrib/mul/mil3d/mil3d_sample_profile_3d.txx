@@ -48,107 +48,6 @@ void mil3d_sample_profile_3d(vnl_vector<vecType>& v,
   mil3d_sample_profile_3d_ic(v,image,im_p0,im_p1,n);
 }
 
-//: Sample along profile, using safe trilinear interpolation
-//  Profile points are p+iu, where i=[0..n-1].
-//  Vector v is resized to n*np elements, where np=image.n_planes().
-//  v[0]..v[np-1] are the values from point p
-//  Points outside image return zero.
-template <class imType, class vecType>
-void mil3d_sample_profile_3d_safe(vnl_vector<vecType>& vec,
-                                const mil3d_image_3d_of<imType>& image,
-                                const vgl_point_3d<double>& p0,
-                                const vgl_vector_3d<double>& u,
-                                int n)
-{
-  int np = image.n_planes();
-  int nx = image.nx();
-  int ny = image.ny();
-  int nz = image.nz();
-  int xstep = image.xstep();
-  int ystep = image.ystep();
-  int zstep = image.zstep();
-
-  vec.resize(n*np);
-  vecType* v = vec.begin();
-
-  vgl_point_3d<double> p = p0;
-
-  if (np==1)
-  {
-    const imType* plane0 = image.plane(0);
-    for (int i=0;i<n;++i)
-    {
-      vgl_point_3d<double> im_p = image.world2im()(p);
-      v[i] = mil3d_safe_trilin_interp_3d(im_p.x(),im_p.y(),im_p.z(),
-			                                  plane0,nx,ny,nz,xstep,ystep,zstep);
-      p+=u;
-    }
-  }
-  else
-  {
-    for (int i=0;i<n;++i)
-    {
-      for (int j=0;j<np;++j)
-      {
-        vgl_point_3d<double> im_p = image.world2im()(p);
-        *v = mil3d_safe_trilin_interp_3d(im_p.x(),im_p.y(),im_p.z(),
-			                                  image.plane(j),nx,ny,nz,xstep,ystep,zstep);
-        v++;
-      }
-      p+=u;
-    }
-  }
-}
-
-//: Sample along profile, using trilinear interpolation (no checks)
-//  Profile points are p+iu, where i=[0..n-1], all of which are
-//  assumed to be sufficiently inside the image that trilinear interpolation
-//  will be safe.
-//  Vector v is resized to n*np elements, where np=image.n_planes().
-//  v[0]..v[np-1] are the values from point p
-template <class imType, class vecType>
-void mil3d_sample_profile_3d_no_checks(vnl_vector<vecType>& vec,
-                                     const mil3d_image_3d_of<imType>& image,
-                                     const vgl_point_3d<double>& p0,
-                                     const vgl_vector_3d<double>& u,
-                                     int n)
-{
-  int np = image.n_planes();
-  int xstep = image.xstep();
-  int ystep = image.ystep();
-  int zstep = image.zstep();
-
-  vec.resize(n*np);
-  vecType* v = vec.begin();
-
-  vgl_point_3d<double> p = p0;
-
-  if (np==1)
-  {
-    const imType* plane0 = image.plane(0);
-    for (int i=0;i<n;++i)
-    {
-      vgl_point_3d<double> im_p = image.world2im()(p);
-      v[i] = mil3d_trilin_interp_3d(im_p.x(),im_p.y(),im_p.z(),
-			                             plane0,xstep,ystep,zstep);
-      p+=u;
-    }
-  }
-  else
-  {
-    for (int i=0;i<n;++i)
-    {
-      for (int j=0;j<np;++j)
-      {
-        vgl_point_3d<double> im_p = image.world2im()(p);
-        *v = mil3d_trilin_interp_3d(im_p.x(),im_p.y(),im_p.z(),
-			                             image.plane(j),xstep,ystep,zstep);
-        v++;
-      }
-      p+=u;
-    }
-  }
-}
 
 //: Sample along profile, using safe trilinear interpolation
 //  Profile points are along the line between p0 and p1 (in image co-ordinates).
@@ -262,16 +161,6 @@ void mil3d_sample_profile_3d_ic(vnl_vector<vecType>& vec,
 
 #define MIL3D_SAMPLE_PROFILE_3D_INSTANTIATE( imType, vecType ) \
 template void mil3d_sample_profile_3d(vnl_vector<vecType >& v, \
-                           const mil3d_image_3d_of<imType >& image, \
-                           const vgl_point_3d<double >& p, \
-                           const vgl_vector_3d<double >& u, \
-                           int n); \
-template void mil3d_sample_profile_3d_safe(vnl_vector<vecType >& v, \
-                           const mil3d_image_3d_of<imType >& image, \
-                           const vgl_point_3d<double >& p, \
-                           const vgl_vector_3d<double >& u, \
-                           int n); \
-template void mil3d_sample_profile_3d_no_checks(vnl_vector<vecType >& v, \
                            const mil3d_image_3d_of<imType >& image, \
                            const vgl_point_3d<double >& p, \
                            const vgl_vector_3d<double >& u, \
