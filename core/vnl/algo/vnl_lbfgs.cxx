@@ -10,7 +10,7 @@
 //-----------------------------------------------------------------------------
 
 #include "vnl_lbfgs.h"
-
+#include <vcl/vcl_cmath.h>
 #include <vcl/vcl_cstdio.h>   // sprintf()
 #include <vcl/vcl_iostream.h>
 
@@ -71,7 +71,7 @@ static struct {
   integer mp, lp; // Fortran i/o stuff.  Unused here.
   doublereal gtol, stpmin, stpmax;
   doublereal stpawf; // line search default step length, added by awf
-} lb3_; // SGI CC warns here about unused variable.
+} lb3_; // SGI CC warns here about unused variable. Just ignore it.
 
 #define lb3_1 lb3_
 
@@ -155,7 +155,7 @@ bool vnl_lbfgs::minimize(vnl_vector<double>& x)
 	  vcl_cerr.form("%6d %20g %20g %20g %20g\n", i, x[i], g[i], fdg[i], g[i] - fdg[i]);
       }
 #endif
-      vcl_cerr << "   ERROR = " << (fdg - g).squared_magnitude() / sqrt(double(n)) << "\n";
+      vcl_cerr << "   ERROR = " << (fdg - g).squared_magnitude() / vcl_sqrt(double(n)) << "\n";
     }
 
     iprint[0] = trace ? 1 : -1; // -1 no o/p, 0 start and end, 1 every iter.
