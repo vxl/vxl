@@ -104,12 +104,24 @@ static void test_convert_to_n_planes()
   vil3d_image_view<vxl_uint_16> image_16_3 = vil3d_convert_round(vxl_uint_16(), f_image_dest_sptr);
   testlib_test_perform( vil3d_image_view_deep_equality(image_16_3, u16_image_expected) );
 
+  { // print out values the function will use, because we are getting odd results on some platforms
+    vcl_streamsize oldprec = vcl_cout.precision(18);
+    float fmaxp, fminp;
+    vil3d_math_value_range(f_image_dest,fminp,fmaxp);
+    double b = 0.0;
+    if (fmaxp-fminp >0)
+      b = (65535.999)/static_cast<double>(fmaxp-fminp);
+    double a = -1.0*fminp*b + 0.0;
+    vcl_cout << "input (minp=" << fminp << ", maxp=" << fmaxp << ')' << vcl_endl;
+    vcl_cout << "trans (a=" << a << ", b=" << b << ')' << vcl_endl;
+    vcl_cout.precision(oldprec);
+  }
   testlib_test_begin( "implicit vil3d_convert_stretch_range float to 16bit with rounding" );
-  vil3d_image_view<vxl_uint_16> image_16_3_stretched = vil3d_convert_stretch_range(vxl_uint_16(), f_image_ref);
+  vil3d_image_view<vxl_uint_16> image_16_3_stretched = vil3d_convert_stretch_range(vxl_uint_16(), f_image_dest_sptr);
   vxl_uint_16 minp,maxp;
   vil3d_math_value_range(image_16_3_stretched,minp,maxp);
-  vcl_cout << "(minp=" << minp << ", maxp=" << maxp << ')';
   testlib_test_perform( minp==0 && maxp==65535);
+  vcl_cout << "output (minp=" << minp << ", maxp=" << maxp << ')' << vcl_endl;
 #ifdef DEBUG
   vil3d_print_all(vcl_cout, image_16_3_stretched);
   vil3d_print_all(vcl_cout, image_16_3);
