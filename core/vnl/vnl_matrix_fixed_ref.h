@@ -148,6 +148,7 @@
 //-----------------------------------------------------------------------------
 
 #include <vcl_cassert.h>
+#include <vcl_iosfwd.h>
 #include <vcl_cstring.h> // memcpy()
 #include <vnl/vnl_matrix_fixed.h>
 #include <vnl/vnl_vector_fixed.h>

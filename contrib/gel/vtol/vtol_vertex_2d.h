@@ -22,6 +22,7 @@
 //   Dec. 2002, Peter Vanroose -interface change: vtol objects -> smart pointers
 // \endverbatim
 
+#include <vcl_iosfwd.h>
 #include <vnl/vnl_double_2.h>
 #include <vsol/vsol_point_2d_sptr.h>
 #include <vtol/vtol_vertex.h>

@@ -22,8 +22,9 @@
 // \endverbatim
 //-----------------------------------------------------------------------------
 
-#include <vtol/vtol_topology_object.h>
+#include <vcl_iosfwd.h>
 #include <vcl_vector.h>
+#include <vtol/vtol_topology_object.h>
 #include <vtol/vtol_vertex.h>
 #include <vtol/vtol_vertex_sptr.h>
 #include <vtol/vtol_vertex_2d_sptr.h>

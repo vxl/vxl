@@ -10,6 +10,7 @@
 #endif // _MSC_VER > 1000
 
 #include <vcl_vector.h>
+#include <vcl_iosfwd.h>
 #include <vcsl/vcsl_spatial_transformation.h>
 #include <vgl/algo/vgl_h_matrix_3d.h>
 

@@ -8,12 +8,13 @@
 // and to perform common operations using it e.g. transfer point.
 //
 // \verbatim
-// Modifications
-//    22 Oct 2002 - Peter Vanroose - added vgl_homg_point_2d interface
-//    23 Oct 2002 - Peter Vanroose - using fixed 3x3 matrices throughout
-//    22 Mar 2003 - J. L. Mundy  - prep for moving to vgl
+//  Modifications
+//   22 Oct 2002 - Peter Vanroose - added vgl_homg_point_2d interface
+//   23 Oct 2002 - Peter Vanroose - using fixed 3x3 matrices throughout
+//   22 Mar 2003 - J. L. Mundy  - prep for moving to vgl
 // \endverbatim
 
+#include <vcl_iosfwd.h>
 #include <vnl/vnl_matrix_fixed.h>
 #include <vnl/vnl_fwd.h>
 #include <vgl/vgl_homg_point_3d.h>

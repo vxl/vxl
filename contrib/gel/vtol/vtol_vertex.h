@@ -23,6 +23,7 @@
 // \endverbatim
 
 #include "vtol_topology_object.h"
+#include <vcl_iosfwd.h>
 
 class vtol_vertex_2d;
 class vtol_edge;

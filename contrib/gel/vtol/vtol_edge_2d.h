@@ -42,6 +42,7 @@
 //   9 Jan. 2003, Peter Vanroose - added "copy_geometry()"
 // \endverbatim
 
+#include <vcl_iosfwd.h>
 #include <vtol/vtol_zero_chain.h>
 #include <vtol/vtol_vertex_2d.h>
 #include <vtol/vtol_vertex_2d_sptr.h>

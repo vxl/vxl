@@ -29,6 +29,7 @@
 // \endverbatim
 //-----------------------------------------------------------------------------
 
+#include <vcl_iosfwd.h>
 #include <vcl_vector.h>
 #include <vtol/vtol_chain.h>
 #include <vtol/vtol_face_2d_sptr.h>

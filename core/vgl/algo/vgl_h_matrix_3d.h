@@ -16,6 +16,7 @@
 // \endverbatim
 
 #include <vcl_vector.h>
+#include <vcl_iosfwd.h>
 #include <vnl/vnl_fwd.h> // for vnl_vector_fixed<T,3>
 #include <vnl/vnl_matrix_fixed.h>
 #include <vgl/vgl_homg_point_3d.h>

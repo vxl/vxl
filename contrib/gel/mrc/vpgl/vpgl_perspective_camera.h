@@ -28,11 +28,12 @@
 //
 //-----------------------------------------------------------------------------
 
+#include <vcl_iosfwd.h>
+#include <vcl_vector.h>
 #include <vpgl/vpgl_matrix_camera.h>
 #include <vpgl/vpgl_matrix_camera_sptr.h>
 #include <vcsl/vcsl_spatial_sptr.h>
 #include <vcsl/vcsl_graph_sptr.h>
-#include <vcl_vector.h>
 
 class vpgl_perspective_camera : public vpgl_basic_camera
 {

@@ -35,16 +35,16 @@
 //   5 Feb. 2003, Peter Vanroose - moved IsHoleP() here from vtol_intensity_face
 // \endverbatim
 
-#include <vtol/vtol_topology_object.h>
+#include <vcl_iosfwd.h>
 #include <vcl_vector.h>
-
+#include <vtol/vtol_topology_object.h>
+#include <vtol/vtol_one_chain.h>
+#include <vtol/vtol_two_chain.h>
 class vtol_vertex;
 class vtol_edge;
 class vtol_face_2d;
 class vtol_one_chain;
 class vtol_two_chain;
-#include <vtol/vtol_one_chain.h>
-#include <vtol/vtol_two_chain.h>
 
 class vtol_face : public vtol_topology_object
 {
