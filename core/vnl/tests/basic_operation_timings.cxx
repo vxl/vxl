@@ -16,8 +16,9 @@ const unsigned NJ=256;
 
 const unsigned nstests = 10;
 
-void distance_squared(const vcl_vector<vnl_vector<double> > &s1, const vcl_vector<vnl_vector<double> > &s2, 
-                   vcl_vector<double> & d, int n_loops)
+template <class T>
+void distance_squared(const vcl_vector<vnl_vector<T> > &s1, const vcl_vector<vnl_vector<T> > &s2, 
+                   vcl_vector<T> & d, int n_loops)
 {
   vnl_vector<double> stats(nstests);
   for (int st=0;st<nstests;++st)
@@ -73,16 +74,18 @@ void mat_x_vec(const vnl_matrix<T> &s1, const vcl_vector<vnl_vector<T> > &s2,
     stats[st] = (1e6*(double(t1)-double(t0))/(n_loops*CLOCKS_PER_SEC));
   }
   vcl_sort(stats.begin(), stats.end());
-  vcl_cout<<"  Mean: "<<unsigned long(stats.mean()+0.5)
-        <<"us  +/-"<<unsigned long((stats(nstests*0.75)-stats(nstests*0.25))+0.5)<<"us\n"<<vcl_endl;
+  vcl_cout<<"  Mean: "<<(unsigned long)(stats.mean()+0.5)
+        <<"us  +/-"<<(unsigned long)((stats(nstests*0.75)-stats(nstests*0.25))+0.5)<<"us\n"<<vcl_endl;
 }
 
-void run_for_size(unsigned nv, unsigned nm)
+
+template <class T>
+void run_for_size(unsigned nv, unsigned nm, T dummy, char * type)
 {
   const unsigned n_data = 10;
-  vcl_vector<vnl_vector<double> > va(n_data), vb(n_data), vc(n_data);
-  vcl_vector<double> na(n_data);
-  vnl_matrix<double> ma(nm,nv);
+  vcl_vector<vnl_vector<T> > va(n_data), vb(n_data), vc(n_data);
+  vcl_vector<T> na(n_data);
+  vnl_matrix<T> ma(nm,nv);
 
   for (unsigned k=0;k<n_data;++k)
   {
@@ -95,21 +98,24 @@ void run_for_size(unsigned nv, unsigned nm)
   vnl_sample_uniform(ma.begin(), ma.end(), -10000,10000);
 
   int n_loops = 1000000/nv;
-  vcl_cout<<"\n\nTimes to operator on "<<nv<<"-d vectors and "<<nm<<" x "<<nv<<" matrices\n"
-          <<"[Range= 75%tile-25%tile)]"<<vcl_endl;
-  vcl_cout<<"Sum of square differences"<<vcl_endl;
+  vcl_cout<<"\nTimes to operator on "<<type<<" "<<nv<<"-d vectors and "<<nm<<" x "<<nv<<" matrices"
+          <<"  [Range= 75%tile-25%tile)]"<<vcl_endl;
+  vcl_cout<<"Sum of square differences       ";
   distance_squared(va,vb,na,n_loops);
-  vcl_cout<<"Vector dot product"<<vcl_endl;
+  vcl_cout<<"Vector dot product              ";
   dot_product(va,vb,na,n_loops);
-  vcl_cout<<"Matrix x Vector multiplication"<<vcl_endl;
+  vcl_cout<<"Matrix x Vector multiplication  ";
   mat_x_vec(ma,vb,vc,n_loops/nm+1);
 }
 
 int main(int argc, char *argv[])
 {
   vnl_sample_reseed(12354);
-  run_for_size(20, 20);
-  run_for_size(300, 300);
-  run_for_size(100, 30000);
+  run_for_size(20, 20, double(), "double");
+  run_for_size(20, 20, float(), "float");
+  run_for_size(300, 300, double(), "double");
+  run_for_size(300, 300, float(), "float");
+  run_for_size(100, 30000, double(), "double");
+  run_for_size(100, 30000, float(), "float");
   return 0;
 }
