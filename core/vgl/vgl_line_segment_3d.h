@@ -45,7 +45,8 @@ class vgl_line_segment_3d
 
   //: the comparison operator
   inline bool operator==(vgl_line_segment_3d<Type> const& l) const {
-    return (this==&l) || (point1() == l.point1() && point2() == l.point2()); }
+    return (this==&l) || (point1() == l.point1() && point2() == l.point2())
+                      || (point1() == l.point2() && point2() == l.point1()); }
 
   inline bool operator!=(vgl_line_segment_3d<Type>const& other)const{return !operator==(other);}
 
