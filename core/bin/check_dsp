@@ -140,12 +140,10 @@ foreach $dir (@DIRS)
       }
       if (m/^\s*(SOURCES|MINI_PROG_SOURCES|TESTS)\s*\+\=\s*(\S+)/) {
         $file = "$2";
-        if ($file eq "\${MOCSOURCES}") {
-          opendir(TMP,"$dir");
-          @tmp_list = readdir(TMP);
-          closedir(TMP);
+        if ($file eq "\$\{MOCSOURCES\}") {
+          @tmp_list = @sources;
           foreach $x (@tmp_list) {
-            push @sources,"$x" if ($x =~ m/_mocced\.cxx$/);
+            if ($x =~ s/\.cxx$/_mocced.cxx/) { push @sources,"$x" if (-f "$dir/$x"); }
           }
         }
         else {
@@ -198,7 +196,6 @@ foreach $dir (@DIRS)
   }
 
   $cmakef = $dir . "/CMakeLists.txt";
-  $hcmakef = $dir . "/CMakeListsHeaders.txt";
   $cmakefile = "";
   @source_files = ();
   @test_files = ();
@@ -211,19 +208,22 @@ foreach $dir (@DIRS)
     close CMAKEFILE;
     $/=$old_v;
   }
-  if (open(CMAKEFILE, $hcmakef)) {
-    $old_v=$/;
-    undef $/;
-    $cmakefile .= <CMAKEFILE>;
-    close CMAKEFILE;
-    $/=$old_v;
-  }
+  $moc_files = "";
   $cmakefile =~ s/\n\s*\#[^\n]*//g;
+  if ($cmakefile =~ s/\bQT_WRAP_CPP\s*\(\s*(\S+)\s+(\S+)\s+([^()]+)\)//) {
+    $moc_files = "$2";
+    foreach $x (split /\s+/, "$3") {
+      $x =~ s/\.h$/_mocced.cxx/;
+      push @source_files,"$x";
+    }
+  }
   while ($cmakefile =~ s/\b(SOURCE_FILES|SET)\s*\(\s*\S+sources\s*([^()]+)\)//) {
     @tmpl_list = split /\s+/, "$2";
     foreach $x (@tmpl_list) {
+      next if ($x eq "\$\{$moc_files\}");
       if ( $x =~ m/^\$\{(\S+sources)\}$/ ) { ; }
       elsif ( $x =~ m/\.h(\.in)?$/) { push @hsource_files, "$x"; }
+      elsif ( $x =~ m/\.rc$/) { push @hsource_files, "$x"; }
       elsif ( $x =~ m/\.txx$/) { push @hsource_files, "$x"; }
       elsif (-f "$dir/$x") { push @source_files, "$x"; }
       elsif (-f "$dir/$x.cxx") { printf "Should replace $x by $x.cxx in $cmakef\n"; push @source_files, "$x.cxx"; }
@@ -232,14 +232,6 @@ foreach $dir (@DIRS)
       elsif (-f "$dir/$x.C") { printf "Should replace $x by $x.C in $cmakef\n"; push @source_files, "$x.C"; }
       elsif (-f "$dir/$x.cpp") { printf "Should replace $x by $x.cpp in $cmakef\n"; push @source_files, "$x.cpp"; }
       else { printf "No source file $x.* found in $dir\n"; }
-    }
-  }
-  if ($cmakefile =~ s/\bQT_WRAP_CPP\s*\(\s*([^()]+)\)//) {
-    opendir(TMP,"$dir");
-    @tmp_list = readdir(TMP);
-    closedir(TMP);
-    foreach $x (@tmp_list) {
-      push @source_files,"$x" if ($x =~ m/_mocced\.cxx$/);
     }
   }
   while ($cmakefile =~ s/\bADD_EXECUTABLE\s*\(\s*(\S+)((\s+[^\s()]+)+)\s*\)//) {
@@ -252,6 +244,7 @@ foreach $dir (@DIRS)
     foreach $y (split /\s+/, "$x") {
       next if ($y eq "");
       if ( $y =~ m/\.h(\.in)?$/) { push @hsource_files, "$y"; }
+      elsif ( $y =~ m/\.rc$/) { push @hsource_files, "$y"; }
       elsif ( $y =~ m/\.txx$/) { push @hsource_files, "$y"; }
       elsif (-f "$dir/$y") { push @source_files, "$y"; }
       elsif (-f "$dir/$y.cxx") { printf "Should replace $y by $y.cxx in $cmakef\n"; push @source_files, "$y.cxx"; }
@@ -450,7 +443,7 @@ foreach $dir (@DIRS)
     unless ($hsource_files eq "~END") {
       $s = shift(@hsource_files);
       while ($s eq $hsource_files) {
-        print STDOUT "multiple occurrence of $s in $hcmakef\n"
+        print STDOUT "multiple occurrence of $s in $cmakef\n"
           unless ($s =~ m/\bFl_(blender|movie|twowin)_ui\.h$/);
         $s = shift(@hsource_files);
       }
@@ -475,7 +468,7 @@ foreach $dir (@DIRS)
       if (-f "$dir/$hsource_files") {
         print STDOUT "MANPAGE_SOURCES += $hsource_files\tis missing from $makef\n";
       } else {
-        print STDOUT "SOURCES($hsource_files)\tmust be removed from $hcmakef\n";
+        print STDOUT "SOURCES($hsource_files)\tmust be removed from $cmakef\n";
       }
       $hsource_files = shift(@hsource_files);
     }
@@ -493,7 +486,7 @@ foreach $dir (@DIRS)
           print STDOUT "SOURCE=.\\$hsources\tis missing from $f (header files)\n";
         }
         if ($hsources lt $hsource_files) {
-          print STDOUT "SOURCE_FILES($hsources)\tis missing from $hcmakef\n";
+          print STDOUT "SOURCE_FILES($hsources)\tis missing from $cmakef\n";
         }
       } else {
         print STDOUT "MANPAGE_SOURCES += $hsources\tmust be removed from $makef\n";
