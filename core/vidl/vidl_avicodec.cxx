@@ -258,9 +258,14 @@ vidl_codec_sptr vidl_avicodec::load(const char* fname, char mode)
   set_name(vul_file::basename(fname).c_str());
   set_description(fname);
 
-  // Open the first frame to get the number of bits per pixel
-  // and check the validity of width and height
+  // Open the first frame
   byte* DIB = (byte*) AVIStreamGetFrame(avi_get_frame_, 0);
+
+  if ( ! DIB )
+      return NULL;
+
+  // Get the number of bits per pixel
+  // and check the validity of width and height
   WORD BitsPerPixel = ((LPBITMAPINFOHEADER)DIB)->biBitCount;
   LONG iwidth = ((LPBITMAPINFOHEADER)DIB)->biWidth;
   LONG iheight = ((LPBITMAPINFOHEADER)DIB)->biHeight;
