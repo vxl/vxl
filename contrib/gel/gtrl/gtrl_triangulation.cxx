@@ -22,7 +22,7 @@ extern "C" {
 #define REAL double
 #endif /* not SINGLE */
 
-#include "gtrl_netlib_triangle.h"
+#include <netlib/triangle.h> // for triangulate()
 }
 
 
