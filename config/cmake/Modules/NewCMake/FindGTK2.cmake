@@ -20,7 +20,7 @@ IF( PKG_CONFIG )
 
   IF( ${GTK2_PKG_RET_VAL} MATCHES "0" ) 
 
-    # The dependendies for GTK-GLExt should have all the GTK parts too, so no need to explictly find them
+    # The dependencies for GTK-GLExt should have all the GTK parts too, so no need to explictly find them
     EXEC_PROGRAM( ${PKG_CONFIG} ARGS "--cflags gtkglext-1.0" OUTPUT_VARIABLE GTK2_glext_DEFINITIONS )
     EXEC_PROGRAM( ${PKG_CONFIG} ARGS "--libs gtkglext-1.0" OUTPUT_VARIABLE GTK2_glext_LIBRARIES )
 
