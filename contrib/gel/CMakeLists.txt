@@ -1,15 +1,8 @@
-#
 # ./gel/CMakeLists.txt
-#
-#   geoff.cross@crd.ge.com
-#
 
-
+INCLUDE_DIRECTORIES(${allvxl_SOURCE_DIR}/vcl)
 INCLUDE_DIRECTORIES(${allvxl_SOURCE_DIR}/vxl)
 INCLUDE_DIRECTORIES(${allvxl_SOURCE_DIR}/gel)
-
-# basics
-SUBDIRS(gbl)
 
 # van-duc region finder (ported from TargetJr)
 SUBDIRS(gevd)
