@@ -130,7 +130,8 @@ if ($IUELOCALROOT && -d "$IUELOCALROOT/Scripts/Shell" ) {
 ## Make path
 $VXLROOT="$IUEROOT/vxl";
 $VXLPATH = "$VXLROOT/bin/${IUEOSTYPE}:$VXLROOT/bin";
-$TARGETPATH = $VXLPATH. ":" . "$IUEROOT/bin/${IUEOSTYPE}:$IUELOCALROOT/bin/${IUEOSTYPE}:$IUELOCALROOT/bin:$IUEROOT/bin:$pathbase/Scripts/Shell:$pathbase/Scripts/Perl";
+$TARGETPATH = $VXLPATH . ":$IUEROOT/bin/${IUEOSTYPE}:$IUELOCALROOT/bin/${IUEOSTYPE}:"
+              . "$IUELOCALROOT/bin:$IUEROOT/bin:$pathbase/Scripts/Shell:$pathbase/Scripts/Perl";
 &setenv ("TARGETPATH", $TARGETPATH);
 
 if ($csh) {
