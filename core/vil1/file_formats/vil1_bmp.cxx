@@ -169,10 +169,11 @@ vil_bmp_generic_image::vil_bmp_generic_image(vil_stream* is, int planes,
   is_->ref();
   local_color_map_=0;
 
-  width_ = width;  // TODO what is this suppposed to do?
-  height_ = height;
+  header.biPlanes = planes; // should be 1
+  header.biWidth = width_ = width;  // TODO what is this supposed to do?
+  header.biHeight = height_ = height;
   components_ = components;
-  bits_per_component_ = bits_per_component;
+  header.biBitCount = bits_per_component_ = bits_per_component;
 
   if (components_ == 3) {
     magic_ = 6;
@@ -413,20 +414,18 @@ bool vil_bmp_generic_image::write_header()
           }
        }
 
-  if (used_color != 0)
+  if (used_color != 0 && local_color_map_)
   {
-
     // int** cm = get_color_map();
     int** cm = local_color_map_;
     
-    for(int j=0; j<used_color; j++){
-          for(int i=0; i<3; i++)
-              is_->write(&cm[2-i][j], 1);
-          is_->write(0, 1);
-      }
-
+    for(int j=0; j<used_color; j++)
+    {
+      for(int i=0; i<3; i++)
+        is_->write(&cm[2-i][j], 1);
+      is_->write(0, 1);
+    }
   }
-
 
   //  SetOffset(file->Tell());
 
