@@ -16,7 +16,7 @@
 
 INCLUDE( ${MODULE_PATH}/NewCMake/FindJPEG.cmake )
 
-IF(NOT FOUND_JPEG)
+IF(NOT JPEG_FOUND)
 
   #
   # At some point, in a "release" version, it is possible that someone
@@ -35,7 +35,7 @@ IF(NOT FOUND_JPEG)
 	
   ENDIF(EXISTS ${allvxl_SOURCE_DIR}/v3p/jpeg/jpeglib.h)
 
-ENDIF(NOT FOUND_JPEG)
+ENDIF(NOT JPEG_FOUND)
 
 IF(JPEG_LIBRARY)
   SET(VXL_USING_NATIVE_JPEG)
