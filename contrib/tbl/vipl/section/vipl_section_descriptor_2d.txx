@@ -16,10 +16,10 @@ vipl_section_descriptor_2d< DataType > ::vipl_section_descriptor_2d(
  : hsreal_descriptor (0),
    hsreal_container (0),
    hsi_data_ptr (0),
-   hsi_data_offsets ( DAtype< vcl_vector< int > >::iuenil() ),
-   hsi_curr_sec_start ( DAtype< vcl_vector< int > >::iuenil() ),
-   hsi_curr_sec_end ( DAtype< vcl_vector< int > >::iuenil() ),
-   hsi_curr_sec_size ( DAtype< vcl_vector< int > >::iuenil() )
+   hsi_data_offsets ( vcl_vector< int > () ),
+   hsi_curr_sec_start ( vcl_vector< int > () ),
+   hsi_curr_sec_end ( vcl_vector< int > () ),
+   hsi_curr_sec_size ( vcl_vector< int > () )
 {
   vcl_cerr << "Warning: called unimplemented vipl_section_descriptor_2d constructor with signature "
            << "int startx, int endx, int starty, int endy\n";
@@ -32,10 +32,10 @@ template < class DataType >
                  vipl_section_container< DataType >* container): hsreal_descriptor (0),
                  hsreal_container (0),
                  hsi_data_ptr (0),
-                 hsi_data_offsets ( DAtype< vcl_vector< int > >::iuenil() ),
-                 hsi_curr_sec_start ( DAtype< vcl_vector< int > >::iuenil() ),
-                 hsi_curr_sec_end ( DAtype< vcl_vector< int > >::iuenil() ),
-                 hsi_curr_sec_size ( DAtype< vcl_vector< int > >::iuenil() )
+                 hsi_data_offsets ( vcl_vector< int > () ),
+                 hsi_curr_sec_start ( vcl_vector< int > () ),
+                 hsi_curr_sec_end ( vcl_vector< int > () ),
+                 hsi_curr_sec_size ( vcl_vector< int > () )
 {
   vcl_cerr << "Warning: called unimplemented constructor with signature "
            << "vipl_section_descriptor< DataType >* desc, vipl_section_container< DataType >* container\n";
@@ -49,10 +49,10 @@ vipl_section_descriptor_2d< DataType > ::vipl_section_descriptor_2d(
           int t): hsreal_descriptor (0),
           hsreal_container (0),
           hsi_data_ptr (0),
-          hsi_data_offsets ( DAtype< vcl_vector< int > >::iuenil() ),
-          hsi_curr_sec_start ( DAtype< vcl_vector< int > >::iuenil() ),
-          hsi_curr_sec_end ( DAtype< vcl_vector< int > >::iuenil() ),
-          hsi_curr_sec_size ( DAtype< vcl_vector< int > >::iuenil() )
+          hsi_data_offsets ( vcl_vector< int > () ),
+          hsi_curr_sec_start ( vcl_vector< int > () ),
+          hsi_curr_sec_end ( vcl_vector< int > () ),
+          hsi_curr_sec_size ( vcl_vector< int > () )
 {
   vcl_cerr << "Warning: called unimplemented constructor with signature "
            << "const vipl_section_descriptor< DataType >* desc, const vipl_section_container< DataType >* container, int t\n";
@@ -67,10 +67,10 @@ template < class DataType >
 vipl_section_descriptor_2d< DataType > ::vipl_section_descriptor_2d(): hsreal_descriptor (0),
                  hsreal_container (0),
                  hsi_data_ptr (0),
-                 hsi_data_offsets ( DAtype< vcl_vector< int > >::iuenil() ),
-                 hsi_curr_sec_start ( DAtype< vcl_vector< int > >::iuenil() ),
-                 hsi_curr_sec_end ( DAtype< vcl_vector< int > >::iuenil() ),
-                 hsi_curr_sec_size ( DAtype< vcl_vector< int > >::iuenil() )
+                 hsi_data_offsets ( vcl_vector< int > () ),
+                 hsi_curr_sec_start ( vcl_vector< int > () ),
+                 hsi_curr_sec_end ( vcl_vector< int > () ),
+                 hsi_curr_sec_size ( vcl_vector< int > () )
 // C++ auto-generated low-level constructor
 {
 }
@@ -78,7 +78,7 @@ vipl_section_descriptor_2d< DataType > ::vipl_section_descriptor_2d(): hsreal_de
 template < class DataType >
 vipl_section_descriptor_2d< DataType > ::vipl_section_descriptor_2d(const vipl_section_descriptor_2d< DataType > &t)
               :
-  vipl_section_descriptor< DataType > (t,vipl_section_descriptor_2d< DataType > ::sclassof()),
+  vipl_section_descriptor< DataType > (t),
                  hsreal_descriptor(t.hsreal_descriptor),
                  hsreal_container(t.hsreal_container),
                  hsi_data_ptr(t.hsi_data_ptr),

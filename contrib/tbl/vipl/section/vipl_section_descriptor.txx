@@ -45,8 +45,7 @@ vipl_section_descriptor< DataType > ::vipl_section_descriptor(
    refcount_ (1)
 {
   hsreal_descriptor = desc->virtual_copy();
-  hsreal_container =
-  container->virtual_copy();
+  hsreal_container = container->virtual_copy();
 #if 0
   vcl_cerr << "Warning: called unimplemented constructor with signature "
            << "const vipl_section_descriptor< DataType >* desc, const vipl_section_container< DataType >* container, int t\n";
@@ -104,8 +103,8 @@ vipl_section_descriptor< DataType > ::vipl_section_descriptor()
 
 template < class DataType >
 vipl_section_descriptor< DataType > ::vipl_section_descriptor(const vipl_section_descriptor< DataType > &t)
-  : hsreal_descriptor(0),
-    hsreal_container(0),
+  : hsreal_descriptor(t.hsreal_descriptor),
+    hsreal_container(t.hsreal_container),
     hsi_data_ptr(t.hsi_data_ptr),
     hsi_data_offsets(t.hsi_data_offsets),
     hsi_curr_sec_start(t.hsi_curr_sec_start),
@@ -126,7 +125,7 @@ vipl_section_descriptor< DataType > ::vipl_section_descriptor(const vipl_section
 }
 
 //: This method takes in an argument called axis (i.e. 0 means the ``x'' axis,
-// 1 means ``y'' axis) etc... and returns an integer which describes the start
+// 1 means ``y'' axis etc...) and returns an integer which describes the start
 // coordinate value for ``x'' (or ``y'' etc..) with respect to the ``image''
 // coordinate system.
 template < class DataType >
@@ -135,8 +134,8 @@ int vipl_section_descriptor< DataType > ::curr_sec_start( int axis) const
   return i_curr_sec_start()[axis];
 }
 
-//: This method takes in an argument called axis (i.e. 0 means the ``x'' axis
-// 1 means ``y'' axis) etc... and returns an integer which describes the end
+//: This method takes in an argument called axis (i.e. 0 means the ``x'' axis,
+// 1 means ``y'' axis etc...) and returns an integer which describes the end
 // coordinate value for ``x'' (or ``y'' etc..) with respect to the ``image''
 // coordinate system.
 
@@ -147,7 +146,7 @@ int vipl_section_descriptor< DataType > ::curr_sec_end( int axis) const
 }
 
 //: This method takes in an argument called axis (i.e. 0 means the ``x'' axis,
-// 1 means ``y'' axis) etc... and returns an integer which describes the size
+// 1 means ``y'' axis etc...) and returns an integer which describes the size
 // of the axis (end minus start) for ``x'' (or ``y'' etc..) with respect to
 // the ``image'' coordinate system.
 template < class DataType >
@@ -157,7 +156,7 @@ int vipl_section_descriptor< DataType > ::curr_sec_size( int axis) const
 }
 
 //: This method takes in an argument called axis (i.e. 0 means the ``x'' axis,
-// 1 means ``y'' axis) etc... and returns an integer which describes the offset
+// 1 means ``y'' axis etc...) and returns an integer which describes the offset
 // of the next (i.e. associated with the higher coordinate value) data item
 // along the axis.
 template < class DataType >
@@ -211,7 +210,7 @@ int vipl_section_descriptor< DataType > ::restrict( const vipl_section_descripto
   return 0;
 }
 
-//: Makes a new correct copy. It's just a bit more tricky because descriptors have pointers to its ``real instance.''
+//: Makes a new correct copy. It's just a bit more tricky because descriptors have pointers to its ``real instance''.
 template < class DataType >
 vipl_section_descriptor< DataType >* vipl_section_descriptor< DataType > ::virtual_copy() const
 {
