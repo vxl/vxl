@@ -6,7 +6,6 @@
 #include <vcl_iostream.h>
 #include <vcl_algorithm.h>
 
-#include <vnl/vnl_math.h>
 #include <vnl/vnl_fortran_copy.h>
 #include "vnl_netlib.h"
 #include <vnl/vnl_matlab_print.h>

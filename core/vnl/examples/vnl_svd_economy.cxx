@@ -1,13 +1,13 @@
 #include <vcl_iostream.h>
 #include <vul/vul_timer.h>
 #include <vnl/vnl_sample.h>
-#include <vnl/vnl_vector.h>
 #include <vnl/vnl_matrix.h>
 #include <vnl/vnl_matlab_print.h>
 #include <vnl/algo/vnl_svd.h>
 #include <vnl/algo/vnl_svd_economy.h>
 
-int main () {
+int main ()
+{
   {
     vnl_matrix<double> M( 10, 4 );
     for (int i=0 ; i < M.size(); ++i) {
@@ -20,16 +20,16 @@ int main () {
     vnl_matlab_print( vcl_cerr, svd.V() );
     vcl_cerr << vcl_endl;
     vnl_matlab_print( vcl_cerr, svd_e.V() );
+    vcl_cerr << vcl_endl << vcl_endl;
 
-    vcl_cerr << vcl_endl;
-    vcl_cerr << vcl_endl;
     vnl_matlab_print( vcl_cerr, svd.W().diagonal() );
     vcl_cerr << vcl_endl;
     vnl_matlab_print( vcl_cerr, svd_e.lambdas() );
     vcl_cerr << vcl_endl;
 
-    vcl_cerr << "( svd.V() - svd_e.V() ).fro_norm() = " << ( svd.V() - svd_e.V() ).fro_norm() << vcl_endl;
-    vcl_cerr << "( svd.W().diagonal() - svd_e.lambdas() ).two_norm() = " << ( svd.W().diagonal() - svd_e.lambdas() ).two_norm() << vcl_endl;
+    vcl_cerr << "( svd.V() - svd_e.V() ).fro_norm() = " << ( svd.V() - svd_e.V() ).fro_norm() << vcl_endl
+             << "( svd.W().diagonal() - svd_e.lambdas() ).two_norm() = "
+             << ( svd.W().diagonal() - svd_e.lambdas() ).two_norm() << vcl_endl;
   }
 
   {
