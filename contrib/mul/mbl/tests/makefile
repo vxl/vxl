@@ -35,6 +35,7 @@ TESTS += test_thin_plate_spline_weights_3d.cxx
 TESTS += test_read_props.cxx
 TESTS += test_correspond_points.cxx
 TESTS += test_rbf_network.cxx
+TESTS += test_stats_nd.cxx
 
 MINI_PROG_SOURCES += test_include.cxx
 
