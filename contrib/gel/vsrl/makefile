@@ -1,19 +1,15 @@
 #   DESCRIPTION:
 #
-#   This is the vbl (Vision Basics) library.
+#   This is the vsrl (dense matcher) library.
 #
-#   DEPENDENCIES:  libvcl
+#   DEPENDENCIES:  libvil libvnl
 
-VXL := 1 
-
-##########################################
+#######################################
 include ${IUEROOT}/config/top-params.mk
-##########################################
+#######################################
 
 USES += vxl gel
-IULIBS := -lvcl
-IULIBS += -lvbl
-IULIBS += -lvnl
+IULIBS += -lvil -lvnl
 
 LIBRARY := vsrl
 VERSION := 1.0
@@ -22,8 +18,6 @@ ifndef NOTEST
 SUBDIRS += tests
 SUBDIRS += examples
 endif
-
-
 
 SOURCES += vsrl_token.cxx
 SOURCES += vsrl_null_token.cxx
@@ -42,8 +36,8 @@ SOURCES += vsrl_saliency_diffusion.cxx
 SOURCES += vsrl_token_saliency.cxx
 SOURCES += vsrl_parameters.cxx
 
-# DEFINES += -DBUILDING_VTOL_DLL
+DEFINES += -DBUILDING_VSRL_DLL
 
-##########################################
+######################################
 include ${IUEROOT}/config/top-rules.mk
-##########################################
+######################################
