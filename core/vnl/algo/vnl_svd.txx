@@ -8,10 +8,6 @@
 #include <vcl_complex.h>
 #include <vcl_fstream.h>
 #include <vcl_algorithm.h> // min
-// is this still needed?
-//#ifdef VCL_SGI_CC_720
-//# include <vcl_rel_ops.h> // operator!=(complex)
-//#endif
 
 #include <vnl/vnl_math.h>
 #include <vnl/vnl_fortran_copy.h>
