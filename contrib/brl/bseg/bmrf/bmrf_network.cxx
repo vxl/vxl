@@ -28,7 +28,7 @@ bmrf_network::add_node(const bmrf_node_sptr& node)
 
 //: Deletes a node in the network
 bool
-bmrf_network::delete_node(const bmrf_node_sptr& node)
+bmrf_network::remove_node(const bmrf_node_sptr& node)
 {
   if(!node.ptr()) return false;
   if(!node->epi_seg().ptr()) return false;
@@ -40,6 +40,35 @@ bmrf_network::delete_node(const bmrf_node_sptr& node)
   return true;
 }
 
+
+//: Add an arc between \param n1 and \param n2 of type \param type
+bool
+bmrf_network::add_arc( const bmrf_node_sptr& n1, const bmrf_node_sptr& n2, neighbor_type type )
+{
+  if(!n1.ptr() || !n2.ptr()) return false;
+  if(!n1->epi_seg().ptr() || !n2->epi_seg().ptr()) return false;
+  
+  node_map::iterator itr = nodes_.find(n1->epi_seg().ptr());
+  if(itr == nodes_.end())
+    if( !this->add_node(n1) )
+      return false;
+  itr = nodes_.find(n2->epi_seg().ptr());
+  if(itr == nodes_.end())
+    if( !this->add_node(n2) )
+      return false;
+      
+  return n1->add_neighbor(n2.ptr(), type);
+}
+
+
+//: Add an arc between \param n1 and \param n2 of type \param type
+bool
+bmrf_network::remove_arc( const bmrf_node_sptr& n1, const bmrf_node_sptr& n2, neighbor_type type )
+{
+  if(!n1.ptr() || !n2.ptr()) return false;
+      
+  return n1->remove_neighbor(n2.ptr(), type);
+}
 
 //: Remove all arcs to NULL nodes and node not found in this network
 bool
@@ -156,7 +185,7 @@ bmrf_network::b_read( vsl_b_istream& is )
 void
 bmrf_network::print_summary( vcl_ostream& os ) const
 {
-  os << "bmrf_network{ " << nodes_.size() << " nodes }";
+  os << " " << nodes_.size() << " nodes ";
 }
 
 
@@ -242,5 +271,15 @@ vsl_b_read(vsl_b_istream &is, bmrf_network* &n)
   }
   else
     n = 0;
+}
+
+
+//: Print an ASCII summary to the stream
+void
+vsl_print_summary(vcl_ostream &os, const bmrf_network* n)
+{
+  os << "bmrf_network{";
+  n->print_summary(os);
+  os << "}";
 }
 

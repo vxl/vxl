@@ -268,7 +268,7 @@ bmrf_node::version(  ) const
 void
 bmrf_node::print_summary( vcl_ostream& os ) const
 {
-  os << "bmrf_node{ pr=" << probability_ << ", frame=" << frame_num_ << " }";
+  os << " pr=" << probability_ << ", frame=" << frame_num_ << " ";
 }
 
 
@@ -327,6 +327,15 @@ vsl_b_read(vsl_b_istream &is, bmrf_node* &n)
 }
 
 
+//: Print an ASCII summary to the stream
+void
+vsl_print_summary(vcl_ostream &os, const bmrf_node* n)
+{
+  os << "bmrf_node{";
+  n->print_summary(os);
+  os << "}";
+}
+
 
 //: Binary save bmrf_node::bmrf_arc to stream.
 void
@@ -356,3 +365,12 @@ vsl_b_read(vsl_b_istream &is, bmrf_node::bmrf_arc* &a)
   else
     a = 0;
 }
+
+
+//: Print an ASCII summary to the stream
+void
+vsl_print_summary(vcl_ostream &os, const bmrf_node::bmrf_arc* a)
+{
+  os << "brmf_arc{}";
+}
+

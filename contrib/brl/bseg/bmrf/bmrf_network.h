@@ -21,6 +21,7 @@
 #include <vsl/vsl_binary_io.h>
 #include <vbl/vbl_ref_count.h>
 #include "bmrf_node_sptr.h"
+#include "bmrf_node.h"
 #include "bmrf_network_sptr.h"
 #include "bmrf_epi_seg_sptr.h"
 
@@ -29,6 +30,9 @@ class bmrf_network : public vbl_ref_count
 {
  public:
   typedef vcl_map<bmrf_epi_seg*, bmrf_node_sptr> node_map;
+
+  typedef bmrf_node::neighbor_type neighbor_type;
+  
   //: Constructor
   bmrf_network();
 
@@ -44,7 +48,13 @@ class bmrf_network : public vbl_ref_count
   //: Deletes a node in the network
   // \retval true if the node was deleted
   // \retval false if the node was not found in the network
-  bool delete_node(const bmrf_node_sptr& node);
+  bool remove_node(const bmrf_node_sptr& node);
+
+  //: Add an arc between \param n1 and \param n2 of type \param type
+  bool add_arc( const bmrf_node_sptr& n1, const bmrf_node_sptr& n2, neighbor_type type );
+
+  //: Add an arc between \param n1 and \param n2 of type \param type
+  bool remove_arc( const bmrf_node_sptr& n1, const bmrf_node_sptr& n2, neighbor_type type = bmrf_node::ALL );
 
   //: Remove all arcs to NULL nodes and node not found in this network
   // \retval true if any arcs have been purged
@@ -95,9 +105,6 @@ class bmrf_network : public vbl_ref_count
     //: Increment
     iterator& operator++ () { next_node(); return *this; }
 
-    //: Increment the current node
-    virtual void next_node() = 0;
-
     //: Dereference
     bmrf_node_sptr operator -> () const { return curr_node_; }
 
@@ -105,36 +112,39 @@ class bmrf_network : public vbl_ref_count
     bool operator == (const iterator& rhs) { return rhs.curr_node_ == this->curr_node_; }
 
    protected:
+    //: Increment the current node
+    virtual void next_node() = 0;
+    
     bmrf_network_sptr network_;
     bmrf_node_sptr curr_node_;
   };
 
   // Depth first search iterator
-  class depth_iterator : private iterator
+  class depth_iterator : public iterator
   {
    public:
     //: Constructor
     depth_iterator( bmrf_network_sptr network, bmrf_node_sptr node ) : iterator(network, node){}
 
+   protected:
     //: Increment the current node
     void next_node();
-
-   protected:
+    
     vcl_deque<bmrf_node_sptr> eval_queue_;
     vcl_set<bmrf_node_sptr> visited_;
   };
 
   // Breadth first search iterator
-  class breadth_iterator : private iterator
+  class breadth_iterator : public iterator
   {
    public:
     //: Constructor
     breadth_iterator( bmrf_network_sptr network, bmrf_node_sptr node ) : iterator(network, node){}
 
+   protected:
     //: Increment the current node
     void next_node();
 
-   protected:
     vcl_deque<bmrf_node_sptr> eval_queue_;
     vcl_set<bmrf_node_sptr> visited_;
   };
@@ -156,6 +166,9 @@ void vsl_b_write(vsl_b_ostream &os, const bmrf_network* n);
 
 //: Binary load bmrf_network* from stream.
 void vsl_b_read(vsl_b_istream &is, bmrf_network* &n);
+
+//: Print an ASCII summary to the stream
+void vsl_print_summary(vcl_ostream &os, const bmrf_network* n);
 
 
 #endif // bmrf_network_h_

@@ -50,6 +50,10 @@ class bmrf_node : public vbl_ref_count
     bmrf_node* to;
   };
 
+
+  friend class bmrf_network;
+  
+  //: Smart pointer to an arc
   typedef vbl_smart_ptr<bmrf_arc> bmrf_arc_sptr;
 
   //: iterator over neighboring nodes
@@ -65,27 +69,8 @@ class bmrf_node : public vbl_ref_count
   //: Destructor
   ~bmrf_node(){}
 
-  //: Strip all of the arcs from this node
-  // This also removes arcs to and from this node in neighboring nodes
-  void strip();
-
-  //: Remove any arcs to or from NULL nodes
-  // \retval true if any arcs were removed
-  // \retval false of all arcs are valid
-  bool purge();
-
   //: Calculate the conditional probability that this node is correct give its neighbors
   double probability();
-
-  //: Add \param node as a neighbor of type \param type
-  // \return true if the node was added successfully
-  // \return false if the neighbor is not valid or already exists
-  bool add_neighbor( bmrf_node *node, neighbor_type type );
-
-  //: Remove \param node from the neighborhood
-  // \return true if the node is removed successfully
-  // \return false if the node was not a neighbor
-  bool remove_neighbor( bmrf_node *node, neighbor_type type = ALL);
 
   //: Returns an iterator to the beginning of the type \param type neighbors
   // \note if \param type is ALL then iteration is over all types
@@ -117,7 +102,27 @@ class bmrf_node : public vbl_ref_count
   //: Print an ascii summary to the stream
   void print_summary(vcl_ostream &os) const;
 
- private:
+ protected:
+  //: Add \param node as a neighbor of type \param type
+  // \return true if the node was added successfully
+  // \return false if the neighbor is not valid or already exists
+  bool add_neighbor( bmrf_node *node, neighbor_type type );
+
+  //: Remove \param node from the neighborhood
+  // \return true if the node is removed successfully
+  // \return false if the node was not a neighbor
+  bool remove_neighbor( bmrf_node *node, neighbor_type type = ALL);
+
+  //: Strip all of the arcs from this node
+  // This also removes arcs to and from this node in neighboring nodes
+  void strip();
+
+  //: Remove any arcs to or from NULL nodes
+  // \retval true if any arcs were removed
+  // \retval false of all arcs are valid
+  bool purge();
+
+ private:  
   //: A smart pointer to the underlying epi-segment data
   bmrf_epi_seg_sptr segment_;
 
@@ -147,11 +152,17 @@ void vsl_b_write(vsl_b_ostream &os, const bmrf_node* n);
 //: Binary load bmrf_node* from stream.
 void vsl_b_read(vsl_b_istream &is, bmrf_node* &n);
 
+//: Print an ASCII summary to the stream
+void vsl_print_summary(vcl_ostream &os, const bmrf_node* n);
+
 
 //: Binary save bmrf_node::bmrf_arc* to stream.
 void vsl_b_write(vsl_b_ostream &os, const bmrf_node::bmrf_arc* a);
 
 //: Binary load bmrf_node::bmrf_arc* from stream.
 void vsl_b_read(vsl_b_istream &is, bmrf_node::bmrf_arc* &a);
+
+//: Print an ASCII summary to the stream
+void vsl_print_summary(vcl_ostream &os, const bmrf_node::bmrf_arc* a);
 
 #endif // bmrf_node_h_
