@@ -5,7 +5,7 @@
 //:
 // \file
 // \brief live vvid_live_video_frame
-//   A special tableau that has a live camera as an image generator. The 
+//   A special tableau that has a live camera as an image generator. The
 //   basic image tableau is wrapped in a easy2D_tableau so that overlays
 //   can be generated if desired
 // \endbrief
@@ -23,10 +23,11 @@
 #include <vgui/vgui_viewer2D_tableau_sptr.h>
 #include <vvid/vvid_live_video_frame_sptr.h>
 #include <vvid/cmu_1394_camera.h>
+
 class vvid_live_video_frame : public vbl_ref_count
 {
 public:
-  vvid_live_video_frame(int node, int pixel_sample_interval, 
+  vvid_live_video_frame(int node, int pixel_sample_interval,
                         const cmu_1394_camera_params& cp);
   ~vvid_live_video_frame();
   //camera manipulation
@@ -63,9 +64,9 @@ public:
   //: Handy pointers to the frame tableaux
   vgui_image_tableau_sptr get_image_tableau(){return _itab;}
   vgui_easy2D_tableau_sptr get_easy2D_tableau(){return _e2d;}
-  vgui_viewer2D_tableau_sptr get_viewer2D_tableau(){return _v2d;}  
+  vgui_viewer2D_tableau_sptr get_viewer2D_tableau(){return _v2d;}
 
-private: 
+ private:
   //utility functions
   //status flags
   bool _live;//video is live
@@ -80,6 +81,5 @@ private:
   vgui_easy2D_tableau_sptr _e2d;
   vgui_viewer2D_tableau_sptr _v2d;
 };
- 
 
 #endif // vvid_live_video_frame_h_

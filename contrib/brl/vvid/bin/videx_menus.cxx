@@ -7,15 +7,15 @@
 
 //Static munu callback functions
 
- void videx_menus::quit_callback()
+void videx_menus::quit_callback()
 {
   vvid_live_video_manager::instance()->quit();
 }
 
 
- void videx_menus::set_camera_params_callback()
+void videx_menus::set_camera_params_callback()
 {
-	vvid_live_video_manager::instance()->set_camera_params();
+  vvid_live_video_manager::instance()->set_camera_params();
 }
 
 void videx_menus::start_live_video_callback()

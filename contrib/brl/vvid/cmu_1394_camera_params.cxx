@@ -1,8 +1,8 @@
 //this-sets-emacs-to-*-c++-*-mode
 #include <vvid/cmu_1394_camera_params.h>
 
-cmu_1394_camera_params::~cmu_1394_camera_params(){
-
+cmu_1394_camera_params::~cmu_1394_camera_params()
+{
 }
 
 cmu_1394_camera_params::cmu_1394_camera_params(int video_format, int video_mode,
@@ -22,6 +22,7 @@ cmu_1394_camera_params::cmu_1394_camera_params(int video_format, int video_mode,
   _rgb=rgb;
   this->constrain();
 }
+
 void cmu_1394_camera_params::set_params(const cmu_1394_camera_params& cp)
 {
   _video_format=cp._video_format;
@@ -35,24 +36,27 @@ void cmu_1394_camera_params::set_params(const cmu_1394_camera_params& cp)
   _rgb=cp._rgb;
   this->constrain();
 }
+
 cmu_1394_camera_params::cmu_1394_camera_params(const cmu_1394_camera_params& cp)
 {
   this->set_params(cp);
-}  
+}
+
 //ensure that the parameters are consistent
 void cmu_1394_camera_params::constrain()
 {
   //rgb vs monochrome - the boolean flag is considered dominant
-  if(_rgb)
+  if (_rgb)
     _video_mode = 4;
   else
     _video_mode = 5;
 }
+
 vcl_ostream& operator << (vcl_ostream& os, const cmu_1394_camera_params& cp)
 {
   os << "video_format: " << cp._video_format << vcl_endl;
   os << "video_mode: " << cp._video_mode << vcl_endl;
-  os << "frame_rate: " << cp._frame_rate << vcl_endl;  
+  os << "frame_rate: " << cp._frame_rate << vcl_endl;
   os << "brightness: " << cp._brightness << vcl_endl;
   os << "sharpness: " << cp._sharpness << vcl_endl;
   os << "exposure: " << cp._exposure << vcl_endl;
