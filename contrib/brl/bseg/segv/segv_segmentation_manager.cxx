@@ -155,8 +155,8 @@ void segv_segmentation_manager::draw_regions(vcl_vector<vdgl_intensity_face_sptr
        rit != regions.end(); rit++)
      {
        vtol_face_2d_sptr f = (*rit)->cast_to_face_2d();
-       _t2D->set_foreground(0.0, 1.0, 0.0);
-       _t2D->add_face(f);
+       t2D_->set_foreground(0.0, 1.0, 0.0);
+       t2D_->add_face(f);
        if(verts)
          {
            vcl_vector<vtol_vertex_sptr>* vts = f->vertices();
@@ -164,8 +164,8 @@ void segv_segmentation_manager::draw_regions(vcl_vector<vdgl_intensity_face_sptr
                vit != vts->end(); vit++)
              {
                vtol_vertex_2d_sptr v = (*vit)->cast_to_vertex_2d();
-               _t2D->set_foreground(1.0, 0, 0.0);
-               _t2D->add_vertex(v);
+               t2D_->set_foreground(1.0, 0, 0.0);
+               t2D_->add_vertex(v);
              }
 		delete vts;
          }
@@ -221,12 +221,12 @@ void segv_segmentation_manager::regions()
   bool debug = false;
   sdet_region_proc_params rpp(debug, true, dp);
   sdet_region_proc rp(rpp);
-  rp.set_image(_img);
+  rp.set_image(img_);
   rp.extract_regions();
   if(debug)
     {
       vil_image ed_img = rp.get_edge_image();
-      vgui_image_tableau_sptr itab =  _t2D->get_image_tableau();
+      vgui_image_tableau_sptr itab =  t2D_->get_image_tableau();
 	  if(!itab)
 	  {
 		  vcl_cout << "In segv_segmentation_manager::regions() - null image tableau"
