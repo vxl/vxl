@@ -17,7 +17,8 @@
 //========================================================================
 void test_table1()
 {
-  vcl_cout << "------------------------------- \n"
+  vcl_cout << "\n\n"
+           << "------------------------------- \n"
            << " Testing piecemeal construction \n"
            << "------------------------------- \n";
    
@@ -52,6 +53,15 @@ void test_table1()
   TEST("get_row(): values", (row_vals[0]==-1.23 && 
                              row_vals[1]==-3.45 && 
                              row_vals[2]==-6.78), true);
+
+  vcl_vector<double> col(3, 1.23456);
+  bool success = table.append_column("x coord", col);
+  unsigned ncols = table.num_cols();
+  TEST("Try to append existing column", success==false && ncols==3, true);
+  
+  success = table.append_column("y coord");
+  ncols = table.num_cols();
+  TEST("Try to append existing column", success==false && ncols==3, true);
 }
 
 
@@ -60,7 +70,8 @@ void test_table1()
 //========================================================================
 void test_table2()
 {
-  vcl_cout << "------------------------------- \n"
+  vcl_cout << "\n\n"
+           << "------------------------------- \n"
            << " Testing equality operations    \n"
            << "------------------------------- \n";
    
@@ -117,7 +128,8 @@ void test_table2()
 //========================================================================
 void test_table3()
 {
-  vcl_cout << "------------------------------- \n"
+  vcl_cout << "\n\n"
+           << "------------------------------- \n"
            << " Testing get/set methods \n"
            << "------------------------------- \n";
   
@@ -139,7 +151,7 @@ void test_table3()
   row1[2] = -6.78;
   table.append_row(row1);
   
-  bool success=false;
+  bool success = false;
   double val = table.get_element("y coord", 0, &success);
   TEST("Get existing element 1", (val==3.45 && success==true), true);
 
@@ -166,6 +178,53 @@ void test_table3()
 }
 
 
+//========================================================================
+// Test the appending of empty columns/rows 
+//========================================================================
+void test_table4()
+{
+  vcl_cout << "\n\n"
+           << "------------------------------------- \n"
+           << " Testing append empty col/row methods \n"
+           << "------------------------------------- \n";
+  
+  char delim = '\t';
+  vcl_vector<vcl_string> headers(3);
+  headers[0] = "x coord";
+  headers[1] = "y coord";
+  headers[2] = "z coord";
+  
+  mbl_table table(delim, headers);
+  vcl_vector<double> row0(3);
+  row0[0] = 1.23;
+  row0[1] = 3.45;
+  row0[2] = 6.78;
+  table.append_row(row0);
+  vcl_vector<double> row1(3);
+  row1[0] = -1.23;
+  row1[1] = -3.45;
+  row1[2] = -6.78;
+  table.append_row(row1);
+  
+  bool success = false;
+  double val = 0;
+
+  success = table.append_row(9.99);
+  val = table.get_element("y coord", 2); 
+  TEST("Appended empty row", success==true &&
+                             table.num_cols()==3 && 
+                             table.num_rows()==3 &&
+                             val==9.99,                 true);
+
+
+  success = table.append_column("Intensity", 8.88);
+  val = table.get_element("Intensity", 2); 
+  TEST("Appended empty column", success==true &&
+                                table.num_cols()==4 && 
+                                table.num_rows()==3 &&
+                                val==8.88,              true);
+}
+
 
 //========================================================================
 // Run a series of tests
@@ -182,6 +241,8 @@ void test_table()
   test_table2();
 
   test_table3();
+
+  test_table4();
 }
 
 
