@@ -53,6 +53,9 @@
 #include <vil/vil_convert.h>
 #include <vil/algo/vil_gauss_reduce.h>
 
+#include <testlib/testlib_test.h>
+void testlib_enter_stealth_mode(); // defined in core/testlib/testlib_main.cxx
+
 typedef vxl_byte pixel_type;
 
 // adding observer to view change
@@ -256,6 +259,9 @@ main( int argc, char* argv[] )
 
   vul_arg_parse( argc, argv );
   vcl_cout << feature_file() << "\n" << from_files() << "\n" << to_files() << vcl_endl;
+
+  // Don't allow Visual Studio to open critical error dialog boxes
+  testlib_enter_stealth_mode();
 
   // Load images
   vcl_cout << "reading from images..." << vcl_endl;
@@ -520,7 +526,7 @@ main( int argc, char* argv[] )
   //
   rgrl_feature_based_registration reg( data_sptr, conv_test );
   // enforce lower bound of geometric scale
-  reg.set_expected_min_geometric_scale( 0.5 );
+  reg.set_expected_min_geometric_scale( 0.25 );
   reg.add_observer( new rgrl_event_iteration(), new command_iteration_update());
   // before running reg engine, release unnecessary space
   feature_sets.clear();
@@ -599,5 +605,9 @@ main( int argc, char* argv[] )
 
   }
 
-  return 0;
+  // Perform testing
+  //
+  testlib_test_start( "Registration using pseudo-matching" );
+  testlib_test_assert_near("", reg.final_status()->objective_value(), 0.25, 1e-2 );
+  return testlib_test_summary();
 }

@@ -60,13 +60,13 @@ TARGET_LINK_LIBRARIES( estimate_normals_3d rrel rsdl vnl_algo)
 ADD_EXECUTABLE( match_2d
   match_2d.cxx 
 )
-TARGET_LINK_LIBRARIES( match_2d rgrl vnl vil)
+TARGET_LINK_LIBRARIES( match_2d rgrl testlib vnl vil)
 
 # multi-resolution version
 ADD_EXECUTABLE( match_2d_multi
   match_2d_multi.cxx 
 )
-TARGET_LINK_LIBRARIES( match_2d_multi rgrl vil_algo vil vnl)
+TARGET_LINK_LIBRARIES( match_2d_multi testlib rgrl vil_algo vil vnl)
 
 
 
@@ -112,3 +112,17 @@ ADD_TEST( registration_blackbox_range_data_test  registration_range_data_blackbo
 
 ADD_TEST( estimate_normals_3d_test estimate_normals_3d
           ${CMAKE_CURRENT_SOURCE_DIR}/IMG0002.pgm.txt IMG0002.pgm.out.txt )
+
+ADD_TEST( pseudo_match_2d_test match_2d
+          1 ${CMAKE_CURRENT_SOURCE_DIR}/sigcube1_face_features.txt
+          ${CMAKE_CURRENT_SOURCE_DIR}/sigcube1.png 
+          ${CMAKE_CURRENT_SOURCE_DIR}/sigcube2.png
+          -init ${CMAKE_CURRENT_SOURCE_DIR}/init_xform_flipped_y.txt
+          -model affine )
+
+ADD_TEST( pseudo_match_2d_mult_test match_2d_multi
+          1 ${CMAKE_CURRENT_SOURCE_DIR}/sigcube1_face_features.txt
+          ${CMAKE_CURRENT_SOURCE_DIR}/sigcube1.png 
+          ${CMAKE_CURRENT_SOURCE_DIR}/sigcube2.png
+          -init ${CMAKE_CURRENT_SOURCE_DIR}/init_xform_flipped_y.txt
+          -model affine )
