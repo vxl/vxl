@@ -61,11 +61,9 @@ void kalman_filter::init()
   init_state_vector();
   memory_size_ = 2;
 
-  // init covariant matrix P_
-  init_covariant_matrix();
+  init_covariant_matrix();  
 
-  // increase the frame number
-  cur_pos_ = (cur_pos_+1) % queue_size_;
+  cur_pos_ = (cur_pos_ + 1) % queue_size_;
 }
 
 kalman_filter::~kalman_filter()
@@ -97,7 +95,6 @@ void kalman_filter::init_transit_matrix()
 
 void kalman_filter::init_state_vector()
 {
-  // initialize the velocity direction
   init_velocity();
   vnl_double_3 T(X_[3],X_[4],X_[5]);
 
@@ -143,14 +140,15 @@ void kalman_filter::init_state_vector()
   int npts = 2* ((size0 < size1) ? size0 : size1); // interpolate 2 times more
 
   vcl_vector<vgl_point_3d<double> > pts_3d;
-  vcl_vector<vgl_point_2d<double> > c0; // matched point for the first view
-  vcl_vector<vgl_point_2d<double> > c1;
 
   for (int i=0; i<npts; i++)
   {
     double index = i/double(npts);
     vgl_homg_point_2d<double> p1(dc0->get_x(index),dc0->get_y(index));
-    vgl_point_2d<double> x1(p1);
+    vgl_point_2d<double> temp_p(p1);
+    vnl_double_2x2 sigma1;
+    sigma1.set_identity();
+    bugl_gaussian_point_2d<double> x1(temp_p, sigma1);
     int x0_index = bdgl_curve_algs:: closest_point(ec0, x1.x(), x1.y());
     double angle0 = (*ec0)[x0_index].get_theta();
 
@@ -190,31 +188,19 @@ void kalman_filter::init_state_vector()
       }
 
       if (flag) { // if have corresponding
-       vgl_point_2d<double> x2(p2);
-       vgl_point_3d<double> point_3d = brct_algos::triangulate_3d_point(x1, P1, x2, P2);
+        vnl_double_2x2 sigma2;
+        sigma2.set_identity();
+        bugl_gaussian_point_2d<double> x2(p2, sigma2);
+        vgl_point_3d<double> point_3d = brct_algos::triangulate_3d_point(x1, P1, x2, P2);
         pts_3d.push_back(point_3d);
-        c0.push_back(x1);
-        c1.push_back(x2);
+        observes_[0].push_back(x1);
+        observes_[1].push_back(x2);
       }
     }
   }
 
 
   num_points_ = pts_3d.size();
-
-  // get observes
-  vnl_matrix<double> t0(2, num_points_);
-  vnl_matrix<double> t1(2, num_points_);
-  for (int i=0; i<num_points_; i++)
-  {
-    t0[0][i] = c0[i].x();
-    t0[1][i] = c0[i].y();
-    t1[0][i] = c1[i].x();
-    t1[1][i] = c1[i].y();
-  }
-
-  observes_[0] = t0;
-  observes_[1] = t1;
 
   curve_3d_.resize(num_points_);
   prob_.resize(num_points_);
@@ -231,27 +217,8 @@ void kalman_filter::init_state_vector()
   X_[0] = T[0];
   X_[1] = T[1];
   X_[2] = T[2];
+
 }
-
-
-void kalman_filter::init_observes(vcl_vector<vnl_matrix<double> > &input)
-{
-  cur_pos_ = 0;
-  queue_size_ = 10;
-  memory_size_ = 2; // but can grow up to queue size
-
-  observes_.resize(queue_size_);
-  assert(input.size() >= (unsigned int)queue_size_);
-
-  curves_.resize(queue_size_);
-  motions_.resize(queue_size_);
-
-  for (int i=0; i<queue_size_; ++i) {
-    assert(input[i].rows() >= 2 && input[i].cols() >= (unsigned int)queue_size_);
-    observes_[i] = input[i];
-  }
-}
-
 
 void kalman_filter::init_covariant_matrix()
 {
@@ -362,18 +329,19 @@ vnl_double_2 kalman_filter::projection(const vnl_double_3x4 &P, const vnl_double
 
 void kalman_filter::update_observes(const vnl_double_3x4 &P, int iframe)
 {
-  vnl_matrix<double> t(2, num_points_);
+  observes_[iframe%queue_size_].resize(num_points_);
+
   for (int i=0; i<num_points_; i++)
   {
     vgl_point_3d<double> X(curve_3d_[i].x(), curve_3d_[i].y(), curve_3d_[i].z());
     vgl_point_2d<double> x = brct_algos::projection_3d_point(X, P);
     vgl_point_2d<double> u = brct_algos::closest_point(curves_[iframe], x);
-
-    t[0][i] = u.x();
-    t[1][i] = u.y();
+    observes_[iframe%queue_size_][i].set_point(u);
+    vnl_double_2x2 sigma;
+    sigma.set_identity();
+    observes_[iframe%queue_size_][i].set_covariant_matrix(sigma);
   }
 
-  observes_[iframe%queue_size_] = t;
 }
 
 void kalman_filter::update_confidence()
@@ -427,7 +395,7 @@ void kalman_filter::inc()
   update_observes(P, cur_pos_);
 
   // adjustion
-  vnl_matrix<double> & cur_measures = observes_[cur_pos_%queue_size_];
+  vcl_vector<bugl_gaussian_point_2d<double> > & cur_measures = observes_[cur_pos_%queue_size_];
 
   for (int i=0; i<num_points_; i++)
   {
@@ -460,10 +428,7 @@ void kalman_filter::inc()
     }
 #endif
 
-    vnl_double_2 z;
-
-    for (int j=0; j<2; j++)
-      z[j] = cur_measures[j][i];
+    vnl_double_2 z(cur_measures[i].x(), cur_measures[i].y());
 
     vnl_double_2 z_pred = projection(P,X);
 
@@ -501,12 +466,12 @@ void kalman_filter::inc()
   {
     for (int j=0; j<memory_size_; j++)
     {
-      pts[j] = vnl_double_2(observes_[j][0][i],observes_[j][1][i]);
+      pts[j] = vnl_double_2(observes_[j][i].x(), observes_[j][i].y());
       Ps[j] = get_projective_matrix(motions_[j]);
     }
 
     vgl_point_3d<double> X3d = brct_algos::bundle_reconstruct_3d_point(pts, Ps);
-    curve_3d_[i].set(X3d.x(), X3d.y(), X3d.z());
+    curve_3d_[i].set_point(X3d);
   }
 
   // update confidence level for each points

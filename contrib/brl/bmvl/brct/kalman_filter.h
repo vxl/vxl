@@ -21,16 +21,12 @@
 #include <vnl/vnl_matrix_fixed.h>
 #include <vnl/vnl_matrix.h>
 #include <vdgl/vdgl_digital_curve_sptr.h>
+#include <bbas/bugl/bugl_gaussian_point_2d.h>
 #include <vgl/vgl_point_3d.h>
 #include <bbas/bugl/bugl_gaussian_point_3d.h>
 
 class kalman_filter
 {
-#if 0
- public:
-  //: initialize the kalman filter with dt
-  virtual kalman_state inc(double dt);
-#endif // 0
  public:
   vcl_vector<vgl_point_2d<double> > get_back_projection();
   vnl_matrix<double> get_predicted_curve();
@@ -69,9 +65,6 @@ class kalman_filter
 
   void init_covariant_matrix();
   void init_cam_intrinsic();
-
-  void init_observes(vcl_vector<vnl_matrix<double> > &input);
-
   void init_state_vector();
   void init_transit_matrix();
 
@@ -80,7 +73,7 @@ class kalman_filter
   vcl_vector<bugl_gaussian_point_3d<double> > curve_3d_;
   vcl_vector<double> prob_;
 
-  vcl_vector<vnl_matrix<double> > observes_;
+  vcl_vector<vcl_vector<bugl_gaussian_point_2d<double> > > observes_;
 
   //: each element of the vector represents a projection of the same 3D curves.
   vcl_vector<vdgl_digital_curve_sptr> curves_;
