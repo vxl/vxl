@@ -283,7 +283,7 @@ jacobian( vnl_vector<double> const& from_loc ) const
   return jacobian;
 }
 
-// for output UNCENTERED transformation, with the origin as the center.
+// for output CENTERED transformation
 void
 rgrl_trans_homography2d::
 write(vcl_ostream& os ) const
