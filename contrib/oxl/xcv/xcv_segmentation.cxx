@@ -125,13 +125,13 @@ void xcv_segmentation::draw_edges(vcl_list<osl_edge*> lines, unsigned col,
     osl_edge const* e = *i;
     float *x = e->GetY(),*y = e->GetX(); // note x-y confusion.
     // - Offset the edges
-    for (int j = 0;j<e->size();j++)
+    for (unsigned int j = 0;j<e->size();j++)
     {
       x[j]+=low[0];
       y[j]+=low[1];
     }
     easy_tab->add_linestrip(e->size(),x, y);
-    for (int j = 0;j<e->size();j++)
+    for (unsigned int j = 0;j<e->size();j++)
     {
       x[j]-=low[0];
       y[j]-=low[1];
@@ -324,7 +324,7 @@ void xcv_segmentation::detect_lines_ox()
     iter!= broken_edges.end(); iter++)
   {
     osl_edge* e = *iter;
-    if (e->size() < min_fit_length)  // Reject edges which are too short
+    if (e->size() < (unsigned int)min_fit_length)  // Reject edges which are too short
       continue;
 
     // Fit a straight line to the edgel:
