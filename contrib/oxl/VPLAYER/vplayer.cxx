@@ -14,6 +14,7 @@
 #include <vgui/vgui_macro.h>
 #include <vgui/vgui_easy2D.h>
 #include <vgui/vgui_rubberbander.h>
+#include <vgui/vgui_adaptor.h>
 #include <vgui/vgui_composite.h>
 #include <vgui/vgui_viewer2D.h>
 #include <vgui/vgui_grid_tableau.h>

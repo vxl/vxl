@@ -9,6 +9,9 @@
 #include <vgui/vgui_menu.h>
 #include <vgui/vgui_dialog.h>
 #include <vgui/vgui_rubberbander.h>
+#include <vgui/vgui_color_text.h>
+#include <vgui/vgui_soview.h>
+#include <vgui/vgui_soview2D.h>
 #include <vgui/vgui_easy2D.h>
 #include <vgui/vgui_macro.h>
 
@@ -106,12 +109,13 @@ void vplayer_geometry::change_sel_color()
   for (unsigned i=0; i<easy_list.size(); i++)
   {
     vcl_vector<vgui_soview*> sel_objs = easy_list[i]->get_selected_soviews();
-    for (vcl_vector<vgui_soview*>::iterator iter = sel_objs.begin(); iter !=
-      sel_objs.end(); iter++)
+    for (vcl_vector<vgui_soview*>::iterator iter = sel_objs.begin();
+         iter != sel_objs.end(); iter++)
     {
       vgui_soview* sv = (vgui_soview*)(*iter);
-      sv->set_colour(red_value(color_value), green_value(color_value),
-        blue_value(color_value));
+      sv->set_colour(red_value(color_value),
+                     green_value(color_value),
+                     blue_value(color_value));
     }
     easy_list[i]->deselect_all();
   }
@@ -375,8 +379,9 @@ void vplayer_geometry::change_default_color()
   vcl_vector<vgui_easy2D_sptr> easy_list = get_easy2D_list();
   for (unsigned i=0; i<easy_list.size(); i++)
   {
-    easy_list[i]->set_foreground(red_value(color_value), green_value(color_value),
-      blue_value(color_value));
+    easy_list[i]->set_foreground(red_value(color_value),
+                                 green_value(color_value),
+                                 blue_value(color_value));
   }
 }
 
