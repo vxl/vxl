@@ -52,7 +52,15 @@ superiority is undisputed. LAPACK is faster, and more accurate. It is
 designed for efficient parallel processing including on SMP machines
 so it should be thread safe. We do not know if f2c'ed LAPACK is
 automally thread safe, but it should be possible to hand edit it
-to deal with f2c's deficiencies.
+to deal with f2c's deficiencies. LAPACK3E has been specifically updated
+to avoid SAVE statements and so is definitely thread safe. It is written
+in Fortran 90 whilst f2c can still only read Fortran77. There is a
+developmental version of gcc supporting Fortran95, so maybe gcc users
+could optionally use the native LAPACK library.
+
+netlib.org has a library called CLAPACK where someone else has done the
+f2c and tidyup already. I don't know if it is thread-safe. It might not
+be too much work to strip out any remaining static values.
 
 It should be possible to start using LAPACK incrementally. LAPACK
 names do not appear to clash with LINPACK, and since they both need
