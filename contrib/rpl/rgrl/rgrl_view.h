@@ -28,7 +28,8 @@ class rgrl_view
              rgrl_mask_box       const& global_region,
              rgrl_estimator_sptr        xform_estimator,
              rgrl_transformation_sptr   xform_estimate,
-             unsigned                   resolution = 0);
+             unsigned                   resolution = 0,
+             rgrl_transformation_sptr   reverse_estimate = 0 );
 
   // default copy and assignment are good.
 
@@ -49,6 +50,9 @@ class rgrl_view
 
   //:  Access current transform estimate
   rgrl_transformation_sptr xform_estimate() const;
+
+  //:  Access current REVERSE transform estimate
+  rgrl_transformation_sptr reverse_xform_estimate() const;
 
   //:  Access the current resolution at which registration is working
   unsigned resolution() const;
@@ -88,7 +92,8 @@ class rgrl_view
 
   rgrl_estimator_sptr        xform_estimator_;
   rgrl_transformation_sptr   xform_estimate_;
-
+  rgrl_transformation_sptr   reverse_estimate_;
+  
   unsigned                   current_resolution_;
 };
 

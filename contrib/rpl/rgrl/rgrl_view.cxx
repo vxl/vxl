@@ -14,13 +14,15 @@ rgrl_view( rgrl_mask_box           const& from_image_roi,
            rgrl_mask_box           const& global_region,
            rgrl_estimator_sptr       xform_estimator,
            rgrl_transformation_sptr  xform_estimate,
-           unsigned                  resolution )
+           unsigned                  resolution,
+           rgrl_transformation_sptr  reverse_estimate )
   : from_image_roi_( from_image_roi ),
     to_image_roi_( to_image_roi ),
     current_region_( region ),
     global_region_( global_region ),
     xform_estimator_( xform_estimator ),
     xform_estimate_( xform_estimate ),
+    reverse_estimate_( reverse_estimate ),
     current_resolution_( resolution )
 {
 }
@@ -68,6 +70,13 @@ rgrl_view::
 xform_estimate() const
 {
   return xform_estimate_;
+}
+
+rgrl_transformation_sptr
+rgrl_view::
+reverse_xform_estimate() const
+{
+  return reverse_estimate_;
 }
 
 unsigned
