@@ -33,6 +33,11 @@ public:
   // The data must be kept in scope, this does not take a copy.
   mbl_data_array_wrapper(const vcl_vector<T > &data);
 
+  //: Copy Constructor
+  // The copy will point to the same data as the original.
+  // The data must be kept in scope, this does not take a copy.
+  mbl_data_array_wrapper(const mbl_data_array_wrapper<T > &orig);
+
   //: Initialise to return elements from data[i]
   // Sets up object to return n examples beginning at data[0].
   // The data must be kept in scope, this does not take a copy.
