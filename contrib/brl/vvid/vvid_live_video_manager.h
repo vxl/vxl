@@ -32,9 +32,9 @@ class vgui_window;
 class vvid_live_video_manager : public vgui_wrapper_tableau
 {
  public:
-  vvid_live_video_manager();
+  vvid_live_video_manager(unsigned num_cameras=2);
   ~vvid_live_video_manager();
-  static vvid_live_video_manager *instance();
+  static vvid_live_video_manager *instance(unsigned num_cameras=2);
 
   //:post construction actions
   void init();
@@ -67,10 +67,12 @@ class vvid_live_video_manager : public vgui_wrapper_tableau
   void quit();
 
   //: access to the current frames
-  bool get_current_rgb_image(int pix_sample_interval,
+  bool get_current_rgb_image(unsigned camera_index,
+	                         int pix_sample_interval,
                              vil1_memory_image_of< vil1_rgb<unsigned char> >& im);
 
-  bool get_current_mono_image(int pix_sample_interval,
+  bool get_current_mono_image(unsigned camera_index,
+	                          int pix_sample_interval,
                               vil1_memory_image_of<unsigned char>& im);
 
   //: control of the process result window
@@ -95,9 +97,10 @@ class vvid_live_video_manager : public vgui_wrapper_tableau
   int sample_;
   unsigned width_;
   unsigned height_;
+  unsigned num_cameras_;
   vgui_window* win_;
-  bgui_vtol2D_tableau_sptr vt2D_;
-  vvid_live_video_tableau_sptr vtab_;
+  vcl_vector <bgui_vtol2D_tableau_sptr> vt2Ds_;
+  vcl_vector <vvid_live_video_tableau_sptr> vtabs_;
   cmu_1394_camera_params cp_;
   vil1_memory_image_of< vil1_rgb<unsigned char> > process_rgb_;
   vil1_memory_image_of<unsigned char> process_mono_;

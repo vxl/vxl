@@ -5,9 +5,11 @@
 // \author J.L. Mundy
 
 #include <vcl_cstdlib.h> // for vcl_exit()
+#include <vcl_sstream.h>
 #include <vcl_vector.h>
 #include <vcl_iostream.h>
 #include <vul/vul_timer.h>
+#include <vul/vul_file.h>
 #include <vil1/vil1_memory_image_of.h>
 #include <vgui/vgui_key.h>
 #include <vgui/vgui_modifier.h>
@@ -34,11 +36,11 @@
 vvid_live_video_manager *vvid_live_video_manager::instance_ = 0;
 
 
-vvid_live_video_manager *vvid_live_video_manager::instance()
+vvid_live_video_manager *vvid_live_video_manager::instance(unsigned num_cameras)
 {
   if (!instance_)
     {
-      instance_ = new vvid_live_video_manager();
+      instance_ = new vvid_live_video_manager(num_cameras);
       instance_->init();
     }
   return vvid_live_video_manager::instance_;
@@ -48,18 +50,18 @@ vvid_live_video_manager *vvid_live_video_manager::instance()
 // constructors/destructor
 //
 vvid_live_video_manager::
-vvid_live_video_manager() :
-  cp_(cmu_1394_camera_params())
-{
-  width_ = 960;
-  height_ = 480;
-  win_ = 0;
-  video_process_ = 0;
-  init_successful_ = false;
-}
+vvid_live_video_manager(unsigned num_cameras) :
+  cp_(cmu_1394_camera_params()),
+  width_(960),
+  height_(480),
+  win_(0),
+  video_process_(0),
+  init_successful_(false),
+  num_cameras_(num_cameras)
+{}
+
 vvid_live_video_manager::~vvid_live_video_manager()
-{
-}
+{}
 //----------------------------------------------------------
 // determine the number of active cameras and install the reduced
 // resolution views accordingly.
@@ -68,21 +70,40 @@ void vvid_live_video_manager::init()
 {
   //Determine the number of active cameras
   // for now we assume use a pre-defined _N_views
+
+  vgui_grid_tableau_sptr grid = vgui_grid_tableau_new(num_cameras_,1);
+  grid->set_grid_size_changeable(true);
   sample_ = 1;
   init_successful_ = true;
   edges_ = true;
-  vtab_ = vvid_live_video_tableau_new(0, sample_, cmu_1394_camera_params());
-  init_successful_ = init_successful_&&vtab_->attach_live_video();
-  if (!init_successful_)
-    {
-      vcl_cout << "In vvid_live_video_manager::init() - bad camera initialization\n";
-      return;
-    }
-  cp_ = vtab_->get_camera_params();
-  vt2D_ =  bgui_vtol2D_tableau_new(vtab_);
-  vt2D_->disable_highlight();
-  vgui_viewer2D_tableau_sptr v2d = vgui_viewer2D_tableau_new(vt2D_);
-  vgui_shell_tableau_sptr shell = vgui_shell_tableau_new(v2d);
+  vvid_live_video_tableau_sptr vtab;
+  bgui_vtol2D_tableau_sptr vt2D;
+
+  for (unsigned cam=0; cam<num_cameras_; ++cam){
+    
+	vtab = vvid_live_video_tableau_new(cam, sample_, cmu_1394_camera_params());
+	vtabs_.push_back(vtab);
+	init_successful_ = init_successful_&&vtab->attach_live_video();
+	if (!init_successful_)
+	{
+	  vcl_cout << "In vvid_live_video_manager::init() - "
+		       << "bad initialization - camera #"<< cam << vcl_endl;
+	  return;
+	}
+	vt2D =  bgui_vtol2D_tableau_new(vtab);
+	vt2D->disable_highlight();
+	vt2Ds_.push_back(vt2D);
+
+	// make a 2D viewer tableau and add it to the grid
+	vgui_viewer2D_tableau_sptr v2d = vgui_viewer2D_tableau_new(vt2D);
+    grid->add_at(v2d, cam, 0);
+  }
+ 
+  // get the camera paramaters from the last camera (assume are are the same)
+  cp_ = vtab->get_camera_params();
+
+  // put the grid in a shell
+  vgui_shell_tableau_sptr shell = vgui_shell_tableau_new(grid);
   this->add_child(shell);
   video_process_  = (vpro_video_process*)0;
 }
@@ -106,24 +127,27 @@ bool vvid_live_video_manager::handle(const vgui_event &e)
 //
 void vvid_live_video_manager::set_camera_params()
 {
-  if (!vtab_)
-    {
-      vcl_cout << "in vvid_live_video_manager::set_camera_params() - no live video tableau\n";
-      return;
-    }
-  cp_ = vtab_->get_camera_params();
+	
+  vvid_live_video_tableau_sptr vtab = vtabs_.back();
+  if (vtabs_.size() != num_cameras_ || !vtab)
+  {
+    vcl_cout << "in vvid_live_video_manager::set_camera_params()"
+		     << "- no live video tableau" << vcl_endl;
+    return;
+  }
+  cp_ = vtab->get_camera_params();
   static int pix_sample_interval = 1;
   vcl_vector<vcl_string> choices;
   vcl_string no_choice="CurrentConfiguration";
   choices.push_back(no_choice);
-  vcl_vector<vcl_string> valid_descrs = vtab_->get_capability_descriptions();
+  vcl_vector<vcl_string> valid_descrs = vtab->get_capability_descriptions();
   for (vcl_vector<vcl_string>::iterator cit = valid_descrs.begin();
        cit != valid_descrs.end(); cit++)
-      choices.push_back(*cit);
+       choices.push_back(*cit);
   static int choice=0;
   //Set up the dialog.
   vgui_dialog cam_dlg("Camera Parameters");
-  cam_dlg.message(vtab_->current_capability_desc().c_str());
+  cam_dlg.message(vtab->current_capability_desc().c_str());
   cam_dlg.choice("Choose Configuration", choices, choice);
   cam_dlg.checkbox("Auto Exposure ", cp_.auto_exposure_);
   cam_dlg.checkbox("Auto Gain ", cp_.auto_gain_);
@@ -137,22 +161,27 @@ void vvid_live_video_manager::set_camera_params()
   cam_dlg.checkbox("RGB(monochrome) ", cp_.rgb_);
   if (!cam_dlg.ask())
     return;
-  if (choice)
-    vtab_->set_current(choice-1);
-  vtab_->set_pixel_sample_interval(pix_sample_interval);
-  vtab_->set_camera_params(cp_);
+
+  // set the results to all video tableaus
+  for (unsigned i=0; i<num_cameras_; ++i) {
+    if (choice) 
+	  vtabs_[i]->set_current(choice-1);
+	vtabs_[i]->set_pixel_sample_interval(pix_sample_interval);
+	vtabs_[i]->set_camera_params(cp_);
+  }
+
   vcl_cout << "Current Camera Parameters\n" << cp_ << '\n';
 }
 
 void vvid_live_video_manager::set_detection_params()
 {
-  if (!vtab_)
+  if (vtabs_.size() != num_cameras_)
     {
       vcl_cout << "in vvid_live_video_manager::set_camera_params() - no live video tableau\n";
       return;
     }
   //cache the live video state to restore
-  bool live = vtab_->get_video_live();
+  bool live = vtabs_.back()->get_video_live();
   if (live)
     this->stop_live_video();
   static bool agr = false;
@@ -209,34 +238,46 @@ void vvid_live_video_manager::init_capture()
   save_video_dlg.file("Video Filename:", ext, video_filename);
   if (!save_video_dlg.ask())
     return;
-  vtab_->start_capture(video_filename);
+  
+  for(unsigned i=0; i<num_cameras_; ++i){
+    vcl_stringstream camera_subdir;
+	camera_subdir << "\\camera" << i << "\\" << vcl_ends;
+    vul_file::make_directory(video_filename+camera_subdir.str());
+    vtabs_[i]->start_capture(video_filename+camera_subdir.str());
+  }
 }
 
 void vvid_live_video_manager::stop_capture()
 {
   this->stop_live_video();
-  vtab_->stop_capture();
+  for(unsigned i=0; i<num_cameras_; ++i){
+    vtabs_[i]->stop_capture();
+  }
 }
 
 void vvid_live_video_manager::display_topology()
 {
-  vt2D_->clear_all();
-  vcl_vector<vtol_topology_object_sptr> const & seg = video_process_->get_output_topology();
+	
+  for(unsigned i=0; i<num_cameras_; ++i){
+    vt2Ds_[i]->clear_all();
+    vcl_vector<vtol_topology_object_sptr> const & seg = video_process_->get_output_topology();
 
-  for (vcl_vector<vtol_topology_object_sptr>::const_iterator ti=seg.begin();
-       ti != seg.end(); ti++)
-    if (edges_)
+    for (vcl_vector<vtol_topology_object_sptr>::const_iterator ti=seg.begin();
+	     ti != seg.end(); ti++){
+      if (edges_)
       {
         vtol_edge_2d_sptr e=(*ti)->cast_to_edge()->cast_to_edge_2d();
         if (e)
-          vt2D_->add_edge(e);
+          vt2Ds_[i]->add_edge(e);
       }
-    else
+      else
       {
         vtol_face_2d_sptr f=(*ti)->cast_to_face()->cast_to_face_2d();
         if (f)
-          vt2D_->add_face(f);
+          vt2Ds_[i]->add_face(f);
       }
+	}
+  }
 }
 
 void vvid_live_video_manager::display_image()
@@ -248,15 +289,17 @@ void vvid_live_video_manager::run_frames()
 {
   if (!init_successful_)
     return;
-  while (vtab_->get_video_live()) {
+  while (vtabs_.back()->get_video_live()) {
     vul_timer t;
-    vtab_->update_frame();
-    if (!cp_.rgb_&&video_process_)//i.e. grey scale
+    for(unsigned i=0; i<num_cameras_; ++i){
+      vtabs_[i]->update_frame();
+
+      if (!cp_.rgb_&&video_process_)//i.e. grey scale
       {
         vil1_memory_image_of<unsigned char> image;
         video_process_->clear_input();
 
-        if (vtab_->get_current_mono_image(sample_,image))
+        if (vtabs_[i]->get_current_mono_image(sample_,image))
           video_process_->add_input_image(image);
         else return;
         if (video_process_->execute())
@@ -267,7 +310,8 @@ void vvid_live_video_manager::run_frames()
               display_topology();
           }
       }
-    vt2D_->post_redraw();
+      vt2Ds_[i]->post_redraw();
+	}
     vgui::run_till_idle();
     float ft = float(t.real())/1000.0, rate=0;
     if (ft)
@@ -278,13 +322,17 @@ void vvid_live_video_manager::run_frames()
 
 void vvid_live_video_manager::start_live_video()
 {
-  if (!init_successful_||!vtab_)
+  if (!init_successful_ || vtabs_.size() != num_cameras_)
     return;
-  if (!vtab_->start_live_video())
+  
+  for(unsigned i=0; i<num_cameras_; ++i){
+    if (!vtabs_[i]->start_live_video())
     {
-      vcl_cout << "In vvid_live_video_manager::start_live_video() - start failed\n";
+      vcl_cout << "In vvid_live_video_manager::start_live_video()"
+		       << "- start failed - camera #" << i << vcl_endl;
       return;
     }
+  }
   this->run_frames();
 }
 
@@ -292,8 +340,11 @@ void vvid_live_video_manager::stop_live_video()
 {
   if (!init_successful_)
     return;
-  if (vtab_)
-    vtab_->stop_live_video();
+  
+  for(unsigned i=0; i<num_cameras_; ++i){
+    if (vtabs_[i])
+      vtabs_[i]->stop_live_video();
+  }
   if (video_process_)
     video_process_->finish();
 }
@@ -303,32 +354,35 @@ void vvid_live_video_manager::quit()
   this->stop_live_video();
   vcl_exit(1);
 }
+
 bool vvid_live_video_manager::
-get_current_rgb_image(int pix_sample_interval,
+get_current_rgb_image(unsigned camera_index,
+					  int pix_sample_interval,
                       vil1_memory_image_of< vil1_rgb<unsigned char> >& im)
 {
-  if (!init_successful_||!vtab_)
+  if (!init_successful_||!vtabs_[camera_index])
     {
       vcl_cout << "In vvid_live_video_manger::get_current_rgb_imge(..) -"
                << " bad initialization\n";
       return false;
     }
 
-  return vtab_->get_current_rgb_image(pix_sample_interval, im);
+  return vtabs_[camera_index]->get_current_rgb_image(pix_sample_interval, im);
 }
 
 bool vvid_live_video_manager::
-get_current_mono_image(int pix_sample_interval,
+get_current_mono_image(unsigned camera_index,
+					   int pix_sample_interval,
                        vil1_memory_image_of<unsigned char>& im)
 {
-  if (!init_successful_||!vtab_)
+  if (!init_successful_||!vtabs_[camera_index])
     {
       vcl_cout << "In vvid_live_video_manger::get_current_mono_imge(..) -"
                << " bad initialization\n";
       return false;
     }
 
-  return vtab_->get_current_mono_image(pix_sample_interval, im);
+  return vtabs_[camera_index]->get_current_mono_image(pix_sample_interval, im);
 }
 
 void vvid_live_video_manager::
