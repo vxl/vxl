@@ -1,5 +1,8 @@
 #ifndef vnl_alloc_h_
 #define vnl_alloc_h_
+#ifdef __GNUC__
+#pragma interface
+#endif
 
 // This is vxl/vnl/vnl_alloc.h
 
