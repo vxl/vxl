@@ -35,12 +35,14 @@ public:
 
   void boo(const vnl_vector<double> &x) {
     assert(x.size()==3);
+#if 0
 #ifdef GNU_LIBSTDCXX_V3
     std::_Ios_Fmtflags
 #else
     int
 #endif
       f=cout.flags();
+#endif
     cout.flags(vcl_ios::fixed | vcl_ios::showpos);
     double z,y;
     for (unsigned i=0;i<N;i++) {
