@@ -125,11 +125,11 @@ void fill_boundary(vil3d_image_view<int> &image, int j, int k, int boundary_labe
   unsigned nj = image.nj();
 
   vcl_stack<int> x_stack, y_stack;
-  int i, m;
+  int i=0, m;
 
   // push all boundary pixels onto stack. Needed for degenerate cases
 
-  for (;j<int(nj);++j,i=0)
+  for (;j<int(nj);++j,i=0) // Why do i=0 here instead of in normal place on next line? No idea...
     for (;i<int(ni);++i)
     {
       if (image(i,j,k) == boundary_label)
