@@ -131,7 +131,7 @@ int vgui_mfc_adaptor::OnCreate(LPCREATESTRUCT lpCreateStruct)
   
   // TODO: Add your specialized creation code here
   
-  if(vgui_accelerate::vgui_mfc_acceleration || vgui_accelerate::vgui_mfc_ogl_acceleration)
+  if(vgui_accelerate::vgui_mfc_acceleration)
   {      
     CDC *tmp = new CClientDC(this);
     m_pDC = new CDC();
@@ -237,7 +237,7 @@ BOOL vgui_mfc_adaptor::SetupPixelFormat()
       0, 0, 0                 // layer masks ignored
   };
   
-  if(vgui_accelerate::vgui_mfc_acceleration || vgui_accelerate::vgui_mfc_ogl_acceleration)
+  if (vgui_accelerate::vgui_mfc_acceleration)
     pfd.dwFlags = PFD_DRAW_TO_BITMAP|PFD_SUPPORT_OPENGL;      
   
   PIXELFORMATDESCRIPTOR* pPFDtoUse;	

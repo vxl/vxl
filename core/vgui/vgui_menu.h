@@ -12,7 +12,7 @@
 #include <vgui/vgui_key.h>
 #include <vgui/vgui_modifier.h>
 class vgui_menu;
-class vgui_command;
+struct vgui_command;
 
 // These menu description structures are designed to work for both 
 // pop-up (modal) menus and stay-up (non-modal) menus. They can be

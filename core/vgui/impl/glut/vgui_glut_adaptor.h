@@ -8,7 +8,7 @@
 
 #include <vcl_vector.h>
 #include <vgui/vgui_adaptor.h>
-class vgui_command;
+struct vgui_command;
 struct vgui_overlay_helper;
 struct vgui_glut_window;
 
