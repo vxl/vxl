@@ -148,7 +148,7 @@ class vsol_digital_curve_2d : public vsol_curve_2d
   //---------------------------------------------------------------------------
   //: Return the curve type
   //---------------------------------------------------------------------------
-  virtual vsol_curve_2d_type curve_type() const { return vsol_curve_2d::DIGITAL; }
+  virtual vsol_curve_2d_type curve_type() const { return vsol_curve_2d::DIGITAL_CURVE; }
 
   //---------------------------------------------------------------------------
   //: Return `this' if `this' is an digital_curve, 0 otherwise

@@ -37,7 +37,6 @@ class vsol_curve_2d : public vsol_spatial_object_2d
     LINE,
     CONIC,
     POLYLINE,
-    DIGITAL,
     DIGITAL_CURVE,
     NUM_CURVE_TYPES
   };
