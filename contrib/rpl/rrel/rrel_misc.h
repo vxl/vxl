@@ -1,12 +1,12 @@
 #ifndef rrel_misc_h_
 #define rrel_misc_h_
 //:
-//  \file
-//  \author Chuck Stewart
-//  \date   Summer 2001
+// \file
+// \author Chuck Stewart
+// \date   Summer 2001
 
 //: Chebychev approximation to erfc.
-//  (Taken from "Numerical Receipes in C".)
+//  (Taken from "Numerical Recipes in C".)
 extern double rrel_misc_erfcc( double x );
 
 //: Inverse of the Gaussian CDF.
