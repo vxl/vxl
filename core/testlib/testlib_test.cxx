@@ -120,7 +120,7 @@ void testlib_test_assert_near_relative(const vcl_string& msg, double expr, doubl
 {
   vcl_cout << msg << " should be " << target << ", is " << expr << ", " << vcl_flush;
   double max = vcl_abs(target); if (vcl_abs(expr) > max) max = vcl_abs(expr);
-  if (max==0.0) max=1.0;
+  if (max==0.0 || target==0.0) max=1.0;
   double diff = vcl_abs(expr - target) / max;
   if (target != 0.0 && diff != 0.0)
     vcl_cout << "relative difference " << diff << ", " << vcl_flush;
@@ -131,7 +131,7 @@ void testlib_test_assert_near_relative(const vcl_string& msg, vcl_complex<double
 {
   vcl_cout << msg << " should be " << target << ", is " << expr << ", " << vcl_flush;
   double max = vcl_abs(target); if (vcl_abs(expr) > max) max = vcl_abs(expr);
-  if (max==0.0) max=1.0;
+  if (max==0.0 || target==vcl_complex<double>(0,0)) max=1.0;
   double diff = vcl_abs(expr - target) / max;
   if (target != vcl_complex<double>(0,0) && diff != 0.0)
     vcl_cout << "relative difference " << diff << ", " << vcl_flush;
