@@ -14,8 +14,6 @@
 #endif
 
 #include "vnl_rnpoly_solve.h"
-#include <vnl/vnl_real_npolynomial.h>
-#include <vcl_cmath.h>
 
 // fsm@robots: moved ::M and ::T into the namespace of vnl_rnpoly_solve, as they
 // were causing multiply defined symbols for static builds. if your compiler cannot
@@ -51,6 +49,10 @@ public:
                                 { return vnl_rnpoly_solve_cmplx(R*T, C*T); }
   inline vnl_rnpoly_solve_cmplx& operator*=(double T)
                                 { R*=T; C*=T; return *this; }
+  inline vnl_rnpoly_solve_cmplx& operator*=(vnl_rnpoly_solve_cmplx const& Y)
+                                { double r=R*Y.R-C*Y.C; C=R*Y.C+C*Y.R; R=r; return *this; }
+  inline vnl_rnpoly_solve_cmplx& operator/=(vnl_rnpoly_solve_cmplx const& Y)
+                                { return *this = operator/(Y); }
 };
 
 static const double twopi = 6.2831853071795864769;
@@ -112,8 +114,8 @@ static void inptbr(int n, vnl_rnpoly_solve_cmplx p[M], vnl_rnpoly_solve_cmplx q[
 static inline vnl_rnpoly_solve_cmplx powr(int n,vnl_rnpoly_solve_cmplx const& y)
 {
     vnl_rnpoly_solve_cmplx x (1,0);
-    if (n>0) while (n--) x = x * y;
-    else     while (n++) x = x / y;
+    if (n>0) while (n--) x *= y;
+    else     while (n++) x /= y;
     return x;
 }
 
@@ -157,7 +159,8 @@ static void ffunr(double coeff[M][T], int polyn[M][T][M], int n,
   // Initialize the new arrays
   for (i=0;i<n;i++) {
     f[i]=vnl_rnpoly_solve_cmplx(0,0);
-    for (int j=0;j<n;j++) df[i][j]=vnl_rnpoly_solve_cmplx(0,0);
+    for (int j=0;j<n;j++)
+      df[i][j]=vnl_rnpoly_solve_cmplx(0,0);
   }
 
   for (i=n-1;i>=0;i--) // Across equations
@@ -165,7 +168,8 @@ static void ffunr(double coeff[M][T], int polyn[M][T][M], int n,
       vnl_rnpoly_solve_cmplx tmp (1,0);
       for (k=n-1;k>=0;k--) { // For each variable
         int index=polyn[i][j][k];
-        if (index>=0) tmp = tmp * pows[index];
+        if (index>=0)
+          tmp *= pows[index];
       }
       f[i] += tmp * coeff[i][j];
     }
@@ -182,10 +186,11 @@ static void ffunr(double coeff[M][T], int polyn[M][T][M], int n,
             if (index>=0) {
               if (k==l) {
                 deg = degree(index);
-                if (deg > 1) tmp = tmp * pows[index-1];
+                if (deg > 1)
+                  tmp *= pows[index-1];
                 tmp *= (double)deg;
               } else
-                tmp = tmp * pows[index];
+                tmp *= pows[index];
             }
           } // end for k
           *df_il_ptr += tmp * coeff[i][j];
@@ -206,10 +211,10 @@ static void gfunr(int len, int ideg[M], vnl_rnpoly_solve_cmplx pdg[M], vnl_rnpol
   vnl_rnpoly_solve_cmplx tmp;
 
   for (j=0;j<len;j++) {
-    if (ideg[j] == 1) tmp = vnl_rnpoly_solve_cmplx(1,0);
-    else{
-      int index = j*P+(ideg[j]-2);
-      tmp = pows[index]; }
+    if (ideg[j] == 1)
+      tmp = vnl_rnpoly_solve_cmplx(1,0);
+    else
+      tmp = pows[j*P+(ideg[j]-2)];
 
     pxdgm1[j] = pdg[j] * tmp;
   }
@@ -268,7 +273,8 @@ static int ludcmp(vnl_rnpoly_solve_cmplx a[M][M], int n, int indx[M])
     double big = 0.0;
     vnl_rnpoly_solve_cmplx *endptr = &a[i][0] + n;
     for (vnl_rnpoly_solve_cmplx *aptr=&a[i][0]; aptr<endptr; ++aptr)
-      if ((temp=aptr->norm()) > big) big = temp;
+      if ((temp=aptr->norm()) > big)
+        big = temp;
     if (big == 0.0) return 1;
     vv[i]=1.0/vcl_sqrt(big);}
 
@@ -382,7 +388,8 @@ static int linnr(int len,vnl_rnpoly_solve_cmplx dhx[M][M],
 static double xnorm(int n, vnl_rnpoly_solve_cmplx v[])
 {
   double txnorm=0.0;
-  for (int j=n-1;j>=0; --j) txnorm += vcl_fabs(v[j].R) + vcl_fabs(v[j].C);
+  for (int j=n-1;j>=0; --j)
+    txnorm += vcl_fabs(v[j].R) + vcl_fabs(v[j].C);
   return txnorm;
 }
 
@@ -526,7 +533,8 @@ static int trace (int len, vnl_rnpoly_solve_cmplx x[M], int ideg[M],
       vcl_printf ("path converged\n");
 #endif
       factor = (1.0-oldt)/(t-oldt);
-      for (j=len-1;j>=0;j--) x[j] = oldx[j] + (x[j]-oldx[j]) * factor;
+      for (j=len-1;j>=0;j--)
+        x[j] = oldx[j] + (x[j]-oldx[j]) * factor;
       t = 1.0;
       cflag=correct(len,ideg,10*maxit,final_eps,pdg,qdg,t,x, polyn, coeff,terms, max_deg);
       if ((cflag==0) ||(cflag==2))
@@ -570,7 +578,7 @@ static void strptr(int n,int icount[M],int ideg[M], vnl_rnpoly_solve_cmplx r[M],
 {
   for (int i=0;i<n;i++)
     if (icount[i] >= ideg[i]) icount[i] = 1;
-    else                    { icount[i]++; i=n+1; }
+    else                    { icount[i]++; break; }
 
   for (int j=0;j<n;j++) {
     double angle = twopi / ideg[j] * icount[j];
@@ -614,7 +622,8 @@ static int Perform_Distributed_Task(int points,vnl_rnpoly_solve_cmplx sols[LEN][
   icount[0]=0;
   for (j=points-1;j>0;j--) icount[j]=1;
   for (i=0;i<points;i++)
-    if (ideg[i] > max_deg) max_deg = ideg[i];
+    if (ideg[i] > max_deg)
+      max_deg = ideg[i];
 
   // *************  Send initial information ****************
   //Initialize(points,maxns,maxdt,maxit,maxroot,
@@ -662,24 +671,26 @@ static int Perform_Distributed_Task(int points,vnl_rnpoly_solve_cmplx sols[LEN][
 int vnl_rnpoly_solve::Read_Input(int ideg[M], int terms[M],
                                  int polyn[M][T][M], double coeff[M][T])
 {
-  int i,j;
-
   // Read the number of equations
-  int n = ps_.size();
+  unsigned int n = ps_.size();
 
   // Initialize the array's to zero
-  for (i=0;i<n;i++) for (unsigned int k=0;k<T;k++) coeff[i][k] = 0.0;
-  for (i=0;i<n;i++) { ideg[i] = 0; terms[i] = 0; }
-  for (i=0;i<n;i++) for (unsigned int k=0;k<T;k++) for (j=0;j<n;j++)
+  for (unsigned int i=0;i<n;i++) for (unsigned int k=0;k<T;k++)
+    coeff[i][k] = 0.0;
+  for (unsigned int i=0;i<n;i++)
+    ideg[i] = terms[i] = 0;
+  for (unsigned int i=0;i<n;i++) for (unsigned int k=0;k<T;k++) for (unsigned int j=0;j<n;j++)
     polyn[i][k][j]=0;
   // Start reading in the array values
-  for (i=0;i<n;i++) {
+  for (unsigned int i=0;i<n;i++)
+  {
     ideg[i]  = ps_[i]->ideg_;
     terms[i] = ps_[i]->nterms_;
 
-    for (int k=0;k<terms[i];k++) {
+    for (int k=0;k<terms[i];k++)
+    {
       coeff[i][k] = ps_[i]->coeffs_(k);
-      for (j=0;j<n;j++) {
+      for (unsigned int j=0;j<n;j++) {
         int deg = ps_[i]->polyn_(k,j);
         if (deg) polyn[i][k][j] = (j*P)+(deg-1);
         else     polyn[i][k][j] = -1;

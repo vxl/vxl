@@ -15,6 +15,7 @@
 //  Peter Vanroose, 20 Oct 1999: implementation simplified through "cmplx" class for doing complex arithmetic.
 //  dac (Manchester) 28/03/2001: tidied up documentation
 //   Feb.2002 - Peter Vanroose - brief doxygen comment placed on single line
+//   May.2002 - Peter Vanroose - added operator*=(cmplx) and operator/=(cmplx)
 // \endverbatim
 
 #include <vnl/vnl_vector.h>
