@@ -18,6 +18,8 @@ vxl vgl vgl_ build
 vxl vil vil_ build
 vxl vul vul_ build
 vxl vpl vpl_ build
+
+package: vxl Level-2 Vision Libraries
 vxl vidl vidl_ build
 vxl vcgl vcgl_ build
 vxl vcsl vcsl_ build
