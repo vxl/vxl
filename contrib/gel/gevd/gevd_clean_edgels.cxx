@@ -541,14 +541,23 @@ void gevd_clean_edgels::RemoveBridges()
           int order = v_edges->size();
           if (order<1 )
           {
-          //We can leave isolated vertices in v_one
-          //but they will go away on the next sweep
-          continue;
+            //We can leave isolated vertices in v_one
+            //but they will go away on the next sweep
+            delete v_edges;
+            continue;
           }
-          vtol_edge_sptr e = (*v_edges)[0];
-          if (!e)
+          vtol_edge_sptr ep = (*v_edges)[0];
+          delete v_edges;
+          if (!ep)
             {
               vcl_cout << "In gevd_clean_edgels::RemoveBridges() - null edge\n";
+              order_one = false;
+              continue;
+            }
+          vtol_edge_2d_sptr e = ep->cast_to_edge_2d();
+          if (!e)
+            {
+              vcl_cout << "In gevd_clean_edgels::RemoveBridges() - edge is not an edge_2d\n";
               order_one = false;
               continue;
             }
@@ -562,7 +571,6 @@ void gevd_clean_edgels::RemoveBridges()
             {
             out_edgels_->erase ( f );
             }
-          delete v_edges;
         }
     }
   vcl_cout << "Remove Bridges(" << out_edgels_->size() << ") in " << t.real() << " msecs.\n";

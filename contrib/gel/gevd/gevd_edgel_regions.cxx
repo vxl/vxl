@@ -1311,7 +1311,8 @@ static bool embedded_T(vtol_vertex_sptr v, vtol_edge_2d_sptr bar, vcl_vector<vto
   vcl_vector<vtol_edge_sptr>::iterator eit;
   for ( eit = edges->begin(); eit != edges->end(); eit++)
     {
-      if (vcl_find(real_edges.begin(), real_edges.end(),(*eit)->cast_to_edge_2d()) == real_edges.end())
+      vtol_edge_2d_sptr e = (*eit)->cast_to_edge_2d();
+      if (vcl_find(real_edges.begin(), real_edges.end(), e) == real_edges.end())
         continue;
 
       if ((*eit)->cast_to_edge_2d()==bar)
@@ -1471,7 +1472,8 @@ bool gevd_edgel_regions::connect_ends(vcl_vector<vtol_edge_2d_sptr>& edges,
             }
           if (!(found_in_bad_verts||found_in_edge_verts)) //3)
             continue;
-          if (vcl_find(edges.begin(), edges.end(), (*eit)->cast_to_edge_2d()) != edges.end())
+          vtol_edge_2d_sptr e = (*eit)->cast_to_edge_2d();
+          if (vcl_find(edges.begin(), edges.end(), e) != edges.end())
             continue; //4)
           //Found a connecting edge.
           edges.push_back((*eit)->cast_to_edge_2d());
