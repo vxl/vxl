@@ -1,6 +1,7 @@
 // include all the streams headers and <string>, to
 // ensure they are compatible.
 #include <vcl_string.h>
+#include <vcl_ios.h> // for vcl_hex, vcl_dec
 #include <vcl_iostream.h>
 #include <vcl_fstream.h>
 #include <vcl_sstream.h>
