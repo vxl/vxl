@@ -39,12 +39,12 @@ vtol_block_2d::vtol_block_2d(two_chain_list_2d &faceloops)
 {
   int i;
   if(faceloops.size()>0)
-    link_inferior(*((vtol_topology_object_2d *)faceloops[0]));
+    link_inferior(*((vtol_topology_object_2d *)faceloops[0].ptr()));
 
   vtol_two_chain_2d *twoch=get_boundary_cycle();
   
   if(twoch!=0)
-    for(i=1;i<faceloops.size();i++)
+    for(i=1;i<faceloops.size();++i)
       twoch->link_chain_inferior(*(faceloops[i]));
 }
 
@@ -64,51 +64,36 @@ vtol_block_2d::vtol_block_2d(face_list_2d &new_face_list)
 //---------------------------------------------------------------------------
 vtol_block_2d::vtol_block_2d(const vtol_block_2d &other)
 {
- 
-  vtol_block_2d_ref oldblock;
-  edge_list_2d *edgs;
-  vertex_list_2d *verts;
-  int vlen;
-  int elen;
-  int i;
+  vtol_block_2d_ref oldblock=(vtol_block_2d*)(&other);
+  edge_list_2d *edgs=oldblock->edges();
+  vertex_list_2d *verts=oldblock->vertices();
+
+  topology_list_2d newedges(edgs->size());
+  topology_list_2d newverts(verts->size());
+
+  int i=0;
   vcl_vector<vtol_vertex_2d_ref>::iterator vi;
-  vtol_vertex_2d_ref v;
-  int j;
-  vcl_vector<vtol_edge_2d_ref>::iterator ei;
-  vtol_edge_2d_ref e;
-  vcl_vector<vtol_two_chain_2d_ref> *old2chains;
-  vtol_two_chain_2d_ref new2ch;
-  
-  oldblock=(vtol_block_2d*)(&other);
-  edgs=oldblock->edges();
-  verts=oldblock->vertices();
-  vlen=verts->size();
-  elen=edgs->size();
-
-  topology_list_2d newedges(elen);
-  topology_list_2d newverts(vlen);
-
-  i=0;
-  for(vi=verts->begin();vi!=verts->end();vi++,i++)
+  for(vi=verts->begin();vi!=verts->end();++vi,++i)
     {
-      v=(*vi);
-      newverts[i]=(vtol_vertex_2d *)(v->clone().ptr());
+      vtol_vertex_2d_ref v= *vi;
+      newverts[i]=v->clone().ptr()->cast_to_topology_object_2d();
       v->set_id(i);
     }
-  j=0;
-  for(ei=edgs->begin();ei!=edgs->end();ei++,j++)
+  int j=0;
+  vcl_vector<vtol_edge_2d_ref>::iterator ei;
+  for(ei=edgs->begin();ei!=edgs->end();++ei,++j)
     {
-      e=(*ei);
+      vtol_edge_2d_ref e = *ei;
       newedges[j]=new vtol_edge_2d(*(newverts[e->v1()->get_id()]->cast_to_vertex()),
                                    *(newverts[e->v2()->get_id()]->cast_to_vertex()));
       e->set_id(j);
     }
 
-  old2chains=oldblock->two_chains();
+  vcl_vector<vtol_two_chain_2d_ref> *old2chains=oldblock->two_chains();
 
-  for(i=0;i<old2chains->size();i++)
+  for(int k=0;k<old2chains->size();++k)
     {
-      new2ch=((*old2chains)[i])->copy_with_arrays(newverts,newedges);
+      vtol_two_chain_2d_ref new2ch=((*old2chains)[k])->copy_with_arrays(newverts,newedges);
       link_inferior(*new2ch);
     }
   delete edgs;
@@ -211,7 +196,7 @@ vertex_list_2d *vtol_block_2d::outside_boundary_vertices(void)
   ptr_list=outside_boundary_compute_vertices();
   // copy the lists
   
-  for(i=ptr_list->begin();i!=ptr_list->end();i++)
+  for(i=ptr_list->begin();i!=ptr_list->end();++i)
     result->push_back(*i);
   delete ptr_list;
   
@@ -243,7 +228,7 @@ zero_chain_list_2d *vtol_block_2d::outside_boundary_zero_chains(void)
  ptr_list=outside_boundary_compute_zero_chains();
   // copy the lists
   
-  for(i=ptr_list->begin();i!=ptr_list->end();i++)
+  for(i=ptr_list->begin();i!=ptr_list->end();++i)
     result->push_back(*i);
   delete ptr_list;
   
@@ -279,7 +264,7 @@ edge_list_2d *vtol_block_2d::outside_boundary_edges(void)
   ptr_list=outside_boundary_compute_edges();
   // copy the lists
   
-  for(i=ptr_list->begin();i!=ptr_list->end();i++)
+  for(i=ptr_list->begin();i!=ptr_list->end();++i)
     result->push_back(*i);
   delete ptr_list;
   
@@ -312,7 +297,7 @@ one_chain_list_2d *vtol_block_2d::outside_boundary_one_chains(void)
 
   result=new one_chain_list_2d;
   ptr_list=outside_boundary_compute_one_chains();
-  for(i=ptr_list->begin();i!=ptr_list->end();i++)
+  for(i=ptr_list->begin();i!=ptr_list->end();++i)
     result->push_back(*i);
   delete ptr_list;
   return result;
@@ -345,7 +330,7 @@ face_list_2d *vtol_block_2d::outside_boundary_faces(void)
 
   result=new face_list_2d();
   ptr_list=outside_boundary_compute_faces();
-  for(i=ptr_list->begin();i!=ptr_list->end();i++)
+  for(i=ptr_list->begin();i!=ptr_list->end();++i)
     result->push_back(*i);
   delete ptr_list;
   return result;
@@ -377,7 +362,7 @@ two_chain_list_2d *vtol_block_2d::outside_boundary_two_chains(void)
 
   result=new two_chain_list_2d();
   ptr_list=outside_boundary_compute_two_chains();
-  for(i=ptr_list->begin();i!=ptr_list->end();i++)
+  for(i=ptr_list->begin();i!=ptr_list->end();++i)
     result->push_back(*i);
   delete ptr_list;
   return result;
@@ -435,7 +420,7 @@ bool vtol_block_2d::operator==(const vtol_block_2d &other) const
       other._inferiors.begin();
       for(bi1=_inferiors.begin(),bi2=other._inferiors.begin();
           bi1!=_inferiors.end();
-          bi1++,bi2++)
+          ++bi1,++bi2)
         {
           twoch1=(*bi1)->cast_to_two_chain();
           
@@ -458,12 +443,12 @@ two_chain_list_2d *vtol_block_2d::hole_cycles(void) const
 
   result=new vcl_vector<vtol_two_chain_2d_ref>();
 
-  for(ti=_inferiors.begin();ti!=_inferiors.end();ti++)
+  for(ti=_inferiors.begin();ti!=_inferiors.end();++ti)
     {
       templist=(*ti)->cast_to_two_chain()->inferior_two_chains();
       // new_list->insert_after(*templist);
       // new_list->insert(new_list->end(),templist->begin(),templist->end());
-      for(ii=templist->begin();ii!=templist->end();ii++)
+      for(ii=templist->begin();ii!=templist->end();++ii)
         result->push_back(*ii);
       delete templist;
     }
@@ -476,13 +461,10 @@ two_chain_list_2d *vtol_block_2d::hole_cycles(void) const
 
 bool vtol_block_2d::add_hole_cycle(vtol_two_chain_2d &new_hole) 
 {
-  bool result;
   vtol_two_chain_2d_ref twoch=get_boundary_cycle();
-  
-  result=twoch.ptr()!=0;
-  if(result)
-    twoch->link_chain_inferior(new_hole);
-  return result;
+  if (! twoch.ptr()) return false;
+  twoch->link_chain_inferior(new_hole);
+  return true;
 }
 
 /*

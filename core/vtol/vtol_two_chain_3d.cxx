@@ -27,7 +27,7 @@ vtol_two_chain_3d::vtol_two_chain_3d (vcl_vector<vtol_face_3d*>& faces, bool cyc
 {
 
   vcl_vector<vtol_face_3d*>::iterator i;
-  for (i=faces.begin(); i!=faces.end();i++)
+  for (i=faces.begin(); i!=faces.end();++i)
     {
       link_inferior((*i));
       // all face normals point outward.
@@ -43,7 +43,7 @@ vtol_two_chain_3d::vtol_two_chain_3d (vcl_vector<vtol_face_3d*>& faces, vcl_vect
   vcl_vector<signed char>::iterator di; 
   vcl_vector<vtol_face_3d*>::iterator fi;
 	
-  for (di= dirs.begin(),fi= faces.begin();fi!= faces.end() && di!=dirs.end();fi++, di++ )
+  for (di= dirs.begin(),fi= faces.begin();fi!= faces.end() && di!=dirs.end();++fi, ++di )
     {
       if((*di) < 0)
         (*fi)->reverse_normal();
@@ -68,7 +68,7 @@ vtol_two_chain_3d::vtol_two_chain_3d (vtol_two_chain_3d const& two_chain)
 
   	
   int i =0;
-  for( vcl_vector<vtol_vertex_3d*>::iterator vi=verts->begin();vi!= verts->end();vi++, i++)
+  for( vcl_vector<vtol_vertex_3d*>::iterator vi=verts->begin();vi!= verts->end();++vi, ++i)
     {
       vtol_vertex_3d* v = (*vi);
       newverts[i] = v->copy();
@@ -77,7 +77,7 @@ vtol_two_chain_3d::vtol_two_chain_3d (vtol_two_chain_3d const& two_chain)
   int j =0;
   vcl_vector<vtol_edge_3d*>::iterator ei;
 	
-  for(ei=edges->begin();ei!= edges->end();ei++, j++)
+  for(ei=edges->begin();ei!= edges->end();++ei, ++j)
     {
       vtol_edge_3d* e = (*ei);
       newedges[j] = new vtol_edge_3d(newverts[e->get_v1()->get_id()]->cast_to_vertex_3d(),
@@ -91,7 +91,7 @@ vtol_two_chain_3d::vtol_two_chain_3d (vtol_two_chain_3d const& two_chain)
   vcl_vector<signed char>::iterator ddi;
   topology_list_3d::iterator tti;
 
-  for(ddi=dirs.begin(),tti= infs.begin();tti!= infs.end() && ddi!= dirs.end(); ddi++, tti++)
+  for(ddi=dirs.begin(),tti= infs.begin();tti!= infs.end() && ddi!= dirs.end(); ++ddi, ++tti)
     {
       vtol_face_3d* f = (*tti)->cast_to_face_3d();
       link_inferior(f->copy_with_arrays(newverts, newedges));
@@ -102,7 +102,7 @@ vtol_two_chain_3d::vtol_two_chain_3d (vtol_two_chain_3d const& two_chain)
   hierarchy_node_list_3d *hierarchy_infs = fl->get_hierarchy_inferiors();
   
   hierarchy_node_list_3d::iterator hhi;
-  for (hhi=hierarchy_infs->begin();hhi!= hierarchy_infs->end();hhi++)
+  for (hhi=hierarchy_infs->begin();hhi!= hierarchy_infs->end();++hhi)
     add_hierarchy_inferior(((vtol_two_chain_3d*)(*hhi))->copy_with_arrays(newverts, newedges));
   delete edges;
   delete verts;
@@ -121,7 +121,7 @@ vtol_two_chain_3d* vtol_two_chain_3d::copy_with_arrays(vcl_vector<vtol_topology_
   topology_list_3d::iterator ti;
   vcl_vector<signed char>::iterator di;
 
-  for(di=dirs.begin(),ti= infs.begin(); ti!=infs.end() &&di != dirs.end();ti++,di++)
+  for(di=dirs.begin(),ti= infs.begin(); ti!=infs.end() &&di != dirs.end();++ti,++di)
     {
       vtol_face_3d* f = (*ti)->cast_to_face_3d();
       newtc->link_inferior(f->copy_with_arrays(newverts, newedges));
@@ -132,7 +132,7 @@ vtol_two_chain_3d* vtol_two_chain_3d::copy_with_arrays(vcl_vector<vtol_topology_
   hierarchy_node_list_3d *hierarchy_infs = get_hierarchy_inferiors();
  
   hierarchy_node_list_3d::iterator hi;
-  for (hi=hierarchy_infs->begin();hi!= hierarchy_infs->end();hi++)
+  for (hi=hierarchy_infs->begin();hi!= hierarchy_infs->end();++hi)
     newtc->add_hierarchy_inferior(((vtol_two_chain_3d*)(*hi))->copy_with_arrays(newverts,
                                                                                 newedges));
   return newtc;
@@ -164,7 +164,7 @@ vtol_topology_object_3d * vtol_two_chain_3d::shallow_copy_with_no_links( void )
     newvtol_two_chain_3d->_cycle_p = _cycle_p;
     vcl_vector<signed char>::iterator di;
 	
-    for (di= _directions.begin();di!= _directions.end();di++ )
+    for (di= _directions.begin();di!= _directions.end();++di )
         newvtol_two_chain_3d->_directions.push_back((*di));
     return newvtol_two_chain_3d;
 }
@@ -191,7 +191,7 @@ vtol_two_chain_3d::topology_type(void) const
 void vtol_two_chain_3d::add_superiors_from_parent(vcl_vector<vtol_topology_object_3d*>& sups)
 {
   vcl_vector<vtol_topology_object_3d*>::iterator si;
-  for (si=sups.begin();si != sups.end();si++)
+  for (si=sups.begin();si != sups.end();++si)
   	{
 	if(vcl_find(_superiors.begin(),_superiors.end(),(*si))==_superiors.end()){
 	  _superiors.push_back((*si));
@@ -199,7 +199,7 @@ void vtol_two_chain_3d::add_superiors_from_parent(vcl_vector<vtol_topology_objec
    }
 	
   hierarchy_node_list_3d::iterator hi;
-  for (hi=_hierarchy_inferiors.begin();hi!= _hierarchy_inferiors.end();hi++)
+  for (hi=_hierarchy_inferiors.begin();hi!= _hierarchy_inferiors.end();++hi)
     ((vtol_two_chain_3d*)(*hi))->add_superiors_from_parent(sups);
 }
 
@@ -207,11 +207,11 @@ void vtol_two_chain_3d::add_superiors_from_parent(vcl_vector<vtol_topology_objec
 void vtol_two_chain_3d::remove_superiors_of_parent(vcl_vector<vtol_topology_object_3d*>& sups)
 {
   vcl_vector<vtol_topology_object_3d*>::iterator si;
-  for (si=sups.begin();si != sups.end();si++)	
+  for (si=sups.begin();si != sups.end();++si)	
       _superiors.erase((si));
 
   hierarchy_node_list_3d::iterator hi;
-  for (hi=_hierarchy_inferiors.begin();hi!= _hierarchy_inferiors.end();hi++)	
+  for (hi=_hierarchy_inferiors.begin();hi!= _hierarchy_inferiors.end();++hi)	
       ((vtol_two_chain_3d*)(*hi))->remove_superiors_of_parent(sups);
 }
 
@@ -219,7 +219,7 @@ void vtol_two_chain_3d::remove_superiors()
 {
   _superiors.clear();
   hierarchy_node_list_3d::iterator hi;
-  for (hi=_hierarchy_inferiors.begin();hi!= _hierarchy_inferiors.end();hi++)
+  for (hi=_hierarchy_inferiors.begin();hi!= _hierarchy_inferiors.end();++hi)
     ((vtol_two_chain_3d*)(*hi))->remove_superiors();
 }
 
@@ -245,7 +245,7 @@ void vtol_two_chain_3d::update_superior_list_p_from_hierarchy_parent()
       // Clear all previous superiors.
       _superiors.clear();
       topology_list_3d::iterator ti;
-     for (ti=parent_superiors->begin();ti!= parent_superiors->end();ti++ )
+     for (ti=parent_superiors->begin();ti!= parent_superiors->end();++ti )
         {
 	   if(vcl_find(_superiors.begin(),_superiors.end(),*ti)==_superiors.end()){
 	       _superiors.push_back((*ti));
@@ -256,7 +256,7 @@ void vtol_two_chain_3d::update_superior_list_p_from_hierarchy_parent()
       vcl_vector<vtol_two_chain_3d*> * chains = inferior_two_chains();
    
       vcl_vector<vtol_two_chain_3d*>::iterator ci;
-      for (ci=chains->begin(); ci!=chains->end();ci++)
+      for (ci=chains->begin(); ci!=chains->end();++ci)
         ((*ci))->update_superior_list_p_from_hierarchy_parent();
 
       delete chains;
@@ -282,7 +282,7 @@ void vtol_two_chain_3d::remove_inferior_two_chain(vtol_two_chain_3d* vtol_two_ch
 }
 
 //:
-// -- This method removes the object from the topological structure
+//    This method removes the object from the topological structure
 //    by unlinking it.  The removal of the object may recursively cause
 //    the removal of some of the object's superiors if these superiors
 //    are no longer valid.  In addition, inferiors of the object are
@@ -308,11 +308,11 @@ bool vtol_two_chain_3d::disconnect( vcl_vector< vtol_topology_object_3d * > & ch
   vcl_vector< vtol_block_3d * > sup;
  
   topology_list_3d::iterator ttti;
-  for (ttti= tmp->begin();ttti!= tmp->end();ttti++ )
+  for (ttti= tmp->begin();ttti!= tmp->end();++ttti )
       sup.push_back( (vtol_block_3d *) (*ttti) );
  
   vcl_vector< vtol_block_3d * >::iterator bi; 
-  for (bi= sup.begin();bi!= sup.end();bi++ )
+  for (bi= sup.begin();bi!= sup.end();++bi )
       ((*bi))->remove( this, changes, deleted );
 
   // in case it is a hole
@@ -320,21 +320,21 @@ bool vtol_two_chain_3d::disconnect( vcl_vector< vtol_topology_object_3d * > & ch
  
   hierarchy_node_list_3d::iterator hti;
 
-  for (hti= htmp->begin();hti!= htmp->end();hti++ )
+  for (hti= htmp->begin();hti!= htmp->end();++hti )
       hsup.push_back( (vtol_two_chain_3d *)(*hti) );
 
   vcl_vector< vtol_two_chain_3d * >::iterator hsi;
-  for ( hsi=hsup.begin();hsi!= hsup.end();hsi++ )
+  for ( hsi=hsup.begin();hsi!= hsup.end();++hsi )
   {
       tmp = ((*hsi))->get_superiors();
       sup.clear();
       topology_list_3d::iterator tti;
 
-      for (tti= tmp->begin(); tti!=tmp->end();tti++ )
+      for (tti= tmp->begin(); tti!=tmp->end();++tti )
          sup.push_back( (vtol_block_3d *)(*tti) );
 
       vcl_vector< vtol_block_3d * >::iterator ssi;
-      for (ssi= sup.begin();ssi!= sup.end();ssi++ )
+      for (ssi= sup.begin();ssi!= sup.end();++ssi )
            ((*ssi))->remove( this, changes, deleted );
   }
 
@@ -373,32 +373,32 @@ bool vtol_two_chain_3d::remove( vtol_face_3d * face,
   vcl_vector< vtol_block_3d * > sup;
 
   topology_list_3d::iterator ti;
-  for (ti= tmp->begin();ti!= tmp->end(); ti++ )
+  for (ti= tmp->begin();ti!= tmp->end(); ++ti )
       sup.push_back( (vtol_block_3d *)(*ti) );
 
   vcl_vector< vtol_block_3d * >::iterator si;
-  for (si= sup.begin();si!= sup.end();si++ )
+  for (si= sup.begin();si!= sup.end();++si )
       ((*si))->remove( this, changes, deleted );
 
   // in case it is a hole
   vcl_vector< vtol_two_chain_3d * > hsup;
 
    hierarchy_node_list_3d::iterator hi;
-  for (hi= htmp->begin();hi!= htmp->end();hi++ )
+  for (hi= htmp->begin();hi!= htmp->end();++hi )
       hsup.push_back( (vtol_two_chain_3d *) (*hi) );
 
  vcl_vector< vtol_two_chain_3d * >::iterator tci;
-  for (tci= hsup.begin(); tci!=hsup.end();tci++ )
+  for (tci= hsup.begin(); tci!=hsup.end();++tci )
   {
       tmp = ((*tci))->get_superiors();
       sup.clear();
   
  
-      for (ti= tmp->begin();ti!= tmp->end();ti++ )
+      for (ti= tmp->begin();ti!= tmp->end();++ti )
          sup.push_back( (vtol_block_3d *) (*ti) );
   
 
-       for (si= sup.begin();si!= sup.end();si++ )
+       for (si= sup.begin();si!= sup.end();++si )
           ((*si))->remove( this, changes, deleted );
   }
 
@@ -450,7 +450,7 @@ bool vtol_two_chain_3d::remove( vtol_face_3d * face,
               
               vcl_vector< vtol_topology_object_3d * >::iterator ci;
               
-              for (ci= components.begin();ci!= components.end();ci++ )
+              for (ci= components.begin();ci!= components.end();++ci )
                 if ((*ci)->numsup() == 0 )
                   changes.insert(changes.begin(),(*ci) );
               return false;
@@ -481,9 +481,9 @@ void vtol_two_chain_3d::deep_remove( vcl_vector< vtol_topology_object_3d * > & r
  
 
   
-  for (topology_list_3d::iterator ti= tmp->begin();ti!= tmp->end();ti++ )
+  for (topology_list_3d::iterator ti= tmp->begin();ti!= tmp->end();++ti )
       inferiors.push_back( (vtol_face_3d *)(*ti) );
-  for (vcl_vector<vtol_face_3d * >::iterator fi= inferiors.begin();fi!= inferiors.end();fi++ )
+  for (vcl_vector<vtol_face_3d * >::iterator fi= inferiors.begin();fi!= inferiors.end();++fi )
   {
       vtol_face_3d * inferior = (*fi);
 
@@ -513,7 +513,7 @@ void vtol_two_chain_3d::deep_remove( vcl_vector< vtol_topology_object_3d * > & r
 // of multiple components, true is returned and the component
 // list contains the components.  
 // 
-// Note -- A valid vtol_two_chain_3d consists of only a single connected component.
+// Note - A valid vtol_two_chain_3d consists of only a single connected component.
 // This function is only used to fix an invalid vtol_two_chain_3d
 //
 
@@ -534,7 +534,7 @@ vtol_two_chain_3d::break_into_connected_components( vcl_vector<vtol_topology_obj
     if ( numfaces == 0 ) return false;
     vcl_vector< vtol_face_3d * > faces( numfaces );
     int i;
-    for ( i = 0,topology_list_3d::iterator ti= tmp->begin(); ti!=tmp->end();ti++, i++ )
+    for ( i = 0,topology_list_3d::iterator ti= tmp->begin(); ti!=tmp->end();++ti, ++i )
         faces[ i ] = (vtol_face_3d *) (*ti);
 
     // compnum[i] stores the component number of the ith face
@@ -547,10 +547,10 @@ vtol_two_chain_3d::break_into_connected_components( vcl_vector<vtol_topology_obj
 
     // build the adjacency list representation
     int j;
-    for ( i = 0; i < numfaces; i++ )
+    for ( i = 0; i < numfaces; ++i )
     {
         compnum[ i ] = -1;  // -1 signals it is not part of any component yet
-        for ( j = i+1; j < numfaces; j++ )
+        for ( j = i+1; j < numfaces; ++j )
           if ( faces[ i ]->shares_edge_with( faces[ j ] ) )
 	  {
               adjlists[i].push_back( j );
@@ -560,7 +560,7 @@ vtol_two_chain_3d::break_into_connected_components( vcl_vector<vtol_topology_obj
 
     // use depth first search to find connected components
     int numcomps = 0;
-    for ( i = 0; i < numfaces; i++ )
+    for ( i = 0; i < numfaces; ++i )
     {
         if ( compnum[ i ] == -1 ) // unvisited
 	{
@@ -579,16 +579,16 @@ vtol_two_chain_3d::break_into_connected_components( vcl_vector<vtol_topology_obj
 		    }
 		}
 	    }
-            numcomps++;
+            ++numcomps;
 	}
     }
 
     if ( numcomps > 1 )
-        for ( i = 0; i < numcomps; i++ )
+        for ( i = 0; i < numcomps; ++i )
         {
             vcl_vector< vtol_face_3d * > component_faces;
 	    // gather faces belonging to the ith component 
-            for ( j = 0; j < numfaces; j++ )
+            for ( j = 0; j < numfaces; ++j )
                 if ( compnum[ j ] == i ) 
                     component_faces.push_back( faces[ j ] );
             // create either a two chain or a face out of the component
@@ -772,14 +772,14 @@ vcl_vector<vtol_block_3d*>* vtol_two_chain_3d::blocks()
 
        vcl_vector<vtol_two_chain_3d*>::iterator tci;
 
-      for(tci=onech->begin();tci!=onech->end();tci++)
+      for(tci=onech->begin();tci!=onech->end();++tci)
         {
           sublist = (*tci)->blocks();
           if(sublist->size())
             {
               // new_list->insert(new_list->end(),sublist->begin(),sublist->end());
               for( vcl_vector<vtol_block_3d*>::iterator si = sublist->begin(); 
-                   si != sublist->end();si++){
+                   si != sublist->end();++si){
                 new_list->push_back(*si);
               }
 
@@ -806,7 +806,7 @@ vcl_vector<vtol_two_chain_3d*>* vtol_two_chain_3d::two_chains()
   twochs =  outside_boundary_two_chains();
 
   hierarchy_node_list_3d::iterator hi;
-  for (hi=_hierarchy_inferiors.begin();hi!= _hierarchy_inferiors.end();hi++ )
+  for (hi=_hierarchy_inferiors.begin();hi!= _hierarchy_inferiors.end();++hi )
     twochs->push_back((vtol_two_chain_3d*)((*hi)));
 
   return twochs;
@@ -819,7 +819,7 @@ vcl_vector<vtol_two_chain_3d*>* vtol_two_chain_3d::inferior_two_chains()
 
 	 
   hierarchy_node_list_3d::iterator hi;
-  for (hi=_hierarchy_inferiors.begin();hi!= _hierarchy_inferiors.end();hi++ )
+  for (hi=_hierarchy_inferiors.begin();hi!= _hierarchy_inferiors.end();++hi )
     two_chains->push_back((vtol_two_chain_3d*)(*hi));
 
   return two_chains;
@@ -831,7 +831,7 @@ vcl_vector<vtol_two_chain_3d*>* vtol_two_chain_3d::superior_two_chains()
   vcl_vector<vtol_two_chain_3d*>* two_chains = new vcl_vector<vtol_two_chain_3d*>();
 
    hierarchy_node_list_3d::iterator hi;	
-  for (hi=_hierarchy_superiors.begin();hi!= _hierarchy_superiors.end();hi++ )
+  for (hi=_hierarchy_superiors.begin();hi!= _hierarchy_superiors.end();++hi )
     two_chains->push_back((vtol_two_chain_3d*)(*hi));
 
   return two_chains;
@@ -862,7 +862,7 @@ bool vtol_two_chain_3d::operator==(const vtol_two_chain_3d& obj) const
     return false;
 
   topology_list_3d::const_iterator ti1,ti2;
-  for (ti1=obj._inferiors.begin(),ti2= _inferiors.begin();ti2!= _inferiors.end() && ti1!= obj._inferiors.end(); ti1++,ti2++)
+  for (ti1=obj._inferiors.begin(),ti2= _inferiors.begin();ti2!= _inferiors.end() && ti1!= obj._inferiors.end(); ++ti1,++ti2)
     {
       vtol_face_3d* f1 = (*ti2)->cast_to_face_3d();
       vtol_face_3d* f2 = (*ti1)->cast_to_face_3d();
@@ -876,7 +876,7 @@ bool vtol_two_chain_3d::operator==(const vtol_two_chain_3d& obj) const
  
    hierarchy_node_list_3d::const_iterator hi1,hi2;
 
-  for(hi1=righth.begin(),hi2= lefth.begin();hi1!= righth.end() && hi2!=lefth.end();hi1++,hi2++)
+  for(hi1=righth.begin(),hi2= lefth.begin();hi1!= righth.end() && hi2!=lefth.end();++hi1,++hi2)
     if( *((vsol_spatial_object_3d*)(*hi1)) != *((vsol_spatial_object_3d*)(*hi2)))
       return false;
   return true;
@@ -912,7 +912,7 @@ void vtol_two_chain_3d::correct_chain_directions()
   vcl_vector<vtol_face_3d*> *allfaces = this->faces();
  
 	
-  for (vcl_vector<vtol_face_3d*>::iterator fi=allfaces->begin();fi!= allfaces->end();fi++)
+  for (vcl_vector<vtol_face_3d*>::iterator fi=allfaces->begin();fi!= allfaces->end();++fi)
     {
       (*fi)->verify();
     }
@@ -933,21 +933,24 @@ void vtol_two_chain_3d::print(ostream& strm) const
 
 
 
-void vtol_two_chain_3d::describe_directions(ostream& strm, int )
+void vtol_two_chain_3d::describe_directions(ostream& strm, int blanking) const
 {
+  for (int j=0; j<blanking; ++j) strm << ' ';
   strm << "<Dirs [" << _directions.size() << "]: ";
 
-  for (vcl_vector<signed char>::iterator di=_directions.begin();di!=_directions.end();di++)
+  vcl_vector<signed char>::const_iterator di;
+  for (di=_directions.begin();di!=_directions.end();++di)
     strm << (*di) << "  ";
   strm << endl;
 }
 
 void vtol_two_chain_3d::describe(ostream& strm, int blanking) const
 {
+  for (int j=0; j<blanking; ++j) strm << ' ';
   print(strm);
-  ((vtol_two_chain_3d*)this)->describe_inferiors(strm, blanking);
-  ((vtol_two_chain_3d*)this)->describe_directions(strm,blanking);
-  ((vtol_two_chain_3d*)this)->describe_superiors(strm, blanking);
+  describe_inferiors(strm, blanking);
+  describe_directions(strm,blanking);
+  describe_superiors(strm, blanking);
 }
 
 

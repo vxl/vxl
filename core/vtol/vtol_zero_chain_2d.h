@@ -81,7 +81,7 @@ public:
   //---------------------------------------------------------------------------
   //: Return the first vertex of `this'. If it does not exist, return 0
   //---------------------------------------------------------------------------
-  virtual vtol_vertex_2d *v0(void) const;
+  virtual vtol_vertex_2d_ref v0(void) const;
 
   //***************************************************************************
   // Replaces dynamic_cast<T>

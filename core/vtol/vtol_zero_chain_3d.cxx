@@ -19,7 +19,7 @@ vtol_zero_chain_3d::vtol_zero_chain_3d(vtol_vertex_3d* v1, vtol_vertex_3d* v2)
 vtol_zero_chain_3d::vtol_zero_chain_3d(vcl_vector<vtol_vertex_3d*> & newvertices) 
 {
   vcl_vector<vtol_vertex_3d*>::iterator i;
-  for (i=newvertices.begin();i!= newvertices.end();i++ )
+  for (i=newvertices.begin();i!= newvertices.end();++i )
     link_inferior((*i)); 
 }
 
@@ -32,7 +32,7 @@ vtol_zero_chain_3d::vtol_zero_chain_3d (vtol_zero_chain_3d const& zchain)
   topology_list_3d *infs = zc->get_inferiors();
   vtol_vertex_3d *newvertex;
   
-  for (int i = 0; i < infs->size() ; i++)
+  for (int i = 0; i < infs->size() ; ++i)
     {
       newvertex = ((*infs)[i])->cast_to_vertex_3d()->copy();
       link_inferior(newvertex);
@@ -139,7 +139,7 @@ vtol_zero_chain_3d* vtol_zero_chain_3d::copy()
   vtol_zero_chain_3d *newzerochain = new vtol_zero_chain_3d();
   vtol_vertex_3d *newvertex;
   
-  for (int i = 0; i < _inferiors.size() ; i++)
+  for (int i = 0; i < _inferiors.size() ; ++i)
     {
       newvertex = ((vtol_vertex_3d *)_inferiors[i])->copy();
       newzerochain->link_inferior(newvertex);
@@ -167,7 +167,7 @@ bool vtol_zero_chain_3d::operator== (const vtol_zero_chain_3d & z2) const
       topology_list_3d::const_iterator i1,i2;
 
       i2=inf2->begin(); 
-      for (i1=inf1->begin(); i1 !=inf1->end(); i1++,i2++)
+      for (i1=inf1->begin(); i1 !=inf1->end(); ++i1,++i2)
 	{
 	  v1 = (*i1);
 	  v2 = (*i2);
@@ -209,14 +209,15 @@ void vtol_zero_chain_3d::print(ostream& strm) const
 
 void vtol_zero_chain_3d::describe(ostream& strm, int blanking) const
 {
+  for (int j=0; j<blanking; ++j) strm << ' ';
   print(strm);
-  ((vtol_zero_chain_3d*)this)->describe_inferiors(strm, blanking);
-  ((vtol_zero_chain_3d*)this)->describe_superiors(strm, blanking);
+  describe_inferiors(strm, blanking);
+  describe_superiors(strm, blanking);
 }
 
 
 //:
-// -- This method removes the object from the topological structure
+//    This method removes the object from the topological structure
 //    by unlinking it.  The removal of the object may recursively cause
 //    the removal of some of the object's superiors if these superiors
 //    are no longer valid.  In addition, inferiors of the object are
@@ -237,13 +238,13 @@ bool vtol_zero_chain_3d::disconnect( vcl_vector< vtol_topology_object_3d * > & c
  
   topology_list_3d::iterator i;
 
-  for (i= tmp->begin(); i!=tmp->end(); i++ )
+  for (i= tmp->begin(); i!=tmp->end(); ++i )
       sup.push_back( (vtol_edge_3d *) (*i) );
   
   vcl_vector< vtol_edge_3d * >::iterator j;
   
 
-  for (j= sup.begin();j!= sup.end();j++ )
+  for (j= sup.begin();j!= sup.end();++j )
      ((*j))->remove( this, changes, deleted );
   
 
@@ -254,7 +255,7 @@ bool vtol_zero_chain_3d::disconnect( vcl_vector< vtol_topology_object_3d * > & c
 }
 
 //:
-// -- Removes the vertex from the zero chain.  If the removal of
+//    Removes the vertex from the zero chain.  If the removal of
 //    the vertex invalidates the superior edge, then the zero
 //    chain is recursively removed from the superior edge.
 //    For more details, see vtol_edge_3d::Disconnect( changes, deleted )
@@ -275,13 +276,13 @@ bool vtol_zero_chain_3d::remove( vtol_vertex_3d * vertex,
   vcl_vector< vtol_edge_3d * > sup;
 
   topology_list_3d::iterator i;
-  for (i= tmp->begin(); i!=tmp->end(); i++ )
+  for (i= tmp->begin(); i!=tmp->end(); ++i )
       sup.push_back( (vtol_edge_3d *) (*i) );
 
 
 
   vcl_vector< vtol_edge_3d * >::iterator s;
-  for (s= sup.begin(); s!=sup.end();s++ )
+  for (s= sup.begin(); s!=sup.end();++s )
   {
       if ( ((vtol_edge_3d *) (*s))->is_endpoint( (vtol_vertex_3d *) vertex ) )
           (*s)->remove( this, changes, deleted );
@@ -312,7 +313,7 @@ bool vtol_zero_chain_3d::remove( vtol_vertex_3d * vertex,
 }
 
 //:
-// -- For each inferior, this method unlinks the inferior
+//    For each inferior, this method unlinks the inferior
 //    from this object.  If the inferior now has zero superiors,
 //    the function is called recursively on it.  Finally, this
 //    object is pushed onto the list removed.  (RYF 7-16-98)
@@ -327,11 +328,11 @@ void vtol_zero_chain_3d::deep_remove( vcl_vector< vtol_topology_object_3d * > & 
   
   topology_list_3d::iterator t;
 
-  for ( t=tmp->begin(); t!=tmp->end();t++ )
+  for ( t=tmp->begin(); t!=tmp->end();++t )
       inferiors.push_back( (vtol_vertex_3d *) (*t) );
   
   vcl_vector< vtol_vertex_3d * >::iterator i;
-  for ( i=inferiors.begin(); i!=inferiors.end();i++ )
+  for ( i=inferiors.begin(); i!=inferiors.end();++i )
   {
       vtol_vertex_3d * inferior = (*i);
 

@@ -32,7 +32,7 @@ vtol_one_chain_2d::vtol_one_chain_2d(edge_list_2d &edgs,
   edge_list_2d::iterator i;
   _is_cycle=new_is_cycle;
   
-  for(i=edgs.begin();i!=edgs.end();i++)
+  for(i=edgs.begin();i!=edgs.end();++i)
     {
       link_inferior(*(*i));
       _directions.push_back((signed char)1);
@@ -55,10 +55,10 @@ vtol_one_chain_2d::vtol_one_chain_2d(edge_list_2d &edgs,
 
   _is_cycle=new_is_cycle;
 
-  for(i=edgs.begin();i!=edgs.end();i++)
+  for(i=edgs.begin();i!=edgs.end();++i)
     link_inferior(*(*i));
   
-  for(j=dirs.begin();j!=dirs.end();j++)
+  for(j=dirs.begin();j!=dirs.end();++j)
     _directions.push_back(*j);
 }
 
@@ -89,17 +89,17 @@ vtol_one_chain_2d::vtol_one_chain_2d(const vtol_one_chain_2d &other)
 
   i=0;
 
-  for(v=verts->begin();v!=verts->end();v++)
+  for(v=verts->begin();v!=verts->end();++v)
     {
       ve=*v;
       newverts[i]=(vtol_topology_object_2d *)(ve->clone().ptr());
       ve->set_id(i);
-      i++;
+      ++i;
     }
 
   for(dir=el->_directions.begin(),inf=el->_inferiors.begin();
       dir!=el->_directions.end();
-      dir++,inf++)
+      ++dir,++inf)
     {
       e=(*inf)->cast_to_edge();
 
@@ -111,7 +111,7 @@ vtol_one_chain_2d::vtol_one_chain_2d(const vtol_one_chain_2d &other)
   set_cycle(el->is_cycle());
   hierarchy_infs=el->chain_inferiors();
   
-  for(h=hierarchy_infs->begin();h!=hierarchy_infs->end();h++)
+  for(h=hierarchy_infs->begin();h!=hierarchy_infs->end();++h)
     link_chain_inferior(*((vtol_one_chain_2d *)((*h)->clone().ptr())));
   delete verts;
 }
@@ -146,7 +146,7 @@ vtol_one_chain_2d::copy_with_arrays(vcl_vector<vtol_topology_object_2d_ref> &ver
   
   for(di=_directions.begin(),ti =_inferiors.begin();
       ti!=_inferiors.end();
-      ti++,di++)
+      ++ti,++di)
     {
       vtol_edge_2d *e=(*ti)->cast_to_edge();
       vtol_edge_2d *newedge=edges[e->get_id()]->cast_to_edge();
@@ -157,7 +157,7 @@ vtol_one_chain_2d::copy_with_arrays(vcl_vector<vtol_topology_object_2d_ref> &ver
   const chain_list_2d *hierarchy_infs=chain_inferiors();
   chain_list_2d::const_iterator hi;
 
-  for(hi=hierarchy_infs->begin();hi!=hierarchy_infs->end();hi++)
+  for(hi=hierarchy_infs->begin();hi!=hierarchy_infs->end();++hi)
     {
       vtol_one_chain_2d *oldone=(vtol_one_chain_2d *)((*hi)->clone().ptr());
       result->link_chain_inferior(*(oldone->copy_with_arrays(verts,edges)));
@@ -181,7 +181,7 @@ vtol_one_chain_2d::topology_type(void) const
 }
 
 //:
-// -- Get the direction of the edge "e" in the onechain.
+// Get the direction of the edge "e" in the onechain.
 signed char vtol_one_chain_2d::direction(const vtol_edge_2d &e) const
 {
   vcl_vector<signed char>::const_iterator dit;
@@ -273,22 +273,22 @@ vtol_one_chain_2d::outside_boundary_compute_vertices(void)
 
   for(inf=_inferiors.begin(),dir=_directions.begin();
       inf!=_inferiors.end();
-      inf++,dir++)
+      ++inf,++dir)
     {
       e=(vtol_edge_2d *)(inf->ptr());
       templist=e->vertices();
       t=templist->begin();
       if((*dir)< 0)
         {
-          t++;
+          ++t;
           result->push_back(t->ptr());
-          t--;
+          --t;
           result->push_back(t->ptr());
         }
       else
         {
           result->push_back(t->ptr());
-          t++;
+          ++t;
           result->push_back(t->ptr());
         }
       delete templist;
@@ -308,7 +308,7 @@ vertex_list_2d *vtol_one_chain_2d::outside_boundary_vertices(void)
   result=new vertex_list_2d;
   result->reserve(tmp_list->size());
   vcl_vector<vtol_vertex_2d *>::iterator i;
-  for(i=tmp_list->begin();i!=tmp_list->end();i++)
+  for(i=tmp_list->begin();i!=tmp_list->end();++i)
     result->push_back((*i));
   delete tmp_list;
   return result;
@@ -354,7 +354,7 @@ zero_chain_list_2d *vtol_one_chain_2d::outside_boundary_zero_chains(void)
   ptr_list=outside_boundary_compute_zero_chains();
   // copy the lists
 
-  for(i=ptr_list->begin();i!=ptr_list->end();i++)
+  for(i=ptr_list->begin();i!=ptr_list->end();++i)
     result->push_back(*i);
   delete ptr_list;
   
@@ -396,7 +396,7 @@ edge_list_2d *vtol_one_chain_2d::outside_boundary_edges(void)
   // copy the lists
   
   for(vcl_vector<vtol_edge_2d*>::iterator ti = ptr_list->begin();
-      ti != ptr_list->end(); ti++){
+      ti != ptr_list->end(); ++ti){
     new_ref_list->push_back(*ti);
   }
   delete ptr_list;
@@ -431,7 +431,7 @@ vcl_vector<vtol_one_chain_2d*> *vtol_one_chain_2d::compute_one_chains(void)
   vcl_vector<vtol_one_chain_2d*> *result=outside_boundary_compute_one_chains();
   chain_list_2d::iterator i;
   // is the clone necessary? 
-  for(i=_chain_inferiors.begin();i!=_chain_inferiors.end();i++)
+  for(i=_chain_inferiors.begin();i!=_chain_inferiors.end();++i)
     result->push_back((vtol_one_chain_2d *)((*i)->clone().ptr()));
   return result;
 }
@@ -447,7 +447,7 @@ one_chain_list_2d *vtol_one_chain_2d::inferior_one_chains(void)
   result=new vcl_vector<vtol_one_chain_2d_ref>();
 
   chain_list_2d::iterator i;
-  for(i=_chain_inferiors.begin();i!=_chain_inferiors.end();i++)
+  for(i=_chain_inferiors.begin();i!=_chain_inferiors.end();++i)
     result->push_back((vtol_one_chain_2d *)((*i)->clone().ptr()));
 
   return result;
@@ -462,8 +462,8 @@ one_chain_list_2d *vtol_one_chain_2d::superior_one_chains(void)
   result=new vcl_vector<vtol_one_chain_2d_ref>();
 
   vcl_list<vtol_chain_2d_ref>::iterator i;
-  for(i=_chain_superiors.begin();i!=_chain_superiors.end();i++)
-    result->push_back((vtol_one_chain_2d *)((*i)->clone().ptr()));
+  for(i=_chain_superiors.begin();i!=_chain_superiors.end();++i)
+    result->push_back((*i)->clone().ptr()->cast_to_topology_object_2d()->cast_to_one_chain());
 
   return result;
 }
@@ -477,7 +477,7 @@ one_chain_list_2d *vtol_one_chain_2d::outside_boundary_one_chains(void)
   one_chain_list_2d *ref_list= new one_chain_list_2d();
   
   vcl_vector<vtol_one_chain_2d*>::iterator i;
-  for(i=ptr_list->begin();i!=ptr_list->end();i++){
+  for(i=ptr_list->begin();i!=ptr_list->end();++i){
     ref_list->push_back(*i);
   }
   delete ptr_list;
@@ -513,13 +513,13 @@ vcl_vector<vtol_face_2d*> *vtol_one_chain_2d::compute_faces(void)
       result=new vcl_vector<vtol_face_2d*>();
       onech=superior_one_chains();
       
-      for(i=onech->begin();i!=onech->end();i++)
+      for(i=onech->begin();i!=onech->end();++i)
         {
           sublist=(*i)->compute_faces();
           if(sublist->size()>0)
             {
               //  result->insert(new_list->end(),sublist->begin(),sublist->end());
-              for(ii=sublist->begin();ii!=sublist->end();ii++)
+              for(ii=sublist->begin();ii!=sublist->end();++ii)
                 result->push_back(*ii);
             }
           delete sublist;
@@ -550,13 +550,13 @@ vcl_vector<vtol_two_chain_2d*> *vtol_one_chain_2d::compute_two_chains(void)
       result=new vcl_vector<vtol_two_chain_2d*>;
       onech=superior_one_chains();
       
-      for(i=onech->begin();i!=onech->end();i++)
+      for(i=onech->begin();i!=onech->end();++i)
         {
           sublist=(*i)->compute_two_chains();
           if(sublist->size())
             {
               //  result->insert(new_list->end(),sublist->begin(),sublist->end());
-              for(ii=sublist->begin();ii!=sublist->end();ii++)
+              for(ii=sublist->begin();ii!=sublist->end();++ii)
                 result->push_back(*ii);
             }
           delete sublist;
@@ -586,13 +586,13 @@ vcl_vector<vtol_block_2d*> *vtol_one_chain_2d::compute_blocks(void)
     {
       result=new vcl_vector<vtol_block_2d*>;
       onech=superior_one_chains();
-      for(i=onech->begin();i!=onech->end();i++)
+      for(i=onech->begin();i!=onech->end();++i)
 	{
           sublist=(*i)->compute_blocks();
           if(sublist->size())
             {
               // result->insert(new_list->end(),sublist->begin(),sublist->end());
-              for(ii=sublist->begin();ii!=sublist->end();ii++){
+              for(ii=sublist->begin();ii!=sublist->end();++ii){
                 result->push_back(*ii);
               }
             }
@@ -609,7 +609,7 @@ vcl_vector<vtol_block_2d*> *vtol_one_chain_2d::compute_blocks(void)
 }
 
 //:
-// -- Computes the bounding box of a vtol_one_chain_2d from the Edges
+//    Computes the bounding box of a vtol_one_chain_2d from the Edges
 //    Just get the bounding box for each Edge and update this's
 //    box accordingly.
 
@@ -636,10 +636,10 @@ void vtol_one_chain_2d::compute_bounding_box(void)
   xmax=-max_float;
   ymax=-max_float;
   // float  zmin = max_float, zmax = -max_float ;
-  for(eit=edgs->begin();eit!=edgs->end();eit++)
+  for(eit=edgs->begin();eit!=edgs->end();++eit)
     {
-      vtol_edge_2d *e=(*eit);
-      vsol_box_2d *b=e->get_bounding_box();
+      vtol_edge_2d_ref e=(*eit);
+      vsol_box_2d_ref b=e->get_bounding_box();
       if(b==0)
 	{
 	  cout << "In vtol_one_chain_2d::ComputeBoundingBox()"
@@ -694,7 +694,7 @@ void vtol_one_chain_2d::determine_edge_directions(void)
       i=_inferiors.begin();
       
       first_edge=(*i)->cast_to_edge();
-      i++;
+      ++i;
       
       second_edge=(*i)->cast_to_edge();
       
@@ -727,7 +727,7 @@ void vtol_one_chain_2d::determine_edge_directions(void)
       if(num_edges>2)
         {
           vtol_edge_2d *cur_edge;
-          i++;
+          ++i;
           while(i!=_inferiors.end())
             {
               cur_edge=(*i)->cast_to_edge();
@@ -741,7 +741,7 @@ void vtol_one_chain_2d::determine_edge_directions(void)
                   tweeney=cur_edge->v1();
                   _directions.push_back((signed char)(-1));
                 }
-              i++;     
+              ++i;     
             }
         }
     }
@@ -830,7 +830,7 @@ bool vtol_one_chain_2d::operator==(const vtol_one_chain_2d &other) const
           topology_list_2d::const_iterator i1;
           topology_list_2d::const_iterator i2;
           
-          for(i1=inf1->begin() , i2 = inf2->begin(); i1 != inf1->end(); i1++ , i2++){
+          for(i1=inf1->begin() , i2 = inf2->begin(); i1 != inf1->end(); ++i1 , ++i2){
             if (!( *(*i1) == *(*i2) ))
               return false;
             
@@ -844,7 +844,7 @@ bool vtol_one_chain_2d::operator==(const vtol_one_chain_2d &other) const
             vcl_vector<signed char>::const_iterator d1;
             vcl_vector<signed char>::const_iterator d2;
             
-            for(d1=dir1->begin(), d2=dir2->begin(); d1 != dir1->end(); d1++, d2++)
+            for(d1=dir1->begin(), d2=dir2->begin(); d1 != dir1->end(); ++d1, ++d2)
               if (!(*d1 == *d2))
             return false;
             
@@ -857,8 +857,8 @@ bool vtol_one_chain_2d::operator==(const vtol_one_chain_2d &other) const
             chain_list_2d::const_iterator r;
             chain_list_2d::const_iterator l;
             
-            for(r=righth.begin(), l=lefth.begin(); r!=righth.end(); r++, l++)
-              if( *((vsol_spatial_object_2d*)(*r)) != *((vsol_spatial_object_2d*)((l))))
+            for(r=righth.begin(), l=lefth.begin(); r!=righth.end(); ++r, ++l)
+              if( *(*r) != *(*l))
                 return false;
           }
         }
@@ -880,7 +880,7 @@ void vtol_one_chain_2d::reverse_directions(void)
  
 
   for(vcl_vector<signed char>::iterator di=_directions.begin(); 
-      di !=_directions.end();di++)
+      di !=_directions.end();++di)
       (*di) = - (*di);
 
   // reverse the inferiors 
@@ -891,7 +891,7 @@ void vtol_one_chain_2d::reverse_directions(void)
   // reverse copy does not seem to work do this the hard way
   int i;
   int s= _inferiors.size();
-  for(i=0;i<s;i++){
+  for(i=0;i<s;++i){
     inf_tmp[i]=_inferiors[s-1-i];
   }
   
@@ -904,7 +904,7 @@ void vtol_one_chain_2d::reverse_directions(void)
   // vcl_reverse_copy(_directions.begin(),_directions.end(),dir_tmp.begin());
   s=_directions.size();
 
-  for(i=0;i<s;i++){
+  for(i=0;i<s;++i){
     dir_tmp[i]=_directions[s-1-i];
   }
   
@@ -915,7 +915,7 @@ void vtol_one_chain_2d::reverse_directions(void)
 
   chain_list_2d::iterator hi;
 
-  for (hi=_chain_inferiors.begin();hi!=_chain_inferiors.end();hi++ )
+  for (hi=_chain_inferiors.begin();hi!=_chain_inferiors.end();++hi )
     ((vtol_one_chain_2d *)((*hi)->clone().ptr()))->reverse_directions();
 }
 
@@ -951,7 +951,7 @@ void vtol_one_chain_2d::describe_directions(ostream &strm,
   strm << "<Dirs [" << _directions.size() << "]: ";
 
   vcl_vector<signed char>::const_iterator d1;
-  for (d1=_directions.begin();d1!=_directions.end();d1++)
+  for (d1=_directions.begin();d1!=_directions.end();++d1)
     strm << (int)(*d1) << "  ";
   strm << endl;
 }
@@ -971,11 +971,11 @@ void vtol_one_chain_2d::describe(ostream &strm,
 
 #if 0
 //:
-// -- For each inferior, this method unlinks the inferior
+//    For each inferior, this method unlinks the inferior
 //    from this object.  If the inferior now has zero superiors,
 //    the function is called recursively on it.  Finally, this
 //    object is pushed onto the list removed. (RYF 7-16-98)
-//
+// Not implemented
 
 
 void vtol_one_chain_2d::deep_remove( vcl_vector< vtol_topology_object_2d * > & removed )
@@ -989,12 +989,12 @@ void vtol_one_chain_2d::deep_remove( vcl_vector< vtol_topology_object_2d * > & r
 
   topology_list_2d::iterator ti;
 
-  for (ti= tmp->begin(); ti!=tmp->end();ti++ )
+  for (ti= tmp->begin(); ti!=tmp->end();++ti )
       inferiors.push_back( (vtol_edge_2d *)(*ti) );
   
   vcl_vector< vtol_edge_2d * >::iterator ii;
 
-  for (ii= inferiors.begin(); ii!=inferiors.end();ii++ )
+  for (ii= inferiors.begin(); ii!=inferiors.end();++ii )
   {
       vtol_edge_2d * inferior = (*ii);
 

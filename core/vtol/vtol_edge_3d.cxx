@@ -20,7 +20,6 @@
 
 
 //:
-// vtol_edge_3d() --
 // Empty constructor for the vtol_edge_3d class.  This constructor creates the
 // skeleton of an edge with *NO* defaults for vertex endpoints.
 // Programmers should use this with caution since many methods that
@@ -60,7 +59,6 @@ vtol_edge_3d::vtol_edge_3d(vtol_vertex_3d *vert1,
 
 
 //:
-// vtol_edge_3d(const vtol_edge_3d& olde) --
 // Copy constructor for an vtol_edge_3d. This methods performs a deep copy of
 // the elements of the old vtol_edge_3d, olde, and sets the corresponding member
 // data of the new vtol_edge_3d.
@@ -72,7 +70,7 @@ vtol_edge_3d::vtol_edge_3d(const vtol_edge_3d&olde)
   vtol_zero_chain_3d *zeroch;
   _curve=0;
 
-  for(int i=0;i<old_e->_inferiors.size();i++)
+  for(int i=0;i<old_e->_inferiors.size();++i)
     {
       zeroch=((vtol_zero_chain_3d *)old_e->_inferiors[i])->copy();
       link_inferior(zeroch);
@@ -102,7 +100,6 @@ vtol_edge_3d::vtol_edge_3d(const vtol_edge_3d&olde)
 
 
 //:
-// vtol_edge_3d(vtol_zero_chain_3d *newchain) --
 // Constructor for an vtol_edge_3d. If the vtol_zero_chain_3d has two vertices , then the
 // first and last vertices of the vtol_zero_chain_3d are used for endpoints and
 // an ImplicitLine is assumed to be the curve.  Otherwise, the all data
@@ -127,7 +124,6 @@ vtol_edge_3d::vtol_edge_3d(vtol_zero_chain_3d *newchain)
 }
 
 //:
-// vtol_edge_3d(vcl_vector<vtol_zero_chain_3d*> &newchains) --
 // Constructor for an vtol_edge_3d. The list of zero_chains, newchains, is
 // assumed to be ordered along an edge. This method assigns the first
 // vertex in the chain list to _v1, and assigns the last vertex in the
@@ -139,7 +135,7 @@ vtol_edge_3d::vtol_edge_3d(vcl_vector<vtol_zero_chain_3d*> &newchains)
   // 1) Link the inferiors.
   vcl_vector<vtol_zero_chain_3d*>::iterator i;
 
-  for (i=newchains.begin();i!= newchains.end();i++ )
+  for (i=newchains.begin();i!= newchains.end();++i )
     link_inferior((*i));
 
   // 2) Set _v1 and _v2;
@@ -150,7 +146,6 @@ vtol_edge_3d::vtol_edge_3d(vcl_vector<vtol_zero_chain_3d*> &newchains)
 
 
 //:
-// vtol_edge_3d(TopologyObject *newv1,TopologyObject *newv2, Curve* curve) --
 // Constructor for a Linear vtol_edge_3d.  The TopologyObjects, newv1 and newv2,
 // are typecast to vtol_vertex_3d* and used as endpoints. If curve == NULL, an
 // ImplicitLine is generated for the vtol_edge_3d, a linear edge, otherwise curve is
@@ -169,7 +164,7 @@ vtol_edge_3d::vtol_edge_3d(vtol_topology_object_3d *newv1,
         // _curve = new ImplicitLine(_v1->GetPoint(), _v2->GetPoint());
 	_curve=new vsol_line_3d(_v1->get_point(),_v2->get_point());
       else
-        _curve=(vsol_curve_3d *)(curve->clone().ptr());
+        _curve=(vsol_curve_3d*)(curve->clone().ptr());
       inf=new vtol_zero_chain_3d(_v1,_v2);
     }
   else
@@ -182,7 +177,6 @@ vtol_edge_3d::vtol_edge_3d(vtol_topology_object_3d *newv1,
 
 
 //:
-// vtol_edge_3d(float,float,float,float, Curve* curve) --
 // Constructor for a Linear vtol_edge_3d.  The coordinates, (x1, y1, z1),
 // determine vtol_vertex_3d, _v1.  The coordinates, (x2, y2, z2), determine _v2.
 // If curve is NULL, an ImplicitLine is generated for the vtol_edge_3d.
@@ -206,7 +200,7 @@ vtol_edge_3d::vtol_edge_3d(double x1,
   else
     {
       // TODO
-      _curve=(vsol_curve_3d *)(curve->clone().ptr());
+      _curve=(vsol_curve_3d*)(curve->clone().ptr());
       // _curve->SetStart(_v1->GetPoint());
       // _curve->SetEnd(_v2->GetPoint());
       // _curve->UpdateGeometry();
@@ -218,7 +212,6 @@ vtol_edge_3d::vtol_edge_3d(double x1,
 }
 
 //:
-// vtol_edge_3d(Curve* edgecurve) --
 // Constructor for an vtol_edge_3d from a Curve. If edgecurve is of ImplicitLine
 // type, vertex locations for endpoints, _v1 and _v2, are computed from
 // the ImplicitLine parameters.  If edgecurve is of any other type, _v1
@@ -286,7 +279,7 @@ void vtol_edge_3d::set_curve(vsol_curve_3d_ref newcurve)
 }
 
 //:
-// -- Set new curve and return old one for deletion, or unprotect.
+// Set new curve and return old one for deletion, or unprotect.
 
 void vtol_edge_3d::set_curve(vsol_curve_3d_ref newcurve,
                              vsol_curve_3d_ref &oldcurve)
@@ -300,7 +293,7 @@ void vtol_edge_3d::set_curve(vsol_curve_3d_ref newcurve,
   this->touch(); //Update timestamp
 }
 
-// ~vtol_edge_3d() -- Destructor for an vtol_edge_3d.
+//: Destructor for an vtol_edge_3d.
 vtol_edge_3d::~vtol_edge_3d()
 {
 }
@@ -313,7 +306,6 @@ vtol_edge_3d::~vtol_edge_3d()
  */
 
 //:
-// void SetV1(vtol_vertex_3d *v) --
 // SetV1 assigns the first endpoint of the vtol_edge_3d, _v1 to be the argument,
 // v.  This function has the side effect of removing the current _v1
 // from the inferior zero_chains and adding the new _v1 to the first
@@ -333,7 +325,6 @@ void vtol_edge_3d::set_v1(vtol_vertex_3d *v)
 }
 
 //:
-// void SetV2(vtol_vertex_3d *v) --
 // SetV2 assigns the second endpoint of the vtol_edge_3d, _v2 to be the argument,
 // v.  This function has the side effect of removing the current _v2
 // from the inferior zero_chains and adding the new _v2 to the first
@@ -354,7 +345,7 @@ void vtol_edge_3d::set_v2 (vtol_vertex_3d *v)
 
 
 //:
-//  -- This function sets the edge endpoints to endpt1 and endpt2.  
+//  This function sets the edge endpoints to endpt1 and endpt2.  
 //     Both endp1 and endpt2 must be vertices on the edge.
 //
 bool vtol_edge_3d::set_end_points(vtol_vertex_3d *endpt1,
@@ -377,7 +368,7 @@ bool vtol_edge_3d::set_end_points(vtol_vertex_3d *endpt1,
 }
 
 //:
-//  -- This function removes curendpt from the edge and replaces it with
+//  This function removes curendpt from the edge and replaces it with
 //     newendpt.  Both curendpt and newendpt must be non-NULL pointers, 
 //     curendpt must point to an endpoint of the edge (either _v1 or
 //     _v2), and newendpt must be colinear with the edge.  Neither vertex 
@@ -411,7 +402,6 @@ bool vtol_edge_3d::replace_end_point(vtol_vertex_3d *curendpt,
 }
 
 //:
-// void SetverticesFromzero_chains() --
 // SetverticesFromzero_chains determines the endpoints of an edge from
 // the inferiors list of zero_chains, and assigns the data members _v1
 // and _v2. The _Inferiors list of the edge is assumed to be in
@@ -482,7 +472,6 @@ void vtol_edge_3d::set_vertices_from_zero_chains(void)
 
 
 //:
-// bool add_edge_loop(vtol_one_chain_3d* new_edge_loop) --
 // This is a utility method that adds new_edge_loop to the vtol_edge_3d's
 // superior list.  It returns a boolean value reflecting the success of
 // linking.
@@ -493,7 +482,6 @@ bool vtol_edge_3d::add_edge_loop(vtol_one_chain_3d *new_edge_loop)
 }
 
 //:
-// bool remove_edge_loop(vtol_one_chain_3d* doomed_edge_loop) --
 // This is a utility method that removes doomed_edge_loop from the
 // vtol_edge_3d's superior list. It returns a boolean value reflecting the
 // success of removing.
@@ -526,7 +514,7 @@ bool vtol_edge_3d::operator==(const vtol_edge_3d &e) const
   if(_curve!=0&&e._curve==0||_curve==0&&e._curve!=0)
     return false;
   if(_curve!=0&&e._curve!=0)
-    if(*((vsol_spatial_object_3d*)_curve)!=*((vsol_spatial_object_3d*)(e._curve)))
+    if(*_curve != *(e._curve))
       return false;
   if((_v1==e._v1)&&(_v2==e._v2))    // pointer equivalence.
     {
@@ -563,7 +551,6 @@ bool vtol_edge_3d::operator==(const vsol_spatial_object_3d &obj) const
  */
 
 //:
-// vcl_vector<vtol_vertex_3d*>* vertices() --
 // Returns a list of vertices on the vtol_edge_3d.
 
 vcl_vector<vtol_vertex_3d*> *vtol_edge_3d::vertices(void)
@@ -572,7 +559,6 @@ vcl_vector<vtol_vertex_3d*> *vtol_edge_3d::vertices(void)
 }
 
 //:
-// vcl_vector<vtol_zero_chain_3d*>* zero_chains() --
 // Returns the vtol_zero_chain_3d list of the vtol_edge_3d. This list is the Inferiors
 // of the edge.
 vcl_vector<vtol_zero_chain_3d*> *vtol_edge_3d::zero_chains(void)
@@ -581,7 +567,6 @@ vcl_vector<vtol_zero_chain_3d*> *vtol_edge_3d::zero_chains(void)
 }
 
 //:
-// vcl_vector<vtol_edge_3d*>* edges() --
 // Returns a list with itself as the only element. This utility is used
 // in Inferior/Superior accessing methods.
 vcl_vector<vtol_edge_3d*> *vtol_edge_3d::edges(void)
@@ -590,7 +575,6 @@ vcl_vector<vtol_edge_3d*> *vtol_edge_3d::edges(void)
 }
 
 //:
-// vcl_vector<vtol_one_chain_3d*>* one_chains() --
 // Returns a list of one_chains which contain the vtol_edge_3d. This list is the
 // Superiors of the edge.
 vcl_vector<vtol_one_chain_3d*> *vtol_edge_3d::one_chains(void)
@@ -600,7 +584,6 @@ vcl_vector<vtol_one_chain_3d*> *vtol_edge_3d::one_chains(void)
 
 
 //:
-// vcl_vector<Face*>* faces() --
 // Returns a list of the faces which contain the vtol_edge_3d.
 vcl_vector<vtol_face_3d*> *vtol_edge_3d::faces(void)
 {
@@ -608,7 +591,6 @@ vcl_vector<vtol_face_3d*> *vtol_edge_3d::faces(void)
 }
 
 //:
-// vcl_vector<vtol_two_chain_3d*>* two_chains() --
 //  Returns the list of two_chains which contain the vtol_edge_3d.
 vcl_vector<vtol_two_chain_3d*> *vtol_edge_3d::two_chains(void)
 {
@@ -616,7 +598,6 @@ vcl_vector<vtol_two_chain_3d*> *vtol_edge_3d::two_chains(void)
 }
 
 //:
-// vcl_vector<vtol_block_3d*>* blocks() --
 //  Returns the list of blocks which contain the vtol_edge_3d.
 vcl_vector<vtol_block_3d*> *vtol_edge_3d::blocks(void)
 {
@@ -624,7 +605,6 @@ vcl_vector<vtol_block_3d*> *vtol_edge_3d::blocks(void)
 }
 
 //:
-// vcl_vector<vtol_vertex_3d*>* endpoints() --
 // Returns a list of vertices containing the endpoints of the edge.
 // These vertices are _v1 and _v2 in that
 // order.
@@ -646,7 +626,7 @@ vcl_vector<vtol_vertex_3d*> *vtol_edge_3d::endpoints(void)
  */
 
 //:
-// -- This method removes the object from the topological structure
+//    This method removes the object from the topological structure
 //    by unlinking it and then recursively checking the object's
 //    superiors and inferiors to see if they should also be removed.
 //    A record of the changes to the topological structure is returned 
@@ -689,7 +669,7 @@ bool vtol_edge_3d::disconnect(vcl_vector< vtol_topology_object_3d *> &changes,
 
   topology_list_3d::iterator t;
 
-  for(t=tmp->begin();t!=tmp->end();t++)
+  for(t=tmp->begin();t!=tmp->end();++t)
       sup.push_back((vtol_one_chain_3d *)(*t));
   
   vcl_vector<vtol_one_chain_3d *>::iterator s;
@@ -706,7 +686,7 @@ bool vtol_edge_3d::disconnect(vcl_vector< vtol_topology_object_3d *> &changes,
 }
 
 //:
-// -- Removes the zero_chain from the edge.  The removal of
+//    Removes the zero_chain from the edge.  The removal of
 //    an edge's zero chain will invalidate the edge, so the
 //    edge is unlinked from the topological structure and
 //    recursively removed from its superiors.  
@@ -726,11 +706,11 @@ bool vtol_edge_3d::remove(vtol_zero_chain_3d *,
   topology_list_3d::iterator t;
 
   vcl_vector<vtol_one_chain_3d *> sup;
-  for(t= tmp->begin();t!=tmp->end();t++ )
+  for(t= tmp->begin();t!=tmp->end();++t )
     sup.push_back((vtol_one_chain_3d *)(*t));
   
   vcl_vector<vtol_one_chain_3d *>::iterator s;
-  for(s= sup.begin();s!= sup.end();s++)
+  for(s= sup.begin();s!= sup.end();++s)
     // TODO
     // ((*s))->remove( this, changes, deleted );
     ;
@@ -748,7 +728,7 @@ bool vtol_edge_3d::remove(vtol_zero_chain_3d *,
 }
 
 //:
-// -- For each inferior, this method unlinks the inferior
+//    For each inferior, this method unlinks the inferior
 //    from this object.  If the inferior now has zero superiors,
 //    the function is called recursively on it.  Finally, this
 //    object is pushed onto the list removed.  (RYF 7-16-98)
@@ -763,12 +743,12 @@ void vtol_edge_3d::deep_remove(vcl_vector<vtol_topology_object_3d *> &removed)
 
   topology_list_3d::iterator t;
 
-  for(t=tmp->begin();t!=tmp->end();t++)
+  for(t=tmp->begin();t!=tmp->end();++t)
     inferiors.push_back((vtol_zero_chain_3d *)(*t));
  
   vcl_vector<vtol_zero_chain_3d *>::iterator inf;
   
-  for(inf= inferiors.begin();inf!=inferiors.end();inf++)
+  for(inf= inferiors.begin();inf!=inferiors.end();++inf)
   {
     vtol_zero_chain_3d *inferior=(*inf);
 
@@ -785,7 +765,7 @@ void vtol_edge_3d::deep_remove(vcl_vector<vtol_topology_object_3d *> &removed)
 }
 
 //:
-//  -- Returns true if the invoking edge has a vertex in common with
+//  Returns true if the invoking edge has a vertex in common with
 //  vtol_edge_3d e.  The method determines if the two edges share a vertex
 //  by comparing pointer values, not the vertex geometry.
 //
@@ -796,15 +776,14 @@ bool vtol_edge_3d::share_vertex_with(vtol_edge_3d *e)
   vcl_vector< vtol_vertex_3d *> *eedges=e->vertices();
   
   vcl_vector< vtol_vertex_3d *>::iterator i1,i2;
-  for(i1=thisedges->begin();i1!=thisedges->end();i1++ )
-    for(i2=eedges->begin();i2!=eedges->end(); i2++ )
+  for(i1=thisedges->begin();i1!=thisedges->end();++i1 )
+    for(i2=eedges->begin();i2!=eedges->end(); ++i2 )
       if((*i1)==(*i2))
         return true;
   return false;
 }
 
 //:
-// bool Addvtol_vertex_3d(vtol_vertex_3d* newvert) --
 // This method adds newvert to the vtol_edge_3d by linking it to one of the
 // zero_chains of the vtol_edge_3d Inferiors. (Method needs work.)
 
@@ -822,7 +801,6 @@ bool vtol_edge_3d::add_vertex(vtol_vertex_3d *newvert)
 }
 
 //:
-// bool Removevtol_vertex_3d(vtol_vertex_3d *uglyvert) --
 // This method removes uglyvert from the vtol_edge_3d by removing it from the
 // inferior zero_chains.  (Method needs work.)
 
@@ -845,7 +823,6 @@ bool vtol_edge_3d::is_endpoint(vtol_vertex_3d *v) const
 
 
 //:
-// bool is_endpoint1(vtol_vertex_3d *v) --
 // Returns True if v is equal to the first vtol_edge_3d endpoint,_v1.
 bool vtol_edge_3d::is_endpoint1(vtol_vertex_3d *v) const
 {
@@ -853,7 +830,6 @@ bool vtol_edge_3d::is_endpoint1(vtol_vertex_3d *v) const
 }
 
 //:
-// bool is_endpoint2(vtol_vertex_3d *v) --
 // Returns True if v is equal to the second vtol_edge_3d endpoint, _v2.
 bool vtol_edge_3d::is_endpoint2(vtol_vertex_3d* v) const
 {
@@ -862,7 +838,6 @@ bool vtol_edge_3d::is_endpoint2(vtol_vertex_3d* v) const
 
 
 //:
-// other_endpoint(vtol_vertex_3d* overt) --
 // This method works only for ImplicitLine edges.
 vtol_vertex_3d* vtol_edge_3d::other_endpoint(vtol_vertex_3d *overt)
 {
@@ -877,7 +852,7 @@ vtol_vertex_3d* vtol_edge_3d::other_endpoint(vtol_vertex_3d *overt)
 
 //:
 //-----------------------------------------------------------------
-// -- Compute bounds from the geometry of _curve. If the curve is
+//    Compute bounds from the geometry of _curve. If the curve is
 //    not fully bounded, then use the vertices.
 //
 void vtol_edge_3d::compute_bounding_box(void)
@@ -913,22 +888,20 @@ void vtol_edge_3d::compute_bounding_box(void)
  */
 
 //:
-// describe(ostream& strm, int blanking) --
 // This method outputs all edge information to the ostream, strm.  It
 // indents various levels of output by the number given in blanking.
 void vtol_edge_3d::describe(ostream &strm,
                             int blanking) const
 {
-  //  BLANK_DESCRIBE;
+  for (int i=0; i<blanking; ++i) strm << ' ';
   print(strm);
-  blanking++;
-  //  REBLANK_DESCRIBE;
+  for (int i1=0; i1<blanking; ++i1) strm << ' ';
   if(_v1) {
     _v1->print(strm);
   } else {
     strm << "Null vertex 1" << endl;
   }
-//  REBLANK_DESCRIBE;
+  for (int i2=0; i2<blanking; ++i2) strm << ' ';
   if(_v2) {
     _v2->print(strm);
   } else {
@@ -937,7 +910,6 @@ void vtol_edge_3d::describe(ostream &strm,
 }
 
 //:
-// print(ostream& strm) --
 // This method outputs a brief vtol_edge_3d info with vtol_edge_3d object address.
 void vtol_edge_3d::print(ostream &strm) const
 {

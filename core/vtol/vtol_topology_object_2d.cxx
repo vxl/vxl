@@ -183,15 +183,10 @@ vtol_block_2d *vtol_topology_object_2d::cast_to_block(void)
 bool
 vtol_topology_object_2d::is_inferior(const vtol_topology_object_2d &inferior) const
 {
-  bool result;
   vcl_vector<vtol_topology_object_2d_ref>::const_iterator i;
-  
-  for(i=_inferiors.begin();(i!=_inferiors.end())&&((*i).ptr()!=&inferior);
-      i++)
+  for(i=_inferiors.begin();(i!=_inferiors.end())&&(*(*i)!=inferior); ++i)
     ;
-  result=i!=_inferiors.end();
-
-  return result;
+  return i!=_inferiors.end();
 }
 
 //---------------------------------------------------------------------------
@@ -201,15 +196,10 @@ vtol_topology_object_2d::is_inferior(const vtol_topology_object_2d &inferior) co
 bool
 vtol_topology_object_2d::is_superior(const vtol_topology_object_2d &superior) const
 {
-  bool result;
   vcl_list<vtol_topology_object_2d_ref>::const_iterator i;
-  
-  for(i=_superiors.begin();(i!=_superiors.end())&&((*i).ptr()!=&superior);
-      i++)
+  for(i=_superiors.begin();(i!=_superiors.end())&&(*(*i)!=superior); ++i)
     ;
-  result=i!=_superiors.end();
-
-  return result;
+  return i!=_superiors.end();
 }
 
 //---------------------------------------------------------------------------
@@ -241,7 +231,7 @@ vtol_topology_object_2d::superiors(void) const
 
   result=new vcl_vector<vtol_topology_object_2d_ref>();
   result->reserve(_superiors.size());
-  for(i=_superiors.begin();i!=_superiors.end();i++)
+  for(i=_superiors.begin();i!=_superiors.end();++i)
     result->push_back(*i);
 
   // check
@@ -298,7 +288,7 @@ void vtol_topology_object_2d::link_inferior(vtol_topology_object_2d &inferior)
   _inferiors.push_back(&inferior);
   ref();
   inferior.link_superior(*this);
-  ref_count--;
+  --ref_count;
   touch();
 }
 
@@ -315,8 +305,7 @@ void vtol_topology_object_2d::unlink_inferior(vtol_topology_object_2d &inferior)
   
   vcl_vector<vtol_topology_object_2d_ref>::iterator i;
   
-  for(i=_inferiors.begin();(i!=_inferiors.end())&&((*i).ptr()!=&inferior);
-      i++)
+  for(i=_inferiors.begin();(i!=_inferiors.end())&&(*(*i)!=inferior); ++i)
     ;
   inferior.unlink_superior(*this);
   _inferiors.erase(i);
@@ -369,7 +358,7 @@ void vtol_topology_object_2d::link_superior(vtol_topology_object_2d &superior)
 
   _superiors.push_back(&superior);
   i=_superiors.end();
-  i--;
+  --i;
   (*i).unprotect();
   touch();
 }
@@ -387,12 +376,11 @@ void vtol_topology_object_2d::unlink_superior(vtol_topology_object_2d &superior)
 
   vcl_list<vtol_topology_object_2d_ref>::iterator i;
 
-  for(i=_superiors.begin();(i!=_superiors.end())&&((*i).ptr()!=&superior);
-      i++)
+  for(i=_superiors.begin();(i!=_superiors.end())&&(*(*i)!=superior); ++i)
     ;
 
   // check
-  assert((*i).ptr()==&superior);
+  assert(*(*i)==superior);
 
   _superiors.erase(i); // unlink
   touch();
@@ -550,7 +538,7 @@ void vtol_topology_object_2d::describe_inferiors(ostream &strm,
   else
     strm<<"**INFERIORS:"<<endl;
   
-  for(i=_inferiors.begin();i!=_inferiors.end();i++) {
+  for(i=_inferiors.begin();i!=_inferiors.end();++i) {
     for (int n=0; n<blanking; ++n) strm << ' ';
     (*i)->print();
   }
@@ -567,7 +555,7 @@ void vtol_topology_object_2d::describe_superiors(ostream &strm,
   else
     strm<<"**SUPERIORS:"<<endl;
   
-  for(i=_superiors.begin();i!= _superiors.end();i++) {
+  for(i=_superiors.begin();i!= _superiors.end();++i) {
     for (int n=0; n<blanking; ++n) strm << ' ';
     (*i)->print();
   }
@@ -670,7 +658,7 @@ vertex_list_2d *vtol_topology_object_2d::vertices(void)
   if(topology_type()<VERTEX)
     {
       vcl_vector<vtol_topology_object_2d_ref>::const_iterator i;
-      for(i=_inferiors.begin();i!=_inferiors.end();i++)
+      for(i=_inferiors.begin();i!=_inferiors.end();++i)
         {
           sublist=(*i)->vertices();
           result->insert(result->end(),sublist()->begin(),sublist()->end());
@@ -682,7 +670,7 @@ vertex_list_2d *vtol_topology_object_2d::vertices(void)
   else
     {
       vcl_vector<vtol_topology_object_2d_ref>::const_iterator i;
-      for(i=_superiors.begin();i!=_superiors.end();i++)
+      for(i=_superiors.begin();i!=_superiors.end();++i)
         {
           sublist=(*i)->vertices();
           result->insert(result->end(),sublist()->begin(),sublist()->end());

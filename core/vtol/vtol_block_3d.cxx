@@ -36,7 +36,7 @@ vtol_block_3d::vtol_block_3d(vtol_block_3d const& block)
 
   int i =0;
   vcl_vector<vtol_vertex_3d*>::iterator vi;
-  for(vi = verts->begin(); vi != verts->end(); vi++, i++)
+  for(vi = verts->begin(); vi != verts->end(); ++vi, ++i)
     {
       vtol_vertex_3d* v = (*vi);
       newverts[i] = v->copy();
@@ -46,7 +46,7 @@ vtol_block_3d::vtol_block_3d(vtol_block_3d const& block)
 
   vcl_vector<vtol_edge_3d*>::iterator ei;
 
-  for(ei=edges->begin();ei!= edges->end();ei++, j++)
+  for(ei=edges->begin();ei!= edges->end();++ei, ++j)
     {
       vtol_edge_3d* e = (*ei);
       newedges[j] = new vtol_edge_3d(newverts[e->get_v1()->get_id()]->cast_to_vertex_3d(),
@@ -57,7 +57,7 @@ vtol_block_3d::vtol_block_3d(vtol_block_3d const& block)
   vcl_vector<vtol_two_chain_3d*> *old2chains = oldblock->two_chains();
   vtol_two_chain_3d *new2ch;
 
-  for ( i = 0; i < old2chains->size(); i++)
+  for ( i = 0; i < old2chains->size(); ++i)
     {
       new2ch = ((*old2chains)[i])->copy_with_arrays(newverts, newedges);
       link_inferior(new2ch);
@@ -91,7 +91,7 @@ vtol_block_3d::vtol_block_3d (vcl_vector<vtol_two_chain_3d*> &faceloops)
   vtol_two_chain_3d *twoch = get_boundary_cycle();
 
   if (twoch)
-    for (int i = 1; i < faceloops.size(); i++)
+    for (int i = 1; i < faceloops.size(); ++i)
       twoch->add_inferior_two_chain(faceloops[i]);
 }
 
@@ -265,7 +265,7 @@ bool vtol_block_3d::operator==(const vtol_block_3d& bl) const
       topology_list_3d::const_iterator bi1, bi2;
 
       bl._inferiors.begin();
-      for (bi1=_inferiors.begin(), bi2= bl._inferiors.begin(); bi1!=_inferiors.end();bi1++,bi2++)
+      for (bi1=_inferiors.begin(), bi2= bl._inferiors.begin(); bi1!=_inferiors.end();++bi1,++bi2)
         {
           twoch1 = (*bi1)->cast_to_two_chain_3d();
          
@@ -307,7 +307,7 @@ vtol_block_3d* vtol_block_3d::copy()
   vcl_vector<vtol_two_chain_3d*> twochlist;
   vtol_two_chain_3d *new2ch;
 
-  for (int i = 0 ; i < _inferiors.size(); i++)
+  for (int i = 0 ; i < _inferiors.size(); ++i)
     {
       new2ch = ((vtol_two_chain_3d *)_inferiors[i])->copy();
       twochlist.push_back(new2ch);
@@ -334,7 +334,7 @@ bool vtol_block_3d::add_face_loop(vtol_two_chain_3d* new_face_loop)
 }
 
 //:
-// -- This method removes the object from the topological structure
+//    This method removes the object from the topological structure
 //    by unlinking it.  The removal of the object may recursively cause
 //    the removal of some of the object's superiors if these superiors
 //    are no longer valid.  In addition, inferiors of the object are
@@ -356,7 +356,7 @@ bool vtol_block_3d::disconnect( vcl_vector< vtol_topology_object_3d * > &,
 }
 
 //:
-// -- Removes the two chain from the block by unlinking it.  If 
+//    Removes the two chain from the block by unlinking it.  If 
 //    the two chain is not a hole, its removal invalidates the
 //    the block and the block is unlinked from the topological
 //    structure and appended to the list deleted.  Any holes
@@ -389,12 +389,12 @@ bool vtol_block_3d::remove( vtol_two_chain_3d * two_chain,
       return true;
   }
 
-  // Record changes -- only holes remain, block is deleted
+  // Record changes - only holes remain, block is deleted
   vcl_vector< vtol_two_chain_3d * > * twochains = this->get_hole_cycles();
   
   vcl_vector< vtol_two_chain_3d * >::iterator ti;
  
-  for (ti= twochains->begin();ti!= twochains->end(); ti++ )
+  for (ti= twochains->begin();ti!= twochains->end(); ++ti )
       changes.push_back( (*ti) );
   delete twochains;
   deleted.push_back( this );
@@ -407,7 +407,7 @@ bool vtol_block_3d::remove( vtol_two_chain_3d * two_chain,
 }
 
 //:
-// -- For each inferior, this method unlinks the inferior
+//    For each inferior, this method unlinks the inferior
 //    from this object.  If the inferior now has zero superiors,
 //    the function is called recursively on it.  Finally, this
 //    object is pushed onto the list removed.  (RYF 7-16-98)
@@ -423,11 +423,11 @@ void vtol_block_3d::deep_remove( vcl_vector< vtol_topology_object_3d * > & remov
   vcl_vector< vtol_two_chain_3d * >::iterator tci;
   
   
-  for ( tci=holes->begin();tci!= holes->end(); tci++ )
+  for ( tci=holes->begin();tci!= holes->end(); ++tci )
       inferiors.push_back( (*tci) );
 
   
-  for ( tci=inferiors.begin(); tci!=inferiors.end();tci++ )
+  for ( tci=inferiors.begin(); tci!=inferiors.end();++tci )
   {
       vtol_two_chain_3d * inferior = (*tci);
 
@@ -448,11 +448,11 @@ void vtol_block_3d::deep_remove( vcl_vector< vtol_topology_object_3d * > & remov
   topology_list_3d::iterator ti;
 
 
-  for ( ti=tmp->begin(); ti!=tmp->end();ti++ )
+  for ( ti=tmp->begin(); ti!=tmp->end();++ti )
       inferiors.push_back( (vtol_two_chain_3d *)(*ti) );
 
  
-  for (tci= inferiors.begin(); tci!=inferiors.end(); tci++ )
+  for (tci= inferiors.begin(); tci!=inferiors.end(); ++tci )
   {
       vtol_two_chain_3d * inferior = (*tci);
 
@@ -478,13 +478,13 @@ vcl_vector< vtol_two_chain_3d* > * vtol_block_3d::get_hole_cycles()
   vcl_vector<vtol_two_chain_3d*>* new_list = new vcl_vector<vtol_two_chain_3d*>();
  topology_list_3d::iterator ti;
 
-  for(ti=_inferiors.begin(); ti!= _inferiors.end(); ti++)
+  for(ti=_inferiors.begin(); ti!= _inferiors.end(); ++ti)
     {
       vcl_vector<vtol_two_chain_3d*>* templist =
                     (*ti)->cast_to_two_chain_3d()->inferior_two_chains();
       // new_list->insert_after(*templist);
       // new_list->insert(new_list->end(),templist->begin(),templist->end());
-      for(vcl_vector<vtol_two_chain_3d*>::iterator ii=templist->begin();ii != templist->end();ii++){
+      for(vcl_vector<vtol_two_chain_3d*>::iterator ii=templist->begin();ii != templist->end();++ii){
         new_list->push_back(*ii);
       }
 
@@ -554,8 +554,9 @@ void vtol_block_3d::print(ostream& strm) const
 
 void vtol_block_3d::describe(ostream& strm, int blanking) const
 {
+  for (int i=0; i<blanking; ++i) strm << ' ';
   print(strm);
-  ((vtol_block_3d*)this)->describe_inferiors(strm, blanking);
-  ((vtol_block_3d*)this)->describe_superiors(strm, blanking);
+  describe_inferiors(strm, blanking);
+  describe_superiors(strm, blanking);
 }
 

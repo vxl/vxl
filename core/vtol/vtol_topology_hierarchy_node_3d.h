@@ -78,8 +78,8 @@ public:
   int numinf() const { return _inferiors.size(); }
   int numsup() const { return _superiors.size(); }
  
-  void describe_inferiors(ostream& strm=cout,int blanking=0);
-  void describe_superiors(ostream& strm=cout,int blanking=0);
+  void describe_inferiors(ostream& strm=cout,int blanking=0) const;
+  void describe_superiors(ostream& strm=cout,int blanking=0) const;
   void print(ostream& strm=cout) const;
   void describe(ostream& strm=cout,int blanking=0) const;
 

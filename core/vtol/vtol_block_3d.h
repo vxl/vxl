@@ -99,7 +99,7 @@ public:
 
   //: Printing Functions
   void print (ostream& strm =cout) const;
-  void describe_directions(ostream& strm = cout, int blanking = 0);
+  void describe_directions(ostream& strm = cout, int blanking = 0) const;
   void describe(ostream& strm = cout, int blanking = 0) const;
 
   bool remove( vtol_two_chain_3d * two_chain,

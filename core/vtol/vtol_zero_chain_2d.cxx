@@ -44,7 +44,7 @@ vtol_zero_chain_2d::vtol_zero_chain_2d(const vcl_vector<vtol_vertex_2d_ref> &new
   assert(new_vertices.size()>0);
 
   vcl_vector<vtol_vertex_2d_ref>::const_iterator i;
-  for(i=new_vertices.begin();i!=new_vertices.end();i++ )
+  for(i=new_vertices.begin();i!=new_vertices.end();++i )
     link_inferior(*(*i)); 
 }
 
@@ -57,7 +57,7 @@ vtol_zero_chain_2d::vtol_zero_chain_2d(const vtol_zero_chain_2d &other)
   vtol_vertex_2d *new_vertex;
   vcl_vector<vtol_topology_object_2d_ref>::const_iterator i;
 
-  for(i=other.inferiors()->begin();i!=other.inferiors()->end();i++)
+  for(i=other.inferiors()->begin();i!=other.inferiors()->end();++i)
     {
       new_vertex=(vtol_vertex_2d *)((*i)->clone().ptr());
       link_inferior(*new_vertex);
@@ -97,14 +97,12 @@ vtol_zero_chain_2d::topology_type(void) const
 // Name: v0
 // Task: Return the first vertex of `this'. If it does not exist, return 0
 //---------------------------------------------------------------------------
-vtol_vertex_2d *vtol_zero_chain_2d::v0(void) const
+vtol_vertex_2d_ref vtol_zero_chain_2d::v0(void) const
 {
-  vtol_vertex_2d *result;
   if(numinf()>0)
-    result=(vtol_vertex_2d *)(inferiors()->begin()->ptr());
+    return (vtol_vertex_2d*)(inferiors()->begin()->ptr());
   else
-    result=0;
-  return result;
+    return 0;
 }
 
 //***************************************************************************
@@ -242,7 +240,7 @@ bool vtol_zero_chain_2d::operator==(const vtol_zero_chain_2d &other) const
         { 
           for(i1=inf1->begin(),i2=inf2->begin();
               i1!=inf1->end()&&result;
-              i1++,i2++)
+              ++i1,++i2)
             {
               //v1=(*i1);
               //v2=(*i2);

@@ -88,9 +88,10 @@ public:
   
   virtual vtol_two_chain_2d *get_boundary_cycle(void)
   {
-    if (_inferiors.size() > 0)
-      return (vtol_two_chain_2d*)(_inferiors[0].ptr());
-    else return NULL;
+    return
+      (_inferiors.size() > 0)
+      ? (vtol_two_chain_2d*)(_inferiors[0].ptr())
+      : 0;
   }
 
   //***************************************************************************
