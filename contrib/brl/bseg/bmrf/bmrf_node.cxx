@@ -10,7 +10,6 @@
 #include <vcl_algorithm.h>
 #include <vcl_cmath.h>
 
-
 #undef MAX
 #define MAX(a,b) ((a)>(b)?(a):(b))
 #undef MIN
@@ -27,12 +26,12 @@ bmrf_node::bmrf_node( const bmrf_epi_seg_sptr& epi_seg, int frame_num, double pr
 void
 bmrf_node::strip()
 {
-  arc_iterator itr = out_arcs_.begin();
-  for (; itr != out_arcs_.end(); ++itr) {
+  for (arc_iterator itr = out_arcs_.begin(); itr != out_arcs_.end(); ++itr)
+  {
     if ((*itr)->to_) {
       bmrf_node_sptr other = (*itr)->to();
-      arc_iterator itr2 = other->in_arcs_.begin();
-      for (; itr2 != other->in_arcs_.end(); ++itr2)
+      for (arc_iterator itr2 = other->in_arcs_.begin();
+           itr2 != other->in_arcs_.end(); ++itr2)
         other->in_arcs_.erase(itr2);
     }
   }
@@ -40,12 +39,9 @@ bmrf_node::strip()
   for (int t = 0; t<=ALL; ++t)
     boundaries_[t] = out_arcs_.end();
 
-  itr = in_arcs_.begin();
-  for (; itr != in_arcs_.end(); ++itr) {
-    if ((*itr)->from_) {
+  for (arc_iterator itr = in_arcs_.begin(); itr != in_arcs_.end(); ++itr)
+    if ((*itr)->from_)
       (*itr)->from_->remove_neighbor(this, ALL);
-    }
-  }
 }
 
 
@@ -54,9 +50,9 @@ bool
 bmrf_node::purge()
 {
   bool retval = false;
-  for (int t = 0; t<ALL; ++t) {
-    arc_iterator itr = boundaries_[t];
-    for (; itr != boundaries_[t+1]; ++itr) {
+  for (int t = 0; t<ALL; ++t)
+  {
+    for (arc_iterator itr = boundaries_[t]; itr != boundaries_[t+1]; ++itr) {
       if (!(*itr)->to_) {
         // adjust boundaries if necessary
         for (int t2=t; t2>=0 && (boundaries_[t2] == itr); --t2)
@@ -68,8 +64,8 @@ bmrf_node::purge()
     }
   }
 
-  arc_iterator itr = in_arcs_.begin();
-  for (; itr != in_arcs_.end(); ++itr) {
+  
+  for (arc_iterator itr = in_arcs_.begin(); itr != in_arcs_.end(); ++itr) {
     if (!(*itr)->from_) {
       in_arcs_.erase(itr--);
       retval = true;
@@ -88,7 +84,7 @@ avg_distance_ratio( const bmrf_epi_seg_sptr& ep1, const bmrf_epi_seg_sptr& ep2)
   double max_alpha = MIN(ep1->max_alpha(), ep2->max_alpha());
   double d_alpha =  MIN( (ep1->max_alpha() - ep1->min_alpha())/ep1->n_pts() ,
                          (ep2->max_alpha() - ep2->min_alpha())/ep2->n_pts() );
-  
+
   double s1 = 0.0, s2 = 0.0;
   for (double alpha = min_alpha; alpha <= max_alpha; alpha += d_alpha){
     s1 += ep1->s(alpha);
@@ -112,7 +108,7 @@ bmrf_match_error( const bmrf_epi_seg_sptr& ep1, const bmrf_epi_seg_sptr& ep2 )
   double s_error = 0.0;
   for (double alpha = min_alpha; alpha <= max_alpha; alpha += d_alpha) {
     double ds = ep1->s(alpha) - ep2->s(alpha);
-    s_error += ds*ds; 
+    s_error += ds*ds;
   }
   return s_error * d_alpha / (max_alpha - min_alpha);
 }
@@ -122,30 +118,28 @@ bmrf_match_error( const bmrf_epi_seg_sptr& ep1, const bmrf_epi_seg_sptr& ep2 )
 double
 bmrf_node::probability()
 {
-  
-  if(weight_.empty())
+  if (weight_.empty())
     this->compute_weights();
 
-  double prob = 0.0;
   vcl_vector<vcl_pair<double,double> > pmf;
   for ( arc_iterator a_itr = this->begin(TIME); a_itr != this->end(TIME); ++a_itr ) {
     bmrf_node_sptr neighbor = (*a_itr)->to();
     double dist_ratio = avg_distance_ratio(this->epi_seg(), neighbor->epi_seg());
     int time_step = neighbor->frame_num() - this->frame_num();
     double gamma = (1.0 - dist_ratio) / time_step;
-    
+
     bmrf_gamma_func_sptr gamma_func = new bmrf_const_gamma_func(gamma);
     pmf.push_back(vcl_pair<double,double>(this->probability(gamma_func),gamma));
   }
   vcl_sort(pmf.begin(), pmf.end());
-/*
-  vcl_cout << "Samples" << vcl_endl;
+#ifdef DEBUG
+  vcl_cout << "Samples\n";
   for ( vcl_vector<vcl_pair<double,double> >::iterator p_itr = pmf.begin();
         p_itr != pmf.end();  ++p_itr )
     vcl_cout << p_itr->second <<'\t'<< p_itr->first << vcl_endl;
   vcl_cout << vcl_endl;
-*/
-  
+#endif
+
   probability_ = (pmf.empty()) ? 0 : pmf.back().first;
   return probability_;
 }
@@ -155,7 +149,7 @@ bmrf_node::probability()
 double
 bmrf_node::probability(const bmrf_gamma_func_sptr& gamma)
 {
-  if(weight_.empty())
+  if (weight_.empty())
     this->compute_weights();
 
   // precompute the segment in the next and previous frames since
@@ -188,7 +182,7 @@ bmrf_node::probability(const bmrf_gamma_func_sptr& gamma)
 
 //: Compute the weights of each node for use in probability computation
 // Nodes are weighted by alpha overlap and intesity similarity
-void 
+void
 bmrf_node::compute_weights()
 {
   double int_var = 0.001; // intensity variance
@@ -205,7 +199,8 @@ bmrf_node::compute_weights()
                            (ep2->max_alpha() - ep2->min_alpha())/ep2->n_pts() );
 
     double l_error = 0.0, r_error = 0.0;
-    for (double alpha = min_alpha; alpha <= max_alpha; alpha += d_alpha) {   
+    for (double alpha = min_alpha; alpha <= max_alpha; alpha += d_alpha)
+    {
       double dli = (ep1->left_int(alpha) - ep2->left_int(alpha));
       double dri = (ep1->right_int(alpha) - ep2->right_int(alpha));
       l_error += dli*dli;
@@ -217,9 +212,9 @@ bmrf_node::compute_weights()
     total_wgt += alpha_range;
   }
   double scale = 1.0/total_wgt;
-  for( vcl_map<bmrf_node*, double>::iterator w_itr = weight_.begin();
-       w_itr != weight_.end();  ++w_itr ){
-    w_itr->second *= scale; 
+  for ( vcl_map<bmrf_node*, double>::iterator w_itr = weight_.begin();
+        w_itr != weight_.end();  ++w_itr ) {
+    w_itr->second *= scale;
   }
 }
 
@@ -232,8 +227,7 @@ bmrf_node::add_neighbor( bmrf_node *node, neighbor_type type )
     return false;
 
   // verify that this arc is not already present
-  arc_iterator itr = boundaries_[type];
-  for (; itr != boundaries_[type+1]; ++itr)
+  for (arc_iterator itr = boundaries_[type]; itr != boundaries_[type+1]; ++itr)
     if ((*itr)->to_ == node) return false;
 
   // add the arc
@@ -261,9 +255,9 @@ bmrf_node::remove_neighbor( bmrf_node *node, neighbor_type type )
   int init_t = type;
   if (type == ALL) init_t=0;
 
-  for (int t = init_t; t<ALL; ++t) {
-    arc_iterator itr = boundaries_[t];
-    for (; itr != boundaries_[t+1]; ++itr) {
+  for (int t = init_t; t<ALL; ++t)
+  {
+    for (arc_iterator itr = boundaries_[t]; itr != boundaries_[t+1]; ++itr) {
       if ((*itr)->to_ == node) {
         // adjust boundaries if necessary
         for (int t2=t; t2>=0 && (boundaries_[t2] == itr); --t2)
@@ -324,16 +318,16 @@ bmrf_node::b_write( vsl_b_ostream& os ) const
     vsl_b_write(os, sizes_[t]);
 
   // write all the outgoing arcs
-  vcl_list<bmrf_arc_sptr>::const_iterator itr = out_arcs_.begin();
-  for (; itr != out_arcs_.end(); ++itr) {
+  for (vcl_list<bmrf_arc_sptr>::const_iterator itr = out_arcs_.begin();
+       itr != out_arcs_.end(); ++itr) {
     vsl_b_write(os, *itr);  // Save the arc
   }
 
   // write the number of incoming arcs
   vsl_b_write(os, (unsigned int) in_arcs_.size());
   // write all the incoming arcs
-  itr = in_arcs_.begin();
-  for (; itr != in_arcs_.end(); ++itr) {
+  for (vcl_list<bmrf_arc_sptr>::const_iterator itr = in_arcs_.begin();
+       itr != in_arcs_.end(); ++itr) {
     vsl_b_write(os, *itr);  // Save the arc
   }
 }
