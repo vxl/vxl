@@ -22,7 +22,7 @@ void mbl_read_props_print(vcl_ostream &afs, mbl_read_props_type props)
 }
 
 
-static strip_tailing_ws(vcl_string &s)
+static void strip_tailing_ws(vcl_string &s)
 {
   int p=s.length()-1;
   while (p>0 && vcl_isspace(s[p])) --p;
