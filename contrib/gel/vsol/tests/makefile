@@ -9,7 +9,7 @@
 
 USES := vxl gel
 
-IULIBS += -lvsol -lvgl -lvnl -lvbl
+IULIBS += -lvsol -lvgl -lvnl -lvbl -lvul
 
 TESTS += test_vsol_point_2d.cxx
 TESTS += test_vsol_group_2d.cxx
