@@ -41,11 +41,11 @@ IF(WIN32)
   ADD_DEFINITIONS( -DTIF_PLATFORM_CONSOLE)
 
   SOURCE_FILES( tiff_sources
-    tif_win32
+    tif_win32.c
   )
 ELSE(WIN32)
   SOURCE_FILES( tiff_sources
-    tif_unix
+    tif_unix.c
   )
 ENDIF(WIN32)
 
