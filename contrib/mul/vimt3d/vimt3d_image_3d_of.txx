@@ -26,7 +26,7 @@ vimt3d_image_3d_of<T>::vimt3d_image_3d_of()
 
 //=======================================================================
 template<class T>
-vimt3d_image_3d_of<T>::vimt3d_image_3d_of(unsigned ni, unsigned nj, 
+vimt3d_image_3d_of<T>::vimt3d_image_3d_of(unsigned ni, unsigned nj,
                                           unsigned nk, unsigned nplanes)
   : image_(ni,nj,nk,nplanes)
 {
@@ -166,7 +166,7 @@ bool vimt3d_image_3d_of<T>::operator==(const vimt3d_image_3d_of<T> &other) const
 
 //=======================================================================
 //: True if the transforms and the actual image data are identical.
-// The image pointers need not be identical, 
+// The image pointers need not be identical,
 // provided that the underlying image data are the same.
 // \relates vimt3d_image_3d_of<T>
 // \relates vil3d_image_view
@@ -179,7 +179,7 @@ bool vimt3d_image_3d_deep_equality(const vimt3d_image_3d_of<T>& lhs,
     return false;
 
   // Now check that the underlying image data are identical
-  return vil3d_image_view_deep_equality(lhs.image(), rhs.image());  
+  return vil3d_image_view_deep_equality(lhs.image(), rhs.image());
 }
 
 
@@ -190,9 +190,7 @@ bool vimt3d_image_3d_deep_equality(const vimt3d_image_3d_of<T>& lhs,
 VCL_DEFINE_SPECIALIZATION vcl_string vimt3d_image_3d_of<T >::is_a() const \
 { return vcl_string("vimt3d_image_3d_of<" #T ">"); } \
 template class vimt3d_image_3d_of<T >; \
-template bool vimt3d_image_3d_deep_equality(const vimt3d_image_3d_of<T>& lhs, \
-                                            const vimt3d_image_3d_of<T>& rhs);
+template bool vimt3d_image_3d_deep_equality(const vimt3d_image_3d_of<T >& lhs, \
+                                            const vimt3d_image_3d_of<T >& rhs)
 
 #endif // vimt3d_image_3d_of_txx_
-
-
