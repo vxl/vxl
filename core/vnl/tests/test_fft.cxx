@@ -22,10 +22,10 @@ void test_fft_1d(int N)
   vnl_vector<vcl_complex<double> > tmp = signal;
   vnl_matlab_print(vcl_cout, tmp, "tmp");
 
-  fft.fwd_transform(tmp); tmp /= vcl_sqrt(double(N));
+  fft.fwd_transform(tmp);
   vnl_matlab_print(vcl_cout, tmp, "tmp");
 
-  fft.bwd_transform(tmp); tmp /= vcl_sqrt(double(N));
+  fft.bwd_transform(tmp); tmp /= N;
   vnl_matlab_print(vcl_cout, tmp, "tmp");
 
   double err = (tmp - signal).two_norm();
@@ -43,10 +43,10 @@ void test_fft_2d(int M, int N)
   vnl_matrix<vcl_complex<double> > tmp = signal;
   vnl_matlab_print(vcl_cout, tmp, "tmp");
 
-  fft.fwd_transform(tmp); tmp /= vcl_sqrt(double(M*N));
+  fft.fwd_transform(tmp);
   vnl_matlab_print(vcl_cout, tmp, "tmp");
 
-  fft.bwd_transform(tmp); tmp /= vcl_sqrt(double(M*N));
+  fft.bwd_transform(tmp); tmp /= (M*N);
   vnl_matlab_print(vcl_cout, tmp, "tmp");
 
   double err = (tmp - signal).fro_norm();
