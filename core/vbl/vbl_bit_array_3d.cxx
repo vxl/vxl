@@ -97,7 +97,7 @@ void vbl_bit_array_3d_base::index(unsigned x, unsigned y, unsigned z,
   unsigned long i = (z*row2_count()+y)*row1_count()+x;
 
   byteindex = i/CHAR_BIT;
-  bitindex  = i%CHAR_BIT;
+  bitindex  = (unsigned char)(i%CHAR_BIT);
 }
 
 
