@@ -1,8 +1,7 @@
-#include <vcl_cstdlib.h>
 #include <vcl_fstream.h>
 #include <vcl_iostream.h>
+#include <vcl_string.h>
 #include <vcl_vector.h>
-#include <vcl_utility.h>
 #include <vnl/vnl_math.h>
 
 #include <vpgl/vpgl_basic_camera.h>
@@ -19,25 +18,24 @@
 
 int get_int_random ()
 {
-  int temp;
-  temp= rand();
-  temp = temp% 200;
+  int temp= rand();
+  temp %= 200;
   temp -= 100;
   return temp;
 }
 
 double get_rnd_angle()
 {
- double temp;
-
-  temp = ((double) rand())/RAND_MAX;
+  double temp = ((double) rand())/RAND_MAX;
   return temp*vnl_math::pi;
 }
 
 int main(int argc, char ** argv)
 {
-  //double rnd_XL,rnd_YL,rnd_ZL, rnd_omega, rnd_phi, rnd_kappa;
-  vcl_ofstream output("egemen1.cm");
+  vcl_string path = "./egemen1.cm";
+  if (argc > 1) path = vcl_string(argv[1]);
+  vcl_cout << "writing correspondence file " << path << vcl_endl;
+  vcl_ofstream output(path.c_str());
 
   srand(1978);
   vcl_vector<double> parameters;
@@ -67,11 +65,11 @@ int main(int argc, char ** argv)
   }
 
   output.close();
-  vcl_cout << "test program for vpgl libraries" << vcl_endl;
+  vcl_cout << "test program for vpgl libraries\n";
 
 ////////////////////////////////////////////////////
 #if 0
-  vcl_ifstream instr("egemen1.cm");
+  vcl_ifstream instr(path);
   if (!instr)
   {
     vcl_cout <<"In carmen_interface::load_correspondence_file()"
