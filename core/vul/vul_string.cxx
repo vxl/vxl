@@ -1,15 +1,13 @@
 // This is core/vul/vul_string.cxx
-
 #include "vul_string.h"
+//:
+// \file
 
 #include <vcl_cassert.h>
 #include <vcl_cstdlib.h>
 #include <vcl_cstring.h>
 #include <vcl_cctype.h>
 #include <vcl_algorithm.h>
-
-#define TO_LOWER vcl_tolower                    // use ANSI functions
-#define TO_UPPER vcl_toupper
 
 #ifndef END_OF_STRING                           // If END_OF_STRING not defined
 #define END_OF_STRING (0)
@@ -21,7 +19,7 @@ char* vul_string_c_upcase(char* s)  // Convert entire string to upper case
   char* p = s;                  // Point to beginning of string
   while (*p) {                  // While there are still valid characters
     if (vcl_islower(*p))        // if this is lower case
-      *p = TO_UPPER(*p);        // convert to uppercase
+      *p = vcl_toupper(*p);     // convert to uppercase
     p++;                        // Advance pointer
   }
   return s;                     // Return reference to modified string
@@ -33,7 +31,7 @@ char* vul_string_c_downcase(char* s)  // Convert entire string to lower case
   char* p = s;                  // Point to beginning of string
   while (*p) {                  // While there are still valid characters
     if (vcl_isupper(*p))        // if this is upper case
-      *p = TO_LOWER(*p);        // convert to lowercase
+      *p = vcl_tolower(*p);     // convert to lowercase
     p++;                        // Advance pointer
   }
   return s;                     // Return reference to modified string
@@ -48,7 +46,7 @@ char* vul_string_c_capitalize(char* s)  // Capitalize each word in string
     for (; *p && !vcl_isalnum(*p); p++);// Skip to first alphanumeric
     if (*p == END_OF_STRING)            // If end of string
       return s;                         // Return string
-    *p = TO_UPPER(*p);                  // Convert character
+    *p = vcl_toupper(*p);               // Convert character
     while (*++p && vcl_isalnum(*p));    // Search for next word
   }
 }
@@ -260,25 +258,25 @@ bool vul_string_to_bool(const vcl_string &str)
 bool vul_string_expand_var(vcl_string &str)
 {
   vcl_string::size_type i = 0; // index to current char.
-  
+
   // If there is a problem, carry on trying to convert rest
   bool success=true; //  of string, but remember failure.
 
   enum {not_in_var, start_var, in_var, in_bracket_var} state = not_in_var;
-  vcl_string::size_type var_begin;
+  vcl_string::size_type var_begin = 0;
 
   while (i<str.size())
   {
     switch (state)
     {
-    case not_in_var: // not currently in a variable
+     case not_in_var: // not currently in a variable
       if (str[i] == '$')
       {
         state = start_var;
         var_begin = i;
       }
       break;
-    case start_var: // just started a variable
+     case start_var: // just started a variable
       if (str[i] == '$')
       {
         str.erase(i,1);
@@ -292,7 +290,7 @@ bool vul_string_expand_var(vcl_string &str)
       }
       else // or this is the first letter of the variable, in which case go through
         state=in_var;
-    case in_var:  // in a non-bracketed variable
+     case in_var:  // in a non-bracketed variable
       assert(var_begin+1 < str.size());
       assert(i > var_begin);
       if (str[i] == '$')
@@ -314,7 +312,7 @@ bool vul_string_expand_var(vcl_string &str)
         }
       }
       break;
-    case in_bracket_var:  // in a bracketed variable
+     case in_bracket_var:  // in a bracketed variable
       if (str[i] == '}')
       {
         assert(var_begin+2 < str.size());
@@ -344,10 +342,3 @@ bool vul_string_expand_var(vcl_string &str)
   }
   return success;
 }
-
-
-
-
-
-
-
