@@ -1,4 +1,4 @@
-SUBDIRS = \
-netlib
+SUBDIRS(netlib)
 
-PROJECT=V3P
+PROJECT(V3P)
+
