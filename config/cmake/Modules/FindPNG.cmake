@@ -8,6 +8,7 @@
 # As per the standard scheme the following definitions are used
 # PNG_INCLUDE_DIR - where to find png.h
 # PNG_LIBRARIES   - the set of libraries to include to use PNG.
+# PNG_DEFINITIONS - You should ADD_DEFINITONS(${PNG_DEFINITIONS}) before compiling code that includes png library files.
 # PNG_FOUND       - TRUE, if available somewhere on the system.
 
 # Additionally
@@ -33,7 +34,7 @@ IF(NOT PNG_FOUND)
 
       SET( PNG_FOUND "YES" )
       SET( PNG_LIBRARIES png)
-      SET( PNG_PNG_INCLUDE_DIR ${allvxl_SOURCE_DIR}/v3p/png ${ZLIB_INCLUDE_DIR} )
+      SET( PNG_INCLUDE_DIR ${allvxl_SOURCE_DIR}/v3p/png ${ZLIB_INCLUDE_DIR} )
 
       IF (CYGWIN)
         IF(BUILD_SHARED_LIBS)
