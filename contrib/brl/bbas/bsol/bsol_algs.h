@@ -14,6 +14,7 @@
 // \endverbatim
 //
 //-----------------------------------------------------------------------------
+#include "dll.h"
 #include <vbl/vbl_bounding_box.h>
 #include <vgl/vgl_polygon.h>
 #include <vsol/vsol_point_2d_sptr.h>
@@ -22,7 +23,6 @@
 #include <vsol/vsol_box_3d_sptr.h>
 #include <vsol/vsol_line_2d_sptr.h>
 #include <vsol/vsol_polygon_2d_sptr.h>
-#include <bsol/dll.h>
 #include <vgl/algo/vgl_h_matrix_2d.h>
 class bsol_algs
 {

@@ -13,7 +13,7 @@
 //
 //-----------------------------------------------------------------------------
 #include <vcl_vector.h>
-#include <btol/dll.h>
+#include "dll.h"
 #include <vtol/vtol_vertex_sptr.h>
 #include <vtol/vtol_edge_sptr.h>
 #include <vtol/vtol_vertex_2d_sptr.h>
