@@ -146,18 +146,18 @@ void pdf1d_pdf::get_samples(vnl_vector<double>& x) const
 bool pdf1d_pdf::write_plot_file(const vcl_string& plot_file, double min_x, double max_x, int n) const
 {
   vcl_ofstream ofs(plot_file.c_str(),vcl_ios::out);
-	if (!ofs) return false;
+  if (!ofs) return false;
   assert(n>1);
 
-	double dx = (max_x-min_x)/(n-1);
+  double dx = (max_x-min_x)/(n-1);
   for (int i=0;i<n;++i)
-	{
-	  double x = min_x + i*dx;
-		ofs<<x<<" "<<operator()(x)<<vcl_endl;
+  {
+    double x = min_x + i*dx;
+    ofs<<x<<" "<<operator()(x)<<vcl_endl;
   }
-	ofs.close();
+  ofs.close();
 
-	return true;
+  return true;
 }
 
 
@@ -312,7 +312,7 @@ double pdf1d_pdf::inverse_cdf(double P) const
     {
       x_above = x_init;
       f_above = f_init;
-      while(1)
+      while (true)
       {
         x_below = x_above - step;
         f_below = cdf(x_below);
@@ -326,7 +326,7 @@ double pdf1d_pdf::inverse_cdf(double P) const
     {
       x_below = x_init;
       f_below = f_init;
-      while(1)
+      while (true)
       {
         x_above = x_below + step;
         f_above = cdf(x_above);
@@ -336,7 +336,7 @@ double pdf1d_pdf::inverse_cdf(double P) const
         step *= 2.0;
       }
     }
-/*
+#if 0
     double x_middle = (x_above + x_below) / 2;
     while (x_above - x_below > vnl_math::sqrteps)
     {
@@ -345,7 +345,7 @@ double pdf1d_pdf::inverse_cdf(double P) const
       else x_above = x_middle;
     }
     return (x_above + x_below) / 2;
-*/
+#endif
     // bracketed Newton Ralphson.
 
 
@@ -386,8 +386,7 @@ double pdf1d_pdf::inverse_cdf(double P) const
     }
     vcl_cerr << "ERROR: pdf1d_pdf::inverse_cdf() failed to converge." << vcl_endl;
     vcl_abort();
-
-
+    return 0.0; // dummy return
   }
   else // Use sampling.
   {
