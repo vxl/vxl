@@ -425,6 +425,9 @@ SOURCE=.\mbl_add_all_loaders.h
 # Begin Source File
 SOURCE=.\mbl_correspond_points.h
 # End Source File
+# Begin Source File
+SOURCE=.\mbl_jarque_bera.h
+# End Source File
 # End Group
 # PROP Default_Filter "ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe"
 # End Group

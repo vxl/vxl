@@ -438,6 +438,9 @@ SOURCE=.\emulation/vcl_straits.cxx
 SOURCE=.\emulation/vcl_string_instances.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\emulation/vcl_limits.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\vcl_cassert.cxx
 # End Source File
 # Begin Source File
@@ -445,6 +448,9 @@ SOURCE=.\vcl_cmath.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\vcl_cstdlib.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\vcl_limits.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\vcl_deprecated.cxx
@@ -913,6 +919,9 @@ SOURCE=.\emulation/vcl_hash_set.h
 # End Source File
 # Begin Source File
 SOURCE=.\emulation/vcl_heap.h
+# End Source File
+# Begin Source File
+SOURCE=.\emulation/vcl_limits.h
 # End Source File
 # Begin Source File
 SOURCE=.\emulation/vcl_multiset.h
