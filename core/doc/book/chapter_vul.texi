@@ -14,6 +14,10 @@ are
 File handling utilities, directory reading
 @end deffn
 
+@deffn class @code{vul_url}
+Downloading files over HTTP.
+@end deffn
+
 @deffn {class template} @code{vul_arg}
 Parse command-line arguments conveniently.
 @end deffn
@@ -322,3 +326,37 @@ Note that more than one of these metacharacters can be used in a single
 regular expression in order to create complex search patterns. For example,
 the pattern @code{[^ab1-9]} says to match any character sequence that does
 not begin with the characters "ab" followed by numbers in the series 1-9.
+
+
+
+@section Loading files using Internet protocols: @code{vul_url}
+@cindex HTTP
+@cindex vul_url
+
+@code{vul_url} provides a useful means of downloading files over the internet.
+For example, if you used to have code like this
+@example
+bool read_ascii(vcl_istream &);
+...
+int main() {
+...
+  vcl_ifstream  input(filename);
+  if (!(!input))
+    read_ascii(input);
+  input.close;
+...
+@end example
+You can get this code to work, even if @code{filename} begins with @code{"http://"}
+by modifying your code to look like.
+@example
+bool read_ascii(vcl_istream &);
+...
+int main() {
+...
+  vcl_istream  *p_input = vul_url::open(filename);
+  if (p_input != 0 && !(!(*input)))
+    read_ascii(*input);
+  delete input;
+...
+@end example
+This will now work both when filename is an HTTP URL and when it is an ordinary filename.

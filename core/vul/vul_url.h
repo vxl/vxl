@@ -8,6 +8,9 @@
 #include <vcl_string.h>
 
 //: Functions to test and open streams via a URL
+// Currently supports file and HTTP only.
+// HTTP support includes basic authentification, using the normal
+// HTTP URL scheme, e.g. \c http://user4:mypassword@webserverthingy.fens-poly.ac.uk/file.txt
 class vul_url
 {
 public:
@@ -19,13 +22,12 @@ public:
   static vcl_istream * open(const char * url, vcl_ios::open_mode mode=vcl_ios::in );
 
 //: Does that URL exist
-// If the URL does not begin with a recognised xcheme identifier, the function will
+// If the URL does not begin with a recognised scheme identifier, the function will
 // treat the parameter as a local filename
   static bool exists(const char * url);
 
 //: Is that a URL
-// If the URL does not begin with a recognised xcheme identifier, the function will
-// treat the parameter as a local filename
+// as opposed to an ordinary filename.
   static bool is_url(const char * url);
 
 //: Is that a file

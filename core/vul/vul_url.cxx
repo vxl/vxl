@@ -427,7 +427,7 @@ bool vul_url::exists(const char * url)
   // maybe it's an ftp URL?
   if (l > 6 && vcl_strncmp(url, "ftp://", 6) == 0)
   {
-    vcl_cerr << __LINE__ << "ERROR:\n vul_read_url(const char * url)\n"
+    vcl_cerr << "ERROR: vul_read_url(const char * url)\n"
       "Doesn't support FTP yet, url=" << url << vcl_endl;
     return false;
   }
