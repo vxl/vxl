@@ -1,0 +1,41 @@
+#ifndef mpeg2_include_inttypes_h_
+#define mpeg2_include_inttypes_h_
+/**
+ * \file
+ * This file either is or was generated from mpeg/include/inttypes.h.in
+ */
+
+/*--------------------------------------------------------------------------*/
+
+#if @VXL_HAS_INT_8@
+  typedef   signed @VXL_INT_8@  int8_t;
+  typedef unsigned @VXL_INT_8@  uint8_t;
+#else
+# define int8_t  void
+# define uint8_t  void
+#endif
+
+#if @VXL_HAS_INT_16@
+  typedef   signed @VXL_INT_16@ int16_t;
+  typedef unsigned @VXL_INT_16@ uint16_t;
+#else
+# define int16_t void
+# define uint16_t void
+#endif
+
+#if @VXL_HAS_INT_32@
+  typedef   signed @VXL_INT_32@ int32_t;
+  typedef unsigned @VXL_INT_32@ uint32_t;
+#else
+# define int32_t void
+# define uint32_t void
+#endif
+
+#if @VXL_HAS_INT_64@
+  typedef   signed @VXL_INT_64@ int64_t;
+  typedef unsigned @VXL_INT_64@ int64_t;
+#endif
+
+
+
+#endif /* mpeg2_include_inttypes_h_ */

@@ -4,22 +4,62 @@ INCLUDE( ${MODULE_PATH}/FindMPEG2.cmake )
 
 IF( NOT VXL_USING_NATIVE_MPEG2 )
 
-# If RUN_CONFIGURE is used here, configure is not run when cmake is first run.
-IF( UNIX )
-  EXEC_PROGRAM( ${vthreep_SOURCE_DIR}/mpeg2/configure
-                ${vthreep_BINARY_DIR}/mpeg2 )
-ENDIF( UNIX )
 
-# A 1st attempt at replacing the MPEG configure script with CMake
-# CONFIGURE_FILE(${vthreep_SOURCE_DIR}/mpeg2/include/config_cmake.h.in ${vthreep_BINARY_DIR}/mpeg2/include/config_cmake.h)
+OPTION(VXL_MPEG_USE_CONFIGURE "Should v3p/mpeg2 setup be done with configure (or cmake if NO)" YES)
+MARK_AS_ADVANCED( VXL_MPEG_USE_CONFIGURE )
 
-IF( UNIX )
-  # this is where autoconf will put config.h and inttypes.h
+IF( VXL_MPEG_USE_CONFIGURE )
+
+  # If RUN_CONFIGURE is used here, configure is not run when cmake is first run.
+  IF( UNIX )
+    EXEC_PROGRAM( ${vthreep_SOURCE_DIR}/mpeg2/configure
+                  ${vthreep_BINARY_DIR}/mpeg2 )
+  ENDIF( UNIX )
+
+  IF( UNIX )
+    # this is where autoconf will put config.h and inttypes.h
+    INCLUDE_DIRECTORIES( ${vthreep_BINARY_DIR}/mpeg2/include )
+  ELSE( UNIX )
+    # location of handwritten config.h and inttypes.h for windows
+    INCLUDE_DIRECTORIES( ${vthreep_SOURCE_DIR}/mpeg2/win32 )
+  ENDIF( UNIX )
+
+ELSE( VXL_MPEG_USE_CONFIGURE )
+
+  IF( CMAKE_SYSTEM_PROCESSOR MATCHES ppc )
+    SET( MPEG_ARCH_PPC 1 )
+  ELSE( CMAKE_SYSTEM_PROCESSOR MATCHES ppc )
+    SET( MPEG_ARCH_PPC 0 )
+  ENDIF( CMAKE_SYSTEM_PROCESSOR MATCHES ppc )
+
+  IF(UNIX)
+    IF( CMAKE_SYSTEM_PROCESSOR MATCHES i[56]86 )
+      SET( MPEG_ARCH_X86 1 )
+    ELSE( CMAKE_SYSTEM_PROCESSOR MATCHES i[56]86 )
+      SET( MPEG_ARCH_X86 0 )
+    ENDIF( CMAKE_SYSTEM_PROCESSOR MATCHES i[56]86 )
+  ELSE(UNIX)
+  # unfortunately MSVC6 (and probably other Windows compilers
+  # can't cope with the mmx assembler
+    SET( MPEG_ARCH_X86 0 )
+  ENDIF(UNIX)
+
+
+  INCLUDE (${CMAKE_ROOT}/Modules/CheckIncludeFileCXX.cmake)
+  CHECK_INCLUDE_FILE_CXX("inttypes.h" MPEG_HAVE_INTTYPES_H)
+
+  ## Still need to figure out how to set these for maximum
+  ## efficiency
+  SET( MPEG_ATTRIBUTE_ALIGNED_MAX 0 )
+  SET( MPEG_HAVE_MEMALIGN 0 )
+
+  CONFIGURE_FILE(${vthreep_SOURCE_DIR}/mpeg2/include/config_cmake.h.in ${vthreep_BINARY_DIR}/mpeg2/include/config.h)
+  IF( NOT MPEG_HAVE_INTTYPES_H )
+    CONFIGURE_FILE(${vthreep_SOURCE_DIR}/mpeg2/include/inttypes.h.in ${vthreep_BINARY_DIR}/mpeg2/include/inttypes.h)
+  ENDIF( NOT MPEG_HAVE_INTTYPES_H )
   INCLUDE_DIRECTORIES( ${vthreep_BINARY_DIR}/mpeg2/include )
-ELSE( UNIX )
-  # location of handwritten config.h and inttypes.h for windows
-  INCLUDE_DIRECTORIES( ${vthreep_SOURCE_DIR}/mpeg2/win32 )
-ENDIF( UNIX )
+
+ENDIF( VXL_MPEG_USE_CONFIGURE )
 
 INCLUDE_DIRECTORIES( ${vthreep_SOURCE_DIR}/mpeg2/include/mpeg2dec )
 

@@ -39,7 +39,7 @@
 /* Define if you have the `memalign' function. */
 #define MPEG_HAVE_MEMALIGN @MPEG_HAVE_MEMALIGN@
 #if MPEG_HAVE_MEMALIGN
-# define MPEG_HAVE_MEMORY_H
+# define HAVE_MEMALIGN
 #endif
 
 /* Define if you have the <memory.h> header file. */
@@ -143,7 +143,7 @@
 /* Define as `__inline' if that's what the C compiler calls it, or to nothing
    if it is not supported. */
 /* We don't support compilers this broken: IMS */
-/* #undef inline */
+#define inline __inline
 
 /* Define as `__restrict' if that's what the C compiler calls it, or to
    nothing if it is not supported. */
