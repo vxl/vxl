@@ -331,6 +331,7 @@ void vul_arg_info_list::parse(int& argc, char **& argv, bool warn_about_unrecogn
       if (*my_argv) {
         done_once[i] = true;
         int advance = args_[i]->parse(my_argv);
+        args_[i]->set_ = true;
         my_argv += advance;
         ++num_satisfied;
       } else {
