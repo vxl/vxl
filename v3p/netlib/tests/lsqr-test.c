@@ -626,23 +626,27 @@ L900:
     test_(&c__40, &c__40, &c__4, &c__4, &zero);
     test_(&c__40, &c__40, &c__4, &c__4, &damp2);
     test_(&c__80, &c__40, &c__4, &c__4, &damp2);
-    s_stop("", 0L);
+    return 0;
+    //    s_stop("", 0L);
 /*     End of main program for testing LSQR */
 } /* main */
+
+int abort();
 
 #include <stdio.h>
 
 /* Subroutine */ void do_fio(integer* fp, char* buf, integer len)
 {
   int i;
-  FILE* f = fdopen(*fp, "w");
+  if (*fp !=1) { printf("Unable to output\n"); abort();}
+//  FILE* f = fdopen(*fp, "w");
   if (len==sizeof(integer))
-    fprintf(f, "%d\n", *((integer*)buf));
+    printf( "%d\n", *((integer*)buf));
   else if (len==sizeof(doublereal))
-    fprintf(f, "%g\n", *((doublereal*)buf));
+    printf( "%g\n", *((doublereal*)buf));
   else {
-    for (i=0; i<len; ++i) fputc(buf[i], f);
-    fputc('\n', f);
+    for (i=0; i<len; ++i) putchar(buf[i]);
+    putchar('\n');
   }
 }
 
