@@ -34,10 +34,6 @@ int main()
   vcl_cout << "Distance " << vcl_endl;
   vcl_cout << dist << vcl_endl;
 
-
-
-
-
   vcl_cout << "3D example " << vcl_endl;
 
   vsol_point_3d_sptr p3d = new vsol_point_3d(5.0,10.0,15.0);
@@ -64,4 +60,5 @@ int main()
   vcl_cout << "Distance " << vcl_endl;
   vcl_cout << dist << vcl_endl;
 
+  return 0;
 }
