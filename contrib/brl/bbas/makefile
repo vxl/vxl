@@ -3,7 +3,7 @@ ifneq (,$(wildcard ${IUEROOT}/v3p/xerces-c-src1_4_0/include/dom/DOM.hpp))
 endif
 
 # additions to vnl
-SUBDIRS += bvnl
+SUBDIRS += bnl
 
 # spatial object algorithms
 SUBDIRS += bsol
