@@ -1,18 +1,16 @@
 #ifndef vcl_iso_strstream_h_
 #define vcl_iso_strstream_h_
 
+// This is a generated file. DO NOT EDIT! Not even a little bit.
+
 #include <strstream>
 
-// istrstream
-#ifndef vcl_istrstream
-#define vcl_istrstream std::istrstream
-#endif
-// ostrstream
-#ifndef vcl_ostrstream
-#define vcl_ostrstream std::ostrstream
+#ifdef vcl_generic_strstream_STD
+  ** error **
+#else
+# define vcl_generic_strstream_STD std
 #endif
 
-using std::istrstream;
-using std::ostrstream;
+#include "../generic/vcl_strstream.h"
 
 #endif // vcl_iso_strstream_h_
