@@ -100,8 +100,6 @@ ftnlen type_len;
 /*                                                                        */
 /*  ===================================================================== */
 
-    /* Function Body */
-
     *info = 0;
 
     if (lsame_(type, "G", 1L, 1L)) {
@@ -128,7 +126,7 @@ ftnlen type_len;
         *info = -4;
     } else if (*m < 0) {
         *info = -6;
-    } else if (*n < 0 || itype == 4 && *n != *m || itype == 5 && *n != *m) {
+    } else if (*n < 0 || (itype == 4 && *n != *m) || (itype == 5 && *n != *m) ) {
         *info = -7;
     } else if (itype <= 3 && *lda < max(1,*m)) {
         *info = -9;
@@ -137,11 +135,11 @@ ftnlen type_len;
             *info = -2;
         } else /* if(complicated condition) */ {
             if (*ku < 0 || *ku > max(*n - 1,0) ||
-                (itype == 4 || itype == 5) && *kl != *ku) {
+                ( (itype == 4 || itype == 5) && *kl != *ku) ) {
                 *info = -3;
-            } else if (itype == 4 && *lda < *kl + 1 ||
-                       itype == 5 && *lda < *ku + 1 ||
-                       itype == 6 && *lda < (*kl << 1) + *ku + 1) {
+            } else if ((itype == 4 && *lda < *kl + 1) ||
+                       (itype == 5 && *lda < *ku + 1) ||
+                       (itype == 6 && *lda < (*kl << 1) + *ku + 1)) {
                 *info = -9;
             }
         }
@@ -189,7 +187,7 @@ L10:
 
         for (j = 0; j < *n; ++j) {
             for (i = 0; i < *m; ++i) {
-                i__1 = i + j * *lda;
+                i__1 = i + j * *lda; /* index [i,j] */
                 a[i__1].r *= mul, a[i__1].i *= mul;
             }
         }
@@ -200,7 +198,7 @@ L10:
 
         for (j = 0; j < *n; ++j) {
             for (i = j; i < *m; ++i) {
-                i__1 = i + j * *lda;
+                i__1 = i + j * *lda; /* index [i,j] */
                 a[i__1].r *= mul, a[i__1].i *= mul;
             }
         }
@@ -211,7 +209,7 @@ L10:
 
         for (j = 0; j < *n; ++j) {
             for (i = 0; i <= j && i < *m; ++i) {
-                i__1 = i + j * *lda;
+                i__1 = i + j * *lda; /* index [i,j] */
                 a[i__1].r *= mul, a[i__1].i *= mul;
             }
         }
@@ -222,7 +220,7 @@ L10:
 
         for (j = 0; j < *n; ++j) {
             for (i = 0; i <= j + 1 && i < *m; ++i) {
-                i__1 = i + j * *lda;
+                i__1 = i + j * *lda; /* index [i,j] */
                 a[i__1].r *= mul, a[i__1].i *= mul;
             }
         }
@@ -235,7 +233,7 @@ L10:
         k4 = *n;
         for (j = 0; j < *n; ++j) {
             for (i = 0; i <= k3 && i < k4 - j; ++i) {
-                i__1 = i + j * *lda;
+                i__1 = i + j * *lda; /* index [i,j] */
                 a[i__1].r *= mul, a[i__1].i *= mul;
             }
         }
@@ -248,7 +246,7 @@ L10:
         k3 = *ku;
         for (j = 0; j < *n; ++j) {
             for (i = max(k1 - j,0); i <= k3; ++i) {
-                i__1 = i + j * *lda;
+                i__1 = i + j * *lda; /* index [i,j] */
                 a[i__1].r *= mul, a[i__1].i *= mul;
             }
         }
@@ -263,7 +261,7 @@ L10:
         k4 = k1 + *m;
         for (j = 0; j < *n; ++j) {
             for (i = max(k1 - j,k2); i <= k3 && i < k4 - j; ++i) {
-                i__1 = i + j * *lda;
+                i__1 = i + j * *lda; /* index [i,j] */
                 a[i__1].r *= mul, a[i__1].i *= mul;
             }
         }
@@ -272,8 +270,4 @@ L10:
     if (! done) {
         goto L10;
     }
-
-/*     End of ZLASCL */
-
 } /* zlascl_ */
-

@@ -100,8 +100,6 @@ integer *lda;
 /*     Sven Hammarling, Nag Central Office. */
 /*     Richard Hanson, Sandia National Labs. */
 
-    /* Function Body */
-
     info = 0;
     if (*m < 0) {
         info = 1;
@@ -120,7 +118,7 @@ integer *lda;
     }
 
 /*     Quick return if possible. */
-    if (*m == 0 || *n == 0 || alpha->r == 0. && alpha->i == 0.) {
+    if (*m == 0 || *n == 0 || (alpha->r == 0. && alpha->i == 0.)) {
         return;
     }
 
@@ -138,7 +136,7 @@ integer *lda;
                 temp.r = alpha->r * y[jy].r + alpha->i * y[jy].i,
                 temp.i = alpha->i * y[jy].r - alpha->r * y[jy].i;
                 for (i = 0; i < *m; ++i) {
-                    i__1 = i + j * *lda;
+                    i__1 = i + j * *lda; /* index [i,j] */
                     a[i__1].r += x[i].r * temp.r - x[i].i * temp.i,
                     a[i__1].i += x[i].r * temp.i + x[i].i * temp.r;
                 }
@@ -157,7 +155,7 @@ integer *lda;
                 temp.i = alpha->i * y[jy].r - alpha->r * y[jy].i;
                 ix = kx;
                 for (i = 0; i < *m; ++i) {
-                    i__1 = i + j * *lda;
+                    i__1 = i + j * *lda; /* index [i,j] */
                     a[i__1].r += x[ix].r * temp.r - x[ix].i * temp.i,
                     a[i__1].i += x[ix].r * temp.i + x[ix].i * temp.r;
                     ix += *incx;
@@ -166,10 +164,4 @@ integer *lda;
             jy += *incy;
         }
     }
-
-    return;
-
-/*     End of ZGERC . */
-
 } /* zgerc_ */
-
