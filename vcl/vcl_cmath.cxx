@@ -21,7 +21,6 @@ double tickle_cmath_inlines()
 // they are not provided in the run-time library.
 // fsm
 namespace std {
-  double abs(double x) { return x >= 0 ? x : -x; }
   float atan2(float y, float x) { return float(std::atan2(double(y), double(x))); }
   float sqrt(float x) { return float(std::sqrt(double(x))); }
   float ceil(float x) { return float(std::ceil(double(x))); }
@@ -33,5 +32,9 @@ namespace std {
   float exp(float x) { return float(std::exp(double(x))); }
   float log(float x) { return float(std::log(double(x))); }
   float acos(float x) { return float(std::acos(double(x))); }
+
+  double abs(double x) { return x >= 0 ? x : -x; }
+  
+  long double sqrt(long double x) { return std::sqrt(double(x)); } // ouch!
 }
 #endif
