@@ -38,8 +38,8 @@ AC_STDCXX_LIB := -lstdc++
 endif
 pic := -fpic
 PIC := -fPIC
-wall := -Wall -Wstrict-prototypes -Wmissing-prototypes -Wpointer-arith
-wall += -Wwrite-strings -Wconversion -Wcast-qual -Wcast-align # -Woverloaded-virtual
+wall := -Wall -Wpointer-arith
+wall += -Wwrite-strings -Wconversion -Wcast-qual -Wcast-align # -Wstrict-prototypes -Wmissing-prototypes -Woverloaded-virtual
 #wall += -Winline -Wshadow -Wnested-externs # annoying warnings
 
 ccflags += -fno-math-errno
@@ -87,8 +87,8 @@ endif
 # fsm: it's bad because it doesn't warn about the line
 # IMSTANTIATE_VECTOR(int*);
 # , but silently treats it as a function declaration (it's a typo).
-#wall += -Wno-return-type 
-wall += -Wreturn-type 
+#wall += -Wno-return-type
+wall += -Wreturn-type
 
 # fsm. these are good if you think mixing 'int' and 'unsigned' is not so bad :
 #wall += -Wno-sign-compare -Wno-sign-promo
