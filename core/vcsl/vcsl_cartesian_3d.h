@@ -1,8 +1,9 @@
-#ifndef VCSL_CARTESIAN_3D_H
-#define VCSL_CARTESIAN_3D_H
+#ifndef vcsl_cartesian_3d_h
+#define vcsl_cartesian_3d_h
+
 //:
 // \file 
-// \brief Descibes vcsl_cartesian_3d - 3D Cartesian coordinate system
+// \brief 3D Cartesian coordinate system
 // \author François BERTEL
 // Modifications
 // \verbatim
@@ -59,4 +60,4 @@ protected:
   bool _right_handed;
 };
 
-#endif // #ifndef VCSL_CARTESIAN_3D_H
+#endif // vcsl_cartesian_3d_h

@@ -1,8 +1,9 @@
-#ifndef VCSL_CARTESIAN_H
-#define VCSL_CARTESIAN_H
+#ifndef vcsl_cartesian_h
+#define vcsl_cartesian_h
+
 //:
 // \file 
-// \brief Descibes vcsl_cartesian - Cartesian coordinate system
+// \brief Cartesian coordinate system
 // \author François BERTEL
 // Modifications
 // \verbatim
@@ -56,4 +57,4 @@ protected:
   bool _right_handed;
 };
 
-#endif // #ifndef VCSL_CARTESIAN_H
+#endif // vcsl_cartesian_h

@@ -1,8 +1,9 @@
 #ifndef vcsl_angle_unit_h
 #define vcsl_angle_unit_h
+
 //:
 // \file
-// \brief Descibes vcsl_angle_unit - Abstract unit associated to the angle dimension.
+// \brief Abstract unit associated to the angle dimension
 // \author François BERTEL
 // Modifications
 // \verbatim

@@ -3,7 +3,7 @@
 
 //:
 //  \file
-//  \brief Helper class used by FFTxD
+//  \brief Helper class used by vnl_fft_1d and vnl_fft_2d
 //
 // \verbatim
 //  Modifications
@@ -12,7 +12,7 @@
 
 template<class T>
 
-//: Helper class used by FFTxD:
+//: Helper class used by vnl_fft_1d and vnl_fft_2d
 //  given an integer n of the form
 //  N = (2**P)(3**Q)(5**R)
 //  split n into its primefactors (2,3,5)

@@ -1,8 +1,9 @@
-#ifndef VCSL_CARTESIAN_2D_H
-#define VCSL_CARTESIAN_2D_H
+#ifndef vcsl_cartesian_2d_h
+#define vcsl_cartesian_2d_h
+
 //:
 // \file 
-// \brief Descibes vcsl_cartesian_2d - 2D Cartesian coordinate system
+// \brief 2D Cartesian coordinate system
 // \author François BERTEL
 // Modifications
 // \verbatim
@@ -60,4 +61,4 @@ protected:
   bool _right_handed;
 };
 
-#endif // #ifndef VCSL_CARTESIAN_2D_H
+#endif // vcsl_cartesian_2d_h

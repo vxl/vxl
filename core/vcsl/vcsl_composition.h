@@ -3,7 +3,7 @@
 
 //:
 // \file
-// \brief Descibes vcsl_composition - Composition of transformations
+// \brief Composition of transformations
 // \author François BERTEL
 // Modifications
 // \verbatim

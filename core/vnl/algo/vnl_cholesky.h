@@ -5,7 +5,7 @@
 #endif
 //:
 //  \file
-//  \brief vnl_cholesky - Decomposition of symmetric matrix
+//  \brief Decomposition of symmetric matrix
 //  \author Andrew W. Fitzgibbon, Oxford RRG
 //  \date   08 Dec 96
 //
@@ -18,7 +18,7 @@
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_matrix.h>
 
-//: vnl_cholesky - Decomposition of symmetric matrix
+//: Decomposition of symmetric matrix
 //  A class to hold the Cholesky decomposition of a symmetric matrix and
 //  use that to solve linear systems, compute determinants and inverses.
 //  The cholesky decomposition decomposes symmetric A = L*L.transpose()

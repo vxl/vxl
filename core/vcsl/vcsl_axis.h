@@ -1,8 +1,9 @@
 #ifndef vcsl_axis_h
 #define vcsl_axis_h
+
 //:
 // \file
-// \brief Descibes vcsl_axis - Axis descriptor: a dimension, a unit, a label
+// \brief Axis descriptor: a dimension, a unit, a label
 // \author François BERTEL
 // Modifications
 // \verbatim

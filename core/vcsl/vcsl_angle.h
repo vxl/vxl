@@ -1,11 +1,9 @@
-#ifndef VCSL_ANGLE_H
-#define VCSL_ANGLE_H
-
-
+#ifndef vcsl_angle_h
+#define vcsl_angle_h
 
 //:
 // \file 
-// \brief Descibes vcsl_angle - Angle dimension.
+// \brief Angle dimension
 // \author François BERTEL
 // Modifications
 // \verbatim
@@ -52,4 +50,5 @@ protected:
   //: Reference to the unique vcsl_angle object
   static vcsl_angle_sptr instance_;
 };
-#endif // VCSL_ANGLE_H
+
+#endif // vcsl_angle_h

@@ -26,6 +26,12 @@
 #include <vnl/vnl_matrix.h>
 #include <vnl/vnl_linear_system.h>
 
+//: Linear least squares
+//  vnl_lsqr implements an algorithm for large, sparse linear systems and
+//  sparse, linear least squares. It is a wrapper for the LSQR algorithm
+//  of Paige and Saunders (ACM TOMS 583). The sparse system is encapsulated
+//  by a vnl_linear_system.
+
 class vnl_lsqr {
 public:
   vnl_lsqr(vnl_linear_system& ls) :

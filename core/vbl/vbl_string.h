@@ -1,11 +1,10 @@
 #ifndef vbl_string_h
 #define vbl_string_h
-
 // This is vxl/vbl/vbl_string.h
 
 //:
 // \file
-// \brief vbl_string - Utility functions for C strings and vcl_strings.
+// \brief Utility functions for C strings and vcl_strings
 
 #include <vcl_string.h>
 

@@ -5,7 +5,7 @@
 #endif
 //:
 //  \file
-//  \brief  vnl_conjugate_gradient - real function minimization
+//  \brief  real function minimization
 //  \author Geoffrey Cross, Oxford RRG
 //  \date   15 Feb 99
 //
@@ -24,9 +24,7 @@
 
 class vnl_cost_function;
 
-//: vnl_conjugate_gradient - real function minimization
-//  vnl_conjugate_gradient - real function minimization
-
+//: real function minimization
 
 class vnl_conjugate_gradient : public vnl_nonlinear_minimizer {
 public:
