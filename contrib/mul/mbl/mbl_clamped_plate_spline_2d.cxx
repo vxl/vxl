@@ -1,19 +1,20 @@
+// This is mul/mbl/mbl_clamped_plate_spline_2d.cxx
+#include "mbl_clamped_plate_spline_2d.h"
 //:
 // \file
 // \brief Construct thin plate spline to map 2D to 2D
 // \author Tim Cootes
 
-#include "mbl_clamped_plate_spline_2d.h"
-
-#include <vsl/vsl_indent.h>
-#include <mbl/mbl_matxvec.h>
 #include <vcl_cmath.h>
 #include <vcl_cassert.h>
+#include <vcl_cstdlib.h> // for vcl_abort()
+#include <vsl/vsl_indent.h>
+#include <vsl/vsl_vector_io.h>
+#include <vnl/algo/vnl_svd.h>
+#include <mbl/mbl_matxvec.h>
 #include <vnl/io/vnl_io_vector.h>
 #include <vnl/io/vnl_io_matrix.h>
 #include <vgl/io/vgl_io_point_2d.h>
-#include <vsl/vsl_vector_io.h>
-#include <vnl/algo/vnl_svd.h>
 
 //=======================================================================
 
@@ -108,16 +109,16 @@ static void build_L(vnl_matrix<double>& L,
 
 //: Set parameters from vectors
 void mbl_clamped_plate_spline_2d::set_params(const vnl_vector<double>& Wx,
-                  const vnl_vector<double>& Wy)
+                                             const vnl_vector<double>& Wy)
 {
   Wx_ = Wx;
   Wy_ = Wy;
 }
 
 void mbl_clamped_plate_spline_2d::set_up_rhs(vnl_vector<double>& Bx,
-                  vnl_vector<double>& By,
-                  const vcl_vector<vgl_point_2d<double> >& src_pts,
-                  const vcl_vector<vgl_point_2d<double> >& dest_pts)
+                                             vnl_vector<double>& By,
+                                             const vcl_vector<vgl_point_2d<double> >& src_pts,
+                                             const vcl_vector<vgl_point_2d<double> >& dest_pts)
 {
   int n =dest_pts.size();
 
@@ -136,7 +137,7 @@ void mbl_clamped_plate_spline_2d::set_up_rhs(vnl_vector<double>& Bx,
 }
 
 void mbl_clamped_plate_spline_2d::build(const vcl_vector<vgl_point_2d<double> >& source_pts,
-                   const vcl_vector<vgl_point_2d<double> >& dest_pts)
+                                        const vcl_vector<vgl_point_2d<double> >& dest_pts)
 {
   assert(all_in_unit_circle(source_pts));
   assert(all_in_unit_circle(dest_pts));
@@ -219,7 +220,7 @@ void mbl_clamped_plate_spline_2d::build(const vcl_vector<vgl_point_2d<double> >&
 }
 
 
-vgl_point_2d<double>  mbl_clamped_plate_spline_2d::operator()(double x, double y) const
+vgl_point_2d<double> mbl_clamped_plate_spline_2d::operator()(double x, double y) const
 {
   unsigned int n = src_pts_.size();
 
@@ -257,12 +258,10 @@ short mbl_clamped_plate_spline_2d::version_no() const
   // required if data is present in this class
 void mbl_clamped_plate_spline_2d::print_summary(vcl_ostream& os) const
 {
-  os<<vcl_endl;
-  os<<"fx: ";
+  os<<vcl_endl<<"fx: ";
   for (unsigned int i=0;i<Wx_.size();++i)
     os<<Wx_[i]<<" ";
-  os<<vcl_endl;
-  os<<"fy: ";
+  os<<vcl_endl<<"fy: ";
   for (unsigned int i=0;i<Wy_.size();++i)
     os<<Wy_[i]<<" ";
   os<<vcl_endl;
@@ -301,10 +300,9 @@ void mbl_clamped_plate_spline_2d::b_read(vsl_b_istream& bfs)
       vsl_b_read(bfs,L_inv_);
       break;
     default:
-      vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, mbl_clamped_plate_spline_2d &)\n";
-      vcl_cerr << "           Unknown version number "<< version << vcl_endl;
+      vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, mbl_clamped_plate_spline_2d &)\n"
+               << "           Unknown version number "<< version << vcl_endl;
       bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
-      return;
   }
 }
 
