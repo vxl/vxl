@@ -19,8 +19,6 @@
 //  LEG May 2000. ported to vxl
 // \endverbatim
 
-#include <vtol/vtol_vertex_2d_sptr.h>
-
 #include <vnl/vnl_double_2.h>
 #include <vsol/vsol_point_2d_sptr.h>
 #include <vtol/vtol_vertex.h>

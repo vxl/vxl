@@ -2,8 +2,6 @@
 
 #include <vcl_cassert.h>
 
-#include <vnl/vnl_least_squares_function.h>
-#include <vnl/algo/vnl_levenberg_marquardt.h>
 #include <vnl/algo/vnl_svd.h>
 #include <mvl/HMatrix1D.h>
 
@@ -28,7 +26,10 @@ HMatrix1DComputeDesign::compute_cool_homg(const vcl_vector<HomgPoint1D>&P,
   for (unsigned i=0;i<N;i++) {
     p=P[i].get_vector();
     q=Q[i].get_vector();
-    D(i,0)=p(0)*q(1); D(i,1)=p(1)*q(1); D(i,2)=-p(0)*q(0); D(i,3)=-p(1)*q(0);
+    D(i,0)=p(0)*q(1);
+    D(i,1)=p(1)*q(1);
+    D(i,2)=-p(0)*q(0);
+    D(i,3)=-p(1)*q(0);
   }
   vnl_svd<double> svd(D);
   M->set(svd.nullvector().data_block());

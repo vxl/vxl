@@ -1,18 +1,11 @@
-#include <vtol/vtol_vertex_2d.h>
-
 //:
 //  \file
 
-#include <vtol/vtol_zero_chain.h>
+#include "vtol_vertex_2d.h"
+#include <vsol/vsol_point_2d.h>
 #include <vtol/vtol_edge_2d.h>
 #include <vtol/vtol_edge.h>
-#include <vtol/vtol_face_2d.h>
-#include <vtol/vtol_macros.h>
-#include <vnl/vnl_math.h>
-#include <vtol/vtol_list_functions.h>
-
 #include <vcl_cassert.h>
-#include <vsol/vsol_point_2d.h>
 
 //***************************************************************************
 // Initialization
@@ -161,7 +154,8 @@ void vtol_vertex_2d::print(vcl_ostream &strm) const
 void vtol_vertex_2d::describe(vcl_ostream &strm,
                               int blanking) const
 {
-  for (int i=0; i<blanking; ++i) strm << ' ';
+  for (int i=0; i<blanking; ++i)
+    strm << ' ';
   print(strm);
   describe_inferiors(strm, blanking);
   describe_superiors(strm, blanking);

@@ -6,11 +6,9 @@
 #include "clsfy_rbf_parzen.h"
 
 #include <vcl_string.h>
-#include <vcl_queue.h>
 #include <vcl_algorithm.h>
 
 #include <vcl_cassert.h>
-#include <vsl/vsl_indent.h>
 #include <vsl/vsl_binary_io.h>
 #include <vsl/vsl_vector_io.h>
 #include <vnl/io/vnl_io_vector.h>

@@ -1,5 +1,9 @@
-// This is ./oxl/vgui/vgui_deck_tableau.h
-
+// This is oxl/vgui/vgui_deck_tableau.h
+#ifndef vgui_deck_tableau_h_
+#define vgui_deck_tableau_h_
+#ifdef __GNUC__
+#pragma interface
+#endif
 //:
 // \file
 // \author Philip C. Pritchett, Robotics Research Group, University of Oxford
@@ -12,16 +16,11 @@
 //    26-APR-2002 K.Y.McGaul - Converted to and added doxygen style comments.
 // \endverbatim
 
-#ifndef vgui_deck_tableau_h_
-#define vgui_deck_tableau_h_
-#ifdef __GNUC__
-#pragma interface
-#endif
-
 #include "vgui_deck_tableau_sptr.h"
 #include <vgui/vgui_observable.h>
-#include <vgui/vgui_drag_mixin.h>
+#include <vgui/vgui_tableau.h>
 #include <vgui/vgui_slot.h>
+#include <vcl_string.h>
 
 //: Tableau which holds many child tableau, only one of which receives events.
 //

@@ -1,9 +1,6 @@
 #ifndef vbl_test_smart_ptr_h_
 #define vbl_test_smart_ptr_h_
 
-
-#include <vcl_iostream.h>
-#include <vcl_list.h>
 #include <vbl/vbl_ref_count.h>
 #include <vbl/vbl_smart_ptr.h>
 

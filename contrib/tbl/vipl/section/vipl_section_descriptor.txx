@@ -4,8 +4,7 @@
 //:
 //  \file
 
-#include <vipl/section/vipl_section_descriptor.h>
-#include <vipl/section/vipl_section_iterator.h>
+#include "vipl_section_descriptor.h"
 #include <vipl/section/vipl_section_container.h>
 #include <vcl_cstdio.h> // for some of the error messages
 #include <vcl_iostream.h>

@@ -5,7 +5,6 @@
 #include <vnl/vnl_test.h>
 #include <mbl/mbl_thin_plate_spline_2d.h>
 #include <mbl/mbl_mz_random.h>
-#include <vsl/vsl_vector_io.h>
 #include <vgl/vgl_distance.h>
 
 void test_tps_at_fixed_points(int n_points)
@@ -35,9 +34,9 @@ void test_tps_at_fixed_points(int n_points)
   }
 
   mbl_thin_plate_spline_2d tps2 = tps;
-  TEST("Comparison operator",tps==tps2,true);
+  TEST("Comparison operator",tps,tps2);
 
-  vcl_cout<<"Testing set_source_pts(),build() pair"<<vcl_endl;
+  vcl_cout<<"Testing set_source_pts(),build() pair\n";
   mbl_thin_plate_spline_2d tps3;
   tps3.set_source_pts(pts1);
   tps3.build(pts2);
@@ -50,9 +49,9 @@ void test_tps_at_fixed_points(int n_points)
 
 void test_thin_plate_spline_2d()
 {
-  vcl_cout << "******************************" << vcl_endl;
-  vcl_cout << " Testing mbl_thin_plate_spline_2d " << vcl_endl;
-  vcl_cout << "*****************************" << vcl_endl;
+  vcl_cout << "**********************************\n";
+  vcl_cout << " Testing mbl_thin_plate_spline_2d\n";
+  vcl_cout << "**********************************\n";
 
   for (int i=1;i<=5;++i)
     test_tps_at_fixed_points(i);

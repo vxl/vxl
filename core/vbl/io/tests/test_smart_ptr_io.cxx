@@ -3,15 +3,15 @@
 #include <vcl_utility.h>
 
 #include <vbl/vbl_test.h>
-#include <vbl/io/tests/vbl_io_test_classes.h>
-#include <vbl/io/tests/vbl_io_test_classes.cxx>
+#include "vbl_io_test_classes.h"
+#include "vbl_io_test_classes.cxx"
 
 
 void test_smart_ptr_io()
 {
-  vcl_cout << "***********************" << vcl_endl;
-  vcl_cout << "Testing smart_ptr<impl> io" << vcl_endl;
-  vcl_cout << "***********************" << vcl_endl;
+  vcl_cout << "**************************\n";
+  vcl_cout << "Testing smart_ptr<impl> io\n";
+  vcl_cout << "**************************\n";
 
   const int n = 50;
 
@@ -19,7 +19,7 @@ void test_smart_ptr_io()
   vbl_smart_ptr<impl> sp2_out(sp1_out);
   vbl_smart_ptr<impl > sp1_in, sp2_in;
 
-  TEST ("sp1_out->get_references() == 2", sp1_out->get_references() ==2, true);
+  TEST ("sp1_out->get_references() == 2", sp1_out->get_references() ,2);
 
   vsl_b_ofstream bfs_out("vbl_smart_ptr_test_io.bvl.tmp");
   TEST ("Created vbl_smart_ptr_test_io.bvl.tmp for writing", (!bfs_out), false);
@@ -34,8 +34,8 @@ void test_smart_ptr_io()
   TEST ("Finished reading file successfully", (!bfs_in), false);
   bfs_in.close();
 
-  TEST ("sp1_in == sp2_in", sp1_in == sp2_in, true);
-  TEST ("sp1_in->get_references() == 2", sp1_in->get_references() ==2, true);
+  TEST ("sp1_in == sp2_in", sp1_in, sp2_in);
+  TEST ("sp1_in->get_references() == 2", sp1_in->get_references(), 2);
   vsl_print_summary(vcl_cout, sp1_out); vcl_cout<<vcl_endl;
 }
 

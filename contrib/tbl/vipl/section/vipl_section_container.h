@@ -6,7 +6,7 @@
 
 #include <vcl_vector.h>
 #include <vcl_cstddef.h>
-#include <vipl/filter/vipl_filter_abs.h>
+
 template <  class DataType > class vipl_section_descriptor; //template forward reference
 template <  class DataType > class vipl_section_iterator; //template forward reference
 
@@ -77,12 +77,11 @@ class vipl_section_container {
     // not implemented
   virtual void swap( const vipl_section_container< DataType >& b) const ;
 
-    // Modifies the passed in descriptor to point to the next section
-    // . This is used by the default iterators for the operator++
-    // method. Returns TRUE if successfully incremented the
-    // variable. Used so we don't have to copy descriptors a zillion
-    // times. Unfortunately STL usage implies we do copy more often
-    // then we'd like.
+    // Modifies the passed in descriptor to point to the next section.
+    // This is used by the default iterators for the operator++ method.
+    // Returns TRUE if successfully incremented the variable.
+    // Used so we don't have to copy descriptors a zillion times.
+    // Unfortunately STL usage implies we do copy more often than we'd like.
  protected:
   virtual bool next_section( vipl_section_descriptor< DataType >& in_out) const ;
 

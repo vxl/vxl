@@ -19,13 +19,9 @@
 // \endverbatim
 //*****************************************************************************
 
-class vsol_line_2d;
-
 //*****************************************************************************
 // External declarations for values
 //*****************************************************************************
-#include <vsol/vsol_line_2d_sptr.h>
-
 #include <vsol/vsol_curve_2d.h>
 #include <vsol/vsol_point_2d_sptr.h>
 

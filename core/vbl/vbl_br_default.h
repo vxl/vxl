@@ -1,8 +1,6 @@
+// This is vxl/vbl/vbl_br_default.h
 #ifndef vbl_br_default_h
 #define vbl_br_default_h
-
-// This is vxl/vbl/vbl_br_default.h
-
 //:
 // \file
 // \author Rupert Curwen, GE Corporate Research and Development
@@ -27,7 +25,6 @@
 #include <vcl_list.h>
 
 #include <vbl/vbl_br_impl.h>
-#include <vbl/vbl_basic_relation.h>
 #include <vbl/vbl_basic_relation_where.h>
 #include <vbl/vbl_basic_optional.h>
 #include <vbl/vbl_hash_map.h>

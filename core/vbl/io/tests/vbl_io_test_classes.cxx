@@ -1,9 +1,9 @@
 #ifndef vbl_io_test_classes_cxx_
 #define vbl_io_test_classes_cxx_
 
+#include "vbl_io_test_classes.h"
 #include <vbl/vbl_smart_ptr.h>
 #include <vbl/io/vbl_io_smart_ptr.h>
-#include <vbl/io/tests/vbl_io_test_classes.h>
 
 //:
 // \file
@@ -46,7 +46,7 @@ void impl::Print (vcl_ostream &str) {
 
 void impl::checkcount () {
   if (reftotal == 0)
-    vcl_cout << "impl : PASSED" << vcl_endl;
+    vcl_cout << "impl : PASSED\n";
   else
     vcl_cout << "impl : FAILED : count = " << reftotal << vcl_endl;
 }
@@ -74,8 +74,8 @@ void vsl_b_read(vsl_b_istream& is, impl &p)
     }
     break;
   default:
-    vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, impl&) \n";
-    vcl_cerr << "           Unknown version number "<< ver << "\n";
+    vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, impl&)\n";
+    vcl_cerr << "           Unknown version number "<< ver << '\n';
     is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
     return;
   }

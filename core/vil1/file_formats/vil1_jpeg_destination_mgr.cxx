@@ -7,7 +7,6 @@
 #include "vil_jpeg_destination_mgr.h"
 #include <vcl_cassert.h>
 #include <vcl_cstddef.h> // for vcl_size_t
-#include <vcl_iostream.h>
 #include <vil/vil_stream.h>
 
 #define STATIC /*static*/

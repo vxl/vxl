@@ -3,9 +3,7 @@
 #include <vcl_utility.h>
 
 #include <vnl/vnl_test.h>
-#include <vnl/vnl_math.h>
 #include <vnl/vnl_vector.h>
-#include <vnl/vnl_matrix.h>
 #include <vsl/vsl_binary_io.h>
 #include <vnl/vnl_diag_matrix.h>
 #include <vnl/io/vnl_io_diag_matrix.h>
@@ -13,9 +11,9 @@
 
 void test_diag_matrix_double_io()
 {
-  vcl_cout << "*************************" << vcl_endl;
-  vcl_cout << "test_diag_matrix_io"       << vcl_endl;
-  vcl_cout << "*************************" << vcl_endl;
+  vcl_cout << "*******************\n";
+  vcl_cout << "test_diag_matrix_io\n";
+  vcl_cout << "*******************\n";
   //// test constructors, accessors
   const int n = 50;
   vnl_vector<double> v_out(n), v_in(n);

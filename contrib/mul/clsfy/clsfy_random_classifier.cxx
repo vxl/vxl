@@ -10,17 +10,15 @@
 // \author iscott
 // \date   Tue Oct  9 10:21:59 2001
 
-#include <clsfy/clsfy_random_classifier.h>
+#include "clsfy_random_classifier.h"
 
 #include <vcl_iostream.h>
 #include <vcl_string.h>
 #include <vcl_cassert.h>
-#include <vsl/vsl_indent.h>
 #include <vsl/vsl_binary_loader.h>
 #include <clsfy/clsfy_classifier_base.h>
 #include <vsl/vsl_vector_io.h>
 #include <vnl/vnl_math.h>
-
 
 //=======================================================================
 
@@ -182,7 +180,7 @@ unsigned clsfy_random_classifier::n_classes() const
 // output(i) i<nClasses, contains the probability that the input is in class i
 void clsfy_random_classifier::class_probabilities(vcl_vector<double> &outputs, const vnl_vector<double> &input) const
 {
-  if(last_inputs_ != input)
+  if (last_inputs_ != input)
   {
     last_inputs_ = input;
     unsigned i=0;

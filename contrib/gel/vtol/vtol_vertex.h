@@ -20,10 +20,7 @@
 //  LEG May 2000. ported to vxl
 // \endverbatim
 
-#include <vtol/vtol_vertex_sptr.h>
-
 #include <vtol/vtol_topology_object.h>
-#include <vnl/vnl_double_2.h>
 
 class vtol_vertex_2d;
 class vtol_edge;

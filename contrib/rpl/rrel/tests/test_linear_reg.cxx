@@ -1,10 +1,8 @@
-
 #include <vcl_cmath.h>
 #include <vcl_iostream.h>
 
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_matrix.h>
-#include <vnl/vnl_math.h>
 #include <vnl/algo/vnl_svd.h>
 
 #include <testlib/testlib_test.h>
@@ -122,7 +120,8 @@ MAIN( test_linear_reg )
   testlib_test_begin( "residuals" );
   lr3->compute_residuals( par, residuals );
   bool ok = true;
-  for ( unsigned int i=0; i<residuals.size() && ok; ++ i )  ok = close( residuals[i], error[i] );
+  for ( unsigned int i=0; i<residuals.size() && ok; ++ i )
+    ok = close( residuals[i], error[i] );
   testlib_test_perform( ok );
 
   //
@@ -146,7 +145,7 @@ MAIN( test_linear_reg )
   double err = vcl_sqrt(dot_product( diff * svd_cof.inverse(), diff )); // standardized error
   //  vcl_cout << "estimated params: " << par
   //           << ";  true params: " << true_params << vcl_endl
-  //           << "cofactor matrix: \n" << cofact
+  //           << "cofactor matrix:\n" << cofact
   //           << " error : " << err << vcl_endl;
   testlib_test_perform( ok && err <2.5 );
 

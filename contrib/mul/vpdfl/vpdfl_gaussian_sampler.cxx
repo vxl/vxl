@@ -8,10 +8,10 @@
 // \date 12-Apr-2001
 // \brief Sampler class for Multi-Variate Gaussian classes.
 
+#include "vpdfl_gaussian_sampler.h"
+
 #include <vcl_cmath.h>
 #include <vpdfl/vpdfl_gaussian.h>
-#include <vpdfl/vpdfl_gaussian_sampler.h>
-#include <vsl/vsl_indent.h>
 #include <mbl/mbl_matxvec.h>
 
 //=======================================================================

@@ -15,14 +15,10 @@
 // \endverbatim
 //*****************************************************************************
 
-class vsol_group_2d;
-
 //*****************************************************************************
 // External declarations for values
 //*****************************************************************************
-#include <vsol/vsol_group_2d_sptr.h>
 #include <vsol/vsol_spatial_object_2d.h>
-
 #include <vcl_list.h>
 
 class vsol_group_2d

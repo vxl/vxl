@@ -1,12 +1,10 @@
-// This is ./oxl/xcv/xcv_multiview.cxx
+// This is oxl/xcv/xcv_multiview.cxx
 #ifdef __GNUC__
 #pragma implementation
 #endif
-
 //:
-//  \file
+// \file
 // \author K.Y.McGaul
-//
 // See xcv_multiview.h for a description of this file.
 //
 // \verbatim
@@ -29,16 +27,16 @@
 #include <mvl/HomgInterestPointSet.h>
 #include <mvl/TripleMatchSetCorner.h>
 #include <mvl/SimilarityMetric.h>
+#include <mvl/TriTensor.h>
 
 #include <vgui/vgui.h>
 #include <vgui/vgui_find.h>
-#include <vgui/vgui_menu.h>
 #include <vgui/vgui_dialog.h>
 #include <vgui/vgui_easy2D.h>
 #include <vgui/vgui_rubberbander.h>
 #include <vgui/vgui_slot.h>
+#include <vgui/vgui_soview.h>
 #include <vgui/vgui_soview2D.h>
-#include <vgui/vgui_macro.h>
 
 vcl_vector<xcv_twoview_manager*> xcv_multiview::twoview_mgrs;
 vcl_vector<vgui_rubberbander_sptr> xcv_multiview::twoview_rubber0;
@@ -47,7 +45,6 @@ vcl_vector<xcv_threeview_manager*> xcv_multiview::threeview_mgrs;
 vcl_vector<vgui_rubberbander_sptr> xcv_multiview::threeview_rubber0;
 vcl_vector<vgui_rubberbander_sptr> xcv_multiview::threeview_rubber1;
 vcl_vector<vgui_rubberbander_sptr> xcv_multiview::threeview_rubber2;
-static bool debug = true;
 
 extern vcl_string* get_loadfile();
 extern vcl_string* get_savefile();
@@ -77,9 +74,8 @@ xcv_twoview_manager* xcv_multiview::get_twoview_manager(vcl_vector<int>& col_pos
     if (rubbers[0] == twoview_rubber1[i] && rubbers[1] == twoview_rubber0[i])
     {
       // Put the vectors of column and row positions into the original order:
-      int temp_col = col_pos[0], temp_row = row_pos[0];
-      col_pos[0] = col_pos[1]; row_pos[0] = row_pos[1];
-      col_pos[1] = temp_col; row_pos[1] = temp_row;
+      int temp_col = col_pos[0]; col_pos[0] = col_pos[1]; col_pos[1] = temp_col;
+      int temp_row = row_pos[0]; row_pos[0] = row_pos[1]; row_pos[1] = temp_row;
       return twoview_mgrs[i];
     }
   }
@@ -88,7 +84,8 @@ xcv_twoview_manager* xcv_multiview::get_twoview_manager(vcl_vector<int>& col_pos
   // collect events.  Create a twoview_manager to pass events between these two
   // and add it to the list of managers:
   xcv_twoview_manager* mgr = new xcv_twoview_manager();
-  twoview_rubber0.push_back(rubbers[0]); twoview_rubber1.push_back(rubbers[1]);
+  twoview_rubber0.push_back(rubbers[0]);
+  twoview_rubber1.push_back(rubbers[1]);
   twoview_mgrs.push_back(mgr);
 
   for (unsigned j=0; j<2; j++)
@@ -235,8 +232,10 @@ void xcv_multiview::load_f_matrix()
   vcl_vector<int> col_pos, row_pos;
   if (!get_twoviews(&col_pos, &row_pos))
     return;
-  if (debug) vcl_cerr << "Selected positions = (" << col_pos[0] << ", "
-    << row_pos[0] << "), (" << col_pos[1] << ", " << row_pos[1] << ")." << vcl_endl;
+#ifdef DEBUG
+  vcl_cerr << "Selected positions = (" << col_pos[0] << ", "
+           << row_pos[0] << "), (" << col_pos[1] << ", " << row_pos[1] << ").\n";
+#endif
 
   vgui_dialog f_dialog("Load FMatrix");
   vcl_string* f_matrix_filename = get_loadfile();
@@ -315,7 +314,7 @@ void xcv_multiview::save_f_matrix()
   FMatrix* fm = mgr->get_f_matrix();
   if (fm == NULL)
   {
-    vcl_cerr << "No FMatrix exists to save" << vcl_endl;
+    vcl_cerr << "No FMatrix exists to save\n";
     return;
   }
   vcl_ofstream output_filestream(f_matrix_filename->c_str());
@@ -343,7 +342,7 @@ void xcv_multiview::save_h_matrix2d()
   HMatrix2D* hm = mgr->get_h_matrix();
   if (hm == NULL)
   {
-    vcl_cerr << "No HMatrix2D exists to save" << vcl_endl;
+    vcl_cerr << "No HMatrix2D exists to save\n";
     return;
   }
   vcl_ofstream output_filestream(h_matrix_filename->c_str());
@@ -370,7 +369,7 @@ void xcv_multiview::save_corner_matches()
   PairMatchSetCorner* corner_matches = mgr->get_corner_matches();
   if (corner_matches == NULL)
   {
-    vcl_cerr << "No corner matches between these two views exist to save" << vcl_endl;
+    vcl_cerr << "No corner matches between these two views exist to save\n";
     return;
   }
   vcl_ofstream output_filestream(cm_filename->c_str());
@@ -416,7 +415,7 @@ void xcv_multiview::display_corner_matches()
   //PairMatchSetCorner* corner_matches = mgr->get_corner_matches();
   //if (corner_matches == NULL)
   //{
-  //  vcl_cerr << "No corner matches exist between these two views." << vcl_endl;
+  //  vcl_cerr << "No corner matches exist between these two views.\n";
   //  return;
   //}
 
@@ -437,7 +436,7 @@ void xcv_multiview::display_corner_tracks()
   PairMatchSetCorner* corner_matches = mgr->get_corner_matches();
   if (corner_matches == NULL)
   {
-    vcl_cerr << "No corner matches exist between these two views." << vcl_endl;
+    vcl_cerr << "No corner matches exist between these two views.\n";
     return;
   }
 
@@ -535,7 +534,7 @@ void xcv_multiview::save_tri_tensor()
   TriTensor* tt = mgr->get_tri_tensor();
   if (tt == NULL)
   {
-    vcl_cerr << "No TriTensor exists to save" << vcl_endl;
+    vcl_cerr << "No TriTensor exists to save\n";
     return;
   }
   vcl_ofstream output_filestream(tri_tensor_filename->c_str());

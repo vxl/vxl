@@ -4,16 +4,14 @@
 // \brief test pdf1d_gaussian_kernel_pdf, building, sampling, saving etc.
 
 
-#include <pdf1d/pdf1d_gaussian_kernel_pdf.h>
-#include <pdf1d/pdf1d_gaussian_kernel_pdf_builder.h>
-#include <pdf1d/pdf1d_gaussian_kernel_pdf_sampler.h>
 #include <vcl_iostream.h>
-#include <vcl_string.h>
 #include <vcl_cmath.h> // for vcl_fabs()
 #include <vsl/vsl_binary_loader.h>
 #include <vnl/vnl_test.h>
-#include <vnl/vnl_math.h>
 #include <mbl/mbl_data_array_wrapper.h>
+#include <pdf1d/pdf1d_gaussian_kernel_pdf.h>
+#include <pdf1d/pdf1d_gaussian_kernel_pdf_builder.h>
+#include <pdf1d/pdf1d_gaussian_kernel_pdf_sampler.h>
 #include <pdf1d/pdf1d_gaussian.h>
 #include <pdf1d/pdf1d_gaussian_builder.h>
 #include <pdf1d/pdf1d_gaussian_sampler.h>
@@ -30,9 +28,9 @@ class pdf1d_test_gaussian_kernel_pdf_test_sample_inverse_cdf : public pdf1d_gaus
 //: Generate lots of samples using pdf, build new pdf with builder and compare the two
 void test_gaussian_kernel_pdf()
 {
-  vcl_cout << "\n\n***********************************" << vcl_endl;
-  vcl_cout <<     " Testing pdf1d_gaussian_kernel_pdf " << vcl_endl;
-  vcl_cout <<     "***********************************" << vcl_endl;
+  vcl_cout << "\n\n***********************************\n";
+  vcl_cout <<     " Testing pdf1d_gaussian_kernel_pdf\n";
+  vcl_cout <<     "***********************************\n";
 
   vsl_add_to_binary_loader(pdf1d_gaussian_kernel_pdf());
   vsl_add_to_binary_loader(pdf1d_gaussian_kernel_pdf_builder());
@@ -180,7 +178,7 @@ void test_gaussian_kernel_pdf()
     else
       fail ++;
   }
-  vcl_cout << "In a sample of 1000 vectors " << pass << " passed and " << fail <<  " failed." << vcl_endl;
+  vcl_cout << "In a sample of 1000 vectors " << pass << " passed and " << fail <<  " failed.\n";
   TEST("880 < pass < 920", pass > 880 && pass < 920, true);
 
   pass=0; fail=0;
@@ -194,7 +192,7 @@ void test_gaussian_kernel_pdf()
     else
       fail ++;
   }
-  vcl_cout << "In a sample of 1000 vectors " << pass << " passed and " << fail <<  " failed." << vcl_endl;
+  vcl_cout << "In a sample of 1000 vectors " << pass << " passed and " << fail <<  " failed.\n";
   TEST("70 < pass < 130", pass > 70 && pass < 130, true);
 
   delete p_sampler2;

@@ -1,12 +1,11 @@
-//-*- c++ -*-------------------------------------------------------------------
+// This is oxl/vgui/vrml/vgui_vrml_draw_visitor.cxx
 #ifdef __GNUC__
 #pragma implementation
 #endif
-//
-// .NAME vgui_vrml_draw_visitor
-// Author: Andrew W. Fitzgibbon, Oxford RRG
-// Created: 09 Jan 99
-//
+//:
+// \file
+// \author Andrew W. Fitzgibbon, Oxford RRG
+// \date   09 Jan 99
 //-----------------------------------------------------------------------------
 
 #include <vcl_functional.h> //vxl_filter
@@ -25,8 +24,6 @@
 #include <vnl/vnl_math.h>
 
 #include <vul/vul_printf.h>
-#include <vul/vul_arg.h>
-#include <vul/vul_file.h>
 
 #include <Qv/QvString.h>
 #include <Qv/QvInput.h>
@@ -294,7 +291,7 @@ bool vgui_vrml_draw_visitor::Visit(QvPointSet* ps) {
 
   int n = (ps->numPoints.value == -1) ? ps->num_ : ps->numPoints.value;
   n += ps->startIndex.value;
-  for(int i = ps->startIndex.value; i < n; ++i)
+  for (int i = ps->startIndex.value; i < n; ++i)
     GlVertex(ps->points_[i]);
   glEnd();
   glPopAttrib();
@@ -311,7 +308,7 @@ bool vgui_vrml_draw_visitor::Visit(QvIndexedLineSet* node) {
   const int* vertindices = node->vertindices_;     // vertex index list
 
   glBegin(GL_LINES);
-  for(int j = 0; j < numvertinds-1; ++j) {
+  for (int j = 0; j < numvertinds-1; ++j) {
     int i1 = vertindices[j];
     int i2 = vertindices[j+1];
 
@@ -348,7 +345,7 @@ bool vgui_vrml_draw_visitor::Visit(QvIndexedFaceSet* node)
   vcl_vector<point3D const*> polyverts;
   vcl_vector<point2D const*> polytexcoords;
   //int i = 0;
-  for(int i = 0; i < numvertinds; ++i) {
+  for (int i = 0; i < numvertinds; ++i) {
     // Collect verts
     polyverts.clear();
     polytexcoords.clear();
@@ -382,7 +379,7 @@ bool vgui_vrml_draw_visitor::Visit(QvIndexedFaceSet* node)
       glNormal3f(normal[0], normal[1], normal[2]);
     }
 
-    for(unsigned v = 0; v < n; ++v) {
+    for (unsigned v = 0; v < n; ++v) {
       if (gl_mode == textured && v < polytexcoords.size())
         glTexCoord2f(polytexcoords[v]->x, polytexcoords[v]->y);
 
@@ -394,7 +391,7 @@ bool vgui_vrml_draw_visitor::Visit(QvIndexedFaceSet* node)
     if (twosided && gl_mode != wireframe) {
       glBegin(GL_POLYGON);
       glNormal3f(-normal[0], -normal[1], -normal[2]);
-      for(unsigned v = n; v > 0;) {
+      for (unsigned v = n; v > 0;) {
         --v;
         if (v < polytexcoords.size())
           glTexCoord2f(polytexcoords[v]->x, polytexcoords[v]->y);

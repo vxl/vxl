@@ -1,17 +1,13 @@
-#ifndef _FMatrixSkew_h
-#define _FMatrixSkew_h
+#ifndef FMatrixSkew_h_
+#define FMatrixSkew_h_
 #ifdef __GNUC__
 #pragma interface
 #endif
 //--------------------------------------------------------------
+//:
+// \file
+// \brief Skew fundamental matrix
 //
-// .NAME FMatrixSkew - Skew fundamental matrix
-// .LIBRARY MViewBasics
-// .HEADER MultiView package
-// .INCLUDE mvl/FMatrixSkew.h
-// .FILE FMatrixSkew.cxx
-//
-// .SECTION Description:
 // A class to hold a Fundamental Matrix of the skew form
 // which occurs with a pure translational motion.
 // Some common operations e.g. generate epipolar lines,
@@ -21,14 +17,10 @@
 #include <vnl/vnl_matrix.h>
 #include <mvl/HomgLine2D.h>
 #include <mvl/HomgPoint2D.h>
-#include <mvl/HomgPoint2D.h>
 #include <mvl/FMatrix.h>
 
-class PMatrix;
-
-class FMatrixSkew : public FMatrix {
-
-  // PUBLIC INTERFACE-------------------------------------------------------
+class FMatrixSkew : public FMatrix
+{
 public:
 
   // Constructors/Initializers/Destructors----------------------------------
@@ -48,7 +40,6 @@ public:
   void find_nearest_perfect_match (const HomgPoint2D& in1, const HomgPoint2D& in2,
                                    HomgPoint2D *out1, HomgPoint2D *out2) const;
 
-
   // Data Access------------------------------------------------------------
 
   bool set (const double* f_matrix );
@@ -57,4 +48,4 @@ public:
   inline void set_rank2_flag (bool rank2_flag);
 };
 
-#endif // _FMatrixSkew_h
+#endif // FMatrixSkew_h_

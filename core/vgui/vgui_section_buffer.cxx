@@ -34,7 +34,6 @@
 #include <vgui/vgui_cache_wizard.h>
 #include <vgui/vgui_section_render.h>
 #include <vgui/internals/vgui_accelerate.h>
-#include <vgui/vgui_texture_hacks.h>
 
 static bool debug = false;
 
@@ -94,7 +93,9 @@ vgui_section_buffer::vgui_section_buffer(int x_, int y_,
   switch (type) {
 #define fsm_alloc_buffer(GLtype) \
 { GLtype *ptr = new GLtype[components * allocw * alloch]; the_pixels = ptr; \
-  for (unsigned int i=0; i<h; ++i) the_rasters[i] = ptr + i*allocw*components; /* alignment ? */ }
+  for (unsigned int i=0; i<h; ++i) \
+    the_rasters[i] = ptr + i*allocw*components; /* alignment ? */ \
+}
 
   case GL_UNSIGNED_BYTE:
   case GL_BYTE:
@@ -232,7 +233,7 @@ if (false) do { } while (false)
 #define fsm_macro_magic(fmt, typ, sto) \
 else if (format==(fmt) && type==(typ)) do { \
   if (debug) \
-    vcl_cerr << __FILE__ ": converting " << what << " image to " #fmt "," #typ " format" << vcl_endl; \
+    vcl_cerr << __FILE__ ": converting " << what << " image to " #fmt "," #typ " format\n"; \
   if (!the_pixels) \
     the_pixels = new sto[allocw*alloch]; \
   if (w != allocw) /* have to convert each raster separately in this case */ \
@@ -370,7 +371,7 @@ void vgui_section_buffer::apply(vil_image const& image_in) {
     fsm_macro_end;
   }
 
-	// IEEE double
+  // IEEE double
   else if (pixel_format == VIL_DOUBLE) {
     fsm_macro_begin(double, "64 bit double");
     fsm_macro_magic(GL_RGB,      GL_UNSIGNED_BYTE,        vgui_pixel_rgb888);
@@ -394,7 +395,7 @@ void vgui_section_buffer::apply(vil_image const& image_in) {
   // dunno.
   else
     {
-      vcl_cerr << "pixel_format == " << vil_print(pixel_format) << " which is unknown..." << vcl_endl;
+      vcl_cerr << "pixel_format == " << vil_print(pixel_format) << " which is unknown...\n";
       assert(false);
     }
 
@@ -425,7 +426,7 @@ bool vgui_section_buffer::draw_as_rectangle(float x0, float y0,  float x1, float
 bool vgui_section_buffer::draw_as_image(float x0, float y0,  float x1, float y1) const
 {
   if (!section_ok) {
-    vgui_macro_warning << "bad section in draw_as_image()" << vcl_endl;
+    vgui_macro_warning << "bad section in draw_as_image()\n";
     return draw_as_rectangle(x0, y0, x1, y1);
   }
 
@@ -466,7 +467,7 @@ bool vgui_section_buffer::texture_begin(bool force_load) const
 
   if (force_load || ::last != this) {
     // time to reload the textures
-    vcl_cerr << "loading textures" << vcl_endl;
+    vcl_cerr << "loading textures\n";
 
     // byte alignment :
     glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
@@ -474,9 +475,9 @@ bool vgui_section_buffer::texture_begin(bool force_load) const
 
     // the loaded texture image must be a power of two.
     if (allocw != next_power_of_two(allocw))
-      vgui_macro_warning << "allocw, " << allocw << ", is not a power of two" << vcl_endl;
+      vgui_macro_warning << "allocw, " << allocw << ", is not a power of two\n";
     if (alloch != next_power_of_two(alloch))
-      vgui_macro_warning << "alloch, " << alloch << ", is not a power of two" << vcl_endl;
+      vgui_macro_warning << "alloch, " << alloch << ", is not a power of two\n";
 
     // specify the texture image.
     glTexImage2D(GL_TEXTURE_2D, // target
@@ -537,7 +538,7 @@ bool vgui_section_buffer::texture_end() const
 bool vgui_section_buffer::draw_as_texture(float x0, float y0,  float x1, float y1) const
 {
   if (!section_ok) {
-    vgui_macro_warning << "bad section in draw_as_texture()" << vcl_endl;
+    vgui_macro_warning << "bad section in draw_as_texture()\n";
     return draw_as_rectangle(x0, y0, x1, y1);
   }
 
@@ -586,7 +587,7 @@ bool vgui_section_buffer::load_image_as_textures()
   glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_DECAL);
   vgui_macro_report_errors;
 
-  vcl_cerr << "loading image as textures" << vcl_endl;
+  vcl_cerr << "loading image as textures\n";
 
   // byte alignment :
   glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
@@ -594,9 +595,9 @@ bool vgui_section_buffer::load_image_as_textures()
 
   // the loaded texture image must be a power of two.
   if (allocw != next_power_of_two(allocw))
-    vgui_macro_warning << "allocw, " << allocw << ", is not a power of two" << vcl_endl;
+    vgui_macro_warning << "allocw, " << allocw << ", is not a power of two\n";
   if (alloch != next_power_of_two(alloch))
-    vgui_macro_warning << "alloch, " << alloch << ", is not a power of two" << vcl_endl;
+    vgui_macro_warning << "alloch, " << alloch << ", is not a power of two\n";
 
   // Inquire about maximum texture size
   glGetIntegerv(GL_MAX_TEXTURE_SIZE, &texture_size);
@@ -636,7 +637,7 @@ bool vgui_section_buffer::load_image_as_textures()
     op_image = orig_image;
     for (int j = 0;j<countw;j++) {
       if (debug)
-        vcl_cerr << "Copying quadrant (" << i << "," << j << ")" << vcl_endl;
+        vcl_cerr << "Copying quadrant (" << i << "," << j << ")\n";
 
       int restx; // number of cols to include in this tile.
       if ((j+1)*texture_size>(int)w)

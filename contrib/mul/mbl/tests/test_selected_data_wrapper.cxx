@@ -4,24 +4,17 @@
 // \brief test vpdfl_pc_gaussian, building, sampling, saving etc.
 
 #include <vcl_iostream.h>
-#include <vcl_string.h>
 #include <mbl/mbl_data_array_wrapper.h>
 #include <mbl/mbl_selected_data_wrapper.h>
-#include <mbl/mbl_data_collector.h>
-#include <vsl/vsl_binary_loader.h>
-#include <vnl/io/vnl_io_vector.h>
 #include <vnl/vnl_test.h>
-#include <vul/vul_printf.h>
-
 
 //=======================================================================
-
 
 //: The main control program
 void test_selected_data_wrapper()
 {
   vcl_cout <<"\n\n***********************************\n"
-           <<    " Testing mbl_selected_data_wrapper \n"
+           <<    " Testing mbl_selected_data_wrapper\n"
            <<    "***********************************\n";
 
 
@@ -36,7 +29,7 @@ void test_selected_data_wrapper()
   vcl_vector<unsigned> selector(2*n, 3);
   selector[0] = n-1;
   mbl_selected_data_wrapper<double> selection(original, selector);
-  
+
   selection.reset();
 
   TEST ("Selected wrapper correct size", selection.size(), n*2);
@@ -53,9 +46,6 @@ void test_selected_data_wrapper()
 
   selection.set_index(0);
   TEST ("Set index correct", selection.current(), n-1);
-
-
-
 }
 
 

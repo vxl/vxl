@@ -16,8 +16,6 @@
 
 #include <vgui/vgui_glut.h>
 #include <vgui/vgui_macro.h>
-#include <vgui/vgui_tableau.h>
-#include <vgui/vgui_command.h>
 #include <vgui/vgui_popup_params.h>
 #include <vgui/internals/vgui_overlay_helper.h>
 
@@ -74,7 +72,7 @@ vgui_glut_adaptor::~vgui_glut_adaptor() {
 //--------------------------------------------------------------------------------
 
 void vgui_glut_adaptor::swap_buffers() {
-  //vgui_macro_warning << "glutSwapBuffers()" << vcl_endl;
+  //vgui_macro_warning << "glutSwapBuffers()\n";
   int old = glutGetWindow();
   glutSetWindow( id );
   glutSwapBuffers();
@@ -113,7 +111,7 @@ void vgui_glut_adaptor::post_redraw() {
 }
 
 void vgui_glut_adaptor::post_overlay_redraw() {
-  //vcl_cerr << "post_overlay_redraw" << vcl_endl;
+  //vcl_cerr << "post_overlay_redraw\n";
   int old = glutGetWindow();
   glutSetWindow( id );
   establish_overlays();
@@ -126,7 +124,7 @@ void vgui_glut_adaptor::post_overlay_redraw() {
 
 extern void vgui_glut_quit();
 void vgui_glut_adaptor::post_destroy() {
-  //vgui_macro_warning << "calling exit()" << vcl_endl;
+  //vgui_macro_warning << "calling exit()\n";
   //exit(1);
   vgui_glut_quit();
 }
@@ -166,12 +164,12 @@ void vgui_glut_adaptor::establish_overlays() {
     glutOverlayDisplayFunc(overlay_display_callback);
     // Establishing the layer implicitly makes it the current layer.
     glutUseLayer(GLenum(GLUT_NORMAL));
-    vcl_cerr << "GLUT hardware overlay established" << vcl_endl;
+    vcl_cerr << "GLUT hardware overlay established\n";
   }
   else {
     assert(! ovl_helper);
     ovl_helper = new vgui_overlay_helper(this);
-    vcl_cerr << "emulation overlay helper established" << vcl_endl;
+    vcl_cerr << "emulation overlay helper established\n";
   }
 
   // done.
@@ -197,7 +195,7 @@ bool vgui_glut_adaptor::glut_dispatch(vgui_event &e) {
   else {
     // normal draw
     if (e.type == vgui_DRAW) {
-      //vgui_macro_warning << "hardware normal redisplay" << vcl_endl;
+      //vgui_macro_warning << "hardware normal redisplay\n";
       //glutUseLayer(GLenum(GLUT_NORMAL));
 
       bool f = dispatch_to_tableau(e);
@@ -208,7 +206,7 @@ bool vgui_glut_adaptor::glut_dispatch(vgui_event &e) {
 
     // overlay draw
     else if (e.type == vgui_DRAW_OVERLAY) {
-      //vgui_macro_warning << "hardware overlay redisplay" << vcl_endl;
+      //vgui_macro_warning << "hardware overlay redisplay\n";
       //glutUseLayer(GLenum(GLUT_OVERLAY));
 
       // set clear index or color :
@@ -222,7 +220,7 @@ bool vgui_glut_adaptor::glut_dispatch(vgui_event &e) {
           if (!once) {
             GLint bits;
             glGetIntegerv(GL_INDEX_BITS, &bits);
-            vcl_cerr << __FILE__ ": color index information:" << vcl_endl;
+            vcl_cerr << __FILE__ ": color index information:\n";
             int cmapsize = glutGet(GLenum(GLUT_WINDOW_COLORMAP_SIZE));
             vcl_cerr << "  color map size is " << cmapsize << vcl_endl;
             vcl_cerr << "  transparent color index is " << index << vcl_endl;
@@ -309,7 +307,7 @@ vgui_glut_adaptor *vgui_glut_adaptor::get_adaptor(int window_id) {
   for (unsigned i=0; i<all.size(); ++i)
     if (all[i]->id == window_id)
       return all[i];
-  vgui_macro_warning << "window id " << window_id << " is not a glut context" << vcl_endl;
+  vgui_macro_warning << "window id " << window_id << " is not a glut context\n";
   return 0; // not one of our glut contexts.
 }
 
@@ -320,7 +318,7 @@ vgui_glut_adaptor *vgui_glut_adaptor::get_adaptor(int window_id) {
 
 void vgui_glut_adaptor::display() {
   if (glutLayerGet(GLenum(GLUT_LAYER_IN_USE)) != GLUT_NORMAL)
-    vgui_macro_warning << "*** current layer is overlay" << vcl_endl;
+    vgui_macro_warning << "*** current layer is overlay\n";
 
   // normal draw.
   vgui_event e(vgui_DRAW);
@@ -329,13 +327,13 @@ void vgui_glut_adaptor::display() {
 
 void vgui_glut_adaptor::overlay_display() {
   if (glutLayerGet(GLenum(GLUT_LAYER_IN_USE)) != GLUT_OVERLAY)
-    vgui_macro_warning << "*** current layer is normal" << vcl_endl;
+    vgui_macro_warning << "*** current layer is normal\n";
 
   {
     GLint isdouble=0;
     glGetIntegerv(GL_DOUBLEBUFFER, &isdouble);
     if (isdouble) // looks suspicious.....
-      vgui_macro_warning << "overlay plane is double buffered" << vcl_endl;
+      vgui_macro_warning << "overlay plane is double buffered\n";
   }
 
   // overlay draw.
@@ -450,7 +448,7 @@ void vgui_glut_adaptor::reshape(int width,int height) {
   // call reshape on the sub-contexts :
   for (unsigned i=0;i<sub_contexts.size();i++) {
     // FIXME
-    vgui_macro_warning << "subcontext reshape not implemented" << vcl_endl;
+    vgui_macro_warning << "subcontext reshape not implemented\n";
   }
 }
 
@@ -571,7 +569,7 @@ void vgui_glut_adaptor::make_popup() {
     button = GLUT_MIDDLE_BUTTON;
     break;
   default:
-    vgui_macro_warning << "unknown vgui_button - assuming right button" << vcl_endl;
+    vgui_macro_warning << "unknown vgui_button - assuming right button\n";
   case vgui_RIGHT:
     button = GLUT_RIGHT_BUTTON;
     break;

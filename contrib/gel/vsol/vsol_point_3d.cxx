@@ -1,13 +1,11 @@
-// This is ./gel/vsol/vsol_point_3d.cxx
+// This is gel/vsol/vsol_point_3d.cxx
 #include "vsol_point_3d.h"
-
 //:
 // \file
 
 //*****************************************************************************
 // External declarations for implementation
 //*****************************************************************************
-#include <vcl_iostream.h>
 #include <vgl/vgl_distance.h>
 
 //***************************************************************************

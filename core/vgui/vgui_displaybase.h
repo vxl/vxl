@@ -1,22 +1,17 @@
-// This is ./oxl/vgui/vgui_displaybase.h
-
-//:
-// \file
-// \author Philip C. Pritchett, Robotics Research Group, University of Oxford
-// \date   14 Sep 99
-// \brief  General display list functionality, can use any type of soview.
-
+// This is oxl/vgui/vgui_displaybase.h
 #ifndef vgui_displaybase_h_
 #define vgui_displaybase_h_
 #ifdef __GNUC__
 #pragma interface
 #endif
+//:
+// \file
+// \author Philip C. Pritchett, Robotics Research Group, University of Oxford
+// \date   14 Sep 99
+// \brief  General display list functionality, can use any type of soview.
 //-----------------------------------------------------------------------------
 
-#include <vcl_string.h>
 #include <vcl_vector.h>
-#include <vcl_map.h>
-#include <vcl_string.h>
 
 #include <vgui/vgui_gl.h>
 #include <vgui/vgui_tableau.h>
@@ -26,7 +21,8 @@ class vgui_event;
 
 
 //: Implement one of these to be told about picking etc.
-struct vgui_displaybase_selection_callback {
+struct vgui_displaybase_selection_callback
+{
   virtual bool select(unsigned id);
   virtual bool deselect(unsigned id);
   virtual bool deselect_all();
@@ -34,7 +30,8 @@ struct vgui_displaybase_selection_callback {
 
 #include "vgui_displaybase_sptr.h"
 //: General display list functionality; can use any type of soview as long as it's black.
-class vgui_displaybase : public vgui_tableau {
+class vgui_displaybase : public vgui_tableau
+{
 public:
 
   vgui_displaybase();
@@ -95,7 +92,8 @@ private:
   unsigned id;
 };
 
-struct vgui_displaybase_new : public vgui_displaybase_sptr {
+struct vgui_displaybase_new : public vgui_displaybase_sptr
+{
   typedef vgui_displaybase_sptr base;
   vgui_displaybase_new() : base(new vgui_displaybase()) { }
 };

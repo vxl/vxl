@@ -7,10 +7,11 @@
 
 #include <vcl_iostream.h>
 
+#include <mvl/HomgPoint2D.h>
 #include <mvl/HomgLine2D.h>
 #include <mvl/HomgLineSeg2D.h>
 #include <mvl/HomgOperator2D.h>
-////////////////#include <Geometry/ImplicitLine.h>
+#include <vnl/vnl_double_2.h>
 
 //--------------------------------------------------------------
 //
@@ -74,10 +75,6 @@ ImplicitLine* HomgLineSeg2D::get_implicitline() const
   return new ImplicitLine(startpoint, endpoint);
 }
 #endif
-
-#include <mvl/HomgPoint2D.h>
-#include <mvl/HomgLineSeg2D.h>
-#include <vnl/vnl_double_2.h>
 
 //: Return distance to nearest point contained in lineseg
 double HomgLineSeg2D::picking_distance(const HomgPoint2D& hp) const

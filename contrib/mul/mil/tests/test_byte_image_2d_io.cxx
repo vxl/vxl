@@ -2,19 +2,16 @@
 #include <vcl_fstream.h>
 #include <vcl_utility.h>
 #include <vcl_cmath.h>
-#include <vil/vil_rgb_byte.h>
-
+#include <vil/vil_byte.h>
 #include <vnl/vnl_test.h>
-#include <mil/mil_convert_vil.h>
-#include <vil/vil_memory_image_of.h>
 #include <mil/mil_byte_image_2d_io.h>
 
 
 void test_byte_image_2d_io()
 {
-  vcl_cout << "******************************" << vcl_endl;
-  vcl_cout << " Testing mil_byte_image_2d_io"  << vcl_endl;
-  vcl_cout << "******************************" << vcl_endl;
+  vcl_cout << "******************************\n";
+  vcl_cout << " Testing mil_byte_image_2d_io\n";
+  vcl_cout << "******************************\n";
 
   int nx=20;
   int ny=20;
@@ -48,10 +45,10 @@ void test_byte_image_2d_io()
       diff1+=vcl_abs( saved_image(x,y)-loaded_image(x,y) );
 
 #if 0
-  vcl_cout<<"saved_image= "<<vcl_endl;
+  vcl_cout<<"saved_image=\n";
   saved_image.print_all(vcl_cout);
 
-  vcl_cout<<"loaded_image= "<<vcl_endl;
+  vcl_cout<<"loaded_image=\n";
   loaded_image.print_all(vcl_cout);
 
   vcl_cout<<"diff1= "<<diff1<<vcl_endl;

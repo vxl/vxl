@@ -1,4 +1,4 @@
-//-*- c++ -*-------------------------------------------------------------------
+// This is gel/octree/VoxmapImagePoints.h
 #ifndef VoxmapImagePoints_h_
 #define VoxmapImagePoints_h_
 #ifdef __GNUC__
@@ -6,9 +6,7 @@
 #endif
 //:
 // \file
-// \author
-//     Geoffrey Cross, Oxford RRG, 20 May 99
-//
+// \author  Geoffrey Cross, Oxford RRG, 20 May 99
 //-----------------------------------------------------------------------------
 
 #include <vbl/vbl_sparse_array_3d.h>
@@ -16,9 +14,9 @@
 #include <mvl/PMatrix.h>
 
 #include "VoxmapPoints.h"
-#include <vbl/vbl_sparse_array_3d.h>
 
-class VoxmapImagePoints : public VoxmapPoints{
+class VoxmapImagePoints : public VoxmapPoints
+{
 public:
   // Constructors/Destructors--------------------------------------------------
 

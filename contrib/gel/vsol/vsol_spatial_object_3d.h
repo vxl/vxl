@@ -1,6 +1,6 @@
-// This is ./gel/vsol/vsol_spatial_object_3d.h
-#ifndef _vsol_spatial_object_3d_h_
-#define _vsol_spatial_object_3d_h_
+// This is gel/vsol/vsol_spatial_object_3d.h
+#ifndef vsol_spatial_object_3d_h_
+#define vsol_spatial_object_3d_h_
 //-----------------------------------------------------------------------------
 //:
 // \file
@@ -27,14 +27,11 @@
 // \endverbatim
 //-----------------------------------------------------------------------------
 
-class vsol_spatial_object_3d;
-
 //*****************************************************************************
 // External declarations for values
 //*****************************************************************************
 #include <vsol/vsol_spatial_object_3d_sptr.h>
 
-#include <vcl_string.h>
 #include <vcl_iostream.h>
 #include <vul/vul_timestamp.h>
 #include <vbl/vbl_ref_count.h>
@@ -44,6 +41,7 @@ class vsol_curve_3d;
 class vsol_group_3d;
 class vsol_volume_3d;
 class vtol_topology_object;
+class vsol_spatial_object_3d;
 extern void iu_delete(vsol_spatial_object_3d *);
 
 
@@ -541,4 +539,4 @@ inline vcl_ostream &operator<<(vcl_ostream &strm,
   return strm;
 }
 
-#endif // _vsol_spatial_object_3d_h_
+#endif // vsol_spatial_object_3d_h_

@@ -1,8 +1,6 @@
+// This is vxl/vbl/vbl_sparse_array_base.txx
 #ifndef vbl_sparse_array_base_txx_
 #define vbl_sparse_array_base_txx_
-
-// This is vxl/vbl/vbl_sparse_array_base.txx
-
 //:
 // \file
 // \brief Contains a base class for sparse arrays.
@@ -11,7 +9,6 @@
 #include "vbl_sparse_array_base.h"
 
 #include <vcl_cassert.h>
-#include <vcl_iostream.h>
 #include <vcl_utility.h>
 
 #if 0

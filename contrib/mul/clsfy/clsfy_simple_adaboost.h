@@ -9,11 +9,11 @@
 
 #include <clsfy/clsfy_classifier_base.h>
 #include <clsfy/clsfy_classifier_1d.h>
-#include <vnl/vnl_matrix.h>
 #include <vnl/vnl_vector.h>
 
 
 //: Classifier using adaboost on combinations of simple 1D classifiers
+
 class clsfy_simple_adaboost : public clsfy_classifier_base
 {
 protected:
@@ -30,7 +30,7 @@ protected:
   //: number of classfiers used
   int n_clfrs_used_;
 
-  //: dimensionality of data 
+  //: dimensionality of data
   // (ie size of input vectors v, ie the total number of different features)
   int n_dims_;
 
@@ -65,7 +65,7 @@ public:
   //: Set number of classifiers used (when applying strong classifier)
   void set_n_clfrs_used(unsigned int x) {if (x <= alphas_.size()) n_clfrs_used_ = x;}
 
-  //: Access 
+  //: Access
   int n_clfrs_used() const {return n_clfrs_used_; }
 
   //: Find the posterior probability of the input being in the positive class.
@@ -96,14 +96,14 @@ public:
                       const vcl_vector<int>& index);
 
   //: Access functions
-  const vcl_vector<clsfy_classifier_1d*>& classifiers() const 
-    {return classifier_1d_;}   
+  const vcl_vector<clsfy_classifier_1d*>& classifiers() const
+    {return classifier_1d_;}
 
-  const vcl_vector<double>& alphas() const 
-    {return alphas_;}   
+  const vcl_vector<double>& alphas() const
+    {return alphas_;}
 
-  const vcl_vector<int>& index() const 
-    {return index_;}  
+  const vcl_vector<int>& index() const
+    {return index_;}
 
   //: Version number for I/O
   short version_no() const;

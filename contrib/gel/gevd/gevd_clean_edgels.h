@@ -1,21 +1,14 @@
-#ifndef _clean_h_
-#define _clean_h_
-
-// .NAME clean - Run Through the results of edgel segmentation and remove
-//               edgel chains that do not satisfy the following criteria:
-//               1: No vertices closer than 3 pixels 2: No bridges
-//               3:No self-intersection
-// .LIBRARY CAD_Detection
-// .HEADER CAD package
-// .INCLUDE CAD_Detection/clean.h
-// .FILE CAD_Detection/clean.h
-// .FILE CAD_Detection/clean.C
+#ifndef gevd_clean_edgels_h_
+#define gevd_clean_edgels_h_
+//:
+// \file
+// \brief Remove edgel chains with (1) end vertices closer than 3 pixels, (2) bridges, (3) self-intersection
 //
-// .SECTION Description
 //  In using an edge segmentation for region analysis it is necessary to
 //  eliminate edges that do not perimit the extraction of valid region
 //  topology. There are a number of conditions that would defeat a region
 //  analysis algorithm:
+//
 //   1: Too short edges.  If the vertices of an edge closer than 3 pixels,
 //   (where distance is measured by the minimum image distance along the
 //    image axis) and the edgels are all within a pixel of a staight line
@@ -34,16 +27,22 @@
 //   but it might be possible that an edge-detection algorithm could produce
 //   such edges. For example, the VanDuc edge-detector does currently
 //   form self-intersecting edges.(not yet implemented)
-// .SECTION Authors
+//
+// \author
 //  J.L. Mundy - Feb 20, 1999
-// .SECTION Modifications Feb 2001
+//
+// \verbatim
+//  Modifications
+//   Feb 2001
 //         Effectively the same as Detection/Clean.h but duplicated here
 //         to allow for CAD required changes
+// \endverbatim
 //-------------------------------------------------------------------------
 #include <vcl_vector.h>
 #include <vtol/vtol_vertex_2d.h>
-#include <vtol/vtol_edge_2d.h>
-#include <vsol/vsol_point_2d.h>
+#include <vtol/vtol_vertex_2d_sptr.h>
+#include <vtol/vtol_edge_2d_sptr.h>
+#include <vsol/vsol_point_2d_sptr.h>
 
 class gevd_clean_edgels
 {
@@ -68,4 +67,5 @@ protected:
   bool split_edge(vtol_edge_2d_sptr e, vtol_vertex_2d_sptr v, vtol_edge_2d_sptr& e1, vtol_edge_2d_sptr& e2);
   vcl_vector<vtol_edge_2d_sptr>* out_edgels_;
 };
-#endif
+
+#endif // gevd_clean_edgels_h_

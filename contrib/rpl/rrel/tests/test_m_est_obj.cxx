@@ -1,5 +1,3 @@
-
-#include <vcl_iostream.h>
 #include <vcl_cmath.h>
 #include <vcl_vector.h>
 #include <testlib/testlib_test.h>

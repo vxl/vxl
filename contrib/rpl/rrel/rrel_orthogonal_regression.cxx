@@ -9,8 +9,6 @@
 #include <vcl_iostream.h>
 #include <vcl_vector.h>
 
-#include <vcl_cassert.h>
-
 rrel_orthogonal_regression::rrel_orthogonal_regression( const vnl_matrix<double>& pts )
   : vars_( pts )
 {
@@ -165,8 +163,8 @@ rrel_orthogonal_regression::print_points() const
   vcl_cout << "\nrrel_orthogonal_regression::print_points:\n"
            << "  param_dof() = " << param_dof() << "\n"
            << "  num_pts = " << vars_.rows() << "\n\n"
-           << " i   vars_ \n"
-           << " =   ========= \n";
+           << " i   vars_\n"
+           << " =   =========\n";
   for ( unsigned int i=0; i<vars_.rows(); ++i ) {
     vcl_cout << " " << i << "   " << vars_.get_row (i) << "\n";
   }

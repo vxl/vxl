@@ -1,4 +1,3 @@
-#include <vil/vil_image.h>
 #include <vil/vil_memory_image_of.h>
 
 #include <vil/vil_load.h>
@@ -16,13 +15,13 @@ MAIN( test_copy )
   START("vil_copy");
 
   char* filename = argv[1];
-  if( argc<2 ) {
+  if ( argc<2 ) {
     filename = default_filename;
     vcl_cerr << "Using default input image " << filename << vcl_endl;
   }
 
   vil_memory_image_of<vxl_uint_8> a( vil_load( filename ) );
-  if( !a ) {
+  if ( !a ) {
     vcl_cerr << "Could not load image " << filename << vcl_endl;
     return 1;
   }

@@ -1,5 +1,4 @@
 #include <vsrl/vsrl_window_accumulator.h>
-#include <vcl_iostream.h>
 #include <vcl_cassert.h>
 #include <vsrl/vsrl_parameters.h>
 

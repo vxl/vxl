@@ -9,17 +9,15 @@
 
 #include <vcl_cstdlib.h>
 
-#include <vnl/vnl_matlab_print.h>
 #include <vnl/vnl_double_2x2.h>
-#include <vnl/vnl_double_4x4.h>
 #include <vnl/vnl_double_4.h>
-#include <vnl/algo/vnl_cholesky.h>
 #include <vnl/algo/vnl_symmetric_eigensystem.h>
 #include <vnl/algo/vnl_rpoly_roots.h>
 #include <vnl/vnl_real_polynomial.h>
 #include <vnl/vnl_transpose.h>
 #include <vnl/algo/vnl_svd.h>
 #include <vnl/vnl_diag_matrix.h>
+#include <vnl/vnl_math.h>
 
 #include <mvl/HomgPoint2D.h>
 #include <mvl/FMatrix.h>
@@ -98,10 +96,10 @@ void FManifoldProject::set_F(const FMatrix& Fobj)
     // Re-sort the eigensystem so that it is -a a -b b
     {
       int I[] = { 0, 3, 1, 2 };
-      for(int col = 0; col < 4; ++col) {
+      for (int col = 0; col < 4; ++col) {
         int from_col = I[col];
         d_[col] = eig.D(from_col,from_col);
-        for(int r=0;r<4;++r)
+        for (int r=0;r<4;++r)
           V_(r,col) = eig.V(r, from_col);
       }
     }
@@ -197,7 +195,7 @@ double FManifoldProject::correct(const HomgPoint2D& p1, const HomgPoint2D& p2, H
   vnl_vector<double> realroots = roots.realroots(1e-8);
   int errs = 0;
   bool got_one = false;
-  for(unsigned i = 0; i < realroots.size(); ++i) {
+  for (unsigned i = 0; i < realroots.size(); ++i) {
     double lambda = realroots[i];
 
     // Some roots to the multiplied out poly are not roots to the rational polynomial.

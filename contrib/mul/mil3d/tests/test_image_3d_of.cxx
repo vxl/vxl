@@ -3,9 +3,6 @@
 #include <vcl_utility.h>
 
 #include <vnl/vnl_test.h>
-#include <vnl/vnl_vector.h>
-#include <vnl/vnl_matrix.h>
-#include <vgl/vgl_distance.h>
 #include <mil3d/mil3d_image_3d_of.h>
 #include <vil/vil_byte.h>
 
@@ -37,9 +34,9 @@ bool deepEquality(const mil3d_image_3d_of<vil_byte>& im0,
 
 void test_image_3d_of_byte()
 {
-  vcl_cout << "***********************" << vcl_endl;
-  vcl_cout << " Testing mil3d_image_3d_of " << vcl_endl;
-  vcl_cout << "***********************" << vcl_endl;
+  vcl_cout << "***************************\n";
+  vcl_cout << " Testing mil3d_image_3d_of\n";
+  vcl_cout << "***************************\n";
 
   mil3d_image_3d_of<vil_byte> image(2,2,2);
   mil3d_transform_3d t;

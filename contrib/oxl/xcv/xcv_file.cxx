@@ -1,5 +1,5 @@
-// This is ./oxl/xcv/xcv_file.cxx
-
+// This is oxl/xcv/xcv_file.cxx
+#include "xcv_file.h"
 //:
 //  \file
 // \author  K.Y.McGaul
@@ -12,26 +12,19 @@
 // \endverbatim
 //
 
-#include "xcv_file.h"
-
 #include <vcl_iostream.h>
 
 #include <vil/vil_image.h>
-#include <vil/vil_file_image.h>
 #include <vil/vil_save.h>
 
 #include <vgui/vgui.h>
 #include <vgui/vgui_menu.h>
-#include <vgui/vgui_macro.h>
 #include <vgui/vgui_dialog.h>
 #include <vgui/vgui_easy2D.h>
 #include <vgui/vgui_rubberbander.h>
-#include <vgui/vgui_roi_tableau.h>
-#include <vgui/vgui_event_server.h>
 
 #include <xcv/xcv_image_tableau.h>
 
-static bool debug = true;
 extern vcl_string* get_loadfile();
 extern vcl_string* get_savefile();
 extern void get_current(unsigned*, unsigned*);
@@ -59,7 +52,9 @@ void xcv_file::load_image()
   if (!load_image_dl.ask())
     return;
 
-  if (debug) vcl_cerr << "Loading image file: " << *image_filename << vcl_endl;
+#ifdef DEBUG
+  vcl_cerr << "Loading image file: " << *image_filename << vcl_endl;
+#endif
   add_image_at(*image_filename, col, row);
 }
 
@@ -87,7 +82,9 @@ void xcv_file::save_image()
   load_image_dl.choice("File format ",labels,choice_value);
   if (load_image_dl.ask())
   {
-    if (debug) vcl_cerr << "Saving image to file: " << image_filename->c_str() << vcl_endl;
+#ifdef DEBUG
+    vcl_cerr << "Saving image to file: " << image_filename->c_str() << vcl_endl;
+#endif
     static char *format[] = {
       "jpg","tiff","pnm","png","iris","mit","viff"};
     vil_save(imt->get_image(),image_filename->c_str(),format[choice_value]);
@@ -112,7 +109,9 @@ void xcv_file::save_as_ps()
   ps_dl.checkbox("Save spatial objects?", save_objs);
   if (ps_dl.ask())
   {
-    if (debug) vcl_cerr << "Saving data to postscript file: " << image_filename << vcl_endl;
+#ifdef DEBUG
+    vcl_cerr << "Saving data to postscript file: " << image_filename << vcl_endl;
+#endif
     vgui_easy2D_sptr easy = get_easy2D_at(col, row);
     if (easy)
       easy->print_psfile(*image_filename, reduction_factor, save_objs);

@@ -6,7 +6,6 @@
 // inclusions
 
 #include <vcl_iostream.h>
-#include <vcl_string.h>
 #include <vcl_ctime.h>
 #include <vcl_cmath.h> // for vcl_fabs()
 
@@ -22,9 +21,9 @@
 //: Generate lots of samples using pdf, build new pdf with builder and compare the two
 void test_pc_gaussian()
 {
-  vcl_cout << "**************************" << vcl_endl;
-  vcl_cout << " Testing vpdfl_pc_gaussian" << vcl_endl;
-  vcl_cout << "**************************" << vcl_endl;
+  vcl_cout << "***************************\n";
+  vcl_cout << " Testing vpdfl_pc_gaussian\n";
+  vcl_cout << "***************************\n";
 
   vsl_add_to_binary_loader(vpdfl_pc_gaussian());
   vsl_add_to_binary_loader(vpdfl_pc_gaussian_builder());
@@ -84,7 +83,7 @@ void test_pc_gaussian()
 
   TEST("mean of built model",vnl_vector_ssd(pdf.mean(), p_pdf_built->mean())<0.1,true);
 
-  vcl_cout<<vcl_endl<<"=================Testing Fast log_p():"<<vcl_endl;
+  vcl_cout<<vcl_endl<<"=================Testing Fast log_p():\n";
 
   vnl_vector<double> x;
   p_sampler->sample(x);
@@ -97,15 +96,15 @@ void test_pc_gaussian()
   for (int i =0; i<10000; i++)
     v = pdf.log_p(x);
   t1 = vcl_clock();
-  vcl_cout <<"Time for fast log_p(): " << (t1-t0)/(10.0*double(CLOCKS_PER_SEC)) << "ms" <<vcl_endl;
+  vcl_cout <<"Time for fast log_p(): " << (t1-t0)/(10.0*double(CLOCKS_PER_SEC)) << "ms\n";
   t0 = vcl_clock();
   for (int i =0; i<10000; i++)
     v = pdf.vpdfl_gaussian::log_p(x);
   t1 = vcl_clock();
-  vcl_cout <<"Time for slow log_p(): " << (t1-t0)/(10.0*double(CLOCKS_PER_SEC)) << "ms" <<vcl_endl;
+  vcl_cout <<"Time for slow log_p(): " << (t1-t0)/(10.0*double(CLOCKS_PER_SEC)) << "ms\n";
 #endif
 
-  vcl_cout<<vcl_endl<<"=================Testing I/O:"<<vcl_endl;
+  vcl_cout<<vcl_endl<<"=================Testing I/O:\n";
   vsl_b_ofstream bfs_out("test_pc_gaussian.bvl.tmp");
   TEST ("Created test_pc_gaussian.bvl.tmp for writing",
              (!bfs_out), false);
@@ -202,7 +201,7 @@ void test_pc_gaussian()
     else
       fail ++;
   }
-  vcl_cout << "In a sample of 1000 vectors " << pass << " passed and " << fail <<  " failed." << vcl_endl;
+  vcl_cout << "In a sample of 1000 vectors " << pass << " passed and " << fail <<  " failed.\n";
   TEST("880 < pass < 920", pass > 880 && pass < 920, true);
   pass=0; fail=0;
   thresh = p_pdf_built->log_prob_thresh(0.1);
@@ -215,7 +214,7 @@ void test_pc_gaussian()
     else
       fail ++;
   }
-  vcl_cout << "In a sample of 1000 vectors " << pass << " passed and " << fail <<  " failed." << vcl_endl;
+  vcl_cout << "In a sample of 1000 vectors " << pass << " passed and " << fail <<  " failed.\n";
   TEST("70 < pass < 130", pass > 70 && pass < 130, true);
   delete p_sampler2;
 

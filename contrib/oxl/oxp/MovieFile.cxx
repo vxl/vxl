@@ -7,9 +7,6 @@
 
 #include "MovieFile.h"
 
-#include <vcl_vector.h>
-#include <vul/vul_printf.h>
-
 #include <oxp/oxp_vidl_moviefile.h>
 #include <oxp/ImageSequenceMovieFile.h>
 #include <oxp/oxp_parse_seqname.h>
@@ -73,7 +70,7 @@ int MovieFile::GetNumFrames()
   if (end_ == -1) {
     vcl_cerr << "MovieFile: probing ";
     int i;
-    for(i = 0; GetImage(i); ++i)
+    for (i = 0; GetImage(i); ++i)
       ;
     --i;
     end_ = start_ + i * step_;
@@ -169,7 +166,7 @@ void MovieFile::GetFrame(int frame_index, vil_byte* frame)
     int size = sx * sy;
     vil_rgb<unsigned char> * rgb_ptr = (vil_rgb<unsigned char> *)tmp_buf_->get_buffer();
     vil_byte* gray_ptr = frame;
-    for(int i = 0; i < size; ++i)
+    for (int i = 0; i < size; ++i)
       *gray_ptr++ = rgb_ptr++->grey();
   }
 }

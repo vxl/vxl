@@ -1,4 +1,4 @@
-#include <mil/mil_image.h>
+#include <mil/mil_image_2d_of.h>
 typedef unsigned char ubyte;
 
 // this must be here for filter-2d to work

@@ -8,16 +8,15 @@
 // \author Tim Cootes
 // Converted to VXL by Gavin Wheeler
 
+#include "mbl_lda.h"
+
 #include <vcl_cassert.h>
 #include <vcl_cstddef.h> // for size_t
 #include <vcl_cstring.h> // for memcpy()
-#include <mbl/mbl_lda.h>
 #include <mbl/mbl_matxvec.h>
-#include <mbl/mbl_matrix_products.h>
 #include <vsl/vsl_indent.h>
 #include <vnl/algo/vnl_svd.h>
 #include <vnl/algo/vnl_symmetric_eigensystem.h>
-
 #include <vnl/io/vnl_io_vector.h>
 #include <vsl/vsl_vector_io.h>
 
@@ -334,7 +333,7 @@ vcl_string mbl_lda::is_a() const
 void mbl_lda::print_summary(vcl_ostream& os) const
 {
   // os << data_; // example of data output
-  vcl_cerr << "mbl_lda::print_summary() NYI" << vcl_endl; vcl_abort();
+  vcl_cerr << "mbl_lda::print_summary() NYI\n"; vcl_abort();
 }
 
 //=======================================================================
@@ -376,7 +375,7 @@ void mbl_lda::b_read(vsl_b_istream& bfs)
       break;
     default:
       //CHECK FUNCTION SIGNATURE IS CORRECT
-      vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, mbl_lda &) \n";
+      vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, mbl_lda &)\n";
       vcl_cerr << "           Unknown version number "<< version << vcl_endl;
       bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
       return;

@@ -1,11 +1,9 @@
 #ifndef rsdl_borgefors_txx_
 #define rsdl_borgefors_txx_
-
 //:
 //  \file
 
 #include "rsdl_borgefors.h"
-#include <vcl_iostream.h>
 #include <vbl/vbl_array_2d.h>
 #include <vnl/vnl_math.h>
 
@@ -85,8 +83,8 @@ template <class T>
 bool
 rsdl_borgefors<T>::in_map(int x, int y) const
 {
-  if( (x < org_x_) || (x >= size_x_ + org_x_) ||
-      (y < org_y_) || (y >= size_y_ + org_y_) )
+  if ( x < org_x_ || x >= size_x_ + org_x_ ||
+       y < org_y_ || y >= size_y_ + org_y_ )
     return false;
 
   int index = index_map_[ y - org_y_][x - org_x_];
@@ -113,7 +111,7 @@ rsdl_borgefors<T>::distance(int x, int y) const
 //  Therefore, should always check in_map(x,y) first.
 //
 template <class T>
-rsdl_borgefors<T>::const_iterator_type
+typename rsdl_borgefors<T>::const_iterator_type
 rsdl_borgefors<T>::nearest(int x, int y) const
 {
   assert( in_map(x,y) );
@@ -134,13 +132,9 @@ template <class T>
 bool
 rsdl_borgefors<T>::operator==(const rsdl_borgefors<T> & rhs) const
 {
-  if ((org_x_ == rhs.org_x_) && (org_y_ == rhs.org_y_) &&
-      (size_x_ == rhs.size_x_) && (size_y_ == rhs.size_y_) &&
-      (distance_map_ == rhs.distance_map_) &&
-      (index_map_ == rhs.index_map_))
-    return true;
-
-  return false;
+  return org_x_ == rhs.org_x_  &&  org_y_ == rhs.org_y_  &&
+         size_x_ == rhs.size_x_ && size_y_ == rhs.size_y_ &&
+         distance_map_ == rhs.distance_map_ && index_map_ == rhs.index_map_;
 }
 
 template <class T>
@@ -157,8 +151,8 @@ rsdl_borgefors<T>::initialize(iterator_type  begin, iterator_type end)
   distance_map_.resize(size_y_ , size_x_ );
   index_map_.resize(size_y_ , size_x_ );
   int max_range = vnl_math_max( size_x_, size_y_) * 3;
-  for(int i = 0; i < size_y_; i++)
-    for(int j = 0; j < size_x_; j++) {
+  for (int i = 0; i < size_y_; i++)
+    for (int j = 0; j < size_x_; j++) {
       distance_map_[i][j] = max_range ;
       index_map_[i][j] = -1;
     }
@@ -168,7 +162,7 @@ rsdl_borgefors<T>::initialize(iterator_type  begin, iterator_type end)
   for (unsigned int i = 0; i < data_.size(); i++) {
     int x = vnl_math_rnd(data_[i]->x() - org_x_);
     int y = vnl_math_rnd(data_[i]->y() - org_y_);
-    if( (x>= 0) && (x < size_x_) && (y>=0) && (y < size_y_) )
+    if ( x>= 0 && x < size_x_ && y>=0 && y < size_y_ )
       {
         distance_map_[y][x] = 0;
         index_map_[y][x] = i;
@@ -198,16 +192,16 @@ template <class T>
 int
 rsdl_borgefors<T>::minimum5(int a, int b, int c, int d, int e)
 {
-  if( (a<=b) && (a<=c) && (a<=d) && (a<=e) )
-        return 1;
-    else if( (b<=c) && (b<=d) && (b<=e) )
-        return 2;
-    else if( (c<=d) && (c<=e) )
-        return 3;
-    else if( d<=e )
-        return 4;
-    else
-        return 5;
+  if ( a<=b && a<=c && a<=d && a<=e )
+    return 1;
+  else if ( b<=c && b<=d && b<=e )
+    return 2;
+  else if ( c<=d && c<=e )
+    return 3;
+  else if ( d<=e )
+    return 4;
+  else
+    return 5;
 }
 
 //: Performs a forward chamfer convolution on the distance_map_ and update the index_map_ accordingly
@@ -216,8 +210,8 @@ template <class T>
 void
 rsdl_borgefors<T>::forward_chamfer()
 {
-  for(int i=1; i<size_y_-1; i++)
-    for(int j=1; j<size_x_-1; j++)
+  for (int i=1; i<size_y_-1; i++)
+    for (int j=1; j<size_x_-1; j++)
       {
         int val = minimum5(distance_map_[i-1][j-1]+4,distance_map_[i-1][j]+3,
                            distance_map_[i-1][j+1]+4, distance_map_[i][j-1]+3,
@@ -256,8 +250,8 @@ template <class T>
 void
 rsdl_borgefors<T>::backward_chamfer()
 {
-  for(int i=size_y_-2; i>0; i--)
-    for(int j=size_x_-2; j>0; j--)
+  for (int i=size_y_-2; i>0; i--)
+    for (int j=size_x_-2; j>0; j--)
       {
         int val = minimum5(distance_map_[i][j],distance_map_[i][j+1]+3,
                            distance_map_[i+1][j-1]+4, distance_map_[i+1][j]+3,

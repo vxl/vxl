@@ -1,14 +1,11 @@
-// This is ./vxl/vnl/algo/vnl_amoeba.cxx
+// This is vxl/vnl/algo/vnl_amoeba.cxx
 #ifdef __GNUC__
 #pragma implementation
 #endif
-
 //:
 // \file
-//
 // \author Andrew W. Fitzgibbon, Oxford RRG
 // \date   23 Oct 97
-//
 //-----------------------------------------------------------------------------
 
 #include "vnl_amoeba.h"
@@ -18,7 +15,7 @@
 #include <vcl_iostream.h>
 #include <vcl_vector.h>
 #include <vnl/vnl_math.h>
-#include <vnl/vnl_matops.h>
+#include <vnl/vnl_vector.h>
 #include <vnl/vnl_cost_function.h>
 #include <vnl/vnl_least_squares_function.h>
 
@@ -134,7 +131,7 @@ static
 double maxabsdiff(const vnl_vector<double>& a, const vnl_vector<double>& b)
 {
   double v = 0;
-  for(unsigned i = 0; i < a.size(); ++i) {
+  for (unsigned i = 0; i < a.size(); ++i) {
     double ad = vnl_math_abs(a[i] - b[i]);
     if (ad > v)
       v = ad;
@@ -154,7 +151,7 @@ double simplex_fdiameter(const vcl_vector<vnl_amoeba_SimplexCorner>& simplex)
 {
   // simplex assumed sorted, so fdiam is n - 0
   double max = 0;
-  for(unsigned i = 1; i < simplex.size(); i++) {
+  for (unsigned i = 1; i < simplex.size(); i++) {
     double thismax = vnl_math_abs(simplex[0].fv - simplex[i].fv);
     if (thismax > max)
       max = thismax;
@@ -167,7 +164,7 @@ static
 double simplex_diameter(const vcl_vector<vnl_amoeba_SimplexCorner>& simplex)
 {
   double max = 0;
-  for(unsigned i = 0; i < simplex.size() - 1; i++) {
+  for (unsigned i = 0; i < simplex.size() - 1; i++) {
     double thismax = maxabsdiff(simplex[i].v, simplex[i+1].v);
     if (thismax > max)
       max = thismax;
@@ -184,7 +181,7 @@ vcl_ostream& operator<<(vcl_ostream& s, const vnl_amoeba_SimplexCorner& simplex)
 
 vcl_ostream& operator<<(vcl_ostream& s, const vcl_vector<vnl_amoeba_SimplexCorner>& simplex)
 {
-  for(unsigned i = 0; i < simplex.size(); ++i)
+  for (unsigned i = 0; i < simplex.size(); ++i)
     s << simplex[i].fv << " ";
   return s;
 }
@@ -208,7 +205,7 @@ void vnl_amoebaFit::set_up_simplex_relative(vcl_vector<vnl_amoeba_SimplexCorner>
   const double usual_delta = relative_diameter;             // 5 percent deltas for non-zero terms
   const double zero_term_delta = 0.00025;      // Even smaller delta for zero elements of x
 //  vnl_vector<double> y(n);
-  for(int j = 0; j < n; ++j) {
+  for (int j = 0; j < n; ++j) {
     vnl_amoeba_SimplexCorner *s = &simplex[j+1];
     s->v = x;
 
@@ -232,7 +229,7 @@ void vnl_amoebaFit::set_up_simplex_absolute(vcl_vector<vnl_amoeba_SimplexCorner>
   simplex[0].v = x;
   simplex[0].fv = f(x);
 
-  for(int j = 0; j < n; ++j) {
+  for (int j = 0; j < n; ++j) {
     vnl_amoeba_SimplexCorner *s = &simplex[j+1];
     s->v = x;
 
@@ -316,9 +313,9 @@ void vnl_amoebaFit::amoeba(vnl_vector<double>& x,
       break;
 
     // One step of the Nelder-Mead simplex algorithm
-    for(int k =  0; k < n; ++k)  {
+    for (int k =  0; k < n; ++k)  {
       vbar[k] = 0;
-      for(int i = 0; i < n; ++i)
+      for (int i = 0; i < n; ++i)
         vbar[k] += simplex[i].v[k];
       vbar[k] /= n;
     }
@@ -355,7 +352,7 @@ void vnl_amoebaFit::amoeba(vnl_vector<double>& x,
       }
       else {
         // The contraction point was only average, shrink the entire simplex.
-        for(int j = 1; j < n; ++j)
+        for (int j = 1; j < n; ++j)
 
           set_corner_a_plus_bl(&simplex[j], simplex[0].v, simplex[j].v, 0.5);
         set_corner_a_plus_bl(&shrink, simplex[0].v, simplex[n].v, 0.5);

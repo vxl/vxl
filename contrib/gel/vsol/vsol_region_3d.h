@@ -15,12 +15,9 @@
 // \endverbatim
 //*****************************************************************************
 
-class vsol_region_3d;
-
 //*****************************************************************************
 // External declarations for values
 //*****************************************************************************
-#include <vsol/vsol_region_3d_sptr.h>
 #include <vsol/vsol_surface_3d.h>
 
 class vsol_region_3d

@@ -9,6 +9,8 @@
 #include <vcl_iomanip.h>
 #include <vcl_ios.h>
 #include <vcl_string.h>
+#include <vcl_cmath.h>
+#include <vcl_algorithm.h>
 #include <clsfy/clsfy_simple_adaboost.h>
 #include <clsfy/clsfy_binary_threshold_1d_sorted_builder.h>
 #include <clsfy/clsfy_binary_threshold_1d_builder.h>
@@ -16,21 +18,16 @@
 #include <clsfy/clsfy_adaboost_trainer.h>
 #include <clsfy/clsfy_adaboost_sorted_trainer.h>
 #include <vsl/vsl_binary_loader.h>
-#include <mbl/mbl_mz_random.h>
-#include <vpdfl/vpdfl_axis_gaussian.h>
-#include <vpdfl/vpdfl_axis_gaussian_sampler.h>
 #include <vsl/vsl_vector_io.h>
 #include <mbl/mbl_data_array_wrapper.h>
-#include <vcl_cmath.h>
 #include <vnl/vnl_test.h>
 #include <vpdfl/vpdfl_axis_gaussian.h>
 #include <vpdfl/vpdfl_axis_gaussian_sampler.h>
-#include <vcl_algorithm.h>
 
 
 //: Extracts the j-th element of each vector in data and puts into v
 void get_1d_inputs(vnl_vector<double>& v,
-                               mbl_data_wrapper<vnl_vector<double> >& data, int j)
+                   mbl_data_wrapper<vnl_vector<double> >& data, int j)
 {
   unsigned long n = data.size();
   v.resize(n);
@@ -46,9 +43,9 @@ void get_1d_inputs(vnl_vector<double>& v,
 //: Tests the clsfy_simple_adaboost and clsfy_adaboost_trainer classes
 void test_adaboost()
 {
-  vcl_cout << "********************************" << vcl_endl
-           << " Testing clsfy_adaboost_trainer " << vcl_endl
-           << "********************************" << vcl_endl;
+  vcl_cout << "********************************\n"
+           << " Testing clsfy_adaboost_trainer\n"
+           << "********************************\n";
 
   // Generate lots of examples for adaboost algorithm
   // Each vector represents a +ve or -ve example
@@ -113,7 +110,7 @@ void test_adaboost()
   mbl_data_array_wrapper< vnl_vector<double> > egs0(&neg_samples[0],n_neg);
 
   // build clsfy_simple_adaboost
-  vcl_cout<<"*************normal classifier************"<<vcl_endl;
+  vcl_cout<<"*************normal classifier************\n";
   clsfy_simple_adaboost *pClassifier = new clsfy_simple_adaboost;
   clsfy_binary_threshold_1d_builder b_thresh_builder;
   clsfy_adaboost_trainer adab_trainer;
@@ -125,7 +122,7 @@ void test_adaboost()
   pClassifier->print_summary(vcl_cout);
 
   // build clsfy_simple_adaboost using sorted method
-  vcl_cout<<"*************sorted classifier************"<<vcl_endl;
+  vcl_cout<<"*************sorted classifier************\n";
   clsfy_simple_adaboost *pClassifier2 = new clsfy_simple_adaboost;
   clsfy_binary_threshold_1d_sorted_builder b_thresh_sorted_builder;
   clsfy_adaboost_sorted_trainer adab_sorted_trainer;
@@ -164,7 +161,7 @@ void test_adaboost()
     for (int i=0; i<n_neg; ++i)
       if ( pClassifier->classify( neg_samples[i] ) == 1 ) fp++;
 
-    //vcl_cout<<"Applied to training set:"<<vcl_endl;
+    //vcl_cout<<"Applied to training set:\n";
     //vcl_cout<<"number of classifiers used= "<<k<<vcl_endl;
     tpr=(tp*1.0)/n_pos;
     vcl_cout<<"True positives= "<<tpr<<vcl_endl;
@@ -227,7 +224,7 @@ void test_adaboost()
 
   //nb I/O doesn't work ???
 
-  vcl_cout<<"======== TESTING I/O ==========="<<vcl_endl;
+  vcl_cout<<"======== TESTING I/O ===========\n";
 
 
    // add binary loaders
@@ -249,9 +246,9 @@ void test_adaboost()
   bfs_in.close();
 
 
-  vcl_cout<<"Saved : "<<vcl_endl;
+  vcl_cout<<"Saved :\n";
   vcl_cout<< *pClassifier << vcl_endl;
-  vcl_cout<<"Loaded: "<<vcl_endl;
+  vcl_cout<<"Loaded:\n";
   vcl_cout<< classifier_in << vcl_endl;
 
 #if 0
@@ -262,11 +259,8 @@ void test_adaboost()
       true);
 #endif
 
-
   TEST("saved classifier == loaded classifier",
-     *pClassifier==classifier_in,
-    true);
-
+       *pClassifier==classifier_in, true);
 
   delete pClassifier;
 }

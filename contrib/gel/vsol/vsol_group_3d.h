@@ -15,12 +15,9 @@
 // \endverbatim
 //*****************************************************************************
 
-class vsol_group_3d;
-
 //*****************************************************************************
 // External declarations for values
 //*****************************************************************************
-#include <vsol/vsol_group_3d_sptr.h>
 #include <vsol/vsol_spatial_object_3d.h>
 #include <vcl_list.h>
 

@@ -23,7 +23,6 @@
 //
 //-------------------------------------------------------------------------
 #include <vcl_vector.h>
-#include <vcl_iostream.h>
 #include <gevd/gevd_bufferxy.h>
 #include <vil/vil_image.h>
 #include <vdgl/vdgl_digital_region.h>

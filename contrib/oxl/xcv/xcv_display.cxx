@@ -1,5 +1,5 @@
-// This is ./oxl/xcv/xcv_display.cxx
-
+// This is oxl/xcv/xcv_display.cxx
+#include "xcv_display.h"
 //:
 // \file
 // \author K.Y.McGaul
@@ -35,14 +35,11 @@
 #include <vgui/vgui_composite.h>
 #include <vgui/vgui_rubberbander.h>
 #include <vgui/vgui_shell_tableau.h>
-#include <vgui/vgui_text_tableau.h>
-#include <vgui/vgui_roi_tableau.h>
 #include <vgui/vgui_event_server.h>
 
 #include <xcv/xcv_image_tableau.h>
 #include <xcv/xcv_picker_tableau.h>
 #include <xcv/xcv_axes_tableau.h>
-#include <xcv/xcv_display.h>
 
 //vgui_roi_tableau_make_roi *xcv_display::roi_tableau_client_ = 0;
 extern void post_to_status_bar(const char*);
@@ -122,7 +119,7 @@ void xcv_display::toggle_enhance()
   }
   else
   {
-    if (debug) vcl_cout << "removing enhance lens" << vcl_endl;
+    if (debug) vcl_cout << "removing enhance lens\n";
 
     vgui_slot::replace_child_everywhere(enhance, img);
     is_enhancing = false;
@@ -140,7 +137,7 @@ void xcv_display::toggle_magnify()
 
   if (is_magnifying == false)
   {
-    if (debug) vcl_cerr << "adding magnify lens" << vcl_endl;
+    if (debug) vcl_cerr << "adding magnify lens\n";
 
     unsigned col, row;
     get_current(&col, &row);
@@ -155,7 +152,7 @@ void xcv_display::toggle_magnify()
   }
   else
   {
-    if (debug) vcl_cout << "removing magnify lens" << vcl_endl;
+    if (debug) vcl_cout << "removing magnify lens\n";
 
     enhance->set_child(0);
     vgui_slot::replace_child_everywhere(enhance, comp);
@@ -223,7 +220,7 @@ void xcv_display::line_profile(const vil_image& src, float x0, float y0, float x
 
   if ((sdepth != 8) /*&& (sdepth != 16)*/)
   {
-    vcl_cerr << sdepth << " bit profile not yet implemented." << vcl_endl;
+    vcl_cerr << sdepth << " bit profile not yet implemented.\n";
     return;
   }
 

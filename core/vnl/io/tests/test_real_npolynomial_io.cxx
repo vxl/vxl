@@ -3,7 +3,6 @@
 #include <vcl_utility.h>
 
 #include <vnl/vnl_test.h>
-#include <vnl/vnl_math.h>
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_matrix.h>
 #include <vnl/vnl_real_npolynomial.h>
@@ -13,9 +12,9 @@
 
 void test_real_npolynomial_io()
 {
-  vcl_cout << "*************************" << vcl_endl;
-  vcl_cout << "test_real_npolynomial_io" << vcl_endl;
-  vcl_cout << "*************************" << vcl_endl;
+  vcl_cout << "************************\n";
+  vcl_cout << "test_real_npolynomial_io\n";
+  vcl_cout << "************************\n";
   //// test constructors, accessors
   vnl_vector<double> coeffs(4),coeffs2;
   vnl_matrix<int> exponents(4,2);

@@ -1,12 +1,11 @@
-//-*- c++ -*-------------------------------------------------------------------
+// This is oxl/vgui/vgui_tview.cxx
 #ifdef __GNUC__
 #pragma implementation
 #endif
-//
-// .NAME vgui_tview
-// Author: Philip C. Pritchett, RRG, University of Oxford
-// Created: 12 Oct 99
-//
+//:
+// \file
+// \author Philip C. Pritchett, RRG, University of Oxford
+// \date   12 Oct 99
 //-----------------------------------------------------------------------------
 
 #include <vcl_string.h>
@@ -18,7 +17,6 @@
 #include <vgui/vgui_gl.h>
 #include <vgui/vgui_event.h>
 #include <vgui/vgui_tableau.h>
-#include <vgui/vgui_slot.h>
 #include <vgui/vgui_deck_tableau.h>
 #include <vgui/vgui_composite.h>
 #include <vgui/vgui_projection_inspector.h>
@@ -280,7 +278,7 @@ vcl_string strip_preceeding_numerals(const char* name) {
 
 bool vgui_tview::handle(const vgui_event& e) {
 
-  if (debug) vcl_cerr << "vgui_tview::handle" << vcl_endl;
+  if (debug) vcl_cerr << "vgui_tview::handle\n";
 
   GLfloat vp[4];
   glGetFloatv(GL_VIEWPORT, vp); // ok
@@ -325,12 +323,12 @@ bool vgui_tview::handle(const vgui_event& e) {
 
     //vcl_cerr << "icon is " << (void*) t << vcl_endl;
     if (t) {
-      vcl_cerr << "---------" << vcl_endl;
+      vcl_cerr << "---------\n";
       //vcl_cerr << "| type : " << strip_preceeding_numerals(typeid(*t).name()) << vcl_endl;
       vcl_cerr << "| type_name   : " << t->type_name() << vcl_endl;
       vcl_cerr << "| file_name   : " << t->file_name() << vcl_endl;
       vcl_cerr << "| pretty_name : " << t->pretty_name() << vcl_endl;
-      vcl_cerr << "---------" << vcl_endl << vcl_endl;;
+      vcl_cerr << "---------\n\n";;
     }
 
     post_redraw();

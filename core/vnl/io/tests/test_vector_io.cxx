@@ -3,18 +3,16 @@
 #include <vcl_utility.h>
 
 #include <vnl/vnl_test.h>
-#include <vnl/vnl_math.h>
 #include <vnl/io/vnl_io_vector.h>
-#include <vnl/vnl_matrix.h>
 
 #include <vsl/vsl_binary_io.h>
 
 
 void test_vector_double_io()
 {
-  vcl_cout << "*****************************" << vcl_endl;
-  vcl_cout << "Testing vnl_vector<double> io" << vcl_endl;
-  vcl_cout << "*****************************" << vcl_endl;
+  vcl_cout << "*****************************\n";
+  vcl_cout << "Testing vnl_vector<double> io\n";
+  vcl_cout << "*****************************\n";
   //// test constructors, accessors
   const int n = 50;
   vnl_vector<double> v_out(n), v_in;
@@ -43,7 +41,7 @@ void test_vector_double_io()
 
   vcl_cout << "after reading in:\t"; vsl_print_summary(vcl_cout, v_in);
 
-  TEST ("v_out == v_in", v_out == v_in, true);
+  TEST ("v_out == v_in", v_out, v_in);
 
   vsl_print_summary(vcl_cout, v_out);
   vcl_cout << vcl_endl;

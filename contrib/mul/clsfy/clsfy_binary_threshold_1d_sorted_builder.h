@@ -6,17 +6,12 @@
 // \brief Describe an concrete classifier builder for scalar data
 // \author Tim Cootes
 
-
 #include "clsfy/clsfy_builder_1d.h"
-#include <vcl_vector.h>
 #include <vcl_string.h>
-#include <mbl/mbl_data_wrapper.h>
 #include <vnl/vnl_vector.h>
 #include <vbl/vbl_triple.h>
 #include <clsfy/clsfy_classifier_1d.h>
-
 class clsfy_classifier_1d;
-
 
 //: Base for classes to build clsfy_classifier_1d objects
 class clsfy_binary_threshold_1d_sorted_builder : public clsfy_builder_1d

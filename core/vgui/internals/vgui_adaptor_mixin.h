@@ -1,17 +1,16 @@
-// This is ./oxl/vgui/internals/vgui_adaptor_mixin.h
-
-//:
-// \file
-// \author fsm@robots.ox.ac.uk
-// \brief  Holds the dimensions of the adaptor and the event causing popup menus.
-
+// This is oxl/vgui/internals/vgui_adaptor_mixin.h
 #ifndef vgui_adaptor_mixin_h_
 #define vgui_adaptor_mixin_h_
 #ifdef __GNUC__
 #pragma interface
 #endif
+//:
+// \file
+// \author fsm@robots.ox.ac.uk
+// \brief  Holds the dimensions of the adaptor and the event causing popup menus.
 
-#include <vgui/vgui_event.h>
+#include <vgui/vgui_button.h>
+#include <vgui/vgui_modifier.h>
 
 //: Holds the dimensions of the adaptor and the event causing popup menus.
 class vgui_adaptor_mixin {

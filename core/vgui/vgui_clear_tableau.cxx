@@ -1,21 +1,18 @@
-// This is ./oxl/vgui/vgui_clear_tableau.cxx
-
+// This is oxl/vgui/vgui_clear_tableau.cxx
+#ifdef __GNUC__
+#pragma implementation
+#endif
 //:
 // \file
 // \author Philip C. Pritchett, RRG, University of Oxford
 // \date   11 Nov 99
 // See vgui_clear_tableau.h for a description of this class.
 
-#ifdef __GNUC__
-#pragma implementation
-#endif
-
 #include "vgui_clear_tableau.h"
 #include <vgui/vgui_event.h>
 #include <vgui/vgui_menu.h>
 #include <vgui/vgui_command.h>
 #include <vgui/vgui_dialog.h>
-#include <vgui/vgui_popup_params.h>
 #include <vgui/internals/vgui_accelerate.h>
 
 vgui_clear_tableau::vgui_clear_tableau()

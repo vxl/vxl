@@ -2,7 +2,6 @@
 #include <vcl_vector.h>
 
 #include <testlib/testlib_test.h>
-#include <vnl/vnl_math.h>
 #include <vnl/vnl_matrix.h>
 #include <vnl/vnl_vector.h>
 

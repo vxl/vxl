@@ -1,16 +1,13 @@
-// This is ./vxl/vnl/vnl_cross_product_matrix.cxx
+// This is vxl/vnl/vnl_cross_product_matrix.cxx
 #ifdef __GNUC__
 #pragma implementation
 #endif
-
 //:
 // \file
 // \author Andrew W. Fitzgibbon, Oxford RRG
 // \date   19 Sep 96
-//
 //-----------------------------------------------------------------------------
 
-#include <vnl/vnl_vector.h>
 #include "vnl_cross_product_matrix.h"
 
 //: Construct a vnl_cross_product_matrix from a vector of 3 doubles.

@@ -1,10 +1,8 @@
 #ifndef vsrl_image_correlation_h
 #define vsrl_image_correlation_h
-
 //:
 // \file
 
-#include <vcl_iostream.h>
 #include <vcl_cmath.h>
 #include <vcl_cstddef.h>
 #include <vcl_cstdio.h>

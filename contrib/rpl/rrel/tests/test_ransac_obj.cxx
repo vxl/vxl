@@ -1,9 +1,6 @@
-
-#include <vcl_iostream.h>
 #include <vcl_cmath.h>
 #include <vcl_vector.h>
 #include <testlib/testlib_test.h>
-#include <vnl/vnl_math.h>
 
 #include <rrel/rrel_ransac_obj.h>
 

@@ -1,10 +1,7 @@
-//-*- c++ -*-------------------------------------------------------------------
-//
-// Module: main
-// Author: Geoffrey Cross, Oxford RRG
-// Created: 11 May 99
-// Modifications:
-//
+//:
+// \file
+// \author Geoffrey Cross, Oxford RRG
+// \date   11 May 99
 //-----------------------------------------------------------------------------
 
 #include <vcl_cassert.h>
@@ -16,7 +13,6 @@
 #include <vcl_vector.h>
 
 #include <vbl/vbl_array_2d.h>
-#include <vbl/vbl_array_3d.h>
 #include <vbl/vbl_sparse_array_1d.h>
 
 #include <vul/vul_arg.h>
@@ -32,7 +28,6 @@
 #include <vil/vil_byte.h>
 #include <vil/vil_image.h>
 #include <vil/vil_memory_image_of.h>
-#include <vil/vil_file_image.h>
 
 #include <mvl/PMatrix.h>
 
@@ -192,11 +187,11 @@ cubetest_t DoScan( VoxmapImagePoints const& voxmap, Voxel &voxel, int imageindex
   // 3 = conflict
   int expecting=0;
 
-  for (polyscan.reset() ; (polyscan.next()) && (expecting!= 3) ; )
+  for (polyscan.reset(); polyscan.next() && expecting != 3; )
     {
       int y= polyscan.scany();
 
-      for (int x=polyscan.startx(); (x<= polyscan.endx()) && (expecting!=3); x++)
+      for (int x=polyscan.startx(); x <= polyscan.endx() && expecting != 3; ++x)
         {
           vil_byte pix= (*imagestore[imageindex])(int(x),int(y));
           int t;
@@ -258,12 +253,12 @@ int main(int argc, char ** argv)
 
   if (( char *)( outputfilename()))
     {
-      vcl_cerr << "Opening pipe..." << vcl_endl;
+      vcl_cerr << "Opening pipe...\n";
       fout= new vcl_ofstream( outputfilename());
     }
   else
     {
-      vcl_cerr << "Not opening pipe..." << vcl_endl;
+      vcl_cerr << "Not opening pipe...\n";
     }
 
   ///////////////////////////////////////////////////////////////////
@@ -286,7 +281,7 @@ int main(int argc, char ** argv)
       pmatrixstore[*it]= new PMatrix;
       pmatrixstore[*it]->read_ascii( pmatrixin);
 
-      vcl_cerr << "Computing borgefor transform..." << vcl_endl;
+      vcl_cerr << "Computing borgefor transform...\n";
 
       // compute borgefors transform
       vbl_array_2d<bool> edges( imagestore[*it]->width(),
@@ -323,7 +318,7 @@ int main(int argc, char ** argv)
 
       if (fout)
         {
-          (*fout) << "c" << vcl_endl;
+          (*fout) << "c\n";
 
           for (unsigned int i=0; i< voxels.size(); i++)
             (*fout) << "a" << voxels[i] << vcl_endl;
@@ -354,7 +349,7 @@ int main(int argc, char ** argv)
           insideobject [i]= true;
         }
 
-      vcl_cerr << "Done. " << vcl_endl;
+      vcl_cerr << "Done.\n";
 
       for (vcl_list<int>::iterator it= imagenumbers.begin(); it!= imagenumbers.end(); ++it)
         {
@@ -365,7 +360,7 @@ int main(int argc, char ** argv)
               if (( char *) colorimagefilename())
                 {
                   (*fout) << "i" << vul_sprintf( ( char *) colorimagefilename(), *it) << vcl_endl;
-                  (*fout) << "u" << vcl_endl;
+                  (*fout) << "u\n";
                 }
             }
 
@@ -384,7 +379,7 @@ int main(int argc, char ** argv)
                                                                *it);
 
                   // centre is outside the image
-                  if ((centre[0]< 0) || ( centre[1]< 0) || ( centre[0]>= xsize) || (centre[1]>= ysize))
+                  if (centre[0]<0 || centre[1]<0 || centre[0]>=xsize || centre[1]>=ysize)
                     {
                       double disttoim= vnl_double_2( double(xsize)/2-centre[0], double(ysize)/2-centre[1]).magnitude();
 
@@ -422,7 +417,7 @@ int main(int argc, char ** argv)
                                   (*fout) << "d " << i << vcl_endl;
                                   if (updatecounter++>= (2<<count))
                                     {
-                                      (*fout) << "u" << vcl_endl;
+                                      (*fout) << "u\n";
                                       updatecounter= 0;
                                     }
                                 }
@@ -462,7 +457,7 @@ int main(int argc, char ** argv)
       //      CoolArray<Voxel> newvoxels;
 
       vcl_cerr << "No voxels = " << voxels.size() << vcl_endl;
-      vcl_cerr << "Making new level..." << vcl_endl;
+      vcl_cerr << "Making new level...\n";
 
       for (unsigned int i=0; i< voxels.size(); i++)
         {
@@ -494,7 +489,7 @@ int main(int argc, char ** argv)
             }
         }
 
-      vcl_cerr << "Copying..." << vcl_endl;
+      vcl_cerr << "Copying...\n";
 
       //      if (count!= (int(iterations)-1))
       voxels= newvoxels;
@@ -503,7 +498,7 @@ int main(int argc, char ** argv)
       delete[] insideobject;
     } // for (int i=0; i< int(iterators); i++)
 
-  vcl_cerr << "Deleting images and pmatrices..." << vcl_endl;
+  vcl_cerr << "Deleting images and pmatrices...\n";
 
   ///////////////////////////////////////////////////////////////////
   // delete all images and pmatrices
@@ -557,7 +552,7 @@ int main(int argc, char ** argv)
   ///////////////////////////////////////////////////////////////////
   // make VRML
 
-  vcl_cerr << "Making VRML..." << vcl_endl;
+  vcl_cerr << "Making VRML...\n";
 
   int size= 1<<(int(iterations())-1);
   vbl_bit_array_3d edges1( size,   size,   size+1, false);
@@ -565,7 +560,7 @@ int main(int argc, char ** argv)
   vbl_bit_array_3d edges3( size+1, size,   size,   false);
   vbl_bit_array_3d voxint( size,   size,   size,   false);
 
-  vcl_cerr << "Surface voxels..." << vcl_endl;
+  vcl_cerr << "Surface voxels...\n";
   for (unsigned int i=0; i< voxels.size(); i++)
     {
       voxint.set( voxels[i].x, voxels[i].y, voxels[i].z);
@@ -580,7 +575,7 @@ int main(int argc, char ** argv)
       edges3.flip( voxels[i].x+1, voxels[i].y,   voxels[i].z);
     }
 
-  vcl_cerr << "Interior voxels..." << vcl_endl;
+  vcl_cerr << "Interior voxels...\n";
   for (unsigned int i=0; i< insidevoxels.size(); i++)
     {
       int depth= 1<<((int(iterations())-1)-insidevoxels[i].depth);
@@ -610,17 +605,17 @@ int main(int argc, char ** argv)
           }
     }
 
-  vcl_cerr << "Clearing up..." << vcl_endl;
+  vcl_cerr << "Clearing up...\n";
   voxels.clear();
   insidevoxels.clear();
 
-  vcl_cerr << "Output VRML..." << vcl_endl;
+  vcl_cerr << "Output VRML...\n";
 
   vbl_sparse_array_1d<int> indexlist;
   vcl_vector<vnl_double_3> points;
   vcl_vector<vnl_int_3> faces;
 
-  vcl_cerr << "z - direction" << vcl_endl;
+  vcl_cerr << "z - direction\n";
 
   // z direction
   for (int x=0; x< size; x++)
@@ -673,7 +668,7 @@ int main(int argc, char ** argv)
         }
     }
 
-  vcl_cerr << "y - direction" << vcl_endl;
+  vcl_cerr << "y - direction\n";
 
   // y direction
   for (int x=0; x< size; x++)
@@ -726,7 +721,7 @@ int main(int argc, char ** argv)
         }
     }
 
-  vcl_cerr << "x - direction" << vcl_endl;
+  vcl_cerr << "x - direction\n";
 
   // x direction
   for (int x=1; x< size; x++)
@@ -790,7 +785,7 @@ int main(int argc, char ** argv)
     {
       vfout << points[i][0] << " "
             << points[i][1] << " "
-            << points[i][2] << "," << vcl_endl;
+            << points[i][2] << ",\n";
     }
 
   vfout << "]}\nIndexedFaceSet { coordIndex [\n";
@@ -799,10 +794,10 @@ int main(int argc, char ** argv)
     {
       vfout << faces[i][0] << ", "
             << faces[i][1] << ", "
-            << faces[i][2] << ", -1," << vcl_endl;
+            << faces[i][2] << ", -1,\n";
     }
 
-  vfout << "]}}" << vcl_endl;
+  vfout << "]}}\n";
 
   vfout.close();
 

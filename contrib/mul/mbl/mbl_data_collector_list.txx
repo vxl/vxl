@@ -4,10 +4,10 @@
 //:
 //  \file
 
+#include "mbl_data_collector_list.h"
+
 #include <vcl_cstdlib.h>
 #include <vcl_cassert.h>
-#include <mbl/mbl_data_collector_list.h>
-#include <vsl/vsl_indent.h>
 #include <vsl/vsl_binary_loader.h>
 #include <vsl/vsl_vector_io.h>
 
@@ -120,7 +120,7 @@ void mbl_data_collector_list<T>::b_read(vsl_b_istream& bfs)
     vsl_b_read(bfs, data_);
     break;
   default:
-    vcl_cerr << "I/O ERROR: mbl_data_collector_list<T>::b_read(vsl_b_istream&) \n";
+    vcl_cerr << "I/O ERROR: mbl_data_collector_list<T>::b_read(vsl_b_istream&)\n";
     vcl_cerr << "           Unknown version number "<< version << "\n";
     bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
     return;

@@ -5,20 +5,19 @@
 
 #include <vnl/vnl_test.h>
 #include <mbl/mbl_mz_random.h>
-#include <mbl/mbl_k_means.h>
 
 void test_mz_random()
 {
-  vcl_cout << "***********************" << vcl_endl;
-  vcl_cout << " Testing mbl_mz_random " << vcl_endl;
-  vcl_cout << "***********************" << vcl_endl;
+  vcl_cout << "***********************\n";
+  vcl_cout << " Testing mbl_mz_random\n";
+  vcl_cout << "***********************\n";
 
   mbl_mz_random mz_random;
   mz_random.reseed(123456);
 
 
-  TEST("lrand32",mz_random.lrand32()==3501493769ul,true);
-  TEST("lrand32(0,10)",mz_random.lrand32(0,10)==9,true);
+  TEST("lrand32",mz_random.lrand32(),3501493769ul);
+  TEST("lrand32(0,10)",mz_random.lrand32(0,10),9);
   double d1 = mz_random.drand32(0,1) - 0.615854;
   TEST("drand32(0,1)",d1*d1<0.000001,true);
   double d2 = mz_random.drand64(0,1) - 0.225741;

@@ -3,15 +3,13 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
-
 //:
 // \file
 // \author Ian Scott
 // \date 19-Apr-2001
 // \brief Base class for Multi-Variate random sampler classes.
 
-#include <vsl/vsl_binary_io.h>
-#include <vnl/io/vnl_io_vector.h>
+#include <vnl/vnl_vector.h>
 #include <vcl_string.h>
 #include <vcl_vector.h>
 
@@ -25,7 +23,8 @@ class vpdfl_pdf_base;
 // Sampler objects should only exist as long as their pdf object,
 // and are not meant to be persistent.
 
-class vpdfl_sampler_base {
+class vpdfl_sampler_base
+{
 protected:
   const vpdfl_pdf_base *pdf_model_;
 public:

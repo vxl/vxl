@@ -1,19 +1,18 @@
-#ifndef _VGUI_QT_MENU_H_
-#define _VGUI_QT_MENU_H_
-
-// .NAME vgui_qt_menu - vgui_menu wrapped into a QT popupmenu
-// .HEADER vxl package
-// .LIBRARY vgui-qt
-// .INCLUDE vgui/impl/qt/vgui_qt_menu.h
-// .FILE vgui_qt_menu.cxx
-
-// .SECTION Author
+#ifndef VGUI_QT_MENU_H_
+#define VGUI_QT_MENU_H_
+//:
+// \file
+// \brief vgui_menu wrapped into a QT popupmenu
+//
+// \author
 // Joris Schouteden
-
-// .SECTION Modifications:
+//
+// \verbatim
+//  Modifications
 // 24.03.2000 JS  Initial Version
+// \endverbatim
+//-----------------------------------------------------------------------------
 
-#include <vgui/vgui_event.h>
 #include <vgui/vgui_menu.h>
 #include <vgui/vgui_command.h>
 #include <vbl/vbl_smart_ptr.h>
@@ -36,4 +35,4 @@ private:
    vgui_command_sptr*  commands_;
 };
 
-#endif // _VGUI_QT_MENU_H_
+#endif // VGUI_QT_MENU_H_

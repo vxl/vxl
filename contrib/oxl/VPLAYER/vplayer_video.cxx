@@ -10,7 +10,6 @@
 #include <vgui/vgui_menu.h>
 #include <vgui/vgui_key.h>
 
-#include <vgui/vgui_image_tableau.h>
 #include <vgui/vgui_adaptor.h>
 #include <vgui/vgui_easy2D.h>
 #include <vgui/vgui_rubberbander.h>

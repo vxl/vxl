@@ -6,7 +6,6 @@
 #include <vtol/vtol_edge.h>
 #include <vtol/vtol_face.h>
 #include <vtol/vtol_macros.h>
-#include <vnl/vnl_math.h>
 #include <vtol/vtol_list_functions.h>
 
 #include <vcl_cassert.h>

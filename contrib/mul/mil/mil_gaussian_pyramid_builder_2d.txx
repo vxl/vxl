@@ -5,11 +5,11 @@
 //  \brief Class to build gaussian pyramids of mil_image_2d_of<T>
 //  \author Tim Cootes
 
-#include <mil/mil_gaussian_pyramid_builder_2d.h>
+#include "mil_gaussian_pyramid_builder_2d.h"
+
 #include <vcl_cstdlib.h>
 #include <vcl_string.h>
 
-#include <vsl/vsl_indent.h>
 #include <mil/mil_image_pyramid.h>
 #include <mil/mil_gauss_reduce_2d.h>
 #include <vcl_cassert.h>
@@ -41,7 +41,7 @@ void mil_gaussian_pyramid_builder_2d<T>::setMaxLevels(int max_l)
   if (max_l<1)
   {
     vcl_cerr<<"mil_gaussian_pyramid_builder_2d<T>::setMaxLevels() ";
-    vcl_cerr<<"Must be >=1"<<vcl_endl;
+    vcl_cerr<<"Must be >=1\n";
     vcl_abort();
   }
   max_levels_ = max_l;
@@ -392,7 +392,7 @@ void mil_gaussian_pyramid_builder_2d<T>::b_read(vsl_b_istream& bfs)
     vsl_b_read(bfs,filter_width_);
     break;
   default:
-    vcl_cerr << "I/O ERROR: mil_gaussian_pyramid_builder_2d<T>::b_read(vsl_b_istream&) \n";
+    vcl_cerr << "I/O ERROR: mil_gaussian_pyramid_builder_2d<T>::b_read(vsl_b_istream&)\n";
     vcl_cerr << "           Unknown version number "<< version << "\n";
     bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
     return;

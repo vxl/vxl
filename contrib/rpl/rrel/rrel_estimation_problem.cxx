@@ -3,7 +3,6 @@
 #include <rrel/rrel_wls_obj.h>
 
 #include <vcl_vector.h>
-#include <vcl_iostream.h>
 #include <vcl_cstdlib.h>
 #include <vcl_cassert.h>
 
@@ -69,7 +68,7 @@ rrel_estimation_problem::prior_scale() const
 void
 rrel_estimation_problem::set_prior_multiple_scales( const vcl_vector<double>& scales )
 {
-  if( ! multiple_scales_ ) {
+  if ( ! multiple_scales_ ) {
     multiple_scales_ = new vcl_vector<double>;
   }
   *multiple_scales_ = scales;

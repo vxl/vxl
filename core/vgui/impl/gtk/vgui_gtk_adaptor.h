@@ -1,27 +1,23 @@
+// This is oxl/vgui/impl/gtk/vgui_gtk_adaptor.h
 #ifndef vgui_gtk_adaptor_h_
 #define vgui_gtk_adaptor_h_
 #ifdef __GNUC__
 #pragma interface
 #endif
-// .NAME vgui_gtk_adaptor
-// .LIBRARY vgui-gtk
-// .HEADER vxl Package
-// .INCLUDE vgui/impl/gtk/vgui_gtk_adaptor.h
-// .FILE vgui_gtk_adaptor.cxx
+//:
+// \file
+// \brief Specialization of vgui_adaptor for GTK.
 //
-// .SECTION Description:
-//   Specialization of vgui_adaptor for GTK. 
-//
-// .SECTION Author:
+// \author
 //              Philip C. Pritchett, 19 Dec 99
 //              Robotics Research Group, University of Oxford
+//-----------------------------------------------------------------------------
 
 #ifdef __SUNPRO_CC
 // <string> breaks if NULL is defined to "(void*)0".
 # include <vcl_string.h>
 #endif
 
-#include <vgui/vgui_tableau.h>
 #include <vgui/vgui_adaptor.h>
 #include <vgui/internals/vgui_adaptor_mixin.h>
 
@@ -45,7 +41,7 @@ public:
   void post_overlay_redraw();
   void post_timer(float,int);
   void post_destroy();  // schedules destruction of parent vgui_window
-  
+
   unsigned get_width() const {return mixin::width;}
   unsigned get_height() const {return mixin::height;}
   void bind_popups(vgui_modifier m, vgui_button b)
@@ -55,7 +51,7 @@ public:
 
   void set_default_popup(vgui_menu);
   vgui_menu get_popup();
-  
+
   void draw();
   void reshape();
 

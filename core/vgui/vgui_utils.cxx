@@ -1,6 +1,7 @@
-// .NAME vgui_utils
-// Author: fsm@robots.ox.ac.uk
-// Created: Oct 99
+//:
+// \file
+// \author fsm@robots.ox.ac.uk
+// \date   Oct 99
 
 #include "vgui_utils.h"
 
@@ -17,13 +18,8 @@
 #include <vil/vil_memory_image_of.h>
 #include <vil/vil_save.h>
 
-#include <vnl/vnl_matrix.h>
-
 #include <vgui/vgui_gl.h>
 #include <vgui/vgui_glu.h>
-#include <vgui/vgui_tableau.h>
-
-static bool debug = false;
 
 //--------------------------------------------------------------------------------
 
@@ -154,12 +150,11 @@ void vgui_utils::begin_sw_overlay() {
   glGetIntegerv(GL_DRAW_BUFFER, &gl_old_buffer);
   if (gl_old_buffer != GL_NONE)
     glDrawBuffer(GL_FRONT);
-
 }
 
 void vgui_utils::end_sw_overlay() {
   if (gl_old_buffer == -1) {
-    vcl_cerr << "WARNING :  end_sw_overlay called before begin_sw_overlay" << vcl_endl;
+    vcl_cerr << "WARNING :  end_sw_overlay called before begin_sw_overlay\n";
     return;
   }
 
@@ -222,36 +217,49 @@ unsigned vgui_utils::leave_pick_mode() {
 
 void vgui_utils::process_hits(int num_hits, GLuint* ptr, vcl_vector<vcl_vector<unsigned> >& hits) {
 
-  if (debug) vcl_cerr << "hits = " << num_hits << vcl_endl;
-
+#ifdef DEBUG
+    vcl_cerr << "hits = " << num_hits << vcl_endl;
+#endif
   // for each hit
    for (int i = 0; i < num_hits; i++) {
      GLuint num_names = *ptr;
-     if (debug) vcl_cerr << vul_sprintf("number of names for hit[%d] = %d", i, num_names) << vcl_endl;
+#ifdef DEBUG
+       vcl_cerr << vul_sprintf("number of names for hit[%d] = %d", i, num_names) << vcl_endl;
+#endif
      ptr++;
-     if (debug) vcl_cerr << vul_sprintf(" z1 is %u;", *ptr);
+#ifdef DEBUG
+       vcl_cerr << vul_sprintf(" z1 is %u;", *ptr);
+#endif
      ptr++;
-     if (debug) vcl_cerr << vul_sprintf(" z2 is %u", *ptr) << vcl_endl;
+#ifdef DEBUG
+       vcl_cerr << vul_sprintf(" z2 is %u", *ptr) << vcl_endl;
+#endif
      ptr++;
 
      vcl_vector<unsigned> names;
-
-     if (debug) vcl_cerr << " the name is ";
+#ifdef DEBUG
+       vcl_cerr << " the name is ";
+#endif
      // for each name
      for (unsigned int j = 0; j < num_names; j++) {
        names.push_back(*ptr);
-       if (debug) vcl_cerr << *ptr << " ";
+#ifdef DEBUG
+         vcl_cerr << *ptr << " ";
+#endif
        ptr++;
      }
-
-     if (debug) vcl_cerr << vcl_endl << "names.size() " << names.size() << vcl_endl;
+#ifdef DEBUG
+       vcl_cerr << vcl_endl << "names.size() " << names.size() << vcl_endl;
+#endif
      hits.push_back(names);
 
-     if (debug) vcl_cerr << vcl_endl;
+#ifdef DEBUG
+       vcl_cerr << vcl_endl;
+#endif
    }
-
-
-   if (debug) vcl_cerr << "hits.size() " << hits.size() << vcl_endl;
+#ifdef DEBUG
+     vcl_cerr << "hits.size() " << hits.size() << vcl_endl;
+#endif
 }
 
 

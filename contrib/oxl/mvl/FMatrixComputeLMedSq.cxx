@@ -1,8 +1,5 @@
 #include "FMatrixComputeLMedSq.h"
 #include <mvl/HomgOperator2D.h>
-#include <vnl/vnl_matrix.h>
-#include <vnl/vnl_double_2.h>
-#include <vcl_iostream.h>
 #include <vcl_cmath.h>
 #include <vcl_algorithm.h>
 
@@ -20,8 +17,8 @@ double FMatrixComputeLMedSq::calculate_term(vcl_vector<double>& residuals, vcl_v
   double M = median(residuals);
   double thresh = inthresh_;
   thresh *= M;
-  for(unsigned int i = 0; i < residuals.size(); i++) {
-    if(residuals[i] < thresh) {
+  for (unsigned int i = 0; i < residuals.size(); i++) {
+    if (residuals[i] < thresh) {
       inlier_list[i] = true;
       count++;
     } else {
@@ -48,7 +45,7 @@ double FMatrixComputeLMedSq::median(vcl_vector<double> residuals) {
   vcl_sort(residuals.begin(), residuals.end());
   int size = residuals.size();
   double s2 = (double)size / 2.0;
-  if(s2 == 0.0) {
+  if (s2 == 0.0) {
     ret = (residuals[(int)s2] + residuals[(int)s2-1]) / 2.0;
   } else {
     ret = residuals[(int)vcl_floor(s2)];

@@ -1,12 +1,11 @@
-//-*- c++ -*-------------------------------------------------------------------
+// This is oxl/vgui/vrml/vgui_vrml_tableau.cxx
 #ifdef __GNUC__
 #pragma implementation
 #endif
-//
-// .NAME vgui_vrml_tableau
-// Author: Philip C. Pritchett, RRG, University of Oxford
-// Created: 17 Sep 99
-//
+//:
+// \file
+// \author Philip C. Pritchett, RRG, University of Oxford
+// \date   17 Sep 99
 //-----------------------------------------------------------------------------
 
 #include "vgui_vrml_tableau.h"
@@ -16,8 +15,6 @@
 
 #include <vcl_iostream.h>
 
-#include <vnl/vnl_math.h>
-
 #include <vul/vul_file.h>
 
 #include <vgui/vgui_gl.h>
@@ -26,8 +23,6 @@
 
 #include "vgui_vrml_texture_map.h"
 #include "vgui_vrml_draw_visitor.h"
-
-static bool debug= false;
 
 
 vgui_vrml_tableau::vgui_vrml_tableau(const char* filename, bool scale)
@@ -56,18 +51,21 @@ void vgui_vrml_tableau::invalidate_vrml()
   post_redraw();
 }
 
-vcl_string vgui_vrml_tableau::type_name() const {
+vcl_string vgui_vrml_tableau::type_name() const
+{
   return "vgui_vrml_tableau";
 }
 
-vcl_string vgui_vrml_tableau::pretty_name() const {
+vcl_string vgui_vrml_tableau::pretty_name() const
+{
   vcl_string fn = vrml?(vrml->get_filename()):"null";
   return type_name() + "[" + fn + "]";
 }
 
-vcl_string vgui_vrml_tableau::file_name() const {
+vcl_string vgui_vrml_tableau::file_name() const
+{
   if (vrml)
-    return (vrml->get_filename());
+    return vrml->get_filename();
 
   return type_name();
 }
@@ -75,22 +73,32 @@ vcl_string vgui_vrml_tableau::file_name() const {
 
 bool vgui_vrml_tableau::handle(const vgui_event &e)
 {
-  if (debug) vcl_cerr << "vgui_vrml_tableau::draw" << vcl_endl;
+#ifdef DEBUG
+  vcl_cerr << "vgui_vrml_tableau::draw\n";
+#endif
 
   if (!glIsEnabled(GL_LIGHTING))
     glColor3f(1,1,1);
 
   int mode = 1;
-  if (mode == 0 /*e.user == &vgui_3D::wireframe*/) {
-    if (debug) vcl_cerr << "vgui_vrml_tableau wireframe" << vcl_endl;
-    if (drawer->get_gl_mode() != vgui_vrml_draw_visitor::wireframe) {
+  if (mode == 0 /*e.user == &vgui_3D::wireframe*/)
+  {
+#ifdef DEBUG
+    vcl_cerr << "vgui_vrml_tableau wireframe\n";
+#endif
+    if (drawer->get_gl_mode() != vgui_vrml_draw_visitor::wireframe)
+    {
       drawer->set_gl_mode(vgui_vrml_draw_visitor::wireframe);
       setup_dl = GL_INVALID_VALUE;
     }
   }
-  else if (mode == 1 /*e.user == &vgui_3D::textured*/) {
-    if (debug) vcl_cerr << "vgui_vrml_tableau textured" << vcl_endl;
-    if (drawer->get_gl_mode() != vgui_vrml_draw_visitor::textured) {
+  else if (mode == 1 /*e.user == &vgui_3D::textured*/)
+  {
+#ifdef DEBUG
+    vcl_cerr << "vgui_vrml_tableau textured\n";
+#endif
+    if (drawer->get_gl_mode() != vgui_vrml_draw_visitor::textured)
+    {
       drawer->set_gl_mode(vgui_vrml_draw_visitor::textured);
       setup_dl = GL_INVALID_VALUE;
     }
@@ -103,17 +111,20 @@ bool vgui_vrml_tableau::handle(const vgui_event &e)
   //
   double scale = 10 / vrml->radius;
 
-  if( rescale_model)
-    {
-      glScalef(scale, scale, scale);
-      glTranslatef(-vrml->centroid[0], -vrml->centroid[1], -vrml->centroid[2]);
-    }
+  if ( rescale_model)
+  {
+    glScalef(scale, scale, scale);
+    glTranslatef(-vrml->centroid[0], -vrml->centroid[1], -vrml->centroid[2]);
+  }
 
   //extern void projective_skew(float*);
   //projective_skew(token.trans);
 
-  if (setup_dl == GL_INVALID_VALUE) {
-    if (debug) vcl_cerr << "vgui_vrml_tableau  generating display list" << vcl_endl;
+  if (setup_dl == GL_INVALID_VALUE)
+  {
+#ifdef DEBUG
+    vcl_cerr << "vgui_vrml_tableau  generating display list\n";
+#endif
 
     setup_dl = glGenLists(1);
     glNewList(setup_dl, GL_COMPILE_AND_EXECUTE);
@@ -122,8 +133,11 @@ bool vgui_vrml_tableau::handle(const vgui_event &e)
 
     glEndList();
    }
-  else {
-    if (debug) vcl_cerr << "vgui_vrml_tableau  using display list" << vcl_endl;
+  else
+  {
+#ifdef DEBUG
+    vcl_cerr << "vgui_vrml_tableau  using display list\n";
+#endif
     glCallList(setup_dl);
   }
 

@@ -1,4 +1,4 @@
-#include <mil/mil_image.h>
+#include <mil/mil_image_2d_of.h>
 
 // this must be here for filter-2d to work
 #include "../vipl_filterable_section_container_generator_mil_image.txx"

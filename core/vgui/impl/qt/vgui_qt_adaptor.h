@@ -1,19 +1,19 @@
 #ifndef VGUI_QT_ADAPTOR_H_
 #define VGUI_QT_ADAPTOR_H_
 
-// .NAME vgui_qt_adaptor - OpenGL canvas in QT as a VGUI adaptor
-// .HEADER vxl package
-// .LIBRARY vgui-qt
-// .INCLUDE vgui/impl/qt/vgui_qt_adaptor.h
-// .FILE vgui_qt_adaptor.cxx
-
-// .SECTION Author
+//:
+// \file
+// \brief OpenGL canvas in QT as a VGUI adaptor
+//
+// \author
 // Joris Schouteden
-
-// .SECTION Modifications:
+//
+// \verbatim
+//  Modifications
 // 24.03.2000 JS  Initial Version, adapted from vgui_gtk_adaptor
+// \endverbatim
+//-----------------------------------------------------------------------------
 
-#include <vgui/vgui_tableau.h>
 #include <vgui/vgui_adaptor.h>
 #include <vgui/internals/vgui_adaptor_mixin.h>
 

@@ -6,7 +6,6 @@
 // this program will allow for efficient accumulation for a
 // rectangular window that goes across an array
 
-#include <vil/vil_memory_image_of.h>
 #include <vnl/vnl_matrix.h>
 #include <vnl/vnl_vector.h>
 

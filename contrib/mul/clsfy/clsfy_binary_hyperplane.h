@@ -11,13 +11,14 @@
 
 
 #include <clsfy/clsfy_classifier_base.h>
-#include <vnl/vnl_matrix.h>
 #include <vnl/vnl_vector.h>
 
 
 //:  A binary output hyperplane classifier.
 // The classifier could be considered as a single perceptron.
-class clsfy_binary_hyperplane : public clsfy_classifier_base {
+
+class clsfy_binary_hyperplane : public clsfy_classifier_base
+{
 protected:
   //: Hyperplane normal
   vnl_vector<double> weights_;

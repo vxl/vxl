@@ -13,12 +13,10 @@
 // Modifications
 // \endverbatim
 
-
 #include <clsfy/clsfy_binary_threshold_1d_builder.h>
 #include <vcl_iostream.h>
 #include <vcl_string.h>
 #include <vcl_cassert.h>
-#include <vsl/vsl_indent.h>
 #include <vsl/vsl_binary_loader.h>
 #include <clsfy/clsfy_builder_1d.h>
 #include <clsfy/clsfy_binary_threshold_1d.h>
@@ -219,7 +217,7 @@ double clsfy_binary_threshold_1d_builder::build(
     }
   }
 
-  vcl_cout<<" clsfy_binary_threshold_1d_builder:: problem with finding binary threshold"<<vcl_endl;
+  vcl_cout<<" clsfy_binary_threshold_1d_builder:: problem with finding binary threshold\n";
   vcl_abort();
   return -1;  // something went wrong!
 }
@@ -278,7 +276,7 @@ void clsfy_binary_threshold_1d_builder::print_summary(vcl_ostream& /*os*/) const
   // clsfy_builder_1d::print_summary(os); // Uncomment this line if it has one.
   // vsl_print_summary(os, data_); // Example of data output
 
-  vcl_cerr << "clsfy_binary_threshold_1d_builder::print_summary() NYI" << vcl_endl;
+  vcl_cerr << "clsfy_binary_threshold_1d_builder::print_summary() NYI\n";
 }
 
 //=======================================================================
@@ -289,7 +287,7 @@ void clsfy_binary_threshold_1d_builder::b_write(vsl_b_ostream& /*bfs*/) const
   //vsl_b_write(bfs, version_no());
   //clsfy_builder_1d::b_write(bfs);  // Needed if base has any data
   //vsl_b_write(bfs, data_);
-  vcl_cerr << "clsfy_binary_threshold_1d_builder::b_write() NYI" << vcl_endl;
+  vcl_cerr << "clsfy_binary_threshold_1d_builder::b_write() NYI\n";
 }
 
 //=======================================================================
@@ -297,8 +295,8 @@ void clsfy_binary_threshold_1d_builder::b_write(vsl_b_ostream& /*bfs*/) const
   // required if data is present in this base class
 void clsfy_binary_threshold_1d_builder::b_read(vsl_b_istream& /*bfs*/)
 {
-  vcl_cerr << "clsfy_binary_threshold_1d_builder::b_read() NYI" << vcl_endl;
-#if (0)
+  vcl_cerr << "clsfy_binary_threshold_1d_builder::b_read() NYI\n";
+#if 0
   if (!bfs) return;
 
   short version;
@@ -310,7 +308,7 @@ void clsfy_binary_threshold_1d_builder::b_read(vsl_b_istream& /*bfs*/)
     vsl_b_read(bfs,data_);
     break;
   default:
-    vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, clsfy_binary_threshold_1d_builder&) \n";
+    vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, clsfy_binary_threshold_1d_builder&)\n";
     vcl_cerr << "           Unknown version number "<< version << "\n";
     bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
     return;

@@ -23,7 +23,6 @@
 
 #include <vcl_vector.h>
 
-#include <vnl/vnl_int_2.h>
 #include <vnl/vnl_double_2.h>
 
 #include <mvl/HomgPoint2D.h>
@@ -35,7 +34,8 @@ class ImageMetric;
 class HomgInterestPointSetData;
 class HomgInterestPoint;
 
-class HomgInterestPointSet {
+class HomgInterestPointSet
+{
 public:
   // Constructors/Destructors--------------------------------------------------
 
@@ -50,8 +50,6 @@ public:
 
   // Operations----------------------------------------------------------------
   // void set(const IUPointGroup&, const HomgMetric& c);
-
-  // Computations--------------------------------------------------------------
 
   // Data Access---------------------------------------------------------------
   unsigned size() const;

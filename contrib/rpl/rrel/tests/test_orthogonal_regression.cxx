@@ -2,7 +2,6 @@
 
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_matrix.h>
-#include <vnl/vnl_math.h>
 
 #include <testlib/testlib_test.h>
 
@@ -83,7 +82,7 @@ MAIN( test_orthogonal_regression )
   testlib_test_begin( "num_points_to_instantiate (1)" );
   testlib_test_perform( lr1->num_samples_to_instantiate() == 3 );
   testlib_test_begin( "num_points_to_instantiate (3)" );
-  testlib_test_perform( (int)lr1->num_samples() == num_pts );
+  testlib_test_perform( lr1->num_samples() == num_pts );
   testlib_test_begin( "dtor (1)" );
   delete lr1;
   testlib_test_perform( true );
@@ -98,7 +97,8 @@ MAIN( test_orthogonal_regression )
   testlib_test_begin( "residuals" );
   lr1->compute_residuals( true_params, residuals );
   bool ok = (residuals.size() == num_pts);
-  for ( unsigned int i=0; i<residuals.size() && ok; ++ i )  ok = close( residuals[i], error[i] );
+  for ( unsigned int i=0; i<residuals.size() && ok; ++ i )
+    ok = close( residuals[i], error[i] );
   testlib_test_perform( ok );
 
   //

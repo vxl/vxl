@@ -4,12 +4,11 @@
 //:
 //  \file
 
-#include <mbl/mbl_data_collector.h>
+#include "mbl_data_collector.h"
+
 #include <vcl_cstdlib.h>
 #include <vcl_cassert.h>
 #include <vcl_algorithm.h>
-#include <vsl/vsl_indent.h>
-#include <vsl/vsl_binary_loader.h>
 
 //=======================================================================
 // Dflt ctor
@@ -39,7 +38,7 @@ unsigned long mbl_data_collector_copy_all(mbl_data_collector<T> &dest, mbl_data_
 
   src.reset();
   dest.record(src.current());
-  while(src.next())
+  while (src.next())
   {
     dest.record(src.current());
     i++;
@@ -87,7 +86,7 @@ unsigned long mbl_data_collector_merge_all(mbl_data_collector<T> &dest,
   long remainder=0;
   src0.reset();
   src1.reset();
-  for(unsigned long i=0; i < n0+n1; i++)
+  for (unsigned long i=0; i < n0+n1; i++)
   {
     if (remainder <= 0L)
     {

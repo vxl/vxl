@@ -33,8 +33,6 @@
 //     PTU ported to vxl may-20
 // \endverbatim
 
-#include <vtol/vtol_face_sptr.h>
-
 #include <vtol/vtol_topology_object.h>
 #include <vcl_vector.h>
 

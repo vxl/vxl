@@ -4,9 +4,9 @@
 // \date 25-Apr-2001
 // \brief Various specialised versions of matrix product operations
 
+#include "mbl_matrix_products.h"
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_matrix.h>
-#include <mbl/mbl_matrix_products.h>
 #include <vcl_cassert.h>
 #include <vcl_cstdlib.h> // for vcl_abort()
 #include <vcl_iostream.h>
@@ -22,9 +22,9 @@ void mbl_matrix_product(vnl_matrix<double>& AB, const vnl_matrix<double>& A,
    unsigned int nr2 = B.rows();
    unsigned int nc2 = B.cols();
 
-   if( nr2 != nc1 )
+   if ( nr2 != nc1 )
    {
-      vcl_cerr<<"Product : B.rows != A.cols"<<vcl_endl;
+      vcl_cerr<<"Product : B.rows != A.cols\n";
       vcl_abort() ;
    }
 
@@ -38,11 +38,11 @@ void mbl_matrix_product(vnl_matrix<double>& AB, const vnl_matrix<double>& A,
   // Zero the elements of AB
   AB.fill(0);
 
-  for(unsigned int r=0; r < nr1; ++r)
+  for (unsigned int r=0; r < nr1; ++r)
   {
     const double* A_row = AData[r];
     double* R_row = RData[r]-1;
-    for(unsigned int c=0; c < nc1 ; ++c )
+    for (unsigned int c=0; c < nc1 ; ++c )
     {
       double a = A_row[c];
       if (a==0.0) continue;
@@ -67,9 +67,9 @@ void mbl_matrix_product_a_bt(vnl_matrix<double>& ABt,
   int nc1 = A.columns();
   int nc2 = B.columns();
 #ifndef NDEBUG
-  if( nc2 != nc1 )
+  if ( nc2 != nc1 )
   {
-    vcl_cerr<<"mbl_matrix_product_a_bt : B.columns != A.columns"<<vcl_endl;
+    vcl_cerr<<"mbl_matrix_product_a_bt : B.columns != A.columns\n";
     vcl_abort();
   }
 #endif //!NDEBUG
@@ -132,9 +132,9 @@ void mbl_matrix_product_at_b(vnl_matrix<double>& AtB,
   unsigned int nr2 = B.rows();
   unsigned int nc2 = B.columns();
 
-  if( nr2 != nr1 )
+  if ( nr2 != nr1 )
   {
-    vcl_cerr<<"TC_ProductAtB : B.rows != A.rows"<<vcl_endl;
+    vcl_cerr<<"TC_ProductAtB : B.rows != A.rows\n";
     vcl_abort();
   }
 
@@ -192,11 +192,11 @@ void mbl_matrix_product_adb(vnl_matrix<double>& ADB,
 
   ADB.fill(0);
 
-  for(unsigned int r=0; r < nr1; ++r)
+  for (unsigned int r=0; r < nr1; ++r)
   {
     const double* A_row = AData[r];
     double* ADB_row = ADBdata[r]-1;
-    for(unsigned int c=0; c < nc1 ; ++c )
+    for (unsigned int c=0; c < nc1 ; ++c )
     {
       double ad = A_row[c] * d_data[c];
       if (ad==0.0) continue;

@@ -4,13 +4,10 @@
 #include "vtol_face_2d.h"
 
 #include <vcl_cassert.h>
-#include <vtol/vtol_macros.h>
-#include <vtol/vtol_two_chain.h>
+#include <vtol/vtol_topology_object.h>
 #include <vtol/vtol_vertex_2d.h>
 #include <vtol/vtol_edge_2d.h>
 #include <vtol/vtol_one_chain.h>
-#include <vtol/vtol_list_functions.h>
-#include <vsol/vsol_curve_2d.h>
 #include <vsol/vsol_region_2d.h>
 #include <vsol/vsol_rectangle_2d.h>
 #include <vsol/vsol_point_2d.h>
@@ -301,7 +298,8 @@ bool vtol_face_2d::operator==(const vtol_face_2d &other) const
   topology_list::const_iterator ti1;
   topology_list::const_iterator ti2;
 
-  for (ti1=inferiors()->begin(),ti2=other.inferiors()->begin(); ti1!=inferiors()->end(); ++ti1,++ti2)
+  for (ti1=inferiors()->begin(),ti2=other.inferiors()->begin();
+       ti1!=inferiors()->end(); ++ti1,++ti2)
     {
       if (!(*(*ti1)== *(*ti2)))
         return false;
@@ -344,7 +342,7 @@ void vtol_face_2d::describe(vcl_ostream &strm,
       if ((_inferiors[i])->cast_to_one_chain()!=0)
         (_inferiors[i])->cast_to_one_chain()->describe(strm,blanking);
       else
-        vcl_cout << "*** Odd inferior for a face" << vcl_endl;
+        vcl_cout << "*** Odd inferior for a face\n";
     }
 }
 

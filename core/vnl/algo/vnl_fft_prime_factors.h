@@ -1,4 +1,4 @@
-// This is ./vxl/vnl/algo/vnl_fft_prime_factors.h
+// This is vxl/vnl/algo/vnl_fft_prime_factors.h
 #ifndef vnl_fft_prime_factors_h_
 #define vnl_fft_prime_factors_h_
 //:
@@ -12,7 +12,7 @@
 // 10/4/2001 Ian Scott (Manchester) Converted perceps header to doxygen
 // \endverbatim
 
-#include <vnl/algo/vnl_fft.h>
+#include <vcl_compiler.h> // for "export" keyword
 
 //: Holds prime factor information
 // Helper class used by the vnl_fft_xd<> FFT routines

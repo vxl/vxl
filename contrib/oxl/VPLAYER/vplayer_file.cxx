@@ -17,7 +17,6 @@
 #include <vgui/vgui_error_dialog.h>
 #include <vgui/vgui_image_tableau.h>
 #include <vgui/vgui_easy2D.h>
-#include <vgui/vgui_grid_tableau.h>
 #include <vgui/vgui_rubberbander.h>
 
 #include <vidl/vidl_io.h>
@@ -42,7 +41,7 @@ void vplayer_file::load_video_sequence()
   if (!load_image_dl.ask())
     return;
   vcl_vector <vcl_string> img_filenames;
-  for(int i = 0;i<n;i++)
+  for (int i = 0;i<n;i++)
   {
     vul_sprintf name(image_filename.c_str(), i);
     img_filenames.push_back(name);
@@ -57,7 +56,7 @@ void vplayer_file::load_video_sequence()
   unsigned col,row;
   get_current(&col,&row);
   tableaux_.clear();
-  while(pframe!=my_movie->last())
+  while (pframe!=my_movie->last())
   {
     tableaux_.push_back(vgui_easy2D_new(vgui_image_tableau_new(pframe->get_image())));
     ++pframe;
@@ -89,7 +88,7 @@ void vplayer_file::load_video_file()
   unsigned col,row;
   get_current(&col,&row);
   tableaux_.clear();
-  while(pframe!=my_movie->last())
+  while (pframe!=my_movie->last())
   {
     tableaux_.push_back(vgui_easy2D_new(vgui_image_tableau_new(pframe->get_image())));
     ++pframe;
@@ -115,7 +114,7 @@ void vplayer_file::load_geometry_sequence()
     return;
   vcl_vector <vcl_string> img_filenames;
   vcl_vector <vgui_easy2D_sptr>::iterator it = tableaux_.begin();
-  for(int i = 0;i<n;i++)
+  for (int i = 0;i<n;i++)
   {
     vul_sprintf name(image_filename.c_str(), i);
     easy2D_loader loader(*it);

@@ -4,7 +4,6 @@
 
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_matrix.h>
-#include <vnl/vnl_math.h>
 
 #include <rrel/rrel_tukey_obj.h>
 #include <rrel/rrel_linear_regression.h>

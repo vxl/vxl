@@ -5,10 +5,6 @@
 #include "ImageSequenceName.h"
 
 #include <vcl_iostream.h>
-#include <vul/vul_reg_exp.h>
-#include <vul/vul_file.h>
-#include <vul/vul_sprintf.h>
-#include <vul/vul_printf.h>
 
 ImageSequenceName::ImageSequenceName(char const* s,
                                      char const* read_or_write,
@@ -48,7 +44,7 @@ void ImageSequenceName::init(char const* read_or_write, char const* default_exte
       ok_ = false;
       if (default_extension)
         extensions[0] = default_extension;
-      for(char const* const* p = extensions; *p; ++p)
+      for (char const* const* p = extensions; *p; ++p)
         if (exists(fmt_, *p, get_start_frame())) {
           ok_ = true;
           ext_ = *p;

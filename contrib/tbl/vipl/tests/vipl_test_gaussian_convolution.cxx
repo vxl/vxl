@@ -6,11 +6,10 @@
 //
 // \author Peter Vanroose, K.U.Leuven, ESAT/PSI
 // \date   26 april 2002
-//
+
 #include <mil/mil_image_2d_of.h>
 #include <vipl/vipl_with_mil/accessors/vipl_accessors_mil_image.h>
 #include <vipl/vipl_gaussian_convolution.h>
-#include <vcl_iostream.h>
 #include <vcl_cmath.h>
 #include <vcl_cstdlib.h>
 #include "test_driver.h"

@@ -7,9 +7,6 @@
 
 #include <vcl_fstream.h>
 
-#include <vil/vil_image.h>
-#include <vil/vil_load.h>
-
 #include <gmvl/gmvl_database.h>
 #include <gmvl/gmvl_image_node.h>
 #include <gmvl/gmvl_node_sptr.h>
@@ -102,10 +99,12 @@ int main( int argc, char **argv)
   vcl_cerr << db << vcl_endl;
 
   vcl_vector<gmvl_node_sptr> nn= db.get_nodes( "gmvl_tag_node");
-  for( int i=0; i< nn.size(); i++) vcl_cerr << ":" << *nn[i] << ":\n";
+  for ( int i=0; i< nn.size(); i++)
+    vcl_cerr << ":" << *nn[i] << ":\n";
 
   vcl_vector<gmvl_node_sptr> jj= db.get_nodes( "gmvl_image_node");
-  for( int i=0; i< jj.size(); i++) vcl_cerr << ":" << *jj[i] << ":\n";
+  for ( int i=0; i< jj.size(); i++)
+    vcl_cerr << ":" << *jj[i] << ":\n";
 //////////////////////////////////////////////////////////////////////////////
 
   vcl_ofstream fout("/tmp/qwerty");
@@ -128,7 +127,8 @@ int main( int argc, char **argv)
 
   vcl_cerr << vcl_endl << vcl_endl;
 
-  for( unsigned int i=0; i< nn.size(); i++) vcl_cerr << *nn[i] << vcl_endl;
+  for ( unsigned int i=0; i< nn.size(); i++)
+    vcl_cerr << *nn[i] << vcl_endl;
 
   return 0;
 }

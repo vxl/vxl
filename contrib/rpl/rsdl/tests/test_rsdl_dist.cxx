@@ -1,7 +1,5 @@
 #include <vcl_cmath.h>
-#include <vcl_iostream.h>
 #include <vcl_vector.h>
-#include <vnl/vnl_vector.h>
 #include <vnl/vnl_math.h>
 #include <vnl/vnl_test.h>
 
@@ -28,10 +26,10 @@ main()
   vcl_vector<double> q_cart;
   vcl_vector<double> p_ang;
   vcl_vector<double> q_ang;
-  for( unsigned int i=0; i < Nc; ++i )  p_cart.push_back( p_cart_arr[i] );
-  for( unsigned int i=0; i < Nc; ++i )  q_cart.push_back( q_cart_arr[i] );
-  for( unsigned int i=0; i < Na; ++i )  p_ang.push_back( p_ang_arr[i] );
-  for( unsigned int i=0; i < Na; ++i )  q_ang.push_back( q_ang_arr[i] );
+  for ( unsigned int i=0; i < Nc; ++i )  p_cart.push_back( p_cart_arr[i] );
+  for ( unsigned int i=0; i < Nc; ++i )  q_cart.push_back( q_cart_arr[i] );
+  for ( unsigned int i=0; i < Na; ++i )  p_ang.push_back( p_ang_arr[i] );
+  for ( unsigned int i=0; i < Na; ++i )  q_ang.push_back( q_ang_arr[i] );
 
   double sq_dist =
     vnl_math_sqr( 3.4 + 1.4 )
@@ -63,8 +61,8 @@ main()
   double ang0_arr[] = { 3*vnl_math::pi/16, vnl_math::pi, 8*vnl_math::pi/5 };
   vcl_vector<double> cart0;
   vcl_vector<double> ang0;
-  for( unsigned int i=0; i < Nc; ++i )  cart0.push_back( cart0_arr[i] );
-  for( unsigned int i=0; i < Na; ++i )  ang0.push_back( ang0_arr[i] );
+  for ( unsigned int i=0; i < Nc; ++i )  cart0.push_back( cart0_arr[i] );
+  for ( unsigned int i=0; i < Na; ++i )  ang0.push_back( ang0_arr[i] );
 
   rsdl_point test_p( cart0.begin(), cart0.end(), ang0.begin(), ang0.end() );
   vnl_test_perform( close( rsdl_dist_sq( test_p, box), 0) );

@@ -2,14 +2,12 @@
 #ifdef __GNUC__
 #pragma implementation
 #endif
-
 //:
 // \file
 // \author fsm@robots.ox.ac.uk
 
 #include "vil_smooth.h"
 
-#include <vcl_iostream.h>
 #include <vcl_cmath.h>
 #include <vcl_vector.h>
 

@@ -10,12 +10,11 @@
 #include <vcl_cassert.h>
 #include <vcl_iostream.h>
 #include <vcl_cmath.h>
-//#include <vcl_memory.h>
 #include <vcl_cstdlib.h>
 #include <vnl/vnl_matrix.h>
 
 #include <vnl/algo/vnl_svd.h>
-#include <vnl/vnl_matops.h> // use vnl_matlab_print.h for pretty printing
+#include <vnl/vnl_math.h>
 #include <vnl/algo/vnl_symmetric_eigensystem.h>
 
 #include <mvl/HomgOperator2D.h>
@@ -119,7 +118,7 @@ FMatrixPlanar::set (const vnl_matrix<double>& f_matrix )
      if (svd.rank()!=2)
      {
           planar = false;
-          vcl_cerr << "WARNING in FMatrixPlanar::set" << vcl_endl;
+          vcl_cerr << "WARNING in FMatrixPlanar::set\n";
           vcl_cerr << "F matrix not rank 2: svd = " << svd.W() << vcl_endl;
      }
      else
@@ -128,7 +127,7 @@ FMatrixPlanar::set (const vnl_matrix<double>& f_matrix )
           if (svd.rank()!=2)
           {
                planar = false;
-               vcl_cerr << "WARNING in FMatrixPlanar::set" << vcl_endl;
+               vcl_cerr << "WARNING in FMatrixPlanar::set\n";
                vcl_cerr << "Symmetric part matrix not rank 2: svd = " << svd.W() << vcl_endl;
           }
      }
@@ -216,8 +215,8 @@ void FMatrixPlanar::init(const FMatrix& F)
           f2 = vcl_sqrt(eig1)*v1 - vcl_sqrt(-eig0)*v0;
      }
      else {
-          vcl_cerr << "ERROR in FMatrix::init" << vcl_endl
-               << "EXITING..." << vcl_endl;
+          vcl_cerr << "ERROR in FMatrix::init\n"
+                   << "EXITING...\n";
           assert(false);
      }
 

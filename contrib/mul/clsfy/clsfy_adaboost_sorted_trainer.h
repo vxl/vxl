@@ -18,7 +18,6 @@
 
 #include <vcl_string.h>
 #include <vsl/vsl_binary_io.h>
-#include <vcl_vector.h>
 #include <clsfy/clsfy_simple_adaboost.h>
 #include <clsfy/clsfy_binary_threshold_1d_sorted_builder.h>
 #include <mbl/mbl_data_wrapper.h>

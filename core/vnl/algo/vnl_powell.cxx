@@ -43,7 +43,7 @@ public:
   }
 
   void uninit(double lambda, vnl_vector<double>& out) {
-    for(unsigned int i = 0; i < n_; ++i)
+    for (unsigned int i = 0; i < n_; ++i)
       out[i] = x0_[i] + lambda * dx_[i];
   }
 };
@@ -64,7 +64,6 @@ vnl_powell::minimize(vnl_vector<double>& p)
   double linmin_ftol = 1e-4;
 
   vnl_matrix<double> xi(n,n, vnl_matrix_identity);
-//  MATLABPRINT(xi);
   vnl_vector<double> ptt(n);
   vnl_vector<double> xit(n);
   double fret = functor_->f(p);
@@ -77,7 +76,7 @@ vnl_powell::minimize(vnl_vector<double>& p)
 
     for (int i=0;i<n;i++) {
       // xit = ith column of xi
-      for(int j = 0; j < n; ++j)
+      for (int j = 0; j < n; ++j)
         xit[j] = xi[j][i];
       double fptt = fret;
 
@@ -99,7 +98,7 @@ vnl_powell::minimize(vnl_vector<double>& p)
     }
 
     if (2.0*vcl_fabs(fp-fret) <= ftol*(vcl_fabs(fp)+vcl_fabs(fret))) {
-      MATLABPRINT(xi);
+      vnl_matlab_print(vcl_cerr, xi, "xi");
       return CONVERGED_FTOL;
     }
 
@@ -131,7 +130,6 @@ vnl_powell::minimize(vnl_vector<double>& p)
           xi[j][ibig]=xi[j][n-1];
           xi[j][n-1]=xit[j];
         }
-//        MATLABPRINT(xi);
       }
     }
     report_iter();

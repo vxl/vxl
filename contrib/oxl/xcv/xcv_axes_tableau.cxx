@@ -1,9 +1,8 @@
-// This is ./oxl/xcv/xcv_axes_tableau.cxx
-
+// This is oxl/xcv/xcv_axes_tableau.cxx
+#include "xcv_axes_tableau.h"
 //:
 //  \file
 // \author   K.Y.McGaul
-//
 // See xcv_axes_tableau.h for a description of this file.
 //
 // \verbatim
@@ -11,20 +10,11 @@
 //   K.Y.McGaul 26-APR-2001   Initial version.
 // \endverbatim
 
-#include <xcv/xcv_axes_tableau.h>
-
-#include <vcl_iostream.h>
 #include <vcl_cstdio.h>
 #include <vcl_cmath.h>
 
-#include <vnl/vnl_math.h>
 #include <vgui/vgui.h>
 #include <vgui/vgui_gl.h>
-#include <vgui/vgui_window.h>
-#include <vgui/vgui_adaptor.h>
-#include <vgui/vgui_tableau.h>
-#include <vgui/vgui_projection_inspector.h>
-#include <vgui/vgui_soview2D.h>
 #include <vgui/vgui_easy2D.h>
 #include <vgui/vgui_text_tableau.h>
 #include <vgui/vgui_composite.h>

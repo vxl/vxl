@@ -3,21 +3,16 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
-//
-// .NAME    RadialLensCorrection
-// .LIBRARY oxp
-// .HEADER  Oxford Package
-// .INCLUDE oxp/RadialLensCorrection.h
-// .FILE    RadialLensCorrection.cxx
-// .SECTION Author
-//     Andrew W. Fitzgibbon, Oxford RRG, 13 Jul 98
+//:
+// \file
+// \author Andrew W. Fitzgibbon, Oxford RRG, 13 Jul 98
 //
 //-----------------------------------------------------------------------------
 
-#include <vul/vul_printf.h>
 #include <oxp/Mapping_2d_2d.h>
 
-class RadialLensCorrection : public Mapping_2d_2d {
+class RadialLensCorrection : public Mapping_2d_2d
+{
 public:
   RadialLensCorrection(double cx, double cy, double sx, double sy, double k2, double k4 = 0);
   RadialLensCorrection(double k2);

@@ -9,14 +9,14 @@
 //  \brief Pyramid of images of arbitrary type
 //  \author Tim Cootes
 
-#include <vsl/vsl_binary_io.h>
 #include <vcl_vector.h>
-#include <vcl_string.h>
+#include <vcl_iostream.h>
 
 class mil_image;
 
 //: Pyramid of images of arbitrary type
-class mil_image_pyramid {
+class mil_image_pyramid
+{
   vcl_vector<mil_image*> image_;
   double base_pixel_width_;
   double scale_step_;
@@ -97,4 +97,4 @@ vcl_ostream& operator<<(vcl_ostream& os, const mil_image_pyramid* im_pyr);
 void vsl_print_summary(vcl_ostream& os, const mil_image_pyramid& im_pyr);
 void vsl_print_summary(vcl_ostream& os, const mil_image_pyramid* im_pyr);
 
-#endif
+#endif // mil_image_pyramid_h_

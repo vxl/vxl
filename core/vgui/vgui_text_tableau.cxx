@@ -1,18 +1,16 @@
-// This is ./oxl/vgui/vgui_text_tableau.cxx
+// This is oxl/vgui/vgui_text_tableau.cxx
 #ifdef __GNUC__
 #pragma implementation
 #endif
 //:
 // \file
-// See vgui_text_tableau.h for a description of this file.
-//
 // \author Philip C. Pritchett, RRG, University of Oxford
 // \date 19 Oct 99
-//
+// See vgui_text_tableau.h for a description of this file.
 //-----------------------------------------------------------------------------
 
 #include "vgui_text_tableau.h"
-#include <vgui/vgui_text.h>
+#include <vgui/vgui_text_put.h>
 #include <vgui/vgui_event.h>
 #include <vgui/vgui_gl.h>
 #include <vcl_cassert.h>

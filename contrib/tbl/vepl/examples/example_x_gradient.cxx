@@ -9,10 +9,7 @@
 // \author Peter Vanroose, K.U.Leuven, ESAT/PSI
 // \date   15 May 2001, from vipl/examples
 //
-#include <vil/vil_pixel.h>
-#include <vil/vil_memory_image_of.h>
 #include <vil/vil_rgb.h>
-
 #include <vepl/vepl_x_gradient.h>
 
 typedef unsigned char ubyte;
@@ -25,7 +22,11 @@ typedef vil_rgb<ubyte> rgbcell;
 
 int
 main(int argc, char** argv) {
-  if (argc < 3) { vcl_cerr << "Syntax: example_x_gradient file_in file_out\n"; return 1; }
+  if (argc < 3)
+  {
+    vcl_cerr << "Syntax: example_x_gradient file_in file_out\n";
+    return 1;
+  }
 
   // The input image:
   vil_image in = vil_load(argv[1]);

@@ -10,17 +10,14 @@
 // \author Ian Scott
 // \date 2001/10/08
 
-
-#include <clsfy/clsfy_random_builder.h>
+#include "clsfy_random_builder.h"
 
 #include <vcl_iostream.h>
 #include <vcl_string.h>
 #include <vcl_cassert.h>
-#include <vsl/vsl_indent.h>
 #include <vsl/vsl_binary_loader.h>
 #include <clsfy/clsfy_random_classifier.h>
 #include <vnl/vnl_c_vector.h>
-
 
 //=======================================================================
 
@@ -119,7 +116,8 @@ double clsfy_random_builder::build(clsfy_classifier_base& model,
 
   double sum = (double)(vnl_c_vector<unsigned>::sum(&freqs.front(), nClasses));
   vcl_vector<double> probs(nClasses);
-  for (unsigned i=0; i < nClasses; ++i) probs[i] = freqs[i] / sum;
+  for (unsigned i=0; i < nClasses; ++i)
+    probs[i] = freqs[i] / sum;
   randclass.set_probs(probs);
 
   assert (inputs.size() > 0);

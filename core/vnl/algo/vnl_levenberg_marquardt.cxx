@@ -16,7 +16,6 @@
 
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_matrix.h>
-#include <vnl/vnl_matops.h>
 #include <vnl/vnl_vector_ref.h>
 #include <vnl/vnl_matrix_ref.h>
 #include <vnl/vnl_least_squares_function.h>
@@ -132,7 +131,7 @@ void vnl_levenberg_marquardt::lmdif_lsqfun(int* n,          // I    Number of re
 //
 bool vnl_levenberg_marquardt::minimize(vnl_vector<double>& x)
 {
-  if( f_->has_gradient() )
+  if ( f_->has_gradient() )
     return minimize_using_gradient(x);
   else
     return minimize_without_gradient(x);
@@ -144,7 +143,7 @@ bool vnl_levenberg_marquardt::minimize_without_gradient(vnl_vector<double>& x)
 {
   //fsm
   if (f_->has_gradient()) {
-    vcl_cerr << __FILE__ " : WARNING. calling minimize_without_gradient(), but f_ has gradient." << vcl_endl;
+    vcl_cerr << __FILE__ " : WARNING. calling minimize_without_gradient(), but f_ has gradient.\n";
   }
 
   // e04fcf
@@ -275,7 +274,7 @@ bool vnl_levenberg_marquardt::minimize_using_gradient(vnl_vector<double>& x)
 {
   //fsm
   if (! f_->has_gradient()) {
-    vcl_cerr << __FILE__ ": called method minimize_using_gradient(), but f_ has no gradient." << vcl_endl;
+    vcl_cerr << __FILE__ ": called method minimize_using_gradient(), but f_ has no gradient.\n";
     return false;
   }
 

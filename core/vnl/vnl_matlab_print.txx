@@ -12,7 +12,6 @@
 #include "vnl_matlab_print.h"
 
 #include <vcl_iostream.h>
-#include <vcl_complex.h>
 
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_matrix.h>
@@ -75,10 +74,10 @@ vcl_ostream& vnl_matlab_print(vcl_ostream& s,
                               vnl_matlab_print_format format)
 {
   if (variable_name)
-    s << variable_name << " = [ ... \n";
+    s << variable_name << " = [ ...\n";
 
   if (M.rows() == 0)
-    return s << "];" << vcl_endl;
+    return s << "];\n";
 
   for (unsigned int i=0; i<M.rows(); i++ ) {
     vnl_matlab_print(s, M[i], M.cols(), format);

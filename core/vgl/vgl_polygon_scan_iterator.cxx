@@ -1,17 +1,8 @@
 // This is vxl/vgl/vgl_polygon_scan_iterator.cxx
-
+#include "vgl_polygon_scan_iterator.h"
 //:
 // \file
 
-//--------------------------------------------------------------
-//
-// Class : vgl_polygon_scan_iterator
-//
-//--------------------------------------------------------------
-
-#include "vgl_polygon_scan_iterator.h"
-
-#include <vcl_list.h>
 #include <vcl_cstdio.h>
 #include <vcl_cstring.h>
 #include <vcl_cmath.h>
@@ -119,7 +110,7 @@ void vgl_polygon_scan_iterator::init()
 {
   // count total numverts
   numverts = 0;
-  for(int s = 0; s < poly_.num_sheets(); ++s)
+  for (int s = 0; s < poly_.num_sheets(); ++s)
     numverts += poly_[s].size();
 
   int numchains = poly_.num_sheets();
@@ -147,7 +138,7 @@ void vgl_polygon_scan_iterator::init()
         i++;
       }
   if ( i != numverts )
-    vcl_cout << "Error:  i does not equal numverts!" << vcl_endl;
+    vcl_cout << "Error:  i does not equal numverts!\n";
 
   // sort vertices by y coordinate
   chs = &poly_[0]; // a hack -- but apparently must do it to use qsort
@@ -158,26 +149,26 @@ void vgl_polygon_scan_iterator::init()
   maxy = get_y( yverts[ numverts - 1 ] );
 
   // set y0 and y1 to bottommost and topmost scan lines
-  if(have_window)
+  if (have_window)
   {
-      if(boundp)
+      if (boundp)
         y0 = (int)MAX(win.min_y(), vcl_floor( miny - fsm_OFFSET));
       else
         y0 = (int)MAX(win.min_y(), vcl_ceil( miny - fsm_OFFSET));
 
-      if(boundp)
+      if (boundp)
         y1 = (int)MIN(win.max_y()-1, vcl_ceil( maxy - fsm_OFFSET));
       else
         y1 = (int)MIN(win.max_y()-1, vcl_floor( maxy - fsm_OFFSET));
   }
   else
   {
-      if(boundp)
+      if (boundp)
         y0 = (int)vcl_floor( miny - fsm_OFFSET);
       else
         y0 = (int)vcl_ceil( miny - fsm_OFFSET);
 
-      if(boundp)
+      if (boundp)
         y1 = (int)vcl_ceil( maxy - fsm_OFFSET);
       else
         y1 = (int)vcl_floor(  maxy - fsm_OFFSET);
@@ -264,18 +255,18 @@ static inline int irnd(double x)
 bool vgl_polygon_scan_iterator::next( )
 {
   // Find next segment on current scan line
-  if( curcrossedge < numcrossedges )
+  if ( curcrossedge < numcrossedges )
     {
       fxl = crossedges[curcrossedge].x;
       fxr = crossedges[curcrossedge+1].x;
-      if(boundp)
+      if (boundp)
         // left end of span with boundary
         xl = (int)vcl_floor( crossedges[curcrossedge].x - fsm_OFFSET);
       else
         // left end of span without boundary
         xl = (int)vcl_ceil( crossedges[curcrossedge].x - fsm_OFFSET);
 
-      if( have_window && xl < irnd(win.min_x()) )
+      if ( have_window && xl < irnd(win.min_x()) )
         {
           fxl = win.min_x();
           xl = irnd(fxl);
@@ -374,16 +365,16 @@ void vgl_polygon_scan_iterator::get_prev_vert( vertind v, vertind & prevvert )
 //===============================================================
 void vgl_polygon_scan_iterator::display_chains()
 {
-    vcl_cout << "Number of Chains: " << poly_.num_sheets() << vcl_endl;
-    vcl_cout << "Number of Vertices: " << numverts << vcl_endl;
-    for (int c = 0; c < poly_.num_sheets(); c++ )
+    vcl_cout << "Number of Chains: " << poly_.num_sheets() << vcl_endl
+             << "Number of Vertices: " << numverts << vcl_endl;
+    for (int c = 0; c < poly_.num_sheets(); ++c )
     {
-        vcl_cout << "---- Chain # " << c << " ----" << vcl_endl;
-        vcl_cout << "  Length: " << poly_[ c ].size() << vcl_endl;
+        vcl_cout << "---- Chain # " << c << " ----\n"
+                 << "  Length: " << poly_[ c ].size() << vcl_endl;
         for (unsigned int v = 0; v < poly_[ c ].size(); v++ )
         {
             vcl_cout << "  [ " << poly_[ c ][ v ].x()
-            << " " << poly_[ c ][ v ].y() << " ]" << vcl_endl;
+            << " " << poly_[ c ][ v ].y() << " ]\n";
         }
     }
     vcl_cout << vcl_flush;
@@ -394,16 +385,14 @@ void vgl_polygon_scan_iterator::display_chains()
 //===============================================================
 void vgl_polygon_scan_iterator::display_crossedges()
 {
-    int i;
-    vcl_cout << "----- CROSSEDGES -----" << vcl_endl;
-    vcl_cout << "numcrossedges: " << numcrossedges << vcl_endl;
-    for ( i = 0; i< numcrossedges; i++ )
+    vcl_cout << "----- CROSSEDGES -----\n"
+             << "numcrossedges: " << numcrossedges << vcl_endl;
+    for (int i = 0; i< numcrossedges; i++ )
     {
         vcl_cout << "x = " << crossedges[i].x
              << "y = " << crossedges[i].dx;
         crossedges[i].v.display( "v: " );
     }
-    vcl_cout << "---------------------" << vcl_endl;
-    vcl_cout << vcl_flush;
+    vcl_cout << "---------------------\n" << vcl_flush;
 }
 

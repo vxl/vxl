@@ -10,7 +10,6 @@
 #include <vcl_fstream.h>
 
 #include <vnl/algo/vnl_svd.h>
-#include <vnl/vnl_matops.h> // use vnl_matlab_print.h for pretty printing
 
 #include <mvl/HomgLine2D.h>
 #include <mvl/HomgOperator2D.h>
@@ -90,8 +89,8 @@ HomgLine2D HMatrix2D::transform_to_plane1(const HomgLine2D& l2) const
 }
 
 //-----------------------------------------------------------------------------
-//: Return the transformed point @{$x_1$@} given by @{$x_2 = {\tt H} x_1$@}.
-// Note that this calculates the inverse of @{\tt H@} on every call.
+//: Return the transformed point $x_1$ given by $x_2 = H \, x_1$.
+// Note that this calculates the inverse of $H$ on every call.
 
 HomgPoint2D HMatrix2D::transform_to_plane1(const HomgPoint2D& x2) const
 {
@@ -105,8 +104,8 @@ HomgPoint2D HMatrix2D::transform_to_plane1(const HomgPoint2D& x2) const
 }
 
 //-----------------------------------------------------------------------------
-//: Return the transformed line @{$l_2$@} given by @{$l_1={\tt H}^\top l_2$@}.
-// Note that this calculates the inverse of @{\tt H@} on every call.
+//: Return the transformed line $l_2$ given by $l_1=H^\top l_2$.
+// Note that this calculates the inverse of $H$ on every call.
 
 HomgLine2D HMatrix2D::transform_to_plane2(const HomgLine2D& l1) const
 {
@@ -200,23 +199,25 @@ vnl_double_4 HMatrix2D::transform_bounding_box(double /*x0*/, double /*y0*/, dou
   vcl_cerr << "FIXME: HMatrix2D::transform_bounding_box() is not yet implemented\n";
   return vnl_double_4();
 
-//  // Find bbox of transformed image
-//  BoundingBox<double, 2> dest_bbox;
-//  double logo_bbox[][2] = {
-//    {x0, y0},
-//    {x1, y0},
-//    {x0, y1},
-//    {x1, y1}
-//  };
-//  for(int k = 0; k < 4; ++k) {
-//    HomgPoint2D corner(logo_bbox[k][0], logo_bbox[k][1], 1);
-//    corner = (*this) * corner;
-//    double s = 1.0/corner[2];
-//    dest_bbox.update(corner[0]*s, corner[1]*s);
-//  }
-//
-//  double* min = dest_bbox.get_min();
-//  double* max = dest_bbox.get_max();
-//  return vnl_double_4(min[0], min[1], max[0], max[1]);
+#if 0
+  // Find bbox of transformed image
+  BoundingBox<double, 2> dest_bbox;
+  double logo_bbox[][2] = {
+    {x0, y0},
+    {x1, y0},
+    {x0, y1},
+    {x1, y1}
+  };
+  for (int k = 0; k < 4; ++k) {
+    HomgPoint2D corner(logo_bbox[k][0], logo_bbox[k][1], 1);
+    corner = (*this) * corner;
+    double s = 1.0/corner[2];
+    dest_bbox.update(corner[0]*s, corner[1]*s);
+  }
+
+  double* min = dest_bbox.get_min();
+  double* max = dest_bbox.get_max();
+  return vnl_double_4(min[0], min[1], max[0], max[1]);
+#endif
 }
 

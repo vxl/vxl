@@ -4,14 +4,13 @@
 
 #include <vnl/vnl_test.h>
 #include <mil/algo/mil_algo_grad_filter_2d.h>
-#include <vil/vil_byte.h>
 #include <vcl_cmath.h> // for fabs()
 
 void test_algo_grad_filter_2d_byte_float()
 {
-  vcl_cout << "********************************************" << vcl_endl;
-  vcl_cout << " Testing mil_algo_grad_filter_2d byte-float" << vcl_endl;
-  vcl_cout << "********************************************" << vcl_endl;
+  vcl_cout << "********************************************\n";
+  vcl_cout << " Testing mil_algo_grad_filter_2d byte-float\n";
+  vcl_cout << "********************************************\n";
 
   mil_image_2d_of<unsigned char> src;
   mil_image_2d_of<float> gx,gy;
@@ -51,14 +50,13 @@ void test_algo_grad_filter_2d_byte_float()
   TEST("Right of square in gy image",vcl_fabs(gy(7,5))<1e-6,true);
   TEST("Top of square in gy image",vcl_fabs(gy(5,7)+8)<1e-6,true);
   TEST("Bottom of square in gy image",vcl_fabs(gy(5,2)-8)<1e-6,true);
-
 }
 
 void test_algo_grad_filter_2d_float_float()
 {
-  vcl_cout << "********************************************" << vcl_endl;
-  vcl_cout << " Testing mil_algo_grad_filter_2d float-float" << vcl_endl;
-  vcl_cout << "********************************************" << vcl_endl;
+  vcl_cout << "*********************************************\n";
+  vcl_cout << " Testing mil_algo_grad_filter_2d float-float\n";
+  vcl_cout << "*********************************************\n";
 
   mil_image_2d_of<float> src;
   mil_image_2d_of<float> gx,gy;
@@ -98,7 +96,6 @@ void test_algo_grad_filter_2d_float_float()
   TEST("Right of square in gy image",vcl_fabs(gy(7,5))<1e-6,true);
   TEST("Top of square in gy image",vcl_fabs(gy(5,7)+8)<1e-6,true);
   TEST("Bottom of square in gy image",vcl_fabs(gy(5,2)-8)<1e-6,true);
-
 }
 
 void test_algo_grad_filter_2d()

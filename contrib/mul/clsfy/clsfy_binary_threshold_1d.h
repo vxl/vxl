@@ -7,12 +7,12 @@
 // \author Tim Cootes
 
 #include <clsfy/clsfy_classifier_1d.h>
-#include <vnl/vnl_matrix.h>
 #include <vnl/vnl_vector.h>
 
 
 //: Simplest possible 1D classifier: A single thresholding function.
 //  Returns class zero if s_*x<threshold_
+
 class clsfy_binary_threshold_1d : public clsfy_classifier_1d
 {
 protected:

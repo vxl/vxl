@@ -18,7 +18,6 @@
 #include "test_index_sort.cxx"
 #include "test_lru_cache.cxx"
 #include "test_thin_plate_spline_2d.cxx"
-#include <mbl/mbl_print.h>
 
 #undef TESTMAIN
 #define TESTMAIN(x) int main() \

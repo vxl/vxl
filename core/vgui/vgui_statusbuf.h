@@ -3,26 +3,15 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
-// 
-// .NAME vgui_statusbuf - Undocumented class FIXME
-// .LIBRARY vgui
-// .HEADER vxl Package
-// .INCLUDE vgui/vgui_statusbuf.h
-// .FILE vgui_statusbuf.cxx
+//:
+// \file
+// \brief Undocumented class FIXME
 //
-// .SECTION Description:
-//
-// vgui_statusbuf is a class that Phil hasnt documented properly. FIXME
-//
-// .SECTION Author:
+// \author
 //              Philip C. Pritchett, 21 Nov 99
 //              Robotics Research Group, University of Oxford
-//
-// .SECTION Modifications:
-//     <none yet>
-//
 //-----------------------------------------------------------------------------
-#include <vcl_iostream.h>
+
 #include <vcl_streambuf.h>
 class vgui_statusbar;
 

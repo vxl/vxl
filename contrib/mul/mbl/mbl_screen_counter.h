@@ -7,7 +7,6 @@
 // \author Ian Scott
 
 #include <vcl_iosfwd.h>
-#include <vsl/vsl_binary_io.h>
 
 //: Prints items to the screen to represent events.
 // \code
@@ -20,6 +19,7 @@
 //   counter(vcl_cout);
 // }
 // \endcode
+
 class mbl_screen_counter
 {
   unsigned long count_;
@@ -34,4 +34,4 @@ public:
   void operator++ (int); 
 };
 
-#endif
+#endif // mbl_screen_counter_h_

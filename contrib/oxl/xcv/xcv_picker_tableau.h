@@ -1,7 +1,6 @@
-// This is ./oxl/xcv/xcv_picker_tableau.h
+// This is oxl/xcv/xcv_picker_tableau.h
 #ifndef xcv_picker_tableau_h_
 #define xcv_picker_tableau_h_
-
 //:
 // \file
 // \author K.Y.McGaul
@@ -19,12 +18,11 @@
 #include <vgui/vgui_tableau.h>
 #include <vgui/vgui_event.h>
 #include <vgui/vgui_slot.h>
-#include <vnl/vnl_matrix.h>
-class vgui_tableau;
 
 // <vgui_make_sptr>
 #include "xcv_picker_tableau_sptr.h"
 // </vgui_make_sptr>
+
 class xcv_picker_tableau : public vgui_tableau
 {
 public:

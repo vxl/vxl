@@ -1,11 +1,10 @@
+// This is osl/osl_fit_circle.h
 #ifndef osl_fit_circle_h_
 #define osl_fit_circle_h_
 
 #ifdef __GNUC__
 #pragma interface
 #endif
-
-// This is osl/osl_fit_circle.h
 
 //:
 // \file
@@ -22,7 +21,6 @@
 // \author Markus Meyer (meyer@mesw.de)
 
 #include <vcl_list.h>
-#include <vnl/vnl_matrix.h>
 #include <vgl/vgl_point_2d.h>
 #include <osl/osl_edgel_chain.h>
 

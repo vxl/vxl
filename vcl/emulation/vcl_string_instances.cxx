@@ -1,7 +1,6 @@
 #include <vcl_compiler.h>
 #if !VCL_USE_NATIVE_STL
 
-#include <vcl_iostream.h>
 #include <vcl_string.h>
 #include <vcl_string.txx>
 

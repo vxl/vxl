@@ -1,30 +1,16 @@
-//-*- c++ -*-------------------------------------------------------------------
+// This is oxl/vgui/vgui_roi_tableau.h
 #ifndef vgui_roi_tableau_h_
 #define vgui_roi_tableau_h_
 #ifdef __GNUC__
 #pragma interface
 #endif
-//
-// .NAME vgui_roi_tableau
-// .LIBRARY vgui
-// .HEADER vxl Package
-// .INCLUDE vgui/vgui_roi_tableau.h
-// .FILE vgui_roi_tableau.cxx
-//
-// .SECTION Description:
-//
-// vgui_roi_tableau is a class that Marko hasn't documented properly. FIXME
-//
-// .SECTION Author:
+//:
+// \file
+// \author
 //              Marko Bacic, 18 Jul 2000
 //              Robotics Research Group, University of Oxford
-//
-// .SECTION Modifications:
-//     <none yet>
-//
 //-----------------------------------------------------------------------------
 #include <vgui/vgui_tableau.h>
-#include <vgui/vgui_rubberbander.h>
 #include <vil/vil_image.h>
 class vil_crop_image_impl;
 class vil_image;

@@ -3,9 +3,6 @@
 #include <vcl_utility.h>
 
 #include <vnl/vnl_test.h>
-#include <vnl/vnl_vector.h>
-#include <vnl/vnl_matrix.h>
-#include <vgl/vgl_distance.h>
 #include <mil/mil_image_2d_of.h>
 #include <vil/vil_byte.h>
 
@@ -22,16 +19,17 @@ bool Equal(const mil_image_2d_of<vil_byte>& im0,
 
 void test_image_2d_of_byte()
 {
-  vcl_cout << "***********************" << vcl_endl;
-  vcl_cout << " Testing mil_image_2d_of<byte> " << vcl_endl;
-  vcl_cout << "***********************" << vcl_endl;
+  vcl_cout << "*******************************\n";
+  vcl_cout << " Testing mil_image_2d_of<byte>\n";
+  vcl_cout << "*******************************\n";
 
   mil_image_2d_of<vil_byte> image0;
   image0.resize(10,8);
   vcl_cout<<"image0: "<<image0<<vcl_endl;
 
-  TEST("N.Planes",image0.n_planes()==1,true);
-  TEST("resize",image0.nx()==10 && image0.ny()==8, true);
+  TEST("N.Planes",image0.n_planes(),1);
+  TEST("resize x",image0.nx(),10);
+  TEST("resize y",image0.ny(),8);
 
   for (int y=0;y<image0.ny();++y)
      for (int x=0;x<image0.nx();++x)
@@ -50,7 +48,7 @@ void test_image_2d_of_byte()
                         && image0.n_planes()==image1.n_planes(), true);
 
     image0(4,6)=127;
-    TEST("Shallow copy (values)",image1(4,6)==image0(4,6),true);
+    TEST("Shallow copy (values)",image1(4,6),image0(4,6));
   }
 
 
@@ -68,7 +66,8 @@ void test_image_2d_of_byte()
        && image2.ny()==5 && image2.n_planes()==3, true);
 
   image2(1,1)=17;
-  TEST("Data still in scope",image2(3,3)==111 && image2(1,1)==17,true);
+  TEST("Data still in scope",image2(3,3),111);
+  TEST("Data still in scope",image2(1,1),17);
 
   vcl_cout<<image2<<vcl_endl;
 
@@ -79,11 +78,11 @@ void test_image_2d_of_byte()
     TEST("Deep copy (size)",image0.nx()==image4.nx()
                          && image0.ny()==image4.ny()
                          && image0.n_planes()==image4.n_planes(), true);
-    TEST("Deep copy (values)",image4(4,6)==image0(4,6),true);
+    TEST("Deep copy (values)",image4(4,6),image0(4,6));
 
     vil_byte v46 = image0(4,6);
     image0(4,6)=255;
-    TEST("Deep copy (values really separate)",image4(4,6)==v46,true);
+    TEST("Deep copy (values really separate)",image4(4,6),v46);
   }
 
   mil_image_2d_of<vil_byte> image_win;
@@ -93,9 +92,9 @@ void test_image_2d_of_byte()
         && image_win.n_planes()==image0.n_planes(),true);
 
   image0(2,3)=222;
-  TEST("setToWindow is shallow copy",image_win(0,0)==222, true);
+  TEST("setToWindow is shallow copy",image_win(0,0),222);
 
-  TEST("is_a() specialisation for vil_byte",image0.is_a()=="mil_image_2d_of<vil_byte>",true);
+  TEST("is_a() specialisation for vil_byte",image0.is_a(),"mil_image_2d_of<vil_byte>");
 }
 
 void test_image_2d_byte_io()
@@ -134,7 +133,7 @@ void test_image_2d_byte_io()
 
   // Check that image_in0 and 1 refer to same data block
   image_in0(3,4,1)=17;
-  TEST("Data connected correctly",image_in1(3,4,1)==17,true);
+  TEST("Data connected correctly",image_in1(3,4,1),17);
 }
 
 void test_image_2d_of()

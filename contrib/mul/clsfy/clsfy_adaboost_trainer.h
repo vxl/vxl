@@ -18,7 +18,6 @@
 
 #include <vcl_string.h>
 #include <vsl/vsl_binary_io.h>
-#include <vcl_vector.h>
 #include <clsfy/clsfy_simple_adaboost.h>
 #include <clsfy/clsfy_builder_1d.h>
 #include <mbl/mbl_data_wrapper.h>

@@ -10,7 +10,6 @@
 // \brief Test if data from a given distribution using Kolmogorov-Smirnov
 
 #include <pdf1d/pdf1d_compare_to_pdf.h>
-#include <mbl/mbl_cloneable_ptr.h>
 
 // \brief Test if data from a given distribution using Kolmogorov-Smirnov
 class pdf1d_compare_to_pdf_ks : public pdf1d_compare_to_pdf {

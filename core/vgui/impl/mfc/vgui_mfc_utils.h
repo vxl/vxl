@@ -1,5 +1,9 @@
-// This is ./oxl/vgui/impl/mfc/vgui_mfc_utils.h
-
+// This is oxl/vgui/impl/mfc/vgui_mfc_utils.h
+#ifndef vgui_mfc_utils_h_
+#define vgui_mfc_utils_h_
+#ifdef __GNUC__
+#pragma interface
+#endif
 //:
 // \file
 // \author  Marko Bacic, Oxford RRG
@@ -14,15 +18,8 @@
 //   22-AUG-2001 K.Y.McGaul - Added destructor to fix memory leak: all menus now deleted.
 // \endverbatim
 
-#ifndef vgui_mfc_utils_h_
-#define vgui_mfc_utils_h_
-#ifdef __GNUC__
-#pragma interface
-#endif
-
-#include <vgui/vgui_event.h>
 #include <vgui/vgui_menu.h>
-#include "stdafx.h"
+#include "StdAfx.h"
 //: Note that the range 0x8000-0x8400 is reserved for dialog box callbacks
 #define ID_MENU_ITEMS 0x8400
 #define MAX_ITEM_COUNT 0x400 // (dec 1024)

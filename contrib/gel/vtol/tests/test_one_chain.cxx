@@ -2,12 +2,9 @@
 
 #include <vtol/vtol_vertex_2d_sptr.h>
 #include <vtol/vtol_vertex_2d.h>
-#include <vsol/vsol_point_2d.h>
 #include <vtol/vtol_edge_2d.h>
 #include <vtol/vtol_edge.h>
 #include <vtol/vtol_edge_sptr.h>
-#include <vtol/vtol_zero_chain_sptr.h>
-#include <vtol/vtol_zero_chain.h>
 #include <vtol/vtol_one_chain_sptr.h>
 #include <vtol/vtol_one_chain.h>
 
@@ -19,7 +16,7 @@ int main(int, char **)
 {
   int success=0, failures=0;
 
-  vcl_cout << "testing one_chain" << vcl_endl;
+  vcl_cout << "testing one_chain\n";
 
   vtol_vertex_2d_sptr v1 = new vtol_vertex_2d(0.0,0.0);
   vtol_vertex_2d_sptr v2 = new vtol_vertex_2d(1.0,1.0);
@@ -127,12 +124,12 @@ int main(int, char **)
 
   oc1->reverse_directions();
 
-  vtol_edge_2d_sptr n_e = new vtol_edge_2d(5,5,1,1);
+  vtol_edge_2d* n_e = new vtol_edge_2d(5,5,1,1);
 
   oc1->add_edge(*n_e,true);
 
   Assert(oc1->num_edges()==5);
-  Assert(oc1->edge(4)==n_e.ptr());
+  Assert(oc1->edge(4)==n_e);
 
   oc1->remove_edge(*n_e,true);
 
@@ -144,7 +141,7 @@ int main(int, char **)
   Assert(!(*oc1 == *och1));
   Assert(oc1->topology_type()==vtol_topology_object::ONECHAIN);
 
-  vcl_cout << "Finished testing one chain" << vcl_endl;
+  vcl_cout << "Finished testing one chain\n\n";
   vcl_cout << "Test Summary: " << success << " tests succeeded, "
            << failures << " tests failed" << (failures?"\t***\n":"\n");
   return failures;

@@ -1,10 +1,7 @@
 #include <rsdl/rsdl_borgefors.h>
 #include <vcl_iostream.h>
 #include <vcl_vector.h>
-#include <vil/vil_memory_image_of.h>
 #include <vnl/vnl_vector_fixed.h>
-#include <vnl/vnl_math.h>
-
 #include <rsdl/rsdl_test.h>
 
 bool location_close(const vnl_vector_fixed<double,2>& v1,
@@ -26,7 +23,7 @@ main()
 
   rsdl_tests_start( vcl_string("Borgefors distance map") );
 
-  vcl_cout << "\nTests a borgefors map without a mask." << vcl_endl;
+  vcl_cout << "\nTests a borgefors map without a mask.\n";
   rsdl_borgefors<vnl_vector_fixed<double,2> >
     bg_map1(-range+50, -range+50, 2*range-100, 2*range-100, data.begin(), data.end());
   TEST("in_map (out of boundary) ", (bg_map1.in_map(-range+49,0) == false));

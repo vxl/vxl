@@ -13,7 +13,6 @@
 
 #include <vgl/vgl_box_2d.h>
 #include <vnl/vnl_math.h>
-#include <vnl/vnl_matlab_print.h>
 
 #include <mvl/HomgInterestPointSet.h>
 

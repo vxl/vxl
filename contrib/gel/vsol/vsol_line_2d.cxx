@@ -1,6 +1,5 @@
-// This is ./gel/vsol/vsol_line_2d.cxx
+// This is gel/vsol/vsol_line_2d.cxx
 #include <vsol/vsol_line_2d.h>
-
 //:
 // \file
 
@@ -11,7 +10,6 @@
 #include <vnl/vnl_math.h>
 #include <vsol/vsol_point_2d.h>
 #include <vgl/vgl_vector_2d.h>
-#include <vgl/vgl_line_segment_2d.h>
 #include <vgl/vgl_homg_line_2d.h>
 #include <vgl/vgl_point_2d.h>
 
@@ -121,7 +119,7 @@ bool vsol_line_2d::operator==(const vsol_line_2d &other) const
   bool result;
 
   result=this==&other;
-  if(!result)
+  if (!result)
     result=(((*p0_)==(*(other.p0_)))&&((*p1_)==(*(other.p1_))))
       ||(((*p0_)==(*(other.p1_)))&&((*p1_)==(*(other.p0_))));
   return result;
@@ -246,7 +244,7 @@ bool vsol_line_2d::in(const vsol_point_2d_sptr &p) const
   result=(p0_->y()-p1_->y())*p->x()+(p1_->x()-p0_->x())*p->y()
     +p0_->x()*p1_->y()-p0_->y()*p1_->x()==0;
 
-  if(result) // `p' belongs to the segment
+  if (result) // `p' belongs to the segment
     {
       dot_product=(p->x()-p0_->x())*(p1_->x()-p0_->x())
         +(p->y()-p0_->y())*(p1_->y()-p0_->y());

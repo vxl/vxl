@@ -3,7 +3,6 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
-
 //:
 // \file
 // \author François BERTEL
@@ -19,7 +18,6 @@
 #include <vcsl/vcsl_matrix_sptr.h>
 #include <vcsl/vcsl_spatial_transformation.h>
 #include <vcl_vector.h>
-#include <vcl_iostream.h>
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_matrix.h>
 

@@ -1,5 +1,5 @@
-#ifndef vdgl_interpolator_h
-#define vdgl_interpolator_h
+#ifndef vdgl_interpolator_h_
+#define vdgl_interpolator_h_
 #ifdef __GNUC__
 #pragma interface
 #endif
@@ -12,7 +12,6 @@
 #include <vdgl/vdgl_interpolator_sptr.h>
 #include <vul/vul_timestamp.h>
 #include <vbl/vbl_ref_count.h>
-#include <vsol/vsol_point_2d.h>
 #include <vdgl/vdgl_edgel_chain_sptr.h>
 #include <vsol/vsol_point_2d_sptr.h>
 
@@ -63,4 +62,4 @@ protected:
   vdgl_edgel_chain_sptr chain_;
 };
 
-#endif // _vdgl_interpolator_h
+#endif // vdgl_interpolator_h_

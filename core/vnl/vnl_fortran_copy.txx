@@ -1,17 +1,13 @@
-// This is ./vxl/vnl/vnl_fortran_copy.txx
+// This is vxl/vnl/vnl_fortran_copy.txx
 #ifndef vnl_fortran_copy_txx_
 #define vnl_fortran_copy_txx_
-
 //:
 // \file
-//
 // \author Andrew W. Fitzgibbon, Oxford RRG
 // \date   29 Aug 96
-//
 //-----------------------------------------------------------------------------
 
 #include "vnl_fortran_copy.h"
-#include <vnl/vnl_vector.h>
 
 //: Generate a fortran column-storage matrix from the given matrix.
 template <class T>
@@ -22,8 +18,8 @@ vnl_fortran_copy<T>::vnl_fortran_copy(vnl_matrix<T> const & M)
 
   data = vnl_c_vector<T>::allocate_T(sz = n*p);
   T *d = data;
-  for(unsigned j = 0; j < p; ++j)
-    for(unsigned i = 0; i < n; ++i)
+  for (unsigned j = 0; j < p; ++j)
+    for (unsigned i = 0; i < n; ++i)
       *d++ = M(i,j);
 }
 

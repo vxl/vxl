@@ -8,8 +8,6 @@
 #include <vcl_sstream.h>
 #include "vnl_io_bignum.h"
 #include <vsl/vsl_binary_io.h>
-#include <vsl/vsl_indent.h>
-#include <vsl/vsl_binary_explicit_io.h>
 
 //=================================================================================
 //: Binary save self to stream.
@@ -38,7 +36,7 @@ void vsl_b_read(vsl_b_istream &is, vnl_bignum & p)
     break;
 
   default:
-    vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vnl_bignum&) \n";
+    vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vnl_bignum&)\n";
     vcl_cerr << "           Unknown version number "<< ver << "\n";
     is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
     return;

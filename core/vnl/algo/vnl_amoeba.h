@@ -19,7 +19,7 @@
 
 //-----------------------------------------------------------------------------
 
-#include <vnl/vnl_matops.h>
+#include <vnl/vnl_vector.h>
 
 class vnl_cost_function;
 class vnl_least_squares_function;
@@ -40,7 +40,9 @@ class vnl_least_squares_function;
 //  Alternatively, if one uses minimize(x,dx), then the starting points
 //  are obtained by adding each dx[i] to the elements of x, one at a time.
 //  This is useful if you know roughly the scale of your space.
-class vnl_amoeba {
+
+class vnl_amoeba
+{
 public:
   int verbose;
   int maxiter;

@@ -8,10 +8,8 @@
 // 1.0     |2002/04/04| Luis E. Galup            |Creation
 //*****************************************************************************
 
-#include <vcl_iostream.h>
 #include <vnl/vnl_test.h>
 #include <gevd/gevd_param_mixin.h>
-
 
 void
 test_gevd_param_mixin()

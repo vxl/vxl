@@ -1,18 +1,14 @@
-//-*- c++ -*-------------------------------------------------------------------
+// This is oxl/vgui/vgui_style.cxx
 #ifdef __GNUC__
 #pragma implementation
 #endif
-//
-// .NAME vgui_style
-// Author: Philip C. Pritchett, RRG, University of Oxford
-// Created: 18 Oct 99
-//
+//:
+// \file
+// \author Philip C. Pritchett, RRG, University of Oxford
+// \date   18 Oct 99
 //-----------------------------------------------------------------------------
 
 #include "vgui_style.h"
-#include <vcl_iostream.h>
-#include <vul/vul_sprintf.h>
-
 
 vgui_style::vgui_style() {
   for (int i=0; i<2; ++i)

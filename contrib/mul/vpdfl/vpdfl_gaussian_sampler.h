@@ -3,25 +3,23 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
-
 //:
 // \file
 // \author Ian Scott
 // \date 19-Apr-2001
 // \brief Sampler class for Multi-Variate Gaussian.
 
-#include <vsl/vsl_binary_io.h>
 #include <vcl_string.h>
 #include <mbl/mbl_mz_random.h>
 #include <vnl/vnl_fwd.h>
 #include <vpdfl/vpdfl_sampler_base.h>
-
-
 class vpdfl_gaussian;
+
 //=======================================================================
 
 //: Samples from a Gaussian PDF
-class vpdfl_gaussian_sampler :public vpdfl_sampler_base {
+class vpdfl_gaussian_sampler :public vpdfl_sampler_base
+{
 protected:
     //: The random number generator
   mbl_mz_random rng_;
@@ -62,10 +60,10 @@ public:
   virtual vpdfl_sampler_base* clone() const;
 };
 
-  //: Stream output operator for class reference
+//: Stream output operator for class reference
 vcl_ostream& operator<<(vcl_ostream& os,const vpdfl_gaussian_sampler& b);
 
-  //: Stream output operator for class pointer
+//: Stream output operator for class pointer
 vcl_ostream& operator<<(vcl_ostream& os,const vpdfl_gaussian_sampler* b);
 
-#endif // vpdfl_pdf_sampler_base_h
+#endif // vpdfl_gaussian_sampler_h

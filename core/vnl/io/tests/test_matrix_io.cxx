@@ -3,17 +3,15 @@
 #include <vcl_utility.h>
 
 #include <vnl/vnl_test.h>
-#include <vnl/vnl_math.h>
-#include <vnl/vnl_vector.h>
 #include <vnl/vnl_matrix.h>
 
 #include <vnl/io/vnl_io_matrix.h>
 
 void test_matrix_double_io()
 {
-  vcl_cout << "*****************************" << vcl_endl;
-  vcl_cout << "Testing vnl_matrix<double> io" << vcl_endl;
-  vcl_cout << "*****************************" << vcl_endl;
+  vcl_cout << "*****************************\n";
+  vcl_cout << "Testing vnl_matrix<double> io\n";
+  vcl_cout << "*****************************\n";
   //// test constructors, accessors
   const int m = 10;
   const int n = 6;
@@ -44,9 +42,9 @@ void test_matrix_double_io()
   bfs_in.close();
 
   // m_in1 has content
-  TEST ("m_out == m_in1", m_out == m_in1, true);
+  TEST ("m_out == m_in1", m_out, m_in1);
   // m_in2 empty
-  TEST ("m_out == m_in2", m_out == m_in2, true);
+  TEST ("m_out == m_in2", m_out, m_in2);
 
   vsl_print_summary(vcl_cout, m_out);
   vcl_cout << vcl_endl;

@@ -7,17 +7,14 @@
 #pragma implementation
 #endif
 
+#include "vpdfl_gaussian_kernel_pdf.h"
+
 #include <vcl_cstdlib.h>
 #include <vcl_cassert.h>
 #include <vcl_string.h>
 #include <vcl_cmath.h>
 
-#include <vsl/vsl_indent.h>
-#include <vpdfl/vpdfl_gaussian_kernel_pdf.h>
 #include <vnl/vnl_math.h>
-#include <mbl/mbl_matxvec.h>
-#include <mbl/mbl_matrix_products.h>
-#include <vnl/algo/vnl_symmetric_eigensystem.h>
 #include <vpdfl/vpdfl_gaussian_kernel_pdf_sampler.h>
 #include <vpdfl/vpdfl_sampler_base.h>
 #include <vpdfl/vpdfl_prob_chi2.h>
@@ -83,7 +80,7 @@ void vpdfl_gaussian_kernel_pdf::gradient(vnl_vector<double>& /*g*/,
                               const vnl_vector<double>& /*x*/,
                               double& /*p*/) const
 {
-  vcl_cerr<<"vpdfl_gaussian_kernel_pdf::gradient() Not yet implemented."<<vcl_endl;
+  vcl_cerr<<"vpdfl_gaussian_kernel_pdf::gradient() Not yet implemented.\n";
   vcl_abort();
 }
 
@@ -91,7 +88,7 @@ void vpdfl_gaussian_kernel_pdf::gradient(vnl_vector<double>& /*g*/,
 
 void vpdfl_gaussian_kernel_pdf::nearest_plausible(vnl_vector<double>& /*x*/, double /*log_p_min*/) const
 {
-  vcl_cerr<<"pdf1d_gaussian_kernel_pdf::nearest_plausible() Not yet implemented."<<vcl_endl;
+  vcl_cerr<<"pdf1d_gaussian_kernel_pdf::nearest_plausible() Not yet implemented.\n";
   vcl_abort();
 }
 
@@ -165,7 +162,7 @@ void vpdfl_gaussian_kernel_pdf::b_read(vsl_b_istream& bfs)
   vsl_b_read(bfs,name);
   if (name != is_a())
   {
-    vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vpdfl_gaussian_kernel_pdf &) \n";
+    vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vpdfl_gaussian_kernel_pdf &)\n";
     vcl_cerr << "           Attempted to load object of type ";
     vcl_cerr << name <<" into object of type " << is_a() << vcl_endl;
     bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
@@ -180,7 +177,7 @@ void vpdfl_gaussian_kernel_pdf::b_read(vsl_b_istream& bfs)
       vpdfl_kernel_pdf::b_read(bfs);
       break;
     default:
-      vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vpdfl_gaussian_kernel_pdf &) \n";
+      vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vpdfl_gaussian_kernel_pdf &)\n";
       vcl_cerr << "           Unknown version number "<< version << vcl_endl;
       bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
       return;

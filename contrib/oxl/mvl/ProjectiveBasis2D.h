@@ -25,9 +25,8 @@
 //
 //-----------------------------------------------------------------------------
 
-//////////////#include <cool/decls.h>
 #include <mvl/HMatrix2D.h>
-
+#include <vcl_vector.h>
 class HomgPoint2D;
 
 class ProjectiveBasis2D {

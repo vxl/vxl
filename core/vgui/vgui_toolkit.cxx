@@ -15,8 +15,6 @@
 
 #include <vgui/vgui_macro.h>
 #include <vgui/vgui_window.h>
-#include <vgui/vgui_tableau.h>
-#include <vgui/vgui_adaptor.h>
 
 vcl_vector<vgui_toolkit*> *vgui_toolkit::registry()
 {
@@ -32,7 +30,7 @@ vgui_toolkit *vgui_toolkit::lookup(char const *name)
   for (unsigned int i=0; i<vv->size(); ++i)
     if ((*vv)[i]->name() == name)
       return (*vv)[i];
-  vgui_macro_warning << "WARNING : no toolkit with name \'" << name << "\' found." << vcl_endl;
+  vgui_macro_warning << "WARNING : no toolkit with name \'" << name << "\' found.\n";
   return 0;
 }
 
@@ -70,7 +68,7 @@ vgui_window *vgui_toolkit::produce_window(int /*width*/,
                                           vgui_menu const & /*menubar*/,
                                           char const* /*title*/)
 {
-  vgui_macro_warning << "no implementation of produce_window supplied" << vcl_endl;
+  vgui_macro_warning << "no implementation of produce_window supplied\n";
   return 0;
 }
 
@@ -78,45 +76,45 @@ vgui_window *vgui_toolkit::produce_window(int /*width*/,
                                           int /*height*/,
                                           char const* /*title*/)
 {
-  vgui_macro_warning << "no implementation of produce_window supplied" << vcl_endl;
+  vgui_macro_warning << "no implementation of produce_window supplied\n";
   return 0;
 }
 
 vgui_dialog_impl *vgui_toolkit::produce_dialog(char const*)
 {
-  vgui_macro_warning << "no implementation of produce_dialog supplied" << vcl_endl;
+  vgui_macro_warning << "no implementation of produce_dialog supplied\n";
   return 0;
 }
 
 void vgui_toolkit::quit()
 {
-  vgui_macro_warning << "vgui_toolkit::quit() called." << vcl_endl;
-  vgui_macro_warning << "calling exit()" << vcl_endl;
+  vgui_macro_warning << "vgui_toolkit::quit() called.\n";
+  vgui_macro_warning << "calling exit()\n";
   vcl_exit(0);
 }
 
 void vgui_toolkit::run()
 {
-  vgui_macro_warning << "no implementation of run supplied" << vcl_endl;
+  vgui_macro_warning << "no implementation of run supplied\n";
 }
 
 void vgui_toolkit::run_one_event()
 {
-  vgui_macro_warning << "no implementation of run_one_event supplied" << vcl_endl;
+  vgui_macro_warning << "no implementation of run_one_event supplied\n";
 }
 
 
 void vgui_toolkit::run_till_idle()
 {
-  vgui_macro_warning << "no implementation of run_till_idle supplied" << vcl_endl;
+  vgui_macro_warning << "no implementation of run_till_idle supplied\n";
 }
 
 void vgui_toolkit::flush()
 {
-  vgui_macro_warning << "no implementation of flush supplied" << vcl_endl;
+  vgui_macro_warning << "no implementation of flush supplied\n";
 }
 
 void vgui_toolkit::add_event(vgui_event const&)
 {
-  vgui_macro_warning << "no implementation of add_event supplied" << vcl_endl;
+  vgui_macro_warning << "no implementation of add_event supplied\n";
 }

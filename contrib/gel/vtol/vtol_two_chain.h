@@ -25,11 +25,9 @@
 //  PTU ported to vxl May 2000
 // \endverbatim
 //-----------------------------------------------------------------------------
-#include <vtol/vtol_two_chain_sptr.h>
 
 #include <vcl_vector.h>
 #include <vtol/vtol_chain.h>
-
 class vtol_vertex;
 class vtol_edge;
 class vtol_zero_chain;

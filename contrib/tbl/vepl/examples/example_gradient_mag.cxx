@@ -8,9 +8,6 @@
 // \author Peter Vanroose, K.U.Leuven, ESAT/PSI
 // \date   15 May 2001, from vipl/examples
 //
-#include <vil/vil_pixel.h>
-#include <vil/vil_memory_image_of.h>
-
 #include <vepl/vepl_gradient_mag.h>
 
 typedef unsigned char ubyte;
@@ -22,7 +19,11 @@ typedef unsigned char ubyte;
 
 int
 main(int argc, char** argv) {
-  if (argc < 3) { vcl_cerr << "Syntax: example_gradient_mag file_in file_out\n"; return 1; }
+  if (argc < 3)
+  {
+    vcl_cerr << "Syntax: example_gradient_mag file_in file_out\n";
+    return 1;
+  }
 
   // The input image:
   vil_image in = vil_load(argv[1]);

@@ -2,10 +2,10 @@
 //  \file
 
 #include "HMatrix2DComputeRobust.h"
+#include <vcl_cmath.h>
 #include <mvl/Probability.h>
 #include <mvl/AffineMetric.h>
 #include <mvl/HomgInterestPointSet.h>
-#include <vnl/vnl_matrix.h>
 
 HMatrix2DComputeRobust::HMatrix2DComputeRobust() {}
 
@@ -74,7 +74,7 @@ bool HMatrix2DComputeRobust::compute(PairMatchSetCorner& matches, HMatrix2D *H)
 //  HMatrix2D* H_temp = new HMatrix2D();
 
     if (!Computor.compute(four1_homg, four2_homg, &Hs))
-      vcl_cout << "HMatrix2DCompute4Point - failure!" << vcl_endl;
+      vcl_cout << "HMatrix2DCompute4Point - failure!\n";
 
     // De-condition H
 //    H_temp = new HMatrix2D(metric.homg_to_image_H(*H_temp_homg, metric, metric));
@@ -98,7 +98,7 @@ bool HMatrix2DComputeRobust::compute(PairMatchSetCorner& matches, HMatrix2D *H)
       vcl_cout << "HMatrix2D : " << Hs.get_matrix() << vcl_endl;
     }
   }
-  vcl_cout << "Final Figures..." << vcl_endl;
+  vcl_cout << "Final Figures...\n";
   vcl_cout << "Ds : " << Ds << vcl_endl;
   vcl_cout << "HMatrix2D : " << Hs << vcl_endl;
   H->set(Hs.get_matrix());
@@ -111,7 +111,7 @@ bool HMatrix2DComputeRobust::compute(PairMatchSetCorner& matches, HMatrix2D *H)
   inliers_ = inlier_list;
   residuals_ = residualsH;
   vcl_cout << "Residuals Variance : " << std_in << vcl_endl;
-  vcl_cout << "Inlier - " << vcl_endl;
+  vcl_cout << "Inlier -\n";
   vcl_cout << "         " << inlier_count << vcl_endl;
 
   return true;

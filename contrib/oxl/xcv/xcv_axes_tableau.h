@@ -1,7 +1,6 @@
-// This is ./oxl/xcv/xcv_axes_tableau.h
+// This is oxl/xcv/xcv_axes_tableau.h
 #ifndef xcv_axes_tableau_h_
 #define xcv_axes_tableau_h_
-
 //:
 // \file
 // \author  K.Y.McGaul
@@ -19,7 +18,6 @@
 
 #include <vgui/vgui_tableau.h>
 #include <vgui/vgui_event.h>
-#include <vgui/vgui_slot.h>
 #include <vgui/vgui_easy2D_sptr.h>
 #include <vgui/vgui_text_tableau_sptr.h>
 #include <vgui/vgui_composite_sptr.h>

@@ -1,14 +1,8 @@
-// This is ./oxl/xcv/xcv_processing.cxx
-
-//:
-//  \file
-// See xcv_processing.h for a description of this file.
-
+// This is oxl/xcv/xcv_processing.cxx
 #include "xcv_processing.h"
-
-#include <vcl_list.h>
-#include <vcl_vector.h>
-#include <vcl_iostream.h>
+//:
+// \file
+// See xcv_processing.h for a description of this file.
 
 #include <vil/vil_image.h>
 #include <vil/vil_smooth.h>
@@ -16,7 +10,6 @@
 #include <vgui/vgui.h>
 #include <vgui/vgui_menu.h>
 #include <vgui/vgui_dialog.h>
-#include <vgui/vgui_macro.h>
 
 #include <xcv/xcv_image_tableau.h>
 

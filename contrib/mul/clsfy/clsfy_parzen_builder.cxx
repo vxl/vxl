@@ -10,16 +10,13 @@
 // \author Ian Scott
 // \date 2001/10/07
 
-
-#include <clsfy/clsfy_parzen_builder.h>
+#include "clsfy_parzen_builder.h"
 
 #include <vcl_iostream.h>
 #include <vcl_string.h>
 #include <vcl_cassert.h>
-#include <vsl/vsl_indent.h>
 #include <vsl/vsl_binary_loader.h>
 #include <clsfy/clsfy_rbf_parzen.h>
-
 
 //=======================================================================
 

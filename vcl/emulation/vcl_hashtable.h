@@ -57,8 +57,6 @@
 
 #include <vcl_cstdlib.h>
 
-#include <vcl_iostream.h>
-//#include <vcl_alloc.h>
 #include "vcl_alloc.h"
 #include <vcl_algorithm.h>
 #include <vcl_iterator.h>

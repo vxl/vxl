@@ -17,7 +17,6 @@
 
 #include <vcl_vector.h>
 #include <vnl/vnl_least_squares_function.h>
-#include <vnl/vnl_double_3x3.h>
 #include <mvl/HomgPoint2D.h>
 #if defined(VCL_GCC_27)
 # include <mvl/HomgLine2D.h>
@@ -27,7 +26,8 @@
 #include <mvl/PairMatchSetCorner.h>
 #include <mvl/FMatrix.h> // needed since there is an FMatrix data member
 
-class FMatrixComputeNonLinear : public vnl_least_squares_function {
+class FMatrixComputeNonLinear : public vnl_least_squares_function
+{
 public:
 
   // Constructors/Destructors--------------------------------------------------

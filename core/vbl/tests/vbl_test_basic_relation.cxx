@@ -6,11 +6,9 @@
 //-----------------------------------------------------------------------------
 
 #include <vcl_string.h>
-#include <vcl_list.h>
 #include <vcl_iostream.h>
 #include <vcl_cstdio.h>
 #include <vbl/vbl_basic_relation.h>
-
 
 class TestType
 {
@@ -81,7 +79,7 @@ bool CheckRelation(vbl_basic_relation<vcl_string,int,vcl_string BR_DEFAULT2 >& r
       if (len != 3)
         {
           vcl_cout << "Failed: where_second(" << i << ").size() returns " << len
-               << ", should be 3" << vcl_endl;
+                   << ", should be 3\n";
           passed = false;
         }
       vbl_basic_relation<vcl_string,int,vcl_string BR_DEFAULT2>::iterator j;
@@ -104,7 +102,7 @@ bool CheckRelation(vbl_basic_relation<vcl_string,int,vcl_string BR_DEFAULT2 >& r
       if (count != 3)
         {
           vcl_cout << "Failed: where_second(" << i << ") returns " << count
-               << " tuples, should be 3." << vcl_endl;
+                   << " tuples, should be 3.\n";
           passed = false;
         }
       bool case1found = false;
@@ -124,7 +122,7 @@ bool CheckRelation(vbl_basic_relation<vcl_string,int,vcl_string BR_DEFAULT2 >& r
         }
       if (!case1found || !case2found || !case3found)
         {
-          vcl_cout << "Failed: where_second(" << i << ") returns wrong three tuples." << vcl_endl;
+          vcl_cout << "Failed: where_second(" << i << ") returns wrong three tuples.\n";
           passed = false;
         }
 
@@ -133,14 +131,14 @@ bool CheckRelation(vbl_basic_relation<vcl_string,int,vcl_string BR_DEFAULT2 >& r
       if (l1 != 2)
         {
           vcl_cout << "Failed: where_first(" << s1 << ") has size " << l1
-               << ", expected 2" << vcl_endl;
+                   << ", expected 2\n";
           passed = false;
         }
       int l2 = r.where_third(s2).size();
       if (l2 != 2)
         {
           vcl_cout << "Failed: where_third(" << s2 << ") has size " << l2
-               << ", expected 2" << vcl_endl;
+                   << ", expected 2\n";
           passed = false;
         }
 
@@ -149,42 +147,42 @@ bool CheckRelation(vbl_basic_relation<vcl_string,int,vcl_string BR_DEFAULT2 >& r
       if (l12 != 1)
         {
           vcl_cout << "Failed: where_first(" << s1 << ").where_third(" << s2 << ") has size " << l12
-               << ", expected 1" << vcl_endl;
+                   << ", expected 1\n";
           passed = false;
         }
       int l11 = r.where_first(s1).where_third(s1).size();
       if (l11 != 1)
         {
           vcl_cout << "Failed: where_first(" << s1 << ").where_third(" << s1 << ") has size " << l11
-               << ", expected 1" << vcl_endl;
+                   << ", expected 1\n";
           passed = false;
         }
       int l22 = r.where_first(s2).where_third(s2).size();
       if (l22 != 1)
         {
           vcl_cout << "Failed: where_first(" << s2 << ").where_third(" << s2 << ") has size " << l22
-               << ", expected 1" << vcl_endl;
+                   << ", expected 1\n";
           passed = false;
         }
       int li12 = r.where_first(s1).where_second(i).where_third(s2).size();
       if (li12 != 1)
         {
-          vcl_cout << "Failed: where_first(" << s1 << ").where_second(" << i << ").where_third(" << s2 << ") has size " << li12
-               << ", expected 1" << vcl_endl;
+          vcl_cout << "Failed: where_first(" << s1 << ").where_second(" << i << ").where_third("
+                   << s2 << ") has size " << li12 << ", expected 1\n";
           passed = false;
         }
       int li11 = r.where_first(s1).where_second(i).where_third(s1).size();
       if (li11 != 1)
         {
-          vcl_cout << "Failed: where_first(" << s1 << ").where_second(" << i << ").where_third(" << s1 << ") has size " << li11
-               << ", expected 1" << vcl_endl;
+          vcl_cout << "Failed: where_first(" << s1 << ").where_second(" << i << ").where_third("
+                   << s1 << ") has size " << li11 << ", expected 1\n";
           passed = false;
         }
       int li22 = r.where_first(s2).where_second(i).where_third(s2).size();
       if (li22 != 1)
         {
-          vcl_cout << "Failed: where_first(" << s2 << ").where_second(" << i << ").where_third(" << s2 << ") has size " << li22
-               << ", expected 1" << vcl_endl;
+          vcl_cout << "Failed: where_first(" << s2 << ").where_second(" << i << ").where_third("
+                   << s2 << ") has size " << li22 << ", expected 1\n";
           passed = false;
         }
     }
@@ -228,9 +226,9 @@ void testStringIntString()
 
   bool passed = CheckRelation(r);
   if (passed)
-    vcl_cout << "Where test passed" << vcl_endl;
+    vcl_cout << "Where test passed\n";
   else
-    vcl_cout << "Where test failed" << vcl_endl;
+    vcl_cout << "Where test failed\n";
 
   // Test random insert/delete.
   vbl_basic_relation<vcl_string,int,vcl_string BR_DEFAULT2> temp_rel("holding_relation");
@@ -279,9 +277,9 @@ void testStringIntString()
 
   passed  = passed && CheckRelation(r);
   if (passed)
-    vcl_cout << "Stress test passed" << vcl_endl;
+    vcl_cout << "Stress test passed\n";
   else
-    vcl_cout << "Stress test failed" << vcl_endl;
+    vcl_cout << "Stress test failed\n";
 
   r.clear();
 }
@@ -295,31 +293,31 @@ void testDowncasting()
   vbl_basic_relation<TestType*,int,vcl_string BR_DEFAULT2>* r1p =
     vbl_basic_relation<TestType*,int,vcl_string BR_DEFAULT2>::cast(r);
   if (r1p != &r1)
-    vcl_cout << "Failed downcast test 1" << vcl_endl;
+    vcl_cout << "Failed downcast test 1\n";
   else
-    vcl_cout << "Passed downcast test 1" << vcl_endl;
+    vcl_cout << "Passed downcast test 1\n";
 
   r = &r2;
   r1p = vbl_basic_relation<TestType*,int,vcl_string BR_DEFAULT2>::cast(r);
   if (r1p)
-    vcl_cout << "Failed downcast test 2" << vcl_endl;
+    vcl_cout << "Failed downcast test 2\n";
   else
-    vcl_cout << "Passed downcast test 2" << vcl_endl;
+    vcl_cout << "Passed downcast test 2\n";
 
   r = &r1;
   vbl_basic_relation<vcl_string,int,vcl_string BR_DEFAULT2>* r2p =
     vbl_basic_relation<vcl_string,int,vcl_string BR_DEFAULT2>::cast(r);
   if (r2p)
-    vcl_cout << "Failed downcast test 3" << vcl_endl;
+    vcl_cout << "Failed downcast test 3\n";
   else
-    vcl_cout << "Passed downcast test 3" << vcl_endl;
+    vcl_cout << "Passed downcast test 3\n";
 
   r = &r2;
   r2p = vbl_basic_relation<vcl_string,int,vcl_string BR_DEFAULT2>::cast(r);
   if (r2p != &r2)
-    vcl_cout << "Failed downcast test 4" << vcl_endl;
+    vcl_cout << "Failed downcast test 4\n";
   else
-    vcl_cout << "Passed downcast test 4" << vcl_endl;
+    vcl_cout << "Passed downcast test 4\n";
 }
 
 //extern "C" void test_vbl_basic_relation()
@@ -334,9 +332,9 @@ main()
   rel.insert(e1,10,"why is it?");
   // This insert should fail.
   if (rel.insert(e1,10,"who is it?"))
-    vcl_cout << "Failed: duplicate tuple inserted." << vcl_endl;
+    vcl_cout << "Failed: duplicate tuple inserted.\n";
   else
-    vcl_cout << "Passed: duplicate tuple was not inserted." << vcl_endl;
+    vcl_cout << "Passed: duplicate tuple was not inserted.\n";
 
   vbl_basic_relation<TestType*,int,vcl_string BR_DEFAULT2>::iterator i;
   int count = 0;
@@ -345,9 +343,9 @@ main()
        i++, count++)
     vcl_cout << "Found tuple where second = 10 : " << *i << vcl_endl;
   if (count == 2)
-    vcl_cout << "Passed: where_second succeeded." << vcl_endl;
+    vcl_cout << "Passed: where_second succeeded.\n";
   else
-    vcl_cout << "Failed: where_second returned " << count << " tuples, expected 2." << vcl_endl;
+    vcl_cout << "Failed: where_second returned " << count << " tuples, expected 2.\n";
 
   vbl_basic_relation<TestType*,int,vcl_string BR_DEFAULT2> selected = rel.where_third("what is it?");
   vcl_cout << "Where third = \"what is it?\" :" << selected << vcl_endl;
@@ -358,30 +356,30 @@ main()
        i++, count++)
     vcl_cout << "Found tuple " << *i << vcl_endl;
   if (count == 2)
-    vcl_cout << "Passed: where_third succeeded." << vcl_endl;
+    vcl_cout << "Passed: where_third succeeded.\n";
   else
-    vcl_cout << "Failed: where_third returned " << count << " tuples, expected 2." << vcl_endl;
+    vcl_cout << "Failed: where_third returned " << count << " tuples, expected 2.\n";
 
   if (rel.size() == 4)
-    vcl_cout << "Passed: size succeeded." << vcl_endl;
+    vcl_cout << "Passed: size succeeded.\n";
   else
-    vcl_cout << "Failed: size returned " << rel.size() << " tuples, expected 4." << vcl_endl;
+    vcl_cout << "Failed: size returned " << rel.size() << " tuples, expected 4.\n";
 
   vcl_cout << rel << vcl_endl;
   rel.where_second(10).clear();
 
   if (rel.size() == 2)
-    vcl_cout << "Passed: clear where second = 10 succeeded." << vcl_endl;
+    vcl_cout << "Passed: clear where second = 10 succeeded.\n";
   else
-    vcl_cout << "Failed: clear where second = 10 failed, leaving " << rel.size() << " tuples, expected 2." << vcl_endl;
+    vcl_cout << "Failed: clear where second = 10 failed, leaving " << rel.size() << " tuples, expected 2.\n";
 
   vcl_cout << rel << vcl_endl;
   rel.clear();
 
   if (TestType::ninstances == 0)
-    vcl_cout << "Passed: no leaks found." << vcl_endl;
+    vcl_cout << "Passed: no leaks found.\n";
   else
-    vcl_cout << "Failed: " << TestType::ninstances << " instances of T leaked." << vcl_endl;
+    vcl_cout << "Failed: " << TestType::ninstances << " instances of T leaked.\n";
 
   rel.clear();
 

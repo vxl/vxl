@@ -1,4 +1,4 @@
-// This is ./vxl/vil/file_formats/vil_bmp.h
+// This is vxl/vil/file_formats/vil_bmp.h
 #ifndef vil_bmp_file_format_h_
 #define vil_bmp_file_format_h_
 #ifdef __GNUC__
@@ -32,9 +32,9 @@ class vil_stream;
 
 #include <vil/vil_file_format.h>
 #include <vil/vil_image_impl.h>
-#include <vil/file_formats/vil_bmp_file_header.h>
-#include <vil/file_formats/vil_bmp_core_header.h>
-#include <vil/file_formats/vil_bmp_info_header.h>
+#include "vil_bmp_file_header.h"
+#include "vil_bmp_core_header.h"
+#include "vil_bmp_info_header.h"
 
 //: Loader for BMP files
 class vil_bmp_file_format : public vil_file_format {

@@ -1,18 +1,15 @@
+// This is vxl/vil/vil_block_cache_image_impl.h
 #ifndef vil_block_cache_image_impl_h_
 #define vil_block_cache_image_impl_h_
 #ifdef __GNUC__
 #pragma interface
 #endif
-//This is vxl/vil/vil_block_cache_image_impl.h
-
 //:
 // \file
 // \author fsm@robots.ox.ac.uk
 
-
 #include <vil/vil_image_impl.h>
 #include <vil/vil_image.h>
-#include <vcl_iostream.h>
 #include <vcl_string.h>
 
 //: vil_block_cache_image_impl - adaptor which caches the given image in blocks of given size.

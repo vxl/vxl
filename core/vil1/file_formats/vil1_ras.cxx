@@ -1,4 +1,4 @@
-// This is ./vxl/vil/file_formats/vil_ras.cxx
+// This is vxl/vil/file_formats/vil_ras.cxx
 #ifdef __GNUC__
 #pragma implementation
 #endif
@@ -9,7 +9,6 @@
 
 #include <vcl_cassert.h>
 #include <vcl_cstdio.h> // for sprintf
-#include <vcl_vector.h>
 
 #include <vcl_iostream.h>
 #include <vcl_cstring.h>
@@ -41,7 +40,8 @@ namespace {
   // Equivalent of ntoh
   bool read_uint_32( vil_stream* vs, vxl_uint_32& word )
   {
-    if ( vs->read( &word, 4 ) < 4 )  return false;
+    if ( vs->read( &word, 4 ) < 4 )
+      return false;
     swap_endian( word );
     return true;
   }
@@ -50,7 +50,7 @@ namespace {
   bool write_uint_32( vil_stream* vs, vxl_uint_32 word )
   {
     swap_endian( word );
-    return ( vs->write( &word, 4 ) == 4 );
+    return vs->write( &word, 4 ) == 4;
   }
 
   // Compute the length of the data from the width, height and depth,
@@ -122,7 +122,8 @@ bool vil_ras_generic_image::get_property(char const *tag, void *prop) const
   // The default raw colour format is BGR. The default indexed colour
   // format is RGB. Go figure.
   if (0==vcl_strcmp(tag, vil_property_component_order_is_BGR)) {
-    if ( prop ) (*(bool*)prop) = ( map_type_ == RMT_NONE && type_ != RT_FORMAT_RGB );
+    if ( prop )
+      (*(bool*)prop) = ( map_type_ == RMT_NONE && type_ != RT_FORMAT_RGB );
     return true;
   }
 
@@ -147,15 +148,15 @@ vil_ras_generic_image::vil_ras_generic_image(vil_stream* vs, int planes,
   height_ = height;
 
   if ( planes != 1 ) {
-    vcl_cerr << __FILE__ << ": can only handle 1 plane" << vcl_endl;
+    vcl_cerr << __FILE__ << ": can only handle 1 plane\n";
     return;
   }
   if ( components != 3 && components != 1 ) {
-    vcl_cerr << __FILE__ << ": can't handle " << components << " components" << vcl_endl;
+    vcl_cerr << __FILE__ << ": can't handle " << components << " components\n";
     return;
   }
   if ( bits_per_component != 8 ) {
-    vcl_cerr << __FILE__ << ": can't handle " << bits_per_component << " bits per component" << vcl_endl;
+    vcl_cerr << __FILE__ << ": can't handle " << bits_per_component << " bits per component\n";
     return;
   }
 
@@ -190,7 +191,8 @@ bool vil_ras_generic_image::read_header()
   vs_->seek(0);
 
   vxl_uint_8 buf[4];
-  if (vs_->read(buf, 4) < 4) return false; // at end-of-file?
+  if (vs_->read(buf, 4) < 4) // at end-of-file?
+    return false;
   if (! ( buf[0] == RAS_MAGIC[0] && buf[1] == RAS_MAGIC[1] &&
           buf[2] == RAS_MAGIC[2] && buf[3] == RAS_MAGIC[3]  ) )
     return false; // magic number isn't correct
@@ -216,12 +218,12 @@ bool vil_ras_generic_image::read_header()
     return false;
   }
   if ( map_type_ == RMT_NONE && map_length_ != 0 ) {
-    vcl_cerr << __FILE__ << ": No colour map according to header, but there is a map!" << vcl_endl;
+    vcl_cerr << __FILE__ << ": No colour map according to header, but there is a map!\n";
     return false;
   }
 
   if ( depth_ != 8 && depth_ != 24 ) {
-    vcl_cerr << __FILE__ << ": depth " << depth_ << " not implemented" << vcl_endl;
+    vcl_cerr << __FILE__ << ": depth " << depth_ << " not implemented\n";
     return false;
   }
 
@@ -230,7 +232,7 @@ bool vil_ras_generic_image::read_header()
     length_ = compute_length( width_, height_, depth_ );
   }
   if ( length_ == 0 ) {
-    vcl_cerr << __FILE__ << ": header says image has length zero" << vcl_endl;
+    vcl_cerr << __FILE__ << ": header says image has length zero\n";
     return false;
   }
   if ( type_ != RT_BYTE_ENCODED && length_ != compute_length( width_, height_, depth_ ) ) {
@@ -331,15 +333,15 @@ bool vil_ras_generic_image::get_section(void* buf, int x0, int y0, int xs, int y
 bool vil_ras_generic_image::put_section(void const* buf, int x0, int y0, int xs, int ys)
 {
   if ( col_map_ ) {
-    vcl_cerr << __FILE__ << ": writing to file with a colour map is not implemented" << vcl_endl;
+    vcl_cerr << __FILE__ << ": writing to file with a colour map is not implemented\n";
     return false;
   }
   if ( type_ == RT_BYTE_ENCODED ) {
-    vcl_cerr << __FILE__ << ": writing to a run-length encoded file is not implemented" << vcl_endl;
+    vcl_cerr << __FILE__ << ": writing to a run-length encoded file is not implemented\n";
     return false;
   }
   if ( components_ == 3 && type_ != RT_FORMAT_RGB ) {
-    vcl_cerr << __FILE__ << ": writing BGR format is not implemented" << vcl_endl;
+    vcl_cerr << __FILE__ << ": writing BGR format is not implemented\n";
     return false;
   }
 
@@ -362,7 +364,8 @@ bool vil_ras_generic_image::put_section(void const* buf, int x0, int y0, int xs,
   for (int y = 0; y < ys; ++y) {
     vs_->seek( file_byte_start + y * file_byte_width );
     vs_->write( ob + y * buff_byte_width, buff_byte_width );
-    if ( need_pad ) vs_->write( &zero, 1 );
+    if ( need_pad )
+      vs_->write( &zero, 1 );
   }
 
   return true;

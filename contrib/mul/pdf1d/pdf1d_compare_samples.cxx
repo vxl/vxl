@@ -3,13 +3,7 @@
 // \author Tim Cootes
 // \brief Functions to compare sets of samples.
 
-// #include <mbl/mbl_mz_random.h>
-
-#include <pdf1d/pdf1d_compare_samples.h>
-#include <vcl_iostream.h>
-
-// Object used to do sampling
-// static mbl_mz_random mz_random;
+#include "pdf1d_compare_samples.h"
 
 //: Return the average number of elements of x2 greater than each x1[i]
 double pdf1d_prop_larger(const double* x1, int n1, const double* x2, int n2)
@@ -75,4 +69,3 @@ int pdf1d_select_largest_samples(vcl_vector<const double*>& x,
 
   return best_i;
 }
-

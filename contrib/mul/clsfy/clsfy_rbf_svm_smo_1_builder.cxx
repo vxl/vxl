@@ -8,26 +8,17 @@
 
 //=======================================================================
 
+#include "clsfy_rbf_svm_smo_1_builder.h"
 #include <clsfy/clsfy_smo_1.h>
-#include <clsfy/clsfy_rbf_svm_smo_1_builder.h>
 #include <vcl_string.h>
 #include <vcl_sstream.h>
 #include <vcl_iomanip.h>
 #include <vcl_limits.h>
-#include <vcl_queue.h>
-#include <vcl_algorithm.h>
-#include <vnl/vnl_cost_function.h>
-#include <vnl/algo/vnl_brent.h>
-
-#include <vsl/vsl_indent.h>
-#include <mbl/mbl_data_wrapper.h>
-#include <vnl/vnl_math.h>
-#include <vnl/vnl_matrix.h>
 #include <vcl_vector.h>
-#include <mbl/mbl_mz_random.h>
+#include <vcl_algorithm.h>
 #include <vcl_cassert.h>
 
-#include <mbl/mbl_data_array_wrapper.h>
+#include <mbl/mbl_data_wrapper.h>
 
 //=======================================================================
 
@@ -75,7 +66,7 @@ double clsfy_rbf_svm_smo_1_builder::build(clsfy_classifier_base& classifier,
   // Get the SVM description, and build an SVM machine
   {
     vcl_vector<vnl_vector<double> > supportVectors;
-    const vnl_vecd &allAlphas = svAPI.lagrange_mults();
+    const vnl_vector<double> &allAlphas = svAPI.lagrange_mults();
     vcl_vector<double> alphas;
     vcl_vector<unsigned> labels;
     for (unsigned i=0; i<nSamples; ++i)
@@ -178,7 +169,7 @@ void clsfy_rbf_svm_smo_1_builder::b_read(vsl_b_istream& bfs)
     vsl_b_read(bfs,rbf_width_);
     break;
   default:
-    vcl_cerr << "I/O ERROR: clsfy_rbf_svm_smo_1_builder::b_read(vsl_b_istream&) \n";
+    vcl_cerr << "I/O ERROR: clsfy_rbf_svm_smo_1_builder::b_read(vsl_b_istream&)\n";
     vcl_cerr << "           Unknown version number "<< version << "\n";
     bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
     return;

@@ -6,15 +6,14 @@
 //  \author Tim Cootes
 
 #include <mil/mil_image_2d_of.h>
-#include <vnl/vnl_vector.h>
 
 
-//: creates a variance normalised version of an input image  
+//: creates a variance normalised version of an input image
 void mil_var_norm_image_2d(mil_image_2d_of<float>& dest,
-                          const mil_image_2d_of<float>& src);
+                           const mil_image_2d_of<float>& src);
 
-//: creates a mean normalised version of an input image  
+//: creates a mean normalised version of an input image
 void mil_mean_norm_image_2d(mil_image_2d_of<float>& dest,
-                          const mil_image_2d_of<float>& src);
+                            const mil_image_2d_of<float>& src);
 
 #endif // mil_normalise_image_2d_h_

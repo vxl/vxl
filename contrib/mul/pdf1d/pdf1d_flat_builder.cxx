@@ -4,15 +4,15 @@
 //:
 // \file
 
+#include "pdf1d_flat_builder.h"
+
 #include <vcl_cassert.h>
 #include <vcl_string.h>
 #include <vcl_cstdlib.h> // vcl_abort()
 
-#include <vsl/vsl_indent.h>
 #include <mbl/mbl_data_wrapper.h>
 #include <mbl/mbl_data_array_wrapper.h>
 #include <pdf1d/pdf1d_flat.h>
-#include <pdf1d/pdf1d_flat_builder.h>
 #include <pdf1d/pdf1d_calc_mean_var.h>
 
 //=======================================================================
@@ -79,7 +79,7 @@ void pdf1d_flat_builder::build_from_array(pdf1d_pdf& model, const double* data, 
   if (n<2)
   {
     vcl_cerr<<"pdf1d_flat_builder::build_from_array()";
-    vcl_cerr<<" Too few examples available."<<vcl_endl;
+    vcl_cerr<<" Too few examples available.\n";
     vcl_abort();
   }
 
@@ -110,7 +110,7 @@ void pdf1d_flat_builder::build(pdf1d_pdf& model, mbl_data_wrapper<double>& data)
 
   if (n_samples<2)
   {
-    vcl_cerr<<"pdf1d_flat_builder::build() Too few examples available."<<vcl_endl;
+    vcl_cerr<<"pdf1d_flat_builder::build() Too few examples available.\n";
     vcl_abort();
   }
 
@@ -225,7 +225,7 @@ void pdf1d_flat_builder::b_read(vsl_b_istream& bfs)
       vsl_b_read(bfs,min_var_);
       break;
     default:
-      vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, pdf1d_flat_builder &) \n";
+      vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, pdf1d_flat_builder &)\n";
       vcl_cerr << "           Unknown version number "<< version << vcl_endl;
       bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
       return;

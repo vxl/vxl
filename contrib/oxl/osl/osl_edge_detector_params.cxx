@@ -1,6 +1,4 @@
 #include <osl/osl_edge_detector_params.h>
-//#include <vcl_sstream.h>
-//#include <vcl_fstream.h>
 
 //:
 //  \file

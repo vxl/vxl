@@ -21,10 +21,8 @@
 //                   these functions must be wrong for 3D use)
 //     \endverbatim
 //-----------------------------------------------------------------------------
-#include <vtol/vtol_block_sptr.h>
 
 #include <vtol/vtol_topology_object.h>
-
 class vtol_vertex;
 class vtol_edge;
 class vtol_zero_chain;

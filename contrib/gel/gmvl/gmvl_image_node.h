@@ -7,7 +7,6 @@
   crossge@crd.ge.com
 */
 
-#include <vcl_string.h>
 #include <vil/vil_image.h>
 #include <gmvl/gmvl_node.h>
 
@@ -23,7 +22,6 @@ public:
 protected:
 
   vil_image image_;
-
 };
 
-#endif
+#endif // gmvl_image_node_h_

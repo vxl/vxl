@@ -1,5 +1,4 @@
 #include <vcl_iterator.h>
-#include <vcl_iostream.h>
 #include <vcl_algorithm.txx>
 
 VCL_SWAP_INSTANTIATE(int);

@@ -10,10 +10,7 @@
 #include <vcl_vector.h>
 #include <vnl/io/vnl_io_vector.h>
 #include <vsl/vsl_binary_loader.h>
-#include <mbl/mbl_matxvec.h>
-#include <mbl/mbl_matrix_products.h>
 #include <vcl_cassert.h>
-
 
 //=======================================================================
 

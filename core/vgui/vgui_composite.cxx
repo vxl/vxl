@@ -20,17 +20,16 @@
 #include <vgui/vgui_gl.h>
 #include <vgui/vgui_event.h>
 #include <vgui/vgui_matrix_state.h>
-#include <vgui/vgui_projection_inspector.h>
 
 //quell_warning static bool debug=false;
 static vgui_event_condition default_c_enable_key_bindings(vgui_key_CTRL('c'));
 
 bool vgui_composite::help() {
   vcl_cerr << vcl_endl;
-  vcl_cerr << "-- vgui_composite --------------" << vcl_endl;
-  vcl_cerr << "|     keys                     |" << vcl_endl;
-  vcl_cerr << "| `1' to `9'  toggle child `n' |" << vcl_endl;
-  vcl_cerr << "--------------------------------" << vcl_endl;
+  vcl_cerr << "-- vgui_composite --------------\n";
+  vcl_cerr << "|     keys                     |\n";
+  vcl_cerr << "| `1' to `9'  toggle child `n' |\n";
+  vcl_cerr << "--------------------------------\n";
   vcl_cerr << vcl_endl;
   return false;
 }
@@ -196,7 +195,7 @@ bool vgui_composite::add_child(vgui_tableau_sptr const& t) {
 
 void vgui_composite::remove(vgui_tableau_sptr const& t) {
   if (!remove_child(t))
-    vcl_cerr << __FILE__ " : no such child tableau" << vcl_endl;
+    vcl_cerr << __FILE__ " : no such child tableau\n";
 }
 
 void vgui_composite::clear() {

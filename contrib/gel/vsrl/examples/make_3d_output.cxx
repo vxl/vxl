@@ -6,7 +6,6 @@
 #include <vsrl/vsrl_results_dense_matcher.h>
 #include <vsrl/vsrl_3d_output.h>
 
-#include <vil/vil_image_impl.h>
 #include <vil/vil_image.h>
 #include <vil/vil_load.h>
 #include <vsrl/vsrl_parameters.h>
@@ -16,8 +15,8 @@
 
 int main(int argc, char ** argv)
 {
-  if(argc < 2){
-    vcl_cout << "make_3d_output im1 im2 disp_image 3d_outfile (params.dat) (transform.dat) " << vcl_endl;
+  if (argc < 2) {
+    vcl_cout << "make_3d_output im1 im2 disp_image 3d_outfile (params.dat) (transform.dat)\n";
     return 0;
   }
 
@@ -36,7 +35,7 @@ int main(int argc, char ** argv)
 
   vsrl_parameters *params = vsrl_parameters::instance();
 
-  if(argc>5){
+  if (argc>5) {
     params->load(argv[5]);
   }
 
@@ -50,7 +49,7 @@ int main(int argc, char ** argv)
   output.set_matcher(&matcher);
 
   // set the projective transform if it exists
-  if(argc==7){
+  if (argc==7) {
     output.read_projective_transform(argv[6]);
   }
 

@@ -12,11 +12,9 @@
 //-----------------------------------------------------------------------------
 
 #include <vcl_iostream.h>
-#include <vcl_vector.h>
 #include <vbl/vbl_ref_count.h>
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_matrix.h>
-#include <vnl/vnl_math.h>
 #include <vpgl/vpgl_basic_camera_sptr.h>
 
 class vpgl_graphics_camera;
@@ -58,7 +56,7 @@ public:
   inline friend vcl_ostream &operator<<(vcl_ostream &os, const vpgl_basic_camera& obj)
     {obj.Print(os); return os;}
   inline friend vcl_ostream &operator<<(vcl_ostream &os, const vpgl_basic_camera* obj)
-    {if(obj) obj->Print(os); else os << "NULL Camera"; return os;}
+    {if (obj) obj->Print(os); else os << "NULL Camera"; return os;}
 #endif
 
 protected:

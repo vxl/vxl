@@ -9,15 +9,13 @@
 #include <mil/mil_image_2d_of.h>
 #include <vil/vil_memory_image_of.h>
 #include <vil/vil_rgb_byte.h>
-#include <vnl/vnl_matrix.h>
-#include <vnl/vnl_vector.h>
 #include <vcl_cassert.h>
 
 
 //: Convert grey image from mil to vil
 template <class vilType, class milType>
 inline void mil_convert_vil_gm2gv(vil_memory_image_of<vilType>& vil_image,
-                          const mil_image_2d_of<milType>& mil_image)
+                                  const mil_image_2d_of<milType>& mil_image)
 {
   assert(mil_image.n_planes()==1);
   int nx=mil_image.nx();
@@ -34,7 +32,7 @@ inline void mil_convert_vil_gm2gv(vil_memory_image_of<vilType>& vil_image,
 //: Convert colour image from mil to vil
 template <class milType>
 inline void mil_convert_vil_cm2cv(vil_memory_image_of<vil_rgb_byte>& vil_image,
-                    const mil_image_2d_of<milType>& mil_image)
+                                  const mil_image_2d_of<milType>& mil_image)
 {
   assert(mil_image.n_planes()==3);
   int nx=mil_image.nx();
@@ -57,7 +55,7 @@ inline void mil_convert_vil_cm2cv(vil_memory_image_of<vil_rgb_byte>& vil_image,
 //: Convert grey image from vil to mil
 template <class vilType, class milType>
 inline void mil_convert_vil_gv2gm(mil_image_2d_of<milType>& mil_image,
-                          const vil_memory_image_of<vilType>& vil_image)
+                                  const vil_memory_image_of<vilType>& vil_image)
 {
   int nx = vil_image.width();
   int ny = vil_image.height();
@@ -73,7 +71,7 @@ inline void mil_convert_vil_gv2gm(mil_image_2d_of<milType>& mil_image,
 //: Convert colour image from vil to mil
 template <class milType>
 inline void mil_convert_vil_cv2cm(mil_image_2d_of<milType>& mil_image,
-                          const vil_memory_image_of<vil_rgb_byte>& vil_image)
+                                  const vil_memory_image_of<vil_rgb_byte>& vil_image)
 {
   int nx = vil_image.width();
   int ny = vil_image.height();
@@ -92,7 +90,7 @@ inline void mil_convert_vil_cv2cm(mil_image_2d_of<milType>& mil_image,
 //: Convert colour image from vil to grey mil
 template <class milType>
 inline void mil_convert_vil_cv2gm(mil_image_2d_of<milType>& mil_image,
-                          const vil_memory_image_of<vil_rgb_byte>& vil_image)
+                                  const vil_memory_image_of<vil_rgb_byte>& vil_image)
 {
   int nx = vil_image.width();
   int ny = vil_image.height();

@@ -1,18 +1,14 @@
-#ifndef _FMatrixPlanar_h
-#define _FMatrixPlanar_h
+#ifndef FMatrixPlanar_h_
+#define FMatrixPlanar_h_
 #ifdef __GNUC__
 #pragma interface
 #endif
 
 //--------------------------------------------------------------
+//:
+// \file
+// \brief planar fundamental matrix
 //
-// .NAME FMatrixPlanar - planar fundamental matrix
-// .LIBRARY MViewBasics
-// .HEADER MultiView package
-// .INCLUDE mvl/FMatrixPlanar.h
-// .FILE FMatrixPlanar.cxx
-//
-// .SECTION Description:
 // A class to hold a Fundamental Matrix of the planar form
 // which occurs when the translation is confined to the plane
 // perpendicular to the rotation axis.
@@ -23,19 +19,17 @@
 #include <vnl/vnl_matrix.h>
 #include <mvl/HomgLine2D.h>
 #include <mvl/HomgPoint2D.h>
-#include <mvl/HomgPoint2D.h>
 #include <mvl/FMatrix.h>
 
-class PMatrix;
-
-class FMatrixPlanar : public FMatrix {
+class FMatrixPlanar : public FMatrix
+{
 public:
   FMatrixPlanar();
   FMatrixPlanar(const double* f_matrix);
   FMatrixPlanar(const vnl_matrix<double>& f_matrix);
   ~FMatrixPlanar();
 
-  // Computations
+  // Computations-----------------------------------------------------------
   void init(const FMatrix& F);
 
   inline void set_rank2_using_svd();
@@ -51,4 +45,4 @@ public:
   inline void set_rank2_flag (bool rank2_flag) const;
 };
 
-#endif // _FMatrixPlanar_h
+#endif // FMatrixPlanar_h_

@@ -1,19 +1,17 @@
-//-*- c++ -*-------------------------------------------------------------------
+// This is oxl/vgui/vgui_soview2D.cxx
 #ifdef __GNUC__
 #pragma implementation
 #endif
-//
-// .NAME vgui_soview2D
-// Author: Philip C. Pritchett, RRG, University of Oxford
-// Created: 24 Mar 99
-//
+//:
+// \file
+// \author Philip C. Pritchett, RRG, University of Oxford
+// \date   24 Mar 99
 //-----------------------------------------------------------------------------
 
 #include "vgui_soview2D.h"
 
 #include <vcl_cmath.h>
 #include <vcl_iostream.h>
-#include <vcl_cmath.h>
 
 #include <vgl/vgl_clip.h>
 #include <vgl/vgl_distance.h>

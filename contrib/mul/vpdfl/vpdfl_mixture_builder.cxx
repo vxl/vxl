@@ -15,18 +15,18 @@
 //    IMS   Converted to VXL 14 May 2000, with redesign
 // \endverbatim
 
+#include "vpdfl_mixture_builder.h"
+
+#include <vcl_cassert.h>
+#include <vcl_cmath.h>
 #include <vsl/vsl_indent.h>
 #include <vsl/vsl_vector_io.h>
-#include <vpdfl/vpdfl_mixture_builder.h>
+#include <vsl/vsl_binary_loader.h>
 #include <vpdfl/vpdfl_mixture_sampler.h>
 #include <vpdfl/vpdfl_mixture.h>
 #include <mbl/mbl_data_wrapper.h>
 #include <mbl/mbl_data_array_wrapper.h>
-#include <mbl/mbl_mz_random.h>
-#include <vcl_cassert.h>
-#include <vcl_cmath.h>
 #include <vnl/vnl_math.h>
-#include <vsl/vsl_binary_loader.h>
 
 // Weights smaller than this are assumed to be zero
 const double min_wt = 1e-8;
@@ -144,7 +144,7 @@ double vpdfl_mixture_builder::min_var() const
 void vpdfl_mixture_builder::build(vpdfl_pdf_base& /*model*/,
             const vnl_vector<double>& /*mean*/) const
 {
-  vcl_cerr<<"vpdfl_mixture_builder::build(model,mean) Not yet implemented."<<vcl_endl;
+  vcl_cerr<<"vpdfl_mixture_builder::build(model,mean) Not yet implemented.\n";
   vcl_abort();
 }
 
@@ -269,7 +269,8 @@ void vpdfl_mixture_builder::initialise_given_means(vpdfl_mixture& model,
 
     // Normalise so weights add to n_samples/n_comp
     double f = n_samples/(n_comp*w_sum);
-    for (unsigned int j=0;j<n_samples;++j) wts_i[j]*=f;
+    for (unsigned int j=0;j<n_samples;++j)
+      wts_i[j]*=f;
 
     // Build i'th component, biasing data toward mean(i)
     builder_[i]->weighted_build(*(model.components()[i]),data_array,wts_i);
@@ -399,7 +400,8 @@ void vpdfl_mixture_builder::e_step(vpdfl_mixture& model,
       for (unsigned int i=0;i<n_comp;++i)
         probs[i](j)/=sum;
 
-    if (sum<=0) vcl_cerr<<"vpdfl_mixture_builder::e_step() Zero sum for probs!"<<vcl_endl;
+    if (sum<=0)
+      vcl_cerr<<"vpdfl_mixture_builder::e_step() Zero sum for probs!\n";
   }
 }
 
@@ -453,7 +455,8 @@ double vpdfl_mixture_builder::m_step(vpdfl_mixture& model,
       w_sum += wts_i[j];
     }
 
-    if (w_sum<=0.0) vcl_cerr<<"m_step: Dubious weights. sum="<<w_sum<<vcl_endl;
+    if (w_sum<=0.0)
+      vcl_cerr<<"m_step: Dubious weights. sum="<<w_sum<<vcl_endl;
 
     old_mean = model.components()[i]->mean();
     builder_[i]->weighted_build(*(model.components()[i]), data_array, wts_i);
@@ -576,7 +579,7 @@ void vpdfl_mixture_builder::b_read(vsl_b_istream& bfs)
   vsl_b_read(bfs,name);
   if (name != is_a())
   {
-    vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vpdfl_mixture_builder &) \n";
+    vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vpdfl_mixture_builder &)\n";
     vcl_cerr << "           Attempted to load object of type ";
     vcl_cerr << name <<" into object of type " << is_a() << vcl_endl;
     bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
@@ -595,7 +598,7 @@ void vpdfl_mixture_builder::b_read(vsl_b_istream& bfs)
       vsl_b_read(bfs,weights_fixed_);
       break;
     default:
-      vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vpdfl_mixture_builder &) \n";
+      vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vpdfl_mixture_builder &)\n";
       vcl_cerr << "           Unknown version number "<< version << vcl_endl;
       bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
       return;

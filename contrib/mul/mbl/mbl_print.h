@@ -8,12 +8,11 @@
 // \author Ian Scott
 
 //=======================================================================
-// inclusions
+
 #include <vcl_iostream.h>
-#include <vcl_string.h>
-#include <vnl/io/vnl_io_vector.h>
-#include <vnl/io/vnl_io_matrix.h>
 #include <vcl_vector.h>
+#include <vnl/vnl_vector.h>
+#include <vnl/vnl_matrix.h>
 
 
 //: Print the first entries of an array of doubles to vcl_cout.

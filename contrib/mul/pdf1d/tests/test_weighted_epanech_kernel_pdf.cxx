@@ -11,7 +11,6 @@
 #include <pdf1d/pdf1d_epanech_kernel_pdf_sampler.h>
 #include <vcl_iostream.h>
 #include <vcl_algorithm.h>
-#include <vcl_string.h>
 #include <vcl_cmath.h> // for vcl_fabs()
 #include <vsl/vsl_binary_loader.h>
 #include <vnl/vnl_test.h>
@@ -27,9 +26,9 @@
 //: Generate lots of samples using pdf, build new pdf with builder and compare the two
 void test_weighted_epanech_kernel_pdf()
 {
-  vcl_cout << "\n\n*******************************************" << vcl_endl;
-  vcl_cout <<     " Testing pdf1d_weighted_epanech_kernel_pdf " << vcl_endl;
-  vcl_cout <<     "*******************************************" << vcl_endl;
+  vcl_cout << "\n\n*******************************************\n";
+  vcl_cout <<     " Testing pdf1d_weighted_epanech_kernel_pdf\n";
+  vcl_cout <<     "*******************************************\n";
 
 
   // Test Single kernel distribution
@@ -156,7 +155,7 @@ void test_weighted_epanech_kernel_pdf()
     if (x < thresh) pass ++;
     else fail ++;
   }
-  vcl_cout << "In a sample of 1000 vectors " << pass << " passed and " << fail <<  " failed using normal method." << vcl_endl;
+  vcl_cout << "In a sample of 1000 vectors " << pass << " passed and " << fail <<  " failed using normal method.\n";
   TEST("880 < pass < 920", pass > 880 && pass < 920, true);
 
 
@@ -169,7 +168,7 @@ void test_weighted_epanech_kernel_pdf()
     if (x < thresh) pass ++;
     else fail ++;
   }
-  vcl_cout << "In a sample of 1000 vectors " << pass << " passed and " << fail <<  " failed using normal method." << vcl_endl;
+  vcl_cout << "In a sample of 1000 vectors " << pass << " passed and " << fail <<  " failed using normal method.\n";
   TEST("80 < pass < 120", pass > 80 && pass < 120, true);
 
   delete p_sampler2;

@@ -11,8 +11,6 @@
 
 template <class T> class vnl_vector;
 template <class T> class vnl_matrix;
-//#include <vnl/vnl_vector.h>
-//#include <vnl/vnl_matrix.h>
 
 bool vnl_rotation_matrix(double const axis[3], double **R);
 bool vnl_rotation_matrix(double const axis[3], double *R0, double *R1, double *R2);

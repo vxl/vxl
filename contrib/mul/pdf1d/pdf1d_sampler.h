@@ -3,19 +3,16 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
-
 //:
 // \file
 // \author Tim Cootes
 // \brief Base class for Univariate random sampler classes.
 
-#include <vsl/vsl_binary_io.h>
 #include <vnl/vnl_vector.h>
 #include <vcl_string.h>
+class pdf1d_pdf;
 
 //=======================================================================
-
-class pdf1d_pdf;
 
 //: Base class for Univariate Random Sampler classes.
 // This is really a random number generator whose

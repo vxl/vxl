@@ -18,12 +18,9 @@
 // \endverbatim
 //*****************************************************************************
 
-class vsol_triangle_3d;
-
 //*****************************************************************************
 // External declarations for values
 //*****************************************************************************
-#include <vsol/vsol_triangle_3d_sptr.h>
 #include <vsol/vsol_polygon_3d.h>
 
 class vsol_triangle_3d

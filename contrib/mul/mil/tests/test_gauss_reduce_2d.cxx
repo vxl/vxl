@@ -3,9 +3,6 @@
 #include <vcl_utility.h>
 
 #include <vnl/vnl_test.h>
-#include <vnl/vnl_vector.h>
-#include <vnl/vnl_matrix.h>
-#include <vgl/vgl_distance.h>
 #include <mil/mil_image_2d_of.h>
 #include <mil/mil_gauss_reduce_2d.h>
 #include <vil/vil_byte.h>
@@ -13,9 +10,9 @@
 
 void test_gauss_reduce_2d_byte(int nx)
 {
-  vcl_cout << "*************************" << vcl_endl;
-  vcl_cout << " Testing mil_gauss_reduce_2d (byte)(nx="<<nx<<")" << vcl_endl;
-  vcl_cout << "*************************" << vcl_endl;
+  vcl_cout << "******************************************\n";
+  vcl_cout << " Testing mil_gauss_reduce_2d (byte)(nx="<<nx<<")\n";
+  vcl_cout << "******************************************\n";
 
   mil_image_2d_of<vil_byte> image0;
   image0.resize(nx,3);
@@ -33,10 +30,10 @@ void test_gauss_reduce_2d_byte(int nx)
   vcl_cout<<"Original: "; image0.print_all(vcl_cout);
   vcl_cout<<"reduced_x : "; reduced_x.print_all(vcl_cout);
 
-  TEST("First element",reduced_x(0,1)==image0(0,1),true);
-  TEST("Next element",reduced_x(1,1)==image0(2,1),true);
+  TEST("First element",reduced_x(0,1),image0(0,1));
+  TEST("Next element", reduced_x(1,1),image0(2,1));
   int L = (nx-1)/2;
-  TEST("Last element",reduced_x(L,1)==image0(2*L,1),true);
+  TEST("Last element", reduced_x(L,1),image0(2*L,1));
 
 
   mil_image_2d_of<vil_byte> test2;
@@ -45,7 +42,7 @@ void test_gauss_reduce_2d_byte(int nx)
   mil_gauss_reduce_2d(test2.plane(0),test2.xstep(),test2.ystep(),
                       image0.plane(0),image0.nx(),image0.ny(),
                       image0.xstep(),image0.ystep());
-  TEST("No overrun",test2(L+1,1)==222,true);
+  TEST("No overrun",test2(L+1,1),222);
 
 
   // Test it can be used to smooth in y by swapping ordinates
@@ -65,16 +62,16 @@ void test_gauss_reduce_2d_byte(int nx)
   vcl_cout<<"Original: "; image1.print_all(vcl_cout);
   vcl_cout<<"reduced_y : "; reduced_y.print_all(vcl_cout);
 
-  TEST("First element",reduced_y(1,0)==image1(1,0),true);
-  TEST("Next element",reduced_y(1,1)==image1(1,2),true);
-  TEST("Last element",reduced_y(1,L)==image1(1,2*L),true);
+  TEST("First element",reduced_y(1,0),image1(1,0));
+  TEST("Next element", reduced_y(1,1),image1(1,2));
+  TEST("Last element", reduced_y(1,L),image1(1,2*L));
 }
 
 void test_gauss_reduce_2d_float(int nx)
 {
-  vcl_cout << "*************************" << vcl_endl;
-  vcl_cout << " Testing mil_gauss_reduce_2d (float)(nx="<<nx<<")" << vcl_endl;
-  vcl_cout << "*************************" << vcl_endl;
+  vcl_cout << "*******************************************\n";
+  vcl_cout << " Testing mil_gauss_reduce_2d (float)(nx="<<nx<<")\n";
+  vcl_cout << "*******************************************\n";
 
   mil_image_2d_of<float> image0;
   image0.resize(nx,3);
@@ -109,9 +106,9 @@ void test_gauss_reduce_2d_float(int nx)
 
 void test_gauss_reduce_121_2d_byte(int nx, int ny)
 {
-  vcl_cout << "****************************************" << vcl_endl;
-  vcl_cout << " Testing mil_gauss_reduce_121_2d (byte)(nx="<<nx<<")" << vcl_endl;
-  vcl_cout << "****************************************" << vcl_endl;
+  vcl_cout << "**********************************************\n";
+  vcl_cout << " Testing mil_gauss_reduce_121_2d (byte)(nx="<<nx<<")\n";
+  vcl_cout << "**********************************************\n";
 
   mil_image_2d_of<vil_byte> image0;
   image0.resize(nx,ny);
@@ -156,9 +153,9 @@ void test_gauss_reduce_121_2d_byte(int nx, int ny)
 
 void test_gauss_reduce_121_2d_float(int nx, int ny)
 {
-  vcl_cout << "****************************************" << vcl_endl;
-  vcl_cout << " Testing mil_gauss_reduce_121_2d (float)(nx="<<nx<<")" << vcl_endl;
-  vcl_cout << "****************************************" << vcl_endl;
+  vcl_cout << "***********************************************\n";
+  vcl_cout << " Testing mil_gauss_reduce_121_2d (float)(nx="<<nx<<")\n";
+  vcl_cout << "***********************************************\n";
 
   mil_image_2d_of<float> image0;
   image0.resize(nx,ny);

@@ -1,6 +1,3 @@
-#include <vcl_iostream.h>
-#include <vcl_vector.h>
-#include <vnl/vnl_vector.h>
 #include <vnl/vnl_math.h>
 #include <vbl/vbl_test.h>
 

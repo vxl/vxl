@@ -1,15 +1,12 @@
 #ifndef vgui_test_h_
 #define vgui_test_h_
-/*
-  fsm@robots.ox.ac.uk
-*/
-// .NAME vgui_test
-// .INCLUDE vgui/vgui_test.h
-// .FILE vgui_test.cxx
+//:
+// \file
+// \author fsm@robots.ox.ac.uk
 
 #include "vgui_test_sptr.h"
 #include <vgui/vgui_tableau.h>
-#include <vgui/vgui_text.h>
+#include <vgui/vgui_text_tableau.h>
 
 class vgui_test_thingy2d : public vgui_tableau {
 public:
@@ -26,7 +23,6 @@ struct vgui_test_thingy2d_new : public vgui_test_thingy2d_sptr {
 };
 
 
-
 class vgui_test_thingy3d : public vgui_tableau {
 public:
   vgui_test_thingy3d();
@@ -40,7 +36,6 @@ struct vgui_test_thingy3d_new : public vgui_test_thingy3d_sptr {
   typedef vgui_test_thingy3d_sptr base;
   vgui_test_thingy3d_new() : base(new vgui_test_thingy3d()) { }
 };
-
 
 
 class vgui_test_credits : public vgui_text_tableau {

@@ -1,6 +1,5 @@
 #include "HMatrix2DCompute4Point.h"
 
-#include <vcl_vector.h>
 #include <mvl/HMatrix2D.h>
 #include <mvl/ProjectiveBasis2D.h>
 

@@ -18,14 +18,10 @@
 // \endverbatim
 //*****************************************************************************
 
-class vsol_rectangle_3d;
-
 //*****************************************************************************
 // External declarations for values
 //*****************************************************************************
-#include <vsol/vsol_rectangle_3d_sptr.h>
 #include <vsol/vsol_polygon_3d.h>
-
 #include <vsol/vsol_point_3d_sptr.h>
 
 class vsol_rectangle_3d

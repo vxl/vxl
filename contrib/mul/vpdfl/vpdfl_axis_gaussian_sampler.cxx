@@ -8,12 +8,11 @@
 // \date 12-Apr-2001
 // \brief Sampler class for Multi-Variate axis aligned Gaussian classes.
 
+#include "vpdfl_axis_gaussian_sampler.h"
+
 #include <vcl_cassert.h>
 #include <vcl_cmath.h>
 #include <vpdfl/vpdfl_axis_gaussian.h>
-#include <vpdfl/vpdfl_axis_gaussian_sampler.h>
-#include <vsl/vsl_indent.h>
-#include <mbl/mbl_matxvec.h>
 
 //=======================================================================
 // Dflt ctor

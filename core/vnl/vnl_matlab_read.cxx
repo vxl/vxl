@@ -1,14 +1,11 @@
-// This is ./vxl/vnl/vnl_matlab_read.cxx
+// This is vxl/vnl/vnl_matlab_read.cxx
 #ifdef __GNUC__
 #pragma implementation
 #endif
-
 //:
 // \file
+// \author fsm@robots.ox.ac.uk
 
-/*
-  fsm@robots.ox.ac.uk
-*/
 #include "vnl_matlab_read.h"
 #include <vcl_ios.h> // for vcl_ios_cur
 #include <vcl_iostream.h>
@@ -16,7 +13,6 @@
 #include <vcl_cstring.h> // memset()
 #include <vcl_complex.h>
 #include <vnl/vnl_c_vector.h>
-#include <vnl/vnl_complex_traits.h>
 
 // FIXME: Currently ignores the byte ordering of the MAT file header, effectively
 // assuming the MAT file was written with the native byte ordering.
@@ -133,19 +129,19 @@ bool vnl_matlab_readhdr::type_chck(vcl_complex<double> &) { return !is_single() 
 
 #define fsm_define_methods(T) \
 bool vnl_matlab_readhdr::read_data(T &v) { \
-  if (!type_chck(v)) { vcl_cerr << "type_check" << vcl_endl; return false; }\
-  if (rows()!=1 || cols()!=1) { vcl_cerr << "size0" << vcl_endl; return false; } \
+  if (!type_chck(v)) { vcl_cerr << "type_check\n"; return false; }\
+  if (rows()!=1 || cols()!=1) { vcl_cerr << "size0\n"; return false; } \
   vnl_matlab_read_data(s, &v, 1); \
   data_read = true; return *this; \
 } \
 bool vnl_matlab_readhdr::read_data(T *p) { \
-  if (!type_chck(p[0])) { vcl_cerr << "type_check" << vcl_endl; return false; } \
-  if (rows()!=1 && cols()!=1) { vcl_cerr << "size1" << vcl_endl; return false; } \
+  if (!type_chck(p[0])) { vcl_cerr << "type_check\n"; return false; } \
+  if (rows()!=1 && cols()!=1) { vcl_cerr << "size1\n"; return false; } \
   vnl_matlab_read_data(s, p, rows()*cols()); \
   data_read = true; return *this; \
 } \
 bool vnl_matlab_readhdr::read_data(T * const *m) { \
-  if (!type_chck(m[0][0])) { vcl_cerr << "type_check" << vcl_endl; return false; } \
+  if (!type_chck(m[0][0])) { vcl_cerr << "type_check\n"; return false; } \
   T *tmp = vnl_c_vector<T >::allocate_T(rows()*cols()); \
   /*vnl_c_vector<T >::fill(tmp, rows()*cols(), 3.14159);*/ \
   vnl_matlab_read_data(s, tmp, rows()*cols()); \
@@ -189,7 +185,8 @@ bool vnl_matlab_read_or_die(vcl_istream &s,
   //assert(s/*bad stream?*/);
   if (name && *name)
     assert(vcl_strcmp(name, h.name())==0/*wrong name?*/);
-  if (v.size() != unsigned(h.rows()*h.cols())) {
+  if (v.size() != unsigned(h.rows()*h.cols()))
+  {
     vcl_destroy(&v);
     new (&v) vnl_vector<T>(h.rows()*h.cols());
   }
@@ -208,7 +205,8 @@ bool vnl_matlab_read_or_die(vcl_istream &s,
   //assert(s/*bad stream?*/);
   if (name && *name)
     assert(vcl_strcmp(name, h.name())==0/*wrong name?*/);
-  if (M.rows() != unsigned(h.rows()) || M.cols() != unsigned(h.cols())) {
+  if (M.rows() != unsigned(h.rows()) || M.cols() != unsigned(h.cols()))
+  {
     vcl_destroy(&M);
     new (&M) vnl_matrix<T>(h.rows(), h.cols());
   }

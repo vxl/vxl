@@ -9,17 +9,10 @@
 #include <vcl_string.h>
 #include <vcl_vector.h>
 
-#include <vul/vul_arg.h>
-#include <vul/vul_sprintf.h>
 #include <vul/vul_printf.h>
 
-extern "C" {
-#include <jpeglib.h>
-}
-//#include <vil/vil_jpeg.h>
-
+#include <vil/vil_jpeglib.h>
 #include <vil/vil_memory_image_of.h>
-#include <vil/vil_byte.h>
 #include <vil/vil_rgb.h>
 
 const int align = 4;
@@ -56,7 +49,7 @@ struct Vars {
     send4(fp, 0);
     send4(fp, names.size());
     send4(fp, 0);
-    for(unsigned i = 0; i < names.size(); ++i) {
+    for (unsigned i = 0; i < names.size(); ++i) {
       // Send name
       int l = names[i].size();
       vcl_strncpy(buf, names[i].c_str(), l);
@@ -161,12 +154,12 @@ SGIMovieFileWriteData::SGIMovieFileWriteData(char const* filename,
 
   // Build jpeg rows.
   if (interlaced)
-    for(int y = 0; y < h / 2; ++y) {
+    for (int y = 0; y < h / 2; ++y) {
       rows[y] = (JSAMPLE*)&buffer(0,2*y);
       rows[y + h/2] = (JSAMPLE*)&buffer(0,2*y+1);
     }
   else
-    for(int y = 0; y < h; ++y)
+    for (int y = 0; y < h; ++y)
       rows[y] = (JSAMPLE*)&buffer(0,y);
 }
 
@@ -180,11 +173,11 @@ struct FrameIndex {
 void SGIMovieFileWriteData::Finish()
 {
   if (l != (int)frame_ends.size()) {
-    vul_printf(vcl_cerr, "ZOKZOK: %d != %d \n", l, frame_ends.size());
+    vul_printf(vcl_cerr, "ZOKZOK: %d != %d\n", l, frame_ends.size());
     return;
   }
   fseek(fp, directory_pos, 0);
-  for(int i = 0; i < l; ++i) {
+  for (int i = 0; i < l; ++i) {
     FrameIndex f;
     int start = (i == 0)?first_frame : frame_ends[i-1];
     int end = frame_ends[i];

@@ -26,10 +26,7 @@ extern "C" {
 
 #include "oxp_mpeg_codec.h"
 
-#include <oxp/oxp_bunch_of_files.h>
-
-
-#include "oxp/oxp_vob_frame_index.cxx"
+#include "oxp_vob_frame_index.cxx"
 
 static bool verbose = false;
 
@@ -188,7 +185,8 @@ bool oxp_mpeg_codec_data::decode_until_desired(int f,
   // Check the ring buffer to see if any in there...
   for (int i = 0; i < 8; ++i)
     if (ring_buffer[i] && ring_buffer[i]->frame == f) {
-      if (verbose) vcl_fprintf(stderr, __FILE__ ": decode_until_desired: Found frame %d in ring buffer\n", f);
+      if (verbose)
+        vcl_fprintf(stderr, __FILE__ ": decode_until_desired: Found frame %d in ring buffer\n", f);
       convert_frame(ring_buffer[i], &r);
       r.done = true;
       return true;
@@ -196,7 +194,8 @@ bool oxp_mpeg_codec_data::decode_until_desired(int f,
 
   // Not in ring buffer, only possible if f < frame_number
   if (f <= frame_number) {
-    if (verbose) vcl_fprintf(stderr, __FILE__ ": decode_until_desired: Need to seek for %d\n", f);
+    if (verbose)
+      vcl_fprintf(stderr, __FILE__ ": decode_until_desired: Need to seek for %d\n", f);
     return false;
   }
 
@@ -241,7 +240,8 @@ int oxp_mpeg_codec_data::decode_mpeg2(unsigned char const *start, unsigned char 
 static
 int my_setup(vo_instance_t *self, int width, int height)
 {
-  if (verbose) vcl_fprintf(stderr, __FILE__ ": setup(%d, %d)\n", width, height);
+  if (verbose)
+    vcl_fprintf(stderr, __FILE__ ": setup(%d, %d)\n", width, height);
   oxp_mpeg_codec_data *impl = (oxp_mpeg_codec_data*)self;
   impl->w = width;
   impl->h = height;
@@ -272,7 +272,8 @@ my_get_frame(vo_instance_t *self, int flags)
 #define VO_BOTH_FIELDS (VO_TOP_FIELD | VO_BOTTOM_FIELD)
 #define VO_PREDICTION_FLAG 4
 #endif
-  if (verbose) vcl_fprintf(stderr, __FILE__ ": get(%d)\n", flags);
+  if (verbose)
+    vcl_fprintf(stderr, __FILE__ ": get(%d)\n", flags);
   oxp_mpeg_codec_data *impl = (oxp_mpeg_codec_data*)self;
 
   if (! impl->ring_buffer[impl->ring_buffer_pos])
@@ -290,7 +291,8 @@ oxp_mpeg_codec_data::frame_plus_index*
 oxp_mpeg_codec_data::make_frame()
 {
   frame_plus_index *frame = (frame_plus_index*) vcl_malloc(sizeof(frame_plus_index));
-  if (verbose) vcl_fprintf(stderr, __FILE__ ": make_frame() : frame = 0x%08X\n", unsigned(frame));
+  if (verbose)
+    vcl_fprintf(stderr, __FILE__ ": make_frame() : frame = 0x%08X\n", unsigned(frame));
   frame->base[0] = (uint8_t*) vcl_malloc(    w * h    );
   frame->base[1] = (uint8_t*) vcl_malloc((w>>1)*(h>>1));
   frame->base[2] = (uint8_t*) vcl_malloc((w>>1)*(h>>1));
@@ -319,7 +321,8 @@ void my_field(vo_frame_t *, int)
 static
 void my_draw(vo_frame_t *frame_p)
 {
-  if (verbose) vcl_printf("draw: frame = 0x%08X\nmy_draw()\n", unsigned(frame_p));
+  if (verbose)
+    vcl_printf("draw: frame = 0x%08X\nmy_draw()\n", unsigned(frame_p));
   oxp_mpeg_codec_data *impl = (oxp_mpeg_codec_data*)frame_p->instance;
   oxp_mpeg_codec_data::frame_plus_index* frame =
     static_cast<oxp_mpeg_codec_data::frame_plus_index*>(frame_p);

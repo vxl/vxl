@@ -1,12 +1,7 @@
-//-*- c++ -*-------------------------------------------------------------------
-
 //:
-//  \file
-//
-// Module: glmovie
+// \file
 // \author Andrew W. Fitzgibbon, Oxford RRG
 // \date   21 May 99
-//
 //-----------------------------------------------------------------------------
 
 // test args:
@@ -22,7 +17,6 @@
 
 #include <vul/vul_file.h>
 #include <vul/vul_printf.h>
-#include <vul/vul_sprintf.h>
 #include <vul/vul_arg.h>
 #include <vul/vul_timer.h>
 
@@ -32,7 +26,6 @@
 #include <vil/vil_load.h>
 #include <vil/vil_flipud.h>
 #include <vil/vil_memory_image_of.h>
-#include <vil/vil_file_image.h>
 #include <vil/vil_rgb_byte.h>
 #include <vil/vil_pixel.h>
 
@@ -383,9 +376,9 @@ void idle()
   // Update frame counter
   frame += dir;
 
-  
+
   frame = frame % num_frames;
-  if(frame<0) frame+=num_frames;
+  if (frame<0) frame+=num_frames;
 
   glutPostRedisplay();
 }
@@ -468,7 +461,7 @@ struct ShuttleCB : public CB {
 
   bool want(int button, int modifiers, int, int) {
     // Shuttle takes an unmodified left mouse button
-    return (modifiers == 0 && button == GLUT_LEFT_BUTTON);
+    return modifiers == 0 && button == GLUT_LEFT_BUTTON;
   }
 
   void down(int, int) {
@@ -512,7 +505,7 @@ struct ZoomCB : public CB {
 
   bool want(int button, int modifiers, int, int) {
     // Take any shifted mouse event
-    return (modifiers & GLUT_ACTIVE_SHIFT);
+    return modifiers & GLUT_ACTIVE_SHIFT;
   }
 
   void down(int x, int y) {
@@ -587,7 +580,7 @@ struct ZoomCB : public CB {
 // Draw cb
 struct DrawCB : public CB {
   bool want(int button, int modifiers, int x, int y) {
-    return (modifiers == 0 && button == GLUT_MIDDLE_BUTTON);
+    return modifiers == 0 && button == GLUT_MIDDLE_BUTTON;
   }
 
   enum {
@@ -748,7 +741,7 @@ void keyboard(unsigned char key, int x, int y)
   }
   }
   frame = frame % num_frames;
-  if(frame<0) frame+=num_frames;
+  if (frame<0) frame+=num_frames;
 
   glutPostRedisplay();
 }
@@ -788,7 +781,8 @@ int main(int argc, char ** argv)
   vul_arg<char*> a_idx("-makeindex", "Output IDX filename");
   vul_arg_parse(argc,argv);
 
-  if (argc > 1) vul_arg_display_usage_and_exit("Too many arguments\n");
+  if (argc > 1)
+    vul_arg_display_usage_and_exit("Too many arguments\n");
 
   ::start_frame = a_start_frame();
   ::save_fmt = a_save_fmt();
@@ -839,7 +833,7 @@ int main(int argc, char ** argv)
   if (vil_image img = vil_load(filename())) {
     vcl_vector<vcl_string> v(1, filename());
     moviefile = new vidl_movie(vidl_io::load_images(v));
-  } else { 
+  } else {
     moviefile = vidl_io::load_movie(filename(), 0, a_end_frame(), increment);
   }
   if (!moviefile || moviefile->width() < 1) {

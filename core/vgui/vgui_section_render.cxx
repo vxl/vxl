@@ -8,7 +8,6 @@
 
 #include <vcl_cmath.h>
 #include <vcl_cassert.h>
-#include <vcl_iostream.h>
 
 #include <vgui/internals/vgui_rasterpos.h>
 #include <vgui/internals/vgui_accelerate.h>

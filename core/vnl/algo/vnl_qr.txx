@@ -1,7 +1,6 @@
-// This is ./vxl/vnl/algo/vnl_qr.txx
+// This is vxl/vnl/algo/vnl_qr.txx
 #ifndef vnl_qr_txx_
 #define vnl_qr_txx_
-
 //:
 // \file
 // \author Andrew W. Fitzgibbon, Oxford RRG
@@ -47,8 +46,8 @@ vnl_qr<T>::vnl_qr(vnl_matrix<T> const& M):
   // Fill transposed O/P matrix
   int c = M.columns();
   int r = M.rows();
-  for(int i = 0; i < r; ++i)
-    for(int j = 0; j < c; ++j)
+  for (int i = 0; i < r; ++i)
+    for (int j = 0; j < c; ++j)
       qrdc_out_(j,i) = M(i,j);
 
   int do_pivot = 0; // Enable[!=0]/disable[==0] pivoting.
@@ -81,7 +80,7 @@ T vnl_qr<T>::determinant() const
   int m = vnl_math_min((int)qrdc_out_.columns(), (int)qrdc_out_.rows());
   T det = qrdc_out_(0,0);
 
-  for(int i = 1; i < m; ++i)
+  for (int i = 1; i < m; ++i)
     det *= -qrdc_out_(i,i);
 
   return det;
@@ -100,7 +99,7 @@ vnl_matrix<T>& vnl_qr<T>::Q()
     Q_ = new vnl_matrix<T>(m,m);
     // extract Q.
     if (verbose) {
-      vcl_cerr << __FILE__ ": vnl_qr<T>::Q() " << vcl_endl;
+      vcl_cerr << __FILE__ ": vnl_qr<T>::Q()\n";
       vcl_cerr << " m,n = " << m << ", " << n << vcl_endl;
       vcl_cerr << " qr0 = [" << qrdc_out_ << "];\n";
       vcl_cerr << " aux = [" << qraux_ << "];\n";
@@ -115,16 +114,16 @@ vnl_matrix<T>& vnl_qr<T>::Q()
     // Golub and vanLoan, p199.  backward accumulation of householder matrices
     // Householder vector k is [zeros(1,k-1) qraux_[k] qrdc_out_[k,:]]
     typedef typename vnl_numeric_traits<T>::abs_t abs_t;
-    for(int k = n-1; k >= 0; --k) {
+    for (int k = n-1; k >= 0; --k) {
       if (k >= m) continue;
       // Make housevec v, and accumulate norm at the same time.
       v[k] = qraux_[k];
       abs_t sq = vnl_math_squared_magnitude(v[k]);
-      for(int j = k+1; j < m; ++j) {
+      for (int j = k+1; j < m; ++j) {
         v[j] = qrdc_out_(k,j);
         sq += vnl_math_squared_magnitude(v[j]);
       }
-      if (verbose) MATLABPRINT(v);
+      if (verbose) vnl_matlab_print(vcl_cerr, v, "v");
 
 #define c vnl_complex_traits<T>::conjugate
       // Premultiply emerging Q by house(v), noting that v[0..k-1] == 0.
@@ -133,16 +132,16 @@ vnl_matrix<T>& vnl_qr<T>::Q()
       if (sq > abs_t(0)) {
         abs_t scale = abs_t(2)/sq;
         // w = (2/v'*v) v' Q
-        for(int i = k; i < m; ++i) {
+        for (int i = k; i < m; ++i) {
           w[i] = T(0);
-          for(int j = k; j < m; ++j)
+          for (int j = k; j < m; ++j)
             w[i] += scale * c(v[j]) * Q(j, i);
         }
-        if (verbose) MATLABPRINT(w);
+        if (verbose) vnl_matlab_print(vcl_cerr, w, "w");
 
         // Q -= v w
-        for(int i = k; i < m; ++i)
-          for(int j = k; j < m; ++j)
+        for (int i = k; i < m; ++i)
+          for (int j = k; j < m; ++j)
             Q(i,j) -= (v[i]) * (w[j]);
       }
 #undef c
@@ -161,8 +160,8 @@ vnl_matrix<T>& vnl_qr<T>::R()
     R_ = new vnl_matrix<T>(m,n);
     vnl_matrix<T> & R = *R_;
 
-    for(int i = 0; i < m; ++i)
-      for(int j = 0; j < n; ++j)
+    for (int i = 0; i < m; ++i)
+      for (int j = 0; j < n; ++j)
         if (i > j)
           R(i, j) = T(0);
         else

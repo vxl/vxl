@@ -5,9 +5,6 @@
 #include <vgl/vgl_polygon.h>
 #include <vgl/vgl_polygon_scan_iterator.h>
 
-#include <vcl_iostream.h>
-#include <vcl_vector.h>
-
 typedef vgl_polygon::point_t       Point_type;
 typedef vgl_polygon                Polygon_type;
 typedef vgl_polygon_scan_iterator  Polygon_scan;
@@ -24,7 +21,7 @@ test_basic_iteration()
   testlib_test_begin("iteration");
   unsigned int count=0;
   Polygon_scan scan_itr(poly);
-  for( scan_itr.reset(); scan_itr.next(); ) {
+  for ( scan_itr.reset(); scan_itr.next(); ) {
     count += scan_itr.endx() - scan_itr.startx() + 1;
   }
   // There are only 6 points with integer-valued coordinates within
@@ -50,7 +47,7 @@ test_denegrate_polygon()
     testlib_test_begin("zero-lengthed edges");
     Polygon_scan scan_itr( poly );
     unsigned int count=0;
-    for( scan_itr.reset(); scan_itr.next(); ) {
+    for ( scan_itr.reset(); scan_itr.next(); ) {
       count += scan_itr.endx() - scan_itr.startx() + 1;
     }
     // See comment above. True count should be 465. Current
@@ -65,7 +62,7 @@ test_denegrate_polygon()
     testlib_test_begin("empty polygon");
     Polygon_scan scan_itr( poly );
     unsigned int count=0;
-    for( scan_itr.reset(); scan_itr.next(); ) {
+    for ( scan_itr.reset(); scan_itr.next(); ) {
       count += scan_itr.endx() - scan_itr.startx() + 1;
     }
     testlib_test_perform( count == 0 );

@@ -13,7 +13,6 @@
 
 #include "vnl_rpoly_roots.h"
 
-//#include <vcl_cstdlib.h>
 #include <vcl_cmath.h> // for fabs()
 #include <vcl_iostream.h>
 #include <vcl_complex.h>

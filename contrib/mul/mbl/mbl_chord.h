@@ -6,12 +6,13 @@
 // \author Tim Cootes
 // \brief Horizontal line used in images, with integer co-ordinates
 
-#include <vgl/vgl_point_2d.h>
 #include <vcl_cmath.h>
 #include <vsl/vsl_binary_io.h>
 
 //: Horizontal line used in images, with integer co-ordinates
-class mbl_chord {
+
+class mbl_chord
+{
 private:
   int start_x_;
   int end_x_;

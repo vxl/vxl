@@ -6,7 +6,6 @@
 #endif
 #include "vgui_observable.h"
 #include "vgui_observer.h"
-#include <vcl_iostream.h>
 #include <vcl_algorithm.h>
 
 //

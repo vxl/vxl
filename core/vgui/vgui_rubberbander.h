@@ -24,8 +24,6 @@
 //--------------------------------------------------------------------------------
 
 #include <vgui/vgui_tableau.h>
-#include <vgui/vgui_wrapper_tableau.h>
-#include <vgui/vgui_slot.h>
 #include <vgui/vgui_easy2D.h>
 #include <vgui/vgui_event_condition.h>
 

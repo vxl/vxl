@@ -1,12 +1,12 @@
-//-*- c++ -*-------------------------------------------------------------------
+// This is oxl/vgui/vgui_displaylist3D.cxx
 #ifdef __GNUC__
 #pragma implementation
 #endif
-//
-// .NAME vgui_displaylist3D
-// Author: Philip C. Pritchett, RRG, University of Oxford
-// Created: 14 Sep 99
-//
+//:
+// \file
+// \brief
+// \author Philip C. Pritchett, RRG, University of Oxford
+// \date   14 Sep 99
 //-----------------------------------------------------------------------------
 
 #include "vgui_displaylist3D.h"
@@ -20,16 +20,8 @@
 #include <vgui/vgui_gl.h>
 #include <vgui/vgui_glu.h>
 #include <vgui/vgui_event.h>
-#include <vgui/vgui_message.h>
-#include <vgui/vgui_drag_mixin.h>
-#include <vgui/vgui_projection_inspector.h>
 #include <vgui/vgui_utils.h>
-#include <vgui/vgui_viewer3D.h>
-#include <vgui/vgui_soview3D.h>
-#include <vgui/vgui_style.h>
-
-// the default is 'false'. don't check in 'true'.
-// static bool debug = false;
+#include <vgui/vgui_soview.h>
 
 vgui_displaylist3D::vgui_displaylist3D()
 {
@@ -87,8 +79,9 @@ bool vgui_displaylist3D::mouse_down(int x, int y, vgui_button button, vgui_modif
 
   // selecting
   if (button == vgui_LEFT) {
-//  if (debug) vcl_cerr << vul_sprintf("selecting at %f %f", x, y) << vcl_endl;
-
+#ifdef DEBUG
+    vcl_cerr << vul_sprintf("selecting at %f %f", x, y) << vcl_endl;
+#endif
     vcl_vector<unsigned> hits;
     get_hits(x,y,hits);
 
@@ -108,13 +101,17 @@ bool vgui_displaylist3D::mouse_down(int x, int y, vgui_button button, vgui_modif
   else if (button == vgui_MIDDLE) {
 
     if (modifier & vgui_SHIFT) {
-//    if (debug) vcl_cerr << "deselecting all" << vcl_endl;
+#ifdef DEBUG
+      vcl_cerr << "deselecting all\n";
+#endif
       this->deselect_all();
       this->post_redraw();
       return false;
     }
 
-//  if (debug) vcl_cerr << vul_sprintf("deselecting at %f %f", x, y) << vcl_endl;
+#ifdef DEBUG
+    vcl_cerr << vul_sprintf("deselecting at %f %f", x, y) << vcl_endl;
+#endif
 
     vcl_vector<unsigned> hits;
     get_hits(x,y,hits);

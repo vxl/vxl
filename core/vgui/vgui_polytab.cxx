@@ -1,21 +1,3 @@
-/*
-  fsm@robots.ox.ac.uk
-*/
-#include "vgui_polytab.h"
-
-#include <vcl_iostream.h>
-#include <vcl_cassert.h>
-
-#include <vul/vul_sprintf.h>
-
-#include <vgui/vgui_gl.h>
-#include <vgui/vgui_macro.h>
-#include <vgui/vgui_event.h>
-#include <vgui/vgui_matrix_state.h>
-//#include <vgui/vgui_menu.h>
-#include <vgui/vgui_popup_params.h>
-#include <vgui/vgui_command.h>
-
 //:
 //  \file
 //
@@ -37,6 +19,19 @@
 // knowing the viewport, because a LEAVE/ENTER pair have to be sent to the old
 // and new child and the viewport must be set correctly before dispatching these
 // events.
+//
+// \author fsm@robots.ox.ac.uk
+
+#include "vgui_polytab.h"
+
+#include <vcl_iostream.h>
+#include <vcl_cassert.h>
+
+#include <vgui/vgui_gl.h>
+#include <vgui/vgui_macro.h>
+#include <vgui/vgui_event.h>
+#include <vgui/vgui_matrix_state.h>
+#include <vgui/vgui_popup_params.h>
 
 #define debug if (true) { } else vcl_cerr
 

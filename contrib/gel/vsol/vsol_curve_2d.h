@@ -15,16 +15,12 @@
 // \endverbatim
 //*****************************************************************************
 
-class vsol_curve_2d;
-class vdgl_digital_curve;
-
 //*****************************************************************************
 // External declarations for values
 //*****************************************************************************
-#include <vsol/vsol_curve_2d_sptr.h>
 #include <vsol/vsol_spatial_object_2d.h>
-
 #include <vsol/vsol_point_2d_sptr.h>
+class vdgl_digital_curve;
 
 class vsol_curve_2d
   :public vsol_spatial_object_2d

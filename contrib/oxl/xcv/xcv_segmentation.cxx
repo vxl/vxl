@@ -1,17 +1,12 @@
-// This is ./oxl/xcv/xcv_segmentation.cxx
-
+// This is oxl/xcv/xcv_segmentation.cxx
+#include "xcv_segmentation.h"
 //:
-//  \file
+// \file
 // See xcv_segmentation.h for a description of this file.
 //
 // \author K.Y.McGaul
 
-#include "xcv_segmentation.h"
-
-#include <vcl_iostream.h>
-
 #include <vil/vil_image.h>
-#include <vil/vil_smooth.h>
 
 #include <osl/osl_harris_params.h>
 #include <osl/osl_harris.h>
@@ -75,7 +70,7 @@ void xcv_segmentation::perform_harris(osl_harris_params& params,
 
   if (!easy_tab)
   {
-    vgui_macro_warning << "Can't get current easy2D to add Harris corners" << vcl_endl;
+    vgui_macro_warning << "Can't get current easy2D to add Harris corners\n";
     return;
   }
 
@@ -129,13 +124,13 @@ void xcv_segmentation::draw_edges(vcl_list<osl_edge*> lines, unsigned col,
     osl_edge const* e = *i;
     float *x = e->GetY(),*y = e->GetX(); // note x-y confusion.
     // - Offset the edges
-    for(int j = 0;j<e->size();j++)
+    for (int j = 0;j<e->size();j++)
     {
       x[j]+=low[0];
       y[j]+=low[1];
     }
     easy_tab->add_linestrip(e->size(),x, y);
-    for(int j = 0;j<e->size();j++)
+    for (int j = 0;j<e->size();j++)
     {
       x[j]-=low[0];
       y[j]-=low[1];

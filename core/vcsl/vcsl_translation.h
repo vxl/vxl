@@ -17,11 +17,9 @@
 // \endverbatim
 
 #include <vcsl/vcsl_translation_sptr.h>
-
 #include <vcsl/vcsl_spatial_transformation.h>
-
-#include <vcl_vector.h>
 #include <vnl/vnl_vector.h>
+
 //: Translation transformation
 class vcsl_translation
   :public vcsl_spatial_transformation

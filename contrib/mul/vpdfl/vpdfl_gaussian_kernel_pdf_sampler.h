@@ -3,13 +3,11 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
-
 //:
 // \file
 // \author Tim Cootes
 // \brief Sampler class for gaussian kernel PDF.
 
-#include <vsl/vsl_binary_io.h>
 #include <vcl_string.h>
 #include <mbl/mbl_mz_random.h>
 #include <vnl/vnl_fwd.h>
@@ -20,7 +18,8 @@ class vpdfl_gaussian_kernel_pdf;
 //=======================================================================
 
 //: Samples from an axis aligned Gaussian PDF
-class vpdfl_gaussian_kernel_pdf_sampler :public vpdfl_sampler_base {
+class vpdfl_gaussian_kernel_pdf_sampler :public vpdfl_sampler_base
+{
 protected:
   //: The random number generator
   mbl_mz_random rng_; 
@@ -70,4 +69,4 @@ public:
   virtual vpdfl_sampler_base* clone() const;
 };
 
-#endif // vpdfl_pdf_sampler_base_h
+#endif // vpdfl_gaussian_kernel_pdf_sampler_h

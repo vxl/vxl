@@ -24,7 +24,7 @@ vtol_zero_chain::vtol_zero_chain(void)
 // Require: v1.ptr()!=0 and v2.ptr()!=0 and v1.ptr()!=v2.ptr()
 //---------------------------------------------------------------------------
 vtol_zero_chain::vtol_zero_chain(vtol_vertex &v1,
-                                       vtol_vertex &v2)
+                                 vtol_vertex &v2)
 {
   // require
   //  assert(v1.ptr()!=0);
@@ -222,13 +222,14 @@ bool vtol_zero_chain::operator==(const vsol_spatial_object_2d& obj) const
 
 void vtol_zero_chain::print(vcl_ostream &strm) const
 {
-  strm << "<vtol_zero_chain " << inferiors()->size() << " " << (void const *)this << ">" << vcl_endl;
+  strm << "<vtol_zero_chain " << inferiors()->size() << " " << (void const*)this << ">\n";
 }
 
 void vtol_zero_chain::describe(vcl_ostream &strm,
                                int blanking) const
 {
-  for (int j=0; j<blanking; ++j) strm << ' ';
+  for (int j=0; j<blanking; ++j)
+    strm << ' ';
   print(strm);
   describe_inferiors(strm, blanking);
   describe_superiors(strm, blanking);

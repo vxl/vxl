@@ -5,7 +5,6 @@
 #include <vnl/vnl_block.h>
 #include <vnl/vnl_c_vector.h>
 #include <vnl/vnl_complex.h>
-#include <vnl/vnl_complexify.h>
 #include <vnl/vnl_complex_ops.h>
 #include <vnl/vnl_complex_traits.h>
 #include <vnl/vnl_copy.h>

@@ -3,17 +3,14 @@
 #include <vcl_utility.h>
 
 #include <vnl/vnl_test.h>
-#include <vnl/vnl_math.h>
-#include <vnl/vnl_vector.h>
 #include <vnl/vnl_matrix_fixed.h>
-
 
 
 void test_matrix_fixed_double_2_2_io()
 {
-  vcl_cout << "***********************" << vcl_endl;
-  vcl_cout << "Testing vnl_matrix_fixed<double,2,2> io" << vcl_endl;
-  vcl_cout << "***********************" << vcl_endl;
+  vcl_cout << "***************************************\n";
+  vcl_cout << "Testing vnl_matrix_fixed<double,2,2> io\n";
+  vcl_cout << "***************************************\n";
   //// test constructors, accessors
    double datablock[4] = {
                            1.1, 1.2,
@@ -40,9 +37,9 @@ void test_matrix_fixed_double_2_2_io()
 
 
   // m_in0 is initially empty
-  TEST ("m_out == m_in0", m_out == m_in0, true);
+  TEST ("m_out == m_in0", m_out, m_in0);
   // m_in1 has content
-  TEST ("m_out == m_in1", m_out == m_in1, true);
+  TEST ("m_out == m_in1", m_out, m_in1);
 
   vsl_print_summary(vcl_cout, m_out);
   vcl_cout << vcl_endl;

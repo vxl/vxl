@@ -1,37 +1,30 @@
-#ifndef _HomgLine2D_h
-#define _HomgLine2D_h
+#ifndef HomgLine2D_h_
+#define HomgLine2D_h_
 #ifdef __GNUC__
 #pragma interface
 #endif
 
 //--------------------------------------------------------------
+//:
+// \file
+// \brief Homogeneous 3-vector for a 2D line
 //
-// .NAME HomgLine2D - Homogeneous 3-vector for a 2D line
-// .LIBRARY MViewBasics
-// .HEADER MultiView package
-// .INCLUDE mvl/HomgLine2D.h
-// .FILE HomgLine2D.cxx
-//
-// .SECTION Description:
 // A class to hold a homogeneous 3-vector for a 2D line.
 //
-// .SECTION Modifications:
+// \verbatim
+// Modifications:
 //   Peter Vanroose - 11 Mar 97 - added operator==
-//
+// \endverbatim
 
 #include <vcl_iosfwd.h>
-#include <vnl/vnl_math.h>
 #include <mvl/Homg2D.h>
 
 class HomgLineSeg2D;
 class HomgPoint2D;
 
-class HomgLine2D : public Homg2D {
-
-  // PUBLIC INTERFACE----------------------------------------------------------
+class HomgLine2D : public Homg2D
+{
 public:
-
-  // Constructors/Initializers/Destructors-------------------------------------
 
   HomgLine2D () {}
   HomgLine2D (const HomgLine2D& that): Homg2D(that) {}
@@ -48,7 +41,7 @@ public:
   // Return true if exactly at infinity
   bool check_infinity() const;
 
-  // Return true if @{min(|x|,|y|) < \mbox{tol} \times |z|@}
+  // Return true if $min(|x|,|y|) < \mbox{tol} \times |z|$.
   bool check_infinity(double tol) const;
 
   // Clip the infinite line to the given bounding box and return
@@ -60,4 +53,4 @@ public:
 
 vcl_ostream& operator<<(vcl_ostream& s, const HomgLine2D& );
 
-#endif // _HomgLine2D_h
+#endif // HomgLine2D_h_

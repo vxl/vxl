@@ -14,8 +14,6 @@
 #include <vcl_iostream.h>
 #include <vcl_algorithm.h>
 
-#include <vul/vul_trace.h>
-
 #include <vgui/vgui_macro.h>
 #include <vgui/vgui_window.h>
 #include <vgui/vgui_tableau.h>
@@ -75,7 +73,7 @@ void vgui::select(char const *toolkit)
       return;
     }
   }
-  vgui_macro_warning << "no such toolkit \'" << toolkit << "\' -- vcl_abort()ing" << vcl_endl;
+  vgui_macro_warning << "no such toolkit \'" << toolkit << "\' -- vcl_abort()ing\n";
   vcl_abort();
 }
 
@@ -134,7 +132,7 @@ void vgui::init(int &argc, char **argv)
 
   // abort if no toolkit has been selected.
   if (! instance_) {
-    vgui_macro_warning << "failed to find a toolkit implementation - vcl_abort()ing." << vcl_endl;
+    vgui_macro_warning << "failed to find a toolkit implementation - vcl_abort()ing.\n";
     vcl_abort();
   }
   assert(instance_); // need an instance.
@@ -142,7 +140,7 @@ void vgui::init(int &argc, char **argv)
   // Look for command line options.
   for (int i=1; i<argc; ) {
     if (vcl_strncmp(argv[i],"--factory=",10) == 0) {            // --factory=<name>
-      vgui_macro_warning << "superfluous command line argument \'"<< argv[i] << "\' ignored" << vcl_endl;
+      vgui_macro_warning << "superfluous command line argument \'"<< argv[i] << "\' ignored\n";
       vgui_remove_arg(i, argc, argv);
     }
     else if (vcl_strncmp(argv[i],"--no-accel",10) == 0) {       // matches --no-accel*
@@ -174,7 +172,7 @@ void vgui::init(int &argc, char **argv)
   }
 
   // print a message prior to initializing the toolkit.
-  vcl_cerr << "vgui : initialize \'" << instance_->name() << "\'" << vcl_endl;
+  vcl_cerr << "vgui : initialize \'" << instance_->name() << "\'\n";
   instance_->init(argc, argv);
 }
 
@@ -188,7 +186,7 @@ vgui_window *vgui::produce_window(int width,
   if (instance_)
     return instance_->produce_window(width, height, menubar, title.c_str());
   else {
-    vgui_macro_warning << "no toolkit selected" << vcl_endl;
+    vgui_macro_warning << "no toolkit selected\n";
     return 0;
   }
 }
@@ -200,7 +198,7 @@ vgui_window *vgui::produce_window(int width,
   if (instance_)
     return instance_->produce_window(width, height, title.c_str());
   else {
-    vgui_macro_warning << "no toolkit selected" << vcl_endl;
+    vgui_macro_warning << "no toolkit selected\n";
     return 0;
   }
 }
@@ -210,7 +208,7 @@ vgui_dialog_impl *vgui::produce_dialog(vcl_string const &name)
   if (instance_)
     return instance_->produce_dialog(name.c_str());
   else {
-    vgui_macro_warning << "no toolkit selected" << vcl_endl;
+    vgui_macro_warning << "no toolkit selected\n";
     return 0;
   }
 }
@@ -220,7 +218,7 @@ void vgui::quit()
   if (instance_)
     instance_->quit();
   else {
-    vgui_macro_warning << "no instance_ to call quit() on" << vcl_endl;
+    vgui_macro_warning << "no instance_ to call quit() on\n";
     //exit(1);
   }
 }
@@ -232,7 +230,7 @@ int vgui::run()
     return 0; // FIXME
   }
   else {
-    vgui_macro_warning << "no toolkit selected" << vcl_endl;
+    vgui_macro_warning << "no toolkit selected\n";
     return 1;
   }
 }
@@ -242,7 +240,7 @@ void vgui::run_one_event()
   if (instance_)
     instance_->run_one_event();
   else
-    vgui_macro_warning << "no toolkit selected" << vcl_endl;
+    vgui_macro_warning << "no toolkit selected\n";
 }
 
 void vgui::run_till_idle()
@@ -250,7 +248,7 @@ void vgui::run_till_idle()
   if (instance_)
     instance_->run_till_idle();
   else
-    vgui_macro_warning << "no toolkit selected" << vcl_endl;
+    vgui_macro_warning << "no toolkit selected\n";
 }
 
 void vgui::flush()
@@ -258,14 +256,14 @@ void vgui::flush()
   if (instance_)
     instance_->flush();
   else
-    vgui_macro_warning << "no toolkit selected" << vcl_endl;
+    vgui_macro_warning << "no toolkit selected\n";
 }
 
 void vgui::add_event(vgui_event const& e) {
   if (instance_)
     instance_->add_event(e);
   else
-    vgui_macro_warning << "no toolkit selected" << vcl_endl;
+    vgui_macro_warning << "no toolkit selected\n";
 }
 
 //-----------------------------------------------------------------------

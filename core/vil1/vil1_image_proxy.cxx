@@ -1,20 +1,16 @@
-// This is ./vxl/vil/vil_image_proxy.cxx
+// This is vxl/vil/vil_image_proxy.cxx
 #ifdef __GNUC__
 #pragma implementation
 #endif
-
 //:
 // \file
+// \author fsm@robots.ox.ac.uk
 
-/*
-  fsm@robots.ox.ac.uk
-*/
 #include "vil_image_proxy.h"
 
 #include <vcl_string.h>
 #include <vcl_cstring.h>
 #include <vil/vil_load.h>
-#include <vcl_string.h>
 
 struct vil_image_proxy_impl : public vil_image_impl
 {

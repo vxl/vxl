@@ -1,23 +1,21 @@
-#ifndef _VGUI_QT_H_
-#define _VGUI_QT_H_
-
-// .NAME vgui_qt - QT implementation of vgui
-// .HEADER vxl package
-// .LIBRARY vgui-qt
-// .INCLUDE vgui/impl/qt/vgui_qt.h
-// .FILE vgui_qt.cxx
-
-// .SECTION Description
+#ifndef VGUI_QT_H_
+#define VGUI_QT_H_
+//:
+// \file
+// \brief QT implementation of vgui
+//
 // vgui_qt is a QT implementation of vgui.
 // Provides functions for controlling the event loop.
-
-// .SECTION Author
+//
+// \author
 // Joris Schouteden
-
-// .SECTION Modifications:
+//
+// \verbatim
+//  Modifications
 // 24.03.2000 JS  Initial Version, adapted from vgui_gtk
+// \endverbatim
+//-----------------------------------------------------------------------------
 
-#include <vcl_vector.h>
 #include <vgui/vgui_toolkit.h>
 
 class vgui_qt_adaptor;
@@ -42,4 +40,4 @@ protected:
    static    vgui_qt* instance_;
 };
 
-#endif // _VGUI_QT_H_
+#endif // VGUI_QT_H_

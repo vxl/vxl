@@ -1,21 +1,15 @@
-//  This is ./oxl/xcv/xcv_picker_tableau.cxx
-
+//  This is oxl/xcv/xcv_picker_tableau.cxx
+#include "xcv_picker_tableau.h"
 //:
 //  \file
 // \author K.Y.McGaul
-//
 //  See xcv_picker_tableau.h for a description of this file.
 //
 // \verbatim
 //  Modifications:
 //    K.Y.McGaul 26-APR-2001   Initial version.
 // \end verbatim
-//
 
-#include <xcv/xcv_picker_tableau.h>
-
-#include <vcl_iostream.h>
-#include <vnl/vnl_math.h>
 #include <vgui/vgui.h>
 #include <vgui/vgui_gl.h>
 #include <vgui/vgui_projection_inspector.h>
@@ -149,7 +143,7 @@ bool xcv_picker_tableau::handle(const vgui_event& event)
     }
     else if (event.type == vgui_BUTTON_DOWN)
     {
-      if(FIRSTPOINT)
+      if (FIRSTPOINT)
       {
         vgui_projection_inspector p_insp;
         p_insp.window_to_image_coordinates(event.wx, event.wy,

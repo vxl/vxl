@@ -14,7 +14,8 @@
 // \endverbatim
 
 #include <vpdfl/vpdfl_pdf_base.h>
-#include <vnl/io/vnl_io_matrix.h>
+#include <vnl/vnl_matrix.h>
+#include <vnl/vnl_vector.h>
 
 
 //: Class for multi-variate gaussians with arbitrary axes.

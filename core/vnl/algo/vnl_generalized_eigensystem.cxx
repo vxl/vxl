@@ -48,7 +48,7 @@ vnl_generalized_eigensystem::vnl_generalized_eigensystem(const vnl_matrix<double
     if (eig.D(0,0) < -THRESH) {
       vcl_cerr << "**** vnl_generalized_eigensystem: ERROR\n"
                << "Matrix B is not nonneg-definite\n";
-      MATLABPRINT(B);
+      vnl_matlab_print(vcl_cerr, B, "B");
       vcl_cerr << "**** eigenvalues(B) = " << eig.D << vcl_endl;
       return;
     }
@@ -76,9 +76,9 @@ vnl_generalized_eigensystem::vnl_generalized_eigensystem(const vnl_matrix<double
     vnl_svd<double> sv6(V05.transpose());
     V.update(V05, 0, 0);
     V.update(sv6.nullspace(), 0, rank - 1);
-    for(int i = 0; i < rank; ++i)
+    for (int i = 0; i < rank; ++i)
       D(i,i) = reduced.D(i,i);
-    for(unsigned i = rank; i < B.columns(); ++i)
+    for (unsigned i = rank; i < B.columns(); ++i)
       D(i,i) = 0;
     vcl_cerr << "AN: " << D << vcl_endl;
 
@@ -89,8 +89,8 @@ vnl_generalized_eigensystem::vnl_generalized_eigensystem(const vnl_matrix<double
   // vnl_transpose-copy V1 to V
   {
     double *vptr = &V1[0];
-    for(int c = 0; c < n; ++c)
-      for(int r = 0; r < n; ++r)
+    for (int c = 0; c < n; ++c)
+      for (int r = 0; r < n; ++r)
         V(r,c) = *vptr++;
   }
 

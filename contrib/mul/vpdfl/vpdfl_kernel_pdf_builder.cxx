@@ -11,16 +11,14 @@
 #include <vcl_string.h>
 #include <vcl_cstdlib.h> // vcl_abort()
 #include <vcl_cmath.h>
-#include <vcl_deque.h>
 #include <vcl_vector.h>
 #include <vcl_functional.h>
 
-#include <vsl/vsl_indent.h>
 #include <mbl/mbl_data_wrapper.h>
 #include <mbl/mbl_data_array_wrapper.h>
 #include <vpdfl/vpdfl_kernel_pdf.h>
 #include <vpdfl/vpdfl_kernel_pdf_builder.h>
-#include <vnl/vnl_vector_ref.h>
+#include <vnl/vnl_vector.h>
 #include <mbl/mbl_priority_bounded_queue.h>
 #include <vpdfl/vpdfl_calc_mean_var.h>
 
@@ -141,7 +139,7 @@ void vpdfl_kernel_pdf_builder::build(vpdfl_pdf_base& model, mbl_data_wrapper<vnl
 
   if (n<1L)
   {
-    vcl_cerr<<"vpdfl_kernel_pdf_builder::build() No examples available."<<vcl_endl;
+    vcl_cerr<<"vpdfl_kernel_pdf_builder::build() No examples available.\n";
     vcl_abort();
   }
 
@@ -169,7 +167,7 @@ void vpdfl_kernel_pdf_builder::weighted_build(vpdfl_pdf_base& model,
                                             mbl_data_wrapper<vnl_vector<double> >& data,
                                             const vcl_vector<double>& /*wts*/) const
 {
-  vcl_cerr<<"vpdfl_kernel_pdf_builder::weighted_build() Ignoring weights."<<vcl_endl;
+  vcl_cerr<<"vpdfl_kernel_pdf_builder::weighted_build() Ignoring weights.\n";
   build(model,data);
 }
 
@@ -336,7 +334,7 @@ void vpdfl_kernel_pdf_builder::b_read(vsl_b_istream& bfs)
       vsl_b_read(bfs,min_var_);
       break;
     default:
-      vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vpdfl_kernel_pdf_builder &) \n";
+      vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vpdfl_kernel_pdf_builder &)\n";
       vcl_cerr << "           Unknown version number "<< version << vcl_endl;
       bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
       return;

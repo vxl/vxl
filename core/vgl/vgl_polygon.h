@@ -1,10 +1,9 @@
-// This is ./vxl/vgl/vgl_polygon.h
+// This is vxl/vgl/vgl_polygon.h
 #ifndef vgl_polygon_h_
 #define vgl_polygon_h_
 #ifdef __GNUC__
 #pragma interface
 #endif
-
 //:
 // \file
 // \author awf@robots.ox.ac.uk
@@ -19,7 +18,6 @@
 #include <vcl_iosfwd.h>
 #include <vgl/vgl_point_2d.h> // needed for vcl_vector instantiations
 #include <vcl_vector.h>
-#include <vcl_string.h>
 #include <vcl_utility.h>
 
 //: Store a polygon.
@@ -27,8 +25,8 @@
 // of "sheets", each sheet is a list of 2d points.
 // Iterate through all points using
 //
-// for(int s = 0; s < polygon.num_sheets(); ++s)
-//   for(int p = 0; p < polygon[s].size(); ++p)
+// for (int s = 0; s < polygon.num_sheets(); ++s)
+//   for (int p = 0; p < polygon[s].size(); ++p)
 //     do_something(polygon[s][p].x(), polygon[s][p].y());
 //
 class vgl_polygon {

@@ -15,14 +15,10 @@
 // \endverbatim
 //*****************************************************************************
 
-class vsol_curve_3d;
-
 //*****************************************************************************
 // External declarations for values
 //*****************************************************************************
-#include <vsol/vsol_curve_3d_sptr.h>
 #include <vsol/vsol_spatial_object_3d.h>
-
 #include <vsol/vsol_point_3d_sptr.h>
 
 class vsol_curve_3d

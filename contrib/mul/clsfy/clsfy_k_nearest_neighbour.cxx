@@ -5,12 +5,10 @@
 
 #include "clsfy_k_nearest_neighbour.h"
 
-#include <vcl_queue.h>
 #include <vcl_string.h>
 #include <vcl_utility.h>
 #include <vcl_cassert.h>
 
-#include <vsl/vsl_indent.h>
 #include <vnl/vnl_math.h>
 #include <vsl/vsl_binary_io.h>
 #include <vsl/vsl_vector_io.h>
@@ -160,7 +158,7 @@ void clsfy_k_nearest_neighbour::b_read(vsl_b_istream& bfs)
     vsl_b_read(bfs,trainInputs_);
     break;
   default:
-    vcl_cerr << "I/O ERROR: clsfy_k_nearest_neighbour::b_read(vsl_b_istream&) \n";
+    vcl_cerr << "I/O ERROR: clsfy_k_nearest_neighbour::b_read(vsl_b_istream&)\n";
     vcl_cerr << "           Unknown version number "<< version << "\n";
     bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
     return;

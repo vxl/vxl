@@ -1,16 +1,15 @@
-//-*- c++ -*-------------------------------------------------------------------
+// This is oxl/vgui/internals/vgui_accelerate_x11.cxx
 #ifdef __GNUC__
 #pragma implementation
 #endif
-//
-// .NAME vgui_accelerate
-// Author: David Capel
-// Created: 28 Mar 2000
-//
+//:
+// \file
+// \author David Capel
+// \date   28 Mar 2000
 //-----------------------------------------------------------------------------
 
-//capes : there's no point starting this accelerator unless you're running Mesa at the moment
 #include <vgui/vgui_gl.h>
+//capes : there's no point starting this accelerator unless you're running Mesa at the moment
 #if VGUI_MESA
 
 // This file uses only the following names from xmesa.h :
@@ -23,8 +22,6 @@
 #include <vcl_cassert.h>
 #include <vcl_cstring.h>
 #include <vcl_algorithm.h>
-
-#include <vul/vul_printf.h>
 
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
@@ -306,10 +303,10 @@ bool vgui_accelerate_x11::vgui_glDrawPixels( GLsizei width, GLsizei height,
         }
 
 #if 0 // commented out
-        vcl_cerr << "clipped dest - \n";
+        vcl_cerr << "clipped dest -\n";
         vcl_cerr << dest_x_min << " " << dest_x_max << vcl_endl;
         vcl_cerr << dest_y_min << " " << dest_y_max << vcl_endl;
-        vcl_cerr << "clipped src - \n";
+        vcl_cerr << "clipped src -\n";
         vcl_cerr << src_x_min << " " << src_x_max << vcl_endl;
         vcl_cerr << src_y_min << " " << src_y_max << vcl_endl;
 #endif

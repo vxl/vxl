@@ -1,13 +1,12 @@
 #include "vgui_qt_adaptor.h"
 #include "vgui_qt_menu.h"
 
-#include <vgui/vgui_matrix_state.h>
 #include <vgui/vgui_popup_params.h>
 
 #include <qgl.h>
 
 //-----------------------------------------------------------------------------
-vgui_qt_adaptor::vgui_qt_adaptor(QWidget* parent) 
+vgui_qt_adaptor::vgui_qt_adaptor(QWidget* parent)
 :  QGLWidget(parent)
 {
    this->setMouseTracking(true);
@@ -20,7 +19,7 @@ void vgui_qt_adaptor::paintGL()
    make_current();
    if (this->doubleBuffer()) glDrawBuffer(GL_BACK);
    else glDrawBuffer(GL_FRONT);
-   dispatch_to_tableau(vgui_DRAW);    
+   dispatch_to_tableau(vgui_DRAW);
 // FIXME
 //   swap_buffers();
 }
@@ -32,7 +31,7 @@ void vgui_qt_adaptor::paintOverlayGL()
    make_current();
    if (this->doubleBuffer()) glDrawBuffer(GL_BACK);
    else glDrawBuffer(GL_FRONT);
-   dispatch_to_tableau(vgui_DRAW_OVERLAY);    
+   dispatch_to_tableau(vgui_DRAW_OVERLAY);
 // FIXME
 //   swap_buffers();
 }
@@ -46,7 +45,7 @@ void vgui_qt_adaptor::resizeGL(int w, int h)
    vgui_adaptor_mixin::width  = QGLWidget::width();
    vgui_adaptor_mixin::height = QGLWidget::height();
 
-   dispatch_to_tableau(vgui_RESHAPE);  
+   dispatch_to_tableau(vgui_RESHAPE);
 }
 
 
@@ -66,8 +65,8 @@ void vgui_qt_adaptor::mousePressEvent  (QMouseEvent* e)
    ev.type = vgui_BUTTON_DOWN;
 
    // popup
-   if (ev.button   == this->popup_button && 
-       ev.modifier == this->popup_modifier) 
+   if (ev.button   == this->popup_button &&
+       ev.modifier == this->popup_modifier)
    {
       vgui_popup_params params;
       params.x = ev.wx;

@@ -1,17 +1,15 @@
-//-*- c++ -*-------------------------------------------------------------------
+// This is oxl/vgui/vgui_function_tableau.cxx
 #ifdef __GNUC__
 #pragma implementation
 #endif
-//
-// .NAME vgui_function_tableau
-// Author: Philip C. Pritchett, RRG, University of Oxford
-// Created: 25 Nov 99
-//
+//:
+// \file
+// \author Philip C. Pritchett, RRG, University of Oxford
+// \date   25 Nov 99
 //-----------------------------------------------------------------------------
 
 #include "vgui_function_tableau.h"
 #include <vgui/vgui_event.h>
-#include <vbl/vbl_bool_ostream.h>
 
 vgui_function_tableau::vgui_function_tableau()
   : draw_(0)

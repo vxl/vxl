@@ -1,19 +1,16 @@
+// This is vxl/vsl/vsl_string_io.h
 #ifndef vsl_string_io_h_
 #define vsl_string_io_h_
 #ifdef __GNUC__
 #pragma interface
 #endif
 
-// This is vxl/vsl/vsl_string_io.h
-
 //:
 // \file 
 // \brief   binary IO functions for vcl_basic_string<T>
 // \author  K.Y.McGaul
 
-//#include <vcl_iosfwd.h>
 #include <vcl_string.h>
-
 class vsl_b_ostream;
 class vsl_b_istream;
 

@@ -1,10 +1,8 @@
-#include <vcl_iostream.h>
 #include <vcl_vector.h>
-#include <vcl_string.h>
 #include <vcl_algorithm.h>
 #include <vcl_utility.h>
 
-#include <vnl/vnl_vector.h>
+#include <vnl/vnl_vector_fixed.h>
 #include <vnl/vnl_math.h>
 #include <vbl/vbl_test.h>
 

@@ -16,14 +16,11 @@
 
 #include <vsol/vsol_box_2d.h>
 #include <vsol/vsol_box_2d_sptr.h>
-#include <vtol/vtol_topology_object.h>
 #include <vtol/vtol_edge.h>
 #include <vtol/vtol_edge_2d.h>
-#include <vtol/vtol_vertex_2d.h>
 #include <vtol/vtol_one_chain.h>
 #include <vtol/vtol_cycle_processor.h>
 
-//#include <vdgl/vdgl_curve_2d.h>
 #include <vdgl/vdgl_digital_curve.h>
 #include <vdgl/vdgl_edgel_chain.h>
 #include <vdgl/vdgl_interpolator.h>
@@ -93,7 +90,8 @@ void gevd_edgel_regions::print_region_equivalence()
   vcl_cout << vcl_endl << "Label Equivalence:\n"
            << "----------------\n";
   vcl_map<unsigned int, vcl_vector<unsigned int>*>::iterator rpf_iterator;
-  for (rpf_iterator= region_pairs_forward_.begin(); rpf_iterator!=region_pairs_forward_.end(); rpf_iterator++)
+  for (rpf_iterator= region_pairs_forward_.begin();
+       rpf_iterator!=region_pairs_forward_.end(); rpf_iterator++)
     {
       vcl_cout << (*rpf_iterator).first << " == "
                << (*rpf_iterator).second << vcl_endl;
@@ -106,7 +104,8 @@ void gevd_edgel_regions::print_reverse_region_equivalence()
   vcl_cout << vcl_endl << "Reverse Label Equivalence:\n"
            << "----------------\n";
   vcl_map<unsigned int, vcl_vector<unsigned int>*>::iterator rpf_iterator;
-  for (rpf_iterator= region_pairs_reverse_.begin(); rpf_iterator!=region_pairs_reverse_.end(); rpf_iterator++)
+  for (rpf_iterator= region_pairs_reverse_.begin();
+       rpf_iterator!=region_pairs_reverse_.end(); rpf_iterator++)
     {
       vcl_cout << (*rpf_iterator).first << " == "
                << (*rpf_iterator).second << vcl_endl;
@@ -127,7 +126,8 @@ void gevd_edgel_regions::print_base_equivalence()
 //Print the fitted intensity data for all faces
 void gevd_edgel_regions::print_intensity_data()
 {
-  for (vcl_vector<vdgl_intensity_face_sptr>::iterator fit =faces_->begin(); fit != faces_->end(); fit++)
+  for (vcl_vector<vdgl_intensity_face_sptr>::iterator fit =faces_->begin();
+       fit != faces_->end(); fit++)
     {
 #if 0
     vdgl_intensity_face* f = *fit;
@@ -353,7 +353,8 @@ bool gevd_edgel_regions::compute_edgel_regions(vcl_vector<vtol_edge_2d_sptr>& sg
     this->print_intensity_data();
   //Output the result
   faces.clear();
-  for (vcl_vector<vdgl_intensity_face_sptr>::iterator fit = faces_->begin(); fit != faces_->end(); fit++)
+  for (vcl_vector<vdgl_intensity_face_sptr>::iterator fit = faces_->begin();
+       fit != faces_->end(); fit++)
       { 
       faces.push_back(*fit);
         //        faces_->value()->Protect(); //This caused a big leak
@@ -791,7 +792,8 @@ bool gevd_edgel_regions::InitRegionArray(vcl_vector< vtol_edge_2d_sptr>& sg)
   //Insert edgels into arrays.
 
   int counter=0;
-  for (vcl_vector<vtol_edge_2d_sptr >::iterator sgit = sg.begin(); sgit != sg.end(); sgit++)
+  for (vcl_vector<vtol_edge_2d_sptr >::iterator sgit = sg.begin();
+       sgit != sg.end(); sgit++)
     {
       vtol_edge_2d_sptr e = (*sgit);
       if (!e)
@@ -829,8 +831,10 @@ bool gevd_edgel_regions::InitRegionArray(vcl_vector< vtol_edge_2d_sptr>& sg)
         }
       else
         {
-          pex1 = e->v1()->cast_to_vertex_2d()->x(); pey1 = e->v1()->cast_to_vertex_2d()->y();
-          pex2 = e->v2()->cast_to_vertex_2d()->x(); pey2 = e->v2()->cast_to_vertex_2d()->y();
+          pex1 = e->v1()->cast_to_vertex_2d()->x();
+          pey1 = e->v1()->cast_to_vertex_2d()->y();
+          pex2 = e->v2()->cast_to_vertex_2d()->x();
+          pey2 = e->v2()->cast_to_vertex_2d()->y();
           this->insert_edgel(pex1, pey1, pex1, pey1, vre);
           this->insert_edgel(pex1, pey1, pex2, pey2, vre);
         }
@@ -1414,8 +1418,10 @@ bool gevd_edgel_regions::connect_ends(vcl_vector<vtol_edge_2d_sptr>& edges,
     {
       vtol_vertex_sptr v1 = (*eit)->v1(), v2 = (*eit)->v2();
 
-      v1->unset_user_flag(VSOL_FLAG1); v2->unset_user_flag(VSOL_FLAG1);
-      v1->unset_user_flag(VSOL_FLAG2); v2->unset_user_flag(VSOL_FLAG2);
+      v1->unset_user_flag(VSOL_FLAG1);
+      v2->unset_user_flag(VSOL_FLAG1);
+      v1->unset_user_flag(VSOL_FLAG2);
+      v2->unset_user_flag(VSOL_FLAG2);
     }
   for (vcl_vector<vtol_edge_2d_sptr>::iterator eit = edges.begin();
        eit != edges.end(); eit++)
@@ -1745,7 +1751,8 @@ void gevd_edgel_regions::insert_adjacency(unsigned int r, vtol_edge_2d_sptr e)
 //
 void gevd_edgel_regions::CollectEdges()
 {
-  for ( vcl_map<int, gevd_region_edge*>::iterator reit= region_edges_.begin(); reit == region_edges_.end(); reit++)
+  for ( vcl_map<int, gevd_region_edge*>::iterator reit= region_edges_.begin();
+        reit == region_edges_.end(); reit++)
     {
       gevd_region_edge* re = reit->second;
       vtol_edge_2d_sptr e = re->get_edge();
@@ -1800,11 +1807,10 @@ void gevd_edgel_regions::CollectFaceEdges()
             {
               if (verbose_)
                 {
-                  vcl_cout << "Region [" << i << "] is corrupt \n";
-                  vcl_cout << "Bad Vertices \n";
-                  for (vcl_vector<vtol_vertex_sptr>::iterator vit =
-                       bad_verts.begin(); vit != bad_verts.end();
-                      vit++)
+                  vcl_cout << "Region [" << i << "] is corrupt\n";
+                  vcl_cout << "Bad Vertices\n";
+                  for (vcl_vector<vtol_vertex_sptr>::iterator vit = bad_verts.begin();
+                       vit != bad_verts.end(); vit++)
                     if (!(*vit)->get_user_flag(VSOL_FLAG1))
                       vcl_cout << *(*vit);
                   for (vcl_vector<vtol_edge_2d_sptr>::iterator eit = edges->begin();
@@ -1833,10 +1839,9 @@ void gevd_edgel_regions::CollectFaceEdges()
           EdgeSet.push_back ( e );
         }
       vcl_vector<vtol_edge_2d_sptr>* edge_list = new vcl_vector<vtol_edge_2d_sptr>;
-      for (vcl_vector<vtol_edge_2d_sptr>::iterator esit = EdgeSet.begin(); esit != EdgeSet.end() ; esit++)
-        {
+      for (vcl_vector<vtol_edge_2d_sptr>::iterator esit = EdgeSet.begin();
+           esit != EdgeSet.end() ; esit++)
         edge_list->push_back (*esit );
-        }
       face_edge_index_[i] = edge_list;
     }
 

@@ -2,13 +2,13 @@
 //  \brief Functions to normalise 2d float plane images
 //  \author Tim Cootes
 
-#include <mil/mil_normalise_image_2d.h>
+#include <mil/mil_image_2d_of.h>
 #include <vnl/vnl_vector.h>
 #include <vcl_cmath.h>
 
 //: creates a variance normalised version of an input image
 void mil_var_norm_image_2d(mil_image_2d_of<float>& dest,
-                          const mil_image_2d_of<float>& src)
+                           const mil_image_2d_of<float>& src)
 {
   int n = src.n_planes();
   int nx = src.nx();
@@ -75,7 +75,7 @@ void mil_var_norm_image_2d(mil_image_2d_of<float>& dest,
 
 //: creates a mean normalised version of an input image
 void mil_mean_norm_image_2d(mil_image_2d_of<float>& dest,
-                          const mil_image_2d_of<float>& src)
+                            const mil_image_2d_of<float>& src)
 {
   int n = src.n_planes();
   int nx = src.nx();

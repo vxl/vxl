@@ -1,15 +1,12 @@
-// This is ./vxl/vbl/io/vbl_io_quadruple.txx
+// This is vxl/vbl/io/vbl_io_quadruple.txx
 #ifndef vbl_io_quadruple_txx_
 #define vbl_io_quadruple_txx_
-
 //:
 // \file
 // \brief  binary IO functions for vbl_quadruple<S, T, U, V>
 // \author Ian Scott
-//
-// Implementation
 
-#include <vsl/vbl_io_quadruple.h>
+#include "vbl_io_quadruple.h"
 #include <vsl/vsl_binary_io.h>
 
 //====================================================================================

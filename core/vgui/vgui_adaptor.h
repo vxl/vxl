@@ -1,5 +1,6 @@
-// This is ./oxl/vgui/vgui_adaptor.h
-
+// This is oxl/vgui/vgui_adaptor.h
+#ifndef vgui_adaptor_h_
+#define vgui_adaptor_h_
 //:
 // \file
 // \author fsm@robots.ox.ac.uk
@@ -22,14 +23,9 @@
 // Feb.2002         Peter Vanroose - brief doxygen comment placed on single line
 // \endverbatim
 
-#ifndef vgui_adaptor_h_
-#define vgui_adaptor_h_
-
 #include "dll.h"
 #include <vgui/vgui_menu.h>
 #include <vgui/vgui_event.h>
-#include <vgui/vgui_observer.h>
-
 class vgui_window;
 class vgui_tableau;
 struct vgui_tableau_sptr;

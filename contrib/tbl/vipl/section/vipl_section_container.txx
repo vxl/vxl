@@ -1,11 +1,10 @@
 #ifndef vipl_section_container_txx_
 #define vipl_section_container_txx_
 
-#include <vipl/section/vipl_section_container.h>
+#include "vipl_section_container.h"
 #include <vipl/filter/vipl_filter_abs.h> // for filter_abs::X_Axis()
 #include <vipl/section/vipl_section_iterator.txx>
 #include <vipl/section/vipl_section_descriptor.txx>
-#include <vipl/filter/vipl_filter_helper.h>
 #include <vcl_cstdio.h>
 #include <vcl_iostream.h>
 

@@ -10,16 +10,13 @@
 // \author Ian Scott
 // \date 2001/10/07
 
-
-#include <clsfy/clsfy_knn_builder.h>
+#include "clsfy_knn_builder.h"
 
 #include <vcl_iostream.h>
 #include <vcl_string.h>
 #include <vcl_cassert.h>
-#include <vsl/vsl_indent.h>
 #include <vsl/vsl_binary_loader.h>
 #include <clsfy/clsfy_k_nearest_neighbour.h>
-
 
 //=======================================================================
 
@@ -70,7 +67,7 @@ void clsfy_knn_builder::b_write(vsl_b_ostream& bfs) const
 {
   vsl_b_write(bfs, version_no());
   vsl_b_write(bfs, k_);
-  vcl_cerr << "clsfy_knn_builder::b_write() NYI" << vcl_endl;
+  vcl_cerr << "clsfy_knn_builder::b_write() NYI\n";
 }
 
 //=======================================================================

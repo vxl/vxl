@@ -1,7 +1,6 @@
+// This is gel/vdgl/vdgl_digital_region.h
 #ifndef vdgl_digital_region_h_
 #define vdgl_digital_region_h_
-
-//-----------------------------------------------------------------------------
 //:
 // \file
 // \brief A representation of the digital interior of a region.
@@ -25,7 +24,6 @@
 // \endverbatim
 //-----------------------------------------------------------------------------
 
-#include <vcl_iostream.h>
 #include <vcl_vector.h>
 #include <vnl/vnl_matrix.h>
 #include <vsol/vsol_region_2d.h>

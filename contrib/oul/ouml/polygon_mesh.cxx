@@ -1,27 +1,27 @@
-//-*-c++-*--------------------------------------------------------------
 //:
 // \file
 // \brief polygon_mesh.cc: a class for polygon meshes
-//
+// \author
 // Copyright (c) 2001 Brendan McCane University of Otago, Dunedin, New
 // Zealand Reproduction rights limited as described in the COPYRIGHT
 // file.
 //----------------------------------------------------------------------
 
 #include "polygon_mesh.h"
-#include <vcl_cstdio.h>
+#include <vcl_cstdio.h> // for fscanf()
 #include <vcl_cstdlib.h>
 #include <vcl_iostream.h>
+#include <vcl_cassert.h>
 
 //----------------------------------------------------------------------
 //: add_vertex
 //
 // Add a vertex to the end of the list of vertices
 //
-// .param DPoint &pt: The location of the vertex
-// .ret int: the position of the added vertex
+// \param DPoint &pt: The location of the vertex
+// \ret int: the position of the added vertex
 //
-//.author Brendan McCane
+// \author Brendan McCane
 //----------------------------------------------------------------------
 int PolygonMesh::add_vertex(DPoint &pt)
 {
@@ -35,11 +35,11 @@ int PolygonMesh::add_vertex(DPoint &pt)
 //
 // Add a vertex to the prescribed position in the list of vertices
 //
-// .param DPoint &pt: The location of the vertex
-// .param int index: where to add the vertex
-// .ret int: the position of the added vertex
+// \param DPoint &pt: The location of the vertex
+// \param int index: where to add the vertex
+// \ret int: the position of the added vertex
 //
-//.author Brendan McCane
+// \author Brendan McCane
 //----------------------------------------------------------------------
 
 int PolygonMesh::set_vertex(int index, DPoint &pt)
@@ -56,10 +56,10 @@ int PolygonMesh::set_vertex(int index, DPoint &pt)
 //
 // Add a face to the end of the list of faces
 //
-// .param Face &fc: The vertices associated with the face
-// .ret int: the position of the added face
+// \param Face &fc: The vertices associated with the face
+// \ret int: the position of the added face
 //
-//.author Brendan McCane
+// \author Brendan McCane
 //----------------------------------------------------------------------
 
 int PolygonMesh::add_face(Face &fc)
@@ -73,11 +73,11 @@ int PolygonMesh::add_face(Face &fc)
 //
 // Add a face to the prescribed position in the list of faces
 //
-// .param Face &fc: The vertices associated with the face
-// .param int index: where to add the face
-// .ret int: the position of the added face
+// \param Face &fc: The vertices associated with the face
+// \param int index: where to add the face
+// \ret int: the position of the added face
 //
-//.author Brendan McCane
+// \author Brendan McCane
 //----------------------------------------------------------------------
 
 int PolygonMesh::set_face(int index, Face &fc)
@@ -94,10 +94,10 @@ int PolygonMesh::set_face(int index, Face &fc)
 //
 // Returns a vertex at the specified location
 //
-// .param int index: the position to return
-// .ret DPoint: the position of the vertex
+// \param int index: the position to return
+// \ret DPoint: the position of the vertex
 //
-//.author Brendan McCane
+// \author Brendan McCane
 //----------------------------------------------------------------------
 
 PolygonMesh::DPoint PolygonMesh::get_vertex(int index)
@@ -105,7 +105,7 @@ PolygonMesh::DPoint PolygonMesh::get_vertex(int index)
   assert(index >= 0);
   if ((unsigned int)index>=vertex_list.size())
   {
-    vcl_cerr << "Warning: vertex doesn't exist" << vcl_endl;
+    vcl_cerr << "Warning: vertex doesn't exist\n";
     return DPoint();
   }
   return vertex_list[index];
@@ -116,10 +116,10 @@ PolygonMesh::DPoint PolygonMesh::get_vertex(int index)
 //
 // Returns a face at the specified location
 //
-// .param int index: the position to return
-// .ret Polygon: a list of vertices
+// \param int index: the position to return
+// \ret Polygon: a list of vertices
 //
-//.author Brendan McCane
+// \author Brendan McCane
 //----------------------------------------------------------------------
 
 PolygonMesh::Polygon PolygonMesh::get_face(int index)
@@ -128,7 +128,7 @@ PolygonMesh::Polygon PolygonMesh::get_face(int index)
   Polygon poly;
   if ((unsigned int)index>=face_list.size())
   {
-    vcl_cerr << "Warning: face doesn't exist" << vcl_endl;
+    vcl_cerr << "Warning: face doesn't exist\n";
     return poly;
   }
   Face& face = face_list[index];
@@ -143,10 +143,10 @@ PolygonMesh::Polygon PolygonMesh::get_face(int index)
 //
 // read a mesh in from a file
 //
-// .param char *filename: the name of the file
-// .ret bool: whether or not the file was successfully read
+// \param char *filename: the name of the file
+// \ret bool: whether or not the file was successfully read
 //
-//.author Brendan McCane
+// \author Brendan McCane
 //----------------------------------------------------------------------
 
 bool PolygonMesh::read_file(char *filename)
@@ -202,15 +202,15 @@ bool PolygonMesh::read_file(char *filename)
 //
 // return the normal vector for the given vertex of a given face.
 //
-// .param int face_index: which face
+// \param int face_index: which face
 //
-// .param int vertex_index: which vertex in the face (ie not the
+// \param int vertex_index: which vertex in the face (ie not the
 // vertex index in the entire list of vertices, but the vertex index
 // within the face).
 //
-// .ret vnl_vector_fixed<double, 3>: the normalised normal vector
+// \ret vnl_vector_fixed<double, 3>: the normalised normal vector
 //
-//.author Brendan McCane
+// \author Brendan McCane
 //----------------------------------------------------------------------
 
 PolygonMesh::DVector3D PolygonMesh::get_face_normal

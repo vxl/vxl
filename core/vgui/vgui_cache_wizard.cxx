@@ -1,8 +1,7 @@
-//-*- c++ -*-------------------------------------------------------------------
+// This is oxl/vgui/vgui_cache_wizard.cxx
 #ifdef __GNUC__
 #pragma implementation
 #endif
-
 //:
 //  \file
 
@@ -18,7 +17,6 @@
 #include <vgui/vgui_pixel.h>
 #include <vgui/vgui_macro.h>
 #include <vgui/internals/vgui_accelerate.h>
-#include <vgui/vgui_texture_hacks.h>
 
 #define DEFAULT_QUADRANT_WIDTH  256
 #define DEFAULT_QUADRANT_HEIGHT 256
@@ -35,7 +33,8 @@ vgui_cache_wizard *vgui_cache_wizard::instance_ = 0;
 vgui_cache_wizard::vgui_cache_wizard(int quadrant_width,
                                      int quadrant_height)
 {
-  if (debug) vcl_cerr << __FILE__": this is the constructor" << vcl_endl;
+  if (debug)
+    vcl_cerr << __FILE__": this is the constructor\n";
   //*(int*)0 = 1;
 
   //: Get the maximum texture size.
@@ -121,7 +120,8 @@ bool vgui_cache_wizard::get_section(int id,int x,int y,int width,int height,
   // Work out section width and height in quadrant units
   int qw_c = (x+width)/quadrant_width_-qx_c;//mb_jigerry_pokery(x+width,quadrant_width_);
   int qh_c = (y+height)/quadrant_height_-qy_c;//mb_jigerry_pokery(y+height,quadrant_height_);
-  if (debug) vcl_cerr<<"X: "<<qx_c<<"Y: "<<qy_c<<"W:"<<qw_c<<" H:"<<qh_c<<vcl_endl;
+  if (debug)
+    vcl_cerr<<"X: "<<qx_c<<"Y: "<<qy_c<<"W:"<<qw_c<<" H:"<<qh_c<<vcl_endl;
   pos->first = qx_c;
   pos->second = qy_c;
   size->first = qw_c;
@@ -148,8 +148,8 @@ bool vgui_cache_wizard::get_section(int id,int x,int y,int width,int height,
           {
             quadrants->push_back((*icq)[index]);
             vcl_list<GLuint>::iterator i;
-            for (i = cache_queue_.begin();i!=cache_queue_.end() &&
-                  (*i)!=(*icq)[index];i++);
+            for (i = cache_queue_.begin();i!=cache_queue_.end() && (*i)!=(*icq)[index]; i++)
+              ;
             cache_queue_.erase(i);
             cache_queue_.push_back((*icq)[index]);
           }
@@ -170,7 +170,7 @@ bool vgui_cache_wizard::get_section(int id,int x,int y,int width,int height,
                   if ((*k) == texture_name)
                     {
                       *k = GLuint(INVALID_TEXTURE_NAME);
-                      vcl_cerr<<"Invalidated!"<<vcl_endl;
+                      vcl_cerr<<"Invalidated!\n";
                     }
             }
           else {
@@ -213,8 +213,10 @@ if (false) { }
 // uses: 'what', 'data', 'the_pixels', 'w', 'h'
 #define fsm_macro_magic(fmt, typ, sto) \
 if (format==fmt && type==typ) { \
-  if (debug) vcl_cerr << __FILE__ ": converting " << what << " image to " #fmt "," #typ " format" << vcl_endl; \
-  if (!the_pixels) the_pixels = new sto[img.width()*img.height()]; \
+  if (debug) \
+    vcl_cerr << __FILE__ ": converting " << what << " image to " #fmt "," #typ " format\n"; \
+  if (!the_pixels) \
+    the_pixels = new sto[img.width()*img.height()]; \
   vgui_pixel_convert_span(data, static_cast<sto*>(the_pixels), \
   img.width()*img.height()); \
 }

@@ -1,20 +1,17 @@
-// This is ./oxl/vgui/vgui_displaybase.cxx
-
+// This is oxl/vgui/vgui_displaybase.cxx
+#ifdef __GNUC__
+#pragma implementation
+#endif
 //:
 // \file
 // \author Philip C. Pritchett, RRG, University of Oxford
 // \date   14 Sep 99
-
-#ifdef __GNUC__
-#pragma implementation
-#endif
 
 #include "vgui_displaybase.h"
 
 #include <vcl_vector.h>
 #include <vcl_algorithm.h>
 
-#include <vul/vul_sprintf.h>
 #include <vbl/vbl_bool_ostream.h>
 
 #include <vgui/vgui_gl.h>
@@ -22,9 +19,6 @@
 #include <vgui/vgui_event.h>
 #include <vgui/vgui_message.h>
 #include <vgui/vgui_style.h>
-#include <vgui/vgui_drag_mixin.h>
-#include <vgui/vgui_projection_inspector.h>
-#include <vgui/vgui_image_tableau.h>
 #include <vgui/vgui_soview.h>
 #include <vgui/vgui_style_factory.h>
 
@@ -116,7 +110,8 @@ void vgui_displaybase::draw_soviews_render()
     vcl_vector<vgui_style*> styles_copy;
 
     vgui_style_factory::get_styles(styles_copy);
-    if (debug) vcl_cerr << "found " << styles_copy.size() << " styles " << vcl_endl;
+    if (debug)
+      vcl_cerr << "found " << styles_copy.size() << " styles\n";
 
     // get all the styles held by the style factory
     for (vcl_vector<vgui_style*>::iterator s_iter = styles_copy.begin();
@@ -131,7 +126,8 @@ void vgui_displaybase::draw_soviews_render()
       vcl_vector<vgui_soview*> soviews;
       vgui_style_factory::get_soviews(*s_iter, soviews);
 
-      if (debug) vcl_cerr << "found " << soviews.size() << " soviews with this style" << vcl_endl;
+      if (debug)
+        vcl_cerr << "found " << soviews.size() << " soviews with this style\n";
 
       // for each soview with this style
       for (vcl_vector<vgui_soview*>::iterator so_iter = soviews.begin();
@@ -149,8 +145,8 @@ void vgui_displaybase::draw_soviews_render()
       }
     }
 
-    if (debug) vcl_cerr << "setting color" << vcl_endl;
-    if (debug) vcl_cerr << "drawing " << selections.size() << " selected soviews" << vcl_endl;
+    if (debug)
+      vcl_cerr << "setting color\ndrawing " << selections.size() << " selected soviews\n";
 
     for (vcl_vector<unsigned>::iterator id_iter = selections.begin();
          id_iter != selections.end(); ++id_iter )

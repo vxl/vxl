@@ -3,31 +3,21 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
-//
-// .NAME vgui_listmanager2D - Undocumented class FIXME
-// .LIBRARY vgui
-// .HEADER vxl Package
-// .INCLUDE vgui/vgui_listmanager2D.h
-// .FILE vgui_listmanager2D.cxx
-//
-// .SECTION Description:
+//:
+// \file
+// \brief manages a set of vgui_displaylist2D children
 //
 // A vgui_listmanager2D manages a set of vgui_displaylist2D children.
 // It behaves lilke an acetate, but is more efficient.
 //
-// .SECTION Author:
+// \author
 //              Philip C. Pritchett, 21 Oct 99
 //              Robotics Research Group, University of Oxford
-//
-// .SECTION Modifications:
-//     <none yet>
-//
 //-----------------------------------------------------------------------------
 
 #include <vgui/vgui_observable.h>
 #include <vgui/vgui_tableau.h>
 #include <vgui/vgui_slot.h>
-#include <vgui/vgui_drag_mixin.h>
 #include <vgui/vgui_event.h>
 #include <vgui/vgui_displaylist2D.h>
 #include <vgui/vgui_listmanager2D_sptr.h>

@@ -1,4 +1,3 @@
-#include <vcl_complex.h>
 #include <vnl/vnl_real_polynomial.h>
 #include <vnl/algo/vnl_rpoly_roots.h>
 
@@ -17,7 +16,7 @@ void test_rpoly_roots()
 
   // Evaluate results
   vnl_real_polynomial p(a);
-  for(int i = 0; i < p.degree(); ++i)
+  for (int i = 0; i < p.degree(); ++i)
     vnl_test_assert("Root residual", vcl_abs(p.evaluate(roots[i])) < 1e-12);
 }
 

@@ -5,14 +5,14 @@
 //:
 //  \file
 
+#include "vpdfl_axis_gaussian_builder.h"
+
 #include <vcl_cassert.h>
 #include <vcl_string.h>
 #include <vcl_cstdlib.h> // vcl_abort()
 
-#include <vsl/vsl_indent.h>
 #include <mbl/mbl_data_wrapper.h>
 #include <vpdfl/vpdfl_axis_gaussian.h>
-#include <vpdfl/vpdfl_axis_gaussian_builder.h>
 
 //=======================================================================
 // Dflt ctor
@@ -67,7 +67,8 @@ void vpdfl_axis_gaussian_builder::build(vpdfl_pdf_base& model,
   vpdfl_axis_gaussian& g = gaussian(model);
 
   vnl_vector<double> var(mean.size());
-  for (unsigned int i=0;i<mean.size();i++) var(i)=min_var_;
+  for (unsigned int i=0;i<mean.size();i++)
+    var(i)=min_var_;
 
   g.set(mean,var);
 }
@@ -81,7 +82,7 @@ void vpdfl_axis_gaussian_builder::build(vpdfl_pdf_base& model,
 
   if (n_samples<2L)
   {
-    vcl_cerr<<"vpdfl_axis_gaussian_builder::build() Too few examples available."<<vcl_endl;
+    vcl_cerr<<"vpdfl_axis_gaussian_builder::build() Too few examples available.\n";
     vcl_abort();
   }
 
@@ -130,7 +131,7 @@ void vpdfl_axis_gaussian_builder::weighted_build(vpdfl_pdf_base& model,
 
   if (n_samples<2L)
   {
-    vcl_cerr<<"vpdfl_axis_gaussian_builder::build() Too few examples available."<<vcl_endl;
+    vcl_cerr<<"vpdfl_axis_gaussian_builder::build() Too few examples available.\n";
     vcl_abort();
   }
 
@@ -258,7 +259,7 @@ void vpdfl_axis_gaussian_builder::b_read(vsl_b_istream& bfs)
       vsl_b_read(bfs,min_var_);
       break;
     default:
-      vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vpdfl_axis_gaussian_builder &) \n";
+      vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vpdfl_axis_gaussian_builder &)\n";
       vcl_cerr << "           Unknown version number "<< version << vcl_endl;
       bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
       return;

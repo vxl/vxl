@@ -1,5 +1,3 @@
-#include <vcl_iostream.h>
-
 #include <vnl/vnl_matrix.h>
 #include <vnl/algo/vnl_qr.h>
 #include <vnl/algo/vnl_determinant.h>

@@ -14,7 +14,7 @@
 #include <gtk/gtk.h>
 #include <gtkgl/gtkglarea.h>
 
-#include <vgui/vgui_matrix_state.h>
+#include <vgui/vgui_gl.h>
 #include <vgui/vgui_popup_params.h>
 #include <vgui/internals/vgui_overlay_helper.h>
 #include "vgui_gtk_utils.h"
@@ -58,7 +58,7 @@ vgui_gtk_adaptor::vgui_gtk_adaptor(vgui_gtk_window* win) : win_(win), ovl_helper
   }
 
   if (!widget) {
-    vcl_cerr << __FILE__ << " : Could not get a GL visual!" << vcl_endl;
+    vcl_cerr << __FILE__ << " : Could not get a GL visual!\n";
     vcl_abort();
   }
 
@@ -145,11 +145,11 @@ void vgui_gtk_adaptor::post_destroy() {
 }
 
 void vgui_gtk_adaptor::set_default_popup(vgui_menu) {
-  vcl_cerr << "vgui_gtk_adaptor::set_default_popup" << vcl_endl;
+  vcl_cerr << "vgui_gtk_adaptor::set_default_popup\n";
 }
 
 vgui_menu vgui_gtk_adaptor::get_popup() {
-  vcl_cerr << "vgui_gtk_adaptor::get_popup" << vcl_endl;
+  vcl_cerr << "vgui_gtk_adaptor::get_popup\n";
   return vgui_menu();
 }
 
@@ -286,7 +286,7 @@ void vgui_gtk_adaptor::reshape() {
 //--------------------------------------------------------------------------------
 //: This is overriding the gtk draw() method.
 void vgui_gtk_adaptor::draw() {
-  if (debug) vcl_cerr << "vgui_gtk_adaptor::draw" << vcl_endl;
+  if (debug) vcl_cerr << "vgui_gtk_adaptor::draw\n";
   make_current();
   glDrawBuffer(GL_BACK);
   if (ovl_helper)
@@ -310,7 +310,6 @@ gint vgui_gtk_adaptor::idle_callback_for_redraw(gpointer data) {
 
 // Callback setup by post_destroy. First notifies tableau of the impending
 // destruction. Then deletes the adaptor and its associated window.
-#include <vgui/vgui_text_graph.h>
 gint vgui_gtk_adaptor::idle_callback_for_destroy(gpointer data) {
   vgui_gtk_adaptor *adaptor = static_cast<vgui_gtk_adaptor*>(data);
 
@@ -326,7 +325,7 @@ gint vgui_gtk_adaptor::idle_callback_for_destroy(gpointer data) {
   if (win)
     delete win;
   else
-    vcl_cerr << __FILE__ " : parent vgui_gtk_window is unknown, so cannot destroy!" << vcl_endl;
+    vcl_cerr << __FILE__ " : parent vgui_gtk_window is unknown, so cannot destroy!\n";
 
   // capes - returning FALSE automagically cancels this callback
   return FALSE;

@@ -1,12 +1,11 @@
-//-*- c++ -*-------------------------------------------------------------------
+// This is oxl/vgui/vgui_roi_tableau.cxx
 #ifdef __GNUC__
 #pragma implementation
 #endif
-//
-// .NAME vgui_roi_tableau
-// Author: Marko Bacic, RRG, University of Oxford
-// Created: 18 Jul 2000
-//
+//:
+// \file
+// \author Marko Bacic, RRG, University of Oxford
+// \date   18 Jul 2000
 //-----------------------------------------------------------------------------
 
 #include <vcl_string.h>
@@ -21,7 +20,6 @@
 #include <vgui/vgui_matrix_state.h>
 #include <vgui/vgui_gl.h>
 #include <vgui/vgui_glu.h>
-#include <vgui/vgui_image_tableau.h>
 
 //--------------------------------------------------------------------------------
 

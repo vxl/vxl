@@ -8,7 +8,6 @@
 // \author Peter Vanroose, K.U.Leuven, ESAT/PSI
 // \date   15 May 2001, from vipl/examples
 //
-#include <vil/vil_memory_image_of.h>
 #include <vil/vil_pixel.h>
 
 #include <vepl/vepl_threshold.h>
@@ -23,11 +22,19 @@ typedef unsigned char ubyte;
 
 int
 main(int argc, char** argv) {
-  if (argc < 3) { vcl_cerr << "Syntax: example2_threshold file_in file_out [threshold]\n"; return 1; }
+  if (argc < 3)
+  {
+    vcl_cerr << "Syntax: example2_threshold file_in file_out [threshold]\n";
+    return 1;
+  }
 
   // The input image:
   vil_image in = vil_load(argv[1]);
-  if (vil_pixel_format(in) != VIL_BYTE) { vcl_cerr << "Please use a ubyte image as input\n"; return 2; }
+  if (vil_pixel_format(in) != VIL_BYTE)
+  {
+    vcl_cerr << "Please use a ubyte image as input\n";
+    return 2;
+  }
 
   // The threshold value:
   ubyte threshold = (argc < 4) ? 128 : atoi(argv[3]);

@@ -4,8 +4,7 @@
 //:
 //  \file
 
-#include <vipl/section/vipl_section_descriptor_2d.h>
-#include <vipl/section/vipl_section_iterator.h>
+#include "vipl_section_descriptor_2d.h"
 #include <vipl/section/vipl_section_container.h>
 
 //: Ctor useful to define 2D section descriptors for ROA's. If you.

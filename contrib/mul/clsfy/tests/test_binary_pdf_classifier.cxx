@@ -11,7 +11,6 @@
 #include <vcl_ios.h>
 
 #include <vcl_string.h>
-#include <vsl/vsl_binary_loader.h>
 #include <vpdfl/vpdfl_axis_gaussian.h>
 #include <clsfy/clsfy_binary_pdf_classifier.h>
 
@@ -23,12 +22,11 @@ void test_binary_pdf_classifier()
   vsl_add_to_binary_loader(vpdfl_axis_gaussian());
 
   vcl_cout << "\n\n\n"
-           << "*************************************" << vcl_endl
-           << " Testing clsfy_binary_pdf_classifier" << vcl_endl
-           << "*************************************" << vcl_endl;
+           << "*************************************\n"
+           << " Testing clsfy_binary_pdf_classifier\n"
+           << "*************************************\n";
 
-  vcl_cout<<"\n======== TESTING CONSTRUCTION ==========="<<vcl_endl;
-
+  vcl_cout<<"\n======== TESTING CONSTRUCTION ===========\n";
 
   vpdfl_axis_gaussian PDF0;
   unsigned nDims=2;
@@ -46,8 +44,8 @@ void test_binary_pdf_classifier()
   vnl_vector<double> x(nDims);
   vcl_vector<double> out(1);
   x.fill(0.0);
-  vcl_cout << "x(2) varies across from -2 to + 2" << vcl_endl
-           << "x(1) varies down from -2 to + 2" << vcl_endl;
+  vcl_cout << "x(2) varies across from -2 to + 2\n"
+           << "x(1) varies down from -2 to + 2\n";
 
   vcl_cout << vcl_setprecision(4);
   for (x(0) = -2; x(0) <= 2 ; x(0) += 0.25)
@@ -69,7 +67,7 @@ void test_binary_pdf_classifier()
     vcl_cout << vcl_endl;
   }
 
-  vcl_cout<<"======== TESTING I/O ==========="<<vcl_endl;
+  vcl_cout<<"======== TESTING I/O ===========\n";
 
   vcl_string test_path = "test_binary_pdf_classifier.bvl.tmp";
 
@@ -77,7 +75,6 @@ void test_binary_pdf_classifier()
   TEST(("Opened " + test_path + " for writing").c_str(), (!bfs_out ), false);
   classifier.b_write(bfs_out);
   bfs_out.close();
-
 
   clsfy_binary_pdf_classifier classifier2;
 

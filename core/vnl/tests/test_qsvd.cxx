@@ -1,5 +1,4 @@
 #include <vcl_cstdio.h>
-#include <vcl_iostream.h>
 #include <vnl/vnl_math.h> // vnl_math_abs()
 #include <vnl/vnl_test.h>
 

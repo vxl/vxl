@@ -1,13 +1,9 @@
-// This is ./oxl/xcv/xcv_image_tableau.cxx
-
-//:
-//  \file
-// See xcv_image_tableau.h for a description of this file.
-//
-// \author  Marko Bacic (u97mb@robots.ox.ac.uk)
-//
-
+// This is oxl/xcv/xcv_image_tableau.cxx
 #include "xcv_image_tableau.h"
+//:
+// \file
+// See xcv_image_tableau.h for a description of this file.
+// \author  Marko Bacic (u97mb@robots.ox.ac.uk)
 
 #include <vcl_string.h>
 #include <vcl_cmath.h>
@@ -16,7 +12,6 @@
 #include <vil/vil_image.h>
 
 #include <vgui/vgui_event.h>
-#include <vgui/vgui_matrix_state.h>
 #include <vgui/vgui_gl.h>
 
 //--------------------------------------------------------------------------------
@@ -39,7 +34,7 @@ vcl_string xcv_image_tableau::type_name() const
 
 vil_image xcv_image_tableau::get_image() const
 {
-  if(!defined_)
+  if (!defined_)
     return base::get_image();
   else
     return vil_crop(base::get_image(),
@@ -63,7 +58,7 @@ void xcv_image_tableau::unset_roi()
 //: Width of the ROI, or if not defined then the width of the whole image.
 unsigned xcv_image_tableau::width() const
 {
-  if(!defined_)
+  if (!defined_)
     return base::width();
   else
     return int(roi_.width);
@@ -73,7 +68,7 @@ unsigned xcv_image_tableau::width() const
 //: Height of the ROI, or if not defined then the height of the whole image.
 unsigned xcv_image_tableau::height() const
 {
-  if(!defined_)
+  if (!defined_)
     return base::height();
   else
     return int(roi_.height);
@@ -83,7 +78,7 @@ unsigned xcv_image_tableau::height() const
 //: Get the low and high values for the ROI.
 bool xcv_image_tableau::get_bounding_box(float low[3], float high[3]) const
 {
-  if(defined_) {
+  if (defined_) {
     low[0] = roi_.x;
     low[1] = roi_.y;
     low[2] = 0;
@@ -103,7 +98,7 @@ bool xcv_image_tableau::handle(vgui_event const &e)
   //
   if (e.type == vgui_DRAW) {
     base::handle(e);
-    if(defined_) {
+    if (defined_) {
       // Draw a region of interest
       glLineWidth(1);
       glColor3f(0,1,0);

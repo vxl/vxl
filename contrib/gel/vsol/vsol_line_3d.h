@@ -18,13 +18,9 @@
 // \endverbatim
 //*****************************************************************************
 
-class vsol_line_3d;
-
 //*****************************************************************************
 // External declarations for values
 //*****************************************************************************
-#include <vsol/vsol_line_3d_sptr.h>
-
 #include <vsol/vsol_curve_3d.h>
 #include <vsol/vsol_point_3d_sptr.h>
 

@@ -6,7 +6,6 @@
 // \brief Construct thin plate spline to map 2D to 2D
 // \author Tim Cootes
 
-#include <vcl_string.h>
 #include <vgl/vgl_point_2d.h>
 #include <vcl_vector.h>
 #include <vnl/vnl_vector.h>

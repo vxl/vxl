@@ -39,13 +39,10 @@
 //   PTU ported to vxl may 2000.
 // \endverbatim
 
-#include <vtol/vtol_edge_sptr.h>
-
 #include <vtol/vtol_topology_object.h>
 #include <vcl_vector.h>
 #include <vtol/vtol_zero_chain.h>
 #include <vtol/vtol_vertex.h>
-
 class vtol_edge_2d;
 
 //: topological edge

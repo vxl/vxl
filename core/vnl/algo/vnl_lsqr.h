@@ -1,4 +1,4 @@
-// This is ./vxl/vnl/algo/vnl_lsqr.h
+// This is vxl/vnl/algo/vnl_lsqr.h
 #ifndef vnl_lsqr_h_
 #define vnl_lsqr_h_
 #ifdef __GNUC__
@@ -24,7 +24,6 @@
 //-----------------------------------------------------------------------------
 
 #include <vnl/vnl_vector.h>
-#include <vnl/vnl_matrix.h>
 #include <vnl/vnl_linear_system.h>
 
 //: Linear least squares
@@ -33,7 +32,8 @@
 //  of Paige and Saunders (ACM TOMS 583). The sparse system is encapsulated
 //  by a vnl_linear_system.
 
-class vnl_lsqr {
+class vnl_lsqr
+{
 public:
   vnl_lsqr(vnl_linear_system& ls) :
     ls_(&ls), max_iter_(4*ls.get_number_of_unknowns()) {}

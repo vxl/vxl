@@ -12,7 +12,6 @@
 //:
 // \file
 
-#include <vcl_iostream.h>
 #include <vcsl/vcsl_cartesian_3d.h>
 
 //-----------------------------------------------------------------------------

@@ -3,8 +3,6 @@
 #include <mvl/HomgOperator2D.h>
 #include <vnl/vnl_matrix.h>
 #include <vnl/vnl_double_2.h>
-#include <vcl_iostream.h>
-#include <vnl/vnl_math.h>
 #include <vcl_cmath.h>
 
 FMatrixComputeRANSAC::FMatrixComputeRANSAC(bool rank2_truncate, double std)
@@ -18,8 +16,8 @@ FMatrixComputeRANSAC::~FMatrixComputeRANSAC() {}
 
 double FMatrixComputeRANSAC::calculate_term(vcl_vector<double>& residuals, vcl_vector<bool>& inlier_list, int& count) {
   count = 0;
-  for(unsigned int i = 0; i < residuals.size(); i++) {
-    if(residuals[i] < inthresh_) {
+  for (unsigned int i = 0; i < residuals.size(); i++) {
+    if (residuals[i] < inthresh_) {
       inlier_list[i] = true;
       count++;
     } else
@@ -51,7 +49,7 @@ double FMatrixComputeRANSAC::calculate_residual(HomgPoint2D& one, HomgPoint2D& t
 
 #if 0
   double factor = a11*a11 + a12*a12 + b11*b11 + b12*b12;
-  if(factor < 0.1)
+  if (factor < 0.1)
     factor = 0.1;
 
   ret /= factor;

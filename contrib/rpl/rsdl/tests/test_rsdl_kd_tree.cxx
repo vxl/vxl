@@ -1,8 +1,6 @@
 #include <vcl_iostream.h>
 #include <vcl_vector.h>
-#include <vcl_string.h>
 #include <vcl_algorithm.h>
-#include <vnl/vnl_vector.h>
 #include <vnl/vnl_math.h>
 #include <vnl/vnl_test.h>
 #include <vcl_utility.h>
@@ -124,7 +122,7 @@ main()
 
   rsdl_kd_tree tree2( points, 0, 4 );
   for ( int t=0; t<num_tests; ++t ) {
-#if 0
+#ifdef DEBUG
     vcl_cout << "\n\n=============================\n  n_nearest test " << t
              <<   "\n=============================\n";
 #endif
@@ -196,7 +194,7 @@ main()
       }
     }
 
-#if 0
+#ifdef DEBUG
     //  Output to check everything:
     vcl_cout << "\n\nChecking rsdl_kd_tree::points_in_bounding_box\n"
              << " inside_count from exhaustive test: " << inside_count << "\n"
@@ -212,7 +210,7 @@ main()
         disagree_pt ++;
     }
 
-#if 0
+#ifdef DEBUG
     vcl_cout << "Number of index disagreements = " << disagree_index
              <<"\nNumber of point disagreements =" << disagree_pt << vcl_endl;
 #endif
@@ -242,7 +240,7 @@ main()
         pt_inside[ i ] = false;
     }
 
-#if 0
+#ifdef DEBUG
     //  Output to check everything:
     vcl_cout << "\n\nChecking rsdl_kd_tree::points_in_radius\n"
              << " inside_count from exhaustive test: " << inside_count << "\n"
@@ -258,7 +256,7 @@ main()
         disagree_pt ++;
     }
 
-#if 0
+#ifdef DEBUG
     vcl_cout << "Number of index disagreements = " << disagree_index
              <<"\nNumber of point disagreements =" << disagree_pt << vcl_endl;
 #endif
@@ -289,7 +287,7 @@ main()
         pt_inside[ i ] = false;
     }
 
-#if 0
+#ifdef DEBUG
     //  Output to check everything:
     vcl_cout << "\n\nChecking rsdl_kd_tree::points_in_radius\n"
              << " inside_count from exhaustive test: " << inside_count << "\n"
@@ -305,7 +303,7 @@ main()
         disagree_pt ++;
     }
 
-#if 0
+#ifdef DEBUG
     vcl_cout << "Number of index disagreements = " << disagree_index
              <<"\nNumber of point disagreements =" << disagree_pt << vcl_endl;
 #endif

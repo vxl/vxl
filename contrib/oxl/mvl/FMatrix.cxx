@@ -10,7 +10,6 @@
 #include <vcl_cassert.h>
 #include <vcl_iostream.h>
 #include <vcl_fstream.h>
-#include <vcl_complex.h>
 
 #include <vul/vul_printf.h>
 
@@ -383,7 +382,7 @@ FMatrix::decompose_to_skew_rank3(vnl_matrix<double>*, vnl_matrix<double>*) const
   assert(!"Not implemented\n");
 }
 
-// @{ \newpage DATA ACCESS @}
+// @{ DATA ACCESS @}
 
 //----------------------------------------------------------------
 //

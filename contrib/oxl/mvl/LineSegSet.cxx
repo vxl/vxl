@@ -5,15 +5,12 @@
 //:
 //  \file
 
+#include "LineSegSet.h"
+
 #include <vcl_iostream.h>
 #include <vcl_fstream.h>
 #include <vcl_vector.h>
 #include <vcl_vector.txx>
-#include <vcl_list.h>
-
-#include "LineSegSet.h"
-
-#include <vnl/vnl_matops.h> // use vnl_matlab_print.h for pretty printing
 
 #include <mvl/ImageMetric.h>
 #include <mvl/HomgPoint2D.h>
@@ -66,7 +63,7 @@ bool LineSegSet::load_ascii(vcl_istream& f, HomgMetric const& c)
 
   _conditioner = c;
   _hlines.resize(0);
-  for(unsigned i = 0; i < L.rows(); ++i) {
+  for (unsigned i = 0; i < L.rows(); ++i) {
     double x1 = L(i,0);
     double y1 = L(i,1);
     double x2 = L(i,2);
@@ -115,14 +112,14 @@ int LineSegSet::FindNearestLineIndex(double x, double y)
       mini = i;
     }
   }
-  return(mini);
+  return mini;
 #endif
 }
 
 //: Save lines to ASCII file
 bool LineSegSet::save_ascii(vcl_ostream& f) const
 {
-  for(unsigned i = 0; i < _hlines.size(); ++i) {
+  for (unsigned i = 0; i < _hlines.size(); ++i) {
     HomgLineSeg2D const& l = _hlines[i];
 
     vnl_double_2 p1 = _conditioner.homg_to_image(l.get_point1());
@@ -144,7 +141,7 @@ int LineSegSet::pick_line_index(double x, double y)
   double dmin = 1e20;
   int imin = -1;
   int nlines = _hlines.size();
-  for(int i = 0; i < nlines; ++i) {
+  for (int i = 0; i < nlines; ++i) {
     const HomgLineSeg2D& l = _hlines[i];
     HomgLineSeg2D l_decond = metric.homg_line_to_image(l);
 

@@ -1,9 +1,8 @@
-// This is ./gel/vsol/vsol_conic_2d.cxx
-
+// This is gel/vsol/vsol_conic_2d.cxx
+#include "vsol_conic_2d.h"
 //:
 //  \file
 
-#include <vsol/vsol_conic_2d.h>
 #include <vsol/vsol_point_2d.h>
 #include <vgl/algo/vgl_homg_operators_2d.h>
 
@@ -11,7 +10,6 @@
 // External declarations for implementation
 //*****************************************************************************
 #include <vcl_cassert.h>
-#include <vsol/vsol_point_2d.h>
 
 //***************************************************************************
 // Initialization
@@ -551,7 +549,8 @@ vsol_conic_2d::closest_point_on_curve(vsol_point_2d_sptr const& pt) const
     candidates = conic.intersection(*this);
   }
   // And find the intersection point closest to the given location:
-  vsol_point_2d_sptr p = 0; double dist = 1e31; // infinity
+  vsol_point_2d_sptr p = 0;
+  double dist = 1e31; // infinity
   vcl_list<vsol_point_2d_sptr>::iterator it = candidates.begin();
   for (; it != candidates.end(); ++it) {
     double d = (*it)->distance(pt);

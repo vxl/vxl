@@ -1,6 +1,5 @@
 #ifndef osl_canny_smooth_txx_
 #define osl_canny_smooth_txx_
-
 //:
 //  \file
 //
@@ -14,7 +13,6 @@
 
 #include "osl_canny_smooth.h"
 #include <vcl_cmath.h>
-#include <vcl_iostream.h>
 #include <vil/vil_rgb.h>
 #include <vil/vil_memory_image_of.h>
 

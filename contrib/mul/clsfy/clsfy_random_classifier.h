@@ -1,12 +1,9 @@
 #ifndef clsfy_random_classifier_h_
 #define clsfy_random_classifier_h_
-
 // Copyright: (C) 2001 Britsh Telecommunications plc
-
 #ifdef __GNUC__
 #pragma interface
 #endif
-
 //:
 // \file
 // \brief Describe a random classifier
@@ -20,7 +17,6 @@
 #include "clsfy_classifier_base.h"
 #include <vcl_vector.h>
 #include <vnl/vnl_vector.h>
-#include <mbl/mbl_data_wrapper.h>
 #include <mbl/mbl_mz_random.h>
 #include <vsl/vsl_binary_io.h>
 

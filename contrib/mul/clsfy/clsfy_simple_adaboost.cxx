@@ -5,21 +5,17 @@
 
 //=======================================================================
 
+#include "clsfy_simple_adaboost.h"
 #include <vcl_string.h>
 #include <vcl_iostream.h>
 #include <vcl_vector.h>
-#include <vnl/io/vnl_io_vector.h>
-#include <mbl/mbl_matxvec.h>
-#include <mbl/mbl_matrix_products.h>
 #include <vcl_cassert.h>
 #include <vcl_cmath.h>
-#include <clsfy/clsfy_simple_adaboost.h>
-#include <vnl/io/vnl_io_vector.h>
-#include <vnl/io/vnl_io_matrix.h>
 #include <vsl/vsl_binary_io.h>
-#include <vnl/io/vnl_io_vector.h>
 #include <vsl/vsl_binary_loader.h>
 #include <vsl/vsl_vector_io.h>
+#include <vnl/io/vnl_io_matrix.h>
+#include <vnl/io/vnl_io_vector.h>
 
 //=======================================================================
 //: Default constructor
@@ -76,10 +72,8 @@ bool clsfy_simple_adaboost::operator==(const clsfy_simple_adaboost& x) const
   for (int i=0; i<n; ++i)
     if (!(*(x.classifier_1d_[i]) == *(classifier_1d_[i]) )) return false;
 
-  return ( 
-          x.alphas_ == alphas_ &&
-          x.index_ == index_ 
-          );
+  return x.alphas_ == alphas_ &&
+         x.index_ == index_;
 }
 
 

@@ -4,9 +4,8 @@
 #pragma implementation
 #endif
 
-#include <vnl/vnl_math.h>
-
 #include "osl_fit_circle.h"
+#include <vcl_cmath.h>
 #include <vnl/vnl_vector.h>
 #include <vnl/algo/vnl_svd.h>
 

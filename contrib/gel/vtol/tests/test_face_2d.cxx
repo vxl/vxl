@@ -2,17 +2,13 @@
 
 #include <vtol/vtol_vertex_2d_sptr.h>
 #include <vtol/vtol_vertex_2d.h>
-#include <vsol/vsol_point_2d.h>
 #include <vtol/vtol_edge_2d.h>
 #include <vtol/vtol_edge.h>
 #include <vtol/vtol_edge_sptr.h>
-#include <vtol/vtol_zero_chain_sptr.h>
-#include <vtol/vtol_zero_chain.h>
 #include <vtol/vtol_one_chain_sptr.h>
 #include <vtol/vtol_one_chain.h>
 #include <vtol/vtol_face_2d.h>
 #include <vtol/vtol_face_2d_sptr.h>
-#include <vtol/vtol_face_sptr.h>
 
 #define Assert(x) { vcl_cout << #x "\t\t\t test "; \
   if (x) { ++success; vcl_cout << "PASSED\n"; } else { ++failures; vcl_cout << "FAILED\n"; } }
@@ -22,7 +18,7 @@ int main(int, char **)
 {
   int success=0, failures=0;
 
-  vcl_cout << "testing face 2d" << vcl_endl;
+  vcl_cout << "testing face 2d\n";
 
   vtol_vertex_2d_sptr v1 = new vtol_vertex_2d(0.0,0.0);
   vtol_vertex_2d_sptr v2 = new vtol_vertex_2d(1.0,1.0);
@@ -106,7 +102,7 @@ int main(int, char **)
   Assert(f1->get_num_edges()==4);
   Assert(f1->shares_edge_with(*new_f));
 
-  vcl_cout << "Finished testing face 2d " << vcl_endl;
+  vcl_cout << "Finished testing face 2d\n\n";
   vcl_cout << "Test Summary: " << success << " tests succeeded, "
            << failures << " tests failed" << (failures?"\t***\n":"\n");
   return failures;

@@ -2,14 +2,13 @@
 #pragma implementation
 #endif
 
+#include "pdf1d_gaussian_kernel_pdf_builder.h"
+
 #include <vcl_cassert.h>
 #include <vcl_string.h>
 #include <vcl_cstdlib.h> // vcl_abort()
 
-#include <vsl/vsl_indent.h>
-#include <mbl/mbl_data_wrapper.h>
 #include <pdf1d/pdf1d_gaussian_kernel_pdf.h>
-#include <pdf1d/pdf1d_gaussian_kernel_pdf_builder.h>
 #include <pdf1d/pdf1d_calc_mean_var.h>
 
 //=======================================================================

@@ -1,11 +1,9 @@
-
 //:
 // \file
 
 #include "vidl_avicodec.h"
 #include <vidl/vidl_movie.h>
 
-#include <vcl_string.h>
 #include <vcl_iostream.h>
 #include <vcl_cstdio.h>
 
@@ -83,7 +81,7 @@ bool vidl_avicodec::read_header()
   //SetBlockSizeY(height());
   //set_widthBlocks((int)((width()+GetBlockSizeX()-1)/GetBlockSizeX()));
   //set_heightBlocks((int)((height()+GetBlockSizeY()-1)/GetBlockSizeY()));
-  return(true);
+  return true;
 }
 
 //-----------------------------------------------------------------------------
@@ -135,7 +133,7 @@ bool vidl_avicodec::get_section(
   // (a row contains a multiple of 4 bytes)
   int line_length = (width()*BitsPerPixel+31)/32*4;
 
-  if(!ib) {
+  if (!ib) {
     ib = new byte[xs*ys*get_bytes_pixel()];
     if (!ib) {
       //SetStatusBad();
@@ -153,7 +151,7 @@ bool vidl_avicodec::get_section(
       for (j=height()-y0-1; j>=height()-y0-ys; j--)
         {
           DIB = StartDIB+ (j*line_length)+x0*(BitsPerPixel/8);
-          for(i=0; i<xs; i++)
+          for (i=0; i<xs; i++)
             {
               *db = *(DIB+2);
               *(db+1) = *(DIB+1);
@@ -167,7 +165,7 @@ bool vidl_avicodec::get_section(
        for (j=height()-y0-1; j>=height()-y0-ys; j--)
         {
           DIB = StartDIB + (j*line_length) + x0*(BitsPerPixel/8);
-          for(i=0; i<xs; i++)
+          for (i=0; i<xs; i++)
             {
               WORD* Pixel16 = (WORD*) DIB; // the current 16 bits pixel
               *db     = (BYTE) RGB16R(*Pixel16);
@@ -240,14 +238,14 @@ vidl_codec_sptr vidl_avicodec::load(const char* fname, char mode)
   // only support first video stream
   AVIFileGetStream(avi_file_, &avi_stream_, videostreamcode, 0);
 
-  if(!avi_file_ || !avi_stream_)
+  if (!avi_file_ || !avi_stream_)
     {
       return NULL;
     }
 
   avi_get_frame_ = AVIStreamGetFrameOpen(avi_stream_, NULL);
 
-  if(!read_header()) {
+  if (!read_header()) {
     vcl_fprintf(stderr, "vidl_avicodec: error reading header\n");
     return NULL;
   }
@@ -444,8 +442,8 @@ HANDLE  vidl_avicodec::make_dib(vidl_frame_sptr frame, UINT bits)
   // 1st, Get the datas from the video frame
 
   byte* TjSection = new byte[frame->width() * frame->height() * frame->get_bytes_pixel()];
-  if(!frame->get_section(TjSection, 0, 0, frame->width(), frame->height()) )
-    vcl_cerr << "vidl_avicodec::make_dib--Could not read get section" << vcl_endl;
+  if (!frame->get_section(TjSection, 0, 0, frame->width(), frame->height()) )
+    vcl_cerr << "vidl_avicodec::make_dib--Could not read get section\n";
 
   // 2nd, Copy the array of bytes (and transform it),
   // so it is usable by a 'windows' BitMap
@@ -460,7 +458,7 @@ HANDLE  vidl_avicodec::make_dib(vidl_frame_sptr frame, UINT bits)
   byte* newbits = new byte[data_size];
   byte* db = (byte*) newbits;
   int i,j;
-  for(i=0; i<data_size; i++)
+  for (i=0; i<data_size; i++)
   {
     *db = 0;
     ++db;
@@ -475,7 +473,7 @@ HANDLE  vidl_avicodec::make_dib(vidl_frame_sptr frame, UINT bits)
       {
         db = TjSection+ (j*frame->width())*frame->get_bytes_pixel();
         DIB = newbits + (frame->height()-j-1)*line_length;
-        for(i=0; i<frame->width(); i++) {
+        for (i=0; i<frame->width(); i++) {
           *DIB = *(db+2);
           *(DIB+1) = *(db+1);
           *(DIB+2) = *(db);
@@ -489,7 +487,7 @@ HANDLE  vidl_avicodec::make_dib(vidl_frame_sptr frame, UINT bits)
       {
         db = TjSection+ (j*frame->width())*frame->get_bytes_pixel();
         DIB = newbits + (frame->height()-j-1)*line_length;
-        for(i=0; i<frame->width(); i++) {
+        for (i=0; i<frame->width(); i++) {
           *DIB = *(db);
           *(DIB+1) = *(db);
           *(DIB+2) = *(db);

@@ -8,7 +8,6 @@
 #include <vgui/vgui_adaptor.h>
 #include <vgui/vgui_menu.h>
 #include <vgui/vgui_tableau.h>
-#include <vgui/vgui_shell_tableau.h>
 
 // example of a tableau which has an associated menu :
 struct joe_tab : vgui_tableau

@@ -3,13 +3,11 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
-
 //:
 // \file
 // \author Tim Cootes
 // \brief Sampler class for Univariate flat distributions
 
-#include <vsl/vsl_binary_io.h>
 #include <vcl_string.h>
 #include <mbl/mbl_mz_random.h>
 #include <pdf1d/pdf1d_sampler.h>

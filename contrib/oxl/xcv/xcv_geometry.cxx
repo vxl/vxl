@@ -1,11 +1,9 @@
-// This is ./oxl/xcv/xcv_geometry.cxx
-
+// This is oxl/xcv/xcv_geometry.cxx
+#include "xcv_geometry.h"
 //:
 //  \file
 // See xcv_geometry.h for a description of this file.
-//
 // \author K.Y.McGaul
-//
 
 #include <vcl_iostream.h>
 #include <vcl_fstream.h>
@@ -25,8 +23,6 @@
 #include <vgui/vgui_style.h>
 #include <vgui/vgui_macro.h>
 #include <vgui/vgui_error_dialog.h>
-
-#include "xcv_geometry.h"
 
 //static bool debug = true;
 extern void get_current(unsigned*, unsigned*);
@@ -127,8 +123,9 @@ void xcv_geometry::change_sel_color()
       sel_objs.end(); iter++)
     {
       vgui_soview* sv = (vgui_soview*)(*iter);
-      sv->set_colour(red_value(color_value), green_value(color_value),
-        blue_value(color_value));
+      sv->set_colour(red_value(color_value),
+                     green_value(color_value),
+                     blue_value(color_value));
     }
     easy_list[i]->deselect_all();
   }
@@ -223,7 +220,7 @@ void xcv_geometry::delete_all()
   vgui_easy2D_sptr easy_tab = get_easy2D_at(col, row);
   if (!easy_tab)
   {
-    vgui_macro_warning << "Unable to get current easy2D to delete te objects" << vcl_endl;
+    vgui_macro_warning << "Unable to get current easy2D to delete te objects\n";
     return;
   }
 
@@ -251,13 +248,13 @@ void xcv_geometry::delete_points()
   vgui_easy2D_sptr easy_tab = get_easy2D_at(col,row);
   if (!easy_tab)
   {
-    vgui_macro_warning << "Unable to get current easy2D to delete  points" << vcl_endl;
+    vgui_macro_warning << "Unable to get current easy2D to delete  points\n";
     return;
   }
   vcl_vector<vgui_soview*> all_objs = easy_tab->get_all();
   for (vcl_vector<vgui_soview*>::iterator i = all_objs.begin(); i != all_objs.end(); i++)
   {
-    if((*i)->type_name() == "vgui_soview2D_point")
+    if ((*i)->type_name() == "vgui_soview2D_point")
         easy_tab->remove((vgui_soview*)(*i));
   }
 }
@@ -278,13 +275,13 @@ void xcv_geometry::delete_lines()
   vgui_easy2D_sptr easy_tab = get_easy2D_at(col,row);
   if (!easy_tab)
   {
-    vgui_macro_warning << "Unable to get current easy2D to delete lines" << vcl_endl;
+    vgui_macro_warning << "Unable to get current easy2D to delete lines\n";
     return;
   }
   vcl_vector<vgui_soview*> all_objs = easy_tab->get_all();
   for (vcl_vector<vgui_soview*>::iterator i = all_objs.begin(); i != all_objs.end(); i++)
   {
-    if((*i)->type_name() == "vgui_soview2D_lineseg")
+    if ((*i)->type_name() == "vgui_soview2D_lineseg")
         easy_tab->remove((vgui_soview*)(*i));
   }
 }
@@ -305,13 +302,13 @@ void xcv_geometry::delete_inf_lines()
   vgui_easy2D_sptr easy_tab = get_easy2D_at(col,row);
   if (!easy_tab)
   {
-    vgui_macro_warning << "Unable to get current easy2D to delete infinite lines?" << vcl_endl;
+    vgui_macro_warning << "Unable to get current easy2D to delete infinite lines?\n";
     return;
   }
   vcl_vector<vgui_soview*> all_objs = easy_tab->get_all();
   for (vcl_vector<vgui_soview*>::iterator i = all_objs.begin(); i != all_objs.end(); i++)
   {
-    if((*i)->type_name() == "vgui_soview2D_infinite_line")
+    if ((*i)->type_name() == "vgui_soview2D_infinite_line")
         easy_tab->remove((vgui_soview*)(*i));
   }
 }
@@ -332,13 +329,13 @@ void xcv_geometry::delete_circles()
   vgui_easy2D_sptr easy_tab = get_easy2D_at(col,row);
   if (!easy_tab)
   {
-    vgui_macro_warning << "Unable to get current easy2D to delete circles?" << vcl_endl;
+    vgui_macro_warning << "Unable to get current easy2D to delete circles?\n";
     return;
   }
   vcl_vector<vgui_soview*> all_objs = easy_tab->get_all();
   for (vcl_vector<vgui_soview*>::iterator i = all_objs.begin(); i != all_objs.end(); i++)
   {
-    if((*i)->type_name() == "vgui_soview2D_circle")
+    if ((*i)->type_name() == "vgui_soview2D_circle")
         easy_tab->remove((vgui_soview*)(*i));
   }
 }
@@ -359,13 +356,13 @@ void xcv_geometry::delete_linestrips()
   vgui_easy2D_sptr easy_tab = get_easy2D_at(col,row);
   if (!easy_tab)
   {
-    vgui_macro_warning << "Unable to get current easy2D to delete linestrips" << vcl_endl;
+    vgui_macro_warning << "Unable to get current easy2D to delete linestrips\n";
     return;
   }
   vcl_vector<vgui_soview*> all_objs = easy_tab->get_all();
   for (vcl_vector<vgui_soview*>::iterator i = all_objs.begin(); i != all_objs.end(); i++)
   {
-    if((*i)->type_name() == "vgui_soview2D_linestrips")
+    if ((*i)->type_name() == "vgui_soview2D_linestrips")
         easy_tab->remove((vgui_soview*)(*i));
   }
 }
@@ -386,8 +383,9 @@ void xcv_geometry::change_default_color()
   vcl_vector<vgui_easy2D_sptr> easy_list = get_easy2D_list();
   for (unsigned i=0; i<easy_list.size(); i++)
   {
-    easy_list[i]->set_foreground(red_value(color_value), green_value(color_value),
-      blue_value(color_value));
+    easy_list[i]->set_foreground(red_value(color_value),
+                                 green_value(color_value),
+                                 blue_value(color_value));
   }
 }
 
@@ -448,7 +446,7 @@ void xcv_geometry::save(const char *object_type,const char *dialog_name)
       vgui_soview* sv = (vgui_soview*)(*i);
       if (!sv)
       {
-         vgui_macro_warning << "Object in soview list is null" << vcl_endl;
+         vgui_macro_warning << "Object in soview list is null\n";
          return;
       }
       bool matched = (object_type == 0) || (sv->type_name() == object_type);
@@ -480,21 +478,21 @@ void xcv_geometry::save(const char *object_type,const char *dialog_name)
         vgui_soview2D_infinite_line* line = (vgui_soview2D_infinite_line*)sv;
         fs<<"il "<<line->a<<" "<<line->b<<" "<<line->c<< vcl_endl;
       }
-      else if(svtype == "vgui_soview2D_linestrip" && matched)
+      else if (svtype == "vgui_soview2D_linestrip" && matched)
       {
         vgui_soview2D_linestrip *linestrip = (vgui_soview2D_linestrip *)sv;
         fs<<"L "<<linestrip->n;
-        for(unsigned int ii = 0; ii<linestrip->n; ++ii)
+        for (unsigned int ii = 0; ii<linestrip->n; ++ii)
         {
           fs<<" "<<linestrip->x[ii]<<" "<<linestrip->y[ii];
         }
         fs << vcl_endl;
       }
-      else if(svtype == "vgui_soview2D_polygon" && matched)
+      else if (svtype == "vgui_soview2D_polygon" && matched)
       {
         vgui_soview2D_polygon *polygon = (vgui_soview2D_polygon *)sv;
         fs<<"y "<<polygon->n;
-        for(unsigned int ii = 0; ii<polygon->n; ++ii)
+        for (unsigned int ii = 0; ii<polygon->n; ++ii)
         {
           fs<<" "<<polygon->x[ii]<<" "<<polygon->y[ii];
         }
@@ -554,7 +552,7 @@ void xcv_geometry::load(const char *object_type,const char *dialog_name)
       return;
     }
 
-    while(!fs.eof())
+    while (!fs.eof())
     {
       vcl_string tag;
       fs >> tag >> vcl_ws;
@@ -604,13 +602,13 @@ void xcv_geometry::load(const char *object_type,const char *dialog_name)
         fs>>a>>b>>c;
         easy_tab->add_infinite_line(a,b,c);
       }
-      else if(tag == "L")
+      else if (tag == "L")
       {
         int n;
         fs>>n;
         float x0,y0;
         fs>>x0>>y0;
-        for(int i = 1; i<n; i++)
+        for (int i = 1; i<n; i++)
         {
           float x1,y1;
           fs>>x1>>y1;
@@ -619,13 +617,13 @@ void xcv_geometry::load(const char *object_type,const char *dialog_name)
           y0 = y1;
         }
       }
-      else if(tag == "y")
+      else if (tag == "y")
       {
         int n;
         fs>>n;
         vcl_vector<float> x(n);
         vcl_vector<float> y(n);
-        for(int i = 0; i<n; i++)
+        for (int i = 0; i<n; i++)
           fs>>x[i]>>y[i];
         easy_tab->add_polygon(n, &x[0], &y[0]);
       }
@@ -647,7 +645,7 @@ static void add(vgl_polygon const& p)
   get_current(&col, &row);
   vgui_easy2D_sptr easy_tab = get_easy2D_at(col, row);
 
-  for(int i = 0; i < p.num_sheets(); ++i) {
+  for (int i = 0; i < p.num_sheets(); ++i) {
     vgl_polygon_sheet_as_array sp(p[i]);
     easy_tab->add_polygon(sp.n, sp.x, sp.y);
   }
@@ -682,7 +680,7 @@ void xcv_geometry::polygon_intersect()
 
   // Delete old polys
   for (unsigned i=0; i<easy_list.size(); i++)
-    for(unsigned j =0; j < all_soviews.size(); ++j)
+    for (unsigned j =0; j < all_soviews.size(); ++j)
       easy_list[i]->remove(all_soviews[j]);
 
   // Intersect :  a and b
@@ -706,7 +704,7 @@ static void xcv_geometry_explode_geometry()
   vgui_easy2D_sptr easy_tab = get_current_easy2D();
   if (!easy_tab)
   {
-    vgui_macro_warning << "Unable to get current easy2D to delete te objects" << vcl_endl;
+    vgui_macro_warning << "Unable to get current easy2D to delete te objects\n";
     return;
   }
 

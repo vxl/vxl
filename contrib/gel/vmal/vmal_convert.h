@@ -1,19 +1,13 @@
 #ifndef vmal_convert_h_
 #define vmal_convert_h_
-//------------------------------------------------------------------------------
-// .NAME        vmal_convert
-// .INCLUDE     xcv/xcv_display.h
-// .FILE        vmal_convert.cxx
-// .SECTION Description:
+//:
+// \file
 //   Toolbox to make conversion from osl to vtol, vil_image to vil_memory_image,
-//
-// .SECTION Author
-//   L. Guichard
-// .SECTION Modifications:
+// \author L. Guichard
 //------------------------------------------------------------------------------
 
-#include <vtol/vtol_vertex_2d.h>
-#include <vtol/vtol_edge_2d.h>
+#include <vtol/vtol_vertex_2d_sptr.h>
+#include <vtol/vtol_edge_2d_sptr.h>
 
 #include <osl/osl_vertex.h>
 #include <osl/osl_edge.h>

@@ -1,7 +1,7 @@
 /*
   fsm@robots.ox.ac.uk
 */
-#include <vbl/examples/vbl_smart_ptr_example.h>
+#include "../vbl_smart_ptr_example.h"
 #include <vbl/vbl_smart_ptr.txx>
 #include <vcl_list.txx>
 #include <vcl_algorithm.txx>

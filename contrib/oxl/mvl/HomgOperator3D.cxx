@@ -5,7 +5,6 @@
 
 #include <vcl_cmath.h>
 #include <vcl_iostream.h>
-#include <vcl_list.h>
 #include <vcl_vector.h>
 #include <vcl_utility.h>
 #include <vcl_algorithm.h>
@@ -87,7 +86,7 @@ HomgOperator3D::sort_points(HomgPoint3D* points, int n)
     tempoints[sort_index] = points[sort->second];
   }
 
-  for(int i = 0; i < n; ++i)
+  for (int i = 0; i < n; ++i)
     points[i] = tempoints[i];
 }
 
@@ -306,7 +305,7 @@ HomgOperator3D::intersection_point (const vcl_vector<HomgPlane3D>& planes)
   int n = planes.size();
   vnl_matrix<double> A(planes.size(), 4);
 
-  for(int i =0; i < n; ++i) {
+  for (int i =0; i < n; ++i) {
     A(i,0) = planes[i].get_x();
     A(i,1) = planes[i].get_y();
     A(i,2) = planes[i].get_z();
@@ -350,6 +349,6 @@ double HomgOperator3D::CrossRatio(const Homg3D& a, const Homg3D& b, const Homg3D
              (y>z)        ? (y1*w4-y4*w1)*(y2*w3-y3*w2) :
                             (z1*w4-z4*w1)*(z2*w3-z3*w2);
   if (n == 0 && m == 0)
-    vcl_cerr << "CrossRatio not defined: three of the given points coincide" << vcl_endl;
+    vcl_cerr << "CrossRatio not defined: three of the given points coincide\n";
   return n/m;
 }

@@ -1,23 +1,17 @@
-//-*- c++ -*-------------------------------------------------------------------
+// This is oxl/vgui/vgui_dialog.cxx
 #ifdef __GNUC__
 #pragma implementation
 #endif
-//
-// .NAME vgui_dialog
-// Author: Philip C. Pritchett, RRG, University of Oxford
-// Created: 23 Oct 99
-//
+//:
+// \file
+// \author Philip C. Pritchett, RRG, University of Oxford
+// \date   23 Oct 99
 //-----------------------------------------------------------------------------
 
 #include "vgui_dialog.h"
-
 #include <vgui/vgui.h>
 
 #include <vgui/internals/vgui_dialog_impl.h>
-//#include <vgui/internals/vgui_dialog_field.h>
-#include <vgui/internals/vgui_simple_field.h>
-#include <vgui/internals/vgui_string_field.h>
-
 
 //-----------------------------------------------------------------------------
 //
@@ -64,7 +58,6 @@ void vgui_dialog::field(const char* txt, float& v) {
 
 void vgui_dialog::field(const char* txt, double& v) {
   if (impl) impl->double_field(txt, v);
-
 }
 
 void vgui_dialog::field(const char* txt, vcl_string& v) {

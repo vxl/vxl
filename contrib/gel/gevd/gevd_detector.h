@@ -1,47 +1,8 @@
-// <begin copyright notice>
-// ---------------------------------------------------------------------------
-//
-//                   Copyright (c) 1997 TargetJr Consortium
-//               GE Corporate Research and Development (GE CRD)
-//                             1 Research Circle
-//                            Niskayuna, NY 12309
-//                            All Rights Reserved
-//              Reproduction rights limited as described below.
-//
-//      Permission to use, copy, modify, distribute, and sell this software
-//      and its documentation for any purpose is hereby granted without fee,
-//      provided that (i) the above copyright notice and this permission
-//      notice appear in all copies of the software and related documentation,
-//      (ii) the name TargetJr Consortium (represented by GE CRD), may not be
-//      used in any advertising or publicity relating to the software without
-//      the specific, prior written permission of GE CRD, and (iii) any
-//      modifications are clearly marked and summarized in a change history
-//      log.
-//
-//      THE SOFTWARE IS PROVIDED "AS IS" AND WITHOUT WARRANTY OF ANY KIND,
-//      EXPRESS, IMPLIED OR OTHERWISE, INCLUDING WITHOUT LIMITATION, ANY
-//      WARRANTY OF MERCHANTABILITY OR FITNESS FOR A PARTICULAR PURPOSE.
-//      IN NO EVENT SHALL THE TARGETJR CONSORTIUM BE LIABLE FOR ANY SPECIAL,
-//      INCIDENTAL, INDIRECT OR CONSEQUENTIAL DAMAGES OF ANY KIND OR ANY
-//      DAMAGES WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS,
-//      WHETHER OR NOT ADVISED OF THE POSSIBILITY OF SUCH DAMAGES, OR ON
-//      ANY THEORY OF LIABILITY ARISING OUT OF OR IN CONNECTION WITH THE
-//      USE OR PERFORMANCE OF THIS SOFTWARE.
-//
-// ---------------------------------------------------------------------------
-// <end copyright notice>
-//-*- c++ -*-------------------------------------------------------------------
-#ifndef _gevd_detector_h_
-#define _gevd_detector_h_
-//
-// .NAME gevd_detector - non-display-based interface class
-// .LIBRARY Detection
-// .HEADER Segmentation package
-// .INCLUDE Detection/gevd_detector.h
-// .FILE gevd_detector.h
-// .FILE gevd_detector.C
-//
-// .SECTION Description
+#ifndef gevd_detector_h_
+#define gevd_detector_h_
+//:
+// \file
+// \brief non-display-based interface class
 //
 // An interface to Van-Duc's Canny code. No display is involved.
 // The Canny has two major phases: 1) detect step edgels, 2)Follow contours
@@ -95,18 +56,20 @@
 //                              to close regions. Nominally false.
 //
 //
-// .SECTION Author:
+// \author
 //             Jane S. Liu - 3/27/95
 //             GE Corporate Research and Development
 //
-// .SECTION Modifications :
-//             JLM - May 1997
+// \verbatim
+//  Modifications
+//   JLM - May 1997
 //             Added extra interface for parameters not intitially
 //             provided by Jane.These parameters are needed to get
 //             satisfactory boundary closure. Also expanded comments.
-//             JLM - November 1997
+//   JLM - November 1997
 //             Moved most parameters up to gevd_detectorParams in
 //             order to unify the use of parameters.
+// \endverbatim
 //-----------------------------------------------------------------------------
 
 class gevd_bufferxy;
@@ -115,8 +78,8 @@ class gevd_bufferxy;
 #include <vcl_iostream.h>
 #include <vil/vil_image.h>
 
-#include <vtol/vtol_vertex_2d.h>
-#include <vtol/vtol_edge_2d.h>
+#include <vtol/vtol_vertex_2d_sptr.h>
+#include <vtol/vtol_edge_2d_sptr.h>
 #include "gevd/gevd_detector_params.h"
 
 class gevd_detector : public gevd_detector_params
@@ -184,4 +147,4 @@ protected:
   float noiseThreshold;
 };
 
-#endif // _gevd_detector_h_
+#endif // gevd_detector_h_

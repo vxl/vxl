@@ -1,7 +1,5 @@
 #include <vcl_fstream.h>
-#include <vcl_vector.h>
 
-#include <vil/vil_image.h>
 #include <vil/vil_save.h>
 
 #include <vul/vul_arg.h>
@@ -24,8 +22,9 @@ int main(int argc, char ** argv)
   vul_arg<int>   a_frame(0, "frame number", 1);
   vul_arg<char*> a_outfile(0, "Output file");
   vul_arg_parse(argc,argv);
-  
-  if (argc > 1) vul_arg_display_usage_and_exit("Too many arguments\n");
+
+  if (argc > 1)
+    vul_arg_display_usage_and_exit("Too many arguments\n");
 
   // Register video codecs
 #ifdef VCL_WIN32
@@ -34,7 +33,7 @@ int main(int argc, char ** argv)
 #ifdef HAS_MPEG
   vidl_io::register_codec(new oxp_vidl_mpeg_codec);
 #endif
-  
+
   // Prime in case it's mpeg
   int s = a_frame() - 14;
   if (s < 0) s = 0;
@@ -44,7 +43,7 @@ int main(int argc, char ** argv)
      vcl_cerr << __FILE__ ": Couldn't find any movie files. Stopping\n";
      return -1;
   }
-  
+
   // pump-prime
   {
     vcl_clog << "Get frame " << s << vcl_endl;
@@ -53,11 +52,10 @@ int main(int argc, char ** argv)
   }
 
   vil_save(moviefile->get_frame(a_frame())->get_image(), a_outfile());
- 
+
   vidl_io::close(); // Need to call this to avoid segvs from naughty codecs.
 
   vul_printf(vcl_clog, __FILE__ ": saved [%s]\n", a_outfile());
-  
-  return 0;
 
+  return 0;
 }

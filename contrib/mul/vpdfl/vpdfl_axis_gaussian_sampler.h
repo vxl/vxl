@@ -3,25 +3,23 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
-
 //:
 // \file
 // \author Ian Scott
 // \date 19-Apr-2001
 // \brief Sampler class for Multi-Variate axis aligned Gaussian.
 
-#include <vsl/vsl_binary_io.h>
 #include <vcl_string.h>
 #include <mbl/mbl_mz_random.h>
 #include <vnl/vnl_fwd.h>
 #include <vpdfl/vpdfl_sampler_base.h>
-
-
 class vpdfl_axis_gaussian;
+
 //=======================================================================
 
 //: Samples from an axis aligned Gaussian PDF
-class vpdfl_axis_gaussian_sampler :public vpdfl_sampler_base {
+class vpdfl_axis_gaussian_sampler :public vpdfl_sampler_base
+{
 protected:
     //: The random number generator
   mbl_mz_random rng_;
@@ -64,4 +62,4 @@ public:
   virtual vpdfl_sampler_base* clone() const;
 };
 
-#endif // vpdfl_pdf_sampler_base_h
+#endif // vpdfl_axis_gaussian_sampler_h

@@ -1,22 +1,18 @@
-//-*- c++ -*-------------------------------------------------------------------
+// This is oxl/vgui/vgui_deck_tableau.cxx
 #ifdef __GNUC__
 #pragma implementation
 #endif
-//
-// .NAME vgui_deck_tableau
-// Author: Philip C. Pritchett, RRG, University of Oxford
-// Created: 13 Sep 99
-//
+//:
+// \file
+// \author Philip C. Pritchett, RRG, University of Oxford
+// \date   13 Sep 99
 //-----------------------------------------------------------------------------
 
 #include "vgui_deck_tableau.h"
-// #include "vgui_deck.h" // backward compatibility - no longer needed
 
 #include <vcl_iostream.h>
 #include <vcl_algorithm.h>
 #include <vcl_vector.h>
-
-#include <vul/vul_sprintf.h>
 
 #include <vgui/vgui_event.h>
 #include <vgui/vgui_menu.h>
@@ -70,7 +66,8 @@ bool vgui_deck_tableau::help() {
 
 bool vgui_deck_tableau::key_press(int x, int y, vgui_key key, vgui_modifier)
 {
-  if (debug) vcl_cerr << "vgui_deck_tableau::key_press " << key << vcl_endl;
+  if (debug)
+    vcl_cerr << "vgui_deck_tableau::key_press " << key << vcl_endl;
 
   switch(key) {
   case vgui_PAGE_UP:
@@ -157,7 +154,8 @@ int vgui_deck_tableau::size()
 void vgui_deck_tableau::index(int v)
 {
   if (index_ok(v)) index_ = v;
-  if (debug) vcl_cerr << "vgui_deck_tableau::index " << index_ << vcl_endl;
+  if (debug)
+    vcl_cerr << "vgui_deck_tableau::index " << index_ << vcl_endl;
   observers.notify();
 }
 
@@ -166,7 +164,8 @@ void vgui_deck_tableau::begin()
   if (index_ok(0))
     index_ = 0;
 
-  if (debug) vcl_cerr << "vgui_deck_tableau::begin " << index_ << vcl_endl;
+  if (debug)
+    vcl_cerr << "vgui_deck_tableau::begin " << index_ << vcl_endl;
   observers.notify();
 }
 
@@ -182,7 +181,8 @@ void vgui_deck_tableau::next()
   if (index_ok(tmp))
     index_=tmp;
 
-  if (debug) vcl_cerr << "vgui_deck_tableau::next " << index_ << vcl_endl;
+  if (debug)
+    vcl_cerr << "vgui_deck_tableau::next " << index_ << vcl_endl;
   observers.notify();
 }
 
@@ -198,7 +198,8 @@ void vgui_deck_tableau::prev()
   if (index_ok(tmp))
     index_=tmp;
 
-  if (debug) vcl_cerr << "vgui_deck_tableau::prev " << index_ << vcl_endl;
+  if (debug)
+    vcl_cerr << "vgui_deck_tableau::prev " << index_ << vcl_endl;
   observers.notify();
 }
 

@@ -7,13 +7,13 @@
 #pragma implementation
 #endif
 
+#include "pdf1d_gaussian.h"
+
 #include <vcl_cstdlib.h>
 #include <vcl_cassert.h>
 #include <vcl_string.h>
 #include <vcl_cmath.h>
 
-#include <vsl/vsl_indent.h>
-#include <pdf1d/pdf1d_gaussian.h>
 #include <vnl/vnl_math.h>
 #include <pdf1d/pdf1d_gaussian_sampler.h>
 #include <pdf1d/pdf1d_sampler.h>
@@ -220,7 +220,7 @@ void pdf1d_gaussian::b_read(vsl_b_istream& bfs)
   vsl_b_read(bfs,name);
   if (name != is_a())
   {
-    vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, pdf1d_gaussian &) \n";
+    vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, pdf1d_gaussian &)\n";
     vcl_cerr << "           Attempted to load object of type ";
     vcl_cerr << name <<" into object of type " << is_a() << vcl_endl;
     bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
@@ -236,7 +236,7 @@ void pdf1d_gaussian::b_read(vsl_b_istream& bfs)
       vsl_b_read(bfs,log_k_);
       break;
     default:
-      vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, pdf1d_gaussian &) \n";
+      vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, pdf1d_gaussian &)\n";
       vcl_cerr << "           Unknown version number "<< version << vcl_endl;
       bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
       return;

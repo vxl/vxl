@@ -9,8 +9,6 @@
 #include <vcl_iostream.h>
 #include <vul/vul_arg.h>
 #include <vil/vil_load.h>
-#include <vil/vil_byte.h>
-#include <vil/vil_memory_image_of.h>
 
 #include <osl/osl_easy_canny.h>
 #include <osl/osl_save_topology.h>
@@ -24,7 +22,7 @@ int main(int argc, char **argv)
   vul_arg<vcl_string> in   ("-in", "input image", "");
   vul_arg<vcl_string> out  ("-out", "output file (default is stdout)", "");
   vul_arg_parse(argc, argv);
-  
+
   vcl_string* in_file = new vcl_string(in());
   if (*in_file == "") {
     vcl_cout << "input image file: ";
@@ -34,19 +32,19 @@ int main(int argc, char **argv)
     in_file = new vcl_string(tmp);
   }
   assert(*in_file != "");
-  
+
   vil_image image = vil_load(in_file->c_str());
   if (!image)
     return 1;
   vcl_cerr << in_file << " : " << image << vcl_endl;
-  
+
   vcl_list<osl_edge*> edges;
   osl_easy_canny(canny(), image, &edges);
-  
+
   if (out() == "")
     osl_save_topology(vcl_cout, edges, vcl_list<osl_Vertex*>());
   else
     osl_save_topology(out().c_str(), edges, vcl_list<osl_Vertex*>());
-  
+
   return 0;
 }

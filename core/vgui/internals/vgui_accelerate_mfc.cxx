@@ -10,7 +10,7 @@
 
 #include <vul/vul_printf.h>
 
-#include <vgui/impl/mfc/stdafx.h>
+#include <vgui/impl/mfc/StdAfx.h>
 #include "vgui_accelerate_mfc.h"
 #include <vgui/vgui_projection_inspector.h>
 #include <vgui/vgui_gl.h>
@@ -28,7 +28,7 @@ static bool debug = false;
 // system
 void mb_glDrawBufferWrapper(GLuint buffer)
 {
-  if(buffer == GL_BACK && vgui_accelerate::vgui_mfc_acceleration)
+  if (buffer == GL_BACK && vgui_accelerate::vgui_mfc_acceleration)
     return;
   glDrawBuffer(buffer);
 }
@@ -37,14 +37,16 @@ void mb_glDrawBufferWrapper(GLuint buffer)
 
 vgui_accelerate_mfc::vgui_accelerate_mfc()
 {
-  if (debug) vcl_cerr << "Initializing Windows/MFC acceleration..." << vcl_endl;
+  if (debug)
+    vcl_cerr << "Initializing Windows/MFC acceleration...\n";
   BytesPerPixel = 0;
 }
 
 
 vgui_accelerate_mfc::~vgui_accelerate_mfc()
 {
-  if (debug) vcl_cerr << "vgui_accelerate_mfc::~vgui_accelerate_mfc()" << vcl_endl;
+  if (debug)
+    vcl_cerr << "vgui_accelerate_mfc::~vgui_accelerate_mfc()\n";
 }
 
 bool vgui_accelerate_mfc::vgui_glClear(GLbitfield mask)
@@ -70,7 +72,8 @@ vidfmt::vidfmt()
   {
     DEVMODE devmode;
     EnumDisplaySettings(0, ENUM_CURRENT_SETTINGS, &devmode);
-    if (debug) vcl_cerr << "DEVMODE bpp = " << devmode.dmBitsPerPel << vcl_endl;
+    if (debug)
+      vcl_cerr << "DEVMODE bpp = " << devmode.dmBitsPerPel << vcl_endl;
   }
 
     // Allocate enough space for a DIB header plus palette (for
@@ -95,33 +98,39 @@ vidfmt::vidfmt()
     ReleaseDC(NULL, hdc);
 
     bpp = dib_hdr->biBitCount;
-    if (debug) vul_printf(vcl_cerr, "Current video mode is %lu-bit; ", dib_hdr->biBitCount);
+    if (debug)
+      vul_printf(vcl_cerr, "Current video mode is %lu-bit; ", dib_hdr->biBitCount);
 
     switch(dib_hdr->biCompression) {
     case BI_BITFIELDS: {
         DWORD * fields = (DWORD*) ((char*)dib_hdr + dib_hdr->biSize);
-        if (debug) vul_printf(vcl_cerr, "masks [%08x %08x %08x] ", fields[0], fields[1], fields[2]);
+        if (debug)
+          vul_printf(vcl_cerr, "masks [%08x %08x %08x] ", fields[0], fields[1], fields[2]);
         switch (fields[0])
         {
         case 0xf800:
           gl_type = GL_UNSIGNED_SHORT_5_6_5;
           gl_format = GL_RGB;
-            if (debug) vul_printf(vcl_cerr, "    (565 BGR pixel alignment)");
+            if (debug)
+              vul_printf(vcl_cerr, "    (565 BGR pixel alignment)");
             break;
         case 0x7c00:
           gl_type = GL_UNSIGNED_SHORT_5_5_5_1;
           gl_format = GL_RGB;
-            if (debug) vul_printf(vcl_cerr, "    (555 BGR pixel alignment)");
+            if (debug)
+              vul_printf(vcl_cerr, "    (555 BGR pixel alignment)");
             break;
         case 0xff0000:
           gl_type = GL_UNSIGNED_BYTE;
           gl_format = GL_BGR;
-            if (debug) vul_printf(vcl_cerr, "    (888 BGR pixel alignment)");
+            if (debug)
+              vul_printf(vcl_cerr, "    (888 BGR pixel alignment)");
             break;
         case 0x0000ff:
           gl_type = GL_UNSIGNED_BYTE;
           gl_format = GL_RGB;
-            if (debug) vul_printf(vcl_cerr, "    (888 RGB pixel alignment)");
+            if (debug)
+              vul_printf(vcl_cerr, "    (888 RGB pixel alignment)");
             break;
         default:
             vul_printf(vcl_cerr, "vgui_accelerate_mfc:    (Unknown pixel alignment %x:%x:%x)\n",
@@ -173,18 +182,21 @@ vidfmt::vidfmt()
       unsigned char opx[2];
       bitmap.GetBitmapBits(2,opx);
       unsigned int redmask = opx[1] * 256 + opx[0];
-      if (debug) vul_printf(vcl_cerr, "redmask = %04x\n", redmask);
+      if (debug)
+        vul_printf(vcl_cerr, "redmask = %04x\n", redmask);
 
       switch (redmask) {
       case 0xf800:
         gl_type = GL_UNSIGNED_SHORT_5_6_5;
         gl_format = GL_RGB;
-        if (debug) vul_printf(vcl_cerr, "    (565 BGR pixel alignment)");
+        if (debug)
+          vul_printf(vcl_cerr, "    (565 BGR pixel alignment)");
         break;
       case 0x7c00:
         gl_type = GL_UNSIGNED_SHORT_5_5_5_1;
         gl_format = GL_RGB;
-        if (debug) vul_printf(vcl_cerr, "    (555 BGR pixel alignment)");
+        if (debug)
+          vul_printf(vcl_cerr, "    (555 BGR pixel alignment)");
         break;
       default:
         vul_printf(vcl_cerr, "vgui_accelerate_mfc:    (Unknown redmask %02x)\n", redmask);
@@ -192,7 +204,7 @@ vidfmt::vidfmt()
     }
     if (debug) vcl_cerr << vcl_endl;
 #if 0
-      for(int component = 0; component < 3; ++component) {
+      for (int component = 0; component < 3; ++component) {
         unsigned char rgb[3 * width];
         vcl_memset(rgb, 0, sizeof rgb);
         for (int p = 0; p < width; ++p)
@@ -213,7 +225,7 @@ vidfmt::vidfmt()
         bitmap.GetBitmap(&b);
         bitmap.GetBitmapBits(width*b.bmBitsPixel,opx);
         vul_printf(vcl_cerr, "opx ");
-        for(int p = 0; p < width; ++p)
+        for (int p = 0; p < width; ++p)
           vul_printf(vcl_cerr, "%02x %02x | ", (int)opx[2*p + 1], (int)opx[2*p + 0]);
         vul_printf(vcl_cerr, "\n");
 #endif
@@ -256,7 +268,7 @@ bool vgui_accelerate_mfc::vgui_choose_cache_format( GLenum* format, GLenum* type
 
 bool vgui_accelerate_mfc::vgui_glDrawPixels( GLsizei width, GLsizei height, GLenum format, GLenum type, const GLvoid *pixels )
 {
-  if(vgui_accelerate::vgui_mfc_acceleration)
+  if (vgui_accelerate::vgui_mfc_acceleration)
   {
     //vcl_cerr << "glDrawPixels(" << width<< ", " << height << "...)\n";
     // Obtain the relative position and scaling of the image
@@ -300,7 +312,9 @@ bool vgui_accelerate_mfc::vgui_glDrawPixels( GLsizei width, GLsizei height, GLen
       bits_per_pixel = GetDeviceCaps(hdc,BITSPIXEL);
       ncolors = GetDeviceCaps(hdc,NUMCOLORS);
       bytes_per_pixel = bits_per_pixel/8;
-      if (debug) vcl_cerr << "vgui_accelerate_mfc: bits = " << bits_per_pixel << ", ncolors = " << ncolors << vcl_endl;
+      if (debug)
+        vcl_cerr << "vgui_accelerate_mfc: bits = " << bits_per_pixel
+                 << ", ncolors = " << ncolors << vcl_endl;
     }
     CBitmap bitmap;
     CDC mem_dc;
@@ -374,13 +388,13 @@ bool vgui_accelerate_mfc::vgui_glDrawPixels( GLsizei width, GLsizei height, GLen
     int vp[4];
     glGetIntegerv(GL_VIEWPORT,vp);
     y = vp[3]-y;
-    if(x<0)
+    if (x<0)
     {
       x_crop = -x;
       width_crop-=x_crop;
       x = 0;
     }
-    if(y<0)
+    if (y<0)
     {
       y_crop = -y;
       height_crop-=y_crop;

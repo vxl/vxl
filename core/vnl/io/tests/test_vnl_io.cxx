@@ -4,19 +4,19 @@
 #include <vnl/vnl_test.h>
 #undef TESTMAIN
 #define TESTMAIN(x)
-#include <vnl/io/tests/test_vector_io.cxx>
-#include <vnl/io/tests/test_real_polynomial_io.cxx>
-#include <vnl/io/tests/test_matrix_io.cxx>
-#include <vnl/io/tests/test_real_npolynomial_io.cxx>
-#include <vnl/io/tests/test_diag_matrix_io.cxx>
-#include <vnl/io/tests/test_matrix_fixed_io.cxx>
-#include <vnl/io/tests/test_vector_fixed_io.cxx>
-#include <vnl/io/tests/test_sparse_matrix_io.cxx>
-#include <vnl/io/tests/test_nonlinear_minimizer_io.cxx>
-#include <vnl/io/tests/test_rational_io.cxx>
-#include <vnl/io/tests/test_bignum_io.cxx>
-#include <vnl/io/tests/test_sym_matrix_io.cxx>
-#include <vnl/io/tests/golden_test_vnl_io.cxx>
+#include "test_vector_io.cxx"
+#include "test_real_polynomial_io.cxx"
+#include "test_matrix_io.cxx"
+#include "test_real_npolynomial_io.cxx"
+#include "test_diag_matrix_io.cxx"
+#include "test_matrix_fixed_io.cxx"
+#include "test_vector_fixed_io.cxx"
+#include "test_sparse_matrix_io.cxx"
+#include "test_nonlinear_minimizer_io.cxx"
+#include "test_rational_io.cxx"
+#include "test_bignum_io.cxx"
+#include "test_sym_matrix_io.cxx"
+#include "golden_test_vnl_io.cxx"
 
 #undef TESTMAIN
 #define TESTMAIN(x) int main() {vnl_test_start(#x); x(); return vnl_test_summary(); }

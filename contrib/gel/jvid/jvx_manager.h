@@ -1,18 +1,22 @@
 #ifndef jvx_manager_h_
 #define jvx_manager_h_
 //--------------------------------------------------------------------------------
-// .NAME jvx_manager - Video player
-// .SECTION Description:
+//:
+// \file
+// \brief Video player
 //   the manager for playing video sequences
-// .SECTION Author
+// \author 
 //   J.L. Mundy
-// .SECTION Modifications:
+//
+// \verbatim
+//  Modifications:
 //   J.L. Mundy Apr 14, 2002    Initial version.
+// \endverbatim
 //--------------------------------------------------------------------------------
 #include <vcl_vector.h>
 #include <vgui/vgui_grid_tableau.h>
-#include <vgui/vgui_easy2D.h>
 #include <vidl/vidl_movie.h>
+
 class jvx_manager : public vgui_grid_tableau
 {
  public:

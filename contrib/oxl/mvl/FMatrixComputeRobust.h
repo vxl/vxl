@@ -17,10 +17,10 @@
 #include <mvl/FMatrixCompute.h>
 #include <mvl/FMatrix.h>
 #include <mvl/HomgPoint2D.h>
-#include <vnl/vnl_vector.h>
 #include <vcl_vector.h>
 
-class FMatrixComputeRobust : public FMatrixCompute {
+class FMatrixComputeRobust : public FMatrixCompute
+{
 public:
   FMatrixComputeRobust();
   virtual ~FMatrixComputeRobust();
@@ -34,7 +34,8 @@ public:
   virtual FMatrix compute (PairMatchSetCorner& matched_points);
   virtual FMatrix compute (vcl_vector<HomgPoint2D>&, vcl_vector<HomgPoint2D>&);
 
-  // Data Access
+  // Data Access---------------------------------------------------------------
+
   vcl_vector<int> get_basis() const { return basis_; }
   HomgPoint2D get_epipole1() const { return epipole1_; }
   HomgPoint2D get_epipole2() const { return epipole2_; }

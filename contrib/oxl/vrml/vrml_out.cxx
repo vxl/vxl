@@ -11,9 +11,6 @@
 
 #include <vcl_fstream.h>
 #include <vcl_map.h>
-
-#include <vnl/vnl_matrix.h>
-
 #include <vul/vul_printf.h>
 
 // Default ctor
@@ -65,7 +62,7 @@ void vrml_out::prologue()
   f << "\t shapeType       UNKNOWN_SHAPE_TYPE\n";
   //  f << "\t faceType        UNKNOWN_FACE_TYPE\n"; // Not necessarily convex
   // vrweb barfs on previous line if faces are triangles...
-  f << "} \n";
+  f << "}\n";
 }
 
 void vrml_out::comment(char const* msg)
@@ -88,14 +85,16 @@ void vrml_out::epilogue()
   f << "# End TargetJr vrml_out output\n";
 }
 
-// void vrml_out::write_vertices(vcl_list<Vertex*>& points)
-// {
-//   begin_pointset();
-//   for(points.reset(); points.next(); )
-//     point3d(points.value());
-//   end_pointset();
-//   display_pointset();
-// }
+#if 0
+void vrml_out::write_vertices(vcl_list<Vertex*>& points)
+{
+  begin_pointset();
+  for (points.reset(); points.next(); )
+    point3d(points.value());
+  end_pointset();
+  display_pointset();
+}
+#endif
 
 void vrml_out::display_pointset ()
 {
@@ -156,14 +155,14 @@ void vrml_out::write_edges(vcl_list<Edge*>& edges)
   // Start sending vertices
   begin_pointset();
   VRML_IO_VertexRememberer vertexer(this, edges.length() * 2);
-  for(edges.reset(); edges.next(); ) {
+  for (edges.reset(); edges.next(); ) {
     vertexer.send_vertex(edges.value()->GetV1());
     vertexer.send_vertex(edges.value()->GetV2());
   }
   end_pointset();
 
   begin_lineset();
-  for(edges.reset(); edges.next(); ) {
+  for (edges.reset(); edges.next(); ) {
     int i0 = vertexer.vertex_id(edges.value()->GetV1());
     int i1 = vertexer.vertex_id(edges.value()->GetV2());
     line(i0, i1);
@@ -177,21 +176,21 @@ void vrml_out::write_faces(vcl_list<Face*>& triangles)
 
   // Send vertices
   begin_pointset();
-  for(triangles.reset(); triangles.next(); ) {
+  for (triangles.reset(); triangles.next(); ) {
     Face* face = triangles.value();
     vcl_list<Vertex*>* vertices = face->Vertices();
-    for(vertices->reset(); vertices->next();)
+    for (vertices->reset(); vertices->next();)
       vertexer.send_vertex(vertices->value());
   }
   end_pointset();
 
   // Now send triangles
   begin_faceset();
-  for(triangles.reset(); triangles.next(); ) {
+  for (triangles.reset(); triangles.next(); ) {
     Face* face = triangles.value();
     vcl_list<Vertex*>* vertices = face->Vertices();
     face_open();
-    for(vertices->reset(); vertices->next();)
+    for (vertices->reset(); vertices->next();)
       face_index(vertexer.vertex_id(vertices->value()));
     face_close();
   }
@@ -210,10 +209,10 @@ void vrml_out::write_faces_textured(
   vcl_ofstream phil2d("/tmp/pcptex.2d");
 
   begin_pointset();
-  for(triangles.reset(); triangles.next(); ) {
+  for (triangles.reset(); triangles.next(); ) {
     Face* face = triangles.value();
     vcl_list<Vertex*>* vertices = face->Vertices();
-    for(vertices->reset(); vertices->next();) {
+    for (vertices->reset(); vertices->next();) {
       Vertex *v = vertices->value();
       if (vertexer.send_vertex(v)) {
         // Save pcp3d
@@ -237,10 +236,10 @@ void vrml_out::write_faces_textured(
 
   begin_texture(texfile);
   int last_id = -1;
-  for(triangles.reset(); triangles.next(); ) {
+  for (triangles.reset(); triangles.next(); ) {
     Face* face = triangles.value();
     vcl_list<Vertex*>* vertices = face->Vertices();
-    for(vertices->reset(); vertices->next();) {
+    for (vertices->reset(); vertices->next();) {
       Vertex *v = vertices->value();
       int id = vertexer.vertex_id(v);
       if (id > last_id) {
@@ -259,11 +258,11 @@ void vrml_out::write_faces_textured(
 
   // Now send triangles
   begin_faceset();
-  for(triangles.reset(); triangles.next(); ) {
+  for (triangles.reset(); triangles.next(); ) {
     Face* face = triangles.value();
     vcl_list<Vertex*>* vertices = face->Vertices();
     face_open();
-    for(vertices->reset(); vertices->next();)
+    for (vertices->reset(); vertices->next();)
       face_index(vertexer.vertex_id(vertices->value()));
     face_close();
   }
@@ -388,11 +387,11 @@ void vrml_out::write_topology(TopologyObject* topobj)
 
 void vrml_out::write_topology(vcl_list<TopologyObject*>& topobjs)
 {
-  for(topobjs.reset(); topobjs.next(); )
+  for (topobjs.reset(); topobjs.next(); )
     write_topology(topobjs.value());
 }
 
-#endif
+#endif // 0
 
 // @{ IMPLEMENTORS @}
 void vrml_out::begin_separator()
@@ -526,7 +525,7 @@ void vrml_out::face(const int* base, int n)
 {
   SETUP;
   f << "\t";
-  for(int i = 0; i < n; ++i)
+  for (int i = 0; i < n; ++i)
     f << base[i] << ", ";
   f << "-1,\n";
 }

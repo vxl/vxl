@@ -7,12 +7,11 @@
 // \author Tim Cootes
 // \brief Sampler class for univariat Gaussian classes.
 
+#include "pdf1d_gaussian_sampler.h"
+
 #include <vcl_cassert.h>
 #include <vcl_cmath.h>
 #include <pdf1d/pdf1d_gaussian.h>
-#include <pdf1d/pdf1d_gaussian_sampler.h>
-#include <vsl/vsl_indent.h>
-#include <mbl/mbl_matxvec.h>
 
 //=======================================================================
 // Dflt ctor

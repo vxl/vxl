@@ -3,16 +3,15 @@
 
 #include <vcl_vector.h>
 
-#include <vil/vil_image.h>
+#include "vplayer_file.h"
+#include "vplayer_geometry.h"
+#include "vplayer_video.h"
 
 #include <vgui/vgui.h>
 #include <vgui/vgui_window.h>
-#include <vgui/vgui_adaptor.h>
 #include <vgui/vgui_tableau.h>
 #include <vgui/vgui_menu.h>
-#include <vgui/vgui_dialog.h>
 #include <vgui/vgui_macro.h>
-#include <vgui/vgui_utils.h>
 #include <vgui/vgui_easy2D.h>
 #include <vgui/vgui_rubberbander.h>
 #include <vgui/vgui_composite.h>
@@ -22,10 +21,6 @@
 
 #include <vidl/vidl_io.h>
 #include <vidl/vidl_avicodec.h>
-
-#include "vplayer_file.h"
-#include "vplayer_geometry.h"
-#include "vplayer_video.h"
 
 #ifdef VCL_WIN32
 # include <vgui/impl/mfc/vgui_mfc_app_init.h>

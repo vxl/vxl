@@ -1,8 +1,7 @@
-// This is ./vxl/vil/vil_copy.cxx
+// This is vxl/vil/vil_copy.cxx
 #ifdef __GNUC__
 #pragma implementation
 #endif
-
 //:
 // \file
 // vil_copy
@@ -13,14 +12,12 @@
 // Modifications:
 // 7 June 2001 - Peter Vanroose - fixed rowsize_bytes for 1-bit pixel type
 // \endverbatim
-//
 //-----------------------------------------------------------------------------
 
 #include "vil_copy.h"
 
 #include <vcl_cassert.h>
 #include <vcl_climits.h>
-#include <vcl_vector.h>
 
 #include <vil/vil_image.h>
 #include <vil/vil_memory_image.h>
@@ -44,15 +41,15 @@ void vil_copy(vil_image const& in, vil_image& out)
   // not just their product.  Hence the assert above.
   unsigned char* buf = new unsigned char[in.get_size_bytes()];
 #ifdef DEBUG
-  vcl_cerr << "...vil_copy() doing get_section()" << vcl_endl;
+  vcl_cerr << "...vil_copy() doing get_section()\n";
 #endif
   in.get_section(buf, 0, 0, width, height);
 #ifdef DEBUG
-  vcl_cerr << "...vil_copy() doing put_section()" << vcl_endl;
+  vcl_cerr << "...vil_copy() doing put_section()\n";
 #endif
   out.put_section(buf, 0, 0, width, height);
 #ifdef DEBUG
-  vcl_cerr << "...vil_copy() done" << vcl_endl;
+  vcl_cerr << "...vil_copy() done\n";
 #endif
   delete[] buf;
 }

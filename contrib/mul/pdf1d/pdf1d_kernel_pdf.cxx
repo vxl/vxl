@@ -14,7 +14,6 @@
 #include <vcl_cassert.h>
 #include <vcl_string.h>
 #include <vcl_cmath.h>
-#include <vcl_vector.h>
 #include <vnl/vnl_math.h>
 #include <vnl/io/vnl_io_vector.h>
 #include <mbl/mbl_index_sort.h>
@@ -163,7 +162,7 @@ double pdf1d_kernel_pdf::inverse_cdf(double P) const
     else
       x_above=x_middle;
   }
-  vcl_cerr << "ERROR: pdf1d_kernel_pdf::inverse_cdf() failed to converge." << vcl_endl;
+  vcl_cerr << "ERROR: pdf1d_kernel_pdf::inverse_cdf() failed to converge.\n";
   vcl_abort();
   return 0.0; // dummy return
 }
@@ -219,7 +218,7 @@ void pdf1d_kernel_pdf::b_read(vsl_b_istream& bfs)
   vsl_b_read(bfs,name);
   if (name != is_a())
   {
-    vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, pdf1d_kernel_pdf &) \n";
+    vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, pdf1d_kernel_pdf &)\n";
     vcl_cerr << "           Attempted to load object of type ";
     vcl_cerr << name <<" into object of type " << is_a() << vcl_endl;
     bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
@@ -236,7 +235,7 @@ void pdf1d_kernel_pdf::b_read(vsl_b_istream& bfs)
       vsl_b_read(bfs,width_);
       break;
     default:
-      vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, pdf1d_kernel_pdf &) \n";
+      vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, pdf1d_kernel_pdf &)\n";
       vcl_cerr << "           Unknown version number "<< version << vcl_endl;
       bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
       return;

@@ -3,16 +3,15 @@
 #include <vcl_utility.h>
 
 #include <vnl/vnl_test.h>
-#include <vnl/vnl_math.h>
 #include <vnl/vnl_vector_fixed.h>
-#include <vnl/io/vnl_io_vector_fixed.h>
+#include <vnl/io/vnl_io_vector.h>
 
 
 void test_vector_fixed_double_3_io()
 {
-  vcl_cout << "***********************" << vcl_endl;
-  vcl_cout << "Testing vnl_vector_fixed<double,3> io" << vcl_endl;
-  vcl_cout << "***********************" << vcl_endl;
+  vcl_cout << "*************************************\n";
+  vcl_cout << "Testing vnl_vector_fixed<double,3> io\n";
+  vcl_cout << "*************************************\n";
   //// test constructors, accessors
 
   vnl_vector_fixed<double,3> m_out(1.2,3.4,5.6), m_in;
@@ -27,7 +26,7 @@ void test_vector_fixed_double_3_io()
   vsl_b_read(bfs_in, m_in);
   bfs_in.close();
 
-  TEST ("m_out == m_in", m_out == m_in, true);
+  TEST ("m_out == m_in", m_out, m_in);
 
   vsl_print_summary(vcl_cout, m_out);
   vcl_cout << vcl_endl;

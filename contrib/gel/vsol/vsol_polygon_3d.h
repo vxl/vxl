@@ -22,9 +22,7 @@
 //*****************************************************************************
 // External declarations for values
 //*****************************************************************************
-#include <vsol/vsol_polygon_3d_sptr.h>
 #include <vsol/vsol_region_3d.h>
-
 #include <vsol/vsol_point_3d_sptr.h>
 #include <vcl_vector.h>
 #include <vgl/vgl_fwd.h> // vgl_vector_3d

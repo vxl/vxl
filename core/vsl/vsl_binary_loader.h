@@ -1,10 +1,9 @@
-// This is ./vxl/vsl/vsl_binary_loader.h
+// This is vxl/vsl/vsl_binary_loader.h
 #ifndef vsl_binary_loader_h_
 #define vsl_binary_loader_h_
 #ifdef __GNUC__
 #pragma interface
 #endif
-
 //:
 // \file
 // \brief Loader to do Polymorphic IO.
@@ -16,7 +15,6 @@
 #include <vsl/vsl_binary_io.h>
 #include <vsl/vsl_binary_loader_base.h>
 #include <vcl_vector.h>
-#include <vcl_string.h>
 
 //: Class to load objects by baseclass pointer.
 // An example of a singleton design pattern for loading

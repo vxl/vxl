@@ -6,14 +6,13 @@
 #include <vsrl/vsrl_stereo_dense_matcher.h>
 #include <vsrl/vsrl_parameters.h>
 
-#include <vil/vil_image_impl.h>
 #include <vil/vil_image.h>
 #include <vil/vil_load.h>
 
 int main(int argc, char ** argv)
 {
-  if(argc<2){
-    vcl_cout << "gui_dense_matcher im1 im2 disparity_file (params_file)" << vcl_endl;
+  if (argc<2) {
+    vcl_cout << "gui_dense_matcher im1 im2 disparity_file (params_file)\n";
     return 0;
   }
 
@@ -24,7 +23,7 @@ int main(int argc, char ** argv)
   // set the parameters of the dense matcher
   vsrl_parameters *params = vsrl_parameters::instance();
 
-  if(argc==5){
+  if (argc==5) {
     // we want to set some parameters based from a data file
     params->load(argv[4]);
   }

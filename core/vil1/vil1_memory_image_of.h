@@ -1,10 +1,9 @@
-// This is ./vxl/vil/vil_memory_image_of.h
+// This is vxl/vil/vil_memory_image_of.h
 #ifndef vil_memory_image_of_h_
 #define vil_memory_image_of_h_
 #ifdef __GNUC__
 #pragma interface
 #endif
-
 //:
 // \file
 // \author awf@robots.ox.ac.uk
@@ -24,7 +23,6 @@
 //   Feb.2002 - Peter Vanroose - brief doxygen comment placed on single line
 //\endverbatim
 
-#include <vil/vil_byte.h>
 #include <vil/vil_image.h>
 #include <vil/vil_memory_image.h>
 
@@ -43,8 +41,10 @@
 //    operator [] method gives a pointer to the beginning of a raster.
 //    Thus image[i][j] is the element in the i-th row and j-th column.
 //    However, image(x, y) is the element in the x-th column and y-th row.
+
 template <class T>
-class vil_memory_image_of : public vil_memory_image {
+class vil_memory_image_of : public vil_memory_image
+{
 public:
   // The pixel type of this image
   typedef T pixel_type;

@@ -7,12 +7,11 @@
 // \author Tim Cootes
 // \brief Sampler class for gaussian kernel PDF.
 
+#include "vpdfl_gaussian_kernel_pdf_sampler.h"
+
 #include <vcl_cassert.h>
 #include <vcl_cmath.h>
 #include <vpdfl/vpdfl_gaussian_kernel_pdf.h>
-#include <vpdfl/vpdfl_gaussian_kernel_pdf_sampler.h>
-#include <vsl/vsl_indent.h>
-#include <mbl/mbl_matxvec.h>
 
 //=======================================================================
 // Dflt ctor

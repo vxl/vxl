@@ -1,24 +1,18 @@
 #ifndef vgui_utils_h_
 #define vgui_utils_h_
+//:
+// \file
+// \author fsm@robots.ox.ac.uk
 //
-// .NAME vgui_utils
-// .LIBRARY vgui
-// .HEADER vxl Package
-// .INCLUDE vgui/vgui_utils.h
-// .FILE vgui_utils.cxx
-//
-// .SECTION Author
-//   fsm@robots.ox.ac.uk
-//
-// .SECTION Modifications
+// \verbatim
+//  Modifications
 //   991020 AWF Added inversion of translation+scale.
 //              This is necessary because zoomers demand exact equality
 //              when checking if they are 2D transformations.
+// \endverbatim
 
-#include <vcl_string.h>
 #include <vgui/vgui_gl.h>
 #include <vcl_vector.h>
-#include <vgui/vgui_tableau_sptr.h>
 
 class vgui_utils {
 public:

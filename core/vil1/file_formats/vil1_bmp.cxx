@@ -9,7 +9,6 @@
 #include <vcl_vector.h>
 #include <vcl_cstring.h>
 #include <vil/vil_stream.h>
-#include <vil/vil_image.h>
 #include <vil/vil_property.h>
 
 #define where (vcl_cerr << __FILE__ ":" << __LINE__ << " : ")
@@ -105,7 +104,7 @@ vil_bmp_generic_image::~vil_bmp_generic_image()
 {
 #if 0
   // we must get rid of the local_color_map_;
-  if(local_color_map_){
+  if (local_color_map_){
     delete [] local_color_map_[0];
     delete [] local_color_map_[1];
     delete [] local_color_map_[2];
@@ -130,8 +129,8 @@ bool vil_bmp_generic_image::read_header()
   // seek to beginning and read file header.
   is_->seek(0L);
   file_hdr.read(is_);
-  if( ! file_hdr.signature_valid() ) {
-    where <<  "File is not a valid BMP file" << vcl_endl;
+  if ( ! file_hdr.signature_valid() ) {
+    where <<  "File is not a valid BMP file\n";
     return false;
   }
 #ifdef DEBUG
@@ -145,7 +144,7 @@ bool vil_bmp_generic_image::read_header()
 #endif
   // allowed values for bitsperpixel are 1 4 8 16 24 32;
   // currently we only support 8 and 24 - FIXME
-  if( core_hdr.bitsperpixel != 8 && core_hdr.bitsperpixel != 24 ) {
+  if ( core_hdr.bitsperpixel != 8 && core_hdr.bitsperpixel != 24 ) {
     where << "BMP file has a non-supported pixel size of " << core_hdr.bitsperpixel << " bits\n";
     return false;
   }
@@ -162,7 +161,7 @@ bool vil_bmp_generic_image::read_header()
     info_hdr.print(vcl_cerr); // blather
 #endif
     if (info_hdr.compression) {
-      where << "cannot cope with compression at the moment" << vcl_endl;
+      where << "cannot cope with compression at the moment\n";
       return false;
     }
   }
@@ -225,7 +224,7 @@ bool vil_bmp_generic_image::read_header()
 
     vcl_vector<uchar> cmap(cmap_size, 0); // use vector<> to avoid coreleak
     if (is_->read(/* xxx */&cmap[0], 1024L) != 1024L) {
-      vcl_cerr << "Error reading image palette" << vcl_endl;
+      vcl_cerr << "Error reading image palette\n";
       return false;
     }
 
@@ -261,7 +260,7 @@ bool vil_bmp_generic_image::read_header()
 bool vil_bmp_generic_image::write_header()
 {
 #ifdef DEBUG
-  vcl_cerr << "Writing BMP header" << vcl_endl;
+  vcl_cerr << "Writing BMP header\n";
   vcl_cerr << width() << 'x' << height() << '@'
        << components() << 'x' << bits_per_component() << vcl_endl;
 #endif
@@ -270,7 +269,8 @@ bool vil_bmp_generic_image::write_header()
   rowlen += (3-(rowlen-1)%4); // round up to multiple of 4
   int data_size = height() * rowlen;
 
-  if (components() == 1) info_hdr.colorcount = info_hdr.colormapsize = 1<<bits_per_component();
+  if (components() == 1)
+    info_hdr.colorcount = info_hdr.colormapsize = 1<<bits_per_component();
   file_hdr.bitmap_offset = bit_map_start = 54L + 4 * info_hdr.colormapsize;
   file_hdr.file_size = bit_map_start+data_size;
   core_hdr.header_size = 40;

@@ -7,7 +7,6 @@
 #include <vcl_cstdlib.h>
 #include <vcl_cassert.h>
 #include <vcl_list.h>
-//#include <vcl_memory.h>
 #include <vcl_iostream.h>
 #include <vcl_algorithm.h>
 
@@ -114,7 +113,8 @@ void osl_edge_detector::detect_edges(vil_image const &image,
          << "Kernel size   = " << k_size_ << vcl_endl
          << "Threshold     = " << low_ << vcl_endl;
 
-  if (verbose_) vcl_cerr << "setting convolution kernel and zeroing images\n";
+  if (verbose_)
+    vcl_cerr << "setting convolution kernel and zeroing images\n";
   osl_kernel_DOG(sigma_, kernel_, k_size_, width_);
 
   osl_canny_base_fill_raw_image(thin_, xsize_, ysize_, 0.0f);
@@ -130,10 +130,12 @@ void osl_edge_detector::detect_edges(vil_image const &image,
   if (verbose_) vcl_cerr << "smoothing the image\n";
   osl_canny_smooth_rothwell(image, kernel_, width_, k_size_, smooth_);
 
-  if (verbose_) vcl_cerr << "computing x,y derivatives and norm of gradient\n";
+  if (verbose_)
+    vcl_cerr << "computing x,y derivatives and norm of gradient\n";
   osl_canny_gradient(xsize_, ysize_, smooth_, dx_, dy_, grad_);
 
-  if (verbose_) vcl_cerr << "doing sub-pixel interpolation\n";
+  if (verbose_)
+    vcl_cerr << "doing sub-pixel interpolation\n";
   Sub_pixel_interpolation();
 
   if (verbose_) vcl_cerr << "assigning thresholds\n";
@@ -153,12 +155,15 @@ void osl_edge_detector::detect_edges(vil_image const &image,
 
   // Locate junctions in the edge image and joint the clusters together
   // as we have no confidence in the geometry around them.
-  if (verbose_) vcl_cerr << "locating junctions in the edge image - ";
+  if (verbose_)
+    vcl_cerr << "locating junctions in the edge image - ";
   Find_junctions();
-  if (verbose_) vcl_cerr << xjunc_->size() << " junctions found\n";
+  if (verbose_)
+    vcl_cerr << xjunc_->size() << " junctions found\n";
 
   Find_junction_clusters();
-  if (verbose_) vcl_cerr << vlist_->size() << " junction clusters found\n";
+  if (verbose_)
+    vcl_cerr << vlist_->size() << " junction clusters found\n";
 
   // Finally do edge following to extract the edge data from the thin_ image
   if (verbose_) vcl_cerr << "doing final edge following\n";
@@ -183,14 +188,16 @@ void osl_edge_detector::Sub_pixel_interpolation() {
   float fraction,dnewx=0.0,dnewy=0.0; // dummy initialisation values
 
   // Add 1 to get rid of border effects.
-  for (unsigned int x=width_+1; x+width_+1<xsize_; ++x)  {
+  for (unsigned int x=width_+1; x+width_+1<xsize_; ++x)
+  {
     float *g0 = grad_[x-1];
     float *g1 = grad_[x];
     float *g2 = grad_[x+1];
     float *dx = dx_[x];
     float *dy = dy_[x];
 
-    for (unsigned int y=width_+1; y+width_+1<ysize_; ++y)  {
+    for (unsigned int y=width_+1; y+width_+1<ysize_; ++y)
+    {
       // First check that we have a potential edge
       if ( g1[y] > low_ ) {
         theta = k*vcl_atan2(dy[y],dx[y]);
@@ -271,8 +278,8 @@ void osl_edge_detector::Sub_pixel_interpolation() {
         // thresholds. The >= is used rather than > for reasons
         // involving non-generic images. Should this be interpolated
         // height  = g1[y] + frac*(h2-h1)/4 ?
-        if ( (g1[y]>=h1) && (g1[y]>=h2) && (vcl_fabs(dnewx)<=0.5) && (vcl_fabs(dnewy)<=0.5) ) {
-
+        if ( g1[y]>=h1 && g1[y]>=h2 && vcl_fabs(dnewx)<=0.5 && vcl_fabs(dnewy)<=0.5 )
+        {
           if ( g1[y]*ALPHA > low_ )
             thresh_[x][y] = ALPHA * g1[y]; // Use a ALPHA% bound
           // thresh_ image starts off as being equal to low_
@@ -307,18 +314,21 @@ void osl_edge_detector::Sub_pixel_interpolation() {
       dx_[x][y] = x + 0.5;
       dy_[x][y] = y + 0.5;
     }
-    for (int y=ysize_-width_-1; y<int(ysize_); ++y) {
+    for (int y=ysize_-width_-1; y<int(ysize_); ++y)
+    {
       dx_[x][y] = x + 0.5;
       dy_[x][y] = y + 0.5;
     }
   }
 
-  for (unsigned int y=width_+1; y+width_+1<ysize_; ++y) {
+  for (unsigned int y=width_+1; y+width_+1<ysize_; ++y)
+  {
     for (unsigned int x=0; x<=width_; ++x)  {
       dx_[x][y] = x + 0.5;
       dy_[x][y] = y + 0.5;
     }
-    for (int x=xsize_-width_-1; x<int(xsize_); ++x) {
+    for (int x=xsize_-width_-1; x<int(xsize_); ++x)
+    {
       dx_[x][y] = x + 0.5;
       dy_[x][y] = y + 0.5;
     }
@@ -497,7 +507,7 @@ void osl_edge_detector::Thin_edges() {
   int a,b,c,d,e,f,g,h,genus,count;
   bool do_output = true;
 
-  vcl_cerr << __FILE__ ": Fast Sort" << vcl_endl;
+  vcl_cerr << __FILE__ ": Fast Sort\n";
   osl_edge_detector_xyfloat* edgel_array = new osl_edge_detector_xyfloat[xsize_ * ysize_];
   int edgel_array_len = 0;
   int pos = 0;
@@ -508,8 +518,8 @@ void osl_edge_detector::Thin_edges() {
     edgel_array_len = 0;
     for (unsigned int x=width_; x+width_<xsize_; ++x)
       for (unsigned int y=width_; y+width_<ysize_; ++y)
-        if ( thin_[x][y] > thresh_[x][y] ) {
-
+        if ( thin_[x][y] > thresh_[x][y] )
+        {
           edgel_array[edgel_array_len].x = x;
           edgel_array[edgel_array_len].y = y;
           edgel_array[edgel_array_len].thin = thin_[x][y];
@@ -582,8 +592,8 @@ void osl_edge_detector::Fill_holes() {
 
   for (unsigned int x=width_; x+width_<xsize_; ++x)
     for (unsigned int y=width_; y+width_<ysize_; ++y)
-      if ( thin_[x][y] <= thresh_[x][y] ) {
-
+      if ( thin_[x][y] <= thresh_[x][y] )
+      {
         int count = 0;
         if ( thin_[x  ][y-1] > thresh_[x  ][y-1] ) count++;
         if ( thin_[x  ][y+1] > thresh_[x  ][y+1] ) count++;
@@ -618,9 +628,11 @@ void osl_edge_detector::Follow_curves(vcl_list<osl_edge*> *edges)
 
   // Find an edgel point and start to follow it.
   edges->clear();
-  for (unsigned int x=width_; x+width_<xsize_; ++x)  {
+  for (unsigned int x=width_; x+width_<xsize_; ++x)
+  {
     float *thin = thin_[x];
-    for (unsigned int y=width_; y+width_<ysize_; ++y) {
+    for (unsigned int y=width_; y+width_<ysize_; ++y)
+    {
       if ( (thin[y]<=thresh_[x][y]) || junction_[x][y] )
         continue;
 
@@ -835,7 +847,8 @@ void osl_edge_detector::Find_junctions() {
   osl_canny_base_fill_raw_image(junction_, xsize_, ysize_, 0);
 
   for (unsigned int x=width_; x+width_<xsize_; ++x)
-    for (unsigned int y=width_; y+width_<ysize_; ++y) {
+    for (unsigned int y=width_; y+width_<ysize_; ++y)
+    {
       if ( thin_[x][y] <= thresh_[x][y] )
         continue;
 
@@ -871,8 +884,10 @@ void osl_edge_detector::Find_junction_clusters() {
   yvertices.clear();
   xjunc.clear();
   yjunc.clear();
-  for (unsigned int x=width_; x+width_<xsize_; ++x) {
-    for (unsigned int y=width_; y+width_<ysize_; ++y) {
+  for (unsigned int x=width_; x+width_<xsize_; ++x)
+  {
+    for (unsigned int y=width_; y+width_<ysize_; ++y)
+    {
       if ( junction_[x][y] ) {
 
         // Each cluster is written to (xcoords,ycooords)

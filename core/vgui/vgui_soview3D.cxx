@@ -1,27 +1,18 @@
-//-*- c++ -*-------------------------------------------------------------------
+// This is oxl/vgui/vgui_soview3D.cxx
 #ifdef __GNUC__
 #pragma implementation
 #endif
-//
-// .NAME vgui_soview3D
-// Author: Philip C. Pritchett, RRG, University of Oxford
-// Created: 24 Mar 99
-//
+//:
+// \file
+// \author Philip C. Pritchett, RRG, University of Oxford
+// \date   24 Mar 99
 //-----------------------------------------------------------------------------
 
 #include "vgui_soview3D.h"
-
 #include <vcl_iostream.h>
-
 #include <vgui/vgui_gl.h>
-#include <vgui/vgui_style.h>
 
-
-vgui_soview3D::vgui_soview3D() {
-}
-
-
-
+vgui_soview3D::vgui_soview3D() {}
 
 //--------------------------------------------------------------------------//
 
@@ -30,14 +21,13 @@ vcl_ostream& vgui_point3D::print(vcl_ostream& s) const {
   s << " "; return vgui_soview3D::print(s) << "]";
 }
 
-void vgui_point3D::draw() {
-  
+void vgui_point3D::draw()
+{
   bool lighting = false;
   if (glIsEnabled(GL_LIGHTING)) {
     lighting = true;
     glDisable(GL_LIGHTING);
   }
-  
 
   //glPointSize(style->point_size);
   glBegin(GL_POINTS);
@@ -47,10 +37,7 @@ void vgui_point3D::draw() {
 
   if (lighting)
     glEnable(GL_LIGHTING);
-
 }
-
-
 
 //--------------------------------------------------------------------------//
 
@@ -76,6 +63,5 @@ void vgui_lineseg3D::draw() {
 
   if (lighting)
     glEnable(GL_LIGHTING);
-
 }
 

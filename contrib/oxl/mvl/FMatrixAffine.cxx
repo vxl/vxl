@@ -1,13 +1,11 @@
 #ifdef __GNUG__
 #pragma implementation
 #endif
-
 //:
 //  \file
 
 #include "FMatrixAffine.h"
 
-#include <vcl_iostream.h>
 #include <vcl_cmath.h>
 #include <vcl_cstdlib.h>
 #include <mvl/HomgLine2D.h>

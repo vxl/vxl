@@ -7,7 +7,6 @@
   crossge@crd.ge.com
 */
 
-#include <vcl_string.h>
 #include <vtol/vtol_topology_object_sptr.h>
 #include <gmvl/gmvl_node.h>
 
@@ -23,7 +22,6 @@ public:
 protected:
 
   vtol_topology_object_sptr topology_;
-
 };
 
-#endif
+#endif // gmvl_topology_node_h_

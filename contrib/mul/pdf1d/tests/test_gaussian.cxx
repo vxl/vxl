@@ -4,7 +4,6 @@
 // \brief test pdf1d_gaussian, building, sampling, saving etc.
 
 #include <vcl_iostream.h>
-#include <vcl_string.h>
 #include <vcl_cmath.h> // for vcl_fabs()
 
 #include <pdf1d/pdf1d_gaussian.h>
@@ -20,9 +19,9 @@
 //: Generate lots of samples using pdf, build new pdf with builder and compare the two
 void test_gaussian()
 {
-  vcl_cout << "\n\n************************" << vcl_endl;
-  vcl_cout << " Testing pdf1d_gaussian " << vcl_endl;
-  vcl_cout << "************************" << vcl_endl;
+  vcl_cout << "\n\n************************\n";
+  vcl_cout << " Testing pdf1d_gaussian\n";
+  vcl_cout << "************************\n";
 
   vsl_add_to_binary_loader(pdf1d_gaussian());
   vsl_add_to_binary_loader(pdf1d_gaussian_builder());
@@ -124,7 +123,7 @@ void test_gaussian()
     else
       fail ++;
   }
-  vcl_cout << "In a sample of 1000 vectors " << pass << " passed and " << fail <<  " failed." << vcl_endl;
+  vcl_cout << "In a sample of 1000 vectors " << pass << " passed and " << fail <<  " failed.\n";
   TEST("880 < pass < 920", pass > 880 && pass < 920, true);
   pass=0; fail=0;
   thresh = p_pdf_built->log_prob_thresh(0.1);
@@ -137,7 +136,7 @@ void test_gaussian()
     else
       fail ++;
   }
-  vcl_cout << "In a sample of 1000 vectors " << pass << " passed and " << fail <<  " failed." << vcl_endl;
+  vcl_cout << "In a sample of 1000 vectors " << pass << " passed and " << fail <<  " failed.\n";
   TEST("70 < pass < 130", pass > 70 && pass < 130, true);
   delete p_sampler2;
 

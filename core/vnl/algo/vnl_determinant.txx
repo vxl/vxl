@@ -56,9 +56,6 @@ T vnl_determinant(T const *row0, T const *row1, T const *row2, T const *row3) {
 
 //--------------------------------------------------------------------------------
 
-//#include <vcl_cmath.h>
-//#include <vcl_algorithm.h>
-//#include <vcl_iostream.h>
 template <class T>
 T vnl_determinant(vnl_matrix<T> const &M, bool balance)
 {

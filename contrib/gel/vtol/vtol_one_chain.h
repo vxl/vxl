@@ -26,14 +26,9 @@
 //     PTU May 2000  ported to vxl
 // \endverbatim
 //-----------------------------------------------------------------------------
-#include <vtol/vtol_one_chain_sptr.h>
 
-//#include <vtol/vtol_topology_object.h>
-//#include <vtol/vtol_hierarchy_node.h>
 #include <vtol/vtol_chain.h>
-
 #include <vcl_vector.h>
-
 class vtol_edge;
 class vtol_vertex;
 class vtol_face;

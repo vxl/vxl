@@ -7,7 +7,7 @@
 #endif
 #include "vgui_mfc_app_init.h"
 
-#include <vgui/impl/mfc/stdafx.h>
+#include <vgui/impl/mfc/StdAfx.h>
 #include <vgui/impl/mfc/vgui_mfc_app.h>
 
 

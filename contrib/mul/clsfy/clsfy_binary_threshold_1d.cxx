@@ -5,19 +5,16 @@
 
 //=======================================================================
 
+#include "clsfy_binary_threshold_1d.h"
 #include <vcl_string.h>
 #include <vcl_iostream.h>
 #include <vcl_vector.h>
-#include <vnl/io/vnl_io_vector.h>
-#include <mbl/mbl_matxvec.h>
-#include <mbl/mbl_matrix_products.h>
 #include <vcl_cassert.h>
 #include <vcl_cmath.h>
-#include <clsfy/clsfy_binary_threshold_1d.h>
-#include <vnl/io/vnl_io_vector.h>
-#include <vnl/io/vnl_io_matrix.h>
 #include <vsl/vsl_binary_io.h>
 #include <vsl/vsl_indent.h>
+#include <vnl/io/vnl_io_vector.h>
+#include <vnl/io/vnl_io_matrix.h>
 
 //=======================================================================
 
@@ -64,9 +61,8 @@ bool clsfy_binary_threshold_1d::operator==(const clsfy_classifier_1d& x) const
 {
   assert( x.is_a()== "clsfy_binary_threshold_1d");
   clsfy_binary_threshold_1d& x2= (clsfy_binary_threshold_1d&) x;
-  return (x2.s_ == s_ &&
-          x2.threshold_ == threshold_      
-    ); 
+  return x2.s_ == s_ &&
+         x2.threshold_ == threshold_;
 }
 
 

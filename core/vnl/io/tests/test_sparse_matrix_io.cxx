@@ -2,7 +2,6 @@
 #include <vcl_fstream.h>
 #include <vcl_utility.h>
 #include <vnl/vnl_test.h>
-#include <vnl/vnl_math.h>
 #include <vsl/vsl_binary_io.h>
 #include <vnl/vnl_sparse_matrix.h>
 #include <vnl/io/vnl_io_sparse_matrix.h>
@@ -12,7 +11,7 @@ static bool Compare(vnl_sparse_matrix<double>& M1, vnl_sparse_matrix<double>& M2
   M1.reset();
   M2.reset();
 
-  while(M1.next() && M2.next())
+  while (M1.next() && M2.next())
   {
     if (M1.getrow()!=M2.getrow() || M1.getcolumn() != M2.getcolumn()
               ||  M1.value()!= M2.value())
@@ -26,9 +25,9 @@ static bool Compare(vnl_sparse_matrix<double>& M1, vnl_sparse_matrix<double>& M2
 
 void test_sparse_matrix_double_io()
 {
-  vcl_cout << "***********************" << vcl_endl;
-  vcl_cout << "Testing vnl_sparse_matrix<double> io" << vcl_endl;
-  vcl_cout << "***********************" << vcl_endl;
+  vcl_cout << "************************************\n";
+  vcl_cout << "Testing vnl_sparse_matrix<double> io\n";
+  vcl_cout << "************************************\n";
   //// test constructors, accessors
 
   vnl_sparse_matrix<double>  m_out(3,3), m_in0(3,3), m_in1(3,3);
@@ -75,7 +74,7 @@ void test_sparse_matrix_double_io()
   m_out.reset();
   m_in.reset();
 
-  while(m_out.next() && m_in.next())
+  while (m_out.next() && m_in.next())
   {
     if (m_out.getrow()!=m_in.getrow()
         || m_out.getcolumn() != m_in.getcolumn()

@@ -1,16 +1,13 @@
 #ifndef vsol_box_2d_H
 #define vsol_box_2d_H
 //:
-//  \file
+// \file
 // \brief A bounding box
 //
 //  Note that the definition of width, depth and
 //  height are such that the X-Y plane is considered
 //  as a Rectangle with a "width" and "height"
 //  according to the usual definition.
-
-#include <vsol/vsol_box_2d_sptr.h>
-
 
 #include <vul/vul_timestamp.h>
 #include <vbl/vbl_ref_count.h>

@@ -1,4 +1,4 @@
-//-*- c++ -*-------------------------------------------------------------------
+// This is gel/octree/ConvexHull.h
 #ifndef ConvexHull_h_
 #define ConvexHull_h_
 #ifdef __GNUC__
@@ -10,8 +10,6 @@
 //     Geoffrey Cross, Oxford RRG, 24 May 99
 //
 //-----------------------------------------------------------------------------
-
-#include <vcl_iostream.h>
 
 class ConvexHull {
 public:

@@ -4,9 +4,6 @@
 #include <vcl_vector.h>
 
 #include <testlib/testlib_test.h>
-#include <vil/vil_rgb.h>
-#include <vil/vil_load.h>
-#include <vil/vil_save.h>
 #include <vil/vil_memory_image_of.h>
 #include <vil/vil_memory_image_impl.h>
 #include <vil/vil_memory_image_of_format.txx>
@@ -15,11 +12,9 @@
 
 void test_memory_image_impl_io()
 {
-
-
-  vcl_cout << "***********************" << vcl_endl;
-  vcl_cout << "Testing vil_memory_image_impl io" << vcl_endl;
-  vcl_cout << "***********************" << vcl_endl;
+  vcl_cout << "********************************\n"
+           << "Testing vil_memory_image_impl io\n"
+           << "********************************\n";
 
   // Image set-up and construction
   int planes = 1;

@@ -1,8 +1,7 @@
-//-*- c++ -*-------------------------------------------------------------------
+// This is oxl/vgui/vgui_tableau.cxx
 #ifdef __GNUC__
 #pragma implementation
 #endif
-
 //:
 //  \file
 
@@ -17,7 +16,6 @@
 #include <vgui/vgui_event.h>
 #include <vgui/vgui_slot.h>
 #include <vgui/vgui_menu.h>
-#include <vgui/vgui_command.h>
 #include <vgui/vgui_popup_params.h>
 
 // change 'true' to 'false' to turn on debugging.
@@ -107,32 +105,32 @@ bool vgui_tableau::handle(vgui_event const &event) {
 }
 
 bool vgui_tableau::mouse_down(int, int, vgui_button, vgui_modifier) {
-  //debug << "vgui_tableau::mouse_down" << vcl_endl;
+  //debug << "vgui_tableau::mouse_down\n";
   return false;
 }
 
 bool vgui_tableau::mouse_up(int, int, vgui_button, vgui_modifier) {
-  //debug << "vgui_tableau::mouse_up" << vcl_endl;
+  //debug << "vgui_tableau::mouse_up\n";
   return false;
 }
 
 bool vgui_tableau::motion(int, int) {
-  //debug << "vgui_tableau::motion" << vcl_endl;
+  //debug << "vgui_tableau::motion\n";
   return false;
 }
 
 bool vgui_tableau::key_press(int, int, vgui_key, vgui_modifier) {
-  //debug << "vgui_tableau::key_press" << vcl_endl;
+  //debug << "vgui_tableau::key_press\n";
   return false;
 }
 
 bool vgui_tableau::help() {
-  //debug << "vgui_tableau::help" << vcl_endl;
+  //debug << "vgui_tableau::help\n";
   return false;
 }
 
 bool vgui_tableau::draw() {
-  //debug << "vgui_tableau::draw" << vcl_endl;
+  //debug << "vgui_tableau::draw\n";
   return false;
 }
 
@@ -203,7 +201,7 @@ vcl_string vgui_tableau::pretty_name() const {
 vcl_string vgui_tableau::type_name() const {
   static bool warned=false;
   if (!warned) {
-    vgui_macro_warning << "WARNING: vgui_tableau::type_name() called" << vcl_endl;
+    vgui_macro_warning << "WARNING: vgui_tableau::type_name() called\n";
     warned=true;
   }
   return "vgui_tableau";

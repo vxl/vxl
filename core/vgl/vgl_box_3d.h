@@ -1,10 +1,9 @@
-// This is ./vxl/vgl/vgl_box_3d.h
+// This is vxl/vgl/vgl_box_3d.h
 #ifndef vgl_box_3d_h
 #define vgl_box_3d_h
 #ifdef __GNUC__
 #pragma interface
 #endif
-
 //:
 // \file
 // \brief Describe a 3D box.
@@ -22,7 +21,6 @@
 // \endverbatim
 
 #include <vcl_iosfwd.h>
-#include <vcl_string.h>
 #include <vgl/vgl_fwd.h> // forward declare vgl_point_3d
 
 //: Represents a 3D box
@@ -100,8 +98,8 @@ public:
   inline bool operator==(vgl_box_3d<Type> const& b) const {
     // All empty boxes are equal:
     if (b.is_empty() ) return is_empty();
-    return (min_x() == b.min_x() && min_y() == b.min_y() && min_z() == b.min_z()
-         && max_x() == b.max_x() && max_y() == b.max_y() && max_z() == b.max_z());
+    return min_x() == b.min_x() && min_y() == b.min_y() && min_z() == b.min_z()
+        && max_x() == b.max_x() && max_y() == b.max_y() && max_z() == b.max_z();
   }
 
   // Data Access---------------------------------------------------------------
@@ -150,7 +148,7 @@ public:
 
   //: Return true if this box is empty
   inline bool is_empty() const {
-    return (min_x() > max_x() || min_y() > max_y() || min_z() > max_z());
+    return min_x() > max_x() || min_y() > max_y() || min_z() > max_z();
   }
 
   //: Add a point to this box.

@@ -1,5 +1,9 @@
-// This is ./oxl/vgui/vgui_clear_tableau.h
-
+// This is oxl/vgui/vgui_clear_tableau.h
+#ifndef vgui_clear_tableau_h_
+#define vgui_clear_tableau_h_
+#ifdef __GNUC__
+#pragma interface
+#endif
 //:
 // \file
 // \author Philip C. Pritchett, Robotics Research Group, University of Oxford
@@ -12,16 +16,9 @@
 //    26-APR-2002 K.Y.McGaul - Added some doxygen style comments.
 // \endverbatim
 
-#ifndef vgui_clear_tableau_h_
-#define vgui_clear_tableau_h_
-#ifdef __GNUC__
-#pragma interface
-#endif
-
 #include "vgui_clear_tableau_sptr.h"
 #include <vgui/vgui_gl.h>
-#include <vgui/vgui_wrapper_tableau.h>
-#include <vgui/vgui_slot.h>
+#include <vgui/vgui_tableau.h>
 class vgui_menu;
 
 //: Tableau performing OpenGL clearing.

@@ -10,18 +10,15 @@
 #include <vcl_ios.h>
 #include <vcl_strstream.h>
 #include <vcl_iomanip.h>
-#include <vcl_string.h>
 #include <clsfy/clsfy_smo_1.h>
 #include <clsfy/clsfy_k_nearest_neighbour.h>
 #include <clsfy/clsfy_rbf_parzen.h>
-#include <vsl/vsl_binary_loader.h>
 #include <mbl/mbl_mz_random.h>
 #include <vpdfl/vpdfl_axis_gaussian_sampler.h>
 #include <vpdfl/vpdfl_axis_gaussian.h>
 #include <mbl/mbl_data_array_wrapper.h>
 #include <vnl/vnl_test.h>
 #include <vnl/vnl_math.h>
-#include <mbl/mbl_print.h>
 #include <vul/vul_timer.h>
 
 //=======================================================================
@@ -30,10 +27,10 @@ void test_smo()
 {
   vcl_cout << "\n\n\n";
   vcl_cout << "*************************\n";
-  vcl_cout << " Testing clsfy_smo_1_rbf \n";
-  vcl_cout << "*************************\n" << vcl_endl;
+  vcl_cout << " Testing clsfy_smo_1_rbf\n";
+  vcl_cout << "*************************\n\n";
 
-  vcl_cout<<"======== TESTING BUILDING ==========="<<vcl_endl;
+  vcl_cout<<"======== TESTING BUILDING ===========\n";
 
   vcl_vector<vpdfl_axis_gaussian_sampler *> generator(4);//
   const unsigned nDims = 2;
@@ -78,7 +75,7 @@ void test_smo()
   vcl_vector<int> svlabels(nSamples);
   vcl_vector<vnl_vector<double> > data(nSamples);
   vnl_vector<double> s;
-  vcl_cout << "Generating test data" << vcl_endl;
+  vcl_cout << "Generating test data\n";
   vcl_vector<unsigned> labelcount(4, 0u);
 #if 0
   vcl_ofstream svmtest("C:\\svmtest.txt");
@@ -103,20 +100,20 @@ void test_smo()
 
   mbl_data_array_wrapper<vnl_vector<double> > trainingVectors(data);
 
-  vcl_cout << "****************The Training set****************" <<vcl_endl;
+  vcl_cout << "****************The Training set****************\n";
   vcl_cout << "The number of labels from each generators are respectively ";
   vcl_cout << labelcount[0] << ' ' << labelcount[1] << ' ' << labelcount[2] << ' ' << labelcount[3] <<  vcl_endl;
 
   vnl_vector<double> x(nDims);
   vcl_vector<double> out(1);
   x.fill(0.0);
-  vcl_cout << "x(2) varies across from -2 to + 2" << vcl_endl;
-  vcl_cout << "x(1) varies down from -2 to + 2" << vcl_endl;
+  vcl_cout << "x(2) varies across from -2 to + 2\n";
+  vcl_cout << "x(1) varies down from -2 to + 2\n";
 
   clsfy_k_nearest_neighbour knn;
   knn.set(data, labels);
   knn.set_k(3);
-  vcl_cout  << vcl_endl << "KNN output"<<vcl_endl;
+  vcl_cout  << vcl_endl << "KNN output\n";
   vcl_cout << vcl_setprecision(4);
   for (x(0) = -2; x(0) <= 2 ; x(0) += 0.25)
   {
@@ -141,7 +138,7 @@ void test_smo()
   win.set(data, labels);
   win.set_rbf_width(0.14);
   win.set_power(10);
-  vcl_cout << vcl_endl << "Training data distribution"<<vcl_endl;
+  vcl_cout << vcl_endl << "Training data distribution\n";
   vcl_cout << vcl_setprecision(1);
   for (x(0) = -2; x(0) <= 2 ; x(0) += 0.25)
   {
@@ -158,7 +155,7 @@ void test_smo()
 
   mbl_data_wrapper<vnl_vector<double> > &inputs = trainingVectors;
 
-  vcl_cout << "****************Testing SVM on Training set**************" <<vcl_endl;
+  vcl_cout << "****************Testing SVM on Training set**************\n";
   vcl_cout << vcl_setprecision(8) << vcl_resetiosflags(vcl_ios_floatfield);
 
   clsfy_smo_1_rbf svAPI;

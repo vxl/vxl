@@ -15,7 +15,6 @@
 // LSB (Manchester) 23/1/01 Documentation tidied
 // \endverbatim
 
-#include <vcl_string.h>
 #include <vnl/vnl_vector.h>
 
 //: Abstraction for a linear system of equations.

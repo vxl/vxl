@@ -6,12 +6,10 @@
 #include <vcl_iostream.h>
 #include <vcl_string.h>
 #include <mbl/mbl_stochastic_data_collector.h>
-#include <mbl/mbl_data_collector.h>
 #include <vsl/vsl_binary_loader.h>
 #include <vnl/io/vnl_io_vector.h>
 #include <vnl/vnl_test.h>
 #include <vul/vul_printf.h>
-
 
 //=======================================================================
 
@@ -27,7 +25,7 @@ void configure()
 void test_stochastic_data_collector()
 {
   vcl_cout <<"\n\n***************************************\n"
-           <<    " Testing mbl_stochastic_data_collector \n"
+           <<    " Testing mbl_stochastic_data_collector\n"
            <<    "***************************************\n";
 
   configure();
@@ -38,7 +36,7 @@ void test_stochastic_data_collector()
   mbl_stochastic_data_collector<vnl_vector<double> > collector(100);
   collector.reseed(14545);
 
-  vcl_cout << "===========Generate data " <<vcl_endl;
+  vcl_cout << "===========Generate data\n";
   vcl_vector<unsigned> hist(10, 0u);
   const int n_expts = 50;
   for (int i=0;i<n_expts;++i)
@@ -57,10 +55,10 @@ void test_stochastic_data_collector()
     v = data.current();
     hist[((int)(v(0))) / 500] ++;
   }
-  while(data.next());
+  while (data.next());
   }
 
-  vcl_cout << "Histogram output, over " << n_expts << "experiments" <<vcl_endl;
+  vcl_cout << "Histogram output, over " << n_expts << "experiments\n";
   for (i = 0; i < 10; i++)
     vul_printf(vcl_cout, "From %4d to %4d there were on average %4f items stored.\n",
       i * 500, i*500 + 499, ((double)hist[i])/((double)n_expts))  ;
@@ -69,7 +67,7 @@ void test_stochastic_data_collector()
 
   TEST ("Found correct values", vnl_c_vector<unsigned>::euclid_dist_sq(&hist[0], correct_hist, 10), 0);
 
-  vcl_cout << "=========Testing IO"<<vcl_endl;
+  vcl_cout << "=========Testing IO\n";
 
   mbl_stochastic_data_collector<vnl_vector<double> > collector2;
   mbl_data_collector_base *collector3=0;

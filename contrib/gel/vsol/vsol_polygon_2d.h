@@ -18,14 +18,10 @@
 // \endverbatim
 //*****************************************************************************
 
-class vsol_polygon_2d;
-
 //*****************************************************************************
 // External declarations for values
 //*****************************************************************************
-#include <vsol/vsol_polygon_2d_sptr.h>
 #include <vsol/vsol_region_2d.h>
-
 #include <vsol/vsol_point_2d_sptr.h>
 #include <vcl_vector.h>
 

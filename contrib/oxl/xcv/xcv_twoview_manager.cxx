@@ -1,12 +1,10 @@
-// This is ./oxl/xcv/xcv_twoview_manager.cxx
-
+// This is oxl/xcv/xcv_twoview_manager.cxx
+#include "xcv_twoview_manager.h"
 //:
 //  \file
 // See xcv_twoview_manager.h for a description of this file.
 //
 // \author  K.Y.McGaul
-
-#include "xcv_twoview_manager.h"
 
 #include <vcl_compiler.h>
 
@@ -14,11 +12,8 @@
 #include <vgui/vgui_text_graph.h>
 #include <vgui/vgui_projection_inspector.h>
 #include <vgui/vgui_find.h>
-#include <vgui/vgui_soview2D.h>
 #include <mvl/HomgInterestPointSet.h>
 #include <mvl/HomgInterestPoint.h>
-
-static bool debug = false;
 
 //-----------------------------------------------------------------------------
 //: Constructor.
@@ -58,18 +53,20 @@ void xcv_twoview_manager::set_tableau(vgui_tableau_sptr const& tab, unsigned tab
 {
   if (tab_nb > 1)
   {
-    vgui_macro_warning << "Tableau position [" << tab_nb << "] out of range" << vcl_endl;
+    vgui_macro_warning << "Tableau position [" << tab_nb << "] out of range\n";
     return;
   }
-  if (debug) vcl_cerr << "xcv_two_view_manager: Setting tab position [" << tab_nb
-                      << "] to tableau pointer: " << tab << vcl_endl;
+#ifdef DEBUG
+  vcl_cerr << "xcv_two_view_manager: Setting tab position [" << tab_nb
+           << "] to tableau pointer: " << tab << vcl_endl;
+#endif
   tabs[tab_nb] = tab;
   rubberbands[tab_nb].vertical_cast(vgui_find_below_by_type_name(tab, vcl_string("vgui_rubberbander")));
   if (! rubberbands[tab_nb])
-    vgui_macro_warning << "Unable to find rubberbander for tableau1" << vcl_endl;
+    vgui_macro_warning << "Unable to find rubberbander for tableau1\n";
   easys[tab_nb].vertical_cast(vgui_find_below_by_type_name(tab, vcl_string("vgui_easy2D")));
   if (!easys[tab_nb]) {
-    vgui_macro_warning << "Unable to find easy2D for tableau no. " << tab_nb << " \"" << tab << "\"" << vcl_endl;
+    vgui_macro_warning << "Unable to find easy2D for tableau no. " << tab_nb << " \"" << tab << "\"\n";
     vgui_text_graph(vcl_cerr);
   }
 }
@@ -139,8 +136,10 @@ void xcv_twoview_manager::draw_f_matrix(vgui_event const& e, vgui_tableau_sptr c
   // Draw the line and points on the appropriate tableau:
   if (make_permanent)
   {
-    if (debug) vcl_cerr << "Drawing the infinite line: " << hl[0] << "x + "
-                        << hl[1] << "y + " << hl[2] << " = 0." << vcl_endl;
+#ifdef DEBUG
+    vcl_cerr << "Drawing the infinite line: " << hl[0] << "x + "
+             << hl[1] << "y + " << hl[2] << " = 0.\n";
+#endif
     if (easys[transfer_index])
       easys[transfer_index]->add_infinite_line(hl[0], hl[1], hl[2]);
     else
@@ -152,11 +151,13 @@ void xcv_twoview_manager::draw_f_matrix(vgui_event const& e, vgui_tableau_sptr c
     if (easys[0])
       easys[0]->post_redraw();
     else
-      vgui_macro_warning << "no vgui_easy2D at index 0" << vcl_endl;
+      vgui_macro_warning << "no vgui_easy2D at index 0\n";
   }
   else
   {
-    line_coord_a = hl[0]; line_coord_b = hl[1]; line_coord_c = hl[2];
+    line_coord_a = hl[0];
+    line_coord_b = hl[1];
+    line_coord_c = hl[2];
     event_coord_x = ix; event_coord_y = iy;
           if (use_overlays)
       tabs[transfer_index]->post_overlay_redraw();
@@ -219,8 +220,10 @@ void xcv_twoview_manager::draw_h_matrix(
   // Draw the points on the appropriate tableau:
   if (make_permanent)
   {
-    if (debug) vcl_cerr << "draw_h_matrix: Adding points at (" << px << ", " << py
-                        << ") and (" << ix << ", " << iy << ")." << vcl_endl;
+#ifdef DEBUG
+    vcl_cerr << "draw_h_matrix: Adding points at (" << px << ", " << py
+             << ") and (" << ix << ", " << iy << ").\n";
+#endif
     easys[transfer_index]->add_point(px, py);
     easys[(transfer_index+1)%2]->add_point(ix, iy);
     easys[0]->post_redraw();

@@ -10,9 +10,6 @@
 // \author Tim Cootes
 // \author Ian Scott
 
-
-#include <vsl/vsl_binary_io.h>
-#include <vcl_string.h>
 #include <vcl_vector.h>
 #include <mbl/mbl_data_collector_base.h>
 #include <mbl/mbl_data_wrapper.h>
@@ -22,8 +19,10 @@
 //  then the record() function is called with each example.
 //  They can return a mbl_data_wrapper<T> object to iterate through
 //  the saved examples.
+
 template<class T>
-class mbl_data_collector : public mbl_data_collector_base {
+class mbl_data_collector : public mbl_data_collector_base
+{
 public:
   //: Dflt ctor
   mbl_data_collector();

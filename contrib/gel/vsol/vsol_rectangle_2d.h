@@ -18,12 +18,9 @@
 // \endverbatim
 //*****************************************************************************
 
-class vsol_rectangle_2d;
-
 //*****************************************************************************
 // External declarations for values
 //*****************************************************************************
-#include <vsol/vsol_rectangle_2d_sptr.h>
 #include <vsol/vsol_polygon_2d.h>
 
 class vsol_rectangle_2d

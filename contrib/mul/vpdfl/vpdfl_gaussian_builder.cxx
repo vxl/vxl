@@ -17,14 +17,13 @@
 // inclusions
 //=======================================================================
 
+#include "vpdfl_gaussian_builder.h"
+
 #include <vcl_cstdlib.h>
 #include <vcl_string.h>
-
 #include <vcl_cassert.h>
-#include <vsl/vsl_indent.h>
 #include <mbl/mbl_data_wrapper.h>
 #include <vpdfl/vpdfl_gaussian.h>
-#include <vpdfl/vpdfl_gaussian_builder.h>
 #include <vnl/algo/vnl_symmetric_eigensystem.h>
 
 // Weights smaller than this are assumed to be zero
@@ -242,7 +241,7 @@ void vpdfl_gaussian_builder::weighted_build(vpdfl_pdf_base& model,
 
   if (actual_samples==0)
   {
-    vcl_cerr<<"vpdfl_gaussian_builder::weighted_build() All weights zero."<<vcl_endl;
+    vcl_cerr<<"vpdfl_gaussian_builder::weighted_build() All weights zero.\n";
     vcl_abort();
   }
 
@@ -250,7 +249,7 @@ void vpdfl_gaussian_builder::weighted_build(vpdfl_pdf_base& model,
   {
 #if 0
     vcl_cerr<<"vpdfl_gaussian_builder::weighted_build()";
-    vcl_cerr<<" Warning: Only one sample has non-zero weight."<<vcl_endl;
+    vcl_cerr<<" Warning: Only one sample has non-zero weight.\n";
 #endif
     // Build minimal model about the mean (the one non-zero sample)
     sum/=w_sum;
@@ -335,7 +334,7 @@ void vpdfl_gaussian_builder::b_read(vsl_b_istream& bfs)
   vsl_b_read(bfs,name);
   if (name != is_a())
   {
-    vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vpdfl_gaussian_builder &) \n";
+    vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vpdfl_gaussian_builder &)\n";
     vcl_cerr << "           Attempted to load object of type ";
     vcl_cerr << name <<" into object of type " << is_a() << vcl_endl;
     bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
@@ -350,7 +349,7 @@ void vpdfl_gaussian_builder::b_read(vsl_b_istream& bfs)
       vsl_b_read(bfs,min_var_);
       break;
     default:
-      vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vpdfl_gaussian_builder &) \n";
+      vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vpdfl_gaussian_builder &)\n";
       vcl_cerr << "           Unknown version number "<< version << vcl_endl;
       bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
       return;

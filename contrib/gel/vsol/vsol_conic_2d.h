@@ -1,15 +1,9 @@
 #ifndef VSOL_CONIC_2D_H
 #define VSOL_CONIC_2D_H
 //*****************************************************************************
-//
-// .NAME vsol_conic_2d - Section of a conic curve in a 2D space
-// .LIBRARY vsol
-// .INCLUDE vsol/vsol_conic_2d.h
-// .FILE    vsol/vsol_conic_2d.cxx
-
 //:
 // \file
-// \brief Euclidean general conic class
+// \brief Euclidean general conic class in 2D space
 // The conic is defined by its cartesian equation
 // a x^2 +b xy +c y^2 +d x +e y +f
 // This class inherits both from vsol_curve_2d and vgl_conic<double>.
@@ -18,10 +12,11 @@
 // and with non-homogeneous Euclidean 2D geometry terminology instead of
 // homogeneous 3-tuples.
 //
-// .SECTION Author
+// \author
 // François BERTEL
 //
-// .SECTION Modifications
+// \verbatim
+// Modifications
 // 2002/04/05 Peter Vanroose  axis() added
 // 2001/08/31 Peter Vanroose  constructor added from centre, size, orientation
 // 2001/08/30 Peter Vanroose  now inheriting from vgl_conic
@@ -30,20 +25,19 @@
 // 2001/08/29 Peter Vanroose  midpoint() added
 // 2000/06/17 Peter Vanroose  Implemented all operator==()s and type info
 // 2000/04/28 François BERTEL Creation
+// \endverbatim
 //*****************************************************************************
-
-class vsol_conic_2d;
 
 //*****************************************************************************
 // External declarations for values
 //*****************************************************************************
-#include <vsol/vsol_conic_2d_sptr.h>
 #include <vgl/vgl_fwd.h>
 #include <vgl/vgl_conic.h> // parent class
 
 #include <vsol/vsol_curve_2d.h>
 #include <vsol/vsol_point_2d_sptr.h>
 #include <vsol/vsol_line_2d.h>
+#include <vsol/vsol_line_2d_sptr.h>
 #include <vnl/vnl_double_3x3.h>
 #include <vcl_cmath.h> // for vcl_abs(double)
 #include <vcl_list.h>

@@ -1,34 +1,29 @@
+//:
+// \file
 #include <vcl_vector.h>
 #include <vcl_iostream.h>
 #include <vcl_fstream.h>
-#include <vul/vul_sprintf.h>
 #include <vul/vul_timer.h>
 #include <vil/vil_image.h>
 
-#include <vgui/vgui_adaptor.h>
 #include <vgui/vgui.h>
 #include <vgui/vgui_error_dialog.h>
-#include <vgui/vgui_window.h>
 #include <vgui/vgui_adaptor.h>
 #include <vgui/vgui_tableau.h>
-#include <vgui/vgui_menu.h>
 #include <vgui/vgui_dialog.h>
 #include <vgui/vgui_macro.h>
-//#include <vgui/vgui_utils.h>
 #include <vgui/vgui_easy2D.h>
-#include <vgui/vgui_rubberbander.h>
-#include <vgui/vgui_composite.h>
 #include <vgui/vgui_viewer2D.h>
 #include <vgui/vgui_grid_tableau.h>
 #include <vgui/vgui_image_tableau.h>
 
 #include <vidl/vidl_io.h>
 #include <vidl/vidl_frame.h>
-//#include <vidl/vidl_movie.h>
 #include <vidl/vidl_avicodec.h>
 #include <jvid/jvx_manager.h>
+
 //-----------------------------------------------------------
-//: constructors/destructor
+// constructors/destructor
 //
 jvx_manager::jvx_manager()
 {
@@ -39,17 +34,16 @@ jvx_manager::jvx_manager()
 
 jvx_manager::~jvx_manager()
 {
-
 }
 
-// make an event handler 
+// make an event handler
 // note that we have to get an adaptor and set the tableau to receive events
 bool jvx_manager::handle(const vgui_event &e)
 {
   //example for joe to show event mastery : button up==false, button down==true
   vgui_event_condition g0(vgui_LEFT, vgui_CTRL, false);
-  if(g0(e))
-     vcl_cout << "saw an left/cntl up event" << vcl_endl;
+  if (g0(e))
+     vcl_cout << "saw an left/cntl up event\n";
   // just pass it back to the base class
   return vgui_grid_tableau::handle(e);
 }
@@ -74,16 +68,16 @@ void jvx_manager::load_video_file()
  vcl_cout << vcl_endl;
  vidl_movie::frame_iterator pframe(_my_movie);
  pframe = _my_movie->first();
-  
+
   vil_image img = pframe->get_image();
   _height = img.height();
   _width = img.width();
-  vcl_cout << "Video Height " << _height 
+  vcl_cout << "Video Height " << _height
            << " Video Width " << _width << vcl_endl;
-  
+
  int i = 0;
  int inc = 40;
- while(pframe!=_my_movie->last())
+ while (pframe!=_my_movie->last())
  {
    //Get the image from the video and wrap it with a viewer2D tableau
    vgui_easy2D_new easy2D(vgui_image_tableau_new(pframe->get_image()));
@@ -95,25 +89,24 @@ void jvx_manager::load_video_file()
    t->zoomout(2.0, 0.0, 0.0);
    t->center_image(_width,_height);
 
-   //Display some dots on the video that move 
+   //Display some dots on the video that move
    //This code demonstrates how to overlay dynamic stuff on the video
    //It wouldn't be in this loop in the real case.
-   easy2D->set_foreground(0,1,1); 
-   easy2D->set_point_radius(5); 
-   
-   if(inc>60)
+   easy2D->set_foreground(0,1,1);
+   easy2D->set_point_radius(5);
+
+   if (inc>60)
      inc = 40;
-   for(unsigned int j = 0; j<=_height; j+=inc)
-     for(unsigned int k=0; k<=_width; k+=inc)
+   for (unsigned int j = 0; j<=_height; j+=inc)
+     for (unsigned int k=0; k<=_width; k+=inc)
        easy2D->add_point(k,j);
-   
+
    ++pframe;//next video frame
-   vcl_cout << "Loading Frame[" << i  << "]:(" << _width << " " 
-            << _height << ")" <<vcl_endl;
+   vcl_cout << "Loading Frame[" << i << "]:(" <<_width <<" "<<_height << ")\n";
    inc++;
    i++;
  }
- //Display the first frame 
+ //Display the first frame
   unsigned row=0, col=0;
   this->add_at(_tabs[0], col, row);
   this->post_redraw();
@@ -142,24 +135,24 @@ vgui_viewer2D_sptr jvx_manager::get_vgui_viewer2D_at(unsigned col, unsigned row)
 
 void jvx_manager::play_video()
 {
-   vul_timer t;
- for(vcl_vector<vgui_viewer2D_sptr>::iterator vit = _tabs.begin();
-	 vit != _tabs.end(); vit++)
-	{
+  vul_timer t;
+  for (vcl_vector<vgui_viewer2D_sptr>::iterator vit = _tabs.begin();
+       vit != _tabs.end(); vit++)
+  {
     //Remove the previous frame at grid position (0,0)
     unsigned row=0, col=0;
-	 this->remove_at(col, row);
-   //Add the previous frame 
-	 this->add_at(*vit, col, row);
+    this->remove_at(col, row);
+    //Add the previous frame
+    this->add_at(*vit, col, row);
 
-   //Here we can put some stuff to control the frame rate. Hard coded to 
-   //a delay of 10	 
-	 while(t.all()<10.0);
-   //force the new frame to be displayed
-   this->post_redraw();
-   vgui::run_till_idle();
-	 t.mark();
-	 }
+    //Here we can put some stuff to control the frame rate. Hard coded to
+    //a delay of 10
+    while (t.all()<10.0) ;
+    //force the new frame to be displayed
+    this->post_redraw();
+    vgui::run_till_idle();
+    t.mark();
+  }
 }
 //Here are other functions to be coded
 void jvx_manager::stop_video()

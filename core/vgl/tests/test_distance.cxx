@@ -8,8 +8,6 @@
 
 #include <vcl_cmath.h> // for vcl_sqrt()
 
-#include <vcl_iostream.h>
-
 
 void test_point_to_polygon()
 {

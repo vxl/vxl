@@ -1,15 +1,12 @@
-// This is ./vxl/vbl/io/vbl_io_triple.txx
+// This is vxl/vbl/io/vbl_io_triple.txx
 #ifndef vbl_io_triple_txx_
 #define vbl_io_triple_txx_
-
 //:
 // \file
 // \brief  binary IO functions for vbl_triple<S, T, U>
 // \author Ian Scott
-//
-// Implementation
 
-#include <vsl/vbl_io_triple.h>
+#include "vbl_io_triple.h"
 #include <vsl/vsl_binary_io.h>
 
 //====================================================================================

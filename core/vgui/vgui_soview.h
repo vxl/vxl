@@ -3,28 +3,16 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
-// 
-// .NAME vgui_soview - Undocumented class FIXME
-// .LIBRARY vgui
-// .HEADER vxl Package
-// .INCLUDE vgui/vgui_soview.h
-// .FILE vgui_soview.cxx
-//
-// .SECTION Description:
-//
-// vgui_soview is a class that Phil hasnt documented properly. FIXME
-//
+//:
+// \file
+// \brief Undocumented class FIXME
 //
 // Notes:
 //   We use floats instead of doubles as size is a speed issue (sic.)
 //
-// .SECTION Author:
+// \author
 //              Philip C. Pritchett, 24 Mar 99
 //              Robotics Research Group, University of Oxford
-//
-// .SECTION Modifications:
-//     <none yet>
-//
 //-----------------------------------------------------------------------------
 
 #include "dll.h"
@@ -32,8 +20,6 @@
 #include <vcl_string.h>
 #include <vcl_iosfwd.h>
 #include <vcl_vector.h>
-#include <vcl_map.h>
-//#include <vgui/vgui_observable.h>
 
 class vgui_observer;
 class vgui_message;
@@ -49,7 +35,7 @@ public:
   virtual vcl_ostream& print(vcl_ostream&) const;
 
   virtual vcl_string type_name() const;
-  
+
   // style
   virtual void set_style(vgui_style*);
   virtual vgui_style* get_style();
@@ -76,7 +62,7 @@ public:
   static unsigned create_id();
 
   // decide if it is possible to select this object
-  bool get_selectable() const { return selectable; } 
+  bool get_selectable() const { return selectable; }
   void set_selectable( bool s) { selectable= s; }
 
 protected:

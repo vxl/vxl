@@ -1,6 +1,5 @@
-// This is ./gel/vsol/vsol_group_3d.cxx
-#include <vsol/vsol_group_3d.h>
-
+// This is gel/vsol/vsol_group_3d.cxx
+#include "vsol_group_3d.h"
 //:
 // \file
 
@@ -8,7 +7,6 @@
 // External declarations for implementation
 //*****************************************************************************
 #include <vcl_cassert.h>
-#include <vsol/vsol_point_3d.h>
 
 //***************************************************************************
 // Initialization
@@ -93,38 +91,22 @@ void vsol_group_3d::compute_bounding_box(void)
   // require
   assert(size()>0);
 
-  double xmin;
-  double ymin;
-  double zmin;
-  double xmax;
-  double ymax;
-  double zmax;
-
-  vcl_list<vsol_spatial_object_3d_sptr>::iterator i;
-
-  for (i=storage_->begin();i!=storage_->end();++i)
-    {
-      vsol_box_3d *b=(*i)->get_bounding_box();
-      if (i==storage_->begin())
-        {
-          xmin=b->get_min_x();
-          ymin=b->get_min_y();
-          zmin=b->get_min_z();
-          xmax=b->get_max_x();
-          ymax=b->get_max_y();
-          zmax=b->get_max_z();
-        }
-      else
-        {
-          if (b->get_min_x()<xmin) xmin=b->get_min_x();
-          if (b->get_min_y()<ymin) ymin=b->get_min_y();
-          if (b->get_min_z()<zmin) zmin=b->get_min_z();
-          if (b->get_max_x()>xmax) xmax=b->get_max_x();
-          if (b->get_max_y()>ymax) ymax=b->get_max_y();
-          if (b->get_max_z()>zmax) zmax=b->get_max_z();
-        }
-      delete b;
-    }
+  vcl_list<vsol_spatial_object_3d_sptr>::iterator i = storage_->begin();
+  double xmin = (*i)->get_min_x();
+  double ymin = (*i)->get_min_y();
+  double zmin = (*i)->get_min_z();
+  double xmax = (*i)->get_max_x();
+  double ymax = (*i)->get_max_y();
+  double zmax = (*i)->get_max_z();
+  for (++i; i!=storage_->end(); ++i)
+  {
+    if ((*i)->get_min_x()<xmin) xmin=(*i)->get_min_x();
+    if ((*i)->get_min_y()<ymin) ymin=(*i)->get_min_y();
+    if ((*i)->get_min_z()<zmin) zmin=(*i)->get_min_z();
+    if ((*i)->get_max_x()>xmax) xmax=(*i)->get_max_x();
+    if ((*i)->get_max_y()>ymax) ymax=(*i)->get_max_y();
+    if ((*i)->get_max_z()>zmax) zmax=(*i)->get_max_z();
+  }
   if (bounding_box_==0)
     bounding_box_=new vsol_box_3d;
   bounding_box_->set_min_x(xmin);
@@ -150,7 +132,7 @@ int vsol_group_3d::deep_size(void) const
 {
   int result=0;
   vcl_list<vsol_spatial_object_3d_sptr>::iterator i;
-  for (i=storage_->begin();i!=storage_->end();++i)
+  for (i=storage_->begin(); i!=storage_->end(); ++i)
     {
       vsol_group_3d const* g=(*i)->cast_to_group();
       if (g!=0)
@@ -205,18 +187,14 @@ void vsol_group_3d::remove_object(const int i)
 bool
 vsol_group_3d::is_child(const vsol_spatial_object_3d_sptr &new_object) const
 {
-  bool result=false;
   vcl_list<vsol_spatial_object_3d_sptr>::iterator i;
-  for (i=storage_->begin();(i!=storage_->end())&&!result;++i)
-    {
-      result=(*i).ptr()==new_object.ptr();
-      if (!result)
-        {
-          // g=dynamic_cast<vsol_group_3d const *>((*i).ptr());   // GOOD VERSION
-          vsol_group_3d const* g=(vsol_group_3d const*)((*i).ptr()->cast_to_group()); // BAD HACK
-          if (g!=0)
-            g->is_child(new_object);
-        }
-    }
-  return result;
+  for (i=storage_->begin(); i!=storage_->end(); ++i)
+  {
+    if ((*i).ptr()==new_object.ptr())
+      return true;
+    vsol_group_3d const* g=(*i)->cast_to_group();
+    if (g!=0 && g->is_child(new_object))
+      return true;
+  }
+  return false;
 }

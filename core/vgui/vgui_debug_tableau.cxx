@@ -1,12 +1,11 @@
-//-*- c++ -*-------------------------------------------------------------------
+// This is oxl/vgui/vgui_debug_tableau.cxx
 #ifdef __GNUC__
 #pragma implementation
 #endif
-//
-// .NAME vgui_debug_tableau
-// Author: Andrew W. Fitzgibbon, Oxford RRG
-// Created: 08 Oct 99
-//
+//:
+// \file
+// \author Andrew W. Fitzgibbon, Oxford RRG
+// \date   08 Oct 99
 //-----------------------------------------------------------------------------
 
 #include "vgui_debug_tableau.h"
@@ -15,7 +14,6 @@
 #include <vcl_functional.h>
 
 #include <vgui/vgui_event.h>
-#include <vgui/vgui_slot.h>
 
 // Default ctor
 vgui_debug_tableau::vgui_debug_tableau(vgui_tableau_sptr const& child):
@@ -41,7 +39,7 @@ static void print_tableau(vcl_ostream& s, vcl_string indent, vgui_tableau_sptr t
   else
     indent += " ";
 
-  for(unsigned int i = 0; i < children.size(); ++i)
+  for (unsigned int i = 0; i < children.size(); ++i)
     print_tableau(s, indent, children[i]);
 }
 

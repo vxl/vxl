@@ -3,10 +3,10 @@
 // \brief Construct thin plate spline to map 2D to 2D
 // \author Tim Cootes
 
-#include <mbl/mbl_thin_plate_spline_2d.h>
+#include "mbl_thin_plate_spline_2d.h"
+
 #include <vsl/vsl_indent.h>
 #include <mbl/mbl_matxvec.h>
-#include <mbl/mbl_matrix_products.h>
 #include <vcl_cmath.h>
 #include <vnl/vnl_math.h>
 #include <vnl/io/vnl_io_vector.h>
@@ -72,7 +72,8 @@ static void build_K_part(vnl_matrix<double>& L,
   double** K_data = L.data_array();
 
     // Zero the diagonal
-  for (unsigned int i=0;i<n;i++) K_data[i][i] = 0;
+  for (unsigned int i=0;i<n;i++)
+    K_data[i][i] = 0;
     // Now fill upper & lower triangles
   for (unsigned int i=1;i<n;i++)
     for (unsigned int j=0;j<i;j++)
@@ -341,7 +342,7 @@ void mbl_thin_plate_spline_2d::build(const vcl_vector<vgl_point_2d<double> >& so
   unsigned int n=source_pts.size();
   if (dest_pts.size() != n)
   {
-    vcl_cerr<<"mbl_thin_plate_spline_2d::build - incompatible number of points."<<vcl_endl;
+    vcl_cerr<<"mbl_thin_plate_spline_2d::build - incompatible number of points.\n";
     vcl_abort();
   }
 
@@ -409,7 +410,7 @@ void mbl_thin_plate_spline_2d::build(const vcl_vector<vgl_point_2d<double> >& de
   unsigned int n=src_pts_.size();
   if (dest_pts.size() != n)
   {
-    vcl_cerr<<"mbl_thin_plate_spline_2d::build - incompatible number of points."<<vcl_endl;
+    vcl_cerr<<"mbl_thin_plate_spline_2d::build - incompatible number of points.\n";
     vcl_abort();
   }
 
@@ -476,10 +477,12 @@ void mbl_thin_plate_spline_2d::print_summary(vcl_ostream& os) const
 {
   os<<vcl_endl;
   os<<"fx: "<<Ax0_<<" + "<<AxX_<<"*x + "<<AxY_<<"*y   Nonlinear terms:";
-  for (unsigned int i=0;i<Wx_.size();++i) os<<Wx_[i]<<" ";
+  for (unsigned int i=0;i<Wx_.size();++i)
+    os<<Wx_[i]<<" ";
   os<<vcl_endl;
   os<<"fy: "<<Ay0_<<" + "<<AyX_<<"*x + "<<AyY_<<"*y   Nonlinear terms:";
-  for (unsigned int i=0;i<Wy_.size();++i) os<<Wy_[i]<<" ";
+  for (unsigned int i=0;i<Wy_.size();++i)
+    os<<Wy_[i]<<" ";
   os<<vcl_endl;
 }
 
@@ -522,7 +525,7 @@ void mbl_thin_plate_spline_2d::b_read(vsl_b_istream& bfs)
       vsl_b_read(bfs,L_inv_);
       break;
     default:
-      vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, mbl_thin_plate_spline_2d &) \n";
+      vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, mbl_thin_plate_spline_2d &)\n";
       vcl_cerr << "           Unknown version number "<< version << vcl_endl;
       bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
       return;

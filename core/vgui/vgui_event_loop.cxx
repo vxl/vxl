@@ -7,7 +7,6 @@
 #include "vgui_event_loop.h"
 
 #include <vcl_vector.h>
-#include <vcl_map.h>
 #include <vcl_iostream.h>
 
 #include <vgui/vgui_slot.h>
@@ -63,7 +62,7 @@ void vgui_event_loop_detach(vgui_slab *slab)
 void vgui_event_loop_service()
 {
   if (the_container.size() == 0) {
-    vgui_macro_warning << "no (slab, tableau) pairs to service" << vcl_endl;
+    vgui_macro_warning << "no (slab, tableau) pairs to service\n";
     vgui_event_loop_finish();
     return;
   }

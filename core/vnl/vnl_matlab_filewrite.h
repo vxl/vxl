@@ -1,11 +1,9 @@
+// This is vxl/vnl/vnl_matlab_filewrite.h
 #ifndef vnl_matlab_filewrite_h_
 #define vnl_matlab_filewrite_h_
 #ifdef __GNUC__
 #pragma interface
 #endif
-
-// This is vxl/vnl/vnl_matlab_filewrite.h
-
 //:
 //  \file
 //  \author David Capel, Oxford RRG
@@ -18,7 +16,6 @@
 // \endverbatim
 
 #include <vcl_string.h>
-#include <vcl_iostream.h>
 #include <vcl_fstream.h>
 #include <vcl_complex.h>
 

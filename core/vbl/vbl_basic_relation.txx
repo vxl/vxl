@@ -6,10 +6,7 @@
 // \file
 
 #include <vbl/vbl_basic_relation.h>
-#include <vbl/vbl_basic_optional.h>
-#include <vbl/vbl_basic_tuple.h>
 #include <vbl/vbl_basic_relation_where.h>
-#include <vbl/vbl_br_impl.h>
 #include <vcl_iostream.h>
 
 // First the iterator methods.

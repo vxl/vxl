@@ -11,7 +11,6 @@
 // \author fsm@robots.ox.ac.uk
 
 #include <vil/vil_image.h>
-#include <vil/vil_byte.h>
 
 //: \brief Converts to a different pixel type.
 //

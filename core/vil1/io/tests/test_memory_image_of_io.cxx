@@ -1,12 +1,8 @@
 #include <vcl_iostream.h>
 #include <vcl_fstream.h>
 #include <vcl_utility.h>
-#include <vcl_vector.h>
 
 #include <testlib/testlib_test.h>
-#include <vil/vil_rgb.h>
-#include <vil/vil_load.h>
-#include <vil/vil_save.h>
 #include <vil/vil_memory_image_of.h>
 #include <vil/io/vil_io_memory_image_of.h>
 #include <vil/io/vil_io_image_impl.h>
@@ -15,9 +11,9 @@
 
 void test_memory_image_of_io()
 {
-  vcl_cout << "***********************" << vcl_endl;
-  vcl_cout << "Testing vil_memory_image_of io" << vcl_endl;
-  vcl_cout << "***********************" << vcl_endl;
+  vcl_cout << "******************************\n";
+  vcl_cout << "Testing vil_memory_image_of io\n";
+  vcl_cout << "******************************\n";
 
   // Image set-up and construction
   int height = 10;

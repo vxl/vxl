@@ -1,14 +1,11 @@
 // This is vxl/vbl/vbl_br_impl.txx
 #ifndef vbl_br_impl_txx_
 #define vbl_br_impl_txx_
-
-
 //:
 // \file
 
 #include "vbl_br_impl.h"
 #include <vbl/vbl_br_default.h>
-#include <vcl_iostream.h>
 
 //----------------------------------------------------------------------
 //: Return the current factory for this class.

@@ -11,7 +11,6 @@
 #include <vcl_cassert.h>
 #include <vcl_string.h>
 #include <vcl_iostream.h>
-#include <vsl/vsl_indent.h>
 #include <mil/mil_bilin_interp_2d.h>
 #include <mil/mil_image_2d_of.h>
 #include <mil/mil_image_pyramid.h>
@@ -68,7 +67,7 @@ void mil_gaussian_pyramid_builder_2d_general<T>::gauss_reduce(
           src_im.plane(i),src_nx,src_ny,dest_nx,dest_ny,ystep);
 #if 0
   vsl_indent_inc(vcl_cout);
-  vcl_cout << vsl_indent() << "Work image B" << vcl_endl;
+  vcl_cout << vsl_indent() << "Work image B\n";
   workb_.print_all(vcl_cout);
   vsl_indent_dec(vcl_cout);
 #endif
@@ -479,7 +478,7 @@ void mil_gaussian_pyramid_builder_2d_general<T>::b_read(vsl_b_istream& bfs)
     set_scale_step(scale);
     break;
   default:
-    vcl_cerr << "I/O ERROR: mil_gaussian_pyramid_builder_2d_general<T>::b_read(vsl_b_istream&) \n";
+    vcl_cerr << "I/O ERROR: mil_gaussian_pyramid_builder_2d_general<T>::b_read(vsl_b_istream&)\n";
     vcl_cerr << "           Unknown version number "<< version << "\n";
     bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
     return;

@@ -1,13 +1,11 @@
-// This is ./vxl/vnl/io/vnl_io_vector.txx
+// This is vxl/vnl/io/vnl_io_vector.txx
 #ifndef vnl_io_vector_txx_
 #define vnl_io_vector_txx_
-
 //:
 // \file
 
+#include "vnl_io_vector.h"
 #include <vsl/vsl_binary_io.h>
-#include <vnl/io/vnl_io_vector.h>
-#include <vsl/vsl_indent.h>
 #include <vsl/vsl_binary_explicit_io.h>
 
 //=================================================================================

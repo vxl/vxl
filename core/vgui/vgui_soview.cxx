@@ -1,12 +1,11 @@
- //-*- c++ -*-------------------------------------------------------------------
+ // This is oxl/vgui/vgui_soview.cxx
 #ifdef __GNUC__
 #pragma implementation
 #endif
-//
-// .NAME vgui_soview
-// Author: Philip C. Pritchett, RRG, University of Oxford
-// Created: 24 Mar 99
-//
+//:
+// \file
+// \author Philip C. Pritchett, RRG, University of Oxford
+// \date   24 Mar 99
 //-----------------------------------------------------------------------------
 
 #include "vgui_soview.h"
@@ -86,7 +85,7 @@ vcl_string vgui_soview::type_name() const  {
   // this should never be called. derived classes should implement type_name().
   static bool warned=false;
   if (!warned) {
-    vcl_cerr << __FILE__ " : WARNING : vgui_soview::type_name() called" << vcl_endl;
+    vcl_cerr << __FILE__ " : WARNING : vgui_soview::type_name() called\n";
     warned=true;
   }
   return "vgui_soview";
@@ -146,7 +145,6 @@ const void * const vgui_soview::msg_select="x";
 const void * const vgui_soview::msg_deselect="x";
 
 
-
 //--------------------------------------------------------------------------------
 
 // Observers. Rather than storing a vcl_list/vcl_vector/whatever of observers on each
@@ -154,7 +152,6 @@ const void * const vgui_soview::msg_deselect="x";
 // the soviews smaller and optimizes the common case of soviews with no
 // observers.
 // fsm: I have not tested this code yet -- where is it used?
-#include <vcl_map.h>
 
 // vc++ static data members have some peculiarities, so
 // we use this traditional work-around instead :
@@ -182,7 +179,7 @@ void vgui_soview::detach(vgui_observer* o) {
     }
 
   // not found :
-  vcl_cerr << __FILE__ " : no such observer on this soview" << vcl_endl;
+  vcl_cerr << __FILE__ " : no such observer on this soview\n";
 }
 
 void vgui_soview::get_observers(vcl_vector<vgui_observer*>& vobs) const {

@@ -1,11 +1,8 @@
-#ifndef  _QV_BASIC_
-#define  _QV_BASIC_
+#ifndef  QV_BASIC_
+#define  QV_BASIC_
 
-//#include <sys/types.h>
-/* #include <libc.h> */
 #include <vcl_cstdio.h>
 #include <vcl_cmath.h>
-#include <vcl_cstdio.h>
 
 #ifndef FALSE
 #   define FALSE 0
@@ -38,4 +35,4 @@ typedef int QvBool;
 
 #include "Qv_pi.h"
 
-#endif /* _QV_BASIC_ */
+#endif // QV_BASIC_

@@ -1,4 +1,4 @@
-// vul/io/tests/test_user_info_io.cxx
+// This is vxl/vul/io/tests/test_user_info_io.cxx
 #include <vul/vul_user_info.h>
 #include <vcl_iostream.h>
 #include <vcl_fstream.h>
@@ -11,9 +11,9 @@
 
 void test_user_info_io()
 {
-  vcl_cout << "************************" << vcl_endl;
-  vcl_cout << "Testing vul_user_info io" << vcl_endl;
-  vcl_cout << "************************" << vcl_endl;
+  vcl_cout << "************************\n";
+  vcl_cout << "Testing vul_user_info io\n";
+  vcl_cout << "************************\n";
   //
   vcl_string name="cjb";
   vul_user_info p_out(name), p_in("");
@@ -39,7 +39,6 @@ void test_user_info_io()
 
   vsl_print_summary(vcl_cout, p_out);
   vcl_cout << vcl_endl;
-
 }
 
 TESTMAIN(test_user_info_io);
