@@ -111,6 +111,9 @@ SOURCE=.\example_sprite.cxx
 # Begin Source File
 SOURCE=.\example_idle_processing.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\example_text_windows.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"
