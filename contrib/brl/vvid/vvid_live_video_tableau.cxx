@@ -120,7 +120,6 @@ void vvid_live_video_tableau::update_frame()
     cam_.get_monochrome_image(mono_frame_, pixel_sample_interval_, true);
   this->reread_image();
   this->post_redraw();
-  vgui::run_till_idle();
 }
 
 void vvid_live_video_tableau::stop_live_video()
