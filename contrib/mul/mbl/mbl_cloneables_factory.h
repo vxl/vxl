@@ -93,7 +93,7 @@ class mbl_cloneables_factory
     if (found == end)
     {
       vcl_ostringstream ss;
-      typename IT it = objects().begin();
+      IT it = objects().begin();
       if (!objects().empty())
       {
         ss << it->first;
