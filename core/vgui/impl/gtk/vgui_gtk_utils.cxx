@@ -34,7 +34,7 @@ vgui_button vgui_gtk_utils::translate_button(int button)
   else if (button == 3)
     return vgui_RIGHT;
 #if 1
-  // spinning the wheel generates button events no 4 and 4 -- fsm
+  // spinning the wheel generates button events no 4 and 5 -- fsm
   else if (button == 4)
     return vgui_MIDDLE;
   else if (button == 5)
