@@ -134,8 +134,9 @@ static bool create_colour_gif(const char* filename)
 #pragma warning ( push )
 #pragma warning ( disable : 4305 4309)
 #endif
-  char a[] = { 253, 0, 155, 0, 247, 0, 0 };
-  char b[] = { 44, 0, 0, 0, 0, 253, 0, 155, 0, 0, 8, 254, 0, 1, 164, 74, 150, 45, 87, 162, 76, 121, 14, 80, 168, 224, 226, 5, 140,
+  unsigned char a[] = { 253, 0, 155, 0, 247, 0, 0 };
+  unsigned char b[] = {
+    44, 0, 0, 0, 0, 253, 0, 155, 0, 0, 8, 254, 0, 1, 164, 74, 150, 45, 87, 162, 76, 121, 14, 80, 168, 224, 226, 5, 140,
     24, 98, 198, 144, 41, 99, 230, 12, 154, 52, 202, 150, 49, 107, 230, 236, 25, 180, 104, 210, 166, 81, 171, 102, 237, 26, 182,
     108, 1, 16, 36, 176, 112, 1, 67, 6, 25, 51, 104, 212, 176, 113, 3, 71, 14, 53, 107, 216, 180, 113, 243, 6, 78, 28, 57, 115,
     232, 212, 177, 115, 7, 79, 30, 1, 10, 22, 104, 216, 192, 161, 131, 142, 29, 60, 122, 248, 248, 1, 36, 136, 158, 61, 124, 250,
@@ -166,7 +167,7 @@ static bool create_colour_gif(const char* filename)
   if (!f) return false;
   f << "GIF87a";
   for (int i=0; i<7; ++i) f << a[i];
-  for (int i=0; i<256; ++i) f << (char)i << (char)i << (char)0;
+  for (int i=0; i<256; ++i) f << (unsigned char)i << (unsigned char)i << (unsigned char)0;
   for (int i=0; i<642; ++i) f << b[i];
   f.close();
   return true;
@@ -179,8 +180,9 @@ static bool create_grey_gif(const char* filename)
 #pragma warning ( push )
 #pragma warning ( disable : 4305 4309)
 #endif
-  char a[] = { 253, 0, 155, 0, 247, 0, 0 };
-  char b[] = { 44, 0, 0, 0, 0, 253, 0, 155, 0, 0, 8, 254, 0, 1, 8, 28, 72, 176, 160, 193, 131, 8, 19, 42, 92, 200, 176, 161, 195,
+  unsigned char a[] = { 253, 0, 155, 0, 247, 0, 0 };
+  unsigned char b[] = {
+    44, 0, 0, 0, 0, 253, 0, 155, 0, 0, 8, 254, 0, 1, 8, 28, 72, 176, 160, 193, 131, 8, 19, 42, 92, 200, 176, 161, 195,
     135, 16, 35, 74, 156, 72, 177, 162, 197, 139, 24, 51, 106, 220, 200, 177, 163, 199, 143, 32, 67, 138, 28, 73, 178, 164, 201,
     147, 40, 83, 170, 92, 201, 178, 165, 203, 151, 48, 99, 202, 156, 73, 179, 166, 205, 155, 56, 115, 234, 220, 201, 179, 167,
     207, 159, 64, 131, 10, 29, 74, 180, 168, 209, 163, 72, 147, 42, 93, 202, 180, 169, 211, 167, 80, 163, 74, 157, 74, 181, 170,
@@ -200,7 +202,7 @@ static bool create_grey_gif(const char* filename)
   if (!f) return false;
   f << "GIF87a";
   for (int i=0; i<7; ++i) f << a[i];
-  for (int i=0; i<256; ++i) f << (char)i << (char)i << (char)i;
+  for (int i=0; i<256; ++i) f << (unsigned char)i << (unsigned char)i << (unsigned char)i;
   for (int i=0; i<336; ++i) f << b[i];
   f.close();
   return true;
@@ -213,7 +215,8 @@ void vil2_test_image_type(char const* type_name, // type for image to read and w
                          bool exact = true,  // require read back image identical
                          bool fail_save = false) // expect fail on save if true
 {
-  vcl_cout << "=== Start testing " << type_name << " ===\n" << vcl_flush;
+  vcl_cout << "=== Start testing " << type_name << " (" << sizeof(T)
+           << " bpp) ===\n" << vcl_flush;
 
   // Step 1) Write the image out to disk
   //
@@ -375,18 +378,6 @@ MAIN( test_save_load_image )
 #endif
 
 
-  // TIFF
-  vil2_test_image_type("tiff", image8);
-  vil2_test_image_type("tiff", image3p);
-#if 0
-  vil2_test_image_type("tiff", image1, true, true); // Test that boolean doesn't work
-  vil2_test_image_type("tiff", image16, true, true);
-  vil2_test_image_type("tiff", image32, true, true);
-  vil2_test_image_type("tiff", imagefloat, true, true);
-  vil2_test_image_type("tiff", imagedouble, true, true);
-#endif
-
-
   // PNG
 #if 1
   vil2_test_image_type("png", image8);
@@ -430,10 +421,13 @@ MAIN( test_save_load_image )
 
   // pnm ( = PBM / PGM / PPM )
 #if 1
+  vil2_test_image_type("pnm", image1);
   vil2_test_image_type("pbm", image1);
+  vil2_test_image_type("pnm", image8);
   vil2_test_image_type("pgm", image8);
   vil2_test_image_type("pnm", image16);
   vil2_test_image_type("pnm", image32);
+  vil2_test_image_type("pnm", image3p);
   vil2_test_image_type("ppm", image3p);
 #endif
 
@@ -454,6 +448,18 @@ MAIN( test_save_load_image )
   vil2_test_image_type("viff", image3p);
   vil2_test_image_type("viff", imagefloat);
   vil2_test_image_type("viff", imagedouble);
+#endif
+
+
+  // TIFF
+  vil2_test_image_type("tiff", image8);
+  vil2_test_image_type("tiff", image3p);
+#if 0
+  vil2_test_image_type("tiff", image1, true, true); // Test that boolean doesn't work
+  vil2_test_image_type("tiff", image16, true, true);
+  vil2_test_image_type("tiff", image32, true, true);
+  vil2_test_image_type("tiff", imagefloat, true, true);
+  vil2_test_image_type("tiff", imagedouble, true, true);
 #endif
 
 
