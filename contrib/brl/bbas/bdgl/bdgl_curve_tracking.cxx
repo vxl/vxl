@@ -2,7 +2,6 @@
 #include<bdgl/bdgl_curve_clustering.h>
 
 #include <vcl_iostream.h>
-#include <vcl_sstream.h>
 #include <vcl_fstream.h>
 
 bdgl_curve_tracking ::bdgl_curve_tracking(bdgl_curve_tracking_params &tp)
@@ -94,12 +93,8 @@ void bdgl_curve_tracking ::get_reliable_curves(unsigned int frame_no,unsigned in
 void bdgl_curve_tracking ::write_results(vcl_string filename)
 {
   vcl_ofstream ofile(filename.c_str());
-  ofile<<"<\?xml version=\"1.0\" encoding=\"UTF-8\" \?>\n"
-       <<"<vxl>\n";
-  vcl_ostringstream o;
-  o<<"<results video=\""<<filename<<"\" nframes=\""<<output_curves_.size()<<"\">";
-  vcl_string s= o.str();
-  ofile<<s<<"<frame no=";
+  ofile<<"<\?xml version=\"1.0\" encoding=\"UTF-8\" \?>\n<vxl>\n"
+       <<"<results video=\""<<filename<<"\" nframes=\""<<output_curves_.size()<<"\">";
   for (unsigned int i=0; i<output_curves_.size(); ++i)
   {
     double cnt=0;
@@ -107,10 +102,9 @@ void bdgl_curve_tracking ::write_results(vcl_string filename)
       if (output_curves_[i][j]->isreliable_ && output_curves_[i][j]->match_id_ >0)
         ++cnt;
     vcl_cout<<"\n frame no : "<<i <<" score : "<<cnt/output_curves_[i].size();
-    ofile<<"\""<<i<<"\" score = \""<<cnt/output_curves_[i].size()<<"\"></frame>";
+    ofile<<"<frame no=\""<<i<<"\" score=\""<<cnt/output_curves_[i].size()<<"\"/>";
   }
-  ofile<<"</results>\n"
-       <<"</vxl>\n";
+  ofile<<"</results>\n</vxl>\n";
 }
 
 void bdgl_curve_tracking ::track_frame(unsigned int frame)
@@ -122,11 +116,6 @@ void bdgl_curve_tracking ::track_frame(unsigned int frame)
   vcl_vector< bdgl_tracker_curve_sptr >  primitive_list1;
 
   bdgl_curve_matching                    matcher(tp_.mp);
-
-  vsol_curve_2d_sptr c;
-  vdgl_digital_curve_sptr dc;
-  vdgl_interpolator_sptr interp;
-  vdgl_edgel_chain_sptr  ec;
 
   if (input_curves_.size()<=frame) return;
 
@@ -228,8 +217,8 @@ void bdgl_curve_tracking ::write_tracks(bdgl_tracker_curve_sptr curve,
 
         for (unsigned int i=0; i<obj->desc->points_.size(); ++i)
         {
-          f<<" "<<"["<<obj->desc->points_[i].x()<<", "<<obj->desc->points_[i].y()
-           <<"]"<<"   "<<0<<" "<<0<<"\n";
+          f<<" ["<<obj->desc->points_[i].x()<<", "<<obj->desc->points_[i].y()
+           <<"]   0 0\n";
         }
         f<<"[END CONTOUR]\n";
       }
