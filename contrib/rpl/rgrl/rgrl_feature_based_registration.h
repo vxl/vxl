@@ -1,9 +1,8 @@
 #ifndef rgrl_feature_based_registration_h_
 #define rgrl_feature_based_registration_h_
-
 //:
 // \file
-// \brief The engine for feature-based registration. 
+// \brief The engine for feature-based registration.
 // \author Charlene Tsai
 // \date   Feb 2004
 
@@ -28,8 +27,9 @@
 //  different stages. The limitations of feature-based registration
 //  are fixed registration region and estimator at each stage.
 //
-class rgrl_feature_based_registration: public rgrl_object {
-public:
+class rgrl_feature_based_registration: public rgrl_object
+{
+ public:
   //: Initialize with the data storage and the convergence tester
   rgrl_feature_based_registration( rgrl_data_manager_sptr data,
                                    rgrl_convergence_tester_sptr conv_tester );
@@ -48,7 +48,7 @@ public:
   //  Loop through the set of initial estimates.
   void run( rgrl_initializer_sptr initializer );
 
-  //: Running from a given initial estimate. 
+  //: Running from a given initial estimate.
   //
   //  Based on if data_->is_multi_feature(), call run_single_feature(.)
   //  or run_multi_feature(.)
@@ -67,7 +67,7 @@ public:
   //:  Return the scales of the best transformation estimate
   rgrl_set_of<rgrl_scale_sptr>  const& final_scales() const;
   rgrl_scale_sptr final_scale() const;
-  
+
   //:  Return the status of the best transformation estimate.
   rgrl_converge_status_sptr final_status() const;
 
@@ -80,7 +80,7 @@ public:
   //:  Return the number of initial transformations tested
   //
   //   The value might be greater than 1 if using initializer which
-  //   provides a number of initial estiamtes.
+  //   provides a number of initial estimates.
   unsigned num_initial_xforms_tested() const;
 
   //:  Return true if has a best xform_estimate
@@ -90,7 +90,7 @@ public:
   //
   //  The default is 25 at initialization
   void set_max_icp_iter( unsigned iter );
-  
+
   //: Set the expected maximum geometric scale
   //
   //  If \a expected_max_geometric_scale_ is never set, the default
@@ -114,7 +114,7 @@ public:
 
   //: Return the current match sets
   rgrl_set_of<rgrl_match_set_sptr>  const& current_match_sets() const;
-    
+
   //:  Return the current estimate
   rgrl_transformation_sptr current_transformation() const;
 
@@ -124,7 +124,7 @@ public:
   //:  Return the current iterations_at_stage_
   unsigned iterations_at_current_stage() const;
 
-private:
+ private:
   //: registration of single feature type at each stage/resolution
   void register_single_feature( rgrl_mask_box            image_region,
                                 rgrl_estimator_sptr      initial_xform_estimator,
@@ -140,12 +140,12 @@ private:
                                unsigned                 init_resolution);
 
 
-  //: Scale/shrink the registration region and the xform_estimate according to the \a dimension_increase_for_next_stage at \a current_resol
+  //: Scale/shrink the registration region and the \a xform_est according to the \a dim_increase_for_next_stage at \a current_resol
   void initialize_for_next_resolution(  rgrl_mask_box            & image_region,
                                         rgrl_transformation_sptr & xform_estimate,
                                         unsigned                 & current_resol ) const;
 
-private:
+ private:
   rgrl_data_manager_sptr data_;
   rgrl_convergence_tester_sptr conv_tester_;
 
@@ -158,7 +158,7 @@ private:
   unsigned max_icp_iter_;
   double   expected_max_geometric_scale_; //for early termination
   double   expected_min_geometric_scale_;
-  int      iterations_for_scale_est_; 
+  int      iterations_for_scale_est_;
   bool     should_penalize_scaling_;
 
   // data members to keep track of current status
@@ -168,4 +168,4 @@ private:
   rgrl_transformation_sptr          current_xform_estimate_;
 };
 
-#endif // rgrl_feature_based_registration_h
+#endif // rgrl_feature_based_registration_h_
