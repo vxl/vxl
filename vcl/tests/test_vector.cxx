@@ -20,6 +20,7 @@ int frurk(vcl_vector<int> const &a,
 
 int test_vector_main(int /*argc*/,char* /*argv*/[])
 {
+  bool fail = false;
   {
     typedef vcl_vector<int> container;
     container m;
@@ -41,6 +42,20 @@ int test_vector_main(int /*argc*/,char* /*argv*/[])
       v.push_back(13.141592653589793 * i);
     }
   }
+  { // check contiguity
+#define macro(T) do { \
+    vcl_vector<T > v; \
+    for (int i=0; i<5; ++i) v.push_back(T(i)); \
+    bool ok = true; \
+    for (int i=1; i<v.size(); ++i) { T *p = &v[i-1]; T *q = &v[i]; if (p + 1 != q) ok = false; } \
+    if (ok) vcl_cout << "PASSED: vector<" << #T << "> has contiguous storage" << vcl_endl; \
+    else { vcl_cout << "FAIL: vector<" << #T << "> has non-contiguous storage" << vcl_endl; fail = true; } \
+} while (false)
+    macro(char);
+    macro(int);
+    macro(double);
+#undef macro
+  }
 
-  return 0;
+  return fail ? 1 : 0;
 }
