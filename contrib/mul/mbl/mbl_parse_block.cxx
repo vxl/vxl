@@ -75,7 +75,7 @@ vcl_string mbl_parse_block(vcl_istream &afs, bool open_already /*= false*/, cons
           vcl_string dummy;
           vcl_getline(afs, dummy);
           s2 = "";
-          newline = false;
+          newline = true; //false;
           comment_position = 0;
         }
       }
