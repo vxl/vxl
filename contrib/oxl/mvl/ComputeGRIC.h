@@ -11,9 +11,9 @@
 #include <vcl/vcl_vector.h>
 
 class ComputeGRIC {
-public: 
-	ComputeGRIC(double std);
-	~ComputeGRIC();
+public:
+  ComputeGRIC(double std);
+  ~ComputeGRIC();
 
   // Computations
   // Compute the GRIC score and indicate which model

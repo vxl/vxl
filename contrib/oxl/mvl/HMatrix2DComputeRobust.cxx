@@ -4,14 +4,9 @@
 #include <mvl/HomgInterestPointSet.h>
 #include <vnl/vnl_matrix.h>
 
-HMatrix2DComputeRobust::HMatrix2DComputeRobust()
-{
+HMatrix2DComputeRobust::HMatrix2DComputeRobust() {}
 
-}
-
-HMatrix2DComputeRobust::~HMatrix2DComputeRobust() {
-
-}
+HMatrix2DComputeRobust::~HMatrix2DComputeRobust() {}
 
 //-----------------------------------------------------------------------------
 //
@@ -31,13 +26,15 @@ bool HMatrix2DComputeRobust::compute(PairMatchSetCorner& matches, HMatrix2D *H)
   data_size_ = matches.count();
   vcl_vector<HomgPoint2D> point1_image(data_size_), point2_image(data_size_);
 
-  for(int a = 0; a < data_size_; a++) {
+  for(int a = 0; a < data_size_; a++)
+  {
     vnl_double_2 temp1;
     temp1 = points1->get_2d(point1_int[a]);
     point1_image[a] = HomgPoint2D(temp1[0], temp1[1], 1.0);
   }
 
-  for(int a = 0; a < data_size_; a++) {
+  for(int a = 0; a < data_size_; a++)
+  {
     vnl_double_2 temp2;
     temp2 = points2->get_2d(point2_int[a]);
     point2_image[a] = HomgPoint2D(temp2[0], temp2[1], 1.0);
@@ -49,13 +46,15 @@ bool HMatrix2DComputeRobust::compute(PairMatchSetCorner& matches, HMatrix2D *H)
   vcl_vector<bool> inlier_list(data_size_);
   vcl_vector<double> residualsH(data_size_, 100.0);
   // 300 random samples from the points set
-  for(int i = 0; i < 100; i++) {
+  for(int i = 0; i < 100; i++)
+  {
     vcl_vector<int> index(4);
     // Take the minimum sample of seven points for the F Matrix calculation
     index = Monte_Carlo(point1_store, point1_int, 8, 4);
     vcl_vector<HomgPoint2D> four1_homg(4);
     vcl_vector<HomgPoint2D> four2_homg(4);
-    for(int j = 0; j < 4; j++) {
+    for(int j = 0; j < 4; j++)
+    {
       int ind = index[j];
       vnl_double_2 p1 = points1->get_2d(ind);
       four1_homg[j] = HomgPoint2D(p1[0], p1[1], 1.0);
@@ -85,7 +84,8 @@ bool HMatrix2DComputeRobust::compute(PairMatchSetCorner& matches, HMatrix2D *H)
     vcl_vector<bool> list(data_size_);
     vcl_vector<double> residuals = calculate_residuals(point1_image, point2_image, H_temp);
     double mle_error = calculate_term(residuals, list, temp_count);
-    if(mle_error < Ds) {
+    if(mle_error < Ds)
+    {
       Hs = *H_temp;
       Hs_homg = *H_temp_homg;
       Ds = mle_error;
@@ -97,7 +97,6 @@ bool HMatrix2DComputeRobust::compute(PairMatchSetCorner& matches, HMatrix2D *H)
       vcl_cout << "Inliers : " << count << vcl_endl;
       vcl_cout << "HMatrix2D : " << Hs.get_matrix() << vcl_endl;
     }
-
   }
   vcl_cout << "Final Figures..." << vcl_endl;
   vcl_cout << "Ds : " << Ds << vcl_endl;
@@ -118,7 +117,8 @@ bool HMatrix2DComputeRobust::compute(PairMatchSetCorner& matches, HMatrix2D *H)
   return true;
 }
 
-double HMatrix2DComputeRobust::stdev(vcl_vector<double>& residuals) {
+double HMatrix2DComputeRobust::stdev(vcl_vector<double>& residuals)
+{
   double ret;
   for(int i = 0; i < data_size_; i++)
     ret += residuals[i];
@@ -128,18 +128,31 @@ double HMatrix2DComputeRobust::stdev(vcl_vector<double>& residuals) {
   return ret;
 }
 
-vcl_vector<double> HMatrix2DComputeRobust::calculate_residuals(vcl_vector<HomgPoint2D>& one, vcl_vector<HomgPoint2D>& two, HMatrix2D* H) {
+vcl_vector<double> HMatrix2DComputeRobust::calculate_residuals(vcl_vector<HomgPoint2D>& one,
+                                                               vcl_vector<HomgPoint2D>& two,
+                                                               HMatrix2D* H)
+{
   vcl_vector<double> ret(data_size_);
   HomgPoint2D correct1, correct2;
-  for(int i = 0; i < data_size_; i++) {
+  for(int i = 0; i < data_size_; i++)
+  {
     ret[i] = calculate_residual(one[i], two[i], H);
   }
   return ret;
 }
 
-double HMatrix2DComputeRobust::calculate_term(vcl_vector<double>& residuals, vcl_vector<bool>& inlier_list, int& count) {
+// TODO
+double HMatrix2DComputeRobust::calculate_term(vcl_vector<double>& residuals,
+                                              vcl_vector<bool>& inlier_list,
+                                              int& count)
+{
   return 10000.0;
 }
-double HMatrix2DComputeRobust::calculate_residual(HomgPoint2D& one, HomgPoint2D& two, HMatrix2D* H) {
+
+// TODO
+double HMatrix2DComputeRobust::calculate_residual(HomgPoint2D& one,
+                                                  HomgPoint2D& two,
+                                                  HMatrix2D* H)
+{
   return 100.0;
 }

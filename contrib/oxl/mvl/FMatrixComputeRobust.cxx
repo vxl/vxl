@@ -10,13 +10,9 @@
 #include <vnl/vnl_math.h>
 #include <vcl/vcl_cmath.h>
 
-FMatrixComputeRobust::FMatrixComputeRobust() {
+FMatrixComputeRobust::FMatrixComputeRobust() {}
 
-}
-
-FMatrixComputeRobust::~FMatrixComputeRobust() {
-
-}
+FMatrixComputeRobust::~FMatrixComputeRobust() {}
 //-----------------------------------------------------------------------------
 //
 // - Compute a robust fundamental matrix.
@@ -110,7 +106,7 @@ bool FMatrixComputeRobust::compute(PairMatchSetCorner& matches, FMatrix *F)
   HomgPoint2D c2(t[0], t[1], 1.0);
   vcl_cout << "Epipole 1 : " << c1 << " Epipole 2 : " << c2 << vcl_endl;
   vcl_cout << vcl_endl;
-	epipole1_ = c1;
+  epipole1_ = c1;
   epipole2_ = c2;
   sample /= sample.get(2, 2);
   vcl_cout << "FMatrix : " << sample << vcl_endl;
@@ -129,13 +125,13 @@ bool FMatrixComputeRobust::compute(PairMatchSetCorner& matches, FMatrix *F)
 
   // Update the inliers in the PairMatchSet object
   matches.set(inlier_list, point1_int, point2_int);
-//  int k = 0;
-//  for(int z = 0; z < inlier_list.size(); z++)
-//    if(inlier_list[z] == true) {
-//      vcl_cout << "residualsF[" << z << "] : " << residualsF[z] << vcl_endl;
-//      vcl_cout << k << vcl_endl;
-//      k++;
-//    }
+#if 0
+  for(int z=0, k=0; z < inlier_list.size(); z++)
+    if(inlier_list[z] == true) {
+      vcl_cout << "residualsF[" << z << "] : " << residualsF[z] << vcl_endl;
+      vcl_cout << k++ << vcl_endl;
+    }
+#endif
   inliers_ = inlier_list;
   residuals_ = residualsF;
   vcl_cout << "Inlier - " << vcl_endl;
@@ -147,7 +143,9 @@ bool FMatrixComputeRobust::compute(PairMatchSetCorner& matches, FMatrix *F)
 
 // Implemented from FMatrixCompute
 // Wrapping prior compute method
-bool FMatrixComputeRobust::compute (vcl_vector<HomgPoint2D>& p1, vcl_vector<HomgPoint2D>& p2, FMatrix* F) {
+bool FMatrixComputeRobust::compute (vcl_vector<HomgPoint2D>& p1,
+                                    vcl_vector<HomgPoint2D>& p2,
+                                    FMatrix* F) {
   if(p1.size() != p2.size())
     vcl_cout << "Point vectors are not of equal length" << vcl_endl;
   int count = p1.size();
@@ -170,14 +168,17 @@ FMatrix FMatrixComputeRobust::compute(PairMatchSetCorner& matched_points) {
   return *F;
 }
 
-FMatrix FMatrixComputeRobust::compute(vcl_vector<HomgPoint2D>& p1, vcl_vector<HomgPoint2D>& p2) {
+FMatrix FMatrixComputeRobust::compute(vcl_vector<HomgPoint2D>& p1,
+                                      vcl_vector<HomgPoint2D>& p2) {
   FMatrix* F = new FMatrix();
   compute(p1, p2, F);
   return *F;
 }
 
 // Calculate all the residuals for a given relation
-vcl_vector<double> FMatrixComputeRobust::calculate_residuals(vcl_vector<HomgPoint2D>& one, vcl_vector<HomgPoint2D>& two, FMatrix* F) {
+vcl_vector<double> FMatrixComputeRobust::calculate_residuals(vcl_vector<HomgPoint2D>& one,
+                                                             vcl_vector<HomgPoint2D>& two,
+                                                             FMatrix* F) {
   vcl_vector<double> ret(data_size_);
   for(int i = 0; i < data_size_; i++) {
     double val = calculate_residual(one[i], two[i], F);
@@ -197,14 +198,16 @@ double FMatrixComputeRobust::stdev(vcl_vector<double>& residuals) {
   return ret;
 }
 
-// Implement Me!!!
-double FMatrixComputeRobust::calculate_term(vcl_vector<double>& residuals, vcl_vector<bool>& inlier_list, int& count) {
+// Implement Me!!! TODO
+double FMatrixComputeRobust::calculate_term(vcl_vector<double>& residuals,
+                                            vcl_vector<bool>& inlier_list,
+                                            int& count) {
   return 10000.0;
 }
 
-// Implement Me!!!
-double FMatrixComputeRobust::calculate_residual(HomgPoint2D& one, HomgPoint2D& two, FMatrix* F) {
+// Implement Me!!! TODO
+double FMatrixComputeRobust::calculate_residual(HomgPoint2D& one,
+                                                HomgPoint2D& two,
+                                                FMatrix* F) {
   return 100.0;
 }
-
-

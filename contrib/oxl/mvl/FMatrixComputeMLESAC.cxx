@@ -12,12 +12,9 @@ FMatrixComputeMLESAC::FMatrixComputeMLESAC(bool rank2_truncate, double std)
   rank2_truncate_ = rank2_truncate,
   std_ = std;
   inthresh_ = (1.96*std_)*(1.96*std_);
-
 }
 
-FMatrixComputeMLESAC::~FMatrixComputeMLESAC() {
-
-}
+FMatrixComputeMLESAC::~FMatrixComputeMLESAC() {}
 
 // The robust Huber cost function
 double FMatrixComputeMLESAC::calculate_term(vcl_vector<double>& residuals, vcl_vector<bool>& inlier_list, int& count) {
@@ -29,7 +26,7 @@ double FMatrixComputeMLESAC::calculate_term(vcl_vector<double>& residuals, vcl_v
       count++;
     } else {
       inlier_list[i] = false;
-    	sse += inthresh_;
+      sse += inthresh_;
     }
   }
   return sse;
@@ -43,33 +40,34 @@ double FMatrixComputeMLESAC::calculate_residual(HomgPoint2D& one, HomgPoint2D& t
   // that I have experimented with (ie. approximation to the full solution
   // Hartley 'Triangulation')
 
-  //double r = 0.0;
-  double ret = 0.0;
-  //vnl_matrix<double> matrix = F->get_matrix();
-  //double const* const* mat = matrix.data_array();
+#if 0
+  double r = 0.0;
+  vnl_matrix<double> matrix = F->get_matrix();
+  double const* const* mat = matrix.data_array();
 
-  //vnl_double_2 p1 = one.get_nonhomogeneous();
-  //vnl_double_2 p2 = two.get_nonhomogeneous();
-  //double a11 =  mat[0][0]*p1[0] + mat[1][0]*p1[1] + mat[2][0];
-  //double a12 =  mat[0][1]*p1[0] + mat[1][1]*p1[1] + mat[2][1];
-  //double b11 =  mat[0][0]*p2[0] + mat[0][1]*p2[1] + mat[0][2];
-  //double b12 =  mat[1][0]*p2[0] + mat[1][1]*p2[1] + mat[1][2];
-
+  vnl_double_2 p1 = one.get_nonhomogeneous();
+  vnl_double_2 p2 = two.get_nonhomogeneous();
+  double a11 =  mat[0][0]*p1[0] + mat[1][0]*p1[1] + mat[2][0];
+  double a12 =  mat[0][1]*p1[0] + mat[1][1]*p1[1] + mat[2][1];
+  double b11 =  mat[0][0]*p2[0] + mat[0][1]*p2[1] + mat[0][2];
+  double b12 =  mat[1][0]*p2[0] + mat[1][1]*p2[1] + mat[1][2];
+#endif
   HomgLine2D l1 = F->image2_epipolar_line(one);
   HomgLine2D l2 = F->image1_epipolar_line(two);
-  ret += HomgOperator2D::perp_dist_squared(two, l1);
-  ret += HomgOperator2D::perp_dist_squared(one, l2);
+  double ret = HomgOperator2D::perp_dist_squared(two, l1)
+             + HomgOperator2D::perp_dist_squared(one, l2);
 
+#if 0
+  double factor = a11*a11 + a12*a12 + b11*b11 + b12*b12;
+  if(factor < 0.1)
+    factor = 0.1;
 
-//  double factor = a11*a11 + a12*a12 + b11*b11 + b12*b12;
-  //if(factor < 0.1)
-  //  factor = 0.1;
+  ret /= factor;
 
-//  ret /= factor;
-
-//  r += ret*b11;
-//  r += ret*b12;
-//  r += ret*a11;
-//  r += ret*a12;
-  return ret;	
+  r += ret*b11;
+  r += ret*b12;
+  r += ret*a11;
+  r += ret*a12;
+#endif
+  return ret;
 }

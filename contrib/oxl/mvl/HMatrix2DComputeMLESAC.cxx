@@ -8,9 +8,7 @@ HMatrix2DComputeMLESAC::HMatrix2DComputeMLESAC(double std) {
   std_ = std;
 }
 
-HMatrix2DComputeMLESAC::~HMatrix2DComputeMLESAC() {
-
-}
+HMatrix2DComputeMLESAC::~HMatrix2DComputeMLESAC() {}
 
 double HMatrix2DComputeMLESAC::calculate_term(vcl_vector<double>& residuals, vcl_vector<bool>& inlier_list, int& count) {
   double inthresh = 5.99*std_*std_;
@@ -23,7 +21,7 @@ double HMatrix2DComputeMLESAC::calculate_term(vcl_vector<double>& residuals, vcl
     } else {
       inlier_list[i] = false;
       sse += inthresh;
-    }	
+    }
   }
   return sse;
 }
@@ -38,9 +36,9 @@ double HMatrix2DComputeMLESAC::calculate_residual(HomgPoint2D& one, HomgPoint2D&
   vnl_double_2 p2 = two.get_double2();
   r[0] = HomgOperator2D::distance_squared(H->transform_to_plane2(one), two);
   r[1] = HomgOperator2D::distance_squared(H->transform_to_plane1(two), one);
-//  cout << H->transform_to_plane2(one).get_double2() << " : " << two.get_double2() << " : " << r[0] << endl;
-//  cout << H->transform_to_plane1(two).get_double2() << " : " << one.get_double2() << " : " << r[1] << endl;
-/*
+#if 0
+  vcl_cout << H->transform_to_plane2(one).get_double2() << " : " << two.get_double2() << " : " << r[0] << vcl_endl;
+  vcl_cout << H->transform_to_plane1(two).get_double2() << " : " << one.get_double2() << " : " << r[1] << vcl_endl;
   if(r[0] < 100.0 && r[1] < 100.0) {
     double t11 = t[0] - t[6]*p2[0];
     double t12 = t[1] - t[7]*p2[0];
@@ -66,12 +64,10 @@ double HMatrix2DComputeMLESAC::calculate_residual(HomgPoint2D& one, HomgPoint2D&
     vnl_matrix<double> res1 = svd.inverse();
     vnl_double_2 g = res1*r;
     double d = r[0]*g[0] + r[1]*g[1];
-    return d;	
+    return d;
   } else
     return 1e+6;
-*/
-//  cout << "r[0] : " << r[0] << " r[1] : " << r[1] << endl;
+#endif
+//vcl_cout << "r[0] : " << r[0] << " r[1] : " << r[1] << vcl_endl;
   return r[0] + r[1];
 }
-
-

@@ -12,12 +12,9 @@ FMatrixComputeLMedSq::FMatrixComputeLMedSq(bool rank2_truncate, int size)
   double std = 1.4826*(1.0 + 5.0/(size - 7));
   // This gives the inlier thresh^2 minus the Median term (M)
   inthresh_ = (2.5*std)*(2.5*std);
-
 }
 
-FMatrixComputeLMedSq::~FMatrixComputeLMedSq() {
-
-}
+FMatrixComputeLMedSq::~FMatrixComputeLMedSq() {}
 
 double FMatrixComputeLMedSq::calculate_term(vcl_vector<double>& residuals, vcl_vector<bool>& inlier_list, int& count) {
   double M = median(residuals);
@@ -43,7 +40,7 @@ double FMatrixComputeLMedSq::calculate_residual(HomgPoint2D& one, HomgPoint2D& t
   ret += HomgOperator2D::perp_dist_squared(two, l1);
   ret += HomgOperator2D::perp_dist_squared(one, l2);
 
-  return ret;	
+  return ret;
 }
 
 double FMatrixComputeLMedSq::median(vcl_vector<double> residuals) {
