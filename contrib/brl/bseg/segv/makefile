@@ -1,4 +1,4 @@
-USES += contrib/brl contrib/brl/bseg contrib/gel core
+USES += contrib/brl contrib/brl/bbas contrib/brl/bseg contrib/gel core
 
 LIBRARY := segv
 VERSION := 1.0
