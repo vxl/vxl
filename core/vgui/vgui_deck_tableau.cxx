@@ -1,4 +1,4 @@
-// This is oxl/vgui/vgui_deck_tableau.cxx
+// This is core/vgui/vgui_deck_tableau.cxx
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
@@ -23,7 +23,7 @@ static bool debug=false;
 //----------------------------------------------------------------------------
 //: Constructor - don't use this, use vgui_deck_tableau_new.
 //  Makes an empty deck
-vgui_deck_tableau::vgui_deck_tableau() : index_(-1) 
+vgui_deck_tableau::vgui_deck_tableau() : index_(-1)
 {
 }
 
@@ -73,7 +73,7 @@ bool vgui_deck_tableau::handle(const vgui_event& event) {
 //: Send info to cerr - called when user presses '?' in the rendering area.
 //  Over-rides function in vgui_tableau.
 //  This function is called by the default handle() function in vgui_tableau.
-bool vgui_deck_tableau::help() 
+bool vgui_deck_tableau::help()
 {
   vcl_cerr << "\n"
            << "-- vgui_deck_tableau ----------------------------\n"
@@ -156,7 +156,7 @@ bool vgui_deck_tableau::remove_child(vgui_tableau_sptr const& t)
   for (vcl_vector<vgui_parent_child_link>::iterator i = children.begin() ; i!=children.end() ; ++i)
     if ( (*i) == t ) {
       children.erase(i);
-      // Index must be allowed to go to -1 if all are deleted, so don't 
+      // Index must be allowed to go to -1 if all are deleted, so don't
       // check for zero
       --index_;
       observers.notify();
@@ -300,8 +300,8 @@ class vgui_deck_switch_command : public vgui_command
 
 //----------------------------------------------------------------------------
 //: Builds a popup menu for the user to select the active child.
-void vgui_deck_tableau::get_popup(const vgui_popup_params& params, 
-  vgui_menu &menu) 
+void vgui_deck_tableau::get_popup(const vgui_popup_params& params,
+  vgui_menu &menu)
 {
   vgui_menu submenu;
 
@@ -311,7 +311,7 @@ void vgui_deck_tableau::get_popup(const vgui_popup_params& params,
   int count = 0;
   vcl_vector<vgui_parent_child_link>::iterator i = children.begin();
   for ( ; i!=children.end() ; ++i, ++count) {
-    selections.add((*i)->file_name().c_str(), 
+    selections.add((*i)->file_name().c_str(),
       new vgui_deck_switch_command(this,count));
   }
 

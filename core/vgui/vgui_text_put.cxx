@@ -1,4 +1,4 @@
-// This is oxl/vgui/vgui_text_put.cxx
+// This is core/vgui/vgui_text_put.cxx
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif

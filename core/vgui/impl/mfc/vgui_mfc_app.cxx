@@ -1,4 +1,4 @@
-// This is oxl/vgui/impl/mfc/vgui_mfc_app.cxx
+// This is core/vgui/impl/mfc/vgui_mfc_app.cxx
 #include "StdAfx.h"
 #include "vgui_mfc_app.h"
 //:
@@ -135,7 +135,7 @@ BOOL vgui_mfc_app::Run()
       MSG tmp_msg;
       if (::PeekMessage(&tmp_msg,NULL,NULL,NULL,PM_NOREMOVE))
       {
-        if (1) 
+        if (1)
         {
           // Collapse multiple move events...
           while (tmp_msg.message == WM_MOVE)

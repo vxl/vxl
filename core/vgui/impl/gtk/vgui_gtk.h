@@ -1,4 +1,4 @@
-// This is oxl/vgui/impl/gtk/vgui_gtk.h
+// This is core/vgui/impl/gtk/vgui_gtk.h
 #ifndef vgui_gtk_h_
 #define vgui_gtk_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
@@ -50,7 +50,7 @@ class vgui_gtk : public vgui_toolkit
 
   //: Run until there are no more events left in the event queue.
   virtual void run_till_idle();
- 
+
   //: Clear all events from the event queue.
   virtual void flush();
 
@@ -58,7 +58,7 @@ class vgui_gtk : public vgui_toolkit
   virtual void quit();
 
   //: Create a window with a menubar.
-  virtual vgui_window* produce_window(int width, int height, 
+  virtual vgui_window* produce_window(int width, int height,
                                       const vgui_menu& menubar,
                                       const char* title="vgui gtk window");
 

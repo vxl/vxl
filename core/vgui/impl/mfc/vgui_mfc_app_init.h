@@ -1,4 +1,4 @@
-// This is oxl/vgui/impl/mfc/vgui_mfc_app_init.h
+// This is core/vgui/impl/mfc/vgui_mfc_app_init.h
 #ifndef vgui_mfc_app_init_h_
 #define vgui_mfc_app_init_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
@@ -19,7 +19,7 @@ class vgui_mfc_app_init
  public:
   vgui_mfc_app_init();
   ~vgui_mfc_app_init();
- 
+
  protected:
   vgui_mfc_app* p;
 };

@@ -1,4 +1,4 @@
-// This is oxl/vgui/vgui_cache_wizard.cxx
+// This is core/vgui/vgui_cache_wizard.cxx
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
@@ -28,8 +28,8 @@
 bool debug = false;
 vgui_cache_wizard *vgui_cache_wizard::instance_ = 0;
 //: Constructor.
-// Set the image quadrant width/height. 
-// Do use sensible values(i.e. powers of two) otherwise the cache 
+// Set the image quadrant width/height.
+// Do use sensible values(i.e. powers of two) otherwise the cache
 // wizard won't work.
 vgui_cache_wizard::vgui_cache_wizard(int quadrant_width,
                                      int quadrant_height)

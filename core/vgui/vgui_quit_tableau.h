@@ -1,4 +1,4 @@
-// This is oxl/vgui/vgui_quit_tableau.h
+// This is core/vgui/vgui_quit_tableau.h
 #ifndef vgui_quit_tableau_h_
 #define vgui_quit_tableau_h_
 //:

@@ -1,4 +1,4 @@
-// This is oxl/vgui/vgui_button.h
+// This is core/vgui/vgui_button.h
 #ifndef vgui_button_h_
 #define vgui_button_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
@@ -9,8 +9,8 @@
 // \brief Enumeration of possible mouse buttons.
 //
 //  WIN32 NOTE: The middle mouse button does not produce a middle mouse button
-//  event by default on Windows.  If you are not getting middle mouse button 
-//  events then look at Start->Settings->Control Panel->Mouse.  Check on 
+//  event by default on Windows.  If you are not getting middle mouse button
+//  events then look at Start->Settings->Control Panel->Mouse.  Check on
 //  the "Button Actions" tab that your middle mouse button is set to "Middle"
 //  - kym.
 

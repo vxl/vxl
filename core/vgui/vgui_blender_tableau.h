@@ -1,4 +1,4 @@
-// This is oxl/vgui/vgui_blender_tableau.h
+// This is core/vgui/vgui_blender_tableau.h
 #ifndef vgui_blender_tableau_h_
 #define vgui_blender_tableau_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
@@ -27,7 +27,7 @@ class vil_image;
 
 //: Tableau to blend two images.
 //
-//  To use this tableau make a vgui_image_tableau containing one of the 
+//  To use this tableau make a vgui_image_tableau containing one of the
 //  images to blend and a vgui_blender_tableau containing the other.
 //  Put them both in a vgui_composite_tableau.  Set alpha to be less than
 //  one to see the blended image.
@@ -71,14 +71,14 @@ class vgui_blender_tableau : public vgui_tableau
 };
 
 //: Creates a smart-pointer to a vgui_blender_tableau.
-struct vgui_blender_tableau_new : public vgui_blender_tableau_sptr 
+struct vgui_blender_tableau_new : public vgui_blender_tableau_sptr
 {
   //: Constructor - create a blender with the given image and alpha value.
-  vgui_blender_tableau_new(char const* file, float a=1.0) 
+  vgui_blender_tableau_new(char const* file, float a=1.0)
     : vgui_blender_tableau_sptr(new vgui_blender_tableau(file,a)) { }
 
   //: Constructor - create a blender with the given image and alpha value.
-  vgui_blender_tableau_new(vil_image const& img, float a=1.0) 
+  vgui_blender_tableau_new(vil_image const& img, float a=1.0)
     : vgui_blender_tableau_sptr(new vgui_blender_tableau(img, a)) { }
 };
 

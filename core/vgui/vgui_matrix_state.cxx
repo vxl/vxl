@@ -1,4 +1,4 @@
-// This is oxl/vgui/vgui_matrix_state.cxx
+// This is core/vgui/vgui_matrix_state.cxx
 
 //:
 // \file

@@ -1,4 +1,4 @@
-// This is oxl/vgui/impl/gtk/vgui_gtk_window.cxx
+// This is core/vgui/impl/gtk/vgui_gtk_window.cxx
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif

@@ -1,4 +1,4 @@
-// This is oxl/vgui/vgui_pixel.cxx
+// This is core/vgui/vgui_pixel.cxx
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif

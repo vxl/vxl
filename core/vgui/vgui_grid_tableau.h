@@ -1,4 +1,4 @@
-// This is oxl/vgui/vgui_grid_tableau.h
+// This is core/vgui/vgui_grid_tableau.h
 #ifndef vgui_grid_tableau_h_
 #define vgui_grid_tableau_h_
 //:
@@ -40,9 +40,9 @@ bool operator==(vgui_grid_tableau_data const &a,
 
 //: A tableau which renders its child tableaux as a rectangular grid.
 //
-//  It is derived from vgui_poly_tableau but unlike vgui_poly_tablea, the 
-//  child tableaux of vgui_grid_tableau can only be laid out in an m by n 
-//  rectangular grid.  Rows and columns are numbered starting from 0 with 
+//  It is derived from vgui_poly_tableau but unlike vgui_poly_tablea, the
+//  child tableaux of vgui_grid_tableau can only be laid out in an m by n
+//  rectangular grid.  Rows and columns are numbered starting from 0 with
 //  (0,0) in the top left and (m-1,n-1) in the bottom right.
 //
 //  The default behaviour of vgui_grid is to keep a list of every tableau
@@ -64,10 +64,10 @@ bool operator==(vgui_grid_tableau_data const &a,
 //  PageDown you can prevent users from changing the displayed tableau - this
 //  could also be useful if you want to show two vgui_deck tableau and so want
 //  the PageUp and PageDown events to pass through vgui_grid and be used by the
-//  child decks. Disabling plus and minus events gives a grid tableau of fixed 
+//  child decks. Disabling plus and minus events gives a grid tableau of fixed
 //  size.
 //
-//  This tableau was originally written for xcv, so look at this application 
+//  This tableau was originally written for xcv, so look at this application
 //  to get a better idea what it does.
 class vgui_grid_tableau : public vgui_poly_tableau
 {
@@ -87,7 +87,7 @@ class vgui_grid_tableau : public vgui_poly_tableau
 
   //: Constructor - don't use this, use vgui_grid_tableau_new.
   //  This creates a tri-tab, taking the three tableau as parameters.
-  vgui_grid_tableau(vgui_tableau_sptr const& l, vgui_tableau_sptr const& m, 
+  vgui_grid_tableau(vgui_tableau_sptr const& l, vgui_tableau_sptr const& m,
                     vgui_tableau_sptr const& r);
 
   //: Given the column number, returns the x coord for that column.
@@ -167,7 +167,7 @@ class vgui_grid_tableau : public vgui_poly_tableau
   //: Redraw the grid keeping each tableau in its current row and column.
   void layout_grid();
 
-  //: Redraw the grid of tableaux packing them in without gaps. 
+  //: Redraw the grid of tableaux packing them in without gaps.
   //  Fill each row from top left downwards.
   void layout_grid2();
 

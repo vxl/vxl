@@ -1,4 +1,4 @@
-// This is oxl/vgui/internals/vgui_parent_child_link_data.h
+// This is core/vgui/internals/vgui_parent_child_link_data.h
 #ifndef vgui_parent_child_link_data_h_
 #define vgui_parent_child_link_data_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE

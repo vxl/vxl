@@ -1,4 +1,4 @@
-// This is oxl/vgui/vrml/vgui_vrml_draw_visitor.h
+// This is core/vgui/vrml/vgui_vrml_draw_visitor.h
 #ifndef vgui_vrml_draw_visitor_h_
 #define vgui_vrml_draw_visitor_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE

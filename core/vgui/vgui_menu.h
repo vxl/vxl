@@ -1,4 +1,4 @@
-// This is oxl/vgui/vgui_menu.h
+// This is core/vgui/vgui_menu.h
 #ifndef vgui_menu_h_
 #define vgui_menu_h_
 //:
@@ -56,17 +56,17 @@ struct vgui_menu_item
   //: Constructor - create menu item same as given item.
   vgui_menu_item(vgui_menu_item const &);
 
-  //: Destructor 
+  //: Destructor
   ~vgui_menu_item();
 
   //: Name of item, "" for separators.
   vcl_string name;
 
-  //: Pointer to the command to be executed. 
+  //: Pointer to the command to be executed.
   //  Non-zero for command items only.
   vbl_smart_ptr<vgui_command> cmnd;
 
-  //: Pointer to a submenu. 
+  //: Pointer to a submenu.
   //  The object pointed to is owned (ie managed) by
   //  the menu. non-zero for submenu items only.
   vgui_menu *menu;
@@ -82,7 +82,7 @@ struct vgui_menu_item
 
   //: Return true if the item is a command (item which performs an action).
   bool is_command()       const { return name!="" &&  (bool)cmnd && (menu == 0) && !(bool)is_toggle; }
- 
+
   //: Returns true if the item is a sub-menu.
   bool is_submenu()       const { return name!="" && !(bool)cmnd && (menu != 0) && !(bool)is_toggle; }
 

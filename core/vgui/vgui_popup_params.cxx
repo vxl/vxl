@@ -1,4 +1,4 @@
-// This is oxl/vgui/vgui_popup_params.cxx
+// This is core/vgui/vgui_popup_params.cxx
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
@@ -14,6 +14,6 @@
 vgui_popup_params::vgui_popup_params()
   : x(-1) , y(-1)
   , recurse(true)
-  , nested(false) 
+  , nested(false)
   , defaults(false)
 {}

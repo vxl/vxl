@@ -1,4 +1,4 @@
-// This is oxl/vgui/impl/mfc/vgui_mfc_app.h
+// This is core/vgui/impl/mfc/vgui_mfc_app.h
 #ifndef AFX_VGUIMFCAPP_H__259D1B15_6A52_45B3_B335_8A7C78097A13__INCLUDED_
 #define AFX_VGUIMFCAPP_H__259D1B15_6A52_45B3_B335_8A7C78097A13__INCLUDED_
 //:

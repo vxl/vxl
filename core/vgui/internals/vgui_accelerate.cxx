@@ -1,4 +1,4 @@
-// This is oxl/vgui/internals/vgui_accelerate.cxx
+// This is core/vgui/internals/vgui_accelerate.cxx
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif

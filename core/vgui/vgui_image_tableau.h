@@ -1,4 +1,4 @@
-// This is oxl/vgui/vgui_image_tableau.h
+// This is core/vgui/vgui_image_tableau.h
 #ifndef vgui_image_tableau_h_
 #define vgui_image_tableau_h_
 //:

@@ -1,4 +1,4 @@
-// This is oxl/vgui/vgui_tag.h
+// This is core/vgui/vgui_tag.h
 #ifndef vgui_tag_h_
 #define vgui_tag_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE

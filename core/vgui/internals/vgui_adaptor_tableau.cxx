@@ -1,4 +1,4 @@
-// This is oxl/vgui/internals/vgui_adaptor_tableau.cxx
+// This is core/vgui/internals/vgui_adaptor_tableau.cxx
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif

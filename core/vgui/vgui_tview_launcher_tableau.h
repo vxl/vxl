@@ -1,4 +1,4 @@
-// This is oxl/vgui/vgui_tview_launcher_tableau.h
+// This is core/vgui/vgui_tview_launcher_tableau.h
 #ifndef vgui_tview_launcher_tableau_h_
 #define vgui_tview_launcher_tableau_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
@@ -9,7 +9,7 @@
 // \author Philip C. Pritchett, Robotics Research Group, University of Oxford
 // \date   21 Oct 99
 // \brief  Tableau which pops up tableau tree (tview) on Shift-G
-// 
+//
 // Contains classes:  vgui_tview_launcher_tableau  vgui_tview_launcher_tableau_new
 //
 // \verbatim
@@ -29,7 +29,7 @@
 //
 // vgui_tview_launcher_tableau responds to the keypress "Shift-G", and pops up a picture
 // of the tableau graph of the adaptor under the mouse pointer.  It is generally
-// placed in a composite to provide debugging facilities, and is provided by 
+// placed in a composite to provide debugging facilities, and is provided by
 // default if you use the vgui_shell_tableau.
 class vgui_tview_launcher_tableau : public vgui_tableau
 {
@@ -50,7 +50,7 @@ class vgui_tview_launcher_tableau : public vgui_tableau
   //:
   void go(vgui_adaptor*);
 
-  //: 
+  //:
   vgui_event_condition c_graph;
 
  protected:
@@ -62,7 +62,7 @@ class vgui_tview_launcher_tableau : public vgui_tableau
 struct vgui_tview_launcher_tableau_new : public vgui_tview_launcher_tableau_sptr
 {
   typedef vgui_tview_launcher_tableau_sptr base;
- 
+
   //: Constructor - creates a vgui_tview_launcher_tableau.
   vgui_tview_launcher_tableau_new() : base(new vgui_tview_launcher_tableau) { }
 };

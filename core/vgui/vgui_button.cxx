@@ -1,4 +1,4 @@
-// This is oxl/vgui/vgui_button.cxx
+// This is core/vgui/vgui_button.cxx
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif

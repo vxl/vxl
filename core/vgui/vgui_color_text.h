@@ -1,4 +1,4 @@
-// This is oxl/vgui/vgui_color_text.h
+// This is core/vgui/vgui_color_text.h
 #ifndef vgui_color_text_h_
 #define vgui_color_text_h_
 //:

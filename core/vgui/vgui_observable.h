@@ -1,4 +1,4 @@
-// This is oxl/vgui/vgui_observable.h
+// This is core/vgui/vgui_observable.h
 #ifndef vgui_observable_h_
 #define vgui_observable_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
@@ -23,8 +23,8 @@ class vgui_message;
 
 //: Base class for classes that want to broadcast messages to observers.
 //
-//  Objects from classes derived from vgui_observable can broadcast a 
-//  vgui_message or an update using notify() to all the vgui_observer's 
+//  Objects from classes derived from vgui_observable can broadcast a
+//  vgui_message or an update using notify() to all the vgui_observer's
 //  attached to themselves.
 class vgui_observable
 {
@@ -47,7 +47,7 @@ class vgui_observable
   //: Broadcast an update to all observers of this class.
   virtual void notify() const;
 
-  //: Broadcast a message to all observers of this class. 
+  //: Broadcast a message to all observers of this class.
   virtual void notify(const vgui_message &) const;
 
  private:

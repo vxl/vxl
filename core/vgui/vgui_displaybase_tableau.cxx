@@ -1,4 +1,4 @@
-// This is oxl/vgui/vgui_displaybase_tableau.cxx
+// This is core/vgui/vgui_displaybase_tableau.cxx
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
@@ -90,12 +90,12 @@ void vgui_displaybase_tableau::remove(vgui_soview* object)
     objects.erase(i);
   }
 }
-//: clear all soviews from the display. 
+//: clear all soviews from the display.
 //  The soviews must be deleted otherwise we have a big memory leak.
-//  It is not clear that the design intended that the creator of the 
+//  It is not clear that the design intended that the creator of the
 //  soview is responsible for deleting it.  In any case, such management
 //  would be impossible without reference counting.  If users are going
-//  to keep soviews for personal use, then the whole soview scheme 
+//  to keep soviews for personal use, then the whole soview scheme
 //  should be changed to smart pointers. JLM
 //
 void vgui_displaybase_tableau::clear()

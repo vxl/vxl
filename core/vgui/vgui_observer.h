@@ -1,4 +1,4 @@
-// This is oxl/vgui/vgui_observer.h
+// This is core/vgui/vgui_observer.h
 #ifndef vgui_observer_h_
 #define vgui_observer_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE

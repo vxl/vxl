@@ -1,4 +1,4 @@
-// This is oxl/vgui/vgui_function_tableau_sptr.h
+// This is core/vgui/vgui_function_tableau_sptr.h
 #ifndef vgui_function_tableau_sptr_h
 #define vgui_function_tableau_sptr_h
 //:
@@ -6,7 +6,7 @@
 // \author K.Y.McGaul
 // \date   02-OCT-2002
 // \brief  Smart-pointer to a vgui_function_tableau.
-// 
+//
 // \verbatim
 //  Modifications:
 //   02-OCT-2002 K.Y.McGaul - Initial version.

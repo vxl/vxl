@@ -1,4 +1,4 @@
-// This is oxl/vgui/vgui_matrix_state.h
+// This is core/vgui/vgui_matrix_state.h
 #ifndef vgui_matrix_state_h_
 #define vgui_matrix_state_h_
 //:

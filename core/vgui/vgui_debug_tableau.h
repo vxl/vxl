@@ -1,4 +1,4 @@
-// This is oxl/vgui/vgui_debug_tableau.h
+// This is core/vgui/vgui_debug_tableau.h
 #ifndef vgui_debug_tableau_h_
 #define vgui_debug_tableau_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE

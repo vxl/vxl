@@ -1,4 +1,4 @@
-// This is oxl/vgui/vgui_loader_tableau.h
+// This is core/vgui/vgui_loader_tableau.h
 #ifndef vgui_loader_tableau_h_
 #define vgui_loader_tableau_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE

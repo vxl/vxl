@@ -1,4 +1,4 @@
-// This is oxl/vgui/vgui_wrapper_tableau.h
+// This is core/vgui/vgui_wrapper_tableau.h
 #ifndef vgui_wrapper_tableau_h_
 #define vgui_wrapper_tableau_h_
 //:

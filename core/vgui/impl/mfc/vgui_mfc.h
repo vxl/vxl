@@ -1,4 +1,4 @@
-// This is oxl/vgui/impl/mfc/vgui_mfc.h
+// This is core/vgui/impl/mfc/vgui_mfc.h
 #ifndef vgui_mfc_h_
 #define vgui_mfc_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
@@ -6,7 +6,7 @@
 #endif
 //:
 // \file
-// \author  awf@robots.ox.ac.uk 
+// \author  awf@robots.ox.ac.uk
 // \date    July 2000
 // \brief   MFC (Microsoft Foundation Classes) implementation of vgui_toolkit.
 //

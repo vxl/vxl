@@ -1,4 +1,4 @@
-// This is oxl/vgui/impl/gtk/vgui_gtk2_window.h
+// This is core/vgui/impl/gtk2/vgui_gtk2_window.h
 #ifndef vgui_gtk2_window_h_
 #define vgui_gtk2_window_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
@@ -68,7 +68,7 @@ class vgui_gtk2_window : public vgui_window
   GtkWidget *menubar;
 
  private:
-  // This is a place to store any menu passed in, so that it doesn't go out 
+  // This is a place to store any menu passed in, so that it doesn't go out
   // of scope while the popup is on screen.
   vgui_menu* last_menubar; // <-- ask fsm about this.
 };

@@ -1,4 +1,4 @@
-// This is oxl/vgui/internals/vgui_back_project.cxx
+// This is core/vgui/internals/vgui_back_project.cxx
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif

@@ -1,4 +1,4 @@
-// This is oxl/vgui/vgui_dialog.h
+// This is core/vgui/vgui_dialog.h
 #ifndef vgui_dialog_h_
 #define vgui_dialog_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
@@ -30,10 +30,10 @@ class vgui_dialog_impl;
 //
 // vgui_dialog allows the user to build a dialog from a collection of fields.
 // A field in this context consists of a vcl_string label and a variable.
-// The dialog is then posted using the ask() method. If ask returns true then 
+// The dialog is then posted using the ask() method. If ask returns true then
 // any changes to the fields in the dialog are used to update the variables.
-// Each vgui_dialog contains an instance of a concrete subclass of 
-// vgui_dialog_impl. The type of the subclass will be determined by the GUI 
+// Each vgui_dialog contains an instance of a concrete subclass of
+// vgui_dialog_impl. The type of the subclass will be determined by the GUI
 // being used.
 //
 // \par Example
@@ -64,17 +64,17 @@ class vgui_dialog
   void field(const char*, vcl_string&);
 
   //: Multiple choice - with two options.
-  void choice(const char* label, const char* option1, 
+  void choice(const char* label, const char* option1,
               const char* option2, int& chosen);
 
   //: Multiple choice - with three options.
-  void choice(const char* label, const char* option1, 
+  void choice(const char* label, const char* option1,
     const char* option2, const char* option3, int& chosen);
 
   //: Multiple choice - with the list of options given.
   void choice(const char*, const vcl_vector<vcl_string>&, int &);
 
-  void choice(const char*s, const vcl_vector<vcl_string>&v, unsigned &r) 
+  void choice(const char*s, const vcl_vector<vcl_string>&v, unsigned &r)
   { choice(s,v,*reinterpret_cast<int*>(&r)); }
 
   //: File browsers
@@ -93,7 +93,7 @@ class vgui_dialog
   void message(const char*);
 
   //: Display a tableau in the dialog
-  void inline_tableau(const vgui_tableau_sptr tab, unsigned width, 
+  void inline_tableau(const vgui_tableau_sptr tab, unsigned width,
     unsigned height);
 
   //: Set the labels on each button, if 0 that button does not appear.

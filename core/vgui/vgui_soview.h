@@ -1,4 +1,4 @@
-// This is oxl/vgui/vgui_soview.h
+// This is core/vgui/vgui_soview.h
 #ifndef vgui_soview_h_
 #define vgui_soview_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
@@ -39,7 +39,7 @@ class vgui_soview /*: public vgui_observable*/
 
   //: Render this soview on the display.
   virtual void draw() const = 0;
- 
+
   //: Calls OpenGL function glLoadName.
   virtual void load_name() const;
 
@@ -55,7 +55,7 @@ class vgui_soview /*: public vgui_observable*/
   //: Return the style (colour, line width) of the soview.
   virtual vgui_style* get_style() const;
 
-  //: Set the colour of the soview. 
+  //: Set the colour of the soview.
   void set_colour(float r, float g, float b);
 
   //: Set the point radius of the soview.

@@ -1,4 +1,4 @@
-// This is oxl/vgui/vgui.h
+// This is core/vgui/vgui.h
 #ifndef vgui_h_
 #define vgui_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
@@ -69,7 +69,7 @@ class vgui
   //: Method for determining if a given toolkit is available.
   static bool exists(char const *toolkit);
 
-  //: Method for selecting a specific toolkit. 
+  //: Method for selecting a specific toolkit.
   //  This will abort() if given a toolkit which is not available.
   static void select(char const *toolkit);
 
@@ -107,7 +107,7 @@ class vgui
                  vcl_string const &title ="");
 
   //: Display this tableau and run till dead (with menubar)
-  static int run(vgui_tableau_sptr const&, int w, int h, 
+  static int run(vgui_tableau_sptr const&, int w, int h,
                  vgui_menu const &menubar, vcl_string const &title ="");
 
   //: Create the vgui_window but don't run it (no menubar).
@@ -115,7 +115,7 @@ class vgui
                             vcl_string const &title ="");
 
   //: Create the vgui_window but don't run it (with menubar).
-  static vgui_window *adapt(vgui_tableau_sptr const&, int w, int h, 
+  static vgui_window *adapt(vgui_tableau_sptr const&, int w, int h,
                             vgui_menu const &, vcl_string const &title ="");
 
   // Functions for event-loop management

@@ -1,4 +1,4 @@
-// This is oxl/vgui/vgui_macro.h
+// This is core/vgui/vgui_macro.h
 #ifndef vgui_macro_h_
 #define vgui_macro_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE

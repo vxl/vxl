@@ -1,4 +1,4 @@
-// This is oxl/vgui/vrml/vgui_vrml_tableau.cxx
+// This is core/vgui/vrml/vgui_vrml_tableau.cxx
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif

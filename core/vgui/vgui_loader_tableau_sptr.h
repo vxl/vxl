@@ -1,4 +1,4 @@
-// This is oxl/vgui/vgui_loader_tableau_sptr.h
+// This is core/vgui/vgui_loader_tableau_sptr.h
 #ifndef vgui_loader_tableau_sptr_h_
 #define vgui_loader_tableau_sptr_h_
 //:

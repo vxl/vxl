@@ -1,4 +1,4 @@
-// This is oxl/vgui/vgui_glut.cxx
+// This is core/vgui/vgui_glut.cxx
 #include "vgui_glut.h"
 //:
 // \file
@@ -6,7 +6,7 @@
 
 #include <vcl_cstdlib.h>
 
-extern "C" 
+extern "C"
 void vgui_glut_exit(int x)
 {
   vcl_exit(x);

@@ -1,4 +1,4 @@
-// This is oxl/vgui/vgui_easy2D_tableau.h
+// This is core/vgui/vgui_easy2D_tableau.h
 #ifndef vgui_easy2D_tableau_h_
 #define vgui_easy2D_tableau_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE

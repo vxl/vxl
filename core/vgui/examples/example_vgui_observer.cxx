@@ -1,4 +1,4 @@
-// This is oxl/vgui/examples/example_vgui_observer.cxx
+// This is core/vgui/examples/example_vgui_observer.cxx
 // This example displays some images in a window (the image filenames are
 // given as parameters on the command line).  An observer is attached to the
 // vgui_deck_tableau containing the images.  As the user flips through the
@@ -41,19 +41,19 @@ struct example_window_title_setter : public vgui_observer
   void update()
   {
     vgui_adaptor *a = vgui_adaptor::current;
-    if (! a) 
+    if (! a)
     {
       vgui_macro_warning << "no adaptor\n";
       return;
     }
     vgui_window *w = a->get_window();
-    if (! w) 
+    if (! w)
     {
       vgui_macro_warning << "no window\n";
       return;
     }
     int i = deck->index();
-    if (last_title != argv[i + 1]) 
+    if (last_title != argv[i + 1])
     {
       last_title = argv[i + 1];
       w->set_title(last_title);
@@ -68,9 +68,9 @@ int main(int argc, char **argv)
   // Create a deck tableau and add images given in the parameter list:
   vgui_deck_tableau_new deck;
   unsigned int w = 0, h = 0;
-  for (int i=1; i<argc; ++i) 
+  for (int i=1; i<argc; ++i)
   {
-    if (vul_file::exists(argv[i])) 
+    if (vul_file::exists(argv[i]))
     {
       vgui_image_tableau_new t(argv[i]);
       if (t->width ()>w) w = t->width ();

@@ -1,4 +1,4 @@
-// This is oxl/vgui/vgui_cache_wizard.h
+// This is core/vgui/vgui_cache_wizard.h
 #ifndef vgui_cache_wizard_h_
 #define vgui_cache_wizard_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE

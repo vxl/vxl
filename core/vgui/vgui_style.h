@@ -1,4 +1,4 @@
-// This is oxl/vgui/vgui_style.h
+// This is core/vgui/vgui_style.h
 #ifndef vgui_style_h_
 #define vgui_style_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
@@ -59,7 +59,7 @@ class vgui_style_equal
     }
     return false;
   }
- 
+
   vgui_style *s1;
 };
 

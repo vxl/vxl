@@ -1,4 +1,4 @@
-// This is oxl/vgui/vgui_fwd.h
+// This is core/vgui/vgui_fwd.h
 #ifndef vgui_fwd_h_
 #define vgui_fwd_h_
 //:

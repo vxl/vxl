@@ -1,4 +1,4 @@
-// This is oxl/vgui/vgui_text_put.h
+// This is core/vgui/vgui_text_put.h
 #ifndef vgui_text_put_h_
 #define vgui_text_put_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE

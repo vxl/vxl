@@ -1,4 +1,4 @@
-// This is oxl/vgui/vgui_drag_tableau.h
+// This is core/vgui/vgui_drag_tableau.h
 #ifndef vgui_drag_tableau_h_
 #define vgui_drag_tableau_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
@@ -26,8 +26,8 @@
 
 //: A bare tableau which uses the vgui_drag_mixin
 //
-//  It is useful for making tableaux which have simple interaction 
-//  functionality.  It is expected that this tableau would be used 
+//  It is useful for making tableaux which have simple interaction
+//  functionality.  It is expected that this tableau would be used
 //  as a base class for your own derived tableau, not that this
 //  tableau would be used directly.
 class vgui_drag_tableau : public vgui_tableau, public vgui_drag_mixin

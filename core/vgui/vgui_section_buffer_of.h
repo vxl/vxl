@@ -1,4 +1,4 @@
-// This is oxl/vgui/vgui_section_buffer_of.h
+// This is core/vgui/vgui_section_buffer_of.h
 #ifndef vgui_section_buffer_of_h_
 #define vgui_section_buffer_of_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE

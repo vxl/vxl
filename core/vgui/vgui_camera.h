@@ -1,4 +1,4 @@
-// This is oxl/vgui/vgui_camera.h
+// This is core/vgui/vgui_camera.h
 #ifndef vgui_camera_h_
 #define vgui_camera_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE

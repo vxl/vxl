@@ -1,4 +1,4 @@
-// This is oxl/vgui/impl/mfc/vgui_mfc_mainfrm.h
+// This is core/vgui/impl/mfc/vgui_mfc_mainfrm.h
 #ifndef AFX_VGUI_MFC_MAINFRM_H__B3175B74_0F91_44DD_8EFD_41CEA35852A1__INCLUDED_
 #define AFX_VGUI_MFC_MAINFRM_H__B3175B74_0F91_44DD_8EFD_41CEA35852A1__INCLUDED_
 //:

@@ -1,4 +1,4 @@
-// This is oxl/vgui/impl/gtk/vgui_gtk_utils.h
+// This is core/vgui/impl/gtk/vgui_gtk_utils.h
 #ifndef vgui_gtk_utils_h_
 #define vgui_gtk_utils_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
@@ -15,7 +15,7 @@
 // \verbatim
 //  Modifications
 //   13-JUL-2000 Marko Bacic, Oxford RRG -- Added support for menu accelerators
-//   13-SEP-2002 
+//   13-SEP-2002
 // \endverbatim
 
 

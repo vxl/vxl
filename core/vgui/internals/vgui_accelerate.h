@@ -1,4 +1,4 @@
-// This is oxl/vgui/internals/vgui_accelerate.h
+// This is core/vgui/internals/vgui_accelerate.h
 #ifndef vgui_accelerate_h_
 #define vgui_accelerate_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
@@ -30,9 +30,9 @@ class vgui_accelerate
   static bool vgui_mfc_acceleration;
 
   //: Sometimes double buffering needs to be switched off on windows.
-  static bool vgui_doublebuffer; 
+  static bool vgui_doublebuffer;
 
-  //: Singleton instance of this class. 
+  //: Singleton instance of this class.
   static vgui_accelerate* instance();
 
   //: Destructor.
@@ -42,7 +42,7 @@ class vgui_accelerate
   virtual bool vgui_glClear( GLbitfield mask );
 
   //: Set the OpenGL cache format.
-  //  If you pass stuff to vgui_glDrawPixels, and the format and type are what 
+  //  If you pass stuff to vgui_glDrawPixels, and the format and type are what
   //  you got from an earlier call to this baby, then it might go faster.
   virtual bool vgui_choose_cache_format( GLenum* format, GLenum* type);
 
@@ -51,16 +51,16 @@ class vgui_accelerate
 
   //: For X11/Mesa - copy back buffer to auxilary buffer.
   //  This function is used in X11/Mesa to speed up overlay emulation.  It
-  //  returns false to indicate to overlay_biscuit that a default emulation 
+  //  returns false to indicate to overlay_biscuit that a default emulation
   //  must be used.
   virtual bool vgui_copy_back_to_aux();
 
   //: For X11/Mesa - copy auxilary buffer to back buffer.
   //  This function is used in X11/Mesa to speed up overlay emulation.  It
-  //  returns false to indicate to overlay_biscuit that a default emulation 
+  //  returns false to indicate to overlay_biscuit that a default emulation
   //  must be used.
   virtual bool vgui_copy_aux_to_back();
- 
+
   //: If level is higher than current level, then change to given accelerator.
   static void register_accelerator (vgui_accelerate* p, int level);
 

@@ -1,4 +1,4 @@
-// This is oxl/vgui/vgui_command.h
+// This is core/vgui/vgui_command.h
 #ifndef vgui_command_h_
 #define vgui_command_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE

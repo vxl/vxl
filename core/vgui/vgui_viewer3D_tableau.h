@@ -1,4 +1,4 @@
-// This is oxl/vgui/vgui_viewer3D_tableau.h
+// This is core/vgui/vgui_viewer3D_tableau.h
 #ifndef vgui_viewer3D_tableau_h_
 #define vgui_viewer3D_tableau_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
@@ -11,7 +11,7 @@
 // \brief  Tableau with functions to view 3D objects (eg, rotate, zoom, etc).
 //
 //  Contains classes:  vgui_viewer3D_tableau  vgui_viewer3D_tableau_new
-// 
+//
 // \verbatim
 //  Modifications:
 //    14-SEP-1999 P.Pritchett - Initial version.

@@ -1,4 +1,4 @@
-// This is oxl/vgui/internals/vgui_accelerate_mfc.h
+// This is core/vgui/internals/vgui_accelerate_mfc.h
 #ifndef vgui_accelerate_mfc_h_
 #define vgui_accelerate_mfc_h_
 //:
@@ -36,7 +36,7 @@ class vgui_accelerate_mfc : public vgui_accelerate
   virtual bool vgui_choose_cache_format( GLenum* format, GLenum* type);
 
   //: Fast and smooth glDrawPixels routine for MFC.
-  virtual bool vgui_glDrawPixels( GLsizei width, GLsizei height, 
+  virtual bool vgui_glDrawPixels( GLsizei width, GLsizei height,
                                   GLenum format, GLenum type, const GLvoid *pixels );
 
   //: OpenGL clearing.

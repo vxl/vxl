@@ -1,4 +1,4 @@
-// This is oxl/vgui/vgui_tview_tableau.h
+// This is core/vgui/vgui_tview_tableau.h
 #ifndef vgui_tview_tableau_h_
 #define vgui_tview_tableau_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
@@ -9,7 +9,7 @@
 // \author Philip C. Pritchett, Robotics Research Group, University of Oxford
 // \date   12 Oct 99
 // \brief  Tableau displaying a tableau tree.
-// 
+//
 //  Contains classes:  vgui_tview_tableau  vgui_tview_tableau_new
 //
 // \verbatim

@@ -1,4 +1,4 @@
-// This is oxl/vgui/vgui_listmanager2D_tableau.h
+// This is core/vgui/vgui_listmanager2D_tableau.h
 #ifndef vgui_listmanager2D_tableau_h_
 #define vgui_listmanager2D_tableau_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
@@ -101,7 +101,7 @@ class vgui_listmanager2D_tableau : public vgui_tableau
   vgui_displaylist2D_tableau_sptr contains_hit(vcl_vector<unsigned> const& names);
   void get_hits(float x, float y, vcl_vector<vcl_vector<unsigned> >* hits);
   void find_closest(float x, float y, vcl_vector<vcl_vector<unsigned> >* hits,
-                    vgui_soview2D** closest_so, 
+                    vgui_soview2D** closest_so,
                     vgui_displaylist2D_tableau_sptr * closest_display);
 };
 

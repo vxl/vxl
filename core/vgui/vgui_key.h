@@ -1,4 +1,4 @@
-// This is oxl/vgui/vgui_key.h
+// This is core/vgui/vgui_key.h
 #ifndef vgui_key_h_
 #define vgui_key_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
@@ -14,7 +14,7 @@
 enum vgui_key {
   vgui_KEY_NULL = 0,
   vgui_ESC=27, /* */ vgui_ESCAPE=27,
-  vgui_TAB='\t', 
+  vgui_TAB='\t',
   vgui_RETURN='\r',
   vgui_NEWLINE='\n',
   vgui_KEY_XXX=0x100, // non-ascii encoded keys below :
@@ -24,7 +24,7 @@ enum vgui_key {
   vgui_CURSOR_LEFT, vgui_CURSOR_UP, vgui_CURSOR_RIGHT, vgui_CURSOR_DOWN,  // cursor movement
   vgui_PAGE_UP, /* */ vgui_PGUP=vgui_PAGE_UP,
   vgui_PAGE_DOWN, /* */ vgui_PGDN = vgui_PAGE_DOWN,
-  vgui_HOME, vgui_END, 
+  vgui_HOME, vgui_END,
   vgui_DELETE, vgui_INSERT  // other things
 };
 

@@ -1,4 +1,4 @@
-// This is oxl/vgui/impl/gtk/vgui_gtk_dialog_impl.h
+// This is core/vgui/impl/gtk/vgui_gtk_dialog_impl.h
 #ifndef vgui_gtk_dialog_impl_h_
 #define vgui_gtk_dialog_impl_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
@@ -44,7 +44,7 @@ class vgui_gtk_dialog_impl : public vgui_dialog_impl
 
   bool ask();
 
-public:
+ public:
   // Status of this dialog box.
   enum status_type { BUSY,     // user is doing stuff
                      OK,       // okay button pressed
@@ -60,7 +60,6 @@ public:
   vcl_string ok_text;
   vcl_string cancel_text;
   vcl_string title;
-
 };
 
 #endif // vgui_gtk_dialog_impl_h_

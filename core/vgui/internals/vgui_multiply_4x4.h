@@ -1,4 +1,4 @@
-// This is oxl/vgui/internals/vgui_multiply_4x4.h
+// This is core/vgui/internals/vgui_multiply_4x4.h
 #ifndef vgui_multiply_4x4_h_
 #define vgui_multiply_4x4_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE

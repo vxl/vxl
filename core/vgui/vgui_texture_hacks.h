@@ -1,4 +1,4 @@
-// This is oxl/vgui/vgui_texture_hacks.h
+// This is core/vgui/vgui_texture_hacks.h
 #ifndef vgui_texture_hacks_h_
 #define vgui_texture_hacks_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE

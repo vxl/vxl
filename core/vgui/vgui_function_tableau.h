@@ -1,4 +1,4 @@
-// This is oxl/vgui/vgui_function_tableau.h
+// This is core/vgui/vgui_function_tableau.h
 #ifndef vgui_function_tableau_h_
 #define vgui_function_tableau_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
@@ -15,7 +15,7 @@
 // \verbatim
 //  Modifications:
 //   25-NOV-1999 P.Pritchett - Initial version.
-//   02-OCT-2002 K.Y.McGaul - Added vgui_function_tableau_new. 
+//   02-OCT-2002 K.Y.McGaul - Added vgui_function_tableau_new.
 //                          - Added comments for the functions.
 // \endverbatim
 
@@ -78,7 +78,7 @@ class vgui_function_tableau : public vgui_tableau
 struct vgui_function_tableau_new : public vgui_function_tableau_sptr
 {
   //: Constructor - create a default vgui_function_tableau.
-  vgui_function_tableau_new( ) 
+  vgui_function_tableau_new( )
     : vgui_function_tableau_sptr(new vgui_function_tableau) { }
 };
 

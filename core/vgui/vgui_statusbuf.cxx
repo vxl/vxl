@@ -1,4 +1,4 @@
-// This is oxl/vgui/vgui_statusbuf.cxx
+// This is core/vgui/vgui_statusbuf.cxx
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
@@ -18,7 +18,7 @@ int vgui_statusbuf::sync()
 }
 
 int vgui_statusbuf::overflow(int ch)
-{ 
+{
   long n = pptr() - pbase();
 
   if (n && sync())
@@ -30,5 +30,5 @@ int vgui_statusbuf::overflow(int ch)
       return EOF;
   }
   pbump (-n);  // Reset pptr().
-  return 0; 
+  return 0;
 }

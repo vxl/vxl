@@ -1,4 +1,4 @@
-// This is oxl/vgui/impl/mfc/vgui_mfc_dialog_impl.cxx
+// This is core/vgui/impl/mfc/vgui_mfc_dialog_impl.cxx
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
@@ -51,12 +51,12 @@ vgui_mfc_dialog_impl::vgui_mfc_dialog_impl(const char* name)
 
 //------------------------------------------------------------------------------
 //: Destructor
-vgui_mfc_dialog_impl::~vgui_mfc_dialog_impl() 
+vgui_mfc_dialog_impl::~vgui_mfc_dialog_impl()
 {
 }
 
 //: Structure to contain data for a choice field.
-struct vgui_mfc_dialog_choice 
+struct vgui_mfc_dialog_choice
 {
   vcl_vector<vcl_string> names;
   int index;
@@ -263,7 +263,7 @@ bool vgui_mfc_dialog_impl::ask()
   // Ok button
   CButton* accept = 0;
   int right_of_ok_button;
-  if (ok_button_text_.size() > 0) 
+  if (ok_button_text_.size() > 0)
   {
     CRect r;
     r.left = width-2*10*8-3*8;
@@ -281,7 +281,7 @@ bool vgui_mfc_dialog_impl::ask()
 
   // Cancel button
   CButton* cancel = 0;
-  if (cancel_button_text_.size() > 0) 
+  if (cancel_button_text_.size() > 0)
   {
     CRect r;
     r.left = right_of_ok_button+1*8;
@@ -302,7 +302,7 @@ bool vgui_mfc_dialog_impl::ask()
   r.top = 0;
   r.bottom = 3*8+2;
   for (vcl_vector<element>::iterator e_iter2 = elements.begin();
-       e_iter2 != elements.end(); ++e_iter2) 
+       e_iter2 != elements.end(); ++e_iter2)
   {
     element l = *e_iter2;
     vgui_dialog_field *field = l.field;
@@ -311,7 +311,7 @@ bool vgui_mfc_dialog_impl::ask()
         l.type == long_elem ||
         l.type == float_elem ||
         l.type == double_elem ||
-        l.type == string_elem) 
+        l.type == string_elem)
     {
       // Hard coded coordinates
       r.left = 2*4;
@@ -497,7 +497,7 @@ bool vgui_mfc_dialog_impl::ask()
     }
     else if (l.type == inline_tabl)
     {
-      vgui_mfc_dialog_inline_tab* tab_data 
+      vgui_mfc_dialog_inline_tab* tab_data
         = (vgui_mfc_dialog_inline_tab*)l.widget;
       vgui_mfc_adaptor *widg = new vgui_mfc_adaptor();
       widg->set_tableau(tab_data->tab);
@@ -516,12 +516,12 @@ bool vgui_mfc_dialog_impl::ask()
       delete tab_data;
     }
   }
-  if (accept) 
+  if (accept)
   {
     accept->UpdateWindow();
     accept->ShowWindow(SW_SHOW);
   }
-  if (cancel) 
+  if (cancel)
   {
     cancel->UpdateWindow();
     cancel->ShowWindow(SW_SHOW);
@@ -532,11 +532,11 @@ bool vgui_mfc_dialog_impl::ask()
   if (m_hWnd != NULL)
     SetWindowPos(NULL, 0, 0, 0, 0, SWP_HIDEWINDOW|
                  SWP_NOSIZE|SWP_NOMOVE|SWP_NOACTIVATE|SWP_NOZORDER);
-  if (ok_clicked) 
+  if (ok_clicked)
   {
     vcl_vector<CWnd *>::iterator w_iter = wlist.begin();
     for (vcl_vector<element>::iterator e_iter3 = elements.begin();
-         e_iter3 != elements.end(); ++e_iter3, ++w_iter) 
+         e_iter3 != elements.end(); ++e_iter3, ++w_iter)
     {
       element l = *e_iter3;
       CWnd *input = *w_iter;
@@ -549,18 +549,18 @@ bool vgui_mfc_dialog_impl::ask()
           l.type == file_bsr ||
           l.type == color_csr ||
           l.type == inline_color_csr ||
-          l.type == inline_file_bsr) 
+          l.type == inline_file_bsr)
       {
         CString s;
         input->GetWindowText(s);
         l.field->update_value((LPCSTR)s);
       }
-      else if (l.type == bool_elem) 
+      else if (l.type == bool_elem)
       {
         vgui_bool_field *field = static_cast<vgui_bool_field*>(l.field);
         field->var =((CButton *)input)->GetCheck()!=0;
       }
-      if (l.type == choice_elem) 
+      if (l.type == choice_elem)
       {
         vgui_int_field *field = static_cast<vgui_int_field*>(l.field);
         field->var = ((CComboBox *)input)->GetCurSel();

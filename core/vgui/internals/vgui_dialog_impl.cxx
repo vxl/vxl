@@ -1,4 +1,4 @@
-// This is oxl/vgui/internals/vgui_dialog_impl.cxx
+// This is core/vgui/internals/vgui_dialog_impl.cxx
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
@@ -180,7 +180,7 @@ void vgui_dialog_impl::inline_color_chooser(const char* txt, vcl_string& val) {
 void vgui_dialog_impl::inline_tab(const vgui_tableau_sptr tab, unsigned width,
                                   unsigned height)
 {
-  // kym - don't use the field - store the tableau in the widget variable(?). 
+  // kym - don't use the field - store the tableau in the widget variable(?).
   // Since the OpenGL window in the inline tableau doesn't have any
   //variables, it doesn't make sense for it to have a field.
 

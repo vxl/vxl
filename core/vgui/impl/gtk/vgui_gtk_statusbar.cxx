@@ -1,4 +1,4 @@
-// This is oxl/vgui/impl/gtk/vgui_gtk_statusbar.cxx
+// This is core/vgui/impl/gtk/vgui_gtk_statusbar.cxx
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif

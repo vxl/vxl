@@ -1,4 +1,4 @@
-// This is oxl/vgui/impl/mfc/vgui_mfc_dialog_impl.h
+// This is core/vgui/impl/mfc/vgui_mfc_dialog_impl.h
 #ifndef vgui_mfc_dialog_impl_h_
 #define vgui_mfc_dialog_impl_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE

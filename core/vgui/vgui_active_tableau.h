@@ -1,4 +1,4 @@
-// This is oxl/vgui/vgui_active_tableau.h
+// This is core/vgui/vgui_active_tableau.h
 #ifndef vgui_active_tableau_h_
 #define vgui_active_tableau_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
@@ -30,7 +30,7 @@
 //
 //  Functions to toggle these can appear on the popup menu for the tableau.
 //
-//  When the tableau is invisible, all vgui_DRAW and vgui_DRAW_OVERLAY 
+//  When the tableau is invisible, all vgui_DRAW and vgui_DRAW_OVERLAY
 //  mevents are passed to the child tableau.
 //
 //  When the tableau is inactive, all events apart from draw events

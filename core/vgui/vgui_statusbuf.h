@@ -1,4 +1,4 @@
-// This is oxl/vgui/vgui_statusbuf.h
+// This is core/vgui/vgui_statusbuf.h
 #ifndef vgui_statusbuf_h_
 #define vgui_statusbuf_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE

@@ -1,4 +1,4 @@
-// This is oxl/vgui/vgui_text_tableau.cxx
+// This is core/vgui/vgui_text_tableau.cxx
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
@@ -7,7 +7,7 @@
 // \author Philip C. Pritchett, RRG, University of Oxford
 // \date   19 Oct 99
 // \brief  See vgui_text_tableau.h for a description of this file.
-// 
+//
 // \verbatim
 //  Modifications:
 //    19-OCT-1999 P.Pritchett - Initial version.

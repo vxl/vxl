@@ -1,4 +1,4 @@
-// This is oxl/vgui/vgui_enhance_tableau.h
+// This is core/vgui/vgui_enhance_tableau.h
 #ifndef vgui_enhance_tableau_h_
 #define vgui_enhance_tableau_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
@@ -26,7 +26,7 @@
 class vgui_event;
 
 //: Magnify or display another tableau in a region around the mouse pointer.
-//  This happens when the user presses the left mouse button inside the 
+//  This happens when the user presses the left mouse button inside the
 //  rendering area.
 //
 //  Use '[' and ']' to change size of region around the mouse pointer.
@@ -40,14 +40,14 @@ class vgui_enhance_tableau : public vgui_tableau
   vgui_enhance_tableau();
 
   //: Constructor - don't use this, use vgui_enhance_tableau_new.
-  //  A tableau constructed this way magnifies area of the given tableau 
+  //  A tableau constructed this way magnifies area of the given tableau
   //  under the mouse pointer.
   vgui_enhance_tableau(vgui_tableau_sptr const& t);
 
   //: Constructor - don't use this, use vgui_enhance_tableau_new.
-  //  A tableau constructed this way displays the tableau t2 on top of t1 in 
+  //  A tableau constructed this way displays the tableau t2 on top of t1 in
   //  a region around the mouse pointer.
-  vgui_enhance_tableau(vgui_tableau_sptr const& t1, 
+  vgui_enhance_tableau(vgui_tableau_sptr const& t1,
                        vgui_tableau_sptr const& t2);
 
   //: Returns the file_name of the first child tableau.
@@ -107,7 +107,7 @@ struct vgui_enhance_tableau_new : public vgui_enhance_tableau_sptr
     vgui_enhance_tableau_sptr(new vgui_enhance_tableau(t)) { }
 
   //: Constructor - displays t2 on top of t1 in a region around mouse pointer.
-  vgui_enhance_tableau_new(vgui_tableau_sptr const&t1, 
+  vgui_enhance_tableau_new(vgui_tableau_sptr const&t1,
                            vgui_tableau_sptr const&t2) :
     vgui_enhance_tableau_sptr(new vgui_enhance_tableau(t1,t2)) { }
 };

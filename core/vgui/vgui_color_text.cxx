@@ -1,4 +1,4 @@
-// This is oxl/vgui/vgui_color_text.cxx
+// This is core/vgui/vgui_color_text.cxx
 #include "vgui_color_text.h"
 //:
 // \file
@@ -60,8 +60,8 @@ vcl_string text_to_color(vcl_string txt)
     if (txt == colors[i][0])
       color =  colors[i][1];
   }
- 
-  if (color == "") 
+
+  if (color == "")
     vgui_macro_warning << "Unknown color string: " << txt << vcl_endl;
   else
     vcl_sscanf(color.c_str(), "%f %f %f", &red, &green, &blue);

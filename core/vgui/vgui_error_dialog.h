@@ -1,4 +1,4 @@
-// This is oxl/vgui/vgui_error_dialog.h
+// This is core/vgui/vgui_error_dialog.h
 #ifndef vgui_error_dialog_h_
 #define vgui_error_dialog_h_
 //:

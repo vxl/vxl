@@ -1,4 +1,4 @@
-// This is oxl/vgui/vgui_clear_tableau.cxx
+// This is core/vgui/vgui_clear_tableau.cxx
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
@@ -41,9 +41,9 @@ vgui_clear_tableau::~vgui_clear_tableau()
 
 //-----------------------------------------------------------------------------
 //: Returns the type of this tableau ('vgui_clear_tableau').
-vcl_string vgui_clear_tableau::type_name() const 
-{ 
-  return "vgui_clear_tableau"; 
+vcl_string vgui_clear_tableau::type_name() const
+{
+  return "vgui_clear_tableau";
 }
 
 //-----------------------------------------------------------------------------

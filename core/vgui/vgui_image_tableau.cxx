@@ -1,4 +1,4 @@
-// This is oxl/vgui/vgui_image_tableau.cxx
+// This is core/vgui/vgui_image_tableau.cxx
 #include "vgui_image_tableau.h"
 //:
 // \file
@@ -37,8 +37,8 @@ vgui_image_tableau::vgui_image_tableau(vil_image const &I)
   : vgui_tableau()
   , pixels_centered(true)
   , renderer(new vgui_image_renderer)
-{ 
-  set_image(I); 
+{
+  set_image(I);
 }
 
 //-----------------------------------------------------------------------------
@@ -50,8 +50,8 @@ vgui_image_tableau::vgui_image_tableau(char const *f)
   , name_(f)
   , pixels_centered(true)
   , renderer(new vgui_image_renderer)
-{ 
-  set_image(f); 
+{
+  set_image(f);
 }
 
 //-----------------------------------------------------------------------------
@@ -139,11 +139,11 @@ bool vgui_image_tableau::get_bounding_box(float low[3], float high[3]) const
 
 //-----------------------------------------------------------------------------
 //: Handle all events sent to this tableau.
-//  In particular, use draw events to render the image contained in 
+//  In particular, use draw events to render the image contained in
 //  this tableau.
 bool vgui_image_tableau::handle(vgui_event const &e)
 {
-  if (e.type == vgui_DRAW) 
+  if (e.type == vgui_DRAW)
   {
     // If blending is turned on, there is a severe performance penalty
     // when rendering an image. So, we turn off blending before calling

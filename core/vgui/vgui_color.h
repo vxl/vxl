@@ -1,4 +1,4 @@
-// This is oxl/vgui/vgui_color.h
+// This is core/vgui/vgui_color.h
 #ifndef vgui_color_h_
 #define vgui_color_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE

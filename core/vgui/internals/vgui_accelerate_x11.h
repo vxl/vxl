@@ -1,4 +1,4 @@
-// This is oxl/vgui/internals/vgui_accelerate_x11.h
+// This is core/vgui/internals/vgui_accelerate_x11.h
 #ifndef vgui_accelerate_x11_h_
 #define vgui_accelerate_x11_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
@@ -26,7 +26,7 @@ class vgui_accelerate_x11 : public vgui_accelerate
  public:
   vgui_accelerate_x11();
   virtual ~vgui_accelerate_x11();
- 
+
   virtual bool vgui_glDrawPixels( GLsizei width, GLsizei height, GLenum format, GLenum type, const GLvoid *pixels );
   virtual bool vgui_glClear( GLbitfield mask );
   virtual bool vgui_choose_cache_format( GLenum* format, GLenum* type);

@@ -1,4 +1,4 @@
-// This is oxl/vgui/vgui_displaylist3D_tableau.h
+// This is core/vgui/vgui_displaylist3D_tableau.h
 #ifndef vgui_displaylist3D_tableau_h_
 #define vgui_displaylist3D_tableau_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
@@ -47,7 +47,7 @@ class vgui_displaylist3D_tableau : public vgui_displaybase_tableau, public vgui_
 struct vgui_displaylist3D_tableau_new : public vgui_displaylist3D_tableau_sptr
 {
   //: Constructor - create a default vgui_displaylist3D_tableau.
-  vgui_displaylist3D_tableau_new( ) 
+  vgui_displaylist3D_tableau_new( )
     : vgui_displaylist3D_tableau_sptr(new vgui_displaylist3D_tableau) { }
 };
 

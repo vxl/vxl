@@ -1,4 +1,4 @@
-// This is oxl/vgui/impl/mfc/vgui_mfc_doc.cxx
+// This is core/vgui/impl/mfc/vgui_mfc_doc.cxx
 #include "StdAfx.h"
 #include "vgui_mfc_doc.h"
 //:

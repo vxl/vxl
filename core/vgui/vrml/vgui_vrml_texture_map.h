@@ -1,10 +1,10 @@
-// This is oxl/vgui/vrml/vgui_vrml_texture_map.h
+// This is core/vgui/vrml/vgui_vrml_texture_map.h
 #ifndef vgui_vrml_texture_map_h_
 #define vgui_vrml_texture_map_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
-// 
+//
 // .NAME vgui_vrml_texture_map
 // .LIBRARY vgui-vrml
 // .HEADER vxl Package

@@ -1,4 +1,4 @@
-// This is oxl/vgui/vgui_dialog.cxx
+// This is core/vgui/vgui_dialog.cxx
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
@@ -104,7 +104,7 @@ void vgui_dialog::message(const char* txt) {
   if (impl) impl->text_message(txt);
 }
 
-void vgui_dialog::inline_tableau(const vgui_tableau_sptr tab, unsigned width, 
+void vgui_dialog::inline_tableau(const vgui_tableau_sptr tab, unsigned width,
   unsigned height)
 {
   if (impl) impl->inline_tab(tab, width, height);

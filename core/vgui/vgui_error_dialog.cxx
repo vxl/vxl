@@ -1,4 +1,4 @@
-// This is oxl/vgui/vgui_error_dialog.cxx
+// This is core/vgui/vgui_error_dialog.cxx
 #include "vgui_error_dialog.h"
 //:
 // \file

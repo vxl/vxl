@@ -1,4 +1,4 @@
-// This is oxl/vgui/internals/vgui_simple_field.h
+// This is core/vgui/internals/vgui_simple_field.h
 #ifndef vgui_simple_field_h_
 #define vgui_simple_field_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE

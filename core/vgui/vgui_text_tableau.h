@@ -1,4 +1,4 @@
-// This is oxl/vgui/vgui_text_tableau.h
+// This is core/vgui/vgui_text_tableau.h
 #ifndef vgui_text_tableau_h_
 #define vgui_text_tableau_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
@@ -82,7 +82,7 @@ class vgui_text_tableau : public vgui_tableau
  protected:
   //: Destructor - called by vgui_text_tableau_sptr.
   ~vgui_text_tableau() { }
- 
+
   //: Handles all events sent to this tableau.
   //  In particular, uses draw events to render the text.
   bool handle(vgui_event const &);

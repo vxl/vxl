@@ -1,4 +1,4 @@
-// This is oxl/vgui/vgui_wrapper_tableau_sptr.h
+// This is core/vgui/vgui_wrapper_tableau_sptr.h
 #ifndef vgui_wrapper_tableau_sptr_h_
 #define vgui_wrapper_tableau_sptr_h_
 //:

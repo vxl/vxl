@@ -1,4 +1,4 @@
-// This is oxl/vgui/internals/vgui_un_project.h
+// This is core/vgui/internals/vgui_un_project.h
 #ifndef vgui_un_project_h_
 #define vgui_un_project_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE

@@ -1,4 +1,4 @@
-// This is oxl/vgui/vgui_blender_tableau_sptr.h
+// This is core/vgui/vgui_blender_tableau_sptr.h
 #ifndef vgui_blender_tableau_sptr_h
 #define vgui_blender_tableau_sptr_h
 //:

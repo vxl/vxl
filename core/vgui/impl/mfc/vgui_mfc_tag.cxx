@@ -1,4 +1,4 @@
-// This is oxl/vgui/impl/mfc/vgui_mfc_tag.cxx
+// This is core/vgui/impl/mfc/vgui_mfc_tag.cxx
 #include "vgui_mfc.h"
 //:
 // \file

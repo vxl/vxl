@@ -1,4 +1,4 @@
-// This is oxl/vgui/internals/vgui_rasterpos.cxx
+// This is core/vgui/internals/vgui_rasterpos.cxx
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif

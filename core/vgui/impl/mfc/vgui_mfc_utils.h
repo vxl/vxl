@@ -1,4 +1,4 @@
-// This is oxl/vgui/impl/mfc/vgui_mfc_utils.h
+// This is core/vgui/impl/mfc/vgui_mfc_utils.h
 #ifndef vgui_mfc_utils_h_
 #define vgui_mfc_utils_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
@@ -17,7 +17,7 @@
 //   04-AUG-2000 Marko Bacic - Initial version.
 //   14-AUG-2000 Marko Bacic - Added support for popup menus
 //   16-MAR-2001 K.Y.McGaul - Added menu accelerators
-//   22-AUG-2001 K.Y.McGaul - Added destructor to fix memory leak: all 
+//   22-AUG-2001 K.Y.McGaul - Added destructor to fix memory leak: all
 //                            menus now deleted.
 // \endverbatim
 
@@ -31,7 +31,7 @@ typedef void (*fp)();
 
 //: MFC support for menus.
 //  Only one instance of the class is allowed
-class vgui_mfc_utils 
+class vgui_mfc_utils
 {
   //: Number of menu items.
   int item_count;
@@ -64,7 +64,7 @@ class vgui_mfc_utils
   //: Sets the menu of the application window
   void set_menu(const vgui_menu& menu);
 
-  //: Create popup menu. 
+  //: Create popup menu.
   CMenu *set_popup_menu(const vgui_menu & menu);
 
   //: Called within message service routine of vgui_mfc_mainfrm.

@@ -1,4 +1,4 @@
-// This is oxl/vgui/vgui_tableau.cxx
+// This is core/vgui/vgui_tableau.cxx
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
@@ -223,7 +223,7 @@ vcl_string vgui_tableau::pretty_name() const {
 
 //-----------------------------------------------------------------------------
 //: Return the name of the most derived (tableau) class.
-//  Virtual. This ought never to be called as derived classes should 
+//  Virtual. This ought never to be called as derived classes should
 //  implement type_name().
 vcl_string vgui_tableau::type_name() const {
   static bool warned=false;
@@ -247,7 +247,7 @@ void vgui_tableau::get_children(vcl_vector<vgui_tableau_sptr> *v) const {
 }
 
 //-----------------------------------------------------------------------------
-//: Get the ith child, or return 0. 
+//: Get the ith child, or return 0.
 vgui_tableau_sptr vgui_tableau::get_child(unsigned i) const {
   vcl_vector<vgui_tableau_sptr> children;
   get_children(&children);
@@ -269,8 +269,8 @@ bool vgui_tableau::remove_child(vgui_tableau_sptr const&) {
 
 //-----------------------------------------------------------------------------
 //: Called when a child of this tableau is forcibly replaced.
-//  This method is called when some part of the program (typically the 
-//  parent_child_link mechanism) is about to forcibly replace a child of this 
+//  This method is called when some part of the program (typically the
+//  parent_child_link mechanism) is about to forcibly replace a child of this
 //  tableau.
 //  The canonical reason to override this is in order to invalidate caches.
 bool vgui_tableau::notify_replaced_child(vgui_tableau_sptr const& /*old_child*/,
@@ -293,7 +293,7 @@ void vgui_tableau::add_popup(vgui_menu &/*menu*/) {
 
 //-----------------------------------------------------------------------------
 //: Gets popup menu for this tableau.
-// If recurse is, true, recursively add the popup menus for children and 
+// If recurse is, true, recursively add the popup menus for children and
 // children's children etc.
 //
 // ** this is a mixin method. it does some work for you. **

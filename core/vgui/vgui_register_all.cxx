@@ -1,4 +1,4 @@
-// This is oxl/vgui/vgui_register_all.cxx
+// This is core/vgui/vgui_register_all.cxx
 
 //:
 // \file

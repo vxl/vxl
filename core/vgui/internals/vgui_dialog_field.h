@@ -1,4 +1,4 @@
-// This is oxl/vgui/internals/vgui_dialog_field.h
+// This is core/vgui/internals/vgui_dialog_field.h
 #ifndef vgui_dialog_field_h_
 #define vgui_dialog_field_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE

@@ -1,4 +1,4 @@
-// This is oxl/vgui/internals/vgui_rasterpos.h
+// This is core/vgui/internals/vgui_rasterpos.h
 #ifndef vgui_rasterpos_h_
 #define vgui_rasterpos_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE

@@ -1,4 +1,4 @@
-// This is oxl/vgui/vgui_blender_tableau.cxx
+// This is core/vgui/vgui_blender_tableau.cxx
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
@@ -56,14 +56,14 @@ vgui_blender_tableau::~vgui_blender_tableau()
 
 //-----------------------------------------------------------------------------
 //: Returns the filename of the loaded image (if it was loaded from file).
-vcl_string vgui_blender_tableau::file_name() const 
+vcl_string vgui_blender_tableau::file_name() const
 {
   return filename.c_str();
 }
 
 //-----------------------------------------------------------------------------
 // Returns the type of this tableau ('vgui_blender_tableau').
-vcl_string vgui_blender_tableau::type_name() const 
+vcl_string vgui_blender_tableau::type_name() const
 {
   return "vgui_blender_tableau";
 }
@@ -79,7 +79,7 @@ void vgui_blender_tableau::reread_image()
 //: Handle all events sent to this tableau.
 //  In particular, use draw events to draw the blended image.
 //  Use '_' and '+' key-press events to change alpha.
-bool vgui_blender_tableau::handle(vgui_event const &e) 
+bool vgui_blender_tableau::handle(vgui_event const &e)
 {
   if (vgui_matrix_state::gl_matrices_are_cleared()) {
     GLint vp[4];

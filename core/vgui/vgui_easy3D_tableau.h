@@ -1,4 +1,4 @@
-// This is oxl/vgui/vgui_easy3D_tableau.h
+// This is core/vgui/vgui_easy3D_tableau.h
 #ifndef vgui_easy3D_tableau_h_
 #define vgui_easy3D_tableau_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
@@ -16,7 +16,7 @@
 //  Modifications:
 //   24-SEP-1999 P.Pritchett - Initial version.
 //   26-APR-2002 K.Y.McGaul - Added some doxygen-style documentation.
-//   01-OCT-2002 K.Y.McGaul - Moved vgui_easy3D to vgui_easy3D_tableau. 
+//   01-OCT-2002 K.Y.McGaul - Moved vgui_easy3D to vgui_easy3D_tableau.
 // \endverbatim
 
 #include "vgui_easy3D_tableau_sptr.h"

@@ -1,4 +1,4 @@
-// This is oxl/vgui/vgui_clear_tableau.h
+// This is core/vgui/vgui_clear_tableau.h
 #ifndef vgui_clear_tableau_h_
 #define vgui_clear_tableau_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
@@ -44,7 +44,7 @@ class vgui_clear_tableau : public vgui_tableau
 
   //: Set the given GLbitfield as the mask.
   void set_mask(GLbitfield);
- 
+
   //: Toggle clearing on and off.
   void toggle_clearing();
 

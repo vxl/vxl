@@ -1,4 +1,4 @@
-// This is oxl/vgui/internals/vgui_string_field.cxx
+// This is core/vgui/internals/vgui_string_field.cxx
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif

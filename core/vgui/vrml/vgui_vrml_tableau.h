@@ -1,4 +1,4 @@
-// This is oxl/vgui/vrml/vgui_vrml_tableau.h
+// This is core/vgui/vrml/vgui_vrml_tableau.h
 #ifndef vgui_vrml_tableau_h_
 #define vgui_vrml_tableau_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
@@ -9,7 +9,7 @@
 // \author Philip C. Pritchett, Robotics Research Group, University of Oxford
 // \date   17 Sep 99
 // \brief  Tableau to display VRML.
-// 
+//
 // \verbatim
 //  Modifications:
 //    17-SEP-1999 P.Pritchett - Initial version.

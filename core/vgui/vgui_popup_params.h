@@ -1,4 +1,4 @@
-// This is oxl/vgui/vgui_popup_params.h
+// This is core/vgui/vgui_popup_params.h
 #ifndef vgui_popup_params_h_
 #define vgui_popup_params_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
@@ -8,8 +8,8 @@
 // \file
 // \author Philip C. Pritchett, Robotics Research Group, University of Oxford
 // \date   21 Jan 00
-// \brief 
-// 
+// \brief
+//
 //  Contains classes:  vgui_popup_params
 //
 
