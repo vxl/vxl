@@ -76,7 +76,7 @@ class vgui_loader_tableau : public vgui_wrapper_tableau
                  float x2,float y2,float z2);// top, right hand, near corner.
 
   //: Default for a w-by-h image :
-  void set_image(unsigned w, unsigned h) { set_ortho(0, h, w, 0); }
+  void set_image(unsigned w, unsigned h) { set_ortho(0.f, float(h), float(w), 0.f); }
 
  protected:
   //: Destructor - called by vgui_loader_tableau_sptr.

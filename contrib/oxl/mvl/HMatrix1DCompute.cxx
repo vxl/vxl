@@ -33,8 +33,8 @@ HMatrix1DCompute::compute_array_dbl(const double p1[],
   pt1.reserve(N);
   pt2.reserve(N);
   for (int i=0;i<N;i++) {
-    pt1.push_back(HomgPoint1D(p1[i],1));
-    pt2.push_back(HomgPoint1D(p2[i],1));
+    pt1.push_back(HomgPoint1D(p1[i],1.0));
+    pt2.push_back(HomgPoint1D(p2[i],1.0));
   }
   return compute_cool_homg(pt1,pt2,H);
 }
@@ -44,10 +44,9 @@ HMatrix1DCompute::compute_cool_homg(const vcl_vector<HomgPoint1D> &,
                                     const vcl_vector<HomgPoint1D> &,
                                     HMatrix1D *)
 {
-  vcl_cerr << vcl_endl;
-  vcl_cerr << "HMatrix1DCompute::compute_cool_homg() :" << vcl_endl;
-  vcl_cerr << "This is a virtual method which should have been" << vcl_endl;
-  vcl_cerr << "overridden by a class derived from HMatrix1DCompute." << vcl_endl;
+  vcl_cerr << "\nHMatrix1DCompute::compute_cool_homg() :\n";
+  vcl_cerr << "This is a virtual method which should have been\n";
+  vcl_cerr << "overridden by a class derived from HMatrix1DCompute.\n";
   vcl_abort();
   return false;
 }

@@ -22,7 +22,7 @@ void test_algo_convolve_2d_byte()
   vil2_image_view<float> kernel1(m,1,1);
   for (unsigned int j=0;j<kernel1.nj();++j)
     for (unsigned int i=0;i<kernel1.ni();++i)
-      kernel1(i,j) = 1;
+      kernel1(i,j) = 1.0f;
 
   vil2_image_view<double> dest_im;
 
@@ -39,7 +39,7 @@ void test_algo_convolve_2d_byte()
   vil2_image_view<float> kernel2(m,3,1);
   for (unsigned int j=0;j<kernel2.nj();++j)
     for (unsigned int i=0;i<kernel2.ni();++i)
-      kernel2(i,j) = 1;
+      kernel2(i,j) = 1.0f;
 
   vil2_convolve_2d(src_im,dest_im,kernel2,double());
 
@@ -54,7 +54,7 @@ void test_algo_convolve_2d_byte()
   vil2_image_view<float> kernel3(m,3,1);
   for (unsigned int j=0;j<kernel3.nj();++j)
     for (unsigned int i=0;i<kernel3.ni();++i)
-      kernel3(i,j) = 1+j;
+      kernel3(i,j) = 1.0f+j;
 
   vil2_convolve_2d(src_im,dest_im,kernel3,double());
 

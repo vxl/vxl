@@ -53,16 +53,16 @@ void test_psfile()
   else {
     vcl_cout << "writing a set of lines, points, circles and ellipses\n";
     for (int i=0; i<100; ++i)
-      f.line(100,100+5*i,400-3*i,100);
+      f.line(100.0f,100.0f+5*i,400.0f-3*i,100.0f);
 
     for (int i=0; i<100; ++i)
-      f.point(300+i,400-i,0.5);
+      f.point(300.0f+i,400.0f-i,0.5f);
 
     for (int i=0; i<10; ++i)
-      f.circle(210+5*i,210,10+5*i);
+      f.circle(210.0f+5*i,210.0f,10.0f+5*i);
 
     for (int i=0; i<10; ++i)
-      f.ellipse(150+5*i,350+5*i,10+5*i,20+10*i,45);
+      f.ellipse(150.0f+5*i,350.0f+5*i,10.0f+5*i,20.0f+10*i,45.0f);
   }
 
 #if INTERACTIVE
