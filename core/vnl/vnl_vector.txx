@@ -428,7 +428,7 @@ vnl_vector<T>& vnl_vector<T>::pre_multiply (vnl_matrix<T> const& m) {
   T* temp= vnl_c_vector<T>::allocate_T(m.rows()); // Temporary
   vnl_matrix<T>& mm = (vnl_matrix<T>&) m;       // Drop const for get()
   for (unsigned i = 0; i < m.rows(); i++) {     // For each index
-    temp[i] = (T) 0.0;                          // Initialize element value
+    temp[i] = (T)0;                             // Initialize element value
     for (unsigned k = 0; k < this->num_elmts; k++)      // Loop over column values
       temp[i] += (mm.get(i,k) * this->data[k]); // Multiply
   }
@@ -448,7 +448,7 @@ vnl_vector<T>& vnl_vector<T>::post_multiply (vnl_matrix<T> const& m) {
   T* temp= vnl_c_vector<T>::allocate_T(m.columns()); // Temporary
   vnl_matrix<T>& mm = (vnl_matrix<T>&) m;       // Drop const for get()
   for (unsigned i = 0; i < m.columns(); i++) {  // For each index
-    temp[i] = (T) 0.0;                          // Initialize element value
+    temp[i] = (T)0;                             // Initialize element value
     for (unsigned k = 0; k < this->num_elmts; k++) // Loop over column values
       temp[i] += (this->data[k] * mm.get(k,i)); // Multiply
   }
@@ -481,7 +481,7 @@ vnl_vector<T> operator* (vnl_matrix<T> const& m, vnl_vector<T> const& v) {
   vnl_vector<T> result(m.rows());               // Temporary
   vnl_matrix<T>& mm = (vnl_matrix<T>&) m;       // Drop const for get()
   for (unsigned i = 0; i < m.rows(); i++) {     // For each index
-    result[i] = (T) 0.0;                        // Initialize element value
+    result[i] = (T)0;                           // Initialize element value
     for (unsigned k = 0; k < v.size(); k++)     // Loop over column values
       result[i] += (mm.get(i,k) * v[k]);        // Multiply
   }
@@ -506,7 +506,7 @@ vnl_vector<T> vnl_vector<T>::operator* (vnl_matrix<T> const&m) const {
   vnl_vector<T> result(m.columns());            // Temporary
   vnl_matrix<T>& mm = (vnl_matrix<T>&) m;       // Drop const for get()
   for (unsigned i = 0; i < m.columns(); i++) {  // For each index
-    result.data[i] = (T) 0.0;                   // Initialize element value
+    result.data[i] = (T)0;                      // Initialize element value
     for (unsigned k = 0; k < num_elmts; k++)    // Loop over column values
       result.data[i] += (data[k] * mm.get(k,i)); // Multiply
   }
