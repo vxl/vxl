@@ -17,6 +17,15 @@
 
 // Workaround for a "bug" in GL/glut.h, where the signature of glutAddMenuEntry
 // and some others is (char*,int) instead of (const char*,long).
+// GLUT on Win32 does not have this problem. So make it specific based on platforms.
+#ifdef VCL_WIN32
+inline void glutAddMenuEntry(const char* label, long value) { glutAddMenuEntry(label,int(value)); }
+inline void glutAddSubMenu(const char* label, long sub) { glutAddSubMenu(label,int(sub)); }
+inline void glutChangeToMenuEntry(long item, const char* label, long value) {
+  glutChangeToMenuEntry(int(item),label,int(value)); }
+inline void glutChangeToSubMenu(long item, const char* label, long sub) {
+  glutChangeToSubMenu(int(item),label,int(sub)); }
+#elif
 inline void glutAddMenuEntry(const char* label, int value) { glutAddMenuEntry(const_cast<char*>(label),value); }
 inline void glutAddMenuEntry(const char* label, long value) { glutAddMenuEntry(const_cast<char*>(label),int(value)); }
 inline int glutCreateWindow(const char* title) { return glutCreateWindow(const_cast<char*>(title)); }
@@ -33,6 +42,7 @@ inline void glutChangeToSubMenu(int item, const char* label, int sub) {
 inline void glutChangeToSubMenu(long item, const char* label, long sub) {
   glutChangeToSubMenu(int(item),const_cast<char*>(label),int(sub)); }
 inline int glutExtensionSupported(const char* name) { return glutExtensionSupported(const_cast<char*>(name)); }
+#endif
 
 #else // HAS_GLUT
 # error "Trying to use vgui_glut when HAS_GLUT is not defined."
