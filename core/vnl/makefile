@@ -1,7 +1,3 @@
-#######################################
-include ${IUEROOT}/config/top-params.mk
-#######################################
-
 USES := vxl
 LIBRARY := vnl
 VERSION := 1.0
@@ -84,6 +80,16 @@ SOURCES += vnl_sample.cxx
 SOURCES += vnl_unary_function.cxx
 SOURCES += vnl_transpose.cxx
 
+FLAGS_Templates/vnl_c_vector+float-.cxx += $(optimize)
+FLAGS_Templates/vnl_c_vector+double-.cxx += $(optimize
+FLAGS_Templates/vnl_c_vector+float_complex-.cxx += $(optimize)
+FLAGS_Templates/vnl_c_vector+double_complex-.cxx += $(optimize)
+FLAGS_Templates/vnl_sparse_matrix_instances.cxx += $(optimize)
+
+#######################################
+include ${IUEROOT}/config/top-params.mk
+#######################################
+
 # algo
 SUBDIRS += algo
 
@@ -101,16 +107,12 @@ endif
 ifeq ($(COMPILER),CC-n32)
 PRAGMA_INSTANTIATE_TEMPLATES = 1
 endif
-#optimize := -O3
-FLAGS_Templates/vnl_c_vector+float-.cxx += $(optimize)
-FLAGS_Templates/vnl_c_vector+double-.cxx += $(optimize)
-FLAGS_Templates/vnl_c_vector+float_complex-.cxx += $(optimize)
-FLAGS_Templates/vnl_c_vector+double_complex-.cxx += $(optimize)
-FLAGS_Templates/vnl_sparse_matrix_instances.cxx += $(optimize)
 
 ######################################
 include ${IUEROOT}/config/top-rules.mk
 ######################################
+
+debug=$(debug_for_optimize) # needed for using $(optimize) on some files
 
 # on HP unix, this library has become too big, so it needs -fPIC
 ifeq "hpux" "$(findstring hpux,$(OS))"
