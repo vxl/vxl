@@ -66,9 +66,12 @@ struct vul_file {
   //: Return basename
   static vcl_string basename(char const* filename, char const* suffix = 0);
 
-  //: Strip aways directory of the filename
+  //: Strips away directory of the filename
   static vcl_string strip_directory(char const* filename);
-  //: Strip aways extension of the filename
+  static vcl_string strip_directory(vcl_string const &filename)
+  { return strip_directory(filename.c_str()); }
+
+  //: Strips away extension of the filename
   static vcl_string strip_extension(char const* filename);
 
   //: Delete 1 or more files using the Local OS prefered globbing.
