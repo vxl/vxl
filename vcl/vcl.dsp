@@ -450,9 +450,6 @@ SOURCE=.\vcl_cmath.cxx
 SOURCE=.\vcl_cstdlib.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\vcl_limits.cxx
-# End Source File
-# Begin Source File
 SOURCE=.\vcl_deprecated.cxx
 # End Source File
 # End Group
