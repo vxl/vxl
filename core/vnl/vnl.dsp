@@ -710,11 +710,6 @@ SOURCE=.\Templates/vnl_vector+vnl_rational-.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=.\Templates/vnl_vector+vcl_complex+vnl_rational--.cxx
-
-# End Source File
-# Begin Source File
-
 SOURCE=.\Templates/vnl_sparse_matrix+vnl_rational-.cxx
 
 # End Source File
@@ -781,11 +776,6 @@ SOURCE=.\Templates/vnl_det+double-.cxx
 # Begin Source File
 
 SOURCE=.\Templates/vnl_c_vector+vnl_rational-.cxx
-
-# End Source File
-# Begin Source File
-
-SOURCE=.\Templates/vnl_c_vector+vcl_complex+vnl_rational--.cxx
 
 # End Source File
 # Begin Source File

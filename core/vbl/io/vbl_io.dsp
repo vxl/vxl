@@ -110,6 +110,11 @@ SOURCE=.\Templates/vbl_io_array_1d+float-.cxx
 # End Source File
 # Begin Source File
 
+SOURCE=.\Templates/vbl_io_array_2d+bool-.cxx
+
+# End Source File
+# Begin Source File
+
 SOURCE=.\Templates/vbl_io_array_2d+double-.cxx
 
 # End Source File
@@ -171,6 +176,26 @@ SOURCE=.\Templates/vbl_io_sparse_array+int.vcl_pair+uint.uint--.cxx
 # Begin Source File
 
 SOURCE=.\Templates/vsl_vector_io+vcl_vector+vbl_triple+int.int.int---.cxx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates/vsl_vector_io+vbl_triple+int.int.int--.cxx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates/vsl_vector_io+vbl_triple+double.int.int--.cxx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates/vsl_vector_io+vcl_vector+vbl_triple+double.int.int---.cxx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates/vbl_io_triple+double.int.int-.cxx
 
 # End Source File
 # End Group

@@ -255,6 +255,16 @@ SOURCE=.\Templates/vsl_vector_io+vnl_vector+double--.cxx
 # End Source File
 # Begin Source File
 
+SOURCE=.\Templates/vsl_vector_io+vcl_vector+vcl_vector+vnl_vector+double----.cxx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates/vsl_vector_io+vnl_matrix+double--.cxx
+
+# End Source File
+# Begin Source File
+
 SOURCE=.\vnl_io_nonlinear_minimizer.cxx
 
 # End Source File

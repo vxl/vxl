@@ -218,6 +218,11 @@ SOURCE=.\oxp_vidl_mpeg_codec.cxx
 SOURCE=.\oxp_yuv_to_rgb.cxx
 
 # End Source File
+# Begin Source File
+
+SOURCE=.\oxp_vob_frame_index.cxx
+
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter ""
@@ -334,6 +339,11 @@ SOURCE=.\MedianReduceImage.h
 # Begin Source File
 
 SOURCE=.\oxp_yuv_to_rgb.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\oxp_vob_frame_index.h
 
 # End Source File
 # End Group

@@ -190,6 +190,41 @@ SOURCE=.\Templates/mbl_selected_data_wrapper+vnl_vector+double--.cxx
 # End Source File
 # Begin Source File
 
+SOURCE=.\Templates/mbl_file_data_collector+vnl_vector+double--.cxx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates/mbl_file_data_wrapper+double-.cxx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates/mbl_file_data_wrapper+vnl_vector+double--.cxx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates/mbl_data_collector+vcl_vector+vbl_triple+double.int.int---.cxx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates/mbl_data_wrapper+vcl_vector+vbl_triple+double.int.int---.cxx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates/mbl_file_data_collector+vcl_vector+vbl_triple+double.int.int---.cxx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates/mbl_file_data_wrapper+vcl_vector+vbl_triple+double.int.int---.cxx
+
+# End Source File
+# Begin Source File
+
 SOURCE=.\mbl_data_collector_base.cxx
 
 # End Source File
@@ -484,6 +519,26 @@ SOURCE=.\mbl_clamped_plate_spline_2d.h
 # Begin Source File
 
 SOURCE=.\mbl_read_yes.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\mbl_file_data_collector.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\mbl_file_data_collector.txx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\mbl_file_data_wrapper.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\mbl_file_data_wrapper.txx
 
 # End Source File
 # End Group

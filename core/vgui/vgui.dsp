@@ -680,11 +680,6 @@ SOURCE=.\vgui_tag.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=.\vgui_test.cxx
-
-# End Source File
-# Begin Source File
-
 SOURCE=.\vgui_text_graph.cxx
 
 # End Source File
@@ -1091,6 +1086,26 @@ SOURCE=.\impl/qt/vgui_qt_tag.cxx
 # Begin Source File
 
 SOURCE=.\impl/qt/vgui_qt_window.cxx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\impl/qt/vgui_qt_adaptor_mocced.cxx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\impl/qt/vgui_qt_dialog_impl_mocced.cxx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\impl/qt/vgui_qt_menu_mocced.cxx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\impl/qt/vgui_qt_statusbar_mocced.cxx
 
 # End Source File
 # End Group
@@ -1539,11 +1554,6 @@ SOURCE=.\vgui_tableau.h
 # Begin Source File
 
 SOURCE=.\vgui_tag.h
-
-# End Source File
-# Begin Source File
-
-SOURCE=.\vgui_test.h
 
 # End Source File
 # Begin Source File
@@ -1999,11 +2009,6 @@ SOURCE=.\vgui_shell_tableau_sptr.h
 # Begin Source File
 
 SOURCE=.\vgui_tableau_sptr.h
-
-# End Source File
-# Begin Source File
-
-SOURCE=.\vgui_test_sptr.h
 
 # End Source File
 # Begin Source File

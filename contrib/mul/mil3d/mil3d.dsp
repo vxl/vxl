@@ -183,6 +183,11 @@ SOURCE=.\Templates/mil3d_sample_grid_3d+uchar.double-.cxx
 SOURCE=.\Templates/mil3d_sample_profile_3d+int.double-.cxx
 
 # End Source File
+# Begin Source File
+
+SOURCE=.\Templates/mil3d_gaussian_pyramid_builder_3d+int-.cxx
+
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter ""

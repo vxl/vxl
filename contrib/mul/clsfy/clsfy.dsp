@@ -175,6 +175,11 @@ SOURCE=.\clsfy_simple_adaboost.cxx
 # End Source File
 # Begin Source File
 
+SOURCE=.\clsfy_adaboost_sorted_trainer2.cxx
+
+# End Source File
+# Begin Source File
+
 SOURCE=.\Templates/vcl_vector+clsfy_classifier_1d~-.cxx
 
 # End Source File
@@ -201,6 +206,16 @@ SOURCE=.\Templates/vsl_binary_loader+clsfy_classifier_1d-.cxx
 # Begin Source File
 
 SOURCE=.\Templates/vsl_vector_io+clsfy_classifier_1d~-.cxx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates/vbl_array_2d+clsfy_binary_threshold_1d-.cxx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates/vbl_io_array_2d+clsfy_binary_threshold_1d-.cxx
 
 # End Source File
 # Begin Source File
@@ -359,6 +374,11 @@ SOURCE=.\clsfy_binary_threshold_1d_builder.h
 # Begin Source File
 
 SOURCE=.\clsfy_binary_threshold_1d_sorted_builder.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\clsfy_adaboost_sorted_trainer2.h
 
 # End Source File
 # End Group
