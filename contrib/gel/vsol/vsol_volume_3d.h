@@ -22,13 +22,15 @@ class vsol_polyhedron;
 
 class vsol_volume_3d : public vsol_spatial_object_3d
 {
- public:
+ protected:
   enum vsol_volume_3d_type
   { VOLUME_NO_TYPE=0,
     POLYHEDRON,
     NUM_VOLUME_TYPES
   };
+  vsol_volume_3d_type volume_type(void) const { return vsol_volume_3d::VOLUME_NO_TYPE; }
 
+ public:
   //---------------------------------------------------------------------------
   //: Destructor
   //---------------------------------------------------------------------------
@@ -52,12 +54,17 @@ class vsol_volume_3d : public vsol_spatial_object_3d
   //: Return the spatial type of `this'
   //---------------------------------------------------------------------------
   vsol_spatial_object_3d_type spatial_type(void) const { return vsol_spatial_object_3d::VOLUME; }
-  vsol_volume_3d_type volume_type(void) const { return vsol_volume_3d::VOLUME_NO_TYPE; }
 
   //---------------------------------------------------------------------------
   //: Return the volume of `this'
   //---------------------------------------------------------------------------
   virtual double volume(void) const=0;
+
+  //: Return a platform independent string identifying the class
+  virtual vcl_string is_a() const { return vcl_string("vsol_volume_3d"); }
+
+  //: Return true if the argument matches the string identifying the class or any parent class
+  virtual bool is_class(const vcl_string& cls) const { return cls==is_a(); }
 };
 
 #endif // vsol_volume_3d_h_

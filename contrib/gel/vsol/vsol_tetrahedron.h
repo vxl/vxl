@@ -14,7 +14,7 @@
 // \verbatim
 //  Modifications
 //   2004/05/14 Peter Vanroose  Added describe()
-//   2004/09/24 Peter Vanroose  Removed operaqtor==() since parent's suffices
+//   2004/09/24 Peter Vanroose  Removed operator==() since parent's suffices
 // \endverbatim
 //*****************************************************************************
 
@@ -123,6 +123,13 @@ class vsol_tetrahedron : public vsol_polyhedron
   //: output description to stream
   //---------------------------------------------------------------------------
   void describe(vcl_ostream &strm, int blanking=0) const;
+
+  //: Return a platform independent string identifying the class
+  virtual vcl_string is_a() const { return vcl_string("vsol_tetrahedron"); }
+
+  //: Return true if the argument matches the string identifying the class or any parent class
+  virtual bool is_class(const vcl_string& cls) const
+  { return cls==is_a() || vsol_polyhedron::is_class(cls); }
 };
 
 #endif // vsol_tetrahedron_h_

@@ -59,6 +59,12 @@ class vsol_surface_3d : public vsol_spatial_object_3d
   //  REQUIRE: in(p)
   //---------------------------------------------------------------------------
   virtual vgl_vector_3d<double> normal_at_point(const vsol_point_3d_sptr &p) const=0;
+
+  //: Return a platform independent string identifying the class
+  virtual vcl_string is_a() const { return vcl_string("vsol_surface_3d"); }
+
+  //: Return true if the argument matches the string identifying the class or any parent class
+  virtual bool is_class(const vcl_string& cls) const { return cls==is_a(); }
 };
 
 #endif // vsol_surface_3d_h_
