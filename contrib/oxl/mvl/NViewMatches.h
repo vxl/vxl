@@ -38,8 +38,6 @@
 #include <vcl_vector.h>
 #include <vcl_iosfwd.h>
 
-//template <class T> class vbl_sparse_array_2d;
-
 struct NViewMatch : public vnl_vector<int> {
   // Constants
   enum { nomatch = -1 };
