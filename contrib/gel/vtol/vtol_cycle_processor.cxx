@@ -370,7 +370,7 @@ static vtol_edge_2d_sptr ccw_edge(vtol_edge_2d_sptr in_edg, vtol_vertex_sptr fro
 //    "Assignable" is defined by
 //    the condition that an edge has not already been traversed in
 //    the required direction.  That is, if a traversal from s to e,
-//    (V1 to V2) has occured then dir1 is true.  A second traversal
+//    (V1 to V2) has occurred then dir1 is true.  A second traversal
 //    is not allowed and the edge is considered un-assignable.
 //
 bool vtol_cycle_processor::assignable(vtol_edge_2d_sptr edg, vtol_vertex_sptr last)
@@ -696,36 +696,36 @@ void vtol_cycle_processor::print_edge(vtol_edge_2d_sptr& e)
     return;
   vcl_cout << e << " :[(" << e->v1()->cast_to_vertex_2d()->x()
            << " " << e->v1()->cast_to_vertex_2d()->y()<< "), ("
-           << e->v2()->cast_to_vertex_2d()->x() << " "
+           << e->v2()->cast_to_vertex_2d()->x() << ' '
            << e->v2()->cast_to_vertex_2d()->y() << ")]\n";
 }
 
 //------------------------------------------------------------------------
-//:   The main cycle tracing algorithm.
-//    The input is edges_ and the output is chains_, a set of 1-cycles.
-//    The approach is to select an vtol_edge from edges_ and explore all the
-//    vtol_edge(s) connected to it.  The search proceeds by traversing connected
-//    vtol_edge(s), turning in a cw or ccw direction depending on the initial vtol_edge
-//    orientation.  If the search returns to a vertex already on the path,
-//    then a cycle is output.  The traversed vtol_edge(s) and vertices are pushed
-//    onto a stack so that cycles can be "popped" off an the search continued
-//    from a proper state.  Each vtol_edge can be traversed in a plus or minus
-//    direction (2 half_edges). Thus boundaries might be traced twice producing
-//    identical cycles but traversed in opposite senses.
+//: The main cycle tracing algorithm.
+//  The input is edges_ and the output is chains_, a set of 1-cycles.
+//  The approach is to select an vtol_edge from edges_ and explore all the
+//  vtol_edge(s) connected to it.  The search proceeds by traversing connected
+//  vtol_edge(s), turning in a cw or ccw direction depending on the initial vtol_edge
+//  orientation.  If the search returns to a vertex already on the path,
+//  then a cycle is output.  The traversed vtol_edge(s) and vertices are pushed
+//  onto a stack so that cycles can be "popped" off an the search continued
+//  from a proper state.  Each vtol_edge can be traversed in a plus or minus
+//  direction (2 half_edges). Thus boundaries might be traced twice producing
+//  identical cycles but traversed in opposite senses.
 //
-//    Bridges are detected by the fact that all vtol_edge(s) in the bridge are
-//    used(plus and minus) and the traveral winding angle is 180 deg, i.e.,
-//    the path folds exactly back on itself.
+//  Bridges are detected by the fact that all vtol_edge(s) in the bridge are
+//  used(plus and minus) and the traversal winding angle is 180 deg, i.e.,
+//  the path folds exactly back on itself.
 //
-//    Cycles are labled according to the accumulated winding angle in
-//    traversing the cycle.  If the accumulated angle is + then the
-//    cycle is ccw, otherwise cw.  Here, the winding angle is defined as the
-//    exterior angle between two sequential vtol_edge(s) in the traversed path.
+//  Cycles are labeled according to the accumulated winding angle in
+//  traversing the cycle.  If the accumulated angle is + then the
+//  cycle is ccw, otherwise cw.  Here, the winding angle is defined as the
+//  exterior angle between two sequential vtol_edge(s) in the traversed path.
 //
-//    In the traversal, completely unused vtol_edge(s) are favored to continue in
-//    an unexplored path.  If none are available then the bool, force,
-//    is set and the remaining half_edge is used, retracing a previous path
-//    in the opposite direction.
+//  In the traversal, completely unused vtol_edge(s) are favored to continue in
+//  an unexplored path.  If none are available then the bool, force,
+//  is set and the remaining half_edge is used, retracing a previous path
+//  in the opposite direction.
 void vtol_cycle_processor::compute_cycles()
 {
   int limit = 10*edges_.size();//just to be guard against any infinite loop
