@@ -52,8 +52,8 @@ vil_image_impl* vil_iris_file_format::make_input_image(vil_stream* is)
   /*int pixmax_    =*/ get_long(is);
 
   is->seek(24);
-  char imagename_[81];
-  is->read(imagename_, 80);
+  char imagename[81];
+  is->read(imagename, 80);
 
   colormap_ = get_long(is);
 
@@ -64,7 +64,7 @@ vil_image_impl* vil_iris_file_format::make_input_image(vil_stream* is)
   if (dimension_ > 3 || dimension_ < 1) return 0;
   if (bytes_per_component_ < 1 || bytes_per_component_ > 2) return 0;
 
-  return new vil_iris_generic_image(is);
+  return new vil_iris_generic_image(is,imagename);
 }
 
 vil_image_impl* vil_iris_file_format::make_output_image(vil_stream* is, int planes,
@@ -84,11 +84,12 @@ char const* vil_iris_file_format::tag() const
 
 /////////////////////////////////////////////////////////////////////////////
 
-vil_iris_generic_image::vil_iris_generic_image(vil_stream* is):
+vil_iris_generic_image::vil_iris_generic_image(vil_stream* is, char* imagename):
   is_(is)
 {
   is_->ref();
   read_header();
+  strncpy(imagename_, imagename, 80);
 }
 
 char const* vil_iris_generic_image::file_format() const
@@ -115,7 +116,7 @@ vil_iris_generic_image::vil_iris_generic_image(vil_stream* is, int planes,
     height_ = height;
     pixmin_ = 0;
     pixmax_ = (bits_per_component == 8) ? 255 : 65535;
-    /*imagename_ = neXw char[80];*/  strcpy(imagename_, "ViL writes an iris image!");
+    strcpy(imagename_, "vil writes an iris image!");
     colormap_ = 0;
   
     if ((components * planes) == 1)
@@ -166,7 +167,6 @@ bool vil_iris_generic_image::read_header()
   //  starts at 24
 
   is_->seek(24);
-  //imagename_ = neXw char[81];
   is_->read(imagename_, 80);
 
   // COLORMAP starts at 104
@@ -177,7 +177,7 @@ bool vil_iris_generic_image::read_header()
   if (magic_ != 474) 
   {
     cerr << "This is not an Iris RGB file: magic number is incorrect: " 
-	      << magic_<< endl;
+	 << magic_ << endl;
     return false; 
   }
   
@@ -208,8 +208,8 @@ bool vil_iris_generic_image::read_header()
   
 bool vil_iris_generic_image::write_header()
 {
-/*
-  cerr << "vil_iuris_generic_image::write_header()\n";
+#ifdef DEBUG
+  cerr << "vil_iris_generic_image::write_header()\n";
   cerr << "Here we go : \n";
   cerr << "magic_      = " << magic_    << endl;
   cerr << "storage_    = " << storage_ << endl;
@@ -224,7 +224,7 @@ bool vil_iris_generic_image::write_header()
   cerr << "components_ = " << components_ << endl;
   cerr << "imagename_  = " << imagename_ << endl;
   cerr << endl;
-*/
+#endif
   
   char dummy[410];
   
@@ -251,7 +251,7 @@ bool vil_iris_generic_image::write_header()
 
 vil_image vil_iris_generic_image::get_plane(int plane) const
 {
-  assert(plane <= planes_); // should this be 'plane < planes_'? planes start at 0.
+  assert(plane < planes_); // should this be 'plane <= planes_'? planes start at 0.
   cerr << "do something for vil_iris_generic_image::get_plane\n";
   return 0;
 }
@@ -283,7 +283,9 @@ bool vil_iris_generic_image::get_section_verbatim(void* ib, int x0, int y0, int 
   unsigned char* dp = (unsigned char*)ib;
 
   for (int channel=0; channel<planes_; ++channel) {
+#ifdef DEBUG
     cerr << "c" << channel;
+#endif
     unsigned char* cbi = dp;
     // skip cbi to point at last row of section
     cbi+=(row_len*(ys-1));
@@ -309,7 +311,9 @@ bool vil_iris_generic_image::get_section_verbatim(void* ib, int x0, int y0, int 
       cbi-=(row_len*2);
     }
   }
+#ifdef DEBUG
   cerr << endl;
+#endif
   return true;
 }//GetSectionVERBATIM
 

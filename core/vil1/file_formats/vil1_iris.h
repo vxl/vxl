@@ -4,8 +4,12 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
-// Author: joris.schouteden@esat.kuleuven.ac.be
+// .NAME vil_iris
+// .AUTHOR
+// joris.schouteden@esat.kuleuven.ac.be
 // Created: 17 Feb 2000
+// .SECTION Modifications
+//  Peter Vanroose - July 2000 - bug fixed in write_header() by adding extra argument to constructor to pass imagename_ member
 
 #include <vil/vil_file_format.h>
 #include <vil/vil_image_impl.h>
@@ -34,7 +38,7 @@ class vil_iris_generic_image : public vil_image_impl {
   friend class vil_iris_file_format;
 public:
 
-  vil_iris_generic_image(vil_stream* is);
+  vil_iris_generic_image(vil_stream* is, char* imagename = "");
   vil_iris_generic_image(vil_stream* is, int planes,
 					       int width,
 					       int height,
