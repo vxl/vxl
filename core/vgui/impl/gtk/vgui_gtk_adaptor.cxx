@@ -33,6 +33,10 @@ vgui_gtk_adaptor::vgui_gtk_adaptor(vgui_gtk_window* win) : win_(win), ovl_helper
   widget = gtk_gl_area_new_vargs(0/*NULL*/,         // no sharing
                                  GDK_GL_RGBA,
                                  GDK_GL_DOUBLEBUFFER,
+                                 GDK_GL_RED_SIZE, 8,
+                                 GDK_GL_GREEN_SIZE, 8,
+                                 GDK_GL_BLUE_SIZE, 8,
+                                 //GDK_GL_ALPHA_SIZE, 8,
                                  GDK_GL_DEPTH_SIZE,1,
                                  GDK_GL_NONE); // last argument must be GDK_GL_NONE
 
