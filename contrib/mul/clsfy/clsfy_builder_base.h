@@ -77,6 +77,12 @@ void vsl_b_write(vsl_b_ostream& bfs, const clsfy_builder_base& b);
 void vsl_b_read(vsl_b_istream& bfs, clsfy_builder_base& b);
 
 //: Stream output operator for class reference
+void vsl_print_summary(vcl_ostream& os,const clsfy_builder_base& b);
+
+//: Stream output operator for class pointer
+void vsl_print_summary(vcl_ostream& os,const clsfy_builder_base* b);
+
+//: Stream output operator for class reference
 vcl_ostream& operator<<(vcl_ostream& os,const clsfy_builder_base& b);
 
 //: Stream output operator for class pointer

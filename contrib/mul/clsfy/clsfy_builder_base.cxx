@@ -80,11 +80,19 @@ vcl_ostream& operator<<(vcl_ostream& os,const clsfy_builder_base& b)
 
 //=======================================================================
 
-vcl_ostream& operator<<(vcl_ostream& os,const clsfy_builder_base* b)
+void vsl_print_summary(vcl_ostream& os,const clsfy_builder_base* b)
 {
   if (b)
-    return os << *b;
+    os << *b;
   else
-    return os << "No clsfy_builder_base defined.";
+    os << "No clsfy_builder_base defined.";
+}
+
+//=======================================================================
+
+vcl_ostream& operator<<(vcl_ostream& os,const clsfy_builder_base* b)
+{
+  vsl_print_summary(os, b);
+  return os;
 }
 
