@@ -111,8 +111,8 @@ sub update_book
     }
     closedir(BOOKSRCDIR);
 
-    opendir(BOOKSRCDIR,$booksrcdir) || die "Cannot open $booksrcdir: $!";    
-    
+    opendir(BOOKSRCDIR,$booksrcdir) || die "Cannot open $booksrcdir: $!";
+
     while ($_ = readdir(BOOKSRCDIR))
     {
       # print "DIR: $_\n";
