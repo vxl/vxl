@@ -20,7 +20,7 @@
 template <class T>
 T vnl_c_vector<T>::sum(T const* v, unsigned n)
 {
-  T tot = 0;
+  T tot(0);
   for(unsigned i = 0; i < n; ++i)
     tot += *v++;
   return tot;
@@ -32,7 +32,7 @@ void vnl_c_vector<T>::normalize(T* v, unsigned n)
   abs_t tot(0);
   for(unsigned i = 0; i < n; ++i)
     tot += vnl_math_squared_magnitude(v[i]);
-  tot = abs_t(1.0 / vcl_sqrt(double(tot)));
+  tot = abs_t(abs_t(1) / vcl_sqrt(tot));
   for(unsigned i = 0; i < n; ++i)
     v[i] *= tot;
 }
@@ -223,7 +223,8 @@ template <class T, class S>
 void vnl_c_vector_rms_norm(T const *p, unsigned n, S *out)
 {
   vnl_c_vector_two_norm_squared(p, n, out);
-  *out = S(vcl_sqrt(double(*out) / n));
+  *out /= n;
+  *out = vcl_sqrt(*out);
 }
 
 template <class T, class S>
@@ -238,7 +239,7 @@ template <class T, class S>
 void vnl_c_vector_two_norm(T const *p, unsigned n, S *out)
 {
   vnl_c_vector_two_norm_squared(p, n, out);
-  *out = S(vcl_sqrt(double(*out)));
+  *out = S(vcl_sqrt(S(*out)));
 }
 
 template <class T, class S>
@@ -290,25 +291,38 @@ inline void vnl_c_vector_dealloc(void* v, int n, int size)
 template<class T>
 T** vnl_c_vector<T>::allocate_Tptr(int n)
 {
+  // "T *" is POD.
   return (T**)vnl_c_vector_alloc(n, sizeof (T*));
 }
 
-template<class T>
-T* vnl_c_vector<T>::allocate_T(int n)
-{
-  return (T*)vnl_c_vector_alloc(n, sizeof (T));
-}
-
-template<class T>
+template<class T> 
 void vnl_c_vector<T>::deallocate(T** v, int n)
 {
   vnl_c_vector_dealloc(v, n, sizeof (T*));
 }
 
-template<class T>
-void vnl_c_vector<T>::deallocate(T* v, int n)
+// "T *" is POD, but "T" might not be.
+#include <vcl_new.h>
+
+template<class T> 
+T* vnl_c_vector<T>::allocate_T(int n)
 {
-  vnl_c_vector_dealloc(v, n, sizeof (T));
+  T *p = (T*)vnl_c_vector_alloc(n, sizeof (T));
+#if 1
+  for (int i=0; i<n; ++i)
+    new (p+i) T();
+#endif
+  return p;
+}
+
+template<class T> 
+void vnl_c_vector<T>::deallocate(T* p, int n)
+{
+#if 1
+  for (int i=0; i<n; ++i)
+    (p+i)->~T();
+#endif
+  vnl_c_vector_dealloc(p, n, sizeof (T));
 }
 
 //---------------------------------------------------------------------------
