@@ -45,7 +45,7 @@ void test_image_view_maths_byte()
   TEST_NEAR("Values scaled+offset",imC(3,5),imA(3,5)*2+7,1e-8);
 
 
-  vil2_image_view<float> im_sum;
+  vil2_image_view<float> im_sum,im_sum_sqr;
   vil2_math_image_sum(imA,imB,im_sum);
   TEST("Width of im_sum",im_sum.ni(),imA.ni());
   TEST("Height of im_sum",im_sum.nj(),imA.nj());
@@ -62,6 +62,15 @@ void test_image_view_maths_byte()
   float is45 = im_sum(4,5);
   vil2_math_add_image_fraction(im_sum,0.77,imA,0.23);
   TEST_NEAR("add_fraction",im_sum(4,5),0.77*is45+0.23*imA(4,5),1e-5);
+
+  double sumA,sum_sqrA;
+  vil2_math_sum_squares(sumA,sum_sqrA,imA,0);
+  vil2_math_integral_image(imA,im_sum);
+  TEST_NEAR("integral_image",im_sum(n-1,m-1),sumA,1e-6);
+
+  vil2_math_integral_sqr_image(imA,im_sum,im_sum_sqr);
+  TEST_NEAR("integral_sqr_image (sum)",im_sum(n-1,m-1),sumA,1e-6);
+  TEST_NEAR("integral_sqr_image (sum sqr)",im_sum_sqr(n-1,m-1),sum_sqrA,1e-6);
 }
 
 MAIN( test_image_view_maths )
