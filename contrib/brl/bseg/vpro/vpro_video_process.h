@@ -42,6 +42,8 @@ class vpro_video_process : public vbl_ref_count
   virtual ~vpro_video_process() {}
   void clear_input();
   void clear_output();
+
+  
   void set_n_frames(int n_frames) { n_frames_ = n_frames; }
   void set_frame_index(int index) { frame_index_= index; }
 
@@ -69,12 +71,20 @@ class vpro_video_process : public vbl_ref_count
   vcl_vector<vtol_topology_object_sptr> const& get_input_topology()
   { return input_topo_objs_; }
 
+
   //:output handling may depend on the specific process
   virtual vcl_vector<vsol_spatial_object_2d_sptr> const& get_output_spatial_objects()
   { return output_spat_objs_; }
 
   virtual vcl_vector<vtol_topology_object_sptr> const & get_output_topology()
   { return output_topo_objs_; }
+
+  //graph output for data display
+  void set_graph_flag(){graph_flag_ = true;}
+  void clear_graph_flag(){graph_flag_ = false;}
+  bool graph_flag(){return graph_flag_;}
+  void  set_graph(vcl_vector<float> const& graph){graph_=graph;}
+  vcl_vector<float> graph(){return graph_;}
 
   virtual process_data_type get_input_type() { return NOTYPE; }
   virtual process_data_type get_output_type() { return NOTYPE; }
@@ -90,6 +100,8 @@ class vpro_video_process : public vbl_ref_count
   vil1_image output_image_;
   vcl_vector<vtol_topology_object_sptr> output_topo_objs_;
   vcl_vector<vsol_spatial_object_2d_sptr> output_spat_objs_;
+  bool graph_flag_;
+  vcl_vector<float> graph_;//for histograms and other plots
 };
 
 #endif // vpro_video_process_h_
