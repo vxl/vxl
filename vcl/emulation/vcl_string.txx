@@ -357,7 +357,7 @@ operator>> (vcl_istream &is, vcl_basic_string <charT, traits> &s)
   if (is.ipfx0 ())
 #endif
     {
-      register streambuf *sb = is.rdbuf ();
+      register vcl_streambuf *sb = is.rdbuf ();
       s.resize (0);
       while (1)
         {
@@ -401,7 +401,7 @@ getline (vcl_istream &is, vcl_basic_string <charT, traits>& s, charT delim)
   if (is.ipfx1 ())
     {
       _IO_size_t count = 0;
-      streambuf *sb = is.rdbuf ();
+      vcl_streambuf *sb = is.rdbuf ();
       s.resize (0);
 
       while (1)
