@@ -40,7 +40,7 @@ void ensure_initialized()
 #ifdef VCL_WIN32
   vidl_io::register_codec(new vidl_avicodec);
 #endif
-#ifdef HAS_MPEG
+#if HAS_MPEG
   vidl_io::register_codec(new oxp_vidl_mpeg_codec);
 #endif
   init = true;
