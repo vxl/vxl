@@ -6,7 +6,7 @@ SUBDIRS += osl
 
 SUBDIRS += mvl
 SUBDIRS += oxp
-SUBDIRS += ../Oxford/mvox
+#SUBDIRS += ../Oxford/mvox
 SUBDIRS += vrml
 
 ifeq (1,$(strip $(HAS_OPENGL)))
