@@ -52,14 +52,16 @@ inline void test_image_view_io_as(T value1, T value2)
   TEST("Smart ptr", &image2p(0,0), &image2(0,0,1));
 }
 
-MAIN( test_image_view_io )
+static void test_image_view_io()
 {
-  START( "vil_image_view" );
-
-  vcl_cout << "********************************\n"
+  vcl_cout << "*******************************\n"
            << " Testing IO for vil_image_view\n"
-           << "********************************\n";
+           << "*******************************\n";
 
+#if VXL_HAS_INT_64
+  test_image_view_io_as(vxl_uint_64(3),vxl_uint_64(17));
+  test_image_view_io_as(vxl_int_64(5),vxl_int_64(-17));
+#endif
   test_image_view_io_as(vxl_uint_32(3),vxl_uint_32(17));
   test_image_view_io_as(vxl_int_32(5),vxl_int_32(-17));
   test_image_view_io_as(vxl_uint_16(4),vxl_uint_16(19));
@@ -69,6 +71,6 @@ MAIN( test_image_view_io )
   test_image_view_io_as(float(-0.6f),float(13.5f));
   test_image_view_io_as(double(12.1),double(123.456));
   test_image_view_io_as(bool(false),bool(true));
-
-  SUMMARY();
 }
+
+TESTMAIN(test_image_view_io);

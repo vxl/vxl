@@ -54,14 +54,16 @@ inline void test_memory_chunk_io_as(T value)
   TEST("Type OK", chunk_sptr2->pixel_format(),chunk1.pixel_format());
 }
 
-MAIN( test_memory_chunk_io )
+void test_memory_chunk_io()
 {
-  START( "vil_memory_chunk" );
-
-  vcl_cout << "**********************************\n"
+  vcl_cout << "*********************************\n"
            << " Testing IO for vil_memory_chunk\n"
-           << "**********************************\n";
+           << "*********************************\n";
 
+#if VXL_HAS_INT_64
+  test_memory_chunk_io_as(vxl_uint_64(17));
+  test_memory_chunk_io_as(vxl_int_64(-17));
+#endif
   test_memory_chunk_io_as(vxl_uint_32(17));
   test_memory_chunk_io_as(vxl_int_32(-17));
   test_memory_chunk_io_as(vxl_uint_16(19));
@@ -71,6 +73,6 @@ MAIN( test_memory_chunk_io )
   test_memory_chunk_io_as(float(13.5f));
   test_memory_chunk_io_as(double(123.456));
   test_memory_chunk_io_as(bool(true));
-
-  SUMMARY();
 }
+
+TESTMAIN( test_memory_chunk_io );

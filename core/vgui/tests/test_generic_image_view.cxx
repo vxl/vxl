@@ -52,6 +52,10 @@ test_generic_image_view()
   // These tests make sure that the data stored in the generic image
   // are the same as that of the image used to create it.
 
+#if VXL_HAS_INT_64
+  TestWith( vxl_uint_64 );
+  TestWith( vxl_int_64 );
+#endif
   TestWith( vxl_uint_32 );
   TestWith( vxl_int_32 );
   TestWith( vxl_uint_16 );
