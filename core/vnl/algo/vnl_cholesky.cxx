@@ -21,10 +21,10 @@
 // the reciprocal condition number.  If mode is estimate_condition, the
 // condition number and an approximate nullspace are estimated, at a cost
 // of a factor of (1 + 18/n).  Here's a table of 1 + 18/n:
-//<pre>
+// \verbatim
 // n:              3      5     10     50    100    500   1000
 // slowdown:     7.0    4.6    2.8    1.4   1.18   1.04   1.02
-//</pre>
+// \endverbatim
 
 vnl_cholesky::vnl_cholesky(vnl_matrix<double> const & M, Operation mode):
   A_(M)
