@@ -268,8 +268,8 @@ bool vil_png_image::get_property(char const *key, void * value) const
 {
   if (vcl_strcmp(vil_property_quantisation_depth, key)==0)
   {
-    unsigned* depth =  static_cast<unsigned*>(value);
-    *depth = bits_per_component_;
+    if (value)
+      *static_cast<unsigned int*>(value) = bits_per_component_;
     return true;
   }
 

@@ -14,7 +14,7 @@
 #include <vil/vil_memory_chunk.h>
 #include <vil/vil_image_view.h>
 
-#define where (vcl_cerr << __FILE__ ":" << __LINE__ << " : ")
+#define where (vcl_cerr << __FILE__ " : " << __LINE__ << " : ")
 
 //--------------------------------------------------------------------------------
 
@@ -68,8 +68,8 @@ bool vil_bmp_image::get_property(char const * tag, void * value) const
 {
   if (vcl_strcmp(vil_property_quantisation_depth, tag)==0)
   {
-    unsigned* depth =  static_cast<unsigned*>(value);
-    *depth = core_hdr.bitsperpixel / nplanes();
+    if (value)
+      *static_cast<unsigned int*>(value) = core_hdr.bitsperpixel / nplanes();
     return true;
   }
 

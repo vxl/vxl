@@ -79,8 +79,8 @@ bool vil_pnm_image::get_property(char const * tag, void * value) const
 {
   if (vcl_strcmp(vil_property_quantisation_depth, tag)==0)
   {
-    unsigned* depth =  static_cast<unsigned*>(value);
-    *depth = bits_per_component_;
+    if (value)
+      *static_cast<unsigned int*>(value) = bits_per_component_;
     return true;
   }
 
@@ -324,18 +324,18 @@ vil_image_view_base_sptr vil_pnm_image::get_copy_view(
   }
   else if (bits_per_component_ <= 8)
   {
-    buf = new vil_memory_chunk(ni_ * nj_* nplanes() * sizeof(unsigned char),VIL_PIXEL_FORMAT_BYTE);
-    ib = reinterpret_cast<unsigned char *>(buf->data());
+    buf = new vil_memory_chunk(ni_ * nj_* nplanes() * 1,VIL_PIXEL_FORMAT_BYTE);
+    ib = reinterpret_cast<vxl_byte*>(buf->data());
   }
   else if (bits_per_component_ <= 16)
   {
-    buf = new vil_memory_chunk(ni_ * nj_* nplanes() * sizeof(unsigned short),VIL_PIXEL_FORMAT_UINT_16);
-    jb = reinterpret_cast<unsigned short *>(buf->data());
+    buf = new vil_memory_chunk(ni_ * nj_* nplanes() * 2,VIL_PIXEL_FORMAT_UINT_16);
+    jb = reinterpret_cast<vxl_uint_16*>(buf->data());
   }
   else
   {
-    buf = new vil_memory_chunk(ni_ * nj_* nplanes() * sizeof(unsigned int),VIL_PIXEL_FORMAT_UINT_32);
-    kb = reinterpret_cast<unsigned int *>(buf->data());
+    buf = new vil_memory_chunk(ni_ * nj_* nplanes() * 4,VIL_PIXEL_FORMAT_UINT_32);
+    kb = reinterpret_cast<vxl_uint_32*>(buf->data());
   }
 
   if (magic_ > 4) // pgm or ppm raw image

@@ -277,8 +277,8 @@ bool vil_dicom_image::get_property(char const* tag, void* value) const
 {
   if (vcl_strcmp(vil_property_quantisation_depth, tag)==0)
   {
-    unsigned* depth =  static_cast<unsigned*>(value);
-    *depth = header_.allocated_bits_;
+    if (value)
+      *static_cast<unsigned int*>(value) = header_.allocated_bits_;
     return true;
   }
 
