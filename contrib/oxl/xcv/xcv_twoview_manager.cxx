@@ -16,7 +16,7 @@
 static bool debug = false;
 
 //-----------------------------------------------------------------------------
-//-- Constructor.
+//: Constructor.
 //-----------------------------------------------------------------------------
 xcv_twoview_manager::xcv_twoview_manager() 
   : f_matrix(0)
@@ -27,15 +27,27 @@ xcv_twoview_manager::xcv_twoview_manager()
   , corner_matches_are_displayed(false)
   , transfer_index(0)
   , dragging(false)
-{ }
+{
+#ifdef WIN32
+  // Until somebody implements overlays for mfc, this
+  // is the default for windows (see also vgui_rubberbander).
+  use_overlays = false;
+#else
+  // This is the default on non-windows platforms.
+  // Please keep it that way or document clearly why
+  // it must be changed. It is the default because
+  // Mesa (or glx) is too slow otherwise.
+  use_overlays = true;
+#endif
+}
 
 //-----------------------------------------------------------------------------
-//-- Destructor.
+//: Destructor.
 //-----------------------------------------------------------------------------
 xcv_twoview_manager::~xcv_twoview_manager() { }
 
 //-----------------------------------------------------------------------------
-//-- Set the tableau at the given position to be the given tableau.
+//: Set the tableau at the given position to be the given tableau.
 //-----------------------------------------------------------------------------
 void xcv_twoview_manager::set_tableau(vgui_tableau_ref const& tab, unsigned tab_nb)
 {
@@ -58,7 +70,7 @@ void xcv_twoview_manager::set_tableau(vgui_tableau_ref const& tab, unsigned tab_
 }
 
 //-----------------------------------------------------------------------------
-//-- Toggle between displaying and not displaying the FMatrix.
+//: Toggle between displaying and not displaying the FMatrix.
 //-----------------------------------------------------------------------------
 void xcv_twoview_manager::toggle_f_matrix_display()
 {
@@ -69,7 +81,7 @@ void xcv_twoview_manager::toggle_f_matrix_display()
 }
 
 //-----------------------------------------------------------------------------
-//-- Toggle between displaying and not displaying the HMatrix2D.
+//: Toggle between displaying and not displaying the HMatrix2D.
 //-----------------------------------------------------------------------------
 void xcv_twoview_manager::toggle_h_matrix_display()
 {
@@ -80,7 +92,7 @@ void xcv_twoview_manager::toggle_h_matrix_display()
 }
 
 //-----------------------------------------------------------------------------
-//-- Toggle between displaying and not displaying corner matches.
+//: Toggle between displaying and not displaying corner matches.
 //-----------------------------------------------------------------------------
 void xcv_twoview_manager::toggle_corner_match_display()
 {
@@ -91,7 +103,7 @@ void xcv_twoview_manager::toggle_corner_match_display()
 }
 
 //-----------------------------------------------------------------------------
-//-- Draw a point and the transformed epipolar line on the display.
+//: Draw a point and the transformed epipolar line on the display.
 //-----------------------------------------------------------------------------
 void xcv_twoview_manager::draw_f_matrix(vgui_event const& e, vgui_tableau_ref const& child_tab,
   bool make_permanent)
@@ -141,22 +153,34 @@ void xcv_twoview_manager::draw_f_matrix(vgui_event const& e, vgui_tableau_ref co
   {
     line_coord_a = hl[0]; line_coord_b = hl[1]; line_coord_c = hl[2]; 
     event_coord_x = ix; event_coord_y = iy;
-    rubberbands[transfer_index]->post_redraw();
+	  if (use_overlays)
+      tabs[transfer_index]->post_overlay_redraw();
+  	else
+      tabs[transfer_index]->post_redraw();
   }
 }
 
 //-----------------------------------------------------------------------------
-//-- Handle overlay redraw event for FMatrix.
+//: Handle overlay redraw event for FMatrix.
 //-----------------------------------------------------------------------------
 void xcv_twoview_manager::draw_overlay_f_matrix(vgui_tableau_ref const& child_tab)
 {
   if (child_tab == tabs[transfer_index])
+  {
+    // Force a re-draw of the image and easy before we draw on top of it:
+    vgui_event evt;
+    if (!use_overlays)
+      evt.type = vgui_DRAW;
+    else
+      evt.type = vgui_DRAW_OVERLAY;
+    easys[transfer_index]->handle(evt);
 	  rubberbands[transfer_index]->draw_infinite_line(line_coord_a,
 		  line_coord_b, line_coord_c);
+  }
 }
 
 //-----------------------------------------------------------------------------
-//-- Draw the point and corresponding point computed using the HMatrix2D.
+//: Draw the point and corresponding point computed using the HMatrix2D.
 //-----------------------------------------------------------------------------
 void xcv_twoview_manager::draw_h_matrix(
   vgui_event const& e, vgui_tableau_ref const& child_tab, bool make_permanent)
@@ -200,19 +224,29 @@ void xcv_twoview_manager::draw_h_matrix(
   {
     event_coord_x = ix; event_coord_y = iy;
     point_coord_x = px; point_coord_y = py;
-    rubberbands[transfer_index]->post_redraw();
+	if (use_overlays)
+	  rubberbands[transfer_index]->post_overlay_redraw();
+	else
+      rubberbands[transfer_index]->post_redraw();
   }
 }
 
 //-----------------------------------------------------------------------------
-//-- Handle overlay redraw event for HMatrix2D.
+//: Handle overlay redraw event for HMatrix2D.
 //-----------------------------------------------------------------------------
 void xcv_twoview_manager::draw_overlay_h_matrix(vgui_tableau_ref const& child_tab)
 {
   if (child_tab == tabs[transfer_index])
   {
+    // Force a re-draw of the image and easy before we draw on top of it:
+    vgui_event evt;
+    if (!use_overlays)
+      evt.type = vgui_DRAW;
+    else
+      evt.type = vgui_OVERLAY_DRAW;
+    easys[transfer_index]->handle(evt);
+
     // Draw a cross-hair over the point:
-    //rubberbands[transfer_index]->draw_point(point_coord_x, point_coord_y);
     int crosshair_radius = 8;
     rubberbands[transfer_index]->draw_line(point_coord_x-crosshair_radius, point_coord_y,
       point_coord_x+crosshair_radius, point_coord_y);
@@ -223,7 +257,7 @@ void xcv_twoview_manager::draw_overlay_h_matrix(vgui_tableau_ref const& child_ta
 }
 
 //-----------------------------------------------------------------------------
-//-- Handle events which draw matching corners.
+//: Draw matching corners in two views.
 //-----------------------------------------------------------------------------
 void xcv_twoview_manager::draw_corner_matches(
   vgui_event const&, vgui_tableau_ref const&child_tab)
@@ -244,7 +278,8 @@ void xcv_twoview_manager::draw_corner_matches(
 }
 
 //-----------------------------------------------------------------------------
-//-- Handle overlay redraw event for corner matches.
+//: Handle overlay redraw event for corner matches.
+//  This is not completed yet.... FIXME
 //-----------------------------------------------------------------------------
 void xcv_twoview_manager::draw_overlay_corner_matches(vgui_tableau_ref const&)
 {
@@ -291,7 +326,7 @@ void xcv_twoview_manager::draw_overlay_corner_matches(vgui_tableau_ref const&)
 }
 
 //-----------------------------------------------------------------------------
-//-- Handle any events we are interested in.
+//: Handle any events we are interested in.
 //-----------------------------------------------------------------------------
 void xcv_twoview_manager::handle_tjunction_event(vgui_event const& e, vgui_tableau_ref const& child_tab)
 {
@@ -319,16 +354,26 @@ void xcv_twoview_manager::handle_tjunction_event(vgui_event const& e, vgui_table
     if (h_matrix != 0 && h_matrix_is_displayed)
       draw_h_matrix(e, child_tab, true);
   }
-  if (e.type == vgui_DRAW && dragging == true)
+  if (dragging == true)
   {
-    //awfawfxxx fix this.
-    //if (child_tab == tabs[transfer_index])	
-    //  rubberbands[transfer_index]->child->handle(e);
-    if (f_matrix != 0 && f_matrix_is_displayed)
-      draw_overlay_f_matrix(child_tab);
-    if (h_matrix != 0 && h_matrix_is_displayed)
-      draw_overlay_h_matrix(child_tab);
-    if (corner_matches != 0 && corner_matches_are_displayed)
-      draw_overlay_corner_matches(child_tab);
+	  if ((use_overlays && e.type == vgui_DRAW_OVERLAY) || (!use_overlays && e.type == vgui_DRAW))
+	  {
+      //awfawfxxx fix this.
+      //if (child_tab == tabs[transfer_index])	
+      //  rubberbands[transfer_index]->child->handle(e);
+
+	    if (child_tab == tabs[transfer_index])
+	    {
+		    easys[transfer_index]->handle(e);
+		    easys[transfer_index]->get_child(0)->handle(e);
+	    }
+
+      if (f_matrix != 0 && f_matrix_is_displayed)
+        draw_overlay_f_matrix(child_tab);
+      if (h_matrix != 0 && h_matrix_is_displayed)
+        draw_overlay_h_matrix(child_tab);
+      if (corner_matches != 0 && corner_matches_are_displayed)
+        draw_overlay_corner_matches(child_tab);
+	  }
   }
 }
