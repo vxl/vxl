@@ -77,6 +77,9 @@
 #include <vgui/vgui_projection_inspector.h>
 #include <vgui/vgui_quit_tableau.h>
 #include <vgui/vgui_quit_tableau_sptr.h>
+#include <vgui/vgui_range_map.h>
+#include <vgui/vgui_range_map_params.h>
+#include <vgui/vgui_range_map_params_sptr.h>
 #include <vgui/vgui_roi_tableau.h>
 #include <vgui/vgui_roi_tableau_sptr.h>
 #include <vgui/vgui_rubberband_tableau.h>
@@ -115,5 +118,6 @@
 #include <vgui/vgui_window.h>
 #include <vgui/vgui_wrapper_tableau.h>
 #include <vgui/vgui_wrapper_tableau_sptr.h>
+
 
 int main() { return 0; }
