@@ -3,11 +3,11 @@
 */
 #include "vgui_glut.h"
 #include <vgui/vgui_tag.h>
-#include <vbl/vbl_trace.h>
+#include <vul/vul_trace.h>
 
 vgui_tag(glut) {
-  vbl_trace;
+  vul_trace;
   new vgui_glut;
-  vbl_trace;
+  vul_trace;
   return 0;
 }

@@ -681,7 +681,7 @@ implement_static_callback(special_up,(int key,int x,int y),(key,x,y));
 //--------------------------------------------------------------------------------
 
 #if 0
-#include <vbl/vbl_sprintf.h>
+#include <vul/vul_sprintf.h>
 #include <vil/vil_save.h>
 #include <vil/vil_rgb.h>
 #include <vil/vil_rgba.h>
@@ -747,7 +747,7 @@ void fsm_hook()
 {
   if (fsm_hook_flag) {
     static int frame_counter = 0;
-    fsm_dump(vbl_sprintf("/tmp/dump%03d.pnm", frame_counter++).c_str());
+    fsm_dump(vul_sprintf("/tmp/dump%03d.pnm", frame_counter++).c_str());
   }
 }
 #endif

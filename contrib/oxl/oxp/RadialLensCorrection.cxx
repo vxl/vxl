@@ -32,7 +32,7 @@ void RadialLensCorrection::init(double cx, double cy, double sx, double sy, doub
   _sy = sy;
   _k2 = k2;
   _k4 = k4;
-  // vbl_printf(cerr,"RDC params: c(%g,%g) scale %g x %g, K=[%g %g].\n",  cx, cy, sx, sy, k2, k4);
+  // vul_printf(cerr,"RDC params: c(%g,%g) scale %g x %g, K=[%g %g].\n",  cx, cy, sx, sy, k2, k4);
 
   _invsx = 1.0 / _sx;
   _invsy = 1.0 / _sy;

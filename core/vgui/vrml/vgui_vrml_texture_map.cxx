@@ -10,11 +10,11 @@
 //-----------------------------------------------------------------------------
 
 #include "vgui_vrml_texture_map.h"
-#include <vbl/vbl_file.h>
+#include <vul/vul_file.h>
 #include <vil/vil_image.h>
 #include <vil/vil_file_image.h>
 #include <vil/vil_memory_image_of.h>
-#include <vbl/vbl_printf.h>
+#include <vul/vul_printf.h>
 #include <vcl_iostream.h>
 
 int VrmlDraw_TEX_MAX = 256;
@@ -44,18 +44,18 @@ vgui_vrml_texture_map* vgui_vrml_texture_map::create(char const* filename)
 
   // Try some directory hilarity if file not found
   vcl_string fn;
-  if (vbl_file::exists(filename))
+  if (vul_file::exists(filename))
     fn = filename;
   else if (vrml_dirname.size() > 0) {
     fn = vrml_dirname; fn += "/"; fn += filename;
-    if (!vbl_file::exists(fn.c_str())) {
-      vbl_printf(vcl_cerr, "Can't find texture [tried %s and %s]\n", filename, fn.c_str());
+    if (!vul_file::exists(fn.c_str())) {
+      vul_printf(vcl_cerr, "Can't find texture [tried %s and %s]\n", filename, fn.c_str());
       return 0;
     }
   }
   filename = fn.c_str();
 
-  vbl_printf(vcl_cerr, "Loading texture from [%s]... ", filename);
+  vul_printf(vcl_cerr, "Loading texture from [%s]... ", filename);
   vil_file_image fileimage(filename, vil_file_image::laconic);
   if (!fileimage) {
     vcl_cerr << "Failed!";
@@ -70,7 +70,7 @@ vgui_vrml_texture_map* vgui_vrml_texture_map::create(char const* filename)
 
   bool need_rescale = (tex_w != w) || (tex_h != h);
   if (need_rescale)
-    vbl_printf(vcl_cerr, "Rescale from %dx%d to %dx%d, ", w, h, tex_w, tex_h);
+    vul_printf(vcl_cerr, "Rescale from %dx%d to %dx%d, ", w, h, tex_w, tex_h);
 
   // Rescale and flip Y
   if (vil_pixel_format(fileimage) == VIL_RGB_BYTE) {
@@ -102,7 +102,7 @@ vgui_vrml_texture_map* vgui_vrml_texture_map::create(char const* filename)
     return newmap;
   }
 
-  vbl_printf(vcl_cerr, " ignoring %d b x %d comp image\n", fileimage.bits_per_component(), fileimage.components() );
+  vul_printf(vcl_cerr, " ignoring %d b x %d comp image\n", fileimage.bits_per_component(), fileimage.components() );
   return 0;
 }
 

@@ -1,7 +1,7 @@
 /*
   fsm@robots.ox.ac.uk
 */
-#include <vbl/vbl_arg.h>
+#include <vul/vul_arg.h>
 
 #include <osl/osl_edge.h>
 #include <osl/osl_break_edge.h>
@@ -10,10 +10,10 @@
 
 int main(int argc, char **argv)
 {
-  vbl_arg<vcl_string> in ("-in", "input file (default is stdin)", "");
-  vbl_arg<vcl_string> out("-out", "output file (default is stdout)", "");
-  vbl_arg<double> thresh ("-thresh", "threshold", 0.2);
-  vbl_arg_parse(argc, argv);
+  vul_arg<vcl_string> in ("-in", "input file (default is stdin)", "");
+  vul_arg<vcl_string> out("-out", "output file (default is stdout)", "");
+  vul_arg<double> thresh ("-thresh", "threshold", 0.2);
+  vul_arg_parse(argc, argv);
     
   //
   vcl_cerr << "loading topology" << vcl_endl;

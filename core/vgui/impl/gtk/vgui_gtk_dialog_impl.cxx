@@ -18,7 +18,7 @@
 #include <vcl_string.h>
 #include <vcl_vector.h>
 #include <vcl_cstdio.h>
-#include <vbl/vbl_sprintf.h>
+#include <vul/vul_sprintf.h>
 
 #include <vgui/vgui_gl.h>
 #include <vgui/impl/gtk/vgui_gtk_adaptor.h>
@@ -210,7 +210,7 @@ void color_changed_cb(GtkWidget* /*w*/, GtkColorSelection *colorsel) {
   gdouble color[3];
   gtk_color_selection_get_color(colorsel, color);
 
-  vbl_sprintf color_str("%.3f %.3f %.3f", color[0], color[1], color[2]);
+  vul_sprintf color_str("%.3f %.3f %.3f", color[0], color[1], color[2]);
 
   // Set the text entry back in the dialog to the color selected in the color chooser:
   gtk_entry_set_text(GTK_ENTRY(color_entry), color_str.c_str());

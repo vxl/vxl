@@ -1,7 +1,7 @@
 #include "vplayer.h"
 #include "vplayer_video.h"
 
-#include <vbl/vbl_timer.h>
+#include <vul/vul_timer.h>
 
 #include <vgui/vgui.h>
 #include <vgui/vgui_menu.h>
@@ -42,7 +42,7 @@ void vplayer_video::play_video(const void *)
      vgui_rubberbander_sptr r= get_rubberbander_at(col,row);
      playing = true;
      vcl_vector<vgui_easy2D_sptr>::iterator it = tableaux_.begin();
-     vbl_timer t;
+     vul_timer t;
      while(playing)
      {
        if (pframe == my_movie->last())

@@ -1,5 +1,5 @@
 #include <vcl_fstream.h>
-#include <vbl/vbl_timer.h>
+#include <vul/vul_timer.h>
 #include <mvl/mvl_multi_view_matches.h>
 
 #define W -1
@@ -78,7 +78,7 @@ int main (int argc, char** argv)
       i1[i] = (int)(299*drand48());
       i2[i] = (int)(299*drand48());
     }
-    vbl_timer timer;
+    vul_timer timer;
     for (int i=0; i < 50000; ++i) {
       mvm.add_pair(f[i], i1[i], f[i]+1, i2[i]);
     }

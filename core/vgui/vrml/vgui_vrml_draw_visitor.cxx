@@ -24,10 +24,9 @@
 #include <vnl/vnl_float_3.h>
 #include <vnl/vnl_math.h>
 
-#include <vbl/vbl_printf.h>
-#include <vbl/vbl_arg.h>
-#include <vbl/vbl_file.h>
-//#include <vbl/vbl_rgb.h>
+#include <vul/vul_printf.h>
+#include <vul/vul_arg.h>
+#include <vul/vul_file.h>
 
 #include <Qv/QvString.h>
 #include <Qv/QvInput.h>
@@ -361,7 +360,7 @@ bool vgui_vrml_draw_visitor::Visit(QvIndexedFaceSet* node)
     }
     unsigned n = polyverts.size();
     if (n < 3) {
-      vbl_printf(vcl_cerr, "Bad poly, n = %d\n", n);
+      vul_printf(vcl_cerr, "Bad poly, n = %d\n", n);
       continue;
     }
 
@@ -476,7 +475,7 @@ bool vgui_vrml_draw_visitor::Visit(QvMaterial* node)
   glMaterialfv(GL_FRONT_AND_BACK, GL_EMISSION, node->emissiveColor.values);
   glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, node->shininess.values[0]);
   float* c = node->emissiveColor.values;
-  // vbl_printf(cerr, "vbl_rgba %g %g %g %g\n", c[0], c[1], c[2], node->transparency.values[0]);
+  // vul_printf(cerr, "vbl_rgba %g %g %g %g\n", c[0], c[1], c[2], node->transparency.values[0]);
   glColor4f(c[0], c[1], c[2], node->transparency.values[0]);
   return true;
 }

@@ -18,7 +18,7 @@
 
 #include <vnl/vnl_math.h>
 
-#include <vbl/vbl_file.h>
+#include <vul/vul_file.h>
 
 #include <vgui/vgui_gl.h>
 #include <vgui/vgui_glu.h>
@@ -35,7 +35,7 @@ vgui_vrml_tableau::vgui_vrml_tableau(const char* filename, bool scale)
 {
   vrml = new QvVrmlFile(filename);
   drawer = new vgui_vrml_draw_visitor;
-  vgui_vrml_texture_map::vrml_dirname = vbl_file::dirname(vrml->get_filename());
+  vgui_vrml_texture_map::vrml_dirname = vul_file::dirname(vrml->get_filename());
 
 
   if (scale) vrml->compute_centroid_radius();

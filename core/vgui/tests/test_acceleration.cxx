@@ -4,8 +4,8 @@
 
 #include <vpl/vpl_unistd.h>
 
-#include <vbl/vbl_printf.h>
-#include <vbl/vbl_timer.h>
+#include <vul/vul_printf.h>
+#include <vul/vul_timer.h>
 
 #include <vgui/vgui_gl.h>
 #include <vgui/vgui_glx.h>
@@ -87,8 +87,8 @@ int main (int /*argc*/, char** /*argv*/)
   GLenum format;
   GLenum type;
   vgui_accelerate::instance()->vgui_choose_cache_format (&format, &type);
-  vbl_printf(vcl_cerr, "chosen format %0x\n", format);
-  vbl_printf(vcl_cerr, "chosen type   %0x\n", type);
+  vul_printf(vcl_cerr, "chosen format %0x\n", format);
+  vul_printf(vcl_cerr, "chosen type   %0x\n", type);
 
   // GLX window code straight out of
   // http://www.eecs.tulane.edu/www/graphics/doc/OpenGL-Man-Pages/glXIntro.html
@@ -120,9 +120,9 @@ int main (int /*argc*/, char** /*argv*/)
   vcl_cerr << vcl_endl;
   vcl_cerr << "XVisualInfo - " << vcl_endl;
   vcl_cerr << "           depth : " << visualinfo->depth << vcl_endl;
-  vbl_printf(vcl_cerr,"        red-mask : %08x\n", visualinfo->red_mask);
-  vbl_printf(vcl_cerr,"      green-mask : %08x\n", visualinfo->green_mask);
-  vbl_printf(vcl_cerr,"       blue-mask : %08x\n", visualinfo->blue_mask);
+  vul_printf(vcl_cerr,"        red-mask : %08x\n", visualinfo->red_mask);
+  vul_printf(vcl_cerr,"      green-mask : %08x\n", visualinfo->green_mask);
+  vul_printf(vcl_cerr,"       blue-mask : %08x\n", visualinfo->blue_mask);
   vcl_cerr << vcl_endl;
   vcl_cerr << "GL Gets - " << vcl_endl;
   GLint data_int;
@@ -169,7 +169,7 @@ int main (int /*argc*/, char** /*argv*/)
     vcl_cerr << "\nvgui_glClear - ";
     int draws=0;
     int elapsed;
-    vbl_timer timer;
+    vul_timer timer;
     do {
       vgui_glClear(GL_COLOR_BUFFER_BIT);
       elapsed = timer.real();
@@ -181,7 +181,7 @@ int main (int /*argc*/, char** /*argv*/)
     vcl_cerr << "\nglClear - ";
     int draws=0;
     int elapsed;
-    vbl_timer timer;
+    vul_timer timer;
     do {
       glClear(GL_COLOR_BUFFER_BIT);
       elapsed = timer.real();
@@ -195,7 +195,7 @@ int main (int /*argc*/, char** /*argv*/)
     vcl_cerr << "\nUsing default (RGBA) format with glDrawPixels - ";
     int draws=0;
     int elapsed;
-    vbl_timer timer;
+    vul_timer timer;
     do {
       glDrawPixels(512,512,GL_RGBA,GL_UNSIGNED_BYTE,data);
       elapsed = timer.real();
@@ -207,7 +207,7 @@ int main (int /*argc*/, char** /*argv*/)
     vcl_cerr << "\nUsing recommended format with glDrawPixels - ";
     int draws=0;
     int elapsed;
-    vbl_timer timer;
+    vul_timer timer;
     do {
       glDrawPixels(512,512,format, type, data);
       elapsed = timer.real();
@@ -219,7 +219,7 @@ int main (int /*argc*/, char** /*argv*/)
     vcl_cerr << "\nUsing recommended format with vgui_accelerate::instance()->vgui_glDrawPixels - ";
     int draws=0;
     int elapsed;
-    vbl_timer timer;
+    vul_timer timer;
     do {
       vgui_accelerate::instance()->vgui_glDrawPixels(512,512, format, type, data);
       elapsed = timer.real();

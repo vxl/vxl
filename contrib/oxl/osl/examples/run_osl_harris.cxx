@@ -1,6 +1,6 @@
 #include <vcl_string.h>
 #include <vcl_cassert.h>
-#include <vbl/vbl_arg.h>
+#include <vul/vul_arg.h>
 #include <vil/vil_memory_image_of.h>
 #include <vil/vil_image.h>
 #include <vil/vil_load.h>
@@ -12,14 +12,14 @@
 // usable in a script, as a filter. **
 int main(int argc,char **argv) 
 {
-  vbl_arg<vcl_string> infile ("-in"   ,"input image file"    ,"-"); // default is stdin.
-  vbl_arg<vcl_string> outfile("-out"  ,"output corner file (default is stdout)"  ,"");
-  vbl_arg<double>     sigma  ("-sigma","gauss sigma"         ,0.7);
-  vbl_arg<int>        corner_count_max("-c","Max number of corners", 900);
-  vbl_arg<int>        adaptive_window_size("-w","Adaptive window size (0 disables)", 64);
-  vbl_arg<vcl_string> cormap ("-map"  ,"cornerness map (pnm)","");
-  vbl_arg<bool>       pab    ("-pab"  ,"emulate pab harris"  ,false);
-  vbl_arg_parse(argc,argv);
+  vul_arg<vcl_string> infile ("-in"   ,"input image file"    ,"-"); // default is stdin.
+  vul_arg<vcl_string> outfile("-out"  ,"output corner file (default is stdout)"  ,"");
+  vul_arg<double>     sigma  ("-sigma","gauss sigma"         ,0.7);
+  vul_arg<int>        corner_count_max("-c","Max number of corners", 900);
+  vul_arg<int>        adaptive_window_size("-w","Adaptive window size (0 disables)", 64);
+  vul_arg<vcl_string> cormap ("-map"  ,"cornerness map (pnm)","");
+  vul_arg<bool>       pab    ("-pab"  ,"emulate pab harris"  ,false);
+  vul_arg_parse(argc,argv);
   
   // load image
   vil_image I;

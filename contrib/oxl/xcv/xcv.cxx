@@ -16,7 +16,7 @@
 #include <vcl_iostream.h>
 #include <vcl_vector.h>
 
-#include <vbl/vbl_arg.h>
+#include <vul/vul_arg.h>
 
 #include <vil/vil_image.h>
 
@@ -499,10 +499,10 @@ int main(int argc, char** argv)
 
   // Let the vbl arg parser loose on those command line
   // arguments not used by vgui::init();
-  vbl_arg<bool> a_adaptive("-adaptive", "resize window adaptively");
-  vbl_arg<int>  a_rows    ("-rows",     "desired number of rows      in array of images", 0);
-  vbl_arg<int>  a_cols    ("-cols",     "desired number of col(umn)s in array of images", 0);
-  vbl_arg_parse(argc, argv);
+  vul_arg<bool> a_adaptive("-adaptive", "resize window adaptively");
+  vul_arg<int>  a_rows    ("-rows",     "desired number of rows      in array of images", 0);
+  vul_arg<int>  a_cols    ("-cols",     "desired number of col(umn)s in array of images", 0);
+  vul_arg_parse(argc, argv);
 
   int rows, cols;
   if (a_rows() && a_cols()) {

@@ -24,7 +24,7 @@
 #include <vcl_cstring.h>
 #include <vcl_algorithm.h>
 
-#include <vbl/vbl_printf.h>
+#include <vul/vul_printf.h>
 
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>

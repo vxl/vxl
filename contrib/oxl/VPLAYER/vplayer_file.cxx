@@ -3,7 +3,7 @@
 #include "easy2D_sequencer.h"
 #include "easy2D_loader.h"
 
-#include <vbl/vbl_sprintf.h>
+#include <vul/vul_sprintf.h>
 
 #include <vcl_iostream.h>
 #include <vcl_fstream.h>
@@ -41,7 +41,7 @@ void vplayer_file::load_video_sequence()
   vcl_vector <vcl_string> img_filenames;
   for(int i = 0;i<n;i++)
   {
-    vbl_sprintf name(image_filename.c_str(), i);
+    vul_sprintf name(image_filename.c_str(), i);
     img_filenames.push_back(name);
     vcl_cerr<<"Registering image: "<<name<<vcl_endl;
   }
@@ -114,7 +114,7 @@ void vplayer_file::load_geometry_sequence()
   vcl_vector <vgui_easy2D_sptr>::iterator it = tableaux_.begin();
   for(int i = 0;i<n;i++)
   {
-    vbl_sprintf name(image_filename.c_str(), i);
+    vul_sprintf name(image_filename.c_str(), i);
     easy2D_loader loader(*it);
     loader.visit(name);
     it++;

@@ -3,7 +3,7 @@
 */
 #include <vcl_cassert.h>
 #include <vcl_iostream.h>
-#include <vbl/vbl_arg.h>
+#include <vul/vul_arg.h>
 #include <vil/vil_load.h>
 #include <vil/vil_byte.h>
 #include <vil/vil_memory_image_of.h>
@@ -16,10 +16,10 @@
 
 int main(int argc, char **argv)
 {
-  vbl_arg<int>        canny("-canny", "which canny? (0:oxford, 1:rothwell1, 2:rothwell2)", 0);
-  vbl_arg<vcl_string> in   ("-in", "input image", "");
-  vbl_arg<vcl_string> out  ("-out", "output file (default is stdout)", "");
-  vbl_arg_parse(argc, argv);
+  vul_arg<int>        canny("-canny", "which canny? (0:oxford, 1:rothwell1, 2:rothwell2)", 0);
+  vul_arg<vcl_string> in   ("-in", "input image", "");
+  vul_arg<vcl_string> out  ("-out", "output file (default is stdout)", "");
+  vul_arg_parse(argc, argv);
   
   vcl_string* in_file = new vcl_string(in());
   if (*in_file == "") {
