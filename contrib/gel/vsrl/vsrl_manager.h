@@ -1,13 +1,12 @@
-//
-// vdmt_manager.cxx
+// vsrl_manager.cxx
 //
 // This program was written to test the Dense Matching software
 //
 // G.W. Brooksby
 // 02/13/03
 
-#ifndef vdmt_manager_h_
-#define vdmt_manager_h_
+#ifndef vsrl_manager_h_
+#define vsrl_manager_h_
 
 #include <vil/vil_image.h>
 #include <vil/vil_memory_image_of.h>
@@ -23,12 +22,13 @@
 #include <vdgl/vdgl_edgel_chain.h>
 #include <vdgl/vdgl_intensity_face_sptr.h>
 #include <vgl/vgl_vector_2d.h>
+#include <vgl/vgl_point_2d.h>
 
 #include "vsrl_point_picker.h"
 
 class vsrl_manager : public vgui_wrapper_tableau
 {
-public:
+ public:
   ~vsrl_manager();
   static vsrl_manager *instance();
   void quit();
@@ -41,8 +41,8 @@ public:
   void point_pick();
   void clear_all();
   virtual bool handle(vgui_event const &);
-  bool validate_point(vnl_vector<float>* pt);
-  int get_disparity(vnl_vector<float>* pt);
+  bool validate_point(vgl_point_2d<float> const& pt);
+  int get_disparity(vgl_point_2d<float> const& pt);
   bool put_points();
   bool put_lines();
   bool do_dense_matching();
@@ -58,8 +58,8 @@ public:
   vil_image show_gradient_dir(vil_memory_image_of<double> im_in);
   vil_memory_image_of<double> make_3d();
 
-private:
-  vsrl_manager();
+ private:
+  vsrl_manager(); // default constructor is private: only one instance allowed
   vil_image imgL_;
   vil_image imgR_;
   vil_image disp_img_;
@@ -79,7 +79,6 @@ private:
   vgl_vector_2d<float> sun_el_; // sun elevation expressed as a vector
   static vsrl_manager *instance_;
   int disparity_bias_;
-  
 };
 
 #endif // vsrl_manager_h_
