@@ -519,7 +519,13 @@ bool vil2_pnm_image::put_view(const vil2_image_view_base& view,
     if ( bytes_per_sample==1 || ( bytes_per_sample==2 && VXL_BIG_ENDIAN ) ) {
       for (unsigned y = 0; y < view.nj(); ++y) {
         vs_->seek(byte_start + y * byte_width);
-        vs_->write(pb->top_left_ptr() + y * view.ni() * nplanes(), byte_out_width);
+        if (bytes_per_sample == 1) {
+          assert(ob!=0);
+          vs_->write(ob->top_left_ptr() + y * view.ni() * nplanes(), byte_out_width);
+        } else {
+          assert(pb!=0);
+          vs_->write(pb->top_left_ptr() + y * view.ni() * nplanes(), byte_out_width);
+        }
       }
     } else if ( bytes_per_sample==2 ) {
       // Little endian host; must convert words to have MSB first.
@@ -528,6 +534,7 @@ bool vil2_pnm_image::put_view(const vil2_image_view_base& view,
       vcl_vector<unsigned char> tempbuf( byte_out_width );
       for (int y = 0; y < view.nj(); ++y) {
         vs_->seek(byte_start + y * byte_width);
+        assert(pb!=0);
         vcl_memcpy( &tempbuf[0], pb->top_left_ptr() + y * view.ni() * nplanes(), byte_out_width );
         ConvertHostToMSB( &tempbuf[0], view.ni() );
         vs_->write(&tempbuf[0], byte_out_width);
@@ -541,6 +548,7 @@ bool vil2_pnm_image::put_view(const vil2_image_view_base& view,
   {
     int byte_width = (nx_+7)/8;
 
+    assert(bb!=0);
     for (int y = 0; y < view.nj(); ++y) {
       vil_streampos byte_start = start_of_data_ + (y0+y) * byte_width + x0/8;
       vs_->seek(byte_start);
