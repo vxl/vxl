@@ -137,6 +137,9 @@ SOURCE=.\vimt3d_gaussian_pyramid_builder_3d.cxx
 # Begin Source File
 SOURCE=.\vimt3d_transform_3d.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\vimt3d_image_3d.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # Begin Source File
