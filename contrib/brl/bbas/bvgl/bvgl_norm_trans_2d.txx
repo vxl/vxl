@@ -78,8 +78,8 @@ compute_from_points(vcl_vector<vgl_homg_point_2d<T> > const& points)
    t12_matrix_.set_identity();
    t12_matrix_.put(0,2, -cx);    t12_matrix_.put(1,2, -cy);
    vcl_vector<vgl_homg_point_2d<T> > temp;
-   for (vcl_vector<vgl_homg_point_2d<T> >::const_iterator pit = points.begin();
-        pit != points.end(); pit++)
+   typedef typename vcl_vector<vgl_homg_point_2d<T> >::const_iterator iter;
+   for (iter pit = points.begin(); pit != points.end(); pit++)
      {
        vgl_homg_point_2d<T> p((*this)(*pit));
        temp.push_back(p);
