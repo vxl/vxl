@@ -17,9 +17,9 @@ template <class TPermutation>
 bool vmap_permutation_kernel<TPermutation>::valid() const
 {
   vcl_vector<bool> v(p_.nb_cycles(), false) ;
-  for (unsigned int i=0; i<size(); ++i)
+  for (unsigned int i=0; i<this->size(); ++i)
   {
-    dart_iterator d=dart(i) ;
+    dart_iterator d=this->dart(i) ;
     element_index e1=p_.cycle_index_of(d),
                   e2=p_.opposite_cycle_index_of(d) ;
     if (v[e1] && v[e2])
@@ -152,7 +152,7 @@ template <class TPermutation>
 bool vmap_permutation_kernel<TPermutation>::can_insert(const dart_iterator & arg) const
 {
   return representatives_.representative(p_.cycle_index_of(arg)) !=
-         representatives_.representative(p_.opposite_cycle_index_of(a)) ;
+         representatives_.representative(p_.opposite_cycle_index_of(arg)) ;
 }
 
 //:
