@@ -57,13 +57,21 @@ typedef unsigned    vpl_useconds_t;
 // there is a problem here in that VXL_UNISTD_HAS_INTPTR_T is set
 // using  <unistd.h> but this file (vpl/vpl_unistd.h> doesn't include it
 // and instead uses <sys/types.h>
-# ifndef __intptr_t_defined
-typedef __intptr_t  vpl_intptr_t;
-# else
-typedef intptr_t    vpl_intptr_t;
+# if defined(linux)
+typedef long int    vpl_intptr_t;
+# elif defined(sun) && defined(sparc)
+#  ifdef  _LP64
+typedef long        vpl_intptr_t;
+#  else
+typedef int         vpl_intptr_t;
+#  endif
+# elif defined(sgi)
+typedef signed long vpl_intptr_t;
+# elif defined(hppa)
+typedef long        vpl_intptr_t;
 # endif
 #else
-typedef int         vpl_intptr_t;
+typedef long        vpl_intptr_t;
 #endif
 
 // sys/stat.h:
