@@ -168,11 +168,6 @@ SOURCE=.\test_vcl_new.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=.\test_vcl_rel_ops.cxx
-
-# End Source File
-# Begin Source File
-
 SOURCE=.\test_vcl_set.cxx
 
 # End Source File
