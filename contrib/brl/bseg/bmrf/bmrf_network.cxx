@@ -84,8 +84,8 @@ bmrf_network::purge()
     retval = curr_node->purge() || retval; // remove the NULL arcs
     bmrf_node::arc_iterator a_itr = curr_node->begin();
     for(; a_itr != curr_node->end(); ++a_itr){
-      if(node_from_seg_.find((*a_itr)->to->epi_seg().ptr()) == node_from_seg_.end()){
-        curr_node->remove_neighbor((*a_itr)->to);
+      if(node_from_seg_.find((*a_itr)->to()->epi_seg().ptr()) == node_from_seg_.end()){
+        curr_node->remove_neighbor((*a_itr)->to().ptr());
         retval = true;
       }
     }
@@ -242,7 +242,7 @@ bmrf_network::depth_iterator::next_node()
   if (curr_node_.ptr() == NULL) return;
   bmrf_node::arc_iterator itr = curr_node_->end();
   for(--itr; itr != curr_node_->end(); --itr){
-    eval_queue_.push_front((*itr)->to);
+    eval_queue_.push_front((*itr)->to().ptr());
   }
   while( visited_.find(eval_queue_.front()) != visited_.end() )
     eval_queue_.pop_front();
@@ -263,7 +263,7 @@ bmrf_network::breadth_iterator::next_node()
   if (curr_node_.ptr() == NULL) return;
   bmrf_node::arc_iterator itr = curr_node_->begin();
   for(; itr != curr_node_->end(); ++itr){
-    eval_queue_.push_back((*itr)->to);
+    eval_queue_.push_back((*itr)->to().ptr());
   }
   while( visited_.find(eval_queue_.front()) != visited_.end() )
     eval_queue_.pop_front();

@@ -33,10 +33,12 @@ class bmrf_node : public vbl_ref_count
   class bmrf_arc : public vbl_ref_count
   {
    public:
+    friend class bmrf_node;
+     
     //: Constructor
-    bmrf_arc() : from(NULL), to(NULL) {}
+    bmrf_arc() : from_(NULL), to_(NULL) {}
     //: Constructor
-    bmrf_arc( bmrf_node* f, bmrf_node* t) : from(f), to(t) {}
+    bmrf_arc( bmrf_node* f, bmrf_node* t) : from_(f), to_(t) {}
     //: Destructor
     ~bmrf_arc() {}
 
@@ -46,8 +48,15 @@ class bmrf_node : public vbl_ref_count
     //: Binary load self from stream.
     void b_read(vsl_b_istream &is);
 
-    bmrf_node* from;
-    bmrf_node* to;
+    //: Smart pointer to the node where this arc originates
+    bmrf_node_sptr from() { return bmrf_node_sptr(from_); }
+
+    //: Smart pointer to the node where this arc ends
+    bmrf_node_sptr to() { return bmrf_node_sptr(to_); }
+   
+  private:
+    bmrf_node* from_;
+    bmrf_node* to_;
   };
 
 
