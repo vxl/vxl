@@ -210,3 +210,14 @@ jpeg_stdio_src (j_decompress_ptr cinfo, FILE * infile)
   src->pub.bytes_in_buffer = 0; /* forces fill_input_buffer on first read */
   src->pub.next_input_byte = NULL; /* until buffer loaded */
 }
+
+/* AWF added this to simplify reading of SGI movie files. */
+GLOBAL(unsigned long)
+jpeg_stdio_ftell(j_decompress_ptr cinfo)
+{
+  my_src_ptr src = (my_src_ptr) cinfo->src;
+  if (src->pub.next_input_byte)
+    return ftell(src->infile) - src->pub.bytes_in_buffer;
+  else 
+    return 0;
+}

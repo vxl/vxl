@@ -60,3 +60,6 @@ include ${SYS_IUPACKAGES}/config/top.mk
 ifeq ($(OS),win32)
 CFLAGS += -D_jpeg_mak
 endif
+
+# Always optimize this lib
+debug = $(optimize)
