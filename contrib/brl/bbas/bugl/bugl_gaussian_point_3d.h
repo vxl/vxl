@@ -18,7 +18,7 @@ private:
   vnl_matrix_fixed<T, 3, 3> sigma_inv_;
   
 public:  
-  bugl_gaussian_point_3d(T x, T y, T z, vnl_matrix_fixed<T, 3, 3> & s):bugl_uncertainty_point_3d<T>(x, y, z) {sigma_ = s;}
+  bugl_gaussian_point_3d(T x, T y, T z, vnl_matrix_fixed<T, 3, 3> & s);
   ~bugl_gaussian_point_3d() {}
 };
 
