@@ -488,3 +488,5 @@ BIN_ABSPATH          = $DOXYSEARCHPATH
 # the documentation for these projects as well.
 
 EXT_DOC_PATHS        =
+
+DETAILS_AT_TOP       = YES
