@@ -52,7 +52,7 @@ bool vil_save(vil_image const& i, char const* filename)
   char const *dot = strrchr(filename, '.');
   if (!dot) {
     // filename doesn't end in ".anything"
-    vcl_cerr << __FILE__ ": assuming pnm format" << vcl_endl;
+    vcl_cerr << __FILE__ ": assuming pnm format for \'" << filename << "\'" << vcl_endl;
     file_format = "pnm";
   }
   else {
@@ -67,7 +67,7 @@ bool vil_save(vil_image const& i, char const* filename)
 #undef macro
     else {
       //file_format = dot+1; // hope it works.
-      vcl_cerr << __FILE__ ": assuming pnm format" << vcl_endl;
+      vcl_cerr << __FILE__ ": assuming pnm format for \'" << filename << "\'" << vcl_endl;
       file_format = "pnm";
     }
   }
