@@ -60,6 +60,17 @@
 //----------------------------------------------------------------------
 // problems with static members.
 
+// -- VCL_IMPLEMENT_STATIC_CONSTS
+// 
+// True if static consts must be defined in some source file.  I don't know
+// what ANSI has to say about this, but anyway, the above example needs this
+// in some .C file:
+//     #if VCL_IMPLEMENT_STATIC_CONSTS
+//     const int A::x = 27;
+//     #endif
+//#define VCL_IMPLEMENT_STATIC_CONSTS @VCL_IMPLEMENT_STATIC_CONSTS@
+
+
 // -- VCL_STATIC_CONST_INIT_INT(x)
 // 
 // ANSI allows
@@ -75,7 +86,9 @@
 //
 //#define VCL_CAN_STATIC_CONST_INIT_INT 1 /* allowed */
 //#define VCL_CAN_STATIC_CONST_INIT_INT 0 /* not allowed */
-#define VCL_CAN_STATIC_CONST_INIT_INT @VCL_STATIC_CONST_INIT_INT@
+#ifndef VCL_CAN_STATIC_CONST_INIT_INT
+#define VCL_CAN_STATIC_CONST_INIT_INT (@VCL_STATIC_CONST_INIT_INT@ && !@VCL_IMPLEMENT_STATIC_CONSTS@)
+#endif
 #if VCL_CAN_STATIC_CONST_INIT_INT
 #define VCL_STATIC_CONST_INIT_INT(x) = x
 #else
@@ -93,23 +106,14 @@
 //
 //#define VCL_CAN_STATIC_CONST_INIT_FLOAT 1 /* allowed */
 //#define VCL_CAN_STATIC_CONST_INIT_FLOAT 0 /* not allowed */
-#define VCL_CAN_STATIC_CONST_INIT_FLOAT @VCL_STATIC_CONST_INIT_FLOAT@
+#ifndef VCL_CAN_STATIC_CONST_INIT_FLOAT
+#define VCL_CAN_STATIC_CONST_INIT_FLOAT (@VCL_STATIC_CONST_INIT_FLOAT@ && !@VCL_IMPLEMENT_STATIC_CONSTS@)
+#endif
 #if VCL_CAN_STATIC_CONST_INIT_FLOAT
 #define VCL_STATIC_CONST_INIT_FLOAT(x) = x
 #else
 #define VCL_STATIC_CONST_INIT_FLOAT(x) /* not allowed */
 #endif
-
-
-// -- VCL_IMPLEMENT_STATIC_CONSTS
-// 
-// True if static consts must be defined in some source file.  I don't know
-// what ANSI has to say about this, but anyway, the above example needs this
-// in some .C file:
-//     #if VCL_IMPLEMENT_STATIC_CONSTS
-//     const int A::x = 27;
-//     #endif
-//#define VCL_IMPLEMENT_STATIC_CONSTS @VCL_IMPLEMENT_STATIC_CONSTS@
 
 
 //----------------------------------------------------------------------
@@ -333,11 +337,9 @@ text { return ret; }
 
 // -- VCL_NO_STATIC_DATA_MEMBERS
 //
-// Set if compiler does not support static data members in template classes.
-// Uses value determined for STL
-//#if (__STL_STATIC_TEMPLATE_DATA < 1)
-//#define VCL_NO_STATIC_DATA_MEMBERS 1
-//#endif
+// True if compiler does not support static data members in template classes.
+//
+#define VCL_NO_STATIC_DATA_MEMBERS @VCL_NO_STATIC_DATA_MEMBERS@
 
 
 // -- VCL_HAS_TEMPLATE_SYMBOLS

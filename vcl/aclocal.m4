@@ -627,16 +627,24 @@ VCL_COMPILE_CXX
 
 AC_TRY_LINK([
 // "includes"
-class A {
+template <class T> class A {
 public:
-  static const int x = 27;
+  static const int x;
 };
-int function() {
-  return A::x * A::x;
-}
+$VCL_DEFINE_SPECIALIZATION
+class A<int> {
+public:
+  static const int x = 23;
+};
+template <class T> class B {
+public:
+  T function(T t) { T a = t; if (t && a) t = a; if (a) return A<T>::x + a; else return t; }
+};
+template class B<int>;
 ],[
-  // function body
-  function();
+  // function body  
+  B<int> b;
+  b.function(5);
 ],[
 VCL_IMPLEMENT_STATIC_CONSTS="0";
 AC_MSG_RESULT(no)
@@ -910,6 +918,36 @@ AC_MSG_RESULT(no)
 
 AC_LANG_RESTORE
 export VCL_ALLOWS_INLINE_INSTANTIATION
+])
+dnl
+
+
+
+### Check whether the compiler allows static data members
+AC_DEFUN(AC_CXX_NO_STATIC_DATA_MEMBERS,[
+AC_MSG_CHECKING(whether the C++ compiler allows static data members)
+AC_LANG_SAVE
+AC_LANG_CPLUSPLUS
+
+VCL_COMPILE_TXX
+
+AC_TRY_COMPILE([
+template <class T>
+class vvv {
+  static T xxx;
+};
+
+template class vvv<int>;
+],,[
+VCL_NO_STATIC_DATA_MEMBERS="0";
+AC_MSG_RESULT(yes)
+],[
+VCL_NO_STATIC_DATA_MEMBERS="1";
+AC_MSG_RESULT(no)
+])
+
+AC_LANG_RESTORE
+export VCL_NO_STATIC_DATA_MEMBERS
 ])
 dnl
 
