@@ -6,7 +6,40 @@
 
 #if defined(VCL_WIN32)
 #  include <crtdbg.h>
-#endif
+#  include <windows.h>
+#  include <stdio.h>
+LONG WINAPI vxl_exception_filter( struct _EXCEPTION_POINTERS *ExceptionInfo )
+{
+  // Retrieve exception information
+  PVOID ExceptionAddress       = ExceptionInfo->ExceptionRecord->ExceptionAddress;
+  DWORD ExceptionCode          = ExceptionInfo->ExceptionRecord->ExceptionCode;
+  DWORD* ExceptionInformation  = ExceptionInfo->ExceptionRecord->ExceptionInformation;
+
+	fprintf(stderr, "\nTOP-LEVEL EXCEPTION HANDLER\n");
+	switch(ExceptionCode) {
+		case EXCEPTION_ACCESS_VIOLATION:
+			fprintf(stderr, "The instruction at \"0x%.8p\" failed to %s memory at \"0x%.8x\".\n\n", 
+			        ExceptionAddress, ExceptionInformation[0] ? "write to" :"read",
+							ExceptionInformation[1]);
+			break;
+
+		case EXCEPTION_INT_DIVIDE_BY_ZERO:
+			fprintf(stderr, "The insturction at \"0x%.8p\" caused an exception of integer devision by zero.\n\n",
+						  ExceptionAddress);
+			break;
+		default:
+			fprintf(stderr, "The insturction at \"0x%.8p\" caused an unknown exception (exception code: \"0x%.8x\").\n\n", 
+				      ExceptionAddress, 
+						  ExceptionCode);
+	}
+
+	// Default action is to abort
+	printf("Execution aborted!\n");
+	return EXCEPTION_EXECUTE_HANDLER;
+}
+
+
+#endif // defined(VCL_WIN32)
 
 vcl_vector<TestMainFunction> testlib_test_func_;
 vcl_vector<vcl_string>       testlib_test_name_;
@@ -26,14 +59,24 @@ testlib_main( int argc, char* argv[] )
 {
   // The caller should already have called register_tests().
 
-  // Don't allow Visual Studio to open assertion error dialog boxes
+  // Don't allow Visual Studio to open critical error dialog boxes
   #if defined(VCL_WIN32) 
     char * env_var = getenv("DART_TEST_FROM_DART");
     if( env_var ) {
+      // No abort or ANSI assertion failure dialog box
       _CrtSetReportMode(_CRT_ERROR, _CRTDBG_MODE_FILE);
       _CrtSetReportFile(_CRT_ERROR, _CRTDBG_FILE_STDERR);
+
+      // No Windows style ASSERT failure dialog box
+      _CrtSetReportMode(_CRT_ASSERT, _CRTDBG_MODE_FILE);
+      _CrtSetReportFile(_CRT_ASSERT, _CRTDBG_FILE_STDERR);
+      
+      // No unhandled exceptions dialog box, 
+      // such as access violation and integer division by zero
+    	SetUnhandledExceptionFilter( vxl_exception_filter );
     }
-  #endif
+  #endif //defined(VCL_WIN32)
+  
   // Assume the index type for vector<string> and
   // vector<TestMainFunction> are the same.
   typedef vcl_vector<vcl_string>::size_type vec_size_t;
