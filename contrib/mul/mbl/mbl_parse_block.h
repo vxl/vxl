@@ -18,6 +18,7 @@
 // will be ignored.
 // \param open_already should be true if the client has already
 // read the opening brace.
-// \return the text including the opening and closing braces.
+// \return the text. The first and last characters are guaranteed to be
+// the opening and closing braces.
 vcl_string mbl_parse_block(vcl_istream &afs, bool open_already = false, const char * comment = "//");
 #endif // mbl_parse_block_h

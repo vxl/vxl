@@ -17,7 +17,8 @@
 // The stream's fail bit will be set on error. Comment lines beginning with //
 // will be stripped.
 // \param open_already should be true if the client has already
-// read the opening brace.
+// read the opening brace. If set to false and the first non-whitespace character is
+// not an opening brace then that chacter will be left in the stream and "{} will be returned.
 // \return the text including the opening and closing braces.
 // \param comment Lines begining with white space followed by this string will be ignored.
 // Set to empty for no comment stripping.
@@ -32,9 +33,7 @@ vcl_string mbl_parse_block(vcl_istream &afs, bool open_already /*= false*/, cons
     afs >> c;
     if (c != '{')
     {
-      vcl_cerr << " WARNING: mbl_parse_block()\n" <<
-                  "First non-ws char is '" << c <<"'. Should be '{'\n\n";
-      afs.clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+      afs.unget(); // push c back into stream.
       return "{}";
     }
   }
@@ -86,7 +85,14 @@ vcl_string mbl_parse_block(vcl_istream &afs, bool open_already /*= false*/, cons
         comment_position = 0;
         if (c=='{') ++level;
         else if (c=='}')
-          if (--level==0) return s+s2;
+          if (--level==0) // Found final closing brace
+          {
+            s+=s2;
+            for (unsigned i = 1; i+1 < s.size(); ++i)
+              if (!vcl_isspace(s[i])) return s;
+            // Contents between braces is just empty space
+            return "{}";
+          }
       }
     }
   }
