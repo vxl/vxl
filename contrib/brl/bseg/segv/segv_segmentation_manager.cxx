@@ -40,6 +40,7 @@
 #include <vtol/vtol_one_chain.h>
 #include <bgui/bgui_vtol2D_tableau.h>
 #include <gevd/gevd_float_operators.h>
+#include <brip/brip_float_ops.h>
 #include <sdet/sdet_region_proc_params.h>
 #include <sdet/sdet_region_proc.h>
 
@@ -167,20 +168,72 @@ void segv_segmentation_manager::draw_regions(vcl_vector<vdgl_intensity_face_sptr
          }
      }
 }
+void segv_segmentation_manager::original_image()
+{
+  if(img_)
+  {
+    t2D_->get_image_tableau()->set_image(img_);
+	t2D_->post_redraw();
+  }
+}
 
+void segv_segmentation_manager::gaussian()
+{
+  if(!img_)
+    {
+      vcl_cout << "In segv_segmentation_manager::gaussian() - no image\n";
+      return;
+    }
+  static float sigma = 1.0;
+  vgui_dialog gauss_dialog("Gaussian Smooth");
+  gauss_dialog.field("Gaussian sigma", sigma);
+  if (!gauss_dialog.ask())
+    return;
+  vil_memory_image_of<float> input(img_);
+  vil_memory_image_of<float> smooth = brip_float_ops::gaussian(input, sigma);
+  vil_memory_image_of<unsigned char> char_smooth =
+    brip_float_ops::convert_to_byte(smooth);
+  t2D_->get_image_tableau()->set_image(char_smooth);
+  t2D_->post_redraw();
+}
+void segv_segmentation_manager::convolution()
+{
+  vgui_dialog kernel_dlg("Load Kernel");
+  static vcl_string kernel_filename = "c:/images";
+  static vcl_string ext = "*.*";
+  kernel_dlg.file("Kernel Filename:", ext, kernel_filename);
+  if (!kernel_dlg.ask())
+    return;
+  vbl_array_2d<float> kernel = brip_float_ops::load_kernel(kernel_filename);
+
+  //convert input image
+  vil_memory_image_of<unsigned char> temp(img_);
+  vil_memory_image_of<float> temp2 = brip_float_ops::convert_to_float(temp);
+
+  //convolve
+  vil_memory_image_of<float> conv = brip_float_ops::convolve(temp2, kernel);
+
+  //convert back to unsigned char
+  vil_memory_image_of<unsigned char> char_conv =
+    brip_float_ops::convert_to_byte(conv);
+
+  //display the image
+  t2D_->get_image_tableau()->set_image(char_conv);
+  t2D_->post_redraw();
+}
 void segv_segmentation_manager::vd_edges()
 {
   this->clear_display();
   static bool agr = true;
   static sdet_detector_params dp;
   dp.noise_multiplier=1.0;
-  vgui_dialog* vd_dialog = new vgui_dialog("VD Edges");
-  vd_dialog->field("Gaussian sigma", dp.smooth);
-  vd_dialog->field("Noise Threshold", dp.noise_multiplier);
-  vd_dialog->checkbox("Automatic Threshold", dp.automatic_threshold);
-  vd_dialog->checkbox("Agressive Closure", agr);
-  vd_dialog->checkbox("Compute Junctions", dp.junctionp);
-  if (!vd_dialog->ask())
+  vgui_dialog vd_dialog("VD Edges");
+  vd_dialog.field("Gaussian sigma", dp.smooth);
+  vd_dialog.field("Noise Threshold", dp.noise_multiplier);
+  vd_dialog.checkbox("Automatic Threshold", dp.automatic_threshold);
+  vd_dialog.checkbox("Agressive Closure", agr);
+  vd_dialog.checkbox("Compute Junctions", dp.junctionp);
+  if (!vd_dialog.ask())
     return;
 
   if (agr)
@@ -205,15 +258,15 @@ void segv_segmentation_manager::regions()
   static bool residual = false;
   static sdet_detector_params dp;
   dp.noise_multiplier=1.0;
-  vgui_dialog* vd_dialog = new vgui_dialog("Edgel Regions");
-  vd_dialog->field("Gaussian sigma", dp.smooth);
-  vd_dialog->field("Noise Threshold", dp.noise_multiplier);
-  vd_dialog->checkbox("Automatic Threshold", dp.automatic_threshold);
-  vd_dialog->checkbox("Agressive Closure", agr);
-  vd_dialog->checkbox("Compute Junctions", dp.junctionp);
-  vd_dialog->checkbox("Debug", debug);
-  vd_dialog->checkbox("Residual Image", residual);
-  if (!vd_dialog->ask())
+  vgui_dialog region_dialog("Edgel Regions");
+  region_dialog.field("Gaussian sigma", dp.smooth);
+  region_dialog.field("Noise Threshold", dp.noise_multiplier);
+  region_dialog.checkbox("Automatic Threshold", dp.automatic_threshold);
+  region_dialog.checkbox("Agressive Closure", agr);
+  region_dialog.checkbox("Compute Junctions", dp.junctionp);
+  region_dialog.checkbox("Debug", debug);
+  region_dialog.checkbox("Residual Image", residual);
+  if (!region_dialog.ask())
     return;
   if (agr)
     dp.aggressive_junction_closure=1;

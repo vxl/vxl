@@ -5,6 +5,7 @@ INCLUDE_DIRECTORIES( ${GEL_INCLUDE_DIR} )
 INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR} )
 INCLUDE_DIRECTORIES(${BRL_INCLUDE_DIR}/bseg )
 INCLUDE_DIRECTORIES(${BRL_INCLUDE_DIR}/bbas )
+INCLUDE_DIRECTORIES(${BRL_INCLUDE_DIR}/brip )
 
 # determines if vgui is built and opengl is available
 INCLUDE( ${VXLCORE_INCLUDE_DIR}/vgui/UseVGUI.cmake )
@@ -32,7 +33,7 @@ IF(HAS_XERCES)
  TARGET_LINK_LIBRARIES(segv bxml)
 ENDIF(HAS_XERCES)
 
-TARGET_LINK_LIBRARIES(segv bgui sdet gevd vdgl vtol vsol vil vnl vbl)
+TARGET_LINK_LIBRARIES(segv bgui sdet brip gevd vdgl vtol vsol vil vnl vbl)
 
 ENDIF(HAS_VGUI)
 

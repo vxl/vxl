@@ -31,6 +31,9 @@ class segv_segmentation_manager : public vgui_wrapper_tableau
   void quit();
   void load_image();
   void clear_display();
+  void original_image();
+  void gaussian();
+  void convolution();
   void vd_edges();
   void regions();
   void test_face();

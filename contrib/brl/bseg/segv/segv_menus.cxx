@@ -23,6 +23,20 @@ void segv_menus::clear_display_callback()
   segv_segmentation_manager::instance()->clear_display();
 }
 
+void segv_menus::original_image_callback()
+{
+  segv_segmentation_manager::instance()->original_image();
+}
+
+void segv_menus::gaussian_callback()
+{
+  segv_segmentation_manager::instance()->gaussian();
+}
+void segv_menus::convolution_callback()
+{
+  segv_segmentation_manager::instance()->convolution();
+}
+
 void segv_menus::vd_edges_callback()
 {
   segv_segmentation_manager::instance()->vd_edges();
@@ -64,8 +78,11 @@ vgui_menu segv_menus::get_menu()
   menufile.add( "Load XML Edges", read_xml_edges_callback);
 #endif
   //view menu entries
+  menuview.add("Original Image", original_image_callback);
   menuview.add("Clear Display", clear_display_callback);
   //edit menu entries
+  menuedit.add("Gaussian", gaussian_callback);
+  menuedit.add("Convolution", convolution_callback);
   menuedit.add("VD Edges", vd_edges_callback);
   menuedit.add("Regions", regions_callback);
   menuedit.add("TestFace", test_face_callback);
