@@ -108,7 +108,8 @@ vtol_two_chain::vtol_two_chain(vtol_two_chain const &other)
   for (edge_list::iterator ei=edges->begin();ei!= edges->end();++ei,++j)
     {
       vtol_edge_sptr e = *ei;
-      newedges[j]= newverts[e->v1()->get_id()]->cast_to_vertex()->new_edge(*(newverts[e->v2()->get_id()]->cast_to_vertex()))->cast_to_topology_object();
+      newedges[j] = newverts[e->v1()->get_id()]->cast_to_vertex()->new_edge(
+                  *(newverts[e->v2()->get_id()]->cast_to_vertex()))->cast_to_topology_object();
       e->set_id(j);
     }
   delete edges;
@@ -599,8 +600,7 @@ vcl_vector<vtol_block*> *vtol_two_chain::compute_blocks(void)
             result->push_back(*si);
           delete sublist;
         }
-      tagged_union((vcl_vector<vsol_spatial_object_2d*> *)result);
-      return result;
+      return tagged_union(result);
     }
   else
     {

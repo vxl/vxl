@@ -23,8 +23,7 @@
       new_list->push_back(*m_i);\
     delete sublist;\
   }\
-  tagged_union((vcl_vector<vsol_spatial_object_2d *> *)new_list);\
-  return new_list
+  return tagged_union(new_list)
 
 #define SEL_INF(inftype,target)\
   vcl_vector<inftype *> *new_list=new vcl_vector<inftype *>();\
@@ -37,8 +36,7 @@
       new_list->push_back(*m_i);\
     delete sublist;\
   }\
-  tagged_union((vcl_vector<vsol_spatial_object_2d *> *)new_list);\
-  return new_list
+  return tagged_union(new_list)
 
 #define SUBCHAIN_INF(listnm, suptype, inftype, target) \
   vcl_vector<inftype*> *templist; \
@@ -51,8 +49,7 @@
       listnm->push_back(*m_i); \
     delete templist;\
   } \
-  tagged_union((vcl_vector<vsol_spatial_object_2d*> *)listnm); \
-  return listnm
+  return tagged_union(listnm)
 
 
 #define OUTSIDE_BOUNDARY(targettype, inftype, target) \
