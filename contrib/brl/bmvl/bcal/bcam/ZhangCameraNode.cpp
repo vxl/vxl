@@ -3,7 +3,7 @@
 //////////////////////////////////////////////////////////////////////
 
 #include "ZhangCameraNode.h"
-
+#include <vcl_iostream.h>
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
@@ -33,7 +33,7 @@ int ZhangCameraNode::readData(char *fname, int iView)
   vcl_ifstream  in(fname);
 
   if(!in){
-    vcl_cerr<<" cannot open the file: "<<fname;
+    vcl_cout<<" cannot open the file: "<<fname;
     return 1;
   }
 

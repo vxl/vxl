@@ -13,6 +13,7 @@
 #include "CameraNode.h"
 #include <vcl_vector.h>
 #include <vgl/vgl_homg_point_2d.h>
+#include <vcl_fstream.h>
 
 class ZhangCameraNode : public CameraNode
 {
