@@ -6,6 +6,8 @@
 /*
   fsm@robots.ox.ac.uk
 */
+
+//:
 // \file
 
 #include <vil/vil_stream.h>

@@ -20,11 +20,12 @@
 //
 // Imagine that vil_image is a class derived from
 // vbl_smart_ptr<vil_image_impl>, but with some extra convenience
-// methods.  These methods might traditionally be attached to the ABC
-// image_impl, but this avoids cluttering that interface.
-
+// methods.  These methods might traditionally be attached to the abstract
+// base class vil_image_impl, but this avoids cluttering that interface.
+//
 // You should not derive from vil_image to make a new image type.
 // Derive from vil_image_impl instead.
+
 class vil_image {
 public:
 // use this delegation macro for consistency, not convenience.

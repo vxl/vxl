@@ -9,7 +9,7 @@
 #include "vil_interpolate.h"
 
 // Normal (x,y) access doesn't have range checking, so why should this? [capes Nov 1999]
-
+//
 // Indeed, but why support interpolation on the boundary, then? The current boundary
 // interpolation is broken anyway because it does nearest neighbour interpolation if
 // only one coordinate is on the boundary and the other is not. [fsm Sep 2000]

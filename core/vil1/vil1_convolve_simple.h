@@ -16,7 +16,7 @@ template <class T> class vil_memory_image_of;
 //
 // The given regions of the input images are convolved and placed at
 // the given position in the output image, according to the formula :
-//   OUT[y][x] = \sum_{x1+x2=x, y1+y2=y} IN1[y1][x1] IN2[y2][x2]
+// $\displaystyle OUT[y][x] = \sum_{x1+x2=x, y1+y2=y} IN1[y1][x1] IN2[y2][x2] $
 //
 // The dummy parameter is just for dumb compilers that do not allow
 // the use of vil_convolve_simple<...> to specify the accumulator type.
@@ -34,16 +34,15 @@ void vil_convolve_simple(I1 const* const*  in1, unsigned w1, unsigned h1, // inp
 
 //: Convolution
 // This function performs some bounds checks on the given memory images
-// and the dispatches the convolution itself to the above function.
+// and then dispatches the convolution itself to the above function.
 //
-// \verbatim
-// I1 : input image type
-// I2 : input image type
-// AC : accumulator pixel type
-// O  : output image type
-// \endverbatim
+// - I1 : input image type
+// - I2 : input image type
+// - AC : accumulator pixel type
+// - O  : output image type
 //
-// out_{off+k} = \sum_{i+j = k} a_{off+i} b_{off+j}
+// $\displaystyle  out_{off+k} = \sum_{i+j = k} a_{off+i} b_{off+j} $
+
 template <class I1, class I2, class AC, class O>
 void vil_convolve_simple(// input 1
                          vil_memory_image_of<I1> const &IN1, // input 1
@@ -58,14 +57,13 @@ void vil_convolve_simple(// input 1
 // Like the previous function, except without bounds checking and
 // specified regions.
 //
-// \verbatim
-// I1 : input image type
-// I2 : input image type
-// AC : accumulator pixel type
-// O  : output image type
-// \endverbatim
+// - I1 : input image type
+// - I2 : input image type
+// - AC : accumulator pixel type
+// - O  : output image type
 //
-// out_{off+k} = \sum_{i+j = k} a_{off+i} b_{off+j}
+// $\displaystyle  out_{off+k} = \sum_{i+j = k} a_{off+i} b_{off+j} $
+
 template <class I1, class I2, class AC, class O>
 void vil_convolve_simple(vil_memory_image_of<I1> const &input1,
                          vil_memory_image_of<I2> const &input2,

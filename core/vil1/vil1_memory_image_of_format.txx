@@ -1,13 +1,12 @@
 #ifndef vil_memory_image_of_format_h_
 #define vil_memory_image_of_format_h_
 
-
 // This is vxl/vil/vil_memory_image_of_format.txx
 
-
-// vil_memory_image_of_format
-// Author: Andrew W. Fitzgibbon, Oxford RRG
-// Created: 21 Feb 2000
+//:
+// \file
+// \author Andrew W. Fitzgibbon, Oxford RRG
+// \date 21 Feb 2000
 // fsm: moved from vil_memory_image_of.txx to allow clients to specialize
 // the traits after the standard ones in here, but before first use in
 // there.

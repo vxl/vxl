@@ -27,8 +27,7 @@ public:
   // Computations--------------------------------------------------------------
   int sum_squared_differences(const vil_memory_image_of<vil_byte>& image2,
                               int centre2_x, int centre2_y,
-                              int early_exit_level =
-                                  vil_memory_image_window_maxint);
+                              int early_exit_level = vil_memory_image_window_maxint);
 
   double normalised_cross_correlation(const vil_memory_image_of<vil_byte>& image2,
                                       int centre2_x, int centre2_y);
@@ -40,10 +39,6 @@ public:
           int early_exit_level = vil_memory_image_window_maxint);
 
   float mean_intensity();
-
-  // Data Access---------------------------------------------------------------
-
-  // Data Control--------------------------------------------------------------
 
 protected:
   // Data Members--------------------------------------------------------------
