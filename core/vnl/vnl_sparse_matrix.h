@@ -40,8 +40,15 @@
 #include <vcl_functional.h>
 
 //: Stores elements of sparse matrix
-//  Each pair consists of a position of an element in the matrix,
-//  and the value of that element
+//  Only those values which
+//  are non-zero are stored. The sparse matrix currently supports
+//  only getting/putting elements, and multiply by vector or another
+//  sparse matrix.
+//
+//  Each row is stored as a vector of vcl_pair<unsigned int,T>, where the first
+//  of the pair indicates the column index, and the second the
+//  value.  All rows are stored, as vcl_vector< row >;
+//
 template <class T>
 class vnl_sparse_matrix_pair {
 public:

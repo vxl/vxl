@@ -46,6 +46,24 @@
 #include <vcl_iostream.h>
 #include <vcl_cassert.h>
 
+//: Infinite precision rational numbers
+//
+// The  vnl_rational  class  provides  infinite  precision rational numbers and
+// arithmetic, using the built-in type long, for the numerator and denominator.
+// Implicit conversion to the system defined types short, int, long, float, and
+// double is supported by  overloaded  operator member functions.  Although the
+// rational class makes judicous use  of inline  functions and  deals only with
+// integral values, the user  is warned that  the rational  integer  arithmetic
+// class is still considerably slower than the built-in  integer data types. If
+// the range  of values  anticipated will  fit into a  built-in  type, use that
+// instead.
+//
+// In  addition  to  the  original  COOL Rational class, vnl_rational is able to
+// represent plus and minus infinity.  An  other  interesting  addition  is  the
+// possibility  to construct a rational from a double.  This allows for lossless
+// conversion from e.g. double 1.0/3.0 to the rational number 1/3, hence no more
+// rounding errors.  This is implemented with continued fraction approximations.
+//
 class vnl_rational {
 public:
   //: Creates a rational with given numerator and denominator.

@@ -40,6 +40,22 @@
 #include <vcl_cstring.h> // memcpy()
 #include <vnl/vnl_matrix.h>
 
+//: Fixed size stack-stored vnl_matrix
+// vnl_matrix_fixed_ref is a fixed-size vnl_matrix for which the data space
+// has been supplied externally.  This is useful for two main tasks:
+//
+// (a) Treating some row-based "C" matrix as a vnl_matrix in order to
+// perform vnl_matrix operations on it.
+//
+// (b) Declaring a vnl_matrix that uses entirely stack-based storage for the
+// matrix.
+//
+// The big warning is that returning a vnl_matrix_fixed_ref pointer will free
+// non-heap memory if deleted through a vnl_matrix pointer.  This should be
+// very difficult though, as vnl_matrix_fixed_ref objects may not be constructed
+// using operator new.  This in turn is plausible as the point is to avoid
+// such calls.
+//
 template <class T, int m, int n>
 class vnl_matrix_fixed_ref : public vnl_matrix<T> {
   typedef vnl_matrix<T> Base;

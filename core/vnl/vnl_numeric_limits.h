@@ -37,6 +37,11 @@ enum vnl_float_round_style {
 # error
 #endif
 
+//: Standard limits for numeric datatypes
+// Implementation of the May 96 ANSI Draft Working Paper (DWP)
+// numeric_limits class.  Numbering in
+// the documentation below refers to section 18.2 of the DWP.
+//
 template<class T>
 class vnl_numeric_limits {
 public:

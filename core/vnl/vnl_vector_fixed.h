@@ -6,10 +6,6 @@
 
 // This is vxl/vnl/vnl_vector_fixed.h
 
-#include <vcl_cstring.h> // memcpy()
-#include <vnl/vnl_vector_ref.h>
-#include <vnl/vnl_c_vector.h>
-
 //:
 // \file
 // \brief Fixed length stack-stored vnl_vector
@@ -26,7 +22,17 @@
 // LSB Manchester 16/3/01 Binary I/O added
 // \endverbatim
 
+#include <vcl_cstring.h> // memcpy()
+#include <vnl/vnl_vector_ref.h>
+#include <vnl/vnl_c_vector.h>
+
 //: fixed length  stack-stored vnl_vector.
+//
+//  vnl_vector_fixed is a fixed-length, stack storage vnl_vector.
+//  vnl_vector_fixed allocates storage space,
+//  and passes reference to this space to vnl_vector_ref
+// \see vnl_matrix_ref
+//
 export template <class T, int n>
 class vnl_vector_fixed : public vnl_vector_ref<T> {
   typedef vnl_vector_ref<T> Base;
