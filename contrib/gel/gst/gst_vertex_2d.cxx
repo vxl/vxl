@@ -57,3 +57,8 @@ void gst_vertex_2d::set( const double x, const double y)
 {
   x_=x; y_=y;
 }
+
+// operators
+bool operator==( const gst_vertex_2d& a, const gst_vertex_2d& b)
+{ return ((a.x_== b.x_)&&(a.y_== b.y_)); }
+

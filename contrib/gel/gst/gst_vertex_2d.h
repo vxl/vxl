@@ -26,11 +26,15 @@ public:
   void set_y( const double y);
   void set( const double x, const double y);
 
+  // operators
+  friend bool operator==( const gst_vertex_2d& a, const gst_vertex_2d& b);
+
 protected:
 
   // members
   double x_, y_;
 };
 
+bool operator==( const gst_vertex_2d& a, const gst_vertex_2d& b);
 
 #endif
