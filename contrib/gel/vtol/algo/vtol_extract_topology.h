@@ -45,9 +45,7 @@ struct vtol_extract_topology_params
   // change. This will make code more robust against changes to the
   // code and parameter set, because we don't have a bunch of unnamed
   // arguments to change or worry about.
-  vtol_extract_topology_params()
-    : num_for_smooth( 0 )
-    { }
+  vtol_extract_topology_params() : num_for_smooth( 0 ) {}
 };
 
 //: Extracts the topology from a segmentation label image.
@@ -77,7 +75,7 @@ class vtol_extract_topology
   //: Input data image type
   typedef vil_image_view< data_pixel_type > data_image_type;
 
-public: // public methods
+ public: // public methods
 
   //: Prepare to extract the topology from \a image.
   vtol_extract_topology( label_image_type const& image,
@@ -105,7 +103,7 @@ public: // public methods
   vcl_vector< vtol_intensity_face_sptr >
   faces( data_image_type const& data_img ) const;
 
-private:   // internal classes and constants
+ private:   // internal classes and constants
 
   //: Image of indices into the vertex node list
   typedef vil_image_view< unsigned > index_image_type;
@@ -178,8 +176,8 @@ private:   // internal classes and constants
 
  private: // internal methods
 
-  // Allow the test harness to call on the "internal" member functions
-  // for through testing.
+  // Allow the test harness to call on the "internal" member function is_edge()
+  // for thorough testing.
   //
   friend class test_vtol_extract_topology;
 
