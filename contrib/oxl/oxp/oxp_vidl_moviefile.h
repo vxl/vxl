@@ -9,8 +9,6 @@
 // \author awf@robots.ox.ac.uk
 // Created: 08 Dec 01
 
-#include <vcl_iosfwd.h>
-
 #include <oxp/MovieFileInterface.h>
 
 struct oxp_vidl_moviefile_privates;

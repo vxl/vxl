@@ -1,13 +1,8 @@
-// awfmfcView.cpp : implementation of the vgui_mfc_view class
-//
-
+// This is oxl/vgui/impl/mfc/vgui_mfc_view.cxx
+#include "StdAfx.h"
+#include "vgui_mfc_view.h"
 //:
 //  \file
-
-#include "StdAfx.h"
-//#include "vgui_mfc_app.h"
-
-#include "vgui_mfc_view.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW

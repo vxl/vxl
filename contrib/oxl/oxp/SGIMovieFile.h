@@ -14,8 +14,6 @@
 //
 //-----------------------------------------------------------------------------
 
-#include <vcl_iosfwd.h>
-
 #include <oxp/MovieFileInterface.h>
 
 struct SGIMovieFilePrivates;
