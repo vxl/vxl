@@ -27,8 +27,23 @@
 
 void run_test_mil()
 {
+  test_image_2d_of();
+  test_normalise_image_2d();
+  test_sample_profile_2d();
+  test_sample_grid_2d();
+  test_transform_2d();
+  test_bilin_interp_2d();
+  test_gauss_reduce_2d();
+  test_algo_line_filter();
+  test_algo_grad_filter_2d();
+  test_algo_gaussian_filter();
+  test_algo_exp_filter_1d();
+  test_scale_pyramid_builder_2d();
+  test_gaussian_pyramid_builder_2d();
   test_gaussian_pyramid_builder_2d_general();
-}
 
+  test_byte_image_2d_io();
+  test_convert_vil();
+}
 
 TESTLIB_DEFINE_MAIN(run_test_mil);
