@@ -9,13 +9,8 @@
 #endif
 
 #include "QvString.h"
-
-// changed Gerbert Orasche 260695
-#ifdef __PC__
-#include "stdafx.h"
-#endif
-
 #include "QvDebugError.h"
+#include <vcl_iostream.h>
 
 QvDebugErrorCallback QvDebugError::callback_ = 0;  // mpichler, 19950713
 
@@ -36,5 +31,5 @@ QvDebugError::post(const char *methodName, const char *formatString ...)
   if (callback_)
     (*callback_) (methodName, buf);
   else
-    fprintf(stderr, "VRML error in %s: %s\n", methodName, buf);
+    vcl_cerr << "VRML error in " << methodName << ": " << buf << '\n';
 }

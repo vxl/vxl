@@ -109,8 +109,7 @@ static bool jmpbuf_ok = false;
 //
 static void pngtopnm_error_handler (png_structp png_ptr, png_const_charp msg)
 {
-  fprintf(stderr, "vil_png:  fatal libpng error: %s\n", msg);
-  fflush(stderr);
+  vcl_cerr << "vil_png:  fatal libpng error: " << msg << '\n';
 
   if (!jmpbuf_ok) {
     // Someone called the error handler when the setjmp was wrong
@@ -121,9 +120,7 @@ static void pngtopnm_error_handler (png_structp png_ptr, png_const_charp msg)
 
   vil_jmpbuf_wrapper  *jmpbuf_ptr = (vil_jmpbuf_wrapper*) png_get_error_ptr(png_ptr);
   if (jmpbuf_ptr == NULL) {         // we are completely hosed now
-    fprintf(stderr,
-      "pnmtopng:  EXTREMELY fatal error: jmpbuf unrecoverable; terminating.\n");
-    fflush(stderr);
+    vcl_cerr << "pnmtopng:  EXTREMELY fatal error: jmpbuf unrecoverable; terminating.\n";
     vcl_exit(99);
   }
 

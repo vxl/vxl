@@ -4,12 +4,13 @@
 #include "StdAfx.h"
 
 #include <mvl/HomgOperator3D.h>
+#include <vcl_iostream.h>
 
 int main(int argc, char* argv[])
 {
   HomgOperator3D::sort_points(0,0);
 
-  printf("Hello World!\n");
+  vcl_cout << "Hello World!\n";
   return 0;
 }
 

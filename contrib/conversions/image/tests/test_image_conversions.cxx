@@ -4,7 +4,7 @@
 //#include <image/vil_to_vbl_array.h>
 
 #include <vcl_cstring.h> // for memcmp()
-#include <vcl_cstdio.h> // for fopen() etc.
+#include <vcl_fstream.h>
 #include <vpl/vpl.h> // for vpl_unlink()
 #include <vul/vul_temp_filename.h>
 #include <vil/vil_load.h>
@@ -13,9 +13,9 @@
 static void create_image(const char* name)
 {
   // create a PPM image, just a very simple one (3x2)
-  FILE* f = fopen(name, "wb");
-  fprintf(f, "P6\n3 2\n255\n111222333456567678");
-  fclose(f);
+  vcl_ofstream f(name);
+  f << "P6\n3 2\n255\n111222333456567678";
+  f.close();
 }
 
 void test_image_conversions()

@@ -2,7 +2,7 @@
 #include <image/vil_to_vbl_array.h>
 
 #include <vcl_cstring.h> // for memcmp()
-#include <vcl_cstdio.h> // for fopen() etc.
+#include <vcl_fstream.h>
 #include <vpl/vpl.h> // for vpl_unlink()
 #include <vil/vil_load.h>
 #include <vil/vil_test.h>
@@ -11,9 +11,9 @@
 static void create_image(const char* name)
 {
   // create a PGM image, just a very simple one (3x2)
-  FILE* f = vcl_fopen(name, "wb");
-  fprintf(f, "P5\n3 2\n255\n123456");
-  fclose(f);
+  vcl_ofstream f(name);
+  f << "P5\n3 2\n255\n123456";
+  f.close();
 }
 
 void test_image_conversions()

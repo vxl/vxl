@@ -11,7 +11,6 @@
 #include "vnl_levenberg_marquardt.h"
 
 #include <vcl_cassert.h>
-#include <vcl_cstdio.h>
 #include <vcl_cstdlib.h>
 #include <vcl_iostream.h>
 
@@ -94,9 +93,9 @@ int vnl_levenberg_marquardt::lmdif_lsqfun(int* n,          // I    Number of res
 
   if (*iflag == 0) {
     if (active->trace)
-      fprintf(stderr,
-              "lmdif: iter %3d err [%g, %g, %g, %g, %g, ... ] = %g\n",
-              active->num_iterations_, x[0], x[1], x[2], x[3], x[4], ref_fx.magnitude());
+      vcl_cerr << "lmdif: iter " << active->num_iterations_ << " err ["
+               << x[0] << ", " << x[1] << ", " << x[2] << ", " << x[3] << ", "
+               << x[4] << ", ... ] = " << ref_fx.magnitude() << '\n';
 
     f->trace(active->num_iterations_, ref_x, ref_fx);
     ++(active->num_iterations_);
@@ -240,9 +239,9 @@ int vnl_levenberg_marquardt::lmder_lsqfun(int* n,          // I    Number of res
 
   if (*iflag == 0) {
     if (active->trace)
-      fprintf(stderr,
-              "lmder: iter %3d err [%g, %g, %g, %g, %g, ... ] = %g\n",
-              active->num_iterations_, x[0], x[1], x[2], x[3], x[4], ref_fx.magnitude());
+      vcl_cerr << "lmder: iter " << active->num_iterations_ << " err ["
+               << x[0] << ", " << x[1] << ", " << x[2] << ", " << x[3] << ", "
+               << x[4] << ", ... ] = " << ref_fx.magnitude() << '\n';
     f->trace(active->num_iterations_, ref_x, ref_fx);
   }
   else if (*iflag == 1) {

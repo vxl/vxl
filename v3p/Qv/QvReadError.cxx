@@ -10,13 +10,8 @@
 
 #include "QvString.h"
 #include "QvInput.h"
-
-// changed Gerbert Orasche 260695
-#ifdef __PC__
-#include "stdafx.h"
-#endif
-
 #include "QvReadError.h"
+#include <vcl_iostream.h>
 
 QvReadErrorCallback QvReadError::callback_ = 0;  // mpichler, 19950713
 
@@ -41,10 +36,6 @@ QvReadError::post(const QvInput *in, const char *formatString ...)
     (*callback_) (buf, locstr.getString());
   else
   {
-#ifdef __PC__
-    TRACE("VRML read error: %s\n%s\n", buf, locstr.getString());
-#else
-    fprintf(stderr, "VRML read error: %s\n%s\n", buf, locstr.getString());
-#endif
+    vcl_cerr << "VRML read error: " << buf << '\n' << locstr.getString() << '\n';
   }
 }

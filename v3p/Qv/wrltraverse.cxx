@@ -60,6 +60,7 @@ enum Binding { goofyBinding };  // cfront confused about QvMaterialBinding/QvNor
 #include "QvExtensions.h"
 #include "QvUnknownNode.h"  /* mpichler */
 #include "QvState.h"
+#include <vcl_iostream.h>
 
 //////////////////////////////////////////////////////////////////////////////
 //
@@ -75,8 +76,8 @@ static void
 announce(const char *className)
 {
     for (int i = 0; i < indent; i++)
-        printf("\t");
-    printf("Traversing a %s\n", className);
+        vcl_cout << '\t';
+    vcl_cout << "Traversing a " << className << vcl_endl;
 }
 #define ANNOUNCE(className) announce(QV__QUOTE(className))
 
@@ -242,9 +243,9 @@ DO_TYPED_PROPERTY(QvScale,           TransformationIndex, Scale)
 static void
 printProperties(QvState *state)
 {
-    printf("--------------------------------------------------------------\n");
+    vcl_cout << "--------------------------------------------------------------\n";
     state->print();
-    printf("--------------------------------------------------------------\n");
+    vcl_cout << "--------------------------------------------------------------\n";
 }
 
 #define DO_SHAPE(className)         \
