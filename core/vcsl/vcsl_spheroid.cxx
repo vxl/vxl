@@ -199,7 +199,7 @@ bool vcsl_spheroid::operator==(const vcsl_spheroid &other) const
 //***************************************************************************
 
 //---------------------------------------------------------------------------
-// Assignement
+// Assignment
 //---------------------------------------------------------------------------
 vcsl_spheroid &vcsl_spheroid::operator=(const vcsl_spheroid &other)
 {

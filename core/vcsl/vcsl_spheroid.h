@@ -1,6 +1,5 @@
-#ifndef VCSL_SPHEROID_H
-#define VCSL_SPHEROID_H
-
+#ifndef VCSL_SPHEROID_H_
+#define VCSL_SPHEROID_H_
 //:
 // \file
 // \author François BERTEL
@@ -24,9 +23,9 @@
 // Bulletin 1532, U.S. Government Printing Office, Washington, 1982.) for
 // further detail on most of these coordinate systems.
 class vcsl_spheroid
-  :public vbl_ref_count
+  : public vbl_ref_count
 {
-public:
+ public:
   enum vcsl_std_spheroid
   {
     airy_1830,
@@ -107,10 +106,10 @@ public:
   // Duplication
   //***************************************************************************
 
-  //: Assignement
+  //: Assignment
   virtual vcsl_spheroid &operator=(const vcsl_spheroid &other);
 
-protected:
+ protected:
   //***************************************************************************
   // Implementation
   //***************************************************************************
@@ -125,4 +124,4 @@ protected:
   double f_;
 };
 
-#endif // #ifndef VCSL_SPHEROID_H
+#endif // #ifndef VCSL_SPHEROID_H_
