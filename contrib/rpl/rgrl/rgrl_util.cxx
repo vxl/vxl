@@ -5,6 +5,7 @@
 #include "rgrl_util.h"
 #include <vcl_vector.h>
 #include <vcl_string.h>
+#include <vcl_cassert.h>
 
 #include <vnl/vnl_vector.h>
 #include <vnl/algo/vnl_svd.h>
@@ -17,17 +18,17 @@
 
 
 // CHECK: only tested with affine transform
-rgrl_mask_box 
+rgrl_mask_box
 rgrl_util_estimate_global_region( rgrl_mask_box const&         from_image_roi,
                                   rgrl_mask_box const&         to_image_roi,
-                                  rgrl_mask_box const&         current_region, 
-                                  rgrl_transformation const&   curr_xform, 
+                                  rgrl_mask_box const&         current_region,
+                                  rgrl_transformation const&   curr_xform,
                                   bool                         union_with_curr)
 {
   // Forward map 9 points - 4 corners, 4 side centers and 1 image center (27
-  // points in 3D) of the from_image_roi. For each corner point q of the to_image_roi, 
+  // points in 3D) of the from_image_roi. For each corner point q of the to_image_roi,
   // find the closest forward_xformed point for initialized inverse_map for q.
-  // Take the intersection of the from_image_roi and the inverse_xformed to_image_roi 
+  // Take the intersection of the from_image_roi and the inverse_xformed to_image_roi
   // as the maximum region. If any q failed to converge or the region is null,
   // this procedure fails.
   //
@@ -58,7 +59,7 @@ rgrl_util_estimate_global_region( rgrl_mask_box const&         from_image_roi,
       else {
         vnl_vector<double> pt(2);
         pt[0] = i;
-        pt[1] = j; 
+        pt[1] = j;
         from_pts.push_back(pt);
       }
     }
@@ -89,13 +90,13 @@ rgrl_util_estimate_global_region( rgrl_mask_box const&         from_image_roi,
       else {
         vnl_vector<double> pt(2);
         pt[0] = i;
-        pt[1] = j; 
+        pt[1] = j;
         to_corner_pts.push_back(pt);
       }
     }
   }
 
-  //4. For each corner point q of the to_image_roi, find the closest 
+  //4. For each corner point q of the to_image_roi, find the closest
   //   forward_xformed point for initialized inverse_map for q.
   vnl_vector<double> inv_mapped_x0 = from_x1;
   vnl_vector<double> inv_mapped_x1 = from_x0;
@@ -118,18 +119,18 @@ rgrl_util_estimate_global_region( rgrl_mask_box const&         from_image_roi,
       return region;
 
     //update the inv_mapped bounding box
-    for( unsigned d=0; d < m; ++d ) {
+    for ( unsigned d=0; d < m; ++d ) {
       if (inv_mapped_pt[d] < inv_mapped_x0[d]) inv_mapped_x0[d] = inv_mapped_pt[d];
       if (inv_mapped_pt[d] > inv_mapped_x1[d]) inv_mapped_x1[d] = inv_mapped_pt[d];
     }
   }
- 
+
   //5. Take the intersection of the from_image_roi and the inverse_xformed to_image_roi
   //   as the maximum region.
   vnl_vector<double> region_x0(m);
   vnl_vector<double> region_x1(m);
 
-  for( unsigned d=0; d < m; ++d ) {
+  for ( unsigned d=0; d < m; ++d ) {
     region_x0[d] = (inv_mapped_x0[d] > from_x0[d])? inv_mapped_x0[d]:from_x0[d];
     region_x1[d] = (inv_mapped_x1[d] < from_x1[d])? inv_mapped_x1[d]:from_x1[d];
     if ( region_x0[d] > from_x1[d] )  region_x0[d] = from_x1[d];
@@ -140,22 +141,22 @@ rgrl_util_estimate_global_region( rgrl_mask_box const&         from_image_roi,
 
   //6. If union_with_curr set, union region and current_region to prevent oscillation
   if (union_with_curr) {
-    for( unsigned d=0; d < m; ++d ) {
+    for ( unsigned d=0; d < m; ++d ) {
       if (region_x0[d] > current_region.x0()[d]) region_x0[d] = current_region.x0()[d];
       if (region_x1[d] < current_region.x1()[d]) region_x1[d] = current_region.x1()[d];
     }
   }
 
-  //7. If the changes from current_region is insignificant, or the change is too 
+  //7. If the changes from current_region is insignificant, or the change is too
   //   drastic, set region to be same ascurrent_region
-  bool changed = 
+  bool changed =
     ( (region_x0 - current_region.x0()).inf_norm() > 1 ||
       (region_x1 - current_region.x1()).inf_norm() > 1);
   bool drastic_changed = false;
   double prev_space = 1, new_space = 1;
   vnl_vector<double>  prev_space_dim = current_region.x1() - current_region.x0();
   vnl_vector<double>  new_space_dim = region_x1 - region_x0;
-  for( unsigned d=0; d < m; ++d ) {
+  for ( unsigned d=0; d < m; ++d ) {
     prev_space *= prev_space_dim[d];
     new_space  *= new_space_dim[d];
   }
@@ -191,22 +192,22 @@ rgrl_util_geometric_error_scaling( rgrl_match_set const& match_set )
   //
   vnl_vector<double> from_centre( m, 0.0 );
   vnl_vector<double> mapped_centre( m, 0.0 );
-  for( FIter fi = match_set.from_begin(); fi != match_set.from_end(); ++fi ) {
+  for ( FIter fi = match_set.from_begin(); fi != match_set.from_end(); ++fi ) {
     from_centre += fi.from_feature()->location();
     mapped_centre += fi.mapped_from_feature()->location();
   }
   from_centre /= match_set.from_size();
   mapped_centre /=  match_set.from_size();
-  
+
   // Compute the covariance matrices
   //
   vnl_matrix<double> cov_matrix_from(m,m,0.0);
   vnl_matrix<double> cov_matrix_mapped(m,m,0.0);
-  for( FIter fi = match_set.from_begin(); fi != match_set.from_end(); ++fi ) {
-    cov_matrix_from += 
+  for ( FIter fi = match_set.from_begin(); fi != match_set.from_end(); ++fi ) {
+    cov_matrix_from +=
       outer_product(fi.from_feature()->location() - from_centre,
                     fi.from_feature()->location() - from_centre);
-    cov_matrix_mapped += 
+    cov_matrix_mapped +=
       outer_product(fi.mapped_from_feature()->location() - mapped_centre,
                     fi.mapped_from_feature()->location() - mapped_centre);
   }
@@ -224,9 +225,9 @@ rgrl_util_geometric_error_scaling( rgrl_match_set const& match_set )
 
   // Estimate the change in the spread of the feature set
   //
-  double change_in_fst = vnl_math_max(ev_fst_from/ev_fst_mapped, 
+  double change_in_fst = vnl_math_max(ev_fst_from/ev_fst_mapped,
                                       ev_fst_mapped/ev_fst_from);
-  double change_in_snd = vnl_math_max(ev_snd_from/ev_snd_mapped, 
+  double change_in_snd = vnl_math_max(ev_snd_from/ev_snd_mapped,
                                       ev_snd_mapped/ev_snd_from);
 
   double scaling_sqr = vnl_math_max( change_in_fst, change_in_snd );
@@ -234,7 +235,7 @@ rgrl_util_geometric_error_scaling( rgrl_match_set const& match_set )
 
   return scaling;
 
-  /*
+#if 0 // commented out
   // The new formulation, measures the changes of the ratio of te 2nd
   // moments
   double ratio_from = ev_fst_from/ev_snd_from;
@@ -243,7 +244,7 @@ rgrl_util_geometric_error_scaling( rgrl_match_set const& match_set )
                                     ratio_mapped/ratio_from );
 
   return distortion;
-  */
+#endif // 0
 }
 
 double
@@ -252,8 +253,8 @@ rgrl_util_geometric_error_scaling( rgrl_set_of<rgrl_match_set_sptr> const& curre
   // Take the max geometric scaling of the set
   //
   double geometric_scaling = 0;
-  for( unsigned ds=0; ds < current_match_sets.size(); ++ds ) {
-    geometric_scaling = vnl_math_max(geometric_scaling, 
+  for ( unsigned ds=0; ds < current_match_sets.size(); ++ds ) {
+    geometric_scaling = vnl_math_max(geometric_scaling,
                                      rgrl_util_geometric_error_scaling(*current_match_sets[ds]) );
   }
 
@@ -262,9 +263,9 @@ rgrl_util_geometric_error_scaling( rgrl_set_of<rgrl_match_set_sptr> const& curre
 
 void
 rgrl_util_extract_region_locations( vnl_vector< double >             const& center,
-				    vcl_vector< vnl_vector<double> > const& basis_dirs,
-				    vnl_vector< double >             const& basis_radii,
-				    vcl_vector< vnl_vector<int> >         & pixel_locations )
+                                    vcl_vector< vnl_vector<double> > const& basis_dirs,
+                                    vnl_vector< double >             const& basis_radii,
+                                    vcl_vector< vnl_vector<int> >         & pixel_locations )
 {
   //  0. Get the image dimension, clear the pixels, and make sure
   //  everyone agrees on the sizes.
@@ -276,10 +277,10 @@ rgrl_util_extract_region_locations( vnl_vector< double >             const& cent
 
   //  1. We need to get the bounding box in axis-aligned coordinates.  We
   //  therefore need to get the corners of the rotated box in these
-  //  coordinates...  
+  //  coordinates...
 
   //  1a. We start by forming a vector of corner points.  There will be
-  //  2^dimension corners.   
+  //  2^dimension corners.
 
   vcl_vector< vnl_vector<double> > corner_points;
   int num_corners = vnl_math_rnd( vcl_exp( dimension * vcl_log(2.0) ));
@@ -293,44 +294,44 @@ rgrl_util_extract_region_locations( vnl_vector< double >             const& cent
   //  vector.  This doubles the number of vectors stored in each
   //  iteration of the outer loop.  This is an iterative version of
   //  what would normally be at least designed as a recursive
-  //  procedure. 
+  //  procedure.
 
 //   vnl_vector<double> zero_vector( dimension, 0.0 );
 //   corner_points.push_back( zero_vector );
   corner_points.push_back( center );
 
   for ( unsigned int i=0; i<dimension; ++i )
-    {
-      // 1b(i). For each current / partially built corner vector, create a
-      // new corner by adding r * dir, then add -r * dir to the
-      // current vector.
+  {
+    // 1b(i). For each current / partially built corner vector, create a
+    // new corner by adding r * dir, then add -r * dir to the
+    // current vector.
 
-      vnl_vector<double> offset = basis_dirs[i] * basis_radii[i];
-      unsigned curr_size = corner_points.size();
-      for ( unsigned int j=0; j<curr_size; ++j )
-	{
-	  corner_points.push_back( corner_points[j] + offset );
-	  corner_points[j] -= offset;
-	}
+    vnl_vector<double> offset = basis_dirs[i] * basis_radii[i];
+    unsigned curr_size = corner_points.size();
+    for ( unsigned int j=0; j<curr_size; ++j )
+    {
+      corner_points.push_back( corner_points[j] + offset );
+      corner_points[j] -= offset;
     }
+  }
 
   //  1c. Form a bounding box by taking the min and max over the
-  //  corners.  At this point, the bounding box is in centered 
+  //  corners.  At this point, the bounding box is in centered
   //  coordinates, not in absolute coordinates.
 
-  vnl_vector<double> lower = center; 
+  vnl_vector<double> lower = center;
   vnl_vector<double> upper = center;
 
   for ( unsigned int i=0; i<corner_points.size(); ++i )
+  {
+    for ( unsigned int j=0; j<dimension; ++j )
     {
-      for ( unsigned int j=0; j<dimension; ++j )
-	{
-	  if ( lower[j] > corner_points[i][j] )
-	    lower[j] = corner_points[i][j];
-	  if ( upper[j] < corner_points[i][j] )
-	    upper[j] = corner_points[i][j];
-	}
+      if ( lower[j] > corner_points[i][j] )
+        lower[j] = corner_points[i][j];
+      if ( upper[j] < corner_points[i][j] )
+        upper[j] = corner_points[i][j];
     }
+  }
 
   //  2. Ok, folks, time to build the intervals of possible points.
   //  How to do this generalized over dimension?  An interval is an
@@ -341,21 +342,21 @@ rgrl_util_extract_region_locations( vnl_vector< double >             const& cent
   //  possible combinations of dimension-1 coordinates from the
   //  bounding boxes.  As examples, in 2d this  will contain just the
   //  possible x values (lower[0] .. lower[1]), in 3d this will
-  //  contain all possible x,y values.   
+  //  contain all possible x,y values.
 
   //  2a. Find an approximate upper bound on the number of
   //  intervals.  This is used for nothing more than to reserve space
   //  in a vector.
 
   int max_num_intervals = 1;
-  for ( unsigned int i=0; i < dimension-1; ++i ) 
+  for ( unsigned int i=0; i < dimension-1; ++i )
     max_num_intervals *= (int)vcl_floor( upper[i] - lower[i] + 1 );
 
   //  2b. Allocate a vector of interval indices.  Note that in each
   //  of these, the last component will be 0.0.  It is important that
   //  it stay this way for the computation below (step 3).  Also the
   //  interval_indices will be stored as doubles even though they are
-  //  really integers.  This just simplifies some computation. 
+  //  really integers.  This just simplifies some computation.
 
   vcl_vector< vnl_vector<double> > interval_indices;
   interval_indices.reserve( max_num_intervals );
@@ -369,7 +370,7 @@ rgrl_util_extract_region_locations( vnl_vector< double >             const& cent
   //  of coordinate combinations is built up one dimension at a time.
   //  In each step, the integer values in the bounding box (remember,
   //  it is axis-aligned) are combined with each in the previous
-  //  dimension.  
+  //  dimension.
 
   //   vnl_vector< double > zero_vect( dimension, 0.0 );  // basis
   //   interval_indices.push_back( zero );
@@ -386,7 +387,7 @@ rgrl_util_extract_region_locations( vnl_vector< double >             const& cent
 
     //  2c(i).  For the current dimension, expand the set of
     //  coordinates of the axis-aligned line segments.  Go through
-    //  each 
+    //  each
     for ( int prev=0; prev < prev_size; ++prev )
     {
       vnl_vector< double > partial_interval = interval_indices[prev];
@@ -396,7 +397,6 @@ rgrl_util_extract_region_locations( vnl_vector< double >             const& cent
         partial_interval[ i ] = double(index);  // double for convenience
         interval_indices.push_back( partial_interval );
       }
-
     }
   }
 
@@ -425,8 +425,8 @@ rgrl_util_extract_region_locations( vnl_vector< double >             const& cent
     for ( unsigned int basis_index=0; basis_index<dimension; ++basis_index )
     {
       // for calculating max_z and min_z correctly, let bdir[ dimension - 1 ] >= 0.
-      vnl_vector< double > bdir = 
-        ( basis_dirs[ basis_index ][ dimension - 1 ] < 0 ) ? 
+      vnl_vector< double > bdir =
+        ( basis_dirs[ basis_index ][ dimension - 1 ] < 0 ) ?
         basis_dirs[ basis_index ] / -1 : basis_dirs[ basis_index ];
       double bradius = basis_radii[ basis_index ];
 
@@ -454,7 +454,7 @@ rgrl_util_extract_region_locations( vnl_vector< double >             const& cent
 
     //  3d. If the interval can not contain any points (even after
     //  rounding), skip the rest of the computation and go on to the
-    //  next interval. 
+    //  next interval.
     //       if ( max_z < min_z-1 ) continue;
 
     //  3e. Form the first dimension-1 components of the pixel index by
@@ -478,12 +478,12 @@ rgrl_util_extract_region_locations( vnl_vector< double >             const& cent
     int last_upper_bound = (int)vcl_floor( max_z );
     for ( int last_component = last_lower_bound; last_component <= last_upper_bound;
           ++ last_component )
-      {
-        pixel_index[ dimension - 1 ] = last_component;
-        pixel_locations.push_back( pixel_index );
-      }
+    {
+      pixel_index[ dimension - 1 ] = last_component;
+      pixel_locations.push_back( pixel_index );
+    }
   }
-} 
+}
 
 bool
 rgrl_util_irls( rgrl_match_set_sptr              match_set,
@@ -501,12 +501,12 @@ rgrl_util_irls( rgrl_match_set_sptr              match_set,
   scales.push_back( scale );
   vcl_vector<rgrl_weighter_sptr> weighters;
   weighters.push_back(weighter);
-  
+
   return rgrl_util_irls(match_sets, scales, weighters,
                         conv_tester, estimator, estimate, error, debug_flag);
 }
 
-bool 
+bool
 rgrl_util_irls( rgrl_set_of<rgrl_match_set_sptr> const& match_sets,
                 rgrl_set_of<rgrl_scale_sptr>     const& scales,
                 vcl_vector<rgrl_weighter_sptr>   const& weighters,
@@ -516,7 +516,7 @@ rgrl_util_irls( rgrl_set_of<rgrl_match_set_sptr> const& match_sets,
                 double&                          total_error,
                 unsigned int                     debug_flag )
 {
-  DebugFuncMacro( debug_flag, 1, " In irls for model "<<estimator->transformation_type().name()<<"\n" );
+  DebugFuncMacro( debug_flag, 1, " In irls for model "<<estimator->transformation_type().name()<<'\n' );
 
   typedef rgrl_match_set::from_iterator  from_iter;
   typedef from_iter::to_iterator         to_iter;
@@ -527,13 +527,13 @@ rgrl_util_irls( rgrl_set_of<rgrl_match_set_sptr> const& match_sets,
 
   //  Basic loop:
   //  1. Calculate new estimate
-  //  2. Map matches and calculate weights 
+  //  2. Map matches and calculate weights
   //  3. Test for convergence.
   //
 
   // initialize the weights for the first estimation
   rgrl_converge_status_sptr current_status = 0;
-  for( unsigned ms=0; ms < match_sets.size(); ++ms ) {
+  for ( unsigned ms=0; ms < match_sets.size(); ++ms ) {
     rgrl_match_set_sptr match_set = match_sets[ms];
     if (match_set->from_size() > 0) {
       match_set->remap_from_features( *estimate );
@@ -551,9 +551,9 @@ rgrl_util_irls( rgrl_set_of<rgrl_match_set_sptr> const& match_sets,
       return failed;
     }
 
-    //  Step 2.  Map matches and calculate weights 
+    //  Step 2.  Map matches and calculate weights
     //
-    for( unsigned ms=0; ms < match_sets.size(); ++ms ) {
+    for ( unsigned ms=0; ms < match_sets.size(); ++ms ) {
       rgrl_match_set_sptr match_set = match_sets[ms];
       if (match_set->from_size() > 0) {
         match_set->remap_from_features( *new_estimate );
@@ -568,7 +568,8 @@ rgrl_util_irls( rgrl_set_of<rgrl_match_set_sptr> const& match_sets,
                                                  new_estimate, estimator,
                                                  match_sets, scales, false);
 
-    DebugFuncMacro_abv(debug_flag, 2, "irls: (iteration = " << iteration << ") oscillation count = " << current_status->oscillation_count() << "\n" );
+    DebugFuncMacro_abv(debug_flag, 2, "irls: (iteration = " << iteration
+                       << ") oscillation count = " << current_status->oscillation_count() << '\n' );
     DebugFuncMacro_abv(debug_flag, 2, "irls: error = " << current_status->error() << vcl_endl );
     DebugFuncMacro_abv(debug_flag, 2, "irls: error_diff = " << current_status->error_diff() << vcl_endl );
     DebugFuncMacro_abv(debug_flag, 2, "irls: converged = " << current_status->has_converged() << vcl_endl );
@@ -576,26 +577,26 @@ rgrl_util_irls( rgrl_set_of<rgrl_match_set_sptr> const& match_sets,
     estimate = new_estimate;
     ++ iteration;
   } while ( !current_status->has_converged() &&
-            !current_status->has_stagnated() && 
+            !current_status->has_stagnated() &&
             iteration < max_iterations );
 
-  DebugFuncMacro_abv(debug_flag, 1, "irls status: " << 
-                     ( ( current_status->has_converged() )? 
-                       "converged" : ( ( current_status->has_stagnated() )? 
+  DebugFuncMacro_abv(debug_flag, 1, "irls status: " <<
+                     ( ( current_status->has_converged() )?
+                       "converged" : ( ( current_status->has_stagnated() )?
                                        "stagnated" : "reaches max iteration\n" ) ) );
-  
+
   // Compute the total alignment error as the sum of the weighted
   // residual squares
   //
   total_error = 0;
-  for( unsigned ms=0; ms < match_sets.size(); ++ms ) {
+  for ( unsigned ms=0; ms < match_sets.size(); ++ms ) {
     rgrl_match_set_sptr match_set = match_sets[ms];
     //  for each from image feature being matched
-    for( from_iter fitr = match_set->from_begin(); fitr != match_set->from_end(); ++fitr ){
-      if( fitr.size() == 0 )  continue;
+    for ( from_iter fitr = match_set->from_begin(); fitr != match_set->from_end(); ++fitr ){
+      if ( fitr.size() == 0 )  continue;
 
       rgrl_feature_sptr mapped_from = fitr.from_feature()->transform( *estimate );
-      for( to_iter titr = fitr.begin(); titr != fitr.end(); ++titr ) {
+      for ( to_iter titr = fitr.begin(); titr != fitr.end(); ++titr ) {
         //  for each match with a "to" image feature
         rgrl_feature_sptr to_feature = titr.to_feature();
         double geometric_err = to_feature->geometric_error( *mapped_from );
@@ -611,24 +612,24 @@ rgrl_util_irls( rgrl_set_of<rgrl_match_set_sptr> const& match_sets,
 }
 
 //: skip empty lines in input stream
-void 
+void
 rgrl_util_skip_empty_lines( vcl_istream& is )
 {
   vcl_streampos pos;
   vcl_string str;
-  const static vcl_string white_chars = " \t";
-  int non_empty_pos; 
-  
-  // skip any empty lines  
-  do{
+  static const vcl_string white_chars = " \t";
+  int non_empty_pos;
+
+  // skip any empty lines
+  do {
     // store current reading position
     pos = is.tellg();
     str = "";
     vcl_getline( is, str );
-    
+
     non_empty_pos = str.find_first_not_of( white_chars );
-  }while( str.empty() || non_empty_pos < 0 );
-  
+  } while ( str.empty() || non_empty_pos < 0 );
+
   // back to the beginning of non-empty line
   is.seekg( pos );
-}  
+}

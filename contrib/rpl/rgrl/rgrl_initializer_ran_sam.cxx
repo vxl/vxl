@@ -1,8 +1,10 @@
+//:
 // \file
 // \author Charlene Tsai
 // \date   Sep 2003
 
 #include <vcl_cmath.h>
+#include <vcl_cassert.h>
 
 #include "rgrl_initializer_ran_sam.h"
 #include "rgrl_match_set.h"
@@ -15,7 +17,7 @@
 
 #include <vnl/vnl_random.h>
 
-const static unsigned verbose_ = 0;
+static const unsigned verbose_ = 0;
 
 // Random number generator. This will be shared by all ran_sam instances.
 static vnl_random global_generator_;
@@ -73,12 +75,12 @@ set_sampling_params( double max_outlier_frac,
   max_outlier_frac_ = max_outlier_frac;
   desired_prob_good_ = desired_prob_good;
   max_populations_expected_ = max_populations_expected;
-  min_samples_ = min_samples; 
+  min_samples_ = min_samples;
 }
 
-void 
+void
 rgrl_initializer_ran_sam::
-set_data(rgrl_match_set_sptr                init_match_set, 
+set_data(rgrl_match_set_sptr                init_match_set,
          rgrl_scale_estimator_unwgted_sptr  scale_est,
          rgrl_view_sptr                     prior_view,
          bool should_estimate_global_region)
@@ -92,51 +94,51 @@ set_data(rgrl_match_set_sptr                init_match_set,
   should_estimate_global_region_ = should_estimate_global_region;
 }
 
-void 
+void
 rgrl_initializer_ran_sam::
-set_data(rgrl_match_set_sptr                init_match_set, 
+set_data(rgrl_match_set_sptr                init_match_set,
          rgrl_scale_estimator_unwgted_sptr  scale_est,
          rgrl_mask_box            const&    from_image_roi,
          rgrl_mask_box            const&    to_image_roi,
-         rgrl_mask_box            const&    initial_from_image_roi, 
+         rgrl_mask_box            const&    initial_from_image_roi,
          rgrl_estimator_sptr                xform_estimator,
          unsigned                           initial_resolution,
          bool should_estimate_global_region)
 {
-  rgrl_view_sptr  prior_view  = new rgrl_view( from_image_roi, to_image_roi, 
-                                               initial_from_image_roi, 
-                                               from_image_roi, xform_estimator, 
+  rgrl_view_sptr  prior_view  = new rgrl_view( from_image_roi, to_image_roi,
+                                               initial_from_image_roi,
+                                               from_image_roi, xform_estimator,
                                                0, initial_resolution );
   set_data( init_match_set, scale_est, prior_view, should_estimate_global_region );
 }
 
-void 
+void
 rgrl_initializer_ran_sam::
-set_data(rgrl_match_set_sptr                init_match_set, 
+set_data(rgrl_match_set_sptr                init_match_set,
          rgrl_scale_estimator_unwgted_sptr  scale_est,
          rgrl_mask_box       const&         from_image_roi,
          rgrl_mask_box       const&         to_image_roi,
          rgrl_estimator_sptr                xform_estimator,
          unsigned                           initial_resolution )
 {
-  rgrl_view_sptr  prior_view  = new rgrl_view( from_image_roi, to_image_roi, 
-                                               from_image_roi, from_image_roi, 
-                                               xform_estimator, 0, 
+  rgrl_view_sptr  prior_view  = new rgrl_view( from_image_roi, to_image_roi,
+                                               from_image_roi, from_image_roi,
+                                               xform_estimator, 0,
                                                initial_resolution );
   set_data( init_match_set, scale_est, prior_view, false );
 }
 
 void
 rgrl_initializer_ran_sam::
-set_data(rgrl_match_set_sptr                init_match_set, 
+set_data(rgrl_match_set_sptr                init_match_set,
          rgrl_scale_estimator_unwgted_sptr  scale_est,
          rgrl_mask_box       const&         from_image_roi,
          rgrl_estimator_sptr                xform_estimator,
          unsigned                           initial_resolution )
 {
-  rgrl_view_sptr  prior_view  = new rgrl_view( from_image_roi, from_image_roi, 
-                                               from_image_roi, from_image_roi, 
-                                               xform_estimator, 0, 
+  rgrl_view_sptr  prior_view  = new rgrl_view( from_image_roi, from_image_roi,
+                                               from_image_roi, from_image_roi,
+                                               xform_estimator, 0,
                                                initial_resolution );
   set_data( init_match_set, scale_est, prior_view, false );
 }
@@ -146,23 +148,23 @@ rgrl_initializer_ran_sam::
 next_initial( rgrl_view_sptr           & view,
               rgrl_scale_sptr          & prior_scale)
 {
-  if( called_before_ ) return false;
+  if ( called_before_ ) return false;
 
   if (!estimate()) return false;
 
   int dim = init_view_->from_image_roi().x0().size();
   rgrl_mask_box global_region( dim );
-  
+
   if ( should_estimate_global_region_ )
-    global_region =  
+    global_region =
       rgrl_util_estimate_global_region(init_view_->from_image_roi(),
                                        init_view_->to_image_roi(),
                                        init_view_->global_region(),
                                        *xform_);
   else global_region = init_view_->from_image_roi();
 
-  view = new rgrl_view(init_view_->from_image_roi(), init_view_->to_image_roi(), 
-                       init_view_->region(), global_region, 
+  view = new rgrl_view(init_view_->from_image_roi(), init_view_->to_image_roi(),
+                       init_view_->region(), global_region,
                        init_view_-> xform_estimator(),
                        xform_,
                        init_view_->resolution());
@@ -173,26 +175,26 @@ next_initial( rgrl_view_sptr           & view,
   return true;
 }
 
-bool 
+bool
 rgrl_initializer_ran_sam::
 estimate()
 {
   //
   //  Initialize the random sampling.
   //
-  // Calculate the total number of matches. In most problems, this equals 
+  // Calculate the total number of matches. In most problems, this equals
   // the match_set_->size() (number of "unique samples"). With estimation
   // problems involving non-unique correspondences, however, the total
   // number of possible correspondences generally
-  // much greater than the number of unique samples 
+  // much greater than the number of unique samples
   //
   unsigned int total_num_matches = 0;
-  for( FIter fi = match_set_->from_begin(); fi != match_set_->from_end(); ++fi ) {
+  for ( FIter fi = match_set_->from_begin(); fi != match_set_->from_end(); ++fi ) {
     total_num_matches += fi.size();
   }
   this->calc_num_samples( total_num_matches );
 
-  DebugMacro_abv( 1 , "Samples = " << samples_to_take_ <<"\n" );
+  DebugMacro_abv( 1 , "Samples = " << samples_to_take_ <<'\n' );
 
   unsigned int points_per = (int)vcl_floor((double)transform_estiamtor_->param_dof()/match_set_->num_constraints_per_match());
   vcl_vector<int> point_indices( points_per );
@@ -212,19 +214,19 @@ estimate()
   //
   for ( unsigned int s = 0; s<samples_to_take_; ++s ) {
     this->next_sample( s, total_num_matches, point_indices, points_per );
-    rgrl_match_set_sptr 
+    rgrl_match_set_sptr
       sub_match_set = this->get_matches(point_indices,total_num_matches );
     if (this->debug_flag() > 2) this->trace_sample( point_indices );
 
-    rgrl_transformation_sptr 
+    rgrl_transformation_sptr
       new_xform = transform_estiamtor_->estimate( sub_match_set, dummy_trans );
     if ( new_xform )
     {
       match_set_->remap_from_features(*new_xform);
-      rgrl_scale_sptr 
+      rgrl_scale_sptr
         new_scale = scale_estimator_->estimate_unweighted(*match_set_, dummy_scale);
 
-      if ( !scale_set || (new_scale->has_geometric_scale() && 
+      if ( !scale_set || (new_scale->has_geometric_scale() &&
                           new_scale->geometric_scale() < scale_->geometric_scale()) ) {
         scale_ = new_scale;
         xform_ = new_xform;
@@ -238,14 +240,14 @@ estimate()
     return false;
   }
 
-  DebugMacro_abv(1,"Final geometric scale = "<<scale_->geometric_scale()<<"\n");
+  DebugMacro_abv(1,"Final geometric scale = "<<scale_->geometric_scale()<<'\n');
 
   return true;
 }
 
 //
 //: Calculate number of samples --- non-unique matching estimation problems
-void 
+void
 rgrl_initializer_ran_sam::
 calc_num_samples( unsigned int num_matches )
 {
@@ -268,7 +270,8 @@ calc_num_samples( unsigned int num_matches )
     //  Calculate the probability that a sample is good.  Then, use this
     //  to determine the minimum number of samples required.
     //
-    int num_samples_to_instantiate =(int)vcl_floor((double)transform_estiamtor_->param_dof()/match_set_->num_constraints_per_match());
+    int num_samples_to_instantiate =
+      (int)vcl_floor((double)transform_estiamtor_->param_dof()/match_set_->num_constraints_per_match());
     unsigned int num_unique_matches = match_set_->from_size();
     double prob_pt_inlier = (1 - max_outlier_frac_) * num_unique_matches / double(num_matches);
     double prob_pt_good
@@ -282,9 +285,9 @@ calc_num_samples( unsigned int num_matches )
 }
 
 //: Determine the next random sample, filling in the "sample" vector.
-void 
+void
 rgrl_initializer_ran_sam::
-next_sample( unsigned int taken, unsigned int num_points, 
+next_sample( unsigned int taken, unsigned int num_points,
              vcl_vector<int>& sample,
              unsigned int points_per_sample )
 {
@@ -347,26 +350,26 @@ rgrl_match_set_sptr
 rgrl_initializer_ran_sam::
 get_matches(const vcl_vector<int>&  point_indices, unsigned int total_num_matches)
 {
-  rgrl_match_set_sptr 
+  rgrl_match_set_sptr
     sub_match_set = new rgrl_match_set( match_set_->from_feature_type(), match_set_->to_feature_type() );
 
   if ( total_num_matches == match_set_->from_size() ) { //unique matches
     for (unsigned int i = 0; i<point_indices.size(); ++i) {
       FIter fi = match_set_->from_begin() + point_indices[i];
       TIter ti = fi.begin();
-      sub_match_set->add_feature_and_match( fi.from_feature(), 
+      sub_match_set->add_feature_and_match( fi.from_feature(),
                                             fi.mapped_from_feature(),
                                             ti.to_feature() );
     }
   }
   else {
     int match_count = 0;
-    for( FIter fi = match_set_->from_begin(); fi != match_set_->from_end(); ++fi ) {
+    for ( FIter fi = match_set_->from_begin(); fi != match_set_->from_end(); ++fi ) {
       for (unsigned int i = 0; i<point_indices.size(); ++i) {
         if ( match_count <= point_indices[i] && match_count + (int)fi.size() > point_indices[i]) {
           unsigned int offset = point_indices[i] - match_count;
           TIter ti = fi.begin() + offset;
-          sub_match_set->add_feature_and_match( fi.from_feature(), 
+          sub_match_set->add_feature_and_match( fi.from_feature(),
                                                 fi.mapped_from_feature(),
                                                 ti.to_feature() );
         }
@@ -374,7 +377,7 @@ get_matches(const vcl_vector<int>&  point_indices, unsigned int total_num_matche
       match_count += fi.size();
     }
   }
-  
+
   return sub_match_set;
 }
 
@@ -384,6 +387,6 @@ trace_sample( const vcl_vector<int>& indices ) const
 {
   vcl_cout << "\nNew sample: ";
   for ( unsigned int i=0; i<indices.size(); ++i)
-    vcl_cout << " " << indices[i];
+    vcl_cout << ' ' << indices[i];
   vcl_cout << vcl_endl;
 }
