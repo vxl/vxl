@@ -75,8 +75,8 @@ compute_from_points(vcl_vector<vgl_homg_point_2d<T> > const& points)
 {
   T cx, cy, radius;
   this->center_of_mass(points, cx, cy);
-  t12_matrix_.set_identity();
-  t12_matrix_.put(0,2, -cx);    t12_matrix_.put(1,2, -cy);
+  this->t12_matrix_.set_identity();
+  this->t12_matrix_.put(0,2, -cx);    this->t12_matrix_.put(1,2, -cy);
   vcl_vector<vgl_homg_point_2d<T> > temp;
   for (typename vcl_vector<vgl_homg_point_2d<T> >::const_iterator
        pit = points.begin(); pit != points.end(); pit++)
@@ -88,16 +88,16 @@ compute_from_points(vcl_vector<vgl_homg_point_2d<T> > const& points)
   if (!this->scale_xyroot2(temp, radius))
     return false;
   T scale = 1/radius;
-  t12_matrix_.put(0,0, scale);
-  t12_matrix_.put(1,1, scale);
-  t12_matrix_.put(0,2, -cx*scale);
-  t12_matrix_.put(1,2, -cy*scale);
+  this->t12_matrix_.put(0,0, scale);
+  this->t12_matrix_.put(1,1, scale);
+  this->t12_matrix_.put(0,2, -cx*scale);
+  this->t12_matrix_.put(1,2, -cy*scale);
   return true;
 }
 
 //-----------------------------------------------------------------
 //:
-//  The normalizing transform for lines is computed from the 
+//  The normalizing transform for lines is computed from the
 //  set of points defined by the intersection of the perpendicular from
 //  the origin with the line.  Each such point is given by:
 //    $p = [-a*c, -b*c, \sqrt(a^2+b^2)]^T$
