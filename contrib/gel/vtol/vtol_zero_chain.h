@@ -141,6 +141,4 @@ protected:
   virtual vcl_vector<vtol_block*> *compute_blocks(void);
 };
 
-inline bool operator!=(vtol_zero_chain const &a, vtol_zero_chain const &b) { return !(a == b); }
-
 #endif // vtol_zero_chain_h
