@@ -5,7 +5,7 @@
 # You don't need to include anything or link anything to use it.
 
 # Assume no MFC support
-SET( HAS_MFC "YES" )
+SET( MFC_FOUND "NO" )
 # Add MFC support if win32 and not cygwin and not borland
 IF( WIN32 )
   IF( NOT CYGWIN )
