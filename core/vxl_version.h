@@ -27,8 +27,8 @@
 //: Version date.  This is updated every day.
 // Formats are year=CCYY, month=MM, day=DD
 #define VXL_VERSION_DATE_YEAR 2005
-#define VXL_VERSION_DATE_MONTH 03
-#define VXL_VERSION_DATE_DAY 31
+#define VXL_VERSION_DATE_MONTH 04
+#define VXL_VERSION_DATE_DAY 01
 
 //: This can either be "RELEASE" or "CVS"
 #define VXL_SOURCE "CVS"
