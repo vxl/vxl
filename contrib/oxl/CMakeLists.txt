@@ -14,6 +14,6 @@ SUBDIRS(mvl oxp vrml osl)
 INCLUDE(${CMAKE_SOURCE_DIR}/config.cmake/Modules/FindOpenGL.cmake)
 
 IF(HAS_OPENGL)
-  SUBDIRS(vgui xcv VPLAYER apps/vxl_vrml_viewer)
+  SUBDIRS(vgui xcv VPLAYER apps)
 ENDIF(HAS_OPENGL)
 
