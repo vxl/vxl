@@ -1,2 +1,2 @@
 #include <vnl/vnl_matrix.txx>
-VNL_MATRIX_INSTANTIATE_integral(unsigned long);
+VNL_MATRIX_INSTANTIATE(unsigned long);
