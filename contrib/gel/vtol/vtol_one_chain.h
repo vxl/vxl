@@ -4,31 +4,31 @@
 //-----------------------------------------------------------------------------
 //:
 // \file
-// \brief Represents a set of edges
+// \brief Represents a connected chain of edges
 //
 //  The vtol_one_chain class is used to represent a set of edges on a topological
 //  structure.  A vtol_one_chain consists of its inferior edges and the superiors
 //  on which it lies.  A vtol_one_chain may or may not be an ordered cycle.  If
 //  the chain of edges encloses an area, then the vtol_one_chain may be used as
-//  the boundary of a topological Face in a 3D structure.
+//  the boundary of a topological face in a 3D structure.
 //
 // \author
 //     Patricia A. Vrobel
 //
 // \verbatim
-// Modifications:
-//     JLM Dec 1995, Added timeStamp (Touch) to operations which affect bounds.
-//     JLM Dec 1995, no local method for ComputeBoundingBox
-//                   Should use edge geometry recursively to be proper.
-//                   Currently reverts to bounds on vertices from
-//                   TopologyObject::ComputeBoundingBox()
-//     JLM Jan 1998  Added method to get direction of an edge
-//     JLM Feb 1999  Added correct method for ComputeBoundingBox()
-//     PTU May 2000  ported to vxl
-//     JLM Nov 2002  Modified the compute_bounding_box method to use
-//                   box::grow_minmax_bounds for uniformity and to
-//                   avoid dependence on dimension.  Old method was strictly 2-d.
-//  Dec. 2002, Peter Vanroose - interface change: vtol objects -> smart pointers
+//  Modifications:
+//   JLM Dec 1995, Added timeStamp (Touch) to operations which affect bounds.
+//   JLM Dec 1995, no local method for ComputeBoundingBox
+//                 Should use edge geometry recursively to be proper.
+//                 Currently reverts to bounds on vertices from
+//                 TopologyObject::ComputeBoundingBox()
+//   JLM Jan 1998  Added method to get direction of an edge
+//   JLM Feb 1999  Added correct method for ComputeBoundingBox()
+//   PTU May 2000  ported to vxl
+//   JLM Nov 2002  Modified the compute_bounding_box method to use
+//                 box::grow_minmax_bounds for uniformity and to
+//                 avoid dependence on dimension.  Old method was strictly 2-d.
+//   Dec. 2002, Peter Vanroose -interface change: vtol objects -> smart pointers
 // \endverbatim
 //-----------------------------------------------------------------------------
 
@@ -45,9 +45,7 @@ class vtol_two_chain;
 
 //: The class represents a collection of edges and orientations
 
-class vtol_one_chain
-//: public vtol_topology_object,
-  : public vtol_chain
+class vtol_one_chain : public vtol_chain
 {
  public:
   //***************************************************************************
@@ -60,7 +58,7 @@ class vtol_one_chain
   //---------------------------------------------------------------------------
   //: Default constructor
   //---------------------------------------------------------------------------
-  explicit vtol_one_chain(void) { set_cycle(false); }
+  vtol_one_chain(void) { set_cycle(false); }
 
   //---------------------------------------------------------------------------
   //: Constructor from an array of edges
@@ -71,9 +69,9 @@ class vtol_one_chain
   //---------------------------------------------------------------------------
   //: Constructor from an array of edges and an array of directions
   //---------------------------------------------------------------------------
-  explicit vtol_one_chain(edge_list const&,
-                          vcl_vector<signed char> const&,
-                          bool new_is_cycle=false);
+  vtol_one_chain(edge_list const&,
+                 vcl_vector<signed char> const&,
+                 bool new_is_cycle=false);
 
   //---------------------------------------------------------------------------
   //: Pseudo copy constructor.  Deep copy.
@@ -158,10 +156,10 @@ class vtol_one_chain
 
   virtual void reverse_directions(void);
 
-  virtual vtol_one_chain *
-  copy_with_arrays(topology_list &verts, topology_list &edges) const;
+  virtual vtol_one_chain * copy_with_arrays(topology_list &verts,
+                                            topology_list &edges) const;
 
-  virtual void compute_bounding_box(void); //A local implementation
+  virtual void compute_bounding_box(void) const; //A local implementation
 
   virtual vtol_edge_sptr edge(int i) const;
   int num_edges(void) const { return numinf(); }
@@ -186,8 +184,7 @@ class vtol_one_chain
   virtual void describe_directions(vcl_ostream &strm=vcl_cout, int blanking=0) const;
   virtual void describe(vcl_ostream &strm=vcl_cout, int blanking=0) const;
 
- public:
-
+ protected:
   // \warning clients should not use these methods
   // The returned pointers must be deleted after use.
 
@@ -199,6 +196,7 @@ class vtol_one_chain
   virtual vcl_vector<vtol_two_chain*> *compute_two_chains(void);
   virtual vcl_vector<vtol_block*> *compute_blocks(void);
 
+ public:
   virtual vcl_vector<vtol_vertex*> *outside_boundary_compute_vertices(void);
   virtual vcl_vector<vtol_zero_chain*> *outside_boundary_compute_zero_chains(void);
   virtual vcl_vector<vtol_edge*> *outside_boundary_compute_edges(void);

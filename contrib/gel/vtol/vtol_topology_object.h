@@ -1,6 +1,6 @@
 // This is gel/vtol/vtol_topology_object.h
-#ifndef topology_object_h
-#define topology_object_h
+#ifndef topology_object_h_
+#define topology_object_h_
 //:
 // \file
 // \brief base class for topology objects
@@ -60,12 +60,12 @@
 //
 // \author
 //    Patricia A. Vrobel.
-//    ported by Luis E. Galup
 // \verbatim
-// Modifications
-//  JLM November 2002 - added a local bounding box method
-//  dec.2002 - Peter Vanroose - added chain_list (typedef) and cast_to_chain()
-//  dec.2002 - Peter Vanroose - link_inferior() now takes smart pointer argument
+//  Modifications
+//   ported to vxl by Luis E. Galup
+//   JLM November 2002 - added a local bounding box method
+//   dec.2002 - Peter Vanroose - added chain_list (typedef) and cast_to_chain()
+//   dec.2002 - Peter Vanroose - link_inferior() now takes smart pointer argument
 //\endverbatim
 
 #include <vtol/vtol_topology_object_sptr.h>
@@ -85,7 +85,6 @@
 #include <vtol/vtol_chain_sptr.h>
 class vtol_topology_cache;
 
-
 // Useful typedefs
 typedef vcl_vector<vtol_topology_object_sptr> topology_list;
 typedef vcl_vector<vtol_vertex_sptr>          vertex_list;
@@ -104,9 +103,29 @@ typedef vcl_vector<vtol_chain_sptr>           chain_list;
 // BAD VERSIONS OF METHODS SHOULD BE CALLED (C++ IS STUPID !)
 //*****************************************************************************
 
-class vtol_topology_object
-  : public vsol_spatial_object_2d
+class vtol_topology_object : public vsol_spatial_object_2d
 {
+  //***************************************************************************
+  // Data members
+  //***************************************************************************
+
+  //---------------------------------------------------------------------------
+  // Description: cache system
+  //---------------------------------------------------------------------------
+  vtol_topology_cache *inf_sup_cache_;
+
+ protected:
+
+  //---------------------------------------------------------------------------
+  // Description: array of superiors
+  //---------------------------------------------------------------------------
+  vcl_list<vtol_topology_object*> superiors_;
+
+  //---------------------------------------------------------------------------
+  // Description: array of inferiors
+  //---------------------------------------------------------------------------
+  topology_list inferiors_;
+
  public:
   enum vtol_topology_object_type
   { TOPOLOGY_NO_TYPE=0,
@@ -133,13 +152,13 @@ class vtol_topology_object
   //---------------------------------------------------------------------------
   //: Default constructor
   //---------------------------------------------------------------------------
-  explicit vtol_topology_object(void);
+  vtol_topology_object(void);
 
   //---------------------------------------------------------------------------
   //: Constructor with given sizes for arrays of inferiors and superiors
   //---------------------------------------------------------------------------
-  explicit vtol_topology_object(int num_inferiors,
-                                int num_superiors);
+  vtol_topology_object(int num_inferiors, int num_superiors);
+
  protected:
   //---------------------------------------------------------------------------
   //: Destructor
@@ -412,77 +431,57 @@ class vtol_topology_object
   //: print and describe the objects
   //---------------------------------------------------------------------------
   virtual void print(vcl_ostream &strm=vcl_cout) const;
-  virtual void describe_inferiors(vcl_ostream &strm=vcl_cout,
-                                  int blanking=0) const;
-  virtual void describe_superiors(vcl_ostream &strm=vcl_cout,
-                                  int blanking=0) const;
-  virtual void describe(vcl_ostream &strm=vcl_cout,
-                        int blanking=0) const;
+  void describe_inferiors(vcl_ostream &strm=vcl_cout, int blanking=0) const;
+  void describe_superiors(vcl_ostream &strm=vcl_cout, int blanking=0) const;
+  virtual void describe(vcl_ostream &strm=vcl_cout, int blanking=0) const;
+
+  virtual void compute_bounding_box(void) const; //A local implementation
 
   //---------------------------------------------------------------------------
   //: compute lists of vertices
-  // WARNING should not be used by clients
+  // \warning should not be used by clients
   //---------------------------------------------------------------------------
   virtual vcl_vector<vtol_vertex*> *compute_vertices(void);
 
   //---------------------------------------------------------------------------
   //: compute lists of zero chains
-  // WARNING should not be used by clients
+  // \warning should not be used by clients
   //---------------------------------------------------------------------------
   virtual vcl_vector<vtol_zero_chain*> *compute_zero_chains(void);
 
   //---------------------------------------------------------------------------
   //: compute lists of edges
-  // WARNING should not be used by clients
+  // \warning should not be used by clients
   //---------------------------------------------------------------------------
   virtual vcl_vector<vtol_edge*> *compute_edges(void);
 
   //---------------------------------------------------------------------------
   //: compute lists of one chains
-  // WARNING should not be used by clients
+  // \warning should not be used by clients
   //---------------------------------------------------------------------------
   virtual vcl_vector<vtol_one_chain*> *compute_one_chains(void);
 
   //---------------------------------------------------------------------------
   //: compute lists of faces
-  // WARNING should not be used by clients
+  // \warning should not be used by clients
   //---------------------------------------------------------------------------
   virtual vcl_vector<vtol_face*> *compute_faces(void);
 
   //---------------------------------------------------------------------------
   //: compute lists of two chains
-  // WARNING should not be used by clients
+  // \warning should not be used by clients
   //---------------------------------------------------------------------------
   virtual vcl_vector<vtol_two_chain*> *compute_two_chains(void);
 
   //---------------------------------------------------------------------------
   //: compute lists of blocks
-  // WARNING should not be used by clients
+  // \warning should not be used by clients
   //---------------------------------------------------------------------------
   virtual vcl_vector<vtol_block*> *compute_blocks(void);
 
-  virtual void compute_bounding_box(void);//A local implementation
-
- protected:
-
-  //---------------------------------------------------------------------------
-  // Description: array of superiors
-  //---------------------------------------------------------------------------
-  vcl_list<vtol_topology_object*> superiors_;
-
-  //---------------------------------------------------------------------------
-  // Description: array of inferiors
-  //---------------------------------------------------------------------------
-  topology_list inferiors_;
-
  private:
-  //---------------------------------------------------------------------------
-  // Description: cache system
-  //---------------------------------------------------------------------------
-  vtol_topology_cache *inf_sup_cache_;
-
-  // declare a freind class
+  // declare a friend class
   friend class vtol_topology_cache;
 };
 
-#endif // topology_object_h
+#endif // topology_object_h_

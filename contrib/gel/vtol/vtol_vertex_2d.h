@@ -1,25 +1,25 @@
 // This is gel/vtol/vtol_vertex_2d.h
-#ifndef vtol_vertex_2d_h
-#define vtol_vertex_2d_h
+#ifndef vtol_vertex_2d_h_
+#define vtol_vertex_2d_h_
 //:
 // \file
-// \brief Topological container for a spatial point
+// \brief Topological container for a spatial point, with 2d geometry (location)
 //
 //  The vtol_vertex_2d class is used to represent either a 2D or 2D point on
-//  a topological structure.  A vtol_vertex_2d maintains a pointer to the IUPoint
-//  which is the actual spatial point.
+//  a topological structure.  A vtol_vertex_2d maintains a pointer to the point
+//  which is the actual spatial location.
 //
 // \verbatim
-// Modifications:
-//  JLM December 1995, Added timeStamp (touch) to
-//                     operations which affect bounds.
+//  Modifications:
+//   JLM December 1995, Added timeStamp (touch) to
+//                      operations which affect bounds.
 //
-//  JLM October 1996,  Added the method EuclideanDistance(vtol_vertex_2d &)
-//     to permit Charlie Rothwell's Polyhedra code to be more
-//     generic.  Note this is distance, NOT squared distance.
-//  LEG May 2000. ported to vxl
-//  JLM November 2002 - added local bounding_box method
-//  Dec. 2002, Peter Vanroose - interface change: vtol objects -> smart pointers
+//   JLM October 1996,  Added the method EuclideanDistance(vtol_vertex_2d &)
+//      to permit Charlie Rothwell's Polyhedra code to be more
+//      generic.  Note this is distance, NOT squared distance.
+//   LEG May 2000. ported to vxl
+//   JLM November 2002 - added local bounding_box method
+//   Dec. 2002, Peter Vanroose -interface change: vtol objects -> smart pointers
 // \endverbatim
 
 #include <vnl/vnl_double_2.h>
@@ -27,9 +27,18 @@
 #include <vtol/vtol_vertex.h>
 #include <vtol/vtol_vertex_2d_sptr.h>
 
-class vtol_vertex_2d
-  : public vtol_vertex
+class vtol_vertex_2d : public vtol_vertex
 {
+  //***************************************************************************
+  // Data members
+  //***************************************************************************
+
+ protected:
+  //---------------------------------------------------------------------------
+  // Description: point associated to the vertex
+  //---------------------------------------------------------------------------
+  vsol_point_2d_sptr point_;
+
  public:
   //***************************************************************************
   // Initialization
@@ -38,7 +47,7 @@ class vtol_vertex_2d
   //---------------------------------------------------------------------------
   //: Default constructor
   //---------------------------------------------------------------------------
-  explicit vtol_vertex_2d(void);
+  vtol_vertex_2d(void);
 
   //---------------------------------------------------------------------------
   //: Constructor from a point (the point is copied, not stored)
@@ -54,8 +63,7 @@ class vtol_vertex_2d
   //---------------------------------------------------------------------------
   //: Constructor from abscissa `new_x' and ordinate `new_y' of the point
   //---------------------------------------------------------------------------
-  explicit vtol_vertex_2d(const double new_x,
-                          const double new_y);
+  vtol_vertex_2d(double new_x, double new_y);
 
   //---------------------------------------------------------------------------
   //: Pseudo copy constructor.  Deep copy.
@@ -65,7 +73,7 @@ class vtol_vertex_2d
   //---------------------------------------------------------------------------
   //: Copy constructor. Copy the point but not the links.  Deprecated.
   //---------------------------------------------------------------------------
-  explicit vtol_vertex_2d(const vtol_vertex_2d &other);
+  vtol_vertex_2d(const vtol_vertex_2d &other);
  public:
   //---------------------------------------------------------------------------
   //: Destructor
@@ -158,12 +166,7 @@ class vtol_vertex_2d
 
   void print(vcl_ostream &strm=vcl_cout) const;
   void describe(vcl_ostream &strm=vcl_cout, int blanking=0) const;
-  virtual void compute_bounding_box(void);//A local implementation
- protected:
-  //---------------------------------------------------------------------------
-  // Description: point associated to the vertex
-  //---------------------------------------------------------------------------
-  vsol_point_2d_sptr point_;
+  virtual void compute_bounding_box(void) const; //A local implementation
 
   //:  copy the geometry
   virtual void copy_geometry(const vtol_vertex &other);
@@ -172,4 +175,4 @@ class vtol_vertex_2d
   virtual bool compare_geometry(const vtol_vertex &other) const;
 };
 
-#endif // vtol_vertex_2d_h
+#endif // vtol_vertex_2d_h_

@@ -1,30 +1,30 @@
 // This is gel/vtol/vtol_two_chain.h
-#ifndef vtol_two_chain_h
-#define vtol_two_chain_h
+#ifndef vtol_two_chain_h_
+#define vtol_two_chain_h_
 //-----------------------------------------------------------------------------
 //:
 // \file
-// \brief Represents a set of vtol_face
+// \brief Represents a connected chain of faces
 //
-//  The vtol_two_chain class is used to represent a set of vtol_faces on a topological
-//  structure.  A vtol_two_chain consists of its inferior onechains and the superiors
+// The vtol_two_chain class is used to represent a set of faces on a topological
+//  structure. A vtol_two_chain consists of its inferior faces and the superiors
 //  on which it lies.  A vtol_two_chain may or may not be an ordered cycle.  If
-//  the chain of vtol_face encloses a volume, then the vtol_two_chain may be used as
+//  the chain of faces encloses a volume, then the vtol_two_chain may be used as
 //  the boundary of a topological vtol_block in a 3D structure.
 //
 // \author
 //     Patricia A. Vrobel
 //
 // \verbatim
-// Modifications:
-//  JLM December 1995, Added timeStamp (Touch) to
-//      operations which affect bounds.
-//  JLM December 1995, no local method for ComputeBoundingBox
-//      Should use vtol_face geometry recursively to be proper.
-//      Currently reverts to bounds on vertices from
-//      vtol_topology_object::ComputeBoundingBox()
-//  PTU ported to vxl May 2000
-//  Dec. 2002, Peter Vanroose - interface change: vtol objects -> smart pointers
+//  Modifications:
+//   JLM December 1995, Added timeStamp (Touch) to
+//       operations which affect bounds.
+//   JLM December 1995, no local method for ComputeBoundingBox
+//       Should use vtol_face geometry recursively to be proper.
+//       Currently reverts to bounds on vertices from
+//       vtol_topology_object::ComputeBoundingBox()
+//   PTU May 2000 ported to vxl
+//   Dec. 2002, Peter Vanroose -interface change: vtol objects -> smart pointers
 // \endverbatim
 //-----------------------------------------------------------------------------
 
@@ -38,8 +38,7 @@ class vtol_one_chain;
 class vtol_face;
 class vtol_block;
 
-class vtol_two_chain
-  : public vtol_chain
+class vtol_two_chain : public vtol_chain
 {
  public:
   //***************************************************************************
@@ -52,7 +51,7 @@ class vtol_two_chain
   //---------------------------------------------------------------------------
   //: Default constructor
   //---------------------------------------------------------------------------
-  explicit vtol_two_chain(void) { is_cycle_=false; }
+  vtol_two_chain(void) { is_cycle_=false; }
 
   //---------------------------------------------------------------------------
   //: Constructor
@@ -67,9 +66,9 @@ class vtol_two_chain
   //---------------------------------------------------------------------------
   //: Constructor
   //---------------------------------------------------------------------------
-  explicit vtol_two_chain(face_list const&,
-                          vcl_vector<signed char> const&,
-                          bool new_is_cycle=false);
+  vtol_two_chain(face_list const&,
+                 vcl_vector<signed char> const&,
+                 bool new_is_cycle=false);
 
   //---------------------------------------------------------------------------
   //: Pseudo copy constructor.  Deep copy.
@@ -92,9 +91,8 @@ class vtol_two_chain
   //---------------------------------------------------------------------------
   virtual vsol_spatial_object_2d_sptr clone(void) const;
 
-  virtual vtol_two_chain *
-  copy_with_arrays(topology_list &verts,
-                   topology_list &edges) const;
+  virtual vtol_two_chain * copy_with_arrays(topology_list &verts,
+                                            topology_list &edges) const;
   // Accessors
 
   //---------------------------------------------------------------------------
@@ -175,7 +173,8 @@ class vtol_two_chain
   // The returned pointers must be deleted after use.
   virtual two_chain_list *superior_two_chains(void);
 
-  // WARNING these methods should not be used by clients
+ protected:
+  // \warning these methods should not be used by clients
   // The returned pointers must be deleted after use.
 
   virtual vcl_vector<vtol_vertex*> *compute_vertices(void);
@@ -186,6 +185,7 @@ class vtol_two_chain
   virtual vcl_vector<vtol_two_chain*> *compute_two_chains(void);
   virtual vcl_vector<vtol_block*> *compute_blocks(void);
 
+ public:
   virtual vcl_vector<vtol_vertex*> *outside_boundary_compute_vertices(void);
   virtual vcl_vector<vtol_zero_chain*> *outside_boundary_compute_zero_chains(void);
   virtual vcl_vector<vtol_edge*> *outside_boundary_compute_edges(void);
@@ -208,4 +208,4 @@ class vtol_two_chain
   virtual bool break_into_connected_components(topology_list &components);
 };
 
-#endif // vtol_two_chain_h
+#endif // vtol_two_chain_h_

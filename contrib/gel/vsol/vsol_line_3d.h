@@ -1,20 +1,21 @@
-#ifndef vsol_line_3d_h
-#define vsol_line_3d_h
+// This is gel/vsol/vsol_line_3d.h
+#ifndef vsol_line_3d_h_
+#define vsol_line_3d_h_
 //*****************************************************************************
 //:
-//  \file
+// \file
 // \brief Straight line segment in a 3D space.
 //
 // The direction gives the orientation and the length of the segment
 //
-// \author
-// François BERTEL
+// \author François BERTEL
+// \date   2000/05/03
 //
 // \verbatim
-// Modifications
-//  2001/07/03 Peter Vanroose  Replaced vnl_double_3 by vgl_vector_3d
-//  2000/06/17 Peter Vanroose  Implemented all operator==()s and type info
-//  2000/05/03 François BERTEL Creation
+//  Modifications
+//   2000/05/03 François BERTEL Creation
+//   2000/06/17 Peter Vanroose  Implemented all operator==()s and type info
+//   2001/07/03 Peter Vanroose  Replaced vnl_double_3 by vgl_vector_3d
 // \endverbatim
 //*****************************************************************************
 
@@ -27,24 +28,38 @@
 #include <vgl/vgl_vector_3d.h>
 #include <vgl/vgl_homg_line_3d_2_points.h>
 
-class vsol_line_3d
-  :public vsol_curve_3d
+class vsol_line_3d : public vsol_curve_3d
 {
+  //***************************************************************************
+  // Data members
+  //***************************************************************************
+
+  //---------------------------------------------------------------------------
+  // Description: First point of the straight line segment
+  //---------------------------------------------------------------------------
+  vsol_point_3d_sptr p0_;
+
+  //---------------------------------------------------------------------------
+  // Description: Last point of the straight line segment
+  //---------------------------------------------------------------------------
+  vsol_point_3d_sptr p1_;
+
+ public:
   //***************************************************************************
   // Initialization
   //***************************************************************************
-public:
+
   //---------------------------------------------------------------------------
   //: Constructor from the direction and the middle point
   //---------------------------------------------------------------------------
-  explicit vsol_line_3d(const vgl_vector_3d<double> &new_direction,
-                        const vsol_point_3d_sptr &new_middle);
+  vsol_line_3d(const vgl_vector_3d<double> &new_direction,
+               const vsol_point_3d_sptr &new_middle);
 
   //---------------------------------------------------------------------------
   //: Constructor from the first and the last point of the straight line
   //---------------------------------------------------------------------------
-  explicit vsol_line_3d(const vsol_point_3d_sptr &new_p0,
-                        const vsol_point_3d_sptr &new_p1);
+  vsol_line_3d(const vsol_point_3d_sptr &new_p0,
+               const vsol_point_3d_sptr &new_p1);
 
   //---------------------------------------------------------------------------
   //: Copy constructor
@@ -75,12 +90,12 @@ public:
   //---------------------------------------------------------------------------
   //: Middle point of the straight line segment
   //---------------------------------------------------------------------------
-  virtual vsol_point_3d_sptr middle(void) const;
+  vsol_point_3d_sptr middle(void) const;
 
   //---------------------------------------------------------------------------
   //: direction of the straight line segment. Has to be deleted manually
   //---------------------------------------------------------------------------
-  virtual vgl_vector_3d<double> direction(void) const;
+  vgl_vector_3d<double> direction(void) const;
 
   //---------------------------------------------------------------------------
   //: First point of the straight line segment
@@ -119,7 +134,7 @@ public:
   //---------------------------------------------------------------------------
   //: Compute the bounding box of `this'
   //---------------------------------------------------------------------------
-  virtual void compute_bounding_box(void);
+  virtual void compute_bounding_box(void) const;
 
   //---------------------------------------------------------------------------
   //: Return the length of `this'
@@ -145,7 +160,7 @@ public:
   //  If p0 and p1 are equal then the direction is set to (1,0,0)
   //  REQUIRE: new_length>=0
   //---------------------------------------------------------------------------
-  virtual void set_length(const double new_length);
+  void set_length(const double new_length);
 
   //***************************************************************************
   // Basic operations
@@ -160,23 +175,7 @@ public:
   //: Return the tangent to `this' at `p'. Has to be deleted manually
   //  REQUIRE: in(p)
   //---------------------------------------------------------------------------
-  virtual vgl_homg_line_3d_2_points<double> *
-  tangent_at_point(const vsol_point_3d_sptr &p) const;
-
-  //***************************************************************************
-  // Implementation
-  //***************************************************************************
-private:
-
-  //---------------------------------------------------------------------------
-  // Description: First point of the straight line segment
-  //---------------------------------------------------------------------------
-  vsol_point_3d_sptr p0_;
-
-  //---------------------------------------------------------------------------
-  // Description: Last point of the straight line segment
-  //---------------------------------------------------------------------------
-  vsol_point_3d_sptr p1_;
+  virtual vgl_homg_line_3d_2_points<double>* tangent_at_point(const vsol_point_3d_sptr &p) const;
 };
 
-#endif // vsol_line_3d_h
+#endif // vsol_line_3d_h_

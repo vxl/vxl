@@ -8,7 +8,7 @@
 //
 //  The vtol_chain class is a base class of vtol_one_chain and vtol_two_chain.
 //  It provides the data and methods for creating the doubly linked subhierarchy
-//  of holes in Blocks and Faces respectively.  (Warning:: this class and
+//  of holes in blocks and faces respectively.  (Warning: this class and
 //  philosophy of holes may not be around after evaluation of the necessity
 //  for Boolean operations....pav).
 //
@@ -29,9 +29,26 @@
 // OTHERWISE BAD VERSIONS OF METHODS SHOULD BE CALLED (C++ IS STUPID !)
 //*****************************************************************************
 
-class vtol_chain
-  :public vtol_topology_object
+class vtol_chain : public vtol_topology_object
 {
+ protected:
+  //***************************************************************************
+  // Data members
+  //***************************************************************************
+
+  //---------------------------------------------------------------------------
+  // Description: array of the inferiors
+  //---------------------------------------------------------------------------
+  chain_list chain_inferiors_;
+
+  //---------------------------------------------------------------------------
+  // Description: array of the superiors
+  //---------------------------------------------------------------------------
+  vcl_list<vtol_chain*> chain_superiors_;
+
+  bool is_cycle_; // True if `this' is a connected chain
+  vcl_vector<signed char> directions_;
+
  public:
   //***************************************************************************
   // Initialization
@@ -40,7 +57,7 @@ class vtol_chain
   //---------------------------------------------------------------------------
   //: Default constructor
   //---------------------------------------------------------------------------
-  explicit vtol_chain(void);
+  vtol_chain(void);
 
   //---------------------------------------------------------------------------
   //: Destructor
@@ -83,14 +100,12 @@ class vtol_chain
   //---------------------------------------------------------------------------
   //: Is `chain_inf_sup' type valid for `this' ?
   //---------------------------------------------------------------------------
-  virtual bool
-  valid_chain_type(vtol_chain_sptr chain_inf_sup) const = 0;
+  virtual bool valid_chain_type(vtol_chain_sptr chain_inf_sup) const = 0;
 
   //---------------------------------------------------------------------------
   //: Is `inferior' already an inferior of `this' ?
   //---------------------------------------------------------------------------
-  virtual bool
-  is_chain_inferior(vtol_chain_sptr chain_inferior) const;
+  virtual bool is_chain_inferior(vtol_chain_sptr chain_inferior) const;
 
   //---------------------------------------------------------------------------
   //: Is `superior' already a superior of `this' ?
@@ -174,23 +189,6 @@ class vtol_chain
   // Task: Reset the chain
   //---------------------------------------------------------------------------
   virtual void clear(void);
-
-  //***************************************************************************
-  // Implementation
-  //***************************************************************************
- protected:
-  //---------------------------------------------------------------------------
-  // Description: array of the inferiors
-  //---------------------------------------------------------------------------
-  chain_list chain_inferiors_;
-
-  //---------------------------------------------------------------------------
-  // Description: array of the superiors
-  //---------------------------------------------------------------------------
-  vcl_list<vtol_chain*> chain_superiors_;
-
-  bool is_cycle_; // True if `this' is a connected chain
-  vcl_vector<signed char> directions_;
 };
 
 #endif // vtol_chain_h_

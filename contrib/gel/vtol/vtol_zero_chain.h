@@ -1,24 +1,24 @@
 // This is gel/vtol/vtol_zero_chain.h
-#ifndef vtol_zero_chain_h
-#define vtol_zero_chain_h
+#ifndef vtol_zero_chain_h_
+#define vtol_zero_chain_h_
 //-----------------------------------------------------------------------------
 //:
 // \file
 // \brief Represents a set of vertices
 //
-//  The vtol_zero_chain class is used to represent a set of Vertices on
+//  The vtol_zero_chain class is used to represent a set of vertices on
 //  a topological structure. A vtol_zero_chain maintains only the inferiors and
-//  superiors. It is the topological inferior of an Edge.
+//  superiors, not the geometry. It is the topological inferior of an edge.
 //
 // \author
 //     Patricia A. Vrobel
 //
 // \verbatim
-// Modifications:
+//  Modifications:
 //   JLM Dec 1995, Added timeStamp (Touch) to operations which affect bounds.
 //   Peter Vanroose - 02-26-97 Added implementation for virtual Transform()
-//   PTU - ported to vxl may 2000
-//  Dec. 2002, Peter Vanroose - interface change: vtol objects -> smart pointers
+//   PTU may 2000 - ported to vxl
+//   Dec. 2002, Peter Vanroose -interface change: vtol objects -> smart pointers
 // \endverbatim
 //-----------------------------------------------------------------------------
 
@@ -35,8 +35,7 @@ class vtol_face;
 class vtol_two_chain;
 class vtol_block;
 
-class vtol_zero_chain
-  : public vtol_topology_object
+class vtol_zero_chain : public vtol_topology_object
 {
  public:
   //***************************************************************************
@@ -46,7 +45,7 @@ class vtol_zero_chain
   //---------------------------------------------------------------------------
   //: Default constructor. Empty zero-chain
   //---------------------------------------------------------------------------
-  explicit vtol_zero_chain(void) {}
+  vtol_zero_chain(void) {}
 
   //---------------------------------------------------------------------------
   //: Constructor from two vertices (to make edge creation easier)
@@ -59,15 +58,14 @@ class vtol_zero_chain
                   vtol_vertex_2d_sptr const& v2);
 // private:
   // Deprecated
-  explicit vtol_zero_chain(vtol_vertex &v1,
-                           vtol_vertex &v2);
+  vtol_zero_chain(vtol_vertex &v1, vtol_vertex &v2);
+
  public:
   //---------------------------------------------------------------------------
   //: Constructor from an array of vertices
   //  REQUIRE: new_vertices.size()>0
   //---------------------------------------------------------------------------
-  explicit
-  vtol_zero_chain(const vertex_list &new_vertices);
+  explicit vtol_zero_chain(const vertex_list &new_vertices);
 
   //---------------------------------------------------------------------------
   //: Pseudo copy constructor. Deep copy.
@@ -148,7 +146,7 @@ class vtol_zero_chain
   virtual void describe(vcl_ostream &strm=vcl_cout,
                         int blanking=0) const;
 
-  // : Warning - should not be used by clients
+  //: \warning these should not be used by clients
  protected:
   virtual vcl_vector<vtol_vertex*> *compute_vertices(void);
   virtual vcl_vector<vtol_edge*> *compute_edges(void);
@@ -159,4 +157,4 @@ class vtol_zero_chain
   virtual vcl_vector<vtol_block*> *compute_blocks(void);
 };
 
-#endif // vtol_zero_chain_h
+#endif // vtol_zero_chain_h_

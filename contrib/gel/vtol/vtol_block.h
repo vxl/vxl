@@ -1,26 +1,26 @@
 // This is gel/vtol/vtol_block.h
-#ifndef vtol_block_h
-#define vtol_block_h
+#ifndef vtol_block_h_
+#define vtol_block_h_
 //-----------------------------------------------------------------------------
 //:
 // \file
 // \brief Highest node in a 3D topological structure
 //
 //   The vtol_block class is used to represent the highest node in a 3D topological
-//   structure. A vtol_block consists of its inferior vtol_two_chains which must be
+//   structure. A vtol_block consists of its inferior 2-chains which must be
 //   cyclic, and no topological superiors.
 //
 // \author
 //     Patricia A. Vrobel
 //
 // \verbatim
-// Modifications:
-//     JLM Dec 1995, Added timeStamp (Touch) to operations which affect bounds.
-//     JLM Dec 1995  (Need to decide proper policy for curved volumes
-//                   and possibly inconsistent polyhedra volume geometry)
-//     JNS Dec 1998, Added is_within functions (used in 2D display of a block,
-//                   these functions must be wrong for 3D use)
-//  Dec. 2002, Peter Vanroose - interface change: vtol objects -> smart pointers
+//  Modifications:
+//   JLM Dec 1995, Added timeStamp (Touch) to operations which affect bounds.
+//   JLM Dec 1995  (Need to decide proper policy for curved volumes
+//                 and possibly inconsistent polyhedra volume geometry)
+//   JNS Dec 1998, Added is_within functions (used in 2D display of a block,
+//                 these functions must be wrong for 3D use)
+//   Dec. 2002, Peter Vanroose -interface change: vtol objects -> smart pointers
 // \endverbatim
 //-----------------------------------------------------------------------------
 
@@ -33,8 +33,7 @@ class vtol_face;
 class vtol_two_chain;
 #include <vtol/vtol_two_chain.h>
 
-class vtol_block
-  : public vtol_topology_object
+class vtol_block : public vtol_topology_object
 {
  public:
   //***************************************************************************
@@ -44,7 +43,7 @@ class vtol_block
   //---------------------------------------------------------------------------
   //: Default constructor
   //---------------------------------------------------------------------------
-  explicit vtol_block(void) {}
+  vtol_block(void) {}
 
   //---------------------------------------------------------------------------
   //: Constructor from a two-chain (inferior)
@@ -131,7 +130,8 @@ class vtol_block
   virtual face_list *outside_boundary_faces(void);
   virtual two_chain_list *outside_boundary_two_chains(void);
 
-  // WARNING these methods should not be used by clients
+ protected:
+  // \warning these methods should not be used by clients
   // The returned pointers must be deleted after use.
 
   virtual vcl_vector<vtol_vertex *> *compute_vertices(void);
@@ -142,17 +142,14 @@ class vtol_block
   virtual vcl_vector<vtol_two_chain *> *compute_two_chains(void);
   virtual vcl_vector<vtol_block *> *compute_blocks(void);
 
-  virtual
-  vcl_vector<vtol_vertex *> *outside_boundary_compute_vertices(void);
-  virtual
-  vcl_vector<vtol_zero_chain *> *outside_boundary_compute_zero_chains(void);
+  virtual vcl_vector<vtol_vertex *> *outside_boundary_compute_vertices(void);
+  virtual vcl_vector<vtol_zero_chain *> *outside_boundary_compute_zero_chains(void);
   virtual vcl_vector<vtol_edge *> *outside_boundary_compute_edges(void);
-  virtual
-  vcl_vector<vtol_one_chain *> *outside_boundary_compute_one_chains(void);
+  virtual vcl_vector<vtol_one_chain *> *outside_boundary_compute_one_chains(void);
   virtual vcl_vector<vtol_face *> *outside_boundary_compute_faces(void);
-  virtual
-  vcl_vector<vtol_two_chain *> *outside_boundary_compute_two_chains(void);
+  virtual vcl_vector<vtol_two_chain *> *outside_boundary_compute_two_chains(void);
 
+ public:
   virtual two_chain_list *hole_cycles(void) const;
 
   //: Utility and Editing Functions
@@ -169,4 +166,4 @@ class vtol_block
                         int blanking=0) const;
 };
 
-#endif // vtol_block_h
+#endif // vtol_block_h_

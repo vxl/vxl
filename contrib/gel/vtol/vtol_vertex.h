@@ -1,25 +1,25 @@
 // This is gel/vtol/vtol_vertex.h
-#ifndef vtol_vertex_h
-#define vtol_vertex_h
+#ifndef vtol_vertex_h_
+#define vtol_vertex_h_
 //:
 // \file
-// \brief Topological container for a spatial point
+// \brief Topological container for a spatial point, without geometry info
 //
 //  The vtol_vertex class is used to represent either a 2D or 3D point on
 //  a topological structure.  A vtol_vertex does not actually maintain a pointer
 //  to the vsol_point which is the actual spatial point, since this could either
-//  be a vsol_point_2d or a vsol_point_3d.
+//  be a vsol_point_2d or a vsol_point_3d.  See vtol_vertex_2d for this purpose.
 //
 // \verbatim
-// Modifications:
-//  JLM December 1995, Added timeStamp (touch) to
-//                     operations which affect bounds.
+//  Modifications:
+//   JLM December 1995, Added timeStamp (touch) to
+//                      operations which affect bounds.
 //
-//  JLM October 1996,  Added the method EuclideanDistance(vtol_vertex &)
-//     to permit Charlie Rothwell's Polyhedra code to be more
-//     generic.  Note this is distance, NOT squared distance.
-//  LEG May 2000. ported to vxl
-//  Dec. 2002, Peter Vanroose - interface change: vtol objects -> smart pointers
+//   JLM October 1996,  Added the method EuclideanDistance(vtol_vertex &)
+//      to permit Charlie Rothwell's Polyhedra code to be more
+//      generic.  Note this is distance, NOT squared distance.
+//   LEG May 2000. ported to vxl
+//   Dec. 2002, Peter Vanroose -interface change: vtol objects -> smart pointers
 // \endverbatim
 
 #include "vtol_topology_object.h"
@@ -32,8 +32,7 @@ class vtol_face;
 class vtol_two_chain;
 class vtol_block;
 
-class vtol_vertex
-  : public vtol_topology_object
+class vtol_vertex : public vtol_topology_object
 {
  public:
   //***************************************************************************
@@ -43,7 +42,7 @@ class vtol_vertex
   //---------------------------------------------------------------------------
   //: Default constructor
   //---------------------------------------------------------------------------
-  explicit vtol_vertex(void) {}
+  vtol_vertex(void) {}
 
   //---------------------------------------------------------------------------
   //: Destructor
@@ -134,15 +133,13 @@ class vtol_vertex
   void print(vcl_ostream &strm=vcl_cout) const;
   void describe(vcl_ostream &strm=vcl_cout, int blanking=0) const;
 
- protected:
-
   //: have the inherited classes copy the geometry
   virtual void copy_geometry(const vtol_vertex &other)=0;
   virtual bool compare_geometry(const vtol_vertex &other) const =0;
 
- public:
+ protected:
+  // \warning these should not be used by clients
 
-  // : Warning - should not be used by clients
   virtual vcl_vector<vtol_vertex*> *compute_vertices(void);
   virtual vcl_vector<vtol_edge*> *compute_edges(void);
   virtual vcl_vector<vtol_zero_chain*> *compute_zero_chains(void);
@@ -152,4 +149,4 @@ class vtol_vertex
   virtual vcl_vector<vtol_block*> *compute_blocks(void);
 };
 
-#endif // vtol_vertex_h
+#endif // vtol_vertex_h_
