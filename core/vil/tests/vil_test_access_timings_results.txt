@@ -5,7 +5,10 @@ Method3: for (unsigned i=0;i<image.ni();++i,pixel+=image.istep()) *pixel = vxl_b
 Method4: for (unsigned i=0;i<ni;++i,pixel+=istep) *pixel = vxl_byte(i+j+3*p);
 Method5: for (unsigned i=ni;i>ni;--i,pixel-=istep) *pixel = vxl_byte(i-1+j+3*p);
 Method6: for (unsigned i=0;i<ni;++i) row[i] = vxl_byte(i+j+3*p);
-  // Method 6 simulates lookup method of original vil
+  // Method 6 simulates partial lookup method of original vil
+Method7: for (unsigned i=0;i<ni;++i) im_data[p][j][i] = vxl_byte(i+j+3*p);
+  // Method 7 simulates complete lookup method of original vil
+Method8: for (unsigned i=0;i<ni;++i) row[i*istep] = vxl_byte(i+j+3*p);
 
 Times to fill a 256 x 256 image of 3 planes (in microsecs) [Range= 0.5(max-min)]
 
@@ -26,12 +29,24 @@ Method 5) Mean: 4810us  +/-50us
 Method 6) Mean: 4390us  +/-100us
 
 Using -O2:
-Method 1) Mean: 5920us  +/-100us
-Method 2) Mean: 6430us  +/-100us
-Method 3) Mean: 1850us  +/-50us
-Method 4) Mean: 2210us  +/-50us
-Method 5) Mean: 2090us  +/-50us
-Method 6) Mean: 1200us  +/-100us
+Images of BYTE
+Method 1) Mean: 6180us  +/-2250us
+Method 2) Mean: 6340us  +/-650us
+Method 3) Mean: 1860us  +/-100us
+Method 4) Mean: 2220us  +/-100us
+Method 5) Mean: 2260us  +/-50us
+Method 6) Mean: 1190us  +/-50us
+Method 7) Mean: 1880us  +/-100us
+Method 8) Mean: 2230us  +/-100us
+Images of FLOAT
+Method 1) Mean: 14220us  +/-500us
+Method 2) Mean: 15540us  +/-900us
+Method 3) Mean: 13750us  +/-600us
+Method 4) Mean: 11120us  +/-350us
+Method 5) Mean: 11340us  +/-200us
+Method 6) Mean: 11520us  +/-100us
+Method 7) Mean: 11500us  +/-100us
+Method 8) Mean: 10940us  +/-50us
 
 Using -O3:
 Method 1) Mean: 5950us  +/-200us
