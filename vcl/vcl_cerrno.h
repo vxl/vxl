@@ -13,8 +13,8 @@
 #endif
 
 #ifdef linux // bug fix: errno.h erroneously declares __errno_location() as C++
-extern "C" int* __errno_location__Fv() { return __errno_location(); }
-extern "C" int* _Z16__errno_locationv() { return __errno_location(); }
+extern "C" inline int* __errno_location__Fv() { return __errno_location(); }
+extern "C" inline int* _Z16__errno_locationv() { return __errno_location(); }
 #endif
 
 #endif // vcl_cerrno_h_
