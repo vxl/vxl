@@ -24,8 +24,8 @@ struct less_cost
   { return x->cost_ < y->cost_; }
 };
 
-void bdgl_curve_matching :: initialize_matrix(vcl_vector<bdgl_tracker_curve> new_curves,
-                                              vcl_vector<bdgl_tracker_curve> old_curves)
+void bdgl_curve_matching::initialize_matrix(vcl_vector<bdgl_tracker_curve> new_curves,
+                                            vcl_vector<bdgl_tracker_curve> old_curves)
 {
   for (unsigned int i=0;i<new_curves.size();++i)
   {
@@ -42,9 +42,9 @@ void bdgl_curve_matching :: initialize_matrix(vcl_vector<bdgl_tracker_curve> new
 }
 
 
-void bdgl_curve_matching :: match_prev_tail_curve(bdgl_tracker_curve_sptr parent_curve,
-                                                  bdgl_tracker_curve_sptr &tail_curve,
-                                                  vcl_vector<bdgl_tracker_curve_sptr> * new_curves)
+void bdgl_curve_matching::match_prev_tail_curve(bdgl_tracker_curve_sptr parent_curve,
+                                                bdgl_tracker_curve_sptr &tail_curve,
+                                                vcl_vector<bdgl_tracker_curve_sptr> * new_curves)
 {
   for (unsigned int i=0;i<(*new_curves).size();++i)
   {
@@ -84,9 +84,9 @@ void bdgl_curve_matching :: match_prev_tail_curve(bdgl_tracker_curve_sptr parent
   vcl_sort(tail_curve->next_.begin(),tail_curve->next_.end(),less_cost());
 }
 
-void bdgl_curve_matching :: match_next_tail_curve(bdgl_tracker_curve_sptr parent_curve,
-                                                  bdgl_tracker_curve_sptr &tail_curve,
-                                                  vcl_vector<bdgl_tracker_curve_sptr> * old_curves)
+void bdgl_curve_matching::match_next_tail_curve(bdgl_tracker_curve_sptr parent_curve,
+                                                bdgl_tracker_curve_sptr &tail_curve,
+                                                vcl_vector<bdgl_tracker_curve_sptr> * old_curves)
 {
   for (unsigned int i=0;i<(*old_curves).size();++i)
   {
@@ -128,9 +128,9 @@ void bdgl_curve_matching :: match_next_tail_curve(bdgl_tracker_curve_sptr parent
   vcl_sort(tail_curve->prev_.begin(),tail_curve->prev_.end(),less_cost());
 }
 
-double bdgl_curve_matching :: coarse_match_DP(bdgl_curve_description * desc1,
-                                              bdgl_curve_description * desc2,
-                                              vgl_point_2d<double> epi)
+double bdgl_curve_matching::coarse_match_DP(bdgl_curve_description * desc1,
+                                            bdgl_curve_description * desc2,
+                                            vgl_point_2d<double> epi)
 {
   vcl_vector<vcl_pair<double,double> > v1,v2;
 
@@ -152,8 +152,6 @@ double bdgl_curve_matching :: coarse_match_DP(bdgl_curve_description * desc1,
   vnl_matrix<double> R,T,Tbar,R1,T1,Tbar1;
   vcl_vector<int> tail_old, tail_new;
   vcl_map<int,int> alignment;
-  vgl_point_2d<double> ep1,ep2;
-  //ep[1]=0;ep[2]=0;
   double dist1=curveMatch(euc,v1,v2,alignment,R,T,Tbar,tail_old,tail_new,scale,epipole_);
   vcl_reverse(v2.begin(),v2.end());
   double dist2=curveMatch(euc,v1,v2,alignment,R1,T1,Tbar1,tail_old,tail_new,scale,epipole_);
@@ -161,11 +159,11 @@ double bdgl_curve_matching :: coarse_match_DP(bdgl_curve_description * desc1,
   return dist1<dist2 ? dist1 : dist2;
 }
 
-double bdgl_curve_matching :: match_DP(bdgl_curve_description * desc1,
-                                       bdgl_curve_description * desc2,vcl_map<int,int> &alignment,
-                                       double & cost, vnl_matrix<double> &R,vnl_matrix<double> &T,
-                                       vnl_matrix<double> & Tbar,double & scale,vcl_vector<int> & tail1,
-                                       vcl_vector<int> & tail2,vgl_point_2d<double> & e)
+double bdgl_curve_matching::match_DP(bdgl_curve_description * desc1,
+                                     bdgl_curve_description * desc2,vcl_map<int,int> &alignment,
+                                     double & cost, vnl_matrix<double> &R,vnl_matrix<double> &T,
+                                     vnl_matrix<double> & Tbar,double & scale,vcl_vector<int> & tail1,
+                                     vcl_vector<int> & tail2,vgl_point_2d<double> & e)
 {
   double dist = -1; // dummy initialisation, to avoid compiler warning
 
@@ -286,8 +284,8 @@ double bdgl_curve_matching :: match_DP(bdgl_curve_description * desc1,
   return dist;
 }
 
-double bdgl_curve_matching :: match_stat(bdgl_curve_description * desc1,
-                                         bdgl_curve_description  * desc2)
+double bdgl_curve_matching::match_stat(bdgl_curve_description * desc1,
+                                       bdgl_curve_description  * desc2)
 {
   double dist=0;
   double image_scale=1;
@@ -308,7 +306,7 @@ double bdgl_curve_matching :: match_stat(bdgl_curve_description * desc1,
 }
 
 // Minkowski sausage bounding region
-bool bdgl_curve_matching :: sausage_intersection(bdgl_tracker_curve_sptr c1,bdgl_tracker_curve_sptr c2)
+bool bdgl_curve_matching::sausage_intersection(bdgl_tracker_curve_sptr c1,bdgl_tracker_curve_sptr c2)
 {
   for (unsigned int i=0; i<c1->desc->coarser_points_.size(); ++i)
   {
@@ -325,8 +323,8 @@ bool bdgl_curve_matching :: sausage_intersection(bdgl_tracker_curve_sptr c1,bdgl
   return false;
 }
 
-bool bdgl_curve_matching :: bounding_box_intersection(vsol_box_2d_sptr box1,
-                                                      vsol_box_2d_sptr box2)
+bool bdgl_curve_matching::bounding_box_intersection(vsol_box_2d_sptr box1,
+                                                    vsol_box_2d_sptr box2)
 {
   return box2->get_min_x()<=(box1->get_max_x()+motion_in_pixels_) &&
          box2->get_max_x()>=(box1->get_min_x()-motion_in_pixels_) &&
@@ -334,8 +332,8 @@ bool bdgl_curve_matching :: bounding_box_intersection(vsol_box_2d_sptr box1,
          box2->get_max_y()>=(box1->get_min_y()-motion_in_pixels_);
 }
 
-void bdgl_curve_matching :: match(vcl_vector<bdgl_tracker_curve_sptr> * new_curves,
-                                  vcl_vector<bdgl_tracker_curve_sptr> * old_curves)
+void bdgl_curve_matching::match(vcl_vector<bdgl_tracker_curve_sptr> * new_curves,
+                                vcl_vector<bdgl_tracker_curve_sptr> * old_curves)
 {
   for (unsigned int i=0;i<(*new_curves).size();++i)
   {

@@ -460,15 +460,11 @@ void bmvv_multiview_manager::track_edges()
 {
   // get parameters
   this->clear_display();
-  static int track_window;
-  //static bool track;
   bdgl_curve_tracking_params tp_;
 
   static bdgl_curve_clustering_params cp;
   static bdgl_curve_matching_params mp;
   static double ex,ey;
-  static int third=1;
-  //static bdgl_curve_tracking_params tp;
 
   vgui_dialog* tr_dialog = new vgui_dialog("Curve Tracking");
   tr_dialog->checkbox("Matching", tp_.mp.matching_);
