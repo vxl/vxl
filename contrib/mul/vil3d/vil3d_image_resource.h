@@ -85,7 +85,7 @@ class vil3d_image_resource
   // format of view is not correct (if it is a compound pixel type, try
   // assigning it to a multi-plane scalar pixel view.)
   virtual bool put_view(const vil3d_image_view_base& im,
-                        unsigned i0, unsigned j0, unsigned k0) = 0;
+                        unsigned i0=0, unsigned j0=0, unsigned k0=0) = 0;
 
   //: Check that a view will fit into the data at the given offset.
   // This includes checking that the pixel type is scalar.

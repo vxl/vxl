@@ -36,7 +36,7 @@ vil3d_image_resource_sptr vil3d_new_image_resource(const char* name,
                                                    char const* file_type)
 {
   if (!file_type) // avoid segfault in strcmp()
-    file_type = "pnm";
+    file_type = "gipl";
 
   vil3d_image_resource_sptr outimage = 0;
   for (unsigned i=0; i < vil3d_file_format::n_formats(); ++i)
@@ -51,5 +51,13 @@ vil3d_image_resource_sptr vil3d_new_image_resource(const char* name,
   }
 
   vcl_cerr << "vil3d_new: Unknown file type [" << file_type << "]\n";
+  vcl_cerr << "Known file types are: ";
+  for (unsigned i=0; i < vil3d_file_format::n_formats(); ++i)
+  {
+    if (i) vcl_cerr << ',';
+    vcl_cerr << vil3d_file_format::format(i).tag() ;
+  }
+  vcl_cerr << '.' << vcl_endl;
+
   return 0;
 }

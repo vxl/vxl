@@ -105,7 +105,7 @@ vil3d_slice_list_format::make_input_image(const char * filename) const
     }
 
 
-  if (filenames.empty())
+  if (filenames.empty() || filenames.size()==1)
     parse_globbed_filenames(filename, filenames);
 
   if (filenames.empty()) return 0;

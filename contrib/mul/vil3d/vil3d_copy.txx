@@ -11,6 +11,7 @@
 
 #include "vil3d_copy.h"
 #include <vcl_cassert.h>
+#include <vil3d/vil3d_image_view.h>
 
 //: Create a copy of the data viewed by this, and return a view of copy.
 template<class T>
@@ -36,7 +37,7 @@ template<class T>
 void vil3d_copy_reformat(const vil3d_image_view<T> &src, vil3d_image_view<T> &dest)
 {
   assert (src.nplanes() == dest.nplanes() &&
-    src.nj() == dest.nj() &&
+    src.nk() == dest.nk() && src.nj() == dest.nj() &&
     src.ni() == dest.ni());
   for (unsigned p = 0; p < dest.nplanes(); ++p)
     for (unsigned k = 0; k < dest.nk(); ++k)
@@ -54,7 +55,7 @@ void vil3d_copy_to_window(const vil3d_image_view<T> &src, vil3d_image_view<T> &d
                          unsigned i0, unsigned j0, unsigned k0)
 {
   // check window is within dest's bounds
-  assert(i0+src.ni() <= dest.ni() && j0+src.nj() <= dest.nj());
+  assert(i0+src.ni() <= dest.ni() && j0+src.nj() <= dest.nj() && k0+src.nk() <= dest.nk());
   assert (src.nplanes() == dest.nplanes());
 
   for (unsigned p = 0; p < dest.nplanes(); ++p)

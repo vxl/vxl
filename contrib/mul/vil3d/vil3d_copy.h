@@ -10,7 +10,7 @@
 // \author Ian Scott - Manchester
 // \date 2 Feb 2003
 
-#include <vil3d/vil3d_image_view.h>
+#include <vil3d/vil3d_fwd.h>
 
 
 //: Copy src to dest, without changing dest's view parameters.
@@ -40,5 +40,15 @@ void vil3d_copy_deep(const vil3d_image_view<T> &src, vil3d_image_view<T> &dest);
 // \relates vil3d_image_view
 template<class T>
 vil3d_image_view<T> vil3d_copy_deep(const vil3d_image_view<T> &src);
+
+
+//: Copy src to dest.
+// This is useful if you want to copy on image into a window on another image.
+// src and dest must have identical sizes, and pixel-types. Returns false if the copy
+// failed.
+//  O(size).
+// \relates vil3d_image_resource
+bool vil3d_copy_deep(const vil3d_image_resource_sptr &src, vil3d_image_resource_sptr &dest);
+
 
 #endif // vil3d_copy_h_

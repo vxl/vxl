@@ -15,11 +15,13 @@ SET(vil3d_sources
     vil3d_math.h
     vil3d_file_format.h              vil3d_file_format.cxx
     vil3d_load.h                     vil3d_load.cxx
+    vil3d_save.h                     vil3d_save.cxx
     vil3d_memory_image.h             vil3d_memory_image.cxx
-    vil3d_copy.h                     vil3d_copy.txx
+    vil3d_copy.h                     vil3d_copy.cxx                      vil3d_copy.txx
     vil3d_image_resource.h           vil3d_image_resource.cxx
     vil3d_new.h                      vil3d_new.cxx
     vil3d_convert.h
+    vil3d_fwd.h
 
     file_formats/vil3d_gipl_format.h file_formats/vil3d_gipl_format.cxx
     file_formats/vil3d_dicom.h       file_formats/vil3d_dicom.cxx

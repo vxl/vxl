@@ -12,7 +12,7 @@
 #include <vcl_string.h>
 #include <vcl_iosfwd.h>
 #include <vcl_vector.h>
-#include <vsl/vsl_binary_io.h>
+#include <vsl/vsl_fwd.h>
 
 //: A base class for images of any dimension and type
 //  Derived classes tend to have world to image transformations

@@ -14,7 +14,7 @@
 #include <vcl_iosfwd.h>
 
 
-//: Represent 2D image of type T together with a transform.
+//: Represent 3D image of type T together with a transform.
 //  Each plane is ni() x nj() Ts, with the (x,y) element
 //  of the i'th plane accessible using im.plane(i)[x*im.istep() + y*im.jstep()]
 template<class T>
