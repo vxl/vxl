@@ -45,8 +45,10 @@ SUBDIRS += vgui
 #xcv must be compiled *after* mvox.
 # # new xcv
 # SUBDIRS += xcv
-
 endif
+
+# examples
+SUBDIRS += examples
 
 
 ######################################
