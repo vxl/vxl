@@ -37,7 +37,7 @@ class mbl_lda
   void updateCovar(vnl_matrix<double>& S, const vnl_vector<double>& v);
 
   //: Perform LDA on data
-  // Classes must be labelled from 0..n-1
+  // Classes must be labeled from 0..n-1
   // \param label  Array [0..n-1] of integer indices. label[i] gives class of v[i]
   // \param n      Size of label and of v
   // \param v  Set of vectors [0..n-1]
@@ -69,7 +69,7 @@ class mbl_lda
   // - label[i] gives class of v[i]
   // - If label[i]<0 the class is assumed to be unknown
   //   and example i is ignored
-  // - Classes must be labelled from 0..n-1
+  // - Classes must be labeled from 0..n-1
   void build(const vnl_vector<double>* v, const int* label, int n);
 
   //: Perform LDA on data
@@ -78,7 +78,7 @@ class mbl_lda
   // - label[i] gives class of v[i]
   // - If label[i]<0 the class is assumed to be unknown
   //   and example i is ignored
-  // - Classes must be labelled from 0..n-1
+  // - Classes must be labeled from 0..n-1
   void build(const vnl_vector<double>* v, const vcl_vector<int>& label);
 
   //: Perform LDA on data
@@ -88,7 +88,7 @@ class mbl_lda
   // - label[i] gives class of v[i]
   // - If label[i]<0 the class is assumed to be unknown
   //   and example i is ignored
-  // - Classes must be labelled from 0..n-1
+  // - Classes must be labeled from 0..n-1
   void build(const vnl_vector<double>* v, const vcl_vector<int>& label,
              const vnl_matrix<double>& wS);
 
@@ -98,7 +98,7 @@ class mbl_lda
   // - label[i] gives class of v[i]
   // - If label[i]<0 the class is assumed to be unknown
   //   and example i is ignored
-  // - Classes must be labelled from 0..n-1
+  // - Classes must be labeled from 0..n-1
   void build(const vcl_vector<vnl_vector<double> >& v, const vcl_vector<int>& label);
 
   //: Perform LDA on data
@@ -106,7 +106,7 @@ class mbl_lda
   // \param v  Set of vectors [0..n-1]
   // \param wS  Within class covariance to use
   // - label[i] gives class of v[i]
-  // - Classes must be labelled from 0..n-1
+  // - Classes must be labeled from 0..n-1
   // - If label[i]<0 the class is assumed to be unknown and example i is ignored
   void build(const vcl_vector<vnl_vector<double> >& v, const vcl_vector<int>& label,
              const vnl_matrix<double>& wS);
