@@ -285,7 +285,7 @@ vsol_line_2d::tangent_at_point(const vsol_point_2d_sptr &p) const
 }
 
 //--------------------------------------------------------------------
-//: compute an infinite homogenous line corresponding to *this
+//: compute an infinite homogeneous line corresponding to *this
 //--------------------------------------------------------------------
 vgl_homg_line_2d<double> vsol_line_2d::vgl_hline_2d() const
 {
