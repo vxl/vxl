@@ -1,7 +1,7 @@
 
-LIBRARY(vnl)
+ADD_LIBRARY(vnl vnl_sources)
 
-SOURCE_FILES(
+SOURCE_FILES( vnl_sources
 vnl_alloc
 vnl_binary
 vnl_complex
@@ -52,6 +52,6 @@ vnl_transpose
 vnl_unary_function
 )
 
-AUX_SOURCE_DIRECTORY(Templates)
+AUX_SOURCE_DIRECTORY(Templates vnl_sources)
 
-SUBDIRS(algo tests)
+SUBDIRS(algo)

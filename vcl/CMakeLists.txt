@@ -10,7 +10,7 @@ WIN32_INCLUDE_DIRECTORIES( config.win32-vc60 )
 
 AUX_SOURCE_DIRECTORY(Templates vcl_common)
 
-ADD_LIBRARY( vcl vcl_common )
+ADD_LIBRARY(vcl vcl_common)
 
-#SUBDIRS( tests )
+#SUBDIRS(tests)
 
