@@ -158,22 +158,12 @@ inline bool operator== (vbl_smart_ptr<T> const& a, vbl_smart_ptr<T> const& b)
 }
 #endif
 
+// -- Comparison of pointer with smart-pointer (cannot be a member function)
 template <class T>
 inline bool operator== (T const* p, vbl_smart_ptr<T> const& a)
 {
   return a.as_pointer() == p;
 }
-
-// SGI CC thinks that "base_ref == 0" is a comparison with int.
-// Try to not use that specific comparison; use "!base_ref" instead,
-// as cast-to-bool is provided. - PVr
-#if defined(VCL_SGI_CC) && 0
-template <class T>
-inline bool operator== (vbl_smart_ptr<T> const& a, int p)
-{
-  return a.as_pointer() == (T*)p;
-}
-#endif
 
 // Sunpro and GCC need an ostream operator. It need not be inline
 // because if you're about to make a system call you can afford the
