@@ -5,18 +5,20 @@
 // \author Charlene Tsai / Chuck Stewart / Gehua Yang
 // \date   Sep 2003
 
-#include "rgrl_mask.h"
-#include "rgrl_transformation.h"
-#include "rgrl_transformation_sptr.h"
-#include "rgrl_weighter_sptr.h"
-#include "rgrl_scale_sptr.h"
-#include "rgrl_match_set_sptr.h"
-#include "rgrl_set_of.h"
-#include "rgrl_convergence_tester.h"
+//#include "rgrl_mask.h"
+//#include "rgrl_transformation.h"
+//#include "rgrl_set_of.h"
+//#include "rgrl_convergence_tester.h"
+#include <rgrl/rgrl_transformation_sptr.h>
+#include <rgrl/rgrl_weighter_sptr.h>
+#include <rgrl/rgrl_scale_sptr.h>
+#include <rgrl/rgrl_match_set_sptr.h>
+#include <rgrl/rgrl_estimator_sptr.h>
 
 #include <vnl/vnl_vector.h>
 #include <vcl_iosfwd.h>
 #include <vcl_vector.h>
+#include <rgrl/rgrl_fwd.h>
 
 class rgrl_match_set;
 

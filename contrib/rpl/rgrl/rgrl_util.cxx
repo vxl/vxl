@@ -11,10 +11,13 @@
 #include <vnl/algo/vnl_svd.h>
 #include <vnl/vnl_math.h>
 
-#include "rgrl_converge_status.h"
-#include "rgrl_weighter.h"
-#include "rgrl_estimator.h"
-#include "rgrl_match_set.h"
+#include <rgrl/rgrl_converge_status.h>
+#include <rgrl/rgrl_converge_status_sptr.h>
+#include <rgrl/rgrl_convergence_tester.h>
+#include <rgrl/rgrl_weighter.h>
+#include <rgrl/rgrl_estimator.h>
+#include <rgrl/rgrl_match_set.h>
+#include <rgrl/rgrl_mask.h>
 
 
 // CHECK: only tested with affine transform
@@ -620,7 +623,8 @@ rgrl_util_irls( rgrl_set_of<rgrl_match_set_sptr> const& match_sets,
   //
 
   // initialize the weights for the first estimation
-  rgrl_converge_status_sptr current_status = 0;
+  rgrl_converge_status_sptr current_status = conv_tester.initialize_status( estimate, estimator, scales[0], false );
+
   for ( unsigned ms=0; ms < match_sets.size(); ++ms ) {
     rgrl_match_set_sptr match_set = match_sets[ms];
     if ( match_set && match_set->from_size() > 0) {
@@ -672,12 +676,14 @@ rgrl_util_irls( rgrl_set_of<rgrl_match_set_sptr> const& match_sets,
     ++ iteration;
   } while ( !current_status->has_converged() &&
             !current_status->has_stagnated() &&
+            !current_status->is_failed() &&
             iteration < max_iterations );
 
   DebugFuncMacro_abv(debug_flag, 1, "irls status: " <<
                      ( current_status->has_converged() ?
                        "converged\n" : current_status->has_stagnated() ?
-                                       "stagnated\n" : "reaches max iteration\n" ) );
+                                       "stagnated\n" : current_status->is_failed() ?
+                                                       "failed\n" :"reaches max iteration\n" ) );
 
   return !failed;
 }
