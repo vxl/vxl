@@ -1661,7 +1661,7 @@ void sdet_edgel_regions::CollectFaceEdges()
       if (vtol_cycle_processor::corrupt_boundary(*edges, bad_verts))
         {
           this->repair_failed_insertions(*edges, bad_verts);
-          if (!vtol_cycle_processor::connect_paths(*edges, bad_verts))
+	  if (!vtol_cycle_processor::connect_paths(*edges, bad_verts))
             {
               if (verbose_)
                 {
