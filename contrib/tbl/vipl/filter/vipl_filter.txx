@@ -9,7 +9,7 @@
 #pragma warning( disable: 4390 )
 #endif
 
-#ifndef VCL_CAN_STATIC_CONST_INIT_INT
+#if ! VCL_CAN_STATIC_CONST_INIT_INT
 template <class ImgIn,class ImgOut,class DataIn,class DataOut,int Arity,class PixelItr>
 const VIPL_FILTER_STATE vipl_filter<ImgIn,ImgOut,DataIn,DataOut,Arity,PixelItr>::Not_Ready = 0;
 template <class ImgIn,class ImgOut,class DataIn,class DataOut,int Arity,class PixelItr>
