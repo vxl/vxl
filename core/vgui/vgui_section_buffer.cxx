@@ -33,7 +33,6 @@
 #include <vgui/internals/vgui_accelerate.h>
 #include <vgui/vgui_texture_hacks.h>
 
-// the default is 'false'. don't check in 'true'.
 static bool debug = false;
 
 //: return the smallest power of two, 2^k, such that n <= 2^k
