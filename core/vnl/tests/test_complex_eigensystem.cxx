@@ -5,7 +5,7 @@
 #include <vnl/vnl_matops.h>
 #include <vnl/algo/vnl_complex_eigensystem.h>
 
-void test_complex_eigensystem()
+void test_complex_eigensystem1()
 {
   const unsigned N=6;
   double a_real[N*N] = {
@@ -59,6 +59,33 @@ void test_complex_eigensystem()
     //vcl_cout << "  " << err << vcl_endl;
     vnl_test_assert("  Right eigenvalue", err.magnitude() < 1e-10);
   }
+}
+
+void test_complex_eigensystem2()
+{
+  // The standard version of ZLAHQR fails to converge on this 6x6 matrix
+  // because the maximum number of iterations is reached. Removing the
+  // upper limit makes it work, though.
+  double Adata[6][6] = {
+    { 6.81189847675500,  -0.75094724440200,   0.02962045905500,   0.08278481627400,  -0.00326537487000,   0.00012879986400},
+    {-0.30264207899000,   7.24396703250300,  -0.23873370907200,  -1.59347941419300,   0.05767229376100,  -0.00207046888600},
+    {-0.22478047851400,   1.66397856595400,   6.51603673051800,  -0.36414398064500,  -0.71120349595300,   0.05667215261300},
+    { 0.00336147948700,  -0.16054853597700,   0.00528866726000,   7.66800229119600,  -0.25259347537300,   0.00832074135800},
+    { 0.00499332392900,  -0.15593251059600,  -0.14083152011000,   3.50460364036400,   6.85617756909000,  -0.45550486394200},
+    { 0.00185433854100,  -0.02724973652500,  -0.10751684805800,   0.40043828267200,   1.57997351477200,   6.23396017664100}
+  };
+  vnl_matrix<vcl_complex<double> > A(6, 6);
+  for (int i=0; i<6; ++i)
+    for (int j=0; j<6; ++j)
+      A[i][j] = Adata[i][j]; //(0.77+i) + (0.1+j)*(0.33+j);
+  vnl_complex_eigensystem eig(A);
+  vnl_test_assert("  Funny eigensystem", true);
+}
+
+void test_complex_eigensystem()
+{
+  test_complex_eigensystem1();
+  test_complex_eigensystem2();
 }
 
 TESTMAIN(test_complex_eigensystem);
