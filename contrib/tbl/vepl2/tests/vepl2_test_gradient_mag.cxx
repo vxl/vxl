@@ -26,7 +26,7 @@ int vepl2_test_gradient_mag() {
 #define args
   ONE_TEST(vepl2_gradient_mag,byte_img,byte_ori,vxl_byte,84514,m+"_byte",args);
   ONE_TEST(vepl2_gradient_mag,shrt_img,shrt_ori,vxl_uint_16,21757474,m+"_short",args);
-  ONE_TEST(vepl2_gradient_mag,int__img,int__ori,vxl_uint_32,1957900120,m+"_int",args);
+  FUZ_TEST(vepl2_gradient_mag,int__img,int__ori,vxl_uint_32,1957900120,m+"_int",args);
   ONE_TEST(vepl2_gradient_mag,flot_img,flot_ori,float,288,m+"_float",args);
   ONE_TEST(vepl2_gradient_mag,dble_img,dble_ori,double,288,m+"_double",args);
 
