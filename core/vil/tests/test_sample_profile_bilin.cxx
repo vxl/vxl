@@ -3,7 +3,7 @@
 #include <vcl_vector.h>
 #include <vil2/vil2_image_view.h>
 #include <vil2/vil2_sample_profile_bilin.h>
-#include <vil/vil_byte.h>
+#include <vil2/vil2_byte.h>
 #include <testlib/testlib_test.h>
 
 void test_sample_profile_bilin_byte()
@@ -13,7 +13,7 @@ void test_sample_profile_bilin_byte()
   vcl_cout << "*******************************\n";
 
   vcl_cout<< "One plane image"<<vcl_endl;
-  vil2_image_view<vil_byte> image1;
+  vil2_image_view<vil2_byte> image1;
   image1.resize(10,10);
 
   for (int y=0;y<image1.nj();++y)

@@ -2,7 +2,7 @@
 #include <vcl_iostream.h>
 #include <vcl_vector.h>
 #include <vil2/algo/vil2_algo_exp_filter_1d.h>
-#include <vil/vil_byte.h>
+#include <vil2/vil2_byte.h>
 #include <testlib/testlib_test.h>
 
 void test_algo_exp_filter_1d_byte_float()
@@ -12,7 +12,7 @@ void test_algo_exp_filter_1d_byte_float()
   vcl_cout << "***********************" << vcl_endl;
 
   int n = 100;
-  vcl_vector<vil_byte> src(n);
+  vcl_vector<vil2_byte> src(n);
   for (int i=0;i<n;++i) src[i]=0;
   src[50] = 100;
 

@@ -8,7 +8,7 @@
 //  - Each type tends to need a slightly different implementation
 //  - Let's not have too many templates.
 
-#include <vil/vil_byte.h>
+#include <vil2/vil2_byte.h>
 #include <vil2/vil2_image_view.h>
 
 //: Smooth and subsample src_im to produce dest_im
@@ -38,9 +38,9 @@ void vil2_algo_gauss_reduce_121(vil2_image_view<T>& dest,
 //
 //  By applying twice we can obtain a full gaussian smoothed and
 //  sub-sampled 2D image
-void vil2_algo_gauss_reduce(vil_byte* dest_im,
+void vil2_algo_gauss_reduce(vil2_byte* dest_im,
                             int d_x_step, int d_y_step,
-                            const vil_byte* src_im,
+                            const vil2_byte* src_im,
                             int src_nx, int src_ny,
                             int s_x_step, int s_y_step);
 
@@ -77,9 +77,9 @@ void vil2_algo_gauss_reduce(int* dest_im,
 
 //: Smooth and subsample single plane src_im in x to produce dest_im using 121 filter in x and y
 //  Smooths with a 3x3 filter and subsamples
-void vil2_algo_gauss_reduce_121(vil_byte* dest_im,
+void vil2_algo_gauss_reduce_121(vil2_byte* dest_im,
                                int d_x_step, int d_y_step,
-                               const vil_byte* src_im,
+                               const vil2_byte* src_im,
                                int src_nx, int src_ny,
                                int s_x_step, int s_y_step);
 
