@@ -5,6 +5,7 @@
 
 #include <vcl_iostream.h>
 #include <vcl_algorithm.h>
+#include <vcl_cmath.h> // for std::abs(double)
 
 #include <vnl/vnl_fortran_copy.h>
 #include "vnl_netlib.h"
@@ -47,7 +48,8 @@ vnl_svd_economy<real_t>::vnl_svd_economy( vnl_matrix<real_t> const& M ) :
                    &job, &info);
 
   // Error return?
-  if (info != 0) {
+  if (info != 0)
+  {
     // If info is non-zero, it contains the number of singular values
     // for this the SVD algorithm failed to converge. The condition is
     // not bogus. Even if the returned singular values are sensible,
@@ -81,9 +83,10 @@ vnl_svd_economy<real_t>::vnl_svd_economy( vnl_matrix<real_t> const& M ) :
     vnl_matlab_print(vcl_cerr, M, "M", vnl_matlab_print_format_long);
     //    valid_ = false;
   }
-  // else {
-  //   valid_ = true;
-  // }
+#if 0
+  else
+    valid_ = true;
+#endif
 
   for (int j = 0; j < mm; ++j)
     sv_[j] = vcl_abs(wspace(j)); // we get rid of complexness here.
@@ -101,7 +104,7 @@ vnl_svd_economy<real_t>::vnl_svd_economy( vnl_matrix<real_t> const& M ) :
 
 template <typename real_t>
 vnl_vector<real_t>
-vnl_svd_economy<real_t>:: nullvector()
+vnl_svd_economy<real_t>::nullvector()
 {
   return V_.get_column( n_ - 1 );
 }
@@ -109,4 +112,4 @@ vnl_svd_economy<real_t>:: nullvector()
 #undef VNL_SVD_ECONOMY_INSTANTIATE
 #define VNL_SVD_ECONOMY_INSTANTIATE(T) template class vnl_svd_economy<T >
 
-#endif
+#endif // vnl_svd_economy_txx_
