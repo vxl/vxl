@@ -12,7 +12,9 @@
 #include <vdgl/vdgl_digital_curve.h>
 #include <vdgl/vdgl_interpolator.h>
 #include <vdgl/vdgl_edgel_chain.h>
-#include <bxml/bxml_vtol_io.h>
+#ifdef HAS_XERCES
+# include <bxml/bxml_vtol_io.h>
+#endif
 #include <sdet/sdet_detector_params.h>
 #include <sdet/sdet_detector.h>
 #include <gevd/gevd_clean_edgels.h>
@@ -308,6 +310,7 @@ void bmvv_multiview_manager::regions()
   this->draw_regions(regions, true);
 }
 
+#ifdef HAS_XERCES
 void bmvv_multiview_manager::read_xml_edges()
 {
   this->init_tabs();
@@ -329,6 +332,7 @@ void bmvv_multiview_manager::read_xml_edges()
   if (bxml_vtol_io::read_edges(xml_filename, edges))
     btab->add_edges(edges, true);
 }
+#endif
 
 //====================================================================
 //: a test FMatrix

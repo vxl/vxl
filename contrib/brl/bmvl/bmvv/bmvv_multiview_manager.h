@@ -41,7 +41,9 @@ class bmvv_multiview_manager : public vgui_grid_tableau
   void clear_display();
   void vd_edges();
   void regions();
+#ifdef HAS_XERCES
   void read_xml_edges();
+#endif
   void show_epipolar_line();
 
   //: access to the window
