@@ -7,9 +7,7 @@
 #include "vgl_homg_operators_2d.h"
 
 #include <vcl_iostream.h>
-#ifdef VCL_VC60
-# include <vcl_limits.h>
-#endif
+#include <vcl_limits.h> // for infinity
 #include <vcl_cassert.h>
 #include <vcl_cmath.h> // for vcl_sqrt()
 #include <vgl/vgl_homg_line_2d.h>
@@ -24,7 +22,6 @@
 #include <vnl/vnl_matrix_fixed.h>
 #include <vnl/vnl_math.h>
 #include <vnl/algo/vnl_scatter_3x3.h> // used in most_orthogonal_vector()
-#include <vcl_limits.h> // for infinity
 #include <vnl/algo/vnl_real_eigensystem.h> // used for conic intersection
 #include <vnl/vnl_diag_matrix.h>  // used for conic intersection
 
@@ -677,11 +674,11 @@ vgl_homg_operators_2d<T>::intersection(vgl_conic<T> const& c1, vgl_conic<T> cons
        c2.type()==vgl_conic<T>::complex_intersecting_lines)
       && c1.contains(c2.centre()))
     return vcl_list<vgl_homg_point_2d<T> >(2, c2.centre()); // double intersection point
-  if (c1.type() == vgl_conic<T>::no_type   ||  c2.type() == vgl_conic<T>::no_type
-   || c1.type()==vgl_conic<T>::complex_parallel_lines||c2.type()==vgl_conic<T>::complex_parallel_lines
-   || c1.type()==vgl_conic<T>::complex_intersecting_lines||c2.type()==vgl_conic<T>::complex_intersecting_lines
-   || c1.type() == vgl_conic<T>::imaginary_ellipse|| c2.type() == vgl_conic<T>::imaginary_ellipse
-   || c1.type() == vgl_conic<T>::imaginary_circle || c2.type() == vgl_conic<T>::imaginary_circle)
+  if (c1.type() == vgl_conic<T>::no_type   ||  c2.type() == vgl_conic<T>::no_type ||
+      c1.type()==vgl_conic<T>::complex_parallel_lines||c2.type()==vgl_conic<T>::complex_parallel_lines ||
+      c1.type()==vgl_conic<T>::complex_intersecting_lines||c2.type()==vgl_conic<T>::complex_intersecting_lines ||
+      c1.type() == vgl_conic<T>::imaginary_ellipse|| c2.type() == vgl_conic<T>::imaginary_ellipse ||
+      c1.type() == vgl_conic<T>::imaginary_circle || c2.type() == vgl_conic<T>::imaginary_circle)
     return vcl_list<vgl_homg_point_2d<T> >(); // empty list
 
   if (c1.type() == vgl_conic<T>::coincident_lines ||
@@ -777,7 +774,8 @@ vgl_homg_operators_2d<T>::closest_point(vgl_conic<T> const& c,
   // connection line with the given point; all points with this property form
   // a certain conic  (actually an orthogonal hyperbola) :
   vcl_list<vgl_homg_point_2d<T> > candidates; // all intersection points
-  if (pt.w() == 0) { // given point is at infinity
+  if (pt.w() == 0) // given point is at infinity
+  {
     // ==> degenerate hyperbola: line + line at infinity
     vgl_homg_line_2d<T> l(c.a()*pt.y()*2-c.b()*pt.x(),
                          -c.c()*pt.x()*2+c.b()*pt.y(),
@@ -787,14 +785,17 @@ vgl_homg_operators_2d<T>::closest_point(vgl_conic<T> const& c,
       return vgl_homg_point_2d<T>(0,0,0); // this cannot happen
     // just return any of the candidates, since distance makes no sense at infinity:
     else return candidates.front();
-  } else if (c.b()==0 && c.a()==c.c()) { // the given conic is a circle
+  }
+  else if (c.b()==0 && c.a()==c.c()) // the given conic is a circle
+  {
     // ==> degenerate hyperbola: line thru centre & point  +  line at infinity
     vgl_homg_point_2d<T> centre = c.centre();
     if (centre == pt) // in this case, any point of the circle is all right
       centre = vgl_homg_point_2d<T>(1,0,0); // take a horizontal line thru pt
     candidates = intersection(c, vgl_homg_line_2d<T>(centre,pt));
-  } else {
-    // general case:
+  }
+  else // general case:
+  {
     vgl_conic<T> conic(pt.w()*c.b(),
                        pt.w()*(c.c()-c.a())*2,
                       -pt.w()*c.b(),
