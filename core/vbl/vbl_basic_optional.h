@@ -21,7 +21,7 @@
 #include <vcl_iostream.h>
 #include <vcl_cstdlib.h>
 
-#ifdef IUE_STL_USE_ABBREVS
+#ifdef __STL_USE_ABBREVS
 #define vbl_basic_optional vbl_bRo
 #endif
 
