@@ -44,6 +44,11 @@ bgui_displaylist2D_tableau_sptr.h
 bgui_easy2D_tableau.cxx            bgui_easy2D_tableau.h
 bgui_easy2D_tableau_sptr.h
 
+bgui_linked_vsol_soview2D.cxx      bgui_linked_vsol_soview2D.h
+
+bgui_linked_vsol2D_tableau.cxx     bgui_linked_vsol2D_tableau.h       
+bgui_linked_vsol2D_tableau_sptr.h
+
 )
 AUX_SOURCE_DIRECTORY(Templates bgui_sources)
 
