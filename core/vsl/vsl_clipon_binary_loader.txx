@@ -7,14 +7,14 @@
 template<class BaseClass, class BaseClassIO>
 vsl_clipon_binary_loader<BaseClass,BaseClassIO>& vsl_clipon_binary_loader<BaseClass,BaseClassIO>::instance()
 {
-    if (instance_ == 0)
-    {
+  if (instance_ == 0)
+  {
     instance_ = new vsl_clipon_binary_loader<BaseClass,BaseClassIO>;
 
     // Register for deletion by vsl_delete_all_loaders()
     instance_->register_this();
   }
-    return *instance_;
+  return *instance_;
 }
 
 //: Add example object to list of those that can be loaded
@@ -28,17 +28,18 @@ void vsl_clipon_binary_loader<BaseClass,BaseClassIO>::add( const BaseClassIO& b)
 template<class BaseClass, class BaseClassIO>
 int vsl_clipon_binary_loader<BaseClass,BaseClassIO>::index_for_name(const vcl_string& name) const
 {
-  int i;
-  for (i=0; (i<object_io_.size()) && !(object_io_[i]->target_classname()==name); i++);
+  int i=0;
+  while ((i<object_io_.size()) && !(object_io_[i]->target_classname()==name))
+    ++i;
 
   if (i>=object_io_.size())
   {
-      vcl_cerr << "vsl_clipon_binary_loader<BaseClass>::index_for_name: ";
+    vcl_cerr << "vsl_clipon_binary_loader<BaseClass>::index_for_name: ";
     vcl_cerr << "class name <" << name << "> not in list of loaders"<<vcl_endl;
     vcl_cerr << object_io_.size()<<" valid loaders available for "<<vcl_endl;
-        for (int j=0; j<object_io_.size(); ++j)
-        vcl_cerr << object_io_[j]->target_classname() << vcl_endl;
-      vcl_abort();
+    for (int j=0; j<object_io_.size(); ++j)
+      vcl_cerr << object_io_[j]->target_classname() << vcl_endl;
+    vcl_abort();
   }
 
   return i;
@@ -53,12 +54,12 @@ const BaseClassIO& vsl_clipon_binary_loader<BaseClass,BaseClassIO>::io_for_class
 
   if (i>=object_io_.size())
   {
-      vcl_cerr << "vsl_clipon_binary_loader<BaseClass>::io_for_class: ";
+    vcl_cerr << "vsl_clipon_binary_loader<BaseClass>::io_for_class: ";
     vcl_cerr << "Unable to determine suitable loader."<<vcl_endl;
     vcl_cerr << object_io_.size()<<" valid loaders available for "<<vcl_endl;
-        for (int j=0; j<object_io_.size(); ++j)
-        vcl_cerr << object_io_[j]->target_classname() << vcl_endl;
-      vcl_abort();
+    for (int j=0; j<object_io_.size(); ++j)
+      vcl_cerr << object_io_[j]->target_classname() << vcl_endl;
+    vcl_abort();
   }
 
   return *object_io_[i];
@@ -75,15 +76,15 @@ const BaseClassIO& vsl_clipon_binary_loader<BaseClass,BaseClassIO>::object_io(co
 template<class BaseClass, class BaseClassIO>
 void vsl_clipon_binary_loader<BaseClass,BaseClassIO>::make_empty()
 {
-    for (int i=0; i<object_io_.size(); ++i)
-    delete object_io_[i];
-    object_io_.resize(0);
+  for (int i=0; i<object_io_.size(); ++i)
+  delete object_io_[i];
+  object_io_.resize(0);
 }
 
 template<class BaseClass, class BaseClassIO>
 vsl_clipon_binary_loader<BaseClass,BaseClassIO>::~vsl_clipon_binary_loader()
 {
-    make_empty();
+  make_empty();
 }
 
 // IO for  pointers to BaseClass:
@@ -101,7 +102,7 @@ void vsl_clipon_binary_loader<BaseClass,BaseClassIO>::read_object( vsl_b_istream
     // Zero pointer
     b=0;
     return;
-    }
+  }
 
   const BaseClassIO& io = object_io(name);
   b = io.new_object();
@@ -116,8 +117,7 @@ void vsl_clipon_binary_loader<BaseClass,BaseClassIO>::write_object( vsl_b_ostrea
   {
     vsl_b_write(os,vcl_string("VSL_NULL_PTR"));
     return;
-    }
-
+  }
 
   const BaseClassIO& io = io_for_class(*b);
   vsl_b_write(os,io.target_classname());
@@ -132,38 +132,16 @@ void vsl_clipon_binary_loader<BaseClass,BaseClassIO>::print_object_summary( vcl_
   {
     os<<"No object defined.";
     return;
-    }
-
+  }
 
   const BaseClassIO& io = io_for_class(*b);
   io.print_summary_by_base(os,*b);
 }
 
-#if 0 // why is this needed?
 #if VCL_CAN_DO_STATIC_TEMPLATE_MEMBER
-#ifdef __GNUC__
-#define VSL_CLIPON_BINARY_LOADER_INSTANTIATE(B,IO) \
-vsl_clipon_binary_loader<B, IO >* vsl_clipon_binary_loader<B, IO >::instance_ = 0; \
-template class vsl_clipon_binary_loader<B, IO >; \
-/* Create space for singleton pointer */ \
-VCL_VECTOR_INSTANTIATE(IO*)
-#else
-#define VSL_CLIPON_BINARY_LOADER_INSTANTIATE(B,IO) \
-template class vsl_clipon_binary_loader<B, IO >; \
-/* Create space for singleton pointer */ \
-VCL_VECTOR_INSTANTIATE(IO*) \
-template <class B, class IO > vsl_clipon_binary_loader<B, IO >* vsl_clipon_binary_loader<B, IO >::instance_ = 0;
-#endif
-#else
-#define VSL_CLIPON_BINARY_LOADER_INSTANTIATE(B,IO) \
-template class vsl_clipon_binary_loader<B, IO >; \
-/* Create space for singleton pointer */ \
-VCL_VECTOR_INSTANTIATE(IO*)
-#endif
-#endif
-
 template <class B, class IO>
 vsl_clipon_binary_loader<B, IO>* vsl_clipon_binary_loader<B, IO>::instance_ = 0;
+#endif
 
 #define VSL_CLIPON_BINARY_LOADER_INSTANTIATE(B,IO) \
 template class vsl_clipon_binary_loader<B, IO >; \

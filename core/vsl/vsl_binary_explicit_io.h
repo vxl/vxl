@@ -21,7 +21,7 @@
 // nibbles. Each nibble is saved with the 8th bit set if this is the last byte.
 // The nibbles are stored in little endian order. ie The first byte of the
 // encoded format represents the least significant 7 bits.
-// 
+//
 // The algorithm used to encode an unsigned value works as follows
 // \verbatim
 //  while value is greater than 2^7-1
@@ -33,6 +33,8 @@
 // \endverbatim
 
 #include <vxl_config.h>
+#include <vcl_cassert.h>
+#include <vcl_cstdlib.h> // vcl_abort()
 #include "vsl_binary_io.h"
 
 // Both VXL_LITTLE_ENDIAN && VXL_BIG_ENDIAN should be defined
@@ -73,9 +75,7 @@
 
 inline void vsl_swap_bytes( char * ptr, int nbyte, int nelem = 1)
 {
-
-
-#if VXL_LITTLE_ENDIAN 
+#if VXL_LITTLE_ENDIAN
   return;
 #else
   // If the byte order of the file
@@ -104,9 +104,7 @@ inline void vsl_swap_bytes( char * ptr, int nbyte, int nelem = 1)
 // In general use vsl_swap_bytes where possible, because it is faster.
 inline void vsl_swap_bytes_to_buffer( const char * source, char * dest, int nbyte, int nelem = 1)
 {
-
-
-#if VXL_LITTLE_ENDIAN 
+#if VXL_LITTLE_ENDIAN
   memcpy(dest, source, nbyte * nelem);
 #else
   // If the byte order of the file
@@ -146,13 +144,13 @@ inline void vsl_swap_bytes_to_buffer( const char * source, char * dest, int nbyt
 // buffer should be at least as long as
 // VSL_MAX_ARBITRARY_INT_BUFFER_LENGTH(sizeof(unsigned long)) * count
 inline unsigned long vsl_convert_to_arbitrary_length(const unsigned long* ints,
-                                          unsigned char *buffer,
-                                          unsigned long count = 1)
+                                                     unsigned char *buffer,
+                                                     unsigned long count = 1)
 {
   unsigned char* ptr = buffer;
   while (count-- > 0)
   {
-// The inside of this loop is run once per integer 
+// The inside of this loop is run once per integer
     unsigned long v = *(ints++);
     while (v > 127)
     {
@@ -175,13 +173,13 @@ inline unsigned long vsl_convert_to_arbitrary_length(const unsigned long* ints,
 // The functions will abort if the input data will not fit into
 // an unsigned long.
 inline unsigned long vsl_convert_from_arbitrary_length(const unsigned char* buffer,
-                                            unsigned long *ints,
-                                            unsigned long count = 1)
+                                                       unsigned long *ints,
+                                                       unsigned long count = 1)
 {
   const unsigned char* ptr = buffer;
   while (count-- > 0)
   {
-// The inside of this loop is run once per integer 
+// The inside of this loop is run once per integer
     unsigned long v = 0;
     unsigned char b = *(ptr++);
     int bitsLoaded = 0;
@@ -200,13 +198,12 @@ inline unsigned long vsl_convert_from_arbitrary_length(const unsigned char* buff
       {
         vcl_cerr << "\nI/O ERROR: vsl_convert_from_arbitrary_length() has "
                  << "attempted to\n convert a number that is too large "
-                 << "to fit into an unsigned long" << vcl_endl; 
-        vcl_cerr << "Aborting with " << count << " integers left to convert"
-                 << vcl_endl;
-        abort();
+                 << "to fit into an unsigned long\n"
+                 << "Aborting with " << count << " integers left to convert\n";
+        vcl_abort();
       }
-    }      
-    
+    }
+
 // Now add the last 7 bits.
     *(ints++) = v + ( ((unsigned long)(b & 127)) << bitsLoaded);
   }
@@ -221,13 +218,13 @@ inline unsigned long vsl_convert_from_arbitrary_length(const unsigned char* buff
 // buffer should be at least as long as
 // VSL_MAX_ARBITRARY_INT_BUFFER_LENGTH(sizeof(signed long)) * count
 inline unsigned long vsl_convert_to_arbitrary_length(const signed long* ints,
-                                          unsigned char *buffer,
-                                          unsigned long count = 1)
+                                                     unsigned char *buffer,
+                                                     unsigned long count = 1)
 {
   unsigned char* ptr = buffer;
   while (count-- > 0)
   {
-// The inside of this loop is run once per integer 
+// The inside of this loop is run once per integer
     signed long v = *(ints++);
     while (v > 63 || v < -64)
     {
@@ -236,7 +233,7 @@ inline unsigned long vsl_convert_to_arbitrary_length(const signed long* ints,
     }
     *(ptr++) = (v & 127) | 128;
   }
-  
+
   return (unsigned long)(ptr - buffer);
 }
 
@@ -250,13 +247,13 @@ inline unsigned long vsl_convert_to_arbitrary_length(const signed long* ints,
 // The functions will abort if the input data will not fit into
 // a signed long.
 inline unsigned long vsl_convert_from_arbitrary_length(const unsigned char* buffer,
-                                            signed long *ints,
-                                            unsigned long count = 1)
+                                                       signed long *ints,
+                                                       unsigned long count = 1)
 {
   const unsigned char* ptr = buffer;
   while (count-- > 0)
   {
-// The inside of this loop is run once per integer 
+// The inside of this loop is run once per integer
     signed long v = 0; // The value being loaded
     unsigned char b= *(ptr++);
     int bitsLoaded = 0;
@@ -273,18 +270,17 @@ inline unsigned long vsl_convert_from_arbitrary_length(const unsigned char* buff
     if (bitsLeft < 7)
     {
       if (bitsLeft <= 0 ||
-            b & 64 ?
+          b & 64 ?
               (((signed char)b >> (bitsLeft-1)) != -1) :
               (((b & 127) >> (bitsLeft-1)) != 0) )
       {
         vcl_cerr << "\nI/O ERROR: vsl_convert_from_arbitrary_length() has "
                  << "attempted to\n convert a number that is too large "
-                 << "to fit into a signed long" << vcl_endl;
-        vcl_cerr << "Aborting with " << count << " integers left to convert"
-                 << vcl_endl;
-        abort();
+                 << "to fit into a signed long\n"
+                 << "Aborting with " << count << " integers left to convert\n";
+        vcl_abort();
       }
-    }        
+    }
 
 // Now add the last 1<=n<=7 bits.
     *(ints++) = v |            // the stuff found before the final 7 bits
@@ -302,13 +298,13 @@ inline unsigned long vsl_convert_from_arbitrary_length(const unsigned char* buff
 // buffer should be at least as long as
 // VSL_MAX_ARBITRARY_INT_BUFFER_LENGTH(sizeof(unsigned int)) * count
 inline unsigned long vsl_convert_to_arbitrary_length(const unsigned int* ints,
-                                          unsigned char *buffer,
-                                          unsigned long count = 1)
+                                                     unsigned char *buffer,
+                                                     unsigned long count = 1)
 {
   unsigned char* ptr = buffer;
   while (count-- > 0)
   {
-// The inside of this loop is run once per integer 
+// The inside of this loop is run once per integer
     unsigned int v = *(ints++);
     while (v > 127)
     {
@@ -331,13 +327,13 @@ inline unsigned long vsl_convert_to_arbitrary_length(const unsigned int* ints,
 // The functions will abort if the input data will not fit into
 // an unsigned int.
 inline unsigned long vsl_convert_from_arbitrary_length(const unsigned char* buffer,
-                                            unsigned int *ints,
-                                            unsigned long count = 1)
+                                                       unsigned int *ints,
+                                                       unsigned long count = 1)
 {
   const unsigned char* ptr = buffer;
   while (count-- > 0)
   {
-// The inside of this loop is run once per integer 
+// The inside of this loop is run once per integer
     unsigned int v = 0;
     unsigned char b = *(ptr++);
     int bitsLoaded = 0;
@@ -357,13 +353,12 @@ inline unsigned long vsl_convert_from_arbitrary_length(const unsigned char* buff
       {
         vcl_cerr << "\nI/O ERROR: vsl_convert_from_arbitrary_length() has "
                  << "attempted to\n convert a number that is too large "
-                 << "to fit into an unsigned int" << vcl_endl;
-        vcl_cerr << "Aborting with " << count << " integers left to convert"
-                 << vcl_endl;
-       abort();
+                 << "to fit into an unsigned int\n"
+                 << "Aborting with " << count << " integers left to convert\n";
+        vcl_abort();
       }
-    }      
-    
+    }
+
 // Now add the last 7 bits.
     *(ints++) = v + ( ((unsigned int)(b & 127)) << bitsLoaded);
   }
@@ -378,13 +373,13 @@ inline unsigned long vsl_convert_from_arbitrary_length(const unsigned char* buff
 // buffer should be at least as long as
 // VSL_MAX_ARBITRARY_INT_BUFFER_LENGTH(sizeof(signed int)) * count
 inline unsigned long vsl_convert_to_arbitrary_length(const signed int* ints,
-                                          unsigned char *buffer,
-                                          unsigned long count = 1)
+                                                     unsigned char *buffer,
+                                                     unsigned long count = 1)
 {
   unsigned char* ptr = buffer;
   while (count-- > 0)
   {
-// The inside of this loop is run once per integer 
+// The inside of this loop is run once per integer
     signed int v = *(ints++);
     while (v > 63 || v < -64)
     {
@@ -393,7 +388,7 @@ inline unsigned long vsl_convert_to_arbitrary_length(const signed int* ints,
     }
     *(ptr++) = (v & 127) | 128;
   }
-  
+
   return (unsigned long)(ptr - buffer);
 }
 
@@ -408,13 +403,13 @@ inline unsigned long vsl_convert_to_arbitrary_length(const signed int* ints,
 // The functions will abort if the input data will not fit into
 // a signed int.
 inline unsigned long vsl_convert_from_arbitrary_length(const unsigned char* buffer,
-                                            signed int *ints,
-                                            unsigned long count = 1)
+                                                       signed int *ints,
+                                                       unsigned long count = 1)
 {
   const unsigned char* ptr = buffer;
   while (count-- > 0)
   {
-// The inside of this loop is run once per integer 
+// The inside of this loop is run once per integer
     signed int v = 0; // The value being loaded
     unsigned char b= *(ptr++);
     int bitsLoaded = 0;
@@ -431,18 +426,17 @@ inline unsigned long vsl_convert_from_arbitrary_length(const unsigned char* buff
     if (bitsLeft < 7)
     {
       if (bitsLeft <= 0 ||
-            b & 64 ?
+          b & 64 ?
               (((signed char)b >> (bitsLeft-1)) != -1) :
               (((b & 127) >> (bitsLeft-1)) != 0) )
       {
         vcl_cerr << "\nI/O ERROR: vsl_convert_from_arbitrary_length() has "
                  << "attempted to\n convert a number that is too large "
-                 << "to fit into a signed int" << vcl_endl;
-        vcl_cerr << "Aborting with " << count << " integers left to convert"
-                 << vcl_endl;
-        abort();
+                 << "to fit into a signed int\n"
+                 << "Aborting with " << count << " integers left to convert\n";
+        vcl_abort();
       }
-    }        
+    }
 
 
 // Now add the last 1<=n<=7 bits.
@@ -461,13 +455,13 @@ inline unsigned long vsl_convert_from_arbitrary_length(const unsigned char* buff
 // buffer should be at least as long as
 // VSL_MAX_ARBITRARY_INT_BUFFER_LENGTH(sizeof(unsigned short)) * count
 inline unsigned long vsl_convert_to_arbitrary_length(const unsigned short* ints,
-                                          unsigned char *buffer,
-                                          unsigned long count = 1)
+                                                     unsigned char *buffer,
+                                                     unsigned long count = 1)
 {
   unsigned char* ptr = buffer;
   while (count-- > 0)
   {
-// The inside of this loop is run once per integer 
+// The inside of this loop is run once per integer
     unsigned short v = *(ints++);
     while (v > 127)
     {
@@ -490,13 +484,13 @@ inline unsigned long vsl_convert_to_arbitrary_length(const unsigned short* ints,
 // The functions will abort if the input data will not fit into
 // an unsigned short.
 inline unsigned long vsl_convert_from_arbitrary_length(const unsigned char* buffer,
-                                            unsigned short *ints,
-                                            unsigned long count = 1)
+                                                       unsigned short *ints,
+                                                       unsigned long count = 1)
 {
   const unsigned char* ptr = buffer;
   while (count-- > 0)
   {
-// The inside of this loop is run once per integer 
+// The inside of this loop is run once per integer
     unsigned short v = 0;
     unsigned char b = *(ptr++);
     int bitsLoaded = 0;
@@ -506,7 +500,7 @@ inline unsigned long vsl_convert_from_arbitrary_length(const unsigned char* buff
       bitsLoaded += 7;
       b = *(ptr++);
     }
-    
+
 // At the end of the loop, the last seven bits have not been added
 // First check that number has not and will not overflow
     int bitsLeft = sizeof(unsigned short)*8 - bitsLoaded;
@@ -516,13 +510,12 @@ inline unsigned long vsl_convert_from_arbitrary_length(const unsigned char* buff
       {
         vcl_cerr << "\nI/O ERROR: vsl_convert_from_arbitrary_length() has "
                  << "attempted to\n convert a number that is too large "
-                 << "to fit into an unsigned short" << vcl_endl;
-        vcl_cerr << "Aborting with " << count << " integers left to convert"
-                 << vcl_endl;
-        abort();
+                 << "to fit into an unsigned short\n"
+                 << "Aborting with " << count << " integers left to convert\n";
+        vcl_abort();
       }
-    }      
-    
+    }
+
 // Now add the last 7 bits.
     *(ints++) = v + ( ((unsigned short)(b & 127)) << bitsLoaded);
   }
@@ -537,13 +530,13 @@ inline unsigned long vsl_convert_from_arbitrary_length(const unsigned char* buff
 // buffer should be at least as long as
 // VSL_MAX_ARBITRARY_INT_BUFFER_LENGTH(sizeof(signed short)) * count
 inline unsigned long vsl_convert_to_arbitrary_length(const signed short* ints,
-                                          unsigned char *buffer,
-                                          unsigned long count = 1)
+                                                     unsigned char *buffer,
+                                                     unsigned long count = 1)
 {
   unsigned char* ptr = buffer;
   while (count-- > 0)
   {
-// The inside of this loop is run once per integer 
+// The inside of this loop is run once per integer
     signed short v = *(ints++);
     while (v > 63 || v < -64)
     {
@@ -552,7 +545,7 @@ inline unsigned long vsl_convert_to_arbitrary_length(const signed short* ints,
     }
     *(ptr++) = (v & 127) | 128;
   }
-  
+
   return (unsigned long)(ptr - buffer);
 }
 
@@ -567,14 +560,14 @@ inline unsigned long vsl_convert_to_arbitrary_length(const signed short* ints,
 // The functions will abort if the input data will not fit into
 // a signed short.
 inline unsigned long vsl_convert_from_arbitrary_length(const unsigned char* buffer,
-                                            signed short *ints,
-                                            unsigned long count = 1)
+                                                       signed short *ints,
+                                                       unsigned long count = 1)
 {
   const unsigned char* ptr = buffer;
   while (count-- > 0)
   {
-// The inside of this loop is run once per integer 
-    
+// The inside of this loop is run once per integer
+
     signed short v = 0; // The value being loaded
     unsigned char b= *(ptr++);
     int bitsLoaded = 0;
@@ -597,18 +590,16 @@ inline unsigned long vsl_convert_from_arbitrary_length(const unsigned char* buff
       {
         vcl_cerr << "\nI/O ERROR: vsl_convert_from_arbitrary_length() has "
                  << "attempted to\n convert a number that is too large "
-                 << "to fit into a signed short" << vcl_endl;
-        vcl_cerr << "Aborting with " << count << " integers left to convert"
-                 << vcl_endl;
-        abort();
+                 << "to fit into a signed short\n"
+                 << "Aborting with " << count << " integers left to convert\n";
+        vcl_abort();
       }
-    }        
+    }
 
 // Now add the last 1<=n<=7 bits.
     *(ints++) = v |            // the stuff found before the final 7 bits
       ( ((signed short)(b & 63)) << bitsLoaded) | // the value of the penultimate 6 bits
       ( ((signed short)(b & 64)) ? (-64 << bitsLoaded) : 0); // the value of the final bit.
-
   }
   return (unsigned long)(ptr - buffer);
 }
@@ -620,7 +611,7 @@ inline unsigned long vsl_convert_from_arbitrary_length(const unsigned char* buff
 //: Write an unsigned int as 16 bits to vsl_b_ostream
 // If your signed int cannot be represented in 16 bits (e.g. on a 32 bit
 // platform) the function will abort().
-// 
+//
 // Warning: This function should be used infrequently and carefully. Under
 // all normal cicurmstances, the generic vsl_b_read and vsl_b_write in
 // vsl_binary_io.h will be perfectly adequate.
@@ -635,7 +626,7 @@ inline void vsl_b_write_uint_16(vsl_b_ostream& os, unsigned long n )
 }
 
 //: Read an unsigned int as 16 bits from vsl_b_istream
-// 
+//
 // Warning: This function should be used infrequently and carefully. Under
 // all normal cicurmstances, the generic vsl_b_read and vsl_b_write in
 // vsl_binary_io.h will be perfectly adequate.
@@ -654,7 +645,7 @@ inline void vsl_b_read_uint_16(vsl_b_istream& is, unsigned long& n )
 //: Write a signed int as 16 bits to vsl_b_ostream
 // If your signed int cannot be represented in 16 bits (e.g. on a 32 bit
 // platform) the function will abort().
-// 
+//
 // Warning: This function should be used infrequently and carefully. Under
 // all normal cicurmstances, the generic vsl_b_read and vsl_b_write in
 // vsl_binary_io.h will be perfectly adequate.
@@ -668,7 +659,7 @@ inline void vsl_b_write_int_16(vsl_b_ostream& os, long n )
 }
 
 //: Read a signed int as 16 bits from vsl_b_istream
-// 
+//
 // Warning: This function should be used infrequently and carefully. Under
 // all normal cicurmstances, the generic vsl_b_read and vsl_b_write in
 // vsl_binary_io.h will be perfectly adequate.
@@ -678,7 +669,7 @@ inline void vsl_b_read_int_16(vsl_b_istream& is, long& n )
 {
   is.is().read( ( char* )&n, 2 );
   if (*(((unsigned char*)&n)+1) & 128 == 1)
-  {  
+  {
     vsl_swap_bytes(( char* )&n, sizeof(long) );
     n |= -65536l;
   }
@@ -687,20 +678,19 @@ inline void vsl_b_read_int_16(vsl_b_istream& is, long& n )
     vsl_swap_bytes(( char* )&n, sizeof(long) );
     n &= 65535l;
   }
-
 }
 
 /////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////
 
 //: Write a block of doubles to a vsl_b_ostream
-// This function is very speed efficient, but 
+// This function is very speed efficient, but
 // temporarily allocates a block of memory the size of the
 // block being read.
 inline void vsl_b_write_block(vsl_b_ostream &os, const double* begin, unsigned nelems)
 {
   double *block = new double[nelems];
- 
+
   vsl_swap_bytes_to_buffer((const char *)begin, (char *)block, sizeof(double), nelems);
 
   os.os().write((const char*) block, (unsigned long)nelems*(unsigned long)sizeof(double));
@@ -718,7 +708,7 @@ inline void vsl_b_read_block(vsl_b_istream &is, double* begin, unsigned nelems)
 /////////////////////////////////////////////////////////////////////////
 
 //: Write a block of floats to a vsl_b_ostream
-// This function is very speed efficient, but 
+// This function is very speed efficient, but
 // temporarily allocates a block of memory the size of the
 // block being read.
 inline void vsl_b_write_block(vsl_b_ostream &os, const float* begin, unsigned nelems)
@@ -742,22 +732,22 @@ inline void vsl_b_read_block(vsl_b_istream &is, float* begin, unsigned nelems)
 /////////////////////////////////////////////////////////////////////////
 
 //: Write a block of signed ints to a vsl_b_ostream
-// This function is very speed efficient, but 
+// This function is very speed efficient, but
 // temporarily allocates a block of memory the about 1.2 times
 // size of the block being read.
 inline void vsl_b_write_block(vsl_b_ostream &os, const signed int* begin, unsigned nelems)
 {
   char *block = new char[VSL_MAX_ARBITRARY_INT_BUFFER_LENGTH(sizeof(signed int)) * nelems];
- 
+
   unsigned long nbytes = vsl_convert_to_arbitrary_length(begin, (unsigned char *)block, nelems);
   vsl_b_write(os, nbytes);
-  
+
   os.os().write( block, nbytes);
   delete block;
 }
 
 //: Read a block of signed ints from a vsl_b_istream
-// This function is very speed efficient, but 
+// This function is very speed efficient, but
 // temporarily allocates a block of memory the about 1.2 times
 // size of the block being read.
 inline void vsl_b_read_block(vsl_b_istream &is, signed int* begin, unsigned nelems)
@@ -765,7 +755,7 @@ inline void vsl_b_read_block(vsl_b_istream &is, signed int* begin, unsigned nele
   char *block = new char[VSL_MAX_ARBITRARY_INT_BUFFER_LENGTH(sizeof(signed int)) * nelems];
   unsigned long nbytes;
   vsl_b_read(is, nbytes);
-  
+
   is.is().read(block, nbytes);
 
 #ifndef NDEBUG
@@ -782,22 +772,22 @@ inline void vsl_b_read_block(vsl_b_istream &is, signed int* begin, unsigned nele
 /////////////////////////////////////////////////////////////////////////
 
 //: Write a block of unsigned ints to a vsl_b_ostream
-// This function is very speed efficient, but 
+// This function is very speed efficient, but
 // temporarily allocates a block of memory the about 1.2 times
 // size of the block being read.
 inline void vsl_b_write_block(vsl_b_ostream &os, const unsigned int* begin, unsigned nelems)
 {
   char *block = new char[VSL_MAX_ARBITRARY_INT_BUFFER_LENGTH(sizeof(unsigned int)) * nelems];
- 
+
   unsigned long nbytes = vsl_convert_to_arbitrary_length(begin, (unsigned char *)block, nelems);
   vsl_b_write(os, nbytes);
-  
+
   os.os().write( block, nbytes);
   delete block;
 }
 
 //: Read a block of unsigned ints from a vsl_b_istream
-// This function is very speed efficient, but 
+// This function is very speed efficient, but
 // temporarily allocates a block of memory the about 1.2 times
 // size of the block being read.
 inline void vsl_b_read_block(vsl_b_istream &is, unsigned int* begin, unsigned nelems)
@@ -805,7 +795,7 @@ inline void vsl_b_read_block(vsl_b_istream &is, unsigned int* begin, unsigned ne
   char *block = new char[VSL_MAX_ARBITRARY_INT_BUFFER_LENGTH(sizeof(unsigned int)) * nelems];
   unsigned long nbytes;
   vsl_b_read(is, nbytes);
-  
+
   is.is().read(block, nbytes);
 
 #ifndef NDEBUG
@@ -819,26 +809,25 @@ inline void vsl_b_read_block(vsl_b_istream &is, unsigned int* begin, unsigned ne
 }
 
 
-
 /////////////////////////////////////////////////////////////////////////
 
 //: Write a block of signed shorts to a vsl_b_ostream
-// This function is very speed efficient, but 
+// This function is very speed efficient, but
 // temporarily allocates a block of memory the about 1.2 times
 // size of the block being read.
 inline void vsl_b_write_block(vsl_b_ostream &os, const signed short* begin, unsigned nelems)
 {
   char *block = new char[VSL_MAX_ARBITRARY_INT_BUFFER_LENGTH(sizeof(signed short)) * nelems];
- 
+
   unsigned long nbytes = vsl_convert_to_arbitrary_length(begin, (unsigned char *)block, nelems);
   vsl_b_write(os, nbytes);
-  
+
   os.os().write( block, nbytes);
   delete block;
 }
 
 //: Read a block of signed shorts from a vsl_b_istream
-// This function is very speed efficient, but 
+// This function is very speed efficient, but
 // temporarily allocates a block of memory the about 1.2 times
 // size of the block being read.
 inline void vsl_b_read_block(vsl_b_istream &is, signed short* begin, unsigned nelems)
@@ -846,7 +835,7 @@ inline void vsl_b_read_block(vsl_b_istream &is, signed short* begin, unsigned ne
   char *block = new char[VSL_MAX_ARBITRARY_INT_BUFFER_LENGTH(sizeof(signed short)) * nelems];
   unsigned long nbytes;
   vsl_b_read(is, nbytes);
-  
+
   is.is().read(block, nbytes);
 
 #ifndef NDEBUG
@@ -860,26 +849,25 @@ inline void vsl_b_read_block(vsl_b_istream &is, signed short* begin, unsigned ne
 }
 
 
-
 /////////////////////////////////////////////////////////////////////////
 
 //: Write a block of unsigned shorts to a vsl_b_ostream
-// This function is very speed efficient, but 
+// This function is very speed efficient, but
 // temporarily allocates a block of memory the about 1.2 times
 // size of the block being read.
 inline void vsl_b_write_block(vsl_b_ostream &os, const unsigned short* begin, unsigned nelems)
 {
   char *block = new char[VSL_MAX_ARBITRARY_INT_BUFFER_LENGTH(sizeof(unsigned short)) * nelems];
- 
+
   unsigned long nbytes = vsl_convert_to_arbitrary_length(begin, (unsigned char *)block, nelems);
   vsl_b_write(os, nbytes);
-  
+
   os.os().write( block, nbytes);
   delete block;
 }
 
 //: Read a block of unsigned shorts from a vsl_b_istream
-// This function is very speed efficient, but 
+// This function is very speed efficient, but
 // temporarily allocates a block of memory the about 1.2 times
 // size of the block being read.
 inline void vsl_b_read_block(vsl_b_istream &is, unsigned short* begin, unsigned nelems)
@@ -887,7 +875,7 @@ inline void vsl_b_read_block(vsl_b_istream &is, unsigned short* begin, unsigned 
   char *block = new char[VSL_MAX_ARBITRARY_INT_BUFFER_LENGTH(sizeof(unsigned short)) * nelems];
   unsigned long nbytes;
   vsl_b_read(is, nbytes);
-  
+
   is.is().read(block, nbytes);
 
 #ifndef NDEBUG
@@ -901,26 +889,25 @@ inline void vsl_b_read_block(vsl_b_istream &is, unsigned short* begin, unsigned 
 }
 
 
-
 /////////////////////////////////////////////////////////////////////////
 
 //: Write a block of signed longs to a vsl_b_ostream
-// This function is very speed efficient, but 
+// This function is very speed efficient, but
 // temporarily allocates a block of memory the about 1.2 times
 // size of the block being read.
 inline void vsl_b_write_block(vsl_b_ostream &os, const signed long* begin, unsigned nelems)
 {
   char *block = new char[VSL_MAX_ARBITRARY_INT_BUFFER_LENGTH(sizeof(signed long)) * nelems];
- 
+
   unsigned long nbytes = vsl_convert_to_arbitrary_length(begin, (unsigned char *)block, nelems);
   vsl_b_write(os, nbytes);
-  
+
   os.os().write( block, nbytes);
   delete block;
 }
 
 //: Read a block of signed longs from a vsl_b_istream
-// This function is very speed efficient, but 
+// This function is very speed efficient, but
 // temporarily allocates a block of memory the about 1.2 times
 // size of the block being read.
 inline void vsl_b_read_block(vsl_b_istream &is, signed long* begin, unsigned nelems)
@@ -928,7 +915,7 @@ inline void vsl_b_read_block(vsl_b_istream &is, signed long* begin, unsigned nel
   char *block = new char[VSL_MAX_ARBITRARY_INT_BUFFER_LENGTH(sizeof(signed long)) * nelems];
   unsigned long nbytes;
   vsl_b_read(is, nbytes);
-  
+
   is.is().read(block, nbytes);
 
 #ifndef NDEBUG
@@ -942,26 +929,25 @@ inline void vsl_b_read_block(vsl_b_istream &is, signed long* begin, unsigned nel
 }
 
 
-
 /////////////////////////////////////////////////////////////////////////
 
 //: Write a block of unsigned longs to a vsl_b_ostream
-// This function is very speed efficient, but 
+// This function is very speed efficient, but
 // temporarily allocates a block of memory the about 1.2 times
 // size of the block being read.
 inline void vsl_b_write_block(vsl_b_ostream &os, const unsigned long* begin, unsigned nelems)
 {
   char *block = new char[VSL_MAX_ARBITRARY_INT_BUFFER_LENGTH(sizeof(unsigned long)) * nelems];
- 
+
   unsigned long nbytes = vsl_convert_to_arbitrary_length(begin, (unsigned char *)block, nelems);
   vsl_b_write(os, nbytes);
-  
+
   os.os().write( block, nbytes);
   delete block;
 }
 
 //: Read a block of unsigned longs from a vsl_b_istream
-// This function is very speed efficient, but 
+// This function is very speed efficient, but
 // temporarily allocates a block of memory the about 1.2 times
 // size of the block being read.
 inline void vsl_b_read_block(vsl_b_istream &is, unsigned long* begin, unsigned nelems)
@@ -969,7 +955,7 @@ inline void vsl_b_read_block(vsl_b_istream &is, unsigned long* begin, unsigned n
   char *block = new char[VSL_MAX_ARBITRARY_INT_BUFFER_LENGTH(sizeof(unsigned long)) * nelems];
   unsigned long nbytes;
   vsl_b_read(is, nbytes);
-  
+
   is.is().read(block, nbytes);
 
 #ifndef NDEBUG
@@ -981,9 +967,5 @@ inline void vsl_b_read_block(vsl_b_istream &is, unsigned long* begin, unsigned n
                                        // or something's read and write are not matched.
   delete block;
 }
-
-
-
-
 
 #endif // vsl_binary_explicit_io_h_

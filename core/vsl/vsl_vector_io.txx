@@ -1,9 +1,9 @@
+//This is vxl/vsl/vsl_vector_io.txx
 #ifndef vsl_vector_io_txx_
 #define vsl_vector_io_txx_
-//This is vxl/vsl/vsl_vector_io.txx
 
 //:
-// \file 
+// \file
 // \brief binary IO functions for vcl_vector<T>
 // \author Tim Cootes
 // Implementation
@@ -59,14 +59,14 @@ void vsl_print_summary(vcl_ostream& os, const vcl_vector<T> &v)
     vsl_print_summary(os, v[i]);
     os << vcl_endl;
   }
-  if (v.size() > 5) 
+  if (v.size() > 5)
     os << " ..." << vcl_endl;
 }
+
 
 #define VSL_VECTOR_INSTANTIATE(T) \
 template void vsl_print_summary(vcl_ostream& s, const vcl_vector<T >& v); \
 template void vsl_b_write(vsl_b_ostream& s, const vcl_vector<T >& v); \
-template void vsl_b_read(vsl_b_istream& s, vcl_vector<T >& v); \
-;
+template void vsl_b_read(vsl_b_istream& s, vcl_vector<T >& v)
 
-#endif
+#endif // vsl_vector_io_txx_

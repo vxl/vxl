@@ -30,7 +30,7 @@ void test_arbitrary_length_int_conversion_int()
 
   unsigned char * buf = new unsigned char[maxbuf];
 
-  clock_t t1, t2;
+  vcl_clock_t t1, t2;
 
   vcl_cout << " Starting encode " << vcl_endl;
 
@@ -64,10 +64,7 @@ void test_arbitrary_length_int_conversion_int()
   delete a;
   delete b;
   delete buf;
-
 }
-
-
 
 
 void test_arbitrary_length_int_conversion_short()
@@ -118,10 +115,7 @@ void test_arbitrary_length_int_conversion_short()
   TEST ("Checking the end conditions", c[65536] == 0 && c[65537] == 1, true);
 
   delete buf;
-
 }
-
-
 
 
 void test_arbitrary_length_int_conversion_ushort()
@@ -170,9 +164,8 @@ void test_arbitrary_length_int_conversion_ushort()
 
   TEST ("Checking the end conditions", c[65536] == 0 && c[65537] == 1, true);
   delete buf;
-
-
 }
+
 
 void test_explicit_int_io()
 {
@@ -226,13 +219,9 @@ void test_explicit_int_io()
   TEST ("Checking that the results are correct", i == 65536, true);
   if (i != 65536)
     vcl_cout << "Failed at number " << i <<vcl_endl;
-
-
-
-
-
-
 }
+
+
 void test_extreme_int_io()
 {
   vcl_cout << "*************************************" << vcl_endl;
@@ -270,9 +259,7 @@ void test_extreme_int_io()
   TEST ("min_long == min_long_in", min_long == min_long_in, true);
   TEST ("max_long == max_long_in", max_long == max_long_in, true);
   TEST ("max_ulong == max_ulong_in", max_ulong == max_ulong_in, true);
-
 }
-
 
 
 void test_arbitrary_length_int_conversion()
@@ -281,7 +268,7 @@ void test_arbitrary_length_int_conversion()
   test_arbitrary_length_int_conversion_short();
   test_explicit_int_io();
   test_extreme_int_io();
-//  test_arbitrary_length_int_conversion_int();
+//test_arbitrary_length_int_conversion_int();
 }
 
 
