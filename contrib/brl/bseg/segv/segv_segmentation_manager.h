@@ -47,6 +47,7 @@ class segv_segmentation_manager : public vgui_wrapper_tableau
   void fit_lines();
   void test_face();
   void test_digital_lines();
+  void display_IHS();
 #if 0
 #ifdef HAS_XERCES
   void read_xml_edges();

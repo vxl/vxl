@@ -856,3 +856,23 @@ void segv_segmentation_manager::test_digital_lines()
   t2D_->add_digital_curve(cae);
   t2D_->add_digital_curve(caf);
 }
+void segv_segmentation_manager::display_IHS()
+{
+  if(!img_)
+    return;
+  vgui_image_tableau_sptr itab =  t2D_->get_image_tableau();
+  if (!itab)
+    {
+      vcl_cout << "In segv_segmentation_manager::display_IHS() - null image tableau\n";
+      return;
+    }
+  vil1_memory_image_of<float> I,H,S;
+
+  vil1_memory_image_of<vil1_rgb<unsigned char> > in_image(img_), out_image;
+if(!in_image)
+  return;
+  brip_float_ops::convert_to_IHS(in_image, I, H, S);
+  brip_float_ops::display_IHS_as_RGB(I, H, S, out_image);
+  itab->set_image(out_image);
+  itab->post_redraw();
+}

@@ -96,6 +96,11 @@ void segv_menus::test_digital_lines_callback()
 segv_segmentation_manager::instance()->test_digital_lines();
 }
 
+void segv_menus::display_IHS_callback()
+{
+segv_segmentation_manager::instance()->display_IHS();
+}
+
 //segv_menus definition
 vgui_menu segv_menus::get_menu()
 {
@@ -114,6 +119,7 @@ vgui_menu segv_menus::get_menu()
   //view menu entries
   menuview.add("Original Image", original_image_callback);
   menuview.add("Clear Display", clear_display_callback);
+  menuview.add("Display IHS", display_IHS_callback);
   //edit menu entries
   menuedit.add("Region Of Interest", roi_callback);
   menuedit.add("Gaussian", gaussian_callback);
