@@ -1,3 +1,4 @@
+// This is mul/mbl/mbl_lda.cxx
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
@@ -5,7 +6,7 @@
 // \file
 // \brief  Class to perform linear discriminant analysis
 // \author Tim Cootes
-// Converted to VXL by Gavin Wheeler
+//         Converted to VXL by Gavin Wheeler
 
 #include "mbl_lda.h"
 
@@ -20,7 +21,6 @@
 #include <vnl/algo/vnl_symmetric_eigensystem.h>
 #include <vnl/io/vnl_io_vector.h>
 #include <vsl/vsl_vector_io.h>
-
 
 //=======================================================================
 
@@ -87,7 +87,7 @@ int mbl_lda::nDistinctIDs(const int* id, const int n)
 // \param label  Array [0..n-1] of integers indices
 // \param v  Set of vectors [0..n-1]
 // label[i] gives class of v[i]
-// Classes must be labelled from 0..m-1
+// Classes must be labelled from 0 to m-1
 void mbl_lda::build(const vnl_vector<double>* v, const int * label, int n,
                     const vnl_matrix<double>& wS, bool compute_wS)
 {
@@ -110,9 +110,9 @@ void mbl_lda::build(const vnl_vector<double>* v, const int * label, int n,
 
   // Compute mean of each class
   int n_classes = nDistinctIDs(label,n);
-  vcl_cout<<"There are "<<n_classes<<" classes to build LDA space"<<vcl_endl;
-  vcl_cout<<"Mix label index is "<<hi_i<<vcl_endl;
-  vcl_cout<<"Min label index is "<<lo_i<<vcl_endl;
+  vcl_cout<<"There are "<<n_classes<<" classes to build LDA space\n"
+          <<"Mix label index is "<<hi_i<<vcl_endl
+          <<"Min label index is "<<lo_i<<vcl_endl;
 
   int n_size=hi_i+1;
   mean_.resize(n_size);
@@ -341,7 +341,12 @@ short mbl_lda::version_no() const
 
 vcl_string mbl_lda::is_a() const
 {
-  return vcl_string("NR_LDA");
+  return vcl_string("mbl_lda");
+}
+
+bool mbl_lda::is_class(vcl_string const& s) const
+{
+  return s==is_a();
 }
 
 //=======================================================================
@@ -391,8 +396,8 @@ void mbl_lda::b_read(vsl_b_istream& bfs)
       break;
     default:
       //CHECK FUNCTION SIGNATURE IS CORRECT
-      vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, mbl_lda &)\n";
-      vcl_cerr << "           Unknown version number "<< version << vcl_endl;
+      vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, mbl_lda &)\n"
+               << "           Unknown version number "<< version << vcl_endl;
       bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
       return;
   }

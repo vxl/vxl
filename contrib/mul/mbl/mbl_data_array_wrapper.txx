@@ -1,8 +1,7 @@
 #ifndef mbl_data_array_wrapper_txx_
 #define mbl_data_array_wrapper_txx_
-
 //:
-//  \file
+// \file
 
 #include "mbl_data_array_wrapper.h"
 #include <vcl_iostream.h>
@@ -46,8 +45,6 @@ mbl_data_array_wrapper<T>::mbl_data_array_wrapper(const mbl_data_array_wrapper<T
   set(orig.data_, orig.size());
 }
 
-
-
 //: Initialise to return elements from data[i]
 template<class T>
 void mbl_data_array_wrapper<T>::set(const T* data, unsigned long n)
@@ -90,7 +87,7 @@ template<class T>
 bool mbl_data_array_wrapper<T>::next()
 {
   index_++;
-  return (index_<n_);
+  return index_<n_;
 }
 
 //: Return current index
@@ -99,7 +96,6 @@ unsigned long mbl_data_array_wrapper<T>::index() const
 {
   return index_;
 }
-
 
 //: Create copy on heap and return base pointer
 template<class T>
@@ -116,8 +112,8 @@ void mbl_data_array_wrapper<T>::set_index(unsigned long n)
   assert(n != ((unsigned)-1));
   if (n>=n_)
   {
-    vcl_cerr<<"mbl_data_array_wrapper<T>::set_index(n) ";
-    vcl_cerr<<"n = "<<n<<" not in range 0<=n<"<<size()<<vcl_endl;
+    vcl_cerr<<"mbl_data_array_wrapper<T>::set_index(n) "
+            <<"n = "<<n<<" not in range 0<=n<"<<size()<<vcl_endl;
     vcl_abort();
   }
 
@@ -128,6 +124,12 @@ template <class T>
 vcl_string mbl_data_array_wrapper<T>::is_a() const
 {
   return vcl_string("mbl_data_array_wrapper<T>");
+}
+
+template <class T>
+bool mbl_data_array_wrapper<T>::is_class(vcl_string const& s) const
+{
+  return s==is_a(); // no ref to parent's is_class() since that is pure virtual
 }
 
 

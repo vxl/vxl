@@ -1,7 +1,10 @@
+// This is mul/mbl/mbl_rbf_network.cxx
+#include "mbl_rbf_network.h"
 //:
 // \file
 // \brief A class to perform some of the functions of a Radial Basis Function Network.
 // \author Tim Cootes
+//
 //  Given a set of n training vectors, x_i (i=0..n-1), a set of internal weights are computed.
 //  Given a new vector, x, a vector of weights, w, are computed such that
 //  if x = x_i then w(i+1) = 1, w(j !=i+1) = 0  The sum of the weights
@@ -18,9 +21,6 @@
 //
 //  I'm not sure if this is exactly an RBF network in the original
 //  definition. I'll check one day.
-//
-
-#include "mbl_rbf_network.h"
 
 #include <vcl_cstdlib.h>
 #include <vcl_cassert.h>
@@ -100,7 +100,7 @@ double mbl_rbf_network::distSqr(const vnl_vector<double>& x, const vnl_vector<do
   unsigned int n = x.size();
   if (y.size()!=n)
   {
-    vcl_cerr<<"mbl_rbf_network::distSqr() x and y different sizes."<<vcl_endl;
+    vcl_cerr<<"mbl_rbf_network::distSqr() x and y different sizes.\n";
     vcl_abort();
   }
 
@@ -193,6 +193,15 @@ vcl_string mbl_rbf_network::is_a() const
 }
 
 //=======================================================================
+// Method: is_class
+//=======================================================================
+
+bool mbl_rbf_network::is_class(vcl_string const& s) const
+{
+  return s==is_a();
+}
+
+//=======================================================================
 // Method: print
 //=======================================================================
 
@@ -200,9 +209,7 @@ vcl_string mbl_rbf_network::is_a() const
 void mbl_rbf_network::print_summary(vcl_ostream& os) const
 {
   os << "Built with "<<x_.size()<<" examples.";
-  //  os << x_ << vcl_endl;
-  //  os << W_ << vcl_endl;
-  //  os << s2_<< vcl_endl;
+  //  os << x_ << vcl_endl << W_ << vcl_endl << s2_<< vcl_endl;
 }
 
 //=======================================================================
@@ -244,8 +251,8 @@ void mbl_rbf_network::b_read(vsl_b_istream& bfs)
     vsl_b_read(bfs,flag);  sum_to_one_ = (flag!=0);
     break;
   default:
-    vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, mbl_rbf_network &) \n";
-    vcl_cerr << "           Unknown version number "<< version << vcl_endl;
+    vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, mbl_rbf_network &)\n"
+             << "           Unknown version number "<< version << vcl_endl;
     bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
     return;
   }

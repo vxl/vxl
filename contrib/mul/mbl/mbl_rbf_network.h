@@ -1,11 +1,10 @@
 #ifndef mbl_rbf_network_h_
 #define mbl_rbf_network_h_
-
 //:
 // \file
 // \brief A class to perform some of the functions of a Radial Basis Function Network
 // \author tfc
-// wondrous VXL conversion started by gvw, errors corrected by ...
+//         wondrous VXL conversion started by gvw, errors corrected by ...
 
 #include <vcl_string.h>
 #include <vcl_vector.h>
@@ -37,8 +36,8 @@
 //
 //  I'm not sure if this is exactly an RBF network in the original
 //  definition. I'll check one day.
-class mbl_rbf_network {
-private:
+class mbl_rbf_network
+{
   vcl_vector<vnl_vector<double> > x_;
   vnl_matrix<double> W_;
   double s2_;
@@ -50,11 +49,12 @@ private:
 
   double distSqr(const vnl_vector<double>& x, const vnl_vector<double>& y) const;
   double rbf(double r2) const
-    { return (r2<=0.0? 1.0 : vcl_exp(-r2) ); }
+    { return r2<=0.0 ? 1.0 : vcl_exp(-r2); }
+
   double rbf(const vnl_vector<double>& x, const vnl_vector<double>& y)
     { return rbf(distSqr(x,y)/s2_); }
 
-public:
+ public:
 
   //: Dflt ctor
   mbl_rbf_network();
@@ -92,6 +92,9 @@ public:
 
   //: Name of the class
   vcl_string is_a() const;
+
+  //: True if this is (or is derived from) class named s
+  bool is_class(vcl_string const& s) const;
 
   //: Print class to os
   void print_summary(vcl_ostream& os) const;

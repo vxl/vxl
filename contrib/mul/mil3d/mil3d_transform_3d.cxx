@@ -158,8 +158,8 @@ void mil3d_transform_3d::params(vnl_vector<double>& v) const
 void mil3d_transform_3d::setCheck(int n1,int n2,const char* str) const
 {
   if (n1==n2) return;
-  vcl_cerr<<"mil3d_transform_3d::set() "<<n1<<" parameters required for ";
-  vcl_cerr<<str<<". Passed "<<n2<<vcl_endl;
+  vcl_cerr<<"mil3d_transform_3d::set() "<<n1<<" parameters required for "
+          <<str<<". Passed "<<n2<<vcl_endl;
   vcl_abort();
 }
 
@@ -406,9 +406,9 @@ vgl_point_3d<double> mil3d_transform_3d::operator()(double x, double y, double z
     case Affine :
     {
 #if 0
-      vcl_cout << x*xx_+y*xy_+z*xz_+xt_ << vcl_endl;
-      vcl_cout << x*yx_+y*yy_+z*yz_+yt_ << vcl_endl;
-      vcl_cout << x*zx_+y*zy_+z*zz_+zt_ << vcl_endl;
+      vcl_cout << x*xx_+y*xy_+z*xz_+xt_ << vcl_endl
+               << x*yx_+y*yy_+z*yz_+yt_ << vcl_endl
+               << x*zx_+y*zy_+z*zz_+zt_ << vcl_endl;
 #endif
 
         return vgl_point_3d<double> (x*xx_+y*xy_+z*xz_+xt_,
@@ -416,8 +416,8 @@ vgl_point_3d<double> mil3d_transform_3d::operator()(double x, double y, double z
                                      x*zx_+y*zy_+z*zz_+zt_);
     }
     default:
-      vcl_cerr<<"mil3d_transform_3d::operator() : Unrecognised form:"<<int(form_)
-              <<vcl_endl;
+      vcl_cerr<<"mil3d_transform_3d::operator() : Unrecognised form: "
+              <<int(form_)<<vcl_endl;
       vcl_abort();
   }
 
@@ -452,7 +452,7 @@ vgl_vector_3d<double> mil3d_transform_3d::delta(vgl_point_3d<double> p, vgl_vect
         );
     }
     default:
-      vcl_cerr<<"mil3d_transform_3d::delta() : Unrecognised form:"
+      vcl_cerr<<"mil3d_transform_3d::delta() : Unrecognised form: "
               <<int(form_)<<vcl_endl;
       vcl_abort();
   }
@@ -558,7 +558,7 @@ void mil3d_transform_3d::calcInverse() const
       break;
     }
     default:
-      vcl_cerr<<"mil3d_transform_3d::calcInverse() : Unrecognised form:"<<int(form_)<<vcl_endl;
+      vcl_cerr<<"mil3d_transform_3d::calcInverse() : Unrecognised form: "<<int(form_)<<vcl_endl;
       vcl_abort();
   }
 
@@ -696,6 +696,15 @@ vcl_string mil3d_transform_3d::is_a() const
 }
 
 //=======================================================================
+// Method: is_class
+//=======================================================================
+
+bool mil3d_transform_3d::is_class(vcl_string const& s) const
+{
+  return s==is_a();
+}
+
+//=======================================================================
 // Method: print
 //=======================================================================
 
@@ -713,10 +722,8 @@ void mil3d_transform_3d::print_summary(vcl_ostream& o) const
     {
       vnl_vector<double> p(3);
       params(p);
-      o << "Translation ";
-      o << "(" << p(0) << ","
-               << p(1) << ","
-               << p(2) << ")";
+      o << "Translation "
+        << '(' << p(0) << ',' << p(1) << ',' << p(2) << ')';
       break;
     }
 
@@ -724,9 +731,9 @@ void mil3d_transform_3d::print_summary(vcl_ostream& o) const
     {
       vnl_vector<double> p(6);
       params(p);
-      o << "ZoomOnly" << vcl_endl;
-      o << vsl_indent()<< "scale factor = (" << p(0) << "," << p(1) << "," << p(2) << ")\n";
-      o << vsl_indent() << "translation = (" << p(3) << "," << p(4) << "," << p(5) << ")\n";
+      o << "ZoomOnly\n"
+        << vsl_indent()<< "scale factor = (" << p(0) << ',' << p(1) << ',' << p(2) << ")\n"
+        << vsl_indent()<< "translation  = (" << p(3) << ',' << p(4) << ',' << p(5) << ")\n";
       break;
     }
 
@@ -734,12 +741,9 @@ void mil3d_transform_3d::print_summary(vcl_ostream& o) const
     {
       vnl_vector<double> p(6);
       params(p);
-      o << "RigidBody" << vcl_endl;
-      o << vsl_indent()<< "angles = "
-        << p(0) << ","
-        << p(1) << ","
-        << p(2) << vcl_endl;
-      o << vsl_indent()<< "translation = (" << p(3) << "," << p(4) << "," << p(5) << ")\n";
+      o << "RigidBody\n"
+        << vsl_indent()<< "angles = " << p(0) << ',' << p(1) << ',' << p(2) << vcl_endl
+        << vsl_indent()<< "translation = (" << p(3) << ',' << p(4) << ',' << p(5) << ")\n";
       break;
     }
 
@@ -747,33 +751,24 @@ void mil3d_transform_3d::print_summary(vcl_ostream& o) const
     {
       vnl_vector<double> p(7);
       params(p);
-      o << "Similarity" << vcl_endl;
-      o << vsl_indent()<< "scale factor = " << p(0) << vcl_endl;
-      o << vsl_indent()<< "angles = "
-        << p(1) << ","
-        << p(2) << ","
-        << p(3) << vcl_endl;
-      o << vsl_indent()<< "translation = (" << p(4) << "," << p(5) << "," << p(5) << ")\n";
+      o << "Similarity\n"
+        << vsl_indent()<< "scale factor = " << p(0) << vcl_endl
+        << vsl_indent()<< "angles = " << p(1) << ',' << p(2) << ',' << p(3) << vcl_endl
+        << vsl_indent()<< "translation = (" << p(4) << ',' << p(5) << ',' << p(5) << ")\n";
       break;
     }
     case Affine:
     {
       vnl_vector<double> p(9);
       params(p);
-      o << "Affine" << vcl_endl;
-      o << vsl_indent()<< "scale factors = "
-        << p(0) << ","
-        << p(1) << ","
-        << p(2) << vcl_endl;
-      o << vsl_indent()<< "angles = "
-        << p(3) << ","
-        << p(4) << ","
-        << p(5) << vcl_endl;
-      o << vsl_indent()<< "translation = (" << p(6) << "," << p(7) << "," << p(8) << ")\n";
+      o << "Affine\n"
+        << vsl_indent()<< "scale factors = " << p(0) << ',' << p(1) << ',' << p(2) << vcl_endl
+        << vsl_indent()<< "angles = " << p(3) << ',' << p(4) << ',' << p(5) << vcl_endl
+        << vsl_indent()<< "translation = (" << p(6) << ',' << p(7) << ',' << p(8) << ")\n";
       break;
     }
     case Undefined:
-      o << "Undefined" << vcl_endl;
+      o << "Undefined\n";
       break;
   }
   vsl_indent_dec(o);
@@ -813,8 +808,8 @@ void mil3d_transform_3d::b_read(vsl_b_istream& bfs)
     vsl_b_read(bfs,tx_); vsl_b_read(bfs,ty_); vsl_b_read(bfs,tz_); vsl_b_read(bfs,tt_);
     break;
   default:
-    vcl_cerr<<"mil3d_transform_3d::load : ";
-    vcl_cerr<<"Illegal version number : "<< version << vcl_endl;
+    vcl_cerr<<"mil3d_transform_3d::load : "
+            <<"Illegal version number : "<< version << vcl_endl;
     vcl_abort();
   }
 

@@ -78,6 +78,9 @@ class mbl_selected_data_wrapper: public mbl_data_wrapper<T>
 
   //: Name of the class.
   virtual vcl_string is_a() const;
+
+  //: True if this is (or is derived from) class named s
+  virtual bool is_class(vcl_string const& s) const;
 };
 
 #endif // mbl_selected_data_wrapper_h

@@ -4,7 +4,7 @@
 #endif
 //:
 // \file
-// \brief Interface for loading new image formats 
+// \brief Interface for loading new image formats
 // This class provides an interface for loading images in new formats
 // \author      Franck Bettinger
 // \date        Sun Mar 17 22:57:00 2002
@@ -40,6 +40,11 @@ vcl_string mil_byte_image_2d_io_plugin::is_a() const
   return vcl_string("mil_byte_image_2d_io_plugin");
 }
 
+bool mil_byte_image_2d_io_plugin::is_class(vcl_string const& s) const
+{
+  return s==is_a();
+}
+
 //=======================================================================
 
 bool mil_byte_image_2d_io_plugin::loadTheImage (
@@ -48,7 +53,7 @@ bool mil_byte_image_2d_io_plugin::loadTheImage (
     const vcl_string & colour)
 {
   if (mil_byte_image_2d_of_plugins_list_==0 ||
-      is_a()!=vcl_string("mil_byte_image_2d_io_plugin")) 
+      !is_class("mil_byte_image_2d_io_plugin"))
   {
     return false;
   }
@@ -70,7 +75,7 @@ bool mil_byte_image_2d_io_plugin::loadTheImage (
 void mil_byte_image_2d_io_plugin::register_plugin(
     mil_byte_image_2d_io_plugin* plugin)
 {
-  if (plugin==0 || plugin->is_a()==vcl_string("mil_byte_image_2d_io_plugin")) 
+  if (plugin==0 || plugin->is_class("mil_byte_image_2d_io_plugin"))
   {
     return;
   }
@@ -78,7 +83,7 @@ void mil_byte_image_2d_io_plugin::register_plugin(
   if (mil_byte_image_2d_of_plugins_list_==0)
   {
     mil_byte_image_2d_of_plugins_list_ =
-      new vcl_vector<mil_byte_image_2d_io_plugin*>(); 
+      new vcl_vector<mil_byte_image_2d_io_plugin*>();
   }
 
   mil_byte_image_2d_of_plugins_list_->push_back(plugin);
@@ -104,7 +109,7 @@ void mil_byte_image_2d_io_plugin::delete_all_plugins()
 bool mil_byte_image_2d_io_plugin::can_be_loaded(const vcl_string& filename)
 {
   if (mil_byte_image_2d_of_plugins_list_==0 ||
-      is_a()!=vcl_string("mil_byte_image_2d_io_plugin")) 
+      is_class("mil_byte_image_2d_io_plugin"))
   {
     return false;
   }

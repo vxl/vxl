@@ -32,14 +32,17 @@ class mil_byte_image_2d_io_plugin
   //: Name of the class
   virtual vcl_string is_a() const;
 
-  //: Attempt to load image from named file. 
+  //: True if this is (or is derived from) class named s
+  virtual bool is_class(vcl_string const& s) const;
+
+  //: Attempt to load image from named file.
   // \param filetype  String hinting at what image format is
   // \param colour    define whether to load images as colour or grey-scale.
   //        Options are '' (i.e. rely on image), 'Grey' or 'RGB'
   // \ret   true if successful
-  virtual bool loadTheImage (mil_image_2d_of<vil_byte>& image, 
+  virtual bool loadTheImage (mil_image_2d_of<vil_byte>& image,
                              const vcl_string & path,
-                             const vcl_string & filetype, 
+                             const vcl_string & filetype,
                              const vcl_string & colour);
 
   //: Register a mil_byte_image_2d_io_plugin to the list of plugins

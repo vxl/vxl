@@ -129,8 +129,8 @@ void mbl_selected_data_wrapper<T>::set_index(unsigned long n)
   assert(n != ((unsigned)-1));
   if (n>=size())
   {
-    vcl_cerr<<"mbl_selected_data_wrapper<T>::set_index(n) ";
-    vcl_cerr<<"n = "<<n<<" not in range 0<=n<"<<size()<<vcl_endl;
+    vcl_cerr<<"mbl_selected_data_wrapper<T>::set_index(n) "
+            <<"n = "<<n<<" not in range 0<=n<"<<size()<<vcl_endl;
     vcl_abort();
   }
   index_=n;
@@ -141,6 +141,12 @@ template <class T>
 vcl_string mbl_selected_data_wrapper<T>::is_a() const
 {
   return vcl_string("mbl_selected_data_wrapper<T>");
+}
+
+template <class T>
+bool mbl_selected_data_wrapper<T>::is_class(vcl_string const& s) const
+{
+  return s==is_a(); // no ref to parent's is_class() since that is pure virtual
 }
 
 

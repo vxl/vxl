@@ -42,21 +42,19 @@
 template<class T>
 class mbl_file_data_wrapper : public mbl_data_wrapper<T>
 {
-  private:
+  // file stream
+  vsl_b_ifstream bfs_;
 
-      // file stream
-    vsl_b_ifstream bfs_;   
-                                 
-      // path to file holding all data
-    vcl_string path_;
+  // path to file holding all data
+  vcl_string path_;
 
-      // data
-    T d_;  
+  // data
+  T d_;
 
-      // current index of data
-    unsigned long index_; 
+  // current index of data
+  unsigned long index_;
 
-      // size of data
+  // size of data
     unsigned long size_;
 
   public:
@@ -88,11 +86,11 @@ class mbl_file_data_wrapper : public mbl_data_wrapper<T>
   //  First example has index 0
   virtual unsigned long index() const;
 
-/*
+#if 0
   //: Move to element n
   //  First example has index 0
   virtual void set_index(unsigned long n);
-*/
+#endif
 
   //: Create copy on heap and return base pointer
   // This will create an independent iterator on the underlying data.
@@ -102,6 +100,9 @@ class mbl_file_data_wrapper : public mbl_data_wrapper<T>
 
   //: Name of the class
   virtual vcl_string is_a() const;
+
+  //: True if this is (or is derived from) class named s
+  virtual bool is_class(vcl_string const& s) const;
 };
 
 #endif // mbl_file_data_wrapper_h

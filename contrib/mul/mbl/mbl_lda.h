@@ -8,7 +8,7 @@
 // \file
 // \brief  Class to perform linear discriminant analysis
 // \author Tim Cootes
-// Converted to VXL by Gavin Wheeler
+//         Converted to VXL by Gavin Wheeler
 
 #include <vcl_string.h>
 #include <vcl_vector.h>
@@ -165,6 +165,9 @@ class mbl_lda
 
   //: Name of the class
   virtual vcl_string is_a() const;
+
+  //: True if this is (or is derived from) class named s
+  virtual bool is_class(vcl_string const& s) const;
 
   //: Print class to os
   virtual void print_summary(vcl_ostream& os) const;
