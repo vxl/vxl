@@ -8,7 +8,7 @@
 #include <vtol/vtol_edge.h>
 #include <vtol/vtol_vertex_2d.h>
 #include <vtol/vtol_face_2d.h>
-#include <vil1/vil1_memory_image_of.h>
+#include <vil1/vil1_image.h>
 #include <strk/strk_tracker.h>
 #include <strk/strk_info_tracker_process.h>
 
@@ -127,12 +127,12 @@ bool strk_info_tracker_process::finish()
     if (!track_stream)
     {
       vcl_cout << "In strk_info_tracker_process::finish() -"
-               << " could not open file " << track_file_ << "\n";
+               << " could not open file " << track_file_ << '\n';
       return false;
     }
-    track_stream << "START_FRAME: " << start_frame_ << "\n"
-                 << "N_FRAMES: " << n_frames << "\n"
-                 << "N_VERTS: " << n_verts_ << "\n";
+    track_stream << "START_FRAME: " << start_frame_ << '\n'
+                 << "N_FRAMES: " << n_frames << '\n'
+                 << "N_VERTS: " << n_verts_ << '\n';
     vcl_vector<vtol_vertex_sptr> verts;
     for (int i = 0; i<n_frames; i++)
     {
@@ -170,7 +170,7 @@ bool strk_info_tracker_process::set_output_file(vcl_string const& file_name)
   if (!track_stream)
   {
     vcl_cout << "In strk_info_tracker_process::set_output_file() -"
-             << " could not open file " << track_file_ << "\n";
+             << " could not open file " << track_file_ << '\n';
     return false;
   }
   track_stream.close();
