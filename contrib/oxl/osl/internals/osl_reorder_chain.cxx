@@ -36,7 +36,7 @@ void osl_reorder_chain(osl_edgel_chain *dc)
     return;
 
   osl_OrthogRegress data;
-  float a0,b0,a1,b1,dot,diff,max=0.0;
+  double a0,b0,a1,b1,dot,diff,max=0.0;
   double MPIby2 = vnl_math::pi/2.0;
 
   // Add the first npts to the data set and fit.

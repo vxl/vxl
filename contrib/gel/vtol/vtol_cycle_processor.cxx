@@ -1,7 +1,7 @@
+// This is gel/vtol/vtol_cycle_processor.cxx
+#include "vtol_cycle_processor.h"
 //:
 // \file
-
-#include "vtol_cycle_processor.h"
 
 #include <vcl_vector.h>
 #include <vcl_algorithm.h>
@@ -135,7 +135,7 @@ static bool self_loop(vtol_edge_2d_sptr& e)
   return loop;
 }
 
-static bool bridge_traverse(float angle)
+static bool bridge_traverse(double angle)
 {
   double tol = 1e-3;
   double delta = vcl_fabs(vcl_fabs(angle)-180);
@@ -194,9 +194,9 @@ static void v_edges(vtol_vertex_sptr v, vcl_vector<vtol_edge_2d_sptr>& b_edges,
   delete edges;
 }
 
-static float tangent_angle_at_vertex(vtol_vertex_sptr v, vtol_edge_2d_sptr e)
+static double tangent_angle_at_vertex(vtol_vertex_sptr v, vtol_edge_2d_sptr e)
 {
-  float ang = 0;
+  double ang = 0;
   if (!e||!v||!(v==e->v1()||v==e->v2()))
     {
       vcl_cout << "vtol_vertex and vtol_edge not incident\n";
@@ -256,13 +256,13 @@ static vtol_vertex_sptr common_vertex(vtol_edge_2d_sptr& e0, vtol_edge_2d_sptr& 
 //    The angle is mapped to the interval [-180, 180].  The angle sense is
 //    defined so that the e0 orientation is towards v and the e1
 //    orientation is away from v.
-static float angle_between_edges(vtol_edge_2d_sptr e0, vtol_edge_2d_sptr e1, vtol_vertex_sptr v)
+static double angle_between_edges(vtol_edge_2d_sptr e0, vtol_edge_2d_sptr e1, vtol_vertex_sptr v)
 {
-  float theta0 = 180+tangent_angle_at_vertex(v, e0);
+  double theta0 = 180+tangent_angle_at_vertex(v, e0);
   if (theta0>360)
     theta0 -= 360;
-  float theta1 = tangent_angle_at_vertex(v, e1);
-  float angle = theta1-theta0;
+  double theta1 = tangent_angle_at_vertex(v, e1);
+  double angle = theta1-theta0;
   if (angle>180)
     angle-=360;
   if (angle<-180)
@@ -273,16 +273,16 @@ static float angle_between_edges(vtol_edge_2d_sptr e0, vtol_edge_2d_sptr e1, vto
 //:   Find the most counter clockwise vtol_edge at the input vtol_vertex, from.
 //
 static vtol_edge_2d_sptr ccw_edge(vtol_edge_2d_sptr in_edg, vtol_vertex_sptr from,
-                      vcl_vector<vtol_edge_2d_sptr>& edges)
+                                  vcl_vector<vtol_edge_2d_sptr>& edges)
 {
-  float most_ccw = -360;
+  double most_ccw = -360;
   vtol_edge_2d_sptr ccw = NULL;
   for (vcl_vector<vtol_edge_2d_sptr>::iterator eit = edges.begin();
        eit != edges.end(); eit++)
     {
       if ((*eit)==in_edg)
         continue;
-      float delta = angle_between_edges(in_edg, *eit, from);
+      double delta = angle_between_edges(in_edg, *eit, from);
       if (delta>most_ccw)
         {
           most_ccw = delta;
@@ -444,7 +444,7 @@ void vtol_cycle_processor::set_bridge_vars()
 //    (just convenient code packaging for use in classify_path)
 //
 static void classify_adjacent_edges(vtol_edge_2d_sptr& e0, vtol_edge_2d_sptr& e1,
-                                    bool& all_bridge, float& angle)
+                                    bool& all_bridge, double& angle)
 {
   vtol_vertex_sptr cv = common_vertex(e0, e1);
   if (cv)
@@ -461,8 +461,8 @@ static void classify_adjacent_edges(vtol_edge_2d_sptr& e0, vtol_edge_2d_sptr& e1
 static bool classify_two_edge_path(vtol_edge_2d_sptr& e0, vtol_edge_2d_sptr& e1)
 {
   vtol_vertex_sptr v1 = e0->v1(), v2 = e0->v1();
-  float angle1 = angle_between_edges(e0, e1, v1);
-  float angle2 = angle_between_edges(e0, e1, v2);
+  double angle1 = angle_between_edges(e0, e1, v1);
+  double angle2 = angle_between_edges(e0, e1, v2);
   bool bridge = bridge_traverse(angle1)&&bridge_traverse(angle2);
   return !bridge;
 }
@@ -519,7 +519,7 @@ bool vtol_cycle_processor::classify_path(vcl_vector<vtol_edge_2d_sptr>& path_edg
     }
   //scan the path and determine if it is a bridge.  Also compute
   //the cumulative angle between vtol_edge(s) along the path
-  float winding_angle = 0, angle = 0;
+  double winding_angle = 0, angle = 0;
   bool all_bridge = used(e0);
   //If the path has two edges it is simpler to deal with it as follows
   if (path_edges.size()==2)
@@ -663,7 +663,7 @@ void vtol_cycle_processor::sort_one_cycles()
   //defined as a ccw cycle with the largest bounding box.
   //search for the largest ccw bounding box
   vcl_vector<vtol_one_chain_sptr>::iterator cit = chains_.begin();
-  float area = 0;
+  double area = 0;
   vtol_one_chain_sptr outer_chain;
   for (cit=chains_.begin(); cit != chains_.end(); cit++)
     {
@@ -671,7 +671,7 @@ void vtol_cycle_processor::sort_one_cycles()
       if (!ccw(*cit))
         continue;
       vsol_box_2d* box = (*cit)->get_bounding_box();
-      float WxH = box->width()*box->height();
+      double WxH = box->width()*box->height();
       if (WxH>area)
         {
           area = WxH;

@@ -1,8 +1,9 @@
+// This is oxl/osl/osl_convolve.cxx
 #include "osl_convolve.h"
-#include <osl/osl_roi_window.h>
-
 //:
 //  \file
+
+#include <osl/osl_roi_window.h>
 
 //-----------------------------------------------------------------------------
 
@@ -48,8 +49,8 @@ void osl_convolve2 (osl_roi_window const *window,
   int row_max = window->row_end_index;
   int col_max = window->col_end_index-(mask->count-1);
 
-  float mask0 = mask->array [0];
-  float mask1 = mask->array [1];
+  double mask0 = mask->array [0];
+  double mask1 = mask->array [1];
 
   // horizontal smoothing.
 
@@ -89,9 +90,9 @@ void osl_convolve3 (osl_roi_window const *window,
   int row_max = window->row_end_index;
   int col_max = window->col_end_index-(mask->count-1);
 
-  float mask0 = mask->array [0];
-  float mask1 = mask->array [1];
-  float mask2 = mask->array [2];
+  double mask0 = mask->array [0];
+  double mask1 = mask->array [1];
+  double mask2 = mask->array [2];
 
   // horizontal smoothing.
 
@@ -133,10 +134,10 @@ void osl_convolve4 (osl_roi_window const *window,
   int row_max = window->row_end_index;
   int col_max = window->col_end_index-(mask->count-1);
 
-  float mask0 = mask->array [0];
-  float mask1 = mask->array [1];
-  float mask2 = mask->array [2];
-  float mask3 = mask->array [3];
+  double mask0 = mask->array [0];
+  double mask1 = mask->array [1];
+  double mask2 = mask->array [2];
+  double mask3 = mask->array [3];
 
   // horizontal smoothing.
 
@@ -180,11 +181,11 @@ void osl_convolve5 (osl_roi_window const *window,
   int row_max = window->row_end_index;
   int col_max = window->col_end_index-(mask->count-1);
 
-  float mask0 = mask->array [0];
-  float mask1 = mask->array [1];
-  float mask2 = mask->array [2];
-  float mask3 = mask->array [3];
-  float mask4 = mask->array [4];
+  double mask0 = mask->array [0];
+  double mask1 = mask->array [1];
+  double mask2 = mask->array [2];
+  double mask3 = mask->array [3];
+  double mask4 = mask->array [4];
 
   // horizontal smoothing.
 
@@ -230,12 +231,12 @@ void osl_convolve6 (osl_roi_window const *window,
   int row_max = window->row_end_index;
   int col_max = window->col_end_index-(mask->count-1);
 
-  float mask0 = mask->array [0];
-  float mask1 = mask->array [1];
-  float mask2 = mask->array [2];
-  float mask3 = mask->array [3];
-  float mask4 = mask->array [4];
-  float mask5 = mask->array [5];
+  double mask0 = mask->array [0];
+  double mask1 = mask->array [1];
+  double mask2 = mask->array [2];
+  double mask3 = mask->array [3];
+  double mask4 = mask->array [4];
+  double mask5 = mask->array [5];
 
   // horizontal smoothing.
 

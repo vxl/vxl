@@ -104,9 +104,9 @@ struct VrmlCentroidVisitor : public QvVisitor {
       return;
     }
 
-    centroid [0] *= 1.0/n;
-    centroid [1] *= 1.0/n;
-    centroid [2] *= 1.0/n;
+    centroid [0] *= 1.0f/n;
+    centroid [1] *= 1.0f/n;
+    centroid [2] *= 1.0f/n;
 
     pass = 1;
     radius = 0;

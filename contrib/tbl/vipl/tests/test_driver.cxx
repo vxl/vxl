@@ -1,3 +1,4 @@
+// This is tbl/vipl/tests/test_driver.cxx
 #include "test_driver.h"
 #include <testlib/testlib_register.h>
 #include <vil/vil_memory_image_of.h>
@@ -74,7 +75,7 @@ vil_image CreateTestfloatImage(int wd, int ht)
   vil_memory_image_of<float> image(wd, ht);
   for (int x = 0; x < wd; x++)
     for (int y = 0; y < ht; y++) {
-      float data = 0.01 * ((x-wd/2)*(y-ht/2)/16);
+      float data = 0.01f * ((x-wd/2)*(y-ht/2)/16);
       image.put_section(&data, x, y, 1, 1);
     }
   return image;
@@ -110,7 +111,7 @@ mil_image_2d_of<float> Create_milfloatImage(int wd, int ht)
   mil_image_2d_of<float> image(wd, ht);
   for (int x = 0; x < wd; x++)
     for (int y = 0; y < ht; y++) {
-      float data = 0.01 * ((x-wd/2)*(y-ht/2)/16);
+      float data = 0.01f * ((x-wd/2)*(y-ht/2)/16);
       image(x,y) = data;
     }
   return image;

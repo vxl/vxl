@@ -1,11 +1,9 @@
+// This is oxl/osl/osl_1d_half_kernel.txx
 #ifndef osl_1d_half_kernel_txx_
 #define osl_1d_half_kernel_txx_
-/*
-  fsm@robots.ox.ac.uk
-*/
-
 //:
-//  \file
+// \file
+// \author fsm@robots.ox.ac.uk
 
 #include "osl_1d_half_kernel.h"
 #include <vcl_iostream.h>
@@ -18,8 +16,8 @@ float osl_compute_gauss_weight (float sigma, int mask_index) {
   float sum = 0;
 
   for (int repeat = 0; repeat < 6; repeat++) {
-    float x = mask_index-0.5 + 0.2*repeat;
-    sum += vcl_exp( - (x*x) / (2 * sigma * sigma));
+    double x = mask_index-0.5 + 0.2*repeat;
+    sum += (float)vcl_exp( - (x*x) / (2 * sigma * sigma));
   }
 
   return sum / 6;
@@ -33,7 +31,7 @@ void osl_create_gaussian (T gauss_sigma, osl_1d_half_kernel<T> *mask_ptr) {
 
   unsigned mask_index = 0;
 
-  float gauss_weight = osl_compute_gauss_weight (gauss_sigma, mask_index);
+  double gauss_weight = osl_compute_gauss_weight (gauss_sigma, mask_index);
   while (gauss_weight > CN_GAUSS_CUTOFF_VALUE) {
     mask_ptr->array [mask_index] = gauss_weight;
     ++ mask_index;
@@ -48,7 +46,7 @@ void osl_create_gaussian (T gauss_sigma, osl_1d_half_kernel<T> *mask_ptr) {
 
   mask_ptr->count = mask_index;
 
-  float total_mask_value = mask_ptr->array [0];
+  double total_mask_value = mask_ptr->array [0];
   for (mask_index = 1; mask_index < mask_ptr->count; mask_index++) {
     total_mask_value += 2 * mask_ptr->array [mask_index];
   }

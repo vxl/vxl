@@ -1,11 +1,10 @@
-
+// This is oxl/osl/osl_canny_base.cxx
+#include "osl_canny_base.h"
 //:
 //  \file
 
-#include "osl_canny_base.h"
 #include <osl/osl_canny_port.h>
 #include <vcl_cmath.h>
-#include <vcl_cstdlib.h>
 #include <vcl_list.h>
 #include <vcl_cassert.h>
 
@@ -224,11 +223,11 @@ void osl_canny_base::Cluster_centre_of_gravity(int * const *jx, int * const *jy,
   x /= xc.size();  y /= yc.size();
 
   // Now find the point closest to the CofG
-  float dist = -1; // an invalid number
+  double dist = -1; // an invalid number
   for (it i=xc.begin(),j=yc.begin(); i!=xc.end() && j!=yc.end(); ++i, ++j) {
     //xc.reset(),yc.reset();xc.next(),yc.next();)
     //float newdist = hypot(x- *i/*xc.value()*/,y- *j/*yc.value()*/);
-    float newdist;
+    double newdist;
     { float dx = x- *i/*xc.value()*/, dy = y- *j/*yc.value()*/; newdist = vcl_sqrt(dx*dx + dy*dy); }
     if ( dist<0 || newdist < dist ) {
       x0 = *i;//xc.value();

@@ -58,7 +58,7 @@ ByteConvertImage::ByteConvertImage(vil_memory_image_of<double> const& in, bool i
   filter(in);
 }
 
-ByteConvertImage::ByteConvertImage(vil_memory_image_of<double> const& in, double min, double max):
+ByteConvertImage::ByteConvertImage(vil_memory_image_of<double> const& in, float min, float max):
   base(in.width(), in.height())
 {
   ignore_zero_ = false;

@@ -1,8 +1,8 @@
-
+// This is oxl/osl/osl_canny_rothwell.cxx
+#include "osl_canny_rothwell.h"
 //:
 //  \file
 
-#include "osl_canny_rothwell.h"
 #include <osl/osl_canny_rothwell_params.h>
 #include <osl/osl_kernel.h>
 #include <osl/osl_canny_smooth.h>
@@ -135,7 +135,7 @@ void osl_canny_rothwell::detect_edges(vil_image const &image, vcl_list<osl_edge*
     // Do Canny around the remaining ends at smaller scales to improve
     // topology. We wish to do the adaptive Canny until the region of
     // influence is less than `range' pixels
-    float min_sigma = range_ / vcl_sqrt(-2.0*vcl_log(gauss_tail_));
+    double min_sigma = range_ / vcl_sqrt(-2.0*vcl_log(gauss_tail_));
     if (verbose) vcl_cerr << "\nadaptive Canny with smoothing sigma bound = " << min_sigma << vcl_endl;
 
     // Try to fix single pixel breaks in the edgel chains
@@ -208,7 +208,7 @@ void osl_canny_rothwell::Non_maximal_supression() {
     for (unsigned int y=w0_; y+2+w0_<ysize_; ++y)  {
       // First check that we have an edge
       if ( g1[y+1] > low_ ) {
-        float theta = k*vcl_atan2(dy[y+1],dx[y+1]);
+        double theta = k*vcl_atan2(dy[y+1],dx[y+1]);
 
         // Now work out which direction wrt the eight-way
         // neighbours the edge normal points
@@ -249,7 +249,7 @@ void osl_canny_rothwell::Non_maximal_supression() {
         // therefore do subpixel interpolation by fitting a parabola
         // along the NMS line and finding its peak
         if ( (g1[y+1]>h1) && (g1[y+1]>h2) ) {
-          float fraction = (h1-h2)/(2.0*(h1-2.0*g1[y+1]+h2));
+          float fraction = (h1-h2)/(2*(h1-2*g1[y+1]+h2));
           float newx=0,newy=0;
           switch( orient ) {
           case 0:
@@ -282,8 +282,8 @@ void osl_canny_rothwell::Non_maximal_supression() {
           // that is already in them).
           // + 0.5 is to account for targetjr display offset
           thick_[x+1][y+1] = g1[y+1]; // Should this be interpolated height --
-          dx[y+1] = newx + 1.5;   // = g1[y+1] + frac*(h2-h1)/4 ?
-          dy[y+1] = newy + 1.5;
+          dx[y+1] = newx + 1.5f;   // = g1[y+1] + frac*(h2-h1)/4 ?
+          dy[y+1] = newy + 1.5f;
           theta_[x+1][y+1] = theta;
         }
       }
@@ -446,7 +446,7 @@ void osl_canny_rothwell::Final_hysteresis(vcl_list<osl_edge*> *edges) {
 
             // *** Bug fix, Samer Abdallah 5/10/95:  next line was
             // theta_[tmpx][tmpy]  = k*vcl_atan2(dy[y],dx[y]);
-            theta_[tmpx][tmpy]  = k*vcl_atan2(dy[tmpy],dx[tmpy]);
+            theta_[tmpx][tmpy]  = k*(float)vcl_atan2(dy[tmpy],dx[tmpy]);
           }
 
           *(pt++) = theta_[tmpx][tmpy];
@@ -527,7 +527,7 @@ void osl_canny_rothwell::Thin_edges() {
   // Now do the thinning. Do it twice: the first time to try to remove
   // dummy_ edges, and then other edges -- 0.001 turns <= to <
 
-  for (threshold=dummy_-0.001,i=0; i<2; threshold=low_,i++)  {
+  for (threshold=dummy_-0.001f,i=0; i<2; threshold=low_,i++)  {
 
     count = 1;     // count set to dummy value
     while ( count )  { //  Thin until no Pixels are removed

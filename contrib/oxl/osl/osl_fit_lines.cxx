@@ -1,7 +1,8 @@
+// This is oxl/osl/osl_fit_lines.cxx
+#include "osl_fit_lines.h"
 //:
 //  \file
 
-#include "osl_fit_lines.h"
 #include <vcl_cassert.h>
 #include <vcl_iostream.h>
 #include <vcl_list.h>
@@ -22,7 +23,7 @@ osl_fit_lines::osl_fit_lines(osl_fit_lines_params const & params,
                              double scale, double x0, double y0)
   : osl_fit_lines_params(params)
 {
-  float temp_thresh = this->threshold_;
+  double temp_thresh = this->threshold_;
   if (this->use_square_fit_) temp_thresh *= this->threshold_;
   this->threshold_ = temp_thresh;
   data_ = new osl_OrthogRegress(scale,x0,y0);
@@ -895,7 +896,7 @@ float osl_fit_lines::MyGetCost(osl_OrthogRegress const *fitter,
   float distance = 0;
 
   for (int i = start; i < finish; i ++)
-    distance += vcl_fabs(A*dc->GetX(i) + B*dc->GetY(i) + C);
+    distance += (float)vcl_fabs(A*dc->GetX(i) + B*dc->GetY(i) + C);
 
   return distance / (finish - start);
 }

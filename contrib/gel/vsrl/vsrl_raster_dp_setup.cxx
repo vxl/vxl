@@ -1,4 +1,7 @@
+// This is gel/vsrl/vsrl_raster_dp_setup.cxx
 #include "vsrl_raster_dp_setup.h"
+//:
+// \file
 #include <vsrl/vsrl_dynamic_program.h>
 #include <vsrl/vsrl_parameters.h>
 #include <vsrl/vsrl_token.h>
@@ -194,7 +197,7 @@ void vsrl_raster_dp_setup::set_token_biases()
 
   vcl_vector<vsrl_intensity_token*>::iterator i;
 
-  float bias_diff = vsrl_parameters::instance()->common_intensity_diff;
+  double bias_diff = vsrl_parameters::instance()->common_intensity_diff;
 
   for (i=tok_list1.begin();i<tok_list1.end();i++)
   {
@@ -227,7 +230,7 @@ void vsrl_raster_dp_setup::set_token_biases()
 }
 
 
-// get the raster line that this dynamic program uses
+//: get the raster line that this dynamic program uses
 int vsrl_raster_dp_setup::get_raster_line()
 {
   return _raster_line;

@@ -12,7 +12,7 @@ QvMatrixTransform::QvMatrixTransform()
 
     for (int i = 0; i < 4; i++)
         for (int j = 0; j < 4; j++)
-            matrix.value[i][j] = (i == j ? 1.0 : 0.0);
+            matrix.value[i][j] = (i == j ? 1.0f : 0.0f);
 }
 
 QvMatrixTransform::~QvMatrixTransform()

@@ -1,5 +1,5 @@
+// This is oxl/osl/osl_edge_detector.cxx
 #include "osl_edge_detector.h"
-
 //:
 //  \file
 
@@ -200,7 +200,7 @@ void osl_edge_detector::Sub_pixel_interpolation() {
     {
       // First check that we have a potential edge
       if ( g1[y] > low_ ) {
-        theta = k*vcl_atan2(dy[y],dx[y]);
+        theta = k*(float)vcl_atan2(dy[y],dx[y]);
 
         // Now work out which direction wrt the eight-way
         // neighbours the edge normal points
@@ -244,7 +244,7 @@ void osl_edge_detector::Sub_pixel_interpolation() {
 
         // Do subpixel interpolation by fitting a parabola
         // along the NMS line and finding its peak
-        fraction = (h1-h2)/(2.0*(h1-2.0*g1[y]+h2));
+        fraction = (h1-h2)/(2*(h1-2*g1[y]+h2));
         switch( orient ) {
         case 0:
           dnewx = fraction;
@@ -290,20 +290,20 @@ void osl_edge_detector::Sub_pixel_interpolation() {
 
         // + 0.5 is to account for targetjr display offset
         if ( (vcl_fabs(dnewx)<=0.5) && (vcl_fabs(dnewy)<=0.5) ) {
-          dx[y] = x + dnewx + 0.5;
-          dy[y] = y + dnewy + 0.5;
+          dx[y] = x + dnewx + 0.5f;
+          dy[y] = y + dnewy + 0.5f;
         }
         else {
-          dx[y] = x + 0.5;
-          dy[y] = y + 0.5;
+          dx[y] = x + 0.5f;
+          dy[y] = y + 0.5f;
         }
         theta_[x][y] = theta;
       }
       // For consistency assign these values even though the
       // edge is below strength.
       else {
-        dx[y] = x + 0.5;
-        dy[y] = y + 0.5;
+        dx[y] = x + 0.5f;
+        dy[y] = y + 0.5f;
       }
     }
   }
@@ -311,26 +311,26 @@ void osl_edge_detector::Sub_pixel_interpolation() {
   // Clean up around the border to ensure consistency in the dx_ and dy_ values.
   for (unsigned int x=0; x<xsize_; ++x) {
     for (unsigned int y=0; y<=width_; ++y) {
-      dx_[x][y] = x + 0.5;
-      dy_[x][y] = y + 0.5;
+      dx_[x][y] = x + 0.5f;
+      dy_[x][y] = y + 0.5f;
     }
     for (int y=ysize_-width_-1; y<int(ysize_); ++y)
     {
-      dx_[x][y] = x + 0.5;
-      dy_[x][y] = y + 0.5;
+      dx_[x][y] = x + 0.5f;
+      dy_[x][y] = y + 0.5f;
     }
   }
 
   for (unsigned int y=width_+1; y+width_+1<ysize_; ++y)
   {
     for (unsigned int x=0; x<=width_; ++x)  {
-      dx_[x][y] = x + 0.5;
-      dy_[x][y] = y + 0.5;
+      dx_[x][y] = x + 0.5f;
+      dy_[x][y] = y + 0.5f;
     }
     for (int x=xsize_-width_-1; x<int(xsize_); ++x)
     {
-      dx_[x][y] = x + 0.5;
-      dy_[x][y] = y + 0.5;
+      dx_[x][y] = x + 0.5f;
+      dy_[x][y] = y + 0.5f;
     }
   }
 }
@@ -379,25 +379,23 @@ void osl_edge_detector::Thicken_threshold(int x, int y) {
 //
 void osl_edge_detector::Set_thresholds()
 {
-  int **fdist,**bdist,**a1dist,**a2dist;
-  fdist = Make_int_image(xsize_,ysize_);
-  bdist = Make_int_image(xsize_,ysize_);
-  a1dist = Make_int_image(xsize_,ysize_);
-  a2dist = Make_int_image(xsize_,ysize_);
+  int** fdist = Make_int_image(xsize_,ysize_);
+  int** bdist = Make_int_image(xsize_,ysize_);
+  int**a1dist = Make_int_image(xsize_,ysize_);
+  int**a2dist = Make_int_image(xsize_,ysize_);
   osl_canny_base_copy_raw_image(VCL_OVERLOAD_CAST(int const*const*, dist_), fdist, xsize_, ysize_);
   osl_canny_base_copy_raw_image(VCL_OVERLOAD_CAST(int const*const*, dist_), bdist, xsize_, ysize_);
-  osl_canny_base_copy_raw_image(VCL_OVERLOAD_CAST(int const*const*, dist_), a1dist, xsize_, ysize_);
-  osl_canny_base_copy_raw_image(VCL_OVERLOAD_CAST(int const*const*, dist_), a2dist, xsize_, ysize_);
+  osl_canny_base_copy_raw_image(VCL_OVERLOAD_CAST(int const*const*, dist_),a1dist, xsize_, ysize_);
+  osl_canny_base_copy_raw_image(VCL_OVERLOAD_CAST(int const*const*, dist_),a2dist, xsize_, ysize_);
 
-  float **fth,**bth,**a1th,**a2th;
-  fth = Make_float_image(xsize_,ysize_);
-  bth = Make_float_image(xsize_,ysize_);
-  a1th = Make_float_image(xsize_,ysize_);
-  a2th = Make_float_image(xsize_,ysize_);
+  float** fth = Make_float_image(xsize_,ysize_);
+  float** bth = Make_float_image(xsize_,ysize_);
+  float**a1th = Make_float_image(xsize_,ysize_);
+  float**a2th = Make_float_image(xsize_,ysize_);
   osl_canny_base_copy_raw_image(VCL_OVERLOAD_CAST(float const *const*, thresh_), fth, xsize_, ysize_);
   osl_canny_base_copy_raw_image(VCL_OVERLOAD_CAST(float const *const*, thresh_), bth, xsize_, ysize_);
-  osl_canny_base_copy_raw_image(VCL_OVERLOAD_CAST(float const *const*, thresh_), a1th, xsize_, ysize_);
-  osl_canny_base_copy_raw_image(VCL_OVERLOAD_CAST(float const *const*, thresh_), a2th, xsize_, ysize_);
+  osl_canny_base_copy_raw_image(VCL_OVERLOAD_CAST(float const *const*, thresh_),a1th, xsize_, ysize_);
+  osl_canny_base_copy_raw_image(VCL_OVERLOAD_CAST(float const *const*, thresh_),a2th, xsize_, ysize_);
 
   osl_chamfer_Forward (xsize_, ysize_, fdist, fth);
   osl_chamfer_Backward(xsize_, ysize_, bdist, bth);
@@ -419,18 +417,18 @@ void osl_edge_detector::Set_thresholds()
                                   bdist[x][y],
                                   a1dist[x][y],
                                   a2dist[x][y]);
-        float num=1.0,den=1.0; // dummy initialisation values
+        float num=1.0f; int den=1; // dummy initialisation values
         switch(option) {
         case 1:
         case 2:
-          den = (fdist[x][y]+bdist[x][y]);
-          num = (bdist[x][y]*fth[x][y]+fdist[x][y]*bth[x][y]);
+          den = fdist[x][y]+bdist[x][y];
+          num = bdist[x][y]*fth[x][y]+fdist[x][y]*bth[x][y];
           break;
 
         case 3:
         case 4:
-          den = (a1dist[x][y]+a2dist[x][y]);
-          num = (a2dist[x][y]*a1th[x][y]+a1dist[x][y]*a2th[x][y]);
+          den = a1dist[x][y]+a2dist[x][y];
+          num = a2dist[x][y]*a1th[x][y]+a1dist[x][y]*a2th[x][y];
           break;
 
         default:
@@ -697,7 +695,7 @@ void osl_edge_detector::Follow_curves(vcl_list<osl_edge*> *edges)
         }
         if (theta_[tmpx][tmpy] == DUMMYTHETA) {
           const float k = 180.0f/float(vnl_math::pi);
-          theta_[tmpx][tmpy]  = k*vcl_atan2(dy_[tmpx][y],dx_[tmpx][y]);
+          theta_[tmpx][tmpy]  = k*(float)vcl_atan2(dy_[tmpx][y],dx_[tmpx][y]);
         }
 
         *(pt++) = theta_[tmpx][tmpy];
