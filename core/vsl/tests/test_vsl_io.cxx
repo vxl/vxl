@@ -21,6 +21,7 @@
 #include <vsl/tests/test_map_io.cxx>
 #include <vsl/tests/test_set_io.cxx>
 #include <vsl/tests/test_stack_io.cxx>
+#include <vsl/tests/test_indent.cxx>
 
 #undef TESTMAIN
 #define TESTMAIN(x) int main()\
@@ -40,7 +41,7 @@ void run_test_vsl_io()
   test_map_io();
   test_set_io();
   test_stack_io();
+  test_indent();
 }
-
 
 TESTMAIN(run_test_vsl_io);
