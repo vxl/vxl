@@ -1,6 +1,5 @@
 // This is core/vgui/examples/basic_manager.cxx
 #include <vcl_cstdlib.h> // for vcl_exit()
-#include <vcl_iostream.h>
 #include <vil/vil_load.h>
 #include <vgui/vgui.h>
 #include <vgui/vgui_dialog.h>
@@ -41,7 +40,7 @@ void basic_manager::init()
 //the event handler
 bool basic_manager::handle(vgui_event const & e)
 {
-  if(e.key == 'b')
+  if (e.key == 'b')
     vgui::out << "I saw a 'b'\n";
   //pass the event to the shell
   return this->child.handle(e);
