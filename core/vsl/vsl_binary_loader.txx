@@ -20,7 +20,7 @@ vsl_binary_loader<BaseClass>& vsl_binary_loader<BaseClass>::instance()
 template<class BaseClass>
 void vsl_binary_loader<BaseClass>::make_empty()
 {
-    for (int i=0; i<object_.size(); ++i)
+    for (unsigned int i=0; i<object_.size(); ++i)
       delete object_[i];
     object_.resize(0);
 }
@@ -54,7 +54,7 @@ void vsl_binary_loader<BaseClass>::load_object( vsl_b_istream& is, BaseClass*& b
     return;
   }
 
-  int i;
+  unsigned int i;
   for (i=0; (i<object_.size()) && !(object_[i]->is_a()==name); i++);
 
   if (i<object_.size())

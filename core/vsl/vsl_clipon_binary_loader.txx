@@ -28,7 +28,7 @@ void vsl_clipon_binary_loader<BaseClass,BaseClassIO>::add( const BaseClassIO& b)
 template<class BaseClass, class BaseClassIO>
 int vsl_clipon_binary_loader<BaseClass,BaseClassIO>::index_for_name(const vcl_string& name) const
 {
-  int i=0;
+  unsigned int i=0;
   while ((i<object_io_.size()) && !(object_io_[i]->target_classname()==name))
     ++i;
 
@@ -37,7 +37,7 @@ int vsl_clipon_binary_loader<BaseClass,BaseClassIO>::index_for_name(const vcl_st
     vcl_cerr << "vsl_clipon_binary_loader<BaseClass>::index_for_name: ";
     vcl_cerr << "class name <" << name << "> not in list of loaders"<<vcl_endl;
     vcl_cerr << object_io_.size()<<" valid loaders available for "<<vcl_endl;
-    for (int j=0; j<object_io_.size(); ++j)
+    for (unsigned int j=0; j<object_io_.size(); ++j)
       vcl_cerr << object_io_[j]->target_classname() << vcl_endl;
     vcl_abort();
   }
@@ -49,7 +49,7 @@ int vsl_clipon_binary_loader<BaseClass,BaseClassIO>::index_for_name(const vcl_st
 template<class BaseClass, class BaseClassIO>
 const BaseClassIO& vsl_clipon_binary_loader<BaseClass,BaseClassIO>::io_for_class(const BaseClass& b) const
 {
-  int i;
+  unsigned int i;
   for (i=0; (i<object_io_.size()) && !(object_io_[i]->is_io_for(b)); i++);
 
   if (i>=object_io_.size())
@@ -76,7 +76,7 @@ const BaseClassIO& vsl_clipon_binary_loader<BaseClass,BaseClassIO>::object_io(co
 template<class BaseClass, class BaseClassIO>
 void vsl_clipon_binary_loader<BaseClass,BaseClassIO>::make_empty()
 {
-  for (int i=0; i<object_io_.size(); ++i)
+  for (unsigned int i=0; i<object_io_.size(); ++i)
   delete object_io_[i];
   object_io_.resize(0);
 }
