@@ -108,9 +108,6 @@ SOURCE=.\brct_structure_estimator.cxx
 SOURCE=.\brct_epi_reconstructor.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vbl_smart_ptr+brct_corr-.cxx
-# End Source File
-# Begin Source File
 SOURCE=.\brct_corr.cxx
 # End Source File
 # Begin Source File
@@ -129,7 +126,19 @@ SOURCE=.\brct_volume_processor.cxx
 SOURCE=.\brct_volume_processor_params.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\brct_dense_reconstructor.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\brct_plane_corr.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\kalman_filter.cpp
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vbl_smart_ptr+brct_plane_corr-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vcl_vector+brct_plane_corr_sptr-.cxx
 # End Source File
 # End Group
 # Begin Group "Header Files"
@@ -150,9 +159,6 @@ SOURCE=.\kalman_filter.h
 SOURCE=.\brct_corr.h
 # End Source File
 # Begin Source File
-SOURCE=.\brct_corr_sptr.h
-# End Source File
-# Begin Source File
 SOURCE=.\brct_plane_calibrator.h
 # End Source File
 # Begin Source File
@@ -166,6 +172,15 @@ SOURCE=.\brct_volume_processor.h
 # End Source File
 # Begin Source File
 SOURCE=.\brct_volume_processor_params.h
+# End Source File
+# Begin Source File
+SOURCE=.\brct_dense_reconstructor.h
+# End Source File
+# Begin Source File
+SOURCE=.\brct_plane_corr.h
+# End Source File
+# Begin Source File
+SOURCE=.\brct_plane_corr_sptr.h
 # End Source File
 # End Group
 # End Target
