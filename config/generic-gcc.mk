@@ -91,7 +91,7 @@ endif
 wall += -Wreturn-type 
 
 # fsm. these are good if you think mixing 'int' and 'unsigned' is not so bad :
-wall += -Wno-sign-compare -Wno-sign-promo
+#wall += -Wno-sign-compare -Wno-sign-promo
 
 # warn about non-virtual dtor in class with virtual methods.
 wall += -Wnon-virtual-dtor
