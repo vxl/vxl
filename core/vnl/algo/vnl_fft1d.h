@@ -19,8 +19,8 @@
 //  original temperton-code (fortran) converted using f2c with -C++
 //  option. Two versions created: float and double.
 //
-//  subclassed from vnl_vector<vnl_complex>, i.e. internally uses
-//  vnl_vector<vnl_complex> for storing the data
+//  subclassed from vnl_vector<vcl_complex<T> >, i.e. internally uses
+//  vnl_vector<vcl_complex<T> > for storing the data
 //
 //  two super-simple constructors, first takes as input is an vnl_vector<T>
 //  for which it will compute  the FFT. Second takes vnl_complex_vector_t<T>
