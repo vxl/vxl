@@ -120,6 +120,24 @@ inline void vil_math_mean_over_planes(const vil_image_view<aT>& src,
     }
 }
 
+//: Calc the mean of each pixel over all the planes.
+// \relates vil_image_view
+template<class inT, class outT, class sumT>
+inline void vil_math_mean_over_planes(const vil_image_view<inT>& src,
+                                      vil_image_view<outT>& dest,
+                                      sumT /*dummy*/)
+{
+  dest.set_size(src.ni(), src.nj(), 1);
+  for (unsigned j=0;j<src.nj();++j)
+    for (unsigned i=0;i<src.ni();++i)
+    {
+      sumT sum=0;
+      for (unsigned p=0;p<src.nplanes();++p)
+        sum += static_cast<sumT>(src(i,j,p));
+      dest(i,j) = static_cast<outT>(sum / src.nplanes());
+    }
+}
+
 //: Sum of elements in plane p of image
 // \relates vil_image_view
 template<class imT, class sumT>
