@@ -23,7 +23,7 @@ class vil3d_slice_list_format : public vil3d_file_format
   virtual vil3d_image_resource_sptr make_input_image(const char *) const;
 
   //: Make a "generic_image" on which put_section may be applied.
-  // The file may bo openned immediately for writing so that a header can be written.
+  // The file may be opened immediately for writing so that a header can be written.
   virtual vil3d_image_resource_sptr make_output_image(const char* filename,
                                                       unsigned ni,
                                                       unsigned nj,

@@ -16,7 +16,7 @@
 //: Reader/Writer for GIPL format images.
 class vil3d_gipl_format : public vil3d_file_format
 {
-public:
+ public:
   vil3d_gipl_format();
   //: The destructor must be virtual so that the memory chunk is destroyed.
   virtual ~vil3d_gipl_format();
@@ -24,17 +24,16 @@ public:
   virtual vil3d_image_resource_sptr make_input_image(const char *) const;
 
   //: Make a "generic_image" on which put_section may be applied.
-  // The file may bo openned immediately for writing so that a header can be written.
+  // The file may be opened immediately for writing so that a header can be written.
   virtual vil3d_image_resource_sptr make_output_image(const char* filename,
-                                                     unsigned ni,
-                                                     unsigned nj,
-                                                     unsigned nk,
-                                                     unsigned nplanes,
-                                                     enum vil_pixel_format)const;
+                                                      unsigned ni,
+                                                      unsigned nj,
+                                                      unsigned nk,
+                                                      unsigned nplanes,
+                                                      enum vil_pixel_format) const;
 
   //: default filename tag for this image.
   virtual const char * tag() const {return "gipl";}
-
 };
 
 // You can't create one of these yourself.
@@ -44,7 +43,7 @@ class vil3d_gipl_image: public vil3d_image_resource
   vil_smart_ptr<vil_stream> is_;
   //: image dimensions
   unsigned dim1_, dim2_, dim3_;
-  
+
   //: Physical Voxel dimensions ( in mm )
   float vox_width1_, vox_width2_, vox_width3_;
 
@@ -98,7 +97,5 @@ class vil3d_gipl_image: public vil3d_image_resource
   // This will just return the property of the first slice in the list.
   virtual bool get_property(char const* tag, void* property_value = 0) const;
 };
-
-
 
 #endif

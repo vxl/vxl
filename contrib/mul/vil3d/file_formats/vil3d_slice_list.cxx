@@ -3,7 +3,7 @@
 #endif
 //:
 // \file
-// \brief Reader/Writer a vlolume made up of a list of slices.
+// \brief Reader/Writer for a volume made up of a list of slices.
 // \author Ian Scott - Manchester
 
 #include "vil3d_slice_list.h"
@@ -68,8 +68,6 @@ vil3d_slice_list_format::make_input_image(const char * filename) const
   }
   // everything seems fine so create the volume
   return new vil3d_slice_list_image(images);
-
-  return 0;
 }
 
 
@@ -89,13 +87,11 @@ vil3d_slice_list_to_volume(const vcl_vector<vil_image_resource_sptr> & images)
   }
   // everything seems fine so create the volume
   return new vil3d_slice_list_image(images);
-
-  return 0;
 }
 
 
 //: Make a "generic_image" on which put_section may be applied.
-// The file may bo openned immediately for writing so that a header can be written.
+// The file may be opened immediately for writing so that a header can be written.
 // The width/height etc are explicitly specified, so that file_format implementors
 // know what they need to do...
 vil3d_image_resource_sptr
@@ -157,7 +153,7 @@ bool vil3d_slice_list_image::get_property(char const *key, void * value) const
   return slices_.empty()?false:slices_.front()->get_property(key, value);
 }
 
-//: Get some oor all of the volume.
+//: Get some or all of the volume.
 vil3d_image_view_base_sptr
 vil3d_slice_list_image::get_copy_view(unsigned i0, unsigned ni,
                                       unsigned j0, unsigned nj,
@@ -199,8 +195,8 @@ vil3d_slice_list_image::get_copy_view(unsigned i0, unsigned ni,
     macro( vcl_complex<double> );
 #endif
   default:
-    vcl_cerr << "ERROR: vil3d_slice_list_image::get_copy_view\n"
-             << "       Can't deal with pixel_format " << pixel_format() << vcl_endl;
+    vcl_cerr<< "ERROR: vil3d_slice_list_image::get_copy_view\n"
+            << "       Can't deal with pixel_format " << pixel_format() << '\n';
     return 0;
   }
 }

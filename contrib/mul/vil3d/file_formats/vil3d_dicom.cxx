@@ -39,7 +39,7 @@ vil3d_image_resource_sptr vil3d_dicom_format::make_input_image(const char * file
 
 
 //: Make a "generic_image" on which put_section may be applied.
-// The file may bo openned immediately for writing so that a header can be written.
+// The file may be opened immediately for writing so that a header can be written.
 // The width/height etc are explicitly specified, so that file_format implementors
 // know what they need to do...
 vil3d_image_resource_sptr vil3d_dicom_format::make_output_image

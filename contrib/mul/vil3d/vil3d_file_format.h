@@ -31,13 +31,13 @@ class vil3d_file_format
   virtual vil3d_image_resource_sptr make_input_image(const char *filename)const =0;
 
   //: Make a "generic_image" on which put_section may be applied.
-  // The file may bo openned immediately for writing so that a header can be written.
+  // The file may be opened immediately for writing so that a header can be written.
   virtual vil3d_image_resource_sptr make_output_image(const char* filename,
-                                                     unsigned ni,
-                                                     unsigned nj,
-                                                     unsigned nk,
-                                                     unsigned nplanes,
-                                                     enum vil_pixel_format)const =0;
+                                                      unsigned ni,
+                                                      unsigned nj,
+                                                      unsigned nk,
+                                                      unsigned nplanes,
+                                                      enum vil_pixel_format) const =0;
 
   //: default filename tag for this image.
   virtual const char *tag()const =0;
