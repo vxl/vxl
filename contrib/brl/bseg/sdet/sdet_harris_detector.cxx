@@ -4,7 +4,7 @@
 // \file
 #include <vcl_cstdlib.h>   // for vcl_abs(int) and vcl_qsort()
 #include <vil1/vil1_memory_image_of.h>
-#include <brip/brip_float_ops.h>
+#include <brip/brip_vil1_float_ops.h>
 #include <vsol/vsol_point_2d.h>
 
 //: A container to support sorting of corners
@@ -82,14 +82,14 @@ void sdet_harris_detector::extract_corners()
 
   //Process the image to extract the Harris corners
   points_.clear();
-  vil1_memory_image_of<float> inputf = brip_float_ops::convert_to_float(image_);
-  vil1_memory_image_of<float> smooth = brip_float_ops::gaussian(inputf, sigma_);
+  vil1_memory_image_of<float> inputf = brip_vil1_float_ops::convert_to_float(image_);
+  vil1_memory_image_of<float> smooth = brip_vil1_float_ops::gaussian(inputf, sigma_);
   vil1_memory_image_of<float> IxIx, IxIy, IyIy, c;
   IxIx.resize(w,h);  IxIy.resize(w,h);   IyIy.resize(w,h);
-  brip_float_ops::grad_matrix_NxN(smooth, n_, IxIx, IxIy, IyIy);
-  c = brip_float_ops::harris(IxIx, IxIy, IyIy, scale_factor_);
+  brip_vil1_float_ops::grad_matrix_NxN(smooth, n_, IxIx, IxIy, IyIy);
+  c = brip_vil1_float_ops::harris(IxIx, IxIy, IyIy, scale_factor_);
   vcl_vector<float> x_pos, y_pos, val;
-  brip_float_ops::non_maximum_suppression(c, n_, thresh_, x_pos, y_pos, val);
+  brip_vil1_float_ops::non_maximum_suppression(c, n_, thresh_, x_pos, y_pos, val);
   int n_corners = x_pos.size();
   vcl_cout << "Found " << n_corners << " above the threshold\n";
   if (!n_corners)
