@@ -1,6 +1,7 @@
 USES += vxl mul
 include ${IUEROOT}/mul/clsfy/config.mk
 include $(IUEROOT)/vxl/vul/config.mk
+include $(IUEROOT)/vxl/testlib/config.mk
 
 TESTS += test_binary_hyperplane.cxx
 TESTS += test_binary_pdf_classifier.cxx

@@ -2,8 +2,21 @@ USES += vxl
 include ${IUEROOT}/vxl/vnl/io/config.mk
 include ${IUEROOT}/vxl/testlib/config.mk
 
-TESTS += test_vnl_io.cxx # includes all *.cxx test files
-MINI_PROG_SOURCES += vnl_io_test_all.cxx
+TESTMAIN = test_driver.cxx
+TESTS += golden_test_vnl_io.cxx
+TESTS += test_bignum_io.cxx
+TESTS += test_diag_matrix_io.cxx
+TESTS += test_include.cxx
+TESTS += test_matrix_fixed_io.cxx
+TESTS += test_matrix_io.cxx
+TESTS += test_nonlinear_minimizer_io.cxx
+TESTS += test_rational_io.cxx
+TESTS += test_real_npolynomial_io.cxx
+TESTS += test_real_polynomial_io.cxx
+TESTS += test_sparse_matrix_io.cxx
+TESTS += test_sym_matrix_io.cxx
+TESTS += test_vector_fixed_io.cxx
+TESTS += test_vector_io.cxx
 
 #######################################
 include ${IUEROOT}/config/top-params.mk

@@ -4,7 +4,9 @@ include ${IUEROOT}/vxl/vul/config.mk # vul_timer used
 include ${IUEROOT}/vxl/vpl/config.mk # vpl_unlink used in test_matlab
 include ${IUEROOT}/vxl/testlib/config.mk
 
-TESTS += vnl_test_all.cxx
+TESTMAIN = test_driver.cxx
+SOURCES += test_util.cxx
+TESTS += test_include.cxx
 TESTS += test_fft.cxx
 TESTS += test_fft1d.cxx
 TESTS += test_fft2d.cxx

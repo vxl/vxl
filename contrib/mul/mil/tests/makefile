@@ -1,5 +1,6 @@
 USES += vxl mul
 include ${IUEROOT}/mul/mil/algo/config.mk
+include $(IUEROOT)/vxl/testlib/config.mk
 
 TESTS += test_mil.cxx
 

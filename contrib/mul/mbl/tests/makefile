@@ -2,8 +2,9 @@ USES += vxl mul
 include ${IUEROOT}/mul/mbl/config.mk
 include ${IUEROOT}/vxl/vul/config.mk
 include ${IUEROOT}/vxl/vbl/config.mk
+include $(IUEROOT)/vxl/testlib/config.mk
 
-TESTS += test_mbl.cxx # includes test_mz_random.cxx test_matrix_products.cxx test_matxvec.cxx test_index_sort.cxx test_lru_cache.cxx test_thin_plate_spline_2d.cxx
+TESTS += test_mbl.cxx # includes all test .cxx files
 
 #########################################
 include ${IUEROOT}/config/static-tests.mk

@@ -1,6 +1,7 @@
 USES = vxl rpl mul
 include ${IUEROOT}/rpl/rsdl/config.mk
 include $(IUEROOT)/mul/mbl/config.mk
+include $(IUEROOT)/vxl/testlib/config.mk
 
 TESTS += test_borgefors.cxx
 TESTS += test_rsdl_bins_2d.cxx

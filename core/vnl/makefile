@@ -51,7 +51,6 @@ endif
 SOURCES += vnl_copy.cxx
 SOURCES += vnl_complex.cxx
 SOURCES += vnl_error.cxx
-SOURCES += vnl_test.cxx
 SOURCES += vnl_matlab_print.cxx
 MANPAGE_SOURCES += vnl_matlab_print.txx
 SOURCES += vnl_matlab_print_format.cxx
