@@ -16,6 +16,8 @@
 #include <vil/vil_image_view.h>
 //#include <vil1/vil1_memory_image_of.h>
 #include <vcl_vector.h>
+#include <vcl_set.h>
+#include <vcl_map.h>
 #include <vnl/vnl_double_3.h>
 #include <vgl/vgl_point_2d.h>
 #include <vdgl/vdgl_digital_curve_sptr.h>
@@ -25,6 +27,7 @@
 #include <bmrf/bmrf_epi_seg_sptr.h>
 #include <bmrf/bmrf_node_sptr.h>
 #include <bmrf/bmrf_network_sptr.h>
+
 
 class bmrf_network_builder : public bmrf_network_builder_params
 {
@@ -76,30 +79,30 @@ class bmrf_network_builder : public bmrf_network_builder_params
                               vcl_vector<bmrf_epi_seg_sptr>& epi_segs);
   bool compute_segments();
   bool intensity_candidates(const bmrf_epi_seg_sptr& seg,
-                            vcl_vector<bmrf_epi_seg_sptr>& left_cand,
-                            vcl_vector<bmrf_epi_seg_sptr>& right_cand);
-  double radius(const double s);
+                            vcl_set<bmrf_epi_seg_sptr>& left_cand,
+                            vcl_set<bmrf_epi_seg_sptr>& right_cand) const;
+  double radius(const double s) const;
   double find_left_s(const double a, const double s,
-                     vcl_vector<bmrf_epi_seg_sptr> const& cand);
+                     vcl_set<bmrf_epi_seg_sptr> const& cand) const;
   double find_right_s(const double a, const double s,
-                      vcl_vector<bmrf_epi_seg_sptr> const& cand);
-  double ds(const double s);
+                      vcl_set<bmrf_epi_seg_sptr> const& cand) const;
+  double ds(const double s) const;
 
-  double scan_interval(const double a, const double sl, const double s);
+  double scan_interval(const double a, const double sl, const double s) const;
   double scan_left(double a, double s,
-                   vcl_vector<bmrf_epi_seg_sptr> const& left_cand,
-                   double& ds);
+                   vcl_set<bmrf_epi_seg_sptr> const& left_cand,
+                   double& ds) const;
   double scan_right(double a,double s,
-                    vcl_vector<bmrf_epi_seg_sptr> const& right_cand,
-                    double& ds);
+                    vcl_set<bmrf_epi_seg_sptr> const& right_cand,
+                    double& ds) const;
 
   bool fill_intensity_values(bmrf_epi_seg_sptr& seg);
   bool set_intensity_info();
   bool add_frame_nodes();
   bool time_neighbors(bmrf_node_sptr const& node,
-                      vcl_vector<bmrf_node_sptr>& neighbors);
+                      vcl_set<bmrf_node_sptr>& neighbors) const;
   bool assign_neighbors();
-  bool build_network();
+
   //members
   //: network building status flags
   bool network_valid_;
@@ -141,8 +144,13 @@ class bmrf_network_builder : public bmrf_network_builder_params
   bmrf_network_sptr network_;
 
   //:temporary arrays for building the intensity information
-  vcl_vector<bmrf_epi_seg_sptr> min_epi_segs_;
-  vcl_vector<bmrf_epi_seg_sptr> max_epi_segs_;
+  vcl_vector<bmrf_epi_seg_sptr> epi_segs_;
+
+  //:map s ranges to nodes
+  vcl_multimap<double,bmrf_node_sptr> s_node_map_;
+
+  //:map s ranges to nodes for the previous frame
+  vcl_multimap<double,bmrf_node_sptr> prev_s_node_map_;
 };
 
 #endif // bmrf_network_builder_h_

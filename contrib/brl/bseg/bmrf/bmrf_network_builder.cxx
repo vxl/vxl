@@ -20,7 +20,7 @@
 #include <bmrf/bmrf_network.h>
 #include <bmrf/bmrf_epipole.h>
 
-
+#include <vul/vul_timer.h>
 //---------------------------------------------------------------
 // Constructors
 //
@@ -230,14 +230,6 @@ bmrf_network_builder::inside_epipolar_wedge(vdgl_digital_curve_sptr const& dc)
   double xmin = bb->get_min_x(), xmax = bb->get_max_x();
   double ymin = bb->get_min_y(), ymax = bb->get_max_y();
 
-#ifdef BMRF_DEBUG // filter Only for VW
-  vsol_box_2d_sptr temp = new vsol_box_2d();
-  temp->add_point(680, 350);   temp->add_point(870, 450);
-  if (!((*bb)<(*temp)))
-    return false;
-#endif
-//END BMRF_DEBUG
-
   vnl_double_3 lower_left, lower_right;
   lower_left[0]=xmin;   lower_left[1]=ymin; lower_left[2]=1.0;
   lower_right[0]=xmax;  lower_right[1]=ymin; lower_right[2]=1.0;
@@ -260,41 +252,10 @@ bmrf_network_builder::inside_epipolar_wedge(vdgl_digital_curve_sptr const& dc)
   return inside;
 }
 
-//: save the min cache index in the epi_seg
-// the vector should be sorted at this point.
-static void set_min_index(vcl_vector<bmrf_epi_seg_sptr>& min_segs)
-{
-  int n = min_segs.size();
-  for (int i = 0; i<n; i++)
-    min_segs[i]->set_min_index(i);
-}
-
-//: save the max cache index in the epi_seg
-// the vector should be sorted at this point.
-static void set_max_index(vcl_vector<bmrf_epi_seg_sptr>& max_segs)
-{
-  int n = max_segs.size();
-  for (int i = 0; i<n; i++)
-    max_segs[i]->set_max_index(i);
-}
-
-//Gives a sort on increasing epipolar minimum segment position
-static bool epi_seg_compare_min(bmrf_epi_seg_sptr const n0,
-                                bmrf_epi_seg_sptr const n1)
-{
-  return n0->min_s() < n1->min_s();
-}
-
-//Gives a sort on increasing epipolar minimum segment position
-static bool epi_seg_compare_max(bmrf_epi_seg_sptr const n0,
-                                bmrf_epi_seg_sptr const n1)
-{
-  return n0->max_s() < n1->max_s();
-}
 
 bool bmrf_network_builder::compute_segments()
 {
-  vcl_vector<bmrf_epi_seg_sptr> min_segments, max_segments;
+  epi_segs_.clear();
   vcl_vector<vdgl_digital_curve_sptr> dcs;
   for (vcl_vector<vtol_edge_2d_sptr>::iterator eit = edges_.begin();
        eit != edges_.end(); eit++)
@@ -313,33 +274,14 @@ bool bmrf_network_builder::compute_segments()
     vcl_vector<bmrf_epi_seg_sptr> epi_segs;
     if (!this->extract_alpha_segments((*cit), epi_segs))
       continue;
-    // For later computations, the epi_segs are sorted according
-    // to min and max s values.  This ordering enables efficient
-    // searching for nearby segments.
     int k=0;
     for (vcl_vector<bmrf_epi_seg_sptr>::iterator sit = epi_segs.begin();
          sit != epi_segs.end(); sit++, k++ )
     {
-      min_segments.push_back(*sit);
-      max_segments.push_back(*sit);
+      epi_segs_.push_back(*sit);
     }
   }
 
-  //sort the segments according to min epipolar distance
-  vcl_sort(min_segments.begin(),
-           min_segments.end(),
-           epi_seg_compare_min);
-  set_min_index(min_segments);//store sorted index position in segs
-
-  //sort the segments according to max epipolar distance
-  vcl_sort(max_segments.begin(),
-           max_segments.end(),
-           epi_seg_compare_max);
-  set_max_index(min_segments);//store sorted index position in segs
-
-  //cache the segments for this frame.  Intensity info yet to be done
-  min_epi_segs_ = min_segments;
-  max_epi_segs_ = max_segments;
   return true;
 }
 
@@ -365,35 +307,26 @@ bool bmrf_network_builder::image_coords(const double a, const double s,
 }
 
 //==========================================================
-//: fill in intensity information on an epi_seg.
-// define r=ds*Ns. For the current seg:
-//     alpha_min, alpha_max
-//     s_min, s_max
+//: find the candidate bounding neighbors for intensity scans
 // All intensity bound candidates, x,  must satisfy:
 // x_alpha_min < alpha_max and x_alpha_max > alpha_min
 //
 // Candidates for the left scan must satisfy
 // x_s_max > s_min - r
-// x_s_min < s_max - r
+// x_s_min < s_max
 //
 // Candidates for the right scan also must satisfy
-// x_s_min < s_max + r
+// x_s_min < s_max 
 // x_s_max > s_min + r
-//
-// Given this set of candidates, then for each (alpha, s) in the
-// current seg, all the relevant candidates (left or right) are
-// checked for the nearest bound. If there is a candidate, x, within
-// r then the region is delimited by x.s(alpha), otherwise r.
 //==============================================================
 bool bmrf_network_builder::
 intensity_candidates(bmrf_epi_seg_sptr const& seg,
-                     vcl_vector<bmrf_epi_seg_sptr>& left_cand,
-                     vcl_vector<bmrf_epi_seg_sptr>& right_cand)
+                     vcl_set<bmrf_epi_seg_sptr>& left_cand,
+                     vcl_set<bmrf_epi_seg_sptr>& right_cand) const
 {
   if (!seg)
     return false; 
-  vcl_vector<bmrf_epi_seg_sptr>& min_segs = min_epi_segs_;
-  int n = min_segs.size();//same set as max_segs_, different order
+  int n = epi_segs_.size();
   if (n<2)
     return false;//can't get bounds with only one seg
   
@@ -401,24 +334,40 @@ intensity_candidates(bmrf_epi_seg_sptr const& seg,
   double s_min = seg->min_s(), s_max = seg->max_s();
   double r = radius(s_min);//scaled region radius
 
+  // define the bounds for the search
+  const vcl_multimap<double,bmrf_node_sptr>::const_iterator 
+    bound1 = s_node_map_.lower_bound(s_min-r),
+    bound2 = s_node_map_.lower_bound(s_min),
+    bound3 = s_node_map_.upper_bound(s_max),
+    bound4 = s_node_map_.upper_bound(s_max+r);
 
-  //scan the array for suitable candidates
-  for (vcl_vector<bmrf_epi_seg_sptr>::iterator sit = min_segs.begin();
-       sit != min_segs.end(); ++sit)
+  vcl_multimap<double,bmrf_node_sptr>::const_iterator itr = bound1;
+  for ( ; itr != bound2;  ++itr)
   {
-    bmrf_epi_seg_sptr curr_seg = *sit;
-    // Check the candidate for alpha range
-    if ( curr_seg->min_alpha()<a_max && 
-         curr_seg->max_alpha()> a_min )
+    bmrf_epi_seg_sptr curr_seg = itr->second->epi_seg();
+    if ( (curr_seg->min_alpha() < a_max) &&
+         (curr_seg->max_alpha() > a_min) )
     {
-      // Check the candidate for the right s range
-      if ( curr_seg->max_s() > s_min &&
-           curr_seg->min_s() < s_max+r )
-        right_cand.push_back(curr_seg);
-      // Check the candidate for the left s range
-      if( curr_seg->min_s() < s_max &&
-          curr_seg->max_s() > s_min-r )
-        left_cand.push_back(curr_seg);
+      left_cand.insert(curr_seg);
+    }
+  }
+  for ( ; itr != bound3;  ++itr)
+  {
+    bmrf_epi_seg_sptr curr_seg = itr->second->epi_seg();
+    if ( (curr_seg->min_alpha() < a_max) &&
+         (curr_seg->max_alpha() > a_min) )
+    {
+      right_cand.insert(curr_seg);
+      left_cand.insert(curr_seg);
+    }
+  }
+  for ( ; itr != bound4;  ++itr)
+  {
+    bmrf_epi_seg_sptr curr_seg = itr->second->epi_seg();
+    if ( (curr_seg->min_alpha() < a_max) &&
+         (curr_seg->max_alpha() > a_min) )
+    {
+      right_cand.insert(curr_seg);
     }
   }
 
@@ -427,7 +376,7 @@ intensity_candidates(bmrf_epi_seg_sptr const& seg,
 
 
 //: the radius for intensity sampling
-double bmrf_network_builder::radius(const double s)
+double bmrf_network_builder::radius(const double s) const
 {
   return (Ns_*s)/smax_;
 }
@@ -436,14 +385,14 @@ double bmrf_network_builder::radius(const double s)
 //:find the closest left bounding segment s value
 double bmrf_network_builder::
 find_left_s(const double a, const double s,
-            vcl_vector<bmrf_epi_seg_sptr> const& cand)
+            vcl_set<bmrf_epi_seg_sptr> const& cand) const
 {
   double r = radius(s);
   if (!cand.size())
     return s-r;
   //find the closest smaller value of s
   double ds_min = vnl_numeric_traits<double>::maxval;
-  for (vcl_vector<bmrf_epi_seg_sptr>::const_iterator sit = cand.begin();
+  for (vcl_set<bmrf_epi_seg_sptr>::const_iterator sit = cand.begin();
        sit != cand.end(); sit++)
   {
     if (a<(*sit)->min_alpha()||a>(*sit)->max_alpha())
@@ -465,14 +414,14 @@ find_left_s(const double a, const double s,
 //:find the closest right bounding segment s value
 double bmrf_network_builder::
 find_right_s(const double a, const double s,
-             vcl_vector<bmrf_epi_seg_sptr> const& cand)
+             vcl_set<bmrf_epi_seg_sptr> const& cand) const
 {
   double r = radius(s);
   if (!cand.size())
     return s+r;
   //find the closest larger value of s
   double ds_min = vnl_numeric_traits<double>::maxval;
-  for (vcl_vector<bmrf_epi_seg_sptr>::const_iterator sit = cand.begin();
+  for (vcl_set<bmrf_epi_seg_sptr>::const_iterator sit = cand.begin();
        sit != cand.end(); sit++)
   {
     if (a<(*sit)->min_alpha()||a>(*sit)->max_alpha())
@@ -491,14 +440,14 @@ find_right_s(const double a, const double s,
   return s+r;
 }
 
-double bmrf_network_builder::ds(const double s)
+double bmrf_network_builder::ds(const double s) const
 {
   return s/smax_;
 }
 
 //: Find the average intensity for given s limits on a line of constant alpha
 double bmrf_network_builder::scan_interval(const double a, const double sl,
-                                           const double s)
+                                           const double s) const
 {
   if (!image_)
     return 0;
@@ -522,8 +471,8 @@ double bmrf_network_builder::scan_interval(const double a, const double sl,
 
 //scan along the epipolar line to the left
 double bmrf_network_builder::
-scan_left(double a, double s, vcl_vector<bmrf_epi_seg_sptr> const& left_cand,
-          double& ds)
+scan_left(double a, double s, vcl_set<bmrf_epi_seg_sptr> const& left_cand,
+          double& ds) const
 {
   double sl = this->find_left_s(a, s, left_cand);
   ds = s-sl;
@@ -532,8 +481,8 @@ scan_left(double a, double s, vcl_vector<bmrf_epi_seg_sptr> const& left_cand,
 
 //scan along the epipolar line to the right
 double bmrf_network_builder::
-scan_right(double a,double s, vcl_vector<bmrf_epi_seg_sptr> const& right_cand,
-           double& ds)
+scan_right(double a,double s, vcl_set<bmrf_epi_seg_sptr> const& right_cand,
+           double& ds) const
 {
   double sr = this->find_right_s(a, s, right_cand);
   ds = sr-s;
@@ -551,7 +500,7 @@ bool bmrf_network_builder::fill_intensity_values(bmrf_epi_seg_sptr& seg)
   vcl_cout << "\n\nStarting new Seg\n";
 #endif
   //the potential bounding segments
-  vcl_vector<bmrf_epi_seg_sptr> left_cand, right_cand;
+  vcl_set<bmrf_epi_seg_sptr> left_cand, right_cand;
   this->intensity_candidates(seg, left_cand, right_cand);
   //scan the segment
   double min_a = seg->min_alpha(), max_a = seg->max_alpha();
@@ -562,7 +511,7 @@ bool bmrf_network_builder::fill_intensity_values(bmrf_epi_seg_sptr& seg)
     right_int = scan_right(a, s, right_cand, right_ds);
     seg->add_int_sample(a, left_ds, left_int, right_ds, right_int);
   }
-return true;
+  return true;
 }
 
 //======================================================================
@@ -570,21 +519,13 @@ return true;
 //======================================================================
 bool bmrf_network_builder::set_intensity_info()
 {
-  //the min and max caches hold the same segments, just sorted
-  //differently
-  vcl_vector<bmrf_epi_seg_sptr>& segs = min_epi_segs_;
-#ifdef DEBUG
-  vcl_cout << "Intensity data for Frame " << frame_ << '\n';
-#endif
-  for (vcl_vector<bmrf_epi_seg_sptr>::iterator sit = segs.begin();
-       sit != segs.end(); sit++)
+  bool retval = true;
+  for (vcl_vector<bmrf_epi_seg_sptr>::iterator sit = epi_segs_.begin();
+       sit != epi_segs_.end(); sit++)
   {
-    this->fill_intensity_values(*sit);
-#ifdef DEBUG
-    vcl_cout << *(*sit) << vcl_endl;
-#endif
+    retval = this->fill_intensity_values(*sit) && retval;
   }
-return true;
+  return retval;
 }
 
 //==============================================================
@@ -594,9 +535,9 @@ bool bmrf_network_builder::add_frame_nodes()
 {
   if (!network_)
     return false;
-  vcl_vector<bmrf_epi_seg_sptr>& segs = min_epi_segs_;
-  for (vcl_vector<bmrf_epi_seg_sptr>::iterator sit = segs.begin();
-       sit != segs.end(); ++sit)
+
+  for (vcl_vector<bmrf_epi_seg_sptr>::iterator sit = epi_segs_.begin();
+       sit != epi_segs_.end(); ++sit)
   {
     //for now, make the node the entire alpha segment.
     bmrf_node_sptr node = new bmrf_node(*sit, frame_);
@@ -608,18 +549,31 @@ bool bmrf_network_builder::add_frame_nodes()
       return false;
     }
   }
+
+  // build a map from s regions to nodes for fast neighbor look up
+  prev_s_node_map_ = s_node_map_;
+  s_node_map_.clear();
+  for (bmrf_network::seg_node_map::const_iterator nit = network_->begin(frame_);
+       nit != network_->end(frame_); ++nit)
+  {
+    bmrf_epi_seg_sptr seg = nit->second->epi_seg();
+    double min_s = seg->min_s();
+    double max_s = seg->max_s();
+    for (double s = min_s; s<max_s; s=1.0/(1.0/s - max_delta_recip_s_/2.0))
+      s_node_map_.insert(vcl_pair<double,bmrf_node_sptr>(s, nit->second));
+  
+    s_node_map_.insert(vcl_pair<double,bmrf_node_sptr>(max_s, nit->second));
+  }
   return true;
 }
 
+
 //==============================================================
 //: Find the neighbors of a node in time from the previous frame
-//  This algorithm is n^2 since for each node,
-//  we have to scan the entire frame to find neighbors. But let's
-//  keep it simple for now, until we get the whole process in place.
 //=============================================================
 bool bmrf_network_builder::
 time_neighbors(bmrf_node_sptr const& node,
-               vcl_vector<bmrf_node_sptr>& neighbors)
+               vcl_set<bmrf_node_sptr>& neighbors) const
 {
   if (!node)
     return false;
@@ -631,23 +585,25 @@ time_neighbors(bmrf_node_sptr const& node,
   double a_min = node->epi_seg()->min_alpha(),
          a_max = node->epi_seg()->max_alpha();
 
-  //scan the frame 
-  //the upper bound passes zero velocity
-  //the lower bound is extended using the maximum difference of reciprocals in s.
-  bool found_something = false;
-  int frame = node->frame_num();
-  for (bmrf_network::seg_node_map::const_iterator nit = network_->begin(frame-1);
-       nit != network_->end(frame-1); ++nit)
-    if ( (nit->first->min_alpha() < a_max) &&
-         (nit->first->max_alpha() > a_min) &&
-         (nit->first->min_s() <= s_max) &&
-         (nit->first->max_s() > 1.0/(1.0/s_min + max_delta_recip_s_) )){
-      neighbors.push_back(nit->second);
-      found_something = true;
+  bmrf_node_sptr last = NULL;
+  for ( vcl_multimap<double,bmrf_node_sptr>::const_iterator 
+        itr = prev_s_node_map_.lower_bound(1.0/(1.0/s_min + max_delta_recip_s_));
+        itr != prev_s_node_map_.upper_bound(s_max);  ++itr)
+  {
+    if(itr->second == last)
+      continue;
+    bmrf_epi_seg_sptr seg = itr->second->epi_seg();
+    if ( (seg->min_alpha() < a_max) &&
+         (seg->max_alpha() > a_min) )
+    {
+      neighbors.insert(itr->second);
+      last = itr->second;
     }
+  }
 
-  return found_something;
+  return !neighbors.empty();
 }
+
 
 //==============================================================
 //: Assign neighbors to nodes.  For now just select a range of
@@ -666,10 +622,10 @@ bool bmrf_network_builder::assign_neighbors()
   for (bmrf_network::seg_node_map::const_iterator nit = network_->begin(frame_);
        nit != network_->end(frame_); ++nit )
   {
-    vcl_vector<bmrf_node_sptr> neighbors;
+    vcl_set<bmrf_node_sptr> neighbors;
     if (!this->time_neighbors(nit->second, neighbors))
       continue;
-    for (vcl_vector<bmrf_node_sptr>::iterator nnit = neighbors.begin();
+    for (vcl_set<bmrf_node_sptr>::iterator nnit = neighbors.begin();
          nnit != neighbors.end(); nnit++)
     {
       const double int_var = 0.001; // intensity variance
@@ -685,28 +641,26 @@ bool bmrf_network_builder::assign_neighbors()
   return true;
 }
 
-bool bmrf_network_builder::build_network()
-{
-  if (!this->add_frame_nodes())
-    return false;
-  if (!this->assign_neighbors())
-    return false;
-  network_valid_ = true;
-  return true;
-}
 
 //==============================================================
 //: The main process method
 //=============================================================
 bool bmrf_network_builder::build()
 {
-  if (!this->compute_segments())
+  vul_timer t;   
+  if (!this->compute_segments())    if (!this->compute_segments()) 
     return false;
-  if (!this->set_intensity_info())
+  vcl_cout << "compute time = " << t.user() << vcl_endl; t.mark(); 
+  if (!this->add_frame_nodes())
     return false;
-  if (!this->build_network())
+  if (!this->set_intensity_info())    if (!this->set_intensity_info()) 
     return false;
-  return true;
+  vcl_cout << "stats time = " << t.user() << vcl_endl; t.mark();   
+  if (!this->assign_neighbors())
+    return false;
+  network_valid_ = true;
+  vcl_cout << "build time = " << t.user() << vcl_endl; t.mark();   
+  return true; 
 }
 
 //: return the network if valid, otherwise a null network
