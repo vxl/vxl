@@ -46,6 +46,7 @@ TESTS += test_sym_matrix.cxx
 TESTS += test_amoeba.cxx
 TESTS += test_bignum.cxx
 TESTS += test_finite.cxx
+TESTS += test_diag_matrix.cxx
 
 #######################################
 include ${IUEROOT}/config/top-params.mk
