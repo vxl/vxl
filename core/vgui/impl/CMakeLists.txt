@@ -1,41 +1,11 @@
-# ./oxl/vgui/impl/CMakeLists.txt
+# oxl/vgui/impl/CMakeLists.txt
 
-#IF(HAS_GLUT)
-  SUBDIRS(glut)
-#ENDIF(HAS_GLUT)
-
-#IF(HAS_QT)
-  SUBDIRS(qt)
-#ENDIF(HAS_QT)
-
-IF(HAS_MFC)
-  SUBDIRS(mfc)
-ENDIF(HAS_MFC)
-
-IF(UNIX)
-
-  IF(HAS_X11)
-    SUBDIRS(X)
-  ENDIF(HAS_X11)
-
-  IF(HAS_GLX)
-    SUBDIRS(glX)
-  ENDIF(HAS_GLX)
-
-# IF(HAS_GTK)
-    SUBDIRS(gtk)
-# ENDIF(HAS_GTK)
-
-  IF(HAS_SDL)
-    SUBDIRS(SDL)
-  ENDIF(HAS_SDL)
-
-  IF(HAS_MOTIF)
-    SUBDIRS(Xm)
-  ENDIF(HAS_MOTIF)
-
-  IF(HAS_FL)
-    SUBDIRS(Fl)
-  ENDIF(HAS_FL)
-
-ENDIF(UNIX)
+SUBDIRS(glut)
+SUBDIRS(qt)
+SUBDIRS(mfc)
+SUBDIRS(X)
+SUBDIRS(glX)
+SUBDIRS(gtk)
+SUBDIRS(SDL)
+SUBDIRS(Xm)
+SUBDIRS(Fl)
