@@ -12,6 +12,11 @@ USES += contrib/gel core
 LIBRARY := vsol
 VERSION := 1.0
 
+# dimensionless virtual classes
+SOURCES += vsol_spatial_object.cxx
+SOURCES += vsol_box.cxx
+SOURCES += vsol_flags_id.cxx
+
 # embedding dimension 2
 SOURCES += vsol_spatial_object_2d.cxx
 SOURCES += vsol_box_2d.cxx
@@ -53,6 +58,7 @@ SOURCES += vsol_polyhedron.cxx
 SOURCES += vsol_tetrahedron.cxx
 
 # smart pointer header files
+MANPAGE_SOURCES += vsol_box_sptr.h
 MANPAGE_SOURCES += vsol_box_2d_sptr.h
 MANPAGE_SOURCES += vsol_box_3d_sptr.h
 MANPAGE_SOURCES += vsol_conic_2d_sptr.h
@@ -60,6 +66,7 @@ MANPAGE_SOURCES += vsol_curve_2d_sptr.h
 MANPAGE_SOURCES += vsol_curve_3d_sptr.h
 MANPAGE_SOURCES += vsol_digital_curve_2d_sptr.h
 MANPAGE_SOURCES += vsol_digital_curve_3d_sptr.h
+MANPAGE_SOURCES += vsol_flags_id_sptr.h
 MANPAGE_SOURCES += vsol_group_2d_sptr.h
 MANPAGE_SOURCES += vsol_group_3d_sptr.h
 MANPAGE_SOURCES += vsol_line_2d_sptr.h
@@ -75,6 +82,7 @@ MANPAGE_SOURCES += vsol_rectangle_2d_sptr.h
 MANPAGE_SOURCES += vsol_rectangle_3d_sptr.h
 MANPAGE_SOURCES += vsol_region_2d_sptr.h
 MANPAGE_SOURCES += vsol_region_3d_sptr.h
+MANPAGE_SOURCES += vsol_spatial_object_sptr.h
 MANPAGE_SOURCES += vsol_spatial_object_2d_sptr.h
 MANPAGE_SOURCES += vsol_spatial_object_3d_sptr.h
 MANPAGE_SOURCES += vsol_surface_3d_sptr.h
