@@ -120,7 +120,7 @@ bool strk_info_tracker_process::finish()
     vnl_matrix<double> X(n_frames, n_verts_);
     vnl_matrix<double> Y(n_frames, n_verts_);
     vcl_ofstream track_stream(track_file_.c_str());
-    if (!track_stream.is_open())
+    if (!track_stream)
     {
       vcl_cout << "In strk_info_tracker_process::finish() -"
                << " could not open file " << track_file_ << "\n";
@@ -163,7 +163,7 @@ bool strk_info_tracker_process::set_output_file(vcl_string const& file_name)
   write_tracked_faces_ = true;
   track_file_ = file_name;
   vcl_ofstream track_stream(track_file_.c_str());
-  if (!track_stream.is_open())
+  if (!track_stream)
   {
     vcl_cout << "In strk_info_tracker_process::set_output_file() -"
              << " could not open file " << track_file_ << "\n";
