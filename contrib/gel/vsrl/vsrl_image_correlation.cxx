@@ -27,14 +27,12 @@ vsrl_image_correlation::vsrl_image_correlation(const vil_image &im1, const vil_i
 // desctructor
 vsrl_image_correlation::~vsrl_image_correlation()
 {
-  if(_image_correlations)
+  if (_image_correlations)
   {
     int i;
-    for(i=0;i<_correlation_range*2+1;i++)
-    {
+    for (i=0;i<_correlation_range*2+1;i++)
       delete _image_correlations[i];
-    }
-    delete _image_correlations;
+    delete[] _image_correlations;
   }
   delete _mean_x;
   delete _mean_y;
@@ -71,11 +69,7 @@ int vsrl_image_correlation::get_correlation_range()
 
 bool vsrl_image_correlation::check_range(vil_byte_buffer &buf, int x, int y)
 {
-  if(x<0 || x >= buf.width() || y<0 || y>buf.height())
-  {
-    return false;
-  }
-  return true;
+  return x>=0 && x<buf.width() && y>=0 && y<buf.height();
 }
 
 
@@ -115,17 +109,13 @@ void vsrl_image_correlation::compute_local_stats(vnl_matrix<double> &im, vnl_mat
   ac_std.set_window_height(this->_window_height);
   ac_std.execute();
 
-  int r,c;
-  double xx,m;
-  for(r=0;r<std.rows();r++)
-  {
-    for(c=0;c<std.cols();c++)
+  for (int r=0;r<std.rows();r++)
+    for (int c=0;c<std.cols();c++)
     {
-      xx=std(r,c);
-      m=mean(r,c);
+      double xx=std(r,c);
+      double m=mean(r,c);
       std(r,c) = vcl_sqrt(xx-m*m);
     }
-  }
 }
 
 void vsrl_image_correlation::shift_multiply_matrix(int offset, vnl_matrix<double> &X, vnl_matrix<double> &Y,
@@ -138,26 +128,16 @@ void vsrl_image_correlation::shift_multiply_matrix(int offset, vnl_matrix<double
   // find the start and end colums
 
   int start_col = 0-offset;
-  if(start_col <0)
-  {
+  if (start_col<0)
     start_col=0;
-  }
 
-  int end_col = X.cols()-offset;
-  if(end_col>X.cols()-1)
-  {
-    end_col=X.cols()-1;
-  }
+  int end_col = Y.cols()-offset; // 1 more than last column
+  if (end_col>X.cols())
+    end_col=X.cols();
 
-  int r,c;
-
-  for(r=0;r<X.rows();r++)
-  {
-    for(c=start_col;c<=end_col;c++)
-    {
+  for (int r=0;r<X.rows();r++)
+    for (int c=start_col;c<end_col;c++)
       XY(r,c) = X(r,c) * Y(r,c+offset);
-    }
-  }
 }
 
 
@@ -201,82 +181,53 @@ void  vsrl_image_correlation::compute_correlation(int x_offset,
   // find the start and end colums
 
   int start_col = 0-x_offset;
-  if(start_col <0)
-  {
+  if (start_col <0)
     start_col=0;
-  }
 
-  int end_col = X.cols()-x_offset;
-  if(end_col>X.cols()-1)
-  {
-    end_col=X.cols()-1;
-  }
+  int end_col = Y.cols()-x_offset;
+  if (end_col>X.cols())
+    end_col=X.cols();
 
-  int r,c;
-
-  double mx,my,sx,sy;
-  double xy;
-  double value;
-
-  for(r=0;r<X.rows();r++)
-  {
-    for(c=start_col;c<=end_col;c++)
+  for (int r=0;r<X.rows();r++)
+    for (int c=start_col;c<end_col;c++)
     {
-      sx = std_x(r,c);
-      sy = std_y(r,c+x_offset);
+      double sx = std_x(r,c);
+      double sy = std_y(r,c+x_offset);
 
-      mx = mean_x(r,c);
-      my = mean_y(r,c+x_offset);
+      double mx = mean_x(r,c);
+      double my = mean_y(r,c+x_offset);
 
-      xy = ac_XY(r,c);
+      double xy = ac_XY(r,c);
 
-      if(sx && sy)
-      {
-        value=(xy-mx*my)/(sx*sy);
-        corr_matrix(r,c) = value;
-      }
+      if (sx!=0.0 && sy!=0.0)
+        corr_matrix(r,c) = (xy-mx*my)/(sx*sy);
     }
-  }
 }
 
 
-void  vsrl_image_correlation::initial_calculations()
+void vsrl_image_correlation::initial_calculations()
 {
   // we want to be able to compute all the possible correlations
   // between the two images;
 
-  if(_mean_x)
-  {
-    // the initial calculations have already been done
-    // return;
-
-    return;
-  }
+  if (_mean_x)
+    return; // the initial calculations have already been done
 
 
   // step 1 make a vnl_matrix from the two buffers
 
   vnl_matrix<double> X(_buffer1.height(),_buffer1.width());
-  int r,c;
 
-  for(r=0;r<X.rows();r++)
-  {
-    for(c=0;c<X.cols();c++)
-    {
+  for (int r=0;r<X.rows();r++)
+    for (int c=0;c<X.cols();c++)
       X(r,c)= _buffer1(c,r);
-    }
-  }
 
   vnl_matrix<double> Y(_buffer2.height(),_buffer2.width());
 
 
-  for(r=0;r<Y.rows();r++)
-  {
-    for(c=0;c<Y.cols();c++)
-    {
+  for (int r=0;r<Y.rows();r++)
+    for (int c=0;c<Y.cols();c++)
       Y(r,c)= _buffer2(c,r);
-    }
-  }
 
   // Now compute the mean and std for X and Y
 
@@ -297,9 +248,7 @@ void  vsrl_image_correlation::initial_calculations()
 
   // now compute each correlation
 
-  int i;
-
-  for(i=0;i<_correlation_range*2 + 1;i++)
+  for (int i=0;i<_correlation_range*2 + 1;i++)
   {
     vnl_matrix<double> *corr = new vnl_matrix<double>(X.rows(),X.cols());
     _image_correlations[i]=corr;
@@ -344,17 +293,13 @@ double vsrl_image_correlation::get_image_value2(int x, int y)
 
 double vsrl_image_correlation::get_correlation(int x1, int y1, int delta_x)
 {
-  if(!_image_correlations)
-    {
-      return 0.0;
-    }
+  if (!_image_correlations)
+    return 0.0;
 
   int index = delta_x + _correlation_range;
 
-  if(index < 0 || index >=(2*_correlation_range +1))
-  {
+  if (index < 0 || index >=(2*_correlation_range +1))
     return 0.0;
-  }
 
   return (*(_image_correlations[index]))(y1,x1);
 }
@@ -364,6 +309,7 @@ int vsrl_image_correlation::get_image1_width()
 {
   return _buffer1.width();
 }
+
 int vsrl_image_correlation::get_image2_width()
 {
   return _buffer2.width();
@@ -373,6 +319,7 @@ int vsrl_image_correlation::get_image1_height()
 {
   return _buffer1.height();
 }
+
 int vsrl_image_correlation::get_image2_height()
 {
   return _buffer2.height();
@@ -393,29 +340,20 @@ void vsrl_image_correlation::compute_local_stats(vil_byte_buffer &buf, int x, in
   int low_x= x- _window_width/2;
   int hi_x= x+ _window_width/2;
 
-  if(low_x <0)
-  {
+  if (low_x <0)
     low_x=0;
-  }
 
-  if(hi_x>buf.width()-1)
-  {
+  if (hi_x>buf.width()-1)
     hi_x=buf.width()-1;
-  }
-
 
   int low_y= y- _window_height/2;
   int hi_y= y+ _window_height/2;
 
-  if(low_y <0)
-  {
+  if (low_y <0)
     low_y=0;
-  }
 
-  if(hi_y>buf.height()-1)
-  {
+  if (hi_y>buf.height()-1)
     hi_y=buf.height()-1;
-  }
 
 
   // we want to compute the local stats of the data;
@@ -424,23 +362,18 @@ void vsrl_image_correlation::compute_local_stats(vil_byte_buffer &buf, int x, in
   double sum_xx=0.0;
   double N=0;
 
-
-  int ix,iy;
-
-  for(ix=low_x;ix<= hi_x;ix++)
-  {
-    for(iy=low_y;iy<=hi_y;iy++)
+  for (int ix=low_x;ix<= hi_x;ix++)
+    for (int iy=low_y;iy<=hi_y;iy++)
     {
       double val = buf(ix,iy);
       sum_x=sum_x+val;
       sum_xx=sum_xx + val*val;
       N++;
     }
-  }
 
   // compute the mean
 
-  if(N)
+  if (N)
   {
     mean=sum_x/N;
 
@@ -461,66 +394,50 @@ double vsrl_image_correlation::get_correlation(int x1, int y1, int x2, int y2)
 {
   // we want to compute the correlation
 
-  if(!check_range(_buffer1,x1,y1) || !check_range(_buffer2,x2,y2))
-  {
+  if (!check_range(_buffer1,x1,y1) || !check_range(_buffer2,x2,y2))
     return 0.0;
-  }
 
   // compute the window ranges for the data;
 
   // first the x component
 
   int dx = _window_width/2;
-  if(x1 < dx)
-  {
+  if (x1 < dx)
     dx=x1;
-  }
 
-  if(x2 < dx)
-  {
+  if (x2 < dx)
     dx=x2;
-  }
+
   int low_x1 = x1-dx;
   int low_x2 = x2-dx;
 
   dx=_window_width/2;
-  if((_buffer1.width()-1 -x1) < dx)
-  {
+  if ((_buffer1.width()-1 -x1) < dx)
     dx=(_buffer1.width()-1 -x1);
-  }
 
-  if((_buffer2.width()-1 -x2) < dx)
-  {
+  if ((_buffer2.width()-1 -x2) < dx)
     dx=(_buffer2.width()-1 -x2);
-  }
 
   int hi_x1= x1+dx;
 
   // now the y component
 
   int dy = _window_height/2;
-  if(y1 < dy)
-  {
+  if (y1 < dy)
     dy=y1;
-  }
 
-  if(y2 < dy)
-  {
+  if (y2 < dy)
     dy=y2;
-  }
+
   int low_y1 = y1-dy;
   int low_y2 = y2-dy;
 
   dy=_window_height/2;
-  if((_buffer1.height()-1 -y1) < dy)
-  {
+  if ((_buffer1.height()-1 -y1) < dy)
     dy=(_buffer1.height()-1 -y1);
-  }
 
-  if((_buffer2.height()-1 -y2) < dy)
-  {
+  if ((_buffer2.height()-1 -y2) < dy)
     dy=(_buffer2.height()-1 -y2);
-  }
 
   int hi_y1= y1+dy;
 
@@ -534,16 +451,14 @@ double vsrl_image_correlation::get_correlation(int x1, int y1, int x2, int y2)
 
   // now compute the correlation
 
-  if(std1 && std2)
+  if (std1 && std2)
   {
-    int i1,i2,j1,j2;
     double val1, val2;
     double N=0;
     double corr=0;
 
-    for(i1=low_x1, i2=low_x2; i1<= hi_x1;i1++, i2++)
-    {
-      for(j1=low_y1, j2=low_y2; j1 <= hi_y1;j1++, j2++)
+    for (int i1=low_x1, i2=low_x2; i1<= hi_x1;i1++, i2++)
+      for (int j1=low_y1, j2=low_y2; j1 <= hi_y1;j1++, j2++)
       {
         val1=_buffer1(i1,j1);
         val2=_buffer2(i2,j2);
@@ -551,19 +466,15 @@ double vsrl_image_correlation::get_correlation(int x1, int y1, int x2, int y2)
         corr=corr+((val1-mean1)/std1)*((val2-mean2)/std2);
         N++;
       }
-    }
-    if(N)
-    {
+
+    if (N != 0)
       corr=corr/N;
-    }
 
     // return the correlation value
     return corr;
   }
   else
-  {
     return 0.0;
-  }
 }
 
 
@@ -597,11 +508,8 @@ double vsrl_image_correlation::get_sub_pixel_delta(int x1,int y1, int delta_x)
 
   int index = delta_x + _correlation_range;
 
-  if(index <1 || index >= (2*_correlation_range))
-  {
-    // cannot three measurements sending back the original
-    return delta_x;
-  }
+  if (index <1 || index >= (2*_correlation_range))
+    return delta_x; // cannot three measurements sending back the original
 
   // get Y1 , Y2 , Y3
 
@@ -613,7 +521,7 @@ double vsrl_image_correlation::get_sub_pixel_delta(int x1,int y1, int delta_x)
   double b = 0.5*Y3 - 0.5*Y1;
 
   double x_hat=0;
-  if(a>=0)
+  if (a>=0)
   {
     // this is a straight line or a minumum has
     // occured in the interval
@@ -621,29 +529,23 @@ double vsrl_image_correlation::get_sub_pixel_delta(int x1,int y1, int delta_x)
     x_hat =0;
 
     if (Y1 > Y3)
-    {
       x_hat = 0.0-0.5;
-    }
-    if(Y3 > Y1)
-    {
+
+    if (Y3 > Y1)
       x_hat = 0.5;
-    }
   }
   else
   {
     // we have trapped a local maxima
     x_hat = 0.0-b/ (2.0*a);
-    if(x_hat >0.5)
-    {
+    if (x_hat >0.5)
       x_hat = 0.5;
-    }
-    if(x_hat < (0.0-0.5))
-    {
+
+    if (x_hat < (0.0-0.5))
       x_hat = (0.0-0.5);
-    }
   }
 
-  return (delta_x + x_hat);
+  return delta_x + x_hat;
 }
 
 
@@ -654,26 +556,23 @@ void vsrl_image_correlation::get_correlation_stats(int x, int y, double &mean, d
   // then recording the mean and standard deviation for this correlation function
 
   double N=0;
-  double z;
-  double var;
   double sum_z=0;
   double sum_zz=0;
-  int delta;
 
   // cover all posible correlations
 
-  for(delta=0-_correlation_range;delta<_correlation_range+1;delta++)
+  for (int delta=0-_correlation_range;delta<_correlation_range+1;delta++)
   {
-    z = this->get_correlation(x,y,delta);
-    sum_z = sum_z + z;
-    sum_zz = sum_zz + z*z;
-    N++;
+    double z = this->get_correlation(x,y,delta);
+    sum_z += z;
+    sum_zz += z*z;
+    ++N;
   }
 
-  if(N)
+  if (N!=0)
   {
     mean = sum_z/N;
-    var = sum_zz/N - mean*mean;
+    double var = sum_zz/N - mean*mean;
     std = vcl_sqrt(var);
   }
 }
