@@ -525,6 +525,10 @@ SOURCE=.\vil_skip.cxx
 
 SOURCE=.\vil_warp.cxx
 # End Source File
+# Begin Source File
+
+SOURCE=.\vil_colour_space.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 
@@ -796,6 +800,10 @@ SOURCE=.\vil_skip.h
 # Begin Source File
 
 SOURCE=.\vil_warp.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\vil_colour_space.h
 # End Source File
 # End Group
 # End Target
