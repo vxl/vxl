@@ -188,11 +188,34 @@ KLT_PixelType* vgel_kl::convert_to_gs_image(vil_image &image)
 
         for(int i=0;i<w;i++)
             for(int j=0;j<h;j++)
-            {
+	      {
                 tab_mono[i*h+j]=(KLT_PixelType)p[i*h+j];
-            }
+	      }
         return tab_mono;
-    } else return NULL;
+    } 
+    else if (vil_pixel_format(image)==VIL_BYTE)
+      {
+        int w=image.width();
+        int h=image.height();
+        KLT_PixelType* tab_mono=new KLT_PixelType[w*h];
+        vcl_cerr << "width: " <<w<< "  height: "<<h<<  vcl_endl;
+
+        vil_memory_image_of<vil_byte> ima_mono;
+        ima_mono.resize(w,h);
+
+        vil_image_as_byte(image).get_section(ima_mono.get_buffer(), 0, 0, w, h);
+        vil_byte* p=ima_mono.get_buffer();
+
+        for(int i=0;i<w;i++)
+            for(int j=0;j<h;j++)
+	      {
+                tab_mono[i*h+j]=(KLT_PixelType)p[i*h+j];
+	      }
+        return tab_mono;
+      }
+
+
+    return NULL;
 }
 
 void vgel_kl::set_tracking_context( KLT_TrackingContext tc)
