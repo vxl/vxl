@@ -362,7 +362,7 @@ void xcv_geometry::delete_linestrips()
   vcl_vector<vgui_soview*> all_objs = easy_tab->get_all();
   for (vcl_vector<vgui_soview*>::iterator i = all_objs.begin(); i != all_objs.end(); i++)
   {
-    if ((*i)->type_name() == "vgui_soview2D_linestrips")
+    if ((*i)->type_name() == "vgui_soview2D_linestrip")
         easy_tab->remove((vgui_soview*)(*i));
   }
 }
