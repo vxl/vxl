@@ -128,10 +128,13 @@ template vcl_ostream &vnl_matlab_print(vcl_ostream &, T const *, unsigned, vnl_m
 template vcl_ostream &vnl_matlab_print(vcl_ostream &, T const * const *, unsigned, unsigned, vnl_matlab_print_format); \
 template vcl_ostream &vnl_matlab_print(vcl_ostream &, vnl_diag_matrix<T > const &, char const *, vnl_matlab_print_format); \
 template vcl_ostream &vnl_matlab_print(vcl_ostream &, vnl_matrix<T > const &, char const *, vnl_matlab_print_format); \
-template vcl_ostream &vnl_matlab_print(vcl_ostream &, vnl_vector<T > const &, char const *, vnl_matlab_print_format);
+template vcl_ostream &vnl_matlab_print(vcl_ostream &, vnl_vector<T > const &, char const *, vnl_matlab_print_format)
+
 inst(int);
 inst(float);
 inst(double);
+inst(long double);
 inst(vcl_complex<float>);
 inst(vcl_complex<double>);
+inst(vcl_complex<long double>);
 #undef inst
