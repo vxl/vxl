@@ -8,8 +8,13 @@
 
 // Purpose: provide access to the <time.h> standard C header.
 
-#include <time.h>
+#if !VCL_CXX_HAS_HEADER_CTIME
+# include <time.h>
+#else
+# include "iso/vcl_ctime.h"
+#endif
 
+// ??
 #ifndef VCL_WIN32
 #include <sys/times.h>
 #endif
