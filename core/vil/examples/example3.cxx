@@ -3,20 +3,20 @@
 // \brief Example of setting up view of external data.
 // \author Tim Cootes - Manchester
 
-#include <vil2/vil2_image_view.h>
-#include <vil2/vil2_image_view_functions.h>
-#include <vil2/vil2_byte.h>
 #include <vcl_iostream.h>
 #include <vcl_vector.h>
+#include <vxl_config.h>
+#include <vil2/vil2_image_view.h>
+#include <vil2/vil2_image_view_functions.h>
 
 int main(int argc, char** argv)
 {
   // Create some data in memory
-  vcl_vector<vil2_byte> vec_data(64);
+  vcl_vector<vxl_byte> vec_data(64);
   for (unsigned i=0;i<vec_data.size();++i) vec_data[i] = i;
 
   vcl_cout<<"Creating a view of some data in memory"<<vcl_endl;
-  vil2_image_view<vil2_byte> image(&vec_data[0],8,8,1,1,8,1);
+  vil2_image_view<vxl_byte> image(&vec_data[0],8,8,1,1,8,1);
 
   // equivalent to image.set_to_memory(&vec_data[0],8,8,1,1,8,1);
 

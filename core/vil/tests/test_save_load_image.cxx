@@ -1,5 +1,4 @@
 // This is mul/vil2/tests/test_save_load_image.cxx
-#include <testlib/testlib_test.h>
 //:
 // \file
 // \author Peter.Vanroose@esat.kuleuven.ac.be
@@ -27,10 +26,11 @@
 #include <vcl_iostream.h>
 #include <vcl_fstream.h>
 
+#include <vxl_config.h>
+#include <testlib/testlib_test.h>
 #include <vul/vul_temp_filename.h>
 #include <vpl/vpl.h> // vpl_unlink()
 
-#include <vil2/vil2_byte.h>
 #include <vil2/vil2_save.h>
 #include <vil2/vil2_load.h>
 #include <vil2/vil2_image_view.h>
@@ -326,9 +326,9 @@ vil2_image_view<bool> CreateTest1bitImage(int wd, int ht)
 
 
 // create an 8 bit test image
-vil2_image_view<vil2_byte> CreateTest8bitImage(int wd, int ht)
+vil2_image_view<vxl_byte> CreateTest8bitImage(int wd, int ht)
 {
-  vil2_image_view<vil2_byte> image(wd, ht);
+  vil2_image_view<vxl_byte> image(wd, ht);
   for (int y = 0; y < ht; y++)
     for (int x = 0; x < wd; x++) {
       image(x,y) = ((x-wd/2)*(y-ht/2)/16) & 0xff;
@@ -361,12 +361,12 @@ vil2_image_view<vxl_uint_32> CreateTest32bitImage(int wd, int ht)
 #if 0 // read back pixel type will not match: ppm is always read in as 3-plane image
 
 // create a 24 bit color test image
-vil2_image_view<vil_rgb<vil2_byte> > CreateTest24bitImage(int wd, int ht)
+vil2_image_view<vil_rgb<vxl_byte> > CreateTest24bitImage(int wd, int ht)
 {
-  vil2_image_view<vil_rgb<vil2_byte> > image(wd, ht);
+  vil2_image_view<vil_rgb<vxl_byte> > image(wd, ht);
   for (int x = 0; x < wd; x++)
     for (int y = 0; y < ht; y++) {
-      image(x,y) = vil_rgb<vil2_byte>(x%(1<<8), ((x-wd/2)*(y-ht/2)/16) % (1<<8), ((y/3)%(1<<8)));
+      image(x,y) = vil_rgb<vxl_byte>(x%(1<<8), ((x-wd/2)*(y-ht/2)/16) % (1<<8), ((y/3)%(1<<8)));
     }
   return image;
 }
@@ -374,9 +374,9 @@ vil2_image_view<vil_rgb<vil2_byte> > CreateTest24bitImage(int wd, int ht)
 #endif // 0
 
 // create a 24 bit color test image, with 3 planes
-vil2_image_view<vil2_byte> CreateTest3planeImage(int wd, int ht)
+vil2_image_view<vxl_byte> CreateTest3planeImage(int wd, int ht)
 {
-  vil2_image_view<vil2_byte> image( wd, ht, 3);
+  vil2_image_view<vxl_byte> image( wd, ht, 3);
   for (int x = 0; x < wd; x++)
     for (int y = 0; y < ht; y++) {
       image(x,y,0) = x%(1<<8);
@@ -404,13 +404,13 @@ MAIN( test_save_load_image )
   int sizex = 253;
   int sizey = 155;
   vil2_image_view<bool>                image1 = CreateTest1bitImage(sizex, sizey);
-  vil2_image_view<vil2_byte>           image8 = CreateTest8bitImage(sizex, sizey);
+  vil2_image_view<vxl_byte>           image8 = CreateTest8bitImage(sizex, sizey);
   vil2_image_view<vxl_uint_16>         image16 = CreateTest16bitImage(sizex, sizey);
 #if 0 // read back pixel type will not match: ppm is always read in as 3-plane image
-  vil2_image_view<vil_rgb<vil2_byte> > image24 = CreateTest24bitImage(sizex, sizey);
+  vil2_image_view<vil_rgb<vxl_byte> > image24 = CreateTest24bitImage(sizex, sizey);
 #endif
   vil2_image_view<vxl_uint_32>         image32 = CreateTest32bitImage(sizex, sizey);
-  vil2_image_view<vil2_byte>           image3p = CreateTest3planeImage(sizex, sizey);
+  vil2_image_view<vxl_byte>           image3p = CreateTest3planeImage(sizex, sizey);
 #if 0 // no float image support available yet
   vil2_image_view<float>               imagefloat = CreateTestfloatImage(sizex, sizey);
 #endif

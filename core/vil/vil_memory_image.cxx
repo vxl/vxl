@@ -9,7 +9,7 @@
 #include "vil2_memory_image.h"
 #include <vcl_cassert.h>
 #include <vcl_cstdlib.h>
-#include <vil2/vil2_byte.h>
+#include <vxl_config.h>
 #include <vil2/vil2_image_view.h>
 #include <vil2/vil2_copy.h>
 #include <vil2/vil2_pixel_format.h>
@@ -17,7 +17,7 @@
 class vil2_image_view_base;
 
 vil2_memory_image::vil2_memory_image():
-   view_(new vil2_image_view<vil2_byte>()) {}
+   view_(new vil2_image_view<vxl_byte>()) {}
 
 vil2_memory_image::vil2_memory_image(unsigned ni,
   unsigned nj, unsigned nplanes, vil2_pixel_format format)
@@ -28,10 +28,10 @@ vil2_memory_image::vil2_memory_image(unsigned ni,
   switch (format)
   {
   case VIL2_PIXEL_FORMAT_BYTE:
-    view_ = new vil2_image_view<vil2_byte>(ni, nj, nplanes);
+    view_ = new vil2_image_view<vxl_byte>(ni, nj, nplanes);
     break;
-  case VIL2_PIXEL_FORMAT_INT_8:
-    view_ = new vil2_image_view<vxl_int_8>(ni, nj, nplanes);
+  case VIL2_PIXEL_FORMAT_SBYTE:
+    view_ = new vil2_image_view<vxl_sbyte>(ni, nj, nplanes);
     break;
   case VIL2_PIXEL_FORMAT_UINT_32:
     view_ = new vil2_image_view<vxl_uint_32>(ni, nj, nplanes);
@@ -72,21 +72,21 @@ vil2_image_view_base_sptr vil2_memory_image::get_copy_view(unsigned i0, unsigned
   {
   case  VIL2_PIXEL_FORMAT_BYTE:
     {
-      const vil2_image_view<vil2_byte> &v =
-        static_cast<const vil2_image_view<vil2_byte> &>(*view_);
-      vil2_image_view<vil2_byte> w(v.memory_chunk(), &v(i0,j0),
+      const vil2_image_view<vxl_byte> &v =
+        static_cast<const vil2_image_view<vxl_byte> &>(*view_);
+      vil2_image_view<vxl_byte> w(v.memory_chunk(), &v(i0,j0),
                                    ni, nj, v.nplanes(),
                                    v.istep(), v.jstep(), v.planestep());
-      return new vil2_image_view<vil2_byte>(vil2_copy_deep(w));
+      return new vil2_image_view<vxl_byte>(vil2_copy_deep(w));
     }
-  case  VIL2_PIXEL_FORMAT_INT_8:
+  case  VIL2_PIXEL_FORMAT_SBYTE:
     {
-      const vil2_image_view<vxl_int_8> &v =
-        static_cast<const vil2_image_view<vxl_int_8> &>(*view_);
-      vil2_image_view<vxl_int_8> w(v.memory_chunk(), &v(i0,j0),
+      const vil2_image_view<vxl_sbyte> &v =
+        static_cast<const vil2_image_view<vxl_sbyte> &>(*view_);
+      vil2_image_view<vxl_sbyte> w(v.memory_chunk(), &v(i0,j0),
                                    ni, nj, v.nplanes(),
                                    v.istep(), v.jstep(), v.planestep());
-      return new vil2_image_view<vxl_int_8>(vil2_copy_deep(w));
+      return new vil2_image_view<vxl_sbyte>(vil2_copy_deep(w));
     }
   case  VIL2_PIXEL_FORMAT_UINT_16:
     {
@@ -165,17 +165,17 @@ vil2_image_view_base_sptr vil2_memory_image::get_view(unsigned i0, unsigned ni,
   {
   case  VIL2_PIXEL_FORMAT_BYTE:
     {
-      const vil2_image_view<vil2_byte> &v =
-        static_cast<const vil2_image_view<vil2_byte> &>(*view_);
-      return new vil2_image_view<vil2_byte>(v.memory_chunk(), &v(i0,j0),
+      const vil2_image_view<vxl_byte> &v =
+        static_cast<const vil2_image_view<vxl_byte> &>(*view_);
+      return new vil2_image_view<vxl_byte>(v.memory_chunk(), &v(i0,j0),
                                             ni, nj, v.nplanes(),
                                             v.istep(), v.jstep(), v.planestep());
     }
-  case  VIL2_PIXEL_FORMAT_INT_8:
+  case  VIL2_PIXEL_FORMAT_SBYTE:
     {
-      const vil2_image_view<vxl_int_8> &v =
-        static_cast<const vil2_image_view<vxl_int_8> &>(*view_);
-      return new vil2_image_view<vxl_int_8>(v.memory_chunk(), &v(i0,j0),
+      const vil2_image_view<vxl_sbyte> &v =
+        static_cast<const vil2_image_view<vxl_sbyte> &>(*view_);
+      return new vil2_image_view<vxl_sbyte>(v.memory_chunk(), &v(i0,j0),
                                             ni, nj, v.nplanes(),
                                             v.istep(), v.jstep(), v.planestep());
     }
@@ -253,10 +253,10 @@ bool vil2_memory_image::put_view(const vil2_image_view_base& im,unsigned i0, uns
   {
   case  VIL2_PIXEL_FORMAT_BYTE:
     {
-      vil2_image_view<vil2_byte> &v =
-        static_cast<vil2_image_view<vil2_byte> &>(*view_);
-      const vil2_image_view<vil2_byte> &w =
-        static_cast<const vil2_image_view<vil2_byte> &>(im);
+      vil2_image_view<vxl_byte> &v =
+        static_cast<vil2_image_view<vxl_byte> &>(*view_);
+      const vil2_image_view<vxl_byte> &w =
+        static_cast<const vil2_image_view<vxl_byte> &>(im);
       if (v.memory_chunk() == w.memory_chunk())
       {
         if (&v(i0,j0) != w.top_left_ptr())
@@ -267,12 +267,12 @@ bool vil2_memory_image::put_view(const vil2_image_view_base& im,unsigned i0, uns
       vil2_copy_to_window(w, v, i0, j0);
       return true;
     }
-  case  VIL2_PIXEL_FORMAT_INT_8:
+  case  VIL2_PIXEL_FORMAT_SBYTE:
     {
-      vil2_image_view<vil2_byte> &v =
-        static_cast<vil2_image_view<vil2_byte> &>(*view_);
-      const vil2_image_view<vil2_byte> &w =
-        static_cast<const vil2_image_view<vil2_byte> &>(im);
+      vil2_image_view<vxl_byte> &v =
+        static_cast<vil2_image_view<vxl_byte> &>(*view_);
+      const vil2_image_view<vxl_byte> &w =
+        static_cast<const vil2_image_view<vxl_byte> &>(im);
       if (v.memory_chunk() == w.memory_chunk())
       {
         if (&v(i0,j0) != w.top_left_ptr())

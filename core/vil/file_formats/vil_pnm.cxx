@@ -102,7 +102,7 @@ vil2_pnm_image::vil2_pnm_image(vil_stream* vs, unsigned nx, unsigned ny,
   ncomponents_ = nplanes;
   if (nplanes == 1 &&
       (format==VIL2_PIXEL_FORMAT_RGB_BYTE ||
-       format==VIL2_PIXEL_FORMAT_RGB_INT_8 ||
+       format==VIL2_PIXEL_FORMAT_RGB_SBYTE ||
        format==VIL2_PIXEL_FORMAT_RGB_INT_16 ||
        format==VIL2_PIXEL_FORMAT_RGB_INT_16 ||
        format==VIL2_PIXEL_FORMAT_RGB_INT_32 ||
@@ -361,7 +361,7 @@ vil2_image_view_base_sptr vil2_pnm_image::get_copy_view(
       if (bits_per_component_ <= 1)
         return new vil2_image_view<bool>(buf, bb, nx, ny, nplanes(), nplanes(), nx*nplanes(), 1);
       if (bits_per_component_ <= 8)
-        return new vil2_image_view<vil2_byte>(buf, ib, nx, ny, nplanes(), nplanes(), nx*nplanes(), 1);
+        return new vil2_image_view<vxl_byte>(buf, ib, nx, ny, nplanes(), nplanes(), nx*nplanes(), 1);
       else if (bits_per_component_ <= 16)
         return new vil2_image_view<vxl_uint_16>(buf, jb, nx, ny, nplanes(), nplanes(), nx*nplanes(), 1);
       else
@@ -369,7 +369,7 @@ vil2_image_view_base_sptr vil2_pnm_image::get_copy_view(
 #if 0 // never return vil2_image_view<vil_rgb<T> > : default image representation is planar
     } else if (ncomponents_ == 3) {
       if (bits_per_component_ <= 8)
-        return new vil2_image_view<vil_rgb<vil2_byte> >(buf, (vil_rgb<vil2_byte>*)ib, nx, ny, 1, 1, nx, 1);
+        return new vil2_image_view<vil_rgb<vxl_byte> >(buf, (vil_rgb<vxl_byte>*)ib, nx, ny, 1, 1, nx, 1);
       else if (bits_per_component_ <= 16)
         return new vil2_image_view<vil_rgb<vxl_uint_16> >(buf, (vil_rgb<vxl_uint_16>*)jb, nx, ny, 1, 1, nx, 1);
       else
@@ -424,7 +424,7 @@ vil2_image_view_base_sptr vil2_pnm_image::get_copy_view(
       if (bits_per_component_ <= 1)
         return new vil2_image_view<bool>(buf, (bool*)buf->data(), nx, ny, nplanes(), nplanes(), nx*nplanes(), 1);
       if (bits_per_component_ <= 8)
-        return new vil2_image_view<vil2_byte>(buf, (vil2_byte*)buf->data(), nx, ny, nplanes(), nplanes(), nx*nplanes(), 1);
+        return new vil2_image_view<vxl_byte>(buf, (vxl_byte*)buf->data(), nx, ny, nplanes(), nplanes(), nx*nplanes(), 1);
       else if (bits_per_component_ <= 16)
         return new vil2_image_view<vxl_uint_16>(buf,(vxl_uint_16*)buf->data(),nx, ny, nplanes(), nplanes(), nx*nplanes(), 1);
       else
@@ -432,7 +432,7 @@ vil2_image_view_base_sptr vil2_pnm_image::get_copy_view(
 #if 0 // never return vil2_image_view<vil_rgb<T> > : default image representation is planar
     } else if (ncomponents_ == 3) {
       if (bits_per_component_ <= 8)
-        return new vil2_image_view<vil_rgb<vil2_byte> >(buf, (vil_rgb<vil2_byte>*)buf->data(), nx, ny, 1, 1, nx, 1);
+        return new vil2_image_view<vil_rgb<vxl_byte> >(buf, (vil_rgb<vxl_byte>*)buf->data(), nx, ny, 1, 1, nx, 1);
       else if (bits_per_component_ <= 16)
         return new vil2_image_view<vil_rgb<vxl_uint_16> >(buf, (vil_rgb<vxl_uint_16>*)buf->data(), nx, ny, 1, 1, nx, 1);
       else
@@ -460,7 +460,7 @@ bool vil2_pnm_image::put_view(const vil2_image_view_base& view,
       (view.pixel_format() == VIL2_PIXEL_FORMAT_UINT_16 && bits_per_component_ < 16) ||
       (view.pixel_format() == VIL2_PIXEL_FORMAT_INT_16  && bits_per_component_ < 16) ||
       (view.pixel_format() == VIL2_PIXEL_FORMAT_BYTE    && bits_per_component_ <  8) ||
-      (view.pixel_format() == VIL2_PIXEL_FORMAT_INT_8   && bits_per_component_ <  8) ||
+      (view.pixel_format() == VIL2_PIXEL_FORMAT_SBYTE   && bits_per_component_ <  8) ||
       (view.pixel_format() == VIL2_PIXEL_FORMAT_BOOL    && bits_per_component_ <  1) ||
        view.pixel_format() == VIL2_PIXEL_FORMAT_DOUBLE ||
        view.pixel_format() == VIL2_PIXEL_FORMAT_FLOAT )
@@ -470,14 +470,14 @@ bool vil2_pnm_image::put_view(const vil2_image_view_base& view,
   }
 
   const vil2_image_view<bool>*  bb=0;
-  const vil2_image_view<vil2_byte>*  ob = 0;
+  const vil2_image_view<vxl_byte>*  ob = 0;
   const vil2_image_view<vxl_uint_16>* pb = 0;
   const vil2_image_view<vxl_uint_32>*   qb = 0;
 
   if (view.pixel_format() == VIL2_PIXEL_FORMAT_BOOL)
     bb = &static_cast<const vil2_image_view<bool>& >(view);
   else if (view.pixel_format() == VIL2_PIXEL_FORMAT_BYTE)
-    ob = &static_cast<const vil2_image_view<vil2_byte>& >(view);
+    ob = &static_cast<const vil2_image_view<vxl_byte>& >(view);
   else if (view.pixel_format() == VIL2_PIXEL_FORMAT_UINT_16)
     pb = &static_cast<const vil2_image_view<vxl_uint_16>& >(view);
   else if (view.pixel_format() == VIL2_PIXEL_FORMAT_UINT_32)
@@ -515,7 +515,7 @@ bool vil2_pnm_image::put_view(const vil2_image_view_base& view,
       // Little endian host; must convert words to have MSB first.
       //
       // Convert line by line to avoid duplicating a potentially large image.
-      vcl_vector<vil2_byte> tempbuf( byte_out_width );
+      vcl_vector<vxl_byte> tempbuf( byte_out_width );
       assert(pb!=0);
       for (unsigned y = 0; y < view.nj(); ++y) {
         vs_->seek(byte_start);

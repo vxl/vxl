@@ -8,7 +8,7 @@
 
 #include <vil2/vil2_image_view_functions.h>
 #include <vcl_cassert.h>
-#include <vil2/vil2_byte.h>
+#include <vxl_config.h>
 #include <vil/vil_rgb.h>
 
 

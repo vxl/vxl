@@ -9,26 +9,26 @@
 //: Smooth and subsample single plane src_im in x to produce dest_im
 //  Applies 1-5-8-5-1 filter in x, then samples
 //  every other pixel.  Fills [0,(ni+1)/2-1][0,nj-1] elements of dest
-void vil2_algo_gauss_reduce(const vil2_byte* src_im,
+void vil2_algo_gauss_reduce(const vxl_byte* src_im,
                             int src_ni, int src_nj,
                             int s_x_step, int s_y_step,
-														vil2_byte* dest_im,
+														vxl_byte* dest_im,
                             int d_x_step, int d_y_step)
 {
-    vil2_byte* d_row = dest_im;
-    const vil2_byte* s_row = src_im;
+    vxl_byte* d_row = dest_im;
+    const vxl_byte* s_row = src_im;
     int sxs2 = s_x_step*2;
     int ni2 = (src_ni-3)/2;
     for (int y=0;y<src_nj;++y)
     {
         // Set first element of row
         *d_row = *s_row;
-        vil2_byte * d = d_row + d_x_step;
-        const vil2_byte* s = s_row + sxs2;
+        vxl_byte * d = d_row + d_x_step;
+        const vxl_byte* s = s_row + sxs2;
         for (int x=0;x<ni2;++x)
         {
             // The 0.5 offset in the following ensures rounding
-            *d = vil2_byte(0.5+ 0.05*s[-sxs2] +0.05 *s[sxs2]
+            *d = vxl_byte(0.5+ 0.05*s[-sxs2] +0.05 *s[sxs2]
                           +0.25*s[-s_x_step]+0.25*s[s_x_step]
                           +0.4*s[0]);
 
@@ -119,32 +119,32 @@ void vil2_algo_gauss_reduce(const int* src_im,
 
 //: Smooth and subsample single plane src_im in x to produce dest_im using 121 filter in x and y
 //  Smooths with a 3x3 filter and subsamples
-void vil2_algo_gauss_reduce_121(const vil2_byte* src_im,
+void vil2_algo_gauss_reduce_121(const vxl_byte* src_im,
                                 int src_ni, int src_nj,
                                 int s_x_step, int s_y_step,
-																vil2_byte* dest_im,int d_x_step, int d_y_step)
+																vxl_byte* dest_im,int d_x_step, int d_y_step)
 {
   int sxs2 = s_x_step*2;
   int sys2 = s_y_step*2;
-  vil2_byte* d_row = dest_im+d_y_step;
-  const vil2_byte* s_row1 = src_im + s_y_step;
-  const vil2_byte* s_row2 = s_row1 + s_y_step;
-  const vil2_byte* s_row3 = s_row2 + s_y_step;
+  vxl_byte* d_row = dest_im+d_y_step;
+  const vxl_byte* s_row1 = src_im + s_y_step;
+  const vxl_byte* s_row2 = s_row1 + s_y_step;
+  const vxl_byte* s_row3 = s_row2 + s_y_step;
   int ni2 = (src_ni-2)/2;
   int nj2 = (src_nj-2)/2;
   for (int y=0;y<nj2;++y)
   {
       // Set first element of row
       *d_row = *s_row2;
-      vil2_byte * d = d_row + d_x_step;
-      const vil2_byte* s1 = s_row1 + sxs2;
-      const vil2_byte* s2 = s_row2 + sxs2;
-      const vil2_byte* s3 = s_row3 + sxs2;
+      vxl_byte * d = d_row + d_x_step;
+      const vxl_byte* s1 = s_row1 + sxs2;
+      const vxl_byte* s2 = s_row2 + sxs2;
+      const vxl_byte* s3 = s_row3 + sxs2;
       for (int x=0;x<ni2;++x)
       {
           // The following is a little inefficient - could group terms to reduce arithmetic
           // Add 0.5 so that truncating effetively rounds
-          *d = vil2_byte( 0.0625f * s1[-s_x_step] + 0.125f * s1[0] + 0.0625f * s1[s_x_step]
+          *d = vxl_byte( 0.0625f * s1[-s_x_step] + 0.125f * s1[0] + 0.0625f * s1[s_x_step]
                        + 0.1250f * s2[-s_x_step] + 0.250f * s2[0] + 0.1250f * s2[s_x_step]
                        + 0.0625f * s3[-s_x_step] + 0.125f * s3[0] + 0.0625f * s3[s_x_step] +0.5);
 
@@ -166,7 +166,7 @@ void vil2_algo_gauss_reduce_121(const vil2_byte* src_im,
   // Need to set first and last rows as well
 
   // Dest image should be (src_ni+1)/2 x (src_nj+1)/2
-  const vil2_byte* s0 = src_im;
+  const vxl_byte* s0 = src_im;
   int ni=(src_ni+1)/2;
   for (int i=0;i<ni;++i)
   {
@@ -177,8 +177,8 @@ void vil2_algo_gauss_reduce_121(const vil2_byte* src_im,
   if (src_nj%2==1)
   {
     int yhi = (src_nj-1)/2;
-    vil2_byte* dest_last_row = dest_im + yhi*d_y_step;
-    const vil2_byte* s_last = src_im + yhi*sys2;
+    vxl_byte* dest_last_row = dest_im + yhi*d_y_step;
+    const vxl_byte* s_last = src_im + yhi*sys2;
     for (int i=0;i<ni;++i)
     {
       dest_last_row[i]= *s_last;

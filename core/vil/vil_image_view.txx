@@ -171,12 +171,12 @@ inline bool convert_components_from_planes(vil2_image_view<bool> &lhs,
 {return false;} 
 
 VCL_DEFINE_SPECIALIZATION
-inline bool convert_components_from_planes(vil2_image_view<vxl_int_8> &lhs,
+inline bool convert_components_from_planes(vil2_image_view<vxl_sbyte> &lhs,
                                          const vil2_image_view_base &rhs_base)
 {return false;} 
 
 VCL_DEFINE_SPECIALIZATION
-inline bool convert_components_from_planes(vil2_image_view<vil2_byte> &lhs,
+inline bool convert_components_from_planes(vil2_image_view<vxl_byte> &lhs,
                                          const vil2_image_view_base &rhs_base)
 {return false;} 
 
@@ -208,7 +208,7 @@ inline bool convert_planes_from_components(vil2_image_view<T> &lhs,
 { return false;} // when lhs has non-scalar pixels, don't attempt conversion
 
 VCL_DEFINE_SPECIALIZATION
-inline bool convert_planes_from_components(vil2_image_view<vil2_byte> &lhs,
+inline bool convert_planes_from_components(vil2_image_view<vxl_byte> &lhs,
                                            const vil2_image_view_base &rhs_base)
 {
   const unsigned ncomp =
@@ -220,9 +220,9 @@ inline bool convert_planes_from_components(vil2_image_view<vil2_byte> &lhs,
       vil2_pixel_format_component_format(rhs_base.pixel_format()) == VIL2_PIXEL_FORMAT_BYTE)
   {
     // cheat by casting to component type, not pixel type (because we don't know full pixel type at compile time.)
-    const vil2_image_view<vil2_byte> &rhs = static_cast<const vil2_image_view<vil2_byte>&>(rhs_base);
+    const vil2_image_view<vxl_byte> &rhs = static_cast<const vil2_image_view<vxl_byte>&>(rhs_base);
 
-    lhs = vil2_image_view<vil2_byte>(rhs.memory_chunk(), rhs.top_left_ptr(),
+    lhs = vil2_image_view<vxl_byte>(rhs.memory_chunk(), rhs.top_left_ptr(),
                                       rhs.ni(),rhs.nj(),ncomp,
                                       rhs.istep()*ncomp,rhs.jstep()*ncomp,1);
     return true;
@@ -232,7 +232,7 @@ inline bool convert_planes_from_components(vil2_image_view<vil2_byte> &lhs,
 } 
 
 VCL_DEFINE_SPECIALIZATION
-inline bool convert_planes_from_components(vil2_image_view<vxl_int_8> &lhs,
+inline bool convert_planes_from_components(vil2_image_view<vxl_sbyte> &lhs,
                                            const vil2_image_view_base &rhs_base)
 {
   const unsigned ncomp =
@@ -241,12 +241,12 @@ inline bool convert_planes_from_components(vil2_image_view<vxl_int_8> &lhs,
   if (// rhs has just 1 plane
       rhs_base.nplanes() == 1 &&
       // both sides have equal component types
-      vil2_pixel_format_component_format(rhs_base.pixel_format()) == VIL2_PIXEL_FORMAT_INT_8)
+      vil2_pixel_format_component_format(rhs_base.pixel_format()) == VIL2_PIXEL_FORMAT_SBYTE)
   {
     // cheat by casting to component type, not pixel type (because we don't know full pixel type at compile time.)
-    const vil2_image_view<vxl_int_8> &rhs = static_cast<const vil2_image_view<vxl_int_8>&>(rhs_base);
+    const vil2_image_view<vxl_sbyte> &rhs = static_cast<const vil2_image_view<vxl_sbyte>&>(rhs_base);
 
-    lhs = vil2_image_view<vxl_int_8>(rhs.memory_chunk(), rhs.top_left_ptr(),
+    lhs = vil2_image_view<vxl_sbyte>(rhs.memory_chunk(), rhs.top_left_ptr(),
                                       rhs.ni(),rhs.nj(),ncomp,
                                       rhs.istep()*ncomp,rhs.jstep()*ncomp,1);
     return true;

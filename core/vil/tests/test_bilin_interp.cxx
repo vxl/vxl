@@ -1,9 +1,9 @@
 // This is mul/vil2/tests/test_bilin_interp.cxx
 #include <vcl_iostream.h>
+#include <vxl_config.h>
+#include <testlib/testlib_test.h>
 #include <vil2/vil2_image_view.h>
 #include <vil2/vil2_bilin_interp.h>
-#include <vil2/vil2_byte.h>
-#include <testlib/testlib_test.h>
 
 void test_bilin_interp_byte()
 {
@@ -11,7 +11,7 @@ void test_bilin_interp_byte()
   vcl_cout << " Testing vil2_bilin_interp\n";
   vcl_cout << "***************************\n";
 
-  vil2_image_view<vil2_byte> image0;
+  vil2_image_view<vxl_byte> image0;
   image0.resize(5,5);
 
   for (unsigned int y=0;y<image0.nj();++y)
@@ -33,7 +33,7 @@ void test_bilin_interp_byte()
      int ny = image0.nj();
      int xstep = image0.istep();
      int ystep = image0.jstep();
-     const vil2_byte* data = image0.top_left_ptr();
+     const vxl_byte* data = image0.top_left_ptr();
 
      double v1 = vil2_safe_bilin_interp(3,3,data,nx,ny,xstep,ystep);
      TEST_NEAR("vil2_safe_bilin_interp at grid point",v1,33,1e-8);

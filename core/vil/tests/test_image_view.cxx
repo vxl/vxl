@@ -1,13 +1,13 @@
 // This is mul/vil2/tests/test_image_view.cxx
+#include <vcl_iostream.h>
+#include <vxl_config.h>
+#include <testlib/testlib_test.h>
 #include <vil2/vil2_image_view.h>
 #include <vil2/vil2_image_view_functions.h>
 #include <vil2/vil2_copy.h>
-#include <vil2/vil2_byte.h>
-#include <vcl_iostream.h>
-#include <testlib/testlib_test.h>
 
-bool Equal(const vil2_image_view<vil2_byte>& im0,
-           const vil2_image_view<vil2_byte>& im1)
+bool Equal(const vil2_image_view<vxl_byte>& im0,
+           const vil2_image_view<vxl_byte>& im1)
 {
   return im0.nplanes()==im1.nplanes()
       && im0.ni() == im1.ni()
@@ -23,7 +23,7 @@ void test_image_view_byte()
            << " Testing vil2_image_view<byte>\n"
            << "*******************************\n";
 
-  vil2_image_view<vil2_byte> image0;
+  vil2_image_view<vxl_byte> image0;
   image0.resize(10,8);
   vcl_cout<<"image0: "<<image0<<vcl_endl;
 
@@ -39,7 +39,7 @@ void test_image_view_byte()
 
   {
     // Test the shallow copy
-    vil2_image_view<vil2_byte> image1;
+    vil2_image_view<vxl_byte> image1;
     image1 = image0;
 
     TEST("Shallow copy (size)",image0.ni()==image1.ni() && image0.nj()==image1.nj()
@@ -50,10 +50,10 @@ void test_image_view_byte()
   }
 
 
-   vil2_image_view<vil2_byte> image2;
+   vil2_image_view<vxl_byte> image2;
   {
     // Check data remains valid if a copy taken
-    vil2_image_view<vil2_byte> image3;
+    vil2_image_view<vxl_byte> image3;
     image3.resize(4,5,3);
     image3.fill(111);
     image2 = image3;
@@ -70,19 +70,19 @@ void test_image_view_byte()
 
   {
     // Test the deep copy
-    vil2_image_view<vil2_byte> image4;
+    vil2_image_view<vxl_byte> image4;
     image4.deep_copy(image0);
     TEST("Deep copy (size)",image0.ni()==image4.ni()
                          && image0.nj()==image4.nj()
                          && image0.nplanes()==image4.nplanes(), true);
     TEST("Deep copy (values)",image4(4,6),image0(4,6));
 
-    vil2_byte v46 = image0(4,6);
+    vxl_byte v46 = image0(4,6);
     image0(4,6)=255;
     TEST("Deep copy (values really separate)",image4(4,6),v46);
   }
 
-  vil2_image_view<vil2_byte> image_win;
+  vil2_image_view<vxl_byte> image_win;
   image_win.set_to_window(image0,2,4,3,4);
   TEST("set_to_window size",
         image_win.ni()==4 && image_win.nj()==4
@@ -92,11 +92,11 @@ void test_image_view_byte()
   TEST("set_to_window is shallow copy",image_win(0,0),222);
 
   vcl_cout<<image0.is_a()<<vcl_endl;
-  TEST("is_a() specialisation for vil2_byte",image0.is_a(),"vil2_image_view<vil2_byte>");
+  TEST("is_a() specialisation for vxl_byte",image0.is_a(),"vil2_image_view<vxl_byte>");
 
-  vil2_image_view<vil_rgb<vil2_byte> > image5;
+  vil2_image_view<vil_rgb<vxl_byte> > image5;
   image5.resize(5,4);
-  image5.fill(vil_rgb<vil2_byte>(25,35,45));
+  image5.fill(vil_rgb<vxl_byte>(25,35,45));
   image5(2,2).b = 50;
 
   image2 = image5;
@@ -106,7 +106,7 @@ void test_image_view_byte()
   image5 = image2;
   TEST("Can assign 3 planes suitable image to rgb view", image5, true);
 
-  vil2_image_view<vil_rgba<vil2_byte> > image6 = image2;
+  vil2_image_view<vil_rgba<vxl_byte> > image6 = image2;
   TEST("Can't assign a 3 plane images to rgba view", image6, false);
 
   vcl_cout << "***********************************\n";
@@ -116,13 +116,13 @@ void test_image_view_byte()
   image2.fill(0);
   image_win = vil2_window(image2,2,1,1,2);
   image5.resize(1,2);
-  image5(0,0) = vil_rgb<vil2_byte>(25,35,45);
-  image5(0,1) = vil_rgb<vil2_byte>(25,35,45);
+  image5(0,0) = vil_rgb<vxl_byte>(25,35,45);
+  image5(0,1) = vil_rgb<vxl_byte>(25,35,45);
   image0 = image5;
 
   vil2_copy_reformat(image0, image_win);
   vil2_print_all(vcl_cout, image2);
-  vil2_image_view<vil2_byte> test_image(5,4,3);
+  vil2_image_view<vxl_byte> test_image(5,4,3);
   test_image.fill(0);
   test_image(2,1,0) = test_image(2,2,0) = 25;
   test_image(2,1,1) = test_image(2,2,1) = 35;
@@ -138,8 +138,8 @@ void test_image_view_byte()
 void test_image_2d_byte_io()
 {
   // -------- Test the binary I/O --------
-  vil2_image_view<vil2_byte> image_out0;
-  vil2_image_view<vil2_byte> image_out1;
+  vil2_image_view<vxl_byte> image_out0;
+  vil2_image_view<vxl_byte> image_out1;
   image_out0.set_nplanes(2);
   image_out0.resize(5,6);
   for (int i=0;i<2;++i)
@@ -156,7 +156,7 @@ void test_image_2d_byte_io()
   vsl_b_write(bfs_out, image_out1);
   bfs_out.close();
 
-  vil2_image_view<vil2_byte> image_in0,image_in1;
+  vil2_image_view<vxl_byte> image_in0,image_in1;
 
   vsl_b_ifstream bfs_in("test_image_view.bvl.tmp");
   TEST ("Opened test_image_view.bvl.tmp for reading",

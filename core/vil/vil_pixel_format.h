@@ -8,7 +8,6 @@
 #include <vxl_config.h> // for vxl_uint_32 etc.
 #include <vil/vil_rgb.h>
 #include <vil/vil_rgba.h>
-#include <vil2/vil2_byte.h>
 
 //: Describes the type of the concrete data.
 enum vil2_pixel_format {
@@ -21,7 +20,7 @@ enum vil2_pixel_format {
   VIL2_PIXEL_FORMAT_UINT_16 = 5,
   VIL2_PIXEL_FORMAT_INT_16 = 6,
   VIL2_PIXEL_FORMAT_BYTE = 7,
-  VIL2_PIXEL_FORMAT_INT_8 = 8,
+  VIL2_PIXEL_FORMAT_SBYTE = 8,
   VIL2_PIXEL_FORMAT_FLOAT = 9,
   VIL2_PIXEL_FORMAT_DOUBLE = 10,
 //  VIL2_PIXEL_FORMAT_LONG_DOUBLE = 11,
@@ -34,7 +33,7 @@ enum vil2_pixel_format {
   VIL2_PIXEL_FORMAT_RGB_UINT_16 = 17,
   VIL2_PIXEL_FORMAT_RGB_INT_16 = 18,
   VIL2_PIXEL_FORMAT_RGB_BYTE = 19,
-  VIL2_PIXEL_FORMAT_RGB_INT_8 = 20,
+  VIL2_PIXEL_FORMAT_RGB_SBYTE = 20,
   VIL2_PIXEL_FORMAT_RGB_FLOAT = 21,
   VIL2_PIXEL_FORMAT_RGB_DOUBLE = 22,
 //  VIL2_PIXEL_FORMAT_RGB_LONG_DOUBLE = 23,
@@ -46,7 +45,7 @@ enum vil2_pixel_format {
   VIL2_PIXEL_FORMAT_RGBA_UINT_16 = 28,
   VIL2_PIXEL_FORMAT_RGBA_INT_16 = 29,
   VIL2_PIXEL_FORMAT_RGBA_BYTE = 30,
-  VIL2_PIXEL_FORMAT_RGBA_INT_8 = 31,
+  VIL2_PIXEL_FORMAT_RGBA_SBYTE = 31,
   VIL2_PIXEL_FORMAT_RGBA_FLOAT = 32,
   VIL2_PIXEL_FORMAT_RGBA_DOUBLE = 33,
 //  VIL2_PIXEL_FORMAT_RGBA_LONG_DOUBLE = 34,
@@ -68,8 +67,8 @@ vil2_pixel_format_macro(vxl_uint_32, VIL2_PIXEL_FORMAT_UINT_32)
 vil2_pixel_format_macro(vxl_int_32,  VIL2_PIXEL_FORMAT_INT_32)
 vil2_pixel_format_macro(vxl_uint_16, VIL2_PIXEL_FORMAT_UINT_16)
 vil2_pixel_format_macro(vxl_int_16,  VIL2_PIXEL_FORMAT_INT_16)
-vil2_pixel_format_macro(vil2_byte,   VIL2_PIXEL_FORMAT_BYTE)
-vil2_pixel_format_macro(vxl_int_8,   VIL2_PIXEL_FORMAT_INT_8)
+vil2_pixel_format_macro(vxl_byte,   VIL2_PIXEL_FORMAT_BYTE)
+vil2_pixel_format_macro(vxl_sbyte,   VIL2_PIXEL_FORMAT_SBYTE)
 vil2_pixel_format_macro(float,       VIL2_PIXEL_FORMAT_FLOAT)
 vil2_pixel_format_macro(double,      VIL2_PIXEL_FORMAT_DOUBLE)
 vil2_pixel_format_macro(bool,        VIL2_PIXEL_FORMAT_BOOL)
@@ -78,8 +77,8 @@ vil2_pixel_format_macro(vil_rgb<vxl_uint_32>, VIL2_PIXEL_FORMAT_RGB_UINT_32)
 vil2_pixel_format_macro(vil_rgb<vxl_int_32>,  VIL2_PIXEL_FORMAT_RGB_INT_32)
 vil2_pixel_format_macro(vil_rgb<vxl_uint_16>, VIL2_PIXEL_FORMAT_RGB_UINT_16)
 vil2_pixel_format_macro(vil_rgb<vxl_int_16>,  VIL2_PIXEL_FORMAT_RGB_INT_16)
-vil2_pixel_format_macro(vil_rgb<vil2_byte>,   VIL2_PIXEL_FORMAT_RGB_BYTE)
-vil2_pixel_format_macro(vil_rgb<vxl_int_8>,   VIL2_PIXEL_FORMAT_RGB_INT_8)
+vil2_pixel_format_macro(vil_rgb<vxl_byte>,   VIL2_PIXEL_FORMAT_RGB_BYTE)
+vil2_pixel_format_macro(vil_rgb<vxl_sbyte>,   VIL2_PIXEL_FORMAT_RGB_SBYTE)
 vil2_pixel_format_macro(vil_rgb<float>,       VIL2_PIXEL_FORMAT_RGB_FLOAT)
 vil2_pixel_format_macro(vil_rgb<double>,      VIL2_PIXEL_FORMAT_RGB_DOUBLE)
 
@@ -87,8 +86,8 @@ vil2_pixel_format_macro(vil_rgba<vxl_uint_32>, VIL2_PIXEL_FORMAT_RGBA_UINT_32)
 vil2_pixel_format_macro(vil_rgba<vxl_int_32>,  VIL2_PIXEL_FORMAT_RGBA_INT_32)
 vil2_pixel_format_macro(vil_rgba<vxl_uint_16>, VIL2_PIXEL_FORMAT_RGBA_UINT_16)
 vil2_pixel_format_macro(vil_rgba<vxl_int_16>,  VIL2_PIXEL_FORMAT_RGBA_INT_16)
-vil2_pixel_format_macro(vil_rgba<vil2_byte>,   VIL2_PIXEL_FORMAT_RGBA_BYTE)
-vil2_pixel_format_macro(vil_rgba<vxl_int_8>,   VIL2_PIXEL_FORMAT_RGBA_INT_8)
+vil2_pixel_format_macro(vil_rgba<vxl_byte>,   VIL2_PIXEL_FORMAT_RGBA_BYTE)
+vil2_pixel_format_macro(vil_rgba<vxl_sbyte>,   VIL2_PIXEL_FORMAT_RGBA_SBYTE)
 vil2_pixel_format_macro(vil_rgba<float>,       VIL2_PIXEL_FORMAT_RGBA_FLOAT)
 vil2_pixel_format_macro(vil_rgba<double>,      VIL2_PIXEL_FORMAT_RGBA_DOUBLE)
 

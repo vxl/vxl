@@ -8,7 +8,7 @@
 #include <vxl_config.h>
 #include <vil/vil_rgb.h>
 #include <vil2/vil2_image_data.h>
-#include <vil2/vil2_byte.h>
+#include <vxl_config.h>
 
 //: Explicit overload for bool
 VCL_DEFINE_SPECIALIZATION
@@ -19,7 +19,7 @@ void vil2_print_value(vcl_ostream& os, const bool& value)
 
 //: Explicit overload for unsigned char
 VCL_DEFINE_SPECIALIZATION
-void vil2_print_value(vcl_ostream& os, const vil2_byte& value)
+void vil2_print_value(vcl_ostream& os, const vxl_byte& value)
 {
   os.width(3);
   os<<int(value);
@@ -27,7 +27,7 @@ void vil2_print_value(vcl_ostream& os, const vil2_byte& value)
 
 //: Explicit overload for unsigned char
 VCL_DEFINE_SPECIALIZATION
-void vil2_print_value(vcl_ostream& os, const vxl_int_8& value)
+void vil2_print_value(vcl_ostream& os, const vxl_sbyte& value)
 {
   os.width(3);
   os<<int(value);
@@ -103,7 +103,7 @@ void vil2_print_value(vcl_ostream& os, const double& value)
 
 //: Explicit overload of print for rgb<ubyte>
 VCL_DEFINE_SPECIALIZATION
-void vil2_print_value(vcl_ostream& os, const vil_rgb<vil2_byte>& value)
+void vil2_print_value(vcl_ostream& os, const vil_rgb<vxl_byte>& value)
 {
   int r = int(value.r);
   if (r<10)  os<<'0';
@@ -137,10 +137,10 @@ void vil2_print_value(vcl_ostream& os, const vil_rgb<float>& value)
 
 //: Compute minimum and maximum values over view
 VCL_DEFINE_SPECIALIZATION
-void vil2_value_range(vil_rgb<vil2_byte>& min_value, vil_rgb<vil2_byte>& max_value,
-                      const vil2_image_view<vil_rgb<vil2_byte> >& rgb_view)
+void vil2_value_range(vil_rgb<vxl_byte>& min_value, vil_rgb<vxl_byte>& max_value,
+                      const vil2_image_view<vil_rgb<vxl_byte> >& rgb_view)
 {
-  vil2_image_view<vil2_byte> plane_view = vil2_view_as_planes(rgb_view);
+  vil2_image_view<vxl_byte> plane_view = vil2_view_as_planes(rgb_view);
   // Get range for each plane in turn
   vil2_value_range(min_value.r,max_value.r,vil2_plane(plane_view,0));
   vil2_value_range(min_value.g,max_value.g,vil2_plane(plane_view,1));

@@ -1,10 +1,10 @@
 // This is mul/vil2/tests/test_algo_gauss_reduce.cxx
 #include <vcl_iostream.h>
+#include <vxl_config.h>
+#include <testlib/testlib_test.h>
 #include <vil2/vil2_image_view.h>
 #include <vil2/vil2_image_view_functions.h>
 #include <vil2/algo/vil2_algo_gauss_reduce.h>
-#include <vil2/vil2_byte.h>
-#include <testlib/testlib_test.h>
 
 void test_algo_gauss_reduce_byte(int nx)
 {
@@ -12,9 +12,9 @@ void test_algo_gauss_reduce_byte(int nx)
   vcl_cout << " Testing vil2_algo_gauss_reduce (byte)(nx="<<nx<<")\n";
   vcl_cout << "***********************************************\n";
 
-  vil2_image_view<vil2_byte> image0;
+  vil2_image_view<vxl_byte> image0;
   image0.resize(nx,3);
-  vil2_image_view<vil2_byte> reduced_x;
+  vil2_image_view<vxl_byte> reduced_x;
   reduced_x.resize((nx+1)/2,3);
 
   for (unsigned int y=0;y<image0.nj();++y)
@@ -34,7 +34,7 @@ void test_algo_gauss_reduce_byte(int nx)
   TEST("Last element", reduced_x(L,1),image0(2*L,1));
 
 
-  vil2_image_view<vil2_byte> test2;
+  vil2_image_view<vxl_byte> test2;
   test2.resize(nx,3);
   test2.fill(222);
   vil2_algo_gauss_reduce(image0.top_left_ptr(),image0.ni(),image0.nj(),
@@ -44,9 +44,9 @@ void test_algo_gauss_reduce_byte(int nx)
 
 
   // Test it can be used to smooth in y by swapping ordinates
-  vil2_image_view<vil2_byte> image1;
+  vil2_image_view<vxl_byte> image1;
   image1.resize(3,nx);
-  vil2_image_view<vil2_byte> reduced_y;
+  vil2_image_view<vxl_byte> reduced_y;
   reduced_y.resize(3,(nx+1)/2);
 
   for (unsigned int y=0;y<image1.nj();++y)
@@ -108,9 +108,9 @@ void test_algo_gauss_reduce_121_byte(int nx, int ny)
   vcl_cout << " Testing vil2_algo_gauss_reduce_121 (byte)(nx="<<nx<<")\n";
   vcl_cout << "**********************************************\n";
 
-  vil2_image_view<vil2_byte> image0;
+  vil2_image_view<vxl_byte> image0;
   image0.resize(nx,ny);
-  vil2_image_view<vil2_byte> reduced_x;
+  vil2_image_view<vxl_byte> reduced_x;
   reduced_x.resize((nx+1)/2,(ny+1)/2);
 
   for (unsigned int y=0;y<image0.nj();++y)
@@ -131,7 +131,7 @@ void test_algo_gauss_reduce_121_byte(int nx, int ny)
   TEST("Last element in x",reduced_x(Lx-1,1),image0(2*(Lx-1),2));
   TEST("Last element in y",reduced_x(1,Ly-1),image0(2,2*(Ly-1)));
 
-  vil2_image_view<vil2_byte> test2;
+  vil2_image_view<vxl_byte> test2;
   test2.resize(nx,ny);
   test2.fill(222);
   vil2_algo_gauss_reduce_121(image0.top_left_ptr(),image0.ni(),image0.nj(),

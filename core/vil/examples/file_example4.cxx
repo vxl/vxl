@@ -4,12 +4,12 @@
 // \author Ian Scott
 
 #include <vcl_iostream.h>
+#include <vcl_cassert.h>
 #include <testlib/testlib_root_dir.h>
 #include <vil2/vil2_load.h>
 #include <vil2/vil2_save.h>
 #include <vil2/vil2_image_view.h>
 #include <vil2/vil2_image_view_functions.h>
-#include <vcl_cassert.h>
 
 int main(int argc, char** argv)
 {
@@ -18,7 +18,7 @@ int main(int argc, char** argv)
 
   // This is how we quickly load an rgb image view.
 
-  vil2_image_view<vil_rgb<vil2_byte> > b_im = vil2_load(filename.c_str());
+  vil2_image_view<vil_rgb<vxl_byte> > b_im = vil2_load(filename.c_str());
 
   vil2_print_all(vcl_cout, b_im);
 

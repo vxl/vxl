@@ -1,9 +1,9 @@
 // This is mul/vil2/tests/test_sample_profile_bilin.cxx
 #include <vcl_iostream.h>
 #include <vcl_vector.h>
+#include <vxl_config.h>
 #include <vil2/vil2_image_view.h>
 #include <vil2/vil2_sample_profile_bilin.h>
-#include <vil2/vil2_byte.h>
 #include <testlib/testlib_test.h>
 
 void test_sample_profile_bilin_byte()
@@ -13,7 +13,7 @@ void test_sample_profile_bilin_byte()
   vcl_cout << "***********************************\n";
 
   vcl_cout<< "One plane image"<<vcl_endl;
-  vil2_image_view<vil2_byte> image1;
+  vil2_image_view<vxl_byte> image1;
   image1.resize(10,10);
 
   for (unsigned int y=0;y<image1.nj();++y)

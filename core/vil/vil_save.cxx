@@ -35,7 +35,7 @@ bool vil2_save(const vil2_image_view_base &im, char const* filename, char const*
   switch (vil2_pixel_format_component_format(im.pixel_format()))
   {
   case VIL2_PIXEL_FORMAT_BYTE:
-    return out->put_view(vil2_image_view<vil2_byte>(im),0,0);
+    return out->put_view(vil2_image_view<vxl_byte>(im),0,0);
   case VIL2_PIXEL_FORMAT_UINT_16:
     return out->put_view(vil2_image_view<vxl_uint_16>(im),0,0);
   case VIL2_PIXEL_FORMAT_INT_16:
@@ -49,8 +49,8 @@ bool vil2_save(const vil2_image_view_base &im, char const* filename, char const*
   case VIL2_PIXEL_FORMAT_BOOL:
     return out->put_view(vil2_image_view<bool>(im),0,0);
 #ifdef VIL2_TO_BE_FIXED
-  case VIL2_PIXEL_FORMAT_INT_8:
-    return out->put_view(vil2_image_view<vxl_int_8>(im),0,0);
+  case VIL2_PIXEL_FORMAT_SBYTE:
+    return out->put_view(vil2_image_view<vxl_sbyte>(im),0,0);
   case VIL2_PIXEL_FORMAT_DOUBLE:
     return out->put_view(vil2_image_view<double>(im),0,0);
 #endif

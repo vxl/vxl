@@ -3,24 +3,24 @@
 // \brief Example of computing gradients of a vil2_image_view<T>.
 // \author Tim Cootes - Manchester
 
+#include <vcl_iostream.h>
+#include <vxl_config.h>
 #include <vil2/vil2_image_view.h>
 #include <vil2/vil2_image_view_functions.h>
 #include <vil2/algo/vil2_algo_sobel_3x3.h>
-#include <vil2/vil2_byte.h>
-#include <vcl_iostream.h>
 
 int main(int argc, char** argv)
 {
   unsigned ni=8;
   unsigned nj=15;
   unsigned nplanes=1;
-  vil2_image_view<vil2_byte> image(ni,nj,nplanes);
+  vil2_image_view<vxl_byte> image(ni,nj,nplanes);
 
   // Slow fill
   for (unsigned p=0;p<nplanes;++p)
     for (unsigned j=0;j<nj;++j)
       for (unsigned i=0;i<ni;++i)
-        image(i,j,p) = vil2_byte(i+10*j+100*p);
+        image(i,j,p) = vxl_byte(i+10*j+100*p);
 
   vcl_cout<<"Original image:"<<vcl_endl;
   vil2_print_all(vcl_cout,image);

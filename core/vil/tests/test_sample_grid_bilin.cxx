@@ -1,11 +1,11 @@
 // This is mul/vil2/tests/test_sample_grid_bilin.cxx
-#include <vil2/vil2_image_view.h>
-#include <vil2/vil2_sample_grid_bilin.h>
-#include <vil2/vil2_byte.h>
 #include <vcl_iostream.h>
 #include <vcl_vector.h>
-
+#include <vxl_config.h>
 #include <testlib/testlib_test.h>
+#include <vil2/vil2_image_view.h>
+#include <vil2/vil2_sample_grid_bilin.h>
+
 
 void test_sample_grid_bilin_byte()
 {
@@ -13,7 +13,7 @@ void test_sample_grid_bilin_byte()
            << " Testing vil2_sample_grid_bilin\n"
            << "********************************\n";
 
-  vil2_image_view<vil2_byte> image0;
+  vil2_image_view<vxl_byte> image0;
   image0.resize(10,10);
 
   vcl_cout<<"Testing one plane image"<<vcl_endl;

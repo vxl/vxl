@@ -1,8 +1,8 @@
 // This is mul/vil2/tests/test_algo_convolve_2d.cxx
 #include <vcl_iostream.h>
 #include <vcl_vector.h>
-#include <vil2/algo/vil2_algo_convolve_2d.h>
 #include <testlib/testlib_test.h>
+#include <vil2/algo/vil2_algo_convolve_2d.h>
 
 void test_algo_convolve_2d_byte()
 {
@@ -12,7 +12,7 @@ void test_algo_convolve_2d_byte()
 
   int n=10, m=5;
 
-  vil2_image_view<vil2_byte> src_im(n,n,1);
+  vil2_image_view<vxl_byte> src_im(n,n,1);
 
   for (int y=0;y<src_im.nj();++y)
     for (int x=0;x<src_im.ni();++x)
