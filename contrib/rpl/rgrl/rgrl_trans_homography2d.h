@@ -6,6 +6,8 @@
 // \date   Oct 2004
 
 #include "rgrl_transformation.h"
+#include <vnl/vnl_matrix_fixed.h>
+#include <vnl/vnl_vector_fixed.h>
 #include <vcl_iosfwd.h>
 
 //: Represents a 2D homography transformation.
@@ -39,7 +41,7 @@ class rgrl_trans_homography2d
   vnl_matrix<double> transfer_error_covar( vnl_vector<double> const& p  ) const;
 
   //: The scaling and rotation component of the transform
-  vnl_matrix<double> const& H() const {return H_;}
+  vnl_matrix_fixed<double, 3, 3> const& H() const {return H_;}
 
   //: Inverse map using pseudo-inverse of H_.
   void inv_map( const vnl_vector<double>& to,
@@ -86,8 +88,8 @@ class rgrl_trans_homography2d
                 vnl_vector<double>      & to_dir    ) const;
 
  private:
-  vnl_matrix<double> H_;
-  vnl_vector<double> from_centre_;
+  vnl_matrix_fixed<double, 3, 3> H_;
+  vnl_vector_fixed<double, 2> from_centre_;
 };
 
 #endif

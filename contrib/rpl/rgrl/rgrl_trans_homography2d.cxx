@@ -12,8 +12,8 @@
 
 rgrl_trans_homography2d::
 rgrl_trans_homography2d()
-  : H_( vnl_matrix<double>( 3, 3, vnl_matrix_identity ) ),
-    from_centre_( 2, 0.0 )
+  : H_( 0.0 ),
+    from_centre_( 0.0, 0.0 )
 {}
 
 rgrl_trans_homography2d::
@@ -21,18 +21,18 @@ rgrl_trans_homography2d( vnl_matrix<double> const& H,
                         vnl_matrix<double> const& covar )
   : rgrl_transformation( covar ),
     H_( H ),
-    from_centre_( 2, 0.0 )
+    from_centre_( 0.0, 0.0 )
 {
-  assert( H_.rows() == 3 );
-  assert( H_.cols() == 3 );
+  assert( H.rows() == 3 );
+  assert( H.cols() == 3 );
   assert( covar_.rows() == covar_.cols() );
-  assert( covar_.rows() == 3 );
+  // assert( covar_.rows() == 3 );
 }
 
 rgrl_trans_homography2d::
 rgrl_trans_homography2d( vnl_matrix<double> const& H )
   :  H_( H ),
-     from_centre_( 2, 0.0 )
+     from_centre_( 0.0, 0.0 )
 {}
 
 rgrl_trans_homography2d::
@@ -42,6 +42,8 @@ rgrl_trans_homography2d( vnl_matrix<double> const& H,
                         vnl_vector<double> const& to_centre )
   : rgrl_transformation( covar )
 {
+  assert( to_centre.size() == 2 );
+
   //Uncenter the H_ = to_matrix^-1 * H * from_matrix
   //
   vnl_matrix<double> to_inv(3,3, vnl_matrix_identity);
@@ -221,7 +223,7 @@ vnl_matrix<double>
 rgrl_trans_homography2d::
 jacobian( vnl_vector<double> const& from_loc ) const
 {
-  // The jacobian is a 2x3 matrix with entries
+  // The jacobian is a 2x2 matrix with entries
   // [d(f_0)/dx   d(f_0)/dy;
   //  d(f_1)/dx   d(f_1)/dy]
   //
@@ -276,8 +278,6 @@ read(vcl_istream& is )
   dim=-1;
   is >> dim;
   if ( dim > 0 ) {
-    H_.set_size( 3,3 );
-    from_centre_.set_size( dim );
     is >> H_ >> from_centre_;
   }
 }
@@ -290,7 +290,7 @@ map_loc( vnl_vector<double> const& from,
   to.set_size(2);
   // convert "from" to homogeneous co-cord
   vnl_vector_fixed<double,3> h_from(from[0], from[1], 1);
-  vnl_vector<double> h_to = H_*h_from.as_ref();
+  vnl_vector_fixed<double,3> h_to = H_*h_from;
   to[0] = h_to[0]/h_to[2];
   to[1] = h_to[1]/h_to[2];
 }
