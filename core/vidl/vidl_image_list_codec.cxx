@@ -1,8 +1,7 @@
-
+// This is core/vidl/vidl_image_list_codec.cxx
+#include "vidl_image_list_codec.h"
 //:
 // \file
-
-#include "vidl_image_list_codec.h"
 
 #include <vcl_cassert.h>
 #include <vcl_cstdio.h>
@@ -13,14 +12,13 @@
 #include <vidl/vidl_codec.h>
 #include <vidl/vidl_movie.h>
 #include <vidl/vidl_frame.h>
-#include <vil/vil_image_view.h>
+#include <vil/vil_image_view_base.h>
 #include <vil/vil_load.h>
 #include <vil/vil_save.h>
 
 //=========================================================================
 //  Methods for vidl_image_list_codec.
 //_________________________________________________________________________
-
 
 char *vidl_image_list_codec::default_initialization_image_type_ = "tiff";
 
@@ -100,7 +98,7 @@ vil_image_view_base_sptr vidl_image_list_codec::get_view(int position, int x0, i
 }
 
 //: Put a section of pixels in function of the frame number, position and size.
-bool vidl_image_list_codec::put_view(int position, const vil_image_view_base &im, int x0, int y0)
+bool vidl_image_list_codec::put_view(int /*position*/, const vil_image_view_base & /*im*/, int /*x0*/, int /*y0*/)
 {
   vcl_cerr << "vidl_image_list_codec::put_section not implemented\n";
   return false;
@@ -245,4 +243,3 @@ bool vidl_image_list_codec::save(
 
   return ret;
 }
-
