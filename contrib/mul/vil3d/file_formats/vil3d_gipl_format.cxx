@@ -163,20 +163,20 @@ bool vil3d_gipl_image::read_header(vil2_stream *is)
 
   switch (gipl_pixel_type)
   {
-  case 1  : pixel_format_ = VIL2_PIXEL_FORMAT_BOOL;    break;
-  case 7  : pixel_format_ = VIL2_PIXEL_FORMAT_SBYTE;   break;
-  case 8  : pixel_format_ = VIL2_PIXEL_FORMAT_BYTE;    break;
-  case 15 : pixel_format_ = VIL2_PIXEL_FORMAT_UINT_16; break;
-  case 16 : pixel_format_ = VIL2_PIXEL_FORMAT_INT_16;  break;
-  case 31 : pixel_format_ = VIL2_PIXEL_FORMAT_UINT_32; break;
-  case 32 : pixel_format_ = VIL2_PIXEL_FORMAT_INT_16;  break;
-  case 64 : pixel_format_ = VIL2_PIXEL_FORMAT_FLOAT;   break;
-  case 65 : pixel_format_ = VIL2_PIXEL_FORMAT_DOUBLE;  break;
-  case 144: // C.Short I don't want to support complex types.
-  case 160: // C.Int   Could maybe reimplement them as a 2-plane images
-  case 192: // C.Float
-  case 193: // C.Double
-  default : pixel_format_ = VIL2_PIXEL_FORMAT_UNKNOWN;
+   case 1  : pixel_format_ = VIL2_PIXEL_FORMAT_BOOL;    break;
+   case 7  : pixel_format_ = VIL2_PIXEL_FORMAT_SBYTE;   break;
+   case 8  : pixel_format_ = VIL2_PIXEL_FORMAT_BYTE;    break;
+   case 15 : pixel_format_ = VIL2_PIXEL_FORMAT_UINT_16; break;
+   case 16 : pixel_format_ = VIL2_PIXEL_FORMAT_INT_16;  break;
+   case 31 : pixel_format_ = VIL2_PIXEL_FORMAT_UINT_32; break;
+   case 32 : pixel_format_ = VIL2_PIXEL_FORMAT_INT_16;  break;
+   case 64 : pixel_format_ = VIL2_PIXEL_FORMAT_FLOAT;   break;
+   case 65 : pixel_format_ = VIL2_PIXEL_FORMAT_DOUBLE;  break;
+   case 144: // C.Short I don't want to support complex types.
+   case 160: // C.Int   Could maybe reimplement them as a 2-plane image
+   case 192: // C.Float
+   case 193: // C.Double
+   default : pixel_format_ = VIL2_PIXEL_FORMAT_UNKNOWN;
   }
 
   vox_width1_ = vil2_stream_read_big_endian_float(is);
@@ -184,9 +184,7 @@ bool vil3d_gipl_image::read_header(vil2_stream *is)
   vox_width3_ = vil2_stream_read_big_endian_float(is);
   // vcl_cout<<"Voxel widths: "<<vox_width1<<" x "<<vox_width2<<" x "<<vox_width3<<vcl_endl;
 
-  if (pixel_format_ == VIL2_PIXEL_FORMAT_UNKNOWN) return false;
-
-  return true;
+  return pixel_format_ != VIL2_PIXEL_FORMAT_UNKNOWN;
 }
 
 
