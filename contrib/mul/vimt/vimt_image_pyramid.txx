@@ -24,25 +24,28 @@ template <class T> void vimt_image_pyramid_flatten(T& out, const vimt_image_pyra
   if (out.is_class("vimt_image_2d"))
 #endif
   {
-    int width = 0;
+    unsigned width = 0;
     for (int i =0; i<n_levels; ++i)
-      width += (in(i).nx());
-    const int n_planes = in(0).n_planes();
-    out.set_size(width, in(0).ny(), n_planes);
-    out.fill((typename T::pixel_type)0);
+      width += static_cast<const vimt_image_2d&>(in(i)).image_base().ni();
+
+    const unsigned nplanes = static_cast<const vimt_image_2d&>(in(0)).image_base().nplanes();
+    unsigned height = static_cast<const vimt_image_2d&>(in(0)).image_base().nj();
+    out.image().set_size(width, height, nplanes);
+    out.image().fill(0);
     int offset=0;
     for (int i =0; i<n_levels; ++i)
     {
-      const int nx = in(i).nx();
-      const int ny = in(i).ny();
+      const T& im_i = static_cast<const T&>(in(i));
+      const int ni = im_i.image().ni();
+      const int nj = im_i.image().nj();
 
-      for (int p=0;p<n_planes;++p)
-        for (int y=0;y<ny;++y)
-          for (int x=0;x<nx;++x)
+      for (int p=0;p<nplanes;++p)
+        for (int y=0;y<nj;++y)
+          for (int x=0;x<ni;++x)
           {
-            out(x+offset, y, p) = ((const T &)in(i))(x, y, p);
+            out.image()(x+offset, y, p) = im_i.image()(x, y, p);
           }
-      offset += nx;
+      offset += ni;
     }
   }
   else
@@ -55,8 +58,8 @@ template <class T> void vimt_image_pyramid_flatten(T& out, const vimt_image_pyra
 }
 
 
-#undef MIL_IMAGE_PYRAMID_INSTANTIATE
-#define MIL_IMAGE_PYRAMID_INSTANTIATE(T) \
+#undef VIMT_IMAGE_PYRAMID_INSTANTIATE
+#define VIMT_IMAGE_PYRAMID_INSTANTIATE(T) \
 template void vimt_image_pyramid_flatten(T &, const vimt_image_pyramid &)
 
 #endif //vimt_image_pyramid_txx_
