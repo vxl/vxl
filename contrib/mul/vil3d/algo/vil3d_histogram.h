@@ -49,4 +49,4 @@ void vil3d_histogram(const vil3d_image_view<T>& image,
 void vil3d_histogram_byte(const vil3d_image_view<vxl_byte>& image,
                           vcl_vector<double>& histo);
 
-#endif // vil_histogram_h_
+#endif // vil3d_histogram_h_
