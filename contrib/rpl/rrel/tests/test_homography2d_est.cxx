@@ -1,4 +1,4 @@
-#include <vbl/vbl_test.h>
+#include <testlib/testlib_test.h>
 #include <vcl_vector.h>
 #include <vnl/vnl_double_3x3.h>
 #include <vnl/vnl_double_3.h>
@@ -7,9 +7,9 @@
 #include <vnl/vnl_math.h>
 #include <rrel/rrel_homography2d_est.h>
 
-int main ()
+MAIN( test_homography2d_est )
 {
-  vbl_test_start ("homography2d estimation");
+  START ("homography2d estimation");
   vnl_double_3x3 H (0.0);
   vnl_matrix<double> cofact;
   vcl_vector <int> indices;
@@ -186,6 +186,5 @@ int main ()
     TEST ("Degenracy of Projective Weighted Least Squares", ret, false);
   }
 
-  vbl_test_summary ();
-  return 0;
+  SUMMARY();
 }

@@ -1,44 +1,41 @@
 # ./rpl/rrel/tests/CMakeLists.txt
 
-ADD_LIBRARY( rrel_tests rrel_tests_sources )
-
-SOURCE_FILES( rrel_tests_sources similarity_from_matches.cxx )
+INCLUDE( ${allvxl_SOURCE_DIR}/rpl/rrel/CMakeListsLink.txt )
+INCLUDE( ${allvxl_SOURCE_DIR}/vxl/testlib/CMakeListsLink.txt )
 
 AUX_SOURCE_DIRECTORY( Templates rrel_tests_sources )
 
-LINK_LIBRARIES( rrel_tests )
+ADD_EXECUTABLE( rrel_test_driver
+  test_driver.cxx
 
-IF (WIN32)
-  IF (NOT CYGWIN)
-    INCLUDE(${allvxl_SOURCE_DIR}/rpl/rrel/tests/CMakeListsHeaders.txt)
-  ENDIF (NOT CYGWIN)
-ENDIF(WIN32)
+  # Supporting class
+  similarity_from_matches.h  similarity_from_matches.cxx
 
-ADD_EXECUTABLE( rrel_test_link                  test_link.cxx )
-ADD_EXECUTABLE( rrel_test_m_est_obj             test_m_est_obj.cxx )
-ADD_EXECUTABLE( rrel_test_ransac_obj            test_ransac_obj.cxx )
-ADD_EXECUTABLE( rrel_test_lms_lts               test_lms_lts.cxx )
-ADD_EXECUTABLE( rrel_test_irls                  test_irls.cxx )
-ADD_EXECUTABLE( rrel_test_ran_sam_search        test_ran_sam_search.cxx )
+  # Template instantiations
+  rrel_tests_sources
 
-ADD_EXECUTABLE( rrel_test_linear_reg            test_linear_reg.cxx )
-ADD_EXECUTABLE( rrel_test_orthogonal_regression test_orthogonal_regression.cxx )
-ADD_EXECUTABLE( rrel_test_homography2d_est      test_homography2d_est.cxx )
+  # The tests
+  test_include.cxx
+  test_homography2d_est.cxx
+  test_irls.cxx
+  test_linear_reg.cxx
+  test_lms_lts.cxx
+  test_m_est_obj.cxx
+  test_orthogonal_regression.cxx
+  test_ran_sam_search.cxx
+  test_ransac_obj.cxx
+  test_robust_util.cxx
+  test_similarity_from_matches.cxx
+)
 
-ADD_EXECUTABLE( rrel_test_robust_util           test_robust_util.cxx )
-
-ADD_TEST( rrel_test_link rrel_test_link )
-ADD_TEST( rrel_test_m_est_obj rrel_test_m_est_obj )
-ADD_TEST( rrel_test_ransac_obj rrel_test_ransac_obj )
-ADD_TEST( rrel_test_lms_lts rrel_test_lms_lts )
-ADD_TEST( rrel_test_irls rrel_test_irls )
-ADD_TEST( rrel_test_ran_sam_search rrel_test_ran_sam_search )
-
-ADD_TEST( rrel_test_linear_reg rrel_test_linear_reg )
-ADD_TEST( rrel_test_orthogonal_regression rrel_test_orthogonal_regression )
-ADD_TEST( rrel_test_homography2d_est rrel_test_homography2d_est )
-
-ADD_TEST( rrel_test_robust_util rrel_test_robust_util )
-
-
-INCLUDE( ${allvxl_SOURCE_DIR}/rpl/rrel/CMakeListsLink.txt )
+ADD_TEST( rrel_test_include                  rrel_test_driver test_include )
+ADD_TEST( rrel_test_homography2d_est         rrel_test_driver test_homography2d_est )
+ADD_TEST( rrel_test_irls                     rrel_test_driver test_irls )
+ADD_TEST( rrel_test_linear_reg               rrel_test_driver test_linear_reg )
+ADD_TEST( rrel_test_lms_lts                  rrel_test_driver test_lms_lts )
+ADD_TEST( rrel_test_m_est_obj                rrel_test_driver test_m_est_obj )
+ADD_TEST( rrel_test_orthogonal_regression    rrel_test_driver test_orthogonal_regression )
+ADD_TEST( rrel_test_ran_sam_search           rrel_test_driver test_ran_sam_search )
+ADD_TEST( rrel_test_ransac_obj               rrel_test_driver test_ransac_obj )
+ADD_TEST( rrel_test_robust_util              rrel_test_driver test_robust_util )
+ADD_TEST( rrel_test_similarity_from_matches  rrel_test_driver test_similarity_from_matches )

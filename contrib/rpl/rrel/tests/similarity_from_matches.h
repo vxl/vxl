@@ -48,7 +48,7 @@ public:
                                 vcl_vector<double>& weights ) const;
   virtual bool weighted_least_squares_fit( vnl_vector<double>& params,
                                            vnl_matrix<double>& cofact,
-                                           vcl_vector<double>* weights=0 ) const;
+                                           const vcl_vector<double>* weights=0 ) const;
 private:
   vcl_vector<image_point_match> matches_;
   int num_points_to_match_;

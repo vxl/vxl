@@ -6,17 +6,15 @@
 #include <vnl/vnl_math.h>
 #include <vnl/algo/vnl_svd.h>
 
-#include <vbl/vbl_test.h>
+#include <testlib/testlib_test.h>
 
 #include <rrel/rrel_orthogonal_regression.h>
 
+bool close(double,double);
 
-bool close( double x, double y ) { return vnl_math_abs(x-y) < 1.0e-6; }
-
-int
-main()
+MAIN( test_orthogonal_regression )
 {
-  vbl_test_start( "orthogonal regression" );
+  START( "orthogonal regression" );
   vnl_vector<double> true_params(4);
   //  z = 0.02 x - 0.1 y + 10.0
   double a0 = 0.02, a1 = -0.1, a2 = 10.0;
@@ -31,7 +29,7 @@ main()
   norm_vect[2] = true_params[2];
   true_params /= norm_vect.two_norm();  //  4 component vector
   norm_vect /= norm_vect.two_norm();    //  3 component normal only
-  const int num_pts=7;
+  const unsigned int num_pts=7;
 
   //  Build LinearRegression objects exercising both constructors and
   //  the two different options for the first constructor.
@@ -79,31 +77,31 @@ main()
   //
   //  The first set of tests are for the constructor, and parameter access methods.
   //
-  vbl_test_begin( "ctor 1" );
+  testlib_test_begin( "ctor 1" );
   rrel_estimation_problem * lr1 = new rrel_orthogonal_regression( pts );
-  vbl_test_perform( lr1 != 0 );
+  testlib_test_perform( lr1 != 0 );
 
   
-  vbl_test_begin( "num_points_to_instantiate (1)" );
-  vbl_test_perform( lr1->num_samples_to_instantiate() == 3 );
-  vbl_test_begin( "num_points_to_instantiate (3)" );
-  vbl_test_perform( (int)lr1->num_samples() == num_pts );
-  vbl_test_begin( "dtor (1)" );
+  testlib_test_begin( "num_points_to_instantiate (1)" );
+  testlib_test_perform( lr1->num_samples_to_instantiate() == 3 );
+  testlib_test_begin( "num_points_to_instantiate (3)" );
+  testlib_test_perform( lr1->num_samples() == num_pts );
+  testlib_test_begin( "dtor (1)" );
   delete lr1;
-  vbl_test_perform( true );
+  testlib_test_perform( true );
  
  
   //
   //  Test the residuals function.
   //
-  vcl_vector<double> residuals;
+  vcl_vector<double> residuals( pts.size() );
   lr1 = new rrel_orthogonal_regression( pts );
 
-  vbl_test_begin( "residuals" );
+  testlib_test_begin( "residuals" );
   lr1->compute_residuals( true_params, residuals );
-  bool ok = (int(residuals.size()) == num_pts);
+  bool ok = (residuals.size() == num_pts);
   for ( unsigned int i=0; i<residuals.size() && ok; ++ i )  ok = close( residuals[i], error[i] );
-  vbl_test_perform( ok );
+  testlib_test_perform( ok );
 
   //
   //  Test the fit from minimal set function.
@@ -122,8 +120,8 @@ main()
   else
     err = diff2.two_norm();
   
-  vbl_test_begin( "fit_from_minimal_set" );
-  vbl_test_perform( ok && err <1e-2 ); 
+  testlib_test_begin( "fit_from_minimal_set" );
+  testlib_test_perform( ok && err <1e-2 ); 
 //    vcl_cout << " estimated params: " << params << vcl_endl
 //             << " true params: " << true_params << vcl_endl
 //             << " error : " << err << vcl_endl;
@@ -137,8 +135,8 @@ main()
   // Make weights so that the estimation is singular.
   wgts[0] = 0;   wgts[1] = 1;   wgts[2] = 0;    wgts[3] = 0;  
   wgts[4] = 0;   wgts[5] = 0;   wgts[6] = 0;
-  vbl_test_begin( "weighted_least_squares_fit (singular)" );
-  vbl_test_perform( !lr1->weighted_least_squares_fit( par, cofact, &wgts ) );
+  testlib_test_begin( "weighted_least_squares_fit (singular)" );
+  testlib_test_perform( !lr1->weighted_least_squares_fit( par, cofact, &wgts ) );
 
   // Ok.  This one should work.
   ok = lr1->weighted_least_squares_fit( par, cofact );
@@ -150,13 +148,13 @@ main()
   else
     err = diff2.two_norm();
   
-  vbl_test_begin( "weighted_least_squares_fit (ok) ");
-  vbl_test_perform( ok && err <1e-2 ); 
+  testlib_test_begin( "weighted_least_squares_fit (ok) ");
+  testlib_test_perform( ok && err <1e-2 ); 
 //    vcl_cout << " estimated params: " << par << vcl_endl
 //             << " true params: " << true_params << vcl_endl
 //             << " error : " << err << vcl_endl;
  
   delete lr1;
-  vbl_test_summary();
-  return 0;
+
+  SUMMARY();
 }

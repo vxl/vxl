@@ -8,8 +8,7 @@
 
 #include "similarity_from_matches.h"
 
-#include <mbl/mbl_mz_random.h>
-static double noise( double sigma ) { static mbl_mz_random rand; return rand.normal() * sigma; }
+double noise( double sigma );
 
 // Assume throughout that the format of the parameter vector is a, b, tx, ty
 
@@ -128,7 +127,7 @@ similarity_from_matches::compute_weights( const vcl_vector<double>& residuals,
 bool 
 similarity_from_matches::weighted_least_squares_fit( vnl_vector<double>& params,
                                                      vnl_matrix<double>& cofact,
-                                                     vcl_vector<double>* weights ) const
+                                                     const vcl_vector<double>* weights ) const
 {
   assert( params.size() == 4 );
 

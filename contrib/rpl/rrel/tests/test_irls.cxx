@@ -11,24 +11,15 @@
 #include <rrel/rrel_linear_regression.h>
 #include <rrel/rrel_irls.h>
 
-#include <mbl/mbl_mz_random.h>
+#include <testlib/testlib_test.h>
 
-#include <vbl/vbl_test.h>
+#include "similarity_from_matches.h"
 
-static bool close( double x, double y ) { return vnl_math_abs(x-y) < 1.0e-6; }
+bool close(double,double);
 
-static double noise( double sigma )
-{
-  static mbl_mz_random rand;
-  return rand.normal() * sigma;
-}
-
-//  Source code for tests
-#include <rrel/tests/similarity_test.cxx>
-
+double noise( double sigma );
 
 const double conv_tolerance=1.0e-5;
-
 
 void
 regression_points( const vnl_vector<double>& a,
@@ -138,12 +129,9 @@ check( const vnl_vector<double>& correct_params,
 }
 
 
-int
-main()
+MAIN( test_irls )
 {
-  test_similarity_from_matches();
-
-  vbl_test_start( "rrel_irls" );
+  START( "rrel_irls" );
 
   //  Set true parameter estimate.
   double a[] = { 10.0, 0.02, -0.1 };
@@ -161,9 +149,9 @@ main()
   rrel_wls_obj * m_est = new rrel_tukey_obj( dof );
   int max_iterations = 50;
   int trace_level=0;
-  vbl_test_begin( "ctor" );
+  testlib_test_begin( "ctor" );
   rrel_irls * irls = new rrel_irls( max_iterations );
-  vbl_test_perform( irls != 0 );
+  testlib_test_perform( irls != 0 );
 
   //  Setting max iteration parameters.
   max_iterations = 15;
@@ -172,52 +160,52 @@ main()
   //  Setting scale estimation parameters.
   int iterations_for_scale = 2;
   bool use_weighted_scale = false;
-  vbl_test_begin( "scale parameters for non-weighted scale" );
+  testlib_test_begin( "scale parameters for non-weighted scale" );
   irls->set_est_scale( iterations_for_scale, use_weighted_scale );
-  vbl_test_perform( true );
-  vbl_test_begin( "use convergence test" );
+  testlib_test_perform( true );
+  testlib_test_begin( "use convergence test" );
   irls->set_convergence_test( conv_tolerance );
-  vbl_test_perform( true );
+  testlib_test_perform( true );
 
-  vbl_test_begin( "irls with scale estimation" );
+  testlib_test_begin( "irls with scale estimation" );
   bool success = irls->estimate( lr, m_est ) && check( true_params, irls );
   vcl_cout << "scale:  correct = " << sigma << ", estimated = " << irls->scale() << vcl_endl;
-  vbl_test_perform( success );
+  testlib_test_perform( success );
 
   irls->reset_params();
   irls->reset_scale();
   use_weighted_scale = true;
   irls->set_est_scale( iterations_for_scale, use_weighted_scale );
 
-  vbl_test_begin( "irls with weighted scale" );
+  testlib_test_begin( "irls with weighted scale" );
   success = irls->estimate( lr, m_est ) && check( true_params, irls );
   vcl_cout << "scale:  correct = " << sigma << ", estimated = " << irls->scale() << vcl_endl;
-  vbl_test_perform( success );
-  vbl_test_begin( "did it converge?" );
-  vbl_test_perform( irls->converged() );
+  testlib_test_perform( success );
+  testlib_test_begin( "did it converge?" );
+  testlib_test_perform( irls->converged() );
 
   irls->reset_params();
   irls->reset_scale();
   irls->initialize_params( true_params );
-  vbl_test_begin( "irls with correct initial fit" );
+  testlib_test_begin( "irls with correct initial fit" );
   success = irls->estimate( lr, m_est ) && check( true_params, irls );
   vcl_cout << "scale:  correct = " << sigma << ", estimated = " << irls->scale() << vcl_endl;
-  vbl_test_perform( success );
+  testlib_test_perform( success );
 
   irls->reset_params();
   irls->initialize_scale( sigma );
   irls->set_no_scale_est();
   irls->set_no_convergence_test();
 
-  vbl_test_begin( "irls with fixed scale" );
+  testlib_test_begin( "irls with fixed scale" );
   max_iterations=6;
   irls->set_max_iterations( max_iterations );
   success = irls->estimate( lr, m_est ) && check( true_params, irls );
-  vbl_test_perform( success );
-  vbl_test_begin( "scale unchanged" );
-  vbl_test_perform( irls->scale() == sigma );
-  vbl_test_begin( "iterations used" );
-  vbl_test_perform( irls->iterations_used() == max_iterations );
+  testlib_test_perform( success );
+  testlib_test_begin( "scale unchanged" );
+  testlib_test_perform( irls->scale() == sigma );
+  testlib_test_begin( "iterations used" );
+  testlib_test_perform( irls->iterations_used() == max_iterations );
 
 
   //  onto irls from matches
@@ -235,8 +223,8 @@ main()
   irls_m.set_convergence_test();
   irls_m.initialize_params( params );
 
-  vbl_test_begin( "non-unique matches -- params initialized correctly, weighted scale" );
-  vbl_test_perform( irls_m.estimate( match_prob, m_est ) &&
+  testlib_test_begin( "non-unique matches -- params initialized correctly, weighted scale" );
+  testlib_test_perform( irls_m.estimate( match_prob, m_est ) &&
                     check( params, &irls_m ) );
   vcl_cout << "true scale = " << sigma << ", weighted scale = " << irls_m.scale() << vcl_endl;
 
@@ -244,8 +232,8 @@ main()
   irls_m.initialize_params( params );
   irls_m.set_est_scale( 2, false );  // use un-weighted scale
   irls_m.set_convergence_test();
-  vbl_test_begin( "non-unique matches -- params initialized correctly, MAD scale" );
-  vbl_test_perform( irls_m.estimate( match_prob, m_est ) &&
+  testlib_test_begin( "non-unique matches -- params initialized correctly, MAD scale" );
+  testlib_test_perform( irls_m.estimate( match_prob, m_est ) &&
                     check( params, &irls_m ) );
   vcl_cout << "true scale = " << sigma << ", MAD scale = " << irls_m.scale() << vcl_endl;
 
@@ -254,13 +242,11 @@ main()
   irls_m.set_no_scale_est( );  // use no scale
   irls_m.initialize_scale( sigma );
   irls_m.set_convergence_test();
-  vbl_test_begin( "non-unique matches -- params initialized correctly, fixed scale" );
-  vbl_test_perform( irls_m.estimate( match_prob, m_est ) &&
+  testlib_test_begin( "non-unique matches -- params initialized correctly, fixed scale" );
+  testlib_test_perform( irls_m.estimate( match_prob, m_est ) &&
                     check( params, &irls_m ) );
-  vbl_test_begin( "scale unchanged" );
-  vbl_test_perform( close( sigma, irls_m.scale() ) );
+  testlib_test_begin( "scale unchanged" );
+  testlib_test_perform( close( sigma, irls_m.scale() ) );
 
-  vbl_test_summary();
-
-  return 0;
+  SUMMARY();
 }

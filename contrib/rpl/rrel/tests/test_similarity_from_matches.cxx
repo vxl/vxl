@@ -1,7 +1,7 @@
 #include <vcl_iostream.h>
 #include <vcl_vector.h>
 
-#include <vbl/vbl_test.h>
+#include <testlib/testlib_test.h>
 #include <vnl/vnl_math.h>
 #include <vnl/vnl_matrix.h>
 #include <vnl/vnl_vector.h>
@@ -10,19 +10,18 @@
 
 #include <rrel/rrel_m_est_obj.h>
 
+bool close(double,double);
+
 class null_m_est : public rrel_m_est_obj
 {
   double rho( double u ) const { return u; }
   double wgt( double u ) const { return u; }
 };
 
-#ifdef STAND_ALONE
-static bool close( double x, double y ) { return vnl_math_abs(x-y) < 1.0e-6; }
-#endif
-
-void
-test_similarity_from_matches()
+MAIN( test_similarity_from_matches )
 {
+  START( "similarity from matches" );
+
   vnl_matrix<double> A(2,2,0.0);
   vnl_vector<double> t(2);
   vnl_vector<double> params(4);
@@ -65,38 +64,37 @@ test_similarity_from_matches()
   to_loc.x() += 0.3;  to_loc.y() += -0.4;
   matches.push_back( image_point_match( from_loc, to_loc, id ) );  // 5 - id 2 - good (small error)
 
-  vbl_test_start( "similarity_from_matches" );
-  vbl_test_begin( "ctor" );
+  testlib_test_begin( "ctor" );
   similarity_from_matches sim( matches );
-  vbl_test_perform( true );
+  testlib_test_perform( true );
 
-  vbl_test_begin( "num to instantiate" );
-  vbl_test_perform( sim.num_samples_to_instantiate() == 2 );
+  testlib_test_begin( "num to instantiate" );
+  testlib_test_perform( sim.num_samples_to_instantiate() == 2 );
 
-  vbl_test_begin( "num_unique_samples" );
-  vbl_test_perform( sim.num_unique_samples() == 3 );
+  testlib_test_begin( "num_unique_samples" );
+  testlib_test_perform( sim.num_unique_samples() == 3 );
 
   vcl_cout << " num = " << sim.num_samples() << vcl_endl;
-  vbl_test_begin( "num_samples" );
-  vbl_test_perform( sim.num_samples() == 6 );
+  testlib_test_begin( "num_samples" );
+  testlib_test_perform( sim.num_samples() == 6 );
 
   vnl_vector<double> est_params(4);
-  vbl_test_begin( "fit_from_minimal_sample -- degenerate" );
+  testlib_test_begin( "fit_from_minimal_sample -- degenerate" );
   vcl_vector<int> indices(2);  indices[0] = 4;  indices[1] = 3;
-  vbl_test_perform( !sim.fit_from_minimal_set( indices, est_params ) );
+  testlib_test_perform( !sim.fit_from_minimal_set( indices, est_params ) );
 
-  vbl_test_begin( "fit_from_minimal_sample -- exact" );
+  testlib_test_begin( "fit_from_minimal_sample -- exact" );
   indices[0] = 0;  indices[1] = 3;
-  vbl_test_perform( sim.fit_from_minimal_set( indices, est_params )
+  testlib_test_perform( sim.fit_from_minimal_set( indices, est_params )
                     && close( est_params[0], params[0] )
                     && close( est_params[1], params[1] )
                     && close( est_params[2], params[2] )
                     && close( est_params[3], params[3] ) );
 
   vcl_vector<double> residuals;
-  vbl_test_begin( "compute_residuals" );
+  testlib_test_begin( "compute_residuals" );
   sim.compute_residuals( params, residuals );
-  vbl_test_perform( residuals.size() == 6
+  testlib_test_perform( residuals.size() == 6
                     && close( residuals[0],  0 )
                     && close( residuals[1],  5 )
                     && close( residuals[2], 50 )
@@ -111,13 +109,14 @@ test_similarity_from_matches()
   temp_res[2] = 0.02; temp_res[3] = 1; temp_res[4] = 0.12;
   temp_res[5] = 0.9;
 
-  vbl_test_begin( "compute_weights" );
+  testlib_test_begin( "compute_weights" );
   sim.compute_weights( temp_res, &obj, 1.0, weights );
-  vbl_test_perform( close( weights[0], 1.0 * 1.0 / 1.1 )
+  testlib_test_perform( close( weights[0], 1.0 * 1.0 / 1.1 )
                     && close( weights[1], 0.1 * 0.1 / 1.1 )
                     && close( weights[2], 0.02 * 0.02 / 1.14 )
                     && close( weights[3], 1.0 * 1.0 / 1.14 )
                     && close( weights[4], 0.12 * 0.12 / 1.14 )
                     && close( weights[5], 0.9 ) );
-  vbl_test_summary();
+
+  SUMMARY();
 }

@@ -19,7 +19,8 @@
 #include <rrel/rrel_util.h>
 #include <rrel/rrel_wls_obj.h>
 
-int main()
+int
+test_include_main( int, char*[] )
 {
   return 0;
 }

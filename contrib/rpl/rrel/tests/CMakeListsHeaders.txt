@@ -1,3 +1,0 @@
-SOURCE_FILES(rrel_tests_sources
-  similarity_from_matches.h
-)

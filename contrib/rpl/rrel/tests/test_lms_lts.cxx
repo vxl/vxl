@@ -5,14 +5,13 @@
 #include <rrel/rrel_lms_obj.h>
 #include <rrel/rrel_lts_obj.h>
 
-#include <vbl/vbl_test.h>
+#include <testlib/testlib_test.h>
 
-bool close( double x, double y ) { return vnl_math_abs(x-y) < 1.0e-4; }
+bool close(double,double);
 
-int
-main()
+MAIN( test_lms_lts )
 {
-  vbl_test_start( "LMS and LTS objective functions");
+  START( "LMS and LTS objective functions" );
 
   //
   //  Testing the LMS objective functions
@@ -39,16 +38,16 @@ main()
   test_lms.push_back( -0.8 );
   test_lms.push_back( 0.6 );
   double corr_obj = 2.2*2.2;
-  vbl_test_begin( "LMS with 0.5 inlier fraction:" );
+  testlib_test_begin( "LMS with 0.5 inlier fraction:" );
   double obj = lms1->fcn( test_lms.begin(), test_lms.end(), 0.0, 0 );
-  vbl_test_perform( close( obj, corr_obj) );
+  testlib_test_perform( close( obj, corr_obj) );
 
   frac = 0.7;
   rrel_objective * lms2 = new rrel_lms_obj( dof, frac );
   corr_obj = 4.0*4.0;
-  vbl_test_begin( "LMS with 0.7 inlier fraction:" );
+  testlib_test_begin( "LMS with 0.7 inlier fraction:" );
   obj = lms2->fcn( test_lms.begin(), test_lms.end(), 0.0, 0 );
-  vbl_test_perform( close( obj, corr_obj) );
+  testlib_test_perform( close( obj, corr_obj) );
 
   //
   //  Testing the LTS objective function
@@ -77,17 +76,16 @@ main()
     vnl_math_sqr(-1.0) + vnl_math_sqr(-2.0) + vnl_math_sqr(1.2) + vnl_math_sqr(-1.5) +
     vnl_math_sqr(2.2)  + vnl_math_sqr(1.1) + vnl_math_sqr(2.15) + vnl_math_sqr(-2.1) +
     vnl_math_sqr(-0.8) + vnl_math_sqr(0.6);
-  vbl_test_begin( "LTS with 0.5 inlier fraction:" );
+  testlib_test_begin( "LTS with 0.5 inlier fraction:" );
   obj = lts1->fcn( test_lts.begin(), test_lts.end(), 0.0, 0 );
-  vbl_test_perform( close( obj, corr_obj) );
+  testlib_test_perform( close( obj, corr_obj) );
 
   frac = 0.7;
   rrel_objective * lts2 = new rrel_lts_obj( dof, frac );
   corr_obj +=  vnl_math_sqr(-4.0) + vnl_math_sqr(-2.4) + vnl_math_sqr(3.1) ;
-  vbl_test_begin( "LTS with 0.7 inlier fraction:" );
+  testlib_test_begin( "LTS with 0.7 inlier fraction:" );
   obj = lts2->fcn( test_lts.begin(), test_lts.end(), 0.0, 0 );
-  vbl_test_perform( close( obj, corr_obj) );
+  testlib_test_perform( close( obj, corr_obj) );
 
-  vbl_test_summary();
-  return 0;
+  SUMMARY();
 }
