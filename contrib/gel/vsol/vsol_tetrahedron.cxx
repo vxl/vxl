@@ -12,18 +12,18 @@
 //***************************************************************************
 
 //---------------------------------------------------------------------------
-//: Constructor from its 3 vertices
+//: Constructor from its 4 vertices
 //---------------------------------------------------------------------------
 vsol_tetrahedron::vsol_tetrahedron(const vsol_point_3d_sptr &new_p0,
                                    const vsol_point_3d_sptr &new_p1,
                                    const vsol_point_3d_sptr &new_p2,
                                    const vsol_point_3d_sptr &new_p3)
 {
-  storage_.reserve(4);
-  storage_[0]=new_p0;
-  storage_[1]=new_p1;
-  storage_[2]=new_p2;
-  storage_[3]=new_p3;
+//storage_.reserve(4); // DO NOT DO THIS!  calls unimplemented default constructor of vsol_point_3d; causes memory fault on Alpha
+  storage_.push_back(new_p0);
+  storage_.push_back(new_p1);
+  storage_.push_back(new_p2);
+  storage_.push_back(new_p3);
 }
 
 //---------------------------------------------------------------------------
@@ -171,5 +171,5 @@ bool vsol_tetrahedron::in(vsol_point_3d const& p) const
 {
   // TO DO
   vcl_cerr << "Warning: vsol_tetrahedron::in() has not been implemented yet\n";
-  return false;
+  return true;
 }
