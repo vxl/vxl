@@ -165,32 +165,56 @@ bool vgui_section_render(void const *pixels,
     if(format == GL_LUMINANCE)
       {
         glPixelTransferi(GL_MAP_COLOR, GL_TRUE);
-        vcl_vector<float>::iterator tfLmap = fLmap->begin();
+        float* tfLmap = new float[UCHAR_MAX];
+        for(unsigned i = 0; i<UCHAR_MAX; ++i)
+          tfLmap[i]=(*fLmap)[i];
         glPixelMapfv(GL_PIXEL_MAP_R_TO_R, UCHAR_MAX, tfLmap);
         glPixelMapfv(GL_PIXEL_MAP_G_TO_G, UCHAR_MAX, tfLmap);
         glPixelMapfv(GL_PIXEL_MAP_B_TO_B, UCHAR_MAX, tfLmap);
+        delete [] tfLmap;
       }
     else if(format == GL_RGB)
       {
         glPixelTransferi(GL_MAP_COLOR, GL_TRUE);
-        vcl_vector<float>::iterator tfRmap = fRmap->begin();
-        vcl_vector<float>::iterator tfGmap = fGmap->begin();
-        vcl_vector<float>::iterator tfBmap = fBmap->begin();
+        float* tfRmap = new float[UCHAR_MAX];
+        for(unsigned i = 0; i<UCHAR_MAX; ++i)
+          tfRmap[i]=(*fRmap)[i];
+        float* tfGmap = new float[UCHAR_MAX];
+        for(unsigned i = 0; i<UCHAR_MAX; ++i)
+          tfGmap[i]=(*fGmap)[i];
+        float* tfBmap = new float[UCHAR_MAX];
+        for(unsigned i = 0; i<UCHAR_MAX; ++i)
+          tfBmap[i]=(*fBmap)[i];
         glPixelMapfv(GL_PIXEL_MAP_R_TO_R, UCHAR_MAX, tfRmap);
         glPixelMapfv(GL_PIXEL_MAP_G_TO_G, UCHAR_MAX, tfGmap);
         glPixelMapfv(GL_PIXEL_MAP_B_TO_B, UCHAR_MAX, tfBmap);
+        delete [] tfRmap;
+        delete [] tfGmap;
+        delete [] tfBmap;
       }
     else if(format == GL_RGBA)
       {
         glPixelTransferi(GL_MAP_COLOR, GL_TRUE);
-        vcl_vector<float>::iterator tfRmap = fRmap->begin();
-        vcl_vector<float>::iterator tfGmap = fGmap->begin();
-        vcl_vector<float>::iterator tfBmap = fBmap->begin();
-        vcl_vector<float>::iterator tfAmap = fAmap->begin();
+        float* tfRmap = new float[UCHAR_MAX];
+        for(unsigned i = 0; i<UCHAR_MAX; ++i)
+          tfRmap[i]=(*fRmap)[i];
+        float* tfGmap = new float[UCHAR_MAX];
+        for(unsigned i = 0; i<UCHAR_MAX; ++i)
+          tfGmap[i]=(*fGmap)[i];
+        float* tfBmap = new float[UCHAR_MAX];
+        for(unsigned i = 0; i<UCHAR_MAX; ++i)
+          tfBmap[i]=(*fBmap)[i];
+        float* tfAmap = new float[UCHAR_MAX];
+        for(unsigned i = 0; i<UCHAR_MAX; ++i)
+          tfAmap[i]=(*fAmap)[i];
         glPixelMapfv(GL_PIXEL_MAP_R_TO_R, UCHAR_MAX, tfRmap);
         glPixelMapfv(GL_PIXEL_MAP_G_TO_G, UCHAR_MAX, tfGmap);
         glPixelMapfv(GL_PIXEL_MAP_B_TO_B, UCHAR_MAX, tfBmap);
         glPixelMapfv(GL_PIXEL_MAP_A_TO_A, UCHAR_MAX, tfAmap);
+        delete [] tfRmap;
+        delete [] tfGmap;
+        delete [] tfBmap;
+        delete [] tfAmap;
       }
   if(hardware_map&&format == GL_LUMINANCE&&type == GL_UNSIGNED_SHORT
      &&table_size>=USHRT_MAX)
