@@ -103,7 +103,7 @@ bool oxp_vidl_moviefile::GetFrame(int frame_index, void* buffer)
   return f->get_section(buffer, 0,0, f->width(), f->height());
 }
 
-bool oxp_vidl_moviefile::GetField(int field_index, void* buffer)
+bool oxp_vidl_moviefile::GetField(int /*field_index*/, void* /*buffer*/)
 {
   return false;
 }
