@@ -141,6 +141,57 @@ const bool vcl_numeric_limits<short>::traps      VCL_STATIC_CONST_INIT_INT_DEFN(
 const bool vcl_numeric_limits<short>::tinyness_before VCL_STATIC_CONST_INIT_INT_DEFN(false);
 const vcl_float_round_style vcl_numeric_limits<short>::round_style VCL_STATIC_CONST_INIT_INT_DEFN(vcl_round_toward_zero);
 
+
+// ----------------------------------------------------------------------
+// Constants for signed char
+
+const bool vcl_numeric_limits<signed char>::is_specialized VCL_STATIC_CONST_INIT_INT_DEFN(true);
+const int vcl_numeric_limits<signed char>::digits   VCL_STATIC_CONST_INIT_INT_DEFN(7);
+const int vcl_numeric_limits<signed char>::digits10 VCL_STATIC_CONST_INIT_INT_DEFN(3);
+const bool vcl_numeric_limits<signed char>::is_signed  VCL_STATIC_CONST_INIT_INT_DEFN(true);
+const bool vcl_numeric_limits<signed char>::is_integer VCL_STATIC_CONST_INIT_INT_DEFN(true);
+const bool vcl_numeric_limits<signed char>::is_exact   VCL_STATIC_CONST_INIT_INT_DEFN(true);
+const int vcl_numeric_limits<signed char>::radix VCL_STATIC_CONST_INIT_INT_DEFN(2);
+const int vcl_numeric_limits<signed char>::min_exponent   VCL_STATIC_CONST_INIT_INT_DEFN(-7);
+const int vcl_numeric_limits<signed char>::min_exponent10 VCL_STATIC_CONST_INIT_INT_DEFN(-3);
+const int vcl_numeric_limits<signed char>::max_exponent   VCL_STATIC_CONST_INIT_INT_DEFN(7);
+const int vcl_numeric_limits<signed char>::max_exponent10 VCL_STATIC_CONST_INIT_INT_DEFN(3);
+const bool vcl_numeric_limits<signed char>::has_infinity      VCL_STATIC_CONST_INIT_INT_DEFN(false);
+const bool vcl_numeric_limits<signed char>::has_quiet_NaN     VCL_STATIC_CONST_INIT_INT_DEFN(false);
+const bool vcl_numeric_limits<signed char>::has_signaling_NaN VCL_STATIC_CONST_INIT_INT_DEFN(false);
+const bool vcl_numeric_limits<signed char>::has_denorm        VCL_STATIC_CONST_INIT_INT_DEFN(false);
+const bool vcl_numeric_limits<signed char>::is_iec559  VCL_STATIC_CONST_INIT_INT_DEFN(false);
+const bool vcl_numeric_limits<signed char>::is_bounded VCL_STATIC_CONST_INIT_INT_DEFN(true);
+const bool vcl_numeric_limits<signed char>::is_modulo  VCL_STATIC_CONST_INIT_INT_DEFN(true);
+const bool vcl_numeric_limits<signed char>::traps      VCL_STATIC_CONST_INIT_INT_DEFN(false);
+const bool vcl_numeric_limits<signed char>::tinyness_before VCL_STATIC_CONST_INIT_INT_DEFN(false);
+const vcl_float_round_style vcl_numeric_limits<signed char>::round_style VCL_STATIC_CONST_INIT_INT_DEFN(vcl_round_toward_zero);
+
+// ----------------------------------------------------------------------
+// Constants for unsigned char
+
+const bool vcl_numeric_limits<unsigned char>::is_specialized VCL_STATIC_CONST_INIT_INT_DEFN(true);
+const int vcl_numeric_limits<unsigned char>::digits   VCL_STATIC_CONST_INIT_INT_DEFN(8);
+const int vcl_numeric_limits<unsigned char>::digits10 VCL_STATIC_CONST_INIT_INT_DEFN(3);
+const bool vcl_numeric_limits<unsigned char>::is_signed  VCL_STATIC_CONST_INIT_INT_DEFN(false);
+const bool vcl_numeric_limits<unsigned char>::is_integer VCL_STATIC_CONST_INIT_INT_DEFN(true);
+const bool vcl_numeric_limits<unsigned char>::is_exact   VCL_STATIC_CONST_INIT_INT_DEFN(true);
+const int vcl_numeric_limits<unsigned char>::radix VCL_STATIC_CONST_INIT_INT_DEFN(2);
+const int vcl_numeric_limits<unsigned char>::min_exponent   VCL_STATIC_CONST_INIT_INT_DEFN(-8);
+const int vcl_numeric_limits<unsigned char>::min_exponent10 VCL_STATIC_CONST_INIT_INT_DEFN(-3);
+const int vcl_numeric_limits<unsigned char>::max_exponent   VCL_STATIC_CONST_INIT_INT_DEFN(8);
+const int vcl_numeric_limits<unsigned char>::max_exponent10 VCL_STATIC_CONST_INIT_INT_DEFN(3);
+const bool vcl_numeric_limits<unsigned char>::has_infinity      VCL_STATIC_CONST_INIT_INT_DEFN(false);
+const bool vcl_numeric_limits<unsigned char>::has_quiet_NaN     VCL_STATIC_CONST_INIT_INT_DEFN(false);
+const bool vcl_numeric_limits<unsigned char>::has_signaling_NaN VCL_STATIC_CONST_INIT_INT_DEFN(false);
+const bool vcl_numeric_limits<unsigned char>::has_denorm        VCL_STATIC_CONST_INIT_INT_DEFN(false);
+const bool vcl_numeric_limits<unsigned char>::is_iec559  VCL_STATIC_CONST_INIT_INT_DEFN(false);
+const bool vcl_numeric_limits<unsigned char>::is_bounded VCL_STATIC_CONST_INIT_INT_DEFN(true);
+const bool vcl_numeric_limits<unsigned char>::is_modulo  VCL_STATIC_CONST_INIT_INT_DEFN(true);
+const bool vcl_numeric_limits<unsigned char>::traps      VCL_STATIC_CONST_INIT_INT_DEFN(false);
+const bool vcl_numeric_limits<unsigned char>::tinyness_before VCL_STATIC_CONST_INIT_INT_DEFN(false);
+const vcl_float_round_style vcl_numeric_limits<unsigned char>::round_style VCL_STATIC_CONST_INIT_INT_DEFN(vcl_round_toward_zero);
+
 // ----------------------------------------------------------------------
 // Constants and functions for double
 
