@@ -21,7 +21,8 @@
 //     testlib_test_assert_near(n+ "Determinant", qr.determinant(), det, 1e-10);
 // }
 
-extern "C" void test_cholesky() {
+void test_cholesky()
+{
   vnl_matrix<double> A(3,3);
   test_util_fill_random(A.begin(), A.end());
   A = A * A.transpose();
@@ -34,15 +35,19 @@ extern "C" void test_cholesky() {
     vnl_svd<double> svd(A);
     MATLABPRINT(chol.inverse());
     MATLABPRINT(svd.inverse());
+    testlib_test_assert_near("svd.inverse() ~= cholesky.inverse()",
+                             (chol.inverse() - svd.inverse()).fro_norm());
   }
 
   {
     vnl_cholesky chol(A);
     testlib_test_assert_near("Ai * A - I", (chol.inverse() * A - I).fro_norm());
+    testlib_test_assert_near("Ai * A - I", (A * chol.inverse() - I).fro_norm());
   }
   {
     vnl_cholesky chol(A, vnl_cholesky::estimate_condition);
     testlib_test_assert_near("Ai * A - I", (chol.inverse() * A - I).fro_norm());
+    testlib_test_assert_near("Ai * A - I", (A * chol.inverse() - I).fro_norm());
   }
 }
 
