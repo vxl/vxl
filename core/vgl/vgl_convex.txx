@@ -1,12 +1,12 @@
 // This is core/vgl/vgl_convex.txx
 #ifndef vgl_convex_txx_
 #define vgl_convex_txx_
-
+//:
+// \file
 #include "vgl_convex.h"
-#include "vcl_limits.h"
-#include "vcl_cstdlib.h"
-#include "vcl_cmath.h"
-#include "vcl_list.h"
+#include <vcl_limits.h>
+#include <vcl_cmath.h>
+#include <vcl_list.h>
 
 
 //: Calculate the negative cosine of the angle from dir to next - current.
@@ -34,7 +34,7 @@ vgl_polygon<T> vgl_convex_hull(vcl_vector<vgl_point_2d<T> > const& points)
   vgl_polygon<T> hull(1);
   if (points.empty()) return hull;
 
-  typedef vcl_list<vgl_point_2d<T> >::iterator ITER;
+  typedef typename vcl_list<vgl_point_2d<T> >::iterator ITER;
 
   // A list of points still not used.
   vcl_list<vgl_point_2d<T> > pts(points.begin(), points.end());
@@ -57,13 +57,13 @@ vgl_polygon<T> vgl_convex_hull(vcl_vector<vgl_point_2d<T> > const& points)
     if (pts.empty()) return hull;
 
     // Calculate angles to closing point, and all the remaining points.
-    double nc_angle_to_first = get_nc_angle(last_dir, current, first) ;   
+    double nc_angle_to_first = get_nc_angle(last_dir, current, first);
 
     // If the current point is not the closing point, but is very close to it,
     // then we are done.
     if (not_starting && nc_angle_to_first > 1.5) return hull;
     not_starting=true;
-     
+
     double best_nc_angle = 1.5;
     ITER best;
 
@@ -87,12 +87,11 @@ vgl_polygon<T> vgl_convex_hull(vcl_vector<vgl_point_2d<T> > const& points)
     current = * best;
     pts.erase(best);
   }
-
 }
 
 #undef VGL_CONVEX_INSTANTIATE
 #define VGL_CONVEX_INSTANTIATE(T) \
-template vgl_polygon<T> vgl_convex_hull(const vcl_vector<vgl_point_2d<T> >&);
+template vgl_polygon<T > vgl_convex_hull(const vcl_vector<vgl_point_2d<T > >&)
 
 
 #endif // vgl_convex_txx_
