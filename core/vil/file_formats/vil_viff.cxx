@@ -6,7 +6,7 @@ extern "C" {
 #include <vcl_cassert.h>
 #include <vcl_complex.h>
 
-char const* vil_viff_format_tag = "viff";
+static char const* vil_viff_format_tag = "viff";
 
 #include <vcl_iostream.h>
 #include <vcl_cstring.h>
@@ -108,7 +108,7 @@ char const* vil_viff_image::file_format() const
 }
 
 vil_viff_image::vil_viff_image(vil_stream* is,
-                               int ni, int nj, int nplanes,
+                               unsigned int ni, unsigned int nj, unsigned int nplanes,
                                vil_pixel_format format)
   : is_(is), ni_(ni), nj_(nj),
     nplanes_(nplanes), start_of_data_(VIFF_HEADERSIZE),
@@ -243,10 +243,11 @@ bool vil_viff_image::write_header()
   return true;
 }
 
-vil_image_view_base_sptr vil_viff_image::get_copy_view(unsigned int x0, unsigned int xs, unsigned int y0, unsigned int ys) const
+vil_image_view_base_sptr vil_viff_image::get_copy_view(unsigned int x0, unsigned int xs,
+                                                       unsigned int y0, unsigned int ys) const
 {
-  assert((x0+xs)<=ni_);
-  assert((y0+ys)<=nj_);
+  assert(x0+xs<=ni_);
+  assert(y0+ys<=nj_);
   unsigned int pix_size = 8*vil_pixel_format_sizeof_components(format_);
   if (format_==VIL_PIXEL_FORMAT_BOOL) pix_size = 1;
   if (format_==VIL_PIXEL_FORMAT_BOOL && x0%8 != 0)
@@ -255,7 +256,7 @@ vil_image_view_base_sptr vil_viff_image::get_copy_view(unsigned int x0, unsigned
   vxl_uint_32 rowsize = (pix_size*xs+7)/8;
   vxl_uint_32 tbytes = rowsize*ys*nplanes_;
   vil_memory_chunk_sptr buf = new vil_memory_chunk(tbytes,format_);
-  unsigned char* ib = reinterpret_cast<unsigned char *>(buf->data());
+  vxl_byte* ib = reinterpret_cast<vxl_byte*>(buf->data());
   for (unsigned int p = 0; p<nplanes_; ++p) {
     for (unsigned int y = y0; y < y0+ys; ++y) {
       is_->seek(start_of_data_ + p*nj_*((ni_*pix_size+7)/8)
@@ -266,54 +267,60 @@ vil_image_view_base_sptr vil_viff_image::get_copy_view(unsigned int x0, unsigned
     }
   }
   if (!endian_consistent_) {
-    ib = reinterpret_cast<unsigned char *>(buf->data());
+    ib = reinterpret_cast<vxl_byte*>(buf->data());
     for (unsigned int i=0;i<tbytes;i+=(pix_size+7)/8)
       swap(ib+i,(pix_size+7)/8);
   }
 
-  if (format_ == VIL_PIXEL_FORMAT_BOOL)
-    return new vil_image_view<bool>(buf, reinterpret_cast<bool*>(buf->data()),ni_,nj_,nplanes_,1,ni_,ni_*nj_);
-  else if (format_ == VIL_PIXEL_FORMAT_BYTE)
-    return new vil_image_view<vxl_byte>(buf,reinterpret_cast<vxl_byte*>(buf->data()),ni_,nj_,nplanes_,1,ni_,ni_*nj_);
-  else if (format_ == VIL_PIXEL_FORMAT_UINT_16)
-   return new vil_image_view<vxl_uint_16>(buf,reinterpret_cast<vxl_uint_16*>(buf->data()),ni_,nj_,nplanes_,1,ni_,ni_*nj_);
-  else if (format_ == VIL_PIXEL_FORMAT_UINT_32)
-   return new vil_image_view<vxl_uint_32>(buf,reinterpret_cast<vxl_uint_32*>(buf->data()),ni_,nj_,nplanes_,1,ni_,ni_*nj_);
-  else if (format_ == VIL_PIXEL_FORMAT_FLOAT)
-   return new vil_image_view<float>(buf,reinterpret_cast<float*>(buf->data()),ni_,nj_,nplanes_,1,ni_,ni_*nj_);
-  else if (format_ == VIL_PIXEL_FORMAT_DOUBLE)
-   return new vil_image_view<double>(buf,reinterpret_cast<double*>(buf->data()),ni_,nj_,nplanes_,1,ni_,ni_*nj_);
-  else if (format_ == VIL_PIXEL_FORMAT_COMPLEX_FLOAT)
-   return new vil_image_view<vcl_complex<float> >(buf,reinterpret_cast<vcl_complex<float>*>(buf->data()),ni_,nj_,nplanes_,1,ni_,ni_*nj_);
-  else if (format_ == VIL_PIXEL_FORMAT_COMPLEX_DOUBLE)
-   return new vil_image_view<vcl_complex<double> >(buf,reinterpret_cast<vcl_complex<double>*>(buf->data()),ni_,nj_,nplanes_,1,ni_,ni_*nj_);
-  else
-    return 0;
+#define ARGS(T) buf, reinterpret_cast<T*>(buf->data()), ni_,nj_,nplanes_, 1,ni_,ni_*nj_
+  if (format_ == VIL_PIXEL_FORMAT_BOOL)                return new vil_image_view<bool>                (ARGS(bool));
+  else if (format_ == VIL_PIXEL_FORMAT_BYTE)           return new vil_image_view<vxl_byte>            (ARGS(vxl_byte));
+  else if (format_ == VIL_PIXEL_FORMAT_UINT_16)        return new vil_image_view<vxl_uint_16>         (ARGS(vxl_uint_16));
+  else if (format_ == VIL_PIXEL_FORMAT_UINT_32)        return new vil_image_view<vxl_uint_32>         (ARGS(vxl_uint_32));
+  else if (format_ == VIL_PIXEL_FORMAT_FLOAT)          return new vil_image_view<float>               (ARGS(float));
+  else if (format_ == VIL_PIXEL_FORMAT_DOUBLE)         return new vil_image_view<double>              (ARGS(double));
+  else if (format_ == VIL_PIXEL_FORMAT_COMPLEX_FLOAT)  return new vil_image_view<vcl_complex<float> > (ARGS(vcl_complex<float>));
+  else if (format_ == VIL_PIXEL_FORMAT_COMPLEX_DOUBLE) return new vil_image_view<vcl_complex<double> >(ARGS(vcl_complex<double>));
+  else return 0;
+#undef ARGS
 }
 
 bool vil_viff_image::put_view(vil_image_view_base const& buf, unsigned int x0, unsigned int y0)
 {
   assert(buf.pixel_format() == format_); // pixel formats of image and buffer must match
-  if (!view_fits(buf, x0, y0))
+  if (!view_fits(buf, x0, y0) || buf.nplanes() != nplanes())
   {
     vcl_cerr << "ERROR: " << __FILE__ << ":\n view does not fit\n";
     return false;
   }
+  unsigned int ni = buf.ni();
+  unsigned int nj = buf.nj();
 #ifdef DEBUG
-  vcl_cerr<<"vil_viff_image::put_view() : buf="
-          <<buf.ni()<<'x'<<buf.nj()<<'x'<< buf.nplanes()<<'p'
-          <<" at ("<<x0<<','<<y0<<")\n";
+  vcl_cerr << "vil_viff_image::put_view() : buf="
+           << ni<<'x'<<nj<<'x'<< buf.nplanes()<<'p'
+           << " at ("<<x0<<','<<y0<<")\n";
 #endif
-  const unsigned char* ob = static_cast<vil_image_view<unsigned char> const&>(buf).top_left_ptr();
+  vil_image_view<vxl_byte> ibuf = static_cast<vil_image_view<vxl_byte> const&>(buf);
+  if (ibuf.istep() != 1 || ibuf.jstep() != int(ni) ||
+      (ibuf.planestep() != int(ni*nj) && nplanes() != 1))
+  {
+    vcl_cerr << "ERROR: " << __FILE__ << ":\n"
+             << " view does not fit: istep="<<ibuf.istep()
+             << ", jstep="<<ibuf.jstep()
+             << ", planestep="<<ibuf.planestep()
+             << " instead of 1,"<<ni<<','<<ni*nj<<'\n';
+    return false;
+  }
+  const vxl_byte* ob = ibuf.top_left_ptr();
   unsigned int pix_size = 8*vil_pixel_format_sizeof_components(format_);
   if (format_==VIL_PIXEL_FORMAT_BOOL) pix_size = 1;
   if (format_==VIL_PIXEL_FORMAT_BOOL && x0%8 != 0)
     vcl_cerr << "vil_viff_image::put_view(): Warning: x0 should be a multiple of 8 for this type of image\n";
 
-  vxl_uint_32 rowsize = (pix_size*buf.ni()+7)/8;
-  if (endian_consistent_)
+  vxl_uint_32 rowsize = (pix_size*ni+7)/8;
+  if (endian_consistent_ || pix_size <= 8)
     for (unsigned int p = 0; p<nplanes_; ++p)
-      for (unsigned int y = y0; y < y0+buf.nj(); ++y) {
+      for (unsigned int y = y0; y < y0+nj; ++y) {
         is_->seek(start_of_data_ + p*nj_*((ni_*pix_size+7)/8)
                                  + y*((ni_*pix_size+7)/8)
                                  + x0*pix_size/8);
@@ -327,10 +334,10 @@ bool vil_viff_image::put_view(vil_image_view_base const& buf, unsigned int x0, u
 #endif
         ob += rowsize;
       }
-  else {
-    unsigned char* tempbuf = new unsigned char[rowsize];
+  else { // !endian_consistent_ ==> must swap bytes
+    vxl_byte* tempbuf = new vxl_byte[rowsize];
     for (unsigned int p = 0; p<nplanes_; ++p)
-      for (unsigned int y = y0; y < y0+buf.nj(); ++y) {
+      for (unsigned int y = y0; y < y0+nj; ++y) {
         vcl_memcpy(tempbuf, ob, rowsize);
         for (unsigned int i=0; i<rowsize; i+=pix_size/8)
           swap(tempbuf+i,pix_size/8);
@@ -373,12 +380,12 @@ void vil_viff_image::set_ispare1(vxl_uint_32 ispare1)
 {
   header_.ispare1 = ispare1;
   int longsize = sizeof(vxl_uint_32);
-  unsigned char* bytes = new unsigned char[longsize];
+  vxl_byte* bytes = new vxl_byte[longsize];
   vcl_memcpy(bytes,&ispare1,longsize);
   if (!endian_consistent_)
     swap(bytes,longsize);
 
-  is_->seek((int)((unsigned char*)&header_.ispare1 - (unsigned char*)&header_));
+  is_->seek((int)((vxl_byte*)&header_.ispare1 - (vxl_byte*)&header_));
   is_->write(bytes, longsize);
   delete[] bytes;
 }
@@ -387,12 +394,12 @@ void vil_viff_image::set_ispare2(vxl_uint_32 ispare2)
 {
   header_.ispare2 = ispare2;
   int longsize = sizeof(vxl_uint_32);
-  unsigned char* bytes = new unsigned char[longsize];
+  vxl_byte* bytes = new vxl_byte[longsize];
   vcl_memcpy(bytes,&ispare2,longsize);
   if (!endian_consistent_)
     swap(bytes,longsize);
 
-  is_->seek((int)((unsigned char*)&header_.ispare2 - (unsigned char*)&header_));
+  is_->seek((int)((vxl_byte*)&header_.ispare2 - (vxl_byte*)&header_));
   is_->write(bytes, longsize);
   delete[] bytes;
 }
@@ -401,12 +408,12 @@ void vil_viff_image::set_fspare1(float fspare1)
 {
   header_.fspare1 = fspare1;
   int floatsize = sizeof(float);
-  unsigned char* bytes = new unsigned char[floatsize];
+  vxl_byte* bytes = new vxl_byte[floatsize];
   vcl_memcpy(bytes,&fspare1,floatsize);
   if (!endian_consistent_)
     swap(bytes,floatsize);
 
-  is_->seek((int)((unsigned char*)&header_.fspare1 - (unsigned char*)&header_));
+  is_->seek((int)((vxl_byte*)&header_.fspare1 - (vxl_byte*)&header_));
   is_->write(bytes, floatsize);
 
   delete[] bytes;
@@ -416,12 +423,12 @@ void vil_viff_image::set_fspare2(float fspare2)
 {
   header_.fspare2 = fspare2;
   int floatsize = sizeof(float);
-  unsigned char* bytes = new unsigned char[floatsize];
+  vxl_byte* bytes = new vxl_byte[floatsize];
   vcl_memcpy(bytes,&fspare2,floatsize);
   if (!endian_consistent_)
     swap(bytes,floatsize);
 
-  is_->seek((int)((unsigned char*)&header_.fspare2 - (unsigned char*)&header_));
+  is_->seek((int)((vxl_byte*)&header_.fspare2 - (vxl_byte*)&header_));
   is_->write(bytes, floatsize);
   delete[] bytes;
 }

@@ -1,6 +1,6 @@
 // This is core/vil/file_formats/vil_viff.h
-#ifndef vil_viff_h_
-#define vil_viff_h_
+#ifndef vil_viff_file_format_h_
+#define vil_viff_file_format_h_
 //:
 // \file
 // \brief  Loader for Khoros 1.0 images
@@ -8,13 +8,13 @@
 // \date 17 Feb 2000
 // VIFF is the "Visualization Image File Format" used by Khoros 1.0.
 //
-//\verbatim
+// \verbatim
 //  Modifications
-//   3 Oct  2001 Peter Vanroose - Implemented get_property("top_row_first")
-//  21 Febr 2002 Maarten Vergauwen - Added access functions for [fi]spare[12]
-//   5 June 2003 Peter Vanroose - bug fix for 64-bit platforms: data is 32-bit
-//  14 June 2003 Peter Vanroose - ported from vil1
-//\endverbatim
+//    3 Oct  2001 Peter Vanroose - Implemented get_property("top_row_first")
+//   21 Febr 2002 Maarten Vergauwen - Added access functions for [fi]spare[12]
+//    5 June 2003 Peter Vanroose - bug fix for 64-bit platforms: data is 32-bit
+//   14 June 2003 Peter Vanroose - ported from vil1
+// \endverbatim
 
 #include <vil/vil_file_format.h>
 #include <vil/vil_image_resource.h>
@@ -57,11 +57,11 @@ class vil_viff_image : public vil_image_resource
  public:
   vil_viff_image(vil_stream* is);
   vil_viff_image(vil_stream* is,
-                 int ni, int nj, int nplanes,
+                 unsigned int ni, unsigned int nj, unsigned int nplanes,
                  vil_pixel_format format);
   ~vil_viff_image();
 
-  //: Dimensions.  Planes x W x H x Components
+  //: Dimensions.  Planes x W x H
   virtual unsigned int ni() const { return ni_; }
   virtual unsigned int nj() const { return nj_; }
   virtual unsigned int nplanes() const { return nplanes_; }
@@ -87,4 +87,4 @@ class vil_viff_image : public vil_image_resource
   void set_fspare2(float fspare2);
 };
 
-#endif // vil_viff_h_
+#endif // vil_viff_file_format_h_
