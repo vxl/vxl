@@ -131,7 +131,6 @@ contrib/rpl rgrl   rgrl_   build contrib/rpl/rrel contrib/rpl/rsdl core/vnl core
 
 package: :pserver:anonymous@cvs.sourceforge.net:/cvsroot/vxl contrib/brl Brown University libraries
 contrib/brl/bbas bgrl   bgrl_   build core/vbl core/vsl
-contrib/brl/bbas bvnl   bvnl_   build core/vnl # core/vnl/algo
 contrib/brl/bbas bvgl   bvgl_   build core/vgl core/vnl
 contrib/brl/bbas bsol   bsol_   build contrib/gel/vsol core/vul core/vbl
 contrib/brl/bbas bdgl   bdgl_   build contrib/gel/vtol contrib/oxl/mvl contrib/mul/mbl core/vbl
