@@ -50,19 +50,19 @@ void vil2_sample_grid_bilin(vecType* v,
   {
     if (np==1)
     {
-      for (unsigned i=0;i<n1;++i,x1+=dx1,y1+=dy1)
+      for (int i=0;i<n1;++i,x1+=dx1,y1+=dy1)
       {
         double x=x1, y=y1;  // Start of j-th row
-        for (unsigned j=0;j<n2;++j,x+=dx2,y+=dy2,++v)
+        for (int j=0;j<n2;++j,x+=dx2,y+=dy2,++v)
           *v = vil2_bilin_interp(x,y,plane0,ni,nj,istep,jstep);
       }
     }
     else
     {
-      for (unsigned i=0;i<n1;++i,x1+=dx1,y1+=dy1)
+      for (int i=0;i<n1;++i,x1+=dx1,y1+=dy1)
       {
         double x=x1, y=y1; // Start of j-th row
-        for (unsigned j=0;j<n2;++j,x+=dx2,y+=dy2)
+        for (int j=0;j<n2;++j,x+=dx2,y+=dy2)
         {
           for (unsigned p=0;p<np;++p,++v)
             *v = vil2_bilin_interp(x,y,plane0+p*pstep,ni,nj,istep,jstep);
@@ -79,15 +79,15 @@ void vil2_sample_grid_bilin(vecType* v,
       {
         double x=x1, y=y1;  // Start of j-th row
         for (int j=0;j<n2;++j,x+=dx2,y+=dy2,++v)
-          *v = vil2_bilin_interp_safe(x,y,plane0,ni,nj,istep,jstep);
+          *v = (vecType)vil2_bilin_interp_safe(x,y,plane0,ni,nj,istep,jstep);
       }
     }
     else
     {
-      for (unsigned i=0;i<n1;++i,x1+=dx1,y1+=dy1)
+      for (int i=0;i<n1;++i,x1+=dx1,y1+=dy1)
       {
         double x=x1, y=y1; // Start of j-th row
-        for (unsigned j=0;j<n2;++j,x+=dx2,y+=dy2)
+        for (int j=0;j<n2;++j,x+=dx2,y+=dy2)
         {
           for (unsigned p=0;p<np;++p,++v)
             *v = vil2_bilin_interp_safe(x,y,plane0+p*pstep,ni,nj,istep,jstep);

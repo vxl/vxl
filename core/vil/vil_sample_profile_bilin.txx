@@ -59,7 +59,7 @@ void vil2_sample_profile_bilin(vecType* v,
     {
       for (int k=0;k<n;++k,x+=dx,y+=dy)
       {
-        for (int p=0;p<np;++p,++v)
+        for (unsigned int p=0;p<np;++p,++v)
           *v = vil2_bilin_interp(x,y,plane0+p*pstep,ni,nj,istep,jstep);
       }
     }
@@ -76,7 +76,7 @@ void vil2_sample_profile_bilin(vecType* v,
     {
       for (int k=0;k<n;++k,x+=dx,y+=dy)
       {
-        for (int p=0;p<np;++p,++v)
+        for (unsigned int p=0;p<np;++p,++v)
           *v = vil2_bilin_interp_safe(x,y,plane0+p*pstep,ni,nj,istep,jstep);
       }
     }

@@ -26,18 +26,18 @@ void vil2_binary_erode(const vil2_image_view<bool>& src_image,
   vcl_vector<int> offset;
   vil2_compute_offsets(offset,element,s_istep,s_jstep);
 
-  // Define box in which all element will be valid
+  // Define box in which all elements will be valid
   int ilo = -element.min_i();
   int ihi = ni-1-element.max_i();
   int jlo = -element.min_j();
   int jhi = nj-1-element.max_j();
 
   // Deal with left edge
-  for (unsigned i=0;i<ilo;++i)    vil2_fill_col(dest_image,i,false);
+  for (int i=0;i<ilo;++i)         vil2_fill_col(dest_image,i,false);
   // Deal with right edge
   for (unsigned i=ihi+1;i<ni;++i) vil2_fill_col(dest_image,i,false);
   // Deal with bottom edge
-  for (unsigned j=0;j<jlo;++j)    vil2_fill_row(dest_image,j,false);
+  for (int j=0;j<jlo;++j)         vil2_fill_row(dest_image,j,false);
   // Deal with top edge
   for (unsigned j=jhi+1;j<nj;++j) vil2_fill_row(dest_image,j,false);
 

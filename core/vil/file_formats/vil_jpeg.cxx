@@ -188,17 +188,10 @@ bool vil2_jpeg_image::put_view(const vil2_image_view_base &view,
   unsigned bpp = jc->jobj.input_components;
 
   // write each scanline
-<<<<<<< vil2_jpeg.cxx
-  for (unsigned int j=0; j<view2.nj(); ++j) {
-    JSAMPLE const *scanline = (JSAMPLE const*)
-      ((char const*)view2.top_left_ptr() + j*view2.nj()*bpp);
-    if (!jc->write_scanline(y0+j, scanline))
-      return false;
-=======
   if (view2.planestep() == 1 || view2.nplanes() == 1)
   {
     assert(view2.istep() == bpp);
-    for (int j=0; j<view2.nj(); ++j) {
+    for (unsigned int j=0; j<view2.nj(); ++j) {
       JSAMPLE const *scanline = (JSAMPLE const*)
         &view2(0,j);
       if (!jc->write_scanline(y0+j, scanline))
@@ -211,7 +204,7 @@ bool vil2_jpeg_image::put_view(const vil2_image_view_base &view,
       view2.ni(), 1, view2.nplanes(), vxl_byte());
     JSAMPLE *scanline = line.top_left_ptr();
 
-    for (int j=0; j<view2.nj(); ++j)
+    for (unsigned int j=0; j<view2.nj(); ++j)
     {
       // arrange data into componentwise form.
       for (unsigned i = 0; i < view2.ni(); ++i)
@@ -220,7 +213,6 @@ bool vil2_jpeg_image::put_view(const vil2_image_view_base &view,
       if (!jc->write_scanline(y0+j, scanline))
         return false;
     }
->>>>>>> 1.3
   }
 
   return true;

@@ -36,9 +36,9 @@ void vil2_gauss_reduce(const vil2_image_view<T>& src_im,
   {
     // Smooth and subsample in x, result in work_im
     vil2_gauss_reduce(src_im.top_left_ptr()+i*src_im.planestep(),ni,nj,
-                           src_im.istep(),src_im.jstep(),
-                           work_im.top_left_ptr(),
-                           work_im.istep(),work_im.jstep());
+                      src_im.istep(),src_im.jstep(),
+                      work_im.top_left_ptr(),
+                      work_im.istep(),work_im.jstep());
 
     // Smooth and subsample in y (by implicitly transposing work_im)
     vil2_gauss_reduce(work_im.top_left_ptr(),nj,ni2,
@@ -68,9 +68,9 @@ void vil2_gauss_reduce_121(const vil2_image_view<T>& src_im,
   for (unsigned int i=0;i<n_planes;++i)
   {
     vil2_gauss_reduce_121(src_im.top_left_ptr()+i*src_im.planestep(),ni,nj,
-                               src_im.istep(),src_im.jstep(),
-                               dest_im.top_left_ptr(),
-                               dest_im.istep(),dest_im.jstep());
+                          src_im.istep(),src_im.jstep(),
+                          dest_im.top_left_ptr(),
+                          dest_im.istep(),dest_im.jstep());
   }
 }
 
@@ -157,9 +157,9 @@ void gauss_reduce_general_plane(const vil2_image_view<T>& src,
 
 //  worka_.print_all(vcl_cout);
   // Now perform vertical smoothing
-  for (int y=2;y<src.nj()-2;y++)
+  for (unsigned int y=2;y+2<src.nj();++y)
   {
-    for (int x=0; x<src.ni(); x++)
+    for (unsigned int x=0; x<src.ni(); x++)
       workb(x,y) = l_round(  params.filt2() *(worka(x,y-2) + worka(x,y+2))
                            + params.filt1() *(worka(x,y-1) + worka(x,y+1))
                            + params.filt0() * worka(x,  y),
@@ -196,10 +196,10 @@ void gauss_reduce_general_plane(const vil2_image_view<T>& src,
 
   const double init_x = 0.5 * (src.ni()-1 - (dest.ni()-1)*params.scale_step());
   double y = 0.5 * (src.nj() -1 - (dest.nj()-1)*params.scale_step());
-  for (int yi=0; yi<dest.nj(); yi++)
+  for (unsigned int yi=0; yi<dest.nj(); yi++)
   {
     double x=init_x;
-    for (int xi=0; xi<dest.ni(); xi++)
+    for (unsigned int xi=0; xi<dest.ni(); xi++)
     {
       dest(xi,yi) = l_round (vil2_bilin_interp_safe_extend(workb, x, y), (T)0);
       x += params.scale_step();

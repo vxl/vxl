@@ -28,11 +28,11 @@ inline T vil2_greyscale_dilate(const vil2_image_view<T>& image, unsigned plane,
   T max_v;
   bool first=true;
   unsigned n = element.p_i().size();
-  for (int k=0;k<n;++k)
+  for (unsigned int k=0;k<n;++k)
   {
-    int i = i0+element.p_i()[k];
-    int j = j0+element.p_j()[k];
-    if (i>=0 && i<image.ni() && j>=0 && j<image.nj())
+    unsigned int i = i0+element.p_i()[k];
+    unsigned int j = j0+element.p_j()[k];
+    if (i<image.ni() && j<image.nj())
     {
       if  (first || image(i,j,plane) > max_v)
         { max_v=image(i,j,plane); first=false; }

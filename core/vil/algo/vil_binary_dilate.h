@@ -22,11 +22,11 @@ inline bool vil2_binary_dilate(const vil2_image_view<bool>& image, unsigned plan
                                const vil2_structuring_element& element, int i0, int j0)
 {
   unsigned n = element.p_i().size();
-  for (int k=0;k<n;++k)
+  for (unsigned int k=0;k<n;++k)
   {
-    int i = i0+element.p_i()[k];
-    int j = j0+element.p_j()[k];
-    if (i>=0 && i<image.ni() && j>=0 && j<image.nj() && image(i,j,plane))
+    unsigned int i = i0+element.p_i()[k];
+    unsigned int j = j0+element.p_j()[k];
+    if (i<image.ni() && j<image.nj() && image(i,j,plane))
       return true;
   }
   return false;

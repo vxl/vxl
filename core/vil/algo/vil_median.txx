@@ -40,11 +40,11 @@ void vil2_median(const vil2_image_view<T>& src_image,
 
   // Deal with left edge
   for (int i=0;i<ilo;++i)
-    for (int j=0;j<nj;++j)
+    for (unsigned int j=0;j<nj;++j)
       dest_image(i,j,0)=vil2_sorted_value(src_image,0,element,i,j,value_wkspce,0.5);
   // Deal with right edge
-  for (int i=ihi+1;i<ni;++i)
-    for (int j=0;j<nj;++j)
+  for (unsigned int i=ihi+1;i<ni;++i)
+    for (unsigned int j=0;j<nj;++j)
       dest_image(i,j,0)=vil2_sorted_value(src_image,0,element,i,j,value_wkspce,0.5);
   // Deal with bottom edge
   for (int i=ilo;i<=ihi;++i)
@@ -52,7 +52,7 @@ void vil2_median(const vil2_image_view<T>& src_image,
       dest_image(i,j,0)=vil2_sorted_value(src_image,0,element,i,j,value_wkspce,0.5);
   // Deal with top edge
   for (int i=ilo;i<=ihi;++i)
-    for (int j=jhi+1;j<nj;++j)
+    for (unsigned int j=jhi+1;j<nj;++j)
       dest_image(i,j,0)=vil2_sorted_value(src_image,0,element,i,j,value_wkspce,0.5);
 
   int rank = int(0.5*(offset.size()-1));

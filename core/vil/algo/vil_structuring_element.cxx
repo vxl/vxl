@@ -24,7 +24,7 @@ void vil2_structuring_element::set(const vcl_vector<int>& p_i,const vcl_vector<i
 
   max_i_=min_i_ = p_i[0];
   max_j_=min_j_ = p_j[0];
-  for (int k=1;k<p_i.size();++k)
+  for (unsigned int k=1;k<p_i.size();++k)
   {
     if (p_i[k]<min_i_) min_i_=p_i[k];
     else if (p_i[k]>max_i_) max_i_=p_i[k];
@@ -81,7 +81,7 @@ vcl_ostream& operator<<(vcl_ostream& os, const vil2_structuring_element& element
   os<<"Bounds ["
     <<element.min_i()<<","<<element.max_i()<<"]["
     <<element.min_j()<<","<<element.max_j()<<"] Points: ";
-  for (int k=0;k<element.p_i().size();++k)
+  for (unsigned int k=0;k<element.p_i().size();++k)
     os<<'('<<element.p_i()[k]<<','<<element.p_j()[k]<<") ";
   return os;
 }
@@ -93,7 +93,7 @@ void vil2_compute_offsets(vcl_vector<int>& offset, const vil2_structuring_elemen
 {
   unsigned n = element.p_i().size();
   offset.resize(n);
-  for (int k=0;k<n;++k)
+  for (unsigned int k=0;k<n;++k)
     offset[k] = element.p_i()[k]*istep +  element.p_j()[k]*jstep;
 }
 

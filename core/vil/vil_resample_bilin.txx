@@ -76,7 +76,7 @@ void vil2_resample_bilin(const vil2_image_view<sType>& src_image,
         dType *dpt = row;
         for (int i=0;i<n1;++i,x+=dx1,y+=dy1,dpt+=d_istep)
         {
-          for (int p=0;p<np;++p)
+          for (unsigned int p=0;p<np;++p)
             dpt[p*d_pstep] = (dType) vil2_bilin_interp_raw(x,y,plane0+p*pstep,istep,jstep);
         }
       }
@@ -106,7 +106,7 @@ void vil2_resample_bilin(const vil2_image_view<sType>& src_image,
         dType *dpt = row;
         for (int i=0;i<n1;++i,x+=dx1,y+=dy1,dpt+=d_istep)
         {
-          for (int p=0;p<np;++p)
+          for (unsigned int p=0;p<np;++p)
             dpt[p*d_pstep] = (dType) vil2_bilin_interp_safe(x,y,plane0+p*pstep,
                                                             ni,nj,istep,jstep);
         }
