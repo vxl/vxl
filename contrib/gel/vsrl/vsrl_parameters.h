@@ -1,17 +1,15 @@
 #ifndef vsrl_parameters_h
 #define vsrl_parameters_h
-
 //:
-//  \file
+// \file
 
-//: This class will be used to set all the paramters used in the dense matching process.
-// We use a singlton arangement so that the paramters can be considered global. This
+//: This class will be used to set all the parameters used in the dense matching process.
+// We use a singleton arrangement so that the parameters can be considered global. This
 // will make it much easier to do parametric optimization of the system performance
 
 class vsrl_parameters
 {
  protected:
-
   static vsrl_parameters* instance_;
 
  public:
