@@ -108,7 +108,7 @@ SOURCE=.\Templates/vbl_smart_ptr+vgui_command-.cxx
 SOURCE=.\Templates/vbl_smart_ptr+vgui_tableau-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vcl_algorithm+vgui_style~-.cxx
+SOURCE=.\Templates/vcl_algorithm+vgui_style_sptr-.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\Templates/vcl_list+vgui_event-.cxx
