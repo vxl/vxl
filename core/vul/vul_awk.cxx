@@ -44,7 +44,7 @@ void vul_awk::next()
 
   while (1) {
     int c = fd_.get();
-    if (c == EOF) {
+    if (c == EOF  ||  fd_.eof()) {
       done_ = true;
       break;
     }
