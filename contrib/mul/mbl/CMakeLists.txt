@@ -60,6 +60,7 @@ SET(mbl_sources
   mbl_jarque_bera.h
   mbl_stl_pred.h
   mbl_test.h
+  mbl_exception.h
 )
 AUX_SOURCE_DIRECTORY(Templates mbl_sources)
 
