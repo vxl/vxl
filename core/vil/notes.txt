@@ -149,5 +149,67 @@ Convert rest of file_images
 Convert rest of vil2_image_data filters
 
 
+Images with Transformations
+---------------------------
+We (Manchester) need images with associated "world to image" transformations.
+In mil_image_2d_of<T> this is provided using a mil_transform_2d object which applies linear
+transformations up to affine + projective.
 
-Philosophy
+We also need an image hierarchy with a base for both 2D and 3D images.
+
+To keep vil2 clean, whatever is created should be in a separate library (call it vilt).
+
+Possible hierarchy:
+        vilt_image
+		     |
+        vilt_image_2d
+		              vilt_transform_2d  world2im();
+		              virtual vil2_image_view_base& view_base();
+             |
+       vilt_image_2d_of<T>
+	                  vil2_image_view<T> image();
+
+This would then work pretty much as the current mil_image hierarchy
+
+Advantages: Simple, known to work in mil
+
+However, the transform is of fixed type
+  - one can't replace it with, for instance, a non-linear warp
+
+
+Alternative hierarchy:
+        vilt_image
+		     |
+        vilt_image_2d<TransformType>
+		              TransformType  world2im();
+		              virtual vil2_image_view_base& view_base();
+             |
+       vilt_image_2d_of<TransformType,T>
+	                  vil2_image_view<T> image();
+
+TransformType must implement:
+  vgl_point<double> operator()(x,y);
+  vgl_point<double> operator()(vgl_point<double>);
+  bool is_linear();   // Many things can be done much quicker if transform known to be affine
+
+Advantages: Can use general transformations
+Disadvantages:
+  - More complex
+  - In practise there probably aren't many times when you'll want to use non-linear warps
+  - Quite a few of the current mil functions assume much more of the transform
+    (eg can compose it with something which shrinks it by a known factor - for an image pyramid)
+
+Possible compromise:
+Use first hierarchy, but where possible write functions templated over transform, passing in
+transform separately.
+
+eg
+template<imT,TransformT>
+vilt_sample_profile(vnl_vector<double>, vil_image_view<imT>&, TransformType& T, p0,p1,n);
+
+This allows someone to use more complex transforms themselves later.
+
+
+
+
+

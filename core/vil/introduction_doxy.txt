@@ -146,10 +146,10 @@ vil2_image_view<vil_byte> filtered_image = vil2_transpose(tmp_image2);
 * - vil2_filetype_image: Representing an image in a file
 * - vil2_memory_image: Representing an image in memory (essentially a wrapper around a view)
 *
-* Most instances of vil2_image_data objecst will be through smart pointers. So expect to see
+* Most instances of vil2_image_data objects will be through smart pointers. So expect to see
 * lots of references to vil2_image_data_sptr types.
 *
-* \section algo Algorithms and Image Process
+* \section algo Algorithms and Image Processing
 * Some simple algorithms for manipulation images are included in the algo sub-directory.
 * Examples include
 * - vil2_algo_sobel_3x3 - to generate X/Y gradient images using 3x3 Sobel operators
