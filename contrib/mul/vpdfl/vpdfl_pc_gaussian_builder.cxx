@@ -160,10 +160,10 @@ void vpdfl_pc_gaussian_builder::build(vpdfl_pdf_base& model,
 {
   vpdfl_pc_gaussian& g = gaussian(model);
 
-  int n_samples = data.size();
-  int n = data.current().size();
+  unsigned long n_samples = data.size();
+  assert (n_samples>=2L);
 
-  assert (n_samples>=2);
+  int n = data.current().size();
 
   vnl_vector<double> mean;
 //vnl_matrix<double> evecs;
@@ -207,9 +207,9 @@ void vpdfl_pc_gaussian_builder::build(vpdfl_pdf_base& model,
 void vpdfl_pc_gaussian_builder::mean_covar(vnl_vector<double>& mean, vnl_matrix<double>& S,
                                            mbl_data_wrapper<vnl_vector<double> >& data) const
 {
-  int n_samples = data.size();
+  unsigned long n_samples = data.size();
 
-  assert (n_samples!=0);
+  assert (n_samples!=0L);
 
   int n_dims = data.current().size();
   vnl_vector<double> sum(n_dims);
@@ -218,7 +218,7 @@ void vpdfl_pc_gaussian_builder::mean_covar(vnl_vector<double>& mean, vnl_matrix<
   S.resize(0,0);
 
   data.reset();
-  for (int i=0;i<n_samples;i++)
+  for (unsigned long i=0;i<n_samples;i++)
   {
     sum += data.current();
     updateCovar(S,data.current(),1.0);
@@ -239,9 +239,9 @@ void vpdfl_pc_gaussian_builder::weighted_build(vpdfl_pdf_base& model,
 {
   vpdfl_pc_gaussian& g = gaussian(model);
 
-  int n_samples = data.size();
+  unsigned long n_samples = data.size();
 
-  if (n_samples<2)
+  if (n_samples<2L)
   {
     vcl_cerr<<"vpdfl_gaussian_builder::weighted_build() Too few examples available."<<vcl_endl;
     vcl_abort();
@@ -258,7 +258,7 @@ void vpdfl_pc_gaussian_builder::weighted_build(vpdfl_pdf_base& model,
   double w;
   unsigned actual_samples = 0;
 
-  for (int i=0;i<n_samples;i++)
+  for (unsigned long i=0;i<n_samples;i++)
   {
     w = wts[i];
     if (w != 0.0) // Common case - save time.
@@ -327,8 +327,8 @@ void vpdfl_pc_gaussian_builder::weighted_build(vpdfl_pdf_base& model,
 // for the dataset. The method may use simplified algorithms if
 // you indicate that the number of samples or noise floor is unknown
 // (by setting the latter parameters to 0.)
-unsigned vpdfl_pc_gaussian_builder::decide_partition(const vnl_vector<double>& eVals, unsigned nSamples /*=0*/,
-  double noise /*=0.0*/) const
+unsigned vpdfl_pc_gaussian_builder::decide_partition(const vnl_vector<double>& eVals, unsigned /*nSamples*/ /*=0*/,
+  double /*noise*/ /*=0.0*/) const
 {
   assert (eVals.size() > 0);
   if (partitionMethod_ == vpdfl_pc_gaussian_builder::fixed)

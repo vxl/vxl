@@ -55,8 +55,8 @@ void vpdfl_calc_mean_var(vnl_vector<double>& mean,
     return;
   }
 
-  int n = data.size();
-  if (n==0) return;
+  unsigned long n = data.size();
+  if (n==0L) return;
   data.reset();
   int n_dims = data.current().size();
   vnl_vector<double> sum_sq(n_dims);
@@ -69,7 +69,7 @@ void vpdfl_calc_mean_var(vnl_vector<double>& mean,
   mean.fill(0.0);
   sum_sq.fill(0.0);
 
-  for (int i=0;i<n;i++)
+  for (unsigned long i=0;i<n;i++)
   {
     const double *v = data.current().data_block();
     for (int j=0;j<n_dims;j++)

@@ -160,9 +160,9 @@ void vpdfl_gaussian_builder::build(vpdfl_pdf_base& model,
 {
   vpdfl_gaussian& g = gaussian(model);
 
-  int n_samples = data.size();
+  unsigned long n_samples = data.size();
 
-  assert(n_samples >= 2); // Not enough examples available
+  assert(n_samples >= 2L); // Not enough examples available
 
   vnl_vector<double> mean;
   vnl_matrix<double> S;
@@ -176,9 +176,9 @@ void vpdfl_gaussian_builder::build(vpdfl_pdf_base& model,
 void vpdfl_gaussian_builder::meanCovar(vnl_vector<double>& mean, vnl_matrix<double>& S,
                                        mbl_data_wrapper<vnl_vector<double> >& data) const
 {
-  int n_samples = data.size();
+  unsigned long n_samples = data.size();
 
-  assert(n_samples!=0);
+  assert(n_samples!=0L);
 
   data.reset();
   int n_dims = data.current().size();
@@ -188,7 +188,7 @@ void vpdfl_gaussian_builder::meanCovar(vnl_vector<double>& mean, vnl_matrix<doub
   S.resize(0,0);
 
   data.reset();
-  for (int i=0;i<n_samples;i++)
+  for (unsigned long i=0;i<n_samples;i++)
   {
     sum += data.current();
     updateCovar(S,data.current(),1.0);
@@ -209,9 +209,9 @@ void vpdfl_gaussian_builder::weighted_build(vpdfl_pdf_base& model,
 {
   vpdfl_gaussian& g = gaussian(model);
 
-  int n_samples = data.size();
+  unsigned long n_samples = data.size();
 
-  assert(n_samples>=2); // Need enough samples
+  assert(n_samples>=2L); // Need enough samples
 
   data.reset();
   int n_dims = data.current().size();
@@ -222,7 +222,7 @@ void vpdfl_gaussian_builder::weighted_build(vpdfl_pdf_base& model,
   unsigned actual_samples = 0;
 
   data.reset();
-  for (int i=0;i<n_samples;i++)
+  for (unsigned long i=0;i<n_samples;i++)
   {
     double w = wts[i];
     if (w >= min_wt) actual_samples ++;

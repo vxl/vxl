@@ -77,31 +77,31 @@ void vpdfl_axis_gaussian_builder::build(vpdfl_pdf_base& model,
 {
   vpdfl_axis_gaussian& g = gaussian(model);
 
-  int n_samples = data.size();
+  unsigned long n_samples = data.size();
 
-  if (n_samples<2)
+  if (n_samples<2L)
   {
     vcl_cerr<<"vpdfl_axis_gaussian_builder::build() Too few examples available."<<vcl_endl;
     vcl_abort();
   }
 
-  int n_dims = data.current().size();
+  unsigned long n_dims = data.current().size();
   vnl_vector<double> sum(n_dims),sum_sq(n_dims),var(n_dims);
 
   double* var_data = var.data_block();
   double* sum_data = sum.data_block();
   double* sum_sq_data = sum_sq.data_block();
-  for (int j=0;j<n_dims;j++)
+  for (unsigned long j=0;j<n_dims;j++)
   {
     sum_data[j]=0.0;
     sum_sq_data[j]=0.0;
   }
 
   data.reset();
-  for (int i=0;i<n_samples;i++)
+  for (unsigned long i=0;i<n_samples;i++)
   {
     const double *v = data.current().data_block();
-    for (int j=0;j<n_dims;j++)
+    for (unsigned long j=0;j<n_dims;j++)
     {
       sum_data[j] += v[j];
       sum_sq_data[j] += v[j]*v[j];
@@ -111,7 +111,7 @@ void vpdfl_axis_gaussian_builder::build(vpdfl_pdf_base& model,
   }
 
   sum/=n_samples;
-  for (int j=0;j<n_dims;j++)
+  for (unsigned long j=0;j<n_dims;j++)
   {
     var_data[j] = sum_sq_data[j]/n_samples - sum_data[j]*sum_data[j];
     if (var_data[j]<min_var_) var_data[j]=min_var_;
@@ -126,9 +126,9 @@ void vpdfl_axis_gaussian_builder::weighted_build(vpdfl_pdf_base& model,
 {
   vpdfl_axis_gaussian& g = gaussian(model);
 
-  int n_samples = data.size();
+  unsigned long n_samples = data.size();
 
-  if (n_samples<2)
+  if (n_samples<2L)
   {
     vcl_cerr<<"vpdfl_axis_gaussian_builder::build() Too few examples available."<<vcl_endl;
     vcl_abort();
@@ -141,12 +141,12 @@ void vpdfl_axis_gaussian_builder::weighted_build(vpdfl_pdf_base& model,
     vcl_abort();
   }
   data.reset();
-  int n_dims = data.current().size();
+  unsigned long n_dims = data.current().size();
 
   vnl_vector<double> sum = wts[0] * data.current();
   double w_sum = wts[0];
 
-  for (int i=1;i<n_samples;i++)
+  for (unsigned long i=1;i<n_samples;i++)
   {
     data.next();
     sum += wts[i] * data.current();
@@ -160,17 +160,17 @@ void vpdfl_axis_gaussian_builder::weighted_build(vpdfl_pdf_base& model,
   double* var_data = var.data_block();
   double* m_data = mean.data_block();
   double* sum_sq_data = sum_sq.data_block();
-  for (int j=0;j<n_dims;j++)
+  for (unsigned long j=0;j<n_dims;j++)
   {
     sum_sq_data[j]=0.0;
   }
 
   data.reset();
-  for (int i=0;i<n_samples;i++)
+  for (unsigned long i=0;i<n_samples;i++)
   {
     const double *v = data.current().data_block();
     double w = wts[i];
-    for (int j=0;j<n_dims;j++)
+    for (unsigned long j=0;j<n_dims;j++)
     {
       double dx = v[j]-m_data[j];
       sum_sq_data[j] += w * dx*dx;
@@ -179,7 +179,7 @@ void vpdfl_axis_gaussian_builder::weighted_build(vpdfl_pdf_base& model,
     data.next();
   }
 
-  for (int j=0;j<n_dims;j++)
+  for (unsigned long j=0;j<n_dims;j++)
   {
     var_data[j] = sum_sq_data[j]/w_sum;
     if (var_data[j]<min_var_) var_data[j]=min_var_;

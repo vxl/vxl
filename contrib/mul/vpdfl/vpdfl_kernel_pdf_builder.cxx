@@ -137,9 +137,9 @@ void vpdfl_kernel_pdf_builder::build(vpdfl_pdf_base& model, mbl_data_wrapper<vnl
 {
   /* vpdfl_kernel_pdf& kpdf = */ kernel_pdf(model);
 
-  int n = data.size();
+  unsigned long n = data.size();
 
-  if (n<1)
+  if (n<1L)
   {
     vcl_cerr<<"vpdfl_kernel_pdf_builder::build() No examples available."<<vcl_endl;
     vcl_abort();
@@ -156,7 +156,7 @@ void vpdfl_kernel_pdf_builder::build(vpdfl_pdf_base& model, mbl_data_wrapper<vnl
   // Fill array with data
   vcl_vector<vnl_vector<double> >x(n);
   data.reset();
-  for (int i=0;i<n;++i)
+  for (unsigned long i=0;i<n;++i)
   {
     x[i]=data.current();
     data.next();
@@ -167,7 +167,7 @@ void vpdfl_kernel_pdf_builder::build(vpdfl_pdf_base& model, mbl_data_wrapper<vnl
 
 void vpdfl_kernel_pdf_builder::weighted_build(vpdfl_pdf_base& model,
                                             mbl_data_wrapper<vnl_vector<double> >& data,
-                                            const vcl_vector<double>& wts) const
+                                            const vcl_vector<double>& /*wts*/) const
 {
   vcl_cerr<<"vpdfl_kernel_pdf_builder::weighted_build() Ignoring weights."<<vcl_endl;
   build(model,data);
