@@ -61,11 +61,11 @@ sub update_book
 
   if ($cvsup eq "true")
   {
-    $changes = `cvs -q -n up -d`;
+    $changes = `cvs -q -n up -d -A`;
     if ($changes ne "")
     {
       $buildit="true";
-      xec("cvs -q  up -d");
+      xec("cvs -q  up -d -A");
     }
     else
     {

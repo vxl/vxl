@@ -101,7 +101,7 @@ if ($cvsupflag)
   chdir $ctrl_list_dir || die "Unable to chdir to $ctrl_list_dir\n";
 
   print "Checking for update of library lists etc.\n";
-  $changes = `cvs -q up -d $ctrl_list_file`;
+  $changes = `cvs -q up -d -A $ctrl_list_file`;
 
   if ($changes)
   {

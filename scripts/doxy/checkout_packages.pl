@@ -73,7 +73,7 @@ while (<PACKAGES>)
     print "Checking for $package (CVSROOT=$cvsroot)\n";
     if (! -e $package)
     {
-      xec("cvs -z3 -d$cvsroot co $package");
+      xec("cvs -z3 -d$cvsroot co -A $package");
     }
   }
 }

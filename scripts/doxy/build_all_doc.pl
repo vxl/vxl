@@ -80,7 +80,7 @@ if ($cvsupflag)
   chdir $script_dir || die "Unable to chdir to $script_dir\n";
 
   print "Checking for update of documentation scripts\n";
-  $changes = `cvs -q up -d`;
+  $changes = `cvs -q up -d -A`;
 
   if ($changes)
   {
