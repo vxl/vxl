@@ -54,17 +54,12 @@
 #ifndef DBL_MIN
 # define DBL_MIN 2.2250738585072014e-308
 #endif
-#ifndef MAXFLOAT
-# define MAXFLOAT FLT_MAX
-#endif
-#ifndef MAXDOUBLE
-# define MAXDOUBLE DBL_MAX
-#endif
-#ifndef MINFLOAT
-# define MINFLOAT FLT_MIN
-#endif
-#ifndef MINDOUBLE
-# define MINDOUBLE DBL_MIN
-#endif
+
+// Don't define MAXFLOAT, MAXDOUBLE and relatives here. They are not
+// part of the standard (see table 17, section 18.2.2/3), and may not
+// be defined in cfloat. Defining them here may cause unnecessary
+// redefinition warnings depending on the order that a user includes
+// header files.
+// If you absolutely need MAXFLOAT, look in the C header file math.h
 
 #endif // vcl_cfloat_h_
