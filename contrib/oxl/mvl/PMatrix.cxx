@@ -95,6 +95,7 @@ PMatrix::PMatrix (const double *c_matrix) :
 // - Copy ctor
 
 PMatrix::PMatrix (const PMatrix& that) :
+  vbl_ref_count(), 
   p_matrix_ (that.get_matrix()),
   svd_(0)
 {
