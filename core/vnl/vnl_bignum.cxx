@@ -1,4 +1,4 @@
-// This is vxl/vnl/vnl_bignum.cxx
+// This is core/vnl/vnl_bignum.cxx
 #include "vnl_bignum.h"
 //:
 // \file
@@ -11,17 +11,10 @@
 #include <vcl_cassert.h>
 #include <vcl_iostream.h>
 #include <vnl/vnl_math.h> // for vnl_math_isfinite(double)
+#include <vnl/vnl_numeric_limits.h> // for vnl_numeric_limits<double>::infinity()
 
 typedef unsigned short Counter;
 typedef unsigned short Data;
-
-// Used to create inf below. Can't
-// use the constants directly because
-// Visual Studio C++ will fail with a
-// compiler error.
-static long double zerold = 0.0L;
-static double zerod = 0.0;
-static float zerof = 0.0f;
 
 //: Creates a zero vnl_bignum.
 
@@ -699,7 +692,7 @@ vnl_bignum::operator float () const
   float f = 0.0f;
   for (Counter i = this->count; i > 0; )
     f = f*0x10000 + this->data[--i];
-  if (this->is_infinity()) f = 1.0f / zerof; // create inf
+  if (this->is_infinity()) f = vnl_numeric_limits<float>::infinity();
   return this->sign*f;
 }
 
@@ -711,7 +704,7 @@ vnl_bignum::operator double () const
   double d = 0.0;
   for (Counter i = this->count; i > 0; )
     d = d*0x10000 + this->data[--i];
-  if (this->is_infinity()) d = 1.0 / zerod; // create inf
+  if (this->is_infinity()) d = vnl_numeric_limits<double>::infinity();
   return this->sign*d;
 }
 
@@ -722,7 +715,7 @@ vnl_bignum::operator long double () const
   long double d = 0.0;
   for (Counter i = this->count; i > 0; )
     d = d*0x10000 + this->data[--i];
-  if (this->is_infinity()) d = 1.0L / zerold; // create inf
+  if (this->is_infinity()) d = vnl_numeric_limits<long double>::infinity();
   return this->sign*d;
 }
 
