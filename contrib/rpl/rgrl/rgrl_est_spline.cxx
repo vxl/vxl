@@ -20,19 +20,9 @@
 #include <vnl/algo/vnl_amoeba.h>
 #include <vnl/algo/vnl_powell.h>
 #include <vnl/algo/vnl_lbfgs.h>
-
-#undef NDEBUG
+#include <vcl_iostream.h>
+#include <vul/vul_timer.h>
 #include <vcl_cassert.h>
-
-//#define DEBUG
-
-#if defined (DEBUG)
-#  include <vcl_iostream.h>
-#  include <vul/vul_timer.h>
-#  define DBG(x) x
-#else
-#  define DBG(x)
-#endif
 
 namespace{
   // for Levenberg Marquardt
@@ -228,21 +218,21 @@ estimate( rgrl_set_of<rgrl_match_set_sptr> const& matches,
       for ( unsigned i=0; i<dim; ++i ) {
         splines[ i ] = cur_trans_spline.get_spline( i )->refinement( m_ );
       }
-      DBG( vcl_cout << "###spline is initialized by refinement\n" );
+      DebugMacro(1, "###spline is initialized by refinement\n" );
     }
      else if ( ( delta_ - cur_trans_spline.get_delta() ).two_norm() < 1e-5 ) {
-       DBG( vcl_cout << "###spline is initialized by copying\n" );
+       DebugMacro(1, "###spline is initialized by copying\n" );
       for ( unsigned i=0; i<dim; ++i )
         splines[ i ] = new rgrl_spline( *(cur_trans_spline.get_spline( i )) );
     }
     else {
-      DBG( vcl_cout << "create spline with m_=" << m_ << '\n' );
+      DebugMacro(1, "create spline with m_=" << m_ << "\n");
       for ( unsigned i=0; i<dim; ++i )
         splines[ i ] = new rgrl_spline( m_ );
     }
   }
   else {
-    DBG( vcl_cout << "create spline with m_=" << m_ << '\n' );
+    DebugMacro(1, "create spline with m_=" << m_ << "\n" );
     for ( unsigned i=0; i<dim; ++i )
       splines[ i ] = new rgrl_spline( m_ );
   }
@@ -267,6 +257,7 @@ estimate( rgrl_set_of<rgrl_match_set_sptr> const& matches,
     vcl_vector< bool > control_point_constraint( num_control, false );
     for ( unsigned ms=0; ms < matches.size(); ++ms ) {
       rgrl_match_set const& match_set = *matches[ms];
+      DebugMacro_abv(2, "rgrl_est_spline.cxx: from_pt \t to_pt \t displacement\n");
       for ( FIter fi = match_set.from_begin(); fi != match_set.from_end(); ++fi ) {
         vnl_vector<double> const& from_pt = fi.from_feature()->location();
         // If the point is not inside the region of interest, skip it.
@@ -288,23 +279,16 @@ estimate( rgrl_set_of<rgrl_match_set_sptr> const& matches,
             }
           }
 
-#ifdef DEBUG
-          vcl_cout << "rgrl_est_spline.cxx: from_pt \t to_pt \t displacement\n";
-#endif
           for ( TIter ti = fi.begin(); ti != fi.end(); ++ti ) {
             if ( !global_xform_ ) {
               displacement.set_row( i, ti.to_feature()->location() - from_pt );
-#ifdef DEBUG
-              vcl_cout << from_pt << " \t " << ti.to_feature()->location() << " \t " << displacement.get_row( i ) << '\n';
-#endif
+
+              DebugMacro_abv(2, from_pt << " \t " << ti.to_feature()->location() << " \t " << displacement.get_row( i ) << "\n" );  
             }
             else {
               displacement.set_row( i, ti.to_feature()->location() - global_xform_->map_location( from_pt ) );
-#ifdef DEBUG
-              vcl_cout << global_xform_->map_location( from_pt ) << " \t "
-                       << ti.to_feature()->location() << " \t "
-                       << displacement.get_row( i ) << '\n';
-#endif
+
+              DebugMacro_abv(2, global_xform_->map_location( from_pt ) << " \t "<<ti.to_feature()->location() << " \t "<<displacement.get_row( i ) << "\n" );
             }
             g.set_row( i, gr );
             wgt[i] = ti.cumulative_weight();
@@ -323,21 +307,21 @@ estimate( rgrl_set_of<rgrl_match_set_sptr> const& matches,
   }
 
   vcl_cerr << "\nafter reduce dof, dof=" << free_control_pt_index.size() << vcl_endl;
-  DBG( vcl_cout << "\nafter reduce dof, dof=" << free_control_pt_index.size() << vcl_endl );
+  DebugMacro( 1,  "\nafter reduce dof, dof=" << free_control_pt_index.size()<< vcl_endl );
 
-  DBG( vul_timer timer );
+  vul_timer timer;
   // Levenberg Marquardt
   if ( optimize_method_ == RGRL_LEVENBERG_MARQUARDT )
   {
-    DBG( vcl_cout << "Levenberg marquardt :\n" );
+    DebugMacro( 1, "Levenberg marquardt :\n" );
     vnl_matrix< double > covar;
 
-#ifdef DEBUG
-    vcl_cout << "rgrl_est_spline.cxx: displacement \t weight\n";
-    for ( unsigned i=0; i<displacement.rows(); ++i )
-      vcl_cout << i << "    " << displacement.get_row( i ) << " \t " << wgt[i] << '\n';
-#endif
-
+    if (this->debug_flag() > 1) {
+      vcl_cout << "rgrl_est_spline.cxx: displacement \t weight\n";
+      for ( unsigned i=0; i<displacement.rows(); ++i )
+        vcl_cout << i << "    " << displacement.get_row( i ) << " \t " << wgt[i] << '\n';
+    }
+    
     for ( unsigned i = 0; i < dim ; ++i ) {
       spline_least_squares_func f( splines[i], from_pts_in_knots, wgt, displacement.get_column( i ), free_control_pt_index );
       vnl_levenberg_marquardt minimizer( f );
@@ -346,32 +330,30 @@ estimate( rgrl_set_of<rgrl_match_set_sptr> const& matches,
       vnl_vector< double > & c = splines[i]->get_control_points();
       for ( unsigned j=0; j<x.size(); ++j )
         x[ j ] = c[ free_control_pt_index[ j ] ];
-      DBG( timer.mark() );
+      if (this->debug_flag() > 1 ) timer.mark();
       minimizer.minimize( x );
-      DBG( timer.print( vcl_cout ) );
-
-#ifdef DEBUG
-      vcl_cout << "computing covariance\n";
-      DBG( timer.mark() );
-      if ( i==0 )
-        covar = minimizer.get_JtJ();
-      DBG( timer.print( vcl_cout ) );
-      vcl_cout << "covariance " << covar.rows() << 'x' << covar.columns() << vcl_endl;
-//             << covar << vcl_endl;
-#endif
+      minimizer.diagnose_outcome(vcl_cout);
+      if (this->debug_flag() > 1 ) { 
+        timer.print( vcl_cout );
+        vcl_cout << "computing covariance\n";
+        timer.mark();
+        if ( i==0 )
+          covar = minimizer.get_JtJ();
+        timer.print( vcl_cout );
+        vcl_cout << "covariance " << covar.rows() << 'x' << covar.columns() << vcl_endl;
+      }
 
       // Convert x back to control points
 //      vnl_vector< double > c( splines[i]->num_of_control_points(), 0.0 );
       for ( unsigned j=0; j<x.size(); ++j )
         c[ free_control_pt_index[ j ] ] = x[ j ];
       splines[i]->set_control_points( c );
-      DBG( vcl_cout << "control points:\n" << c << vcl_endl );
+      DebugMacro( 1, "control points:\n" << c << vcl_endl );
     }
     return new rgrl_trans_spline( splines, vnl_vector<double>(dim,0.0), delta_, global_xform_ );
   }
   else if ( optimize_method_ == RGRL_CONJUGATE_GRADIENT ) {
-
-    DBG( vcl_cout << "Conjugate Gradient\n" );
+    DebugMacro( 1, "Conjugate Gradient\n" );
     for ( unsigned i = 0; i < dim ; ++i ) {
       spline_cost_function f( splines[i], from_pts_in_knots, wgt, displacement.get_column( i ) );
       vnl_conjugate_gradient minimizer( f );
@@ -380,13 +362,13 @@ estimate( rgrl_set_of<rgrl_match_set_sptr> const& matches,
       vnl_vector< double > c( splines[i]->num_of_control_points(), 0 );
       minimizer.minimize( c );
       splines[i]->set_control_points( c );
-      DBG( vcl_cout << "control points:\n" << c << '\n' );
+      DebugMacro( 1, "control points:\n" << c << "\n" );
       }
-    DBG( timer.print( vcl_cout ) );
+    if ( this->debug_flag() > 1) timer.print( vcl_cout );
     return new rgrl_trans_spline( splines, vnl_vector<double>(dim,0.0), delta_, global_xform_ );
   }
   else if ( optimize_method_ == RGRL_AMOEBA ) {
-    DBG( vcl_cout << "Nelder-Meade downhill simplex (AMOEBA)\n" );
+    DebugMacro( 1, "Nelder-Meade downhill simplex (AMOEBA)\n" );
     for ( unsigned i = 0; i < dim ; ++i ) {
       spline_cost_function f( splines[i], from_pts_in_knots, wgt, displacement.get_column( i ) );
       vnl_amoeba minimizer( f );
@@ -395,13 +377,13 @@ estimate( rgrl_set_of<rgrl_match_set_sptr> const& matches,
       vnl_vector< double > c( splines[i]->num_of_control_points(), 0 );
       minimizer.minimize( c );
       splines[i]->set_control_points( c );
-      DBG( vcl_cout << "control points:\n" << c << '\n' );
+      DebugMacro( 1, "control points:\n" << c << "\n" );
     }
-    DBG( timer.print( vcl_cout ) );
+    if (this->debug_flag() > 1) timer.print( vcl_cout );
     return new rgrl_trans_spline( splines, vnl_vector<double>(dim,0.0), delta_, global_xform_ );
   }
   else if ( optimize_method_ == RGRL_POWELL ) {
-    DBG( vcl_cout << "Powell's direction-set\n " );
+    DebugMacro( 1, "Powell's direction-set\n " );
     for ( unsigned i = 0; i < dim ; ++i ) {
       spline_cost_function f( splines[i], from_pts_in_knots, wgt, displacement.get_column( i ) );
       vnl_powell minimizer( &f );
@@ -410,13 +392,13 @@ estimate( rgrl_set_of<rgrl_match_set_sptr> const& matches,
       vnl_vector< double > c( splines[i]->num_of_control_points(), 0 );
       minimizer.minimize( c );
       splines[i]->set_control_points( c );
-      DBG( vcl_cout << "control points:\n" << c << '\n' );
+      DebugMacro( 1, "control points:\n" << c << "\n" );
     }
-    DBG( timer.print( vcl_cout ) );
+    if (this->debug_flag() > 1) timer.print( vcl_cout );
     return new rgrl_trans_spline( splines, vnl_vector<double>(dim,0.0), delta_, global_xform_ );
   }
   else if ( optimize_method_ == RGRL_LBFGS ) {
-    DBG( vcl_cout << "LBFGS\n" );
+    DebugMacro( 1, "LBFGS\n" );
     for ( unsigned i = 0; i < dim ; ++i ) {
       spline_cost_function f( splines[i], from_pts_in_knots, wgt, displacement.get_column( i ) );
       vnl_lbfgs minimizer( f );
@@ -425,9 +407,9 @@ estimate( rgrl_set_of<rgrl_match_set_sptr> const& matches,
       vnl_vector< double > c( splines[i]->num_of_control_points(), 0 );
       minimizer.minimize( c );
       splines[i]->set_control_points( c );
-      DBG( vcl_cout << "control points:\n" << c << '\n' );
+      DebugMacro( 1, "control points:\n" << c << "\n" );
     }
-    DBG( timer.print( vcl_cout ) );
+    if (this->debug_flag()> 1) timer.print( vcl_cout ); 
     return new rgrl_trans_spline( splines, vnl_vector<double>(dim,0.0), delta_, global_xform_ );
   }
   else {   //    // No approximation
@@ -438,7 +420,8 @@ estimate( rgrl_set_of<rgrl_match_set_sptr> const& matches,
     // Cost = (Z - G*C)^T * W * (Z - G*C) + C^T * K * C,
     // where K is the symmetric thin-plate regularization
     // => C = (G^T * W * G + \lambda * K)^{-1} * G^T * W * Z
-    DBG( vcl_cout << "No approximation\n" );
+    //DBG( vcl_cout << "No approximation\n" );
+    DebugMacro( 1, "No approximation\n" );
 
     vnl_matrix<double> X0;
     vnl_matrix<double> covar;
@@ -475,7 +458,7 @@ estimate( rgrl_set_of<rgrl_match_set_sptr> const& matches,
       vnl_vector<double> c = displacement.get_column( j ).pre_multiply( X0 );
       splines[j]->set_control_points(c);
     }
-    DBG( timer.print( vcl_cout ) );
+    if (this->debug_flag()>1) timer.print( vcl_cout );
     return new rgrl_trans_spline( splines, vnl_vector<double>(dim,0.0), delta_, covar, global_xform_ );
   }
 }
