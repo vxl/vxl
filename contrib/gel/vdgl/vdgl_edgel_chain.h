@@ -107,6 +107,8 @@ void vsl_b_write(vsl_b_ostream &os, const vdgl_edgel_chain* e);
 //: Binary load vdgl_edgel_chain* from stream.
 void vsl_b_read(vsl_b_istream &is, vdgl_edgel_chain* &e);
 
+//: Print human readable summary of vdgl_edgel_chain* to a stream.
+void vsl_print_summary(vcl_ostream &os, const vdgl_edgel_chain* e);
 
 
 #endif // vdgl_edgel_chain_h

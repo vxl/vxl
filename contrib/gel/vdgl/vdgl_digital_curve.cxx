@@ -270,6 +270,12 @@ void vsl_b_read(vsl_b_istream &is, vdgl_digital_curve* &dc)
     dc = 0;
 }
 
+//: Print human readable summary of vdgl_digital_curve* to a stream.
+void vsl_print_summary(vcl_ostream &os, const vdgl_digital_curve* dc)
+{
+  os << *dc;
+}
+
 //: Stream operator
 vcl_ostream& operator<<(vcl_ostream& s, const vdgl_digital_curve& dc)
 {

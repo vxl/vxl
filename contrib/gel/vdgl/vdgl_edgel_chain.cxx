@@ -307,3 +307,10 @@ vsl_b_read(vsl_b_istream &is, vdgl_edgel_chain* &ec)
     ec = 0;
 }
 
+//: Print human readable summary of vdgl_edgel_chain* to a stream.
+void
+vsl_print_summary(vcl_ostream &os, const vdgl_edgel_chain* e)
+{
+  os << *e;
+}
+
