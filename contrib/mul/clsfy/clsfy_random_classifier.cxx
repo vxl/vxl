@@ -2,7 +2,6 @@
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
-
 // Copyright (c) 2001: British Telecommunications plc
 
 //:
@@ -197,7 +196,6 @@ void clsfy_random_classifier::class_probabilities(vcl_vector<double> &outputs, c
 
     double * const p = &last_outputs_[0];
     cvd::scale(p, p, n, 1.0/cvd::sum(p, n));
-    if (last_outputs_.size() ==2);
   }
 
 // Convert a two class output into a binary output
