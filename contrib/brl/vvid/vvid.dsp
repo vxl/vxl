@@ -66,6 +66,9 @@ SOURCE=.\vvid_lucas_kanade_process.cxx
 # Begin Source File
 SOURCE=.\vvid_harris_corner_process.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\vvid_frame_trail.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"
@@ -125,6 +128,9 @@ SOURCE=.\vvid_lucas_kanade_process.h
 # End Source File
 # Begin Source File
 SOURCE=.\vvid_harris_corner_process.h
+# End Source File
+# Begin Source File
+SOURCE=.\vvid_frame_trail.h
 # End Source File
 # End Group
 # End Target

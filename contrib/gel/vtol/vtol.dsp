@@ -314,6 +314,9 @@ SOURCE=.\Templates/vtol_list_functions+vtol_vertex~-.cxx
 # Begin Source File
 SOURCE=.\Templates/vtol_list_functions+vtol_zero_chain~-.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\Templates/vcl_deque+vcl_vector+vtol_topology_object_sptr--.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "txx;h"

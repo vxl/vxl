@@ -99,541 +99,329 @@ LIB32=link.exe -lib
 # Begin Group "Source Files"
 # PROP Default_Filter ""
 # Begin Source File
-
 SOURCE=.\Templates/vbl_bounding_box+double.3-.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\Templates/vbl_smart_ptr+vsol_box_2d-.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\Templates/vbl_smart_ptr+vsol_box_3d-.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\Templates/vbl_smart_ptr+vsol_conic_2d-.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\Templates/vbl_smart_ptr+vsol_curve_2d-.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\Templates/vbl_smart_ptr+vsol_curve_3d-.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\Templates/vbl_smart_ptr+vsol_group_2d-.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\Templates/vbl_smart_ptr+vsol_group_3d-.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\Templates/vbl_smart_ptr+vsol_line_2d-.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\Templates/vbl_smart_ptr+vsol_line_3d-.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\Templates/vbl_smart_ptr+vsol_point_2d-.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\Templates/vbl_smart_ptr+vsol_point_3d-.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\Templates/vbl_smart_ptr+vsol_polygon_2d-.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\Templates/vbl_smart_ptr+vsol_polygon_3d-.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\Templates/vbl_smart_ptr+vsol_rectangle_2d-.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\Templates/vbl_smart_ptr+vsol_rectangle_3d-.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\Templates/vbl_smart_ptr+vsol_region_2d-.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\Templates/vbl_smart_ptr+vsol_region_3d-.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\Templates/vbl_smart_ptr+vsol_spatial_object_2d-.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\Templates/vbl_smart_ptr+vsol_spatial_object_3d-.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\Templates/vbl_smart_ptr+vsol_surface_3d-.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\Templates/vbl_smart_ptr+vsol_tetrahedron-.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\Templates/vbl_smart_ptr+vsol_triangle_2d-.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\Templates/vbl_smart_ptr+vsol_triangle_3d-.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\Templates/vcl_list+vsol_point_2d_sptr-.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\Templates/vcl_list+vsol_spatial_object_2d_sptr-.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\Templates/vcl_list+vsol_spatial_object_3d_sptr-.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\Templates/vcl_vector+vsol_point_2d_sptr-.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\Templates/vcl_vector+vsol_point_3d_sptr-.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\Templates/vcl_vector+vsol_spatial_object_2d~-.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\Templates/vcl_vector+vsol_spatial_object_3d~-.cxx
-
 # End Source File
 # Begin Source File
-
+SOURCE=.\Templates/vcl_deque+vcl_vector+vsol_spatial_object_2d_sptr--.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\vsol_box_2d.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vsol_box_3d.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vsol_conic_2d.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vsol_curve_2d.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vsol_curve_3d.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vsol_group_2d.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vsol_group_3d.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vsol_line_2d.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vsol_line_3d.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vsol_point_2d.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vsol_point_3d.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vsol_polygon_2d.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vsol_polygon_3d.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vsol_polyhedron.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vsol_rectangle_2d.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vsol_rectangle_3d.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vsol_region_2d.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vsol_region_3d.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vsol_spatial_object_2d.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vsol_spatial_object_3d.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vsol_surface_3d.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vsol_tetrahedron.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vsol_triangle_2d.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vsol_triangle_3d.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vsol_volume_3d.cxx
-
 # End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter ""
 # Begin Source File
-
 SOURCE=.\vsol_box_2d.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vsol_box_3d.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vsol_conic_2d.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vsol_curve_2d.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vsol_curve_3d.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vsol_group_2d.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vsol_group_3d.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vsol_line_2d.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vsol_line_3d.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vsol_point_2d.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vsol_point_3d.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vsol_polygon_2d.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vsol_polygon_3d.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vsol_polyhedron.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vsol_rectangle_2d.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vsol_rectangle_3d.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vsol_region_2d.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vsol_region_3d.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vsol_spatial_object_2d.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vsol_spatial_object_3d.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vsol_surface_3d.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vsol_tetrahedron.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vsol_triangle_2d.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vsol_triangle_3d.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vsol_volume_3d.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vsol_box_2d_sptr.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vsol_box_3d_sptr.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vsol_conic_2d_sptr.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vsol_curve_2d_sptr.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vsol_curve_3d_sptr.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vsol_group_2d_sptr.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vsol_group_3d_sptr.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vsol_line_2d_sptr.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vsol_line_3d_sptr.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vsol_point_2d_sptr.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vsol_point_3d_sptr.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vsol_polygon_2d_sptr.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vsol_polygon_3d_sptr.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vsol_polyhedron_sptr.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vsol_rectangle_2d_sptr.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vsol_rectangle_3d_sptr.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vsol_region_2d_sptr.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vsol_region_3d_sptr.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vsol_spatial_object_2d_sptr.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vsol_spatial_object_3d_sptr.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vsol_surface_3d_sptr.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vsol_tetrahedron_sptr.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vsol_triangle_2d_sptr.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vsol_triangle_3d_sptr.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vsol_volume_3d_sptr.h
-
 # End Source File
-# End Group
-# PROP Default_Filter "ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe"
 # End Group
 # End Target
 # End Project
-
