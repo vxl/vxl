@@ -24,6 +24,27 @@ vnl_matrix<double> arp_covar(const vcl_vector<vnl_vector<double> >& v)
   return C/=((double)v.size());
 }
 
+vnl_vector<double> vector_of_squares(const vnl_vector<double>& v)
+{
+  vnl_vector<double> s=v;
+
+  for (unsigned int i=0;i<s.size();i++)
+    s[i]*=v[i];
+
+  return s;
+}
+
+vnl_vector<double> arp_vars(const vcl_vector<vnl_vector<double> >& v)
+{
+  vnl_vector<double> m=arp_mean(v);
+  vnl_vector<double> s=vector_of_squares(v[0]-m);
+
+  for (unsigned int i=1;i<v.size();i++)
+    s+=vector_of_squares(v[i]-m);
+
+  return s/=((double)v.size());
+}
+
 void test_ar_process()
 {
   const unsigned int SIZE = 100;
@@ -36,12 +57,24 @@ void test_ar_process()
 
   // A, B and C are random diagonal matrices:
   vnl_matrix<double> A(2,2,0.0),B(2,2,0.0),C(2,2,0.0); // initialise to 0
-  A(0,0)=mz_random.normal()/3.0;
+  A(0,0)=mz_random.normal()/2.0;
+  A(1,1)=mz_random.normal()/2.0;
+  B(0,0)=mz_random.normal()/2.0;
+  B(1,0)=mz_random.normal()/2.0;
+  B(0,1)=mz_random.normal()/2.0;
+  B(1,1)=mz_random.normal()/2.0;
+  /*A(0,0)=mz_random.normal()/3.0;
+  A(1,0)=mz_random.normal()/3.0;
+  A(0,1)=mz_random.normal()/3.0;
   A(1,1)=mz_random.normal()/3.0;
   B(0,0)=mz_random.normal()/3.0;
-  B(1,1)=mz_random.normal()/3.0;
-  C(0,0)=mz_random.normal()/100.0;
-  C(1,1)=mz_random.normal()/100.0;
+  B(1,0)=mz_random.normal()/3.0;
+  B(0,1)=mz_random.normal()/3.0;
+  B(1,1)=mz_random.normal()/3.0;*/
+  C(0,0)=mz_random.normal()/20.0;
+  C(1,0)=mz_random.normal()/20.0;
+  C(0,1)=mz_random.normal()/20.0;
+  C(1,1)=mz_random.normal()/20.0;
 
   // two start values of autoregressive process are random:
   vcl_vector<vnl_vector<double> > vlist;
@@ -74,17 +107,18 @@ void test_ar_process()
     glist.push_back(arp.predict(glist[i],glist[i+1]));
 
   vnl_vector<double> dm=arp_mean(vlist)-arp_mean(glist);
-  vnl_matrix<double> dC=arp_covar(vlist)-arp_covar(glist);
+  vnl_vector<double> ds=arp_vars(vlist)-arp_vars(glist);
 #ifdef DEBUG
   vcl_cout << "\nvlist:"; for (int i=0;i<SIZE+2;++i) vcl_cout<<' '<<vlist[i];
   vcl_cout << "\nglist:"; for (int i=0;i<SIZE+2;++i) vcl_cout<<' '<<glist[i];
-  vcl_cout << "\nv_mean: "<<arp_mean(vlist)<<"\tv_covar: "<<arp_covar(vlist)
-           << "\ng_mean: "<<arp_mean(glist)<<"\tg_covar: "<<arp_covar(glist)
-           << "\ndm="<<dm<<"\ndC="<<dC<<'\n';
+  vcl_cout << "\nv_mean: "<<arp_mean(vlist)<<"\tv_vars: "<<arp_vars(vlist)
+           << "\ng_mean: "<<arp_mean(glist)<<"\tg_vars: "<<arp_vars(glist)
+           << "\ndm="<<dm<<"\nds="<<ds<<'\n'
+           << "\n||dm||="<<dm.inf_norm()<<"\n||ds||="<<ds.inf_norm()<<'\n';
 #endif
-  TEST("Similar mean for burg algorithm",dm.inf_norm()<0.5,true);
+  TEST("Similar mean for burg algorithm",dm.inf_norm()<0.1,true);
   TEST("Similar covariance matrix for burg algorithm",
-       dC.array_inf_norm()<0.5,true);
+       ds.inf_norm()<0.4,true);
 
   arp.learn(vlist);
 
@@ -97,16 +131,17 @@ void test_ar_process()
     glist.push_back(arp.predict(glist[i],glist[i+1]));
 
   dm=arp_mean(vlist)-arp_mean(glist);
-  dC=arp_covar(vlist)-arp_covar(glist);
+  vnl_matrix<double> dC=arp_covar(vlist)-arp_covar(glist);
 #ifdef DEBUG
   vcl_cout << "\nvlist:"; for (int i=0;i<SIZE+2;++i) vcl_cout<<' '<<vlist[i];
   vcl_cout << "\nglist:"; for (int i=0;i<SIZE+2;++i) vcl_cout<<' '<<glist[i];
   vcl_cout << "\nv_mean: "<<arp_mean(vlist)<<"\tv_covar: "<<arp_covar(vlist)
            << "\ng_mean: "<<arp_mean(glist)<<"\tg_covar: "<<arp_covar(glist)
-           << "\ndm="<<dm<<"\ndC="<<dC<<'\n';
+           << "\ndm="<<dm<<"\ndC="<<dC<<'\n'
+           << "\n||dm||="<<dm.inf_norm()<<"\n||dC||="<<dC.array_inf_norm()<<'\n';
 #endif
-  TEST("Similar mean",dm.inf_norm()<0.5,true);
-  TEST("Similar covariance matrix",dC.array_inf_norm()<0.5,true);
+  TEST("Similar mean",dm.inf_norm()<0.1,true);
+  TEST("Similar covariance matrix",dC.array_inf_norm()<0.1,true);
 }
 
 TESTLIB_DEFINE_MAIN(test_ar_process);
