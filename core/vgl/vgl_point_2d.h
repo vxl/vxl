@@ -75,7 +75,7 @@ public:
     return *this;
   }
 
-  // some convinience operators 
+  // some convenience operators 
 
   vgl_point_2d<Type> operator+(const vgl_point_2d<Type>& that) const;
   vgl_point_2d<Type> operator-(const vgl_point_2d<Type>& that) const;

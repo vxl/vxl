@@ -56,7 +56,7 @@ public:
   }
   
   
-  // some convinience operators 
+  // some convenience operators 
 
   vgl_point_3d<Type> operator+(const vgl_point_3d<Type>& that) const;
   vgl_point_3d<Type> operator-(const vgl_point_3d<Type>& that) const;
