@@ -98,6 +98,9 @@ SOURCES += pow_ii.c
 # from DATAPAC
 SOURCES += camsun.c
 
+# from LASO2
+SOURCES += dnlaso.c
+
 ##########################################
 include $(SYS_IUPACKAGES)/config/top.mk
 ##########################################
