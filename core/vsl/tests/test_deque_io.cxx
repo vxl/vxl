@@ -13,20 +13,18 @@ void test_deque_io()
 
   int n = 10;
   vcl_deque<int> d_int_out;
-  for (int i=0;i<n;++i) 
+  for (int i=0;i<n;++i)
     d_int_out.push_back(i);
 
 
-  vsl_b_ofstream bfs_out("vsl_deque_io_test.bvl.tmp",
-    vcl_ios_openmode(vcl_ios_out | vcl_ios_binary));
+  vsl_b_ofstream bfs_out("vsl_deque_io_test.bvl.tmp");
   TEST ("Created vsl_deque_io_test.bvl.tmp for writing", (!bfs_out), false);
   vsl_b_write(bfs_out, d_int_out);
   bfs_out.close();
-  
+
   vcl_deque<int> d_int_in;
-  
-  vsl_b_ifstream bfs_in("vsl_deque_io_test.bvl.tmp",
-    vcl_ios_openmode(vcl_ios_in | vcl_ios_binary));
+
+  vsl_b_ifstream bfs_in("vsl_deque_io_test.bvl.tmp");
   TEST ("Opened vsl_deque_io_test.bvl.tmp for reading", (!bfs_in), false);
   vsl_b_read(bfs_in, d_int_in);
   bfs_in.close();

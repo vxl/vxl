@@ -13,19 +13,17 @@ void test_stack_io()
 
   int n = 10;
   vcl_stack<int> s_int_out;
-  for (int i=0;i<n;++i) 
+  for (int i=0;i<n;++i)
     s_int_out.push(i);
 
-  vsl_b_ofstream bfs_out("vsl_stack_io_test.bvl.tmp", 
-    vcl_ios_openmode(vcl_ios_out | vcl_ios_binary));
+  vsl_b_ofstream bfs_out("vsl_stack_io_test.bvl.tmp");
   TEST ("Created vsl_stack_io_test.bvl.tmp for writing", (!bfs_out), false);
   vsl_b_write(bfs_out, s_int_out);
   bfs_out.close();
-  
+
   vcl_stack<int> s_int_in;
-  
-  vsl_b_ifstream bfs_in("vsl_stack_io_test.bvl.tmp", 
-    vcl_ios_openmode(vcl_ios_in | vcl_ios_binary));
+
+  vsl_b_ifstream bfs_in("vsl_stack_io_test.bvl.tmp");
   TEST ("Opened vsl_stack_io_test.bvl.tmp for reading", (!bfs_in), false);
   vsl_b_read(bfs_in, s_int_in);
   bfs_in.close();
@@ -47,7 +45,7 @@ void test_stack_io()
        s_int_in.pop();
     }
   }
-  TEST ("vcl_stack<int> out == vcl_stack<int> in", 
+  TEST ("vcl_stack<int> out == vcl_stack<int> in",
     test_result, true);
   vsl_print_summary(vcl_cout, s_int_in);
   vcl_cout << vcl_endl;

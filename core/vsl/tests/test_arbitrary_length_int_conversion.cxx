@@ -29,11 +29,11 @@ void test_arbitrary_length_int_conversion_int()
     25000000;
 
   unsigned char * buf = new unsigned char[maxbuf];
-  
+
   clock_t t1, t2;
 
   vcl_cout << " Starting encode " << vcl_endl;
-  
+
   t1 = clock();
   unsigned long len = vsl_convert_to_arbitrary_length(a, buf, 25000000);
   t2 = clock();
@@ -89,7 +89,7 @@ void test_arbitrary_length_int_conversion_short()
   a[65536] = 0;
   a[65537] = 1;
 
-  unsigned maxbuf = 
+  unsigned maxbuf =
     VSL_MAX_ARBITRARY_INT_BUFFER_LENGTH(sizeof(unsigned short))
     * 65538;
 
@@ -99,7 +99,7 @@ void test_arbitrary_length_int_conversion_short()
            << vcl_endl;
 
   TEST ("Checking that the buffer didn't overflow", len < maxbuf, true);
-  
+
   b[0] = (short) (0xc5c5);
   b[65539] = 0x5c5c;
   unsigned long len2 = vsl_convert_from_arbitrary_length(buf, c, 65538);
@@ -143,7 +143,7 @@ void test_arbitrary_length_int_conversion_ushort()
   a[65536] = 0;
   a[65537] = 1;
 
-  unsigned maxbuf = 
+  unsigned maxbuf =
     VSL_MAX_ARBITRARY_INT_BUFFER_LENGTH(sizeof(unsigned short))
     * 65538;
 
@@ -153,10 +153,10 @@ void test_arbitrary_length_int_conversion_ushort()
            << vcl_endl;
 
   TEST ("Checking that the buffer didn't overflow", len < maxbuf, true);
-  
+
   b[0] = 0xc5c5;
   b[65539] = 0x5c5c;
-  unsigned len2 = vsl_convert_from_arbitrary_length(buf, c, 65538); 
+  unsigned len2 = vsl_convert_from_arbitrary_length(buf, c, 65538);
 
   TEST ("Checking that the result buffer didn't overflow", (b[0] == 0xc5c5)
     && (b[65539] == 0x5c5c), true);
@@ -182,16 +182,14 @@ void test_explicit_int_io()
 
   int i;
 
-  vsl_b_ofstream bfs_out("vsl_explicit_int_io_test.bvl.tmp",
-    vcl_ios_openmode(vcl_ios_out | vcl_ios_binary));
+  vsl_b_ofstream bfs_out("vsl_explicit_int_io_test.bvl.tmp");
   TEST ("Created vsl_explicit_int_io_test.bvl.tmp for writing",
     (!bfs_out), false);
   for (i = 0; i < 65536; ++i)
     vsl_b_write_uint_16(bfs_out, i);
   bfs_out.close();
 
-  vsl_b_ifstream bfs_in("vsl_explicit_int_io_test.bvl.tmp",
-    vcl_ios_openmode(vcl_ios_in | vcl_ios_binary));
+  vsl_b_ifstream bfs_in("vsl_explicit_int_io_test.bvl.tmp");
   TEST ("Opened vsl_explicit_int_io_test.bvl.tmp for reading",
     (!bfs_in), false);
   for (i = 0; i < 65536; ++i)
@@ -247,8 +245,7 @@ void test_extreme_int_io()
   long max_long = ~min_long;
   unsigned long max_ulong = ~0;
 
-  vsl_b_ofstream bfs_out("vsl_extreme_int_io_test.bvl.tmp",
-    vcl_ios_openmode(vcl_ios_out | vcl_ios_binary));
+  vsl_b_ofstream bfs_out("vsl_extreme_int_io_test.bvl.tmp");
   TEST ("Created vsl_extreme_int_io_test.bvl.tmp for writing",
     (!bfs_out), false);
 
@@ -262,8 +259,7 @@ void test_extreme_int_io()
   unsigned long max_ulong_in = 77;
 
 
-  vsl_b_ifstream bfs_in("vsl_extreme_int_io_test.bvl.tmp",
-    vcl_ios_openmode(vcl_ios_in | vcl_ios_binary));
+  vsl_b_ifstream bfs_in("vsl_extreme_int_io_test.bvl.tmp");
   TEST ("Opened vsl_extreme_int_io_test.bvl.tmp for reading",
     (!bfs_in), false);
   vsl_b_read(bfs_in,min_long_in);
