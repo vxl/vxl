@@ -30,8 +30,7 @@ setCameraGraph(camera_graph<calibrate_plane, zhang_camera_node, euclidean_transf
 
 int zhang_linear_calibrate::compute_homography()
 {
-
-  if(!camGraph_){
+  if (!camGraph_){
     vcl_cerr<<"empty graphy, need to set graph first\n";
     return 1;
   }
@@ -43,12 +42,12 @@ int zhang_linear_calibrate::compute_homography()
   h_matrice_.resize(size);
 
   vcl_vector<vgl_homg_point_2d<double> > &p0 = camGraph_->getSource()->get_points();
-  for(int i=0; i<size; i++)
+  for (int i=0; i<size; i++)
   {
     zhang_camera_node *pCamera = camGraph_->get_vertex(ids[i]);
     // compute homography
     int nViews = pCamera->num_views();
-    for(int j=0; j<nViews; j++){
+    for (int j=0; j<nViews; j++){
       vcl_vector<vgl_homg_point_2d<double> > &p1 = pCamera->getPoints(j);
       h_matrice_[i][j] = hmcl.compute(p0, p1);
     }
@@ -58,7 +57,6 @@ int zhang_linear_calibrate::compute_homography()
 
 int zhang_linear_calibrate::initialize()
 {
-
   // resize h_matrice_
   vcl_vector<int> ids = camGraph_->get_vertex_ids();
   int size = ids.size();
@@ -66,13 +64,13 @@ int zhang_linear_calibrate::initialize()
   num_views_.resize(size);
 
   // allocate vgl_h_matrix_2d<double> for each views
-  for(int i=0; i<size; i++){
+  for (int i=0; i<size; i++){
     zhang_camera_node *pCamera = camGraph_->get_vertex(ids[i]);
-    
+
     int nViews = pCamera->num_views();
     num_views_[i] = nViews;
-    for(int j=0; j<nViews; j++)
-      h_matrice_[i] = new vgl_h_matrix_2d<double> [nViews];            
+    for (int j=0; j<nViews; j++)
+      h_matrice_[i] = new vgl_h_matrix_2d<double> [nViews];
   }
 
   return 0;
@@ -82,12 +80,12 @@ int zhang_linear_calibrate::clear()
 {
   int size = h_matrice_.size();
 
-  if(size==0)
+  if (size==0)
     return 0;
-  else{ 
+  else{
     // delete all the data
-    for(int i=0; i<size; i++){
-      if(h_matrice_[i])
+    for (int i=0; i<size; i++){
+      if (h_matrice_[i])
         delete [] h_matrice_[i];
     }
 
@@ -104,10 +102,10 @@ vnl_vector_fixed<double, 6> zhang_linear_calibrate::homg_constrain(const vgl_h_m
   assert(j>=0 && j<=2);
 
   v[0] = hm.get(0,i) * hm.get(0,j);
-  v[1] = hm.get(0,i) * hm.get(1,j) + hm.get(1,i) * hm.get(0,j); 
+  v[1] = hm.get(0,i) * hm.get(1,j) + hm.get(1,i) * hm.get(0,j);
   v[2] = hm.get(1,i) * hm.get(1,j);
-  v[3] = hm.get(2,i) * hm.get(0,j) + hm.get(0,i) * hm.get(2,j); 
-  v[4] = hm.get(2,i) * hm.get(1,j) + hm.get(1,i) * hm.get(2,j); 
+  v[3] = hm.get(2,i) * hm.get(0,j) + hm.get(0,i) * hm.get(2,j);
+  v[4] = hm.get(2,i) * hm.get(1,j) + hm.get(1,i) * hm.get(2,j);
   v[5] = hm.get(2,i) * hm.get(2,j);
 
   return v;
@@ -120,10 +118,10 @@ int zhang_linear_calibrate::calibrate()
 
   // get homographies
   compute_homography();
-  
+
   // calibrate cameras
   int num_camera = camGraph_->num_vertice();
-  for(int i= 0; i<num_camera; i++){
+  for (int i= 0; i<num_camera; i++){
     vnl_double_3x3 K = compute_intrinsic(h_matrice_[i], num_views_[i]);
     camGraph_->get_vertex(i)->set_intrinsic(K);
     vcl_cerr<<camGraph_->get_vertex(i)->get_intrinsic();
@@ -141,13 +139,13 @@ vnl_double_3x3 zhang_linear_calibrate::compute_intrinsic(vgl_h_matrix_2d<double>
   vnl_matrix<double> v(n_hm*2, 6);
 
   vnl_vector_fixed<double, 6> v11, v12, v22, v11_v22;
-  for(i=0; i<n_hm; i++){
+  for (i=0; i<n_hm; i++){
     v11 = homg_constrain(hm_list[i], 0, 0);
     v12 = homg_constrain(hm_list[i], 0, 1);
     v22 = homg_constrain(hm_list[i], 1, 1);
     v11_v22 = v11 - v22;
 
-    for(j=0; j<6; j++){
+    for (j=0; j<6; j++){
       v[i*2][j] = v12[j];
       v[i*2+1][j] = v11_v22[j];
     }
@@ -156,44 +154,39 @@ vnl_double_3x3 zhang_linear_calibrate::compute_intrinsic(vgl_h_matrix_2d<double>
   // 2) now solve for b
   vnl_svd<double> svd(v);
   vnl_vector_fixed<double, 6> b;
-  for(i=0; i<6; i++)
+  for (i=0; i<6; i++)
     b[i] = svd.V(i, 5);
 
   double sv4 = svd.W(4);
   double sv5 = svd.W(5);
-  
-  if(sv5){ /* error check */
+
+  if (sv5){ /* error check */
     double ratio = sv4/sv5;
 
-    if(fabs(ratio) < 200){
-      vcl_cerr << "Warning after comparing the singular values\n";
-      vcl_cerr << "It may be that the system of homographies is underconstrained:\n";
-      vcl_cerr << sv4 <<  " " << sv5 << '\n';     
+    if (vcl_fabs(ratio) < 200){
+      vcl_cerr << "Warning after comparing the singular values\n"
+               << "It may be that the system of homographies is underconstrained:\n"
+               << sv4 <<  " " << sv5 << '\n';
     }
   }
 
   // 3) get intrinsinsic parameter
   double B11,B12,B22,B13,B23,B33;
-  
+
   B11 = b[0];
   B12 = b[1];
   B22 = b[2];
   B13 = b[3];
   B23 = b[4];
   B33 = b[5];
-  
+
   double v0 = (B12*B13 - B11*B23)/(B11*B22 - B12*B12);
-  
   double lamda = B33 - (B13*B13 + v0*(B12*B13-B11*B23))/B11;
-  
-  double alpha = sqrt(fabs(lamda/B11));
-  
-  double beta = sqrt(fabs(lamda * B11 /(B11*B22 - B12*B12)));
-  
+  double alpha = vcl_sqrt(vcl_fabs(lamda/B11));
+  double beta = vcl_sqrt(vcl_fabs(lamda * B11 /(B11*B22 - B12*B12)));
   double gamma = 0.0-B12*alpha*alpha*beta/lamda;
-  
   double u0 = gamma*v0/beta - B13*alpha*alpha/lamda;
-  
+
   vnl_double_3x3 k(0.0);
   k[0][0] = alpha;
   k[0][1] = gamma;
@@ -201,6 +194,6 @@ vnl_double_3x3 zhang_linear_calibrate::compute_intrinsic(vgl_h_matrix_2d<double>
   k[1][1] = beta;
   k[1][2] = v0;
   k[2][2] = 1;
-  
+
   return k;
 }
