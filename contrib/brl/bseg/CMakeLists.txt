@@ -1,5 +1,9 @@
-# ./brl/bseg/CMakeLists.txt
+# brl/bseg/CMakeLists.txt
 # main package for segmentation-related code and applications
+# Mutual dependencies: brip --> sdet --> (vpro,segv)
+
+# float image operations
+SUBDIRS(brip)
 
 # segmentation feature detection library
 SUBDIRS(sdet)
@@ -10,12 +14,10 @@ SUBDIRS(vpro)
 # segmentation view library
 SUBDIRS(segv)
 
-# float image operations
-SUBDIRS(brip)
-
 # segmentation application executables
 SUBDIRS(sbin)
 
-
 # segmentation tests
-SUBDIRS(tests)
+IF (BUILD_TESTING)
+  SUBDIRS(tests)
+ENDIF (BUILD_TESTING)
