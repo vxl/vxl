@@ -417,6 +417,36 @@ SOURCE=.\file_formats/vil_viff.cxx
 SOURCE=.\file_formats/vil_viff_support.c
 # End Source File
 # Begin Source File
+SOURCE=.\file_formats/vil_nitf.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\file_formats/vil_nitf_extended_header.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\file_formats/vil_nitf_header.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\file_formats/vil_nitf_image_subheader.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\file_formats/vil_nitf_image_subheader_v20.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\file_formats/vil_nitf_message_header.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\file_formats/vil_nitf_message_header_v20.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\file_formats/vil_nitf_util.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\file_formats/vil_nitf_version.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\file_formats/vil_nitf_version_v20.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\Templates/vil_resample_bilin+float.float-.cxx
 # End Source File
 # Begin Source File
@@ -766,6 +796,48 @@ SOURCE=.\file_formats/vil_viff_support.h
 # End Source File
 # Begin Source File
 SOURCE=.\file_formats/vil_viffheader.h
+# End Source File
+# Begin Source File
+SOURCE=.\file_formats/vil_nitf.h
+# End Source File
+# Begin Source File
+SOURCE=.\file_formats/vil_nitf_blocking_info.h
+# End Source File
+# Begin Source File
+SOURCE=.\file_formats/vil_nitf_extended_header.h
+# End Source File
+# Begin Source File
+SOURCE=.\file_formats/vil_nitf_header.h
+# End Source File
+# Begin Source File
+SOURCE=.\file_formats/vil_nitf_header_v20.h
+# End Source File
+# Begin Source File
+SOURCE=.\file_formats/vil_nitf_image_subheader.h
+# End Source File
+# Begin Source File
+SOURCE=.\file_formats/vil_nitf_image_subheader_v20.h
+# End Source File
+# Begin Source File
+SOURCE=.\file_formats/vil_nitf_macro_defs.h
+# End Source File
+# Begin Source File
+SOURCE=.\file_formats/vil_nitf_message_header.h
+# End Source File
+# Begin Source File
+SOURCE=.\file_formats/vil_nitf_message_header_v20.h
+# End Source File
+# Begin Source File
+SOURCE=.\file_formats/vil_nitf_typeinfo.h
+# End Source File
+# Begin Source File
+SOURCE=.\file_formats/vil_nitf_util.h
+# End Source File
+# Begin Source File
+SOURCE=.\file_formats/vil_nitf_version.h
+# End Source File
+# Begin Source File
+SOURCE=.\file_formats/vil_nitf_version_v20.h
 # End Source File
 # Begin Source File
 SOURCE=.\vil_nearest_neighbour_interp.h
