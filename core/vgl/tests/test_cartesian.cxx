@@ -1,8 +1,10 @@
+// This is vxl/vgl/tests/test_cartesian.cxx
+#include <testlib/testlib_test.h>
+//:
 // \file
 // \author Peter.Vanroose@esat.kuleuven.ac.be
 // \date  4 July, 2001
 
-#include <testlib/testlib_test.h>
 #define APPROX(a,b,c) TEST(a,((b)-(c)<1e-6 && (c)-(b)<1e-6),true)
 #include <vcl_iostream.h>
 
@@ -18,14 +20,14 @@
 #include <vgl/vgl_box_3d.h>
 #include <vgl/vgl_clip.h>
 #include <vgl/vgl_distance.h>
-#include <vgl/vgl_polygon.h>
-#include <vgl/vgl_polygon_scan_iterator.h>
-#include <vgl/vgl_region_scan_iterator.h>
-#include <vgl/vgl_triangle_scan_iterator.h>
-#include <vgl/vgl_window_scan_iterator.h>
+//#include <vgl/vgl_polygon.h>
+//#include <vgl/vgl_polygon_scan_iterator.h>
+//#include <vgl/vgl_region_scan_iterator.h>
+//#include <vgl/vgl_triangle_scan_iterator.h>
+//#include <vgl/vgl_window_scan_iterator.h>
 #include <vgl/vgl_lineseg_test.h>
-#include <vgl/vgl_polygon_test.h>
-#include <vgl/vgl_triangle_test.h>
+//#include <vgl/vgl_polygon_test.h>
+//#include <vgl/vgl_triangle_test.h>
 #include <vgl/vgl_1d_basis.h>
 
 static void test_vector_2d()
