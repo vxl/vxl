@@ -116,7 +116,7 @@
  * If your system doesn't have them in <sys/types.h>,
  * then define BSDTYPES in your Makefile.
  */
-#if defined(BSDTYPES) && ! defined(_WINSOCK2API_)
+#if defined(BSDTYPES) && ! defined(_GNU_H_WINDOWS32_SOCKETS)
 typedef unsigned char u_char;
 typedef unsigned short u_short;
 typedef unsigned int u_int;
