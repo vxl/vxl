@@ -46,7 +46,7 @@ main(int argc, char** argv) {
   img_type dst(xs, ys);
 
   // set the input image:
-  in.get_section(src.get_rows(),0,0,xs,ys);
+  in.get_section(src.begin(),0,0,xs,ys);
 
   // The filter:
   vipl_gradient_mag<img_type,img_type,ubyte,ubyte VCL_DFL_TMPL_ARG(vipl_trivial_pixeliter)> op;
@@ -55,7 +55,7 @@ main(int argc, char** argv) {
   op.filter();
 
   // Write output:
-  out.put_section(dst.get_rows(),0,0,xs,ys);
+  out.put_section(dst.begin(),0,0,xs,ys);
   vil_save(out, argv[2], "pnm");
   vcl_cout << "Written image of type PGM to " << argv[2] << vcl_endl;
 
