@@ -17,7 +17,8 @@
 #include <vil3d/vil3d_property.h>
 
 // GIPL magic number
-const unsigned GIPL_MAGIC = 719555000;
+const unsigned GIPL_MAGIC1 = 719555000;
+const unsigned GIPL_MAGIC2 = 4026526128;
 
 // GIPL header size
 #define GIPL_HEADERSIZE   256
@@ -84,7 +85,7 @@ vil3d_image_resource_sptr vil3d_gipl_format::make_input_image(const char *filena
 
   is->seek(252);
   unsigned magic_number = vil_stream_read_big_endian_uint_32(is.as_pointer());
-  if (magic_number!=GIPL_MAGIC) return 0;
+  if (!(magic_number==GIPL_MAGIC1 || magic_number==GIPL_MAGIC2)) return 0;
 
   return new vil3d_gipl_image(is.as_pointer());
 }
