@@ -1,4 +1,4 @@
-// This is contrib/mul/vil3d/tests/test_convert.cxx
+// This is mul/vil3d/tests/test_convert.cxx
 #include <vxl_config.h> // for vxl_byte
 #include <vcl_iostream.h>
 #include <vil3d/vil3d_convert.h>
@@ -19,7 +19,7 @@ static void test_convert_diff_types(const char * golden_data_dir)
   if (*golden_data_dir) datadir += "/";
 
   testlib_test_begin( "Loading images" );
-  
+
   vil3d_image_view<vxl_uint_16> image1 = vil3d_load((datadir + "ff_grey_cross.gipl").c_str());
   vil3d_image_view_base_sptr image_base1 = vil3d_load((datadir + "ff_grey_cross.gipl").c_str());
   testlib_test_perform( image1 && image_base1 );
@@ -30,15 +30,13 @@ static void test_convert_diff_types(const char * golden_data_dir)
   testlib_test_perform( image_32_1 && image_32_1(4,0,3) == vxl_uint_32( image1(4,0,3) ) );
 
   testlib_test_begin( "Converting implicitly 16bit to 32bit" );
-  vil3d_image_view<vxl_uint_32> image_32_2 = 
-    vil3d_convert_cast(vxl_uint_32(), image_base1 );
+  vil3d_image_view<vxl_uint_32> image_32_2 = vil3d_convert_cast(vxl_uint_32(), image_base1 );
   testlib_test_perform( image_32_2 && image_32_2(4,0,3) == vxl_uint_32( image1(4,0,3) ) );
-#if 0
-  if ( image_32_2 ) {
+#ifdef DEBUG
+  if ( image_32_2 )
     vil3d_print_all(vcl_cout, image_32_2);
-  } else {
+  else
     vcl_cout << "(no dump)\n";
-  }
 #endif
 }
 
@@ -51,7 +49,9 @@ static void test_convert_stretch_range()
       for (unsigned i=0;i<f_image.ni();++i)
         f_image(i,j,k)=0.1f*i+0.01f*j+0.001f*k+5.f;
 
-//  vil3d_print_all(vcl_cout, f_image) ;
+#ifdef DEBUG
+  vil3d_print_all(vcl_cout, f_image) ;
+#endif
 
   vil3d_image_view<vxl_byte> b_image;
   vil3d_convert_stretch_range(f_image,b_image);
@@ -86,8 +86,9 @@ static void test_convert_to_n_planes()
         u16_image_expected(i,j,k,2)= i + 10*j + 100*k + 5;
       }
 
-
-//  vil3d_print_all(vcl_cout, f_image);
+#ifdef DEBUG
+  vil3d_print_all(vcl_cout, f_image);
+#endif
 
   vil3d_image_view_base_sptr f_image_ref = new vil3d_image_view<float>(f_image);
 
@@ -107,14 +108,13 @@ static void test_convert_to_n_planes()
   vil3d_image_view<vxl_uint_16> image_16_3_stretched = vil3d_convert_stretch_range(vxl_uint_16(), f_image_ref);
   vxl_uint_16 minp,maxp;
   vil3d_math_value_range(image_16_3_stretched,minp,maxp);
+  vcl_cout << "(minp=" << minp << ", maxp=" << maxp << ')';
   testlib_test_perform( minp==0 && maxp==65535);
-  
-//  vil3d_print_all(vcl_cout, image_16_3_stretched);
-  
-  
-  
-//  vil3d_print_all(vcl_cout, image_16_3);
-//  vil3d_print_all(vcl_cout, u16_image_expected);
+#ifdef DEBUG
+  vil3d_print_all(vcl_cout, image_16_3_stretched);
+  vil3d_print_all(vcl_cout, image_16_3);
+  vil3d_print_all(vcl_cout, u16_image_expected);
+#endif
 }
 
 MAIN_ARGS( test_convert )
