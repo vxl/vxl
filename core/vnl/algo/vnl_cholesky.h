@@ -53,8 +53,11 @@ class vnl_cholesky
   //: Compute determinant
   double determinant() const;
 
-  //: Compute inverse.  Not efficient.
-  vnl_matrix<double> inverse() const;
+  //   Compute inverse.  Not efficient.
+  // It's broken, I don't have time to fix it.  
+  // Mail awf@robots if you need it and I'll tell you as much as I can
+  // to fix it.
+  // vnl_matrix<double> inverse() const;
 
   //: Return lower-triangular factor.
   vnl_matrix<double> lower_triangle() const;

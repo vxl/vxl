@@ -81,22 +81,23 @@ double vnl_cholesky::determinant() const
   return det[0] * vcl_pow(10.0, det[1]);
 }
 
-//: Compute inverse.  Not efficient.
-vnl_matrix<double> vnl_cholesky::inverse() const
-{
-  assert(!"Completely wrong -- see awf@robots.ox.ac.uk");
-  int n = A_.columns();
-  vnl_matrix<double> I = A_;
-  int job = 01;
-  dpodi_(I.data_block(), &n, &n, 0, &job);
-
-  // Copy lower triangle into upper
-  for (int i = 0; i < n; ++i)
-    for (int j = i+1; j < n; ++j)
-      I(i,j) = I(j,i);
-
-  return I;
-}
+//   not just not efficient, broken
+// : Compute inverse.  Not efficient.
+// vnl_matrix<double> vnl_cholesky::inverse() const
+// {
+//   assert(!"Completely wrong -- see awf@robots.ox.ac.uk");
+//   int n = A_.columns();
+//   vnl_matrix<double> I = A_;
+//   int job = 01;
+//   dpodi_(I.data_block(), &n, &n, 0, &job);
+// 
+//   // Copy lower triangle into upper
+//   for (int i = 0; i < n; ++i)
+//     for (int j = i+1; j < n; ++j)
+//       I(i,j) = I(j,i);
+// 
+//   return I;
+// }
 
 //: Return lower-triangular factor.
 vnl_matrix<double> vnl_cholesky::lower_triangle() const
