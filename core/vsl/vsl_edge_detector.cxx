@@ -15,8 +15,8 @@
 #include <vsl/vsl_chamfer.h>
 #include <vsl/internals/vsl_reorder_chain.h>
 
-const float DUMMYTHETA = 10000.0;
-const float ALPHA = 0.9;
+const float DUMMYTHETA = 10000.0f;
+const float ALPHA = 0.9f;
 
 #define FAR 65535
 
@@ -174,7 +174,7 @@ void vsl_edge_detector::detect_edges(vil_image const &image,
 //
 void vsl_edge_detector::Sub_pixel_interpolation() {
   float h1,h2;
-  float k = 180.0/3.1415926;
+  float k = 180.0f/3.1415926f;
   int orient;
   float theta,grad;
   float fraction,dnewx,dnewy;
@@ -585,7 +585,7 @@ void vsl_edge_detector::Thin_edges() {
 //
 void vsl_edge_detector::Fill_holes() {
   // Find all of the edgels with a strength <= _thresh
-  float SMALL = 0.0001;
+  float SMALL = 0.0001f;
 
   for (int x=_width; x<_xsize-_width; ++x) 
     for (int y=_width; y<_ysize-_width; ++y) 
@@ -693,7 +693,7 @@ void vsl_edge_detector::Follow_curves(vcl_list<vsl_Edge*> *edges)
 	  *(pg++) = 0.0;   // Mark the gradient as zero at a junction
 	}
 	if (_theta[tmpx][tmpy] == DUMMYTHETA) {
-	  const float k = 180.0/3.1415926;
+	  const float k = 180.0f/3.1415926f;
 	  _theta[tmpx][tmpy]  = k*atan2(_dy[tmpx][y],_dx[tmpx][y]);
 	}
 	
