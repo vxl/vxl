@@ -4,7 +4,7 @@
 // \file
 
 //: return the maximum of three numbers
-double maxof(double a, double b, double c);
+//double maxof(double a, double b, double c);
 //: return true if the difference between a and b is smaller than 1e-4
 bool almostEqual(double a, double b);
 //: return true if the difference between a and b is smaller than eps

@@ -6,6 +6,7 @@
 
 class bdgl_tracker_curve;
 class match_data;
+
 #include <vbl/vbl_smart_ptr.h>
 
 typedef vbl_smart_ptr<bdgl_tracker_curve> bdgl_tracker_curve_sptr;

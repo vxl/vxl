@@ -16,6 +16,7 @@
 #include<vcl_vector.h>
 #include<vcl_algorithm.h>
 #include<vcl_map.h>
+//#include<bdgl/curveMatch.h>
 
 class bdgl_curve_matching_params
 {
@@ -24,12 +25,14 @@ class bdgl_curve_matching_params
 
   int  motion_in_pixels;
   int  no_of_top_choices;
-
-  bdgl_curve_matching_params(){motion_in_pixels=0;no_of_top_choices=0;}
+  bool matching_;
+  vgl_point_2d<double> e_;
+  bdgl_curve_matching_params(){motion_in_pixels=0;no_of_top_choices=0;e_.set(0,0);}
   bdgl_curve_matching_params(int motion,int top_ranks)
   {
-    motion_in_pixels=motion;
-  no_of_top_choices=top_ranks;
+	 motion_in_pixels=motion;
+	 no_of_top_choices=top_ranks;
+	e_.set(0,0);
   }
 
   ~bdgl_curve_matching_params(){}
@@ -44,6 +47,11 @@ class bdgl_curve_matching
     {
     motion_in_pixels_=mp.motion_in_pixels;
     no_of_top_choices_=mp.no_of_top_choices;
+	if(mp.e_.x()!=0 && mp.e_.y()!=0)
+	{
+		epipole_=mp.e_;
+	}
+
    }
   ~bdgl_curve_matching(){}
 
@@ -54,19 +62,27 @@ class bdgl_curve_matching
  // coarser version of curve-matching to reduce the number of
  // candidates of curve-matching
   double coarse_match_DP(bdgl_curve_description * desc1,
-                         bdgl_curve_description * desc2);
+                         bdgl_curve_description * desc2,
+						 vgl_point_2d<double> epi);
  // curve-matching algorithm
   double match_DP(bdgl_curve_description  * desc1,
                   bdgl_curve_description  * desc2,
-                  vcl_map<int,int> &mapping,double &cost,
-                  vnl_matrix<double> &R,vnl_matrix<double> &T,
-                  vnl_matrix<double> &Tbar,double & scale,
-                  vcl_vector<int> & tail1,vcl_vector<int> & tail2);
+                  vcl_map<int,int> & mapping,double &cost,
+                  vnl_matrix<double> & R,vnl_matrix<double> & T,
+                  vnl_matrix<double> & Tbar,double & scale,
+                  vcl_vector<int> & tail1,vcl_vector<int> & tail2,
+				  vgl_point_2d<double> &e);
 
   // compute the euclidean dist of  b using transformation of a
   double compute_euc_dist(bdgl_tracker_curve_sptr a,
                           bdgl_tracker_curve_sptr b);
+  // compute the best pairwise match
+  void best_matches(vcl_vector<bdgl_tracker_curve_sptr> * new_curves,
+                    vcl_vector<bdgl_tracker_curve_sptr> * old_curves);
 
+  void best_matches_tc(vcl_vector<bdgl_tracker_curve_sptr> * current_curves,
+					   vcl_vector<bdgl_tracker_curve_sptr> * past_curves,
+					   vcl_vector<bdgl_tracker_curve_sptr> * future_curves);
  protected:
     // compute the best match of tail in previous curve
   void match_prev_tail_curve(bdgl_tracker_curve_sptr parent_curve,
@@ -85,9 +101,8 @@ class bdgl_curve_matching
                     bdgl_curve_description  * desc2);
   // check if the bounding boxes of the curves intersect or not
   bool bounding_box_intersection(vsol_box_2d_sptr box1,vsol_box_2d_sptr box2);
-  // compute the best pairwise match
-  void best_matches(vcl_vector<bdgl_tracker_curve_sptr> * new_curves,
-                    vcl_vector<bdgl_tracker_curve_sptr> * old_curves);
+  // sausage intersection
+  bool sausage_intersection(bdgl_tracker_curve_sptr c1,bdgl_tracker_curve_sptr c2);
   // merging curves to form a single curve
   void merge_curves(bdgl_tracker_curve_sptr cs1,
                     bdgl_tracker_curve_sptr cs2,
@@ -97,10 +112,12 @@ class bdgl_curve_matching
   double compute_mean(vcl_vector<double> t);
     // compute stalndard deviation
   double compute_std(vcl_vector<double> t);
+  double maxof(double a,double b,double c);
   // estimated motion in pixels
   int motion_in_pixels_;
     // after coarse DP Match filter top rank choices
   int no_of_top_choices_;
+  vgl_point_2d<double> epipole_;
 };
 
 #endif

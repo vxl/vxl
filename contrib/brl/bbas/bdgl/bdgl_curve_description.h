@@ -31,6 +31,7 @@ class bdgl_curve_description
   double               gradient_std_dir_;
 
   vcl_vector<vgl_point_2d<double> > points_;
+  vcl_vector<vgl_point_2d<double> > coarser_points_;
   vcl_vector<double> angles_;
   vcl_vector<double> grad_;
   vsol_box_2d_sptr   box_;

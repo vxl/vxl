@@ -1,6 +1,7 @@
 #ifndef __TBS_CURVE_DEF__
 #define __TBS_CURVE_DEF__
 #include <vcl_string.h>
+#include <vcl_cmath.h>
 #include <vcl_utility.h>
 #include <vgl/vgl_point_2d.h>
 #include <bdgl/utils.h>
@@ -17,7 +18,7 @@ class Curve
   // Read data from Raphael contour format file
   void readDataFromFile(vcl_string fileName);
   void readDataFromVector(vcl_vector<vcl_pair<double,double> > v);
- 
+ void readDataFromVector(vcl_vector<vgl_point_2d<double> > v);
   // Assignment operator
   Curve& operator=(const Curve &rhs);
 
@@ -35,6 +36,7 @@ class Curve
   double arcLength(int index){return arcLength_[index];};
   double normArcLength(int index){return normArcLength_[index];};
   double curvature(int index){return curvature_[index];};
+  double Tcurvature(){return vcl_fabs(totalCurvature_);}
   double angle(int index){return angle_[index];};
   double dx(int index){return dx_[index];};
   double dy(int index){return dy_[index];};

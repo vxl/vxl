@@ -33,11 +33,13 @@ void bdgl_curve_description::init(vdgl_edgel_chain_sptr const& ec)
   }
 
   unsigned int N = ec->size();
+  coarser_points_.clear();
   points_.clear(); angles_.clear(); grad_.clear();
   // means
   center_.set(0.0, 0.0);
   gradient_mean_val_=0.0;
   gradient_mean_dir_=0.0;
+  int j=0;
   for (unsigned int i=0; i<N; ++i)
   {
     vdgl_edgel ed = ec->edgel(i);
@@ -47,6 +49,9 @@ void bdgl_curve_description::init(vdgl_edgel_chain_sptr const& ec)
     points_.push_back(vgl_point_2d<double>(ed.get_x(),ed.get_y()));
     angles_.push_back(ed.get_theta());
     grad_.push_back(ed.get_grad());
+	if(j%10==0)
+		coarser_points_.push_back(vgl_point_2d<double>(ed.get_x(),ed.get_y()));
+	j++;
     //vcl_cout<<"grad:("<<ed.get_grad()<<", "<<ed.get_theta()<<")\n";
   }
   center_.set( center_.x()/double(N) , center_.y()/double(N) );

@@ -17,6 +17,7 @@
 #include <vdgl/vdgl_interpolator_linear.h>
 #include <vdgl/vdgl_digital_curve.h>
 #include <bdgl/bdgl_curve_algs.h>
+#include <bdgl/bdgl_tracker_curve.h>
 #include <vnl/algo/vnl_gaussian_kernel_1d.h>
 
 const double bdgl_curve_algs::tol = 1e-16;
@@ -758,3 +759,69 @@ create_digital_curves(vcl_vector<vgl_point_2d<double> > & curve)
   vdgl_digital_curve_sptr dc = new vdgl_digital_curve(interp);
   return dc;
 }
+double  bdgl_curve_algs::compute_transformed_euclidean_distance
+											(bdgl_tracker_curve_sptr c1,
+											 bdgl_tracker_curve_sptr c2,
+											 vnl_matrix<double> R,
+											 vnl_matrix<double> T,
+											 double s,vcl_map<int,int> alignment)
+
+{
+  if(!c1.ptr() && !c2.ptr())
+	  return -1;
+  vcl_vector<double> x1,y1,x2,y2,x1t,y1t;
+  double xcen1=0,xcen2=0,ycen1=0,ycen2=0;
+	  double H[2]={0,0};
+  vcl_map<int,int>::iterator iter1;
+  vcl_cout<<"\n"<<c1->desc->points_.size()<<"\t"<<c2->desc->points_.size();
+  for(iter1 = alignment.begin(); iter1!=alignment.end(); ++iter1)
+  {
+	x1.push_back(c1->desc->points_[(*iter1).first].x());
+	y1.push_back(c1->desc->points_[(*iter1).first].y());
+	x2.push_back(c2->desc->points_[(*iter1).second].x());
+	y2.push_back(c2->desc->points_[(*iter1).second].y());
+	
+  }
+  int t=x1.size();
+  for(int j=0;j<x1.size()-1;j++)
+  {
+	vcl_cout<<"\n"<<x1[j]<<"\t"<<x2[j];
+	xcen1+=x1[j];
+	ycen1+=y1[j];
+	xcen2+=x2[j];
+	ycen2+=y2[j];
+  }
+  xcen1/=alignment.size();
+  ycen1/=alignment.size();
+  xcen2/=alignment.size();
+  ycen2/=alignment.size();
+
+  for(int i=0;i<x1.size();i++)
+  {
+	x1[i]-=xcen1;
+	y1[i]-=ycen1;
+	//x2[i]-=xcen2;
+	//y2[i]-=ycen2;
+  }
+  double dist=0;
+  double X2[2]={0,0};
+  double X1cen[2]={xcen1,ycen1};
+  for (int i=0;i<x1.size();i++)
+  {
+    H[0]=x1[i];
+    H[1]=y1[i];
+	X2[0]=x2[i];
+	X2[1]=y2[i];
+
+	vnl_matrix<double> X (H, 2, 1);
+	vnl_matrix<double> X2t (X2, 2, 1);
+   
+	vnl_matrix<double> X1center(X1cen,2,1);
+	vnl_matrix<double> Xt=R*X+T+X1center-X2t;
+    vcl_cout<<"\n"<<X2t(0,0)<<"\t"<<X2t(1,0)<<"\t"<<X(0,0)+X1center(0,0)<<"\t"<<X(1,0)+X1center(0,0);
+    dist+=vcl_sqrt(Xt(0,0)*Xt(0,0)+Xt(1,0)*Xt(1,0));
+  }
+  dist/=alignment.size();
+  return dist;
+
+  }

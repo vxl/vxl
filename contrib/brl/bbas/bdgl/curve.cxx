@@ -5,7 +5,8 @@
 #include<vcl_fstream.h>
 #include<vcl_cstring.h>
 #include<vcl_cstdlib.h> // for exit()
-
+#include<vgl/vgl_point_2d.h>
+#include<vnl/vnl_double_2.h>
 #define ZERO_TOLERANCE 1E-1
 
 // Default Constructor:
@@ -59,7 +60,8 @@ Curve::operator=(const Curve &rhs)
 {
   if (this != &rhs)
   {
-   ptArray_ = rhs.ptArray_;
+   //vcl_cout<<"\n the size is "<<rhs.ptArray_.size()<<"\n";
+	  ptArray_ = rhs.ptArray_;
    arcLength_ = rhs.arcLength_;
    normArcLength_ = rhs.normArcLength_;
    dx_ = rhs.dx_;
@@ -359,7 +361,7 @@ void Curve::readDataFromFile(vcl_string fileName)
 void Curve::readDataFromVector(vcl_vector<vcl_pair<double,double> > v)
 {
   int numOfPoints=v.size();
-
+  ptArray_.clear();
   double x,y;
   for (int i=0;i<numOfPoints;i++)
   {
@@ -367,6 +369,19 @@ void Curve::readDataFromVector(vcl_vector<vcl_pair<double,double> > v)
     y=v[i].second;
     append(x,y);
   }
-
+  
+  computeProperties();
+}
+void Curve::readDataFromVector(vcl_vector<vgl_point_2d<double> > v)
+{
+  int numOfPoints=v.size();
+  ptArray_.clear();
+  double x,y;
+  for (int i=0;i<numOfPoints;i++)
+  {
+    x=v[i].x();
+    y=v[i].y();
+    append(x,y);
+  }
   computeProperties();
 }

@@ -16,7 +16,12 @@ class bdgl_curve_tracking_params
   // Parameters
 
   bool clustering_;
+  bool transitive_closure;
+  int window_size;
   int min_length_of_curves;
+  bool ps_moving_curves;
+  bool ps_match_curves;
+
   bdgl_curve_matching_params mp ;
   bdgl_curve_clustering_params cp ;
 
@@ -71,6 +76,7 @@ class bdgl_curve_tracking
   bdgl_tracker_curve_sptr get_output_curve(unsigned int frame_no, int set_id);
 
 
+  void write_clusters(vcl_string filename,int i);
   void get_reliable_curves(unsigned int frame_no, unsigned int window_sz);
   // tracking of  the sequence
   void track();
@@ -80,11 +86,22 @@ class bdgl_curve_tracking
   void write_tracks(bdgl_tracker_curve_sptr curve,vcl_string fname,int min_length_of_track);
   // traversal function to get tracks
   void level_order_traversal(bdgl_tracker_curve_sptr curve,vcl_list<bdgl_tracker_curve_sptr> & tr);
-
+  void obtain_tracks();
   int get_min_len_of_curves(){return tp_.min_length_of_curves;}
-
+  vcl_map<int,int> len_of_tracks_;
+  vcl_string outfilename;
  protected:
-  bdgl_curve_tracking_params tp_;
+	 
+	 bdgl_curve_tracking_params tp_;
+	 vcl_vector<vcl_vector<bdgl_tracker_curve_sptr> > moving_curves_;
+	 vcl_vector<vcl_vector<vcl_vector<bdgl_tracker_curve_sptr> > > frame_moving_curves_;
+
+ private:
+	// current frame number 
+  int frame_;
+  bool clustering_;
+ 
+  int min_len_of_curves_;
 };
 
 #endif

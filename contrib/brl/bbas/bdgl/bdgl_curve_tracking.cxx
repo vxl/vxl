@@ -7,6 +7,9 @@
 bdgl_curve_tracking ::bdgl_curve_tracking(bdgl_curve_tracking_params &tp)
 : tp_(tp)
 {
+  clustering_=tp.clustering_;
+  min_len_of_curves_=tp.min_length_of_curves;
+  tp_=tp;
 }
 
 void bdgl_curve_tracking ::track()
@@ -46,17 +49,22 @@ void bdgl_curve_tracking ::get_reliable_curves(unsigned int frame_no,unsigned in
 
     bool found=false;
 
-    for (unsigned int i=0; i<output_curves_[prev_frame].size(); ++i)
-    {
-      // avoid the virtual curves added
-      if (output_curves_[prev_frame][i]->isreal_)
+   for (int i=0;i<output_curves_[prev_frame].size();i++)
       {
-        bdgl_tracker_curve_sptr way2;
-        for (unsigned int j=0; j<output_curves_tc_[prev_frame].size(); j++)
-          if (output_curves_tc_[prev_frame][j]->get_id()==output_curves_[prev_frame][i]->get_id())
-            way2=output_curves_tc_[prev_frame][j];
+        // avoid the virtual curves added
+        if (output_curves_[prev_frame][i]->isreal_)
+		{
+         
+         bdgl_tracker_curve_sptr way2;
+         for (int j=0;j<output_curves_tc_[prev_frame].size();j++)
+          {
+            if (output_curves_tc_[prev_frame][j]->get_id()==output_curves_[prev_frame][i]->get_id())
+            {
+             way2=output_curves_tc_[prev_frame][j];
+            }
+        }
+      bdgl_tracker_curve_sptr way1=output_curves_[prev_frame][i];
 
-        bdgl_tracker_curve_sptr way1=output_curves_[prev_frame][i];
 
         vcl_map<int,vcl_vector<bdgl_tracker_curve_sptr> > way1_map,way2_map;
         way1_map[0].push_back(way1);
@@ -114,7 +122,6 @@ void bdgl_curve_tracking ::track_frame(unsigned int frame)
 
   bdgl_tracker_curve_sptr                primitive1;
   vcl_vector< bdgl_tracker_curve_sptr >  primitive_list1;
-
   bdgl_curve_matching                    matcher(tp_.mp);
 
   if (input_curves_.size()<=frame) return;
@@ -124,28 +131,32 @@ void bdgl_curve_tracking ::track_frame(unsigned int frame)
   {
     primitive_list.clear();
     primitive_list1.clear();
-
     for (unsigned int i=0;i<input_curves_[0].size();i++)
     {
       primitive = new bdgl_tracker_curve;
       primitive->init_set(input_curves_[0][i],i);
       primitive->frame_number=0;
+	  primitive->ismatchedprev_=true;
       primitive_list.insert(primitive_list.end(), primitive);
+
       // for alternate frame tracking
       primitive1= new bdgl_tracker_curve;
       primitive1->frame_number=0;
+	  primitive1->ismatchedprev_=true;
       primitive1->init_set(input_curves_[0][i],i);
       primitive_list1.insert(primitive_list1.end(), primitive1);
     }
     output_curves_.insert(output_curves_.end(), primitive_list);
     output_curves_tc_.insert(output_curves_tc_.end(), primitive_list1);
+	vcl_cout<<"\n"<<primitive1->frame_number;
+	//moving_curves_.clear();
   }
   else
   {
     // init : duplicate empty primitive lists
     primitive_list.clear();
     primitive_list1.clear();
-
+    
     for (unsigned int i=0;i<input_curves_[frame].size();i++)
     {
       primitive = new bdgl_tracker_curve;
@@ -161,27 +172,131 @@ void bdgl_curve_tracking ::track_frame(unsigned int frame)
     output_curves_tc_.insert(output_curves_tc_.end(), primitive_list1);
 
     // give the new and old curves to matcher to do the matching
-    matcher.match(&output_curves_[frame],&output_curves_[frame-1]);
-    vcl_vector<vcl_vector<bdgl_tracker_curve_sptr> > groups;
-    if (tp_.clustering_)
-    {
-      bdgl_curve_clustering cl(tp_.cp);
-      vcl_cout<<"\n the no of clusters is "<<tp_.cp.no_of_clusters;
-      cl.cluster_curves(&output_curves_[frame]);
-      cl.get_moving_objects(frame,groups);
-      vcl_cout<<"\n size of groups is "<<groups.size();
-    }
+	if(tp_.mp.matching_)
+	{
+	    vcl_cout<<"\n the no of curves entered "<<output_curves_[frame].size();
+		matcher.match(&output_curves_[frame],&output_curves_[frame-1]);
+		if(tp_.transitive_closure )
+		{
+		 if( tp_.window_size-1<=frame)
+		 {
+			tp_.mp.motion_in_pixels*=tp_.window_size;
+			bdgl_curve_matching matcher_tc(tp_.mp);
+			matcher_tc.match(&output_curves_tc_[frame],&output_curves_tc_[frame-tp_.window_size+1]);
+			matcher.best_matches_tc(&output_curves_[frame-1],&output_curves_[frame-2],&output_curves_tc_[frame]);
+		 }
+		}
+		else
+			matcher.best_matches(&output_curves_[frame],&output_curves_[frame-1]);
+
+		if (tp_.clustering_)
+		{
+		 bdgl_curve_clustering cl(tp_.cp);
+		 cl.cluster_curves(&output_curves_[frame]);
+		 vcl_ostringstream s;
+		 s<<"c:\\clusters\\cl_dist_table"<<frame<<".txt";
+		 cl.write_distance_table(s.str(),&output_curves_[frame]);
+		 cl.get_moving_objects(frame,moving_curves_);
+		 int t1=moving_curves_.size();
+		 //frame_moving_curves_.push_back(moving_curves_);
+		 //vcl_ostringstream s;
+		 //s<<"c:\\clusters\\clusters"<<frame<<".cem";
+		 //write_clusters(s.str(),t1-1);
+		}
+	}
+	//  transitive closure : input window size=3,5 
+	
   }
 }
 
+void bdgl_curve_tracking :: write_clusters(vcl_string filename,int i)
+{
+ 
+
+ vcl_ofstream f;
+ f.open(filename.c_str());
+ if(!f)
+	{
+	 vcl_cerr<<"\n could not open the file to write ";
+	 return;
+ }
+ //header of the file
+ f<<"#.cem files\n";
+ f<<"#Each contour block will consist of the following\n";
+ f<<"#[Begin Contour ]\n";
+ 
+
+ if(moving_curves_.size()>0)
+ {
+  //for(int i=0;i<moving_curves_.size();i++)
+  {
+	for(int j=0;j<moving_curves_[i].size();j++)
+	{
+		f<<"[BEGIN CONTOUR]\n";
+		f<<"EDGE_COUNT="<<moving_curves_[i][j]->desc->points_.size()<<"\n";
+		for(int k=0;k<moving_curves_[i][j]->desc->points_.size();k++)
+		{
+			f<<"[0,0]\t0\t0\t"<<"["<<moving_curves_[i][j]->desc->points_[k].x()<<","
+			 <<moving_curves_[i][j]->desc->points_[k].y()<<"]"
+			 <<"\t"<<moving_curves_[i][j]->desc->angles_[k]<<"\t"
+			 <<moving_curves_[i][j]->desc->grad_[k]<<"\n";
+		}
+		f<<"[BEGIN TRANSFORMATION]\n";
+		f<<"["<<moving_curves_[i][j]->get_best_match_prev()->T_(0,0)<<"\t"<<moving_curves_[i][j]->get_best_match_prev()->T_(1,0)<<"\t"<<
+			moving_curves_[i][j]->get_best_match_prev()->R_(0,0)<<"\t"<<moving_curves_[i][j]->get_best_match_prev()->R_(0,1)<<"\t"
+			<<moving_curves_[i][j]->get_best_match_prev()->R_(1,0)<<"\t"<<moving_curves_[i][j]->get_best_match_prev()->R_(1,1)<<"\t"
+			<<moving_curves_[i][j]->get_best_match_prev()->scale_<<"]\n";
+		if(moving_curves_[i][j]->get_best_match_next())
+			f<<"["<<moving_curves_[i][j]->get_best_match_next()->T_(0,0)<<"\t"<<moving_curves_[i][j]->get_best_match_next()->T_(1,0)<<"\t"<<
+			moving_curves_[i][j]->get_best_match_next()->R_(0,0)<<"\t"<<moving_curves_[i][j]->get_best_match_next()->R_(0,1)<<"\t"
+			<<moving_curves_[i][j]->get_best_match_next()->R_(1,0)<<"\t"<<moving_curves_[i][j]->get_best_match_next()->R_(1,1)<<
+			"\t"<<moving_curves_[i][j]->get_best_match_next()->scale_<<"]\n";
+		f<<"[END TRANSFORMATION]\n";
+		f<<"[END CONTOUR]\n";
+	}
+
+  }
+ }
+ f.close();
+
+}
+
 vcl_vector< bdgl_tracker_curve_sptr> *bdgl_curve_tracking ::get_output_curves(unsigned int frame_no)
+
 {
   if (frame_no >= output_curves_.size())
     return NULL;
   else
     return &output_curves_[frame_no];
 }
+void bdgl_curve_tracking ::obtain_tracks()
+{
+ if(output_curves_.size()<1)
+	 return ;
 
+ int trackid=0;
+ for(int i=0;i<output_curves_.size();i++)
+ {
+	for(int j=0;j<get_output_size_at(i);j++)
+	{
+	 bdgl_tracker_curve_sptr curve=get_output_curve(i,j);
+	 if(curve->track_id_==-1)
+	 {
+		 vcl_list<bdgl_tracker_curve_sptr> tr;
+		 vcl_list<bdgl_tracker_curve_sptr>::iterator iter;
+
+		level_order_traversal(curve,tr);
+		if(tr.size()>0)
+		{
+			for (iter=tr.begin();iter!=tr.end();iter++)
+				(*iter)->track_id_=trackid;
+			len_of_tracks_[trackid]=tr.size();
+			trackid++;
+		}
+	 }
+	}
+ }
+}
 void bdgl_curve_tracking ::write_tracks(bdgl_tracker_curve_sptr curve,
                                         vcl_string fname,
                                         int min_length_of_track)
