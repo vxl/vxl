@@ -100,7 +100,6 @@ void vvid_live_video_manager::init()
       return;
     }
     vt2D =  bgui_vtol2D_tableau_new(vtab);
-    vt2D->disable_highlight();
     vt2Ds_.push_back(vt2D);
 
     // make a 2D viewer tableau and add it to the grid
