@@ -89,12 +89,12 @@ MANPAGE_SOURCES += vnl_identity.h
 MANPAGE_SOURCES += vnl_matrix_ref.h
 MANPAGE_SOURCES += vnl_operators.h
 MANPAGE_SOURCES += vnl_tag.h
-MANPAGE_SOURCES += vnl_vector_dereference.h
 
 # ops
 SOURCES += vnl_fastops.cxx
 SOURCES += vnl_linear_operators_3.cxx
 MANPAGE_SOURCES += vnl_complex_ops.txx
+MANPAGE_SOURCES += vnl_cross.h
 
 # traits
 SOURCES += vnl_numeric_limits.cxx

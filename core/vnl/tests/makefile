@@ -48,6 +48,9 @@ TESTS += test_bignum.cxx
 TESTS += test_finite.cxx
 TESTS += test_diag_matrix.cxx
 TESTS += test_gamma.cxx
+TESTS += test_arithmetic.cxx
+
+MANPAGE_SOURCES += test_arithmetic_body.h
 
 #######################################
 include ${IUEROOT}/config/top-params.mk
