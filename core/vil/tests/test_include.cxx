@@ -59,6 +59,7 @@
 #include <vil/vil_math.h>
 #include <vil/vil_memory_chunk.h>
 #include <vil/vil_memory_image.h>
+#include <vil/vil_nearest_neighbour_interp.h>
 #include <vil/vil_new.h>
 #include <vil/vil_open.h>
 #include <vil/vil_pixel_format.h>
