@@ -144,15 +144,15 @@ bool vgl_triangle_scan_iterator::next()
   
   //cerr << "minx maxx = " << minx << ' ' << maxx << endl;
   for (int i=0; i<3; ++i) {
-    double a = data[i][0];
-    double b = data[i][1] * (scany_ - g.y) + data[i][2];
+    double a_ = data[i][0];
+    double b_ = data[i][1] * (scany_ - g.y) + data[i][2];
     // ax + b >= 0
-    if (a == 0) {
+    if (a_ == 0) {
       // bif bif
     }
     else {
-      double x = -b/a;
-      if (a > 0) {
+      double x = -b_/a_;
+      if (a_ > 0) {
 	if (x > minx)
 	  minx = x;
       }

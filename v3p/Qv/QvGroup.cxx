@@ -40,12 +40,12 @@ QvBool
 QvGroup::readInstance(QvInput *in)
 {
     QvName	typeString;
-    QvFieldData	*fieldData = getFieldData();
+    QvFieldData	*fieldData_auto = getFieldData();
 
     if (! isBuiltIn) {
         if (in->read(typeString, TRUE)) {
 	    if (typeString == "fields") {
-		if (! fieldData->readFieldTypes(in, this)) {
+		if (! fieldData_auto->readFieldTypes(in, this)) {
 		    QvReadError::post(in, "Bad field specifications for node");
 		    return FALSE;
 		}
@@ -55,7 +55,7 @@ QvGroup::readInstance(QvInput *in)
 	}
     }
 
-    return (fieldData->read(in, this, FALSE) && readChildren(in));
+    return (fieldData_auto->read(in, this, FALSE) && readChildren(in));
 }
 
 QvBool

@@ -230,11 +230,11 @@ QvBool
 QvNode::readInstance(QvInput *in)
 {
     QvName	typeString;
-    QvFieldData	*fieldData = getFieldData();
+    QvFieldData	*fieldData_auto = getFieldData();
 
     if (in->read(typeString, TRUE)) {
 	if (typeString == "fields") {
-	    if (! fieldData->readFieldTypes(in, this)) {
+	    if (! fieldData_auto->readFieldTypes(in, this)) {
 		QvReadError::post(in, "Bad field specifications for node");
 		return FALSE;
 	    }
@@ -243,7 +243,7 @@ QvNode::readInstance(QvInput *in)
 	    in->putBack(typeString.getString());
     }
 
-    if (! fieldData->read(in, this))
+    if (! fieldData_auto->read(in, this))
         return FALSE;
 
     return TRUE;

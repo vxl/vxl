@@ -29,7 +29,7 @@ QvPerspectiveCamera::QvPerspectiveCamera()
     orientation.axis[2] = 1.0;
     orientation.angle = 0.0;
     focalDistance.value = 5.0;
-    heightAngle.value = M_PI_4; // 45 degrees
+    heightAngle.value = M_PI/4.0; // 45 degrees
 
     // mpichler, 19951024
     registered_ = 0;

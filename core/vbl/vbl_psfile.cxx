@@ -376,15 +376,15 @@ void vbl_psfile::print_greyscale_image(byte* buffer, int sizex, int sizey)
 //-----------------------------------------------------------------------------
 //: Write 24 bit colour image.
 //-----------------------------------------------------------------------------
-void vbl_psfile::print_color_image(byte* data, int width, int height)
+void vbl_psfile::print_color_image(byte* data, int width_arg, int height_arg)
 {
   int bytes_per_pixel = 3;
   int new_height;
   int new_width;
   exist_image = true;
   if (debug) vcl_cerr << "Reduction factor is " << reduction_factor << "\n";
-  new_width = (int)(width/reduction_factor);
-  new_height= (int)(height/reduction_factor);
+  new_width = (int)(width_arg/reduction_factor);
+  new_height= (int)(height_arg/reduction_factor);
 
   // This part uses xv outfile as a reference:
   output_filestream << "\n%%Page: 1 1\n\n"
@@ -393,9 +393,9 @@ void vbl_psfile::print_color_image(byte* data, int width, int height)
     << "\n% build a temporary dictionary\n"
     << "20 dict begin\n\n"
     << "% define string to hold a scanline's worth of data\n"
-    << "/pix " << 3 * width << " string def\n"
+    << "/pix " << 3 * width_arg << " string def\n"
     << "\n% define space for color conversions\n"
-    << "/grays " << width
+    << "/grays " << width_arg
     << " string def  % space for gray scale line\n"
     << "/npixls 0 def\n"
     << "/rgbindx 0 def\n\n";
@@ -459,11 +459,11 @@ void vbl_psfile::print_color_image(byte* data, int width, int height)
     << "    } bind def\n"
     << "  } ifelse          % end of 'false' case\n\n\n"
     << "\n"
-    << width << " "
-    << height << " 8                      % dimensions of data\n"
-    << "[" << width << " 0 0 -"
-    << height << " 0 "
-    << height << "]            % mapping matrix\n"
+    << width_arg << " "
+    << height_arg << " 8                      % dimensions of data\n"
+    << "[" << width_arg << " 0 0 -"
+    << height_arg << " 0 "
+    << height_arg << "]            % mapping matrix\n"
     << "{currentfile pix readhexstring pop}\n"
     << "false 3 colorimage\n\n";
 
@@ -481,12 +481,12 @@ void vbl_psfile::print_color_image(byte* data, int width, int height)
     for (int i = 0; i < new_width; i++)
     {
       // get RGB hex index.
-      index = (int) (*(data + width * bytes_per_pixel * j +i));
+      index = (int) (*(data + width_arg * bytes_per_pixel * j +i));
       countrow+=6 *bytes_per_pixel;
       // Reduce Image if necessary
       if(reduction_factor != 1)
       {
-        int pixel_number= (width * bytes_per_pixel * j + i) * reduction_factor;
+        int pixel_number= (width_arg * bytes_per_pixel * j + i) * reduction_factor;
         index=0;
         width_left = new_width - i;
         number_of_pixels_sampled=0;
@@ -499,15 +499,15 @@ void vbl_psfile::print_color_image(byte* data, int width, int height)
             {
               for (int n=0; n < reduction_factor;n++)
               {
-                index += (int) (*(data + (pixel_number+m+n * bytes_per_pixel * width)));
+                index += (int) (*(data + (pixel_number+m+n * bytes_per_pixel * width_arg)));
                 number_of_pixels_sampled += 1;
               }
             }
             else // height_left < 1
             {
-              for (int n=0; n <= height % reduction_factor;n++)
+              for (int n=0; n <= height_arg % reduction_factor;n++)
               {
-               index += (int) (*(data + (pixel_number+m+n * bytes_per_pixel*width)));
+               index += (int) (*(data + (pixel_number+m+n * bytes_per_pixel*width_arg)));
                number_of_pixels_sampled += 1;
               }
             }
@@ -515,22 +515,22 @@ void vbl_psfile::print_color_image(byte* data, int width, int height)
         }
         else // width_left < 1
         {
-          for (int m=0; m <= width % reduction_factor ;m++)
+          for (int m=0; m <= width_arg % reduction_factor ;m++)
           {
             height_left = new_height - j;
             if( height_left >= 1)
             {
               for (int n=0; n < reduction_factor;n++)
               {
-                index += (int) (*(data + (pixel_number+m+n * bytes_per_pixel*width)));
+                index += (int) (*(data + (pixel_number+m+n * bytes_per_pixel*width_arg)));
                 number_of_pixels_sampled += 1;
               }
             }
             else
             {
-              for (int n=0; n <= height % reduction_factor;n++)
+              for (int n=0; n <= height_arg % reduction_factor;n++)
               {
-                index += (int) (*(data + (pixel_number+m+n * bytes_per_pixel*width)));
+                index += (int) (*(data + (pixel_number+m+n * bytes_per_pixel*width_arg)));
                 number_of_pixels_sampled += 1;
               }
             }
@@ -540,7 +540,7 @@ void vbl_psfile::print_color_image(byte* data, int width, int height)
       }
       else // reduction_factor == 1
       {
-        index=(int)(*(data + width * bytes_per_pixel * j + i));
+        index=(int)(*(data + width_arg * bytes_per_pixel * j + i));
       }
       countrow+=6*bytes_per_pixel;
  

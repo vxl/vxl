@@ -135,9 +135,9 @@ struct VrmlCentroidVisitor : public QvVisitor {
   // ----
   
   bool Visit(QvPointSet* ps) {
-    int n = (ps->numPoints.value == -1) ? ps->num_ : ps->numPoints.value;
-    n += ps->startIndex.value;
-    for(int i = ps->startIndex.value; i < n; ++i)
+    int nn = (ps->numPoints.value == -1) ? ps->num_ : ps->numPoints.value;
+    nn += ps->startIndex.value;
+    for(int i = ps->startIndex.value; i < nn; ++i)
       inc(ps->points_[i]);
     return true; // ??
   }
