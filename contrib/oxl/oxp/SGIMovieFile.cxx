@@ -206,7 +206,7 @@ bool SGIMovieFile::GetFrame(int frame_index, void* buffer)
     return false;
   }
 
-  int n = p->video_indices[0][frame_index].size;
+//int n = p->video_indices[0][frame_index].size;
   int s = p->video_indices[0][frame_index].offset;
 
   // Need to open file every time...
@@ -445,13 +445,14 @@ SGIMV_FrameIndexArray::SGIMV_FrameIndexArray(istream& f, int n):
   for(int i = 0; i < n; ++i) {
     (*this)[i].offset = get_u32(f);
     (*this)[i].size = get_u32(f);
-    int pad1 = get_u32(f);
-    int pad2 = get_u32(f);
+    /* int pad1 = */ get_u32(f);
+    /* int pad2 = */ get_u32(f);
     //    vbl_printf(cerr, "FMV: %8d %8d %8d %8d\n", (*this)[i].offset, (*this)[i].size, pad1, pad2);
   }
 }
 
 /////////////////////////////////////////////////////////////////////////////
+#if 0 // unused
 static void hexdump(ifstream& f, int nframes)
 {
   for(int j = 0; j < nframes; ++j) {
@@ -466,6 +467,7 @@ static void hexdump(ifstream& f, int nframes)
     vbl_printf(cerr, "\n");
   }  
 }
+#endif
 
 static int get_u16(istream& f)
 {
