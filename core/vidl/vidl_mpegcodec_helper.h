@@ -1,6 +1,6 @@
+// This is vxl/vidl/vidl_mpegcodec_helper.h
 #ifndef vidl_mpegcodec_helper_h
 #define vidl_mpegcodec_helper_h
-
 //:
 // \file
 // \author l.e.galup
@@ -21,8 +21,6 @@
 // Modifications
 // \endverbatim
 
-#include <vcl_cstdio.h>
-#include <vcl_cstdlib.h>
 #include <vcl_string.h>
 #include <vcl_map.h>
 #include <vcl_iostream.h>

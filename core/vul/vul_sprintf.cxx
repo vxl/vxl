@@ -12,8 +12,6 @@
 
 #include <vcl_cstdarg.h>
 #include <vcl_cstring.h>
-#include <vcl_cstdio.h>
-
 #include <vcl_iostream.h>
 
 vul_sprintf::vul_sprintf(char const *fmt, ...) : vcl_string("")

@@ -12,10 +12,7 @@
 //-----------------------------------------------------------------------------
 
 #include "vnl_int_matrix.h"
-
 #include <vcl_fstream.h>
-#include <vcl_cstdlib.h>
-#include <vcl_cctype.h>
 
 //: Construct from matrix of double.
 //  The double-to-int conversion is simply the standard (int) cast.

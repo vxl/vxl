@@ -8,8 +8,6 @@
 
 #include "vil_open.h"
 
-#include <vcl_cstdio.h>   // sprintf()
-#include <vcl_cstdlib.h>  // atoi()
 #include <vcl_cstring.h>  // strncmp()
 
 #include <vil/vil_stream_fstream.h>

@@ -9,7 +9,6 @@
 #include "vnl_matlab_read.h"
 #include <vcl_ios.h> // for vcl_ios_cur
 #include <vcl_iostream.h>
-#include <vcl_cstdlib.h> // abort()
 #include <vcl_cstring.h> // memset()
 #include <vcl_complex.h>
 #include <vnl/vnl_c_vector.h>
@@ -165,7 +164,6 @@ fsm_define_methods(vcl_complex<double>);
 
 #include <vcl_cassert.h>
 #include <vcl_new.h>
-#include <vcl_algorithm.h>
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_matrix.h>
 

@@ -5,7 +5,6 @@
 
 #include "vil_stream_fstream.h"
 #include <vcl_cassert.h>
-#include <vcl_cstdio.h>    // perror()
 #include <vcl_iostream.h>
 
 static vcl_ios_openmode modeflags(char const* mode)

@@ -1,6 +1,6 @@
+// This is vxl/vsl/vsl_binary_io.h
 #ifndef vsl_binary_io_h_
 #define vsl_binary_io_h_
-
 //:
 // \file
 // \brief Set of functions, and objects to perform binary IO
@@ -18,7 +18,6 @@
 #include <vcl_fstream.h>
 #include <vcl_map.h>
 #include <vcl_utility.h>
-#include <vcl_cstdlib.h>
 
 //: A binary output adaptor for any vcl_ostream
 // Currently the main use of this is to encourage streams to be opened
@@ -61,8 +60,7 @@ public:
   // You can optionally add some user-defined integer with each record
   // If error checking is on, and the object pointer is already in the records,
   // this function will abort()
-  virtual unsigned long add_serialisation_record(void *pointer,
-    int other_data = 0);
+  virtual unsigned long add_serialisation_record(void *pointer, int other_data = 0);
 
   //: Returns a unique identifier for the object.
   // Returns 0 if there is no record of the object.
@@ -119,9 +117,8 @@ public:
   //: Create this adaptor from a file.
   // The adapter will delete the internal stream automatically on destruction.
   vsl_b_ofstream(const vcl_string &filename,
-    vcl_ios_openmode mode = vcl_ios_out | vcl_ios_trunc):
-    vsl_b_ostream(new vcl_ofstream(filename.c_str(),
-      mode | vcl_ios_binary)) {}
+                 vcl_ios_openmode mode = vcl_ios_out | vcl_ios_trunc):
+    vsl_b_ostream(new vcl_ofstream(filename.c_str(), mode | vcl_ios_binary)) {}
 
   //: Create this adaptor from a file.
   // The adapter will delete the internal stream automatically on destruction.

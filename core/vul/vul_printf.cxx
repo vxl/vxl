@@ -11,7 +11,6 @@
 #include "vul_printf.h"
 
 #include <vcl_cstdarg.h>
-#include <vcl_cstdio.h>
 #include <vcl_iostream.h>
 
 vcl_ostream& vul_printf(vcl_ostream& s, char const * fmt, ...)

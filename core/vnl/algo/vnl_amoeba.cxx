@@ -10,7 +10,6 @@
 
 #include "vnl_amoeba.h"
 
-#include <vcl_cstdlib.h>
 #include <vcl_cstdio.h> // for sprintf()
 #include <vcl_iostream.h>
 #include <vcl_vector.h>

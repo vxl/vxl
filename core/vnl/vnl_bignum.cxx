@@ -3,7 +3,6 @@
 //:
 // \file
 
-#include <vcl_cstdlib.h>   // Include standard c library support
 #include <vcl_cctype.h>    // Include character macros
 #include <vcl_cstring.h>   // for vcl_strlen
 #include <vcl_cmath.h>     // for vcl_fmod

@@ -14,7 +14,6 @@
 #include "vil_jpeg_compressor.h"
 
 #include <vcl_cassert.h>
-#include <vcl_cstdio.h>
 #include <vcl_climits.h> // CHAR_BIT
 #include <vcl_iostream.h>
 #include <vcl_cstring.h> // memcpy()
@@ -119,7 +118,7 @@ vil_jpeg_generic_image::vil_jpeg_generic_image(vil_stream *s,
 
 vil_jpeg_generic_image::~vil_jpeg_generic_image() {
   // FIXME: I suspect there's a core leak here because jpeg_destroy() does not
-  // free the vil_jpeg_stream_source_mgr allocated in vil_jpeg_stream_*_set()
+  // free the vil_jpeg_stream_source_mgr allocated in vil_jpeg_stream_xxx_set()
   if (jd)
     delete jd;
   jd = 0;

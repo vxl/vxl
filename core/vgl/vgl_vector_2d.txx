@@ -1,13 +1,11 @@
-// This is ./vxl/vgl/vgl_vector_2d.txx
+// This is vxl/vgl/vgl_vector_2d.txx
 #ifndef vgl_vector_2d_txx_
 #define vgl_vector_2d_txx_
-
 //:
 // \file
 
 #include "vgl_vector_2d.h"
 
-#include <vcl_cstdlib.h> // abort()
 #include <vcl_cmath.h> // sqrt() , acos()
 #include <vcl_iostream.h>
 

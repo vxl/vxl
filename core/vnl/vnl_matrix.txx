@@ -1,7 +1,6 @@
 // This is vxl/vnl/vnl_matrix.txx
 #ifndef vnl_matrix_txx_
 #define vnl_matrix_txx_
-
 //:
 // \file
 //
@@ -82,9 +81,7 @@
 
 #include <vcl_cassert.h>
 #include <vcl_cstdlib.h>  // abort()
-#include <vcl_cstdio.h>   // sprintf()
 #include <vcl_cctype.h>   // isspace()
-#include <vcl_cstring.h>  // strcpy()
 #include <vcl_iostream.h>
 #include <vcl_vector.h>
 #include <vcl_algorithm.h>
@@ -126,7 +123,7 @@ do { \
       vnl_c_vector<T>::deallocate(this->data, 1); \
     } \
   } \
-} while(false)
+} while (false)
 
 //: Creates a matrix with given number of rows and columns.
 // Elements are not initialized. O(m*n).

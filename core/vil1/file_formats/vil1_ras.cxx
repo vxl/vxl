@@ -8,8 +8,6 @@
 #include "vil_ras.h"
 
 #include <vcl_cassert.h>
-#include <vcl_cstdio.h> // for sprintf
-
 #include <vcl_iostream.h>
 #include <vcl_cstring.h>
 
