@@ -41,15 +41,15 @@ int bugl_curve_3d::add_curve(vcl_vector<bugl_normal_point_3d_sptr > & pts)
   vcl_vector<bugl_normal_point_3d_sptr> seg(2*num_neighbors_+1);
   for(int i=0; i<size; i++){
     seg[num_neighbors_] = pts[i]; // assign the middle point
-    for(int j=0; j<num_neighbors_; j++){
+    for(int j=1; j<=num_neighbors_; j++){
       // assign the left neighbors
-      if(i-j >= 0)
-        seg[num_neighbors_-j] = pts[i-j];
-      else
+      if(j > i)
         seg[num_neighbors_-j] = 0;
+      else
+        seg[num_neighbors_-j] = pts[i-j];
 
       // assign the right neighbors
-      if(i+j < size)
+      if(j < size - i)
         seg[num_neighbors_ + j] = pts[i+j];
       else
         seg[num_neighbors_ + j] = 0;
@@ -72,4 +72,12 @@ int bugl_curve_3d::get_num_points() const
 int bugl_curve_3d::get_num_fragments() const
 {
   return index_.size();
+}
+
+int bugl_curve_3d::get_fragment_size(int i) const
+{
+  if(i<index_.size()-1)
+    return index_[i+1] - index_[i];
+  else 
+    return data_.size() - index_[i];
 }

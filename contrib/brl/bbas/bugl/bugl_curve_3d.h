@@ -42,6 +42,9 @@ public:
   //: get the global position of a point in a fragment. 0-based indice are used 
   inline int get_global_pos(int frag_index, int loc_pos ) 
   {return index_[frag_index]+loc_pos;}
+
+  //: get the i-th fragemnet size
+  int get_fragment_size(int i) const;
 };
 
 #endif
