@@ -28,7 +28,7 @@ else {
     print STDERR "IUEROOT is not defined, and no command line arguments were given\n";
     exit 0;
   }
-  $FILES = `find $IUEROOT/config $IUEROOT/vcl $IUEROOT/v3p $IUEROOT/vxl $IUEROOT/mul $IUEROOT/oxl $IUEROOT/gel $IUEROOT/tbl $IUEROOT/conversions -type f \\\( -name \\\*.cxx -o -name \\\*.cc -o -name \\\*.cpp -o -name \\\*.c -o -name \\\*.h \\\) -print|grep -v /vxl/....\.new/`;
+  $FILES = `find $IUEROOT/config $IUEROOT/vcl $IUEROOT/v3p $IUEROOT/vxl $IUEROOT/mul $IUEROOT/oxl $IUEROOT/gel $IUEROOT/tbl $IUEROOT/conversions -type f \\\( -name \\\*.cxx -o -name \\\*.cc -o -name \\\*.cpp -o -name \\\*.c -o -name \\\*.h \\\) -print|grep -v /gel/v.ol\\.new/`;
   @FILES = split(' ', $FILES);
 }
 
@@ -96,6 +96,8 @@ foreach $f (@FILES)
   # remove string constants, incl. multiline string constants with "correct syntax":
   $file_s =~ s/\\\n//g; $file_s =~ s/([^\\])\\\"/$1/g;
   $file_s =~ s/\".*?\"/\003/g;
+  # replace :: by \005 (useful later)
+  $file_s =~ s/::/\005/g;
   # remove // comments
   $file_s =~ s/\/\/[^\n]*\n/\n/g;
   # remove /* ... */ comments
@@ -129,7 +131,7 @@ foreach $f (@FILES)
             $f =~ m/v3p\/(jpeg|tiff|zlib)\// ||
             $f =~ m/\/resource\.h$/i ||
             $f =~ m/vcl(\/win32)?\/vcl_c(assert|string)/ ||
-            $file_s eq "")
+            $file_s eq "\n")
     {
       print "$f\t\# has no (valid) inclusion guard\n";
       $printed = 1;
@@ -137,7 +139,8 @@ foreach $f (@FILES)
   }
 
 # 9. Constant pi written as 3.1415...
-  if ($file_s =~ m/\b(3\.14159\d*)/) {
+  if ($f !~ m/\b(v[cibt]l|v3p)\// && $f !~ m/\bvxl\/vnl\/vnl_math\./ && $f !~ m/\.c$/ &&
+      $file_s =~ m/\b(3\.14159\d*)/) {
     print "$f\t\# should maybe use vnl_math::pi instead of $1\n";
     $printed = 1;
   }
@@ -163,9 +166,11 @@ foreach $f (@FILES)
         $f !~ m/\.c$/ &&
         $f !~ m/\bvnl\/vnl_complex_ops\.txx$/ &&
         "$f.$wd" !~ m/\bvbl\/vbl_timer\.(h|cxx)\.real$/ &&
+        "$f.$wd" !~ m/\bvnl\/vnl_quaternion\.h\.real$/ &&
+        "$f.$wd" !~ m/\bvnl\/vnl_numeric_limits\.h\.(min|max)$/ &&
         "$f.$wd" !~ m/\boxl\/mvl\/HomgConic\.(h|cxx)\.polar$/ &&
         "$f.$wd" !~ m/\bvnl\/algo\/vnl_rn?poly_(solve|roots)\.h\.(real|imag)$/ &&
-        $file_s =~ m/[^.]\b$wd\s*(\s*)\(/) {
+        $file_s =~ m/[^.\005]\b$wd\s*(\s*)\(/) { # \005 is ::
       print "$f\t\# $wd$1() must be vcl_$wd()\n";
       $printed = 1;
     }
