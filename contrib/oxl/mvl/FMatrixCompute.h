@@ -3,14 +3,9 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
-//
-// .NAME FMatrixCompute - Base class for fundamental matrix fitters
-// .LIBRARY MViewCompute
-// .HEADER MultiView package
-// .INCLUDE mvl/FMatrixCompute.h
-// .FILE FMatrixCompute.cxx
-//
-// .SECTION Description:
+//:
+// \file
+// \brief Base class for fundamental matrix fitters
 //
 // FMatrixCompute defines the abstract interface to an object which can compute
 // a fundamental matrix.  The method compute should be overloaded by
@@ -21,10 +16,10 @@
 //
 // Currently implemented subclasses:
 //
-// * FMatrixComputeLinear    - Hartley's normalized linear method
-// * FMatrixComputeRANSAC    - Oxford robust RANSAC computation
-// * FMatrixComputeNonLinear - Oxford nonlinear optimization
-// * FMatrixCompute7Point    - Oxford implementation of 7-point algorithm
+// - FMatrixComputeLinear    - Hartley's normalized linear method
+// - FMatrixComputeRANSAC    - Oxford robust RANSAC computation
+// - FMatrixComputeNonLinear - Oxford nonlinear optimization
+// - FMatrixCompute7Point    - Oxford implementation of 7-point algorithm
 //
 
 #include <vcl_vector.h>

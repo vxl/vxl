@@ -1,22 +1,21 @@
 #ifndef HMatrix2DCompute_h_
 #define HMatrix2DCompute_h_
 
-// .NAME HMatrix2DCompute
-// .INCLUDE mvl/HMatrix2DCompute.h
-// .FILE HMatrix2DCompute.cxx
+//:
+// \file
 //
-// .SECTION Description:
 // Abstract interface for classes that compute plane-to-plane
 // projectivities from point and line correspondences.
 //
-// .SECTION Modifications:
+// \verbatim
+// Modifications:
 //   08-02-98 FSM
 //      1. Added virtual compute methods that actually take arguments :
-//      generic estimator using points, lines or both.
+//         generic estimator using points, lines or both.
 //      2. Obsoleted bool compute(HMatrix2D *). So don't use it!
 //      3. made arguments to compute method 'const ... &',
-//      thereby potentially breaking the code of certain other people.
-//
+//         thereby potentially breaking the code of certain other people.
+// \endverbatim
 
 class HMatrix2D;
 class PairMatchSetCorner;
@@ -34,7 +33,7 @@ public:
 
   // fsm@robots.ox.ac.uk
   virtual int minimum_number_of_correspondences() const = 0;
-  
+
   // these reduce the size of the method signatures somewhat.
   typedef vcl_vector<HomgPoint2D> PointArray;
   typedef vcl_vector<HomgLine2D>  LineArray;
@@ -49,7 +48,7 @@ public:
   bool compute(LineArray const&, LineArray const&, HMatrix2D *);
   bool compute(PointArray const&, PointArray const&, LineArray const&, LineArray const&, HMatrix2D *);
   bool compute(PairMatchSetCorner const &, HMatrix2D *);
-  
+
   HMatrix2D compute(PointArray const&, PointArray const&);
   HMatrix2D compute(LineArray const&, LineArray const&);
   HMatrix2D compute(PointArray const&, PointArray const&, LineArray const&, LineArray const&);
@@ -57,7 +56,7 @@ public:
 
 protected:
   bool verbose_;
-  
+
   virtual bool compute_p (PointArray const&, PointArray const&, HMatrix2D *);
   virtual bool compute_l (LineArray const&, LineArray const&, HMatrix2D *);
   virtual bool compute_pl(PointArray const&, PointArray const&, LineArray const&, LineArray const&, HMatrix2D *);

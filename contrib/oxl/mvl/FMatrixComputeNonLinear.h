@@ -3,23 +3,15 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
-//
-// .NAME	FMatrixComputeNonLinear
-// .LIBRARY	MViewCompute
-// .HEADER	MultiView Package
-// .INCLUDE	mvl/FMatrixComputeNonLinear.h
-// .FILE	FMatrixComputeNonLinear.cxx
-//
-// .SECTION Description
+//:
+// \file
 //    FMatrixComputeNonLinear is a class that contains the functions required for
 //  two differing Non-Linear minimisations of the F Matrix.
-//  1. Zhengyou Zhang's 36 different rank-2 parametrisations of the F Matrix
-//  2. Phil Torr's augmentation of a given 7 points basis
-// .SECTION Author
-//     David McKinnon, U.Q. 2/1/01
+//  - Zhengyou Zhang's 36 different rank-2 parametrisations of the F Matrix
+//  - Phil Torr's augmentation of a given 7 points basis
 //
-// .SECTION Modifications:
-//     <none yet>
+// \author
+//     David McKinnon, U.Q. 2/1/01
 //
 //-----------------------------------------------------------------------------
 

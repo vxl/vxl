@@ -1,13 +1,9 @@
 #ifndef FMatrixComputeLMedSq_h_
 #define FMatrixComputeLMedSq_h_
-// .NAME    FMatrixComputeLMedSq - Robust FMatrix computation
-// .LIBRARY MViewCompute
-// .HEADER  MultiView Package
-// .INCLUDE mvl/FMatrixComputeLMedSq.h
-// .FILE    FMatrixComputeLMedSq.cxx
-// .EXAMPLE
+//:
+// \file
+// \brief Robust FMatrix computation
 //
-// .SECTION Description
 //    FMatrixComputeLMedSq implements
 //    Zhengyou Zhang's LMedSq (Least Medium of Squares Estimation) of the fundamental matrix.
 //
@@ -16,11 +12,8 @@
 //    truncated.  The conditioning and truncation are optional and may be
 //    omitted.
 //
-// .SECTION Author
+// \author
 //     David N. McKinnon, UQ I.R.I.S., 02.12.2000
-//
-// .SECTION Modifications:
-//     <none yet>
 //
 //-----------------------------------------------------------------------------
 
@@ -29,7 +22,7 @@
 
 class FMatrixComputeLMedSq : public FMatrixComputeRobust {
 public :
-  // -- Initialize FMatrixComputeRobust object.
+  //: Initialize FMatrixComputeRobust object.
   // If rank2_truncate = false, the resulting solution is not forced to rank 2
   // using the vnl_svd<double>.
   FMatrixComputeLMedSq(bool rank2_truncate, int size);

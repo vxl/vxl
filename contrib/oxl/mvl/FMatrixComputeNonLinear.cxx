@@ -26,16 +26,15 @@
 const int FMatrixComputeNonLinear_nparams = 7;
 
 //-----------------------------------------------------------------------------
-// -- Constructor 
+//: Constructor
 //
 FMatrixComputeNonLinear::FMatrixComputeNonLinear(PairMatchSetCorner* matches) :
    vnl_least_squares_function(FMatrixComputeNonLinear_nparams, matches->compute_match_count(), no_gradient),
   data_size_(matches->compute_match_count()),
   matches_(*matches),
   one_(true)
-
 {
-  // Copy matching points from matchset.  
+  // Copy matching points from matchset.
   // Set up some initial variables
   HomgInterestPointSet const* points1 = matches_.get_corners1();
   HomgInterestPointSet const* points2 = matches_.get_corners2();
@@ -63,7 +62,7 @@ FMatrixComputeNonLinear::FMatrixComputeNonLinear(PairMatchSetCorner* matches) :
 #include <vcl/vcl_iomanip.h>
 
 //-----------------------------------------------------------------------------
-// -- Compute the F Matrix by augmenting a 7 point basis
+//: Compute the F Matrix by augmenting a 7 point basis
 //
 
 bool FMatrixComputeNonLinear::compute_basis(FMatrix* F, vcl_vector<int> basis) {
@@ -78,7 +77,6 @@ bool FMatrixComputeNonLinear::compute_basis(FMatrix* F, vcl_vector<int> basis) {
       vnl_double_2 p2 = matches_.get_corners2()->get_2d(other);
         basis1[i] = HomgPoint2D(p1[0], p1[1], 1.0);
         basis2[i] = HomgPoint2D(p2[0], p2[1], 1.0);
-
     }
   }
   basis1_ = basis1;
@@ -126,29 +124,29 @@ bool FMatrixComputeNonLinear::compute(FMatrix* F)
           FMatrix res = params_to_fmatrix(f_params);
           vnl_levenberg_marquardt lm(*this);
 
-      		// Adjusting these parameters will alter the
+          // Adjusting these parameters will alter the
           // convergence properties of the minimisation
           lm.set_max_function_evals(200);
           lm.set_f_tolerance(1e-6);
-      		lm.set_x_tolerance(1e-6);
+          lm.set_x_tolerance(1e-6);
   //        lm.set_epsilon_function(1e-6);
           lm.minimize(f_params);
 
-    			if(lm.get_end_error() < so_far) {
+          if(lm.get_end_error() < so_far) {
             so_far = lm.get_end_error();
             vcl_cout << "so_far : " << so_far << vcl_endl;
             norm_F = params_to_fmatrix(f_params);
-    			  F_final->set(norm_F);
+            F_final->set(norm_F);
             HomgPoint2D *e1 = new HomgPoint2D(), *e2 = new HomgPoint2D();
-    			  F_final->get_epipoles(e1, e2);
-    			  double *x1 = new double, *y1 = new double, *x2 = new double, *y2 = new double;
-    			  e1->get_nonhomogeneous(*x1, *y1);
-    			  e2->get_nonhomogeneous(*x2, *y2);
-    			  HomgPoint2D c1(*x1, *y1, 1.0);
-    			  HomgPoint2D c2(*x2, *y2, 1.0);
-    			  delete x1; delete x2; delete y1; delete y2;
-    			  delete e1; delete e2;
-    			  vcl_cout << "Epipole locations 1 : " << c1 << " 2 : " << c2 << vcl_endl;
+            F_final->get_epipoles(e1, e2);
+            double *x1 = new double, *y1 = new double, *x2 = new double, *y2 = new double;
+            e1->get_nonhomogeneous(*x1, *y1);
+            e2->get_nonhomogeneous(*x2, *y2);
+            HomgPoint2D c1(*x1, *y1, 1.0);
+            HomgPoint2D c2(*x2, *y2, 1.0);
+            delete x1; delete x2; delete y1; delete y2;
+            delete e1; delete e2;
+            vcl_cout << "Epipole locations 1 : " << c1 << " 2 : " << c2 << vcl_endl;
           }
         }
       }
@@ -164,7 +162,7 @@ bool FMatrixComputeNonLinear::compute(FMatrix* F)
 
     vnl_levenberg_marquardt lm(*this);
 
-		// Adjusting these parameters will alter the
+    // Adjusting these parameters will alter the
     // convergence properties of the minimisation
     lm.set_max_function_evals(100);
     lm.set_f_tolerance(1e-4);
@@ -172,31 +170,32 @@ bool FMatrixComputeNonLinear::compute(FMatrix* F)
     lm.set_epsilon_function(1e-4);
     lm.minimize(f_params);
 
-		if(lm.get_end_error() < so_far) {
+    if(lm.get_end_error() < so_far) {
       so_far = lm.get_end_error();
       vcl_cout << "so_far : " << so_far << vcl_endl;
       for(int l = 0; l < 7; l++)
         vcl_cout << f_params(l) << vcl_endl;
       norm_F = params_to_fmatrix(f_params);
-		  F_final->set(norm_F);
+      F_final->set(norm_F);
       lm.diagnose_outcome();
       HomgPoint2D *e1 = new HomgPoint2D(), *e2 = new HomgPoint2D();
-		  F_final->get_epipoles(e1, e2);
-		  double *x1 = new double, *y1 = new double, *x2 = new double, *y2 = new double;
-		  e1->get_nonhomogeneous(*x1, *y1);
-		  e2->get_nonhomogeneous(*x2, *y2);
-		  HomgPoint2D c1(*x1, *y1, 1.0);
-		  HomgPoint2D c2(*x2, *y2, 1.0);
-		  delete x1; delete x2; delete y1; delete y2;
-		  delete e1; delete e2;
-		  vcl_cout << "Epipole locations 1 : " << c1 << " 2 : " << c2 << vcl_endl;
+      F_final->get_epipoles(e1, e2);
+      double *x1 = new double, *y1 = new double, *x2 = new double, *y2 = new double;
+      e1->get_nonhomogeneous(*x1, *y1);
+      e2->get_nonhomogeneous(*x2, *y2);
+      HomgPoint2D c1(*x1, *y1, 1.0);
+      HomgPoint2D c2(*x2, *y2, 1.0);
+      delete x1; delete x2; delete y1; delete y2;
+      delete e1; delete e2;
+      vcl_cout << "Epipole locations 1 : " << c1 << " 2 : " << c2 << vcl_endl;
     }
   }
   F = F_final;
   return true;
 }
+
 //-----------------------------------------------------------------------------
-// -- The virtual function from vnl_levenberg_marquardt which returns the RMS
+//: The virtual function from vnl_levenberg_marquardt which returns the RMS
 // epipolar error and a vector of residuals.
  //
 void FMatrixComputeNonLinear::f(const vnl_vector<double>& f_params, vnl_vector<double>& fx)
@@ -204,7 +203,6 @@ void FMatrixComputeNonLinear::f(const vnl_vector<double>& f_params, vnl_vector<d
   FMatrix F = params_to_fmatrix(f_params);
 
   fx = calculate_residuals(&F);
-
 }
 
 // Convert an F Matrix to the parameters to be minimised
@@ -297,51 +295,51 @@ FMatrix FMatrixComputeNonLinear::params_to_fmatrix(const vnl_vector<double>& par
     switch(r_) {
       case 0 :
         d = 1.0;
-    		ref.put(r1, c2, a);
-    		ref.put(r2, c1, -b);
-    		ref.put(r2, c2, -c);
-    		ref.put(r1, c1, d);
-    		ref.put(r1, p_, d*x + a*y);
-    		ref.put(r2, p_, -b*x - c*y);
-    		ref.put(q_, c1, d*xd - b*yd);
-    		ref.put(q_, c2, a*xd - c*yd);
-    		ref.put(q_, p_, xd*(d*x + a*y) - yd*(b*x + c*y));
+        ref.put(r1, c2, a);
+        ref.put(r2, c1, -b);
+        ref.put(r2, c2, -c);
+        ref.put(r1, c1, d);
+        ref.put(r1, p_, d*x + a*y);
+        ref.put(r2, p_, -b*x - c*y);
+        ref.put(q_, c1, d*xd - b*yd);
+        ref.put(q_, c2, a*xd - c*yd);
+        ref.put(q_, p_, xd*(d*x + a*y) - yd*(b*x + c*y));
         break;
       case 1 :
         d = 1.0;
-    		ref.put(r1, c1, a);
-    		ref.put(r2, c1, -b);
-    		ref.put(r2, c2, -c);
-    		ref.put(r1, c2, d);
-    		ref.put(r1, p_, a*x + d*y);
-    		ref.put(r2, p_, -b*x - c*y);
-    		ref.put(q_, c1, a*xd - b*yd);
-    		ref.put(q_, c2, d*xd - c*yd);
-    		ref.put(q_, p_, xd*(a*x + d*y) - yd*(b*x + c*y));
+        ref.put(r1, c1, a);
+        ref.put(r2, c1, -b);
+        ref.put(r2, c2, -c);
+        ref.put(r1, c2, d);
+        ref.put(r1, p_, a*x + d*y);
+        ref.put(r2, p_, -b*x - c*y);
+        ref.put(q_, c1, a*xd - b*yd);
+        ref.put(q_, c2, d*xd - c*yd);
+        ref.put(q_, p_, xd*(a*x + d*y) - yd*(b*x + c*y));
         break;
       case 2 :
         d = -1.0;
-    		ref.put(r1, c1, a);
-    		ref.put(r1, c2, b);
-    		ref.put(r2, c2, -c);
-    		ref.put(r2, c1, -d);
-    		ref.put(r1, p_, a*x + b*y);
-    		ref.put(r2, p_, -d*x - c*y);
-    		ref.put(q_, c1, a*xd - d*yd);
-    		ref.put(q_, c2, b*xd - c*yd);
-    		ref.put(q_, p_, xd*(a*x + b*y) - yd*(d*x + c*y));
+        ref.put(r1, c1, a);
+        ref.put(r1, c2, b);
+        ref.put(r2, c2, -c);
+        ref.put(r2, c1, -d);
+        ref.put(r1, p_, a*x + b*y);
+        ref.put(r2, p_, -d*x - c*y);
+        ref.put(q_, c1, a*xd - d*yd);
+        ref.put(q_, c2, b*xd - c*yd);
+        ref.put(q_, p_, xd*(a*x + b*y) - yd*(d*x + c*y));
         break;
       case 3 :
-  			d = -1.0;
+        d = -1.0;
         ref.put(r1, c1, a);
         ref.put(r1, c2, b);
         ref.put(r2, c1, -c);
         ref.put(r2, c2, -d);
-  		  ref.put(r1, p_, a*x + b*y);
-   		  ref.put(r2, p_, -c*x - d*y);
-    		ref.put(q_, c1, a*xd - c*yd);
-    		ref.put(q_, c2, b*xd - d*yd);
-    		ref.put(q_, p_, xd*(a*x + b*y) - yd*(c*x + d*y));
+        ref.put(r1, p_, a*x + b*y);
+        ref.put(r2, p_, -c*x - d*y);
+        ref.put(q_, c1, a*xd - c*yd);
+        ref.put(q_, c2, b*xd - d*yd);
+        ref.put(q_, p_, xd*(a*x + b*y) - yd*(c*x + d*y));
         break;
     }
     ret.set(ref);
@@ -380,7 +378,6 @@ FMatrix FMatrixComputeNonLinear::params_to_fmatrix(const vnl_vector<double>& par
     }
     return *ref[num];
   }
-
 }
 
 // Forms a map of the different rank-2 structures for the F Matrix
@@ -421,11 +418,13 @@ vnl_vector<double> FMatrixComputeNonLinear::calculate_residuals(FMatrix* F) {
   vnl_matrix<double> ft;
   F->get(&f);
   f /= f.rms();
-//  ft = f.transpose();
-//  vnl_matrix<double> z(3, 3, 0.0);
-//  z.put(0, 0, 1.0);z.put(1, 1, 1.0);
-//  vnl_matrix<double> pre1 = ft*z*f;
-//  vnl_matrix<double> pre2 = f*z*ft;
+#if 0
+  ft = f.transpose();
+  vnl_matrix<double> z(3, 3, 0.0);
+  z.put(0, 0, 1.0);z.put(1, 1, 1.0);
+  vnl_matrix<double> pre1 = ft*z*f;
+  vnl_matrix<double> pre2 = f*z*ft;
+#endif
 
   for(int i = 0; i < data_size_; i++) {
     HomgPoint2D one = points1_[i], two = points2_[i];
@@ -434,17 +433,18 @@ vnl_vector<double> FMatrixComputeNonLinear::calculate_residuals(FMatrix* F) {
     HomgLine2D l2 = F->image1_epipolar_line(two);
     t += HomgOperator2D::perp_dist_squared(two, l1);
     t += HomgOperator2D::perp_dist_squared(one, l2);
-//    vnl_double_2 od = one.get_double2();
-//    vnl_double_2 td = two.get_double2();
-//    vnl_vector<double> oi(3, 1.0); oi[0]=od[0]; oi[1]=od[1];
-//    vnl_vector<double> ti(3, 1.0); ti[0]=td[0]; ti[1]=td[1];
-//    vnl_vector<double> p1 = ti*pre1;
-//		vnl_vector<double> p2 = oi*pre2;
-//    double p11 = p1[0]*oi[0] + p1[1]*oi[1] + p1[2]*oi[2];
-//    double p21 = p2[0]*ti[0] + p2[1]*ti[1] + p2[2]*ti[2];
-//    double factor = 1.0/ p11 + 1.0/ p21;
+#if 0
+    vnl_double_2 od = one.get_double2();
+    vnl_double_2 td = two.get_double2();
+    vnl_vector<double> oi(3, 1.0); oi[0]=od[0]; oi[1]=od[1];
+    vnl_vector<double> ti(3, 1.0); ti[0]=td[0]; ti[1]=td[1];
+    vnl_vector<double> p1 = ti*pre1;
+    vnl_vector<double> p2 = oi*pre2;
+    double p11 = p1[0]*oi[0] + p1[1]*oi[1] + p1[2]*oi[2];
+    double p21 = p2[0]*ti[0] + p2[1]*ti[1] + p2[2]*ti[2];
+    double factor = 1.0/ p11 + 1.0/ p21;
+#endif
     fx[i] = t;//*factor;
   }
   return fx;
 }
-

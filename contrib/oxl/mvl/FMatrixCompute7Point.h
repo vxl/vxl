@@ -1,13 +1,9 @@
 #ifndef FMatrixCompute7Point_h_
 #define FMatrixCompute7Point_h_
-// .NAME    FMatrixCompute7Point - SVD 7 Point F Matrix Fit
-// .LIBRARY MViewCompute
-// .HEADER  MultiView Package
-// .INCLUDE mvl/FMatrixCompute7Point.h
-// .FILE    FMatrixCompute7Point.cxx
-// .EXAMPLE 
+//:
+// \file
+// \brief SVD 7 Point F Matrix Fit
 //
-// .SECTION Description
 //    FMatrixCompute7Point implements the `7-point' estimation
 //    of the fundamental matrix.
 //
@@ -22,11 +18,8 @@
 //    Note: As with any nonrobust algorithm, mismatches in the input data
 //    may severely effect the result.
 //
-// .SECTION Author
+// \author
 //     David N. McKinnon, UQ I.R.I.S., 25 Nov 2000
-//
-// .SECTION Modifications:
-//     <none yet>
 //
 //-----------------------------------------------------------------------------
 #include <mvl/FMatrix.h>
@@ -35,21 +28,21 @@
 
 class FMatrixCompute7Point {
 public:
-  // -- Initialize FMatrixCompute7Point object.  If precondition = false,
+  //: Initialize FMatrixCompute7Point object.  If precondition = false,
   // points are not conditioned prior to computation.
   // If rank2_truncate = false, the resulting solution is not forced to rank 2
   // using the vnl_svd<double>.
   FMatrixCompute7Point(bool precondition = true, bool rank2_truncate = true);
 
   // Computations--------------------------------------------------------------
-  // -- Compute a fundamental matrix for a set of point matches.
-  //
+
+  //: Compute a fundamental matrix for a set of point matches.
   // Return false if the calculation fails or there are fewer than seven point
   // matches in the list.
   //
   bool compute(PairMatchSetCorner&, vcl_vector<FMatrix*>&);
 
-  // -- Interface to above using arrays of HomgPoint2D.  Makes a PairMatchSetCorner,
+  //: Interface to above using arrays of HomgPoint2D.  Makes a PairMatchSetCorner,
   // and then calls the compute method above.
   bool compute(vcl_vector<HomgPoint2D>&, vcl_vector<HomgPoint2D>&, vcl_vector<FMatrix*>&);
 

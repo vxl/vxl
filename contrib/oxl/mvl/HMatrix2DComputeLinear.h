@@ -2,27 +2,20 @@
 #define _HMatrix2DComputeLinear_h
 
 //--------------------------------------------------------------
-//
-// .NAME HMatrix2DComputeLinear
-// .LIBRARY MViewCompute
-// .HEADER MultiView package
-// .INCLUDE mvl/HMatrix2DComputeLinear.h
-// .FILE HMatrix2DComputeLinear.cxx
-//
-// .SECTION Description:
+//:
+// \file
 //
 // HMatrix2DComputeLinear contains a linear method to calculate
 // the plane projectivity which relates four 2D point correspondences.
-// @{ The returned $H$ is such that
-// \[
-//   H ~ [p_1 ~ p_2 ~ p_3 ~ p_4 ] \sim [p'_1 ~ p'_2 ~ p'_3 ~ p'_4 ]
-// \]
-// Where the $p_i$ are the homogeneous points in the first view, and the
-// $p'_i$ their images. @}
+// The returned $H$ is such that
+// $H ~ [p_1 ~ p_2 ~ p_3 ~ p_4 ] \sim [p'_1 ~ p'_2 ~ p'_3 ~ p'_4 ]$
+// where the $p_i$ are the homogeneous points in the first view, and the
+// $p'_i$ their images.
 //
-// .SECTION Modifications:
+// \verbatim
+// Modifications:
 //     200598 FSM added checks for degenerate or coincident points.
-//
+// \endverbatim
 
 #include "HMatrix2DCompute.h"
 

@@ -3,15 +3,10 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
-// .NAME    FMatrixComputeLinear - Hartley 8-point fundamental matrix fit
-// .LIBRARY MViewCompute
-// .HEADER  MultiView Package
-// .INCLUDE mvl/FMatrixComputeLinear.h
-// .FILE    FMatrixComputeLinear.cxx
-// .EXAMPLE examples/exampleFMatrixCompute.cxx
-
 //:
 // \file
+// \brief Hartley 8-point fundamental matrix fit
+//
 //    FMatrixComputeLinear is a subclass of FMatrixCompute, and implements
 //    the ``8-point'' or linear least squares algorithm for estimation of
 //    the fundamental matrix.
@@ -24,11 +19,10 @@
 //    Note: As with any nonrobust algorithm, mismatches in the input data
 //    may severely effect the result.
 //
-// .SECTION Author
-//     Andrew W. Fitzgibbon, Oxford RRG, 21 Aug 96
+// \example examples/exampleFMatrixCompute.cxx
 //
-// .SECTION Modifications:
-//     <none yet>
+// \author
+//     Andrew W. Fitzgibbon, Oxford RRG, 21 Aug 96
 //
 //-----------------------------------------------------------------------------
 

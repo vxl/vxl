@@ -1,23 +1,16 @@
 #ifndef FMatrixComputeRobust_h
 #define FMatrixComputeRobust_h
 
-// .NAME    FMatrixComputeRobust - Robust FMatrix computation
-// .LIBRARY MViewCompute
-// .HEADER  MultiView Package
-// .INCLUDE mvl/FMatrixComputeRobust.h
-// .FILE    FMatrixComputeRobust.cxx
-// .EXAMPLE
+//:
+// \file
+// \brief Robust FMatrix computation
 //
-// .SECTION Description
 //  FMatrixComputeRobust is a base class for robust F Matrix calculations.
 //  Relevant methods are abstracted to allow for sub-classing
 //  of different robust variants.
 //
-// .SECTION Author
+// \author
 //     David N. McKinnon, UQ I.R.I.S., 17.05.2001
-//
-// .SECTION Modifications:
-//     <none yet>
 //
 //-----------------------------------------------------------------------------
 
@@ -28,13 +21,13 @@
 #include <vcl/vcl_vector.h>
 
 class FMatrixComputeRobust : FMatrixCompute {
-public: 
+public:
   FMatrixComputeRobust();
   virtual ~FMatrixComputeRobust();
 
   // Computations--------------------------------------------------------------
-  // -- Compute a fundamental matrix for a set of point matches.
-  //
+
+  //: Compute a fundamental matrix for a set of point matches.
   // This is the implemented method, other computes wrap this.
   virtual bool compute(PairMatchSetCorner& matches, FMatrix* F);
   virtual bool compute (vcl_vector<HomgPoint2D>&, vcl_vector<HomgPoint2D>&, FMatrix* F);
@@ -68,6 +61,3 @@ public:
 };
 
 #endif // FMatrixComputeRobust_h
-
-
-

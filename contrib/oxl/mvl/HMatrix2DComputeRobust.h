@@ -1,11 +1,10 @@
 #ifndef HMatrix2DComputeRobust_h
 #define HMatrix2DComputeRobust_h
 
-
-/**
-  *@author root
-  */
-
+//:
+// \file
+// \brief Robust HMatrix computation
+//
 #include <mvl/HMatrix2DCompute4Point.h>
 #include <mvl/HMatrix2D.h>
 #include <mvl/AffineMetric.h>
