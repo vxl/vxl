@@ -19,6 +19,7 @@ book: mul : Manchester University Library overview documentation
 
 
 package: :pserver:anonymous@cvs.vxl.sourceforge.net:/cvsroot/vxl vxl Core Vision Libraries
+vxl testlib testlib_ build
 vxl vsl vsl_ build
 vxl vnl vnl_ build
 vxl vbl vbl_ build
