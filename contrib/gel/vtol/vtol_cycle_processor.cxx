@@ -1137,8 +1137,8 @@ bool vtol_cycle_processor::connect_paths(vcl_vector<vtol_edge_2d_sptr>& edges,
   if (!bad_verts.size())
     return paths_connected;
 
-  if (edges.size()==1)
-    vcl_cout << "One Edge\n";
+//   if (edges.size()==1)
+//     vcl_cout << "One Edge\n";
 
   //Clear the bad vertex flags
   vcl_vector<vtol_vertex_sptr> temp;//temporary bad_verts array
