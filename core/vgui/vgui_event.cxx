@@ -60,7 +60,7 @@ vgui_event::vgui_event(vgui_event_type etype) {
 //: Convert the given key to lower case and use that to set the key.
 //  I added this to avoid the complication of doing this conversion in each
 //  GUI impl - kym.
-void vgui_event::set_key(char c)
+void vgui_event::set_key(vgui_key c)
 {
   if (c < 32)
   {

@@ -88,7 +88,7 @@ class vgui_event
   vgui_key key;
 
   //: Convert given key to lower case and use that to set key.
-  void set_key(char c);
+  void set_key(vgui_key c);
 
   //: Which modifiers are pressed during the event (NULL, CTRL, SHIFT).
   vgui_modifier modifier;
