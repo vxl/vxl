@@ -30,8 +30,9 @@ Directory vc++ was changes to win32.  The only files modified were:
 
   configure.in
   aclocal.m4
+  config.h.in
 
-For both of these files, the original was checked in to the CVS
+For each of these files, the original was checked in to the CVS
 repository first, then the changes were checked in.  The autoconf
 configuration of mpeg2 was simplified since we are only building
 libmpeg2 and libvo, and not installing.  Autoconf still created the
