@@ -72,7 +72,8 @@ double clsfy_smo_1_lin::C() const
 
 void clsfy_smo_1_lin::set_C(double C)
 {
-  C_ = C;
+  if (C <= 0) C_ = vnl_huge_val(double());
+  else C_ = C;
 }
 
 // ----------------------------------------------------------------
