@@ -1,13 +1,13 @@
 #ifndef vbl_sprintf_h_
 #define vbl_sprintf_h_
+// This is vxl/vbl/vbl_sprintf.h
 #ifdef __GNUC__
 #pragma interface
 #endif
-// This is vxl/vbl/vbl_sprintf.h
 
 //:
 // \file
-// \brief vbl_sprintf - creates a formatted ANSI C++ string.
+// \brief creates a formatted ANSI C++ string
 // \author Andrew W. Fitzgibbon, Oxford RRG
 // \date   08 Aug 96
 //
@@ -22,8 +22,8 @@
 #include <vcl_string.h>
 #include <vcl_iosfwd.h>
 
-//:vbl_sprintf is a C++ conforming replacement to the ANSI C functions sprintf and printf.
-// It works in the same way as sprintf but is itself an ANSI C++ string
+//: C++ conforming replacement to the ANSI C functions sprintf and printf.
+// vbl_sprintf works in the same way as sprintf but is itself an ANSI C++ string
 // which can either be kept or output directly using streams  e.g.
 // \verbatim
 // cerr << vbl_sprintf("int %d, float %f ", 1, 3.14)
