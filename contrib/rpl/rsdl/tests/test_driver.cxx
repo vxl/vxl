@@ -7,6 +7,7 @@ DECLARE( test_bounding_box );
 DECLARE( test_dist );
 DECLARE( test_kd_tree );
 DECLARE( test_point );
+DECLARE( test_bins );
 
 void
 register_tests()
@@ -17,6 +18,7 @@ register_tests()
   REGISTER( test_dist );
   REGISTER( test_kd_tree );
   REGISTER( test_point );
+  REGISTER( test_bins );
 }
 
 DEFINE_MAIN;

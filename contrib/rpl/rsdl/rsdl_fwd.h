@@ -7,4 +7,10 @@
 class rsdl_kd_tree;
 typedef vbl_smart_ptr<rsdl_kd_tree> rsdl_kd_tree_sptr;
 
+template  < class COORD_T, class VALUE_T >
+class rsdl_bins_2d;
+
+template< unsigned N, typename CoordType, typename ValueType >
+class rsdl_bins;
+
 #endif // rsdl_fwd_h_
