@@ -187,10 +187,10 @@ bool vgui_mfc_dialog_impl::ask()
   int width, max_length = 0,fbsr_count = 0;
   int height = 45 + 6*8;
 
-  for (vcl_vector<element>::iterator e_iter = elements.begin();
-       e_iter != elements.end(); ++e_iter)
+  for (vcl_vector<element>::iterator e_iter1 = elements.begin();
+       e_iter1 != elements.end(); ++e_iter1)
   {
-    element l = *e_iter;
+    element l = *e_iter1;
     vgui_dialog_field *field = l.field;
 
     if(l.type == bool_elem)
@@ -307,11 +307,11 @@ bool vgui_mfc_dialog_impl::ask()
   r.right = 999; //
   r.top = 0;
   r.bottom = 3*8+2;
-  for (vcl_vector<element>::iterator e_iter = elements.begin();
-       e_iter != elements.end(); ++e_iter) 
+  for (vcl_vector<element>::iterator e_iter2 = elements.begin();
+       e_iter2 != elements.end(); ++e_iter2) 
   {
 
-    element l = *e_iter;
+    element l = *e_iter2;
     vgui_dialog_field *field = l.field;
 
     if (l.type == int_elem ||
@@ -541,10 +541,10 @@ bool vgui_mfc_dialog_impl::ask()
   if (ok_clicked) 
   {
     vcl_vector<CWnd *>::iterator w_iter = wlist.begin();
-    for (vcl_vector<element>::iterator e_iter = elements.begin();
-         e_iter != elements.end(); ++e_iter, ++w_iter) 
+    for (vcl_vector<element>::iterator e_iter3 = elements.begin();
+         e_iter3 != elements.end(); ++e_iter3, ++w_iter) 
     {
-      element l = *e_iter;
+      element l = *e_iter3;
       CWnd *input = *w_iter;
 
       if (l.type == int_elem ||
@@ -576,10 +576,10 @@ bool vgui_mfc_dialog_impl::ask()
   // Remove all the created objects from the heap
   for(vcl_vector<CWnd *>::iterator w_iter = awlist.begin();w_iter!=awlist.end();++w_iter)
     delete (*w_iter);
-  for (vcl_vector<element>::iterator e_iter = elements.begin(); e_iter != elements.end();
-    ++e_iter)
+  for (vcl_vector<element>::iterator e_iter4 = elements.begin(); e_iter4 != elements.end();
+    ++e_iter4)
   {
-    element l = *e_iter;
+    element l = *e_iter4;
     delete l.field;
   }
   delete accept;
