@@ -3,9 +3,9 @@
 
 // .NAME vipl_x_gradient - Convolve image with horizontal [-1 1] filter
 // .LIBRARY vipl
-// .HEADER vxl image processing package
+// .HEADER vxl package
 // .INCLUDE vipl/vipl_x_gradient.h
-// .FILE vipl_x_gradient.cxx
+// .FILE vipl_x_gradient.txx
 //
 // .SECTION Description
 //   This Image Processing class is implemented using the vipl filters,

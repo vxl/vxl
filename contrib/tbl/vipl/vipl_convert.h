@@ -3,9 +3,9 @@
 
 // .NAME vipl_convert - convert between arbitrary image types
 // .LIBRARY vipl
-// .HEADER vxl image processing package
+// .HEADER vxl package
 // .INCLUDE vipl/vipl_convert.h
-// .FILE vipl_convert.cxx
+// .FILE vipl_convert.txx
 //
 // .SECTION Description
 //   This Image Processing class is implemented using the vipl filters,

@@ -3,9 +3,9 @@
 
 // .NAME vipl_monadic - apply any (fixed) function to all pixels
 // .LIBRARY vipl
-// .HEADER vxl image processing package
+// .HEADER vxl package
 // .INCLUDE vipl/vipl_monadic.h
-// .FILE vipl_monadic.cxx
+// .FILE vipl_monadic.txx
 //
 // .SECTION Description
 //   This Image Processing class is implemented using the vipl filters,

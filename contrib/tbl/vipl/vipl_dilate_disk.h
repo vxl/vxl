@@ -3,9 +3,9 @@
 
 // .NAME vipl_dilate_disk - morphological dilation with circular element
 // .LIBRARY vipl
-// .HEADER vxl image processing package
+// .HEADER vxl package
 // .INCLUDE vipl/vipl_dilate_disk.h
-// .FILE vipl_dilate_disk.cxx
+// .FILE vipl_dilate_disk.txx
 //
 // .SECTION Description
 //   This Image Processing class is implemented using the vipl filters,

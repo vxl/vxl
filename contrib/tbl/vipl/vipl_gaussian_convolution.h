@@ -3,9 +3,9 @@
 
 // .NAME vipl_gaussian_convolution - gaussian smoothing
 // .LIBRARY vipl
-// .HEADER vxl image processing package
+// .HEADER vxl package
 // .INCLUDE vipl/vipl_gaussian_convolution.h
-// .FILE vipl_gaussian_convolution.cxx
+// .FILE vipl_gaussian_convolution.txx
 //
 // .SECTION Description
 //   This Image Processing class is implemented using the vipl filters,

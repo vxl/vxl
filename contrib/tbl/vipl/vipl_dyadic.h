@@ -3,9 +3,9 @@
 
 // .NAME vipl_dyadic - apply any (fixed) function to all (out,in) pixel pairs
 // .LIBRARY vipl
-// .HEADER vxl image processing package
+// .HEADER vxl package
 // .INCLUDE vipl/vipl_dyadic.h
-// .FILE vipl_dyadic.cxx
+// .FILE vipl_dyadic.txx
 //
 // .SECTION Description
 //   This Image Processing class is implemented using the vipl filters,

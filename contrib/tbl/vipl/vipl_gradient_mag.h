@@ -3,9 +3,9 @@
 
 // .NAME vipl_gradient_mag - sqrt of vipl_x_gradient square plus vipl_y_gradient square
 // .LIBRARY vipl
-// .HEADER vxl image processing package
+// .HEADER vxl package
 // .INCLUDE vipl/vipl_gradient_mag.h
-// .FILE vipl_gradient_mag.cxx
+// .FILE vipl_gradient_mag.txx
 //
 // .SECTION Description
 //   This Image Processing class is implemented using the vipl filters,

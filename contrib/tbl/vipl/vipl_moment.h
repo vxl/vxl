@@ -3,9 +3,9 @@
 
 // .NAME vipl_moment - computation of n-th order moment
 // .LIBRARY vipl
-// .HEADER vxl image processing package
+// .HEADER vxl package
 // .INCLUDE vipl/vipl_moment.h
-// .FILE vipl_moment.cxx
+// .FILE vipl_moment.txx
 //
 // .SECTION Description
 //   This Image Processing class is implemented using the vipl filters,

@@ -3,9 +3,9 @@
 
 // .NAME vipl_sobel - vipl_sobel convolution filter
 // .LIBRARY vipl
-// .HEADER vxl image processing package
+// .HEADER vxl package
 // .INCLUDE vipl/vipl_sobel.h
-// .FILE vipl_sobel.cxx
+// .FILE vipl_sobel.txx
 //
 // .SECTION Description
 //   This Image Processing class is implemented using the vipl filters,

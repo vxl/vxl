@@ -3,9 +3,9 @@
 
 // .NAME vipl_erode_disk - morphological erosion with circular element
 // .LIBRARY vipl
-// .HEADER vxl image processing package
+// .HEADER vxl package
 // .INCLUDE vipl/vipl_erode_disk.h
-// .FILE vipl_erode_disk.cxx
+// .FILE vipl_erode_disk.txx
 //
 // .SECTION Description
 //   This Image Processing class is implemented using the vipl filters,

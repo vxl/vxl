@@ -3,9 +3,9 @@
 
 // .NAME vipl_histogram - pixel value histogram of 2D image
 // .LIBRARY vipl
-// .HEADER vxl image processing package
+// .HEADER vxl package
 // .INCLUDE vipl/vipl_histogram.h
-// .FILE vipl_histogram.cxx
+// .FILE vipl_histogram.txx
 //
 // .SECTION Description
 //   This Image Processing class creates a pixel value histogram of a 2D image

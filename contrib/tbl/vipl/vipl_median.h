@@ -3,9 +3,9 @@
 
 // .NAME vipl_median - median filter with circular element
 // .LIBRARY vipl
-// .HEADER vxl image processing package
+// .HEADER vxl package
 // .INCLUDE vipl/vipl_median.h
-// .FILE vipl_median.cxx
+// .FILE vipl_median.txx
 //
 // .SECTION Description
 //   This Image Processing class is implemented using the vipl filters,

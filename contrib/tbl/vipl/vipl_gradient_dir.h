@@ -3,9 +3,9 @@
 
 // .NAME vipl_gradient_dir - atan2 of vipl_x_gradient and vipl_y_gradient
 // .LIBRARY vipl
-// .HEADER vxl image processing package
+// .HEADER vxl package
 // .INCLUDE vipl/vipl_gradient_dir.h
-// .FILE vipl_gradient_dir.cxx
+// .FILE vipl_gradient_dir.txx
 //
 // .SECTION Description
 //   This Image Processing class is implemented using the vipl filters,

@@ -3,9 +3,9 @@
 
 // .NAME vipl_add_random_noise - add random noise to all pixels
 // .LIBRARY vipl
-// .HEADER vxl image processing package
+// .HEADER vxl package
 // .INCLUDE vipl/vipl_add_random_noise.h
-// .FILE vipl_add_random_noise.cxx
+// .FILE vipl_add_random_noise.txx
 //
 // .SECTION Description
 //   This Image Processing class is implemented using the vipl filters,

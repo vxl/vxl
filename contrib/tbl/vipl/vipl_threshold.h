@@ -3,9 +3,9 @@
 
 // .NAME vipl_threshold - set pixel to given value if above/below certain threshold
 // .LIBRARY vipl
-// .HEADER vxl image processing package
+// .HEADER vxl package
 // .INCLUDE vipl/vipl_threshold.h
-// .FILE vipl_threshold.cxx
+// .FILE vipl_threshold.txx
 //
 // .SECTION Description
 //   This Image Processing class is implemented using the vipl filters,

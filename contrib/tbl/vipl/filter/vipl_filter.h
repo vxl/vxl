@@ -183,7 +183,8 @@ class vipl_filter          : public vipl_filter_abs {
  public: void put_is_input_driven(bool b=true) { hsis_input_driven=b; }
 
  public:
-  //: A workhorse constructor for this abstract class. If dst_image
+  //:
+  // A workhorse constructor for this abstract class. If dst_image
   // (by default) the output will be generated automatically when
   // filtering is about to proceed. (Either way, the filter
   // increments refcount when set and decrements the refcount of
@@ -197,7 +198,8 @@ class vipl_filter          : public vipl_filter_abs {
               int ninputs=1,
               int img_border=0 ,
               DataOut fill_val=0 ) ;
-  //: A second workhorse constructor for this abstract class. If
+  //:
+  // A second workhorse constructor for this abstract class. If
   // dst_img is null (by default), the output will be generated
   // automatically when filtering is about to proceed. The filter
   // decrements the refcount of the output when it is
@@ -217,7 +219,8 @@ class vipl_filter          : public vipl_filter_abs {
   
   // begin method list for class filter
 
-  //: The main operation of the class, filters input images to
+  //:
+  // The main operation of the class, filters input images to
   // produce output image.
   // Before this function can run to completion, all arguments must
   // be set via the respective ``put_*'' functions (or
@@ -228,7 +231,8 @@ class vipl_filter          : public vipl_filter_abs {
   // proceed.
   virtual bool filter();
 
-  //: For those filters that only need one input and output set (after
+  //:
+  // For those filters that only need one input and output set (after
   // construction), the following function allows one to treat the filter
   // object more like a function calling
   // obj.process(inimg, outimg)
@@ -240,7 +244,8 @@ class vipl_filter          : public vipl_filter_abs {
   // second form passing pointers...
   bool process( ImgIn const* inimg, ImgOut* outimg);
 
-  //: What is the ``start coordinate for the current apply
+  //:
+  // What is the ``start coordinate for the current apply
   // section. This always leaves a border around the
   // section. (E.g. if there is no ROA this is actual section start
   // + image_boarder_size; remember section iteration overlaps). If
@@ -249,7 +254,8 @@ class vipl_filter          : public vipl_filter_abs {
   int start( int axis) const;
   int start(int axis, int other_axis_value) const;
 
-  //: What is the ``stopping'' coordinate for the current apply
+  //:
+  // What is the ``stopping'' coordinate for the current apply
   // section This always leaves a border around the
   // section. (E.g. if there is no ROA this is actual section end -
   // image_boarder_size; remember section iteration overlaps). If
@@ -258,67 +264,81 @@ class vipl_filter          : public vipl_filter_abs {
   int stop( int axis) const;
   int stop(int axis, int other_axis_value) const;
 
-  //: Put the given pointer into an input "image" at the provided
+  //:
+  // Put the given pointer into an input "image" at the provided
   // index. Decrements old objects refcount, increments
   // newobjects refcount
   bool put_in_data_ptr(const ImgIn* fpointer, int index=0);
 
-  //: Return the a pointer to the input ``image'' at the
+  //:
+  // Return the a pointer to the input ``image'' at the
   // provided index. Increments refcount before returning
   const ImgIn* in_data_ptr( int index=0);
 
-  //: Return a ref to the input ``data object'' at the provided
+  //:
+  // Return a ref to the input ``data object'' at the provided
   // index (dereferences the internal pointer).
   const ImgIn& in_data( int index=0) const ;
 
-  //: Put the given pointer into output data at the given index
+  //:
+  // Put the given pointer into output data at the given index
   // location Decrements old putput refcount, Inc's newobjects
   // refcount
   bool put_out_data_ptr(ImgOut* fpointer, int /*index*/=0);
 
-  //: Get ptr to specified output data item given index
+  //:
+  // Get ptr to specified output data item given index
   // location. Inc's refcount before returning ptr
   virtual ImgOut* out_data_ptr(int index=0);
 
-  //: Get ref to specified output data item given index location
+  //:
+  // Get ref to specified output data item given index location
   virtual ImgOut& out_data(int index=0) const;
 
  protected:
 
-  //: This is the function that gets called for every iteration of
+  //:
+  // This is the function that gets called for every iteration of
   // the filtering operation, before the actual filtering
   // routine. Can be used for normalization or such. Default op is
   // noop
   virtual bool preop();
 
-  //: This is the function that gets called after every iteration of
+  //:
+  // This is the function that gets called after every iteration of
   // the actual filtering routine. Can be used for post_processing
   // normalization or cleaning up the edges. Default op is noop
   virtual bool postop();
 
-  //: This is the method that implements the basic form for the
+  //:
+  // This is the method that implements the basic form for the
   // filtering operation.
   virtual bool applyop() = 0;
 
-  //: For each section, this method runs before
+  //:
+  // For each section, this method runs before
   // section_applyop. Default at this level is no_op. (lower level
   // class redefine it to ``fill'' the image boarders).
   virtual bool section_preop();
 
-  //: For each section, this method runs after
+  //:
+  // For each section, this method runs after
   // section_applyop. Default is no_op
   virtual bool section_postop();
 
-  //: This is the method that implements the filtering inside each
+  //:
+  // This is the method that implements the filtering inside each
   // section. You must supply this function
   virtual bool section_applyop() = 0;
 
   // pure virtual function
-  //: If a section is pointer safe, then this function is called to
+  //:
+  // If a section is pointer safe, then this function is called to
   // filter it. default is just to call section_applyop
   virtual bool ptr_based_section_applyop();
 
-  //: Called by filter(). checks for input/output
+  //:
+  // Called by filter(). checks for input/output
   // being set.  User can make it check for additional
   // parameters required before the filtering operation can
   // proceed.  Allows filter to "proceed" on warnings so not public
@@ -326,17 +346,20 @@ class vipl_filter          : public vipl_filter_abs {
   
  public:
 
-  //: returns if the filter is "ready" to run, i.e. all needed
+  //:
+  // returns if the filter is "ready" to run, i.e. all needed
   // parameters are "set".  Default just calls check_parms_1()
   virtual bool is_ready() const;
 
-  //: Is the current apply section intersected with the ROA an empty
+  //:
+  // Is the current apply section intersected with the ROA an empty
   // region, if so we should not load it. If its empty there is no
   // guarantee that the section_start and section_end will not overlap.
   int is_section_within_ROA( int axis) const;
 
 #ifdef USE_COMPOSE_WITH
-  //: Try to set the output of this filter to be the input of
+  //:
+  // Try to set the output of this filter to be the input of
   // ``to'', and if possible make the filtering more efficient than
   // just sequential calls. Currently unimplemented so far this
   // function does nothing. Arg should be a nonconst ref because
