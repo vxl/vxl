@@ -6,11 +6,11 @@
 // \brief  See vgui_mfc_adaptor.h for a description of this file.
 //
 // \verbatim
-//   Modifications:
-//    06-AUG-2002 K.Y.McGaul - Changed key returned by CTRL events.
-//    04-OCT-2002 K.Y.McGaul - Use event.set_key() to set key, this makes sure
-//                             the key stroke is always lower case.
-//                           - Set event.ascii_char to be the actual key stroke.
+//  Modifications
+//   06-AUG-2002 K.Y.McGaul - Changed key returned by CTRL events.
+//   04-OCT-2002 K.Y.McGaul - Use event.set_key() to set key, this makes sure
+//                            the key stroke is always lower case.
+//                          - Set event.ascii_char to be the actual key stroke.
 // \endverbatim
 
 #include <vcl_iostream.h>
@@ -210,7 +210,7 @@ int vgui_mfc_adaptor::OnCreate(LPCREATESTRUCT lpCreateStruct)
     // You can draw on DIB sections with GDI, and you can directly modify the bits in memory.
     // This differs from device dependent bitmaps (on which only GDI can draw),
     // and DIBs (which don't support GDI but which you can modify directly).
-    // DIB sections (especially large DIBs) can be blted to the screen faster than normal
+    // DIB sections (especially large DIBs) can be blitted to the screen faster than normal
     // DIBs and bitmaps.
 
     HBITMAP hbmp = CreateDIBSection(m_pDC->GetSafeHdc(),
@@ -423,7 +423,7 @@ void vgui_mfc_adaptor::OnSize(UINT nType, int cx, int cy)
     // You can draw on DIB sections with GDI, and you can directly modify the bits in memory.
     // This differs from device dependent bitmaps (on which only GDI can draw),
     // and DIBs (which don't support GDI but which you can modify directly).
-    // DIB sections (especially large DIBs) can be blted to the screen faster than normal
+    // DIB sections (especially large DIBs) can be blitted to the screen faster than normal
     // DIBs and bitmaps.
 
     HBITMAP hbmp = CreateDIBSection(m_pDC->GetSafeHdc(),(BITMAPINFO *)&bmi,DIB_RGB_COLORS,&buffer,
