@@ -1,3 +1,7 @@
+#include <vcl_compiler.h>
+
+// ------------------------------------------------
+
 // this *does* work for SGI CC 7.2.1 -- fsm
 
 template <class T>
@@ -18,6 +22,17 @@ X<T> *X<T>::pl = 0;
 
 // explicit instantiation of class also instantiates statics.
 template struct X<int>;
+
+// ------------------------------------------------
+
+struct A
+{
+  int x;
+  mutable int y;
+  A() : x(0), y(0) { }
+  void f() { ++ x; }
+  void g() const { ++ y; }
+};
 
 // ------------------------------------------------
 
