@@ -41,12 +41,17 @@
 //  271001 Peter Vanroose - ported to vxl from BigSparseArray3; removed n1,n2,n3
 // \endverbatim
 //-----------------------------------------------------------------------------
-#ifndef VCL_WIN32
+
+#include <vxl_config.h>
+
+#if VXL_HAS_INT_64
 # define VCL_HAS_LONG_LONG 1
-typedef unsigned long long ulonglong;
-#else // There are no 64-bit integers on MS-Windows
+typedef vxl_uint_64 ulonglong;
+#elif VXL_HAS_INT_32
 # define VCL_HAS_LONG_LONG 0
-typedef unsigned long ulonglong;
+typedef vxl_uint_32 ulonglong;
+#else
+# error "only implemented with 32 and 64-bit ints"
 #endif
 
 #include <vcl_functional.h>
