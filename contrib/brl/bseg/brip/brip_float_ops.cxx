@@ -6,7 +6,7 @@
 #include <vil/vil_smooth.h>
 //------------------------------------------------------------
 //  Convolve with a kernel
-//  It is assumed that the kernel is square with odd dimensions
+//   It's assumed that the kernel is square with odd dimensions
 vil_memory_image_of<float>
 brip_float_ops::convolve(vil_memory_image_of<float> const & input,
                          vbl_array_2d<float> const & kernel)
