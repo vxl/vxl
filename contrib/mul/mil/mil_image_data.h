@@ -78,6 +78,9 @@ public:
     void print_summary(vcl_ostream& os) const;
 };
 
+#if 0
+// MSVC confuses the templated vsl_b_read(s, myclass<T> &)
+// and vsl_b_read(s, myclass<T> *&). We don't really need the former
 
 //: Write data to binary stream
 template<class T>
@@ -86,6 +89,7 @@ void vsl_b_write(vsl_b_ostream& s, const mil_image_data<T>& v);
 //: Read data from binary stream
 template<class T>
 void vsl_b_read(vsl_b_istream& s, mil_image_data<T>& v);
+#endif
 
 //: Write  to binary stream
 template<class T>
@@ -93,6 +97,12 @@ void vsl_b_write(vsl_b_ostream& s, const mil_image_data<T>* p);
 
 //: Read data from binary stream
 template<class T>
-void vsl_b_read(vsl_b_istream& s, mil_image_data<T>*& v);
+void vsl_b_read(vsl_b_istream& s, mil_image_data<T>* & v);
+
+
+//: Print class to os
+template<class T>
+void vsl_print_summary(vcl_ostream& os, const mil_image_data<T>* p);
+
 
 #endif // mil_image_data_h_

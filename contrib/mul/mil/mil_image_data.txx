@@ -126,6 +126,10 @@ void mil_image_data<T>::b_read(vsl_b_istream& bfs)
 }
 
 
+#if 0
+// MSVC confuses the templated vsl_b_read(s, myclass<T> &)
+// and vsl_b_read(s, myclass<T> *&). We don't really need the former
+
 //: Write  to binary stream
 template<class T>
 void vsl_b_write(vsl_b_ostream& s, const mil_image_data<T>& v)
@@ -139,6 +143,7 @@ void vsl_b_read(vsl_b_istream& s, mil_image_data<T>& v)
 {
     v.b_read(s);
 }
+#endif
 
 //: Write  to binary stream
 template<class T>
@@ -151,13 +156,15 @@ void vsl_b_write(vsl_b_ostream& os, const mil_image_data<T>* p)
   else
   {
     vsl_b_write(os,true); // Indicate non-null pointer stored
-    vsl_b_write(os,*p);
+    p->b_write(os);
+    //vsl_b_write(os,*p);
   }
 }
 
+
 //: Read data from binary stream
 template<class T>
-void vsl_b_read(vsl_b_istream& is, mil_image_data<T>*& v)
+void vsl_b_read(vsl_b_istream& is, mil_image_data<T>* & v)
 {
   delete v;
   bool not_null_ptr;
@@ -165,12 +172,21 @@ void vsl_b_read(vsl_b_istream& is, mil_image_data<T>*& v)
   if (not_null_ptr)
   {
     v = new mil_image_data<T>();
-    vsl_b_read(is, *v);
+    v->b_read(is);
+    //vsl_b_read(is, *v);
   }
   else
     v = 0;
 }
 
+
+
+//: Print class to os
+template<class T>
+void vsl_print_summary(vcl_ostream& os, const mil_image_data<T>* p)
+{
+  p->print_summary(os);
+}
 
 #if 0 // For reasons I don't understand the following causes an error
 #undef MIL_IMAGE_DATA_INSTANTIATE
@@ -179,7 +195,13 @@ template class mil_image_data<T >; \
 template void vsl_b_write(vsl_b_ostream& s, const mil_image_data<T >& v); \
 template void vsl_b_read(vsl_b_istream& s, mil_image_data<T >& v); \
 template void vsl_b_write(vsl_b_ostream& s, const mil_image_data<T >* v); \
-template void vsl_b_read(vsl_b_istream& s, mil_image_data<T >*& v)
+template void vsl_b_read(vsl_b_istream& s, mil_image_data<T >* & v)
+#else // 0
+#undef MIL_IMAGE_DATA_INSTANTIATE
+#define MIL_IMAGE_DATA_INSTANTIATE(T) \
+template class mil_image_data<T >; \
+template void vsl_b_write(vsl_b_ostream& s, const mil_image_data<T >* v); \
+template void vsl_b_read(vsl_b_istream& s, mil_image_data<T >* & v)
 #endif // 0
 
 
