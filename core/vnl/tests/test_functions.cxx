@@ -1,11 +1,4 @@
-#include <vcl_cstdlib.h>
-#include <vcl_iostream.h>
-#include <vcl_iomanip.h>
-#include <vcl_cmath.h>
-#include <vcl_ctime.h>
-
-#include <testlib/testlib_test.h>
-#include <vnl/algo/vnl_chi_squared.h>
+// This is vxl/vnl/tests/test_functions.cxx
 
 //:
 // \file
@@ -13,15 +6,23 @@
 // Test function results for chi-squared cumulative density function.
 // The values are those calculated from this function on solaris, and
 // agree (to 3sf) with those from a mathematical table.
-
+//
 // Each row is for a different dof, from 1 through 96 in increments of
 // 5 (20 rows).
-
+//
 // Each column is for a different chi-squared, from 0 though 180 in
 // increments of 20 (10 columns).
-
+//
 // For readability reasons, the rows are split in 2x 5 rows, with an extra
 // indentation for the second half of each row.
+
+#include <vcl_iostream.h>
+#include <vcl_iomanip.h>
+#include <vcl_cmath.h>
+#include <vcl_ctime.h>
+
+#include <testlib/testlib_test.h>
+#include <vnl/algo/vnl_chi_squared.h>
 
 double cdf_baseline[] =
 {
@@ -121,4 +122,4 @@ int test_functions()
   return 0;
 }
 
-TESTMAIN(test_functions)
+TESTMAIN(test_functions);
