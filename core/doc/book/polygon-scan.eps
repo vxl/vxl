@@ -120,17 +120,17 @@ newfontname newfont definefont pop end } def
 8#374 /udieresis 8#375 /yacute 8#376 /thorn 8#377 /ydieresis] def
 /Helvetica /Helvetica-iso isovec ReEncode
  /DrawEllipse {
-	/endangle exch def
-	/startangle exch def
-	/yrad exch def
-	/xrad exch def
-	/y exch def
-	/x exch def
-	/savematrix mtrx currentmatrix def
-	x y tr xrad yrad sc 0 0 1 startangle endangle arc
-	closepath
-	savematrix setmatrix
-	} def
+  /endangle exch def
+  /startangle exch def
+  /yrad exch def
+  /xrad exch def
+  /y exch def
+  /x exch def
+  /savematrix mtrx currentmatrix def
+  x y tr xrad yrad sc 0 0 1 startangle endangle arc
+  closepath
+  savematrix setmatrix
+  } def
 /$F2psBegin {$F2psDict begin /$F2psEnteredState save def} def
 /$F2psEnd {$F2psEnteredState restore end} def
 $F2psBegin

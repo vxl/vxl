@@ -42,19 +42,19 @@
 /bplot /gsave ldef
 /eplot {stroke grestore} bdef
 % orientation switch
-/portraitMode 	0 def
-/landscapeMode 	1 def
+/portraitMode   0 def
+/landscapeMode  1 def
 % coordinate system mappings
 /dpi2point 0 def
 % font control
 /FontSize 0 def
 /FMS {
-	/FontSize xstore		%save size off stack
-	findfont
-	[FontSize 0 0 FontSize neg 0 0]
-	makefont
-	setfont
-	}bdef
+  /FontSize xstore  %save size off stack
+  findfont
+  [FontSize 0 0 FontSize neg 0 0]
+  makefont
+  setfont
+  }bdef
 /reencode {
 exch dup where
 {pop load} {pop StandardEncoding} ifelse
@@ -78,10 +78,10 @@ dup isroman
 exch FMS
 } bdef
 /csm {
-	1 dpi2point div -1 dpi2point div scale
-	neg translate
-	landscapeMode eq {90 rotate} if
-	} bdef
+  1 dpi2point div -1 dpi2point div scale
+  neg translate
+  landscapeMode eq {90 rotate} if
+  } bdef
 % line types: solid, dotted, dashed, dotdash
 /SO { [] 0 setdash } bdef
 /DO { [.5 dpi2point mul 4 dpi2point mul] 0 setdash } bdef
@@ -89,57 +89,57 @@ exch FMS
 /DD { [.5 dpi2point mul 4 dpi2point mul 6 dpi2point mul 4 dpi2point mul] 0 setdash } bdef
 % macros for lines and objects
 /L {
-	lineto
-	stroke
-	} bdef
+  lineto
+  stroke
+  } bdef
 /MP {
-	3 1 roll moveto
-	1 sub {rlineto} repeat
-	} bdef
+  3 1 roll moveto
+  1 sub {rlineto} repeat
+  } bdef
 /AP {
-	{rlineto} repeat
-	} bdef
+  {rlineto} repeat
+  } bdef
 /PP {
-	closepath fill
-	} bdef
+  closepath fill
+  } bdef
 /DP {
-	closepath stroke
-	} bdef
+  closepath stroke
+  } bdef
 /MR {
-	4 -2 roll moveto
-	dup  0 exch rlineto
-	exch 0 rlineto
-	neg  0 exch rlineto
-	closepath
-	} bdef
+  4 -2 roll moveto
+  dup  0 exch rlineto
+  exch 0 rlineto
+  neg  0 exch rlineto
+  closepath
+  } bdef
 /FR {
-	MR stroke
-	} bdef
+  MR stroke
+  } bdef
 /PR {
-	MR fill
-	} bdef
+  MR fill
+  } bdef
 /L1i {
-	{ currentfile picstr readhexstring pop } image
-	} bdef
+  { currentfile picstr readhexstring pop } image
+  } bdef
 /tMatrix matrix def
 /MakeOval {
-	newpath
-	tMatrix currentmatrix pop
-	translate scale
-	0 0 1 0 360 arc
-	tMatrix setmatrix
-	} bdef
+  newpath
+  tMatrix currentmatrix pop
+  translate scale
+  0 0 1 0 360 arc
+  tMatrix setmatrix
+  } bdef
 /FO {
-	MakeOval
-	stroke
-	} bdef
+  MakeOval
+  stroke
+  } bdef
 /PO {
-	MakeOval
-	fill
-	} bdef
+  MakeOval
+  fill
+  } bdef
 /PD {
-	2 copy moveto lineto stroke
-	} bdef
+  2 copy moveto lineto stroke
+  } bdef
 currentdict end def
 %%EndProlog
 %%BeginSetup
