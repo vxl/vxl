@@ -153,6 +153,78 @@ Package=<4>
 
 ###############################################################################
 
+Project: "gevd"=..\gel\gevd\gevd.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name vbl
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name vil
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name vnl
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name vtol
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "geml"=..\gel\geml\geml.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name vbl
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name vil
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name vnl
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name vtol
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "gkll"=..\gel\gkll\gkll.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name vbl
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name vil
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name vnl
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name vtol
+    End Project Dependency
+}}}
+
+###############################################################################
+
 Project: "gmvl"=..\gel\gmvl\gmvl.dsp - Package Owner=<4>
 
 Package=<5>
@@ -178,6 +250,21 @@ Package=<4>
 ###############################################################################
 
 Project: "gst"=..\gel\gst\gst.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name vbl
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "vgel"=..\gel\vgel\vgel.dsp - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -324,7 +411,61 @@ Package=<4>
 
 ###############################################################################
 
+Project: "mil3d"=..\mul\mil3d\mil3d.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name mil
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "mil_algo"=..\mul\mil\algo\mil_algo.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name mil
+    End Project Dependency
+}}}
+
+###############################################################################
+
 Project: "mvl"=..\oxl\mvl\mvl.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name vbl
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name vil
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name vgl
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name vnl_algo
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "oxp"=..\oxl\oxp\oxp.dsp - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -415,6 +556,171 @@ Package=<4>
     End Project Dependency
     Begin Project Dependency
     Project_Dep_Name vpl
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "vbl_test_all"=.\vbl\tests\vbl_test_all.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name vbl
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "vgl_test_all"=.\vgl\tests\vgl_test_all.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name vgl
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "vil_test_all"=.\vil\tests\vil_test_all.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name vil
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "vnl_test_all"=.\vnl\tests\vnl_test_all.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name vnl
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "vul_test_all"=.\vul\tests\vul_test_all.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name vul
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "vcsl_test_all"=.\vcsl\tests\vcsl_test_all.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name vcsl
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "vbl_io_test_all"=.\vbl\io\tests\vbl_io_test_all.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name vbl_io
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "vgl_io_test_all"=.\vgl\io\tests\vgl_io_test_all.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name vgl_io
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "vil_io_test_all"=.\vil\io\tests\vil_io_test_all.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name vil_io
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "vnl_io_test_all"=.\vnl\io\tests\vnl_io_test_all.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name vnl_io
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "vul_io_test_all"=.\vul\io\tests\vul_io_test_all.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name vul_io
     End Project Dependency
 }}}
 
@@ -969,6 +1275,51 @@ Package=<4>
 
 ###############################################################################
 
+Project: "rrel"=..\rpl\rrel\rrel.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name vnl
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name vbl
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name vgl
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name mbl
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "rsdl"=..\rpl\rsdl\rsdl.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name vnl
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name vbl
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name vil
+    End Project Dependency
+}}}
+
+###############################################################################
+
 Project: "vpl"=.\vpl\vpl.dsp - Package Owner=<4>
 
 Package=<5>
@@ -1120,6 +1471,30 @@ Package=<4>
     End Project Dependency
     Begin Project Dependency
     Project_Dep_Name vsol
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "octree"=..\gel\octree\octree.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name mvl
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name vgl
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name vul
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name vil
     End Project Dependency
 }}}
 
