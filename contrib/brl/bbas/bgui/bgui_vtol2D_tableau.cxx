@@ -89,8 +89,9 @@ bool bgui_vtol2D_tableau::handle(vgui_event const &e)
   return vgui_easy2D_tableau::handle(e);
 }
 
-bgui_vtol_soview2D_digital_curve*
-bgui_vtol2D_tableau::add_digital_curve(vdgl_digital_curve_sptr& dc)
+
+bgui_vtol_soview2D_digital_curve* 
+bgui_vtol2D_tableau::add_digital_curve(vdgl_digital_curve_sptr const& dc)
 {
   this->set_line_width(3.0);
   this->set_foreground(0.0,0.0,1.0);
@@ -100,7 +101,8 @@ bgui_vtol2D_tableau::add_digital_curve(vdgl_digital_curve_sptr& dc)
   return obj;
 }
 
-bgui_vtol_soview2D_vertex* bgui_vtol2D_tableau::add_vertex(vtol_vertex_2d_sptr& v)
+bgui_vtol_soview2D_vertex* 
+bgui_vtol2D_tableau::add_vertex(vtol_vertex_2d_sptr const& v)
 {
   bgui_vtol_soview2D_vertex* obj = new bgui_vtol_soview2D_vertex();
   obj->x = v->x();
@@ -117,7 +119,8 @@ bgui_vtol_soview2D_vertex* bgui_vtol2D_tableau::add_vertex(vtol_vertex_2d_sptr& 
   return obj;
 }
 
-bgui_vtol_soview2D_edge* bgui_vtol2D_tableau::add_edge(vtol_edge_2d_sptr& e)
+bgui_vtol_soview2D_edge* 
+bgui_vtol2D_tableau::add_edge(vtol_edge_2d_sptr const& e)
 {
   bgui_vtol_soview2D_edge* obj = new bgui_vtol_soview2D_edge(e);
   //set the default style
@@ -144,7 +147,8 @@ bgui_vtol2D_tableau::add_edge_group(vcl_vector<vtol_edge_2d_sptr>& edges)
   return obj;
 }
 
-bgui_vtol_soview2D_face* bgui_vtol2D_tableau::add_face(vtol_face_2d_sptr& f)
+bgui_vtol_soview2D_face* 
+bgui_vtol2D_tableau::add_face(vtol_face_2d_sptr const& f)
 {
   bgui_vtol_soview2D_face* obj = new bgui_vtol_soview2D_face(f);
 

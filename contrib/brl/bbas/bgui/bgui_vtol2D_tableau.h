@@ -17,6 +17,7 @@
 #include <vcl_vector.h>
 #include <vcl_map.h>
 #include <vgui/vgui_style.h>
+#include <vdgl/vdgl_digital_curve_sptr.h>
 #include <vtol/vtol_vertex_2d.h>
 #include <vtol/vtol_edge_2d.h>
 #include <vtol/vtol_vertex_2d_sptr.h>
@@ -54,15 +55,15 @@ class bgui_vtol2D_tableau : public vgui_easy2D_tableau
 
   //: display for digital_curve (not vtol but often useful)
   bgui_vtol_soview2D_digital_curve* 
-    add_digital_curve(vdgl_digital_curve_sptr& v);
+    add_digital_curve(vdgl_digital_curve_sptr const& dc);
 
   //: the vtol display methods for individual topology classes
-  bgui_vtol_soview2D_vertex* add_vertex(vtol_vertex_2d_sptr& v);
-  bgui_vtol_soview2D_edge* add_edge(vtol_edge_2d_sptr& e);
+  bgui_vtol_soview2D_vertex* add_vertex(vtol_vertex_2d_sptr const& v);
+  bgui_vtol_soview2D_edge* add_edge(vtol_edge_2d_sptr const& e);
 
   bgui_vtol_soview2D_edge_group* add_edge_group(vcl_vector<vtol_edge_2d_sptr>&
                                                 edges);
-  bgui_vtol_soview2D_face* add_face(vtol_face_2d_sptr& f);
+  bgui_vtol_soview2D_face* add_face(vtol_face_2d_sptr const& f);
 
   //: display methods for vectors of topology classes (not grouped)
 

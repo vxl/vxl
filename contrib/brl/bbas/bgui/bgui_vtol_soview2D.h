@@ -29,7 +29,7 @@ class bgui_vtol_soview2D_digital_curve : public vgui_soview2D_group
   bgui_vtol_soview2D_digital_curve() {;}
 
   //: Constructor - creates a view of a vdgl_digital_curve
-  bgui_vtol_soview2D_digital_curve(vdgl_digital_curve_sptr& e);
+  bgui_vtol_soview2D_digital_curve(vdgl_digital_curve_sptr const& e);
 
   //: Print details about this vdgl_digital_curve to the given stream.
   virtual vcl_ostream& print(vcl_ostream&) const;
@@ -62,7 +62,7 @@ class bgui_vtol_soview2D_edge : public vgui_soview2D_linestrip
   bgui_vtol_soview2D_edge() {}
 
   //: Constructor - creates a view of a given vtol_edge_2d
-  bgui_vtol_soview2D_edge(vtol_edge_2d_sptr& e);
+  bgui_vtol_soview2D_edge(vtol_edge_2d_sptr const& e);
 
   //: Print details about this vtol_edge_2d to the given stream.
   virtual vcl_ostream& print(vcl_ostream&) const;
@@ -95,7 +95,7 @@ class bgui_vtol_soview2D_face : public vgui_soview2D_group
   bgui_vtol_soview2D_face() {}
 
   //: Constructor - creates a view of a vtol_face_2d
-  bgui_vtol_soview2D_face(vtol_face_2d_sptr& f);
+  bgui_vtol_soview2D_face(vtol_face_2d_sptr const& f);
 
   //: Print details about this vtol_face_2d to the given stream.
   virtual vcl_ostream& print(vcl_ostream&) const;

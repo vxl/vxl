@@ -22,7 +22,7 @@ vcl_ostream& bgui_vtol_soview2D_digital_curve::print(vcl_ostream& s) const
 }
 
 bgui_vtol_soview2D_digital_curve::
-bgui_vtol_soview2D_digital_curve(vdgl_digital_curve_sptr& dc)
+bgui_vtol_soview2D_digital_curve(vdgl_digital_curve_sptr const& dc)
 {
   if (!dc)
     {
@@ -70,7 +70,7 @@ vcl_ostream& bgui_vtol_soview2D_edge::print(vcl_ostream& s) const
   return vgui_soview2D_linestrip::print(s);
 }
 
-bgui_vtol_soview2D_edge::bgui_vtol_soview2D_edge(vtol_edge_2d_sptr& e)
+bgui_vtol_soview2D_edge::bgui_vtol_soview2D_edge(vtol_edge_2d_sptr const& e)
 {
   if (!e)
     {
@@ -138,7 +138,7 @@ vcl_ostream& bgui_vtol_soview2D_face::print(vcl_ostream& s) const
 }
 
 
-bgui_vtol_soview2D_face::bgui_vtol_soview2D_face(vtol_face_2d_sptr& f)
+bgui_vtol_soview2D_face::bgui_vtol_soview2D_face(vtol_face_2d_sptr const& f)
 {
   if (!f)
     {
