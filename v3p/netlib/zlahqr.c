@@ -142,8 +142,6 @@ integer *ldz, *info;
 /*                                                                        */
 /*  ===================================================================== */
 
-    /* Function Body */
-
     *info = 0;
 
 /*     Quick return if possible */
@@ -212,23 +210,32 @@ L10:
                 tst1 = zlanhs_("1", &i__1, &h[l + l * *ldh], ldh, rwork, 1L);
             }
             if (abs(h[k + (k - 1) * *ldh].r) <= max(ulp * tst1,smlnum)) {
-                goto L30;
+                break;
             }
         }
-L30:
         l = k;
         if (l > *ilo-1) {
 
 /*           H(L,L-1) is negligible */
 
             i__1 = l + (l - 1) * *ldh;
-            h[i__1].r = 0., h[i__1].i = 0.;
+            h[i__1].r = h[i__1].i = 0.;
         }
 
 /*        Exit from loop if a submatrix of order 1 has split off. */
 
         if (l >= i) {
-            goto L120;
+/*         H(I,I-1) is negligible: one eigenvalue has converged. */
+
+            i__1 = i + i * *ldh;
+            w[i].r = h[i__1].r, w[i].i = h[i__1].i;
+
+/*         Decrement number of remaining iterations, and return to start of */
+/*         the main loop with new value of I. */
+
+            itn -= its;
+            i = l - 1;
+            goto L10;
         }
 
 /*        Now the active submatrix is in rows and columns L to I. If */
@@ -292,15 +299,14 @@ L30:
             v[0].r = h11s.r, v[0].i = h11s.i;
             v[1].r = h21, v[1].i = 0.;
             if (m == l) {
-                goto L50;
+                break;
             }
             h10 = h[m + (m - 1) * *ldh].r;
             tst1 = (abs(h11s.r) + abs(h11s.i)) * (abs(h11.r) + abs(h11.i) + abs(h22.r) + abs(h22.i));
             if (abs(h10 * h21) <= ulp * tst1) {
-                goto L50;
+                break;
             }
         }
-L50:
 
 /*        Single-shift QR step */
 
@@ -441,23 +447,5 @@ L50:
 /*     Failure to converge in remaining number of iterations */
 
     *info = i+1;
-    return;
-
-L120:
-
-/*     H(I,I-1) is negligible: one eigenvalue has converged. */
-
-    i__1 = i + i * *ldh;
-    w[i].r = h[i__1].r, w[i].i = h[i__1].i;
-
-/*     Decrement number of remaining iterations, and return to start of */
-/*     the main loop with new value of I. */
-
-    itn -= its;
-    i = l - 1;
-    goto L10;
-
-/*     End of ZLAHQR */
 
 } /* zlahqr_ */
-

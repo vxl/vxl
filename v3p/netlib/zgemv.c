@@ -129,8 +129,6 @@ ftnlen trans_len;
 /*     Sven Hammarling, Nag Central Office. */
 /*     Richard Hanson, Sandia National Labs. */
 
-    /* Function Body */
-
     info = 0;
     if (! lsame_(trans, "N", 1L, 1L) && ! lsame_(trans, "T", 1L, 1L) && !
             lsame_(trans, "C", 1L, 1L)) {
@@ -153,8 +151,7 @@ ftnlen trans_len;
 
 /*     Quick return if possible. */
 
-    if (*m == 0 || *n == 0 || alpha->r == 0. && alpha->i == 0. && (beta->r ==
-            1. && beta->i == 0.)) {
+    if (*m == 0 || *n == 0 || (alpha->r == 0. && alpha->i == 0. && beta->r == 1. && beta->i == 0.)) {
         return;
     }
 
@@ -230,7 +227,7 @@ ftnlen trans_len;
                     temp.r = alpha->r * x[jx].r - alpha->i * x[jx].i,
                     temp.i = alpha->r * x[jx].i + alpha->i * x[jx].r;
                     for (i = 0; i < *m; ++i) {
-                        i__1 = i + j * *lda;
+                        i__1 = i + j * *lda; /* index [i,j] */
                         y[i].r += temp.r * a[i__1].r - temp.i * a[i__1].i,
                         y[i].i += temp.r * a[i__1].i + temp.i * a[i__1].r;
                     }
@@ -244,7 +241,7 @@ ftnlen trans_len;
                     temp.i = alpha->r * x[jx].i + alpha->i * x[jx].r;
                     iy = ky;
                     for (i = 0; i < *m; ++i) {
-                        i__1 = i + j * *lda;
+                        i__1 = i + j * *lda; /* index [i,j] */
                         y[iy].r += temp.r * a[i__1].r - temp.i * a[i__1].i,
                         y[iy].i += temp.r * a[i__1].i + temp.i * a[i__1].r;
                         iy += *incy;
@@ -263,7 +260,7 @@ ftnlen trans_len;
                 temp.r = 0., temp.i = 0.;
                 if (noconj) {
                     for (i = 0; i < *m; ++i) {
-                        i__1 = i + j * *lda;
+                        i__1 = i + j * *lda; /* index [i,j] */
                         temp.r += a[i__1].r * x[i].r - a[i__1].i * x[i].i,
                         temp.i += a[i__1].r * x[i].i + a[i__1].i * x[i].r;
                     }
@@ -284,7 +281,7 @@ ftnlen trans_len;
                 ix = kx;
                 if (noconj) {
                     for (i = 0; i < *m; ++i) {
-                        i__1 = i + j * *lda;
+                        i__1 = i + j * *lda; /* index [i,j] */
                         temp.r += a[i__1].r * x[ix].r - a[i__1].i * x[ix].i,
                         temp.i += a[i__1].r * x[ix].i + a[i__1].i * x[ix].r;
                         ix += *incx;
@@ -303,8 +300,4 @@ ftnlen trans_len;
             }
         }
     }
-
-/*     End of ZGEMV . */
-
 } /* zgemv_ */
-
