@@ -37,7 +37,7 @@ SET (EXPECTED_BUILDS "\\
   {esat.kuleuven.ac.be Linux-2.6-gcc-3.4-O3} \\
   {esat.kuleuven.ac.be Linux64-2.6-gcc-3.4-O3} \\
   {esat.kuleuven.ac.be OSF1-V5.1-gcc-3.4} \\
-  {crd.ge.com Solaris-2.8_gcc-3.0.4_profile_static} \\
+  {crd.ge.com Solaris-2.8_gcc-3.0.4_static} \\
   {crd.ge.com Win2k_bcc-5.5.1_Release} \\
   {esat.kuleuven.ac.be SunOS-5.8-gcc-3.4-O2} \\
   {esat.kuleuven.ac.be HP-UX-B.11.00-gcc-3.4-O1} \\
