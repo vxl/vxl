@@ -612,7 +612,7 @@ considered good C++, and (b) it doesn't work anyway.
 
 The low-tech solution is simply to prefix each standard identifier with
 @code{vcl_}, so that @code{vcl_vector} works everywhere.  And this is
-what @vxl {} does, when you include @code{<vcl_vector.h>}.  Thus, safe
+what @vxl{} does, when you include @code{<vcl_vector.h>}.  Thus, safe
 programmers prefix @emph{everything} in the standard library with
 @code{vcl_}.
 @quotation
@@ -666,7 +666,7 @@ C++ should describe it better than we can.  However, it is important to
 note that nothing more can go in there.  If it's not in the standard, it's
 not in VCL.  Remember, VCL is full, nothing else can go in there.  It
 cannot for example be ``helpfully'' modified, Microsoft-style, to send
-standard error to a window (but @pxref{vbl_redirector}).
+standard error to a window (but see also @code{vbl_redirector}).
 
 
 @comment fsm
@@ -871,7 +871,7 @@ assertions; invalid user input, file input failure; users are too
 good at messing these things up, and should be treated
 sympathetically.
 
-When putting an assertion in one of the @vxl() libraries, you
+When putting an assertion in one of the @vxl{} libraries, you
 should make sure that it can be turned off using @code{NDEBUG}.
 This is the intention of the NDEBUG macro, and is very useful for
 time-critical code.
@@ -1380,7 +1380,7 @@ vector of doubles, premultiply it by @var{P}, and print the result:
 vnl_vector<double> X(4);
 cerr << P*X;
 @end example
-Several more examples are shown in Figure @ref{fig:matrixbasics}.
+Several more examples are shown in the figure below. @comment @ref{fig:matrixbasics}
 
 @cindex matrix indices, zero based
 The vnl matrices are indexed from zero, as in C.  This is always a
@@ -2071,7 +2071,7 @@ overloaded parenthesis operator, and print out the value.
 @end example
 Memory images are derived classes of vil_image, and they too can be passed
 around cheaply, always referring to the same block of pixels.  To copy a
-memory image, use @xref{sec:vil_copy}.
+memory image, use @code{vil_copy}.
 
 @subsection Loading and saving: The threshold program
 @cindex threshold example
