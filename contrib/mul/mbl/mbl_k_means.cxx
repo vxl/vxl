@@ -1,6 +1,8 @@
 #include "mbl_k_means.h"
 #include <vcl_cmath.h>
 #include <vcl_algorithm.h>
+#include <vcl_iostream.h>
+#include <vcl_cstdlib.h>
 
 //: Find k cluster centres
 // Uses batch k-means clustering.
