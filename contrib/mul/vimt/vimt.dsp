@@ -120,6 +120,9 @@ SOURCE=.\vimt_gaussian_pyramid_builder_2d_general.cxx
 SOURCE=.\vimt_add_all_binary_loaders.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\vimt_image_2d.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\Templates/vimt_sample_grid_bilin+byte.double-.cxx
 # End Source File
 # Begin Source File
