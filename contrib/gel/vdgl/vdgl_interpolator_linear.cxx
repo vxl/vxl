@@ -7,6 +7,7 @@
 #include <vdgl/vdgl_edgel_chain.h>
 #include <vnl/algo/vnl_svd.h>
 #include "vdgl_interpolator_linear.h"
+#include <vcl_cassert.h>
 
 
 vdgl_interpolator_linear::vdgl_interpolator_linear( vdgl_edgel_chain_sptr chain)
@@ -19,83 +20,78 @@ vdgl_interpolator_linear::~vdgl_interpolator_linear()
 {
 }
 
-
 vsol_point_2d_sptr vdgl_interpolator_linear::closest_point_on_curve ( vsol_point_2d_sptr p )
 {
-  double min_distance = 10e5;
+  double min_distance = 1e6;
   int index = -1;
   for( int i=0; i< chain_->size(); i++)
-    {
+  {
     vgl_point_2d<double> curve_point = chain_->edgel(i).get_pt();
     double d = p->distance ( vsol_point_2d ( curve_point ) );
     if ( d < min_distance )
-      {
+    {
       index = i;
       min_distance = d;
-      }
     }
+  }
   if ( index == -1 )
-    {
+  {
     return NULL;
-    }
+  }
   return new vsol_point_2d ( chain_->edgel(index).get_pt() );
 }
-
-  
 
 
 double vdgl_interpolator_linear::get_x( const double index)
 {
-  int a= int( index);
-  int b= a+1;
+  assert(index >= 0 && index < chain_->size());
+  int a= int( index); // round down
   double d= index- a;
 
-  vdgl_edgel ae( chain_->edgel( a));
-  if (d==0) return ae.get_x(); /* to avoid accessing nonexistent edgel */
-  vdgl_edgel be( chain_->edgel( b));
+  double ae = chain_->edgel( a).get_x();
+  if (d==0) return ae; // exactly at an edgel
+  double be = chain_->edgel( a+1).get_x();
 
-  return (2*be.get_x()*d+ae.get_x()*(1-d));
+  return be*d+ae*(1-d);
 }
 
 
 double vdgl_interpolator_linear::get_y( const double index)
 {
-  int a= int( index);
-  int b= a+1;
+  assert(index >= 0 && index < chain_->size());
+  int a= int( index); // round down
   double d= index- a;
 
-  vdgl_edgel ae( chain_->edgel( a));
-  if (d==0) return ae.get_y(); /* to avoid accessing nonexistent edgel */
-  vdgl_edgel be( chain_->edgel( b));
+  double ae = chain_->edgel( a).get_y();
+  if (d==0) return ae; // exactly at an edgel
+  double be = chain_->edgel( a+1).get_y();
 
-  return (2*be.get_y()*d+ae.get_y()*(1-d));
+  return be*d+ae*(1-d);
 }
 
 
 double vdgl_interpolator_linear::get_theta( const double index)
 {
-  int a= int( index);
-  int b= a+1;
+  assert(index >= 0 && index < chain_->size());
+  int a= int( index); // round down
   double d= index- a;
 
-  vdgl_edgel ae( chain_->edgel( a));
-  if (d==0) return ae.get_theta(); /* to avoid accessing nonexistent edgel */
-  vdgl_edgel be( chain_->edgel( b));
+  double ae = chain_->edgel( a).get_theta();
+  if (d==0) return ae; // exactly at an edgel
+  double be = chain_->edgel( a+1).get_theta();
 
-  return (2*be.get_theta()*d+ae.get_theta()*(1-d));
+  return be*d+ae*(1-d);
 }
 
 
 double vdgl_interpolator_linear::get_curvature( const double index)
 {
-  int a= int( index);
+  int a= int( index); // round down
 
-  if (( a-index)== 0)
-    {
-      return vnl_math::maxdouble;
-    }
-
-  return 0;
+  if ( a == index ) // if exactly at an edgel, curvature is undefined
+    return vnl_math::maxdouble;
+  else
+    return 0; // curvature of straight line segments is always zero
 }
 
 
@@ -158,7 +154,7 @@ void vdgl_interpolator_linear::recompute_length()
 {
   lengthcache_= 0;
 
-  for( int i=0; i< chain_->size(); i++)
+  for ( int i=0; i< chain_->size(); i++)
   {
     int j = i==0 ? chain_->size()-1 : i-1;
     vgl_point_2d<double> p1= chain_->edgel(j).get_pt();
@@ -174,20 +170,20 @@ void vdgl_interpolator_linear::recompute_length()
 void vdgl_interpolator_linear::recompute_bbox()
 {
   if ( chain_->size() == 0 )
-    {
+  {
     minxcache_=  maxxcache_= minycache_= maxycache_ = 0.0;
     return;
-    }    
+  }
   minxcache_= chain_->edgel( 0).get_x();
   maxxcache_= chain_->edgel( 0).get_x();
   minycache_= chain_->edgel( 0).get_y();
   maxycache_= chain_->edgel( 0).get_y();
 
-  for( int i=1; i< chain_->size(); i++)
-    {
-      if ( chain_->edgel( i).get_x()< minxcache_) minxcache_= chain_->edgel( i).get_x();
-      if ( chain_->edgel( i).get_x()> maxxcache_) maxxcache_= chain_->edgel( i).get_x();
-      if ( chain_->edgel( i).get_y()< minycache_) minycache_= chain_->edgel( i).get_y();
-      if ( chain_->edgel( i).get_y()> maxycache_) maxycache_= chain_->edgel( i).get_y();
-    }
+  for ( int i=1; i< chain_->size(); i++)
+  {
+    if ( chain_->edgel( i).get_x()< minxcache_) minxcache_= chain_->edgel( i).get_x();
+    if ( chain_->edgel( i).get_x()> maxxcache_) maxxcache_= chain_->edgel( i).get_x();
+    if ( chain_->edgel( i).get_y()< minycache_) minycache_= chain_->edgel( i).get_y();
+    if ( chain_->edgel( i).get_y()> maxycache_) maxycache_= chain_->edgel( i).get_y();
+  }
 }
