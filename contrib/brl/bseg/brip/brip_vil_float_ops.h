@@ -160,15 +160,15 @@ class brip_vil_float_ops
     convert_to_float(vil_image_view<vil_rgb<vxl_byte> > const& image);
   //: convert a color image to float IHS images
   static void
-    convert_to_IHS(vil_image_view<vil_rgb<vxl_byte> >const& image,
+    convert_to_IHS(vil_image_view<vil_rgb<vxl_byte> > const& image,
                    vil_image_view<float>& I,
                    vil_image_view<float>& H,
                    vil_image_view<float>& S);
-  static void brip_vil_float_ops::
-  convert_to_IHS(vil_image_view<unsigned char >const& image,
-		 vil_image_view<float>& I,
-		 vil_image_view<float>& H,
-		 vil_image_view<float>& S);
+  static void
+    convert_to_IHS(vil_image_view<unsigned char> const& image,
+                   vil_image_view<float>& I,
+                   vil_image_view<float>& H,
+                   vil_image_view<float>& S);
 
   //: display IHS images as RGB (not conversion from IHS to RGB)
   static void
@@ -254,9 +254,9 @@ class brip_vil_float_ops
                   vil_image_view<float>& out,
                   int radius = 5, float intensity_thresh=25.0f);
   static void ihs_to_rgb(vil_rgb<vxl_byte>& rgb,
-			 float i, float h, float s);
+                         float i, float h, float s);
  static  void rgb_to_ihs(vil_rgb<vxl_byte> const& rgb,
-			 float& i, float& h, float& s);
+                         float& i, float& h, float& s);
  private:
 
   //: find if the center pixel of a neighborhood is the maximum value
