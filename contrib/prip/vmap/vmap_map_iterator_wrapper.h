@@ -12,7 +12,7 @@
 // \endverbatim
 
 //: A wrapper in order to use any iterator on pairs (e.g. vcl_map::iterator) as if it was an iterator on the second element.
-template <typename ref, typename ptr, class it>
+template <typename Ref, typename Ptr, class It>
 class vmap_map_iterator_wrapper
 {
  public:
@@ -20,84 +20,81 @@ class vmap_map_iterator_wrapper
   vmap_map_iterator_wrapper() {}
 
   //:
-  vmap_map_iterator_wrapper(const vmap_map_iterator_wrapper &right)
-    : _current(right._current) {}
+  vmap_map_iterator_wrapper(vmap_map_iterator_wrapper const& w) :current_(w.current_) {}
 
   //:
-  vmap_map_iterator_wrapper(const it &right)
-    : _current(right) {}
+  vmap_map_iterator_wrapper(It const& w) : current_(w) {}
 
   //:
   ~vmap_map_iterator_wrapper() {}
 
   //:
-  vmap_map_iterator_wrapper & operator=(const vmap_map_iterator_wrapper &right)
+  vmap_map_iterator_wrapper & operator=(vmap_map_iterator_wrapper const& w)
   {
-    _current=right._current ;
+    current_=w.current_ ;
     return *this ;
   }
 
   //:
-  vmap_map_iterator_wrapper & operator=(const it &right)
+  vmap_map_iterator_wrapper & operator=(It const& w)
   {
-    _current=right ;
+    current_=w ;
     return *this ;
   }
 
   //:
-  int operator==(const vmap_map_iterator_wrapper &right) const
+  int operator==(vmap_map_iterator_wrapper const& w) const
   {
-      return _current==right._current ;
+      return current_==w.current_ ;
   }
 
   //:
-  int operator!=(const vmap_map_iterator_wrapper &right) const
+  int operator!=(vmap_map_iterator_wrapper const& w) const
   {
-      return _current!=right._current ;
+      return current_!=w.current_ ;
   }
 
   //:
   vmap_map_iterator_wrapper & operator ++ ()
   {
-      ++_current ;
+      ++current_ ;
       return *this ;
   }
 
   //:
   vmap_map_iterator_wrapper & operator -- ()
   {
-      --_current ;
+      --current_ ;
       return *this ;
   }
 
 #if 0
   const T & operator * () const
   {
-      return (*_current).second ;
+      return (*current_).second ;
   }
 
   T & operator * ()
   {
-      return (*_current).second ;
+      return (*current_).second ;
   }
 #endif // 0
 
   //:
-  ref operator * () const
+  Ref operator * () const
   {
-      return (*_current).second ;
+      return (*current_).second ;
   }
 
   //:
-  ptr operator->() const
+  Ptr operator->() const
   {
     return &(operator*());
   }
 
-
  private:
   //:
-  it _current;
+  It current_;
 };
 
 #endif

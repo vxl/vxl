@@ -15,19 +15,19 @@
 #include <vmap/vmap_2_tmap.h>
 #include "vpyr_2_tpyramid_level_elts.h"
 
-template <class _level_type>
+template <class level_type_>
 class vpyr_2_tpyramid ;
 
 //:
 template <class V, class E, class F, class D>
 class vpyr_2_tpyramid_level: public vpyr_2_pyramid_level<D>,
-      public vmap_ptr_sequence< typename V::base_type >,
-      public vmap_ptr_sequence< typename E::base_type >,
-      public vmap_ptr_sequence< typename F::base_type >
+                             public vmap_ptr_sequence< typename V::base_type >,
+                             public vmap_ptr_sequence< typename E::base_type >,
+                             public vmap_ptr_sequence< typename F::base_type >
 {
  public:
 
-    //:
+  //:
   static vmap_2_tmap_tag tag ;
   //:
   typedef vpyr_2_tpyramid_level<V,E,F,D> self_type;
@@ -39,18 +39,18 @@ class vpyr_2_tpyramid_level: public vpyr_2_pyramid_level<D>,
   typedef vpyr_2_tpyramid<self_type> pyramid_type ;
 
   //:
-  typedef vpyr_2_pyramid_level<D> _Base ;
+  typedef vpyr_2_pyramid_level<D> Base_ ;
 
   //:
-  typedef typename _Base::base_dart_type base_dart_type ;
+  typedef typename Base_::base_dart_type base_dart_type ;
 
  protected:
   //:
-  typedef typename _Base::dart_pointer dart_pointer ;
+  typedef typename Base_::dart_pointer dart_pointer ;
   //:
-  typedef typename _Base::dart_sequence_iterator dart_sequence_iterator ;
+  typedef typename Base_::dart_sequence_iterator dart_sequence_iterator ;
   //:
-  typedef typename _Base::const_dart_sequence_iterator const_dart_sequence_iterator ;
+  typedef typename Base_::const_dart_sequence_iterator const_dart_sequence_iterator ;
 
   //:
   typedef vmap_ptr_sequence< typename V::base_type > vertex_sequence ;
@@ -114,7 +114,7 @@ class vpyr_2_tpyramid_level: public vpyr_2_pyramid_level<D>,
 
   //:
   typedef F face_type ;
-   //: reference of a face.
+  //: reference of a face.
   typedef face_type face_reference ;
   //: const reference of a face.
   typedef const face_type const_face_reference ;
@@ -127,15 +127,15 @@ class vpyr_2_tpyramid_level: public vpyr_2_pyramid_level<D>,
   // --- Dart types ---
 
   //:
-  typedef typename _Base::dart_type dart_type ;
+  typedef typename Base_::dart_type dart_type ;
   //: reference on a dart.
   typedef dart_type dart_reference ;
   //: const reference on a dart.
   typedef const dart_type const_dart_reference ;
   //:
-  typedef typename _Base::dart_iterator dart_iterator ;
+  typedef typename Base_::dart_iterator dart_iterator ;
   //:
-  typedef typename _Base::const_dart_iterator const_dart_iterator ;
+  typedef typename Base_::const_dart_iterator const_dart_iterator ;
 
   //: Kernel class for contraction.
   typedef vmap_permutation_kernel< vmap_sigma_permutation<self_type> > contraction_kernel ;
@@ -200,10 +200,10 @@ class vpyr_2_tpyramid_level: public vpyr_2_pyramid_level<D>,
 
   //:
   vpyr_2_tpyramid_level(const self_type & arg)
-      : _Base(arg),
+    : Base_(arg),
       vertex_sequence(arg),
       edge_sequence(arg),
-      face_sequence(arg)                     {}
+      face_sequence(arg)                       {}
 
   //:
   virtual ~vpyr_2_tpyramid_level() {}
@@ -211,31 +211,31 @@ class vpyr_2_tpyramid_level: public vpyr_2_pyramid_level<D>,
   //:
   int index() const
   {
-    return _Base::index() ;
+    return Base_::index() ;
   }
 
   //: Returns an iterator on the first dart.
   const_dart_iterator begin_dart() const
   {
-    return _Base::begin_dart() ;
+    return Base_::begin_dart() ;
   }
 
   //: Returns an iterator on the first dart.
   dart_iterator begin_dart()
   {
-    return _Base::begin_dart() ;
+    return Base_::begin_dart() ;
   }
 
   //: Returns an iterator after the last dart.
   const_dart_iterator end_dart() const
   {
-    return _Base::end_dart() ;
+    return Base_::end_dart() ;
   }
 
   //: Returns an iterator after the last dart.
   dart_iterator end_dart()
   {
-    return _Base::end_dart() ;
+    return Base_::end_dart() ;
   }
 
   //: Returns an iterator on the first vertex.
@@ -329,7 +329,7 @@ class vpyr_2_tpyramid_level: public vpyr_2_pyramid_level<D>,
   //:
   vmap_dart_index index(const vpyr_2_tpyramid_level_dart & arg) const
   {
-    return _Base::index((const dart_type &)arg) ;
+    return Base_::index((const dart_type &)arg) ;
   }
 
   //: Returns the number of vertices.
@@ -369,7 +369,7 @@ class vpyr_2_tpyramid_level: public vpyr_2_pyramid_level<D>,
   //: Returns the index of the vertex "arg".
   vmap_vertex_index index (const vertex_type & arg) const
   {
-    return arg.sequence_index();//-(*_begin_vertex)->index() ;
+    return arg.sequence_index(); // -(*begin_vertex_)->index() ;
   }
 
   //: Returns the edge of index "arg".
@@ -391,7 +391,7 @@ class vpyr_2_tpyramid_level: public vpyr_2_pyramid_level<D>,
   //: Returns the index of the edge "arg".
   vmap_edge_index index (const edge_type & arg) const
   {
-    return arg.sequence_index();//-(*_begin_edge)->index() ;
+    return arg.sequence_index(); // -(*begin_edge_)->index() ;
   }
 
   //: Returns the face of index "arg".
@@ -413,7 +413,7 @@ class vpyr_2_tpyramid_level: public vpyr_2_pyramid_level<D>,
   //: Returns the index of the face "arg".
   vmap_face_index index (const face_type & arg) const
   {
-    return arg.sequence_index() ;//-(*_begin_face)->index() ;
+    return arg.sequence_index() ; // -(*begin_face_)->index() ;
   }
 
   //: Returns the index of the vertex associated to the dart "arg".
@@ -464,13 +464,12 @@ class vpyr_2_tpyramid_level: public vpyr_2_pyramid_level<D>,
   //: Removes the darts of arg_kernel. The darts are required beforehand to form a representativeed forest of faces.
   virtual void removal(const removal_kernel &arg_kernel) ;
 
-
  protected:
 
   //:
   pyramid_type & pyramid()
   {
-    return (pyramid_type &)*_pyramid ;
+    return (pyramid_type &)*pyramid_ ;
   }
 
  protected:

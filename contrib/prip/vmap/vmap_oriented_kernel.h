@@ -20,17 +20,19 @@ class vmap_oriented_kernel : public vmap_kernel
  public:
 
   //:
-  typedef vmap_kernel _Base ;
+  typedef vmap_kernel Base_ ;
 
   //:
-  typedef typename _Base::map_type map_type ;
+  typedef typename Base_::map_type map_type ;
 
   //:
-  typedef typename _Base::dart_iterator dart_iterator ;
-  //typedef typename map_type::vmap_dart_index vmap_dart_index ;
+  typedef typename Base_::dart_iterator dart_iterator ;
+#if 0
+  typedef typename map_type::vmap_dart_index vmap_dart_index ;
+#endif // 0
 
   //:
-  vmap_oriented_kernel(map_type & arg) : _Base(arg) {}
+  vmap_oriented_kernel(map_type & arg) : Base_(arg) {}
 
   //:
   ~vmap_oriented_kernel() {}
@@ -44,7 +46,7 @@ class vmap_oriented_kernel : public vmap_kernel
   //:
   bool can_insert(const dart_iterator & arg) const
   {
-    return !_mark(permutation().index_of(arg)) || !_Base::can_insert(arg) ;
+    return !mark_(permutation().index_of(arg)) || !Base_::can_insert(arg) ;
   }
 
   //:
@@ -59,8 +61,8 @@ class vmap_oriented_kernel : public vmap_kernel
   //:
   void clear()
   {
-    _Base::clear() ;
-    _mark.clear() ;
+    Base_::clear() ;
+    mark_.clear() ;
   }
 
  private :
@@ -69,7 +71,7 @@ class vmap_oriented_kernel : public vmap_kernel
   typedef std::vector<int> Mark ;
 
   //:
-  Mark _mark ;
+  Mark mark_ ;
 };
 
 #include "vmap_oriented_kernel.txx"

@@ -6,28 +6,28 @@
 
 template <class V, class E, class F, class D>
 vpyr_2_tpyramid_level<V,E,F,D>::vpyr_2_tpyramid_level(vmap_level_index arg_level,  pyramid_type & pyramid)
-  : _Base(arg_level, (typename _Base::pyramid_type &)pyramid),
+  : Base_(arg_level, (typename Base_::pyramid_type &)pyramid),
     vertex_sequence(pyramid.base_map()),
     edge_sequence(pyramid.base_map()),
     face_sequence(pyramid.base_map())
 {
-    vertex_sequence_iterator v;
-    for (v=begin_vertex_sequence(); v!=end_vertex_sequence();++v)
-    {
-      (*v)->set_last_level(index()) ;
-    }
+  vertex_sequence_iterator v;
+  for (v=begin_vertex_sequence(); v!=end_vertex_sequence();++v)
+  {
+    (*v)->set_last_level(index()) ;
+  }
 
-     edge_sequence_iterator e;
-    for (e=begin_edge_sequence(); e!=end_edge_sequence();++e)
-    {
-      (*e)->set_last_level(index()) ;
-    }
+  edge_sequence_iterator e;
+  for (e=begin_edge_sequence(); e!=end_edge_sequence();++e)
+  {
+    (*e)->set_last_level(index()) ;
+  }
 
-    face_sequence_iterator f;
-    for (f=begin_face_sequence(); f!=end_face_sequence();++f)
-    {
-      (*f)->set_last_level(index()) ;
-    }
+  face_sequence_iterator f;
+  for (f=begin_face_sequence(); f!=end_face_sequence();++f)
+  {
+    (*f)->set_last_level(index()) ;
+  }
 }
 
 template <class V, class E, class F, class D>
@@ -42,21 +42,33 @@ void vpyr_2_tpyramid_level<V,E,F,D>::contraction(const contraction_kernel &arg_k
         le=nb_edges(), id ;
 
     typename contraction_kernel::const_iterator itk ;
-    for (int i=0; i<arg_kernel.size(); ++i)//itk=arg_kernel.begin(); itk!=arg_kernel.end(); ++itk)
+    for (unsigned int i=0; i<arg_kernel.size(); ++i)//itk=arg_kernel.begin(); itk!=arg_kernel.end(); ++itk)
     {
-      //dart_pointer d =*itk ;
+#if 0
+      dart_pointer d =*itk ;
+#endif // 0
 
       id=dart_associated_edge(arg_kernel.get_dart_index(i)) ;
-      edge_pointer e=get_edge_pointer(id) ;////vpyr_2_pyramid_base_ancestor((edge_pointer)d->get_edge_pointer(),index()) ;
+      edge_pointer e=get_edge_pointer(id) ;
+#if 0
+      vpyr_2_pyramid_base_ancestor((edge_pointer)d->get_edge_pointer(),index()) ;
+#endif // 0
       e->set_last_level(level) ;
-      //id=e->sequence_index() ;
+#if 0
+      id=e->sequence_index() ;
+#endif // 0
       --le ;
       edge_sequence::swap(id,le) ;
 
       id=arg_kernel.get_element_index(i) ;
-      vertex_pointer v=get_vertex_pointer(id) ;////vpyr_2_pyramid_base_ancestor((vertex_pointer)d->get_vertex_pointer(),index()) ;
+      vertex_pointer v=get_vertex_pointer(id) ;
+#if 0
+      vpyr_2_pyramid_base_ancestor((vertex_pointer)d->get_vertex_pointer(),index()) ;
+#endif // 0
       v->set_last_level(level) ;
-      //id=v->sequence_index() ;
+#if 0
+      id=v->sequence_index() ;
+#endif // 0
       --lv ;
       vertex_sequence::swap(id,lv) ;
     }
@@ -90,21 +102,33 @@ void vpyr_2_tpyramid_level<V,E,F,D>::removal(const removal_kernel &arg_kernel)
         le=nb_edges(), id ;
 
     typename contraction_kernel::const_iterator itk ;
-    for (int i=0; i<arg_kernel.size(); ++i)//itk=arg_kernel.begin(); itk!=arg_kernel.end(); ++itk)
+    for (unsigned int i=0; i<arg_kernel.size(); ++i)//itk=arg_kernel.begin(); itk!=arg_kernel.end(); ++itk)
     {
-      //dart_pointer d =*itk ;
+#if 0
+      dart_pointer d =*itk ;
+#endif // 0
 
       id=dart_associated_edge(arg_kernel.get_dart_index(i)) ;
-      edge_pointer e=get_edge_pointer(id) ;////vpyr_2_pyramid_base_ancestor((edge_pointer)d->get_edge_pointer(),index()) ;
+      edge_pointer e=get_edge_pointer(id) ;
+#if 0
+      vpyr_2_pyramid_base_ancestor((edge_pointer)d->get_edge_pointer(),index()) ;
+#endif // 0
       e->set_last_level(level) ;
-      //id=e->sequence_index() ;
+#if 0
+      id=e->sequence_index() ;
+#endif // 0
       --le ;
       edge_sequence::swap(id,le) ;
 
       id=arg_kernel.get_element_index(i) ;
-      face_pointer v=get_face_pointer(id) ;////vpyr_2_pyramid_base_ancestor((face_pointer)d->get_face_pointer(),index()) ;
+      face_pointer v=get_face_pointer(id) ;
+#if 0
+      vpyr_2_pyramid_base_ancestor((face_pointer)d->get_face_pointer(),index()) ;
+#endif // 0
       v->set_last_level(level) ;
-      //id=v->sequence_index() ;
+#if 0
+      id=v->sequence_index() ;
+#endif // 0
       --lv ;
       face_sequence::swap(id,lv) ;
     }
@@ -121,9 +145,13 @@ void vpyr_2_tpyramid_level<V,E,F,D>::removal(const removal_kernel &arg_kernel)
       dart_sequence::swap(id,ld) ;
     }
     for (int i=le; i<nb_edges(); i++)
+    {
       get_edge_pointer(i)->set_last_level(level) ;
+    }
     for (int i=lv; i<nb_faces(); i++)
+    {
       get_face_pointer(i)->set_last_level(level) ;
+    }
 
     dart_sequence::resize(ld) ;
     edge_sequence::resize(le) ;

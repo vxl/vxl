@@ -26,13 +26,11 @@ class vpyr_2_tpyramid_level_dart : public vpyr_2_pyramid_level_dart
   typedef vpyr_2_tpyramid_base_dart base_type ;
 
   //:
-  vpyr_2_tpyramid_level_dart()
-  {}
+  vpyr_2_tpyramid_level_dart() {}
 
   //:
   vpyr_2_tpyramid_level_dart(const vpyr_2_tpyramid_level_dart & arg)
-      :vpyr_2_pyramid_level_dart(arg)
-  {}
+    :vpyr_2_pyramid_level_dart(arg)                                  {}
 
   //: Associated edge.
   inline const vpyr_2_tpyramid_level_edge edge() const ;
@@ -54,7 +52,7 @@ class vpyr_2_tpyramid_level_dart : public vpyr_2_pyramid_level_dart
 
  protected:
   //:
-  vpyr_2_tpyramid_base_dart* link() const {return (vpyr_2_tpyramid_base_dart*)_link ;}
+  vpyr_2_tpyramid_base_dart* link() const {return (vpyr_2_tpyramid_base_dart*)link_ ;}
 };
 
 //:
@@ -69,7 +67,6 @@ class vmap_2_tpdl_edge ;
 
 template <class D>
 class vmap_2_tpdl_face ;
-
 
 //: The public dart_type class.
 template <class D>
@@ -90,17 +87,17 @@ class vmap_2_tpdl_dart : public vpyr_2_tpyramid_level_dart
   //:
   value_type & data()
   {
-    return link()->data(_level) ;
+    return link()->data(level_) ;
   }
 
   //:
   const value_type & data() const
   {
-    return link()->data(_level) ;
+    return link()->data(level_) ;
   }
 
   //:
-  base_type* link() const {return (base_type*)_link ;}
+  base_type* link() const {return (base_type*)link_ ;}
 };
 
 //:
@@ -115,58 +112,56 @@ class vpyr_2_tpyramid_level_element_iterator : protected FD
   typedef FD element_type ;
 
   //:
-  vpyr_2_tpyramid_level_element_iterator()
-  {}
+  vpyr_2_tpyramid_level_element_iterator() {}
 
   //:
-  vpyr_2_tpyramid_level_element_iterator(const self_type &right)
-      :_it(right._it)
+  vpyr_2_tpyramid_level_element_iterator(const self_type &it)
+    :it_(it.it_)
   {
-    _level=right.level() ;
+    level_=it.level() ;
     set_link() ;
   }
 
   //:
-  ~vpyr_2_tpyramid_level_element_iterator()
-  {}
+  ~vpyr_2_tpyramid_level_element_iterator() {}
 
   //:
-  self_type & operator=(const self_type &right)
+  self_type & operator=(const self_type &it)
   {
-    _level=right.level() ;
-    _it=right.reference() ;
+    level_=it.level() ;
+    it_=it.reference() ;
     set_link() ;
     return *this ;
   }
 
   //:
-  bool operator==(const self_type &right) const
+  bool operator==(const self_type &it) const
   {
-    return _it==right._it ;
+    return it_==it.it_ ;
   }
 
   //:
-  bool operator!=(const self_type &right) const
+  bool operator!=(const self_type &it) const
   {
-    return _it!=right._it ;
+    return it_!=it.it_ ;
   }
 
   //:
-  Ref operator * () const
+  Ref operator*() const
   {
     return (Ref)*this ;
   }
 
   //:
-  const Ptr operator->() const
+  Ptr operator->() const
   {
-    return (const Ptr) this;
+    return (Ptr)this ;
   }
 
   //:
   self_type & operator++()
   {
-    ++_it;
+    ++it_;
     set_link();
     return *this ;
   }
@@ -177,10 +172,11 @@ class vpyr_2_tpyramid_level_element_iterator : protected FD
     return FD::level();
   }
 
-  //////////////////////private :
+// private :
+
   //:
   vpyr_2_tpyramid_level_element_iterator(It arg,vmap_level_index l)
-      :_it(arg)
+    :it_(arg)
   {
     set(*arg,l) ;
   }
@@ -188,18 +184,18 @@ class vpyr_2_tpyramid_level_element_iterator : protected FD
   //:
   It reference() const
   {
-    return _it ;
+    return it_ ;
   }
  private:
 
   //:
   void set_link()
   {
-    _link=*_it ;
+    link_=*it_ ;
   }
 
   //:
-  It _it ;
+  It it_ ;
 };
 
 //:
@@ -230,50 +226,50 @@ class vpyr_2_tpyramid_level_vertex
   //:
   void set(vpyr_2_tpyramid_base_vertex* arg_link, vmap_level_index arg_level)
   {
-    _link= arg_link ;
-    _level=arg_level ;
+    link_= arg_link ;
+    level_=arg_level ;
   }
 
   //:   Returns the number of edges adjacent to the vertex, i.e. the cardinal of associated sigma*.
   int degree() const
   {
-    return _link->degree(level()) ;
+    return link_->degree(level()) ;
   }
 
   //: Returns an iterator on the first dart of the associated sigma-cycle.
   dart_iterator begin()
   {
-    return dart_iterator(_link->begin(level()).reference(),level()) ;
+    return dart_iterator(link_->begin(level()).reference(),level()) ;
   }
 
   //: Returns an iterator on the first dart of the associated sigma-cycle.
   const_dart_iterator begin() const
   {
-    return const_dart_iterator(((const vpyr_2_tpyramid_base_vertex*)_link)->begin(level()).reference(),level()) ;
+    return const_dart_iterator(((const vpyr_2_tpyramid_base_vertex*)link_)->begin(level()).reference(),level()) ;
   }
 
   //: The vertex' level.
   vmap_level_index level() const
   {
-    return _level;
+    return level_;
   }
 
   //: An index of the map's vertex sequence.
   vmap_vertex_index sequence_index() const
   {
-    return _link->sequence_index() ;
+    return link_->sequence_index() ;
   }
 
  protected :
 
   //:
-  base_type* link() const {return _link ;}
+  base_type* link() const {return link_ ;}
 
   //:
-  vpyr_2_tpyramid_base_vertex* _link ;
+  vpyr_2_tpyramid_base_vertex* link_ ;
 
   //:
-  vmap_level_index _level ;
+  vmap_level_index level_ ;
 };
 
 //:
@@ -298,17 +294,17 @@ class vmap_2_tpdl_vertex : public vpyr_2_tpyramid_level_vertex
   //:
   value_type & data()
   {
-    return link()->data(_level) ;
+    return link()->data(level_) ;
   }
 
   //:
   const value_type & data() const
   {
-    return link()->data(_level) ;
+    return link()->data(level_) ;
   }
 };
 
-///:  The public face class. Faces are the orbits phi* of the darts.
+//:  The public face class. Faces are the orbits phi* of the darts.
 class vpyr_2_tpyramid_level_face
 {
  public :
@@ -324,38 +320,38 @@ class vpyr_2_tpyramid_level_face
   //:
   void set(vpyr_2_tpyramid_base_face* arg_link, vmap_level_index arg_level)
   {
-    _link= arg_link ;
-    _level=arg_level ;
+    link_= arg_link ;
+    level_=arg_level ;
   }
 
   //: Returns the number of edges adjacent to the face, i.e., the cardinal of associated phi*.
   int degree() const
   {
-    return _link->degree(level()) ;
+    return link_->degree(level()) ;
   }
 
   //: Returns an iterator on the first dart of the associated phi-cycle.
   dart_iterator begin()
   {
-    return dart_iterator(_link->begin(level()).reference(),level()) ;
+    return dart_iterator(link_->begin(level()).reference(),level()) ;
   }
 
   //: Returns an iterator on the first dart of the associated phi-cycle.
   const_dart_iterator begin() const
   {
-    return const_dart_iterator(((const vpyr_2_tpyramid_base_face*)_link)->begin(level()).reference(),level()) ;
+    return const_dart_iterator(((const vpyr_2_tpyramid_base_face*)link_)->begin(level()).reference(),level()) ;
   }
 
   //: The face's level.
   vmap_level_index level() const
   {
-    return _level;
+    return level_;
   }
 
   //: An index of the map's vertex sequence.
   vmap_face_index sequence_index() const
   {
-    return _link->sequence_index() ;
+    return link_->sequence_index() ;
   }
 
  protected:
@@ -364,13 +360,13 @@ class vpyr_2_tpyramid_level_face
   friend class vpyr_2_tpyramid_level_edge ;
 
   //:
-  base_type* link() const {return _link ;}
+  base_type* link() const {return link_ ;}
 
   //:
-  vpyr_2_tpyramid_base_face* _link ;
+  vpyr_2_tpyramid_base_face* link_ ;
 
   //:
-  vmap_level_index _level ;
+  vmap_level_index level_ ;
 };
 
 //:
@@ -394,16 +390,15 @@ class vmap_2_tpdl_face : public vpyr_2_tpyramid_level_face
   //:
   value_type & data()
   {
-    return link()->data(_level) ;
+    return link()->data(level_) ;
   }
 
   //:
   const value_type & data() const
   {
-    return link()->data(_level) ;
+    return link()->data(level_) ;
   }
 };
-
 
 //: The public edge_type class. Edges are the orbits alpha* of the darts.
 class vpyr_2_tpyramid_level_edge
@@ -421,66 +416,65 @@ class vpyr_2_tpyramid_level_edge
   //:
   void set(vpyr_2_tpyramid_base_edge* arg_link, vmap_level_index arg_level)
   {
-    _link= arg_link ;
-    _level=arg_level ;
+    link_= arg_link ;
+    level_=arg_level ;
   }
-
 
   //: Returns the cardinal of alpha*, i.e. 2.
   //  This is present for having an homogeneous view of the
   //  elements associated to permutations.
   int degree() const
   {
-    return _link->degree(level()) ;
+    return link_->degree(level()) ;
   }
 
   //: Returns true if the edge is a self-loop, false otherwise.
   bool is_self_loop () const
   {
-    return _link->is_self_loop(level()) ;
+    return link_->is_self_loop(level()) ;
   }
 
   //: Returns true if the edge is an empty self-loop, false otherwise.
   bool is_empty_self_loop () const
   {
-    return _link->is_empty_self_loop(level()) ;
+    return link_->is_empty_self_loop(level()) ;
   }
 
   //: Returns true if the edge is an isthmus, false otherwise.
   bool is_isthmus() const
   {
-    return _link->is_isthmus(level()) ;
+    return link_->is_isthmus(level()) ;
   }
 
   //: Returns true if the edge is a pendant edge, false otherwise.
   bool is_pendant() const
   {
-    return _link->is_pendant(level()) ;
+    return link_->is_pendant(level()) ;
   }
 
   //: Returns true if the edge is an isolated self-loop, false otherwise.
   bool is_isolated_self_loop() const
   {
-    return _link->is_isolated_self_loop(level()) ;
+    return link_->is_isolated_self_loop(level()) ;
   }
 
   //: Returns an iterator on the first dart of the associated alpha-cycle.
   dart_iterator begin()
   {
-    return dart_iterator(_link->begin(level()).reference(),level()) ;
+    return dart_iterator(link_->begin(level()).reference(),level()) ;
   }
 
   //: Returns an iterator on the first dart of the associated alpha-cycle.
   const_dart_iterator begin() const
   {
-    return const_dart_iterator(((const vpyr_2_tpyramid_base_edge*)_link)->begin(level()).reference(),level()) ;
+    return const_dart_iterator(((const vpyr_2_tpyramid_base_edge*)link_)->begin(level()).reference(),level()) ;
   }
 
   //:
   const vpyr_2_tpyramid_level_vertex first_vertex() const
   {
     vpyr_2_tpyramid_level_vertex tmp ;
-    tmp.set(const_cast<vpyr_2_tpyramid_base_vertex*>(&_link->first_vertex(level())), level());
+    tmp.set(const_cast<vpyr_2_tpyramid_base_vertex*>(&link_->first_vertex(level())), level());
     return tmp;
   }
 
@@ -488,7 +482,7 @@ class vpyr_2_tpyramid_level_edge
   const vpyr_2_tpyramid_level_vertex last_vertex() const
   {
     vpyr_2_tpyramid_level_vertex tmp ;
-    tmp.set(const_cast<vpyr_2_tpyramid_base_vertex*>(&_link->last_vertex(level())), level());
+    tmp.set(const_cast<vpyr_2_tpyramid_base_vertex*>(&link_->last_vertex(level())), level());
     return tmp;
   }
 
@@ -496,7 +490,7 @@ class vpyr_2_tpyramid_level_edge
   const vpyr_2_tpyramid_level_face right_face() const
   {
     vpyr_2_tpyramid_level_face tmp ;
-    tmp.set(const_cast<vpyr_2_tpyramid_base_face*>(&_link->right_face(level())),level()) ;
+    tmp.set(const_cast<vpyr_2_tpyramid_base_face*>(&link_->right_face(level())),level()) ;
     return tmp ;
   }
 
@@ -504,14 +498,14 @@ class vpyr_2_tpyramid_level_edge
   const vpyr_2_tpyramid_level_face left_face() const
   {
     vpyr_2_tpyramid_level_face tmp ;
-    tmp.set(const_cast<vpyr_2_tpyramid_base_face*>(&_link->left_face(level())),level()) ;
+    tmp.set(const_cast<vpyr_2_tpyramid_base_face*>(&link_->left_face(level())),level()) ;
     return tmp ;
   }
 
   //:
   bool is_adjacent_to (const vpyr_2_tpyramid_level_face & arg) const
   {
-    return _link->is_adjacent_to(*arg.link(),level()) ;
+    return link_->is_adjacent_to(*arg.link(),level()) ;
   }
 
   //:
@@ -523,25 +517,25 @@ class vpyr_2_tpyramid_level_edge
   //: The edge's level.
   vmap_level_index level() const
   {
-    return _level;
+    return level_;
   }
 
   //: An index of the map's vertex sequence.
   vmap_edge_index sequence_index() const
   {
-    return _link->sequence_index() ;
+    return link_->sequence_index() ;
   }
 
  protected:
 
   //:
-  base_type* link() const {return _link ;}
+  base_type* link() const {return link_ ;}
 
   //:
-  vpyr_2_tpyramid_base_edge* _link ;
+  vpyr_2_tpyramid_base_edge* link_ ;
 
   //:
-  vmap_level_index _level ;
+  vmap_level_index level_ ;
 };
 
 //:
@@ -565,72 +559,70 @@ class vmap_2_tpdl_edge : public vpyr_2_tpyramid_level_edge
   //:
   value_type & data()
   {
-    return link()->data(_level) ;
+    return link()->data(level_) ;
   }
 
   //:
   const value_type & data() const
   {
-    return link()->data(_level) ;
+    return link()->data(level_) ;
   }
 };
-
 
 //:
 inline const vpyr_2_tpyramid_level_edge vpyr_2_tpyramid_level_dart::edge() const
 {
   vpyr_2_tpyramid_level_edge tmp ;
-  tmp.set(&((vpyr_2_tpyramid_base_dart*)_link)->edge(level()),level()) ;
+  tmp.set(&((vpyr_2_tpyramid_base_dart*)link_)->edge(level()),level()) ;
   return tmp ;
 }
 
 inline const vpyr_2_tpyramid_level_vertex vpyr_2_tpyramid_level_dart::vertex() const
 {
   vpyr_2_tpyramid_level_vertex tmp ;
-  tmp.set(&((vpyr_2_tpyramid_base_dart*)_link)->vertex(level()),level()) ;
+  tmp.set(&((vpyr_2_tpyramid_base_dart*)link_)->vertex(level()),level()) ;
   return tmp ;
 }
 
 inline const vpyr_2_tpyramid_level_face vpyr_2_tpyramid_level_dart::face() const
 {
   vpyr_2_tpyramid_level_face tmp ;
-  tmp.set(&((vpyr_2_tpyramid_base_dart*)_link)->face(level()),level()) ;
+  tmp.set(&((vpyr_2_tpyramid_base_dart*)link_)->face(level()),level()) ;
   return tmp ;
 }
 
 inline vpyr_2_tpyramid_level_edge vpyr_2_tpyramid_level_dart::edge()
 {
   vpyr_2_tpyramid_level_edge tmp ;
-  tmp.set(&((vpyr_2_tpyramid_base_dart*)_link)->edge(level()),level()) ;
+  tmp.set(&((vpyr_2_tpyramid_base_dart*)link_)->edge(level()),level()) ;
   return tmp ;
 }
 
 inline vpyr_2_tpyramid_level_vertex vpyr_2_tpyramid_level_dart::vertex()
 {
   vpyr_2_tpyramid_level_vertex tmp ;
-  tmp.set(&((vpyr_2_tpyramid_base_dart*)_link)->vertex(level()),level()) ;
+  tmp.set(&((vpyr_2_tpyramid_base_dart*)link_)->vertex(level()),level()) ;
   return tmp ;
 }
 
 inline vpyr_2_tpyramid_level_face vpyr_2_tpyramid_level_dart::face()
 {
   vpyr_2_tpyramid_level_face tmp;
-  tmp.set(&((vpyr_2_tpyramid_base_dart*)_link)->face(level()),level()) ;
+  tmp.set(&((vpyr_2_tpyramid_base_dart*)link_)->face(level()),level()) ;
   return tmp ;
 }
 
 inline const vpyr_2_tpyramid_level_dart vpyr_2_tpyramid_level_edge::direct_dart() const
 {
   vpyr_2_tpyramid_level_dart tmp ;
-  //tmp.set(const_cast<vpyr_2_tpyramid_base_dart*>(&_link->direct_dart(level())),level()) ;
-  tmp.set(const_cast<vpyr_2_tpyramid_base_dart*>(&_link->direct_dart(level())),level()) ;
+  tmp.set(const_cast<vpyr_2_tpyramid_base_dart*>(&link_->direct_dart(level())),level()) ;
   return tmp ;
 }
 
 inline const vpyr_2_tpyramid_level_dart vpyr_2_tpyramid_level_edge::inverse_dart() const
 {
   vpyr_2_tpyramid_level_dart tmp ;
-  tmp.set(const_cast<vpyr_2_tpyramid_base_dart*>(&_link->inverse_dart(level())),level()) ;
+  tmp.set(const_cast<vpyr_2_tpyramid_base_dart*>(&link_->inverse_dart(level())),level()) ;
   return tmp ;
 }
 

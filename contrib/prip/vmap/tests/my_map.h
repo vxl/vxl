@@ -1,3 +1,4 @@
+// This is prip/vmap/tests/my_map.h
 #ifndef my_map_h_
 #define my_map_h_
 
@@ -6,57 +7,57 @@
 
 struct my_map_vertex : public vmap_2_tmap_vertex
 {
-  int _id ;
+  int id_ ;
   int id() const
   {
-    return  _id ;
+    return  id_ ;
   }
 
   int & id()
   {
-    return _id ;
+    return id_ ;
   }
 };
 
 struct my_map_edge : public vmap_2_tmap_edge
 {
-  int _id ;
+  int id_ ;
   int id() const
   {
-    return  _id ;
+    return  id_ ;
   }
 
   int & id()
   {
-    return _id ;
+    return id_ ;
   }
 };
 
 struct my_map_face : public vmap_2_tmap_face
 {
-  int _id ;
+  int id_ ;
   int id() const
   {
-    return  _id ;
+    return  id_ ;
   }
 
   int & id()
   {
-    return _id ;
+    return id_ ;
   }
 };
 
 struct my_map_dart : public vmap_2_tmap_dart
 {
-  int _id ;
+  int id_ ;
   int id() const
   {
-    return  _id ;
+    return  id_ ;
   }
 
   int & id()
   {
-    return _id ;
+    return id_ ;
   }
 };
 

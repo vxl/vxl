@@ -4,85 +4,99 @@
 #if 0
 vpyr_2_pyramid_base_dart::vpyr_2_pyramid_base_dart()
 {
-    _directAncestor=_toplevel_typeAncestor=this ;
+  directAncestor_=toplevel_typeAncestor_=this ;
 }
 #endif // 0
 
 vpyr_2_pyramid_base_dart* vpyr_2_pyramid_base_dart::ancestor(vmap_level_index level)
 {
 #if 0
-      if (level==::vmap_top_level_index())
-      {
-        return toplevel_typeAncestor() ;
-      }
-      vpyr_2_pyramid_base_dart* d=this;
-      unsigned dl=d->last_level() ;
-      while (dl<level)
-      {
-        d=d->directAncestor() ;
-      }
+  if (level==::vmap_top_level_index())
+  {
+    return toplevel_typeAncestor() ;
+  }
+  vpyr_2_pyramid_base_dart* d=this;
+  unsigned dl=d->last_level() ;
+  while (dl<level)
+  {
+    d=d->directAncestor() ;
+  }
 #endif // 0
   vpyr_2_pyramid_base_dart* d=this;
   unsigned dl=d->last_level() ;
   while (dl<level)
   {
     if (vmap_is_contraction_type(dl))
+    {
       d=vmap_2_map_phi(d) ;
+    }
     else
+    {
       d=vmap_2_map_sigma(d) ;
+    }
     dl=d->last_level() ;
   }
   return d ;
 }
 
-#if 0
+#if 0 // method commented out
 vpyr_2_pyramid_base_dart* vpyr_2_pyramid_base_dart::directAncestor()
 {
-    if (_directAncestor==this && last_level()!=::vmap_top_level_index()) 
+  if (directAncestor_==this && last_level()!=::vmap_top_level_index())
+  {
+    unsigned dl=last_level() ;
+    do
     {
-      unsigned dl=last_level() ;
-      do
+      if (vmap_is_contraction_type(directAncestor_->last_level()))
       {
-        if (vmap_is_contraction_type(_directAncestor->last_level()))
-              _directAncestor=::phi(_directAncestor) ;
-          else
-              _directAncestor=::sigma(_directAncestor) ;
+        directAncestor_=::phi(directAncestor_) ;
       }
-      while (_directAncestor->last_level()<=dl) ;
+      else
+      {
+        directAncestor_=::sigma(directAncestor_) ;
+      }
     }
-    return _directAncestor ;
+    while (directAncestor_->last_level()<=dl) ;
+  }
+  return directAncestor_ ;
 }
- 
+
 vpyr_2_pyramid_base_dart* vpyr_2_pyramid_base_dart::toplevel_typeAncestor()
 {
-    if (_toplevel_typeAncestor->last_level()!=::vmap_top_level_index())
+    if (toplevel_typeAncestor_->last_level()!=::vmap_top_level_index())
     {
-      vpyr_2_pyramid_base_dart * d=_toplevel_typeAncestor->directAncestor() ;
-      while (_toplevel_typeAncestor->last_level()!=::vmap_top_level_index()) 
-        _toplevel_typeAncestor=_toplevel_typeAncestor->directAncestor() ;
-      while (d->_toplevel_typeAncestor->last_level()!=::vmap_top_level_index()) 
+      vpyr_2_pyramid_base_dart * d=toplevel_typeAncestor_->directAncestor() ;
+      while (toplevel_typeAncestor_->last_level()!=::vmap_top_level_index())
       {
-        d->_toplevel_typeAncestor = _toplevel_typeAncestor ;
+        toplevel_typeAncestor_=toplevel_typeAncestor_->directAncestor() ;
+      }
+      while (d->toplevel_typeAncestor_->last_level()!=::vmap_top_level_index())
+      {
+        d->toplevel_typeAncestor_ = toplevel_typeAncestor_ ;
         d=d->directAncestor() ;
       }
     }
-    return _toplevel_typeAncestor ;
+    return toplevel_typeAncestor_ ;
 }
 #endif // 0
 
 void vpyr_2_pyramid_base_dart::set_last_level(vmap_level_index arg)
 {
-  _last_level=(arg*2);
+  last_level_=(arg*2);
   if (arg==vmap_top_level_index())
   {
-    vmap_2_map_alpha(this)->_last_level=_last_level;
+    vmap_2_map_alpha(this)->last_level_=last_level_;
   }
   else
   {
-    //std::cout<<arg<<'/'<<_last_level<<std::endl ;
-    vmap_2_map_alpha(this)->_last_level=(_last_level+1);
+#ifdef DEBUG
+    vcl_cout<<arg<<'/'<<last_level_<<vcl_endl ;
+#endif
+    vmap_2_map_alpha(this)->last_level_=(last_level_+1);
   }
-  //_directAncestor=_toplevel_typeAncestor=this ;
+#if 0
+  directAncestor_=toplevel_typeAncestor_=this ;
+#endif // 0
 }
 
 const vpyr_2_pyramid_base_dart* vpyr_2_pyramid_base_dart::ancestor(vmap_level_index level) const
@@ -90,4 +104,3 @@ const vpyr_2_pyramid_base_dart* vpyr_2_pyramid_base_dart::ancestor(vmap_level_in
   vpyr_2_pyramid_base_dart& d=const_cast<vpyr_2_pyramid_base_dart&> (*this);
   return d.ancestor(level) ;
 }
-

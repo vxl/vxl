@@ -17,7 +17,9 @@
 template < class TPyramid , class TTopLevel >
 class vpyr_bu_builder
 {
-  //typedef Basevpyr_2_pyramid _Base ;
+#if 0
+  typedef Basevpyr_2_pyramid Base_ ;
+#endif // 0
  public:
 
   //:

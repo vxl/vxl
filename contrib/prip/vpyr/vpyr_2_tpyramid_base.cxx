@@ -1,77 +1,81 @@
 // This is prip/vpyr/vpyr_2_tpyramid_base.cxx
 #include "vpyr_2_tpyramid_base.h"
 
-//////////////////////////////////////// inline
-
 const vpyr_2_tpyramid_base_edge & vpyr_2_tpyramid_base_dart::edge(vmap_level_index level) const
 {
-  return *_BaseTuple::edge().ancestor(level) ;
+  return *BaseTuple_::edge().ancestor(level) ;
 }
 
 const vpyr_2_tpyramid_base_vertex & vpyr_2_tpyramid_base_dart::vertex(vmap_level_index level) const
 {
-  return *_BaseTuple::vertex().ancestor(level) ;
+  return *BaseTuple_::vertex().ancestor(level) ;
 }
 
 const vpyr_2_tpyramid_base_face & vpyr_2_tpyramid_base_dart::face(vmap_level_index level) const
 {
-  return *_BaseTuple::face().ancestor(level) ;
+  return *BaseTuple_::face().ancestor(level) ;
 }
 
 vpyr_2_tpyramid_base_edge & vpyr_2_tpyramid_base_dart::edge(vmap_level_index level)
 {
-  return *_BaseTuple::edge().ancestor(level) ;
+  return *BaseTuple_::edge().ancestor(level) ;
 }
 
 vpyr_2_tpyramid_base_vertex & vpyr_2_tpyramid_base_dart::vertex(vmap_level_index level)
 {
-  return *_BaseTuple::vertex().ancestor(level) ;
+  return *BaseTuple_::vertex().ancestor(level) ;
 }
 
 vpyr_2_tpyramid_base_face & vpyr_2_tpyramid_base_dart::face(vmap_level_index level)
 {
-  return *_BaseTuple::face().ancestor(level) ;
+  return *BaseTuple_::face().ancestor(level) ;
 }
 
 void vpyr_2_tpyramid_base_dart::set_sequence_index(vmap_dart_index arg)
 {
-   int offset =arg-sequence_index() ;
+  int offset =arg-sequence_index() ;
 
   vpyr_2_pyramid_base_dart::set_sequence_index(arg) ;
 
   vmap_2_tmap_dart_iterator it ;
-  if (_edge!=NULL)
+  if (edge_!=NULL)
   {
-    it = _edge->begin()+offset ;
+    it = edge_->begin()+offset ;
     if (&*it==(vmap_2_tmap_dart*)this)
-      _edge->set_begin(it) ;
+    {
+      edge_->set_begin(it) ;
+    }
   }
-  if (_vertex!=NULL)
+  if (vertex_!=NULL)
   {
-    it = _vertex->begin()+offset ;
+    it = vertex_->begin()+offset ;
     if (&*it==(vmap_2_tmap_dart*)this)
-      _vertex->set_begin(it) ;
+    {
+      vertex_->set_begin(it) ;
+    }
   }
-  if (_face!=NULL)
+  if (face_!=NULL)
   {
-    it = _face->begin()+offset ;
+    it = face_->begin()+offset ;
     if (&*it==(vmap_2_tmap_dart*)this)
-      _face->set_begin(it) ;
+    {
+      face_->set_begin(it) ;
+    }
   }
 #if 0
   int offset =arg-sequence_index() ;
 
-  if (_edge!=NULL && (vpyr_2_tpyramid_base_dart*)&*(((vmap_2_tmap_edge*)_edge)->begin()+offset)==this)
+  if (edge_!=NULL && (vpyr_2_tpyramid_base_dart*)&*(((vmap_2_tmap_edge*)edge_)->begin()+offset)==this)
   {
-    _edge->set_begin(((vmap_2_tmap_edge*)_edge)->begin()+offset) ;
+    edge_->set_begin(((vmap_2_tmap_edge*)edge_)->begin()+offset) ;
   }
-  if (_vertex!=NULL && (vpyr_2_tpyramid_base_dart*)&*(((vmap_2_tmap_vertex*)_vertex)->begin()+offset)==this)
+  if (vertex_!=NULL && (vpyr_2_tpyramid_base_dart*)&*(((vmap_2_tmap_vertex*)vertex_)->begin()+offset)==this)
   {
-    _vertex->set_begin(((vmap_2_tmap_vertex*)_vertex)->begin()+offset) ;
+    vertex_->set_begin(((vmap_2_tmap_vertex*)vertex_)->begin()+offset) ;
   }
-  if (_face!=NULL && (vpyr_2_tpyramid_base_dart*)&*(((vmap_2_tmap_face*)_face)->begin()+offset)==this)
+  if (face_!=NULL && (vpyr_2_tpyramid_base_dart*)&*(((vmap_2_tmap_face*)face_)->begin()+offset)==this)
   {
-    _face->set_begin(((vmap_2_tmap_face*)_face)->begin()+offset) ;
+    face_->set_begin(((vmap_2_tmap_face*)face_)->begin()+offset) ;
   }
   vpyr_2_pyramid_base_dart::set_sequence_index(arg) ;
 #endif // 0
@@ -207,13 +211,16 @@ vpyr_2_tpyramid_base_vertex* vpyr_2_tpyramid_base_vertex::ancestor(vmap_level_in
   vmap_level_index l=v->last_level() ;
   while (l<level && vmap_is_contraction_type(l)) // if
   {
-    vpyr_2_tpyramid_base_dart* d=*v->begin(l).reference(); //, end=d ;
+    vpyr_2_tpyramid_base_dart* d=*v->begin(l).reference();
+#if 0
+    vpyr_2_tpyramid_base_dart* end=d;
+#endif // 0
     // we find the adjacent contracted dart leading to the father
     do
     {
       d=vpyr_2_pyramid_base_sigma(d,l) ;
     }
-    while (!d->modified_at_level(l)); // d!=end) ; there is a father !
+    while (!d->modified_at_level(l)); // d!=end); // there is a father !
     v=&vpyr_2_pyramid_base_alpha(d,l)->vertex(l) ;
     l=v->last_level() ;
   }
@@ -257,13 +264,16 @@ vpyr_2_tpyramid_base_face* vpyr_2_tpyramid_base_face::ancestor(vmap_level_index 
   vmap_level_index l=v->last_level() ;
   while (l<level && vmap_is_removal_type(l)) // if
   {
-    vpyr_2_tpyramid_base_dart* d=*v->begin(l).reference(); //, end=d ;
+    vpyr_2_tpyramid_base_dart* d=*v->begin(l).reference();
+#if 0
+    vpyr_2_tpyramid_base_dart* end=d;
+#endif // 0
     // we find the adjacent contracted dart leading to the father
     do
     {
       d=vpyr_2_pyramid_base_phi(d,l) ;
     }
-    while (!d->modified_at_level(l)); // d!=end) ; there is a father !
+    while (!d->modified_at_level(l)); // d!=end); // there is a father !
     v=&vpyr_2_pyramid_base_alpha(d,l)->face(l) ;
     l=v->last_level() ;
   }

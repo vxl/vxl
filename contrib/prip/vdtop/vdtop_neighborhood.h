@@ -29,41 +29,40 @@ class vdtop_8_neighborhood
     vcl_ptrdiff_t jstep=img.jstep();
     typename vil_image_view<T>::iterator tmp=pix.position();
     tmp+=istep ;
-    _neighbors[0]=tmp ;
+    neighbors_[0]=tmp ;
     tmp-=jstep ;
-    _neighbors[1]=tmp ;
+    neighbors_[1]=tmp ;
     tmp-=istep ;
-    _neighbors[2]=tmp ;
+    neighbors_[2]=tmp ;
     tmp-=istep ;
-    _neighbors[3]=tmp ;
+    neighbors_[3]=tmp ;
     tmp+=jstep ;
-    _neighbors[4]=tmp ;
+    neighbors_[4]=tmp ;
     tmp+=jstep ;
-    _neighbors[5]=tmp ;
+    neighbors_[5]=tmp ;
     tmp+=istep ;
-    _neighbors[6]=tmp ;
+    neighbors_[6]=tmp ;
     tmp+=istep ;
-    _neighbors[7]=tmp ;
+    neighbors_[7]=tmp ;
   }
 
   const_iterator begin() const
   {
-    return _neighbors ;
+    return neighbors_ ;
   }
   const_iterator end() const
   {
-    return _neighbors+8 ;
+    return neighbors_+8 ;
   }
 
   const T& neighbor_value(vdtop_freeman_code arg) const
   {
-    return *_neighbors[arg.code()] ;
+    return *neighbors_[arg.code()] ;
   }
 
-
  private:
-  typename vil_image_view<T>::iterator _neighbors[8] ;
-} ;
+  typename vil_image_view<T>::iterator neighbors_[8] ;
+};
 
 template <class T>
 class vdtop_4_neighborhood
@@ -79,30 +78,29 @@ class vdtop_4_neighborhood
     vcl_ptrdiff_t istep=img.istep();
     vcl_ptrdiff_t jstep=img.jstep();
     tmp+=istep ;
-    _neighbors[0]=tmp ;
+    neighbors_[0]=tmp ;
     tmp-=jstep ;
     tmp-=istep ;
-    _neighbors[1]=tmp ;
+    neighbors_[1]=tmp ;
     tmp-=istep ;
     tmp+=jstep ;
-    _neighbors[2]=tmp ;
+    neighbors_[2]=tmp ;
     tmp+=istep ;
     tmp+=jstep ;
-    _neighbors[3]=tmp ;
+    neighbors_[3]=tmp ;
   }
 
   const_iterator begin() const
   {
-    return _neighbors ;
+    return neighbors_ ;
   }
   const_iterator end() const
   {
-    return _neighbors+4 ;
+    return neighbors_+4 ;
   }
 
-
  private:
-  typename vil_image_view<T>::iterator _neighbors[4] ;
-} ;
+  typename vil_image_view<T>::iterator neighbors_[4] ;
+};
 
 #endif

@@ -19,72 +19,73 @@ template< typename F, typename Ref, typename Ptr, typename It >
 class vmap_ptr_iterator_wrapper
 {
  public:
-    //:
-    typedef vmap_ptr_iterator_wrapper< F,Ref,Ptr,It > self_type ;
+  //:
+  typedef vmap_ptr_iterator_wrapper< F,Ref,Ptr,It > self_type ;
 
-    //:
-    typedef F element_type ;
+  //:
+  typedef F element_type ;
 
-    //:
-    vmap_ptr_iterator_wrapper() {}
+  //:
+  vmap_ptr_iterator_wrapper() {}
 
-    //:
-    vmap_ptr_iterator_wrapper(const self_type &it) :_it(it._it) {}
+  //:
+  vmap_ptr_iterator_wrapper(const self_type &it) :it_(it.it_) {}
 
-    //:
-    ~vmap_ptr_iterator_wrapper() {}
+  //:
+  ~vmap_ptr_iterator_wrapper() {}
 
-    //:
-    self_type & operator=(const self_type &it)
-    {
-        _it=it._it ;
-        return *this ;
-    }
+  //:
+  self_type & operator=(const self_type &it)
+  {
+      it_=it.it_ ;
+      return *this ;
+  }
 
-    //:
-    bool operator==(const self_type &it) const
-    {
-        return _it==it._it ;
-    }
+  //:
+  bool operator==(const self_type &it) const
+  {
+      return it_==it.it_ ;
+  }
 
-    //:
-    bool operator!=(const self_type &it) const
-    {
-        return _it!=it._it ;
-    }
+  //:
+  bool operator!=(const self_type &it) const
+  {
+      return it_!=it.it_ ;
+  }
 
-    //:
-    Ref operator * () const
-    {
-        return (Ref)**_it ;
-    }
+  //:
+  Ref operator * () const
+  {
+      return (Ref)**it_ ;
+  }
 
-    //:
-    Ptr operator->() const
-    {
-        return (Ptr) *_it;
-    }
+  //:
+  Ptr operator->() const
+  {
+      return (Ptr) *it_;
+  }
 
-    //:
-    self_type & operator++ ()
-    {
-        ++_it;
-        return *this ;
-    }
+  //:
+  self_type & operator++ ()
+  {
+      ++it_;
+      return *this ;
+  }
 
 // private :
 
-    //:
-    vmap_ptr_iterator_wrapper(It arg) :_it(arg) {}
+  //:
+  vmap_ptr_iterator_wrapper(It arg) :it_(arg) {}
 
-    //:
-    It reference() const
-    {
-        return _it ;
-    }
+  //:
+  It reference() const
+  {
+      return it_ ;
+  }
+
  private :
-    //:
-    It _it ;
+  //:
+  It it_ ;
 };
 
 //:
@@ -114,15 +115,15 @@ class vmap_ptr_sequence
 
  public:
   //:
-  vmap_ptr_sequence() : _begin(NULL), _end(NULL) {}
+  vmap_ptr_sequence() : begin_(NULL), end_(NULL) {}
 
   //:
-  vmap_ptr_sequence(const vmap_ptr_sequence<D> & arg ) : _begin(arg._begin), _end(arg._end) {}
+  vmap_ptr_sequence(const vmap_ptr_sequence<D> & arg ) : begin_(arg.begin_), end_(arg.end_) {}
 
   //:
   int size () const
   {
-    return _end-_begin;
+    return end_-begin_;
   }
 
   //:
@@ -136,47 +137,49 @@ class vmap_ptr_sequence
   //:
   iterator begin()
   {
-    return _begin ;
+    return begin_ ;
   }
 
   //:
   iterator end()
   {
-    return _end ;
+    return end_ ;
   }
 
   //:
   const_iterator begin() const
   {
-    return _begin;
+    return begin_;
   }
 
   //:
   const_iterator end() const
   {
-    return _end ;
+    return end_ ;
   }
 
   //:
-  template <class _Predicate>
-  iterator reorder(const _Predicate & arg)
+  template <class Predicate_>
+  iterator reorder(const Predicate_ & arg)
   {
-    iterator middle=vcl_stable_partition(_begin,_end,arg) ;
-    for (iterator tmp=_begin;tmp!=_end;++tmp)
-      (*tmp)->set_sequence_index(tmp-_begin) ;
+    iterator middle=vcl_stable_partition(begin_,end_,arg) ;
+    for (iterator tmp=begin_;tmp!=end_;++tmp)
+    {
+      (*tmp)->set_sequence_index(tmp-begin_) ;
+    }
     return middle ;
   }
 
   //:
   pointer & get_pointer(int arg)
   {
-    return _begin[arg] ;
+    return begin_[arg] ;
   }
 
   //:
   const pointer & get_pointer(int arg) const
   {
-    return _begin[arg] ;
+    return begin_[arg] ;
   }
 
   //:
@@ -190,31 +193,31 @@ class vmap_ptr_sequence
   //:
   void pop_back()
   {
-    delete_dart(*(--_end)) ;
+    delete_dart(*(--end_)) ;
   }
 
   //:
   void set_begin(iterator arg)
   {
-    _begin=arg;
+    begin_=arg;
   }
 
   //:
   void resize(int arg_size)
   {
-    _end=_begin+arg_size ;
+    end_=begin_+arg_size ;
   }
 
   //:
   void clear()
   {
-    _begin=_end=NULL ;
+    begin_=end_=NULL ;
   }
 
  private:
 
   //:
-  iterator _begin, _end ;
+  iterator begin_, end_ ;
 };
 
 //:
@@ -258,8 +261,8 @@ class vmap_owning_sequence: public vmap_ptr_sequence<D>
       int j=0;
       for (;i!=arg.end(); ++i,++j)
       {
-        _storage[j]=**i ;
-        _storage[j].set_sequence_index(j) ;
+        storage_[j]=**i ;
+        storage_[j].set_sequence_index(j) ;
       }
     }
     return *this ;
@@ -268,7 +271,7 @@ class vmap_owning_sequence: public vmap_ptr_sequence<D>
   //:
   int position(const element_type & arg) const
   {
-    return &arg - &_storage.front() ;
+    return &arg - &storage_.front() ;
   }
 
  protected:
@@ -283,30 +286,29 @@ class vmap_owning_sequence: public vmap_ptr_sequence<D>
   void resize(int arg_size)
   {
     clear() ;
-    _storage.resize(arg_size) ;
+    storage_.resize(arg_size) ;
     set_begin(new pointer[arg_size]) ;
     vmap_ptr_sequence<D>::resize(arg_size) ;
 
     for (int i=0; i<arg_size; ++i)
     {
-      get_pointer(i)=&_storage[i] ;
-      _storage[i].set_sequence_index(i) ;
+      get_pointer(i)=&storage_[i] ;
+      storage_[i].set_sequence_index(i) ;
     }
   }
 
   //:
   void clear()
   {
-    if (begin()!=NULL)
-      delete [] begin() ;
+    delete [] begin() ;
     vmap_ptr_sequence<D>::clear() ;
-    _storage.clear();
+    storage_.clear();
   }
 
  private:
 
   //:
-  vcl_vector<element_type> _storage ;
+  vcl_vector<element_type> storage_ ;
 };
 
 #endif

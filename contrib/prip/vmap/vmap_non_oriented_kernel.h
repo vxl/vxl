@@ -14,7 +14,6 @@
 
 #include "vmap_kernel.h"
 
-
 //: A wrapper to an existing kernel which manage darts in an non oriented mananer and avoids aving loops in the resulting kernel.
 // The darts added to the kernel using the function "add" are added if the resulting edge graph is a tree.
 // When finalise is called, the non oriented graph is turn into an oriented graph which is composed of rooted trees.
@@ -24,31 +23,31 @@ class vmap_non_oriented_kernel : public TKernel
  public:
 
   //:
-  typedef TKernel _Base ;
+  typedef TKernel Base_ ;
 
   //:
-  typedef typename _Base::map_type map_type ;
+  typedef typename Base_::map_type map_type ;
 
   //:
-  typedef typename _Base::dart_iterator dart_iterator ;
-  //typedef typename map_type::vmap_dart_index vmap_dart_index ;
+  typedef typename Base_::dart_iterator dart_iterator ;
+#if 0
+  typedef typename map_type::vmap_dart_index vmap_dart_index ;
+#endif // 0
 
   //: the linked elements
-  typedef typename _Base::element_type element_type ;
+  typedef typename Base_::element_type element_type ;
 
   //:
-  typedef typename _Base::element_iterator element_iterator ;
+  typedef typename Base_::element_iterator element_iterator ;
 
   //:
-  typedef typename _Base::element_index element_index ;
+  typedef typename Base_::element_index element_index ;
 
   //:
-  typedef typename _Base::element_pointer element_pointer ;
+  typedef typename Base_::element_pointer element_pointer ;
 
   //:
-  vmap_non_oriented_kernel(map_type & arg)
-      : _Base(arg)
-  {}
+  vmap_non_oriented_kernel(map_type & arg) : Base_(arg) {}
 
   //:
   ~vmap_non_oriented_kernel() {}
@@ -76,8 +75,8 @@ class vmap_non_oriented_kernel : public TKernel
   //:
   void clear()
   {
-    _Base::clear() ;
-    _graph.clear() ;
+    Base_::clear() ;
+    graph_.clear() ;
   }
 
  protected :
@@ -94,7 +93,7 @@ class vmap_non_oriented_kernel : public TKernel
   typedef vcl_vector<AdjList> Graph;
 
   //:
-  Graph _graph ;
+  Graph graph_ ;
 };
 
 #include "vmap_non_oriented_kernel.txx"

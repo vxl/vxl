@@ -8,9 +8,9 @@
 
 template <class V, class E, class F, class D>
 vmap_2_tmap< V,E,F,D >::vmap_2_tmap(self_type const& tmap)
-  : _Base(tmap)
+  : Base_(tmap)
 {
-   operator=(tmap) ;
+  operator=(tmap) ;
 }
 
 template <class V, class E, class F, class D>
@@ -45,7 +45,7 @@ void vmap_2_tmap< V,E,F,D >::set_all_cycles()
 template <class V, class E, class F, class D>
 void vmap_2_tmap< V,E,F,D >::clear()
 {
-  _Base::clear() ;
+  Base_::clear() ;
   vertex_sequence::clear() ;
   edge_sequence::clear() ;
   face_sequence::clear() ;
@@ -79,15 +79,14 @@ void vmap_2_tmap< V,E,F,D >::initialise_faces(int arg_nb_faces)
 }
 
 template <class V, class E, class F, class D>
-vmap_2_tmap< V,E,F,D >::~ vmap_2_tmap()
-{}
+vmap_2_tmap< V,E,F,D >::~ vmap_2_tmap() {}
 
 template <class V, class E, class F, class D>
 vmap_2_tmap< V,E,F,D > & vmap_2_tmap< V,E,F,D >::operator=(self_type const& tmap)
 {
   if (&tmap!=this)
   {
-    _Base::operator=(tmap) ;
+    Base_::operator=(tmap) ;
     vertex_sequence::operator=(tmap) ;
     edge_sequence::operator=(tmap) ;
     face_sequence::operator=(tmap) ;
@@ -166,7 +165,7 @@ void vmap_2_tmap< V,E,F,D >::set_vertex_cycles()
   count_vertex =0 ;
   for (d=begin_dart();d!=end_dart();++d)
   {
-    if (d->get_vertex_pointer()==(vmap_2_tmap_vertex*)0xFFFFFFFF)//NULL)
+    if (d->get_vertex_pointer()==(vmap_2_tmap_vertex*)0xFFFFFFFF)
     {
       vertex(count_vertex).set_begin(d) ;
       dart_iterator end=d ;
@@ -238,7 +237,7 @@ void vmap_2_tmap< V,E,F,D >::set_face_cycles()
   count_vertex =0 ;
   for (d=begin_dart();d!=end_dart();++d)
   {
-    if (d->get_face_pointer()==(vmap_2_tmap_face*)0xFFFFFFFF)//NULL)
+    if (d->get_face_pointer()==(vmap_2_tmap_face*)0xFFFFFFFF)
     {
       face(count_vertex).set_begin(d) ;
       dart_iterator end=d ;
@@ -285,7 +284,7 @@ bool vmap_2_tmap< V,E,F,D >::valid_permutations() const
 template <class V, class E, class F, class D>
 bool vmap_2_tmap< V,E,F,D >::valid() const
 {
-  if (!_Base::valid()) return false ;
+  if (!Base_::valid()) return false ;
   for (int i=0; i<nb_darts(); i++)
   {
     if (!dart(i).valid()) return false ;
@@ -351,7 +350,7 @@ void vmap_2_tmap< V,E,F,D >::removal(dart_iterator & arg)
       a->vertex().set_begin(i) ;
     }
     edge_type * e=d->get_edge_pointer() ;
-    _base.unchecked_removal(arg) ;
+    base_.unchecked_removal(arg) ;
     face_sequence::remove(v->sequence_index()) ;
     edge_sequence::remove(e->sequence_index()) ;
   }
@@ -360,10 +359,10 @@ void vmap_2_tmap< V,E,F,D >::removal(dart_iterator & arg)
 template <class V, class E, class F, class D>
 void vmap_2_tmap< V,E,F,D >::contraction(dart_iterator & arg)
 {
-  vmap_2_tmap_dart* d=&*arg,
-            *  a=vmap_2_map_alpha(d) ;
-  vmap_2_tmap_vertex * v=d->get_vertex_pointer(),
-               * ov=a->get_vertex_pointer() ;
+  vmap_2_tmap_dart * d = &*arg,
+                   * a = vmap_2_map_alpha(d) ;
+  vmap_2_tmap_vertex * v = d->get_vertex_pointer(),
+                     * ov = a->get_vertex_pointer() ;
   if (v!=ov)
   {
     dart_iterator i=arg ; i.sigma() ;
@@ -388,7 +387,7 @@ void vmap_2_tmap< V,E,F,D >::contraction(dart_iterator & arg)
       a->face().set_begin(i) ;
     }
     edge_type * e=d->get_edge_pointer() ;
-    _base.unchecked_contraction(arg) ;
+    base_.unchecked_contraction(arg) ;
     vertex_sequence::remove(v->sequence_index()) ;
     edge_sequence::remove(e->sequence_index()) ;
   }
@@ -404,7 +403,10 @@ void vmap_2_tmap< V,E,F,D >::contraction(contraction_kernel const& arg_kernel)
   typename contraction_kernel::const_iterator itk ;
   for (itk=arg_kernel.begin(); itk!=arg_kernel.end(); ++itk)
   {
-    dart_pointer d =*itk ; //get_dart_pointer((*itk)->sequence_index()) ;
+    dart_pointer d =*itk ;
+#if 0
+    get_dart_pointer((*itk)->sequence_index()) ;
+#endif // 0
     id=d->sequence_index() ;
     --ld ;
     dart_sequence::swap(id,ld) ;
@@ -441,19 +443,21 @@ void vmap_2_tmap< V,E,F,D >::contraction(contraction_kernel const& arg_kernel)
     }
   }
 
+  for (itk=arg_kernel.begin(); itk!=arg_kernel.end(); ++itk)
+  {
+    dart_pointer d =*itk ;
+#if 0
+    get_dart_pointer((*itk)->sequence_index()) ;
+#endif // 0
 
-    for (itk=arg_kernel.begin(); itk!=arg_kernel.end(); ++itk)
-    {
-      dart_pointer d =*itk ; //get_dart_pointer((*itk)->sequence_index()) ;
+    id=d->get_edge_pointer()->sequence_index() ;
+    --le ;
+    edge_sequence::swap(id,le) ;
 
-      id=d->get_edge_pointer()->sequence_index() ;
-      --le ;
-      edge_sequence::swap(id,le) ;
-
-      id=d->get_vertex_pointer()->sequence_index() ;
-      --lv ;
-      vertex_sequence::swap(id,lv) ;
-    }
+    id=d->get_vertex_pointer()->sequence_index() ;
+    --lv ;
+    vertex_sequence::swap(id,lv) ;
+  }
 
   for (id=nb_darts()-1; id>=ld ; id-- )
   {
@@ -466,9 +470,13 @@ void vmap_2_tmap< V,E,F,D >::contraction(contraction_kernel const& arg_kernel)
       while (ssd->sequence_index()>=ld) ssd=vmap_2_map_phi(ssd) ;
       dart_iterator it(&get_dart_pointer(ssd->sequence_index())) ;
       if (d==bv)
-            d->vertex().set_begin(it) ;
+      {
+        d->vertex().set_begin(it) ;
+      }
       if (d==bf)
-            d->face().set_begin(it) ;
+      {
+        d->face().set_begin(it) ;
+      }
     }
 #endif // 0
     dart_sequence::pop_back() ;
@@ -494,7 +502,10 @@ void vmap_2_tmap< V,E,F,D >::removal(removal_kernel const& arg_kernel)
   typename contraction_kernel::const_iterator itk ;
   for (itk=arg_kernel.begin(); itk!=arg_kernel.end(); ++itk)
   {
-    dart_pointer d =*itk;//get_dart_pointer((*itk)->sequence_index()) ;
+    dart_pointer d =*itk;
+#if 0
+    get_dart_pointer((*itk)->sequence_index()) ;
+#endif // 0
     id=d->sequence_index() ;
     --ld ;
     dart_sequence::swap(id,ld) ;
@@ -530,7 +541,10 @@ void vmap_2_tmap< V,E,F,D >::removal(removal_kernel const& arg_kernel)
   }
   for (itk=arg_kernel.begin(); itk!=arg_kernel.end(); ++itk)
   {
-    dart_pointer d =*itk;//get_dart_pointer((*itk)->sequence_index()) ;
+    dart_pointer d =*itk;
+#if 0
+    get_dart_pointer((*itk)->sequence_index()) ;
+#endif // 0
     id=d->get_edge_pointer()->sequence_index() ;
     --le ;
     edge_sequence::swap(id,le) ;
@@ -551,9 +565,13 @@ void vmap_2_tmap< V,E,F,D >::removal(removal_kernel const& arg_kernel)
       while (ssd->sequence_index()>=ld) ssd=vmap_2_map_sigma(ssd) ;
       dart_iterator it(&get_dart_pointer(ssd->sequence_index())) ;
       if (d==bv)
-            d->vertex().set_begin(it) ;
+      {
+        d->vertex().set_begin(it) ;
+      }
       if (d==bf)
-            d->face().set_begin(it) ;
+      {
+        d->face().set_begin(it) ;
+      }
     }
 #endif // 0
     dart_sequence::pop_back() ;
@@ -573,7 +591,7 @@ void vmap_2_tmap< V,E,F,D >::removal(removal_kernel const& arg_kernel)
 template <class V, class E, class F, class D>
 vmap_2_tmap_tag vmap_2_tmap<V,E,F,D>::tag ;
 
-#if 0
+#if 0 // method commented out
 template <class V, class E, class F, class D>
 typename vmap_2_tmap< V,E,F,D >::edge_iterator
 vmap_2_tmap< V,E,F,D >::find_edge(vertex_type const& arg1,vertex_type const& arg2)
@@ -586,12 +604,14 @@ vmap_2_tmap< V,E,F,D >::find_edge(vertex_type const& arg1,vertex_type const& arg
            &dart->edge().first_vertex()!=&arg2 &&
            &dart->edge().last_vertex()!=&arg2) ;
   if ((&dart->edge().first_vertex()==&arg2)|| (&dart->edge().last_vertex()==&arg2))
+  {
     return (get_edge_pointer.begin()+index(cast(dart->edge())));
+  }
   return end_edge() ;
 }
 #endif // 0
 
-#if 0
+#if 0 // method commented out
 template <class V, class E, class F, class D>
 void  vmap_2_map< V,E,F,D >::set_edge(vmap_edge_index arg,
                                       vmap_edge_index arg_edge1, vmap_vertex_index arg_vertex1, vmap_face_index arg_face1,
@@ -602,17 +622,21 @@ void  vmap_2_map< V,E,F,D >::set_edge(vmap_edge_index arg,
                   tmp12 = edge_first_dart(arg),
                   tmp22 = alpha(tmp12);
   if (dart_associated_vertex(tmp1)!=arg_vertex1)
+  {
     tmp1=alpha(tmp1) ;
+  }
 
   if (dart_associated_vertex(tmp2)!=arg_vertex2)
+  {
     tmp1=alpha(tmp2) ;
+  }
 
   set_dart(tmp12,tmp1, arg_vertex1, arg_face1) ;
   set_dart(tmp22,tmp2, arg_vertex2, arg_face2) ;
 }
 #endif // 0
 
-#if 0
+#if 0 // method commented out
 template <class V, class E, class F, class D>
 typename vmap_2_tmap< V,E,F,D >::edge_iterator
 vmap_2_tmap< V,E,F,D >::find_edge(vertex_type const& arg1,vertex_type const& arg2)
@@ -625,7 +649,9 @@ vmap_2_tmap< V,E,F,D >::find_edge(vertex_type const& arg1,vertex_type const& arg
            &dart->edge().first_vertex()!=&arg2 &&
            &dart->edge().last_vertex()!=&arg2) ;
   if ((&dart->edge().first_vertex()==&arg2)|| (&dart->edge().last_vertex()==&arg2))
+  {
     return (get_edge_pointer.begin()+index(cast(dart->edge())));
+  }
   return end_edge() ;
 }
 #endif // 0

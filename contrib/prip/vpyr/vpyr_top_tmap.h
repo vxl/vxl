@@ -21,17 +21,17 @@ class vpyr_top_tmap : public vmap_2_tmap<V,E,F,D>
  public:
 
   //:
-  typedef vmap_2_tmap<V,E,F,D> _Base ;
+  typedef vmap_2_tmap<V,E,F,D> Base_ ;
 
-  typedef typename _Base::contraction_kernel contraction_kernel ;
-  typedef typename _Base::removal_kernel removal_kernel ;
+  typedef typename Base_::contraction_kernel contraction_kernel ;
+  typedef typename Base_::removal_kernel removal_kernel ;
 
   //:
   typedef TPyramid pyramid_type ;
 
   //:
   vpyr_top_tmap(TPyramid & arg)
-    :_pyramid(arg)
+    :pyramid_(arg)
   {
     synchronise() ;
   }
@@ -49,27 +49,26 @@ class vpyr_top_tmap : public vmap_2_tmap<V,E,F,D>
   //:
   virtual void removal(const removal_kernel & arg) ;
 
-
   const pyramid_type & pyramid() const
   {
-    return _pyramid ;
+    return pyramid_ ;
   }
 
   //: Synchronises the top level of its pyramid and its structure
   void synchronise()
   {
-    if (!_pyramid.empty()) _Base::set_structure(_pyramid.top_level()) ;
+    if (!pyramid_.empty()) Base_::set_structure(pyramid_.top_level()) ;
   }
 
   void set_pyramid_base_structure()
   {
-    _pyramid.set_base_structure(*this) ;
+    pyramid_.set_base_structure(*this) ;
   }
 
  private :
 
   //:
-  pyramid_type & _pyramid ;
+  pyramid_type & pyramid_ ;
 };
 
 #include "vpyr_top_tmap.txx"

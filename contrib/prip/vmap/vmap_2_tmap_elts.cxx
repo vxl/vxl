@@ -7,29 +7,35 @@ void vmap_2_tmap_dart::set_sequence_index(vmap_dart_index arg)
   vmap_2_map_dart::set_sequence_index(arg) ;
 
   vmap_2_tmap_dart_iterator it ;
-  if (_edge!=NULL)
+  if (edge_!=NULL)
   {
-    it = _edge->begin()+offset ;
+    it = edge_->begin()+offset ;
     if (&*it==(vmap_2_tmap_dart*)this)
-      _edge->set_begin(it) ;
+    {
+      edge_->set_begin(it) ;
+    }
   }
-  if (_vertex!=NULL)
+  if (vertex_!=NULL)
   {
-    it = _vertex->begin()+offset ;
+    it = vertex_->begin()+offset ;
     if (&*it==(vmap_2_tmap_dart*)this)
-      _vertex->set_begin(it) ;
+    {
+      vertex_->set_begin(it) ;
+    }
   }
-  if (_face!=NULL)
+  if (face_!=NULL)
   {
-    it = _face->begin()+offset ;
+    it = face_->begin()+offset ;
     if (&*it==(vmap_2_tmap_dart*)this)
-      _face->set_begin(it) ;
+    {
+      face_->set_begin(it) ;
+    }
   }
  }
 
 int vmap_2_tmap_face::degree() const
 {
-  dart_iterator pt=_begin, end=pt ;
+  dart_iterator pt=begin_, end=pt ;
   int count=0;
   do
   {
@@ -52,4 +58,3 @@ int vmap_2_tmap_vertex::degree() const
   while (pt!=end) ;
   return count ;
 }
-

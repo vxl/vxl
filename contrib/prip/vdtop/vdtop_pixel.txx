@@ -3,33 +3,32 @@
 #define vdtop_pixel_txx_
 //:
 // \file
-
 #include "vdtop_pixel.h"
 
 template <class T>
 vdtop_8_neighborhood_mask vdtop_pixel<T>::upper_neighborhood() const
 {
-  image_iterator tmp=_position;
+  image_iterator tmp=position_;
   vxl_byte mask=0;
-  const vcl_ptrdiff_t istep=_img->istep();
-  const vcl_ptrdiff_t jstep=_img->jstep();
+  const vcl_ptrdiff_t istep=img_->istep();
+  const vcl_ptrdiff_t jstep=img_->jstep();
 
   tmp+=istep; // right
-  mask|=((*tmp)>=(*_position));
+  mask|=((*tmp)>=(*position_));
   tmp-=jstep; // top right
-  mask|=((*tmp)>=(*_position))<<1;
+  mask|=((*tmp)>=(*position_))<<1;
   tmp-=istep; // top
-  mask|=((*tmp)>=(*_position))<<2;
+  mask|=((*tmp)>=(*position_))<<2;
   tmp-=istep; // top left
-  mask|=((*tmp)>=(*_position))<<3;
+  mask|=((*tmp)>=(*position_))<<3;
   tmp+=jstep; // left
-  mask|=((*tmp)>=(*_position))<<4;
+  mask|=((*tmp)>=(*position_))<<4;
   tmp+=jstep; // bottom left
-  mask|=((*tmp)>=(*_position))<<5;
+  mask|=((*tmp)>=(*position_))<<5;
   tmp+=istep; // bottom
-  mask|=((*tmp)>=(*_position))<<6;
+  mask|=((*tmp)>=(*position_))<<6;
   tmp+=istep; // bottom right
-  mask|=((*tmp)>=(*_position))<<7;
+  mask|=((*tmp)>=(*position_))<<7;
 
   return vdtop_8_neighborhood_mask(mask);
 }
@@ -37,27 +36,27 @@ vdtop_8_neighborhood_mask vdtop_pixel<T>::upper_neighborhood() const
 template <class T>
 vdtop_8_neighborhood_mask vdtop_pixel<T>::lower_neighborhood() const
 {
-  image_iterator tmp=_position;
+  image_iterator tmp=position_;
   vxl_byte mask= 0;
-  const vcl_ptrdiff_t istep=_img->istep();
-  const vcl_ptrdiff_t jstep=_img->jstep();
+  const vcl_ptrdiff_t istep=img_->istep();
+  const vcl_ptrdiff_t jstep=img_->jstep();
 
   tmp+=istep; // right
-  mask|=((*tmp)<=(*_position));
+  mask|=((*tmp)<=(*position_));
   tmp-=jstep; // top right
-  mask|=((*tmp)<=(*_position))<<1;
+  mask|=((*tmp)<=(*position_))<<1;
   tmp-=istep; // top
-  mask|=((*tmp)<=(*_position))<<2;
+  mask|=((*tmp)<=(*position_))<<2;
   tmp-=istep; // top left
-  mask|=((*tmp)<=(*_position))<<3;
+  mask|=((*tmp)<=(*position_))<<3;
   tmp+=jstep; // left
-  mask|=((*tmp)<=(*_position))<<4;
+  mask|=((*tmp)<=(*position_))<<4;
   tmp+=jstep; // bottom left
-  mask|=((*tmp)<=(*_position))<<5;
+  mask|=((*tmp)<=(*position_))<<5;
   tmp+=istep; // bottom
-  mask|=((*tmp)<=(*_position))<<6;
+  mask|=((*tmp)<=(*position_))<<6;
   tmp+=istep; // bottom right
-  mask|=((*tmp)<=(*_position))<<7;
+  mask|=((*tmp)<=(*position_))<<7;
 
   return vdtop_8_neighborhood_mask(mask);
 }
@@ -66,34 +65,34 @@ vdtop_8_neighborhood_mask vdtop_pixel<T>::lower_neighborhood() const
 template <class T>
 void vdtop_pixel<T>::destruct_4()
 {
-  image_iterator tmp=_position, alpha;
+  image_iterator tmp=position_, alpha;
   bool unset=true;
-  const vcl_ptrdiff_t istep=_img->istep();
-  const vcl_ptrdiff_t jstep=_img->jstep();
+  const vcl_ptrdiff_t istep=img_->istep();
+  const vcl_ptrdiff_t jstep=img_->jstep();
 
   tmp+=istep; // right
-  if (*tmp < *_position && (unset || *tmp > *alpha ))
+  if (*tmp < *position_ && (unset || *tmp > *alpha ))
   {
     alpha=tmp; unset=false;
   }
   tmp-=jstep+istep; // top
-  if (*tmp < *_position && (unset || *tmp > *alpha ))
+  if (*tmp < *position_ && (unset || *tmp > *alpha ))
   {
     alpha=tmp; unset=false;
   }
   tmp+=jstep-istep; // left
-  if (*tmp < *_position && (unset || *tmp > *alpha ))
+  if (*tmp < *position_ && (unset || *tmp > *alpha ))
   {
     alpha=tmp; unset=false;
   }
   tmp+=jstep+istep; // bottom
-  if (*tmp < *_position && (unset || *tmp > *alpha ))
+  if (*tmp < *position_ && (unset || *tmp > *alpha ))
   {
     alpha=tmp; unset=false;
   }
   if (!unset)
   {
-    *_position=*alpha;
+    *position_=*alpha;
   }
 #if 0
   vdtop_binary_neighborhood low=~upper_neighborhood();
@@ -113,61 +112,61 @@ void vdtop_pixel<T>::destruct_4()
       direction+=2;
     }
   }
-  *_position=alpha;
+  *position_=alpha;
 #endif // 0
 }
 
 template <class T>
 void vdtop_pixel<T>::destruct_8()
 {
-  image_iterator tmp=_position, alpha=tmp;
+  image_iterator tmp=position_, alpha=tmp;
   bool unset=true;
-  const vcl_ptrdiff_t istep=_img->istep();
-  const vcl_ptrdiff_t jstep=_img->jstep();
+  const vcl_ptrdiff_t istep=img_->istep();
+  const vcl_ptrdiff_t jstep=img_->jstep();
 
   tmp+=istep; // right
-  if (*tmp < *_position && (unset || *tmp > *alpha ))
+  if (*tmp < *position_ && (unset || *tmp > *alpha ))
   {
     alpha=tmp; unset=false;
   }
   tmp-=jstep; // top right
-  if (*tmp < *_position && (unset || *tmp > *alpha ))
+  if (*tmp < *position_ && (unset || *tmp > *alpha ))
   {
     alpha=tmp; unset=false;
   }
   tmp-=istep; // top
-  if (*tmp < *_position && (unset || *tmp > *alpha ))
+  if (*tmp < *position_ && (unset || *tmp > *alpha ))
   {
     alpha=tmp; unset=false;
   }
   tmp-=istep; // top left
-  if (*tmp < *_position && (unset || *tmp > *alpha ))
+  if (*tmp < *position_ && (unset || *tmp > *alpha ))
   {
     alpha=tmp; unset=false;
   }
   tmp+=jstep; // left
-  if (*tmp < *_position && (unset || *tmp > *alpha ))
+  if (*tmp < *position_ && (unset || *tmp > *alpha ))
   {
     alpha=tmp; unset=false;
   }
   tmp+=jstep; // bottom left
-  if (*tmp < *_position && (unset || *tmp > *alpha ))
+  if (*tmp < *position_ && (unset || *tmp > *alpha ))
   {
     alpha=tmp; unset=false;
   }
   tmp+=istep; // bottom
-  if (*tmp < *_position && (unset || *tmp > *alpha ))
+  if (*tmp < *position_ && (unset || *tmp > *alpha ))
   {
     alpha=tmp; unset=false;
   }
   tmp+=istep; // bottom right
-  if (*tmp < *_position && (unset || *tmp > *alpha ))
+  if (*tmp < *position_ && (unset || *tmp > *alpha ))
   {
     alpha=tmp; unset=false;
   }
   if (!unset)
   {
-    *_position=*alpha;
+    *position_=*alpha;
   }
 #if 0
   vdtop_binary_neighborhood low=~upper_neighborhood();
@@ -187,41 +186,41 @@ void vdtop_pixel<T>::destruct_8()
       ++direction;
     }
   }
-  *_position=alpha;
+  *position_=alpha;
 #endif // 0
 }
 
 template <class T>
 void vdtop_pixel<T>::construct_4()
 {
-  image_iterator  tmp=_position, alpha=tmp;
+  image_iterator  tmp=position_, alpha=tmp;
   bool unset=true;
-  const vcl_ptrdiff_t istep=_img->istep();
-  const vcl_ptrdiff_t jstep=_img->jstep();
+  const vcl_ptrdiff_t istep=img_->istep();
+  const vcl_ptrdiff_t jstep=img_->jstep();
 
   tmp+=istep; // right
-  if (*tmp > *_position && (unset || *tmp < *alpha ))
+  if (*tmp > *position_ && (unset || *tmp < *alpha ))
   {
     alpha=tmp; unset=false;
   }
   tmp-=jstep+istep; // top
-  if (*tmp > *_position && (unset || *tmp < *alpha ))
+  if (*tmp > *position_ && (unset || *tmp < *alpha ))
   {
     alpha=tmp; unset=false;
   }
   tmp+=jstep-istep; // left
-  if (*tmp > *_position && (unset || *tmp < *alpha ))
+  if (*tmp > *position_ && (unset || *tmp < *alpha ))
   {
     alpha=tmp; unset=false;
   }
   tmp+=jstep+istep; // bottom
-  if (*tmp > *_position && (unset || *tmp < *alpha ))
+  if (*tmp > *position_ && (unset || *tmp < *alpha ))
   {
     alpha=tmp; unset=false;
   }
   if (!unset)
   {
-    *_position=*alpha;
+    *position_=*alpha;
   }
 #if 0
   vdtop_binary_neighborhood low=~lower_neighborhood();
@@ -241,61 +240,61 @@ void vdtop_pixel<T>::construct_4()
       direction+=2;
     }
   }
-  *_position=alpha;
+  *position_=alpha;
 #endif // 0
 }
 
 template <class T>
 void vdtop_pixel<T>::construct_8()
 {
-  image_iterator tmp=_position, alpha=tmp;
+  image_iterator tmp=position_, alpha=tmp;
   bool unset=true;
-  const vcl_ptrdiff_t istep=_img->istep();
-  const vcl_ptrdiff_t jstep=_img->jstep();
+  const vcl_ptrdiff_t istep=img_->istep();
+  const vcl_ptrdiff_t jstep=img_->jstep();
 
   tmp+=istep; // right
-  if (*tmp > *_position && (unset || *tmp < *alpha ))
+  if (*tmp > *position_ && (unset || *tmp < *alpha ))
   {
     alpha=tmp; unset=false;
   }
   tmp-=jstep; // top right
-  if (*tmp > *_position && (unset || *tmp < *alpha ))
+  if (*tmp > *position_ && (unset || *tmp < *alpha ))
   {
     alpha=tmp; unset=false;
   }
   tmp-=istep; // top
-  if (*tmp > *_position && (unset || *tmp < *alpha ))
+  if (*tmp > *position_ && (unset || *tmp < *alpha ))
   {
     alpha=tmp; unset=false;
   }
   tmp-=istep; // top left
-  if (*tmp > *_position && (unset || *tmp < *alpha ))
+  if (*tmp > *position_ && (unset || *tmp < *alpha ))
   {
     alpha=tmp; unset=false;
   }
   tmp+=jstep; // left
-  if (*tmp > *_position && (unset || *tmp < *alpha ))
+  if (*tmp > *position_ && (unset || *tmp < *alpha ))
   {
     alpha=tmp; unset=false;
   }
   tmp+=jstep; // bottom left
-  if (*tmp > *_position && (unset || *tmp < *alpha ))
+  if (*tmp > *position_ && (unset || *tmp < *alpha ))
   {
     alpha=tmp; unset=false;
   }
   tmp+=istep; // bottom
-  if (*tmp > *_position && (unset || *tmp < *alpha ))
+  if (*tmp > *position_ && (unset || *tmp < *alpha ))
   {
     alpha=tmp; unset=false;
   }
   tmp+=istep; // bottom right
-  if (*tmp > *_position && (unset || *tmp < *alpha ))
+  if (*tmp > *position_ && (unset || *tmp < *alpha ))
   {
     alpha=tmp; unset=false;
   }
   if (!unset)
   {
-    *_position=*alpha;
+    *position_=*alpha;
   }
 #if 0
   vdtop_binary_neighborhood low=~lower_neighborhood();
@@ -315,7 +314,7 @@ void vdtop_pixel<T>::construct_8()
       ++direction;
     }
   }
-  *_position=alpha;
+  *position_=alpha;
 #endif // 0
 }
 

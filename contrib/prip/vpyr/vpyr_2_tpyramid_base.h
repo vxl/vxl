@@ -27,42 +27,42 @@ class vpyr_2_tpyramid_base_dart : public vpyr_2_pyramid_base_dart,
 {
  public:
   //:
-  typedef vmap_2_tmap_tuple< vpyr_2_tpyramid_base_vertex, vpyr_2_tpyramid_base_edge, vpyr_2_tpyramid_base_face > _BaseTuple ;
+  typedef vmap_2_tmap_tuple< vpyr_2_tpyramid_base_vertex, vpyr_2_tpyramid_base_edge, vpyr_2_tpyramid_base_face > BaseTuple_ ;
 
   //: Associated edge.
   const vpyr_2_tpyramid_base_edge & edge() const
   {
-    return (const vpyr_2_tpyramid_base_edge &) _BaseTuple::edge() ;
+    return (const vpyr_2_tpyramid_base_edge &) BaseTuple_::edge() ;
   }
 
   //: Associated vertex.
   const vpyr_2_tpyramid_base_vertex & vertex() const
   {
-    return (const vpyr_2_tpyramid_base_vertex &) _BaseTuple::vertex() ;
+    return (const vpyr_2_tpyramid_base_vertex &) BaseTuple_::vertex() ;
   }
 
   //: Associated face.
   const vpyr_2_tpyramid_base_face & face() const
   {
-    return (const vpyr_2_tpyramid_base_face &) _BaseTuple::face() ;
+    return (const vpyr_2_tpyramid_base_face &) BaseTuple_::face() ;
   }
 
   //: Associated edge.
   vpyr_2_tpyramid_base_edge & edge()
   {
-    return (vpyr_2_tpyramid_base_edge &) _BaseTuple::edge() ;
+    return (vpyr_2_tpyramid_base_edge &) BaseTuple_::edge() ;
   }
 
   //: Associated vertex.
   vpyr_2_tpyramid_base_vertex & vertex()
   {
-    return (vpyr_2_tpyramid_base_vertex &) _BaseTuple::vertex() ;
+    return (vpyr_2_tpyramid_base_vertex &) BaseTuple_::vertex() ;
   }
 
   //: Associated face.
   vpyr_2_tpyramid_base_face & face()
   {
-    return (vpyr_2_tpyramid_base_face &) _BaseTuple::face() ;
+    return (vpyr_2_tpyramid_base_face &) BaseTuple_::face() ;
   }
 
   //: Associated edge.
@@ -95,18 +95,18 @@ class vmap_2_tpd_dart : public vpyr_2_tpyramid_base_dart
   //:
   typename D::value_type & data(vmap_level_index arg_level)
   {
-    return _d.data(arg_level) ;
+    return d_.data(arg_level) ;
   }
 
   //:
   const typename D::value_type & data(vmap_level_index arg_level) const
   {
-    return _d.data(arg_level) ;
+    return d_.data(arg_level) ;
   }
  protected :
 
   //:
-  D _d ;
+  D d_ ;
 };
 
 //:
@@ -159,19 +159,19 @@ class vpyr_2_tpyramid_base_vertex : public vmap_2_tmap_vertex
   //: Returns the index of the last level of existence of the vertex.
   vmap_level_index last_level() const
   {
-    return _last_level ;
+    return last_level_ ;
   }
 
   //: Sets the index of the last level of existence of the vertex.
   void set_last_level(vmap_level_index arg)
   {
-    _last_level = arg ;
+    last_level_ = arg ;
   }
 
  private:
 
   //:
-  vmap_level_index _last_level ;
+  vmap_level_index last_level_ ;
 };
 
 template <class D>
@@ -182,19 +182,19 @@ class vmap_2_tpd_vertex : public vpyr_2_tpyramid_base_vertex
   //:
   typename D::value_type & data(vmap_level_index arg_level)
   {
-    return _d.data(arg_level) ;
+    return d_.data(arg_level) ;
   }
 
   //:
   const typename D::value_type  & data(vmap_level_index arg_level) const
   {
-    return _d.data(arg_level) ;
+    return d_.data(arg_level) ;
   }
 
  protected :
 
   //:
-  D _d ;
+  D d_ ;
 };
 
 //: The class for faces of the base structure of a topological pyramid.
@@ -237,19 +237,19 @@ class vpyr_2_tpyramid_base_face : public vmap_2_tmap_face
   //: Returns the index of the last level of existence of the face.
   vmap_level_index last_level() const
   {
-    return _last_level ;
+    return last_level_ ;
   }
 
   //: Sets the index of the last level of existence of the face.
   void set_last_level(vmap_level_index arg)
   {
-    _last_level = arg ;
+    last_level_ = arg ;
   }
 
  private:
 
   //:
-  vmap_level_index _last_level ;
+  vmap_level_index last_level_ ;
 };
 
 template <class D>
@@ -260,19 +260,19 @@ class vmap_2_tpd_face : public vpyr_2_tpyramid_base_face
   //:
   typename D::value_type & data(vmap_level_index arg_level)
   {
-    return _d.data(arg_level) ;
+    return d_.data(arg_level) ;
   }
 
   //:
   const typename D::value_type & data(vmap_level_index arg_level) const
   {
-    return _d.data(arg_level) ;
+    return d_.data(arg_level) ;
   }
 
  protected :
 
   //:
-  D _d ;
+  D d_ ;
 };
 
 //:
@@ -355,8 +355,7 @@ class vpyr_2_tpyramid_base_edge : public vmap_2_tmap_edge
   vmap_level_index last_level() const ;
 
   //: Sets the index of the last level of existence of the edge.
-  void set_last_level(vmap_level_index arg)
-  {}
+  void set_last_level(vmap_level_index arg) {}
 };
 
 //:
@@ -368,19 +367,19 @@ class vmap_2_tpd_edge : public vpyr_2_tpyramid_base_edge
   //:
   typename D::value_type & data(vmap_level_index arg_level)
   {
-    return _d.data(arg_level) ;
+    return d_.data(arg_level) ;
   }
 
   //:
   const typename D::value_type & data(vmap_level_index arg_level) const
   {
-    return _d.data(arg_level) ;
+    return d_.data(arg_level) ;
   }
 
  protected :
 
   //:
-  D _d ;
+  D d_ ;
 };
 
 #endif

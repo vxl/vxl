@@ -1,7 +1,6 @@
 // This is prip/vdtop/vdtop_construct_well_composed.h
 #ifndef vdtop_construct_well_composed_h_
 #define vdtop_construct_well_composed_h_
-
 //:
 // \file
 // \brief Provides a function for computing a 4-connected lower leveling kernel of Bertrand and al
@@ -20,52 +19,50 @@ template <class T>
 class vdtop_well_composed
 {
  protected:
-  vdtop_pixel<T> _pixel ;
-  vdtop_8_neighborhood<T> _neighborhood ;
+  vdtop_pixel<T> pixel_ ;
+  vdtop_8_neighborhood<T> neighborhood_ ;
  public:
-  vdtop_well_composed(vil_image_view<T> & arg)
-    :_pixel(arg, arg.begin())
-  {}
+  vdtop_well_composed(vil_image_view<T> & arg) :pixel_(arg, arg.begin()) {}
 
   typedef typename vdtop_8_neighborhood<T>::const_iterator iterator ;
 
   void set_position(typename vil_image_view<T>::iterator arg)
   {
-    _pixel.set_position(arg) ;
-    _neighborhood.set_center(_pixel) ;
+    pixel_.set_position(arg) ;
+    neighborhood_.set_center(pixel_) ;
   }
 
   bool can_remove()
   {
     return
-    (_neighborhood.neighbor_value(7)<=_pixel.value() &&
-     _pixel.value()<_neighborhood.neighbor_value(6) &&
-     _pixel.value()<_neighborhood.neighbor_value(0))||
-    (_neighborhood.neighbor_value(1)<=_pixel.value() &&
-     _pixel.value()<_neighborhood.neighbor_value(0) &&
-     _pixel.value()<_neighborhood.neighbor_value(2))||
-    (_neighborhood.neighbor_value(3)<=_pixel.value() &&
-     _pixel.value()<_neighborhood.neighbor_value(2) &&
-     _pixel.value()<_neighborhood.neighbor_value(4))||
-    (_neighborhood.neighbor_value(5)<=_pixel.value() &&
-     _pixel.value()<_neighborhood.neighbor_value(6) &&
-     _pixel.value()<_neighborhood.neighbor_value(4)) ;
+    (neighborhood_.neighbor_value(7)<=pixel_.value() &&
+     pixel_.value()<neighborhood_.neighbor_value(6) &&
+     pixel_.value()<neighborhood_.neighbor_value(0))||
+    (neighborhood_.neighbor_value(1)<=pixel_.value() &&
+     pixel_.value()<neighborhood_.neighbor_value(0) &&
+     pixel_.value()<neighborhood_.neighbor_value(2))||
+    (neighborhood_.neighbor_value(3)<=pixel_.value() &&
+     pixel_.value()<neighborhood_.neighbor_value(2) &&
+     pixel_.value()<neighborhood_.neighbor_value(4))||
+    (neighborhood_.neighbor_value(5)<=pixel_.value() &&
+     pixel_.value()<neighborhood_.neighbor_value(6) &&
+     pixel_.value()<neighborhood_.neighbor_value(4)) ;
   }
 
   void remove()
   {
-    _pixel.construct_4() ;
+    pixel_.construct_4() ;
   }
 
   iterator begin_next()
   {
-    return _neighborhood.begin() ;
+    return neighborhood_.begin() ;
   }
   iterator end_next()
   {
-    return _neighborhood.end() ;
+    return neighborhood_.end() ;
   }
-} ;
+};
 
 //: Construct a well composed image of arg
 template <class T>

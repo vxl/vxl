@@ -1,7 +1,6 @@
 // This is prip/vpyr/vpyr_2_pyramid_base.h
 #ifndef vpyr_2_pyramid_base_h_
 #define vpyr_2_pyramid_base_h_
-
 //:
 // \file
 // \brief contains the elements of the base of a vmap_2_pyramid.
@@ -15,7 +14,7 @@
 //
 // \verbatim
 //  Modifications
-//   Here goes a chronological list of file modifications (with author and date)
+//   6 May 2004 Jocelyn Marchadier - initial version
 // \endverbatim
 
 #include <vmap/vmap_2_map.h>
@@ -64,7 +63,6 @@ DPtr vpyr_2_pyramid_base_ancestor(DPtr arg, vmap_level_index l)
   return (DPtr)(arg->ancestor(l)) ;
 }
 
-
 //: Data associated to each element at each level.
 template <class D>
 struct vmap_simple_data
@@ -80,8 +78,7 @@ struct vmap_simple_data
   {
     return d ;
   }
-  void set_level(vmap_level_index l)
-  {}
+  void set_level(vmap_level_index l) {}
 };
 
 //: Data associated to each element duplicated at level.
@@ -107,30 +104,32 @@ struct vmap_replicated_data
   {
     while (d.size()<l) d.push_back(d.last()) ;
   }
-} ;
+};
 
 //: the dart class of a 2-pyramid base level.
 class vpyr_2_pyramid_base_dart : public vmap_2_map_dart
 {
  public:
-  //vpyr_2_pyramid_base_dart() ;
+#if 0
+  vpyr_2_pyramid_base_dart() ;
+#endif // 0
 
   //: The last level.
   vmap_level_index last_level() const
   {
-    return _last_level/2;
+    return last_level_/2;
   }
 
   //: Returns true if the dart has been contracted or removed at level "arg".
   bool modified_at_level(vmap_level_index arg) const
   {
-    return _last_level == (arg*2);
+    return last_level_ == (arg*2);
   }
 
   //: Returns true if the dart has been contracted or removed at its last level.
   bool modified_at_last_level() const
   {
-    return !(_last_level & 1);
+    return !(last_level_ & 1);
   }
 
   //: Sets the last level at which the dart survive.
@@ -217,14 +216,14 @@ class vpyr_2_pyramid_base_dart : public vmap_2_map_dart
     return vmap_2_map_iphi(this)->ancestor(level) ;
   }
  protected :
-  //: Return the direct ancestor of this dart.
-  //vpyr_2_pyramid_base_dart* directAncestor() ;
-  vmap_level_index _last_level ;
-
+  vmap_level_index last_level_ ;
 #if 0
+  //: Return the direct ancestor of this dart.
+  vpyr_2_pyramid_base_dart* directAncestor() ;
+
  private :
-      vpyr_2_pyramid_base_dart* _toplevel_typeAncestor ;
-      vpyr_2_pyramid_base_dart* _directAncestor ;
+  vpyr_2_pyramid_base_dart* toplevel_typeAncestor_ ;
+  vpyr_2_pyramid_base_dart* directAncestor_ ;
 #endif // 0
 };
 
@@ -236,17 +235,16 @@ class vmap_2_pd_dart : public vpyr_2_pyramid_base_dart
 
   typename D::value_type & data(vmap_level_index arg_level)
   {
-    return _d.data(arg_level) ;
+    return d_.data(arg_level) ;
   }
 
   const typename D::value_type & data(vmap_level_index arg_level) const
   {
-    return _d.data(arg_level) ;
+    return d_.data(arg_level) ;
   }
 
  protected :
-  D _d ;
+  D d_ ;
 };
-
 
 #endif

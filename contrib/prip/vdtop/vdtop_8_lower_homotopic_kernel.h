@@ -1,7 +1,6 @@
 // This is prip/vdtop/vdtop_8_lower_homotopic_kernel.h
 #ifndef vdtop_8_lower_homotopic_kernel_h_
 #define vdtop_8_lower_homotopic_kernel_h_
-
 //:
 // \file
 // \brief Provides a function for computing a 8-connected lower homotopic kernel of Bertrand and al
@@ -16,45 +15,42 @@
 
 #include "vdtop_kernel.h"
 
-
 template <class T>
 class vdtop_8_lower_homotopic
 {
  protected:
-  vdtop_pixel<T> _pixel ;
-  vdtop_8_neighborhood<T> _neighborhood ;
+  vdtop_pixel<T> pixel_ ;
+  vdtop_8_neighborhood<T> neighborhood_ ;
  public:
-  vdtop_8_lower_homotopic(vil_image_view<T> & arg)
-    :_pixel(arg, arg.begin())
-  {}
+  vdtop_8_lower_homotopic(vil_image_view<T> & arg) :pixel_(arg, arg.begin()) {}
 
   typedef typename vdtop_8_neighborhood<T>::const_iterator iterator ;
 
   void set_position(typename vil_image_view<T>::iterator arg)
   {
-    _pixel.set_position(arg) ;
+    pixel_.set_position(arg) ;
   }
 
   bool can_remove()
   {
-    return _pixel.is_8_destructible() ;
+    return pixel_.is_8_destructible() ;
   }
 
   void remove()
   {
-    _pixel.destruct_8() ;
+    pixel_.destruct_8() ;
   }
 
   iterator begin_next()
   {
-    _neighborhood.set_center(_pixel) ;
-    return _neighborhood.begin() ;
+    neighborhood_.set_center(pixel_) ;
+    return neighborhood_.begin() ;
   }
   iterator end_next()
   {
-    return _neighborhood.end() ;
+    return neighborhood_.end() ;
   }
-} ;
+};
 
 //: 8 lower homotopic kernel.
 template <class T>

@@ -29,11 +29,15 @@ class vmap_sigma_permutation
 
   //:
   typedef typename map_type::dart_pointer element_pointer ;
-  //typedef typename map_type::vmap_dart_index vmap_dart_index ;
+#if 0
+  typedef typename map_type::vmap_dart_index vmap_dart_index ;
+#endif // 0
 
-   //:
+  //:
   typedef vmap_dart_index element_index ;
-  //typedef typename map_type::vmap_dart_index element_index ;
+#if 0
+  typedef typename map_type::vmap_dart_index element_index ;
+#endif // 0
 
   //:
   typedef typename map_type::vertex_type cycle_type ; // the linked elements
@@ -45,8 +49,10 @@ class vmap_sigma_permutation
   typedef typename map_type::vertex_pointer cycle_pointer ; // the linked elements
 
   //:
-  typedef //typename map_type::
-  vmap_vertex_index cycle_index ;
+  typedef vmap_vertex_index cycle_index ;
+#if 0
+  typedef typename map_type::vmap_vertex_index cycle_index ;
+#endif // 0
 
 #if 0
   element_reference cycle(const dart_iterator & arg)
@@ -61,7 +67,7 @@ class vmap_sigma_permutation
   }
 #endif // 0
 
-  vmap_sigma_permutation(map_type & arg) :_map(&arg) {}
+  vmap_sigma_permutation(map_type & arg) :map_(&arg) {}
 
   cycle_index cycle_index_of(const element_iterator & arg) const
   {
@@ -115,42 +121,42 @@ class vmap_sigma_permutation
     //:
   cycle_iterator begin_cycle() const
   {
-    return _map->begin_vertex() ;
+    return map_->begin_vertex() ;
   }
 
   //:
   cycle_iterator end_cycle() const
   {
-    return _map->end_vertex() ;
+    return map_->end_vertex() ;
   }
 
   //:
   int nb_cycles() const
   {
-    return _map->nb_vertices() ;
+    return map_->nb_vertices() ;
   }
 
   //:
   cycle_pointer get_cycle_pointer(cycle_index i) const
   {
-    return _map->get_vertex_pointer(i) ;
+    return map_->get_vertex_pointer(i) ;
   }
 
   //:
   int nb_elements() const
   {
-    return _map->nb_darts() ;
+    return map_->nb_darts() ;
   }
 
   //:
   element_pointer get_element_pointer(element_index i) const
   {
-    return _map->get_dart_pointer(i) ;
+    return map_->get_dart_pointer(i) ;
   }
 
  private :
   //:
-  map_type *_map ;
+  map_type *map_ ;
 };
 
 template <class TMap>
@@ -163,14 +169,18 @@ class vmap_phi_permutation
 
   //:
   typedef typename map_type::dart_iterator element_iterator ;
-  //typedef typename map_type::vmap_dart_index vmap_dart_index ;
+#if 0
+  typedef typename map_type::vmap_dart_index vmap_dart_index ;
+#endif // 0
 
   //:
   typedef typename map_type::dart_pointer element_pointer ;
 
-   //:
+  //:
   typedef vmap_dart_index element_index ;
-  //typedef typename map_type::vmap_dart_index element_index ;
+#if 0
+  typedef typename map_type::vmap_dart_index element_index ;
+#endif // 0
 
   //:
   typedef typename map_type::face_type cycle_type ; // the linked elements
@@ -182,8 +192,10 @@ class vmap_phi_permutation
   typedef typename map_type::face_iterator cycle_iterator ; // the linked elements
 
   //:
-  typedef //typename map_type::
-  vmap_face_index cycle_index ;
+  typedef vmap_face_index cycle_index ;
+#if 0
+  typedef typename map_type::vmap_face_index cycle_index ;
+#endif // 0
 
 #if 0
   element_reference cycle(const dart_iterator & arg)
@@ -198,7 +210,7 @@ class vmap_phi_permutation
   }
 #endif // 0
 
-  vmap_phi_permutation(map_type & arg) :_map(&arg) {}
+  vmap_phi_permutation(map_type & arg) :map_(&arg) {}
 
   cycle_index cycle_index_of(const element_iterator & arg) const
   {
@@ -242,37 +254,37 @@ class vmap_phi_permutation
   //:
   cycle_iterator begin_cycle() const
   {
-    return _map->begin_face() ;
+    return map_->begin_face() ;
   }
 
   //:
   cycle_iterator end_cycle() const
   {
-    return _map->end_face() ;
+    return map_->end_face() ;
   }
 
   //:
   int nb_cycles() const
   {
-    return _map->nb_faces() ;
+    return map_->nb_faces() ;
   }
 
   //:
   cycle_pointer get_cycle_pointer(cycle_index i) const
   {
-    return _map->get_face_pointer(i) ;
+    return map_->get_face_pointer(i) ;
   }
 
   //:
   int nb_elements() const
   {
-    return _map->nb_darts() ;
+    return map_->nb_darts() ;
   }
 
   //:
   element_pointer get_element_pointer(element_index i) const
   {
-    return _map->get_dart_pointer(i) ;
+    return map_->get_dart_pointer(i) ;
   }
 
   cycle_pointer cycle_pointer_of(const element_iterator & arg) const
@@ -287,7 +299,7 @@ class vmap_phi_permutation
 
  private :
   //:
-  map_type *_map ;
+  map_type *map_ ;
 };
 
 //:  Kernel class for contraction/removal.
@@ -318,9 +330,11 @@ class vmap_kernel
   //:
   typedef typename map_type::dart_pointer dart_pointer ;
 
-   //:
+  //:
   typedef vmap_dart_index dart_index ;
-  //typedef typename map_type::vmap_dart_index dart_index ;
+#if 0
+  typedef typename map_type::vmap_dart_index dart_index ;
+#endif // 0
 
  private:
   //:
@@ -336,7 +350,7 @@ class vmap_kernel
   //:
   vmap_kernel (map_type & arg)
   {
-    _map=&arg ;
+    map_=&arg ;
   }
 
   //: To be called before any addition/test.
@@ -350,10 +364,10 @@ class vmap_kernel
   //   tree that can be used for contraction/removal.
   void finalise() {}
 
-  ///: Inserts a new dart pointed by "arg".
+  //: Inserts a new dart pointed by "arg".
   bool add(const dart_iterator & arg)
   {
-    _dart.push_back(*arg.reference()) ;
+    dart_.push_back(*arg.reference()) ;
     return true ;
   }
 
@@ -366,49 +380,49 @@ class vmap_kernel
   //:
   void clear()
   {
-    _dart.clear() ;
+    dart_.clear() ;
   }
 
   //:
   iterator begin()
   {
-    return _dart.begin() ;
+    return dart_.begin() ;
   }
 
   //:
   iterator end()
   {
-    return _dart.end() ;
+    return dart_.end() ;
   }
 
   //:
   const_iterator begin() const
   {
-    return _dart.begin() ;
+    return dart_.begin() ;
   }
 
   //:
   const_iterator end() const
   {
-    return _dart.end() ;
+    return dart_.end() ;
   }
 
   //:
   dart_iterator dart(int i) const
   {
-    return _map->begin_dart()+_dart[i]->sequence_index() ;
+    return map_->begin_dart()+dart_[i]->sequence_index() ;
   }
 
-   //:
+  //:
   vmap_dart_index get_dart_index(int i) const
   {
-    return _dart[i]->sequence_index() ;
+    return dart_[i]->sequence_index() ;
   }
 
   //:
   unsigned int size() const
   {
-    return _dart.size() ;
+    return dart_.size() ;
   }
 
  protected :
@@ -416,14 +430,14 @@ class vmap_kernel
   //:
   dart_iterator dart_iterator_on(vmap_dart_index arg) const
   {
-    return _map->begin_dart()+arg ;
+    return map_->begin_dart()+arg ;
   }
 
   //:
-  map_type *_map ;
+  map_type *map_ ;
 
   //:
-  dart_collection _dart;
+  dart_collection dart_;
 };
 
 //: The base class for forests of vertices.
@@ -437,7 +451,7 @@ class vmap_permutation_kernel : public vmap_kernel<typename TPermutation::map_ty
   typedef typename TPermutation::map_type map_type ;
 
   //:
-  typedef vmap_kernel<map_type> _Base ;
+  typedef vmap_kernel<map_type> Base_ ;
 
   //:
   typedef TPermutation permutation_type ;
@@ -462,10 +476,10 @@ class vmap_permutation_kernel : public vmap_kernel<typename TPermutation::map_ty
 
   //:
   vmap_permutation_kernel(map_type &arg)
-      : _Base(arg),
-        _p(arg)
+    : Base_(arg),
+      p_(arg)
   {
-    _representatives.initialise(_p.nb_cycles()) ;
+    representatives_.initialise(p_.nb_cycles()) ;
   }
 
   //: Before any addition/test
@@ -489,9 +503,9 @@ class vmap_permutation_kernel : public vmap_kernel<typename TPermutation::map_ty
   //:
   void clear()
   {
-    _Base::clear() ;
-    _representatives.clear() ;
-    _dart_associated_elt.clear() ;
+    Base_::clear() ;
+    representatives_.clear() ;
+    dart_associated_elt_.clear() ;
   }
 
   //: Adds all the (recursive) pendant darts of the current map to the kernel.
@@ -505,54 +519,54 @@ class vmap_permutation_kernel : public vmap_kernel<typename TPermutation::map_ty
 
   permutation_type & permutation()
   {
-    return _p ;
+    return p_ ;
   }
 
   element_index father_index(element_index arg) const
   {
-    return _representatives.representative(arg);
+    return representatives_.representative(arg);
   }
 
   //:
   element_index get_element_index(int i) const
   {
-    return _dart_associated_elt[i]->sequence_index() ;
+    return dart_associated_elt_[i]->sequence_index() ;
   }
 
   template <class TPp>
   void operator=(const vmap_permutation_kernel<TPp> & arg)
   {
-    _dart.resize(arg.size()) ;
-    _dart_associated_elt.resize(arg.size());
+    dart_.resize(arg.size()) ;
+    dart_associated_elt_.resize(arg.size());
     for (unsigned int i=0; i<arg.size(); ++i)
     {
-      _dart[i]=_p.get_element_pointer(arg.get_dart_index(i)) ;
-      _dart_associated_elt[i]=_p.get_cycle_pointer(arg.get_element_index(i)) ;
+      dart_[i]=p_.get_element_pointer(arg.get_dart_index(i)) ;
+      dart_associated_elt_[i]=p_.get_cycle_pointer(arg.get_element_index(i)) ;
     }
-    _representatives=arg.representatives() ;
+    representatives_=arg.representatives() ;
   }
 
   const vbl_controlled_partition & representatives() const
   {
-    return _representatives;
+    return representatives_;
   }
 
  protected :
 
   //:
-  permutation_type _p ;
+  permutation_type p_ ;
 
   //: The representative of "root" is the new representative of the set to which "j" is the representative.
   void union_of(element_pointer root, element_pointer j)
   {
-     _father[representative(j)->sequence_index()]= _father[representative(root)->sequence_index()] ;
+    father_[representative(j)->sequence_index()]= father_[representative(root)->sequence_index()] ;
   }
 
   //:
-  vcl_vector<element_pointer> _dart_associated_elt ;
+  vcl_vector<element_pointer> dart_associated_elt_;
 
   //:
-  vbl_controlled_partition _representatives;
+  vbl_controlled_partition representatives_;
 };
 
 #include "vmap_kernel.txx"

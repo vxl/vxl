@@ -1,7 +1,6 @@
 // This is prip/vdtop/vdtop_4_lower_leveling_kernel.h
 #ifndef vdtop_4_lower_leveling_kernel_h_
 #define vdtop_4_lower_leveling_kernel_h_
-
 //:
 // \file
 // \brief Provides a function for computing a 4-connected lower leveling kernel of Bertrand and al
@@ -16,45 +15,42 @@
 
 #include "vdtop_kernel.h"
 
-
 template <class T>
 class vdtop_4_lower_leveling
 {
  protected:
-  vdtop_pixel<T> _pixel ;
-  vdtop_4_neighborhood<T> _neighborhood ;
+  vdtop_pixel<T> pixel_ ;
+  vdtop_4_neighborhood<T> neighborhood_ ;
  public:
-  vdtop_4_lower_leveling(vil_image_view<T> & arg)
-    :_pixel(arg, arg.begin())
-  {}
+  vdtop_4_lower_leveling(vil_image_view<T> & arg) :pixel_(arg, arg.begin()) {}
 
   typedef typename vdtop_4_neighborhood<T>::const_iterator iterator ;
 
   void set_position(typename vil_image_view<T>::iterator arg)
   {
-    _pixel.set_position(arg) ;
+    pixel_.set_position(arg) ;
   }
 
   bool can_remove()
   {
-    return _pixel.is_4_destructible_or_peak() ;
+    return pixel_.is_4_destructible_or_peak() ;
   }
 
   void remove()
   {
-    _pixel.destruct_8() ;
+    pixel_.destruct_8() ;
   }
 
   iterator begin_next()
   {
-    _neighborhood.set_center(_pixel) ;
-    return _neighborhood.begin() ;
+    neighborhood_.set_center(pixel_) ;
+    return neighborhood_.begin() ;
   }
   iterator end_next()
   {
-    return _neighborhood.end() ;
+    return neighborhood_.end() ;
   }
-} ;
+};
 
 //: computes the 4 lower leveling kernel of arg.  Points having at least 1 lower neighbor can be viewed as a 4-connected watershed.
 template <class T>

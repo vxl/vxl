@@ -1,21 +1,21 @@
+// This is prip/vdtop/vdtop_misc.txx
 #ifndef vdtop_misc_txx_
 #define vdtop_misc_txx_
 //:
 // \file
 
 #include <vdtop/vdtop_veinerization_builder.h>
-
 #include <vdtop/vdtop_8_neighborhood_mask.h>
 
 //: The 3 in 1 function.
 // It computes upper masks, removes non maximal directions, and compute the down-left version of the symmetric
 
 template <class T>
-void _vdtop_compute_first_veinerization_pass(vil_image_view<T> & img, const T& max_value,
+void vdtop_compute_first_veinerization_pass_(vil_image_view<T> & img, const T& max_value,
                                              vil_image_view<vdtop_8_neighborhood_mask> & masks)
 {
   unsigned ni = img.ni(),nj = img.nj(),np = img.nplanes(), nil=ni-1, njl=nj-1;
-  const vxl_byte dir_order[8]={4,2,1,3,5,6,7} ;
+  const vxl_byte dir_order[8]={4,2,1,3,5,6,7};
   const vdtop_8_neighborhood_mask down_left_neighbors(0xF0),up_right_neighbors(0x0F) ;
 
   masks.set_size(ni, nj, np) ;
@@ -354,12 +354,11 @@ void vdtop_compute_8_upper_masks(vil_image_view<T> & img, const T& max_value, vi
   }
 }
 
-
 template <class T>
 void vdtop_remove_non_maximal_direction(const vil_image_view<T> & img, vil_image_view<vdtop_8_neighborhood_mask> & mask)
 {
   unsigned ni = img.ni(),nj = img.nj(),np = img.nplanes();
-  const vxl_byte dir_order[8]={4,2,1,3,5,6,7} ;
+  const vxl_byte dir_order[8]={4,2,1,3,5,6,7};
 
   // Precompute steps
   vcl_ptrdiff_t istepI=img.istep(),jstepI=img.jstep(),pstepI = img.planestep();
@@ -379,40 +378,39 @@ void vdtop_remove_non_maximal_direction(const vil_image_view<T> & img, vil_image
 
   for (unsigned p=0;p<np;++p,planeI += pstepI,planeM += pstepM)
   {
-     const T* rowI   = planeI, *current;
-     vdtop_8_neighborhood_mask* rowM   = planeM, *current_mask;
+    const T* rowI   = planeI, *current;
+    vdtop_8_neighborhood_mask* rowM   = planeM, *current_mask;
 
-     for (unsigned j=0;j<nj;j++,rowI+=jstepI,rowM+=jstepM)
-     {
-        // remove non_maximal_directions for preceding line
-        current=rowI ;
-        current_mask=rowM ;
-        for (unsigned i=0; i<ni; ++i, current_mask+=istepM, current+=istepI)
+    for (unsigned j=0;j<nj;j++,rowI+=jstepI,rowM+=jstepM)
+    {
+      // remove non_maximal_directions for preceding line
+      current=rowI ;
+      current_mask=rowM ;
+      for (unsigned i=0; i<ni; ++i, current_mask+=istepM, current+=istepI)
+      {
+        vdtop_8_neighborhood_mask max_mask(0) ;
+        int n = current_mask->t8p();
+        for (int k = 0; k<n; k++) // for each component
         {
-          vdtop_8_neighborhood_mask max_mask(0) ;
-          int n = current_mask->t8p();
-          for (int k = 0; k<n; k++) // for each component
+          vdtop_8_neighborhood_mask cc = current_mask->connected_8_component(k);
+          int nb_neigh=cc.nb_8_neighbors() ;
+
+          // Computes the direction to the max neighbor
+          vdtop_freeman_code m=cc.direction_8_neighbor(0) ;
+          const T * m_val=current+moves[m.code()] ;
+
+          for (int l=1; l<nb_neigh; l++)
           {
-            vdtop_8_neighborhood_mask cc = current_mask->connected_8_component(k);
-            int nb_neigh=cc.nb_8_neighbors() ;
-
-            // Computes the direction to the max neighbor
-            vdtop_freeman_code m=cc.direction_8_neighbor(0) ;
-            const T * m_val=current+moves[m.code()] ;
-
-            for (int l=1; l<nb_neigh; l++)
+            vdtop_freeman_code d=cc.direction_8_neighbor(l) ;
+            const T * d_val=current+movesI[d.code()] ;
+            if (*d_val>*m_val || (*d_val==*m_val && dir_order[d.code()]>dir_order[m.code()]))
             {
-              vdtop_freeman_code d=cc.direction_8_neighbor(l) ;
-              const T * d_val=current+movesI[d.code()] ;
-              if (*d_val>*m_val || (*d_val==*m_val && dir_order[d.code()]>dir_order[m.code()]))
-              {
-                m=d ; m_val=d_val ;
-              }
+              m=d ; m_val=d_val ;
             }
-            max_mask.add_direction(m) ;
           }
-          *current_mask=max_mask ;
+          max_mask.add_direction(m) ;
         }
+        *current_mask=max_mask ;
       }
     }
   }
@@ -435,7 +433,6 @@ void vdtop_set_veinerization_structure(TMap & res, const vil_image_view<T> & arg
   moves[5]=mask.jstep()-mask.istep() ;
   moves[6]=mask.jstep() ;
   moves[7]=mask.jstep()+mask.istep() ;
-
 
   // symmetrize
   down_masks(mask) ;
@@ -481,16 +478,22 @@ void vdtop_set_veinerization_structure(TMap & res, const vil_image_view<T> & arg
         for (k = 0; k<n; dir=mask(i,j).direction_8_neighbor(++k) )
         {
           if (last!=-1)
+          {
             res.set_sigma(nb_darts, last) ;
+          }
           else
+          {
             first=nb_darts ;
+          }
           last=nb_darts++ ;
           res.set_alpha(nb_darts, last) ;
           dart[i+dir.di()][(-dir).code()]=nb_darts++ ;
         }
       }
       if (first!=-1)
+      {
         res.set_sigma(last, first) ;
+      }
     }
   }
 }
@@ -567,16 +570,22 @@ void vdtop_set_structure_from_masks(TMap & res, const vil_image_view<vdtop_8_nei
           for (k = 0; k<n; dir=tmp_mask.direction_8_neighbor(++k) )
           {
             if (last!=-1)
+            {
               res.set_sigma(nb_darts, last) ;
+            }
             else
+            {
               first=nb_darts ;
+            }
             last=nb_darts++ ;
             res.set_alpha(nb_darts, last) ;
             dart[i+dir.di()][(-dir).code()]=nb_darts++ ;
           }
         }
         if (first!=-1)
+        {
           res.set_sigma(last, first) ;
+        }
       }
     }
   }
@@ -599,7 +608,6 @@ void vdtop_set_veinerization_structure(TMap & res, vil_image_view<T> & img, cons
   moves[5]=mask.jstep()-mask.istep() ;
   moves[6]=mask.jstep() ;
   moves[7]=mask.jstep()+mask.istep() ;
-
 
   // symmetrize
   down_masks(mask) ;
@@ -645,7 +653,9 @@ void vdtop_set_veinerization_structure(TMap & res, vil_image_view<T> & img, cons
         for (k = 0; k<n; dir=mask(i,j).direction_8_neighbor(++k) )
         {
           if (last!=-1)
+          {
             res.set_sigma(nb_darts, last) ;
+          }
           else
           {
             first=nb_darts ;
@@ -656,7 +666,9 @@ void vdtop_set_veinerization_structure(TMap & res, vil_image_view<T> & img, cons
         }
       }
       if (first!=-1)
+      {
         res.set_sigma(last, first) ;
+      }
       vertex_first_dart[i]=first ;
     }
     for (int i=0; i<mask.ni(); ++i)

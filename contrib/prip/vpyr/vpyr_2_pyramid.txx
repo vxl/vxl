@@ -3,7 +3,6 @@
 #define vpyr_2_pyramid_txx_
 //:
 // \file
-
 #include "vpyr_2_pyramid.h"
 
 template <class TLevel>
@@ -11,11 +10,11 @@ vpyr_2_pyramid<TLevel>::vpyr_2_pyramid()
 {
 }
 
-#if 0
+#if 0 // method commented out
 template <class TLevel>
-vpyr_2_pyramid<TLevel>::vpyr_2_pyramid(const self_type &right)
+vpyr_2_pyramid<TLevel>::vpyr_2_pyramid(const self_type &p)
 {
-  operator=(right) ;
+  operator=(p) ;
 }
 #endif // 0
 
@@ -25,42 +24,44 @@ vpyr_2_pyramid<TLevel>::~vpyr_2_pyramid()
   clear() ;
 }
 
-#if 0
+#if 0 // method commented out
 template <class TLevel>
-vpyr_2_pyramid<TLevel> & vpyr_2_pyramid<TLevel>::operator=(const self_type &right)
+vpyr_2_pyramid<TLevel> & vpyr_2_pyramid<TLevel>::operator=(const self_type &p)
 {
-  if (this!=&right)
+  if (this!=&p)
   {
     clear() ;
-    _base_map.set_structure(right) ;
-    initialise_levels(right.nb_levels());
+    base_map_.set_structure(p) ;
+    initialise_levels(p.nb_levels());
     for (int i=0; i<nb_levels(); ++i)
     {
-      level(i).set_nb_darts(right.level(i).nb_darts()) ;
+      level(i).set_nb_darts(p.level(i).nb_darts()) ;
     }
   }
   return *this ;
 }
+#endif // 0
 
+#if 0 // method commented out
 template <class TLevel>
 void vpyr_2_pyramid<TLevel>::initialise_levels(int nb_levels)
 {
   clear() ;
-  for (unsigned int i=0; i+1<_level.size(); ++i)
+  for (unsigned int i=0; i+1<level_.size(); ++i)
   {
     level_type tmp(i,(typename level_type::pyramid_type&)*this) ;
-    _level.insert(level_array_type::value_type(i,tmp)) ;
+    level_.insert(level_array_type::value_type(i,tmp)) ;
   }
-  (--_level.end())->second.set_level_index(vmap_top_level_index()) ;
+  (--level_.end())->second.set_level_index(vmap_top_level_index()) ;
 }
 #endif // 0
 
 template <class TLevel>
 TLevel * vpyr_2_pyramid<TLevel>::level_below(vmap_level_type type, const level_type& above)
 {
-  level_iterator it=_level.find(above.index()) ;
+  level_iterator it=level_.find(above.index()) ;
   vmap_level_index level=0;
-  if (it!=_level.begin())
+  if (it!=level_.begin())
   {
     --it ;
     level=(*it).index() + 1 ; // remove +1 for previous behavior
@@ -74,7 +75,7 @@ TLevel * vpyr_2_pyramid<TLevel>::level_below(vmap_level_type type, const level_t
   {
     level_type tmp(above) ;
     tmp.set_level_index(level) ;
-    it=_level.insert(level_array_type::value_type(level,tmp)).first ;
+    it=level_.insert(level_array_type::value_type(level,tmp)).first ;
   }
   return &(*it) ;
 }
@@ -83,9 +84,9 @@ template <class TLevel>
 template <class M>
 void vpyr_2_pyramid<TLevel>::set_base_structure(const M & arg)
 {
-  _base_map.set_structure(arg) ;
-  _level.clear() ;
-  _level.insert(level_array_type::value_type(::vmap_top_level_index(),
+  base_map_.set_structure(arg) ;
+  level_.clear() ;
+  level_.insert(level_array_type::value_type(::vmap_top_level_index(),
                 level_type(::vmap_top_level_index(),(typename level_type::pyramid_type&) *this))) ;
 }
 
@@ -98,8 +99,8 @@ bool vpyr_2_pyramid<TLevel>::valid()
 template <class TLevel>
 void vpyr_2_pyramid<TLevel>::clear()
 {
-  _level.clear() ;
-  _base_map.clear() ;
+  level_.clear() ;
+  base_map_.clear() ;
 }
 
 //: Initializes the sturcture of the combinatorial map from "stream".

@@ -13,7 +13,7 @@
 #include <vmap/vmap_kernel.h>
 #include "vpyr_2_pyramid_level_elts.h"
 
-template <class _level_type>
+template <class level_type_>
 class vpyr_2_pyramid ;
 
 //: The class of a level of a combinatorial pyramid.
@@ -79,15 +79,14 @@ class vpyr_2_pyramid_level : public vmap_ptr_sequence< typename D::base_type >
     return (const dart_type&) (a) ;
   }
 
-
   //:
   vpyr_2_pyramid_level(vmap_level_index arg_level, pyramid_type & pyramid) ;
 
   //:
   vpyr_2_pyramid_level(const self_type & arg)
-      : dart_sequence(arg),
-      _level_index(arg._level_index),
-      _pyramid(arg._pyramid)                 {}
+    : dart_sequence(arg),
+      level_index_(arg.level_index_),
+      pyramid_(arg.pyramid_)                  {}
 
   //:
   virtual ~vpyr_2_pyramid_level() {}
@@ -119,15 +118,14 @@ class vpyr_2_pyramid_level : public vmap_ptr_sequence< typename D::base_type >
   //: Returns the index of the dart "arg".
   vmap_dart_index index (const dart_type & arg) const
   {
-    return arg.sequence_index();//-(*_begin_dart)->index() ;
+    return arg.sequence_index();//-(*begin_dart_)->index() ;
   }
 
   //: Returns the index of the level.
   vmap_level_index index () const
   {
-    return _level_index ;
+    return level_index_ ;
   }
-
 
   //: Returns an iterator on the first dart.
   const_dart_iterator begin_dart() const
@@ -171,7 +169,9 @@ class vpyr_2_pyramid_level : public vmap_ptr_sequence< typename D::base_type >
     return get_dart_pointer(arg)->phi(index())->sequence_index() ;
   }
 
-  //virtual bool valid()const ;
+#if 0
+  virtual bool valid() const ;
+#endif // 0
 
   //:
   virtual void contraction(const contraction_kernel &arg_kernel) ;
@@ -182,7 +182,7 @@ class vpyr_2_pyramid_level : public vmap_ptr_sequence< typename D::base_type >
   //:
   void set_level_index(vmap_level_index arg)
   {
-    _level_index=arg ;
+    level_index_=arg ;
   }
 
   //:
@@ -196,7 +196,7 @@ class vpyr_2_pyramid_level : public vmap_ptr_sequence< typename D::base_type >
   //:
   pyramid_type & pyramid()
   {
-    return (pyramid_type &)*_pyramid ;
+    return (pyramid_type &)*pyramid_ ;
   }
 
  protected:
@@ -240,10 +240,10 @@ class vpyr_2_pyramid_level : public vmap_ptr_sequence< typename D::base_type >
  protected:
 
   //: the index of the level.
-  vmap_level_index _level_index ;
+  vmap_level_index level_index_ ;
 
   //: The pyramid for which it is a level.
-  pyramid_type * _pyramid ;
+  pyramid_type * pyramid_ ;
 };
 
 #include "vpyr_2_pyramid_level.txx"

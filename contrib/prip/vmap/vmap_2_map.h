@@ -92,80 +92,83 @@ class vmap_2_map_dart
     //: The following functions should not be used by the user
   const vmap_2_map_dart* alpha() const
   {
-    return _alpha ;
-    //return const_cast<vmap_2_map_dart*> (this+(1-2*(index()%2))) ;
+    return alpha_ ;
+#if 0
+    return const_cast<vmap_2_map_dart*> (this+(1-2*(index()%2))) ;
+#endif // 0
   }
 
   const vmap_2_map_dart* sigma() const
   {
-    return _sigma ;
+    return sigma_ ;
   }
 
   const vmap_2_map_dart* phi() const
   {
-    return alpha()->_sigma ;
+    return alpha()->sigma_ ;
   }
 
   const vmap_2_map_dart* isigma() const
   {
-    return _isigma ;
+    return isigma_ ;
   }
 
   const vmap_2_map_dart* iphi() const
   {
-    return _isigma->alpha() ;
+    return isigma_->alpha() ;
   }
 
   vmap_2_map_dart* alpha()
   {
-    return _alpha ;
-    //return const_cast<vmap_2_map_dart*> (this+(1-2*(index()%2))) ;
+    return alpha_ ;
+#if 0
+    return const_cast<vmap_2_map_dart*> (this+(1-2*(index()%2))) ;
+#endif // 0
   }
 
   vmap_2_map_dart* sigma()
   {
-    return _sigma ;
+    return sigma_ ;
   }
 
   vmap_2_map_dart* phi()
   {
-    return alpha()->_sigma ;
+    return alpha()->sigma_ ;
   }
 
   vmap_2_map_dart* isigma()
   {
-    return _isigma ;
+    return isigma_ ;
   }
 
   vmap_2_map_dart* iphi()
   {
-    return _isigma->alpha() ;
+    return isigma_->alpha() ;
   }
 
-
-    //: For construction of the underlying map.
+  //: For construction of the underlying map.
   void set_sigma(vmap_2_map_dart *arg) ;
   void set_alpha(vmap_2_map_dart *arg) ;
   void set_phi(vmap_2_map_dart *arg) ;
 
-    //: Index of the dart in the sequence.
-    // Very powerful as it enables the direct order reuse in implicit pyramids,
-    // and an efficient dynamic management of darts in the basic CombinatorialMap.
+  //: Index of the dart in the sequence.
+  // Very powerful as it enables the direct order reuse in implicit pyramids,
+  // and an efficient dynamic management of darts in the basic CombinatorialMap.
   vmap_dart_index sequence_index() const
   {
-    return _sequence_index ;
+    return sequence_index_ ;
   }
   void set_sequence_index(vmap_dart_index arg)
   {
-    _sequence_index=arg ;
+    sequence_index_=arg ;
   }
 
  protected :
-  vmap_dart_index _sequence_index ;
-  vmap_2_map_dart *_sigma ;
-  vmap_2_map_dart *_isigma ;
-  vmap_2_map_dart *_alpha ;
-} ;
+  vmap_dart_index sequence_index_ ;
+  vmap_2_map_dart *sigma_ ;
+  vmap_2_map_dart *isigma_ ;
+  vmap_2_map_dart *alpha_ ;
+};
 
 //: The base dart iterator class.
 // This class is instanciated in vmap_2_map. There is no need to use it directly.
@@ -177,16 +180,16 @@ class vmap_2_map_dart_base_iterator
 
   vmap_2_map_dart_base_iterator() {}
 
-  explicit vmap_2_map_dart_base_iterator(It arg) :_it(arg) {}
+  explicit vmap_2_map_dart_base_iterator(It arg) :it_(arg) {}
 
 #if 0 // This constructor is covered by the next one
-  vmap_2_map_dart_base_iterator(self_type const& it) :_it((It)it.reference()) {}
+  vmap_2_map_dart_base_iterator(self_type const& it) :it_((It)it.reference()) {}
 #endif // 0
 
   template< typename Ref2, typename Ptr2, typename It2 >
   vmap_2_map_dart_base_iterator(vmap_2_map_dart_base_iterator<Ref2,Ptr2,It2> const& it)
   {
-    _it=(It)it.reference();
+    it_=(It)it.reference();
   }
 
   ~vmap_2_map_dart_base_iterator() {}
@@ -194,7 +197,7 @@ class vmap_2_map_dart_base_iterator
 #if 0 // This assignment operator is covered by the next one
   self_type & operator=(self_type const& it)
   {
-    _it=it._it ;
+    it_=it.it_ ;
     return *this ;
   }
 #endif // 0
@@ -202,59 +205,63 @@ class vmap_2_map_dart_base_iterator
   template< typename Ref2, typename Ptr2, typename It2 >
   self_type & operator=(vmap_2_map_dart_base_iterator<Ref2,Ptr2,It2> const& it)
   {
-    _it=(It)it.reference() ;
+    it_=(It)it.reference() ;
     return *this ;
   }
 
   self_type & operator=(It const& it)
   {
-    _it=it ;
+    it_=it ;
     return *this ;
   }
 
   bool operator==(self_type const& it) const
   {
-    return _it==it._it ;
+    return it_==it.it_ ;
   }
 
   bool operator!=(self_type const& it) const
   {
-    return _it!=it._it ;
+    return it_!=it.it_ ;
   }
 
-  Ref operator * () const
+  Ref operator*() const
   {
-    //return *_it ;
-    return (Ref)**_it ;
+    return (Ref)**it_ ;
   }
 
   Ptr operator->() const
   {
-    //return _it ;
-    return (Ptr)*_it;
+    return (Ptr)*it_;
   }
 
   //: Applies alpha.
   self_type & alpha ()
   {
-    _it+=offset(vmap_2_map_alpha(*_it)) ;
-    //_it=(Ptr)_it->alpha() ;
+    it_+=offset(vmap_2_map_alpha(*it_)) ;
+#if 0 // old implementation
+    it_=(Ptr)it_->alpha() ;
+#endif // 0
     return *this ;
   }
 
   //: Applies phi.
   self_type & phi ()
   {
-    _it+=offset(vmap_2_map_phi(*_it)) ;
-    //_it=(Ptr)_it->phi() ;
+    it_+=offset(vmap_2_map_phi(*it_)) ;
+#if 0 // old implementation
+    it_=(Ptr)it_->phi() ;
+#endif // 0
     return *this ;
   }
 
   //: Applies sigma.
   self_type & sigma ()
   {
-    _it+=offset(vmap_2_map_sigma(*_it)) ;
-    //_it=(Ptr)_it->sigma() ;
+    it_+=offset(vmap_2_map_sigma(*it_)) ;
+#if 0 // old implementation
+    it_=(Ptr)it_->sigma() ;
+#endif // 0
     return *this ;
   }
 
@@ -268,45 +275,48 @@ class vmap_2_map_dart_base_iterator
   //: Applies phi^{-1}.
   self_type & iphi ()
   {
-    _it+=offset(vmap_2_map_iphi(*_it)) ;
-    //_it=(Ptr)_it->iphi() ;
+    it_+=offset(vmap_2_map_iphi(*it_)) ;
+#if 0 // old implementation
+    it_=(Ptr)it_->iphi() ;
+#endif // 0
     return *this ;
   }
 
   //: Applies sigma^{-1}.
   self_type & isigma ()
   {
-    _it+=offset(vmap_2_map_isigma(*_it)) ;
-    //_it=(Ptr)_it->isigma() ;
+    it_+=offset(vmap_2_map_isigma(*it_)) ;
+#if 0 // old implementation
+    it_=(Ptr)it_->isigma() ;
+#endif // 0
     return *this ;
   }
 
   //: Next dart of the sequence.
   self_type & operator++()
   {
-    _it++ ;
+    it_++ ;
     return *this ;
   }
 
   //: ith dart following on the sequence.
   self_type & operator+(int i)
   {
-    _it+=i ;
+    it_+=i ;
     return *this ;
   }
 
   It reference() const
   {
-    return _it ;
+    return it_ ;
   }
 
  protected:
   int offset(vmap_2_map_dart const* arg) const
   {
-    return arg->sequence_index()-(*_it)->sequence_index() ;
+    return arg->sequence_index()-(*it_)->sequence_index() ;
   }
-  //Ptr _it ;
-  It _it ;
+  It it_ ;
 };
 
 //: The class for handling a 2-map (combinatorial map).
@@ -350,8 +360,7 @@ class vmap_2_map : public vmap_owning_sequence<D>
 
  public:
 
-  vmap_2_map()
-  {}
+  vmap_2_map() {}
 
   vmap_2_map(self_type const& m) ;
 
@@ -390,9 +399,12 @@ class vmap_2_map : public vmap_owning_sequence<D>
   //: Returns the index of the dart "arg".
   vmap_dart_index index (vmap_2_map_dart const& arg) const
   {
-    //vmap_dart_index tmp=index(*arg._edge) ;
-    //return &arg==&arg._edge->_dart[0]?tmp:alpha(tmp) ;
-    return arg.sequence_index();//&arg-&_dartArray[0] ;
+#if 0
+    vmap_dart_index tmp=index(*arg.edge_) ;
+    return &arg==&arg.edge_->dart_[0]?tmp:alpha(tmp) ;
+    return &arg-&dartArray_[0] ;
+#endif // 0
+    return arg.sequence_index();
   }
 
   //: Returns the index of a dart in the initial sequence
@@ -508,7 +520,6 @@ class vmap_2_map : public vmap_owning_sequence<D>
 
   //: Writes the sturcture of the combinatorial map to "stream".
   void write_structure(vcl_ostream & stream) const ;
-
 
  protected:
 

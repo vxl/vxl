@@ -22,21 +22,25 @@ template < class TLevel=vpyr_2_tpyramid_level<vpyr_2_tpyramid_level_vertex,
                                               vpyr_2_tpyramid_level_dart> >
 class vpyr_2_tpyramid : public vpyr_2_pyramid<TLevel>
 {
-  //typedef Basevpyr_2_pyramid _Base ;
  public:
 
   //:
-  typedef vpyr_2_pyramid<TLevel> _Base ;
+  typedef vpyr_2_pyramid<TLevel> Base_ ;
+#if 0
+  typedef Basevpyr_2_pyramid Base_ ;
+#endif // 0
 
   //:
   typedef vpyr_2_tpyramid<TLevel> self_type;
 
   //:
-  //typedef vmap_2_tmap<typename TLevel::vertex_type::base_type,
-  //                    typename TLevel::edge_type::base_type,
-  //                    typename TLevel::face_type::base_type,
-  //                    typename TLevel::dart_type::base_type > base_map_type ;
-  typedef typename _Base::base_map_type base_map_type ;
+  typedef typename Base_::base_map_type base_map_type ;
+#if 0
+  typedef vmap_2_tmap<typename TLevel::vertex_type::base_type,
+                      typename TLevel::edge_type::base_type,
+                      typename TLevel::face_type::base_type,
+                      typename TLevel::dart_type::base_type > base_map_type ;
+#endif // 0
 
   //:
   typedef vpyr_2_tpyramid_level< typename TLevel::vertex_type,
@@ -71,10 +75,10 @@ class vpyr_2_tpyramid : public vpyr_2_pyramid<TLevel>
   typedef typename base_map_type::edge_type base_edge_type ;
 
   //:
-  typedef typename _Base::level_iterator level_iterator ;
+  typedef typename Base_::level_iterator level_iterator ;
 
   //:
-  typedef typename _Base::const_level_iterator const_level_iterator ;
+  typedef typename Base_::const_level_iterator const_level_iterator ;
 
   //: kernel class for contraction of darts on a level.
   typedef typename level_type::contraction_kernel contraction_kernel ;
@@ -82,16 +86,17 @@ class vpyr_2_tpyramid : public vpyr_2_pyramid<TLevel>
   //: kernel class for removal of darts on a level.
   typedef typename level_type::removal_kernel removal_kernel ;
 
-
   //:
   vpyr_2_tpyramid();
 
-  //vpyr_2_tpyramid(const self_type &right);
+#if 0
+  vpyr_2_tpyramid(self_type const& p);
+
+  self_type & operator=(self_type const& p);
+#endif // 0
 
   //:
   virtual ~vpyr_2_tpyramid();
-
-  //self_type & operator=(const self_type &right);
 
   //: Returns true if all the permutations are valid, false otherwise.
   // May be usefull for testing permutations set by hand...
@@ -103,7 +108,7 @@ class vpyr_2_tpyramid : public vpyr_2_pyramid<TLevel>
   //: Returns "true" if the map empty.
   bool empty() const
   {
-    return _level.empty() ;
+    return level_.empty() ;
   }
 
   //: Initializes the sturcture of the combinatorial map from "stream".
@@ -123,7 +128,7 @@ class vpyr_2_tpyramid : public vpyr_2_pyramid<TLevel>
   //:
   level_type* level_below(vmap_level_type type, const level_type& above)
   {
-    return _Base::level_below(type, above) ;
+    return Base_::level_below(type, above) ;
   }
 };
 

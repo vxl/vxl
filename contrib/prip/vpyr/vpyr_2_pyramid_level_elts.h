@@ -15,7 +15,6 @@
 #include <vmap/vmap_types.h>
 #include "vpyr_2_pyramid_base.h"
 
-
 //: The dart class of a pyramid.
 class vpyr_2_pyramid_level_dart
 {
@@ -23,68 +22,65 @@ class vpyr_2_pyramid_level_dart
   typedef vpyr_2_pyramid_base_dart base_type ;
 
   //:
-  vpyr_2_pyramid_level_dart()
-  {}
+  vpyr_2_pyramid_level_dart() {}
 
   //:
   void set(base_type* arg_link, vmap_level_index arg_level)
   {
-    _link=arg_link;
-    _level=arg_level;
+    link_=arg_link;
+    level_=arg_level;
   }
 
   //:
   vpyr_2_pyramid_level_dart(const vpyr_2_pyramid_level_dart & arg)
-      :_link(arg._link),_level(arg._level)
-  {}
+    :link_(arg.link_),level_(arg.level_)                           {}
 
   //: Returns true if the dart is a pendant dart.
   bool is_pendant() const
   {
-    return _link->is_pendant(level()) ;
+    return link_->is_pendant(level()) ;
   }
 
   //: Returns true if the dart is a redundant dart.
   bool is_redundant() const
   {
-    return _link->is_redundant(level()) ;
+    return link_->is_redundant(level()) ;
   }
 
   //: Returns true if the dart is a self direct loop.
   bool is_self_direct_loop() const
   {
-    return _link->is_self_direct_loop(level()) ;
+    return link_->is_self_direct_loop(level()) ;
   }
 
   //: Returns true if the dart is a double dart.
   bool is_double() const
   {
-    return _link->is_double(level()) ;
+    return link_->is_double(level()) ;
   }
 
   //: The dart's level.
   vmap_level_index level() const
   {
-    return _level;
+    return level_;
   }
 
   //: An index of the map's vertex sequence.
   vmap_dart_index sequence_index() const
   {
-    return _link->sequence_index() ;
+    return link_->sequence_index() ;
   }
 
  protected :
   //:
-  base_type* link() const {return (base_type*)_link ;}
+  base_type* link() const {return (base_type*)link_ ;}
 
   //:
-  base_type* _link ;
+  base_type* link_ ;
 
   //:
-  vmap_level_index _level ;
+  vmap_level_index level_ ;
 };
-
 
 //:
 template <class D>
@@ -101,14 +97,10 @@ class vmap_2_pdl_dart : public vpyr_2_pyramid_level_dart
   typedef vmap_2_pd_dart< value_set > base_type ;
 
   //:
-  vmap_2_pdl_dart()
-  {}
+  vmap_2_pdl_dart() {}
 
   //:
-  vmap_2_pdl_dart(const vmap_2_pdl_dart<D> & arg)
-      :vpyr_2_pyramid_level_dart(arg)
-  {}
-
+  vmap_2_pdl_dart(vmap_2_pdl_dart<D> const& arg) :vpyr_2_pyramid_level_dart(arg) {}
 
  protected :
   //:
@@ -117,13 +109,13 @@ class vmap_2_pdl_dart : public vpyr_2_pyramid_level_dart
   //:
   value_type & data()
   {
-    return link()->data(_level) ;
+    return link()->data(level_) ;
   }
 
   //:
   const value_type & data() const
   {
-    return link()->data(_level) ;
+    return link()->data(level_) ;
   }
 };
 
@@ -139,72 +131,69 @@ class vpyr_2_pyramid_level_dart_base_iterator : protected FD
   typedef FD element_type ;
 
   //:
-  vpyr_2_pyramid_level_dart_base_iterator()
-  {}
+  vpyr_2_pyramid_level_dart_base_iterator() {}
 
   //:
-  vpyr_2_pyramid_level_dart_base_iterator(const self_type &right)
-      :element_type(right),_it(right._it)
-  {}
+  vpyr_2_pyramid_level_dart_base_iterator(const self_type &it)
+    :element_type(it),it_(it.it_)                              {}
 
   //:
   template< typename FDp, typename Refp, typename Ptrp, typename Itp >
-  vpyr_2_pyramid_level_dart_base_iterator(const vpyr_2_pyramid_level_dart_base_iterator<FDp,Refp,Ptrp,Itp> &right)
-      :_it((It)right.reference())
+  vpyr_2_pyramid_level_dart_base_iterator(const vpyr_2_pyramid_level_dart_base_iterator<FDp,Refp,Ptrp,Itp> &it)
+    :it_((It)it.reference())
   {
-    set(*_it, right.level()) ;
+    set(*it_, it.level()) ;
   }
 
   //:
   template< typename FDp, typename Refp, typename Ptrp, typename Itp >
-  self_type & operator=(const vpyr_2_pyramid_level_dart_base_iterator<FDp,Refp,Ptrp,Itp> &right)
+  self_type & operator=(const vpyr_2_pyramid_level_dart_base_iterator<FDp,Refp,Ptrp,Itp> &it)
   {
-    _it=(It)right.reference() ;
-    set(*_it, right.level()) ;
+    it_=(It)it.reference() ;
+    set(*it_, it.level()) ;
     return *this ;
   }
 
   //:
-  ~vpyr_2_pyramid_level_dart_base_iterator()
-  {}
+  ~vpyr_2_pyramid_level_dart_base_iterator() {}
 
   //:
-  self_type & operator=(const self_type &right)
+  self_type & operator=(const self_type &it)
   {
-    _level=right.level() ;
-    _it=right.reference() ;
+    level_=it.level() ;
+    it_=it.reference() ;
     set_link();
     return *this ;
   }
 
   //:
-  bool operator==(const self_type &right) const
+  bool operator==(const self_type &it) const
   {
-    return _it==right._it ;
+    return it_==it.it_ ;
   }
 
   //:
-  bool operator!=(const self_type &right) const
+  bool operator!=(const self_type &it) const
   {
-    return _it!=right._it ;
+    return it_!=it.it_ ;
   }
 
   //:
-  Ref operator * () const
+  Ref operator*() const
   {
     return (Ref)*this ;
   }
 
   //:
-  const Ptr operator->() const
+  Ptr operator->() const
   {
-    return (const Ptr)this;
+    return (Ptr)this ;
   }
 
   //:  Applies alpha.
   self_type & alpha()
   {
-    _it+=offset(vpyr_2_pyramid_base_alpha(link(),level())) ;
+    it_+=offset(vpyr_2_pyramid_base_alpha(link(),level())) ;
     set_link();
     return *this ;
   }
@@ -212,7 +201,7 @@ class vpyr_2_pyramid_level_dart_base_iterator : protected FD
   //:  Applies phi.
   self_type & phi ()
   {
-    _it+=offset(vpyr_2_pyramid_base_phi(link(),level())) ;
+    it_+=offset(vpyr_2_pyramid_base_phi(link(),level())) ;
     set_link();
     return *this ;
   }
@@ -220,7 +209,7 @@ class vpyr_2_pyramid_level_dart_base_iterator : protected FD
   //:  Applies sigma.
   self_type & sigma ()
   {
-    _it+=offset(vpyr_2_pyramid_base_sigma(link(),level())) ;
+    it_+=offset(vpyr_2_pyramid_base_sigma(link(),level())) ;
     set_link();
     return *this ;
   }
@@ -235,7 +224,7 @@ class vpyr_2_pyramid_level_dart_base_iterator : protected FD
   //:  Applies phi^{-1}.
   self_type & iphi ()
   {
-    _it+=offset(vpyr_2_pyramid_base_iphi(link(),level())) ;
+    it_+=offset(vpyr_2_pyramid_base_iphi(link(),level())) ;
     set_link();
     return *this ;
   }
@@ -243,7 +232,7 @@ class vpyr_2_pyramid_level_dart_base_iterator : protected FD
   //:  Applies sigma^{-1}.
   self_type & isigma ()
   {
-    _it+=offset(vpyr_2_pyramid_base_isigma(link(),level())) ;
+    it_+=offset(vpyr_2_pyramid_base_isigma(link(),level())) ;
     set_link();
     return *this ;
   }
@@ -251,7 +240,7 @@ class vpyr_2_pyramid_level_dart_base_iterator : protected FD
   //:  Next dart.
   self_type & operator++ ()
   {
-    ++_it;
+    ++it_;
     set_link();
     return *this ;
   }
@@ -259,7 +248,7 @@ class vpyr_2_pyramid_level_dart_base_iterator : protected FD
   //:  Next dart.
   self_type & operator+ (int i)
   {
-    _it+=i;
+    it_+=i;
     set_link();
     return *this ;
   }
@@ -270,10 +259,11 @@ class vpyr_2_pyramid_level_dart_base_iterator : protected FD
     return FD::level();
   }
 
-  //////////////////////private :
+// private :
+
   //:
   vpyr_2_pyramid_level_dart_base_iterator(It arg,vmap_level_index l)
-      :_it(arg)
+    :it_(arg)
   {
     set(*arg,l) ;
   }
@@ -281,7 +271,7 @@ class vpyr_2_pyramid_level_dart_base_iterator : protected FD
   //:
   It reference() const
   {
-    return _it ;
+    return it_ ;
   }
 
  protected:
@@ -289,20 +279,20 @@ class vpyr_2_pyramid_level_dart_base_iterator : protected FD
   //:
   void set_link()
   {
-    _link=*_it ;
+    link_=*it_ ;
   }
 
   //:
   template <typename D>
   int offset(D* arg) const
   {
-    return arg->sequence_index()-_link->sequence_index();
+    return arg->sequence_index()-link_->sequence_index();
   }
 
  private:
 
   //:
-  It _it ;
+  It it_ ;
 };
 
 #endif

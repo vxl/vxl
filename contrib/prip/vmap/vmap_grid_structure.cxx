@@ -11,8 +11,8 @@ vmap_grid_structure::vmap_grid_structure(int arg_width, int arg_height)
 //: Initializes the vmap_grid_structure with "arg_width"*"arg_height" faces
 void vmap_grid_structure::initialise(int arg_width, int arg_height)
 {
-  _width = arg_width; _height=arg_height ;
-  _horizontalEdges = _width*(_height+1) ;
-  _verticalEdges = _height*(_width+1) ;
-  _nb_darts=2*(_horizontalEdges+_verticalEdges) ;
+  width_ = arg_width; height_=arg_height ;
+  horizontalEdges_ = width_*(height_+1) ;
+  verticalEdges_ = height_*(width_+1) ;
+  nb_darts_=2*(horizontalEdges_+verticalEdges_) ;
 }

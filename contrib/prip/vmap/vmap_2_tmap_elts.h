@@ -24,99 +24,99 @@ class vmap_2_tmap_tuple
  public:
   vmap_2_tmap_tuple()
   {
-    _edge=NULL ;
-    _vertex=NULL ;
-    _face=NULL ;
+    edge_=NULL ;
+    vertex_=NULL ;
+    face_=NULL ;
   }
 
   //: Associated edge.
   const E & edge() const
   {
-    return *_edge ;
+    return *edge_ ;
   }
 
   //: Associated vertex.
   const V& vertex() const
   {
-    return *_vertex ;
+    return *vertex_ ;
   }
 
   //: Associated face.
   const F& face() const
   {
-    return *_face ;
+    return *face_ ;
   }
 
   //: Associated edge.
   E& edge()
   {
-    return *_edge ;
+    return *edge_ ;
   }
 
   //: Associated vertex.
   V& vertex()
   {
-    return *_vertex ;
+    return *vertex_ ;
   }
 
   //: Associated face.
   F& face()
   {
-    return *_face ;
+    return *face_ ;
   }
 
   //: For construction of the underlying map.
   void set_vertex(V*arg)
   {
-    _vertex=arg ;
+    vertex_=arg ;
   }
 
   //:
   void set_edge(E*arg)
   {
-    _edge=arg ;
+    edge_=arg ;
   }
 
   //:
   void set_face(F*arg)
   {
-    _face=arg ;
+    face_=arg ;
   }
 
   //:
   V* get_vertex_pointer() const
   {
-    return _vertex ;
+    return vertex_ ;
   }
 
   //:
   E* get_edge_pointer() const
   {
-    return _edge ;
+    return edge_ ;
   }
 
   //:
   F* get_face_pointer() const
   {
-    return _face ;
+    return face_ ;
   }
 
   //:
   bool valid() const
   {
-    return _edge!=NULL && _vertex!=NULL && _face != NULL ;
+    return edge_!=NULL && vertex_!=NULL && face_ != NULL ;
   }
 
  protected :
 
   //:
-  E * _edge ;
+  E * edge_ ;
 
   //:
-  V * _vertex ;
+  V * vertex_ ;
 
   //:
-  F * _face ;
+  F * face_ ;
 };
 
 //: the base dart class of a topological map
@@ -127,7 +127,6 @@ class vmap_2_tmap_dart : public vmap_2_map_dart,
   //:
   void set_sequence_index(vmap_dart_index arg) ;
 };
-
 
 //: Enables to iterate on the topology of a topological map.
 typedef vmap_2_map_dart_base_iterator< vmap_2_tmap_dart&,vmap_2_tmap_dart*,vmap_2_tmap_dart**> vmap_2_tmap_dart_iterator ;
@@ -152,40 +151,40 @@ class vmap_2_tmap_vertex
   //: Returns an iterator on the first dart of the associated sigma*.
   dart_iterator begin()
   {
-    return _begin ;
+    return begin_ ;
   }
 
   //: Returns an iterator on the first dart of the associated sigma*.
   const_dart_iterator begin() const
   {
-    return _begin ;
+    return begin_ ;
   }
 
   //: For construction of the underlying map.
   void set_begin(dart_iterator arg)
   {
-    _begin = arg ;
+    begin_ = arg ;
   }
 
   //: An index of the map's vertex sequence.
   vmap_vertex_index sequence_index() const
   {
-    return _sequence_index ;
+    return sequence_index_ ;
   }
 
   //:
   void set_sequence_index(vmap_vertex_index arg)
   {
-    _sequence_index=arg ;
+    sequence_index_=arg ;
   }
 
  protected :
 
   //:
-  vmap_vertex_index _sequence_index ;
+  vmap_vertex_index sequence_index_ ;
 
   //:
-  dart_iterator _begin ;
+  dart_iterator begin_ ;
 };
 
 //: The public face_type class.  face_types are the orbits phi* of the darts.
@@ -204,39 +203,39 @@ class vmap_2_tmap_face
   //: Returns an iterator on the first dart of the associated phi*.
   dart_iterator begin()
   {
-    return _begin ;
+    return begin_ ;
   }
 
   //: Returns an iterator on the first dart of the associated phi*.
   const_dart_iterator begin() const
   {
-    return _begin ;
+    return begin_ ;
   }
 
   //: For construction of the underlying map.
   void set_begin(dart_iterator arg)
   {
-    _begin = arg ;
+    begin_ = arg ;
   }
 
   //: An index of the map's face sequence.
   vmap_face_index sequence_index() const
   {
-    return _sequence_index ;
+    return sequence_index_ ;
   }
 
   //:
   void set_sequence_index(vmap_face_index arg)
   {
-    _sequence_index=arg ;
+    sequence_index_=arg ;
   }
 
  protected :
   //:
-  vmap_face_index _sequence_index ;
+  vmap_face_index sequence_index_ ;
 
   //:
-  dart_iterator _begin ;
+  dart_iterator begin_ ;
 };
 
 //: The public edge class. Edges are the orbits alpha* of the darts.
@@ -320,7 +319,7 @@ class vmap_2_tmap_edge
   //: Returns the direct dart associated to the edge.
   const vmap_2_tmap_dart & direct_dart() const
   {
-    return *_begin ;
+    return *begin_ ;
   }
 
   //: Returns the inverse dart associated to the edge.
@@ -332,39 +331,39 @@ class vmap_2_tmap_edge
   //: Returns an iterator on the first dart of the associated alpha*.
   dart_iterator begin()
   {
-    return _begin ;
+    return begin_ ;
   }
 
   //: Returns an iterator on the first dart of the associated alpha*.
   const_dart_iterator begin() const
   {
-    return _begin ;
+    return begin_ ;
   }
 
   //: For construction of the underlying map.
   void set_begin(dart_iterator arg)
   {
-    _begin = arg ;
+    begin_ = arg ;
   }
 
   //: An index of the map's edge sequence.
   vmap_edge_index sequence_index() const
   {
-    return _sequence_index ;
+    return sequence_index_ ;
   }
 
   //: Sets the index of the map's edge sequence.
   void set_sequence_index(vmap_edge_index arg)
   {
-    _sequence_index=arg ;
+    sequence_index_=arg ;
   }
 
  protected :
   //:
-  vmap_edge_index _sequence_index ;
+  vmap_edge_index sequence_index_ ;
 
   //:
-  dart_iterator _begin ;
+  dart_iterator begin_ ;
 };
 
 #endif

@@ -19,59 +19,58 @@
 // when the representative plays a special role.
 class vbl_controlled_partition
 {
-    struct node
-    {
-        int father ;
-    } ;
-    vcl_vector<node> _elements ;
-    int _nb_sets ;
+  struct node
+  {
+    int father ;
+  };
+  vcl_vector<node> elements_ ;
+  int nb_sets_ ;
 
-    void link(int i, int j)
-    {
-        _elements[j].father=_elements[i].father ;
-        _nb_sets-- ;
-    }
+  void link(int i, int j)
+  {
+    elements_[j].father=elements_[i].father ;
+    nb_sets_-- ;
+  }
 
  public:
-    vbl_controlled_partition() ;
-    ~vbl_controlled_partition() ;
+  vbl_controlled_partition() ;
+  ~vbl_controlled_partition() ;
 
+  //: Initializes the struture with "size" new sets composed
+  //   of a single element.
+  void initialise(int size) ;
 
-    //: Initializes the struture with "size" new sets composed
-    //   of a single element.
-    void initialise(int size) ;
+  vbl_controlled_partition & operator=(const vbl_controlled_partition & arg) ;
 
-    vbl_controlled_partition & operator=(const vbl_controlled_partition & arg) ;
+  //: The representative of "root" is the new representative of the set to which "j" is the representative.
+  void union_of(int root, int j)
+  {
+    link(representative(root), representative(j)) ;
+  }
 
-    //: The representative of "root" is the new representative of the set to which "j" is the representative.
-    void union_of(int root, int j)
-    {
-        link(representative(root), representative(j)) ;
-    }
+  //: Finds the representative of "i".
+  int representative(int i) const ;
 
-    //: Finds the representative of "i".
-    int representative(int i) const ;
+  //: Sets "i" as the representative its set.
+  void set_as_representative(int i) ;
 
-    //: Sets "i" as the representative its set.
-    void set_as_representative(int i) ;
+  //: Number of sets.
+  int nb_sets() const
+  {
+    return nb_sets_ ;
+  }
 
-    //: Number of sets.
-    int nb_sets() const
-    {
-        return _nb_sets ;
-    }
+ //: Number of elements.
+  int nb_elements() const
+  {
+    return elements_.size() ;
+  }
 
-   //: Number of elements.
-    int nb_elements() const
-    {
-        return _elements.size() ;
-    }
-
-    //: Deletes everything
-    void clear()
-    {
-        _elements.clear() ;
-    }
+  //: Deletes everything
+  void clear()
+  {
+    elements_.clear() ;
+  }
 };
 
 #endif

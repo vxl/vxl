@@ -52,8 +52,10 @@ class vpyr_2_pyramid
   //: const_iterator on the level sequence of the pyramid.
   typedef vmap_map_iterator_wrapper<const level_type&, const level_type*, typename level_array_type::const_iterator >
           const_level_iterator ;
-  //typedef typename level_array_type::iterator level_iterator ;
-  //typedef typename level_array_type::const_iterator const_level_iterator ;
+#if 0
+  typedef typename level_array_type::iterator level_iterator ;
+  typedef typename level_array_type::const_iterator const_level_iterator ;
+#endif // 0
 
   //: kernel for contraction of darts on a level.
   typedef typename level_type::contraction_kernel contraction_kernel ;
@@ -61,18 +63,20 @@ class vpyr_2_pyramid
   //: kernel class for removal of darts on a level.
   typedef typename level_type::removal_kernel removal_kernel ;
 
-
+  //////////////////
   //
-  // Constructors/Destructors
+  // Constructors/Destructor
   //
   //////////////////
 
   vpyr_2_pyramid();
-  //vpyr_2_pyramid(const vpyr_2_pyramid &right);
+#if 0
+  vpyr_2_pyramid(vpyr_2_pyramid const& p);
+
+  vpyr_2_pyramid& operator=(vpyr_2_pyramid const& p);
+#endif // 0
 
   virtual ~vpyr_2_pyramid();
-
-  //vpyr_2_pyramid & operator=(const vpyr_2_pyramid &right);
 
   //: Erases everything and sets the base level of the pyramid .
   template <class M>
@@ -81,31 +85,31 @@ class vpyr_2_pyramid
   //: Returns the base level of the pyramid.
   const base_map_type & base_map() const
   {
-    return _base_map ;
+    return base_map_ ;
   }
 
   //: Returns the base level of the pyramid.
   const level_type & base_level() const
   {
-    return _level.begin()->second ;
+    return level_.begin()->second ;
   }
 
   //: Returns the base level of the pyramid.
   level_type & base_level()
   {
-    return _level.begin()->second ;
+    return level_.begin()->second ;
   }
 
   //: Returns the top level of the pyramid.
   const level_type & top_level() const
   {
-    return (--_level.end())->second ;
+    return (--level_.end())->second ;
   }
 
   //: Returns the top level of the pyramid.
   level_type & top_level()
   {
-    return (--_level.end())->second ;
+    return (--level_.end())->second ;
   }
 
   //: Returns the index of the top level of the pyramid.
@@ -117,54 +121,55 @@ class vpyr_2_pyramid
   //: Returns the number of levels in the pyramid.
   int nb_levels() const
   {
-    return _level.size() ;
+    return level_.size() ;
   }
 
   //: Returns an intermediate level of the pyramid.
   level_type & level(vmap_level_index arg)
   {
-    typename level_array_type::iterator i=_level.lower_bound(arg) ;
+    typename level_array_type::iterator i=level_.lower_bound(arg) ;
   if (i->first==arg) return i->second ;
-  if (i==_level.begin()) return _level.end()->second ;
+  if (i==level_.begin()) return level_.end()->second ;
   return (--i)->second ;
   }
 
   //: Returns an intermediate level of the pyramid.
   const level_type & level(vmap_level_index arg) const
   {
-    typename level_array_type::iterator i=_level.lower_bound(arg) ;
+    typename level_array_type::iterator i=level_.lower_bound(arg) ;
   if (i->first==arg) return i->second ;
-  if (i==_level.begin()) return _level.end()->second ;
+  if (i==level_.begin()) return level_.end()->second ;
   return (--i)->second ;
   }
 
   //: Returns the first iterator on the level sequence.
   level_iterator begin_level()
   {
-    return _level.begin() ;
+    return level_.begin() ;
   }
 
   //: Returns the first iterator on the level sequence.
   const_level_iterator begin_level() const
   {
-    return _level.begin() ;
+    return level_.begin() ;
   }
 
   //: Returns the end iterator on the level sequence.
   level_iterator end_level()
   {
-    return _level.end() ;
+    return level_.end() ;
   }
 
   //: Returns the end iterator on the level sequence.
   const_level_iterator end_level() const
   {
-    return _level.end() ;
+    return level_.end() ;
   }
 
-  /*//: Initialises nb_levels.
+#if 0
+  //: Initialises nb_levels.
   virtual void initialise_levels(int nb_levels) ;
-  */
+#endif // 0
 
   //: Returns true if all the permutations are valid, false otherwise.
   // May be usefull for testing permutations set by hand...
@@ -176,9 +181,8 @@ class vpyr_2_pyramid
   //: Returns "true" if the map is empty.
   bool empty() const
   {
-    return _level.empty() ;
+    return level_.empty() ;
   }
-
 
   //: Initializes the sturcture of the combinatorial map from "stream".
   void read_structure(vcl_istream & stream) ;
@@ -189,7 +193,7 @@ class vpyr_2_pyramid
   //: returns the ith dart of the base map.
   base_dart_type & base_dart(int index)
   {
-    return _base_map.dart(index) ;
+    return base_map_.dart(index) ;
   }
 
  protected:
@@ -198,10 +202,10 @@ class vpyr_2_pyramid
   level_type* level_below(vmap_level_type type, const level_type& above) ;
 
   //: the base map of the pyramid.
-  base_map_type _base_map ;
+  base_map_type base_map_ ;
 
   //:  all the levels of the pyramid.
-  level_array_type _level ;
+  level_array_type level_ ;
 };
 
 #include "vpyr_2_pyramid.txx"

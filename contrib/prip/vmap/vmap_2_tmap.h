@@ -18,9 +18,9 @@
 //: Enables to explicitly manipulate darts, but also vertices, edges, faces of a topological partition.
 template <class V=vmap_2_tmap_vertex, class E=vmap_2_tmap_edge, class F=vmap_2_tmap_face, class D=vmap_2_tmap_dart>
 class vmap_2_tmap: public vmap_2_map<D>,
-      public vmap_owning_sequence<V>,
-      public vmap_owning_sequence<E>,
-      public vmap_owning_sequence<F>
+                   public vmap_owning_sequence<V>,
+                   public vmap_owning_sequence<E>,
+                   public vmap_owning_sequence<F>
 {
  public:
 
@@ -30,7 +30,7 @@ class vmap_2_tmap: public vmap_2_map<D>,
   static vmap_2_tmap_tag tag ;
 
   //:
-  typedef vmap_2_map<D> _Base ;
+  typedef vmap_2_map<D> Base_ ;
 
  protected:
   // --- vertex sequence ---
@@ -69,11 +69,11 @@ class vmap_2_tmap: public vmap_2_map<D>,
   // --- dart sequence ---
 
   //:
-  typedef typename _Base::dart_sequence_iterator dart_sequence_iterator ;
+  typedef typename Base_::dart_sequence_iterator dart_sequence_iterator ;
   //:
-  typedef typename _Base::const_dart_sequence_iterator const_dart_sequence_iterator ;
+  typedef typename Base_::const_dart_sequence_iterator const_dart_sequence_iterator ;
   //:
-  typedef typename _Base::dart_pointer dart_pointer ;
+  typedef typename Base_::dart_pointer dart_pointer ;
 
  public:
 
@@ -120,15 +120,15 @@ class vmap_2_tmap: public vmap_2_map<D>,
   // --- Dart types ---
 
   //: the type of dart of this map.
-  typedef typename _Base::dart_type dart_type ;
+  typedef typename Base_::dart_type dart_type ;
   //: reference on a dart.
   typedef dart_type& dart_reference ;
   //: const reference on a dart.
   typedef dart_type const& const_dart_reference ;
   //:An iterator iterates on a sequence of darts and on the topology.
-  typedef typename _Base::dart_iterator dart_iterator ;
+  typedef typename Base_::dart_iterator dart_iterator ;
   //:An iterator iterates on a sequence of darts and on the topology.
-  typedef typename _Base::const_dart_iterator const_dart_iterator ;
+  typedef typename Base_::const_dart_iterator const_dart_iterator ;
 
   //: Kernel class for contraction.
   typedef vmap_permutation_kernel< vmap_sigma_permutation<self_type> > contraction_kernel ;
@@ -189,7 +189,6 @@ class vmap_2_tmap: public vmap_2_map<D>,
     return (dart_type const&) a ;
   }
 
-
  public:
 
   //:
@@ -204,7 +203,6 @@ class vmap_2_tmap: public vmap_2_map<D>,
 
   //:
   self_type & operator=(self_type const& m);
-
 
   //:
   template <class M>
@@ -222,13 +220,13 @@ class vmap_2_tmap: public vmap_2_map<D>,
   //: Returns the index of a dart in the initial sequence
   int position(vmap_2_tmap_dart const& arg) const
   {
-    return _Base::position(arg) ;
+    return Base_::position(arg) ;
   }
 
   //: Returns the index of a dart in the initial sequence
   int dart_position(vmap_dart_index i) const
   {
-    return _Base::position(dart(i)) ;
+    return Base_::position(dart(i)) ;
   }
 
   //: Returns the index of the vertex "arg".
@@ -274,7 +272,6 @@ class vmap_2_tmap: public vmap_2_map<D>,
   {
     return edge_sequence::position(edge(i)) ;
   }
-
 
   //: Returns the index of the face "arg".
   vmap_face_index index (vmap_2_tmap_face const& arg) const
@@ -541,23 +538,35 @@ class vmap_2_tmap: public vmap_2_map<D>,
   {
     if ((self_type const*)&st != this)
     {
-      //base_map_type::set_structure(st) ;
+#if 0
+      base_map_type::set_structure(st) ;
+#endif // 0
       int lf=st.nb_faces(),
           lv=st.nb_vertices(),
-          le=st.nb_edges(),i ;
+          le=st.nb_edges() ;
       initialise(lv,le,lf) ;
-      //initialise_vertices(lv) ;
-      //initialise_edges(le) ;
-      //initialise_faces(lf) ;
-      for (i=0; i<nb_darts(); i++)
+#if 0
+      initialise_vertices(lv) ;
+      initialise_edges(le) ;
+      initialise_faces(lf) ;
+#endif // 0
+      for (int i=0; i<nb_darts(); i++)
+      {
         set_dart(i,st.sigma(i), st.alpha(i), st.dart_associated_vertex(i),
                  st.dart_associated_edge(i),st.dart_associated_face(i)) ;
-      for (i=0; i<nb_vertices(); i++)
+      }
+      for (int i=0; i<nb_vertices(); i++)
+      {
         vertex(i).set_begin(begin_dart()+st.vertex_associated_dart(i)) ;
-      for (i=0; i<nb_edges(); i++)
+      }
+      for (int i=0; i<nb_edges(); i++)
+      {
         edge(i).set_begin(begin_dart()+st.edge_associated_dart(i)) ;
-      for (i=0; i<nb_faces(); i++)
+      }
+      for (int i=0; i<nb_faces(); i++)
+      {
         face(i).set_begin(begin_dart()+st.face_associated_dart(i)) ;
+      }
     }
   }
 
@@ -568,7 +577,7 @@ class vmap_2_tmap: public vmap_2_map<D>,
   {
     if (&st != this)
     {
-      _Base::set_structure(st) ;
+      Base_::set_structure(st) ;
       set_edge_cycles() ;
       set_vertex_cycles() ;
       set_face_cycles() ;
@@ -694,7 +703,6 @@ class vmap_2_tmap: public vmap_2_map<D>,
     return face_sequence::get_pointer(arg) ;
   }
 };
-
 
 #include "vmap_2_tmap.txx"
 

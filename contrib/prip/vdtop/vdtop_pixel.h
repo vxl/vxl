@@ -22,44 +22,44 @@ class vdtop_pixel
   typedef typename vil_image_view<T>::iterator image_iterator ;
 
   vdtop_pixel(vil_image_view<T> & img, image_iterator arg)
-    :_position(arg), _img(&img)
+    :position_(arg), img_(&img)
   {
   }
 
   vil_image_view<T> & image() const
   {
-    return *_img ;
+    return *img_ ;
   }
 
   void set_position(image_iterator arg)
   {
-    _position=arg ;
+    position_=arg ;
   }
 
   image_iterator position() const
   {
-    return _position ;
+    return position_ ;
   }
 
   self_type & operator=(const self_type & arg)
   {
-    _position=arg._position;
-    _img=arg._img ;
+    position_=arg.position_;
+    img_=arg.img_ ;
   }
 
   self_type operator+(vdtop_freeman_code code) const
   {
-    return self_type(img,_position+(code.di()*_img->istep()+code.dj()*_img->jstep())) ;
+    return self_type(img,position_+(code.di()*img_->istep()+code.dj()*img_->jstep())) ;
   }
 
   T& value()
   {
-    return *_position ;
+    return *position_ ;
   }
 
   const T& value() const
   {
-    return *_position ;
+    return *position_ ;
   }
 
   //: Returns the set composed of all points in the neighborhood of this having a value greater or equal.
@@ -177,9 +177,9 @@ class vdtop_pixel
   }
 
  private:
-  image_iterator _position ;
-  vil_image_view<T> * _img ;
-} ;
+  image_iterator position_ ;
+  vil_image_view<T> * img_ ;
+};
 
 #include "vdtop_pixel.txx"
 
