@@ -35,9 +35,10 @@
 
 void test_bounding_box()
 {
-  vcl_cout << "\n\n\n*******************\n"
-                 << " Test Bounding Box \n"
-                 << "*******************" << vcl_endl;
+  vcl_cout << "\n\n\n"
+           << "*******************\n"
+           << " Test Bounding Box\n"
+           << "*******************\n";
   vbl_bounding_box<double,3> bb;
   TEST("bounding box dimension", bb.dimension(), 3);
   bb.update(-3.0,4.0,5.0);
