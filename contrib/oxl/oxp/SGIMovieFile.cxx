@@ -229,7 +229,7 @@ bool SGIMovieFile::GetFrame(int frame_index, void* buffer)
     int h = p->height / interlace_factor;
     int inrowsize = w * in_bytes_per_pixel;
     int outrowsize = w * bytes_per_pixel;
-    char row_buf[inrowsize];
+    char* row_buf = new char[inrowsize];
 
     char r,g,b;
     for (int i=0; i < interlace_factor; ++i) {
@@ -251,6 +251,7 @@ bool SGIMovieFile::GetFrame(int frame_index, void* buffer)
     }
     if (MovieFileInterface::verbose) vbl_printf(cerr, "] ");
     fclose(fp);
+    delete[] row_buf;
   }
   else if (p->compression == "10") {
     // JPEG
@@ -456,7 +457,7 @@ static void hexdump(ifstream& f, int nframes)
   for(int j = 0; j < nframes; ++j) {
     int pos = f.tellg();
     u8 buf[16];
-    f.read(buf,16);
+    f.read((char*)buf,16);
     vbl_printf(cerr, "%08x:", pos);
     for(int i = 0; i < 16; ++i) {
       if (i % 4 == 0) vbl_printf(cerr, " ");
@@ -470,14 +471,14 @@ static void hexdump(ifstream& f, int nframes)
 static int get_u16(istream& f)
 {
   u8 buf[2];
-  f.read(buf, 2);
+  f.read((char*)buf, 2);
   return (buf[0] << 8) + buf[1];
 }
 
 static int get_u32(istream& f)
 {
   u8 buf[4];
-  f.read(buf, 4);
+  f.read((char*)buf, 4);
   return (((unsigned long)buf[0] << 24) |
 	  ((unsigned long)buf[1] << 16) |
 	  ((unsigned long)buf[2] << 8) |
