@@ -89,6 +89,12 @@ public:
   void change_value( const value_type& old_val, const value_type& new_val );
 
   point_type max_pt() {return max_pt_ ;}
+  
+  point_type min_pt() {return min_pt_ ;}
+  
+  point_type bin_sizes() {return bin_sizes_;}
+
+
 
 private:
   void point_to_bin( COORD_T x, COORD_T y, int& bin_x, int& bin_y ) const;
