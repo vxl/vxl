@@ -101,14 +101,22 @@ double clsfy_random_builder::build(clsfy_classifier_base& model,
   clsfy_random_classifier &randclass = (clsfy_random_classifier&) model;
   
   if (nClasses==1) nClasses=2;
+  
+  assert (n>0);
 
   vcl_vector<unsigned> freqs(nClasses);
-  for (unsigned i=0; i < n; ++i) freqs[outputs[i]] ++;
+  for (unsigned i=0; i < n; ++i)
+  {
+    assert (outputs[i] < nClasses);
+    freqs[outputs[i]] ++;
+  }
+
   double sum = (double)(vnl_c_vector<unsigned>::sum(&freqs.front(), nClasses)) ;
   vcl_vector<double> probs(nClasses);
   for (unsigned i=0; i < nClasses ; ++i) probs[i] = freqs[i] / sum;
   randclass.set_probs(probs);
 
+  assert (inputs.size() > 0);
   inputs.reset();
   randclass.set_n_dims(inputs.current().size());
   randclass.set_confidence(confidence_);
