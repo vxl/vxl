@@ -48,7 +48,8 @@ vtol_cycle_processor::vtol_cycle_processor(vcl_vector<vtol_edge_sptr>& edges)
 vtol_cycle_processor::vtol_cycle_processor(vcl_vector<vtol_edge*>& edges)
 {
   vcl_vector<vtol_edge_sptr> vedges;
-  //  stl_cool_topology::listp_edge_to_vcl_vector(edges, vedges);
+  for (vcl_vector<vtol_edge*>::iterator i=edges.begin(); i!=edges.end(); ++i)
+    vedges.push_back(*i);
   _tolerance = 0;
   init(vedges);
 }
