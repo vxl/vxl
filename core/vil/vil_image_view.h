@@ -41,7 +41,7 @@ protected:
   int jstep_;
   int planestep_;
 
-  vil2_smart_ptr<vil2_memory_chunk> ptr_;
+  vil2_memory_chunk_sptr ptr_;
 public:
 
     //: Dflt ctor
@@ -133,14 +133,14 @@ public:
     // eg using set_to_memory.
     //
     // Typically used when creating new views of the data
-  const vil2_smart_ptr<vil2_memory_chunk>& memory_chunk() const { return ptr_; }
+  const vil2_memory_chunk_sptr& memory_chunk() const { return ptr_; }
 
     //: Smart pointer to the object holding the data for this view
     // Will be a null pointer if this view looks at `third-party' data,
     // eg using set_to_memory
     //
     // Typically used when creating new views of the data
-  vil2_smart_ptr<vil2_memory_chunk>& memory_chunk() { return ptr_; }
+  vil2_memory_chunk_sptr& memory_chunk() { return ptr_; }
 
   // Ordinary image indexing stuff.
 
