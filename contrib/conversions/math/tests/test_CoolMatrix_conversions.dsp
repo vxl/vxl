@@ -114,6 +114,11 @@ LINK32=link.exe
 # Begin Group "Source Files"
 # Begin Source File
 
+SOURCE=.\test_driver.cxx
+
+# End Source File
+# Begin Source File
+
 SOURCE=.\test_CoolMatrix_conversions.cxx
 
 # End Source File

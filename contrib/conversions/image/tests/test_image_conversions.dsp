@@ -133,6 +133,11 @@ LINK32=link.exe
 # PROP Default_Filter ""
 # Begin Source File
 
+SOURCE=.\test_driver.cxx
+
+# End Source File
+# Begin Source File
+
 SOURCE=.\test_image_conversions.cxx
 
 # End Source File
