@@ -145,7 +145,133 @@ brip_float_ops::gaussian(vil_memory_image_of<float> const & input, float sigma)
   vil_memory_image_of<float> output(vil_smooth_gaussian(input, sigma));
   return output;
 }
+//-------------------------------------------------------------------
+// Determine if the center of a (2n+1)x(2n+1) neighborhood is a local maxium
+//
+bool brip_float_ops::
+local_maximum(vbl_array_2d<float> const & neighborhood,
+              int n, float& value)
+{
+  bool local_max = true;
+  value = 0;
+  float center = neighborhood[n][n];
+  for(int y = -n; y<=n; y++)
+    for(int x = -n; x<=n; x++)
+      local_max = local_max&&(neighborhood[y+n][x+n]<=center);
+  if(!local_max)
+    return false;
+  value = local_max;
+  return true;
+}
+//-------------------------------------------------------------------
+// Interpolate the sub-pixel position of a neighborhood using a
+// second order expansion on a 3x3 sub-neighborhood. Return the 
+// offset to the maximum, i.e. x=x0+dx, y = y0+dy. The design is
+// similar to the droid counterpoint by fsm, which uses the Beaudet Hessian
+//
+void brip_float_ops::
+interpolate_center(vbl_array_2d<float> const & neighborhood,
+                   float& dx, float& dy)
+{
+  dx = 0; dy=0;
+  //extract the neighborhood
+ float n_m1_m1 = neighborhood[0][0];
+ float n_m1_0 = neighborhood[0][1];
+ float n_m1_1 = neighborhood[0][2];
+ float n_0_m1 = neighborhood[1][0];
+ float n_0_0 = neighborhood[1][1];
+ float n_0_1 = neighborhood[1][2];
+ float n_1_m1 = neighborhood[2][0];
+ float n_1_0 = neighborhood[2][1];
+ float n_1_1 = neighborhood[2][2];
 
+ //Compute the 2nd order quadratic coefficients 
+ //      1/6 * [ -1  0 +1 ]
+ // Ix =       [ -1  0 +1 ]
+ //            [ -1  0 +1 ]
+ float Ix =(-n_m1_m1+n_m1_1-n_0_m1+n_0_1-n_1_m1+n_1_1)/6.0f;
+ //      1/6 * [ -1 -1 -1 ]
+ // Iy =       [  0  0  0 ]
+ //            [ +1 +1 +1 ]
+ float Iy =(-n_m1_m1-n_m1_0-n_m1_1+n_1_m1+n_1_0+n_1_1)/6.0f;
+ //      1/3 * [ +1 -2 +1 ]
+ // Ixx =      [ +1 -2 +1 ]
+ //            [ +1 -2 +1 ]
+ float Ixx = ((n_m1_m1+n_0_m1+n_1_m1+n_m1_1+n_0_1+n_1_1) 
+              -2.0f*(n_m1_0+n_0_0+n_1_0))/3.0f;
+ //      1/4 * [ +1  0 -1 ]
+ // Ixy =      [  0  0  0 ]
+ //            [ -1  0 +1 ]
+ float Ixy = (n_m1_m1-n_m1_1+n_1_m1+n_1_1)/4.0f; 
+ //      1/3 * [ +1 +1 +1 ]
+ // Iyy =      [ -2 -2 -2 ]
+ //            [ +1 +1 +1 ]
+ float Iyy = ((n_m1_m1+n_m1_0+n_m1_1+n_1_m1+n_1_0+n_1_1) 
+              -2.0f*(n_0_m1 + n_0_0 + n_1_0))/3.0f;
+  //
+  // The next bit is to find the extremum of the fitted surface by setting its
+  // partial derivatives to zero. We need to solve the following linear system :
+  // Given the fitted surface is
+  // I(x,y) = Io + Ix x + Iy y + 1/2 Ixx x^2 + Ixy x y + 1/2 Iyy y^2
+  // we solve for the maximum (x,y), 
+  //
+  //  [ Ixx Ixy ] [ dx ] + [ Ix ] = [ 0 ]      (dI/dx = 0)
+  //  [ Ixy Iyy ] [ dy ]   [ Iy ]   [ 0 ]      (dI/dy = 0)
+  //
+ float det = Ixx*Iyy - Ixy*Ixy;
+ // det>0 corresponds to a true local extremum otherwise a saddle point
+ if(det>0)
+   {
+     dx = (Iy*Ixy - Ix*Iyy) / det;
+     dy = (Ix*Ixy - Iy*Ixx) / det;
+    // more than one pixel away
+    if (vcl_fabs (dx) > 1.0 || vcl_fabs (dy) > 1.0)
+      {
+        dx = 0; dy = 0;
+      }
+   }
+}  
+//---------------------------------------------------------------
+// Compute the local maxima of the input on a (2n+1)x(2n+2)
+// neighborhood above the given threshold. At each local maximum, 
+// compute the sub-pixel location, (x_pos, y_pos).
+void brip_float_ops::
+non_maximum_supression(vil_memory_image_of<float> const & input,
+                        const int n,
+                        const float thresh,
+                        vcl_vector<float>& x_pos,
+                        vcl_vector<float>& y_pos,
+                        vcl_vector<float>& value)
+{
+  vul_timer t;
+  int N = 2*n+1;
+  int w = input.width(), h = input.height();
+  x_pos.clear();  x_pos.clear();   value.clear();
+  vbl_array_2d<float> neighborhood(N,N);
+  for(int y =n; y<h-n; y++)
+    for(int x = n; x<w-n; x++)
+      {
+        //If the center is not above threshold then there is
+        //no hope
+        if(input(x,y)<thresh)
+          continue;
+        //Fill the neighborhood
+        for(int i = -n; i<=n; i++)
+          for(int j = -n; j<=n; j++)
+            neighborhood.put(j+n,i+n,input(x+i, y+j));
+        //Check if the center is a local maximum
+        float dx, dy, max_v;
+        if(brip_float_ops::local_maximum(neighborhood, n, max_v))
+          {
+            //if so sub-pixel interpolate (3x3) and output results
+            brip_float_ops::interpolate_center(neighborhood, dx, dy);
+            x_pos.push_back(x+dx);
+            y_pos.push_back(y+dy);
+            value.push_back(max_v);
+          }
+      }
+  vcl_cout << "\nCompute non-maximum supression on a "<< w <<" x " << h << " image in "<< t.real() << " msecs.\n";
+}
 // -----------------------------------------------------------------
 // Subtract image_1 from image_2.
 // Will not operate unless the two input images are the same dimensions
@@ -260,7 +386,8 @@ brip_float_ops::beaudet(vil_memory_image_of<float> const & Ixx,
     for (int x = 0; x<w; x++)
       {
         double xx = Ixx(x,y), xy = Ixy(x,y), yy = Iyy(x,y);
-        //compute eigenvalues for experimentation
+
+       //compute eigenvalues for experimentation
         double det = xx*yy-xy*xy;
         double tr = xx+yy;
         double arg = tr*tr-4.0*det, lambda0 = 0, lambda1=0;

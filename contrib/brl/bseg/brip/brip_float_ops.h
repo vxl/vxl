@@ -18,6 +18,7 @@
 // \endverbatim
 //
 //-----------------------------------------------------------------------------
+#include <vcl_vector.h>
 #include <vbl/vbl_array_2d.h>
 #include <vil/vil_memory_image_of.h>
 
@@ -35,10 +36,18 @@ class brip_float_ops
   static vil_memory_image_of<float>
     gaussian(vil_memory_image_of<float> const & input, float sigma);
 
-  //: downsamples the input using the Bert-Adelson algorithm
-  static vil_memory_image_of<float>
-    half_resolution(vil_memory_image_of<float> const & input,
-                    float filter_coef=0.359375);
+  //:non-maximum supression on a NxN neighborhood, with sub-pixel location
+  static void non_maximum_supression(vil_memory_image_of<float> const & input,
+                                      const int n,
+                                      const float thresh,
+                                      vcl_vector<float>& x_pos,
+                                      vcl_vector<float>& y_pos,
+                                      vcl_vector<float>& value);
+
+  //:downsamples the input using the Bert-Adelson algorithm
+  static vil_memory_image_of<float> 
+  half_resolution(vil_memory_image_of<float> const & input,
+                  float filter_coef=0.359375);
 
 #if 0
   //: interpolates the input using the Bert-Adelson algorithm
@@ -119,8 +128,18 @@ class brip_float_ops
   static vbl_array_2d<float> load_kernel(vcl_string const & file);
 
  private:
-  //: sub-sample a 1-d array using the Bert-Adelson algorithm
-  static void half_resolution_1d(const float* input, int n,
+
+  //:find if the center pixel of a neighborhood is the maximum value
+static bool local_maximum(vbl_array_2d<float> const & nighborhood,
+                     int n, float& value);
+
+  //:find the sub-pixel offset to the maximum using a 3x3 quad interpolation
+static void interpolate_center(vbl_array_2d<float> const & neighborhood,
+                          float& dx, float& dy);
+
+
+  //:sub-sample a 1-d array using the Bert-Adelson algorithm
+  static void half_resolution_1d(const float* input, int n, 
                                  const float k0, const float k1,
                                  const float k2, float* output);
   brip_float_ops(){};
