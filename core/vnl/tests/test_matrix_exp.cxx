@@ -19,7 +19,7 @@ void test_matrix_exp()
   v[1] = -0.572;
   v[2] =  0.777;
 
-  vnl_matrix<double> X = vnl_cross_product_matrix(v);
+  vnl_matrix<double> X = vnl_cross_product_matrix(v).as_ref();
   vnl_matlab_print(vcl_cout, X, "[v]");
 
   vnl_matrix<double> expX = vnl_matrix_exp(X);
