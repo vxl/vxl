@@ -18,7 +18,6 @@
 #include <rrel/rrel_orthogonal_regression.h>
 #include <rrel/rrel_ran_sam_search.h>
 #include <rrel/rrel_ransac_obj.h>
-#include <rrel/rrel_ransac_obj_smooth_cost.h>
 #include <rrel/rrel_trunc_quad_obj.h>
 #include <rrel/rrel_tukey_obj.h>
 #include <rrel/rrel_util.h>
