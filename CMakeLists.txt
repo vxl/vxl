@@ -39,6 +39,7 @@ OPTION(BUILD_OXL "Should the Oxford University Library be built?" YES)
 OPTION(BUILD_GEL "Should the GE Library be built?" YES)
 OPTION(BUILD_TBL "Should the TB Library be built?" YES)
 OPTION(BUILD_RPL "Should the RPI Library be built?" YES)
+OPTION(BUILD_BRL "Should the Brown Library be built?" NO)
 OPTION(BUILD_OUL "Should the Otago University package be built?" YES)
 OPTION(BUILD_CONVERSIONS "Should the Conversions Examples be built?" YES)
 
@@ -64,6 +65,10 @@ ENDIF(BUILD_TBL)
 IF(BUILD_RPL)
   SUBDIRS(rpl)
 ENDIF(BUILD_RPL)
+
+IF(BUILD_BRL)
+  SUBDIRS(brl)
+ENDIF(BUILD_BRL)
 
 IF(BUILD_OUL)
   SUBDIRS(oul)
