@@ -15,7 +15,7 @@ inline void ipts_draw_i_line(vil_image_view<T>& image,
                              int i0, int j0, unsigned L, T value)
 {
   int ilo = i0; if (ilo<0) ilo=0;
-  int ihi = i0+L; if (ihi>=image.ni())  ihi=image.ni()-1;
+  int ihi = i0+L; if (ihi>=int(image.ni()))  ihi=image.ni()-1;
   for (int i=ilo;i<=ihi;++i) image(i,j0)=value;
 }
 
@@ -26,7 +26,7 @@ inline void ipts_draw_j_line(vil_image_view<T>& image,
                              int i0, int j0, unsigned L, T value)
 {
   int jlo = j0; if (jlo<0) jlo=0;
-  int jhi = j0+L; if (jhi>=image.nj())  jhi=image.nj()-1;
+  int jhi = j0+L; if (jhi>=int(image.nj()))  jhi=image.nj()-1;
   for (int j=jlo;j<=jhi;++j) image(i0,j)=value;
 }
 
@@ -39,4 +39,4 @@ void ipts_draw_cross(vil_image_view<T>& image, int i0, int j0, unsigned L, T val
 }
 
 
-#endif
+#endif // ipts_draw_h_
