@@ -4,7 +4,7 @@
 #include "vcl_compiler.h"
 
 // File: vcl_complex.h
-// 
+//
 // The task of this horrible file is to rationalize the complex number
 // support in the various compilers.  Basically it promises to give you:
 //
@@ -19,7 +19,7 @@
 
 
 // ---------- all emulation
-#if !VCL_USE_NATIVE_COMPLEX 
+#if !VCL_USE_NATIVE_COMPLEX
 # include "emulation/vcl_complex.h"
 
 #elif defined(VCL_STLPORT)
@@ -63,7 +63,7 @@
 #endif
 
 
-# if !VCL_COMPLEX_POW_WORKS
+# if !VCL_COMPLEX_POW_WORKS && !defined(VCL_SGI_CC_7)
 #  undef vcl_pow
 #  define vcl_pow vcl_pow
 // several implementations of pow are wrong.
@@ -102,11 +102,6 @@ template <class T> inline vcl_complex<T>
 }
 
 # endif // !VCL_COMPLEX_POW_WORKS
-
-
-
-
-
 
 
 #if 0
