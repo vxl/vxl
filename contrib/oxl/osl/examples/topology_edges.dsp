@@ -83,7 +83,6 @@ LINK32=link.exe
 # ADD LINK32 /libpath:"$(VXLROOT)/vxl/vul/$(IntDir)"
 # ADD LINK32 "opengl32.lib" "glu32.lib" "osl.lib" "vnl_algo.lib" "netlib.lib" "vnl.lib" "jpeg.lib" "png.lib" "zlib.lib" "tiff.lib" "vbl.lib" "vul.lib" "vil.lib" "vpl.lib" "vcl.lib" /STACK:10000000 
 
-
 !ELSEIF  "$(CFG)" == "topology_edges - Win32 Debug"
 
 # PROP BASE Use_MFC 0
@@ -146,4 +145,3 @@ SOURCE=.\topology_edges.cxx
 # End Group
 # End Target
 # End Project
-
