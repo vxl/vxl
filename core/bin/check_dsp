@@ -84,7 +84,7 @@ foreach $dir (@DIRS)
 
   # verify #includes in test_include.cxx
   if (-f "$dir/test_include.cxx" && $dir =~ m+^/+) {
-    if ($dir !~ m!/vil/tests$! && opendir(UPDIR,"$dir/../algo")) {
+    if ($dir !~ m!/v[in]l/tests$! && opendir(UPDIR,"$dir/../algo")) {
       @updir_files = readdir(UPDIR);
       closedir(UPDIR);
       map s/^/algo\//,@updir_files;
@@ -96,6 +96,7 @@ foreach $dir (@DIRS)
     $prefix=$dir; $prefix =~ s/[^\/]*$//; $prefix =~ s/^.*\/(vcl|core|contrib\/[^\/]*)\///;
     map s/^/$prefix/,@updir_files;
     @updir_files = grep(/\.h$/, @updir_files);
+    @updir_files = grep(!/vidl_(win|avifile)_avicodec/, @updir_files);
     @updir_files = sort(@updir_files); push @updir_files, "~END";
     open(FILE, "$dir/test_include.cxx");
     while(<FILE>) {
@@ -500,7 +501,7 @@ foreach $dir (@DIRS)
       $s = shift(@hsource_files);
       while ($s eq $hsource_files) {
         print STDOUT "multiple occurrence of $s in $cmakef\n"
-          unless ($s =~ m/\bFl_(blender|movie|twowin)_ui\.h$/);
+          unless ($s =~ m/\b(Fl_(blender|movie|twowin)_ui|vidl_avicodec)\.h$/);
         $s = shift(@hsource_files);
       }
       $hsource_files = $s;
