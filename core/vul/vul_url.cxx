@@ -371,7 +371,6 @@ bool vul_http_exists(char const *url)
   close(tcp_socket);
 #endif
 
-  vcl_string::size_type  n;
   if ( (contents.find("HTTP/1.1 200")) == contents.npos)
   {
     return false;
