@@ -1,24 +1,10 @@
-////////////////////////////////////////////////////////////////////////////////////
-//
-//  Filename:         mbl_table.cxx
-//  Creation date:    2004/08/05
-//  Original author:  Kevin de Souza
-//
-//	$Revision: 1.2 $
-//	$Date: 2004/08/06 16:07:40 $
-//	$Author: peter_vanroose $
-//
-////////////////////////////////////////////////////////////////////////////////////
-
-
 //:
 // \file
 // \author Kevin de Souza
 // \date 05-Aug-2004
 // \brief Container for tabulated data suitable for reading/writing to delimited text files
 
-
-#include <mbl/mbl_table.h>
+#include "mbl_table.h"
 #include <vcl_cstdlib.h>
 
 
@@ -28,7 +14,6 @@
 mbl_table::mbl_table(const char delim)
   : delimiter_(delim)
 {
-
 }
 
 
@@ -138,7 +123,7 @@ void mbl_table::write(vcl_ostream& os) const
   {
     os << column_headers_[c] << delimiter_;
   }
-  os << "\n";
+  os << vcl_endl;
 
   // Write data rows
   for (unsigned r=0; r<nrows; ++r)
@@ -147,7 +132,7 @@ void mbl_table::write(vcl_ostream& os) const
     {
       os << columns_[c][r] << delimiter_;
     }
-    os << "\n";
+    os << vcl_endl;
   }
 }
 
