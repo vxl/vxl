@@ -57,16 +57,6 @@ public:
   // If already correct size, this function returns quickly
   virtual void set_size(unsigned width, unsigned height, unsigned nplanes) =0;
 
-  //: resize current planes to ni x nj
-  // If already correct size, this function returns quickly
-  // \deprecated in favour of set_size
-  // void resize(unsigned ni, unsigned nj) { set_size(ni, nj);}
-
-  //: resize to ni x nj x nplanes
-  // If already correct size, this function returns quickly
-  // \deprecated in favour of set_size
-  // void resize(unsigned ni, unsigned nj, unsigned nplanes){ set_size(ni, nj, nplanes);}
-
   //: Print a 1-line summary of contents
   virtual void print(vcl_ostream&) const =0;
 
