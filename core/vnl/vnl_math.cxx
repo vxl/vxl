@@ -7,12 +7,12 @@
 #include <vnl/vnl_math.h>
 #include <vxl_config.h>
 
-#if defined(_MSC_VER)
+#if defined(VCL_VC)
 // I don't think we need this, because <ieeefp.h> is available -- fsm
 # include <Float.h> // for 'isnan' and 'finite'
 // # define isnan _isnan
 # define finite _finite
-
+# define isnan _isnan
 #elif VXL_IEEEFP_HAS_FINITE
 # include <ieeefp.h>
 
@@ -61,7 +61,7 @@ const double   vnl_math::maxdouble    = HUGE_VAL;
 const float    vnl_math::maxfloat     = 3.40282346638528860e+38F;
 
 //--------------------------------------------------------------------------------
-#if !defined(VNL_HAS_NO_FINITE) && !defined(VCL_SGI_CC_7) && !defined(__alpha__)
+#if !defined(VNL_HAS_NO_FINITE) && !defined(VCL_SGI_CC_7) && !defined(__alpha__) && !defined(VCL_WIN32)
 //: Return true iff x is "Not a Number"
 bool vnl_math_isnan(float x) { return x != x; } // causes "floating exception" on alpha & sgi
 //: Return true iff x is "Not a Number"
@@ -141,12 +141,6 @@ bool vnl_math_isfinite(long double x) {
 }
 #endif
 
-#if defined(_MSC_VER)
-inline bool isnan(double x)
-{
-  return !(x == x);
-}
-#endif
 
 #if !defined(VNL_HAS_NO_FINITE)
 //: Return true if x is inf
