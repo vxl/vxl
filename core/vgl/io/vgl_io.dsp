@@ -245,6 +245,10 @@ SOURCE=".\Templates\vgl_io_point_3d+double-.cxx"
 
 SOURCE=".\Templates\vgl_io_point_3d+float-.cxx"
 # End Source File
+# Begin Source File
+
+SOURCE=".\Templates\vsl_vector_io+vgl_point_2d+int--.cxx"
+# End Source File
 # End Group
 # Begin Group "Header Files"
 
