@@ -301,8 +301,8 @@ void sdet_gradient_dir_joint_hist::print()
 }
 
 //Gives a sort on correlation score (currently decreasing values JLM)
-static bool corr_compare(sdet_correlated_face* & f1,
-                         sdet_correlated_face* & f2)
+static bool corr_compare(sdet_correlated_face* const f1,
+                         sdet_correlated_face* const f2)
 {
   return f1->total_info() > f2->total_info();//JLM Switched
 }
