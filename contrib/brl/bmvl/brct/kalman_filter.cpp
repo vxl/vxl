@@ -277,7 +277,7 @@ void kalman_filter::init_covariant_matrix()
       R_[i][j] = 0;
 
   for (int i=0; i<2; i++)
-    R_[i][i] = 16;
+    R_[i][i] = 0.25;
 }
 
 void kalman_filter::init_cam_intrinsic()
