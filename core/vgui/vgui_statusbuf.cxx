@@ -38,13 +38,13 @@ int vgui_statusbuf::xsputn(char* text, int n)
 {
 }
 
-streamsize vgui_statusbuf::xsputn(char* text, streamsize n)
+vcl_streamsize vgui_statusbuf::xsputn(char* text, vcl_streamsize n)
 { 
   vcl_cerr << "xsputn " << text << " " << n << vcl_endl;
   return sync() == EOF ? 0 : status->write(text, n);
 }
 
-streamsize vgui_statusbuf::xsputn(const char* text, streamsize n) {
+vcl_streamsize vgui_statusbuf::xsputn(const char* text, vcl_streamsize n) {
   vcl_cerr << "xsputn const " << text << " " << n << vcl_endl;
   return sync() == EOF ? 0 : status->write(text, n);
 }
