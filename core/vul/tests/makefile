@@ -1,5 +1,5 @@
 USES = vxl
-USE_SOCKETS := 1 # for libvul
+include ${IUEROOT}/vxl/vul/config.mk
 
 TESTS += vul_test_all.cxx
 TESTS += vul_test_arg.cxx

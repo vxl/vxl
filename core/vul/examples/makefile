@@ -1,4 +1,5 @@
 USES := vxl
+include ${IUEROOT}/vxl/vul/config.mk
 
 IMMEDIATE_LIBS := -lvul
 IULIBS := -lvul
