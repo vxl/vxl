@@ -92,7 +92,7 @@ stripWhite(const char *name)
 
     int i;  // mpichler (gcc)
     for (i=0; name[i]; i++) {
-        if (isspace(name[i]))
+        if (vcl_isspace(name[i]))
             lastwhite = i;
         else {
             if (firstchar == -1) firstchar = i;

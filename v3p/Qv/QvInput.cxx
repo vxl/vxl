@@ -152,7 +152,7 @@ QvInput::read(QvString &s)
                     lineNum++;
             }
 
-            else if (isspace(*buf)) {
+            else if (vcl_isspace(*buf)) {
                 putBack(*buf);
                 break;
             }
@@ -358,7 +358,7 @@ QvInput::skipWhiteSpace()
 
     while (TRUE) {
 
-        while ((gotChar = get(c)) && isspace(c))
+        while ((gotChar = get(c)) && vcl_isspace(c))
             if (c == '\n')
                 lineNum++;
 
@@ -514,7 +514,7 @@ QvInput::readDigits(char *string)
 
     while (get(c)) {
 
-        if (isdigit(c))
+        if (vcl_isdigit(c))
             *s++ = c;
 
         else {
@@ -533,7 +533,7 @@ QvInput::readHexDigits(char *string)
 
     while (get(c)) {
 
-        if (isxdigit(c))
+        if (vcl_isxdigit(c))
             *s++ = c;
 
         else {

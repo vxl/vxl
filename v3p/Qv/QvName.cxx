@@ -90,7 +90,7 @@ QvName::QvName()
 QvBool
 QvName::isIdentStartChar(char c)
 {
-    if (isdigit(c)) return FALSE;
+    if (vcl_isdigit(c)) return FALSE;
 
     return isIdentChar(c);
 }
@@ -98,7 +98,7 @@ QvName::isIdentStartChar(char c)
 QvBool
 QvName::isIdentChar(char c)
 {
-    if (isalnum(c) || c == '_') return TRUE;
+    if (vcl_isalnum(c) || c == '_') return TRUE;
 
     return FALSE;
 }
@@ -106,7 +106,7 @@ QvName::isIdentChar(char c)
 QvBool
 QvName::isNodeNameStartChar(char c)
 {
-    if (isdigit(c)) return FALSE;
+    if (vcl_isdigit(c)) return FALSE;
 
     return isIdentChar(c);
 }
@@ -117,10 +117,10 @@ badCharacters[] = "+\'\"\\{}";
 QvBool
 QvName::isNodeNameChar(char c)
 {
-    if (isalnum(c)) return TRUE;
+    if (vcl_isalnum(c)) return TRUE;
 
     if ((vcl_strchr(badCharacters, c) != NULL) ||
-        isspace(c) || iscntrl(c)) return FALSE;
+        vcl_isspace(c) || vcl_iscntrl(c)) return FALSE;
 
     return TRUE;
 }
