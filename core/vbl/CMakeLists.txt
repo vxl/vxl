@@ -17,3 +17,6 @@ vbl_qsort
 
 AUX_SOURCE_DIRECTORY(Templates vbl_sources)
 
+IF( BUILD_TESTS)
+  SUBDIRS(tests)
+ENDIF( BUILD_TESTS)
