@@ -53,12 +53,8 @@ inline void swap32_for_big_endian(char *a, unsigned n)
   char c;
   for (unsigned i = 0; i < n * 4; i += 4)
   {
-    c = a[i];
-    a[i] = a[i+3];
-    a[i+3] = c;
-    c = a[i+1];
-    a[i+1] = a[i+2];
-    a[i+2] = c;
+    c = a[i];   a[i] =   a[i+3]; a[i+3] = c;
+    c = a[i+1]; a[i+1] = a[i+2]; a[i+2] = c;
   }
 #endif //VXL_LITTLE_ENDIAN
 }
@@ -69,18 +65,10 @@ inline void swap64_for_big_endian(char *a, unsigned n)
   char c;
   for (unsigned i = 0; i < n * 8; i += 8)
   {
-    c = a[i];
-    a[i] = a[i+7];
-    a[i+7] = c;
-    c = a[i+1];
-    a[i+1] = a[i+6];
-    a[i+6] = c;
-    c = a[i+2];
-    a[i+2] = a[i+5];
-    a[i+5] = c;
-    c = a[i+3];
-    a[i+3] = a[i+4];
-    a[i+4] = c;
+    c = a[i];   a[i]   = a[i+7]; a[i+7] = c;
+    c = a[i+1]; a[i+1] = a[i+6]; a[i+6] = c;
+    c = a[i+2]; a[i+2] = a[i+5]; a[i+5] = c;
+    c = a[i+3]; a[i+3] = a[i+4]; a[i+4] = c;
   }
 #endif //VXL_LITTLE_ENDIAN
 }
@@ -287,11 +275,11 @@ vil3d_image_view_base_sptr vil3d_gipl_image::get_copy_view(
     case VIL2_PIXEL_FORMAT_BOOL:
       vcl_cout<<"ERROR: vil3d_gipl_format::get_image_data()"
               <<pixel_format() << " pixel type not yet implemented\n";
-      return false;
+      return 0;
     default:
       vcl_cout<<"ERROR: vil3d_gipl_format::get_image_data()\n"
               <<"Can't deal with pixel type " << pixel_format() << vcl_endl;
-      return false;
+      return 0;
   }
 }
 
