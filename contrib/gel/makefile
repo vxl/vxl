@@ -42,6 +42,12 @@ SUBDIRS += mrc/vcsl
 # Kanade-Lucas-Tomasi feature tracker
 SUBDIRS += vgel gkll
 
+# Dense matcher
+SUBDIRS += vmal
+
+# GUI
+SUBDIRS += vace
+
 # general examples
 ifndef NOTEST
 SUBDIRS += examples
