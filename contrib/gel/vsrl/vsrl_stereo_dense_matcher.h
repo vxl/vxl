@@ -1,6 +1,5 @@
 #ifndef vsrl_stereo_dense_matcher_h
 #define vsrl_stereo_dense_matcher_h
-
 //:
 //  \file
 
@@ -15,7 +14,7 @@
 // on the corresponding raster.
 // Once two images are inserted, dynamic programming on
 // each raster is performed. The user can then find the
-// point corespondences between each pixel in the image.
+// point correspondences between each pixel in the image.
 
 class vsrl_stereo_dense_matcher : public vsrl_dense_matcher
 {
