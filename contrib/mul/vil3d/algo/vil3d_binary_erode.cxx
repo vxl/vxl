@@ -1,7 +1,7 @@
 //:
-//  \file
-//  \brief Perform binary erosion on 3D images
-//  \author Tim Cootes
+// \file
+// \brief Perform binary erosion on 3D images
+// \author Tim Cootes
 
 #include "vil3d_binary_erode.h"
 #include <vcl_cassert.h>
@@ -35,15 +35,15 @@ void vil3d_binary_erode(const vil3d_image_view<bool>& src_image,
 
   // Zero low and high i sides
   if (ilo>0)    vil3d_crop(dest_image,0,ilo,0,nj,0,nk).fill(false);
-  if (ihi<int(ni-1)) vil3d_crop(dest_image,ihi+1,ni-ihi-1,0,nj,0,nk).fill(false);
+  if (ihi<int(ni)-1) vil3d_crop(dest_image,ihi+1,ni-ihi-1,0,nj,0,nk).fill(false);
 
   // Zero low and high j sides
   if (jlo>0)    vil3d_crop(dest_image,0,ni,0,jlo,0,nk).fill(false);
-  if (jhi<int(nj-1)) vil3d_crop(dest_image,0,ni,jhi+1,nj-jhi-1,0,nk).fill(false);
+  if (jhi<int(nj)-1) vil3d_crop(dest_image,0,ni,jhi+1,nj-jhi-1,0,nk).fill(false);
 
   // Zero low and high k sides
   if (klo>0)    vil3d_crop(dest_image,0,ni,0,nj,0,klo).fill(false);
-  if (khi<int(nk-1)) vil3d_crop(dest_image,0,ni,0,nj,khi+1,nk-khi-1).fill(false);
+  if (khi<int(nk)-1) vil3d_crop(dest_image,0,ni,0,nj,khi+1,nk-khi-1).fill(false);
 
   for (int k=klo;k<=khi;++k)
     for (int j=jlo;j<=jhi;++j)
