@@ -108,6 +108,11 @@ SOURCE=.\testlib_main.cxx
 SOURCE=.\testlib_test.cxx
 
 # End Source File
+# Begin Source File
+
+SOURCE=.\testlib_root_dir.cxx
+
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter ""
@@ -119,6 +124,11 @@ SOURCE=.\testlib_register.h
 # Begin Source File
 
 SOURCE=.\testlib_test.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\testlib_root_dir.h
 
 # End Source File
 # End Group
