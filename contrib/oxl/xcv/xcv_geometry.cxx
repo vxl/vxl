@@ -463,36 +463,36 @@ void xcv_geometry::save(const char *object_type,const char *dialog_name)
       vcl_string svtype = sv->type_name();
       vgui_style* style = sv->get_style();
       if (style)
-        fs << "c " << style->rgba[0] << " " << style->rgba[1] <<  " " << style->rgba[2] << vcl_endl
+        fs << "c " << style->rgba[0] << ' ' << style->rgba[1] <<  ' ' << style->rgba[2] << vcl_endl
            << "r " << style->point_size << vcl_endl
            << "w " << style->line_width << vcl_endl;
 
       if (svtype == "vgui_soview2D_point" && matched)
       {
         vgui_soview2D_point* pt = (vgui_soview2D_point*)sv;
-        fs<<"p "<<pt->x<<" "<<pt->y<< vcl_endl;
+        fs<<"p "<<pt->x<<' '<<pt->y<< vcl_endl;
       }
       else if (svtype == "vgui_soview2D_circle" && matched)
       {
         vgui_soview2D_circle* circ = (vgui_soview2D_circle*)sv;
-        fs<<"circle "<<circ->x<<" "<<circ->y<<" "<<circ->r<< vcl_endl;
+        fs<<"circle "<<circ->x<<' '<<circ->y<<' '<<circ->r<< vcl_endl;
       }
       else if (svtype == "vgui_soview2D_lineseg" && matched)
       {
         vgui_soview2D_lineseg* line = (vgui_soview2D_lineseg*)sv;
-        fs<<"l "<<line->x0<<" "<<line->y0<<" "<<line->x1<<" "<<line->y1<< vcl_endl;
+        fs<<"l "<<line->x0<<' '<<line->y0<<' '<<line->x1<<' '<<line->y1<< vcl_endl;
       }
       else if (svtype == "vgui_soview2D_infinite_line" && matched)
       {
         vgui_soview2D_infinite_line* line = (vgui_soview2D_infinite_line*)sv;
-        fs<<"il "<<line->a<<" "<<line->b<<" "<<line->c<< vcl_endl;
+        fs<<"il "<<line->a<<' '<<line->b<<' '<<line->c<< vcl_endl;
       }
       else if (svtype == "vgui_soview2D_linestrip" && matched)
       {
         vgui_soview2D_linestrip *linestrip = (vgui_soview2D_linestrip *)sv;
         fs<<"L "<<linestrip->n;
         for (unsigned int ii = 0; ii<linestrip->n; ++ii)
-          fs<<" "<<linestrip->x[ii]<<" "<<linestrip->y[ii];
+          fs<<' '<<linestrip->x[ii]<<' '<<linestrip->y[ii];
         fs << vcl_endl;
       }
       else if (svtype == "vgui_soview2D_polygon" && matched)
@@ -500,7 +500,7 @@ void xcv_geometry::save(const char *object_type,const char *dialog_name)
         vgui_soview2D_polygon *polygon = (vgui_soview2D_polygon *)sv;
         fs<<"y "<<polygon->n;
         for (unsigned int ii = 0; ii<polygon->n; ++ii)
-          fs<<" "<<polygon->x[ii]<<" "<<polygon->y[ii];
+          fs<<' '<<polygon->x[ii]<<' '<<polygon->y[ii];
         fs << vcl_endl;
       }
     }
@@ -653,7 +653,7 @@ static void add(vgl_polygon<float> const& p)
   get_current(&col, &row);
   vgui_easy2D_tableau_sptr easy_tab = get_easy2D_at(col, row);
 
-  for (int i = 0; i < p.num_sheets(); ++i) {
+  for (unsigned int i = 0; i < p.num_sheets(); ++i) {
     vgl_polygon_sheet_as_array<float> sp(p[i]);
     easy_tab->add_polygon(sp.n, sp.x, sp.y);
   }
