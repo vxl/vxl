@@ -1,4 +1,4 @@
+LINK_DIRECTORIES( ${allvxl_BINARY_DIR}/tbl/vepl )
 LINK_LIBRARIES( vepl )
 
 INCLUDE( ${allvxl_SOURCE_DIR}/tbl/vipl/CMakeListsLink.txt )
-INCLUDE( ${allvxl_SOURCE_DIR}/vxl/vil/CMakeListsLink.txt )
