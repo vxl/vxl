@@ -2,6 +2,7 @@
 # Begin Target
 
 # Begin Group "Source Files"
+# PROP Default_Filter "cxx;c"
 # Begin Source File
 SOURCE=.\test_driver.cxx
 # End Source File
@@ -110,8 +111,9 @@ SOURCE=.\test_algo_correlate_2d.cxx
 # Begin Source File
 SOURCE=.\test_algo_threshold.cxx
 # End Source File
-# End Group
-# Begin Group "Header Files"
+# Begin Source File
+SOURCE=.\test_deep_copy_3_plane.cxx
+# End Source File
 # End Group
 # End Target
 # End Project

@@ -97,7 +97,7 @@ LIB32=link.exe -lib
 # Name "vimt - Win32 Debug"
 
 # Begin Group "Source Files"
-# PROP Default_Filter ""
+# PROP Default_Filter "cxx;c"
 # Begin Source File
 SOURCE=.\vimt_gaussian_pyramid_builder_2d.cxx
 # End Source File
@@ -173,9 +173,12 @@ SOURCE=.\Templates/vimt_scale_pyramid_builder_2d+byte-.cxx
 # Begin Source File
 SOURCE=.\Templates/vimt_scale_pyramid_builder_2d+float-.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\Templates/vimt_image_2d_of+int-.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
-# PROP Default_Filter ""
+# PROP Default_Filter "txx;h"
 # Begin Source File
 SOURCE=.\vimt_gaussian_pyramid_builder_2d.h
 # End Source File
