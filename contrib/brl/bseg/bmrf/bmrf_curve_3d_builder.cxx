@@ -11,17 +11,22 @@
 #include "bmrf_gamma_func.h"
 
 #include <vcl_algorithm.h>
+#include <vcl_limits.h>
 #include <vgl/vgl_point_2d.h>
 #include <vnl/vnl_double_2.h>
+#include <vnl/vnl_double_3.h>
 #include <vnl/vnl_double_4.h>
 #include <vnl/vnl_double_3x4.h>
+#include <vnl/vnl_rotation_matrix.h>
+#include <vnl/vnl_inverse.h>
+#include <vnl/vnl_identity.h>
 #include <vnl/algo/vnl_svd.h>
 #include <vnl/algo/vnl_qr.h>
 
 
 //: Constructor
 bmrf_curve_3d_builder::bmrf_curve_3d_builder()
- : network_(NULL), min_alpha_(0.0), max_alpha_(0.0)
+ : network_(NULL), min_alpha_(0.0), max_alpha_(0.0), bb_xform_(0.0)
 {
   init_intrinsic();
 }
@@ -29,7 +34,7 @@ bmrf_curve_3d_builder::bmrf_curve_3d_builder()
 
 //: Constructor
 bmrf_curve_3d_builder::bmrf_curve_3d_builder(bmrf_network_sptr network)
- : network_(network), min_alpha_(0.0), max_alpha_(0.0)
+ : network_(network), min_alpha_(0.0), max_alpha_(0.0), bb_xform_(0.0)
 {
   init_intrinsic();
   init_cameras();
@@ -57,18 +62,28 @@ bmrf_curve_3d_builder::init_cameras()
     return;
   unsigned int num_frames = network_->num_frames();
   const vgl_point_2d<double>& ep = network_->epipole(1).location();
+ 
+  // compute the 3d direction unit vector
+  vnl_double_3 d;
+  d[0] = ep.x();
+  d[1] = ep.y();
+  d[2] = 1.0;
+  vnl_double_3 dir = vnl_inverse(K_)*d;
+  direction_.set(dir[0],dir[1],dir[2]);
+  normalize(direction_);
 
+  // compute the cameras
   vnl_double_3x4 E;
   E[0][0] = 1;  E[0][1] = 0;  E[0][2] = 0;  E[0][3] = ep.x();
   E[1][0] = 0;  E[1][1] = 1;  E[1][2] = 0;  E[1][3] = ep.y();
   E[2][0] = 0;  E[2][1] = 0;  E[2][2] = 1;  E[2][3] = 1;
-
+ 
+  vnl_double_3x4 Ef = K_*E;
   for (unsigned int f=0; f<num_frames; ++f) {
-    vnl_double_3x4 Ef = K_*E;
-    double dt = double(f);
-    Ef[0][3] = -dt*ep.x();
-    Ef[1][3] = -dt*ep.y();
-    Ef[2][3] = -dt;
+    double dt = -double(f);
+    Ef[0][3] = dt*ep.x();
+    Ef[1][3] = dt*ep.y();
+    Ef[2][3] = dt;
     C_.push_back(Ef);
   }
 }
@@ -91,6 +106,113 @@ bmrf_curve_3d_builder::curves() const
 }
 
 
+//: Return the cameras used in the reconstruction
+vcl_vector<vnl_double_3x4> 
+bmrf_curve_3d_builder::cameras() const
+{
+  return C_;
+}
+
+
+//: Return the 3D direction of motion of the curves
+vgl_vector_3d<double> 
+bmrf_curve_3d_builder::direction() const
+{
+  return direction_;
+}
+
+
+//: Return the bounding box transformation
+vnl_double_4x4
+bmrf_curve_3d_builder::bb_xform() const
+{
+  return bb_xform_;
+}
+
+
+
+bool bmrf_cmp_x(const vnl_double_3& rhs, const vnl_double_3& lhs)
+{
+  return rhs[0] < lhs[0];
+}
+
+bool bmrf_cmp_y(const vnl_double_3& rhs, const vnl_double_3& lhs)
+{
+  return rhs[1] < lhs[1];
+}
+
+bool bmrf_cmp_z(const vnl_double_3& rhs, const vnl_double_3& lhs)
+{
+  return rhs[2] < lhs[2];
+}
+
+//: Compute the bounding box aligned with vehicle direction
+bool 
+bmrf_curve_3d_builder::compute_bounding_box(double inlier_fraction)
+{
+  if(curves_.empty())
+    return false;
+
+  vgl_vector_3d<double> base_axis(1.0, 0.0, 0.0);
+  vgl_vector_3d<double> rot_axis = normalize(cross_product(direction_,base_axis));
+  double angle = vcl_acos(dot_product(direction_,base_axis));
+  rot_axis *= angle;
+  vnl_vector<double> v(3);
+  v[0] = rot_axis.x();
+  v[1] = rot_axis.y();
+  v[2] = rot_axis.z();
+  vnl_double_3x3 rot = vnl_rotation_matrix(v);
+  vnl_double_3x3 inv_rot = rot.transpose();
+
+  vcl_vector<vnl_double_3> pts_x;
+
+  for ( vcl_set<vcl_list<bmrf_curvel_3d_sptr> >::iterator itr1 = curves_.begin();
+        itr1 != curves_.end();  ++itr1)
+  {
+    for ( vcl_list<bmrf_curvel_3d_sptr>::iterator itr2 = itr1->begin();
+          itr2 != itr1->end();  ++itr2)
+    {
+      bmrf_curvel_3d_sptr curvel = *itr2;
+      vnl_double_3 point(curvel->x(), curvel->y(), curvel->z());
+      pts_x.push_back(rot*point);
+    } 
+  }
+        
+  vcl_vector<vnl_double_3> pts_y = pts_x;
+  vcl_vector<vnl_double_3> pts_z = pts_x;
+
+  vcl_sort(pts_x.begin(), pts_x.end(), bmrf_cmp_x);
+  vcl_sort(pts_y.begin(), pts_y.end(), bmrf_cmp_y);
+  vcl_sort(pts_z.begin(), pts_z.end(), bmrf_cmp_z);
+
+  const double fraction_out = (1.0 - inlier_fraction)/2.0;
+  const int min_ind = (pts_x.size()-1)*fraction_out;
+  const int max_ind = (pts_x.size()-1)*(1.0 - fraction_out);
+  vnl_double_3 min_point(pts_x[min_ind][0], pts_y[min_ind][1], pts_z[min_ind][2]);
+  vnl_double_3 max_point(pts_x[max_ind][0], pts_y[max_ind][1], pts_z[max_ind][2]);
+
+  vnl_double_3 diag_vector = max_point - min_point;
+  vnl_vector_fixed<double,3> x_axis(0.0), y_axis(0.0), z_axis(0.0);
+  x_axis[0] = diag_vector[0];
+  y_axis[1] = diag_vector[1];
+  z_axis[2] = diag_vector[2];
+
+  x_axis = inv_rot * x_axis;
+  y_axis = inv_rot * y_axis;  
+  z_axis = inv_rot * z_axis;
+
+  vnl_double_3 origin = inv_rot * min_point;
+
+  bb_xform_.set_identity();
+  bb_xform_(0,0)=x_axis[0]; bb_xform_(1,0)=x_axis[1]; bb_xform_(2,0)=x_axis[2]; 
+  bb_xform_(0,1)=y_axis[0]; bb_xform_(1,1)=y_axis[1]; bb_xform_(2,1)=y_axis[2];
+  bb_xform_(0,2)=z_axis[0]; bb_xform_(1,2)=z_axis[1]; bb_xform_(2,2)=z_axis[2];
+  bb_xform_(0,3)=origin[0]; bb_xform_(1,3)=origin[1]; bb_xform_(2,3)=origin[2];
+
+  return true;
+}
+
+
 //: Build the curves
 bool
 bmrf_curve_3d_builder::build(int min_prj, int min_len, float sigma)
@@ -104,9 +226,6 @@ bmrf_curve_3d_builder::build(int min_prj, int min_len, float sigma)
 
   find_alpha_bounds();
 
-#if 0
-  double a_init = (min_alpha_ + max_alpha_)*0.5;
-#endif // 0
   vcl_set<vcl_list<bmrf_curvel_3d_sptr>*> growing_curves;
 
   vcl_set<bmrf_curvel_3d_sptr> empty_set;
@@ -137,9 +256,9 @@ bmrf_curve_3d_builder::build(int min_prj, int min_len, float sigma)
     vcl_set<vcl_list<bmrf_curvel_3d_sptr> >::iterator next_itr = itr;
     ++next_itr;
 
-    this->trim_curve(const_cast<vcl_list<bmrf_curvel_3d_sptr> &> (*itr), min_prj);
     this->fill_gaps(const_cast<vcl_list<bmrf_curvel_3d_sptr> &> (*itr), da);
     this->interp_gaps(const_cast<vcl_list<bmrf_curvel_3d_sptr> &> (*itr));
+    this->stat_trim_curve(const_cast<vcl_list<bmrf_curvel_3d_sptr> &> (*itr), 0.001);
     if ( itr->size() < (unsigned int)min_len )
       curves_.erase(itr);
     else
@@ -548,33 +667,30 @@ bmrf_curve_3d_builder::fill_gaps(vcl_list<bmrf_curvel_3d_sptr>& curve, double da
 void
 bmrf_curve_3d_builder::trim_curve(vcl_list<bmrf_curvel_3d_sptr>& curve, int min_prj)
 {
-  unsigned int num_frames = network_->num_frames();
-  for (unsigned int f=0; f<num_frames; ++f)
+  for (vcl_list<bmrf_curvel_3d_sptr>::iterator itr = curve.begin();
+       itr != curve.end(); )
   {
-    bool last_valid = false;
-    vnl_double_2 last_point;
-    for (vcl_list<bmrf_curvel_3d_sptr>::iterator itr = curve.begin();
-         itr != curve.end(); ++itr)
-    {
-      vnl_double_2 curr_point;
-      if ( !(*itr)->pos_in_frame(f, curr_point) ){
-        last_valid = false;
-        continue;
-      }
+    vcl_list<bmrf_curvel_3d_sptr>::iterator next_itr = itr;
+    ++next_itr;
+    if((*itr)->num_projections(true) < min_prj)
+      curve.erase(itr);
+    itr = next_itr;
+  }
+}
 
-      if (!last_valid){
-        last_valid = true;
-        last_point = curr_point;
-        continue;
-      }
 
-      double dist = vnl_vector_ssd(curr_point, last_point);
-      if (dist > 2.0){
-        (*itr)->set_proj_in_frame(f,0.0, NULL);
-      }
-
-      last_point = curr_point;
-    }
+//: Trim curvels with large deviation in gamma
+void
+bmrf_curve_3d_builder::stat_trim_curve(vcl_list<bmrf_curvel_3d_sptr>& curve, double max_std)
+{
+  for (vcl_list<bmrf_curvel_3d_sptr>::iterator itr = curve.begin();
+       itr != curve.end(); )
+  {
+    vcl_list<bmrf_curvel_3d_sptr>::iterator next_itr = itr;
+    ++next_itr;
+    if((*itr)->gamma_std() > max_std)
+      curve.erase(itr);
+    itr = next_itr;
   }
 }
 
@@ -601,7 +717,7 @@ bmrf_curve_3d_builder::append_curvels(vcl_set<bmrf_curvel_3d_sptr>& curvels,
           c_itr != curvels.end();  ++c_itr )
     {
       double align = this->append_correct((*c_itr), prev_curvel);
-      if ( align > 0.5 ) {
+      if ( align > 0 ) {
         matches.push_back(vcl_pair<double, append_match>(align, append_match(end_curvel, *c_itr)));
       }
     }

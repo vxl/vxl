@@ -17,10 +17,13 @@
 #include <bmrf/bmrf_arc_sptr.h>
 #include <vnl/vnl_double_3x3.h>
 #include <vnl/vnl_double_3x4.h>
+#include <vnl/vnl_double_4x4.h>
+#include <vgl/vgl_vector_3d.h>
 #include <vcl_utility.h>
 #include <vcl_set.h>
 #include <vcl_list.h>
 #include <vcl_vector.h>
+
 
 //: A 3D curve builder
 class bmrf_curve_3d_builder
@@ -42,8 +45,20 @@ class bmrf_curve_3d_builder
   //  Curves with less than \p min_prj projections are removed
   bool build(int min_prj = 3, int min_len = 10, float sigma = 0.5);
 
+  //: Compute the bounding box aligned with vehicle direction
+  bool compute_bounding_box(double inlier_fraction = 0.95);
+
   //: Return the constructed curves
   vcl_set<vcl_list<bmrf_curvel_3d_sptr> > curves() const;
+
+  //: Return the cameras used in the reconstruction
+  vcl_vector<vnl_double_3x4> cameras() const;
+
+  //: Return the 3D direction of motion of the curves
+  vgl_vector_3d<double> direction() const;
+
+  //: Return the bounding box transformation
+  vnl_double_4x4 bb_xform() const;
 
  protected:
   //: Initialize the intrinsic camera parameters
@@ -82,6 +97,9 @@ class bmrf_curve_3d_builder
   //: Trim the ends of the curve with few correspondences
   void trim_curve(vcl_list<bmrf_curvel_3d_sptr>& curve, int min_prj);
 
+  //: Trim curvels with large deviation in gamma
+  void stat_trim_curve(vcl_list<bmrf_curvel_3d_sptr>& curve, double max_std);
+
   //: Match the \p curvels to the ends of the \p growing_curves
   void append_curvels(vcl_set<bmrf_curvel_3d_sptr>& curvels,
                       vcl_set<vcl_list<bmrf_curvel_3d_sptr>*>& growing_curves,
@@ -105,6 +123,12 @@ class bmrf_curve_3d_builder
 
   //: Vector of cameras
   vcl_vector<vnl_double_3x4> C_;
+  
+  //: 3D direction unit vector
+  vgl_vector_3d<double> direction_;
+
+  //: This transform maps the unit cube into the vehicle aligned bounding box
+  vnl_double_4x4 bb_xform_;
 };
 
 #endif // bmrf_curve_3d_builder_h_
