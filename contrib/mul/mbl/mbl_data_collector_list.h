@@ -38,24 +38,23 @@ public:
   virtual mbl_data_wrapper<T >& data_wrapper();
 
 
-    //: Version number for I/O
+  //: Version number for I/O
   short version_no() const;
 
-    //: Name of the class
+  //: Name of the class
   virtual vcl_string is_a() const;
 
-    //: Create a copy on the heap and return base class pointer
+  //: Create a copy on the heap and return base class pointer
   virtual mbl_data_collector_base* clone() const;
 
-	//: Print class to os
+  //: Print class to os
   virtual void print_summary(vcl_ostream& os) const;
 
-    //: Save class to binary file stream
+  //: Save class to binary file stream
   virtual void b_write(vsl_b_ostream& bfs) const;
 
-    //: Load class from binary file stream
+  //: Load class from binary file stream
   virtual void b_read(vsl_b_istream& bfs);
-
 };
 
 #endif // mbl_data_collector_list_h_
