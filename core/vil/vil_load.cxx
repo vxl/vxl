@@ -2,6 +2,8 @@
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
+//:
+// \file
 
 #include "vil2_load.h"
 
@@ -67,7 +69,6 @@ vil2_image_data_sptr vil2_load_image_data(char const* filename)
 #endif// VIL2_TO_BE_FIXED
   return i;
 }
-
 
 
 //: Convenience function for loading an image into an image view.
