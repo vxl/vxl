@@ -28,4 +28,6 @@ SOURCES += vsl_conic_as_params.cxx
 SOURCES += vsl_conic_as_matrix.cxx
 SOURCES += vsl_conic_points.cxx
 
+IULIBS += -lvil -lvnl_algo -lvnl -lvbl -lvcl
+
 include $(IUELOCALROOT)/config/top.mk
