@@ -144,13 +144,15 @@ void vpdfl_axis_gaussian_builder::weighted_build(vpdfl_pdf_base& model,
   data.reset();
   unsigned long n_dims = data.current().size();
 
-  vnl_vector<double> sum = wts[0] * data.current();
+  double wt = wts[0];
+  vnl_vector<double> sum = wt * data.current();
   double w_sum = wts[0];
 
   for (unsigned long i=1;i<n_samples;i++)
   {
     data.next();
-    sum += wts[i] * data.current();
+    double wt = wts[i];
+    sum += wt * data.current();
     w_sum += wts[i];
   }
 
