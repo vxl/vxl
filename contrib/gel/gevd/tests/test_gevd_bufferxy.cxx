@@ -33,11 +33,11 @@ test_gevd_bufferxy()
 
   for (int i=0;i<3;i++)
   {
-    char * dataddr = (char *) gbxy1->GetElementAddr(i,1);
+    char* dataddr = (char*) gbxy1->GetElementAddr(i,1);
     vcl_memcpy(dataddr,"n",2);
   }
 
-  char * dat = (char*) gbxy1->GetElementAddr(2,1);
+  char* dat = (char*) gbxy1->GetElementAddr(2,1);
   vcl_string strdat = dat;
   TEST("GetElementAddr",strdat,"n");
 
@@ -71,7 +71,7 @@ test_gevd_bufferxy()
 
   const char * fn = "gevd_bufferxy_dump_file.tmp";
   gbxy1->dump(fn);
-  vpl_unlink (fn);
+  vpl_unlink(fn);
   vcl_cout << "the following is a dump of a bufferxy. " << (*gbxy1) << vcl_endl;
 
   delete gbxy1;
@@ -83,36 +83,32 @@ test_gevd_bufferxy()
   //Test byte constructor
   vil_image_resource_sptr rsb = vil_new_image_resource(3,4,1,VIL_PIXEL_FORMAT_BYTE);
   vil_image_view<unsigned char> bview = rsb->get_view(0,3,0,4);
-  for(unsigned r  = 0; r<4; ++r)
-    for(unsigned c = 0; c<3; ++c)
+  for (unsigned r  = 0; r<4; ++r)
+    for (unsigned c = 0; c<3; ++c)
       bview(c,r)= c*r;
-  gevd_bufferxy bbuf(*rsb);
-  
+  gevd_bufferxy bbuf(rsb);
+
   bool good_buf = true;
 
-  for(unsigned r  = 0; r<4; ++r)
-    for(unsigned c = 0; c<3; ++c)
-      good_buf = 
-        good_buf&&(*((unsigned char*)bbuf.GetElementAddr(c,r)))==c*r;
-  TEST("Unsigned char vil bufferxy constructor ",good_buf,true);  
+  for (unsigned r  = 0; r<4; ++r)
+    for (unsigned c = 0; c<3; ++c)
+      good_buf = good_buf && (*((unsigned char*)bbuf.GetElementAddr(c,r)))==c*r;
+  TEST("Unsigned char vil bufferxy constructor ",good_buf,true);
 
   //Test unsigned short constructor
   vil_image_resource_sptr rs = vil_new_image_resource(3,4,1,VIL_PIXEL_FORMAT_UINT_16);
   vil_image_view<unsigned short> usview = rs->get_view(0,3,0,4);
-  for(unsigned r  = 0; r<4; ++r)
-    for(unsigned c = 0; c<3; ++c)
+  for (unsigned r  = 0; r<4; ++r)
+    for (unsigned c = 0; c<3; ++c)
       usview(c,r)= 1000+c*r;
-  gevd_bufferxy buf(*rs);
-  
+  gevd_bufferxy buf(rs);
+
   good_buf = true;
 
-  for(unsigned r  = 0; r<4; ++r)
-    for(unsigned c = 0; c<3; ++c)
-      good_buf = 
-        good_buf&&(*((unsigned short*)buf.GetElementAddr(c,r)))==1000+c*r;
-  TEST("Unsigned short vil bufferxy constructor ",good_buf,true);  
-  vil_image_resource_sptr vm = vil_new_memory_image(3,4,1,VIL_PIXEL_FORMAT_UINT_16);
-  
+  for (unsigned r  = 0; r<4; ++r)
+    for (unsigned c = 0; c<3; ++c)
+      good_buf = good_buf && (*((unsigned short*)buf.GetElementAddr(c,r)))==1000+c*r;
+  TEST("Unsigned short vil bufferxy constructor ",good_buf,true);
 }
 
 TESTMAIN(test_gevd_bufferxy);
