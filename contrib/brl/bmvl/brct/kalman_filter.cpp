@@ -398,13 +398,12 @@ void kalman_filter::inc()
   //
   X_pred_ = A_*X_;
 
-  vnl_double_3 v;
-  v[0] = X_pred_[3];
-  v[1] = X_pred_[4];
-  v[2] = X_pred_[5];
+  vnl_double_3 camCenter;
+  camCenter[0] = X_pred_[0];
+  camCenter[1] = X_pred_[1];
+  camCenter[2] = X_pred_[2];
   
-  v = get_next_motion(v);
-  vnl_double_3x4 P = get_projective_matrix(v);
+  vnl_double_3x4 P = get_projective_matrix(camCenter);
   update_observes(P, cur_pos_+1);
 
   // adjustion
@@ -431,13 +430,15 @@ void kalman_filter::inc()
 
   }
 
+#if 0
   v[0] = X_pred_[0] - X_[0];
   v[1] = X_pred_[1] - X_[1];
   v[2] = X_pred_[2] - X_[2];
 
   cur_pos_ = (cur_pos_+1) % queue_size_;
   motions_[cur_pos_+1] = get_next_motion(v);
-
+#endif
+  
   // store the history
   X_ = X_pred_;
 
@@ -599,7 +600,11 @@ void kalman_filter::init_velocity()
 
   vcl_cout<<T;
 
-  //setting velocity part of the state vector
+  //initialize the state vector
+  X_[0] = T[0];
+  X_[1] = T[1];
+  X_[2] = T[2];
+  
   X_[3] = T[0];
   X_[4] = T[1];
   X_[5] = T[2];
