@@ -9,4 +9,5 @@ include ${IUEROOT}/contrib/gel/gevd/config.mk
 include ${IUEROOT}/contrib/gel/vdgl/config.mk
 include ${IUEROOT}/contrib/gel/vsol/config.mk
 include ${IUEROOT}/contrib/gel/vtol/config.mk
+include ${IUEROOT}/contrib/brl/bbas/bugl/config.mk
 include ${IUEROOT}/contrib/brl/bseg/brip/config.mk
