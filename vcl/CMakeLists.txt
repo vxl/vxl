@@ -315,14 +315,18 @@ SET( vcl_sources
   win32-vc60/vcl_cstdlib.h
   win32-vc60/vcl_memory.h
   win32-vc60/vcl_string.h
+  win32-vc60/vcl_valarray.h
 
   win32-vc70/vcl_cmath.h
+  win32-vc70/vcl_complex.h
   win32-vc70/vcl_cstdlib.h
+  win32-vc70/vcl_valarray.h
 
   borland55/vcl_cfloat.h
   borland55/vcl_cmath.h
   borland55/vcl_complex.h
   borland55/vcl_cstdlib.h
+  borland55/vcl_memory.h
   borland56/vcl_complex.h
 
   mwerks/vcl_cmath.h
