@@ -88,7 +88,7 @@ T vnl_qr<T>::determinant() const
 
 //: Unpack and return unitary part Q.
 template <class T>
-vnl_matrix<T>& vnl_qr<T>::Q()
+vnl_matrix<T> const& vnl_qr<T>::Q() const
 {
   int m = qrdc_out_.columns(); // column-major storage
   int n = qrdc_out_.rows();
@@ -96,7 +96,7 @@ vnl_matrix<T>& vnl_qr<T>::Q()
   bool verbose = false;
 
   if (!Q_) {
-    Q_ = new vnl_matrix<T>(m,m);
+    ((vnl_matrix<T>*&)Q_) = new vnl_matrix<T>(m,m);
     // extract Q.
     if (verbose) {
       vcl_cerr << __FILE__ ": vnl_qr<T>::Q()\n";
@@ -152,12 +152,12 @@ vnl_matrix<T>& vnl_qr<T>::Q()
 
 //: Unpack and return R.
 template <class T>
-vnl_matrix<T>& vnl_qr<T>::R()
+vnl_matrix<T> const& vnl_qr<T>::R() const
 {
   if (!R_) {
     int m = qrdc_out_.columns(); // column-major storage
     int n = qrdc_out_.rows();
-    R_ = new vnl_matrix<T>(m,n);
+    ((vnl_matrix<T>*&)R_) = new vnl_matrix<T>(m,n);
     vnl_matrix<T> & R = *R_;
 
     for (int i = 0; i < m; ++i)
@@ -169,6 +169,12 @@ vnl_matrix<T>& vnl_qr<T>::R()
   }
 
   return *R_;
+}
+
+template <class T>
+vnl_matrix<T> vnl_qr<T>::recompose() const
+{
+  return Q() * R();
 }
 
 // JOB: ABCDE decimal

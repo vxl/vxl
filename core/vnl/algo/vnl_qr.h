@@ -44,8 +44,8 @@ class vnl_qr
   vnl_vector<T> solve (const vnl_vector<T>& rhs) const;
 
   T determinant() const;
-  vnl_matrix<T>& Q();
-  vnl_matrix<T>& R();
+  vnl_matrix<T> const& Q() const;
+  vnl_matrix<T> const& R() const;
   vnl_vector<T> QtB(const vnl_vector<T>& b) const;
 
   void extract_q_and_r(vnl_matrix<T>* Q, vnl_matrix<T>* R);
