@@ -13,9 +13,6 @@ SUBDIRS += bmvl
 # standalone executables
 SUBDIRS += bexe
  
-# ...
-SUBDIRS += b3p
- 
 ################################
 include ${IUEROOT}/config/top.mk
 ################################
