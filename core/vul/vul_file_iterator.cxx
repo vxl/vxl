@@ -92,7 +92,7 @@ struct vul_file_iterator_data {
   }
 
   void next() {
-    assert(dir_handle);
+    assert(dir_handle != 0);
     de = readdir(dir_handle);
     if (de)
       mkname();
