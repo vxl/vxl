@@ -126,6 +126,12 @@ SOURCE=.\bugl_gaussian_point_3d.h
 SOURCE=.\bugl_gaussian_point_3d.txx
 # End Source File
 # Begin Source File
+SOURCE=.\bugl_gaussian_point_2d_sptr.h
+# End Source File
+# Begin Source File
+SOURCE=.\bugl_gaussian_point_3d_sptr.h
+# End Source File
+# Begin Source File
 SOURCE=.\bugl_uncertainty_point_2d.h
 # End Source File
 # Begin Source File
