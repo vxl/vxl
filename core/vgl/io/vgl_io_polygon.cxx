@@ -1,6 +1,9 @@
 // This is vxl/vgl/io/vgl_io_polygon.cxx
+#ifdef __GNUC__
+#pragma implementation
+#endif
 
-#include <vgl/io/vgl_io_polygon.h>
+#include "vgl_io_polygon.h"
 
 //====================================================================================
 //: Binary save self to stream.

@@ -1,7 +1,10 @@
-// This is vxl/vnl/io/vnl_io_real_npolynomial.cxx
+// This is vxl/vnl/io/vnl_io_real_polynomial.cxx
+#ifdef __GNUC__
+#pragma implementation
+#endif
 
+#include "vnl_io_real_polynomial.h"
 #include <vsl/vsl_binary_io.h>
-#include <vnl/io/vnl_io_real_polynomial.h>
 #include <vnl/io/vnl_io_vector.h>
 #include <vnl/io/vnl_io_matrix.h>
 

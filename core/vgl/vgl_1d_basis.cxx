@@ -1,4 +1,7 @@
 // This is vxl/vgl/vgl_1d_basis.cxx
+#ifdef __GNUC__
+#pragma implementation
+#endif
 
 #include "vgl_1d_basis.txx"
 #include <vgl/vgl_point_2d.h>

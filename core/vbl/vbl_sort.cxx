@@ -1,4 +1,7 @@
 // This is vxl/vbl/vbl_sort.cxx
+#ifdef __GNUC__
+#pragma implementation
+#endif
 
 //-*- c++ -*-------------------------------------------------------------------
 //

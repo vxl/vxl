@@ -1,9 +1,10 @@
-// This is vxl/vnl/io/vnl_io_rational.txx
-#ifndef vnl_io_rational_txx_
-#define vnl_io_rational_txx_
+// This is vxl/vnl/io/vnl_io_rational.cxx
+#ifdef __GNUC__
+#pragma implementation
+#endif
 
+#include "vnl_io_rational.h"
 #include <vsl/vsl_binary_io.h>
-#include <vnl/io/vnl_io_rational.h>
 #include <vsl/vsl_indent.h>
 #include <vsl/vsl_binary_explicit_io.h>
 
@@ -47,5 +48,3 @@ void vsl_print_summary(vcl_ostream & os,const vnl_rational & p)
 {
   os<<p;
 }
-
-#endif // vnl_io_rational_txx_

@@ -1,5 +1,7 @@
-
 // This is vxl/vul/vul_file_iterator.cxx
+#ifdef __GNUC__
+#pragma implementation
+#endif
 
 #include "vul_file_iterator.h"
 #include <vcl_string.h>

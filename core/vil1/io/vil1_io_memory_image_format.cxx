@@ -1,4 +1,7 @@
-// This is vxl/vil/io/vil_io_memory_image_format.txx
+// This is vxl/vil/io/vil_io_memory_image_format.cxx
+#ifdef __GNUC__
+#pragma implementation
+#endif
 
 #include "vil_io_memory_image_format.h"
 
