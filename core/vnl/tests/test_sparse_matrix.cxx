@@ -11,7 +11,7 @@
 // Test the sparse matrix operations.
 void doTest1()
 {
-  const unsigned int n = 20;
+  const unsigned int n = 16;
 
   vnl_sparse_matrix<double> m1(n,n);
   for (unsigned i=0; i<n; i++) {
@@ -97,7 +97,7 @@ void doTest2()
 
 void doTest3()
 {
-  const unsigned int n = 20;
+  const unsigned int n = 16;
 
   vnl_sparse_matrix<double> ms(n,n);
   vnl_matrix<double> md(n,n); md = 0.0; // Initialise to all zeros
@@ -121,7 +121,7 @@ void doTest3()
   vnl_symmetric_eigensystem<double> ed(md);
   vnl_sparse_symmetric_eigensystem es;
   TEST ("vnl_sparse_symmetric_eigensystem::CalculateNPairs()",
-        es.CalculateNPairs(ms,nvals,true,20), 0);
+        es.CalculateNPairs(ms,nvals,true,n), 0);
 
   // Report 'em.
   for (unsigned i=0; i<nvals; i++) {
@@ -134,7 +134,7 @@ void doTest3()
 
 void doTest4()
 {
-  const unsigned int n = 20;
+  const unsigned int n = 16;
 
   vnl_sparse_matrix<double> ms(n,n);
   vnl_matrix<double> md(n,n); md = 0.0; // Initialise to all zeros
