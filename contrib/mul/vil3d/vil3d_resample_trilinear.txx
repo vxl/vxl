@@ -43,8 +43,10 @@ void vil3d_resample_trilinear(const vil3d_image_view< T >& src_image,
   const vcl_ptrdiff_t d_pstep = dst_image.planestep();
   T* d_plane = dst_image.origin_ptr();
 
-  // Loop over all voxels in the destination image (except near upper boundaries)
-  // and sample from the corresponding point in the source image.
+  // Loop over all voxels in the destination image
+  // and sample from the corresponding point in the source image
+  // (except near upper boundaries - interpolation does not work for them
+  // so just give them the same value as the source image).
   for (unsigned p=0; p<np; ++p, s_plane+=s_pstep, d_plane+=d_pstep)
   {
     T* d_slice = d_plane;
@@ -58,30 +60,42 @@ void vil3d_resample_trilinear(const vil3d_image_view< T >& src_image,
         {
           *d_pix = vil3d_trilin_interp_raw(i/dx, j/dy, k/dz, s_plane,
                                            s_istep, s_jstep, s_kstep);
-        }
-      }
-    }
-  }
 
-  // Now process the pixels near the upper boundaries - no interpolation,
-  // just give them the same value as the source image.
-  d_plane = dst_image.origin_ptr();
-  for (unsigned p=0; p<np; ++p, s_plane+=s_pstep, d_plane+=d_pstep)
-  {
-    T* d_slice = d_plane;
-    for (unsigned k=dnk-dz-1; k<dnk; ++k, d_slice+=d_kstep)
-    {
-      T* d_row = d_slice;
-      for (unsigned j=dnj-dy-1; j<dnj; ++j, d_row+=d_jstep)
-      {
-        T* d_pix = d_row;
+        }
+        // Process the pixels near the upper i boundary - no interpolation
         for (unsigned i=dni-dx-1; i<dni; ++i, d_pix+=d_istep)
         {
           *d_pix = src_image(i/dx, j/dy, k/dz);
         }
       }
+
+      // Process the pixels near the upper j boundary - no interpolation
+      for (unsigned j=dnj-dy-1; j<dnj; ++j, d_row+=d_jstep)
+      {
+        T* d_pix = d_row;
+        for (unsigned i=0; i<dni; ++i, d_pix+=d_istep)
+        {
+          *d_pix = src_image(i/dx, j/dy, k/dz);
+        }
+      }      
     }
+
+    // Process the pixels near the upper k boundary - no interpolation
+    for (unsigned k=dnk-dz-1; k<dnk; ++k, d_slice+=d_kstep)
+    {
+      T* d_row = d_slice;
+      for (unsigned j=0; j<dnj; ++j, d_row+=d_jstep)
+      {
+        T* d_pix = d_row;
+        for (unsigned i=0; i<dni; ++i, d_pix+=d_istep)
+        {
+          *d_pix = src_image(i/dx, j/dy, k/dz);
+        }
+      }      
+    }
+
   }
+
 }
 
 
