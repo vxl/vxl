@@ -57,7 +57,7 @@ int main(int argc, char**argv)
 
   {
     // Perform the fit using Phil Torr's Maximum Likelyhood Estimation.
-    FMatrixComputeMLESAC computor(true,9);
+    FMatrixComputeMLESAC computor(true,2);
     FMatrix f = computor.compute(points1, points2);
     f.set_rank2_using_svd();
 
@@ -71,7 +71,7 @@ int main(int argc, char**argv)
 
   {
     // Perform the fit using Phil Torr's Robust Sampling Concensus
-    FMatrixComputeRANSAC computor(true,9);
+    FMatrixComputeRANSAC computor(true,2);
     FMatrix f = computor.compute(points1, points2);
     f.set_rank2_using_svd();
 
