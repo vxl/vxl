@@ -30,7 +30,7 @@ IF (OPENGL_FOUND)
   # implementations
   INCLUDE(${MODULE_PATH}/NewCMake/FindQt.cmake)
   INCLUDE(${CMAKE_ROOT}/Modules/FindGTK.cmake)
-  INCLUDE(${MODULE_PATH}/FindGTK2.cmake)
+  INCLUDE(${MODULE_PATH}/NewCMake/FindGTK2.cmake)
   INCLUDE(${CMAKE_ROOT}/Modules/FindMFC.cmake)
 
   ADD_DEFINITIONS( -DHAS_OPENGL)
