@@ -20,7 +20,7 @@ void vsl_b_write(vsl_b_ostream &os, const vgl_vector_3d<T> & v)
 //============================================================================
 //: Binary load self from stream.
 template<class T>
-void vsl_b_read(vsl_b_istream &is, vgl_vector_3d<T> & v)
+void vsl_b_read(vsl_b_istream &is, vgl_vector_3d<T> & vec)
 {
   if (!is) return;
 
@@ -33,7 +33,7 @@ void vsl_b_read(vsl_b_istream &is, vgl_vector_3d<T> & v)
     vsl_b_read(is, x);
     vsl_b_read(is, y);
     vsl_b_read(is, z);
-    v.set(x,y,z);
+    vec.set(x,y,z);
     break;
 
   default:
