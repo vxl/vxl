@@ -55,7 +55,7 @@ class vil2_image_resource
   // multi-plane scalar-pixel view of the data.
   // \return 0 if unable to get view of correct size, or if resource is write-only.
   //
-  // If you want to fill an existing view (e.g. a window onto some other image,
+  // If you want to fill an existing view (e.g. a window onto some other image),
   // then use
   // \verbatim
   // vil2_reformat(data->get_view(..), window);
