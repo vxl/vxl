@@ -115,6 +115,14 @@ SOURCE=.\vpdfl_gaussian_sampler.cxx
 # End Source File
 # Begin Source File
 
+SOURCE=.\vpdfl_pc_gaussian.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\vpdfl_pc_gaussian_builder.cxx
+# End Source File
+# Begin Source File
+
 SOURCE=.\vpdfl_pdf_base.cxx
 # End Source File
 # Begin Source File
@@ -164,6 +172,14 @@ SOURCE=.\vpdfl_gaussian_builder.h
 # Begin Source File
 
 SOURCE=.\vpdfl_gaussian_sampler.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\vpdfl_pc_gaussian.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\vpdfl_pc_gaussian_builder.h
 # End Source File
 # Begin Source File
 

@@ -27,6 +27,9 @@ private:
 	vnl_vector<double> evals_;
 	double log_k_;
 	void calcLogK();
+
+  
+protected: // Workspace may be accessed by sub-classes
   //: Workspace
   // The difference between an input vector an the mean
   mutable vnl_vector<double> dx_;
