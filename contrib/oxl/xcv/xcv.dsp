@@ -25,7 +25,7 @@ CFG=xcv - Win32 Debug
 # PROP AllowPerConfigDependencies 0
 # PROP Scc_ProjName ""
 # PROP Scc_LocalPath ""
-CPP=cl.exe
+CPP=xicl6.exe
 RSC=rc.exe
 
 !IF  "$(CFG)" == "xcv - Win32 Release"
@@ -42,15 +42,15 @@ RSC=rc.exe
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /MD /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_CONSOLE" /D "_MBCS" /D "_AFXDLL" /Yu"stdafx.h" /FD /c
-# ADD CPP /nologo /MT /W3 /GX /O2 /Ob2 /I "$(IUEROOT)\vcl\config.win32-vc60" /I "$(IUEROOT)/vcl" /I "$(IUEROOT)" /I "$(IUEROOT)/oxl" /I "$(IUEROOT)/Oxford" /I "$(IUEROOT)/vxl" /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /D "_MBCS" /D "HAS_MVOX" /FR /YX /FD /c
+# ADD CPP /nologo /MT /W3 /GX /O2 /Ob2 /I "$(IUEROOT)\vcl\config.win32-vc60" /I "$(IUEROOT)/vcl" /I "$(IUEROOT)" /I "$(IUEROOT)/oxl" /I "$(IUEROOT)/Oxford" /I "$(IUEROOT)/vxl" /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /D "_MBCS" /FR /YX /FD /c
 # ADD BASE RSC /l 0x809 /d "NDEBUG" /d "_AFXDLL"
 # ADD RSC /l 0x809 /d "NDEBUG"
 BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
-LINK32=link.exe
+LINK32=xilink6.exe
 # ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:console /machine:I386
-# ADD LINK32 nafxcw.lib mvox.lib opengl32.lib glu32.lib /nologo /subsystem:console /machine:I386 /libpath:"$(IUEROOT)/vxl/Release" /libpath:"$(IUEROOT)/v3p/Release" /libpath:"$(IUEROOT)/oxl/Release" /libpath:"$(IUEROOT)/Oxford/Release"
+# ADD LINK32 nafxcw.lib opengl32.lib glu32.lib /nologo /subsystem:console /machine:I386 /libpath:"$(IUEROOT)/vxl/Release" /libpath:"$(IUEROOT)/v3p/Release" /libpath:"$(IUEROOT)/oxl/Release" /libpath:"$(IUEROOT)/Oxford/Release"
 # SUBTRACT LINK32 /nodefaultlib
 
 !ELSEIF  "$(CFG)" == "xcv - Win32 Debug"
@@ -74,9 +74,9 @@ LINK32=link.exe
 BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
-LINK32=link.exe
+LINK32=xilink6.exe
 # ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:console /debug /machine:I386 /pdbtype:sept
-# ADD LINK32 mvl.lib glu32.lib opengl32.lib /nologo /subsystem:console /debug /machine:I386 /pdbtype:sept /libpath:"$(IUEROOT)/vxl/Debug" /libpath:"$(IUEROOT)/v3p/Debug" /libpath:"$(IUEROOT)/oxl/Debug" /libpath:"$(IUEROOT)/Oxford/Debug"
+# ADD LINK32 glu32.lib opengl32.lib /nologo /subsystem:console /debug /machine:I386 /pdbtype:sept /libpath:"$(IUEROOT)/vxl/Debug" /libpath:"$(IUEROOT)/v3p/Debug" /libpath:"$(IUEROOT)/oxl/Debug" /libpath:"$(IUEROOT)/Oxford/Debug"
 # SUBTRACT LINK32 /nodefaultlib
 
 !ENDIF 
@@ -88,6 +88,10 @@ LINK32=link.exe
 # Begin Group "Source Files"
 
 # PROP Default_Filter "cpp;c;cxx;rc;def;r;odl;idl;hpj;bat"
+# Begin Source File
+
+SOURCE=..\..\Oxford\t.c
+# End Source File
 # Begin Source File
 
 SOURCE=".\Templates\vcl_vector+vgui_easy2D~-.cxx"
@@ -135,6 +139,10 @@ SOURCE=.\xcv_image_tableau.cxx
 # Begin Source File
 
 SOURCE=.\xcv_multiview.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\xcv_multiview_create_multiview_menu.cxx
 # End Source File
 # Begin Source File
 

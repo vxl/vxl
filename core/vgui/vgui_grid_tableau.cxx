@@ -19,7 +19,7 @@ void vgui_grid_tableau::init(unsigned initial_cols, unsigned initial_rows)
   cond_flip_fwd   = vgui_event_condition(vgui_PAGE_DOWN);
   cond_flip_bwd   = vgui_event_condition(vgui_PAGE_UP);
   cond_select     = vgui_event_condition(vgui_LEFT);
-  cond_deselect   = vgui_event_condition(vgui_RIGHT);
+  cond_deselect   = vgui_event_condition(vgui_MIDDLE);
   
   INCREMENT_COLS = 50;
   INCREMENT_ROWS = 50;
@@ -287,6 +287,18 @@ void vgui_grid_tableau::get_last_selected_position(
 {
   *col_pos = last_selected[0];
   *row_pos = last_selected[1];
+}
+
+//: Select a certain tableau
+void vgui_grid_tableau::set_selected(int r, int c, bool onoff)
+{
+  int time = onoff ? 1000 : -1;
+
+  if (r < nb_rows && c < nb_cols) {
+    grid_pos(c,r).time_selected = time;
+  } else {
+    vcl_cerr << "vgui_grid_tableau::set_selected: (r,c) > (cols,rows)\n";
+  }
 }
 
 //------------------------------------------------------------------------------
