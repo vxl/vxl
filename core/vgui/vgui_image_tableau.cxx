@@ -23,12 +23,14 @@
 #include <vgui/vgui_event.h>
 #include <vgui/vgui_gl.h>
 #include <vgui/vgui_glu.h>
+#include <vgui/vgui_range_map_params.h>
 
 //-----------------------------------------------------------------------------
 
 vgui_image_tableau::
 vgui_image_tableau()
   : vgui_tableau(),
+    rmp_( 0 ),
     pixels_centered_( true ),
     renderer_( 0 ),
     vil_renderer_( 0 )
@@ -38,50 +40,54 @@ vgui_image_tableau()
 //-----------------------------------------------------------------------------
 
 vgui_image_tableau::
-vgui_image_tableau( vil1_image const &I )
+vgui_image_tableau( vil1_image const &I, 
+                    vgui_range_map_params_sptr const& mp)
   : vgui_tableau(),
     pixels_centered_( true ),
     renderer_( 0 ),
     vil_renderer_( 0 )
 {
-  set_image( I );
+  set_image( I, mp );
 }
 
 //-----------------------------------------------------------------------------
 
 vgui_image_tableau::
-vgui_image_tableau( vil_image_view_base const& I )
+vgui_image_tableau( vil_image_view_base const& I,
+                    vgui_range_map_params_sptr const& mp )
   : vgui_tableau(),
     pixels_centered_( true ),
     renderer_( 0 ),
     vil_renderer_( 0 )
 {
-  set_image_view( I );
+  set_image_view( I, mp );
 }
 
 //-----------------------------------------------------------------------------
 
 vgui_image_tableau::
-vgui_image_tableau( vil_image_resource_sptr const& I )
+vgui_image_tableau( vil_image_resource_sptr const& I,
+                    vgui_range_map_params_sptr const& mp )
   : vgui_tableau(),
     pixels_centered_( true ),
     renderer_( 0 ),
     vil_renderer_( 0 )
 {
-  set_image_resource( I );
+  set_image_resource( I, mp);
 }
 
 //-----------------------------------------------------------------------------
 
 vgui_image_tableau::
-vgui_image_tableau(char const *f)
+vgui_image_tableau(char const *f,
+                   vgui_range_map_params_sptr const& mp)
   : vgui_tableau(),
     name_( f ),
     pixels_centered_( true ),
     renderer_( 0 ),
     vil_renderer_( 0 )
 {
-  set_image( f );
+  set_image( f, mp );
 }
 
 //-----------------------------------------------------------------------------
@@ -147,70 +153,83 @@ vil_image_resource_sptr
 vgui_image_tableau::
 get_image_resource() const
 {
-  return vil_renderer_->get_image_resource();
+  if(vil_renderer_)
+	return vil_renderer_->get_image_resource();
+  else
+	  return 0;
 }
 
 //-----------------------------------------------------------------------------
 
 void
 vgui_image_tableau::
-set_image_view( char const* f )
+set_image_view( char const* f, vgui_range_map_params_sptr const& mp)
 {
   name_ = f;
   vil_image_view_base_sptr img = vil_load( f );
   if ( img )
-    set_image_view( *img );
+    set_image_view( *img, mp );
 }
 
 //-----------------------------------------------------------------------------
 
 void
 vgui_image_tableau::
-set_image_view( vil_image_view_base const& I )
+set_image_view( vil_image_view_base const& I,
+                vgui_range_map_params_sptr const& mp)
 {
   if ( !vil_renderer_ )
     vil_renderer_ = new vgui_vil_image_renderer;
 
   // use the name of the image as the name of the tableau :
   vil_renderer_->set_image_resource( vil_new_image_resource_of_view( I ) );
+
+  rmp_ = mp;
 }
 
 //-----------------------------------------------------------------------------
 
 void
 vgui_image_tableau::
-set_image_resource( vil_image_resource_sptr const& I )
+set_image_resource( vil_image_resource_sptr const& I,
+                    vgui_range_map_params_sptr const& mp )
 {
   if ( !vil_renderer_ )
     vil_renderer_ = new vgui_vil_image_renderer;
 
   // use the name of the image as the name of the tableau :
   vil_renderer_->set_image_resource( I );
+
+  rmp_ = mp;
 }
 
 //-----------------------------------------------------------------------------
 
 void
 vgui_image_tableau::
-set_image( vil1_image const& I )
+set_image( vil1_image const& I,
+           vgui_range_map_params_sptr const& mp ) 
 {
   if ( !renderer_ )
     renderer_ = new vgui_image_renderer;
 
   // use the name of the image as the name of the tableau :
   renderer_->set_image( I );
+
+  rmp_ = mp;
 }
 
 //-----------------------------------------------------------------------------
 
 void
 vgui_image_tableau::
-set_image(char const *f)
+set_image(char const *f,
+          vgui_range_map_params_sptr const& mp)
 {
   name_ = f;
   vil1_image img = vil1_load( f );
   if ( img )
-    set_image( img );
+    set_image( img, mp );
 }
 
 //-----------------------------------------------------------------------------
@@ -259,6 +278,7 @@ get_bounding_box(float low[3], float high[3]) const
 {
   low[0] = 0; high[0] = width();
   low[1] = 0; high[1] = height();
+
   low[2] = 0; high[2] = 0;
   return true;
 }
@@ -283,9 +303,10 @@ handle(vgui_event const &e)
 
     if (pixels_centered_)
       glTranslated(-0.5, -0.5, 0);
-
-    if ( renderer_ )     renderer_->render();
-    if ( vil_renderer_ ) vil_renderer_->render();
+    //If rmp_ is not null then the rendering will be mapped according to the
+    //specified mapping parameters
+    if ( renderer_ )     renderer_->render(rmp_);
+    if ( vil_renderer_ ) vil_renderer_->render(rmp_);
 
     if (pixels_centered_)
       glTranslated(+0.5, +0.5, 0);
@@ -297,4 +318,10 @@ handle(vgui_event const &e)
   }
   else
     return false;
+}
+
+void vgui_image_tableau::set_mapping(const vgui_range_map_params_sptr rmp)
+{
+  rmp_ = rmp; 
+  this->post_redraw();
 }

@@ -8,13 +8,19 @@
 // \file
 // \author fsm
 // \brief  Holds a section of a GL image with given OpenGL buffer format and types.
-//
+// \verbatim
+// Modifications 
+//   J.L. Mundy December 2004
+//    Added a range mapping function to allow non-byte images to be
+//    displayed within a specified range. Originally these were just clamped
+//    to a max value of 255.
+// \endverbatim
 //  Contains classes:  vgui_section_buffer
-
+// 
 #include <vgui/vgui_gl.h>
 class vil1_image;
 #include <vil/vil_fwd.h>
-
+#include <vgui/vgui_range_map_params_sptr.h>
 //: Holds a section of a GL image with given OpenGL buffer format and types.
 //
 // A section_buffer is an object which holds a section of a GL image
@@ -83,13 +89,16 @@ class vgui_section_buffer
   bool draw_as_rectangle() const;
 
   //: Grab a section from the given image.
-  void apply( vil1_image const & );
+  void apply( vil1_image const & ,
+              vgui_range_map_params_sptr const& );
 
   //: Grab a section from the given resource.
-  void apply( vil_image_resource_sptr const& );
+  void apply( vil_image_resource_sptr const&,
+              vgui_range_map_params_sptr const& );
 
   unsigned width () const { return w_; }
   unsigned height() const { return h_; }
+  
 
  private:
   // fsm: I want these to be GLenums as gcc 2.95 will not implicitly
@@ -113,6 +122,7 @@ class vgui_section_buffer
 
   //: Did the last apply() work?
   bool buffer_ok_;
+
 };
 
 #endif // vgui_section_buffer_h_
