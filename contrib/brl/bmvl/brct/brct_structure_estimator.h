@@ -1,10 +1,9 @@
 #ifndef brct_structure_estimator_h_
 #define brct_structure_estimator_h_
-
+//:
 // \file
 // \author Kongbin Kang
-// \brief A class to increamentally compute 3D structure 
-// from 2D masurements.
+// \brief A class to incrementally compute 3D structure from 2D measurements.
 
 #include <vnl/vnl_double_3x3.h>
 #include <vnl/vnl_double_3x4.h>
@@ -13,16 +12,16 @@
 
 class brct_structure_estimator
 {
-  private:
-    //: state transit matrix
-    vnl_double_3x3 A_;
+ private:
+  //: state transit matrix
+  vnl_double_3x3 A_;
 
-    //: projective matrix
-    vnl_double_3x4 P_;
-    
-  public:
-    brct_structure_estimator() {}
-    ~brct_structure_estimator(){}
+  //: projective matrix
+  vnl_double_3x4 P_;
+
+ public:
+  brct_structure_estimator() {}
+  ~brct_structure_estimator(){}
 };
 
-#endif // structure_estimator_h_
+#endif // brct_structure_estimator_h_
