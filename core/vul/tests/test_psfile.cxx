@@ -62,7 +62,7 @@ void test_psfile()
       f.circle(210.0f+5*i,210.0f,10.0f+5*i);
 
     for (int i=0; i<10; ++i)
-      f.ellipse(150.0f+5*i,350.0f+5*i,10.0f+5*i,20.0f+10*i,45.0f);
+      f.ellipse(150.0f+5*i,350.0f+5*i,10.0f+5*i,20.0f+10*i,45);
   }
 
 #if INTERACTIVE
