@@ -7,6 +7,10 @@
 //:
 // \file
 // \author Ian Scott
+// \verbatim
+//  Modifications
+//   Peter Vanroose - 21 Aug.2003 - support added for _RGB_, _RGBA_ and _COMPLEX_ pixel_formats
+// \endverbatim
 
 #include <vil/vil_image_resource.h>
 #include <vil/vil_image_view_base.h>
@@ -30,7 +34,7 @@ class vil_memory_image : public vil_image_resource
                    unsigned nplanes,
                    vil_pixel_format format);
 
-  //: Create an wrapper around the given image_view
+  //: Create a wrapper around the given image_view
   vil_memory_image(vil_image_view_base &);
 
 
@@ -42,7 +46,6 @@ class vil_memory_image : public vil_image_resource
     vil_image_view_base & view);
 
  public:
-
 
   ~vil_memory_image() {delete view_;}
 

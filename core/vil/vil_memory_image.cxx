@@ -21,22 +21,37 @@ vil_memory_image::vil_memory_image():
 
 vil_memory_image::vil_memory_image(unsigned ni, unsigned nj, unsigned nplanes, vil_pixel_format format)
 {
-  // format should be a scalar type
-  assert (vil_pixel_format_num_components(format)==1);
-
   switch (format)
   {
-#define macro( F , T ) \
-  case F :     view_ = new vil_image_view<T >(ni, nj, nplanes); break;
-macro(VIL_PIXEL_FORMAT_BYTE, vxl_byte )
-macro(VIL_PIXEL_FORMAT_SBYTE , vxl_sbyte )
-macro(VIL_PIXEL_FORMAT_UINT_32 , vxl_uint_32 )
-macro(VIL_PIXEL_FORMAT_UINT_16 , vxl_uint_16 )
-macro(VIL_PIXEL_FORMAT_INT_32 , vxl_int_32 )
-macro(VIL_PIXEL_FORMAT_INT_16 , vxl_int_16 )
-macro(VIL_PIXEL_FORMAT_BOOL , bool )
-macro(VIL_PIXEL_FORMAT_FLOAT , float )
-macro(VIL_PIXEL_FORMAT_DOUBLE , double )
+#define macro( F , T , ncomponents ) \
+  case F :     view_ = new vil_image_view<T >(ni, nj, nplanes, ncomponents); break;
+macro(VIL_PIXEL_FORMAT_BYTE ,   vxl_byte ,   1 )
+macro(VIL_PIXEL_FORMAT_SBYTE ,  vxl_sbyte ,  1 )
+macro(VIL_PIXEL_FORMAT_UINT_32, vxl_uint_32, 1 )
+macro(VIL_PIXEL_FORMAT_UINT_16, vxl_uint_16, 1 )
+macro(VIL_PIXEL_FORMAT_INT_32 , vxl_int_32 , 1 )
+macro(VIL_PIXEL_FORMAT_INT_16 , vxl_int_16 , 1 )
+macro(VIL_PIXEL_FORMAT_BOOL ,   bool ,       1 )
+macro(VIL_PIXEL_FORMAT_FLOAT ,  float ,      1 )
+macro(VIL_PIXEL_FORMAT_DOUBLE , double ,     1 )
+macro(VIL_PIXEL_FORMAT_RGB_BYTE ,   vxl_byte ,   3 )
+macro(VIL_PIXEL_FORMAT_RGB_SBYTE ,  vxl_sbyte ,  3 )
+macro(VIL_PIXEL_FORMAT_RGB_UINT_32, vxl_uint_32, 3 )
+macro(VIL_PIXEL_FORMAT_RGB_UINT_16, vxl_uint_16, 3 )
+macro(VIL_PIXEL_FORMAT_RGB_INT_32 , vxl_int_32 , 3 )
+macro(VIL_PIXEL_FORMAT_RGB_INT_16 , vxl_int_16 , 3 )
+macro(VIL_PIXEL_FORMAT_RGB_FLOAT ,  float ,      3 )
+macro(VIL_PIXEL_FORMAT_RGB_DOUBLE , double ,     3 )
+macro(VIL_PIXEL_FORMAT_RGBA_BYTE ,   vxl_byte ,   4 )
+macro(VIL_PIXEL_FORMAT_RGBA_SBYTE ,  vxl_sbyte ,  4 )
+macro(VIL_PIXEL_FORMAT_RGBA_UINT_32, vxl_uint_32, 4 )
+macro(VIL_PIXEL_FORMAT_RGBA_UINT_16, vxl_uint_16, 4 )
+macro(VIL_PIXEL_FORMAT_RGBA_INT_32 , vxl_int_32 , 4 )
+macro(VIL_PIXEL_FORMAT_RGBA_INT_16 , vxl_int_16 , 4 )
+macro(VIL_PIXEL_FORMAT_RGBA_FLOAT ,  float      , 4 )
+macro(VIL_PIXEL_FORMAT_RGBA_DOUBLE , double     , 4 )
+macro(VIL_PIXEL_FORMAT_COMPLEX_FLOAT ,  float ,  2 )
+macro(VIL_PIXEL_FORMAT_COMPLEX_DOUBLE , double , 2 )
 #undef macro
   default:
     vcl_cerr << "ERROR: vil_memory_image::vil_memory_image\n"
@@ -46,21 +61,21 @@ macro(VIL_PIXEL_FORMAT_DOUBLE , double )
 }
 
 
-//: Create an wrapper around the given image_view
+//: Create a wrapper around the given image_view
 vil_memory_image::vil_memory_image(vil_image_view_base &view)
 {
   switch (vil_pixel_format_component_format(view.pixel_format()))
   {
 #define macro( F , T ) \
   case F :  view_ = new vil_image_view<T >(view); break;
-macro(VIL_PIXEL_FORMAT_BYTE, vxl_byte )
-macro(VIL_PIXEL_FORMAT_SBYTE , vxl_sbyte )
-macro(VIL_PIXEL_FORMAT_UINT_32 , vxl_uint_32 )
-macro(VIL_PIXEL_FORMAT_UINT_16 , vxl_uint_16 )
+macro(VIL_PIXEL_FORMAT_BYTE ,   vxl_byte )
+macro(VIL_PIXEL_FORMAT_SBYTE ,  vxl_sbyte )
+macro(VIL_PIXEL_FORMAT_UINT_32, vxl_uint_32 )
+macro(VIL_PIXEL_FORMAT_UINT_16, vxl_uint_16 )
 macro(VIL_PIXEL_FORMAT_INT_32 , vxl_int_32 )
 macro(VIL_PIXEL_FORMAT_INT_16 , vxl_int_16 )
-macro(VIL_PIXEL_FORMAT_BOOL , bool )
-macro(VIL_PIXEL_FORMAT_FLOAT , float )
+macro(VIL_PIXEL_FORMAT_BOOL ,   bool )
+macro(VIL_PIXEL_FORMAT_FLOAT ,  float )
 macro(VIL_PIXEL_FORMAT_DOUBLE , double )
 #undef macro
   default:
@@ -70,7 +85,6 @@ macro(VIL_PIXEL_FORMAT_DOUBLE , double )
     vcl_abort();
   }
   assert (view_->ni() == view.ni() && view_->nj() == view.nj());
-
 }
 
 
