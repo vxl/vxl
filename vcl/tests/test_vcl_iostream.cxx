@@ -8,6 +8,7 @@
 
 struct flux : vcl_fstream
 {
+  // check that bitwise OR of {openmode}s works.
   flux(vcl_ios_openmode mode = vcl_ios_in | vcl_ios_binary)
     : vcl_fstream("/tmp/flux", mode) { }
 };
@@ -31,6 +32,14 @@ int main()
   ++ size; // quell warning.
 
   if (false) {
+    int x;
+    vcl_cin >> x; // read from stdin [27.3.1.2]
+    vcl_cout << "cout goes to stdout [27.3.1.3]" << vcl_endl;
+    vcl_cerr << "cerr goes to stderr [27.3.1.4]" << vcl_endl;
+    vcl_clog << "clog goes to stderr [27.3.1.5]" << vcl_endl;
+  }
+
+  if (false) {
     vcl_ofstream f("dont_worry_this_file_is_not_created",
                    vcl_ios_in |
                    vcl_ios_out |
@@ -50,8 +59,8 @@ int main()
     bool bb;
     vcl_cin >> bb;
   }
-  
+
   vcl_stringstream s(vcl_ios_in | vcl_ios_out | vcl_ios_binary);
-  
+
   return 0;
 }
