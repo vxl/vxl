@@ -1,4 +1,4 @@
-// This is mul/vil2/vil2_vil1.cxx
+// This is core/vil2/vil2_vil1.cxx
 #include "vil2_vil1.h"
 //:
 // \file
@@ -84,7 +84,7 @@ bool vil2_vil1_image_resource::get_property (char const *tag, void *property_val
   if (src_)
     return src_.get_property(tag, property_value);
   else
-    return 0;
+    return false;
 }
 
 vil2_image_view_base_sptr vil2_vil1_image_resource::get_copy_view(unsigned i0,
