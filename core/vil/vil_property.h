@@ -11,7 +11,7 @@
 //   bool get_property(char const *tag, void *property_value = 0) const;
 // \endcode
 // which allow format extensions to be added without cluttering the
-// interface to vil2_image_view. The idea is that properties can be
+// interface to vil2_image_resource. The idea is that properties can be
 // identified by a "tag" (some name or other textual description)
 // through which clients can obtain or manipulate extra properties.
 //
@@ -45,5 +45,22 @@
 //  correct.  Only images which do not allow put_view must implement this
 //  property, and return "true".
 #define vil2_property_read_only "read-only"
+
+
+//: Pixel width in metres.
+// Type is float.
+#define vil2_property_pixel_size_i "pixel_size_i"
+
+//: Pixel height in metres.
+// Type is float.
+#define vil2_property_pixel_size_j "pixel_size_j"
+
+//: Original image origin in pixels.
+// Measured right from left edge - i.e. in i direction. Type is float.
+#define vil2_property_offset_i "offset_i"
+
+//: Original image origin in pixels.
+// Measured down from top - i.e. in j direction. Type is float.
+#define vil2_property_offset_j "offset_j"
 
 #endif // vil2_property_h_
