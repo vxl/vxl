@@ -12,41 +12,41 @@
 
 
 //: VCL_HAS_DYNAMIC_CAST
-// 
+//
 // True if the compiler supports dynamic cast.
 //
 #define VCL_HAS_DYNAMIC_CAST @VCL_HAS_DYNAMIC_CAST@
 
 
 //: VCL_HAS_TYPENAME
-// 
+//
 // True if the compiler supports the "typename" keyword
 //
 #define VCL_HAS_TYPENAME @VCL_HAS_TYPENAME@
 
 
 //: VCL_HAS_EXPORT
-// 
+//
 // True if the compiler supports the "export" keyword
 //
 #define VCL_HAS_EXPORT @VCL_HAS_EXPORT@
 
 //: VCL_HAS_MUTABLE
-// 
+//
 // True if the compiler supports the "mutable" keyword
 //
 #define VCL_HAS_MUTABLE @VCL_HAS_MUTABLE@
 
 
 //: VCL_HAS_EXPLICIT
-// 
+//
 // True if the compiler supports the "explicit" keyword
 //
 #define VCL_HAS_EXPLICIT @VCL_HAS_EXPLICIT@
 
 
 //: VCL_FOR_SCOPE_HACK:
-// 
+//
 // True if the compiler uses old-style 'for' loop scoping.
 // Setting this nonzero causes the Henderson trick to be used.
 #define VCL_FOR_SCOPE_HACK @VCL_FOR_SCOPE_HACK@
@@ -67,7 +67,7 @@
 // problems with static members.
 
 // VCL_IMPLEMENT_STATIC_CONSTS
-// 
+//
 // True if static consts must be defined in some source file.  I don't know
 // what ANSI has to say about this, but anyway, the above example needs this
 // in some .C file:
@@ -80,11 +80,11 @@
 
 
 //: VCL_STATIC_CONST_INIT_INT(x)
-// 
+//
 // ANSI allows
 // \verbatim
 //     class A {
-//     	 static const int x = 27;
+//       static const int x = 27;
 //     };
 // \endverbatim
 // And there is a speed advantage, so we want to use it where supported.
@@ -109,7 +109,7 @@
 
 
 //: VCL_STATIC_CONST_INIT_FLOAT(x)
-// 
+//
 // GCC allows the above, but with floating point types, ANSI doesn't.
 // Again, we'll use it if we've got it.
 //
@@ -132,18 +132,18 @@
 // various template issues.
 
 //: VCL_HAS_MEMBER_TEMPLATES
-// 
+//
 // True if the compiler supports template members of template classes.  e.g.
 // \verbatim
 //     template <class U> class A {
-//     	 template <class V> void f(V);
+//       template <class V> void f(V);
 //     }
 // \endverbatim
 #define VCL_HAS_MEMBER_TEMPLATES @VCL_HAS_MEMBER_TEMPLATES@
 
 
 //: VCL_CAN_DO_PARTIAL_SPECIALIZATION
-// 
+//
 // True if the compiler supports partial specializations of templates. e.g.
 // \verbatim
 // template <class T>
@@ -154,7 +154,7 @@
 
 
 //: VCL_DEFINE_SPECIALIZATION
-// 
+//
 // In order to *define* a template (function or class) specialization, the
 // definition must be preceded by "template <>" on ISO-conforming compilers.
 // Some compilers (eg gcc 2.7.2) make no distinction between an instance
@@ -162,7 +162,7 @@
 // and so do not support the use of "template <>". Use VCL_DEFINE_SPECIALIZATION
 // instead.
 //
-// Note that you DO NOT need to forward declare a specialization. E.g. if 
+// Note that you DO NOT need to forward declare a specialization. E.g. if
 // foo.h says "template <class T> void foo(T *);" and foo.cxx specializes
 // void foo<int>(int *), the client doesn't need to know that the template
 // symbol he links against is a specialization.
@@ -186,15 +186,15 @@
 // template instantiation
 
 //: VCL_ALLOWS_INLINE_INSTANTIATION
-// 
-// True if the compiler allows explicit instantiation of inline 
+//
+// True if the compiler allows explicit instantiation of inline
 // function templates. The native SGI CC 7.2.1 does not.
 #define VCL_ALLOWS_INLINE_INSTANTIATION @VCL_ALLOWS_INLINE_INSTANTIATION@
 
 
 //: VCL_NEEDS_INLINE_INSTANTIATION
-// 
-// True if the compiler needs explicit instantiation of inline 
+//
+// True if the compiler needs explicit instantiation of inline
 // function templates. gcc 2.7.2 (with -fno-implicit-templates) does.
 #define VCL_NEEDS_INLINE_INSTANTIATION @VCL_NEEDS_INLINE_INSTANTIATION@
 
@@ -207,9 +207,9 @@
 // \verbatim
 //     template <class T>
 //     class T {
-//    	 int bad_method() {
-//    	   return T::f();  // Requires T to have static method f
-//    	 }
+//       int bad_method() {
+//         return T::f();  // Requires T to have static method f
+//       }
 //     };
 // \endverbatim
 //
@@ -234,7 +234,7 @@ text { return ret; }
 
 
 //: VCL_UNINSTANTIATE_SPECIALIZATION(symbol)
-// 
+//
 // OK, various compilers do various silly things about instantiation of
 // functions/methods that have been specialized.  Use this macro to tell
 // the compiler not to generate code for methods which have been specialized
@@ -250,7 +250,7 @@ text { return ret; }
 
 
 //: VCL_UNINSTANTIATE_UNSEEN_SPECIALIZATION(symbol)
-// 
+//
 // gcc is sensible about specializations if it has seen the definition,
 // but if it's in another file, need to use extern to tell it.
 // \verbatim
@@ -266,7 +266,7 @@ text { return ret; }
 
 //: VCL_INSTANTIATE_STATIC_TEMPLATE_MEMBER(symbol)
 //
-// Some compilers (e.g. gcc 2.7.2) do not accept a templated definition 
+// Some compilers (e.g. gcc 2.7.2) do not accept a templated definition
 // of static members, as in
 // \verbatim
 //   template <class T>
@@ -280,7 +280,7 @@ text { return ret; }
 //
 //   template struct A<int>;
 // \endverbatim
-// The way round this is to supply an explicit definition for every 
+// The way round this is to supply an explicit definition for every
 // instance of the class needed.
 //
 // Put the templated definition like this
@@ -320,7 +320,7 @@ text { return ret; }
 //: VCL_CAN_DO_NON_TYPE_FUNCTION_TEMPLATE_PARAMETER
 //
 // Some compilers (e.g. SunPro 5.0) do not accept non-type template
-// parameters in function templates. E.g. 
+// parameters in function templates. E.g.
 // \verbatim
 // template <class T, int n> struct vicky { T data[n]; } // can do
 //
@@ -337,7 +337,7 @@ text { return ret; }
 //
 // On some compilers (in particular gcc 2.7.2.3), the compiler doesn't
 // know how to cast a templated derived class to a templated base class
-// (eg. vnl_matrix_fixed<3,3,double> -> vnl_matrix<double>) when doing overload 
+// (eg. vnl_matrix_fixed<3,3,double> -> vnl_matrix<double>) when doing overload
 // resolution. Making the overloaded function a friend of the class makes
 // the problem go away.
 //
@@ -378,7 +378,7 @@ text { return ret; }
 
 //: VCL_HAS_TEMPLATE_SYMBOLS
 //
-// True if the compiler mangles function template instances differently 
+// True if the compiler mangles function template instances differently
 // from non-templated functions with the same name and signature.
 // This is correct behaviour.
 //
@@ -391,7 +391,7 @@ text { return ret; }
 //: VCL_DEFAULT_TMPL_ARG(arg)
 //
 // It is wrong to provide a default for a template parameter in two
-// declarations in the same scope (14.1.12), e.g. 
+// declarations in the same scope (14.1.12), e.g.
 // \verbatim
 //   template <class S, class T = int> class X;
 //   template <class S, class T = int> class X { /* ... */ };
@@ -405,14 +405,14 @@ text { return ret; }
 //   template X<double VCL_DEFAULT_TMPL_ARG(, int)>;
 // \endverbatim
 //
-// It's possible we need two macros, one for redeclaration and 
+// It's possible we need two macros, one for redeclaration and
 // one for instantiation.
 
 //#define VCL_DEFAULT_TMPL_ARG(arg) /* no need */
 //#define VCL_DEFAULT_TMPL_ARG(arg) arg
 #define VCL_DEFAULT_TMPL_ARG(arg) @VCL_DEFAULT_TMPL_ARG@
 
-// 
+//
 #define VCL_CAN_DO_COMPLETE_DEFAULT_TYPE_PARAMETER @VCL_CAN_DO_COMPLETE_DEFAULT_TYPE_PARAMETER@
 #define VCL_CAN_DO_TEMPLATE_DEFAULT_TYPE_PARAMETER @VCL_CAN_DO_TEMPLATE_DEFAULT_TYPE_PARAMETER@
 
@@ -435,8 +435,8 @@ text { return ret; }
 
 
 // VCL_DFL_TMPL_ARG(class)
-// Similarly, when instantiating a templated class with a default 
-// template argument, some compilers don't like the redeclaration of 
+// Similarly, when instantiating a templated class with a default
+// template argument, some compilers don't like the redeclaration of
 // that argument, while others insist on it.
 // In such cases, specify the default argument as follows:
 //   template class vector <int VCL_DFL_TMPL_ARG(default_iterator) >;
@@ -453,8 +453,8 @@ text { return ret; }
 // Nice one.  Can't use std::vector<T> in a class on SunPro 5, must use
 // std::vector<T, std::allocator<T> >.  Of course, we cannot expect that other
 // compilers call the default allocator std::allocator<T>, so we must use
-// a macro.  I could call it something generic, like 
-// VCL_CLASS_SCOPE_HACK, but to be honest, it's a sunpro problem, 
+// a macro.  I could call it something generic, like
+// VCL_CLASS_SCOPE_HACK, but to be honest, it's a sunpro problem,
 // they deserve the blame.
 // Usage (the comma is inside the macro) :
 // \verbatim
