@@ -50,7 +50,7 @@ class vtol_intensity_face : public vtol_face_2d
   //Constructors---------------------------------------------------------------
   vtol_intensity_face(vtol_face_2d_sptr const& face);
   vtol_intensity_face(vcl_vector<vtol_edge_sptr>* edges);
-  vtol_intensity_face(one_chain_list const& one_chains);
+  vtol_intensity_face(one_chain_list & one_chains);
   //  vtol_intensity_face(vcl_vector<vtol_edge_sptr>* edges, vdgl_digital_region& dr);
   vtol_intensity_face(vcl_vector<vtol_one_chain_sptr>* chains, vdgl_digital_region const& dr);
   vtol_intensity_face(vtol_intensity_face_sptr const& iface);
