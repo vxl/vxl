@@ -1,4 +1,5 @@
 USES := vxl mul
+TRY_JPEG := 1
 
 LIBRARY := vil2
 VERSION := 1.0
@@ -19,7 +20,6 @@ SOURCES += vil2_new.cxx
 SOURCES += vil2_save.cxx
 MANPAGE_SOURCES += vil2_bilin_interp.h
 MANPAGE_SOURCES += vil2_sample_profile_bilin.txx
-MANPAGE_SOURCES += vil2_pixel_traits.h
 MANPAGE_SOURCES += vil2_sample_grid_bilin.txx
 MANPAGE_SOURCES += vil2_copy.txx
 MANPAGE_SOURCES += vil2_math.h
@@ -33,6 +33,12 @@ MANPAGE_SOURCES += vil2_view_as.h
 MANPAGE_SOURCES += vil2_fill.h
 MANPAGE_SOURCES += vil2_convert.h
 MANPAGE_SOURCES += vil2_transform.h
+SOURCES += file_formats/vil2_jpeg.cxx
+SOURCES += file_formats/vil2_jpeg_compressor.cxx
+SOURCES += file_formats/vil2_jpeg_decompressor.cxx
+SOURCES += file_formats/vil2_jpeg_destination_mgr.cxx
+SOURCES += file_formats/vil2_jpeg_source_mgr.cxx
+MANPAGE_SOURCES += file_formats/vil2_jpeglib.h
 
 SUBDIRS += algo io
 
