@@ -12,10 +12,11 @@ int test_exception_main(int /*argc*/,char* /*argv*/[])
     vcl_throw ex;
   }
   vcl_catch (const char* e) {
-    vcl_cout << "caught " << e << ". Good." << vcl_endl;
+    vcl_cout << "caught " << e << ".  Good." << vcl_endl;
+    result = 0;
   }
   vcl_catch_all {
-    vcl_cout << "caught nuffink. Bad." << vcl_endl;
+    vcl_cout << "caught nothing.  Bad." << vcl_endl;
     result = 1;
   }
 #else
