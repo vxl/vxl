@@ -321,6 +321,9 @@ SOURCE=.\vsol_triangle_3d.cxx
 SOURCE=.\vsol_polyline_2d.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\vsol_polyline_3d.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\vsol_digital_curve_2d.cxx
 # End Source File
 # End Group
@@ -481,6 +484,12 @@ SOURCE=.\vsol_polyline_2d.h
 # End Source File
 # Begin Source File
 SOURCE=.\vsol_polyline_2d_sptr.h
+# End Source File
+# Begin Source File
+SOURCE=.\vsol_polyline_3d.h
+# End Source File
+# Begin Source File
+SOURCE=.\vsol_polyline_3d_sptr.h
 # End Source File
 # Begin Source File
 SOURCE=.\vsol_digital_curve_2d.h
