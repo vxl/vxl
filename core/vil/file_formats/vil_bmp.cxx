@@ -8,7 +8,9 @@
 #include <vcl_cassert.h>
 #include <vcl_iostream.h>
 #include <vcl_vector.h>
+#include <vcl_cstring.h>
 #include <vil/vil_stream.h>
+#include <vil/vil_property.h>
 #include <vil/vil_memory_chunk.h>
 #include <vil/vil_image_view.h>
 
@@ -62,9 +64,15 @@ vil_bmp_image::vil_bmp_image(vil_stream* is)
   read_header();
 }
 
-bool vil_bmp_image::get_property(char const * /*tag*/, void * /*prop*/) const
+bool vil_bmp_image::get_property(char const * tag, void * value) const
 {
-  // This is not an in-memory image type, nor is it read-only:
+  if (vcl_strcmp(vil_property_quantisation_depth, tag)==0)
+  {
+    unsigned* depth =  static_cast<unsigned*>(value);
+    *depth = core_hdr.bitsperpixel / nplanes();
+    return true;
+  }
+
   return false;
 }
 

@@ -16,6 +16,7 @@
 
 #include <vxl_config.h> // for VXL_BIG_ENDIAN and vxl_byte
 
+#include <vil/vil_property.h>
 #include <vil/vil_stream.h>
 #include <vil/vil_image_resource.h>
 #include <vil/vil_image_view.h>
@@ -74,9 +75,15 @@ vil_pnm_image::vil_pnm_image(vil_stream* vs):
   read_header();
 }
 
-bool vil_pnm_image::get_property(char const * /*tag*/, void * /*prop*/) const
+bool vil_pnm_image::get_property(char const * tag, void * value) const
 {
-  // This is not an in-memory image type, nor is it read-only:
+  if (vcl_strcmp(vil_property_quantisation_depth, tag)==0)
+  {
+    unsigned* depth =  static_cast<unsigned*>(value);
+    *depth = bits_per_component_;
+    return true;
+  }
+
   return false;
 }
 

@@ -9,9 +9,11 @@
 
 #include <vcl_cassert.h>
 #include <vcl_iostream.h>
+#include <vcl_cstring.h>
 
 #include <vxl_config.h> // for VXL_BIG_ENDIAN and vxl_byte
 
+#include <vil/vil_property.h>
 #include <vil/vil_stream.h>
 #include <vil/vil_image_resource.h>
 #include <vil/vil_image_view.h>
@@ -271,8 +273,23 @@ vil_dicom_image::vil_dicom_image(vil_stream* vs):
   start_of_pixels_ = vs->tell();
 }
 
-bool vil_dicom_image::get_property(char const* /*tag*/, void* /*prop*/) const
+bool vil_dicom_image::get_property(char const* tag, void* value) const
 {
+  if (vcl_strcmp(vil_property_quantisation_depth, tag)==0)
+  {
+    unsigned* depth =  static_cast<unsigned*>(value);
+    *depth = header_.allocated_bits_;
+    return true;
+  }
+
+  if (vcl_strcmp(vil_property_pixel_size, tag)==0)
+  {
+    float *pixel_size = static_cast<float*>(value);
+    pixel_size[0] = header_.xsize_;
+    pixel_size[0] = header_.ysize_;
+    return true;
+  }
+
   // Need to write lots of access code for the dicom header.
   return false;
 }

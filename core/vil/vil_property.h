@@ -46,22 +46,16 @@
 //  property, and return "true".
 #define vil_property_read_only "read-only"
 
-
 //: Pixel width in metres.
-// Type is float.
-#define vil_property_pixel_size_i "pixel_size_i"
-
-//: Pixel height in metres.
-// Type is float.
-#define vil_property_pixel_size_j "pixel_size_j"
+// Strictly this is the pixel spacing, and not some function of
+// the sensor's spatial sampling kernel.
+// Type is float[2].
+#define vil_property_pixel_size "pixel_size"
 
 //: Original image origin in pixels.
-// Measured right from left edge - i.e. in i direction. Type is float.
-#define vil_property_offset_i "offset_i"
-
-//: Original image origin in pixels.
-// Measured down from top - i.e. in j direction. Type is float.
-#define vil_property_offset_j "offset_j"
+// Measured right from left edge, and down from top - i.e. in i and j directions
+// Type is float[2].
+#define vil_property_offset "offset"
 
 //: The quantisation depth of pixel components.
 // This is the maximum information per pixel component. (Bear in mind that particular image
