@@ -21,6 +21,7 @@ SET(bdgl_sources
 	curveMatch.h
 	utils.h		utils.cxx
 	bdgl_curve_region.h bdgl_curve_region.cxx
+	bdgl_curve_tracker.h bdgl_curve_tracker.cxx
 )
 AUX_SOURCE_DIRECTORY(Templates bdgl_sources)
 
