@@ -5,6 +5,9 @@ aren't documented here, unless the bug-fix has a major observable
 effect. If you change something in VXL, please document it here.
 
 ---------------------------------------------------------------------------
+      - Added an implementation of the Mukres or Hungarian algorithm for
+        finding a minimum cost assignment.
+
 VXL 1.1.0	- May 2004
 
       - Automated codec registration in vidl based on the approach of vil
