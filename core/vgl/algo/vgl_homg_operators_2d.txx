@@ -134,7 +134,7 @@ void vgl_homg_operators_2d<Type>::unitize(vgl_homg_point_2d<Type>& a)
   a.set(x*norm, y*norm, z*norm);
 }
 
-// @{ DISTANCE MEASUREMENTS IN IMAGE COORDINATES @}
+//  DISTANCE MEASUREMENTS IN IMAGE COORDINATES 
 
 //: Get the square of the 2D distance between the two points.
 template <class Type>
@@ -163,12 +163,10 @@ vgl_homg_operators_2d<Type>::distance_squared(
           vnl_math_sqr (y1 * scale1 - y2 * scale2));
 }
 
-//-----------------------------------------------------------------------------
-//
 //: Get the square of the perpendicular distance to a line.
 // This is just the homogeneous form of the familiar 
-// @{ $ \frac{a x + b y + c}{\sqrt{a^2+b^2}} $ @}:
-// @{ \[ d = \frac{(l^\top p)}{p_z\sqrt{l_x^2 + l_y^2}} \] @}
+// \f$ \frac{a x + b y + c}{\sqrt{a^2+b^2}} \f$ :
+// \[ d = \frac{(l^\top p)}{p_z\sqrt{l_x^2 + l_y^2}} \] 
 // If either the point or the line are at infinity an error message is
 // printed and Homg::infinity is returned.
 
@@ -192,7 +190,7 @@ vgl_homg_operators_2d<Type>::perp_dist_squared(
 }
 
 
-// @{ ANGLES @}
+//  ANGLES 
 
 //-----------------------------------------------------------------------------
 //: Get the anticlockwise angle between a line and the x axis.
@@ -315,15 +313,15 @@ vgl_homg_operators_2d<Type>::intersection ( const vgl_homg_line_2d<Type>& line1,
 
 //-----------------------------------------------------------------------------
 //
-//: @{ Get the perpendicular line to line which passes through point.
-// Params are line $(a,b,c)$ and point $(x,y,1)$.
-// Then the cross product of $(x,y,1)$ and the line's direction $(a,b,0)$,
-// called $(p,q,r)$ satisfies
+//: Get the perpendicular line to line which passes through point.
+// Params are line \f$(a,b,c)\f$ and point \f$(x,y,1)\f$.
+// Then the cross product of \f$(x,y,1)\f$ and the line's direction \f$(a,b,0)\f$,
+// called \f$(p,q,r)\f$ satisfies
 //
-//   $ap+bq=0$ (perpendicular condition) and
+//   \f$ap+bq=0\f$ (perpendicular condition) and
 //
-//   $px+qy+r=0$ (incidence condition).
-// @}
+//   \f$px+qy+r=0\f$ (incidence condition).
+
 
 template <class Type>
 vgl_homg_line_2d<Type>
@@ -369,7 +367,7 @@ vgl_homg_operators_2d<Type>::midpoint( const vgl_homg_point_2d<Type>& p1,
   return vgl_homg_point_2d<Type>(x,y,w);
 }
 
-// @{ FITTING @}
+//  FITTING 
 
 // - Kanatani sect 2.2.2.
 template <class Type>
