@@ -283,7 +283,15 @@ void vil_test_image_type(char const* type_name, // type for image to read and wr
   bool qdr = image3->get_property("quantisation_depth", &qd);
   if (qdr) vcl_cout << "quantisation depth = " << qd << ", should be " << depth << '\n';
   else     depth = 0;
-  TEST("get_property(\"quantisation_depth\")", qd, depth);
+
+  // NOTE: Test below may not be correct for NITF images.  One common format
+  //     for NITF images is 11 bits per pixel stored in 2 bytes.  For these
+  //     images qd will be 11 but depth as calculated above will be (8 * 2) = 16.  
+  //     Therefore, only perform test if image type is not NITF or 
+  //     depth is other than 16.    MAL 6jan2004
+  if (vcl_strncmp (type_name, "NITF", 4) != 0 || (depth != 16)) {
+    TEST("get_property(\"quantisation_depth\")", qd, depth);
+  }
 
 #if !LEAVE_IMAGES_BEHIND
   // STEP 5) Remove the temporarily written file
