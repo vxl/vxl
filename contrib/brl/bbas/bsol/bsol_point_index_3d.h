@@ -16,6 +16,7 @@
 //-----------------------------------------------------------------------------
 
 #include <vcl_vector.h>
+#include <vbl/vbl_array_2d.h>
 #include <vsol/vsol_box_3d_sptr.h>
 #include <vsol/vsol_point_3d_sptr.h>
 
@@ -107,7 +108,9 @@ class bsol_point_index_3d
   vsol_box_3d_sptr b_box_;//bounding box for the array
 
   //  row         col       slab     points in cell
-  vcl_vector<vcl_vector<vcl_vector<vcl_vector<vsol_point_3d_sptr> > > > point_array_;
+  //  vcl_vector<vcl_vector<vcl_vector<vcl_vector<vsol_point_3d_sptr> > > > point_array_;
+  // row col      slab        points in cell
+  vbl_array_2d<vcl_vector<vcl_vector<vsol_point_3d_sptr> >* > point_array_;
 };
 
 #endif

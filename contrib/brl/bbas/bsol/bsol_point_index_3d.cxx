@@ -41,13 +41,14 @@ bsol_point_index_3d::bsol_point_index_3d(int nrows, int ncols, int nslabs,
   ncols_ = ncols;
   nslabs_ = nslabs;
   //initialize the array
-  point_array_.resize(nrows);
-  for (int r=0; r<nrows; r++)
-  {
-    point_array_[r].resize(ncols);
-    for (int c=0; c<ncols; c++)
-      point_array_[r][c].resize(nslabs);
-  }
+  point_array_.resize(nrows, ncols);
+  for (int r = 0; r<nrows; r++)
+    for (int c = 0; c<ncols; c++)
+      {
+        point_array_[r][c]= 
+          new vcl_vector<vcl_vector<vsol_point_3d_sptr> >;
+        point_array_[r][c]->resize(nslabs);
+      }
   b_box_ = bb;
   double w = b_box_->width(), h = b_box_->height(), d = b_box_->depth();
   row_spacing_ = 1;
@@ -69,13 +70,14 @@ bsol_point_index_3d(int nrows, int ncols, int nslabs,
   ncols_ = ncols;
   nslabs_ = nslabs;
   //initialize the array
-  point_array_.resize(nrows);
-  for (int r=0; r<nrows; r++)
-  {
-    point_array_[r].resize(ncols);
-    for (int c=0; c<ncols; c++)
-      point_array_[r][c].resize(nslabs);
-  }
+  point_array_.resize(nrows, ncols);
+  for (int r = 0; r<nrows; r++)
+    for (int c = 0; c<ncols; c++)
+      {
+        point_array_[r][c]= 
+          new vcl_vector<vcl_vector<vsol_point_3d_sptr> >;
+        point_array_[r][c]->resize(nslabs);
+      }
   vbl_bounding_box<double,3> box = bsol_algs::bounding_box(points);
   b_box_ = new vsol_box_3d(box);
   double w = b_box_->width(), h = b_box_->height(), d = b_box_->depth();
@@ -95,6 +97,9 @@ bsol_point_index_3d(int nrows, int ncols, int nslabs,
 //: Destructor
 bsol_point_index_3d::~bsol_point_index_3d()
 {
+  for (int r = 0; r<nrows_; r++)
+    for (int c = 0; c<ncols_; c++)
+      delete point_array_[r][c];
 }
 
 void bsol_point_index_3d::origin(double& x0, double& y0, double& z0)
@@ -110,7 +115,7 @@ bsol_point_index_3d::n_points(const int row, const int col, const int slab)
 {
   if (row<0||row>=nrows_||col<0||col>=ncols_||slab<0||slab>=nslabs_)
     return 0;
-  int n = point_array_[row][col][slab].size();
+  int n = (*(point_array_[row][col]))[slab].size();
   return n;
 }
 
@@ -122,7 +127,7 @@ bsol_point_index_3d::n_points(const double x, const double y, const double z)
     return 0;
   if (row<0||row>=nrows_||col<0||col>=ncols_||slab<0||slab>=nslabs_)
     return 0;
-  return point_array_[row][col][slab].size();
+  return (*(point_array_[row][col]))[slab].size();
 }
 
 int bsol_point_index_3d::n_points()
@@ -141,7 +146,7 @@ vcl_vector<vsol_point_3d_sptr> bsol_point_index_3d::points(const int row, const 
   vcl_vector<vsol_point_3d_sptr> out;
   if (row<0||row>=nrows_||col<0||col>=ncols_||slab<0||slab>=nslabs_)
     return out;
-  return point_array_[row][col][slab];
+  return (*(point_array_[row][col]))[slab];
 }
 
 //:offset to origin of bounds and convert to cell integer coordinates
@@ -164,14 +169,12 @@ bool bsol_point_index_3d::trans(const double x, const double y,
 bool bsol_point_index_3d::add_point(vsol_point_3d_sptr const& p)
 {
   double x = p->x(), y = p->y(), z = p->z();
-  if (vcl_fabs(y-659.234)<1.0)
-    y = y;
   int row=0, col=0, slab=0;
   if (!trans(x, y, z, row, col, slab))
     return false;
   if (row<0||row>=nrows_||col<0||col>=ncols_||slab<0||slab>=nslabs_)
     return false;
-  point_array_[row][col][slab].push_back(p);
+  (*(point_array_[row][col]))[slab].push_back(p);
   return true;
 }
 
@@ -192,7 +195,7 @@ bool bsol_point_index_3d::find_point(vsol_point_3d_sptr const& p)
     return false;
   if (row<0||row>=nrows_||col<0||col>=ncols_||slab<0||slab>=nslabs_)
     return false;
-  vcl_vector<vsol_point_3d_sptr>& points = point_array_[row][col][slab];
+  vcl_vector<vsol_point_3d_sptr>& points = (*(point_array_[row][col]))[slab];
   for (vcl_vector<vsol_point_3d_sptr>::iterator pit = points.begin();
        pit!=points.end(); pit++)
     if ((*pit)==p)
@@ -230,7 +233,7 @@ bool bsol_point_index_3d::in_box(vsol_box_3d_sptr const& box,
     for (int c=col_min; c<col_max; c++)
       for (int s=slab_min; s<slab_max; s++)
       {
-        vcl_vector<vsol_point_3d_sptr>& pts = point_array_[r][c][s];
+        vcl_vector<vsol_point_3d_sptr>& pts = (*(point_array_[r][c]))[s];
         for (vcl_vector<vsol_point_3d_sptr>::iterator pit = pts.begin();
              pit != pts.end(); pit++)
           points.push_back(*pit);
@@ -263,7 +266,8 @@ bool bsol_point_index_3d::in_radius(const double radius,
         int r = row+ro, c = col+co, s = slab + so;
         if (r<0||r>=nrows_||c<0||c>=ncols_||s<0||s>=nslabs_)
           continue;
-        vcl_vector<vsol_point_3d_sptr>& points_in_cell = point_array_[r][c][s];
+        vcl_vector<vsol_point_3d_sptr>& points_in_cell =
+          (*(point_array_[r][c]))[s];
         int n = points_in_cell.size();
         if (!n)
           continue;
@@ -296,10 +300,10 @@ bool bsol_point_index_3d::closest_in_radius(const double radius,
 
 void bsol_point_index_3d::clear()
 {
-  for (int r=0; r<nrows_; r++)
-    for (int c=0; c<ncols_; c++)
-      for (int s=0; s<nslabs_; s++)
-        point_array_[r][c][s].clear();
+  for (int r =0; r<nrows_; r++)
+    for (int c = 0; c<ncols_; c++)
+      for (int s = 0; c<nslabs_; c++)
+        (*(point_array_[r][c]))[s].clear();
 }
 
 bool bsol_point_index_3d::mark_point(vsol_point_3d_sptr& p)
@@ -332,7 +336,7 @@ vcl_vector<vsol_point_3d_sptr> bsol_point_index_3d::points()
     for (int c=0; c<ncols_; c++)
       for (int s=0; s<nslabs_; s++)
       {
-        vcl_vector<vsol_point_3d_sptr>& points = point_array_[r][c][s];
+        vcl_vector<vsol_point_3d_sptr>& points = (*(point_array_[r][c]))[s];
         for (vcl_vector<vsol_point_3d_sptr>::iterator pit = points.begin();
              pit!= points.end(); pit++)
           out.push_back(*pit);
@@ -386,7 +390,7 @@ vsol_box_3d_sptr bsol_point_index_3d::point_bounds()
     for (int c=0; c<ncols_; c++)
       for (int s=0; s<nslabs_; s++)
       {
-        vcl_vector<vsol_point_3d_sptr>& points = point_array_[r][c][s];
+        vcl_vector<vsol_point_3d_sptr>& points = (*(point_array_[r][c]))[s];
         for (vcl_vector<vsol_point_3d_sptr>::iterator pit = points.begin();
              pit!= points.end(); pit++)
           box->add_point((*pit)->x(), (*pit)->y(), (*pit)->z());
