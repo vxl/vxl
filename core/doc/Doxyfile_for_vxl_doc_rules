@@ -105,7 +105,7 @@ FULL_PATH_NAMES      = YES
 # only done if one of the specified strings matches the left-hand part of
 # the path.
 
-STRIP_FROM_PATH      = "$IUEROOT/vxl/" "$IUEROOT/v3p/" "$IUEROOT/oxl/" "$IUEROOT/gel/"
+STRIP_FROM_PATH      = "$IUEROOT/vcl/" "$IUEROOT/vxl/" "$IUEROOT/v3p/" "$IUEROOT/mul/" "$IUEROOT/tbl/" "$IUEROOT/oxl/" "$IUEROOT/gel/"
 
 # The INTERNAL_DOCS tag determines if documentation
 # that is typed after a \internal command is included. If the tag is set 
@@ -176,7 +176,7 @@ TAB_SIZE             = 8
 # directories like "/usr/src/myproject". Separate the files or directories 
 # with spaces.
 
-INPUT                = "$IUEROOT/vxl" "$IUEROOT/oxl/" "$IUEROOT/gel/"
+INPUT                = "$IUEROOT/vxl" "$IUEROOT/mul" "$IUEROOT/tbl" "$IUEROOT/oxl" "$IUEROOT/gel"
 
 # If the value of the INPUT tag contains directories, you can use the 
 # FILE_PATTERNS tag to specify one or more wildcard pattern (like *.cpp 
@@ -192,16 +192,16 @@ FILE_PATTERNS        = "*.h" "*.cxx" "*.txx"
 RECURSIVE            = YES
 
 # The EXCLUDE tag can be used to specify files and/or directories that should
-# excluded from the INPUT source files. This way you can easily exclude a 
+# be excluded from the INPUT source files. This way you can easily exclude a 
 # subdirectory from a directory tree whose root is specified with the INPUT tag.
 
-EXCLUDE              = "doc" "vcl"
+EXCLUDE              = "vxl/doc" "vcl"
 
 # If the value of the INPUT tag contains directories, you can use the
 # EXCLUDE_PATTERNS tag to specify one or more wildcard patterns to exclude
 # certain files from those directories.
 
-EXCLUDE_PATTERNS     = "*/doc/*" "*/vxl_copyright.h" "*/vcl/*" "*/dll.h" "*test*" "*example*" "*config*" "*/contrib/*" # "*impl*" "*/Templates/*"
+EXCLUDE_PATTERNS     = "*/doc/*" "*/vxl_copyright.h" "*/vcl/*" "*/dll.h" "*/test*" "*/example*" "*config*" "*/contrib/*" "*/Templates/*" # "*impl*"
     
 # The EXAMPLE_PATH tag can be used to specify one or more files or 
 # directories that contain example code fragments that are included (see 
@@ -381,7 +381,7 @@ SEARCH_INCLUDES      = YES
 # contain include files that are not input files but should be processed by
 # the preprocessor.
 
-INCLUDE_PATH         = "$IUEROOT/vxl" "$IUEROOT/v3p" "$IUEROOT/oxl/" "$IUEROOT/gel/" "$IUEROOT/vcl/"
+INCLUDE_PATH         = "$IUEROOT/vxl" "$IUEROOT/v3p" "$IUEROOT/oxl" "$IUEROOT/gel" "$IUEROOT/vcl"
 
 # The PREDEFINED tag can be used to specify one or more macro names that
 # are defined before the preprocessor is started (similar to the -D option of
@@ -389,7 +389,10 @@ INCLUDE_PATH         = "$IUEROOT/vxl" "$IUEROOT/v3p" "$IUEROOT/oxl/" "$IUEROOT/g
 # or name=definition (no spaces). If the definition and the = are 
 # omitted =1 is assumed.
 
-PREDEFINED           = "FREEVERSION"
+PREDEFINED           = "FREEVERSION" "LEUVENVERSION" "ERROR_CHECKING" "HAS_TIFF" "HAS_JPEG" \
+                       "HAS_NETLIB" "HAS_PNG" "HAS_ZLIB" "HAS_GLUT" "HAS_QT" "VCL_USE_NATIVE_STL=1" \
+                       "VCL_USE_NATIVE_COMPLEX=1" "VCL_HAS_BOOL=1" "VXL_BIG_ENDIAN=1" "VXL_LITTLE_ENDIAN=0" \
+                       "VNL_DLL_DATA=" "size_t=vcl_size_t"
 
 # If the EXPAND_ONLY_PREDEF and MACRO_EXPANSION tags are both set to YES
 # then the macro expansion is limited to the macros specified with the
