@@ -266,14 +266,14 @@ vidl_codec_sptr vidl_avicodec::load(const char* fname, char mode)
 
   if (width() != iwidth)
   {
-    vcl_cerr << "vidl_avicodec::Load ohoh, width of the first frame is different from the one specified for the avifile\n"
+    vcl_cerr << "vidl_avicodec::load ohoh, width of the first frame is different from the one specified for the avifile\n"
              << "          Movie width set with the first frame\n";
     set_width(iwidth);
   }
 
   if (height() != iheight)
   {
-    vcl_cerr << "vidl_avicodec::Load ohoh, height of the first frame is different from the one specified for the avifile\n"
+    vcl_cerr << "vidl_avicodec::load ohoh, height of the first frame is different from the one specified for the avifile\n"
              << "          Movie height set with the first frame\n";
     set_height(iheight);
   }
@@ -437,7 +437,7 @@ bool vidl_avicodec::save(vidl_movie* movie, const char* fname)
 }
 
 
-//: Create a DIB (Device Independant Bitmap) from a frame.
+//: Create a DIB (Device Independent Bitmap) from a frame.
 // (Note : make_dib is not guaranteed to work with bits!=24 for the moment)
 HANDLE  vidl_avicodec::make_dib(vidl_frame_sptr frame, UINT bits)
 {
