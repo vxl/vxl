@@ -198,9 +198,6 @@ SOURCE=.\mbl_matrix_products.cxx
 SOURCE=.\mbl_matxvec.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\mbl_mz_random.cxx
-# End Source File
-# Begin Source File
 SOURCE=.\mbl_read_double.cxx
 # End Source File
 # Begin Source File
@@ -304,9 +301,6 @@ SOURCE=.\mbl_matrix_products.h
 # End Source File
 # Begin Source File
 SOURCE=.\mbl_matxvec.h
-# End Source File
-# Begin Source File
-SOURCE=.\mbl_mz_random.h
 # End Source File
 # Begin Source File
 SOURCE=.\mbl_rbf_network.h
