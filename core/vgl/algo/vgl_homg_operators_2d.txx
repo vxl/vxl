@@ -322,7 +322,7 @@ vgl_homg_operators_2d<T>::most_orthogonal_vector_svd(const vcl_list<vgl_homg_lin
 
   vnl_svd<T> svd(D);
 #ifdef DEBUG
-  vcl_cout << "[movrank " << svd.W() << "]";
+  vcl_cout << "[movrank " << svd.W() << ']';
 #endif
 
   return svd.nullvector();
@@ -849,11 +849,11 @@ vgl_homg_operators_2d<T>::compute_bounding_box(vgl_conic<T> const& c)
     // find out if these lines happen to be horizontal or vertical
     vcl_list<vgl_homg_line_2d<T> > l = c.components();
     if (l.front().a() == 0) // horizontal lines
-      return vgl_box_2d<T>(vgl_point_2d<T>(1e33,-l.front().c()/l.front().b()),
-                           vgl_point_2d<T>(-1e33,-l.back().c()/l.back().b()));
+      return vgl_box_2d<T>(vgl_point_2d<T>(T(1e33),-l.front().c()/l.front().b()),
+                           vgl_point_2d<T>(T(-1e33),-l.back().c()/l.back().b()));
     if (l.front().b() == 0) // vertical lines
-      return vgl_box_2d<T>(vgl_point_2d<T>(-l.front().c()/l.front().b(),1e33),
-                           vgl_point_2d<T>(-l.back().c()/l.back().b(),-1e33));
+      return vgl_box_2d<T>(vgl_point_2d<T>(-l.front().c()/l.front().b(),T(1e33)),
+                           vgl_point_2d<T>(-l.back().c()/l.back().b(),T(-1e33)));
     // if not, go to the general case, i.e., return "everything".
   }
 
@@ -896,6 +896,22 @@ vgl_homg_line_2d<T> operator*(vnl_matrix_fixed<T,3,3> const& m,
   return vgl_homg_line_2d<T>(m(0,0)*l.a()+m(0,1)*l.b()+m(0,2)*l.c(),
                              m(1,0)*l.a()+m(1,1)*l.b()+m(1,2)*l.c(),
                              m(2,0)*l.a()+m(2,1)*l.b()+m(2,2)*l.c());
+}
+
+//: Return the point on the line closest to the given point
+template <class T>
+vgl_homg_point_2d<T> vgl_homg_operators_2d<T>::closest_point(vgl_homg_line_2d<T> const& l,
+                                                             vgl_homg_point_2d<T> const& p)
+{
+  // Return p itself, if p lies on l:
+  if (l.a()*p.x()+l.b()*p.y()+l.c()*p.w() == 0) return p;
+  // Otherwise, make sure that both l and p are not at infinity:
+  assert(!l.ideal()); // should not be the line at infinity
+  assert(!p.ideal()); // point should not be at infinity
+  // Line othogonal to l and through p is  bx-ay+d=0, with d = (a*py-b*px)/pw.
+  vgl_homg_line_2d<T> o(l.b()*p.w(), -l.a()*p.w(), l.a()*p.y()-l.b()*p.x());
+  // Finally return the intersection point of l with this orthogonal line:
+  return vgl_homg_operators_2d<T>::intersection(l,o);
 }
 
 #endif // vgl_homg_operators_2d_txx_

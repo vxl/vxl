@@ -16,6 +16,7 @@
 //   16-Mar-01 Tim Cootes - added documentation
 //   29-Aug-01 Peter Vanroose - added vgl_conic functions (ported from TargetJr)
 //    5-Oct-01 Peter Vanroose - added compute_bounding_box functions
+//   15-May-03 Peter Vanroose - added implementation for closest_point()
 // \endverbatim
 
 #include <vnl/vnl_fwd.h>
