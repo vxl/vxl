@@ -59,3 +59,5 @@ close( double x, double y )
 {
   return vcl_fabs(x-y) < 1.0e-6;
 }
+
+DEFINE_MAIN;

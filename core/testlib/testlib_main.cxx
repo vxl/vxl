@@ -16,13 +16,10 @@ list_test_names( vcl_ostream& ostr )
   }
 }
 
-void
-register_tests();
-
 int
-main( int argc, char* argv[] )
+testlib_main( int argc, char* argv[] )
 {
-  register_tests();
+  // The caller should already have called register_tests().
 
   if( argc < 2 ) {
     vcl_cerr << "Test driver needs at least one parameter: the test name\n";

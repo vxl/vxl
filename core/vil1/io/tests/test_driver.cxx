@@ -19,3 +19,5 @@ register_tests()
   REGISTER( golden_test_vil_io );
   REGISTER( test_include );
 }
+
+DEFINE_MAIN;

@@ -14,3 +14,4 @@ register_tests()
   REGISTER( test_root_dir );
 }
 
+DEFINE_MAIN;

@@ -30,3 +30,4 @@ register_tests()
   REGISTER( test_write_endian );
 }
 
+DEFINE_MAIN;

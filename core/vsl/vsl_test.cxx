@@ -24,11 +24,6 @@ static int tests_failed;
 static const char* test_name;
 
 
-//: A hack to allow programs in vsl/tests to use testlib
-void register_tests(void)
-{
-}
-
 void vsl_test_start(const char* name = 0) {
   num_test = 0;
   tests_passed = 0;

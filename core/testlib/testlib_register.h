@@ -14,8 +14,9 @@
 //   {
 //     REGISTER( some_test_name );
 //   }
+//   DEFINE_MAIN;
 // \endverbatim
-// The testlib library contains the main program to control the running of the tests.
+// The DEFINE_MAIN macro will define the main() function for the driver.
 // You will also have to link in a file defining a function
 // \verbatim
 //   int some_test_name_main(int,char*[])
@@ -49,4 +50,17 @@ extern vcl_vector<vcl_string>       testlib_test_name_;
    testlib_test_func_.push_back( & testname ## _main ); \
    testlib_test_name_.push_back( #testname )
 
+//: Define the main() routine for this test driver.
+// This allows the main function to be defined in the driver code
+// itself--instead of in the testlib library--thus avoiding
+// "awf-weirdness". This also means that functionality from the test
+// library, such as testlib_root_dir, can be used even if it is not
+// used to create a test driver.
+#define DEFINE_MAIN \
+   int testlib_main(int,char*[]); \
+   int main( int argc, char* argv[] ) { \
+     register_tests(); \
+     return testlib_main( argc, argv ); \
+   }
+     
 #endif

@@ -42,3 +42,4 @@ register_tests()
   REGISTER( test_vector_3d_io );
 }
 
+DEFINE_MAIN;
