@@ -22,9 +22,14 @@ void vcl_string_instance_tickler(ostream &os, vcl_string::iterator i, char *a, c
 
 
 #if defined(VCL_GCC_295) && !defined(GNU_LIBSTDCXX_V3)
-# if !VCL_HAS_TEMPLATE_SYMBOLS
+# if VCL_HAS_TEMPLATE_SYMBOLS
+#  undef bs
+#  define bs basic_string<char, string_char_traits<char>, __default_alloc_template<false, 0> >
+template bs &bs::replace<char*>(char *, char *, char *, char *);
+template bs &bs::replace<char const*>(char *, char *, char const *, char const *);
+# else
 // The following is needed when using -fguiding-decls.
-
+#  undef inst
 #  define inst \
 template class __default_alloc_template<true, 0>; \
 template bs &bs::replace(char *, char *, char *, char *); \
@@ -36,11 +41,8 @@ template bs &bs::replace(size_t, size_t, size_t, char)
 #  undef bs
 #  define bs basic_string<char, string_char_traits<char>, __default_alloc_template<true , 0> >
 inst;
-
 #  undef bs
 #  define bs basic_string<char, string_char_traits<char>, __default_alloc_template<false, 0> >
 inst;
-
-#  undef inst
 # endif
 #endif
