@@ -1,4 +1,8 @@
+#ifndef vgel_multi_view_data_txx_
+#define vgel_multi_view_data_txx_
+
 #include <vgel/vgel_multi_view_data.h>
+#include <vtol/vtol_vertex_2d.h>
 
 template <class T>
 vgel_multi_view_data<T>::vgel_multi_view_data():
@@ -8,7 +12,7 @@ _nbviews(0)
 
 template <class T>
 vgel_multi_view_data<T>::vgel_multi_view_data(int nbviews):
-_nbviews(nbviews),_size_vect_ft(0),_matchnum(-1),MVM(0),_closed_track(true)
+_nbviews(nbviews),_size_vect_ft(0),_matchnum(-1),_closed_track(true),MVM(0)
 {
   //all_pts=new vcl_vector<T>();
 }
@@ -69,7 +73,7 @@ void vgel_multi_view_data<T>::new_track()
 template <class T>
 void vgel_multi_view_data<T>::close_track()
 {
-    _closed_track=true;
+  _closed_track=true;
 }
 
 //put in point_vector all the points that have been detected and
@@ -164,12 +168,11 @@ bool vgel_multi_view_data<T>::get_pred_match(int view_num,T obj,T & res)
 {
   if ((view_num>=0) && (view_num<_nbviews-1))
   {
-    int i,j;
     NViewMatches::iterator iter;
     for(iter=MVM.begin();iter!=MVM.end();iter++)
     {
-      i=(*iter)[view_num];
-      j=(*iter)[view_num+1];
+      int i=(*iter)[view_num];
+      int j=(*iter)[view_num+1];
       if ((i!=NViewMatch::nomatch) && (j!=NViewMatch::nomatch))
         if (*all_pts[j]==*obj)
         {
@@ -186,11 +189,10 @@ void vgel_multi_view_data<T>::remove(int view_num, T match)
 {
   if ((view_num>=0) && (view_num<_nbviews-1))
   {
-    int i;
     NViewMatches::iterator iter;
     for(iter=MVM.begin();iter!=MVM.end();iter++)
     {
-      i=(*iter)[view_num];
+      int i=(*iter)[view_num];
       if (i!=NViewMatch::nomatch)
         if (all_pts[i]==match)
         {
@@ -224,3 +226,4 @@ vcl_ostream& vgel_multi_view_data<T>::print(vcl_ostream& str)
   return str;
 }
 
+#endif // vgel_multi_view_data_txx_
