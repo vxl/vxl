@@ -1,8 +1,8 @@
 //:
 // \file
-// \brief Tool to test performance of different methods of accessing image data
-//        When run, tries a variety of different approaches and reports their timings.
-//        Useful to try it on different platforms to how different optimisers perform.
+// \brief Tool to test performance of different methods of accessing image data.
+//  When run, tries a variety of different approaches and reports their timings.
+//  Useful to try it on different platforms to see how different optimisers perform.
 // \author Tim Cootes
 
 #include <vcl_iostream.h>

@@ -71,7 +71,9 @@ ADD_TEST( vil_algo_test_greyscale_erode     vil_algo_test_all test_greyscale_ero
 ADD_TEST( vil_algo_test_median              vil_algo_test_all test_median)
 ADD_TEST( vil_algo_test_suppress_non_max    vil_algo_test_all test_suppress_non_max )
 
-
+#ADD_EXECUTABLE( vil_mil_gauss_general_timings vil_mil_gauss_general_timings.cxx)
+#TARGET_LINK_LIBRARIES( vil_mil_gauss_general_timings vil_algo mil vpl vul mbl testlib vcl )
+#ADD_TEST( vil_mil_gauss_general_timings vil_mil_gauss_general_timings )
 
 ADD_EXECUTABLE( vil_algo_test_include test_include.cxx )
 TARGET_LINK_LIBRARIES( vil_algo_test_include vil_algo )
