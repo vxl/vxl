@@ -50,7 +50,7 @@ SOURCES += vgui_image_blender.cxx
 
 # tableau mixins and miscellaneous
 SOURCES += vgui_wrapper_tableau.cxx
-SOURCES += vgui_deck.cxx
+SOURCES += vgui_deck_tableau.cxx
 SOURCES += vgui_composite.cxx
 SOURCES += vgui_polytab.cxx
 SOURCES += vgui_grid_tableau.cxx
