@@ -114,9 +114,6 @@ SOURCE=.\Templates/vcl_algorithm+vgui_style~-.cxx
 SOURCE=.\Templates/vcl_list+vgui_event-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vcl_map+vgui_style~.vgui_soview~-.cxx
-# End Source File
-# Begin Source File
 SOURCE=.\Templates/vcl_vector+vcl_pair+vil1_image.vcl_vector+GLuint-~-~-.cxx
 # End Source File
 # Begin Source File
@@ -375,9 +372,6 @@ SOURCE=.\vgui_statusbuf.cxx
 SOURCE=.\vgui_style.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\vgui_style_factory.cxx
-# End Source File
-# Begin Source File
 SOURCE=.\vgui_tableau.cxx
 # End Source File
 # Begin Source File
@@ -457,6 +451,9 @@ SOURCE=.\Templates/vcl_algorithm+vgui_rubberband_tableau_sptr-.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\Templates/vcl_vector+vgui_easy2D_tableau_sptr-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vbl_smart_ptr+vgui_style-.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\impl/gtk/vgui_gtk.cxx
@@ -828,7 +825,7 @@ SOURCE=.\vgui_statusbuf.h
 SOURCE=.\vgui_style.h
 # End Source File
 # Begin Source File
-SOURCE=.\vgui_style_factory.h
+SOURCE=.\vgui_style_sptr.h
 # End Source File
 # Begin Source File
 SOURCE=.\vgui_tableau.h
