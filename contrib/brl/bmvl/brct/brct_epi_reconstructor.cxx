@@ -1,4 +1,6 @@
 /////////////////////////////////////////////////////////////////////
+//:
+// \file
 
 #include "brct_epi_reconstructor.h"
 #include <vcl_fstream.h>
@@ -83,17 +85,18 @@ brct_epi_reconstructor::~brct_epi_reconstructor()
   delete e_;
 }
 
-//: Use the observed curves from frame 0 and frame 1 and the intial
+//: Define the set of 3-d points that are to be tracked across frames.
+//  Use the observed curves from frame 0 and frame 1 and the initial
 //  epipole to define the set of 3-d points that are to be tracked
 //  across frames.  In this implementation no new 3-d points are created as
-//  tracking proceeds, but the initial curve is interpolated to twice 
-//  its number of samples to define the tracked pointset
+//  tracking proceeds, but the initial curve is interpolated to twice
+//  its number of samples to define the tracked pointset.
 //
 //  The camera for frame 0 is taken as the identity camera.
 //  The camera for frame 1 is defined by the initial epipole.  That is,
-//  the camera projection of translation vector in 3-d is equivalent 
-//  to the epipole in frame 1. These two cameras are used to 
-//  triangulate the 3-d point coordinates are defined in 
+//  the camera projection of translation vector in 3-d is equivalent
+//  to the epipole in frame 1. These two cameras are used to
+//  triangulate the 3-d point coordinates are defined in
 //  in the coordinate system of camera 0.
 //
 void brct_epi_reconstructor::init_state_3d_estimation()
@@ -146,7 +149,8 @@ void brct_epi_reconstructor::init_state_3d_estimation()
   Sigma3d.set_identity();
   vcl_cout<<Sigma3d<<'\n';
   int k = 0;
-  for (int t =0; t<c; t++){
+  for (int t =0; t<c; t++)
+  {
     vcl_vector<bugl_normal_point_3d_sptr> pts_3d;
     vcl_vector<bugl_gaussian_point_2d<double> > tracked_points0;
     vcl_vector<bugl_gaussian_point_2d<double> > tracked_points1;
@@ -156,54 +160,54 @@ void brct_epi_reconstructor::init_state_3d_estimation()
 
     vdgl_digital_curve_sptr dc1 = tracks_[t][1];
 
-    //define the initial set of points to be twice the number of 
+    //define the initial set of points to be twice the number of
     //points in the shortest curve (between c0 and c1)
     int npts0 = dc0->n_pts();
     int npts1 = dc1->n_pts();
-    int npts = 2* ((npts0 < npts1) ? npts0 : npts1); 
+    int npts = 2* ((npts0 < npts1) ? npts0 : npts1);
     for (int i=0; i<npts; i++)
+    {
+      double index = i/double(npts);//uniformly sample the curve parameter
+
+      //construct the corresponding point
+      vgl_point_2d<double> p0(dc0->get_x(index),dc0->get_y(index));
+      vgl_homg_point_2d<double> p0h(p0.x(), p0.y());
+      double angle0 = dc0->get_theta(index);
+      vnl_double_2x2 sigma1;
+      sigma1.set_identity();
+      bugl_gaussian_point_2d<double> x0(p0, sigma1);
+
+      //the epipolar line through the point
+      vgl_line_2d<double> lr(FM.image2_epipolar_line(p0h));
+
+      //Construct the corresponding point by intersecting
+      //the epipolar line with c1
+      vgl_point_2d<double> p1;
+      if (bdgl_curve_algs::match_intersection(dc1, lr, p0, angle0, p1))
       {
-        double index = i/double(npts);//uniformly sample the curve parameter
-
-        //construct the corresponding point
-        vgl_point_2d<double> p0(dc0->get_x(index),dc0->get_y(index));
-        vgl_homg_point_2d<double> p0h(p0.x(), p0.y());
-        double angle0 = dc0->get_theta(index);
-        vnl_double_2x2 sigma1;
-        sigma1.set_identity();
-        bugl_gaussian_point_2d<double> x0(p0, sigma1);
-
-        //the epipolar line through the point
-        vgl_line_2d<double> lr(FM.image2_epipolar_line(p0h));
-
-        //Construct the corresponding point by intersecting
-        //the epipolar line with c1
-        vgl_point_2d<double> p1;
-        if(bdgl_curve_algs::match_intersection(dc1, lr, p0, angle0, p1))
-          {
-            bugl_gaussian_point_2d<double> x1(p1, Sigma2d);
-            //construct the 3-d point from the two matching points
-            vgl_point_3d<double> point_3d = 
-              brct_algos::triangulate_3d_point(x0, P0, x1, P1);
-            if(debug_)
-              vcl_cout << "P0[" << k << "]= (" << point_3d.x()  
-                       << " " << point_3d.y() << " " << point_3d.z()
-                       << ")\n";
-            bugl_normal_point_3d_sptr p3d_sptr = 
-              new bugl_normal_point_3d(point_3d, Sigma3d);
-            pts_3d.push_back(p3d_sptr);
-            //Joe section
-            grad_angles_[t].push_back(angle0);
-            tracked_points0.push_back(x0);
-            tracked_points1.push_back(x1);
-            observes_[0].push_back(x0);//observed points
-            observes_[1].push_back(x1);
-            k++;
-          }
-      }// end of interpolated points
-      curve_3d_.add_curve(pts_3d);
-      joe_observes_[t].push_back(tracked_points0);
-      joe_observes_[t].push_back(tracked_points1);
+        bugl_gaussian_point_2d<double> x1(p1, Sigma2d);
+        //construct the 3-d point from the two matching points
+        vgl_point_3d<double> point_3d =
+          brct_algos::triangulate_3d_point(x0, P0, x1, P1);
+        if (debug_)
+          vcl_cout << "P0[" << k << "]= (" << point_3d.x()
+                   << ' ' << point_3d.y() << ' ' << point_3d.z()
+                   << ")\n";
+        bugl_normal_point_3d_sptr p3d_sptr =
+          new bugl_normal_point_3d(point_3d, Sigma3d);
+        pts_3d.push_back(p3d_sptr);
+        //Joe section
+        grad_angles_[t].push_back(angle0);
+        tracked_points0.push_back(x0);
+        tracked_points1.push_back(x1);
+        observes_[0].push_back(x0);//observed points
+        observes_[1].push_back(x1);
+        k++;
+      }
+    }// end of interpolated points
+    curve_3d_.add_curve(pts_3d);
+    joe_observes_[t].push_back(tracked_points0);
+    joe_observes_[t].push_back(tracked_points1);
   } // end of each track
 
   num_points_ = curve_3d_.get_num_points();
@@ -213,14 +217,13 @@ void brct_epi_reconstructor::init_state_3d_estimation()
     prob_[i] = 1.0/num_points_;
   }
 
-
   X_[0] = T[0];
   X_[1] = T[1];
   X_[2] = T[2];
 }
 
-//: Initialize the covariance matrix of the state vector to the identity
-//  Intitialize covariance matrix of the 2-d projection to have 
+//: Initialize the covariance matrix of the state vector to the identity.
+//  Initialize covariance matrix of the 2-d projection to have
 //  larger variance in the motion direction
 //
 void brct_epi_reconstructor::init_covariant_matrix()
@@ -317,7 +320,7 @@ vnl_matrix_fixed<double, 2, 6> brct_epi_reconstructor::get_H_matrix(vnl_double_3
       H[i][j] = K_[i][j] / temp - t * K_[2][j] / (temp*temp);
 
     for (int j=3; j<6; j++)
-        H[i][j] = 0;
+      H[i][j] = 0;
   }
 
   return H;
@@ -326,23 +329,23 @@ vnl_matrix_fixed<double, 2, 6> brct_epi_reconstructor::get_H_matrix(vnl_double_3
 
 vnl_double_2 brct_epi_reconstructor::projection(const vnl_double_3x4 &P, const vnl_double_3 &X)
 {
-    vnl_double_2 z;
-    double t1 = 0;
+  vnl_double_2 z;
+  double t1 = 0;
+  for (int k=0; k<3; k++)
+    t1 += P[2][k]*X[k];
+  t1 += P[2][3];
+
+  for (int i=0; i<2; i++)
+  {
+    double t0 =0;
     for (int k=0; k<3; k++)
-      t1 += P[2][k]*X[k];
-    t1 += P[2][3];
+      t0 += P[i][k]*X[k];
+    t0 += P[i][3];
 
-    for (int i=0; i<2; i++)
-    {
-      double t0 =0;
-      for (int k=0; k<3; k++)
-        t0 += P[i][k]*X[k];
-      t0 += P[i][3];
+    z[i] = t0/t1;
+  }
 
-      z[i] = t0/t1;
-    }
-
-    return z;
+  return z;
 }
 
 
@@ -353,7 +356,8 @@ void brct_epi_reconstructor::update_observes(const vnl_double_3x4 &P, int iframe
   sigma.set_identity();
 
   int c = tracks_.size();
-  for (int t=0; t<c; t++){
+  for (int t=0; t<c; t++)
+  {
     int frag_size = curve_3d_.get_fragment_size(t);
     for (int i=0; i<frag_size; i++)
     {
@@ -366,17 +370,18 @@ void brct_epi_reconstructor::update_observes(const vnl_double_3x4 &P, int iframe
     }
   }
 }
+
 bool brct_epi_reconstructor::match_point(vdgl_digital_curve_sptr const& dc,
-                                bugl_gaussian_point_2d<double>& p0,
-                                double grad_angle,
-                                bugl_gaussian_point_2d<double>& p)
+                                         bugl_gaussian_point_2d<double>& p0,
+                                         double grad_angle,
+                                         bugl_gaussian_point_2d<double>& p)
 {
   vnl_double_2x2 sigma;
   sigma.set_identity();
   //construct the epipolar line through p0;
   vgl_point_2d<double> e((*e_)[0], (*e_)[1]), temp;
   vgl_line_2d<double> el(e, p0);
-  if(!bdgl_curve_algs::match_intersection(dc, el, p0, grad_angle, temp))
+  if (!bdgl_curve_algs::match_intersection(dc, el, p0, grad_angle, temp))
     return false;
   p = bugl_gaussian_point_2d<double>(temp, sigma);
   return true;
@@ -387,46 +392,47 @@ void brct_epi_reconstructor::update_observes_joe(int iframe)
 {
   int c = tracks_.size();
   for (int t=0; t<c; t++)
+  {
+    //get the tracked curve in the current frame
+    vdgl_digital_curve_sptr dci = tracks_[t][iframe];
+    //get the corresponding points from frame 0
+    vcl_vector<bugl_gaussian_point_2d<double> > pts0 =
+      joe_observes_[t][0];
+    int npts = pts0.size();
+    //vector for current track and frame
+    vcl_vector<bugl_gaussian_point_2d<double> > cur_frame(npts);
+    for (int i = 0; i<npts; i++)
     {
-      //get the tracked curve in the current frame
-      vdgl_digital_curve_sptr dci = tracks_[t][iframe];
-      //get the corresponding points from frame 0
-      vcl_vector<bugl_gaussian_point_2d<double> > pts0 =
-        joe_observes_[t][0];
-      int npts = pts0.size();
-      //vector for current track and frame
-      vcl_vector<bugl_gaussian_point_2d<double> > cur_frame(npts);
-      for(int i = 0; i<npts; i++)
-        {
-//           //JLM Debug
-//           if(i>0)
-//             {
-//               vgl_line_2d<double> l(pts0[i-1], pts0[i]);
-//               double ang = l.slope_degrees();
-//               if(ang<0)
-//                 ang +=180;
-//               if(debug_)
-//                 vcl_cout << "\nTrack Tangent:" << ang << "\n";
-//             }
-          //default constructor creates a point will zero probability
-          bugl_gaussian_point_2d<double> p;
-          if(!match_point(dci, pts0[i], grad_angles_[t][i], p))
-            vcl_cout << "Match failed for (" << pts0[i].x() << " " 
-                     << pts0[i].y() << ")\n";
-          cur_frame[i]=p;
-        }
-      joe_observes_[t].push_back(cur_frame);
+#if 0 //JLM Debug
+      if (i>0)
+      {
+        vgl_line_2d<double> l(pts0[i-1], pts0[i]);
+        double ang = l.slope_degrees();
+        if (ang<0)
+          ang +=180;
+        if (debug_)
+          vcl_cout << "\nTrack Tangent:" << ang << '\n';
+      }
+#endif // 0
+      //default constructor creates a point will zero probability
+      bugl_gaussian_point_2d<double> p;
+      if (!match_point(dci, pts0[i], grad_angles_[t][i], p))
+        vcl_cout << "Match failed for (" << pts0[i].x() << ' '
+                 << pts0[i].y() << ")\n";
+      cur_frame[i]=p;
     }
+    joe_observes_[t].push_back(cur_frame);
+  }
 }
 
-vcl_vector<bugl_gaussian_point_2d<double> > 
+vcl_vector<bugl_gaussian_point_2d<double> >
 brct_epi_reconstructor::get_cur_joe_observes(int frame)
 {
   vcl_vector<bugl_gaussian_point_2d<double> > pts(num_points_);
   int c = tracks_.size();
   int ip = 0;
-  for(int t = 0; t<c; t++)
-    for(int i = 0; i<joe_observes_[t][frame].size(); i++, ip++)
+  for (int t = 0; t<c; t++)
+    for (int i = 0; i<joe_observes_[t][frame].size(); i++, ip++)
       pts[ip] = joe_observes_[t][frame][i];
   return pts;
 }
@@ -435,67 +441,66 @@ void brct_epi_reconstructor::write_results(const char* fname)
 {
   vcl_ofstream out(fname);
   int num_total_points = curve_3d_.get_num_points();
-  out<<"[ point3d ";
-  out<<num_total_points<<" ]\n";
+  out<<"[ point3d "
+     <<num_total_points<<" ]\n";
 
-
-  for(int i=0; i<num_total_points; i++){
-	  out<<curve_3d_.get_point(i)->x()<<' ';
-	  out<<curve_3d_.get_point(i)->y()<<' ';
-	  out<<curve_3d_.get_point(i)->z()<<' ';
-	  out<<curve_3d_.get_point(i)->exists()<<'\n';
-		  
+  for (int i=0; i<num_total_points; i++)
+  {
+    out<<curve_3d_.get_point(i)->x()<<' '
+       <<curve_3d_.get_point(i)->y()<<' '
+       <<curve_3d_.get_point(i)->z()<<' '
+       <<curve_3d_.get_point(i)->exists()<<'\n';
   }
-
 
   // only write frame 0
   int frame = 0;
   int c = tracks_.size();
   int ip = 0;
-  for(int t = 0; t<c; t++){
-    out<<"[ curve "<< t <<" "<< joe_observes_[t][frame].size()<<" ]\n";
-    for(int i = 0; i<joe_observes_[t][frame].size(); i++){
-       out<< joe_observes_[t][frame][i].x()<< ' ';
-	   out<< joe_observes_[t][frame][i].y()<< ' ';
-	   out<< joe_observes_[t][frame][i].exists()<<'\n';
-	}
+  for (int t = 0; t<c; t++)
+  {
+    out<<"[ curve "<< t <<' '<< joe_observes_[t][frame].size()<<" ]\n";
+    for (int i = 0; i<joe_observes_[t][frame].size(); i++)
+    {
+      out<< joe_observes_[t][frame][i].x()<< ' '
+         << joe_observes_[t][frame][i].y()<< ' '
+         << joe_observes_[t][frame][i].exists()<<'\n';
+    }
   }
-  
   return;
-  
 }
 
 void brct_epi_reconstructor::print_motion_array()
 {
   int n_frames = tracks_[0].size();
-  if(!n_frames||!num_points_)
+  if (!n_frames||!num_points_)
     return;
-  for(int i = 2; i<n_frames-1; i++)
+  for (int i = 2; i<n_frames-1; i++)
     update_observes_joe(i);
-  vnl_matrix<double> H(n_frames, num_points_); 
+  vnl_matrix<double> H(n_frames, num_points_);
   vcl_vector<bugl_gaussian_point_2d<double> > temp_0, temp_i, temp_i1;
   temp_0 = get_cur_joe_observes(0);
-  for(int i = 0; i<n_frames-1; i++)
-    {
-      temp_i = get_cur_joe_observes(i);
-      temp_i1 = get_cur_joe_observes(i+1);
-      for(int j = 0; j<temp_0.size(); j++)
-        {
-          bugl_gaussian_point_2d<double>& gp_0 = temp_0[j], gp_i = temp_i[j],
-            gp_i1 = temp_i1[j];
-          if(!gp_0.exists()||!gp_i.exists()||!gp_i1.exists())
-            continue;
-          vnl_double_2 p_i(gp_i.x(), gp_i.y());
-          vnl_double_2 p_i1(gp_i1.x(), gp_i1.y());
-          double gamma = brct_algos::motion_constant(*e_, i, p_i, p_i1);
-          vcl_cout << "gamma[" << i << "][" << j << "]("
-                   << gp_0.x() << " " << gp_0.y() << ") = " << gamma << "\n";
-          H.put(i, j, gamma);
-        }
-      brct_algos::print_motion_array(H);
-    }
+  for (int i = 0; i<n_frames-1; i++)
+  {
+    temp_i = get_cur_joe_observes(i);
+    temp_i1 = get_cur_joe_observes(i+1);
+    for (int j = 0; j<temp_0.size(); j++)
+      {
+        bugl_gaussian_point_2d<double>& gp_0 = temp_0[j], gp_i = temp_i[j],
+          gp_i1 = temp_i1[j];
+        if (!gp_0.exists()||!gp_i.exists()||!gp_i1.exists())
+          continue;
+        vnl_double_2 p_i(gp_i.x(), gp_i.y());
+        vnl_double_2 p_i1(gp_i1.x(), gp_i1.y());
+        double gamma = brct_algos::motion_constant(*e_, i, p_i, p_i1);
+        vcl_cout << "gamma[" << i << "][" << j << "]("
+                 << gp_0.x() << ' ' << gp_0.y() << ") = " << gamma << '\n';
+        H.put(i, j, gamma);
+      }
+    brct_algos::print_motion_array(H);
+  }
 }
-//:estimate the probability of each 3-d point
+
+//: estimate the probability of each 3-d point
 //
 void brct_epi_reconstructor::update_confidence()
 {
@@ -506,7 +511,8 @@ void brct_epi_reconstructor::update_confidence()
 
   double normalization_factor = 0;
   int c = tracks_.size();
-  for (int t=0; t<c; t++){
+  for (int t=0; t<c; t++)
+  {
     int frag_size = curve_3d_.get_fragment_size(t);
     for (int i=0; i<frag_size; i++)
     {
@@ -538,10 +544,8 @@ void brct_epi_reconstructor::update_confidence()
   if (normalization_factor == 0)
     return ;
 
-
   for (int i=0; i<num_points_; i++)
     prob_[i] /= normalization_factor;
-
 #endif
 
 #if 0
@@ -550,7 +554,7 @@ void brct_epi_reconstructor::update_confidence()
 #endif
 }
 //original inc
-#if 0 
+#if 0
 void brct_epi_reconstructor::inc()
 {
   if ((unsigned)(cur_pos_+1) >= tracks_[0].size()){ // end of the data
@@ -572,7 +576,7 @@ void brct_epi_reconstructor::inc()
   vnl_double_3 camCenter(Xpred[0],Xpred[1],Xpred[2]);
   vnl_double_3x4 P = get_projective_matrix(camCenter);
 
-  //project the 3-d uncertain point set into the image as a set of 
+  //project the 3-d uncertain point set into the image as a set of
   //2-d uncertain points and find the closest edgel observations
   update_observes(P, cur_pos_);
 
@@ -623,15 +627,13 @@ void brct_epi_reconstructor::inc()
   motions_[cur_pos_%queue_size_] = xNew;
   P = get_projective_matrix(motions_[cur_pos_%queue_size_] );
   update_observes(P, cur_pos_);
-  
+
   // store the history
   X_ = Xpred;
   vcl_cout<<"X_ = "<< X_;
 
   if (memory_size_ < queue_size_)
     ++memory_size_;
-
-
 
   // update 3d reconstruction results
   //step through the set of edgel observations for each view
@@ -653,11 +655,11 @@ void brct_epi_reconstructor::inc()
 
     //least squares reconstruction of the point using SVD
     vgl_point_3d<double> X3d = brct_algos::bundle_reconstruct_3d_point(pts, Ps);
-//     vcl_cout << "Pi[" << i << "]= (" << X3d.x() 
-//              << " " << X3d.y() << " " << X3d.z()
+//     vcl_cout << "Pi[" << i << "]= (" << X3d.x()
+//              << ' ' << X3d.y() << ' ' << X3d.z()
 //              << ")\n";
 
-    //Get the displacement between the current 3d point and the 
+    //Get the displacement between the current 3d point and the
     //least-squares reconstruction
     bugl_normal_point_3d_sptr p3d_sptr = curve_3d_.get_point(i);
     vnl_double_3 dX(X3d.x() - p3d_sptr->x(), X3d.y() - p3d_sptr->y(), X3d.z() - p3d_sptr->z());
@@ -676,9 +678,9 @@ void brct_epi_reconstructor::inc()
   // update confidence level for each points
   update_confidence();
 }
-#endif 
+#endif
 //end of original inc
-//start of joe version of inc 
+//start of joe version of inc
 #if 1
 void brct_epi_reconstructor::inc()
 {
@@ -692,24 +694,25 @@ void brct_epi_reconstructor::inc()
 
   //get the camera for the current step using the previous 3-d points
   //get the corresponding points from current obs
-  vcl_vector<bugl_gaussian_point_2d<double> > temp0 = 
-    get_cur_joe_observes(0), temp1 = get_cur_joe_observes(1),
-    temp = get_cur_joe_observes(cur_pos_);
-  
+  vcl_vector<bugl_gaussian_point_2d<double> >
+    temp0 = get_cur_joe_observes(0),
+    temp1 = get_cur_joe_observes(1),
+    temp  = get_cur_joe_observes(cur_pos_);
+
   vcl_vector<vnl_double_2> points_0, points_1, points;
   int ip = 0;
-  for(vcl_vector<bugl_gaussian_point_2d<double> >::iterator pit = temp0.begin(); pit != temp0.end(); pit++, ip++)
-    {
-      bugl_gaussian_point_2d<double>& gp1 = temp1[ip], gp = temp[ip];
-      if(!(*pit).exists()||!gp1.exists()||!gp.exists())
-      continue;
-      vnl_double_2 p0((*pit).x(), (*pit).y());
-      vnl_double_2 p1(gp1.x(), gp1.y());
-      vnl_double_2 p(gp.x(), gp.y());
-      points_0.push_back(p0);
-      points_1.push_back(p1);
-      points.push_back(p);
-    }
+  for (vcl_vector<bugl_gaussian_point_2d<double> >::iterator pit = temp0.begin(); pit != temp0.end(); pit++, ip++)
+  {
+    bugl_gaussian_point_2d<double>& gp1 = temp1[ip], gp = temp[ip];
+    if (!(*pit).exists()||!gp1.exists()||!gp.exists())
+    continue;
+    vnl_double_2 p0((*pit).x(), (*pit).y());
+    vnl_double_2 p1(gp1.x(), gp1.y());
+    vnl_double_2 p(gp.x(), gp.y());
+    points_0.push_back(p0);
+    points_1.push_back(p1);
+    points.push_back(p);
+  }
   vnl_double_3 T;
   brct_algos::camera_translation(K_, *e_, points_0, points_1, points, T);
 
@@ -717,17 +720,17 @@ void brct_epi_reconstructor::inc()
   //
   vcl_cout << "X prior to update " << X_ << '\n';
   //update state vector
- // vcl_cout << "Camera translation " << T << "\n";
 #if 0
+  vcl_cout << "Camera translation " << T << '\n';
   vnl_matrix_fixed<double, 6, 6> A = get_transit_matrix(cur_pos_-1, cur_pos_);
   //update state vector
   vnl_vector_fixed<double, 6> Xpred = A*X_;
-#endif  
+#endif
 #if 1
   //update state vector
   vnl_vector_fixed<double, 6> Xpred=X_;
-  Xpred[0]=T[0];   Xpred[1]=T[1];   Xpred[2]=T[2]; 
-#endif  
+  Xpred[0]=T[0];   Xpred[1]=T[1];   Xpred[2]=T[2];
+#endif
   vcl_cout << Xpred<< vcl_flush <<'\n';
   Tk[0]=Xpred[0];  Tk[1]=Xpred[1];   Tk[2]=Xpred[2];
   motions_[cur_pos_%queue_size_] = Tk;
@@ -738,8 +741,6 @@ void brct_epi_reconstructor::inc()
   if (memory_size_ < queue_size_)
     ++memory_size_;
 
-
-
   // update 3d reconstruction results
   //step through the set of edgel observations for each view
   //and compute the least-squares 3-d reconstruction of the corresponding
@@ -748,59 +749,60 @@ void brct_epi_reconstructor::inc()
   vcl_vector<vnl_double_2> pts(memory_size_);
   int c = tracks_.size();
   int ipt = 0;
-  for(int t =0; t<c; t++)
+  for (int t =0; t<c; t++)
+  {
+    int n = joe_observes_[t][0].size();
+    for (int ip = 0; ip<n; ip++, ipt++)
     {
-      int n = joe_observes_[t][0].size();
-      for(int ip = 0; ip<n; ip++, ipt++)
-        {
-          for(int j =0; j<memory_size_; j++)
-            if (joe_observes_[t][j][ip].exists()){
-              pts[j] = 
-                vnl_double_2(joe_observes_[t][j][ip].x(),
-                             joe_observes_[t][j][ip].y());
-              Ps[j] = get_projective_matrix(motions_[j]);
-            }
-          //least squares reconstruction of the point using SVD
-          vgl_point_3d<double> X3d = 
-            brct_algos::bundle_reconstruct_3d_point(pts, Ps);
-          if(debug_)
-            vcl_cout << "Pi[" << ipt << "]= (" << X3d.x()  
-                     << " " << X3d.y() << " " << X3d.z()
-                     << ")\n";
-          //Get the displacement between the current 3d point and the 
-          //least-squares reconstruction
-          bugl_normal_point_3d_sptr p3d_sptr = curve_3d_.get_point(ipt);
-          vnl_double_3 dX(X3d.x() - p3d_sptr->x(),
-                          X3d.y() - p3d_sptr->y(),
-                          X3d.z() - p3d_sptr->z());
-          if(debug_)
-            vcl_cout << "3dERROR " << dX.magnitude() << "\n";
-          if(p3d_sptr->exists()&&dX.magnitude()>3)//JLM
-            {
-              if(debug_)
-                vcl_cout << "Killing [" << ipt 
-                         << "]= (" << X3d.x()  
-                         << " " << X3d.y() << " " << X3d.z()
-                         << ")\n";
-              p3d_sptr->set_existence(false);
-              continue;
-            }
-//            vcl_cout << "dX( " << dX[0] << " " << dX[1] << " " << dX[2] 
-//                     << ")\n";
-          
-    //incrementally update the covariance matrix
-          vnl_double_3x3 Sigma3d = p3d_sptr->get_covariant_matrix();
-          Sigma3d = Sigma3d*(cur_pos_-1.0)/(double)cur_pos_;
-          for (int m = 0; m<3; m++)
-            for (int n = 0; n<3; n++)
-              Sigma3d[m][n] += dX[m]*dX[n] /(cur_pos_);
-          //replace the point with the least-squares estimate
-          p3d_sptr->set_point(X3d);
-          p3d_sptr->set_covariant_matrix(Sigma3d);
-        }	
+      for (int j =0; j<memory_size_; j++)
+        if (joe_observes_[t][j][ip].exists()){
+          pts[j] =
+            vnl_double_2(joe_observes_[t][j][ip].x(),
+                         joe_observes_[t][j][ip].y());
+          Ps[j] = get_projective_matrix(motions_[j]);
+        }
+      //least squares reconstruction of the point using SVD
+      vgl_point_3d<double> X3d =
+        brct_algos::bundle_reconstruct_3d_point(pts, Ps);
+      if (debug_)
+        vcl_cout << "Pi[" << ipt << "]= (" << X3d.x()
+                 << ' ' << X3d.y() << ' ' << X3d.z()
+                 << ")\n";
+      //Get the displacement between the current 3d point and the
+      //least-squares reconstruction
+      bugl_normal_point_3d_sptr p3d_sptr = curve_3d_.get_point(ipt);
+      vnl_double_3 dX(X3d.x() - p3d_sptr->x(),
+                      X3d.y() - p3d_sptr->y(),
+                      X3d.z() - p3d_sptr->z());
+      if (debug_)
+        vcl_cout << "3dERROR " << dX.magnitude() << '\n';
+      if (p3d_sptr->exists()&&dX.magnitude()>3)//JLM
+      {
+        if (debug_)
+          vcl_cout << "Killing [" << ipt
+                   << "]= (" << X3d.x()
+                   << ' ' << X3d.y() << ' ' << X3d.z()
+                   << ")\n";
+        p3d_sptr->set_existence(false);
+        continue;
+      }
+#ifdef DEBUG
+      vcl_cout << "dX( " << dX[0] << ' ' << dX[1] << ' ' << dX[2] // << ")\n";
+#endif
+
+      //incrementally update the covariance matrix
+      vnl_double_3x3 Sigma3d = p3d_sptr->get_covariant_matrix();
+      Sigma3d = Sigma3d*(cur_pos_-1.0)/(double)cur_pos_;
+      for (int m = 0; m<3; m++)
+        for (int n = 0; n<3; n++)
+          Sigma3d[m][n] += dX[m]*dX[n] /(cur_pos_);
+      //replace the point with the least-squares estimate
+      p3d_sptr->set_point(X3d);
+      p3d_sptr->set_covariant_matrix(Sigma3d);
     }
+  }
 }
-#endif 
+#endif
 //end of joe inc 2
 void brct_epi_reconstructor::read_data(const char *fname)
 {
@@ -845,22 +847,23 @@ vcl_vector<double> brct_epi_reconstructor::read_timestamp_file(char *fname)
   return times;
 }
 
-void 
+void
 brct_epi_reconstructor::add_track(vcl_vector<vdgl_digital_curve_sptr> const& track)
 {
   tracks_.push_back(track);
 }
 
 //----------------------------------------------------------------------
-//: read a set of curves corresponding to tracked edge contours
-//  each "contour" is the curve in a given image frame
+//: read a set of curves corresponding to tracked edge contours.
+//  Each "contour" is the curve in a given image frame.
 //  The file format is:
+// \verbatim
 // CURVE
 // [BEGIN CONTOUR]
 // EDGE_COUNT=150
 // [202, 298.257]   -68.673 13.1904 ([edgel position]  angle   gradient mag)
 //   ...
-//   ... 
+//   ...
 //   ...
 // [END CONTOUR]
 // [BEGIN CONTOUR]
@@ -869,6 +872,7 @@ brct_epi_reconstructor::add_track(vcl_vector<vdgl_digital_curve_sptr> const& tra
 // ...
 // [END CONTOUR]
 // END CURVE
+// \endverbatim
 vcl_vector<vdgl_digital_curve_sptr> brct_epi_reconstructor::read_track_file(char *fname)
 {
   vcl_ifstream fp(fname);
@@ -936,22 +940,23 @@ vcl_vector<vdgl_digital_curve_sptr> brct_epi_reconstructor::read_track_file(char
 //  step.  The initial projection matrix is assumed to be the identity
 //  camera. The camera at the first time step is deterimined from the
 //  relation,
-//   
+// \verbatim
 //           _    _        _          _   _  _
 //          | w ex |      | 1  0  0  0 | | Tx |
 //          | w ey | = [K]| 0  1  0  0 | | Ty |
 //          |  w   |      | 0  0  1  0 | | Tz |
 //           -    -        -           - | 1  |
 //                                        -  -
+// \endverbatim
 void brct_epi_reconstructor::init_velocity()
 {
   vcl_vector<vgl_homg_line_2d<double> > lines;
 
   if (!e_) //if epipole is not initialized
-    {
-      vcl_cerr<<"epipole is not initialized\n";
-      return;
-    }
+  {
+    vcl_cerr<<"epipole is not initialized\n";
+    return;
+  }
   vnl_double_3 e((*e_)[0],(*e_)[1],1.0);//projective point.
   init_cam_intrinsic();
 
@@ -972,10 +977,9 @@ void brct_epi_reconstructor::init_velocity()
   X_[1] = T[1];
   X_[2] = T[2];
 
-
   double dt = time_tick_[1]-time_tick_[0];
   //the camera motion is opposite in sign to the object motion
-  //we imagine the camera is moving to the left as the vehicle is 
+  //we imagine the camera is moving to the left as the vehicle is
   //moving to the right.
   X_[3] = -T[0] /dt;
   X_[4] = -T[1] /dt;
@@ -1058,7 +1062,7 @@ vcl_vector<vgl_point_2d<double> > brct_epi_reconstructor::get_cur_observes()
 
 vcl_vector<vgl_point_2d<double> > brct_epi_reconstructor::get_joe_cur_observes()
 {
-  vcl_vector<bugl_gaussian_point_2d<double> > pts = 
+  vcl_vector<bugl_gaussian_point_2d<double> > pts =
     this->get_cur_joe_observes(cur_pos_);
 
   int Np = pts.size();
@@ -1072,7 +1076,7 @@ vcl_vector<vgl_point_2d<double> > brct_epi_reconstructor::get_joe_cur_observes()
 vcl_vector<vgl_point_2d<double> > brct_epi_reconstructor::get_joe_pre_observes()
 {
   assert(cur_pos_ > 0);
-  vcl_vector<bugl_gaussian_point_2d<double> > pts = 
+  vcl_vector<bugl_gaussian_point_2d<double> > pts =
     this->get_cur_joe_observes(cur_pos_-1);
 
   int Np = pts.size();
@@ -1084,7 +1088,7 @@ vcl_vector<vgl_point_2d<double> > brct_epi_reconstructor::get_joe_pre_observes()
 
 vcl_vector<vgl_point_2d<double> > brct_epi_reconstructor::get_joe_next_observes()
 {
-  vcl_vector<bugl_gaussian_point_2d<double> > pts = 
+  vcl_vector<bugl_gaussian_point_2d<double> > pts =
     this->get_cur_joe_observes(cur_pos_+1);
 
   int Np = pts.size();
@@ -1102,7 +1106,8 @@ vcl_vector<vgl_point_2d<double> > brct_epi_reconstructor::get_pre_observes()
 
   int c = tracks_.size();
 
-  for (int t = 0; t<c; t++){
+  for (int t = 0; t<c; t++)
+  {
     vdgl_digital_curve_sptr dc = tracks_[t][(cur_pos_-1)%queue_size_];
     vdgl_interpolator_sptr interp = dc->get_interpolator();
     vdgl_edgel_chain_sptr  ec = interp->get_edgel_chain();
@@ -1147,8 +1152,8 @@ vnl_matrix<double> brct_epi_reconstructor::get_predicted_curve()
 
 vcl_vector<vnl_matrix<double> > brct_epi_reconstructor::get_back_projection() const
 {
- vcl_vector<vnl_matrix<double> > res(memory_size_);
- for (int f=0; f<memory_size_; f++)
+  vcl_vector<vnl_matrix<double> > res(memory_size_);
+  for (int f=0; f<memory_size_; f++)
   {
     vnl_double_3x4 P = get_projective_matrix(motions_[f]);
 
@@ -1166,6 +1171,7 @@ vcl_vector<vnl_matrix<double> > brct_epi_reconstructor::get_back_projection() co
 
   return res;
 }
+
 //original code
 vgl_point_2d<double> brct_epi_reconstructor::get_cur_epipole() const
 {
@@ -1214,7 +1220,7 @@ double brct_epi_reconstructor::matched_point_prob(vnl_double_2& z, vnl_double_2&
     return vcl_exp(-d2/2);
 }
 
-//: The state transition matrix 
+//: The state transition matrix
 vnl_matrix_fixed<double, 6, 6> brct_epi_reconstructor::get_transit_matrix(int i, int j)
 {
   assert(i>=0 && j>=0 && j>=i);
@@ -1238,16 +1244,16 @@ vnl_matrix_fixed<double, 6, 6> brct_epi_reconstructor::get_transit_matrix(int i,
 
 void brct_epi_reconstructor::print_track(const int track_index, const int frame)
 {
-  if(track_index>=tracks_.size())
+  if (track_index>=tracks_.size())
     return;
   vcl_vector<vdgl_digital_curve_sptr> track = tracks_[track_index];
-  if(frame>=track.size())
+  if (frame>=track.size())
     return;
-  for(vcl_vector<vdgl_digital_curve_sptr>::iterator cit = track.begin();
-      cit != track.end(); cit++)
-    {
-      vdgl_interpolator_sptr intp = (*cit)->get_interpolator();
-      vdgl_edgel_chain_sptr chain = intp->get_edgel_chain();
-      vcl_cout << *chain << "\n";
-    }
+  for (vcl_vector<vdgl_digital_curve_sptr>::iterator cit = track.begin();
+       cit != track.end(); cit++)
+  {
+    vdgl_interpolator_sptr intp = (*cit)->get_interpolator();
+    vdgl_edgel_chain_sptr chain = intp->get_edgel_chain();
+    vcl_cout << *chain << '\n';
+  }
 }
