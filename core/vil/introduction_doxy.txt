@@ -162,8 +162,9 @@ vil2_image_view<vil_byte> filtered_image = vil2_transpose(tmp_image2);
 * - vil2_assert_bilin_interp : Intepolate, using assert to check if in valid region
 * - vil2_safe_extend_bilin_interp : Interpolate, returning nearest edge value if outside
 *
-* Profiles can be sampled using
-* - vil2_sample_profile_bilin
+* Other methods of sampling include:
+* - vil2_sample_profile_bilin : Sample values along a line (using bilin. interpoloation)
+* - vil2_sample_grid_bilin : Sample values over a grid (using bilin. interpoloation)
 *
 * \section reg_im Registered images
 * These meet two needs, a common base class for 2D and 3D images, and a means of
