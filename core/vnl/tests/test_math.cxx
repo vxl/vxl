@@ -2,12 +2,22 @@
 #include <vnl/vnl_math.h>
 #include <vnl/vnl_complex.h>
 #include <testlib/testlib_test.h>
-#ifdef VCL_VC
-// This only seems to work if placed right near the top
-# pragma warning ( disable : 4756)
-#endif
 
-void test_math() {
+// Use these variables instead of compile time constants so that the
+// compiler won't warn about the intentional division by zero below.
+// Constants for one avoid warnings about loss of precision. Making
+// them global variables means that an optimizing compiler can't
+// figure out that the number is zero and warn anyway.
+float zero_f = 0.0f;
+float one_f = 1.0f;
+double zero_d = 0.0;
+double one_d = 1.0;
+long double zero_ld = 0.0;
+long double one_ld = 1.0;
+
+void test_math()
+{
+
   int n = -11;
   float f = -7.5;
   double d = -vnl_math::pi;
@@ -42,35 +52,18 @@ void test_math() {
   testlib_test_assert("exp(d*i) == -1", vnl_math_abs(e_ipi+1.0) < 1e-10);
   vcl_cout << vcl_endl;
 
-#ifdef VCL_VC
-# pragma warning ( push )
-# pragma warning ( disable : 4056)
-// can't seem to disable warning 4756
-#endif
   // Create Inf and -Inf:
-  float a1 = 1.0e33f/1.0e-33f;
-  float a2 = -1.0e33f/1.0e-33f;
-  double a3 = 1.0e300/1.0e-300;
-  double a4 = -1.0e300/1.0e-300;
-#ifdef VCL_VC
-#pragma warning ( pop )
-#endif
+  float a1 = one_f / zero_f;
+  float a2 = (-one_f) / zero_f;
+  double a3 = one_d / zero_d;
+  double a4 = (-one_d) / zero_d;
+  long double a5 = one_ld / zero_ld;
+  long double a6 = (-one_ld) / zero_ld;
 
-#if !defined(VCL_VC) // VC70 gives an "error C2124: divide or mod by zero".
-  long double a5 = (long double)1/(long double)0; // compiler warning
-  long double a6 = -(long double)1/(long double)0; // compiler warning
-#endif
-
-#if defined(__alpha__)
-  float b1 = 0.0f/0.0f; // compiler warning
-  double b2 = 0.0/0.0; // compiler warning
-  long double b3 = (long double)0.0/(long double)0.0; // compiler warning
-  int t = 0x7f800000; a1 = *((float*)(&t)); a2 = -a1;
-#else // this gives runtime errors on alpha
-  float b1 = vcl_sqrt(-1.0f);
-  double b2 = vcl_sqrt(-1.0);
-  long double b3 = vcl_sqrt((long double)-1.0);
-#endif
+  // Create NaN
+  float b1 = zero_f / zero_f;
+  double b2 = zero_d / zero_d;
+  long double b3 = zero_ld / zero_ld;
 
   testlib_test_assert(" isfinite(f)    ",  vnl_math_isfinite(f));
   testlib_test_assert(" isfinite(d)    ",  vnl_math_isfinite(d));
@@ -96,14 +89,13 @@ void test_math() {
   testlib_test_assert("!isinf(0/0d)    ", !vnl_math_isinf(b2));
   testlib_test_assert(" isnan(0/0d)    ",  vnl_math_isnan(b2));
 
-#if !defined(VCL_VC)
   testlib_test_assert("!isfinite(1/0l) ", !vnl_math_isfinite(a5));
   testlib_test_assert(" isinf(1/0l)    ",  vnl_math_isinf(a5));
   testlib_test_assert("!isnan(1/0l)    ", !vnl_math_isnan(a5));
   testlib_test_assert("!isfinite(-1/0l)", !vnl_math_isfinite(a6));
   testlib_test_assert(" isinf(-1/0l)   ",  vnl_math_isinf(a6));
   testlib_test_assert("!isnan(-1/0l)   ", !vnl_math_isnan(a6));
-#endif
+
   testlib_test_assert("!isfinite(0/0l) ", !vnl_math_isfinite(b3));
   testlib_test_assert("!isinf(0/0l)    ", !vnl_math_isinf(b3));
   testlib_test_assert(" isnan(0/0l)    ",  vnl_math_isnan(b3));
