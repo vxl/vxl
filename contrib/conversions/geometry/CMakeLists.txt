@@ -4,6 +4,6 @@ ENDIF(BUILD_TESTING)
 
 IF (WIN32)
   IF (NOT CYGWIN)
-    INCLUDE(${allvxl_SOURCE_DIR}/geometry/container/CMakeListsHeaders.txt)
+    INCLUDE(${allvxl_SOURCE_DIR}/conversions/geometry/CMakeListsHeaders.txt)
   ENDIF (NOT CYGWIN)
 ENDIF(WIN32)
