@@ -127,7 +127,7 @@ struct vil_file_format_storage
     unsigned c=0;
     while (l[c]!=0)
       delete l[c++];
-    delete l;
+    delete [] l;
     l=0;
   }
 };
