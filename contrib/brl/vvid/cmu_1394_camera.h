@@ -35,28 +35,26 @@ class cmu_1394_camera : public cmu_1394_camera_params, public C1394Camera
   ~cmu_1394_camera();
 
   //camera status
-  bool get_camera_present(){return _camera_present;}
-  bool get_running(){return _running;}
+  bool get_camera_present() const { return camera_present_; }
+  bool get_running() const { return running_; }
   //basic camera operations
   void update_settings();
   bool init(int node);
-  void  start();
-  void  stop();
+  void start();
+  void stop();
   bool get_frame();
-  bool  get_rgb_image(vil_memory_image_of<vil_rgb<unsigned char> >& im,
-                      int pixel_sample_interval=1, bool reread = true);
-  bool  get_monochrome_image(vil_memory_image_of<unsigned char>& im,
-                             int pixel_sample_interval =1, bool reread = true);
+  bool get_rgb_image(vil_memory_image_of<vil_rgb<unsigned char> >& im,
+                     int pixel_sample_interval=1, bool reread = true);
+  bool get_monochrome_image(vil_memory_image_of<unsigned char>& im,
+                            int pixel_sample_interval =1, bool reread = true);
   friend vcl_ostream& operator << (vcl_ostream& os, const cmu_1394_camera& c);
+
  private:
-  //internal methods
-
   //camera status flags
-  bool _link_failed;
-  bool _camera_present;
-  bool _running;
-  bool _image_valid;
+  bool link_failed_;
+  bool camera_present_;
+  bool running_;
+  bool image_valid_;
 };
-
 
 #endif // cmu_1394_camera_h_

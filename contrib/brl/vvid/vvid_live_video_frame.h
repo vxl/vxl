@@ -32,14 +32,14 @@ class vvid_live_video_frame : public vbl_ref_count
   ~vvid_live_video_frame();
   //camera manipulation
   void set_camera_params(const cmu_1394_camera_params& cp);
-  cmu_1394_camera_params get_camera_params(){return (cmu_1394_camera_params)_cam;}
+  cmu_1394_camera_params get_camera_params() const { return (const cmu_1394_camera_params)cam_; }
   bool attach_live_video();
   void start_live_video();
   void update_frame();
   void stop_live_video();
 
   //: Frame state, i.e. is live and capturing frames
-  bool get_frame_live(){return _live;}
+  bool get_frame_live() const { return live_; }
   //: Access to next live camera frames. Causes the camera to take a new frame
   void get_camera_rgb_image(vil_memory_image_of< vil_rgb<unsigned char> >& im,
                             int pix_sample_interval = 1);
@@ -62,24 +62,23 @@ class vvid_live_video_frame : public vbl_ref_count
                               vil_memory_image_of<unsigned char>& im);
 
   //: Handy pointers to the frame tableaux
-  vgui_image_tableau_sptr get_image_tableau(){return _itab;}
-  vgui_easy2D_tableau_sptr get_easy2D_tableau(){return _e2d;}
-  vgui_viewer2D_tableau_sptr get_viewer2D_tableau(){return _v2d;}
+  vgui_image_tableau_sptr get_image_tableau(){return itab_;}
+  vgui_easy2D_tableau_sptr get_easy2D_tableau(){return e2d_;}
+  vgui_viewer2D_tableau_sptr get_viewer2D_tableau(){return v2d_;}
 
  private:
-  //utility functions
   //status flags
-  bool _live;//video is live
+  bool live_;//video is live
   //the live camera
-  cmu_1394_camera _cam;
-  int _pixel_sample_interval;//default pixel sample spacing
-  //:the tableau heirarchy
+  cmu_1394_camera cam_;
+  int pixel_sample_interval_;//default pixel sample spacing
+  //:the tableau hierarchy
   // Local pointers to the camera image in the image_tableau
-  vil_memory_image_of< vil_rgb<unsigned char> > _rgb_frame;
-  vil_memory_image_of< unsigned char > _mono_frame;
-  vgui_image_tableau_sptr _itab;
-  vgui_easy2D_tableau_sptr _e2d;
-  vgui_viewer2D_tableau_sptr _v2d;
+  vil_memory_image_of< vil_rgb<unsigned char> > rgb_frame_;
+  vil_memory_image_of< unsigned char > mono_frame_;
+  vgui_image_tableau_sptr itab_;
+  vgui_easy2D_tableau_sptr e2d_;
+  vgui_viewer2D_tableau_sptr v2d_;
 };
 
 #endif // vvid_live_video_frame_h_

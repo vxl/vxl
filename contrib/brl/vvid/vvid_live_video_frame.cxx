@@ -8,12 +8,12 @@
 vvid_live_video_frame::vvid_live_video_frame(int node,
                                              int pixel_sample_interval,
                                              const cmu_1394_camera_params& cp)
-  : _cam(node, cp)
+  : cam_(node, cp)
 {
-  _live = false;
-  _pixel_sample_interval = pixel_sample_interval;
-  _itab = 0;
-  _e2d = 0;
+  live_ = false;
+  pixel_sample_interval_ = pixel_sample_interval;
+  itab_ = 0;
+  e2d_ = 0;
 }
 
 vvid_live_video_frame::~vvid_live_video_frame()
@@ -22,17 +22,17 @@ vvid_live_video_frame::~vvid_live_video_frame()
 
 void vvid_live_video_frame::set_camera_params(const cmu_1394_camera_params& cp)
 {
-  if (!_cam.get_camera_present())
+  if (!cam_.get_camera_present())
     {
       vcl_cout << "In vvid_live_video_frame::set_camera_params() - warning, "
                << "no camera present, but param values were reassigned\n";
       return;
     }
-  bool live =_live;
+  bool live =live_;
   if (live)
     this->stop_live_video();
-  _cam.set_params(cp);
-  _cam.update_settings();
+  cam_.set_params(cp);
+  cam_.update_settings();
 
   if (live)
     this->start_live_video();
@@ -40,7 +40,7 @@ void vvid_live_video_frame::set_camera_params(const cmu_1394_camera_params& cp)
 
 bool vvid_live_video_frame::attach_live_video()
 {
-  if (!_cam.get_camera_present())
+  if (!cam_.get_camera_present())
     {
       vcl_cout << "In vvid_live_video_frame::attach_live_video() - "
                << "no camera present\n";
@@ -48,70 +48,70 @@ bool vvid_live_video_frame::attach_live_video()
     }
 
   //Build the tableaux
-  _itab= vgui_image_tableau_new();
-  _e2d = vgui_easy2D_tableau_new(_itab);
-  _v2d = vgui_viewer2D_tableau_new(_e2d);
+  itab_= vgui_image_tableau_new();
+  e2d_ = vgui_easy2D_tableau_new(itab_);
+  v2d_ = vgui_viewer2D_tableau_new(e2d_);
   return true;
 }
 
 void vvid_live_video_frame::start_live_video()
 {
-  if (!_cam.get_camera_present())
+  if (!cam_.get_camera_present())
     {
       vcl_cout << "In vvid_live_video_frame::start_live_video() - "
                << "no camera present\n";
       return;
     }
-  _cam.start();
-  _live = true;
+  cam_.start();
+  live_ = true;
 
-  if (_cam.rgb_)
+  if (cam_.rgb_)
     {
-    _cam.get_rgb_image(_rgb_frame, _pixel_sample_interval, true);
-    _itab->set_image(_rgb_frame);
+    cam_.get_rgb_image(rgb_frame_, pixel_sample_interval_, true);
+    itab_->set_image(rgb_frame_);
     }
   else
     {
-      _cam.get_monochrome_image(_mono_frame, _pixel_sample_interval, true);
-      _itab->set_image(_mono_frame);
+      cam_.get_monochrome_image(mono_frame_, pixel_sample_interval_, true);
+      itab_->set_image(mono_frame_);
     }
 }
 
 void vvid_live_video_frame::update_frame()
 {
-  if (_cam.rgb_)
-    _cam.get_rgb_image(_rgb_frame, _pixel_sample_interval, true);
+  if (cam_.rgb_)
+    cam_.get_rgb_image(rgb_frame_, pixel_sample_interval_, true);
   else
-    _cam.get_monochrome_image(_mono_frame, _pixel_sample_interval, true);
-  _itab->reread_image();
-  _v2d->post_redraw();
+    cam_.get_monochrome_image(mono_frame_, pixel_sample_interval_, true);
+  itab_->reread_image();
+  v2d_->post_redraw();
   vgui::run_till_idle();
 }
 
 void vvid_live_video_frame::stop_live_video()
 {
-  if (!_cam.get_camera_present())
+  if (!cam_.get_camera_present())
     {
       vcl_cout << "In vvid_live_video_frame::stop_live_video() - "
                << "no camera present\n";
       return;
     }
-  _cam.stop();
-  _live=false;
+  cam_.stop();
+  live_=false;
 }
 
 void vvid_live_video_frame::
 get_camera_rgb_image(vil_memory_image_of< vil_rgb<unsigned char> >& im,
                      int pix_sample_interval)
 {
-  _cam.get_rgb_image(im, pix_sample_interval, false);
+  cam_.get_rgb_image(im, pix_sample_interval, false);
 }
 
 vil_memory_image_of< vil_rgb<unsigned char> >
 vvid_live_video_frame::get_current_rgb_image(int pix_sample_interval)
 {
   vil_memory_image_of< vil_rgb<unsigned char> > im;
-  _cam.get_rgb_image(im, pix_sample_interval, false);
+  cam_.get_rgb_image(im, pix_sample_interval, false);
   return im;
 }
 
@@ -119,14 +119,14 @@ bool vvid_live_video_frame::
 get_current_rgb_image(int pix_sample_interval,
                       vil_memory_image_of< vil_rgb<unsigned char> >& im)
 {
- return  _cam.get_rgb_image(im, pix_sample_interval, false);
+ return  cam_.get_rgb_image(im, pix_sample_interval, false);
 }
 
 vil_memory_image_of<unsigned char>
 vvid_live_video_frame::get_current_mono_image(int pix_sample_interval)
 {
   vil_memory_image_of<unsigned char> im;
-  _cam.get_monochrome_image(im, pix_sample_interval, false);
+  cam_.get_monochrome_image(im, pix_sample_interval, false);
   return im;
 }
 
@@ -134,5 +134,5 @@ bool vvid_live_video_frame::
 get_current_mono_image(int pix_sample_interval,
                        vil_memory_image_of<unsigned char>& im )
 {
-  return _cam.get_monochrome_image(im, pix_sample_interval, false);
+  return cam_.get_monochrome_image(im, pix_sample_interval, false);
 }
