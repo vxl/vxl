@@ -86,15 +86,16 @@ inline void vil_convolve_edge_1d(const srcT* src, unsigned n, vcl_ptrdiff_t s_st
                                  vcl_ptrdiff_t kstep, accumT,
                                  vil_convolve_boundary_option option)
 {
-  if (option==vil_convolve_ignore_edge) return;
-  if (option==vil_convolve_no_extend)
+  switch (option)
   {
+  case vil_convolve_ignore_edge:
+    return;
+  case vil_convolve_no_extend:
     // Initialise first elements of row to zero
     for (vcl_ptrdiff_t i=-k_hi;i<0;++i,dest+=d_step)
       *dest = 0;
-  }
-  else if (option==vil_convolve_zero_extend)
-  {
+    return;
+  case vil_convolve_zero_extend:
     // Assume src[i]==0 for i<0
     for (vcl_ptrdiff_t i=-k_hi+1;i<=0;++i,dest+=d_step,src+=s_step)
     {
@@ -105,72 +106,75 @@ inline void vil_convolve_edge_1d(const srcT* src, unsigned n, vcl_ptrdiff_t s_st
         sum+= (accumT)((*s)*(*k));
       *dest=(destT)sum;
     }
-  }
-  else if (option==vil_convolve_constant_extend)
-  {
-    // Assume src[i]=src[0] for i<0
-    vcl_ptrdiff_t i_max = k_hi-1;
-    for (vcl_ptrdiff_t i=0;i<=i_max;++i)
+    return;
+  case vil_convolve_constant_extend:
     {
-      accumT sum=0;
-      for (vcl_ptrdiff_t j=-k_hi;j<=-k_lo;++j)
+      // Assume src[i]=src[0] for i<0
+      vcl_ptrdiff_t i_max = k_hi-1;
+      for (vcl_ptrdiff_t i=0;i<=i_max;++i)
       {
-        if ((i+j)<0) sum+=(accumT)(src[0]*kernel[j*(-kstep)]);
-        else         sum+=(accumT)(src[(i+j)*s_step]*kernel[j*(-kstep)]);
+        accumT sum=0;
+        for (vcl_ptrdiff_t j=-k_hi;j<=-k_lo;++j)
+        {
+          if ((i+j)<0) sum+=(accumT)(src[0]*kernel[j*(-kstep)]);
+          else         sum+=(accumT)(src[(i+j)*s_step]*kernel[j*(-kstep)]);
+        }
+        dest[i*d_step]=(destT)sum;
       }
-      dest[i*d_step]=(destT)sum;
+      return;
     }
-  }
-  else if (option==vil_convolve_reflect_extend)
-  {
-    // Assume src[i]=src[0] for i<0
-    vcl_ptrdiff_t i_max = k_hi-1;
-    for (vcl_ptrdiff_t i=0;i<=i_max;++i)
+  case vil_convolve_reflect_extend:
     {
-      accumT sum=0;
-      for (vcl_ptrdiff_t j=-k_hi;j<=-k_lo;++j)
+      // Assume src[i]=src[0] for i<0
+      vcl_ptrdiff_t i_max = k_hi-1;
+      for (vcl_ptrdiff_t i=0;i<=i_max;++i)
       {
-        if ((i+j)<0) sum+=(accumT)(src[-(i+j)*s_step]*kernel[j*(-kstep)]);
-        else         sum+=(accumT)(src[(i+j)*s_step]*kernel[j*(-kstep)]);
+        accumT sum=0;
+        for (vcl_ptrdiff_t j=-k_hi;j<=-k_lo;++j)
+        {
+          if ((i+j)<0) sum+=(accumT)(src[-(i+j)*s_step]*kernel[j*(-kstep)]);
+          else         sum+=(accumT)(src[(i+j)*s_step]*kernel[j*(-kstep)]);
+        }
+        dest[i*d_step]=(destT)sum;
       }
-      dest[i*d_step]=(destT)sum;
+      return;
     }
-  }
-  else if (option==vil_convolve_periodic_extend)
-  {
-    // Assume src[i]=src[n+i] for i<0
-    vcl_ptrdiff_t i_max = k_hi-1;
-    for (int i=0;i<=i_max;++i)
+  case vil_convolve_periodic_extend:
     {
-      accumT sum=0;
-      for (vcl_ptrdiff_t j=k_hi;j>=k_lo;--j)
-        sum+=(accumT)(src[((i-j+n)%n)*s_step]*kernel[j*kstep]);
-      dest[i*d_step]=(destT)sum;
+      // Assume src[i]=src[n+i] for i<0
+      vcl_ptrdiff_t i_max = k_hi-1;
+      for (int i=0;i<=i_max;++i)
+      {
+        accumT sum=0;
+        for (vcl_ptrdiff_t j=k_hi;j>=k_lo;--j)
+          sum+=(accumT)(src[((i-j+n)%n)*s_step]*kernel[j*kstep]);
+        dest[i*d_step]=(destT)sum;
+      }
+      return;
     }
-  }
-  else if (option==vil_convolve_trim)
-  {
-    // Truncate and reweigh kernel
-    accumT k_sum_all=0;
-    for (vcl_ptrdiff_t j=-k_hi;j<=-k_lo;++j) k_sum_all+=(accumT)(kernel[j*(-kstep)]);
+  case vil_convolve_trim:
+    {
+      // Truncate and reweigh kernel
+      accumT k_sum_all=0;
+      for (vcl_ptrdiff_t j=-k_hi;j<=-k_lo;++j) k_sum_all+=(accumT)(kernel[j*(-kstep)]);
 
-    vcl_ptrdiff_t i_max = k_hi-1;
-    for (vcl_ptrdiff_t i=0;i<=i_max;++i)
-    {
-      accumT sum=0;
-      accumT k_sum=0;
-      // Sum elements which overlap src
-      // ie i+j>=0  (so j starts at -i)
-      for (vcl_ptrdiff_t j=-i;j<=-k_lo;++j)
+      vcl_ptrdiff_t i_max = k_hi-1;
+      for (vcl_ptrdiff_t i=0;i<=i_max;++i)
       {
-        sum+=(accumT)(src[(i+j)*s_step]*kernel[j*(-kstep)]);
-        k_sum += (accumT)(kernel[j*(-kstep)]);
+        accumT sum=0;
+        accumT k_sum=0;
+        // Sum elements which overlap src
+        // ie i+j>=0  (so j starts at -i)
+        for (vcl_ptrdiff_t j=-i;j<=-k_lo;++j)
+        {
+          sum+=(accumT)(src[(i+j)*s_step]*kernel[j*(-kstep)]);
+          k_sum += (accumT)(kernel[j*(-kstep)]);
+        }
+        dest[i*d_step]=(destT)(sum*k_sum_all/k_sum);
       }
-      dest[i*d_step]=(destT)(sum*k_sum_all/k_sum);
+      return;
     }
-  }
-  else
-  {
+  default:
     vcl_cout<<"vil_convolve_edge_1d: "
             <<"Sorry, can't deal with supplied edge option.\n";
     vcl_abort();
