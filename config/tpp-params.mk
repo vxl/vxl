@@ -130,7 +130,7 @@ ifeq ($(strip $(HAS_DCMTK))-$(strip $(DCMTK_LIB_DIR)),1-)
   ifndef CENTRAL_LIBDIR
     DCMTK_LIB_DIR := $(IUEROOT_libbase)/v3p/$(tj_libdir)
   endif
-  DCMTK_LIBS := -ldcmtk
+  DCMTK_LIBS := -ldcmtk $(ZLIB_LIBS)
 endif
 
 # NETLIB: if none supplied, use the one in v3p
