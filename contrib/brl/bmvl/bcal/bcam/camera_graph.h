@@ -18,6 +18,7 @@
 
 #include <vcl_cassert.h>
 #include <vcl_iostream.h>
+#include <vcl_cstdlib.h>
 #include <vcsl/vcsl_graph.h>
 #include <vcsl/vcsl_spatial.h>
 #include <vcsl/vcsl_spatial_sptr.h>
