@@ -261,10 +261,10 @@ SOURCE=.\vtol_zero_chain.cxx
 SOURCE=.\vtol_cycle_processor.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\../vdgl/vdgl_intensity_face.cxx
+SOURCE=.\vtol_intensity_face.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vbl_smart_ptr+vdgl_intensity_face-.cxx
+SOURCE=.\Templates/vbl_smart_ptr+vtol_intensity_face-.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\Templates/vtol_list_functions+vtol_block~-.cxx
@@ -417,10 +417,10 @@ SOURCE=.\vtol_zero_chain_sptr.h
 SOURCE=.\vtol_cycle_processor.h
 # End Source File
 # Begin Source File
-SOURCE=.\../vdgl/vdgl_intensity_face.h
+SOURCE=.\vtol_intensity_face.h
 # End Source File
 # Begin Source File
-SOURCE=.\../vdgl/vdgl_intensity_face_sptr.h
+SOURCE=.\vtol_intensity_face_sptr.h
 # End Source File
 # End Group
 # End Target
