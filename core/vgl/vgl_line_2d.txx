@@ -1,4 +1,4 @@
-// This is vxl/vgl/vgl_line_2d.txx
+// This is core/vgl/vgl_line_2d.txx
 #ifndef vgl_line_2d_txx_
 #define vgl_line_2d_txx_
 //:
@@ -45,29 +45,37 @@ void vgl_line_2d<Type>::get_two_points(vgl_point_2d<Type> &p1, vgl_point_2d<Type
 }
 
 template <class Type>
-double vgl_line_2d<Type>::tangent_angle() const
+double vgl_line_2d<Type>::slope_degrees() const
 {
- double deg_per_rad = 180/3.14159265358979323846;
- double dy = a();
- double dx = -b();
- double atn = vcl_atan2(dy,dx);
- return deg_per_rad*atn;
+  static const double deg_per_rad = 45.0/vcl_atan2(1.0,1.0);
+  // do special cases separately, to avoid rounding errors:
+  if (a() == 0) return b()<0 ? 0.0 : 180.0;
+  if (b() == 0) return a()<0 ? -90.0 : 90.0;
+  if (a() == b()) return a()<0 ? -45.0 : 135.0;
+  if (a()+b() == 0) return a()<0 ? -135.0 : 45.0;
+  // general case:
+  return deg_per_rad * vcl_atan2(double(a()),-double(b()));
+}
+
+template <class Type>
+double vgl_line_2d<Type>::slope_radians() const
+{
+  return vcl_atan2(double(a()),-double(b()));
 }
 
 template <class Type>
 bool vgl_line_2d<Type>::normalize()
 {
-
-  double mag_sq = a_*a_ + b_*b_;
-  double mag = vcl_sqrt(mag_sq);
-  if(mag)
-    {
-      a_ = a_/mag;
-      b_ = b_/mag;
-      c_ = c_/mag;
-      return true;
-    }
-  return false;
+  double mag = a_*a_ + b_*b_;
+  if (mag==1.0) return true;
+  if (mag==0.0) return false;
+  mag = 1.0/vcl_sqrt(mag);
+  a_ = Type(a_*mag);
+  b_ = Type(b_*mag);
+  c_ = Type(c_*mag);
+  mag = a_*a_ + b_*b_;
+  // return false when normalisation did not succeed, e.g. when Type == int:
+  return mag>0.99 && mag<1.01;
 }
 
 #define vp(os,v,s) { os<<' '; if ((v)>0) os<<'+'; if ((v)&&!s[0]) os<<(v); else { \
