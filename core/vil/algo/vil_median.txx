@@ -21,8 +21,8 @@ void vil2_median(const vil2_image_view<T>& src_image,
   unsigned nj = src_image.nj();
   dest_image.set_size(ni,nj,1);
 
-  unsigned s_istep = src_image.istep(),  s_jstep = src_image.jstep();
-  unsigned d_istep = dest_image.istep(), d_jstep = dest_image.jstep();
+  vcl_ptrdiff_t s_istep = src_image.istep(),  s_jstep = src_image.jstep();
+  vcl_ptrdiff_t d_istep = dest_image.istep(), d_jstep = dest_image.jstep();
 
   const T* src_row0 = src_image.top_left_ptr();
   T* dest_row0 = dest_image.top_left_ptr();
@@ -30,7 +30,7 @@ void vil2_median(const vil2_image_view<T>& src_image,
   vcl_vector<int> offset;
   vil2_compute_offsets(offset,element,s_istep,s_jstep);
 
-  vcl_vector<T> value_wkspce(offset.size());
+  vcl_vector<T> value_wkspce;
 
   // Define box in which all element will be valid
   int ilo = -element.min_i();
@@ -55,6 +55,9 @@ void vil2_median(const vil2_image_view<T>& src_image,
     for (unsigned int j=jhi+1;j<nj;++j)
       dest_image(i,j,0)=vil2_sorted_value(src_image,0,element,i,j,value_wkspce,0.5);
 
+  // No bounds checks in the interior, so we must make sure there is enough space in
+  // the workspace.
+  value_wkspce.resize( offset.size() );
   int rank = int(0.5*(offset.size()-1));
   for (int j=jlo;j<=jhi;++j)
   {
