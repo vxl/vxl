@@ -118,8 +118,10 @@ bmrf_node::compute_probability()
   for ( arc_iterator a_itr = this->begin(TIME);
         a_itr != this->end(TIME); ++a_itr )
   {
-    bmrf_gamma_func_sptr gamma_func = new bmrf_const_gamma_func((*a_itr)->induced_gamma());
-    (*a_itr)->probability_ = this->probability(gamma_func);
+    // use the gamma function associated with the arc
+    bmrf_gamma_func_sptr gamma_func = (*a_itr)->gamma_func();
+    (*a_itr)->probability_ = this->probability(gamma_func, -1)
+                            *this->probability(gamma_func, 1);
 
     sum += (*a_itr)->probability_;
     // select the probability of the best neighbor
@@ -147,8 +149,10 @@ bmrf_node::prune_by_probability(double threshold, bool relative)
   for ( arc_iterator a_itr = this->begin(TIME);
         a_itr != this->end(TIME); ++a_itr )
   {
-    bmrf_gamma_func_sptr gamma_func = new bmrf_const_gamma_func((*a_itr)->induced_gamma());
-    pmf.push_back(vcl_pair<double,arc_iterator>(this->probability(gamma_func),a_itr));
+    // use the gamma function associated with the arc
+    bmrf_gamma_func_sptr gamma_func = (*a_itr)->gamma_func();
+    pmf.push_back(vcl_pair<double,arc_iterator>( this->probability(gamma_func,-1)
+                                                 *this->probability(gamma_func,1), a_itr));
   }
 
   // Sort the results by probability
@@ -214,36 +218,25 @@ bmrf_node::prune_directed()
 
 //: Calculate the error in similarity between this transformed by \p xform
 double
-bmrf_node::probability(const bmrf_gamma_func_sptr& gamma)
+bmrf_node::probability(const bmrf_gamma_func_sptr& gamma, int time_step)
 {
-  // precompute the segment in the next and previous frames since
-  // this should make up most of the neighbors
-  bmrf_epi_seg_sptr prev_seg = bmrf_epi_transform(this->epi_seg(), gamma, -1.0);
-  bmrf_epi_seg_sptr next_seg = bmrf_epi_transform(this->epi_seg(), gamma, 1.0);
+  // precompute the transformed segment 
+  bmrf_epi_seg_sptr trans_seg = bmrf_epi_transform(this->epi_seg(), gamma, time_step);
   double prob = 0.0;
   double total_alpha = 0.0;
   for ( arc_iterator a_itr = this->begin(TIME); a_itr != this->end(TIME); ++a_itr ) {
+    if((*a_itr)->time_step() != time_step)
+      continue;
+
     bmrf_node_sptr neighbor = (*a_itr)->to();
-    int time_step = neighbor->frame_num() - this->frame_num();
-    double error;
-    switch (time_step) {
-     case -1:
-      error = bmrf_match_error(prev_seg, neighbor->epi_seg());
-      break;
-     case 1:
-      error = bmrf_match_error(next_seg, neighbor->epi_seg());
-      break;
-     default:
-      // compute less likely transformations as needed
-      bmrf_epi_seg_sptr xform_seg = bmrf_epi_transform(this->epi_seg(), gamma, double(time_step));
-      error = bmrf_match_error(xform_seg, neighbor->epi_seg());
-    }
+    double error = bmrf_match_error(trans_seg, neighbor->epi_seg());
+
     double alpha_range = (*a_itr)->max_alpha_ - (*a_itr)->min_alpha_;
     double int_var = 0.001; // intensity variance
     prob += alpha_range * vcl_exp(-error/2.0 - (*a_itr)->avg_intensity_error_/(2.0*int_var));
     total_alpha += alpha_range;
   }
-  return (prob / total_alpha) * 0.398942; // 1/sqrt(2*pi)
+  return (prob / total_alpha);
 }
 
 

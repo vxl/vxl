@@ -58,7 +58,7 @@ class bmrf_node : public vbl_ref_count
   bmrf_gamma_func_sptr gamma();
 
   //: Calculate the probability given the gamma function and neighbors
-  double probability(const bmrf_gamma_func_sptr& gamma);
+  double probability(const bmrf_gamma_func_sptr& gamma, int time_step);
 
   //: Returns an iterator to the beginning of the type \p type neighbors
   // \note if \p type is ALL then iteration is over all types
