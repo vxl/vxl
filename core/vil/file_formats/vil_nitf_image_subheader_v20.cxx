@@ -39,20 +39,20 @@ vil_nitf_image_subheader_v20::vil_nitf_image_subheader_v20()
 //====================================================================
 //: Builds a Version 2.0 vil_nitf_image_subheader from an arbitrary header.
 //====================================================================
-vil_nitf_image_subheader_v20::vil_nitf_image_subheader_v20 (const vil_nitf_image_subheader& h)
+vil_nitf_image_subheader_v20::vil_nitf_image_subheader_v20(const vil_nitf_image_subheader& h)
 {
     init();
-    Copy ((vil_nitf_image_subheader*) &h);
+    Copy(&h);
 }
 
 //====================================================================
 //: Copy constructor for vil_nitf_image_subheader_v20.
 //====================================================================
-vil_nitf_image_subheader_v20::vil_nitf_image_subheader_v20 (const vil_nitf_image_subheader_v20& h)
+vil_nitf_image_subheader_v20::vil_nitf_image_subheader_v20(const vil_nitf_image_subheader_v20& h)
     : vil_nitf_image_subheader(h)
 {
     init();
-    FilledCopy (IDATIM_, GetVersion20Date());
+    FilledCopy(IDATIM_, GetVersion20Date());
 }
 
 vil_nitf_image_subheader_v20::~vil_nitf_image_subheader_v20()
@@ -92,7 +92,7 @@ int vil_nitf_image_subheader_v20::GetCloudCoverPercentage() const
 // \param file input stream
 // \return StatusCode == STATUS_GOOD if success
 
-StatusCode vil_nitf_image_subheader_v20::Read (vil_stream* file)
+StatusCode vil_nitf_image_subheader_v20::Read(vil_stream* file)
 {
     static vcl_string method_name = "vil_nitf_image_subheader_v20::Read: ";
 
@@ -374,7 +374,7 @@ StatusCode vil_nitf_image_subheader_v20::Read (vil_stream* file)
 
         if (error) break;
 
-        if (!GetInt (buffer, &ISYNC, 1, file) ||
+        if (!GetInt(buffer, &ISYNC, 1, file) ||
             (file->read(buffer,     1) < 1)  ||
             (!vcl_strpbrk(buffer, "BSPbsp")))
         {
@@ -399,17 +399,17 @@ StatusCode vil_nitf_image_subheader_v20::Read (vil_stream* file)
             (NBPR < 1)                            ||
             !get_unsigned(buffer, &NBPC, 4, file) ||
             (NBPC < 1)                            ||
-            !get_unsigned(buffer, &NPPBH, 4, file) ||
+            !get_unsigned(buffer,&NPPBH, 4, file) ||
             (NPPBH > 9999)         ||
-            !get_unsigned(buffer, &NPPBV, 4, file) ||
+            !get_unsigned(buffer,&NPPBV, 4, file) ||
             (NPPBV > 9999)         ||
             !get_unsigned(buffer, &NBPP, 2, file) ||
             (NBPP < 1) || (NBPP > 16)             ||
-            !GetInt (buffer, &DLVL,       3, file) ||
-            !GetInt (buffer, &ALVL,       3, file) ||
+            !GetInt(buffer, &DLVL,       3, file) ||
+            !GetInt(buffer, &ALVL,       3, file) ||
             (ALVL > 998)                          ||
-            !GetInt (buffer, &LOCrow,     5, file) ||
-            !GetInt (buffer, &LOCcolumn,  5, file) ||
+            !GetInt(buffer, &LOCrow,     5, file) ||
+            !GetInt(buffer, &LOCcolumn,  5, file) ||
             (file->read(IMAG,       4) < 4))
         {
             error = true;
@@ -418,7 +418,7 @@ StatusCode vil_nitf_image_subheader_v20::Read (vil_stream* file)
 
         // And finally, read any extended header information.
         //
-        if (!GetInt (buffer, &UDIDL_, 5, file))
+        if (!GetInt(buffer, &UDIDL_, 5, file))
         {
             error = true;
             break;
@@ -440,7 +440,7 @@ StatusCode vil_nitf_image_subheader_v20::Read (vil_stream* file)
         }
 
         int tmp;
-        if (!GetInt (buffer, &tmp, 5, file))
+        if (!GetInt(buffer, &tmp, 5, file))
         {
             error = true;
             break;
@@ -448,7 +448,7 @@ StatusCode vil_nitf_image_subheader_v20::Read (vil_stream* file)
 
         XSHD->XHDL = tmp;
 
-        if (XSHD->Read (file) != STATUS_GOOD)
+        if (XSHD->Read(file) != STATUS_GOOD)
         {
             error = true;
             break;
@@ -855,7 +855,7 @@ StatusCode vil_nitf_image_subheader_v20::Write(vil_stream* file)
                 vcl_string temp_str = imap.str();
                 UDIDL_ = temp_str.size();
                 UDID_ = new char[UDIDL_ + 1];
-                UDID_ = STRCPY (UDID_, temp_str.c_str());
+                UDID_ = STRCPY(UDID_, temp_str.c_str());
                 UDID_[UDIDL_] = '\0';
 
                 // Encode the RPC extension
@@ -928,9 +928,9 @@ StatusCode vil_nitf_image_subheader_v20::Write(vil_stream* file)
             (!vcl_strcmp(ISDWNG, "999998") &&
              file->write(ISDEVT, 40) < 40) ||
             !((ENCRYP == NOTENCRYPTED &&
-               file->write((char*)"0", 1)==1)     ||
+               file->write((const char*)"0", 1)==1)     ||
               (ENCRYP == ENCRYPTED &&
-               file->write((char*)"1", 1)==1))    ||
+               file->write((const char*)"1", 1)==1))    ||
             (file->write(ISORCE, 42) < 42) ||
             (NROWS > NBPC * NPPBV)      ||
             (!put_unsigned(buffer, NROWS, 8, file))     ||
@@ -941,7 +941,7 @@ StatusCode vil_nitf_image_subheader_v20::Write(vil_stream* file)
             break;
         }
 
-        char* pvtype = 0;
+        const char* pvtype = 0;
         if (PVTYPE_ == VIL_PIXEL_FORMAT_COMPLEX_FLOAT) pvtype = "C  ";
         else if (PVTYPE_== VIL_PIXEL_FORMAT_UINT_32 && ABPP==1) pvtype = "B  ";
         else if (PVTYPE_ == VIL_PIXEL_FORMAT_UINT_32) pvtype = "INT";
@@ -949,9 +949,9 @@ StatusCode vil_nitf_image_subheader_v20::Write(vil_stream* file)
         else if (PVTYPE_ == VIL_PIXEL_FORMAT_INT_32) pvtype = "SI ";
         else if (PVTYPE_ == VIL_PIXEL_FORMAT_UNKNOWN) pvtype = "U  ";
 
-        char* pjust = PJUST == PJUST_LEFT ? (char*)"L" : (char*)"R";
+        const char* pjust = PJUST == PJUST_LEFT ? "L" : "R";
 
-        char* icords = (char*)NULL;
+        const char* icords = 0;
         switch (ICORDS)
         {
             case GEOCENTRIC:    icords = "C"; break;
@@ -999,7 +999,7 @@ StatusCode vil_nitf_image_subheader_v20::Write(vil_stream* file)
         for (unsigned int n = 0; n < NICOM; n++)
         {
           const char *str_ptr = ICOM_[n].c_str();
-          if (file->write((void*)str_ptr, 80) < 80)
+          if (file->write(str_ptr, 80) < 80)
           {
             error = true;
             break;
@@ -1017,7 +1017,7 @@ StatusCode vil_nitf_image_subheader_v20::Write(vil_stream* file)
             break;
         }
 
-        if (!PutInt (buffer, NBANDS, 1, file) || NBANDS == 0)
+        if (!PutInt(buffer, NBANDS, 1, file) || NBANDS == 0)
         {
             error = true;
             break;
@@ -1028,7 +1028,7 @@ StatusCode vil_nitf_image_subheader_v20::Write(vil_stream* file)
                 (file->write(bands[n]->IFC,   1) < 1) ||
                 (bands[n]->IFC[0] != 'N')                 ||
                 (file->write(bands[n]->IMFLT, 3) < 3) ||
-                (!PutInt (buffer,bands[n]->NLUTS, 1, file)) ||
+                (!PutInt(buffer,bands[n]->NLUTS, 1, file)) ||
                 (bands[n]->NLUTS > 4))
             {
                 bands[n]->NLUTS = 0;
@@ -1037,7 +1037,7 @@ StatusCode vil_nitf_image_subheader_v20::Write(vil_stream* file)
             }
             if (bands[n]->NLUTS > 0)
             {
-                if (!PutInt (buffer, bands[n]->NELUT, 5, file) ||
+                if (!PutInt(buffer, bands[n]->NELUT, 5, file) ||
                     bands[n]->NELUT > MAX_UINT_16 ||
                     bands[n]->NELUT < 1)
                 {
@@ -1059,24 +1059,24 @@ StatusCode vil_nitf_image_subheader_v20::Write(vil_stream* file)
         }
         if (error) break;
 
-        char* imode = IMODE_== BLOCK_INTERLEAVED ? (char*)"B" : (char*)"S";
-        if (!PutInt (buffer, ISYNC,      1, file) ||
-            (file->write(imode, 1) < 1)  ||
-            !PutInt (buffer, NBPR, 4, file) ||
-            (NBPR < 1)                            ||
-            !PutInt (buffer, NBPC, 4, file) ||
-            (NBPC < 1)                            ||
-            !PutInt (buffer, NPPBH, 4, file) ||
-            (NPPBH > 9999)         ||
+        const char* imode = IMODE_== BLOCK_INTERLEAVED ? "B" : "S";
+        if (!PutInt(buffer, ISYNC,      1, file) ||
+            (file->write(imode, 1) < 1)          ||
+            !PutInt(buffer, NBPR, 4, file)       ||
+            (NBPR < 1)                           ||
+            !PutInt(buffer, NBPC, 4, file)       ||
+            (NBPC < 1)                           ||
+            !PutInt(buffer, NPPBH, 4, file)      ||
+            (NPPBH > 9999)                       ||
             !PutInt(buffer, NPPBV,      4, file) ||
-            (NPPBV > 9999)         ||
+            (NPPBV > 9999)                       ||
             !PutInt(buffer, NBPP,       2, file) ||
-            (NBPP < 1) || (NBPP > 16)             ||
-            !PutInt (buffer, DLVL,       3, file) ||
-            !PutInt (buffer, ALVL,       3, file) ||
-            (ALVL > 998)                          ||
-            !PutInt (buffer, LOCrow,     5, file) ||
-            !PutInt (buffer, LOCcolumn,  5, file) ||
+            (NBPP < 1) || (NBPP > 16)            ||
+            !PutInt(buffer, DLVL,       3, file) ||
+            !PutInt(buffer, ALVL,       3, file) ||
+            (ALVL > 998)                         ||
+            !PutInt(buffer, LOCrow,     5, file) ||
+            !PutInt(buffer, LOCcolumn,  5, file) ||
             (file->write(IMAG, 4) < 4))
         {
             error = true;
@@ -1085,7 +1085,7 @@ StatusCode vil_nitf_image_subheader_v20::Write(vil_stream* file)
 
         // And finally, write any extended header information.
         //
-        if (!PutInt (buffer, UDIDL_, 5, file))
+        if (!PutInt(buffer, UDIDL_, 5, file))
         {
             error = true;
             break;
@@ -1099,7 +1099,7 @@ StatusCode vil_nitf_image_subheader_v20::Write(vil_stream* file)
             }
         }
 
-        if (!PutInt (buffer, XSHD->XHDL, 5, file))
+        if (!PutInt(buffer, XSHD->XHDL, 5, file))
         {
             error = true;
             break;
@@ -1151,8 +1151,8 @@ void vil_nitf_image_subheader_v20::init()
 
     vcl_memset(initstr,' ',80);
 
-    STRNCPY (IM,  "IM",     2);
-    STRNCPY (IID, initstr, 10);
+    STRNCPY(IM,  "IM",     2);
+    STRNCPY(IID, initstr, 10);
 
     // We must fool SCCS, otherwise it will try to
     // be smart and interpret the percents in the string.
@@ -1160,7 +1160,7 @@ void vil_nitf_image_subheader_v20::init()
     // only string!
     vcl_time_t clock = vcl_time(NULL);
     vcl_tm *t_m = vcl_localtime(&clock);
-    // char* format = "%d%H%M%SZ%h%y";
+    // const char* format = "%d%H%M%SZ%h%y";
 
     STRNCPY(IDATIM_, initstr, 14);
     vcl_strftime(IDATIM_, 15, date_format, t_m);
@@ -1176,16 +1176,16 @@ void vil_nitf_image_subheader_v20::init()
     STRNCPY(ISDWNG, initstr,  6);
     STRNCPY(ISDEVT, initstr, 40);
     ENCRYP = NOTENCRYPTED;
-    STRNCPY (ISORCE, initstr, 42);
-    STRNCPY (IREP,   initstr,  8);       // Unique to v2.0.
-    STRNCPY (ICAT,   initstr,  8);       // Unique to v2.0.
+    STRNCPY(ISORCE, initstr, 42);
+    STRNCPY(IREP,   initstr,  8);       // Unique to v2.0.
+    STRNCPY(ICAT,   initstr,  8);       // Unique to v2.0.
     ICORDS = NONE;
-    STRNCPY (IGEOLO, initstr, 60);
+    STRNCPY(IGEOLO, initstr, 60);
 
     ICOM_.clear();
 
-    STRNCPY (IC,     "NC",     2);
-    STRNCPY (COMRAT, initstr,  4);
+    STRNCPY(IC,     "NC",     2);
+    STRNCPY(COMRAT, initstr,  4);
 
     for (unsigned int n = 0; n < NBANDS; n++)
     {
@@ -1215,7 +1215,7 @@ void vil_nitf_image_subheader_v20::init()
     PVTYPE_ = VIL_PIXEL_FORMAT_UINT_32;
     DLVL   = 1;
     ALVL   = LOCrow = LOCcolumn = 0;
-    STRNCPY (IMAG,  initstr, 4);
+    STRNCPY(IMAG,  initstr, 4);
 
     UDIDL_ = 0;
     delete UDID_;
@@ -1224,8 +1224,8 @@ void vil_nitf_image_subheader_v20::init()
     XSHD = new vil_nitf_extended_subheader(0);
 
     //set up some defaults for the 2.0 specifics
-    STRCPY (IREP, "MONO    ");
-    STRCPY (ICAT, "VIS     ");
+    STRCPY(IREP, "MONO    ");
+    STRCPY(ICAT, "VIS     ");
 }  // end method init
 
 ////////////////////////////////////////////////////////////////
@@ -1239,8 +1239,8 @@ StatusCode vil_nitf_image_subheader_v20::extract_rpc00x_extension()
 
   // Look for the RPC tag. (Look for the union label...)
   // It can be an A or a B tag so we just look for RPC00
-  //      char *rpc_tag = XSHD->XHD ? vcl_strstr(XSHD->XHD,"RPC00A") : 0;
-  char * rpc_tag = XSHD->XHD ? vcl_strstr(XSHD->XHD, "RPC00") : 0;
+//char *rpc_tag = XSHD->XHD ? vcl_strstr(XSHD->XHD,"RPC00A") : 0;
+  char *rpc_tag = XSHD->XHD ? vcl_strstr(XSHD->XHD, "RPC00") : 0;
 
       // If there is no RPC tag in the subheader, our job is done and we
       //  return the 'error' variable to the caller.
@@ -1866,17 +1866,17 @@ StatusCode vil_nitf_image_subheader_v20::extract_stdid_extension()
     }
 
     // Grab the ACQUISITION_DATE
-    STRNCPY (ACQUISITION_DATE, &XSHD->XHD[offset], acq_date);
+    STRNCPY(ACQUISITION_DATE, &XSHD->XHD[offset], acq_date);
     offset += acq_date;
     vcl_cout << "ACQUISITION_DATE = " << ACQUISITION_DATE << vcl_endl;
 
     // Grab the MISSION
-    STRNCPY (MISSION, &XSHD->XHD[offset],mission);
+    STRNCPY(MISSION, &XSHD->XHD[offset],mission);
     offset += mission;
     vcl_cout << "MISSION = " << MISSION << vcl_endl;
 
     // Grab the PASS
-    STRNCPY (PASS, &XSHD->XHD[offset], pass);
+    STRNCPY(PASS, &XSHD->XHD[offset], pass);
     offset += pass;
     vcl_cout << "PASS = " << PASS << vcl_endl;
 
@@ -1888,7 +1888,7 @@ StatusCode vil_nitf_image_subheader_v20::extract_stdid_extension()
     vcl_cout << "OP_NUM = " << OP_NUM << vcl_endl;
 
     // Grab the START_SEGMENT
-    STRNCPY (START_SEGMENT, &XSHD->XHD[offset],start_seg);
+    STRNCPY(START_SEGMENT, &XSHD->XHD[offset],start_seg);
     offset += start_seg;
     vcl_cout << "START_SEGMENT = " << START_SEGMENT << vcl_endl;
 
@@ -2013,11 +2013,11 @@ static void es(vcl_ostringstream& s, double v)
     if (exp <= 0)   //fully use the 6 digit precision after the .
       exp--;
 
-    double x = v/vcl_pow (10.0, exp);  //gives a single digit 0-9 before .
-  //could be 10.xxx etc so back off one
-    if (vcl_fabs(x) > 9) {
+    double x = v/vcl_pow(10.0, exp);  //gives a single digit 0-9 before .
+    //could be 10.xxx etc so back off one
+    if (vcl_fabs(x) >= 10) {
         exp++;
-        x = v/vcl_pow(10.0, exp);
+        x /= 10.0;
     }
     ss.setf(vcl_ios_fixed, vcl_ios_floatfield);  //fixed floating point
     ss.setf(vcl_ios_showpos);  //leading +-
@@ -2066,22 +2066,22 @@ void vil_nitf_image_subheader_v20::encode_rpc00a_extension(vcl_ostringstream& rp
         // Write LINE_NUMs
         for (c=0; c<20; c++) {
     //    rpc_buf << vcl_setw(12) << vcl_setprecision(6) << LINE_NUM[c];
-          es (rpc_buf, LINE_NUM[c]);
+          es(rpc_buf, LINE_NUM[c]);
         }
         // Write LINE_DENs
         for (c=0; c<20; c++) {
     //    rpc_buf << vcl_setw(12) << vcl_setprecision(6) << LINE_DEN[c];
-          es (rpc_buf, LINE_DEN[c]);
+          es(rpc_buf, LINE_DEN[c]);
         }
         // Write SAMP_NUMs
         for (c=0; c<20; c++) {
     //    rpc_buf << vcl_setw(12) << vcl_setprecision(6) << SAMP_NUM[c];
-          es (rpc_buf, SAMP_NUM[c]);
+          es(rpc_buf, SAMP_NUM[c]);
         }
         // Write SAMP_DENs
         for (c=0; c<20; c++) {
     //    rpc_buf << vcl_setw(12) << vcl_setprecision(6) << SAMP_DEN[c];
-          es (rpc_buf, SAMP_DEN[c]);
+          es(rpc_buf, SAMP_DEN[c]);
         }
         rpc_buf << vcl_ends;
 }
