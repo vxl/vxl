@@ -12,13 +12,14 @@
 #include "rgrl_util.h"
 
 #include <vcl_iostream.h>
+#include <vcl_cassert.h>
 
 rgrl_scale_est_closest::
 rgrl_scale_est_closest( vcl_auto_ptr<rrel_objective>  obj,
-			bool                          do_signature_scale )
+                        bool                          do_signature_scale )
   : do_signature_scale_( do_signature_scale ),
     obj_( obj )
-{  
+{
   assert( obj_->can_estimate_scale() );
 }
 
@@ -39,7 +40,7 @@ estimate_unweighted( rgrl_match_set const& match_set,
 
   scales->set_geometric_scale( compute_geometric_scale( match_set, penalize_scaling ) );
 
-  if( do_signature_scale_ ) {
+  if ( do_signature_scale_ ) {
     scales->set_signature_covar( compute_signature_covar( match_set ) );
   }
 
@@ -64,19 +65,19 @@ compute_geometric_scale( rgrl_match_set const& match_set,
   vcl_vector<double> error_distances;
   DebugMacro(1, "\n");
 
-  for( from_iter fitr = match_set.from_begin(); fitr != match_set.from_end(); ++fitr ) {
+  for ( from_iter fitr = match_set.from_begin(); fitr != match_set.from_end(); ++fitr ) {
     //  If there aren't any matches, set the error_distance to an
     //  arbitrarily large number.
-    if( fitr.empty() ) {
-      DebugMacro_abv(1, " no matched points for from: " << fitr.from_feature()->location() << ", set its error distances = 1.0e30 \n" );
-      error_distances.push_back( 1.0e30 ); 
+    if ( fitr.empty() ) {
+      DebugMacro_abv(1," no matched points for from: "<< fitr.from_feature()->location()<< ", set its error distances = 1.0e30\n");
+      error_distances.push_back( 1.0e30 );
     } else {
       to_iter titr = fitr.begin();
-      
+
       rgrl_feature_sptr mapped_from = fitr.mapped_from_feature();
       double min_distance = titr.to_feature()->geometric_error( *mapped_from );
- 
-      for( ++titr; titr != fitr.end(); ++titr ) {
+
+      for ( ++titr; titr != fitr.end(); ++titr ) {
         double distance = titr.to_feature()->geometric_error( *mapped_from );
         if ( distance < min_distance ) {
           min_distance = distance;
@@ -86,17 +87,17 @@ compute_geometric_scale( rgrl_match_set const& match_set,
     }
   }
 
-  /*
-  vcl_cout << " error_distance : \n" << vcl_endl;
+#if 0 // commented out
+  vcl_cout << " error_distance :\n" << vcl_endl;
   unsigned zeros = 0;
-  for( unsigned i = 0; i < error_distances.size(); ++i ) {
+  for ( unsigned i = 0; i < error_distances.size(); ++i ) {
     if ( error_distances[ i ] == 0 )
       ++zeros;
     vcl_cout << error_distances[ i ] << vcl_endl;
   }
   vcl_cout << " number of zers : " << zeros << " out of " << error_distances.size() << vcl_endl;
-  */
-  
+#endif // 0
+
   double epsilon = 1e-16;
   double return_scale = scaling * vnl_math_max( obj_->scale( error_distances.begin(), error_distances.end() ), epsilon );
 
@@ -120,39 +121,39 @@ compute_signature_covar( rgrl_match_set const& match_set ) const
   assert( nrows );
 
   vcl_vector< vcl_vector<double> > all_errors( nrows );
-  
-  for( ; fitr != match_set.from_end(); ++fitr ) {
+
+  for ( ; fitr != match_set.from_end(); ++fitr ) {
     //  If there aren't any matches, set the error_distance to an
     //  arbitrarily large number.
-    if( fitr.empty() ) {
-      for( unsigned r=0; r<nrows; ++r ) {
-        all_errors[r].push_back( 1.0e30 ); 
+    if ( fitr.empty() ) {
+      for ( unsigned r=0; r<nrows; ++r ) {
+        all_errors[r].push_back( 1.0e30 );
       }
     } else {
       to_iter titr = fitr.begin();
-      to_iter best_titr = titr;
-          
+//    to_iter best_titr = titr;
+
       rgrl_feature_sptr mapped_from = fitr.mapped_from_feature();
       double min_distance = titr.to_feature()->geometric_error( *mapped_from );
-	  
+
       for ( ++titr; titr != fitr.end(); ++titr ) {
         double distance = titr.to_feature()->geometric_error( *mapped_from );
-        if( distance < min_distance ) {
+        if ( distance < min_distance ) {
           min_distance = distance;
-          best_titr = titr;
+//        best_titr = titr;
         }
       }
 
       vnl_vector<double> signature_error = titr.to_feature()->signature_error_vector( *mapped_from );
-      for( unsigned r = 0; r < nrows; ++r ) {
+      for ( unsigned r = 0; r < nrows; ++r ) {
         all_errors[r].push_back( signature_error[r] );
       }
     }
   }
 
   vnl_matrix<double> covar( nrows, nrows, 0.0 );
-  
-  for( unsigned r = 0; r < nrows; ++r ) {
+
+  for ( unsigned r = 0; r < nrows; ++r ) {
     covar(r,r) = vnl_math_sqr( obj_->scale( all_errors[r].begin(), all_errors[r].end() ) );
   }
 
