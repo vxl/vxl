@@ -29,6 +29,7 @@ SET(vsol_sources
  vsol_curve_3d.cxx          vsol_curve_3d.h          vsol_curve_3d_sptr.h
  vsol_line_3d.cxx           vsol_line_3d.h           vsol_line_3d_sptr.h
  vsol_polyline_3d.cxx       vsol_polyline_3d.h       vsol_polyline_3d_sptr.h
+ vsol_digital_curve_3d.cxx  vsol_digital_curve_3d.h  vsol_digital_curve_3d_sptr.h
  # 2-D
                             vsol_surface_3d.h        vsol_surface_3d_sptr.h
                             vsol_region_3d.h         vsol_region_3d_sptr.h
