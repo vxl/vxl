@@ -63,7 +63,10 @@ void test_image_view_int()
 
   {
     // Test the shallow copy by smart pointer
-    vil3d_image_view_base_sptr image_sptr =&image0;
+    vil3d_image_view<vxl_int_32> *image_ptr = new vil3d_image_view<vxl_int_32>;
+    image_ptr->deep_copy(image0);
+
+    vil3d_image_view_base_sptr image_sptr = image_ptr;
     vil3d_image_view<vxl_int_32> image1;
     image1 = image_sptr;
 
