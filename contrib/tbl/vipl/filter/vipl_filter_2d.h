@@ -3,11 +3,14 @@
 #ifdef __GNUG__
 #pragma interface
 #endif
+//:
+// \file
+
 #include <vipl/filter/vipl_filter.h>
 
 template < class ImgIn, class ImgOut, class DataIn, class DataOut, VCL_DFL_TYPE_PARAM_STLDECL(PixelItr, vipl_trivial_pixeliter) >
-  class vipl_filter_2d : public vipl_filter< ImgIn, ImgOut, DataIn, DataOut, 2, PixelItr > {
-
+  class vipl_filter_2d : public vipl_filter< ImgIn, ImgOut, DataIn, DataOut, 2, PixelItr >
+{
  public:
 
  //: Main constructor for this abstract class.
@@ -63,7 +66,6 @@ template < class ImgIn, class ImgOut, class DataIn, class DataOut, VCL_DFL_TYPE_
   virtual bool applyop();
  //: The main filtering method, derived class must supply it.
   virtual bool section_applyop() = 0;
-
 };
 
 #ifdef INSTANTIATE_TEMPLATES
