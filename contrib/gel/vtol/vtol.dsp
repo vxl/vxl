@@ -97,453 +97,322 @@ LIB32=link.exe -lib
 # Name "vtol - Win32 Debug"
 
 # Begin Group "Source Files"
-# PROP Default_Filter ""
+# PROP Default_Filter "cxx;c"
 # Begin Source File
-
 SOURCE=.\Templates/vbl_smart_ptr+vtol_block-.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\Templates/vbl_smart_ptr+vtol_chain-.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\Templates/vbl_smart_ptr+vtol_edge-.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\Templates/vbl_smart_ptr+vtol_edge_2d-.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\Templates/vbl_smart_ptr+vtol_face-.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\Templates/vbl_smart_ptr+vtol_face_2d-.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\Templates/vbl_smart_ptr+vtol_one_chain-.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\Templates/vbl_smart_ptr+vtol_topology_object-.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\Templates/vbl_smart_ptr+vtol_two_chain-.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\Templates/vbl_smart_ptr+vtol_vertex-.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\Templates/vbl_smart_ptr+vtol_vertex_2d-.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\Templates/vbl_smart_ptr+vtol_zero_chain-.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\Templates/vcl_list+vtol_chain_sptr-.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\Templates/vcl_list+vtol_topology_object_sptr-.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\Templates/vcl_vector+vtol_block_sptr-.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\Templates/vcl_vector+vtol_block~-.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\Templates/vcl_vector+vtol_chain_sptr-.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\Templates/vcl_vector+vtol_edge_2d_sptr-.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\Templates/vcl_vector+vtol_edge_2d~-.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\Templates/vcl_vector+vtol_edge_sptr-.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\Templates/vcl_vector+vtol_edge~-.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\Templates/vcl_vector+vtol_face_2d_sptr-.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\Templates/vcl_vector+vtol_face_2d~-.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\Templates/vcl_vector+vtol_face_sptr-.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\Templates/vcl_vector+vtol_face~-.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\Templates/vcl_vector+vtol_one_chain_sptr-.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\Templates/vcl_vector+vtol_one_chain~-.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\Templates/vcl_vector+vtol_topology_object_sptr-.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\Templates/vcl_vector+vtol_topology_object~-.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\Templates/vcl_vector+vtol_two_chain_sptr-.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\Templates/vcl_vector+vtol_two_chain~-.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\Templates/vcl_vector+vtol_vertex_2d_sptr-.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\Templates/vcl_vector+vtol_vertex_2d~-.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\Templates/vcl_vector+vtol_vertex_sptr-.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\Templates/vcl_vector+vtol_vertex~-.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\Templates/vcl_vector+vtol_zero_chain_sptr-.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\Templates/vcl_vector+vtol_zero_chain~-.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vtol_block.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vtol_chain.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vtol_edge.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vtol_edge_2d.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vtol_face.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vtol_face_2d.cxx
-
 # End Source File
 # Begin Source File
-
-SOURCE=.\vtol_list_functions.cxx
-
-# End Source File
-# Begin Source File
-
 SOURCE=.\vtol_one_chain.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vtol_topology_cache.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vtol_topology_io.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vtol_topology_object.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vtol_two_chain.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vtol_vertex.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vtol_vertex_2d.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vtol_zero_chain.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vtol_cycle_processor.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\../vdgl/vdgl_intensity_face.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\Templates/vbl_smart_ptr+vdgl_intensity_face-.cxx
-
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vtol_list_functions+vtol_block~-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vtol_list_functions+vtol_edge~-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vtol_list_functions+vtol_face~-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vtol_list_functions+vtol_one_chain~-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vtol_list_functions+vtol_topology_object_sptr-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vtol_list_functions+vtol_two_chain~-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vtol_list_functions+vtol_vertex~-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vtol_list_functions+vtol_zero_chain~-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vtol_list_functions+vtol_block~-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vtol_list_functions+vtol_edge~-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vtol_list_functions+vtol_face~-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vtol_list_functions+vtol_one_chain~-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vtol_list_functions+vtol_topology_object_sptr-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vtol_list_functions+vtol_two_chain~-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vtol_list_functions+vtol_vertex~-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vtol_list_functions+vtol_zero_chain~-.cxx
 # End Source File
 # End Group
 # Begin Group "Header Files"
-# PROP Default_Filter ""
+# PROP Default_Filter "txx;h"
 # Begin Source File
-
 SOURCE=.\vtol_block.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vtol_chain.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vtol_edge.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vtol_edge_2d.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vtol_face.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vtol_face_2d.h
-
 # End Source File
 # Begin Source File
-
+SOURCE=.\vtol_list_functions.txx
+# End Source File
+# Begin Source File
 SOURCE=.\vtol_list_functions.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vtol_one_chain.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vtol_topology_cache.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vtol_topology_io.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vtol_topology_object.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vtol_two_chain.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vtol_vertex.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vtol_vertex_2d.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vtol_zero_chain.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vtol_block_sptr.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vtol_chain_sptr.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vtol_dtd.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vtol_edge_2d_sptr.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vtol_edge_sptr.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vtol_face_2d_sptr.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vtol_face_sptr.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vtol_macros.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vtol_one_chain_sptr.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vtol_topology_cache_sptr.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vtol_topology_object_sptr.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vtol_two_chain_sptr.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vtol_vertex_2d_sptr.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vtol_vertex_sptr.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vtol_zero_chain_sptr.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vtol_cycle_processor.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\../vdgl/vdgl_intensity_face.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\../vdgl/vdgl_intensity_face_sptr.h
-
 # End Source File
-# End Group
-# PROP Default_Filter "ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe"
 # End Group
 # End Target
 # End Project
-
