@@ -3,10 +3,10 @@
 INCLUDE(${BRL_INCLUDE_DIR}/bmods/find_xerces.cmake)
 
 # camera calibration
-SUBDIRS(bcal)
+#SUBDIRS(bcal)
 
 # 3-d reconstruction 
-SUBDIRS(brct)
+#SUBDIRS(brct)
 
 # multi-view gui stuff , xerces is required to read stuff in from Tjr
 SUBDIRS(bmvv)
