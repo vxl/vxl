@@ -1,4 +1,6 @@
-//-*- c++ -*-
+#ifndef vcl_emulation_algorithm_txx_
+#define vcl_emulation_algorithm_txx_
+
 #include <vcl/vcl_compiler.h>
 #include <vcl/vcl_algorithm.h>
 
@@ -13,13 +15,12 @@ VCL_INSTANTIATE_INLINE(bool operator!=(T const&, T const &))
 #define VCL_CONTAINABLE_INSTANTIATE(T) \
 VCL_INSTANTIATE_INLINE(void vcl_construct(T *, T const &)); \
 VCL_INSTANTIATE_INLINE(void vcl_destroy(T *))
-//VCL_SWAP_INSTANTIATE(T);
+//;VCL_SWAP_INSTANTIATE(T)
 
 //SGI CC does not allow explicit instantiation of inlines.
 //So use "VCL_INSTANTIATE_INLINE" instead of "template".
 #define VCL_FIND_INSTANTIATE(I, T) \
 VCL_INSTANTIATE_INLINE( I vcl_find(I, I, T const&) )
-#define VCL_FIND_INSTANTIATE_ITER(I, T) VCL_FIND_INSTANTIATE(I, T)
 
 #define VCL_REMOVE_INSTANTIATE(I, T) \
 VCL_INSTANTIATE_INLINE( I vcl_remove(I, I, T const&) )
@@ -41,4 +42,5 @@ VCL_INSTANTIATE_INLINE(Out vcl_copy_backward(Inp, Inp, Out))
 
 #define VCL_FIND_IF_INSTANTIATE(I, P) \
 VCL_INSTANTIATE_INLINE(I vcl_find_if(I, I, P))
-#define VCL_FIND_IF_INSTANTIATE_ITER(I, P) VCL_FIND_IF_INSTANTIATE(I, P)
+
+#endif // vcl_emulation_algorithm_txx_

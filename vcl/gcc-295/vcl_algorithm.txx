@@ -5,11 +5,11 @@
 
 #define VCL_SWAP_INSTANTIATE(T)\
 VCL_INSTANTIATE_INLINE(void swap(T&, T&))
- 
+
 #define VCL_OPERATOR_NE_INSTANTIATE(T)
 
 #define VCL_CONTAINABLE_INSTANTIATE(T)
- 
+
 // I is a random access iterator
 #define VCL_SORT_INSTANTIATE(I, T) \
 template void __final_insertion_sort(I, I); \
@@ -36,6 +36,15 @@ inline _BdIter find(_BdIter __first,
   return ::find(__first, __last, __val, input_iterator_tag());
 }
 
+template <class _BdIter, class _Pred>
+inline _BdIter find_if(_BdIter __first,
+                       _BdIter __last,
+                       _Pred   __pred,
+                       bidirectional_iterator_tag)
+{
+  return ::find_if(__first, __last, __pred, input_iterator_tag());
+}
+
 #define VCL_FIND_INSTANTIATE(I, T) \
 template <int N> struct fsm_find_tickler; /* empty template */ \
 template <> struct fsm_find_tickler<__LINE__> { void method(I, I, T const &); }; \
@@ -43,14 +52,11 @@ void fsm_find_tickler<__LINE__>::method(I b, I e, T const &v) { find(b, e, v); }
 template I find(I, I, T const&); \
 template I find(I, I, T const&, iterator_traits<I >::iterator_category)
 
-#define VCL_FIND_IF_INSTANTIATE_ITER(I, P) \
-template I find_if(I, I, P)
-
 #define VCL_FIND_IF_INSTANTIATE(I, P) \
-VCL_FIND_IF_INSTANTIATE_ITER(I, P); \
-template I find_if<I,P>(I, I, P, random_access_iterator_tag)
+template I find_if(I, I, P); \
+template I find_if(I, I, P, iterator_traits<I >::iterator_category)
 
 #define VCL_REMOVE_INSTANTIATE(I, T) \
 template I remove(I, I, T const &)
 
-#endif
+#endif // vcl_gcc_295_algorithm_txx_

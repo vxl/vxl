@@ -16,7 +16,7 @@ template void std::fill(Out, Out, T const &)
 
 #define VCL_SWAP_INSTANTIATE(T)\
 VCL_INSTANTIATE_INLINE(void swap(T&, T&))
- 
+
 #define VCL_OPERATOR_NE_INSTANTIATE(T) \
 VCL_INSTANTIATE_INLINE(bool operator!=(T const&, T const &))
 
@@ -29,7 +29,6 @@ template struct vcl_less<T >
 
 #define VCL_FIND_INSTANTIATE(I, T) \
 template I vcl_find(I, I, T const&)
-#define VCL_FIND_INSTANTIATE_ITER(I, T) VCL_FIND_INSTANTIATE(I, T)
 
 // vcl_sort(). We really do need to know both the element type 
 // and the iterator type.
@@ -54,6 +53,5 @@ template void std::__unguarded_linear_insert(I, T, C)
 
 #define VCL_FIND_IF_INSTANTIATE(I, P) \
 VCL_INSTANTIATE_INLINE(I find_if(I, I, P))
-#define VCL_FIND_IF_INSTANTIATE_ITER(I, P) VCL_FIND_IF_INSTANTIATE(I, P)
 
-#endif
+#endif // vcl_sunpro_vcl_algorithm_txx_
