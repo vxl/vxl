@@ -15,13 +15,12 @@
 //-----------------------------------------------------------------------------
 #include <vcl_vector.h>
 #include <vcl_map.h>
-#include <mvl/FMatrix.h>
 #include <vil1/vil1_image.h>
+#include <mvl/FMatrix.h>
 #include <vtol/vtol_intensity_face_sptr.h>
 #include <vgui/vgui_wrapper_tableau.h>
 #include <vgui/vgui_grid_tableau.h>
 #include <vgui/vgui_grid_tableau_sptr.h>
-#include <mvl/FMatrix.h>
 #include <vgui/vgui_style_sptr.h>
 #include <bgui/bgui_vtol2D_tableau_sptr.h>
 #include <bgui/bgui_picker_tableau_sptr.h>
