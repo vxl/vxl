@@ -31,7 +31,7 @@ public:
   double& operator() (unsigned int r, unsigned int c);
 
   void set_matrix(const vnl_matrix<double>& mat);
-  vnl_matrix<double> & vpgl_matrix_camera::get_matrix();
+  vnl_matrix<double>& get_matrix();
 #if 0
   void set_general_matrix(const vnl_matrix<double> & gen);
 #endif
