@@ -37,6 +37,10 @@
 #elif defined(VCL_SGI_CC_7)
 #include  "sgi/vcl_complex.h"
 
+// ---------- MW
+#elif defined(VCL_METRO_WERKS)
+#include  "mwerks/vcl_complex.h"
+
 // ---------- ISO
 #else
 # include "iso/vcl_complex.h"

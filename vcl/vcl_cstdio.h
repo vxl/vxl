@@ -15,6 +15,10 @@
 # include "iso/vcl_cstdio.h"
 #elif defined(VCL_VC)
 # include "win32/vcl_cstdio.h"
+#elif defined(VCL_METRO_WERKS)
+# include <cstdio>
+# define vcl_generic_cstdio_STD /* */
+# include "generic/vcl_cstdio.h"
 #else
 # include "vcl_cstddef.h" // for size_t
 # include "iso/vcl_cstdio.h"
