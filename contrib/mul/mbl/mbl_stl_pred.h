@@ -93,6 +93,30 @@ struct mbl_stl_pred_pair_iter_value_order : public vcl_binary_function<PairIter,
   }
 };
 
+
+//Order a collection of pairs according to their first elements
+//NB assumes the key type supports operator<
+template <class Pair>
+struct mbl_stl_pred_pair_key_order : public vcl_binary_function<Pair,Pair, bool>
+{
+  inline bool  operator()(const Pair& pair1, const Pair& pair2 ) const
+  {
+    return (pair1.first < pair2.first) ? true : false;
+  }
+};
+
+//Order a collection of pairs according to their second elements
+//NB assumes the key type supports operator<
+template <class Pair>
+struct mbl_stl_pred_pair_value_order : public vcl_binary_function<Pair,Pair, bool>
+{
+  inline bool  operator()(const Pair& pair1, const Pair& pair2 ) const
+  {
+    return (pair1.second < pair2.second) ? true : false;
+  }
+};
+
+
 //
 //////////////////////////////////////////////////////////////////////////
 //Order a collection of pairs
@@ -132,3 +156,4 @@ class mbl_stl_pred_is_a : public vcl_unary_function<T, bool>
 };
 
 #endif
+
