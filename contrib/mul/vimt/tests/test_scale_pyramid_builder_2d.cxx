@@ -5,6 +5,7 @@
 #include <vimt/vimt_image_pyramid.h>
 #include <vimt/vimt_image_2d_of.h>
 #include <vcl_iostream.h>
+#include <vcl_cmath.h> // for log()
 #include <vxl_config.h>
 #include <vpl/vpl.h> // vpl_unlink()
 #include <vsl/vsl_binary_loader.h>
@@ -53,8 +54,8 @@ void test_scale_pyramid_builder_2d1(unsigned int nx, unsigned int ny)
   TEST("Level 1 size x",image1.image().ni(),nx_scaled);
   TEST("Level 1 size y",image1.image().nj(),ny_scaled);
   TEST("Pixel (0,0)",image1.image()(0,0),image0.image()(0,0));
-  TEST("Central pixel", image0.image()(nx/2,(ny-1)/2),
-       image1.image()(nx_scaled/2,(ny_scaled-1)/2));
+  TEST("Central pixel", image0.image()((nx-1)/2,ny/2),
+       image1.image()((nx_scaled-1)/2,ny_scaled/2));
   TEST("Lower left corner pixel", image0.image()(0,ny-1),
        image1.image()(0,ny_scaled-1));
   TEST("Upper right corner pixel", image0.image()(nx-1,0),
@@ -67,7 +68,10 @@ void test_scale_pyramid_builder_2d1(unsigned int nx, unsigned int ny)
   vcl_cout<<"\n\n\nTesting builder.extend():\n";
   image_pyr.print_all(vcl_cout);
 
-  TEST("Found correct number of levels", image_pyr.n_levels(), 9);
+  // nx/(scale_step^(nr_levels-1)) must be at least 4.5 in order to have
+  // at least a 5x5 image at the last level:
+  int nr_levels = 1+int(vcl_log((nx<ny?nx:ny)/4.5)/vcl_log(scale_step));
+  TEST("Found correct number of levels", image_pyr.n_levels(), nr_levels);
 
   vimt_image_2d_of<float> image2(200, 200, 1);
   image2.image().fill(255.0f);
@@ -77,15 +81,15 @@ void test_scale_pyramid_builder_2d1(unsigned int nx, unsigned int ny)
   builder2.build(image_pyr2, image2);
   bool all_less_than_256 = true;
   bool all_more_than_254 = true;
-  for (unsigned int y=0;y<image0.image().nj();++y)
-     for (unsigned int x=0;x<image0.image().ni();++x)
+  for (unsigned int y=0;y<image2.image().nj();++y)
+     for (unsigned int x=0;x<image2.image().ni();++x)
      {
-       if (image0.image()(x,y) > 255.01) all_less_than_256 = false;
-       if (image0.image()(x,y) < 254.99) all_more_than_254 = false;
+       if (image2.image()(x,y) > 255.01) all_less_than_256 = false;
+       if (image2.image()(x,y) < 254.99) all_more_than_254 = false;
      }
 
   TEST("No drift upwards in a float pyramid", all_less_than_256, true);
-  TEST("No drift downwards in a float pyramid", all_more_than_254, false);
+  TEST("No drift downwards in a float pyramid", all_more_than_254, true);
 
   vcl_cout<<"\n\n======== TESTING I/O ===========\n";
 
@@ -123,7 +127,7 @@ void test_scale_pyramid_builder_2d1(unsigned int nx, unsigned int ny)
 MAIN( test_scale_pyramid_builder_2d )
 {
   START( "test_scale_pyramid_builder_2d\n" );
-  test_scale_pyramid_builder_2d1(20,30);
+  test_scale_pyramid_builder_2d1(25,37);
 
   SUMMARY();
 }
