@@ -614,55 +614,55 @@ struct memorypool {
 /*   viri (triangles being eaten), bad (encroached) segments, bad (skinny    */
 /*   or too large) triangles, and splay tree nodes.                          */
 
-struct memorypool triangles;
-struct memorypool shelles;
-struct memorypool points;
-struct memorypool viri;
-struct memorypool badsegments;
-struct memorypool badtriangles;
-struct memorypool splaynodes;
+static struct memorypool triangles;
+static struct memorypool shelles;
+static struct memorypool points;
+static struct memorypool viri;
+static struct memorypool badsegments;
+static struct memorypool badtriangles;
+static struct memorypool splaynodes;
 
 /* Variables that maintain the bad triangle queues.  The tails are pointers  */
 /*   to the pointers that have to be filled in to enqueue an item.           */
 
-struct badface *queuefront[64];
-struct badface **queuetail[64];
+static struct badface *queuefront[64];
+static struct badface **queuetail[64];
 
-REAL xmin, xmax, ymin, ymax;                              /* x and y bounds. */
-REAL xminextreme;        /* Nonexistent x value used as a flag in sweepline. */
-int inpoints;                                     /* Number of input points. */
-int inelements;                                /* Number of input triangles. */
-int insegments;                                 /* Number of input segments. */
-int holes;                                         /* Number of input holes. */
-int regions;                                     /* Number of input regions. */
-long edges;                                       /* Number of output edges. */
-int mesh_dim;                                  /* Dimension (ought to be 2). */
-int nextras;                              /* Number of attributes per point. */
-int eextras;                           /* Number of attributes per triangle. */
-long hullsize;                            /* Number of edges of convex hull. */
-int triwords;                                   /* Total words per triangle. */
-int shwords;                                  /* Total words per shell edge. */
-int pointmarkindex;             /* Index to find boundary marker of a point. */
-int point2triindex;         /* Index to find a triangle adjacent to a point. */
-int highorderindex;    /* Index to find extra nodes for high-order elements. */
-int elemattribindex;              /* Index to find attributes of a triangle. */
-int areaboundindex;               /* Index to find area bound of a triangle. */
-int checksegments;           /* Are there segments in the triangulation yet? */
-int readnodefile;                             /* Has a .node file been read? */
-long samples;                /* Number of random samples for point location. */
-unsigned long randomseed;                     /* Current random number seed. */
+static REAL xmin, xmax, ymin, ymax;                       /* x and y bounds. */
+static REAL xminextreme; /* Nonexistent x value used as a flag in sweepline. */
+static int inpoints;                              /* Number of input points. */
+static int inelements;                         /* Number of input triangles. */
+static int insegments;                          /* Number of input segments. */
+static int holes;                                  /* Number of input holes. */
+static int regions;                              /* Number of input regions. */
+static long edges;                                /* Number of output edges. */
+static int mesh_dim;                           /* Dimension (ought to be 2). */
+static int nextras;                       /* Number of attributes per point. */
+static int eextras;                    /* Number of attributes per triangle. */
+static long hullsize;                     /* Number of edges of convex hull. */
+static int triwords;                            /* Total words per triangle. */
+static int shwords;                           /* Total words per shell edge. */
+static int pointmarkindex;      /* Index to find boundary marker of a point. */
+static int point2triindex;  /* Index to find a triangle adjacent to a point. */
+static int highorderindex;/* Index to find extra nodes for high-order elements. */
+static int elemattribindex;       /* Index to find attributes of a triangle. */
+static int areaboundindex;        /* Index to find area bound of a triangle. */
+static int checksegments;    /* Are there segments in the triangulation yet? */
+static int readnodefile;                      /* Has a .node file been read? */
+static long samples;         /* Number of random samples for point location. */
+static unsigned long randomseed;              /* Current random number seed. */
 
-REAL splitter;       /* Used to split REAL factors for exact multiplication. */
-REAL epsilon;                             /* Floating-point machine epsilon. */
-REAL resulterrbound;
-REAL ccwerrboundA, ccwerrboundB, ccwerrboundC;
-REAL iccerrboundA, iccerrboundB, iccerrboundC;
+static REAL splitter;/* Used to split REAL factors for exact multiplication. */
+static REAL epsilon;                      /* Floating-point machine epsilon. */
+static REAL resulterrbound;
+static REAL ccwerrboundA, ccwerrboundB, ccwerrboundC;
+static REAL iccerrboundA, iccerrboundB, iccerrboundC;
 
-long incirclecount;                   /* Number of incircle tests performed. */
-long counterclockcount;       /* Number of counterclockwise tests performed. */
-long hyperbolacount;        /* Number of right-of-hyperbola tests performed. */
-long circumcentercount;    /* Number of circumcenter calculations performed. */
-long circletopcount;         /* Number of circle top calculations performed. */
+static long incirclecount;            /* Number of incircle tests performed. */
+static long counterclockcount;/* Number of counterclockwise tests performed. */
+static long hyperbolacount; /* Number of right-of-hyperbola tests performed. */
+static long circumcentercount;/* Number of circumcenter calculations performed. */
+static long circletopcount;  /* Number of circle top calculations performed. */
 
 /* Switches for the triangulator.                                            */
 /*   poly: -p switch.  refine: -r switch.                                    */
@@ -695,21 +695,21 @@ long circletopcount;         /* Number of circle top calculations performed. */
 /*                                                                           */
 /* Read the instructions to find out the meaning of these switches.          */
 
-int poly, refine, quality, vararea, fixedarea, regionattrib, convex;
-int firstnumber;
-int edgesout, voronoi, neighbors, geomview;
-int nobound, nopolywritten, nonodewritten, noelewritten, noiterationnum;
-int noholes, noexact;
-int incremental, sweepline, dwyer;
-int splitseg;
-int docheck;
-int quiet, verbose;
-int useshelles;
-int order;
-int nobisect;
-int steiner, steinerleft;
-REAL minangle, goodangle;
-REAL maxarea;
+static int poly, refine, quality, vararea, fixedarea, regionattrib, convex;
+static int firstnumber;
+static int edgesout, voronoi, neighbors, geomview;
+static int nobound, nopolywritten, nonodewritten, noelewritten, noiterationnum;
+static int noholes, noexact;
+static int incremental, sweepline, dwyer;
+static int splitseg;
+static int docheck;
+static int quiet, verbose;
+static int useshelles;
+static int order;
+static int nobisect;
+static int steiner, steinerleft;
+static REAL minangle, goodangle;
+static REAL maxarea;
 
 /* Variables for file names.                                                 */
 
@@ -730,24 +730,24 @@ char offfilename[FILENAMESIZE];
 
 /* Triangular bounding box points.                                           */
 
-point infpoint1, infpoint2, infpoint3;
+static point infpoint1, infpoint2, infpoint3;
 
 /* Pointer to the `triangle' that occupies all of "outer space".             */
 
-triangle *dummytri;
-triangle *dummytribase;      /* Keep base address so we can free() it later. */
+static triangle *dummytri;
+static triangle *dummytribase;      /* Keep base address so we can free() it later. */
 
 /* Pointer to the omnipresent shell edge.  Referenced by any triangle or     */
 /*   shell edge that isn't really connected to a shell edge at that          */
 /*   location.                                                               */
 
-shelle *dummysh;
-shelle *dummyshbase;         /* Keep base address so we can free() it later. */
+static shelle *dummysh;
+static shelle *dummyshbase;         /* Keep base address so we can free() it later. */
 
 /* Pointer to a recently visited triangle.  Improves point location if       */
 /*   proximate points are inserted sequentially.                             */
 
-struct triedge recenttri;
+static struct triedge recenttri;
 
 
 /* Deal with point types that are not unsigned long                          */
@@ -798,8 +798,8 @@ struct triedge recenttri;
 
 /* Fast lookup arrays to speed some of the mesh manipulation primitives.     */
 
-int plus1mod3[3] = {1, 2, 0};
-int minus1mod3[3] = {2, 0, 1};
+static int plus1mod3[3] = {1, 2, 0};
+static int minus1mod3[3] = {2, 0, 1};
 
 /********* Primitives for triangles                                  *********/
 /*                                                                           */
@@ -3029,8 +3029,7 @@ char **argv;
 
 #if defined(_MSC_VER) && (_MSC_VER >= 1300)
 #  pragma warning( push )
-   /* warning C4311: 'type cast' : pointer truncation from 'void *' to 
-    *'unsigned long' */
+   /* warning C4311: 'type cast' : pointer truncation from 'void *' to 'unsigned long' */
 #  pragma warning( disable: 4311 )
 #endif
 
