@@ -54,9 +54,6 @@ T vnl_det(T const *row0, T const *row1, T const *row2, T const *row3) {
 #define VNL_DET_INSTANTIATE(T) \
 template T vnl_det(T const *, T const *); \
 template T vnl_det(T const *, T const *, T const *); \
-template T vnl_det(T const *, T const *, T const *, T const *); \
-template T vnl_det(vnl_matrix_fixed<T,2,2> const&); \
-template T vnl_det(vnl_matrix_fixed<T,3,3> const&); \
-template T vnl_det(vnl_matrix_fixed<T,4,4> const&)
+template T vnl_det(T const *, T const *, T const *, T const *)
 
 #endif // vnl_det_txx_
