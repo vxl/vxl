@@ -34,6 +34,7 @@
 //:
 // \file
 
+#include <vcl_compiler.h>
 #include <vcl_iostream.h>
 #include <vcl_fstream.h>
 #include <vcl_algorithm.h>
@@ -50,7 +51,7 @@
 //#include <ImageProcessing/xpixel.h>
 //#include <cool/Timer.h>
 
-#ifdef WIN32
+#ifdef VCL_WIN32
 inline static double rint(double v)
 {
   return (((v - vcl_floor(v)) < 0.5) ? vcl_floor(v) : vcl_ceil(v));
