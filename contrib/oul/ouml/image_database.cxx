@@ -25,6 +25,7 @@
 #include <vcl_cerrno.h> // for EEXIST
 #include <vcl_cctype.h> // for tolower()
 #include <vcl_cstdio.h> // for fscanf()
+#include <vcl_algorithm.h> // for transform()
 #include <vpl/vpl.h> // for vpl_mkdir
 #include <vil/vil_load.h>
 #include <vil/vil_save.h>
