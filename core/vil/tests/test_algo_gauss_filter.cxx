@@ -74,13 +74,13 @@ static void test_algo_gaussian_filter_5tap_byte_float()
 void test_algo_vil_gauss_filter_gen_ntaps()
 {
   vcl_cout << "***********************************\n"
-           << " Testing vil_gauss_filter_gen_ntap \n"
+           << " Testing vil_gauss_filter_gen_ntap\n"
            << "***********************************\n\n";
   vcl_vector<double> filter1(7);
   vcl_cout << "filter1 = 7 tap gaussian(sd=1.5)\n";
   vil_gauss_filter_gen_ntap(1.5, 0, filter1);
 #ifdef DEBUG
-  for(unsigned i =0; i < 7; ++i)
+  for (unsigned i=0; i<7; ++i)
     vcl_cout << ' ' << filter1[i];
   vcl_cout << vcl_endl;
 #endif
@@ -92,8 +92,7 @@ void test_algo_vil_gauss_filter_gen_ntaps()
     0.21500681127034, 0.11308483122135, 0.03873542550599};
   for (unsigned i=0; i<7; ++i)
   {
-    TEST_NEAR("filter1", filter1[i],
-      correct_filter1[i], 1e-7);
+    TEST_NEAR("filter1", filter1[i], correct_filter1[i], 1e-7);
   }
 
   const double correct_filter2[] = {0.12372451934878,
@@ -104,8 +103,7 @@ void test_algo_vil_gauss_filter_gen_ntaps()
   vil_gauss_filter_gen_ntap(1.5, 2, filter2);
   for (unsigned i=0; i<7; ++i)
   {
-    TEST_NEAR("filter2", filter2[i],
-      correct_filter2[i], 1e-7);
+    TEST_NEAR("filter2", filter2[i], correct_filter2[i], 1e-7);
   }
 
   const double correct_filter3[] = {0.00000000000003,  0.00000028665154,
@@ -117,8 +115,7 @@ void test_algo_vil_gauss_filter_gen_ntaps()
   for (unsigned i=0; i<8; ++i)
   {
     // use log to get even tolerances
-    TEST_NEAR("log filter3", vcl_log(filter3[i]),
-      vcl_log(correct_filter3[i]), 0.3);
+    TEST_NEAR("filter3", vcl_log(filter3[i]), vcl_log(correct_filter3[i]), 0.3);
   }
 
 
@@ -130,12 +127,9 @@ void test_algo_vil_gauss_filter_gen_ntaps()
   vil_gauss_filter_gen_ntap(4.0, 1, filter4);
   for (unsigned i=0; i<8; ++i)
   {
-    TEST_NEAR("filter4", filter4[i],
-      correct_filter4[i], 1e-7);
+    TEST_NEAR("filter4", filter4[i], correct_filter4[i], 1e-7);
   }
-
 }
-
 
 
 MAIN( test_algo_gauss_filter )
