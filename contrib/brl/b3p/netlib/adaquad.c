@@ -22,29 +22,27 @@ int adaptquad_(E_fp f, real *a, real *b, real *tol, real *srmat, real *integral,
     /* Local variables */
     static integer j, k, n, iterating;
     static real sum1, sum2;
-    static integer done;
     static real srvec[11];
 
     /* Function Body */
     iterating = 0;
-    done = 1;
     srule_((E_fp)f, a, b, tol, srvec);
     for (k = 0; k < 11; ++k) {
-      srmat[k * 101] = srvec[k];
+        srmat[k * 101] = srvec[k];
     }
     *m = 1;
     *state = iterating;
     while (*state == iterating) {
-      n = *m;
-      for (j = n; j >= 1; --j) {
-          refine_((U_fp)f, &j, srmat, m, state);
-      }
+        n = *m;
+        for (j = n; j >= 1; --j) {
+            refine_((U_fp)f, &j, srmat, m, state);
+        }
     }
     sum1 = 0.f;
     sum2 = 0.f;
     for (j = 0; j < *m; ++j) {
-      sum1 += srmat[j + 707];
-      sum2 += dabs(srmat[j + 808]);
+        sum1 += srmat[j + 707];
+        sum2 += dabs(srmat[j + 808]);
     }
     *integral = sum1;
     *errbdd = sum2;
@@ -60,62 +58,59 @@ int refine_(U_fp f, integer *p, real *srmat, integer *m, integer *state)
     /* Local variables */
     static real a, b, c__;
     static integer j, k;
-    static real s;
     static integer iterating;
-    static real s2, fa, fb, fc, err, tol, tol2;
-    static integer done;
+    static real err, tol, tol2;
     static real check;
     static real sr0vec[11], sr1vec[11], sr2vec[11];
 
     /* Function Body */
     iterating = 0;
-    done = 1;
-    *state = done;
+    *state = 1;
     pm1 = *p - 1;
     for (k = 0; k < 11; ++k) {
-      sr0vec[k] = srmat[pm1 + k * 101];
+        sr0vec[k] = srmat[pm1 + k * 101];
     }
     a = sr0vec[0];
     c__ = sr0vec[1];
     b = sr0vec[2];
-    fa = sr0vec[3];
-    fc = sr0vec[4];
-    fb = sr0vec[5];
-    s = sr0vec[6];
-    s2 = sr0vec[7];
+/*  fa = sr0vec[3]; */
+/*  fc = sr0vec[4]; */
+/*  fb = sr0vec[5]; */
+/*  s = sr0vec[6]; */
+/*  s2 = sr0vec[7]; */
     err = sr0vec[8];
     tol = sr0vec[9];
     check = sr0vec[10];
     if (check == 1.f) {
-      return 0;
+        return 0;
     }
     tol2 = tol / 2;
     srule_((E_fp)f, &a, &c__, &tol2, sr1vec);
     srule_((E_fp)f, &c__, &b, &tol2, sr2vec);
     err = dabs(sr0vec[6] - sr1vec[6] - sr2vec[6]) / 10;
     if (err < tol) {
-      sr0vec[10] = 1.f;
+        sr0vec[10] = 1.f;
     }
     if (err < tol) {
-      for (k = 0; k < 11; ++k) {
-          srmat[pm1 + k * 101] = sr0vec[k];
-      }
-      srmat[pm1 + 707] = sr1vec[6] + sr2vec[6];
-      srmat[pm1 + 808] = err;
+        for (k = 0; k < 11; ++k) {
+            srmat[pm1 + k * 101] = sr0vec[k];
+        }
+        srmat[pm1 + 707] = sr1vec[6] + sr2vec[6];
+        srmat[pm1 + 808] = err;
     } else {
-      for (j = *m; j >= pm1; --j) {
-          for (k = 0; k < 11; ++k) {
-            srmat[j + k * 101] = srmat[j - 1 + k * 101];
-          }
-      }
-      ++(*m);
-      for (k = 0; k < 11; ++k) {
-          srmat[pm1 + k * 101] = sr1vec[k];
-      }
-      for (k = 0; k < 11; ++k) {
-          srmat[*p + k * 101] = sr2vec[k];
-      }
-      *state = iterating;
+        for (j = *m; j >= pm1; --j) {
+            for (k = 0; k < 11; ++k) {
+                srmat[j + k * 101] = srmat[j - 1 + k * 101];
+            }
+        }
+        ++(*m);
+        for (k = 0; k < 11; ++k) {
+            srmat[pm1 + k * 101] = sr1vec[k];
+        }
+        for (k = 0; k < 11; ++k) {
+            srmat[*p + k * 101] = sr2vec[k];
+        }
+        *state = iterating;
     }
     return 0;
 } /* refine_ */
@@ -124,9 +119,6 @@ int refine_(U_fp f, integer *p, real *srmat, integer *m, integer *state)
 int srule_(E_fp f, real *a, real *b, real *tol0, real *srvec)
 {
     static real c__, h__, s, s2, fa, fb, fc, err, tol1, check;
-
-    /* Parameter adjustments */
-    --srvec;
 
     /* Function Body */
     h__ = (*b - *a) / 2;
@@ -139,16 +131,16 @@ int srule_(E_fp f, real *a, real *b, real *tol0, real *srvec)
     tol1 = *tol0;
     err = *tol0;
     check = 0.f;
-    srvec[1] = *a;
-    srvec[2] = c__;
-    srvec[3] = *b;
-    srvec[4] = fa;
-    srvec[5] = fc;
-    srvec[6] = fb;
-    srvec[7] = s;
-    srvec[8] = s2;
-    srvec[9] = err;
-    srvec[10] = tol1;
-    srvec[11] = check;
+    srvec[0] = *a;
+    srvec[1] = c__;
+    srvec[2] = *b;
+    srvec[3] = fa;
+    srvec[4] = fc;
+    srvec[5] = fb;
+    srvec[6] = s;
+    srvec[7] = s2;
+    srvec[8] = err;
+    srvec[9] = tol1;
+    srvec[10] = check;
     return 0;
 } /* srule_ */
