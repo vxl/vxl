@@ -8,14 +8,14 @@
 // \date   16 Sep 99
 // \brief  See vgui_gtk2.h for a description of this file.
 
-
 #include "vgui_gtk2.h"
 #include <vgui/vgui_gl.h> // glFlush()
 #include <gtk/gtk.h>
 #include "vgui_gtk2_window.h"
 #include "vgui_gtk2_dialog_impl.h"
-
-static bool debug = false;
+#ifdef DEBUG
+# include <vcl_iostream.h>
+#endif
 
 vgui_gtk2* vgui_gtk2::instance()
 {
@@ -33,7 +33,9 @@ vcl_string vgui_gtk2::name() const { return "gtk2"; }
 //: Virtual function from vgui.  Initialise the implementation of vgui.
 void vgui_gtk2::init(int &argc, char **argv)
 {
-  if (debug) vcl_cerr << "vgui_gtk2::init()\n";
+#ifdef DEBUG
+  vcl_cerr << "vgui_gtk2::init()\n";
+#endif
   gtk_init(&argc, &argv);
 }
 
@@ -42,7 +44,9 @@ void vgui_gtk2::init(int &argc, char **argv)
 //: Virtual function from vgui.   Runs the event loop.
 void vgui_gtk2::run()
 {
-  if (debug) vcl_cerr << "vgui_gtk2::run()\n";
+#ifdef DEBUG
+  vcl_cerr << "vgui_gtk2::run()\n";
+#endif
   gtk_main();
 }
 
@@ -67,8 +71,10 @@ void vgui_gtk2::flush()
 
 void vgui_gtk2::quit()
 {
+#ifdef DEBUG
   vcl_cerr << __FILE__ " : terminating GTK+ event loop\n";
-  gtk_main_quit(); // capes@robots -- causes the gtk event loop to return
+#endif
+  gtk_main_quit(); // capes@robots - causes the gtk event loop to return
 }
 
 //--------------------------------------------------------------------------------

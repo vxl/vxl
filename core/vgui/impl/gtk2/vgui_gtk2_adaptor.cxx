@@ -28,8 +28,8 @@
 #include <vgui/internals/vgui_overlay_helper.h>
 #include "vgui_gtk2_utils.h"
 #include "vgui_gtk2_window.h"
+#include <vcl_iostream.h>
 
-static bool debug = false;
 vgui_menu vgui_gtk2_adaptor::last_popup;
 
 extern "C" {
@@ -197,12 +197,16 @@ void vgui_gtk2_adaptor::post_destroy()
 
 void vgui_gtk2_adaptor::set_default_popup(vgui_menu)
 {
+#ifdef DEBUG
   vcl_cerr << "vgui_gtk2_adaptor::set_default_popup\n";
+#endif
 }
 
 vgui_menu vgui_gtk2_adaptor::get_popup()
 {
+#ifdef DEBUG
   vcl_cerr << "vgui_gtk2_adaptor::get_popup\n";
+#endif
   return vgui_menu();
 }
 
@@ -326,7 +330,9 @@ gint vgui_gtk2_adaptor::handle(GtkWidget *widget,
     return TRUE;
   }
 
-  if (debug) vcl_cerr << "vgui_event " << event << vcl_endl;
+#ifdef DEBUG
+  vcl_cerr << "vgui_event " << event << vcl_endl;
+#endif
   // Only send events to the tableau if the widget is mapped; that is,
   // only when an OpenGL context exists.
   if ( GTK_WIDGET_MAPPED(widget) )
@@ -372,7 +378,9 @@ bool vgui_gtk2_adaptor::do_idle()
 //: This is overriding the gtk draw() method.
 void vgui_gtk2_adaptor::draw()
 {
-  if (debug) vcl_cerr << "vgui_gtk2_adaptor::draw\n";
+#ifdef DEBUG
+  vcl_cerr << "vgui_gtk2_adaptor::draw\n";
+#endif
   if ( GTK_WIDGET_MAPPED(widget) )
   {
     make_current();
