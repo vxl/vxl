@@ -53,8 +53,9 @@ class vdgl_edgel_chain : public vul_timestamp,
   // Data Access---------------------------------------------------------------
 
   int size() const { return es_.size(); }
-  vdgl_edgel edgel( int i) const { return es_[i]; }
-  vdgl_edgel &operator[]( int i) { return es_[i]; }
+  vdgl_edgel const& edgel( int i) const { return es_[i]; }
+  vdgl_edgel& operator[]( int i) { return es_[i]; }
+  vdgl_edgel const& operator[]( int i) const { return es_[i]; }
 
   //: should call this if one of the edgels is likely to have changed
   void notify_change();
