@@ -116,7 +116,7 @@ class vgui_range_map_params : public vbl_ref_count
 
   //: copy constructor
   vgui_range_map_params(vgui_range_map_params const& p)
-  : n_components_(p.n_components_),
+  : vbl_ref_count(), n_components_(p.n_components_),
     min_L_(p.min_L_), max_L_(p.max_L_), gamma_L_(p.gamma_L_), invert_(p.invert_),
     min_R_(p.min_R_), max_R_(p.max_R_), gamma_R_(p.gamma_R_),
     min_G_(p.min_G_), max_G_(p.max_G_), gamma_G_(p.gamma_G_),
