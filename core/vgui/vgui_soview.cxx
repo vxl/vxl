@@ -11,7 +11,6 @@
 #include "vgui_soview.h"
 
 #include <vcl_iostream.h>
-#include <vcl_algorithm.h>
 #include <vcl_map.h>
 
 #include <vgui/vgui_gl.h>

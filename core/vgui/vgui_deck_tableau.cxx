@@ -11,7 +11,6 @@
 #include "vgui_deck_tableau.h"
 
 #include <vcl_iostream.h>
-#include <vcl_algorithm.h>
 #include <vcl_vector.h>
 
 #include <vgui/vgui_event.h>
@@ -32,7 +31,7 @@ vgui_deck_tableau::vgui_deck_tableau() : index_(-1)
 //: Constructor - don't use this, use vgui_deck_tableau_new.
 //  Make a deck with two children, listed top to bottom.
 vgui_deck_tableau::vgui_deck_tableau(vgui_tableau_sptr const& child0,
-                     vgui_tableau_sptr const& child1) : index_(-1)
+                                     vgui_tableau_sptr const& child1) : index_(-1)
 {
   add(child0);
   add(child1);

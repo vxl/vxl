@@ -13,7 +13,6 @@
 #include <vcl_cstring.h>
 #include <vcl_cstdlib.h> // abort()
 #include <vcl_iostream.h>
-#include <vcl_algorithm.h>
 
 #include <vgui/vgui_macro.h>
 #include <vgui/vgui_window.h>
@@ -77,8 +76,7 @@ void vgui::select(char const *toolkit)
       return;
     }
   }
-  vgui_macro_warning << "no such toolkit \'" << toolkit 
-  << "\' -- vcl_abort()ing\n";
+  vgui_macro_warning << "no such toolkit \'" << toolkit << "\' -- vcl_abort()ing\n";
   vcl_abort();
 }
 
@@ -141,23 +139,22 @@ void vgui::init(int &argc, char **argv)
 
   // abort if no toolkit has been selected.
   if (! instance_) {
-    vgui_macro_warning 
-      << "failed to find a toolkit implementation - vcl_abort()ing.\n";
+    vgui_macro_warning << "failed to find a toolkit implementation - vcl_abort()ing.\n";
     vcl_abort();
   }
   assert(instance_); // need an instance.
 
   // Look for command line options.
   for (int i=1; i<argc; ) {
-    if (vcl_strncmp(argv[i],"--factory=",10) == 0) 
-    {            
+    if (vcl_strncmp(argv[i],"--factory=",10) == 0)
+    {
       // --factory=<name>
       vgui_macro_warning << "superfluous command line argument \'"
-        << argv[i] << "\' ignored\n";
+                         << argv[i] << "\' ignored\n";
       vgui_remove_arg(i, argc, argv);
     }
-    else if (vcl_strncmp(argv[i],"--no-accel",10) == 0) 
-    {       
+    else if (vcl_strncmp(argv[i],"--no-accel",10) == 0)
+    {
       // matches --no-accel*
       vgui_accelerate::vgui_no_acceleration = true;
       vgui_remove_arg(i, argc, argv);
@@ -250,7 +247,7 @@ int vgui::run()
 {
   if (instance_) {
     instance_->run();
-    return 0; 
+    return 0;
   }
   else {
     vgui_macro_warning << "no toolkit selected\n";
@@ -317,8 +314,8 @@ int vgui::run(vgui_tableau_sptr const& tableau, int width, int height,
 
 //-----------------------------------------------------------------------------
 //: Create the vgui_window but don't run it (no menubar).
-vgui_window *vgui::adapt(vgui_tableau_sptr const& tableau, int width, 
-  int height, vcl_string const &title)
+vgui_window *vgui::adapt(vgui_tableau_sptr const& tableau, int width,
+                         int height, vcl_string const &title)
 {
   vgui_window *win = vgui::produce_window(width, height, title);
   win->get_adaptor()->set_tableau(tableau);
@@ -328,8 +325,8 @@ vgui_window *vgui::adapt(vgui_tableau_sptr const& tableau, int width,
 
 //-----------------------------------------------------------------------------
 //: Create the vgui_window but don't run it (with menubar).
-vgui_window *vgui::adapt(vgui_tableau_sptr const& tableau, int width, 
-  int height, vgui_menu const &mb, vcl_string const &title)
+vgui_window *vgui::adapt(vgui_tableau_sptr const& tableau, int width,
+                         int height, vgui_menu const &mb, vcl_string const &title)
 {
   vgui_window *win = vgui::produce_window(width, height, mb, title);
   win->get_adaptor()->set_tableau(tableau);

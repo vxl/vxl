@@ -1,16 +1,12 @@
-// This is ./oxl/vgui/vgui_adaptor.cxx
-
+// This is oxl/vgui/vgui_adaptor.cxx
+#include "vgui_adaptor.h"
 //:
 // \file
 // \author fsm@robots.ox.ac.uk
 // \brief  See vgui_adaptor.h for a description of this file.
 
-
-#include "vgui_adaptor.h"
-
 #include <vcl_cassert.h>
 #include <vcl_iostream.h>
-#include <vcl_algorithm.h>
 
 #include <vgui/vgui_gl.h>
 
@@ -176,8 +172,9 @@ bool vgui_adaptor::dispatch_to_tableau(vgui_event const &e) {
 
   // if the event is DRAW, DRAW_OVERLAY or RESHAPE
   // then set the glViewport and clear the OpenGL matrices
-  if (e.type == vgui_DRAW || e.type == vgui_DRAW_OVERLAY 
-    || e.type == vgui_RESHAPE) {
+  if (e.type == vgui_DRAW ||
+      e.type == vgui_DRAW_OVERLAY ||
+      e.type == vgui_RESHAPE) {
     glViewport(0, 0, get_width(), get_height());
 
     // set projection matrices.

@@ -13,7 +13,6 @@
 
 #include <vcl_iostream.h>
 #include <vcl_vector.h>
-#include <vcl_algorithm.h>
 
 #include <vul/vul_sprintf.h>
 

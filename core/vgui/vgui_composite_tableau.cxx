@@ -13,7 +13,6 @@
 
 #include <vcl_iostream.h>
 #include <vcl_vector.h>
-#include <vcl_algorithm.h>
 
 #include <vul/vul_sprintf.h>
 
@@ -48,7 +47,7 @@ vgui_composite_tableau::vgui_composite_tableau()
 
 //----------------------------------------------------------------------------
 //: Constructor - don't use this, use vgui_composite_tableau_new.
-//: Constructor taking two children.   The first is on top, the second below.
+//  Takes 2 children: the first is on top, the second below.
 vgui_composite_tableau::vgui_composite_tableau(vgui_tableau_sptr const& child0, vgui_tableau_sptr const& child1)
   : c_enable_key_bindings(default_c_enable_key_bindings)
 {
@@ -59,8 +58,10 @@ vgui_composite_tableau::vgui_composite_tableau(vgui_tableau_sptr const& child0, 
 
 //----------------------------------------------------------------------------
 //: Constructor - don't use this, use vgui_composite_tableau_new.
-//: Three children, top to bottom.
-vgui_composite_tableau::vgui_composite_tableau(vgui_tableau_sptr const& child0, vgui_tableau_sptr const& child1, vgui_tableau_sptr const& child2)
+// Three children, top to bottom.
+vgui_composite_tableau::vgui_composite_tableau(vgui_tableau_sptr const& child0,
+                                               vgui_tableau_sptr const& child1,
+                                               vgui_tableau_sptr const& child2)
   : c_enable_key_bindings(default_c_enable_key_bindings)
 {
   add(child0);
@@ -71,7 +72,7 @@ vgui_composite_tableau::vgui_composite_tableau(vgui_tableau_sptr const& child0, 
 
 //----------------------------------------------------------------------------
 //: Constructor - don't use this, use vgui_composite_tableau_new.
-//: Many children, top to bottom.
+// Many children, top to bottom.
 vgui_composite_tableau::vgui_composite_tableau(vcl_vector<vgui_tableau_sptr> const& the_children)
   : c_enable_key_bindings(default_c_enable_key_bindings)
 {
