@@ -11,7 +11,8 @@
 
 #include "vil_nitf_macro_defs.h"
 
-char const * V20_VERSION_STR = "NITF 2.0";
+char const * const V20_VERSION_STR = "NITF 2.0";
+#define DEBUG 0
 
 //====================================================================
 // Constructor(s) and destructor.  Note: the constructor is protected.
@@ -52,12 +53,12 @@ vil_nitf_version_v20 * vil_nitf_version_v20::GetVersion()
 // Since this is a singleton, I don't think we need to delete it.
 // MAL 17oct2003
         nitfvXX = new vil_nitf_version_v20 (V20_VERSION_STR);
+#if DEBUG
         vcl_cout << method_name << "create version object = "
-                 << nitfvXX << " <" << nitfvXX->GetTitle() << ">\n";
+                 << nitfvXX << " <" << nitfvXX->GetTitle() << ">" << vcl_endl ;
+#endif
     }
-    vcl_cout << method_name << "return version object = "
-             << nitfvXX << vcl_endl;
-    return nitfvXX;
+    return nitfvXX ;
 }
 
 vil_nitf_image_subheader_band * vil_nitf_version_v20::newImageHeaderBand (
