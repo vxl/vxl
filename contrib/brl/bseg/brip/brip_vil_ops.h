@@ -39,12 +39,13 @@ brip_sqrt_grad_singular_values(const vil_image_view<T>& input, vil_image_view<T>
     for (unsigned j=n; j<nj-n; ++j){
       for (unsigned i=n; i<ni-n; ++i){
         T IxIx=(T)0, IxIy=(T)0, IyIy=(T)0;
-        for (int x = -n; x<=(int)n; ++x)
+        for (int x = -n; x<=(int)n; ++x){
           for (int y = -n; y<=(int)n; ++y){
             T gx = grad_i(i+x, j+y,p), gy = grad_j(i+x, j+y,p);
-          IxIx += gx*gx;
-          IxIy += gx*gy;
-          IyIy += gy*gy;
+            IxIx += gx*gx;
+            IxIy += gx*gy;
+            IyIy += gy*gy;
+          }
         }
         // calculate the absolute value of the determinate (should work of all types)
         T IxIxIyIy = IxIx*IyIy;
