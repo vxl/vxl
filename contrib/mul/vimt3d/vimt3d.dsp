@@ -132,6 +132,15 @@ SOURCE=.\Templates/vimt3d_sample_grid_trilin+int.double-.cxx
 SOURCE=.\Templates/vimt3d_sample_grid_trilin+uchar.double-.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\Templates/vimt3d_reconstruct_from_grid+float.double-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vimt3d_reconstruct_from_grid+int.double-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vimt3d_reconstruct_from_grid+uchar.double-.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\vimt3d_transform_3d.cxx
 # End Source File
 # Begin Source File
@@ -147,6 +156,12 @@ SOURCE=.\vimt3d_gaussian_pyramid_builder_3d.h
 # End Source File
 # Begin Source File
 SOURCE=.\vimt3d_gaussian_pyramid_builder_3d.txx
+# End Source File
+# Begin Source File
+SOURCE=.\vimt3d_reconstruct_from_grid.h
+# End Source File
+# Begin Source File
+SOURCE=.\vimt3d_reconstruct_from_grid.txx
 # End Source File
 # Begin Source File
 SOURCE=.\vimt3d_image_3d.h

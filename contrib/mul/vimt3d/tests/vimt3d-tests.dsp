@@ -266,6 +266,9 @@ SOURCE=.\test_transform_3d.cxx
 # Begin Source File
 SOURCE=.\test_load.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\test_sample_grid_trilin.cxx
+# End Source File
 # End Group
 # End Target
 # End Project
