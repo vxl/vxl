@@ -23,7 +23,6 @@
 //
 
 #include <vnl/vnl_matrix.h>
-#include <mvl/HomgLine2D.h>
 #include <mvl/HomgPoint2D.h>
 #include <vgl/vgl_homg_point_2d.h>
 #include <mvl/FMatrix.h>
