@@ -349,6 +349,10 @@ void vnl_vector_test_float() {
           ((v1 = 3.0f * v),
            (v1.normalize()), v1 == v), true);
   }
+
+  TEST ("vnl_vector_ssd",
+    vnl_vector_ssd(vnl_vector<float>(4, 0.0f), vnl_vector<float>(4, 1.0f)),
+    4.0);
 }
 
 
