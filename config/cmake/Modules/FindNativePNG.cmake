@@ -5,10 +5,12 @@
 IF(NOT HAS_NATIVE_PNG)
   FIND_PATH( NATIVE_PNG_INCLUDE_PATH png.h
     /usr/local/include
+    /usr/include
   )
 
   FIND_LIBRARY( NATIVE_PNG_LIBRARY png
     /usr/local/lib
+    /usr/lib
   )
 
   IF(NATIVE_PNG_INCLUDE_PATH)
