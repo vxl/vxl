@@ -13,8 +13,6 @@ MANPAGE_SOURCES += vil2_smart_ptr.txx
 SOURCES += vil2_memory_chunk.cxx
 SOURCES += vil2_image_view_base.cxx
 SOURCES += vil2_load.cxx
-SOURCES += vil2_image_view_functions.cxx
-MANPAGE_SOURCES += vil2_image_view_functions.txx
 SOURCES += vil2_crop.cxx
 SOURCES += vil2_memory_image.cxx
 SOURCES += vil2_new.cxx
@@ -32,6 +30,7 @@ SOURCES += vil2_flip.cxx
 SOURCES += vil2_plane.cxx
 SOURCES += vil2_print.cxx
 MANPAGE_SOURCES += vil2_view_as.h
+MANPAGE_SOURCES += vil2_fill.h
 
 SUBDIRS += algo io
 
