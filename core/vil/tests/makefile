@@ -35,6 +35,7 @@ TESTS += test_greyscale_erode.cxx
 TESTS += test_median.cxx
 TESTS += test_algo_exp_grad_filter_1d.cxx
 TESTS += test_algo_gauss_filter.cxx
+TESTS += test_algo_line_filter.cxx
 
 include ${IUEROOT}/mul/mbl/config.mk
 include ${IUEROOT}/mul/mil/config.mk
