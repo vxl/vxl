@@ -197,7 +197,7 @@ void mvl_psi_invert_direct(U const abcde[5], U XYZT[4])
 }
 
 #include <vnl/vnl_matrix_ref.h>
-#include <vnl/algo/vnl_svd.h>
+#include <vnl/algo/vnl_svd_economy.h>
 
 template <mvl_typename U>
 void mvl_psi_invert_design(U const abcde[5], U XYZT[4])
@@ -216,14 +216,15 @@ void mvl_psi_invert_design(U const abcde[5], U XYZT[4])
     0  , e-b, a-d, 0  , // Y:Z
     0  , 0  , d  , b-c  // Z:T
   };
-  vnl_svd<U> svd(vnl_matrix_ref<U>(6, 4, design));
+  // capes_at_robots - much faster than full vnl_svd.
+  vnl_svd_economy<U> svd(vnl_matrix_ref<U>(6, 4, design));
   svd.nullvector().copy_out(XYZT);
 }
 
 template <mvl_typename U>
 void mvl_psi_invert(U const abcde[5], U XYZT[4])
 {
-#if 0
+#if 1 // capes_at_robots - mvl_psi_invert_direct fails occasionally : I think it is missing a case.
   mvl_psi_invert_design(abcde, XYZT);
 #else
   mvl_psi_invert_direct(abcde, XYZT);
