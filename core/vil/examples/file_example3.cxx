@@ -19,7 +19,7 @@ int main(int argc, char** argv)
 
   // This is how we quickly load an image view.
 
-  vil2_image_view<vil_byte> im = vil2_load(filename.c_str());
+  vil2_image_view<vil2_byte> im = vil2_load(filename.c_str());
 
 
   vil2_print_all(vcl_cout, im);
