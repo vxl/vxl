@@ -127,7 +127,7 @@ bool meet(vbl_bounding_box<T,DIM> const &a, vbl_bounding_box<T,DIM> const &b)
 #endif
 
 // VC50 has trouble with this
-#if !defined (WIN32) && !defined(__SUNPRO_CC)
+#if !defined (VCL_WIN32) && !defined(VCL_SUNPRO_CC)
 template <class T, int DIM>
 ostream& operator << (ostream& s, const vbl_bounding_box<T,DIM>& bbox) { return bbox.print(s); }
 #else
