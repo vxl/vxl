@@ -14,6 +14,7 @@
 #include <vdgl/vdgl_interpolator_sptr.h>
 #include <vdgl/vdgl_edgel_chain.h>
 #include <vdgl/vdgl_edgel_chain_sptr.h>
+#include <vdgl/vdgl_digital_curve.h>
 #include <bbas/bdgl/bdgl_curve_algs.h>
 #include <vsol/vsol_box_3d.h>
 #include <vcl_cassert.h>
