@@ -149,6 +149,11 @@ LINK32=link.exe
 SOURCE=.\glmovie.cxx
 
 # End Source File
+# Begin Source File
+
+SOURCE=.\make_index.cxx
+
+# End Source File
 # End Group
 # PROP Default_Filter "ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe"
 # End Group

@@ -165,11 +165,6 @@ SOURCE=.\vul_string.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=.\vul_test.cxx
-
-# End Source File
-# Begin Source File
-
 SOURCE=.\vul_timer.cxx
 
 # End Source File
@@ -264,11 +259,6 @@ SOURCE=.\vul_sprintf.h
 # Begin Source File
 
 SOURCE=.\vul_string.h
-
-# End Source File
-# Begin Source File
-
-SOURCE=.\vul_test.h
 
 # End Source File
 # Begin Source File

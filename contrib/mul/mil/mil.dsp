@@ -290,6 +290,11 @@ SOURCE=.\mil_image_pyramid_builder.cxx
 # End Source File
 # Begin Source File
 
+SOURCE=.\mil_invert_image_2d.cxx
+
+# End Source File
+# Begin Source File
+
 SOURCE=.\mil_transform_2d.cxx
 
 # End Source File
@@ -464,6 +469,11 @@ SOURCE=.\mil_image_data.txx
 # Begin Source File
 
 SOURCE=.\mil_image_pyramid.txx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\mil_invert_image_2d.h
 
 # End Source File
 # Begin Source File

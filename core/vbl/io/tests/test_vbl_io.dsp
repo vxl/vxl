@@ -49,7 +49,7 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:console /machine:I386
-# ADD LINK32 vbl_io.lib vsl.lib vul.lib vbl.lib vcl.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:console /machine:I386 /libpath:"$(VXLROOT)\vxl\vbl\io\Release" /libpath:"$(VXLROOT)\vxl\vsl\Release" /libpath:"$(VXLROOT)\vxl\vul\Release" /libpath:"$(VXLROOT)\vxl\vbl\Release" /libpath:"$(VXLROOT)\vcl\Release"
+# ADD LINK32 vbl_io.lib vsl.lib testlib.lib vbl.lib vcl.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:console /machine:I386 /libpath:"$(VXLROOT)\vxl\vbl\io\Release" /libpath:"$(VXLROOT)\vxl\vsl\Release" /libpath:"$(VXLROOT)\vxl\testlib\Release" /libpath:"$(VXLROOT)\vxl\vbl\Release" /libpath:"$(VXLROOT)\vcl\Release"
 
 !ELSEIF  "$(CFG)" == "test_vbl_io - Win32 Debug"
 
@@ -74,7 +74,7 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:console /debug /machine:I386 /pdbtype:sept
-# ADD LINK32 vbl_io.lib vsl.lib vul.lib vbl.lib vcl.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:console /debug /machine:I386 /pdbtype:sept /libpath:"$(VXLROOT)\vxl\vbl\io\Debug" /libpath:"$(VXLROOT)\vxl\vsl\Debug" /libpath:"$(VXLROOT)\vxl\vul\Debug" /libpath:"$(VXLROOT)\vxl\vbl\Debug" /libpath:"$(VXLROOT)\vcl\Debug"
+# ADD LINK32 vbl_io.lib vsl.lib testlib.lib vbl.lib vcl.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:console /debug /machine:I386 /pdbtype:sept /libpath:"$(VXLROOT)\vxl\vbl\io\Debug" /libpath:"$(VXLROOT)\vxl\vsl\Debug" /libpath:"$(VXLROOT)\vxl\testlib\Debug" /libpath:"$(VXLROOT)\vxl\vbl\Debug" /libpath:"$(VXLROOT)\vcl\Debug"
 # SUBTRACT LINK32 /verbose
 
 !ENDIF 
