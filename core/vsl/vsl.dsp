@@ -251,6 +251,10 @@ SOURCE=.\vsl_test.cxx
 # End Source File
 # Begin Source File
 
+SOURCE=".\Templates\vsl_vector+double-.cxx"
+# End Source File
+# Begin Source File
+
 SOURCE=".\Templates\vsl_vector+float-.cxx"
 # End Source File
 # Begin Source File
