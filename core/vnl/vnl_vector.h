@@ -129,7 +129,7 @@ class vnl_vector
 #endif
 
   //: Destructor
-  ~vnl_vector() { if (data) destroy(); }
+  ~vnl_vector();
 
   //: Return the length, number of elements, dimension of this vector.
   unsigned size() const { return num_elmts; }
@@ -399,6 +399,12 @@ class vnl_vector
  protected:
   unsigned num_elmts;           // Number of elements
   T* data;                      // Pointer to the vnl_vector
+
+#if VCL_HAS_SLICED_DESTRUCTOR_BUG
+  // Since this bug exists, we need a flag that can be set during
+  // construction to tell our destructor whether we own data.
+  char vnl_vector_own_data;
+#endif
 
   void assert_size_internal(unsigned sz) const;
   void assert_finite_internal() const;

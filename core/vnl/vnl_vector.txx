@@ -48,6 +48,13 @@
 
 //--------------------------------------------------------------------------------
 
+#if VCL_HAS_SLICED_DESTRUCTOR_BUG
+// vnl_vector owns its data by default.
+# define vnl_vector_construct_hack() vnl_vector_own_data = 1
+#else
+# define vnl_vector_construct_hack()
+#endif
+
 // This macro allocates the dynamic storage used by a vnl_vector.
 #define vnl_vector_alloc_blah(size) \
 do { \
@@ -67,6 +74,7 @@ do { \
 template<class T>
 vnl_vector<T>::vnl_vector (unsigned len)
 {
+  vnl_vector_construct_hack();
   vnl_vector_alloc_blah(len);
 }
 
@@ -76,6 +84,7 @@ vnl_vector<T>::vnl_vector (unsigned len)
 template<class T>
 vnl_vector<T>::vnl_vector (unsigned len, T const& value)
 {
+  vnl_vector_construct_hack();
   vnl_vector_alloc_blah(len);
   for (unsigned i = 0; i < len; i ++)           // For each elmt
     this->data[i] = value;                      // Assign initial value
@@ -86,6 +95,7 @@ vnl_vector<T>::vnl_vector (unsigned len, T const& value)
 template<class T>
 vnl_vector<T>::vnl_vector (unsigned len, int n, T const values[])
 {
+  vnl_vector_construct_hack();
   vnl_vector_alloc_blah(len);
   if (n > 0) {                                  // If user specified values
     for (unsigned i = 0; i < len && n; i++, n--)        // Initialize first n elements
@@ -99,6 +109,7 @@ template<class T>
 vnl_vector<T>::vnl_vector (unsigned len, T const& px, T const& py)
 {
   assert(len==2);
+  vnl_vector_construct_hack();
   vnl_vector_alloc_blah(2);
   this->data[0] = px;
   this->data[1] = py;
@@ -110,6 +121,7 @@ template<class T>
 vnl_vector<T>::vnl_vector (unsigned len, T const& px, T const& py, T const& pz)
 {
   assert(len==3);
+  vnl_vector_construct_hack();
   vnl_vector_alloc_blah(3);
   this->data[0] = px;
   this->data[1] = py;
@@ -122,6 +134,7 @@ template<class T>
 vnl_vector<T>::vnl_vector (unsigned len, T const& px, T const& py, T const& pz, T const& pw)
 {
   assert(len==4);
+  vnl_vector_construct_hack();
   vnl_vector_alloc_blah(4);
   this->data[0] = px;
   this->data[1] = py;
@@ -139,6 +152,7 @@ template<class T>
 vnl_vector<T>::vnl_vector (unsigned len, int n, T v00, ...)
 : num_elmts(len), data(vnl_c_vector<T>::allocate_T(len))
 {
+  vnl_vector_construct_hack();
   vcl_cerr << "Please use automatic arrays instead variable arguments\n";
   if (n > 0) {                               // If user specified values
     va_list argp;                            // Declare argument list
@@ -156,6 +170,7 @@ template<class T>
 vnl_vector<T>::vnl_vector (unsigned len, int n, T v00, ...)
 : num_elmts(len), data(vnl_c_vector<T>::allocate_T(len))
 {
+  vnl_vector_construct_hack();
   vcl_cerr << "Please use automatic arrays instead variable arguments\n";
   if (n > 0) {                                  // If user specified values
     va_list argp;                               // Declare argument list
@@ -174,6 +189,7 @@ vnl_vector<T>::vnl_vector (unsigned len, int n, T v00, ...)
 template<class T>
 vnl_vector<T>::vnl_vector (vnl_vector<T> const& v)
 {
+  vnl_vector_construct_hack();
   vnl_vector_alloc_blah(v.num_elmts);
   for (unsigned i = 0; i < v.num_elmts; i ++)   // For each element in v
     this->data[i] = v.data[i];                  // Copy value
@@ -185,6 +201,7 @@ vnl_vector<T>::vnl_vector (vnl_vector<T> const& v)
 template<class T>
 vnl_vector<T>::vnl_vector (T const* datablck, unsigned len)
 {
+  vnl_vector_construct_hack();
   vnl_vector_alloc_blah(len);
   for (unsigned i = 0; i < len; ++i)    // Copy data from datablck
     this->data[i] = datablck[i];
@@ -195,6 +212,7 @@ vnl_vector<T>::vnl_vector (T const* datablck, unsigned len)
 template<class T>
 vnl_vector<T>::vnl_vector (vnl_vector<T> const &u, vnl_vector<T> const &v, vnl_tag_add)
 {
+  vnl_vector_construct_hack();
   vnl_vector_alloc_blah(u.num_elmts);
 #if VNL_CONFIG_CHECK_BOUNDS  && (!defined NDEBUG)
   if (u.size() != v.size())
@@ -207,6 +225,7 @@ vnl_vector<T>::vnl_vector (vnl_vector<T> const &u, vnl_vector<T> const &v, vnl_t
 template<class T>
 vnl_vector<T>::vnl_vector (vnl_vector<T> const &u, vnl_vector<T> const &v, vnl_tag_sub)
 {
+  vnl_vector_construct_hack();
   vnl_vector_alloc_blah(u.num_elmts);
 #if VNL_CONFIG_CHECK_BOUNDS  && (!defined NDEBUG)
   if (u.size() != v.size())
@@ -219,6 +238,7 @@ vnl_vector<T>::vnl_vector (vnl_vector<T> const &u, vnl_vector<T> const &v, vnl_t
 template<class T>
 vnl_vector<T>::vnl_vector (vnl_vector<T> const &u, T s, vnl_tag_mul)
 {
+  vnl_vector_construct_hack();
   vnl_vector_alloc_blah(u.num_elmts);
   for (unsigned int i=0; i<num_elmts; ++i)
     data[i] = u[i] * s;
@@ -227,6 +247,7 @@ vnl_vector<T>::vnl_vector (vnl_vector<T> const &u, T s, vnl_tag_mul)
 template<class T>
 vnl_vector<T>::vnl_vector (vnl_vector<T> const &u, T s, vnl_tag_div)
 {
+  vnl_vector_construct_hack();
   vnl_vector_alloc_blah(u.num_elmts);
   for (unsigned int i=0; i<num_elmts; ++i)
     data[i] = u[i] / s;
@@ -235,6 +256,7 @@ vnl_vector<T>::vnl_vector (vnl_vector<T> const &u, T s, vnl_tag_div)
 template<class T>
 vnl_vector<T>::vnl_vector (vnl_vector<T> const &u, T s, vnl_tag_add)
 {
+  vnl_vector_construct_hack();
   vnl_vector_alloc_blah(u.num_elmts);
   for (unsigned int i=0; i<num_elmts; ++i)
     data[i] = u[i] + s;
@@ -243,6 +265,7 @@ vnl_vector<T>::vnl_vector (vnl_vector<T> const &u, T s, vnl_tag_add)
 template<class T>
 vnl_vector<T>::vnl_vector (vnl_vector<T> const &u, T s, vnl_tag_sub)
 {
+  vnl_vector_construct_hack();
   vnl_vector_alloc_blah(u.num_elmts);
   for (unsigned int i=0; i<num_elmts; ++i)
     data[i] = u[i] - s;
@@ -251,6 +274,7 @@ vnl_vector<T>::vnl_vector (vnl_vector<T> const &u, T s, vnl_tag_sub)
 template<class T>
 vnl_vector<T>::vnl_vector (vnl_matrix<T> const &M, vnl_vector<T> const &v, vnl_tag_mul)
 {
+  vnl_vector_construct_hack();
   vnl_vector_alloc_blah(M.rows());
 
 #ifndef NDEBUG
@@ -268,6 +292,7 @@ vnl_vector<T>::vnl_vector (vnl_matrix<T> const &M, vnl_vector<T> const &v, vnl_t
 template<class T>
 vnl_vector<T>::vnl_vector (vnl_vector<T> const &v, vnl_matrix<T> const &M, vnl_tag_mul)
 {
+  vnl_vector_construct_hack();
   vnl_vector_alloc_blah(M.cols());
 #ifndef NDEBUG
   if (v.size() != M.rows())
@@ -279,6 +304,16 @@ vnl_vector<T>::vnl_vector (vnl_vector<T> const &v, vnl_matrix<T> const &M, vnl_t
       sum += v[i] * M[i][j];
     data[j] = sum;
   }
+}
+
+template<class T>
+vnl_vector<T>::~vnl_vector()
+{
+#if VCL_HAS_SLICED_DESTRUCTOR_BUG
+  if (data && vnl_vector_own_data) destroy();
+#else
+  if (data) destroy();
+#endif
 }
 
 //: Frees up the array inside vector. O(1).
