@@ -47,10 +47,10 @@ vgui_mfc_app_init theAppinit;
 # include <vgui/vgui_linker_hack.h>
 #endif
 
-vgui_deck_ref thedeck;
-vcl_vector<vgui_vrml_tableau_ref> thevrmls;
+vgui_deck_sptr thedeck;
+vcl_vector<vgui_vrml_tableau_sptr> thevrmls;
 
-vgui_tableau_ref make_3d_tableau(char const* filename)
+vgui_tableau_sptr make_3d_tableau(char const* filename)
 {
   vgui_vrml_tableau_new vrml(filename, true);
 
@@ -98,7 +98,7 @@ void load_vrml()
   d.inline_file("Filename", re, filename);
   if (!d.ask())
     return;
-  vgui_tableau_ref tab3d = make_3d_tableau(filename.c_str());
+  vgui_tableau_sptr tab3d = make_3d_tableau(filename.c_str());
   thedeck->add(tab3d);
 }
 
@@ -153,7 +153,7 @@ int main(int argc, char **argv)
   vgui_deck_new deck;
   thedeck = deck;
   for(int i = 1; i < argc; ++i) {
-    vgui_tableau_ref tab3d = make_3d_tableau(argv[i]);
+    vgui_tableau_sptr tab3d = make_3d_tableau(argv[i]);
     thedeck->add(tab3d);
   }
 
