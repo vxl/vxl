@@ -267,6 +267,15 @@ SOURCE=.\Templates/vsl_vector_io+vsol_spatial_object_2d_sptr-.cxx
 SOURCE=.\Templates/vsl_vector_io+vsol_triangle_2d_sptr-.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\Templates/vbl_io_smart_ptr+vsol_digital_curve_2d-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vbl_smart_ptr+vsol_digital_curve_2d-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vsl_vector_io+vsol_digital_curve_2d_sptr-.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\vsol_box_2d.cxx
 # End Source File
 # Begin Source File
@@ -343,6 +352,9 @@ SOURCE=.\vsol_volume_3d.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\vsol_polyline_2d.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\vsol_digital_curve_2d.cxx
 # End Source File
 # End Group
 # Begin Group "Header Files"
@@ -502,6 +514,12 @@ SOURCE=.\vsol_polyline_2d.h
 # End Source File
 # Begin Source File
 SOURCE=.\vsol_polyline_2d_sptr.h
+# End Source File
+# Begin Source File
+SOURCE=.\vsol_digital_curve_2d.h
+# End Source File
+# Begin Source File
+SOURCE=.\vsol_digital_curve_2d_sptr.h
 # End Source File
 # End Group
 # End Target

@@ -180,6 +180,9 @@ SOURCE=.\test_vsol_triangle_3d.cxx
 # Begin Source File
 SOURCE=.\test_vsol_io.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\test_vsol_digital_curve_2d.cxx
+# End Source File
 # End Group
 # End Target
 # End Project
