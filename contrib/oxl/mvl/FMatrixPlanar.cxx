@@ -84,7 +84,7 @@ FMatrixPlanar::set (const vnl_matrix<double>& f_matrix )
 {
   int row_index, col_index;
 
-#if PARANOID
+#ifdef PARANOID
 
   // CRUDE test for planar form with tolerance 0
   // test F and F+F' are Rank 2
