@@ -34,10 +34,10 @@ extern "C" {
   typedef unsigned char uint8_t;
   typedef unsigned int uint32_t;
 #define this c_this
-#include <video_out.h>
-#include <mpeg2.h>
-#include <mm_accel.h>
-#include <../libvo/video_out_internal.h>
+#include <mpeg2dec/video_out.h>
+#include <mpeg2dec/mpeg2.h>
+#include <mpeg2dec/mm_accel.h>
+#include <libvo/video_out_internal.h>
 #undef this
 }
 
