@@ -20,8 +20,7 @@ vifa_int_face_attr_common(vdgl_fit_lines_params*    fitter_params,
   this->init();
 }
 
-vifa_int_face_attr_common::
-~vifa_int_face_attr_common()
+vifa_int_face_attr_common::~vifa_int_face_attr_common()
 {
 }
 
@@ -59,7 +58,7 @@ col_collapse()
   double  total_count = 0;
 
   for (coll_iterator c = collinear_lines_.begin();
-      c != collinear_lines_.end(); ++c)
+       c != collinear_lines_.end(); ++c)
   {
     total_count++;
 
@@ -99,7 +98,7 @@ get_line_along_edge(vtol_edge* edge)
   vtol_vertex_sptr    ev2 = edge->v2();
 
   for (coll_iterator c = collinear_lines_.begin();
-      c != collinear_lines_.end(); ++c)
+       c != collinear_lines_.end(); ++c)
   {
     edge_2d_list&  c_edges = (*c)->get_contributors();
 
@@ -186,8 +185,10 @@ fit_lines()
 {
   edge_2d_list  edges_in_vect = this->GetEdges();
 
-//  vcl_cout << "ifac::fit_lines(): " << edges_in_vect.size()
-//           << " edges available\n";
+#ifdef DEBUG
+    vcl_cout << "ifac::fit_lines(): " << edges_in_vect.size()
+             << " edges available\n";
+#endif
 
   if (!edges_in_vect.size())
   {
@@ -200,7 +201,7 @@ fit_lines()
        ei != edges_in_vect.end(); ei++)
   {
     vsol_curve_2d_sptr c = (*ei)->curve();
-    vdgl_digital_curve_sptr dc = c->cast_to_digital_curve();
+    vdgl_digital_curve_sptr dc = c->cast_to_vdgl_digital_curve();
     if (!dc)
       continue;
     curves_in.push_back(dc);
@@ -217,7 +218,9 @@ fit_lines()
   fitter.set_curves(curves_in);
   vcl_vector<vsol_line_2d_sptr>&  segs = fitter.get_line_segs();
 
-//  vcl_cout << "ifac::fit_lines(): " << segs.size() << " segments from fitter\n";
+#ifdef DEBUG
+    vcl_cout << "ifac::fit_lines(): " << segs.size() << " segments from fitter\n";
+#endif
 
   // Convert fitter output to edges & update statistics
   vcl_vector<vsol_line_2d_sptr>::iterator  segi = segs.begin();
@@ -241,7 +244,7 @@ find_collinear_lines()
   edge_2d_list  unsorted_edges = this->GetFittedEdges();
   edge_2d_list  f_edges;
   for (edge_2d_iterator e = unsorted_edges.begin();
-      e != unsorted_edges.end(); ++e)
+       e != unsorted_edges.end(); ++e)
   {
     double        len = (*e)->curve()->length();
     edge_2d_iterator  slot = f_edges.begin();
@@ -257,10 +260,14 @@ find_collinear_lines()
   coll_list    unfiltered_lines;
   coll_iterator  match;
 
-//  vcl_cout << "Collineating: ";
+#ifdef DEBUG
+  vcl_cout << "Collineating: ";
+#endif
   for (edge_2d_iterator e = f_edges.begin(); e != f_edges.end(); ++e)
   {
-//    vcl_cout << '.';
+#ifdef DEBUG
+    vcl_cout << '.';
+#endif
 
     if ((*e)->curve()->length() == 0)
       continue;
@@ -280,12 +287,13 @@ find_collinear_lines()
       (*match)->add_and_update(*e);
   }
 
-//  vcl_cout << vcl_endl;
+#ifdef DEBUG
+  vcl_cout << vcl_endl;
+#endif
 
   // remove lines whose support is too low
-  // int  unwind_count = 0;
   for (coll_iterator c = unfiltered_lines.begin();
-      c != unfiltered_lines.end(); ++c)
+       c != unfiltered_lines.end(); ++c)
   {
     double  span = (*c)->spanning_length();
     double  support = (*c)->support_length();
@@ -306,8 +314,7 @@ find_collinear_lines()
         vifa_coll_lines_sptr  cl(new vifa_coll_lines(*e,
                                                      cpp_->angle_tolerance(),
                                                      cpp_->endpt_distance(),
-                                                     true)
-                                );
+                                                     true));
 
         collinear_lines_.push_back(cl);
 
@@ -317,15 +324,15 @@ find_collinear_lines()
         col_span_.add_sample(span);
         col_support_.add_sample(support);
         col_contrib_.add_sample(cl->get_contributors().size());
-        // unwind_count++;
       }
     }
   }
 
-//  vcl_cout << unfiltered_lines.size() << " raw collinear lines; "
-//           << unwind_count << " lines from unsupported lines; "
-//           << collinear_lines_.size() << " lines above discard threshold "
-//           << cpp_->discard_threshold_ << vcl_endl;
+#ifdef DEBUG
+  vcl_cout << unfiltered_lines.size() << " raw collinear lines; "
+           << collinear_lines_.size() << " lines above discard threshold "
+           << cpp_->discard_threshold_ << vcl_endl;
+#endif
 }
 
 bool vifa_int_face_attr_common::
@@ -361,12 +368,16 @@ compute_parallel_sal(vifa_group_pgram_params_sptr  gpp)
   float      sal = 0.f;
   edge_2d_list  fedges = this->GetFittedEdges();
 
-//  vcl_cout << "ifac::compute_parallel_sal(): " << fedges.size()
-//           << " edges found\n";
+#ifdef DEBUG
+  vcl_cout << "ifac::compute_parallel_sal(): " << fedges.size()
+           << " edges found\n";
+#endif
 
   if (fedges.size())
   {
-//    vcl_cout << (*fitter_params_);
+#ifdef DEBUG
+    vcl_cout << (*fitter_params_);
+#endif
 
     float    total_len = 0.f;
     int      nlines = 0;
@@ -388,8 +399,10 @@ compute_parallel_sal(vifa_group_pgram_params_sptr  gpp)
       }
     }
 
-//  vcl_cout << "ifac::compute_parallel_sal(): " << nlines
-//           << " lines after filtering, total_len = " << total_len << vcl_endl;
+#ifdef DEBUG
+    vcl_cout << "ifac::compute_parallel_sal(): " << nlines
+             << " lines after filtering, total_len = " << total_len << vcl_endl;
+#endif
 
     // compute the score for the set of fitted lines
     if (nlines > 2)

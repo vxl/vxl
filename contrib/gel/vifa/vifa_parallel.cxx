@@ -64,7 +64,7 @@ vifa_parallel(iface_list&   faces,
 
         if (c)
         {
-          vdgl_digital_curve*  dc = c->cast_to_digital_curve();
+          vdgl_digital_curve*  dc = c->cast_to_vdgl_digital_curve();
 
           if (dc)
           {
@@ -107,8 +107,7 @@ vifa_parallel(vcl_vector<float>&  pixel_orientations,
   float  range = max_angle - min_angle;
 
   for (vcl_vector<float>::iterator p = pixel_orientations.begin();
-      p != pixel_orientations.end();
-      ++p)
+       p != pixel_orientations.end(); ++p)
   {
     float  theta = (*p);
 
@@ -133,8 +132,9 @@ vifa_parallel(float  center_angle,
 {
   raw_h_ = new vifa_histogram(nbuckets, min_angle, max_angle);
 
-//  vcl_cout << "vifa_parallel(): 0.5 is " << raw_h_->GetValIndex(0.5) <<
-//    vcl_endl;
+#ifdef DEBUG
+  vcl_cout << "vifa_parallel(): 0.5 is "<< raw_h_->GetValIndex(0.5) << vcl_endl;
+#endif
 
   vifa_gaussian  g(center_angle, std_dev);
   for (float i = min_angle; i < 2 * max_angle; i++)
@@ -148,15 +148,13 @@ vifa_parallel(float  center_angle,
   norm_h_ = vifa_parallel::normalize_histogram(raw_h_);
 }
 
-vifa_parallel::
-~vifa_parallel()
+vifa_parallel::~vifa_parallel()
 {
   delete raw_h_;
   delete norm_h_;
 }
 
-void vifa_parallel::
-reset(void)
+void vifa_parallel::reset(void)
 {
   delete norm_h_;
   norm_h_ = normalize_histogram(raw_h_);
@@ -192,7 +190,6 @@ map_gaussian(float&  max_angle,
   if (local_max_angle != -1.0)
   {
     float  min_residual = 0.f; // dummy initialisation
-//  int    min_index = -1; // dummy initialisation
 
     for (float j=-(n_sigma+1); j<=(n_sigma+1); j++)
     {
@@ -250,19 +247,23 @@ map_gaussian(float&  max_angle,
           std_dev = local_std_dev;
           max_angle = new_center;
           scale = local_scale;
-//        min_index = i;
 
-          // vcl_cout << "*** ";
+#ifdef DEBUG
+          vcl_cout << "*** ";
+#endif
         }
 
-        // vcl_cout << j << " gaussian " << i << " residual " <<
-        //  sample_sum << " sample count " << sample_count << vcl_endl;
+#ifdef DEBUG
+        vcl_cout << j << " gaussian " << i << " residual "
+                 << sample_sum << " sample count " << sample_count << vcl_endl;
+#endif
       }
     }
 
-    //  vcl_cout << "best is at " << max_angle << " sd of " << std_dev <<
-    //    " scale " << scale << " (index " << min_index << " )" <<
-    //    vcl_endl;
+#ifdef DEBUG
+    vcl_cout << "best is at " << max_angle << " sd of " << std_dev
+             << " scale " << scale << vcl_endl;
+#endif
 
 #ifdef DUMP
     pass++;
@@ -292,8 +293,9 @@ remove_gaussian(float  max_angle,
       {
         float  new_val = ((f - e) < 0) ? 0 : (f - e);
 
-//        vcl_cout << "  --- " << x << ": " << f <<" to " << new_val
-//          << vcl_endl;
+#ifdef DEBUG
+        vcl_cout << "  --- " << x << ": " << f <<" to " << new_val << vcl_endl;
+#endif
 
         norm_h_->SetCount(x, new_val);
       }
