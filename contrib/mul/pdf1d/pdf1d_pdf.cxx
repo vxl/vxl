@@ -6,16 +6,14 @@
 // \file
 // \author Tim Cootes
 // \brief Base class for Univariate Probability Density Function classes.
-// Modifications
 // \verbatim
-// IMS 28 Feb 2002 - Added inverse CDF function.
-// \endverbtim
+//  Modifications
+//  IMS 28 Feb 2002 - Added inverse CDF function.
+// \endverbatim
 
 #include "pdf1d_pdf.h"
 #include <vcl_cstdlib.h>
 #include <vcl_cmath.h>
-#include <vcl_ctime.h>
-#include <vcl_algorithm.h>
 #include <vcl_cassert.h>
 #include <vsl/vsl_indent.h>
 #include <vsl/vsl_binary_loader.h>

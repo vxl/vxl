@@ -6,15 +6,15 @@
 // \file
 // \brief Base class for kernel PDFs.
 // \author Tim Cootes
-// Modifications
 // \verbatim
-// IMS 28 Feb 2002 Added inverse CDF.
+//  Modifications
+//  IMS 28 Feb 2002 Added inverse CDF.
+// \endverbatim
 
 #include "pdf1d_kernel_pdf.h"
 #include <vcl_cstdlib.h>
 #include <vcl_cassert.h>
 #include <vcl_string.h>
-#include <vcl_cmath.h>
 #include <vnl/vnl_math.h>
 #include <vnl/io/vnl_io_vector.h>
 #include <mbl/mbl_index_sort.h>
