@@ -102,7 +102,7 @@ LIB32=link.exe -lib
 SOURCE=.\Templates/vcl_map+int.vcl_vector+vtol_edge_2d_sptr-~-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vcl_map+int.vbl_smart_ptr+vtol_topology_object--.cxx
+SOURCE=.\Templates/vcl_map+int.vtol_topology_object_sptr-.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\Templates/vbl_smart_ptr+vtol_block-.cxx
