@@ -867,7 +867,8 @@ void bmvv_recon_manager::corr_plot()
   float x=0, y=0;
   ptab->pick_point(&x,&y);
   vcl_vector<float> z, corr;
-  sweep_.corr_vals(x, y, z, corr);
+  int ix = (int)x, iy = (int)y;
+  sweep_.corr_vals(ix, iy, z, corr);
   int n = z.size();
   if (!n)
     return;
@@ -930,7 +931,7 @@ void bmvv_recon_manager::map_image()
  z_map_dlg.field("Depth value (z)", z);
  if (!z_map_dlg.ask())
    return;
- int from_cam = this->get_cam(), to_cam = 1-from_cam;
+ int from_cam = this->get_cam();
  vil1_memory_image_of<unsigned char> mapped_to_image, orig_to_image;
  if (!sweep_.map_image_to_image(from_cam, z, mapped_to_image, orig_to_image))
    return;
@@ -956,7 +957,7 @@ void bmvv_recon_manager::map_harris_corners()
   z_map_dlg.field("Depth value (z)", z);
   if (!z_map_dlg.ask())
     return;
-  int from_cam = this->get_cam(), to_cam = 1-from_cam;
+  int from_cam = this->get_cam();
   vcl_vector<vsol_point_2d_sptr> mapped_to_points, orig_to_points;
   if (!sweep_.map_harris_corners(from_cam, z, mapped_to_points, orig_to_points))
     return;
@@ -977,7 +978,7 @@ void bmvv_recon_manager::match_harris_corners()
   z_match_dlg.field("Point Radiuus", sweep_.point_radius_);
   if (!z_match_dlg.ask())
     return;
-  int from_cam = this->get_cam(), to_cam = 1-from_cam;
+  int from_cam = this->get_cam();
   vcl_vector<vsol_point_2d_sptr> matched_to_points, orig_to_points;
   sweep_.init_harris_match(from_cam);
   if (!sweep_.match_harris_corners(from_cam, z, matched_to_points,
