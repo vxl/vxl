@@ -2,7 +2,7 @@
 include ${IUEROOT}/config/top-params.mk
 #######################################
 
-USES := vxl
+USES := vxl gel
 
 IMMEDIATE_LIBS := -lvsol -lvgl -lvbl -lvnl -lvcl
 
@@ -21,7 +21,10 @@ SOURCES += vdgl_interpolator_linear.cxx
 SOURCES += vdgl_digital_curve.cxx
 
 SOURCES += vdgl_fit_line.cxx
-SUBDIRS += examples
+
+ifndef NOTEST
+SUBDIRS += tests examples
+endif
 
 ######################################
 include ${IUEROOT}/config/top-rules.mk

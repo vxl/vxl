@@ -6,8 +6,11 @@
 include ${IUEROOT}/config/top-params.mk
 #######################################
 
-# van-duc region finder (ported from target)
-#SUBDIRS += gevd
+# basics
+SUBDIRS += gbl
+
+# van-duc region finder (ported from TargetJr)
+SUBDIRS += gevd
 
 # matcher
 SUBDIRS += geml
@@ -16,16 +19,24 @@ SUBDIRS += geml
 SUBDIRS += gmvl
 
 # Dense matcher
-#SUBDIRS += vsrl
+SUBDIRS += vsrl
 
 # Triangulation code
-#SUBDIRS += gtrl
+SUBDIRS += gtrl
+
+# digital geometry
+SUBDIRS += vdgl
 
 # spatial objects
 SUBDIRS += vsol
 
 # topology
-SUBDIRS += vtol
+SUBDIRS += gst vtol
+
+# general examples
+ifndef NOTEST
+SUBDIRS += examples
+endif
 
 ######################################
 include ${IUEROOT}/config/top-rules.mk
