@@ -492,7 +492,7 @@ void bmvv_multiview_manager::track_edges()
   det1.DoContour();
   edges = det1.GetEdges();
   //display the edges
-	/*
+#if 0
   btab = this->get_vtol2D_tableau_at(0,0);
   if (btab)
     btab->add_edges(*edges, true);
@@ -501,7 +501,7 @@ void bmvv_multiview_manager::track_edges()
       vcl_cout << "In bmvv_multiview_manager::track_edges() - null tableau\n";
       return;
     }
-		*/
+#endif // 0
   // pass the edges
   ecl.clear();
   for (unsigned int i=0;i<edges->size();i++){
@@ -518,7 +518,7 @@ void bmvv_multiview_manager::track_edges()
   det2.DoContour();
   edges = det2.GetEdges();
   //display the edges
-	/*
+#if 0
   btab = this->get_vtol2D_tableau_at(1,0);
   if (btab)
     btab->add_edges(*edges, true);
@@ -527,7 +527,7 @@ void bmvv_multiview_manager::track_edges()
       vcl_cout << "In bmvv_multiview_manager::track_edges() - null tableau\n";
       return;
     }
-		*/
+#endif // 0
   ecl.clear();
   for (unsigned int i=0;i<edges->size();i++){
     c = (*edges)[i]->curve();
@@ -548,8 +548,8 @@ void bmvv_multiview_manager::track_edges()
   //display the edges
   btab = this->get_vtol2D_tableau_at(0,0);
   if (btab){
-		tracker.draw_lines(0, btab);
-	} else {
+    tracker.draw_lines(0, btab);
+  } else {
     vcl_cout << "In bmvv_multiview_manager::track_edges() - null tableau\n";
     return;
   }
@@ -557,12 +557,12 @@ void bmvv_multiview_manager::track_edges()
   //display the edges
   btab = this->get_vtol2D_tableau_at(1,0);
   if (btab){
-		tracker.draw_lines(1, btab);
-	} else {
+    tracker.draw_lines(1, btab);
+  } else {
       vcl_cout << "In bmvv_multiview_manager::track_edges() - null tableau\n";
       return;
   }
-	return;
+  return;
 }
 
 //====================================================================
