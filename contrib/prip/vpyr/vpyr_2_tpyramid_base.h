@@ -287,9 +287,6 @@ class vpyr_2_tpyramid_base_edge : public vmap_2_tmap_edge
   typedef vpyr_2_tpyramid_const_base_dart_iterator const_dart_iterator ;
 
   //:
-  typedef vpyr_2_tpyramid_base_dart_iterator dart_iterator ;
-
-  //:
   typedef vpyr_2_tpyramid_const_base_dart_iterator const_dart_iterator ;
 
   //: Returns the corresponding edge at level "level".
