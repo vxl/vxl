@@ -34,7 +34,7 @@ ADD_LIBRARY(vmap ${vmap_sources})
 LINK_LIBRARIES(vmap vbl vcl)
 
 #IF (BUILD_EXAMPLES)
-  SUBDIRS(examples)
+# SUBDIRS(examples)
 #ENDIF (BUILD_EXAMPLES)
 
 #IF (BUILD_TESTING)
