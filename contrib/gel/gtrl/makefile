@@ -2,7 +2,7 @@
 # crossge@crd.ge.com
 #
 ##########################################
-include $(IUEROOT)/vxl/vgui/easy-client.mk
+#include $(IUEROOT)/vxl/vgui/easy-client.mk
 ##########################################
 
 USES += v3p vxl gel
@@ -22,7 +22,6 @@ DEFINES += -DANSI_DECLARATORS
 DEFINES += -DTRILIBRARY
 SOURCES += gtrl_netlib_triangle.c
 
-
-######################################
-include ${IUEROOT}/config/top-rules.mk
-######################################
+################################
+include ${IUEROOT}/config/top.mk
+################################
