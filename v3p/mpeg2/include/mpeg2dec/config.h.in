@@ -46,22 +46,22 @@
 #undef HAVE_UNISTD_H
 
 /* libmpeg2 mediaLib support */
-#undef LIBMPEG2_MLIB
+/* #undef LIBMPEG2_MLIB */
 
 /* libvo MGA support */
-#undef LIBVO_MGA
+/* #undef LIBVO_MGA */
 
 /* libvo mediaLib support */
-#undef LIBVO_MLIB
+/* #undef LIBVO_MLIB */
 
 /* libvo SDL support */
-#undef LIBVO_SDL
+/* #undef LIBVO_SDL */
 
 /* libvo X11 support */
-#undef LIBVO_X11
+/* #undef LIBVO_X11 */
 
 /* libvo Xv support */
-#undef LIBVO_XV
+/* #undef LIBVO_XV */
 
 /* mpeg2dec profiling */
 #undef MPEG2DEC_GPROF
