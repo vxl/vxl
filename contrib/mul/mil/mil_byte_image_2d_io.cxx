@@ -18,33 +18,25 @@
 #include <vil/vil_rgb_byte.h>
 
 //=======================================================================
-// Dflt ctor
-//=======================================================================
 
 mil_byte_image_2d_io::mil_byte_image_2d_io()
 {
 }
 
 //=======================================================================
-// Destructor
-//=======================================================================
 
 mil_byte_image_2d_io::~mil_byte_image_2d_io()
 {
 }
 
-//=======================================================================
 //: Define whether to load images as colour or grey-scale
 //  Options are '' (ie rely on image), 'Grey' or 'RGB'
-//=======================================================================
 void mil_byte_image_2d_io::setColour(const vcl_string& c)
 {
   colour_ = c;
 }
 
-//=======================================================================
 //: Whether to load images as RGB, Grey-scale or leave to image format
-//=======================================================================
 const vcl_string& mil_byte_image_2d_io::colour() const
 {
   return colour_;

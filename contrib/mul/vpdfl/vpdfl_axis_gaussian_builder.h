@@ -52,7 +52,6 @@ public:
                               mbl_data_wrapper<vnl_vector<double> >& data,
                               const vcl_vector<double>& wts) const;
 
-
     //: Version number for I/O
   short version_no() const;
 
@@ -69,12 +68,9 @@ public:
   virtual void print_summary(vcl_ostream& os) const;
 
     //: Save class to binary file stream
-    //!in: bfs: Target binary file stream
   virtual void b_write(vsl_b_ostream& bfs) const;
 
-
     //: Load class from binary file stream
-    //!out: bfs: Target binary file stream
   virtual void b_read(vsl_b_istream& bfs);
 };
 
