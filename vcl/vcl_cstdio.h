@@ -17,7 +17,7 @@
 # include <stdio.h>
 # define vcl_generic_cstdio_STD /* */
 # include "generic/vcl_cstdio.h"
-#elif VCL_VC60
+#elif defined(VCL_VC60)
 # include <cstdio>
 # define vcl_generic_cstdio_STD /**/
 # include "generic/vcl_cstdio.h"

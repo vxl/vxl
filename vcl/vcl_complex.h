@@ -26,7 +26,7 @@
 # include "stlport/vcl_complex.h"
 
 // ---------- Visual Studio 6
-#elif VCL_VC60
+#elif defined(VCL_VC60)
 # include "win32-vc60/vcl_complex.h"
 
 // ---------- SunPro compiler

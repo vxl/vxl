@@ -2,7 +2,7 @@
 #include <vcl_functional.h>
 #include <vcl_string.h> // C++ specific includes first
 
-#if TEST == 1
+#if defined(TEST) && TEST == 1
 // STL included later - this does not work with vcl/emulation because of "redefinition of default argument"
 #include <vcl_stlfwd.h>
 #include <vcl_map.h>
@@ -10,7 +10,7 @@
 #include <vcl_list.h>
 
 #else
-#if TEST == 2
+#if defined(TEST) && TEST == 2
 // stl included first
 
 #include <vcl_map.h>
