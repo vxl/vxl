@@ -29,10 +29,10 @@ SOURCES += vsrl_parameters.cxx
 
 DEFINES += -DBUILDING_VSRL_DLL
 
-################################
-include ${IUEROOT}/config/top.mk
-################################
-
 ifndef NOTEST
 SUBDIRS += examples
 endif
+
+################################
+include ${IUEROOT}/config/top.mk
+################################
