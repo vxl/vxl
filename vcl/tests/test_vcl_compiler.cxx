@@ -67,5 +67,5 @@ bool operator< (mystery_type const &x, mystery_type const &y)
 { return (x.a <  y.b) || ((x.a == y.a) && (x.b < y.b)); }
 
 #else
-void test_implicit_instantiation(int) { }
+void vcl_test_implicit_instantiation(int) { }
 #endif
