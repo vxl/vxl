@@ -28,9 +28,8 @@ static void test_range_map()
   if (rmuc.mapable())
   {
     map_good = true;
-    for (unsigned i = 0; i<size8; ++i)
-      if (i>=0&&i<=255)
-        map_good = map_good&&map8[i]==(vxl_byte)i;
+    for (unsigned i = 0; i<size8 && i<256; ++i)
+      map_good = map_good && map8[i]==(vxl_byte)i;
   }
   TEST("vxl_byte values", val8==127&&!rmuc.offset()&&map_good, true);
 
