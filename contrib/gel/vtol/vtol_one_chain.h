@@ -149,7 +149,7 @@ class vtol_one_chain
 
   virtual void compute_bounding_box(void); //A local implementation
 
-  virtual vtol_edge *edge(int i) const;
+  virtual vtol_edge_sptr edge(int i) const;
   virtual int num_edges(void) const { return numinf(); }
 
   virtual void determine_edge_directions(void);
