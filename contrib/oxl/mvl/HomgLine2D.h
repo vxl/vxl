@@ -45,6 +45,8 @@ class HomgLine2D : public Homg2D
   // Return true if $min(|x|,|y|) < \mbox{tol} \times |z|$.
   bool check_infinity(double tol) const;
 
+  inline bool ideal(double tol = 1e-12) const { return check_infinity(tol); }
+
   // Clip the infinite line to the given bounding box and return
   HomgLineSeg2D clip(int x0, int y0, int x1, int y1) const;
 
