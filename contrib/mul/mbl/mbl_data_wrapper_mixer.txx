@@ -142,7 +142,6 @@ void mbl_data_wrapper_mixer<T>::set_index(unsigned long n)
   while (index_>=sum_n)
     { current_wrapper_++; sum_n += wrapper_[current_wrapper_]->size(); }
   int offset = index_ - (sum_n - wrapper_[current_wrapper_]->size());
-  vcl_cout<<"Current: "<<current_wrapper_<<vcl_endl;
   wrapper_[current_wrapper_]->set_index(offset);
 }
 
