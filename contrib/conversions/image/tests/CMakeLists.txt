@@ -3,6 +3,7 @@ INCLUDE( ${allvxl_SOURCE_DIR}/vxl/vil/CMakeListsLink.txt )
 INCLUDE( ${allvxl_SOURCE_DIR}/vxl/vpl/CMakeListsLink.txt )
 
 IF(BUILD_MUL)
+  INCLUDE_DIRECTORIES(${allvxl_SOURCE_DIR}/mul)
   INCLUDE( ${allvxl_SOURCE_DIR}/mul/mil/CMakeListsLink.txt )
   ADD_EXECUTABLE( test_mil_conversions test_mil_conversions.cxx )
 ENDIF(BUILD_MUL)
