@@ -45,7 +45,6 @@ SET(vcl_generic
   vcl_stdexcept.hhh
   vcl_streambuf.hhh
   vcl_string.hhh
-  vcl_strstream.hhh
   vcl_typeinfo.hhh
   vcl_utility.hhh
   vcl_valarray.hhh

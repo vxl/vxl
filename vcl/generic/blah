@@ -44,7 +44,6 @@ stack
 stdexcept
 streambuf
 string
-strstream
 typeinfo
 utility
 valarray
