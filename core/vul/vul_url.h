@@ -5,6 +5,7 @@
 #endif
 
 #include <vcl_istream.h>
+#include <vcl_iostream.h> // needed for vcl_ios_in and vcl_ios_openmode
 #include <vcl_string.h>
 
 //: Functions to test and open streams via a URL
@@ -19,7 +20,7 @@ public:
 // If url is "http://..." open using vul_http_open
 // If url is "ftp://..." attempt ftp
 // Otherwise assume it is a filename and open with given mode
-  static vcl_istream * open(const char * url, vcl_ios::open_mode mode=vcl_ios::in );
+  static vcl_istream * open(const char * url, vcl_ios_openmode mode=vcl_ios_in );
 
 //: Does that URL exist
 // If the URL does not begin with a recognised scheme identifier, the function will

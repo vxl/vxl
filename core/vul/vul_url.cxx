@@ -380,7 +380,7 @@ bool vul_http_exists(char const *url)
 }
 
 
-vcl_istream * vul_url::open(const char * url, vcl_ios::open_mode mode)
+vcl_istream * vul_url::open(const char * url, vcl_ios_openmode mode)
 {
   // check for null pointer or empty strings.
   if (!url || !*url)
