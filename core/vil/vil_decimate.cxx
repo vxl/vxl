@@ -64,7 +64,6 @@ vil2_image_view_base_sptr vil2_decimate_image_resource::get_copy_view(unsigned i
     default:
       return 0;
     }
-    return vs;
   }
   else // do large image case.
   {
@@ -129,7 +128,6 @@ vil2_image_view_base_sptr vil2_decimate_image_resource::get_view(unsigned i0, un
     default:
       return 0;
     }
-    return vs;
   }
   else // do large image case.
     return get_copy_view(i0, ni, j0, nj);
