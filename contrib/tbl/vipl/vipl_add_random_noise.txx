@@ -10,8 +10,8 @@ bool vipl_add_random_noise <ImgIn,ImgOut,DataIn,DataOut,PixelItr> :: section_app
   int starty = start(Y_Axis());
   int stopx = stop(X_Axis());
   int stopy = stop(Y_Axis());
-  for(register int j = starty; j < stopy; ++j)
-    for(register int i = startx; i < stopx; ++i) {
+  for (register int j = starty; j < stopy; ++j)
+    for (register int i = startx; i < stopx; ++i) {
 #ifdef STAT_LIB
       DataOut p = fgetpixel(in_data(),i,j,dummy) + (DataOut)(distrib_->Draw(&seed_));
 #else

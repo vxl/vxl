@@ -14,8 +14,8 @@ bool vipl_gradient_mag <ImgIn,ImgOut,DataIn,DataOut,PixelItr> :: section_applyop
   int starty = start(Y_Axis());
   int stopx = stop(X_Axis());
   int stopy = stop(Y_Axis());
-  for(int j = starty; j < stopy; ++j)
-    for(int i = startx; i < stopx; ++i) {
+  for (int j = starty; j < stopy; ++j)
+    for (int i = startx; i < stopx; ++i) {
       dx = fgetpixel(in, i, j, dummy) - getpixel(in, i-1, j, dummy);
       dy = fgetpixel(in, i, j, dummy) - getpixel(in, i, j-1, dummy);
       dx = (vcl_sqrt( dx*dx + dy*dy ) + shift()) * scale();

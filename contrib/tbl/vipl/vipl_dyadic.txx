@@ -14,8 +14,8 @@ bool vipl_dyadic <ImgIn,ImgOut,DataIn,DataOut,PixelItr> :: section_applyop(){
   int starty = start(Y_Axis());
   int stopx = stop(X_Axis());
   int stopy = stop(Y_Axis());
-  for(int j = starty; j < stopy; ++j)
-    for(int i = startx; i < stopx; ++i) {
+  for (int j = starty; j < stopy; ++j)
+    for (int i = startx; i < stopx; ++i) {
       DataIn p = fgetpixel(in, i, j, dummy1);
       DataOut q = fgetpixel(out, i, j, dummy2);
       func()(q,p);

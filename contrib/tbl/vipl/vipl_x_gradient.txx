@@ -14,8 +14,8 @@ bool vipl_x_gradient <ImgIn,ImgOut,DataIn,DataOut,PixelItr> :: section_applyop()
   int starty = start(Y_Axis());
   int stopx = stop(X_Axis());
   int stopy = stop(Y_Axis());
-  for(int j = starty; j < stopy; ++j)
-    for(int i = startx+1; i < stopx; ++i) {
+  for (int j = starty; j < stopy; ++j)
+    for (int i = startx+1; i < stopx; ++i) {
       w = fgetpixel(in, i, j, dummy) - fgetpixel(in, i-1, j, dummy) /* + shift() */;
 //    if (scale() != 1) w = w * scale();
       fsetpixel(out, i, j, w);

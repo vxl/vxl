@@ -52,12 +52,10 @@ bool vipl_moment <ImgIn,ImgOut,DataIn,DataOut,PixelItr> :: section_applyop()
   int stopx = stop(X_Axis());
   int stopy = stop(Y_Axis());
 
-
   int sizex = stopx-startx+1;
   int sizey = stopy-starty+1;
 
   double* tempbuf = new double[sizex*sizey];
-
 
   int size = width_*height_; // size of the mask
 

@@ -16,8 +16,8 @@ bool vipl_dilate_disk <ImgIn,ImgOut,DataIn,DataOut,PixelItr> :: section_applyop(
   int starty = start(Y_Axis());
   int stopx = stop(X_Axis());
   int stopy = stop(Y_Axis());
-  for(int j = starty, ej =  stopy; j < ej  ; ++j)
-    for(int i = startx, ei = stopx; i < ei ; ++i) {
+  for (int j = starty, ej =  stopy; j < ej  ; ++j)
+    for (int i = startx, ei = stopx; i < ei ; ++i) {
       register DataIn
       v = fgetpixel(in, i, j, DataIn()); // set v to max of surrounding pixels:
       for (int x=0; x<=size; ++x) for (int y=0; y<=size; ++y) if (mask()[x][y]) {
@@ -39,11 +39,11 @@ bool vipl_dilate_disk <ImgIn,ImgOut,DataIn,DataOut,PixelItr> :: preop(){
   int size = (radius() < 0) ? 0 : int(radius());
   float rs = (radius() < 0) ? 0 : radius() * radius();
   typedef bool* boolptr;
-  if(mask() == 0)
+  if (mask() == 0)
          ref_mask() = new boolptr[1+size];
   else {
         for (int x=0; x<=size; ++x)
-            if(mask()[x]) delete[] ref_mask()[x];
+            if (mask()[x]) delete[] ref_mask()[x];
         delete[] ref_mask();
         ref_mask() = new boolptr[1+size];
         }
@@ -60,9 +60,9 @@ bool vipl_dilate_disk <ImgIn,ImgOut,DataIn,DataOut,PixelItr> :: preop(){
 template <class ImgIn,class ImgOut,class DataIn,class DataOut,class PixelItr>
 bool vipl_dilate_disk <ImgIn,ImgOut,DataIn,DataOut,PixelItr> :: postop(){
   int size = (radius() < 0) ? 0 : int(radius());
-  if(mask()){
+  if (mask()){
     for (int x=0; x<=size; ++x)
-      if(mask()[x]) delete[] ref_mask()[x];
+      if (mask()[x]) delete[] ref_mask()[x];
     delete[] ref_mask();
     ref_mask()=0;
   }

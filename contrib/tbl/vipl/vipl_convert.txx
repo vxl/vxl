@@ -13,8 +13,8 @@ bool vipl_convert <ImgIn,ImgOut,DataIn,DataOut,PixelItr> :: section_applyop(){
   int starty = start(Y_Axis());
   int stopx = stop(X_Axis());
   int stopy = stop(Y_Axis());
-  for(int j = starty; j < stopy; ++j)
-    for(int i = startx; i < stopx; ++i)
+  for (int j = starty; j < stopy; ++j)
+    for (int i = startx; i < stopx; ++i)
       fsetpixel(out, i, j, (DataOut)fgetpixel(in,i,j,nil_obj));
   return true;
 }

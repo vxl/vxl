@@ -13,10 +13,10 @@ bool vipl_threshold <ImgIn,ImgOut,DataIn,DataOut,PixelItr> :: section_applyop(){
   int starty = start(Y_Axis());
   int stopx = stop(X_Axis());
   int stopy = stop(Y_Axis());
-  for(int j = starty; j < stopy; ++j)
-    for(int i = startx; i < stopx; ++i) {
+  for (int j = starty; j < stopy; ++j)
+    for (int i = startx; i < stopx; ++i) {
       DataIn p = fgetpixel(in, i, j, dummy);
-      if(p <= threshold()) {fsetpixel(out, i, j, (DataOut)below());}
+      if (p <= threshold()) {fsetpixel(out, i, j, (DataOut)below());}
       else if (aboveset()) {fsetpixel(out, i, j, (DataOut)above());}
       else {fsetpixel(out, i, j, p);}
     }
