@@ -17,15 +17,18 @@
 class sdet_grid_finder_params : public gevd_param_mixin
 {
  public:
-  enum debug {NO_DEBUG=0, VANISHING_POINT, AFFINE_GROUP_BEFORE_SKEW_SCALE, AFFINE_GROUP_AFTER_SKEW_SCALE, TRANS_PERIM_LINES, AFFINE_GROUP_AFTER_TRANS};
+  enum debug {NO_DEBUG=0,
+              VANISHING_POINT,
+              AFFINE_GROUP_BEFORE_SKEW_SCALE,
+              AFFINE_GROUP_AFTER_SKEW_SCALE,
+              TRANS_PERIM_LINES,
+              AFFINE_GROUP_AFTER_TRANS};
 
-  sdet_grid_finder_params(const int n_lines_x=11, const int n_lines_y=11, 
-                          const double spacing=100.0, 
+  sdet_grid_finder_params(const int n_lines_x=11, const int n_lines_y=11,
+                          const double spacing=100.0,
                           const int thresh=1, const float angle_tol=5,
                           bool verbose = false,
                           int debug_state = false);
-                          
-
 
  sdet_grid_finder_params(const sdet_grid_finder_params& old_params);
  ~sdet_grid_finder_params(){}
@@ -35,7 +38,7 @@ class sdet_grid_finder_params : public gevd_param_mixin
  friend
    vcl_ostream& operator<<(vcl_ostream& os, const sdet_grid_finder_params& gfp);
  protected:
-  void InitParams(const int n_lines_x, const int n_lines_y, 
+  void InitParams(const int n_lines_x, const int n_lines_y,
                   const double spacing, const int thresh,
                   const float angle_tol,
                   bool verbose,
@@ -53,6 +56,5 @@ class sdet_grid_finder_params : public gevd_param_mixin
   bool verbose_;//print informative debug output
   int  debug_state_;//general purpose debug state
 };
-
 
 #endif // sdet_grid_finder_params_h_
