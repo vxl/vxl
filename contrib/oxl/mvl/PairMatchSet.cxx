@@ -34,6 +34,7 @@ PairMatchSet::~PairMatchSet()
 // == OPERATIONS ==
 
 PairMatchSet::PairMatchSet(const PairMatchSet& that):
+  MatchSet(),
   matches_(that.matches_),
   match_count_(that.match_count_)
 {

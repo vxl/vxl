@@ -1,4 +1,3 @@
-//----*-c++-*----tells emacs to use C++ mode----------
 // This is brl/bseg/vpro/vpro_motion_params.cxx
 #include <vpro/vpro_motion_params.h>
 //:
@@ -14,6 +13,7 @@
 
 vpro_motion_params::
 vpro_motion_params(const vpro_motion_params& vmp)
+  : gevd_param_mixin()
 {
   InitParams(vmp.low_range_, vmp.high_range_, vmp.smooth_sigma_);
 }
@@ -52,10 +52,10 @@ bool vpro_motion_params::SanityCheck()
 
 vcl_ostream& operator << (vcl_ostream& os, const vpro_motion_params& vmp)
 {
-  os << "vpro_motion_params:" << vcl_endl << "[---" << vcl_endl;
-  os << "low_range " << vmp.low_range_ << vcl_endl;
-  os << "high_range " << vmp.high_range_ << vcl_endl;
-  os << "smooth_sigma " << vmp.smooth_sigma_ << vcl_endl;
-  os << "---]" << vcl_endl;
-  return os;
+  return
+  os << "vpro_motion_params:\n[---\n"
+     << "low_range " << vmp.low_range_ << vcl_endl
+     << "high_range " << vmp.high_range_ << vcl_endl
+     << "smooth_sigma " << vmp.smooth_sigma_ << vcl_endl
+     << "---]" << vcl_endl;
 }

@@ -1,4 +1,3 @@
-//----*-c++-*----tells emacs to use C++ mode----------
 // This is brl/bseg/strk/strk_epipolar_grouper_params.cxx
 #include <strk/strk_epipolar_grouper_params.h>
 //:
@@ -14,6 +13,7 @@
 
 strk_epipolar_grouper_params::
 strk_epipolar_grouper_params(const strk_epipolar_grouper_params& tp)
+  : gevd_param_mixin()
 {
   InitParams(tp.eu_,
              tp.ev_,
@@ -55,7 +55,6 @@ void strk_epipolar_grouper_params::InitParams(
                                      int Ns,
                                      float angle_thresh,
                                      bool  dummy4)
-
 {
   eu_ = eu;
   ev_ = ev;
@@ -86,14 +85,14 @@ bool strk_epipolar_grouper_params::SanityCheck()
 
 vcl_ostream& operator << (vcl_ostream& os, const strk_epipolar_grouper_params& tp)
 {
-  os << "strk_epipolar_grouper_params:" << vcl_endl << "[---" << vcl_endl;
-  os << "epi_u " << tp.eu_ << vcl_endl;
-  os << "epi_v " << tp.ev_ << vcl_endl;
-  os << "epi space col " << tp.elu_ << vcl_endl;
-  os << "min epi space row " << tp.elv_min_ << vcl_endl;
-  os << "max epi space row " << tp.elv_max_ << vcl_endl;
-  os << "Samples in s " << tp.Ns_ << vcl_endl;
-  os << "angle_thresh " << tp.angle_thresh_ << vcl_endl;
-  os << "---]" << vcl_endl;
-  return os;
+  return
+  os << "strk_epipolar_grouper_params:\n[---\n"
+     << "epi_u " << tp.eu_ << vcl_endl
+     << "epi_v " << tp.ev_ << vcl_endl
+     << "epi space col " << tp.elu_ << vcl_endl
+     << "min epi space row " << tp.elv_min_ << vcl_endl
+     << "max epi space row " << tp.elv_max_ << vcl_endl
+     << "Samples in s " << tp.Ns_ << vcl_endl
+     << "angle_thresh " << tp.angle_thresh_ << vcl_endl
+     << "---]" << vcl_endl;
 }

@@ -13,6 +13,7 @@
 
 sdet_fit_lines_params::
 sdet_fit_lines_params(const sdet_fit_lines_params& flp)
+  : gevd_param_mixin(), vbl_ref_count()
 {
   InitParams(flp.min_fit_length_,
              flp.rms_distance_);
@@ -44,15 +45,15 @@ bool sdet_fit_lines_params::SanityCheck()
   bool valid = true;
 
   if (min_fit_length_<3)
-    {
-      msg << "ERROR: need at least 3 points for a fit\n";
-      valid = false;
-    }
+  {
+    msg << "ERROR: need at least 3 points for a fit\n";
+    valid = false;
+  }
   if (rms_distance_>1)
-    {
-      msg << "ERROR: a line fit should be better than one pixel rms\n";
-      valid = false;
-    }
+  {
+    msg << "ERROR: a line fit should be better than one pixel rms\n";
+    valid = false;
+  }
    msg << vcl_ends;
 
   SetErrorMsg(msg.str().c_str());

@@ -32,10 +32,10 @@ const char * vsol_spatial_object_2d::get_name() const
 void vsol_spatial_object_2d::protected_destroy()
 {
   if (this->get_references() <= 0)
-    {
-      vcl_cout << "goodbye cruel world\n";
-      delete this;
-    }
+  {
+    vcl_cout << "goodbye cruel world\n";
+    delete this;
+  }
 }
 
 //: constructor initialize basic vsol_spatial_object_2d attributes.
@@ -52,6 +52,7 @@ vsol_spatial_object_2d::vsol_spatial_object_2d(void)
 
 
 vsol_spatial_object_2d::vsol_spatial_object_2d(const vsol_spatial_object_2d &other)
+  : vul_timestamp(), vbl_ref_count()
 {
   bounding_box_=0;
   id_=other.get_id();
@@ -95,7 +96,7 @@ void vsol_spatial_object_2d::grow_minmax_bounds(vsol_box_2d & comp_box) const
 
 
 //: Return IO version number;
-short 
+short
 vsol_spatial_object_2d::version() const
 {
   return 1;
@@ -103,7 +104,7 @@ vsol_spatial_object_2d::version() const
 
 
 //: Binary save self to stream.
-void 
+void
 vsol_spatial_object_2d::b_write(vsl_b_ostream &os) const
 {
   vsl_b_write(os, this->version());
@@ -113,21 +114,21 @@ vsol_spatial_object_2d::b_write(vsl_b_ostream &os) const
 
 
 //: Binary load self from stream.
-void 
+void
 vsol_spatial_object_2d::b_read(vsl_b_istream &is)
 {
   if (!is) return;
 
   short ver;
   vsl_b_read(is, ver);
-  switch(ver)
+  switch (ver)
   {
-  case 1:
+   case 1:
     vsl_b_read(is, this->tag_);
     vsl_b_read(is, this->id_);
     break;
 
-  default:
+   default:
     vcl_cerr << "I/O ERROR: vsol_spatial_object_2d::b_read(vsl_b_istream&)\n"
              << "           Unknown version number "<< ver << '\n';
     is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream

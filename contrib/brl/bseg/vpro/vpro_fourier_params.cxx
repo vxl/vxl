@@ -1,4 +1,3 @@
-//----*-c++-*----tells emacs to use C++ mode----------
 // This is brl/bseg/vpro/vpro_fourier_params.cxx
 #include <vpro/vpro_fourier_params.h>
 //:
@@ -14,19 +13,18 @@
 
 vpro_fourier_params::
 vpro_fourier_params(const vpro_fourier_params& vfp)
+  : gevd_param_mixin()
 {
   InitParams(vfp.thresh_, vfp.level_, vfp.range_);
 }
 
 vpro_fourier_params::
 vpro_fourier_params(const float thresh, const float level, const float range)
-
 {
   InitParams(thresh, level, range);
 }
 
 void vpro_fourier_params::InitParams(float thresh, float level, float range)
-
 {
   thresh_= thresh;
   level_ = level;
@@ -52,10 +50,10 @@ bool vpro_fourier_params::SanityCheck()
 
 vcl_ostream& operator << (vcl_ostream& os, const vpro_fourier_params& vfp)
 {
-  os << "vpro_fourier_params:" << vcl_endl << "[---" << vcl_endl;
-  os << "thresh " << vfp.thresh_ << vcl_endl;
-  os << "level " << vfp.level_ << vcl_endl;
-  os << "range " << vfp.range_ << vcl_endl;
-  os << "---]" << vcl_endl;
-  return os;
+  return
+  os << "vpro_fourier_params:\n[---\n"
+     << "thresh " << vfp.thresh_ << vcl_endl
+     << "level " << vfp.level_ << vcl_endl
+     << "range " << vfp.range_ << vcl_endl
+     << "---]" << vcl_endl;
 }

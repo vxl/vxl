@@ -18,6 +18,7 @@ bgrl_vertex::bgrl_vertex()
 
 //: Copy Constructor
 bgrl_vertex::bgrl_vertex(const bgrl_vertex& vertex)
+  : vbl_ref_count()
 {
   for ( vcl_set<bgrl_edge_sptr>::const_iterator itr = vertex.out_edges_.begin();
         itr != vertex.out_edges_.end();  ++itr ){
@@ -112,11 +113,11 @@ bgrl_vertex::add_edge_to( const bgrl_vertex_sptr& vertex,
 
   // add the edge
   bgrl_edge_sptr new_edge;
-  if(model_edge)
+  if (model_edge)
     new_edge = model_edge->clone();
   else
     new_edge = new bgrl_edge;
-  
+
   new_edge->from_ = this;
   new_edge->to_ = vertex.ptr();
   this->out_edges_.insert(new_edge);
@@ -170,16 +171,16 @@ bgrl_vertex::end()
 
 
 //: Return a platform independent string identifying the class
-vcl_string 
-bgrl_vertex::is_a() const 
-{ 
-  return "bgrl_vertex"; 
+vcl_string
+bgrl_vertex::is_a() const
+{
+  return "bgrl_vertex";
 }
 
 
 //: Create a copy of the object on the heap.
 // The caller is responsible for deletion
-bgrl_vertex* 
+bgrl_vertex*
 bgrl_vertex::clone() const
 {
   return new bgrl_vertex(*this);
@@ -207,9 +208,9 @@ bgrl_vertex::b_read( vsl_b_istream& is )
 
   short ver;
   vsl_b_read(is, ver);
-  switch(ver)
+  switch (ver)
   {
-  case 1:
+   case 1:
     // read the outgoing edges
     out_edges_.clear();
     vsl_b_read(is, out_edges_);

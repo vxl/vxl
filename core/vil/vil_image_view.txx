@@ -81,8 +81,9 @@ vil_image_view<T>::vil_image_view(vil_memory_chunk_sptr const& mem_chunk,
 // If this view cannot set itself to view the other data (e.g. because the
 // types are incompatible) it will set itself to empty.
 template<class T>
-vil_image_view<T>::vil_image_view(const vil_image_view<T>& that):
-top_left_(0), istep_(0), jstep_(0), planestep_(0), ptr_(0)
+vil_image_view<T>::vil_image_view(const vil_image_view<T>& that)
+: vil_image_view_base(that.ni(),that.nj(),that.nplanes()),
+  top_left_(0), istep_(0), jstep_(0), planestep_(0), ptr_(0)
 {
   operator=( static_cast<vil_image_view_base const&>(that) );
 }

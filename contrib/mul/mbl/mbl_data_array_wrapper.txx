@@ -43,6 +43,7 @@ mbl_data_array_wrapper<T>::mbl_data_array_wrapper(const vcl_vector<T > &data)
 // The data must be kept in scope, this does not take a copy.
 template <class T>
 mbl_data_array_wrapper<T>::mbl_data_array_wrapper(const mbl_data_array_wrapper<T > &orig)
+ : mbl_data_wrapper<T>()
 {
   set(orig.data_, orig.size());
 }

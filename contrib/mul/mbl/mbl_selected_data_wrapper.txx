@@ -30,7 +30,7 @@ mbl_selected_data_wrapper<T>::mbl_selected_data_wrapper(
 template<class T>
 mbl_selected_data_wrapper<T>::mbl_selected_data_wrapper(
   const mbl_selected_data_wrapper<T>& p)
-  : data_(0), index_(0)
+  : mbl_data_wrapper<T>(), data_(0), index_(0)
 {
   *this = p;
 }

@@ -16,8 +16,9 @@
 #include <brip/brip_vil1_float_ops.h>
 #include <brct/brct_algos.h>
 
-brct_plane_sweeper::brct_plane_sweeper(brct_plane_sweeper_params const& sp) // FIXME: sp unused
- : n_planes_(0), n_cams_(0), del_(1.f), to_cam_(0), pindx_(192,256,vsol_box_2d_sptr(0))
+brct_plane_sweeper::brct_plane_sweeper(brct_plane_sweeper_params const& sp)
+ : brct_plane_sweeper_params(sp), n_planes_(0), n_cams_(0), del_(1.f),
+   to_cam_(0), pindx_(192,256,vsol_box_2d_sptr(0))
 {
 }
 
@@ -424,7 +425,7 @@ cross_correlate_proj_corners(const double z,
                              vcl_vector<vsol_point_2d_sptr>& matched_corners,
                              vcl_vector<vsol_point_2d_sptr>& back_proj_cnrs,
                              vcl_vector<vsol_point_2d_sptr>& orig_cnrs0,
-                             bool reset_flags)
+                             bool reset_flags) // unused - FIXME
 {
   if (n_cams_<2)
   {
@@ -695,7 +696,6 @@ bool brct_plane_sweeper::
 correlate_corners(vcl_vector<vil1_memory_image_of<float> > const& imgs,
                   vcl_vector<vcl_vector<vsol_point_2d_sptr> > const& corners,
                   vcl_vector<vsol_point_2d_sptr>& matched_corners)
-
 {
   int n_imgs=imgs.size();
   int n_corn=corners.size();
@@ -791,7 +791,6 @@ void brct_plane_sweeper::corr_vals(const int col, const int row,
 
 vsol_point_2d_sptr brct_plane_sweeper::
 map_point(vsol_point_2d_sptr const& p, vgl_h_matrix_2d<double> const& Hcomp)
-
 {
   vgl_homg_point_2d<double> hp(p->x(), p->y()), hp_to;
   //map the point

@@ -24,6 +24,7 @@ vifa_int_face_attr_common_params(vdgl_fit_lines_params*    fitter_params,
 
 vifa_int_face_attr_common_params::
 vifa_int_face_attr_common_params(const vifa_int_face_attr_common_params&  ifap)
+  : gevd_param_mixin(), vul_timestamp(), vbl_ref_count()
 {
   init_params(ifap.fitter_params_.ptr(),
               ifap.gpp_s_.ptr(),

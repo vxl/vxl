@@ -25,6 +25,7 @@ clsfy_direct_boost::clsfy_direct_boost()
 }
 
 clsfy_direct_boost::clsfy_direct_boost(const clsfy_direct_boost& c)
+  : clsfy_classifier_base()
 {
   *this = c;
 }
@@ -260,7 +261,7 @@ void clsfy_direct_boost::b_read(vsl_b_istream& bfs)
       break;
     default:
       vcl_cerr << "I/O ERROR: clsfy_direct_boost::b_read(vsl_b_istream&)\n"
-               << "           Unknown version number "<< version << "\n";
+               << "           Unknown version number "<< version << '\n';
       bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
   }
 }

@@ -15,6 +15,7 @@
 
 gevd_region_proc_params::
 gevd_region_proc_params(const gevd_region_proc_params& rpp)
+  : gevd_param_mixin()
 {
   InitParams(rpp.expand_scale_,
              rpp.burt_adelson_factor_,
@@ -77,13 +78,12 @@ bool gevd_region_proc_params::SanityCheck()
 
 vcl_ostream& operator << (vcl_ostream& os, const gevd_region_proc_params& rpp)
 {
-  os << "gevd_region_proc_params:" << vcl_endl << "[---" << vcl_endl;
-  //os << rpp.dp_ << vcl_endl
-  //   << "  ---" << vcl_endl;
-  os << "expand scale factor  " << rpp.expand_scale_ << vcl_endl;
-  os << "burt_adelson_factor " << rpp.burt_adelson_factor_ << vcl_endl;
-  os << "debug " << rpp.debug_ << vcl_endl;
-  os << "verbose " << rpp.verbose_ << vcl_endl;
-  os << "---]" << vcl_endl;
-  return os;
+  return
+  os << "gevd_region_proc_params:\n[---\n"
+  // << rpp.dp_ << "\n  ---\n"
+     << "expand scale factor  " << rpp.expand_scale_ << vcl_endl
+     << "burt_adelson_factor " << rpp.burt_adelson_factor_ << vcl_endl
+     << "debug " << rpp.debug_ << vcl_endl
+     << "verbose " << rpp.verbose_ << vcl_endl
+     << "---]" << vcl_endl;
 }

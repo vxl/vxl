@@ -19,6 +19,7 @@ vifa_coll_lines_params(float midpt_distance,
 
 vifa_coll_lines_params::
 vifa_coll_lines_params(const vifa_coll_lines_params& old_params)
+  : gevd_param_mixin(), vul_timestamp(), vbl_ref_count()
 {
   midpt_distance_ = old_params.midpt_distance_;
   angle_tolerance_ = old_params.angle_tolerance_;

@@ -1,4 +1,3 @@
-//----*-c++-*----tells emacs to use C++ mode----------
 // This is brl/bseg/bmrf/bmrf_network_builder_params.cxx
 #include <bmrf/bmrf_network_builder_params.h>
 //:
@@ -14,6 +13,7 @@
 
 bmrf_network_builder_params::
 bmrf_network_builder_params(const bmrf_network_builder_params& tp)
+  : gevd_param_mixin()
 {
   InitParams(tp.eu_,
              tp.ev_,
@@ -51,7 +51,6 @@ void bmrf_network_builder_params::InitParams(
                                      int elv_max,
                                      int Ns,
                                      float max_delta_recip_s)
-
 {
   eu_ = eu;
   ev_ = ev;
@@ -81,13 +80,13 @@ bool bmrf_network_builder_params::SanityCheck()
 
 vcl_ostream& operator << (vcl_ostream& os, const bmrf_network_builder_params& tp)
 {
-  os << "bmrf_network_builder_params:" << vcl_endl << "[---" << vcl_endl;
-  os << "epi_u " << tp.eu_ << vcl_endl;
-  os << "epi_v " << tp.ev_ << vcl_endl;
-  os << "epi space col " << tp.elu_ << vcl_endl;
-  os << "min epi space row " << tp.elv_min_ << vcl_endl;
-  os << "max epi space row " << tp.elv_max_ << vcl_endl;
-  os << "Samples in s " << tp.Ns_ << vcl_endl;
-  os << "---]" << vcl_endl;
-  return os;
+  return
+  os << "bmrf_network_builder_params:\n[---\n"
+     << "epi_u " << tp.eu_ << vcl_endl
+     << "epi_v " << tp.ev_ << vcl_endl
+     << "epi space col " << tp.elu_ << vcl_endl
+     << "min epi space row " << tp.elv_min_ << vcl_endl
+     << "max epi space row " << tp.elv_max_ << vcl_endl
+     << "Samples in s " << tp.Ns_ << vcl_endl
+     << "---]" << vcl_endl;
 }

@@ -13,6 +13,7 @@
 
 brct_volume_processor_params::
 brct_volume_processor_params(brct_volume_processor_params const& vp)
+  : gevd_param_mixin()
 {
   InitParams(vp.xmin_,
              vp.xmax_,

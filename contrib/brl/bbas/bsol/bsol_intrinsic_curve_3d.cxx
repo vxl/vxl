@@ -41,6 +41,7 @@ bsol_intrinsic_curve_3d::bsol_intrinsic_curve_3d(const vcl_vector<vsol_point_3d_
 // Copy constructor
 //---------------------------------------------------------------------------
 bsol_intrinsic_curve_3d::bsol_intrinsic_curve_3d(const bsol_intrinsic_curve_3d &other)
+  : vsol_curve_3d(other)
 {
   storage_=new vcl_vector<vsol_point_3d_sptr>(*other.storage_);
   for (unsigned int i=0; i<storage_->size(); ++i)

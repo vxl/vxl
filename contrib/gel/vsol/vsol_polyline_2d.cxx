@@ -20,6 +20,7 @@
 //: Default Constructor
 //---------------------------------------------------------------------------
 vsol_polyline_2d::vsol_polyline_2d()
+  : vsol_curve_2d()
 {
   storage_=new vcl_vector<vsol_point_2d_sptr>();
   p0_ = 0;
@@ -31,6 +32,7 @@ vsol_polyline_2d::vsol_polyline_2d()
 //---------------------------------------------------------------------------
 
 vsol_polyline_2d::vsol_polyline_2d(const vcl_vector<vsol_point_2d_sptr> &new_vertices)
+  : vsol_curve_2d()
 {
   storage_=new vcl_vector<vsol_point_2d_sptr>(new_vertices);
   int n = storage_->size();
@@ -47,6 +49,7 @@ vsol_polyline_2d::vsol_polyline_2d(const vcl_vector<vsol_point_2d_sptr> &new_ver
 // Copy constructor
 //---------------------------------------------------------------------------
 vsol_polyline_2d::vsol_polyline_2d(const vsol_polyline_2d &other)
+  : vsol_curve_2d(other)
 {
   storage_=new vcl_vector<vsol_point_2d_sptr>(*other.storage_);
   for (unsigned int i=0;i<storage_->size();++i)
@@ -113,20 +116,20 @@ vsol_point_2d_sptr vsol_polyline_2d::vertex(const int i) const
 //---------------------------------------------------------------------------
 bool vsol_polyline_2d::operator==(const vsol_polyline_2d &other) const
 {
-  if(this==&other)
+  if (this==&other)
     return true;
   //check endpoint equality since that is cheaper then checking each vertex
   //and if it fails we are done
   bool epts_eq = vsol_curve_2d::endpoints_equal(other);
-  if(!epts_eq)
+  if (!epts_eq)
     return false;
   //Do the polylines have the same number of vertices?
-  if(storage_->size()!=other.storage_->size())
+  if (storage_->size()!=other.storage_->size())
     return false;
   //The easy tests are done.  Now compare each vertex
   int n = storage_->size();
-  for(int i=0; i<n; i++)
-    if(*((*storage_)[i])!=*((*other.storage_)[i]))
+  for (int i=0; i<n; i++)
+    if (*((*storage_)[i])!=*((*other.storage_)[i]))
       return false;
   return true;
 }
@@ -238,17 +241,19 @@ void vsol_polyline_2d::b_read(vsl_b_istream &is)
     return;
   short ver;
   vsl_b_read(is, ver);
-  switch(ver)
+  switch (ver)
   {
-  case 1:
-    {
-      vsl_b_read(is, *storage_);
-      int n = storage_->size();
-      if (n<2)
-        break;
-      p0_=(*storage_)[0];
-      p1_=(*storage_)[n-1];
-    }
+   case 1: {
+    vsl_b_read(is, *storage_);
+    int n = storage_->size();
+    if (n<2)
+      break;
+    p0_=(*storage_)[0];
+    p1_=(*storage_)[n-1];
+    break;
+   }
+   default:
+    vcl_cerr << "vsol_polyline_2d: unknown I/O version " << ver << '\n';
   }
 }
 //: Return IO version number;

@@ -49,11 +49,11 @@ vil1_memory_image_impl::vil1_memory_image_impl(int w, int h,
   init((void*)0, 1, w, h, pixel_format);
 }
 
-vil1_memory_image_impl::vil1_memory_image_impl
-        (vil1_memory_image_impl const& that)
+vil1_memory_image_impl::vil1_memory_image_impl(vil1_memory_image_impl const& i)
+  : vil1_image_impl()
 {
-  init((void*)0, that.planes_, that.width_, that.height_, that.components_,
-       that.bits_per_component_, that.component_format_);
+  init((void*)0, i.planes_, i.width_, i.height_, i.components_,
+       i.bits_per_component_, i.component_format_);
 }
 
 void vil1_memory_image_impl::init(void *buf,

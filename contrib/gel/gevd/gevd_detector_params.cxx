@@ -9,6 +9,7 @@
 //
 
 gevd_detector_params::gevd_detector_params(const gevd_detector_params& dp)
+  : gevd_param_mixin()
 {
   InitParams(dp.smooth, dp.noise_weight, dp.noise_multiplier,
              dp.automatic_threshold, dp.aggressive_junction_closure,
@@ -76,13 +77,13 @@ void gevd_detector_params::InitParams(float smooth_sigma, float noise_w,
   // be a bool and the parameters are determined from computation.
 
   if (aggressive_junction_closure<0)
-    {
-      junctionp = recover_j;
-      contourFactor = contour_f;
-      junctionFactor = junction_f;
-      maxGap = maxgp;
-      minJump = minjmp;
-    }
+  {
+    junctionp = recover_j;
+    contourFactor = contour_f;
+    junctionFactor = junction_f;
+    maxGap = maxgp;
+    minJump = minjmp;
+  }
 
   // Perform the sanity check anyway.
   SanityCheck();

@@ -14,11 +14,11 @@
 struct vil1_image_proxy : public vil1_image
 {
   vil1_image_proxy(char const *file);
-  ~vil1_image_proxy() { }
+  ~vil1_image_proxy() {}
 
  private:
-  vil1_image_proxy(vil1_image const &) { }
-  vil1_image_proxy(vil1_image_proxy const &) { }
+  vil1_image_proxy(vil1_image const &) {}
+  vil1_image_proxy(vil1_image_proxy const& i) : vil1_image(i) {}
 };
 
 #endif // vil1_image_proxy_h_

@@ -6,6 +6,7 @@
 #include <vcl_cassert.h>
 
 vsol_box_2d::vsol_box_2d(vsol_box_2d const &b)
+  : vbl_ref_count(), vul_timestamp()
 {
   box_ = b.box_;
 }
@@ -98,18 +99,20 @@ void vsol_box_2d::b_write(vsl_b_ostream &os) const
 //: Binary load self from stream (not typically used)
 void vsol_box_2d::b_read(vsl_b_istream &is)
 {
-  if(!is)
+  if (!is)
     return;
   short ver;
   vsl_b_read(is, ver);
-  switch(ver)
+  switch (ver)
   {
-  case 1:
-    {
-      vsl_b_read(is, box_);
-    }
+   case 1:
+    vsl_b_read(is, box_);
+    break;
+   default:
+    vcl_cerr << "vsol_box_2d: unknown I/O version " << ver << '\n';
   }
 }
+
 //: Return IO version number;
 short vsol_box_2d::version() const
 {
@@ -137,7 +140,7 @@ bool vsol_box_2d::is_class(const vcl_string& cls) const
 //external functions
 vcl_ostream& operator<<(vcl_ostream& s, vsol_box_2d const& b)
 {
-  s << "[(" << b.get_min_x() << ' ' << b.get_min_y() << ")(" 
+  s << "[(" << b.get_min_x() << ' ' << b.get_min_y() << ")("
     << b.get_max_x() << ' ' << b.get_max_y() << ")]";
   return s;
 }
@@ -162,20 +165,19 @@ vsl_b_read(vsl_b_istream &is, vsol_box_2d_sptr &b)
   bool not_null_ptr;
   vsl_b_read(is, not_null_ptr);
   if (not_null_ptr)
+  {
+    short ver;
+    vsl_b_read(is, ver);
+    switch (ver)
     {
-      short ver;
-      vsl_b_read(is, ver);
-      switch(ver)
-        {
-        case 1:
-          {
-            vbl_bounding_box<double,2> box;
-            vsl_b_read(is, box);
-            b = new vsol_box_2d(box);
-            break;
-          }
-        default:
-          b = 0;
-        }
+     case 1: {
+      vbl_bounding_box<double,2> box;
+      vsl_b_read(is, box);
+      b = new vsol_box_2d(box);
+      break;
+     }
+     default:
+      b = 0;
     }
+  }
 }

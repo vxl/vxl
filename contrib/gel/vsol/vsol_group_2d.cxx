@@ -17,6 +17,7 @@
 //: Default Constructor: with no child
 //---------------------------------------------------------------------------
 vsol_group_2d::vsol_group_2d(void)
+  : vsol_spatial_object_2d()
 {
   storage_=new vcl_vector<vsol_spatial_object_2d_sptr>();
 }
@@ -26,6 +27,7 @@ vsol_group_2d::vsol_group_2d(void)
 // Description: The objects of the group are not duplicated
 //---------------------------------------------------------------------------
 vsol_group_2d::vsol_group_2d(const vsol_group_2d &other)
+  : vsol_spatial_object_2d(other)
 {
   storage_=new vcl_vector<vsol_spatial_object_2d_sptr>(*other.storage_);
 }

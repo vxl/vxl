@@ -15,6 +15,7 @@
 
 sdet_region_proc_params::
 sdet_region_proc_params(const sdet_region_proc_params& rpp)
+  : gevd_param_mixin()
 {
   InitParams((sdet_detector_params)rpp.dp_,
              rpp.verbose_,
@@ -55,11 +56,11 @@ bool sdet_region_proc_params::SanityCheck()
   vcl_stringstream msg;
   bool valid = true;
 
-  if(array_scale_<2)
-    {
-      msg << "ERROR: don't use a label array resolution factor less than 2x";
-      valid = false;
-    }
+  if (array_scale_<2)
+  {
+    msg << "ERROR: don't use a label array resolution factor less than 2x";
+    valid = false;
+  }
 
   valid = valid && dp_.SanityCheck();
   msg << dp_.GetErrorMsg() << vcl_ends;
@@ -70,12 +71,11 @@ bool sdet_region_proc_params::SanityCheck()
 
 vcl_ostream& operator << (vcl_ostream& os, const sdet_region_proc_params& rpp)
 {
-  os << "sdet_region_proc_params:" << vcl_endl << "[---" << vcl_endl;
-  os << rpp.dp_ << vcl_endl
-     << "  ---" << vcl_endl;
-  os << "debug " << rpp.debug_ << vcl_endl;
-  os << "verbose " << rpp.verbose_ << vcl_endl;
-  os << "label array scale " << rpp.array_scale_ << vcl_endl;
-  os << "---]" << vcl_endl;
-  return os;
+  return
+  os << "sdet_region_proc_params:\n[---\n"
+     << rpp.dp_ << "\n  ---\n"
+     << "debug " << rpp.debug_ << vcl_endl
+     << "verbose " << rpp.verbose_ << vcl_endl
+     << "label array scale " << rpp.array_scale_ << vcl_endl
+     << "---]" << vcl_endl;
 }

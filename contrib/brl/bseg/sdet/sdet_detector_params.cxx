@@ -9,6 +9,7 @@
 //
 
 sdet_detector_params::sdet_detector_params(const sdet_detector_params& dp)
+  : gevd_param_mixin()
 {
   InitParams(dp.smooth, dp.noise_weight, dp.noise_multiplier,
              dp.automatic_threshold, dp.aggressive_junction_closure,
@@ -77,13 +78,13 @@ void sdet_detector_params::InitParams(float smooth_sigma, float noise_w,
   // be a bool and the parameters are determined from computation.
 
   if (aggressive_junction_closure<0)
-    {
-      junctionp = recover_j;
-      contourFactor = contour_f;
-      junctionFactor = junction_f;
-      maxGap = maxgp;
-      minJump = minjmp;
-    }
+  {
+    junctionp = recover_j;
+    contourFactor = contour_f;
+    junctionFactor = junction_f;
+    maxGap = maxgp;
+    minJump = minjmp;
+  }
 
   // Perform the sanity check anyway.
   SanityCheck();
@@ -151,7 +152,7 @@ bool sdet_detector_params::SanityCheck()
   if (noise_weight > 0.0 || noise_weight < -1.0)   // Noise weighting factor
   {
     msg << "ERROR: Value of noise weight must be between -1 and 0, not "
-        << noise_weight << "\0";
+        << noise_weight << '\0';
     noise_weight = -0.5f;
   }
   if (noise_multiplier <= 0)    // The over all noise scale factor
@@ -229,35 +230,37 @@ bool sdet_detector_params::SanityCheck()
   SetErrorMsg(msg.str().c_str());
   return valid;
 }
+
 vcl_ostream& operator << (vcl_ostream& os, const sdet_detector_params& dp)
 {
   vcl_string sa, st;
-  if(dp.aggressive_junction_closure>0)
+  if (dp.aggressive_junction_closure>0)
     sa = "yes";
   else
     sa = "no";
-  if(dp.automatic_threshold)
+  if (dp.automatic_threshold)
     st = "yes";
   else
     st = "no";
-  os << "Edge Detector Params:" << vcl_endl;
-  os << " Smooth Sigma " << dp.smooth << vcl_endl;
-  os << " Noise Weight " << dp.noise_weight << vcl_endl;
-  os << " Noise Multiplier " << dp.noise_multiplier << vcl_endl;
-  os << " Automatic Threshold? " << st << vcl_endl;
-  os << " Agressive Closure " << sa << vcl_endl;
-  os << " Recover Junctions " << dp.junctionp << vcl_endl;
-  os << " Minimum Chain Length " << dp.minLength << vcl_endl;
-  os << " Peaks Only " << dp.peaks_only << vcl_endl;
-  os << " Valleys Only " << dp.valleys_only << vcl_endl << vcl_endl;
-  os << "Corner Detection Params: " << vcl_endl;
-  os << " Corner Angle " << dp.corner_angle << vcl_endl;
-  os << " Corner Separation " << dp.separation  << vcl_endl;
-  os << " Min Corner Length " << dp.min_corner_length << vcl_endl;
-  os << " Close borders " << dp.borderp << vcl_endl << vcl_endl;
 
-  return os;
+  return
+  os << "Edge Detector Params:\n"
+     << " Smooth Sigma " << dp.smooth << vcl_endl
+     << " Noise Weight " << dp.noise_weight << vcl_endl
+     << " Noise Multiplier " << dp.noise_multiplier << vcl_endl
+     << " Automatic Threshold? " << st << vcl_endl
+     << " Agressive Closure " << sa << vcl_endl
+     << " Recover Junctions " << dp.junctionp << vcl_endl
+     << " Minimum Chain Length " << dp.minLength << vcl_endl
+     << " Peaks Only " << dp.peaks_only << vcl_endl
+     << " Valleys Only " << dp.valleys_only << vcl_endl << vcl_endl
+     << "Corner Detection Params:\n"
+     << " Corner Angle " << dp.corner_angle << vcl_endl
+     << " Corner Separation " << dp.separation  << vcl_endl
+     << " Min Corner Length " << dp.min_corner_length << vcl_endl
+     << " Close borders " << dp.borderp << vcl_endl << vcl_endl;
 }
+
 //------------------------------------------------------------
 //: Describe the parameters to a parameter modifier.
 void sdet_detector_params::Describe(ParamModifier& /* mod */)

@@ -30,6 +30,7 @@ vsol_polyhedron::vsol_polyhedron(vcl_vector<vsol_point_3d_sptr> const& new_verti
 // Copy constructor
 //---------------------------------------------------------------------------
 vsol_polyhedron::vsol_polyhedron(vsol_polyhedron const &other)
+  : vsol_volume_3d(other)
 {
   storage_.clear();
   for (unsigned int i=0;i<other.storage_.size();++i)

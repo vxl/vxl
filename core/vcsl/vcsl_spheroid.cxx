@@ -27,7 +27,7 @@ vcsl_spheroid::vcsl_spheroid(const vcsl_std_spheroid new_std_spheroid)
 //---------------------------------------------------------------------------
 // Copy constructor
 //---------------------------------------------------------------------------
-vcsl_spheroid::vcsl_spheroid(const vcsl_spheroid &other)
+vcsl_spheroid::vcsl_spheroid(const vcsl_spheroid &other) : vbl_ref_count()
 {
   a_=other.a_;
   b_=other.b_;

@@ -32,6 +32,7 @@ vsol_polygon_3d::vsol_polygon_3d(const vcl_vector<vsol_point_3d_sptr> &new_verti
 // Copy constructor
 //---------------------------------------------------------------------------
 vsol_polygon_3d::vsol_polygon_3d(const vsol_polygon_3d &other)
+  : vsol_region_3d(other)
 {
   //vsol_point_3d_sptr p;
 

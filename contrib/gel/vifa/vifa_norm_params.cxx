@@ -30,6 +30,7 @@ vifa_norm_params(float  IntLow,
 
 vifa_norm_params::
 vifa_norm_params(const vifa_norm_params&  old_params)
+  : gevd_param_mixin(), vul_timestamp(), vbl_ref_count()
 {
   ilow = old_params.ilow;
   plow = old_params.plow;

@@ -26,7 +26,8 @@
 //: Default Constructor
 //---------------------------------------------------------------------------
 vsol_line_2d::vsol_line_2d()
-: p0_(new vsol_point_2d),
+: vsol_curve_2d(),
+  p0_(new vsol_point_2d),
   p1_(new vsol_point_2d)
 {
 }
@@ -36,7 +37,8 @@ vsol_line_2d::vsol_line_2d()
 //---------------------------------------------------------------------------
 vsol_line_2d::vsol_line_2d(const vgl_vector_2d<double> &new_direction,
                            const vsol_point_2d_sptr &new_middle)
-: p0_(new vsol_point_2d(*(new_middle->plus_vector(-(new_direction)/2)))),
+: vsol_curve_2d(),
+  p0_(new vsol_point_2d(*(new_middle->plus_vector(-(new_direction)/2)))),
   p1_(new vsol_point_2d(*(new_middle->plus_vector((new_direction)/2))))
 {
 }
@@ -46,7 +48,8 @@ vsol_line_2d::vsol_line_2d(const vgl_vector_2d<double> &new_direction,
 //---------------------------------------------------------------------------
 vsol_line_2d::vsol_line_2d(const vgl_vector_2d<double> &new_direction,
                            const vgl_point_2d<double> &new_middle)
-: p0_(new vsol_point_2d(*(vsol_point_2d(new_middle).plus_vector(-(new_direction)/2)))),
+: vsol_curve_2d(),
+  p0_(new vsol_point_2d(*(vsol_point_2d(new_middle).plus_vector(-(new_direction)/2)))),
   p1_(new vsol_point_2d(*(vsol_point_2d(new_middle).plus_vector((new_direction)/2))))
 {
 }
@@ -56,7 +59,8 @@ vsol_line_2d::vsol_line_2d(const vgl_vector_2d<double> &new_direction,
 //---------------------------------------------------------------------------
 vsol_line_2d::vsol_line_2d(vgl_point_2d<double> const& p0,
                            vgl_point_2d<double> const& p1)
-: p0_(new vsol_point_2d(p0)),
+: vsol_curve_2d(),
+  p0_(new vsol_point_2d(p0)),
   p1_(new vsol_point_2d(p1))
 {
 }
@@ -66,7 +70,7 @@ vsol_line_2d::vsol_line_2d(vgl_point_2d<double> const& p0,
 //---------------------------------------------------------------------------
 vsol_line_2d::vsol_line_2d(const vsol_point_2d_sptr &new_p0,
                            const vsol_point_2d_sptr &new_p1)
-: p0_(new_p0), p1_(new_p1)
+: vsol_curve_2d(), p0_(new_p0), p1_(new_p1)
 {
 }
 
@@ -74,6 +78,7 @@ vsol_line_2d::vsol_line_2d(const vsol_point_2d_sptr &new_p0,
 //: Constructor
 //---------------------------------------------------------------------------
 vsol_line_2d::vsol_line_2d(const vgl_line_segment_2d<double> &l)
+: vsol_curve_2d()
 {
   p0_ = new vsol_point_2d(l.point1());
   p1_ = new vsol_point_2d(l.point2());
@@ -84,7 +89,7 @@ vsol_line_2d::vsol_line_2d(const vgl_line_segment_2d<double> &l)
 // Description: no duplication of the points
 //---------------------------------------------------------------------------
 vsol_line_2d::vsol_line_2d(const vsol_line_2d &other)
-: p0_(other.p0_), p1_(other.p1_)
+: vsol_curve_2d(other), p0_(other.p0_), p1_(other.p1_)
 {
 }
 
@@ -149,7 +154,7 @@ vsol_point_2d_sptr vsol_line_2d::p1(void) const
 //---------------------------------------------------------------------------
 bool vsol_line_2d::operator==(const vsol_line_2d &other) const
 {
-  if(this==&other)
+  if (this==&other)
     return true;
   return vsol_curve_2d::endpoints_equal(other);
 }
@@ -271,13 +276,13 @@ bool vsol_line_2d::in(const vsol_point_2d_sptr &p) const
               +p0_->x()*p1_->y()         -p0_->y()*p1_->x()        ==0;
 
   if (result) // `p' belongs to the segment
-    {
-      double dot_product=(p->x()-p0_->x())*(p1_->x()-p0_->x())
-                        +(p->y()-p0_->y())*(p1_->y()-p0_->y());
-      result=(dot_product>=0)&&
-        (dot_product<(vnl_math_sqr(p1_->x()-p0_->x())
-                     +vnl_math_sqr(p1_->y()-p0_->y())));
-    }
+  {
+    double dot_product=(p->x()-p0_->x())*(p1_->x()-p0_->x())
+                      +(p->y()-p0_->y())*(p1_->y()-p0_->y());
+    result=(dot_product>=0)&&
+           (dot_product<(vnl_math_sqr(p1_->x()-p0_->x())
+                        +vnl_math_sqr(p1_->y()-p0_->y())));
+  }
   return result;
 }
 
@@ -338,12 +343,15 @@ void vsol_line_2d::b_read(vsl_b_istream &is)
     return;
   short ver;
   vsl_b_read(is, ver);
-  switch(ver)
+  switch (ver)
   {
    case 1:
     vsol_spatial_object_2d::b_read(is);
     vsl_b_read(is, p0_);
     vsl_b_read(is, p1_);
+    break;
+   default:
+    vcl_cerr << "vsol_line_2d: unknown I/O version " << ver << '\n';
   }
 }
 //: Return IO version number;

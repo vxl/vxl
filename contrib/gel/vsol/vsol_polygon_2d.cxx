@@ -22,6 +22,7 @@
 // Require: new_vertices.size()>=3
 //---------------------------------------------------------------------------
 vsol_polygon_2d::vsol_polygon_2d(const vcl_vector<vsol_point_2d_sptr> &new_vertices)
+  : vsol_region_2d()
 {
   // require
   assert(new_vertices.size()>=3);
@@ -33,6 +34,7 @@ vsol_polygon_2d::vsol_polygon_2d(const vcl_vector<vsol_point_2d_sptr> &new_verti
 // Copy constructor
 //---------------------------------------------------------------------------
 vsol_polygon_2d::vsol_polygon_2d(const vsol_polygon_2d &other)
+  : vsol_region_2d(other)
 {
   //vsol_point_2d_sptr p;
   storage_=new vcl_vector<vsol_point_2d_sptr>(*other.storage_);
@@ -56,20 +58,22 @@ vsol_spatial_object_2d* vsol_polygon_2d::clone(void) const
 {
   return new vsol_polygon_2d(*this);
 }
+
 //***************************************************************************
 // Safe casting
 //***************************************************************************
 
 vsol_polygon_2d* vsol_polygon_2d::cast_to_polygon_2d(void)
 {
-  if(!cast_to_triangle_2d()||!cast_to_rectangle_2d())
+  if (!cast_to_triangle_2d()||!cast_to_rectangle_2d())
     return this;
   else
     return 0;
 }
+
 const vsol_polygon_2d* vsol_polygon_2d::cast_to_polygon_2d(void) const
 {
-  if(!cast_to_triangle_2d()||!cast_to_rectangle_2d())
+  if (!cast_to_triangle_2d()||!cast_to_rectangle_2d())
     return this;
   else
     return 0;
@@ -166,14 +170,14 @@ double vsol_polygon_2d::area(void) const
 {
   double area = 0.0;
   unsigned int last = storage_->size()-1;
-  
+
   for (unsigned int i=0; i<last; ++i)
     area += ((*storage_)[i]->x() * (*storage_)[i+1]->y())
           - ((*storage_)[i+1]->x() * (*storage_)[i]->y());
-          
+
   area += ((*storage_)[last]->x() * (*storage_)[0]->y())
         - ((*storage_)[0]->x() * (*storage_)[last]->y());
-          
+
   return vcl_abs(area / 2.0);
 }
 
@@ -239,32 +243,35 @@ void vsol_polygon_2d::b_write(vsl_b_ostream &os) const
   if (!storage_)
     vsl_b_write(os, false); // Indicate null pointer stored
   else
-    {
-      vsl_b_write(os, true); // Indicate non-null pointer stored
-      vsl_b_write(os, *storage_);
-    }
+  {
+    vsl_b_write(os, true); // Indicate non-null pointer stored
+    vsl_b_write(os, *storage_);
+  }
 }
+
 //: Binary load self from stream (not typically used)
 void vsol_polygon_2d::b_read(vsl_b_istream &is)
 {
   short ver;
   vsl_b_read(is, ver);
-  switch(ver)
+  switch (ver)
   {
-  case 1:
-    {
-      vsol_spatial_object_2d::b_read(is);
+   case 1:
+    vsol_spatial_object_2d::b_read(is);
 
-      delete storage_;
-      storage_ = new vcl_vector<vsol_point_2d_sptr>();
-      bool null_ptr;
-      vsl_b_read(is, null_ptr);
-      if (!null_ptr)
-        return;
-      vsl_b_read(is, *storage_);
-    }
+    delete storage_;
+    storage_ = new vcl_vector<vsol_point_2d_sptr>();
+    bool null_ptr;
+    vsl_b_read(is, null_ptr);
+    if (!null_ptr)
+      return;
+    vsl_b_read(is, *storage_);
+    break;
+   default:
+    vcl_cerr << "vsol_polygon_2d: unknown I/O version " << ver << '\n';
   }
 }
+
 //: Return IO version number;
 short vsol_polygon_2d::version() const
 {
@@ -343,8 +350,8 @@ inline void vsol_polygon_2d::describe(vcl_ostream &strm, int blanking) const
   if (size() == 0)
     strm << "[null]";
   else {
-    strm << "[Nverts=" << size();
-    strm << " Area=" << area();
+    strm << "[Nverts=" << size()
+         << " Area=" << area();
     for (unsigned int i=0; i<size(); ++i)
       strm << " p" << i << ':' << *(vertex(i));
     strm << ']';

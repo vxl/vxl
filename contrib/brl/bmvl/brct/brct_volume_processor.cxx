@@ -6,7 +6,8 @@
 #include <bsol/bsol_algs.h>
 #include <brct/brct_algos.h>
 
-brct_volume_processor::brct_volume_processor(brct_volume_processor_params const& vp) // FIXME: vp unused
+brct_volume_processor::brct_volume_processor(brct_volume_processor_params const& vp)
+  : brct_volume_processor_params(vp)
 {
   vsol_box_3d_sptr b = new vsol_box_3d;
   b->add_point(xmin_, ymin_, zmin_);

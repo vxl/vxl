@@ -42,6 +42,7 @@ inline static bool is_zero(double x) { return vcl_abs(x)<=1e-6; }
 //  Produces and invalid conic (needed for binary I/O)
 //---------------------------------------------------------------------------
 vsol_conic_2d::vsol_conic_2d()
+  : vsol_curve_2d(), vgl_conic<double>()
 {
 }
 
@@ -55,7 +56,7 @@ vsol_conic_2d::vsol_conic_2d(double new_a,
                              double new_d,
                              double new_e,
                              double new_f) :
-  vgl_conic<double>(new_a, new_b, new_c, new_d, new_e, new_f)
+  vsol_curve_2d(), vgl_conic<double>(new_a, new_b, new_c, new_d, new_e, new_f)
 {
 }
 
@@ -70,7 +71,7 @@ vsol_conic_2d::vsol_conic_2d(double new_a,
 //  one specified the 'minor' axis length.
 //---------------------------------------------------------------------------
 vsol_conic_2d::vsol_conic_2d(vsol_point_2d const& c, double rx, double ry, double theta) :
-  vgl_conic<double>(vgl_homg_point_2d<double>(c.x(),c.y(),1.0), rx, ry, theta)
+  vsol_curve_2d(), vgl_conic<double>(vgl_homg_point_2d<double>(c.x(),c.y(),1.0), rx, ry, theta)
 {
 }
 
@@ -98,7 +99,7 @@ void vsol_conic_2d::set_central_parameters(vsol_point_2d const& c, double rx, do
 //---------------------------------------------------------------------------
 vsol_conic_2d::vsol_conic_2d(vgl_vector_2d<double> const& dir,
                              vsol_point_2d const& top, double theta) :
-  vgl_conic<double>(vgl_homg_point_2d<double>(dir.x(),dir.y(),0.0), top.x(), top.y(), theta)
+  vsol_curve_2d(), vgl_conic<double>(vgl_homg_point_2d<double>(dir.x(),dir.y(),0.0), top.x(), top.y(), theta)
 {
 }
 
@@ -119,7 +120,7 @@ void vsol_conic_2d::set_parabola_parameters(vgl_vector_2d<double> const& dir,
 // Copy constructor
 //---------------------------------------------------------------------------
 vsol_conic_2d::vsol_conic_2d(const vsol_conic_2d &other) :
-  vgl_conic<double>(other)
+  vsol_curve_2d(other), vgl_conic<double>(other)
 {
 }
 

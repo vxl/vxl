@@ -1,4 +1,3 @@
-//----*-c++-*----tells emacs to use C++ mode----------
 // This is brl/bmvl/brct/brct_plane_sweeper_params.cxx
 #include <brct/brct_plane_sweeper_params.h>
 //:
@@ -14,6 +13,7 @@
 
 brct_plane_sweeper_params::
 brct_plane_sweeper_params(const brct_plane_sweeper_params& sp)
+  : gevd_param_mixin()
 {
   InitParams(sp.zmin_,
              sp.zmax_,
@@ -58,8 +58,7 @@ void brct_plane_sweeper_params::InitParams(float zmin,
                                            float corr_sigma,
                                            float  intensity_thresh,
                                            const sdet_harris_detector_params& hdp
-                                           )
-
+                                          )
 {
   zmin_ = zmin;
   zmax_ = zmax;
@@ -93,18 +92,18 @@ bool brct_plane_sweeper_params::SanityCheck()
 
 vcl_ostream& operator << (vcl_ostream& os, const brct_plane_sweeper_params& sp)
 {
-  os << "brct_plane_sweeper_params:" << vcl_endl << "[---" << vcl_endl;
-  os << "zmin " << sp.zmin_ << vcl_endl;
-  os << "zmax " << sp.zmax_ << vcl_endl;
-  os << "N zplanes " << sp.nz_ << vcl_endl;
-  os << "Point Match Radius " << sp.point_radius_ << vcl_endl;
-  os << "Corr Window Radius " << sp.corr_radius_ << vcl_endl;
-  os << "Corr Display Range Min " << sp.corr_min_ << vcl_endl;
-  os << "Corr Display Range Max " << sp.corr_max_ << vcl_endl;
-  os << "Coor Thresh " << sp.corr_thresh_ << vcl_endl;
-  os << "Corr Smooth Sigma " << sp.corr_sigma_ << vcl_endl;
-  os << "Intensity Thresh " << sp.intensity_thresh_ << vcl_endl;
-  os << sp.hdp_;
-  os << "---]" << vcl_endl;
-  return os;
+  return
+  os << "brct_plane_sweeper_params:\n[---\n"
+     << "zmin " << sp.zmin_ << vcl_endl
+     << "zmax " << sp.zmax_ << vcl_endl
+     << "N zplanes " << sp.nz_ << vcl_endl
+     << "Point Match Radius " << sp.point_radius_ << vcl_endl
+     << "Corr Window Radius " << sp.corr_radius_ << vcl_endl
+     << "Corr Display Range Min " << sp.corr_min_ << vcl_endl
+     << "Corr Display Range Max " << sp.corr_max_ << vcl_endl
+     << "Coor Thresh " << sp.corr_thresh_ << vcl_endl
+     << "Corr Smooth Sigma " << sp.corr_sigma_ << vcl_endl
+     << "Intensity Thresh " << sp.intensity_thresh_ << vcl_endl
+     << sp.hdp_
+     << "---]" << vcl_endl;
 }

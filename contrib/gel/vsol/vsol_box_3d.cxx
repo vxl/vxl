@@ -4,7 +4,8 @@
 // \file
 #include <vcl_cassert.h>
 
-vsol_box_3d::vsol_box_3d(vsol_box_3d const &b){
+vsol_box_3d::vsol_box_3d(vsol_box_3d const &b) : vbl_ref_count(), vul_timestamp()
+{
   box_ = b.box_;
 }
 

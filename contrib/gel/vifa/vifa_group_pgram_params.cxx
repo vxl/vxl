@@ -6,6 +6,7 @@
 
 vifa_group_pgram_params::
 vifa_group_pgram_params(const vifa_group_pgram_params&  dp)
+  : gevd_param_mixin(), vul_timestamp(), vbl_ref_count()
 {
   init_params(dp.angle_increment_,
               dp.max_suppress_radius_,

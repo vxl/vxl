@@ -1,4 +1,3 @@
-//----*-c++-*----tells emacs to use C++ mode----------
 // This is brl/bseg/strk/strk_region_info_params.cxx
 #include <strk/strk_region_info_params.h>
 //:
@@ -14,6 +13,7 @@
 
 strk_region_info_params::
 strk_region_info_params(const strk_region_info_params& tp)
+  : gevd_param_mixin()
 {
   InitParams(tp.sigma_,
              tp.gradient_info_,
@@ -79,14 +79,14 @@ bool strk_region_info_params::SanityCheck()
 
 vcl_ostream& operator << (vcl_ostream& os, const strk_region_info_params& tp)
 {
-  os << "strk_region_info_params:" << vcl_endl << "[---" << vcl_endl;
-  os << "sigma " << tp.sigma_ << vcl_endl;
-  os << "gradient_info " << tp.gradient_info_ << vcl_endl;
-  os << "color_info " << tp.color_info_ << vcl_endl;
-  os << "min_gradient " << tp.min_gradient_ << vcl_endl;
-  os << "parzen_sigma " << tp.parzen_sigma_ << vcl_endl;
-  os << "verbose " << tp.verbose_ << vcl_endl;
-  os << "debug " << tp.debug_ << vcl_endl;
-  os << "---]" << vcl_endl;
-  return os;
+  return
+  os << "strk_region_info_params:\n[---\n"
+     << "sigma " << tp.sigma_ << vcl_endl
+     << "gradient_info " << tp.gradient_info_ << vcl_endl
+     << "color_info " << tp.color_info_ << vcl_endl
+     << "min_gradient " << tp.min_gradient_ << vcl_endl
+     << "parzen_sigma " << tp.parzen_sigma_ << vcl_endl
+     << "verbose " << tp.verbose_ << vcl_endl
+     << "debug " << tp.debug_ << vcl_endl
+     << "---]" << vcl_endl;
 }

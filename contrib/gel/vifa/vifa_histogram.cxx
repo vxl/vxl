@@ -97,6 +97,7 @@ vifa_histogram::vifa_histogram(float* uvals, float* ucounts, int xres)
 //-----------------------------------------------------------
 //: Copy constructor
 vifa_histogram::vifa_histogram(const vifa_histogram& h)
+  : vul_timestamp(), vbl_ref_count()
 {
   // We know we really aren't changing h, but the array access to h isn't
   // strictly speaking const. JLM -Oct 2000

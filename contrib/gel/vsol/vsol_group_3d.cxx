@@ -25,6 +25,7 @@ vsol_group_3d::vsol_group_3d(void)
 // Description: The objects of the group are not duplicated
 //---------------------------------------------------------------------------
 vsol_group_3d::vsol_group_3d(const vsol_group_3d &other)
+  : vsol_spatial_object_3d(other)
 {
   storage_=new vcl_list<vsol_spatial_object_3d_sptr>(*other.storage_);
 }
@@ -106,13 +107,13 @@ unsigned int vsol_group_3d::deep_size(void) const
   int result=0;
   vcl_list<vsol_spatial_object_3d_sptr>::iterator i;
   for (i=storage_->begin(); i!=storage_->end(); ++i)
-    {
-      vsol_group_3d const* g=(*i)->cast_to_group();
-      if (g!=0)
-        result+=g->deep_size();
-      else
-        ++result;
-    }
+  {
+    vsol_group_3d const* g=(*i)->cast_to_group();
+    if (g!=0)
+      result+=g->deep_size();
+    else
+      ++result;
+  }
   return result;
 }
 

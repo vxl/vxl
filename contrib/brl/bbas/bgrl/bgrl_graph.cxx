@@ -16,6 +16,7 @@ bgrl_graph::bgrl_graph()
 //: Copy Constructor
 // \note this provides a deep copy of the graph
 bgrl_graph::bgrl_graph(const bgrl_graph& graph)
+  : vbl_ref_count()
 {
   vcl_map<bgrl_vertex_sptr, bgrl_vertex_sptr> old_to_new;
 
@@ -41,7 +42,7 @@ bgrl_graph::bgrl_graph(const bgrl_graph& graph)
         find_new->second->in_edges_.insert(*e_itr);
       }
       else
-        vcl_cerr << "Error copying graph: vertex not found in graph" << vcl_endl;
+        vcl_cerr << "Error copying graph: vertex not found in graph\n";
     }
   }
 }
@@ -141,16 +142,16 @@ bgrl_graph::size() const
 
 
 //: Return a platform independent string identifying the class
-vcl_string 
-bgrl_graph::is_a() const 
-{ 
-  return "bgrl_graph"; 
+vcl_string
+bgrl_graph::is_a() const
+{
+  return "bgrl_graph";
 }
 
 
 //: Create a copy of the object on the heap.
 // The caller is responsible for deletion
-bgrl_graph* 
+bgrl_graph*
 bgrl_graph::clone() const
 {
   return new bgrl_graph(*this);
@@ -217,11 +218,11 @@ bgrl_graph::version(  ) const
 //-----------------------------------------------------------------------------------------
 
 //: Constructor
-bgrl_graph::iterator::iterator( bgrl_graph_sptr graph, bgrl_search_func_sptr func ) 
- : graph_(graph), search_func_(func), 
-   use_internal_(false), internal_(graph->vertices_.begin()) 
+bgrl_graph::iterator::iterator( bgrl_graph_sptr graph, bgrl_search_func_sptr func )
+ : graph_(graph), search_func_(func),
+   use_internal_(false), internal_(graph->vertices_.begin())
 {
-  if(!func)
+  if (!func)
     use_internal_ = true;
 }
 
@@ -235,21 +236,21 @@ bgrl_graph::iterator::iterator( bgrl_graph_sptr graph )
 
 
 //: Pre-Increment
-bgrl_graph::iterator& 
+bgrl_graph::iterator&
 bgrl_graph::iterator::operator++ ()
-{ 
-  if(use_internal_)
+{
+  if (use_internal_)
     ++internal_;
   else
     search_func_->next_vertex();
-  
-  return *this; 
+
+  return *this;
 }
 
 //: Post-Increment
-bgrl_graph::iterator 
+bgrl_graph::iterator
 bgrl_graph::iterator::operator++ (int)
-{ 
+{
   iterator old(*this);
   ++(*this);
   return old;
@@ -257,20 +258,20 @@ bgrl_graph::iterator::operator++ (int)
 
 
 //: Dereference
-bgrl_vertex_sptr 
-bgrl_graph::iterator::operator -> () const 
+bgrl_vertex_sptr
+bgrl_graph::iterator::operator -> () const
 {
   return *(*this);
 }
 
 
 //: Dereference
-bgrl_vertex_sptr 
-bgrl_graph::iterator::operator * () const 
+bgrl_vertex_sptr
+bgrl_graph::iterator::operator * () const
 {
-  if(use_internal_)
-    if(internal_ == this->graph_->vertices_.end())
-      return NULL; 
+  if (use_internal_)
+    if (internal_ == this->graph_->vertices_.end())
+      return NULL;
     else
       return *internal_;
   else
@@ -279,16 +280,16 @@ bgrl_graph::iterator::operator * () const
 
 
 //: Equality comparison
-bool 
-bgrl_graph::iterator::operator == (const iterator& rhs) const 
-{ 
-  return *rhs == *(*this); 
+bool
+bgrl_graph::iterator::operator == (const iterator& rhs) const
+{
+  return *rhs == *(*this);
 }
 
 //: Inequality comparison
-bool 
-bgrl_graph::iterator::operator != (const iterator& rhs) const 
-{ 
+bool
+bgrl_graph::iterator::operator != (const iterator& rhs) const
+{
   return !(rhs == *this);
 }
 

@@ -14,14 +14,14 @@ gst_vertex_2d::gst_vertex_2d()
 }
 
 // useful constructor
-gst_vertex_2d::gst_vertex_2d( const double x, const double y) 
-  : x_(x), y_(y)
+gst_vertex_2d::gst_vertex_2d( const double x, const double y)
+  : vbl_ref_count(), x_(x), y_(y)
 {
 }
 
 // copy constructor
 gst_vertex_2d::gst_vertex_2d( const gst_vertex_2d &v)
-  : x_(v.get_x()), y_(v.get_y())
+  : vbl_ref_count(), x_(v.get_x()), y_(v.get_y())
 {
 }
 
@@ -65,5 +65,5 @@ bool operator==( const gst_vertex_2d& a, const gst_vertex_2d& b)
 // output
 vcl_ostream &operator <<( vcl_ostream &os, const gst_vertex_2d &v)
 {
-  return os << v.x_ << " " << v.y_;
+  return os << v.x_ << ' ' << v.y_;
 }

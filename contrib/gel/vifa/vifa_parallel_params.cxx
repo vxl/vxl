@@ -16,6 +16,7 @@ vifa_parallel_params(float  angle_min,
 
 vifa_parallel_params::
 vifa_parallel_params(const vifa_parallel_params& np)
+  : gevd_param_mixin(), vul_timestamp(), vbl_ref_count()
 {
   min_angle = np.min_angle;
   max_angle = np.max_angle;

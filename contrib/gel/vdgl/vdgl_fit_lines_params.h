@@ -26,11 +26,10 @@ class vdgl_fit_lines_params : public vbl_ref_count
 
   vdgl_fit_lines_params(int  min_fit_length = 10,
                         double rms_distance = 0.1)
-    : min_fit_length_(min_fit_length), rms_distance_(rms_distance)
-  { SanityCheck(); }
+    : min_fit_length_(min_fit_length), rms_distance_(rms_distance) { SanityCheck(); }
 
   vdgl_fit_lines_params(const vdgl_fit_lines_params& flp)
-    : min_fit_length_(flp.min_fit_length_), rms_distance_(flp.rms_distance_) {}
+    : vbl_ref_count(), min_fit_length_(flp.min_fit_length_), rms_distance_(flp.rms_distance_) {}
 
  ~vdgl_fit_lines_params() {}
 

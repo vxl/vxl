@@ -24,7 +24,7 @@ class example_sp : public vbl_ref_count
 
  ~example_sp() { vcl_cout << "example_sp destructor, refcount=" << get_references() << '\n'; }
 
-  example_sp(example_sp const&)
+  example_sp(example_sp const&) : vbl_ref_count()
   {
     vcl_cout << "example_sp copy constructor, refcount=" << get_references() << '\n';
   }

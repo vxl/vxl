@@ -1,4 +1,3 @@
-//----*-c++-*----tells emacs to use C++ mode----------
 // This is brl/bseg/strk/strk_tracker_params.cxx
 #include <strk/strk_tracker_params.h>
 //:
@@ -14,6 +13,7 @@
 
 strk_tracker_params::
 strk_tracker_params(const strk_tracker_params& tp)
+  : gevd_param_mixin()
 {
   InitParams(tp.n_samples_,
              tp.search_radius_,
@@ -25,14 +25,14 @@ strk_tracker_params(const strk_tracker_params& tp)
 }
 
 strk_tracker_params::
-strk_tracker_params(const int n_samples, 
+strk_tracker_params(const int n_samples,
                     const float search_radius,
                     const float angle_range,
                     const float scale_range,
                     const float sigma,
                     const bool gradient_info)
 {
-  InitParams(n_samples, 
+  InitParams(n_samples,
              search_radius,
              angle_range,
              scale_range,
@@ -40,14 +40,14 @@ strk_tracker_params(const int n_samples,
              gradient_info);
 }
 
-void strk_tracker_params::InitParams(int n_samples, 
+void strk_tracker_params::InitParams(int n_samples,
                                      float search_radius,
                                      float angle_range,
                                      float scale_range,
                                      float sigma,
                                      bool gradient_info)
 {
-  n_samples_ = n_samples; 
+  n_samples_ = n_samples;
   search_radius_ = search_radius;
   angle_range_ = angle_range;
   scale_range_ = scale_range;
@@ -74,13 +74,13 @@ bool strk_tracker_params::SanityCheck()
 
 vcl_ostream& operator << (vcl_ostream& os, const strk_tracker_params& tp)
 {
-  os << "strk_tracker_params:" << vcl_endl << "[---" << vcl_endl;
-  os << "n_samples " << tp.n_samples_ << vcl_endl;
-  os << "search_radius " << tp.search_radius_ << vcl_endl;
-  os << "angle_range " << tp.angle_range_ << vcl_endl;
-  os << "scale_range " << tp.scale_range_ << vcl_endl;
-  os << "sigma " << tp.sigma_ << vcl_endl;
-  os << "gradient_info " << tp.gradient_info_ << vcl_endl;
-  os << "---]" << vcl_endl;
-  return os;
+  return
+  os << "strk_tracker_params:\n[---\n"
+     << "n_samples " << tp.n_samples_ << vcl_endl
+     << "search_radius " << tp.search_radius_ << vcl_endl
+     << "angle_range " << tp.angle_range_ << vcl_endl
+     << "scale_range " << tp.scale_range_ << vcl_endl
+     << "sigma " << tp.sigma_ << vcl_endl
+     << "gradient_info " << tp.gradient_info_ << vcl_endl
+     << "---]" << vcl_endl;
 }

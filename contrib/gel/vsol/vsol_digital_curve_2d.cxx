@@ -23,7 +23,7 @@
 //: Default Constructor
 //---------------------------------------------------------------------------
 vsol_digital_curve_2d::vsol_digital_curve_2d()
- : samples_()
+ : vsol_curve_2d(), samples_()
 {
 }
 
@@ -32,7 +32,7 @@ vsol_digital_curve_2d::vsol_digital_curve_2d()
 //---------------------------------------------------------------------------
 
 vsol_digital_curve_2d::vsol_digital_curve_2d(const vcl_vector<vsol_point_2d_sptr> &samples)
- : samples_(samples)
+ : vsol_curve_2d(), samples_(samples)
 {
 }
 
@@ -40,7 +40,7 @@ vsol_digital_curve_2d::vsol_digital_curve_2d(const vcl_vector<vsol_point_2d_sptr
 // Copy constructor
 //---------------------------------------------------------------------------
 vsol_digital_curve_2d::vsol_digital_curve_2d(const vsol_digital_curve_2d &other)
- : samples_()
+  : vsol_curve_2d(other), samples_()
 {
   for ( vcl_vector<vsol_point_2d_sptr>::const_iterator itr=other.samples_.begin();
         itr != other.samples_.end();  ++itr )

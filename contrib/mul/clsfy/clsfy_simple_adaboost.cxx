@@ -25,6 +25,7 @@ clsfy_simple_adaboost::clsfy_simple_adaboost()
 }
 
 clsfy_simple_adaboost::clsfy_simple_adaboost(const clsfy_simple_adaboost& c)
+  : clsfy_classifier_base()
 {
   *this = c;
 }
@@ -104,7 +105,7 @@ void clsfy_simple_adaboost::clear()
 
 //: Add weak classifier and alpha value
 // nb also changes n_clfrs_used to use all current weak classifiers
-void clsfy_simple_adaboost::add_classifier(clsfy_classifier_1d* c1d, 
+void clsfy_simple_adaboost::add_classifier(clsfy_classifier_1d* c1d,
                                            double alpha,
                                            int index)
 {
@@ -167,7 +168,7 @@ double clsfy_simple_adaboost::log_l(const vnl_vector<double> &v) const
     sum2 += alphas_[i];
   }
 
-  return sum1 - sum2 * 0.5; 
+  return sum1 - sum2 * 0.5;
 }
 
 //=======================================================================
@@ -194,7 +195,7 @@ void clsfy_simple_adaboost::print_summary(vcl_ostream& os) const
   os<<vcl_endl;
   for (int i=0;i<n;++i)
   {
-    os<<" Alpha: "<<alphas_[i] 
+    os<<" Alpha: "<<alphas_[i]
       <<" Index: "<<index_[i]
       <<" Classifier: "<<classifier_1d_[i]<<vcl_endl;
   }
@@ -240,7 +241,7 @@ void clsfy_simple_adaboost::b_read(vsl_b_istream& bfs)
       break;
     default:
       vcl_cerr << "I/O ERROR: clsfy_simple_adaboost::b_read(vsl_b_istream&)\n"
-               << "           Unknown version number "<< version << "\n";
+               << "           Unknown version number "<< version << '\n';
       bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
   }
 }

@@ -247,7 +247,7 @@ class vmap_owning_sequence: public vmap_ptr_sequence<D>
   vmap_owning_sequence() {}
 
   //:
-  vmap_owning_sequence(const self_type & arg )
+  vmap_owning_sequence(const self_type & arg ) : vmap_ptr_sequence<D>(arg)
   {
     operator=( arg ) ;
   }

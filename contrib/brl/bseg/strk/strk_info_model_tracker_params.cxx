@@ -1,4 +1,3 @@
-//----*-c++-*----tells emacs to use C++ mode----------
 // This is brl/bseg/strk/strk_info_model_tracker_params.cxx
 #include <strk/strk_info_model_tracker_params.h>
 //:
@@ -14,6 +13,7 @@
 
 strk_info_model_tracker_params::
 strk_info_model_tracker_params(const strk_info_model_tracker_params& tp)
+  : gevd_param_mixin()
 {
   InitParams(tp.n_samples_,
              tp.stem_trans_radius_,
@@ -58,8 +58,8 @@ strk_info_model_tracker_params(const int n_samples,
              verbose);
 }
 
-void 
-strk_info_model_tracker_params::InitParams(int n_samples, 
+void
+strk_info_model_tracker_params::InitParams(int n_samples,
                                            float stem_trans_radius,
                                            float long_arm_tip_trans_radius,
                                            float short_arm_tip_trans_radius,
@@ -105,19 +105,19 @@ bool strk_info_model_tracker_params::SanityCheck()
 
 vcl_ostream& operator << (vcl_ostream& os, const strk_info_model_tracker_params& tp)
 {
-  os << "strk_info_model_tracker_params:" << vcl_endl << "[---" << vcl_endl;
-  os << "n_samples " << tp.n_samples_ << vcl_endl;
-  os << "stem_trans_radius " << tp.stem_trans_radius_ << vcl_endl;
-  os << "long_arm_tip_trans_radius " << tp.long_arm_tip_trans_radius_ << vcl_endl;
-  os << "short_arm_tip_trans_radius " << tp.short_arm_tip_trans_radius_ << vcl_endl;
-  os << "stem_angle_range " << tp.stem_angle_range_ << vcl_endl;
-  os << "long_arm_angle_range " << tp.long_arm_angle_range_ << vcl_endl;
-  os << "short_arm_angle_range " << tp.short_arm_angle_range_ << vcl_endl;
-  os << "long_arm_tip_angle_range " << tp.long_arm_tip_angle_range_ << vcl_endl;
-  os << "short_arm_tip_angle_range " << tp.short_arm_tip_angle_range_ << vcl_endl;
-  os << "sigma " << tp.sigma_ << vcl_endl;
-  os << "gradient_info "<< tp.gradient_info_ << vcl_endl;
-  os << "verbose " << tp.verbose_ << vcl_endl;
-    os << "---]" << vcl_endl;
-  return os;
+  return
+  os << "strk_info_model_tracker_params:\n[---\n"
+     << "n_samples " << tp.n_samples_ << vcl_endl
+     << "stem_trans_radius " << tp.stem_trans_radius_ << vcl_endl
+     << "long_arm_tip_trans_radius " << tp.long_arm_tip_trans_radius_ << vcl_endl
+     << "short_arm_tip_trans_radius " << tp.short_arm_tip_trans_radius_ << vcl_endl
+     << "stem_angle_range " << tp.stem_angle_range_ << vcl_endl
+     << "long_arm_angle_range " << tp.long_arm_angle_range_ << vcl_endl
+     << "short_arm_angle_range " << tp.short_arm_angle_range_ << vcl_endl
+     << "long_arm_tip_angle_range " << tp.long_arm_tip_angle_range_ << vcl_endl
+     << "short_arm_tip_angle_range " << tp.short_arm_tip_angle_range_ << vcl_endl
+     << "sigma " << tp.sigma_ << vcl_endl
+     << "gradient_info "<< tp.gradient_info_ << vcl_endl
+     << "verbose " << tp.verbose_ << vcl_endl
+     << "---]" << vcl_endl;
 }

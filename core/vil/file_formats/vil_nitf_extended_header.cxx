@@ -22,7 +22,8 @@ static const char* const CRLF = "\n";
 //: Copy constructor for vil_nitf_extended_header.
 //====================================================================
 vil_nitf_extended_header::vil_nitf_extended_header(const vil_nitf_extended_header& other_header)
-  : XHDL(data_length_)
+  : vil_nitf_header(other_header)
+  , XHDL(data_length_)
 {
     XHDL = other_header.XHDL;
     XHD = new char[XHDL+1];

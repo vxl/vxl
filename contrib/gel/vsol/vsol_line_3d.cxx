@@ -38,7 +38,7 @@ vsol_line_3d::vsol_line_3d(const vsol_point_3d_sptr &new_p0,
 // Description: no duplication of the points
 //---------------------------------------------------------------------------
 vsol_line_3d::vsol_line_3d(const vsol_line_3d &other)
-: p0_(other.p0_), p1_(other.p1_)
+: vsol_curve_3d(other), p0_(other.p0_), p1_(other.p1_)
 {
 }
 

@@ -17,8 +17,10 @@ PairMatchSet2D3D::PairMatchSet2D3D()
 
 // Copy ctor
 PairMatchSet2D3D::PairMatchSet2D3D(const PairMatchSet2D3D& that)
+  : PairMatchSet(that),
+    _corners(new HomgInterestPointSet(*that._corners)),
+    _structure(new vcl_vector<HomgPoint3D>(*that._structure))
 {
-  operator=(that);
 }
 
 PairMatchSet2D3D::PairMatchSet2D3D(const HomgInterestPointSet* corners, vcl_vector<HomgPoint3D>* structure)

@@ -58,7 +58,7 @@ vcsl_axis::vcsl_axis(vcsl_dimension &new_dimension,
 //---------------------------------------------------------------------------
 // Copy constructor
 //---------------------------------------------------------------------------
-vcsl_axis::vcsl_axis(const vcsl_axis &other)
+vcsl_axis::vcsl_axis(const vcsl_axis &other) : vbl_ref_count()
 {
   dimension_=other.dimension_;
   unit_=other.unit_;
