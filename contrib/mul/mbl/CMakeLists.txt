@@ -44,7 +44,7 @@ SET(mbl_sources
 
   mbl_table.cxx                         mbl_table.h
   mbl_progress.cxx                      mbl_progress.h
-  mbl_progress_text.h
+  mbl_progress_text.cxx                 mbl_progress_text.h
   mbl_progress_null.h
   mbl_progress_composite.cxx            mbl_progress_composite.h
 
@@ -67,7 +67,7 @@ IF(CMAKE_COMPILER_IS_GNUCXX)
 ENDIF(CMAKE_COMPILER_IS_GNUCXX)
 
 ADD_LIBRARY(mbl ${mbl_sources})
-TARGET_LINK_LIBRARIES(mbl vnl_io vnl_algo vgl_io vsl)
+TARGET_LINK_LIBRARIES(mbl vnl_io vnl_algo vnl vgl_io vsl)
 
 IF (BUILD_TESTING)
   SUBDIRS(tests)

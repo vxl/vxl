@@ -23,34 +23,23 @@ class mbl_progress_text : public mbl_progress
 public:
   
   //: Constructor
-  mbl_progress_text() {}
-  
+  mbl_progress_text();
+
   //: Destructor
-  ~mbl_progress_text() {}
-  
+  ~mbl_progress_text();
+
   //: Name of the class
-  virtual vcl_string is_a() const { return "mbl_progress_text"; }
-  
+  virtual vcl_string is_a() const;
 
 protected:
-  
   virtual void on_set_estimated_iterations(const vcl_string& identifier,
-                                           const int total_iterations)
-  { vcl_cout << "Starting " << identifier << vcl_endl; }
-  
+                                           const int total_iterations);
 
-  virtual void on_set_progress(const vcl_string& identifier, 
-                               const int progress)
-  { 
-    vcl_cout << "Progress for " << identifier << " is " << progress 
-             << " (out of " << estimated_iterations(identifier) << ")" 
-             << vcl_endl; 
-  }
-  
-  
-  virtual void on_end_progress(const vcl_string &identifier)
-  { vcl_cout << "Finishing " << identifier << vcl_endl; }
-  
+  virtual void on_set_progress(const vcl_string& identifier,
+                               const int progress);
+
+  virtual void on_end_progress(const vcl_string &identifier);
+
 };
 //========================================================================
 
