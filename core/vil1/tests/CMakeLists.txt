@@ -1,0 +1,11 @@
+
+
+EXECUTABLES(
+test_assign
+test_interpolate
+test_load
+test_memory_image
+test_memory_image_of
+test_save_load_image
+test_write_endian
+)
