@@ -10,11 +10,9 @@ SOURCES += gtrl_triangle.cxx
 SOURCES += gtrl_vertex.cxx
 SOURCES += gtrl_polygon.cxx
 
-# from netlib
-#DEFINES += -DANSI_DECLARATORS
-#DEFINES += -DTRILIBRARY
-MANPAGE_SOURCES += gtrl_netlib_triangle.h
-#SOURCES += gtrl_netlib_triangle.c
+ifndef NOTEST
+SUBDIRS += examples
+endif
 
 ################################
 include ${IUEROOT}/config/top.mk
