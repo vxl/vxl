@@ -4,7 +4,7 @@ VERSION := 1.0
 DEFINES += -DBUILDING_VNL_DLL
 
 MANPAGE_SOURCES += vnl_fwd.h
-MANPAGE_SOURCES += vnl_config.h.in
+MANPAGE_SOURCES += vnl_config.h.in vnl_config.h
 MANPAGE_SOURCES += vnl_tag.h
 
 # vector and matrix
