@@ -9,13 +9,14 @@
 #include <brip/brip_vil1_float_ops.h>
 #include <strk/strk_tracking_face_2d.h>
 
-//Gives a sort on mutual information decreasing order
+#if 0 // unused static function
+//: Gives a sort on mutual information in decreasing order
 static bool info_compare(strk_tracking_face_2d_sptr const f1,
                          strk_tracking_face_2d_sptr const f2)
 {
   return f1->total_info() > f2->total_info();//JLM Switched
 }
-
+#endif // 0
 
 //---------------------------------------------------------------
 // Constructors
