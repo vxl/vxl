@@ -10,6 +10,9 @@ IF( UNIX )
                 ${vthreep_BINARY_DIR}/mpeg2 )
 ENDIF( UNIX )
 
+# A 1st attempt at replacing the MPEG configure script with CMake
+# CONFIGURE_FILE(${vthreep_SOURCE_DIR}/mpeg2/include/config_cmake.h.in ${vthreep_BINARY_DIR}/mpeg2/include/config_cmake.h)
+
 IF( UNIX )
   # this is where autoconf will put config.h and inttypes.h
   INCLUDE_DIRECTORIES( ${vthreep_BINARY_DIR}/mpeg2/include )
