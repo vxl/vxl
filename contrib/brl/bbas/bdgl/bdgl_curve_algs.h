@@ -23,8 +23,13 @@ class bdgl_curve_algs
   ~bdgl_curve_algs();
 
   //:Finds the edgel index on a digital curve closest to the given point
-  static int closest_point(vdgl_edgel_chain_sptr& dc,
+  static int closest_point(vdgl_edgel_chain_sptr& ec,
                            const double x, const double y);
+
+  //:Finds the x-y coordinates on a digital curve closest to the given point
+  static bool closest_point(vdgl_digital_curve_sptr& dc,
+                           const double x, const double y,
+                            double& xc, double& yc);
 
   //:Reverses the edgel chain
   static vdgl_digital_curve_sptr reverse(vdgl_digital_curve_sptr& dc);

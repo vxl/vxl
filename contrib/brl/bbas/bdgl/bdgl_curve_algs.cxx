@@ -49,6 +49,32 @@ int bdgl_curve_algs::closest_point(vdgl_edgel_chain_sptr& ec,
   return imin;
 }
 //:
+//-----------------------------------------------------------------------------
+// Finds the closest point, (xc, yc) on a digital curve to a given 
+// location (x,y).
+// Current implementation is not the best since it is discrete with
+// the edgel_chain index.  Ultimately it should use the interpolator
+// to refine the location on the digital_curve.
+//-----------------------------------------------------------------------------
+bool bdgl_curve_algs::closest_point(vdgl_digital_curve_sptr& dc,
+                                    const double x, const double y,
+                                    double& xc, double& yc)
+
+
+{
+  if (!dc)
+    {
+      vcl_cout<<"In bdgl_curve_algs::closest_point(..) - warning, null curve\n";
+      return false;
+    }
+  vdgl_interpolator_sptr interp = dc->get_interpolator();
+  vdgl_edgel_chain_sptr ec = interp->get_edgel_chain();
+  int index = bdgl_curve_algs::closest_point(ec, x, y);
+  xc = (*ec)[index].x();
+  yc = (*ec)[index].y();
+  return true;
+}
+//:
 // It is sometimes necessary to reverse the order of the digital curve
 // so that the initial point corresponds to v1 of a topology edge
 vdgl_digital_curve_sptr bdgl_curve_algs::reverse(vdgl_digital_curve_sptr& dc)

@@ -62,6 +62,11 @@ int main(int, char **)
       vcl_cout << " p[0] " << pts[0] << " p[1] " << pts[1] << "\n";
     }
   Assert(pts.size()==2);
+  //test closest point
+  double xc=0, yc=0;
+  good =  bdgl_curve_algs::closest_point(dc, 0.5, 2.0, xc, yc);
+  vcl_cout << "Closest Point to (0.5, 2.0)=(" << xc << " " << yc << ")\n";
+
   vcl_cout << "finished testing bdgl_curve_algs\n";
   vcl_cout << "Test Summary: " << success << " tests succeeded, "
            << failures << " tests failed" << (failures?"\t***\n":"\n");
