@@ -264,14 +264,14 @@ bool vul_string_expand_var(vcl_string &str)
   // If there is a problem, carry on trying to convert rest
   bool success=true; //  of string, but remember failure.
 
-  enum {not, start_var, in_var, in_bracket_var} state = not;
+  enum {not_in_var, start_var, in_var, in_bracket_var} state = not_in_var;
   vcl_string::size_type var_begin;
 
   while (i<str.size())
   {
     switch (state)
     {
-    case not: // not currently in a variable
+    case not_in_var: // not currently in a variable
       if (str[i] == '$')
       {
         state = start_var;
@@ -282,7 +282,7 @@ bool vul_string_expand_var(vcl_string &str)
       if (str[i] == '$')
       {
         str.erase(i,1);
-        state=not;
+        state=not_in_var;
         continue;
       }
       else if (str[i] == '{')
@@ -309,7 +309,7 @@ bool vul_string_expand_var(vcl_string &str)
         {
           str.replace(var_begin, i+1-var_begin, value);
           i = var_begin + vcl_strlen(value);
-          state=not;
+          state=not_in_var;
           continue;
         }
       }
@@ -319,7 +319,7 @@ bool vul_string_expand_var(vcl_string &str)
       {
         assert(var_begin+2 < str.size());
         assert(i > var_begin+1);
-        state=not;
+        state=not_in_var;
         if (i==var_begin+2) // empty variable name
         {
           success=false;
