@@ -141,7 +141,8 @@ rrel_orthogonal_regression::weighted_least_squares_fit( vnl_vector<double>& para
   A = shift_vars.transpose() * shift_vars;
 
   vnl_svd<double> svd( A, 1.0e-8 );
-  if ( (unsigned int)svd.rank() < param_dof() ) {
+	// Rank of (param_dof() -1) is an exact fit
+  if ( (unsigned int)svd.rank() < param_dof() - 1 ) {
     vcl_cerr << "rrel_orthogonal_regression::WeightedLeastSquaresFit --- singularity!\n";
     return false;
   }
