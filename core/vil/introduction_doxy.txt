@@ -179,7 +179,7 @@ vil2_image_view<vxl_byte> filtered_image = vil2_transpose(tmp_image2);
 * - vil2_memory_image: Representing an image in memory (essentially a wrapper around a view.)
 *   This is created using vil2_new_image_resource().
 * - Representing a filtered version of an image in a file (without loading in memory): e.g.
-*   vil2_crop_image_resource adn vil2_decimate_image_resource. These are created using the 
+*   vil2_crop_image_resource and vil2_decimate_image_resource. These are created using the
 *   equivalent functions: vil2_crop(), vil2_decimate(), etc.
 * - Representing the outcome of an image processing algorithm (see next section)
 *   e.g. vil2_convolve_1d_resource. These are creates using the equivalent functions
@@ -191,7 +191,7 @@ vil2_image_view<vxl_byte> filtered_image = vil2_transpose(tmp_image2);
 *
 * \section Legacy interfaces
 *
-* There are two reasons to still use vil1 (currently vxl/vil)
+* There are two reasons to still use vil1 (currently core/vil)
 * - vil1  has more image processing functions and image loaders than vil2 at
 * the moment.
 * - You may have lots of code that uses vil1, and haven't yet converted to vil2.
