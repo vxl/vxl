@@ -21,14 +21,15 @@ int main(int argc, char** argv)
 {
   // Register video codecs
   vidl_io::register_codec(new vidl_image_list_codec);
+
 #ifdef VCL_WIN32
   vidl_io::register_codec(new vidl_avicodec);
 #endif
 
 #ifdef HAS_MPEG2
+  vcl_cout << " Has MPEG\n";
   vidl_io::register_codec(new vidl_mpegcodec);
 #endif
-
    // Initialize the toolkit.
   vgui::init(argc, argv);
   vgui_menu menubar = vidfpl_menus::get_menu();

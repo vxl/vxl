@@ -2,6 +2,13 @@
 
 INCLUDE_DIRECTORIES( ${VXLCORE_INCLUDE_DIR} )
 
+INCLUDE( ${MODULE_PATH}/FindMPEG2.cmake )
+
+IF( MPEG2_FOUND )
+  INCLUDE_DIRECTORIES(${MPEG2_INCLUDE_DIR})
+  ADD_DEFINITIONS(-DHAS_MPEG2)
+ENDIF( MPEG2_FOUND )
+
 SET(vidfpl_sources vidfpl.cxx vidfpl_menus.cxx vidfpl_menus.h)
 ADD_EXECUTABLE (vidfpl ${vidfpl_sources})
 TARGET_LINK_LIBRARIES(vidfpl brip  vvid vidl vgui )
