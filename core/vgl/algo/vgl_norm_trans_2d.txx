@@ -107,7 +107,7 @@ bool vgl_norm_trans_2d<T>::
 compute_from_lines(vcl_vector<vgl_homg_line_2d<T> > const& lines)
 {
   vcl_vector<vgl_homg_point_2d<T> > points;
-  for(vcl_vector<vgl_homg_line_2d<T> >::const_iterator lit = lines.begin();
+  for(typename vcl_vector<vgl_homg_line_2d<T> >::const_iterator lit=lines.begin();
       lit != lines.end(); lit++)
     {
       vgl_homg_line_2d<T> l = (*lit);
