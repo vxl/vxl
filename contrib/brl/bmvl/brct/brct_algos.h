@@ -34,10 +34,10 @@
 struct brct_error_index
 {
   brct_error_index(int i, double error){i_ = i; e_ = error;}
-  ~brct_error_index(){};
+  ~brct_error_index() {}
   int i(){return i_;}
-  double error(){return e_;}
-private:
+  double error() {return e_;}
+ private:
   int i_;
   double e_;
 };
@@ -45,12 +45,11 @@ private:
 
 class brct_algos
 {
-public:
+ public:
   brct_algos();
   virtual ~brct_algos();
 
   //operators
-public:
   static void add_box_vrml(double xmin, double ymin, double zmin, double xmax, double ymax, double zmax);
   static vsol_box_3d_sptr get_bounding_box(vcl_vector<vgl_point_3d<double> > &pts_3d);
   static vgl_point_3d<double> bundle_reconstruct_3d_point(vcl_vector<vnl_double_2> &pts,
@@ -71,52 +70,53 @@ public:
                                                    const vgl_point_2d<double>& x2, const vnl_double_3x4& P2);
 
   //: solve a general projective P matrix
-static  bool solve_p_matrix(vcl_vector<vgl_homg_point_2d<double> >const& image_points,
-                      vcl_vector<vgl_homg_point_3d<double> >const& world_points,
-                      vnl_double_3x4& P);
+  static  bool solve_p_matrix(vcl_vector<vgl_homg_point_2d<double> >const& image_points,
+                              vcl_vector<vgl_homg_point_3d<double> >const& world_points,
+                              vnl_double_3x4& P);
 
-  //: compute the Euclidean camera from 3d-2d correspondences given K
+ //: compute the Euclidean camera from 3d-2d correspondences given K
  static  bool compute_euclidean_camera(vcl_vector<vgl_point_2d<double> > const& image_points,
-                                vcl_vector<vgl_point_3d<double> > const& world_points,
-                                vnl_double_3x3 const & K,
-                                vnl_double_3x4& P);
+                                       vcl_vector<vgl_point_3d<double> > const& world_points,
+                                       vnl_double_3x3 const & K,
+                                       vnl_double_3x4& P);
 
  //: compute a world to image homography from Euclidean Points
  static bool homography(vcl_vector<vgl_point_3d<double> > const& world_points,
                         vcl_vector<vgl_point_2d<double> > const& image_points,
                         vgl_h_matrix_2d<double> & H);
 
- //:form a 3x4 projection matrix from a planar homography
+ //: form a 3x4 projection matrix from a planar homography
  static vgl_p_matrix<double> p_from_h(vgl_h_matrix_2d<double> const& H);
 
  //: change the world coordinates to be at image scale and position
- static void scale_and_translate_world(vcl_vector<vgl_point_3d<double> > const& world_points, const double magnification, vgl_h_matrix_2d<double> & H);
+ static void scale_and_translate_world(vcl_vector<vgl_point_3d<double> > const& world_points,
+                                       const double magnification, vgl_h_matrix_2d<double> & H);
 
  //: change the world coordinates to be at image scale and position
- static void scale_and_translate_world( const double world_x_min, 
-                                        const double world_y_min, 
-                                        const double magnification,
-                                        vgl_h_matrix_2d<double> & H);
+ static void scale_and_translate_world(const double world_x_min,
+                                       const double world_y_min,
+                                       const double magnification,
+                                       vgl_h_matrix_2d<double> & H);
 
 
  //: project world points into an image using a homography
- static void project(vcl_vector<vgl_point_3d<double> > const& world_points, 
+ static void project(vcl_vector<vgl_point_3d<double> > const& world_points,
                      vgl_h_matrix_2d<double> const& H,
                      vcl_vector<vgl_point_2d<double> > & image_points);
 
 
  //: project world points into an image using a projection matrix
- static void project(vcl_vector<vgl_point_3d<double> > const& world_points, 
+ static void project(vcl_vector<vgl_point_3d<double> > const& world_points,
                      vgl_p_matrix<double> const& P,
                      vcl_vector<vgl_point_2d<double> > & image_points);
 
 
- //: compute a TargetJr style 4x4 projection matrix from a 3x4 matrix
- static vnl_double_4x4 convert_to_target(vnl_double_3x4 const& P);
+  //: compute a TargetJr style 4x4 projection matrix from a 3x4 matrix
+  static vnl_double_4x4 convert_to_target(vnl_double_3x4 const& P);
 
- //: TargetJr CoolTransform Projection Method
-static  vnl_double_2 target_project(vnl_double_4x4 const& T,
-                                    vnl_double_3 const& v);
+  //: TargetJr CoolTransform Projection Method
+  static  vnl_double_2 target_project(vnl_double_4x4 const& T,
+                                      vnl_double_3 const& v);
   //: filter outliers for camera translation
   static void filter_outliers(const vnl_double_3x3& K,
                               const vnl_double_3& trans,
@@ -146,28 +146,26 @@ static  vnl_double_2 target_project(vnl_double_4x4 const& T,
 
   static double motion_constant(vnl_double_2 const& image_epipole,
                                 int i,
-                                vnl_double_2& p_i, 
-                                vnl_double_2& p_i1); 
-                               
+                                vnl_double_2& p_i,
+                                vnl_double_2& p_i1);
+
   static void print_motion_array(vnl_matrix<double>& H);
-  static void read_vrml_points(vcl_ifstream& str, 
+  static void read_vrml_points(vcl_ifstream& str,
                                vcl_vector<vsol_point_3d_sptr>& pts3d);
-  
+
   static void write_vrml_header(vcl_ofstream& str);
   static void write_vrml_trailer(vcl_ofstream& str);
-  static void write_vrml_points(vcl_ofstream& str, 
+  static void write_vrml_points(vcl_ofstream& str,
                                 vcl_vector<vsol_point_3d_sptr> const& pts3d);
   static void write_vrml_box(vcl_ofstream& str, vsol_box_3d_sptr const& box,
                              const float r = 1.0, const float g = 1.0,
-                             const float b = 1.0, 
+                             const float b = 1.0,
                              const float transparency = 0.0);
   static bool read_target_corrs(vcl_ifstream& str,
                                 vcl_vector<vgl_point_2d<double> >& image_points,
                                 vcl_vector<vgl_point_3d<double> >& world_points);
 
   static void write_target_camera(vcl_ofstream& str, vnl_double_3x4 const& P);
-
 };
-
 
 #endif // bcrt_algos_h_
