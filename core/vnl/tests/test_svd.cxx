@@ -25,7 +25,7 @@ vnl_matrix<double> solve_with_warning(const vnl_matrix<double>& M,
 }
 
 template <class T, class S>
-void test_hilbert(T dummy, char const* type, S residual)
+void test_hilbert(T /*dummy*/, char const* type, S residual)
 {
   // Test inversion and recomposition of 5x5 hilbert matrix
   vnl_matrix<T> H(5,5);
