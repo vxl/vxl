@@ -11,6 +11,7 @@
 #include <vcl/vcl_functional.h>
 
 #include <vil/vil_image_as.h>
+#include <vil/vil_copy.h>
 #include <vil/vil_memory_image_of.h>
 
 #include <vsl/vsl_roi_window.h>
@@ -50,7 +51,7 @@ void vsl_harris::prepare_buffers(int w, int h)
   window_str.row_end_index = image_h-1;
   window_str.col_end_index = image_w-1;
 }
-  
+
 void vsl_harris::compute_gradients(vil_image const &image) 
 {
   // copy input image to byte buffer
@@ -59,6 +60,11 @@ void vsl_harris::compute_gradients(vil_image const &image)
   // compute gradients
   if (params_.verbose)
     cerr << " gradient" << flush;
+
+  cerr << endl;
+  for(int i = 0; i < 10; ++i) {
+    cerr << i << ": " << (int)image_buf(i,i+4) << endl;
+  }
 
   // trim the window
   window_str.row_start_index += 2;
@@ -113,6 +119,7 @@ void vsl_harris::compute_cornerness()
   // compute cornerness map
   if (params_.verbose)
     cerr << " cornerness" << flush;
+  image_cornerness_buf.fill(0);
   corner_max = droid::compute_cornerness (&window_str,
 					  &image_fxx_buf,
 					  &image_fxy_buf,
@@ -120,6 +127,11 @@ void vsl_harris::compute_cornerness()
 					  params_.scale_factor,
 					  &image_cornerness_buf);
   //
+  cerr << "------\n";
+  for(int i = 0; i < 10; ++i) {
+    cerr << i << ": " << (float)image_cornerness_buf(i,i+4) << endl;
+  }
+
   if (params_.verbose)
     cerr << "  done" << endl;
 }
@@ -237,46 +249,61 @@ void vsl_harris::do_adaptive() {
   
   vcl_vector<double> cornerness(maxima_count, 0.0);
 
-  for(int tile_y = 0; tile_y < n_tiles_y; ++tile_y) {
-    int window_row_start_index = tile_y * TILE_WIDTH+row_min;
-    int window_row_end_index = vcl_min(window_row_start_index+TILE_WIDTH, row_max);
+  vil_memory_image_of<bool> keep(image_cornermax_buf.width(), image_cornermax_buf.height());
+  keep.fill(false);
+
+  // Do two passes, overlapping tiles by 1/2
+  for(int pass = 0; pass < 2; ++pass) {
+    int win_offset = pass * TILE_WIDTH / 2;
+    cerr << "pass " << pass << endl;
+    for(int tile_y = 0; tile_y < n_tiles_y; ++tile_y) {
+      int window_row_start_index = tile_y * TILE_WIDTH + row_min + win_offset;
+      int window_row_end_index = vcl_min(window_row_start_index+TILE_WIDTH, row_max);
     
-    for(int tile_x = 0; tile_x < n_tiles_x; ++tile_x) {
-      int window_col_start_index = tile_x * TILE_WIDTH+col_min;
-      int window_col_end_index = vcl_min(window_col_start_index+TILE_WIDTH, col_max);
+      for(int tile_x = 0; tile_x < n_tiles_x; ++tile_x) {
+	int window_col_start_index = tile_x * TILE_WIDTH + col_min + win_offset;
+	int window_col_end_index = vcl_min(window_col_start_index+TILE_WIDTH, col_max);
 
-      // get corner strengths in this tile :
-      vil_memory_image_of<bool>        &corner_present  = image_cornermax_buf;
-      vil_memory_image_of<float> const &corner_strength = image_cornerness_buf;
-      int n = 0;
-      for(int row = window_row_start_index; row < window_row_end_index; row++)
-	for(int col = window_col_start_index; col < window_col_end_index; col++)
-	  if (corner_present[row][col])
-	    cornerness[n++] = corner_strength[row][col];
-      cerr << setw(3) << n << ' ';
-
-      //
-      double THIS_TILE_AREA = 
-	(window_row_end_index-window_row_start_index) *
-	(window_col_end_index-window_col_start_index);
-
-      int NUM_PER_TILE = (int) ( IDEAL_NUM_PER_TILE * (THIS_TILE_AREA/TILE_AREA) );
-
-      if (n > NUM_PER_TILE) {
-	// Sort corners to get thresholds
-	vcl_sort(cornerness.begin(), cornerness.begin()+n);
-	double thresh = cornerness[n-1-NUM_PER_TILE];
-
-	// Zap corners over thresh
+	// get corner strengths in this tile :
+	vil_memory_image_of<bool>        &corner_present  = image_cornermax_buf;
+	vil_memory_image_of<float> const &corner_strength = image_cornerness_buf;
+	int n = 0;
 	for(int row = window_row_start_index; row < window_row_end_index; row++)
 	  for(int col = window_col_start_index; col < window_col_end_index; col++)
 	    if (corner_present[row][col])
-	      if (corner_strength[row][col] < thresh)
-		corner_present[row][col] = false;
+	      cornerness[n++] = corner_strength[row][col];
+	cerr << setw(3) << n << ' ';
+
+	//
+	double THIS_TILE_AREA = 
+	  (window_row_end_index-window_row_start_index) *
+	  (window_col_end_index-window_col_start_index);
+
+	int NUM_PER_TILE = (int) ( IDEAL_NUM_PER_TILE * (THIS_TILE_AREA/TILE_AREA) );
+
+        double thresh = 0;
+	if (n > NUM_PER_TILE) {
+	  // Sort corners to get thresholds
+	  vcl_sort(cornerness.begin(), cornerness.begin()+n);
+	  thresh = cornerness[n-1-NUM_PER_TILE];
+        } else {
+          // Less than NUM on tile, take them all
+          thresh = 0;
+        }
+
+        // Keep corners over thresh
+        for(int row = window_row_start_index; row < window_row_end_index; row++)
+          for(int col = window_col_start_index; col < window_col_end_index; col++)
+            if (corner_present[row][col])
+              if (corner_strength[row][col] >= thresh)
+                keep[row][col] = true;
       }
+      cerr << endl;
     }
-    cerr << endl;
   }
+
+  // Copy keep to present
+  vil_copy(keep,image_cornermax_buf);
 }
 
 //-----------------------------------------------------------------------------
