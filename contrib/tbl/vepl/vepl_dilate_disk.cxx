@@ -6,7 +6,12 @@
 
 typedef unsigned char ubyte;
 static inline vil_rgb<ubyte> vcl_max(vil_rgb<ubyte> const& a, vil_rgb<ubyte> const& b)
-{ return vil_rgb<ubyte>(vcl_max(a.r,b.r), vcl_max(a.g,b.g), vcl_max(a.b,b.b)); }
+  //recursive: { return vil_rgb<ubyte>(vcl_max(a.r,b.r), vcl_max(a.g,b.g), vcl_max(a.b,b.b)); }
+{
+  return vil_rgb<ubyte>(a.r > b.r ? a.r : b.r,
+                        a.g > b.g ? a.g : b.g,
+                        a.b > b.b ? a.b : b.b);
+}
 
 vil_image vepl_dilate_disk(vil_image const& image, float radius)
 {

@@ -1,3 +1,4 @@
+#include <vcl_iostream.h>
 #include <vipl/accessors/vipl_accessors_vil_image.h>
 #include <vepl/vepl_moment.h>
 #include <vipl/vipl_moment.h>
