@@ -34,6 +34,7 @@
 //                                                              EXTRACT TOPOLOGY
 // =============================================================================
 
+typedef vtol_extract_topology_vertex_node vertex_node;
 
 // ---------------------------------------------------------------------------
 //                                              static variables and constants
