@@ -1,7 +1,3 @@
-/*
-  fsm@robots.ox.ac.uk
-*/
-
 #include "f2c.h"
 
 /* Subroutine */ void qrsolv_(n, r, ldr, ipvt, diag, qtb, x, sdiag, wa)
@@ -10,16 +6,6 @@ doublereal *r;
 integer *ldr, *ipvt;
 doublereal *diag, *qtb, *x, *sdiag, *wa;
 {
-    /* Initialized data */
-
-    static doublereal p5 = .5;
-    static doublereal p25 = .25;
-    static doublereal zero = 0.;
-
-    /* System generated locals */
-    integer r_dim1, r_offset, i__1, i__2, i__3;
-    doublereal d__1, d__2;
-
     /* Builtin functions */
     double sqrt();
 
@@ -29,7 +15,6 @@ doublereal *diag, *qtb, *x, *sdiag, *wa;
     static doublereal cotan;
     static integer nsing;
     static doublereal qtbpj;
-    static integer jp1, kp1;
     static doublereal tan_, cos_, sin_, sum;
 
 /*     ********** */
@@ -109,47 +94,31 @@ doublereal *diag, *qtb, *x, *sdiag, *wa;
 /*     burton s. garbow, kenneth e. hillstrom, jorge j. more */
 
 /*     ********** */
-    /* Parameter adjustments */
-    --wa;
-    --sdiag;
-    --x;
-    --qtb;
-    --diag;
-    --ipvt;
-    r_dim1 = *ldr;
-    r_offset = r_dim1 + 1;
-    r -= r_offset;
-
-    /* Function Body */
 
 /*     copy r and (q transpose)*b to preserve input and initialize s. */
 /*     in particular, save the diagonal elements of r in x. */
 
-    i__1 = *n;
-    for (j = 1; j <= i__1; ++j) {
-        i__2 = *n;
-        for (i = j; i <= i__2; ++i) {
-            r[i + j * r_dim1] = r[j + i * r_dim1];
+    for (j = 0; j < *n; ++j) {
+        for (i = j; i < *n; ++i) {
+            r[i + j * *ldr] = r[j + i * *ldr];
         }
-        x[j] = r[j + j * r_dim1];
+        x[j] = r[j + j * *ldr];
         wa[j] = qtb[j];
     }
 
 /*     eliminate the diagonal matrix d using a givens rotation. */
 
-    i__1 = *n;
-    for (j = 1; j <= i__1; ++j) {
+    for (j = 0; j < *n; ++j) {
 
 /*        prepare the row of d to be eliminated, locating the */
 /*        diagonal element using p from the qr factorization. */
 
-        l = ipvt[j];
-        if (diag[l] == zero) {
+        l = ipvt[j] - 1;
+        if (diag[l] == 0.) {
             goto L90;
         }
-        i__2 = *n;
-        for (k = j; k <= i__2; ++k) {
-            sdiag[k] = zero;
+        for (k = j; k < *n; ++k) {
+            sdiag[k] = 0.;
         }
         sdiag[j] = diag[l];
 
@@ -157,107 +126,76 @@ doublereal *diag, *qtb, *x, *sdiag, *wa;
 /*        modify only a single element of (q transpose)*b */
 /*        beyond the first n, which is initially zero. */
 
-        qtbpj = zero;
-        i__2 = *n;
-        for (k = j; k <= i__2; ++k) {
+        qtbpj = 0.;
+        for (k = j; k < *n; ++k) {
 
 /*           determine a givens rotation which eliminates the */
 /*           appropriate element in the current row of d. */
 
-            if (sdiag[k] == zero) {
-                goto L70;
+            if (sdiag[k] == 0.)
+                continue;
+
+            if (abs(r[k + k * *ldr]) < abs(sdiag[k])) {
+                cotan = r[k + k * *ldr] / sdiag[k];
+                sin_ = .5 / sqrt(.25 + .25 * (cotan * cotan));
+                cos_ = sin_ * cotan;
+            } else {
+                tan_ = sdiag[k] / r[k + k * *ldr];
+                cos_ = .5 / sqrt(.25 + .25 * (tan_ * tan_));
+                sin_ = cos_ * tan_;
             }
-            if ((d__1 = r[k + k * r_dim1], abs(d__1)) >= (d__2 = sdiag[k],
-                    abs(d__2))) {
-                goto L40;
-            }
-            cotan = r[k + k * r_dim1] / sdiag[k];
-/* Computing 2nd power */
-            d__1 = cotan;
-            sin_ = p5 / sqrt(p25 + p25 * (d__1 * d__1));
-            cos_ = sin_ * cotan;
-            goto L50;
-L40:
-            tan_ = sdiag[k] / r[k + k * r_dim1];
-/* Computing 2nd power */
-            d__1 = tan_;
-            cos_ = p5 / sqrt(p25 + p25 * (d__1 * d__1));
-            sin_ = cos_ * tan_;
-L50:
 
 /*           compute the modified diagonal element of r and */
 /*           the modified element of ((q transpose)*b,0). */
 
-            r[k + k * r_dim1] = cos_ * r[k + k * r_dim1] + sin_ * sdiag[k];
+            r[k + k * *ldr] = cos_ * r[k + k * *ldr] + sin_ * sdiag[k];
             temp = cos_ * wa[k] + sin_ * qtbpj;
             qtbpj = -sin_ * wa[k] + cos_ * qtbpj;
             wa[k] = temp;
 
 /*           accumulate the tranformation in the row of s. */
 
-            kp1 = k + 1;
-            if (*n < kp1) {
-                goto L70;
+            for (i = k+1; i < *n; ++i) {
+                temp = cos_ * r[i + k * *ldr] + sin_ * sdiag[i];
+                sdiag[i] = -sin_ * r[i + k * *ldr] + cos_ * sdiag[i];
+                r[i + k * *ldr] = temp;
             }
-            i__3 = *n;
-            for (i = kp1; i <= i__3; ++i) {
-                temp = cos_ * r[i + k * r_dim1] + sin_ * sdiag[i];
-                sdiag[i] = -sin_ * r[i + k * r_dim1] + cos_ * sdiag[i];
-                r[i + k * r_dim1] = temp;
-            }
-L70:
-            ;
         }
 L90:
 
 /*        store the diagonal element of s and restore */
 /*        the corresponding diagonal element of r. */
 
-        sdiag[j] = r[j + j * r_dim1];
-        r[j + j * r_dim1] = x[j];
+        sdiag[j] = r[j + j * *ldr];
+        r[j + j * *ldr] = x[j];
     }
 
 /*     solve the triangular system for z. if the system is */
 /*     singular, then obtain a least squares solution. */
 
     nsing = *n;
-    i__1 = *n;
-    for (j = 1; j <= i__1; ++j) {
-        if (sdiag[j] == zero && nsing == *n) {
-            nsing = j - 1;
+    for (j = 0; j < *n; ++j) {
+        if (sdiag[j] == 0. && nsing == *n) {
+            nsing = j;
         }
         if (nsing < *n) {
-            wa[j] = zero;
+            wa[j] = 0.;
         }
     }
-    if (nsing < 1) {
-        goto L150;
-    }
-    i__1 = nsing;
-    for (k = 1; k <= i__1; ++k) {
-        j = nsing - k + 1;
-        sum = zero;
-        jp1 = j + 1;
-        if (nsing < jp1) {
-            goto L130;
+    for (k = 0; k < nsing; ++k) {
+        j = nsing - k - 1;
+        sum = 0.;
+        for (i = j+1; i < nsing; ++i) {
+            sum += r[i + j * *ldr] * wa[i];
         }
-        i__2 = nsing;
-        for (i = jp1; i <= i__2; ++i) {
-            sum += r[i + j * r_dim1] * wa[i];
-        }
-L130:
         wa[j] = (wa[j] - sum) / sdiag[j];
     }
-L150:
 
 /*     permute the components of z back to components of x. */
 
-    i__1 = *n;
-    for (j = 1; j <= i__1; ++j) {
-        l = ipvt[j];
+    for (j = 0; j < *n; ++j) {
+        l = ipvt[j] - 1;
         x[l] = wa[j];
     }
-
-/*     last card of subroutine qrsolv. */
 
 } /* qrsolv_ */
