@@ -3,6 +3,10 @@
 ADD_LIBRARY( netlib netlib_sources )
 
 SOURCE_FILES( netlib_sources
+  f2c.h
+  netlib.h
+
+  # Std Fortran Library
   F77_aloc.c
   exit.c
   s_cmp.c
@@ -22,11 +26,15 @@ SOURCE_FILES( netlib_sources
   r_sign.c
   r_imag.c
   r_cnjg.c
+
   pow_ii.c
   pow_ri.c
   pow_di.c
   pow_dd.c
+
+  # BLAS
   izamax.c
+
   daxpy.c
   dcopy.c
   ddot.c
@@ -39,6 +47,7 @@ SOURCE_FILES( netlib_sources
   dswap.c
   dgemv.c
   dger.c
+
   saxpy.c
   scopy.c
   sdot.c
@@ -72,7 +81,11 @@ SOURCE_FILES( netlib_sources
   ztrmv.c
   ztrsv.c
   zswap.c
+
+  # LINALG
   lsqr.c
+
+  # LINPACK
   ssvdc.c
   dsvdc.c
   csvdc.c
@@ -91,6 +104,8 @@ SOURCE_FILES( netlib_sources
   dpodi.c
   isamax.c
   idamax.c
+
+  # EISPACK
   rsg.c
   rg.c
   rs.c
@@ -98,6 +113,8 @@ SOURCE_FILES( netlib_sources
   tql2.c
   tred1.c
   tred2.c
+
+  # MINPACK
   enorm.c
   fdjac2.c
   lmpar.c
@@ -108,9 +125,15 @@ SOURCE_FILES( netlib_sources
   lmder1.c
   pythag.c
   rpoly.c
+
+  # TOMS Misc
   dtrans.c
   trans.c
+
+  # General
   machineparams.c
+
+  # Temperton FFT routines
   dgpfa.c
   dgpfa3f.c
   dsetgpfa.c
@@ -121,19 +144,31 @@ SOURCE_FILES( netlib_sources
   gpfa.c
   gpfa3f.c
   setgpfa.c
+
+  # NAPACK
   cg.c
+
+  # from DATAPAC
   camsun.c
+
+  # from LASO2
   dnlaso.c
   snlaso.c
+
+  # from OPT
   lbfgs.c
   lbfgs-lb1.c
+
+  # from LAPACK
   ilaenv.c
   izmax1.c
+
   xerbla.c
   urand.c
   lsame.c
   dlamch.c
   slamch.c
+  
   dgeqpf.c
   dgeqr2.c
   dgerq2.c
@@ -155,6 +190,7 @@ SOURCE_FILES( netlib_sources
   dlabad.c
   dladiv.c
   dlapy3.c
+
   dorg2r.c
   dorm2r.c
   dormr2.c
@@ -181,6 +217,7 @@ SOURCE_FILES( netlib_sources
   sorm2r.c
   sormr2.c
   stgsja.c
+
   zgebak.c
   zgebal.c
   zgeev.c
@@ -207,7 +244,8 @@ SOURCE_FILES( netlib_sources
   zung2r.c
   zunghr.c
   zungqr.c
-# Added by fsm for generalized chur
+
+  # Added by fsm for generalized chur
   dgecon.c
   dgemm.c
   dgeqrf.c
@@ -242,12 +280,6 @@ SOURCE_FILES( netlib_sources
   dtrsv.c
   i_dnnt.c
 )
-
-IF (WIN32)
-  IF (NOT CYGWIN)
-    INCLUDE(${allvxl_SOURCE_DIR}/v3p/netlib/CMakeListsHeaders.txt)
-  ENDIF (NOT CYGWIN)
-ENDIF(WIN32)
 
 IF( BUILD_TESTING)
   SUBDIRS(tests)
