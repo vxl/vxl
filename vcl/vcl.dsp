@@ -1388,67 +1388,67 @@ SOURCE=.\vcl_vector.txx
 # End Source File
 # Begin Source File
 
-SOURCE=.\win32/vcl_algorithm.txx
+SOURCE=.\win32-vc60/vcl_algorithm.txx
 
 # End Source File
 # Begin Source File
 
-SOURCE=.\win32/vcl_complex.h
+SOURCE=.\win32-vc60/vcl_complex.h
 
 # End Source File
 # Begin Source File
 
-SOURCE=.\win32/vcl_complex.txx
+SOURCE=.\win32-vc60/vcl_complex.txx
 
 # End Source File
 # Begin Source File
 
-SOURCE=.\win32/vcl_deque.txx
+SOURCE=.\win32-vc60/vcl_deque.txx
 
 # End Source File
 # Begin Source File
 
-SOURCE=.\win32/vcl_functional.txx
+SOURCE=.\win32-vc60/vcl_functional.txx
 
 # End Source File
 # Begin Source File
 
-SOURCE=.\win32/vcl_iterator.txx
+SOURCE=.\win32-vc60/vcl_iterator.txx
 
 # End Source File
 # Begin Source File
 
-SOURCE=.\win32/vcl_list.txx
+SOURCE=.\win32-vc60/vcl_list.txx
 
 # End Source File
 # Begin Source File
 
-SOURCE=.\win32/vcl_map.txx
+SOURCE=.\win32-vc60/vcl_map.txx
 
 # End Source File
 # Begin Source File
 
-SOURCE=.\win32/vcl_set.txx
+SOURCE=.\win32-vc60/vcl_set.txx
 
 # End Source File
 # Begin Source File
 
-SOURCE=.\win32/vcl_string.h
+SOURCE=.\win32-vc60/vcl_string.h
 
 # End Source File
 # Begin Source File
 
-SOURCE=.\win32/vcl_string.txx
+SOURCE=.\win32-vc60/vcl_string.txx
 
 # End Source File
 # Begin Source File
 
-SOURCE=.\win32/vcl_utility.txx
+SOURCE=.\win32-vc60/vcl_utility.txx
 
 # End Source File
 # Begin Source File
 
-SOURCE=.\win32/vcl_vector.txx
+SOURCE=.\win32-vc60/vcl_vector.txx
 
 # End Source File
 # Begin Source File
@@ -2293,32 +2293,32 @@ SOURCE=.\vcl_valarray.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\win32/vcl_cmath.h
+SOURCE=.\win32-vc60/vcl_cmath.h
 
 # End Source File
 # Begin Source File
 
-SOURCE=.\win32/vcl_complex_fwd.h
+SOURCE=.\win32-vc60/vcl_complex_fwd.h
 
 # End Source File
 # Begin Source File
 
-SOURCE=.\win32/vcl_cstdio.h
+SOURCE=.\win32-vc60/vcl_cstdio.h
 
 # End Source File
 # Begin Source File
 
-SOURCE=.\win32/vcl_cstdlib.h
+SOURCE=.\win32-vc60/vcl_cstdlib.h
 
 # End Source File
 # Begin Source File
 
-SOURCE=.\win32/vcl_cstring.h
+SOURCE=.\win32-vc60/vcl_cstring.h
 
 # End Source File
 # Begin Source File
 
-SOURCE=.\win32/vcl_ctime.h
+SOURCE=.\win32-vc60/vcl_ctime.h
 
 # End Source File
 # Begin Source File
