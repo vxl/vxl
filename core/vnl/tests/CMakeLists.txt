@@ -22,6 +22,7 @@ IF(NETLIB_FOUND)
     test_cpoly_roots.cxx
     test_determinant.cxx
     test_inverse.cxx
+    test_rank.cxx
     test_diag_matrix.cxx
     test_fft.cxx
     test_fft1d.cxx

@@ -9,6 +9,7 @@ DECLARE( test_convolve );
 DECLARE( test_cpoly_roots );
 DECLARE( test_determinant );
 DECLARE( test_inverse );
+DECLARE( test_rank );
 DECLARE( test_diag_matrix );
 DECLARE( test_fft );
 DECLARE( test_fft1d );
@@ -56,6 +57,7 @@ register_tests()
   REGISTER( test_cpoly_roots );
   REGISTER( test_determinant );
   REGISTER( test_inverse );
+  REGISTER( test_rank );
   REGISTER( test_diag_matrix );
   REGISTER( test_fft );
   REGISTER( test_fft1d );
