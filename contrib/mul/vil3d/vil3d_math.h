@@ -8,6 +8,7 @@
 
 #include <vcl_cassert.h>
 #include <vcl_vector.h>
+#include <vcl_functional.h> // for std::less<T>
 #include <vil3d/vil3d_image_view.h>
 #include <vil3d/vil3d_plane.h>
 
@@ -87,7 +88,7 @@ inline void vil3d_math_value_range_percentile(
   vcl_ptrdiff_t pstep = im.planestep();
   vcl_vector<T> data(ni*nj*nk*np);
   
-  vcl_vector<T>::iterator it = data.begin();
+  typename vcl_vector<T>::iterator it = data.begin();
   const T* plane = im.origin_ptr();
   for (unsigned int p=0;p<np;++p, plane += pstep)
   {
@@ -110,7 +111,7 @@ inline void vil3d_math_value_range_percentile(
 
   // Sort the list up to the higher fraction
   int index_hi = int (frac_hi*npix - 0.5);
-  vcl_vector<T>::iterator index_hi_it = data.begin() + index_hi;
+  typename vcl_vector<T>::iterator index_hi_it = data.begin() + index_hi;
   vcl_nth_element(data.begin(), index_hi_it, data.end(), vcl_less<T>());
   int index_lo = int (frac_lo*npix - 0.5);
 
