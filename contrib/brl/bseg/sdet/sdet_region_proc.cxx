@@ -1,5 +1,7 @@
-// This is brl/bseg/sdet_region_proc.cxx
+// This is brl/bseg/sdet/sdet_region_proc.cxx
 
+//:
+// \file
 #include <gevd/gevd_float_operators.h>
 #include <sdet/sdet_edgel_regions.h>
 #include <vdgl/vdgl_intensity_face.h>
@@ -17,13 +19,11 @@
 sdet_region_proc::sdet_region_proc(sdet_region_proc_params& rpp)
   : sdet_region_proc_params(rpp)
 {
-
 }
 
 //:Default Destructor
 sdet_region_proc::~sdet_region_proc()
 {
-
 }
 
 //-------------------------------------------------------------------------
@@ -75,10 +75,11 @@ void sdet_region_proc::extract_regions()
 
   sdet_edgel_regions er(debug_, verbose_);
   er.compute_edgel_regions(image_, *edges, regions_);
-  if(debug_)
+  if (debug_)
     edge_image_ = er.GetEdgeImage(*edges);
   regions_valid_ = true;
 }
+
 //----------------------------------------------------------
 //: Clear internal storage
 //
@@ -86,5 +87,4 @@ void sdet_region_proc::clear()
 {
   regions_.clear();
 }
-
 
