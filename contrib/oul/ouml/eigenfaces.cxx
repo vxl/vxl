@@ -211,8 +211,11 @@ bool EigenFace::calculate_eigenfaces()
     eigenvalues.push_back(eigen.get_eigenvalue(i));
   }
 
-  vcl_cout << "Eigenvalues = " << eigenvalues << vcl_endl
-           << "Encoding training images\n";
+  vcl_cout << "Eigenvalues are:" ;
+  vcl_vector<double>::iterator val_iter;
+  for (val_iter=eigenvalues.begin(); val_iter!=eigenvalues.end(); val_iter++)
+    vcl_cout << ' ' << (*val_iter);
+  vcl_cout << "\nEncoding training images\n";
   encode_training_images();
   // should check they are in fact eigenvectors
   return true;
@@ -272,10 +275,10 @@ bool EigenFace::check_eigenvectors()
 {
   if (eigenvectors.size()<=0) return false;
 
-  vcl_cout << "Eigenvalues are: " ;
+  vcl_cout << "Eigenvalues are:" ;
   vcl_vector<double>::iterator val_iter;
   for (val_iter=eigenvalues.begin(); val_iter!=eigenvalues.end(); val_iter++)
-    vcl_cout << *val_iter << ' ';
+    vcl_cout << ' ' << (*val_iter);
   vcl_cout << vcl_endl;
   vcl_vector<vnl_vector<double> *>::iterator iter1, iter2;
   for (iter1=eigenvectors.begin(); iter1!=eigenvectors.end(); iter1++)
