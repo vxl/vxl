@@ -99,6 +99,9 @@ LIB32=link.exe -lib
 # Begin Group "Source Files"
 # PROP Default_Filter "c;cxx"
 # Begin Source File
+SOURCE=.\bugl_curve_3d.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\Templates/bugl_gaussian_point_2d+double-.cxx
 # End Source File
 # Begin Source File
@@ -119,6 +122,9 @@ SOURCE=.\Templates/vbl_smart_ptr+bugl_normal_point_3d-.cxx
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"
+# Begin Source File
+SOURCE=.\bugl_curve_3d.h
+# End Source File
 # Begin Source File
 SOURCE=.\bugl_gaussian_point_2d.h
 # End Source File
