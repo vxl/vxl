@@ -50,11 +50,11 @@ Copyright @copyright{} 2000 Andrew Fitzgibbon
 * vgl::
 * vsl::
 * vcsl::
-* vgui::
-* Conclusion::
 * structure::
 * build::
 * templates::
+* Adding To vnl::
+* vsl for developers::
 * Concept Index::
 @end menu
 
