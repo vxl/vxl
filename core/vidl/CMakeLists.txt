@@ -1,4 +1,4 @@
-#  vxl/vidl/CMakeLists.txt
+# ./vxl/vidl/CMakeLists.txt
 
 ADD_LIBRARY(vidl vidl_sources)
 
