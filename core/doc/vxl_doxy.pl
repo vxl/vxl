@@ -37,6 +37,7 @@ $comment = 0;
 
 # verbatim found -> lines should not start with * (visible in Doxygen)
 $verbatim = 0;
+$should_end_verbatim = 0;
 
 # file-header found -> we have to deal with .SECTION NAME etc
 $weareinfile = 0;
@@ -60,11 +61,17 @@ $gotonextlinemod = 0;
 # mainloop
 while (<>)
   {
+    if ( $should_end_verbatim )
+      {
+	$verbatim = 0;
+	$should_end_verbatim = 0;
+      }
+
     # found verbatim ?
     if ( m/$verbpatt/ ) { $verbatim = 1; };
 
     # found endverbatim ?
-    if ( m/$endverbpatt/ ) { $verbatim = 0; };
+    if ( m/$endverbpatt/ ) { $should_end_verbatim = 1; };
 
     # in header and found end ( "//---------eol") -> stop header
     if ( $weareinfile && ( m/^\s*\/\/\s*-+$/ || ( ! m/^\s*\/\// && ! m/^\s*$/ ) || m!$slashslashcolonpatt! || m!$slashslashspacedashdashpatt! ) )
@@ -82,6 +89,12 @@ while (<>)
         chomp;
         # escape all dots, and add a dot at the end:
         s/\./\\\./g; s/\\\.\s*$//; s/$/.\n/;
+	if ($comment)
+	  {
+	    # Previous comment hasn't ended--two contiguous comment blocks. (Happens at the top of .txx
+	    # files, for example.)
+	    print "*\/ \n";
+	  }
         $comment = 1;
         if ($weareinfile) { $weareinfile = 0; print " *\/ \n"; }
         print; next;
@@ -274,5 +287,4 @@ while (<>)
 
     # just print line if not in comment or in file
     print; # if ( !$comment && !$weareinfile);
-
   }
