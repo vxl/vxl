@@ -30,5 +30,15 @@ int main()
 
   vcl_cerr<<"Length: "<< myline->length();
 
+  //--------------------------------------------------
+  //: test the generation of a straight edgel_chain defined by two points
+  //
+  double x0=0, y0=0, x1=10, y1=10;
+  vdgl_edgel_chain_sptr ec = new vdgl_edgel_chain(x0, y0, x1, y1);
+  int N = ec->size();
+  vcl_cout << "Chain has " << N << " edgels " << vcl_endl;
+  for(int i = 0; i<N; i++)
+    vcl_cout << "edgel[" << i<<"] = (" << (*ec)[i] << ") " << vcl_endl;
+
   return 0;
 }
