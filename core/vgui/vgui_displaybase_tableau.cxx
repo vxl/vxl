@@ -57,7 +57,6 @@ vgui_displaybase_tableau::vgui_displaybase_tableau()
 
 vgui_displaybase_tableau::~vgui_displaybase_tableau()
 {
-  clear();
 }
 
 void vgui_displaybase_tableau::set_selection_callback(vgui_displaybase_tableau_selection_callback* cb)
