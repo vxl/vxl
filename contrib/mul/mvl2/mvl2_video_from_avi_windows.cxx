@@ -4,6 +4,7 @@
 // \author Louise Butcher
 
 #include "mvl2_video_from_avi_windows.h"
+#include <vil2/vil2_flip.h>
 
 mvl2_video_from_avi::mvl2_video_from_avi()
 {
@@ -83,9 +84,9 @@ bool mvl2_video_from_avi::get_frame(vimt_image_2d_of<vxl_byte>& image)
   int nx = bmp_info.bmiHeader.biWidth;
   int ny = bmp_info.bmiHeader.biHeight;
   int bpp= bmp_info.bmiHeader.biBitCount;
-  int bplanes= bmp_info.bmiHeader.biBitCount;
+  int bplanes= bmp_info.bmiHeader.biBitCount/8;
 
-  if (bplanes)
+  if (bplanes==1)
     use_colour=false;
   else
     use_colour=true;
@@ -96,11 +97,13 @@ bool mvl2_video_from_avi::get_frame(vimt_image_2d_of<vxl_byte>& image)
   unsigned char* data=(unsigned char*)(img_data)+img->bmiHeader.biSize+img->bmiHeader.biClrUsed*sizeof(RGBQUAD);
   vimt_image_2d_of<vxl_byte> temp_img;
   if (use_colour)
-    temp_img.image().set_to_memory(data,nx,ny,bplanes,xstep,ystep,1);
+    temp_img.image().set_to_memory(data+2,nx,ny,bplanes,xstep,ystep,-1);
   else
-    temp_img.image().set_to_memory(data,nx,ny,bplanes,xstep,ystep,1);
+    temp_img.image().set_to_memory(data,nx,ny,bplanes,xstep,ystep,0);
 
-  image.deep_copy(temp_img);
+  vimt_image_2d_of<vxl_byte> image_tmp_;
+  image_tmp_.image()=vil2_flip_ud(temp_img.image());
+  image.deep_copy(image_tmp_);
 
   AVIStreamGetFrameClose(g_frame);
   return true;
