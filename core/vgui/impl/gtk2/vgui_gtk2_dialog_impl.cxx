@@ -23,8 +23,9 @@
 #include "vgui_gtk2_adaptor.h"
 
 static bool debug = false;
-static bool is_modal = true;
 
+static bool is_modal = true;
+void vgui_gtk2_dialog_impl::modal(bool m) { is_modal = m; }
 
 //--------------------------------------------------------------------------------
 //: Constructor
