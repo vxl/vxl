@@ -33,7 +33,7 @@ template<class T>
 void vimt_image_2d_of<T>::deep_copy(const vimt_image_2d_of& src)
 {
   world2im_     = src.world2im_;
-	image_.deep_copy(src.image_);
+  image_.deep_copy(src.image_);
 }
 
 template<class T> vimt_image_2d_of<T>::~vimt_image_2d_of()
@@ -44,13 +44,11 @@ template<class T> vimt_image_2d_of<T>::~vimt_image_2d_of()
 //: Define valid data region (including transform).
 //  Resizes and sets the tranformation so that
 //  worldToIm(x,y) is valid for all points in range
-//  Specifically, resize(1+xhi-xlo,1+yhi-ylo);
-//  worldToIm() translates by (-xlo,-ylo)
 template<class T>
-void vimt_image_2d_of<T>::set_valid_region(int xlo, int xhi, int ylo, int yhi)
+void vimt_image_2d_of<T>::set_valid_region(unsigned x0, unsigned nx, unsigned y0, unsigned ny)
 {
-  image_.resize(1+xhi-xlo,1+yhi-ylo);
-  world2im_.set_translation(-xlo,-ylo);
+  image_.resize(nx,ny);
+  world2im_.set_translation(-double(x0),-double(y0));
 }
 
 
@@ -63,14 +61,28 @@ void vimt_image_2d_of<T>::set_valid_region(int xlo, int xhi, int ylo, int yhi)
 //  in world co-ords.
 template<class T>
 void vimt_image_2d_of<T>::set_to_window(const vimt_image_2d_of& im,
-                                     int xlo, int xhi, int ylo, int yhi)
+                                     unsigned x0, unsigned nx, unsigned y0, unsigned ny)
 {
   assert(this!=&im);
-	image_.set_to_window(im.image(),xlo,1+xhi-xlo,ylo,1+yhi-ylo);
+  image_.set_to_window(im.image(),x0,nx,y0,ny);
 
   vimt_transform_2d trans;
-  trans.set_translation(-xlo,-ylo);
+  trans.set_translation(-double(x0),-double(y0));
   world2im_ = trans * im.world2im();
+}
+
+//: Create windowed view of given image
+//  The parameters should be in image co-ords.
+//  The world2im transform is set to match
+//  so this appears identical to im when addressed
+//  in world co-ords.
+template<class T>
+vimt_image_2d_of<T> vimt_image_2d_of<T>::window(unsigned x0, unsigned nx,
+                                                unsigned y0, unsigned ny) const
+{
+  vimt_transform_2d trans;
+  trans.set_translation(-double(x0),-double(y0));
+  return vimt_image_2d_of<T>(image_.window(x0,ny,y0,ny),trans*world2im_);
 }
 
 
