@@ -21,8 +21,9 @@ TESTS += test_vector_io.cxx
 include ${IUEROOT}/config/top-params.mk
 #######################################
 
-ifeq "$(TJ_GCC30)" "1"
-FLAGS_test_map_io.cxx += -O0 # otherwise gcc 3.0 needs too much virtual memory
+ifeq "$(TJ_GCC30)" "1" # otherwise gcc 3.0 needs too much virtual memory
+FLAGS_test_vsl_io.cxx += -O1
+FLAGS_test_map_io.cxx += -O0
 endif
 
 #########################################
