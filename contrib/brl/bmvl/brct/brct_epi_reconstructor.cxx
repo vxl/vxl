@@ -781,7 +781,7 @@ void brct_epi_reconstructor::inc()
                    << "]= (" << X3d.x()
                    << ' ' << X3d.y() << ' ' << X3d.z()
                    << ")\n";
-        p3d_sptr->set_existence(false);
+        p3d_sptr->set_point(); // no point is set
         continue;
       }
 #ifdef DEBUG
