@@ -173,9 +173,9 @@ sub print_header
 sub print_link
 {
   my ($text, $link)  = @_;
-  print SUMMARYFILE "<a href=";
+  print SUMMARYFILE "<a href=\"";
   print SUMMARYFILE $link;
-  print SUMMARYFILE "> $text";
+  print SUMMARYFILE "\"> $text";
   print SUMMARYFILE '</a>' , "\n";
 }
 

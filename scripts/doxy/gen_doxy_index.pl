@@ -128,9 +128,9 @@ print OF  "<HR>";
 sub print_link
 {
   my ($text, $link)  = @_;
-  print OF "<a href=";
+  print OF "<a href=\"";
   print OF $link;
-  print OF "> $text";
+  print OF "\"> $text";
   print OF '</a>' , "\n";
 
 }
@@ -146,7 +146,7 @@ sub print_book_index_links
 
   print OF "<h2>Overview Documentation</h2>\n";
 
-  print_link("VXL Homepage","http://vxl.sourceforge.net/");
+  print_link("VXL Homepage","http://vxl.sourceforge.net");
   print OF "<br><br>\n";
   print OF "<p>Overviews are compiled from the doc/book directories of each package.</p>\n";
 
