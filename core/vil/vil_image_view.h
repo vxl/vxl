@@ -13,6 +13,7 @@
 #include <vil2/vil2_smart_ptr.h>
 #include <vcl_iosfwd.h>
 #include <vcl_string.h>
+#include <vcl_cassert.h>
 #include <vil2/vil2_memory_chunk.h>
 
 //: An abstract base class of smart pointers to actual image data in memory.
@@ -44,14 +45,14 @@ public:
 
     //: Set this view to look at another view's data
     //  Typically used by functions which generate a manipulated view of
-	//  another's image data.
-	//  Need to pass the memory chunk to set up the internal smart ptr appropriately
+    //  another's image data.
+    //  Need to pass the memory chunk to set up the internal smart ptr appropriately
   vil2_image_view(const vil2_smart_ptr<vil2_memory_chunk>& mem_chunk,
                   const T* top_left, unsigned nx, unsigned ny, unsigned nplanes,
                   unsigned xstep, unsigned ystep, unsigned planestep);
 
-	//  Destructor
-  ~vil2_image_view();
+    //  Destructor
+  virtual ~vil2_image_view();
 
   // Standard container stuff
   // This assumes that the data is arranged contiguously.
@@ -93,17 +94,17 @@ public:
   inline unsigned size_bytes() const { return size() * sizeof(T); }
 
     //: Smart pointer to the object holding the data for this view
-	// Will be a null pointer if this view looks at `third-party' data,
-	// eg using set_to_memory.
-	//
-	// Typically used when creating new views of the data
+    // Will be a null pointer if this view looks at `third-party' data,
+    // eg using set_to_memory.
+    //
+    // Typically used when creating new views of the data
   const vil2_smart_ptr<vil2_memory_chunk>& memory_chunk() const { return ptr_; }
 
     //: Smart pointer to the object holding the data for this view
-	// Will be a null pointer if this view looks at `third-party' data,
-	// eg using set_to_memory
-	//
-	// Typically used when creating new views of the data
+    // Will be a null pointer if this view looks at `third-party' data,
+    // eg using set_to_memory
+    //
+    // Typically used when creating new views of the data
   vil2_smart_ptr<vil2_memory_chunk>& memory_chunk() { return ptr_; }
 
   // Ordinary image indexing stuff.
@@ -145,8 +146,8 @@ public:
   //: Create a copy of the data viewed by this, and return a view of copy.
   vil2_image_view<T> deep_copy() const;
 
-  //: Create a view which appears as the transpose of this view
-  //  ie transpose()(x,y,p) = this(y,x,p)
+  //: Create a view which appears as the transpose of this view.
+  //  I.e transpose()(x,y,p) = this(y,x,p)
   vil2_image_view<T> transpose() const;
 
   //: Disconnect this view from the underlying data.
@@ -197,7 +198,6 @@ public:
     //  to different image data objects that contain identical images, then
     //  the result will still be false.
   bool operator==(const vil2_image_view<T> &other) const;
-
 };
 
 //: Print a 1-line summary of contents
