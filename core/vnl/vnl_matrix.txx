@@ -722,13 +722,12 @@ template<class T>
 T cos_angle (vnl_matrix<T> const& a, vnl_matrix<T> const& b) {
   typedef typename vnl_numeric_traits<T>::real_t real_t;
   typedef typename vnl_numeric_traits<T>::abs_t abs_t;
-  real_t ab = inner_product(a,b);
-  //  Look, goddamit, abs_t is right.  If your compiler can't deal
-  //  with it, ifdef that baby outta there.   My compiler is cleverer than
-  //  yours, and can't handle that whole double thing.
-  abs_t a_b = (abs_t)vcl_sqrt( (abs_t)vnl_math_abs(inner_product(a,a) * inner_product(b,b)) );
+  typedef typename vnl_numeric_traits<abs_t>::real_t abs_r;
 
-  return T( ab / a_b);
+  real_t ab = inner_product(a,b);
+  abs_t a_b = vcl_sqrt( (abs_r)vnl_math_abs(inner_product(a,a) * inner_product(b,b)) );
+
+  return T( ab / (real_t)a_b);
 }
 
 //: Returns new matrix whose elements are the products m1[ij]*m2[ij].
@@ -811,8 +810,8 @@ void vnl_matrix<T>::normalize_rows()
       norm += vnl_math_squared_magnitude(this->data[i][j]);
 
     if (norm != 0) {
-      typedef typename vnl_numeric_traits<T>::abs_t brrz;
-      typename vnl_numeric_traits<brrz>::real_t scale = 1.0/vcl_sqrt(norm);
+      typedef typename vnl_numeric_traits<abs_t>::real_t real_t;
+      real_t scale = 1.0/vcl_sqrt((real_t)norm);
       for (unsigned int j = 0; j < this->num_cols; j++) {
         // FIXME need correct rounding here
         // There is no *standard* no operator*(complex<float>, double).
@@ -834,8 +833,8 @@ void vnl_matrix<T>::normalize_columns()
       norm += vnl_math_squared_magnitude(this->data[i][j]);
 
     if (norm != 0) {
-      typedef typename vnl_numeric_traits<T>::abs_t brrz;
-      typename vnl_numeric_traits<brrz>::real_t scale = 1.0/vcl_sqrt(norm);
+      typedef typename vnl_numeric_traits<abs_t>::real_t real_t;
+      real_t scale = 1.0/vcl_sqrt((real_t)norm);
       for (unsigned int i = 0; i < this->num_rows; i++) {
         // FIXME need correct rounding here
         // There is no *standard* no operator*(complex<float>, double).
