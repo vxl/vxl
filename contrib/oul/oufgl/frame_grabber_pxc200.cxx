@@ -1,7 +1,7 @@
+// This is oul/oufgl/frame_grabber_pxc200.cxx
+#include "frame_grabber_pxc200.h"
 //:
 // \file
-#include "frame_grabber_pxc200.h"
-#include <vcl_algorithm.h>
 #include <vcl_cstring.h> // for memcpy()
 
 //----------------------------------------------------------------------
