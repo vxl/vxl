@@ -1,4 +1,7 @@
 IULIBS += -lvsrl
+USES += contrib/tbl
+USES += contrib/rpl
+USES += contrib/brl
 include ${IUEROOT}/core/vgui/config.mk
 include ${IUEROOT}/contrib/gel/vtol/config.mk
 include ${IUEROOT}/contrib/gel/vdgl/config.mk
