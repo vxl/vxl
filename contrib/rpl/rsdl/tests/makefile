@@ -1,6 +1,6 @@
-USES += contrib/rpl contrib/mul core
+USES += contrib/rpl core
 include ../config.mk
-include $(IUEROOT)/contrib/mul/mbl/config.mk
+include $(IUEROOT)/core/vnl/config.mk
 include $(IUEROOT)/core/testlib/config.mk
 
 TESTMAIN := test_driver.cxx
