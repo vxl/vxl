@@ -72,8 +72,8 @@ void test_matlab() {
       vnl_matrix<double> M_( M.rows(), M.cols());
       fsm_assert( Mh.read_data(M_.data_array()));
       fsm_assert(M_ == M);
-      //vnl_matlab_print(cerr, M, "M");
-      //vnl_matlab_print(cerr, M_, "M_");
+      //vnl_matlab_print(cout, M, "M");
+      //vnl_matlab_print(cout, M_, "M_");
     }
     vcl_unlink(file);
   }

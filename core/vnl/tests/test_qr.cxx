@@ -45,8 +45,8 @@ void old_test()
   vnl_vector<double> b(b_data, 4);
   vnl_qr<double> qr(A);
 
-  vnl_matlab_print(cerr, qr.Q(), "Q");
-  vnl_matlab_print(cerr, qr.R(), "R");
+  vnl_matlab_print(cout, qr.Q(), "Q");
+  vnl_matlab_print(cout, qr.R(), "R");
   
   vnl_vector<double> x = qr.solve(b);
   

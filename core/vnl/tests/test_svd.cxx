@@ -17,7 +17,7 @@ vnl_matrix<double> solve_with_warning(const vnl_matrix<double>& M,
   vnl_svd<double> svd(M, 1e-8);
   // Check for rank-deficiency
   if (svd.singularities() > 1)
-    cerr << "Warning: Singular matrix, condition = " << svd.well_condition() << endl;
+    cout << "Warning: Singular matrix, condition = " << svd.well_condition() << endl;
   return svd.solve(B);
 }
 
@@ -33,7 +33,7 @@ void test_hilbert()
 
   vnl_svd<double> svd(H);
   
-  cerr << "rcond(H) = " << svd.well_condition() << endl;
+  cout << "rcond(H) = " << svd.well_condition() << endl;
   
   vnl_matrix<double> Hinv = svd.inverse();
 

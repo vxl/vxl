@@ -80,15 +80,15 @@ int testFunctions()
 	}
     }
   
-  cerr << "cdf(7.88,1) = " << vnl_chi_squared_cumulative(7.88F,1) 
+  cout << "cdf(7.88,1) = " << vnl_chi_squared_cumulative(7.88F,1) 
        << " should be about 0.995 " << endl;
-  cerr << "cdf(14.8,12) = " << vnl_chi_squared_cumulative(14.8F,12)
+  cout << "cdf(14.8,12) = " << vnl_chi_squared_cumulative(14.8F,12)
        << " should be about 0.75 " << endl;
-  cerr << "cdf(10.1,19) = " << vnl_chi_squared_cumulative(10.1F,19)
+  cout << "cdf(10.1,19) = " << vnl_chi_squared_cumulative(10.1F,19)
        << " should be about 0.05 " << endl;
-  cerr << "cdf(39.3,40) = " << vnl_chi_squared_cumulative(39.3F,40)
+  cout << "cdf(39.3,40) = " << vnl_chi_squared_cumulative(39.3F,40)
        << " should be about 0.50 " << endl;
-  cerr << "cdf(109.1,100) = " << vnl_chi_squared_cumulative(109.1F,100)
+  cout << "cdf(109.1,100) = " << vnl_chi_squared_cumulative(109.1F,100)
        << " should be about 0.75 " << endl;
 
   float hist1[20];
@@ -102,11 +102,11 @@ int testFunctions()
   chisq = 0;
   for (i=0; i<20; i++)
     {
-      cerr << i << " " << hist1[i] << " " << hist2[i] << endl;
+      cout << i << " " << hist1[i] << " " << hist2[i] << endl;
       float delta = hist1[i] - hist2[i];
       chisq += delta*delta/(hist1[i] + hist2[i]);
     }
-  cerr << "cdf(" << chisq << ",20) = " 
+  cout << "cdf(" << chisq << ",20) = " 
        << vnl_chi_squared_cumulative(chisq,20)
        << " so P(same dist) = " << (1.0 - vnl_chi_squared_cumulative(chisq,20))
        << endl;

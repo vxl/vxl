@@ -13,20 +13,20 @@ void test_resize() {
     vnl_vector<double> X(3);
     
     X.fill(2);
-    cerr << "X = " << X << endl;
+    cout << "X = " << X << endl;
     
     vnl_resize(X,5);
-    cerr << "X = " << X << endl;
+    cout << "X = " << X << endl;
   }
   
   {
     vnl_matrix<double> M(3,4);
     
     M.fill(2);
-    cerr << "M = " << endl << M << endl;
+    cout << "M = " << endl << M << endl;
     
     vnl_resize(M,5,7);
-    cerr << "M = " << endl << M << endl;
+    cout << "M = " << endl << M << endl;
   }
 }
 

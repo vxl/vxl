@@ -22,16 +22,16 @@ void testvnl_sample()
   for (unsigned i=0; i<N; ++i)
     X_bar += X[i];
   X_bar /= N;
-  cerr << "actual mean : " << mu << endl;
-  cerr << "sample mean : " << X_bar << endl;
+  cout << "actual mean : " << mu << endl;
+  cout << "sample mean : " << X_bar << endl;
 
   // sample standard deviation
   double sigma_bar = 0;
   for (unsigned i=0; i<N; ++i)
     sigma_bar += vnl_math_sqr(X[i] - X_bar);
   sigma_bar = sqrt(sigma_bar / (N-1));
-  cerr << "actual standard deviation : " << sigma << endl;
-  cerr << "sample standard deviation : " << sigma_bar << endl;
+  cout << "actual standard deviation : " << sigma << endl;
+  cout << "sample standard deviation : " << sigma_bar << endl;
 }
 
 TESTMAIN(testvnl_sample);
