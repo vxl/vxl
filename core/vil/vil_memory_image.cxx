@@ -29,11 +29,11 @@ vil2_memory_image::vil2_memory_image(unsigned ni,
   case VIL2_PIXEL_FORMAT_BYTE:
     view_ = new vil2_image_view<vil2_byte>(ni, nj, nplanes);
     break;
-  case VIL2_PIXEL_FORMAT_RGB_BYTE:
-    view_ = new vil2_image_view<vil_rgb<vil2_byte> >(ni, nj, nplanes);
+  case VIL2_PIXEL_FORMAT_UINT_32:
+    view_ = new vil2_image_view<vxl_uint_32>(ni, nj, nplanes);
     break;
-  case VIL2_PIXEL_FORMAT_UNSIGNED_INT:
-    view_ = new vil2_image_view<unsigned int>(ni, nj, nplanes);
+  case VIL2_PIXEL_FORMAT_UINT_16:
+    view_ = new vil2_image_view<vxl_uint_16>(ni, nj, nplanes);
     break;
   case VIL2_PIXEL_FORMAT_BOOL:
     view_ = new vil2_image_view<bool>(ni, nj, nplanes);

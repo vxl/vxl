@@ -86,7 +86,7 @@ void vil2_print_value(vcl_ostream& os, const float& value)
 
 //: Explicit overload of print for rgb<ubyte>
 VCL_DEFINE_SPECIALIZATION
-void vil2_print_value(vcl_ostream& os, const vil_rgb<unsigned char>& value)
+void vil2_print_value(vcl_ostream& os, const vil_rgb<vil2_byte>& value)
 {
   int r = int(value.r);
   if (r<10)  os<<'0';
@@ -104,7 +104,7 @@ void vil2_print_value(vcl_ostream& os, const vil_rgb<unsigned char>& value)
 
 //: Explicit overload of print for rgb<ushort>
 VCL_DEFINE_SPECIALIZATION
-void vil2_print_value(vcl_ostream& os, const vil_rgb<unsigned short>& value)
+void vil2_print_value(vcl_ostream& os, const vil_rgb<vxl_uint_16>& value)
 {
   vil2_print_value(os,value.r); os<<'/';
   vil2_print_value(os,value.g); os<<'/';
@@ -120,10 +120,10 @@ void vil2_print_value(vcl_ostream& os, const vil_rgb<float>& value)
 
 //: Compute minimum and maximum values over view
 VCL_DEFINE_SPECIALIZATION
-void vil2_value_range(vil_rgb<unsigned char>& min_value, vil_rgb<unsigned char>& max_value,
-                      const vil2_image_view<vil_rgb<unsigned char> >& rgb_view)
+void vil2_value_range(vil_rgb<vil2_byte>& min_value, vil_rgb<vil2_byte>& max_value,
+                      const vil2_image_view<vil_rgb<vil2_byte> >& rgb_view)
 {
-  vil2_image_view<unsigned char> plane_view = vil2_view_as_planes(rgb_view);
+  vil2_image_view<vil2_byte> plane_view = vil2_view_as_planes(rgb_view);
   // Get range for each plane in turn
   vil2_value_range(min_value.r,max_value.r,plane_view.plane(0));
   vil2_value_range(min_value.g,max_value.g,plane_view.plane(1));

@@ -36,17 +36,17 @@ bool vil2_save(const vil2_image_view_base &im, char const* filename, char const*
   {
   case VIL2_PIXEL_FORMAT_RGB_BYTE:
     return out->put_view(vil2_view_as_planes(static_cast<const vil2_image_view<vil_rgb<vil2_byte> >&>(im)),0,0);
-  case VIL2_PIXEL_FORMAT_RGB_UNSIGNED_SHORT:
-    return out->put_view(vil2_view_as_planes(static_cast<const vil2_image_view<vil_rgb<unsigned short> >&>(im)),0,0);
+  case VIL2_PIXEL_FORMAT_RGB_UINT_16:
+    return out->put_view(vil2_view_as_planes(static_cast<const vil2_image_view<vil_rgb<vxl_uint_16> >&>(im)),0,0);
 #ifdef VIL2_TO_BE_FIXED
-  case VIL2_PIXEL_FORMAT_RGB_SIGNED_CHAR:
-    return out->put_view(vil2_view_as_planes(static_cast<const vil2_image_view<vil_rgb<signed char> >&>(im)),0,0);
-  case VIL2_PIXEL_FORMAT_RGB_SIGNED_SHORT:
-    return out->put_view(vil2_view_as_planes(static_cast<const vil2_image_view<vil_rgb<signed short> >&>(im)),0,0);
-  case VIL2_PIXEL_FORMAT_RGB_UNSIGNED_INT:
-    return out->put_view(vil2_view_as_planes(static_cast<const vil2_image_view<vil_rgb<unsigned int> >&>(im)),0,0);
-  case VIL2_PIXEL_FORMAT_RGB_SIGNED_INT:
-    return out->put_view(vil2_view_as_planes(static_cast<const vil2_image_view<vil_rgb<signed int> >&>(im)),0,0);
+  case VIL2_PIXEL_FORMAT_RGB_INT_8:
+    return out->put_view(vil2_view_as_planes(static_cast<const vil2_image_view<vil_rgb<vxl_int_8> >&>(im)),0,0);
+  case VIL2_PIXEL_FORMAT_RGB_INT_16:
+    return out->put_view(vil2_view_as_planes(static_cast<const vil2_image_view<vil_rgb<vxl_int_16> >&>(im)),0,0);
+  case VIL2_PIXEL_FORMAT_RGB_UINT_32:
+    return out->put_view(vil2_view_as_planes(static_cast<const vil2_image_view<vil_rgb<vxl_uint_32> >&>(im)),0,0);
+  case VIL2_PIXEL_FORMAT_RGB_INT_32:
+    return out->put_view(vil2_view_as_planes(static_cast<const vil2_image_view<vil_rgb<vxl_int_32> >&>(im)),0,0);
   case VIL2_PIXEL_FORMAT_RGB_DOUBLE:
     return out->put_view(vil2_view_as_planes(static_cast<const vil2_image_view<vil_rgb<double> >&>(im)),0,0);
   case VIL2_PIXEL_FORMAT_RGB_FLOAT:

@@ -329,7 +329,7 @@ vil2_image_view<bool> CreateTest1bitImage(int wd, int ht)
 // create an 8 bit test image
 vil2_image_view<vil_byte> CreateTest8bitImage(int wd, int ht)
 {
-  vil2_image_view<unsigned char> image(wd, ht);
+  vil2_image_view<vil2_byte> image(wd, ht);
   for (int y = 0; y < ht; y++)
     for (int x = 0; x < wd; x++) {
       image(x,y) = ((x-wd/2)*(y-ht/2)/16) & 0xff;
@@ -338,9 +338,9 @@ vil2_image_view<vil_byte> CreateTest8bitImage(int wd, int ht)
 }
 
 // create a 16 bit test image
-vil2_image_view<unsigned short> CreateTest16bitImage(int wd, int ht)
+vil2_image_view<vxl_uint_16> CreateTest16bitImage(int wd, int ht)
 {
-  vil2_image_view<unsigned short> image(wd, ht);
+  vil2_image_view<vxl_uint_16> image(wd, ht);
   for (int y = 0; y < ht; y++)
     for (int x = 0; x < wd; x++) {
       image(x,y) = ((x-wd/2)*(y-ht/2)/16) & 0xffff;
@@ -350,9 +350,9 @@ vil2_image_view<unsigned short> CreateTest16bitImage(int wd, int ht)
 
 
 // create a 32 bit test image
-vil2_image_view<unsigned int> CreateTest32bitImage(int wd, int ht)
+vil2_image_view<vxl_uint_32> CreateTest32bitImage(int wd, int ht)
 {
-  vil2_image_view<unsigned int> image(wd, ht);
+  vil2_image_view<vxl_uint_32> image(wd, ht);
   for (int y = 0; y < ht; y++)
     for (int x = 0; x < wd; x++)
       image(x, y) = x + wd*y;
@@ -363,7 +363,7 @@ vil2_image_view<unsigned int> CreateTest32bitImage(int wd, int ht)
 // create a 24 bit color test image
 vil2_image_view<vil_rgb<vil_byte> > CreateTest24bitImage(int wd, int ht)
 {
-  vil2_image_view<vil_rgb<unsigned char> > image(wd, ht);
+  vil2_image_view<vil_rgb<vil2_byte> > image(wd, ht);
   for (int x = 0; x < wd; x++)
     for (int y = 0; y < ht; y++) {
       image(x,y) = vil_rgb<vil_byte>(x%(1<<8),
@@ -405,10 +405,10 @@ MAIN( test_save_load_image )
   int sizey = 155;
   vil2_image_view<bool>               image1 = CreateTest1bitImage(sizex, sizey);
   vil2_image_view<vil_byte>           image8 = CreateTest8bitImage(sizex, sizey);
-  vil2_image_view<unsigned short>     image16 = CreateTest16bitImage(sizex, sizey);
-  vil2_image_view<vil_rgb<vil_byte> > image24 = CreateTest24bitImage(sizex, sizey);
-  vil2_image_view<unsigned int>       image32 = CreateTest32bitImage(sizex, sizey);
-  vil2_image_view<vil_byte>           image3p = CreateTest3planeImage(sizex, sizey);
+  vil2_image_view<vxl_uint_16>     image16 = CreateTest16bitImage(sizex, sizey);
+  vil2_image_view<vil_rgb<vil2_byte> > image24 = CreateTest24bitImage(sizex, sizey);
+  vil2_image_view<vxl_uint_32>       image32 = CreateTest32bitImage(sizex, sizey);
+  vil2_image_view<vil2_byte>           image3p = CreateTest3planeImage(sizex, sizey);
   vil2_image_view<float>              imagefloat = CreateTestfloatImage(sizex, sizey);
 
   // pnm ( = PGM / PPM )
