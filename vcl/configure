@@ -1056,9 +1056,9 @@ export VCL_HAS_TYPENAME
 
 
 
-echo $ac_n "checking whether the C++ compiler supports the keyword 'mutable'""... $ac_c" 1>&6
-echo "configure:1061: checking whether the C++ compiler supports the keyword 'mutable'" >&5
-if eval "test \"`echo '$''{'ac_cxx_has_mutable'+set}'`\" = set"; then
+echo $ac_n "checking whether the C++ compiler accepts the keyword 'export'""... $ac_c" 1>&6
+echo "configure:1061: checking whether the C++ compiler accepts the keyword 'export'" >&5
+if eval "test \"`echo '$''{'ac_cxx_has_export'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
 else
   
@@ -1080,6 +1080,81 @@ cat > conftest.$ac_ext <<EOF
 #line 1081 "configure"
 #include "confdefs.h"
 
+export
+template <class T, int N>
+struct plither
+{
+  plither();
+  ~plither();
+  void f(T *, int);
+};
+
+void g()
+{
+  double x;
+  int y;
+  plither<double, 3> obj;
+  obj.f(&x, y);
+}
+
+int main() {
+
+; return 0; }
+EOF
+if { (eval echo configure:1105: \"$ac_compile\") 1>&5; (eval $ac_compile) 2>&5; }; then
+  rm -rf conftest*
+  ac_cxx_has_export=yes
+else
+  echo "configure: failed program was:" >&5
+  cat conftest.$ac_ext >&5
+  rm -rf conftest*
+  ac_cxx_has_export=no
+fi
+rm -f conftest*
+ac_ext=c
+# CFLAGS is not in ac_cpp because -g, -O, etc. are not valid cpp options.
+ac_cpp='$CPP $CPPFLAGS'
+ac_compile='${CC-cc} -c $CFLAGS $CPPFLAGS conftest.$ac_ext 1>&5'
+ac_link='${CC-cc} -o conftest $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS 1>&5'
+cross_compiling=$ac_cv_prog_cc_cross
+
+ 
+fi
+
+echo "$ac_t""$ac_cxx_has_export" 1>&6
+if test "$ac_cxx_has_export" = "yes" ; then
+  VCL_HAS_EXPORT=1;
+else
+  VCL_HAS_EXPORT=0;
+fi;
+export VCL_HAS_EXPORT
+
+
+
+echo $ac_n "checking whether the C++ compiler supports the keyword 'mutable'""... $ac_c" 1>&6
+echo "configure:1136: checking whether the C++ compiler supports the keyword 'mutable'" >&5
+if eval "test \"`echo '$''{'ac_cxx_has_mutable'+set}'`\" = set"; then
+  echo $ac_n "(cached) $ac_c" 1>&6
+else
+  
+
+ac_ext=C
+# CXXFLAGS is not in ac_cpp because -g, -O, etc. are not valid cpp options.
+ac_cpp='$CXXCPP $CPPFLAGS'
+ac_compile='${CXX-g++} -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext 1>&5'
+ac_link='${CXX-g++} -o conftest $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS 1>&5'
+cross_compiling=$ac_cv_prog_cxx_cross
+
+
+
+CXXFLAGS=$given_CXXFLAGS
+export CXXFLAGS
+
+
+cat > conftest.$ac_ext <<EOF
+#line 1156 "configure"
+#include "confdefs.h"
+
 class X {
 public:
   mutable int const *p;
@@ -1089,7 +1164,7 @@ int main() {
 
 ; return 0; }
 EOF
-if { (eval echo configure:1093: \"$ac_compile\") 1>&5; (eval $ac_compile) 2>&5; }; then
+if { (eval echo configure:1168: \"$ac_compile\") 1>&5; (eval $ac_compile) 2>&5; }; then
   rm -rf conftest*
   ac_cxx_has_mutable=yes
 else
@@ -1120,7 +1195,7 @@ export VCL_HAS_MUTABLE
 
 
 echo $ac_n "checking whether the C++ compiler supports the keyword 'explicit'""... $ac_c" 1>&6
-echo "configure:1124: checking whether the C++ compiler supports the keyword 'explicit'" >&5
+echo "configure:1199: checking whether the C++ compiler supports the keyword 'explicit'" >&5
 if eval "test \"`echo '$''{'ac_cxx_has_explicit'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
 else
@@ -1140,7 +1215,7 @@ export CXXFLAGS
 
 
 cat > conftest.$ac_ext <<EOF
-#line 1144 "configure"
+#line 1219 "configure"
 #include "confdefs.h"
 
 class X {
@@ -1152,7 +1227,7 @@ int main() {
 
 ; return 0; }
 EOF
-if { (eval echo configure:1156: \"$ac_compile\") 1>&5; (eval $ac_compile) 2>&5; }; then
+if { (eval echo configure:1231: \"$ac_compile\") 1>&5; (eval $ac_compile) 2>&5; }; then
   rm -rf conftest*
   ac_cxx_has_explicit=yes
 else
@@ -1183,7 +1258,7 @@ export VCL_HAS_EXPLICIT
 
 
 echo $ac_n "checking whether the C++ compiler supports the keyword 'dynamic_cast'""... $ac_c" 1>&6
-echo "configure:1187: checking whether the C++ compiler supports the keyword 'dynamic_cast'" >&5
+echo "configure:1262: checking whether the C++ compiler supports the keyword 'dynamic_cast'" >&5
 if eval "test \"`echo '$''{'ac_cxx_has_dynamic_cast'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
 else
@@ -1203,7 +1278,7 @@ export CXXFLAGS
 
 
 cat > conftest.$ac_ext <<EOF
-#line 1207 "configure"
+#line 1282 "configure"
 #include "confdefs.h"
 
 struct foo { foo(); virtual ~foo(); virtual void f() =0; };
@@ -1214,7 +1289,7 @@ int main() {
 
 ; return 0; }
 EOF
-if { (eval echo configure:1218: \"$ac_compile\") 1>&5; (eval $ac_compile) 2>&5; }; then
+if { (eval echo configure:1293: \"$ac_compile\") 1>&5; (eval $ac_compile) 2>&5; }; then
   rm -rf conftest*
   ac_cxx_has_dynamic_cast=yes
 else
@@ -1245,7 +1320,7 @@ export VCL_HAS_DYNAMIC_CAST
 
 
 echo $ac_n "checking whether the C++ compiler supports ISO for scope""... $ac_c" 1>&6
-echo "configure:1249: checking whether the C++ compiler supports ISO for scope" >&5
+echo "configure:1324: checking whether the C++ compiler supports ISO for scope" >&5
 if eval "test \"`echo '$''{'ac_cxx_check_for_scope'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
 else
@@ -1265,7 +1340,7 @@ export CXXFLAGS
 
 
 cat > conftest.$ac_ext <<EOF
-#line 1269 "configure"
+#line 1344 "configure"
 #include "confdefs.h"
 
 void fn() {
@@ -1278,7 +1353,7 @@ int main() {
 
 ; return 0; }
 EOF
-if { (eval echo configure:1282: \"$ac_compile\") 1>&5; (eval $ac_compile) 2>&5; }; then
+if { (eval echo configure:1357: \"$ac_compile\") 1>&5; (eval $ac_compile) 2>&5; }; then
   rm -rf conftest*
   ac_cxx_check_for_scope=yes
 else
@@ -1317,7 +1392,7 @@ ac_link='${CXX-g++} -o conftest $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $L
 cross_compiling=$ac_cv_prog_cxx_cross
 
 echo $ac_n "checking whether the C++ compiler needs default values in second definition""... $ac_c" 1>&6
-echo "configure:1321: checking whether the C++ compiler needs default values in second definition" >&5
+echo "configure:1396: checking whether the C++ compiler needs default values in second definition" >&5
 
 
 CXXFLAGS=$given_CXXFLAGS
@@ -1325,7 +1400,7 @@ export CXXFLAGS
 
 
 cat > conftest.$ac_ext <<EOF
-#line 1329 "configure"
+#line 1404 "configure"
 #include "confdefs.h"
 
 // declaration
@@ -1338,7 +1413,7 @@ int main() {
 
 ; return 0; }
 EOF
-if { (eval echo configure:1342: \"$ac_compile\") 1>&5; (eval $ac_compile) 2>&5; }; then
+if { (eval echo configure:1417: \"$ac_compile\") 1>&5; (eval $ac_compile) 2>&5; }; then
   rm -rf conftest*
   
 VCL_DEFAULT_VALUE="/* no need */";
@@ -1366,7 +1441,7 @@ export VCL_DEFAULT_VALUE
 
 
 echo $ac_n "checking whether the C++ compiler supports member templates""... $ac_c" 1>&6
-echo "configure:1370: checking whether the C++ compiler supports member templates" >&5
+echo "configure:1445: checking whether the C++ compiler supports member templates" >&5
 if eval "test \"`echo '$''{'ac_cxx_has_member_templates'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
 else
@@ -1386,7 +1461,7 @@ export CXXFLAGS
 
 
 cat > conftest.$ac_ext <<EOF
-#line 1390 "configure"
+#line 1465 "configure"
 #include "confdefs.h"
 
 template <class S>
@@ -1407,7 +1482,7 @@ int main() {
 
 ; return 0; }
 EOF
-if { (eval echo configure:1411: \"$ac_compile\") 1>&5; (eval $ac_compile) 2>&5; }; then
+if { (eval echo configure:1486: \"$ac_compile\") 1>&5; (eval $ac_compile) 2>&5; }; then
   rm -rf conftest*
   ac_cxx_has_member_templates=yes
 else
@@ -1438,7 +1513,7 @@ export VCL_HAS_MEMBER_TEMPLATES
 
 
 echo $ac_n "checking whether the C++ compiler supports partial specialization""... $ac_c" 1>&6
-echo "configure:1442: checking whether the C++ compiler supports partial specialization" >&5
+echo "configure:1517: checking whether the C++ compiler supports partial specialization" >&5
 
 ac_ext=C
 # CXXFLAGS is not in ac_cpp because -g, -O, etc. are not valid cpp options.
@@ -1454,7 +1529,7 @@ export CXXFLAGS
 
 
 cat > conftest.$ac_ext <<EOF
-#line 1458 "configure"
+#line 1533 "configure"
 #include "confdefs.h"
 
 template <class T>
@@ -1496,7 +1571,7 @@ int main() {
 
 ; return 0; }
 EOF
-if { (eval echo configure:1500: \"$ac_compile\") 1>&5; (eval $ac_compile) 2>&5; }; then
+if { (eval echo configure:1575: \"$ac_compile\") 1>&5; (eval $ac_compile) 2>&5; }; then
   rm -rf conftest*
   
 VCL_CAN_DO_PARTIAL_SPECIALIZATION="1";
@@ -1532,7 +1607,7 @@ ac_link='${CXX-g++} -o conftest $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $L
 cross_compiling=$ac_cv_prog_cxx_cross
 
 echo $ac_n "checking whether the C++ compiler understands the 'template <>' specialization syntax""... $ac_c" 1>&6
-echo "configure:1536: checking whether the C++ compiler understands the 'template <>' specialization syntax" >&5
+echo "configure:1611: checking whether the C++ compiler understands the 'template <>' specialization syntax" >&5
 
 
 CXXFLAGS=$given_CXXFLAGS
@@ -1540,7 +1615,7 @@ export CXXFLAGS
 
 
 cat > conftest.$ac_ext <<EOF
-#line 1544 "configure"
+#line 1619 "configure"
 #include "confdefs.h"
 
 // declaration
@@ -1561,7 +1636,7 @@ int main() {
 
 ; return 0; }
 EOF
-if { (eval echo configure:1565: \"$ac_compile\") 1>&5; (eval $ac_compile) 2>&5; }; then
+if { (eval echo configure:1640: \"$ac_compile\") 1>&5; (eval $ac_compile) 2>&5; }; then
   rm -rf conftest*
   
 VCL_DEFINE_SPECIALIZATION="template <>";
@@ -1589,7 +1664,7 @@ export VCL_DEFINE_SPECIALIZATION
 
 
 echo $ac_n "checking whether the C++ compiler allows explicit instantiation of inline templates""... $ac_c" 1>&6
-echo "configure:1593: checking whether the C++ compiler allows explicit instantiation of inline templates" >&5
+echo "configure:1668: checking whether the C++ compiler allows explicit instantiation of inline templates" >&5
 
 ac_ext=C
 # CXXFLAGS is not in ac_cpp because -g, -O, etc. are not valid cpp options.
@@ -1605,7 +1680,7 @@ export CXXFLAGS
 
 
 cat > conftest.$ac_ext <<EOF
-#line 1609 "configure"
+#line 1684 "configure"
 #include "confdefs.h"
 
 template <class T>
@@ -1621,7 +1696,7 @@ int main() {
 
 ; return 0; }
 EOF
-if { (eval echo configure:1625: \"$ac_compile\") 1>&5; (eval $ac_compile) 2>&5; }; then
+if { (eval echo configure:1700: \"$ac_compile\") 1>&5; (eval $ac_compile) 2>&5; }; then
   rm -rf conftest*
   
 VCL_ALLOWS_INLINE_INSTANTIATION="1";
@@ -1651,7 +1726,7 @@ export VCL_ALLOWS_INLINE_INSTANTIATION
 if test "$VCL_ALLOWS_INLINE_INSTANTIATION" = "1"; then
 
 echo $ac_n "checking whether the C++ compiler needs explicit instantiation of inline function templates""... $ac_c" 1>&6
-echo "configure:1655: checking whether the C++ compiler needs explicit instantiation of inline function templates" >&5
+echo "configure:1730: checking whether the C++ compiler needs explicit instantiation of inline function templates" >&5
 
 ac_ext=C
 # CXXFLAGS is not in ac_cpp because -g, -O, etc. are not valid cpp options.
@@ -1669,7 +1744,7 @@ export CXXFLAGS
 
 
 cat > conftest.$ac_ext <<EOF
-#line 1673 "configure"
+#line 1748 "configure"
 #include "confdefs.h"
 
 #ifdef __GNUC__
@@ -1697,7 +1772,7 @@ int main() {
 
 ; return 0; }
 EOF
-if { (eval echo configure:1701: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest; then
+if { (eval echo configure:1776: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest; then
   rm -rf conftest*
   
 VCL_NEEDS_INLINE_INSTANTIATION="0";
@@ -1746,7 +1821,7 @@ ac_link='${CXX-g++} -o conftest $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $L
 cross_compiling=$ac_cv_prog_cxx_cross
 
 echo $ac_n "checking whether the C++ compiler allows initialization of static const int""... $ac_c" 1>&6
-echo "configure:1750: checking whether the C++ compiler allows initialization of static const int" >&5
+echo "configure:1825: checking whether the C++ compiler allows initialization of static const int" >&5
 
 
 CXXFLAGS=$given_CXXFLAGS
@@ -1754,7 +1829,7 @@ export CXXFLAGS
 
 
 cat > conftest.$ac_ext <<EOF
-#line 1758 "configure"
+#line 1833 "configure"
 #include "confdefs.h"
 
 class A {
@@ -1770,7 +1845,7 @@ int main() {
 
 ; return 0; }
 EOF
-if { (eval echo configure:1774: \"$ac_compile\") 1>&5; (eval $ac_compile) 2>&5; }; then
+if { (eval echo configure:1849: \"$ac_compile\") 1>&5; (eval $ac_compile) 2>&5; }; then
   rm -rf conftest*
   
 VCL_STATIC_CONST_INIT_INT="1";
@@ -1806,7 +1881,7 @@ ac_link='${CXX-g++} -o conftest $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $L
 cross_compiling=$ac_cv_prog_cxx_cross
 
 echo $ac_n "checking whether the C++ compiler allows initialization of static const floats""... $ac_c" 1>&6
-echo "configure:1810: checking whether the C++ compiler allows initialization of static const floats" >&5
+echo "configure:1885: checking whether the C++ compiler allows initialization of static const floats" >&5
 
 
 CXXFLAGS=$given_CXXFLAGS
@@ -1814,7 +1889,7 @@ export CXXFLAGS
 
 
 cat > conftest.$ac_ext <<EOF
-#line 1818 "configure"
+#line 1893 "configure"
 #include "confdefs.h"
 
 class A {
@@ -1827,7 +1902,7 @@ int main() {
 
 ; return 0; }
 EOF
-if { (eval echo configure:1831: \"$ac_compile\") 1>&5; (eval $ac_compile) 2>&5; }; then
+if { (eval echo configure:1906: \"$ac_compile\") 1>&5; (eval $ac_compile) 2>&5; }; then
   rm -rf conftest*
   
 VCL_STATIC_CONST_INIT_FLOAT="1";
@@ -1863,7 +1938,7 @@ ac_link='${CXX-g++} -o conftest $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $L
 cross_compiling=$ac_cv_prog_cxx_cross
 
 echo $ac_n "checking whether the C++ compiler requires implementation of static consts""... $ac_c" 1>&6
-echo "configure:1867: checking whether the C++ compiler requires implementation of static consts" >&5
+echo "configure:1942: checking whether the C++ compiler requires implementation of static consts" >&5
 
 
 CXXFLAGS=$given_CXXFLAGS
@@ -1871,7 +1946,7 @@ export CXXFLAGS
 
 
 cat > conftest.$ac_ext <<EOF
-#line 1875 "configure"
+#line 1950 "configure"
 #include "confdefs.h"
 
 // "includes"
@@ -1898,7 +1973,7 @@ int main() {
 
 ; return 0; }
 EOF
-if { (eval echo configure:1902: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest; then
+if { (eval echo configure:1977: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest; then
   rm -rf conftest*
   
 VCL_IMPLEMENT_STATIC_CONSTS="0";
@@ -1926,7 +2001,7 @@ export VCL_IMPLEMENT_STATIC_CONSTS
 
 
 echo $ac_n "checking whether the C++ compiler accepts templated definitions of static class template members""... $ac_c" 1>&6
-echo "configure:1930: checking whether the C++ compiler accepts templated definitions of static class template members" >&5
+echo "configure:2005: checking whether the C++ compiler accepts templated definitions of static class template members" >&5
 
 ac_ext=C
 # CXXFLAGS is not in ac_cpp because -g, -O, etc. are not valid cpp options.
@@ -1942,7 +2017,7 @@ export CXXFLAGS
 
 
 cat > conftest.$ac_ext <<EOF
-#line 1946 "configure"
+#line 2021 "configure"
 #include "confdefs.h"
 
 template <class T>
@@ -1959,7 +2034,7 @@ int main() {
 
 ; return 0; }
 EOF
-if { (eval echo configure:1963: \"$ac_compile\") 1>&5; (eval $ac_compile) 2>&5; }; then
+if { (eval echo configure:2038: \"$ac_compile\") 1>&5; (eval $ac_compile) 2>&5; }; then
   rm -rf conftest*
   
 echo "$ac_t"""yes"" 1>&6
@@ -1980,7 +2055,7 @@ export VCL_CAN_DO_STATIC_TEMPLATE_MEMBER
 
 
 echo $ac_n "checking whether the C++ compiler accepts non-type template parameters to function templates""... $ac_c" 1>&6
-echo "configure:1984: checking whether the C++ compiler accepts non-type template parameters to function templates" >&5
+echo "configure:2059: checking whether the C++ compiler accepts non-type template parameters to function templates" >&5
 
 ac_ext=C
 # CXXFLAGS is not in ac_cpp because -g, -O, etc. are not valid cpp options.
@@ -1996,7 +2071,7 @@ export CXXFLAGS
 
 
 cat > conftest.$ac_ext <<EOF
-#line 2000 "configure"
+#line 2075 "configure"
 #include "confdefs.h"
 
 template <class T, int n>
@@ -2020,7 +2095,7 @@ int main() {
 
 ; return 0; }
 EOF
-if { (eval echo configure:2024: \"$ac_compile\") 1>&5; (eval $ac_compile) 2>&5; }; then
+if { (eval echo configure:2099: \"$ac_compile\") 1>&5; (eval $ac_compile) 2>&5; }; then
   rm -rf conftest*
   
 echo "$ac_t"""yes"" 1>&6
@@ -2049,7 +2124,7 @@ ac_link='${CXX-g++} -o conftest $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $L
 cross_compiling=$ac_cv_prog_cxx_cross
 
 echo $ac_n "checking whether the C++ compiler needs friend declarations for proper template function overloading""... $ac_c" 1>&6
-echo "configure:2053: checking whether the C++ compiler needs friend declarations for proper template function overloading" >&5
+echo "configure:2128: checking whether the C++ compiler needs friend declarations for proper template function overloading" >&5
 
 
 CXXFLAGS=$given_CXXFLAGS
@@ -2057,7 +2132,7 @@ export CXXFLAGS
 
 
 cat > conftest.$ac_ext <<EOF
-#line 2061 "configure"
+#line 2136 "configure"
 #include "confdefs.h"
 
 template <class T>
@@ -2097,7 +2172,7 @@ int main() {
 
 ; return 0; }
 EOF
-if { (eval echo configure:2101: \"$ac_compile\") 1>&5; (eval $ac_compile) 2>&5; }; then
+if { (eval echo configure:2176: \"$ac_compile\") 1>&5; (eval $ac_compile) 2>&5; }; then
   rm -rf conftest*
   
 VCL_NEED_FRIEND_FOR_TEMPLATE_OVERLOAD="0";
@@ -2127,7 +2202,7 @@ ac_link='${CXX-g++} -o conftest $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $L
 cross_compiling=$ac_cv_prog_cxx_cross
 
 echo $ac_n "checking whether the C++ compiler requires explicit casts where it should not""... $ac_c" 1>&6
-echo "configure:2131: checking whether the C++ compiler requires explicit casts where it should not" >&5
+echo "configure:2206: checking whether the C++ compiler requires explicit casts where it should not" >&5
 
 
 CXXFLAGS=$given_CXXFLAGS
@@ -2135,7 +2210,7 @@ export CXXFLAGS
 
 
 cat > conftest.$ac_ext <<EOF
-#line 2139 "configure"
+#line 2214 "configure"
 #include "confdefs.h"
 
 //
@@ -2188,7 +2263,7 @@ int main() {
 
 ; return 0; }
 EOF
-if { (eval echo configure:2192: \"$ac_compile\") 1>&5; (eval $ac_compile) 2>&5; }; then
+if { (eval echo configure:2267: \"$ac_compile\") 1>&5; (eval $ac_compile) 2>&5; }; then
   rm -rf conftest*
   
 VCL_OVERLOAD_CAST="(x)";
@@ -2218,7 +2293,7 @@ ac_link='${CXX-g++} -o conftest $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $L
 cross_compiling=$ac_cv_prog_cxx_cross
 
 echo $ac_n "checking whether the C++ compiler requires <> in templated forward/friend declarations""... $ac_c" 1>&6
-echo "configure:2222: checking whether the C++ compiler requires <> in templated forward/friend declarations" >&5
+echo "configure:2297: checking whether the C++ compiler requires <> in templated forward/friend declarations" >&5
 
 
 CXXFLAGS=$given_CXXFLAGS
@@ -2226,7 +2301,7 @@ export CXXFLAGS
 
 
 cat > conftest.$ac_ext <<EOF
-#line 2230 "configure"
+#line 2305 "configure"
 #include "confdefs.h"
 
 template <class T> class victor;
@@ -2267,7 +2342,7 @@ int main() {
 
 ; return 0; }
 EOF
-if { (eval echo configure:2271: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest; then
+if { (eval echo configure:2346: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest; then
   rm -rf conftest*
   
 VCL_NULL_TMPL_ARGS="/* <> */";
@@ -2289,7 +2364,7 @@ export VCL_NULL_TMPL_ARGS
 
 
 echo $ac_n "checking whether the C++ compiler allows static data members""... $ac_c" 1>&6
-echo "configure:2293: checking whether the C++ compiler allows static data members" >&5
+echo "configure:2368: checking whether the C++ compiler allows static data members" >&5
 
 ac_ext=C
 # CXXFLAGS is not in ac_cpp because -g, -O, etc. are not valid cpp options.
@@ -2305,7 +2380,7 @@ export CXXFLAGS
 
 
 cat > conftest.$ac_ext <<EOF
-#line 2309 "configure"
+#line 2384 "configure"
 #include "confdefs.h"
 
 template <class T>
@@ -2319,7 +2394,7 @@ int main() {
 
 ; return 0; }
 EOF
-if { (eval echo configure:2323: \"$ac_compile\") 1>&5; (eval $ac_compile) 2>&5; }; then
+if { (eval echo configure:2398: \"$ac_compile\") 1>&5; (eval $ac_compile) 2>&5; }; then
   rm -rf conftest*
   
 VCL_NO_STATIC_DATA_MEMBERS="0";
@@ -2350,7 +2425,7 @@ ac_link='${CXX-g++} -o conftest $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $L
 cross_compiling=$ac_cv_prog_cxx_cross
 
 echo $ac_n "checking whether the C++ compiler distinguishes templated and non-templated functions""... $ac_c" 1>&6
-echo "configure:2354: checking whether the C++ compiler distinguishes templated and non-templated functions" >&5
+echo "configure:2429: checking whether the C++ compiler distinguishes templated and non-templated functions" >&5
 
 
 CXXFLAGS=$given_CXXFLAGS
@@ -2358,7 +2433,7 @@ export CXXFLAGS
 
 
 cat > conftest.$ac_ext <<EOF
-#line 2362 "configure"
+#line 2437 "configure"
 #include "confdefs.h"
 
 // Declare a function template.
@@ -2380,7 +2455,7 @@ int main() {
 
 ; return 0; }
 EOF
-if { (eval echo configure:2384: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest; then
+if { (eval echo configure:2459: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest; then
   rm -rf conftest*
   
 VCL_HAS_TEMPLATE_SYMBOLS="0";
@@ -2406,7 +2481,7 @@ export VCL_HAS_TEMPLATE_SYMBOLS
 #VCL_DFL_TMPL_ARG
 
 echo $ac_n "checking whether the C++ compiler accepts complete types as default template parameters""... $ac_c" 1>&6
-echo "configure:2410: checking whether the C++ compiler accepts complete types as default template parameters" >&5
+echo "configure:2485: checking whether the C++ compiler accepts complete types as default template parameters" >&5
 
 ac_ext=C
 # CXXFLAGS is not in ac_cpp because -g, -O, etc. are not valid cpp options.
@@ -2422,7 +2497,7 @@ export CXXFLAGS
 
 
 cat > conftest.$ac_ext <<EOF
-#line 2426 "configure"
+#line 2501 "configure"
 #include "confdefs.h"
 
 template <class T> struct less { };
@@ -2449,7 +2524,7 @@ int main() {
 
 ; return 0; }
 EOF
-if { (eval echo configure:2453: \"$ac_compile\") 1>&5; (eval $ac_compile) 2>&5; }; then
+if { (eval echo configure:2528: \"$ac_compile\") 1>&5; (eval $ac_compile) 2>&5; }; then
   rm -rf conftest*
   
 echo "$ac_t"""yes"" 1>&6
@@ -2470,7 +2545,7 @@ export VCL_CAN_DO_COMPLETE_DEFAULT_TYPE_PARAMETER
 if test "$VCL_CAN_DO_COMPLETE_DEFAULT_TYPE_PARAMETER" = "1"; then
 
 echo $ac_n "checking whether the C++ compiler accepts default template type parameters templated over earlier parameters""... $ac_c" 1>&6
-echo "configure:2474: checking whether the C++ compiler accepts default template type parameters templated over earlier parameters" >&5
+echo "configure:2549: checking whether the C++ compiler accepts default template type parameters templated over earlier parameters" >&5
 
 ac_ext=C
 # CXXFLAGS is not in ac_cpp because -g, -O, etc. are not valid cpp options.
@@ -2486,7 +2561,7 @@ export CXXFLAGS
 
 
 cat > conftest.$ac_ext <<EOF
-#line 2490 "configure"
+#line 2565 "configure"
 #include "confdefs.h"
 
 template <class T> struct less { };
@@ -2503,7 +2578,7 @@ int main() {
 
 ; return 0; }
 EOF
-if { (eval echo configure:2507: \"$ac_compile\") 1>&5; (eval $ac_compile) 2>&5; }; then
+if { (eval echo configure:2582: \"$ac_compile\") 1>&5; (eval $ac_compile) 2>&5; }; then
   rm -rf conftest*
   
 echo "$ac_t"""yes"" 1>&6
@@ -2529,7 +2604,7 @@ fi
 
 
 echo $ac_n "checking whether the C++ compiler needs the SunPro class scope hack""... $ac_c" 1>&6
-echo "configure:2533: checking whether the C++ compiler needs the SunPro class scope hack" >&5
+echo "configure:2608: checking whether the C++ compiler needs the SunPro class scope hack" >&5
 
 ac_ext=C
 # CXXFLAGS is not in ac_cpp because -g, -O, etc. are not valid cpp options.
@@ -2545,7 +2620,7 @@ export CXXFLAGS
 
 
 cat > conftest.$ac_ext <<EOF
-#line 2549 "configure"
+#line 2624 "configure"
 #include "confdefs.h"
 
 template < class T > 
@@ -2581,7 +2656,7 @@ int main() {
 
 ; return 0; }
 EOF
-if { (eval echo configure:2585: \"$ac_compile\") 1>&5; (eval $ac_compile) 2>&5; }; then
+if { (eval echo configure:2660: \"$ac_compile\") 1>&5; (eval $ac_compile) 2>&5; }; then
   rm -rf conftest*
   
 VCL_SUNPRO_CLASS_SCOPE_HACK="/* , A */";
@@ -2603,7 +2678,7 @@ export VCL_SUNPRO_CLASS_SCOPE_HACK
 
 
 echo $ac_n "checking whether the C++ compiler has working exceptions""... $ac_c" 1>&6
-echo "configure:2607: checking whether the C++ compiler has working exceptions" >&5
+echo "configure:2682: checking whether the C++ compiler has working exceptions" >&5
 if eval "test \"`echo '$''{'ac_cxx_has_exceptions'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
 else
@@ -2623,7 +2698,7 @@ export CXXFLAGS
 
 
 cat > conftest.$ac_ext <<EOF
-#line 2627 "configure"
+#line 2702 "configure"
 #include "confdefs.h"
 
 
@@ -2664,7 +2739,7 @@ int main() {
 
 ; return 0; }
 EOF
-if { (eval echo configure:2668: \"$ac_compile\") 1>&5; (eval $ac_compile) 2>&5; }; then
+if { (eval echo configure:2743: \"$ac_compile\") 1>&5; (eval $ac_compile) 2>&5; }; then
   rm -rf conftest*
   ac_cxx_has_exceptions=yes
 else
@@ -2689,7 +2764,7 @@ export VCL_HAS_EXCEPTIONS
 
 
 echo $ac_n "checking whether the C++ compiler has working namespaces""... $ac_c" 1>&6
-echo "configure:2693: checking whether the C++ compiler has working namespaces" >&5
+echo "configure:2768: checking whether the C++ compiler has working namespaces" >&5
 if eval "test \"`echo '$''{'ac_cxx_has_namespaces'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
 else
@@ -2709,7 +2784,7 @@ export CXXFLAGS
 
 
 cat > conftest.$ac_ext <<EOF
-#line 2713 "configure"
+#line 2788 "configure"
 #include "confdefs.h"
 
 namespace foo {
@@ -2788,7 +2863,7 @@ int main() {
 
 ; return 0; }
 EOF
-if { (eval echo configure:2792: \"$ac_compile\") 1>&5; (eval $ac_compile) 2>&5; }; then
+if { (eval echo configure:2867: \"$ac_compile\") 1>&5; (eval $ac_compile) 2>&5; }; then
   rm -rf conftest*
   ac_cxx_has_namespaces=yes
 else
@@ -2813,7 +2888,7 @@ export VCL_HAS_NAMESPACES
 
 
 echo $ac_n "checking whether the C++ compiler allows std:: for the standard library""... $ac_c" 1>&6
-echo "configure:2817: checking whether the C++ compiler allows std:: for the standard library" >&5
+echo "configure:2892: checking whether the C++ compiler allows std:: for the standard library" >&5
 if eval "test \"`echo '$''{'ac_cxx_allows_namespace_std'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
 else
@@ -2833,7 +2908,7 @@ export CXXFLAGS
 
 
 cat > conftest.$ac_ext <<EOF
-#line 2837 "configure"
+#line 2912 "configure"
 #include "confdefs.h"
 
 #include <cmath>
@@ -2850,7 +2925,7 @@ int main() {
 
 ; return 0; }
 EOF
-if { (eval echo configure:2854: \"$ac_compile\") 1>&5; (eval $ac_compile) 2>&5; }; then
+if { (eval echo configure:2929: \"$ac_compile\") 1>&5; (eval $ac_compile) 2>&5; }; then
   rm -rf conftest*
   ac_cxx_allows_namespace_std=yes
 else
@@ -2876,7 +2951,7 @@ export VCL_ALLOWS_NAMESPACE_STD
 if test "$VCL_ALLOWS_NAMESPACE_STD" = "1"; then
 
 echo $ac_n "checking whether the C++ compiler needs std:: for the standard library""... $ac_c" 1>&6
-echo "configure:2880: checking whether the C++ compiler needs std:: for the standard library" >&5
+echo "configure:2955: checking whether the C++ compiler needs std:: for the standard library" >&5
 if eval "test \"`echo '$''{'ac_cxx_needs_namespace_std'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
 else
@@ -2896,7 +2971,7 @@ export CXXFLAGS
 
 
 cat > conftest.$ac_ext <<EOF
-#line 2900 "configure"
+#line 2975 "configure"
 #include "confdefs.h"
 
 #include <cmath>
@@ -2913,7 +2988,7 @@ int main() {
 
 ; return 0; }
 EOF
-if { (eval echo configure:2917: \"$ac_compile\") 1>&5; (eval $ac_compile) 2>&5; }; then
+if { (eval echo configure:2992: \"$ac_compile\") 1>&5; (eval $ac_compile) 2>&5; }; then
   rm -rf conftest*
   ac_cxx_needs_namespace_std=no
 else
@@ -2942,14 +3017,14 @@ fi
 
 ## architecture
 echo $ac_n "checking whether byte ordering is bigendian""... $ac_c" 1>&6
-echo "configure:2946: checking whether byte ordering is bigendian" >&5
+echo "configure:3021: checking whether byte ordering is bigendian" >&5
 if eval "test \"`echo '$''{'ac_cv_c_bigendian'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
 else
   ac_cv_c_bigendian=unknown
 # See if sys/param.h defines the BYTE_ORDER macro.
 cat > conftest.$ac_ext <<EOF
-#line 2953 "configure"
+#line 3028 "configure"
 #include "confdefs.h"
 #include <sys/types.h>
 #include <sys/param.h>
@@ -2960,11 +3035,11 @@ int main() {
 #endif
 ; return 0; }
 EOF
-if { (eval echo configure:2964: \"$ac_compile\") 1>&5; (eval $ac_compile) 2>&5; }; then
+if { (eval echo configure:3039: \"$ac_compile\") 1>&5; (eval $ac_compile) 2>&5; }; then
   rm -rf conftest*
   # It does; now see whether it defined to BIG_ENDIAN or not.
 cat > conftest.$ac_ext <<EOF
-#line 2968 "configure"
+#line 3043 "configure"
 #include "confdefs.h"
 #include <sys/types.h>
 #include <sys/param.h>
@@ -2975,7 +3050,7 @@ int main() {
 #endif
 ; return 0; }
 EOF
-if { (eval echo configure:2979: \"$ac_compile\") 1>&5; (eval $ac_compile) 2>&5; }; then
+if { (eval echo configure:3054: \"$ac_compile\") 1>&5; (eval $ac_compile) 2>&5; }; then
   rm -rf conftest*
   ac_cv_c_bigendian=yes
 else
@@ -2995,7 +3070,7 @@ if test "$cross_compiling" = yes; then
     { echo "configure: error: can not run test program while cross compiling" 1>&2; exit 1; }
 else
   cat > conftest.$ac_ext <<EOF
-#line 2999 "configure"
+#line 3074 "configure"
 #include "confdefs.h"
 #ifdef __cplusplus
 extern "C" void exit(int);
@@ -3011,7 +3086,7 @@ main () {
   exit (u.c[sizeof (long) - 1] == 1);
 }
 EOF
-if { (eval echo configure:3015: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest && (./conftest; exit) 2>/dev/null
+if { (eval echo configure:3090: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest && (./conftest; exit) 2>/dev/null
 then
   ac_cv_c_bigendian=no
 else
@@ -3060,17 +3135,17 @@ cross_compiling=$ac_cv_prog_cxx_cross
 
 ac_safe=`echo "cassert" | sed 'y%./+-%__p_%'`
 echo $ac_n "checking for cassert""... $ac_c" 1>&6
-echo "configure:3064: checking for cassert" >&5
+echo "configure:3139: checking for cassert" >&5
 if eval "test \"`echo '$''{'ac_cv_header_$ac_safe'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
 else
   cat > conftest.$ac_ext <<EOF
-#line 3069 "configure"
+#line 3144 "configure"
 #include "confdefs.h"
 #include <cassert>
 EOF
 ac_try="$ac_cpp conftest.$ac_ext >/dev/null 2>conftest.out"
-{ (eval echo configure:3074: \"$ac_try\") 1>&5; (eval $ac_try) 2>&5; }
+{ (eval echo configure:3149: \"$ac_try\") 1>&5; (eval $ac_try) 2>&5; }
 ac_err=`grep -v '^ *+' conftest.out`
 if test -z "$ac_err"; then
   rm -rf conftest*
@@ -3105,17 +3180,17 @@ cross_compiling=$ac_cv_prog_cxx_cross
 
 ac_safe=`echo "ciso646" | sed 'y%./+-%__p_%'`
 echo $ac_n "checking for ciso646""... $ac_c" 1>&6
-echo "configure:3109: checking for ciso646" >&5
+echo "configure:3184: checking for ciso646" >&5
 if eval "test \"`echo '$''{'ac_cv_header_$ac_safe'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
 else
   cat > conftest.$ac_ext <<EOF
-#line 3114 "configure"
+#line 3189 "configure"
 #include "confdefs.h"
 #include <ciso646>
 EOF
 ac_try="$ac_cpp conftest.$ac_ext >/dev/null 2>conftest.out"
-{ (eval echo configure:3119: \"$ac_try\") 1>&5; (eval $ac_try) 2>&5; }
+{ (eval echo configure:3194: \"$ac_try\") 1>&5; (eval $ac_try) 2>&5; }
 ac_err=`grep -v '^ *+' conftest.out`
 if test -z "$ac_err"; then
   rm -rf conftest*
@@ -3150,17 +3225,17 @@ cross_compiling=$ac_cv_prog_cxx_cross
 
 ac_safe=`echo "csetjmp" | sed 'y%./+-%__p_%'`
 echo $ac_n "checking for csetjmp""... $ac_c" 1>&6
-echo "configure:3154: checking for csetjmp" >&5
+echo "configure:3229: checking for csetjmp" >&5
 if eval "test \"`echo '$''{'ac_cv_header_$ac_safe'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
 else
   cat > conftest.$ac_ext <<EOF
-#line 3159 "configure"
+#line 3234 "configure"
 #include "confdefs.h"
 #include <csetjmp>
 EOF
 ac_try="$ac_cpp conftest.$ac_ext >/dev/null 2>conftest.out"
-{ (eval echo configure:3164: \"$ac_try\") 1>&5; (eval $ac_try) 2>&5; }
+{ (eval echo configure:3239: \"$ac_try\") 1>&5; (eval $ac_try) 2>&5; }
 ac_err=`grep -v '^ *+' conftest.out`
 if test -z "$ac_err"; then
   rm -rf conftest*
@@ -3195,17 +3270,17 @@ cross_compiling=$ac_cv_prog_cxx_cross
 
 ac_safe=`echo "cstdio" | sed 'y%./+-%__p_%'`
 echo $ac_n "checking for cstdio""... $ac_c" 1>&6
-echo "configure:3199: checking for cstdio" >&5
+echo "configure:3274: checking for cstdio" >&5
 if eval "test \"`echo '$''{'ac_cv_header_$ac_safe'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
 else
   cat > conftest.$ac_ext <<EOF
-#line 3204 "configure"
+#line 3279 "configure"
 #include "confdefs.h"
 #include <cstdio>
 EOF
 ac_try="$ac_cpp conftest.$ac_ext >/dev/null 2>conftest.out"
-{ (eval echo configure:3209: \"$ac_try\") 1>&5; (eval $ac_try) 2>&5; }
+{ (eval echo configure:3284: \"$ac_try\") 1>&5; (eval $ac_try) 2>&5; }
 ac_err=`grep -v '^ *+' conftest.out`
 if test -z "$ac_err"; then
   rm -rf conftest*
@@ -3240,17 +3315,17 @@ cross_compiling=$ac_cv_prog_cxx_cross
 
 ac_safe=`echo "ctime" | sed 'y%./+-%__p_%'`
 echo $ac_n "checking for ctime""... $ac_c" 1>&6
-echo "configure:3244: checking for ctime" >&5
+echo "configure:3319: checking for ctime" >&5
 if eval "test \"`echo '$''{'ac_cv_header_$ac_safe'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
 else
   cat > conftest.$ac_ext <<EOF
-#line 3249 "configure"
+#line 3324 "configure"
 #include "confdefs.h"
 #include <ctime>
 EOF
 ac_try="$ac_cpp conftest.$ac_ext >/dev/null 2>conftest.out"
-{ (eval echo configure:3254: \"$ac_try\") 1>&5; (eval $ac_try) 2>&5; }
+{ (eval echo configure:3329: \"$ac_try\") 1>&5; (eval $ac_try) 2>&5; }
 ac_err=`grep -v '^ *+' conftest.out`
 if test -z "$ac_err"; then
   rm -rf conftest*
@@ -3285,17 +3360,17 @@ cross_compiling=$ac_cv_prog_cxx_cross
 
 ac_safe=`echo "cctype" | sed 'y%./+-%__p_%'`
 echo $ac_n "checking for cctype""... $ac_c" 1>&6
-echo "configure:3289: checking for cctype" >&5
+echo "configure:3364: checking for cctype" >&5
 if eval "test \"`echo '$''{'ac_cv_header_$ac_safe'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
 else
   cat > conftest.$ac_ext <<EOF
-#line 3294 "configure"
+#line 3369 "configure"
 #include "confdefs.h"
 #include <cctype>
 EOF
 ac_try="$ac_cpp conftest.$ac_ext >/dev/null 2>conftest.out"
-{ (eval echo configure:3299: \"$ac_try\") 1>&5; (eval $ac_try) 2>&5; }
+{ (eval echo configure:3374: \"$ac_try\") 1>&5; (eval $ac_try) 2>&5; }
 ac_err=`grep -v '^ *+' conftest.out`
 if test -z "$ac_err"; then
   rm -rf conftest*
@@ -3330,17 +3405,17 @@ cross_compiling=$ac_cv_prog_cxx_cross
 
 ac_safe=`echo "climits" | sed 'y%./+-%__p_%'`
 echo $ac_n "checking for climits""... $ac_c" 1>&6
-echo "configure:3334: checking for climits" >&5
+echo "configure:3409: checking for climits" >&5
 if eval "test \"`echo '$''{'ac_cv_header_$ac_safe'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
 else
   cat > conftest.$ac_ext <<EOF
-#line 3339 "configure"
+#line 3414 "configure"
 #include "confdefs.h"
 #include <climits>
 EOF
 ac_try="$ac_cpp conftest.$ac_ext >/dev/null 2>conftest.out"
-{ (eval echo configure:3344: \"$ac_try\") 1>&5; (eval $ac_try) 2>&5; }
+{ (eval echo configure:3419: \"$ac_try\") 1>&5; (eval $ac_try) 2>&5; }
 ac_err=`grep -v '^ *+' conftest.out`
 if test -z "$ac_err"; then
   rm -rf conftest*
@@ -3375,17 +3450,17 @@ cross_compiling=$ac_cv_prog_cxx_cross
 
 ac_safe=`echo "csignal" | sed 'y%./+-%__p_%'`
 echo $ac_n "checking for csignal""... $ac_c" 1>&6
-echo "configure:3379: checking for csignal" >&5
+echo "configure:3454: checking for csignal" >&5
 if eval "test \"`echo '$''{'ac_cv_header_$ac_safe'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
 else
   cat > conftest.$ac_ext <<EOF
-#line 3384 "configure"
+#line 3459 "configure"
 #include "confdefs.h"
 #include <csignal>
 EOF
 ac_try="$ac_cpp conftest.$ac_ext >/dev/null 2>conftest.out"
-{ (eval echo configure:3389: \"$ac_try\") 1>&5; (eval $ac_try) 2>&5; }
+{ (eval echo configure:3464: \"$ac_try\") 1>&5; (eval $ac_try) 2>&5; }
 ac_err=`grep -v '^ *+' conftest.out`
 if test -z "$ac_err"; then
   rm -rf conftest*
@@ -3420,17 +3495,17 @@ cross_compiling=$ac_cv_prog_cxx_cross
 
 ac_safe=`echo "cstdlib" | sed 'y%./+-%__p_%'`
 echo $ac_n "checking for cstdlib""... $ac_c" 1>&6
-echo "configure:3424: checking for cstdlib" >&5
+echo "configure:3499: checking for cstdlib" >&5
 if eval "test \"`echo '$''{'ac_cv_header_$ac_safe'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
 else
   cat > conftest.$ac_ext <<EOF
-#line 3429 "configure"
+#line 3504 "configure"
 #include "confdefs.h"
 #include <cstdlib>
 EOF
 ac_try="$ac_cpp conftest.$ac_ext >/dev/null 2>conftest.out"
-{ (eval echo configure:3434: \"$ac_try\") 1>&5; (eval $ac_try) 2>&5; }
+{ (eval echo configure:3509: \"$ac_try\") 1>&5; (eval $ac_try) 2>&5; }
 ac_err=`grep -v '^ *+' conftest.out`
 if test -z "$ac_err"; then
   rm -rf conftest*
@@ -3465,17 +3540,17 @@ cross_compiling=$ac_cv_prog_cxx_cross
 
 ac_safe=`echo "cwchar" | sed 'y%./+-%__p_%'`
 echo $ac_n "checking for cwchar""... $ac_c" 1>&6
-echo "configure:3469: checking for cwchar" >&5
+echo "configure:3544: checking for cwchar" >&5
 if eval "test \"`echo '$''{'ac_cv_header_$ac_safe'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
 else
   cat > conftest.$ac_ext <<EOF
-#line 3474 "configure"
+#line 3549 "configure"
 #include "confdefs.h"
 #include <cwchar>
 EOF
 ac_try="$ac_cpp conftest.$ac_ext >/dev/null 2>conftest.out"
-{ (eval echo configure:3479: \"$ac_try\") 1>&5; (eval $ac_try) 2>&5; }
+{ (eval echo configure:3554: \"$ac_try\") 1>&5; (eval $ac_try) 2>&5; }
 ac_err=`grep -v '^ *+' conftest.out`
 if test -z "$ac_err"; then
   rm -rf conftest*
@@ -3510,17 +3585,17 @@ cross_compiling=$ac_cv_prog_cxx_cross
 
 ac_safe=`echo "cerrno" | sed 'y%./+-%__p_%'`
 echo $ac_n "checking for cerrno""... $ac_c" 1>&6
-echo "configure:3514: checking for cerrno" >&5
+echo "configure:3589: checking for cerrno" >&5
 if eval "test \"`echo '$''{'ac_cv_header_$ac_safe'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
 else
   cat > conftest.$ac_ext <<EOF
-#line 3519 "configure"
+#line 3594 "configure"
 #include "confdefs.h"
 #include <cerrno>
 EOF
 ac_try="$ac_cpp conftest.$ac_ext >/dev/null 2>conftest.out"
-{ (eval echo configure:3524: \"$ac_try\") 1>&5; (eval $ac_try) 2>&5; }
+{ (eval echo configure:3599: \"$ac_try\") 1>&5; (eval $ac_try) 2>&5; }
 ac_err=`grep -v '^ *+' conftest.out`
 if test -z "$ac_err"; then
   rm -rf conftest*
@@ -3555,17 +3630,17 @@ cross_compiling=$ac_cv_prog_cxx_cross
 
 ac_safe=`echo "clocale" | sed 'y%./+-%__p_%'`
 echo $ac_n "checking for clocale""... $ac_c" 1>&6
-echo "configure:3559: checking for clocale" >&5
+echo "configure:3634: checking for clocale" >&5
 if eval "test \"`echo '$''{'ac_cv_header_$ac_safe'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
 else
   cat > conftest.$ac_ext <<EOF
-#line 3564 "configure"
+#line 3639 "configure"
 #include "confdefs.h"
 #include <clocale>
 EOF
 ac_try="$ac_cpp conftest.$ac_ext >/dev/null 2>conftest.out"
-{ (eval echo configure:3569: \"$ac_try\") 1>&5; (eval $ac_try) 2>&5; }
+{ (eval echo configure:3644: \"$ac_try\") 1>&5; (eval $ac_try) 2>&5; }
 ac_err=`grep -v '^ *+' conftest.out`
 if test -z "$ac_err"; then
   rm -rf conftest*
@@ -3600,17 +3675,17 @@ cross_compiling=$ac_cv_prog_cxx_cross
 
 ac_safe=`echo "cstdarg" | sed 'y%./+-%__p_%'`
 echo $ac_n "checking for cstdarg""... $ac_c" 1>&6
-echo "configure:3604: checking for cstdarg" >&5
+echo "configure:3679: checking for cstdarg" >&5
 if eval "test \"`echo '$''{'ac_cv_header_$ac_safe'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
 else
   cat > conftest.$ac_ext <<EOF
-#line 3609 "configure"
+#line 3684 "configure"
 #include "confdefs.h"
 #include <cstdarg>
 EOF
 ac_try="$ac_cpp conftest.$ac_ext >/dev/null 2>conftest.out"
-{ (eval echo configure:3614: \"$ac_try\") 1>&5; (eval $ac_try) 2>&5; }
+{ (eval echo configure:3689: \"$ac_try\") 1>&5; (eval $ac_try) 2>&5; }
 ac_err=`grep -v '^ *+' conftest.out`
 if test -z "$ac_err"; then
   rm -rf conftest*
@@ -3645,17 +3720,17 @@ cross_compiling=$ac_cv_prog_cxx_cross
 
 ac_safe=`echo "cstring" | sed 'y%./+-%__p_%'`
 echo $ac_n "checking for cstring""... $ac_c" 1>&6
-echo "configure:3649: checking for cstring" >&5
+echo "configure:3724: checking for cstring" >&5
 if eval "test \"`echo '$''{'ac_cv_header_$ac_safe'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
 else
   cat > conftest.$ac_ext <<EOF
-#line 3654 "configure"
+#line 3729 "configure"
 #include "confdefs.h"
 #include <cstring>
 EOF
 ac_try="$ac_cpp conftest.$ac_ext >/dev/null 2>conftest.out"
-{ (eval echo configure:3659: \"$ac_try\") 1>&5; (eval $ac_try) 2>&5; }
+{ (eval echo configure:3734: \"$ac_try\") 1>&5; (eval $ac_try) 2>&5; }
 ac_err=`grep -v '^ *+' conftest.out`
 if test -z "$ac_err"; then
   rm -rf conftest*
@@ -3690,17 +3765,17 @@ cross_compiling=$ac_cv_prog_cxx_cross
 
 ac_safe=`echo "cwctype" | sed 'y%./+-%__p_%'`
 echo $ac_n "checking for cwctype""... $ac_c" 1>&6
-echo "configure:3694: checking for cwctype" >&5
+echo "configure:3769: checking for cwctype" >&5
 if eval "test \"`echo '$''{'ac_cv_header_$ac_safe'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
 else
   cat > conftest.$ac_ext <<EOF
-#line 3699 "configure"
+#line 3774 "configure"
 #include "confdefs.h"
 #include <cwctype>
 EOF
 ac_try="$ac_cpp conftest.$ac_ext >/dev/null 2>conftest.out"
-{ (eval echo configure:3704: \"$ac_try\") 1>&5; (eval $ac_try) 2>&5; }
+{ (eval echo configure:3779: \"$ac_try\") 1>&5; (eval $ac_try) 2>&5; }
 ac_err=`grep -v '^ *+' conftest.out`
 if test -z "$ac_err"; then
   rm -rf conftest*
@@ -3735,17 +3810,17 @@ cross_compiling=$ac_cv_prog_cxx_cross
 
 ac_safe=`echo "cfloat" | sed 'y%./+-%__p_%'`
 echo $ac_n "checking for cfloat""... $ac_c" 1>&6
-echo "configure:3739: checking for cfloat" >&5
+echo "configure:3814: checking for cfloat" >&5
 if eval "test \"`echo '$''{'ac_cv_header_$ac_safe'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
 else
   cat > conftest.$ac_ext <<EOF
-#line 3744 "configure"
+#line 3819 "configure"
 #include "confdefs.h"
 #include <cfloat>
 EOF
 ac_try="$ac_cpp conftest.$ac_ext >/dev/null 2>conftest.out"
-{ (eval echo configure:3749: \"$ac_try\") 1>&5; (eval $ac_try) 2>&5; }
+{ (eval echo configure:3824: \"$ac_try\") 1>&5; (eval $ac_try) 2>&5; }
 ac_err=`grep -v '^ *+' conftest.out`
 if test -z "$ac_err"; then
   rm -rf conftest*
@@ -3780,17 +3855,17 @@ cross_compiling=$ac_cv_prog_cxx_cross
 
 ac_safe=`echo "cmath" | sed 'y%./+-%__p_%'`
 echo $ac_n "checking for cmath""... $ac_c" 1>&6
-echo "configure:3784: checking for cmath" >&5
+echo "configure:3859: checking for cmath" >&5
 if eval "test \"`echo '$''{'ac_cv_header_$ac_safe'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
 else
   cat > conftest.$ac_ext <<EOF
-#line 3789 "configure"
+#line 3864 "configure"
 #include "confdefs.h"
 #include <cmath>
 EOF
 ac_try="$ac_cpp conftest.$ac_ext >/dev/null 2>conftest.out"
-{ (eval echo configure:3794: \"$ac_try\") 1>&5; (eval $ac_try) 2>&5; }
+{ (eval echo configure:3869: \"$ac_try\") 1>&5; (eval $ac_try) 2>&5; }
 ac_err=`grep -v '^ *+' conftest.out`
 if test -z "$ac_err"; then
   rm -rf conftest*
@@ -3825,17 +3900,17 @@ cross_compiling=$ac_cv_prog_cxx_cross
 
 ac_safe=`echo "cstddef" | sed 'y%./+-%__p_%'`
 echo $ac_n "checking for cstddef""... $ac_c" 1>&6
-echo "configure:3829: checking for cstddef" >&5
+echo "configure:3904: checking for cstddef" >&5
 if eval "test \"`echo '$''{'ac_cv_header_$ac_safe'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
 else
   cat > conftest.$ac_ext <<EOF
-#line 3834 "configure"
+#line 3909 "configure"
 #include "confdefs.h"
 #include <cstddef>
 EOF
 ac_try="$ac_cpp conftest.$ac_ext >/dev/null 2>conftest.out"
-{ (eval echo configure:3839: \"$ac_try\") 1>&5; (eval $ac_try) 2>&5; }
+{ (eval echo configure:3914: \"$ac_try\") 1>&5; (eval $ac_try) 2>&5; }
 ac_err=`grep -v '^ *+' conftest.out`
 if test -z "$ac_err"; then
   rm -rf conftest*
@@ -3870,17 +3945,17 @@ cross_compiling=$ac_cv_prog_cxx_cross
 
 ac_safe=`echo "algorithm" | sed 'y%./+-%__p_%'`
 echo $ac_n "checking for algorithm""... $ac_c" 1>&6
-echo "configure:3874: checking for algorithm" >&5
+echo "configure:3949: checking for algorithm" >&5
 if eval "test \"`echo '$''{'ac_cv_header_$ac_safe'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
 else
   cat > conftest.$ac_ext <<EOF
-#line 3879 "configure"
+#line 3954 "configure"
 #include "confdefs.h"
 #include <algorithm>
 EOF
 ac_try="$ac_cpp conftest.$ac_ext >/dev/null 2>conftest.out"
-{ (eval echo configure:3884: \"$ac_try\") 1>&5; (eval $ac_try) 2>&5; }
+{ (eval echo configure:3959: \"$ac_try\") 1>&5; (eval $ac_try) 2>&5; }
 ac_err=`grep -v '^ *+' conftest.out`
 if test -z "$ac_err"; then
   rm -rf conftest*
@@ -3915,17 +3990,17 @@ cross_compiling=$ac_cv_prog_cxx_cross
 
 ac_safe=`echo "iomanip" | sed 'y%./+-%__p_%'`
 echo $ac_n "checking for iomanip""... $ac_c" 1>&6
-echo "configure:3919: checking for iomanip" >&5
+echo "configure:3994: checking for iomanip" >&5
 if eval "test \"`echo '$''{'ac_cv_header_$ac_safe'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
 else
   cat > conftest.$ac_ext <<EOF
-#line 3924 "configure"
+#line 3999 "configure"
 #include "confdefs.h"
 #include <iomanip>
 EOF
 ac_try="$ac_cpp conftest.$ac_ext >/dev/null 2>conftest.out"
-{ (eval echo configure:3929: \"$ac_try\") 1>&5; (eval $ac_try) 2>&5; }
+{ (eval echo configure:4004: \"$ac_try\") 1>&5; (eval $ac_try) 2>&5; }
 ac_err=`grep -v '^ *+' conftest.out`
 if test -z "$ac_err"; then
   rm -rf conftest*
@@ -3960,17 +4035,17 @@ cross_compiling=$ac_cv_prog_cxx_cross
 
 ac_safe=`echo "list" | sed 'y%./+-%__p_%'`
 echo $ac_n "checking for list""... $ac_c" 1>&6
-echo "configure:3964: checking for list" >&5
+echo "configure:4039: checking for list" >&5
 if eval "test \"`echo '$''{'ac_cv_header_$ac_safe'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
 else
   cat > conftest.$ac_ext <<EOF
-#line 3969 "configure"
+#line 4044 "configure"
 #include "confdefs.h"
 #include <list>
 EOF
 ac_try="$ac_cpp conftest.$ac_ext >/dev/null 2>conftest.out"
-{ (eval echo configure:3974: \"$ac_try\") 1>&5; (eval $ac_try) 2>&5; }
+{ (eval echo configure:4049: \"$ac_try\") 1>&5; (eval $ac_try) 2>&5; }
 ac_err=`grep -v '^ *+' conftest.out`
 if test -z "$ac_err"; then
   rm -rf conftest*
@@ -4005,17 +4080,17 @@ cross_compiling=$ac_cv_prog_cxx_cross
 
 ac_safe=`echo "ostream" | sed 'y%./+-%__p_%'`
 echo $ac_n "checking for ostream""... $ac_c" 1>&6
-echo "configure:4009: checking for ostream" >&5
+echo "configure:4084: checking for ostream" >&5
 if eval "test \"`echo '$''{'ac_cv_header_$ac_safe'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
 else
   cat > conftest.$ac_ext <<EOF
-#line 4014 "configure"
+#line 4089 "configure"
 #include "confdefs.h"
 #include <ostream>
 EOF
 ac_try="$ac_cpp conftest.$ac_ext >/dev/null 2>conftest.out"
-{ (eval echo configure:4019: \"$ac_try\") 1>&5; (eval $ac_try) 2>&5; }
+{ (eval echo configure:4094: \"$ac_try\") 1>&5; (eval $ac_try) 2>&5; }
 ac_err=`grep -v '^ *+' conftest.out`
 if test -z "$ac_err"; then
   rm -rf conftest*
@@ -4050,17 +4125,17 @@ cross_compiling=$ac_cv_prog_cxx_cross
 
 ac_safe=`echo "streambuf" | sed 'y%./+-%__p_%'`
 echo $ac_n "checking for streambuf""... $ac_c" 1>&6
-echo "configure:4054: checking for streambuf" >&5
+echo "configure:4129: checking for streambuf" >&5
 if eval "test \"`echo '$''{'ac_cv_header_$ac_safe'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
 else
   cat > conftest.$ac_ext <<EOF
-#line 4059 "configure"
+#line 4134 "configure"
 #include "confdefs.h"
 #include <streambuf>
 EOF
 ac_try="$ac_cpp conftest.$ac_ext >/dev/null 2>conftest.out"
-{ (eval echo configure:4064: \"$ac_try\") 1>&5; (eval $ac_try) 2>&5; }
+{ (eval echo configure:4139: \"$ac_try\") 1>&5; (eval $ac_try) 2>&5; }
 ac_err=`grep -v '^ *+' conftest.out`
 if test -z "$ac_err"; then
   rm -rf conftest*
@@ -4095,17 +4170,17 @@ cross_compiling=$ac_cv_prog_cxx_cross
 
 ac_safe=`echo "bitset" | sed 'y%./+-%__p_%'`
 echo $ac_n "checking for bitset""... $ac_c" 1>&6
-echo "configure:4099: checking for bitset" >&5
+echo "configure:4174: checking for bitset" >&5
 if eval "test \"`echo '$''{'ac_cv_header_$ac_safe'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
 else
   cat > conftest.$ac_ext <<EOF
-#line 4104 "configure"
+#line 4179 "configure"
 #include "confdefs.h"
 #include <bitset>
 EOF
 ac_try="$ac_cpp conftest.$ac_ext >/dev/null 2>conftest.out"
-{ (eval echo configure:4109: \"$ac_try\") 1>&5; (eval $ac_try) 2>&5; }
+{ (eval echo configure:4184: \"$ac_try\") 1>&5; (eval $ac_try) 2>&5; }
 ac_err=`grep -v '^ *+' conftest.out`
 if test -z "$ac_err"; then
   rm -rf conftest*
@@ -4140,17 +4215,17 @@ cross_compiling=$ac_cv_prog_cxx_cross
 
 ac_safe=`echo "ios" | sed 'y%./+-%__p_%'`
 echo $ac_n "checking for ios""... $ac_c" 1>&6
-echo "configure:4144: checking for ios" >&5
+echo "configure:4219: checking for ios" >&5
 if eval "test \"`echo '$''{'ac_cv_header_$ac_safe'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
 else
   cat > conftest.$ac_ext <<EOF
-#line 4149 "configure"
+#line 4224 "configure"
 #include "confdefs.h"
 #include <ios>
 EOF
 ac_try="$ac_cpp conftest.$ac_ext >/dev/null 2>conftest.out"
-{ (eval echo configure:4154: \"$ac_try\") 1>&5; (eval $ac_try) 2>&5; }
+{ (eval echo configure:4229: \"$ac_try\") 1>&5; (eval $ac_try) 2>&5; }
 ac_err=`grep -v '^ *+' conftest.out`
 if test -z "$ac_err"; then
   rm -rf conftest*
@@ -4185,17 +4260,17 @@ cross_compiling=$ac_cv_prog_cxx_cross
 
 ac_safe=`echo "locale" | sed 'y%./+-%__p_%'`
 echo $ac_n "checking for locale""... $ac_c" 1>&6
-echo "configure:4189: checking for locale" >&5
+echo "configure:4264: checking for locale" >&5
 if eval "test \"`echo '$''{'ac_cv_header_$ac_safe'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
 else
   cat > conftest.$ac_ext <<EOF
-#line 4194 "configure"
+#line 4269 "configure"
 #include "confdefs.h"
 #include <locale>
 EOF
 ac_try="$ac_cpp conftest.$ac_ext >/dev/null 2>conftest.out"
-{ (eval echo configure:4199: \"$ac_try\") 1>&5; (eval $ac_try) 2>&5; }
+{ (eval echo configure:4274: \"$ac_try\") 1>&5; (eval $ac_try) 2>&5; }
 ac_err=`grep -v '^ *+' conftest.out`
 if test -z "$ac_err"; then
   rm -rf conftest*
@@ -4230,17 +4305,17 @@ cross_compiling=$ac_cv_prog_cxx_cross
 
 ac_safe=`echo "queue" | sed 'y%./+-%__p_%'`
 echo $ac_n "checking for queue""... $ac_c" 1>&6
-echo "configure:4234: checking for queue" >&5
+echo "configure:4309: checking for queue" >&5
 if eval "test \"`echo '$''{'ac_cv_header_$ac_safe'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
 else
   cat > conftest.$ac_ext <<EOF
-#line 4239 "configure"
+#line 4314 "configure"
 #include "confdefs.h"
 #include <queue>
 EOF
 ac_try="$ac_cpp conftest.$ac_ext >/dev/null 2>conftest.out"
-{ (eval echo configure:4244: \"$ac_try\") 1>&5; (eval $ac_try) 2>&5; }
+{ (eval echo configure:4319: \"$ac_try\") 1>&5; (eval $ac_try) 2>&5; }
 ac_err=`grep -v '^ *+' conftest.out`
 if test -z "$ac_err"; then
   rm -rf conftest*
@@ -4275,17 +4350,17 @@ cross_compiling=$ac_cv_prog_cxx_cross
 
 ac_safe=`echo "string" | sed 'y%./+-%__p_%'`
 echo $ac_n "checking for string""... $ac_c" 1>&6
-echo "configure:4279: checking for string" >&5
+echo "configure:4354: checking for string" >&5
 if eval "test \"`echo '$''{'ac_cv_header_$ac_safe'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
 else
   cat > conftest.$ac_ext <<EOF
-#line 4284 "configure"
+#line 4359 "configure"
 #include "confdefs.h"
 #include <string>
 EOF
 ac_try="$ac_cpp conftest.$ac_ext >/dev/null 2>conftest.out"
-{ (eval echo configure:4289: \"$ac_try\") 1>&5; (eval $ac_try) 2>&5; }
+{ (eval echo configure:4364: \"$ac_try\") 1>&5; (eval $ac_try) 2>&5; }
 ac_err=`grep -v '^ *+' conftest.out`
 if test -z "$ac_err"; then
   rm -rf conftest*
@@ -4320,17 +4395,17 @@ cross_compiling=$ac_cv_prog_cxx_cross
 
 ac_safe=`echo "complex" | sed 'y%./+-%__p_%'`
 echo $ac_n "checking for complex""... $ac_c" 1>&6
-echo "configure:4324: checking for complex" >&5
+echo "configure:4399: checking for complex" >&5
 if eval "test \"`echo '$''{'ac_cv_header_$ac_safe'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
 else
   cat > conftest.$ac_ext <<EOF
-#line 4329 "configure"
+#line 4404 "configure"
 #include "confdefs.h"
 #include <complex>
 EOF
 ac_try="$ac_cpp conftest.$ac_ext >/dev/null 2>conftest.out"
-{ (eval echo configure:4334: \"$ac_try\") 1>&5; (eval $ac_try) 2>&5; }
+{ (eval echo configure:4409: \"$ac_try\") 1>&5; (eval $ac_try) 2>&5; }
 ac_err=`grep -v '^ *+' conftest.out`
 if test -z "$ac_err"; then
   rm -rf conftest*
@@ -4365,17 +4440,17 @@ cross_compiling=$ac_cv_prog_cxx_cross
 
 ac_safe=`echo "iosfwd" | sed 'y%./+-%__p_%'`
 echo $ac_n "checking for iosfwd""... $ac_c" 1>&6
-echo "configure:4369: checking for iosfwd" >&5
+echo "configure:4444: checking for iosfwd" >&5
 if eval "test \"`echo '$''{'ac_cv_header_$ac_safe'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
 else
   cat > conftest.$ac_ext <<EOF
-#line 4374 "configure"
+#line 4449 "configure"
 #include "confdefs.h"
 #include <iosfwd>
 EOF
 ac_try="$ac_cpp conftest.$ac_ext >/dev/null 2>conftest.out"
-{ (eval echo configure:4379: \"$ac_try\") 1>&5; (eval $ac_try) 2>&5; }
+{ (eval echo configure:4454: \"$ac_try\") 1>&5; (eval $ac_try) 2>&5; }
 ac_err=`grep -v '^ *+' conftest.out`
 if test -z "$ac_err"; then
   rm -rf conftest*
@@ -4410,17 +4485,17 @@ cross_compiling=$ac_cv_prog_cxx_cross
 
 ac_safe=`echo "map" | sed 'y%./+-%__p_%'`
 echo $ac_n "checking for map""... $ac_c" 1>&6
-echo "configure:4414: checking for map" >&5
+echo "configure:4489: checking for map" >&5
 if eval "test \"`echo '$''{'ac_cv_header_$ac_safe'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
 else
   cat > conftest.$ac_ext <<EOF
-#line 4419 "configure"
+#line 4494 "configure"
 #include "confdefs.h"
 #include <map>
 EOF
 ac_try="$ac_cpp conftest.$ac_ext >/dev/null 2>conftest.out"
-{ (eval echo configure:4424: \"$ac_try\") 1>&5; (eval $ac_try) 2>&5; }
+{ (eval echo configure:4499: \"$ac_try\") 1>&5; (eval $ac_try) 2>&5; }
 ac_err=`grep -v '^ *+' conftest.out`
 if test -z "$ac_err"; then
   rm -rf conftest*
@@ -4455,17 +4530,17 @@ cross_compiling=$ac_cv_prog_cxx_cross
 
 ac_safe=`echo "set" | sed 'y%./+-%__p_%'`
 echo $ac_n "checking for set""... $ac_c" 1>&6
-echo "configure:4459: checking for set" >&5
+echo "configure:4534: checking for set" >&5
 if eval "test \"`echo '$''{'ac_cv_header_$ac_safe'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
 else
   cat > conftest.$ac_ext <<EOF
-#line 4464 "configure"
+#line 4539 "configure"
 #include "confdefs.h"
 #include <set>
 EOF
 ac_try="$ac_cpp conftest.$ac_ext >/dev/null 2>conftest.out"
-{ (eval echo configure:4469: \"$ac_try\") 1>&5; (eval $ac_try) 2>&5; }
+{ (eval echo configure:4544: \"$ac_try\") 1>&5; (eval $ac_try) 2>&5; }
 ac_err=`grep -v '^ *+' conftest.out`
 if test -z "$ac_err"; then
   rm -rf conftest*
@@ -4500,17 +4575,17 @@ cross_compiling=$ac_cv_prog_cxx_cross
 
 ac_safe=`echo "typeinfo" | sed 'y%./+-%__p_%'`
 echo $ac_n "checking for typeinfo""... $ac_c" 1>&6
-echo "configure:4504: checking for typeinfo" >&5
+echo "configure:4579: checking for typeinfo" >&5
 if eval "test \"`echo '$''{'ac_cv_header_$ac_safe'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
 else
   cat > conftest.$ac_ext <<EOF
-#line 4509 "configure"
+#line 4584 "configure"
 #include "confdefs.h"
 #include <typeinfo>
 EOF
 ac_try="$ac_cpp conftest.$ac_ext >/dev/null 2>conftest.out"
-{ (eval echo configure:4514: \"$ac_try\") 1>&5; (eval $ac_try) 2>&5; }
+{ (eval echo configure:4589: \"$ac_try\") 1>&5; (eval $ac_try) 2>&5; }
 ac_err=`grep -v '^ *+' conftest.out`
 if test -z "$ac_err"; then
   rm -rf conftest*
@@ -4545,17 +4620,17 @@ cross_compiling=$ac_cv_prog_cxx_cross
 
 ac_safe=`echo "deque" | sed 'y%./+-%__p_%'`
 echo $ac_n "checking for deque""... $ac_c" 1>&6
-echo "configure:4549: checking for deque" >&5
+echo "configure:4624: checking for deque" >&5
 if eval "test \"`echo '$''{'ac_cv_header_$ac_safe'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
 else
   cat > conftest.$ac_ext <<EOF
-#line 4554 "configure"
+#line 4629 "configure"
 #include "confdefs.h"
 #include <deque>
 EOF
 ac_try="$ac_cpp conftest.$ac_ext >/dev/null 2>conftest.out"
-{ (eval echo configure:4559: \"$ac_try\") 1>&5; (eval $ac_try) 2>&5; }
+{ (eval echo configure:4634: \"$ac_try\") 1>&5; (eval $ac_try) 2>&5; }
 ac_err=`grep -v '^ *+' conftest.out`
 if test -z "$ac_err"; then
   rm -rf conftest*
@@ -4590,17 +4665,17 @@ cross_compiling=$ac_cv_prog_cxx_cross
 
 ac_safe=`echo "iostream" | sed 'y%./+-%__p_%'`
 echo $ac_n "checking for iostream""... $ac_c" 1>&6
-echo "configure:4594: checking for iostream" >&5
+echo "configure:4669: checking for iostream" >&5
 if eval "test \"`echo '$''{'ac_cv_header_$ac_safe'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
 else
   cat > conftest.$ac_ext <<EOF
-#line 4599 "configure"
+#line 4674 "configure"
 #include "confdefs.h"
 #include <iostream>
 EOF
 ac_try="$ac_cpp conftest.$ac_ext >/dev/null 2>conftest.out"
-{ (eval echo configure:4604: \"$ac_try\") 1>&5; (eval $ac_try) 2>&5; }
+{ (eval echo configure:4679: \"$ac_try\") 1>&5; (eval $ac_try) 2>&5; }
 ac_err=`grep -v '^ *+' conftest.out`
 if test -z "$ac_err"; then
   rm -rf conftest*
@@ -4635,17 +4710,17 @@ cross_compiling=$ac_cv_prog_cxx_cross
 
 ac_safe=`echo "memory" | sed 'y%./+-%__p_%'`
 echo $ac_n "checking for memory""... $ac_c" 1>&6
-echo "configure:4639: checking for memory" >&5
+echo "configure:4714: checking for memory" >&5
 if eval "test \"`echo '$''{'ac_cv_header_$ac_safe'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
 else
   cat > conftest.$ac_ext <<EOF
-#line 4644 "configure"
+#line 4719 "configure"
 #include "confdefs.h"
 #include <memory>
 EOF
 ac_try="$ac_cpp conftest.$ac_ext >/dev/null 2>conftest.out"
-{ (eval echo configure:4649: \"$ac_try\") 1>&5; (eval $ac_try) 2>&5; }
+{ (eval echo configure:4724: \"$ac_try\") 1>&5; (eval $ac_try) 2>&5; }
 ac_err=`grep -v '^ *+' conftest.out`
 if test -z "$ac_err"; then
   rm -rf conftest*
@@ -4680,17 +4755,17 @@ cross_compiling=$ac_cv_prog_cxx_cross
 
 ac_safe=`echo "sstream" | sed 'y%./+-%__p_%'`
 echo $ac_n "checking for sstream""... $ac_c" 1>&6
-echo "configure:4684: checking for sstream" >&5
+echo "configure:4759: checking for sstream" >&5
 if eval "test \"`echo '$''{'ac_cv_header_$ac_safe'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
 else
   cat > conftest.$ac_ext <<EOF
-#line 4689 "configure"
+#line 4764 "configure"
 #include "confdefs.h"
 #include <sstream>
 EOF
 ac_try="$ac_cpp conftest.$ac_ext >/dev/null 2>conftest.out"
-{ (eval echo configure:4694: \"$ac_try\") 1>&5; (eval $ac_try) 2>&5; }
+{ (eval echo configure:4769: \"$ac_try\") 1>&5; (eval $ac_try) 2>&5; }
 ac_err=`grep -v '^ *+' conftest.out`
 if test -z "$ac_err"; then
   rm -rf conftest*
@@ -4725,17 +4800,17 @@ cross_compiling=$ac_cv_prog_cxx_cross
 
 ac_safe=`echo "utility" | sed 'y%./+-%__p_%'`
 echo $ac_n "checking for utility""... $ac_c" 1>&6
-echo "configure:4729: checking for utility" >&5
+echo "configure:4804: checking for utility" >&5
 if eval "test \"`echo '$''{'ac_cv_header_$ac_safe'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
 else
   cat > conftest.$ac_ext <<EOF
-#line 4734 "configure"
+#line 4809 "configure"
 #include "confdefs.h"
 #include <utility>
 EOF
 ac_try="$ac_cpp conftest.$ac_ext >/dev/null 2>conftest.out"
-{ (eval echo configure:4739: \"$ac_try\") 1>&5; (eval $ac_try) 2>&5; }
+{ (eval echo configure:4814: \"$ac_try\") 1>&5; (eval $ac_try) 2>&5; }
 ac_err=`grep -v '^ *+' conftest.out`
 if test -z "$ac_err"; then
   rm -rf conftest*
@@ -4770,17 +4845,17 @@ cross_compiling=$ac_cv_prog_cxx_cross
 
 ac_safe=`echo "exception" | sed 'y%./+-%__p_%'`
 echo $ac_n "checking for exception""... $ac_c" 1>&6
-echo "configure:4774: checking for exception" >&5
+echo "configure:4849: checking for exception" >&5
 if eval "test \"`echo '$''{'ac_cv_header_$ac_safe'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
 else
   cat > conftest.$ac_ext <<EOF
-#line 4779 "configure"
+#line 4854 "configure"
 #include "confdefs.h"
 #include <exception>
 EOF
 ac_try="$ac_cpp conftest.$ac_ext >/dev/null 2>conftest.out"
-{ (eval echo configure:4784: \"$ac_try\") 1>&5; (eval $ac_try) 2>&5; }
+{ (eval echo configure:4859: \"$ac_try\") 1>&5; (eval $ac_try) 2>&5; }
 ac_err=`grep -v '^ *+' conftest.out`
 if test -z "$ac_err"; then
   rm -rf conftest*
@@ -4815,17 +4890,17 @@ cross_compiling=$ac_cv_prog_cxx_cross
 
 ac_safe=`echo "istream" | sed 'y%./+-%__p_%'`
 echo $ac_n "checking for istream""... $ac_c" 1>&6
-echo "configure:4819: checking for istream" >&5
+echo "configure:4894: checking for istream" >&5
 if eval "test \"`echo '$''{'ac_cv_header_$ac_safe'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
 else
   cat > conftest.$ac_ext <<EOF
-#line 4824 "configure"
+#line 4899 "configure"
 #include "confdefs.h"
 #include <istream>
 EOF
 ac_try="$ac_cpp conftest.$ac_ext >/dev/null 2>conftest.out"
-{ (eval echo configure:4829: \"$ac_try\") 1>&5; (eval $ac_try) 2>&5; }
+{ (eval echo configure:4904: \"$ac_try\") 1>&5; (eval $ac_try) 2>&5; }
 ac_err=`grep -v '^ *+' conftest.out`
 if test -z "$ac_err"; then
   rm -rf conftest*
@@ -4860,17 +4935,17 @@ cross_compiling=$ac_cv_prog_cxx_cross
 
 ac_safe=`echo "new" | sed 'y%./+-%__p_%'`
 echo $ac_n "checking for new""... $ac_c" 1>&6
-echo "configure:4864: checking for new" >&5
+echo "configure:4939: checking for new" >&5
 if eval "test \"`echo '$''{'ac_cv_header_$ac_safe'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
 else
   cat > conftest.$ac_ext <<EOF
-#line 4869 "configure"
+#line 4944 "configure"
 #include "confdefs.h"
 #include <new>
 EOF
 ac_try="$ac_cpp conftest.$ac_ext >/dev/null 2>conftest.out"
-{ (eval echo configure:4874: \"$ac_try\") 1>&5; (eval $ac_try) 2>&5; }
+{ (eval echo configure:4949: \"$ac_try\") 1>&5; (eval $ac_try) 2>&5; }
 ac_err=`grep -v '^ *+' conftest.out`
 if test -z "$ac_err"; then
   rm -rf conftest*
@@ -4905,17 +4980,17 @@ cross_compiling=$ac_cv_prog_cxx_cross
 
 ac_safe=`echo "stack" | sed 'y%./+-%__p_%'`
 echo $ac_n "checking for stack""... $ac_c" 1>&6
-echo "configure:4909: checking for stack" >&5
+echo "configure:4984: checking for stack" >&5
 if eval "test \"`echo '$''{'ac_cv_header_$ac_safe'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
 else
   cat > conftest.$ac_ext <<EOF
-#line 4914 "configure"
+#line 4989 "configure"
 #include "confdefs.h"
 #include <stack>
 EOF
 ac_try="$ac_cpp conftest.$ac_ext >/dev/null 2>conftest.out"
-{ (eval echo configure:4919: \"$ac_try\") 1>&5; (eval $ac_try) 2>&5; }
+{ (eval echo configure:4994: \"$ac_try\") 1>&5; (eval $ac_try) 2>&5; }
 ac_err=`grep -v '^ *+' conftest.out`
 if test -z "$ac_err"; then
   rm -rf conftest*
@@ -4950,17 +5025,17 @@ cross_compiling=$ac_cv_prog_cxx_cross
 
 ac_safe=`echo "valarray" | sed 'y%./+-%__p_%'`
 echo $ac_n "checking for valarray""... $ac_c" 1>&6
-echo "configure:4954: checking for valarray" >&5
+echo "configure:5029: checking for valarray" >&5
 if eval "test \"`echo '$''{'ac_cv_header_$ac_safe'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
 else
   cat > conftest.$ac_ext <<EOF
-#line 4959 "configure"
+#line 5034 "configure"
 #include "confdefs.h"
 #include <valarray>
 EOF
 ac_try="$ac_cpp conftest.$ac_ext >/dev/null 2>conftest.out"
-{ (eval echo configure:4964: \"$ac_try\") 1>&5; (eval $ac_try) 2>&5; }
+{ (eval echo configure:5039: \"$ac_try\") 1>&5; (eval $ac_try) 2>&5; }
 ac_err=`grep -v '^ *+' conftest.out`
 if test -z "$ac_err"; then
   rm -rf conftest*
@@ -4995,17 +5070,17 @@ cross_compiling=$ac_cv_prog_cxx_cross
 
 ac_safe=`echo "fstream" | sed 'y%./+-%__p_%'`
 echo $ac_n "checking for fstream""... $ac_c" 1>&6
-echo "configure:4999: checking for fstream" >&5
+echo "configure:5074: checking for fstream" >&5
 if eval "test \"`echo '$''{'ac_cv_header_$ac_safe'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
 else
   cat > conftest.$ac_ext <<EOF
-#line 5004 "configure"
+#line 5079 "configure"
 #include "confdefs.h"
 #include <fstream>
 EOF
 ac_try="$ac_cpp conftest.$ac_ext >/dev/null 2>conftest.out"
-{ (eval echo configure:5009: \"$ac_try\") 1>&5; (eval $ac_try) 2>&5; }
+{ (eval echo configure:5084: \"$ac_try\") 1>&5; (eval $ac_try) 2>&5; }
 ac_err=`grep -v '^ *+' conftest.out`
 if test -z "$ac_err"; then
   rm -rf conftest*
@@ -5040,17 +5115,17 @@ cross_compiling=$ac_cv_prog_cxx_cross
 
 ac_safe=`echo "iterator" | sed 'y%./+-%__p_%'`
 echo $ac_n "checking for iterator""... $ac_c" 1>&6
-echo "configure:5044: checking for iterator" >&5
+echo "configure:5119: checking for iterator" >&5
 if eval "test \"`echo '$''{'ac_cv_header_$ac_safe'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
 else
   cat > conftest.$ac_ext <<EOF
-#line 5049 "configure"
+#line 5124 "configure"
 #include "confdefs.h"
 #include <iterator>
 EOF
 ac_try="$ac_cpp conftest.$ac_ext >/dev/null 2>conftest.out"
-{ (eval echo configure:5054: \"$ac_try\") 1>&5; (eval $ac_try) 2>&5; }
+{ (eval echo configure:5129: \"$ac_try\") 1>&5; (eval $ac_try) 2>&5; }
 ac_err=`grep -v '^ *+' conftest.out`
 if test -z "$ac_err"; then
   rm -rf conftest*
@@ -5085,17 +5160,17 @@ cross_compiling=$ac_cv_prog_cxx_cross
 
 ac_safe=`echo "numeric" | sed 'y%./+-%__p_%'`
 echo $ac_n "checking for numeric""... $ac_c" 1>&6
-echo "configure:5089: checking for numeric" >&5
+echo "configure:5164: checking for numeric" >&5
 if eval "test \"`echo '$''{'ac_cv_header_$ac_safe'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
 else
   cat > conftest.$ac_ext <<EOF
-#line 5094 "configure"
+#line 5169 "configure"
 #include "confdefs.h"
 #include <numeric>
 EOF
 ac_try="$ac_cpp conftest.$ac_ext >/dev/null 2>conftest.out"
-{ (eval echo configure:5099: \"$ac_try\") 1>&5; (eval $ac_try) 2>&5; }
+{ (eval echo configure:5174: \"$ac_try\") 1>&5; (eval $ac_try) 2>&5; }
 ac_err=`grep -v '^ *+' conftest.out`
 if test -z "$ac_err"; then
   rm -rf conftest*
@@ -5130,17 +5205,17 @@ cross_compiling=$ac_cv_prog_cxx_cross
 
 ac_safe=`echo "stdexcept" | sed 'y%./+-%__p_%'`
 echo $ac_n "checking for stdexcept""... $ac_c" 1>&6
-echo "configure:5134: checking for stdexcept" >&5
+echo "configure:5209: checking for stdexcept" >&5
 if eval "test \"`echo '$''{'ac_cv_header_$ac_safe'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
 else
   cat > conftest.$ac_ext <<EOF
-#line 5139 "configure"
+#line 5214 "configure"
 #include "confdefs.h"
 #include <stdexcept>
 EOF
 ac_try="$ac_cpp conftest.$ac_ext >/dev/null 2>conftest.out"
-{ (eval echo configure:5144: \"$ac_try\") 1>&5; (eval $ac_try) 2>&5; }
+{ (eval echo configure:5219: \"$ac_try\") 1>&5; (eval $ac_try) 2>&5; }
 ac_err=`grep -v '^ *+' conftest.out`
 if test -z "$ac_err"; then
   rm -rf conftest*
@@ -5175,17 +5250,17 @@ cross_compiling=$ac_cv_prog_cxx_cross
 
 ac_safe=`echo "vector" | sed 'y%./+-%__p_%'`
 echo $ac_n "checking for vector""... $ac_c" 1>&6
-echo "configure:5179: checking for vector" >&5
+echo "configure:5254: checking for vector" >&5
 if eval "test \"`echo '$''{'ac_cv_header_$ac_safe'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
 else
   cat > conftest.$ac_ext <<EOF
-#line 5184 "configure"
+#line 5259 "configure"
 #include "confdefs.h"
 #include <vector>
 EOF
 ac_try="$ac_cpp conftest.$ac_ext >/dev/null 2>conftest.out"
-{ (eval echo configure:5189: \"$ac_try\") 1>&5; (eval $ac_try) 2>&5; }
+{ (eval echo configure:5264: \"$ac_try\") 1>&5; (eval $ac_try) 2>&5; }
 ac_err=`grep -v '^ *+' conftest.out`
 if test -z "$ac_err"; then
   rm -rf conftest*
@@ -5220,17 +5295,17 @@ cross_compiling=$ac_cv_prog_cxx_cross
 
 ac_safe=`echo "functional" | sed 'y%./+-%__p_%'`
 echo $ac_n "checking for functional""... $ac_c" 1>&6
-echo "configure:5224: checking for functional" >&5
+echo "configure:5299: checking for functional" >&5
 if eval "test \"`echo '$''{'ac_cv_header_$ac_safe'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
 else
   cat > conftest.$ac_ext <<EOF
-#line 5229 "configure"
+#line 5304 "configure"
 #include "confdefs.h"
 #include <functional>
 EOF
 ac_try="$ac_cpp conftest.$ac_ext >/dev/null 2>conftest.out"
-{ (eval echo configure:5234: \"$ac_try\") 1>&5; (eval $ac_try) 2>&5; }
+{ (eval echo configure:5309: \"$ac_try\") 1>&5; (eval $ac_try) 2>&5; }
 ac_err=`grep -v '^ *+' conftest.out`
 if test -z "$ac_err"; then
   rm -rf conftest*
@@ -5265,17 +5340,17 @@ cross_compiling=$ac_cv_prog_cxx_cross
 
 ac_safe=`echo "limits" | sed 'y%./+-%__p_%'`
 echo $ac_n "checking for limits""... $ac_c" 1>&6
-echo "configure:5269: checking for limits" >&5
+echo "configure:5344: checking for limits" >&5
 if eval "test \"`echo '$''{'ac_cv_header_$ac_safe'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
 else
   cat > conftest.$ac_ext <<EOF
-#line 5274 "configure"
+#line 5349 "configure"
 #include "confdefs.h"
 #include <limits>
 EOF
 ac_try="$ac_cpp conftest.$ac_ext >/dev/null 2>conftest.out"
-{ (eval echo configure:5279: \"$ac_try\") 1>&5; (eval $ac_try) 2>&5; }
+{ (eval echo configure:5354: \"$ac_try\") 1>&5; (eval $ac_try) 2>&5; }
 ac_err=`grep -v '^ *+' conftest.out`
 if test -z "$ac_err"; then
   rm -rf conftest*
@@ -5310,17 +5385,17 @@ cross_compiling=$ac_cv_prog_cxx_cross
 
 ac_safe=`echo "strstream" | sed 'y%./+-%__p_%'`
 echo $ac_n "checking for strstream""... $ac_c" 1>&6
-echo "configure:5314: checking for strstream" >&5
+echo "configure:5389: checking for strstream" >&5
 if eval "test \"`echo '$''{'ac_cv_header_$ac_safe'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
 else
   cat > conftest.$ac_ext <<EOF
-#line 5319 "configure"
+#line 5394 "configure"
 #include "confdefs.h"
 #include <strstream>
 EOF
 ac_try="$ac_cpp conftest.$ac_ext >/dev/null 2>conftest.out"
-{ (eval echo configure:5324: \"$ac_try\") 1>&5; (eval $ac_try) 2>&5; }
+{ (eval echo configure:5399: \"$ac_try\") 1>&5; (eval $ac_try) 2>&5; }
 ac_err=`grep -v '^ *+' conftest.out`
 if test -z "$ac_err"; then
   rm -rf conftest*
@@ -5354,6 +5429,7 @@ fi
 
 
 # compiler
+
 
 
 
@@ -5602,6 +5678,7 @@ s%@VCL_USE_NATIVE_COMPLEX@%$VCL_USE_NATIVE_COMPLEX%g
 s%@VCL_HAS_BOOL@%$VCL_HAS_BOOL%g
 s%@VCL_HAS_DYNAMIC_CAST@%$VCL_HAS_DYNAMIC_CAST%g
 s%@VCL_HAS_TYPENAME@%$VCL_HAS_TYPENAME%g
+s%@VCL_HAS_EXPORT@%$VCL_HAS_EXPORT%g
 s%@VCL_HAS_MUTABLE@%$VCL_HAS_MUTABLE%g
 s%@VCL_HAS_EXPLICIT@%$VCL_HAS_EXPLICIT%g
 s%@VCL_STATIC_CONST_INIT_INT@%$VCL_STATIC_CONST_INIT_INT%g
