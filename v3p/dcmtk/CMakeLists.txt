@@ -24,7 +24,7 @@ IF( VXL_BUILD_DCMTK )
 # you want to ensure that the builds don't use old, invalid cached
 # values of the results. The number should be incremented to indicate
 # change. The format follows a DNS-style numbering: the current date
-# followed by a modification time within the day.
+# followed by a modification count within the day.
 #
 SET( DCMTK_CONFIG_SERIAL_CURRENT "2004-02-03-000" )
 
@@ -133,77 +133,7 @@ INCLUDE( ${CMAKE_ROOT}/Modules/CheckFunctionExists.cmake )
 INCLUDE( ${CMAKE_ROOT}/Modules/CheckIncludeFile.cmake )
 INCLUDE( ${CMAKE_ROOT}/Modules/CheckIncludeFileCXX.cmake )
 INCLUDE( ${CMAKE_ROOT}/Modules/CheckTypeSize.cmake )
-
-# This checks if a prototype for FUNC (with C linkage) has been
-# declared in any one of the header files listed in INCLUDE. It uses
-# the C++ compiler.
-#
-# (The check is actually whether declaring a prototype will cause a
-# conflict and thus an error. The results may differ depending on the
-# compiler. For example, gcc under Cygwin will issue a warning but g++
-# will issue an error. In the DCMTK, the prototypes are used in a C++
-# context, so we use the C++ compiler to check.
-#
-MACRO(CHECK_PROTOTYPE_EXISTS FUNC INCLUDE VARIABLE)
-  IF("${VARIABLE}" MATCHES "^${VARIABLE}$")
-    SET( CHECK_PROTOTYPE_EXISTS_FILE "${CMAKE_BINARY_DIR}/CheckPrototypeExists.cxx" )
-    SET( CHECK_PROTOTYPE_EXISTS_EXTERNC_BEGIN "extern \"C\" {\n" )
-    SET( CHECK_PROTOTYPE_EXISTS_EXTERNC_END "}\n" )
-
-    SET(MACRO_CHECK_PROTOTYPE_EXISTS_FLAGS ${CMAKE_REQUIRED_FLAGS})
-    MESSAGE(STATUS "Looking for prototype for ${FUNC} in ${INCLUDE}")
-
-    SET( ${VARIABLE} 0 )
-    FOREACH(FILE ${INCLUDE})
-
-      # First check if the header exists. Cache the result in a variable named after
-      # the header, so that we don't re-do the effort
-      STRING( REGEX REPLACE "\\.|/" "_" CLEAN_FILE ${FILE} )
-      SET( CHECK_PROTOTYPE_EXISTS_INCLUDE "CHECK_PROTOTYPE_EXISTS_INCLUDE_${CLEAN_FILE}" )
-      CHECK_INCLUDE_FILE( ${FILE} ${CHECK_PROTOTYPE_EXISTS_INCLUDE} )
-      IF( CHECK_PROTOTYPE_EXISTS_INCLUDE )
-
-        FILE(APPEND ${CMAKE_BINARY_DIR}/CMakeOutput.log "Trying struct with ${FILE}\n" )
-        FILE(WRITE ${CHECK_PROTOTYPE_EXISTS_FILE}
-          "#include <${FILE}>\n"
-          ${CHECK_PROTOTYPE_EXISTS_EXTERNC_BEGIN}
-          "typedef union { int member; } dummyStruct;\n"
-          "dummyStruct ${FUNC}( dummyStruct );\n"
-          ${CHECK_PROTOTYPE_EXISTS_EXTERNC_END}
-          "int main(){return 0;}\n" )
-
-        TRY_COMPILE( CHECK_PROTOTYPE_EXISTS_RESULT
-          ${CMAKE_BINARY_DIR}
-          ${CHECK_PROTOTYPE_EXISTS_FILE}
-          CMAKE_FLAGS 
-          -DCOMPILE_DEFINITIONS:STRING=${MACRO_CHECK_PROTOTYPE_EXISTS_FLAGS}
-          OUTPUT_VARIABLE OUTPUT)
-        IF( CHECK_PROTOTYPE_EXISTS_RESULT ) 
-          FILE(APPEND ${CMAKE_BINARY_DIR}/CMakeOutput.log 
-            "Determining if prototype ${FUNC} exists in ${FILE} "
-            "failed with the following output:\n"
-            "${OUTPUT}\n\n")
-        ELSE( CHECK_PROTOTYPE_EXISTS_RESULT ) 
-          FILE(APPEND ${CMAKE_BINARY_DIR}/CMakeOutput.log 
-            "Determining if prototype ${FUNC} exists in ${FILE} "
-            "passed with the following output:\n"
-            "${OUTPUT}\n\n")
-          MESSAGE(STATUS "    Found in ${FILE}")
-          SET( ${VARIABLE} 1 )
-        ENDIF( CHECK_PROTOTYPE_EXISTS_RESULT )
-
-      ENDIF( CHECK_PROTOTYPE_EXISTS_INCLUDE )
-    ENDFOREACH(FILE)
-
-    IF( ${VARIABLE} )
-      MESSAGE(STATUS "Looking for prototype of ${FUNC} - found")
-      SET(${VARIABLE} 1 CACHE INTERNAL "Have prototype ${VARIABLE}")
-    ELSE(${VARIABLE})
-      MESSAGE(STATUS "Looking for prototype of ${FUNC} - not found")
-      SET(${VARIABLE} "" CACHE INTERNAL "Have prototype ${VARIABLE}")
-    ENDIF(${VARIABLE})
-  ENDIF("${VARIABLE}" MATCHES "^${VARIABLE}$")
-ENDMACRO(CHECK_PROTOTYPE_EXISTS)
+INCLUDE( ${VXL_CMAKE_DIR}/CheckPrototypeExistsCXX.cmake )
 
 
 # The DCMTK HAVE_STD_NAMESPACE has a looser definition than the vcl
@@ -307,19 +237,19 @@ CHECK_INCLUDE_FILE( sys/dir.h     DCMTK_HAVE_SYS_DIR_H )
 CHECK_INCLUDE_FILE( sys/ndir.h    DCMTK_HAVE_SYS_NDIR_H )
 CHECK_INCLUDE_FILE( netinet/in.h  DCMTK_HAVE_NETINET_IN_H )
 
-CHECK_PROTOTYPE_EXISTS(
+CHECK_PROTOTYPE_EXISTS_CXX(
   bzero
   "string.h;strings.h;libc.h;unistd.h;stdlib.h"
   DCMTK_HAVE_PROTOTYPE_BZERO )
-CHECK_PROTOTYPE_EXISTS(
+CHECK_PROTOTYPE_EXISTS_CXX(
   gethostid 
   "libc.h;unistd.h;stdlib.h;netdb.h"
   DCMTK_HAVE_PROTOTYPE_GETHOSTID )
-CHECK_PROTOTYPE_EXISTS(
+CHECK_PROTOTYPE_EXISTS_CXX(
   gettimeofday
   "sys/time.h;unistd.h"
   DCMTK_HAVE_PROTOTYPE_GETTIMEOFDAY )
-CHECK_PROTOTYPE_EXISTS(
+CHECK_PROTOTYPE_EXISTS_CXX(
   mktemp
   "libc.h;unistd.h;stdlib.h"
   DCMTK_HAVE_PROTOTYPE_MKTEMP )
@@ -350,6 +280,7 @@ ELSE( WIN32 )
   SET( DCMTK_ENVIRONMENT_PATH_SEPARATOR ":" )
 ENDIF( WIN32 )
 
+MESSAGE("abc: .${DCMTK_INCLUDE_MATH_H_AS_CXX}.")
 IF( "DCMTK_INCLUDE_MATH_H_AS_CXX" MATCHES "^${DCMTK_INCLUDE_MATH_H_AS_CXX}$" )
   FILE(WRITE ${CMAKE_BINARY_DIR}/CMakeTmp/CheckIncludeMath.cxx
     "extern \"C\" { #include <math.h> }" )
