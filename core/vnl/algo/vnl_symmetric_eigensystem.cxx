@@ -2,9 +2,9 @@
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
-//
-// vnl_symmetric_eigensystem
-// Author: Andrew W. Fitzgibbon, Oxford RRG
+//:
+// \file
+// \author Andrew W. Fitzgibbon, Oxford RRG
 // Created: 29 Aug 96
 //
 //-----------------------------------------------------------------------------
@@ -121,7 +121,7 @@ vnl_matrix<T> vnl_symmetric_eigensystem<T>::pinverse() const
       invD(i, i) = 0;
     }
     else
-      invD(i, i) = 1.0/D(i, i);
+      invD(i, i) = 1 / D(i, i);
   return V * invD * V.transpose();
 }
 
@@ -133,11 +133,11 @@ vnl_matrix<T> vnl_symmetric_eigensystem<T>::square_root() const
   for (unsigned i=0; i<n; ++i)
     if (D(i, i) < 0) {
       vcl_cerr << __FILE__ ": square_root(): eigenvalue " << i << " is negative (" << D(i, i) << ").\n";
-      sqrtD(i, i) = vcl_sqrt((typename vnl_numeric_traits<T>::real_t)(-D(i, i)));
+      sqrtD(i, i) = (T)vcl_sqrt((typename vnl_numeric_traits<T>::real_t)(-D(i, i)));
                     // gives square root of the absolute value of T.
     }
     else
-      sqrtD(i, i) = vcl_sqrt((typename vnl_numeric_traits<T>::real_t)(D(i, i)));
+      sqrtD(i, i) = (T)vcl_sqrt((typename vnl_numeric_traits<T>::real_t)(D(i, i)));
   return V * sqrtD * V.transpose();
 }
 
@@ -149,10 +149,10 @@ vnl_matrix<T> vnl_symmetric_eigensystem<T>::inverse_square_root() const
   for (unsigned i=0; i<n; ++i)
     if (D(i, i) <= 0) {
       vcl_cerr << __FILE__ ": square_root(): eigenvalue " << i << " is non-positive (" << D(i, i) << ").\n";
-      inv_sqrtD(i, i) = vcl_sqrt(-1.0/(typename vnl_numeric_traits<T>::real_t)(D(i, i))); // ??
+      inv_sqrtD(i, i) = (T)vcl_sqrt(-1.0/(typename vnl_numeric_traits<T>::real_t)(D(i, i))); // ??
     }
     else
-      inv_sqrtD(i, i) = vcl_sqrt(1.0/(typename vnl_numeric_traits<T>::real_t)(D(i, i)));
+      inv_sqrtD(i, i) = (T)vcl_sqrt(1.0/(typename vnl_numeric_traits<T>::real_t)(D(i, i)));
   return V * inv_sqrtD * V.transpose();
 }
 

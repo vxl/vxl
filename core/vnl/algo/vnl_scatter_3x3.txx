@@ -1,8 +1,9 @@
 // This is vxl/vnl/algo/vnl_scatter_3x3.txx
 #ifndef vnl_scatter_3x3_txx_
 #define vnl_scatter_3x3_txx_
-
-// Author: Andrew W. Fitzgibbon, Oxford RRG
+//:
+// \file
+// \author Andrew W. Fitzgibbon, Oxford RRG
 // Created: 02 Oct 96
 //-----------------------------------------------------------------------------
 
@@ -23,9 +24,9 @@ void vnl_scatter_3x3<T>::add_outer_product(const vnl_vector_fixed<T,3> & v)
   // awf/gcc-2.7.2: vnl_scatter_3x3<T>::vect doesn't work in the arglist
 {
   vnl_scatter_3x3<T> & S = *this;
-  for(int i = 0; i < 3; ++i) {
+  for (int i = 0; i < 3; ++i) {
     S(i,i) +=  v[i]*v[i];
-    for(int j = i+1; j < 3; ++j) {
+    for (int j = i+1; j < 3; ++j) {
       T value = v[i]*v[j];
       S(i,j) += value;
       S(j,i) = S(i,j);
@@ -38,8 +39,8 @@ void vnl_scatter_3x3<T>::add_outer_product(const vnl_vector_fixed<T,3> & u,
                                            const vnl_vector_fixed<T,3> & v)
 {
   vnl_scatter_3x3<T> & S = *this;
-  for(int i = 0; i < 3; ++i)
-    for(int j = 0; j < 3; ++j)
+  for (int i = 0; i < 3; ++i)
+    for (int j = 0; j < 3; ++j)
       S(i,j) += v[i]*u[j];
   symmetricp = false; // conservative assumption -- use add_outer_product(v) to maintain symmetry
 }
@@ -50,9 +51,9 @@ void vnl_scatter_3x3<T>::force_symmetric()
   if (symmetricp)
     return;
   vnl_scatter_3x3<T> & S = *this;
-  for(int i = 0; i < 3; ++i)
-    for(int j = i+1; j < 3; ++j) {
-      T vbar = (S(i,j) + S(j,i)) * 0.5;
+  for (int i = 0; i < 3; ++i)
+    for (int j = i+1; j < 3; ++j) {
+      T vbar = (S(i,j) + S(j,i)) / 2;
       S(i,j) = S(j,i) = vbar;
     }
   symmetricp = true;
