@@ -1,14 +1,32 @@
-#ifndef vgl_line_2d_h
-#define  vgl_line_2d_h
-#ifdef __GNUC__
-#pragma interface
-#endif
+#ifndef vgl_line_2d_h_
+#define vgl_line_2d_h_
+//-----------------------------------------------------------------------------
+//
+// .NAME vgl_line_2d - Represents an euclidian 2D line.
+// .LIBRARY vgl
+// .HEADER  vgl/vgl_line_2d.h
+// .INCLUDE vcl/vcl_iostream.h
+// .INCLUDE vcl/vcl_cmath.h
+// .FILE    vgl/vgl_line_2d.txx
+//
+// .SECTION Description
+// An interface for the line coefficients, [a,b,c], is provided in terms of the
+// standard implicit line equation: a*x + b*y + c = 0
+//
+// .SECTION Author
+// Don HAMILTON
+// Peter TU
+// Peter VANROOSE
+// François BERTEL
+//
+// .SECTION Modifications
+// 2000/05/05 François BERTEL        Several minor bugs fixed
+// 2000/02/29 Peter VANROOSE         Several minor fixes
+// 2000/02/16 Don HAMILTON, Peter TU Creation
+//-----------------------------------------------------------------------------
 
-// Author: Don Hamilton, Peter Tu
-// Copyright:
-// Created: Feb 16 2000
-// Modifications:
-//  Peter Vanroose, 29 Feb 2000: several minor fixes
+template <class Type>
+class vgl_line_2d;
 
 #include <vcl/vcl_iostream.h>
 #include <vcl/vcl_cmath.h> // for sqrt()
@@ -19,10 +37,6 @@ class vgl_point_2d;
 template <class Type>
 class vgl_homg_line_2d;
 
-//: Represents a euclidian 2D line.
-//   An interface for the line coefficients, [a,b,c], is provided
-//   in terms of the standard implicit line equation:
-//   a*x + b*y + c = 0
 template <class Type>
 class vgl_line_2d {
 
@@ -110,4 +124,4 @@ istream&  operator>>(istream& is,  vgl_line_2d<Type>& p) {
   return is >> p->data_[0] >> p->data_[1] >> p->data_[2];
 }
   
-#endif
+#endif // #ifndef vgl_line_2d_h_

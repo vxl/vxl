@@ -1,19 +1,8 @@
-//*****************************************************************************
-// File name: vgl_homg_point_3d.txx
-// Description: Represents a homogeneous 3D line using two points.
-//              A class to hold a homogeneous representation of a 3D Line. The
-//              line is stored as a pair of homogeneous 3d points.
-//-----------------------------------------------------------------------------
-// Language: C++
-//
-// Version |Date      | Author                   |Comment
-// --------+----------+--------------------------+-----------------------------
-// 1.0     |2000/05/05| François BERTEL          |Change default constructor
-// --------+----------+--------------------------+-----------------------------
-// 1.0     |2000/02/15| Don HAMILTON, Peter TU   |Creation
-//*****************************************************************************
-#include <vgl/vgl_homg_line_3d_2_points.h> 
+#include <vgl/vgl_homg_line_3d_2_points.h>
 
+//***************************************************************************
+// Initialization
+//***************************************************************************
 
 //---------------------------------------------------------------------------
 // Name: vgl_homg_line_3d_2_points
@@ -26,16 +15,22 @@ vgl_homg_line_3d_2_points<Type>::vgl_homg_line_3d_2_points(void)
 {
 }
 
-// -- Constructor
+//---------------------------------------------------------------------------
+// Name: vgl_homg_line_3d_2_points
+// Task: Copy constructor
+//---------------------------------------------------------------------------
 template <class Type>
-vgl_homg_line_3d_2_points<Type>::vgl_homg_line_3d_2_points( const vgl_homg_line_3d_2_points<Type> &that)
+vgl_homg_line_3d_2_points<Type>::vgl_homg_line_3d_2_points(const vgl_homg_line_3d_2_points<Type> &that)
   : point_finite_(that.point_finite_),
     point_infinite_(that.point_infinite_)
 {
 }
 
-// -- Constructor, initialise using the specified distinct points
-// on the line.
+//---------------------------------------------------------------------------
+// Name: vgl_homg_line_3d_2_points
+// Task: Construct from two points. Initialise using the specified distinct
+//       points on the line.
+//---------------------------------------------------------------------------
 template <class Type>
 vgl_homg_line_3d_2_points<Type>::vgl_homg_line_3d_2_points(const vgl_homg_point_3d<Type> &start,
                                                            const vgl_homg_point_3d<Type> &end)
@@ -63,16 +58,24 @@ vgl_homg_line_3d_2_points<Type>::vgl_homg_line_3d_2_points(const vgl_homg_point_
   }
 }
 
-// -- Destructor
+//---------------------------------------------------------------------------
+// Name: vgl_homg_line_3d_2_points
+// Task: Destructor
+//---------------------------------------------------------------------------
 template <class Type>
-vgl_homg_line_3d_2_points<Type>::~vgl_homg_line_3d_2_points() {}
+vgl_homg_line_3d_2_points<Type>::~vgl_homg_line_3d_2_points()
+{
+}
 
-//-----------------------------------------------------------------------------
-//
-
-// -- Push point2 off to infinity
+//***************************************************************************
+// Utility methods
+//***************************************************************************
+//---------------------------------------------------------------------------
+// Name: force_point2_infinite
+// Task: force a point to infinity
+//---------------------------------------------------------------------------
 template <class Type>
-void vgl_homg_line_3d_2_points<Type>::force_point2_infinite()
+void vgl_homg_line_3d_2_points<Type>::force_point2_infinite(void)
 {
 }
 
@@ -89,13 +92,16 @@ void vgl_homg_line_3d_2_points<Type>::force_point2_infinite()
 //  return Double3(d[0], d[1], d[2])
 // }
 
+//*****************************************************************************
+// stream operators
+//*****************************************************************************
 
 template <class Type>
-ostream& operator<<(ostream& s, const vgl_homg_line_3d_2_points<Type>& p)
+ostream& operator<<(ostream &s,
+                    const vgl_homg_line_3d_2_points<Type> &p)
 {
   return s << "<vgl_homg_line_3d_2_points  finite_point: " 
            << p.get_point_finite()
            << " infinite_point: " << p.get_point_infinite_() << ">";
 }
-
 

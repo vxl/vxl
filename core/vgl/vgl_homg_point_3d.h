@@ -1,23 +1,26 @@
-//*****************************************************************************
-// File name: vgl_homg_point_3d.h
-// Description: Represents a homogeneous 3D point
+#ifndef vgl_homg_point_3d_h_
+#define vgl_homg_point_3d_h_
 //-----------------------------------------------------------------------------
-// Language: C++
 //
-// Version |Date      | Author                   |Comment
-// --------+----------+--------------------------+-----------------------------
-// 1.0     |2000/05/05| François BERTEL          |Add default constructor
-// --------+----------+--------------------------+-----------------------------
-// 1.0     |2000/02/29| Peter VANROOSE           |Several minor fixes
-// --------+----------+--------------------------+-----------------------------
-// 1.0     |2000/02/15| Don HAMILTON, Peter TU   |Creation
-//*****************************************************************************
-#ifndef vgl_homg_point_3d_h
-#define vgl_homg_point_3d_h
-
-#ifdef __GNUC__
-#pragma interface
-#endif
+// .NAME vgl_homg_point_3d - Represents a homogeneous 3D point
+// .LIBRARY vgl
+// .HEADER  vgl/vgl_homg_point_3d.h
+// .INCLUDE vcl/vcl_iostream.h
+// .INCLUDE vcl/vcl_algorithm.h
+// .INCLUDE vcl/vcl_cmath.h
+// .FILE    vgl/vgl_homg_point_3d.txx
+//
+// .SECTION Author
+// Don HAMILTON
+// Peter TU
+// Peter VANROOSE
+// François BERTEL
+//
+// .SECTION Modifications
+// 2000/05/05 François BERTEL Add default constructor
+// 2000/02/29 Peter VANROOSE  Several minor fixes
+// 2000/02/15 Don HAMILTON, Peter TU Creation
+//-----------------------------------------------------------------------------
 
 template <class Type>
 class vgl_point_3d;
@@ -26,18 +29,16 @@ class vgl_point_3d;
 #include <vcl/vcl_algorithm.h>
 #include <vcl/vcl_cmath.h> // for fabs()
 
-//: Represents a homogeneous 3D point.
 template <class Type>
-class vgl_homg_point_3d {
-
-  // PUBLIC INTERFACE--------------------------------------------------------  
+class vgl_homg_point_3d
+{ 
+  //***************************************************************************
+  // Initialization
+  //***************************************************************************
 public:
- 
-  // Constructors/Initializers/Destructors-----------------------------------
-
+  
   //---------------------------------------------------------------------------
-  // Name: vgl_homg_point_3d
-  // Task: Default constructor with (0,0,0,1)
+  //: Default constructor with (0,0,0,1)
   //---------------------------------------------------------------------------
   explicit vgl_homg_point_3d(void);
   
@@ -46,16 +47,36 @@ public:
   //   set(that.x(),that.y(),that.z(),that.w());
   // }
 
-  vgl_homg_point_3d<Type> (vgl_point_3d<Type> const& p);
+  vgl_homg_point_3d(vgl_point_3d<Type> const& p);
 
-  // -- Construct from four Types.
-  vgl_homg_point_3d (Type px, Type py, Type pz, Type pw) { set(px,py,pz,pw); }
+  //---------------------------------------------------------------------------
+  //: Constructor from four Types
+  //---------------------------------------------------------------------------
+  vgl_homg_point_3d(Type px,
+                    Type py,
+                    Type pz,
+                    Type pw)
+  {
+    set(px,py,pz,pw);
+  }
 
-  // -- Construct from three Types.
-  vgl_homg_point_3d (Type px, Type py, Type pz) { set(px,py,pz,1.0); }
+  //---------------------------------------------------------------------------
+  //: Constructor from three Types
+  //---------------------------------------------------------------------------
+  vgl_homg_point_3d(Type px,
+                    Type py,
+                    Type pz)
+  {
+    set(px,py,pz,1.0);
+  }
 
-  // -- Construct from 4-vector.
-  vgl_homg_point_3d (const Type v[4]) { set(v[0],v[1],v[2],v[3]); }
+  //---------------------------------------------------------------------------
+  //: Construct from 4-vector.
+  //---------------------------------------------------------------------------
+  vgl_homg_point_3d(const Type v[4])
+  {
+    set(v[0],v[1],v[2],v[3]);
+  }
 
   // Default destructor
   // ~vgl_homg_point_3d () {}
@@ -65,49 +86,71 @@ public:
   //   set(that.x(),that.y(),that.z(),that.w());
   //   return *this;
   // }
+  
+  //***************************************************************************
+  // Data Access
+  //***************************************************************************
 
-  // Data Access-------------------------------------------------------------
+  inline Type x(void) const
+  {
+    return data_[0];
+  }
+  inline Type y(void) const
+  {
+    return data_[1];
+  }
+  inline Type z(void) const
+  {
+    return data_[2];
+  }
+  inline Type w(void) const {
+    return data_[3];
+  }
 
-  inline Type x() const {return data_[0];}
-  inline Type y() const {return data_[1];}
-  inline Type z() const {return data_[2];}
-  inline Type w() const {return data_[3];}
-
-  // -- Set x,y,z,w
-  inline void set (Type px, Type py, Type pz, Type pw) {
-    data_[0] = px,
-    data_[1] = py,
-    data_[2] = pz,
-    data_[3] = pw;
+  // Set x,y,z,w
+  inline void set(Type px,
+                  Type py,
+                  Type pz,
+                  Type pw)
+  {
+    data_[0]=px;
+    data_[1]=py;
+    data_[2]=pz;
+    data_[3]=pw;
   }
 
   // test for point at infinity  
   // Return true when |w| < tol * min(|x|, |y|, |z|)
-  bool ideal(Type tol) {
+  bool ideal(Type tol)
+  {
     return fabs(w()) < tol * vcl_min(vcl_min(fabs(x()),fabs(y())),fabs(z()));
   }
-
-  // INTERNALS---------------------------------------------------------------
-
+  
+  //***************************************************************************
+  // Internals
+  //***************************************************************************
 protected:
   // the data associated with this point 
   Type data_[4];
 };
 
-  // stream operators 
+//*****************************************************************************
+// Stream operators
+//*****************************************************************************
 template <class Type>
-ostream&  operator<<(ostream& s, const vgl_homg_point_3d<Type>& p) {
+ostream &operator<<(ostream &s,
+                    const vgl_homg_point_3d<Type> &p)
+{
   return s << " <vgl_homg_point_3d ("
            << p->data_[0] << "," << p->data_[1] << "," 
            << p->data_[2] << "," << p->data_[3] << ") >";  
 }
 
 template <class Type>
-istream&  operator>>(istream& is,  vgl_homg_point_3d<Type>& p) {
+istream &operator>>(istream &is,
+                    vgl_homg_point_3d<Type> &p)
+{
   return is >> p->data_[0] >> p->data_[1] >> p->data_[2] >> p->data_[3]; 
 }
 
-#endif // #ifndef vgl_homg_point_3d_h
-
-
-
+#endif // #ifndef vgl_homg_point_3d_h_

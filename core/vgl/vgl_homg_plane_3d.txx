@@ -1,16 +1,3 @@
-//*****************************************************************************
-// File name: vgl_homg_point_3d.h
-// Description: Represents a homogeneous 3D plane
-//-----------------------------------------------------------------------------
-// Language: C++
-//
-// Version |Date      | Author                   |Comment
-// --------+----------+--------------------------+-----------------------------
-// 1.0     |2000/05/05| François BERTEL          | #include trouble fixed
-//         |          |                          | val expression bug fixed
-// --------+----------+--------------------------+-----------------------------
-// 1.0     |2000/02/15| Don HAMILTON, Peter TU   |Creation
-//*****************************************************************************
 #include <vgl/vgl_homg_plane_3d.h> 
 
 #include <vgl/vgl_homg_point_3d.h>
