@@ -1,6 +1,5 @@
-//----*-c++-*----tells emacs to use C++ mode----------
 // This is brl/bmvl/brct/brct_volume_processor_params.cxx
-#include <brct/brct_volume_processor_params.h>
+#include "brct_volume_processor_params.h"
 //:
 // \file
 // See brct_volume_processor_params.h
@@ -13,7 +12,7 @@
 //
 
 brct_volume_processor_params::
-brct_volume_processor_params(brct_volume_processor_params& vp)
+brct_volume_processor_params(brct_volume_processor_params const& vp)
 {
   InitParams(vp.xmin_,
              vp.xmax_,
@@ -25,36 +24,35 @@ brct_volume_processor_params(brct_volume_processor_params& vp)
              vp.cell_thresh_,
              vp.dummy2_,
              vp.dummy3_
-             );
+            );
 }
 
 brct_volume_processor_params::
 brct_volume_processor_params(const float xmin,
-                               const float xmax,
-                               const float ymin,
-                               const float ymax,
-                               const float zmin,
-                               const float zmax,
-                               const int cube_edge_length,
-                               const float cell_thresh,
-                               const float dummy2,
-                               const float dummy3)
+                             const float xmax,
+                             const float ymin,
+                             const float ymax,
+                             const float zmin,
+                             const float zmax,
+                             const int cube_edge_length,
+                             const float cell_thresh,
+                             const float dummy2,
+                             const float dummy3)
 {
   InitParams(xmin, xmax, ymin, ymax, zmin, zmax, cube_edge_length,
              cell_thresh,  dummy2,  dummy3);
 }
 
 void brct_volume_processor_params::InitParams(float xmin,
-                 float xmax,
-                 float ymin,
-                 float ymax,
-                 float zmin,
-                 float zmax,
-                 int cube_edge_length,
-                 float cell_thresh,
-                 float dummy2,
-                 float dummy3)
-
+                                              float xmax,
+                                              float ymin,
+                                              float ymax,
+                                              float zmin,
+                                              float zmax,
+                                              int cube_edge_length,
+                                              float cell_thresh,
+                                              float dummy2,
+                                              float dummy3)
 {
   xmin_ = xmin;
   xmax_ = xmax;
@@ -85,17 +83,17 @@ bool brct_volume_processor_params::SanityCheck()
   return valid;
 }
 
-vcl_ostream& operator << (vcl_ostream& os, const brct_volume_processor_params& vp)
+vcl_ostream& operator<< (vcl_ostream& os, const brct_volume_processor_params& vp)
 {
-  os << "brct_volume_processor_params:" << vcl_endl << "[---" << vcl_endl;
-  os << "xmin " << vp.xmin_ << vcl_endl;
-  os << "xmax " << vp.xmax_ << vcl_endl;
-  os << "ymin " << vp.ymin_ << vcl_endl;
-  os << "ymax " << vp.ymax_ << vcl_endl;
-  os << "zmin " << vp.zmin_ << vcl_endl;
-  os << "zmax " << vp.zmax_ << vcl_endl;
-  os << "cube_edge_length " << vp.cube_edge_length_ << vcl_endl;
-  os << "cell thresh " << vp.cell_thresh_ << vcl_endl;
-  os << "---]" << vcl_endl;
+  os << "brct_volume_processor_params:\n[---\n"
+     << "xmin " << vp.xmin_ << vcl_endl
+     << "xmax " << vp.xmax_ << vcl_endl
+     << "ymin " << vp.ymin_ << vcl_endl
+     << "ymax " << vp.ymax_ << vcl_endl
+     << "zmin " << vp.zmin_ << vcl_endl
+     << "zmax " << vp.zmax_ << vcl_endl
+     << "cube_edge_length " << vp.cube_edge_length_ << vcl_endl
+     << "cell thresh " << vp.cell_thresh_ << vcl_endl
+     << "---]" << vcl_endl;
   return os;
 }
