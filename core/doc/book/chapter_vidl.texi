@@ -1,0 +1,129 @@
+@chapsummary
+@code{vidl} is a library for managing video data.
+@code{vidl} supports the following general functions:
+@itemize @bullet
+@item Reading Video Files
+@item Saving Video Files
+@item Indexing through Video Files
+@end itemize
+
+@code{vidl} has the central notion of a @emph{movie}, which is turn is a
+sequence of clips. A @emph{clip} is simply a sequence of frames. A
+@emph{frame} can return a @code{vil_image} corresponding to the frame,
+using the coder/decoder @emph{codec} for a given video format.
+
+Large videos can be read a frame at a time from the codec so it is not
+necessary to load an entire video into memory in order to access individual
+frames.
+
+Currently vidl supports the following codecs:
+@itemize @bullet
+@item List of images
+@item AVI
+@item MPEG (not mature and read only)
+@end itemize
+There are plans to extend to DVD with a read-only capability
+@endchapsummary
+
+@section The vidl_movie structure
+The main interface class in @code{vidl} is @code{vidl_movie} it contains a 
+list of clips.  The class is meant to reflect a movie structure which is
+typically segmented into short independent frame sequences, i.e. clips. The
+movie structure hides the clip segments from the user by providing an iterator
+that plays through the whole movie. However, most research experiments involve
+single clip sequences. Currently a movie file is loaded as a single clip.
+
+The standard interface for getting frames from the movie is through an iterator
+as illustrated in the following example:
+
+@example
+#include <vidl/vidl_io.h>
+#include <vidl/vidl_frame.h>
+#include <vidl/vidl_movie.h>
+//load the movie
+vidl_movie_sptr  my_movie = vidl_io::load_movie("video.avi");
+
+//loop through the frames
+vidl_movie::frame_iterator fit(my_movie); 
+for(fit = my_movie->first(); fit != my_movie->last(); ++fit)
+  @{
+     vil_image image = fit->get_image();
+     // do something with the image
+    ...
+  @}
+@end example
+
+Most users will operate in this way in accessing the frames of a movie.  The
+@code{frame_iterator} allows the user to set forward and backward through the
+movie or to access a specific frame.
+
+@section The Codec
+Access to video file formats is provided through a standardized interface
+called the @emph{codec}, which stands for coder/decoder.  The key tasks of the
+codec are to load, save and probe a video file.  The probe detects if the format
+of a given file corresponds to any of the available codecs.
+
+In order to access a given file format it is necessary to register the 
+corresponding codec.  The codecs are registered in the user's main program
+as in the following example:
+@example
+#ifdef HAS_MPEG
+# include <vidl/vidl_mpegcodec.h>
+#endif
+
+#ifdef VCL_WIN32
+#include <vidl/vidl_avicodec.h>
+#endif
+
+int main(int argc, char** argv)
+@{
+  // Register video codecs
+#ifdef VCL_WIN32
+  vidl_io::register_codec(new vidl_avicodec);
+#endif
+
+#ifdef HAS_MPEG
+  vidl_io::register_codec(new vidl_mpegcodec);
+#endif
+ 
+// rest of main program
+   ...
+@}
+@end example
+The ugly conditional compilation illustrates the current state of affairs in 
+dealing with video across platforms.  It is difficult to find portable codecs 
+that are open source code for the popular video formats. We are working on 
+an MPEG codec (the current implementation doesn't read the header information)
+that will work on both unix and windows.   
+
+@section File I/O
+As we have already seen the @code{vidl} library supports reading and writing 
+video files.  These functions are handled by the class @code{vidl_io}.
+The key methods are illustrated by the following example:
+
+@example
+#include <vidl/vidl_io.h>
+#include <vidl/vidl_movie.h>
+...
+  vidl_movie_sptr avi_movie = vidl_io::load_movie("movie.avi");
+  if (!avi_movie) @{
+    vgui_error_dialog("Failed to load movie");
+    return;
+  @}
+...
+
+//later we save the avi movie as a set of images in the indicated directory
+
+ if(!vidl_io::save(avi_movie, "image_directory" , "ImageList"))
+  @{
+    vgui_error_dialog("Failed to save movie");
+    return;
+  @}
+...
+
+@end example
+
+@section Conclusion
+The @code{vidl} interface is simple and hides most of the difficult aspects of 
+dealing with video files. Getting MPEG to work at least in read mode across
+platforms is an important next step.
