@@ -170,6 +170,11 @@ SOURCE=.\Templates/vsl_vector_io+mbl_sum_1d-.cxx
 # End Source File
 # Begin Source File
 
+SOURCE=.\Templates/mbl_data_array_ptr_wrapper+vnl_vector+double--.cxx
+
+# End Source File
+# Begin Source File
+
 SOURCE=.\mbl_data_collector_base.cxx
 
 # End Source File
@@ -379,6 +384,21 @@ SOURCE=.\mbl_print.h
 # Begin Source File
 
 SOURCE=.\mbl_priority_bounded_queue.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\mbl_data_array_ptr_wrapper.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\mbl_data_array_ptr_wrapper.txx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\mbl_stl.h
 
 # End Source File
 # End Group
