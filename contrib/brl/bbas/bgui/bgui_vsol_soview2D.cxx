@@ -417,7 +417,7 @@ void bgui_vsol_soview2D_polygon::draw() const
 {
   unsigned int n = sptr()->size();
 
-  glBegin( GL_LINE_STRIP );
+  glBegin( GL_LINE_LOOP );
   for (unsigned int i=0; i<n;i++)
   {
     glVertex2f( sptr()->vertex(i)->x() , sptr()->vertex(i)->y() );
