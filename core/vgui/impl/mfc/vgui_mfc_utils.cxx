@@ -3,11 +3,16 @@
 #pragma implementation
 #endif
 //
-// .NAME vgui_mfc_util
-// Author: Marko Bacic, Oxford RRG
-// Created: 4 August 2000
+// This is vgui/impl/mfc/vgui_mfc_utils.cxx
+// See vgui_mfc_utils.h for a description of this file.
 //
-//-----------------------------------------------------------------------------
+// \author  Marko Bacic, Oxford RRG
+// \date    4 August 2000
+// \verbatim
+//  Modifications:
+//    20-JUL-2001  K.Y.McGaul  Added menu accelerators.
+// \endverbatim
+
 #include <vgui/impl/mfc/vgui_mfc_utils.h>
 #include <vgui/vgui_command.h>
 static bool debug = false;
@@ -16,24 +21,55 @@ vgui_mfc_utils *vgui_mfc_utils::instance_ = NULL;
 //: Called within message service routine of vgui_mfc_mainfrm.
 void vgui_mfc_utils::menu_dispatcher(UINT nID)
 {
-        // Make sure nID is in the relevant range
-        ASSERT(nID>=ID_MENU_ITEMS && nID<ID_MENU_ITEMS+item_count);
-        // Call the callback function associated with the menu item
-        callbacks[nID-ID_MENU_ITEMS]->execute();
+  // Make sure nID is in the relevant range
+  ASSERT(nID>=ID_MENU_ITEMS && nID<ID_MENU_ITEMS+item_count);
+  // Call the callback function associated with the menu item
+  callbacks[nID-ID_MENU_ITEMS]->execute();
 }
 
 //: (Create if necessary and) return singleton instance of this class.
 vgui_mfc_utils *vgui_mfc_utils::instance()
 {
-        if(!instance_)
-                instance_= new vgui_mfc_utils;
-        return instance_;
+  if(!instance_)
+    instance_= new vgui_mfc_utils;
+  return instance_;
 }
 
 //: Constructor.
 vgui_mfc_utils::vgui_mfc_utils()
 {
-        item_count = 0;
+  item_count = 0;
+}
+
+//: Add keyboard shortcut for this menu item to our accelerator table (accels).
+//  Also add text to the_menu_name for the shortcut.
+void vgui_mfc_utils::add_menu_accelerator(const vgui_menu_item menu_item, const WORD function_id, vcl_string& the_menu_name)
+{
+  ACCEL acc;
+  acc.cmd = function_id;
+  the_menu_name += vcl_string("\t");  // tab to right hand side of label
+  if (menu_item.short_cut.mod == vgui_SHIFT)
+  {
+    acc.fVirt = FSHIFT|FVIRTKEY;  // you can't use modifiers unless you use virtual key codes 
+                                  // hence the need for FVIRTKEY here.
+    the_menu_name += vcl_string("Shift+");
+  }
+  else if (menu_item.short_cut.mod == vgui_CTRL)
+  {
+    acc.fVirt = FCONTROL|FVIRTKEY;
+    the_menu_name += vcl_string("Ctrl+");
+  }
+  else if (menu_item.short_cut.mod == vgui_ALT)
+  {
+    acc.fVirt = FALT|FVIRTKEY;
+    the_menu_name += vcl_string("Alt+");
+  }
+  else // we are going to give a virtual key code, even if there is no modifier:
+    acc.fVirt = FVIRTKEY;
+  // VkKeyScan converts the key code from ASCII to a virtual key code:
+  acc.key = VkKeyScan(menu_item.short_cut.key);
+  the_menu_name += menu_item.short_cut.key;
+  accels.push_back(acc);
 }
 
 //: Create a MFC sub-menu from the given vgui_menu.
@@ -45,37 +81,29 @@ HMENU vgui_mfc_utils::add_submenu(const vgui_menu& menu)
   popdown_menu = new CMenu();
   popdown_menu->CreatePopupMenu();
 
-  for (unsigned i=0;i<menu.size();i++) {
-
-    if (menu[i].is_separator()) {
+  for (unsigned i=0;i<menu.size();i++) 
+  {
+    if (menu[i].is_separator()) 
+    {
       if (debug) vcl_cerr << " <separator> " << vcl_endl;
-          popdown_menu->AppendMenu(MF_SEPARATOR);
+        popdown_menu->AppendMenu(MF_SEPARATOR);
     }
-    else if (menu[i].is_command()) {
+    else if (menu[i].is_command()) 
+    {
       if (debug) vcl_cerr << " <command>" << vcl_endl;
-    int the_menu_id = ID_MENU_ITEMS+item_count++;
-          popdown_menu->AppendMenu(MF_STRING,the_menu_id,menu[i].name.c_str());
-          // Add to our callback list, the associated callback function pointer
-          vgui_command *cmnd = static_cast<vgui_command *>(menu[i].cmnd.as_pointer());
-          callbacks.push_back(cmnd);
+      int the_menu_id = ID_MENU_ITEMS+item_count++;
+      vcl_string the_menu_name = menu[i].name;
 
-    // Add menu accelerators:
-          if(menu[i].short_cut.mod!=vgui_MODIFIER_NULL ||
-             menu[i].short_cut.key!=vgui_KEY_NULL)
-                {
-      ACCEL acc;
-      if (menu[i].short_cut.mod == vgui_SHIFT)
-        acc.fVirt = FSHIFT;
-      else if (menu[i].short_cut.mod == vgui_CTRL)
-        acc.fVirt = FCONTROL;
-      else if (menu[i].short_cut.mod == vgui_ALT)
-        acc.fVirt = FALT;
-      char the_key = menu[i].short_cut.key;
-      acc.key = the_key;
-      acc.cmd = the_menu_id;
-      accels.push_back(acc);
-                }
-        }
+      // Add menu accelerators:
+      if(menu[i].short_cut.mod!=vgui_MODIFIER_NULL ||
+        menu[i].short_cut.key!=vgui_KEY_NULL)   
+         add_menu_accelerator(menu[i], the_menu_id, the_menu_name);
+
+      popdown_menu->AppendMenu(MF_STRING,the_menu_id,the_menu_name.c_str());
+      // Add to our callback list, the associated callback function pointer
+      vgui_command *cmnd = static_cast<vgui_command *>(menu[i].cmnd.as_pointer());
+      callbacks.push_back(cmnd);
+    }
     else if (menu[i].is_submenu()) {
       if (debug) vcl_cerr << " <submenu>" << vcl_endl;
       popdown_menu->AppendMenu(MF_POPUP,(UINT)add_submenu(*menu[i].menu),menu[i].name.c_str());
@@ -89,16 +117,16 @@ void vgui_mfc_utils::set_menu(const vgui_menu& menu)
 {
   CMenu *menu_bar;
 
-  // Get the application thread
+  // Get the application thread (this is the single CWinApp object associated with the application):
   CWinApp *theapp = AfxGetApp();
   // Obtain the main window associated with it
   CWnd *window = theapp->GetMainWnd();
   // See whether the application window already has a menu associated with it
   if(window->GetMenu() == NULL)
   {
-          menu_bar = new CMenu();
-          menu_bar->CreateMenu();
-          window->SetMenu(menu_bar);
+    menu_bar = new CMenu();
+    menu_bar->CreateMenu();
+    window->SetMenu(menu_bar);
   }
   for (unsigned i=0;i<menu.size();i++)
   {
@@ -110,25 +138,16 @@ void vgui_mfc_utils::set_menu(const vgui_menu& menu)
     else if (menu[i].is_command())
     {
       int the_menu_id = ID_MENU_ITEMS+item_count++;
-      if (debug) vcl_cerr << " <command> " << menu[i].name << vcl_endl;
-      menu_bar->AppendMenu(MF_STRING|MF_ENABLED,the_menu_id,
-        menu[i].name.c_str());
+      vcl_string the_menu_name = menu[i].name;
 
       // Add menu accelerators
       if(menu[i].short_cut.mod!=vgui_MODIFIER_NULL ||
-             menu[i].short_cut.key!=vgui_KEY_NULL)
-      {
-        ACCEL acc;
-        acc.cmd = the_menu_id;
-        if (menu[i].short_cut.mod == vgui_SHIFT)
-          acc.fVirt = FSHIFT;
-        else if (menu[i].short_cut.mod == vgui_CTRL)
-          acc.fVirt = FCONTROL;
-        else if (menu[i].short_cut.mod == vgui_ALT)
-          acc.fVirt = FALT;
-        acc.key = menu[i].short_cut.key;
-        accels.push_back(acc);
-                  }
+        menu[i].short_cut.key!=vgui_KEY_NULL)
+          add_menu_accelerator(menu[i], the_menu_id, the_menu_name);
+
+      if (debug) vcl_cerr << " <command> " << menu[i].name << vcl_endl;
+      menu_bar->AppendMenu(MF_STRING|MF_ENABLED,the_menu_id,
+        the_menu_name.c_str());
     }
     else if (menu[i].is_submenu())
     {
@@ -136,7 +155,7 @@ void vgui_mfc_utils::set_menu(const vgui_menu& menu)
       menu_bar->AppendMenu(MF_POPUP,(UINT)add_submenu(*menu[i].menu),menu[i].name.c_str());
     }
   }
-  if (accels.size() < 0)
+  if (accels.size() > 0)
     AccelTable = CreateAcceleratorTable(&accels[0], accels.size());
   window->DrawMenuBar();
   window->UpdateWindow();
@@ -153,28 +172,33 @@ CMenu *vgui_mfc_utils::set_popup_menu(const vgui_menu &menu)
   pop_up = new CMenu();
   pop_up->CreatePopupMenu();
 
-  for (unsigned i=0;i<menu.size();i++) {
-
-    if (menu[i].is_separator()) {
+  for (unsigned i=0;i<menu.size();i++) 
+  {
+    if (menu[i].is_separator()) 
+    {
       if (debug) vcl_cerr << " <separator> " << vcl_endl;
           pop_up->AppendMenu(MF_SEPARATOR);
     }
-    else if (menu[i].is_command()) {
+    else if (menu[i].is_command()) 
+    {
       if (debug) vcl_cerr << " <command>" << vcl_endl;
-          pop_up->AppendMenu(MF_STRING,ID_MENU_ITEMS+item_count++,menu[i].name.c_str());
-          // Add to our callback list, the associated callback function pointer
-          vgui_command *cmnd = static_cast<vgui_command *>(menu[i].cmnd.as_pointer());
-          callbacks.push_back(cmnd);
-          if(menu[i].short_cut.mod!=vgui_MODIFIER_NULL ||
-             menu[i].short_cut.key!=vgui_KEY_NULL)
-                {
-            // FIXME: Accelerators
-      // kym - there is only one accelerator table - it has been defined for non-popup menus
-                }
-        }
-    else if (menu[i].is_submenu()) {
+      int the_menu_id = ID_MENU_ITEMS+item_count++;
+      vcl_string the_menu_name = menu[i].name;
+
+      // Add menu accelerators:
+      if(menu[i].short_cut.mod!=vgui_MODIFIER_NULL ||
+        menu[i].short_cut.key!=vgui_KEY_NULL)
+          add_menu_accelerator(menu[i], the_menu_id, the_menu_name);
+      
+      pop_up->AppendMenu(MF_STRING,the_menu_id,menu[i].name.c_str());
+      // Add to our callback list, the associated callback function pointer
+      vgui_command *cmnd = static_cast<vgui_command *>(menu[i].cmnd.as_pointer());
+      callbacks.push_back(cmnd);
+    }
+    else if (menu[i].is_submenu()) 
+    {
       if (debug) vcl_cerr << " <submenu>" << vcl_endl;
-         pop_up->AppendMenu(MF_POPUP,(UINT)add_submenu(*menu[i].menu),menu[i].name.c_str());
+        pop_up->AppendMenu(MF_POPUP,(UINT)add_submenu(*menu[i].menu),menu[i].name.c_str());
     }
   }
   return pop_up;

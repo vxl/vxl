@@ -1,18 +1,23 @@
+//
+// This is vgui/impl/mfc/vgui_mfc_utils.h
+
+//:
+// \file
+// \author  Marko Bacic, Oxford RRG
+// \date    4 August 2000
+// \brief   Provides support for menus 
+// \verbatim
+//  Modifications:
+//   14-AUG-2000 Marko Bacic   Added support for popup menus
+//   16-MAR-2001 K.Y.McGaul    Added menu accelerators
+// \endverbatim
+//
+
 #ifndef vgui_mfc_utils_h_
 #define vgui_mfc_utils_h_
 #ifdef __GNUC__
 #pragma interface
 #endif
-//
-// .NAME vgui_mfc_utils - Provides support for menus
-// .LIBRARY vgui-mfc
-// .SECTION Author
-//    Marko Bacic, Oxford RRG
-// Created: 4 August 2000 
-// .SECTION Modifications:
-//   14-AUG-2000 Marko Bacic   Added support for popup menus
-//   16-MAR-2001 K.Y.McGaul    Added menu accelerators.
-//-----------------------------------------------------------------------------
 
 #include <vgui/vgui_event.h>
 #include <vgui/vgui_menu.h>
@@ -34,6 +39,8 @@ class vgui_mfc_utils
   vcl_vector<vgui_command *> callbacks;
   //: List of menu accelerators.
   vcl_vector<ACCEL> accels;
+  //: Add keyboard shortcut for this menu item to our accelerator table (accels).
+  void add_menu_accelerator(const vgui_menu_item item, const WORD function_id, vcl_string& the_menu_name);
 
 public:
   //: (Create if necessary and) return singleton instance of this class.
