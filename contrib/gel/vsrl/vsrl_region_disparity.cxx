@@ -11,8 +11,6 @@
 #include "vsrl_region_disparity.h"
 #include <vcl_iostream.h>
 #include <vsrl/vsrl_stereo_dense_matcher.h>
-#include <sdet/sdet_region_proc_params.h>
-#include <sdet/sdet_region_proc.h>
 #include <vtol/vtol_intensity_face.h>
 #include <vsrl/vsrl_results_dense_matcher.h>
 
