@@ -28,7 +28,7 @@ vil_image vil_new(int width, int height, vil_image const& prototype)
   switch (vil_pixel_type(prototype)) {
   case VIL_BYTE: return vil_memory_image_of<unsigned char>(width, height);
   default:
-    vcl_assert(!"vil_new");
+    assert(!"vil_new");
     return 0;
   }
 }

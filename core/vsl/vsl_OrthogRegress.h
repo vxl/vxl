@@ -9,11 +9,11 @@
 
 #include <vcl/vcl_cmath.h>
 #include <vsl/vsl_hacks.h>
-#include <vsl/fsm_ortho_regress.h>
+#include <vsl/vsl_ortho_regress.h>
 
-class vsl_OrthogRegress : public fsm_ortho_regress {
+class vsl_OrthogRegress : public vsl_ortho_regress {
 public:
-  typedef fsm_ortho_regress base;
+  typedef vsl_ortho_regress base;
   vsl_OrthogRegress() { }
   vsl_OrthogRegress(double, double, double) { } // FIXME
   void IncrByXY(double x, double y) { base::add_point(x, y); }

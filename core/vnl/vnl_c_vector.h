@@ -27,7 +27,7 @@
 template <class T>
 class vnl_c_vector {
 public:
-  typedef typename vnl_numeric_traits<T>::abs_t abs_t;
+  typedef vnl_numeric_traits<T>::abs_t abs_t;
 
   static T sum(const T* v, unsigned n);
   static inline abs_t squared_magnitude(T const *p, unsigned n) { return two_nrm2(p,n); }
@@ -65,7 +65,7 @@ public:
   static inline abs_t two_norm(T const *p, unsigned n) 
     { two_nrm2_aux(p,n); return abs_t(sqrt(aux_var)); }
   static inline abs_t rms_norm(T const *p, unsigned n) 
-    { two_nrm2_aux(p,n); return abs_t(sqrt(aux_var)/n); }
+    { two_nrm2_aux(p,n); return abs_t(sqrt(aux_var/n)); }
   static inline abs_t inf_norm(T const *p, unsigned n) 
     { inf_norm_aux(p,n); return aux_var; }
 

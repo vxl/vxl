@@ -135,7 +135,7 @@ void vil_stream_fstream::seek(int position)
     xerr << "seekp to " << position << endl;
     int at = f_.tellp();
     if (position != at) {
-      cerr << "seekp to " << position << ", at " << f_.tellp() << endl;
+      xerr << "seekp to " << position << ", at " << f_.tellp() << endl;
       f_.seekp(position);
       assert(f_.good());
     }

@@ -3,11 +3,9 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
-// .NAME	vnl_symmetric_eigensystem - Solve $A x = \lambda x$ using vnl_qr
-// .LIBRARY	vnl-algo
-// .HEADER	vxl Package
-// .INCLUDE	vnl/algo/vnl_symmetric_eigensystem.h
-// .FILE	vnl_symmetric_eigensystem.cxx
+// .NAME        vnl_symmetric_eigensystem - @{\boldmath Solve $A x = \lambda x$ using vnl_qr. @}
+// .INCLUDE     vnl/algo/vnl_symmetric_eigensystem.h
+// .FILE        vnl/algo/vnl_symmetric_eigensystem.cxx
 //
 // .SECTION Description
 // @{
@@ -15,6 +13,8 @@
 //    The resulting eigenvectors and values are sorted in increasing order
 //    so V.column(0) is the eigenvector corresponding to the smallest
 //    eigenvalue.
+//
+//    As a matrix decomposition, this is A = V D V^t
 //
 //    Uses the EISPACK routine RS, which in turn calls TRED2 to reduce A
 //    to tridiagonal form, followed by TQL2, to find the eigensystem.
@@ -42,11 +42,8 @@
 // \end{quote}
 // @}
 //
-// .SECTION Author
-//     Andrew W. Fitzgibbon, Oxford RRG, 29 Aug 96
-//
-// .SECTION Modifications
-//     fsm@robots, 5 March 2000: templated
+// Author: Andrew W. Fitzgibbon, Oxford RRG, 29 Aug 96
+// History: fsm@robots, 5 March 2000: templated
 
 #include <vnl/vnl_matrix.h>
 #include <vnl/vnl_diag_matrix.h>
@@ -93,7 +90,11 @@ public:
   // @}
   vnl_matrix<T> recompose() const { return V * D * V.transpose(); }
 
-  vnl_matrix<T> pinverse() const; // pseudoinverse
+  //: return the pseudoinverse.
+  vnl_matrix<T> pinverse() const;
+
+  //: return the square root, if positive semi-definite.
+  vnl_matrix<T> square_root() const;
 
   //: Solve LS problem M x = b
   vnl_vector<T> solve(vnl_vector<T> const & b);

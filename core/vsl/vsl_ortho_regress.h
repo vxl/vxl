@@ -1,17 +1,28 @@
-#ifndef fsm_ortho_regress_h_
-#define fsm_ortho_regress_h_
+#ifndef vsl_ortho_regress_h_
+#define vsl_ortho_regress_h_
 #ifdef __GNUC__
-#pragma interface
+#pragma interface "vsl_ortho_regress"
 #endif
 /*
   fsm@robots.ox.ac.uk
 */
 
-class fsm_ortho_regress {
+// A vsl_ortho_regress object performs least-squares
+// fitting of straight lines to point sets.
+//
+// Internally, the object maintains only the moments
+//   S_{mn} = \sum_i x_i^m y_i^n
+// and this is sufficient for both unconstrained and
+// constrained (fit line through a point) fitting.
+//
+// There is no need to store any fitting costs, "current
+// fit" etc on this object.
+
+class vsl_ortho_regress {
 public:
-  unsigned S1;
-  double Sx, Sy;
-  double Sxx, Sxy, Syy;
+  unsigned S1;                  // S_00
+  double Sx, Sy;                // S_10, S_01
+  double Sxx, Sxy, Syy;         // S_20, S_11, S_02
 
   void reset() {
     S1 = 0;
@@ -19,9 +30,9 @@ public:
     Sxx = Sxy = Syy =0;
   }
   
-  fsm_ortho_regress() { reset(); }
+  vsl_ortho_regress() { reset(); }
 
-  ~fsm_ortho_regress() { }
+  ~vsl_ortho_regress() { }
 
   void add_point(double x, double y) {
     ++S1;

@@ -21,7 +21,7 @@
 //     ported by Luis E. Galup
 //
 //-----------------------------------------------------------------------------
-#include <vtol/vtol_topology_cache_2d_ref.h>
+//#include <vtol/vtol_topology_cache_2d_ref.h>
 
 #include <vtol/vtol_topology_object_2d.h>
 #include <vcl/vcl_vector.h>

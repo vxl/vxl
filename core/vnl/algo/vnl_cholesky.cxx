@@ -91,7 +91,24 @@ vnl_matrix<double> vnl_cholesky::inverse() const
   return I;
 }
 
-// -- Return Upper-triangular factor.
+// -- Return lower-triangular factor.
+vnl_matrix<double> vnl_cholesky::lower_triangle() const
+{
+  unsigned n = A_.columns();
+  vnl_matrix<double> L(n,n);
+  // Zap upper triangle and transpose
+  for(unsigned i = 0; i < n; ++i) {
+    L(i,i) = A_(i,i);
+    for(unsigned j = i+1; j < n; ++j) {
+      L(j,i) = A_(j,i);
+      L(i,j) = 0;
+    }
+  }
+  return L;
+}
+  
+
+// -- Return upper-triangular factor.
 vnl_matrix<double> vnl_cholesky::upper_triangle() const
 {
   unsigned n = A_.columns();

@@ -75,8 +75,8 @@ public:
 
 // -- Return the error of the function when it was evaluated at the start
 // point of the last minimization. For minimizers driven by a vnl_least_squares_function
-// (Levenberg-Marquardt, Conjugate Gradients) this is usually the RMS error.
-// For those driven by a vnl_cost_function (LBFGS, Amoeba) it is simply the
+// (Levenberg-Marquardt) this is usually the RMS error.
+// For those driven by a vnl_cost_function (CG, LBFGS, Amoeba) it is simply the
 // value of the vnl_cost_function at the start (usually the sum of squared residuals).
   double get_start_error() const { return start_error_; }
 

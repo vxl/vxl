@@ -310,3 +310,6 @@ void vtol_chain_2d::clear(void)
   _directions.clear();
   unlink_all_inferiors();
 }
+
+#include <vcl/vcl_rel_ops.h> // gcc 2.7
+VCL_INSTANTIATE_INLINE(bool operator!=(vtol_chain_2d const &, vtol_chain_2d const &));

@@ -2,24 +2,24 @@
   fsm@robots.ox.ac.uk
 */
 #ifdef __GNUC__
-#pragma implementation
+#pragma implementation "vsl_ortho_regress"
 #endif
-#include "fsm_ortho_regress.h"
+#include "vsl_ortho_regress.h"
 #include <vcl/vcl_cmath.h>
 
 // convenience methods
 
-void fsm_ortho_regress::add_points(double const *x, double const *y, unsigned n) {
+void vsl_ortho_regress::add_points(double const *x, double const *y, unsigned n) {
   for (unsigned i=0; i<n; ++i)
     add_point(x[i], y[i]);
 }
 
-void fsm_ortho_regress::add_points(float const *x, float const *y, unsigned n) {
+void vsl_ortho_regress::add_points(float const *x, float const *y, unsigned n) {
   for (unsigned i=0; i<n; ++i)
     add_point(x[i], y[i]);
 }
 
-double fsm_ortho_regress::rms_cost(double a, double b, double c) const {
+double vsl_ortho_regress::rms_cost(double a, double b, double c) const {
   return sqrt( cost(a, b, c) / S1 );
 }
 
@@ -69,12 +69,12 @@ bool symmetric_2x2_eigen_system(double a, double b, double c,
   M = \sum (x_i - xbar)*(x_i - xbar)^t which has least
   eigenvalue.
 */
-double fsm_ortho_regress::cost(double a, double b, double c) const {
+double vsl_ortho_regress::cost(double a, double b, double c) const {
   return 
     (Sxx*a*a + 2*Sxy*a*b + Syy*b*b + 2*Sx*a*c + 2*Sy*b*c + S1*c*c)/(a*a+b*b);
 }
 
-bool fsm_ortho_regress::fit(double &a, double &b, double &c) const {
+bool vsl_ortho_regress::fit(double &a, double &b, double &c) const {
   assert(S1 >= 2);
   double xbar = Sx/S1; 
   double ybar = Sy/S1;
@@ -101,7 +101,7 @@ bool fsm_ortho_regress::fit(double &a, double &b, double &c) const {
   is solved by taking the eigenvector of M of least 
   eigenvalue.
 */
-bool fsm_ortho_regress::fit_constrained(double x, double y, 
+bool vsl_ortho_regress::fit_constrained(double x, double y, 
 					double &a, double &b, double &c) const 
 {
   assert(S1 >= 1);

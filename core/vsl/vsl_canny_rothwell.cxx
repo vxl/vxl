@@ -67,8 +67,9 @@ vsl_canny_rothwell::~vsl_canny_rothwell() {
 //-----------------------------------------------------------------------------
 
 
-void vsl_canny_rothwell::detect_edges(vil_image const &image, vcl_list<vsl_Edge*> *edges, bool adaptive) {
-  vcl_assert(edges);
+void vsl_canny_rothwell::detect_edges(vil_image const &image, vcl_list<vsl_Edge*> *edges, bool adaptive) 
+{
+  assert(edges);
 
   _xsize  = image.height();
   _ysize  = image.width();

@@ -8,7 +8,7 @@
 
 #include <vcl/vcl_cassert.h>
 #include <vsl/vsl_edge.h>
-#include <vsl/fsm_ortho_regress.h>
+#include <vsl/vsl_ortho_regress.h>
 
 void vsl_break_edge(vsl_edge const *in,
 		    vcl_vector<unsigned> const &where,
@@ -53,7 +53,7 @@ void vsl_break_edge(vsl_edge const *in,
   float const *y = in->GetY();
   unsigned n = in->size();
 
-  fsm_ortho_regress fitter;
+  vsl_ortho_regress fitter;
 
   // decide where to break the edge.
   vcl_vector<unsigned> breaks;

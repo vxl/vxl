@@ -173,7 +173,7 @@ static tsize_t vil_tiff_writeproc(thandle_t h, tdata_t buf, tsize_t n)
 
 static toff_t vil_tiff_seekproc(thandle_t h, toff_t offset, int whence)
 {
-  trace << "seek " << offset << " w = " << whence << endl;
+    trace << "seek " << offset << " w = " << whence << endl;
   vil_tiff_structures* p = (vil_tiff_structures*)h;
   if (whence == SEEK_SET) {
     p->vs->seek(offset);
@@ -486,7 +486,8 @@ bool vil_tiff_generic_image::write_header()
   TIFFSetField(p->tif, TIFFTAG_ORIENTATION, ORIENTATION_TOPLEFT);
 
   // hmmm.  single strip image.  good for compression?
-  p->rows_per_strip = height_;
+  //  p->rows_per_strip = height_;
+  p->rows_per_strip = 1;
   TIFFSetField(p->tif, TIFFTAG_ROWSPERSTRIP, p->rows_per_strip);
 
   int samplesperpixel = components_;
@@ -529,9 +530,10 @@ bool vil_tiff_generic_image::write_header()
   TIFFSetField(p->tif, TIFFTAG_PHOTOMETRIC, p->photometric);
   
   // TODO: Choice of compression
-  p->compression = COMPRESSION_LZW;
+  //  p->compression = COMPRESSION_LZW;
+  p->compression = COMPRESSION_NONE;
   TIFFSetField(p->tif, TIFFTAG_COMPRESSION, p->compression);
-  p->compressed = p->compression == COMPRESSION_NONE;
+  p->compressed = (p->compression != COMPRESSION_NONE);
   
   // TIFFSetField(p->tif, TIFFTAG_IMAGEDESCRIPTION, GetDescription());
   TIFFSetField(p->tif, TIFFTAG_SOFTWARE, "vxl/vil/file_formats/vil_tiff.cxx");

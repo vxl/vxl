@@ -1,10 +1,4 @@
 // -*- c++ -*-
-// .NAME	vnl_fft2d - 2D Fourier transform
-// .LIBRARY	vnl-algo
-// .HEADER	vxl Package
-// .INCLUDE	vnl/algo/vnl_fft2d.h
-// .FILE	vnl_fft2d.txx
-// .EXAMPLE	../tests/test_fft2d.cxx
 //
 // .SECTION Description
 //
@@ -28,9 +22,9 @@
 //  of the 'number' (the size of the array) to be FFT'd.
 //  (integral part of Temperton's algorithm)
 //
-// .SECTION Author
+//  .SECTION Author
 //  Veit U.B. Schenk, Oxford RRG, 19 Mar 98
-// .SECTION Modifications:
+//  .SECTION Modifications:
 //-----------------------------------------------------------------------------
 
 #ifndef vnl_fft2d_h_

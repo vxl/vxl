@@ -19,31 +19,32 @@
 #include <vcl/vcl_iostream.h>
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_matrix.h>
+#include <vnl/vnl_nonlinear_minimizer.h>
 
-class vnl_least_squares_function;
+class vnl_cost_function;
 
-class vnl_conjugate_gradient {
+class vnl_conjugate_gradient : public vnl_nonlinear_minimizer {
 public:
   // Constructors/Destructors--------------------------------------------------
   
   // -- Initialize with the function object that is to be minimized.
-  vnl_conjugate_gradient(vnl_least_squares_function& f) { init( f); }
+  vnl_conjugate_gradient(vnl_cost_function& f) { init( f); }
 
   // -- Initialize as above, and then run minimization.
-  vnl_conjugate_gradient(vnl_least_squares_function& f, vnl_vector<double>& x) {
+  vnl_conjugate_gradient(vnl_cost_function& f, vnl_vector<double>& x) {
     init(f);
     minimize(x);
   }
 
   // -- Initialize all variables
-  void init( vnl_least_squares_function &f);
+  void init(vnl_cost_function &f);
 
   // -- Destructor.
   ~vnl_conjugate_gradient();
 
   // Operations----------------------------------------------------------------
 
-  void diagnose_outcome( ostream& = cout) const;
+  void diagnose_outcome(ostream& = cout) const;
 
   // Computations--------------------------------------------------------------
 
@@ -52,32 +53,11 @@ public:
   // Returns true for convergence, false for failure.
   bool minimize(vnl_vector<double>& x);
 
-  // Data Access---------------------------------------------------------------
-
-  // -- Step size used to approximate the gradient
-  void set_gradient_step_size( const double s) { gradstep_= s; }
-
-  // -- Set maximum number of iterations
-  void set_max_iterations( const int v) { max_number_of_iterations= v; }
-
-  // -- Set tolerance on gradient for minimization
-  void set_gradient_tolerance( const double t) { gradtolerance_= t; }
-
-  // Data Control--------------------------------------------------------------
-
 protected:
   // Data Members--------------------------------------------------------------
 
-  vnl_least_squares_function *f_;
-
-  double gradstep_;
-  int max_number_of_iterations;
-  double gradtolerance_;
-
-  int number_of_iterations;
-  double startresidue;
-  double endresidue;
-  int number_of_evaluations;
+  vnl_cost_function *f_;
+  double final_step_size_;
 
   // Helpers-------------------------------------------------------------------
 

@@ -8,10 +8,12 @@
 // Created: 15 Feb 99
 // Modifications:
 //   990215 Geoff Initial version.
-//
+//   000628 David Capel - Major rewrite. Now derived from vnl_nonlinear_minimizer
+//                        and operates on a vnl_cost_function.
 //-----------------------------------------------------------------------------
 #include "vnl_conjugate_gradient.h"
-#include <vnl/vnl_least_squares_function.h>
+#include <vnl/vnl_cost_function.h>
+#include <vnl/vnl_vector_ref.h>
 #include <vnl/algo/vnl_svd.h>
 #include <vcl/vcl_cstdlib.h>
 #include <vcl/vcl_cassert.h>
@@ -66,66 +68,64 @@ vnl_conjugate_gradient::~vnl_conjugate_gradient()
 {
 }
 
-void vnl_conjugate_gradient::init( vnl_least_squares_function &f)
+void vnl_conjugate_gradient::init(vnl_cost_function &f)
 {
-  // not implemented if gradient known
-  assert( !f.has_gradient());
-
   f_= &f;
-  gradstep_= 1e-7;
-  max_number_of_iterations= 10* f.get_number_of_unknowns();
-  gradtolerance_= 1e-7;
-  number_of_iterations= 0;
-  startresidue= 0;
-  endresidue= 0;
-  number_of_evaluations= 0;
+  num_iterations_ = 0;
+  num_evaluations_ = 0;
+  start_error_ = 0;
+  end_error_ = 0;
 }
 
 ///////////////////////////////////////
 
-double vnl_conjugate_gradient::valuecomputer_( double *x)
+double vnl_conjugate_gradient::valuecomputer_(double *x)
 {
   vnl_conjugate_gradient* active = vnl_conjugate_gradient_Activate::current;
-  vnl_least_squares_function* f = active->f_;
-  vnl_vector<double> xv( x, f->get_number_of_unknowns());
-  active->number_of_evaluations++;
+  vnl_cost_function* f = active->f_;
+  vnl_vector_ref<double> ref_x(f->get_number_of_unknowns(), x);
 
-  double rms_residuals = f->rms(xv);
-  // capes - return value of cost function at x, i.e. sum of squared residuals
-  return rms_residuals * rms_residuals * f->get_number_of_residuals();
+  active->num_evaluations_++;
+
+  return f->f(ref_x);
 }
 
-int vnl_conjugate_gradient::gradientcomputer_( double *g, double *x)
+int vnl_conjugate_gradient::gradientcomputer_(double *g, double *x)
 {
   vnl_conjugate_gradient* active = vnl_conjugate_gradient_Activate::current;
-  vnl_least_squares_function* f = active->f_;
+  vnl_cost_function* f = active->f_;
+  vnl_vector_ref<double> ref_x(f->get_number_of_unknowns(), x);
+  vnl_vector_ref<double> ref_g(f->get_number_of_unknowns(), g);
 
-  vnl_vector<double> xp1(x, f->get_number_of_unknowns());
-  vnl_vector<double> xm1(x, f->get_number_of_unknowns());
+  f->gradf(ref_x, ref_g);
 
-  for( int i=0; i< f->get_number_of_unknowns(); i++)
-    {
-      xp1[i] += active->gradstep_;
-      xm1[i] -= active->gradstep_;
-
-      g[i] = (valuecomputer_(xp1.data_block())- valuecomputer_(xm1.data_block()))/(2*active->gradstep_);
-
-      xp1[i] = x[i];
-      xm1[i] = x[i];
-    }
   return 0;
 }
 
-int vnl_conjugate_gradient::valueandgradientcomputer_( double *v, double *g, double *x)
+int vnl_conjugate_gradient::valueandgradientcomputer_(double *v, double *g, double *x)
 {
-  *v= valuecomputer_( x);
-  gradientcomputer_( g, x);
+  vnl_conjugate_gradient* active = vnl_conjugate_gradient_Activate::current;
+  vnl_cost_function* f = active->f_;
+  vnl_vector_ref<double> ref_x(f->get_number_of_unknowns(), x);
+  vnl_vector_ref<double> ref_g(f->get_number_of_unknowns(), g);
+
+  f->compute(ref_x, v, &ref_g);
+
   return 0;
 }
 
 int vnl_conjugate_gradient::preconditioner_( double *out, double *in)
 {
-  *out= *in;
+  // FIXME - there should be some way to set a preconditioner if you have one
+  // e.g. P = inv(diag(A'A)) for linear least squares systems.
+
+  vnl_conjugate_gradient* active = vnl_conjugate_gradient_Activate::current;
+  vnl_cost_function* f = active->f_;
+
+  int n = f->get_number_of_unknowns();
+  for (int i=0; i < n ; ++i)
+    out[i] = in[i];
+
   return 0;
 }
 
@@ -153,25 +153,25 @@ extern "C" int vnl_conjugate_gradient__preconditioner_( double *out, double *in)
 
 bool vnl_conjugate_gradient::minimize( vnl_vector<double> &x)
 {
-  double *xp= x.data_block();
-  vnl_vector<double>  maximum_gradient(f_->get_number_of_unknowns());
-  double  step_size= 0;
-  vnl_vector<double> tv( f_->get_number_of_unknowns(), gradtolerance_);
-  double *gradient_tolerance= tv.data_block();
-  vnl_vector<double>  workspace( f_->get_number_of_unknowns()*3 );
-  int     number_of_unknowns= f_->get_number_of_unknowns();
+  double *xp = x.data_block();
+  double max_norm_of_gradient;
+  int number_of_iterations;
+  final_step_size_ = 0; 
+  double gradient_tolerance = gtol;
+  vnl_vector<double> workspace(f_->get_number_of_unknowns()*3);
+  int number_of_unknowns = f_->get_number_of_unknowns();
 
   vnl_conjugate_gradient_Activate activator(this);
 
-  startresidue= valuecomputer_( xp);
-  number_of_evaluations= 0;
+  start_error_ = valuecomputer_(xp);
+  num_evaluations_ = 0;
 
   cg_( xp, 
-       maximum_gradient.data_block(), 
+       &max_norm_of_gradient,
        &number_of_iterations,
-       &step_size,
-       gradient_tolerance,
-       &max_number_of_iterations,
+       &final_step_size_,
+       &gradient_tolerance,
+       &maxfev,
        &number_of_unknowns,
        &number_of_unknowns,
 #ifdef VCL_SUNPRO_CC
@@ -187,7 +187,8 @@ bool vnl_conjugate_gradient::minimize( vnl_vector<double> &x)
 #endif
        workspace.data_block());
 
-  endresidue= valuecomputer_(xp);
+  end_error_= valuecomputer_(xp);
+  num_iterations_ = number_of_iterations;
 
   return true;
 }
@@ -196,12 +197,13 @@ bool vnl_conjugate_gradient::minimize( vnl_vector<double> &x)
 void vnl_conjugate_gradient::diagnose_outcome(ostream& os) const
 {
   os << "vnl_conjugate_gradient: " 
-     << number_of_iterations 
+     << num_iterations_ 
      << " iterations, " 
-     << number_of_evaluations 
-     << " evaluations. RMS error start/end " 
-     << sqrt(startresidue/f_->get_number_of_residuals())
+     << num_evaluations_ 
+     << " evaluations. Cost function reported error" 
+     << f_->reported_error(start_error_)
      << "/" 
-     << sqrt(endresidue/f_->get_number_of_residuals())
+     << f_->reported_error(end_error_)
+     << " . Final step size = " << final_step_size_
      << endl;
 }

@@ -86,12 +86,25 @@ vnl_vector<T> vnl_symmetric_eigensystem<T>::solve(const vnl_vector<T>& b)
 template <class T>
 vnl_matrix<T> vnl_symmetric_eigensystem<T>::pinverse() const
 {
-  unsigned n=D.n();
+  unsigned n = D.n();
   vnl_diag_matrix<T> invD(n);
-  for (unsigned i=0;i<n;i++)
-    if (D(i,i))
-      invD(i,i) = 1.0/D(i,i);
+  for (unsigned i=0; i<n; ++i)
+    if (D(i, i))
+      invD(i, i) = 1.0/D(i, i);
   return V * invD * V.transpose();
+}
+
+template <class T>
+vnl_matrix<T> vnl_symmetric_eigensystem<T>::square_root() const
+{
+  unsigned n = D.n();
+  vnl_diag_matrix<T> sqrtD(n);
+  for (unsigned i=0; i<n; ++i)
+    if (D(i, i) < 0)
+      cerr << __FILE__ ": square_root(): some eigenvalues are negative." << endl;
+    else
+      sqrtD(i, i) = sqrt(D(i, i));
+  return V * sqrtD * V.transpose();
 }
 
 //--------------------------------------------------------------------------------

@@ -61,5 +61,5 @@ double vnl_least_squares_function::rms(vnl_vector<double> const & x)
 {
   vnl_vector<double> fx(n_);
   f(x, fx);
-  return fx.magnitude();
+  return fx.rms();
 }

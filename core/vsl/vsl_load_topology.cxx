@@ -42,7 +42,7 @@ void vsl_load_topology(istream &f, vcl_list<vsl_edge*> &es, vcl_list<vsl_vertex*
     cerr << __FILE__ ": error reading number of vertices" << endl;
     return;
   } 
-  vcl_assert(numverts >= 0);
+  assert(numverts >= 0);
   streamok;
   // read vertices :
   cerr << "reading " << numverts << " vertices..." << endl;
@@ -52,7 +52,7 @@ void vsl_load_topology(istream &f, vcl_list<vsl_edge*> &es, vcl_list<vsl_vertex*
     int id;
     float x, y;
     f >> vcl_ws >> stashid >> id >> x >> y;
-    vcl_assert(stashid<vert.size() && !vert[stashid]);
+    assert(stashid<vert.size() && !vert[stashid]);
     vert[stashid] = new vsl_vertex(x, y, id);
 
     vs.push_front(vert[stashid]);
@@ -67,15 +67,15 @@ void vsl_load_topology(istream &f, vcl_list<vsl_edge*> &es, vcl_list<vsl_vertex*
     cerr << __FILE__ ": error reading number of edges" << endl;
     return;
   }
-  vcl_assert(numedges >= 0);
+  assert(numedges >= 0);
   streamok;
   // read edges :
   cerr << "reading " << numedges << " edges..." << endl;
   for (unsigned i=0; i<numedges; ++i) {
     int stashid1 = -1, stashid2 = -1;
     f >> vcl_ws >> stashid1 >> stashid2;
-    vcl_assert(0<=stashid1 && stashid1<vert.size() && vert[stashid1]);
-    vcl_assert(0<=stashid2 && stashid2<vert.size() && vert[stashid2]);
+    assert(0<=stashid1 && stashid1<vert.size() && vert[stashid1]);
+    assert(0<=stashid2 && stashid2<vert.size() && vert[stashid2]);
     
     int id; // edge id
     f >> vcl_ws >> id;

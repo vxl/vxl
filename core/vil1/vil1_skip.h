@@ -10,6 +10,6 @@
 #include <vil/vil_image.h>
 
 //: a function
-vil_image vil_skip_image(vil_image const &, unsigned, unsigned);
+vil_image vil_skip(vil_image const &, unsigned, unsigned);
 
 #endif

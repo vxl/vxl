@@ -15,7 +15,6 @@
 #include <vil/vil_image.h>
 #include <vil/vil_image_as.h>
 #include <vil/vil_memory_image_of.h>
-#include <vil/vil_copy.h>
 
 #include <vsl/vsl_roi_window.h>
 #include <vsl/vsl_convolve.h>
@@ -74,43 +73,7 @@ void vsl_harris::init_module (vil_image const &image) {
   window_str.col_end_index = image_w-1;
   
   // copy input image to byte buffer.
-  //vil_image_as_byte(image).get_section(image_ptr->get_buffer(), 0, 0, image_w, image_h);
-
-  // set up response images etc.
-  //no longer:
-  // we have to explicitly ref() and unref() the buffers
-  // because we want to refer to them as vil_memory_image_of<T>s and not generic images.
-  image_ptr            = new vil_byte_buffer   (image_w, image_h); //image_ptr->ref();
-  image_gradx_ptr      = new vil_int_buffer    (image_w, image_h); //image_gradx_ptr->ref();
-  image_grady_ptr      = new vil_int_buffer    (image_w, image_h); //image_grady_ptr->ref();
-  image_fxx_ptr        = new vil_float_buffer  (image_w, image_h); //image_fxx_ptr->ref();
-  image_fxy_ptr        = new vil_float_buffer  (image_w, image_h); //image_fxy_ptr->ref();
-  image_fyy_ptr        = new vil_float_buffer  (image_w, image_h); //image_fyy_ptr->ref();
-  image_cornerness_ptr = new vil_float_buffer  (image_w, image_h); //image_cornerness_ptr->ref();
-  image_cornermax_ptr  = new vil_bool_buffer   (image_w, image_h); //image_cornermax_ptr->ref();
-
-  // copy input image to buffer.
-  if (image.planes()             ==1 && 
-      image.components()         ==1 && 
-      image.bits_per_component() ==CHAR_BIT &&
-      image.component_format()==VIL_COMPONENT_FORMAT_UNSIGNED_INT) {
-    // byte greyscale
-    vil_copy(image, *image_ptr);
-  }
-  else if (image.planes()             ==1 && 
-	   image.components()         ==3 && 
-	   image.bits_per_component() ==CHAR_BIT &&
-	   image.component_format()==VIL_COMPONENT_FORMAT_UNSIGNED_INT) {
-    // byte rgb
-    vcl_vector<vil_byte> buf(3*image_w);
-    for (unsigned j=0; j<image_h; ++j) {
-      image.get_section(buf.begin(), 0, j, image_w, 1);
-      for (unsigned i=0; i<image_w; ++i)
-	(*image_ptr)[j][i] = (unsigned(buf[3*i+0]) + unsigned(buf[3*i+1]) + unsigned(buf[3*i+2]))/3;
-    }
-  }
-  else
-    assert(false/* implement for your image type as needed */);
+  vil_image_as_byte(image).get_section(image_ptr->get_buffer(), 0, 0, image_w, image_h);
 }
 
 void vsl_harris::uninit_module() {

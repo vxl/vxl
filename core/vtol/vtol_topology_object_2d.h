@@ -56,7 +56,7 @@
 #include <vtol/vtol_face_2d_ref.h>
 #include <vtol/vtol_two_chain_2d_ref.h>
 #include <vtol/vtol_block_2d_ref.h>
-#include <vtol/vtol_topology_cache_2d_ref.h>
+class vtol_topology_cache_2d; //#include <vtol/vtol_topology_cache_2d_ref.h>
 
 
 // Useful typedefs

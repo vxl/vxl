@@ -25,7 +25,7 @@ TESTS += test_real_eigensystem.cxx
 TESTS += test_complex_eigensystem.cxx
 TESTS += test_symmetric_eigensystem.cxx
 TESTS += test_generalized_eigensystem.cxx
-TESTS += $(wildcard test_jordan_normal_form.cxx)
+TESTS += test_matrix_exp.cxx
 
 IULIBS += -lvnl-algo -lvnl -lnetlib -lvcl
 

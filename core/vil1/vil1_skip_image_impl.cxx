@@ -38,8 +38,8 @@ bool vil_skip_image_impl::get_section(void * buf, int x0, int y0, int w, int h) 
 
   // make a buffer for (skipx*w) x 1 sections of base :
   unsigned cell_size = base.planes() * base.components() * base.bits_per_component();
+  cell_size /= CHAR_BIT;
   unsigned buffer_size = (skipx*w * cell_size);
-  buffer_size /= CHAR_BIT;
   vcl_vector<unsigned char> buffer(buffer_size);
 
   // destination, as a unsigned char*

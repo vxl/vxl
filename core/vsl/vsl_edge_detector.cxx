@@ -78,7 +78,7 @@ void vsl_edge_detector::detect_edges(vil_image const &image,
 				     vcl_list<vsl_Edge*> *edges, 
 				     bool maintain_topology) 
 {
-  vcl_assert(edges);
+  assert(edges);
 
   //
   _xsize = image.height();

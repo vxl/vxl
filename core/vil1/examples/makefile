@@ -1,3 +1,8 @@
+#######################################
+include ${IUEROOT}/config/top-params.mk
+#######################################
+
+VXL := 1
 USES = vxl
 
 # Examples may use vbl....
@@ -12,8 +17,8 @@ MINI_PROG_SOURCES += vil_print_section.cxx
 MINI_PROG_SOURCES += vil_scale.cxx
 MINI_PROG_SOURCES += vil_flipud.cxx
 
-########################
 include ../vil_config.mk
-#####################################
-include $(IUELOCALROOT)/config/top.mk
-#####################################
+
+#######################################
+include ${IUEROOT}/config/top-rules.mk
+#######################################

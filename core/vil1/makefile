@@ -1,3 +1,7 @@
+#######################################
+include ${IUEROOT}/config/top-params.mk
+#######################################
+
 USES += vxl
 
 IMMEDIATE_LIBS := -lvcl
@@ -31,39 +35,13 @@ SOURCES += vil_flipud_impl.cxx
 SOURCES += vil_block_cache_image_impl.cxx
 SOURCES += vil_image_as.cxx
 
-# classes derived from vil_file_format
+# classes derived from vil_file_format 
 SOURCES += file_formats/vil_pnm.cxx
 SOURCES += file_formats/vil_viff.cxx
 SOURCES += file_formats/vil_viff_support.c
 SOURCES += file_formats/vil_iris.cxx
 SOURCES += file_formats/vil_mit.cxx
 SOURCES += file_formats/vil_bmp.cxx
-
-# Operations
-SOURCES += vil_new.cxx
-SOURCES += vil_load.cxx
-SOURCES += vil_save.cxx
-SOURCES += vil_copy.cxx
-SOURCES += vil_crop.cxx
-SOURCES += vil_skip.cxx
-SOURCES += vil_flipud.cxx
-MANPAGE_SOURCES += vil_convolve.txx
-SOURCES += vil_smooth.cxx
-
-# Utilities
-SOURCES += vil_clamp.cxx
-SOURCES += vil_rgb_byte.cxx
-SOURCES += vil_memory_image_window.cxx
-
-# turn on optimization for the convolution code
-FLAGS_Templates/vil_convolve_1d.cxx := $(optimize)
-FLAGS_Templates/vil_convolve_simple+byte.byte.int.int-.cxx := $(optimize)
-FLAGS_Templates/vil_convolve_simple+byte.float.float.byte-.cxx := $(optimize)
-
-#######################################
-include ${IUEROOT}/config/top-params.mk
-#######################################
-
 ifeq ($(HAS_PNG),1)
 USE_PNG := 1
 SOURCES += file_formats/vil_png.cxx
@@ -81,11 +59,35 @@ USE_TIFF := 1
 SOURCES += file_formats/vil_tiff.cxx
 endif
 
+# Operations
+SOURCES += vil_new.cxx
+SOURCES += vil_load.cxx
+SOURCES += vil_save.cxx
+SOURCES += vil_copy.cxx
+SOURCES += vil_crop.cxx
+SOURCES += vil_skip.cxx
+SOURCES += vil_flipud.cxx
+SOURCES += vil_convolve.cxx
+SOURCES += vil_smooth.cxx
+
+# Utilities
+SOURCES += vil_clamp.cxx
+SOURCES += vil_rgb_byte.cxx
+SOURCES += vil_memory_image_window.cxx
+
+# turn on optimization for the convolution code
+FLAGS_Templates/vil_convolve_1d.cxx := $(optimize)
+FLAGS_Templates/vil_convolve_simple+byte.byte.int.int-.cxx := $(optimize)
+FLAGS_Templates/vil_convolve_simple+byte.float.byte.float-.cxx := $(optimize)
+FLAGS_Templates/vil_convolve_simple+byte.float.float.float-.cxx := $(optimize)
+FLAGS_Templates/vil_convolve_simple+byte.float.int.float-.cxx := $(optimize)
+FLAGS_Templates/vil_convolve_simple+byte.float.short.float-.cxx := $(optimize)
+FLAGS_Templates/vil_convolve_simple+byte.short.short.int-.cxx := $(optimize)
 
 # subdirectories
 #SUBDIRS += algo
 ifndef NOTEST
-SUBDIRS += tests
+SUBDIRS += tests 
 SUBDIRS += examples
 endif
 

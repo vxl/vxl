@@ -496,3 +496,6 @@ void vtol_vertex_2d::explore_vertex(vertex_list_2d &verts)
     }
   delete edges_;
 }
+
+#include <vcl/vcl_rel_ops.h> // gcc 2.7
+VCL_INSTANTIATE_INLINE(bool operator!=(vtol_vertex_2d const &, vtol_vertex_2d const &));

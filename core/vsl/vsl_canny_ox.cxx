@@ -69,7 +69,7 @@ vsl_canny_ox::~vsl_canny_ox() {
 //-----------------------------------------------------------------------------
 
 void vsl_canny_ox::detect_edges(vil_image const &image_in, vcl_list<vsl_Edge*> *edges) {
-  vcl_assert(edges);
+  assert(edges);
 
   // Get the image size
   _xsize = image_in.height();
@@ -218,7 +218,7 @@ vsl_EdgelChain *vsl_canny_ox::Get_NMS_edgelsOX(int n_edgels_NMS, int *_x, int *_
   for (int y=1; y<=_ysize-2; ++y) 
     for (int x=1; x<=_xsize-2; ++x) 
       if ( _thick[x][y] != 0 /*&& i < n_edgels_NMS*/) {
-	vcl_assert(i < n_edgels_NMS);
+	assert(i < n_edgels_NMS);
 	// fill edgels_NMS
 	edgels_NMS->SetX(_dx[x][y],i);
 	edgels_NMS->SetY(_dy[x][y],i);

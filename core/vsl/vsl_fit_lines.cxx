@@ -39,26 +39,26 @@ vsl_fit_lines::~vsl_fit_lines() {
 // When used in conjunction with BreakLines, it mimics Paul Beardsley's
 // old straight line fitting code.
 //
-void vsl_fit_lines::simple_fit_to_list(vcl_list<vsl_Edge *> *myedges,
-				       vcl_list<vsl_Edge *> *outedges)
+void vsl_fit_lines::simple_fit_to_list(vcl_list<vsl_edge *> *myedges,
+				       vcl_list<vsl_edge *> *outedges)
 {
   int edge_no = 0;
   bool success = false;
 
   //  for(myedges->reset(), _curves->clear(); myedges->next();)
   //  {
-  //    vsl_Edge *edge = myedges->pop();
+  //    vsl_edge *edge = myedges->pop();
   //_curves->clear();
-  vcl_list<vsl_EdgelChain*> curves;
-  for(vcl_list<vsl_Edge*>::iterator i=myedges->begin(); i!=myedges->end(); ++i) {
-    vsl_Edge *edge = *i;
+  vcl_list<vsl_edgel_chain*> curves;
+  for(vcl_list<vsl_edge*>::iterator i=myedges->begin(); i!=myedges->end(); ++i) {
+    vsl_edge *edge = *i;
     
     bool angle_ok = true;
     {
-      vsl_EdgelChain *dc = edge;//->GetCurve()->CastToDigitalCurve();
+      vsl_edgel_chain *dc = edge;//->GetCurve()->CastToDigitalCurve();
       assert(dc);
       
-      // If the vsl_EdgelChain is long enough fit
+      // If the vsl_edgel_chain is long enough fit
       if( dc->size() < _min_fit_length )
 	success = false;
       
@@ -100,12 +100,12 @@ void vsl_fit_lines::simple_fit_to_list(vcl_list<vsl_Edge *> *myedges,
       }
       
       if (success) { // ie. we have fitted a line and have no gunk
-	vsl_EdgelChain *mycurve = fsm_pop(&curves);
+	vsl_edgel_chain *mycurve = fsm_pop(&curves);
 	// Edge will be an implicit digital line, with vertices on
 	// the original curve. However, the start and end point of
 	// the curve will not be the same as the curve data.
 	//was:edge->SetCurve(mycurve);
-	vsl_Edge *newedge = new vsl_Edge(*mycurve, edge->GetV1(), edge->GetV2());
+	vsl_edge *newedge = new vsl_edge(*mycurve, edge->GetV1(), edge->GetV2());
 	delete mycurve;
 	edge->unref();
 	edge = newedge;
@@ -122,10 +122,10 @@ void vsl_fit_lines::simple_fit_to_list(vcl_list<vsl_Edge *> *myedges,
 // -- Method that takes a vcl_list<Edge*>* that represents the
 // current segmentation and breaks off each Edge for further
 // investigation. An incremental fitting process is applied to
-// the vsl_EdgelChain in each vsl_Edge. The resultant segmentation
+// the vsl_edgel_chain in each vsl_edge. The resultant segmentation
 // is then written to output (with edges destroyed).
-void vsl_fit_lines::incremental_fit_to_list(vcl_list<vsl_Edge *> *myedges,
-					    vcl_list<vsl_Edge *> *outedges)
+void vsl_fit_lines::incremental_fit_to_list(vcl_list<vsl_edge *> *myedges,
+					    vcl_list<vsl_edge *> *outedges)
 {
   //  cout << "Fitting lines to Edge(s), threshold = " << _threshold << endl;
   int edge_no = 0;
@@ -136,18 +136,18 @@ void vsl_fit_lines::incremental_fit_to_list(vcl_list<vsl_Edge *> *myedges,
   outedges->clear();
   //  for(myedges->reset(), _curves->clear(); myedges->next();)
   //  {
-  //    vsl_Edge *edge = myedges->pop();
-  for (vcl_list<vsl_Edge*>::iterator iter=myedges->begin(); iter!=myedges->end(); ++iter) {
-    vsl_Edge *edge = *iter;
+  //    vsl_edge *edge = myedges->pop();
+  for (vcl_list<vsl_edge*>::iterator iter=myedges->begin(); iter!=myedges->end(); ++iter) {
+    vsl_edge *edge = *iter;
     ++edge_no;
 
-    vcl_list<vsl_EdgelChain*> curves;
+    vcl_list<vsl_edgel_chain*> curves;
     if (_use_square_fit)
       SquareIncrementalFit(&curves, edge);
     else
       MeanIncrementalFit(&curves, edge);
     
-    // Within 'curves' we now have a list of vsl_EdgelChains for which the
+    // Within 'curves' we now have a list of vsl_edgel_chains for which the
     // fitting succeeded and some for which line fitting failed.
     // We want to develop a topology structure from the list that
     // will replace the current edge (so that it has consistent endpoints)
@@ -165,14 +165,14 @@ void vsl_fit_lines::incremental_fit_to_list(vcl_list<vsl_Edge *> *myedges,
 
     // If we have fitted a line and have no gunk.
     else if( curves.size() == 1 ) {
-      vsl_EdgelChain *mycurve = fsm_pop(&curves); 
+      vsl_edgel_chain *mycurve = fsm_pop(&curves); 
       //Curve *mycurve = _curves->pop();
       //edge->SetCurve(mycurve);
       //edge->SetId(edge_no);
       //edge->GetCurve()->SetId(edge_no++);
       // edge->Protect(); // DORIN this should not be done since 
       // the edge is not created.
-      outedges->push_front(new vsl_Edge(*mycurve, edge->GetV1(), edge->GetV2()));
+      outedges->push_front(new vsl_edge(*mycurve, edge->GetV1(), edge->GetV2()));
       outedges->front()->SetId(edge_no);
       warn_if_empty(edge);
       edge->unref(); // delete the old one. Can't we reuse it?
@@ -182,33 +182,33 @@ void vsl_fit_lines::incremental_fit_to_list(vcl_list<vsl_Edge *> *myedges,
     else { 
       curves.reverse();
 #if 0
-      vsl_EdgelChain *old = 0;
-      vsl_EdgelChain *current = fsm_pop(&curves);
+      vsl_edgel_chain *old = 0;
+      vsl_edgel_chain *current = fsm_pop(&curves);
       // Setup the start and end edge for the new 1-chain. Remove the
       // old edge from circulation.
-      vsl_Vertex *vstart = edge->GetV1();
-      vsl_Vertex *vend = edge->GetV2(); //(edge->GetV1() == edge->GetV2()) ? vstart : edge->GetV2();
+      vsl_vertex *vstart = edge->GetV1();
+      vsl_vertex *vend = edge->GetV2(); //(edge->GetV1() == edge->GetV2()) ? vstart : edge->GetV2();
       
       // protect while it is used
       vend->ref/*Protect*/();
 	
-      vsl_Vertex *v1 = 0;
-      vsl_Vertex *v2 = vstart;
+      vsl_vertex *v1 = 0;
+      vsl_vertex *v2 = vstart;
       while ( !curves.empty() ) {
 	old = current;
 	current = fsm_pop(&curves);
 	v1 = v2;
-	v2 = new vsl_Vertex(current->GetX(0)/*GetStartX()*/,
+	v2 = new vsl_vertex(current->GetX(0)/*GetStartX()*/,
 			    current->GetY(0)/*GetStartY(),0.0*/, 
 			    vertex_no++); // id
 	
-	vsl_Edge *newedge = 0;
+	vsl_edge *newedge = 0;
 	if( v1 == vstart ) {
 	  edge->set_v2(v2);
 	  newedge = edge; // DORIN in this case protection not required
 	}
 	else {
-	  newedge = new vsl_Edge(*old, v1, v2);
+	  newedge = new vsl_edge(*old, v1, v2);
 	  // DORIN protection of newedge done here to avoid spurious protect.
 	  newedge -> ref/*Protect*/(); 
 	}
@@ -224,7 +224,7 @@ void vsl_fit_lines::incremental_fit_to_list(vcl_list<vsl_Edge *> *myedges,
       // Set up the start and finish points (problems if length==1)
       //current->SetStart(  v2->GetX(),   v2->GetY());
       //current->SetEnd  (vend->GetX(), vend->GetY());
-      vsl_Edge *newedge = new vsl_Edge(*current, v2, vend);
+      vsl_edge *newedge = new vsl_edge(*current, v2, vend);
       vend->unref/*UnProtect*/();
       
       newedge->SetId(edge_no);
@@ -232,16 +232,16 @@ void vsl_fit_lines::incremental_fit_to_list(vcl_list<vsl_Edge *> *myedges,
       outedges->push_front(newedge);
       warn_if_empty(newedge);
 #else
-      vsl_Vertex *v1 = 0;
-      vsl_Vertex *v2 = edge->GetV1();
+      vsl_vertex *v1 = 0;
+      vsl_vertex *v2 = edge->GetV1();
       while (!curves.empty()) {
-	vsl_EdgelChain *next = fsm_pop(&curves);
+	vsl_edgel_chain *next = fsm_pop(&curves);
 	v1 = v2;
 	if (curves.empty()) // last one
 	  v2 = edge->GetV2();
 	else // somewhere in the middle
-	  v2 = new vsl_Vertex(next->GetX(next->size()-1), next->GetY(next->size()-1), vertex_no++);
-	outedges->push_front(new vsl_Edge(*next, v1, v2));
+	  v2 = new vsl_vertex(next->GetX(next->size()-1), next->GetY(next->size()-1), vertex_no++);
+	outedges->push_front(new vsl_edge(*next, v1, v2));
 	warn_if_empty(outedges->front());
       }
 #endif
@@ -254,12 +254,12 @@ void vsl_fit_lines::incremental_fit_to_list(vcl_list<vsl_Edge *> *myedges,
 // -- This method is used to fit lines incrementally using the mean
 // absolute error instead of the mean square error. The difference
 // between this and SquareIncrementalFit is very small.
-void vsl_fit_lines::MeanIncrementalFit(vcl_list<vsl_EdgelChain*> *_curves, vsl_Edge *edge)
+void vsl_fit_lines::MeanIncrementalFit(vcl_list<vsl_edgel_chain*> *_curves, vsl_edge *edge)
 {
   //cerr << "MeanIncrementalFit()" << endl;
   float new_cost, new_est_cost;
   // Get the digital curve
-  vsl_EdgelChain *dc = edge;//->GetCurve()->CastToDigitalCurve();
+  vsl_edgel_chain *dc = edge;//->GetCurve()->CastToDigitalCurve();
   assert(dc);
 
   // If the EdgelChain is long enough fit
@@ -397,7 +397,7 @@ void vsl_fit_lines::MeanIncrementalFit(vcl_list<vsl_EdgelChain*> *_curves, vsl_E
   // a line has been fitted
   int length = dc->size() - _old_finish;
   if( _curves->size() && length ) {
-    vsl_EdgelChain *ndc = new vsl_EdgelChain(length);
+    vsl_edgel_chain *ndc = new vsl_edgel_chain(length);
     for(i=0,j=_old_finish;j<dc->size();i++,j++) {
       ndc->SetX(dc->GetX(j),i);
       ndc->SetY(dc->GetY(j),i);
@@ -421,12 +421,12 @@ void vsl_fit_lines::MeanIncrementalFit(vcl_list<vsl_EdgelChain*> *_curves, vsl_E
 // and its associated DigitalCurve, and fits lines using
 // orthogonal regression with mean square error residual and incremental
 // fitting. 
-void vsl_fit_lines::SquareIncrementalFit(vcl_list<vsl_EdgelChain*> *_curves, vsl_Edge *edge)
+void vsl_fit_lines::SquareIncrementalFit(vcl_list<vsl_edgel_chain*> *_curves, vsl_edge *edge)
 {
   //cerr << "SquareIncrementalFit()" << endl;
 
   // Get the digital curve
-  vsl_EdgelChain *dc = edge;//->GetCurve()->CastToDigitalCurve();
+  vsl_edgel_chain *dc = edge;//->GetCurve()->CastToDigitalCurve();
   assert(dc);
 
   // If the EdgelChain is long enough fit
@@ -548,7 +548,7 @@ void vsl_fit_lines::SquareIncrementalFit(vcl_list<vsl_EdgelChain*> *_curves, vsl
   // a line has been fitted.
   int length = dc->size() - _old_finish;
   if( _curves->size() && length ) {
-    vsl_EdgelChain *ndc = new vsl_EdgelChain(length);
+    vsl_edgel_chain *ndc = new vsl_edgel_chain(length);
     for(i=0,j=_old_finish;j<dc->size();i++,j++) {
       ndc->SetX(dc->GetX(j),i);
       ndc->SetY(dc->GetY(j),i);
@@ -569,16 +569,16 @@ void vsl_fit_lines::SquareIncrementalFit(vcl_list<vsl_EdgelChain*> *_curves, vsl
 //-----------------------------------------------------------------------------
 
 // -- Output the fitted line.
-void vsl_fit_lines::OutputLine(vcl_list<vsl_EdgelChain*> *_curves, 
+void vsl_fit_lines::OutputLine(vcl_list<vsl_edgel_chain*> *_curves, 
 			       int start, int finish, 
-			       vsl_EdgelChain *dc, 
+			       vsl_edgel_chain *dc, 
 			       float /*cost*/)
 {
   // First of all, store the edgel data between the current fit
   // and the previous fit to a DigitalCurve
   int length = start - _old_finish;
   if( length > 0 ) {
-    vsl_EdgelChain *ndc = new vsl_EdgelChain(length);
+    vsl_edgel_chain *ndc = new vsl_edgel_chain(length);
     for(int i=0,j=_old_finish;j<start;i++,j++) {
       ndc->SetX(dc->GetX(j),i);
       ndc->SetY(dc->GetY(j),i);
@@ -596,8 +596,8 @@ void vsl_fit_lines::OutputLine(vcl_list<vsl_EdgelChain*> *_curves,
   }
   _old_finish = finish;
   
-  // Create a vsl_EdgelChain from the fit 
-  vsl_EdgelChain *line = new vsl_EdgelChain(finish-start);
+  // Create a vsl_edgel_chain from the fit 
+  vsl_edgel_chain *line = new vsl_edgel_chain(finish-start);
   for(int i=0,j=start;j<finish;i++,j++) {  // Copy the edgels into the new chain
     line->SetX(dc->GetX(j),i);
     line->SetY(dc->GetY(j),i);
@@ -620,17 +620,17 @@ void vsl_fit_lines::OutputLine(vcl_list<vsl_EdgelChain*> *_curves,
 // should be done using the underlying edgel data, *** BUT THIS IS
 // NOT YET IMPLEMENTED ***
 //
-void vsl_fit_lines::MergeLines(vcl_list<vsl_EdgelChain*> *_curves) {
+void vsl_fit_lines::MergeLines(vcl_list<vsl_edgel_chain*> *_curves) {
   if( _curves->size() < 2 )
     return;
 
   // Take the first two lines off the list (must be careful about the
   // ordering if we are to produce a correctly formed EdgelChain).
-  vsl_EdgelChain *dc2 = fsm_pop(_curves);
-  vsl_EdgelChain *dc1 = fsm_pop(_curves);
+  vsl_edgel_chain *dc2 = fsm_pop(_curves);
+  vsl_edgel_chain *dc1 = fsm_pop(_curves);
 
 #ifndef fsm_is_cute
-  fsm_ortho_regress fitter;
+  vsl_ortho_regress fitter;
   fitter.reset();
   for (int i=0; i<dc1->size(); ++i)
     fitter.add_point(dc1->GetX(i), dc1->GetY(i));
@@ -644,7 +644,7 @@ void vsl_fit_lines::MergeLines(vcl_list<vsl_EdgelChain*> *_curves) {
   }
   else {
     // FIXME: what if endpoints are equal?
-    vsl_EdgelChain *dc = new vsl_EdgelChain(dc1->size() + dc2->size());
+    vsl_edgel_chain *dc = new vsl_edgel_chain(dc1->size() + dc2->size());
     for (int i=0; i<dc1->size(); ++i) {
       dc->SetX(dc1->GetX(i), i);
       dc->SetY(dc1->GetY(i), i);
@@ -875,7 +875,7 @@ void vsl_fit_lines::MergeLines(vcl_list<vsl_EdgelChain*> *_curves) {
 // -- This method calculates the current mean absolute cost of fitting a line.
 float vsl_fit_lines::MyGetCost(vsl_OrthogRegress const *fitter, 
 			       int start, int finish, 
-			       vsl_EdgelChain *dc) 
+			       vsl_edgel_chain *dc) 
 {
   double A = fitter->GetA();
   double B = fitter->GetB();

@@ -32,7 +32,7 @@ T vnl_determinant(T const * const * rows, unsigned n) {
 template <class T>
 T vnl_determinant(vnl_matrix<T> const &M) {
   unsigned n = M.rows();
-  vcl_assert(M.cols() == n);
+  assert(M.cols() == n);
   if (n<=4)
     return vnl_determinant(M.data_array(), n);
   else

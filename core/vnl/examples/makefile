@@ -1,7 +1,10 @@
+#######################################
+include ${IUEROOT}/config/top-params.mk
+#######################################
 USES += vxl
+USE_NETLIB := 1
 
-ald_libs := vbl vnl-algo
-IULIBS += -lvbl -lvnl-algo -lvnl -lvcl
+IULIBS := -lvbl -lvnl-algo -lnetlib -lvnl -lvcl
 
 MINI_PROG_SOURCES += time_fastops.cxx
 MINI_PROG_SOURCES += vnl_amoeba.cxx
@@ -12,12 +15,9 @@ MINI_PROG_SOURCES += vnl_polyroots.cxx
 MINI_PROG_SOURCES += vnl_rosenbrock.cxx
 MINI_PROG_SOURCES += vnl_svd.cxx
 
-####################################
-include $(IUEROOT)/vxl/vbl/client.mk
-include $(IUEROOT)/vxl/vnl/client.mk
-####################################
-include ${IUEROOT}/config/top.mk
-################################
+######################################
+include ${IUEROOT}/config/top-rules.mk
+######################################
 
 #all: $(RELOBJDIR)/time_fastops.40
 
@@ -30,4 +30,3 @@ $(RELOBJDIR)/time_fastops_O_M1: time_fastops.cxx
 	$(COMPILE.c++) -O2 -DOPTIMIZED -DMETHOD=1 $<
 	$(MAKE_EXE)
 	$@
-

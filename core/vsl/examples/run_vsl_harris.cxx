@@ -9,8 +9,10 @@
 #include <vil/vil_load.h>
 #include <vil/vil_save.h>
 
+// ** please don't make this program interactive. it must be
+// usable in a script, as a filter. **
 int main(int argc,char **argv) {
-  vbl_arg<vcl_string> infile ("-in"   ,"input image file"    ,""); // default should be stdin.
+  vbl_arg<vcl_string> infile ("-in"   ,"input image file"    ,"-"); // default is stdin.
   vbl_arg<vcl_string> outfile("-out"  ,"output corner file (default is stdout)"  ,"");
   vbl_arg<double>     sigma  ("-sigma","gauss sigma"         ,0.7);
   vbl_arg<int>        corner_count_max("-c","Max number of corners", 900);
@@ -19,30 +21,11 @@ int main(int argc,char **argv) {
   vbl_arg<bool>       pab    ("-pab"  ,"emulate pab harris"  ,false);
   vbl_arg_parse(argc,argv);
   
-  vcl_string* in_file = new vcl_string(infile());
-  if (*in_file == "") {
-    cout << "input image file: ";
-    char tmp[1024];
-    cin >> tmp;
-    delete in_file;
-    in_file = new vcl_string(tmp);
-  }
-  assert(*in_file != "");
-
-  vcl_string* out_file = new vcl_string(outfile());
-  if (*out_file == "") {
-    cout << "output image file: ";
-    char tmp[1024];
-    cin >> tmp;
-    delete out_file;
-    out_file = new vcl_string(tmp);
-  }
-  assert(*out_file != "");
-
   // load image
-  vil_image I = vil_load(in_file->c_str());
-  delete in_file;
-
+  if (infile() == "-")
+    cerr << "reading image from stdin" << endl;
+  vil_image I = vil_load(infile().c_str());
+  
   // parameters
   vsl_harris_params params;
   params.corner_count_max = corner_count_max();
@@ -57,10 +40,15 @@ int main(int argc,char **argv) {
   H.compute(I);
 
   // save
-  H.save_corners(out_file->c_str());
-  delete out_file;
+  if (outfile() == "") {
+    cerr << "writing image to stdout" << endl;
+    H.save_corners(cout);
+  }
+  else
+    H.save_corners(outfile().c_str());
 
-  if (cormap() != "") // cornerness map
+  // cornerness map
+  if (cormap.set())
     vil_save(*H.image_cornerness_ptr, cormap().c_str(), "pnm");
   
   return 0;

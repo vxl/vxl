@@ -32,6 +32,7 @@ SOURCES += vnl_complex.cxx
 SOURCES += vnl_error.cxx
 SOURCES += vnl_test.cxx
 SOURCES += vnl_matlab_print.cxx
+SOURCES += vnl_matlab_print2.cxx
 SOURCES += vnl_matlab_write.cxx
 SOURCES += vnl_matlab_read.cxx
 SOURCES += vnl_matlab_filewrite.cxx

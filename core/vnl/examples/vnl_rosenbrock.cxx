@@ -91,30 +91,34 @@ int main()
   cout << "Evaluations: " << levmarq.get_num_evaluations() << endl;
   levmarq.diagnose_outcome();
 
-  // Make a vnl_cost_function, and use vnl_amoeba
-  cout << "** Amoeba (Nelder Meade downhill simplex)  ** \n";
-  vnl_least_squares_cost_function cf(&f);
-  vnl_amoeba amoeba(cf);
-  x = x0;
-  amoeba.minimize(x);
-  cout << "Rosenbrock min of " << cf.f(x) << " at " << x << endl;
-  cout << "Evaluations: " << amoeba.get_num_evaluations() << endl;
-
-  cout << "** Conjugate Gradient ** \n";
-  vnl_conjugate_gradient cg(f);
-  x = x0;
-  cg.minimize(x);
-  cout << "CG min of " << cf.f(x) << " at " << x << endl;
-  cg.diagnose_outcome();
-
-  cout << "** LBFGS (Limited memory Broyden Fletcher Goldfarb Shanno) ** \n";
-  vnl_rosenbrock_grad_cost_fun rcf;
-  vnl_lbfgs lbfgs(rcf);
-  x = x0;
-  lbfgs.minimize(x);
-  assert(lbfgs.get_end_error() == rcf.f(x));
-  cout << "L-BFGS min of " << lbfgs.get_end_error() << " at " << x << endl;
-  cout << "Evaluations: " << lbfgs.get_num_evaluations() << endl;
-  
+  {
+    // Make a vnl_cost_function, and use vnl_amoeba
+    cout << "** Amoeba (Nelder Meade downhill simplex)  ** \n";
+    vnl_least_squares_cost_function cf(&f);
+    vnl_amoeba amoeba(cf);
+    x = x0;
+    amoeba.minimize(x);
+    cout << "Rosenbrock min of " << cf.f(x) << " at " << x << endl;
+    cout << "Evaluations: " << amoeba.get_num_evaluations() << endl;
+  }
+  {
+    cout << "** Conjugate Gradient ** \n";
+    vnl_rosenbrock_grad_cost_fun rcf;
+    vnl_conjugate_gradient cg(rcf);
+    x = x0;
+    cg.minimize(x);
+    cout << "CG min of " << rcf.f(x) << " at " << x << endl;
+    cg.diagnose_outcome();
+  }
+  {
+    cout << "** LBFGS (Limited memory Broyden Fletcher Goldfarb Shanno) ** \n";
+    vnl_rosenbrock_grad_cost_fun rcf;
+    vnl_lbfgs lbfgs(rcf);
+    x = x0;
+    lbfgs.minimize(x);
+    //    assert(lbfgs.get_end_error() == rcf.f(x));
+    cout << "L-BFGS min of " << lbfgs.get_end_error() << " at " << x << endl;
+    cout << "Evaluations: " << lbfgs.get_num_evaluations() << endl;
+  }
   return 0;
 }

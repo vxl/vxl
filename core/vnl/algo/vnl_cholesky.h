@@ -54,11 +54,14 @@ public:
   // -- Compute inverse.  Not efficient.
   vnl_matrix<double> inverse() const;
 
-  // -- Return Upper-triangular factor.
+  // -- Return lower-triangular factor.
+  vnl_matrix<double> lower_triangle() const;
+
+  // -- Return upper-triangular factor.
   vnl_matrix<double> upper_triangle() const;
 
   // -- return the decomposition matrix
-  vnl_matrix<double> const& L() { return A_; }
+  vnl_matrix<double> const& L_badly_named_method() { return A_; }
 
 // -- A Success/failure flag
   int rank_deficiency() const { return num_dims_rank_def_; }
