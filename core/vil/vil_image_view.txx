@@ -120,9 +120,9 @@ void vil_image_view<T>::deep_copy(const vil_image_view<T>& src)
       vcl_memcpy(top_left_,src.top_left_ptr(),src.size()*sizeof(T));
       return;
     }
-    vil_image_view<T>::const_iterator s_it = src.begin();
-    vil_image_view<T>::iterator d_it = begin();
-    vil_image_view<T>::const_iterator end_it = src.end();
+    const_iterator s_it = src.begin();
+    iterator d_it = begin();
+    const_iterator end_it = src.end();
     while (s_it!=end_it) {*d_it = *s_it; ++s_it; ++d_it; }
     return;
   }
@@ -652,8 +652,8 @@ void vil_image_view<T>::fill(T value)
 
   if (is_contiguous())
   {
-    vil_image_view<T>::iterator it = begin();
-    vil_image_view<T>::const_iterator end_it = end();
+    iterator it = begin();
+    const_iterator end_it = end();
     while (it!=end_it) {*it = value; ++it; }
     return;
   }
