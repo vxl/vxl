@@ -18,9 +18,13 @@ void vil3d_fill_boundary(vil3d_image_view<bool>& image);
 //: Follow the current boundary in the current slice.
 //  labelling boundary pixels and background pixels
 //  that border the boundary.
-void label_boundary_and_bkg(vil3d_image_view<int> &image, int *p0, int boundary_label, int background_label);
+void label_boundary_and_bkg(vil3d_image_view<int> &image,
+                            int i,int j, int k, 
+                            int boundary_label,
+                            int background_label);
 
 //:  Fill interior of current boundary.
-void fill_boundary(vil3d_image_view<int> &image, int *p0, int boundary_label, int background_label, int row, int col);
+void fill_boundary(vil3d_image_view<int> &image, int j, int k, int boundary_label, int background_label);
+
 
 #endif
