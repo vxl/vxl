@@ -24,7 +24,7 @@ QvField::setContainer(QvNode *cont)
 
 const char* const IgnoreErrorMsg =  // mpichler, 19950712
   "Invalid value '~' for field \"%s\"\n"
-  "(further occurances will not be reported)";
+  "(further occurrences will not be reported)";
 
 QvBool
 QvField::read(QvInput *in, const QvName &name) const

@@ -101,7 +101,7 @@ int main(int argc, char** argv)
   vcl_string title = "xcv";
   vgui_window *win = vgui::produce_window( 300, 300, menubar, title);
 
-  // add tableaux heirarchy to window
+  // add tableaux hierarchy to window
   win->get_adaptor()->set_tableau( shelltab);
 
   win->set_statusbar(true);

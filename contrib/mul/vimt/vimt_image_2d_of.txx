@@ -39,7 +39,7 @@ template<class T> vimt_image_2d_of<T>::~vimt_image_2d_of()
 }
 
 //: Shallow equality tester.
-//  The paramter must be identical type to this.
+//  The parameter must be identical type to this.
 template<class T>
 bool vimt_image_2d_of<T>::equals(const vimt_image &im) const
 {

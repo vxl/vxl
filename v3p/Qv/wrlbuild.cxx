@@ -85,7 +85,7 @@ static int camswindex;
 // only valid if it is local to the node and when it does not depend
 // from the traversal state
 
-// TODO: check for multiple instances if state dependend variables
+// TODO: check for multiple instances if state dependent variables
 // need to be stored - strictly taken this already happens with
 // IndexedFaceSet that has to use the current point array etc.
 
@@ -1077,7 +1077,7 @@ void QvIndexedFaceSet::build (QvState* state)
   if (attr)
   {
     materials_ = ((QvMaterial*) attr->data)->materials_;  // hilit_none
-    // current material will be no longer stored with FaceSet to allow for anchor highlighing
+    // current material will be no longer stored with FaceSet to allow for anchor highlighting
     nummatinds_ = materialIndex.num;  // no. of material indices
     matindices_ = (const int*) materialIndex.values;
 
@@ -1405,7 +1405,7 @@ void QvLabel::build (QvState*)
 {
   if (newinstance_)
   { QvDebugError::post ("Label", "invalid VRML 1.0 node (ignored)\n"
-                        "        (further occurances will not be reported)");
+                        "        (further occurrences will not be reported)");
     newinstance_ = 0;
   }
 }
@@ -1415,7 +1415,7 @@ void QvLightModel::build (QvState*)
 {
   if (newinstance_)
   { QvDebugError::post ("LightModel", "warning: extension to VRML 1.0 standard\n"
-                        "        (further occurances will not be reported)");
+                        "        (further occurrences will not be reported)");
     newinstance_ = 0;
   }
 

@@ -201,7 +201,7 @@ BUILDING (Unix)
 
 GNU autoconf is used to configure the software for the hardware / operating
 system you are using.  You do not need to obtain GNU autoconf to compile
-and install this software.  All the neccessary configure scripts are
+and install this software.  All the necessary configure scripts are
 included in this distribution.  The configure scripts examine your system
 capabilities and automatically generate include files and Makefiles.
 

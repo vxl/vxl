@@ -21,10 +21,10 @@
  *
  *  Purpose: class DcmFileFormat
  *
- *  Last Update:      $Author: amithaperera $
- *  Update Date:      $Date: 2004/01/14 04:01:10 $
+ *  Last Update:      $Author: peter_vanroose $
+ *  Update Date:      $Date: 2004/05/28 17:59:55 $
  *  Source File:      Source
- *  CVS/RCS Revision: $Revision: 1.1 $
+ *  CVS/RCS Revision: $Revision: 1.2 $
  *  Status:           $State: Exp $
  *
  *  CVS/RCS Log at end of file
@@ -201,7 +201,7 @@ OFCondition DcmFileFormat::checkValue(DcmMetaInfo *metainfo,
     /* if there is meta header information and also data set information, do something */
     if (metainfo != (DcmMetaInfo*)NULL && dataset != (DcmDataset*)NULL)
     {
-        /* intitialize variables */
+        /* initialize variables */
         DcmStack stack;
         DcmTag tag(atagkey);
         if (obj != (DcmObject*)NULL)
@@ -638,7 +638,7 @@ OFCondition DcmFileFormat::write(DcmOutputStream &outStream,
         DcmDataset *dataset = getDataset();
         DcmMetaInfo *metainfo = getMetaInfo();
         /* Determine the transfer syntax which shall be used. Either we use the one which was passed, */
-        /* or (if it's an unknown tranfer syntax) we use the data set's original transfer syntax. */
+        /* or (if it's an unknown transfer syntax) we use the data set's original transfer syntax. */
         E_TransferSyntax outxfer = oxfer;
         if (outxfer == EXS_Unknown && dataset)
             outxfer = dataset->getOriginalXfer();
@@ -859,7 +859,11 @@ DcmDataset *DcmFileFormat::getAndRemoveDataset()
 
 /*
 ** CVS/RCS Log:
-** Log: dcfilefo.cc
+** Log: dcfilefo.cxx
+** Revision 1.1  2004/01/14 04:01:10  amithaperera
+** Add better DICOM support by wrapping DCMTK, and add a stripped down
+** version of DCMTK to v3p. Add more DICOM test cases.
+**
 ** Revision 1.33  2002/12/06 13:09:26  joergr
 ** Enhanced "print()" function by re-working the implementation and replacing
 ** the boolean "showFullData" parameter by a more general integer flag.

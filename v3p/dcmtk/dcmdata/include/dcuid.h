@@ -23,10 +23,10 @@
  *  Definitions of "well known" DICOM Unique Indentifiers,
  *  routines for finding and creating UIDs.
  *
- *  Last Update:      $Author: amithaperera $
- *  Update Date:      $Date: 2004/01/14 04:01:09 $
+ *  Last Update:      $Author: peter_vanroose $
+ *  Update Date:      $Date: 2004/05/28 17:59:55 $
  *  Source File:      Source
- *  CVS/RCS Revision: $Revision: 1.1 $
+ *  CVS/RCS Revision: $Revision: 1.2 $
  *  Status:           $State: Exp $
  *
  *  CVS/RCS Log at end of file
@@ -90,7 +90,7 @@ OFBool dcmIsaStorageSOPClassUID(const char* uid);
 ** string pointers containing the UIDs of all known Image SOP
 ** Classes.  The global variable numberOfDcmImageSOPClassUIDs
 ** defines the size of the array.
-** NOTE: this list represets a subset of the dcmStorageSOPClassUIDs list
+** NOTE: this list represents a subset of the dcmStorageSOPClassUIDs list
 */
 
 extern const char* dcmImageSOPClassUIDs[];
@@ -171,7 +171,7 @@ unsigned long dcmGuessModalityBytes(const char *sopClassUID);
 /*
 ** Useful UID prefixes. These can be whatever you want.
 **
-** These site UIDs are arbitary, non-standard, with no meaning
+** These site UIDs are arbitrary, non-standard, with no meaning
 ** and can be changed at any time.  Do _not_ rely on these values.  
 ** Do _not_ assume any semantics when using these suffixes.
 **
@@ -435,6 +435,10 @@ unsigned long dcmGuessModalityBytes(const char *sopClassUID);
 /*
 ** CVS/RCS Log:
 ** Log: dcuid.h
+** Revision 1.1  2004/01/14 04:01:09  amithaperera
+** Add better DICOM support by wrapping DCMTK, and add a stripped down
+** version of DCMTK to v3p. Add more DICOM test cases.
+**
 ** Revision 1.53  2002/12/23 10:58:21  meichel
 ** Updated version name and implementation name to reflect release 3.5.2
 **

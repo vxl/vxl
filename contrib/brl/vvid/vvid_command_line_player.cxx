@@ -29,7 +29,7 @@ vvid_command_line_player::vvid_command_line_player()
    performance_output_file_ = new vul_arg<vcl_string>(arg_list_,"-P","performance output file","");
    output_directory_ = new vul_arg<vcl_string>(arg_list_,"-O","output directory","");
    print_params_flag_ = new vul_arg<bool>(arg_list_,"-print_params_only",
-                                          "print xml paramter file and exit",false);
+                                          "print xml parameter file and exit",false);
 }
 
 //: Destructor

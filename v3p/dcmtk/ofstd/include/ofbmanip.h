@@ -21,10 +21,10 @@
  *
  *  Purpose: Template class for bit manipulations (Header)
  *
- *  Last Update:      $Author: amithaperera $
- *  Update Date:      $Date: 2004/01/14 04:01:11 $
+ *  Last Update:      $Author: peter_vanroose $
+ *  Update Date:      $Date: 2004/05/28 17:59:57 $
  *  Source File:      Source
- *  CVS/RCS Revision: $Revision: 1.1 $
+ *  CVS/RCS Revision: $Revision: 1.2 $
  *  Status:           $State: Exp $
  *
  *  CVS/RCS Log at end of file
@@ -136,6 +136,10 @@ class OFBitmanipTemplate
  *
  * CVS/RCS Log:
  * Log: ofbmanip.h
+ * Revision 1.1  2004/01/14 04:01:11  amithaperera
+ * Add better DICOM support by wrapping DCMTK, and add a stripped down
+ * version of DCMTK to v3p. Add more DICOM test cases.
+ *
  * Revision 1.12  2002/11/27 11:23:04  meichel
  * Adapted module ofstd to use of new header file ofstdinc.h
  *
@@ -171,7 +175,7 @@ class OFBitmanipTemplate
  * Corrected bug in setMem routine (parameter 'value' was ignored).
  *
  * Revision 1.1  1998/11/27 12:29:20  joergr
- * First release of class for plaform independant memory operations.
+ * First release of class for plaform independent memory operations.
  *
  *
  */

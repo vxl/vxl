@@ -21,10 +21,10 @@
  *
  *  Purpose: Utilities (Header)
  *
- *  Last Update:      $Author: amithaperera $
- *  Update Date:      $Date: 2004/01/14 04:01:10 $
+ *  Last Update:      $Author: peter_vanroose $
+ *  Update Date:      $Date: 2004/05/28 17:59:56 $
  *  Source File:      Source
- *  CVS/RCS Revision: $Revision: 1.1 $
+ *  CVS/RCS Revision: $Revision: 1.2 $
  *  Status:           $State: Exp $
  *
  *  CVS/RCS Log at end of file
@@ -315,7 +315,7 @@ class DicomImageClass
     /** calculate maximum value which could be stored in the specified number of bits
      *
      ** @param  mv_bits  number of bits
-     *  @param  mv_pos   value substracted from the maximum value (0 or 1)
+     *  @param  mv_pos   value subtracted from the maximum value (0 or 1)
      *
      ** @return maximum value
      */
@@ -328,7 +328,7 @@ class DicomImageClass
     /** calculate number of bits which are necessary to store the specified value
      *
      ** @param  tb_value  value to be stored
-     *  @param  tb_pos    value substracted from the value (0 or 1) before converting
+     *  @param  tb_pos    value subtracted from the value (0 or 1) before converting
      *
      ** @return number of bits
      */
@@ -412,6 +412,10 @@ class DicomImageClass
  *
  * CVS/RCS Log:
  * Log: diutils.h
+ * Revision 1.1  2004/01/14 04:01:10  amithaperera
+ * Add better DICOM support by wrapping DCMTK, and add a stripped down
+ * version of DCMTK to v3p. Add more DICOM test cases.
+ *
  * Revision 1.21  2002/11/27 14:08:08  meichel
  * Adapted module dcmimgle to use of new header file ofstdinc.h
  *

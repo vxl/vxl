@@ -12,7 +12,7 @@ class vsrl_intensity_token : public vsrl_token
 {
   vsrl_image_correlation *image_correlation_;
 
-  double bias_; // the expected posisition of the associated token
+  double bias_; // the expected position of the associated token
   double bias_cost_; // the cost for deviating from the bias
   double correlation_dyn_range_; // the standard deviation of the corelation function
 

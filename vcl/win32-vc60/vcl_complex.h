@@ -16,7 +16,7 @@
 // The compiler issues a warning about the inconsistency in <complex>,
 // but it seems that the warning can be safely ignored provided the
 // implementors wrote the code correcting. Since this is part of the
-// compiler system, we can assume that the implementators have
+// compiler system, we can assume that the implementers have
 // addressed the issue, and that we can safely ignore the warning. A
 // couple of articles on the web seem to support this position:
 // http://support.microsoft.com/default.aspx?scid=http://support.microsoft.com:80/support/kb/articles/Q134/9/80.asp&NoWebContent=1

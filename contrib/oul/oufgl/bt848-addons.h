@@ -10,7 +10,7 @@
 
 #define BT848_NR_REGISTERS 0x200
 
-/* To access multi-bit valus, I prefer to use shift values */
+/* To access multi-bit values, I prefer to use shift values */
 
 #define BT848_DSTATUS_FIELD_S 5
 #define BT848_DSTATUS_CSEL_S  3

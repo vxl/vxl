@@ -21,10 +21,10 @@
  *
  *  Purpose: DicomInputPixelTemplate (Header)
  *
- *  Last Update:      $Author: amithaperera $
- *  Update Date:      $Date: 2004/01/14 04:01:10 $
+ *  Last Update:      $Author: peter_vanroose $
+ *  Update Date:      $Date: 2004/05/28 17:59:56 $
  *  Source File:      Source
- *  CVS/RCS Revision: $Revision: 1.1 $
+ *  CVS/RCS Revision: $Revision: 1.2 $
  *  Status:           $State: Exp $
  *
  *  CVS/RCS Log at end of file
@@ -592,6 +592,10 @@ class DiInputPixelTemplate
  *
  * CVS/RCS Log:
  * Log: diinpxt.h
+ * Revision 1.1  2004/01/14 04:01:10  amithaperera
+ * Add better DICOM support by wrapping DCMTK, and add a stripped down
+ * version of DCMTK to v3p. Add more DICOM test cases.
+ *
  * Revision 1.24  2002/10/21 10:13:50  joergr
  * Corrected wrong calculation of min/max pixel value in cases where the
  * stored pixel data exceeds the expected size.
@@ -662,7 +666,7 @@ class DiInputPixelTemplate
  * Replaced invocation of getCount() by member variable Count where possible.
  *
  * Revision 1.5  1999/01/11 09:34:28  joergr
- * Corrected bug in determing 'AbsMaximum' (removed '+ 1').
+ * Corrected bug in determining 'AbsMaximum' (removed '+ 1').
  *
  * Revision 1.4  1998/12/22 14:23:16  joergr
  * Added calculation of member variables AbsMinimum/AbsMaximum.

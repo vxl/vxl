@@ -46,7 +46,7 @@ int main(int argc, char** argv)
   vul_arg<vcl_string> output_directory(arg_list,"-O","output directory","");
   vul_arg<vcl_string> output_video_directory(arg_list,"-R","results video directory","");
   vul_arg<bool> print_params_only(arg_list,"-print_params_only",
-                                           "print xml paramter file and exit",false);
+                                           "print xml parameter file and exit",false);
   vul_arg_include(arg_list);
   vul_arg_parse(argc, argv);
 

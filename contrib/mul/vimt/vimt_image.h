@@ -21,7 +21,7 @@
 class vimt_image
 {
   //: Shallow equality tester.
-  //  The paramter must be identical type to this.
+  //  The parameter must be identical type to this.
   virtual bool equals(const vimt_image &) const =0;
 
 public:

@@ -87,7 +87,7 @@ class vil_nitf_header
 
   // Fields common to all (or nearly all) NITF objects.
 
-  virtual unsigned long get_data_length() const {return data_length_;}  /// Default implementaton
+  virtual unsigned long get_data_length() const {return data_length_;}  /// Default implementation
   void set_data_length (unsigned long new_val) {data_length_ = new_val;}
 
   char*      ID;

@@ -208,7 +208,7 @@ vgui_image_tableau_sptr get_image_tab(vgui_tableau_sptr const& tab)
 @}
 @end example
 If the input tableau, @code{tab}, is above an image tableau in the
-heirarchy then this routine will return it, otherwise the returned
+hierarchy then this routine will return it, otherwise the returned
 tableau will be null. One can also keep smart pointers to each tableau
 as members in an application class, which provides convenient access.
 
@@ -1027,7 +1027,7 @@ one is referencing a pointer to the object. A drawback to the smart pointer
 approach is that inheritance is not maintained, that is, the smart pointer of a
 child of a class is not a sub-class of the smart pointer of the class.
 @code{vgui} has implemented a solution to this problem by creating a
-hierarchy of smart pointers that match the tableau heirarchy.
+hierarchy of smart pointers that match the tableau hierarchy.
 
 @item @code{bool handle(const vgui_event &e)}:
 The base class for all tableaux, @code{vgui_tableau} defines the
@@ -1190,7 +1190,7 @@ If one wants to work directly with the actual ascii character pressed, then
 use @code{e.ascii_char}.
 @subsection Event Condition
 A convenient class, @code{vgui_event_condition} is defined to
-represent the occurance of a particular event configuration. Its use
+represent the occurrence of a particular event configuration. Its use
 is best illustrated by an example:
 @example
 bool my_tableau::handle(const vgui_event &e)

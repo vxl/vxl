@@ -139,7 +139,7 @@ void vsrl_step_diffusion::diffuse_disparity()
   // all over the place.
 
   // OK the idea is to anchor the diffusion algorithm
-  // so that steps of more than 1 pixel are maintianed.
+  // so that steps of more than 1 pixel are maintained.
   // We then start the diffusion process to smooth things
   // out.
 
@@ -189,7 +189,7 @@ void vsrl_step_diffusion::diffuse_disparity()
          N=0;
          sum=0;
 
-         // what are the intiail limits?
+         // what are the initial limits?
 
          low=T1(x,y);
          hi=T2(x,y);

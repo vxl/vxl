@@ -21,10 +21,10 @@
  *
  *  Purpose: Implementation of class DcmDataset
  *
- *  Last Update:      $Author: amithaperera $
- *  Update Date:      $Date: 2004/01/14 04:01:10 $
+ *  Last Update:      $Author: peter_vanroose $
+ *  Update Date:      $Date: 2004/05/28 17:59:55 $
  *  Source File:      Source
- *  CVS/RCS Revision: $Revision: 1.1 $
+ *  CVS/RCS Revision: $Revision: 1.2 $
  *  Status:           $State: Exp $
  *
  *  CVS/RCS Log at end of file
@@ -285,7 +285,7 @@ OFCondition DcmDataset::write(DcmOutputStream &outStream,
     if (errorFlag.good() && fTransferState != ERW_ready)
     {
       /* Determine the transfer syntax which shall be used. Either we use the one which was passed, */
-      /* or (if it's an unknown tranfer syntax) we use the one which is contained in this->Xfer. */
+      /* or (if it's an unknown transfer syntax) we use the one which is contained in this->Xfer. */
       E_TransferSyntax newXfer = oxfer;
       if (newXfer == EXS_Unknown)
         newXfer = Xfer;
@@ -556,7 +556,11 @@ void DcmDataset::removeAllButOriginalRepresentations()
 
 /*
 ** CVS/RCS Log:
-** Log: dcdatset.cc
+** Log: dcdatset.cxx
+** Revision 1.1  2004/01/14 04:01:10  amithaperera
+** Add better DICOM support by wrapping DCMTK, and add a stripped down
+** version of DCMTK to v3p. Add more DICOM test cases.
+**
 ** Revision 1.32  2002/12/09 09:30:49  wilkens
 ** Modified/Added doc++ documentation.
 **

@@ -5975,7 +5975,7 @@ static const DBI_SimpleEntry simpleBuiltinDict[] = {
       DcmDictRange_Unspecified, DcmDictRange_Unspecified,
       "SIEMENS DLR.01" }
   , { 0x0019, 0x006a, 0x0019, 0x006a,
-      EVR_SS, "DependantOnNumberOfViewsProcessed", 1, 1, "DICOM",
+      EVR_SS, "DependentOnNumberOfViewsProcessed", 1, 1, "DICOM",
       DcmDictRange_Unspecified, DcmDictRange_Unspecified,
       "GEMS_ACQU_01" }
   , { 0x0019, 0x006a, 0x0019, 0x006a,

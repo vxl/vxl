@@ -45,7 +45,7 @@ double FMatrixComputeMLESAC::calculate_residual(vgl_homg_point_2d<double>& one,
 // (First Order Geometric Correction)!
 double FMatrixComputeMLESAC::calculate_residual(HomgPoint2D& one, HomgPoint2D& two, FMatrix* F)
 {
-  // I've got some sampson's first order geometric approximation code here
+  // I've got some Sampson's first order geometric approximation code here
   // that I have experimented with (ie. approximation to the full solution
   // Hartley 'Triangulation')
 

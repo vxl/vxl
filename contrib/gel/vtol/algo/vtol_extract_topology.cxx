@@ -702,7 +702,7 @@ trace_face_boundary( vcl_vector<unsigned>& markers,
     //          |    |
     //          +----+
     //
-    // as two regions intead of one figure-8 region.
+    // as two regions instead of one figure-8 region.
     //
     // We keep the object on the right, which actually corresponds to
     // the standard "keep the object on the left" in a right-handed

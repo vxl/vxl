@@ -49,7 +49,7 @@
 template <class T>
 vnl_quaternion<T>::vnl_quaternion (T x, T y, T z, T r)
 {
-  this->operator[](0) = x;  // 3 first elmts are
+  this->operator[](0) = x;  // 3 first elements are
   this->operator[](1) = y;  // imaginary parts
   this->operator[](2) = z;
   this->operator[](3) = r;  // last element is real part

@@ -23,7 +23,7 @@ void gmvl_database::remove_node( const gmvl_node_sptr node)
   connectioncache_.rebuild();
 }
 
-// returns the first occurance if there are multiple tags of the same type
+// returns the first occurrence if there are multiple tags of the same type
 gmvl_node_sptr gmvl_database::find_tag( const vcl_string &string) const
 {
   vcl_vector<gmvl_node_sptr> tags= nodecache_.get( "gmvl_tag_node");

@@ -340,7 +340,7 @@ void gevd_clean_edgels::JumpGaps()
   float radius = 5.0f;
   //  float radius = 5.0; Feb 08, 2001 - used in recent DDB exp
   //  float radius = 6.0;
-  //All the vertices of the intital segmentation
+  //All the vertices of the initial segmentation
   vcl_vector<vtol_vertex_2d*> verts;
   vcl_vector<vtol_edge_2d_sptr >::iterator eit;
   for (eit = out_edgels_->begin(); eit != out_edgels_->end(); ++eit)

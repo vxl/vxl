@@ -21,10 +21,10 @@
  *
  *  Purpose: class DcmItem
  *
- *  Last Update:      $Author: amithaperera $
- *  Update Date:      $Date: 2004/01/14 04:01:10 $
+ *  Last Update:      $Author: peter_vanroose $
+ *  Update Date:      $Date: 2004/05/28 17:59:55 $
  *  Source File:      Source
- *  CVS/RCS Revision: $Revision: 1.1 $
+ *  CVS/RCS Revision: $Revision: 1.2 $
  *  Status:           $State: Exp $
  *
  *  CVS/RCS Log at end of file
@@ -214,7 +214,7 @@ E_TransferSyntax DcmItem::checkTransferSyntax(DcmInputStream & inStream)
     /* if both tag variables show an error, we encountered an invalid tag */
     if ((taglittle.error().bad()) && (tagbig.error().bad()))
     {
-        /* in case we encounterd an invalid tag, we want to assume that the used transfer syntax */
+        /* in case we encountered an invalid tag, we want to assume that the used transfer syntax */
         /* is a little endian transfer syntax. Now we have to figure out, if it is an implicit or */
         /* explicit transfer syntax. Hence, check if the last 2 bytes represent a valid VR. */
         if (foundVR(&tagAndVR[4]))
@@ -231,7 +231,7 @@ E_TransferSyntax DcmItem::checkTransferSyntax(DcmInputStream & inStream)
     /* if at least one tag variable did not show an error, we encountered a valid tag */
     else
     {
-        /* in case we encounterd a valid tag, we want to figure out, if it is an implicit or */
+        /* in case we encountered a valid tag, we want to figure out, if it is an implicit or */
         /* explicit transfer syntax. Hence, check if the last 2 bytes represent a valid VR. */
         if (foundVR(&tagAndVR[4]))
         {
@@ -828,7 +828,7 @@ OFCondition DcmItem::readTagAndLength(DcmInputStream &inStream,
 
     /* check if either 4 (for implicit transfer syntaxes) or 6 (for explicit transfer */
     /* syntaxes) bytes are available in (i.e. can be read from) inStream. if an error */
-    /* occured while performing this check return this error */
+    /* occurred while performing this check return this error */
     if (inStream.avail() < (xferSyn.isExplicitVR() ? 6u:4u))
         return EC_StreamNotifyClient;
 
@@ -969,7 +969,7 @@ OFCondition DcmItem::readSubElement(DcmInputStream &inStream,
     /* length; the object will be accessible through subElem */
     OFCondition l_error = newDicomElement(subElem, newTag, newLength);
 
-    /* if no error occured and subElem does not equal NULL, go ahead */
+    /* if no error occurred and subElem does not equal NULL, go ahead */
     if (l_error.good() && subElem != (DcmElement*)NULL)
     {
         // inStream.UnsetPutbackMark(); // not needed anymore with new stream architecture
@@ -997,7 +997,7 @@ OFCondition DcmItem::readSubElement(DcmInputStream &inStream,
             delete subElem;
         }
     }
-    /* else if an error occured, try to recover from this error */
+    /* else if an error occurred, try to recover from this error */
     else if (l_error == EC_InvalidTag)
     {
         /* This is the second Putback operation on the putback mark in */
@@ -1309,7 +1309,7 @@ OFCondition DcmItem::insert(DcmElement *elem,
                             OFBool replaceOld,
                             OFBool checkInsertOrder)
 {
-    /* intialize error flag with ok */
+    /* initialize error flag with ok */
     errorFlag = EC_Normal;
     /* do something only if the pointer which was passed does not equal NULL */
     if (elem != (DcmElement*)NULL)
@@ -3098,7 +3098,11 @@ OFBool DcmItem::containsUnknownVR() const
 
 /*
 ** CVS/RCS Log:
-** Log: dcitem.cc
+** Log: dcitem.cxx
+** Revision 1.1  2004/01/14 04:01:10  amithaperera
+** Add better DICOM support by wrapping DCMTK, and add a stripped down
+** version of DCMTK to v3p. Add more DICOM test cases.
+**
 ** Revision 1.80  2002/12/09 09:30:52  wilkens
 ** Modified/Added doc++ documentation.
 **

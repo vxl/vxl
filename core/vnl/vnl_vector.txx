@@ -86,7 +86,7 @@ vnl_vector<T>::vnl_vector (unsigned len, T const& value)
 {
   vnl_vector_construct_hack();
   vnl_vector_alloc_blah(len);
-  for (unsigned i = 0; i < len; i ++)           // For each elmt
+  for (unsigned i = 0; i < len; i ++)           // For each element
     this->data[i] = value;                      // Assign initial value
 }
 

@@ -21,10 +21,10 @@
  *
  *  Purpose: Implementation of class DcmElement
  *
- *  Last Update:      $Author: amithaperera $
- *  Update Date:      $Date: 2004/01/14 04:01:10 $
+ *  Last Update:      $Author: peter_vanroose $
+ *  Update Date:      $Date: 2004/05/28 17:59:55 $
  *  Source File:      Source
- *  CVS/RCS Revision: $Revision: 1.1 $
+ *  CVS/RCS Revision: $Revision: 1.2 $
  *  Status:           $State: Exp $
  *
  *  CVS/RCS Log at end of file
@@ -301,7 +301,7 @@ OFCondition DcmElement::getOFStringArray(OFString &value,
     /* iterate over all values and convert them to a character string */
     while ((i < count) && (errorFlag = getOFString(string, i, normalize)).good())
     {
-        /* intialize result string */
+        /* initialize result string */
         if (i == 0)
         {
             /* reserve number of bytes expected (heuristic) */
@@ -447,7 +447,7 @@ OFCondition DcmElement::loadValue(DcmInputStream *inStream)
             /* if we encountered the end of the stream, set the error flag correspondingly */
             if (errorFlag.good() && readStream->eos())
                 errorFlag = EC_EndOfStream;
-            /* if we did not encounter the end of the stream and no error occured so far, go ahead */
+            /* if we did not encounter the end of the stream and no error occurred so far, go ahead */
             else if (errorFlag.good())
             {
                 /* if the object which holds this element's value does not yet exist, create it */
@@ -814,7 +814,7 @@ OFCondition DcmElement::read(DcmInputStream &inStream,
         /* if we encountered the end of the stream, set the error flag correspondingly */
         if (errorFlag.good() && inStream.eos())
             errorFlag = EC_EndOfStream;
-        /* if we did not encounter the end of the stream and no error occured so far, go ahead */
+        /* if we did not encounter the end of the stream and no error occurred so far, go ahead */
         else if (errorFlag.good())
         {
             /* if the transfer state is ERW_init, we need to prepare */
@@ -1046,7 +1046,11 @@ OFCondition DcmElement::writeXML(ostream &out,
 
 /*
 ** CVS/RCS Log:
-** Log: dcelem.cc
+** Log: dcelem.cxx
+** Revision 1.1  2004/01/14 04:01:10  amithaperera
+** Add better DICOM support by wrapping DCMTK, and add a stripped down
+** version of DCMTK to v3p. Add more DICOM test cases.
+**
 ** Revision 1.44  2002/12/09 09:30:50  wilkens
 ** Modified/Added doc++ documentation.
 **

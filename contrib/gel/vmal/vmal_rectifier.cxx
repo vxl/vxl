@@ -299,7 +299,7 @@ int vmal_rectifier::compute_initial_joint_epipolar_transforms (
   const vnl_double_3x3 &Q,
   double ci, double cj,   // Position of reference point in first image
   vnl_double_3x3 &H0,     // The first transformation matrix computed
-  vnl_double_3x3 &H1      // second transfrmtion matrix to be computed
+  vnl_double_3x3 &H1      // second transformation matrix to be computed
   )
 {
   // First get the epipole e'

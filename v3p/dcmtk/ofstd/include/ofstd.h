@@ -21,10 +21,10 @@
  *
  *  Purpose: Class for various helper functions
  *
- *  Last Update:      $Author: amithaperera $
- *  Update Date:      $Date: 2004/01/14 04:01:11 $
+ *  Last Update:      $Author: peter_vanroose $
+ *  Update Date:      $Date: 2004/05/28 17:59:57 $
  *  Source File:      Source
- *  CVS/RCS Revision: $Revision: 1.1 $
+ *  CVS/RCS Revision: $Revision: 1.2 $
  *  Status:           $State: Exp $
  *
  *  CVS/RCS Log at end of file
@@ -230,7 +230,7 @@ class OFStandard
     /** decode "Base64" encoded string.
      *  Any character that does not belong to the Base64 alphabet (0..9, A..Z, a..z, + and /) is
      *  ignored when decoding the input string.  This is especially true for line breaks which are
-     *  usually contained in MIME (RFC 2045) encoded streams (see above).  The first occurence of
+     *  usually contained in MIME (RFC 2045) encoded streams (see above).  The first occurrence of
      *  a '=' character is taken as evidence that the end of the data has been reached.
      *  NB: The memory buffer in which the binary output is stored is allocated inside this function
      *      and has to to be freed (using "delete[]") by the caller!  Do not pass a pointer to an
@@ -380,6 +380,10 @@ class OFStandard
  *
  * CVS/RCS Log:
  * Log: ofstd.h
+ * Revision 1.1  2004/01/14 04:01:11  amithaperera
+ * Add better DICOM support by wrapping DCMTK, and add a stripped down
+ * version of DCMTK to v3p. Add more DICOM test cases.
+ *
  * Revision 1.12  2002/12/13 13:45:33  meichel
  * Removed const from decodeBase64() return code, needed on MIPSpro
  *

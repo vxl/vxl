@@ -30,7 +30,7 @@ rrel_misc_erfcc( double x )
 // New York. Equation 26.2.23. pg. 933. 1972.
 //
 // Since the initial approximation only provides an estimate within
-// 4.5 E-4 of the true value, 3 Newton-Raphson interations are used
+// 4.5 E-4 of the true value, 3 Newton-Raphson iterations are used
 // to refine the approximation.
 //
 // Let

@@ -21,8 +21,8 @@
 #include <vcl_vector.h>
 
 // a structure used to store the lens distortion parameters
-// It provide facility for set it on and off.
-// the difination of each bits is given at Brown's paper.
+// It provides facility for setting it on and off.
+// The definition of each bit is given in Brown's paper.
 
 class bcal_lens_model
 {

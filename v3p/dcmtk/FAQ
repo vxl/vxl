@@ -207,7 +207,7 @@ A: You should use the compiler options "+d +a1" to prevent the
 1998.01.27
 
 Q: I am trying to compile DCMTK on a SGI IRIX 6.x machine with gcc 2.7.2.
-   The configure script terminates with the following error messsage:
+   The configure script terminates with the following error message:
 
      checking whether the C compiler (gcc  ) works... no
      configure: error: installation or configuration problem:

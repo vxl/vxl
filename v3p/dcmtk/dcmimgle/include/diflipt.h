@@ -21,10 +21,10 @@
  *
  *  Purpose: DicomFlipTemplate (Header)
  *
- *  Last Update:      $Author: amithaperera $
- *  Update Date:      $Date: 2004/01/14 04:01:10 $
+ *  Last Update:      $Author: peter_vanroose $
+ *  Update Date:      $Date: 2004/05/28 17:59:56 $
  *  Source File:      Source
- *  CVS/RCS Revision: $Revision: 1.1 $
+ *  CVS/RCS Revision: $Revision: 1.2 $
  *  Status:           $State: Exp $
  *
  *  CVS/RCS Log at end of file
@@ -354,6 +354,10 @@ class DiFlipTemplate
  *
  * CVS/RCS Log:
  * Log: diflipt.h
+ * Revision 1.1  2004/01/14 04:01:10  amithaperera
+ * Add better DICOM support by wrapping DCMTK, and add a stripped down
+ * version of DCMTK to v3p. Add more DICOM test cases.
+ *
  * Revision 1.12  2001/06/01 15:49:41  meichel
  * Updated copyright header
  *
@@ -367,7 +371,7 @@ class DiFlipTemplate
  * Updated copyright header.
  *
  * Revision 1.9  2000/03/02 12:51:36  joergr
- * Rewrote variable initialization in class contructors to avoid warnings
+ * Rewrote variable initialization in class constructors to avoid warnings
  * reported on Irix.
  *
  * Revision 1.8  1999/09/17 12:10:55  joergr

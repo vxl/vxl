@@ -43,7 +43,7 @@ class vvid_command_line_player
   //: add required system_info args
   bool add_system_info_args(vul_arg_info_list& arg_list);
 
-  //: check if user only wants an xml paramter file output
+  //: check if user only wants an xml parameter file output
   bool print_params_only();
 
   //: print and xml parameter file

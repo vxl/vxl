@@ -19,7 +19,7 @@ class vimt_image_2d_of : public vimt_image_2d
   vil_image_view<T> image_;
 
   //: Shallow equality tester.
-  //  The paramter must be identical type to this.
+  //  The parameter must be identical type to this.
   bool equals(const vimt_image &) const;
  public:
   //: Dflt ctor

@@ -26,7 +26,7 @@ vsrl_image_correlation::vsrl_image_correlation(const vil1_image &im1, const vil1
   std_y_=0;
 }
 
-// desctructor
+// destructor
 vsrl_image_correlation::~vsrl_image_correlation()
 {
   if (image_correlations_)
@@ -130,7 +130,7 @@ void vsrl_image_correlation::shift_multiply_matrix(int offset, vnl_matrix<double
 
   XY.fill(0.0);
 
-  // find the start and end colums
+  // find the start and end columns
 
   int start_col = 0-offset;
   if (start_col<0)
@@ -185,7 +185,7 @@ void  vsrl_image_correlation::compute_correlation(int x_offset,
   corr_matrix.fill(0.0);
 
 
-  // find the start and end colums
+  // find the start and end columns
 
   int start_col = 0-x_offset;
   if (start_col <0)

@@ -21,10 +21,10 @@
  *
  *  Purpose: Implementation of class DcmSequenceOfItems
  *
- *  Last Update:      $Author: amithaperera $
- *  Update Date:      $Date: 2004/01/14 04:01:10 $
+ *  Last Update:      $Author: peter_vanroose $
+ *  Update Date:      $Date: 2004/05/28 17:59:56 $
  *  Source File:      Source
- *  CVS/RCS Revision: $Revision: 1.1 $
+ *  CVS/RCS Revision: $Revision: 1.2 $
  *  Status:           $State: Exp $
  *
  *  CVS/RCS Log at end of file
@@ -506,9 +506,9 @@ OFCondition DcmSequenceOfItems::readSubItem(DcmInputStream &inStream,
     else if (l_error == EC_InvalidTag)  // try to recover parsing
     {
         inStream.putback();
-        ofConsole.lockCerr() << "Warning: DcmSequenceOfItems::readSubItem(): parse error occured: " << newTag << endl;
+        ofConsole.lockCerr() << "Warning: DcmSequenceOfItems::readSubItem(): parse error occurred: " << newTag << endl;
         ofConsole.unlockCerr();
-        debug(1, ("Warning: DcmSequenceOfItems::readSubItem(): parse error occured:"
+        debug(1, ("Warning: DcmSequenceOfItems::readSubItem(): parse error occurred:"
             " (0x%4.4hx,0x%4.4hx)", newTag.getGTag(), newTag.getETag()));
     }
     else if (l_error != EC_SequEnd)
@@ -1254,7 +1254,11 @@ OFBool DcmSequenceOfItems::containsUnknownVR() const
 
 /*
 ** CVS/RCS Log:
-** Log: dcsequen.cc
+** Log: dcsequen.cxx
+** Revision 1.1  2004/01/14 04:01:10  amithaperera
+** Add better DICOM support by wrapping DCMTK, and add a stripped down
+** version of DCMTK to v3p. Add more DICOM test cases.
+**
 ** Revision 1.51  2002/12/10 20:03:01  joergr
 ** Added curly brackets around debug() call to avoid compiler errors with gcc
 ** 2.9.5 in debug mode.
@@ -1304,7 +1308,7 @@ OFBool DcmSequenceOfItems::containsUnknownVR() const
 ** Updated copyright header
 **
 ** Revision 1.38  2001/05/10 12:46:28  meichel
-** Fixed memory leak that occured when parsing of a sequence failed.
+** Fixed memory leak that occurred when parsing of a sequence failed.
 **
 ** Revision 1.37  2001/05/03 08:15:23  meichel
 ** Fixed bug in dcmdata sequence handling code that could lead to application

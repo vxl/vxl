@@ -440,7 +440,7 @@ L40:
         stry = TRUE_;
         betas *= 0.25f;
 /* IF LINEAR ITERATION SIGNALS AN ALMOST DOUBLE REAL */
-/* ZERO ATTEMPT QUADRATIC INTERATION */
+/* ZERO ATTEMPT QUADRATIC ITERATION */
         if (iflag != 0) {
             ui = -(s + s);
             vi = s * s;

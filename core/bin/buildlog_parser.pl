@@ -323,7 +323,7 @@ for $build ( keys %allbuilds )
 %allbuilds= %allbuildsnew;
 
 #######################
-# compute the heirarchy
+# compute the hierarchy
 
 for $buildit1 ( keys %allbuilds )
   {

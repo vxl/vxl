@@ -220,7 +220,7 @@ void gevd_region_proc::extract_regions()
       for (vcl_vector<IntensityFace*>::iterator fit = faces.begin();
           fit != faces.end(); fit++)
         tc->add_face((Face*)(*fit), '1');
-      //Coordiantes are defined at the center of a pixel
+      //Coordinates are defined at the center of a pixel
       CoolTransform minus=CoolTransform::translation(-0.5, -0.5, 0.0);
       CoolTransform plus=CoolTransform::translation(0.5+xo, 0.5+yo, 0.0);
       CoolTransform scale = CoolTransform::stretching(si, si, 1.0);

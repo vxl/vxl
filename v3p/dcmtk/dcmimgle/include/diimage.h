@@ -21,10 +21,10 @@
  *
  *  Purpose: DicomImage (Header)
  *
- *  Last Update:      $Author: amithaperera $
- *  Update Date:      $Date: 2004/01/14 04:01:10 $
+ *  Last Update:      $Author: peter_vanroose $
+ *  Update Date:      $Date: 2004/05/28 17:59:56 $
  *  Source File:      Source
- *  CVS/RCS Revision: $Revision: 1.1 $
+ *  CVS/RCS Revision: $Revision: 1.2 $
  *  Status:           $State: Exp $
  *
  *  CVS/RCS Log at end of file
@@ -396,7 +396,7 @@ class DiImage
      *  @param  upsideDown  specifies the order of lines in the images (0 = top-down, bottom-up otherwise)
      *  @param  padding     align each line to a 32-bit address if true (default)
      *
-     ** @return number of bytes allocated by the bitmap, or 0 if an error occured
+     ** @return number of bytes allocated by the bitmap, or 0 if an error occurred
      */
     virtual unsigned long createDIB(void *&data,
                                     const unsigned long size,
@@ -411,7 +411,7 @@ class DiImage
      *  @param  frame  index of frame to be converted
      *  @param  bits   number of bits per pixel used for the output bitmap (8 or 32)
      *
-     ** @return number of bytes allocated by the bitmap, or 0 if an error occured
+     ** @return number of bytes allocated by the bitmap, or 0 if an error occurred
      */
     virtual unsigned long createAWTBitmap(void *&data,
                                           const unsigned long frame,
@@ -634,6 +634,10 @@ class DiImage
  *
  * CVS/RCS Log:
  * Log: diimage.h
+ * Revision 1.1  2004/01/14 04:01:10  amithaperera
+ * Add better DICOM support by wrapping DCMTK, and add a stripped down
+ * version of DCMTK to v3p. Add more DICOM test cases.
+ *
  * Revision 1.29  2002/12/09 13:32:51  joergr
  * Renamed parameter/local variable to avoid name clashes with global
  * declaration left and/or right (used for as iostream manipulators).

@@ -967,7 +967,7 @@ compute_homography_linear_chamfer(vgl_h_matrix_2d<double> & H)
         //vcl_cout << "discarding line with offset "<<mid->x()<<"\n";
         continue;
       }
-      // line passes: add to set of corrrespondences
+      // line passes: add to set of correspondences
       lines_grid.push_back(lh);
       matched_lines_.push_back(l0);
       if (debug_state_==AFFINE_GROUP_AFTER_TRANS)

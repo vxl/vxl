@@ -149,10 +149,8 @@ vgui_section_buffer( unsigned in_x, unsigned in_y,
   // 'type' parameters. Until we decide if it makes sense, it's not allowed.
   if      ( format_ == GL_NONE && type_ == GL_NONE ) 
     vgui_accelerate::instance()->vgui_choose_cache_format( &format_, &type_ );
-  else if ( format_ != GL_NONE && type_ != GL_NONE )
-    { } // ok
-  else
-    assert( false );
+  else if ( format_ == GL_NONE || type_ == GL_NONE )
+    assert(false);
 
   // make sure allocw_ and alloch_ have been initialized.
   assert( allocw_*alloch_ >= w_*h_ );
@@ -190,7 +188,7 @@ vgui_section_buffer::
 {
   // We need to cast back to the correct type before we delete to make
   // sure the correct things happen. Since the data types are POD, it
-  // doesn't really matter, because no desctructors need to be
+  // doesn't really matter, because no destructors need to be
   // called. However, it's always good to do it correctly.
   //
 #define Code( BufferType ) \

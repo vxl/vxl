@@ -198,7 +198,7 @@ gevd_step::DetectEdgels(const gevd_bufferxy& image,
   //          ^ j            Normal Direction
   //          |________            ^
   //    light |        |           |    dirx = 0 and diry = +.  The direction
-  //        __|________|__Contour__|    code returned by NonMaximumSupresssion
+  //        __|________|__Contour__|    code returned by NonMaximumSupression
   //          |xxxxxxxx|                is 10 -- modulo 8 is 2, as shown.
   //    dark  |xxxxxxxx|
   //           ----------> i

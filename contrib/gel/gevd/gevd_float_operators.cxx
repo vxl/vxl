@@ -2796,7 +2796,7 @@ gevd_float_operators::WaveletTransformByBlock(float* array,
     int* sub_dims = level_dims[l];
     int n = sub_dims[ndim];
     CopyNdRecursive(array, ntot, dims,
-                    sub_array, n, sub_dims,     // consecutive elmts.
+                    sub_array, n, sub_dims,     // consecutive elements.
                     ndim);
     WaveletTransformStep(sub_array, sub_dims, ndim,
                          forwardp,

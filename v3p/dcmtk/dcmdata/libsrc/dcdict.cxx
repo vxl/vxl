@@ -21,10 +21,10 @@
  *
  *  Purpose: loadable DICOM data dictionary
  *
- *  Last Update:      $Author: amithaperera $
- *  Update Date:      $Date: 2004/01/14 04:01:10 $
+ *  Last Update:      $Author: peter_vanroose $
+ *  Update Date:      $Date: 2004/05/28 17:59:55 $
  *  Source File:      Source
- *  CVS/RCS Revision: $Revision: 1.1 $
+ *  CVS/RCS Revision: $Revision: 1.2 $
  *  Status:           $State: Exp $
  *
  *  CVS/RCS Log at end of file
@@ -820,7 +820,11 @@ void GlobalDcmDataDictionary::clear()
 
 /*
 ** CVS/RCS Log:
-** Log: dcdict.cc
+** Log: dcdict.cxx
+** Revision 1.1  2004/01/14 04:01:10  amithaperera
+** Add better DICOM support by wrapping DCMTK, and add a stripped down
+** version of DCMTK to v3p. Add more DICOM test cases.
+**
 ** Revision 1.28  2002/11/27 12:06:44  meichel
 ** Adapted module dcmdata to use of new header file ofstdinc.h
 **
@@ -921,7 +925,7 @@ void GlobalDcmDataDictionary::clear()
 ** Revision 1.6  1996/04/18 09:51:00  hewett
 ** White space is now being stripped from data dictionary fields.  Previously
 ** a tag name could retain trailing whitespace which caused silly results
-** when generating dcdeftag.h (e.g. tag names wil trailing underscores).
+** when generating dcdeftag.h (e.g. tag names with trailing underscores).
 **
 ** Revision 1.5  1996/03/20 16:44:04  hewett
 ** Updated for revised data dictionary.  Repeating tags are now handled better.

@@ -21,10 +21,10 @@
  *
  *  Purpose: Provides main interface to the "DICOM image toolkit"
  *
- *  Last Update:      $Author: amithaperera $
- *  Update Date:      $Date: 2004/01/14 04:01:10 $
+ *  Last Update:      $Author: peter_vanroose $
+ *  Update Date:      $Date: 2004/05/28 17:59:56 $
  *  Source File:      Source
- *  CVS/RCS Revision: $Revision: 1.1 $
+ *  CVS/RCS Revision: $Revision: 1.2 $
  *  Status:           $State: Exp $
  *
  *  CVS/RCS Log at end of file
@@ -539,7 +539,7 @@ class DicomImage
      *  possibly active VOI LUT is implicitly disabled.
      *
      ** @param  thresh  threshhold value specifying percentage of histogram border which
-     *                  shall be ignored (defaut: 5%).
+     *                  shall be ignored (default: 5%).
      *
      ** @return true if successful, false otherwise
      */
@@ -1104,7 +1104,7 @@ class DicomImage
      ** @param  plane  number (0..15) or group number (0x60nn) of overlay plane
      *  @param  idx    index of overlay group (0 = dataset, 1 = additional), default: 0
      *
-     ** @return mode of overlay plane if succesful, EMO_Default otherwise
+     ** @return mode of overlay plane if successful, EMO_Default otherwise
      */
     inline EM_Overlay getOverlayMode(const unsigned int plane,
                                      const unsigned int idx = 0) const
@@ -1432,7 +1432,7 @@ class DicomImage
      *                      the bottom-most of the source image (as required by the BMP file format)
      *  @param  padding     align each line to a 32-bit address if true (default)
      *
-     ** @return number of bytes allocated by the bitmap, or 0 if an error occured
+     ** @return number of bytes allocated by the bitmap, or 0 if an error occurred
      */
     unsigned long createWindowsDIB(void *&data,
                                    const unsigned long size,
@@ -1455,7 +1455,7 @@ class DicomImage
      *  @param  frame  index of frame to be converted (default: 0 = first frame)
      *  @param  bits   number of bits per pixel used for the output bitmap (8 or 32, default: 32)
      *
-     ** @return number of bytes allocated by the bitmap, or 0 if an error occured
+     ** @return number of bytes allocated by the bitmap, or 0 if an error occurred
      */
     unsigned long createJavaAWTBitmap(void *&data,
                                       const unsigned long frame = 0,
@@ -1768,6 +1768,10 @@ class DicomImage
  *
  * CVS/RCS Log:
  * Log: dcmimage.h
+ * Revision 1.1  2004/01/14 04:01:10  amithaperera
+ * Add better DICOM support by wrapping DCMTK, and add a stripped down
+ * version of DCMTK to v3p. Add more DICOM test cases.
+ *
  * Revision 1.46  2002/12/09 13:32:50  joergr
  * Renamed parameter/local variable to avoid name clashes with global
  * declaration left and/or right (used for as iostream manipulators).

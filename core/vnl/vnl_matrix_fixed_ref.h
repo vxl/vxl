@@ -386,7 +386,7 @@ class vnl_matrix_fixed_ref : public vnl_matrix_fixed_ref_const<T,num_rows,num_co
 
  public:
   // this is the only point where the const_cast happens
-  // the base class is used to store the pointer, so that conversion is not neccesary
+  // the base class is used to store the pointer, so that conversion is not necessary
   T * data_block() const {
     return const_cast<T*>(this->data_);
   }

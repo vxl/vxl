@@ -21,10 +21,10 @@
  *
  *  Purpose: DicomScaleTemplates (Header)
  *
- *  Last Update:      $Author: amithaperera $
- *  Update Date:      $Date: 2004/01/14 04:01:10 $
+ *  Last Update:      $Author: peter_vanroose $
+ *  Update Date:      $Date: 2004/05/28 17:59:56 $
  *  Source File:      Source
- *  CVS/RCS Revision: $Revision: 1.1 $
+ *  CVS/RCS Revision: $Revision: 1.2 $
  *  Status:           $State: Exp $
  *
  *  CVS/RCS Log at end of file
@@ -217,7 +217,7 @@ class DiScaleTemplate
                 reducePixel(src, dest);
             else if ((Dest_X % Src_X == 0) && (Dest_Y % Src_Y == 0))            // replication
                 replicatePixel(src, dest);
-            else if ((Src_X % Dest_X == 0) && (Src_Y % Dest_Y == 0))            // supression
+            else if ((Src_X % Dest_X == 0) && (Src_Y % Dest_Y == 0))            // suppression
                 suppressPixel(src, dest);
             else                                                                // general scaling
                 scalePixel(src, dest);
@@ -879,6 +879,10 @@ class DiScaleTemplate
  *
  * CVS/RCS Log:
  * Log: discalet.h
+ * Revision 1.1  2004/01/14 04:01:10  amithaperera
+ * Add better DICOM support by wrapping DCMTK, and add a stripped down
+ * version of DCMTK to v3p. Add more DICOM test cases.
+ *
  * Revision 1.20  2002/12/09 13:32:56  joergr
  * Renamed parameter/local variable to avoid name clashes with global
  * declaration left and/or right (used for as iostream manipulators).

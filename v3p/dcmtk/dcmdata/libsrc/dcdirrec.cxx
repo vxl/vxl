@@ -21,10 +21,10 @@
  *
  *  Purpose: Implementation of class DcmDirectoryRecord
  *
- *  Last Update:      $Author: amithaperera $
- *  Update Date:      $Date: 2004/01/14 04:01:10 $
+ *  Last Update:      $Author: peter_vanroose $
+ *  Update Date:      $Date: 2004/05/28 17:59:55 $
  *  Source File:      Source
- *  CVS/RCS Revision: $Revision: 1.1 $
+ *  CVS/RCS Revision: $Revision: 1.2 $
  *  Status:           $State: Exp $
  *
  *  CVS/RCS Log at end of file
@@ -548,7 +548,7 @@ static void hostToDicomFilename(char *fname)
 {
     /*
     ** Massage filename into dicom format.
-    ** Elmiminate any invalid characters.
+    ** Eliminate any invalid characters.
     ** Most commonly there is a '.' at the end of a filename.
     */
     int len = strlen(fname);
@@ -1410,7 +1410,11 @@ const char* DcmDirectoryRecord::getRecordsOriginFile()
 
 /*
  * CVS/RCS Log:
- * Log: dcdirrec.cc
+ * Log: dcdirrec.cxx
+ * Revision 1.1  2004/01/14 04:01:10  amithaperera
+ * Add better DICOM support by wrapping DCMTK, and add a stripped down
+ * version of DCMTK to v3p. Add more DICOM test cases.
+ *
  * Revision 1.44  2002/12/06 12:55:43  joergr
  * Enhanced "print()" function by re-working the implementation and replacing
  * the boolean "showFullData" parameter by a more general integer flag.
