@@ -1,4 +1,4 @@
-#include <vcl_cmath.h>
+// This is rpl/rrel/tests/test_ran_sam_search.cxx
 #include <vcl_iostream.h>
 
 #include <vnl/vnl_vector.h>

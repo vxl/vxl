@@ -1,11 +1,11 @@
+// This is rpl/rrel/examples/line_gen.cxx
 
-//
+//:
+// \file
 //  Simple program to generate line data plus outliers.
 //
 
 #include <vcl_iostream.h>
-#include <vcl_cmath.h>
-#include <vcl_cstdlib.h>
 #include <mbl/mbl_mz_random.h>
 
 int
@@ -47,7 +47,7 @@ main()
     }
     vcl_cout << double(x) << "  " << y << vcl_endl;
   }
-    
+
   for ( ; x<=x1; ++ x) {
     double y = b0 + b1*x;
     if ( mz_random.drand32() < outlier_frac ) {

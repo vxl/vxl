@@ -1,11 +1,11 @@
+// This is rpl/rrel/examples/homography2d_gen.cxx
 
-//
-//  Simple program to generate homography2d data plus outliers.
+//:
+// \file
+// \brief Simple program to generate homography2d data plus outliers.
 //
 
 #include <vcl_iostream.h>
-#include <vcl_cmath.h>
-#include <vcl_cstdlib.h>
 #include <mbl/mbl_mz_random.h>
 #include <vnl/vnl_matrix.h>
 
@@ -62,11 +62,11 @@ main()
         B(1, 0) += B(2,0) * sigma * mz_random.normal();
         inliers ++ ;
       }
-      vcl_cout << A(0, 0) << " " << A(1, 0) << " " << A(2, 0) << " " 
+      vcl_cout << A(0, 0) << " " << A(1, 0) << " " << A(2, 0) << " "
                << B(0, 0) << " " << B(1, 0) << " " << B(2, 0) << vcl_endl;
     }
   }
-    
+
   vcl_cerr << "outlier frac = " << outliers / double(inliers+outliers) << vcl_endl;
 
   return 0;

@@ -1,4 +1,4 @@
-#include <vcl_cmath.h>
+// This is rpl/rrel/tests/test_lms_lts.cxx
 #include <vnl/vnl_math.h>
 
 #include <rrel/rrel_lms_obj.h>

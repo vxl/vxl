@@ -1,6 +1,5 @@
+// This is rpl/rrel/rrel_ransac_obj.cxx
 #include "rrel_ransac_obj.h"
-
-#include <vcl_cmath.h>
 
 rrel_ransac_obj::rrel_ransac_obj( double scale_mult )
   : scale_mult_( scale_mult )
