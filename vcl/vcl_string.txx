@@ -1,3 +1,6 @@
+#ifndef vcl_string_txx_
+#define vcl_string_txx_
+
 #include "vcl_string.h"
 
 #if !VCL_USE_NATIVE_STL
@@ -16,4 +19,6 @@
 # include "win32/vcl_string.txx"
 #else
 # include "iso/vcl_string.txx"
+#endif
+
 #endif
