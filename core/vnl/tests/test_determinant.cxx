@@ -155,7 +155,7 @@ void test_determinant() {
       { 0, 0, 0, 0, 2, 0 },
       { 0, 0, 0, 0, 0, 6 } };
     vnl_matrix<int> m7(&M7[0][0],6,6);
-    testlib_test_assert_near("3x3 vnl_determinant(vnl_matix<int>)", vnl_determinant(m7), 2*1*5*4*2*6, eps);
+    testlib_test_assert_near("6x6 vnl_determinant(vnl_matix<int>)", vnl_determinant(m7), 2*1*5*4*2*6, eps);
   }
 }
 
