@@ -77,16 +77,6 @@ vil2_image_view<vil_rgb<T> > vil2_view_as_rgb(const vil2_image_view<T>& v)
                                       v.istep()/3,v.jstep()/3,1);
 }
 
-//: Create a view which appears as the transpose of this view.
-//  i.e transpose(i,j,p) = view(j,i,p)
-template<class T>
-vil2_image_view<T> vil2_transpose(const vil2_image_view<T>& v)
-{
-  // Create view with i and j switched
-  return vil2_image_view<T>(v.memory_chunk(),v.top_left_ptr(),
-                                   v.nj(),v.ni(),v.nplanes(),
-                                   v.jstep(),v.istep(),v.planestep());
-}
 
 //: Create a reflected view in which i -> (ni-1)-i
 //  i.e vil2_flip_lr(view)(i,j,p) = view(ni-1-i,j,p)

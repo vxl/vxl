@@ -4,6 +4,7 @@
 #include <vil2/vil2_new.h>
 #include <vil2/vil2_crop.h>
 #include <vil2/vil2_clamp.h>
+#include <vil2/vil2_transpose.h>
 #include <vcl_iostream.h>
 #include <testlib/testlib_test.h>
 
@@ -52,7 +53,23 @@ void test_image_resource_1()
   view1 = clamp->get_view(0, clamp->ni(), 0, clamp->nj());
   vil2_print_all(vcl_cout, view1);
   vil2_value_range(v1, v2, view1);
-  TEST("Value range is 1,9", v1 == 1.0f && v2 == 9.0f, true);
+  TEST("Value range after clamping is 1,9", v1 == 1.0f && v2 == 9.0f, true);
+
+
+  view2.resize(1,1,1);
+  view2.fill(20.0);
+  vil2_image_resource_sptr trans = vil2_transpose(mem);
+  TEST("Transpose::put_view",trans->put_view(view2,3,0), true);
+  view1 = mem->get_view(0, mem->ni(), 0, mem->nj());
+
+
+  trans = vil2_transpose(clamp);
+
+  view1 = clamp->get_view(0, clamp->ni(), 0, clamp->nj());
+  TEST("Clamping", view1 && view1(3,0) == 1.0f && view1(0,3)==9.0f, true);
+  view1 = trans->get_view(0, trans->ni(), 0, trans->nj());
+  TEST("Transpose, and clamping", view1 && view1(3,0) == 9.0f && view1(0,3)==1.0f, true);
+
   
 }
 

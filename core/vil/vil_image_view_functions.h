@@ -44,13 +44,6 @@ vil2_image_view<T> vil2_view_as_planes(const vil2_image_view<vil_rgb<T> >& rgb_v
 template<class T>
 vil2_image_view<vil_rgb<T> > vil2_view_as_rgb(const vil2_image_view<T>& plane_view);
 
-//: Create a view which appears as the transpose of this view.
-//  i.e vil2_transpose(view)(i,j,p) = view(j,i,p)
-//  O(1).
-// \relates vil2_image_view
-template<class T>
-vil2_image_view<T> vil2_transpose(const vil2_image_view<T>& view);
-
 //: Create a reflected view in which i -> ni-1-i.
 //  i.e vil2_flip_lr(view)(i,j,p) = view(ni-1-i,j,p)
 //  O(1).
