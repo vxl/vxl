@@ -57,7 +57,7 @@ vcl_string image_base;
 
   vil2_image_view<vxl_byte> ppm_image = vil2_load( (image_base+"ff_rgb8bit_raw.ppm").c_str());
   TEST("vil2_load worked", ppm_image, true);
-  
+
   if (tiff_image && ppm_image)
   {
     vil2_image_resource_sptr resource1 = vil2_vil1_to_image_resource(tiff_image);
@@ -66,7 +66,7 @@ vcl_string image_base;
   }
 //  vil2_print_all(vcl_cout, image1);
 //  vil2_print_all(vcl_cout, ppm_image);
-  
+
 
   // Check if we can create a image_view and put it into a vil1_image
   vil_memory_image_of<double> vil2_mem(10,8);
@@ -76,10 +76,10 @@ vcl_string image_base;
    for (unsigned int i=0;i<image2.ni();++i)
      image2(i,j) = (double)i-(double)j;
   res1->put_view(image2,0,0);
-  
+
   bad_pixels = false;
-  for (unsigned int j=0;j<vil2_mem.height();++j)
-    for (unsigned int i=0;i<vil2_mem.width();++i)
+  for (int j=0;j<vil2_mem.height();++j)
+    for (int i=0;i<vil2_mem.width();++i)
       if (vil2_mem(i,j) != (double)i-(double)j) bad_pixels = true;
 
   TEST ("vil2_vil1_image_resource::putview(..)", bad_pixels, false);
