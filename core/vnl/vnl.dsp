@@ -408,36 +408,6 @@ SOURCE=.\Templates/vnl_complex_ops+long_double-.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=.\Templates/vnl_determinant+double-.cxx
-
-# End Source File
-# Begin Source File
-
-SOURCE=.\Templates/vnl_determinant+float-.cxx
-
-# End Source File
-# Begin Source File
-
-SOURCE=.\Templates/vnl_determinant+long_double-.cxx
-
-# End Source File
-# Begin Source File
-
-SOURCE=.\Templates/vnl_determinant+vcl_complex+double--.cxx
-
-# End Source File
-# Begin Source File
-
-SOURCE=.\Templates/vnl_determinant+vcl_complex+float--.cxx
-
-# End Source File
-# Begin Source File
-
-SOURCE=.\Templates/vnl_determinant+vcl_complex+long_double--.cxx
-
-# End Source File
-# Begin Source File
-
 SOURCE=.\Templates/vnl_diag_matrix+double-.cxx
 
 # End Source File
@@ -724,6 +694,211 @@ SOURCE=.\Templates/vnl_sparse_matrix+double-.cxx
 # Begin Source File
 
 SOURCE=.\Templates/vnl_sparse_matrix+float-.cxx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates/vnl_vector_fixed_ref+vnl_rational.3-.cxx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates/vnl_vector_fixed_ref+vnl_rational.2-.cxx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates/vnl_vector_fixed_ref+vnl_rational.1-.cxx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates/vnl_vector_fixed_ref+int.4-.cxx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates/vnl_vector_fixed_ref+int.3-.cxx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates/vnl_vector_fixed_ref+int.2-.cxx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates/vnl_vector_fixed_ref+int.1-.cxx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates/vnl_vector_fixed_ref+float.4-.cxx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates/vnl_vector_fixed_ref+float.3-.cxx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates/vnl_vector_fixed_ref+float.2-.cxx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates/vnl_vector_fixed_ref+float.1-.cxx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates/vnl_vector_fixed_ref+double.6-.cxx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates/vnl_vector_fixed_ref+double.4-.cxx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates/vnl_vector_fixed_ref+double.3-.cxx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates/vnl_vector_fixed_ref+double.2-.cxx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates/vnl_vector_fixed_ref+double.1-.cxx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates/vnl_vector_fixed+vnl_rational.3-.cxx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates/vnl_vector_fixed+vnl_rational.2-.cxx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates/vnl_vector_fixed+vnl_rational.1-.cxx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates/vnl_vector+vnl_rational-.cxx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates/vnl_vector+vcl_complex+vnl_rational--.cxx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates/vnl_sparse_matrix+vnl_rational-.cxx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates/vnl_matrix_ref+vnl_rational-.cxx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates/vnl_matrix_fixed_ref+vnl_rational.3.3-.cxx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates/vnl_matrix_fixed+vnl_rational.3.3-.cxx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates/vnl_matrix+vnl_rational-.cxx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates/vnl_matrix+vcl_complex+vnl_rational--.cxx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates/vnl_diag_matrix+vnl_rational-.cxx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates/vnl_det+vnl_rational-.cxx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates/vnl_det+vcl_complex+long_double--.cxx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates/vnl_det+vcl_complex+float--.cxx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates/vnl_det+vcl_complex+double--.cxx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates/vnl_det+long_double-.cxx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates/vnl_det+float-.cxx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates/vnl_det+double-.cxx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates/vnl_c_vector+vnl_rational-.cxx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates/vnl_c_vector+vcl_complex+vnl_rational--.cxx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates/vcl_vector+vnl_rational~-.cxx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates/vcl_vector+vnl_rational-.cxx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates/vcl_complex+vnl_rational-.cxx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates/vcl_algorithm+vnl_rational-.cxx
 
 # End Source File
 # Begin Source File
