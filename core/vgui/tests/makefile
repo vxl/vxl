@@ -2,8 +2,11 @@ USES += core
 include ../config.mk
 include ${IUEROOT}/core/testlib/config.mk
 
+TESTMAIN := test_driver.cxx
+
 TESTS += test_pixels.cxx
 TESTS += test_displaybase.cxx
+TESTS += test_generic_image_view.cxx
 # The following tests cannot run in background:
 MINI_PROG_SOURCES += test_popup.cxx      #TESTS += test_popup.cxx
 MINI_PROG_SOURCES += test_timer.cxx      #TESTS += test_timer.cxx

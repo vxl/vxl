@@ -5,7 +5,8 @@ include ${IUEROOT}/core/vidl/config.mk
 MINI_PROG_SOURCES += basic01_display_image.cxx
 MINI_PROG_SOURCES += basic01a_multiple_panes.cxx
 MINI_PROG_SOURCES += basic01b_deck.cxx
-MINI_PROG_SOURCES += basic01b_display_vil_image.cxx
+MINI_PROG_SOURCES += basic01c_display_vil_image.cxx
+MINI_PROG_SOURCES += basic01d_display_vil1_image.cxx
 MINI_PROG_SOURCES += basic02_display_line.cxx
 MINI_PROG_SOURCES += basic03_display_text.cxx
 MINI_PROG_SOURCES += basic04_display_2d.cxx
