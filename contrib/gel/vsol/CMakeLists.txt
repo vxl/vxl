@@ -1,5 +1,7 @@
 # gel/vsol/CMakeLists.txt
 
+#vsol_polyline was added by Amir
+
 SET(vsol_sources
  vsol_spatial_object_2d.cxx vsol_spatial_object_2d.h vsol_spatial_object_2d_sptr.h
  vsol_box_2d.cxx            vsol_box_2d.h            vsol_box_2d_sptr.h
@@ -8,6 +10,7 @@ SET(vsol_sources
  vsol_curve_2d.cxx          vsol_curve_2d.h          vsol_curve_2d_sptr.h
  vsol_line_2d.cxx           vsol_line_2d.h           vsol_line_2d_sptr.h
  vsol_conic_2d.cxx          vsol_conic_2d.h          vsol_conic_2d_sptr.h
+ vsol_polyline_2d.cxx       vsol_polyline_2d.h       vsol_polyline_2d_sptr.h 
  vsol_region_2d.cxx         vsol_region_2d.h         vsol_region_2d_sptr.h
  vsol_polygon_2d.cxx        vsol_polygon_2d.h        vsol_polygon_2d_sptr.h
  vsol_triangle_2d.cxx       vsol_triangle_2d.h       vsol_triangle_2d_sptr.h
