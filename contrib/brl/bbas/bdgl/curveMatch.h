@@ -5,8 +5,8 @@
 #define MAX_LEN 2000
 //#define INFINITY 1e20
 
-#include<vnl/vnl_matrix.h>
-#include<vcl_utility.h>
+#include <vnl/vnl_matrix.h>
+#include <vcl_utility.h>
 
 
 #include "DPMatch.h"
@@ -15,30 +15,28 @@
 #define SUCCESS 1
 #define FAILURE 0
 
-double curveMatch(double &euc_dist,
-                  vcl_vector<vcl_pair<double,double> > v1,
-                  vcl_vector<vcl_pair<double,double> > v2,
-                  vcl_map<int,int> & mapping,
-                  vnl_matrix <double> & R_,
-                  vnl_matrix <double> & T_,
-                  vnl_matrix <double> & Tbar,
+double curveMatch(double &euc_dist,                        //!< out
+                  vcl_vector<vcl_pair<double,double> > v1, //!< in
+                  vcl_vector<vcl_pair<double,double> > v2, //!< in
+                  vcl_map<int,int> & mapping,              //!< out
+                  vnl_matrix <double> & R_,                //!< out
+                  vnl_matrix <double> & T_,                //!< out
+                  vnl_matrix <double> & Tbar,              //!< out
                   vcl_vector<int> &tail1,
                   vcl_vector<int> &tail2,
-                  double &scale)
+                  double &scale)                           //!< out
 {
+#if 0 // these variables are not used
   double lambda1=1.0;
   double R=8.0;
   int writeFiles=0;
   double sampleSize=0.1;
-  int endPointMatch=0;
   int localize=0;
+#endif // 0
+  bool endPointMatch=false;
 
-  Curve c1;
-  Curve c2;
-
-  c1.readDataFromVector(v1);
-  c2.readDataFromVector(v2);
-
+  Curve c1; c1.readDataFromVector(v1);
+  Curve c2; c2.readDataFromVector(v2);
   DPMatch d1(c1,c2);
 
   if (endPointMatch)
@@ -50,16 +48,14 @@ double curveMatch(double &euc_dist,
   vcl_vector <double> fmapCost = d1.finalMapCost();
 
   //transformed and then computed euclidean distance
-  double  totalCost=d1.normfinalCost();
   euc_dist = d1.transformed_euclidean_distance();
+  mapping  = d1.alignment;
+  R_       = d1.R;
+  T_       = d1.T;
+  Tbar     = d1.Tbar;
+  scale    = d1.scale;
 
-  R_=d1.R;
-  T_=d1.T;
-  Tbar=d1.Tbar;
-  scale=d1.scale;
-
-  mapping=d1.alignment;
-  return totalCost;
+  return d1.normfinalCost();
 }
 
 #endif
