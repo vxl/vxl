@@ -9,6 +9,7 @@
 // Converted to VXL by Gavin Wheeler
 
 #include <vcl_cassert.h>
+#include <vcl_cstddef.h> // for size_t
 #include <mbl/mbl_lda.h>
 #include <mbl/mbl_matxvec.h>
 #include <mbl/mbl_matrix_products.h>
@@ -53,14 +54,14 @@ void mbl_lda::updateCovar(vnl_matrix<double>& S, const vnl_vector<double>& V)
     S.resize(n,n);
     ZeroMatrix(S);
   }
-  
+
   double** s = S.data_array();
   const double* v = V.data_block();
   for (int i=0;i<n;++i)
   {
     double *row = s[i];
     double vi = v[i];
-    for (int j=0;j<n;++j) 
+    for (int j=0;j<n;++j)
       row[j] += vi*v[j];
   }
 }
@@ -87,16 +88,16 @@ void mbl_lda::build(const vnl_vector<double>* v, const int * label, int n,
       n_valid++;
     }
   }
-  
+
   assert(lo_i==0);
-  
+
   // Compute mean of each class
   int n_classes = hi_i+1;
   mean_.resize(n_classes);
   n_samples_.resize(n_classes);
-  for (int i=0;i<n_classes;++i) 
+  for (int i=0;i<n_classes;++i)
     n_samples_[i]=0;
-  
+
   for (int i=0;i<n;++i)
   {
     int l = label[i];
@@ -112,7 +113,7 @@ void mbl_lda::build(const vnl_vector<double>* v, const int * label, int n,
       n_samples_[l] += 1;
     }
   }
-  
+
   int n_used_classes = 0;
   for (int i=0;i<n_classes;++i)
   {
@@ -124,21 +125,21 @@ void mbl_lda::build(const vnl_vector<double>* v, const int * label, int n,
       n_used_classes++;
     }
   }
-  
+
   mean_class_mean_/=n_used_classes;
-  
+
   // Build between class covariance
   // Zero to start:
   betweenS_.resize(0,0);
-  
+
   for (int i=0;i<n_classes;++i)
   {
     if (n_samples_[i]>0)
       updateCovar(betweenS_,mean_[i] - mean_class_mean_);
   }
-  
+
   betweenS_/=n_used_classes;
-  
+
   if (compute_wS)
   {
     withinS_.resize(0,0);
@@ -157,20 +158,20 @@ void mbl_lda::build(const vnl_vector<double>* v, const int * label, int n,
   }
   else
     withinS_ = wS;
-  
+
   vnl_matrix<double> wS_inv;
   //  NR_Inverse(wS_inv,withinS_);
   vnl_svd<double> wS_svd(withinS_); // vnl_svd<double> wS_svd(wS) is wrong
   wS_inv = wS_svd.inverse();
-  
+
   vnl_matrix<double> A = betweenS_ * wS_inv;
-  
+
   // Compute eigenvectors and eigenvalues (descending order)
   vnl_matrix<double> EVecs(A.rows(), A.columns());
   vnl_vector<double> evals(A.columns());
   //  NR_CalcSymEigens(A,EVecs,evals,false);
   vnl_symmetric_eigensystem_compute(A, EVecs, evals);
-  
+
   //make the eigenvector matrix (columns) and eigenvalue vector in descending order.
   vnl_vector<double> temp_vect(EVecs.rows());
   double temp_val;
@@ -192,32 +193,32 @@ void mbl_lda::build(const vnl_vector<double>* v, const int * label, int n,
   vcl_cout << evals<< vcl_endl;
 
   // Record n_classes-1 vector basis
- 	int m = EVecs.rows();
-  
+  int m = EVecs.rows();
+
   int t = n_used_classes-1;
   if (t>m) t=m;
   // Copy first t to basis_
   basis_.resize(m,t);
-  
+
   double **E = EVecs.data_array();
   double **b = basis_.data_array();
-  size_t bytes_per_row = t * sizeof(double);
+  vcl_size_t bytes_per_row = t * sizeof(double);
   for (int i=0;i<m;++i)
   {
     memcpy(b[i]+1,E[i]+1,bytes_per_row);
   }
-  
+
   evals_.resize(t);
-  for (int i=0;i<t;++i) 
+  for (int i=0;i<t;++i)
     evals_[i] = evals[i];
-  
+
   // Compute projection of mean into d space
   d_m_mean_.resize(t);
   mbl_matxvec_prod_vm(mean_class_mean_,basis_,d_m_mean_);
-  
+
   // Project each mean into d-space
   d_mean_.resize(n_classes);
-  for (int i=0;i<n_classes;++i)	
+  for (int i=0;i<n_classes;++i)
     if (n_samples_[i]>0)
       x_to_d(d_mean_[i],mean_[i]);
 }
@@ -233,7 +234,7 @@ void mbl_lda::build(const vnl_vector<double>* v, const int* label, int n)
 //: Perform LDA on data
 void mbl_lda::build(const vnl_vector<double>* v, const vcl_vector<int>& label)
 {
-  build(v,label.begin(),label.size(),vnl_matrix<double>(),true);
+  build(v,&label.front(),label.size(),vnl_matrix<double>(),true);
 }
 
 //=======================================================================
@@ -241,7 +242,7 @@ void mbl_lda::build(const vnl_vector<double>* v, const vcl_vector<int>& label)
 void mbl_lda::build(const vnl_vector<double>* v, const vcl_vector<int>& label,
                     const vnl_matrix<double>& wS)
 {
-  build(v,label.begin(),label.size(),wS,false);
+  build(v,&label.front(),label.size(),wS,false);
 }
 
 //=======================================================================
@@ -249,7 +250,7 @@ void mbl_lda::build(const vnl_vector<double>* v, const vcl_vector<int>& label,
 void mbl_lda::build(const vcl_vector<vnl_vector<double> >& v, const vcl_vector<int>& label)
 {
   assert(v.size()==label.size());
-  build(v.begin(),label.begin(),label.size(),vnl_matrix<double>(),true);
+  build(&v.front(),&label.front(),label.size(),vnl_matrix<double>(),true);
 }
 
 //=======================================================================
@@ -258,7 +259,7 @@ void mbl_lda::build(const vcl_vector<vnl_vector<double> >& v, const vcl_vector<i
                     const vnl_matrix<double>& wS)
 {
   assert(v.size()==label.size());
-  build(v.begin(),label.begin(),label.size(),wS,false);
+  build(&v.front(),&label.front(),label.size(),wS,false);
 }
 
 //=======================================================================
@@ -276,7 +277,7 @@ void mbl_lda::build(const vnl_matrix<double>& M, const vcl_vector<int>& label)
   {
     v[i] = M.get_column(i);
   }
-  build(v.begin(),label.begin()+1,n_egs,vnl_matrix<double>(),true);
+  build(&v.front(),&label.front()+1,n_egs,vnl_matrix<double>(),true);
 }
 
 //=======================================================================
@@ -295,7 +296,7 @@ void mbl_lda::build(const vnl_matrix<double>& M, const vcl_vector<int>& label,
   {
     v[i] = M.get_column(i);
   }
-  build(v.begin(),label.begin()+1,n_egs,wS,false);
+  build(&v.front(),&label.front()+1,n_egs,wS,false);
 }
 
 
@@ -318,9 +319,9 @@ void mbl_lda::d_to_x(vnl_vector<double>& x, const vnl_vector<double>& d) const
 
 //=======================================================================
 
-short mbl_lda::version_no() const 
-{ 
-  return 1; 
+short mbl_lda::version_no() const
+{
+  return 1;
 }
 
 //=======================================================================
@@ -356,15 +357,15 @@ void mbl_lda::b_write(vsl_b_ostream& bfs) const
 
 //=======================================================================
 
-void mbl_lda::b_read(vsl_b_istream& bfs) 
+void mbl_lda::b_read(vsl_b_istream& bfs)
 {
   if (!bfs) return;
-  
+
   short version;
   vsl_b_read(bfs,version);
   switch (version)
   {
-		case (1):
+    case (1):
       vsl_b_read(bfs,mean_);
       vsl_b_read(bfs,d_mean_);
       vsl_b_read(bfs,mean_class_mean_);
@@ -389,7 +390,6 @@ void mbl_lda::b_read(vsl_b_istream& bfs)
 void vsl_b_write(vsl_b_ostream& bfs, const mbl_lda& b)
 {
   b.b_write(bfs);
-  
 }
 
 //=======================================================================
@@ -397,7 +397,6 @@ void vsl_b_write(vsl_b_ostream& bfs, const mbl_lda& b)
 void vsl_b_read(vsl_b_istream& bfs, mbl_lda& b)
 {
   b.b_read(bfs);
-  
 }
 
 //=======================================================================
