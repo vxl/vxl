@@ -36,16 +36,19 @@ extern float vnl_chi_squared_cumulative(float chisq, int dof);
 //      (a[i] - b[i])^2
 // \sum ---------------
 //   i       a[i]
-double vnl_chi_squared_statistic_1 (int const *A, int const *B, int n, bool normalize);
+template <class T>
+double vnl_chi_squared_statistic_1 (T const *A, T const *B, int n, bool normalize);
 
 //      (a[i] - b[i])^2
 // \sum ---------------
 //   i       b[i]
-double vnl_chi_squared_statistic_2 (int const *A, int const *B, int n, bool normalize);
+template <class T>
+double vnl_chi_squared_statistic_2 (T const *A, T const *B, int n, bool normalize);
 
 //      (a[i] - b[i])^2
 // \sum ---------------
 //   i    a[i] + b[i]
-double vnl_chi_squared_statistic_12(int const *A, int const *B, int n, bool normalize);
+template <class T>
+double vnl_chi_squared_statistic_12(T const *A, T const *B, int n, bool normalize);
 
 #endif // vnl_chi_squared_h_

@@ -22,13 +22,14 @@ float vnl_chi_squared_cumulative(float chisq, int dof) {
 
 //------------------------------------------------------------
 
-double vnl_chi_squared_statistic_1 (int const *A, int const *B, int n, bool normalize)
+template <class T>
+double vnl_chi_squared_statistic_1 (T const *A, T const *B, int n, bool normalize)
 {
   double sum = 0;
   
   if (normalize) {
-    int sumA = 0;
-    int sumB = 0;
+    T sumA = 0;
+    T sumB = 0;
     for (int i=0; i<n; ++i) {
       sumA += A[i];
       sumB += B[i];
@@ -53,18 +54,20 @@ double vnl_chi_squared_statistic_1 (int const *A, int const *B, int n, bool norm
   return sum;
 }
 
-double vnl_chi_squared_statistic_2 (int const *A, int const *B, int n, bool normalize)
+template <class T>
+double vnl_chi_squared_statistic_2 (T const *A, T const *B, int n, bool normalize)
 {
   return vnl_chi_squared_statistic_1(B, A, n, normalize);
 }
 
-double vnl_chi_squared_statistic_12(int const *A, int const *B, int n, bool normalize)
+template <class T>
+double vnl_chi_squared_statistic_12(T const *A, T const *B, int n, bool normalize)
 {
   double sum = 0;
   
   if (normalize) {
-    int sumA = 0;
-    int sumB = 0;
+    T sumA = 0;
+    T sumB = 0;
     for (int i=0; i<n; ++i) {
       sumA += A[i];
       sumB += B[i];
@@ -88,3 +91,11 @@ double vnl_chi_squared_statistic_12(int const *A, int const *B, int n, bool norm
   
   return sum;
 }
+
+#define inst(T) \
+template double vnl_chi_squared_statistic_1 (T const *, T const *, int, bool); \
+template double vnl_chi_squared_statistic_2 (T const *, T const *, int, bool); \
+template double vnl_chi_squared_statistic_12(T const *, T const *, int, bool)
+
+inst(int);
+inst(double);
