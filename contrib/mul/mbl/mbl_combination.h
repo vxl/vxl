@@ -1,13 +1,14 @@
 #ifndef mbl_combination_h
 #define mbl_combination_h
 
-/:
+//:
 // \file
 // \author Tim Cootes
 // \brief Functions to generate combinations of integers
 
 #include <vcl_cassert.h>
 #include <vcl_vector.h>
+#include <vcl_iostream.h>
 
 //: Generate first combination (n.size() zeros)
 inline
@@ -27,6 +28,7 @@ vcl_vector<unsigned> mbl_combination_begin(const vcl_vector<unsigned>& n)
 //  vcl_vector<unsigned> x = mbl_combination_begin(n);
 //  do { ...}  while (mbl_combination_next(x,n));
 // \endverbatim
+inline
 bool mbl_combination_next(vcl_vector<unsigned>& x, const vcl_vector<unsigned>& n)
 {
   assert(n.size()==x.size());
@@ -43,9 +45,16 @@ inline
 unsigned mbl_n_combinations(const vcl_vector<unsigned>& n)
 {
   unsigned nc = 1;
-  for (unsigned i=0;i<n.size();++i) if (n[i]>1) nc*=nc[i];
+  for (unsigned i=0;i<n.size();++i) if (n[i]>1) nc*=n[i];
   return nc;
 }
 
+//: Print combination as x3:x2:x1:x0
+inline
+void mbl_print_combination(vcl_ostream& os, const vcl_vector<unsigned>& x)
+{
+  for (int i=x.size()-1;i>0;--i) vcl_cout<<x[i]<<":";
+  vcl_cout<<x[0];
+}
 
 #endif
