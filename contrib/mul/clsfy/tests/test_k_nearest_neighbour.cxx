@@ -29,6 +29,15 @@
 
 #include <vnl/vnl_test.h>
 
+template <class T>
+inline static vcl_ostream& operator<< (vcl_ostream& os, vcl_vector<T> const& v)
+{
+  os << '[' << v.size() << ']';
+  vcl_vector<T>::const_iterator it = v.begin();
+  for (; it != v.end(); ++it) os << ' ' << (*it);
+  return os;
+}
+
 //: Test clsfy_k_nearest_neighbour and clsfy.rbf_parzen_window
 void test_k_nearest_neighbour()
 {
@@ -315,7 +324,7 @@ void test_k_nearest_neighbour()
        win.n_dims() == win_in.n_dims() &&
        win.training_classes() == win_in.training_classes() &&
        win.training_vectors() == win_in.training_vectors() &&
-       win.rbf_width() == win_in.rbf_width(),
+       win.gamma() == win_in.gamma(),
        true);
 
   vcl_cout << "win.log_l(2.0, 2.0) = " << win.log_l(probe) << vcl_endl;

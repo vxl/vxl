@@ -38,7 +38,7 @@ unsigned clsfy_rbf_parzen::classify(const vnl_vector<double> &input) const
     }
   else
   {
-    double gamma = - 0.5 / vcl_pow(rbf_width(), power_);
+    double gamma = - 0.5 * vcl_pow(-2*gamma_, 0.5*power_);
     double p = power_ / 2.0;
     for (unsigned i = 0; i < nTrainingVecs; i++)
     {
@@ -70,7 +70,7 @@ void clsfy_rbf_parzen::class_probabilities(vcl_vector<double> &outputs, const vn
     }
   else
   {
-    double gamma = - 0.5 / vcl_pow(rbf_width(), power_);
+    double gamma = - 0.5 * vcl_pow(-2*gamma_, 0.5*power_);
     double p = power_ / 2.0;
     for (unsigned i = 0; i < nTrainingVecs; i++)
     {
@@ -96,7 +96,7 @@ double clsfy_rbf_parzen::weightings(const vnl_vector<double> &input) const
       sumWeightings += vcl_exp(gamma_ * vnl_vector_ssd(input, trainInputs_[i]));
   else
   {
-    double gamma = - 0.5 / vcl_pow(rbf_width(), power_);
+    double gamma = - 0.5 * vcl_pow(-2*gamma_, 0.5*power_);
     double p = power_ / 2.0;
     for (unsigned i = 0; i < nTrainingVecs; i++)
       sumWeightings += vcl_exp(gamma * vcl_pow(vnl_vector_ssd(input, trainInputs_[i]), p) );
@@ -133,6 +133,14 @@ void clsfy_rbf_parzen::set_rbf_width(double sigma)
 {
   assert(sigma > 0.0);
   gamma_ = -0.5/(sigma*sigma);
+}
+
+//=======================================================================
+//: Set the 1st standard deviation width sigma through gamma = -0.5/(sigma*sigma)
+void clsfy_rbf_parzen::set_gamma(double gamma)
+{
+  assert(gamma < 0.0);
+  gamma_ = gamma;
 }
 
 //=======================================================================

@@ -23,7 +23,7 @@
 // and finding the majority prediction of the nearby training vectors, each weighted by the window function.
 class clsfy_rbf_parzen : public clsfy_classifier_base
 {
-  double gamma_; //!< Inversely proportional to width of the RBF window function.  Default value is 1.0.
+  double gamma_; //!< Inversely proportional to width of the RBF window function.  Default value is -0.5.
   // width = 1/vcl_sqrt(-2.0*gamma_)
 
   double power_; //!< The power, p, in the window funtion. Default value is 2.0.
@@ -57,9 +57,16 @@ public:
   // The default value is 1.
   double rbf_width() const { return 1/vcl_sqrt(-2.0*gamma_);}
 
+  //: Since rbf_width() is computing a sqrt at every call, use this for lookup:
+  double gamma() const { return gamma_;}
+
   //: Set the 1st standard deviation width of the RBF window.
-  // The default value is 1.
+  // The default value in the constructor is 1.
   void set_rbf_width(double sigma);
+
+  //: Set gamma, which is -1/(2*rbf_width*rbf_width)
+  // The default value in the constructor is -0.5.
+  void set_gamma(double gamma);
 
   //: The value p in the window function exp(-1/(2*sigma^p) * |x-y|^p).
   // The value p affects the kurtosis, or peakyness of the window. Towards 0 gives a more peaked central spike, and longer tail.
