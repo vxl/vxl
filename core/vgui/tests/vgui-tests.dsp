@@ -134,9 +134,6 @@ SOURCE=.\test_events.cxx
 SOURCE=.\test_front_back.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\test_generic_image_view.cxx
-# End Source File
-# Begin Source File
 SOURCE=.\test_pixels.cxx
 # End Source File
 # Begin Source File

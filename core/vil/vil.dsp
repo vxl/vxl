@@ -531,6 +531,9 @@ SOURCE=.\file_formats/vil_ras.h
 SOURCE=.\vil_image_resource.h
 # End Source File
 # Begin Source File
+SOURCE=.\vil_image_resource_sptr.h
+# End Source File
+# Begin Source File
 SOURCE=.\vil_image_view.h
 # End Source File
 # Begin Source File

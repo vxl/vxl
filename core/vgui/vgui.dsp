@@ -609,60 +609,6 @@ SOURCE=.\vgui_loader_tableau.cxx
 SOURCE=.\vgui_viewer3D_tableau.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vgui_vil_image_tableau+byte-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vgui_vil_image_tableau+double-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vgui_vil_image_tableau+float-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vgui_vil_image_tableau+int_16-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vgui_vil_image_tableau+int_32-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vgui_vil_image_tableau+sbyte-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vgui_vil_image_tableau+uint_16-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vgui_vil_image_tableau+uint_32-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vgui_vil_image_tableau+vil_rgb+byte--.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vgui_vil_image_tableau+vil_rgb+double--.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vgui_vil_image_tableau+vil_rgb+float--.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vgui_vil_image_tableau+vil_rgb+int_16--.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vgui_vil_image_tableau+vil_rgb+int_32--.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vgui_vil_image_tableau+vil_rgb+sbyte--.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vgui_vil_image_tableau+vil_rgb+uint_16--.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vgui_vil_image_tableau+vil_rgb+uint_32--.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vgui_vil_image_tableau+vil_rgba+byte--.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vgui_vil_image_tableau+vil_rgba+float--.cxx
-# End Source File
-# Begin Source File
 SOURCE=.\impl/gtk2/vgui_gtk2.cxx
 # End Source File
 # Begin Source File
@@ -682,9 +628,6 @@ SOURCE=.\impl/gtk2/vgui_gtk2_utils.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\impl/gtk2/vgui_gtk2_window.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\internals/vgui_generic_vil_image_view.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\vgui_vil_image_renderer.cxx
@@ -1188,15 +1131,6 @@ SOURCE=.\internals/vgui_gl_selection_macros.h
 SOURCE=.\vgui_vil_image_renderer.h
 # End Source File
 # Begin Source File
-SOURCE=.\vgui_vil_image_tableau.h
-# End Source File
-# Begin Source File
-SOURCE=.\vgui_vil_image_tableau.txx
-# End Source File
-# Begin Source File
-SOURCE=.\vgui_vil_image_tableau_sptr.h
-# End Source File
-# Begin Source File
 SOURCE=.\impl/gtk2/vgui_gtk2.h
 # End Source File
 # Begin Source File
@@ -1213,9 +1147,6 @@ SOURCE=.\impl/gtk2/vgui_gtk2_utils.h
 # End Source File
 # Begin Source File
 SOURCE=.\impl/gtk2/vgui_gtk2_window.h
-# End Source File
-# Begin Source File
-SOURCE=.\internals/vgui_generic_vil_image_view.h
 # End Source File
 # End Group
 # PROP Default_Filter "ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe"
