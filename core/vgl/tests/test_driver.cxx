@@ -13,6 +13,7 @@ DECLARE( test_clip );
 DECLARE( test_h_matrix_2d );
 DECLARE( test_h_matrix_3d );
 DECLARE( test_fit_lines_2d );
+DECLARE( test_p_matrix );
 DECLARE( test_closest_point );
 
 void
@@ -31,6 +32,7 @@ register_tests()
   REGISTER( test_h_matrix_2d );
   REGISTER( test_h_matrix_3d );
   REGISTER( test_fit_lines_2d );
+  REGISTER( test_p_matrix );
   REGISTER( test_closest_point );
 }
 
