@@ -303,6 +303,7 @@ BOOL vgui_mfc_adaptor::SetupPixelFormat()
   pPFDtoUse = &pfd; //(0 == pPFD)? &pfd : pPFD;
 
   int pixelformat = ::ChoosePixelFormat( m_pDC->GetSafeHdc(), pPFDtoUse );
+  // fixme: [awf] could now use DescribePixelFormat to find out what the screen pixel format really is.
 
   if (0 == pixelformat) {
     ::AfxMessageBox("ChoosePixelFormat failed.");

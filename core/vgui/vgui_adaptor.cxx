@@ -189,7 +189,8 @@ bool vgui_adaptor::dispatch_to_tableau(vgui_event const &e) {
     //vgui_matrix_state::clear_gl_matrices();    // to zero
     vgui_matrix_state::identity_gl_matrices(); // to identity
 
-    if (e.type == vgui_DRAW && use_double_buffering) 
+    vgui_macro_report_errors;
+    if (e.type == vgui_DRAW && !vgui_accelerate::vgui_mfc_acceleration) 
     {
       GLint buffer;
       glGetIntegerv(GL_DRAW_BUFFER,&buffer);

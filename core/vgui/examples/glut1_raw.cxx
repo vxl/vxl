@@ -1,5 +1,14 @@
 // GLUT example.
 
+//: Pure glut + vgui for image drawing in a movie player.
+// This example shows how all the tableau stuff for drawing
+// (but not mouse or keyboard) can be used with a pure and
+// simple GLUT program.  This means that the really really hairy
+// image drawing stuff can be used in any GL program, whether or
+// not it buys into the whole VGUI framework.  The other main 
+// point is to show that vgui just makes OpenGL commands -- no 
+// magic happens when you send a vgui_DRAW event.
+
 #include <vgui/vgui_gl.h>
 #include <vgui/vgui_glut.h>
 
@@ -15,14 +24,6 @@ vgui_deck_tableau_new   deck;
 vgui_loader_tableau_new load(deck);
 vgui_shell_tableau_new  shell(load);
 
-// GLUT display callback
-void display()
-{
-  shell->handle(vgui_DRAW);
-
-  glutSwapBuffers();
-}
-
 // GLUT keyboard event callback
 void keyboard(unsigned char k, int, int)
 {
@@ -36,15 +37,29 @@ void idle()
   static vcl_time_t last = 0;
   vcl_time_t now = time(0);
   if (now > last) {
+    // Advance the deck
     deck->next();
+
+    // Tell glut to redraw, that will call display() [below]
     glutPostRedisplay();
     last = now;
   }
 }
 
+// GLUT display callback
+void display()
+{
+  // This is the point where the vgui tableaux get to do their stuff.
+  shell->handle(vgui_DRAW);
+
+  glutSwapBuffers();
+}
+
 // usage: give a number of image filenames on command line.
 int main(int argc, char **argv)
 {
+  // Initialize the tableau, and add any images on the commandline
+  // to the deck.  When run, the images will cycle.
   load->set_image(512, 512);
   for (int i=1; i<argc; ++i)
     deck->add(vgui_image_tableau_new(argv[i]));

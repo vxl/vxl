@@ -28,7 +28,10 @@ class vgui_accelerate
 
   //: Set to true to use MFC acceleration.
   static bool vgui_mfc_acceleration;
- 
+
+  //: Sometimes double buffering needs to be switched off on windows.
+  static bool vgui_doublebuffer; 
+
   //: Singleton instance of this class. 
   static vgui_accelerate* instance();
 

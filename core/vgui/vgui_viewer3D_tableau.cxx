@@ -382,7 +382,7 @@ bool vgui_viewer3D_tableau::mouse_up(int x, int y, vgui_button button, vgui_modi
 }
 
 bool vgui_viewer3D_tableau::help() {
-  // awfawf fixme
+  // awfawf fixme these need to come from this->c_*
   vcl_cerr << "\n-- vgui_viewer3D_tableau ---------\n"
            << "|     mouse              |\n"
            << "| shift+left        zoom |\n"

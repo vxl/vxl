@@ -33,7 +33,7 @@ static bool debug = false;
 // system
 void mb_glDrawBufferWrapper(GLuint buffer)
 {
-  if (buffer == GL_BACK && vgui_accelerate::vgui_mfc_acceleration)
+  if(buffer == GL_BACK && vgui_accelerate::vgui_doublebuffer)
     return;
   glDrawBuffer(buffer);
 }
@@ -42,9 +42,10 @@ void mb_glDrawBufferWrapper(GLuint buffer)
 
 vgui_accelerate_mfc::vgui_accelerate_mfc()
 {
-  if (debug)
-    vcl_cerr << "Initializing Windows/MFC acceleration...\n";
+  if (debug) 
+    vcl_cerr << "vgui_accelerate_mfc::vgui_accelerate_mfc() Initializing Windows/MFC acceleration..." << vcl_endl;
   BytesPerPixel = 0;
+  vgui_doublebuffer = false;
 }
 
 
@@ -153,7 +154,7 @@ vidfmt::vidfmt()
     }
     if (debug) vul_printf(vcl_cerr, "\n");
 
-    // awf: OK, the above doesn't work on my win2k laptop.
+    // awf: OK, the above doesn't work on my win2k laptop (Dell inspiron 8100, nVidia GeForce2Go).
     // write an rgb into a bitmap and have a gander...
     if (bpp == 16) {
 
@@ -260,10 +261,12 @@ bool vgui_accelerate_mfc::vgui_choose_cache_format( GLenum* format, GLenum* type
       g_format = vf.gl_format;
       g_type = vf.gl_type;
     } else {
+      // 32 bit display -- not accelerated yet -awf
       g_format = GL_RGB;
       g_type = GL_UNSIGNED_BYTE;
       vcl_cerr << "[vgui_accelerate_mfc: disabling acceleration]";
       vgui_mfc_acceleration = false;
+      vgui_doublebuffer = false;
     }
   }
   *format = g_format;

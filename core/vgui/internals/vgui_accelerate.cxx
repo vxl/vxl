@@ -19,6 +19,7 @@ extern CDC *vgui_mfc_adaptor_global_dc;
 
 bool vgui_accelerate::vgui_no_acceleration = false;
 bool vgui_accelerate::vgui_mfc_acceleration = true;
+bool vgui_accelerate::vgui_doublebuffer = true;
 
 static int accelerator_level = 0;
 static vgui_accelerate* vgui_accelerator = 0;
