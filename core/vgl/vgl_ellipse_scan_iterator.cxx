@@ -14,11 +14,11 @@ namespace {
 }
 
 
-vgl_ellipse_scan_iterator::vgl_ellipse_scan_iterator( double xc, double yc, double a, double b, double theta )
+vgl_ellipse_scan_iterator::vgl_ellipse_scan_iterator( double xc, double yc, double rx, double ry, double theta )
   : xc_( xc ),
     yc_( yc ),
-    a_( a*a ),
-    b_( b*b ),
+    rx_( rx*rx ),
+    ry_( ry*ry ),
     theta_( theta ),
     y_( 0 ),
     min_y_( 0 )
@@ -35,10 +35,10 @@ vgl_ellipse_scan_iterator::reset()
   // The max value.
   double y0;
   if( vcl_sin( theta_ ) == 0.0 ) {
-    y0 = vcl_sqrt(b_);
+    y0 = vcl_sqrt(ry_);
   } else {
-    double t = vcl_atan( vcl_sqrt(b_) / (vcl_sqrt(a_) * vcl_tan( theta_ )) );
-    y0 = vcl_sqrt(a_) * vcl_cos( t ) * vcl_sin( theta_ ) + vcl_sqrt(b_) * vcl_sin( t ) * vcl_cos( theta_ );
+    double t = vcl_atan( vcl_sqrt(ry_) / (vcl_sqrt(rx_) * vcl_tan( theta_ )) );
+    y0 = vcl_sqrt(rx_) * vcl_cos( t ) * vcl_sin( theta_ ) + vcl_sqrt(ry_) * vcl_sin( t ) * vcl_cos( theta_ );
   }
   if( y0 < 0 ) y0 = -y0;
 
@@ -55,9 +55,9 @@ vgl_ellipse_scan_iterator::next()
 
   double st = vcl_sin( -theta_ );
   double ct = vcl_cos( -theta_ );
-  double A = a_ * st * st + b_ * ct * ct;
-  double B = 2.0 * (a_ - b_) * (y_-yc_) * ct * st;
-  double C = - a_ * b_ + (a_ * ct * ct + b_ * st * st) * (y_-yc_) * (y_-yc_);
+  double A = rx_ * st * st + ry_ * ct * ct;
+  double B = 2.0 * (rx_ - ry_) * (y_-yc_) * ct * st;
+  double C = - rx_ * ry_ + (rx_ * ct * ct + ry_ * st * st) * (y_-yc_) * (y_-yc_);
 
   double x0, x1; // the intersection points of the scan line
 
@@ -71,7 +71,7 @@ vgl_ellipse_scan_iterator::next()
   } else {
     // "ellipse" is a horizontal line or a point
     //
-    x1 = vcl_sqrt( my_max(a_,b_) );
+    x1 = vcl_sqrt( my_max(rx_,ry_) );
     x0 = -x1;
   }
 

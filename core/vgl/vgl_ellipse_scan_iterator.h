@@ -21,9 +21,9 @@ class vgl_ellipse_scan_iterator : public vgl_region_scan_iterator
 public:
   //: Constructor
   //  The ellipse is parameterised by (\a xc, \a yc) (the centre), by \a
-  //  a and \a b (the radii along the principle axes) and by \a theta,
+  //  rx and \a ry (the radii along the principle axes) and by \a theta,
   //  the rotation about the centre of the ellipse.
-  vgl_ellipse_scan_iterator( double xc, double yx, double a, double b, double theta );
+  vgl_ellipse_scan_iterator( double xc, double yc, double rx, double ry, double theta );
 
   //: Destructor
   virtual ~vgl_ellipse_scan_iterator();
@@ -49,7 +49,7 @@ public:
 private:
   //: Parameters of the ellipse being scan converted.
   //  Centre, squared radii, and angle of rotation about the centre.
-  double xc_, yc_, a_, b_, theta_;
+  double xc_, yc_, rx_, ry_, theta_;
 
   //: Current scan line
   int y_;

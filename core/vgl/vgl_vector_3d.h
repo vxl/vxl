@@ -37,7 +37,7 @@ public:
   inline T y() const { return y_; }
   inline T z() const { return z_; }
 
-  //: Creates the vector (0,0) of zero length.
+  //: Creates the vector (0,0,0) of zero length.
   inline vgl_vector_3d () : x_(0) , y_(0) , z_(0) {}
 
   //: Creates the vector (x,y,z).
