@@ -12,11 +12,11 @@
 //
 //   _kernel[i] = exp( (i-_width)^2/sigma^2 )/det
 void osl_kernel_DOG(float _sigma, float *_kernel, int _k_size, int _width) {
-  float s2 = 2.0*_sigma*_sigma;
-  float det = _sigma*vcl_sqrt(2.0 * vnl_math::pi);
+  float s2 = 2.0f*_sigma*_sigma;
+  float det = _sigma*(float)vcl_sqrt(2.0 * vnl_math::pi);
 
   for (int i=0,x=-_width; i<_k_size; ++i,++x)
-    _kernel[i] = vcl_exp(-x*x/s2)/det;
+    _kernel[i] = (float)vcl_exp(-x*x/s2)/det;
 }
 
 // Construct one half of a Gaussian convolution kernel.
@@ -25,7 +25,7 @@ void osl_kernel_DOG(float *_kernel, float *_sub_area, int &_k_size,
                     float _sigma, float _gauss_tail,
                     int _max_width, int &_width)
 {
-  const float s2 = 2.0*_sigma*_sigma;
+  const float s2 = 2.0f*_sigma*_sigma;
 
   for (int i=0; i<_max_width; ++i)  {
     _width = i;                             // half Kernel width
@@ -33,9 +33,9 @@ void osl_kernel_DOG(float *_kernel, float *_sub_area, int &_k_size,
     // the value of _kernel[i] is the average of the gaussian over
     // 11 points evenly spaced on the interval [i-0.5, i+0.5].
     _kernel[i] = 0.0;
-    for (float x=i-0.5; x<=i+0.5; x+=0.1)
-      _kernel[i] += vcl_exp(-x*x/s2);
-    _kernel[i] /= 11.0;
+    for (float x=i-0.5f; x<=i+0.5f; x+=0.1f)
+      _kernel[i] += (float)vcl_exp(-x*x/s2);
+    _kernel[i] /= 11.0f;
 
     if (i>0 && _kernel[i] < _gauss_tail)
       break;
@@ -47,7 +47,7 @@ void osl_kernel_DOG(float *_kernel, float *_sub_area, int &_k_size,
     area += _kernel[i];
 
   // Total area under whole profile curve.
-  float total_area = 2.0*area - _kernel[0];
+  float total_area = 2.0f*area - _kernel[0];
 
   for (int i=0; i<_width; ++i)  {
     _sub_area[i] = (total_area - area)/total_area;

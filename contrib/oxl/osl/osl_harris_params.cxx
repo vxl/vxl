@@ -34,12 +34,12 @@ void osl_harris_params::set_defaults()
   pab_emulate = false;
   //----------
   corner_count_max = 300;
-  gauss_sigma = 0.7;
-  relative_minimum = 0.00001;
-  scale_factor = 0.04;
+  gauss_sigma = 0.7f;
+  relative_minimum = 0.00001f;
+  scale_factor = 0.04f;
   adaptive = true;
   adaptive_window_size = 32;
-  density_thresh = 0.5;
+  density_thresh = 0.5f;
   corner_count_low = 40;
 }
 

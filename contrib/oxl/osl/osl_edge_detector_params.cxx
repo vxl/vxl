@@ -4,9 +4,9 @@
 
 
 osl_edge_detector_params::osl_edge_detector_params()
-  : _sigma(3.0)
+  : _sigma(3.0f)
   , _low(6)
-  , _gauss_tail(0.015)
+  , _gauss_tail(0.015f)
   , _fill_gaps(true)
   , _verbose(false)
 {
@@ -15,9 +15,9 @@ osl_edge_detector_params::osl_edge_detector_params()
 #if 0 // commented out
 // from osl_edge_detector
 osl_edge_detector_params::osl_edge_detector_params()
-  : _sigma(1.0)
+  : _sigma(1.0f)
   , _low(6)
-  , _gauss_tail(0.05)
+  , _gauss_tail(0.05f)
   , grd_hist(false)
   , res(15)
   , _verbose(true)
