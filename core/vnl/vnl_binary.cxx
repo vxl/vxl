@@ -1,13 +1,10 @@
 // This is vxl/vnl/vnl_binary.cxx
-
+#include "vnl_binary.h"
 //:
 // \file
 // \author fsm@robots.ox.ac.uk
 
-#include "vnl_binary.h"
-
 #include <vcl_iostream.h>
-#include <vcl_new.h>
 
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_matrix.h>
