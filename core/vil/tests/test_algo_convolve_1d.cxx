@@ -16,10 +16,10 @@ void test_algo_convolve_1d_double()
   int n = 10;
   vcl_vector<double> src(n),dest(n+2),kernel(3);
   for (int i=0;i<n;++i) src[i]=i+1;
-  for (int i=0;i<3;++i) kernel[i]=(i+1);
+  for (int i=0;i<3;++i) kernel[i]=i+1;
 
   // Note: In the following dest[1]..dest[n] should be valid.
-  // dest[0] and dest[n+1] should be untouched.
+  // dest[0] and dest[n+1] should be untouched (set to 999).
   // They are included to test for over-runs.
 
   vil2_algo_convolve_1d(&src[0],n,1, &dest[1],1,
@@ -120,8 +120,8 @@ void test_algo_convolve_1d_double()
 
   vil2_image_resource_sptr mem = vil2_new_image_resource(n,n,1,VIL2_PIXEL_FORMAT_BYTE);
   vil2_image_view<vxl_byte> v(n,n,1), v_out(n,n,1);
-  for (unsigned j=0; j<n; ++j)
-    for (unsigned i=0; i<n; ++i)
+  for (int j=0; j<n; ++j)
+    for (int i=0; i<n; ++i)
       v(i,j) = i+1;
 
   TEST ("memory image.put_view()", mem->put_view(v,0,0), true);
