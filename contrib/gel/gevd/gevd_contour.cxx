@@ -479,13 +479,12 @@ DetectJunction(vtol_vertex_2d& end, int& index,
       vdgl_edgel edge= dc->get_interpolator()->get_edgel_chain()->edgel(r);
       edgeMap.put(int( edge.get_x()), int( edge.get_y()), labels[r]);
     }
-  else {
+  else
     for ( int r=0; r< rfuzz; r++) {
       vdgl_edgel edgel= dc->get_interpolator()->get_edgel_chain()->edgel(len-1-r);
       edgeMap.put(int( edgel.get_x()), int( edgel.get_y()),labels[r]);
     }
-  }
-  delete [] labels;
+  delete[] labels;
 
   if (!stronger)                // do not find any edge in search region
     return false;
@@ -496,7 +495,7 @@ DetectJunction(vtol_vertex_2d& end, int& index,
   vdgl_digital_curve_sptr dc2 =(stronger->curve()->cast_to_digital_curve());
 
   // find corresponding index on contour
-  for (int n = 0; n < dc2->get_interpolator()->get_edgel_chain()->size(); n++)
+  for (unsigned int n = 0; n < dc2->get_interpolator()->get_edgel_chain()->size(); ++n)
   {
     vdgl_edgel edgel= dc2->get_interpolator()->get_edgel_chain()->edgel(n);
 
