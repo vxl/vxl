@@ -81,6 +81,15 @@ class rgrl_match_set
                                         vcl_vector< rgrl_feature_sptr > const& matching_to,
                                         vcl_vector< double > const&            signature_weights );
 
+  //: Add from feature, the transformed feature, and its matching "to" features, and ALL weights.
+  //
+  void add_feature_matches_and_weights( rgrl_feature_sptr                      from_feature,
+                                        rgrl_feature_sptr                      mapped_feature,
+                                        vcl_vector< rgrl_feature_sptr > const& matching_to,
+                                        vcl_vector< double > const&            sig_wgts,
+                                        vcl_vector< double > const&            geo_wgts,
+                                        vcl_vector< double > const&            cum_wgts );
+
   //: Add from feature and its matching "to" feature.
   //
   // Convenience method for adding a one-to-one correspondence. The \a

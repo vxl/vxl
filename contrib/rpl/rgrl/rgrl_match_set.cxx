@@ -140,10 +140,55 @@ add_feature_matches_and_weights( rgrl_feature_sptr                      from_fea
   vcl_vector<match_info> blank;
   vcl_vector<double>::const_iterator s_itr;
   matches_and_weights_.push_back( blank );
+  matches_and_weights_.back().reserve( matching_to.size() );
   for ( to_itr = matching_to.begin(), s_itr = signature_weights.begin();
         to_itr != matching_to.end(); ++to_itr,  ++s_itr )
   {
     matches_and_weights_.back().push_back( match_info( *to_itr, *s_itr ));
+  }
+}
+
+void
+rgrl_match_set ::
+add_feature_matches_and_weights( rgrl_feature_sptr                      from_feature,
+                                 rgrl_feature_sptr                      mapped_feature,
+                                 vcl_vector< rgrl_feature_sptr > const& matching_to,
+                                 vcl_vector< double > const&            sig_wgts,
+                                 vcl_vector< double > const&            geo_wgts,
+                                 vcl_vector< double > const&            cum_wgts )
+{
+  vcl_vector< rgrl_feature_sptr >::const_iterator to_itr;
+
+  //  Check to make sure all features involve the same feature types
+
+  assert ( from_feature->is_type( *(this->from_type_ ) ) );
+  for ( to_itr = matching_to.begin(); to_itr != matching_to.end(); ++to_itr ) {
+    assert ( (*to_itr)->is_type( *(this->to_type_ ) ) );
+  }
+
+  // Make sure the
+
+  assert ( matching_to.size() == sig_wgts.size() );
+  assert ( matching_to.size() == geo_wgts.size() );
+  assert ( matching_to.size() == cum_wgts.size() );
+
+  // Add from and xformed from
+
+  from_features_.push_back( from_feature );
+  xformed_from_features_.push_back( mapped_feature );
+
+  // Add matches, with default initial weights.
+  //
+  vcl_vector<match_info> blank;
+  matches_and_weights_.push_back( blank );
+  vcl_vector< vcl_vector< match_info > >::reverse_iterator back_it 
+    = matches_and_weights_.rbegin();
+
+  const unsigned size = matching_to.size();
+  back_it->reserve( size);
+  for( unsigned i=0; i<size; ++i ) {
+    back_it->push_back( match_info( matching_to[i], geo_wgts[i], 
+                                    sig_wgts[i], cum_wgts[i] ) );
   }
 }
 
