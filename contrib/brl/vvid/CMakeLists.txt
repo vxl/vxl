@@ -41,7 +41,7 @@ IF(HAS_CMU1394CAMERA)
  )
 ENDIF(HAS_CMU1394CAMERA)
 
-AUX_SOURCE_DIRECTORY(Templates cmu_camera_sources)
+AUX_SOURCE_DIRECTORY(Templates vvid_sources)
 
 # check if we have the camera libraries and assemble accordingly
 IF(HAS_CMU1394CAMERA)
