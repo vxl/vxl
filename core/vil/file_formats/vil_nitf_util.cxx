@@ -84,8 +84,6 @@ void display_as_hex(
 {
   static vcl_string method_name = "display_as_hex: ";
 
-  unsigned short temp_short;
-
   vcl_cout << method_name;
   if (label.length() > 0) {
     vcl_cout << label << " - ";
@@ -100,11 +98,9 @@ void display_as_hex(
   for (unsigned count = 0; count < loop_count; ++count)
   {
 //  if ((count > 0) && (count % 2 == 0))
+    unsigned short temp_short = (unsigned short) buffer[count];
     if (count > 0)
-    {
-      temp_short = (unsigned short) buffer[count];
       vcl_cout << ' ';
-    }
     vcl_cout << temp_short;
 
     if ((count > 0) && (count % 32 == 0))
