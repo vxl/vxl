@@ -61,13 +61,18 @@ bool vipl_gaussian_convolution <ImgIn,ImgOut,DataIn,DataOut,PixelItr> :: preop()
   int radius = (lc<=0) ? 0 : 1 + int(vcl_sqrt(lc)*sigma()); // sigma guaranteed >= 0
   int size = radius + 1; // only need half mask, because it is symmetric
   ref_masksize() = size;
-  if (mask() == 0) ref_mask() = new double[size];
-  else { delete[] ref_mask(); ref_mask() = new double[size]; }
-  double halfnorm = 0.5;
-  ref_mask()[0] = 1.0;
+  delete[] ref_mask(); ref_mask() = new double[size];
+  double s = -0.5/sigma()/sigma();
+  double halfnorm = vcl_exp(0.25*s) + 1.0;
+  for (int y=1; y<8; ++y) halfnorm += 2*vcl_exp(y*y*0.0625*0.0625*s);
+  ref_mask()[0] = 2*halfnorm;
   for (int x=1; x<size; ++x)
-    { ref_mask()[x] = vcl_exp(-0.5*x*x/sigma()/sigma()); halfnorm += mask()[x]; }
-  for (int x=0; x<=size; ++x) ref_mask()[x] /= 2*halfnorm; // normalise mask
+  { // trapezoid approximation (16 pieces) of integral between x-0.5 and x+0.5
+    ref_mask()[x] = vcl_exp((x-0.5)*(x-0.5)*s) + vcl_exp((x+0.5)*(x+0.5)*s);
+    for (int y=-7; y<8; ++y) ref_mask()[x] += 2*vcl_exp((x+y*0.0625)*(x+y*0.0625)*s);
+    halfnorm += mask()[x];
+  }
+  for (int x=0; x<size; ++x) ref_mask()[x] /= 2*halfnorm; // normalise mask
   return true;
 }
 
