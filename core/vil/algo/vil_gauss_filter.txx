@@ -172,7 +172,7 @@ void vil2_gauss_filter_5tap(
   unsigned n_planes = src_im.nplanes();
   dest_im.set_size(ni, nj, n_planes);
   work.set_size(ni,nj,1);
-  assert (work.jstep() == ni);
+  assert (work.jstep() == (vcl_ptrdiff_t)ni);
 
   // Reduce plane-by-plane
 
