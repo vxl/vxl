@@ -739,6 +739,15 @@ shelle *dummyshbase;         /* Keep base address so we can free() it later. */
 
 struct triedge recenttri;
 
+
+/* Deal with point types that anre not unsigned long                         */
+/* The conditional test could be improved to be more cross platform          */
+#ifdef VCL_VC70
+# define ptr_sized_int __w64 int
+#else
+# define ptr_sized_int unsigned long
+#endif
+
 /*****************************************************************************/
 /*                                                                           */
 /*  Mesh manipulation primitives.  Each triangle contains three pointers to  */
@@ -776,20 +785,21 @@ int minus1mod3[3] = {2, 0, 1};
 /*                                                                           */
 /*                                                                           */
 
+
 /* decode() converts a pointer to an oriented triangle.  The orientation is  */
 /*   extracted from the two least significant bits of the pointer.           */
 
 #define decode(ptr, triedge)                                                  \
-  (triedge).orient = (int) ((unsigned long) (ptr) & (unsigned long) 3l);      \
+  (triedge).orient = (int) ((ptr_sized_int) (ptr) & (ptr_sized_int) 3l);      \
   (triedge).tri = (triangle *)                                                \
-                  ((unsigned long) (ptr) ^ (unsigned long) (triedge).orient)
+                  ((ptr_sized_int) (ptr) ^ (ptr_sized_int) (triedge).orient)
 
 /* encode() compresses an oriented triangle into a single pointer.  It       */
 /*   relies on the assumption that all triangles are aligned to four-byte    */
 /*   boundaries, so the two least significant bits of (triedge).tri are zero.*/
 
 #define encode(triedge)                                                       \
-  (triangle) ((unsigned long) (triedge).tri | (unsigned long) (triedge).orient)
+  (triangle) ((ptr_sized_int) (triedge).tri | (ptr_sized_int) (triedge).orient)
 
 /* The following edge manipulation primitives are all described by Guibas    */
 /*   and Stolfi.  However, they use an edge-based data structure, whereas I  */
@@ -958,16 +968,16 @@ int minus1mod3[3] = {2, 0, 1};
 
 #define infect(triedge)                                                       \
   (triedge).tri[6] = (triangle)                                               \
-                     ((unsigned long) (triedge).tri[6] | (unsigned long) 2l)
+                     ((ptr_sized_int) (triedge).tri[6] | (ptr_sized_int) 2l)
 
 #define uninfect(triedge)                                                     \
   (triedge).tri[6] = (triangle)                                               \
-                     ((unsigned long) (triedge).tri[6] & ~ (unsigned long) 2l)
+                     ((ptr_sized_int) (triedge).tri[6] & ~ (ptr_sized_int) 2l)
 
 /* Test a triangle for viral infection.                                      */
 
 #define infected(triedge)                                                     \
-  (((unsigned long) (triedge).tri[6] & (unsigned long) 2l) != 0)
+  (((ptr_sized_int) (triedge).tri[6] & (ptr_sized_int) 2l) != 0)
 
 /* Check or set a triangle's attributes.                                     */
 
@@ -994,16 +1004,16 @@ int minus1mod3[3] = {2, 0, 1};
 /*   are masked out to produce the real pointer.                             */
 
 #define sdecode(sptr, edge)                                                   \
-  (edge).shorient = (int) ((unsigned long) (sptr) & (unsigned long) 1l);      \
+  (edge).shorient = (int) ((ptr_sized_int) (sptr) & (ptr_sized_int) 1l);      \
   (edge).sh = (shelle *)                                                      \
-              ((unsigned long) (sptr) & ~ (unsigned long) 3l)
+              ((ptr_sized_int) (sptr) & ~ (ptr_sized_int) 3l)
 
 /* sencode() compresses an oriented shell edge into a single pointer.  It    */
 /*   relies on the assumption that all shell edges are aligned to two-byte   */
 /*   boundaries, so the least significant bit of (edge).sh is zero.          */
 
 #define sencode(edge)                                                         \
-  (shelle) ((unsigned long) (edge).sh | (unsigned long) (edge).shorient)
+  (shelle) ((ptr_sized_int) (edge).sh | (ptr_sized_int) (edge).shorient)
 
 /* ssym() toggles the orientation of a shell edge.                           */
 
@@ -3007,27 +3017,27 @@ struct triedge *t;
   struct edge printsh;
   point printpoint;
 
-  printf("triangle x%lx with orientation %d:\n", (unsigned long) t->tri,
+  printf("triangle x%lx with orientation %d:\n", (ptr_sized_int) t->tri,
          t->orient);
   decode(t->tri[0], printtri);
   if (printtri.tri == dummytri) {
     printf("    [0] = Outer space\n");
   } else {
-    printf("    [0] = x%lx  %d\n", (unsigned long) printtri.tri,
+    printf("    [0] = x%lx  %d\n", (ptr_sized_int) printtri.tri,
            printtri.orient);
   }
   decode(t->tri[1], printtri);
   if (printtri.tri == dummytri) {
     printf("    [1] = Outer space\n");
   } else {
-    printf("    [1] = x%lx  %d\n", (unsigned long) printtri.tri,
+    printf("    [1] = x%lx  %d\n", (ptr_sized_int) printtri.tri,
            printtri.orient);
   }
   decode(t->tri[2], printtri);
   if (printtri.tri == dummytri) {
     printf("    [2] = Outer space\n");
   } else {
-    printf("    [2] = x%lx  %d\n", (unsigned long) printtri.tri,
+    printf("    [2] = x%lx  %d\n", (ptr_sized_int) printtri.tri,
            printtri.orient);
   }
   org(*t, printpoint);
@@ -3035,36 +3045,36 @@ struct triedge *t;
     printf("    Origin[%d] = NULL\n", (t->orient + 1) % 3 + 3);
   else
     printf("    Origin[%d] = x%lx  (%.12g, %.12g)\n",
-           (t->orient + 1) % 3 + 3, (unsigned long) printpoint,
+           (t->orient + 1) % 3 + 3, (ptr_sized_int) printpoint,
            printpoint[0], printpoint[1]);
   dest(*t, printpoint);
   if (printpoint == (point) NULL)
     printf("    Dest  [%d] = NULL\n", (t->orient + 2) % 3 + 3);
   else
     printf("    Dest  [%d] = x%lx  (%.12g, %.12g)\n",
-           (t->orient + 2) % 3 + 3, (unsigned long) printpoint,
+           (t->orient + 2) % 3 + 3, (ptr_sized_int) printpoint,
            printpoint[0], printpoint[1]);
   apex(*t, printpoint);
   if (printpoint == (point) NULL)
     printf("    Apex  [%d] = NULL\n", t->orient + 3);
   else
     printf("    Apex  [%d] = x%lx  (%.12g, %.12g)\n",
-           t->orient + 3, (unsigned long) printpoint,
+           t->orient + 3, (ptr_sized_int) printpoint,
            printpoint[0], printpoint[1]);
   if (useshelles) {
     sdecode(t->tri[6], printsh);
     if (printsh.sh != dummysh) {
-      printf("    [6] = x%lx  %d\n", (unsigned long) printsh.sh,
+      printf("    [6] = x%lx  %d\n", (ptr_sized_int) printsh.sh,
              printsh.shorient);
     }
     sdecode(t->tri[7], printsh);
     if (printsh.sh != dummysh) {
-      printf("    [7] = x%lx  %d\n", (unsigned long) printsh.sh,
+      printf("    [7] = x%lx  %d\n", (ptr_sized_int) printsh.sh,
              printsh.shorient);
     }
     sdecode(t->tri[8], printsh);
     if (printsh.sh != dummysh) {
-      printf("    [8] = x%lx  %d\n", (unsigned long) printsh.sh,
+      printf("    [8] = x%lx  %d\n", (ptr_sized_int) printsh.sh,
              printsh.shorient);
     }
   }
@@ -3092,19 +3102,19 @@ struct edge *s;
   point printpoint;
 
   printf("shell edge x%lx with orientation %d and mark %d:\n",
-         (unsigned long) s->sh, s->shorient, mark(*s));
+         (ptr_sized_int) s->sh, s->shorient, mark(*s));
   sdecode(s->sh[0], printsh);
   if (printsh.sh == dummysh) {
     printf("    [0] = No shell\n");
   } else {
-    printf("    [0] = x%lx  %d\n", (unsigned long) printsh.sh,
+    printf("    [0] = x%lx  %d\n", (ptr_sized_int) printsh.sh,
            printsh.shorient);
   }
   sdecode(s->sh[1], printsh);
   if (printsh.sh == dummysh) {
     printf("    [1] = No shell\n");
   } else {
-    printf("    [1] = x%lx  %d\n", (unsigned long) printsh.sh,
+    printf("    [1] = x%lx  %d\n", (ptr_sized_int) printsh.sh,
            printsh.shorient);
   }
   sorg(*s, printpoint);
@@ -3112,27 +3122,27 @@ struct edge *s;
     printf("    Origin[%d] = NULL\n", 2 + s->shorient);
   else
     printf("    Origin[%d] = x%lx  (%.12g, %.12g)\n",
-           2 + s->shorient, (unsigned long) printpoint,
+           2 + s->shorient, (ptr_sized_int) printpoint,
            printpoint[0], printpoint[1]);
   sdest(*s, printpoint);
   if (printpoint == (point) NULL)
     printf("    Dest  [%d] = NULL\n", 3 - s->shorient);
   else
     printf("    Dest  [%d] = x%lx  (%.12g, %.12g)\n",
-           3 - s->shorient, (unsigned long) printpoint,
+           3 - s->shorient, (ptr_sized_int) printpoint,
            printpoint[0], printpoint[1]);
   decode(s->sh[4], printtri);
   if (printtri.tri == dummytri) {
     printf("    [4] = Outer space\n");
   } else {
-    printf("    [4] = x%lx  %d\n", (unsigned long) printtri.tri,
+    printf("    [4] = x%lx  %d\n", (ptr_sized_int) printtri.tri,
            printtri.orient);
   }
   decode(s->sh[5], printtri);
   if (printtri.tri == dummytri) {
     printf("    [5] = Outer space\n");
   } else {
-    printf("    [5] = x%lx  %d\n", (unsigned long) printtri.tri,
+    printf("    [5] = x%lx  %d\n", (ptr_sized_int) printtri.tri,
            printtri.orient);
   }
 }
@@ -3221,7 +3231,7 @@ int alignment;
 void poolrestart(pool)
 struct memorypool *pool;
 {
-  unsigned long alignptr;
+  ptr_sized_int alignptr;
 
   pool->items = 0;
   pool->maxitems = 0;
@@ -3229,11 +3239,11 @@ struct memorypool *pool;
   /* Set the currently active block. */
   pool->nowblock = pool->firstblock;
   /* Find the first item in the pool.  Increment by the size of (VOID *). */
-  alignptr = (unsigned long) (pool->nowblock + 1);
+  alignptr = (ptr_sized_int) (pool->nowblock + 1);
   /* Align the item on an `alignbytes'-byte boundary. */
   pool->nextitem = (VOID *)
-    (alignptr + (unsigned long) pool->alignbytes
-     - (alignptr % (unsigned long) pool->alignbytes));
+    (alignptr + (ptr_sized_int) pool->alignbytes
+     - (alignptr % (ptr_sized_int) pool->alignbytes));
   /* There are lots of unallocated items left in this block. */
   pool->unallocateditems = pool->itemsperblock;
   /* The stack of deallocated items is empty. */
@@ -3267,7 +3277,7 @@ struct memorypool *pool;
 {
   VOID *newitem;
   VOID **newblock;
-  unsigned long alignptr;
+  ptr_sized_int alignptr;
 
   /* First check the linked list of dead items.  If the list is not   */
   /*   empty, allocate an item from the list rather than a fresh one. */
@@ -3294,11 +3304,11 @@ struct memorypool *pool;
       pool->nowblock = (VOID **) *(pool->nowblock);
       /* Find the first item in the block.    */
       /*   Increment by the size of (VOID *). */
-      alignptr = (unsigned long) (pool->nowblock + 1);
+      alignptr = (ptr_sized_int) (pool->nowblock + 1);
       /* Align the item on an `alignbytes'-byte boundary. */
       pool->nextitem = (VOID *)
-        (alignptr + (unsigned long) pool->alignbytes
-         - (alignptr % (unsigned long) pool->alignbytes));
+        (alignptr + (ptr_sized_int) pool->alignbytes
+         - (alignptr % (ptr_sized_int) pool->alignbytes));
       /* There are lots of unallocated items left in this block. */
       pool->unallocateditems = pool->itemsperblock;
     }
@@ -3346,16 +3356,16 @@ VOID *dyingitem;
 void traversalinit(pool)
 struct memorypool *pool;
 {
-  unsigned long alignptr;
+  ptr_sized_int alignptr;
 
   /* Begin the traversal in the first block. */
   pool->pathblock = pool->firstblock;
   /* Find the first item in the block.  Increment by the size of (VOID *). */
-  alignptr = (unsigned long) (pool->pathblock + 1);
+  alignptr = (ptr_sized_int) (pool->pathblock + 1);
   /* Align with item on an `alignbytes'-byte boundary. */
   pool->pathitem = (VOID *)
-    (alignptr + (unsigned long) pool->alignbytes
-     - (alignptr % (unsigned long) pool->alignbytes));
+    (alignptr + (ptr_sized_int) pool->alignbytes
+     - (alignptr % (ptr_sized_int) pool->alignbytes));
   /* Set the number of items left in the current block. */
   pool->pathitemsleft = pool->itemsperblock;
 }
@@ -3378,7 +3388,7 @@ VOID *traverse(pool)
 struct memorypool *pool;
 {
   VOID *newitem;
-  unsigned long alignptr;
+  ptr_sized_int alignptr;
 
   /* Stop upon exhausting the list of items. */
   if (pool->pathitem == pool->nextitem) {
@@ -3389,11 +3399,11 @@ struct memorypool *pool;
     /* Find the next block. */
     pool->pathblock = (VOID **) *(pool->pathblock);
     /* Find the first item in the block.  Increment by the size of (VOID *). */
-    alignptr = (unsigned long) (pool->pathblock + 1);
+    alignptr = (ptr_sized_int) (pool->pathblock + 1);
     /* Align with item on an `alignbytes'-byte boundary. */
     pool->pathitem = (VOID *)
-      (alignptr + (unsigned long) pool->alignbytes
-       - (alignptr % (unsigned long) pool->alignbytes));
+      (alignptr + (ptr_sized_int) pool->alignbytes
+       - (alignptr % (ptr_sized_int) pool->alignbytes));
     /* Set the number of items left in the current block. */
     pool->pathitemsleft = pool->itemsperblock;
   }
@@ -3429,7 +3439,7 @@ void dummyinit(trianglewords, shellewords)
 int trianglewords;
 int shellewords;
 {
-  unsigned long alignptr;
+  ptr_sized_int alignptr;
 
   /* `triwords' and `shwords' are used by the mesh manipulation primitives */
   /*   to extract orientations of triangles and shell edges from pointers. */
@@ -3444,10 +3454,10 @@ int shellewords;
     exit(1);
   }
   /* Align `dummytri' on a `triangles.alignbytes'-byte boundary. */
-  alignptr = (unsigned long) dummytribase;
+  alignptr = (ptr_sized_int) dummytribase;
   dummytri = (triangle *)
-    (alignptr + (unsigned long) triangles.alignbytes
-     - (alignptr % (unsigned long) triangles.alignbytes));
+    (alignptr + (ptr_sized_int) triangles.alignbytes
+     - (alignptr % (ptr_sized_int) triangles.alignbytes));
   /* Initialize the three adjoining triangles to be "outer space".  These  */
   /*   will eventually be changed by various bonding operations, but their */
   /*   values don't really matter, as long as they can legally be          */
@@ -3471,10 +3481,10 @@ int shellewords;
       exit(1);
     }
     /* Align `dummysh' on a `shelles.alignbytes'-byte boundary. */
-    alignptr = (unsigned long) dummyshbase;
+    alignptr = (ptr_sized_int) dummyshbase;
     dummysh = (shelle *)
-      (alignptr + (unsigned long) shelles.alignbytes
-       - (alignptr % (unsigned long) shelles.alignbytes));
+      (alignptr + (ptr_sized_int) shelles.alignbytes
+       - (alignptr % (ptr_sized_int) shelles.alignbytes));
     /* Initialize the two adjoining shell edges to be the omnipresent shell */
     /*   edge.  These will eventually be changed by various bonding         */
     /*   operations, but their values don't really matter, as long as they  */
@@ -3754,7 +3764,7 @@ int number;
 {
   VOID **getblock;
   point foundpoint;
-  unsigned long alignptr;
+  ptr_sized_int alignptr;
   int current;
 
   getblock = points.firstblock;
@@ -3765,9 +3775,9 @@ int number;
     current += points.itemsperblock;
   }
   /* Now find the right point. */
-  alignptr = (unsigned long) (getblock + 1);
-  foundpoint = (point) (alignptr + (unsigned long) points.alignbytes
-                        - (alignptr % (unsigned long) points.alignbytes));
+  alignptr = (ptr_sized_int) (getblock + 1);
+  foundpoint = (point) (alignptr + (ptr_sized_int) points.alignbytes
+                        - (alignptr % (ptr_sized_int) points.alignbytes));
   while (current < number) {
     foundpoint += points.itemwords;
     current++;
@@ -5725,7 +5735,7 @@ struct triedge *searchtri;
   triangle *firsttri;
   struct triedge sampletri;
   point torg, tdest;
-  unsigned long alignptr;
+  ptr_sized_int alignptr;
   REAL searchdist, dist;
   REAL ahead;
   long sampleblocks, samplesperblock, samplenum;
@@ -5781,9 +5791,9 @@ struct triedge *searchtri;
   sampleblock = triangles.firstblock;
   sampletri.orient = 0;
   for (i = 0; i < sampleblocks; i++) {
-    alignptr = (unsigned long) (sampleblock + 1);
-    firsttri = (triangle *) (alignptr + (unsigned long) triangles.alignbytes
-                          - (alignptr % (unsigned long) triangles.alignbytes));
+    alignptr = (ptr_sized_int) (sampleblock + 1);
+    firsttri = (triangle *) (alignptr + (ptr_sized_int) triangles.alignbytes
+                          - (alignptr % (ptr_sized_int) triangles.alignbytes));
     for (j = 0; j < samplesperblock; j++) {
       if (i == triblocks - 1) {
         samplenum = randomnation((int)
