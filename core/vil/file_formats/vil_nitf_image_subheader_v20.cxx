@@ -1162,14 +1162,12 @@ void vil_nitf_image_subheader_v20::init()
     // be smart and interpret the percents in the string.
     // We don't use SCCS, so don't try to write to a read
     // only string!
-    vcl_time_t clock;
-    struct tm *tm;
-    clock = time(NULL);
-    tm = localtime(&clock);
+    vcl_time_t clock = vcl_time(NULL);
+    struct tm *tm = vcl_localtime(&clock);
     // char* format = "%d%H%M%SZ%h%y";
 
-    STRNCPY (IDATIM_, initstr, 14);
-    strftime(IDATIM_, 15, date_format, tm);
+    STRNCPY(IDATIM_, initstr, 14);
+    vcl_strftime(IDATIM_, 15, date_format, tm);
 
     STRNCPY(TGTID,  initstr, 17);
     STRNCPY(ITITLE, initstr, 80);
