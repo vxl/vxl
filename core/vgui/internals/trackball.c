@@ -62,6 +62,15 @@
 #define TRACKBALLSIZE  ((float)0.8)
 
 /*
+ * Using sqrtf() for float arguments, instead of sqrt(double),
+ * at least when math.h provides this.
+ */
+#include <vxl_config.h>
+#if !VXL_MATH_HAS_SQRTF
+#define sqrtf(x) (float)sqrt((double)(x))
+#endif
+
+/*
  * Local function prototypes (not defined in trackball.h)
  */
 static float tb_project_to_sphere(float, float, float);
