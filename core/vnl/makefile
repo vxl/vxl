@@ -85,10 +85,8 @@ MANPAGE_SOURCES += vnl_double_4x3.h
 MANPAGE_SOURCES += vnl_double_4x4.h
 MANPAGE_SOURCES += vnl_double_5.h
 MANPAGE_SOURCES += vnl_identity.h
-MANPAGE_SOURCES += vnl_matlab_file_write.h
 MANPAGE_SOURCES += vnl_matrix_ref.h
 MANPAGE_SOURCES += vnl_operators.h
-MANPAGE_SOURCES += vnl_random.h
 MANPAGE_SOURCES += vnl_tag.h
 MANPAGE_SOURCES += vnl_vector_dereference.h
 
