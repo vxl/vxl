@@ -140,11 +140,6 @@ SOURCE=.\Templates/vil_convolve_1d+float.uchar.float.float-.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=.\Templates/vil_convolve_signal.cxx
-
-# End Source File
-# Begin Source File
-
 SOURCE=.\Templates/vil_convolve_simple+vil_byte.double.double.float-.cxx
 
 # End Source File

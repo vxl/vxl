@@ -105,6 +105,36 @@ SOURCE=.\Templates/vepl_convert+double-.cxx
 # End Source File
 # Begin Source File
 
+SOURCE=.\Templates/vipl_filter_2d+vil_image.vcl_vector+uint-.double.uint.cxx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates/vipl_filter_2d+vil_image.vcl_vector+uint-.float.uint.cxx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates/vipl_filter_2d+vil_image.vcl_vector+uint-.ushort.uint.cxx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates/vipl_histogram+vil_image.vcl_vector+uint-.double.uint-.cxx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates/vipl_histogram+vil_image.vcl_vector+uint-.float.uint-.cxx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates/vipl_histogram+vil_image.vcl_vector+uint-.ushort.uint-.cxx
+
+# End Source File
+# Begin Source File
+
 SOURCE=.\Templates/vepl_convert+float-.cxx
 
 # End Source File

@@ -225,22 +225,22 @@ SOURCE=.\Templates/vcl_vector+vgui_tview+-icon-.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=.\Templates/vgui_simple_command+vgui_active_visible-.cxx
+SOURCE=.\Templates/vgui_command_simple+vgui_active_visible-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=.\Templates/vgui_simple_command+vgui_adaptor-.cxx
+SOURCE=.\Templates/vgui_command_simple+vgui_adaptor-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=.\Templates/vgui_simple_command+vgui_clear_tableau-.cxx
+SOURCE=.\Templates/vgui_command_simple+vgui_clear_tableau-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=.\Templates/vgui_simple_command+vgui_tableau-.cxx
+SOURCE=.\Templates/vgui_command_simple+vgui_tableau-.cxx
 
 # End Source File
 # Begin Source File
@@ -1434,11 +1434,6 @@ SOURCE=.\vgui_tableau_sptr.h
 # Begin Source File
 
 SOURCE=.\vgui_test_sptr.h
-
-# End Source File
-# Begin Source File
-
-SOURCE=.\vgui_text.h
 
 # End Source File
 # Begin Source File

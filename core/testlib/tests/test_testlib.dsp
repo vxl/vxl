@@ -96,6 +96,9 @@ SOURCE=.\test_assert.cxx
 SOURCE=.\test_macros.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\test_link.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\test_root_dir.cxx
 # End Source File
 # End Group
