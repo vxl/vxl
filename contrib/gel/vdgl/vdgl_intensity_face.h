@@ -6,7 +6,7 @@
 // \brief A face with intensity attributes
 //
 //  A sub-class of Face which contains intensity attributes that are the
-//  result of samping the interior of the face in an image. The boundaries
+//  result of sampling the interior of the face in an image. The boundaries
 //  of the face are vtol_edge(s) with DigitalCurve geometry. The
 //  IntensityFace is nominally 2d and embedded in an image coordinate
 //  frame. The IntensityFace can be constructed from a 3-d linear
@@ -16,7 +16,7 @@
 //  from a set of vtol_edge(s) and then the interior is derived from the
 //  associated image region.  If the IntensityFace is derived from
 //  a projected linear Face, the projected boundaries of a set of Faces
-//  are used to tesselate the image for region analysis.
+//  are used to tessellate the image for region analysis.
 //
 // \author J.L. Mundy
 // \date   November 21, 1999
@@ -24,7 +24,7 @@
 // \verbatim
 //  Modifications
 //   8-May-2002 - Peter Vanroose - no longer inherits from vdgl_digital_region:
-//                dependency changed to "has_a", but with cast_to semantics
+//                    dependency changed to "has_a", but with cast_to semantics
 //   8-Jan-2003 - Peter Vanroose - moved compute_bounding_box() to vtol_face
 //   5-Feb-2003 - Peter Vanroose - moved IsHoleP() to vtol_face_2d
 // \endverbatim
