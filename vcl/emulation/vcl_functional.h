@@ -183,9 +183,9 @@ struct vcl__binary_fun_aux : private Operation
 template <class Predicate>
 class vcl_unary_negate :
     public vcl_unary_function<typename __UNARY_ARG(Predicate,argument_type), bool> {
-protected:
+  protected:
     Predicate pred;
-public:
+  public:
 
     explicit vcl_unary_negate(const Predicate& x) : pred(x) {}
     bool operator()(const argument_type& x) const { return !pred(x); }
@@ -201,9 +201,9 @@ class vcl_binary_negate
     : public vcl_binary_function<typename __BINARY_ARG(Predicate,first_argument_type),
                              typename __BINARY_ARG(Predicate,second_argument_type),
                              bool> {
-protected:
+  protected:
     Predicate pred;
-public:
+  public:
     explicit vcl_binary_negate(const Predicate& x) : pred(x) {}
     bool operator()(const first_argument_type& x,
                     const second_argument_type& y) const {
@@ -220,12 +220,12 @@ template <class Operation>
 class vcl_binder1st :
     public vcl_unary_function<typename __BINARY_ARG(Operation,second_argument_type),
                           typename __BINARY_ARG(Operation,result_type) > {
-protected:
+  protected:
     Operation op;
     typename __BINARY_ARG(Operation,first_argument_type) value;
-public:
+  public:
     vcl_binder1st(const Operation& x,
-              const typename __BINARY_ARG(Operation,first_argument_type)& y)
+                  const typename __BINARY_ARG(Operation,first_argument_type)& y)
         : op(x), value(y) {}
     result_type operator()(const argument_type& x) const {
         return op(value, x);
@@ -241,13 +241,13 @@ vcl_binder1st<Operation> bind1st(const Operation& op, const T& x) {
 template <class Operation>
 class vcl_binder2nd :
     public vcl_unary_function<typename __BINARY_ARG(Operation,first_argument_type),
-                          typename __BINARY_ARG(Operation,result_type)> {
-protected:
+                              typename __BINARY_ARG(Operation,result_type)> {
+  protected:
     Operation op;
     typename __BINARY_ARG(Operation,second_argument_type) value;
-public:
+  public:
     vcl_binder2nd(const Operation& x,
-              const typename __BINARY_ARG(Operation,second_argument_type)& y)
+                  const typename __BINARY_ARG(Operation,second_argument_type)& y)
         : op(x), value(y) {}
     result_type operator()(const argument_type& x) const {
         return op(x, value);
@@ -263,11 +263,11 @@ vcl_binder2nd<Operation> bind2nd(const Operation& op, const T& x) {
 template <class Operation1, class Operation2>
 class vcl_unary_compose :
     public vcl_unary_function<typename __UNARY_ARG(Operation2,argument_type),
-                          typename __UNARY_ARG(Operation1,result_type)> {
-protected:
+                              typename __UNARY_ARG(Operation1,result_type)> {
+  protected:
     Operation1 op1;
     Operation2 op2;
-public:
+  public:
     vcl_unary_compose(const Operation1& x, const Operation2& y) : op1(x), op2(y) {}
     typename __UNARY_ARG(Operation1,result_type)
     operator()(const typename __UNARY_ARG(Operation2,argument_type)& x) const {
@@ -284,12 +284,12 @@ inline vcl_unary_compose<Operation1, Operation2> compose1(const Operation1& op1,
 template <class Operation1, class Operation2, class Operation3>
 class vcl_binary_compose :
     public vcl_unary_function<typename __UNARY_ARG(Operation2,argument_type),
-                          typename __BINARY_ARG(Operation1,result_type)> {
-protected:
+                              typename __BINARY_ARG(Operation1,result_type)> {
+  protected:
     Operation1 op1;
     Operation2 op2;
     Operation3 op3;
-public:
+  public:
     vcl_binary_compose(const Operation1& x, const Operation2& y,
                        const Operation3& z) : op1(x), op2(y), op3(z) { }
     typename __BINARY_ARG(Operation1,result_type)
@@ -306,9 +306,9 @@ compose2(const Operation1& op1, const Operation2& op2, const Operation3& op3) {
 
 template <class Arg, class Result>
 class vcl_pointer_to_unary_function : public vcl_unary_function<Arg, Result> {
-protected:
+  protected:
     Result (*ptr)(Arg);
-public:
+  public:
     vcl_pointer_to_unary_function() {}
     explicit vcl_pointer_to_unary_function(Result (*x)(Arg)) : ptr(x) {}
     Result operator()(Arg x) const { return ptr(x); }
@@ -321,9 +321,9 @@ inline vcl_pointer_to_unary_function<Arg, Result> ptr_fun(Result (*x)(Arg)) {
 
 template <class Arg1, class Arg2, class Result>
 class vcl_pointer_to_binary_function : public vcl_binary_function<Arg1, Arg2, Result> {
-protected:
+  protected:
     Result (*ptr)(Arg1, Arg2);
-public:
+  public:
     vcl_pointer_to_binary_function() {}
     explicit vcl_pointer_to_binary_function(Result (*x)(Arg1, Arg2)) : ptr(x) {}
     Result operator()(Arg1 x, Arg2 y) const { return ptr(x, y); }
@@ -430,11 +430,11 @@ inline vcl_constant_binary_fun<Result
 // Note: this code assumes that T is 32-bit unsigned integer.
 template < class T >
 class vcl__subtractive_rng_t : public vcl_unary_function<T, T> {
-private:
+  private:
   T table[55];
   vcl_size_t index1;
   vcl_size_t index2;
-public:
+  public:
   vcl__subtractive_rng_t(T seed) { initialize(seed); }
   vcl__subtractive_rng_t() { initialize(161803398u); }
 
@@ -475,10 +475,10 @@ typedef vcl__subtractive_rng_t<__STL_UINT32_T> vcl_subtractive_rng;
 // pointer argument.
 template <class Class, class Result>
 class vcl_mem_fun_t : public vcl_unary_function<Class*, Result> {
-protected:
+  protected:
     typedef Result (Class::*fun_type)(void);
     fun_type ptr;
-public:
+  public:
     vcl_mem_fun_t() {}
     explicit vcl_mem_fun_t(fun_type p) : ptr(p) {}
     Result operator()(Class* x) const { return (x->*ptr)();}
@@ -488,11 +488,11 @@ public:
 //   pointer argument and an additional argument of the appropriate type.
 template <class Class, class Arg, class Result>
 class vcl_mem_fun1_t: public vcl_binary_function<Class*, Arg, Result> {
-public:
-protected:
+  public:
+  protected:
     typedef Result (Class::*fun_type)(Arg);
     fun_type ptr;
-public:
+  public:
     vcl_mem_fun1_t() {}
     explicit vcl_mem_fun1_t(fun_type p) : ptr(p) {}
     Result operator()(Class* x, Arg a) const { return (x->*ptr)(a);}
@@ -502,10 +502,10 @@ public:
 // reference argument.
 template <class Class, class Result>
 class vcl_mem_fun_ref_t : public vcl_unary_function<Class, Result> {
-protected:
+  protected:
     typedef Result (Class::*fun_type)(void);
     fun_type ptr;
-public:
+  public:
     vcl_mem_fun_ref_t() {}
     explicit vcl_mem_fun_ref_t(fun_type p) : ptr(p) {}
     Result operator()(Class& x) const { return (x.*ptr)();}
@@ -516,11 +516,10 @@ public:
 // type.
 template <class Class, class Arg, class Result>
 class vcl_mem_fun1_ref_t: public vcl_binary_function<Class, Arg, Result> {
-public:
-protected:
+  protected:
     typedef Result (Class::*fun_type)(Arg);
     fun_type ptr;
-public:
+  public:
     vcl_mem_fun1_ref_t() {}
     explicit vcl_mem_fun1_ref_t(fun_type p) : ptr(p) {}
     Result operator()(Class& x, Arg a) const { return (x.*ptr)(a);}

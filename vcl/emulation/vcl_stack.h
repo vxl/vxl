@@ -123,13 +123,15 @@ public:
     vcl_priority_queue() :  c(), comp(Compare()) {}
     explicit vcl_priority_queue(const Compare& x) :  c(), comp(x) {}
     vcl_priority_queue(const value_type* first, const value_type* last,
-                   const Compare& x = Compare()) : c(first, last), comp(x) {
+                       const Compare& x = Compare()) : c(first, last), comp(x)
+    {
         vcl_make_heap(c.begin(), c.end(), comp);
     }
 #if 0
     template <class InputIterator>
     vcl_priority_queue(InputIterator first, InputIterator last,
-                   const Compare& x = Compare()) : c(first, last), comp(x) {
+                       const Compare& x = Compare()) : c(first, last), comp(x)
+    {
         vcl_make_heap(c.begin(), c.end(), comp);
     }
 #endif

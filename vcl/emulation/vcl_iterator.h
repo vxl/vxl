@@ -257,7 +257,8 @@ inline vcl_insert_iterator<Container> vcl_inserter(Container& x, Iterator i) {
 
 // Forward declarations
 template <class BidirectionalIterator, class T, class Reference, class Distance> class vcl_reverse_bidirectional_iterator;
-template <class BidirectionalIterator, class T, class Reference, class Distance> inline bool operator==(
+template <class BidirectionalIterator, class T, class Reference, class Distance> inline bool operator==
+   (
     const vcl_reverse_bidirectional_iterator<BidirectionalIterator, T, Reference, Distance>& x,
     const vcl_reverse_bidirectional_iterator<BidirectionalIterator, T, Reference, Distance>& y);
 
@@ -266,7 +267,7 @@ template <class BidirectionalIterator, class T,
           VCL_DFL_TYPE_PARAM_STLDECL(Distance, vcl_ptrdiff_t)>
 class vcl_reverse_bidirectional_iterator {
     typedef vcl_reverse_bidirectional_iterator<BidirectionalIterator, T, Reference,
-                                           Distance> self;
+                                               Distance> self;
     friend bool operator== VCL_NULL_TMPL_ARGS (const self& x, const self& y);
 protected:
     BidirectionalIterator current;
@@ -318,41 +319,48 @@ distance_type(const vcl_reverse_bidirectional_iterator<BidirectionalIterator, T,
 }
 
 template <class BidirectionalIterator, class T, class Reference, class Distance>
-inline bool operator==(
+inline bool operator==
+   (
     const vcl_reverse_bidirectional_iterator<BidirectionalIterator, T, Reference, Distance>& x,
-    const vcl_reverse_bidirectional_iterator<BidirectionalIterator, T, Reference, Distance>& y) {
+    const vcl_reverse_bidirectional_iterator<BidirectionalIterator, T, Reference, Distance>& y)
+{
     return x.current == y.current;
 }
 
 // Forward declarations
 template <class RandomAccessIterator, class T, class Reference, class Distance> class vcl_reverse_iterator;
-template <class RandomAccessIterator, class T, class Reference, class Distance> inline bool operator==(
+template <class RandomAccessIterator, class T, class Reference, class Distance> inline bool operator==
+   (
     const vcl_reverse_iterator<RandomAccessIterator, T, Reference, Distance>& x,
     const vcl_reverse_iterator<RandomAccessIterator, T, Reference, Distance>& y);
-template <class RandomAccessIterator, class T, class Reference, class Distance> inline bool operator<(
+template <class RandomAccessIterator, class T, class Reference, class Distance> inline bool operator<
+   (
     const vcl_reverse_iterator<RandomAccessIterator, T, Reference, Distance>& x,
     const vcl_reverse_iterator<RandomAccessIterator, T, Reference, Distance>& y);
-template <class RandomAccessIterator, class T, class Reference, class Distance> inline Distance operator-(
+template <class RandomAccessIterator, class T, class Reference, class Distance> inline Distance operator-
+   (
     const vcl_reverse_iterator<RandomAccessIterator, T, Reference, Distance>& x,
     const vcl_reverse_iterator<RandomAccessIterator, T, Reference, Distance>& y);
 template <class RandomAccessIterator, class T, class Reference, class Distance>
-   inline vcl_reverse_iterator<RandomAccessIterator, T, Reference, Distance> operator+(
+   inline vcl_reverse_iterator<RandomAccessIterator, T, Reference, Distance> operator+
+   (
     const vcl_reverse_iterator<RandomAccessIterator, T, Reference, Distance>& x,
     const vcl_reverse_iterator<RandomAccessIterator, T, Reference, Distance>& y);
 
 template <class RandomAccessIterator, class T,
           VCL_DFL_TMPL_PARAM_STLDECL(Reference,T&),
           VCL_DFL_TYPE_PARAM_STLDECL(Distance,vcl_ptrdiff_t)>
-class vcl_reverse_iterator {
+class vcl_reverse_iterator
+{
     typedef Distance distance_type;
     typedef vcl_reverse_iterator<RandomAccessIterator, T, Reference, Distance> self;
     friend bool operator== VCL_NULL_TMPL_ARGS (const self& x, const self& y);
     friend bool operator< VCL_NULL_TMPL_ARGS (const self& x, const self& y);
     friend Distance operator- VCL_NULL_TMPL_ARGS (const self& x, const self& y);
     friend self operator+ VCL_NULL_TMPL_ARGS (Distance n, const self& x);
-protected:
+  protected:
     RandomAccessIterator current;
-public:
+  public:
     vcl_reverse_iterator() {}
     vcl_reverse_iterator(const RandomAccessIterator& x) : current(x) {}
     RandomAccessIterator base() const { return current; }
