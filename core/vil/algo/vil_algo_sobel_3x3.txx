@@ -1,3 +1,4 @@
+// This is mul/vil2/algo/vil2_algo_sobel_3x3.txx
 #ifndef vil2_algo_sobel_3x3_txx_
 #define vil2_algo_sobel_3x3_txx_
 //:
@@ -21,11 +22,11 @@ void vil2_algo_sobel_3x3(vil2_image_view<srcT>& src,
   for (int p=0;p<np;++p)
   {
     vil2_algo_sobel_3x3_1plane(src.top_left_ptr()+p*src.planestep(),
-      src.istep(),src.jstep(),
-      grad_ij.top_left_ptr()+2*p*grad_ij.planestep(),
-      grad_ij.istep(),grad_ij.jstep(),
-      grad_ij.top_left_ptr()+(2*p+1)*grad_ij.planestep(),
-      grad_ij.istep(),grad_ij.jstep(), ni,nj);
+                               src.istep(),src.jstep(),
+                               grad_ij.top_left_ptr()+2*p*grad_ij.planestep(),
+                               grad_ij.istep(),grad_ij.jstep(),
+                               grad_ij.top_left_ptr()+(2*p+1)*grad_ij.planestep(),
+                               grad_ij.istep(),grad_ij.jstep(), ni,nj);
   }
 }
 
@@ -43,11 +44,11 @@ void vil2_algo_sobel_3x3(vil2_image_view<srcT>& src,
   for (int p=0;p<np;++p)
   {
     vil2_algo_sobel_3x3_1plane(src.top_left_ptr()+p*src.planestep(),
-      src.istep(),src.jstep(),
-      grad_i.top_left_ptr()+p*grad_i.planestep(),
-      grad_i.istep(),grad_i.jstep(),
-      grad_j.top_left_ptr()+p*grad_j.planestep(),
-      grad_j.istep(),grad_j.jstep(), ni,nj);
+                               src.istep(),src.jstep(),
+                               grad_i.top_left_ptr()+p*grad_i.planestep(),
+                               grad_i.istep(),grad_i.jstep(),
+                               grad_j.top_left_ptr()+p*grad_j.planestep(),
+                               grad_j.istep(),grad_j.jstep(), ni,nj);
   }
 }
 
