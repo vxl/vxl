@@ -51,21 +51,21 @@ class rgrl_initializer_inv_indexing
   //  \param k   k-nearest neighbor(s)
   void add_data( vcl_vector<rgrl_invariant_sptr> fixed_set,
                  vcl_vector<rgrl_invariant_sptr> moving_set,
-                 double nn_radius,
+                 double nn_radius = 0,
                  unsigned int k_nn = 1 );
 
   //: Add a set of invariants from the fixed image and multiple sets from multiple moving images
   //
   //  Matches are sorted in order of descreasing distance. \a
-  //  nn_radius has precedence over \a k_nn. If no neighbor falles in
+  //  nn_radius has precedence over \a k_nn. If no neighbor falls in
   //  \a nn_radius, \a k_nn are taken.
   //
   //  \param nn_radius nearest-neighbors in nn_radius.
   //  \param k_nn k-nearest-neighbor(s)
-  void add_data( vcl_vector<rgrl_invariant_sptr> fixed_set,
-                 vcl_vector<vcl_vector<rgrl_invariant_sptr> > moving_sets,
-                 double nn_radius,
-                 unsigned int k_nn  = 1);
+  virtual void add_data( vcl_vector<rgrl_invariant_sptr> fixed_set,
+                         vcl_vector<vcl_vector<rgrl_invariant_sptr> > moving_sets,
+                         double nn_radius = 0,
+                         unsigned int k_nn = 1);
 
   //: Set the index of the current moving image. Default is the the 0th moving-image
   void set_current_moving_image( unsigned int moving_image_index);
@@ -84,7 +84,7 @@ class rgrl_initializer_inv_indexing
   // Defines type-related functions
   rgrl_type_macro( rgrl_initializer_inv_indexing, rgrl_initializer );
 
- private:
+ protected:
   vcl_vector<vcl_vector<rgrl_invariant_match_sptr> > matches_;
   rgrl_view_sptr view_;
   bool should_estimate_global_region_;
