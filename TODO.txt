@@ -13,6 +13,33 @@ that in this file.  If that marks a significant improvement, make an
 entry in the CHANGES.txt file as well.
 
 
+
+############################################################################
+
+* Add exception support to VXL.
+
+This would have to be done so that all exception code can be switched off,
+since VXL does not require exception support. Converting many of the
+calls to vcl_abort, into exceptions would be useful for programmers of
+GUIs, giving the program a change to save state and possibly give a
+useful bug report before exiting. Lots of VXL is probably not exception
+safe, and needs to be fixed.
+
+############################################################################
+
+* Ensure that VXL APIs are re-entrant.
+
+VXL is not thread-safe, but should be. Some of this is due to the
+limitations of f2c in v3p/netlib. It produces static variables, where
+automatic ones would do. This may be fixed with the latest version of
+f2c and or lapack3e.
+
+In other places, such as the vil image loader, and the vsl binary
+loader, there are singleton classes. This code is inherently
+non-thread safe. Such code can be clearly documented to indicate how
+to avoid thread problems, e.g. by initialising such loaders in a single
+thread.
+
 ############################################################################
 
 * upgrade netlib to use LAPACK instead of LINPACK
