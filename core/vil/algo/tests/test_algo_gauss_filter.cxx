@@ -68,6 +68,51 @@ static void test_algo_gaussian_filter_5tap_byte_float()
   TEST("impulse response is contained", fail1, false);
   TEST("response is centre maximum", fail2, false);
   TEST_NEAR("impulse response sums to input", sum, 255.0f, 1e-3);
+
+
+  vcl_cout << "**********Awkward cases***************" << vcl_endl;
+
+  src.set_size(n,1);
+  for (int i=0;i<n;++i)
+    src(i,0)=(i%2)*10+i;
+  vil_gauss_filter_5tap(src,dest, params);
+  vcl_cout << "Source\n";
+  vil_print_all(vcl_cout,  src);
+  vcl_cout << "Destination\n";
+  vil_print_all(vcl_cout,  dest);
+
+  src.set_size(n,2);
+  for (int i=0;i<n;++i)
+  {
+    src(i,0)=(i%2)*10+i;
+    src(i,1)=((i+1)%2)*10+i;
+  }
+  vil_gauss_filter_5tap(src,dest, params);
+  vcl_cout << "Source\n";
+  vil_print_all(vcl_cout,  src);
+  vcl_cout << "Destination\n";
+  vil_print_all(vcl_cout,  dest);
+
+  src.set_size(3,3);
+  for (int j=0;j<3;++j)
+    for (int i=0;i<3;++i)
+      src(i,j)=i*10+j;
+  vil_gauss_filter_5tap(src,dest, params);
+  vcl_cout << "Source\n";
+  vil_print_all(vcl_cout,  src);
+  vcl_cout << "Destination\n";
+  vil_print_all(vcl_cout,  dest);
+
+  src.set_size(4,4);
+  for (int j=0;j<4;++j)
+    for (int i=0;i<4;++i)
+      src(i,j)=i*10+j;
+  vil_gauss_filter_5tap(src,dest, params);
+  vcl_cout << "Source\n";
+  vil_print_all(vcl_cout,  src);
+  vcl_cout << "Destination\n";
+  vil_print_all(vcl_cout,  dest);
+
 }
 
 
@@ -129,13 +174,16 @@ static void test_algo_vil_gauss_filter_gen_ntaps()
   {
     TEST_NEAR("filter4", filter4[i], correct_filter4[i], 1e-7);
   }
+
+
+
 }
 
 
 static void test_algo_gauss_filter()
 {
-  test_algo_gaussian_filter_5tap_byte_float();
   test_algo_vil_gauss_filter_gen_ntaps();
+  test_algo_gaussian_filter_5tap_byte_float();
 }
 
 TESTMAIN(test_algo_gauss_filter);

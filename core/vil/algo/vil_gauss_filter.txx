@@ -7,6 +7,8 @@
 // \author Ian Scott
 
 #include "vil_gauss_filter.h"
+#include <vil/vil_transpose.h>
+#include <vil/algo/vil_convolve_1d.h>
 #include <vcl_iostream.h>
 #include <vcl_cassert.h>
 #include <vsl/vsl_indent.h>
@@ -37,9 +39,9 @@ void vil_gauss_filter_5tap(const srcT* src_im, vcl_ptrdiff_t src_istep, vcl_ptrd
                            unsigned nx, unsigned ny, const vil_gauss_filter_5tap_params& params,
                            destT* work, vcl_ptrdiff_t work_jstep)
 {
+  assert (nx > 3 && ny > 3);
   // Convolve src with a 5 x 1 Gaussian filter,
   // placing result in work_
-
   // First perform horizontal smoothing
   for (unsigned int y=0;y<ny;y++)
   {
@@ -152,12 +154,122 @@ void vil_gauss_filter_5tap(const vil_image_view<srcT>& src_im,
   work.set_size(ni,nj,1);
   assert (work.jstep() == (vcl_ptrdiff_t)ni);
 
+  if (ni > 3 && nj > 3)
   // Reduce plane-by-plane
-
-  for (unsigned p=0;p<n_planes;++p)
-    vil_gauss_filter_5tap(&src_im(0,0,p), src_im.istep(), src_im.jstep(),
-                          &dest_im(0,0,p), dest_im.istep(), dest_im.jstep(), ni,nj,
-                          params, work.top_left_ptr(), work.jstep());
+    for (unsigned p=0;p<n_planes;++p)
+      vil_gauss_filter_5tap(&src_im(0,0,p), src_im.istep(), src_im.jstep(),
+                            &dest_im(0,0,p), dest_im.istep(), dest_im.jstep(), ni,nj,
+                            params, work.top_left_ptr(), work.jstep());
+  else
+  {
+    if (ni==0 || nj==0) return;
+    if (ni==2)
+    {
+      const double k0 = params.filt0()/(params.filt0() + params.filt1());
+      const double k1 = params.filt1()/(params.filt0() + params.filt1());
+      for (unsigned p=0;p<n_planes;++p)
+        for (unsigned j=0;j<nj;++j)
+        {
+          dest_im(0,j,p) = k0*src_im(0,j,p) + k1*src_im(1,j,p);
+          dest_im(1,j,p) = k1*src_im(0,j,p) + k0*src_im(1,j,p);
+        }
+    }
+    else if (ni==3)
+    {
+      const double ke0 = params.filt0()/(params.filt0() + params.filt1());
+      const double ke1 = params.filt1()/(params.filt0() + params.filt1());
+      const double k0 = params.filt0()/(params.filt0() + 2.0*params.filt1());
+      const double k1 = params.filt1()/(params.filt0() + 2.0*params.filt1());
+      for (unsigned p=0;p<n_planes;++p)
+        for (unsigned j=0;j<nj;++j)
+        {
+          dest_im(0,j,p) = ke0*src_im(0,j,p) + ke1*src_im(1,j,p);
+          dest_im(1,j,p) = k1 *src_im(0,j,p) + k0 *src_im(1,j,p) + k1 *src_im(2,j,p);
+          dest_im(2,j,p) =                     ke1*src_im(1,j,p) + ke0*src_im(2,j,p);
+        }
+    }
+    else if (ni==4)
+    {
+      const double ke0 = params.filt_edge0();
+      const double ke1 = params.filt_edge1();
+      const double ke2 = params.filt_edge2();
+      const double kpn1= params.filt_pen_edge_n1();
+      const double kp0 = params.filt_pen_edge0();
+      const double kp1 = params.filt_pen_edge1();
+      const double kp2 = params.filt_pen_edge2();
+      for (unsigned p=0;p<n_planes;++p)
+        for (unsigned j=0;j<nj;++j)
+        {
+          dest_im(0,j,p) = ke0 *src_im(0,j,p) + ke1*src_im(1,j,p) + ke2*src_im(2,j,p);
+          dest_im(1,j,p) = kpn1*src_im(0,j,p) + kp0*src_im(1,j,p) + kp1*src_im(2,j,p) + kp2 *src_im(3,j,p);
+          dest_im(2,j,p) = kp2 *src_im(0,j,p) + kp1*src_im(1,j,p) + kp0*src_im(2,j,p) + kpn1*src_im(3,j,p);
+          dest_im(3,j,p) =                      ke2*src_im(1,j,p) + ke1*src_im(2,j,p) + ke0 *src_im(3,j,p);
+        }
+    }
+    else if (ni>4)
+    {
+      double kernel[5];
+      kernel[0] = kernel[4] = params.filt2();
+      kernel[1] = kernel[3] = params.filt1();
+      kernel[2] = params.filt0();
+      vil_convolve_1d(src_im,dest_im, kernel+2, -2, +2, double(), vil_convolve_trim, vil_convolve_trim);
+    }
+    if (nj==2)
+    {
+      const double k0 = params.filt0()/(params.filt0() + params.filt1());
+      const double k1 = params.filt1()/(params.filt0() + params.filt1());
+      for (unsigned p=0;p<n_planes;++p)
+        for (unsigned i=0;i<ni;++i)
+        {
+          dest_im(i,0,p) = k0 * src_im(i,0,p) + k1 * src_im(i,1,p);
+          dest_im(i,1,p) = k1 * src_im(i,0,p) + k0 * src_im(i,1,p);
+        }
+    }
+    else if (nj==3)
+    {
+      const double ke0 = params.filt0()/(params.filt0() + params.filt1());
+      const double ke1 = params.filt1()/(params.filt0() + params.filt1());
+      const double k0 = params.filt0()/(params.filt0() + 2.0*params.filt1());
+      const double k1 = params.filt1()/(params.filt0() + 2.0*params.filt1());
+      for (unsigned p=0;p<n_planes;++p)
+        for (unsigned i=0;i<ni;++i)
+        {
+          dest_im(i,0,p) = ke0*src_im(i,0,p) + ke1*src_im(i,1,p);
+          dest_im(i,1,p) = k1 *src_im(i,0,p) + k0 *src_im(i,1,p) + k1 *src_im(i,2,p);
+          dest_im(i,2,p) =                     ke1*src_im(i,1,p) + ke0*src_im(i,2,p);
+    
+        }
+    }
+    else if (nj==4)
+    {
+      const double ke0 = params.filt_edge0();
+      const double ke1 = params.filt_edge1();
+      const double ke2 = params.filt_edge2();
+      const double kpn1= params.filt_pen_edge_n1();
+      const double kp0 = params.filt_pen_edge0();
+      const double kp1 = params.filt_pen_edge1();
+      const double kp2 = params.filt_pen_edge2();
+      for (unsigned p=0;p<n_planes;++p)
+        for (unsigned i=0;i<ni;++i)
+        {
+          dest_im(i,0,p) = ke0 *src_im(i,0,p) + ke1*src_im(i,1,p) + ke2*src_im(i,2,p);
+          dest_im(i,1,p) = kpn1*src_im(i,0,p) + kp0*src_im(i,1,p) + kp1*src_im(i,2,p) + kp2 *src_im(i,3,p);
+          dest_im(i,2,p) = kp2 *src_im(i,0,p) + kp1*src_im(i,1,p) + kp0*src_im(i,2,p) + kpn1*src_im(i,3,p);
+          dest_im(i,3,p) =                      ke2*src_im(i,1,p) + ke1*src_im(i,2,p) + ke0 *src_im(i,3,p);
+        }
+    }
+    else if (nj>4)
+    {
+      double kernel[5];
+      kernel[0] = kernel[4] = params.filt2();
+      kernel[1] = kernel[3] = params.filt1();
+      kernel[2] = params.filt0();
+      vil_convolve_1d(vil_transpose(src_im),vil_transpose(dest_im),
+        kernel+2, -2, +2, double(), vil_convolve_trim, vil_convolve_trim);
+    }
+  }
+      
+      
 #if 0
   vsl_indent_inc(vcl_cout);
   vcl_cout << vsl_indent() << "Work image B\n";

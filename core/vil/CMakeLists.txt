@@ -161,15 +161,6 @@ SET( vil_sources ${vil_sources}
   vil_image_resource_plugin.cxx         vil_image_resource_plugin.h
 )
 
-IF (BORLAND)
-  IF (HAS_DCMTK)
-    # avoid warnings in dcmtk include files about variables that are
-    # assigned a value, but never used. We don't want to maintain dcmtk
-    SET_SOURCE_FILES_PROPERTIES(file_formats/vil_dicom.cxx PROPERTIES COMPILE_FLAGS -w-8004)
-  ENDIF (HAS_DCMTK)
-ENDIF (BORLAND)
-
-
 AUX_SOURCE_DIRECTORY(Templates vil_sources)
 
 # Some versions of Solaris (at least 5.8) has a brain-dead mechanism
