@@ -475,13 +475,13 @@ vgui_soview2D_image::~vgui_soview2D_image()
 void vgui_soview2D_image::draw() const
 {
   glEnable(GL_BLEND);
-  glRasterPos2i(x_,y_);
-  glDrawPixels(width_,height_,img_format_,img_type_,img_);
+  glRasterPos2i(int(x_),int(y_));
+  glDrawPixels(int(width_),int(height_),img_format_,img_type_,img_);
   glFlush();
 #if 0
   vil1_memory_image_of< vil1_rgb< unsigned char > > test;
-  test.resize(width_,height_);
-  test.put_section(img_,0,0,width_,height_);
+  test.resize(int(width_),int(height_));
+  test.put_section(img_,0,0,int(width_),int(height_));
   vil1_save(test,"shouldwork.jpg","jpeg");
 #endif // 0
 }
