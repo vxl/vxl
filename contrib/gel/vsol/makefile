@@ -22,6 +22,7 @@ SOURCES += vsol_point_2d.cxx
 SOURCES += vsol_curve_2d.cxx
 SOURCES += vsol_line_2d.cxx
 SOURCES += vsol_conic_2d.cxx
+SOURCES += vsol_polyline_2d.cxx
 # 2-D
 SOURCES += vsol_region_2d.cxx
 SOURCES += vsol_polygon_2d.cxx
@@ -63,6 +64,7 @@ MANPAGE_SOURCES += vsol_point_3d_sptr.h
 MANPAGE_SOURCES += vsol_polygon_2d_sptr.h
 MANPAGE_SOURCES += vsol_polygon_3d_sptr.h
 MANPAGE_SOURCES += vsol_polyhedron_sptr.h
+MANPAGE_SOURCES += vsol_polyline_2d_sptr.h
 MANPAGE_SOURCES += vsol_rectangle_2d_sptr.h
 MANPAGE_SOURCES += vsol_rectangle_3d_sptr.h
 MANPAGE_SOURCES += vsol_region_2d_sptr.h
