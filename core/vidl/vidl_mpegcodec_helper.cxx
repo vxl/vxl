@@ -36,7 +36,7 @@ vidl_mpegcodec_helper::~vidl_mpegcodec_helper()
 {
   vcl_cout << "vidl_mpegcodec_helper::~vidl_mpegcodec_helper. entering.\n";
   vo_close (output_);
-  if (in_file_) 
+  if (in_file_)
   {
     in_file_->close();
     delete in_file_;
@@ -165,34 +165,34 @@ vidl_mpegcodec_helper::demux (uint8_t * buf, uint8_t * endb, int flags)
   long int bytes;
   int len;
 
-#define NEEDBYTES(x)                                           \
-  do {                                                       \
-    long int missing = (x) - bytes;                        \
-    if (missing > 0) {                                     \
-      if (header == head_buf) {                          \
-        if (missing <= endb - buf) {                   \
+#define NEEDBYTES(x)                                 \
+  do {                                               \
+    long int missing = (x) - bytes;                  \
+    if (missing > 0) {                               \
+      if (header == head_buf) {                      \
+        if (missing <= endb - buf) {                 \
           vcl_memcpy(header + bytes, buf, missing);  \
           buf += missing;                            \
           bytes = (x);                               \
-        } else {                                       \
+        } else {                                     \
           vcl_memcpy(header + bytes, buf, endb-buf); \
           state_bytes = bytes + (endb - buf);        \
           return 0;                                  \
-        }                                              \
-      } else {                                           \
-        vcl_memcpy(head_buf, header, bytes);           \
-        state = DEMUX_HEADER;                          \
-        state_bytes = bytes;                           \
-        return 0;                                      \
-      }                                                  \
-    }                                                      \
-  } while (0)
+        }                                            \
+      } else {                                       \
+        vcl_memcpy(head_buf, header, bytes);         \
+        state = DEMUX_HEADER;                        \
+        state_bytes = bytes;                         \
+        return 0;                                    \
+      }                                              \
+    }                                                \
+  } while (false)
 
-#define DONEBYTES(x)            \
-  do {                        \
+#define DONEBYTES(x)        \
+  do {                      \
     if (header != head_buf) \
-      buf = header + (x); \
-  } while (0)
+      buf = header + (x);   \
+  } while (false)
 
   if (flags & DEMUX_PAYLOAD_START)
     goto payload_start;
