@@ -1,7 +1,7 @@
 /*
  * jcparam.c
  *
- * Copyright (C) 1991-1996, Thomas G. Lane.
+ * Copyright (C) 1991-1998, Thomas G. Lane.
  * This file is part of the Independent JPEG Group's software.
  * For conditions of distribution and use, see the accompanying README file.
  *
@@ -21,21 +21,26 @@
 
 GLOBAL(void)
 jpeg_add_quant_table (j_compress_ptr cinfo, int which_tbl,
-                      const unsigned int *basic_table,
-                      int scale_factor, boolean force_baseline)
+		      const unsigned int *basic_table,
+		      int scale_factor, boolean force_baseline)
 /* Define a quantization table equal to the basic_table times
  * a scale factor (given as a percentage).
  * If force_baseline is TRUE, the computed quantization table entries
  * are limited to 1..255 for JPEG baseline compatibility.
  */
 {
-  JQUANT_TBL ** qtblptr = & cinfo->quant_tbl_ptrs[which_tbl];
+  JQUANT_TBL ** qtblptr;
   int i;
   long temp;
 
   /* Safety check to ensure start_compress not called yet. */
   if (cinfo->global_state != CSTATE_START)
     ERREXIT1(cinfo, JERR_BAD_STATE, cinfo->global_state);
+
+  if (which_tbl < 0 || which_tbl >= NUM_QUANT_TBLS)
+    ERREXIT1(cinfo, JERR_DQT_INDEX, which_tbl);
+
+  qtblptr = & cinfo->quant_tbl_ptrs[which_tbl];
 
   if (*qtblptr == NULL)
     *qtblptr = jpeg_alloc_quant_table((j_common_ptr) cinfo);
@@ -46,7 +51,7 @@ jpeg_add_quant_table (j_compress_ptr cinfo, int which_tbl,
     if (temp <= 0L) temp = 1L;
     if (temp > 32767L) temp = 32767L; /* max quantizer needed for 12 bits */
     if (force_baseline && temp > 255L)
-      temp = 255L;  /* limit to baseline range if requested */
+      temp = 255L;		/* limit to baseline range if requested */
     (*qtblptr)->quantval[i] = (UINT16) temp;
   }
 
@@ -57,7 +62,7 @@ jpeg_add_quant_table (j_compress_ptr cinfo, int which_tbl,
 
 GLOBAL(void)
 jpeg_set_linear_quality (j_compress_ptr cinfo, int scale_factor,
-                         boolean force_baseline)
+			 boolean force_baseline)
 /* Set or change the 'quality' (quantization) setting, using default tables
  * and a straight percentage-scaling quality scale.  In most cases it's better
  * to use jpeg_set_quality (below); this entry point is provided for
@@ -91,9 +96,9 @@ jpeg_set_linear_quality (j_compress_ptr cinfo, int scale_factor,
 
   /* Set up two quantization tables using the specified scaling */
   jpeg_add_quant_table(cinfo, 0, std_luminance_quant_tbl,
-                       scale_factor, force_baseline);
+		       scale_factor, force_baseline);
   jpeg_add_quant_table(cinfo, 1, std_chrominance_quant_tbl,
-                       scale_factor, force_baseline);
+		       scale_factor, force_baseline);
 }
 
 
@@ -145,14 +150,28 @@ jpeg_set_quality (j_compress_ptr cinfo, int quality, boolean force_baseline)
 
 LOCAL(void)
 add_huff_table (j_compress_ptr cinfo,
-                JHUFF_TBL **htblptr, const UINT8 *bits, const UINT8 *val)
+		JHUFF_TBL **htblptr, const UINT8 *bits, const UINT8 *val)
 /* Define a Huffman table */
 {
+  int nsymbols, len;
+
   if (*htblptr == NULL)
     *htblptr = jpeg_alloc_huff_table((j_common_ptr) cinfo);
 
+  /* Copy the number-of-symbols-of-each-code-length counts */
   MEMCOPY((*htblptr)->bits, bits, SIZEOF((*htblptr)->bits));
-  MEMCOPY((*htblptr)->huffval, val, SIZEOF((*htblptr)->huffval));
+
+  /* Validate the counts.  We do this here mainly so we can copy the right
+   * number of symbols from the val[] array, without risking marching off
+   * the end of memory.  jchuff.c will do a more thorough test later.
+   */
+  nsymbols = 0;
+  for (len = 1; len <= 16; len++)
+    nsymbols += bits[len];
+  if (nsymbols < 1 || nsymbols > 256)
+    ERREXIT(cinfo, JERR_BAD_HUFF_TABLE);
+
+  MEMCOPY((*htblptr)->huffval, val, nsymbols * SIZEOF(UINT8));
 
   /* Initialize sent_table FALSE so table will be written to JPEG file. */
   (*htblptr)->sent_table = FALSE;
@@ -168,12 +187,12 @@ std_huff_tables (j_compress_ptr cinfo)
     { /* 0-base */ 0, 0, 1, 5, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0 };
   static const UINT8 val_dc_luminance[] =
     { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11 };
-
+  
   static const UINT8 bits_dc_chrominance[17] =
     { /* 0-base */ 0, 0, 3, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0 };
   static const UINT8 val_dc_chrominance[] =
     { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11 };
-
+  
   static const UINT8 bits_ac_luminance[17] =
     { /* 0-base */ 0, 0, 2, 1, 3, 3, 2, 4, 3, 5, 5, 4, 4, 0, 0, 1, 0x7d };
   static const UINT8 val_ac_luminance[] =
@@ -198,7 +217,7 @@ std_huff_tables (j_compress_ptr cinfo)
       0xe3, 0xe4, 0xe5, 0xe6, 0xe7, 0xe8, 0xe9, 0xea,
       0xf1, 0xf2, 0xf3, 0xf4, 0xf5, 0xf6, 0xf7, 0xf8,
       0xf9, 0xfa };
-
+  
   static const UINT8 bits_ac_chrominance[17] =
     { /* 0-base */ 0, 0, 2, 1, 2, 4, 4, 3, 4, 7, 5, 4, 4, 0, 1, 2, 0x77 };
   static const UINT8 val_ac_chrominance[] =
@@ -223,15 +242,15 @@ std_huff_tables (j_compress_ptr cinfo)
       0xe2, 0xe3, 0xe4, 0xe5, 0xe6, 0xe7, 0xe8, 0xe9,
       0xea, 0xf2, 0xf3, 0xf4, 0xf5, 0xf6, 0xf7, 0xf8,
       0xf9, 0xfa };
-
+  
   add_huff_table(cinfo, &cinfo->dc_huff_tbl_ptrs[0],
-                 bits_dc_luminance, val_dc_luminance);
+		 bits_dc_luminance, val_dc_luminance);
   add_huff_table(cinfo, &cinfo->ac_huff_tbl_ptrs[0],
-                 bits_ac_luminance, val_ac_luminance);
+		 bits_ac_luminance, val_ac_luminance);
   add_huff_table(cinfo, &cinfo->dc_huff_tbl_ptrs[1],
-                 bits_dc_chrominance, val_dc_chrominance);
+		 bits_dc_chrominance, val_dc_chrominance);
   add_huff_table(cinfo, &cinfo->ac_huff_tbl_ptrs[1],
-                 bits_ac_chrominance, val_ac_chrominance);
+		 bits_ac_chrominance, val_ac_chrominance);
 }
 
 
@@ -261,7 +280,7 @@ jpeg_set_defaults (j_compress_ptr cinfo)
   if (cinfo->comp_info == NULL)
     cinfo->comp_info = (jpeg_component_info *)
       (*cinfo->mem->alloc_small) ((j_common_ptr) cinfo, JPOOL_PERMANENT,
-                                  MAX_COMPONENTS * SIZEOF(jpeg_component_info));
+				  MAX_COMPONENTS * SIZEOF(jpeg_component_info));
 
   /* Initialize everything not dependent on the color space */
 
@@ -313,9 +332,17 @@ jpeg_set_defaults (j_compress_ptr cinfo)
 
   /* Fill in default JFIF marker parameters.  Note that whether the marker
    * will actually be written is determined by jpeg_set_colorspace.
+   *
+   * By default, the library emits JFIF version code 1.01.
+   * An application that wants to emit JFIF 1.02 extension markers should set
+   * JFIF_minor_version to 2.  We could probably get away with just defaulting
+   * to 1.02, but there may still be some decoders in use that will complain
+   * about that; saying 1.01 should minimize compatibility problems.
    */
-  cinfo->density_unit = 0; /* Pixel size is unknown by default */
-  cinfo->X_density = 1;    /* Pixel aspect ratio is square by default */
+  cinfo->JFIF_major_version = 1; /* Default JFIF version = 1.01 */
+  cinfo->JFIF_minor_version = 1;
+  cinfo->density_unit = 0;	/* Pixel size is unknown by default */
+  cinfo->X_density = 1;		/* Pixel aspect ratio is square by default */
   cinfo->Y_density = 1;
 
   /* Choose JPEG colorspace based on input space, set defaults accordingly */
@@ -431,7 +458,7 @@ jpeg_set_colorspace (j_compress_ptr cinfo, J_COLOR_SPACE colorspace)
     cinfo->num_components = cinfo->input_components;
     if (cinfo->num_components < 1 || cinfo->num_components > MAX_COMPONENTS)
       ERREXIT2(cinfo, JERR_COMPONENT_COUNT, cinfo->num_components,
-               MAX_COMPONENTS);
+	       MAX_COMPONENTS);
     for (ci = 0; ci < cinfo->num_components; ci++) {
       SET_COMP(ci, ci, 1,1, 0, 0,0);
     }
@@ -446,7 +473,7 @@ jpeg_set_colorspace (j_compress_ptr cinfo, J_COLOR_SPACE colorspace)
 
 LOCAL(jpeg_scan_info *)
 fill_a_scan (jpeg_scan_info * scanptr, int ci,
-             int Ss, int Se, int Ah, int Al)
+	     int Ss, int Se, int Ah, int Al)
 /* Support routine: generate one scan for specified component */
 {
   scanptr->comps_in_scan = 1;
@@ -461,7 +488,7 @@ fill_a_scan (jpeg_scan_info * scanptr, int ci,
 
 LOCAL(jpeg_scan_info *)
 fill_scans (jpeg_scan_info * scanptr, int ncomps,
-            int Ss, int Se, int Ah, int Al)
+	    int Ss, int Se, int Ah, int Al)
 /* Support routine: generate one scan for each component */
 {
   int ci;
@@ -524,16 +551,25 @@ jpeg_simple_progression (j_compress_ptr cinfo)
   } else {
     /* All-purpose script for other color spaces. */
     if (ncomps > MAX_COMPS_IN_SCAN)
-      nscans = 6 * ncomps;     /* 2 DC + 4 AC scans per component */
+      nscans = 6 * ncomps;	/* 2 DC + 4 AC scans per component */
     else
-      nscans = 2 + 4 * ncomps; /* 2 DC scans; 4 AC scans per component */
+      nscans = 2 + 4 * ncomps;	/* 2 DC scans; 4 AC scans per component */
   }
 
-  /* Allocate space for script. */
-  /* We use permanent pool just in case application re-uses script. */
-  scanptr = (jpeg_scan_info *)
-    (*cinfo->mem->alloc_small) ((j_common_ptr) cinfo, JPOOL_PERMANENT,
-                                nscans * SIZEOF(jpeg_scan_info));
+  /* Allocate space for script.
+   * We need to put it in the permanent pool in case the application performs
+   * multiple compressions without changing the settings.  To avoid a memory
+   * leak if jpeg_simple_progression is called repeatedly for the same JPEG
+   * object, we try to re-use previously allocated space, and we allocate
+   * enough space to handle YCbCr even if initially asked for grayscale.
+   */
+  if (cinfo->script_space == NULL || cinfo->script_space_size < nscans) {
+    cinfo->script_space_size = MAX(nscans, 10);
+    cinfo->script_space = (jpeg_scan_info *)
+      (*cinfo->mem->alloc_small) ((j_common_ptr) cinfo, JPOOL_PERMANENT,
+			cinfo->script_space_size * SIZEOF(jpeg_scan_info));
+  }
+  scanptr = cinfo->script_space;
   cinfo->scan_info = scanptr;
   cinfo->num_scans = nscans;
 
