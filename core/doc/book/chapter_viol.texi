@@ -135,6 +135,7 @@ class vxl_my_class : public vxl_baseclass
   virtual void b_write(viol_b_ostream&) const;
   virtual void b_read(viol_b_ostream&);
   virtual vcl_string is_a() const;
+  virtual bool is_a(vcl_string const&) const;
   virtual vxl_baseclass* clone() const;
 @};
 
@@ -230,7 +231,7 @@ public:
   virtual vcl_string target_classname() const;
 
     //: Return true if b is of class target_classname()
-    //  Typically this will just be "return b.is_a()==target_classname()"
+    //  Typically this will just be "return b.is_a(target_classname())"
     //  However, third party libraries may use a different system
   virtual bool is_io_for(const vxl_baseclass& b) const;
 @};
@@ -325,6 +326,9 @@ you need to add the following functions to the class definition in the .h file.
   //: Return a platform independent string identifying the class
   const vcl_string is_a() const;
 
+  //: Return true if the argument matches the string identifying the class or any parent class
+  bool is_a(vcl_string const&) const;
+
 @end example
 You will also need to add the following global scope helper function
 declarations to the .h file
@@ -358,6 +362,9 @@ you need to add the following functions to the class definition in the .h file.
 
   //: Return a platform independent string identifying the class
   virtual const vcl_string is_a() const;
+
+  //: Return true if the argument matches the string identifying the class
+  virtual bool is_a(vcl_string const&) const;
 
   //: Create a copy of the object on the heap.
   // The caller is responsible for deletion
@@ -415,6 +422,9 @@ you need to add the following functions to the class definition in the .h file.
   virtual const vcl_string is_a() const;    // This function is not strictly necessary
                                             // if the class is not part of an inheritance
                                             // hierarchy
+
+  //: Return true if the argument matches the string identifying the class or any parent class
+  bool is_a(vcl_string const&) const;
 
   //: Create a copy of the object on the heap.
   // The caller is responsible for deletion
@@ -542,6 +552,13 @@ pointer, the @code{is_a()} method is not necessary and can be left out.
 const vcl_string vanyl_my_class::is_a() const
 @{
     return vcl_string("vanyl_my_class");
+@}
+
+//=======================================
+//: Return true if the argument matches the string identifying the class or any parent class
+bool vanyl_my_class::is_a(vcl_string const& s) const
+@{
+    return s=="vanyl_my_class" || vanyl_parent_class::is_a(s);
 @}
 @end example
 
@@ -819,7 +836,7 @@ void viol_b_read(viol_b_istream& is, class_B * &p)
   viol_b_read(is, not_null_ptr);
   if (not_null_ptr)
   @{
-  	p = new class_B;
+    p = new class_B;
     viol_b_read(is, *p);
   @}
   else 
@@ -831,12 +848,12 @@ void viol_b_write(viol_b_ostream& os, const class_B *p)
 @{
   if (p==0)
   @{
-  	viol_b_write(os, false); /* Indicate null pointer stored */ 
+    viol_b_write(os, false); /* Indicate null pointer stored */ 
   @}
   else
   @{
     viol_b_write(os,true); /* Indicate non-null pointer stored */
-	  viol_b_write(os,*p);
+    viol_b_write(os,*p);
   @}
 @}
 @end example
@@ -947,7 +964,7 @@ void viol_b_read(viol_b_istream &is, vgl_point_2d<T>& p)
 
   default:
     vcl_cerr << "b_read(viol_b_istream &, const vgl_point_2d<T>&)"
-		         << " Unknown version number "<< v << vcl_endl;
+             << " Unknown version number "<< v << vcl_endl;
     vcl_abort();
   @}
 
@@ -1023,7 +1040,7 @@ public:
   virtual vcl_string target_classname() const;
 
     //: Return true if b is of class target_classname()
-    //  Typically this will just be "return b.is_a()==target_classname()"
+    //  Typically this will just be "return b.is_a(target_classname())"
     //  However, third party libraries may use a different system
   virtual bool is_io_for(const BaseClass& b) const;
 @};
@@ -1231,7 +1248,7 @@ public:
   virtual vcl_string target_classname() const;
 
     //: Return true if b is of class target_classname()
-    //  Typically this will just be "return b.is_a()==target_classname()"
+    //  Typically this will just be "return b.is_a(target_classname())"
     //  However, third party libraries may use a different system
   virtual bool is_io_for(const BaseClass& b) const;
 @};
@@ -1395,12 +1412,11 @@ void test_point_2d_double_io()
     bfs_in.close();
 
 
-
     TEST ("p_out == p_in", p_out == p_in, true);
 
 
     viol_print_summary(vcl_cout, p_out);
-		vcl_cout << vcl_endl;
+    vcl_cout << vcl_endl;
 
 @}
 
