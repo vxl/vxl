@@ -13,7 +13,8 @@ int main()
   cg.getSource()->readData("Model.txt");
 
   // add a camera with 5 views into a graph
-  int camID = cg.addVertex();
+  int camID = cg.add_vertex();
+  cg.print();
 
   // create time beats. 
   vcl_vector<double> t_beats(5);
@@ -31,6 +32,7 @@ int main()
   cg.get_vertex(camID)->readData("data5.txt" , 4);
 
   // do the calibration
+  vcl_cerr<<"\n\nlinear calibration..............\n\n ";
   zhang_linear_calibrate lc;
   lc.setCameraGraph(&cg);
   lc.calibrate();
