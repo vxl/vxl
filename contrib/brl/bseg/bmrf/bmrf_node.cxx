@@ -9,6 +9,7 @@
 #include <vcl_algorithm.h>
 #include <vcl_cmath.h>
 
+
 #undef MAX
 #define MAX(a,b) ((a)>(b)?(a):(b))
 #undef MIN
@@ -89,21 +90,23 @@ bmrf_node::probability()
 
 // Helper function to compute match error between to segments
 static double
-bmrf_match_error( const bmrf_epi_seg_sptr& ep1, const bmrf_epi_seg_sptr& ep2 )
+bmrf_match_error( const bmrf_epi_seg_sptr& ep1, const bmrf_epi_seg_sptr& ep2, double &alpha_range )
 {
   double min_alpha = MAX(ep1->min_alpha(), ep2->min_alpha());
   double max_alpha = MIN(ep1->max_alpha(), ep2->max_alpha());
+  alpha_range = max_alpha - min_alpha;
   double d_alpha =  MIN( (ep1->max_alpha() - ep1->min_alpha())/ep1->n_pts() ,
                          (ep2->max_alpha() - ep2->min_alpha())/ep2->n_pts() );
+  // static double d_alpha = 0.0006;
   int num_pts = 0;
   double error = 0.0;
   for (double alpha = min_alpha; alpha <= max_alpha; alpha += d_alpha, ++num_pts) {
     double ds = ep1->s(alpha) - ep2->s(alpha);
-    double dli = ep1->left_int(alpha) - ep2->left_int(alpha);
-    double dri = ep1->right_int(alpha) - ep2->right_int(alpha);
-    error += ds*ds + dli*dli + dri*dri;
+    //double dli = ep1->left_int(alpha) - ep2->left_int(alpha);
+    //double dri = ep1->right_int(alpha) - ep2->right_int(alpha);
+    error += ds*ds; //+ dli*dli + dri*dri;
   }
-  return error * d_alpha / num_pts;
+  return error * d_alpha / alpha_range;//(max_alpha - min_alpha); // num_pts;
 }
 
 //: Calculate the error in similarity between this trasformed by \p xform
@@ -115,27 +118,30 @@ bmrf_node::probability(const bmrf_epi_transform_sptr& xform)
   bmrf_epi_seg_sptr prev_seg = xform->apply(this->epi_seg(), -1.0);
   bmrf_epi_seg_sptr next_seg = xform->apply(this->epi_seg(), 1.0);
   double prob = 0.0;
+  double total_wgt = 0.0;
   int num_neighbors = 0;
   for ( arc_iterator a_itr = this->begin(TIME); a_itr != this->end(TIME); ++a_itr, ++num_neighbors ) {
     bmrf_node_sptr neighbor = (*a_itr)->to();
     int time_step = neighbor->frame_num() - this->frame_num();
     double error;
+    double wgt;
     switch(time_step) {
      case -1:
-      error = bmrf_match_error(prev_seg, neighbor->epi_seg());
+      error = bmrf_match_error(prev_seg, neighbor->epi_seg(), wgt);
       break;
      case 1:
-      error = bmrf_match_error(next_seg, neighbor->epi_seg());
+      error = bmrf_match_error(next_seg, neighbor->epi_seg(), wgt);
       break;
      default:
       // compute less likely transformations as needed
       bmrf_epi_seg_sptr xform_seg = xform->apply(this->epi_seg(), double(time_step));
-      error = bmrf_match_error(xform_seg, neighbor->epi_seg());
+      error = bmrf_match_error(xform_seg, neighbor->epi_seg(), wgt);
     }
     //vcl_cout << "Error = " << error << vcl_endl;
-    prob += vcl_exp(-error/2.0);
+    prob += wgt*vcl_exp(-error/2.0);
+    total_wgt += wgt;
   }
-  return prob / (num_neighbors * 2.50663);
+  return prob / (total_wgt /*num_neighbors*/ * 2.50663);
 }
 
 
@@ -229,6 +235,7 @@ void
 bmrf_node::b_write( vsl_b_ostream& os ) const
 {
   vsl_b_write(os, version());
+
   vsl_b_write(os, this->segment_);
   vsl_b_write(os, this->frame_num_);
   vsl_b_write(os, this->probability_);
@@ -244,7 +251,7 @@ bmrf_node::b_write( vsl_b_ostream& os ) const
   }
 
   // write the number of incoming arcs
-  vsl_b_write(os, in_arcs_.size());
+  vsl_b_write(os, (unsigned int) in_arcs_.size());
   // write all the incoming arcs
   itr = in_arcs_.begin();
   for (; itr != in_arcs_.end(); ++itr) {
@@ -294,9 +301,9 @@ bmrf_node::b_read( vsl_b_istream& is )
       }
       boundaries_[0] = out_arcs_.begin();
 
-      int num_incoming;
+      unsigned int num_incoming;
       vsl_b_read(is, num_incoming);
-      for (int n=0; n<num_incoming; ++n) {
+      for (unsigned int n=0; n<num_incoming; ++n) {
         bmrf_arc_sptr arc_ptr;
         vsl_b_read(is, arc_ptr);
         arc_ptr->to_ = this;
