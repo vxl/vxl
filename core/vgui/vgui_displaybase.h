@@ -30,8 +30,8 @@
 
 #include <vgui/vgui_gl.h>
 #include <vgui/vgui_tableau.h>
-#include <vgui/vgui_soview.h>
 
+class vgui_soview;
 class vgui_event;
 
 
