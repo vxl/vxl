@@ -1,8 +1,11 @@
+// This is oxl/mvl/Probability.cxx
+#include "Probability.h"
+//:
+// \file
+
 #include <stdlib.h>
 #include <vcl_vector.h>
 #include <vcl_iostream.h>
-#include <vcl_iterator.h>
-#include <vcl_cmath.h>
 #include <vcl_cassert.h>
 
 #include <vnl/vnl_matrix.h>
@@ -13,10 +16,11 @@
 #include <mvl/HomgPoint2D.h>
 #include <mvl/FMatrix.h>
 
-// Randomly select samples points from the screen size of row_size & col_size bucketed symmetrically
-// with buckets partitions on the area.
-// Note : that no two selected points can lie in the same bucketed partition.
-
+//:
+// Randomly select samples points from the screen size of row_size & col_size
+// bucketed symmetrically with buckets partitions on the area.
+// Note that no two selected points can lie in the same bucketed partition.
+//
 // Watch this routine, if the given points are not dispersed
 // uniformly enough across the given distribution then the routine will
 // not exit, rather keep searching for the requested number of subsamples.
