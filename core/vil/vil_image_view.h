@@ -215,7 +215,7 @@ public:
     //: Return a description of the concrete data pixel type.
     // The value corresponds directly to pixel_type.
   virtual enum vil2_pixel_format pixel_format() const
-  { return vil2_pixel_format_of(T(0)); }
+  { return vil2_pixel_format_of(T()); }
 
     //: True if they share same view of same image data.
     //  This does not do a deep equality on image data. If the images point

@@ -48,9 +48,12 @@ enum vil2_pixel_format {
 
 
 
+template <class T>
+inline vil2_pixel_format vil2_pixel_format_of(T dummy) { return VIL2_PIXEL_FORMAT_UNKNOWN;}
+
 //: Get the vil2_pixel_format value for a given type.
 #define vil2_pixel_format_macro(T,V)\
-inline enum vil2_pixel_format vil2_pixel_format_of(T dummy) { return V; }
+VCL_DEFINE_SPECIALIZATION inline vil2_pixel_format vil2_pixel_format_of(T dummy) { return V; }
 
 vil2_pixel_format_macro(vxl_uint_32, VIL2_PIXEL_FORMAT_UINT_32)
 vil2_pixel_format_macro(vxl_int_32,  VIL2_PIXEL_FORMAT_INT_32)

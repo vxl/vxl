@@ -119,6 +119,80 @@ vil2_image_view<T> vil2_image_view<T>::deep_copy() const
   return cpy;
 }
 
+template <class T>
+inline bool convert_components_from_planes(vil2_image_view<T> &lhs,
+                                           const vil2_image_view_base &rhs_base)
+{
+  typedef T::value_type comp_type;
+
+  const unsigned ncomp =
+    vil2_pixel_format_num_components(vil2_pixel_format_of(T()));
+
+  if (// both sides have equal component types and rhs has scalar pixels and
+      rhs_base.pixel_format() == vil2_pixel_format_component_format(vil2_pixel_format_of(T()) ) &&
+      // lhs has number of components equal to rhs's number of planes.
+      ncomp == rhs_base.nplanes() )
+  {
+    const vil2_image_view<comp_type> &rhs = static_cast<const vil2_image_view<comp_type>&>(rhs_base);
+    // Check that the steps are suitable for viewing as components
+    if (rhs.planestep() != 1 && rhs.istep()%ncomp ==0 && rhs.jstep()%ncomp ==0 ) return false;
+    lhs = vil2_image_view<T >(rhs.memory_chunk(),
+                              (T const*) rhs.top_left_ptr(),
+                              rhs.ni(),rhs.nj(),1,
+                              rhs.istep()/3,rhs.jstep()/3,1);
+    return true;
+  }
+  else
+    return false;
+} 
+
+
+
+VCL_DEFINE_SPECIALIZATION
+inline bool convert_components_from_planes(vil2_image_view<float> &lhs,
+                                         const vil2_image_view_base &rhs_base)
+{return false;} 
+
+VCL_DEFINE_SPECIALIZATION
+inline bool convert_components_from_planes(vil2_image_view<double> &lhs,
+                                         const vil2_image_view_base &rhs_base)
+{return false;} 
+
+VCL_DEFINE_SPECIALIZATION
+inline bool convert_components_from_planes(vil2_image_view<bool> &lhs,
+                                         const vil2_image_view_base &rhs_base)
+{return false;} 
+
+VCL_DEFINE_SPECIALIZATION
+inline bool convert_components_from_planes(vil2_image_view<vxl_int_8> &lhs,
+                                         const vil2_image_view_base &rhs_base)
+{return false;} 
+
+VCL_DEFINE_SPECIALIZATION
+inline bool convert_components_from_planes(vil2_image_view<vil2_byte> &lhs,
+                                         const vil2_image_view_base &rhs_base)
+{return false;} 
+
+VCL_DEFINE_SPECIALIZATION
+inline bool convert_components_from_planes(vil2_image_view<vxl_int_16> &lhs,
+                                         const vil2_image_view_base &rhs_base)
+{return false;} 
+
+VCL_DEFINE_SPECIALIZATION
+inline bool convert_components_from_planes(vil2_image_view<vxl_uint_16> &lhs,
+                                         const vil2_image_view_base &rhs_base)
+{return false;} 
+
+VCL_DEFINE_SPECIALIZATION
+inline bool convert_components_from_planes(vil2_image_view<vxl_int_32> &lhs,
+                                         const vil2_image_view_base &rhs_base)
+{return false;} 
+
+VCL_DEFINE_SPECIALIZATION
+inline bool convert_components_from_planes(vil2_image_view<vxl_uint_32> &lhs,
+                                         const vil2_image_view_base &rhs_base)
+{return false;} 
+
 
 //: Create a copy of the data viewed by this, and return a view of copy.
 // This function can be made a lot more powerful - to automatically convert between pixel types.
@@ -153,18 +227,8 @@ const vil2_image_view<T> & vil2_image_view<T>::operator= (const vil2_image_view_
   }
 #endif
 
-  if (vil2_pixel_format_num_components(pixel_format())== rhs.nplanes() && 
-      vil2_pixel_format_component_format(pixel_format())== rhs.pixel_format())
-  {
-// Uncommenting this causes a wierd compile error on MSVC 
-//    const vil2_image_view<vil_rgb<T> > &that2 = static_cast<const vil2_image_view<vil_rgb<T> >&>(rhs);
-//    vil2_image_view<T> that = vil2_view_as_rgb(
-//      static_cast<const vil2_image_view<vil_rgb<T> >&>(rhs));
-//    this->operator=(that);
-//    return *this;
-    set_to_memory(0, 0, 0, 0, 0, 0, 0);
+  if (convert_components_from_planes(*this, rhs))
     return *this;
-  }
 
   set_to_memory(0, 0, 0, 0, 0, 0, 0);
   return *this;

@@ -10,6 +10,7 @@ int test_pixel_format_main( int argc, char* argv[] )
   vcl_cout << " Testing vil2_pixel_format \n";
   vcl_cout << "*******************************\n";
 
+
   TEST("vil2_pixel_format_of(byte)", vil2_pixel_format_of(bool(0)), VIL2_PIXEL_FORMAT_BOOL);
 
   TEST("vil2_pixel_format_of(vil_rgb<vil_byte>) has 3 components", 

@@ -42,8 +42,6 @@ public:
     vil2_image_view_base_sptr im = vil2_load( (image_base + file).c_str() );
     if ( !im )
       vcl_cout << "[ couldn't load " << file << "]\n";
-    else if (im->nplanes() == 3)
-      img_ = vil2_view_as_rgb(static_cast<vil2_image_view<T> >(im));
     else
       img_ = im;
 #ifdef DEBUG
