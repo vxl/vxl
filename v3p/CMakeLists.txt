@@ -6,6 +6,7 @@
 
 
 SUBDIRS(netlib)
+SUBDIRS(Qv)
 
 INCLUDE(${allvxl_SOURCE_DIR}/config.cmake/Modules/FindNativeJPEG.cmake)
 INCLUDE(${allvxl_SOURCE_DIR}/config.cmake/Modules/FindNativeTIFF.cmake)

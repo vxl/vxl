@@ -1,0 +1,13 @@
+#
+# Try to find Qv
+#
+
+IF(NOT HAS_QV)
+
+  SET( HAS_QV "YES" )
+
+  ADD_DEFINITIONS( -DHAS_QV )
+  LINK_LIBRARIES( Qv )
+  INCLUDE_DIRECTORIES( ${allvxl_SOURCE_DIR}/v3p )
+
+ENDIF(NOT HAS_QV)
