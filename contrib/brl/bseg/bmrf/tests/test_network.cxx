@@ -7,6 +7,7 @@
 
 #include <bmrf/bmrf_epi_seg.h>
 #include <bmrf/bmrf_node.h>
+#include <bmrf/bmrf_epipole.h>
 #include <bmrf/bmrf_network.h>
 
 //: Test the network class
@@ -100,6 +101,10 @@ void test_network()
     breadth_check = ((*b_itr)->probability() == breadth_order[i]) && breadth_check;
   TEST("Testing breadth_iterator", breadth_check, true);
 
+  bmrf_epipole ep(-16,432);
+  the_network->set_epipole(ep,1);
+  TEST("Testing epipole", the_network->epipole(1).location(), ep.location());
+
 //----------------------------------------------------------------------------------------
 // I/O Tests
 //----------------------------------------------------------------------------------------
@@ -128,6 +133,10 @@ void test_network()
        network_in->size(3) == the_network->size(3) &&
        network_in->size(10) == the_network->size(10),
        true);
+
+  TEST("Testing loaded epipole", 
+       the_network->epipole(1).location() ,
+       network_in->epipole(1).location() );
 }
 
 
