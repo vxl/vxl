@@ -45,11 +45,11 @@ void vsl_create_gaussian (T gauss_sigma, vsl_1d_half_kernel<T> *mask_ptr) {
   mask_ptr->count = mask_index;
   
   float total_mask_value = mask_ptr->array [0];
-  for (mask_index = 1; mask_index < mask_ptr->count; mask_index++) {
+  for (mask_index = 1; int(mask_index) < mask_ptr->count; mask_index++) {
     total_mask_value += 2 * mask_ptr->array [mask_index];
   }
   
-  for (mask_index = 0; mask_index < mask_ptr->count; mask_index++) {
+  for (mask_index = 0; int(mask_index) < mask_ptr->count; mask_index++) {
     mask_ptr->array [mask_index] /= total_mask_value;
     
     if (mask_ptr->array [mask_index] < CN_GAUSS_CUTOFF_VALUE)

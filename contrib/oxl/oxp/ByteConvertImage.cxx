@@ -22,8 +22,8 @@ ByteConvertImage::ByteConvertImage(vil_memory_image_of<float> const& in, bool ig
   ignore_zero_ = ignore_zero;
   min_ = 1e20;
   max_ = -min_;
-  for(unsigned y = 0; y < in.height(); ++y)
-    for(unsigned x = 0; x < in.width(); ++x) {
+  for(int y = 0; y < in.height(); ++y)
+    for(int x = 0; x < in.width(); ++x) {
       float v = in(x,y);
       if (ignore_zero && v == 0.0F)
 	continue;
@@ -53,8 +53,8 @@ ByteConvertImage::ByteConvertImage(vil_memory_image_of<double> const& in, bool i
   ignore_zero_ = ignore_zero;
   min_ = 1e20;
   max_ = -min_;
-  for(unsigned y = 0; y < in.height(); ++y)
-    for(unsigned x = 0; x < in.width(); ++x) {
+  for(int y = 0; y < in.height(); ++y)
+    for(int x = 0; x < in.width(); ++x) {
       double v = in(x,y);
       if (ignore_zero && v == 0.0F)
 	continue;
@@ -81,8 +81,8 @@ ByteConvertImage::ByteConvertImage(vil_memory_image_of<double> const& in, double
 void ByteConvertImage::filter(vil_memory_image_of<float> const& in)
 {
   float scale = 255 / (max_ - min_);
-  for(unsigned y = 0; y < in.height(); ++y)
-    for(unsigned x = 0; x < in.width(); ++x) {
+  for(int y = 0; y < in.height(); ++y)
+    for(int x = 0; x < in.width(); ++x) {
       float v = in(x,y);
       if (ignore_zero_ && v == 0.0F)
 	(*this)(x,y) = 0;
@@ -95,8 +95,8 @@ void ByteConvertImage::filter(vil_memory_image_of<double> const& in)
 {
   double dmin = (double)min_;
   double scale = 255 / (max_ - min_);
-  for(unsigned y = 0; y < in.height(); ++y)
-    for(unsigned x = 0; x < in.width(); ++x) {
+  for(int y = 0; y < in.height(); ++y)
+    for(int x = 0; x < in.width(); ++x) {
       double v = in(x,y);
       if (ignore_zero_ && v == 0.0F)
 	(*this)(x,y) = 0;

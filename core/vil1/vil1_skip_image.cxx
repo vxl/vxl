@@ -46,14 +46,14 @@ bool vil_skip_image::get_section(void * buf, int x0, int y0, int w, int h) const
   unsigned char *dst = static_cast<unsigned char*>(buf);
 
   // for each raster
-  for (unsigned j=0; j<h; ++j) {
+  for (int j=0; j<h; ++j) {
     // get from underlying :
     bool v = base.get_section(buffer.begin(), skipx*x0, skipy*(y0+j), skipx*w, 1);
     if (!v)
       return false; // failed
     
     // 
-    for (unsigned i=0; i<w; ++i)
+    for (int i=0; i<w; ++i)
       // copy the cell :
       for (unsigned k=0; k<cell_size; ++k)
 	dst[cell_size*(j*w + i) + k] = buffer[cell_size*skipx*i + k];

@@ -543,14 +543,14 @@ bool vil_tiff_generic_image::get_section(void* buf, int x0, int y0, int xs, int 
     // Random access only to strips.
     // Get the nearby strips...
     int y1 = (y0 + ys - 1);
-    int strip_min = y0 / p->rows_per_strip;
-    int strip_max = y1 / p->rows_per_strip;
+    unsigned strip_min = y0 / p->rows_per_strip;
+    unsigned strip_max = y1 / p->rows_per_strip;
     assert(strip_max <= p->numberofstrips);
     // Get each strip
     int pixel_byte_size = components_ * bits_per_component_ / 8;
     // memset(buf, 100, xs * ys * pixel_byte_size);
     {
-      for(int strip_id = strip_min; strip_id <= strip_max; ++strip_id) {
+      for(unsigned strip_id = strip_min; strip_id <= strip_max; ++strip_id) {
 	TIFFReadEncodedStrip(p->tif, strip_id, p->buf, (tsize_t) -1);
 	// Strip contains some rows...
 	int strip_min_row = strip_id * p->rows_per_strip;
@@ -581,12 +581,12 @@ bool vil_tiff_generic_image::put_section(void const* buf, int x0, int y0, int xs
   // Random access only to strips.
   // Put the nearby strips...
   int y1 = (y0 + ys - 1);
-  int strip_min = y0 / p->rows_per_strip;
-  int strip_max = y1 / p->rows_per_strip;
+  unsigned strip_min = y0 / p->rows_per_strip;
+  unsigned strip_max = y1 / p->rows_per_strip;
   assert(strip_max <= p->numberofstrips);
   // Put each strip
   int pixel_byte_size = components_ * bits_per_component_ / 8;
-  for(int strip_id = strip_min; strip_id <= strip_max; ++strip_id) {
+  for(unsigned strip_id = strip_min; strip_id <= strip_max; ++strip_id) {
     // Strip contains some rows...
     int strip_min_row = strip_id * p->rows_per_strip;
     int strip_max_row = strip_min_row + p->rows_per_strip - 1;
