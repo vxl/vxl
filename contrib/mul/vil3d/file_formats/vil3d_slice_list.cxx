@@ -44,6 +44,7 @@ void parse_globbed_filenames(const vcl_string & input,
   if (start == filename.npos) return;
   vcl_size_t end = filename.find_first_not_of("#", start);
   if (filename.find_first_of("#",end) != filename.npos) return;
+  if (end == filename.npos) end = filename.length();
   for (vcl_size_t i=start, j=start; i!=end; ++i, j+=12)
     filename.replace(j,1,"[0123456789]");
 
