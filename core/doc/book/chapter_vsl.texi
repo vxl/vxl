@@ -446,7 +446,7 @@ class.
 @subsection Format of Fundamental types
 
 All values are stored in little endian format (as used by Intel and DEC
-alpha processors.) We has to choose one, and we mostly use Intel platforms.
+alpha processors.) We had to choose one, and we mostly use Intel platforms.
 
 @subsubsection Format of Integer types
 
@@ -537,6 +537,26 @@ The @code{vsl} system stores a IO schema version number at the start of the stre
 a clean backwards compatible upgrade of the IO schema. It will not however make the rewrite of
 @code{vsl} trivial. Contact the designers if you wish to change the schema.
 
+@subsection File Magic Numbers
+
+If you use Unix, the following can be inserted in your /etc/magic file so that the @command{file} command
+will recognise @code{vsl} files.
+
+@example
+#------------------------------------------------------------------------------
+# VXL: file(1) magic for VXL binary IO data files
+#
+# from Ian Scott <scottim@sf.net>
+#
+# VXL is a collection of C++ libraries for Computer Vision.
+# See the vsl chapter in the VXL Book for more info
+# http://www.isbe.man.ac.uk/public_vxl_doc/books/vxl/book.html
+# http:/vxl.sf.net
+
+2       lelong  0x472b2c4e      VXL binary file,
+>0      leshort >0      schema version no %d
+
+@end example
 
 @subsection Serialisation
 
