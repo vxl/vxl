@@ -19,6 +19,7 @@
 #ifndef vil_nitf_util_h_
 #define vil_nitf_util_h_
 
+#include <vcl_iosfwd.h>
 #include <vcl_cstdio.h>
 #include <vcl_cstring.h>
 #include <vcl_string.h>
@@ -40,22 +41,22 @@
 //    2: LEADING:          delete leading characters c.
 //    3: HEAD/TAIL:        delete all leading && trailing characters c.
 //
-char * squeeze (char*, int, int);
-void clear_string_vector (vcl_vector<vcl_string *> str_vector);
-void display_as_hex (
+char * squeeze(char*, int, int);
+void clear_string_vector(vcl_vector<vcl_string *> str_vector);
+void display_as_hex(
     const unsigned char * buffer,
     unsigned int display_count,
     unsigned int bytes_per_value,
     vcl_string label = "");
-void display_as_hex (const unsigned char value);
+void display_as_hex(const unsigned char value);
 
 // Two functions below are from TargetJr file
 //    .../IUPackages/GeneralUtility/Basics/geopt_util.C
 
 enum geopt_coord {LAT, LON};
 
-int geostr_to_latlon (const char* str, double* lat, double* lon);
-int geostr_to_double (const char* str, double* val, geopt_coord lat_lon_flag);
+int geostr_to_latlon(const char* str, double* lat, double* lon);
+int geostr_to_double(const char* str, double* val, geopt_coord lat_lon_flag);
 
 // this inline assumes b, v and f are valid.  It does not
 // change the value of v unless the read is successful.
@@ -68,29 +69,25 @@ int geostr_to_double (const char* str, double* val, geopt_coord lat_lon_flag);
 //
 // \return true if read successful
 //
-inline bool GetInt (char* cbuf, int* ival, int count, vil_stream * f, bool preserve = true)
+inline bool GetInt(char* cbuf, int* ival, int count, vil_stream * f, bool preserve = true)
 {
     int orig_val = *ival;
-    bool rval = true;
 
-    if (f->read (cbuf, count) < count) {
-        rval = false;
+    if (f->read(cbuf, count) < count) {
+        return false;
     }
     else {
-      char fmt[6];
-      cbuf[count] = '\0'; // Prevent Purify UMR warning (MPP 5/7/2002)
-      vcl_sprintf(fmt, "%%%dd", count);
-
+      cbuf[count] = '\0'; // Prevent sscanf from reading beyond end of buffer
       // IF cbuf CONTAINS BLANKS, TREAT AS ZERO
-      if (vcl_sscanf(cbuf, fmt, ival) < 1) {
+      if (vcl_sscanf(cbuf, "%d", ival) < 1) {
         *ival = 0;
       }
       if (preserve && *ival < 0) {
-        rval = false;
         *ival = orig_val;
+        return false;
       }
     }
-    return rval;
+    return true;
 }
 
 // this inline assumes b, v and f are valid.  It does not
@@ -113,12 +110,9 @@ inline bool get_unsigned(char* cbuf, unsigned * ival, int count, vil_stream * f,
     if (f->read(cbuf, count) < count)
         return false;
 
-    char fmt[6];
-    if (count > 99) return false; // avoid problems with fmt
-    vcl_sprintf(fmt, "%%%uu", count);
-
+    cbuf[count] = '\0'; // Prevent sscanf from reading beyond end of buffer
     // IF cbuf CONTAINS BLANKS, TREAT AS ZERO
-    if (vcl_sscanf(cbuf, fmt, ival) < 1) {
+    if (vcl_sscanf(cbuf, "%u", ival) < 1) {
       *ival = 0;
     }
 #if 0 // *ival is unsigned, so it can never be < 0
@@ -132,55 +126,51 @@ inline bool get_unsigned(char* cbuf, unsigned * ival, int count, vil_stream * f,
 
 // this inline assumes b and f are valid.
 //
-inline bool PutInt (char* b, int v, int w, vil_stream* f, bool p = true)
+inline bool PutInt(char* b, int v, int w, vil_stream* f, bool p = true)
 {
     if (p && v < 0) return false;
     vcl_sprintf(b, "%0*d", w, v);
     int pos = f->tell();
-    if (f->write (b,w) < w) { f->seek(pos); return false; }
+    if (f->write(b,w) < w) { f->seek(pos); return false; }
     return true;
 }
 
 // this inline assumes b and f are valid.
 //
-inline bool put_unsigned (char* b, unsigned int v, int w, vil_stream* f, bool p = true)
+inline bool put_unsigned(char* b, unsigned int v, int w, vil_stream* f, bool p = true)
 {
-    bool rval = true;
     vcl_sprintf(b, "%0*u", w, v);
     int pos = f->tell();
-    if (f->write (b, w) < w) {
-      rval = false;
+    if (f->write(b, w) < w) {
       f->seek(pos);
+      return false;
     }
-
-    return rval;
+    return true;
 }
 
-inline bool GetUchar (char* b, vxl_byte* v, int w, vil_stream* f)
+inline bool GetUchar(char* b, vxl_byte* v, int w, vil_stream* f)
 {
-  bool rval = true;
-  if (f->read (b,w) < w)
-    rval = false;
+  if (f->read(b,w) < w)
+    return false;
   else
     for (int i =0; i < w; i++)
       v[i]= (vxl_byte)b[i];
-  return rval;
+  return true;
 }
 
 // this inline assumes b and f are valid.
 //
-inline bool PutUchar (char* b, vxl_byte* v, int w, vil_stream* f)
+inline bool PutUchar(char* b, vxl_byte* v, int w, vil_stream* f)
 {
-    bool rval = true;
     if (w < 0) return false;
     for (int i =0; i < w; i++)
       b[i]= v[i];
     int pos = f->tell();
-    if (f->write (b,w) < w) {
-        rval = false;
-        f->seek (pos);
+    if (f->write(b,w) < w) {
+        f->seek(pos);
+        return false;
     }
-    return rval;
+    return true;
 }
 
 /////////////////////////////////////////////////
@@ -190,7 +180,7 @@ inline bool PutUchar (char* b, vxl_byte* v, int w, vil_stream* f)
 /// \return char * pointer to new copy of string
 ///
 /////////////////////////////////////////////////
-inline char* new_strdup (const char* str)
+inline char* new_strdup(const char* str)
 {
     char *ret;
 
