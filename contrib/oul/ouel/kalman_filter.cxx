@@ -35,25 +35,21 @@
 //
 // Initiallises the necessary parameters and matrices
 //
-// \param unsigned int ns: number of dimensions in signal
-// \param unsigned int nm: number of dimensions in measurement
-// \param unsigned int nc: number of dimensions in control input
+// \param ns  number of dimensions in signal
+// \param nm  number of dimensions in measurement
+// \param nc  number of dimensions in control input
 //
-// \param vnl_matrix<double> &A: the ns*ns matrix relating signal
-//at time k to signal at time k+1.
+// \param A   the ns*ns matrix relating signal at time k to signal at time k+1.
 //
-// \param vnl_matrix<double> &H: the nm*ns matrix relating the
-//measurement to the signal.
+// \param H   the nm*ns matrix relating the measurement to the signal.
 //
-// \param vnl_matrix<double> &B: the nc*ns matrix relating the
-//signal to the control input. I'm not sure what this is used for, but
-//I've included it for completeness.
+// \param B   the nc*ns matrix relating the signal to the control input.
+//   I'm not sure what this is used for, but I've included it for completeness.
 //
-// \param vnl_matrix<double> &x_initial: the initial ns*1 estimate
-//of the signal.
+// \param x_initial  the initial ns*1 estimate of the signal.
 //
-// \param vnl_matrix<double> &p_initial: the initial error variance
-//vector. P = p_initial.transpose()*p_initial.
+// \param p_initial  the initial error variance vector.
+//        P = p_initial.transpose()*p_initial.
 //
 // \status under development
 // \author Brendan McCane
@@ -122,20 +118,17 @@ KalmanFilter::KalmanFilter(
 //
 // Initiallises the necessary parameters and matrices
 //
-// \param unsigned int ns: number of dimensions in signal
-// \param unsigned int nm: number of dimensions in measurement
+// \param ns  number of dimensions in signal
+// \param nm  number of dimensions in measurement
 //
-// \param vnl_matrix<double> &A: the ns*ns matrix relating signal
-//at time k to signal at time k+1.
+// \param A   the ns*ns matrix relating signal at time k to signal at time k+1.
 //
-// \param vnl_matrix<double> &H: the nm*ns matrix relating the
-//measurement to the signal.
+// \param H   the nm*ns matrix relating the measurement to the signal.
 //
-// \param vnl_matrix<double> &x_initial: the initial ns*1 estimate
-//of the signal.
+// \param x_initial  the initial ns*1 estimate of the signal.
 //
-// \param vnl_matrix<double> &p_initial: the initial error variance
-//vector. P = p_initial.transpose()*p_initial.
+// \param p_initial  the initial error variance vector.
+//        P = p_initial.transpose()*p_initial.
 //
 // \status under development
 // \author Brendan McCane
@@ -195,8 +188,8 @@ KalmanFilter::KalmanFilter(
 // time point using the previous estimate and the new measurement, and
 // update the error covariance matrix.
 //
-// \param vnl_matrix<double> &zk: the new measurement
-// \param vnl_matrix<double> &Rk: the measurement error covariance matrix
+// \param zk the new measurement
+// \param Rk the measurement error covariance matrix
 //
 // \status under development
 // \author Brendan McCane
@@ -252,7 +245,7 @@ void KalmanFilter::measurement_update(const vnl_matrix<double> &zk,
 // error covariance matrix ahead in time as well. In this case, I am
 // assuming there is no control input.
 //
-// \param vnl_matrix<double> &Qk: the process error covariance matrix
+// \param Qk  the process error covariance matrix
 //
 // \status under development
 // \author Brendan McCane
@@ -285,8 +278,8 @@ KalmanFilter::predict(const vnl_matrix<double> &Qk)
 // Calculate the next state given the current estimate and project the
 // error covariance matrix ahead in time as well. 
 //
-// \param vnl_matrix<double> &Qk: the process error covariance matrix
-// \param vnl_matrix<double> &uk: the control input
+// \param Qk  the process error covariance matrix
+// \param uk  the control input
 //
 // \status under development
 // \author Brendan McCane
@@ -328,9 +321,9 @@ KalmanFilter::predict(const vnl_matrix<double> &Qk,
 // A wrapper function to both update the measurement and predict the
 // new state.
 //
-// \param vnl_matrix<double> &zk: the new measurement
-// \param vnl_matrix<double> &Rk: the measurement error covariance matrix
-// \param vnl_matrix<double> &Qk: the process error covariance matrix
+// \param zk  the new measurement
+// \param Rk  the measurement error covariance matrix
+// \param Qk  the process error covariance matrix
 //
 // \status under development
 // \author Brendan McCane

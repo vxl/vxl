@@ -11,10 +11,9 @@
 //----------------------------------------------------------------------
 //: Converts from one type of memory image to another
 //
-// \param const vil_memory_image_of<T1> &from: the image converted from
-// \param T2 &var: a dummy variable used so the right function is called.
-//
-// \ret vil_memory_image_of<T2> *: the resultant image - a new one
+// \param from the image converted from
+// \param var  a dummy variable used so the right function is called.
+// \ret        the resultant image - a new one
 //
 // \author Brendan McCane
 //----------------------------------------------------------------------
@@ -31,9 +30,7 @@ vil_memory_image_of<T2> *convert_image
 
   for (int x=0; x<from.width(); x++)
     for (int y=0; y<from.height(); y++)
-    {
       (*to)(x,y) = (T2)from(x,y);
-    }
 
   return to;
 }
@@ -44,10 +41,9 @@ vil_memory_image_of<T2> *convert_image
 //
 // Specialization for converting from rgb to greyscale
 //
-// \param const vil_memory_image_of<T1> &from: the image converted from
-// \param T2 &var: a dummy variable used so the right function is called.
-//
-// \ret vil_memory_image_of<T2> *: the resultant image - a new one
+// \param from the image converted from
+// \param var  a dummy variable used so the right function is called.
+// \ret        the resultant image - a new one
 //
 // \author Brendan McCane
 //----------------------------------------------------------------------
