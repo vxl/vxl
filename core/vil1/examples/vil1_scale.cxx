@@ -147,17 +147,17 @@ struct pnmscale {
     /* Compute all sizes and scales. */
     if ( newpixels )
       if ( rows * cols <= newpixels )
-        {
-          newrows = rows;
-          newcols = cols;
-          xscale = yscale = 1.0;
-        }
+      {
+        newrows = rows;
+        newcols = cols;
+        xscale = yscale = 1.0;
+      }
       else
-        {
-          xscale = yscale =
-            vcl_sqrt( (float) newpixels / (float) cols / (float) rows );
-          specxscale = specyscale = 1;
-        }
+      {
+        xscale = yscale =
+          vcl_sqrt( (float) newpixels / (float) cols / (float) rows );
+        specxscale = specyscale = 1;
+      }
 
     if ( specxysize )
       if ( (float) newcols / (float) newrows > (float) cols / (float) rows )
@@ -176,27 +176,27 @@ struct pnmscale {
       newrows = int(rows * yscale + 0.999);
     else
       if ( specxsize )
-        {
-          yscale = xscale;
-          newrows = int(rows * yscale + 0.999);
-        }
+      {
+        yscale = xscale;
+        newrows = int(rows * yscale + 0.999);
+      }
       else
-        {
-          yscale = 1.0;
-          newrows = rows;
-        }
+      {
+        yscale = 1.0;
+        newrows = rows;
+      }
 
     if ( ! ( specxsize || specxscale ) )
       if ( specysize )
-        {
-          xscale = yscale;
-          newcols = int(cols * xscale + 0.999);
-        }
+      {
+        xscale = yscale;
+        newcols = int(cols * xscale + 0.999);
+      }
       else
-        {
-          xscale = 1.0;
-          newcols = cols;
-        }
+      {
+        xscale = 1.0;
+        newcols = cols;
+      }
 
     sxscale = int(xscale * SCALE);
     syscale = int(yscale * SCALE);
@@ -242,113 +242,111 @@ void pnmscaleT<T, longT>::go()
   newxelrow = new T[newcols];
 
   for ( row = 0; row < newrows; ++row )
+  {
+    // First scale Y from xelrow into tempxelrow.
+    if ( newrows == rows ) // shortcut Y scaling if possible
     {
-      /* First scale Y from xelrow into tempxelrow. */
-      if ( newrows == rows ) /* shortcut Y scaling if possible */
+      pnm_readpnmrow(xelrow, cols);
+    }
+    else
+    {
+      while ( fracrowleft < fracrowtofill )
+      {
+        if ( needtoreadrow )
+          if ( rowsread < rows )
+          {
+            pnm_readpnmrow(xelrow, cols);
+            ++rowsread;
+            // needtoreadrow = 0;
+          }
+        for ( col = 0, xP = xelrow; col < cols; ++col, ++xP )
+          gs[col] += longT(fracrowleft * (*xP));
+        fracrowtofill -= fracrowleft;
+        fracrowleft = syscale;
+        needtoreadrow = 1;
+      }
+      // Now fracrowleft is >= fracrowtofill, so we can produce a row.
+      if ( needtoreadrow )
+        if ( rowsread < rows )
         {
           pnm_readpnmrow(xelrow, cols);
+          ++rowsread;
+          needtoreadrow = 0;
         }
-      else
-        {
-          while ( fracrowleft < fracrowtofill )
-            {
-              if ( needtoreadrow )
-                if ( rowsread < rows )
-                  {
-                    pnm_readpnmrow(xelrow, cols);
-                    ++rowsread;
-                    /* needtoreadrow = 0; */
-                  }
-              for ( col = 0, xP = xelrow; col < cols; ++col, ++xP )
-                gs[col] += longT(fracrowleft * (*xP));
-              fracrowtofill -= fracrowleft;
-              fracrowleft = syscale;
-              needtoreadrow = 1;
-            }
-          /* Now fracrowleft is >= fracrowtofill, so we can produce a row. */
-          if ( needtoreadrow )
-            if ( rowsread < rows )
-              {
-                pnm_readpnmrow(xelrow, cols);
-                ++rowsread;
-                needtoreadrow = 0;
-              }
-          {
-            for ( col = 0, xP = xelrow, nxP = tempxelrow;
-                  col < cols; ++col, ++xP, ++nxP )
-              {
-                longT g = gs[col] + fracrowtofill * *xP;
-                g /= SCALE;
+      for ( col = 0, xP = xelrow, nxP = tempxelrow;
+            col < cols; ++col, ++xP, ++nxP )
+      {
+        longT g = gs[col] + fracrowtofill * *xP;
+        g /= SCALE;
 
-                *nxP = (T)g;
-                gs[col] = longT(HALFSCALE);
-              }
-          }
-          fracrowleft -= fracrowtofill;
-          if ( fracrowleft == 0 )
-            {
-              fracrowleft = syscale;
-              needtoreadrow = 1;
-            }
-          fracrowtofill = SCALE;
-        }
-
-      /* Now scale X from tempxelrow into newxelrow and write it out. */
-      if ( newcols == cols ) /* shortcut X scaling if possible */
-        pnm_writepnmrow(tempxelrow, newcols);
-      else
-        {
-          longT g;
-          long fraccoltofill, fraccolleft;
-          int needcol;
-
-          nxP = newxelrow;
-          fraccoltofill = SCALE;
-          g = longT(HALFSCALE);
-          needcol = 0;
-          for ( col = 0, xP = tempxelrow; col < cols; ++col, ++xP )
-            {
-              fraccolleft = sxscale;
-              while ( fraccolleft >= fraccoltofill )
-                {
-                  if ( needcol )
-                    {
-                      ++nxP;
-                      g = longT(HALFSCALE);
-                    }
-                  g += fraccoltofill * *xP;
-                  g /= SCALE;
-                  *nxP = (T)g;
-
-                  fraccolleft -= fraccoltofill;
-                  fraccoltofill = SCALE;
-                  needcol = 1;
-                }
-              if ( fraccolleft > 0 )
-                {
-                  if ( needcol )
-                    {
-                      ++nxP;
-                      g = longT(HALFSCALE);
-                      needcol = 0;
-                    }
-                  g += fraccolleft * *xP;
-                  fraccoltofill -= fraccolleft;
-                }
-            }
-          if ( fraccoltofill > 0 )
-            {
-              --xP;
-              g += fraccoltofill * *xP;
-            }
-          if ( ! needcol )
-            {
-              g /= SCALE;
-              *nxP = (T)g;
-            }
-          pnm_writepnmrow(newxelrow, newcols);
-        }
+        *nxP = (T)g;
+        gs[col] = longT(HALFSCALE);
+      }
+      fracrowleft -= fracrowtofill;
+      if ( fracrowleft == 0 )
+      {
+        fracrowleft = syscale;
+        needtoreadrow = 1;
+      }
+      fracrowtofill = SCALE;
     }
+
+    /* Now scale X from tempxelrow into newxelrow and write it out. */
+    if ( newcols == cols ) /* shortcut X scaling if possible */
+      pnm_writepnmrow(tempxelrow, newcols);
+    else
+    {
+      longT g;
+      long fraccoltofill, fraccolleft;
+      int needcol;
+
+      nxP = newxelrow;
+      fraccoltofill = SCALE;
+      g = longT(HALFSCALE);
+      needcol = 0;
+      for ( col = 0, xP = tempxelrow; col < cols; ++col, ++xP )
+      {
+        fraccolleft = sxscale;
+        while ( fraccolleft >= fraccoltofill )
+        {
+          if ( needcol )
+          {
+            ++nxP;
+            g = longT(HALFSCALE);
+          }
+          g += fraccoltofill * *xP;
+          g /= SCALE;
+          *nxP = (T)g;
+
+          fraccolleft -= fraccoltofill;
+          fraccoltofill = SCALE;
+          needcol = 1;
+        }
+        if ( fraccolleft > 0 )
+        {
+          if ( needcol )
+          {
+            ++nxP;
+            g = longT(HALFSCALE);
+            needcol = 0;
+          }
+          g += fraccolleft * *xP;
+          fraccoltofill -= fraccolleft;
+        }
+      }
+      if ( fraccoltofill > 0 )
+      {
+        --xP;
+        g += fraccoltofill * *xP;
+      }
+      if ( ! needcol )
+      {
+        g /= SCALE;
+        *nxP = (T)g;
+      }
+      pnm_writepnmrow(newxelrow, newcols);
+    }
+  }
 }
 
 template struct pnmscaleT<unsigned char, long>;
