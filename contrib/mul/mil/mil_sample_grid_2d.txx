@@ -9,7 +9,7 @@
 #include <mil/mil_bilin_interp_2d.h>
 #include <vnl/vnl_vector.h>
 
-// True if p clearly inside the image
+//: True if p clearly inside the image
 inline bool mil_point_in_image(const vgl_point_2d<double>& p, const mil_image_2d& image)
 {
   if (p.x()<1) return false;
@@ -19,13 +19,13 @@ inline bool mil_point_in_image(const vgl_point_2d<double>& p, const mil_image_2d
   return true;
 }
 
-//: True if grid of size nu * nv (in steps of u,v) is entirely in the image
+//: True if grid of size nu * nv (in steps of u,v) is entirely in the image.
 //  p defines centre of one size.
 inline bool mil_grid_in_image(const vgl_point_2d<double>& p,
-                                 const vgl_vector_2d<double>& u,
-                                 const vgl_vector_2d<double>& v,
-                 int nu, int nv,
-                                 const mil_image_2d& image)
+                              const vgl_vector_2d<double>& u,
+                              const vgl_vector_2d<double>& v,
+                              int nu, int nv,
+                              const mil_image_2d& image)
 {
   vgl_vector_2d<double> u1=(nu-1)*u;
   vgl_vector_2d<double> v1=(nv-1)*v;
@@ -37,18 +37,18 @@ inline bool mil_grid_in_image(const vgl_point_2d<double>& p,
   return true;
 }
 
-//: Sample grid p+i.u+j.v using bilinear interpolation
+//: Sample grid p+i.u+j.v using bilinear interpolation.
 //  Profile points are p+i.u+j.v, where i=[0..nu-1],j=[0..nv-1]
 //  Vector v is resized to nu*nv*np elements, where np=image.n_planes().
 //  v[0]..v[np-1] are the values from point p
 //  Samples are taken along direction v first
 template <class imType, class vecType>
 void mil_sample_grid_2d(vnl_vector<vecType>& vec,
-                           const mil_image_2d_of<imType>& image,
-                           const vgl_point_2d<double>& p,
-                           const vgl_vector_2d<double>& u,
-                           const vgl_vector_2d<double>& v,
-                           int nu, int nv)
+                        const mil_image_2d_of<imType>& image,
+                        const vgl_point_2d<double>& p,
+                        const vgl_vector_2d<double>& u,
+                        const vgl_vector_2d<double>& v,
+                        int nu, int nv)
 {
   if (image.world2im().form()!=mil_transform_2d::Projective)
   {
@@ -71,7 +71,7 @@ void mil_sample_grid_2d(vnl_vector<vecType>& vec,
     mil_sample_grid_2d_safe(vec,image,p,u,v,nu,nv);
 }
 
-//: Sample grid, using safe bilinear interpolation
+//: Sample grid, using safe bilinear interpolation.
 //  Profile points are p+i.u+j.v, where i=[0..nu-1],j=[0..nv-1]
 //  Vector v is resized to nu*nv*np elements, where np=image.n_planes().
 //  v[0]..v[np-1] are the values from point p
@@ -79,11 +79,11 @@ void mil_sample_grid_2d(vnl_vector<vecType>& vec,
 //  Points outside image return zero.
 template <class imType, class vecType>
 void mil_sample_grid_2d_safe(vnl_vector<vecType>& vec,
-                                const mil_image_2d_of<imType>& image,
-                           const vgl_point_2d<double>& p0,
-                           const vgl_vector_2d<double>& u,
-                           const vgl_vector_2d<double>& v,
-                           int nu, int nv)
+                             const mil_image_2d_of<imType>& image,
+                             const vgl_point_2d<double>& p0,
+                             const vgl_vector_2d<double>& u,
+                             const vgl_vector_2d<double>& v,
+                             int nu, int nv)
 {
   int np = image.n_planes();
   int nx = image.nx();
@@ -133,7 +133,7 @@ void mil_sample_grid_2d_safe(vnl_vector<vecType>& vec,
   }
 }
 
-//: Sample grid, using bilinear interpolation (no checks)
+//: Sample grid, using bilinear interpolation (no checks).
 //  Profile points are p+i.u+j.v, where i=[0..nu-1],j=[0..nv-1]
 //  Vector v is resized to nu*nv*np elements, where np=image.n_planes().
 //  v[0]..v[np-1] are the values from point p
@@ -141,11 +141,11 @@ void mil_sample_grid_2d_safe(vnl_vector<vecType>& vec,
 //  Points outside image return zero.
 template <class imType, class vecType>
 void mil_sample_grid_2d_no_checks(vnl_vector<vecType>& vec,
-                                const mil_image_2d_of<imType>& image,
-                           const vgl_point_2d<double>& p0,
-                           const vgl_vector_2d<double>& u,
-                           const vgl_vector_2d<double>& v,
-                           int nu, int nv)
+                                  const mil_image_2d_of<imType>& image,
+                                  const vgl_point_2d<double>& p0,
+                                  const vgl_vector_2d<double>& u,
+                                  const vgl_vector_2d<double>& v,
+                                  int nu, int nv)
 {
   int np = image.n_planes();
   int xstep = image.xstep();
@@ -193,7 +193,7 @@ void mil_sample_grid_2d_no_checks(vnl_vector<vecType>& vec,
   }
 }
 
-//: Sample grid, using safe bilinear interpolation (points in image co-ordinates)
+//: Sample grid, using safe bilinear interpolation (points in image co-ordinates).
 //  Grid points are p+i.u+j.v, where i=[0..nu-1],j=[0..nv-1]
 //  Vector v is resized to nu*nv*np elements, where np=image.n_planes().
 //  v[0]..v[np-1] are the values from point p
@@ -202,10 +202,10 @@ void mil_sample_grid_2d_no_checks(vnl_vector<vecType>& vec,
 template <class imType, class vecType>
 void mil_sample_grid_2d_ic_safe(vnl_vector<vecType>& vec,
                                 const mil_image_2d_of<imType>& image,
-                           const vgl_point_2d<double>& p0,
-                           const vgl_vector_2d<double>& u,
-                           const vgl_vector_2d<double>& v,
-                           int nu, int nv)
+                                const vgl_point_2d<double>& p0,
+                                const vgl_vector_2d<double>& u,
+                                const vgl_vector_2d<double>& v,
+                                int nu, int nv)
 {
   int np = image.n_planes();
   int nx = image.nx();
@@ -253,7 +253,7 @@ void mil_sample_grid_2d_ic_safe(vnl_vector<vecType>& vec,
   }
 }
 
-//: Sample grid, using bilinear interpolation (no checks) (points in image co-ordinates)
+//: Sample grid, using bilinear interpolation (no checks) (points in image co-ordinates).
 //  Profile points are p+i.u+j.v, where i=[0..nu-1],j=[0..nv-1]
 //  Vector v is resized to nu*nv*np elements, where np=image.n_planes().
 //  v[0]..v[np-1] are the values from point p
@@ -261,11 +261,11 @@ void mil_sample_grid_2d_ic_safe(vnl_vector<vecType>& vec,
 //  Points are assumed to be inside the image.
 template <class imType, class vecType>
 void mil_sample_grid_2d_ic_no_checks(vnl_vector<vecType>& vec,
-                                const mil_image_2d_of<imType>& image,
-                           const vgl_point_2d<double>& p0,
-                           const vgl_vector_2d<double>& u,
-                           const vgl_vector_2d<double>& v,
-                           int nu, int nv)
+                                     const mil_image_2d_of<imType>& image,
+                                     const vgl_point_2d<double>& p0,
+                                     const vgl_vector_2d<double>& u,
+                                     const vgl_vector_2d<double>& v,
+                                     int nu, int nv)
 {
   int np = image.n_planes();
   int xstep = image.xstep();
@@ -313,34 +313,34 @@ void mil_sample_grid_2d_ic_no_checks(vnl_vector<vecType>& vec,
 
 #define MIL_SAMPLE_GRID_2D_INSTANTIATE( imType, vecType ) \
 template void mil_sample_grid_2d(vnl_vector<vecType >& vec, \
-                           const mil_image_2d_of<imType >& image, \
-                           const vgl_point_2d<double >& p, \
-                           const vgl_vector_2d<double >& u, \
-                           const vgl_vector_2d<double >& v, \
-                           int nu, int nv); \
+                                 const mil_image_2d_of<imType >& image, \
+                                 const vgl_point_2d<double >& p, \
+                                 const vgl_vector_2d<double >& u, \
+                                 const vgl_vector_2d<double >& v, \
+                                 int nu, int nv); \
 template void mil_sample_grid_2d_safe(vnl_vector<vecType >& vec, \
-                           const mil_image_2d_of<imType >& image, \
-                           const vgl_point_2d<double >& p, \
-                           const vgl_vector_2d<double >& u, \
-                           const vgl_vector_2d<double >& v, \
-                           int nu, int nv); \
+                                      const mil_image_2d_of<imType >& image, \
+                                      const vgl_point_2d<double >& p, \
+                                      const vgl_vector_2d<double >& u, \
+                                      const vgl_vector_2d<double >& v, \
+                                      int nu, int nv); \
 template void mil_sample_grid_2d_no_checks(vnl_vector<vecType >& vec, \
-                           const mil_image_2d_of<imType >& image, \
-                           const vgl_point_2d<double >& p, \
-                           const vgl_vector_2d<double >& u, \
-                           const vgl_vector_2d<double >& v, \
-                           int nu, int nv); \
+                                           const mil_image_2d_of<imType >& image, \
+                                           const vgl_point_2d<double >& p, \
+                                           const vgl_vector_2d<double >& u, \
+                                           const vgl_vector_2d<double >& v, \
+                                           int nu, int nv); \
 template void mil_sample_grid_2d_ic_safe(vnl_vector<vecType >& vec, \
-                           const mil_image_2d_of<imType >& image, \
-                           const vgl_point_2d<double >& p, \
-                           const vgl_vector_2d<double >& u, \
-                           const vgl_vector_2d<double >& v, \
-                           int nu, int nv); \
+                                         const mil_image_2d_of<imType >& image, \
+                                         const vgl_point_2d<double >& p, \
+                                         const vgl_vector_2d<double >& u, \
+                                         const vgl_vector_2d<double >& v, \
+                                         int nu, int nv); \
 template void mil_sample_grid_2d_ic_no_checks(vnl_vector<vecType >& vec, \
-                           const mil_image_2d_of<imType >& image, \
-                           const vgl_point_2d<double >& p0, \
-                           const vgl_vector_2d<double >& u, \
-                           const vgl_vector_2d<double >& v, \
-                           int nu, int nv)
+                                              const mil_image_2d_of<imType >& image, \
+                                              const vgl_point_2d<double >& p0, \
+                                              const vgl_vector_2d<double >& u, \
+                                              const vgl_vector_2d<double >& v, \
+                                              int nu, int nv)
 
 #endif // mil_sample_grid_2d_txx_
