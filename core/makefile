@@ -5,10 +5,7 @@ include ${IUEROOT}/config/top-params.mk
 # POSIX layer
 SUBDIRS += vpl
 
-# templates
-SUBDIRS += vtl
-
-# "basics"
+# "basics" (templates)
 SUBDIRS += vbl
 
 # numerics
@@ -19,6 +16,9 @@ SUBDIRS += vgl
 
 # image
 SUBDIRS += vil
+
+# utilities
+SUBDIRS += vul
 
 # video
 SUBDIRS += vidl
