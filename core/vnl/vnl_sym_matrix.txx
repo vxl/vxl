@@ -9,7 +9,7 @@
 
 
 // ==========================================================================
-//: Replaces the symetric submatrix of THIS matrix, starting at top left corner, by the elements of matrix m.
+//: Replaces the symmetric submatrix of THIS matrix, starting at top left corner, by the elements of matrix m.
 // O(m*m).
 template<class T>
 vnl_sym_matrix<T>& vnl_sym_matrix<T>::update (vnl_sym_matrix<T> const& m,
@@ -80,7 +80,7 @@ vcl_ostream& operator<< (vcl_ostream& s, const vnl_sym_matrix<T>& M)
   for (unsigned i=0; i<M.rows(); ++i)
   {
     for (unsigned j=0; j<=i; ++j)
-      s << M.fast(i,j) << " ";
+      s << M.fast(i,j) << ' ';
     s  << '\n';
   }
   return s;
