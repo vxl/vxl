@@ -136,9 +136,10 @@ bool vil3d_memory_image::put_view(const vil3d_image_view_base& im,
         static_cast<const vil3d_image_view< T > &>(im); \
       if (v.memory_chunk() == w.memory_chunk()) \
       { \
-        if (&v(i0,j0,k0) != w.origin_ptr()) \
-          assert("ERROR: vil3d_memory_image::put_view()\n" \
-                 "different window from that used in get_view()"); \
+        if (&v(i0,j0,k0) != w.origin_ptr()) { \
+          vcl_cerr << "ERROR: vil_memory_image::put_view()\n" \
+            "different window from that used in get_view()" << vcl_endl; \
+          vcl_abort(); } \
         else return true; /* The user has already modified the data in place. */ \
       } \
       vil3d_copy_to_window(w, v, i0, j0, k0); \

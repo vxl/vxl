@@ -145,7 +145,6 @@ macro(VIL_PIXEL_FORMAT_COMPLEX_DOUBLE , vcl_complex<double>)
 
 
 //: Put the data in this view back into the image source.
-// Currently not yet implemented.
 // \return true on success.
 bool vil_memory_image::put_view(const vil_image_view_base& im,unsigned i0, unsigned j0)
 {
@@ -162,9 +161,10 @@ bool vil_memory_image::put_view(const vil_image_view_base& im,unsigned i0, unsig
         static_cast<const vil_image_view< T > &>(im); \
       if (v.memory_chunk() == w.memory_chunk()) \
       { \
-        if (&v(i0,j0) != w.top_left_ptr()) \
-          assert("ERROR: vil_memory_image::put_view()\n" \
-                 "different window from that used in get_view()"); \
+        if (&v(i0,j0) != w.top_left_ptr()) { \
+          vcl_cerr << "ERROR: vil_memory_image::put_view()\n" \
+            "different window from that used in get_view()" << vcl_endl; \
+          vcl_abort(); } \
         else return true; /* The user has already modified the data in place. */ \
       } \
       vil_copy_to_window(w, v, i0, j0); \
