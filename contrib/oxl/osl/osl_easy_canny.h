@@ -9,7 +9,7 @@
 // \author fsm@robots.ox.ac.uk
 
 #include <vcl_list.h>
-class osl_edge;
+struct osl_edge;
 class vil_image;
 
 // 0: oxford

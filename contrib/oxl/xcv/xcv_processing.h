@@ -18,7 +18,7 @@ class vgui_menu;
 class osl_harris_params;
 class osl_canny_ox_params;
 class vgui_easy2D;
-class osl_edge;
+struct osl_edge;
 
 class xcv_processing
 {

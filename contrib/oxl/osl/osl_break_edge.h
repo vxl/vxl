@@ -8,7 +8,7 @@
 // .FILE osl_break_edge.cxx
 // \author fsm@robots.ox.ac.uk
 
-class osl_edge;
+struct osl_edge;
 #include <vcl_list.h>
 #include <vcl_vector.h>
 
