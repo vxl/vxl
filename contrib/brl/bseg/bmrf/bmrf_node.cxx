@@ -233,7 +233,7 @@ bmrf_node::prune_directed()
         }
       if(!found){
         arc_iterator next_itr = o_itr;
-        ++next_itr;
+        ++next_itr; 
         remove_helper(o_itr, neighbor_type(t));
         o_itr = next_itr;
       }
@@ -363,6 +363,8 @@ bmrf_node::remove_helper( arc_iterator& a_itr, neighbor_type type)
   // a pointer to this arc
   arc->to_ = NULL;
   arc->from_ = NULL;
+
+  this->probability_ = 0.0;
 
   return true;
 }
