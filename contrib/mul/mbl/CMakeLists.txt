@@ -30,6 +30,8 @@ SET(mbl_sources
  mbl_data_wrapper.txx              mbl_data_wrapper.h
  mbl_stochastic_data_collector.txx mbl_stochastic_data_collector.h
  mbl_data_wrapper_mixer.txx        mbl_data_wrapper_mixer.h
+ mbl_file_data_collector.txx       mbl_file_data_collector.h
+ mbl_file_data_wrapper.txx         mbl_file_data_wrapper.h
 
  mbl_chord.h
  mbl_cloneable_ptr.h
