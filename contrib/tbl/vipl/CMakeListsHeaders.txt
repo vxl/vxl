@@ -22,7 +22,6 @@ SOURCE_FILES(vipl_sources
   filter/vipl_filter_abs.h
   filter/vipl_filter_helper.h
   filter/vipl_trivial_pixeliter.h
-  section/vipl_filterable_section_container_generator_vcl_vector.h
   section/vipl_section_container.h
   section/vipl_section_descriptor.h
   section/vipl_section_descriptor_2d.h

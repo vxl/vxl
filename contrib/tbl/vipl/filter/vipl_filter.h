@@ -251,9 +251,8 @@ class vipl_filter          : public vipl_filter_abs {
   // second form passing pointers...
   bool process(ImgIn const* inimg, ImgOut* outimg);
 
-  //:
-  // What is the ``start coordinate for the current apply
-  // section. This always leaves a border around the
+  //: The ``start'' coordinate for the current apply section.
+  // This always leaves a border around the
   // section. (E.g. if there is no ROA this is actual section start
   // + image_boarder_size; remember section iteration overlaps). If
   // the current section is outside the ROA, the section_start and
@@ -261,15 +260,47 @@ class vipl_filter          : public vipl_filter_abs {
   int start(int axis) const;
   int start(int axis, int other_axis_value) const;
 
-  //:
-  // What is the ``stopping'' coordinate for the current apply
-  // section This always leaves a border around the
+  //: The ``stopping'' coordinate for the current apply section.
+  // This always leaves a border around the
   // section. (E.g. if there is no ROA this is actual section end -
   // image_boarder_size; remember section iteration overlaps). If
   // the current section is outside the ROA, the section_start and
   // section_end may be equal.
   int stop(int axis) const;
   int stop(int axis, int other_axis_value) const;
+
+  //: The ``start'' coordinate for the current source apply section.
+  // This always leaves a border around the
+  // section. (E.g. if there is no ROA this is actual section start
+  // + image_boarder_size; remember section iteration overlaps). If
+  // the current section is outside the ROA, the section_start and
+  // section_end may be equal.
+  int start_src(int axis) const;
+
+  //: The ``stopping'' coordinate for the current source apply section.
+  // This always leaves a border around the
+  // section. (E.g. if there is no ROA this is actual section end -
+  // image_boarder_size; remember section iteration overlaps). If
+  // the current section is outside the ROA, the section_start and
+  // section_end may be equal.
+  int stop_src(int axis) const;
+
+  //: The ``start'' coordinate for the current destination apply section.
+  // This always leaves a border around the
+  // section. (E.g. if there is no ROA this is actual section start
+  // + image_boarder_size; remember section iteration overlaps). If
+  // the current section is outside the ROA, the section_start and
+  // section_end may be equal.
+  int start_dst(int axis) const;
+
+  //: The ``stopping'' coordinate for the current destination apply section.
+  // This always leaves a border around the
+  // section. (E.g. if there is no ROA this is actual section end -
+  // image_boarder_size; remember section iteration overlaps). If
+  // the current section is outside the ROA, the section_start and
+  // section_end may be equal.
+  int stop_dst(int axis) const;
+
 
   //:
   // Put the given pointer into an input "image" at the provided

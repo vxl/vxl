@@ -15,11 +15,11 @@ vipl_filterable_section_container_generator(const vcl_vector<DataType>& vec, Dat
 {
   vipl_section_container<DataType> *rtn = new vipl_section_container<DataType>((vipl_section_container<DataType>*)0);
   rtn->put_imgptr((const void*) &vec);
-  rtn->ref_imgsz()[0] = 1;
-  rtn->ref_imgsz()[1] = vec.size();
+  rtn->ref_imgsz()[0] = vec.size();
+  rtn->ref_imgsz()[1] = 1;
 
-  rtn->ref_secsz()[0] = 1;
-  rtn->ref_secsz()[1] = vec.size();
+  rtn->ref_secsz()[0] = vec.size();
+  rtn->ref_secsz()[1] = 1;
 
   return rtn;
 }

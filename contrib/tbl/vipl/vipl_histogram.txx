@@ -7,9 +7,9 @@
 template <class ImgIn,class ImgOut,class DataIn,class DataOut,class PixelItr>
 bool vipl_histogram <ImgIn,ImgOut,DataIn,DataOut,PixelItr> :: section_applyop(){
   const ImgIn &in = in_data(0);
-  DataIn dummy = DataIn(); // dummy initialization to avoid compiler warning
+  const DataIn dummy = DataIn(); // dummy initialization to avoid compiler warning
   ImgOut &out = *out_data_ptr();
-  int index = indexout();
+  const int index = indexout();
 //if (index < 0) index = 0;
   if (checkrange() == 1)  { // check range is slow, we always keep the divide...
     for (int j = start(Y_Axis()), ej = stop(Y_Axis()) ; j < ej ; ++j)
@@ -48,19 +48,11 @@ bool vipl_histogram <ImgIn,ImgOut,DataIn,DataOut,PixelItr> :: section_applyop(){
 
 template <class ImgIn,class ImgOut,class DataIn,class DataOut,class PixelItr>
 bool vipl_histogram <ImgIn,ImgOut,DataIn,DataOut,PixelItr> :: section_preop(){
-#if 0 // should not zero the output here - that is up to the user
-  vcl_fill(out_data_ptr()->begin(), out_data_ptr()->end(), DataOut());
-  const ImgIn &in = in_data(0);
-  DataIn dummy = DataIn(); // dummy initialization to avoid compiler warning
+  const int index = indexout();
   ImgOut &out = *out_data_ptr();
-  int index = indexout();
-//if (index < 0) index = 0;
-
-  for (int i = start(X_Axis(),0), ei = stop(X_Axis(),0) ; i < ei ; ++i)
-  {
-    setpixel(out, bin, index, 0);
-  }
-#endif
+  for (int i = start_dst(X_Axis()),
+    ei = stop_dst(X_Axis()); i < ei; ++i)
+    setpixel(out, i, index, DataOut());
   return true;
 }
 

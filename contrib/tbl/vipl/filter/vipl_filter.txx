@@ -304,45 +304,71 @@ template < class ImgIn, class ImgOut, class DataIn, class DataOut, int Arity, cl
   int vipl_filter< ImgIn, ImgOut, DataIn, DataOut, Arity, PixelItr >
                      ::start(int axis) const
 {
-  if (is_input_driven()){
-    if (insecp()){ // ok have a valid section
-      int ibs = image_border_size();
-      int end = insecp()->curr_sec_end(axis);
-      int st = insecp()->curr_sec_start(axis);
-      if (st > end){ // swap hack in case people get it wrong....
-        int temp = end; end = st; st = temp;
-      }
-      st += ibs;
-      end -= ibs;
-      if (inROA())
-        st =vcl_min(end,vcl_max(st,inROA()->curr_sec_start(axis)+ibs));
-#ifdef DEBUG
-      vcl_cerr << "i_ [" << axis << "] st=" << st << " ibs=" << ibs << vcl_endl;
-#endif
-      return st;
+  if (is_input_driven()) return start_src(axis);
+  else  return start_dst(axis);
+}
+
+// What is the ``start'' coordinate for the current source apply section. This always
+// leaves a border around the section. (E.g. if there is no ROA this is
+// actual section start + image_boarder_size; remember section iteration
+// overlaps). If the current section is outside the ROA, the section_start
+// and section_end may be equal.
+template < class ImgIn, class ImgOut, class DataIn, class DataOut, int Arity, class PixelItr>
+  int vipl_filter< ImgIn, ImgOut, DataIn, DataOut, Arity, PixelItr >
+                     ::start_src(int axis) const
+{
+  if (insecp()){ // ok have a valid section
+    int ibs = image_border_size();
+    int end = insecp()->curr_sec_end(axis);
+    int st = insecp()->curr_sec_start(axis);
+    if (st > end){ // swap hack in case people get it wrong....
+      int temp = end; end = st; st = temp;
     }
-  }
-  else {
-    // should we consider secp or insecp????
-    if (secp()){ // ok have a valid section
-      int ibs = image_border_size();
-      int end = secp()->curr_sec_end(axis);
-      int st = secp()->curr_sec_start(axis);
-      if (st > end){ // swap hack in case people get it wrong....
-        int temp = end; end = st; st = temp;
-      }
-      st += ibs;
-      end -= ibs;
-      if (ROA())
-        st = vcl_min(end,vcl_max(st,ROA()->curr_sec_start(axis)+ibs));
+    st += ibs;
+    end -= ibs;
+    if (inROA())
+      st =vcl_min(end,vcl_max(st,inROA()->curr_sec_start(axis)+ibs));
 #ifdef DEBUG
-      vcl_cerr << "o_ [" << axis << "] st=" << st << " ibs=" << ibs << vcl_endl;
+    vcl_cerr << "i_ [" << axis << "] st=" << st << " ibs=" << ibs << vcl_endl;
 #endif
-      return st;
-    }
+    return st;
   }
+
   // error if reaching this point:
-  vcl_cerr << "Warning: called start but no valid sections defined. Returning 0\n";
+  vcl_cerr << "Warning: called start_src but no valid sections defined. Returning 0\n";
+  return 0;
+}  
+    
+    
+// What is the ``start'' coordinate for the current destination apply section. This always
+// leaves a border around the section. (E.g. if there is no ROA this is
+// actual section start + image_boarder_size; remember section iteration
+// overlaps). If the current section is outside the ROA, the section_start
+// and section_end may be equal.
+template < class ImgIn, class ImgOut, class DataIn, class DataOut, int Arity, class PixelItr>
+  int vipl_filter< ImgIn, ImgOut, DataIn, DataOut, Arity, PixelItr >
+                     ::start_dst(int axis) const
+{
+  // should we consider secp or insecp????
+  if (secp()){ // ok have a valid section
+    int ibs = image_border_size();
+    int end = secp()->curr_sec_end(axis);
+    int st = secp()->curr_sec_start(axis);
+    if (st > end){ // swap hack in case people get it wrong....
+      int temp = end; end = st; st = temp;
+    }
+    st += ibs;
+    end -= ibs;
+    if (ROA())
+      st = vcl_min(end,vcl_max(st,ROA()->curr_sec_start(axis)+ibs));
+#ifdef DEBUG
+    vcl_cerr << "o_ [" << axis << "] st=" << st << " ibs=" << ibs << vcl_endl;
+#endif
+    return st;
+  }
+
+  // error if reaching this point:
+  vcl_cerr << "Warning: called start_dst but no valid sections defined. Returning 0\n";
   return 0;
 }
 
@@ -360,39 +386,66 @@ template < class ImgIn, class ImgOut, class DataIn, class DataOut, int Arity, cl
   int vipl_filter< ImgIn, ImgOut, DataIn, DataOut, Arity, PixelItr >
                      ::stop(int axis) const
 {
-  if (is_input_driven()){
-    if (insecp()){ // ok have a valid section
-      int ibs = image_border_size();
-      int end = insecp()->curr_sec_end(axis);
-      int st = insecp()->curr_sec_start(axis);
-      if (st > end){ // swap hack in case people get it wrong....
-        int temp = end; end = st; st = temp;
-      }
-      end -= ibs;
-#ifdef DEBUG
-      vcl_cerr << "_i [" << axis << "] end=" << end << " ibs=" << ibs << vcl_endl;
-#endif
-      return end;
+  if (is_input_driven()) return stop_src(axis);
+  else  return stop_dst(axis);
+}
+
+    
+// What is the ``stopping'' coordinate for the current apply section This
+// always leaves a border around the section. (E.g. if there is no ROA this
+// is actual section end - image_boarder_size; remember section iteration
+// overlaps). If the current section is outside the ROA, the section_start
+// and section_end may be equal.
+template < class ImgIn, class ImgOut, class DataIn, class DataOut, int Arity, class PixelItr>
+  int vipl_filter< ImgIn, ImgOut, DataIn, DataOut, Arity, PixelItr >
+                     ::stop_src(int axis) const
+{
+  if (insecp()){ // ok have a valid section
+    int ibs = image_border_size();
+    int end = insecp()->curr_sec_end(axis);
+    int st = insecp()->curr_sec_start(axis);
+    if (st > end){ // swap hack in case people get it wrong....
+      int temp = end; end = st; st = temp;
     }
-  }
-  else {
-    // should we consider secp or insecp????
-    if (secp()){ // ok have a valid section
-      int ibs = image_border_size();
-      int end = secp()->curr_sec_end(axis);
-      int st = secp()->curr_sec_start(axis);
-      if (st > end){ // swap hack in case people get it wrong....
-        int temp = end; end = st; st = temp;
-      }
-      end -= ibs;
+    end -= ibs;
 #ifdef DEBUG
-      vcl_cerr << "_o [" << axis << "] end=" << end << " ibs=" << ibs << vcl_endl;
+    vcl_cerr << "_i [" << axis << "] end=" << end << " ibs=" << ibs << vcl_endl;
 #endif
-      return end;
-    }
+    return end;
   }
+
   // error if reaching this point:
-  vcl_cerr << "Warning: called stop but no valid sections defined. Returning 0\n";
+  vcl_cerr << "Warning: called stop_src but no valid sections defined. Returning 0\n";
+  return 0;
+}
+
+  
+// What is the ``stopping'' coordinate for the current apply section This
+// always leaves a border around the section. (E.g. if there is no ROA this
+// is actual section end - image_boarder_size; remember section iteration
+// overlaps). If the current section is outside the ROA, the section_start
+// and section_end may be equal.
+template < class ImgIn, class ImgOut, class DataIn, class DataOut, int Arity, class PixelItr>
+  int vipl_filter< ImgIn, ImgOut, DataIn, DataOut, Arity, PixelItr >
+                     ::stop_dst(int axis) const
+{
+  // should we consider secp or insecp????
+  if (secp()){ // ok have a valid section
+    int ibs = image_border_size();
+    int end = secp()->curr_sec_end(axis);
+    int st = secp()->curr_sec_start(axis);
+    if (st > end){ // swap hack in case people get it wrong....
+      int temp = end; end = st; st = temp;
+    }
+    end -= ibs;
+#ifdef DEBUG
+    vcl_cerr << "_o [" << axis << "] end=" << end << " ibs=" << ibs << vcl_endl;
+#endif
+    return end;
+  }
+
+  // error if reaching this point:
+  vcl_cerr << "Warning: called stop_dst but no valid sections defined. Returning 0\n";
   return 0;
 }
 
