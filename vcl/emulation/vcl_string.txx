@@ -70,9 +70,9 @@ realloc(int new_capacity)
     traits::copy(tmp, this->data_, this->strlen_ + 1);
 
     // assert basically that strlen < current_size_
-    assert(this->strlen_ < (size_t) new_capacity); // need space for null terminator.
+    assert(this->strlen_ < (vcl_size_t) new_capacity); // need space for null terminator.
 
-    while (this->current_size_ <= (size_t) new_capacity)
+    while (this->current_size_ <= (vcl_size_t) new_capacity)
       this->current_size_ = this->current_size_ * 2;
     this->current_size_ = ((unsigned)this->current_size_ + 15U) & ~15U; // round up to 16
 
@@ -90,10 +90,10 @@ realloc(int new_capacity)
 //: Replace this[pos1..pos1+n1) with str[pos2..pos2+n2).
 template <class charT, class traits>
 vcl_basic_string <charT, traits>& vcl_basic_string <charT, traits>::
-replace (size_t pos1, size_t n1,
-         const vcl_basic_string& str, size_t pos2, size_t n2)
+replace (vcl_size_t pos1, vcl_size_t n1,
+         const vcl_basic_string& str, vcl_size_t pos2, vcl_size_t n2)
 {
-  const size_t len2 = str.length ();
+  const vcl_size_t len2 = str.length ();
 
   if (pos1 == 0 && n1 >= length () && pos2 == 0 && n2 >= len2)
     return operator= (str);
@@ -109,14 +109,14 @@ replace (size_t pos1, size_t n1,
 //: Replace this[pos..pos+n1) with str[0..n2).
 template <class charT, class traits>
 vcl_basic_string <charT, traits>& vcl_basic_string <charT, traits>::
-replace (size_t pos, size_t n1, const charT* s, size_t n2)
+replace (vcl_size_t pos, vcl_size_t n1, const charT* s, vcl_size_t n2)
 {
-  const size_t len = length ();
+  const vcl_size_t len = length ();
   OUTOFRANGE (pos > len);
   if (n1 > len - pos)
     n1 = len - pos;
   LENGTHERROR (len - n1 > max_size () - n2);
-  size_t newlen = len - n1 + n2;
+  vcl_size_t newlen = len - n1 + n2;
 
   realloc (newlen + 1);
   int p = len - (pos + n1);
@@ -133,14 +133,14 @@ replace (size_t pos, size_t n1, const charT* s, size_t n2)
 
 template <class charT, class traits>
 vcl_basic_string <charT, traits>& vcl_basic_string <charT, traits>::
-replace (size_t pos, size_t n1, size_t n2, charT c)
+replace (vcl_size_t pos, vcl_size_t n1, vcl_size_t n2, charT c)
 {
-  const size_t len = length ();
+  const vcl_size_t len = length ();
   OUTOFRANGE (pos > len);
   if (n1 > len - pos)
     n1 = len - pos;
   LENGTHERROR (len - n1 > max_size () - n2);
-  size_t newlen = len - n1 + n2;
+  vcl_size_t newlen = len - n1 + n2;
 
   realloc (newlen + 1);
   int p = len - (pos + n1);
@@ -159,7 +159,7 @@ replace (size_t pos, size_t n1, size_t n2, charT c)
 
 template <class charT, class traits>
 void vcl_basic_string <charT, traits>::
-resize (size_t n, charT c)
+resize (vcl_size_t n, charT c)
 {
   LENGTHERROR (n > max_size ());
 
@@ -170,8 +170,8 @@ resize (size_t n, charT c)
 }
 
 template <class charT, class traits>
-size_t vcl_basic_string <charT, traits>::
-copy (charT* s, size_t n, size_t pos)
+vcl_size_t vcl_basic_string <charT, traits>::
+copy (charT* s, vcl_size_t n, vcl_size_t pos)
 {
   OUTOFRANGE (pos > length ());
 
@@ -183,10 +183,10 @@ copy (charT* s, size_t n, size_t pos)
 }
 
 template <class charT, class traits>
-size_t vcl_basic_string <charT, traits>::
-find (const charT* s, size_t pos, size_t n) const
+vcl_size_t vcl_basic_string <charT, traits>::
+find (const charT* s, vcl_size_t pos, vcl_size_t n) const
 {
-  size_t xpos = pos;
+  vcl_size_t xpos = pos;
   for (; xpos + n <= length (); ++xpos)
     if (traits::eq (data () [xpos], *s)
         && traits::compare (data () + xpos, s, n) == 0)
@@ -195,8 +195,8 @@ find (const charT* s, size_t pos, size_t n) const
 }
 
 template <class charT, class traits>
-inline size_t vcl_basic_string <charT, traits>::
-_find (const charT* ptr, charT c, size_t xpos, size_t len)
+inline vcl_size_t vcl_basic_string <charT, traits>::
+_find (const charT* ptr, charT c, vcl_size_t xpos, vcl_size_t len)
 {
   for (; xpos < len; ++xpos)
     if (traits::eq (ptr [xpos], c))
@@ -205,20 +205,20 @@ _find (const charT* ptr, charT c, size_t xpos, size_t len)
 }
 
 template <class charT, class traits>
-size_t vcl_basic_string <charT, traits>::
-find (charT c, size_t pos) const
+vcl_size_t vcl_basic_string <charT, traits>::
+find (charT c, vcl_size_t pos) const
 {
   return _find (data (), c, pos, length ());
 }
 
 template <class charT, class traits>
-size_t vcl_basic_string <charT, traits>::
-rfind (const charT* s, size_t pos, size_t n) const
+vcl_size_t vcl_basic_string <charT, traits>::
+rfind (const charT* s, vcl_size_t pos, vcl_size_t n) const
 {
   if (n > length ())
     return npos;
 
-  size_t xpos = length () - n;
+  vcl_size_t xpos = length () - n;
   if (xpos > pos)
     xpos = pos;
 
@@ -230,13 +230,13 @@ rfind (const charT* s, size_t pos, size_t n) const
 }
 
 template <class charT, class traits>
-size_t vcl_basic_string <charT, traits>::
-rfind (charT c, size_t pos) const
+vcl_size_t vcl_basic_string <charT, traits>::
+rfind (charT c, vcl_size_t pos) const
 {
   if (1 > length ())
     return npos;
 
-  size_t xpos = length () - 1;
+  vcl_size_t xpos = length () - 1;
   if (xpos > pos)
     xpos = pos;
 
@@ -247,10 +247,10 @@ rfind (charT c, size_t pos) const
 }
 
 template <class charT, class traits>
-size_t vcl_basic_string <charT, traits>::
-find_first_of (const charT* s, size_t pos, size_t n) const
+vcl_size_t vcl_basic_string <charT, traits>::
+find_first_of (const charT* s, vcl_size_t pos, vcl_size_t n) const
 {
-  size_t xpos = pos;
+  vcl_size_t xpos = pos;
   for (; xpos < length (); ++xpos)
     if (_find (s, data () [xpos], 0, n) != npos)
       return xpos;
@@ -258,10 +258,10 @@ find_first_of (const charT* s, size_t pos, size_t n) const
 }
 
 template <class charT, class traits>
-size_t vcl_basic_string <charT, traits>::
-find_last_of (const charT* s, size_t pos, size_t n) const
+vcl_size_t vcl_basic_string <charT, traits>::
+find_last_of (const charT* s, vcl_size_t pos, vcl_size_t n) const
 {
-  size_t xpos = length ();
+  vcl_size_t xpos = length ();
   for (; xpos-- > pos; )
     if (_find (s, data () [xpos], 0, n) != npos)
       return xpos;
@@ -269,10 +269,10 @@ find_last_of (const charT* s, size_t pos, size_t n) const
 }
 
 template <class charT, class traits>
-size_t vcl_basic_string <charT, traits>::
-find_first_not_of (const charT* s, size_t pos, size_t n) const
+vcl_size_t vcl_basic_string <charT, traits>::
+find_first_not_of (const charT* s, vcl_size_t pos, vcl_size_t n) const
 {
-  size_t xpos = pos;
+  vcl_size_t xpos = pos;
   for (; xpos < length (); ++xpos)
     if (_find (s, data () [xpos], 0, n) == npos)
       return xpos;
@@ -280,10 +280,10 @@ find_first_not_of (const charT* s, size_t pos, size_t n) const
 }
 
 template <class charT, class traits>
-size_t vcl_basic_string <charT, traits>::
-find_first_not_of (charT c, size_t pos) const
+vcl_size_t vcl_basic_string <charT, traits>::
+find_first_not_of (charT c, vcl_size_t pos) const
 {
-  size_t xpos = pos;
+  vcl_size_t xpos = pos;
   for (; xpos < length (); ++xpos)
     if (traits::ne (data () [xpos], c))
       return xpos;
@@ -291,10 +291,10 @@ find_first_not_of (charT c, size_t pos) const
 }
 
 template <class charT, class traits>
-size_t vcl_basic_string <charT, traits>::
-find_last_not_of (const charT* s, size_t pos, size_t n) const
+vcl_size_t vcl_basic_string <charT, traits>::
+find_last_not_of (const charT* s, vcl_size_t pos, vcl_size_t n) const
 {
-  size_t xpos = length ();
+  vcl_size_t xpos = length ();
   for (; xpos-- > pos; )
     if (_find (s, data () [xpos], 0, n) == npos)
       return xpos;
@@ -302,10 +302,10 @@ find_last_not_of (const charT* s, size_t pos, size_t n) const
 }
 
 template <class charT, class traits>
-size_t vcl_basic_string <charT, traits>::
-find_last_not_of (charT c, size_t pos) const
+vcl_size_t vcl_basic_string <charT, traits>::
+find_last_not_of (charT c, vcl_size_t pos) const
 {
-  size_t xpos = length ();
+  vcl_size_t xpos = length ();
   for (; xpos-- > pos; )
     if (traits::ne (data () [xpos], c))
       return xpos;
@@ -314,11 +314,11 @@ find_last_not_of (charT c, size_t pos) const
 
 template <class charT, class traits>
 int vcl_basic_string <charT, traits>::
-compare (const vcl_basic_string& str, size_t pos, size_t n) const
+compare (const vcl_basic_string& str, vcl_size_t pos, vcl_size_t n) const
 {
   OUTOFRANGE (pos > length ());
 
-  size_t rlen = length () - pos;
+  vcl_size_t rlen = length () - pos;
   if (rlen > n)
     rlen = n;
   if (rlen > str.length ())
@@ -333,11 +333,11 @@ compare (const vcl_basic_string& str, size_t pos, size_t n) const
 
 template <class charT, class traits>
 int vcl_basic_string <charT, traits>::
-compare (const charT* s, size_t pos, size_t n) const
+compare (const charT* s, vcl_size_t pos, vcl_size_t n) const
 {
   OUTOFRANGE (pos > length ());
 
-  size_t rlen = length () - pos;
+  vcl_size_t rlen = length () - pos;
   if (rlen > n)
     rlen = n;
   int r = traits::compare (data () + pos, s, rlen);
@@ -349,8 +349,8 @@ compare (const charT* s, size_t pos, size_t n) const
 #include <vcl_iostream.h>
 
 template <class charT, class traits>
-istream &
-operator>> (istream &is, vcl_basic_string <charT, traits> &s)
+vcl_istream &
+operator>> (vcl_istream &is, vcl_basic_string <charT, traits> &s)
 {
   int w = is.width (0);
 #ifdef __GNUG__
@@ -382,7 +382,7 @@ operator>> (istream &is, vcl_basic_string <charT, traits> &s)
         }
     }
 #if __SUNPRO_CC >= 0x500
-  std::istream::sentry sen(is); // this is how you call isfx in ansi c++
+  vcl_istream::sentry sen(is); // this is how you call isfx in ansi c++
 #else
   is.isfx ();
 #endif
@@ -395,8 +395,8 @@ operator>> (istream &is, vcl_basic_string <charT, traits> &s)
 }
 
 template <class charT, class traits>
-istream&
-getline (istream &is, vcl_basic_string <charT, traits>& s, charT delim)
+vcl_istream&
+getline (vcl_istream &is, vcl_basic_string <charT, traits>& s, charT delim)
 {
   if (is.ipfx1 ())
     {
@@ -444,8 +444,8 @@ getline (istream &is, vcl_basic_string <charT, traits>& s, charT delim)
 #define VCL_BASIC_STRING_INSTANTIATE(charT,traits)\
 typedef vcl_basic_string<charT, traits > charType ; \
 template class vcl_basic_string<charT, traits >;\
-VCL_INSTANTIATE_INLINE(ostream& operator<<(ostream &, charType const& s)) \
-template istream & operator>> (istream &i, charType & s); \
+VCL_INSTANTIATE_INLINE(vcl_ostream& operator<<(vcl_ostream &, charType const& s)) \
+template vcl_istream & operator>> (vcl_istream &i, charType & s); \
 VCL_INSTANTIATE_INLINE(charType operator+(charType const &, charType const &))\
 VCL_INSTANTIATE_INLINE(charType operator+(charType const &, charT const *))\
 VCL_INSTANTIATE_INLINE(charType operator+(charType const &, charT))\
@@ -454,7 +454,7 @@ VCL_INSTANTIATE_INLINE(bool operator==(charType const &, charType const &))\
 VCL_INSTANTIATE_INLINE(bool operator==(charType const &, charT const *))\
 VCL_INSTANTIATE_INLINE(bool operator!=(charType const &, charT const *))\
 VCL_INSTANTIATE_INLINE(bool operator!=(charType const &, charType const &))\
-VCL_INSTANTIATE_INLINE(bool operator<(charType const &, charType const &));
+VCL_INSTANTIATE_INLINE(bool operator<(charType const &, charType const &))
 // End macro
 
 #endif

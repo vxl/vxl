@@ -8,7 +8,7 @@
 // We only want the instances to see this
 #ifdef VCL_SUNPRO_CC
 template <class charT, class traits>
-const size_t basic_string <charT, traits>::npos = (size_t)(-1);
+const vcl_size_t basic_string <charT, traits>::npos = (vcl_size_t)(-1);
 #endif
 
 //template class vcl_basic_string<char, vcl_char_traits<char> >;

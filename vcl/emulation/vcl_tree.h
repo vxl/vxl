@@ -129,7 +129,7 @@ struct __rb_tree_node : public __rb_tree_node_base
 struct __rb_tree_base_iterator
 {
   typedef __rb_tree_node_base::base_ptr base_ptr;
-  typedef ptrdiff_t distance_type;
+  typedef vcl_ptrdiff_t distance_type;
   base_ptr node;
   void increment()
   {
@@ -500,8 +500,8 @@ public:
     typedef const value_type* const_pointer;
     typedef value_type& reference;
     typedef const value_type& const_reference;
-    typedef size_t size_type;
-    typedef ptrdiff_t difference_type;
+    typedef vcl_size_t size_type;
+    typedef vcl_ptrdiff_t difference_type;
 protected:
     typedef __rb_tree_node_base* base_ptr;
     typedef __rb_tree_node<Value> rb_tree_node;
@@ -588,78 +588,78 @@ public:
 
 template <class Key, class Value, class KeyOfValue, class Compare, VCL_DFL_TYPE_PARAM_STLDECL(Alloc,vcl_alloc) >
 class rb_tree : public __rb_tree_base<Value,Alloc> {
-    typedef __rb_tree_base<Value,Alloc> super;
-    typedef rb_tree<Key,Value,KeyOfValue,Compare,Alloc> self;
+  typedef __rb_tree_base<Value,Alloc> super;
+  typedef rb_tree<Key,Value,KeyOfValue,Compare,Alloc> self;
 public:
-    __IMPORT_CONTAINER_TYPEDEFS(super)
-    typedef __rb_tree_node_base* base_ptr;
-    typedef __rb_tree_node<Value> rb_tree_node;
-    typedef __rb_tree_color_type color_type;
-    typedef rb_tree_node* link_type;
-    typedef __rb_tree_iterator<value_type> iterator;
-    typedef __rb_tree_const_iterator<value_type> const_iterator;
-    typedef reverse_bidirectional_iterator<iterator, value_type, reference,
-                                           difference_type>
-        reverse_iterator;
-    typedef reverse_bidirectional_iterator<const_iterator, value_type,
-                                           const_reference, difference_type>
-        const_reverse_iterator;
-    typedef Key key_type;
+  __IMPORT_CONTAINER_TYPEDEFS(super)
+  typedef __rb_tree_node_base* base_ptr;
+  typedef __rb_tree_node<Value> rb_tree_node;
+  typedef __rb_tree_color_type color_type;
+  typedef rb_tree_node* link_type;
+  typedef __rb_tree_iterator<value_type> iterator;
+  typedef __rb_tree_const_iterator<value_type> const_iterator;
+  typedef reverse_bidirectional_iterator<iterator, value_type, reference,
+                                         difference_type>
+      reverse_iterator;
+  typedef reverse_bidirectional_iterator<const_iterator, value_type,
+                                         const_reference, difference_type>
+      const_reverse_iterator;
+  typedef Key key_type;
 protected:
-    Compare key_compare;
-    static const Key& key(link_type x) { return KeyOfValue()(value(x)); }
-    static const Key& key(base_ptr x) { return KeyOfValue()(value(link_type(x)));}
+  Compare key_compare;
+  static const Key& key(link_type x) { return KeyOfValue()(value(x)); }
+  static const Key& key(base_ptr x) { return KeyOfValue()(value(link_type(x)));}
 private:
-    IUEi_STL_INLINE iterator __insert(base_ptr x, base_ptr y, const value_type& v);
-    void init() {
-        root() = 0;
-        leftmost() = header;
-        rightmost() = header;
-    }
+  IUEi_STL_INLINE iterator __insert(base_ptr x, base_ptr y, const value_type& v);
+  void init() {
+      root() = 0;
+      leftmost() = header;
+      rightmost() = header;
+  }
 public:
-    // allocation/deallocation
-    rb_tree(): key_compare(Compare())  { init(); }
-    rb_tree(const Compare& comp): key_compare(comp)  { init(); }
-    rb_tree(const self& x)
-      : key_compare(x.key_compare)  {
-        root() = __copy(x.root(), header);
-        if (root() == 0) {
-            leftmost() = header;
-            rightmost() = header;
-        } else {
-            leftmost() = minimum(root());
-            rightmost() = maximum(root());
-        }
-        node_count = x.node_count;
-    }
+  // allocation/deallocation
+  rb_tree(): key_compare(Compare())  { init(); }
+  rb_tree(const Compare& comp): key_compare(comp)  { init(); }
+  rb_tree(const self& x)
+    : key_compare(x.key_compare)  {
+      root() = __copy(x.root(), header);
+      if (root() == 0) {
+          leftmost() = header;
+          rightmost() = header;
+      } else {
+          leftmost() = minimum(root());
+          rightmost() = maximum(root());
+      }
+      node_count = x.node_count;
+  }
 
-    ~rb_tree() { clear();}
-    IUEi_STL_INLINE self& operator=(const self& x);
-
-public:
-    // accessors:
-    iterator make_iterator(link_type l) { return iterator(l); }
-    const_iterator make_const_iterator(link_type l) const { return const_iterator(l); }
-    iterator begin() { return leftmost(); }
-    const_iterator begin() const { return leftmost(); }
-    iterator end() { return header; }
-    const_iterator end() const { return header; }
-    reverse_iterator rbegin() { return reverse_iterator(end()); }
-    const_reverse_iterator rbegin() const { return const_reverse_iterator(end()); }
-    reverse_iterator rend() { return reverse_iterator(begin()); }
-    const_reverse_iterator rend() const { return const_reverse_iterator(begin()); }
-    Compare key_comp() const { return key_compare; }
-
-    void swap(self& t) {
-        __stl_debug_do(iter_list.swap_owners(t.iter_list));
-        vcl_swap(header, t.header);
-        vcl_swap(node_count, t.node_count);
-        vcl_swap(key_compare, t.key_compare);
-    }
+  ~rb_tree() { clear();}
+  IUEi_STL_INLINE self& operator=(const self& x);
 
 public:
-    // insert/erase
-    vcl_pair<iterator,bool> insert_unique(const value_type& v){
+  // accessors:
+  iterator make_iterator(link_type l) { return iterator(l); }
+  const_iterator make_const_iterator(link_type l) const { return const_iterator(l); }
+  iterator begin() { return leftmost(); }
+  const_iterator begin() const { return leftmost(); }
+  iterator end() { return header; }
+  const_iterator end() const { return header; }
+  reverse_iterator rbegin() { return reverse_iterator(end()); }
+  const_reverse_iterator rbegin() const { return const_reverse_iterator(end()); }
+  reverse_iterator rend() { return reverse_iterator(begin()); }
+  const_reverse_iterator rend() const { return const_reverse_iterator(begin()); }
+  Compare key_comp() const { return key_compare; }
+
+  void swap(self& t) {
+      __stl_debug_do(iter_list.swap_owners(t.iter_list));
+      vcl_swap(header, t.header);
+      vcl_swap(node_count, t.node_count);
+      vcl_swap(key_compare, t.key_compare);
+  }
+
+public:
+  // insert/erase
+  vcl_pair<iterator,bool> insert_unique(const value_type& v){
     link_type y = header;
     link_type x = root();
     bool comp = true;
@@ -677,8 +677,9 @@ public:
     if (key_compare(key(j.node), KeyOfValue()(v)))
         return vcl_pair<iterator,bool>(__insert(x, y, v), true);
     return vcl_pair<iterator,bool>(j, false);
-};
-    iterator insert_equal(const value_type& v){
+  }
+
+  iterator insert_equal(const value_type& v){
     link_type y = header;
     link_type x = root();
     while (x != 0) {
@@ -686,9 +687,9 @@ public:
         x = key_compare(KeyOfValue()(v), key(x)) ? left(x) : right(x);
     }
     return __insert(x, y, v);
-};
+  }
 
-    iterator insert_unique(iterator position, const value_type& v){
+  iterator insert_unique(iterator position, const value_type& v){
     __stl_debug_check(__check_if_owner(header,position));
     if (position.node == header->left) // begin()
         if (size() > 0 && key_compare(KeyOfValue()(v), key(position.node)))
@@ -714,7 +715,8 @@ public:
         else
             return insert_unique(v).first;
     }
-};
+  }
+
   iterator insert_equal(iterator position, const value_type& v){
     __stl_debug_check(__check_if_owner(header,position));
     if (position.node == header->left) // begin()
@@ -741,39 +743,37 @@ public:
         else
             return insert_equal(v);
     }
-}
-;
+  }
 
-    void insert_unique(const_iterator first, const_iterator last){  while (first != last) insert_unique(*first++);};
-    void insert_unique(const value_type* first, const value_type* last){  while (first != last) insert_unique(*first++);};
-    void insert_equal(const_iterator first, const_iterator last) {
+  void insert_unique(const_iterator first, const_iterator last){  while (first != last) insert_unique(*first++);};
+  void insert_unique(const value_type* first, const value_type* last){  while (first != last) insert_unique(*first++);};
+  void insert_equal(const_iterator first, const_iterator last) {
     while (first != last) insert_equal(*first++);
-}
-;
-    void insert_equal(const value_type* first, const value_type* last) {
-    while (first != last) insert_equal(*first++);
-}
-;
+  }
 
-    IUEi_STL_INLINE void erase(iterator position);
-    IUEi_STL_INLINE void erase(iterator first, iterator last);
-    IUEi_STL_INLINE size_type erase(const key_type& x);
-    IUEi_STL_INLINE void erase(const key_type* first, const key_type* last);
+  void insert_equal(const value_type* first, const value_type* last) {
+    while (first != last) insert_equal(*first++);
+  }
+
+  IUEi_STL_INLINE void erase(iterator position);
+  IUEi_STL_INLINE void erase(iterator first, iterator last);
+  IUEi_STL_INLINE size_type erase(const key_type& x);
+  IUEi_STL_INLINE void erase(const key_type* first, const key_type* last);
 
 public:
                                 // vcl_set operations:
-    IUEi_STL_INLINE iterator find(const key_type& x);
-    IUEi_STL_INLINE const_iterator find(const key_type& x) const;
-    IUEi_STL_INLINE size_type count(const key_type& x) const;
-    IUEi_STL_INLINE iterator lower_bound(const key_type& x);
-    IUEi_STL_INLINE const_iterator lower_bound(const key_type& x) const;
-    IUEi_STL_INLINE iterator upper_bound(const key_type& x);
-    IUEi_STL_INLINE const_iterator upper_bound(const key_type& x) const;
-    IUEi_STL_INLINE vcl_pair<iterator,iterator> equal_range(const key_type& x);
-    IUEi_STL_INLINE vcl_pair<const_iterator, const_iterator> equal_range(const key_type& x) const;
+  IUEi_STL_INLINE iterator find(const key_type& x);
+  IUEi_STL_INLINE const_iterator find(const key_type& x) const;
+  IUEi_STL_INLINE size_type count(const key_type& x) const;
+  IUEi_STL_INLINE iterator lower_bound(const key_type& x);
+  IUEi_STL_INLINE const_iterator lower_bound(const key_type& x) const;
+  IUEi_STL_INLINE iterator upper_bound(const key_type& x);
+  IUEi_STL_INLINE const_iterator upper_bound(const key_type& x) const;
+  IUEi_STL_INLINE vcl_pair<iterator,iterator> equal_range(const key_type& x);
+  IUEi_STL_INLINE vcl_pair<const_iterator, const_iterator> equal_range(const key_type& x) const;
 public:
                                 // Debugging.
-    IUEi_STL_INLINE bool __rb_verify() const;
+  IUEi_STL_INLINE bool __rb_verify() const;
 };
 
 // fbp: these defines are for outline methods definitions.
@@ -781,7 +781,7 @@ public:
 # if defined  ( __STL_NESTED_TYPE_PARAM_BUG )
 #  define __iterator__        __rb_tree_iterator<Value>
 #  define __const_iterator__  __rb_tree_const_iterator<Value>
-#  define __size_type__       size_t
+#  define __size_type__       vcl_size_t
 #  define __link_type__       __rb_tree_node<Value>*
 #  define __base_ptr__        __rb_tree_node_base*
 #  define __value_type__      Value
@@ -859,8 +859,6 @@ rb_tree<Key, Value, KeyOfValue, Compare, Alloc>::__insert(__base_ptr__ x_,
     ++node_count;
     return make_iterator(z);
 }
-
-
 
 
 template <class Key, class Value, class KeyOfValue, class Compare, class Alloc>

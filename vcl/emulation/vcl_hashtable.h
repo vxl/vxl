@@ -73,7 +73,7 @@
 # define vcl_hashtable_const_iterator   vcl_hTcIt
 # define vcl_hashtable_node             vcl_hTN
 # define vcl_hashtable_base             vcl_hTB
-# define vcl_hashtable                vcl_hT
+# define vcl_hashtable                  vcl_hT
 #endif
 
 #if defined(VCL_EMULATION_STLCONF_H_INCLUDED)
@@ -88,51 +88,51 @@
 
 template <class Key> struct vcl_hash { };
 
-inline size_t VCL_hash_string(const char* s)
+inline vcl_size_t VCL_hash_string(const char* s)
 {
   unsigned long h = 0;
   for ( ; *s; ++s)
     h = 5*h + *s;
 
-  return size_t(h);
+  return vcl_size_t(h);
 }
 
 struct vcl_hash<char*>
 {
-  size_t operator()(const char* s) const { return VCL_hash_string(s); }
+  vcl_size_t operator()(const char* s) const { return VCL_hash_string(s); }
 };
 
 struct vcl_hash<const char*>
 {
-  size_t operator()(const char* s) const { return VCL_hash_string(s); }
+  vcl_size_t operator()(const char* s) const { return VCL_hash_string(s); }
 };
 
 struct vcl_hash<char> {
-  size_t operator()(char x) const { return x; }
+  vcl_size_t operator()(char x) const { return x; }
 };
 struct vcl_hash<unsigned char> {
-  size_t operator()(unsigned char x) const { return x; }
+  vcl_size_t operator()(unsigned char x) const { return x; }
 };
 struct vcl_hash<signed char> {
-  size_t operator()(unsigned char x) const { return x; }
+  vcl_size_t operator()(unsigned char x) const { return x; }
 };
 struct vcl_hash<short> {
-  size_t operator()(short x) const { return x; }
+  vcl_size_t operator()(short x) const { return x; }
 };
 struct vcl_hash<unsigned short> {
-  size_t operator()(unsigned short x) const { return x; }
+  vcl_size_t operator()(unsigned short x) const { return x; }
 };
 struct vcl_hash<int> {
-  size_t operator()(int x) const { return x; }
+  vcl_size_t operator()(int x) const { return x; }
 };
 struct vcl_hash<unsigned int> {
-  size_t operator()(unsigned int x) const { return x; }
+  vcl_size_t operator()(unsigned int x) const { return x; }
 };
 struct vcl_hash<long> {
-  size_t operator()(long x) const { return x; }
+  vcl_size_t operator()(long x) const { return x; }
 };
 struct vcl_hash<unsigned long> {
-  size_t operator()(unsigned long x) const { return x; }
+  vcl_size_t operator()(unsigned long x) const { return x; }
 };
 
 template <class Value>
@@ -159,7 +159,7 @@ struct vcl_hashtable_iterator
   typedef vcl_hashtable_iterator<Value, Key, HashFcn, ExtractKey, EqualKey, Alloc> iterator;
   typedef vcl_hashtable_const_iterator<Value, Key, HashFcn, ExtractKey, EqualKey, Alloc> const_iterator;
   typedef vcl_hashtable_node<Value> node;
-  typedef size_t size_type;
+  typedef vcl_size_t size_type;
   typedef Value& reference;
   typedef const Value& const_reference;
 
@@ -192,7 +192,7 @@ struct vcl_hashtable_const_iterator
   typedef vcl_hashtable_iterator<Value, Key, HashFcn, ExtractKey, EqualKey, Alloc> iterator;
   typedef vcl_hashtable_const_iterator<Value, Key, HashFcn, ExtractKey, EqualKey, Alloc> const_iterator;
   typedef vcl_hashtable_node<Value> node;
-  typedef size_t size_type;
+  typedef vcl_size_t size_type;
   typedef Value& reference;
   typedef const Value& const_reference;
 
@@ -265,7 +265,7 @@ class vcl_hashtable_base
 {
 private:
   typedef Value value_type;
-  typedef size_t size_type;
+  typedef vcl_size_t size_type;
   typedef vcl_hashtable_node<Value> node;
   typedef vcl_simple_alloc<node, Alloc> node_allocator;
 public: // These are public to get around restriction on protected access
@@ -323,8 +323,8 @@ public:
   typedef HashFcn hasher;
   typedef EqualKey key_equal;
 
-  typedef size_t            size_type;
-  typedef ptrdiff_t         difference_type;
+  typedef vcl_size_t        size_type;
+  typedef vcl_ptrdiff_t     difference_type;
   typedef value_type*       pointer;
   typedef const value_type* const_pointer;
   typedef value_type&       reference;
@@ -563,11 +563,11 @@ private:
     return bkt_num_key(get_key(obj));
   }
 
-  size_type bkt_num_key(const key_type& key, size_t n) const {
+  size_type bkt_num_key(const key_type& key, vcl_size_t n) const {
     return hashfun(key) % n;
   }
 
-  size_type bkt_num(const value_type& obj, size_t n) const {
+  size_type bkt_num(const value_type& obj, vcl_size_t n) const {
     return bkt_num_key(get_key(obj), n);
   }
   IUEi_STL_INLINE void erase_bucket(const size_type n, node* first, node* last);
@@ -578,8 +578,8 @@ private:
 // needed to definitions to be portable. Should not be used in method bodies.
 
 # if defined ( __STL_NESTED_TYPE_PARAM_BUG )
-#  define __difference_type__ ptrdiff_t
-#  define __size_type__       size_t
+#  define __difference_type__ vcl_ptrdiff_t
+#  define __size_type__       vcl_size_t
 #  define __value_type__      Value
 #  define __key_type__        Key
 #  define __node__            vcl_hashtable_node<Value>
@@ -656,10 +656,10 @@ value_type(const vcl_hashtable_iterator<Value, Key, HashFcn, ExtractKey, EqualKe
 }
 
 template <class Value, class Key, class HashFcn, class ExtractKey, class EqualKey, class Alloc>
-inline ptrdiff_t*
+inline vcl_ptrdiff_t*
 distance_type(const vcl_hashtable_iterator<Value, Key, HashFcn, ExtractKey, EqualKey, Alloc>&)
 {
-  return (ptrdiff_t*) 0;
+  return (vcl_ptrdiff_t*) 0;
 }
 
 template <class Value, class Key, class HashFcn, class ExtractKey, class EqualKey, class Alloc>
@@ -677,12 +677,11 @@ value_type(const vcl_hashtable_const_iterator<Value, Key, HashFcn, ExtractKey, E
 }
 
 template <class Value, class Key, class HashFcn, class ExtractKey, class EqualKey, class Alloc>
-inline ptrdiff_t*
+inline vcl_ptrdiff_t*
 distance_type(const vcl_hashtable_const_iterator<Value, Key, HashFcn, ExtractKey, EqualKey, Alloc>&)
 {
-  return (ptrdiff_t*) 0;
+  return (vcl_ptrdiff_t*) 0;
 }
-
 
 
 template <class Value, class Key, class HashFcn, class ExtractKey, class EqualKey, class Alloc>
@@ -952,7 +951,7 @@ vcl_hashtable<Value, Key, HashFcn, ExtractKey, EqualKey, Alloc>::resize(__size_t
 
 template <class Value, class Key, class HashFcn, class ExtractKey, class EqualKey, class Alloc>
 void
-vcl_hashtable<Value, Key, HashFcn, ExtractKey, EqualKey, Alloc>::erase_bucket(const size_t n,
+vcl_hashtable<Value, Key, HashFcn, ExtractKey, EqualKey, Alloc>::erase_bucket(const vcl_size_t n,
                                              vcl_hashtable_node<Value>* first,
                                              vcl_hashtable_node<Value>* last)
 {
@@ -974,7 +973,7 @@ vcl_hashtable<Value, Key, HashFcn, ExtractKey, EqualKey, Alloc>::erase_bucket(co
 
 template <class Value, class Key, class HashFcn, class ExtractKey, class EqualKey, class Alloc>
 void
-vcl_hashtable<Value, Key, HashFcn, ExtractKey, EqualKey, Alloc>::erase_bucket(const size_t n,
+vcl_hashtable<Value, Key, HashFcn, ExtractKey, EqualKey, Alloc>::erase_bucket(const vcl_size_t n,
                                                             vcl_hashtable_node<Value>* last)
 {
   node* cur = buckets[n];

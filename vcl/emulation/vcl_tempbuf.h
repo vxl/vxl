@@ -55,18 +55,18 @@
 #include "vcl_pair.h"
 
 template <class T>
-vcl_pair<T*, ptrdiff_t> get_temporary_buffer(ptrdiff_t len, T*) {
-  if (len > ptrdiff_t(INT_MAX / sizeof(T)))
+vcl_pair<T*, vcl_ptrdiff_t> get_temporary_buffer(vcl_ptrdiff_t len, T*) {
+  if (len > vcl_ptrdiff_t(INT_MAX / sizeof(T)))
     len = INT_MAX / sizeof(T);
 
   while (len > 0) {
-    T* tmp = (T*) malloc((size_t)len * sizeof(T));
+    T* tmp = (T*) malloc((vcl_size_t)len * sizeof(T));
     if (tmp != 0)
-      return vcl_pair<T*, ptrdiff_t>(tmp, len);
+      return vcl_pair<T*, vcl_ptrdiff_t>(tmp, len);
     len /= 2;
   }
 
-  return vcl_pair<T*, ptrdiff_t>((T*)0, 0);
+  return vcl_pair<T*, vcl_ptrdiff_t>((T*)0, 0);
 }
 
 template <class T>
@@ -74,12 +74,12 @@ inline void return_temporary_buffer(T* p) {
   free(p);
 }
 
-// extension : an object describing (possibly partially filled 
+// extension : an object describing (possibly partially filled
 // with constructed objects) temporary buffer
 // useful for convenient exception cleanup, also greatly reduces the
 // parameters count of functions in vcl_algorithm.h
 
-template <class T, VCL_DFL_TYPE_PARAM_STLDECL(Distance,ptrdiff_t)>
+template <class T, VCL_DFL_TYPE_PARAM_STLDECL(Distance,vcl_ptrdiff_t)>
 struct __stl_tempbuf
 {
 public:
@@ -93,7 +93,7 @@ public:
     {}
 
     ~__stl_tempbuf()
-    { 
+    {
         if (capacity()!=0) {
             vcl_destroy(begin(), end());
             return_temporary_buffer(begin());
@@ -109,7 +109,7 @@ public:
     // reflects change in initalized area
     void   adjust_size(difference_type len)      { fill_pointer=len; }
 protected:
-    vcl_pair<T*, ptrdiff_t> buf;
+    vcl_pair<T*, vcl_ptrdiff_t> buf;
     difference_type fill_pointer;
 };
 

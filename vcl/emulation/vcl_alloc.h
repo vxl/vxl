@@ -112,25 +112,25 @@ private:
                         // that this must be large enough to preserve
                         // alignment.
 public:
-    static void * allocate(size_t n) {
+    static void * allocate(vcl_size_t n) {
         char *result = (char *)allocator_type::allocate(n + extra_chunk);
-        *(size_t *)result = n;
+        *(vcl_size_t *)result = n;
         return result + extra;
     }
 
-    static void deallocate(void *p, size_t n) {
+    static void deallocate(void *p, vcl_size_t n) {
         char * real_p = (char *)p - extra;
-        assert(*(size_t *)real_p == n);
+        assert(*(vcl_size_t *)real_p == n);
         allocator_type::deallocate(real_p, n + extra);
     }
 
     static void *
-    reallocate(void *p, size_t old_sz, size_t new_sz) {
+    reallocate(void *p, vcl_size_t old_sz, vcl_size_t new_sz) {
         char * real_p = (char *)p - extra;
-        assert(*(size_t *)real_p == old_sz);
+        assert(*(vcl_size_t *)real_p == old_sz);
         char * result = (char *)
             allocator_type::reallocate(real_p, old_sz + extra_chunk, new_sz + extra_chunk);
-        *(size_t *)result = new_sz;
+        *(vcl_size_t *)result = new_sz;
         return result + extra;
     }
 #undef type_size
@@ -156,11 +156,11 @@ public:
 #define chunk (sizeof(value_type)/sizeof(alloc_value_type)+(sizeof(value_type)%sizeof(alloc_value_type)>0))
 #endif
 
-    static value_type *allocate(size_t n)
+    static value_type *allocate(vcl_size_t n)
                 { return 0 == n? 0 : (value_type*) alloc_type::allocate(n * chunk); }
     static value_type *allocate(void)
                 { return (value_type*) alloc_type::allocate(chunk); }
-    static void deallocate(value_type *p, size_t n)
+    static void deallocate(value_type *p, vcl_size_t n)
                 { if (0 != n) alloc_type::deallocate(p, n * chunk); }
     static void deallocate(value_type *p)
                 { alloc_type::deallocate(p, chunk); }
@@ -176,16 +176,16 @@ class __new_alloc {
 public:
   // this one is needed for proper vcl_simple_alloc wrapping
   typedef char value_type;
-  static void*  allocate(size_t n) { return 0 == n ? 0 : ::operator new(n);}
-  static void*  reallocate(void *p, size_t old_sz, size_t new_sz) {
+  static void*  allocate(vcl_size_t n) { return 0 == n ? 0 : ::operator new(n);}
+  static void*  reallocate(void *p, vcl_size_t old_sz, vcl_size_t new_sz) {
     void* result = allocate(new_sz);
-    size_t copy_sz = new_sz > old_sz? old_sz : new_sz;
+    vcl_size_t copy_sz = new_sz > old_sz? old_sz : new_sz;
     memcpy(result, p, copy_sz);
     deallocate(p, old_sz);
     return result;
   }
   static void deallocate(void* p) { ::operator delete(p); }
-  static void deallocate(void* p, size_t) { ::operator delete(p); }
+  static void deallocate(void* p, vcl_size_t) { ::operator delete(p); }
 };
 
 typedef __new_alloc<0> new_alloc;
@@ -198,27 +198,27 @@ typedef void (* __oom_handler_type)();
 template <int inst>
 class __malloc_alloc {
 private:
-  static void *oom_malloc(size_t);
-  static void *oom_realloc(void *, size_t);
+  static void *oom_malloc(vcl_size_t);
+  static void *oom_realloc(void *, vcl_size_t);
   static __oom_handler_type oom_handler;
 
 public:
   // this one is needed for proper vcl_simple_alloc wrapping
   typedef char value_type;
 
-  static void * allocate(size_t n)
+  static void * allocate(vcl_size_t n)
   {
     void *result = malloc(n);
     if (0 == result) result = oom_malloc(n);
     return result;
   }
 
-  static void deallocate(void *p, size_t /* n */)
+  static void deallocate(void *p, vcl_size_t /* n */)
   {
     free(p);
   }
 
-  static void * reallocate(void *p, size_t /* old_sz */, size_t new_sz)
+  static void * reallocate(void *p, vcl_size_t /* old_sz */, vcl_size_t new_sz)
   {
     void * result = realloc(p, new_sz);
     if (0 == result) result = oom_realloc(p, new_sz);
@@ -231,7 +231,6 @@ public:
     oom_handler = f;
     return(old);
   }
-
 };
 
 // malloc_alloc out-of-memory handling
@@ -243,7 +242,7 @@ __DECLARE_INSTANCE(__oom_handler_type, __malloc_alloc<0>::oom_handler,0);
 # endif /* ( __STL_STATIC_TEMPLATE_DATA > 0 ) */
 
 template <int inst>
-void * __malloc_alloc<inst>::oom_malloc(size_t n)
+void * __malloc_alloc<inst>::oom_malloc(vcl_size_t n)
 {
   __oom_handler_type my_malloc_handler;
   void *result = 0;
@@ -258,7 +257,7 @@ void * __malloc_alloc<inst>::oom_malloc(size_t n)
 }
 
 template <int inst>
-void * __malloc_alloc<inst>::oom_realloc(void *p, size_t n)
+void * __malloc_alloc<inst>::oom_realloc(void *p, vcl_size_t n)
 {
   __oom_handler_type my_malloc_handler;
   void *result = 0;
@@ -408,7 +407,7 @@ typedef vcl_malloc_alloc multithreaded_alloc;
 
 
     private:
-      static size_t ROUND_UP(size_t bytes) {
+      static vcl_size_t ROUND_UP(vcl_size_t bytes) {
                 return (((bytes) + __ALIGN-1) & ~(__ALIGN - 1));
       }
     __PRIVATE:
@@ -425,20 +424,20 @@ typedef vcl_malloc_alloc multithreaded_alloc;
 #     else
             static obj * __VOLATILE free_list[__NFREELISTS];
 #     endif
-      static  size_t FREELIST_INDEX(size_t bytes) {
+      static  vcl_size_t FREELIST_INDEX(vcl_size_t bytes) {
                 return (((bytes) + __ALIGN-1)/__ALIGN - 1);
       }
 
       // Returns an object of size n, and optionally adds to size n free vcl_list.
-      static void *refill(size_t n);
+      static void *refill(vcl_size_t n);
       // Allocates a chunk for nobjs of size size.  nobjs may be reduced
       // if it is inconvenient to allocate the requested number.
-      static char *chunk_alloc(size_t size, int &nobjs);
+      static char *chunk_alloc(vcl_size_t size, int &nobjs);
 
       // Chunk allocation state.
       static char *start_free;
       static char *end_free;
-      static size_t heap_size;
+      static vcl_size_t heap_size;
 
 #     ifdef __STL_SGI_THREADS
             static volatile unsigned long __node_allocator_lock;
@@ -466,7 +465,7 @@ typedef vcl_malloc_alloc multithreaded_alloc;
       typedef char value_type;
 
       /* n must be > 0      */
-      static void * allocate(size_t n)
+      static void * allocate(vcl_size_t n)
       {
             obj * __VOLATILE * my_free_list;
             obj * __RESTRICT result;
@@ -492,7 +491,7 @@ typedef vcl_malloc_alloc multithreaded_alloc;
       };
 
       /* p may not be 0 */
-      static void deallocate(void *p, size_t n)
+      static void deallocate(void *p, vcl_size_t n)
       {
             obj *q = (obj *)p;
             obj * __VOLATILE * my_free_list;
@@ -512,9 +511,8 @@ typedef vcl_malloc_alloc multithreaded_alloc;
             // lock is released here
       }
 
-      static void * reallocate(void *p, size_t old_sz, size_t new_sz);
-
-    } ;
+      static void * reallocate(void *p, vcl_size_t old_sz, vcl_size_t new_sz);
+    };
 
     typedef __alloc<__NODE_ALLOCATOR_THREADS, 0> node_alloc;
 #       if defined ( __STL_DEBUG_ALLOC )
@@ -531,11 +529,11 @@ typedef vcl_malloc_alloc multithreaded_alloc;
     /* We hold the allocation lock.                                         */
     template <bool threads, int inst>
     char*
-    __alloc<threads, inst>::chunk_alloc(size_t size, int& nobjs)
+    __alloc<threads, inst>::chunk_alloc(vcl_size_t size, int& nobjs)
     {
             char * result;
-            size_t total_bytes = size * nobjs;
-            size_t bytes_left = end_free - start_free;
+            vcl_size_t total_bytes = size * nobjs;
+            vcl_size_t bytes_left = end_free - start_free;
 
             if (bytes_left >= total_bytes) {
                 result = start_free;
@@ -548,7 +546,7 @@ typedef vcl_malloc_alloc multithreaded_alloc;
                 start_free += total_bytes;
                 return(result);
             } else {
-                size_t bytes_to_get = 2 * total_bytes + ROUND_UP(heap_size >> 4);
+                vcl_size_t bytes_to_get = 2 * total_bytes + ROUND_UP(heap_size >> 4);
                 // Try to make use of the left-over piece.
                 if (bytes_left > 0) {
                     obj * __VOLATILE * my_free_list =
@@ -592,7 +590,7 @@ typedef vcl_malloc_alloc multithreaded_alloc;
     /* We assume that n is properly aligned.                                */
     /* We hold the allocation lock.                                         */
     template <bool threads, int inst>
-    void* __alloc<threads, inst>::refill(size_t n)
+    void* __alloc<threads, inst>::refill(vcl_size_t n)
     {
             int nobjs = 20;
             char * chunk = chunk_alloc(n, nobjs);
@@ -623,11 +621,11 @@ typedef vcl_malloc_alloc multithreaded_alloc;
     template <bool threads, int inst>
     void*
     __alloc<threads, inst>::reallocate(void *p,
-                                       size_t old_sz,
-                                       size_t new_sz)
+                                       vcl_size_t old_sz,
+                                       vcl_size_t new_sz)
     {
             void * result;
-            size_t copy_sz;
+            vcl_size_t copy_sz;
 
             if (old_sz > __MAX_BYTES && new_sz > __MAX_BYTES) {
                 return(realloc(p, new_sz));
@@ -735,7 +733,7 @@ typedef vcl_malloc_alloc multithreaded_alloc;
       char *__alloc<threads, inst>::end_free = 0;
 
       template <bool threads, int inst>
-      size_t __alloc<threads, inst>::heap_size = 0;
+      vcl_size_t __alloc<threads, inst>::heap_size = 0;
 
       template <bool threads, int inst>
       __alloc<threads, inst>::obj * __VOLATILE
@@ -758,7 +756,7 @@ typedef vcl_malloc_alloc multithreaded_alloc;
 #       else /* ( __STL_STATIC_TEMPLATE_DATA > 0 ) */
       __DECLARE_INSTANCE(char *, single_client_alloc::start_free,0);
       __DECLARE_INSTANCE(char *, single_client_alloc::end_free,0);
-      __DECLARE_INSTANCE(size_t, single_client_alloc::heap_size,0);
+      __DECLARE_INSTANCE(vcl_size_t, single_client_alloc::heap_size,0);
 #         if defined ( __SUNPRO_CC ) || defined ( _AIX )
       __DECLARE_INSTANCE(single_client_alloc::obj * __VOLATILE,
                          single_client_alloc::free_list[__NFREELISTS],
@@ -770,7 +768,7 @@ typedef vcl_malloc_alloc multithreaded_alloc;
 #         endif
       __DECLARE_INSTANCE(char *, multithreaded_alloc::start_free,0);
       __DECLARE_INSTANCE(char *, multithreaded_alloc::end_free,0);
-      __DECLARE_INSTANCE(size_t, multithreaded_alloc::heap_size,0);
+      __DECLARE_INSTANCE(vcl_size_t, multithreaded_alloc::heap_size,0);
 #         if defined ( __SUNPRO_CC ) || defined ( _AIX )
       __DECLARE_INSTANCE(multithreaded_alloc::obj * __VOLATILE,
                          multithreaded_alloc::free_list[__NFREELISTS],

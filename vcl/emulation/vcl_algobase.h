@@ -476,8 +476,8 @@ vcl_lexicographical_compare(unsigned char* first1, unsigned char* last1,
 {
   __stl_debug_check(__check_range(first1, last1));
   __stl_debug_check(__check_range(first2, last2));
-  size_t len1 = last1 - first1;  // awf removed const
-  size_t len2 = last2 - first2;
+  vcl_size_t len1 = last1 - first1;  // awf removed const
+  vcl_size_t len2 = last2 - first2;
   const int result = memcmp(first1, first2, vcl_min(len1, len2));
   return result != 0 ? result < 0 : len1 < len2;
 }

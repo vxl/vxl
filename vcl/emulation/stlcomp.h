@@ -37,7 +37,7 @@
 // Uncomment this to disable using std by default
 // #  define __STL_NO_USING_STD 1
 
-// define __STL_USE_ABBREVS if your linker has trouble with long 
+// define __STL_USE_ABBREVS if your linker has trouble with long
 // external symbols
 // # define  __STL_USE_ABBREVS 1
 
@@ -46,7 +46,7 @@
 
 // Mostly correct guess
 #  define __STL_UINT32_T unsigned long
-  
+
 //==========================================================
 
 //==========================================================
@@ -68,8 +68,8 @@
 // default parameters
 // #  define __STL_DEFAULT_TYPE_PARAM 1
 
-// Comment this if your compiler lacks static data 
-// members template declarations 
+// Comment this if your compiler lacks static data
+// members template declarations
 // Uncomment next line if your compiler supports __attribute__((weak))
 #  define __STL_STATIC_TEMPLATE_DATA 1
 // #  define __STL_WEAK_ATTRIBUTE 1
@@ -79,7 +79,7 @@
 // Uncomment this if your compiler can't inline while(), for()
 // #  define __STL_LOOP_INLINE_PROBLEMS 1
 
-// Uncomment this if your compiler supports namespaces 
+// Uncomment this if your compiler supports namespaces
 // #  define __STL_NAMESPACES 1
 
 // Uncomment this if your compiler supports typename
@@ -198,7 +198,7 @@
 #   ifdef _CPPUNWIND
 #     define __STL_USE_EXCEPTIONS
 #   endif
-#   if defined ( _MT ) 
+#   if defined ( _MT )
 #     define __STL_WIN32THREADS
 #   endif
 #  if ( _MSC_VER>=1000 )
@@ -278,7 +278,7 @@
 #     if ( __SUNPRO_CC < 0x401 )
         __GIVE_UP_WITH_STL(SUNPRO_401)
 #     endif
-#   else 
+#   else
 #    if ( __SUNPRO_CC >= 0x420 )
 #     define __STL_FULL_SPEC_SYNTAX 1
 #    endif
@@ -287,7 +287,7 @@
 #  endif
 # endif
 
-// g++ 2.7.x and above 
+// g++ 2.7.x and above
 # if defined (__GNUC__ )
 #  undef   __STL_UNINITIALIZABLE_PRIVATE
 #  define  __STL_BOOL_KEYWORD 1
@@ -314,9 +314,9 @@
 #   define __STL_EXPLICIT 1
 #   undef  __STL_UNINITIALIZABLE_PRIVATE
 #   define __STL_UNINITIALIZABLE_PRIVATE 1
-#   undef  __STL_CONST_CONSTRUCTOR_BUG 
+#   undef  __STL_CONST_CONSTRUCTOR_BUG
 #   undef  __STL_LONG_LONG
-#   undef  __STL_WCHAR_T 
+#   undef  __STL_WCHAR_T
 #   define __STL_LONG_LONG  1
 #   define __STL_WCHAR_T  1
 #   define __STL_MUTABLE 1
@@ -333,7 +333,7 @@
 #   undef  __STL_NAMESPACES
 #   define __STL_EXPLICIT   1
 #   define __STL_TYPENAME   1
-#  endif 
+#  endif
 
 // static template data members workaround strategy for gcc tries
 // to use weak symbols.

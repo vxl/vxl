@@ -160,8 +160,8 @@ distance_type(const random_access_iterator<T, Distance>&) {
 }
 
 template <class T>
-inline ptrdiff_t*
-distance_type(const T*) { return (ptrdiff_t*)(0); }
+inline vcl_ptrdiff_t*
+distance_type(const T*) { return (vcl_ptrdiff_t*)(0); }
 
 template <class Container>
 class back_insert_iterator {
@@ -262,7 +262,7 @@ template <class BidirectionalIterator, class T, class Reference, class Distance>
 
 template <class BidirectionalIterator, class T,
           VCL_DFL_TMPL_PARAM_STLDECL(Reference, T& ),
-          VCL_DFL_TYPE_PARAM_STLDECL(Distance, ptrdiff_t)>
+          VCL_DFL_TYPE_PARAM_STLDECL(Distance, vcl_ptrdiff_t)>
 class reverse_bidirectional_iterator {
     typedef reverse_bidirectional_iterator<BidirectionalIterator, T, Reference,
                                            Distance> self;
@@ -344,7 +344,7 @@ template <class RandomAccessIterator, class T, class Reference, class Distance>
 
 template <class RandomAccessIterator, class T,
           VCL_DFL_TMPL_PARAM_STLDECL(Reference,T&),
-          VCL_DFL_TYPE_PARAM_STLDECL(Distance,ptrdiff_t)>
+          VCL_DFL_TYPE_PARAM_STLDECL(Distance,vcl_ptrdiff_t)>
 class reverse_iterator {
     typedef Distance distance_type;
     typedef reverse_iterator<RandomAccessIterator, T, Reference, Distance> self;
@@ -484,13 +484,13 @@ template <class T, class Distance> IUEi_STL_INLINE bool operator==(
     const istream_iterator<T, Distance>& x,
     const istream_iterator<T, Distance>& y);
 
-template <class T, VCL_DFL_TYPE_PARAM_STLDECL(Distance, ptrdiff_t)>
+template <class T, VCL_DFL_TYPE_PARAM_STLDECL(Distance, vcl_ptrdiff_t)>
 class istream_iterator {
     friend bool operator== VCL_NULL_TMPL_ARGS
                           (const istream_iterator<T, Distance>& x,
                            const istream_iterator<T, Distance>& y);
 protected:
-    istream* stream;
+    vcl_istream* stream;
     T value;
     bool end_marker;
     void read() {
@@ -499,8 +499,8 @@ protected:
         end_marker = (*stream) ? true : false;
     }
 public:
-    istream_iterator() : stream(&cin), end_marker(false) {}
-    istream_iterator(istream& s) : stream(&s) { read(); }
+    istream_iterator() : stream(&vcl_cin), end_marker(false) {}
+    istream_iterator(vcl_istream& s) : stream(&s) { read(); }
     const T& operator*() const { return value; }
     istream_iterator<T, Distance>& operator++() {
         read();
@@ -538,11 +538,11 @@ bool operator==(const istream_iterator<T, Distance>& x,
 template <class T>
 class vcl_ostream_iterator {
 protected:
-    ostream* stream;
+    vcl_ostream* stream;
     char* string;
 public:
-    vcl_ostream_iterator(ostream& s) : stream(&s), string(0) {}
-    vcl_ostream_iterator(ostream& s, char* c) : stream(&s), string(c)  {}
+    vcl_ostream_iterator(vcl_ostream& s) : stream(&s), string(0) {}
+    vcl_ostream_iterator(vcl_ostream& s, char* c) : stream(&s), string(c)  {}
     vcl_ostream_iterator<T>& operator=(const T& value) {
         *stream << value;
         if (string) *stream << string;

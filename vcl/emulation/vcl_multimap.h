@@ -44,7 +44,7 @@
 __BEGIN_STL_FULL_NAMESPACE
 #define vcl_multimap __WORKAROUND_RENAME(vcl_multimap)
 
-template <class Key, class T, VCL_DFL_TMPL_PARAM_STLDECL(Compare,vcl_less<Key>), 
+template <class Key, class T, VCL_DFL_TMPL_PARAM_STLDECL(Compare,vcl_less<Key>),
                               VCL_DFL_TYPE_PARAM_STLDECL(Alloc,vcl_alloc) >
 class vcl_multimap {
     typedef vcl_multimap<Key, T, Compare, Alloc> self;
@@ -68,14 +68,14 @@ public:
   };
 
 private:
-  typedef rb_tree<key_type, value_type, 
+  typedef rb_tree<key_type, value_type,
                   vcl_select1st<value_type>, key_compare, Alloc> rep_type;
 public:
   typedef typename rep_type::pointer pointer;
   typedef typename rep_type::reference reference;
   typedef typename rep_type::const_reference const_reference;
   typedef typename rep_type::iterator iterator;
-  typedef typename rep_type::const_iterator const_iterator; 
+  typedef typename rep_type::const_iterator const_iterator;
   typedef typename rep_type::reverse_iterator reverse_iterator;
   typedef typename rep_type::const_reverse_iterator const_reverse_iterator;
   typedef typename rep_type::size_type size_type;
@@ -88,19 +88,19 @@ public:
 // allocation/deallocation
   vcl_multimap() : t(Compare()) {}
   explicit vcl_multimap(const Compare& comp) : t(comp) {}
-  vcl_multimap(const value_type* first, const value_type* last) : 
+  vcl_multimap(const value_type* first, const value_type* last) :
       t(Compare()) {
         t.insert_equal(first, last);
   }
-  vcl_multimap(const value_type* first, const value_type* last, 
+  vcl_multimap(const value_type* first, const value_type* last,
       const Compare& comp) : t(comp) {
         t.insert_equal(first, last);
   }
-  vcl_multimap(const_iterator first, const_iterator last) : 
+  vcl_multimap(const_iterator first, const_iterator last) :
       t(Compare()) {
         t.insert_equal(first, last);
   }
-  vcl_multimap(const_iterator first, const_iterator last, 
+  vcl_multimap(const_iterator first, const_iterator last,
       const Compare& comp) : t(comp) {
         t.insert_equal(first, last);
   }
@@ -108,7 +108,7 @@ public:
   self&
   operator=(const self& x) {
     t = x.t;
-    return *this; 
+    return *this;
   }
 
   // accessors:
@@ -152,11 +152,11 @@ public:
   size_type count(const key_type& x) const { return t.count(x); }
   iterator lower_bound(const key_type& x) {return t.lower_bound(x); }
   const_iterator lower_bound(const key_type& x) const {
-    return t.lower_bound(x); 
+    return t.lower_bound(x);
   }
   iterator upper_bound(const key_type& x) {return t.upper_bound(x); }
   const_iterator upper_bound(const key_type& x) const {
-    return t.upper_bound(x); 
+    return t.upper_bound(x);
   }
    vcl_pair<iterator,iterator> equal_range(const key_type& x) {
     return t.equal_range(x);
@@ -171,17 +171,17 @@ __END_STL_FULL_NAMESPACE
 
 // do a cleanup
 #  undef vcl_multimap
-// provide a way to access full functionality 
+// provide a way to access full functionality
 #  define __multimap__  __FULL_NAME(vcl_multimap)
 
 template <class Key, class T, class Compare, class Alloc>
-inline bool operator==(const __multimap__<Key, T, Compare, Alloc>& x, 
+inline bool operator==(const __multimap__<Key, T, Compare, Alloc>& x,
                        const __multimap__<Key, T, Compare, Alloc>& y) {
   return x.t == y.t;
 }
 
 template <class Key, class T, class Compare, class Alloc>
-inline bool operator<(const __multimap__<Key, T, Compare, Alloc>& x, 
+inline bool operator<(const __multimap__<Key, T, Compare, Alloc>& x,
                       const __multimap__<Key, T, Compare, Alloc>& y) {
   return x.t < y.t;
 }
@@ -205,26 +205,26 @@ public:
     __IMPORT_SUPER_COPY_ASSIGNMENT(vcl_multimap)
     vcl_multimap() : super(Compare()) {}
     explicit vcl_multimap(const Compare& comp) : super(comp) {}
-    vcl_multimap(const typename super::value_type* first, const typename super::value_type* last) : 
+    vcl_multimap(const typename super::value_type* first, const typename super::value_type* last) :
         super(first, last, Compare()) { }
-    vcl_multimap(const typename super::value_type* first, const typename super::value_type* last, 
+    vcl_multimap(const typename super::value_type* first, const typename super::value_type* last,
         const Compare& comp) : super(first, last, comp) { }
-    vcl_multimap(typename super::const_iterator first, typename super::const_iterator last) : 
+    vcl_multimap(typename super::const_iterator first, typename super::const_iterator last) :
         super(first, last, Compare()) { }
-    vcl_multimap(typename super::const_iterator first, typename super::const_iterator last, 
+    vcl_multimap(typename super::const_iterator first, typename super::const_iterator last,
         const Compare& comp) : super(first, last, comp) { }
 };
 
 #  if defined (__STL_BASE_MATCH_BUG)
 template <class Key, class T, class Compare>
-inline bool operator==(const vcl_multimap<Key, T, Compare>& x, 
+inline bool operator==(const vcl_multimap<Key, T, Compare>& x,
                        const vcl_multimap<Key, T, Compare>& y) {
   typedef __multimap__<Key,T,Compare,vcl_alloc> super;
   return (const super&)x == (const super&)y;
 }
 
 template <class Key, class T, class Compare>
-inline bool operator<(const vcl_multimap<Key, T, Compare>& x, 
+inline bool operator<(const vcl_multimap<Key, T, Compare>& x,
                       const vcl_multimap<Key, T, Compare>& y) {
   typedef __multimap__<Key,T,Compare,vcl_alloc> super;
   return (const super&)x < (const super&)y;

@@ -432,8 +432,8 @@ template < class T >
 class vcl__subtractive_rng_t : public vcl_unary_function<T, T> {
 private:
   T table[55];
-  size_t index1;
-  size_t index2;
+  vcl_size_t index1;
+  vcl_size_t index2;
 public:
   vcl__subtractive_rng_t(T seed) { initialize(seed); }
   vcl__subtractive_rng_t() { initialize(161803398u); }
@@ -451,9 +451,9 @@ template <class T>
 void vcl__subtractive_rng_t<T>::initialize(T seed) {
     T k = 1;
     table[54] = seed;
-    size_t i;
+    vcl_size_t i;
     for (i = 0; i < 54; i++) {
-        size_t ii = (21 * (i + 1) % 55) - 1;
+        vcl_size_t ii = (21 * (i + 1) % 55) - 1;
         table[ii] = k;
         k = seed - k;
         seed = table[ii];

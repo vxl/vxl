@@ -13,13 +13,13 @@
 
 #ifdef VCL_SUNPRO_CC
 #undef VCL_INSTANTIATE_INLINE
-#define VCL_INSTANTIATE_INLINE(fn_decl)  template  fn_decl ;
+#define VCL_INSTANTIATE_INLINE(fn_decl)  template  fn_decl
 #endif
 
 #undef VCL_COMPLEX_INSTANTIATE
 #define VCL_COMPLEX_INSTANTIATE(FLOAT)\
 template class vcl_complex<FLOAT >; \
-VCL_INSTANTIATE_INLINE(ostream& operator<<(ostream&,vcl_complex<FLOAT >const&));\
+VCL_INSTANTIATE_INLINE(vcl_ostream& operator<<(vcl_ostream&,vcl_complex<FLOAT >const&));\
 VCL_INSTANTIATE_INLINE(bool operator==(vcl_complex<FLOAT >const&,vcl_complex<FLOAT >const&));\
 VCL_INSTANTIATE_INLINE(bool operator==(FLOAT,vcl_complex<FLOAT >const&));\
 VCL_INSTANTIATE_INLINE(bool operator==(vcl_complex<FLOAT >const&,FLOAT));\

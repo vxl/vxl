@@ -657,7 +657,7 @@ OutputIterator vcl_random_sample_n(ForwardIterator first, ForwardIterator last,
     __stl_debug_check(__check_range(first, last));
     Distance remaining = 0;
     distance(first, last, remaining);
-    Distance m = min(n, remaining);
+    Distance m = vcl_min(n, remaining);
 
     while (m > 0) {
         if (__rand() % remaining < m) {
@@ -681,7 +681,7 @@ OutputIterator vcl_random_sample_n(ForwardIterator first, ForwardIterator last,
     __stl_debug_check(__check_range(first, last));
     Distance remaining = 0;
     distance(first, last, remaining);
-    Distance m = min(n, remaining);
+    Distance m = vcl_min(n, remaining);
 
     while (m > 0) {
         if (rand(remaining) < m) {
@@ -1155,7 +1155,7 @@ void __merge_sort_loop(RandomAccessIterator1 first,
         first += two_step;
     }
     Distance len(last-first); // VC++ temporary ref warning
-    step_size = min(len, step_size);
+    step_size = vcl_min(len, step_size);
     merge(first, first + step_size, first + step_size, last, result);
 }
 
@@ -1173,7 +1173,7 @@ void __merge_sort_loop(RandomAccessIterator1 first,
         first += two_step;
     }
     Distance len(last-first); // VC++ temporary ref warning
-    step_size = min(len, step_size);
+    step_size = vcl_min(len, step_size);
 
     merge(first, first + step_size, first + step_size, last, result, comp);
 }
@@ -1291,7 +1291,7 @@ inline void __stable_sort(RandomAccessIterator first,
     }
     else {
         Distance len(last-first); // VC++ temporary ref warning
-        len = min(buffer.capacity(), len);
+        len = vcl_min(buffer.capacity(), len);
         vcl_uninitialized_copy(first, first + len, buffer.begin());
         buffer.adjust_size(len);
         __stable_sort_adaptive(first, last, buffer);
@@ -1307,7 +1307,7 @@ inline void __stable_sort(RandomAccessIterator first,
     }
     else {
         Distance len(last-first); // VC++ temporary ref warning
-        len = min(buffer.capacity(), len);
+        len = vcl_min(buffer.capacity(), len);
         vcl_uninitialized_copy(first, first + len, buffer.begin());
         buffer.adjust_size(len);
         __stable_sort_adaptive(first, last, buffer, comp);
@@ -2171,7 +2171,7 @@ void __inplace_merge(BidirectionalIterator first,
     }
     else {
         Distance len(len1+len2); // VC++ temporary ref warning
-        len = min(buffer.capacity(), len);
+        len = vcl_min(buffer.capacity(), len);
         __default_initialize_n(buffer.begin(), len);
 //        vcl_uninitialized_fill_n(buffer.begin(), len, *first);
         buffer.adjust_size(len);
@@ -2190,7 +2190,7 @@ void __inplace_merge(BidirectionalIterator first,
     }
     else {
         Distance len(len1+len2);
-        len = min(buffer.capacity(), len);
+        len = vcl_min(buffer.capacity(), len);
         __default_initialize_n(buffer.begin(), len);
 //        vcl_uninitialized_fill_n(buffer.begin(), len, *first);
         buffer.adjust_size(len);

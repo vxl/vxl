@@ -122,7 +122,7 @@
 # ifdef __STL_ASSERTIONS
 #  define __stl_assert(expr) \
     if (!(expr)) { fprintf(stderr, "%s:%d STL assertion failure: %s\n", \
-                          __FILE__, __LINE__, # expr); abort(); }
+                          __FILE__, __LINE__, # expr); vcl_abort(); }
 # else
 #  define __stl_assert(expr)
 # endif
@@ -130,7 +130,7 @@
 # ifdef __STL_DEBUG
 #  define __stl_verbose_assert(expr,diagnostic) \
     if (!(expr)) { fprintf(stderr, "%s:%d STL error : %s\n%s:%d STL assertion failure: %s\n",\
-                          __FILE__, __LINE__ , diagnostic, __FILE__, __LINE__ , # expr ); abort(); }
+                          __FILE__, __LINE__ , diagnostic, __FILE__, __LINE__ , # expr ); vcl_abort(); }
 
 #  define __stl_debug_check(expr) __stl_assert(expr)
 #  define __stl_debug_do(expr) expr

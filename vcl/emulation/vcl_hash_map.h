@@ -62,7 +62,7 @@
 
 #  define VCL_IMPORT_ITERATORS(super)                                              \
     typedef typename super::iterator iterator;                                   \
-    typedef typename super::const_iterator const_iterator; 
+    typedef typename super::const_iterator const_iterator;
 
 #  define VCL_IMPORT_REVERSE_ITERATORS(super)                                      \
     typedef typename super::const_reverse_iterator  const_reverse_iterator;      \
@@ -151,7 +151,7 @@ public:
   void insert(const value_type* f, const value_type* l) { rep.insert_unique(f,l); }
   void insert(const_iterator f, const_iterator l) { rep.insert_unique(f, l); }
   vcl_pair<iterator, bool> insert_noresize(const value_type& obj)
-    { return rep.insert_unique_noresize(obj); }    
+    { return rep.insert_unique_noresize(obj); }
 
   iterator find(const key_type& key) { return rep.find(key); }
   const_iterator find(const key_type& key) const { return rep.find(key); }
@@ -163,7 +163,7 @@ public:
   }
 
   size_type count(const key_type& key) const { return rep.count(key); }
-  
+
   vcl_pair<iterator, iterator> equal_range(const key_type& key)
     { return rep.equal_range(key); }
   vcl_pair<const_iterator, const_iterator> equal_range(const key_type& key) const
@@ -254,13 +254,13 @@ public:
   void insert(const value_type* f, const value_type* l) { rep.insert_equal(f,l); }
   void insert(const_iterator f, const_iterator l) { rep.insert_equal(f, l); }
   iterator insert_noresize(const value_type& obj)
-    { return rep.insert_equal_noresize(obj); }    
+    { return rep.insert_equal_noresize(obj); }
 
   iterator find(const key_type& key) { return rep.find(key); }
   const_iterator find(const key_type& key) const { return rep.find(key); }
 
   size_type count(const key_type& key) const { return rep.count(key); }
-  
+
   vcl_pair<iterator, iterator> equal_range(const key_type& key)
     { return rep.equal_range(key); }
   vcl_pair<const_iterator, const_iterator> equal_range(const key_type& key) const
@@ -330,7 +330,7 @@ public:
   vcl_hash_map(size_type n, const hasher& hf, const key_equal& eql): super(n, hf, eql) {}
   vcl_hash_map(const value_type* f, const value_type* l) : super(f,l) {}
   vcl_hash_map(const value_type* f, const value_type* l, size_type n): super(f,l,n) {}
-  vcl_hash_map(const value_type* f, const value_type* l, size_type n, 
+  vcl_hash_map(const value_type* f, const value_type* l, size_type n,
            const hasher& hf) : super(f,l,n,hf) {}
   vcl_hash_map(const value_type* f, const value_type* l, size_type n,
            const hasher& hf, const key_equal& eql) : super(f,l,n,hf, eql) {}
@@ -345,11 +345,11 @@ public:
 
 
 template <class Key, class T, class HashFcn, class EqualKey >
-inline bool operator==(const vcl_hash_map<Key, T, HashFcn,EqualKey>& hm1, 
+inline bool operator==(const vcl_hash_map<Key, T, HashFcn,EqualKey>& hm1,
                        const vcl_hash_map<Key, T, HashFcn,EqualKey>& hm2)
 {
     typedef vcl_hash_map<Key, T, HashFcn,EqualKey>::super super;
-    return (const super&)hm1 == (const super&)hm2; 
+    return (const super&)hm1 == (const super&)hm2;
 }
 
 // provide a "default" vcl_hash_multimap adaptor
@@ -372,7 +372,7 @@ public:
   vcl_hash_multimap(size_type n, const hasher& hf, const key_equal& eql): super(n, hf, eql) {}
   vcl_hash_multimap(const value_type* f, const value_type* l) : super(f,l) {}
   vcl_hash_multimap(const value_type* f, const value_type* l, size_type n): super(f,l,n) {}
-  vcl_hash_multimap(const value_type* f, const value_type* l, size_type n, 
+  vcl_hash_multimap(const value_type* f, const value_type* l, size_type n,
            const hasher& hf) : super(f,l,n,hf) {}
   vcl_hash_multimap(const value_type* f, const value_type* l, size_type n,
            const hasher& hf, const key_equal& eql) : super(f,l,n,hf, eql) {}
@@ -387,11 +387,11 @@ public:
 };
 
 template <class Key, class T, class HashFcn, class EqualKey >
-inline bool operator==(const vcl_hash_multimap<Key, T, HashFcn,EqualKey>& hm1, 
+inline bool operator==(const vcl_hash_multimap<Key, T, HashFcn,EqualKey>& hm1,
                        const vcl_hash_multimap<Key, T, HashFcn,EqualKey>& hm2)
 {
     typedef vcl_hash_multimap<Key, T, HashFcn,EqualKey>::super super;
-    return (const super&)hm1 == (const super&)hm2; 
+    return (const super&)hm1 == (const super&)hm2;
 }
 
 # endif /* VCL_STL_DEFAULT_TYPE_PARAM */

@@ -38,7 +38,7 @@
 // with code that use vcl_allocator<T>
 
 template <class T>
-inline T* allocate(size_t size, T*) {
+inline T* allocate(vcl_size_t size, T*) {
     return 0 == size ? 0 : ::operator new(size*sizeof(T));
 }
 
@@ -48,7 +48,7 @@ inline void deallocate(T* buffer) {
 }
 
 template <class T>
-inline void deallocate(T* buffer, size_t) {
+inline void deallocate(T* buffer, vcl_size_t) {
     ::operator delete(buffer);
 }
 
@@ -61,23 +61,23 @@ public:
   typedef const T* const_pointer;
   typedef T& reference;
   typedef const T& const_reference;
-  typedef size_t size_type;
-  typedef ptrdiff_t difference_type;
-  static T* allocate(size_t n) { return (T*)super::allocate(n * sizeof(T));}
+  typedef vcl_size_t size_type;
+  typedef vcl_ptrdiff_t difference_type;
+  static T* allocate(vcl_size_t n) { return (T*)super::allocate(n * sizeof(T));}
 //static T* allocate(void) { return super::allocate(sizeof(T)); }
-  static void deallocate(T *p, size_t n) { super::deallocate(p, n * sizeof(T)); }
+  static void deallocate(T *p, vcl_size_t n) { super::deallocate(p, n * sizeof(T)); }
 //static void deallocate(T *p) { super::deallocate(p); }
   static pointer address(reference x) { return (pointer)&x; }
   static const_pointer address(const_reference x) {
     return (const_pointer)&x;
   }
   static size_type max_size() {
-    size_type sz((size_t)(-1)/sizeof(T));
+    size_type sz((vcl_size_t)(-1)/sizeof(T));
     size_type msz(1);
-    return max(msz, sz);
+    return vcl_max(msz, sz);
   }
   // CD2 requires that
-  static T* allocate(size_t n, const void* ) { return (T*)super::allocate(n * sizeof(T));}
+  static T* allocate(vcl_size_t n, const void* ) { return (T*)super::allocate(n * sizeof(T));}
   void construct(pointer p, const value_type& val) { vcl_construct(p, val); }
   void destroy(pointer p) { vcl_destroy(p); }
 };

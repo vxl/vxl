@@ -61,9 +61,9 @@
 #  define __deque_const_iterator   vcl_dQcIt
 # endif
 
-inline size_t __deque_buf_size(size_t sz)
+inline vcl_size_t __deque_buf_size(vcl_size_t sz)
 {
-  return sz < 4096 ? size_t(4096 / sz) : size_t(1);
+  return sz < 4096 ? vcl_size_t(4096 / sz) : vcl_size_t(1);
 }
 
 template <class T> struct __deque_iterator;
@@ -80,8 +80,8 @@ public:
   typedef value_type* pointer;
   typedef value_type& reference;
   typedef const value_type& const_reference;
-  typedef size_t size_type;
-  typedef ptrdiff_t difference_type;
+  typedef vcl_size_t size_type;
+  typedef vcl_ptrdiff_t difference_type;
   typedef pointer* map_pointer;
 
   pointer current;
@@ -298,9 +298,9 @@ value_type(const __deque_iterator<T>&) {
 }
 
 template <class T>
-inline ptrdiff_t*
+inline vcl_ptrdiff_t*
 distance_type(const __deque_iterator<T>&) {
-  return (ptrdiff_t*) 0;
+  return (vcl_ptrdiff_t*) 0;
 }
 
 template <class T>
@@ -316,17 +316,17 @@ value_type(const __deque_const_iterator<T>&) {
 }
 
 template <class T>
-inline ptrdiff_t*
+inline vcl_ptrdiff_t*
 distance_type(const __deque_const_iterator<T>&) {
-  return (ptrdiff_t*) 0;
+  return (vcl_ptrdiff_t*) 0;
 }
 
 template <class T>
 struct __deque_data
 {
     typedef T value_type;
-    typedef size_t size_type;
-    typedef ptrdiff_t difference_type;
+    typedef vcl_size_t size_type;
+    typedef vcl_ptrdiff_t difference_type;
     typedef T** map_pointer;
 protected:
     __deque_iterator<T> start;
@@ -351,7 +351,7 @@ class __deque_base : public __deque_data <T> {
   typedef __deque_base<T,Alloc> self;
   typedef T value_type;
   typedef value_type* pointer;
-  typedef size_t size_type;
+  typedef vcl_size_t size_type;
   typedef Alloc allocator_type;
 protected:
   static size_type buffer_size() {
@@ -396,12 +396,12 @@ class vcl_deque : public __deque_base<T,Alloc> {
   typedef vcl_deque<T, Alloc> self;
 public:
   typedef T value_type;
-  typedef size_t size_type;
+  typedef vcl_size_t size_type;
   typedef value_type* pointer;
   typedef const value_type* const_pointer;
   typedef value_type& reference;
   typedef const value_type& const_reference;
-  typedef ptrdiff_t difference_type;
+  typedef vcl_ptrdiff_t difference_type;
   typedef __deque_iterator<T> iterator;
   typedef __deque_const_iterator<T> const_iterator;
   typedef reverse_iterator<const_iterator, value_type, const_reference,
@@ -586,7 +586,7 @@ public:
 #   define __iterator__           __deque_iterator<T>
 #   define iterator               __iterator__
 #   define const_iterator         __deque_const_iterator<T>
-#  define size_type              size_t
+#  define size_type              vcl_size_t
 # else
 #  define __iterator__           vcl_deque<T,Alloc>::iterator
 # endif

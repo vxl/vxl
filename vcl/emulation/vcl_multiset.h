@@ -44,7 +44,7 @@
 __BEGIN_STL_FULL_NAMESPACE
 #define vcl_multiset __WORKAROUND_RENAME(vcl_multiset)
 
-template <class Key, VCL_DFL_TMPL_PARAM_STLDECL(Compare,vcl_less<Key>), 
+template <class Key, VCL_DFL_TMPL_PARAM_STLDECL(Compare,vcl_less<Key>),
                      VCL_DFL_TYPE_PARAM_STLDECL(Alloc,vcl_alloc) >
 class vcl_multiset {
     typedef vcl_multiset<Key,Compare,Alloc> self;
@@ -54,15 +54,15 @@ public:
     typedef Key value_type;
     typedef Compare key_compare;
     typedef Compare value_compare;
-    typedef rb_tree<key_type, value_type, 
-                    vcl_identity<value_type>, 
+    typedef rb_tree<key_type, value_type,
+                    vcl_identity<value_type>,
                     key_compare, Alloc>        rep_type;
     typedef typename rep_type::const_pointer   pointer;
     typedef typename rep_type::const_reference reference;
     typedef typename rep_type::const_reference const_reference;
     typedef typename rep_type::const_iterator  const_iterator;
     // SunPro bug
-#  ifdef __SUNPRO_CC  
+#  ifdef __SUNPRO_CC
     typedef const_iterator iterator;
 #  else
     typedef typename rep_type::const_iterator iterator;
@@ -79,24 +79,24 @@ private:
 public:
     vcl_multiset() : t(Compare()) {}
     explicit vcl_multiset(const Compare& comp) : t(comp) {}
-    vcl_multiset(const value_type* first, const value_type* last) : 
+    vcl_multiset(const value_type* first, const value_type* last) :
         t(Compare()) {
                t.insert_equal(first, last);
     }
-    vcl_multiset(const value_type* first, const value_type* last, 
+    vcl_multiset(const value_type* first, const value_type* last,
              const Compare& comp) : t(comp) {
                t.insert_equal(first, last);
     }
     vcl_multiset(const_iterator first, const_iterator last ) : t(Compare()) {
                t.insert_equal(first, last);
     }
-    vcl_multiset(const_iterator first, const_iterator last, 
+    vcl_multiset(const_iterator first, const_iterator last,
              const Compare& comp) : t(comp) {
                t.insert_equal(first, last);
     }
     vcl_multiset(const self& x) : t(x.t) {}
     self& operator=(const self& x) {
-        t = x.t; 
+        t = x.t;
         return *this;
     }
 
@@ -106,7 +106,7 @@ public:
     value_compare value_comp() const { return t.key_comp(); }
     iterator begin() const { return t.begin(); }
     iterator end() const { return t.end(); }
-    reverse_iterator rbegin() const { return t.rbegin(); } 
+    reverse_iterator rbegin() const { return t.rbegin(); }
     reverse_iterator rend() const { return t.rend(); }
     bool empty() const { return t.empty(); }
     size_type size() const { return t.size(); }
@@ -114,7 +114,7 @@ public:
     void swap(self& x) { t.swap(x.t); }
 
 // insert/erase
-    iterator insert(const value_type& x) { 
+    iterator insert(const value_type& x) {
       return t.insert_equal(x);
     }
     iterator insert(iterator position, const value_type& x) {
@@ -126,15 +126,15 @@ public:
     void insert(const_iterator first, const_iterator last) {
       t.insert_equal(first, last);
     }
-    void erase(iterator position) { 
-        t.erase((typename rep_type::iterator&)position); 
+    void erase(iterator position) {
+        t.erase((typename rep_type::iterator&)position);
     }
-    size_type erase(const key_type& x) { 
-        return t.erase(x); 
+    size_type erase(const key_type& x) {
+        return t.erase(x);
     }
-    void erase(iterator first, iterator last) { 
-        t.erase((typename rep_type::iterator&)first, 
-                (typename rep_type::iterator&)last); 
+    void erase(iterator first, iterator last) {
+        t.erase((typename rep_type::iterator&)first,
+                (typename rep_type::iterator&)last);
     }
     void clear() { t.clear(); }
 
@@ -146,7 +146,7 @@ public:
         return t.lower_bound(x);
     }
     iterator upper_bound(const key_type& x) const {
-        return t.upper_bound(x); 
+        return t.upper_bound(x);
     }
     vcl_pair<iterator,iterator> equal_range(const key_type& x) const {
         return t.equal_range(x);
@@ -158,17 +158,17 @@ __END_STL_FULL_NAMESPACE
 
 // do a cleanup
 #  undef vcl_multiset
-// provide a way to access full functionality 
+// provide a way to access full functionality
 #  define __multiset__  __FULL_NAME(vcl_multiset)
 
 template <class Key, class Compare, class Alloc>
-inline bool operator==(const __multiset__<Key, Compare, Alloc>& x, 
+inline bool operator==(const __multiset__<Key, Compare, Alloc>& x,
                        const __multiset__<Key, Compare, Alloc>& y) {
   return x.t == y.t;
 }
 
 template <class Key, class Compare, class Alloc>
-inline bool operator<(const __multiset__<Key, Compare, Alloc>& x, 
+inline bool operator<(const __multiset__<Key, Compare, Alloc>& x,
                       const __multiset__<Key, Compare, Alloc>& y) {
   return x.t < y.t;
 }
@@ -192,26 +192,26 @@ public:
     __IMPORT_SUPER_COPY_ASSIGNMENT(vcl_multiset)
     explicit vcl_multiset() : super(Compare()) {}
     explicit vcl_multiset(const Compare& comp) : super(comp) {}
-    vcl_multiset(const value_type* first, const value_type* last) : 
+    vcl_multiset(const value_type* first, const value_type* last) :
         super(first, last, Compare()) { }
-    vcl_multiset(const value_type* first, const value_type* last, 
+    vcl_multiset(const value_type* first, const value_type* last,
         const Compare& comp) : super(first, last, comp) { }
-    vcl_multiset(const_iterator first, const_iterator last) : 
+    vcl_multiset(const_iterator first, const_iterator last) :
         super(first, last, Compare()) { }
-    vcl_multiset(const_iterator first, const_iterator last, 
+    vcl_multiset(const_iterator first, const_iterator last,
         const Compare& comp) : super(first, last, comp) { }
 };
 
-#  if defined (__STL_BASE_MATCH_BUG)   
+#  if defined (__STL_BASE_MATCH_BUG)
 template <class Key, class Compare>
-inline bool operator==(const vcl_multiset<Key, Compare>& x, 
+inline bool operator==(const vcl_multiset<Key, Compare>& x,
                        const vcl_multiset<Key, Compare>& y) {
   typedef __multiset__<Key,Compare,vcl_alloc> super;
   return (const super&)x == (const super&)y;
 }
 
 template <class Key, class Compare>
-inline bool operator<(const vcl_multiset<Key, Compare>& x, 
+inline bool operator<(const vcl_multiset<Key, Compare>& x,
                       const vcl_multiset<Key, Compare>& y) {
   typedef __multiset__<Key,Compare,vcl_alloc> super;
   return (const super&)x < (const super&)y;

@@ -5,13 +5,13 @@
 #pragma interface
 #endif
 // include vcl_compiler.h to get the settings for this system and compiler
-#include <vcl_compiler.h> 
+#include <vcl_compiler.h>
 
 #include "vcl_stlconf.h"
 
 // This section contains the abbreviations used throughout the SGI STL when
-// __STL_USE_ABBREVS is defined. Including this file before forward 
-// references of STL containers allows files to use STL abbreviated names 
+// __STL_USE_ABBREVS is defined. Including this file before forward
+// references of STL containers allows files to use STL abbreviated names
 // without including the actual STL header files. Although most of these defines
 // will never be used by most programs, all the abbreviations are included for
 // completeness.
@@ -75,10 +75,10 @@
 
 #endif //__STL_USE_ABBREVS
 
-// forward declare the default vcl_allocator, which is used by almost every 
+// forward declare the default vcl_allocator, which is used by almost every
 // STL container
 
-#ifdef __STL_USE_NEWALLOC 
+#ifdef __STL_USE_NEWALLOC
 
 typedef __new_alloc<0> vcl_alloc;
 // forward declare the default vcl_allocator, since it is used in almost
@@ -157,8 +157,8 @@ typedef __alloc<false,0> vcl_alloc;
 #ifndef vcl_emulation_stack_h
     // stack, queue, and vcl_priority_queue are defined in stack.h
     template <class T, VCL_DFL_TMPL_PARAM_STLDECL(Sequence,vcl_vector<T>) > class stack;
-    template <class T, VCL_DFL_TMPL_PARAM_STLDECL(Sequence,vcl_deque<T>) > class queue; 
-    template <class T, VCL_DFL_TMPL_PARAM_STLDECL(Sequence,vcl_vector<T>), 
+    template <class T, VCL_DFL_TMPL_PARAM_STLDECL(Sequence,vcl_deque<T>) > class queue;
+    template <class T, VCL_DFL_TMPL_PARAM_STLDECL(Sequence,vcl_vector<T>),
           VCL_DFL_TMPL_PARAM_STLDECL(Compare,vcl_less<typename Sequence::value_type>) > class  vcl_priority_queue;
 #endif
 
@@ -166,7 +166,7 @@ typedef __alloc<false,0> vcl_alloc;
 # ifndef __STL_DEFAULT_TYPE_PARAM
     template <class Key, class Compare> class vcl_set;
 # else
-    template <class Key, VCL_DFL_TMPL_PARAM_STLDECL(Compare,vcl_less<Key>), 
+    template <class Key, VCL_DFL_TMPL_PARAM_STLDECL(Compare,vcl_less<Key>),
                         VCL_DFL_TYPE_PARAM_STLDECL(Alloc,vcl_alloc) > class vcl_set;
 # endif
 #endif
@@ -175,7 +175,7 @@ typedef __alloc<false,0> vcl_alloc;
 # ifndef __STL_DEFAULT_TYPE_PARAM
     template <class Key, class T, class Compare> class vcl_map;
 # else
-    template <class Key, class T, VCL_DFL_TMPL_PARAM_STLDECL(Compare,vcl_less<Key>),  
+    template <class Key, class T, VCL_DFL_TMPL_PARAM_STLDECL(Compare,vcl_less<Key>),
                                   VCL_DFL_TYPE_PARAM_STLDECL(Alloc,vcl_alloc) > class vcl_map;
 # endif
 #endif
@@ -184,7 +184,7 @@ typedef __alloc<false,0> vcl_alloc;
 # ifndef __STL_DEFAULT_TYPE_PARAM
     template <class Key, class Compare> class vcl_multiset;
 # else
-    template <class Key, VCL_DFL_TMPL_PARAM_STLDECL(Compare,vcl_less<Key>), 
+    template <class Key, VCL_DFL_TMPL_PARAM_STLDECL(Compare,vcl_less<Key>),
                          VCL_DFL_TYPE_PARAM_STLDECL(Alloc,vcl_alloc) > class vcl_multiset;
 # endif
 #endif
@@ -193,7 +193,7 @@ typedef __alloc<false,0> vcl_alloc;
 # if !defined(MULTIMAP_H) && !defined(__STL_DEFAULT_TYPE_PARAM) &&  ( !defined(__STL_NAMESPACES) || defined(__STL_NO_NAMESPACES) )
     template <class Key, class T, class Compare> class vcl_multimap;
 # else
-    template <class Key, class T, VCL_DFL_TMPL_PARAM_STLDECL(Compare,vcl_less<Key>), 
+    template <class Key, class T, VCL_DFL_TMPL_PARAM_STLDECL(Compare,vcl_less<Key>),
                                   VCL_DFL_TYPE_PARAM_STLDECL(Alloc,vcl_alloc) > class vcl_multimap;
 # endif
 #endif
@@ -208,8 +208,8 @@ typedef __alloc<false,0> vcl_alloc;
 
     template <class Value, class HashFcn, class EqualKey > class vcl_hash_multiset;
 # else
-    template <class Value, VCL_DFL_TMPL_PARAM_STLDECL(HashFcn,hash<Value>), 
-              VCL_DFL_TMPL_PARAM_STLDECL(EqualKey,vcl_equal_to<Value>), 
+    template <class Value, VCL_DFL_TMPL_PARAM_STLDECL(HashFcn,hash<Value>),
+              VCL_DFL_TMPL_PARAM_STLDECL(EqualKey,vcl_equal_to<Value>),
               VCL_DFL_TYPE_PARAM_STLDECL(Alloc,vcl_alloc) > class vcl_hash_set;
 
     template <class Value, VCL_DFL_TMPL_PARAM_STLDECL(HashFcn,hash<Value>),
@@ -223,8 +223,8 @@ typedef __alloc<false,0> vcl_alloc;
     template <class Key, class T, class HashFcn, class EqualKey > class vcl_hash_map;
     template <class Key, class T, class HashFcn, class EqualKey > class vcl_hash_multimap;
 # else
-    template <class Key, class T, VCL_DFL_TMPL_PARAM_STLDECL(HashFcn,hash<Key>), 
-              VCL_DFL_TMPL_PARAM_STLDECL(EqualKey,vcl_equal_to<Key>), 
+    template <class Key, class T, VCL_DFL_TMPL_PARAM_STLDECL(HashFcn,hash<Key>),
+              VCL_DFL_TMPL_PARAM_STLDECL(EqualKey,vcl_equal_to<Key>),
               VCL_DFL_TYPE_PARAM_STLDECL(Alloc,vcl_alloc) > class vcl_hash_map;
     template <class Key, class T, VCL_DFL_TMPL_PARAM_STLDECL(HashFcn,hash<Key>),
               VCL_DFL_TMPL_PARAM_STLDECL(EqualKey,vcl_equal_to<Key>),

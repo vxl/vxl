@@ -33,7 +33,7 @@
 #pragma interface
 #endif
 
-#include <vcl_cstddef.h>   // For ptrdiff_t
+#include <vcl_cstddef.h>   // For vcl_ptrdiff_t and vcl_size_t
 #include <vcl_iosfwd.h>
 //dont use this. it is wrong. #include <vcl_rel_ops.h>   // For operator!= from operator==
 
@@ -70,15 +70,15 @@ class vcl_basic_string
 {
 private:
   charT *data_;
-  size_t strlen_;
-  size_t current_size_;
+  vcl_size_t strlen_;
+  vcl_size_t current_size_;
 
 public:
 // types:
   typedef traits traits_type;
   typedef charT value_type;
-  typedef size_t size_type;
-  typedef ptrdiff_t difference_type;
+  typedef vcl_size_t size_type;
+  typedef vcl_ptrdiff_t difference_type;
   typedef charT& reference;
   typedef const charT& const_reference;
   typedef charT* pointer;
@@ -111,7 +111,7 @@ public:
 //: Return current amount of memory allocated
   size_type capacity () const
   { return current_size_; }
-  
+
 //: Return maximum possible size
   size_type max_size () const
     { return (npos - 1)/sizeof (charT); }  // XXX
@@ -307,8 +307,8 @@ public:
   void swap (vcl_basic_string &that) {
 #define vcl_string_swap_aux(T,m) {T d = that.m; that.m = this->m; this->m = d;}
     vcl_string_swap_aux(charT*, data_);
-    vcl_string_swap_aux(size_t, strlen_);
-    vcl_string_swap_aux(size_t, current_size_);
+    vcl_string_swap_aux(vcl_size_t, strlen_);
+    vcl_string_swap_aux(vcl_size_t, current_size_);
   }
 
 //: Return [reference to] char at pos
@@ -449,7 +449,7 @@ private:
 #ifndef __GNUG__
 #ifndef __SUNPRO_CC
 template <class charT, class traits>
-const size_t vcl_basic_string <charT, traits>::npos = (size_t)(-1);
+const vcl_size_t vcl_basic_string <charT, traits>::npos = (vcl_size_t)(-1);
 #endif
 #endif
 
@@ -614,13 +614,15 @@ operator>= (const vcl_basic_string <charT, traits>& lhs, const charT* rhs)
 // #ifndef __IGNORE_STRING_COMPARISOM_OPERATORS
 // #if !defined(__SGI_STL_FUNCTION_H)
 #if !defined(FUNCTION_H)
-// template <class charT, class traits>
-// inline bool
-// operator!= (const vcl_basic_string <charT, traits>& lhs,
-//             const vcl_basic_string <charT, traits>& rhs)
-// {
-//   return (lhs.compare (rhs) != 0);
-// }
+#if 0
+template <class charT, class traits>
+inline bool
+operator!= (const vcl_basic_string <charT, traits>& lhs,
+            const vcl_basic_string <charT, traits>& rhs)
+{
+  return (lhs.compare (rhs) != 0);
+}
+#endif
 
 template <class charT, class traits>
 inline bool

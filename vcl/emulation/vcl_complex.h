@@ -422,7 +422,6 @@ vcl_ostream& operator << (vcl_ostream& o, vcl_complex<FLOAT> const& x)
     o << x.imag() << 'i';
   }
   return o;
-
 }
 
 template <class FLOAT>

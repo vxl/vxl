@@ -82,8 +82,8 @@ struct __list_iterator {
   typedef value_type* pointer;
   typedef value_type& reference;
   typedef const value_type& const_reference;
-  typedef size_t size_type;
-  typedef ptrdiff_t difference_type;
+  typedef vcl_size_t size_type;
+  typedef vcl_ptrdiff_t difference_type;
   typedef __list_node<T>* link_type;
 
   link_type node;
@@ -132,8 +132,8 @@ struct __list_const_iterator {
   typedef value_type* pointer;
   typedef value_type& reference;
   typedef const value_type& const_reference;
-  typedef size_t size_type;
-  typedef ptrdiff_t difference_type;
+  typedef vcl_size_t size_type;
+  typedef vcl_ptrdiff_t difference_type;
   typedef __list_node<T>* link_type;
 
   link_type node;
@@ -187,9 +187,9 @@ value_type(const  __list_iterator<T>&) {
 }
 
 template <class T>
-inline ptrdiff_t*
+inline vcl_ptrdiff_t*
 distance_type(const  __list_iterator<T>&) {
-  return (ptrdiff_t*) 0;
+  return (vcl_ptrdiff_t*) 0;
 }
 
 template <class T>
@@ -205,16 +205,16 @@ value_type(const __list_const_iterator<T>&) {
 }
 
 template <class T>
-inline ptrdiff_t*
+inline vcl_ptrdiff_t*
 distance_type(const __list_const_iterator<T>&) {
-  return (ptrdiff_t*) 0;
+  return (vcl_ptrdiff_t*) 0;
 }
 
 template <class T, class Alloc>
 class __list_base  {
     typedef __list_base<T,Alloc> self;
     typedef T value_type;
-    typedef size_t size_type;
+    typedef vcl_size_t size_type;
     typedef __list_node<T> list_node;
     typedef list_node* link_type;
 protected:
@@ -270,8 +270,8 @@ public:
     typedef const value_type& const_reference;
     typedef __list_node<T> list_node;
     typedef list_node* link_type;
-    typedef size_t size_type;
-    typedef ptrdiff_t difference_type;
+    typedef vcl_size_t size_type;
+    typedef vcl_ptrdiff_t difference_type;
     typedef __list_iterator<T>             iterator;
     typedef __list_const_iterator<T>       const_iterator;
     typedef reverse_bidirectional_iterator<const_iterator, value_type,
@@ -437,7 +437,7 @@ public:
 # if defined (__STL_NESTED_TYPE_PARAM_BUG)
 #  define iterator       __list_iterator<T>
 #  define const_iterator __list_const_iterator<T>
-#  define size_type      size_t
+#  define size_type      vcl_size_t
 # endif
 
 template <class T, class Alloc>

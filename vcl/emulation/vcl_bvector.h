@@ -94,8 +94,8 @@ class __bvec_iterator {
     typedef __bvec_reference reference;
     typedef bool const_reference;
     typedef bool value_type;
-    typedef ptrdiff_t difference_type;
-    typedef size_t size_type;
+    typedef vcl_ptrdiff_t difference_type;
+    typedef vcl_size_t size_type;
 protected:
     unsigned int* p;
     unsigned int offset;
@@ -179,8 +179,8 @@ class __bvec_const_iterator
     typedef __bvec_reference reference;
     typedef bool value_type;
     typedef bool const_reference;
-    typedef ptrdiff_t difference_type;
-    typedef size_t size_type;
+    typedef vcl_ptrdiff_t difference_type;
+    typedef vcl_size_t size_type;
 protected:
     unsigned int* p;
     unsigned int offset;
@@ -265,18 +265,18 @@ inline random_access_iterator_tag
 iterator_category(const __bvec_iterator&) {return random_access_iterator_tag();}
 inline random_access_iterator_tag
 iterator_category(const __bvec_const_iterator&) {return random_access_iterator_tag();}
-inline ptrdiff_t*
-distance_type(const __bvec_iterator&) {return (ptrdiff_t*)0;}
-inline ptrdiff_t*
-distance_type(const __bvec_const_iterator&) {return (ptrdiff_t*)0;}
+inline vcl_ptrdiff_t*
+distance_type(const __bvec_iterator&) {return (vcl_ptrdiff_t*)0;}
+inline vcl_ptrdiff_t*
+distance_type(const __bvec_const_iterator&) {return (vcl_ptrdiff_t*)0;}
 inline bool* value_type(const __bvec_iterator&) {return (bool*)0;}
 inline bool* value_type(const __bvec_const_iterator&) {return (bool*)0;}
 
 class vcl_bit_vector   {
 public:
     typedef bool value_type;
-    typedef size_t size_type;
-    typedef ptrdiff_t difference_type;
+    typedef vcl_size_t size_type;
+    typedef vcl_ptrdiff_t difference_type;
     typedef __bvec_iterator iterator;
     typedef __bvec_const_iterator const_iterator;
     typedef __bvec_reference reference;
@@ -419,7 +419,7 @@ public:
         copy(first, last, position);
         finish += n;
       } else {
-        size_type len = size() + max(size(), n);
+        size_type len = size() + vcl_max(size(), n);
         unsigned int* q = bit_alloc(len);
         iterator i = copy(begin(), position, iterator(q, 0));
         i = copy(first, last, i);
@@ -439,7 +439,7 @@ public:
         copy(first, last, position);
         finish += n;
       } else {
-        size_type len = size() + max(size(), n);
+        size_type len = size() + vcl_max(size(), n);
         unsigned int* q = bit_alloc(len);
         iterator i = copy(begin(), position, iterator(q, 0));
         i = copy(first, last, i);
@@ -457,7 +457,7 @@ public:
         fill(position, position + n, x);
         finish += n;
       } else {
-        size_type len = size() + max(size(), n);
+        size_type len = size() + vcl_max(size(), n);
         unsigned int* q = bit_alloc(len);
         iterator i = copy(begin(), position, iterator(q, 0));
         fill_n(i, n, x);

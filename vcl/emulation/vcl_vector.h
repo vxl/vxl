@@ -63,7 +63,7 @@ class __vector_base
     typedef __vector_base<T,Alloc> self;
 public:
     typedef T value_type;
-    typedef size_t size_type;
+    typedef vcl_size_t size_type;
     typedef T* pointer;
     typedef const T* const_pointer;
 protected:
@@ -100,8 +100,8 @@ public:
 # if defined ( __STL_NESTED_TYPE_PARAM_BUG )
 #  define __pointer__             T*
 #  define __const_pointer__       const T*
-#  define __size_type__           size_t
-#  define __difference_type__     ptrdiff_t
+#  define __size_type__           vcl_size_t
+#  define __difference_type__     vcl_ptrdiff_t
 # else
 #  define __pointer__         pointer
 #  define __const_pointer__   const_pointer
@@ -125,8 +125,8 @@ public:
     typedef const value_type* const_pointer;
     typedef value_type& reference;
     typedef const value_type& const_reference;
-    typedef ptrdiff_t difference_type;
-    typedef size_t size_type;
+    typedef vcl_ptrdiff_t difference_type;
+    typedef vcl_size_t size_type;
     typedef __iterator__ iterator;
     typedef __const_iterator__ const_iterator;
     typedef reverse_iterator<const_iterator, value_type, const_reference,
