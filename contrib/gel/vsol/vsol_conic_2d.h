@@ -1,5 +1,6 @@
-#ifndef VSOL_CONIC_2D_H
-#define VSOL_CONIC_2D_H
+// This is gel/vsol/vsol_conic_2d.h
+#ifndef vsol_conic_2d_h_
+#define vsol_conic_2d_h_
 //*****************************************************************************
 //:
 // \file
@@ -12,19 +13,20 @@
 // and with non-homogeneous Euclidean 2D geometry terminology instead of
 // homogeneous 3-tuples.
 //
-// \author
-// François BERTEL
+// \author François BERTEL
+// \date   2000/04/28
 //
 // \verbatim
-// Modifications
-// 2002/04/05 Peter Vanroose  axis() added
-// 2001/08/31 Peter Vanroose  constructor added from centre, size, orientation
-// 2001/08/30 Peter Vanroose  now inheriting from vgl_conic
-// 2001/08/29 Peter Vanroose  closest_point and distance to point added
-// 2001/08/29 Peter Vanroose  conic intersection added (implemented in vgl)
-// 2001/08/29 Peter Vanroose  midpoint() added
-// 2000/06/17 Peter Vanroose  Implemented all operator==()s and type info
-// 2000/04/28 François BERTEL Creation
+//  Modifications
+//   2000/04/28 François BERTEL Creation
+//   2000/06/17 Peter Vanroose  Implemented all operator==()s and type info
+//   2001/08/29 Peter Vanroose  midpoint() added
+//   2001/08/29 Peter Vanroose  conic intersection added (implemented in vgl)
+//   2001/08/29 Peter Vanroose  closest_point and distance to point added
+//   2001/08/30 Peter Vanroose  now inheriting from vgl_conic
+//   2001/08/31 Peter Vanroose  constructor added from centre, size, orientation
+//   2002/04/05 Peter Vanroose  axis() added
+//   2003/01/08 Peter Vanroose  moved static private methods to vsol_conic_2d.cxx
 // \endverbatim
 //*****************************************************************************
 
@@ -39,14 +41,27 @@
 #include <vsol/vsol_line_2d.h>
 #include <vsol/vsol_line_2d_sptr.h>
 #include <vnl/vnl_double_3x3.h>
-#include <vcl_cmath.h> // for vcl_abs(double)
 #include <vcl_list.h>
 
 //: Euclidean general conic class, part of the vsol_curve_2d hierarchy
-class vsol_conic_2d
-  : public vsol_curve_2d, public vgl_conic<double>
+
+class vsol_conic_2d : public vsol_curve_2d, public vgl_conic<double>
 {
-public:
+  //***************************************************************************
+  // Data members
+  //***************************************************************************
+
+  //---------------------------------------------------------------------------
+  //: First point of the curve
+  //---------------------------------------------------------------------------
+  vsol_point_2d_sptr p0_;
+
+  //---------------------------------------------------------------------------
+  //: Last point of the curve
+  //---------------------------------------------------------------------------
+  vsol_point_2d_sptr p1_;
+
+ public:
   //---------------------------------------------------------------------------
   //: the different kinds of conic
   //---------------------------------------------------------------------------
@@ -76,15 +91,10 @@ public:
   //***************************************************************************
 
   //---------------------------------------------------------------------------
-  //: Constructor from coefficient of the cartesian equation
-  //  `new_a'x^2+`new_b'xy+`new_c'y^2+`new_d'x+`new_e'y+`new_f'
+  //: Constructor from coefficients of the cartesian equation
+  //  `a'x^2+`b'xy+`c'y^2+`d'x+`e'y+`f'
   //---------------------------------------------------------------------------
-  explicit vsol_conic_2d(double new_a,
-                         double new_b,
-                         double new_c,
-                         double new_d,
-                         double new_e,
-                         double new_f);
+  vsol_conic_2d(double a, double b, double c, double d, double e, double f);
 
   //---------------------------------------------------------------------------
   //: Ellipse/hyperbola constructor from centre, size and orientation.
@@ -184,52 +194,52 @@ public:
   //---------------------------------------------------------------------------
   //: Return the real type of the conic from its coefficients
   //---------------------------------------------------------------------------
-  virtual vsol_conic_type real_type(void) const;
+  vsol_conic_type real_type(void) const;
 
   //---------------------------------------------------------------------------
   //: Is `this' an real ellipse ?
   //---------------------------------------------------------------------------
-  virtual bool is_real_ellipse(void) const;
+  bool is_real_ellipse(void) const;
 
   //---------------------------------------------------------------------------
   //: Is `this' a real circle ?
   //---------------------------------------------------------------------------
-  virtual bool is_real_circle(void) const;
+  bool is_real_circle(void) const;
 
   //---------------------------------------------------------------------------
   //: Is `this' a complex ellipse ?
   //---------------------------------------------------------------------------
-  virtual bool is_complex_ellipse(void) const;
+  bool is_complex_ellipse(void) const;
 
   //---------------------------------------------------------------------------
   //: Is `this' a complex circle ?
   //---------------------------------------------------------------------------
-  virtual bool is_complex_circle(void) const;
+  bool is_complex_circle(void) const;
 
   //---------------------------------------------------------------------------
   //: Is `this' a parabola ?
   //---------------------------------------------------------------------------
-  virtual bool is_parabola(void) const;
+  bool is_parabola(void) const;
 
   //---------------------------------------------------------------------------
   //: Is `this' a hyperbola ?
   //---------------------------------------------------------------------------
-  virtual bool is_hyperbola(void) const;
+  bool is_hyperbola(void) const;
 
   //---------------------------------------------------------------------------
   //: Is `this' an real intersecting lines ?
   //---------------------------------------------------------------------------
-  virtual bool is_real_intersecting_lines(void) const;
+  bool is_real_intersecting_lines(void) const;
 
   //---------------------------------------------------------------------------
   //: Is `this' an complex intersecting lines ?
   //---------------------------------------------------------------------------
-  virtual bool is_complex_intersecting_lines(void) const;
+  bool is_complex_intersecting_lines(void) const;
 
   //---------------------------------------------------------------------------
   //: Is `this' an coincident lines ?
   //---------------------------------------------------------------------------
-  virtual bool is_coincident_lines(void) const;
+  bool is_coincident_lines(void) const;
 
   //---------------------------------------------------------------------------
   //: Return 3 ellipse parameters:
@@ -238,11 +248,11 @@ public:
   //  -                            size (`width',`height')
   //  REQUIRE: is_real_ellipse()
   //---------------------------------------------------------------------------
-  virtual void ellipse_parameters(double &cx,
-                                  double &cy,
-                                  double &phi,
-                                  double &width,
-                                  double &height) const;
+  void ellipse_parameters(double &cx,
+                          double &cy,
+                          double &phi,
+                          double &width,
+                          double &height) const;
 
   //---------------------------------------------------------------------------
   //: Return 3 hyperbola parameters:
@@ -251,11 +261,11 @@ public:
   //  -                            size (`half-axis',-`half-secondary-axis')
   //  REQUIRE: is_hyperbola()
   //---------------------------------------------------------------------------
-  virtual void hyperbola_parameters(double &cx,
-                                    double &cy,
-                                    double &phi,
-                                    double &main_axis,
-                                    double &secondary_axis) const;
+  void hyperbola_parameters(double &cx,
+                            double &cy,
+                            double &phi,
+                            double &main_axis,
+                            double &secondary_axis) const;
 
   //---------------------------------------------------------------------------
   //: Return 2 parabola parameters:
@@ -263,20 +273,20 @@ public:
   //  -                             orientation (`cosphi',`sinphi')
   //  REQUIRE: is_parabola()
   //---------------------------------------------------------------------------
-  virtual void parabola_parameters(double &cx,
-                                   double &cy,
-                                   double &cosphi,
-                                   double &sinphi) const;
+  void parabola_parameters(double &cx,
+                           double &cy,
+                           double &cosphi,
+                           double &sinphi) const;
 
   //---------------------------------------------------------------------------
   //: Return the length of `this'
   //---------------------------------------------------------------------------
-  virtual double length(void) const;
+  virtual double length(void) const; // virtual of vsol_curve_2d
 
   //---------------------------------------------------------------------------
   //: Return the matrix associated with the coefficients.
   //---------------------------------------------------------------------------
-  virtual vnl_double_3x3 matrix(void) const;
+  vnl_double_3x3 matrix(void) const;
 
   //***************************************************************************
   // Status setting
@@ -301,12 +311,12 @@ public:
   //---------------------------------------------------------------------------
   //: Return the centre or symmetry point of a central conic.
   //---------------------------------------------------------------------------
-  virtual vsol_point_2d_sptr midpoint() const;
+  vsol_point_2d_sptr midpoint() const;
 
   //---------------------------------------------------------------------------
   //: Return the main symmetry axis, if not degenerate.
   //---------------------------------------------------------------------------
-  virtual vsol_line_2d_sptr axis() const;
+  vsol_line_2d_sptr axis() const;
 
   //---------------------------------------------------------------------------
   //: Is `p' in `this' ? (ie `p' verifies the equation, within some margin)
@@ -317,8 +327,7 @@ public:
   //: Returns the tangent to the conic in the point p, if p is on the conic.
   //  In general, returns the polar line of the point w.r.t. the conic.
   //---------------------------------------------------------------------------
-  virtual vgl_homg_line_2d<double> *
-  tangent_at_point(vsol_point_2d_sptr const& p) const;
+  virtual vgl_homg_line_2d<double>* tangent_at_point(vsol_point_2d_sptr const& p) const;
 
   //---------------------------------------------------------------------------
   //: Return the set of (real) intersection points of this conic with a line
@@ -348,59 +357,6 @@ public:
     if (blanking < 0) blanking = 0; while (blanking--) strm << ' ';
     strm << static_cast<vgl_conic<double> >(*this) << '\n';
   }
-
-private:
-  //***************************************************************************
-  // Internals
-  //***************************************************************************
-
-  //---------------------------------------------------------------------------
-  //: Are `x' and `y' almost equal ?
-  //  the comparison uses an adaptative epsilon
-  //---------------------------------------------------------------------------
-  inline static bool are_equal(double x, double y) {
-    // epsilon is a fixed fraction of the absolute average of x and y
-    const double epsilon=1e-6*(vcl_abs(x)+vcl_abs(y));
-    // <=epsilon but not <epsilon, to compare to null values
-    return vcl_abs(x-y)<=epsilon;
-  }
-
-  //---------------------------------------------------------------------------
-  //: Is `x' almost zero ?
-  //  the comparison uses a fixed epsilon, as the adaptive one from
-  //  are_equal() makes no sense here.
-  //---------------------------------------------------------------------------
-  static bool is_zero(double x) { return vcl_abs(x)<=1e-6; }
-
-#if 0 // These functions were removed from vsol_spatial_object_2d
-  //---------------------------------------------------------------------------
-  // virtuals of vsol_spatial_object_2d
-  //---------------------------------------------------------------------------
-
-  //: return reference point.  This is the midpoint for central conics.
-  virtual vcl_vector<double> *GetLocation();
-  //: return orientation of the main symmetry axis, if not degenerate.
-  virtual vcl_vector<double> *GetOrientation();
-  //: return 2-dimensional size vector
-  virtual vcl_vector<double> *GetSize();
-  //: move location() to (0,0).
-  virtual bool Translate();
-#endif
-
-private:
-  //***************************************************************************
-  // Implementation
-  //***************************************************************************
-
-  //---------------------------------------------------------------------------
-  //: First point of the curve
-  //---------------------------------------------------------------------------
-  vsol_point_2d_sptr p0_;
-
-  //---------------------------------------------------------------------------
-  //: Last point of the curve
-  //---------------------------------------------------------------------------
-  vsol_point_2d_sptr p1_;
 };
 
-#endif // #ifndef VSOL_CONIC_2D_H
+#endif // #ifndef vsol_conic_2d_h_

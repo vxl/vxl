@@ -1,15 +1,35 @@
 // This is gel/vsol/vsol_conic_2d.cxx
 #include "vsol_conic_2d.h"
 //:
-//  \file
+// \file
 
 #include <vsol/vsol_point_2d.h>
 #include <vgl/algo/vgl_homg_operators_2d.h>
+#include <vcl_cmath.h> // for vcl_abs(double)
 
 //*****************************************************************************
 // External declarations for implementation
 //*****************************************************************************
 #include <vcl_cassert.h>
+
+//---------------------------------------------------------------------------
+//: Are `x' and `y' almost equal ?
+//  the comparison uses an adaptative epsilon
+//---------------------------------------------------------------------------
+inline static bool are_equal(double x, double y)
+{
+  // epsilon is a fixed fraction of the absolute average of x and y
+  const double epsilon=1e-6*(vcl_abs(x)+vcl_abs(y));
+  // <=epsilon but not <epsilon, to compare to null values
+  return vcl_abs(x-y)<=epsilon;
+}
+
+//---------------------------------------------------------------------------
+//: Is `x' almost zero ?
+//  the comparison uses a fixed epsilon, as the adaptive one from
+//  are_equal() makes no sense here.
+//---------------------------------------------------------------------------
+inline static bool is_zero(double x) { return vcl_abs(x)<=1e-6; }
 
 //***************************************************************************
 // Initialization
