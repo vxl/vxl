@@ -22,7 +22,7 @@
 #include <vnl/vnl_vector_fixed.h>
 
 template <class T>
-class vnl_scatter_3x3 : public vnl_matrix_fixed<double,3,3> {
+class vnl_scatter_3x3 : public vnl_matrix_fixed<T,3,3> {
 public:
   typedef vnl_matrix_fixed<T,3,3> base;
   typedef vnl_vector_fixed<T,3> vect;
