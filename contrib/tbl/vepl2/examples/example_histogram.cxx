@@ -11,11 +11,10 @@
 #include <vepl2/vepl2_histogram.h>
 
 // for I/O:
+#include <vil2/vil2_image_view.h>
 #include <vil2/vil2_load.h>
-#include <vil2/vil2_image_view_base.h>
 #include <vcl_iostream.h>
-
-typedef unsigned char ubyte;
+#include <vxl_config.h> // for vxl_byte
 
 int
 main(int argc, char** argv) {
@@ -26,10 +25,11 @@ main(int argc, char** argv) {
   }
 
   // The input image:
-  vil2_image_view_base_sptr in = vil2_load(argv[1]);
+  vil2_image_view<vxl_byte> in = vil2_load(argv[1]);
+  if (!in) { vcl_cerr << "Please use a ubyte image as input\n"; return 2; }
 
   // The filter:
-  vcl_vector<unsigned int> out = vepl2_histogram(*in);
+  vcl_vector<unsigned int> out = vepl2_histogram(in);
 
   // Write output:
   for (unsigned int i=0; i<out.size(); ++i) if (out[i] != 0)

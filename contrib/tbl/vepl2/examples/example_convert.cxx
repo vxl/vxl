@@ -10,15 +10,15 @@
 // \author Peter Vanroose, K.U.Leuven, ESAT/PSI
 // \date   7 October 2002, from vepl/examples
 //
-#include <vil2/vil2_image_view.h>
+#include <vepl2/vepl2_convert.h>
 #include <vil/vil_rgb.h>
 
-#include <vepl2/vepl2_convert.h> // this one last!
-
 // for I/O:
+#include <vil2/vil2_image_view.h>
 #include <vil2/vil2_load.h>
 #include <vil2/vil2_save.h>
 #include <vcl_iostream.h>
+#include <vxl_config.h> // for vxl_byte
 
 typedef vil_rgb<vxl_byte> rgbcell;
 
@@ -33,7 +33,7 @@ main(int argc, char** argv) {
   vil2_image_view<vxl_byte> out_grey(in);
   vil2_image_view<rgbcell> out_rgb(in);
 
-  if (in->nplanes() == 1 && in->pixel_format() != VIL2_PIXEL_FORMAT_RGB_BYTE) { // monochrome
+  if (in->nplanes() == 1 && in->pixel_format() == vil2_pixel_format_component_format(in->pixel_format())) { // monochrome
     if (vil2_pixel_format_sizeof_components(in->pixel_format()) == 1)
       vcl_cerr<<"Warning: no conversion necessary\n";
     out_grey = vepl2_convert(*in, (vxl_byte)0);

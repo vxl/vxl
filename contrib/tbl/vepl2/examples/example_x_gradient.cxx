@@ -9,16 +9,17 @@
 // \author Peter Vanroose, K.U.Leuven, ESAT/PSI
 // \date   7 October 2002, from vepl/examples
 //
-#include <vil/vil_rgb.h>
 #include <vepl2/vepl2_x_gradient.h>
 
-typedef unsigned char ubyte;
-typedef vil_rgb<ubyte> rgbcell;
-
 // for I/O:
+#include <vil2/vil2_image_view.h>
 #include <vil2/vil2_load.h>
 #include <vil2/vil2_save.h>
 #include <vcl_iostream.h>
+
+#include <vil/vil_rgb.h>
+#include <vxl_config.h> // for vxl_byte
+typedef vil_rgb<vxl_byte> rgbcell;
 
 int
 main(int argc, char** argv) {
@@ -29,13 +30,14 @@ main(int argc, char** argv) {
   }
 
   // The input image:
-  vil2_image_view_base_sptr in = vil2_load(argv[1]);
+  vil2_image_view<rgbcell> in = vil2_load(argv[1]);
+  if (!in) { vcl_cerr<< "Please use a colour ubyte image as input\n"; return 2;}
 
   // The filter:
-  vil2_image_view_base_sptr out = vepl2_x_gradient(*in);
+  vil2_image_view<rgbcell> out = vepl2_x_gradient(in);
 
   // Write output:
-  vil2_save(*out, argv[2], "pnm");
+  vil2_save(out, argv[2], "pnm");
   vcl_cout << "Written image of type PNM to " << argv[2] << vcl_endl;
 
   return 0;

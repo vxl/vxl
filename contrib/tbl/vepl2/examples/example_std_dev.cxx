@@ -17,15 +17,15 @@
 #include <vepl2/vepl2_dyadic.h>
 
 // for I/O:
+#include <vil2/vil2_image_view.h>
 #include <vil2/vil2_load.h>
 #include <vil2/vil2_save.h>
 #include <vcl_iostream.h>
-#include <vcl_cmath.h> // for vcl_sqrt()
-
-typedef unsigned char ubyte;
+#include <vxl_config.h> // for vxl_byte
 
 int
-main(int argc, char** argv) {
+main(int argc, char** argv)
+{
   if (argc < 3)
   {
     vcl_cerr << "Syntax: example_vepl2_moment file_in file_out\n";
@@ -33,7 +33,7 @@ main(int argc, char** argv) {
   }
 
   // The input image:
-  vil2_image_view_base_sptr in = vil2_load(argv[1]);
+  vil2_image_view_base_sptr in = vil2_load(argv[1]); // any type
   float dummy_f = 0;
   in = vepl2_convert(*in, dummy_f);
 
@@ -53,7 +53,7 @@ main(int argc, char** argv) {
   out = vepl2_monadic_sqrt(*out);
 
   // vepl2_convert to ubyte and write to PGM file:
-  ubyte dummy = 0;
+  vxl_byte dummy = 0;
   out = vepl2_convert(*out, dummy);
   vil2_save(*out, argv[2], "pnm");
   vcl_cout << "Written image of type PGM to " << argv[2] << vcl_endl;
