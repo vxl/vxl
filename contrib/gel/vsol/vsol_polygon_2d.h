@@ -16,6 +16,7 @@
 //   2000/05/09 François BERTEL Creation
 //   2000/06/17 Peter Vanroose  Implemented all operator==()s and type info
 //   2001/07/03 Peter Vanroose  Corrected the implementation of is_convex()
+//   2003/11/05 Amir Tamrakar   Added Safe casting methods
 // \endverbatim
 //*****************************************************************************
 
@@ -63,6 +64,13 @@ class vsol_polygon_2d : public vsol_region_2d
   //  See Prototype pattern
   //---------------------------------------------------------------------------
   virtual vsol_spatial_object_2d_sptr clone(void) const;
+
+  //---------------------------------------------------------------------------
+  //: Safe casting
+  //---------------------------------------------------------------------------
+
+  virtual vsol_polygon_2d* cast_to_polygon_2d(void) { return this;}
+  virtual const vsol_polygon_2d* cast_to_polygon_2d(void) const { return this;}
 
   //***************************************************************************
   // Access
