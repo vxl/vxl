@@ -10,16 +10,14 @@
 #include <vnl/vnl_math.h>
 
 #include <vcl_cmath.h>
-#include <vcl_cstdlib.h>
 #include <vxl_config.h>
+
 #if VXL_STDLIB_HAS_DRAND48
+# include <vcl_cstdlib.h>
 // On SunPro 5.0, <cstdlib> does not
 // declare drand48() but <stdlib.h> does.
 # include <stdlib.h> // dont_vxl_filter
-#endif
-
-
-#if !VXL_STDLIB_HAS_DRAND48
+#else
 // rand() is not always a good random number generator,
 // so use the following congruential random number generator - PVr
 static unsigned long vnl_sample_seed = 12345;
@@ -30,9 +28,9 @@ static unsigned long vnl_sample_seed = 12345;
 void vnl_sample_reseed()
 {
 # if VXL_STDLIB_HAS_DRAND48
-  srand48( time(0) );
+  srand48( vcl_time(0) );
 # else
-  vnl_sample_seed = time(0);
+  vnl_sample_seed = vcl_time(0);
 # endif
 }
 
