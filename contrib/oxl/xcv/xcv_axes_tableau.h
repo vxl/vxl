@@ -3,7 +3,7 @@
 #define xcv_axes_tableau_h_
 //
 // This is xcv/xcv_axes_tableau.h
-//
+
 //:
 // \file
 // \author  K.Y.McGaul
@@ -16,7 +16,6 @@
 //  Modifications:
 //    K.Y.McGaul   26-APR-2001  Initial version.
 // \endverbatim
-//
 
 #include <vgui/vgui_tableau.h>
 #include <vgui/vgui_event.h>

@@ -2,7 +2,7 @@
 #define xcv_geometry_h_
 //
 // This is xcv/xcv_geometry.h
-//
+
 //:
 // \file
 // \author   K.Y.McGaul
@@ -16,7 +16,6 @@
 //   Marko Bacic    01-SEP-2000    Added save_...
 //   Marko Bacic    02-SEP-2000    Added load_...
 // \endverbatim
-//
 
 class vgui_menu;
 
@@ -88,7 +87,6 @@ private:
   static void save(const char *,const char *);
   //: Load coordinates from a file
   static void load(const char *,const char *);
-
 };
 
 #endif // xcv_geometry_

@@ -2,7 +2,7 @@
 #define xcv_twoview_manager_h_
 //
 // This is xcv/xcv_twoview_manager.h
-//
+
 //:
 // \file
 // \author   K.Y.McGaul

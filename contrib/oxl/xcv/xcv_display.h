@@ -2,7 +2,7 @@
 #define xcv_display_h_
 //
 // This is xcv/xcv_display.h
-//
+
 //:
 // \file
 // \author   K.Y.McGaul
@@ -14,7 +14,6 @@
 //   K.Y.McGaul     27-JAN-2000    Initial version.
 //   Marko Bacic    19-JUL-2000    Added support for region of interest
 // \endverbatim
-//
 
 class vgui_menu;
 class vgui_roi_tableau_make_roi;

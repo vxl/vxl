@@ -2,7 +2,7 @@
 #define xcv_mview_manager_h_
 //
 // This is xcv/xcv_mview_manager.h
-//
+
 //:
 // \file
 // \author  K.Y.McGaul
@@ -11,7 +11,6 @@
 //  Modifications:
 //   K.Y.McGaul     05-MAY-2000    Initial version.
 // \endverbatim
-//
 
 class vgui_event;
 struct vgui_tableau_sptr;

@@ -2,7 +2,7 @@
 #define xcv_threeview_manager_h_
 //
 // This is xcv/xcv_threeview_manager.h
-//
+
 //:
 // \file
 // \author  K.Y.McGaul
@@ -15,7 +15,6 @@
 //  Modifications:
 //    K.Y.McGaul     05-MAY-2000    Initial version.
 // \endverbatim
-//
 
 #include <mvl/TriTensor.h>
 #include <vgui/vgui_tableau.h>
@@ -33,7 +32,7 @@ public:
   xcv_threeview_manager();
   //: Destructor.
   ~xcv_threeview_manager();
-  
+
   //: Set the tableau at the given position to the given tableau.
   void set_tableau(vgui_tableau_sptr const& tab, unsigned tab_position);
   //: Set TriTensor to given value.

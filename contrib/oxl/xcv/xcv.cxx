@@ -1,11 +1,11 @@
 //
 // This is xcv/xcv.cxx
-//
+
 //:
 // \file
 // \author  K.Y.McGaul
 // \brief Main function for xcv.
-//  This contains the main function for xcv, a program designed to demonstrate 
+//  This contains the main function for xcv, a program designed to demonstrate
 //  the functionality of vxl.
 // \verbatim
 //  Modifications:
@@ -308,7 +308,7 @@ xcv_image_tableau_sptr get_image_tableau_at(unsigned col, unsigned row)
     tt.vertical_cast(vgui_find_below_by_type_name(tab, vcl_string("xcv_image_tableau")));
     return tt;
   }
-  vgui_macro_warning << "Unable to get xcv_image_tableau at (" << col << ", " 
+  vgui_macro_warning << "Unable to get xcv_image_tableau at (" << col << ", "
     << row << ")" << vcl_endl;
   return xcv_image_tableau_sptr();
 }
@@ -529,7 +529,7 @@ int main(int argc, char** argv)
       vgui_easy2D_new         easy  (image);
       vgui_rubberbander_new   rubber(new vgui_rubberbander_easy2D_client(easy));
       vgui_composite_new      comp(easy,rubber);
-      xcv_picker_tableau_new  picker(comp); 
+      xcv_picker_tableau_new  picker(comp);
       vgui_viewer2D_new       view  (picker);
       xcv_tab->add_next(view);
 

@@ -2,9 +2,9 @@
 #define xcv_axes_limits_h_
 //
 // This is xcv/xcv_axes_limits.h
-//
+
 //:
-// \file 
+// \file
 // \author   Andrew Fitzgibbon <andrewfg@ed.ac.uk>
 // \date     23 Apr 96
 // \brief Compute marks for the axes of a graph.
@@ -16,7 +16,6 @@
 //     Andrew Fitzgibbon 23-APR-1996   Initial version.
 //     K.Y.McGaul        26-APR-2001   Converted to vxl.
 // \endverbatim
-//
 
 class xcv_axes_limits {
 public:
@@ -37,7 +36,7 @@ public:
 
   //: Constructor.
   xcv_axes_limits();
-  //: Set the lowest and highest plotted values. 
+  //: Set the lowest and highest plotted values.
   void set_range(double low, double high);
   //: Compute the start, end and spacing for the tick marks.
   void calc_ticks();

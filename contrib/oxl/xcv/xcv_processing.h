@@ -2,8 +2,8 @@
 #define xcv_processing_h_
 //
 // This is xcv/xcv_processing.h
-//
-//
+
+//:
 // \file
 // \author  K.Y.McGaul
 // \brief   Interface to image processing operations.
@@ -13,7 +13,6 @@
 //  Modifications
 //    K.Y.McGaul     26-SEP-2000    Initial version.
 // \endverbatim
-//
 
 class vgui_menu;
 class osl_harris_params;

@@ -2,7 +2,7 @@
 #define xcv_image_tableau_h_
 //
 // This is xcv/xcv_image_tableau.h
-//
+
 //:
 // \file
 // \author  Marko Bacic (u97mb@robots.ox.ac.uk)
@@ -11,7 +11,6 @@
 //  Modifications:
 //    Marko Bacic   AUG-2000   Initial version.
 // \end verbatim
-//
 
 #include "xcv_image_tableau_sptr.h"
 #include <vgui/vgui_image_tableau.h>

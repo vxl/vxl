@@ -5,7 +5,7 @@
 #endif
 //
 // This is xcv/xcv_multiview.h
-//
+
 //:
 // \file
 // \author   K.Y.McGaul
@@ -19,7 +19,6 @@
 //  Modifications
 //   K.Y.McGaul     27-JAN-2000    Initial version.
 // \endverbatim
-//
 
 #include "xcv_twoview_manager.h"
 #include "xcv_threeview_manager.h"
@@ -39,7 +38,7 @@ public:
   static void load_h_matrix2d();
   //: Load corner matches for the two selected views from a file.
   static void load_corner_matches();
- 
+
   //: Save the FMatrix of the two selected views to file.
   static void save_f_matrix();
   //: Save the HMatrix2D of the two selected views to file.

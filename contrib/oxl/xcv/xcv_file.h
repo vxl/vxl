@@ -1,6 +1,7 @@
 #ifndef xcv_file_h_
 #define xcv_file_h_
 // This is xcv/xcv_file.h
+
 //:
 // \file
 // Creates a menu for, and provides an interface to operations for loading
@@ -16,7 +17,6 @@
 //   xx-AUG-2000 -- Marko Bacic, Oxford RRG added support for saving in different
 //                  image formats
 // \endverbatim
-//
 
 class vgui_menu;
 

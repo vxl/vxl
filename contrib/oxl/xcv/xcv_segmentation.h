@@ -2,8 +2,8 @@
 #define xcv_segmentation_h_
 //
 // This is xcv/xcv_segmentation.h
-//
-//
+
+//:
 // \file
 // \author  K.Y.McGaul
 // \brief   Interface for segmentation operations.
@@ -13,7 +13,6 @@
 //  Modifications
 //   K.Y.McGaul     27-JAN-2000    Initial version.
 // \endverbatim
-//
 
 #include <vcl_list.h>
 #include <vcl_vector.h>

@@ -1,9 +1,9 @@
 //-*- c++ -*-------------------------------------------------------------------
 #ifndef xcv_picker_tableau_h_
 #define xcv_picker_tableau_h_
-// 
-// This is xcv/xcv_picker_tableau.h
 //
+// This is xcv/xcv_picker_tableau.h
+
 //:
 // \file
 // \author K.Y.McGaul
@@ -15,7 +15,6 @@
 //  Modifications:
 //   K.Y.McGaul   23-MAR-2001  Initial version.
 // \endverbatim
-//
 
 #include <vgui/vgui_tableau.h>
 #include <vgui/vgui_event.h>
@@ -26,15 +25,15 @@ class vgui_tableau;
 // <vgui_make_sptr>
 #include "xcv_picker_tableau_sptr.h"
 // </vgui_make_sptr>
-class xcv_picker_tableau : public vgui_tableau 
+class xcv_picker_tableau : public vgui_tableau
 {
 public:
-  
+
   //: Constructor, takes a child tableau.
   xcv_picker_tableau(vgui_tableau_sptr const&);
   //: Destructor.
   ~xcv_picker_tableau();
-  vcl_string type_name() const { return "xcv_picker_tableau";}  
+  vcl_string type_name() const { return "xcv_picker_tableau";}
 
   //: Gets a user selected point.
   bool pick_point(float* x, float* y);
@@ -64,7 +63,7 @@ private:
   float pointx1, pointy1, pointx2, pointy2;
   //: Whether this is the first (start) or second (end) point being selected.
   bool FIRSTPOINT;
- 
+
   //: Coordinates for point:
   float pointx, pointy;
   //: True if picked by left mouse button, else false.
@@ -76,7 +75,7 @@ private:
 
 
 // <vgui_make_sptr>
-struct xcv_picker_tableau_new : public xcv_picker_tableau_sptr 
+struct xcv_picker_tableau_new : public xcv_picker_tableau_sptr
 {
   typedef xcv_picker_tableau_sptr base;
   xcv_picker_tableau_new(vgui_tableau_sptr const& arg1000) : base(new xcv_picker_tableau(arg1000)) { }
