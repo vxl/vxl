@@ -397,7 +397,7 @@ vcl_fill_n(OutputIterator first, Size n, const T& value)
 }
 
 template <class InputIterator1, class InputIterator2>
-INLINE_LOOP vcl_pair<InputIterator1, InputIterator2> mismatch(InputIterator1 first1,
+INLINE_LOOP vcl_pair<InputIterator1, InputIterator2> vcl_mismatch(InputIterator1 first1,
                                               InputIterator1 last1,
                                               InputIterator2 first2)
 {
@@ -407,7 +407,7 @@ INLINE_LOOP vcl_pair<InputIterator1, InputIterator2> mismatch(InputIterator1 fir
 }
 
 template <class InputIterator1, class InputIterator2, class BinaryPredicate>
-INLINE_LOOP vcl_pair<InputIterator1, InputIterator2> mismatch(InputIterator1 first1,
+INLINE_LOOP vcl_pair<InputIterator1, InputIterator2> vcl_mismatch(InputIterator1 first1,
                                               InputIterator1 last1,
                                               InputIterator2 first2,
                                               BinaryPredicate binary_pred)
