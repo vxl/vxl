@@ -451,13 +451,14 @@ The discussion returned to image processing.
 Ian Scott proposed that image processing go in vxl/vil/algo.
 Algorithms would operate on both vil2_image_views (N in, M out) in
 memory, and would operate on vil_image_data, stitching together tiles
-of data.
+of data. The useful code in tbl/vipl would be converted to vil/algo, and
+then we would dump vipl and vepl.
 
 AWF proposed that we skip the stitching.
 
 Amitha Perera suggested that we start by making algorithms in
 vxl/vil/algo only operate on memory images, and add operations on file
-images only when they are needed.
+images only when they are needed. This was agreed by consensus/
 
 ----------------------------------------------------------------------------
 
@@ -498,7 +499,7 @@ new users.
 Goals:
 
 * VXL 1.0 in 2-3 months with these requirements
-  - vgui a top-level library
+  - vgui a level 2, VXL-status library
   - vidl, vcsl get documented (Peter Tu has a vcsl document, not in
     texinfo, needs to be converted)
 
