@@ -5,6 +5,9 @@
 //:
 // \file
 // \author  K.Y.McGaul
+// \brief Passes events to a tableau and a xcv_mview_manager.
+//  Events sent to this tableau are passed on to both its child tableau
+//  and to the xcv_mview_manager registered in the constructor.
 // \verbatim
 //  Modifications:
 //   K.Y.McGaul     05-MAY-2000    Initial version.

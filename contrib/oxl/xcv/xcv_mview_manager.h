@@ -3,10 +3,10 @@
 //
 // This is xcv/xcv_mview_manager.h
 //
-//: Base class for multiview managers.
-//
+//:
 // \file
 // \author  K.Y.McGaul
+// \brief   Base class for multiview managers.
 // \verbatim
 //  Modifications:
 //   K.Y.McGaul     05-MAY-2000    Initial version.

@@ -5,11 +5,11 @@
 // \author K.Y.McGaul
 // \verbatim
 //  Modifications:
-//    K.Y.McGaul 23-MAR-2001   Initial version.
+//    K.Y.McGaul 26-APR-2001   Initial version.
 // \end verbatim
 //
 
-#include "xcv_picker_tableau.h"
+#include <xcv/xcv_picker_tableau.h>
 
 #include <vcl_iostream.h>
 #include <vnl/vnl_math.h>
@@ -18,7 +18,6 @@
 #include <vgui/vgui_projection_inspector.h>
 
 xcv_picker_tableau::object_type xcv_picker_tableau::obj_type = none_enum;
-static bool debug = false;
 
 //========================================================================
 //: Constructor, takes a child tableau.
@@ -116,9 +115,6 @@ void xcv_picker_tableau::pick_line(float* x1, float* y1, float* x2,
 //  the gl matrices would have been reset.
 bool xcv_picker_tableau::handle(const vgui_event& event) 
 {
-   if (debug)
-     vcl_cout << "xcv_picker_tableau: event type = " << event.type << vcl_endl;
-
   // Pass events on down to the child tableaux:
   child_tab->handle(event);
 

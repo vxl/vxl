@@ -3,11 +3,12 @@
 //
 // This is xcv/xcv_processing.h
 //
-//: Creates a menu for, and provides an interface to image processing operations
-//  contained in vxl.
 //
 // \file
 // \author  K.Y.McGaul
+// \brief   Interface to image processing operations.
+//  Creates a menu for, and provides an interface to image processing operations
+//  contained in vxl.
 // \verbatim
 //  Modifications
 //    K.Y.McGaul     26-SEP-2000    Initial version.

@@ -3,13 +3,14 @@
 //
 // This is xcv/xcv_threeview_manager.h
 //
-//: Handles events which occur in one view but are displayed in three views
-//  simultaneously (eg. displaying the epipolar lines in two view corresponding
-//  to a mouse press in the other view.)
-//  Also holds data which links three views, eg. TriTensor
-//
+//:
 // \file
 // \author  K.Y.McGaul
+// \brief Handles events which occur in one view but are displayed in three views.
+//  (eg. displaying the epipolar lines in two view corresponding
+//  to a mouse press in the other view.)
+//  Also holds data which links three views, eg. TriTensor
+//  Each set of three views will have its own threeview_manager.
 // \verbatim
 //  Modifications:
 //    K.Y.McGaul     05-MAY-2000    Initial version.

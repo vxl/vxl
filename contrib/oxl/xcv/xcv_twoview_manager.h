@@ -3,18 +3,19 @@
 //
 // This is xcv/xcv_twoview_manager.h
 //
-//: Handles events which occur in one view but are displayed in two views
-//  simultaneously (eg. displaying the epipolar line in one view corresponding
+//:
+// \file
+// \author   K.Y.McGaul
+// \brief Handles events which occur in one view but are displayed in two views.
+//  (eg. displaying the epipolar line in one view corresponding
 //  to a mouse press in the other view.)
 //  Also holds data which links two views, eg. corner matches, FMatrix and
 //  HMatrix2D.
-//
-// \file
-// \author   K.Y.McGaul
+//  Each set of two views will have its own twoview_manager.
 // \verbatim
 //  Modifications:
-//   K.Y.McGaul     05-MAY-2000    Initial version.
-//   Marko Bacic    18-AUG-2000    Sorted out display of epipolar lines
+//    K.Y.McGaul     05-MAY-2000    Initial version.
+//    Marko Bacic    18-AUG-2000    Sorted out display of epipolar lines
 // \endverbatim
 //
 

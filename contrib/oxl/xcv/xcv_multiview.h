@@ -6,11 +6,15 @@
 //
 // This is xcv/xcv_multiview.h
 //
-//: Creates a menu for, and provides an interface to multiview operations
-//  contained in mvl.
-//
+//:
 // \file
 // \author   K.Y.McGaul
+// \brief Interface for multiview functions.
+//  Creates a menu for, and provides an interface to multiview operations
+//  contained in mvl.
+//  NOTE that multiview computations are not included in this file because of
+//  licencing problems with the code, however, the compiled versions of xcv do
+//  include computations for FMatrix, HMatrix2D and TriTensor.
 // \verbatim
 //  Modifications
 //   K.Y.McGaul     27-JAN-2000    Initial version.
@@ -52,7 +56,7 @@ public:
   //: Display corner tracks.
   static void display_corner_tracks();
 
-  //:Load a TriTensor into the threeview_manager from file.
+  //: Load a TriTensor into the threeview_manager from file.
   static void load_tri_tensor();
   //: Save a TriTensor to file.
   static void save_tri_tensor();
