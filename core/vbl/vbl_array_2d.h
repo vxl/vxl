@@ -20,6 +20,8 @@
 
 #include <vcl_iosfwd.h>
 
+export template <class T> class vbl_array_2d;
+
 //: Simplest possible 2D array
 //
 template <class T>
@@ -73,7 +75,7 @@ private:
   void create(int m, int n);
 };
 
-template<class Type>
+export template<class Type>
 vcl_ostream& operator<< (vcl_ostream& os, const vbl_array_2d<Type> &v);
 
 #define VBL_ARRAY_2D_INSTANTIATE \
