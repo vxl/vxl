@@ -93,7 +93,6 @@ void strk_epipolar_grouper::epi_coords(const double u, const double v,
 void
 strk_epipolar_grouper::set_edges(int frame,
                                  vcl_vector<vtol_edge_2d_sptr> const & edges)
-
 {
   frame_ = frame;
   edges_ = edges;
@@ -286,32 +285,32 @@ bool strk_epipolar_grouper::compute_segments()
   vcl_vector<vdgl_digital_curve_sptr> dcs;
   for (vcl_vector<vtol_edge_2d_sptr>::iterator eit = edges_.begin();
        eit != edges_.end(); eit++)
-    {
-      vsol_curve_2d_sptr c = (*eit)->curve();
-      vdgl_digital_curve_sptr dc = c->cast_to_digital_curve();
-      if (!dc)
-        continue;
-      //:see if the curve is inside the epipolar wedge
-     if (this->inside_epipolar_wedge(dc))
-       dcs.push_back(dc);
-    }
+  {
+    vsol_curve_2d_sptr c = (*eit)->curve();
+    vdgl_digital_curve_sptr dc = c->cast_to_digital_curve();
+    if (!dc)
+      continue;
+    //:see if the curve is inside the epipolar wedge
+    if (this->inside_epipolar_wedge(dc))
+      dcs.push_back(dc);
+  }
   for (vcl_vector<vdgl_digital_curve_sptr>::iterator cit = dcs.begin();
        cit != dcs.end(); cit++)
+  {
+    vcl_vector<strk_epi_seg_sptr> epi_segs;
+    if (!this->extract_alpha_segments((*cit), epi_segs))
+      continue;
+    // For later computations, the epi_segs are sorted according
+    // to min and max s values.  This ordering enables efficient
+    // searching for nearby segments.
+    int k=0;
+    for (vcl_vector<strk_epi_seg_sptr>::iterator sit = epi_segs.begin();
+         sit != epi_segs.end(); sit++, k++ )
     {
-      vcl_vector<strk_epi_seg_sptr> epi_segs;
-      if (!this->extract_alpha_segments((*cit), epi_segs))
-        continue;
-      // For later computations, the epi_segs are sorted according
-      // to min and max s values.  This ordering enables efficient
-      // searching for nearby segments.
-      int k=0;
-      for (vcl_vector<strk_epi_seg_sptr>::iterator sit = epi_segs.begin();
-           sit != epi_segs.end(); sit++, k++ )
-        {
-          min_segments.push_back(*sit);
-          max_segments.push_back(*sit);
-        }
+      min_segments.push_back(*sit);
+      max_segments.push_back(*sit);
     }
+  }
   //sort the segments according to min epipolar distance
   vcl_sort(min_segments.begin(),
            min_segments.end(),
@@ -484,7 +483,7 @@ intensity_candidates(strk_epi_seg_sptr const& seg,
       found_alpha = true;
       right_cand.push_back(*sit);
     }
-  return found_something&&found_alpha;
+  return some_candidates && found_alpha;
 }
 
 //: the radius for intensity sampling
@@ -505,16 +504,16 @@ find_left_s(const double a, const double s,
   double ds_min = vnl_numeric_traits<double>::maxval;
   for (vcl_vector<strk_epi_seg_sptr>::const_iterator sit = cand.begin();
        sit != cand.end(); sit++)
+  {
+    if (a<(*sit)->min_alpha()||a>(*sit)->max_alpha())
+      continue;
+    double xs = (*sit)->s(a);
+    if (xs<s)
     {
-      if (a<(*sit)->min_alpha()||a>(*sit)->max_alpha())
-        continue;
-      double xs = (*sit)->s(a);
-      if (xs<s)
-      {
-        double ds = s-xs;
-        ds_min = vnl_math_min(ds_min, ds);
-      }
+      double ds = s-xs;
+      ds_min = vnl_math_min(ds_min, ds);
     }
+  }
   if (ds_min<r)
   {
     return s-ds_min;
@@ -534,16 +533,16 @@ find_right_s(const double a, const double s,
   double ds_min = vnl_numeric_traits<double>::maxval;
   for (vcl_vector<strk_epi_seg_sptr>::const_iterator sit = cand.begin();
        sit != cand.end(); sit++)
+  {
+    if (a<(*sit)->min_alpha()||a>(*sit)->max_alpha())
+      continue;
+    double xs = (*sit)->s(a);
+    if (xs>s)
     {
-      if (a<(*sit)->min_alpha()||a>(*sit)->max_alpha())
-        continue;
-      double xs = (*sit)->s(a);
-      if (xs>s)
-      {
-        double ds = xs-s;
-        ds_min = vnl_math_min(ds_min, ds);
-      }
+      double ds = xs-s;
+      ds_min = vnl_math_min(ds_min, ds);
     }
+  }
   if (ds_min<r)
   {
     return s+ds_min;
@@ -560,7 +559,7 @@ double strk_epipolar_grouper::ds(const double s)
 double strk_epipolar_grouper::scan_interval(const double a, const double sl,
                                             const double s)
 {
-   if (!image_)
+  if (!image_)
     return 0;
   int n_samples = 0;
   double sum = 0;
@@ -713,32 +712,32 @@ void strk_epipolar_grouper::brute_force_match()
   vcl_vector<strk_epi_seg_sptr>& segs1 = min_epi_segs_[1];
   for (vcl_vector<strk_epi_seg_sptr>::iterator sit0 = segs0.begin();
        sit0 != segs0.end(); sit0++)
+  {
+    double min_a = (*sit0)->min_alpha(), max_a = (*sit0)->max_alpha();
+    double min_s = (*sit0)->s(min_a), max_s = (*sit0)->s(max_a);
+    double u_min, v_min, u_max, v_max;
+    image_coords(min_a, min_s, u_min, v_min);
+    image_coords(max_a, max_s, u_max, v_max);
+    vcl_cout << "\n\nMatching a: [" << u_min << ' ' << v_min << "]["
+             << u_max << ' ' << v_max << "]\n";
+    for (vcl_vector<strk_epi_seg_sptr>::iterator sit1 = segs1.begin();
+         sit1 != segs1.end(); sit1++)
     {
-      double min_a = (*sit0)->min_alpha(), max_a = (*sit0)->max_alpha();
-      double min_s = (*sit0)->s(min_a), max_s = (*sit0)->s(max_a);
-      double u_min, v_min, u_max, v_max;
-      image_coords(min_a, min_s, u_min, v_min);
-      image_coords(max_a, max_s, u_max, v_max);
-      vcl_cout << "\n\nMatching a: [" << u_min << ' ' << v_min << "]["
-               << u_max << ' ' << v_max << "]\n";
-      for (vcl_vector<strk_epi_seg_sptr>::iterator sit1 = segs1.begin();
-           sit1 != segs1.end(); sit1++)
-        {
-          double as=0, ae=0;//alpha limit intersection
-          if (!inside_range(min_a, max_a, (*sit1), as, ae))
-            continue;
-          double ss = (*sit1)->s(as), se = (*sit1)->s(ae);
-          double us, vs, ue, ve;
-          image_coords(as, ss, us, vs);
-          image_coords(ae, se, ue, ve);
-          vcl_cout << "\nto b: [" << us << ' ' << vs << "]["
-                   << ue << ' ' << ve << "]\n"<< vcl_flush;
-          for (double a = as; a<=ae; a+=da_)
-          {
-            strk_epi_seg::match(a, *sit0, *sit1);
-          }
-        }
+      double as=0, ae=0;//alpha limit intersection
+      if (!inside_range(min_a, max_a, (*sit1), as, ae))
+        continue;
+      double ss = (*sit1)->s(as), se = (*sit1)->s(ae);
+      double us, vs, ue, ve;
+      image_coords(as, ss, us, vs);
+      image_coords(ae, se, ue, ve);
+      vcl_cout << "\nto b: [" << us << ' ' << vs << "]["
+               << ue << ' ' << ve << "]\n"<< vcl_flush;
+      for (double a = as; a<=ae; a+=da_)
+      {
+        strk_epi_seg::match(a, *sit0, *sit1);
+      }
     }
+  }
 }
 
 vil1_memory_image_of<unsigned char> strk_epipolar_grouper::epi_region_image()
@@ -754,35 +753,35 @@ vil1_memory_image_of<unsigned char> strk_epipolar_grouper::epi_region_image()
   vcl_vector<strk_epi_seg_sptr>& segs = min_epi_segs_[frame_];
   for (vcl_vector<strk_epi_seg_sptr>::iterator sit = segs.begin();
        sit != segs.end(); sit++)
+  {
+    strk_epi_seg_sptr seg = (*sit);
+    double amin = seg->min_alpha(), amax = seg->max_alpha();
+    for (double a = amin; a<=amax; a+=da_)
     {
-      strk_epi_seg_sptr seg = (*sit);
-      double amin = seg->min_alpha(), amax = seg->max_alpha();
-      for (double a = amin; a<=amax; a+=da_)
+      double s0 = seg->s(a);
+      double slmin = s0-seg->left_ds(a);
+      double srmax = s0+seg->right_ds(a);
+      unsigned char il = (unsigned char)seg->left_int(a);
+      unsigned char ir = (unsigned char)seg->right_int(a);
+      double u, v;
+      int ui, vi;
+
+      for (double s = slmin; s<s0; s++)
       {
-        double s0 = seg->s(a);
-        double slmin = s0-seg->left_ds(a);
-        double srmax = s0+seg->right_ds(a);
-        unsigned char il = (unsigned char)seg->left_int(a);
-        unsigned char ir = (unsigned char)seg->right_int(a);
-        double u, v;
-        int ui, vi;
+        image_coords(a, s, u, v);
+        ui = (int)(u+0.5), vi = (int)(v+0.5);
+        if (out(ui,vi)==0)
+          out(ui, vi) = il;
+      }
 
-        for (double s = slmin; s<s0; s++)
-        {
-          image_coords(a, s, u, v);
-          ui = (int)(u+0.5), vi = (int)(v+0.5);
-          if (out(ui,vi)==0)
-            out(ui, vi) = il;
-        }
-
-        for (double s = s0; s<srmax; s++)
-        {
-          image_coords(a, s, u, v);
-          ui = (int)(u+0.5), vi = (int)(v+0.5);
-          if (out(ui,vi)==0)
-            out(ui, vi) = ir;
-        }
+      for (double s = s0; s<srmax; s++)
+      {
+        image_coords(a, s, u, v);
+        ui = (int)(u+0.5), vi = (int)(v+0.5);
+        if (out(ui,vi)==0)
+          out(ui, vi) = ir;
       }
     }
+  }
   return out;
 }
