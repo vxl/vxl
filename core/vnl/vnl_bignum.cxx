@@ -517,6 +517,38 @@ vcl_ostream& operator<< (vcl_ostream& os, const vnl_bignum& b) {
   return os;                            // return output stream
 }
 
+//: Convert the number to a decimal representation in a string.
+vcl_string& vnl_bignum_to_string (vcl_string& s, const vnl_bignum& b)
+{
+  s.erase();
+  vcl_string::size_type insert_point = 0; // keep record of location of first number.
+
+  vnl_bignum d = b;                     // Copy the input vnl_bignum
+  if (d.sign == -1) {                   // If it's negative
+    s.insert(0,'-');                    //   Output leading minus sign
+    d.sign = 1;                         //   Make d positive for divide
+    insert_point = 1;                   // keep record of location of first number.
+  }
+  vnl_bignum q,r;                       // Temp quotient and remainder
+  Counter i = 0;
+  do {                                  // repeat:
+    divide(d,10L,q,r);                  //   Divide vnl_bignum by ten
+    s.insert(insert_point, 1, char(long(r) + '0'));    //   Get one's digit, and insert it at head.
+    d = q;                              //   Then discard one's digit
+    q = r = 0L;                         //   Prep for next divide
+  } while (d != 0L);                    // until no more one's digits
+  return s;
+}
+
+//: Convert the number from a decimal representation in a string.
+vnl_bignum& vnl_bignum_from_string (vnl_bignum& b, const vcl_string& s)
+{
+  // decimal:     "^ *[-+]?[1-9][0-9]*$"
+
+  b.dtoBigNum(s.c_str());                    // convert decimal to vnl_bignum
+  return b; 
+}
+
 
 //:
 vnl_bignum::operator short () const {

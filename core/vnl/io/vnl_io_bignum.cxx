@@ -17,9 +17,9 @@ void vsl_b_write(vsl_b_ostream & os, const vnl_bignum & p)
 {
   const short io_version_no = 1;
   vsl_b_write(os, io_version_no);
-  vcl_stringstream ss;
-  ss << p;
-  vsl_b_write(os, ss.str());
+  vcl_string s;
+  vnl_bignum_to_string(s, p);
+  vsl_b_write(os, s);
 }
 
 //=================================================================================
@@ -29,14 +29,12 @@ void vsl_b_read(vsl_b_istream &is, vnl_bignum & p)
   if (!is) return;
   short ver;
   vcl_string s;
-  vcl_stringstream ss;
   vsl_b_read(is, ver);
   switch(ver)
   {
   case 1:
     vsl_b_read(is, s);
-    ss.str(s);
-    ss >> p;
+    vnl_bignum_from_string(p, s);
     break;
 
   default:

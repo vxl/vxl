@@ -63,6 +63,7 @@
 #include <vcl_iostream.h>
 #include <vcl_cassert.h>
 #include <vcl_cmath.h> // for sqrt(double)
+#include <vcl_string.h>
 
 class vnl_bignum;
 
@@ -218,6 +219,8 @@ public:
   friend vnl_bignum right_shift(const vnl_bignum& b1, int l);
   friend vcl_ostream& operator<< (vcl_ostream&, const vnl_bignum&);
   friend vcl_istream& operator>> (vcl_istream&, vnl_bignum&);
+  friend vcl_string& vnl_bignum_to_string (vcl_string& s, const vnl_bignum& b);
+  friend vnl_bignum& vnl_bignum_from_string (vnl_bignum& b, const vcl_string& s);
 
 private:
   unsigned short count; // Number of data elements
@@ -232,6 +235,13 @@ private:
   void resize(short);                  // Resize vnl_bignum data
   vnl_bignum& trim();                  // Trim vnl_bignum data
 };
+
+
+//: Convert the number to a decimal representation in a string.
+vcl_string& vnl_bignum_to_string (vcl_string& s, const vnl_bignum& b);
+
+//: Convert the number from a decimal representation in a string.
+vnl_bignum& vnl_bignum_from_string (vnl_bignum& b, const vcl_string& s);
 
 //: Returns the addition of two bignum numbers.
 inline vnl_bignum operator+(vnl_bignum const& r1, long r2) { return r1+vnl_bignum(r2); }
