@@ -48,7 +48,7 @@ vil2_image_data_sptr vil2_pnm_file_format::make_input_image(vil_stream* vs)
   return new vil2_pnm_image(vs);
 }
 
-vil2_image_data_sptr vil2_pnm_file_format::make_output_image(vil_stream* vs, 
+vil2_image_data_sptr vil2_pnm_file_format::make_output_image(vil_stream* vs,
                                                        unsigned nx,
                                                        unsigned ny,
                                                        unsigned nplanes,
@@ -281,7 +281,7 @@ vil2_image_view_base* vil2_pnm_image::get_view(
   unsigned int* kb = 0;
 
   vil2_memory_chunk_sptr buf;
-  
+
   if (bits_per_component_ == 1)
   {
     buf = new vil2_memory_chunk(nx_ * ny_* ncomponents_ * sizeof(bool));
@@ -302,9 +302,6 @@ vil2_image_view_base* vil2_pnm_image::get_view(
     buf = new vil2_memory_chunk(nx_ * ny_* ncomponents_ * sizeof(unsigned int));
     kb = (unsigned int *) buf->data();
   }
-
-
-
 
   if (magic_ == 1) // ascii pbm
   {
@@ -327,7 +324,7 @@ vil2_image_view_base* vil2_pnm_image::get_view(
     } else if ( bytes_per_sample > 2 ) {
       vcl_cerr << "ERROR: pnm: reading rawbits format with > 16bit samples\n";
       return 0;
-    } 
+    }
     if (bits_per_component_ <= 8)
       return new vil2_image_view<unsigned char>(buf, ib, nx, ny, nplanes, nplanes, nx*nplanes, 1);
     else if (bits_per_component_ <= 16)
@@ -340,7 +337,6 @@ vil2_image_view_base* vil2_pnm_image::get_view(
     if (nplanes != 1) return 0;
 
     unsigned byte_width = (nx_+7)/8;
-    unsigned byte_out_width = (nx+7)/8;
 
     for (unsigned y = 0; y < ny; ++y) {
       vil_streampos byte_start = start_of_data_ + (y0+y) * byte_width + x0/8;
@@ -389,8 +385,6 @@ vil2_image_view_base* vil2_pnm_image::get_view(
     else
       return new vil2_image_view<unsigned int>(buf, (unsigned int*)buf->data(), nx, ny, nplanes, nplanes, nx*nplanes, 1);
   }
-
-
 }
 
 
@@ -420,7 +414,7 @@ bool vil2_pnm_image::put_view(const vil2_image_view_base& view,
       vcl_cerr << "ERROR: " << __FILE__ << ":\n Can't fit view into pnm component size\n" << vcl_endl;
       return false;
   }
-  
+
   unsigned char const*  ob = 0;
   unsigned short const* pb = 0;
   unsigned int const*   qb = 0;
@@ -470,7 +464,7 @@ bool vil2_pnm_image::put_view(const vil2_image_view_base& view,
     } else {
       vcl_cerr << "ERROR: pnm: writing rawbits format with > 16bit samples\n";
       return false;
-    } 
+    }
   }
   else if (magic_ == 4) // pbm (bitmap) raw image
   {
