@@ -57,8 +57,8 @@ foreach $f (@FILES)
     $printed = 1;
   }
 
-# 2. spaces at end of line
-  $has_end_spaces = ($file =~ m/ +\n/);
+# 2. spaces (more than 1) at end of line
+  $has_end_spaces = ($file =~ m/  +\n/);
 
 # 3. Lines longer than 132 characters
   if ($file =~ m/[^\n]{133,}/ && $f !~ m/\.dsp$/) {
@@ -143,7 +143,7 @@ foreach $f (@FILES)
     $printed = 1;
   }
 # 11. Inclusion guard
-  if ($file_s =~ m/^\s*\#ifndef\s+(\S+)\n#define\s+\1\n/) {
+  if ($file_s =~ m/^\s*\#ifndef\s+(\S+)\s*\n#define\s+\1\s*\n/) {
     $guard = $1;
     if (defined($inclusion_guards{"$guard"})) {
       print "$f\t\# has the same inclusion guard as " . $inclusion_guards{"$guard"} . "\n";
@@ -209,7 +209,7 @@ foreach $f (@FILES)
     $class =~ s/\bvcl_sort\s*\<[^,]+\,/vcl_algorithm\</g;
     $class =~ s/\bvcl_find_if\s*\<\s*vcl_vector\s*\<([^\005]+)\005\s*iterator.+/vcl_algorithm\<$1/g;
     while ($file_s =~ m/\btypedef\s+([^;]*)\s(\S+)\s*\;/)
-    { $A=$1; $B=$2; $class =~ s/\b$B\b/$A/g; $file_s =~ s/\btypedef\s[^;]*\;//; }
+    { $A=$1; $B=$2; $B =~ s/([][{}()|*+\/\\])/\\$1/g; $class =~ s/\b$B\b/$A/g; $file_s =~ s/\btypedef\s[^;]*\;//; }
 #   $class =~ s/\bconst\b//g;
     $class =~ s/\s//g;
     $class =~ s/\bconstchar/const_char/g; $class =~ s/(\w)const/$1_const/g;
@@ -221,9 +221,9 @@ foreach $f (@FILES)
     $class =~ s/unsigned/u/g; $class =~ s/signed/s/g; $class =~ s/longd/long_d/g;
     $class_r = $class; $class_r =~ s/([.+~-])/\\$1/g;
     $class_s = $class_q; $class_s =~ s/signed/signed_/g; $class_s =~ s/long/long_/g;
-    if ($f !~ m/\/$class_q\.cxx$/ &&
-        $f !~ m/\/$class_r\.cxx$/ &&
-        $f !~ m/\/$class_s\.cxx$/) {
+    if ($f !~ m/\/$class_q\.(cxx|cc|C)$/ &&
+        $f !~ m/\/$class_r\.(cxx|cc|C)$/ &&
+        $f !~ m/\/$class_s\.(cxx|cc|C)$/) {
       print "$f\t\# should be renamed to $class.cxx\n";
       $printed = 1;
     }
@@ -257,16 +257,104 @@ foreach $f (@FILES)
       $printed = 1;
     }
   }
-  foreach $wd (split(' ',"cin cout cerr clog endl ends ios istream ostream fstream ifstream ofstream strstream ostrstream")) {
-    if ($f !~ m/\bvcl(\/iso|\/generic|\/sgi)?\/vcl_(ios|iosfwd|[siof]+stream|strstream)\.h/ &&
+  foreach $wd (split(' ',"cin cout cerr clog endl ends flush ios istream ostream fstream ifstream ofstream strstream ostrstream streambuf streamoff streamsize fpos streampos stringstream")) {
+    if ($f !~ m/\bvcl\/.*\bvcl_(ios|iosfwd|iomanip|[siof]+stream|strstream|streambuf)\.h/ &&
         $f !~ m/\bvcl\/Templates\/stream-instances\.cxx$/ &&
-        $file_s =~ m/\b$wd\b/) {
+        $f !~ m/\bv3p\/(netlib|jpeg|tiff|png|zlib)\// &&
+        $file_s =~ m/[^ .]\s*\b$wd\b\s*[^ (]/) {
       print "$f\t\# $wd must be vcl_$wd\n";
       $printed = 1;
     }
   }
+  foreach $wd (split(' ',"basefield floatfield adjustfield fmtflags seekdir")) {
+    if ($f !~ m/\bvcl\/.*\bvcl_(ios|iosfwd|iomanip|[siof]+stream|strstream|streambuf)\.h/ &&
+        $f !~ m/\bv3p\/(netlib|jpeg|tiff|png|zlib)\// &&
+        $file_s =~ m/[^ .]\s*\b$wd\b\s*[^ (]/) {
+      print "$f\t\# $wd must be vcl_ios_$wd\n";
+      $printed = 1;
+    }
+  }
+  foreach $wd (split(' ',"beg cur end")) {
+    if ($f !~ m/\bvcl\/.*\bvcl_(ios|iosfwd|iomanip|[siof]+stream|strstream|streambuf)\.h/ &&
+        $f !~ m/\bv3p\/(netlib|jpeg|tiff|png|zlib)\// &&
+        $file_s =~ m/,\s*$wd\s*\)/) {
+      print "$f\t\# $wd must be vcl_ios_$wd\n";
+      $printed = 1;
+    }
+  }
+  foreach $wd (split(' ',"boolalpha noboolalpha showbase noshowbase showpoint noshowpoint showpos noshowpos skipws noskipws uppercase nouppercase")) {
+    if ($f !~ m/\bvcl\/.*\bvcl_(ios|iosfwd|iomanip|[siof]+stream|strstream|streambuf)\.h/ &&
+        $f !~ m/\bv3p\/(netlib|jpeg|tiff|png|zlib)\// &&
+        $file_s =~ m/[^ .]\s*\b$wd\b\s*[^ (]/) {
+      print "$f\t\# $wd must be vcl_ios_$wd\n";
+      $printed = 1;
+    }
+    if ($f !~ m/\bvcl\/.*\bvcl_(ios|iosfwd|iomanip|[siof]+stream|strstream|streambuf)\.h/ &&
+        $file_s =~ m/\b$wd\s*\(/) {
+      print "$f\t\# $wd() must be vcl_$wd()\n";
+      $printed = 1;
+    }
+  }
+  foreach $wd (split(' ',"internal left right")) {
+    if ($f !~ m/\bvcl\/.*\bvcl_(ios|iosfwd|iomanip|[siof]+stream|strstream|streambuf)\.h/ &&
+        $f !~ m/\bv3p\/(netlib|jpeg|tiff|png|zlib)\// &&
+        $file_s =~ m/[^ .>]\s*\b$wd\s*[|),]/) {
+      print "$f\t\# $wd must be vcl_ios_$wd\n";
+      $printed = 1;
+    }
+    if ($f !~ m/\bvcl\/.*\bvcl_(ios|iosfwd|iomanip|[siof]+stream|strstream|streambuf)\.h/ &&
+        $file_s =~ m/\bvcl_ios_$wd\s*[^ ,]/ &&
+        $file_s !~ m/(vcl_resetiosflags|\.\s*unsetf)\s*\((vcl_ios_(internal|left|right)\s*\|\s*)*vcl_ios_$wd\s*(\|\s*vcl_ios_(internal|left|right)\s*)*\)/) {
+      print "$f\t\# vcl_ios_$wd must be used together with vcl_ios_adjustfield\n";
+      $printed = 1;
+    }
+    if ($f !~ m/\bvcl\/.*\bvcl_(ios|iosfwd|iomanip|[siof]+stream|strstream|streambuf)\.h/ &&
+        ($f !~ m/\bvcl\/emulation\/vcl_tree\.h$/ || $wd !~ m/^(left|right)$/) &&
+        $file_s =~ m/\b$wd\s*\(/) {
+      print "$f\t\# $wd() must be vcl_$wd()\n";
+      $printed = 1;
+    }
+  }
+  foreach $wd (split(' ',"dec hex oct")) {
+    if ($f !~ m/\bvcl\/.*\bvcl_(ios|iosfwd|iomanip|[siof]+stream|strstream|streambuf)\.h/ &&
+        $file_s =~ m/\b$wd\s*[|),]/) {
+      print "$f\t\# $wd must be vcl_ios_$wd\n";
+      $printed = 1;
+    }
+    if ($f !~ m/\bvcl\/.*\bvcl_(ios|iosfwd|iomanip|[siof]+stream|strstream|streambuf)\.h/ &&
+        $file_s =~ m/\bvcl_ios_$wd\s*[^ ,]/ &&
+        $file_s !~ m/(vcl_resetiosflags|\.\s*unsetf)\s*\((vcl_ios_(dec|hex|oct)\s*\|\s*)*vcl_ios_$wd\s*(\|\s*vcl_ios_(dec|hex|oct)\s*)*\)/) {
+      print "$f\t\# vcl_ios_$wd must be used together with vcl_ios_basefield\n";
+      $printed = 1;
+    }
+    if ($f !~ m/\bvcl\/.*\bvcl_(ios|iosfwd|iomanip|[siof]+stream|strstream|streambuf)\.h/ &&
+        $file_s =~ m/\b$wd\s*\(/) {
+      print "$f\t\# $wd() must be vcl_$wd()\n";
+      $printed = 1;
+    }
+  }
+  foreach $wd (split(' ',"scientific fixed")) {
+    if ($f !~ m/\bvcl\/.*\bvcl_(ios|iosfwd|iomanip|[siof]+stream|strstream|streambuf)\.h/ &&
+        ($f !~ m/\bvpdfl\/vpdfl_pc_gaussian_builder\./ || $wd !~ m/^fixed$/) &&
+        $file_s =~ m/\b$wd\s*[|),]/) {
+      print "$f\t\# $wd must be vcl_ios_$wd\n";
+      $printed = 1;
+    }
+    if ($f !~ m/\bvcl\/.*\bvcl_(ios|iosfwd|iomanip|[siof]+stream|strstream|streambuf)\.h/ &&
+        $file_s =~ m/\bvcl_ios_$wd\s*[^ ,]/ &&
+        ($f !~ m/\bvpdfl\/vpdfl_pc_gaussian_builder\./ || $wd !~ m/^fixed$/) &&
+        $file_s !~ m/(vcl_resetiosflags|\.\s*unsetf)\s*\((vcl_ios_(scientific|fixed)\s*\|\s*)*vcl_ios_$wd\s*(\|\s*vcl_ios_(scientific|fixed)\s*)*\)/) {
+      print "$f\t\# vcl_ios_$wd must be used together with vcl_ios_floatfield\n";
+      $printed = 1;
+    }
+    if ($f !~ m/\bvcl\/.*\bvcl_(ios|iosfwd|iomanip|[siof]+stream|strstream|streambuf)\.h/ &&
+        $file_s =~ m/\b$wd\s*\(/) {
+      print "$f\t\# $wd() must be vcl_$wd()\n";
+      $printed = 1;
+    }
+  }
   foreach $wd (split(' ',"size_t ptrdiff_t clock_t time_t")) {
-    if ($f !~ m/\bvcl(\/generic|\/sgi|\/win32)?\/vcl_c(stddef|stdio|time)\./ &&
+    if ($f !~ m/\bvcl\/.*\bvcl_c(stddef|stdio|time)\./ &&
         $f !~ m/\bv3p\/(jpeg|tiff|png)\// &&
         $f !~ m/\.c$/ &&
         $file_s =~ m/\b$wd\b/) {
@@ -278,7 +366,7 @@ foreach $f (@FILES)
 # 15. Multiple empty lines, empty line before } or after {
 #   (mentioned only if something else is already printed, or is -f given)
   if ($printed && $file =~ m/\n\n\n\n/) {
-    print "$f\t\# contains multiple (>=3) empty lines\n";
+    print "$f\t\# contains multiple (>2) empty lines\n";
   }
   print "$f\t\# has lines ending in spaces\n"
     if ($printed && $has_end_spaces);
