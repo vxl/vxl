@@ -183,7 +183,9 @@ integer *lwa;
 	    nfev, &njev, &ipvt[1], &wa[*n + 1], &wa[(*n << 1) + 1], &wa[*n * 
 	    3 + 1], &wa[(*n << 2) + 1], &wa[*n * 5 + 1]);
 
+#ifdef NUMERICS_DEBUG
     printf("INFO = %d\n", *info);
+#endif
     if (*info == 8) {
 	*info = 4;
     }

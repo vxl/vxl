@@ -97,13 +97,14 @@ APP_CFLAGS +=  -DJPEG_SUPPORT \
 USE_WINAPI := 1
 endif
 
-ifeq ($(OS),hpux10.20)
+ifeq "hpux" "$(findstring hpux,$(OS))"
 APP_CFLAGS += -DUSE_VARARGS=1 -DUSE_PROTOTYPES=0
 endif
 
-ifeq ($(OS),hpux)
+ifeq ($(OS),hp)
 APP_CFLAGS += -DUSE_VARARGS=1 -DUSE_PROTOTYPES=0
 endif
+
 
 ifeq ($(OS),ultrix)
 APP_CFLAGS += -DUSE_VARARGS=1 -DUSE_PROTOTYPES=0
