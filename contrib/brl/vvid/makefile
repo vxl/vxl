@@ -20,6 +20,9 @@ SOURCES += vvid_lucas_kanade_process.cxx
 SOURCES += vvid_epipolar_space_process.cxx
 SOURCES += vvid_edge_process.cxx
 SOURCES += vvid_harris_corner_process.cxx
+SOURCES += vvid_line_fit_process.cxx
+SOURCES += vvid_edge_line_process.cxx
+SOURCES += vvid_grid_finder_process.cxx
 SOURCES += vvid_file_manager.cxx
 
 # sources that do depend on the camera being present
