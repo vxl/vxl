@@ -16,7 +16,8 @@
 struct vcl_stringstream : public strstream
 {
   vcl_stringstream(int /*which*/ = vcl_ios_in | vcl_ios_out) { }
-  //FIXME vcl_stringstream(vcl_string const &s, int /*which*/ = vcl_ios_in | vcl_ios_out) { }
+  vcl_stringstream(vcl_string const &s, int which = vcl_ios_in | vcl_ios_out)
+    : strstream((char*)s.c_str(), (int)strlen(s.c_str()), which) { }
   
   // [27.7.4]
   vcl_string str() { return strstream::str(); }
