@@ -4,7 +4,6 @@
 // \file
 #include <vcl_iostream.h>
 #include <vcl_cstdlib.h>   // for vcl_abs(int)
-#include <vcl_cassert.h>
 #include <vcl_vector.h>
 #include <vcl_algorithm.h> // for vcl_max()
 #include <vxl_config.h>
@@ -191,7 +190,7 @@ gevd_contour::FindNetwork(gevd_bufferxy& edgels,
 
 
 //: Return TRUE if pixel is a local maximum, and so is right on top of contour.
-bool
+static bool
 on_contour(const gevd_bufferxy& edgels, const int i, const int j)
 {
   double pix = (1 + vnl_math::sqrt2) * floatPixel(edgels, i, j); // fuzzy threshold
@@ -203,7 +202,7 @@ on_contour(const gevd_bufferxy& edgels, const int i, const int j)
 
 
 //: Delete pixel from contour, and save its location in xloc/yloc.
-void
+static void
 RecordPixel(int i, int j, gevd_bufferxy& edgels,
             vcl_vector<int>& iloc, vcl_vector<int>& jloc)
 {
@@ -216,7 +215,7 @@ RecordPixel(int i, int j, gevd_bufferxy& edgels,
 // Find next best pixel on contour, searching for strongest response,
 // and favoring 4-connected over 8-connected.
 // Return 0, if no pixel is found, or direction in range [2*pi, 4*pi).
-int
+static int
 NextPixel(int& i, int& j, const gevd_bufferxy& edgels)
 {
   float maxpix = 0, npix;
@@ -243,7 +242,7 @@ NextPixel(int& i, int& j, const gevd_bufferxy& edgels)
 // Find next best pixel on contour, searching for strongest response,
 // and favoring 4-connected over 8-connected.
 // Return 0, if no pixel is found, or direction in range [2*pi, 4*pi).
-int
+static int
 next_pixel(int& i, int& j, const vbl_array_2d<vtol_vertex_2d_sptr>& vertexMap)
 {
   int maxdir = 0, dir;
@@ -515,7 +514,7 @@ DetectJunction(vtol_vertex_2d& end, int& index,
 //: Confirm there is a strong jump in response near a junction.
 // The location of this jump is however inaccurate, and so junctions
 // can not be localized accurately along the stronger cycle.
-bool
+static bool
 ConfirmJunctionOnCycle(int index, float threshold,
                        vtol_edge_2d& cycle, const gevd_bufferxy& edgels)
 {
@@ -591,7 +590,7 @@ BreakCycle(vtol_vertex_2d& junction, const int index,
 //: Confirm there is a strong jump in response near a junction.
 // The location of this jump is however inaccurate, and so junctions
 // can not be localized accurately along the stronger chain.
-bool
+static bool
 ConfirmJunctionOnChain(int index, float threshold,
                        vtol_edge_2d& chain, const gevd_bufferxy& edgels)
 {
@@ -1702,16 +1701,16 @@ gevd_contour::EqualizeSpacing(vcl_vector<vtol_edge_2d_sptr>& chains)
 }
 
 
-//: Translate all the pixels in the edges and vertices by (tx, ty, tz).
+//: Translate all the pixels in the edges and vertices by (tx, ty).
 // If the image is extracted from an ROI, a translation of
-// (roi->GetOrigX(), roi->GetOrigY(), 0) must be done to have
+// (roi->GetOrigX(), roi->GetOrigY()) must be done to have
 // coordinates in the reference frame of the original image.
 // Add 0.5 if you want to display location at center of pixel
 // instead of upper-left corner.
 void
 gevd_contour::Translate(vcl_vector<vtol_edge_2d_sptr>& edges, // translate loc to center
                         vcl_vector<vtol_vertex_2d_sptr >& vertices,
-                        const float tx, const float ty, const float tz)
+                        const float tx, const float ty)
 {
 #ifdef DEBUG
   vul_timer t;
@@ -1736,26 +1735,6 @@ gevd_contour::Translate(vcl_vector<vtol_edge_2d_sptr>& edges, // translate loc t
 
       cxy->set_edgel( k, e);
     }
-  }
-
-  if (tz != 0) {
-#if 0 // commented out
-    for (unsigned int i=0; i< vertices.size(); ++i)
-    {
-      vtol_vertex_2d_sptr  vert = vertices[i];
-      vert->SetZ(vert->GetZ() + tz);
-    }
-    for (unsigned int i=0; i< edges.size(); ++i)
-    {
-      vtol_edge_2d_sptr edge = edges[i];
-      vdgl_digital_curve_sptr dc = (vdgl_digital_curve*) edge->curve();
-      float* cz = dc->GetZ();
-      for (int k = 0; k < dc->size(); k++)
-        cz[k] += tz;
-    }
-#else
-    assert( false);
-#endif
   }
 #ifdef DEBUG
   if (talkative)

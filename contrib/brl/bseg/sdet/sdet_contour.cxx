@@ -255,7 +255,7 @@ sdet_contour::FindNetwork(gevd_bufferxy& edgels, bool junctionp,
 
 
 //: Return TRUE if pixel is a local maximum, and so is right on top of contour.
-bool
+static bool
 on_contour(const gevd_bufferxy& edgels, const int i, const int j)
 {
   double pix = (1 + vnl_math::sqrt2) * floatPixel(edgels, i, j); // fuzzy threshold
@@ -267,7 +267,7 @@ on_contour(const gevd_bufferxy& edgels, const int i, const int j)
 
 
 //: Delete pixel from contour, and save its location in xloc/yloc.
-void
+static void
 RecordPixel(int i, int j, gevd_bufferxy& edgels,
             vcl_vector<int>& iloc, vcl_vector<int>& jloc)
 {
@@ -301,7 +301,7 @@ ErasePixel(vcl_vector<int>& xloc, vcl_vector<int>& yloc)
 // Find next best pixel on contour, searching for strongest response,
 // and favoring 4-connected over 8-connected.
 // Return 0, if no pixel is found, or direction in range [2*pi, 4*pi).
-int
+static int
 NextPixel(int& i, int& j, const gevd_bufferxy& edgels)
 {
   float maxpix = 0, npix;
@@ -331,7 +331,7 @@ NextPixel(int& i, int& j, const gevd_bufferxy& edgels)
 // Find next best pixel on contour, searching for strongest response,
 // and favoring 4-connected over 8-connected.
 // Return 0, if no pixel is found, or direction in range [2*pi, 4*pi).
-int
+static int
 next_pixel(int& i, int& j, const vbl_array_2d<vtol_vertex_2d_sptr>& vertexMap)
 {
   int maxdir = 0, dir;
@@ -587,7 +587,6 @@ bool sdet_contour:: DetectJunction(vtol_vertex_2d_sptr const& endv, int& index,
                                    vtol_edge_2d_sptr& stronger,
                                    const int maxSpiral,
                                    const gevd_bufferxy& edgels)
-
 {
   // 0. Must be an end point of a dangling 1-chain
   if (endv->numsup() > 1)         // avoid junction and 1-cycle
@@ -816,7 +815,7 @@ void fill_cycle_gap(vdgl_edgel_chain_sptr const & ec)
                                        sdet_contour::debug_);
 }
 
-bool
+static bool
 ConfirmJunctionOnCycle(int index, float threshold,
                        vtol_edge_2d& cycle, const gevd_bufferxy& edgels)
 {
@@ -920,7 +919,7 @@ void sdet_contour::BreakCycle(vtol_vertex_2d_sptr const& junction,
 //: Confirm there is a strong jump in response near a junction.
 // The location of this jump is however inaccurate, and so junctions
 // can not be localized accurately along the stronger chain.
-bool
+static bool
 ConfirmJunctionOnChain(int index, float threshold,
                        vtol_edge_2d& chain, const gevd_bufferxy& edgels)
 {
