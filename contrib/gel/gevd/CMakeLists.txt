@@ -12,6 +12,7 @@ SET(gevd_sources
     gevd_float_operators.cxx    gevd_float_operators.h
     gevd_noise.cxx              gevd_noise.h
     gevd_step.cxx               gevd_step.h
+    gevd_fold.cxx               gevd_fold.h
     gevd_contour.cxx            gevd_contour.h
     gevd_clean_edgels.cxx       gevd_clean_edgels.h
     gevd_edgel_regions.cxx      gevd_edgel_regions.h
