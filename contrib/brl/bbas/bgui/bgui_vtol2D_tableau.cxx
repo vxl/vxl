@@ -1,28 +1,30 @@
+#include "bgui_vtol2D_tableau.h"
+//:
+// \file
+
 #include <bgui/bgui_vtol_soview2D.h>
-#include <bgui/bgui_vtol2D_tableau.h>
 #include <vgui/vgui.h>
 #include <vgui/vgui_style.h>
 #include <bgui/bgui_style.h>
 #include <vtol/vtol_face_2d.h>
 
-bgui_vtol2D_tableau::bgui_vtol2D_tableau(const char* n):
-  vgui_easy2D_tableau(n){this->init();}
+bgui_vtol2D_tableau::bgui_vtol2D_tableau(const char* n) :
+  vgui_easy2D_tableau(n) { this->init(); }
 
 bgui_vtol2D_tableau::bgui_vtol2D_tableau(vgui_image_tableau_sptr const& it,
-                                         const char* n):
-  vgui_easy2D_tableau(it, n){this->init();}
+                                         const char* n) :
+  vgui_easy2D_tableau(it, n) { this->init(); }
 
 bgui_vtol2D_tableau::bgui_vtol2D_tableau(vgui_tableau_sptr const& t,
-                                         const char* n):
-  vgui_easy2D_tableau(t, n){this->init();}
+                                         const char* n) :
+  vgui_easy2D_tableau(t, n) { this->init(); }
 
 bgui_vtol2D_tableau::~bgui_vtol2D_tableau()
 {
-  
 }
 
 void bgui_vtol2D_tableau::init()
-{  
+{
   old_id_ = 0;
   //set highlight display style parameters
   highlight_style_ = new bgui_style(0.0, 0.0, 1.0, 5.0, 5.0);
@@ -48,11 +50,11 @@ void bgui_vtol2D_tableau::init()
   bgui_vtol_soview2D_face sf;
   style_map_[sf.type_name()]=face_style;
 }
-//: 
+//:
 // Provide roaming highlighting for soviews in the tableau.
-// As the mouse moves the soview closest to the mouse is 
+// As the mouse moves the soview closest to the mouse is
 // changed to the highlighed style.
-// vgui_displaylist2D_tableau::motion(..) has a mechanism for 
+// vgui_displaylist2D_tableau::motion(..) has a mechanism for
 // highlighting the nearest object but it doesn't work.
 
 bool bgui_vtol2D_tableau::handle(vgui_event const &e)
@@ -61,8 +63,8 @@ bool bgui_vtol2D_tableau::handle(vgui_event const &e)
     {
       //retrive the previously highlighted soview and
       //restore it to its default style
-      vgui_soview* old_so = vgui_soview::id_to_object(old_id_);          
-      if(old_so)
+      vgui_soview* old_so = vgui_soview::id_to_object(old_id_);
+      if (old_so)
         {
           bgui_style_sptr default_sty = style_map_[old_so->type_name()];
           bgui_style* bs = (bgui_style*)default_sty.ptr();
@@ -87,12 +89,12 @@ bool bgui_vtol2D_tableau::handle(vgui_event const &e)
   return vgui_easy2D_tableau::handle(e);
 }
 
-bgui_vtol_soview2D_digital_curve* 
+bgui_vtol_soview2D_digital_curve*
 bgui_vtol2D_tableau::add_digital_curve(vdgl_digital_curve_sptr& dc)
 {
   this->set_line_width(3.0);
   this->set_foreground(0.0,0.0,1.0);
-  bgui_vtol_soview2D_digital_curve* obj = 
+  bgui_vtol_soview2D_digital_curve* obj =
     new bgui_vtol_soview2D_digital_curve(dc);
   add(obj);
   return obj;
@@ -106,7 +108,7 @@ bgui_vtol_soview2D_vertex* bgui_vtol2D_tableau::add_vertex(vtol_vertex_2d_sptr& 
   //set the default style
   bgui_style_sptr sty = style_map_[obj->type_name()];
   add(obj);
-  if(obj)
+  if (obj)
     {
       sty->clone_style(obj->get_style());
       int id = obj->get_id();
@@ -121,7 +123,7 @@ bgui_vtol_soview2D_edge* bgui_vtol2D_tableau::add_edge(vtol_edge_2d_sptr& e)
   //set the default style
   bgui_style_sptr sty = style_map_[obj->type_name()];
   add(obj);
-  if(obj)
+  if (obj)
     {
       sty->clone_style(obj->get_style());
       int id = obj->get_id();
@@ -149,7 +151,7 @@ bgui_vtol_soview2D_face* bgui_vtol2D_tableau::add_face(vtol_face_2d_sptr& f)
   //set the default style
   bgui_style_sptr sty = style_map_[obj->type_name()];
   add(obj);
-  if(obj)
+  if (obj)
     {
       sty->clone_style(obj->get_style());
       int id = obj->get_id();
@@ -180,7 +182,7 @@ void bgui_vtol2D_tableau::add_edges(vcl_vector<vtol_edge_2d_sptr>& edges,
     }
 }
 
-void 
+void
 bgui_vtol2D_tableau::add_faces(vcl_vector<vtol_face_2d_sptr>& faces,
                                bool verts)
 {
@@ -205,7 +207,7 @@ bgui_vtol2D_tableau::add_faces(vcl_vector<vtol_face_2d_sptr>& faces,
 vtol_edge_2d_sptr bgui_vtol2D_tableau::get_mapped_edge(const int id)
 {
   vtol_topology_object_sptr to = obj_map_[id];
-  if(!to)
+  if (!to)
     {
       vcl_cout << "In bgui_vtol2D_tableau::get_mapped_edge(..) -"
                << " null map entry\n";
