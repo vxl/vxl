@@ -57,7 +57,7 @@ class vgl_polygon
   vgl_polygon(T const x_y[], int n);
 
   //: Construct a single-sheet polygon from a sheet, i.e., a vector of 2D points.
-  explicit vgl_polygon(sheet_t const& points) : sheets_(1,points) {}
+  explicit vgl_polygon(sheet_t const& points, unsigned n_sheets=1) : sheets_(1,points) {}
 
   //: Construct by specifying all of its sheets
   explicit vgl_polygon(vcl_vector<sheet_t> const& sheets) : sheets_(sheets) {}
