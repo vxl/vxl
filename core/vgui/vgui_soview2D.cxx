@@ -22,25 +22,26 @@
 #include <vgui/vgui_projection_inspector.h>
 #include <vgui/internals/vgui_draw_line.h>
 
-vgui_soview2D::vgui_soview2D() {
-}
+vgui_soview2D::vgui_soview2D() {}
 
 //--------------------------------------------------------------------------//
 
-vcl_ostream& vgui_soview2D_point::print(vcl_ostream& s) const {
+vcl_ostream& vgui_soview2D_point::print(vcl_ostream& s) const
+{
   s << "[vgui_soview2D_point " << x << "," << y << " ";
   s << " "; return vgui_soview2D::print(s) << "]";
 }
 
-void vgui_soview2D_point::draw() {
-
+void vgui_soview2D_point::draw()
+{
   glPointSize(style->point_size);
   glBegin(GL_POINTS);
   glVertex2f(x,y);
   glEnd();
 }
 
-float vgui_soview2D_point::distance_squared(float x, float y) {
+float vgui_soview2D_point::distance_squared(float x, float y)
+{
   float dx = this->x - x;
   float dy = this->y - y;
   return dx*dx + dy*dy;
@@ -60,12 +61,14 @@ void vgui_soview2D_point::translate(float tx, float ty)
 
 //--------------------------------------------------------------------------//
 
-vcl_ostream& vgui_soview2D_lineseg::print(vcl_ostream& s) const {
+vcl_ostream& vgui_soview2D_lineseg::print(vcl_ostream& s) const
+{
   s << "[vgui_soview2D_lineseg " << x0 << "," << y0 << " -- " << x1 << "," << y1;
   s << " "; return vgui_soview2D::print(s) << "]";
 }
 
-void vgui_soview2D_lineseg::draw() {
+void vgui_soview2D_lineseg::draw()
+{
   //vcl_cerr << "line id : " << id << vcl_endl;
 
   //glLineWidth(style->line_width);
@@ -75,7 +78,8 @@ void vgui_soview2D_lineseg::draw() {
   glEnd();
 }
 
-float vgui_soview2D_lineseg::distance_squared(float x, float y) {
+float vgui_soview2D_lineseg::distance_squared(float x, float y)
+{
   return vgl_distance2_to_linesegment(x0, y0, x1, y1, x, y);
 }
 
@@ -104,7 +108,8 @@ void vgui_soview2D_group::set_style(vgui_style *s)
   vgui_soview::set_style( s);
 }
 
-vcl_ostream& vgui_soview2D_group::print(vcl_ostream& s) const {
+vcl_ostream& vgui_soview2D_group::print(vcl_ostream& s) const
+{
   s << "[vgui_soview2D_group ";
 
   for (unsigned int i=0; i< ls.size(); i++)
@@ -113,7 +118,8 @@ vcl_ostream& vgui_soview2D_group::print(vcl_ostream& s) const {
   return vgui_soview2D::print(s) << "]";
 }
 
-void vgui_soview2D_group::draw() {
+void vgui_soview2D_group::draw()
+{
   for (unsigned int i=0; i< ls.size(); i++)
     ls[i]->draw();
 }
@@ -140,7 +146,8 @@ void vgui_soview2D_group::get_centroid(float* x, float* y)
   *y = 0;
   int n = ls.size();
 
-  for (int i=0; i < n; i++) {
+  for (int i=0; i < n; i++)
+  {
     float cx, cy;
     ls[i]->get_centroid(&cx, &cy);
     *x += cx;
@@ -160,12 +167,14 @@ void vgui_soview2D_group::translate(float tx, float ty)
 
 //--------------------------------------------------------------------------//
 
-vcl_ostream& vgui_soview2D_infinite_line::print(vcl_ostream& s) const {
+vcl_ostream& vgui_soview2D_infinite_line::print(vcl_ostream& s) const
+{
   s << "[vgui_soview2D_infinite_line " << a << "," << b << "," << c;
   s << " "; return vgui_soview2D::print(s) << "]";
 }
 
-void vgui_soview2D_infinite_line::draw() {
+void vgui_soview2D_infinite_line::draw()
+{
 #if 0
   // compute the bounding box
   // this will be the viewport but in the coords of
@@ -194,7 +203,8 @@ void vgui_soview2D_infinite_line::draw() {
 }
 
 
-float vgui_soview2D_infinite_line::distance_squared(float x, float y) {
+float vgui_soview2D_infinite_line::distance_squared(float x, float y)
+{
   float tmp = a*x + b*y + c;
   return tmp*tmp/(a*a + b*b);
 }
@@ -214,10 +224,12 @@ void vgui_soview2D_infinite_line::translate(float tx, float ty)
 
 const int vgui__CIRCLE2D_LIST = 1;
 
-void vgui_soview2D_circle::compile() {
+void vgui_soview2D_circle::compile()
+{
   glNewList(vgui__CIRCLE2D_LIST, GL_COMPILE);
-  glBegin(GL_LINE_LOOP); // <--- should be GL_LINE_LOOP?
-  for (unsigned int i=0;i<100;i++){
+  glBegin(GL_LINE_LOOP);
+  for (unsigned int i=0;i<100;i++)
+  {
     double angle = i*(2*vnl_math::pi/100);
     glVertex2d(vcl_cos(angle), vcl_sin(angle));
   }
@@ -226,21 +238,25 @@ void vgui_soview2D_circle::compile() {
 }
 
 
-vcl_ostream& vgui_soview2D_circle::print(vcl_ostream& s) const {
+vcl_ostream& vgui_soview2D_circle::print(vcl_ostream& s) const
+{
   s << "[vgui_soview2D_circle " << x << "," << y << " r" << r;
   s << " "; return vgui_soview2D::print(s) << "]";
 }
 
-void vgui_soview2D_circle::draw() {
+void vgui_soview2D_circle::draw()
+{
   glBegin(GL_LINE_LOOP);
-  for (unsigned int i=0;i<100;i++){
+  for (unsigned int i=0;i<100;i++)
+  {
     double angle = i*(2*vnl_math::pi/100);
     glVertex2d(x+r*vcl_cos(angle), y+r*vcl_sin(angle));
   }
   glEnd();
 }
 
-float vgui_soview2D_circle::distance_squared(float x, float y) {
+float vgui_soview2D_circle::distance_squared(float x, float y)
+{
   float dx = this->x - x;
   float dy = this->y - y;
 
@@ -265,65 +281,70 @@ void vgui_soview2D_circle::translate(float tx, float ty)
   y += ty;
 }
 
-//--------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------//
 
-const int vgui__ELLIPSE2D_LIST = 1;
-
-vcl_ostream& vgui_soview2D_ellipse::print(vcl_ostream& s) const {
-  s << "[vgui_soview2D_ellipse " << x << "," << y; 
+vcl_ostream& vgui_soview2D_ellipse::print(vcl_ostream& s) const
+{
+  s << "[vgui_soview2D_ellipse " << x << "," << y;
   s << " w" << w << " h" << h << " phi" << phi;
   s << "  "; return vgui_soview2D::print(s) << "]";
 }
 
-void vgui_soview2D_ellipse::draw(){
+void vgui_soview2D_ellipse::draw()
+{
   double px, py;
-  
+
   glBegin(GL_LINE_LOOP);
-  for (unsigned int i=0;i<100;i++){
+  for (unsigned int i=0;i<100;i++)
+  {
     double angle = i*(2*vnl_math::pi/100);
     px = w*vcl_cos(this->phi)*vcl_cos(angle) + h*vcl_sin(this->phi)*vcl_sin(angle);
-    py = h*vcl_cos(this->phi)*vcl_sin(angle) - w*vcl_sin(this->phi)*vcl_cos(angle); 
+    py = h*vcl_cos(this->phi)*vcl_sin(angle) - w*vcl_sin(this->phi)*vcl_cos(angle);
     glVertex2d(x+px, y+py);
   }
   glEnd();
 }
 
-float vgui_soview2D_ellipse::distance_squared(float x, float y) {
-  
-  // not implemented
+float vgui_soview2D_ellipse::distance_squared(float x, float y)
+{
+  // not implemented - TODO
   return -1;
-
 }
 
-void vgui_soview2D_ellipse::get_centroid(float* x, float* y){
-  *x = this->x; 
+void vgui_soview2D_ellipse::get_centroid(float* x, float* y)
+{
+  *x = this->x;
   *y = this->y;
 }
 
-void vgui_soview2D_ellipse::translate(float tx, float ty){
-  x += tx; 
-  y += ty; 
+void vgui_soview2D_ellipse::translate(float tx, float ty)
+{
+  x += tx;
+  y += ty;
 }
 
 
-//--------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------//
 
 vgui_soview2D_linestrip::vgui_soview2D_linestrip(unsigned n_, float const *x_, float const *y_)
   : n(n_), x(new float[n]), y(new float[n])
 {
-  for (unsigned i=0; i<n; ++i) {
+  for (unsigned i=0; i<n; ++i)
+  {
     x[i] = x_[i];
     y[i] = y_[i];
   }
 }
 
-vgui_soview2D_linestrip::~vgui_soview2D_linestrip() {
+vgui_soview2D_linestrip::~vgui_soview2D_linestrip()
+{
   n=0;
   delete [] x; x=0;
   delete [] y; y=0;
 }
 
-void vgui_soview2D_linestrip::draw() {
+void vgui_soview2D_linestrip::draw()
+{
   glBegin(GL_LINE_STRIP);
   for (unsigned i=0; i<n; ++i)
     glVertex2f(x[i], y[i]);
@@ -332,9 +353,9 @@ void vgui_soview2D_linestrip::draw() {
 
 vcl_ostream& vgui_soview2D_linestrip::print(vcl_ostream&s) const { return s << "[a linestrip. FIXME]"; }
 
-float vgui_soview2D_linestrip::distance_squared(float x, float y) {
-  double tmp = vgl_distance_to_non_closed_polygon(this->x, this->y, this->n,
-                                                  x, y);
+float vgui_soview2D_linestrip::distance_squared(float x, float y)
+{
+  double tmp = vgl_distance_to_non_closed_polygon(this->x, this->y, this->n, x, y);
   return tmp*tmp;
 }
 
@@ -342,7 +363,8 @@ void vgui_soview2D_linestrip::get_centroid(float* x, float* y)
 {
   *x = 0;
   *y = 0;
-  for (unsigned i=0; i<n; ++i) {
+  for (unsigned i=0; i<n; ++i)
+  {
     *x += this->x[i];
     *y += this->y[i];
   }
@@ -353,22 +375,22 @@ void vgui_soview2D_linestrip::get_centroid(float* x, float* y)
 
 void vgui_soview2D_linestrip::translate(float tx, float ty)
 {
-  for (unsigned i=0; i<n; ++i) {
+  for (unsigned i=0; i<n; ++i)
+  {
     x[i] += tx;
     y[i] += ty;
   }
 }
 
-void vgui_soview2D_linestrip::set_size(unsigned nn) {
-  if (nn < n) {
-    n = nn;
-    return;
-  }
+void vgui_soview2D_linestrip::set_size(unsigned nn)
+{
+  if (nn < n) { n = nn; return; }
 
   // we know that n <= nn
   float *nx = new float[nn];
   float *ny = new float[nn];
-  for (unsigned i=0; i<n; ++i) {
+  for (unsigned i=0; i<n; ++i)
+  {
     nx[i] = x[i];
     ny[i] = y[i];
   }
@@ -378,24 +400,27 @@ void vgui_soview2D_linestrip::set_size(unsigned nn) {
   delete [] y; y = ny;
 }
 
-//--------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------//
 
 vgui_soview2D_polygon::vgui_soview2D_polygon(unsigned n_, float const *x_, float const *y_)
   : n(n_), x(new float[n]), y(new float[n])
 {
-  for (unsigned i=0; i<n; ++i) {
+  for (unsigned i=0; i<n; ++i)
+  {
     x[i] = x_[i];
     y[i] = y_[i];
   }
 }
 
-vgui_soview2D_polygon::~vgui_soview2D_polygon() {
+vgui_soview2D_polygon::~vgui_soview2D_polygon()
+{
   n=0;
   delete [] x; x=0;
   delete [] y; y=0;
 }
 
-void vgui_soview2D_polygon::draw() {
+void vgui_soview2D_polygon::draw()
+{
   glBegin(GL_LINE_LOOP);
   for (unsigned i=0; i<n; ++i)
     glVertex2f(x[i], y[i]);
@@ -404,9 +429,9 @@ void vgui_soview2D_polygon::draw() {
 
 vcl_ostream& vgui_soview2D_polygon::print(vcl_ostream&s) const { return s << "[a polygon. FIXME]"; }
 
-float vgui_soview2D_polygon::distance_squared(float x, float y) {
-  double tmp = vgl_distance_to_closed_polygon(this->x, this->y, this->n,
-                                              x, y);
+float vgui_soview2D_polygon::distance_squared(float x, float y)
+{
+  double tmp = vgl_distance_to_closed_polygon(this->x, this->y, this->n, x, y);
   return tmp*tmp;
 }
 
@@ -414,7 +439,8 @@ void vgui_soview2D_polygon::get_centroid(float* x, float* y)
 {
   *x = 0;
   *y = 0;
-  for (unsigned i=0; i<n; ++i) {
+  for (unsigned i=0; i<n; ++i)
+  {
     *x += this->x[i];
     *y += this->y[i];
   }
@@ -425,22 +451,22 @@ void vgui_soview2D_polygon::get_centroid(float* x, float* y)
 
 void vgui_soview2D_polygon::translate(float tx, float ty)
 {
-  for (unsigned i=0; i<n; ++i) {
+  for (unsigned i=0; i<n; ++i)
+  {
     x[i] += tx;
     y[i] += ty;
   }
 }
 
-void vgui_soview2D_polygon::set_size(unsigned nn) {
-  if (nn < n) {
-    n = nn;
-    return;
-  }
+void vgui_soview2D_polygon::set_size(unsigned nn)
+{
+  if (nn < n) { n = nn; return; }
 
   // we know that n <= nn
   float *nx = new float[nn];
   float *ny = new float[nn];
-  for (unsigned i=0; i<n; ++i) {
+  for (unsigned i=0; i<n; ++i)
+  {
     nx[i] = x[i];
     ny[i] = y[i];
   }
