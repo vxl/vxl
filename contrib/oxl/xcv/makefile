@@ -8,10 +8,6 @@ PROGRAM = xcv
 ald_libs += mvl osl vcgl
 
 
-
-
-
-
 SOURCES += xcv_image_tableau.cxx
 
 SOURCES += xcv_file.cxx
@@ -35,7 +31,6 @@ SOURCES += xcv_axes_limits.cxx
 ifeq "$(IU_COMPILER)" "egcs"
 FLAGS_xcv_geometry.cxx += -ftemplate-depth-100
 endif
-
 ifeq "$(IU_COMPILER)" "gcc-2.95"
 FLAGS_xcv_geometry.cxx += -ftemplate-depth-100
 endif
