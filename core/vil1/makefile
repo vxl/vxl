@@ -70,10 +70,10 @@ FLAGS_Templates/vil_convolve_simple+byte.float.float.int-.cxx := $(optimize)
 FLAGS_Templates/vil_convolve_simple+byte.float.float.short-.cxx := $(optimize)
 
 # subdirectories
-ifneq (1, $(NOTEST))
+ifndef NOTEST
 SUBDIRS += tests 
-endif
 SUBDIRS += examples
+endif
 
 ######################################
 include ${IUEROOT}/config/usr_rules.mk

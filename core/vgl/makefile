@@ -23,7 +23,7 @@ VERSION := 1.0
 
 SUBDIRS += algo
 
-ifneq (1, $(NOTEST))
+ifndef NOTEST
 SUBDIRS += tests
 endif
 

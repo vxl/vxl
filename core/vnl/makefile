@@ -81,13 +81,15 @@ SOURCES += vnl_transpose.cxx
 SUBDIRS += algo
 
 # tests
-ifneq (1, $(NOTEST))
+ifndef NOTEST
 SUBDIRS += tests
 endif
 
 
 DEFINES += -DBUILDING_VNL_DLL
+ifndef NOTEST
 SUBDIRS += examples
+endif
 IULIBS := -lvcl
 
 ##  Only needed for Templates/vnl_matrix+* and Templates/vnl_c_vector+* :
