@@ -26,7 +26,6 @@ vil2_image_view_base_sptr vepl2_convert(vil2_image_view_base const& image, D dum
   // byte rgb
   else if (image.pixel_format() == VIL2_PIXEL_FORMAT_RGB_BYTE) {
     typedef unsigned char vxl_byte;
-    vil2_image_view<vil_rgb<vxl_byte> > mem(image); // load in memory to pass to filter
     vil2_image_view<D > out(image.ni(),image.nj(),image.nplanes());
     vipl_convert<vil2_image_view_base,vil2_image_view_base,vil_rgb<vxl_byte> ,D ,vipl_trivial_pixeliter> op;
     op.put_in_data_ptr(&image);
