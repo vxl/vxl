@@ -66,8 +66,9 @@ vcl_string text_to_color(vcl_string txt)
   else
     vcl_sscanf(color.c_str(), "%f %f %f", &red, &green, &blue);
 
-  if (debug) vcl_cerr << "vgui_color_text:: color string= " << color << ", red="
-    << red << ", green=" << green << ", blue=" << blue << vcl_endl;
+  if (debug)
+    vcl_cerr << "vgui_color_text:: color string= " << color << ", red="
+             << red << ", green=" << green << ", blue=" << blue << vcl_endl;
   return color;
 }
 

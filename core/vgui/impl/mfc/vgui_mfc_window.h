@@ -35,15 +35,15 @@ class vgui_mfc_window : public vgui_window
  public:
   //: Initialise window - common functionality called by all constructors.
   void init_window(char const *title, vgui_menu const &menubar, 
-    bool has_menu, unsigned width, unsigned height, int posx, int posy);
+                   bool has_menu, unsigned width, unsigned height, int posx, int posy);
 
   //: Constructor for window without menubar.
   vgui_mfc_window(char const *title, unsigned w, unsigned h, 
-    int posx =-1, int posy=-1);
+                  int posx =-1, int posy=-1);
 
   //: Constructor for window with menubar.
   vgui_mfc_window(unsigned w,unsigned h,vgui_menu const &menubar,
-    char const *title);
+                  char const *title);
 
   //: Destructor - delete this vgui_mfc_window.
   ~vgui_mfc_window();

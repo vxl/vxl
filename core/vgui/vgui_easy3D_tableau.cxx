@@ -48,7 +48,7 @@ vgui_point3D* vgui_easy3D_tableau::add_point(float x, float y, float z)
 
 
 vgui_lineseg3D* vgui_easy3D_tableau::add_line(float x0, float y0, float z0,
-                                      float x1, float y1, float z1) {
+                                              float x1, float y1, float z1) {
   vgui_lineseg3D *obj = new vgui_lineseg3D;
 
   obj->x0 = x0;

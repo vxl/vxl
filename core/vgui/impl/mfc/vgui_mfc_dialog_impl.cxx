@@ -66,7 +66,7 @@ struct vgui_mfc_dialog_choice
 //------------------------------------------------------------------------------
 //: Make a choice widget
 void* vgui_mfc_dialog_impl::choice_field_widget(const char* /*txt*/,
-                                          const vcl_vector<vcl_string>& labels, int& val) {
+                                                const vcl_vector<vcl_string>& labels, int& val) {
 
   vgui_mfc_dialog_choice *ch = new vgui_mfc_dialog_choice;
   ch->names = labels;

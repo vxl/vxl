@@ -43,7 +43,7 @@ class vgui_mfc : public vgui_toolkit
   virtual void add_event(const vgui_event&);
 
   virtual vgui_window* produce_window(int width, int height, const vgui_menu& menubar,
-                                           const char* title="vgui mfc window");
+                                      const char* title="vgui mfc window");
 
   virtual vgui_window* produce_window(int width, int height,
                                            const char* title="vgui mfc popup");

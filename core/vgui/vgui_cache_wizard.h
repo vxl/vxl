@@ -39,7 +39,7 @@ class vgui_cache_wizard
 
   //: Get the texture names for the current viewport
   bool get_section(int id, int x, int y,int width,int height,
-    image_cache_quadrants *quadrants,dimension *pos,dimension *size);
+                   image_cache_quadrants *quadrants,dimension *pos,dimension *size);
 
   //:
   void TexImage2D_Brownie(vil_image img);

@@ -77,7 +77,7 @@ void vgui_gtk::quit() {
 //--------------------------------------------------------------------------------
 //: Virtual function from vgui.  Creates a new window with a menubar.
 vgui_window* vgui_gtk::produce_window(int width, int height, const vgui_menu& menubar,
-                                           const char* title) {
+                                      const char* title) {
   return new vgui_gtk_window(width, height, menubar, title);
 }
 
@@ -85,7 +85,7 @@ vgui_window* vgui_gtk::produce_window(int width, int height, const vgui_menu& me
 //--------------------------------------------------------------------------------
 //: Virtual function from vgui.  Creates a new window.
 vgui_window* vgui_gtk::produce_window(int width, int height,
-                                           const char* title) {
+                                      const char* title) {
 
   return new vgui_gtk_window(width, height, title);
 }

@@ -308,14 +308,14 @@ bool vgui_rubberband_tableau::handle_infinite_line(vgui_event const &e, float ix
   if ((use_overlays && e.type == vgui_DRAW_OVERLAY) || (!use_overlays && e.type == vgui_DRAW))
   {
     draw_infinite_line(-lastx+x_coords[0],y_coords[0] - lasty,
-      -(-lastx+x_coords[0])*lastx-lasty*(y_coords[0]-lasty));
+                       -(-lastx+x_coords[0])*lastx-lasty*(y_coords[0]-lasty));
     return true;
   }
   if (gesture1(e))
   {
     // Infinite line is completed, add to rubberband_client
     client_->add_infinite_line(-ix+x_coords[0],y_coords[0] - iy,
-      -(-ix+x_coords[0])*lastx-iy*(y_coords[0]-lasty));
+                               -(-ix+x_coords[0])*lastx-iy*(y_coords[0]-lasty));
     active = false;
     obj_type = none_enum;
     post_redraw();

@@ -110,7 +110,7 @@ struct vgui_satellite_tableau_t : vgui_tableau
   //: Constructor - don't use this, use vgui_satellite_tableau_t_new.
   //  There is no vgui_satellite_tableau_t_sptr for this tableau.
   vgui_satellite_tableau_t(object *p_, method m_, data const &d_, 
-    vcl_string const &n_ = "")
+                           vcl_string const &n_ = "")
     : p(p_), m(m_), d(d_), n(n_) { }
 
   bool handle(vgui_event const &e) { return (p && m) && (p->*m)(e, d); }

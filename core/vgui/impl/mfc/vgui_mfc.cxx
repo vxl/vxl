@@ -137,7 +137,8 @@ void vgui_mfc::add_event(const vgui_event& event) {
 //--------------------------------------------------------------------------------
 //: Virtual function from vgui - creates a new window with a menubar.
 vgui_window* vgui_mfc::produce_window(int width, int height, const vgui_menu& menubar,
-                                           const char* title) {
+                                      const char* title)
+{
   vgui_window* a_window = new vgui_mfc_window(width, height, menubar, title);
   windows_to_delete.push_back(a_window);
   return a_window;
@@ -148,7 +149,8 @@ vgui_window* vgui_mfc::produce_window(int width, int height, const vgui_menu& me
 //--------------------------------------------------------------------------------
 //: Virtual function from vgui - creates a new window.
 vgui_window* vgui_mfc::produce_window(int width, int height,
-                                           const char* title) {
+                                      const char* title)
+{
   vgui_window* a_window = new vgui_mfc_window(title, width, height);
   windows_to_delete.push_back(a_window);
   return a_window;
@@ -158,7 +160,8 @@ vgui_window* vgui_mfc::produce_window(int width, int height,
 
 //--------------------------------------------------------------------------------
 //: Virtual function from vgui - creates a new dialog box.
-vgui_dialog_impl* vgui_mfc::produce_dialog(const char* name) {
+vgui_dialog_impl* vgui_mfc::produce_dialog(const char* name)
+{
   return new vgui_mfc_dialog_impl(name);
   return 0;
 }

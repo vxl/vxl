@@ -11,16 +11,15 @@
 
 class example_CMainFrame : public CFrameWnd
 {
-
-protected: // create from serialization only
+ protected: // create from serialization only
         example_CMainFrame();
         DECLARE_DYNCREATE(example_CMainFrame)
 
 // Attributes
-public:
+ public:
 
 // Operations
-public:
+ public:
 
 // Overrides
         // ClassWizard generated virtual function overrides
@@ -29,19 +28,19 @@ public:
         //}}AFX_VIRTUAL
 
 // Implementation
-public:
+ public:
         virtual ~example_CMainFrame();
 #ifdef _DEBUG
         virtual void AssertValid() const;
         virtual void Dump(CDumpContext& dc) const;
 #endif
 
-protected:  // control bar embedded members
+ protected:  // control bar embedded members
         CStatusBar  m_wndStatusBar;
         CToolBar    m_wndToolBar;
 
 // Generated message map functions
-protected:
+ protected:
         //{{AFX_MSG(example_CMainFrame)
         afx_msg int OnCreate(LPCREATESTRUCT lpCreateStruct);
                 // NOTE - the ClassWizard will add and remove member functions here.

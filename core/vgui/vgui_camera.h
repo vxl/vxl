@@ -47,7 +47,7 @@ class vgui_camera
   //  back clipping planes will be PARALLEL (note: not projective frame!) to
   //  the image plane.
   vnl_matrix<double> get_glprojmatrix( const int imagesizex= 720, 
-    const int imagesizey= 576) const;
+                                       const int imagesizey= 576) const;
 
  protected:
   //: The projection matrix.

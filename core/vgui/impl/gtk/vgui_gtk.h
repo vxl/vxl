@@ -59,11 +59,12 @@ class vgui_gtk : public vgui_toolkit
 
   //: Create a window with a menubar.
   virtual vgui_window* produce_window(int width, int height, 
-    const vgui_menu& menubar, const char* title="vgui gtk window");
+                                      const vgui_menu& menubar,
+                                      const char* title="vgui gtk window");
 
   //: Create a window.
   virtual vgui_window* produce_window(int width, int height,
-    const char* title="vgui gtk popup");
+                                      const char* title="vgui gtk popup");
 
   //: Create a dialog box.
   virtual vgui_dialog_impl* produce_dialog(const char* name);

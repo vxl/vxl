@@ -1,11 +1,11 @@
-// This is ./oxl/vgui/vgui_poly_tableau.h
+// This is oxl/vgui/vgui_poly_tableau.h
 
 //:
 // \file
 // \author fsm@robots.ox.ac.uk
 // \brief  Tableau which renders its children in sub-rectangles of its viewport.
 //
-//  Contains classes: vgui_poly_tableau  vgui_poly_tableau_new 
+//  Contains classes: vgui_poly_tableau  vgui_poly_tableau_new
 //
 // \verbatim
 //  Modifications:
@@ -25,14 +25,14 @@
 
 //: A tableau which renders its children into sub-rectangles of its viewport.
 //
-// Class poly_tableau is a tableau which renders its children into 
-// sub-rectangles of its given viewport. The subrectangles are given as 
-// relative coordinates on [0,1]x[0,1], with (0,0) being the lower left corner 
-// and (1,1) the upper right corner. 
+// Class poly_tableau is a tableau which renders its children into
+// sub-rectangles of its given viewport. The subrectangles are given as
+// relative coordinates on [0,1]x[0,1], with (0,0) being the lower left corner
+// and (1,1) the upper right corner.
 //
-// vgui_poly_tableau has a concept of which child is 'current', meaning 
-// roughly which child is getting the mouse events. It automatically 
-// switches current child, according to where the pointer is, in a 
+// vgui_poly_tableau has a concept of which child is 'current', meaning
+// roughly which child is getting the mouse events. It automatically
+// switches current child, according to where the pointer is, in a
 // sensible way.
 //
 // vgui_poly_tableau can be used to emulate two adaptors side by side.
@@ -44,7 +44,7 @@
 // knowing the viewport, because a LEAVE/ENTER pair have to be sent to the old
 // and new child and the viewport must be set correctly before dispatching these
 // events.
-class vgui_poly_tableau : public vgui_tableau 
+class vgui_poly_tableau : public vgui_tableau
 {
 public:
   //: Constructor - don't use this, use vgui_poly_tableau_new.
@@ -57,7 +57,7 @@ public:
   void get_popup(vgui_popup_params const &, vgui_menu &);
 
   //: The position, colour, etc of the child tableau.
-  struct item 
+  struct item
   {
     vgui_parent_child_link tab;
     float x,y,w,h;
@@ -65,8 +65,8 @@ public:
     int id;
 
     item() { } // for stl container
-    item(vgui_tableau* p, vgui_tableau_sptr const&c, float x, float y, 
-      float w, float h, int id =0);
+    item(vgui_tableau* p, vgui_tableau_sptr const&c, float x, float y,
+         float w, float h, int id =0);
     void set_vp(GLint const vp[4]);
     //: Returns true if the given position is inside the boundaries of this item
     bool inside(GLint const vp[4], int x, int y) const;
@@ -97,7 +97,7 @@ public:
   //: Adds the given tableau to the given proportion of the viewport.
   //  x,y,w,h specify a portion of the vgui_poly_tableau's viewport in
   //  coordinates which go from 0 to 1.
-  //: Returns handle to child.
+  //  Returns handle to child.
   int add(vgui_tableau_sptr const&, float x, float y, float w, float h);
 
   //: Remove subtableau, referred to by handle.
@@ -123,8 +123,8 @@ protected:
   //: Handle all events sent to this tableau.
   //  In particular, use draw events to draw the sub-rectangles.
   bool handle(vgui_event const &);
- 
-  //; Make sure draw events go to all children in the right order. 
+
+  //; Make sure draw events go to all children in the right order.
   bool handle(GLint const vp[4], vgui_event const &e);
 
   //: Misnomer - returns the index of child under the pointer's position.
@@ -144,11 +144,10 @@ protected:
 };
 
 
-
 //: Creates a smart-pointer to a vgui_poly_tableau tableau.
 struct vgui_poly_tableau_new : public vgui_poly_tableau_sptr {
   typedef vgui_poly_tableau_sptr base;
-  
+
   //: Constructor - create a smart-pointer to an empty vgui_poly_tableau.
   vgui_poly_tableau_new() : base(new vgui_poly_tableau()) { }
 };

@@ -17,11 +17,11 @@ struct vgui_glut_impl : vgui_toolkit
   vcl_string name() const;
 
   vgui_window* produce_window(int width, int height,
-                                   vgui_menu const & menubar,
-                                   char const* title);
+                              vgui_menu const & menubar,
+                              char const* title);
 
   vgui_window* produce_window(int width, int height,
-                                   char const* title);
+                              char const* title);
 
   void run();
   void run_one_event();

@@ -65,7 +65,7 @@ class vgui_dialog
 
   //: Multiple choice - with two options.
   void choice(const char* label, const char* option1, 
-    const char* option2, int& chosen);
+              const char* option2, int& chosen);
 
   //: Multiple choice - with three options.
   void choice(const char* label, const char* option1, 

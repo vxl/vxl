@@ -31,8 +31,8 @@ void vgui_qt::run()
 
 //-----------------------------------------------------------------------------
 vgui_window* vgui_qt::produce_window(int width, int height,
-                                          const vgui_menu& menubar,
-                                          const char* title)
+                                     const vgui_menu& menubar,
+                                     const char* title)
 {
    return new vgui_qt_window(width, height, menubar, title);
 }
@@ -40,7 +40,7 @@ vgui_window* vgui_qt::produce_window(int width, int height,
 
 //-----------------------------------------------------------------------------
 vgui_window* vgui_qt::produce_window(int width, int height,
-                                           const char* title)
+                                     const char* title)
 {
    return new vgui_qt_window(width, height, title);
 }

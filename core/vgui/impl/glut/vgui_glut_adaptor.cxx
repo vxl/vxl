@@ -1,10 +1,9 @@
+// This is oxl/vgui/impl/glut/vgui_glut_adaptor.cxx
+#include "vgui_glut_adaptor.h"
 //:
 //  \file
+// \author fsm@robots.ox.ac.uk
 
-/*
-  fsm@robots.ox.ac.uk
-*/
-#include "vgui_glut_adaptor.h"
 #include "vgui_glut_window.h"
 #include "vgui_glut_popup_impl.h"
 #include "menu_hack.h"
@@ -242,9 +241,9 @@ bool vgui_glut_adaptor::glut_dispatch(vgui_event &e) {
 #if 1
             for (int cell=0; cell<tmp; ++cell)
               vcl_cerr << cell << ':'
-                   << glutGetColor(cell, GLUT_RED) << ' '
-                   << glutGetColor(cell, GLUT_GREEN) << ' '
-                   << glutGetColor(cell, GLUT_BLUE) << vcl_endl;
+                       << glutGetColor(cell, GLUT_RED) << ' '
+                       << glutGetColor(cell, GLUT_GREEN) << ' '
+                       << glutGetColor(cell, GLUT_BLUE) << vcl_endl;
 #endif
             once=true;
           }

@@ -29,10 +29,10 @@ public:
    virtual   vcl_string name() const { return "qt"; };
    virtual   void     run();
    virtual   vgui_window* produce_window(int width, int height,
-                                              const vgui_menu& menubar,
+                                         const vgui_menu& menubar,
                                               const char* title="vgui qt window");
    virtual   vgui_window* produce_window(int width, int height,
-                                              const char* title="vgui qt popup");
+                                         const char* title="vgui qt popup");
    virtual   vgui_dialog_impl* produce_dialog(const char* name);
 
 protected:

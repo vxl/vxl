@@ -39,8 +39,8 @@ vcl_string vgui_glut_impl::name() const
 }
 
 vgui_window *vgui_glut_impl::produce_window(int width, int height,
-                                       vgui_menu const &menubar,
-                                       char const *title)
+                                            vgui_menu const &menubar,
+                                            char const *title)
 {
   vgui_glut_window *win = new vgui_glut_window(title, width, height);
   win->menubar = menubar;

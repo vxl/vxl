@@ -209,7 +209,7 @@ void vgui_tview_tableau::draw_icons(vgui_tableau_sptr const& parent, float x, fl
 
 
 void vgui_tview_tableau::add_icons(vcl_vector<vgui_tview_tableau::icon>* icons, vgui_tableau_sptr const& parent,
-                           float x, float y)
+                                   float x, float y)
 {
   vcl_vector<vgui_tableau_sptr> children;
   parent->get_children(&children);
