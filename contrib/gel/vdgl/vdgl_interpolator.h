@@ -36,15 +36,15 @@ class vdgl_interpolator : public vul_timestamp,
   // Operators----------------------------------------------------------------
 
   // interpolation 0th degree
-  virtual double get_x( const double index)= 0;
-  virtual double get_y( const double index)= 0;
+  virtual double get_x(double index)= 0;
+  virtual double get_y(double index)= 0;
 
   // interpolation 1st degree
-  virtual double get_theta( const double index)= 0;
-  virtual double get_tangent_angle( const double index)= 0;
+  virtual double get_theta(double index)= 0;
+  virtual double get_tangent_angle(double index)= 0;
 
   // interpolation 2nd degree
-  virtual double get_curvature( const double index)= 0;
+  virtual double get_curvature(double index)= 0;
 
   // integral
   virtual double get_length()= 0;
