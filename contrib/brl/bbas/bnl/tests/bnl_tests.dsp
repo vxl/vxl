@@ -142,9 +142,6 @@ LINK32=link.exe
 
 # Begin Group "Source Files"
 # PROP Default_Filter "cxx;c"
-# Begin Source File
-SOURCE=.\test_bnl_all.cxx
-# End Source File
 # End Group
 # End Target
 # End Project

@@ -150,15 +150,6 @@ SOURCE=.\rrel_trunc_quad_obj.cxx
 SOURCE=.\rrel_tukey_obj.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/rrel_util_double~.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/rrel_util_list+double-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/rrel_util_vector+double-.cxx
-# End Source File
-# Begin Source File
 SOURCE=.\rrel_kernel_density_obj.cxx
 # End Source File
 # Begin Source File
@@ -172,6 +163,18 @@ SOURCE=.\rrel_affine_est.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\rrel_wgted_ran_sam_search.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/rrel_util_double~.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/rrel_util_list+double-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/rrel_util_vector+double-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/rrel_util_vector+float-.cxx
 # End Source File
 # End Group
 # Begin Group "Header Files"
