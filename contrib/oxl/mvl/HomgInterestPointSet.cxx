@@ -21,7 +21,6 @@ public:
     vcl_vector<HomgInterestPoint>(n, HomgInterestPoint())
   {}
   ~HomgInterestPointSetData() { }
-
 };
 
 //: Construct an empty corner set.
@@ -280,7 +279,7 @@ bool HomgInterestPointSet::write(const char* filename) const
   return write(fout, get_conditioner());
 }
 
-bool HomgInterestPointSet::write(vcl_ostream& f, ImageMetric const*) const
+bool HomgInterestPointSet::write(vcl_ostream& f, const ImageMetric*) const
 {
   for (unsigned i=0; i < size(); i++) {
     const vnl_double_2& p = get_2d(i);
