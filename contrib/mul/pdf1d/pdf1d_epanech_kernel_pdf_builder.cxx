@@ -7,6 +7,7 @@
 // \author Tim Cootes
 // \brief Builds Epanechnikov kernel pdfs
 
+#include <vnl/vnl_fwd.h> // Leave this hack here to avoid a MSVC internal compiler error.
 #include "pdf1d_epanech_kernel_pdf_builder.h"
 
 #include <vcl_cassert.h>
