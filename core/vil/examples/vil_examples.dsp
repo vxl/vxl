@@ -65,6 +65,9 @@ SOURCE=.\example_complex.cxx
 # Begin Source File
 SOURCE=.\vil_resample_image.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\generate_nitf_pyramid_images.cxx
+# End Source File
 # End Group
 # End Target
 # End Project
