@@ -85,13 +85,135 @@ LINK32=link.exe
 
 # PROP Default_Filter "cpp;c;cxx;rc;def;r;odl;idl;hpj;bat"
 # Begin Source File
-
-SOURCE=.\vnl_test_all.cxx
+SOURCE=.\test_driver.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\test_include.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\test_util.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\test_amoeba.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\test_bignum.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\test_complex.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\test_complex_eigensystem.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\test_convolve.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\test_cpoly_roots.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\test_determinant.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\test_fft.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\test_fft1d.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\test_fft2d.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\test_file_matrix.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\test_finite.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\test_functions.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\test_generalized_eigensystem.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\test_levenberg_marquardt.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\test_math.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\test_matlab.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\test_matrix.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\test_matrix_exp.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\test_matrix_fixed.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\test_minimizers.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\test_numeric_limits.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\test_numeric_traits.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\test_qr.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\test_qsvd.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\test_rational.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\test_real_eigensystem.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\test_real_polynomial.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\test_resize.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\test_rnpoly_roots.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\test_rpoly_roots.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\test_sample.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\test_sparse_matrix.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\test_svd.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\test_sym_matrix.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\test_symmetric_eigensystem.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\test_transpose.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\test_vector.cxx
 # End Source File
 # End Group
 # Begin Group "Header Files"
 
 # PROP Default_Filter "h;hpp;hxx;hm;inl"
+# Begin Source File
+SOURCE=.\test_util.h
+# End Source File
 # End Group
 # Begin Group "Resource Files"
 
