@@ -2,9 +2,9 @@
 #ifndef vimt_gaussian_pyramid_builder_2d_txx_
 #define vimt_gaussian_pyramid_builder_2d_txx_
 //:
-//  \file
-//  \brief Class to build gaussian pyramids of vimt_image_2d_of<T>
-//  \author Tim Cootes
+// \file
+// \brief Class to build gaussian pyramids of vimt_image_2d_of<T>
+// \author Tim Cootes
 
 #include "vimt_gaussian_pyramid_builder_2d.h"
 
@@ -121,7 +121,7 @@ template<class T>
 void vimt_gaussian_pyramid_builder_2d<T>::check_pyr(vimt_image_pyramid& im_pyr,  int n_levels) const
 {
   const int got_levels = im_pyr.n_levels();
-  if (got_levels >= n_levels && im_pyr(0).is_a()==work_im_.is_a())
+  if (got_levels >= n_levels && im_pyr(0).is_class(work_im_.is_a()))
   {
     if (im_pyr.n_levels()==n_levels) return;
     else
@@ -147,7 +147,7 @@ void vimt_gaussian_pyramid_builder_2d<T>::build(vimt_image_pyramid& image_pyr,
                                                 const vimt_image& im) const
 {
   //  Require image vimt_image_2d_of<T>
-  assert(im.is_a()==work_im_.is_a());
+  assert(im.is_class(work_im_.is_a()));
 
   const vimt_image_2d_of<T>& base_image = static_cast<const vimt_image_2d_of<T>&>(im);
 
@@ -203,7 +203,7 @@ template<class T>
 void vimt_gaussian_pyramid_builder_2d<T>::extend(vimt_image_pyramid& image_pyr) const
 {
   //  Require image vimt_image_2d_of<T>
-  assert(image_pyr(0).is_a() == work_im_.is_a());
+  assert(image_pyr(0).is_class(work_im_.is_a()));
 
   assert(image_pyr.scale_step() == scale_step());
 

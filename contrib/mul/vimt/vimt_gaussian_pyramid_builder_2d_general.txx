@@ -2,9 +2,9 @@
 #ifndef vimt_gaussian_pyramid_builder_2d_general_txx_
 #define vimt_gaussian_pyramid_builder_2d_general_txx_
 //:
-//  \file
-//  \brief Build gaussian image pyramids at any scale separation
-//  \author Ian Scott
+// \file
+// \brief Build gaussian image pyramids at any scale separation
+// \author Ian Scott
 
 #include "vimt_gaussian_pyramid_builder_2d_general.h"
 #include <vcl_cmath.h>
@@ -50,7 +50,7 @@ void vimt_gaussian_pyramid_builder_2d_general<T>::build(
                   vimt_image_pyramid& im_pyr,
                   const vimt_image& im) const
 {
-  assert(im.is_a()==vimt_image_2d_of<T>().is_a());
+  assert(im.is_class(vimt_image_2d_of<T>().is_a()));
 
   const vimt_image_2d_of<T>& base_image = static_cast<const vimt_image_2d_of<T>&>(im);
 
@@ -94,7 +94,7 @@ void vimt_gaussian_pyramid_builder_2d_general<T>::build(
     // Sort out world to image transformation for destination image
     vimt_transform_2d scaling;
 
-    // use n-1 because we are trying to align inter-pixel spaces, so that the 
+    // use n-1 because we are trying to align inter-pixel spaces, so that the
     // centre pixel is most accurately registered despite buildup of rounding errors.
     const double init_x = 0.5 * (src.image().ni() - 1 - (dest.image().ni()-1)*scale_params_.scale_step());
     const double init_y = 0.5 * (src.image().nj() - 1 - (dest.image().nj()-1)*scale_params_.scale_step());
@@ -122,7 +122,7 @@ template<class T>
 void vimt_gaussian_pyramid_builder_2d_general<T>::extend(vimt_image_pyramid& image_pyr) const
 {
   //  Require image vil2_image_view<T>
-  assert(image_pyr(0).is_a() == vimt_image_2d_of<T>().is_a());
+  assert(image_pyr(0).is_class(vimt_image_2d_of<T>().is_a()));
 
   assert(image_pyr.scale_step() == scale_step());
 
