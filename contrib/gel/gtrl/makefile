@@ -1,7 +1,3 @@
-###########################################
-#include $(IUEROOT)/vxl/vgui/easy-client.mk
-###########################################
-
 USES += v3p vxl gel
 
 LIBRARY = gtrl
