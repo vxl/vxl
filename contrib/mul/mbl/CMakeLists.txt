@@ -20,6 +20,7 @@ SOURCE_FILES(mbl_sources
   mbl_read_str.cxx
   mbl_thin_plate_spline_2d.cxx
   mbl_histogram.cxx
+  mbl_clamped_plate_spline_2d.cxx
 )
 
 AUX_SOURCE_DIRECTORY(Templates mbl_sources)
