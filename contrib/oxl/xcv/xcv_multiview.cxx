@@ -3,30 +3,26 @@
 #endif
 //-----------------------------------------------------------------------------
 
-#include <vcl_string.h>
 #include "xcv_multiview.h"
 #include "xcv_twoview_manager.h"
 #include "xcv_threeview_manager.h"
 #include "xcv_tjunction.h"
 #include "xcv_segmentation.h"
 
-#include <vsl/vsl_harris_params.h>
-#include <vil/vil_image.h>
+#include <vcl_string.h>
 #include <vcl_fstream.h>
 #include <vcl_iostream.h>
+#include <vil/vil_image.h>
+#include <vsl/vsl_harris_params.h>
 
 #include <mvl/HomgInterestPointSet.h>
 #include <mvl/TripleMatchSetCorner.h>
 #include <mvl/SimilarityMetric.h>
-#ifdef HAS_MVOX
-#include <mvox/mvox_compute.h>
-#endif
 
 #include <vgui/vgui.h>
 #include <vgui/vgui_find.h>
 #include <vgui/vgui_menu.h>
 #include <vgui/vgui_dialog.h>
-#include <vgui/vgui_utils.h>
 #include <vgui/vgui_easy2D.h>
 #include <vgui/vgui_rubberbander.h>
 #include <vgui/vgui_slot.h>
@@ -416,128 +412,6 @@ void xcv_multiview::display_corner_tracks()
 }
 
 //-----------------------------------------------------------------------------
-//-- Gets all the points on the given easy2D and converts to HomgPoint2Ds.
-//-----------------------------------------------------------------------------
-static
-vcl_vector<HomgPoint2D> get_points_from_easy(vgui_easy2D_ref const& easy, ImageMetric* metric)
-{
-  vcl_vector<HomgPoint2D> points;
-  vcl_vector<vgui_soview*> all_objs = easy->get_all();
-  for (unsigned counter=0; counter < all_objs.size(); counter++)
-  {
-    if (all_objs[counter]->type_name() == "vgui_soview2D_point")
-    {
-      vgui_soview2D_point* vsp = (vgui_soview2D_point*)all_objs[counter];
-      points.push_back(metric->image_to_homg(vsp->x, vsp->y)); 
-    }
-  }
-  return points;
-}
-
-//-----------------------------------------------------------------------------
-//-- Computes corner matches and either FMatrix or HMatrix2D.
-//-----------------------------------------------------------------------------
-#ifdef HAS_MVOX
-void xcv_multiview::compute_two_view_relation(bool is_f_matrix)
-{
-  vcl_vector<int> col_pos, row_pos;
-  if (!get_twoviews(&col_pos, &row_pos))
-    return;
-  if (debug) vcl_cerr << "Computing FMatrix for views (" << col_pos[0] << ", " <<
-    row_pos[0] << ") and (" << col_pos[1] << ", " << row_pos[1] << ")." << vcl_endl;
-
-  // Get corners and convert to HomgInterestPointSet for both views:
-  vil_image images[2];
-  for (unsigned i=0; i<=1; i++)
-    if (!get_image_at(&images[i], col_pos[i], row_pos[i]))
-      return;
-  SimilarityMetric* metric = new SimilarityMetric(images[0].width(), images[0].height());
-
-  HomgInterestPointSet* corners[2];
-  vcl_vector<HomgPoint2D> points[2];
-  for (unsigned i=0; i<=1; i++)
-  {
-    vgui_easy2D_ref easy = get_easy2D_at(col_pos[i], row_pos[i]);
-    if (! easy)
-      return;
-    points[i] = get_points_from_easy(easy, metric);
-    if (debug) vcl_cerr << "Number of points in view " << i+1 << " = " 
-      << points[i].size() << vcl_endl;
-    if (points[i].size() < 8)
-    {  
-      vcl_cerr << "Not enough corners for (" << col_pos[i] << ", " << row_pos[i] << ")." << vcl_endl;
-      vcl_cerr << "Performing Harris corner detection." << vcl_endl;
-      vsl_harris_params params;
-      xcv_segmentation::perform_harris(params, col_pos[i], row_pos[i]);
-      easy->post_redraw();
-      points[i] = get_points_from_easy(easy, metric);
-    }
-    corners[i] = new HomgInterestPointSet(points[i], metric);
-  }
-
-  static int disp_thresh_x =35;
-  static int disp_thresh_y =35;
-  static double outlier_thresh =1.25;
-  static double inlier_ratio = 0.2;
-
-  vgui_dialog dl("Compute two view relation");
-  dl.field("Disparity x:", disp_thresh_x);
-  dl.field("Disparity y:", disp_thresh_y);
-  dl.field("Outlier threshold:", outlier_thresh);
-  dl.field("Inlier ratio:", inlier_ratio);
-  if (!dl.ask())
-    return;
-
-  mvox_compute mvc;
-  mvc.set_outlier_threshold(outlier_thresh);
-  mvc.set_disparity_threshold(disp_thresh_x, disp_thresh_y);
-  mvc.set_inlier_ratio(inlier_ratio);
-  mvc.set_image_data(0, images[0], corners[0]);
-  mvc.set_image_data(1, images[1], corners[1]);
-
-  if (is_f_matrix == true) {
-    if (!mvc.compute_fmatrix()) {
-      vcl_cerr << "FMatrix computation failed for this pair of images." << vcl_endl;
-      return;
-    }
-
-    // Add the corner matches and FMatrix to the twoview_manager:
-    xcv_twoview_manager* mgr = get_twoview_manager(col_pos, row_pos);
-    mgr->set_corner_matches(new PairMatchSetCorner(mvc.get_matches_2view()));
-    mgr->set_f_matrix(new FMatrix(HomgMetric::homg_to_image_F(mvc.get_fmatrix(), metric, metric)));
-  }
-  else // compute HMatrix
-  {
-    if (!mvc.compute_hmatrix()) {
-      vcl_cerr << "Homography computation failed for this pair of images." << vcl_endl;
-      return;
-    }
-  
-    // Add the corner matches and FMatrix to the twoview_manager:
-    xcv_twoview_manager* mgr = get_twoview_manager(col_pos, row_pos);
-    mgr->set_corner_matches(new PairMatchSetCorner(mvc.get_matches_2view()));
-    mgr->set_h_matrix(new HMatrix2D(HomgMetric::homg_to_image_H(mvc.get_hmatrix(), metric, metric)));
-  }
-}
-#endif
-//-----------------------------------------------------------------------------
-//-- Compute the FMatrix for the two selected views.
-//-----------------------------------------------------------------------------
-#ifdef HAS_MVOX
-void xcv_multiview::compute_f_matrix()
-{
-  compute_two_view_relation(true);
-}
-
-//-----------------------------------------------------------------------------
-//-- Compute the HMatrix2D for the two selected views.
-//-----------------------------------------------------------------------------
-void xcv_multiview::compute_h_matrix2d()
-{
-  compute_two_view_relation(false);
-}
-#endif
-//-----------------------------------------------------------------------------
 //-- Load a TriTensor into the threeview_manager from file.
 //-----------------------------------------------------------------------------
 void xcv_multiview::load_tri_tensor()
@@ -811,158 +685,3 @@ void xcv_multiview::transfer_line()
   }
   easys[0]->post_redraw();
 }
-
-//-----------------------------------------------------------------------------
-//-- Compute the TriTensor for the three currently selected views.
-//-----------------------------------------------------------------------------
-#ifdef HAS_MVOX
-void xcv_multiview::compute_tri_tensor()
-{
-  vcl_vector<int> col_pos, row_pos;
-  if (!get_threeviews(&col_pos, &row_pos))
-    return;
-
-  vil_image images[3];
-  for (unsigned i=0; i<3; i++)
-    if (!get_image_at(&images[i], col_pos[i], row_pos[i]))
-      return;
-
-  SimilarityMetric* metric = new SimilarityMetric(images[0].width(), images[0].height());
-
-  HomgInterestPointSet* corners[3];
-  vcl_vector<HomgPoint2D> points[3];
-  
-  for (unsigned i=0; i<3; i++)
-  {
-    vgui_easy2D_ref easy = get_easy2D_at(col_pos[i], row_pos[i]);
-    if (! easy)
-      return;
-
-    points[i] = get_points_from_easy(easy, metric);
-    if (debug) vcl_cerr << "Number of points in view " << i+1 << " = " << points[i].size() << vcl_endl;
-    if (points[i].size() < 8)
-    {  
-      vcl_cerr << "Not enough corners for (" << col_pos[i] << ", " << row_pos[i] << ")." 
-        << vcl_endl << "Performing Harris corner detection." << vcl_endl;
-      vsl_harris_params params;
-      xcv_segmentation::perform_harris(params, col_pos[i], row_pos[i]);
-      points[i] = get_points_from_easy(easy, metric);
-    }
-    corners[i] = new HomgInterestPointSet(points[i], metric);
-  }
-
-  static int disp_thresh_x =35;
-  static int disp_thresh_y =35;
-  static double outlier_thresh =1.25;
-  static double inlier_ratio = 0.2;
-  static bool fast = false;
- 
-  vgui_dialog dl("Compute TriTensor");
-  dl.field("Disparity x:", disp_thresh_x);
-  dl.field("Disparity y:", disp_thresh_y);
-  dl.field("Outlier threshold:", outlier_thresh);
-  dl.field("Inlier ratio:", inlier_ratio);
-  dl.checkbox("Fast:", fast);
-  if(!dl.ask())
-    return;
-
-  mvox_compute mvc;
-  mvc.set_outlier_threshold(outlier_thresh);
-  mvc.set_disparity_threshold(disp_thresh_x, disp_thresh_y);
-  mvc.set_inlier_ratio(inlier_ratio);
-  mvc.set_fast(fast);
-  for(int i = 0; i < 3; ++i)
-    mvc.set_image_data(i, images[i], corners[i]);
-  
-  if (!mvc.compute_tritensor()) {
-    vcl_cerr << "T computation failed for this triplet." << vcl_endl;
-    return;
-  }
-  
-  TriTensor T = mvc.get_tritensor();
-  T = HomgMetric::homg_to_image_T(T, metric, metric, metric);
-  vcl_cerr << T;
-  
-  xcv_threeview_manager* mgr = get_threeview_manager(col_pos, row_pos);
-  mgr->set_tri_tensor(new TriTensor(T));
-
-  // Get the twoview_managers and set the FMatrices:
-  xcv_twoview_manager* mgr12 = get_twoview_manager(col_pos, row_pos);
-  FMatrix* f12 = new FMatrix(T.get_fmatrix_12());
-  mgr12->set_f_matrix(f12);
-
-  vcl_vector<int> two_col_pos, two_row_pos;
-  two_col_pos.push_back(col_pos[0]); two_col_pos.push_back(col_pos[2]);
-  two_row_pos.push_back(row_pos[0]); two_row_pos.push_back(row_pos[2]);
-  xcv_twoview_manager* mgr13 = get_twoview_manager(two_col_pos, two_row_pos);
-  FMatrix* f13 = new FMatrix(T.get_fmatrix_13());
-  mgr13->set_f_matrix(f13); 
-
-  vcl_vector<int> two_col_pos2, two_row_pos2;
-  two_col_pos2.push_back(col_pos[1]); two_col_pos2.push_back(col_pos[2]);
-  two_row_pos2.push_back(row_pos[1]); two_row_pos2.push_back(row_pos[2]);
-  xcv_twoview_manager* mgr23 = get_twoview_manager(two_col_pos2, two_row_pos2);
-  FMatrix* f23 = new FMatrix(T.compute_fmatrix_23());
-  mgr23->set_f_matrix(f23); 
-}
-#endif
-//-----------------------------------------------------------------------------
-//-- Creates a menu containing all the functions in this file.
-//-----------------------------------------------------------------------------
-vgui_menu xcv_multiview::create_multiview_menu()
-{
-  vgui_menu mult_menu;
-
-  //---- Two view menu --------------------- 
-  vgui_menu two_menu;
-  vgui_menu twoload_menu;
-  twoload_menu.add("Load FMatrix", load_f_matrix);
-  twoload_menu.add("Load HMatrix2D", load_h_matrix2d);
-  //twoload_menu.add("Load corner matches", load_corner_matches);
-  //twoload_menu.add("Load line matches", twoview);
-  two_menu.add("Load", twoload_menu);
-  
-  vgui_menu twosave_menu;
-  twosave_menu.add("Save FMatrix", save_f_matrix);
-  twosave_menu.add("Save HMatrix2D", save_h_matrix2d);
-  twosave_menu.add("Save corner matches", save_corner_matches);
-  two_menu.add("Save", twosave_menu);
-
-  vgui_menu twodisp_menu;
-  twodisp_menu.add("Toggle display FMatrix", toggle_f_matrix);
-  twodisp_menu.add("Toggle display HMatrix2D", toggle_h_matrix);
-  //twodisp_menu.add("Display corner matches", display_corner_matches);
-  twodisp_menu.add("Display corner tracks", display_corner_tracks);
-  two_menu.add("Display", twodisp_menu);
-#ifdef HAS_MVOX
-  vgui_menu twocomp_menu;
-  twocomp_menu.add("Compute FMatrix", compute_f_matrix);
-  twocomp_menu.add("Compute HMatrix2D", compute_h_matrix2d);
-  two_menu.add("Compute", twocomp_menu);
-#endif
-  mult_menu.add("Two view", two_menu);
-  //---- Three view menu --------------------- 
-  vgui_menu three_menu;
-  vgui_menu threeload_menu;
-  threeload_menu.add("Load TriTensor", load_tri_tensor);
-  three_menu.add("Load", threeload_menu);
- 
-  vgui_menu threesave_menu;
-  threesave_menu.add("Save TriTensor", save_tri_tensor);
-  three_menu.add("Save", threesave_menu);
-
-  vgui_menu threedisp_menu;
-  threedisp_menu.add("Toggle display TriTensor", toggle_tri_tensor);
-  threedisp_menu.add("Transfer point", transfer_point);
-  threedisp_menu.add("Transfer line", transfer_line);
-  three_menu.add("Display", threedisp_menu);
-#ifdef HAS_MVOX
-  vgui_menu threecomp_menu;
-  threecomp_menu.add("Compute TriTensor", compute_tri_tensor);
-  three_menu.add("Compute", threecomp_menu); 
-#endif
-  mult_menu.add("Three view", three_menu);
-
-  return mult_menu;
-}
-
