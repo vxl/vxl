@@ -41,7 +41,8 @@ class bgui_vsol_soview2D_point : public vgui_soview2D
   virtual vcl_ostream& print(vcl_ostream&) const;
 
   //: Returns the type of this class ('bgui_vsol_soview2D_point').
-  vcl_string type_name() const { return "bgui_vsol_soview2D_point"; }
+  static vcl_string type_name_() { return "bgui_vsol_soview2D_point"; }
+  vcl_string type_name() const { return type_name_(); }
 
   //: Render this 2D digital_curve on the display.
   void draw() const;
@@ -75,7 +76,8 @@ class bgui_vsol_soview2D_line_seg : public vgui_soview2D
   virtual vcl_ostream& print(vcl_ostream&) const;
 
   //: Returns the type of this class ('bgui_vsol_soview2D_edge').
-  vcl_string type_name() const { return "bgui_vsol_soview2D_line_seg"; }
+  static vcl_string type_name_() { return "bgui_vsol_soview2D_line_seg"; }
+  vcl_string type_name() const { return type_name_(); }
 
   //: Render this 2D digital_curve on the display.
   void draw() const;
@@ -108,7 +110,8 @@ class bgui_vsol_soview2D_polyline : public vgui_soview2D
   virtual vcl_ostream& print(vcl_ostream&) const;
 
   //: Returns the type of this class ('bgui_vsol_soview2D_polyline').
-  vcl_string type_name() const { return "bgui_vsol_soview2D_polyline"; }
+  static vcl_string type_name_() { return "bgui_vsol_soview2D_polyline"; }
+  vcl_string type_name() const { return type_name_(); }
 
   //: Render this 2D digital_curve on the display.
   void draw() const;
@@ -141,7 +144,8 @@ class bgui_vsol_soview2D_polygon : public vgui_soview2D
   virtual vcl_ostream& print(vcl_ostream&) const;
 
   //: Returns the type of this class ('bgui_vsol_soview2D_polygon').
-  vcl_string type_name() const { return "bgui_vsol_soview2D_polygon"; }
+  static vcl_string type_name_() { return "bgui_vsol_soview2D_polygon"; }
+  vcl_string type_name() const { return type_name_(); }
 
   //: Render this 2D digital_curve on the display.
   void draw() const;
@@ -176,7 +180,8 @@ class bgui_vsol_soview2D_digital_curve : public vgui_soview2D
   virtual vcl_ostream& print(vcl_ostream&) const;
 
   //: Returns the type of this class ('bgui_vsol_soview2D_digital_curve').
-  vcl_string type_name() const { return "bgui_vsol_soview2D_digital_curve"; }
+  static vcl_string type_name_() { return "bgui_vsol_soview2D_digital_curve"; }
+  vcl_string type_name() const { return type_name_(); }
 
   //: Render this 2D digital_curve on the display.
   void draw() const;
