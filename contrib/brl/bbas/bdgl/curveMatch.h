@@ -3,9 +3,9 @@
 
 
 #define MAX_LEN 2000
-#define INFINITY 1e20
+//#define INFINITY 1e20
 
-#include<vnl\vnl_matrix.h>
+#include<vnl/vnl_matrix.h>
 #include<vcl_utility.h>
 
 

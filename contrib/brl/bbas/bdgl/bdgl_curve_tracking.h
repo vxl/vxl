@@ -1,13 +1,13 @@
 #ifndef bdgl_curve_tracking_h_
 #define bdgl_curve_tracking_h_
 
-#include<vtol\vtol_edge_2d_sptr.h>
+#include<vtol/vtol_edge_2d_sptr.h>
 #include<vcl_vector.h>
 
 #include <bdgl/bdgl_tracker_curve.h>
 #include <bdgl/bdgl_tracker_curve_sptr.h>
 #include <bdgl/bdgl_curve_matching.h>
-#include <bdgl\bdgl_curve_clustering.h>
+#include <bdgl/bdgl_curve_clustering.h>
 
 
 #include<vcl_iostream.h>

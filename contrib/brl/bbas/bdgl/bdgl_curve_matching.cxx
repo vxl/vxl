@@ -485,7 +485,7 @@ void bdgl_curve_matching::best_matches(vcl_vector<bdgl_tracker_curve_sptr> * new
     
     
     
-    if(!(min_iter_new) || !(min_iter_old))
+    if(min_iter_new == (*new_curves).end() || ! ((bool)min_iter_old) )
       { 
 		selection=0;
       }

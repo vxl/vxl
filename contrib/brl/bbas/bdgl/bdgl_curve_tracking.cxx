@@ -1,9 +1,9 @@
-#include<bdgl\bdgl_curve_tracking.h>
-#include<bdgl\bdgl_curve_clustering.h>
+#include<bdgl/bdgl_curve_tracking.h>
+#include<bdgl/bdgl_curve_clustering.h>
 
 #include <vcl_iostream.h>
 #include <vcl_sstream.h>
-
+#include <vcl_fstream.h>
 
 bdgl_curve_tracking ::bdgl_curve_tracking(bdgl_curve_tracking_params &tp)
 {

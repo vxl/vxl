@@ -10,9 +10,9 @@
 #ifndef bdgl_curve_matching_h_
 #define bdgl_curve_matching_h_
 
-#include<bdgl\bdgl_tracker_curve.h>
-#include<bdgl\bdgl_tracker_curve_sptr.h>
-#include<bdgl\bdgl_curve_description.h>
+#include<bdgl/bdgl_tracker_curve.h>
+#include<bdgl/bdgl_tracker_curve_sptr.h>
+#include<bdgl/bdgl_curve_description.h>
 #include<vcl_vector.h>
 #include<vcl_algorithm.h>
 #include<vcl_map.h>

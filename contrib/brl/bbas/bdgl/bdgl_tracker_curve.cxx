@@ -1,7 +1,7 @@
-#include<bdgl\bdgl_tracker_curve_sptr.h>
-#include<bdgl\bdgl_tracker_curve.h>
-#include<bdgl\bdgl_curve_algs.h>
-#include<vdgl\vdgl_edgel_chain.h>
+#include<bdgl/bdgl_tracker_curve_sptr.h>
+#include<bdgl/bdgl_tracker_curve.h>
+#include<bdgl/bdgl_curve_algs.h>
+#include<vdgl/vdgl_edgel_chain.h>
 
 bdgl_tracker_curve  :: bdgl_tracker_curve()
 {

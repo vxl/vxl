@@ -3,8 +3,8 @@
 #define __TBS_UTILS_DP_DEF__
 
 #include <vcl_cmath.h>
-#include <vnl\vnl_math.h>
-#include <vgl\vgl_point_2d.h>
+#include <vnl/vnl_math.h>
+#include <vgl/vgl_point_2d.h>
 
 double maxof(double a, double b,double c);
 double minof(double a, double b);

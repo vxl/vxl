@@ -13,7 +13,7 @@
 #ifndef bdgl_curve_clustering_h_
 #define bdgl_curve_clustering_h_
 
-#include<bdgl\bdgl_tracker_curve.h>
+#include<bdgl/bdgl_tracker_curve.h>
 #include<vcl_utility.h>
 
 

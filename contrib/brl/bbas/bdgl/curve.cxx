@@ -1,8 +1,8 @@
-#include<bdgl\curve.h>
+#include<bdgl/curve.h>
 #include<vcl_string.h>
 #include<vcl_utility.h>
 #include<vcl_cmath.h>
-
+#include<vcl_fstream.h>
 
 #define ZERO_TOLERANCE 1E-1
 

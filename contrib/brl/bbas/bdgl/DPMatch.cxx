@@ -1,4 +1,4 @@
-#include<bdgl\dpmatch.h>
+#include<bdgl/DPMatch.h>
 
 double DPMatch::transformed_euclidean_distance(){
 
@@ -443,7 +443,7 @@ void DPMatch::computeDPCosts(){
  
   for (sum = 1; sum<n_+m_-1; sum++)
   {
-    start=maxof(0,sum-m_+1,-10000);
+    start=(int)maxof(0,sum-m_+1,-10000);
     for (i=start;(i<=n_-1 && i<=sum);i++)
 	{
       j=sum-i;

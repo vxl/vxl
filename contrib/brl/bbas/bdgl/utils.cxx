@@ -1,8 +1,7 @@
-#include <bdgl\utils.h>
+#include <bdgl/utils.h>
 
 #define ARCLENSAMPLE 0.1
 #define SMALL_VALUE 1E-5
-#define M_PI vnl_math::pi
 
 double maxof(double a, double b,double c){
   if (a>b && a>c)
@@ -36,19 +35,19 @@ int almostEqual(double a, double b){
 }
 
 double fixAngleMPiPi(double a){
-  if (a < -M_PI)
-    return a+2*M_PI;
-  else if (a > M_PI)
-    return a-2*M_PI;
+  if (a < -vnl_math::pi)
+    return a+2*vnl_math::pi;
+  else if (a > vnl_math::pi)
+    return a-2*vnl_math::pi;
   else
     return a;
 }
 
 double fixAngleZTPi(double a){
   if (a < 0)
-    return a+2*M_PI;
-  else if (a > 2*M_PI)
-    return a-2*M_PI;
+    return a+2*vnl_math::pi;
+  else if (a > 2*vnl_math::pi)
+    return a-2*vnl_math::pi;
   else
     return a;
 }
@@ -58,13 +57,13 @@ double angleDiff(double a1, double  a2){
   a1=fixAngleMPiPi(a1);
   a2=fixAngleMPiPi(a2);
   if (a1 > a2)
-    if (a1-a2 > M_PI)
-      return a1-a2-2*M_PI;
+    if (a1-a2 > vnl_math::pi)
+      return a1-a2-2*vnl_math::pi;
     else
       return a1-a2;
   else if (a2 > a1)
-    if (a1-a2 < -M_PI)
-      return a1-a2+2*M_PI;
+    if (a1-a2 < -vnl_math::pi)
+      return a1-a2+2*vnl_math::pi;
     else
       return a1-a2;
   return 0.0;
@@ -74,10 +73,10 @@ double angleDiff(double a1, double  a2){
 double angleAdd(double a1, double  a2){
   double a=a1+a2;
   
-  if (a > M_PI)
-    return a-2*M_PI;
-  if (a < -M_PI)
-    return a+2*M_PI;
+  if (a > vnl_math::pi)
+    return a-2*vnl_math::pi;
+  if (a < -vnl_math::pi)
+    return a+2*vnl_math::pi;
   else
     return a;
 }
@@ -121,10 +120,10 @@ double angleFixForAdd(double ref, double  a){
   double d=a-ref;
   double b=a;
 
-  if (d > M_PI)
-    b=a-2*M_PI;
-  else if (d<-M_PI)
-    b=a+2*M_PI;
+  if (d > vnl_math::pi)
+    b=a-2*vnl_math::pi;
+  else if (d<-vnl_math::pi)
+    b=a+2*vnl_math::pi;
   else
     b=a;
   return b;

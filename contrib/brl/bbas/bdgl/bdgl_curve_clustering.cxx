@@ -1,9 +1,9 @@
 //bdgl_curve_clustering.cxx : implementation of bdgl_curve_clustering class
 
-#include <bdgl\bdgl_curve_clustering.h>
+#include <bdgl/bdgl_curve_clustering.h>
 #include <vcl_cmath.h>
 #include <vcl_map.h>
-#include <mbl\mbl_histogram.h>
+#include <mbl/mbl_histogram.h>
 #include <vcl_algorithm.h>
 
 

@@ -10,4 +10,6 @@ class match_data;
 
 typedef vbl_smart_ptr<bdgl_tracker_curve> bdgl_tracker_curve_sptr;
 typedef vbl_smart_ptr<match_data> match_data_sptr;
-#endif 
+#endif
+
+

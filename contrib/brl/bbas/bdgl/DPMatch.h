@@ -6,7 +6,7 @@
 #include <vcl_vector.h> 
 
 #include <vcl_utility.h>
-#include <bdgl\utils.h>
+#include <bdgl/utils.h>
 
 #include "vnl/vnl_matrix.h"
 #include "vnl/algo/vnl_svd.h"
@@ -20,7 +20,7 @@
 
 
 #define DP_VERY_LARGE_COST 1E10
-#include "Curve.h"
+#include "curve.h"
 
 class DPMatch{
  public:

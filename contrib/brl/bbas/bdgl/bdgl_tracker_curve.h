@@ -10,15 +10,15 @@
 #ifndef bdgl_tracker_curve_h_
 #define bdgl_tracker_curve_h_
 
-#include <vtol\vtol_edge_2d.h>
-#include <vtol\vtol_edge_2d_sptr.h>
-#include <bdgl\bdgl_curve_description.h>
+#include <vtol/vtol_edge_2d.h>
+#include <vtol/vtol_edge_2d_sptr.h>
+#include <bdgl/bdgl_curve_description.h>
 #include<vcl_map.h>
-#include <vbl\vbl_ref_count.h>
-#include <vbl\vbl_smart_ptr.h>
+#include <vbl/vbl_ref_count.h>
+#include <vbl/vbl_smart_ptr.h>
 class bdgl_tracker_curve;
 
-#include <bdgl\bdgl_tracker_curve_sptr.h>
+#include <bdgl/bdgl_tracker_curve_sptr.h>
 #include <vcl_vector.h>
 
 class match_data : public vbl_ref_count
@@ -118,4 +118,5 @@ class bdgl_tracker_curve  : public vbl_ref_count
 
 
 #endif
+
 

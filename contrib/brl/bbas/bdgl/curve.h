@@ -5,8 +5,8 @@
 #include <vcl_iostream.h>
 #include <vcl_string.h>
 #include <vcl_utility.h>
-#include <vgl\vgl_point_2d.h>
-#include <bdgl\utils.h>
+#include <vgl/vgl_point_2d.h>
+#include <bdgl/utils.h>
 class Curve{
  public:
   //Constructors
