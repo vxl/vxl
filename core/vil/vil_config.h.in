@@ -17,7 +17,6 @@
 #define HAS_MIT   1
 #define HAS_BMP   1
 #define HAS_RAS   1
-#define HAS_DICOM 1
 #define HAS_NITF  1
 
 // These formats are supported using external libraries, and hence may

@@ -57,16 +57,12 @@ vil_file_format::~vil_file_format()
 #include <vil/file_formats/vil_gen.h>
 #endif
 
-#if HAS_DICOM
-#include <vil/file_formats/vil_dicom.h>
-#endif
-
 #if HAS_NITF
 #include <vil/file_formats/vil_nitf.h>
 #endif
 
 #if HAS_DCMTK
-#include <vil/file_formats/vil_dicom2.h>
+#include <vil/file_formats/vil_dicom.h>
 #endif
 
 //: Local class to hold file format list
@@ -121,9 +117,6 @@ struct vil_file_format_storage
 // the DCMTK based reader is more complete, so use try that
 // before the vil implementation
 #if HAS_DCMTK
-    l[c++] = new vil_dicom2_file_format;
-#endif
-#if HAS_DICOM
     l[c++] = new vil_dicom_file_format;
 #endif
 

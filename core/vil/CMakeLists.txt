@@ -44,8 +44,9 @@ IF(DCMTK_FOUND)
   INCLUDE_DIRECTORIES(${DCMTK_INCLUDE_DIR})
   SET( HAS_DCMTK 1 )
   SET( vil_sources ${vil_sources}
-    file_formats/vil_dicom2.cxx        file_formats/vil_dicom2.h
-    file_formats/vil_dicom2_stream.cxx file_formats/vil_dicom2_stream.h
+    file_formats/vil_dicom.cxx        file_formats/vil_dicom.h
+    file_formats/vil_dicom_stream.cxx file_formats/vil_dicom_stream.h
+    file_formats/vil_dicom_header.cxx file_formats/vil_dicom_header.h
   )
 ELSE(DCMTK_FOUND)
   SET( HAS_DCMTK 0 )
@@ -83,8 +84,6 @@ SET( vil_sources ${vil_sources}
 
   file_formats/vil_mit.cxx              file_formats/vil_mit.h
 
-  file_formats/vil_dicom.cxx            file_formats/vil_dicom.h
-  file_formats/vil_dicom_header.cxx     file_formats/vil_dicom_header.h
 
   file_formats/vil_viff.cxx             file_formats/vil_viff.h
   file_formats/vil_viff_support.c       file_formats/vil_viff_support.h
