@@ -1,6 +1,6 @@
 #include <vcl_iostream.h>
 #include <vcl_cmath.h>
-#include <vil/vil_rgb.h>
+#include <vil1/vil1_rgb.h>
 #include <brip/brip_float_ops.h>
 #include <vpro/vpro_lucas_kanade_process.h>
 
@@ -61,14 +61,14 @@ bool vpro_lucas_kanade_process::execute()
 {
   if (!this->get_N_input_images()==1)
     {
-      vcl_cout << "In vpro_lucas_kanade_process::execute() - not at exactly one"
-               << " input image \n";
+      vcl_cout << "In vpro_lucas_kanade_process::execute() -"
+               << " not at exactly one input image \n";
       return false;
     }
   vil1_image img = vpro_video_process::get_input_image(0);
   vil1_memory_image_of<float> fimg = brip_float_ops::convert_to_float(img);
   vil1_memory_image_of<float> temp2;
-  if(downsample_)
+  if (downsample_)
     temp2 = brip_float_ops::half_resolution(fimg);
   else
     temp2 = fimg;

@@ -1,5 +1,5 @@
 #include <vcl_iostream.h>
-#include <vil1/vil1_memory_image_of.h>
+#include <vil1/vil1_image.h>
 #include <vidl/vidl_movie.h>
 #include <vidl/vidl_clip.h>
 #include <vidl/vidl_io.h>
@@ -18,12 +18,12 @@ bool vpro_capture_process::execute()
 {
   if (this->get_N_input_images()!=1)
     {
-      vcl_cout << "In vpro_capture_process::execute() - not exactly one"
-               << " input image \n";
+      vcl_cout << "In vpro_capture_process::execute() -"
+               << " not exactly one input image \n";
     return false;
     }
     //JLM
-  //vil_memory_image_of<unsigned char> img(vpro_video_process::get_input_image(0));
+  //vil1_memory_image_of<unsigned char> img(vpro_video_process::get_input_image(0));
   vil1_image img = vpro_video_process::get_input_image(0);
   frames_.push_back(img);
   return true;
@@ -31,7 +31,7 @@ bool vpro_capture_process::execute()
 
 bool vpro_capture_process::finish()
 {
-  if(!frames_.size())
+  if (!frames_.size())
     return false;
   vidl_clip_sptr clip = new vidl_clip(frames_);
   vidl_movie_sptr mov= new vidl_movie();
