@@ -12,25 +12,18 @@
 
 void test_file_data_wrapper()
 {
-
   vcl_cout << "\n*********************************\n"
-           <<   " Testing mbl_file_data_collector \n"
+           <<   " Testing mbl_file_data_collector\n"
            <<   "*********************************\n";
 
   // create data
-  vnl_vector<double> v1(2);
-  v1(0)=-3;
-  v1(1)=4;
-  vnl_vector<double> v2(2);
-  v2(0)=8;
-  v2(1)=-7;
-  vnl_vector<double> v3(2);
-  v2(0)=-40;
-  v2(1)=10;
+  vnl_vector<double> v1(2, -3.0, 4.0);
+  vnl_vector<double> v2(2,  8.0,-7.0);
+  vnl_vector<double> v3(2,-40.0,10.0);
 
-  vcl_cout<<"v1= "<<v1<<vcl_endl;
-  vcl_cout<<"v2= "<<v2<<vcl_endl;
-  vcl_cout<<"v3= "<<v3<<vcl_endl;
+  vcl_cout<<"v1= "<<v1<<vcl_endl
+          <<"v2= "<<v2<<vcl_endl
+          <<"v3= "<<v3<<vcl_endl;
 
   // collect data using mbl_file_data_collector
   vcl_string path= "test_file_data_wrapper.bvl.tmp";

@@ -38,8 +38,8 @@ MAIN( test_point )
   testlib_test_perform( ok );
 #endif
   testlib_test_begin( "ctor from two vnl_vectors" );
-  vnl_vector<double> cv(2);  cv[0] = 1.5; cv[1] = 2.1;
-  vnl_vector<double> av(3);  av[0] = -3; av[1] = -1.5; av[2] = 3.1;
+  vnl_vector<double> cv(2, 1.5,2.1);
+  vnl_vector<double> av(3, -3.0,-1.5,3.1);
   rsdl_point pt_from_2v( cv, av );
   ok=true;
   for ( i=0; ok && i<Nc; ++i ) ok = ok && close(pt_from_2v.cartesian(i), cv[i]);
@@ -125,8 +125,7 @@ MAIN( test_point )
   testlib_test_perform( ok );
 
   testlib_test_begin( "set_angular from vnl_vector" );
-  vnl_vector<double> avect(3);
-  avect[0] = -1; avect[1] = -1.4; avect[2] = 2.0;
+  vnl_vector<double> avect(3, -1.0,-1.4,2.0);
   q.set_angular( avect );
   ok = true;
   for ( i=0; ok && i<Nc; ++i )

@@ -13,10 +13,7 @@ bool close(double,double);
 MAIN( test_linear_reg )
 {
   START( "linear_regression" );
-  vnl_vector<double> true_params(3);
-  true_params[0] = 10.0;
-  true_params[1] = 0.02;
-  true_params[2] = -0.1;
+  vnl_vector<double> true_params(3, 10.0,0.02,-0.1);
   vnl_vector<double> a(true_params);
 
   const unsigned int num_pts=7;
@@ -28,36 +25,40 @@ MAIN( test_linear_reg )
   vcl_vector<double> rand_vars( num_pts );
   vcl_vector<double> error( num_pts );
 
-  vnl_vector<double> p(3), q(3);
-  double x, y, z;
+  double x = 1.0, y=-0.5; error[0]=-0.001;
+  double z= a[0] + a[1]*x + a[2]*y + error[0]; rand_vars[0] = z;
+  pts[0] = vnl_vector<double>(3, x,y,z);
+  ind_vars[0] = vnl_vector<double>(3, 1.0,x,y);
 
-  x = 1.0; y=-0.5; error[0]=-0.001;  z= a[0] + a[1]*x + a[2]*y + error[0];
-  p[0] = x; p[1]=y; p[2]=z;  pts[0]=p;
-  q[0] = 1; q[1]=x; q[2]=y; rand_vars[0] = z; ind_vars[0]=q;
+  x = 2.0;  y=4.0;  error[1]=0;
+  z = a[0] + a[1]*x + a[2]*y + error[1]; rand_vars[1] = z;
+  pts[1] = vnl_vector<double>(3, x,y,z);
+  ind_vars[1] = vnl_vector<double>(3, 1.0,x,y);
 
-  x = 2.0;  y=4.0;  error[1]=0; z = a[0] + a[1]*x + a[2]*y + error[1];
-  p[0] = x; p[1]=y; p[2]=z;  pts[1]=p;
-  q[0] = 1; q[1]=x; q[2]=y; rand_vars[1] = z; ind_vars[1]=q;
+  x = 3.0;  y=1.0;  error[2]=0;
+  z = a[0] + a[1]*x + a[2]*y + error[2]; rand_vars[2] = z;
+  pts[2] = vnl_vector<double>(3, x,y,z);
+  ind_vars[2] = vnl_vector<double>(3, 1.0,x,y);
 
-  x = 3.0;  y=1.0;  error[2]=0; z = a[0] + a[1]*x + a[2]*y + error[2];
-  p[0] = x; p[1]=y; p[2]=z;  pts[2]=p;
-  q[0] = 1; q[1]=x; q[2]=y; rand_vars[2] = z; ind_vars[2]=q;
+  x = -2.0;  y=3.0; error[3]=-0.0025;
+  z = a[0] + a[1]*x + a[2]*y + error[3]; rand_vars[3] = z;
+  pts[3] = vnl_vector<double>(3, x,y,z);
+  ind_vars[3] = vnl_vector<double>(3, 1.0,x,y);
 
-  x = -2.0;  y=3.0; error[3]=-0.0025;  z = a[0] + a[1]*x + a[2]*y + error[3];
-  p[0] = x; p[1]=y; p[2]=z;  pts[3]=p;
-  q[0] = 1; q[1]=x; q[2]=y; rand_vars[3] = z; ind_vars[3]=q;
+  x = 2.0;  y=4.0;  error[4]=0.007;
+  z = a[0] + a[1]*x + a[2]*y + error[4]; rand_vars[4] = z;
+  pts[4] = vnl_vector<double>(3, x,y,z);
+  ind_vars[4] = vnl_vector<double>(3, 1.0,x,y);
 
-  x = 2.0;  y=4.0;  error[4]=0.007;  z = a[0] + a[1]*x + a[2]*y + error[4];
-  p[0] = x; p[1]=y; p[2]=z;  pts[4]=p;
-  q[0] = 1; q[1]=x; q[2]=y; rand_vars[4] = z; ind_vars[4]=q;
+  x = 5.0;  y=-4.0;  error[5]=0;
+  z = a[0] + a[1]*x + a[2]*y + error[5]; rand_vars[5] = z;
+  pts[5] = vnl_vector<double>(3, x,y,z);
+  ind_vars[5] = vnl_vector<double>(3, 1.0,x,y);
 
-  x = 5.0;  y=-4.0;  error[5]=0; z = a[0] + a[1]*x + a[2]*y + error[5];
-  p[0] = x; p[1]=y; p[2]=z;  pts[5]=p;
-  q[0] = 1; q[1]=x; q[2]=y; rand_vars[5] = z; ind_vars[5]=q;
-
-  x = 3.0;  y=-2.0;  error[6]=-0.004; z = a[0] + a[1]*x + a[2]*y + error[6];
-  p[0] = x; p[1]=y; p[2]=z;  pts[6]=p;
-  q[0] = 1; q[1]=x; q[2]=y; rand_vars[6] = z; ind_vars[6]=q;
+  x = 3.0;  y=-2.0;  error[6]=-0.004;
+  z = a[0] + a[1]*x + a[2]*y + error[6]; rand_vars[6] = z;
+  pts[6] = vnl_vector<double>(3, x,y,z);
+  ind_vars[6] = vnl_vector<double>(3, 1.0,x,y);
 
   //
   //  The first set of tests are for the constructor, and parameter access methods.

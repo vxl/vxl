@@ -59,7 +59,7 @@ void vpgl_matrix_camera::world_to_image(vnl_vector<double> const& vect3d,
 void vpgl_matrix_camera::world_to_image(double x, double y, double z,
                                         double& ix, double& iy, double time)
 {
-  vnl_vector<double> vect3d(3); vect3d[0]=x; vect3d[1]=y; vect3d[2]=z;
+  vnl_vector<double> vect3d(3, x,y,z);
   this->world_to_image(vect3d, ix, iy, time);
 }
 

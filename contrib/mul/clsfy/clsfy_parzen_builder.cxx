@@ -1,10 +1,8 @@
 // This is mul/clsfy/clsfy_parzen_builder.cxx
+// Copyright (c) 2001: British Telecommunications plc
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
-
-// Copyright (c) 2001: British Telecommunications plc
-
 //:
 // \file
 // \brief Implement a Parzen window classifier builder
@@ -104,12 +102,7 @@ double clsfy_parzen_builder::build(clsfy_classifier_base& model,
                                    const vcl_vector<unsigned> &outputs) const
 {
   const unsigned n = inputs.size();
-  // cannot use dynamic_cast<> without rtti, which vxl doesn't enforce - PVr
-#if 0
-  assert(dynamic_cast<clsfy_rbf_parzen *> (&model) != 0);
-#else
-  assert(model.is_class("clsfy_rbf_parzen"));
-#endif
+  assert(model.is_class("clsfy_rbf_parzen")); // equiv to dynamic_cast<> != 0
   assert(n==outputs.size());
 
   clsfy_rbf_parzen &parzen = (clsfy_rbf_parzen&) model;

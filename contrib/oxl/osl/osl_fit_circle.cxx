@@ -81,9 +81,7 @@ void osl_fit_circle::calculate(const vcl_list<vgl_point_2d<double> > &points)
     u = svd.V().get_column(3);
 
     a = u(0);
-    vnl_vector<double> b(2);
-    b(0) = u(1);
-    b(1) = u(2);
+    vnl_vector<double> b(2, u(1),u(2));
 
     double c = u(3);
 

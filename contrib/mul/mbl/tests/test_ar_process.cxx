@@ -80,21 +80,13 @@ void test_ar_process()
 
   // two start values of autoregressive process are random:
   vcl_vector<vnl_vector<double> > vlist;
-  vnl_vector<double> X(2);
-  X(0)=mz_random.normal();
-  X(1)=mz_random.normal();
-  vlist.push_back(X);
-  X(0)=mz_random.normal();
-  X(1)=mz_random.normal();
-  vlist.push_back(X);
+  vlist.push_back(vnl_vector<double>(2, mz_random.normal(), mz_random.normal()));
+  vlist.push_back(vnl_vector<double>(2, mz_random.normal(), mz_random.normal()));
 
   for (unsigned int i=0;i<SIZE;i++)
   {
-    vnl_vector<double> W(2);
-    W(0)=mz_random.normal();
-    W(1)=mz_random.normal();
-    X=A*vlist[i]+B*vlist[i+1]+C*W;
-    vlist.push_back(X);
+    vnl_vector<double> W(2, mz_random.normal(), mz_random.normal());
+    vlist.push_back(A*vlist[i]+B*vlist[i+1]+C*W);
   }
 
   mbl_ar_process<double> arp;

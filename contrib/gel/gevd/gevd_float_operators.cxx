@@ -1395,13 +1395,7 @@ gevd_float_operators::SurfaceNormal(const gevd_bufferxy& range, gevd_bufferxy*& 
   const int highx = range.GetSizeX()-frame, highy = range.GetSizeY()-frame;
   normal = gevd_float_operators::Allocate(normal, range, bits_per_ptr);
   normal->Clear();              // NULL vector on border
-  //  CoolVector<float> tx(2.0, 0.0, 0.0), ty(0.0, 2.0, 0.0); // tangents x-y axes
-
-  vnl_vector<float> tx(3);
-  tx[0]= 2; tx[1]= 0; tx[2]= 0;
-
-  vnl_vector<float> ty(3);
-  ty[0]= 0; ty[1]= 2; ty[0]= 0;
+  vnl_vector<float> tx(3, 2.f,0.f,0.f), ty(3, 0.f,2.f,0.f); // tangents x-y axes
 
   for (int j = frame; j < highy; j++)
     for (int i = frame; i < highx; i++) { // for all grid points
@@ -1409,7 +1403,6 @@ gevd_float_operators::SurfaceNormal(const gevd_bufferxy& range, gevd_bufferxy*& 
       ty[3] = floatPixel(range, i, j+1) - floatPixel(range, i, j-1);
 
       vnl_vector<float> *nz= new vnl_vector<float>(cross_3d(tx,ty));
-      //      CoolVector<float>* nz = new CoolVector<float>(cross_3d(tx, ty));
 
       float mag = nz->magnitude();
       if (mag != 0) *nz /= mag; // make unit vector
@@ -1524,27 +1517,14 @@ gevd_float_operators::SurfaceNormalD(const gevd_bufferxy& range,
     for (int i = frame; i < highx; i++) { // for all grid points
       float d_x, d_z_x;
       float d_y, d_z_y;
-      if ( _TangentComponents( range, i-1, j, i, j, i+1, j, no_value,
-                               d_x, d_z_x ) &&
-           _TangentComponents( range, i, j-1, i, j, i, j+1, no_value,
-                               d_y, d_z_y ) )
+      if (_TangentComponents(range, i-1, j, i, j, i+1, j, no_value, d_x, d_z_x) &&
+          _TangentComponents(range, i, j-1, i, j, i, j+1, no_value, d_y, d_z_y) )
         {
-          vnl_vector<float> tx(3);
-          tx[0]= d_x*pixel_distance;
-          tx[1]= 0;
-          tx[2]= d_z_x;
-
-          vnl_vector<float> ty(3);
-          ty[0]= 0;
-          ty[1]= d_y*pixel_distance;
-          ty[2]= d_z_y;
-
-          //      CoolVector<float> tx(d_x*pixel_distance, 0.0, d_z_x);
-          //      CoolVector<float> ty(0.0, d_y*pixel_distance, d_z_y);
+          vnl_vector<float> tx(3, d_x*pixel_distance,0.f,d_z_x);
+          vnl_vector<float> ty(3, 0.f,d_y*pixel_distance,d_z_y);
 
           vnl_vector<float>* nz = new vnl_vector<float>(cross_3d(tx, ty));
 
-          //      CoolVector<float>* nz = new CoolVector<float>(cross_3d(tx, ty));
           // vcl_cout << "Tx = " << tx << ",  Ty = " << ty << vcl_endl;
           float mag = nz->magnitude();
           if (mag != 0) {
@@ -1592,10 +1572,6 @@ _CurvatureInDir( const gevd_bufferxy& normal,
   vnl_vector<float> * low_norm  = fvectorPixel( normal, low_x, low_y );
   vnl_vector<float> * norm      = fvectorPixel( normal, x, y );
   vnl_vector<float> * high_norm = fvectorPixel( normal, high_x, high_y );
-
-  //  CoolVector<float> * low_norm  = fvectorPixel( normal, low_x, low_y );
-  //  CoolVector<float> * norm      = fvectorPixel( normal, x, y );
-  //  CoolVector<float> * high_norm = fvectorPixel( normal, high_x, high_y );
 
   float zval1, zval2, dz;
   int dx, dy;
@@ -2376,7 +2352,7 @@ gevd_float_operators::FindWavelet (const int waveletno,
         hi_filter[ctr-k] = sign * lo_filter[ctr+k];
         sign = - sign;
       }
-      vcl_cerr << "Scale factor need to be fixed up too!!!" << vcl_endl;
+      vcl_cerr << "Scale factor need to be fixed up too!!!\n";
     }
     // find area of lo_filter and hi_filter
     float lo_area = 0;
@@ -2839,7 +2815,7 @@ gevd_float_operators::TestWavelets ()
 #endif
 
   {
-    vcl_cout << "Testing wavelet transforms on nd buffers" << vcl_endl;
+    vcl_cout << "Testing wavelet transforms on nd buffers\n";
     for (int ndim = 1; ndim <= 4; ndim++) {
       for (int s = 3; s <= 8; s++)
         {
@@ -3777,7 +3753,7 @@ gevd_float_operators::BufferToFloat (const gevd_bufferxy& from, gevd_bufferxy& t
     }
     break;
   default:
-    vcl_cerr << "Can only convert unsigned char/short/int/RGB buffer to float" << vcl_endl;
+    vcl_cerr << "Can only convert unsigned char/short/int/RGB buffer to float\n";
     return false;
   }
   return true;
@@ -3799,7 +3775,7 @@ gevd_float_operators::FloatToBuffer (const gevd_bufferxy& from, gevd_bufferxy& t
       for (int i = 0; i < size; i++)
         tobuf[i] = (unsigned char) int(frombuf[i]);
     }
-    break;
+    return true;
   case sizeof(short):
     {
       const float* frombuf = (const float*) from.GetBuffer();
@@ -3807,7 +3783,7 @@ gevd_float_operators::FloatToBuffer (const gevd_bufferxy& from, gevd_bufferxy& t
       for (int i = 0; i < size; i++)
         tobuf[i] = (short) int(frombuf[i]);
     }
-    break;
+    return true;
   case 3*sizeof(unsigned char): // assume RGB ==> restore luminance
     {
       const float* frombuf = (const float*) from.GetBuffer();
@@ -3815,12 +3791,11 @@ gevd_float_operators::FloatToBuffer (const gevd_bufferxy& from, gevd_bufferxy& t
       for (int i = 0; i < size; i++)
         tobuf[3*i] = tobuf[3*i+1] = tobuf[3*i+2] = (unsigned char) int(frombuf[i]);
     }
-    break;
+    return true;
   default:
-    vcl_cerr << "Can only convert float to unsigned char/short/RGB buffer" << vcl_endl;
+    vcl_cerr << "Can only convert float to unsigned char/short/RGB buffer\n";
     return false;
   }
-  return true;
 }
 
 

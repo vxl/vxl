@@ -43,10 +43,7 @@ double clsfy_mean_square_1d::log_l(double input) const
 //: Return parameters defining classifier in a vector (format depends on classifier)
 vnl_vector<double> clsfy_mean_square_1d::params() const
 {
-  vnl_vector<double> p(2);
-  p[0] = mean_;
-  p[1] = threshold_;
-  return p;
+  return vnl_vector<double>(2, mean_,threshold_);
 }
 
 //: Set parameters defining classifier with a vector (format depends on classifier)

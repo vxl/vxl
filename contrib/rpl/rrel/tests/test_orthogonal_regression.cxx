@@ -12,18 +12,11 @@ bool close(double,double);
 MAIN( test_orthogonal_regression )
 {
   START( "orthogonal regression" );
-  vnl_vector<double> true_params(4);
   //  z = 0.02 x - 0.1 y + 10.0
   double a0 = 0.02, a1 = -0.1, a2 = 10.0;
-  true_params[0] =  a0;
-  true_params[1] =  a1;
-  true_params[2] =  -1;
-  true_params[3] =  a2;
+  vnl_vector<double> true_params(4, a0,a1,-1.0,a2);
   vnl_vector<double> par(4);
-  vnl_vector<double> norm_vect(3);
-  norm_vect[0] = true_params[0];
-  norm_vect[1] = true_params[1];
-  norm_vect[2] = true_params[2];
+  vnl_vector<double> norm_vect(3, true_params[0],true_params[1],true_params[2]);
   true_params /= norm_vect.two_norm();  //  4 component vector
   norm_vect /= norm_vect.two_norm();    //  3 component normal only
   const unsigned int num_pts=7;

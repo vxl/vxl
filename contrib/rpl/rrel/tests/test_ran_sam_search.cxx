@@ -48,44 +48,43 @@ MAIN( test_ran_sam_search )
   //  Build LinearRegression objects.
   vcl_vector< vnl_vector<double> > pts(num_pts);
   vcl_vector< double > error(num_pts);
-  vnl_vector<double> p(3);
-  double x, y, z;
 
-  x = 1.0; y=-0.5; error[0]=-0.001;  z= a[0] + a[1]*x + a[2]*y + error[0];
-  p[0] = x; p[1]=y; p[2]=z;  pts[0]=p;
+  double x = 1.0, y=-0.5; error[0]=-0.001;
+  double z= a[0] + a[1]*x + a[2]*y + error[0];
+  pts[0]=vnl_vector<double>(3, x,y,z);
 
   x = 2.0;  y=4.0;  error[1]=0; z = a[0] + a[1]*x + a[2]*y + error[1];
-  p[0] = x; p[1]=y; p[2]=z;  pts[1]=p;
+  pts[1]=vnl_vector<double>(3, x,y,z);
 
   x = 3.0;  y=1.0;  error[2]=0; z = a[0] + a[1]*x + a[2]*y + error[2];
-  p[0] = x; p[1]=y; p[2]=z;  pts[2]=p;
+  pts[2]=vnl_vector<double>(3, x,y,z);
 
   x = -2.0;  y=3.0; error[3]=-0.0025;  z = a[0] + a[1]*x + a[2]*y + error[3];
-  p[0] = x; p[1]=y; p[2]=z;  pts[3]=p;
+  pts[3]=vnl_vector<double>(3, x,y,z);
 
   x = 2.0;  y=4.0;  error[4]=0.9;  z = a[0] + a[1]*x + a[2]*y + error[4];
-  p[0] = x; p[1]=y; p[2]=z;  pts[4]=p;
+  pts[4]=vnl_vector<double>(3, x,y,z);
 
   x = 5.0;  y=-4.0;  error[5]=0; z = a[0] + a[1]*x + a[2]*y + error[5];
-  p[0] = x; p[1]=y; p[2]=z;  pts[5]=p;
+  pts[5]=vnl_vector<double>(3, x,y,z);
 
   x = 3.0;  y=-2.0;  error[6]=-0.004; z = a[0] + a[1]*x + a[2]*y + error[6];
-  p[0] = x; p[1]=y; p[2]=z;  pts[6]=p;
+  pts[6]=vnl_vector<double>(3, x,y,z);
 
   x = 2.0;  y=-2.0;  error[7]=-0.8; z = a[0] + a[1]*x + a[2]*y + error[7];
-  p[0] = x; p[1]=y; p[2]=z;  pts[7]=p;
+  pts[7]=vnl_vector<double>(3, x,y,z);
 
   x = 3.0;  y=0.0;  error[8]=0.008; z = a[0] + a[1]*x + a[2]*y + error[8];
-  p[0] = x; p[1]=y; p[2]=z;  pts[8]=p;
+  pts[8]=vnl_vector<double>(3, x,y,z);
 
   x = -1.0;  y=-2.0;  error[9]=0.003; z = a[0] + a[1]*x + a[2]*y + error[9];
-  p[0] = x; p[1]=y; p[2]=z;  pts[9]=p;
+  pts[9]=vnl_vector<double>(3, x,y,z);
 
   x = 0.0;  y=0.0;  error[10]=0.3; z = a[0] + a[1]*x + a[2]*y + error[10];
-  p[0] = x; p[1]=y; p[2]=z;  pts[10]=p;
+  pts[10]=vnl_vector<double>(3, x,y,z);
 
   x = -1.0;  y=2.0;  error[11]=-0.0012; z = a[0] + a[1]*x + a[2]*y + error[11];
-  p[0] = x; p[1]=y; p[2]=z;  pts[11]=p;
+  pts[11]=vnl_vector<double>(3, x,y,z);
 
   //
   //  Create the linear regression problem and an lms objective
@@ -183,8 +182,7 @@ MAIN( test_ran_sam_search )
 
   double sigma = 0.1;
   vcl_vector<image_point_match> matches;
-  vnl_vector<double> sim_params(4);
-  sim_params[0] = 1.4;  sim_params[1] = -0.2;  sim_params[2] = 20;  sim_params[3] = -18;
+  vnl_vector<double> sim_params(4, 1.4,-0.2,20.0,-18.0);
   generate_similarity_matches( sim_params, sigma, matches );  // 20 matches, 13 points
   rrel_estimation_problem* match_prob = new similarity_from_matches( matches );
 #if 0

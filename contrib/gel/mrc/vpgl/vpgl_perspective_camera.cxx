@@ -1,7 +1,7 @@
 // This is gel/mrc/vpgl/vpgl_perspective_camera.cxx
 #include "vpgl_perspective_camera.h"
 //:
-//  \file
+// \file
 
 #include <vcsl/vcsl_cartesian_3d.h>
 #include <vcsl/vcsl_graph.h>
@@ -61,7 +61,7 @@ void vpgl_perspective_camera::update_intrinsic()
   M(0,0) = alpha_u; M(0,1) = -alpha_u*cott; M(0,2) = _params[uo];
   M(1,1) = alpha_v/sint; M(1,2) = _params[vo];
   M(2,2) = 1.0;
-  vcl_cout << "Intrinsic:" << vcl_endl
+  vcl_cout << "Intrinsic:\n"
            << M;
   for (int row = 0; row < 3; row++)
     for (int col = 0; col < 3; col++)
@@ -108,10 +108,7 @@ void vpgl_perspective_camera::world_to_image(vnl_vector<double> const& vect3d,
 void vpgl_perspective_camera::world_to_image(double x, double y, double z,
                                              double& ix, double& iy, double time)
 {
-  vnl_vector<double> temp(3);
-  temp(0)=x;
-  temp(1)=y;
-  temp(2)=z;
+  vnl_vector<double> temp(3, x,y,z);
   vnl_vector<double> transformed=acs->from_local_to_cs(temp,lcs,time);
   _mat_cam->world_to_image(transformed, ix, iy, time);
 }
@@ -122,8 +119,8 @@ void vpgl_perspective_camera::world_to_image(double x, double y, double z,
 //
 
 void vpgl_perspective_camera::image_to_world(vnl_vector<double>& pos,
-                                       vnl_vector<double>& wray,
-                                       double x, double y)
+                                             vnl_vector<double>& wray,
+                                             double x, double y)
 {
     _mat_cam->image_to_world(pos, wray, x, y);
 }
@@ -134,10 +131,10 @@ void vpgl_perspective_camera::image_to_world(vnl_vector<double>& pos,
 double& vpgl_perspective_camera::operator() (PerspParams param_index)
 {
   if ((param_index >=12) || (param_index < 0))
-    {
-    vcl_cerr << "vpgl_perspective_camera:  Parameter indices out of bound. ";
-    vcl_cerr << "Program may segfault now." << vcl_endl;
-    }
+  {
+    vcl_cerr << "vpgl_perspective_camera:  Parameter indices out of bound.\n"
+             << "Program may segfault now.\n";
+  }
 
   return _params[param_index];
 }
@@ -150,29 +147,25 @@ double& vpgl_perspective_camera::operator() (PerspParams param_index)
 
 vnl_vector<double> vpgl_perspective_camera::GetPosition() const
 {
-  CoolVector<double> position(3);
   // Get the camera translation
-  position.x() = _params[XL];
-  position.y() = _params[YL];
-  position.z() = _params[ZL];
-  return position;
+  return vnl_vector<double> (3, _params[XL],_params[YL],_params[ZL]);
 }
 #endif
 
 void vpgl_perspective_camera::print_data(vcl_ostream &strm) const
 {
-  strm << "f = "  << _params[f] << vcl_endl;
-  strm << "ku = " << _params[ku] << vcl_endl;
-  strm << "kv = " << _params[kv] << vcl_endl;
-  strm << "uo = " << _params[uo] << vcl_endl;
-  strm << "vo = " << _params[vo] << vcl_endl;
-  strm << "theta = " << _params[theta] << vcl_endl;
-  strm << "XL = " << _params[XL] << vcl_endl;
-  strm << "YL = " << _params[YL] << vcl_endl;
-  strm << "ZL = " << _params[ZL] << vcl_endl;
-  strm << "omega = " << _params[omega] << vcl_endl;
-  strm << "phi = " << _params[phi] << vcl_endl;
-  strm << "kappa = " << _params[kappa] << vcl_endl;
+  strm << "f = "  << _params[f] << vcl_endl
+       << "ku = " << _params[ku] << vcl_endl
+       << "kv = " << _params[kv] << vcl_endl
+       << "uo = " << _params[uo] << vcl_endl
+       << "vo = " << _params[vo] << vcl_endl
+       << "theta = " << _params[theta] << vcl_endl
+       << "XL = " << _params[XL] << vcl_endl
+       << "YL = " << _params[YL] << vcl_endl
+       << "ZL = " << _params[ZL] << vcl_endl
+       << "omega = " << _params[omega] << vcl_endl
+       << "phi = " << _params[phi] << vcl_endl
+       << "kappa = " << _params[kappa] << vcl_endl;
 }
 
 void vpgl_perspective_camera::set_lcs(const vcsl_spatial_sptr & new_lcs){

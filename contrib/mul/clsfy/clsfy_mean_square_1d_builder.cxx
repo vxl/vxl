@@ -4,10 +4,6 @@
 // \file
 // \author dac
 // \date   Tue Mar  5 01:11:31 2002
-//
-// \verbatim
-// Modifications
-// \endverbatim
 
 #include <vcl_cmath.h>
 #include <vcl_iostream.h>
@@ -72,9 +68,9 @@ double clsfy_mean_square_1d_builder::build(clsfy_classifier_1d& classifier,
   for (unsigned int i=0; i<n; ++i)
   {
 #ifdef DEBUG
-    vcl_cout<<"egs["<<i<<"]= "<<egs[i]<<vcl_endl;
-    vcl_cout<<"wts["<<i<<"]= "<<wts[i]<<vcl_endl;
-    vcl_cout<<"outputs["<<i<<"]= "<<outputs[i]<<vcl_endl;
+    vcl_cout<<"egs["<<i<<"]= "<<egs[i]<<vcl_endl
+            <<"wts["<<i<<"]= "<<wts[i]<<vcl_endl
+            <<"outputs["<<i<<"]= "<<outputs[i]<<vcl_endl;
 #endif
     if ( outputs[i] == 1 )
     {
@@ -129,15 +125,15 @@ double clsfy_mean_square_1d_builder::build(clsfy_classifier_1d& classifier,
     }
     double error= tot_pos_wts-wt_pos+wt_neg;
 #ifdef DEBUG
-    vcl_cout<<"data[i].first= "<<data[i].first<<vcl_endl;
-    vcl_cout<<"data[i].second= "<<data[i].second<<vcl_endl;
-    vcl_cout<<"data[i].third= "<<data[i].third<<vcl_endl;
+    vcl_cout<<"data[i].first= "<<data[i].first<<vcl_endl
+            <<"data[i].second= "<<data[i].second<<vcl_endl
+            <<"data[i].third= "<<data[i].third<<vcl_endl
 
-    vcl_cout<<"wt_pos= "<<wt_pos<<vcl_endl;
-    vcl_cout<<"tot_wts1= "<<tot_wts1<<vcl_endl;
-    vcl_cout<<"wt_neg= "<<wt_neg<<vcl_endl;
+            <<"wt_pos= "<<wt_pos<<vcl_endl
+            <<"tot_wts1= "<<tot_wts1<<vcl_endl
+            <<"wt_neg= "<<wt_neg<<vcl_endl
 
-    vcl_cout<<"error= "<<error<<vcl_endl;
+            <<"error= "<<error<<vcl_endl;
 #endif
     if ( error< min_error )
     {
@@ -149,14 +145,11 @@ double clsfy_mean_square_1d_builder::build(clsfy_classifier_1d& classifier,
   assert( vcl_fabs (wt_pos - tot_pos_wts) < 1e-9 );
   assert( vcl_fabs (wt_neg - tot_neg_wts) < 1e-9 );
 #ifdef DEBUG
-  vcl_cout<<"min_error= "<<min_error<<vcl_endl;
-  vcl_cout<<"min_thresh= "<<min_thresh<<vcl_endl;
+  vcl_cout<<"min_error= "<<min_error<<vcl_endl
+          <<"min_thresh= "<<min_thresh<<vcl_endl;
 #endif
   // pass parameters to classifier
-  vnl_vector<double> params(2);
-  params[0]=wm_pos;
-  params[1]=min_thresh;
-  classifier.set_params(params);
+  classifier.set_params(vnl_vector<double>(2, wm_pos,min_thresh));
   return min_error;
 }
 
@@ -188,8 +181,8 @@ double clsfy_mean_square_1d_builder::build(clsfy_classifier_1d& classifier,
   {
     wm_pos+= wts1(i)*egs1(i);
 #ifdef DEBUG
-    vcl_cout<<"egs1("<<i<<")= "<<egs1(i)<<vcl_endl;
-    vcl_cout<<"wts1("<<i<<")= "<<wts1(i)<<vcl_endl;
+    vcl_cout<<"egs1("<<i<<")= "<<egs1(i)<<vcl_endl
+            <<"wts1("<<i<<")= "<<wts1(i)<<vcl_endl;
 #endif
   }
   wm_pos/=tot_wts1;
@@ -237,22 +230,22 @@ double clsfy_mean_square_1d_builder::build(clsfy_classifier_1d& classifier,
     else if ( data[i].second == 1 ) wt_pos+= wts[ data[i].third];
     else
     {
-      vcl_cout<<"ERROR: clsfy_mean_square_1d_builder::build()"<<vcl_endl;
-      vcl_cout<<"Unrecognised output value in triple (ie must be 0 or 1)"<<vcl_endl;
-      vcl_cout<<"data.second="<<data[i].second<<vcl_endl;
+      vcl_cout<<"ERROR: clsfy_mean_square_1d_builder::build()\n"
+              <<"Unrecognised output value in triple (ie must be 0 or 1)\n"
+              <<"data.second="<<data[i].second<<vcl_endl;
       vcl_abort();
     }
     double error= tot_wts1-wt_pos+wt_neg;
 #ifdef DEBUG
-    vcl_cout<<"data[i].first= "<<data[i].first<<vcl_endl;
-    vcl_cout<<"data[i].second= "<<data[i].second<<vcl_endl;
-    vcl_cout<<"data[i].third= "<<data[i].third<<vcl_endl;
+    vcl_cout<<"data[i].first= "<<data[i].first<<vcl_endl
+            <<"data[i].second= "<<data[i].second<<vcl_endl
+            <<"data[i].third= "<<data[i].third<<vcl_endl
 
-    vcl_cout<<"wt_pos= "<<wt_pos<<vcl_endl;
-    vcl_cout<<"tot_wts1= "<<tot_wts1<<vcl_endl;
-    vcl_cout<<"wt_neg= "<<wt_neg<<vcl_endl;
+            <<"wt_pos= "<<wt_pos<<vcl_endl
+            <<"tot_wts1= "<<tot_wts1<<vcl_endl
+            <<"wt_neg= "<<wt_neg<<vcl_endl
 
-    vcl_cout<<"error= "<<error<<vcl_endl;
+            <<"error= "<<error<<vcl_endl;
 #endif
     if ( error< min_error )
     {
@@ -263,14 +256,11 @@ double clsfy_mean_square_1d_builder::build(clsfy_classifier_1d& classifier,
 
   assert( vcl_fabs (wt_pos - tot_wts1) < 1e-9 );
   assert( vcl_fabs (wt_neg - tot_wts0) < 1e-9 );
-  vcl_cout<<"min_error= "<<min_error<<vcl_endl;
-  vcl_cout<<"min_thresh= "<<min_thresh<<vcl_endl;
+  vcl_cout<<"min_error= "<<min_error<<vcl_endl
+          <<"min_thresh= "<<min_thresh<<vcl_endl;
 
   // pass parameters to classifier
-  vnl_vector<double> params(2);
-  params[0]=wm_pos;
-  params[1]=min_thresh;
-  classifier.set_params(params);
+  classifier.set_params(vnl_vector<double>(2, wm_pos,min_thresh));
   return min_error;
 }
 
@@ -278,14 +268,14 @@ double clsfy_mean_square_1d_builder::build(clsfy_classifier_1d& classifier,
 //: Train classifier, returning weighted error
 //   Assumes two classes
 double clsfy_mean_square_1d_builder::build_from_sorted_data(
-                                  clsfy_classifier_1d& classifier,
-                                  const vbl_triple<double,int,int> *data,
-                                  const vnl_vector<double>& wts
+                                  clsfy_classifier_1d& /*classifier*/,
+                                  const vbl_triple<double,int,int>* /*data*/,
+                                  const vnl_vector<double>& /*wts*/
                                   ) const
 {
-  vcl_cout<<"ERROR: clsfy_mean_square_1d_builder::build_from_sorted_data()"<<vcl_endl;
-  vcl_cout<<"Function not implemented because can't use pre-sorted data"<<vcl_endl;
-  vcl_cout<<"the weighted mean of the data is needed to calc the ordering!"<<vcl_endl;
+  vcl_cout<<"ERROR: clsfy_mean_square_1d_builder::build_from_sorted_data()\n"
+          <<"Function not implemented because can't use pre-sorted data\n"
+          <<"the weighted mean of the data is needed to calc the ordering!\n";
   vcl_abort();
 
   return 0.0;
@@ -384,8 +374,8 @@ void clsfy_mean_square_1d_builder::b_read(vsl_b_istream& /*bfs*/)
     vsl_b_read(bfs,data_);
     break;
   default:
-    vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, clsfy_mean_square_1d_builder&)\n";
-    vcl_cerr << "           Unknown version number "<< version << "\n";
+    vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, clsfy_mean_square_1d_builder&)\n"
+             << "           Unknown version number "<< version << "\n";
     bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
     return;
   }

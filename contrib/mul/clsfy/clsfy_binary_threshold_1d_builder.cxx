@@ -4,10 +4,6 @@
 // \file
 // \author dac
 // \date   Tue Mar  5 01:11:31 2002
-//
-// \verbatim
-//  Modifications
-// \endverbatim
 
 #include <vcl_iostream.h>
 #include <vcl_string.h>
@@ -195,9 +191,7 @@ double clsfy_binary_threshold_1d_builder::build_from_sorted_data(
     threshold=(data[index].first+data[index+1].first)/2;
 
   // pass parameters to classifier
-  vnl_vector<double> params(2);
-  params[0]=polarity;
-  params[1]=threshold*polarity;
+  vnl_vector<double> params(2, polarity, threshold*polarity);
   classifier.set_params(params);
   return min_err;
 }
