@@ -24,29 +24,6 @@
 #endif
 
 
-
-//-----------------------------------------------------------------------------
-// External refs
-//-----------------------------------------------------------------------------
-
-#ifdef HAS_MFC
-#include <vgui/impl/mfc/vgui_mfc_app_init.h>
-extern int vgui_accelerate_mfc_tag_function();
-extern int vgui_mfc_tag_function();
-vgui_mfc_app_init theAppinit;
-#endif
-
-#ifdef HAS_X11
-extern int vgui_accelerate_x11_tag_function();
-#endif
-
-#ifdef HAS_GTK
-extern int vgui_gtk_tag_function();
-#endif
-
-#ifdef HAS_GLUT
-extern int vgui_glut_tag_function();
-#endif
 static jvx_manager* jvm = new jvx_manager();
 
 void quit_callback()
@@ -71,19 +48,6 @@ int main(int argc, char** argv)
 
 #ifdef HAS_MPEG
   vidl_io::register_codec(new vidl_mpegcodec);
-#endif
-
-#ifdef HAS_GTK
-  vgui_gtk_tag_function();
-#endif
-
-#ifdef HAS_GLUT
-  vgui_glut_tag_function();
-#endif
-
-#ifdef HAS_MFC
-  vgui_mfc_tag_function();
-  vgui_accelerate_mfc_tag_function();
 #endif
 
    // turn off the mfc acceleration since this seems to stop
