@@ -9,5 +9,8 @@ ENDIF (LIBRARY_OUTPUT_PATH MATCHES '^$')
 
 
 # Immediate dependencies
-INCLUDE( ${allvxl_SOURCE_DIR}/oxl/CMakeListsLink.txt )
+INCLUDE( ${allvxl_SOURCE_DIR}/oxl/vgui/CMakeListsLink.txt )
+INCLUDE( ${allvxl_SOURCE_DIR}/vxl/vidl/CMakeListsLink.txt )
+INCLUDE( ${allvxl_SOURCE_DIR}/vxl/vul/CMakeListsLink.txt )
+INCLUDE( ${allvxl_SOURCE_DIR}/vxl/vil/CMakeListsLink.txt )
 
