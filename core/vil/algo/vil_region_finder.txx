@@ -6,7 +6,7 @@
 // ---------------------------------------------------------------------------
 //                                                                 constructor
 
-template <class pix_type>
+template <class pix_type, class predicate_type>
 vil_region_finder<pix_type>::
 vil_region_finder( image_view const& in_image,
                    vil_region_finder_connectivity conn )
@@ -20,7 +20,7 @@ vil_region_finder( image_view const& in_image,
 // ---------------------------------------------------------------------------
 //                                                                        init
 
-template <class pix_type>
+template <class pix_type, class predicate_type>
 void
 vil_region_finder<pix_type>::
 init( vil_region_finder_connectivity conn )
@@ -45,7 +45,7 @@ init( vil_region_finder_connectivity conn )
 // ---------------------------------------------------------------------------
 //                                                             same int region
 
-template <class pix_type>
+template <class pix_type, class predicate_type>
 void
 vil_region_finder<pix_type>::
 same_int_region( unsigned i, unsigned j,
@@ -68,8 +68,40 @@ same_int_region( unsigned i, unsigned j,
     unsigned nbr_j = j + nbr_delta_[c][1];
     if (nbr_i < image_.ni() &&
         nbr_j < image_.nj() &&
-        image_( nbr_i, nbr_j ) == p ) {
-      same_int_region( nbr_i, nbr_j, ri, rj );
+        predi_( image_( nbr_i, nbr_j ),  p ) ) {
+      same_int_region( nbr_i, nbr_j, p, ri, rj );
+    }
+  }
+}
+
+
+// ---------------------------------------------------------------------------
+//                                                             same int region
+
+template <class pix_type, class predicate_type>
+void
+vil_region_finder<pix_type>::
+same_int_region( unsigned i, unsigned j, pix_type p,
+                 vcl_vector<unsigned>& ri,
+                 vcl_vector<unsigned>& rj )
+{
+  // early stop if this pixel has already been processed
+  if ( processed_(i,j) )
+    return;
+
+  // otherwise, add this pixel's coordinates and process neighbours
+  // with the same intensity
+  processed_(i,j) = true;
+  ri.push_back( i );
+  rj.push_back( j );
+
+  for ( unsigned c = 0; c < num_nbrs_; ++c ) {
+    unsigned nbr_i = i + nbr_delta_[c][0];
+    unsigned nbr_j = j + nbr_delta_[c][1];
+    if (nbr_i < image_.ni() &&
+        nbr_j < image_.nj() &&
+        predi_( image_( nbr_i, nbr_j ),  p ) ) {
+      same_int_region( nbr_i, nbr_j, p, ri, rj );
     }
   }
 }
@@ -78,7 +110,7 @@ same_int_region( unsigned i, unsigned j,
 // ---------------------------------------------------------------------------
 //                                                                       image
 
-template <class pix_type>
+template <class pix_type, class predicate_type>
 typename vil_region_finder<pix_type>::image_view const&
 vil_region_finder<pix_type>::
 image() const
