@@ -93,6 +93,7 @@ void test_url()
       vcl_cout << a;
       TEST("test contents", vcl_strncmp(a,b,vcl_strlen(b)), 0);
     }
+    delete i;
   }
 }
 
