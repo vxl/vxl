@@ -6,8 +6,9 @@ inline
 vcl_vector<T> CoolList_to_vcl_vector(CoolList<T> const& cl)
 {
   vcl_vector<T> l;
-  for (cl.reset(); cl.next(); )
-    l.push_back(cl.value());
+  CoolList<T>::const_iterator it = cl.begin();
+  for (; it != cl.end(); ++it)
+    l.push_back(*it);
   return l;
 }
 
@@ -16,7 +17,8 @@ inline
 vcl_vector<T> CoolList_to_vcl_vector(CoolListP<T> const& cl)
 {
   vcl_vector<T> l;
-  for (cl.reset(); cl.next(); )
-    l.push_back(cl.value());
+  CoolListP<T>::const_iterator it = cl.begin();
+  for (; it != cl.end(); ++it)
+    l.push_back(*it);
   return l;
 }

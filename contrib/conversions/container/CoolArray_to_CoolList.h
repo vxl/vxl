@@ -6,8 +6,9 @@ inline
 CoolList<T> CoolArray_to_CoolList(CoolArray<T> const& cl)
 {
   CoolList<T> l;
-  for (cl.reset(); cl.next(); )
-    l.push_end(cl.value());
+  CoolArray<T>::const_iterator it = cl.begin();
+  for (; it != cl.end(); ++it)
+    l.push_end(*it);
   return l;
 }
 
@@ -16,8 +17,9 @@ inline
 CoolList<T> CoolArray_to_CoolList(CoolArrayP<T> const& cl)
 {
   CoolList<T> l;
-  for (cl.reset(); cl.next(); )
-    l.push_end(cl.value());
+  CoolArrayP<T>::const_iterator it = cl.begin();
+  for (; it != cl.end(); ++it)
+    l.push_end(*it);
   return l;
 }
 
@@ -26,7 +28,8 @@ inline
 CoolList<T> CoolListP_to_CoolList(CoolListP<T> const& cl)
 {
   CoolList<T> l;
-  for (cl.reset(); cl.next(); )
-    l.push_end(cl.value());
+  CoolListP<T>::const_iterator it = cl.begin();
+  for (; it != cl.end(); ++it)
+    l.push_end(*it);
   return l;
 }

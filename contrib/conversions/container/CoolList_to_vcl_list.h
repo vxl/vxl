@@ -3,22 +3,22 @@
 
 template <class T>
 inline
-vcl_list<T> CoolList_to_vcl_list(CoolList<T> const& c)
+vcl_list<T> CoolList_to_vcl_list(CoolList<T> const& cl)
 {
-  CoolList<T>& cl = (CoolList<T>&)c;
   vcl_list<T> l;
-  for (cl.reset(); cl.next(); )
-    l.push_back(cl.value());
+  CoolList<T>::const_iterator it = cl.begin();
+  for (; it != cl.end(); ++it)
+    l.push_back(*it);
   return l;
 }
 
 template <class T>
 inline
-vcl_list<T> CoolList_to_vcl_list(CoolListP<T> const& c)
+vcl_list<T> CoolList_to_vcl_list(CoolListP<T> const& cl)
 {
-  CoolListP<T>& cl = (CoolListP<T>&)c;
   vcl_list<T> l;
-  for (cl.reset(); cl.next(); )
-    l.push_back(cl.value());
+  CoolListP<T>::const_iterator it = cl.begin();
+  for (; it != cl.end(); ++it)
+    l.push_back(*it);
   return l;
 }

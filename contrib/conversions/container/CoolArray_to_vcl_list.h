@@ -6,8 +6,9 @@ inline
 vcl_list<T> CoolArray_to_vcl_list(CoolArray<T> const& cl)
 {
   vcl_list<T> l;
-  for (cl.reset(); cl.next(); )
-    l.push_back(cl.value());
+  CoolArray<T>::const_iterator it = cl.begin();
+  for (; it != cl.end(); ++it)
+    l.push_back(*it);
   return l;
 }
 
@@ -16,7 +17,8 @@ inline
 vcl_list<T> CoolArray_to_vcl_list(CoolArrayP<T> const& cl)
 {
   vcl_list<T> l;
-  for (cl.reset(); cl.next(); )
-    l.push_back(cl.value());
+  CoolArrayP<T>::const_iterator it = cl.begin();
+  for (; it != cl.end(); ++it)
+    l.push_back(*it);
   return l;
 }

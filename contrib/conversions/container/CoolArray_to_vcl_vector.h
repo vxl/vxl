@@ -3,22 +3,22 @@
 
 template <class T>
 inline
-vcl_vector<T> CoolArray_to_vcl_vector(CoolArray<T> const& c)
+vcl_vector<T> CoolArray_to_vcl_vector(CoolArray<T> const& cl)
 {
-  CoolArray<T>& cl = (CoolArray<T>&)c;
   vcl_vector<T> l;
-  for (cl.reset(); cl.next(); )
-    l.push_back(cl.value());
+  CoolArray<T>::const_iterator it = cl.begin();
+  for (; it != cl.end(); ++it)
+    l.push_back(*it);
   return l;
 }
 
 template <class T>
 inline
-vcl_vector<T> CoolArray_to_vcl_vector(CoolArrayP<T> const& c)
+vcl_vector<T> CoolArray_to_vcl_vector(CoolArrayP<T> const& cl)
 {
-  CoolArrayP<T>& cl = (CoolArrayP<T>&)c;
   vcl_vector<T> l;
-  for (cl.reset(); cl.next(); )
-    l.push_back(cl.value());
+  CoolArrayP<T>::const_iterator it = cl.begin();
+  for (; it != cl.end(); ++it)
+    l.push_back(*it);
   return l;
 }
