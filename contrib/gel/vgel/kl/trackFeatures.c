@@ -571,16 +571,9 @@ void KLTTrackFeatures(
 
   if (tc->sequentialMode)
   {
-    /* MPP 9/24/2003 */
-    /* Free any existing previous pyramids -- plug memory leak! */
-    if (tc->pyramid_last != NULL)
-      _KLTFreePyramid(tc->pyramid_last);
+    /* Store current-image pyramids in tracking context for next frame */
     tc->pyramid_last = pyramid2;
-    if (tc->pyramid_last_gradx != NULL)
-      _KLTFreePyramid(tc->pyramid_last_gradx);
     tc->pyramid_last_gradx = pyramid2_gradx;
-    if (tc->pyramid_last_grady != NULL)
-      _KLTFreePyramid(tc->pyramid_last_grady);
     tc->pyramid_last_grady = pyramid2_grady;
   }
   else
