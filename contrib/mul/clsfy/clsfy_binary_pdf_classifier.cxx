@@ -43,15 +43,15 @@ void clsfy_binary_pdf_classifier::class_probabilities(
           vcl_vector<double> &outputs,
           const vnl_vector<double> &input)  const
 {
-  // likelyhood = P(input|InClass) / prob_limit_
-  double likelyhood= vcl_exp(log_l(input));
+  // likelihood = P(input|InClass) / prob_limit_
+  double likelihood= vcl_exp(log_l(input));
   outputs.resize(1);
-  outputs[0] = likelyhood / (1 + likelyhood);
+  outputs[0] = likelihood / (1 + likelihood);
 }
 
 //=======================================================================
 
-//: Log likelyhood of being in class 0.  log(P(class=0|data))
+//: Log likelihood of being in class 0.  log(P(class=0|data))
 // This function is intended for use in binary classifiers only. It is
 // related to the class 0 probability as follows,
 // P(class=0|data) = exp(logL) / (1+exp(logL)).
@@ -61,7 +61,7 @@ double clsfy_binary_pdf_classifier::log_l(const vnl_vector<double> &input) const
 {
   assert(pdf_!=0);
 
-  // likelyhood = P(input|InClass) / prob_limit_
+  // likelihood = P(input|InClass) / prob_limit_
   return pdf_->log_p(input) - log_prob_limit_;
 }
 

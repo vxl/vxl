@@ -43,7 +43,7 @@ public:
   // output(0) contains the probability that the input is in class 1
   void virtual class_probabilities(vcl_vector<double> &outputs, const vnl_vector<double> &input) const;
 
-  //: Log likelyhood of being in class 0, i.e. const + log(P(class=0|data)).
+  //: Log likelihood of being in class 0, i.e. const + log(P(class=0|data)).
   // The constant is chosen such that the decision boundary is at logL ==0;
   // This function is intended for binary classifiers only.
   // logL is related to class probability as P(class=0|data) = exp(logL) / (1+exp(logL))
