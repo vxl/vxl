@@ -37,7 +37,7 @@ void vsl_canny_smooth_rothwell(vil_image const &image_in,
 {
   if (false) { }
 #define macro(pt, st) \
-  else if (vil_pixel_type(image_in) == pt) { \
+  else if (vil_pixel_format(image_in) == pt) { \
     vil_memory_image_of<st > sec(image_in); \
     vsl_canny_smooth_rothwell(const_cast<st const *const*>(sec.row_array()), sec.height(), sec.width(), \
                               _kernel, _width, _k_size, _smooth); \
@@ -60,7 +60,7 @@ void vsl_canny_smooth_rothwell_adaptive(vil_image const &image_in,
 {
   if (false) { }
 #define macro(pt, st) \
-  else if (vil_pixel_type(image_in) == pt) { \
+  else if (vil_pixel_format(image_in) == pt) { \
     vil_memory_image_of<st > sec(image_in); \
     vsl_canny_smooth_rothwell_adaptive(const_cast<st const * const *>(sec.row_array()), sec.height(), sec.width(), \
                                        x0, y0, image_size, _kernel, _width, _k_size, dx, dy, grad); \
@@ -82,7 +82,7 @@ void vsl_canny_smooth(vil_image const &image_in,
 {
   if (false) { }
 #define macro(pt, st) \
-  else if (vil_pixel_type(image_in) == pt) { \
+  else if (vil_pixel_format(image_in) == pt) { \
     vil_memory_image_of<st > sec(image_in); \
     vsl_canny_smooth(const_cast<st const * const *>(sec.row_array()), sec.height(), sec.width(), \
                      _kernel, _width, _sub_area_OX, image_out); \
