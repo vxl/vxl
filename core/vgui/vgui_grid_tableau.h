@@ -1,9 +1,38 @@
-// This is vgui_grid_tableau.h
+#ifndef vgui_grid_tableau_h_
+#define vgui_grid_tableau_h_
+// This is oxl/vgui/vgui_grid_tableau.h
 
 //:
 // \file
 // \author K.Y.McGaul
 // \brief  A tableau which renders its child tableaux as a rectangular grid.
+// \verbatim
+//  Modifications:
+//    K.Y.McGaul 20-JAN-2000 Initial version.
+//    K.Y.McGaul 11-FEB-2000 Added a clear_tableau to the empty grid positions.
+//    K.Y.McGaul 21-FEB-2002 Added comments and documentation.
+// \endverbatim
+
+#include <vcl_vector.h>
+#include <vbl/vbl_array_2d.h>
+
+#include "vgui_grid_tableau_sptr.h"
+#include <vgui/vgui_polytab.h>
+#include <vgui/vgui_event_condition.h>
+
+//: Data required by each rectangle in the grid of vgui_grid_tableau.
+struct vgui_grid_tableau_data
+{
+  int handle;       // Handle returned by polytab
+  int tab_pos;      // Position of our tableau in array of tableaux (`tabs')
+  bool is_default;  // True if this is a default tableau (not set by the user)
+  int time_selected;// Time last left clicked on (-1 if not selected)
+};
+
+bool operator==(vgui_grid_tableau_data const &a,
+                vgui_grid_tableau_data const &b);
+
+//: A tableau which renders its child tableaux as a rectangular grid.
 //
 //  It is derived from vgui_polytab but unlike vgui_polytab, the child tableaux
 //  of vgui_grid can only be laid out in an m by n rectangular grid.  Rows
@@ -33,35 +62,6 @@
 //
 //  This tableau was originally written for xcv, so look at this application to get
 //  a better idea what it does.
-//
-// \verbatim
-//  Modifications:
-//    K.Y.McGaul 20-JAN-2000 Initial version.
-//    K.Y.McGaul 11-FEB-2000 Added a clear_tableau to the empty grid positions.
-//    K.Y.McGaul 21-FEB-2002 Added comments and documentation.
-// \endverbatim
-
-#ifndef vgui_grid_tableau_h_
-#define vgui_grid_tableau_h_
-
-#include <vcl_vector.h>
-#include <vbl/vbl_array_2d.h>
-
-#include "vgui_grid_tableau_sptr.h"
-#include <vgui/vgui_polytab.h>
-#include <vgui/vgui_event_condition.h>
-
-struct vgui_grid_tableau_data
-{
-  int handle;       // Handle returned by polytab
-  int tab_pos;      // Position in array of tableaux (`tabs')
-  bool is_default;  // True if this is a default tableau (not set by the user)
-  int time_selected;// Time last left clicked on (-1 if not selected)
-};
-
-bool operator==(vgui_grid_tableau_data const &a,
-                vgui_grid_tableau_data const &b);
-
 class vgui_grid_tableau : public vgui_polytab
 {
 public:
