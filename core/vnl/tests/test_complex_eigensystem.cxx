@@ -3,6 +3,7 @@
 // \author F. Schaffalitzky, Oxford RRG
 // \date    7 September 1999
 #include <vcl_complex.h>
+#include <vcl_iostream.h>
 #include <vnl/algo/vnl_complex_eigensystem.h>
 
 #include <testlib/testlib_test.h>
@@ -38,28 +39,24 @@ void test_complex_eigensystem1()
   vnl_complex_eigensystem eig(A,     // compute both
                               true,  // left and right
                               true); // eigenvectors
+  TEST("vnl_complex_eigensystem constructor", eig.N, N);
 #if 0
-  vcl_cout << "A = " << A << vcl_endl
-           << "eigenvalues = " << eig.W << vcl_endl
-           << "L = " << eig.L << vcl_endl
-           << "R = " << eig.R << vcl_endl;
+  vcl_cout << "A = " << A << '\n'
+           << "eigenvalues = " << eig.W << '\n'
+           << "L = " << eig.L << '\n'
+           << "R = " << eig.R << '\n';
 #endif
   for (unsigned i=0;i<N;i++) {
-    //vcl_cout << "i=" << i << vcl_endl;
-    //
     vcl_complex<double> w = eig.W[i];
-    vnl_vector<vcl_complex<double> > err;
-    //vcl_cout << "  w = " << w << vcl_endl;
+    vcl_cout << "  W[" << i << "] = " << w << '\n';
     //
-    vnl_vector<vcl_complex<double> > l(eig.left_eigen_vector(i));
-    err = (l*A - l*w);
-    //vcl_cout << "  " << err << vcl_endl;
-    testlib_test_assert("  Left  eigenvalue", err.magnitude() < 1e-10);
+    vnl_vector<vcl_complex<double> > l = eig.left_eigen_vector(i);
+    vnl_vector<vcl_complex<double> > err = l*A - l*w;
+    testlib_test_assert_near("  Left  eigenvalue residue", err.magnitude());
     //
-    vnl_vector<vcl_complex<double> > r(eig.right_eigen_vector(i));
-    err = (A*r - w*r);
-    //vcl_cout << "  " << err << vcl_endl;
-    testlib_test_assert("  Right eigenvalue", err.magnitude() < 1e-10);
+    vnl_vector<vcl_complex<double> > r = eig.right_eigen_vector(i);
+    err = A*r - w*r;
+    testlib_test_assert_near("  Right eigenvalue residue", err.magnitude());
   }
 }
 
@@ -69,19 +66,21 @@ void test_complex_eigensystem2()
   // because the maximum number of iterations is reached. Removing the
   // upper limit makes it work, though.
   double Adata[6][6] = {
-    { 6.81189847675500,  -0.75094724440200,   0.02962045905500,   0.08278481627400,  -0.00326537487000,   0.00012879986400},
-    {-0.30264207899000,   7.24396703250300,  -0.23873370907200,  -1.59347941419300,   0.05767229376100,  -0.00207046888600},
-    {-0.22478047851400,   1.66397856595400,   6.51603673051800,  -0.36414398064500,  -0.71120349595300,   0.05667215261300},
-    { 0.00336147948700,  -0.16054853597700,   0.00528866726000,   7.66800229119600,  -0.25259347537300,   0.00832074135800},
-    { 0.00499332392900,  -0.15593251059600,  -0.14083152011000,   3.50460364036400,   6.85617756909000,  -0.45550486394200},
-    { 0.00185433854100,  -0.02724973652500,  -0.10751684805800,   0.40043828267200,   1.57997351477200,   6.23396017664100}
+    { 6.811898476755, -0.750947244402,  0.029620459055,  0.082784816274, -0.003265374870,  0.000128799864},
+    {-0.302642078990,  7.243967032503, -0.238733709072, -1.593479414193,  0.057672293761, -0.002070468886},
+    {-0.224780478514,  1.663978565954,  6.516036730518, -0.364143980645, -0.711203495953,  0.056672152613},
+    { 0.003361479487, -0.160548535977,  0.005288667260,  7.668002291196, -0.252593475373,  0.008320741358},
+    { 0.004993323929, -0.155932510596, -0.140831520110,  3.504603640364,  6.856177569090, -0.455504863942},
+    { 0.001854338541, -0.027249736525, -0.107516848058,  0.400438282672,  1.579973514772,  6.233960176641}
   };
   vnl_matrix<vcl_complex<double> > A(6, 6);
   for (int i=0; i<6; ++i)
     for (int j=0; j<6; ++j)
       A[i][j] = Adata[i][j]; //(0.77+i) + (0.1+j)*(0.33+j);
   vnl_complex_eigensystem eig(A);
-  testlib_test_assert("  Funny eigensystem", true);
+  TEST("vnl_complex_eigensystem constructor", eig.N, 6);
+  for (int i=0; i<6; ++i)
+    vcl_cout << "  W[" << i << "] = " << eig.eigen_value(i) << '\n';
 }
 
 void test_complex_eigensystem()
