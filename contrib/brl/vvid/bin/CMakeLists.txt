@@ -10,7 +10,11 @@ IF( MPEG2_FOUND )
 ENDIF( MPEG2_FOUND )
 
 SET(vidfpl_sources vidfpl.cxx vidfpl_menus.cxx vidfpl_menus.h)
+SET(cl_grid_finder_sources command_line_grid_finder.cxx)
+
 ADD_EXECUTABLE (vidfpl ${vidfpl_sources})
+ADD_EXECUTABLE (cl_grid_finder ${cl_grid_finder_sources})
+
 TARGET_LINK_LIBRARIES(vidfpl brip  vvid vidl_vil1 vgui )
 
 IF(HAS_CMU1394CAMERA)
