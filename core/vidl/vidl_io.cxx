@@ -20,11 +20,12 @@
 
 #include <vul/vul_file.h>
 #include <vul/vul_sequence_filename_map.h>
+#include <vul/vul_file_iterator.h>
 
 #include <vcl_iostream.h>
 #include <vcl_list.h>
 #include <vcl_vector.h>
-
+#include <vcl_string.h>
 #ifdef HAS_MPEG2
 # include <vidl/vidl_mpegcodec.h>
 void (* vidl_io::load_mpegcodec_callback)(vidl_codec*) = 0;
@@ -32,6 +33,25 @@ void (* vidl_io::load_mpegcodec_callback)(vidl_codec*) = 0;
 
 vcl_list<vidl_codec_sptr> vidl_io::supported_types_;
 
+static bool looks_like_a_file_list(char const* fname);
+static vidl_clip_sptr load_from_file_list(char const* fname);
+static vidl_clip_sptr load_from_directory(char const* fname)
+{
+  vcl_list<vcl_string> filenames;
+
+  vcl_string s(fname);
+  s += "/*.*";
+  for (vul_file_iterator fit = s;fit; ++fit) {
+    // check to see if file is a directory.
+    if (vul_file::is_directory(fit()))
+      continue;
+    filenames.push_back(fit());
+  }
+
+  // Call load_images and return the result
+  return vidl_io::load_images(filenames, 'r');
+}
+  
 #if 0
 // Constructor does nothing.
 vidl_io::vidl_io()
@@ -43,6 +63,7 @@ vidl_io::~vidl_io()
 {
 }
 #endif
+
 
 //-----------------------------------------------------------------------------
 
@@ -109,9 +130,6 @@ vidl_movie_sptr  vidl_io::load_movie(
   return movie;
 }
 
-static bool looks_like_a_file_list(char const* fname);
-static vidl_clip_sptr load_from_file_list(char const* fname);
-
 //: Load a clip, takes a file name and return the created clip.
 // A starting frame, ending frame and increment number are optionals
 vidl_clip_sptr  vidl_io::load_clip(
@@ -129,31 +147,10 @@ vidl_clip_sptr  vidl_io::load_clip(
       return 0;
     }
 
-#if 0
-  // Check if the filename is a directory
-  IUE_stat fs(fname);  // check that file size is non zero
-    if (!fs) {
-      return 0;
-    }
-
-  cl_stat_t fs;
-  f (!vcl_stat(fname, &fs))
-     return 0;
-#endif
-
   // test if fname is a directory
   if (vul_file::is_directory(fname))
-      {
-          // fname is a directory.
-          // So, we will process all the files in this directory
-          // as images making the video.
-          return 0;
-#if 0 // avoid warnings about unreachable code - fsm
-          Dir dir(fname);
-          if (!dir.IsOpen())
-             return 0;
-#endif
-      }
+    return load_from_directory(fname);
+    //    return load_from_directory(fname);
   else if (looks_like_a_file_list(fname))
     return load_from_file_list(fname);
 
@@ -371,3 +368,4 @@ static vidl_clip_sptr load_from_file_list(char const* fname)
   // Call load_images and return the result
   return vidl_io::load_images(filenames, 'r');
 }
+

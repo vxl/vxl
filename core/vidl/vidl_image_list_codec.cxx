@@ -22,7 +22,7 @@
 //_________________________________________________________________________
 
 
-char *vidl_image_list_codec::default_initialization_image_type_ = "TIFFImage";
+char *vidl_image_list_codec::default_initialization_image_type_ = "tiff";
 
 //------------------------------------------------------------------------
 // CONSTRUCTOR(S) AND DESTRUCTOR
