@@ -1,12 +1,13 @@
 // Include system headers for UNIX-like operating system :
 #define _XOPEN_SOURCE 1 // necessary on alpha and on SGI since otherwise
 #define _XOPEN_SOURCE_EXTENDED 1 // usleep is not declared
+extern "C" {
 #include <unistd.h>
 #include <sys/types.h>
 #include <sys/stat.h>
+#include <stdlib.h>
+}
 #include <vxl_config.h> // for VXL_UNISTD_*
-#include <vcl_cstdlib.h>
-#include <vcl_cstring.h>
 
 char *
 vpl_getcwd( char *buf, vcl_size_t buf_size )
@@ -62,7 +63,12 @@ vpl_usleep( unsigned int t )
 
 int vpl_putenv ( const char * envvar )
 {
-  char * storage_space = vcl_strdup(envvar); // This causes a memory leak
-                                             // but this can't be helped
-  return vcl_putenv(storage_space);
+  //char * storage_space = vcl_strdup(envvar); // This causes a memory leak
+  //                                           // but this can't be helped
+  //
+  // Why copy the string? putenv is meant to take a const char* of the
+  // form "name=value". Also, putenv is neither ANSI C nor ANSI C++, but
+  // is often present in stdlib on most Unix-like systems. -- AGAP.
+
+  return putenv(envvar);
 }
