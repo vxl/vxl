@@ -48,6 +48,6 @@ template <class T> void mil_image_pyramid_flatten(T& out, const mil_image_pyrami
 
 #undef MIL_IMAGE_PYRAMID_INSTANTIATE
 #define MIL_IMAGE_PYRAMID_INSTANTIATE(T) \
-  template void mil_image_pyramid_flatten<T >(T &, const mil_image_pyramid &)
+template void mil_image_pyramid_flatten(T &, const mil_image_pyramid &)
 
 #endif //mil_image_pyramid_txx_
