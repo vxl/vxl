@@ -87,7 +87,6 @@ MANPAGE_SOURCES += vnl_float_4.h
 MANPAGE_SOURCES += vnl_double_2.h
 MANPAGE_SOURCES += vnl_double_3.h
 MANPAGE_SOURCES += vnl_double_4.h
-MANPAGE_SOURCES += vnl_double_5.h
 
 MANPAGE_SOURCES += vnl_int_2x2.h
 MANPAGE_SOURCES += vnl_float_1x2.h
