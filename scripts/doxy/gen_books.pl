@@ -129,7 +129,7 @@ sub update_book
 #    xec("texi2html -expandinfo -number -split_chapter $booktexi");
      $booklogfile = $book;
      $booklogfile =~ s/\//_/g;
-     xec("texi2html -number $booktexi > $doxydir/output/texi2html_$booklogfile.out 2>&1");
+     xec("texi2html -split=chapter -number $booktexi > $doxydir/output/texi2html_$booklogfile.out 2>&1");
 
 
   }
