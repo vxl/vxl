@@ -15,32 +15,32 @@ void test_byte_image_2d_io()
   vcl_cout << "******************************" << vcl_endl;
   vcl_cout << " Testing mil_byte_image_2d_io" << vcl_endl;
   vcl_cout << "*******************************" << vcl_endl;
-	
+
   int nx=20;
-	int ny=20;
-	mil_image_2d_of<vil_byte> orig_image(nx,ny),saved_image,loaded_image;
+  int ny=20;
+  mil_image_2d_of<vil_byte> orig_image(nx,ny),saved_image,loaded_image;
   // Fill image with shaded squares
   for (int y=0;y<nx;++y)
     for (int x=0;x<ny;++x)
       orig_image(x,y)=10*(x%10)+10*(y%10);
-  
+
   //save the image
   saved_image=orig_image;
   mil_byte_image_2d_io image_io;
   image_io.saveTheImage(saved_image,"./tmp.bmp","bmp");
-  
+
   //load the image
   image_io.loadTheImage(loaded_image,"./tmp.bmp","bmp");
-  
+
   //nb have to use lossless image format ie bitmap, not JPEG!
 
   // Calc Total difference over all pixels
-	double diff1=0;
-	for (int y=0;y<ny;++y)
+  double diff1=0;
+  for (int y=0;y<ny;++y)
     for (int x=0;x<nx;++x)
       diff1+=vcl_fabs( saved_image(x,y)-loaded_image(x,y) );
 
-  /*
+#if 0
   vcl_cout<<"saved_image= "<<vcl_endl;
   saved_image.print_all(vcl_cout);
 
@@ -48,10 +48,9 @@ void test_byte_image_2d_io()
   loaded_image.print_all(vcl_cout);
 
   vcl_cout<<"diff1= "<<diff1<<vcl_endl;
-  */
+#endif
 
   TEST("loaded vs saved image",diff1<1e-6,true);
-
 }
 
 TESTMAIN(test_byte_image_2d_io);
