@@ -1,7 +1,7 @@
 # This is the geometry conversions directory makefile
 
-USES := vxl gel
-IMMEDIATE_LIBS := -lvdgl -vbl
+USES := vxl gel oxl
+IMMEDIATE_LIBS := -losl -lvdgl -vbl
 
 SUBDIRS := tests
 

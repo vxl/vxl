@@ -1,8 +1,11 @@
-USES := conversions vxl gel
+USES := conversions vxl gel oxl
 USE_NETLIB := 1
-IULIBS := -lvdgl -lvsol -lvgl-algo -lvgl -lvnl-algo -lvnl -lvbl -lvul
+include ${IUEROOT}/vxl/vil/config.mk
+IULIBS := -lvdgl -lvsol -lvgl-algo -lvgl -lvnl-algo -lvnl -losl -lvil -lvbl -lvul
 
-ifneq (,$(wildcard $(IUEROOT)/SpatialObjects))
+TESTS += test_osl_to_vdgl.cxx
+
+ifneq (,$(wildcard $(IUEROOT)/SpatialObjects/DigitalGeometry/DigitalCurve.h))
 USES += COOL GeneralUtility SpatialObjects Numerics
 IULIBS += -lDigitalGeometry -lCompGeom -lTopology -lGroups -lGeometry -lSpatialBasics -lBasics -lSolver -lNumerics
 TESTS += test_DigitalCurve_to_vdgl.cxx
