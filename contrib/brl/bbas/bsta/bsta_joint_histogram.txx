@@ -6,10 +6,12 @@
 #include <bsta/bsta_gauss.h>
 #include <bsta/bsta_joint_histogram.h>
 
+#define LOG2 1.442695040889 // == 1/vcl_log(2.0)
+
 template <class T>
 bsta_joint_histogram<T>::bsta_joint_histogram(const T range,
-                                    const unsigned int nbins,
-                                    const T min_prob)
+                                              const unsigned int nbins,
+                                              const T min_prob)
   : volume_valid_(false), volume_(0), nbins_(nbins), range_(range), delta_(0)
 {
   if (nbins>0)
@@ -23,7 +25,7 @@ bsta_joint_histogram<T>::bsta_joint_histogram(const T range,
 
 template <class T>
 void bsta_joint_histogram<T>::upcount(T a, T mag_a,
-                                 T b, T mag_b)
+                                      T b, T mag_b)
 {
   if (a<0||a>range_)
     return;
@@ -89,9 +91,9 @@ T bsta_joint_histogram<T>::entropy() const
     {
       T pij = this->p(i,j);
       if (pij>min_prob_)
-        ent -= pij*vcl_log(pij);
+        ent -= pij*T(vcl_log(pij));
     }
-  ent/= vcl_log(2.0);
+  ent *= LOG2;
   return ent;
 }
 
@@ -106,7 +108,7 @@ T bsta_joint_histogram<T>::renyi_entropy() const
       sum += pij*pij;
     }
   if (sum>min_prob_)
-    ent = -vcl_log(sum)/vcl_log(2.0);
+    ent = - T(vcl_log(sum))*LOG2;
   return ent;
 }
 

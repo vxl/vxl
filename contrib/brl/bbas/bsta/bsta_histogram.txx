@@ -6,9 +6,11 @@
 #include <bsta/bsta_gauss.h>
 #include <bsta/bsta_histogram.h>
 
+#define LOG2 1.442695040889 // == 1/vcl_log(2.0)
+
 template <class T>
 bsta_histogram<T>::bsta_histogram(const T range, const unsigned int nbins,
-                        const T min_prob)
+                                  const T min_prob)
   : area_valid_(false), area_(0), nbins_(nbins), range_(range), delta_(0)
 {
   if (nbins>0)
@@ -71,9 +73,9 @@ T bsta_histogram<T>::entropy() const
   {
     T pi = this->p(i);
     if (pi>min_prob_)
-      ent -= pi*vcl_log(pi);
+      ent -= pi*T(vcl_log(pi));
   }
-  ent/= vcl_log(2.0);
+  ent *= LOG2;
   return ent;
 }
 
@@ -87,7 +89,7 @@ T bsta_histogram<T>::renyi_entropy() const
     sum += pi*pi;
   }
   if (sum>min_prob_)
-    ent = -vcl_log(sum)/vcl_log(2.0);
+    ent = - T(vcl_log(sum))*LOG2;
   return ent;
 }
 
