@@ -5,7 +5,7 @@ IF(JPEG_FOUND)
   INCLUDE_DIRECTORIES( ${JPEG_INCLUDE_DIR} )
   ADD_DEFINITIONS( ${JPEG_DEFINITIONS} -DHAS_JPEG )
   SET( vil2_sources ${vil2_sources}
-    vil2_jpeglib.h
+    file_formats/vil2_jpeglib.h
     file_formats/vil2_jpeg.cxx file_formats/vil2_jpeg.h
     file_formats/vil2_jpeg_source_mgr.cxx file_formats/vil2_jpeg_source_mgr.h
     file_formats/vil2_jpeg_decompressor.cxx file_formats/vil2_jpeg_decompressor.h
