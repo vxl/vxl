@@ -1,5 +1,6 @@
 #ifndef vil2_image_view_txx_
 #define vil2_image_view_txx_
+
 //:
 //  \file
 //  \brief Represent images of one or more planes of Ts.
@@ -7,7 +8,6 @@
 
 #include "vil2_image_view.h"
 #include <vcl_cstdlib.h>
-#include <vcl_iostream.h>
 #include <vcl_string.h>
 #include <vcl_cassert.h>
 #include <vil2/vil2_smart_ptr.h>
@@ -204,6 +204,28 @@ vil2_image_view<T> vil2_image_view<T>::window(unsigned x0, unsigned nx, unsigned
   return win;
 }
 
+//: Return a view of plane p
+template<class T>
+vil2_image_view<T> vil2_image_view<T>::plane(int p) const
+{
+  vil2_image_view<T> p_view;
+  p_view.set_to_window(*this,0,nx_,0,ny_,p,1);
+  return p_view;
+}
+
+//: Create a view which appears as the transpose of this view
+//  ie transpose()(x,y,p) = this(y,x,p)
+template<class T>
+vil2_image_view<T> vil2_image_view<T>::transpose() const
+{
+  vil2_image_view<T> t = *this;
+  // Swap x and y
+  t.nx_    = ny_;
+  t.xstep_ = ystep_;
+  t.ny_    = nx_;
+  t.ystep_ = xstep_;
+  return t;
+}
 
 //: Fill view with given value
 template<class T>
