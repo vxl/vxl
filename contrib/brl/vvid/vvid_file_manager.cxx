@@ -317,10 +317,10 @@ void vvid_file_manager::cached_play()
 //----------------------------------------------
 void vvid_file_manager::un_cached_play()
 {
-  if(!my_movie_)
+  if (!my_movie_)
   {
-	  vcl_cout << "No movie has been loaded\n";
-	  return;
+    vcl_cout << "No movie has been loaded\n";
+    return;
   }
   vidl_movie::frame_iterator pframe(my_movie_);
   for (pframe=my_movie_->first(); pframe!=my_movie_->last()&&play_video_;
