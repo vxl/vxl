@@ -24,7 +24,7 @@ inline
 vnl_double_3 cross_3d (vnl_double_3 const& v1, vnl_double_3 const& v2)
 {
   // Need this template as will not automatically match the base one.
-  return cross_3d<double>(v1, v2);
+  return cross_3d(v1, v2);
 }
 
 #endif // vnl_double_3_h_
