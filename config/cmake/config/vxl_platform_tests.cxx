@@ -75,6 +75,17 @@ int main() { return 0; }
 
 //-------------------------------------
 
+#ifdef VCL_HAS_RTTI
+
+class A { public: virtual ~A(); virtual void f(); };
+class B : public A { public: void f(); };
+bool try_rtti() { B*b=0; A*a1=b,a2=b; return typeid(a1)==typeid(a2); }
+
+int main() { return 0; }
+#endif // VCL_HAS_RTTI
+
+//-------------------------------------
+
 #ifdef VCL_FOR_SCOPE_HACK
 // VCL_FOR_SCOPE_HACK will be set to "1" if this fails to compile
 
@@ -839,6 +850,9 @@ int main()
 
 // CHAR_BIT is the number of bits per char.
 #include <limits.h>
+#ifndef CHAR_BIT
+# define CHAR_BIT 8
+#endif
 
 #include "config.h"
 

@@ -19,6 +19,13 @@
 #define VCL_HAS_DYNAMIC_CAST @VCL_HAS_DYNAMIC_CAST@
 
 
+//: VCL_HAS_RTTI
+//
+// True if the compiler supports RTTI, viz the 'typeid' function.
+//
+#define VCL_HAS_RTTI @VCL_HAS_RTTI@
+
+
 //: VCL_HAS_TYPENAME
 //
 // True if the compiler supports the "typename" keyword
@@ -31,6 +38,7 @@
 // True if the compiler supports the "export" keyword
 //
 #define VCL_HAS_EXPORT @VCL_HAS_EXPORT@
+
 
 //: VCL_HAS_MUTABLE
 //
@@ -103,7 +111,7 @@
 //#define VCL_CAN_STATIC_CONST_INIT_INT 1 /* allowed */
 //#define VCL_CAN_STATIC_CONST_INIT_INT 0 /* not allowed */
 #ifndef VCL_CAN_STATIC_CONST_INIT_INT
-#define VCL_CAN_STATIC_CONST_INIT_INT @VCL_STATIC_CONST_INIT_INT@
+# define VCL_CAN_STATIC_CONST_INIT_INT @VCL_STATIC_CONST_INIT_INT@
 #endif
 #if VCL_CAN_STATIC_CONST_INIT_INT
 # define VCL_STATIC_CONST_INIT_INT_DECL(x) = x
@@ -127,7 +135,7 @@
 //#define VCL_CAN_STATIC_CONST_INIT_FLOAT 1 /* allowed */
 //#define VCL_CAN_STATIC_CONST_INIT_FLOAT 0 /* not allowed */
 #ifndef VCL_CAN_STATIC_CONST_INIT_FLOAT
-#define VCL_CAN_STATIC_CONST_INIT_FLOAT @VCL_STATIC_CONST_INIT_FLOAT@
+# define VCL_CAN_STATIC_CONST_INIT_FLOAT @VCL_STATIC_CONST_INIT_FLOAT@
 #endif
 #if VCL_CAN_STATIC_CONST_INIT_FLOAT
 # define VCL_STATIC_CONST_INIT_FLOAT_DECL(x) = x
@@ -261,7 +269,7 @@
 //: VCL_NULL_TMPL_ARGS
 //
 // Define to <> for compilers that require them in friend template function
-// declarations (i.e., EGCS).
+// declarations (i.e., EGCS, VC C++.NET 2003).
 
 //#define VCL_NULL_TMPL_ARGS /* <> */
 //#define VCL_NULL_TMPL_ARGS <>
