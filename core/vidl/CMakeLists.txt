@@ -16,4 +16,11 @@ vidl_io
 vidl_test
 )
 
+IF(WIN32)
+  SOURCE_FILES(vidl_sources
+    vidl_avicodec.cxx
+  )
+ENDIF(WIN32)
+
+
 AUX_SOURCE_DIRECTORY(Templates vidl_sources)
