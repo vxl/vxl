@@ -681,9 +681,9 @@ bool vil2_image_view_deep_equality(const vil2_image_view<T> &lhs,
 }
 
 #define VIL2_IMAGE_VIEW_INSTANTIATE(T) \
-template class vil2_image_view<T >; \
 VCL_DEFINE_SPECIALIZATION vcl_string vil2_image_view<T >::is_a() const \
 {  return vcl_string("vil2_image_view<" #T ">"); }\
+template class vil2_image_view<T >; \
 template bool vil2_image_view_deep_equality(const vil2_image_view<T >&, \
                                             const vil2_image_view<T >&)
 
