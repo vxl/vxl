@@ -15,7 +15,6 @@
 #include <vcl_string.h>
 #include <vcl_cmath.h>
 #include <vcl_vector.h>
-#include <vsl/vsl_indent.h>
 #include <vnl/vnl_math.h>
 #include <vnl/io/vnl_io_vector.h>
 #include <mbl/mbl_index_sort.h>
@@ -75,24 +74,24 @@ double pdf1d_kernel_pdf::inverse_cdf(double P) const
 {
   assert (cdf_is_analytic()); // if it isn't then we would be better off using sampling
   assert (0.0 < P && P < 1.0);
-    
+
   if (index_.empty())
     mbl_index_sort(x_.data_block(), x_.size(), index_);
 
   // Assume kernels are deltas to get the starting point.
-  double x_init=x_(index_[P * x_.size()]);
+  double x_init=x_(index_[int(P * x_.size())]);
 
   double f_init = cdf(x_init);
 
   // guess initial step size. assuming a triangular kernel.
-  double step = width_(index_[P * x_.size()]);
+  double step = width_(index_[int(P * x_.size())]);
 
   double x_above, x_below, f_above, f_below;
   if (f_init > P)
   {
     x_above = x_init;
     f_above = f_init;
-    while(1)
+    while (true)
     {
       x_below = x_above - step;
       f_below = cdf(x_below);
@@ -106,7 +105,7 @@ double pdf1d_kernel_pdf::inverse_cdf(double P) const
   {
     x_below = x_init;
     f_below = f_init;
-    while(1)
+    while (true)
     {
       x_above = x_below + step;
       f_above = cdf(x_above);
@@ -116,7 +115,7 @@ double pdf1d_kernel_pdf::inverse_cdf(double P) const
       step *= 2.0;
     }
   }
-/*
+#if 0
   double x_middle = (x_above + x_below) / 2;
   while (x_above - x_below > vnl_math::sqrteps)
   {
@@ -125,19 +124,19 @@ double pdf1d_kernel_pdf::inverse_cdf(double P) const
     else x_above = x_middle;
   }
   return (x_above + x_below) / 2;
-*/
+#endif
   // bracketed Newton Ralphson.
 
 
-  double x_middle=0.5*(x_above+x_below); 
-  double dxold= x_above-x_below; 
+  double x_middle=0.5*(x_above+x_below);
+  double dxold= x_above-x_below;
   double dx=dxold;
   double f_middle = cdf(x_middle)-P;
   double df_middle = operator() (x_middle);
-  for (unsigned j=100;j>0;j--) 
+  for (unsigned j=100;j>0;j--)
   {
     if ( !((x_above - x_middle)*df_middle + f_middle > 0.0 &&
-           (x_below - x_middle)*df_middle + f_middle < 0.0   ) || 
+           (x_below - x_middle)*df_middle + f_middle < 0.0   ) ||
       (vnl_math_abs((2.0*f_middle)) > vnl_math_abs(dxold*df_middle)))
     { // Bisect if Nexton Ralphson isn't working
       x_middle=0.5*(x_above+x_below);
@@ -166,8 +165,7 @@ double pdf1d_kernel_pdf::inverse_cdf(double P) const
   }
   vcl_cerr << "ERROR: pdf1d_kernel_pdf::inverse_cdf() failed to converge." << vcl_endl;
   vcl_abort();
-
-
+  return 0.0; // dummy return
 }
 
 //=======================================================================
