@@ -21,7 +21,7 @@
 #include <vsol/vsol_spatial_object_2d.h>
 #include <vsol/vsol_point_2d_sptr.h>
 class vdgl_digital_curve;
-
+class vsol_line_2d;
 class vsol_curve_2d
   :public vsol_spatial_object_2d
 {
@@ -72,6 +72,12 @@ public:
   //---------------------------------------------------------------------------
   virtual vdgl_digital_curve const*cast_to_digital_curve(void)const{return 0;}
   virtual vdgl_digital_curve *cast_to_digital_curve(void) {return 0;}
+
+  //---------------------------------------------------------------------------
+  //: Return `this' if `this' is a line_2d, 0 otherwise
+  //---------------------------------------------------------------------------
+  virtual vsol_line_2d const*cast_to_line_2d(void)const{return 0;}
+  virtual vsol_line_2d *cast_to_line_2d(void) {return 0;}
 
   //---------------------------------------------------------------------------
   //: Return the first point of `this'
