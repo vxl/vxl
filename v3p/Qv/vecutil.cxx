@@ -69,7 +69,7 @@ float rayhitscube ( const point3D& A, const vector3D& b, float tnear, float tmin
       hpz = A.z + thit * b.z;
       if (min.y <= hpy && hpy <= max.y && min.z <= hpz && hpz <= max.z)
       { if (normal)
-          init3D (*normal, b.x > 0 ? -1 : 1, 0, 0);
+          init3D (*normal, b.x > 0 ? -1.f : 1.f, 0.f, 0.f);
         return thit;
       }
     }
@@ -83,7 +83,7 @@ float rayhitscube ( const point3D& A, const vector3D& b, float tnear, float tmin
       hpz = A.z + thit * b.z;
       if (min.x <= hpx && hpx <= max.x && min.z <= hpz && hpz <= max.z)
       { if (normal)
-          init3D (*normal, 0, b.y > 0 ? -1 : 1, 0);
+          init3D (*normal, 0.f, b.y > 0 ? -1.f : 1.f, 0.f);
         return thit;
       }
     }
@@ -97,7 +97,7 @@ float rayhitscube ( const point3D& A, const vector3D& b, float tnear, float tmin
       hpy = A.y + thit * b.y;
       if (min.x <= hpx && hpx <= max.x && min.y <= hpy && hpy <= max.y)
       { if (normal)
-          init3D (*normal, 0, 0, b.z > 0 ? -1 : 1);
+          init3D (*normal, 0.f, 0.f, b.z > 0 ? -1.f : 1.f);
         return thit;
       }
     }
@@ -387,7 +387,7 @@ void quaternion2rotation (const vector3D& v, float s, vector3D& axis, float& ang
     scl3D (axis, s);  // axis = v / vcl_sin (vcl_acos (s))
   }
   else
-    init3D (axis, 0, 0, 0);
+    init3D (axis, 0.f, 0.f, 0.f);
 
   angle *= 2.0;  // angle = 2 * vcl_acos (s)
 }
