@@ -8,6 +8,7 @@
 #include "vil3d_copy.h"
 #include <vcl_algorithm.h>
 #include <vil3d/vil3d_image_resource.h>
+#include <vil3d/vil3d_property.h>
 
 #if 0
 //: Copy images in blocks of roughly this size
@@ -54,5 +55,11 @@ bool vil3d_copy_deep(const vil3d_image_resource_sptr &src, vil3d_image_resource_
     return true;
   }
 #endif
+
+  float sizes[3];
+  if (dest->get_property(vil3d_property_voxel_size, sizes))
+  {
+    dest->set_voxel_size(sizes[0], sizes[1], sizes[2]);
+  }
 }
 

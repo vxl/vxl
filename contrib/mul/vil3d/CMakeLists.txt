@@ -18,7 +18,7 @@ SET(vil3d_sources
     vil3d_save.h                     vil3d_save.cxx
     vil3d_memory_image.h             vil3d_memory_image.cxx
     vil3d_copy.h                     vil3d_copy.cxx                      vil3d_copy.txx
-    vil3d_image_resource.h           vil3d_image_resource.cxx
+    vil3d_image_resource.h
     vil3d_new.h                      vil3d_new.cxx
     vil3d_convert.h
     vil3d_fwd.h
@@ -31,7 +31,7 @@ AUX_SOURCE_DIRECTORY(Templates vil3d_sources)
 
 ADD_LIBRARY(vil3d ${vil3d_sources})
 
-TARGET_LINK_LIBRARIES( vil3d vil vul vcl )
+TARGET_LINK_LIBRARIES( vil3d vil vul vgl vcl )
 
 SUBDIRS(algo io)
 

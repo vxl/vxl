@@ -28,8 +28,8 @@
 class vil3d_image_resource
 {
  public:
-  vil3d_image_resource();
-  virtual ~vil3d_image_resource();
+  vil3d_image_resource(): reference_count_(0) {}
+  virtual ~vil3d_image_resource() {}
 
   //: Dimensions:  Planes x ni x nj.
   // This concept is treated as a synonym to components.
@@ -69,7 +69,12 @@ class vil3d_image_resource
   vil3d_image_view_base_sptr get_view() const
   { return get_view (0, ni(), 0, nj(), 0, nk()); }
 
-
+  
+  //: Set the size of the each voxel in the i,j,k directions.
+  // You can get the voxel sizes via get_properties().
+  // \return false if underlying image doesn't store pixel sizes.
+  virtual bool set_voxel_size(float i, float j, float k) {return false;}
+  
   //: Create a read/write view of a copy of this data.
   // This function will always return a
   // multi-plane scalar-pixel view of the data.
@@ -90,7 +95,12 @@ class vil3d_image_resource
   //: Check that a view will fit into the data at the given offset.
   // This includes checking that the pixel type is scalar.
   virtual bool view_fits(const vil3d_image_view_base& im,
-                         unsigned i0, unsigned j0, unsigned k0);
+                         unsigned i0, unsigned j0, unsigned k0)
+  {
+    return (i0 + im.ni() <= ni() && j0 + im.nj() <= nj() &&
+      k0 + im.nk() <= nk() && im.nplanes() == nplanes() &&
+      vil_pixel_format_num_components(im.pixel_format()) == 1);
+  }
 
   //: Return a string describing the file format.
   // Only file images have a format, others return 0

@@ -197,13 +197,13 @@ bool vimt3d_vil3d_v3i_image::get_property(char const *key, void * value) const
 
   if (vcl_strcmp(vil3d_property_voxel_size, key)==0)
   {
-    vgl_vector_3d<double> p111 = tr(1.0, 1.0, 1.0) - tr.origin();
+    vgl_vector_3d<double> p111 = tr.inverse()(1.0, 1.0, 1.0) - tr.inverse().origin();
     //Assume no rotation or shearing.
 
     float* array =  static_cast<float*>(value);
-    array[0] = p111.x()==0?0:(float)(1.0 / p111.x());
-    array[1] = p111.y()==0?0:(float)(1.0 / p111.y());
-    array[2] = p111.z()==0?0:(float)(1.0 / p111.z());
+    array[0] = p111.x();
+    array[1] = p111.y();
+    array[2] = p111.z();
     return true;
   }
 
@@ -220,6 +220,22 @@ bool vimt3d_vil3d_v3i_image::get_property(char const *key, void * value) const
   return false;
 }
 
+
+//: Set the size of the each pixel in the i,j,k directions.
+// Return false if underlying image doesn't store pixel sizes.
+bool vimt3d_vil3d_v3i_image::set_voxel_size(float si, float sj, float sk)
+{
+  const vimt3d_transform_3d &tr = im_->world2im();
+
+// Try to adjust pixel size without modifying rest of transform  
+  vgl_vector_3d<double> w111 = tr(1.0, 1.0, 1.0) - tr.origin();
+
+  vimt3d_transform_3d zoom;
+  zoom.set_zoom_only (w111.x()/si, w111.y()/sj, w111.z()/sk, 0.0, 0.0, 0.0);
+  
+  im_->set_world2im(tr*zoom);
+  return true;
+}
 
 const vimt3d_transform_3d & vimt3d_vil3d_v3i_image::world2im() const
 {

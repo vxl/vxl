@@ -59,6 +59,8 @@
 
 //: voxel size in metres.
 // Type is float[3].
+// If this property exists you may get and set the values
+// through the size_i(), and set_pixel_size() members of vil3d_image_resource.
 #define vil3d_property_voxel_size "voxel_size"
 
 //: Original image origin in pixels.
