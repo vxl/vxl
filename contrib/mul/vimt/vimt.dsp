@@ -99,9 +99,6 @@ LIB32=link.exe -lib
 # Begin Group "Source Files"
 # PROP Default_Filter "cxx;c"
 # Begin Source File
-SOURCE=.\vimt_gaussian_pyramid_builder_2d.cxx
-# End Source File
-# Begin Source File
 SOURCE=.\vimt_image.cxx
 # End Source File
 # Begin Source File
@@ -112,9 +109,6 @@ SOURCE=.\vimt_image_pyramid_builder.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\vimt_transform_2d.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\vimt_gaussian_pyramid_builder_2d_general.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\vimt_add_all_binary_loaders.cxx
