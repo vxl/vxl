@@ -209,6 +209,9 @@ SOURCE=.\vil2_median.txx
 # Begin Source File
 SOURCE=.\vil2_normalised_correlation_2d.h
 # End Source File
+# Begin Source File
+SOURCE=.\vil2_exp_grad_filter_1d.h
+# End Source File
 # End Group
 # PROP Default_Filter "ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe"
 # End Group

@@ -22,6 +22,7 @@ SOURCE=.\test_vil1.cxx
 SOURCE=.\test_greyscale_dilate.cxx
 SOURCE=.\test_greyscale_erode.cxx
 SOURCE=.\test_median.cxx
+SOURCE=.\test_algo_exp_grad_filter_1d.cxx
 # End Group
 # Begin Group "Header Files"
 # End Group
