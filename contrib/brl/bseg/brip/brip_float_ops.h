@@ -19,6 +19,8 @@
 //
 //-----------------------------------------------------------------------------
 #include <vcl_vector.h>
+#include <vcl_complex.h>
+#include <vnl/vnl_matrix.h>
 #include <vbl/vbl_array_2d.h>
 #include <vil1/vil1_image.h>
 #include <vil1/vil1_memory_image_of.h>
@@ -62,6 +64,11 @@ class brip_float_ops
   static vil1_memory_image_of<float>
     difference(vil1_memory_image_of<float> const & image_1,
                vil1_memory_image_of<float> const & image_2);
+
+  //: sets absolute values greater than thresh to specified level
+  static vil1_memory_image_of<float>
+    abs_clip_to_level(vil1_memory_image_of<float> const & image,
+                      const float thresh, const float level = 0.0);
 
   //: The gradient using a 3x3 kernel
   static void gradient_3x3(vil1_memory_image_of<float> const & input,
@@ -146,9 +153,39 @@ class brip_float_ops
   static vbl_array_2d<float> load_kernel(vcl_string const & file);
 
   //:compute basis images for a set of input images
-  static
-    void basis_images(vcl_vector<vil1_memory_image_of<float> > const & input_images,
-                      vcl_vector<vil1_memory_image_of<float> > & basis);
+  static 
+    void basis_images(vcl_vector<vil1_memory_image_of<float> > const & input_images, vcl_vector<vil1_memory_image_of<float> > & basis);
+
+  //:compute the Fourier transform using the vnl FFT algorithm
+  static bool fourier_transform(vil1_memory_image_of<float> const & input, 
+                                vil1_memory_image_of<float>& mag,
+                                vil1_memory_image_of<float>& phase);
+
+  //:compute the inverse Fourier transform using the vnl FFT algorithm
+  static 
+    bool inverse_fourier_transform(vil1_memory_image_of<float> const& mag,
+                                   vil1_memory_image_of<float> const& phase,
+                                   vil1_memory_image_of<float>& output);
+
+  //:resize to specified dimensions, fill with zeros if output is larger
+  static 
+    void resize(vil1_memory_image_of<float> const & input, 
+                const int width, const int height,
+                vil1_memory_image_of<float>& output);
+
+
+  //:resize to closest power of two larger dimensions than the input 
+  static 
+    bool resize_to_power_of_two(vil1_memory_image_of<float> const & input, 
+                                vil1_memory_image_of<float>& output);
+
+  //:filter the input image with a Gaussian blocking filter
+  static bool 
+    spatial_frequency_filter(vil1_memory_image_of<float> const & input,
+                             const float dir_fx, const float dir_fy, 
+                             const float f0, const float radius,
+                             const bool output_fourier_mag,
+                             vil1_memory_image_of<float> & output);
  private:
 
   //: find if the center pixel of a neighborhood is the maximum value
@@ -164,6 +201,20 @@ class brip_float_ops
                                  const float k0, const float k1,
                                  const float k2, float* output);
 
+  //:One dimensional fft 
+  static bool fft_1d(int dir, int m, double* x, double* y);
+
+  //:Two dimensonal fft
+  static bool fft_2d(vnl_matrix<vcl_complex<double> >& c, int nx,int ny,int dir);
+  //: Transform the fft coefficients from/to fft/frequency order(self inverse).
+  static 
+    void ftt_fourier_2d_reorder(vnl_matrix<vcl_complex<double> > const& F1,
+                                vnl_matrix<vcl_complex<double> > & F2);
+  //: Blocking filter function
+  static float gaussian_blocking_filter(const float dir_fx,
+                                        const float dir_fy, 
+                                        const float f0, const float radius,
+                                        const float fx, const float fy);
   //: Default constructor is private
   brip_float_ops() {}
 };
