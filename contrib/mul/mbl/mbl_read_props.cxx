@@ -22,7 +22,7 @@ void mbl_read_props_print(vcl_ostream &afs, mbl_read_props_type props)
 }
 
 
-static void strip_tailing_ws(vcl_string &s)
+static void strip_trailing_ws(vcl_string &s)
 {
   int p=s.length()-1;
   while (p>0 && vcl_isspace(s[p])) --p;
@@ -96,7 +96,7 @@ mbl_read_props_type mbl_read_props(vcl_istream &afs)
           afs.putback('\n');
           str1 = mbl_parse_block(afs, true);
         }
-        strip_tailing_ws(str1);
+        strip_trailing_ws(str1);
         props[label] = str1;
         last_label = label;
       }
