@@ -1,0 +1,73 @@
+#include "bugl_curve_3d.h"
+#include <bbas/bugl/bugl_normal_point_3d_sptr.h>
+#include <bbas/bugl/bugl_normal_point_2d_sptr.h>
+#include <bugl/bugl_normal_point_2d.h>
+#include <bugl/bugl_normal_point_3d.h>
+#include <vcl_iostream.h>
+
+bugl_curve_3d::~bugl_curve_3d()
+{
+
+}
+
+bugl_curve_3d::bugl_curve_3d(const int n)
+{
+	num_neighbors_=n;
+}
+
+void bugl_curve_3d::add_point( vcl_vector<bugl_normal_point_3d_sptr > & seg)
+{
+  assert(seg.size() == 2*num_neighbors_ + 1);
+  data_.push_back(seg);
+	return;
+}
+
+bugl_normal_point_3d_sptr bugl_curve_3d::get_point(const int index) const
+{
+	return data_[index][num_neighbors_];
+}
+
+vcl_vector<bugl_normal_point_3d_sptr> bugl_curve_3d::get_neighbors(const int index) const
+{
+  return data_[index];
+}
+
+bugl_normal_point_3d_sptr bugl_curve_3d::get_neighbor(const int self, const int offset ) const
+{
+  assert(offset > -num_neighbors_ && offset < num_neighbors_);
+  return data_[self][num_neighbors_ + offset];
+}
+
+int bugl_curve_3d::add_curve(vcl_vector<bugl_normal_point_3d_sptr > & pts)
+{
+  int size = pts.size();
+  assert(size > 2*num_neighbors_ + 1);
+
+  vcl_vector<bugl_normal_point_3d_sptr> seg(2*num_neighbors_+1);
+  for(int i=0; i<size; i++){
+    seg[num_neighbors_] = pts[i]; // assign the middle point
+    for(int j=0; j<num_neighbors_; j++){
+      // assign the left neighbors
+      if(i-j >= 0)
+        seg[num_neighbors_-j] = pts[i-j];
+      else
+        seg[num_neighbors_-j] = 0;
+
+      // assign the right neighbors
+      if(i+j < size)
+        seg[num_neighbors_ + j] = pts[i+j];
+      else
+        seg[num_neighbors_ + j] = 0;
+    }//end neighbors
+
+    data_.push_back(seg);
+      
+  }//end of all the points
+
+  return 0;
+}
+
+int bugl_curve_3d::get_num_points() const
+{
+  return data_.size();
+}

@@ -14,6 +14,8 @@ SET(bugl_sources
     bugl_gaussian_point_3d.h     bugl_gaussian_point_3d.txx
     bugl_normal_point_3d.h
     bugl_normal_point_3d_sptr.h
+
+    bugl_curve_3d.h             bugl_curve_3d.cxx
 )
 
 AUX_SOURCE_DIRECTORY(Templates bugl_sources)
