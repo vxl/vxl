@@ -142,17 +142,17 @@ MANPAGE_SOURCES += sunpro/vcl_map.txx
 MANPAGE_SOURCES += sunpro/vcl_set.txx
 MANPAGE_SOURCES += sunpro/vcl_utility.txx
 MANPAGE_SOURCES += sunpro/vcl_vector.txx
-MANPAGE_SOURCES += win32/vcl_algorithm.txx
-MANPAGE_SOURCES += win32/vcl_complex.txx
-MANPAGE_SOURCES += win32/vcl_deque.txx
-MANPAGE_SOURCES += win32/vcl_functional.txx
-MANPAGE_SOURCES += win32/vcl_iterator.txx
-MANPAGE_SOURCES += win32/vcl_list.txx
-MANPAGE_SOURCES += win32/vcl_map.txx
-MANPAGE_SOURCES += win32/vcl_set.txx
-MANPAGE_SOURCES += win32/vcl_string.txx
-MANPAGE_SOURCES += win32/vcl_utility.txx
-MANPAGE_SOURCES += win32/vcl_vector.txx
+MANPAGE_SOURCES += win32-vc60/vcl_algorithm.txx
+MANPAGE_SOURCES += win32-vc60/vcl_complex.txx
+MANPAGE_SOURCES += win32-vc60/vcl_deque.txx
+MANPAGE_SOURCES += win32-vc60/vcl_functional.txx
+MANPAGE_SOURCES += win32-vc60/vcl_iterator.txx
+MANPAGE_SOURCES += win32-vc60/vcl_list.txx
+MANPAGE_SOURCES += win32-vc60/vcl_map.txx
+MANPAGE_SOURCES += win32-vc60/vcl_set.txx
+MANPAGE_SOURCES += win32-vc60/vcl_string.txx
+MANPAGE_SOURCES += win32-vc60/vcl_utility.txx
+MANPAGE_SOURCES += win32-vc60/vcl_vector.txx
 
 #######################################
 include ${IUEROOT}/config/top-params.mk
@@ -304,12 +304,14 @@ MANPAGE_SOURCES += sunpro/vcl_cmath.h
 MANPAGE_SOURCES += sunpro/vcl_complex_fwd.h
 MANPAGE_SOURCES += sunpro/vcl_cstdlib.h
 MANPAGE_SOURCES += sunpro/vcl_stack.txx
-MANPAGE_SOURCES += win32/vcl_cmath.h
-MANPAGE_SOURCES += win32/vcl_complex_fwd.h
-MANPAGE_SOURCES += win32/vcl_cstdio.h
-MANPAGE_SOURCES += win32/vcl_cstdlib.h
-MANPAGE_SOURCES += win32/vcl_cstring.h
-MANPAGE_SOURCES += win32/vcl_ctime.h
+MANPAGE_SOURCES += win32-vc60/vcl_cmath.h
+MANPAGE_SOURCES += win32-vc60/vcl_complex_fwd.h
+MANPAGE_SOURCES += win32-vc60/vcl_cstdio.h
+MANPAGE_SOURCES += win32-vc60/vcl_cstdlib.h
+MANPAGE_SOURCES += win32-vc60/vcl_cstring.h
+MANPAGE_SOURCES += win32-vc60/vcl_ctime.h
+MANPAGE_SOURCES += win32-vc70/vcl_cmath.h
+MANPAGE_SOURCES += win32-vc70/vcl_cstdlib.h
 
 DEFINES += -DBUILDING_VCL_DLL
 
