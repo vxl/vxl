@@ -8,15 +8,14 @@
 
 #include <vcl_string.h>
 #include <windows.h>
-#include "vfw.h"
-#include "vimt/vimt_image_2d_of.h"
-#include "mvl2/mvl2_video_reader.h"
+#include <vfw.h>
+#include <vimt/vimt_image_2d_of.h>
+#include <mvl2/mvl2_video_reader.h>
 
 //: A class to get video input from avi file
 class mvl2_video_from_avi: public mvl2_video_reader
 {
-
-public:
+ public:
 
     //: Dflt ctor
   mvl2_video_from_avi();
@@ -26,7 +25,7 @@ public:
  
     //: Initialize the file (format can by Grey, RGB, or more complex)
   virtual bool initialize( int width, int height, 
-      vcl_string format, vcl_string file_name);
+                           vcl_string format, vcl_string file_name);
  
     //: Tidy up
   virtual void uninitialize();
@@ -61,13 +60,12 @@ public:
     //: Create a copy on the heap and return base class pointer
   virtual mvl2_video_reader* clone() const;
 
-private:
+ private:
 
 // Windows specific handle to stream
     PAVISTREAM ppavi_;
 // Windows specific format handling
    void getVideoFormat(BITMAPINFO& bmp_info); 
-
 };
 
 #endif // mvl2_video_from_avi_linux_h_

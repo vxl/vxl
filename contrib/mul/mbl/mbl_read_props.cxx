@@ -1,7 +1,7 @@
 // This is mul/mbl/mbl_read_props.cxx
-#include "mbl/mbl_read_props.h"
+#include "mbl_read_props.h"
 //:
-//  \file
+// \file
 
 #include <vsl/vsl_indent.h>
 #include <vcl_string.h>

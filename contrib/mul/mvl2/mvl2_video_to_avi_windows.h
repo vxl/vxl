@@ -1,21 +1,18 @@
 #ifndef mvl2_video_to_avi_windows_h_
 #define mvl2_video_to_avi_windows_h_
-
 //:
 // \file
 // \brief A class for writing videos
 // \author Franck Bettinger
 
-#include "mvl2/mvl2_video_writer.h"
-
-#include "vimt/vimt_transform_2d.h"
+#include <mvl2/mvl2_video_writer.h>
+#include <vimt/vimt_transform_2d.h>
 
 
 //: A class for writing videos
 class mvl2_video_to_avi: public mvl2_video_writer
 {
-
-public:
+ public:
 
     //: Dflt ctor
   mvl2_video_to_avi();
@@ -28,7 +25,7 @@ public:
  
     //: Initialize the file (format can be Grey, RGB, or more complex)
   bool  open( int width, int height, 
-      vcl_string format, vcl_string file_name);
+              vcl_string format, vcl_string file_name);
  
     //: Tidy up and close the file
   void  close();
@@ -59,10 +56,6 @@ public:
  
     //: Create a copy on the heap and return base class pointer
   mvl2_video_writer* clone() const;
- 
-protected:
-
- 
 };
  
 #endif // mvl2_video_to_avi_windows_h_

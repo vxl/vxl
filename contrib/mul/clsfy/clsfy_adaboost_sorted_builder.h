@@ -15,14 +15,12 @@
 // \endverbatim
 
 
-#include "clsfy/clsfy_builder_base.h"
+#include <clsfy/clsfy_builder_base.h>
 #include <vcl_vector.h>
 #include <vcl_string.h>
 #include <mbl/mbl_data_wrapper.h>
 #include <vnl/vnl_vector.h>
 
-//#include "clsfy_builder_1d.h"
-//#include "clsfy_classifier_base.h"
 class clsfy_builder_1d;
 class clsfy_classifier_base;
 
@@ -46,7 +44,7 @@ class clsfy_adaboost_sorted_builder : public clsfy_builder_base
   //: pointer to 1d builder used to build each weak classifier
   clsfy_builder_1d* weak_builder_;
 
-public:
+ public:
 
   // Dflt ctor
   clsfy_adaboost_sorted_builder();

@@ -80,18 +80,18 @@ class gevd_bufferxy;
 
 #include <vtol/vtol_vertex_2d_sptr.h>
 #include <vtol/vtol_edge_2d_sptr.h>
-#include "gevd/gevd_detector_params.h"
+#include <gevd/gevd_detector_params.h>
 
 class gevd_detector : public gevd_detector_params
 {
-public:
+ public:
   // So far, not all parameters are included in the constructor.  These seem to
   // be the most important in controlling performance - JLM
   //
   gevd_detector(gevd_detector_params& params);
   gevd_detector(vil_image, float smoothSigma = 1.0, float noiseSigma =2.0,
-           float contourFactor = 1.0, float junctionFactor = 1.5,
-           int minLength = 6, float maxGap = 2.23606, float minJump=1.0);
+                float contourFactor = 1.0, float junctionFactor = 1.5,
+                int minLength = 6, float maxGap = 2.23606, float minJump=1.0);
   ~gevd_detector();
 
   // External interfaces
@@ -126,12 +126,11 @@ public:
 
   void print(vcl_ostream &strm=vcl_cout) const;
 
-
-protected:
+ protected:
   void UnProtectLists();
   void ClearData(); // clear buffer
 
-protected:
+ protected:
   vil_image image;
 
   float noise; // noise estimation/threshold

@@ -1,4 +1,4 @@
-// This is mul/vil2/vil2_transpose.cxx
+// This is core/vil2/vil2_transpose.cxx
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
@@ -10,7 +10,6 @@
 
 #include "vil2_transpose.h"
 #include "vcl_cstring.h"
-#include "vil2/vil2_property.h"
 
 vil2_image_resource_sptr vil2_transpose(const vil2_image_resource_sptr &src)
 {
@@ -22,7 +21,7 @@ vil2_transpose_image_resource::vil2_transpose_image_resource(vil2_image_resource
 {
 }
 
-vil2_image_view_base_sptr vil2_transpose_image_resource::get_copy_view(unsigned i0, unsigned ni, 
+vil2_image_view_base_sptr vil2_transpose_image_resource::get_copy_view(unsigned i0, unsigned ni,
                                                                        unsigned j0, unsigned nj) const
 {
   vil2_image_view_base_sptr vs = src_->get_copy_view(j0, nj, i0, ni);
@@ -32,7 +31,7 @@ vil2_image_view_base_sptr vil2_transpose_image_resource::get_copy_view(unsigned 
   {
 #define macro( F, T ) \
   case F : \
-    return new vil2_image_view<T > (vil2_transpose(static_cast<const vil2_image_view<T >&>(*vs))); 
+    return new vil2_image_view<T > (vil2_transpose(static_cast<const vil2_image_view<T >&>(*vs)));
 
       macro(VIL2_PIXEL_FORMAT_BYTE, vxl_byte)
       macro(VIL2_PIXEL_FORMAT_SBYTE, vxl_sbyte)
