@@ -25,6 +25,10 @@ void test_complex() {
     a -= b;
     a *= b;
     a /= b;
+    vcl_cout << "a=" << a << vcl_endl;
+    vcl_cout << "b=" << b << vcl_endl;
+    vcl_cout << "c=" << c << vcl_endl;
+    vcl_cout << vcl_endl;
   }
 
   {
