@@ -317,17 +317,17 @@ SOURCE=.\Templates/vnl_determinant+long_double-.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=.\Templates/vnl_determinant+long_double_complex-.cxx
-
-# End Source File
-# Begin Source File
-
 SOURCE=.\Templates/vnl_determinant+vcl_complex+double--.cxx
 
 # End Source File
 # Begin Source File
 
 SOURCE=.\Templates/vnl_determinant+vcl_complex+float--.cxx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates/vnl_determinant+vcl_complex+long_double--.cxx
 
 # End Source File
 # Begin Source File
