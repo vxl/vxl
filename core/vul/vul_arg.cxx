@@ -136,8 +136,6 @@ vul_arg_base::vul_arg_base(char const* option, char const*helpstring):
 
 //: Construct an empty vul_arg_info_list.
 vul_arg_info_list::vul_arg_info_list(vul_arg_info_list::autonomy autonomy__):
-  nargs(0),
-  args(new vul_arg_base*[100]),
   help("-?"), // default help operator!
   verbose_(false),
   autonomy_(autonomy__)
@@ -151,14 +149,13 @@ void vul_arg_info_list::verbose(bool on)
 //: Destructor.
 vul_arg_info_list::~vul_arg_info_list()
 {
-  delete [] args;
 }
 
 //: Change the help operator (defaults to -?)
 void vul_arg_info_list::set_help_option(char const* str)
 {
   // check that the operator isn't already being used
-  for (int i=0; i<nargs; i++) {
+  for (int i=0; i<args.size(); i++) {
     if (vcl_strcmp(args[i]->option(),str) == 0) {
       vcl_cerr << "vul_arg_info_list: WARNING: requested help operator already assigned\n";
       return;
@@ -175,7 +172,7 @@ void vul_arg_info_list::add(vul_arg_base* argmt)
     vcl_cerr << "vul_arg_info_list: WARNING: '-" << help
              << "' option reserved and will be ignored\n";
   else
-    args[nargs++] = argmt;
+    args.push_back(argmt);
 }
 
 //: Append another list.  The other list is not copied, just pointed to.
@@ -183,7 +180,7 @@ void vul_arg_info_list::include(vul_arg_info_list& l)
 {
   assert(&l != this);
 
-  for(int i = 0; i < l.nargs; ++i)
+  for(int i = 0; i < l.args.size(); ++i)
     add(l.args[i]);
 }
 
@@ -197,7 +194,7 @@ void vul_arg_info_list::display_help( char const*progname)
     vcl_cerr << "Usage: aprog ";
 
   // Print "prog [-a int] string string"
-  for ( int i=0; i< nargs; i++) {
+  for ( int i=0; i< args.size(); i++) {
     if (args[i]->option()) {
       vcl_cerr << "[" << args[i]->option();
       if (vcl_strlen(args[i]->type_)> 0)
@@ -215,7 +212,7 @@ void vul_arg_info_list::display_help( char const*progname)
   int maxl_option  = 8; // Length of "REQUIRED"
   int maxl_type    = 0; // Length of "Type"
   //  int maxl_default = 0;
-  for (int i=0; i< nargs; i++)
+  for (int i=0; i< args.size(); i++)
     if (args[i]->help_) {
       if (args[i]->option()) {
         int l = vcl_strlen(args[i]->option());
@@ -233,7 +230,7 @@ void vul_arg_info_list::display_help( char const*progname)
 
   // Do required args first
   vul_printf(vcl_cerr, "REQUIRED:\n");
-  for (int i=0; i< nargs; i++)
+  for (int i=0; i< args.size(); i++)
     if (args[i]->help_)
       if (args[i]->option() == 0) {
         vul_printf(vcl_cerr, fmtbuf, "", args[i]->type_, args[i]->help_);
@@ -244,7 +241,7 @@ void vul_arg_info_list::display_help( char const*progname)
   // Then others
   vul_printf(vcl_cerr, "Optional:\n");
   vul_printf(vcl_cerr, fmtbuf, "Switch", "Type", "Help [default value]") << vcl_endl << vcl_endl;
-  for (int i=0; i< nargs; i++)
+  for (int i=0; i< args.size(); i++)
     if (args[i]->help_)
       if (args[i]->option() != 0) {
         vul_printf(vcl_cerr, fmtbuf, args[i]->option(), args[i]->type_, args[i]->help_);
@@ -256,19 +253,19 @@ void vul_arg_info_list::display_help( char const*progname)
 //  Remove all recognised arguments from the command line by modifying argc and argv.
 void vul_arg_info_list::parse(int& argc, char **& argv, bool warn_about_unrecognized_arguments)
 {
-  vcl_vector<bool> done_once(nargs, false);
+  vcl_vector<bool> done_once(args.size(), false);
 
   // 0. Check that there are no duplicate switches, O(n^2) as n is tiny.
-  for (int i = 0; i < nargs; ++i)
+  for (int i = 0; i < args.size(); ++i)
     if (args[i]->option_)
-      for (int j = i+1; j < nargs; ++j)
+      for (int j = i+1; j < args.size(); ++j)
         if (args[j]->option_)
           if (0==vcl_strcmp(args[i]->option_, args[j]->option_))
             vcl_cerr << "vul_arg_info_list: WARNING: repeated switch ["
                      << args[j]->option_ << "]\n";
 
   // 0a. Clear "set" flags on args
-  for (int i = 0; i < nargs; ++i)
+  for (int i = 0; i < args.size(); ++i)
     args[i]->set_ = false;
 
   // 1. Collect option arguments (i.e. ones with "-"),
@@ -279,7 +276,7 @@ void vul_arg_info_list::parse(int& argc, char **& argv, bool warn_about_unrecogn
   while (*my_argv) {
     char* argmt = *my_argv;
     bool eaten = false;
-    for (int i = 0; i < nargs; ++i)
+    for (int i = 0; i < args.size(); ++i)
       if (args[i]->option_) {
         if ( help == argmt ) { // look for the '-?' operator (i.e. HELP)
           display_help(argv[0]);
@@ -314,7 +311,7 @@ void vul_arg_info_list::parse(int& argc, char **& argv, bool warn_about_unrecogn
   // 2. Just take from the list to fill the non-option arguments
   my_argv = argv + 1;
   int num_satisfied = 0;
-  for (int i = 0; i < nargs; ++i)
+  for (int i = 0; i < args.size(); ++i)
     if (!args[i]->option_)
       if (*my_argv) {
         done_once[i] = true;
@@ -358,9 +355,11 @@ void vul_arg_info_list::parse(int& argc, char **& argv, bool warn_about_unrecogn
       }
 
   // 5. Some people like a chatty program.
-  if (false && verbose_) { //fsm: do not print outcome -- it looks like an error message.
+#if 0
+  //fsm: do not print outcome -- it looks like an error message.
+  if (verbose_) {
     // Print outcome
-    for (int i = 0; i < nargs; ++i)
+    for (int i = 0; i < args.size(); ++i)
       if (args[i]->option_) {
         vcl_cerr << "Switch " << args[i]->option_ << ": "
                  << (!done_once[i]? "not ":"") << "done, value [";
@@ -368,7 +367,7 @@ void vul_arg_info_list::parse(int& argc, char **& argv, bool warn_about_unrecogn
         vcl_cerr << "]\n";
       }
 
-    for (int i = 0; i < nargs; ++i)
+    for (int i = 0; i < args.size(); ++i)
       if (!args[i]->option_) {
         vcl_cerr << "Trailer: ";
         args[i]->print_value(vcl_cerr);
@@ -380,6 +379,7 @@ void vul_arg_info_list::parse(int& argc, char **& argv, bool warn_about_unrecogn
       vcl_cerr << " " << *av;
     vcl_cerr << "\n--------------\n";
   }
+#endif
 }
 
 

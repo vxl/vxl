@@ -17,6 +17,7 @@
 //   Feb.2002 - Peter Vanroose - brief doxygen comment placed on single line
 // \endverbatim
 
+#include <vcl_vector.h>
 #include <vcl_string.h>
 #include <vcl_list.h>
 #include <vcl_iostream.h>
@@ -179,14 +180,17 @@ public:
   void set_help_option(char const* str);
 
 public:
-  int nargs;
-  vul_arg_base** args;
+  vcl_vector<vul_arg_base*> args;
   vcl_string help;
 
   bool verbose_;
   autonomy autonomy_;
 
   void display_help( char const* progname= 0);
+
+private:
+  vul_arg_info_list(vul_arg_info_list const &) { }
+  void operator=(vul_arg_info_list const &) { }
 };
 
 #ifdef VCL_KAI
