@@ -83,7 +83,7 @@ public:
   vnl_matrix(unsigned r, unsigned c);                           // r rows, c cols.
   vnl_matrix(unsigned r, unsigned c, T const& v0);              // r rows, c cols, value v0.
   vnl_matrix(unsigned r, unsigned c, vnl_matrix_type t);        // r rows, c cols, special type
-  vnl_matrix(unsigned r, unsigned c, int n, T const values[]);	// use automatic arrays.
+  vnl_matrix(unsigned r, unsigned c, unsigned n, T const values[]);	// use automatic arrays.
   vnl_matrix(T const* data_block, unsigned r, unsigned c);      // fill row-wise.
   vnl_matrix(vnl_matrix<T> const&);                             // from another matrix.
   vnl_matrix(vnl_matrix<T> &that, vnl_tag_grab)
