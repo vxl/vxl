@@ -58,5 +58,16 @@ include ${IUEROOT}/config/top.mk
 ifneq (,$(strip $(wildcard $(HOME)/source_root0/tinker/fsm_pack)))
 INCDIRS += $(HOME)/source_root0/tinker
 DEFINES += -DHAS_FSM_PACK
-FLAGS_Templates/fsm_pack.cxx += $(optimize)
+FLAGS_Templates/fsm_svd+float-.cxx += $(optimize)
+FLAGS_Templates/fsm_svd+double-.cxx += $(optimize)
+FLAGS_Templates/fsm_svd+long_double-.cxx += $(optimize)
+FLAGS_Templates/fsm_svd+float_complex-.cxx += $(optimize)
+FLAGS_Templates/fsm_svd+double_complex-.cxx += $(optimize)
+FLAGS_Templates/fsm_svd+long_double_complex-.cxx += $(optimize)
+FLAGS_Templates/fsm_qr+float-.cxx += $(optimize)
+FLAGS_Templates/fsm_qr+double-.cxx += $(optimize)
+FLAGS_Templates/fsm_qr+long_double-.cxx += $(optimize)
+FLAGS_Templates/fsm_qr+float_complex-.cxx += $(optimize)
+FLAGS_Templates/fsm_qr+double_complex-.cxx += $(optimize)
+FLAGS_Templates/fsm_qr+long_double_complex-.cxx += $(optimize)
 endif
