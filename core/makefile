@@ -40,8 +40,8 @@ SUBDIRS += vsl
 # coordinate systems
 SUBDIRS += vcsl
 
-# digital geometry
-SUBDIRS += vdgl
+# digital geometry --- moved to gel (geoff)
+#SUBDIRS += vdgl
 
 #######################################
 include ${IUEROOT}/config/top-params.mk
