@@ -9,8 +9,6 @@
 //
 //-----------------------------------------------------------------------------
 
-#include <vcl_functional.h>
-#include <vcl_utility.h>
 #include "vgui_soview.h"
 
 #include <vcl_iostream.h>
