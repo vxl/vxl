@@ -80,10 +80,11 @@ vtol_chain::is_chain_superior(const vtol_chain &chain_superior) const
   bool result;
   vcl_list<vtol_chain_ref>::const_iterator i;
   
+
   for(i=_chain_superiors.begin();
       (i!=_chain_superiors.end())&&((*i).ptr()!=&chain_superior);
-      i++)
-    ;
+      i++);
+  
   result=i!=_chain_superiors.end();
 
   return result;
@@ -224,8 +225,10 @@ void vtol_chain::link_chain_superior(vtol_chain &chain_superior)
 void vtol_chain::unlink_chain_superior(vtol_chain &chain_superior)
 {
   //require
+    
+  
   assert(valid_chain_type(chain_superior));
-  assert(is_superior(chain_superior));
+  assert(is_chain_superior(chain_superior));
 
   vcl_list<vtol_chain_ref>::iterator i;
 
@@ -287,7 +290,7 @@ int vtol_chain::dir(int i) const
 void vtol_chain::clear(void)
 {
   _directions.clear();
-  unlink_all_inferiors();
+  unlink_all_chain_inferiors();
 }
 
 //#include <vcl_rel_ops.h> // gcc 2.7

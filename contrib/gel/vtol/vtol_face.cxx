@@ -296,30 +296,39 @@ void vtol_face::add_one_chain(vtol_one_chain &new_vtol_one_chain)
 
 bool vtol_face::operator==(const vtol_face &other) const
 {
-  if (this==&other) return true;
 
+  if (this==&other) return true;
+  
+  
   if(!compare_geometry(other)){
     return false;
   }
   
+
   //if ( (_surface.ptr()&&other._surface.ptr()==0)
   //   ||(other._surface.ptr()&&_surface.ptr()!=0))
   //  return false;
   //if(_surface.ptr() && *_surface!=*(other._surface))
   //  return false;
 
+
   if (numinf()!=other.numinf())
     return false;
+
 
   topology_list::const_iterator ti1;
   topology_list::const_iterator ti2;
 
+
   for(ti1=_inferiors.begin(),ti2=other._inferiors.begin();
       ti1!=_inferiors.end();
       ++ti1,++ti2)
-    if ((*ti1)!=(*ti2))
-      return false;
-
+    {
+      if (!(*(*ti1)== *(*ti2))){
+	return false;
+      }
+    }
+  
   return true;
 }
 

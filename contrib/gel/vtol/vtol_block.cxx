@@ -35,8 +35,11 @@ vtol_block::vtol_block(vtol_two_chain &faceloop)
 vtol_block::vtol_block(two_chain_list &faceloops)
 {
   int i;
-  if(faceloops.size()>0)
-    link_inferior(*((vtol_topology_object *)faceloops[0].ptr()));
+  if(faceloops.size()>0){
+    vtol_two_chain_ref tc = *((faceloops).begin());
+
+    link_inferior(*tc);
+  }
 
   vtol_two_chain *twoch=get_boundary_cycle();
   
@@ -50,8 +53,9 @@ vtol_block::vtol_block(two_chain_list &faceloops)
 //---------------------------------------------------------------------------
 vtol_block::vtol_block(face_list &new_face_list) 
 {
-  // tagged_union((vcl_vector<vsol_spatial_object_3d *> *)&new_face_list);
-  link_inferior(*(new vtol_two_chain(new_face_list)));
+  vtol_two_chain_ref tc = new vtol_two_chain(new_face_list);
+
+  link_inferior(*(tc));
 }
 
 //---------------------------------------------------------------------------
@@ -71,9 +75,10 @@ vtol_block::vtol_block(const vtol_block &other)
   for(vi=verts->begin();vi!=verts->end();++vi,++i)
     {
       vtol_vertex_ref v= *vi;
-      newverts[i]=v->clone().ptr()->cast_to_topology_object();
+      newverts[i]=v->clone()->cast_to_topology_object();
       v->set_id(i);
     }
+
   int j=0;
   vcl_vector<vtol_edge_ref>::iterator ei;
   for(ei=edgs->begin();ei!=edgs->end();++ei,++j)
@@ -83,21 +88,26 @@ vtol_block::vtol_block(const vtol_block &other)
       newedges[j]=newverts[e->v1()->get_id()]->cast_to_vertex()->new_edge(
 				*(newverts[e->v2()->get_id()]->cast_to_vertex()));
 	
-      //newedges[j]=new vtol_edge(*(newverts[e->v1()->get_id()]->cast_to_vertex()),
-      //                             *(newverts[e->v2()->get_id()]->cast_to_vertex()));
       e->set_id(j);
     }
 
-  vcl_vector<vtol_two_chain_ref> *old2chains=oldblock->two_chains();
+  const topology_list *old2chains = oldblock->inferiors();
+  topology_list::const_iterator tci;
+  
 
-  for(int k=0;k<old2chains->size();++k)
+  for(tci=old2chains->begin();tci != old2chains->end();tci++)
     {
-      vtol_two_chain_ref new2ch=((*old2chains)[k])->copy_with_arrays(newverts,newedges);
+      
+
+      vtol_two_chain_ref new2ch=(*tci)->cast_to_two_chain()->copy_with_arrays(newverts,newedges);
+      
+      assert(*new2ch == *(*tci));
+      
       link_inferior(*new2ch);
     }
   delete edgs;
   delete verts;
-  delete old2chains;
+
 }
 
 //---------------------------------------------------------------------------
@@ -379,30 +389,40 @@ vcl_vector<vtol_block *> *vtol_block::compute_blocks(void)
 
 bool vtol_block::operator==(const vtol_block &other) const
 {
+ 
   vtol_two_chain *twoch1;
   vtol_two_chain *twoch2;
   topology_list::const_iterator bi1;
   topology_list::const_iterator bi2;
   
+
   if(this==&other)
     return true;
   
+
   if(numinf()!=other.numinf())
     return false;
   else
     {
-      other._inferiors.begin();
+     
       for(bi1=_inferiors.begin(),bi2=other._inferiors.begin();
           bi1!=_inferiors.end();
           ++bi1,++bi2)
         {
+
+	  
+
           twoch1=(*bi1)->cast_to_two_chain();
           
 	  twoch2=(*bi2)->cast_to_two_chain();
-	  if(!(*twoch1==*twoch2))
+
+	  if(!(*twoch1 == *twoch2))
 	    return false;
+
 	}
     }
+
+
   return true;
 }
 

@@ -81,11 +81,7 @@ public:
   //---------------------------------------------------------------------------
   explicit vtol_face_2d(vsol_region_2d &facesurf);
 
-  //---------------------------------------------------------------------------
-  //: Constructor
-  //---------------------------------------------------------------------------
-  explicit vtol_face_2d(edge_list &edges);//for faces with interior holes
-
+ 
   //---------------------------------------------------------------------------
   //: Copy constructor
   //---------------------------------------------------------------------------
@@ -107,9 +103,6 @@ public:
   virtual vsol_region_2d_ref surface(void) const;
   virtual void set_surface(vsol_region_2d *const newsurf);
 
-  virtual vtol_face *
-  copy_with_arrays(vcl_vector<vtol_topology_object_ref> &verts,
-                   vcl_vector<vtol_topology_object_ref> &edges) const;
 
  
   //***************************************************************************
@@ -136,8 +129,6 @@ public:
   //---------------------------------------------------------------------------
   virtual vtol_face *shallow_copy_with_no_links(void) const;
 
-  virtual void compute_bounding_box(void); //A local implementation
-
   virtual bool operator==(const vtol_face_2d &other)const;
   bool operator==(const vsol_spatial_object_3d& obj) const; // virtual of vsol_spatial_object_2d
 
@@ -149,6 +140,15 @@ public:
   //: provide a mechanism to compare geometry 
 
   virtual bool compare_geometry(const vtol_face &other) const;
+
+  
+  //: this should not called by a client
+
+  virtual vtol_face *
+  copy_with_arrays(vcl_vector<vtol_topology_object_ref> &verts,
+                   vcl_vector<vtol_topology_object_ref> &edges) const;
+  
+
 
 private:
   vsol_region_2d_ref _surface;

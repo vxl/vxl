@@ -7,6 +7,8 @@
 #include <vtol/vtol_list_functions.h>
 #include <vsol/vsol_box_3d_ref.h>
 
+
+
 vtol_edge *vtol_one_chain::edge(int i) const
 {
   return (vtol_edge *)(_inferiors[i].ptr());
@@ -153,6 +155,9 @@ vtol_one_chain::copy_with_arrays(vcl_vector<vtol_topology_object_ref> &verts,
     {
       vtol_edge *e=(*ti)->cast_to_edge();
       vtol_edge *newedge=edges[e->get_id()]->cast_to_edge();
+
+      assert(*e == *newedge);
+
       result->link_inferior(*newedge);
       result->_directions.push_back((*di));
     }
@@ -165,6 +170,9 @@ vtol_one_chain::copy_with_arrays(vcl_vector<vtol_topology_object_ref> &verts,
       vtol_one_chain *oldone=(vtol_one_chain *)((*hi)->clone().ptr());
       result->link_chain_inferior(*(oldone->copy_with_arrays(verts,edges)));
     }
+  
+  assert(*result == *this);
+
   return result;
 }
 
@@ -780,6 +788,7 @@ bool vtol_one_chain::operator==(vtol_one_chain const &other) const
 
   result=this==&other;
 
+
   if(!result)
     {
       // Check to see if the number of vertices is the same
@@ -792,17 +801,23 @@ bool vtol_one_chain::operator==(vtol_one_chain const &other) const
           topology_list::const_iterator i1;
           topology_list::const_iterator i2;
           
+	 
+
           for(i1=inf1->begin() , i2 = inf2->begin(); i1 != inf1->end(); ++i1 , ++i2){
-            if (!( *(*i1) == *(*i2) ))
+            if (!( *(*i1) == *(*i2) )){
+	      
               return false;
-            
+	    }
+	      
             // Comparing the _directions
             const vcl_vector<signed char> *dir1=directions();
             const vcl_vector<signed char> *dir2=other.directions();
             
             if ((dir1->size()!=dir2->size())||(_is_cycle!=other.is_cycle()))
               return false;
-        
+	    
+	   
+
             vcl_vector<signed char>::const_iterator d1;
             vcl_vector<signed char>::const_iterator d2;
             
@@ -810,19 +825,26 @@ bool vtol_one_chain::operator==(vtol_one_chain const &other) const
               if (!(*d1 == *d2))
             return false;
             
+	    
+
             // compare onechains that make up any holes
             const chain_list &righth=_chain_inferiors;
             const chain_list &lefth=other._chain_inferiors;
             if(righth.size() != lefth.size())
               return false;
-            
+
+	    
+
             chain_list::const_iterator r;
             chain_list::const_iterator l;
             
             for(r=righth.begin(), l=lefth.begin(); r!=righth.end(); ++r, ++l)
               if( !(*(*r) == *(*l)) ) // ( *(*r) != *(*l))
                 return false;
+	   
           }
+
+	 
 	  return true;
         }
       return false;
@@ -839,8 +861,6 @@ void vtol_one_chain::reverse_directions(void)
   // This function reverses the direction{
   // array in the list.
   
- 
-
   for(vcl_vector<signed char>::iterator di=_directions.begin(); 
       di !=_directions.end();++di)
       (*di) = - (*di);
@@ -856,10 +876,19 @@ void vtol_one_chain::reverse_directions(void)
   for(i=0;i<s;++i){
     inf_tmp[i]=_inferiors[s-1-i];
   }
-  
+
+ 
   _inferiors.clear();
-  vcl_copy(inf_tmp.begin(),inf_tmp.end(),_inferiors.begin());
+  //  vcl_copy(inf_tmp.begin(),inf_tmp.end(),_inferiors.begin());
+ 
+  topology_list::iterator ti;
+  for(ti=inf_tmp.begin();ti!=inf_tmp.end();ti++){
+    _inferiors.push_back(*ti);
+  }
+
   
+ 
+
 
   vcl_vector<signed char> dir_tmp(_directions.size());
   
@@ -872,13 +901,22 @@ void vtol_one_chain::reverse_directions(void)
   
   
   _directions.clear();
-  vcl_copy(dir_tmp.begin(),dir_tmp.end(),_directions.begin());
+  // vcl_copy(dir_tmp.begin(),dir_tmp.end(),_directions.begin());
+ 
+  vcl_vector<signed char>::iterator di;
+  for(di=dir_tmp.begin();di!=dir_tmp.end();di++){
+    _directions.push_back(*di);
+  }
+  
+
 
 
   chain_list::iterator hi;
 
-  for (hi=_chain_inferiors.begin();hi!=_chain_inferiors.end();++hi )
-    ((vtol_one_chain *)((*hi)->clone().ptr()))->reverse_directions();
+  for (hi=_chain_inferiors.begin();hi!=_chain_inferiors.end();++hi ){
+    (*hi)->cast_to_one_chain()->reverse_directions();
+  }
+   
 }
 
 // -- spatial object equality
@@ -935,7 +973,6 @@ void vtol_one_chain::describe(vcl_ostream &strm,
 
 void vtol_one_chain::deep_remove( vcl_vector< vtol_topology_object * > & removed )
 {
-  // cout << "            Entering vtol_one_chain::DeepDeleteInferiors\n";
 
   // Make a copy of the object's inferiors
   topology_list * tmp = get_inferiors();

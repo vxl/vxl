@@ -11,6 +11,8 @@
 #include <vtol/vtol_vertex.h>
 #include <vtol/vtol_block.h>
 #include <vtol/vtol_macros.h>
+#include <vcl_cassert.h>
+
 
 //***************************************************************************
 // Initialization
@@ -66,7 +68,7 @@ vtol_two_chain::vtol_two_chain(face_list &faces,
       if((*di)<0)
         (*fi)->reverse_normal();
       link_inferior(*(*fi));
-      _directions.push_back((signed char)1);
+      _directions.push_back(*di);
     }
   _is_cycle=new_is_cycle;
 }
@@ -92,6 +94,7 @@ vtol_two_chain::vtol_two_chain(vtol_two_chain const &other)
   chain_list::const_iterator hhi;
 
   fl=(vtol_two_chain *)(&other);
+
   edges=fl->edges();
   verts=fl->vertices();
   vlen=verts->size();
@@ -101,12 +104,18 @@ vtol_two_chain::vtol_two_chain(vtol_two_chain const &other)
   topology_list newverts(vlen);
 
   i=0;
+
+  // make a copy of the vertices 
+
   for(vi=verts->begin();vi!=verts->end();++vi,++i)
     {
       vtol_vertex_ref v = *vi;
-      newverts[i] = v->clone().ptr()->cast_to_topology_object();
+      newverts[i] = v->clone()->cast_to_topology_object();
       v->set_id(i);
     }
+
+  // make a copy of the edges 
+
   j=0;	
   for(ei=edges->begin();ei!= edges->end();++ei,++j)
     {
@@ -114,23 +123,33 @@ vtol_two_chain::vtol_two_chain(vtol_two_chain const &other)
       
       newedges[j]= newverts[e->v1()->get_id()]->cast_to_vertex()->new_edge(*(newverts[e->v2()->get_id()]->cast_to_vertex()));
 
-	// newedges[j]=new vtol_edge(*(newverts[e->v1()->get_id()]->cast_to_vertex()),
-        //                           *(newverts[e->v2()->get_id()]->cast_to_vertex()));
       e->set_id(j);
+
     }
 
   vcl_vector<signed char> &dirs=fl->_directions;
-  //  topology_list& infs = fl->_inferiors;
+
+
   vcl_vector<vtol_topology_object_ref> &infs=fl->_inferiors;
   
-  //  topology_list::iterator tti;
+
 
   for(ddi=dirs.begin(),tti= infs.begin();
       tti!=infs.end()&&ddi!=dirs.end();
       ++ddi,++tti)
     {
       f=(*tti)->cast_to_face();
-      link_inferior(*(f->copy_with_arrays(newverts,newedges)));
+      
+      vtol_face_ref new_f = f->copy_with_arrays(newverts,newedges);
+      cout << "f" << endl;
+      f->describe();
+      cout << "new f" << endl;
+      new_f->describe();
+
+      
+      assert(*new_f == *f);
+
+      link_inferior(*new_f);
       _directions.push_back((*ddi));
     }
 
@@ -740,14 +759,19 @@ vcl_vector<vtol_two_chain*>  *vtol_two_chain::outside_boundary_compute_two_chain
 
 bool vtol_two_chain::operator==(const vtol_two_chain &other) const
 {
-  if(this==&other) return true;
+   
+  if(this==&other){
+    return true;
+  }
+ 
 
   if(_inferiors.size()!=other._inferiors.size())
     return false;
-
+  
+   
   topology_list::const_iterator ti1,ti2;
   for(ti1=other._inferiors.begin(),ti2=_inferiors.begin();
-      ti2!=_inferiors.end()&&ti1!=other._inferiors.end();
+      ti2!=_inferiors.end() && ti1!=other._inferiors.end();
       ++ti1,++ti2)
     {
       vtol_face *f1=(*ti2)->cast_to_face();
@@ -755,18 +779,40 @@ bool vtol_two_chain::operator==(const vtol_two_chain &other) const
       if(!(*f1==*f2))
         return false;
     }
+  
+  // check out the directions
+  
+  
+
+  vcl_vector<signed char>::const_iterator d1;
+  vcl_vector<signed char>::const_iterator d2;
+  
+  const vcl_vector<signed char> *dir1=this->directions();
+  const vcl_vector<signed char> *dir2=other.directions();
+  
+  for(d1=dir1->begin(), d2=dir2->begin(); d1 != dir1->end(); ++d1, ++d2)
+    if (!(*d1 == *d2))
+      return false;
+  
+
+ 
+
   const chain_list &righth=_chain_inferiors;
   const chain_list &lefth=other._chain_inferiors;
   if(righth.size()!=lefth.size())
     return false;
-  
+
+ 
   chain_list::const_iterator hi1,hi2;
 
   for(hi1=righth.begin(),hi2=lefth.begin();
       hi1!=righth.end()&&hi2!=lefth.end();
       ++hi1,++hi2)
-    if( !(*(*hi1) == *(*hi2)) ) //(*(*hi1)!=*(*hi2))
+
+    if( !(*(*hi1) == *(*hi2)))
       return false;
+
+ 
   return true;
 }
 
@@ -789,17 +835,7 @@ bool vtol_two_chain::operator==(vsol_spatial_object_3d const& obj) const
 void vtol_two_chain::correct_chain_directions(void)
 {
   vcl_cerr << "vtol_two_chain::correct_chain_directions() not yet implemented\n";
-  // TO DO
-#if 0
-  vcl_vector<vtol_face*> *allfaces = this->faces();
- 
-	
-  for (vcl_vector<vtol_face*>::iterator fi=allfaces->begin();fi!= allfaces->end();++fi)
-    {
-      (*fi)->verify();
-    }
-  delete allfaces;
-#endif
+
 }
 
 //***************************************************************************

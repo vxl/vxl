@@ -123,6 +123,7 @@ vtol_face_2d::copy_with_arrays(vcl_vector<vtol_topology_object_ref> &verts,
   for(i=_inferiors.begin();i!=_inferiors.end();++i)
     {
       vtol_one_chain *onech=(*i)->cast_to_one_chain()->copy_with_arrays(verts,edges);
+      assert(*onech == *(*i));
       newface->link_inferior(*onech);
     }
   if(_surface)
@@ -332,24 +333,32 @@ bool vtol_face_2d::operator==(const vtol_face_2d &other) const
 {
   if (this==&other) return true;
 
-  if ( (_surface.ptr()&&other._surface.ptr()==0)
-     ||(other._surface.ptr()&&_surface.ptr()!=0))
+   
+  if ( (_surface.ptr() && other._surface.ptr()==0)
+     ||(other._surface.ptr() && _surface.ptr()==0))
     return false;
 
+ 
   if(_surface.ptr() && *_surface!=*(other._surface))
     return false;
-
+  
+   
   if (numinf()!=other.numinf())
     return false;
 
+ 
   topology_list::const_iterator ti1;
   topology_list::const_iterator ti2;
 
   for(ti1=_inferiors.begin(),ti2=other._inferiors.begin();
       ti1!=_inferiors.end();
       ++ti1,++ti2)
-    if ((*ti1)!=(*ti2))
-      return false;
+    {
+          
+      if (!(*(*ti1)== *(*ti2)))
+	return false;
+    }
+
 
   return true;
 }
@@ -363,32 +372,6 @@ bool vtol_face_2d::operator==(const vsol_spatial_object_3d& obj) const
    ((vtol_topology_object const&)obj).topology_type() == vtol_topology_object::FACE
   ? *this == (vtol_face_2d const&) (vtol_topology_object const&) obj
   : false;
-}
-
-
-void vtol_face_2d::compute_bounding_box()
-{
-  /* todo
-  if(_surface && _surface->GetGeometryType() != GeometryObject::IMPLICITPLANE)
-     {
-      // Get bounds from surface.
-      // But are bounds consistent with face vertices? -JLM
-      // Anyway, this is what was done in get_min_max on vtol_edge_2d.
-       if(_surface->GetExtent() == vsol_region_2d::FULLY_BOUNDED)
-         {
-           this->set_minX(_surface->GetMinX());
-           this->set_minY(_surface->GetMinY());
-           this->set_minZ(_surface->GetMinZ());
-
-           this->set_maxX(_surface->GetMaxX());
-           this->set_maxY(_surface->GetMaxY());
-           this->set_maxZ(_surface->GetMaxZ());
-         }
-     }
-  else  // Just use the generic method computing bounds from vertices
-    this->vtol_topology_object::ComputeBoundingBox();
-  */
-  vtol_topology_object::compute_bounding_box();
 }
 
 

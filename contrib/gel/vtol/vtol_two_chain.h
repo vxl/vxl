@@ -99,21 +99,14 @@ public:
   //---------------------------------------------------------------------------
   virtual vtol_topology_object_type topology_type(void) const;
 
-  //  vcl_vector<signed char>* dirs() {return &_directions;}
-
-  //  bool get_cycle_p() const { return _cycle_p;}
-  //  void set_cycle_p(bool val) { _cycle_p = val; }
-  //vcl_vector<signed char>* get_directions() {return &_directions;}
-  
   //: get the direction of the face 
 
-  signed char direction(const vtol_face &e) const;
+  signed char direction(const vtol_face &f) const;
 
   virtual vtol_face *face(int i)
   {
     return (vtol_face *)(_inferiors[i].ptr());
   }
-  //  vtol_face* get_face(int i) { return (vtol_face *)(_inferiors[i]);}
 
   //---------------------------------------------------------------------------
   //: Shallow copy with no links
@@ -203,11 +196,8 @@ public:
 
 
   virtual int num_faces(void) const { return numinf();}
-  //virtual void clear(void);
 
-  // virtual void Correctvtol_faceNormals(CoolVector<float> &pt, bool outer = true);
   virtual void correct_chain_directions(void);
-  // virtual vtol_face * FindClosestvtol_face(CoolVector<float> &);
 
   virtual bool operator==(const vtol_two_chain &other) const;
   bool operator==(const vsol_spatial_object_3d& obj) const; // virtual of vsol_spatial_object_3d

@@ -156,25 +156,20 @@ public:
   virtual vtol_one_chain *
   copy_with_arrays(vcl_vector<vtol_topology_object_ref> &verts,
                    vcl_vector<vtol_topology_object_ref> &edges) const;
-
+  
   virtual void compute_bounding_box(void); //A local implementation
-
+  
   virtual vtol_edge *edge(int i) const;
   virtual int num_edges(void) const
   {
     return numinf();
   }
 
-  //  virtual vtol_one_chain *copy() { return new vtol_one_chain(*this); }
-
   virtual void determine_edge_directions(void);
   virtual void add_edge(vtol_edge &, bool);
   virtual void remove_edge(vtol_edge &, bool);
   
   
-
-  //  virtual void deep_remove( vcl_vector< vtol_topology_object * > & removed );
-
   // Operators
   //: \brief Operators
 
