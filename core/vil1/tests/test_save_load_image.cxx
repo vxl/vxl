@@ -239,7 +239,7 @@ static bool create_colour_gif(const char* filename)
 #ifdef VCL_VC
 #pragma warning ( pop )
 #endif
-  vcl_ofstream f(filename, vcl_ios_binary);
+  vcl_ofstream f(filename, vcl_ios_out | vcl_ios_binary);
   if (!f) return false;
   f << "GIF87a";
   for (int i=0; i<7; ++i) f << a[i];
@@ -273,7 +273,7 @@ static bool create_grey_gif(const char* filename)
 #ifdef VCL_VC
 #pragma warning ( pop )
 #endif
-  vcl_ofstream f(filename, vcl_ios_binary);
+  vcl_ofstream f(filename, vcl_ios_out | vcl_ios_binary);
   if (!f) return false;
   f << "GIF87a";
   for (int i=0; i<7; ++i) f << a[i];
