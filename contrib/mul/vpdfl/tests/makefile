@@ -1,6 +1,6 @@
 USES += vxl mul
 USE_NETLIB := 1
-IULIBS := -lvpdfl -lmbl -lvnl-io -lvnl-algo -lvnl -lvsl
+IULIBS := -lvpdfl -lmbl -lvnl-io -lvnl-algo -lvnl -lvgl-io -lvgl -lvsl
 
 TESTS += test_vpdfl.cxx # includes test_gaussian.cxx test_axis_gaussian.cxx test_pc_gaussian.cxx
 
