@@ -79,26 +79,26 @@ void vvid_live_video_manager::init()
   vvid_live_video_tableau_sptr vtab;
   bgui_vtol2D_tableau_sptr vt2D;
 
-  for (unsigned cam=0; cam<num_cameras_; ++cam){
-    
-	vtab = vvid_live_video_tableau_new(cam, sample_, cmu_1394_camera_params());
-	vtabs_.push_back(vtab);
-	init_successful_ = init_successful_&&vtab->attach_live_video();
-	if (!init_successful_)
-	{
-	  vcl_cout << "In vvid_live_video_manager::init() - "
-		       << "bad initialization - camera #"<< cam << vcl_endl;
-	  return;
-	}
-	vt2D =  bgui_vtol2D_tableau_new(vtab);
-	vt2D->disable_highlight();
-	vt2Ds_.push_back(vt2D);
+  for (unsigned cam=0; cam<num_cameras_; ++cam)
+  {
+    vtab = vvid_live_video_tableau_new(cam, sample_, cmu_1394_camera_params());
+    vtabs_.push_back(vtab);
+    init_successful_ = init_successful_&&vtab->attach_live_video();
+    if (!init_successful_)
+    {
+      vcl_cout << "In vvid_live_video_manager::init() -"
+               << " bad initialization - camera #"<< cam << vcl_endl;
+      return;
+    }
+    vt2D =  bgui_vtol2D_tableau_new(vtab);
+    vt2D->disable_highlight();
+    vt2Ds_.push_back(vt2D);
 
-	// make a 2D viewer tableau and add it to the grid
-	vgui_viewer2D_tableau_sptr v2d = vgui_viewer2D_tableau_new(vt2D);
+    // make a 2D viewer tableau and add it to the grid
+    vgui_viewer2D_tableau_sptr v2d = vgui_viewer2D_tableau_new(vt2D);
     grid->add_at(v2d, cam, 0);
   }
- 
+
   // get the camera paramaters from the last camera (assume are are the same)
   cp_ = vtab->get_camera_params();
 
@@ -127,12 +127,11 @@ bool vvid_live_video_manager::handle(const vgui_event &e)
 //
 void vvid_live_video_manager::set_camera_params()
 {
-	
   vvid_live_video_tableau_sptr vtab = vtabs_.back();
   if (vtabs_.size() != num_cameras_ || !vtab)
   {
-    vcl_cout << "in vvid_live_video_manager::set_camera_params()"
-		     << "- no live video tableau" << vcl_endl;
+    vcl_cout << "in vvid_live_video_manager::set_camera_params() -"
+             << " no live video tableau\n";
     return;
   }
   cp_ = vtab->get_camera_params();
@@ -162,12 +161,12 @@ void vvid_live_video_manager::set_camera_params()
   if (!cam_dlg.ask())
     return;
 
-  // set the results to all video tableaus
+  // set the results to all video tableaux
   for (unsigned i=0; i<num_cameras_; ++i) {
-    if (choice) 
-	  vtabs_[i]->set_current(choice-1);
-	vtabs_[i]->set_pixel_sample_interval(pix_sample_interval);
-	vtabs_[i]->set_camera_params(cp_);
+    if (choice)
+      vtabs_[i]->set_current(choice-1);
+    vtabs_[i]->set_pixel_sample_interval(pix_sample_interval);
+    vtabs_[i]->set_camera_params(cp_);
   }
 
   vcl_cout << "Current Camera Parameters\n" << cp_ << '\n';
@@ -176,10 +175,11 @@ void vvid_live_video_manager::set_camera_params()
 void vvid_live_video_manager::set_detection_params()
 {
   if (vtabs_.size() != num_cameras_)
-    {
-      vcl_cout << "in vvid_live_video_manager::set_camera_params() - no live video tableau\n";
-      return;
-    }
+  {
+    vcl_cout << "in vvid_live_video_manager::set_camera_params()"
+             << " - no live video tableau\n";
+    return;
+  }
   //cache the live video state to restore
   bool live = vtabs_.back()->get_video_live();
   if (live)
@@ -238,10 +238,11 @@ void vvid_live_video_manager::init_capture()
   save_video_dlg.file("Video Filename:", ext, video_filename);
   if (!save_video_dlg.ask())
     return;
-  
-  for(unsigned i=0; i<num_cameras_; ++i){
+
+  for (unsigned i=0; i<num_cameras_; ++i)
+  {
     vcl_stringstream camera_subdir;
-	camera_subdir << "\\camera" << i << "\\" << vcl_ends;
+    camera_subdir << "/camera" << i << '/' << vcl_ends;
     vul_file::make_directory(video_filename+camera_subdir.str());
     vtabs_[i]->start_capture(video_filename+camera_subdir.str());
   }
@@ -250,20 +251,20 @@ void vvid_live_video_manager::init_capture()
 void vvid_live_video_manager::stop_capture()
 {
   this->stop_live_video();
-  for(unsigned i=0; i<num_cameras_; ++i){
+  for (unsigned i=0; i<num_cameras_; ++i)
     vtabs_[i]->stop_capture();
-  }
 }
 
 void vvid_live_video_manager::display_topology()
 {
-	
-  for(unsigned i=0; i<num_cameras_; ++i){
+  for (unsigned i=0; i<num_cameras_; ++i)
+  {
     vt2Ds_[i]->clear_all();
     vcl_vector<vtol_topology_object_sptr> const & seg = video_process_->get_output_topology();
 
     for (vcl_vector<vtol_topology_object_sptr>::const_iterator ti=seg.begin();
-	     ti != seg.end(); ti++){
+         ti != seg.end(); ti++)
+    {
       if (edges_)
       {
         vtol_edge_2d_sptr e=(*ti)->cast_to_edge()->cast_to_edge_2d();
@@ -276,7 +277,7 @@ void vvid_live_video_manager::display_topology()
         if (f)
           vt2Ds_[i]->add_face(f);
       }
-	}
+    }
   }
 }
 
@@ -291,7 +292,8 @@ void vvid_live_video_manager::run_frames()
     return;
   while (vtabs_.back()->get_video_live()) {
     vul_timer t;
-    for(unsigned i=0; i<num_cameras_; ++i){
+    for (unsigned i=0; i<num_cameras_; ++i)
+    {
       vtabs_[i]->update_frame();
 
       if (!cp_.rgb_&&video_process_)//i.e. grey scale
@@ -311,7 +313,7 @@ void vvid_live_video_manager::run_frames()
           }
       }
       vt2Ds_[i]->post_redraw();
-	}
+    }
     vgui::run_till_idle();
     float ft = float(t.real())/1000.0, rate=0;
     if (ft)
@@ -324,15 +326,14 @@ void vvid_live_video_manager::start_live_video()
 {
   if (!init_successful_ || vtabs_.size() != num_cameras_)
     return;
-  
-  for(unsigned i=0; i<num_cameras_; ++i){
+
+  for (unsigned i=0; i<num_cameras_; ++i)
     if (!vtabs_[i]->start_live_video())
     {
       vcl_cout << "In vvid_live_video_manager::start_live_video()"
-		       << "- start failed - camera #" << i << vcl_endl;
+               << "- start failed - camera #" << i << vcl_endl;
       return;
     }
-  }
   this->run_frames();
 }
 
@@ -340,11 +341,10 @@ void vvid_live_video_manager::stop_live_video()
 {
   if (!init_successful_)
     return;
-  
-  for(unsigned i=0; i<num_cameras_; ++i){
+
+  for (unsigned i=0; i<num_cameras_; ++i)
     if (vtabs_[i])
       vtabs_[i]->stop_live_video();
-  }
   if (video_process_)
     video_process_->finish();
 }
@@ -357,7 +357,7 @@ void vvid_live_video_manager::quit()
 
 bool vvid_live_video_manager::
 get_current_rgb_image(unsigned camera_index,
-					  int pix_sample_interval,
+                      int pix_sample_interval,
                       vil1_memory_image_of< vil1_rgb<unsigned char> >& im)
 {
   if (!init_successful_||!vtabs_[camera_index])
@@ -372,7 +372,7 @@ get_current_rgb_image(unsigned camera_index,
 
 bool vvid_live_video_manager::
 get_current_mono_image(unsigned camera_index,
-					   int pix_sample_interval,
+                       int pix_sample_interval,
                        vil1_memory_image_of<unsigned char>& im)
 {
   if (!init_successful_||!vtabs_[camera_index])

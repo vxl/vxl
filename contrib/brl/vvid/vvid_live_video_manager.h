@@ -68,11 +68,11 @@ class vvid_live_video_manager : public vgui_wrapper_tableau
 
   //: access to the current frames
   bool get_current_rgb_image(unsigned camera_index,
-	                         int pix_sample_interval,
+                             int pix_sample_interval,
                              vil1_memory_image_of< vil1_rgb<unsigned char> >& im);
 
   bool get_current_mono_image(unsigned camera_index,
-	                          int pix_sample_interval,
+                              int pix_sample_interval,
                               vil1_memory_image_of<unsigned char>& im);
 
   //: control of the process result window
