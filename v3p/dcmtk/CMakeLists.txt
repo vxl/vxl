@@ -116,6 +116,7 @@ ELSE( ${DCMTK_CONFIG_SERIAL_CURRENT} MATCHES "^${DCMTK_CONFIG_SERIAL_LAST}$" )
         DCMTK_INCLUDE_MATH_H_AS_CXX
         DCMTK_PATH_SEPARATOR
         DCMTK_SIZEOF_LONG
+        DCMTK_CMAKE_COMPILER_IS_GNUCXX_2XX
         HAVE_DCMTK_SIZEOF_LONG )  # Created indirectly by CHECK_TYPE_SIZE
     SET( ${VAR} ${VAR} )
   ENDFOREACH( VAR )
@@ -390,14 +391,27 @@ CONFIGURE_FILE(
 # There is no point in us fixing them locally. IMS
 #
 # Unfortunately, -Wno-unused-variable only applies to gcc 3.3; it is
-# not a valid gcc 2.94.3 option. We'll have to figure some other way
-# of supressing the warnings. AP
-#
-#IF(CMAKE_COMPILER_IS_GNUCXX)
-#  SET (CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wno-cast-qual -Wno-unused-variable")
-#  SET (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-cast-qual -Wno-unused-variable")
-#ENDIF(CMAKE_COMPILER_IS_GNUCXX)
+# not a valid gcc 2.94.3 option. AP
 
+IF ( DCMTK_CMAKE_COMPILER_IS_GNUCXX_2XX MATCHES "DCMTK_CMAKE_COMPILER_IS_GNUCXX_2XX")
+  IF ( CMAKE_COMPILER_IS_GNUCXX )
+    EXEC_PROGRAM(${CMAKE_CXX_COMPILER} ARGS --version OUTPUT_VARIABLE CMAKE_CXX_COMPILER_VERSION)
+    IF(CMAKE_CXX_COMPILER_VERSION MATCHES ".*2\\.9[0-9]\\.[0-9].*")
+      MESSAGE("gcc 2.x")
+      SET ( DCMTK_CMAKE_COMPILER_IS_GNUCXX_2XX 1 CACHE INTERNAL "Are we using an version of gcc < 3.0")
+    ELSE(CMAKE_CXX_COMPILER_VERSION MATCHES ".*2\\.9[0-9]\\.[0-9].*")
+      MESSAGE("gcc not 2.x")
+      SET ( DCMTK_CMAKE_COMPILER_IS_GNUCXX_2XX 0 CACHE INTERNAL "Are we using an version of gcc < 3.0")
+    ENDIF(CMAKE_CXX_COMPILER_VERSION MATCHES ".*2\\.9[0-9]\\.[0-9].*")
+  ENDIF ( CMAKE_COMPILER_IS_GNUCXX )
+ENDIF ( DCMTK_CMAKE_COMPILER_IS_GNUCXX_2XX MATCHES "DCMTK_CMAKE_COMPILER_IS_GNUCXX_2XX")
+
+IF ( CMAKE_COMPILER_IS_GNUCXX )
+  IF ( NOT DCMTK_CMAKE_COMPILER_IS_GNUCXX_2XX )
+    SET (CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wno-cast-qual -Wno-unused-variable")
+    SET (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-cast-qual -Wno-unused-variable")
+  ENDIF ( NOT DCMTK_CMAKE_COMPILER_IS_GNUCXX_2XX )
+ENDIF ( CMAKE_COMPILER_IS_GNUCXX )
 
 # ---------------------------------------------------------------------------
 # Source files
