@@ -71,8 +71,9 @@ class vgl_h_matrix_2d_optimize
 {
  public:
   vgl_h_matrix_2d_optimize(vgl_h_matrix_2d<double> const& initial_h) 
-    : initial_h_(initial_h),verbose_(false), trace_(false), ftol_(1e-9), gtol_(1e-9),
-    htol_(1e-9), max_iter_(2000){}
+    : verbose_(false), trace_(false), ftol_(1e-9), gtol_(1e-9),
+    htol_(1e-9), max_iter_(2000), initial_h_(initial_h){}
+
   virtual ~vgl_h_matrix_2d_optimize() {}
 
   //: set this to true for verbose run-time information
