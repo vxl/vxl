@@ -297,7 +297,7 @@ void osl_canny_rothwell::Non_maximal_suppression() {
 //:
 // Hysteresis follows edgel chains that lie above the low_ threshold and
 // have at least one edgel above the high_ threshold. Once we have followed,
-// the good edgelchains are re-writted to the thin_ image for further
+// the good edgelchains are re-written to the thin_ image for further
 // processing.
 //
 void osl_canny_rothwell::Initial_hysteresis() {
