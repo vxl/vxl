@@ -486,7 +486,8 @@ int main(int argc, char** argv)
   {
     vcl_vector<vgui_tableau_ref> viewers;
     vcl_vector<xcv_image_tableau_ref> images;
-    
+   
+    xcv_tab->set_grid_size_changeable(false); 
     for (int argcount=1; argcount<argc && strcmp(argv[argcount], "-d"); ++argcount)
     {
       xcv_image_tableau_new image (argv[argcount]);
@@ -500,6 +501,7 @@ int main(int argc, char** argv)
       images.push_back(image);
       viewers.push_back(view);
     }
+    xcv_tab->set_grid_size_changeable(false); 
 
     double viewer_scale;
     if (a_adaptive())
