@@ -53,7 +53,7 @@ set_params(const vifa_int_face_attr_common_params&  ifap)
 bool vifa_int_face_attr_common_params::SanityCheck()
 {
   vcl_stringstream  msg;
-  bool        valid = true;
+  bool valid;
 
   if (!fitter_params_.ptr() ||
       !gpp_s_.ptr() ||

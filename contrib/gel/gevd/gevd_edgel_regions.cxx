@@ -476,11 +476,10 @@ merge_equivalence(vcl_map<unsigned int, vcl_vector<unsigned int>* >& tab,
     {
     array = hashi->second;
     }
-  bool found = false;
   for (int i = 0; i<len; i++)
     {
     unsigned int l = (*labels)[i];
-    found = false;
+    bool found = false;
     for (unsigned int j=0 ; j < array->size() ; j++)
       {
       if ((*array)[j] == l) found = true;
@@ -546,10 +545,9 @@ void gevd_edgel_regions::GrowEquivalenceClasses()
       vcl_vector<unsigned int>* cur_set = NULL;
       unsigned int i = cur_label;
       int len = 0;
-      int old_len = 0;
       while (merging)
       {
-        old_len = len;
+        int old_len = len;
         merging = false;
         bool find_forward =
           this->merge_equivalence(region_pairs_forward_, cur_label, i);
@@ -871,7 +869,7 @@ bool gevd_edgel_regions::InitRegionArray(vcl_vector< vtol_edge_2d_sptr>& sg)
 //
 unsigned char gevd_edgel_regions::label_code(unsigned int label)
 {
-  unsigned char result = 0;
+  unsigned char result;
   if (label<min_region_label_)
     result = label;
   else
@@ -956,21 +954,21 @@ unsigned char
 gevd_edgel_regions::EncodeNeighborhood(unsigned int ul, unsigned int ur,
                                        unsigned int ll, unsigned int lr)
 {
-  unsigned char nhood = 0, nul = 0, nur = 0, nll = 0, nlr =0;
+  unsigned char nhood = 0;
 
-  nul = label_code(ul);
+  unsigned char nul = label_code(ul);
   nul = nul<<6;
   nhood |= nul;
 
-  nur = label_code(ur);
+  unsigned char nur = label_code(ur);
   nur = nur<<4;
   nhood |= nur;
 
-  nll = label_code(ll);
+  unsigned char nll = label_code(ll);
   nll = nll << 2;
   nhood |= nll;
 
-  nlr = label_code(lr);
+  unsigned char nlr = label_code(lr);
   nhood |= nlr;
 
   return nhood;
@@ -1307,7 +1305,6 @@ corrupt_boundary(vcl_vector<vtol_edge_2d_sptr>& edges,
 //  process.
 static bool embedded_T(vtol_vertex_sptr v, vtol_edge_2d_sptr bar, vcl_vector<vtol_edge_2d_sptr>& real_edges)
 {
-  bool embedded = true;
   vcl_vector<vtol_edge_sptr>* edges = v->edges();
   int tedges = 0;
   vcl_vector<vtol_edge_sptr>::iterator eit;
@@ -1330,7 +1327,7 @@ static bool embedded_T(vtol_vertex_sptr v, vtol_edge_2d_sptr bar, vcl_vector<vto
         }
     }
   delete edges;
-  embedded = (tedges>=3);
+  bool embedded = (tedges>=3);
   return embedded;
 }
 //--------------------------------------------------------------------
@@ -1971,7 +1968,7 @@ unsigned short gevd_edgel_regions::get_intensity(unsigned int x)
 void gevd_edgel_regions::AccumulateMeans()
 {
   vul_timer t;
-  unsigned int i =0;
+  unsigned int i;
   //Initialize the intensity face means
   for (i=min_region_label_; i<max_region_label_; i++)
     if (intensity_face_index_[i])

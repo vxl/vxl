@@ -283,7 +283,7 @@ find_collinear_lines()
 //  vcl_cout << vcl_endl;
 
   // remove lines whose support is too low
-  int  unwind_count = 0;
+  // int  unwind_count = 0;
   for (coll_iterator c = unfiltered_lines.begin();
       c != unfiltered_lines.end(); ++c)
   {
@@ -317,7 +317,7 @@ find_collinear_lines()
         col_span_.add_sample(span);
         col_support_.add_sample(support);
         col_contrib_.add_sample(cl->get_contributors().size());
-        unwind_count++;
+        // unwind_count++;
       }
     }
   }

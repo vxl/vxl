@@ -290,7 +290,7 @@ void vsrl_dynamic_program::compute_cost(int i, int j)
 
     // the number of null assignments in a row
 
-    double num_null1=0;
+    double num_null1;
 
     // now compute the prior cost;
 

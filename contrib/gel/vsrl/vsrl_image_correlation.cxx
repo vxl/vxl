@@ -528,7 +528,7 @@ double vsrl_image_correlation::get_sub_pixel_delta(int x1,int y1, int delta_x)
   double a = 0.5*Y1 -Y2 + 0.5 *Y3;
   double b = 0.5*Y3 - 0.5*Y1;
 
-  double x_hat=0;
+  double x_hat;
   if (a>=0)
   {
     // this is a straight line or a minumum has

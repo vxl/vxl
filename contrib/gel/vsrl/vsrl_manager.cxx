@@ -1094,7 +1094,6 @@ void vsrl_manager::raw_correlation()
   for (int y=0; y<imgL_.rows(); y++) {
     vcl_cout << "Row: " << y << vcl_endl;
     for (int x=0; x<imgL_.cols(); x++) {
-      float result=0.f;
       float max=-1e10f;
       // when the disparities are written to the buffer, they are offset by "range"
       // to keep them positive.
@@ -1102,7 +1101,7 @@ void vsrl_manager::raw_correlation()
       for (int i=-range; i<=range;i++) {
         // get the values of the correlation of the pixel in the left
         // image with several pixels in the right image.
-        result = i_corr.get_correlation(x,y,x+i,y);
+        float result = i_corr.get_correlation(x,y,x+i,y);
         if (result > max) {
           max = result; // if we get a new peak, update the max value...
           disp(x,y) = i+range; // ...and put the new disparity in the disparity buffer

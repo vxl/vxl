@@ -268,7 +268,7 @@ double vmal_track_lines::dist(vtol_edge_2d_sptr trans_line,vtol_edge_2d_sptr fit
   vnl_double_2 vect_fl(vect_flx,vect_fly);
   vect_fl=vect_fl.normalize();
 
-  double dist=0;
+  double dist;
   double distover;
 
   double x1,y1;

@@ -865,7 +865,7 @@ float vifa_histogram::GetMaxVal()
 
 float vifa_histogram::GetMaxCount()
 {
-  register int i=0;
+  register int i;
   float max = 0.0f;
 
   for (i=0; i < num; i++)

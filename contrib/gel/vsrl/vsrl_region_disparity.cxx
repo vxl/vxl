@@ -58,7 +58,7 @@ void vsrl_region_disparity::SetRegions(vcl_vector<vdgl_digital_region*>* regs)
 
 bool vsrl_region_disparity::Execute()
 {
-  bool result = false;
+  bool result;
   switch (region_type_)
     {
     case INTENSITY_FACE:

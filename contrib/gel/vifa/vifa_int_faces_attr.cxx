@@ -571,7 +571,7 @@ GetPerimeterEdges()
     delete edges;
   }
 
-  int  total_count = 0;
+  // int total_count = 0;
   int  unique_count = 0;
   for (iface_iterator f = faces_.begin(); f != faces_.end(); ++f)
   {
@@ -581,7 +581,7 @@ GetPerimeterEdges()
       vtol_edge_sptr  e = *ei;
       int        count;
 
-      total_count++;
+      // total_count++;
       edge_count_pos = edge_count.find(e->get_id());
       if (edge_count_pos == edge_count.end())
       {

@@ -62,8 +62,8 @@ InsertLine(imp_line_sptr  l)
   double  te = line_->find_t(ep);
 
   // Get properly ordered and limited parameter bounds
-  int ist = 0;
-  int  iend = 0;
+  int ist;
+  int iend;
   if (ts < te)
   {
     if (ts < 0)

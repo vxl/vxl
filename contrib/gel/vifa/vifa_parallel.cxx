@@ -194,7 +194,6 @@ map_gaussian(float&  max_angle,
 {
   bool    set_min_res_flag = true;
 
-  float    local_std_dev = 0.0;  // degrees
   const float  incr = 3.0;  // put me in the params!
   float    max_value;
   float    local_max_angle = find_peak(max_value);
@@ -211,7 +210,7 @@ map_gaussian(float&  max_angle,
     for (float j=-(n_sigma+1); j<=(n_sigma+1); j++)
     {
       float  new_center = map_x(local_max_angle + (j * incr));
-      local_std_dev = 0.0;
+      float local_std_dev = 0.0;  // degrees
 
       for (int i = 0; i < 5; i++)
       {
@@ -227,7 +226,7 @@ map_gaussian(float&  max_angle,
         vul_sprintf(buf, "gauss-%d-%d-%d.dat", pass, (int)j, i);
         vcl_ofstream  gdump(buf);
 #endif
-        int    sample_count = 0;
+        // int    sample_count = 0;
         float  sample_sum = 0.0;
 
         for (float  dx = (-n_sigma * local_std_dev);
@@ -252,7 +251,7 @@ map_gaussian(float&  max_angle,
           if (e != 0.0)
           {
             sample_sum += ((diff * diff) / e);
-            sample_count++;
+            // sample_count++;
           }
         }
 
@@ -347,8 +346,6 @@ bin_variance(void)
   int    res = norm_h_->GetRes();
   float  sum = 0;
   float  sum2 = 0;
-  float  mean = 0;
-  float  var = 0;
 
   for (int i = 0; i < res; i++)
   {
@@ -356,8 +353,8 @@ bin_variance(void)
     sum2 += (counts[i] * counts[i]);
   }
 
-  mean = sum / res;
-  var = (sum2 / res) - (mean * mean);
+  float mean = sum / res;
+  float var = (sum2 / res) - (mean * mean);
 
   return var;
 }

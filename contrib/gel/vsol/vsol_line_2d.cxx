@@ -194,7 +194,7 @@ double vsol_line_2d::tangent_angle(void) const
   double dy = p1_->y()-p0_->y();
   double dx = p1_->x()-p0_->x();
 
-  double ang = -1;
+  double ang;
   // do special cases separately, to avoid rounding errors:
   if      (dx == 0)  ang = dy<0 ? 270.0 : 90.0; // vertical line
   else if (dy == 0)  ang = dx<0 ? 180.0 :  0.0; // horizontal line
