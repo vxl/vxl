@@ -113,8 +113,6 @@ vil_image_resource_sptr vil_nitf_file_format::make_input_image(vil_stream* is)
 {
   static vcl_string method_name = "vil_nitf_file_format::make_input_image: ";
 
-  vcl_cout << "\n#### enter " << method_name << vcl_endl;
-
   io_stream_ = is;
   vil_image_resource_sptr nitf_image_resource = 0;
 
@@ -271,10 +269,9 @@ vil_nitf_image::vil_nitf_image(vil_stream* is,
 
   this->set_image_data();
 
-  vcl_cout << method_name << "before check_image_data_offset size = ("
-           << ni_ << ", " << nj_ << ")\n";
-
-  check_image_data_offset(vcl_cout, "constructor");
+  if (debug_level > 0) {
+      check_image_data_offset(vcl_cout, "constructor");
+  }
 
 }  // end constructor
 
@@ -346,8 +343,10 @@ StatusCode vil_nitf_image::set_image_data()
   bits_per_component_ = image_subheader->ABPP;
 
   unsigned temp_uival = image_subheader->ABPP * image_subheader->NBANDS;
-  vcl_cout << method_name << "NBPP = " << image_subheader->NBPP
-           << "  (ABPP * NBANDS) = " << temp_uival << vcl_endl;
+  if (debug_level > 1) {
+      vcl_cout << method_name << "NBPP = " << image_subheader->NBPP
+               << "  (ABPP * NBANDS) = " << temp_uival << vcl_endl;
+  }
 
   // PUT OUT WARNING FOR NOW BECAUSE VIL DOES NOT DEAL WELL WITH CASE WHERE
   // ACTUAL BITS < STORED BITS.
@@ -987,8 +986,6 @@ vil_memory_chunk_sptr vil_nitf_image::read_single_band_data(
            << vcl_endl;
 #endif
 
-  vcl_cout << "##### exit " << method_name << vcl_endl;
-
   return buffer;
 
 }  // end method read_single_band_data
@@ -1446,12 +1443,14 @@ int vil_nitf_image::check_image_data_offset (vcl_ostream& out, vcl_string caller
 	     << vcl_endl ;
   }
   else {
-    out << method_name ;
-    if (caller.length() > 0) {
-      out << " from " << caller << ": " ;
+    if (debug_level > 1) {
+        out << method_name ;
+        if (caller.length() > 0) {
+          out << " from " << caller << ": " ;
+        }
+        out << "file position and calculated header offset agree = "
+	    << get_image_data_offset() << vcl_endl;
     }
-    out << "file position and calculated header offset agree = "
-	<< get_image_data_offset() << vcl_endl;
   }
 
   return diff;
