@@ -1626,7 +1626,7 @@ void gpc_polygon_clip(gpc_op op, gpc_polygon *subj, gpc_polygon *clip,
   FREE(sbt);
 }
 
-#if 0 // These functions are not used in vgl_clip
+#if 0 /* These functions are not used in vgl_clip */
 
 void gpc_read_polygon(FILE *fp, int read_hole_flags, gpc_polygon *p)
 {
@@ -2455,7 +2455,7 @@ void gpc_tristrip_clip(gpc_op op, gpc_polygon *subj, gpc_polygon *clip,
   FREE(sbt);
 }
 
-#endif // 0
+#endif /* 0 */
 
 /*
 ===========================================================================
