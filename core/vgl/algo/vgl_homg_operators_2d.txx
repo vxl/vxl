@@ -52,9 +52,8 @@ vnl_vector<Type> vgl_homg_operators_2d<Type>::get_vector(vgl_homg_line_2d<Type> 
 
 //: Cross product of two vgl_homg_point_2d<Type>s
 template <class Type>
-void vgl_homg_operators_2d<Type>::cross(const vgl_homg_point_2d<Type>& a,
-                                        const vgl_homg_point_2d<Type>& b,
-                                        vgl_homg_line_2d<Type>& a_cross_b)
+vgl_homg_line_2d<Type> vgl_homg_operators_2d<Type>::cross(const vgl_homg_point_2d<Type>& a,
+                                                          const vgl_homg_point_2d<Type>& b)
 {
   double x1 = a.x();
   double y1 = a.y();
@@ -64,15 +63,14 @@ void vgl_homg_operators_2d<Type>::cross(const vgl_homg_point_2d<Type>& a,
   double y2 = b.y();
   double w2 = b.w();
 
-  a_cross_b.set(y1 * w2 - w1 * y2,
-                w1 * x2 - x1 * w2,
-                x1 * y2 - y1 * x2);
+  return vgl_homg_line_2d<Type> (y1 * w2 - w1 * y2,
+                                 w1 * x2 - x1 * w2,
+                                 x1 * y2 - y1 * x2);
 }
 
 template <class Type>
-void vgl_homg_operators_2d<Type>::cross(const vgl_homg_line_2d<Type>& a,
-                                        const vgl_homg_line_2d<Type>& b,
-                                        vgl_homg_point_2d<Type>& a_cross_b)
+vgl_homg_point_2d<Type> vgl_homg_operators_2d<Type>::cross(const vgl_homg_line_2d<Type>& a,
+                                                           const vgl_homg_line_2d<Type>& b)
 {
   double x1 = a.a();
   double y1 = a.b();
@@ -82,9 +80,9 @@ void vgl_homg_operators_2d<Type>::cross(const vgl_homg_line_2d<Type>& a,
   double y2 = b.b();
   double w2 = b.c();
 
-  a_cross_b.set(y1 * w2 - w1 * y2,
-                w1 * x2 - x1 * w2,
-                x1 * y2 - y1 * x2);
+  return vgl_homg_point_2d<Type> (y1 * w2 - w1 * y2,
+                                  w1 * x2 - x1 * w2,
+                                  x1 * y2 - y1 * x2);
 }
 
 //-----------------------------------------------------------------------------
@@ -266,9 +264,7 @@ vgl_homg_line_2d<Type>
 vgl_homg_operators_2d<Type>::join (const vgl_homg_point_2d<Type>& point1,
                                    const vgl_homg_point_2d<Type>& point2)
 {
-  vgl_homg_line_2d<Type> answer;
-  cross(point1, point2, answer);
-  return answer;
+  return cross(point1, point2);
 }
 
 //-----------------------------------------------------------------------------
@@ -309,9 +305,7 @@ vgl_homg_point_2d<Type>
 vgl_homg_operators_2d<Type>::intersection ( const vgl_homg_line_2d<Type>& line1,
                                             const vgl_homg_line_2d<Type>& line2)
 {
-  vgl_homg_point_2d<Type> answer;
-  cross(line1, line2, answer);
-  return answer;
+  return cross(line1, line2);
 }
 
 //-----------------------------------------------------------------------------
@@ -332,10 +326,7 @@ vgl_homg_operators_2d<Type>::perp_line_through_point ( const vgl_homg_line_2d<Ty
                                                        const vgl_homg_point_2d<Type>& point)
 {
   vgl_homg_point_2d<Type> direction(line.a(), line.b(), 0);
-  vgl_homg_line_2d<Type> answer;
-  cross(direction, point, answer);
-  //unitize(answer);
-  return answer;
+  return cross(direction, point);
 }
 
 //-----------------------------------------------------------------------------
@@ -349,8 +340,7 @@ vgl_homg_point_2d<Type> vgl_homg_operators_2d<Type>::perp_projection(
                                   const vgl_homg_point_2d<Type>& point)
 {
   vgl_homg_line_2d<Type> perpline = perp_line_through_point (line, point);
-  vgl_homg_point_2d<Type> answer;
-  cross(line, perpline, answer);
+  vgl_homg_point_2d<Type> answer = cross(line, perpline);
   unitize(answer);
   return answer;
 }

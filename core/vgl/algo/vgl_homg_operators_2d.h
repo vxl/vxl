@@ -34,14 +34,13 @@ public:
     //: dot product of two lines
   static double dot(vgl_homg_line_2d<Type> const& a, vgl_homg_point_2d<Type> const& b);
 
-    //: cross product
-  static void cross(const vgl_homg_point_2d<Type>& a,
-                    const vgl_homg_point_2d<Type>& b,
-                    vgl_homg_line_2d<Type>& a_cross_b);
-    //: cross product
-  static void cross(const vgl_homg_line_2d<Type>& a,
-                    const vgl_homg_line_2d<Type>& b,
-                    vgl_homg_point_2d<Type>& a_cross_b);
+    //: cross product: join two points with a line
+  static vgl_homg_line_2d<Type> cross(const vgl_homg_point_2d<Type>& a,
+                                      const vgl_homg_point_2d<Type>& b);
+  //
+    //: cross product: intersect two lines
+  static vgl_homg_point_2d<Type> cross(const vgl_homg_line_2d<Type>& a,
+                                 const vgl_homg_line_2d<Type>& b);
 
   //: Normalize vgl_homg_point_2d<Type> to unit magnitude
   static void unitize(vgl_homg_point_2d<Type>& a);
@@ -58,9 +57,9 @@ public:
                                        const vgl_homg_point_2d<Type>& point);
 
     //: Get the square of the perpendicular distance to a line.
-    // This is just the homogeneous form of the familiar 
+    // This is just the homogeneous form of the familiar
     // \f$ \frac{a x + b y + c}{\sqrt{a^2+b^2}} \f$ :
-    // \[ d = \frac{(l^\top p)}{p_z\sqrt{l_x^2 + l_y^2}} \] 
+    // \[ d = \frac{(l^\top p)}{p_z\sqrt{l_x^2 + l_y^2}} \]
     // If either the point or the line are at infinity an error message is
     // printed and Homg::infinity is returned.
   static double perp_dist_squared (const vgl_homg_point_2d<Type>& point,
@@ -87,7 +86,7 @@ public:
   static vgl_homg_line_2d<Type> join_oriented (const vgl_homg_point_2d<Type>& point1,
                                                const vgl_homg_point_2d<Type>& point2);
 
-    //: Get the intersection point of two lines (the cross-product).  
+    //: Get the intersection point of two lines (the cross-product).
   static vgl_homg_point_2d<Type> intersection (const vgl_homg_line_2d<Type>& line1,
                                                const vgl_homg_line_2d<Type>& line2);
 

@@ -42,8 +42,8 @@ class vgl_line_2d {
 // PUBLIC INTERFACE--------------------------------------------------------
 
 public:
-   //: Default constructor (Line 1.x==0)
-   vgl_line_2d() { data_[0]=1; data_[1]=0; data_[2]=0; }
+  //: Default constructor (Line 1.x==0)
+  vgl_line_2d() { data_[0]=1; data_[1]=0; data_[2]=0; }
 
   //: Construct from homogeneous description of line
   vgl_line_2d<Type> (vgl_homg_line_2d<Type> const& p);
@@ -61,16 +61,18 @@ public:
   //: Construct from its equation, a 3-vector.
   vgl_line_2d (const Type v[3]) { data_[0]=v[0];data_[1]=v[1];data_[2]=v[2]; }
 
+#if 0
   // Default destructor:
-  // ~vgl_line_2d () {}
+  ~vgl_line_2d () {}
 
   // Default assignment operator:
-  // vgl_line_2d<Type>& operator=(const vgl_line_2d<Type>& that){
-  //   data_[0]=that.data_[0];
-  //   data_[1]=that.data_[1];
-  //   data_[2]=that.data_[2];
-  //   return *this;
-  // }
+  vgl_line_2d<Type>& operator=(const vgl_line_2d<Type>& that){
+    data_[0]=that.data_[0];
+    data_[1]=that.data_[1];
+    data_[2]=that.data_[2];
+    return *this;
+  }
+#endif
 
   // Data Access-------------------------------------------------------------
 
@@ -131,4 +133,4 @@ vcl_istream&  operator>>(vcl_istream& is,  vgl_line_2d<Type>& p) {
   return is;
 }
 
-#endif // #ifndef vgl_line_2d_h_
+#endif // vgl_line_2d_h_

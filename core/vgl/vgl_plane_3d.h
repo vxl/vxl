@@ -30,16 +30,18 @@ public:
 
   // Constructors/Initializers/Destructors-----------------------------------
 
+#if 0
   // Default constructor
-  // vgl_plane_3d () {}
+  vgl_plane_3d () {}
 
   // Default copy constructor
-  // vgl_plane_3d (const vgl_plane_3d<Type>& that) {
-  //   data_[0]=that.data_[0];
-  //   data_[1]=that.data_[1];
-  //   data_[2]=that.data_[2];
-  //   data_[3]=that.data_[3];
-  // }
+  vgl_plane_3d (const vgl_plane_3d<Type>& that) {
+    data_[0]=that.data_[0];
+    data_[1]=that.data_[1];
+    data_[2]=that.data_[2];
+    data_[3]=that.data_[3];
+  }
+#endif
 
   vgl_plane_3d<Type> (vgl_homg_plane_3d<Type> const& p);
 
@@ -65,17 +67,19 @@ public:
                 vgl_point_3d<Type> const& p2,
                 vgl_point_3d<Type> const& p3);
 
+#if 0
   // Default destructor
-  // ~vgl_plane_3d () {}
+  ~vgl_plane_3d () {}
 
   // Default assignment operator
-  // vgl_plane_3d<Type>& operator=(vgl_plane_3d<Type> const& that) {
-  //   this->data_[0] = that.data_[0];
-  //   this->data_[1] = that.data_[1];
-  //   this->data_[2] = that.data_[2];
-  //   this->data_[3] = that.data_[3];
-  //   return *this;
-  // }
+  vgl_plane_3d<Type>& operator=(vgl_plane_3d<Type> const& that) {
+    this->data_[0] = that.data_[0];
+    this->data_[1] = that.data_[1];
+    this->data_[2] = that.data_[2];
+    this->data_[3] = that.data_[3];
+    return *this;
+  }
+#endif
 
   // Data Access-------------------------------------------------------------
 
