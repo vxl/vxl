@@ -1,4 +1,7 @@
-USES = vxl
+#######################################
+include ${IUEROOT}/config/top-params.mk
+#######################################
+USES := vxl
 
 LIBRARY := vbl-examples
 IMMEDIATE_LIBS := -lvbl -lvcl
@@ -8,6 +11,6 @@ MINI_PROG_SOURCES += vbl_smart_ptr_example.cxx
 MINI_PROG_SOURCES += vbl_sequence_filename_example.cxx
 MINI_PROG_SOURCES += $(wildcard vbl_get_argc_argv_example.cxx)
 
-################################
-include ${IUEROOT}/config/top.mk
-################################
+######################################
+include ${IUEROOT}/config/top-rules.mk
+######################################

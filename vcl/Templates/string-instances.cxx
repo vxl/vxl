@@ -15,6 +15,8 @@ namespace {
     string_char_traits<char>::eq(a,a);
     concat(str,ing) s;
     os << s;
+
+    vcl_string("foo", "bar");
   }
 }
 

@@ -1,8 +1,6 @@
-#   DESCRIPTION:
-#
-#   This is the vbl (Vision Basics) library.
-#
-#   DEPENDENCIES:  libvcl
+#######################################
+include ${IUEROOT}/config/top-params.mk
+#######################################
 
 USES += vxl
 IMMEDIATE_LIBS := -lvcl
@@ -27,19 +25,13 @@ SOURCES += vbl_types.cxx
 SOURCES += vbl_user_info.cxx
 SOURCES += vbl_bool_ostream.cxx
 SOURCES += vbl_qsort.cxx
-SOURCES += $(wildcard vbl_vector.cxx)
 SOURCES += vbl_psfile.cxx
 SOURCES += vbl_sequence_filename_map.cxx
 
 # debugging
 SOURCES += vbl_trace.cxx
-SOURCES += $(wildcard vbl_get_argc_argv.cxx)
 
 DEFINES += -DBUILDING_VBL_DLL
-
-#######################################
-include ${IUEROOT}/config/top-params.mk
-#######################################
 
 ifndef NOTEST
 SUBDIRS += tests

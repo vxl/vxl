@@ -22,10 +22,17 @@ template void __introsort_loop(I, I, I, int)
 template Out copy(Inp, Inp, Out)
 
 #define VCL_FIND_INSTANTIATE(I, T) \
+template <int N> struct fsm_find_tickler; /* empty template */ \
+template <> struct fsm_find_tickler<__LINE__> { void method(I, I, T const &); }; \
+void fsm_find_tickler<__LINE__>::method(I b, I e, T const &v) { find(b, e, v); } \
 /*template I find(I, I, T const &, iterator_traits<I >::iterator_category);*/ \
 template I find(I, I, T const &);
 
 #define VCL_FIND_IF_INSTANTIATE(I, P) \
 template I find_if(I, I, P);
+
+#define VCL_REMOVE_INSTANTIATE(I, T) \
+template I remove(I, I, T const &);
+
 
 #endif

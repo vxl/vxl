@@ -1,8 +1,5 @@
 #ifndef vcl_cassert_h_
 #define vcl_cassert_h_
-#ifdef __GNUC__
-#pragma interface
-#endif
 /*
   fsm@robots.ox.ac.uk
 */
@@ -11,6 +8,9 @@
 
 #include <assert.h>
 
-#define vcl_assert(x) assert(x)
+// fsm: There should not be a vcl_assert macro as there is no
+// std::assert symbol. If your assert macro is broken, fix it
+// here using #undef and #define.
+//#define vcl_assert(x) assert(x)
 
 #endif

@@ -5,22 +5,22 @@
 // .EXAMPLE vbl/examples/vbl_smart_ptr_example.cxx
 //
 // .SECTION Description
-//   This class requires that the class being templated over has
+//   This class requires that the class being templated over has 
 // a unref and ref method, and the stream operator<< function.  Currently,
 // it has only been tested with vbl_refcount.
-//
+// 
 // .SECTION See also
 //   vbl_refcount
 //
 // .SECTION Author
-//   Richard Hartley (original Macro version),
+//   Richard Hartley (original Macro version), 
 //   William A. Hoffman (current templated version)
 //   fsm@robots: eliminated out-of-date documentation and moved
 //               example to examples directory.
 //
 // .SECTION Modifications
-// 2000.05.16 Peter Vanroose  Operators > < >= <= made const
 // 2000.05.15 François BERTEL Added some missing <T>
+// 2000.05.16 Peter Vanroose  Operators > < >= <= made const
 //
 //-----------------------------------------------------------------------------
 
@@ -35,53 +35,52 @@
 template <class T>
 class vbl_smart_ptr {
 public:
-  inline vbl_smart_ptr () : protected_(true), ptr_(0) { }
-  inline vbl_smart_ptr (vbl_smart_ptr<T> const &p)
-    : protected_(true), ptr_(p.ptr()) { ref(); }
-  inline vbl_smart_ptr (T *p) : protected_(true), ptr_(p) { ref(); }
-  inline ~vbl_smart_ptr () { unref(); ptr_ = 0; }
-
-  //: Assignment
-  inline vbl_smart_ptr<T> &operator = (vbl_smart_ptr<T> const &r) { return operator=(r.ptr()); }
-  inline vbl_smart_ptr<T> &operator = (T *r) {
+  vbl_smart_ptr () : protected_(true), ptr_(0) { }
+  vbl_smart_ptr (vbl_smart_ptr<T> const &p) : protected_(true), ptr_(p.as_pointer()) { ref(); }
+  vbl_smart_ptr (T *p) : protected_(true), ptr_(p) { ref(); }
+  ~vbl_smart_ptr () { unref(); ptr_ = 0; }
+  
+  //: Assignment  
+  vbl_smart_ptr<T> &operator = (vbl_smart_ptr<T> const &r) { return operator=(r.as_pointer()); }
+  vbl_smart_ptr<T> &operator = (T *r) {
     if (ptr_ != r) { unref(); ptr_ = r; ref(); }
     return *this;
   }
-
+  
   //: Cast to bool
-  inline operator bool () const { return ptr_ != (T*)0; }
+  operator bool () const { return ptr_ != (T*)0; }
 
   //: Dereferencing the pointer
-  inline T &operator * () const { return *ptr_; }
+  T &operator * () const { return *ptr_; }
 
   //: These return the raw/dumb pointer.
-  inline T *operator -> () const { return ptr_; }
-  inline T *ptr () const { return ptr_; }
-  inline T *as_pointer () const { return ptr_; }
-// WARNING : Please do not make an automatic cast to T*.
-//           This is intrinsically incorrect as you loose the smartness!
-//           In cases where you really need the pointer, use .ptr()
+  T *operator -> () const { return ptr_; }
+  T *ptr () const { return ptr_; }
+  T *as_pointer () const { return ptr_; }
+  // WARNING : Please do not make an automatic cast to T*.
+  //           This is intrinsically incorrect as you loose the smartness!
+  //           In cases where you really need the pointer, use .as_pointer()
   //DO_NOT_USE operator T* () const { return ptr_; }
 
   //: Used for getting around circular references
-  inline void unprotect() { unref(); }
+  void unprotect() { unref(); }
 
   // Comparison of pointers
-  inline bool operator == (T const *p) const { return ptr_ == p; }
-  inline bool operator == (vbl_smart_ptr<T> const &p) const { return ptr_ == p.ptr(); }
+  bool operator == (T const *p) const { return ptr_ == p; }
+  bool operator == (vbl_smart_ptr<T> const &p) const { return ptr_ == p.as_pointer(); }
   //fsm: what's all the void *s for?
   //answer: this is pointer arithmetic, so there should *not* be any void* - PVr
-  inline bool operator <  (vbl_smart_ptr<T> const &r) const { return ptr_ <   r.ptr(); }
-  inline bool operator >  (vbl_smart_ptr<T> const &r) const { return ptr_ >   r.ptr(); }
-  inline bool operator <= (vbl_smart_ptr<T> const &r) const { return ptr_ <=  r.ptr(); }
-  inline bool operator >= (vbl_smart_ptr<T> const &r) const { return ptr_ >=  r.ptr(); }
+  bool operator <  (vbl_smart_ptr<T> const &r) const { return ptr_ <   r.as_pointer(); }
+  bool operator >  (vbl_smart_ptr<T> const &r) const { return ptr_ >   r.as_pointer(); }
+  bool operator <= (vbl_smart_ptr<T> const &r) const { return ptr_ <=  r.as_pointer(); }
+  bool operator >= (vbl_smart_ptr<T> const &r) const { return ptr_ >=  r.as_pointer(); }
 
 private:
   void ref(); // cannot inline here as this calls T's ref()
   void unref(); // idem
-
+  
   bool protected_;	
-  T* ptr_;
+  T *ptr_;
 };
 
 // GCC 2.7 really *does* need this non-member equality operator,
@@ -90,7 +89,7 @@ private:
 template <class T>
 inline bool operator== (vbl_smart_ptr<T> const& a, vbl_smart_ptr<T> const& b)
 {
-  return a.ptr() == b.ptr();
+  return a.as_pointer() == b.as_pointer();
 }
 #endif
 
@@ -101,7 +100,7 @@ inline bool operator== (vbl_smart_ptr<T> const& a, vbl_smart_ptr<T> const& b)
 template <class T>
 inline bool operator== (vbl_smart_ptr<T> const& a, int p)
 {
-  return a.ptr() == (T*)p;
+  return a.as_pointer() == (T*)p;
 }
 #endif
 
@@ -109,7 +108,7 @@ inline bool operator== (vbl_smart_ptr<T> const& a, int p)
 template <class T>
 inline ostream& operator<< (ostream& os, vbl_smart_ptr<T> const& r)
 {
-  return os << (void*)(r.ptr());
+  return os << (void*) r.as_pointer();
 }
 
 #define VBL_SMART_PTR_INSTANTIATE(T) \

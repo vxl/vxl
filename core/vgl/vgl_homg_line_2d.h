@@ -80,8 +80,8 @@ public:
   }
 
   // -- Return true iff the point is the point at infinity
-  //    This version checks (min(|a|,|b|) < |tol * c|
-  bool ideal(Type tol) const { return vcl_min(vcl_abs(a()),vcl_abs(b())) < vcl_abs(tol*c()); }   
+  //    This version checks (min(|a|,|b|) < tol * c
+//win32 fails  bool ideal(Type tol) const { return vcl_min(vcl_abs(a()),vcl_abs(b())) < tol * vcl_abs(c()); }   
   
   // find the distance of the line to the origin
   Type dist_origin() const;
