@@ -74,7 +74,7 @@ public:
         //: Define number of planes
         //  Each plane will be resized to (0,0)
         //  Default number of planes is 1
-    void setNPlanes(int n);
+    void set_n_planes(int n);
 
         //: Define parameters
         //  planes[i] is pointer to i'th plane of nx x ny image data
@@ -136,16 +136,16 @@ public:
     int ystep() const { return ystep_; }
 
         //: Number of planes available
-    int nPlanes() const { return planes_.size(); }
+    int n_planes() const { return planes_.size(); }
 
         //: const pointer to i'th plane of data
         //  plane(i)[x*xstep()+y*ystep()] is value of (x,y) pixel in plane i
-        //  Valid range for i: [0,nPlanes()-1]
+        //  Valid range for i: [0,n_planes()-1]
     const T* plane(int i) const { return planes_[i]; }
 
         //: (non-const) pointer to i'th plane of data
         //  plane(i)[x*xstep()+y*nx()] is value of (x,y) pixel in plane i
-        //  Valid range for i: [0,nPlanes()-1]
+        //  Valid range for i: [0,n_planes()-1]
     T* plane(int i) { return planes_[i]; }
 
         //: Access to pointer to T planes.

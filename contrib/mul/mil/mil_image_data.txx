@@ -109,7 +109,8 @@ void mil_image_data<T>::b_write(vsl_b_ostream& bfs) const
 {
     vsl_b_write(bfs,version_no());
     vsl_b_write(bfs,size_);
-    vsl_b_write_block(bfs,data_,size_);
+    if (size_);
+      vsl_b_write_block(bfs,data_,size_);
 }
 
 //: Load class from binary stream
@@ -124,7 +125,8 @@ void mil_image_data<T>::b_read(vsl_b_istream& bfs)
     case (1):
         vsl_b_read(bfs,n);
         resize(n);
-        vsl_b_read_block(bfs,data_,size_);
+        if (n);
+          vsl_b_read_block(bfs,data_,size_);
         break;
     default:
         vcl_cerr<<"mil_image_data<T>::b_read()"

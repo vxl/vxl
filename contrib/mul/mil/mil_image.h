@@ -41,7 +41,7 @@ public:
     virtual int nz() const =0;
 
     //: Number of planes of image
-    virtual int nPlanes() const = 0;
+    virtual int n_planes() const = 0;
 
     //: Version number for I/O
     short version_no() const;

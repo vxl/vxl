@@ -32,7 +32,7 @@ template<class T>
 mil_image_2d_of<T>::mil_image_2d_of(int nx, int ny, int n_planes)
     : data_(0),nx_(0),ny_(0),xstep_(1),ystep_(0)
 {
-    setNPlanes(n_planes);
+    set_n_planes(n_planes);
     resize(nx,ny);
 }
 
@@ -40,7 +40,7 @@ mil_image_2d_of<T>::mil_image_2d_of(int nx, int ny, int n_planes)
 template<class T>
 void mil_image_2d_of<T>::deepCopy(const mil_image_2d_of& src)
 {
-    setNPlanes(src.nPlanes());
+    set_n_planes(src.n_planes());
     resize(src.nx(),src.ny());
     world2im_     = src.world2im_;
 
@@ -89,12 +89,12 @@ template<class T> mil_image_2d_of<T>::~mil_image_2d_of()
 template<class T>
 void mil_image_2d_of<T>::resize2(int nx, int ny)
 {
-    if (nx==nx_ && ny==ny_  || nPlanes()==0) return;
+    if (nx==nx_ && ny==ny_  || n_planes()==0) return;
 
     release_data();
 
     data_ = new mil_image_data<T>;
-    data_->resize(nPlanes()*nx*ny);
+    data_->resize(n_planes()*nx*ny);
 
     planes_[0]= (T*) data_->data();
     for (int i=1;i<planes_.size();++i)
@@ -112,7 +112,7 @@ void mil_image_2d_of<T>::resize2(int nx, int ny)
 template<class T>
 void mil_image_2d_of<T>::resize3(int nx, int ny, int n_planes)
 {
-  setNPlanes(n_planes);
+  set_n_planes(n_planes);
   resize2(nx,ny);
 }
 
@@ -122,7 +122,7 @@ void mil_image_2d_of<T>::resize3(int nx, int ny, int n_planes)
 //  Default number of planes is 1
 //=======================================================================
 template<class T>
-void mil_image_2d_of<T>::setNPlanes(int n)
+void mil_image_2d_of<T>::set_n_planes(int n)
 {
     if (planes_.size()!=n)
     {
@@ -283,8 +283,8 @@ void mil_image_2d_of<T>::setToWindow(const mil_image_2d_of& im,
 {
     assert(this!=&im);
 
-    int n_planes = im.nPlanes();
-    setNPlanes(n_planes);
+    int n_planes = im.n_planes();
+    set_n_planes(n_planes);
     release_data();
 
     // Take smart pointer to im's data to keep it in scope
@@ -415,9 +415,9 @@ void mil_image_2d_of<T>::print_all(vcl_ostream& os) const
     print_summary(os);
     os<<vcl_endl;
 
-    for (int i=0;i<nPlanes();++i)
+    for (int i=0;i<n_planes();++i)
     {
-        if (nPlanes()>1) os<<"Plane "<<i<<":"<<vcl_endl;
+        if (n_planes()>1) os<<"Plane "<<i<<":"<<vcl_endl;
         const T* im_data = plane(i);
         for (int y=ny_-1;y>=0;--y)
         {

@@ -12,7 +12,7 @@
 bool Equal(const mil_image_2d_of<vil_byte>& im0,
            const mil_image_2d_of<vil_byte>& im1)
 {
-  return im0.nPlanes()==im1.nPlanes()
+  return im0.n_planes()==im1.n_planes()
       && im0.nx() == im1.nx()
       && im0.ny() == im1.ny()
       && im0(0,0,0) == im1(0,0,0)
@@ -30,7 +30,7 @@ void test_image_2d_of_byte()
   image0.resize(10,8);
   vcl_cout<<"image0: "<<image0<<vcl_endl;
 
-  TEST("N.Planes",image0.nPlanes()==1,true);
+  TEST("N.Planes",image0.n_planes()==1,true);
   TEST("resize",image0.nx()==10 && image0.ny()==8, true);
 
   for (int y=0;y<image0.ny();++y)
@@ -47,7 +47,7 @@ void test_image_2d_of_byte()
     image1 = image0;
 
     TEST("Shallow copy (size)",image0.nx()==image1.nx() && image0.ny()==image1.ny()
-                        && image0.nPlanes()==image1.nPlanes(), true);
+                        && image0.n_planes()==image1.n_planes(), true);
 
     image0(4,6)=127;
     TEST("Shallow copy (values)",image1(4,6)==image0(4,6),true);
@@ -58,14 +58,14 @@ void test_image_2d_of_byte()
   {
     // Check data remains valid if a copy taken
     mil_image_2d_of<vil_byte> image3;
-    image3.setNPlanes(3);
+    image3.set_n_planes(3);
     image3.resize(4,5);
     image3.fill(111);
     image2 = image3;
   }
 
   TEST("Shallow copy 2",image2.nx()==4
-       && image2.ny()==5 && image2.nPlanes()==3, true);
+       && image2.ny()==5 && image2.n_planes()==3, true);
 
   image2(1,1)=17;
   TEST("Data still in scope",image2(3,3)==111 && image2(1,1)==17,true);
@@ -78,7 +78,7 @@ void test_image_2d_of_byte()
     image4.deepCopy(image0);
     TEST("Deep copy (size)",image0.nx()==image4.nx()
                          && image0.ny()==image4.ny()
-                         && image0.nPlanes()==image4.nPlanes(), true);
+                         && image0.n_planes()==image4.n_planes(), true);
     TEST("Deep copy (values)",image4(4,6)==image0(4,6),true);
 
     vil_byte v46 = image0(4,6);
@@ -90,7 +90,7 @@ void test_image_2d_of_byte()
   image_win.setToWindow(image0,2,5,3,6);
   TEST("setToWindow size",
         image_win.nx()==4 && image_win.ny()==4
-        && image_win.nPlanes()==image0.nPlanes(),true);
+        && image_win.n_planes()==image0.n_planes(),true);
 
   image0(2,3)=222;
   TEST("setToWindow is shallow copy",image_win(0,0)==222, true);
@@ -101,7 +101,7 @@ void test_image_2d_byte_io()
   // -------- Test the binary I/O --------
   mil_image_2d_of<vil_byte> image_out0;
   mil_image_2d_of<vil_byte> image_out1;
-  image_out0.setNPlanes(2);
+  image_out0.set_n_planes(2);
   image_out0.resize(5,6);
   for (int i=0;i<2;++i)
     for (int y=0;y<6;++y)

@@ -97,7 +97,7 @@ void mil_byte_image_2d_io::copyAsGrey(vil_image& img)
   int nx = img.width();
   int ny = img.height();
   vil_memory_image_of<vil_byte> buf(img);
-  image_.setNPlanes(1);
+  image_.set_n_planes(1);
   image_.resize(nx,ny);
   // Inefficient copy
   for (int y=0;y<ny;++y)
@@ -110,7 +110,7 @@ void mil_byte_image_2d_io::copyAsRGB(vil_image& img)
    int nx = img.width();
    int ny = img.height();
    vil_memory_image_of<vil_rgb_byte> buf(img);
-    image_.setNPlanes(3);
+    image_.set_n_planes(3);
   image_.resize(nx,ny);
   // Inefficient copy
   for (int y=0;y<ny;++y)
@@ -128,7 +128,7 @@ void mil_byte_image_2d_io::copyGreyToRGB(vil_image& img)
   int ny = img.height();
   // Assume it is a colour image - copy to greyscale image
   vil_memory_image_of<vil_rgb_byte> buf(img);
-  image_.setNPlanes(1);
+  image_.set_n_planes(1);
   image_.resize(nx,ny);
     // Inefficient copy, using a `weighting' on RGB to get the grey-scale
   for (int y=0;y<ny;++y)
