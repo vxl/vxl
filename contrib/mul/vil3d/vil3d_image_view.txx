@@ -72,6 +72,51 @@ vil3d_image_view<T>::vil3d_image_view(const vil2_memory_chunk_sptr& mem_chunk,
   }
 }
 
+//: Create shallow copy of image with given base reference
+//  Sets to empty image if target is of different pixel type
+template<class T>
+vil3d_image_view<T>::vil3d_image_view(const vil3d_image_view_base& base_ref)
+  : top_left_(0),istep_(0),jstep_(0),kstep_(0),planestep_(0)
+{
+  operator=(base_ref);
+}
+
+//: Create shallow copy of image with given base reference
+//  Sets to empty image if target is of different pixel type
+template<class T>
+vil3d_image_view<T>::vil3d_image_view(const vil3d_image_view_base_sptr& base_sptr)
+  : top_left_(0),istep_(0),jstep_(0),kstep_(0),planestep_(0)
+{
+  operator=(base_sptr);
+}
+
+//: Create shallow copy of image with given base reference
+//  Sets to empty image if target is of different pixel type
+template<class T>
+vil3d_image_view<T>& vil3d_image_view<T>::operator=(const vil3d_image_view_base& base_ref)
+{
+  if (static_cast<const vil3d_image_view_base*>(this) == &base_ref)
+    return *this;
+
+  if (base_ref.pixel_format() == pixel_format())
+  {
+    const vil3d_image_view<T> &that = static_cast<const vil3d_image_view<T>&>(base_ref);
+    ni_=that.ni_;
+    nj_=that.nj_;
+    nk_=that.nk_;
+    nplanes_=that.nplanes_;
+    istep_=that.istep_;
+    jstep_=that.jstep_;
+    kstep_=that.kstep_;
+    planestep_=that.planestep_;
+    top_left_=that.top_left_;
+    ptr_=that.ptr_;
+    return *this;
+  }
+
+  clear();
+  return *this;
+}
 
 //: Perform deep copy of the src image, placing in this image
 template<class T>

@@ -79,6 +79,28 @@ class vil3d_image_view : public vil3d_image_view_base
                    vcl_ptrdiff_t i_step, vcl_ptrdiff_t j_step,
                    vcl_ptrdiff_t k_step, vcl_ptrdiff_t plane_step);
 
+    //: Create shallow copy of image with given base reference
+    //  Sets to empty image if target is of different pixel type
+  vil3d_image_view(const vil3d_image_view_base& base_ref);
+
+    //: Create shallow copy of image with given base reference
+    //  Sets to empty image if target is of different pixel type
+  vil3d_image_view(const vil3d_image_view_base_sptr& base_sptr);
+
+    //: Create shallow copy of image with given base reference
+    //  Sets to empty image if target is of different pixel type
+  vil3d_image_view& operator=(const vil3d_image_view_base& base_ref);
+
+  //: Copy a view. The rhs and lhs will point to the same image data.
+  // If the view types are not compatible this object will be set to empty.
+  // If the pointer is null, this object will be set to empty.
+  inline const vil3d_image_view<T>& operator=(const vil3d_image_view_base_sptr& rhs)
+  {
+    if (!rhs) clear();
+    else *this = *rhs;
+    return *this;
+  }
+
   //  Destructor
   virtual ~vil3d_image_view();
 

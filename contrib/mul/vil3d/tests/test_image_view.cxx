@@ -61,6 +61,25 @@ void test_image_view_int()
   }
 
 
+  {
+    // Test the shallow copy by smart pointer
+    vil3d_image_view_base_sptr image_sptr =&image0;
+    vil3d_image_view<vxl_int_32> image1;
+    image1 = image_sptr;
+
+    vcl_cout<<"Shallow copy by smart pointer: "<<image1<<vcl_endl;
+
+    TEST("Shallow copy (size)",
+         image0.ni()==image1.ni() &&
+         image0.nj()==image1.nj() &&
+         image0.nk()==image1.nk() &&
+         image0.nplanes()==image1.nplanes(), true);
+
+    image0(4,6,1)=127;
+    TEST("Shallow copy (values)",image1(4,6,1),image0(4,6,1));
+  }
+
+
    vil3d_image_view<vxl_int_32> image2;
   {
     // Check data remains valid if a copy taken
