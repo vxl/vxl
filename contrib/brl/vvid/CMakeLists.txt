@@ -14,7 +14,6 @@ IF(HAS_VGUI)
      vvid_file_manager.cxx         vvid_file_manager.h
      vvid_command_line_player.cxx  vvid_command_line_player.h
  )
- AUX_SOURCE_DIRECTORY(Templates vvid_sources)
 
  # find the path to the cmu camera libraries and includes
  INCLUDE( ${vxl_SOURCE_DIR}/contrib/brl/bmods/find_cmu_camera.cmake )
