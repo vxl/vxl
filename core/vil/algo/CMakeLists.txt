@@ -28,6 +28,7 @@ SET( vil_algo_sources
   vil_threshold.txx           vil_threshold.h
                               vil_grid_merge.h
                               vil_find_4con_boundary.h
+                              vil_find_peaks.h
   vil_fft.txx                 vil_fft.h
   vil_histogram.cxx           vil_histogram.h
   vil_histogram_equalise.cxx  vil_histogram_equalise.h
