@@ -2,6 +2,8 @@
 include ${IUEROOT}/config/top-params.mk
 #######################################
 
+SUBDIRS += vsl
+
 SUBDIRS += mvl
 SUBDIRS += oxp
 SUBDIRS += ../Oxford/mvox
