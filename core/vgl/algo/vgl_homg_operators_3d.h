@@ -69,11 +69,34 @@ public:
                                                       const vgl_homg_plane_3d<Type >&);
   static vgl_homg_point_3d<Type > intersection_point (const vcl_vector<vgl_homg_plane_3d<Type > >&);
 
-  // cross ratio of four colinear points, or four planes through a common line
-  static double CrossRatio(const vgl_homg_point_3d<Type >& p1,
-                           const vgl_homg_point_3d<Type >& p2,
-                           const vgl_homg_point_3d<Type >& p3,
-                           const vgl_homg_point_3d<Type >& p4);
+  //-----------------------------------------------------------------------------
+  //: Calculates the cross ratio of four collinear points p1, p2, p3 and p4.
+  // This number is projectively invariant, and it is the coordinate of p4
+  // in the reference frame where p2 is the origin (coordinate 0), p3 is
+  // the unity (coordinate 1) and p1 is the point at infinity.
+  // This cross ratio is often denoted as ((p1, p2; p3, p4)) (which also
+  // equals ((p3, p4; p1, p2)) or ((p2, p1; p4, p3)) or ((p4, p3; p2, p1)) )
+  // and is calculated as
+  //                      p1 - p3   p2 - p3      (p1-p3)(p2-p4)
+  //                      ------- : --------  =  --------------
+  //                      p1 - p4   p2 - p4      (p1-p4)(p2-p3)
+  //
+  // In principle, any single nonhomogeneous coordinate from the four points
+  // can be used as parameters for cross_ratio (but of course the same for all
+  // points). The most reliable answer will be obtained when the coordinate with
+  // the largest spacing is used, i.e., the one with smallest slope.
+  //
+  // In this implementation, a least-squares result is calculated when the
+  // points are not exactly collinear.
+
+  static double cross_ratio(const vgl_homg_point_3d<Type >& p1,
+                            const vgl_homg_point_3d<Type >& p2,
+                            const vgl_homg_point_3d<Type >& p3,
+                            const vgl_homg_point_3d<Type >& p4);
+  static double cross_ratio(const vgl_homg_plane_3d<Type >& p1,
+                            const vgl_homg_plane_3d<Type >& p2,
+                            const vgl_homg_plane_3d<Type >& p3,
+                            const vgl_homg_point_3d<Type >& p4);
 };
 
 #endif // _vgl_homg_operators_3d_h
