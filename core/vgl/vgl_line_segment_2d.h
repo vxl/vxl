@@ -71,7 +71,7 @@ class vgl_line_segment_2d
   vgl_vector_2d<double> direction() const;
 
   //: unit vector orthogonal to line
-  inline vgl_vector_2d<double> normal() const;
+  vgl_vector_2d<double> normal() const;
 
   //: tangent angle in degrees
   double tangent_angle() const;
