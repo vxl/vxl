@@ -24,7 +24,7 @@
 static vgui_event_condition default_c_enable_key_bindings(vgui_key_CTRL('c'));
 
 //----------------------------------------------------------------------------
-//: Prints info about this talbeau - called when '?' is pressed.
+//: Prints info about this tableau - called when '?' is pressed.
 bool vgui_composite_tableau::help() 
 {
   vcl_cerr << "\n+- vgui_composite_tableau -----+\n"
@@ -85,7 +85,7 @@ vgui_composite_tableau::~vgui_composite_tableau()
 }
 
 //----------------------------------------------------------------------------
-//: Returns the type of this tableu ('vgui_composite_tableau').
+//: Returns the type of this tableau ('vgui_composite_tableau').
 vcl_string vgui_composite_tableau::type_name() const
 {
   return "vgui_composite_tableau";
