@@ -125,7 +125,7 @@ void oxp_mpeg_codec_data::seek_to_iframe_before(int frame)
   typedef oxp_bunch_of_files::offset_t index_t;
   index_t byte = index_t(lba) * 2048;
   if (verbose)
-    vcl_fprintf(stderr, __FILE__ ": seek_to_iframe_before: Frame %d -> Start at closest frame %d, LBA 0x%x, byte %lu\n", 
+    vcl_fprintf(stderr, __FILE__ ": seek_to_iframe_before: Frame %d -> Start at closest frame %d, LBA 0x%x, byte %lu\n",
                 frame, start_frame_index, lba, (unsigned long) byte);
   if (lba < 0) {
     vcl_fprintf(stderr, __FILE__ ": ERROR!\n");
@@ -342,10 +342,10 @@ void my_draw(vo_frame_t *frame_p)
   else {
     if (verbose) {
       if (impl->frame_number < p->frame)
-        vcl_fprintf(stderr, __FILE__ ": Skipping %d waiting for %d\n", 
+        vcl_fprintf(stderr, __FILE__ ": Skipping %d waiting for %d\n",
                     impl->frame_number, p->frame);
       else
-        vcl_fprintf(stderr, __FILE__ ": Queuing %d having got %d\n", 
+        vcl_fprintf(stderr, __FILE__ ": Queuing %d having got %d\n",
                     impl->frame_number, p->frame);
     }
   }
@@ -462,7 +462,7 @@ int oxp_mpeg_codec::put_section(int position,
 bool oxp_mpeg_codec::probe(const char* fname)
 {
   vcl_string fn(fname);
-  
+
   bool p = (vul_file::size((fn + ".lst").c_str()) > 0);
   vcl_cerr << "oxp_mpeg_codec::probe[" << fname << "] -> " << (p ? "true" : "false") << "\n";
   return p;
@@ -727,7 +727,7 @@ static void ts_loop(void)
 #define PACKETS (BUFFER_SIZE / 188)
   int packets;
   do {
-    packets = fread(buffer, 188, PACKETS, in_file);
+    packets = vcl_fread(buffer, 188, PACKETS, in_file);
     for (int i = 0; i < packets; i++) {
       uint8_t * buf = buffer + i * 188;
       uint8_t * end = buf + 188;
