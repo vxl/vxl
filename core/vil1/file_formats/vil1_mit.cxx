@@ -1,11 +1,9 @@
 #ifdef __GNUC__
-#pragma implementation "vil_mit.h"
+#pragma implementation
 #endif
 //
 // Author: Joris Schouteden
 // Created: 18 Feb 2000
-// Modifications:
-//   000218 JS  Initial version, header info from MITImage.C
 //
 //-----------------------------------------------------------------------------
 

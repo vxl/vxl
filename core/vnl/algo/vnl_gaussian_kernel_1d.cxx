@@ -1,13 +1,11 @@
 //-*- c++ -*-------------------------------------------------------------------
 #ifdef __GNUC__
-#pragma implementation "vnl_gaussian_kernel_1d.h"
+#pragma implementation
 #endif
 //
 // Class: vnl_gaussian_kernel_1d
 // Author: Andrew W. Fitzgibbon, Oxford RRG
 // Created: 07 Aug 97
-// Modifications:
-//   970807 AWF Initial version.
 //
 //-----------------------------------------------------------------------------
 

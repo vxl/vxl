@@ -1,5 +1,5 @@
 #ifdef __GNUC__
-#pragma implementation "vnl_sparse_symmetric_eigensystem.h"
+#pragma implementation
 #endif
 
 #include "vnl_sparse_symmetric_eigensystem.h"

@@ -2,7 +2,7 @@
   fsm@robots.ox.ac.uk
 */
 #ifdef __GNUC__
-#pragma implementation "vsl_vertex"
+#pragma implementation
 #endif
 #include "vsl_vertex.h"
 

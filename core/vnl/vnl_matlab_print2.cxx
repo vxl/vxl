@@ -2,7 +2,7 @@
   fsm@robots.ox.ac.uk
 */
 #ifdef __GNUC__
-#pragma implementation "vnl_matlab_print2.h"
+#pragma implementation
 #endif
 #include "vnl_matlab_print2.h"
 #include <vnl/vnl_complex.h>

@@ -1,9 +1,6 @@
 /*
   fsm@robots.ox.ac.uk
 */
-#ifdef __GNUC__
-#pragma implementation "topology_edges"
-#endif
 
 #include <vcl/vcl_iostream.h>
 

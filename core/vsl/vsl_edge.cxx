@@ -2,7 +2,7 @@
   fsm@robots.ox.ac.uk
 */
 #ifdef __GNUC__
-#pragma implementation "vsl_edge"
+#pragma implementation
 #endif
 #include "vsl_edge.h"
 

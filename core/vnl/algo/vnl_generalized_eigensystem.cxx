@@ -1,11 +1,10 @@
 #ifdef __GNUC__
-#pragma implementation "vnl_generalized_eigensystem.h"
+#pragma implementation
 #endif
 //
 // Class: vnl_generalized_eigensystem
 // Author: Andrew W. Fitzgibbon, Oxford RRG
 // Created: 29 Aug 96
-// Modifications:
 //
 
 #include "vnl_generalized_eigensystem.h"

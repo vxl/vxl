@@ -1,8 +1,12 @@
 #ifndef vsl_vertex_h_
 #define vsl_vertex_h_
 #ifdef __GNUC__
-#pragma interface "vsl_vertex"
+#pragma interface
 #endif
+// .NAME vsl_vertex
+// .INCLUDE vsl/vsl_vertex.h
+// .FILE vsl_vertex.cxx
+// \author fsm@robots.ox.ac.uk
 /*
   fsm@robots.ox.ac.uk
 */

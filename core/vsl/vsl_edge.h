@@ -1,11 +1,12 @@
 #ifndef vsl_edge_h_
 #define vsl_edge_h_
 #ifdef __GNUC__
-#pragma interface "vsl_edge"
+#pragma interface
 #endif
-/*
-  fsm@robots.ox.ac.uk
-*/
+// .NAME vsl_edge
+// .INCLUDE vsl/vsl_edge.h
+// .FILE vsl_edge.cxx
+// \author fsm@robots.ox.ac.uk
 
 #include <vsl/vsl_edgel_chain.h>
 #include <vsl/vsl_vertex.h>

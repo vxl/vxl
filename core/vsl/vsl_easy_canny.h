@@ -1,11 +1,12 @@
 #ifndef vsl_easy_canny_h_
 #define vsl_easy_canny_h_
 #ifdef __GNUC__
-#pragma interface "vsl_easy_canny"
+#pragma interface
 #endif
-/*
-  fsm@robots.ox.ac.uk
-*/
+// .NAME vsl_easy_canny
+// .INCLUDE vsl/vsl_easy_canny.h
+// .FILE vsl_easy_canny.cxx
+// \author fsm@robots.ox.ac.uk
 
 #include <vcl/vcl_list.h>
 class vsl_edge;

@@ -1,7 +1,7 @@
 #ifndef vil_byte_swap_h_
 #define vil_byte_swap_h_
 #ifdef __GNUC__
-#pragma interface "vil_byte_swap"
+#pragma interface
 #endif
 /*
   fsm@robots.ox.ac.uk

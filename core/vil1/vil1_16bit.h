@@ -1,10 +1,12 @@
 #ifndef vil_16bit_h_
 #define vil_16bit_h_
 #ifdef __GNUC__
-#pragma interface "vil_16bit"
+#pragma interface
 #endif
 
 // .NAME vil_16bit
+// .INCLUDE vil/vil_16bit.h
+// .FILE vil_16bit.cxx
 // .SECTION Description
 // Functions to read and write integers to and from a vil_stream.
 // The endianness refers to the format in the stream, not the

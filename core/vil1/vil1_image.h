@@ -1,11 +1,12 @@
 #ifndef vil_image_h_
 #define vil_image_h_
 #ifdef __GNUC__
-#pragma interface "vil_image"
+#pragma interface
 #endif
-/*
-  fsm@robots.ox.ac.uk
-*/
+// .NAME vil_image
+// .INCLUDE vil/vil_image.h
+// .FILE vil_image.cxx
+// @author fsm@robots.ox.ac.uk
 
 #include <vcl/vcl_iosfwd.h>
 #include <vil/vil_image_impl.h>

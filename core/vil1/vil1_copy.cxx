@@ -1,14 +1,11 @@
 //-*- c++ -*-------------------------------------------------------------------
 #ifdef __GNUC__
-#pragma implementation "vil_copy.h"
+#pragma implementation
 #endif
 //
 // Class: vil_copy
 // Author: Andrew W. Fitzgibbon, Oxford RRG
 // Created: 16 Feb 00
-// Modifications:
-//   000216 AWF Initial version.
-//   000217 JS  components*planes because get_section returns RGBRGB
 //
 //-----------------------------------------------------------------------------
 

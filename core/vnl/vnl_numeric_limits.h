@@ -2,7 +2,7 @@
 #ifndef vnl_numeric_limits_h_
 #define vnl_numeric_limits_h_
 #ifdef __GNUC__
-#pragma interface "vnl_numeric_limits.h"
+#pragma interface
 #endif
 //
 // .NAME        numeric_limits - Standard limits for numeric datatypes

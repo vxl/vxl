@@ -1,12 +1,11 @@
 //-*- c++ -*-------------------------------------------------------------------
 #ifdef __GNUC__
-#pragma implementation "vil_memory_image_window.h"
+#pragma implementation
 #endif
 //
 // Class: vil_memory_image_window
 // Author: Andrew W. Fitzgibbon, Oxford RRG
 // Created: 19 Aug 96
-// Modifications:
 //
 //-----------------------------------------------------------------------------
 

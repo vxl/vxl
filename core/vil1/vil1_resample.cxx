@@ -2,7 +2,7 @@
   fsm@robots.ox.ac.uk
 */
 #ifdef __GNUC__
-#pragma implementation "vil_resample.h"
+#pragma implementation
 #endif
 #include "vil_resample.h"
 #include <vil/vil_resample_image_impl.h>

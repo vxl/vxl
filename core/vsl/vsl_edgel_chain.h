@@ -1,11 +1,12 @@
 #ifndef vsl_edgel_chain_h_
 #define vsl_edgel_chain_h_
 #ifdef __GNUC__
-#pragma interface "vsl_edgel_chain"
+#pragma interface
 #endif
-/*
-  fsm@robots.ox.ac.uk
-*/
+// .NAME vsl_edgel_chain
+// .INCLUDE vsl/vsl_edgel_chain.h
+// .FILE vsl_edgel_chain.cxx
+// \author fsm@robots.ox.ac.uk
 
 #include <vcl/vcl_iosfwd.h>
 

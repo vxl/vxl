@@ -1,11 +1,10 @@
 #ifdef __GNUC__
-#pragma implementation "vnl_cholesky.h"
+#pragma implementation
 #endif
 //
 // Class: vnl_cholesky
 // Author: Andrew W. Fitzgibbon, Oxford RRG
 // Created: 08 Dec 96
-// Modifications:
 //
 //-----------------------------------------------------------------------------
 

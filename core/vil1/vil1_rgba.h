@@ -2,7 +2,7 @@
 #ifndef vil_rgba_h_
 #define vil_rgba_h_
 #ifdef __GNUC__
-#pragma interface "vil_rgba"
+#pragma interface
 #endif
 // class vil_rgba<T>:
 //    This is the appropriate pixel type for RGBA colour images.

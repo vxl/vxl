@@ -1,7 +1,7 @@
 #ifndef vil_clamp_h_
 #define vil_clamp_h_
 #ifdef __GNUC__
-#pragma interface "vil_clamp"
+#pragma interface
 #endif
 // .NAME    vil_clamp - Templated vil_clamping functions to ensure value is in
 //           a range appropriate for the data type (e.g. 0-255 for bytes).

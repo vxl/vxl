@@ -2,7 +2,7 @@
   fsm@robots.ox.ac.uk
 */
 #ifdef __GNUC__
-#pragma implementation "vsl_topology"
+#pragma implementation
 #endif
 #include "vsl_topology.h"
 #include <vcl/vcl_new.h>

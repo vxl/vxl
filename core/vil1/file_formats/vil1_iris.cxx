@@ -1,5 +1,5 @@
 #ifdef __GNUC__
-#pragma implementation "vil_iris.h"
+#pragma implementation
 #endif
 //
 //

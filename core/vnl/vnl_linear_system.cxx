@@ -1,5 +1,5 @@
 #ifdef __GNUC__
-#pragma implementation "vnl_linear_system.h"
+#pragma implementation
 #endif
 
 // Class: vnl_linear_system

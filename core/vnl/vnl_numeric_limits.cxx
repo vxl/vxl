@@ -1,11 +1,10 @@
 #ifdef __GNUC__
-#pragma implementation "vnl_numeric_limits.h"
+#pragma implementation
 #endif
 //
 // Class: numeric_limits
 // Author: Andrew W. Fitzgibbon, Oxford RRG
 // Created: 28 Aug 96
-// Modifications:
 //
 //-----------------------------------------------------------------------------
 

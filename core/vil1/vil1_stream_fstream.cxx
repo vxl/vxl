@@ -1,5 +1,5 @@
 #ifdef __GNUC__
-#pragma implementation "vil_stream_fstream.h"
+#pragma implementation
 #endif
 
 #include <vcl/vcl_cassert.h>

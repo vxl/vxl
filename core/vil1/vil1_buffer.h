@@ -1,7 +1,7 @@
 #ifndef vil_buffer_h_
 #define vil_buffer_h_
 #ifdef __GNUC__
-#pragma interface "vil_buffer"
+#pragma interface
 #endif
 /*
   fsm@robots.ox.ac.uk

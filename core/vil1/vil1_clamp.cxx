@@ -1,11 +1,10 @@
 #ifdef __GNUC__
-#pragma implementation "vil_clamp.h"
+#pragma implementation
 #endif
 //
 // Class: vil_clamp
 // Author: David Capel, Oxford RRG
 // Created: 14 Aug 98
-// Modifications:
 //
 //-----------------------------------------------------------------------------
 

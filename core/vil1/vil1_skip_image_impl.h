@@ -1,16 +1,16 @@
 #ifndef vil_skip_image_h_
 #define vil_skip_image_h_
 #ifdef __GNUC__
-#pragma interface "vil_skip_image_impl"
+#pragma interface
 #endif
-/*
-  fsm@robots.ox.ac.uk
-*/
+// .NAME vil_skip_image_impl - Adaptor which produces a new image by skipping rows and columns
+// .INCLUDE vil/vil_skip_image_impl.h
+// .FILE vil_skip_image_impl.cxx
+// \author fsm@robots.ox.ac.uk
 
 #include <vil/vil_image_impl.h>
 #include <vil/vil_image.h>
 
-//: Adaptor which produces a new image by skipping rows and columns.
 class vil_skip_image_impl : public vil_image_impl {
 public:
   vil_skip_image_impl(vil_image const &underlying, unsigned sx, unsigned sy);

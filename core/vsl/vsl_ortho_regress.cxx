@@ -2,7 +2,7 @@
   fsm@robots.ox.ac.uk
 */
 #ifdef __GNUC__
-#pragma implementation "vsl_ortho_regress"
+#pragma implementation
 #endif
 #include "vsl_ortho_regress.h"
 #include <vcl/vcl_cmath.h>

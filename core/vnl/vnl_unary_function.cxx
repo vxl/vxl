@@ -1,13 +1,11 @@
 //-*- c++ -*-------------------------------------------------------------------
 #ifdef __GNUC__
-#pragma implementation "vnl_unary_function.h"
+#pragma implementation
 #endif
 //
 // Class: UnaryFunction
 // Author: Andrew W. Fitzgibbon, Oxford RRG
 // Created: 28 Nov 98
-// Modifications:
-//   981128 AWF Initial version.
 //
 //-----------------------------------------------------------------------------
 

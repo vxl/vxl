@@ -1,12 +1,11 @@
 //-*- c++ -*-------------------------------------------------------------------
 #ifdef __GNUC__
-#pragma implementation "vnl_cross_product_matrix.h"
+#pragma implementation
 #endif
 //
 // Class: vnl_cross_product_matrix
 // Author: Andrew W. Fitzgibbon, Oxford RRG
 // Created: 19 Sep 96
-// Modifications:
 //
 //-----------------------------------------------------------------------------
 

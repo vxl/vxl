@@ -1,8 +1,6 @@
 #ifdef __GNUG__
-#pragma implementation "vnl_math.h"
+#pragma implementation
 #endif
-// Modifications:
-//   210598 AWF Removed conditional VCL_IMPLEMENT_STATIC_CONSTS, sometimes gcc needs them.
 
 #include <vnl/vnl_math.h>
 

@@ -1,11 +1,10 @@
 #ifdef __GNUC__
-#pragma implementation "vil_scale_intensities.h"
+#pragma implementation
 #endif
 //
 // Class: vil_scale_intensities
 // Author: David Capel, Oxford RRG
 // Created: 26 Jul 2000
-// Modifications:
 //
 //-----------------------------------------------------------------------------
 

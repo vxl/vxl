@@ -1,11 +1,12 @@
 #ifndef vil_image_proxy_h_
 #define vil_image_proxy_h_
 #ifdef __GNUC__
-#pragma interface "vil_image_proxy"
+#pragma interface
 #endif
-/*
-  fsm@robots.ox.ac.uk
-*/
+// .NAME vil_image_proxy
+// .INCLUDE vil/vil_image_proxy.h
+// .FILE vil_image_proxy.cxx
+// \author fsm@robots.ox.ac.uk
 
 #include <vil/vil_image.h>
 

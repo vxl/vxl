@@ -2,7 +2,7 @@
   fsm@robots.ox.ac.uk
 */
 #ifdef __GNUC__
-#pragma implementation "vil_byte_swap.h"
+#pragma implementation
 #endif
 #include "vil_byte_swap.h"
 #include <vcl/vcl_cassert.h>

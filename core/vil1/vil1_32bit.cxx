@@ -2,7 +2,7 @@
   fsm@robots.ox.ac.uk
 */
 #ifdef __GNUC__
-#pragma implementation "vil_32bit.h"
+#pragma implementation
 #endif
 #include "vil_32bit.h"
 #include <vil/vil_stream.h>

@@ -2,7 +2,7 @@
 #ifndef vnl_unary_function_h_
 #define vnl_unary_function_h_
 #ifdef __GNUC__
-#pragma interface "vnl_unary_function.h"
+#pragma interface
 #endif
 //
 // .NAME        vnl_unary_function - Abstract 1D map.
@@ -16,6 +16,9 @@
 //
 // .SECTION Author
 //     Andrew W. Fitzgibbon, Oxford RRG, 28 Nov 98
+//
+// .SECTION Modifications
+//     981128 AWF Initial version.
 //
 //-----------------------------------------------------------------------------
 

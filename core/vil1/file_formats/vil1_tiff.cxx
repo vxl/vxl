@@ -1,5 +1,5 @@
 #ifdef __GNUC__
-#pragma implementation "vil_tiff.h"
+#pragma implementation
 #endif
 
 #include "vil_tiff.h"

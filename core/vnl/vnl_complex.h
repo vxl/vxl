@@ -2,9 +2,14 @@
 #ifndef vnl_complex_h_
 #define vnl_complex_h_
 #ifdef __GNUC__
-#pragma interface "vnl_complex.h"
+#pragma interface
 #endif
 
+// .NAME vnl_complex
+// .INCLUDE vnl/vnl_complex.h
+// .FILE vnl_complex.cxx
+//
+// .SECTION Description
 //     We don't want everyone to pay for complex when they don't need it, as
 //     its ratio of expense to frequency of use is high. So we define those 
 //     functions from vnl_math which use complex here instead.

@@ -1,13 +1,12 @@
 //-*- c++ -*-------------------------------------------------------------------
 #ifdef __GNUC__
-#pragma implementation "vnl_lsqr.h"
+#pragma implementation
 #endif
 //
 // Class: vnl_lsqr
 // Author: David Capel
 // Created: July 2000
-// Modifications:
-//   000705 capes@robots initial version.
+//
 //-----------------------------------------------------------------------------
 
 #include "vnl_lsqr.h"

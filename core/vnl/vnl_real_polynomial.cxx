@@ -1,11 +1,10 @@
 #ifdef __GNUC__
-#pragma implementation "vnl_real_polynomial.h"
+#pragma implementation
 #endif
 //
 // Class: vnl_real_polynomial
 // Author: Andrew W. Fitzgibbon, Oxford RRG
 // Created: 23 Aug 96
-// Modifications:
 //
 //-----------------------------------------------------------------------------
 

@@ -1,6 +1,6 @@
 //-*- c++ -*-------------------------------------------------------------------
 #ifdef __GNUC__
-#pragma implementation "vil_stream.h"
+#pragma implementation
 #endif
 
 #include "vil_stream.h"

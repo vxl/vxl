@@ -1,11 +1,10 @@
 #ifdef __GNUC__
-#pragma implementation "vnl_symmetric_eigensystem.h"
+#pragma implementation
 #endif
 //
 // Class: vnl_symmetric_eigensystem
 // Author: Andrew W. Fitzgibbon, Oxford RRG
 // Created: 29 Aug 96
-// Modifications:
 //
 //-----------------------------------------------------------------------------
 

@@ -1,7 +1,7 @@
 #ifndef vil_property_h_
 #define vil_property_h_
 #ifdef __GNUC__
-#pragma interface "vil_property"
+#pragma interface
 #endif
 /*
   fsm@robots.ox.ac.uk

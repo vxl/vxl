@@ -1,13 +1,11 @@
 //-*- c++ -*-------------------------------------------------------------------
 #ifdef __GNUC__
-#pragma implementation "vnl_lbfgs.h"
+#pragma implementation
 #endif
 //
 // Class: vnl_lbfgs
 // Author: Andrew W. Fitzgibbon, Oxford RRG
 // Created: 22 Aug 99
-// Modifications:
-//   990822 AWF Initial version.
 //
 //-----------------------------------------------------------------------------
 

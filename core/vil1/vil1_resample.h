@@ -1,11 +1,12 @@
 #ifndef vil_resample_h_
 #define vil_resample_h_
 #ifdef __GNUC__
-#pragma interface "vil_resample"
+#pragma interface
 #endif
-/*
-  fsm@robots.ox.ac.uk
-*/
+// .NAME vil_resample
+// .INCLUDE vil/vil_resample.h
+// .FILE vil_resample.cxx
+// \author fsm@robots.ox.ac.uk
 
 #include <vil/vil_image.h>
 

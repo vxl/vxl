@@ -2,11 +2,11 @@
   fsm@robots.ox.ac.uk
 */
 #ifdef __GNUC__
-#pragma implementation "vil_image_proxy"
+#pragma implementation
 #endif
 #include "vil_image_proxy.h"
 
-#include <vcl/vcl_string.h>
+#include <vcl/vcl_string.h> // C++ specific includes first
 #include <vcl/vcl_cstring.h>
 #include <vil/vil_load.h>
 

@@ -1,7 +1,7 @@
 #ifndef vil_ncc_h_
 #define vil_ncc_h_
 #ifdef __GNUC__
-#pragma interface "vil_ncc"
+#pragma interface
 #endif
 /*
   capes@robots.ox.ac.uk

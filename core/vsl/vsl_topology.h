@@ -1,11 +1,12 @@
 #ifndef vsl_topology_h_
 #define vsl_topology_h_
 #ifdef __GNUC__
-#pragma interface "vsl_topology"
+#pragma interface
 #endif
-/*
-  fsm@robots.ox.ac.uk
-*/
+// .NAME vsl_topology
+// .INCLUDE vsl/vsl_topology.h
+// .FILE vsl_topology.cxx
+// \author fsm@robots.ox.ac.uk
 
 // *** This is a temporary conversion hack ***
 // Do not expect that future cannies will provide output in this form.

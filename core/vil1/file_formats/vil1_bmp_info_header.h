@@ -1,11 +1,12 @@
 #ifndef vil_bmp_info_header_h_
 #define vil_bmp_info_header_h_
 #ifdef __GNUC__
-#pragma interface "vil_bmp_info_header"
+#pragma interface
 #endif
-/*
-  fsm@robots.ox.ac.uk
-*/
+// .NAME vil_bmp_info_header
+// .INCLUDE vil/file_formats/vil_bmp_info_header.h
+// .FILE file_formats/vil_bmp_info_header.cxx
+// @author fsm@robots.ox.ac.uk
 
 class vil_stream;
 #include <vcl/vcl_iosfwd.h>

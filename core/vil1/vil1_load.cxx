@@ -1,3 +1,6 @@
+#ifdef __GNUC__
+#pragma implementation
+#endif
 
 #include "vil_load.h"
 #include <vil/vil_file_format.h>

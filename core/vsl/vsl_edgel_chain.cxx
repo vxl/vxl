@@ -2,7 +2,7 @@
   fsm@robots.ox.ac.uk
 */
 #ifdef __GNUC__
-#pragma implementation "vsl_edgel_chain"
+#pragma implementation
 #endif
 #include "vsl_edgel_chain.h"
 

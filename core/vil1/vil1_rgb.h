@@ -2,7 +2,7 @@
 #ifndef vil_rgb_h_
 #define vil_rgb_h_
 #ifdef __GNUC__
-#pragma interface "vil_rgb"
+#pragma interface
 #endif
 // .NAME    vil_rgb<> - Templated three-value colour cell
 //

@@ -1,11 +1,12 @@
 #ifndef vsl_break_edge_h_
 #define vsl_break_edge_h_
 #ifdef __GNUC__
-#pragma interface "vsl_break_edge"
+#pragma interface
 #endif
-/*
-  fsm@robots.ox.ac.uk
-*/
+// .NAME vsl_break_edge
+// .INCLUDE vsl/vsl_break_edge.h
+// .FILE vsl_break_edge.cxx
+// \author fsm@robots.ox.ac.uk
 
 class vsl_edge;
 #include <vcl/vcl_list.h>

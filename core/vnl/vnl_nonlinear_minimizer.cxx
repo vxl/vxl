@@ -1,13 +1,11 @@
 //-*- c++ -*-------------------------------------------------------------------
 #ifdef __GNUC__
-#pragma implementation "vnl_nonlinear_minimizer.h"
+#pragma implementation
 #endif
 //
 // Class: vnl_nonlinear_minimizer
 // Author: Andrew W. Fitzgibbon, Oxford RRG
 // Created: 22 Aug 99
-// Modifications:
-//   990822 AWF Initial version.
 //
 //-----------------------------------------------------------------------------
 

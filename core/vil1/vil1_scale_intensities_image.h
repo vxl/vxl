@@ -1,7 +1,13 @@
 #ifndef vil_scale_intensities_image_h_
 #define vil_scale_intensities_image_h_
+#ifdef __GNUC__
+#pragma interface
+#endif
 
-// Purpose: Support function for vil_scale_intensities_image_impl.
+// .NAME vil_scale_intensities_image - Support function for vil_scale_intensities_image_impl
+// .INCLUDE vil/vil_scale_intensities_image.h
+// .FILE vil_scale_intensities_image.cxx
+
 #include <vcl/vcl_compiler.h>
 
 class vil_image;

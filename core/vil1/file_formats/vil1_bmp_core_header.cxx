@@ -2,7 +2,7 @@
   fsm@robots.ox.ac.uk
 */
 #ifdef __GNUC__
-#pragma implementation "vil_bmp_core_header"
+#pragma implementation
 #endif
 #include "vil_bmp_core_header.h"
 

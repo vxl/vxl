@@ -1,7 +1,7 @@
 #ifndef vnl_numeric_traits_h_
 #define vnl_numeric_traits_h_
 #ifdef __GNUC__
-#pragma interface "vnl_numeric_traits.h"
+#pragma interface
 #endif
 //
 // .NAME        vnl_numeric_traits - Templated zero/one/precision
@@ -24,6 +24,7 @@
 //     Andrew W. Fitzgibbon, Oxford RRG, 04 Sep 96
 //
 // .SECTION Modifications:
+//     980212 AWF Initial version.
 //     AWF 010498 Moved to math
 //
 //-----------------------------------------------------------------------------

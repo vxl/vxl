@@ -2,7 +2,7 @@
   fsm@robots.ox.ac.uk
 */
 #ifdef __GNUC__
-#pragma implementation "vsl_easy_canny"
+#pragma implementation
 #endif
 #include "vsl_easy_canny.h"
 

@@ -1,16 +1,19 @@
 #ifndef vil_pyramid_h_
 #define vil_pyramid_h_
 #ifdef __GNUC__
-#pragma interface "vil_pyramid"
+#pragma interface
 #endif
-/*
-  fsm@robots.ox.ac.uk
-*/
-
+// .NAME vil_pyramid
+// .INCLUDE vil/vil_pyramid.h
+// .FILE vil_pyramid.cxx
+//
+// .SECTION Description
 // vil_pyramid is *not* an image. It is like an array of images, with
 // the 0th element as the given image and the ith element a subsampled
 // version of the (i-1)th element. The subsampled images are computed
 // on demand and cached for later use.
+//
+// \author fsm@robots.ox.ac.uk
 
 #include <vil/vil_image.h>
 #include <vcl/vcl_vector.h>

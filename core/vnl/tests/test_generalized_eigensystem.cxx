@@ -1,11 +1,7 @@
-#ifdef __GNUC__
-#pragma implementation "test_generalized_eigensystem.h"
-#endif
 //
-// Class: test_generalized_eigensystem
+// .NAME test_generalized_eigensystem
 // Author: Andrew W. Fitzgibbon, Oxford RRG
 // Created: 29 Aug 96
-// Modifications:
 //
 //-----------------------------------------------------------------------------
 

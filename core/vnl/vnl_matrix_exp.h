@@ -1,7 +1,7 @@
 #ifndef vnl_matrix_exp_h_
 #define vnl_matrix_exp_h_
 #ifdef __GNUC__
-#pragma interface "vnl_matrix_exp"
+#pragma interface
 #endif
 /*
   fsm@robots.ox.ac.uk

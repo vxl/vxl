@@ -1,8 +1,12 @@
 #ifndef vnl_matlab_print2_h_
 #define vnl_matlab_print2_h_
 #ifdef __GNUC__
-#pragma interface "vnl_matlab_print2"
+#pragma interface
 #endif
+//
+// .NAME vnl_matlab_print2
+// .INCLUDE vnl/vnl_matlab_print2.h
+// .FILE vnl_matlab_print2.cxx
 //
 // .SECTION Description
 // After including this header file, the client should be able to say :

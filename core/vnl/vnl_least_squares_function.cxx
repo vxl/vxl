@@ -1,5 +1,5 @@
 #ifdef __GNUC__
-#pragma implementation "vnl_least_squares_function.h"
+#pragma implementation
 #endif
 // Class: vnl_least_squares_function
 // Author: Andrew W. Fitzgibbon, Oxford RRG

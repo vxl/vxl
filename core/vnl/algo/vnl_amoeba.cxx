@@ -1,13 +1,11 @@
 //-*- c++ -*-------------------------------------------------------------------
 #ifdef __GNUC__
-#pragma implementation "vnl_amoeba.h"
+#pragma implementation
 #endif
 //
 // Class: vnl_amoeba
 // Author: Andrew W. Fitzgibbon, Oxford RRG
 // Created: 23 Oct 97
-// Modifications:
-//   971023 AWF Initial version.
 //
 //-----------------------------------------------------------------------------
 

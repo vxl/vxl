@@ -1,13 +1,11 @@
 //-*- c++ -*-------------------------------------------------------------------
 #ifdef __GNUC__
-#pragma implementation "vnl_numeric_traits.h"
+#pragma implementation
 #endif
 //
 // Class: vnl_numeric_traits
 // Author: Andrew W. Fitzgibbon, Oxford RRG
 // Created: 12 Feb 98
-// Modifications:
-//   980212 AWF Initial version.
 //
 //-----------------------------------------------------------------------------
 

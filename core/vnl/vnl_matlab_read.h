@@ -1,11 +1,12 @@
 #ifndef vnl_matlab_read_h_
 #define vnl_matlab_read_h_
 #ifdef __GNUC__
-#pragma interface "vnl_matlab_read.h"
+#pragma interface
 #endif
-/*
-  fsm@robots.ox.ac.uk
-*/
+// .NAME vnl_matlab_read
+// .INCLUDE vnl/vnl_matlab_read.h
+// .FILE vnl_matlab_read.cxx
+// @author fsm@robots.ox.ac.uk
 
 #include <vcl/vcl_iosfwd.h>
 #include <vcl/vcl_complex_fwd.h>

@@ -1,9 +1,14 @@
 #ifndef vil_clamp_image_h_
 #define vil_clamp_image_h_
+#ifdef __GNUC__
+#pragma interface
+#endif
 
 #include <vcl/vcl_compiler.h>
 
-// Purpose: Support function for vil_clamp_image_impl.
+// .NAME vil_clamp_image - Support function for vil_clamp_image_impl
+// .INCLUDE vil/vil_clamp_image.h
+// .FILE vil_clamp_image.cxx
 
 class vil_image;
 

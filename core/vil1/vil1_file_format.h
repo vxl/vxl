@@ -1,6 +1,12 @@
 #ifndef vil_file_format_h_
 #define vil_file_format_h_
+#ifdef __GNUC__
+#pragma interface
+#endif
 
+// .NAME vil_file_format
+// .INCLUDE vil/vil_file_format.h
+// .FILE vil_file_format.cxx
 // .SECTION Author
 //    awf
 

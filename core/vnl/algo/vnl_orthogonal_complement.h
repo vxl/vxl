@@ -1,7 +1,7 @@
 #ifndef vnl_orthogonal_complement_h_
 #define vnl_orthogonal_complement_h_
 #ifdef __GNUC__
-#pragma interface "vnl_orthogonal_complement"
+#pragma interface
 #endif
 /*
   fsm@robots.ox.ac.uk

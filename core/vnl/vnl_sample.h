@@ -1,10 +1,12 @@
 #ifndef vnl_sample_h_
 #define vnl_sample_h_
 #ifdef __GNUC__
-#pragma interface "vnl_sample.h"
+#pragma interface
 #endif
 
-// .NAME  vnl_sample - easy ways to sample from various probability distributions
+// .NAME vnl_sample - easy ways to sample from various probability distributions
+// .INCLUDE vnl/vnl_sample.h
+// .FILE vnl_sample.cxx
 
 // uniform on [a, b)
 double vnl_sample_uniform(double a, double b); 

@@ -1,11 +1,12 @@
 #ifndef vsl_chamfer_h_
 #define vsl_chamfer_h_
 #ifdef __GNUC__
-#pragma interface "vsl_chamfer"
+#pragma interface
 #endif
-/*
-  fsm@robots.ox.ac.uk
-*/
+// .NAME vsl_chamfer
+// .INCLUDE vsl/vsl_chamfer.h
+// .FILE vsl_chamfer.cxx
+// \author fsm@robots.ox.ac.uk
 
 //: Chamfer transform routines taken from vsl_edge_detector.
 void vsl_chamfer_Forward (int,int,int**,float**);

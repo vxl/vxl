@@ -1,12 +1,13 @@
 #ifndef vsl_ortho_regress_h_
 #define vsl_ortho_regress_h_
 #ifdef __GNUC__
-#pragma interface "vsl_ortho_regress"
+#pragma interface
 #endif
-/*
-  fsm@robots.ox.ac.uk
-*/
-
+// .NAME vsl_ortho_regress
+// .INCLUDE vsl/vsl_ortho_regress.h
+// .FILE vsl_ortho_regress.cxx
+//
+// .SECTION Description
 // A vsl_ortho_regress object performs least-squares
 // fitting of straight lines to point sets.
 //
@@ -17,6 +18,8 @@
 //
 // There is no need to store any fitting costs, "current
 // fit" etc on this object.
+//
+// \author fsm@robots.ox.ac.uk
 
 class vsl_ortho_regress {
 public:

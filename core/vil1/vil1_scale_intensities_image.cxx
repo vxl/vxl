@@ -1,5 +1,5 @@
 #ifdef __GNUC__
-#pragma implementation "vil_scale_intensities_image.h"
+#pragma implementation
 #endif
 
 #include "vil_scale_intensities_image.h"

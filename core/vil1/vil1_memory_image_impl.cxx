@@ -1,5 +1,5 @@
 #ifdef __GNUC__
-#pragma implementation "vil_memory_image_impl.h"
+#pragma implementation
 #endif
 
 #include "vil_memory_image_impl.h"

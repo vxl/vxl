@@ -1,16 +1,22 @@
 #ifndef vil_image_impl_h_
 #define vil_image_impl_h_
+#ifdef __GNUC__
+#pragma interface
+#endif
 
-//: 
-// \file vil_image_impl.h
-// \author AWF
-// \date 17 Feb 2000
-// \bug No modifications yet
-// 
-// Representation of a generic image.
+// .NAME vil_image_impl - Representation of a generic image
+// .INCLUDE vil/vil_image_impl.h
+// .FILE vil_image_impl.cxx
 //
+// .SECTION Description
 // A vil_image_impl is reference counted (see below).
 // For a smart-pointer version, use class vil_image.
+//
+// \author AWF
+// \date 17 Feb 2000
+//
+// .SECTION Modifications
+//     000216 AWF Initial version.
 
 class vil_image;
 

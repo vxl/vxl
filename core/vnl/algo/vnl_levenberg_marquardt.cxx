@@ -1,13 +1,10 @@
 #ifdef __GNUC__
-#pragma implementation "vnl_levenberg_marquardt.h"
+#pragma implementation
 #endif
 //
 // Class: vnl_levenberg_marquardt
 // Author: Andrew W. Fitzgibbon, Oxford RRG
 // Created: 31 Aug 96
-// Modifications:
-//    RWMC 001097 Added verbose flag to get rid of all that blathering.
-//    AWF  151197 Added trace flag to increase blather.
 //
 //-----------------------------------------------------------------------------
 

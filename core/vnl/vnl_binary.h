@@ -1,17 +1,20 @@
 #ifndef vnl_binary_h_
 #define vnl_binary_h_
 #ifdef __GNUC__
-#pragma interface "vnl_binary"
+#pragma interface
 #endif
-/*
-  fsm@robots.ox.ac.uk
-*/
-
+// .NAME vnl_binary
+// .INCLUDE vnl/vnl_binary.h
+// .FILE vnl_binary.cxx
+//
+// .SECTION Description
 // Functions for saving and loading matrices and vectors in 
 // binary format. The point of doing that is to 1) make it 
 // go faster and 2) ensure that no accuracy is lost in the
 // process of saving to disk. It doesn't matter that the
 // format is architecture dependent.
+//
+// @author fsm@robots.ox.ac.uk
 
 #include <vcl/vcl_iosfwd.h>
 template <class T> class vnl_vector;

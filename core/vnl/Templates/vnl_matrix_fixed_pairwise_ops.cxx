@@ -1,16 +1,3 @@
-//-*- c++ -*-------------------------------------------------------------------
-#ifdef __GNUC__
-#pragma implementation "vnl_matrix_fixed_pairwise_ops.h"
-#endif
-//
-// Class: vnl_matrix_fixed_pairwise_ops
-// Author: Andrew W. Fitzgibbon, Oxford RRG
-// Created: 23 Apr 99
-// Modifications:
-//   990423 AWF Initial version.
-//
-//-----------------------------------------------------------------------------
-
 #include <vnl/vnl_matrix_fixed.txx>
 
 #if defined(WIN32) || defined(IUE_SUNPRO_CC)

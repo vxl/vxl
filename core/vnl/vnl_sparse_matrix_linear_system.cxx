@@ -1,6 +1,6 @@
 //-*- c++ -*-------------------------------------------------------------------
 #ifdef __GNUC__
-#pragma implementation "vnl_sparse_matrix_linear_system.h"
+#pragma implementation
 #endif
 
 #include "vnl_sparse_matrix_linear_system.h"

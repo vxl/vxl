@@ -1,12 +1,11 @@
 //-*- c++ -*-------------------------------------------------------------------
 #ifdef __GNUC__
-#pragma implementation "vnl_fastops.h"
+#pragma implementation
 #endif
 //
 // Class: vnl_fastops
 // Author: Andrew W. Fitzgibbon, Oxford RRG
 // Created: 08 Dec 96
-// Modifications:
 //
 //-----------------------------------------------------------------------------
 

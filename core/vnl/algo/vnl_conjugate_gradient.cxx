@@ -1,15 +1,12 @@
 //-*- c++ -*-------------------------------------------------------------------
 #ifdef __GNUC__
-#pragma implementation "vnl_conjugate_gradient.h"
+#pragma implementation
 #endif
 //
 // Class: vnl_conjugate_gradient
 // Author: Geoffrey Cross, Oxford RRG
 // Created: 15 Feb 99
-// Modifications:
-//   990215 Geoff Initial version.
-//   000628 David Capel - Major rewrite. Now derived from vnl_nonlinear_minimizer
-//                        and operates on a vnl_cost_function.
+//
 //-----------------------------------------------------------------------------
 #include "vnl_conjugate_gradient.h"
 #include <vnl/vnl_cost_function.h>

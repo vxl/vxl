@@ -1,5 +1,5 @@
 #ifdef __GNUC__
-#pragma implementation "vil_file_format.h"
+#pragma implementation
 #endif
 
 #include "vil_file_format.h"

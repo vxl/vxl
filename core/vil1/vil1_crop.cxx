@@ -1,13 +1,11 @@
 //-*- c++ -*-------------------------------------------------------------------
 #ifdef __GNUC__
-#pragma implementation "vil_crop.h"
+#pragma implementation
 #endif
 //
 // Class: vil_crop
 // Author: Andrew W. Fitzgibbon, Oxford RRG
 // Created: 16 Feb 00
-// Modifications:
-//   000216 AWF Initial version.
 //
 //-----------------------------------------------------------------------------
 
