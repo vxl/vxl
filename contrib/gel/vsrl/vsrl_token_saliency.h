@@ -1,23 +1,23 @@
 #ifndef vsrl_token_saliency_h
 #define vsrl_token_saliency_h
-
+//:
+// \file
 // this class is used to determine the saliency of a particular
-// pixel. It makes this decision based on the results of a correlation 
-// function. We can also ask in the pixel is bounded by salient pixels 
+// pixel. It makes this decision based on the results of a correlation
+// function. We can also ask in the pixel is bounded by salient pixels
 // along its raster line. In this way we can tell whether or not drastic
 // measures will be required.
 
-
-#include<vsrl/vsrl_image_correlation.h>
+#include <vsrl/vsrl_image_correlation.h>
 
 class vsrl_token_saliency
 {
  public:
 
   // constructor
-  vsrl_token_saliency(vsrl_image_correlation *image_correlation); 
+  vsrl_token_saliency(vsrl_image_correlation *image_correlation);
 
-  // destructor 
+  // destructor
   ~vsrl_token_saliency();
 
   // for now we will work with thresholds on mean and std
@@ -68,11 +68,11 @@ class vsrl_token_saliency
   void create_saliency_image(char *filename);
 
  private:
-  vsrl_image_correlation *image_correlation_; // structure used to determine image correlation 
+  vsrl_image_correlation *image_correlation_; // structure used to determine image correlation
 
   vnl_matrix<int> *saliency_matrix_; // a matrix that keeps track of the saliencies
 
-  // the saliency thresholds 
+  // the saliency thresholds
 
   double std_thresh_;
   double mean_thresh_;
@@ -82,4 +82,4 @@ class vsrl_token_saliency
   void compute_saliency_matrix();
 };
 
-#endif
+#endif // vsrl_token_saliency_h
