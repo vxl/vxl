@@ -125,7 +125,6 @@ namespace
 } // end anonymous namespace
 
 
-
 // ==============================================================================
 //                                                            VGUI SECTION BUFFER
 // ==============================================================================
@@ -255,16 +254,16 @@ apply( vil_image_view_base const& image_in )
     DoCase( VIL_PIXEL_FORMAT_DOUBLE )
     default:
     {
-      vcl_cerr << __FILE__ << ":" << __LINE__
+      vcl_cerr << __FILE__ << ": " << __LINE__
                << ": can't handle image pixel format "
-               << component_format << "\n";
+               << component_format << '\n';
     }
   }
 
 #undef DoCase
 
-  if( !conversion_okay ) {
-    vcl_cerr << __FILE__ << ":" << __LINE__ << ": conversion failed\n";
+  if ( !conversion_okay ) {
+    vcl_cerr << __FILE__ << ": " << __LINE__ << ": conversion failed\n";
   }
 
   buffer_ok_ = conversion_okay;
@@ -280,8 +279,7 @@ apply( vil1_image const& image )
 {
   // See comment in the other apply().
 
-  assert( image.planes() == 1 );
-  const int num_comp = image.components();
+  assert( image.planes() == 1 ); // TODO: 3-plane RGB or 4-plane RGBA
   vil1_pixel_format_t pixel_format = vil1_pixel_format( image );
 
   bool conversion_ok = false;
@@ -292,7 +290,7 @@ apply( vil1_image const& image )
       {                                                                      \
         DataType* temp_buffer = new DataType[ w_ * h_ * NComp ];             \
         section_ok = image.get_section( temp_buffer, x_, y_, w_, h_ );       \
-        if( section_ok ) {                                                   \
+        if ( section_ok ) {                                                  \
           vil_image_view<DataType> view( temp_buffer, w_, h_, NComp,         \
                                          NComp, NComp*w_, 1 );               \
           conversion_ok = convert_image( view, 0, 0, w_, h_,                 \
@@ -314,16 +312,16 @@ apply( vil1_image const& image )
     DoCase( VIL1_RGBA_BYTE,  vxl_byte,    4 )
     default:
     {
-      vcl_cerr << __FILE__ << ":" << __LINE__
+      vcl_cerr << __FILE__ << ": " << __LINE__
                << ": can't handle image pixel format "
-               << vil1_print( pixel_format ) << "\n";
+               << vil1_print( pixel_format ) << '\n';
     }
   }
 
 #undef DoCase
 
-  if( !conversion_ok ) {
-    vcl_cerr << __FILE__ << ":" << __LINE__ << ": conversion failed\n";
+  if ( !conversion_ok ) {
+    vcl_cerr << __FILE__ << ": " << __LINE__ << ": conversion failed\n";
   }
 
   if (debug || !section_ok)
@@ -366,7 +364,7 @@ bool
 vgui_section_buffer::
 draw_as_image( float x0, float y0,  float x1, float y1 ) const
 {
-  if( !buffer_ok_ ) {
+  if ( !buffer_ok_ ) {
     vgui_macro_warning << "bad buffer in draw_as_image()\n";
     return draw_as_rectangle( x0, y0, x1, y1 );
   }
