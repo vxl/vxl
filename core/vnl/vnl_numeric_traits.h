@@ -31,7 +31,7 @@
 
 // this is an empty class template.
 // only the specializations make sense.
-#if !defined(VCL_VC_DOTNET)
+#if !defined(VCL_VC)
 template <class T>
 class vnl_numeric_traits;
 #else
