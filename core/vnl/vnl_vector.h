@@ -246,6 +246,15 @@ class vnl_vector
   //: Iterator pointing to element beyond end of data
   const_iterator end() const { return data+num_elmts; }
 
+  //: Return a reference to this.
+  // Useful in code which would prefer not to know if its argument
+  // is a vector, vector_ref or a vector_fixed.  Note that it doesn't
+  // return a vector_ref, so it's only useful in templates or macros.
+  vnl_vector<T> const& as_ref() const { return *this; }
+
+  //: Return a reference to this.
+  vnl_vector<T>&       as_ref()       { return *this; }
+
   //: Applies function to elements
   vnl_vector<T> apply(T (*f)(T)) const;
   //: Applies function to elements

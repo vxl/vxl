@@ -494,6 +494,15 @@ class vnl_matrix
   //: Iterator pointing to element beyond end of data
   const_iterator end() const { return data?data[0]+num_rows*num_cols:0; }
 
+  //: Return a reference to this.
+  // Useful in code which would prefer not to know if its argument
+  // is a matrix, matrix_ref or a matrix_fixed.  Note that it doesn't
+  // return a matrix_ref, so it's only useful in templates or macros.
+  vnl_matrix<T> const& as_ref() const { return *this; }
+
+  //: Return a reference to this.
+  vnl_matrix<T>&       as_ref()       { return *this; }
+
   //--------------------------------------------------------------------------------
 
   //: Return true if *this == rhs

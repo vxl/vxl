@@ -399,10 +399,36 @@ void vnl_levenberg_marquardt::diagnose_outcome(vcl_ostream& s) const
 
 // fdjac is target m*n
 
+//: Get covariance at last minimum.
+// Code thanks to Joss Knight (joss@robots.ox.ac.uk)
 vnl_matrix<double> const& vnl_levenberg_marquardt::get_JtJ()
 {
   if (!set_covariance_) {
-    vcl_cerr << __FILE__ ": get_covariance() not implemented yet\n";
+    vcl_cerr << __FILE__ ": get_covariance() not confirmed tested  yet\n";
+    int n = fdjac_->rows ();
+    vnl_matrix<double> rtr = fdjac_->extract (n, n);
+    rtr = rtr.transpose () * rtr;
+    vnl_matrix<double> rtrpt (n, n);
+    
+    // Permute. First order columns.
+    // Note, *ipvt_ contains 1 to n, not 0 to n-1
+    vnl_vector<int> jpvt (n);
+    for (int j = 0; j < n; j++) {
+      int i = 0;
+      for (; i < n; i++) {
+	if ((*ipvt_)[i] == j+1) {
+	  jpvt (j) = i;
+	  break;
+	}
+      }
+      rtrpt.set_column (j, rtr.get_column (i));
+    }
+    
+    // Now order rows
+    for (int j = 0; j < n; j++) {
+      covariance_->set_row (j, rtrpt.get_row (jpvt(j)));
+    }
+    
     set_covariance_ = true;
   }
   return *covariance_;

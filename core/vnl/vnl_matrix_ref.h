@@ -26,9 +26,6 @@
 //    supplied externally.  This is useful for two main tasks:
 //    (a) Treating some row-based "C" matrix as a vnl_matrix in order to
 //    perform vnl_matrix operations on it.
-//    (b) Declaring a vnl_matrix that uses stack-based storage for the
-//    matrix (See MatrixFixed).  Note however that the rows are still allocated
-//    on the heap.  See MatrixFixed for a fully stack-based solution.
 //
 //    This is a dangerous class.  I believe that I've covered all the bases, but
 //    it's really only intended for interfacing with the Fortran routines.

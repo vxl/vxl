@@ -13,11 +13,19 @@ template <class T> class vnl_c_vector;
 
 template <class T> class vnl_vector;
 template <class T> class vnl_vector_ref;
-template <class T, unsigned n> class vnl_vector_fixed;
 
 template <class T> class vnl_matrix;
 template <class T> class vnl_matrix_ref;
-template <class T, unsigned m, unsigned n> class vnl_matrix_fixed;
+
+#ifdef VCL_VC60
+// VC 6.0 can't forward declare these without barfing.
+// Thereby missing the whole point....
+# include <vnl/vnl_vector_fixed.h>
+# include <vnl/vnl_matrix_fixed.h>
+#else
+  template <class T, unsigned int n> class vnl_vector_fixed;
+  template <class T, unsigned int num_rows, unsigned int num_cols> class vnl_matrix_fixed;
+#endif
 
 template <class T> class vnl_quaternion;
 template <class Return, class Argument> class vnl_unary_function;

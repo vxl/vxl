@@ -14,7 +14,6 @@
 // \verbatim
 // Modifications
 // LSB Manchester 16/3/01 Binary I/O added
-// Paul Smyth     02/5/01 Inserted vnl_vector_fixed_ref as immediate base clase
 //   Feb.2002 - Peter Vanroose - brief doxygen comment placed on single line
 //   Oct.2002 - Amitha Perera - decoupled vnl_vector and vnl_vector_fixed for
 //              space efficiency, removed necessity for vnl_vector_fixed_ref
@@ -47,7 +46,7 @@
 //    vnl_vector_fixed<double,5> my_vec;
 //    
 //    do_something( my_vec );
-//      // Error: no f( vnl_vector_fixed<double,5> ) found
+//      // Error: no do_something( vnl_vector_fixed<double,5> ) found
 //
 //    do_something( my_vec.as_ref() );  // works
 // \endcode
@@ -69,7 +68,7 @@
 // vnl_vector, and does so efficiently. If you try to mix
 // vnl_vector_fixed and vnl_vector, however, you will probably get a
 // vnl_vector result, with the corresponding malloc cost.
-export template <class T, unsigned int n>
+template <class T, unsigned int n>
 class vnl_vector_fixed
 {
 public:
@@ -631,6 +630,16 @@ inline vnl_vector_fixed<T,n> element_quotient( const vnl_vector_fixed<T,n>& a, c
   return r;  
 }
 
+template<class T>
+vnl_vector_fixed<T,3> cross_3d (vnl_vector_fixed<T,3> const& v1, vnl_vector_fixed<T,3> const& v2)
+{
+  vnl_vector_fixed<T,3> result;
+
+  result.x() = v1.y() * v2.z() - v1.z() * v2.y();
+  result.y() = v1.z() * v2.x() - v1.x() * v2.z();
+  result.z() = v1.x() * v2.y() - v1.y() * v2.x();
+  return result;
+}
 
 // These overloads for the common case of mixing a fixed with a
 // non-fixed. Because the operator* are templated, the fixed will not

@@ -112,6 +112,8 @@ class vnl_diag_matrix
   // Need this until we add a vnl_diag_matrix ctor to vnl_matrix;
   inline vnl_matrix<T> asMatrix() const;
 
+  inline vnl_matrix<T> as_ref() const { return asMatrix(); }
+
   void resize(int n) { diagonal_.resize(n); }
   void clear() { diagonal_.clear(); }
   void fill(T const &x) { diagonal_.fill(x); }

@@ -40,10 +40,12 @@ vnl_cholesky::vnl_cholesky(vnl_matrix<double> const & M, Operation mode):
     // Quick factorization
     dpofa_(A_.data_block(), &n, &n, &num_dims_rank_def_);
     if (mode == verbose && num_dims_rank_def_ != 0)
-      vcl_cerr << "vnl_cholesky:: " << num_dims_rank_def_ << " dimensions of non-posdeffness\n";
+      vcl_cerr << "vnl_cholesky: " << num_dims_rank_def_ << " dimensions of non-posdeffness\n";
   } else {
     vnl_vector<double> nullvector(n);
     dpoco_(A_.data_block(), &n, &n, &rcond_, nullvector.data_block(), &num_dims_rank_def_);
+    if (num_dims_rank_def_ != 0)
+      vcl_cerr << "vnl_cholesky: rcond=" << rcond_ << " so " << num_dims_rank_def_ << " dimensions of non-posdeffness\n";
   }
 }
 
@@ -81,11 +83,14 @@ double vnl_cholesky::determinant() const
   return det[0] * vcl_pow(10.0, det[1]);
 }
 
-#if 0 //   not just not efficient, broken
-// : Compute inverse.  Not efficient, and broken
+// : Compute inverse.  Not efficient.
 vnl_matrix<double> vnl_cholesky::inverse() const
 {
-  assert(!"Completely wrong -- see awf@robots.ox.ac.uk");
+  if (num_dims_rank_def_) {
+    vcl_cerr << "vnl_cholesky: Calling inverse() on rank-deficient matrix\n";
+    return vnl_matrix<double>();
+  }
+  
   int n = A_.columns();
   vnl_matrix<double> I = A_;
   int job = 01;
@@ -98,7 +103,6 @@ vnl_matrix<double> vnl_cholesky::inverse() const
 
   return I;
 }
-#endif
 
 //: Return lower-triangular factor.
 vnl_matrix<double> vnl_cholesky::lower_triangle() const

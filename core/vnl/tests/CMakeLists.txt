@@ -2,6 +2,7 @@
 
 INCLUDE( ${MODULE_PATH}/FindNetlib.cmake )
 
+# MESSAGE( NETLIB_FOUND " is " ${NETLIB_FOUND} )
 IF(NETLIB_FOUND)
 
   INCLUDE_DIRECTORIES( ${NETLIB_INCLUDE_DIR} )
@@ -14,6 +15,7 @@ IF(NETLIB_FOUND)
     # The tests
     test_amoeba.cxx
     test_bignum.cxx
+    test_cholesky.cxx
     test_complex.cxx
     test_complex_eigensystem.cxx
     test_convolve.cxx
@@ -61,6 +63,7 @@ IF(NETLIB_FOUND)
   ADD_TEST( vnl_test_include                  vnl_test_driver test_include                 )
   ADD_TEST( vnl_test_amoeba                   vnl_test_driver test_amoeba                  )
   ADD_TEST( vnl_test_bignum                   vnl_test_driver test_bignum                  )
+  ADD_TEST( vnl_test_cholesky                 vnl_test_driver test_cholesky                )
   ADD_TEST( vnl_test_complex                  vnl_test_driver test_complex                 )
   ADD_TEST( vnl_test_complex_eigensystem      vnl_test_driver test_complex_eigensystem     )
   ADD_TEST( vnl_test_convolve                 vnl_test_driver test_convolve                )

@@ -12,6 +12,7 @@
 #include <vcl_iosfwd.h>
 #include <vnl/vnl_fwd.h>
 
+#include <vnl/vnl_fwd.h>
 #include <vnl/vnl_matlab_print_format.h>
 
 // If a variable name (e.g. "foo") is given, the raw data will be preceded by
@@ -60,6 +61,13 @@ vcl_ostream &vnl_matlab_print(vcl_ostream &,
                               char const *variable_name =0,
                               vnl_matlab_print_format =vnl_matlab_print_format_default);
 
+//: print a vnl_matrix_ref<>.
+template <class T>
+vcl_ostream &vnl_matlab_print(vcl_ostream &,
+                              vnl_matrix_ref<T> const &,
+                              char const *variable_name =0,
+                              vnl_matlab_print_format =vnl_matlab_print_format_default);
+
 //: print a vnl_vector<>.
 template <class T>
 vcl_ostream &vnl_matlab_print(vcl_ostream &,
@@ -76,6 +84,6 @@ vcl_ostream &vnl_matlab_print(vcl_ostream &,
 
 
 //: naughty naming-convention-defying-but-handy macro.
-#define MATLABPRINT(X) (vnl_matlab_print(vcl_cerr, X, #X))
+#define MATLABPRINT(X) (vnl_matlab_print(vcl_cerr, (X).as_ref(), #X))
 
 #endif // vnl_matlab_print_h_

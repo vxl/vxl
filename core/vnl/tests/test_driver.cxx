@@ -3,6 +3,7 @@
 DECLARE( test_include );
 DECLARE( test_amoeba );
 DECLARE( test_bignum );
+DECLARE( test_cholesky );
 DECLARE( test_complex );
 DECLARE( test_complex_eigensystem );
 DECLARE( test_convolve );
@@ -50,6 +51,7 @@ register_tests()
   REGISTER( test_include );
   REGISTER( test_amoeba );
   REGISTER( test_bignum );
+  REGISTER( test_cholesky );
   REGISTER( test_complex );
   REGISTER( test_complex_eigensystem );
   REGISTER( test_convolve );
