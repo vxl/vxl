@@ -19,10 +19,15 @@ template class std::basic_ifstream<char, std::char_traits<char> >;
 //template class std::basic_ofstream<char, std::char_traits<char> >;
 namespace {
   void tic(std::ostream &s, int x) { s << std::setw(14) << x; }
+#if 0
+  // my 2.95.2 (linux) has no __mbstate_t.
+  // maybe they were needed for 2.96? 2.95.2 is more important.
+  // fsm
   void toc(std::basic_ostream<char, std::char_traits<char> > &s,
 	   std::fpos<__mbstate_t> x) { s.seekp(x); }
   void tac(std::basic_istream<char, std::char_traits<char> > &s,
 	   std::fpos<__mbstate_t> x) { s.seekg(x); }
+#endif
 }
 # else
 #  if !VCL_HAS_TEMPLATE_SYMBOLS
