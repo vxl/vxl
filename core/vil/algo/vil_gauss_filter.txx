@@ -163,7 +163,13 @@ void vil_gauss_filter_5tap(const vil_image_view<srcT>& src_im,
   else
   {
     if (ni==0 || nj==0) return;
-    if (ni==2)
+    if (ni==1)
+    {
+      for (unsigned p=0;p<n_planes;++p)
+        for (unsigned j=0;j<nj;++j)
+          work(0,j,p) = l_round(src_im(0,j,p), destT());
+    }
+    else if (ni==2)
     {
       const double k0 = params.filt0()/(params.filt0() + params.filt1());
       const double k1 = params.filt1()/(params.filt0() + params.filt1());
@@ -215,7 +221,9 @@ void vil_gauss_filter_5tap(const vil_image_view<srcT>& src_im,
       vil_convolve_1d(src_im,work, kernel+2, -2, +2,
         double(), vil_convolve_trim, vil_convolve_trim);
     }
-    if (nj==2)
+    if (nj==1)
+      dest_im=work;
+    else if (nj==2)
     {
       const double k0 = params.filt0()/(params.filt0() + params.filt1());
       const double k1 = params.filt1()/(params.filt0() + params.filt1());
