@@ -17,7 +17,7 @@
 //: In-place 1D fast fourier transform
 
 template <class T>
-struct vnl_fft_1d : vnl_fft_base<1, T>
+struct vnl_fft_1d : public vnl_fft_base<1, T>
 {
   typedef vnl_fft_base<1, T> base;
 

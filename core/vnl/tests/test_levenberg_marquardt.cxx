@@ -8,7 +8,7 @@
 #include <vnl/vnl_least_squares_function.h>
 #include <vnl/algo/vnl_levenberg_marquardt.h>
 
-struct vnl_rosenbrock : vnl_least_squares_function
+struct vnl_rosenbrock : public vnl_least_squares_function
 {
   vnl_rosenbrock(bool with_grad): vnl_least_squares_function(2, 2, with_grad ? use_gradient : no_gradient) {}
   

@@ -17,7 +17,7 @@
 //: In-place 2D fast fourier transform
 
 template <class T>
-struct vnl_fft_2d : vnl_fft_base<2, T>
+struct vnl_fft_2d : public vnl_fft_base<2, T>
 {
   typedef vnl_fft_base<2, T> base;
 

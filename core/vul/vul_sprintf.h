@@ -30,7 +30,7 @@
 //          << bigobject << vcl_endl;
 // \endcode
 
-struct vul_sprintf : vcl_string
+struct vul_sprintf : public vcl_string
 {
   // ISO C++ does not allow reference types or structure types for the
   // argument preceding ... in a function taking variable a number of

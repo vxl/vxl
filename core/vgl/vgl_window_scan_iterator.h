@@ -13,7 +13,7 @@
 #include <vgl/vgl_region_scan_iterator.h>
 
 //: Iterator to scan rectangular windows
-struct vgl_window_scan_iterator : vgl_region_scan_iterator
+struct vgl_window_scan_iterator : public vgl_region_scan_iterator
 {
   int x1, y1, x2, y2;
 
