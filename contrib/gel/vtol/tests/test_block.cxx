@@ -1,4 +1,5 @@
 // This is gel/vtol/tests/test_block.cxx
+#include <testlib/testlib_test.h>
 #include <vtol/vtol_vertex_2d_sptr.h>
 #include <vtol/vtol_vertex_2d.h>
 #include <vtol/vtol_face_2d.h>
@@ -8,13 +9,8 @@
 #include <vtol/vtol_block.h>
 #include <vtol/vtol_block_sptr.h>
 
-#define Assert(x) { vcl_cout << #x "\t\t\t test "; \
-  if (x) { ++success; vcl_cout << "PASSED\n"; } else { ++failures; vcl_cout << "FAILED\n"; } }
-
-int main(int, char **)
+static void test_block()
 {
-  int success=0, failures=0;
-
   vcl_cout << "testing block\n";
 
   vtol_vertex_2d_sptr v1 = new vtol_vertex_2d(0.0,0.0);
@@ -52,11 +48,11 @@ int main(int, char **)
 
   vtol_two_chain_sptr tc1 = new vtol_two_chain(f_list1);
   vtol_two_chain_sptr tc1_copy = new vtol_two_chain(f_list1);
-  tc1->describe();
+  tc1->describe(vcl_cout,8);
 
-  Assert(*tc1 == *tc1_copy);
+  TEST("vtol_two_chain equality", *tc1, *tc1_copy);
   vtol_block_sptr b1 = new vtol_block(*tc1);
-  b1->describe();
+  b1->describe(vcl_cout,8);
 
   vcl_vector<signed char> dirs;
 
@@ -66,22 +62,22 @@ int main(int, char **)
   vtol_two_chain_sptr tc2 = new vtol_two_chain(f_list1,dirs);
 
   vtol_block_sptr b3 = new vtol_block(f_list1);
-  b3->describe();
+  TEST("vtol_block equality", *b3, *b1);
+  b3->describe(vcl_cout,8);
 
-  Assert(b1->get_boundary_cycle() == tc1.ptr());
+  TEST("vtol_block::get_boundary_cycle()", b1->get_boundary_cycle(), tc1.ptr());
 
-  Assert(*(b1->get_boundary_cycle()) == *(b3->get_boundary_cycle()));
-  Assert(b1->get_boundary_cycle()!=0);
-  Assert(*b3 == *b1);
+  TEST("vtol_block::get_boundary_cycle()", *(b1->get_boundary_cycle()), *(b3->get_boundary_cycle()));
+  TEST("vtol_block::get_boundary_cycle()", b1->get_boundary_cycle()==0, false);
 
   vtol_block_sptr b1_copy = new vtol_block(*b1);
-  b1_copy->describe();
+  TEST("vtol_block copy constructor", *b1, *b1_copy);
+  b1_copy->describe(vcl_cout,8);
 
-  Assert(b1->get_boundary_cycle()!=0);
-  Assert(b1->get_boundary_cycle()!=0);
-  Assert(b1_copy->get_boundary_cycle()!=0);
-  Assert(*(b1->get_boundary_cycle()) == *(b1_copy->get_boundary_cycle()));
-  Assert(*b1 == *b1_copy);
+  TEST("vtol_block::get_boundary_cycle()", b1->get_boundary_cycle()==0, false);
+  TEST("vtol_block::get_boundary_cycle()", b1->get_boundary_cycle()==0, false);
+  TEST("vtol_block::get_boundary_cycle()", b1_copy->get_boundary_cycle()==0, false);
+  TEST("vtol_block::get_boundary_cycle()", *(b1->get_boundary_cycle()), *(b1_copy->get_boundary_cycle()));
 
   two_chain_list tc_list;
   tc_list.push_back(tc2);
@@ -89,29 +85,23 @@ int main(int, char **)
 
   vtol_block_sptr b2 = new vtol_block(tc_list);
 
-  Assert(!(*b2 == *b1));
-  Assert(*(b2->get_boundary_cycle()) == *tc2);
+  TEST("vtol_block inequality", *b2 == *b1, false);
+  TEST("vtol_block::get_boundary_cycle()", *(b2->get_boundary_cycle()), *tc2);
 
   vertex_list *verts = b2->vertices();
-
-  Assert(verts->size()==8);
-
+  TEST("vtol_block::vertices()", verts->size(), 8);
   delete verts;
 
   vtol_block_sptr b2_copy = new vtol_block(*b2);
-
-  Assert(*(b2->get_boundary_cycle()) == *(b2_copy->get_boundary_cycle()));
-  Assert(*b2 == *b2_copy);
+  TEST("vtol_block copy constructor", *b2, *b2_copy);
 
   vsol_spatial_object_2d_sptr b2_clone = b2->clone();
+  TEST("vtol_block::clone()", *b2, *b2_clone);
 
-  Assert(*b2 == *b2_clone);
-  Assert(b2->cast_to_block()!=0);
-  Assert(b1->valid_inferior_type(*tc1));
-  Assert(tc1->valid_superior_type(*b1));
-
-  vcl_cout << "Finished testing block\n";
-  vcl_cout << "Test Summary: " << success << " tests succeeded, "
-           << failures << " tests failed" << (failures?"\t***\n":"\n");
-  return failures;
+  TEST("vtol_block::cast_to_block()", b2->cast_to_block()==0, false);
+  TEST("vtol_block::valid_inferior_type()",b1->valid_inferior_type(*tc1),true);
+  TEST("vtol_block::valid_superior_type()",b1->valid_superior_type(*b1),false);
+  TEST("vtol_two_chain::valid_superior_type()",tc1->valid_superior_type(*b1),true);
 }
+
+TESTLIB_DEFINE_MAIN(test_block);

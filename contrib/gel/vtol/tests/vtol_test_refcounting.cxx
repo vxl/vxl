@@ -1,4 +1,4 @@
-// This is gel/vtol/tests/test_refcounting.cxx
+// This is gel/vtol/tests/vtol_test_refcounting.cxx
 #include <testlib/testlib_test.h>
 //:
 // \file
@@ -48,8 +48,8 @@ static void vtol_test_refcounting()
   TEST("single edge has refcount 0", e2->get_references(), 0);
   TEST("single edge has refcount 0", e3->get_references(), 0);
 
-  v1->describe();
-  e1->describe();
+  v1->describe(vcl_cout,8);
+  e1->describe(vcl_cout,8);
 
   // create a triangle (face) from 3 vertices
   vertex_list vl1; vl1.push_back(v1); vl1.push_back(v2); vl1.push_back(v3);
@@ -63,9 +63,9 @@ static void vtol_test_refcounting()
   TEST("edge on triangle has refcount 1", e3->get_references(), 1);
   TEST("single face has refcount 0", f1->get_references(), 0);
 
-  v1->describe();
-  e1->describe();
-  f1->describe();
+  v1->describe(vcl_cout,8);
+  e1->describe(vcl_cout,8);
+  f1->describe(vcl_cout,8);
 
   // create a rectangle (face) from 4 vertices
   vl1.push_back(new vtol_vertex_2d(0.0,0.0));
@@ -82,7 +82,7 @@ static void vtol_test_refcounting()
   TEST("edge on triangle has refcount 1", e2->get_references(), 1);
   TEST("edge on triangle has refcount 1", e3->get_references(), 1);
 
-  f2->describe();
+  f2->describe(vcl_cout,8);
 
   // create a face with a hole from 2 1-chains
   one_chain_list ol1;
@@ -96,7 +96,7 @@ static void vtol_test_refcounting()
   TEST("edge on triangle has refcount 1", e2->get_references(), 1);
   TEST("edge on triangle has refcount 1", e3->get_references(), 1);
 
-  f3->describe();
+  f3->describe(vcl_cout,8);
 
   // Now removing the objects one by one, and watching the refcounts:
   delete f1;

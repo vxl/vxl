@@ -1,7 +1,6 @@
 // This is gel/vtol/tests/test_cycle_processor.cxx
-#include <vcl_cstdlib.h> // for vcl_abs()
+#include <testlib/testlib_test.h>
 #include <vcl_algorithm.h> // vcl_find()
-#include <vcl_cmath.h>
 #include <vtol/vtol_vertex_2d.h>
 #include <vtol/vtol_vertex_2d_sptr.h>
 #include <vtol/vtol_edge_2d.h>
@@ -17,20 +16,9 @@
 #include <vsol/vsol_point_2d_sptr.h>
 #include <vsol/vsol_curve_2d_sptr.h>
 
-#define Assert(x) { vcl_cout << #x "\t\t\t test "; \
-  if (x) { ++success; vcl_cout << "PASSED\n"; } else { ++failures; vcl_cout << "FAILED\n"; } }
-
-bool near_eq(double x, double y)
-{
-  double d = x-y;
-  double er = vcl_abs(d);
-  return er<1e-03;
-}
-
-int main(int, char **)
+static void test_cycle_processor()
 {
   bool basic_ops = true, cycle_ops = true, set_ops = true, merge_ops = true;
-  int success=0, failures=0;
 
   vcl_cout<< "Testing basic ops\n";
   if (basic_ops)
@@ -56,7 +44,7 @@ int main(int, char **)
     bool eequal = (*eit)==e1;
     vcl_cout << "Found edge == e1 " << eequal << vcl_endl;
 
-    vcl_cout << "edges before erase " << vcl_endl;
+    vcl_cout << "edges before erase\n";
     for (vcl_vector<vtol_edge_2d_sptr>::iterator jit = edges.begin();
          jit != edges.end(); jit++)
       vcl_cout << *jit  << " " ;
@@ -69,7 +57,7 @@ int main(int, char **)
          jit != edges.end(); jit++)
       vcl_cout << " " << *jit;
     vcl_cout << vcl_endl;
-    Assert(edges[0]==e0 && edges[1]==e2);
+    TEST("edges content", edges.size()==2 && edges[0]==e0 && edges[1]==e2, true);
     //Check angle between edges
     vsol_point_2d_sptr pa = new vsol_point_2d(10.0, 5.0);
     vsol_point_2d_sptr pb = new vsol_point_2d(9.33, 2.5);
@@ -101,20 +89,22 @@ int main(int, char **)
     double ang_ef_fa = vtol_cycle_processor::
       angle_between_edges(eef,efa,(vf->cast_to_vertex()));
     vcl_cout << "Angle ef-fa = " << ang_ef_fa <<vcl_endl;
+    TEST_NEAR("angle_between_edges()", ang_ef_fa,-45, 1e-3);
 
     double ang_ef_fb = vtol_cycle_processor::
       angle_between_edges(eef,efb,(vf->cast_to_vertex()));
     vcl_cout << "Angle ef-fb = "  << ang_ef_fb << vcl_endl;
+    TEST_NEAR("angle_between_edges()", ang_ef_fb,-30, 1e-3);
 
     double ang_ef_fc = vtol_cycle_processor::
       angle_between_edges(eef,efc,(vf->cast_to_vertex()));
     vcl_cout << "Angle ef-fc = " << ang_ef_fc << vcl_endl;
+    TEST_NEAR("angle_between_edges()", ang_ef_fc, 30, 1e-3);
 
     double ang_ef_fd = vtol_cycle_processor::
       angle_between_edges(eef,efd,(vf->cast_to_vertex()));
     vcl_cout << "Angle ef-fd = " << ang_ef_fd << vcl_endl;
-    Assert(near_eq(ang_ef_fa,-45) && near_eq(ang_ef_fb,-30)
-         && near_eq(ang_ef_fc,30) && near_eq(ang_ef_fd,45));
+    TEST_NEAR("angle_between_edges()", ang_ef_fd, 45, 1e-3);
   }
 
   //
@@ -156,7 +146,7 @@ int main(int, char **)
         }
     else
       vcl_cout << "No cycles were formed\n";
-    Assert(nested_chains.size()==1);
+    TEST("nested_chains", nested_chains.size(), 1);
     //Add an interior hole
     vsol_point_2d_sptr pi0 = new vsol_point_2d(1.0, 1.0);
     vsol_point_2d_sptr pi1 = new vsol_point_2d(7.0, 1.0);
@@ -189,7 +179,7 @@ int main(int, char **)
           vcl_cout << vcl_endl;
            delete cedges;
         }
-        Assert(nested_chains.size()==2);
+        TEST("nested_chains", nested_chains.size(), 2);
   }
 
   //
@@ -233,7 +223,7 @@ int main(int, char **)
            eit != s1_and_s2.end(); eit++)
         vcl_cout<< *eit;
       vcl_cout<< vcl_endl;
-      Assert(s1_and_s2[0]==e1);
+      TEST("vtol_cycle_processor::intersect_edges()", s1_and_s2[0], e1);
       //Test set difference
       vcl_vector<vtol_edge_sptr> s1_diff_s2;
       vtol_cycle_processor::difference_edges(s1, s2, s1_diff_s2);
@@ -252,7 +242,8 @@ int main(int, char **)
            eit != s1_diff_s2.end(); eit++)
         vcl_cout<< *eit;
       vcl_cout<< vcl_endl;
-      Assert((s1_diff_s2[0]==e2) && (s1_diff_s2[1]==e3));
+      TEST("vtol_cycle_processor::difference_edges()",
+           (s1_diff_s2[0]==e2) && (s1_diff_s2[1]==e3), true);
       vcl_cout << "Ending set operation tests\n\n";
     }
   //
@@ -293,7 +284,7 @@ int main(int, char **)
       vtol_one_chain_sptr merged_cycle = new vtol_one_chain(merged_edges, true);
       merged_cycles.push_back(merged_cycle);
 #endif
-      Assert(merged_cycles.size()==1);
+      TEST("vtol_cycle_processor::merge_one_cycles()", merged_cycles.size(), 1);
       vcl_cout<< "number of one_cycles = " << merged_cycles.size() << vcl_endl;
       if (merged_cycles.size() > 0)
       {
@@ -302,15 +293,13 @@ int main(int, char **)
         for (vcl_vector<vtol_edge_sptr>::iterator eit = outer_edges->begin();
              eit != outer_edges->end(); eit++)
           vcl_cout<< *eit << vcl_endl;
-        Assert((*outer_edges)[0]==e2 && (*outer_edges)[1]==e3
-             &&(*outer_edges)[2]==e4 && (*outer_edges)[3]==e5);
+        TEST("vtol_cycle_processor::merge_one_cycles()",
+             (*outer_edges)[0]==e2 && (*outer_edges)[1]==e3
+           &&(*outer_edges)[2]==e4 && (*outer_edges)[3]==e5, true);
         delete outer_edges;
       }
       vcl_cout << "Ending merge operation tests\n\n";
     }
-
-  vcl_cout << "finished testing cycle_processor\n";
-  vcl_cout << "Test Summary: " << success << " tests succeeded, "
-           << failures << " tests failed" << (failures?"\t***\n":"\n");
-  return failures;
 }
+
+TESTLIB_DEFINE_MAIN(test_cycle_processor);
