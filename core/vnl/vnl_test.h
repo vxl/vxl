@@ -6,11 +6,13 @@
 // "vnl_test_" by "testlib_test_".
 //
 
+#ifndef TESTMAIN
 #include <testlib/testlib_test.h>
 #undef MAIN
 #define MAIN( testname ) int main( int argc, char* argv[] )
 #undef TESTMAIN
 #define TESTMAIN( testname ) MAIN( testname ) { START( #testname ); testname(); SUMMARY(); }
+#endif
 #define vnl_test_start testlib_test_start
 #define vnl_test_begin testlib_test_begin
 #define vnl_test_perform testlib_test_perform
