@@ -232,7 +232,7 @@ tb_project_to_sphere(float r, float x, float y)
     if (d*2 < r) /* Inside sphere */
         return sqrtf(r - d);
     else         /* On hyperbola */
-        return r * 0.5 / sqrtf(d);
+        return r * 0.5f / sqrtf(d);
 }
 
 /*
