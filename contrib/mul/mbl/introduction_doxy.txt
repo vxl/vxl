@@ -1,0 +1,10 @@
+// The following text is included in the main documentation page by doxygen
+/*! \mainpage mbl : Manchester's Basics Library
+* Provides a variety of useful routines used by other mul libraries.
+*
+* Highlights include:
+* - mbl_mz_random : Superior random number generator
+* - mbl_data_collector : Base for objects which collect things, one at a time
+* - mbl_data_wrapper : Base for objects which return things, one at a time
+* - mbl_stats_1d : Simple one dimensional statistics (mean, variance, min, max etc)
+*/
