@@ -519,7 +519,7 @@ depth_image(vil1_memory_image_of<unsigned char>& depth_out,
   //scan over the required z planes and get the union of all overlapping boxes
   vsol_box_2d_sptr un = this->depth_image_box(zmin_, zmax_);
   double Tx = -(un->get_min_x()), Ty = -(un->get_min_y());
-  int w = (int)un->width(), h = un->height();
+  int w = (int)(un->width()), h = (int)(un->height());
 
   //data processing images
   //an image of maximum correlation value over the depth range
@@ -557,9 +557,7 @@ depth_image(vil1_memory_image_of<unsigned char>& depth_out,
     vil1_memory_image_of<float> base(w, h);
     if (!brip_vil1_float_ops::homography(cc, Htrans, base, true, null_corr))
       continue;
-    //JLM Debug
     z_corr_images_.push_back(base);
-    int c0=w/2, r0 = h/2, dr = 4;
     vcl_cout << "corr for depth " << z << vcl_endl;
     for (int r = 0; r<h; r++)
       for (int c=0; c<w; c++)
@@ -572,7 +570,6 @@ depth_image(vil1_memory_image_of<unsigned char>& depth_out,
           max_corr(c, r) = cc_val;
           depth(c, r) = z;
         }
-        //debug_print(c0, r0, dr, c, r, cc_val);
       }
   }
   depth_out = brip_vil1_float_ops::convert_to_byte(depth, null_depth, zmax_);
@@ -605,7 +602,7 @@ harris_depth_match(vcl_vector<vsol_point_3d_sptr>& points_3d,
   //scan over the required z planes and get the union of all overlapping boxes
   vsol_box_2d_sptr un = this->depth_image_box(zmin_, zmax_);
   double Tx = -(un->get_min_x()), Ty = -(un->get_min_y());
-  int w = (int)un->width(), h = un->height();
+  int w = (int)(un->width()), h = (int)(un->height());
 
   //data processing images
   //an image of maximum correlation value over the depth range
@@ -616,7 +613,6 @@ harris_depth_match(vcl_vector<vsol_point_3d_sptr>& points_3d,
   vil1_memory_image_of<float> depth(w, h);
   float null_depth = -10;
   depth.fill(null_depth);
-  float null_corr = -1.0;
   //iterate through the depth planes
   vil1_memory_image_of<float> back;
   vcl_vector<vil1_memory_image_of<float> > imgs;
@@ -735,7 +731,8 @@ correlate_corners(vcl_vector<vil1_memory_image_of<float> > const& imgs,
     int r = (int)y0, c = (int)x0;
     if (r<0||r>=h||c<0||c>=w)
       continue;
-    if (has_neighbor(r, c, point_radius_, h, w, pt_index))
+    int pr = (int)point_radius_;
+    if (has_neighbor(r, c, pr, h, w, pt_index))
     {
       float val =
         brip_vil1_float_ops::cross_correlate(imgs[0], imgs[1], x0, y0,
@@ -934,7 +931,6 @@ void brct_plane_sweeper::init_harris_match(const int from_cam)
   int nrows = 192, ncols = 256;
   int to_cam = 1-from_cam;
   vcl_vector<vsol_point_2d_sptr> to_points = harris_corners_[to_cam];
-  float rad = point_radius_;
   pindx_ = bsol_point_index_2d(nrows, ncols, to_points);
   vcl_vector<vsol_point_2d_sptr> temp = pindx_.points();
   vcl_cout << "\nTotal points in point index = " << temp.size() << vcl_endl;
