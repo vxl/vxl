@@ -3,7 +3,6 @@
 //:
 // \file
 
-#include <vcl_algorithm.h>
 #include <vsl/vsl_binary_io.h>
 #include <vbl/io/vbl_io_smart_ptr.h>
 #include <bmrf/bmrf_node.h>
@@ -15,7 +14,7 @@
 //: Constructor
 bmrf_arc::bmrf_arc()
   : from_(NULL), to_(NULL), probability_(-1.0),
-    min_alpha_(0.0), max_alpha_(0.0), avg_intensity_error_(0.0), 
+    min_alpha_(0.0), max_alpha_(0.0), avg_intensity_error_(0.0),
     dist_ratio_(0.0), induced_match_error_(0.0)
 {
 }
@@ -24,7 +23,7 @@ bmrf_arc::bmrf_arc()
 //: Constructor
 bmrf_arc::bmrf_arc( const bmrf_node_sptr& f, const bmrf_node_sptr& t)
   : from_(f.ptr()), to_(t.ptr()), probability_(-1.0),
-    min_alpha_(0.0), max_alpha_(0.0), avg_intensity_error_(0.0), 
+    min_alpha_(0.0), max_alpha_(0.0), avg_intensity_error_(0.0),
     dist_ratio_(0.0), induced_match_error_(0.0)
 {
   if ( from_ && to_ ) {
@@ -34,8 +33,8 @@ bmrf_arc::bmrf_arc( const bmrf_node_sptr& f, const bmrf_node_sptr& t)
 }
 
 
-//: Produce a new arc which is the reverse of this one efficiently 
-bmrf_arc_sptr 
+//: Produce a new arc which is the reverse of this one efficiently
+bmrf_arc_sptr
 bmrf_arc::reverse() const
 {
   bmrf_arc_sptr rev_arc = new bmrf_arc(*this);
@@ -55,22 +54,22 @@ bmrf_arc::reverse() const
 
 
 //: Return the probability of this arc
-double 
+double
 bmrf_arc::probability()
 {
-  if(probability_ < 0.0)
+  if (probability_ < 0.0)
     from_->compute_probability();
   return probability_;
 }
 
 
 //: The change in time spanned by this arc
-int 
+int
 bmrf_arc::time_step() const
-{ 
-  if( !to_ || !from_ )
+{
+  if ( !to_ || !from_ )
     return 0;
-  return to_->frame_num() - from_->frame_num(); 
+  return to_->frame_num() - from_->frame_num();
 }
 
 
@@ -94,8 +93,8 @@ bmrf_arc::b_read( vsl_b_istream& )
 void
 bmrf_arc::time_init()
 {
-  if( from_->epi_seg()->n_pts() <= 0 || 
-      to_->epi_seg()->n_pts() <= 0 )
+  if ( from_->epi_seg()->n_pts() <= 0 ||
+       to_->epi_seg()->n_pts() <= 0 )
     return;
 
   bmrf_epi_seg_sptr ep1 = from_->epi_seg();
@@ -106,7 +105,7 @@ bmrf_arc::time_init()
 
   avg_intensity_error_ = bmrf_intensity_error(ep1, ep2);
   dist_ratio_ = bmrf_avg_distance_ratio(ep1, ep2);
-        
+
   bmrf_gamma_func_sptr gamma_inv = new bmrf_const_gamma_func(induced_gamma_inv());
   bmrf_epi_seg_sptr xform_seg = bmrf_epi_transform(ep2, gamma_inv, double(-time_step()));
   induced_match_error_ = bmrf_match_error(ep1, xform_seg);
@@ -116,7 +115,6 @@ bmrf_arc::time_init()
 //-----------------------------------------------------------------------------------------
 // External functions
 //-----------------------------------------------------------------------------------------
-
 
 
 //: Binary save bmrf_arc \p a to stream.
