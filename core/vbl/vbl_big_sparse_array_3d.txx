@@ -1,4 +1,4 @@
-// This is vxl/vbl/vbl_big_sparse_array_3d.txx
+// This is core/vbl/vbl_big_sparse_array_3d.txx
 #ifndef vbl_big_sparse_array_3d_txx_
 #define vbl_big_sparse_array_3d_txx_
 
@@ -26,13 +26,13 @@ inline ulonglong bigencode(unsigned i, unsigned j, unsigned k)
 inline void bigdecode(ulonglong v, unsigned& i, unsigned& j, unsigned& k)
 {
 #if VXL_HAS_INT_64
-  k = v & 0x1fffff; // 21 lowest bits
-  j = (v >> 21) & 0x1fffff; // "middle" 21 bits
-  i = (v >> 42) & 0x3fffff; // 22 highest bits
+  k = (unsigned)(v & 0x1fffff); // 21 lowest bits
+  j = (unsigned)((v >> 21) & 0x1fffff); // "middle" 21 bits
+  i = (unsigned)((v >> 42) & 0x3fffff); // 22 highest bits
 #else
-  k = v & 0x7ff; // 11 lowest bits
-  j = (v >> 11) & 0x7ff; // "middle" 11 bits
-  i = (v >> 22) & 0x3ff; // 10 highest bits
+  k = (unsigned)(v & 0x7ff); // 11 lowest bits
+  j = (unsigned)((v >> 11) & 0x7ff); // "middle" 11 bits
+  i = (unsigned)((v >> 22) & 0x3ff); // 10 highest bits
 #endif
 }
 
@@ -72,7 +72,7 @@ template <class T>
 bool vbl_big_sparse_array_3d<T>::put(unsigned i, unsigned j, unsigned k, T const& t)
 {
   typedef typename Map::iterator iter;
-  unsigned int v = bigencode(i,j,k);
+  ulonglong v = bigencode(i,j,k);
   vcl_pair<iter,bool> res = storage_.insert(Map::value_type(v,t));
 #ifdef DEBUG
   vcl_cout << "{vbl_big_sparse_array_3d::put(" << i << "," << j << "," << k << ") - "
