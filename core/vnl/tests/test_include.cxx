@@ -1,14 +1,18 @@
 #include <vnl/vnl_fwd.h>
+#include <vnl/algo/vnl_algo_fwd.h>
+#include <vnl/vnl_config.h>
 
 #include <vnl/vnl_T_n.h>
 #include <vnl/vnl_alloc.h>
 #include <vnl/vnl_bignum.h>
+#include <vnl/vnl_bignum_traits.h>
 #include <vnl/vnl_block.h>
 #include <vnl/vnl_c_vector.h>
 #include <vnl/vnl_complex.h>
 #include <vnl/vnl_complexify.h>
 #include <vnl/vnl_complex_traits.h>
 #include <vnl/vnl_copy.h>
+#include <vnl/vnl_cross.h>
 #include <vnl/vnl_cost_function.h>
 #include <vnl/vnl_cross_product_matrix.h>
 #include <vnl/vnl_det.h>
@@ -33,6 +37,7 @@
 #include <vnl/vnl_float_3.h>
 #include <vnl/vnl_float_4.h>
 #include <vnl/vnl_fortran_copy.h>
+#include <vnl/vnl_gamma.h>
 #include <vnl/vnl_identity.h>
 #include <vnl/vnl_identity_3x3.h>
 #include <vnl/vnl_imag.h>
@@ -65,6 +70,7 @@
 #include <vnl/vnl_operators.h>
 #include <vnl/vnl_quaternion.h>
 #include <vnl/vnl_rational.h>
+#include <vnl/vnl_rational_traits.h>
 #include <vnl/vnl_real.h>
 #include <vnl/vnl_real_npolynomial.h>
 #include <vnl/vnl_real_polynomial.h>
@@ -75,16 +81,12 @@
 #include <vnl/vnl_sparse_matrix_linear_system.h>
 #include <vnl/vnl_sym_matrix.h>
 #include <vnl/vnl_tag.h>
-//#include <vnl/vnl_tensor.h>
-//#include <vnl/vnl_tensor_traits.h>
 #include <vnl/vnl_trace.h>
 #include <vnl/vnl_transpose.h>
 #include <vnl/vnl_unary_function.h>
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_vector_fixed.h>
 #include <vnl/vnl_vector_ref.h>
-
-#include <vnl/algo/vnl_algo_fwd.h>
 
 #include <vnl/algo/vnl_adjugate.h>
 #include <vnl/algo/vnl_amoeba.h>
