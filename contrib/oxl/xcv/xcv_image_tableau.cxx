@@ -19,7 +19,6 @@
 
 #include <vil/vil_crop.h>
 #include <vil/vil_image.h>
-#include <vil/vil_rgb.h>
 #include <vil/vil_rgba.h>
 
 #include <vgui/vgui_event.h>
@@ -143,7 +142,7 @@ bool xcv_image_tableau::handle(vgui_event const &e)
     float pointx, pointy;
     vgui_projection_inspector p_insp;
     p_insp.window_to_image_coordinates(e.wx, e.wy, pointx, pointy);
-    int intx = vcl_floor(pointx), inty = vcl_floor(pointy);
+    int intx = (int)vcl_floor(pointx), inty = (int)vcl_floor(pointy);
 
     // Get RGB value to display on status bar:
 
