@@ -40,7 +40,6 @@ oxl vgui vgui_ build
 
 package: gel GE Libraries
 # Need to check dependency order
-gel gbl gbl_   build
 gel geml geml_ build
 gel gevd gevd_ build
 gel gkll gkll_ build
