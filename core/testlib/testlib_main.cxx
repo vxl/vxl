@@ -4,7 +4,9 @@
 #include <vcl_string.h>
 #include <vcl_vector.h>
 
-#if defined(VCL_WIN32)
+// should this really be #if defined(VCL_VC) ?
+// VCL_WIN32 is not defined under cygwin/gcc
+#if defined(VCL_WIN32) && ! defined(__MINGW32__)
 #  include <crtdbg.h>
 #  include <windows.h>
 #  include <vcl_cstdio.h>
