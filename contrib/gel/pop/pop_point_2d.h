@@ -1,0 +1,58 @@
+// This is core/vgl/pop_point_2d.h
+#ifndef pop_point_2d_h_
+#define pop_point_2d_h_
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
+#pragma interface
+#endif
+//:
+// \file
+// \brief a 2d point with a coordinate system
+//
+//
+// \author
+//            Peter Tu April 2003
+//            General Electric
+//
+// \verbatim
+// \endverbatim
+//
+//-------------------------------------------------------------------------------
+//: this is a 2d point with a coordinate system
+
+#include<vgl/vgl_point_2d.h>
+#include<pop/pop_point_2d.h>
+#include<pop/pop_geometric_object.h>
+#include<pop/pop_vertex.h>
+#include<vcl_list.h>
+#include<pop/pop_parameter.h>
+
+
+class pop_point_2d:public vgl_point_2d<double>, public pop_geometric_object
+{
+ public:
+  //: constructor
+  pop_point_2d(pop_vertex *coordinate_system,vcl_vector<pop_parameter*> &params);
+
+  //: constructor
+  // this is used when we want to represent a non parameteric result
+  pop_point_2d(pop_vertex *coordinate_system, double x, double y);
+  
+  //: destructor
+  ~pop_point_2d();
+  
+  //: this is the update method 
+
+  virtual void update();
+
+  //: this is the casting which needs to be done
+  virtual pop_point_2d* cast_to_pop_point_2d() {return this;} 
+  
+  //: compute the cost between two points 
+  virtual double cost(pop_geometric_object *other);
+ 
+ private:
+  
+    
+};
+
+#endif // pop_point_2d_h_
