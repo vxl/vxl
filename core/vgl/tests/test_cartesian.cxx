@@ -141,9 +141,13 @@ static void test_point_2d()
   vgl_point_2d<int> p1(3,7), p2(d), p3(-1,-8);
   vcl_cout << p3 << vcl_endl;
 
+  TEST("constructor", p1.x() = 3 && p1.y()==7, true);
+
   TEST("inequality", (p1 != p3), true);
 
   p3.set(3,7);
+  TEST("set", p3.x() = 3 && p3.y()==7, true);
+
   TEST("equality", (p1 == p3), true);
 
   vgl_vector_2d<int> d1 = p1 - p2;
