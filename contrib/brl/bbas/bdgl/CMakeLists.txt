@@ -20,6 +20,7 @@ SET(bdgl_sources
 	DPMatch.h	DPMatch.cxx 
 	curveMatch.h
 	utils.h		utils.cxx
+	bdgl_curve_region.h bdgl_curve_region.cxx
 )
 AUX_SOURCE_DIRECTORY(Templates bdgl_sources)
 
