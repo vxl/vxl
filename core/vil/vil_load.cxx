@@ -29,7 +29,7 @@ vil2_image_resource_sptr vil2_load_image_resource_raw(vil2_stream *is)
   }
 
   // failed.
-  vcl_cerr << __FILE__ ": Tried";
+  vcl_cerr << __FILE__ ": Unable to load image;\ntried";
   for (vil2_file_format** p = vil2_file_format::all(); *p; ++p)
     // 'flush' in case of segfault next time through loop. Else, we
     // will not see those printed tags still in the stream buffer.
