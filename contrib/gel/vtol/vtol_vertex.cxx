@@ -120,9 +120,9 @@ vcl_vector<vtol_block*>* vtol_vertex::compute_blocks(void)
 //: Is `inferior' type valid for `this' ?
 //---------------------------------------------------------------------------
 bool
-vtol_vertex::valid_inferior_type(const vtol_topology_object &inferior) const
+vtol_vertex::valid_inferior_type(const vtol_topology_object &) const
 {
-  return false;
+  return false; // a vertex can never have an inferior
 }
 
 //---------------------------------------------------------------------------
@@ -276,8 +276,3 @@ void vtol_vertex::explore_vertex(vertex_list &verts)
     }
   delete e_list;
 }
-
-#ifdef VCL_GCC_27
-#include <vcl_rel_ops.h>
-VCL_INSTANTIATE_INLINE(bool operator!=(vtol_vertex const &, vtol_vertex const &));
-#endif

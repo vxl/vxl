@@ -118,6 +118,7 @@ public:
                                  vtol_vertex &new_end_point);
 
   virtual bool operator==(const vtol_edge &other) const;
+  inline bool operator!=(const vtol_edge &other)const{return !operator==(other);}
   bool operator==(const vsol_spatial_object_3d& obj) const; // virtual of vsol_spatial_object
 
   virtual void add_edge_loop(vtol_one_chain &);

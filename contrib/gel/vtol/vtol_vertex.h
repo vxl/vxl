@@ -67,6 +67,7 @@ public:
   //: Is `this' has the same coordinates for its point than `other' ?
   //---------------------------------------------------------------------------
   virtual bool operator==(const vtol_vertex &other) const;
+  inline bool operator!=(const vtol_vertex &other)const{return !operator==(other);}
   bool operator==(const vsol_spatial_object_3d& obj) const; // virtual of vsol_spatial_object
 
   //---------------------------------------------------------------------------
@@ -155,7 +156,5 @@ public:
   virtual vcl_vector<vtol_two_chain*> *compute_two_chains(void);
   virtual vcl_vector<vtol_block*> *compute_blocks(void);
 };
-
-inline bool operator!=(vtol_vertex const &a, vtol_vertex const &b) { return !(a == b); }
 
 #endif // vtol_vertex_h

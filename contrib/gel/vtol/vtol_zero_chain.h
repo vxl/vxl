@@ -123,6 +123,7 @@ public:
   //: Is `this' equal to `other' ?
   //---------------------------------------------------------------------------
   virtual bool operator==(const vtol_zero_chain &other) const;
+  inline bool operator!=(const vtol_zero_chain &other)const{return !operator==(other);}
   bool operator==(const vsol_spatial_object_3d& obj) const; // virtual of vsol_spatial_object_3d
 
   virtual void print(vcl_ostream &strm=vcl_cout) const;

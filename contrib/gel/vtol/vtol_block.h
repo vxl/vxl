@@ -158,6 +158,7 @@ public:
 
   //  virtual void update(void);
   virtual bool operator==(const vtol_block &other) const;
+  inline bool operator!=(const vtol_block &other)const{return !operator==(other);}
   virtual bool operator==(const vsol_spatial_object_3d& obj) const; // virtual of vsol_spatial_object_3d
 
   //: Printing Functions

@@ -315,7 +315,7 @@ bool
 vtol_two_chain::break_into_connected_components( vcl_vector<vtol_topology_object*> & components )
 {
   vcl_cerr << "vtol_two_chain::break_into_connected_components() not implemented yet\n";
-  return false; // TO DO
+  return false; // TODO
 }
 
 #if 0 // TODO

@@ -315,9 +315,3 @@ bool vtol_vertex_2d::compare_geometry(const vtol_vertex &other) const
 {
   return other.cast_to_vertex_2d() && (*point_)==(*(other.cast_to_vertex_2d()->point()));
 }
-
-
-#ifdef VCL_GCC_27
-#include <vcl_rel_ops.h>
-VCL_INSTANTIATE_INLINE(bool operator!=(vtol_vertex_2d const &, vtol_vertex_2d const &));
-#endif

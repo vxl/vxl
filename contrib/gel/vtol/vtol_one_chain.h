@@ -162,6 +162,7 @@ public:
   // Operators
 
   virtual bool operator==(vtol_one_chain const& other) const;
+  inline bool operator!=(const vtol_one_chain &other)const{return !operator==(other);}
   bool operator==(vsol_spatial_object_3d const& obj) const; // virtual of vsol_spatial_object_3d
 
   virtual void print(vcl_ostream &strm=vcl_cout) const;

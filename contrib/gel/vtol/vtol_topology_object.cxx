@@ -500,8 +500,3 @@ vcl_vector<vtol_block *> *vtol_topology_object::compute_blocks(void)
   vcl_cout << "Compute blocks" << vcl_endl;
   return 0;
 }
-
-#ifdef VCL_GCC_27
-#include <vcl_rel_ops.h>
-VCL_INSTANTIATE_INLINE(bool operator!=(vtol_topology_object const &, vtol_topology_object const &));
-#endif

@@ -158,10 +158,9 @@ vtol_block::valid_inferior_type(const vtol_topology_object &inferior) const
 //: Is `superior' type valid for `this' ?
 //---------------------------------------------------------------------------
 bool
-vtol_block::valid_superior_type(const vtol_topology_object &superior)
-const
+vtol_block::valid_superior_type(const vtol_topology_object &) const
 {
-  return false;
+  return false; // "block" has no possible valid superiors
 }
 
 //: outside boundary vertices

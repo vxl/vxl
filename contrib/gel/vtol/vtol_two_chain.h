@@ -180,6 +180,7 @@ public:
   virtual void correct_chain_directions(void);
 
   virtual bool operator==(vtol_two_chain const& other) const;
+  inline bool operator!=(const vtol_two_chain &other)const{return !operator==(other);}
   bool operator==(vsol_spatial_object_3d const& obj) const; // virtual of vsol_spatial_object_3d
 
   virtual void print(vcl_ostream &strm=vcl_cout) const;

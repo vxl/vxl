@@ -289,6 +289,3 @@ void vtol_chain::clear(void)
   _directions.clear();
   unlink_all_chain_inferiors();
 }
-
-//#include <vcl_rel_ops.h> // gcc 2.7
-//VCL_INSTANTIATE_INLINE(bool operator!=(vtol_chain const &, vtol_chain const &));
