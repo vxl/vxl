@@ -18,7 +18,7 @@ template<class T>
 class mbl_ar_process
 {
   vnl_matrix<T> A_2,A_1,B_0;
-  vnl_vector<T> Xm;
+  vnl_vector<T> Xm; // mean
 
  public:
 
