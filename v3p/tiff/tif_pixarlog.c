@@ -43,7 +43,7 @@
  * input is assumed to be unsigned linear color values that represent
  * the range 0-1.  In the case of IEEE values, the 0-1 range is assumed to
  * be the normal linear color range, in addition over 1 values are
- * accepted up to a value of about 25.0 to encode "hot" hightlights and such.
+ * accepted up to a value of about 25.0 to encode "hot" highlights and such.
  * The encoding is lossless for 8-bit values, slightly lossy for the
  * other bit depths.  The actual color precision should be better
  * than the human eye can perceive with extra room to allow for
@@ -162,7 +162,7 @@ horizontalAccumulateF(uint16 *wp, int n, int stride, float *op, float *ToLinearF
             n -= stride;
             while (n > 0) {
                 REPEAT(stride,
-                    wp[stride] += *wp; *op = ToLinearF[*wp&mask]; wp++; op++)
+                       wp[stride] += *wp; *op = ToLinearF[*wp&mask]; wp++; op++)
                 n -= stride;
             }
         }
@@ -228,8 +228,8 @@ horizontalAccumulate12(uint16 *wp, int n, int stride, int16 *op, float *ToLinear
             n -= stride;
             while (n > 0) {
                 REPEAT(stride,
-                    wp[stride] += *wp; t0 = ToLinearF[wp[stride]&mask]*SCALE12;
-                    *op = CLAMP12(t0);  wp++; op++)
+                       wp[stride] += *wp; t0 = ToLinearF[wp[stride]&mask]*SCALE12;
+                       *op = CLAMP12(t0);  wp++; op++)
                 n -= stride;
             }
         }
@@ -276,7 +276,7 @@ horizontalAccumulate16(uint16 *wp, int n, int stride, uint16 *op, uint16 *ToLine
             n -= stride;
             while (n > 0) {
                 REPEAT(stride,
-                    wp[stride] += *wp; *op = ToLinear16[*wp&mask]; wp++; op++)
+                       wp[stride] += *wp; *op = ToLinear16[*wp&mask]; wp++; op++)
                 n -= stride;
             }
         }
@@ -323,7 +323,7 @@ horizontalAccumulate11(uint16 *wp, int n, int stride, uint16 *op)
             n -= stride;
             while (n > 0) {
                 REPEAT(stride,
-                    wp[stride] += *wp; *op = *wp&mask; wp++; op++)
+                       wp[stride] += *wp; *op = *wp&mask; wp++; op++)
                 n -= stride;
             }
         }
@@ -370,7 +370,7 @@ horizontalAccumulate8(uint16 *wp, int n, int stride, unsigned char *op, unsigned
             n -= stride;
             while (n > 0) {
                 REPEAT(stride,
-                    wp[stride] += *wp; *op = ToLinear8[*wp&mask]; wp++; op++)
+                       wp[stride] += *wp; *op = ToLinear8[*wp&mask]; wp++; op++)
                 n -= stride;
             }
         }
@@ -435,7 +435,7 @@ horizontalAccumulate8abgr(uint16 *wp, int n, int stride, unsigned char *op, unsi
             n -= stride;
             while (n > 0) {
                 REPEAT(stride,
-                    wp[stride] += *wp; *op = ToLinear8[*wp&mask]; wp++; op++)
+                       wp[stride] += *wp; *op = ToLinear8[*wp&mask]; wp++; op++)
                 n -= stride;
             }
         }
@@ -508,20 +508,20 @@ PixarLogMakeTables(PixarLogState *sp)
     ToLinear16 = (uint16 *)_TIFFmalloc(TSIZEP1 * sizeof(uint16));
     ToLinear8 = (unsigned char *)_TIFFmalloc(TSIZEP1 * sizeof(unsigned char));
     if (FromLT2 == NULL || From14  == NULL || From8   == NULL ||
-         ToLinearF == NULL || ToLinear16 == NULL || ToLinear8 == NULL) {
-        if (FromLT2) _TIFFfree(FromLT2);
-        if (From14) _TIFFfree(From14);
-        if (From8) _TIFFfree(From8);
-        if (ToLinearF) _TIFFfree(ToLinearF);
-        if (ToLinear16) _TIFFfree(ToLinear16);
-        if (ToLinear8) _TIFFfree(ToLinear8);
-        sp->FromLT2 = NULL;
-        sp->From14 = NULL;
-        sp->From8 = NULL;
-        sp->ToLinearF = NULL;
-        sp->ToLinear16 = NULL;
-        sp->ToLinear8 = NULL;
-        return 0;
+        ToLinearF == NULL || ToLinear16 == NULL || ToLinear8 == NULL) {
+      if (FromLT2) _TIFFfree(FromLT2);
+      if (From14) _TIFFfree(From14);
+      if (From8) _TIFFfree(From8);
+      if (ToLinearF) _TIFFfree(ToLinearF);
+      if (ToLinear16) _TIFFfree(ToLinear16);
+      if (ToLinear8) _TIFFfree(ToLinear8);
+      sp->FromLT2 = NULL;
+      sp->From14 = NULL;
+      sp->From8 = NULL;
+      sp->ToLinearF = NULL;
+      sp->ToLinear16 = NULL;
+      sp->ToLinear8 = NULL;
+      return 0;
     }
 
     j = 0;
@@ -641,7 +641,7 @@ PixarLogSetupDecode(TIFF* tif)
     /* for some reason, we can't do this in TIFFInitPixarLog */
 
     sp->stride = (td->td_planarconfig == PLANARCONFIG_CONTIG ?
-        td->td_samplesperpixel : 1);
+                  td->td_samplesperpixel : 1);
     sp->tbuf = (uint16 *) _TIFFmalloc(sp->stride *
         td->td_imagewidth * td->td_rowsperstrip * sizeof(uint16));
     if (sp->user_datafmt == PIXARLOGDATAFMT_UNKNOWN)
@@ -795,7 +795,7 @@ PixarLogSetupEncode(TIFF* tif)
     /* for some reason, we can't do this in TIFFInitPixarLog */
 
     sp->stride = (td->td_planarconfig == PLANARCONFIG_CONTIG ?
-        td->td_samplesperpixel : 1);
+                  td->td_samplesperpixel : 1);
     sp->tbuf = (uint16 *) _TIFFmalloc(sp->stride *
         td->td_imagewidth * td->td_rowsperstrip * sizeof(uint16));
     if (sp->user_datafmt == PIXARLOGDATAFMT_UNKNOWN)
@@ -874,9 +874,9 @@ horizontalDifferenceF(float *ip, int n, int stride, uint16 *wp, uint16 *FromLT2)
             n -= stride;
             while (n > 0) {
                 REPEAT(stride, wp[0] = CLAMP(ip[0]);
-                                wp[stride] -= wp[0];
-                                wp[stride] &= mask;
-                                wp--; ip--)
+                               wp[stride] -= wp[0];
+                               wp[stride] &= mask;
+                               wp--; ip--)
                 n -= stride;
             }
             REPEAT(stride, wp[0] = CLAMP(ip[0]); wp--; ip--)
@@ -926,9 +926,9 @@ horizontalDifference16(unsigned short *ip, int n, int stride, unsigned short *wp
             n -= stride;
             while (n > 0) {
                 REPEAT(stride, wp[0] = CLAMP(ip[0]);
-                                wp[stride] -= wp[0];
-                                wp[stride] &= mask;
-                                wp--; ip--)
+                               wp[stride] -= wp[0];
+                               wp[stride] &= mask;
+                               wp--; ip--)
                 n -= stride;
             }
             REPEAT(stride, wp[0] = CLAMP(ip[0]); wp--; ip--)
@@ -978,9 +978,9 @@ horizontalDifference8(unsigned char *ip, int n, int stride, unsigned short *wp, 
             n -= stride;
             while (n > 0) {
                 REPEAT(stride, wp[0] = CLAMP(ip[0]);
-                                wp[stride] -= wp[0];
-                                wp[stride] &= mask;
-                                wp--; ip--)
+                               wp[stride] -= wp[0];
+                               wp[stride] &= mask;
+                               wp--; ip--)
                 n -= stride;
             }
             REPEAT(stride, wp[0] = CLAMP(ip[0]); wp--; ip--)
