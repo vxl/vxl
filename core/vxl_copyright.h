@@ -4,13 +4,13 @@
 // <begin copyright notice>
 // ---------------------------------------------------------------------------
 //
-//                   Copyright (c) 2000 TargetJr Consortium
+//                Copyright (c) 2000-2002 TargetJr Consortium
 //               GE Corporate Research and Development (GE CRD)
 //                             1 Research Circle
 //                            Niskayuna, NY 12309
 //                            All Rights Reserved
 //              Reproduction rights limited as described below.
-//                               
+//
 //      Permission to use, copy, modify, distribute, and sell this software
 //      and its documentation for any purpose is hereby granted without fee,
 //      provided that (i) the above copyright notice and this permission
@@ -20,7 +20,7 @@
 //      the specific, prior written permission of GE CRD, and (iii) any
 //      modifications are clearly marked and summarized in a change history
 //      log.
-//       
+//
 //      THE SOFTWARE IS PROVIDED "AS IS" AND WITHOUT WARRANTY OF ANY KIND,
 //      EXPRESS, IMPLIED OR OTHERWISE, INCLUDING WITHOUT LIMITATION, ANY
 //      WARRANTY OF MERCHANTABILITY OR FITNESS FOR A PARTICULAR PURPOSE.
