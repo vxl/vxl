@@ -65,7 +65,7 @@ SET(vgui_sources
   vgui_button.cxx               vgui_button.h
   vgui_modifier.cxx             vgui_modifier.h
   vgui_event.cxx                vgui_event.h
-  vgui_command.cxx              vgui_command.h
+  vgui_command.cxx              vgui_command.h    vgui_command_sptr.h
   vgui_menu.cxx                 vgui_menu.h
   vgui_popup_params.h
   vgui_message.h
