@@ -623,7 +623,7 @@ if(!images_set_)
     return;
   for(int cam = 0; cam<2; cam++)
     {
-      vcl_vector<vsol_point_2d_sptr>& points = sweep_.harris_corners(cam);
+      vcl_vector<vsol_point_2d_sptr> points = sweep_.harris_corners(cam);
       this->draw_vsol_points(cam, points);
     }
   harris_set_ = true;
@@ -1010,7 +1010,7 @@ void bmvv_recon_manager::display_matched_corners()
   hmatch_dlg.field("Zindex", z_index);
   if (!hmatch_dlg.ask())
     return;
-  vcl_vector<vsol_point_2d_sptr>& matched_points = 
+  vcl_vector<vsol_point_2d_sptr> matched_points = 
     sweep_.matched_points_at_z_index(z_index);
   int n = matched_points.size();
   if(!n)
@@ -1023,7 +1023,7 @@ void bmvv_recon_manager::display_harris_3d()
 {
   if(!harris_set_)
     return;
-  vcl_vector<vsol_point_3d_sptr>& points = sweep_.proj_points_3d();
+  vcl_vector<vsol_point_3d_sptr> points = sweep_.proj_points_3d();
   int n = points.size();
   if(!n)
     return;
