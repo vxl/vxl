@@ -3,6 +3,8 @@
 //:
 // \file
 #include <vcl_cstring.h> // for memcpy()
+#include <vcl_cstdio.h> // for fopen(), fclose(), fprintf()
+#include <vcl_cstdlib.h> // for exit()
 
 //----------------------------------------------------------------------
 //: constructor
