@@ -1,3 +1,5 @@
+#ifndef vtol_extract_topology_txx_
+#define vtol_extract_topology_txx_
 #include <vtol/algo/vtol_extract_topology.h>
 
 #include <vcl_iosfwd.h>
@@ -25,9 +27,9 @@
 
 #ifndef NDEBUG
 #  include <vcl_iostream.h>
-#  define DEBUG( x ) x;
+#  define DBG( x ) x;
 #else
-#  define DEBUG( x ) /*debugging removed*/ do {} while (0)
+#  define DBG( x ) /*debugging removed*/ do {} while (false)
 #endif
 
 // =============================================================================
@@ -53,7 +55,7 @@ vtol_extract_topology_vertex_node::done_index  VCL_STATIC_CONST_INIT_INT_DEFN( u
 //                                                                 constructor
 
 
-template< typename T > 
+template< typename T >
 vtol_extract_topology<T>::
 vtol_extract_topology( label_image_type const& in_image,
                        vtol_extract_topology_params const& in_params )
@@ -68,7 +70,7 @@ vtol_extract_topology( label_image_type const& in_image,
 // ---------------------------------------------------------------------------
 //                                                                    vertices
 
-template< typename T > 
+template< typename T >
 vcl_vector< vtol_vertex_2d_sptr >
 vtol_extract_topology<T>::
 vertices() const
@@ -89,7 +91,7 @@ vertices() const
 // ---------------------------------------------------------------------------
 //                                                                       faces
 
-template< typename T > 
+template< typename T >
 vcl_vector< vtol_intensity_face_sptr >
 vtol_extract_topology<T>::
 faces( data_image_type const& data_img ) const
@@ -111,7 +113,7 @@ faces( data_image_type const& data_img ) const
 }
 
 
-template< typename T > 
+template< typename T >
 vcl_vector< vtol_intensity_face_sptr >
 vtol_extract_topology<T>::
 faces( ) const
@@ -136,7 +138,7 @@ faces( ) const
 // ---------------------------------------------------------------------------
 //                                                                        init
 
-template< typename T > 
+template< typename T >
 void
 vtol_extract_topology<T>::
 compute_label_range()
@@ -160,7 +162,7 @@ compute_label_range()
 // ---------------------------------------------------------------------------
 //                                                                       label
 
-template< typename LABEL_TYPE > 
+template< typename LABEL_TYPE >
 typename vtol_extract_topology< LABEL_TYPE >::LabelPoint
 vtol_extract_topology< LABEL_TYPE >::
 label( unsigned i, unsigned j ) const
@@ -176,7 +178,7 @@ label( unsigned i, unsigned j ) const
 // ---------------------------------------------------------------------------
 //                                                          is junction vertex
 
-template< typename T > 
+template< typename T >
 bool
 vtol_extract_topology<T>::
 is_junction_vertex( unsigned i, unsigned j ) const
@@ -197,7 +199,7 @@ is_junction_vertex( unsigned i, unsigned j ) const
 // ---------------------------------------------------------------------------
 //                                                          is boundary vertex
 
-template< typename LABEL_TYPE > 
+template< typename LABEL_TYPE >
 bool
 vtol_extract_topology< LABEL_TYPE >::
 is_boundary_vertex( unsigned i, unsigned j ) const
@@ -217,7 +219,7 @@ is_boundary_vertex( unsigned i, unsigned j ) const
 // ---------------------------------------------------------------------------
 //                                                                     is edge
 
-template< typename LABEL_TYPE > 
+template< typename LABEL_TYPE >
 bool
 vtol_extract_topology< LABEL_TYPE >::
 is_edge( unsigned i, unsigned j, unsigned dir ) const
@@ -233,7 +235,7 @@ is_edge( unsigned i, unsigned j, unsigned dir ) const
 // ---------------------------------------------------------------------------
 //                                                                 edge labels
 
-template< typename LABEL_TYPE > 
+template< typename LABEL_TYPE >
 void
 vtol_extract_topology< LABEL_TYPE >::
 edge_labels( unsigned i, unsigned j, unsigned dir,
@@ -262,7 +264,7 @@ edge_labels( unsigned i, unsigned j, unsigned dir,
 // ---------------------------------------------------------------------------
 //                                                                vertex index
 
-template< typename T > 
+template< typename T >
 unsigned
 vtol_extract_topology<T>::
 vertex_index( unsigned i, unsigned j ) const
@@ -277,7 +279,7 @@ vertex_index( unsigned i, unsigned j ) const
 // ---------------------------------------------------------------------------
 //                                                            set vertex index
 
-template< typename T > 
+template< typename T >
 void
 vtol_extract_topology<T>::
 set_vertex_index( unsigned i, unsigned j, unsigned index )
@@ -292,7 +294,7 @@ set_vertex_index( unsigned i, unsigned j, unsigned index )
 // ---------------------------------------------------------------------------
 //                                                                        node
 
-template< typename T > 
+template< typename T >
 vtol_extract_topology_vertex_node&
 vtol_extract_topology<T>::
 node( unsigned index )
@@ -303,7 +305,7 @@ node( unsigned index )
 }
 
 
-template< typename T > 
+template< typename T >
 vtol_extract_topology_vertex_node const&
 vtol_extract_topology<T>::
 node( unsigned index ) const
@@ -317,26 +319,27 @@ node( unsigned index ) const
 // ---------------------------------------------------------------------------
 //                                                                        move
 
-template< typename T > 
+template< typename T >
 void
 vtol_extract_topology<T>::
 move( unsigned dir, unsigned& i, unsigned& j )
 {
   assert( dir < 4 );
 
-  switch( dir ) {
-    case 0: // right
-      ++i;
-      break;
-    case 1: // down
-      ++j;
-      break;
-    case 2: // left
-      --i;
-      break;
-    case 3: // up
-      --j;
-      break;
+  switch ( dir )
+  {
+   case 0: // right
+    ++i;
+    break;
+   case 1: // down
+    ++j;
+    break;
+   case 2: // left
+    --i;
+    break;
+   case 3: // up
+    --j;
+    break;
   }
 }
 
@@ -344,7 +347,7 @@ move( unsigned dir, unsigned& i, unsigned& j )
 // ---------------------------------------------------------------------------
 //                                                                    set mark
 
-template< typename T > 
+template< typename T >
 void
 vtol_extract_topology<T>::
 set_mark( unsigned& marker, unsigned dir ) const
@@ -356,7 +359,7 @@ set_mark( unsigned& marker, unsigned dir ) const
 // ---------------------------------------------------------------------------
 //                                                                   is marked
 
-template< typename T > 
+template< typename T >
 bool
 vtol_extract_topology<T>::
 is_marked( unsigned marker, unsigned dir ) const
@@ -368,7 +371,7 @@ is_marked( unsigned marker, unsigned dir ) const
 // ---------------------------------------------------------------------------
 //                                                            trace edge chain
 
-template< typename T > 
+template< typename T >
 void
 vtol_extract_topology<T>::
 trace_edge_chain( unsigned i, unsigned j, unsigned dir )
@@ -403,12 +406,12 @@ trace_edge_chain( unsigned i, unsigned j, unsigned dir )
     // find and move in the outgoing direction. There should be
     // exactly one, since this is not a vertex.
     //
-    DEBUG( unsigned count = 0 );
+    DBG( unsigned count = 0 );
     dir = (dir+3) % 4; // same as dir = dir - 1
     while ( ! is_edge( i, j, dir ) ) {
       dir = (dir+1) % 4;
-      DEBUG( ++count );
-      DEBUG( assert( count < 3 ) );
+      DBG( ++count );
+      DBG( assert( count < 3 ) );
     }
 
     move( dir, i, j );
@@ -426,11 +429,11 @@ trace_edge_chain( unsigned i, unsigned j, unsigned dir )
 
   unsigned end_index = vertex_index( i, j );
 
-  if( end_index == start_index ) {
+  if ( end_index == start_index ) {
     // Construct a new vertex at the just-before-last point to avoid
     // having a chain with identical end-points. Move backwards one
     // unit and create a vertex.
-    move( (dir+2)%4, i, j ); 
+    move( (dir+2)%4, i, j );
     set_vertex_index( i, j, node_list_.size() );
     node_list_.push_back( vertex_node( i, j ) );
     end_index = vertex_index( i, j );
@@ -467,7 +470,7 @@ trace_edge_chain( unsigned i, unsigned j, unsigned dir )
 // ---------------------------------------------------------------------------
 //                                                          construct topology
 
-template< typename T > 
+template< typename T >
 void
 vtol_extract_topology<T>::
 construct_topology( )
@@ -576,7 +579,7 @@ construct_topology( )
 // ---------------------------------------------------------------------------
 //                                                         trace face boundary
 
-template< typename LABEL_TYPE > 
+template< typename LABEL_TYPE >
 bool
 vtol_extract_topology< LABEL_TYPE >::
 trace_face_boundary( vcl_vector<unsigned>& markers,
@@ -590,13 +593,17 @@ trace_face_boundary( vcl_vector<unsigned>& markers,
   edge_labels( node(index).i, node(index).j, dir,
                start_left, region_label );
 
-  /*
-  vcl_cout << "start left, region label: " << (int) start_left << " " << (int)region_label << " ; i,j: " << node(index).i << " " << node(index).j << " ; index,dir " << index << " " << dir << " ; label(i,j) = " << (int)label_img_(node(index).i, node(index).j) << vcl_endl;
+#ifdef DEBUG
+  vcl_cout << "start left, region label: " << (int) start_left << ' '
+           << (int)region_label << " ; i,j: " << node(index).i << ' '
+           << node(index).j << " ; index,dir " << index << ' '
+           << dir << " ; label(i,j) = "
+           << (int)label_img_(node(index).i, node(index).j) << vcl_endl;
   if ( region_label + 1 == min_label_ ) {
     vcl_cout << "exiting" << vcl_endl;
     return false;
   }
-  */
+#endif
   if (!region_label.valid) {
     return false;
   }
@@ -612,9 +619,10 @@ trace_face_boundary( vcl_vector<unsigned>& markers,
   chain_list.i = node(index).i + delta_i[dir];
   chain_list.j = node(index).j + delta_j[dir];
 
-  /*
-  vcl_cout << "index " << index << " dir " << dir << "  node " << node(index).i << " delta " << delta_i[dir] << vcl_endl;
-  */
+#ifdef DEBUG
+  vcl_cout << "index " << index << " dir " << dir << "  node " << node(index).i
+           << " delta " << delta_i[dir] << vcl_endl;
+#endif
   assert( chain_list.i < label_img_.ni() );
   assert( chain_list.j < label_img_.nj() );
 
@@ -649,12 +657,12 @@ trace_face_boundary( vcl_vector<unsigned>& markers,
     unsigned j = node(index).j;
     LabelPoint left, right;
     dir = back_dir;
-    DEBUG( unsigned old_dir = dir % 4 );
+    DBG( unsigned old_dir = dir % 4 );
     do {
       dir = (dir+3) % 4; // same as dir = dir - 1
 
       // Make sure we haven't done a full cycle.
-      DEBUG( assert( dir != old_dir ) );
+      DBG( assert( dir != old_dir ) );
 
       edge_labels( i, j, dir, left, right );
     } while ( left == right || right != region_label );
@@ -668,7 +676,7 @@ trace_face_boundary( vcl_vector<unsigned>& markers,
 // ---------------------------------------------------------------------------
 //                                                             collect regions
 
-template< typename LABEL_TYPE > 
+template< typename LABEL_TYPE >
 void
 vtol_extract_topology< LABEL_TYPE >::
 collect_regions( region_collection& region_list ) const
@@ -719,7 +727,7 @@ collect_regions( region_collection& region_list ) const
 // ---------------------------------------------------------------------------
 //                                                               compute faces
 
-template< typename T > 
+template< typename T >
 void
 vtol_extract_topology<T>::
 compute_faces( vcl_vector< region_type_sptr > const& chains,
@@ -965,3 +973,4 @@ smooth_chain( vdgl_edgel_chain_sptr chain,
   return new_chain;
 }
 
+#endif // vtol_extract_topology_txx_
