@@ -133,11 +133,7 @@ void vimt_gaussian_pyramid_builder_2d<T>::check_pyr(vimt_image_pyramid& im_pyr, 
     return;
   }
 
-  im_pyr.data().resize(n_levels);
-  empty_pyr(im_pyr);
-
-  for (int i=0;i<n_levels;++i)
-    im_pyr.data()[i] = new vimt_image_2d_of<T>;
+  im_pyr.resize(n_levels,vimt_image_2d_of<T>());
 }
 
 //=======================================================================
