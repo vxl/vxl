@@ -407,6 +407,12 @@ SOURCE=.\rgrl_trans_rad_dis_homo2d.cxx
 # Begin Source File
 SOURCE=.\rgrl_trans_couple.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\rgrl_converge_status_nas.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\rgrl_convergence_on_weighted_nas.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter ""
@@ -739,6 +745,12 @@ SOURCE=.\rgrl_trans_rad_dis_homo2d.h
 # End Source File
 # Begin Source File
 SOURCE=.\rgrl_trans_couple.h
+# End Source File
+# Begin Source File
+SOURCE=.\rgrl_converge_status_nas.h
+# End Source File
+# Begin Source File
+SOURCE=.\rgrl_convergence_on_weighted_nas.h
 # End Source File
 # End Group
 # End Target
