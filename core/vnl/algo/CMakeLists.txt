@@ -13,6 +13,7 @@ vnl_complex_eigensystem
 vnl_symmetric_eigensystem
 vnl_generalized_eigensystem
 vnl_sparse_symmetric_eigensystem
+vnl_generalized_schur
 vnl_discrete_diff
 vnl_levenberg_marquardt
 vnl_conjugate_gradient
