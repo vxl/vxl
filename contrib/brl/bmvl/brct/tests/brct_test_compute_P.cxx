@@ -52,7 +52,7 @@ static bool read_correspondences(vcl_vector<vgl_point_2d<double> >& image_points
 }
 
 
-static void brct_test_compute_P(int argc, char * argv[])
+static void brct_test_compute_P()
 {
   vnl_double_3x3 K = generate_K();
   vnl_double_3x4 P = generate_P(K);
@@ -147,4 +147,4 @@ static void brct_test_compute_P(int argc, char * argv[])
              << proj_image_points[i] << '\n';
 }
 
-TESTMAIN_ARGS(brct_test_compute_P);
+TESTMAIN(brct_test_compute_P);
