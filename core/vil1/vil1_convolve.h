@@ -65,26 +65,26 @@ enum vil_convolve_boundary_option {
 // if that is not the case.
 template <class T>
 struct vil_convolve_signal_1d {
-  T *array;
-  int begin;
-  int origin;
-  int end;
+  T *array_;
+  int begin_;
+  int origin_;
+  int end_;
   vil_convolve_signal_1d(T *a, int b, int o, int e)
-    : array(a), begin(b), origin(o), end(e) { }
+    : array_(a), begin_(b), origin_(o), end_(e) { }
 };
 
 //: Parameters for convolution
 template <class T>
 struct vil_convolve_signal_2d {
-  T * const *array;
-  int beginx, originx, endx;
-  int beginy, originy, endy;
+  T * const *array_;
+  int beginx_, originx_, endx_;
+  int beginy_, originy_, endy_;
   vil_convolve_signal_2d(T * const *a,
                          int bx, int ox, int ex,
                          int by, int oy, int ey)
-    : array(a)
-    , beginx(bx), originx(ox), endx(ex)
-    , beginy(by), originy(oy), endy(ey)
+    : array_(a)
+    , beginx_(bx), originx_(ox), endx_(ex)
+    , beginy_(by), originy_(oy), endy_(ey)
     { }
 };
 

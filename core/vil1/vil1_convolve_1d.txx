@@ -8,8 +8,8 @@
 #include "vil_convolve.h"
 
 // Macros to get origin-relative values in signals.
-#define value1d(sig, k)    ( (sig).array[(sig).origin + (k)] )
-#define value2d(sig, x, y) ( (sig).array[(sig).originy + (y)][(sig).originx + (x)] )
+#define value1d(sig, k)    ( (sig).array_[(sig).origin_ + (k)] )
+#define value2d(sig, x, y) ( (sig).array_[(sig).originy_ + (y)][(sig).originx_ + (x)] )
 
 // To make it easier to compare the x and y versions, they live
 // in separate source files.

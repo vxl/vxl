@@ -39,10 +39,10 @@ protected:
   ~vil_stream_section();
 
 private:
-  vil_stream *underlying;
-  int begin;
-  int end;
-  int current;
+  vil_stream *underlying_;
+  int begin_;
+  int end_;
+  int current_;
 };
 
 #endif // vil_stream_section_h_

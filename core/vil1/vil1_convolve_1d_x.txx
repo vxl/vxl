@@ -17,14 +17,14 @@ void vil_convolve_1d_x(vil_convolve_signal_1d<I1 const> const &kernel,
                        vil_convolve_boundary_option e)
 {
   // compute ranges of i, x, y here.
-  int i0 = kernel.begin-kernel.origin;
-  int i1 = kernel.end  -kernel.origin;
+  int i0 = kernel.begin_-kernel.origin_;
+  int i1 = kernel.end_  -kernel.origin_;
 
-  int x0 = output.beginx-output.originx;
-  int x1 = output.endx  -output.originx;
+  int x0 = output.beginx_-output.originx_;
+  int x1 = output.endx_  -output.originx_;
 
-  int y0 = output.beginy-output.originy;
-  int y1 = output.endy  -output.originy;
+  int y0 = output.beginy_-output.originy_;
+  int y1 = output.endy_  -output.originy_;
 
   // compute total weight of the kernel.
   // FIXME assumes non-negative kernel.
