@@ -7,7 +7,6 @@
 // \author Tim Cootes - Manchester
 
 #include <vil2/vil2_image_view_functions.h>
-#include <vcl_cassert.h>
 
 //: Return a 3-plane view of an RGB image
 // \return an empty view if it can't do the conversion 
@@ -25,7 +24,7 @@ vil2_image_view<T> vil2_view_as_planes(const vil2_image_view<vil_rgb<T> >& v)
 
 //: Return an RGB component view of a 3-plane image
 // \return an empty view if it can't do the conversion 
-// (because the data isn't arrange with triples of consequtive components)
+// (because the data isn't arranged with triples of consecutive components)
 template<class T>
 vil2_image_view<vil_rgb<T> > vil2_view_as_rgb(const vil2_image_view<T>& v)
 {
@@ -42,10 +41,8 @@ vil2_image_view<vil_rgb<T> > vil2_view_as_rgb(const vil2_image_view<T>& v)
 template<class T>
 void vil2_print_value(vcl_ostream& os, const T& value)
 {
-  int v = int(value);
-  if (v<10)  os<<" ";
-  if (v<100) os<<" ";
-  os<<v;
+  os.width(3);
+  os<<value;
 }
 
 
