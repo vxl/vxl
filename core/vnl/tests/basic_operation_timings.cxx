@@ -23,14 +23,14 @@ void distance_squared(const vcl_vector<vnl_vector<T> > &s1, const vcl_vector<vnl
   vnl_vector<double> stats(nstests);
   for (int st=0;st<nstests;++st)
   {
-    vcl_time_t t0=vcl_clock();
+    vcl_clock_t t0=vcl_clock();
     for (int l=0;l<n_loops;++l)
     {
       for (unsigned i=1;i<d.size();++i)
         d[i] = vnl_vector_ssd(s1[i], s2[i]);
     }
-    vcl_time_t t1=vcl_clock();
-    stats[st] = (1e9*(double(t1)-double(t0))/(n_loops*CLOCKS_PER_SEC));
+    vcl_clock_t t1=vcl_clock();
+    stats[st] = (1e9*((double(t1)-double(t0)))/(n_loops*CLOCKS_PER_SEC));
   }
   vcl_sort(stats.begin(), stats.end());
   vcl_cout<<"  Mean: "<<stats.mean()
@@ -44,14 +44,14 @@ void dot_product(const vcl_vector<vnl_vector<T> > &s1, const vcl_vector<vnl_vect
   vnl_vector<double> stats(nstests);
   for (int st=0;st<nstests;++st)
   {
-    vcl_time_t t0=vcl_clock();
+    vcl_clock_t t0=vcl_clock();
     for (int l=0;l<n_loops;++l)
     {
       for (unsigned i=1;i<d.size();++i)
         d[i] = dot_product(s1[i], s2[i]);
     }
-    vcl_time_t t1=vcl_clock();
-    stats[st] = (1e9*(double(t1)-double(t0))/(n_loops*CLOCKS_PER_SEC));
+    vcl_clock_t t1=vcl_clock();
+    stats[st] = (1e9*((double(t1)-double(t0)))/(n_loops*CLOCKS_PER_SEC));
   }
   vcl_sort(stats.begin(), stats.end());
   vcl_cout<<"  Mean: "<<stats.mean()
@@ -64,14 +64,14 @@ void mat_x_vec(const vnl_matrix<T> &s1, const vcl_vector<vnl_vector<T> > &s2,
   vnl_vector<double> stats(nstests);
   for (int st=0;st<nstests;++st)
   {
-    vcl_time_t t0=vcl_clock();
+    vcl_clock_t t0=vcl_clock();
     for (int l=0;l<n_loops;++l)
     {
       for (unsigned i=1;i<d.size();++i)
         d[i] = s1 * s2[i];
     }
-    vcl_time_t t1=vcl_clock();
-    stats[st] = (1e6*(double(t1)-double(t0))/(n_loops*CLOCKS_PER_SEC));
+    vcl_clock_t t1=vcl_clock();
+    stats[st] = (1e6*((double(t1)-double(t0)))/(n_loops*CLOCKS_PER_SEC));
   }
   vcl_sort(stats.begin(), stats.end());
   vcl_cout<<"  Mean: "<<stats.mean()
