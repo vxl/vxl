@@ -13,6 +13,9 @@ SOURCES += bgui_image_tableau.cxx
 MANPAGE_SOURCES += bgui_image_tableau_sptr.h
 SOURCES += bgui_style.cxx
 MANPAGE_SOURCES += bgui_style_sptr.h
+SOURCES += bgui_vsol_camera_tableau.cxx
+MANPAGE_SOURCES += bgui_vsol_camera_tableau_sptr.h
+SOURCES += bgui_vsol_soview2D.cxx
 
 ################################
 include ${IUEROOT}/config/top.mk
