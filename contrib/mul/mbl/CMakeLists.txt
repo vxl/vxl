@@ -42,6 +42,8 @@ SET(mbl_sources
   mbl_file_data_collector.txx          mbl_file_data_collector.h
   mbl_file_data_wrapper.txx            mbl_file_data_wrapper.h
 
+  mbl_table.cxx                        mbl_table.h
+
   mbl_chord.h
   mbl_cloneable_ptr.h
   mbl_combination.h
