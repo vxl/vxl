@@ -235,10 +235,6 @@ SOURCE=.\vbl_awk.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=.\vbl_base_array_3d.cxx
-# End Source File
-# Begin Source File
-
 SOURCE=".\Templates\vbl_binary+double-.cxx"
 # End Source File
 # Begin Source File

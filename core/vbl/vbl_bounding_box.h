@@ -14,6 +14,7 @@
 //
 // .SECTION Modifications
 //     970807 AWF Initial version.
+//     07 Mar 01 stewart@cs.rpi.edu added "inside" functions
 
 #include <vcl_iosfwd.h>
 
@@ -62,6 +63,29 @@ public:
     return initialized_ == false;
   }
 
+  //:  is a 2D point inside the bounding box
+  bool inside( const T& x, const T& y) const {
+    return 
+      min_[0] <= x && x <= max_[0] &&
+      min_[1] <= y && y <= max_[1];
+  }
+      
+  //:  is a 3D point inside the bounding box
+  bool inside( const T& x, const T& y, const T& z) const {
+    return 
+      min_[0] <= x && x <= max_[0] &&
+      min_[1] <= y && y <= max_[1] &&
+      min_[2] <= z && z <= max_[2];
+  }
+      
+  //:  inside test for arbitrary dimension
+  bool inside(T const* point) {
+    for( int i=0; i<DIM; ++i )
+      if( point[i] < min_[i] || max_[i] < point[i] )
+	return false;
+    return true;
+  }
+    
   //: return "volume".
   T volume() const {
     if (!initialized_) return T(0);

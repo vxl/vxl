@@ -27,7 +27,7 @@ CFG=vil - Win32 StaticDebug
 # PROP AllowPerConfigDependencies 0
 # PROP Scc_ProjName ""
 # PROP Scc_LocalPath ""
-CPP=xicl6.exe
+CPP=cl.exe
 RSC=rc.exe
 
 !IF  "$(CFG)" == "vil - Win32 Release"
@@ -50,7 +50,7 @@ MTL=midl.exe
 BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
-LIB32=xilink6.exe -lib
+LIB32=link.exe -lib
 # ADD BASE LIB32 /nologo
 # ADD LIB32 /nologo /out:"..\Release\vil.lib"
 
@@ -74,7 +74,7 @@ MTL=midl.exe
 BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
-LIB32=xilink6.exe -lib
+LIB32=link.exe -lib
 # ADD BASE LIB32 /nologo
 # ADD LIB32 /nologo /out:"..\Debug\vil.lib"
 
@@ -98,7 +98,7 @@ MTL=midl.exe
 BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
-LIB32=xilink6.exe -lib
+LIB32=link.exe -lib
 # ADD BASE LIB32 /nologo /out:"..\Debug\vil.lib"
 # ADD LIB32 /nologo /out:"..\StaticDebug\vil.lib"
 
@@ -122,7 +122,7 @@ MTL=midl.exe
 BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
-LIB32=xilink6.exe -lib
+LIB32=link.exe -lib
 # ADD BASE LIB32 /nologo /out:"..\Release\vil.lib"
 # ADD LIB32 /nologo /out:"..\StaticRelease\vil.lib"
 
@@ -527,6 +527,10 @@ SOURCE=.\vil_stream_section.cxx
 # End Source File
 # Begin Source File
 
+SOURCE=.\vil_stream_url.cxx
+# End Source File
+# Begin Source File
+
 SOURCE=.\file_formats\vil_viff.cxx
 # End Source File
 # Begin Source File
@@ -796,6 +800,10 @@ SOURCE=.\vil_stream_fstream.h
 # Begin Source File
 
 SOURCE=.\vil_stream_section.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\vil_stream_url.h
 # End Source File
 # Begin Source File
 

@@ -651,10 +651,6 @@ SOURCE=.\vnl_real_polynomial.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=".\Templates\vnl_resize+T-.cxx"
-# End Source File
-# Begin Source File
-
 SOURCE=.\vnl_rotation_matrix.cxx
 # End Source File
 # Begin Source File
