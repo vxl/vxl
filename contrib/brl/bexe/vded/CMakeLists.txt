@@ -1,4 +1,4 @@
-# brl/vded/bin/CMakeLists.txt
+# brl/bexe/vded/CMakeLists.txt
 
 INCLUDE_DIRECTORIES( ${VXLCORE_INCLUDE_DIR} )
 
@@ -15,5 +15,3 @@ TARGET_LINK_LIBRARIES(frame_extractor vidl vil1 vul)
 
 ADD_EXECUTABLE (video_description video_description.cxx)
 TARGET_LINK_LIBRARIES(video_description vidl vil1 vul)
-
-
