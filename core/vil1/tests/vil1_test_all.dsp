@@ -97,6 +97,9 @@ SOURCE=.\test_colour_space.cxx
 SOURCE=.\test_copy.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\test_resample.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\test_file_format_read.cxx
 # End Source File
 # Begin Source File
