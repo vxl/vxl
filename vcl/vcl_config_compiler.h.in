@@ -162,23 +162,6 @@
 #define VCL_NEEDS_INLINE_INSTANTIATION @VCL_NEEDS_INLINE_INSTANTIATION@
 
 
-// -- VCL_INSTANTIATE_INLINE(symbol)
-// 
-// Use this to instantiate inline functions for compilers that need it. 
-// If a non-member template function is declared inline e.g.
-//     template <class T>
-//     inline T max(T a, T b) { return ....; }
-// Then instantiate using
-//     VCL_INSTANTIATE_INLINE(T max(T,T))
-//
-//#define VCL_INSTANTIATE_INLINE(symbol) template symbol;
-//#define VCL_INSTANTIATE_INLINE(symbol) /* no need */
-//FIXME #define VCL_INSTANTIATE_INLINE(symbol) @VCL_INSTANTIATE_INLINE@
-#if VCL_ALLOWS_INLINE_INSTANTIATION
-# define VCL_INSTANTIATE_INLINE(symbol) template symbol
-#endif
-
-
 // -- VCL_DO_NOT_INSTANTIATE(text, ret)
 //
 // If a method is defined on some template, but makes no sense for some
@@ -238,22 +221,47 @@ text { return ret; }
 
 // -- VCL_INSTANTIATE_STATIC_TEMPLATE_MEMBER(symbol)
 //
-// Some compilers require you to place static template members in a 
-// source file.
+// Some compilers (e.g. gcc 2.7.2) do not accept a templated definition 
+// of static members, as in
 //
-// Put them using
-//      VCL_INSTANTIATE_STATIC_TEMPLATE_MEMBER(int A<int>::var = 0)
+//   template <class T>
+//   struct A {
+//     A() { }
+//     static char *fmt;
+//   };
+//
+//   template <class T>
+//   char *A<T>::fmt = 0;
+//
+//   template struct A<int>;
+//
+// The way round this is to supply an explicit definition for every 
+// instance of the class needed.
+//
+// Put the templated definition like this
+//      #if VCL_CAN_DO_STATIC_TEMPLATE_MEMBER
+//      template <class T>
+//      char *A<T>::fmt = 0;
+//      #endif
+// and place
+//      VCL_INSTANTIATE_STATIC_TEMPLATE_MEMBER(int A<int>::fmt = 0)
 // before the
 //      template class A<int>;
 // with
 //      VCL_UNINSTANTIATE_STATIC_TEMPLATE_MEMBER(A<int>::var)
-// afterwards
+// afterwards.
 //
 //#define VCL_INSTANTIATE_STATIC_TEMPLATE_MEMBER(symbol) /* no need */
 //#define VCL_INSTANTIATE_STATIC_TEMPLATE_MEMBER(symbol) symbol;
-//FIXME #define VCL_INSTANTIATE_STATIC_TEMPLATE_MEMBER(symbol) @VCL_INSTANTIATE_STATIC_TEMPLATE_MEMBER@
-#define VCL_INSTANTIATE_STATIC_TEMPLATE_MEMBER(symbol) symbol;
-
+//
+#define VCL_CAN_DO_STATIC_TEMPLATE_MEMBER @VCL_CAN_DO_STATIC_TEMPLATE_MEMBER@
+#if VCL_CAN_DO_STATIC_TEMPLATE_MEMBER
+# define VCL_INSTANTIATE_STATIC_TEMPLATE_MEMBER(symbol)   /* */
+# define VCL_UNINSTANTIATE_STATIC_TEMPLATE_MEMBER(symbol) /* */
+#else
+# define VCL_INSTANTIATE_STATIC_TEMPLATE_MEMBER(symbol) symbol;
+# define VCL_UNINSTANTIATE_STATIC_TEMPLATE_MEMBER(symbol) /* which compiler needs this ? */
+#endif
 
 //----------------------------------------------------------------------
 // overload resolution problems.

@@ -27,6 +27,9 @@ AC_DEFUN(AC_CXX_HAS_BOOL,[
 AC_CACHE_CHECK([whether the C++ compiler supports the keyword 'bool'],ac_cxx_has_bool,
 [AC_LANG_SAVE
 AC_LANG_CPLUSPLUS
+
+VCL_COMPILE_CXX
+
 AC_TRY_COMPILE([
 void function(int i, void *ptr, bool v) { }
 ],,ac_cxx_has_bool=yes,ac_cxx_has_bool=no)
@@ -47,6 +50,9 @@ AC_DEFUN(AC_CXX_HAS_DYNAMIC_CAST,[
 AC_CACHE_CHECK([whether the C++ compiler supports the keyword 'dynamic_cast'],ac_cxx_has_dynamic_cast,[
 AC_LANG_SAVE
 AC_LANG_CPLUSPLUS
+
+VCL_COMPILE_CXX
+
 AC_TRY_COMPILE(
 [
 struct foo { foo(); virtual ~foo(); virtual void f() =0; };
@@ -69,6 +75,9 @@ AC_DEFUN(AC_CXX_HAS_TYPENAME,[
 AC_CACHE_CHECK([whether the C++ compiler supports the keyword 'typename'],ac_cxx_has_typename,[
 AC_LANG_SAVE
 AC_LANG_CPLUSPLUS
+
+VCL_COMPILE_CXX
+
 AC_TRY_COMPILE(
 [
 template <typename T>
@@ -95,6 +104,9 @@ AC_DEFUN(AC_CXX_HAS_MUTABLE,[
 AC_CACHE_CHECK([whether the C++ compiler supports the keyword 'mutable'],ac_cxx_has_mutable,[
 AC_LANG_SAVE
 AC_LANG_CPLUSPLUS
+
+VCL_COMPILE_CXX
+
 AC_TRY_COMPILE(
 [
 class X {
@@ -120,6 +132,9 @@ AC_DEFUN(AC_CXX_HAS_EXPLICIT,[
 AC_CACHE_CHECK([whether the C++ compiler supports the keyword 'explicit'],ac_cxx_has_explicit,[
 AC_LANG_SAVE
 AC_LANG_CPLUSPLUS
+
+VCL_COMPILE_CXX
+
 AC_TRY_COMPILE(
 [
 class X {
@@ -145,6 +160,9 @@ AC_DEFUN(AC_CXX_HAS_NAMESPACES,[
 AC_CACHE_CHECK(whether the C++ compiler has working namespaces,ac_cxx_has_namespaces,[
 AC_LANG_SAVE
 AC_LANG_CPLUSPLUS
+
+VCL_COMPILE_CXX
+
 AC_TRY_COMPILE([
 namespace foo {
   int hello() { return 10; }
@@ -196,6 +214,9 @@ AC_DEFUN(AC_CXX_ALLOWS_NAMESPACE_STD,[
 AC_CACHE_CHECK(whether the C++ compiler allows std:: for the standard library,ac_cxx_allows_namespace_std,[
 AC_LANG_SAVE
 AC_LANG_CPLUSPLUS
+
+VCL_COMPILE_CXX
+
 AC_TRY_COMPILE([
 #include <cmath>
 #include <vector>
@@ -224,6 +245,9 @@ AC_DEFUN(AC_CXX_NEEDS_NAMESPACE_STD,[
 AC_CACHE_CHECK(whether the C++ compiler needs std:: for the standard library,ac_cxx_needs_namespace_std,[
 AC_LANG_SAVE
 AC_LANG_CPLUSPLUS
+
+VCL_COMPILE_CXX
+
 AC_TRY_COMPILE([
 #include <cmath>
 #include <vector>
@@ -252,6 +276,9 @@ AC_DEFUN(AC_CXX_CHECK_FOR_SCOPE,[
 AC_CACHE_CHECK(whether the C++ compiler supports ISO for scope,ac_cxx_check_for_scope,[
 AC_LANG_SAVE
 AC_LANG_CPLUSPLUS
+
+VCL_COMPILE_CXX
+
 AC_TRY_COMPILE([
 void fn() {
   for (int i=0; i<100; ++i) { }
@@ -276,6 +303,9 @@ AC_DEFUN(AC_CXX_HAS_MEMBER_TEMPLATES,[
 AC_CACHE_CHECK(whether the C++ compiler supports member templates,ac_cxx_has_member_templates,[
 AC_LANG_SAVE
 AC_LANG_CPLUSPLUS
+
+VCL_COMPILE_CXX
+
 AC_TRY_COMPILE([
 template <class S>
 class blip {
@@ -309,6 +339,9 @@ AC_DEFUN(AC_CXX_CAN_DO_PARTIAL_SPECIALIZATION,[
 AC_MSG_CHECKING(whether the C++ compiler supports partial specialization)
 AC_LANG_SAVE
 AC_LANG_CPLUSPLUS
+
+VCL_COMPILE_CXX
+
 AC_TRY_COMPILE([
 template <class T>
 class victor 
@@ -375,6 +408,9 @@ AC_DEFUN(AC_CXX_DEFAULT_VALUE,[
 AC_LANG_SAVE
 AC_LANG_CPLUSPLUS
 AC_MSG_CHECKING(whether the C++ compiler needs default values in second definition)
+
+VCL_COMPILE_CXX
+
 AC_TRY_COMPILE([
 // declaration
 void function(int x, char *ptr = "foo");
@@ -400,6 +436,9 @@ AC_DEFUN(AC_CXX_DEFINE_SPECIALIZATION,[
 AC_LANG_SAVE
 AC_LANG_CPLUSPLUS
 AC_MSG_CHECKING([whether the C++ compiler understands the 'template <>' specialization syntax])
+
+VCL_COMPILE_CXX
+
 AC_TRY_COMPILE([
 // declaration
 template <class T>
@@ -432,6 +471,9 @@ AC_DEFUN(AC_CXX_STATIC_CONST_INIT_INT,[
 AC_LANG_SAVE
 AC_LANG_CPLUSPLUS
 AC_MSG_CHECKING(whether the C++ compiler allows initialization of static const int)
+
+VCL_COMPILE_CXX
+
 AC_TRY_COMPILE([
 class A {
 public:
@@ -459,6 +501,9 @@ AC_DEFUN(AC_CXX_STATIC_CONST_INIT_FLOAT,[
 AC_LANG_SAVE
 AC_LANG_CPLUSPLUS
 AC_MSG_CHECKING(whether the C++ compiler allows initialization of static const floats)
+
+VCL_COMPILE_CXX
+
 AC_TRY_COMPILE([
 class A {
 public:
@@ -483,7 +528,11 @@ AC_DEFUN(AC_CXX_IMPLEMENT_STATIC_CONSTS,[
 AC_LANG_SAVE
 AC_LANG_CPLUSPLUS
 AC_MSG_CHECKING(whether the C++ compiler requires implementation of static consts)
-AC_TRY_RUN([
+
+VCL_COMPILE_CXX
+
+AC_TRY_LINK([
+// "includes"
 class A {
 public:
   static const int x = 27;
@@ -491,7 +540,9 @@ public:
 int function() {
   return A::x * A::x;
 }
-int main(int, char**) { function(); return 0; }
+],[
+  // function body
+  function();
 ],[
 VCL_IMPLEMENT_STATIC_CONSTS="0";
 AC_MSG_RESULT(no)
@@ -510,6 +561,9 @@ AC_DEFUN(AC_CXX_OVERLOAD_CAST,[
 AC_LANG_SAVE
 AC_LANG_CPLUSPLUS
 AC_MSG_CHECKING(whether the C++ compiler requires explicit casts where it should not)
+
+VCL_COMPILE_CXX
+
 AC_TRY_COMPILE([
 //
 template <class T>
@@ -577,6 +631,9 @@ AC_DEFUN(AC_CXX_NULL_TMPL_ARGS,[
 AC_LANG_SAVE
 AC_LANG_CPLUSPLUS
 AC_MSG_CHECKING(whether the C++ compiler requires <> in templated forward/friend declarations)
+
+VCL_COMPILE_CXX
+
 AC_TRY_LINK([
 template <class T> class victor;
 
@@ -632,6 +689,9 @@ AC_DEFUN(AC_CXX_NEED_FRIEND_FOR_TEMPLATE_OVERLOAD,[
 AC_LANG_SAVE
 AC_LANG_CPLUSPLUS
 AC_MSG_CHECKING(whether the C++ compiler needs friend declarations for proper template function overloading)
+
+VCL_COMPILE_CXX
+
 AC_TRY_COMPILE([
 template <class T>
 class victor_base {
@@ -685,6 +745,9 @@ AC_DEFUN(AC_CXX_HAS_TEMPLATE_SYMBOLS,[
 AC_LANG_SAVE
 AC_LANG_CPLUSPLUS
 AC_MSG_CHECKING(whether the C++ compiler distinguishes templated and non-templated functions)
+
+VCL_COMPILE_CXX
+
 AC_TRY_LINK([
 // Declare a function template.
 template <class T> void function(T *ptr, int n);
@@ -713,6 +776,18 @@ export VCL_HAS_TEMPLATE_SYMBOLS
 dnl
 
 
+###
+AC_DEFUN(VCL_COMPILE_CXX,[
+CXXFLAGS=$given_CXXFLAGS
+export CXXFLAGS
+])
+
+###
+AC_DEFUN(VCL_COMPILE_TXX,[
+CXXFLAGS=$given_TXXFLAGS
+export CXXFLAGS
+])
+
 
 ### Check whether the compiler allows explicit instantiation of inline templates.
 AC_DEFUN(AC_CXX_ALLOWS_INLINE_INSTANTIATION,[
@@ -720,8 +795,7 @@ AC_MSG_CHECKING(whether the C++ compiler allows explicit instantiation of inline
 AC_LANG_SAVE
 AC_LANG_CPLUSPLUS
 
-fsm_save_CXXFLAGS=$CXXFLAGS
-CXXFLAGS=$TXXFLAGS
+VCL_COMPILE_TXX
 
 AC_TRY_COMPILE([
 template <class T>
@@ -740,8 +814,6 @@ VCL_ALLOWS_INLINE_INSTANTIATION="0";
 AC_MSG_RESULT(no)
 ])
 
-CXXFLAGS=$fsm_save_CXXFLAGS
-
 AC_LANG_RESTORE
 export VCL_ALLOWS_INLINE_INSTANTIATION
 ])
@@ -755,10 +827,11 @@ AC_MSG_CHECKING(whether the C++ compiler needs explicit instantiation of inline 
 AC_LANG_SAVE
 AC_LANG_CPLUSPLUS
 
-fsm_save_CXXFLAGS=$CXXFLAGS
-CXXFLAGS=$TXXFLAGS
+# _CXX, not _TXX as we're trying to find out if inlines are 
+# expanded when compiling non-template code.
+VCL_COMPILE_CXX
 
-AC_TRY_RUN([
+AC_TRY_LINK([
 #ifdef __GNUC__
 #pragma interface
 #endif
@@ -770,7 +843,7 @@ T dot(T const *a, T const *b)
 }
 //template double dot(double const *, double const *);
 int function();
-int main(int, char **) { function(); return 0; }
+int call_this() { function(); return 0; }
 int function()
 {
   double a[3] = {1.0, 2.0, 3.0};
@@ -779,7 +852,7 @@ int function()
   return int(a_b);
 }
 // If the program links, the compiler inlined the function template.
-],[
+],,[
 VCL_NEEDS_INLINE_INSTANTIATION="0";
 AC_MSG_RESULT(no)
 ],[
@@ -803,6 +876,9 @@ AC_DEFUN(AC_CXX_SUNPRO_CLASS_SCOPE_HACK,[
 AC_MSG_CHECKING(whether the C++ compiler needs the SunPro class scope hack)
 AC_LANG_SAVE
 AC_LANG_CPLUSPLUS
+
+VCL_COMPILE_CXX
+
 AC_TRY_COMPILE([
 template < class T > 
 struct allocator 
@@ -852,6 +928,9 @@ AC_DEFUN(AC_CXX_DEFAULT_TMPL_ARG,[
 AC_MSG_CHECKING(whether the C++ compiler needs default template arguments repeated)
 AC_LANG_SAVE
 AC_LANG_CPLUSPLUS
+
+VCL_COMPILE_CXX
+
 AC_TRY_COMPILE([
 struct alloc1 { };
 
@@ -903,6 +982,9 @@ AC_DEFUN(AC_CXX_CAN_DO_COMPLETE_DEFAULT_TYPE_PARAMETER,[
 AC_MSG_CHECKING([whether the C++ compiler accepts complete types as default template parameters])
 AC_LANG_SAVE
 AC_LANG_CPLUSPLUS
+
+VCL_COMPILE_CXX
+
 AC_TRY_COMPILE([
 template <class T> struct less { };
 
@@ -942,6 +1024,9 @@ AC_DEFUN(AC_CXX_CAN_DO_TEMPLATE_DEFAULT_TYPE_PARAMETER,[
 AC_MSG_CHECKING(whether the C++ compiler accepts default template type parameters templated over earlier parameters)
 AC_LANG_SAVE
 AC_LANG_CPLUSPLUS
+
+VCL_COMPILE_CXX
+
 AC_TRY_COMPILE([
 template <class T> struct less { };
 
@@ -960,4 +1045,35 @@ AC_MSG_RESULT("no")
 VCL_CAN_DO_TEMPLATE_DEFAULT_TYPE_PARAMETER="0"
 ])
 export VCL_CAN_DO_TEMPLATE_DEFAULT_TYPE_PARAMETER
+])
+
+
+
+
+### 
+AC_DEFUN(AC_CXX_CAN_DO_STATIC_TEMPLATE_MEMBER,[
+AC_MSG_CHECKING(whether the C++ compiler accepts templated definitions of static class template members)
+AC_LANG_SAVE
+AC_LANG_CPLUSPLUS
+
+VCL_COMPILE_CXX
+
+AC_TRY_COMPILE([
+template <class T>
+struct A {
+  A() { }
+  static char *fmt;
+};
+
+template <class T>
+char *A<T>::fmt = 0;
+],[
+],[
+AC_MSG_RESULT("yes")
+VCL_CAN_DO_STATIC_TEMPLATE_MEMBER="1"
+],[
+AC_MSG_RESULT("no")
+VCL_CAN_DO_STATIC_TEMPLATE_MEMBER="0"
+])
+export VCL_CAN_DO_STATIC_TEMPLATE_MEMBER
 ])

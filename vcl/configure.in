@@ -32,8 +32,8 @@ AC_PROG_CXX
 AC_PROG_CXXCPP
 
 # remember these
-given_CXXFLAGS="$CXXFLAGS"
-given_TXXFLAGS="$TXXFLAGS"
+given_CXXFLAGS="$CXXFLAGS"; export given_CXXFLAGS
+given_TXXFLAGS="$TXXFLAGS"; export given_TXXFLAGS
 #echo "Compiling non-template code  with: $CXX $CXXFLAGS";
 #echo "Compiling template instances with: $CXX $TXXFLAGS";
 
@@ -112,7 +112,7 @@ fi
 
 #AC_SUBST(VCL_UNINSTANTIATE_UNSEEN_SPECIALIZATION)
 
-#AC_SUBST(VCL_INSTANTIATE_STATIC_TEMPLATE_MEMBER)
+AC_CXX_CAN_DO_STATIC_TEMPLATE_MEMBER
 
 AC_CXX_NEED_FRIEND_FOR_TEMPLATE_OVERLOAD
 
@@ -245,7 +245,7 @@ AC_SUBST(VCL_NEEDS_INLINE_INSTANTIATION)
 #AC_SUBST(VCL_DO_NOT_INSTANTIATE)
 #AC_SUBST(VCL_UNINSTANTIATE_SPECIALIZATION)
 #AC_SUBST(VCL_UNINSTANTIATE_UNSEEN_SPECIALIZATION) # dubious
-#AC_SUBST(VCL_INSTANTIATE_STATIC_TEMPLATE_MEMBER)
+AC_SUBST(VCL_CAN_DO_STATIC_TEMPLATE_MEMBER)
 AC_SUBST(VCL_NEED_FRIEND_FOR_TEMPLATE_OVERLOAD)
 AC_SUBST(VCL_OVERLOAD_CAST)
 AC_SUBST(VCL_DEFINE_SPECIALIZATION)
@@ -323,13 +323,13 @@ AC_SUBST(VCL_CXX_HAS_HEADER_STRSTREAM)
 # OUTPUT
 
 AC_OUTPUT(
-vcl_config.h~:vcl_config.h.in
+vcl_config_manual.h~:vcl_config_manual.h.in
 vcl_config_compiler.h~:vcl_config_compiler.h.in
 vcl_config_headers.h~:vcl_config_headers.h.in
 )
 
 # only touch files that actually change.
-for f in "vcl_config.h" "vcl_config_compiler.h" "vcl_config_headers.h"; do
+for f in "vcl_config_manual.h" "vcl_config_compiler.h" "vcl_config_headers.h"; do
   if test -f $f; then
     if diff ${f} ${f}~ 2>&1 >/dev/null ; then
       echo "no change to ${f}"
