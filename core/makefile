@@ -52,10 +52,10 @@ ifeq (1,$(strip $(HAS_OPENGL)))
 SUBDIRS += vgui
 
 # new xcv
-# (must be compiled *after* mvox)
-ifeq (,$(strip $(wildcard $(IUELOCALROOT)/oxl/mvox)))
-SUBDIRS += xcv
-endif
+# (must be compiled *after* mvl)
+#ifeq (,$(strip $(wildcard $(IUELOCALROOT)/oxl/mvox)))
+#SUBDIRS += xcv
+#endif
 endif
 
 # examples
