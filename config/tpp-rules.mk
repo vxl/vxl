@@ -202,6 +202,18 @@ ifeq ($(strip $(USE_MPEG2)),1)
   endif
 endif
 
+# Select: USE_AVI
+# Set to 1 to use the AVI library
+ifeq ($(strip $(USE_AVI)),1)
+  INCDIRS += $(AVI_INC_DIR)
+  LIBDIRS += $(AVI_LIB_DIR)
+  DEFINES += -DHAS_AVI
+  STDLIBS += $(AVI_LIBS)
+  ifndef HAS_AVI
+    err_CANNOT_BUILD_HERE += "USE_AVI"
+  endif
+endif
+
 # Select: USE_NETLIB
 # Set to 1 to use the NETLIB library
 ifeq ($(strip $(USE_NETLIB)),1)
