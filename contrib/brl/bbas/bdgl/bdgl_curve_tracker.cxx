@@ -143,7 +143,7 @@ void bdgl_curve_tracker::track()
 }
 
 //-----------------------------------------------------------------------------
-void bdgl_curve_tracker::track_frame(int frame)
+void bdgl_curve_tracker::track_frame(unsigned int frame)
 {
   bdgl_curve_region                           reg;
   vcl_vector< bdgl_curve_region >             regions;

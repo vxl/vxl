@@ -30,7 +30,7 @@ class vvid_frame_trail
   vvid_frame_trail();
   ~vvid_frame_trail();
 
-  void set_window(int window){window_ = window;}
+  void set_window(unsigned int window){window_ = window;}
   void clear();
   //: add to queue
   void 
@@ -44,7 +44,7 @@ class vvid_frame_trail
 
  private:
   //members
-  int window_;//number of frames to maintain
+  unsigned int window_;//number of frames to maintain
   vcl_deque< vcl_vector<vtol_topology_object_sptr> > topo_queue_;
   vcl_deque< vcl_vector<vsol_spatial_object_2d_sptr> > spat_obj_queue_;
 };
