@@ -372,7 +372,7 @@ void vtol_topology_hierarchy_node_3d::describe_inferiors(ostream& strm,int blank
   for (topology_list_3d::const_iterator ii=_inferiors.begin();ii!= _inferiors.end();++ii)
     {
       for (int j=0; j<blanking; ++j) strm << ' ';
-      (*ii)->print();
+      (*ii)->print(strm);
     }
 }
 
@@ -386,8 +386,7 @@ void vtol_topology_hierarchy_node_3d::describe_superiors(ostream& strm,int blank
 
   for (topology_list_3d::const_iterator ii=_superiors.begin();ii!= _superiors.end();++ii)
     {
-      for (int j=0; j<blanking; ++j) strm << ' ';
-      (*ii)->print();
+      (*ii)->print(strm);
     }
 }
 
