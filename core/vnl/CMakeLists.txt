@@ -135,7 +135,10 @@ SET( vnl_sources
 AUX_SOURCE_DIRECTORY(Templates vnl_sources)
 
 IF(CMAKE_COMPILER_IS_GNUCXX)
+  # with optimisation, the is_finite etc functions fail on Alpha for long double:
   SET_SOURCE_FILES_PROPERTIES(vnl_math.cxx COMPILE_FLAGS -O0)
+  SET_SOURCE_FILES_PROPERTIES(vnl_bignum.cxx COMPILE_FLAGS -O0)
+  # and these need too much memory with gcc 3.0 on Alpha:
   SET_SOURCE_FILES_PROPERTIES(Templates/vnl_matrix+long-.cxx COMPILE_FLAGS -O0)
   SET_SOURCE_FILES_PROPERTIES(Templates/vnl_matrix+ulong-.cxx COMPILE_FLAGS -O0)
   SET_SOURCE_FILES_PROPERTIES(Templates/vnl_matrix+vcl_complex+double--.cxx COMPILE_FLAGS -O0)
