@@ -55,11 +55,11 @@ void vgl_closest_point_to_non_closed_polygon(T& ret_x, T& ret_y,
                                              T x, T y)
 {
   assert(n>1);
-  T dd = vgl_distance_to_linesegment(px[0],py[0], px[1],py[1], x,y);
+  double dd = vgl_distance_to_linesegment(px[0],py[0], px[1],py[1], x,y);
   int di = 0;
   for (unsigned i=1; i<n-1; ++i)
   {
-    T nd = vgl_distance_to_linesegment(px[i],py[i], px[i+1],py[i+1], x,y);
+    double nd = vgl_distance_to_linesegment(px[i],py[i], px[i+1],py[i+1], x,y);
     if (nd<dd) { dd=nd; di=i; }
   }
   vgl_closest_point_to_linesegment(ret_x,ret_y, px[di],py[di], px[di+1],py[di+1], x,y);
@@ -71,11 +71,11 @@ void vgl_closest_point_to_closed_polygon(T& ret_x, T& ret_y,
                                          T x, T y)
 {
   assert(n>1);
-  T dd = vgl_distance_to_linesegment(px[0],py[0], px[n-1],py[n-1], x,y);
+  double dd = vgl_distance_to_linesegment(px[0],py[0], px[n-1],py[n-1], x,y);
   int di = -1;
   for (unsigned i=0; i<n-1; ++i)
   {
-    T nd = vgl_distance_to_linesegment(px[i],py[i], px[i+1],py[i+1], x,y);
+    double nd = vgl_distance_to_linesegment(px[i],py[i], px[i+1],py[i+1], x,y);
     if (nd<dd) { dd=nd; di=i; }
   }
   if (di == -1)
@@ -148,7 +148,7 @@ vgl_point_2d<T> vgl_closest_point(vgl_polygon<T> const& poly,
                                   bool closed)
 {
   T x=point.x(), y=point.y();
-  T dd = vgl_distance_to_linesegment(poly[0][0].x(),poly[0][0].y(), poly[0][1].x(),poly[0][1].y(), x,y);
+  double dd = vgl_distance_to_linesegment(poly[0][0].x(),poly[0][0].y(), poly[0][1].x(),poly[0][1].y(), x,y);
   int si = 0, di = 0;
   for ( unsigned int s=0; s < poly.num_sheets(); ++s )
   {
@@ -156,12 +156,12 @@ vgl_point_2d<T> vgl_closest_point(vgl_polygon<T> const& poly,
     assert( n > 1 );
     for (unsigned i=0; i<n-1; ++i)
     {
-      T nd = vgl_distance_to_linesegment(poly[s][i].x(),poly[s][i].y(), poly[s][i+1].x(),poly[s][i+1].y(), x,y);
+      double nd = vgl_distance_to_linesegment(poly[s][i].x(),poly[s][i].y(), poly[s][i+1].x(),poly[s][i+1].y(), x,y);
       if (nd<dd) { dd=nd; di=i; si=s; }
     }
     if (closed)
     {
-      T nd = vgl_distance_to_linesegment(poly[s][0].x(),poly[s][0].y(), poly[s][n-1].x(),poly[s][n-1].y(), x,y);
+      double nd = vgl_distance_to_linesegment(poly[s][0].x(),poly[s][0].y(), poly[s][n-1].x(),poly[s][n-1].y(), x,y);
       if (nd<dd) { dd=nd; di=-1; si=s; }
     }
   }
