@@ -42,17 +42,20 @@ void vgl_line_2d<Type>::get_two_points(vgl_point_2d<Type> &p1, vgl_point_2d<Type
   else                p2.set(-c()/a(), 0);
 }
 
-#define vp(os,v,s) { if ((v)>0) os<<'+'; if ((v)==-1) os<<'-';\
-                     if ((v)!=0&&(v)!=1&&(v)!=-1) os<<(v);\
-                     if ((v)!=0) os<<' '<<s<<' '; }
+#define vp(os,v,s) { os<<' '; if ((v)>0) os<<'+'; if ((v)&&!s[0]) os<<(v); else { \
+                     if ((v)==-1) os<<'-';\
+                     else if ((v)!=0&&(v)!=1) os<<(v);\
+                     if ((v)!=0) os<<' '<<s; } }
 
 //: Write line description to stream: "<vgl_line_2d ax+by+c=0>"
 template <class Type>
 vcl_ostream&  operator<<(vcl_ostream& os, vgl_line_2d<Type> const& l)
 {
-  os << "<vgl_line_2d "; vp(os,l.a(),"x"); vp(os,l.b(),"y"); vp(os,l.c(),"");
-  return os << "= 0 >";
+  os << "<vgl_line_2d"; vp(os,l.a(),"x"); vp(os,l.b(),"y"); vp(os,l.c(),"");
+  return os << " = 0 >";
 }
+
+#undef vp
 
 //: Read in three line parameters from stream
 template <class Type>

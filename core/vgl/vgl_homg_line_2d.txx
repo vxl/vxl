@@ -45,17 +45,20 @@ vgl_homg_line_2d<Type>::vgl_homg_line_2d (vgl_homg_point_2d<Type> const& p1,
   assert(a_||b_||c_); // given points should be different
 }
 
-#define vp(os,v,s) { if ((v)>0) os<<'+'; if ((v)==-1) os<<'-';\
-                     if ((v)!=0&&(v)!=1&&(v)!=-1) os<<(v);\
-                     if ((v)!=0) os<<' '<<s<<' '; }
+#define vp(os,v,s) { os<<' '; if ((v)>0) os<<'+'; if ((v)&&!s[0]) os<<(v); else { \
+                     if ((v)==-1) os<<'-';\
+                     else if ((v)!=0&&(v)!=1) os<<(v);\
+                     if ((v)!=0) os<<' '<<s; } }
 
 //: Print line equation to stream
 template <class Type>
 vcl_ostream&  operator<<(vcl_ostream& os, vgl_homg_line_2d<Type>const& l)
 {
-  os << "<vgl_homg_line_2d "; vp(os,l.a(),"x"); vp(os,l.b(),"y"); vp(os,l.c(),"w");
-  return os << "= 0 >";
+  os << "<vgl_homg_line_2d"; vp(os,l.a(),"x"); vp(os,l.b(),"y"); vp(os,l.c(),"w");
+  return os << " = 0 >";
 }
+
+#undef vp
 
 //: Load in line parameters from stream
 template <class Type>
