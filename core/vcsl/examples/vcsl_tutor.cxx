@@ -57,7 +57,7 @@ int main()
   //: 90 degree rotation about WCS y-axis
   // Transforms from WCS to right CS
   vcsl_rotation rightXF;
-  rightXF.set_static(vnl_math::pi_over_2, yA);
+  rightXF.set_static(vnl_math::pi_over_2, yA.as_ref());
 
   //: WCS rotated 90 degrees about the y-axis to produce right hand view/CS
   vcsl_spatial_sptr right = new vcsl_cartesian_3d;
@@ -69,7 +69,7 @@ int main()
   corner[X] = 1; corner[Y] = 2; corner[Z] = 3;
 
   // By inspection, corner should be (-3,2,1) in 'right' CS
-  vnl_vector<double> cornerXF = WCS->from_local_to_cs(corner, right, 0);
+  vnl_vector<double> cornerXF = WCS->from_local_to_cs(corner.as_ref(), right, 0);
 
   vcl_cout << cornerXF.x() << ", " << cornerXF.y() << ", " << cornerXF.z() << '\n';
   assert(vcl_abs(cornerXF.x()+3) < 1e-6);

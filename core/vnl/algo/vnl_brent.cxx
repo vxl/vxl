@@ -19,7 +19,7 @@ struct vnl_brent_data {
 
   double f(double x) {
     vx[0] = x;
-    return functor->f(vx);
+    return functor->f(vx.as_ref());
   }
 };
 

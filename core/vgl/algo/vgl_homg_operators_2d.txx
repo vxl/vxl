@@ -325,7 +325,7 @@ vgl_homg_operators_2d<T>::most_orthogonal_vector(const vcl_list<vgl_homg_line_2d
        i != inpoints.end(); ++i)
     scatter_matrix.add_outer_product(get_vector(*i));
 
-  return scatter_matrix.minimum_eigenvector();
+  return scatter_matrix.minimum_eigenvector().as_ref();
 }
 
 #include <vnl/algo/vnl_svd.h>

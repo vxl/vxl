@@ -192,7 +192,7 @@ template <class T>
 vnl_matrix_fixed<T,4,4> vnl_quaternion<T>::rotation_matrix_4() const {
   vnl_matrix_fixed<T,4,4> rot;
   rot.set_identity();
-  rot.update(this->rotation_matrix());
+  rot.update(this->rotation_matrix().as_ref());
   return rot;
 }
 
