@@ -4,7 +4,6 @@
 #include <vipl/accessors/vipl_accessors_vcl_vector.h>
 #include <vepl2/accessors/vipl_accessors_vil2_image_view_base.h>
 #include <vipl/vipl_histogram.h>
-#include <vil2/vil2_image_view.h>
 #include <vil2/vil2_pixel_format.h>
 #include <vxl_config.h> // for vxl_byte
 
