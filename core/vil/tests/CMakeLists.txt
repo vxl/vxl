@@ -1,4 +1,4 @@
-# This is mul/vil2/tests/CMakeLists.txt
+# This is core/vil2/tests/CMakeLists.txt
 
 ADD_EXECUTABLE( vil2_test_driver
   test_driver.cxx
@@ -98,6 +98,5 @@ ADD_TEST( test_deep_copy_3_plane      vil2_test_driver test_deep_copy_3_plane )
 
 #ADD_EXECUTABLE( vil2_vil_compare_function_timings vil2_vil_compare_function_timings.cxx)
 #TARGET_LINK_LIBRARIES( vil2_vil_compare_function_timings vil2 mbl vcl )
-ADD_TEST( vil2_vil_compare_function_timings vil2_vil_compare_function_timings )
-
+# ADD_TEST( vil2_vil_compare_function_timings vil2_vil_compare_function_timings )
 
