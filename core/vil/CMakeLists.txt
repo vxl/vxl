@@ -53,6 +53,8 @@ SET( vil_sources ${vil_sources}
 
   file_formats/vil_ras.cxx  file_formats/vil_ras.h
 
+  file_formats/vil_iris.cxx          file_formats/vil_iris.h
+
   file_formats/vil_dicom.cxx         file_formats/vil_dicom.h
   file_formats/vil_dicom_header.cxx  file_formats/vil_dicom_header.h
 
