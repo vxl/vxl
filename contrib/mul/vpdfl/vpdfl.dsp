@@ -127,11 +127,11 @@ SOURCE=.\vpdfl_sampler_base.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=".\Templates\vsl_binary_loader+vpdf_pdf_base-.cxx"
+SOURCE=".\Templates\vsl_binary_loader+vpdf_builder_base-.cxx"
 # End Source File
 # Begin Source File
 
-SOURCE=".\Templates\vsl_binary_loader+vpdf_pdf_builder_base-.cxx"
+SOURCE=".\Templates\vsl_binary_loader+vpdf_pdf_base-.cxx"
 # End Source File
 # End Group
 # Begin Group "Header Files"
