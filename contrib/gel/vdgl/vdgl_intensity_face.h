@@ -69,6 +69,7 @@ class vdgl_intensity_face : public vtol_face_2d
   double area() const { return region_->area(); }
   void ResetPixelData() { region_->ResetPixelData(); }
   void IncrementMeans(float x, float y, unsigned short pix){region_->IncrementMeans(x,y,pix);}
+  void ComputeIntensityStdev(){region_->ComputeIntensityStdev();}
   void InitPixelArrays() { region_->InitPixelArrays(); }
   void InsertInPixelArrays(float x, float y, unsigned short pix){region_->InsertInPixelArrays(x,y,pix);}
   float const* Xj() const { return region_->Xj(); }
@@ -87,6 +88,7 @@ class vdgl_intensity_face : public vtol_face_2d
   float Yo()const { return region_->Yo(); }
   float Zo()const { return region_->Zo(); }
   float Io()const { return region_->Io(); }
+  float Io_sd()const { return region_->Io_sd(); }
   double X2()const { return region_->X2(); }
   double Y2()const { return region_->Y2(); }
   double XY()const { return region_->XY(); }
