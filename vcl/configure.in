@@ -349,6 +349,9 @@ vcl_config_headers.h~:vcl_config_headers.h.in
 
 # only touch files that actually change.
 for f in "vcl_config_manual.h" "vcl_config_compiler.h" "vcl_config_headers.h"; do
+  inclgrd=`echo $f | sed -e 's/\.h$/_h_/'`
+  os=`pwd|sed -e 's/.*\///' -e 's/[.+-]/_/g`
+  perl -pi -e s/$inclgrd/${inclgrd}${os}_/; ${f}~
   if test -f $f; then
     if diff ${f} ${f}~ 2>&1 >/dev/null ; then
       echo "no change to ${f}"

@@ -1,5 +1,5 @@
-#ifndef vxl_config_h_
-#define vxl_config_h_
+#ifndef vxl_config_h_config_stlport_win32_vc60_
+#define vxl_config_h_config_stlport_win32_vc60_
 
 // This file was *not* generated from vxl_config.h.in
 // It is maintained manually.
