@@ -9,7 +9,7 @@
 #include <vil/vil_image_view.h>
 #include <vil/algo/vil_sobel_3x3.h>
 
-//: Compute Forstner/Harris corner strength function given gradient images
+//: Compute Forstner/Harris corner strength function given gradient images.
 //  grad_i and grad_j are assumed to be the i and j gradient images (single
 //  plane), such as produced by vil_sobel_3x3().  At each pixel compute
 //  the Forstner/Harris corner function: det(H)-k*sqr(trace(H)), where
