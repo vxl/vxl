@@ -1,4 +1,4 @@
-// This is vxl/vnl/algo/vnl_scatter_3x3.h
+// This is core/vnl/algo/vnl_scatter_3x3.h
 #ifndef vnl_scatter_3x3_h_
 #define vnl_scatter_3x3_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
@@ -11,10 +11,11 @@
 // \date   02 Oct 96
 //
 // \verbatim
-// Modifications:
-//  18 Feb 2000. fsm: templated.
-//  4/4/01 LSB (Manchester) documentation tidied
+//  Modifications:
+//   18 Feb 2000. fsm: templated.
+//   4/4/01 LSB (Manchester) documentation tidied
 //   Feb.2002 - Peter Vanroose - brief doxygen comment placed on single line
+//   13 Jan.2003 - Peter Vanroose - added missing implem. for sub_outer_product
 // \endverbatim
 //-----------------------------------------------------------------------------
 
