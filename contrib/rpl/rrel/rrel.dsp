@@ -164,6 +164,9 @@ SOURCE=.\rrel_kernel_density_obj.cxx
 # Begin Source File
 SOURCE=.\rrel_shift2d_est.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\rrel_homography2d_est_aff.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter ""
@@ -235,6 +238,9 @@ SOURCE=.\rrel_kernel_density_obj.h
 # End Source File
 # Begin Source File
 SOURCE=.\rrel_shift2d_est.h
+# End Source File
+# Begin Source File
+SOURCE=.\rrel_homography2d_est_aff.h
 # End Source File
 # End Group
 # End Target
