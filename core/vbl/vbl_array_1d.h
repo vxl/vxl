@@ -12,6 +12,7 @@
 // \verbatim
 // Modifications
 //    Peter Vanroose 5apr2001 added operator==
+//    Amitha Perera  jan2003  fixed possible alignment issues.
 // \endverbatim
 
 #include <vcl_new.h>
@@ -39,7 +40,8 @@ struct vbl_array_1d
   vbl_array_1d(const_iterator b, const_iterator e) {
     vcl_ptrdiff_t n = e - b;
     assert(n>=0);
-    begin_ = (T*) new char [n * sizeof(T)]; // FIXME alignment
+    // alignment guaranteed by 18.4.1.1
+    begin_ = (T*) operator new( n * sizeof(T) );
     end_   = begin_ + n;
     alloc_ = begin_ + n;
     for (vcl_ptrdiff_t i=0; i<n; ++i)
@@ -52,7 +54,8 @@ struct vbl_array_1d
 
 //: Construct an array with n elements, all equal to v
   vbl_array_1d(unsigned long n, const T &v) {
-    begin_ = (T*) new char [n * sizeof(T)]; // FIXME alignment
+    // alignment guaranteed by 18.4.1.1
+    begin_ = (T*) operator new( n * sizeof(T) );
     end_   = begin_ + n;
     alloc_ = begin_ + n;
     for (unsigned long i=0; i<n; ++i)
@@ -77,7 +80,7 @@ struct vbl_array_1d
   ~vbl_array_1d() {
     if (begin_) {
       clear();
-      delete [] (char*) begin_;
+      operator delete( begin_ );
     }
   }
 
@@ -87,7 +90,8 @@ struct vbl_array_1d
     if (new_n <= n)
       return;
 
-    T *new_begin_ = (T*) new char [new_n * sizeof(T)]; // FIXME alignment
+    // alignment guaranteed by 18.4.1.1
+    T *new_begin_ = (T*) operator new( new_n * sizeof(T) );
     T *new_end_   = new_begin_ + n;
     T *new_alloc_ = new_begin_ + new_n;
 
@@ -96,7 +100,7 @@ struct vbl_array_1d
       begin_[i].~T();
     }
 
-    delete [] (char*) begin_;
+    operator delete( begin_ );
 
     begin_ = new_begin_;
     end_   = new_end_;
