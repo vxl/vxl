@@ -223,6 +223,7 @@ void mil_image_2d_of<T>::setGrey(T* grey_data, int nx, int ny, int ystep)
 //=======================================================================
 //: Define parameters for 3 plane (RGB) T images
 //  Sets up a 3 plane image with plane(0) = r, plane(1) = g etc
+//  General declaration. Can be used to set a BGR image.
 template<class T>
 void mil_image_2d_of<T>::setRGB(T* r, T* g, T* b,
                                 int nx, int ny, int ystep)
@@ -234,6 +235,26 @@ void mil_image_2d_of<T>::setRGB(T* r, T* g, T* b,
   planes_[2] = b;
   nx_ = nx;
   ny_ = ny;
+  ystep_ = ystep;
+  
+  format_ = vcl_string("RGBPlaneByte");
+}
+
+//=======================================================================
+//: Define parameters for 3 plane (RGB) T images
+//  Sets up a 3 plane image with plane(0) = r, plane(1) = g etc
+template<class T>
+void mil_image_2d_of<T>::setRGB(T* r, T* g, T* b,
+                                int nx, int ny, int xstep, int ystep)
+{
+  release_data();
+  planes_.resize(3);
+  planes_[0] = r;
+  planes_[1] = g;
+  planes_[2] = b;
+  nx_ = nx;
+  ny_ = ny;
+  xstep_ = xstep;
   ystep_ = ystep;
   
   format_ = vcl_string("RGBPlaneByte");

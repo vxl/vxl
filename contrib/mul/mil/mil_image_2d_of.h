@@ -99,6 +99,13 @@ public:
     void setRGB(T* r, T* g, T* b,
                          int nx, int ny, int ystep);
 
+    //: Define parameters for 3 plane (RGB) T images
+    //  Sets up a 3 plane image with plane(0) = r, plane(1) = g etc
+    //  ystep gives data row length
+    //  xstep gives the length we have to jump to find the next color value
+    void setRGB(T* r, T* g, T* b,
+                         int nx, int ny, int xstep, int ystep);
+
     //: Define parameters for packed RGB T images
     //  Sets up a 3 plane image, assuming nx x ny image
     //  of xstep T pixels, ie  red(x,y) = data[x*xstep+y*step],
