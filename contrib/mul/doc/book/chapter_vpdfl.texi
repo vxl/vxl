@@ -156,15 +156,15 @@ mbl_data_wrapper<vnl_vector<double> > v_data(data);
 vpdfl_gaussian_builder builder;
 
 // Generate model to build
-vpdfl_pdf_base *model = builder.newModel();
+vpdfl_pdf_base *model = builder.new_model();
 
 // Build the model from the data
 builder.build(*model, v_data);
-vsl_print_summary(model);
+vsl_print_summary(vcl_cout, model);
 
 // Now test each vector
 for (int i=0;i<data.size();++i)
-    vcl_cout<<"log(P(v(i))) = "<<model->log_(data(i))<< vcl_endl;
+    vcl_cout<<"log(P(v(i))) = "<<model->log_p(data[i])<< vcl_endl;
 
 // Tidy up
 delete model;
