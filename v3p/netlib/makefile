@@ -119,6 +119,11 @@ SOURCES += tred1.c
 SOURCES += tred2.c
 
 # MINPACK 
+SOURCES += enorm.c
+SOURCES += fdjac2.c
+SOURCES += lmpar.c
+SOURCES += qrfac.c
+SOURCES += qrsolv.c
 SOURCES += lmdif.c
 SOURCES += lmder.c
 SOURCES += lmder1.c
