@@ -86,11 +86,11 @@ gevd_step::gevd_step(float smooth_sigma, // width of filter dG
              << smoothSigma << vcl_endl;
   if (noiseSigma < -1) {
     vcl_cerr << "gevd_step::gevd_step -- noiseSigma out of range -[0 1]: "
-             << noiseSigma << ". Reset to -1." << vcl_endl;
+             << noiseSigma << ". Reset to -1.\n";
     noiseSigma = -1;
   }
 
-  //vcl_cout << "Init Step " << vcl_endl << *this << vcl_endl;
+  //vcl_cout << "Init Step\n" << *this << vcl_endl;
 }
 
 
@@ -122,7 +122,7 @@ gevd_step::DetectEdgels(const gevd_bufferxy& image,
   //         << *this
   //         << vcl_endl;
   if (image.GetBitsPixel() != bits_per_float) {
-    vcl_cerr << "gevd_step::DetectEdgels requires float image" << vcl_endl;
+    vcl_cerr << "gevd_step::DetectEdgels requires float image\n";
     return false;
   }
 
@@ -170,11 +170,11 @@ gevd_step::DetectEdgels(const gevd_bufferxy& image,
         noiseSigma = ((1-k)*sensorNoise + k*textureNoise) /
           NoiseResponseToFilter(1, smoothSigma, filterFactor);
       } else {
-        vcl_cout << "Can not estimate sensor & texture noise" << vcl_endl;
+        vcl_cout << "Can not estimate sensor & texture noise\n";
         noiseSigma = 1;         // reasonable default for 8-bit
       }
     } else {
-      vcl_cout << "Not enough edge elements to estimate noise" << vcl_endl;
+      vcl_cout << "Not enough edge elements to estimate noise\n";
       noiseSigma = 1;
     }
     //vcl_cout << "Set noise sigma = " << noiseSigma << vcl_endl;
@@ -353,7 +353,7 @@ gevd_step::RecoverJunctions(const gevd_bufferxy& image,
   vul_timer t;
 #endif
   if (image.GetBitsPixel() != bits_per_float) {
-    vcl_cerr << "gevd_step::RecoverJunction requires float image" << vcl_endl;
+    vcl_cerr << "gevd_step::RecoverJunction requires float image\n";
     return false;
   }
   const int rmax = 1+FRAME;     // 1 + kernel radius of BestStepExtension
@@ -361,7 +361,7 @@ gevd_step::RecoverJunctions(const gevd_bufferxy& image,
   const int xmax = image.GetSizeX()-rmax-1; // fill step direction
   const int ymax = image.GetSizeY()-rmax-1;
 
-  //vcl_cout << "RecoverJunctions: rmax, kmax, xmax, ymax:" << rmax << " " << kmax << " " << xmax << " " << ymax << " " << vcl_endl;
+  //vcl_cout << "RecoverJunctions: rmax, kmax, xmax, ymax:" << rmax << " " << kmax << " " << xmax << " " << ymax << "\n";
 
   // 1. Find end points of dangling contours
   //const int length0 = xmax/kmax*ymax/kmax/4;// 25% size
@@ -433,8 +433,8 @@ gevd_step::RecoverJunctions(const gevd_bufferxy& image,
         } else                  // no further extension found
           ndir[i] = 0;
       }
-    //vcl_cout << "Touch " << ntouch << " contours." << vcl_endl;
-    // vcl_cout << "Will extend " << nextension << " contours." << vcl_endl;
+    //vcl_cout << "Touch " << ntouch << " contours.\n";
+    // vcl_cout << "Will extend " << nextension << " contours.\n";
     njunction += ntouch;
     if (!nextension) break;     // all either junction or termination
   }
@@ -510,11 +510,11 @@ gevd_step::NoiseThreshold(bool shortp) const
 // this noise response would eliminate 99% of the noise edges.
 float
 gevd_step::NoiseResponseToFilter(const float noiseSigma,
-                            const float smoothSigma,
-                            const float filterFactor)
+                                 const float smoothSigma,
+                                 const float filterFactor)
 {
   return noiseSigma /          // white noise
-         vcl_pow(smoothSigma, 1.5f) * // size of filter dG
+         (float)vcl_pow((double)smoothSigma, 1.5) * // size of filter dG
          (0.5f / (float)vcl_pow(vnl_math::pi, 0.25)) *
          filterFactor;        // multiplication factor
 }
@@ -523,12 +523,12 @@ gevd_step::NoiseResponseToFilter(const float noiseSigma,
 //: Output a snapshot of current control parameters
 vcl_ostream& operator<< (vcl_ostream& os, const gevd_step& st)
 {
-  os << "Step: " << vcl_endl <<
-    "   smoothSigma " << st.smoothSigma << vcl_endl <<
-    "   noiseSigma " << st.noiseSigma << vcl_endl <<
-    "   contourFactor " << st.contourFactor << vcl_endl <<
-    "   junctionFactor " << st.junctionFactor << vcl_endl <<
-    "   filterFactor " << st.filterFactor << vcl_endl;
+  os << "Step:\n"
+     << "   smoothSigma " << st.smoothSigma << vcl_endl
+     << "   noiseSigma " << st.noiseSigma << vcl_endl
+     << "   contourFactor " << st.contourFactor << vcl_endl
+     << "   junctionFactor " << st.junctionFactor << vcl_endl
+     << "   filterFactor " << st.filterFactor << vcl_endl;
     return os;
 }
 
@@ -536,11 +536,11 @@ vcl_ostream& operator<< (vcl_ostream& os, const gevd_step& st)
 //: Output a snapshot of current control parameters
 vcl_ostream& operator<< (vcl_ostream& os, gevd_step& st)
 {
-  os << "Step: " << vcl_endl <<
-    "   smoothSigma " << st.smoothSigma << vcl_endl <<
-    "   noiseSigma " << st.noiseSigma << vcl_endl <<
-    "   contourFactor " << st.contourFactor << vcl_endl <<
-    "   junctionFactor " << st.junctionFactor << vcl_endl <<
-    "   filterFactor " << st.filterFactor << vcl_endl;
+  os << "Step:\n"
+     << "   smoothSigma " << st.smoothSigma << vcl_endl
+     << "   noiseSigma " << st.noiseSigma << vcl_endl
+     << "   contourFactor " << st.contourFactor << vcl_endl
+     << "   junctionFactor " << st.junctionFactor << vcl_endl
+     << "   filterFactor " << st.filterFactor << vcl_endl;
     return os;
 }

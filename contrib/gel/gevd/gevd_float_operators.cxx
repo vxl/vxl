@@ -99,7 +99,7 @@ gevd_float_operators::Correlation(const gevd_bufferxy& from,
       double varx = sum1 * sumxx - sumx * sumx; // all multiplied with sum1
       double vary = sum1 * sumyy - sumy * sumy;
       double cvar = sum1 * sumxy - sumx * sumy; // linear correlation coeft
-      floatPixel(*to, x+rx, y+ry) = cvar / (float)vcl_sqrt(varx * vary);
+      floatPixel(*to, x+rx, y+ry) = (float)cvar / (float)vcl_sqrt(varx * vary);
     }
   FillFrameX(*to, 0, rx);       // pad border with 0
   FillFrameY(*to, 0, ry);
@@ -139,7 +139,7 @@ gevd_float_operators::CorrelationAlongAxis(const gevd_bufferxy& from,
     double varx = sum1 * sumxx - sumx * sumx; // all multiplied with sum1
     double vary = sum1 * sumyy - sumy * sumy;
     double cvar = sum1 * sumxy - sumx * sumy;   // linear correlation coeft
-    floatPixel(*to, x+rx, y+ry) = cvar / (float)vcl_sqrt(varx * vary);
+    floatPixel(*to, x+rx, y+ry) = (float)cvar / (float)vcl_sqrt(varx * vary);
   }
   for (x = xhi/2, y = 0; y < yhi; y++) {
     register double sumx = 0, sumy = 0, sumxx = 0, sumyy = 0, sumxy = 0,
@@ -157,7 +157,7 @@ gevd_float_operators::CorrelationAlongAxis(const gevd_bufferxy& from,
     double varx = sum1 * sumxx - sumx * sumx; // all multiplied with sum1
     double vary = sum1 * sumyy - sumy * sumy;
     double cvar = sum1 * sumxy - sumx * sumy;   // linear correlation coeft
-    floatPixel(*to, x+rx, y+ry) = cvar / (float)vcl_sqrt(varx * vary);
+    floatPixel(*to, x+rx, y+ry) = (float)cvar / (float)vcl_sqrt(varx * vary);
   }
 //   vcl_cout << " in " << t.real() << " msecs.\n";
   return 1;                     // extra scaling factor
@@ -3179,7 +3179,7 @@ gevd_float_operators::Correlation(const float* data, const int length,
     double varx = sum1 * sumxx - sumx * sumx; // all multiplied with sum1
     double vary = sum1 * sumyy - sumy * sumy;
     double cvar = sum1 * sumxy - sumx * sumy;
-    return cvar / (float)vcl_sqrt(varx * vary); // linear correlation coefficient
+    return (float)cvar / (float)vcl_sqrt(varx * vary); // linear correlation coefficient
   }
 }
 

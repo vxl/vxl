@@ -214,11 +214,11 @@ bool gevd_clean_edgels::closest_vertex(vtol_edge_2d_sptr e, vsol_point_2d_sptr p
   if (!dc){ v = NULL; return false;}
   vsol_point_2d_sptr sp = new vsol_point_2d ( *p );
   vsol_point_2d_sptr pc = dc->get_interpolator()->closest_point_on_curve( sp );
-  float span_sq = p->distance ( pc );
+  double span_sq = p->distance ( pc );
 
   vtol_vertex_2d_sptr v1 = e->v1()->cast_to_vertex_2d(), v2 = e->v2()->cast_to_vertex_2d();
-  float d1 = v1->point()->distance ( p );
-  float d2 = v2->point()->distance ( p );
+  double d1 = v1->point()->distance ( p );
+  double d2 = v2->point()->distance ( p );
   if (d1<d2)
     {
       if (d1<=span_sq)

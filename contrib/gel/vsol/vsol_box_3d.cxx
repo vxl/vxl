@@ -5,7 +5,7 @@
 
 vsol_box_3d::vsol_box_3d()
 {
-  // vcl_cout << "making a boxology object" << vcl_endl;
+  // vcl_cout << "making a boxology object\n";
 }
 
 vsol_box_3d::vsol_box_3d(vsol_box_3d const &b){
@@ -14,7 +14,7 @@ vsol_box_3d::vsol_box_3d(vsol_box_3d const &b){
 
 vsol_box_3d::~vsol_box_3d()
 {
-  // vcl_cout << "deleting a boxology object" << vcl_endl;
+  // vcl_cout << "deleting a boxology object\n";
 }
 
 double vsol_box_3d::get_min_x()
@@ -118,7 +118,7 @@ bool vsol_box_3d::operator< (vsol_box_3d& b)
     this->get_max_z() <= b.get_max_z();
 }
 
-inline static bool near_same(float f1, float f2, float tolerance)
+inline static bool near_same(double f1, double f2, float tolerance)
 {
   return f1-f2<tolerance && f2-f1<tolerance;
 }

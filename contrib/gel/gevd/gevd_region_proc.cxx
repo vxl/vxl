@@ -83,7 +83,7 @@ void gevd_region_proc::set_image(vil_image& image)
 {
   if (!image)
     {
-      vcl_cout <<"In gevd_region_proc::set_image(.) - null input" << vcl_endl;
+      vcl_cout <<"In gevd_region_proc::set_image(.) - null input\n";
       return;
     }
   regions_valid_ = false;
@@ -94,12 +94,12 @@ void gevd_region_proc::set_image(vil_image& image)
       buf_ = NULL;
     }
   //Expand by expand_scale_
-  if (expand_scale_==1)
+  if (expand_scale_==1.0f)
     {
       buf_ = this->get_image_buffer(image_);
       return;
     }
-  if (expand_scale_==2)
+  else if (expand_scale_==2.0f)
     {
       gevd_bufferxy* temp = this->get_image_buffer(image_);
       if (!temp)
@@ -118,7 +118,7 @@ void gevd_region_proc::set_image(vil_image& image)
       delete expand;
       return;
     }
-  if (expand_scale_==0.5)
+  else if (expand_scale_==0.5f)
     {
       gevd_bufferxy* temp = this->get_image_buffer(image_);
       if (!temp)
@@ -150,7 +150,7 @@ void gevd_region_proc::extract_regions()
   // Check the image
   if (!buf_)
     {
-      vcl_cout << "In gevd_region_proc::extract_regions() - no image" << vcl_endl;
+      vcl_cout << "In gevd_region_proc::extract_regions() - no image\n";
       return;
     }
 
@@ -211,13 +211,12 @@ void gevd_region_proc::extract_regions()
   er.compute_edgel_regions(buf_, clean_edgels, faces);
 #if 0 // commented out
   // Transform the extracted region boundaries if necessary
-  float s = float(expand_scale_);
-  if (s)
+  if (expand_scale_!=0.0f)
     {
-      float si = 1/s;
+      float si = 1.0f/expand_scale_;
       //We use a TwoChain to provide a superior to the set of Faces
       //so that the standard ::TaggedTransform can be used to
-      //transform IntensityFace(s) segmented at an expanded scale.
+      //transform IntensityFace(expand_scale_) segmented at an expanded scale.
       TwoChain_ref tc = new TwoChain(faces.length());
       for (vcl_vector<IntensityFace*>::iterator fit = faces.begin();
           fit != faces.end(); fit++)

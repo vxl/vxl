@@ -820,22 +820,26 @@ bool gevd_edgel_regions::InitRegionArray(vcl_vector< vtol_edge_2d_sptr>& sg)
       //There shouldn't be DigitalCurve(s) with this defect but it
       //does seem to occur.
       gevd_region_edge* vre = new gevd_region_edge(NULL);
-      double pex1, pey1, pex2, pey2;
+      float pex1, pey1, pex2, pey2;
       if (n_edgels>0)
         {
-          pex1 = (*xy)[0].x(); pey1 = (*xy)[0].y();
-          pex2 = (*xy)[n_edgels-1].x(); pey2 = (*xy)[n_edgels-1].y();
+          pex1 = float((*xy)[0].x()); pex2 = float((*xy)[n_edgels-1].x());
+          pey1 = float((*xy)[0].y()); pey2 = float((*xy)[n_edgels-1].y());
           this->insert_edgel(pex1, pey1,
-                             e->v1()->cast_to_vertex_2d()->x(), e->v1()->cast_to_vertex_2d()->y(), vre);
+                             float(e->v1()->cast_to_vertex_2d()->x()),
+                             float(e->v1()->cast_to_vertex_2d()->y()),
+                             vre);
           this->insert_edgel(pex2, pey2,
-                             e->v2()->cast_to_vertex_2d()->x(), e->v2()->cast_to_vertex_2d()->y(), vre);
+                             float(e->v2()->cast_to_vertex_2d()->x()),
+                             float(e->v2()->cast_to_vertex_2d()->y()),
+                             vre);
         }
       else
         {
-          pex1 = e->v1()->cast_to_vertex_2d()->x();
-          pey1 = e->v1()->cast_to_vertex_2d()->y();
-          pex2 = e->v2()->cast_to_vertex_2d()->x();
-          pey2 = e->v2()->cast_to_vertex_2d()->y();
+          pex1 = float(e->v1()->cast_to_vertex_2d()->x());
+          pey1 = float(e->v1()->cast_to_vertex_2d()->y());
+          pex2 = float(e->v2()->cast_to_vertex_2d()->x());
+          pey2 = float(e->v2()->cast_to_vertex_2d()->y());
           this->insert_edgel(pex1, pey1, pex1, pey1, vre);
           this->insert_edgel(pex1, pey1, pex2, pey2, vre);
         }
@@ -848,7 +852,7 @@ bool gevd_edgel_regions::InitRegionArray(vcl_vector< vtol_edge_2d_sptr>& sg)
       bool edge_insert = false;
       for (int k =0; k < n_edgels; k++)
         {
-          bool inserted = this->insert_edgel(pex1, pey1, (*xy)[k].x(), (*xy)[k].y(), re);
+          bool inserted = this->insert_edgel(pex1, pey1, float((*xy)[k].x()), float((*xy)[k].y()), re);
           edge_insert = edge_insert || inserted;
           pex1 = (*xy)[k].x();
           pey1 = (*xy)[k].y();
@@ -1994,8 +1998,8 @@ void gevd_edgel_regions::AccumulateMeans()
           if (intensity_face_index_[label])
             {
               unsigned short intensity = this->get_intensity(x);
-              double Ximg = double(x)+.5;//coordinates are at the pixel center
-              double Yimg = double(y)+.5;
+              float Ximg = float(x)+.5f;//coordinates are at the pixel center
+              float Yimg = float(y)+.5f;
               intensity_face_index_[label]->
                 IncrementMeans(Ximg, Yimg, intensity);
             }
@@ -2032,8 +2036,8 @@ void gevd_edgel_regions::AccumulateRegionData()
             unsigned short intensity= this->get_intensity(x);
             //Set face pixel arrays
             vdgl_intensity_face_sptr f = intensity_face_index_[label];
-            double Ximg = double(x)+.5;
-            double Yimg = double(y)+.5;
+            float Ximg = float(x)+.5f;
+            float Yimg = float(y)+.5f;
             f->InsertInPixelArrays(Ximg, Yimg, intensity);
           }
       }
