@@ -1,0 +1,138 @@
+This is vxl/core/doc/meetings/2003-meeting-plan.txt
+(http://cvs.sourceforge.net/viewcvs.py/vxl/vxl/core/doc/meetings/2003-meeting-plan.txt?view=markup).
+
+Thanks to everyone for all the positive responses about the 2003 VXL
+teleconference.  I will be away Tue. (11/4) to Thu. (11/6) of this
+week with minimal e-mail, so I am attempting to put the agenda
+formation process in the hands of CVS.  Please modify and commit this
+file as you see fit, especially the agenda section.
+
+The VXL developer community will have a teleconference on November 11,
+2003 at 9:00 AM EST.  (Add other time zones here if you're confident
+about your conversions.)  E-mail Fred Wheeler, or add a note here if
+that day/time is bad for you.  We will change the plan if the
+situation warrants.
+
+What you should do:
+  1. If you want to call in, make sure your name is below.
+  2. Make sure the agenda has items you are interested in.
+
+Participation
+-------------
+
+If you wish to participate in the teleconference, add your name and
+e-mail address here, or e-mail Fred Wheeler (wheeler at crd.ge.com).
+All this means is that you will get the call-in information.  Before
+the meeting I will e-mail the teleconference call-in numbers and
+access codes.  I do not want those numbers to end up on the web so I
+will not send them to the mailing list.
+
+If you want to call in just for certain items, let me know and we'll
+work it out -Fred Wheeler (wheeler at crd.ge.com).
+
+Geoff Cross (Visual Geometry Solutions), geoff at visualgeometrysolutions.com
+Andrew Fitzgibbon (Oxford), awf at robots.ox.ac.uk
+Brad King (Kitware), brad.king at kitware.com
+Brendan McCane (Alberta), mccane at cs.ualberta.ca
+Amitha Perera (GE), perera at crd.ge.com
+Ian Scott (Manchester), ian.m.scott at stud.man.ac.uk
+Michal Sofka (Rensselaer), sofka at cs.rpi.edu
+Fred Wheeler (GE), wheeler at crd.ge.com
+Gary Yang (Rensselaer), yangg2 at cs.rpi.edu
+
+Web whiteboarding
+-----------------
+
+Amitha: if you want to go ahead with your plan for this, please add
+instructions here.  Can we just go live right now to discover any
+bugs/problems?
+
+Agenda
+------
+
+I would like to help make sure this teleconference happens and is
+productive, but I am hoping that others with more VXL and TargetJr
+experience will step in to lead and steer the discussion where
+appropriate.  My original proposed "half-baked" agenda was not meant
+to be definitive.  Most of those items are copied below, but some have
+lines indicating they need to be "seconded".  Remove that line the
+"second" the agenda item.  Some people have e-mailed agenda items to
+me.  They are added below.
+
+*** Configuration - Windows DLLs
+
+Last year Fred Wheeler tried to do this the declspec code markup way,
+but abandoned the effort.  Amitha Perera has been working on this
+recently with more success.
+
+*** Configuration - Are people happy with new CMake export scheme
+
+*** Configuration - Are people happy with new CMake configuration
+
+*** Configuration - Is it OK to be so dependent on CMake?
+
+*** Configuration - How do people structure their internal private code that uses VXL?
+
+Remove this line to "second" this item if you think this is something we should discuss.
+
+*** Language - Is anyone interested in TCL/Python bindings
+
+Remove this line to "second" this item if you think this is something we should discuss.
+
+*** V3P - NEW: Move from netlib to LAPACK
+
+*** V3P - Why VCLize V3P?  V3P packages are already portable.  Upgrades tough after we VCLize.
+
+*** V3P - XML in v3p
+
+GE uses Xerces XML with VXL quite a bit.
+
+Remove this line to "second" this item.
+
+*** Core - "Ownership" of core VXL libs - discussion started on list a few months ago
+
+*** Core - vidl upgrade to vil2
+
+Brown recently did this.  Any difficulties or open issues?
+
+*** Core - NITF support in vil
+
+GE is doing this now by porting Target code.
+
+*** Contrib - Any upgrade candidates
+
+rpl/rrel might be a good candidate.
+
+*** Contrib - What are people working on?  Are there more opportunities to share code?
+
+Remove this line to "second" this item if you think this is something we should discuss.
+
+*** Communication - CVS commit mailing list painful to read
+      Summary to VXL maintainers after major changes better (or CHANGES.txt)
+
+Remove this line to "second" this item if you think this is something we should discuss.
+
+*** Communication - New release system
+
+Brendan McCane e-mailed me about this issue, but his concern may be
+settled by the fact that Ian has started the regular release process.
+
+Remove this line to "second" this item if you think this is something we should discuss.
+
+*** Communication - To Do list may invite new users to contribute
+
+We should brainstorm some more easy and hard to-do items to add to this list.
+
+*** Testing - Borland C++ dashboard builds (Part of the "deal" with Kitware)
+
+We are now in the middle of the Borland port.
+
+*** VXL Principles - What is the VXL copyright exactly?
+
+Are we marking files properly?  Consistently?
+
+*** VXL Principles - Is VXL in danger of becoming like Target Jr.?
+
+Someone has suggested a concern about bloat and feature creep.  Any real danger here?
+
+END
