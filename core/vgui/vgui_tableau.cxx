@@ -104,32 +104,32 @@ bool vgui_tableau::handle(vgui_event const &event) {
 }
 
 bool vgui_tableau::mouse_down(int, int, vgui_button, vgui_modifier) {
-  debug << "vgui_tableau::mouse_down" << vcl_endl;
+  //debug << "vgui_tableau::mouse_down" << vcl_endl;
   return false;
 }
 
 bool vgui_tableau::mouse_up(int, int, vgui_button, vgui_modifier) {
-  debug << "vgui_tableau::mouse_up" << vcl_endl;
+  //debug << "vgui_tableau::mouse_up" << vcl_endl;
   return false;
 }
 
 bool vgui_tableau::motion(int, int) {
-  debug << "vgui_tableau::motion" << vcl_endl;
+  //debug << "vgui_tableau::motion" << vcl_endl;
   return false;
 }
 
 bool vgui_tableau::key_press(int, int, vgui_key, vgui_modifier) {
-  debug << "vgui_tableau::key_press" << vcl_endl;
+  //debug << "vgui_tableau::key_press" << vcl_endl;
   return false;
 }
 
 bool vgui_tableau::help() {
-  debug << "vgui_tableau::help" << vcl_endl;
+  //debug << "vgui_tableau::help" << vcl_endl;
   return false;
 }
 
 bool vgui_tableau::draw() {
-  debug << "vgui_tableau::draw" << vcl_endl;
+  //debug << "vgui_tableau::draw" << vcl_endl;
   return false;
 }
 
@@ -281,8 +281,8 @@ void vgui_tableau::get_popup(vgui_popup_params const &params, vgui_menu &menu) {
   else {
     // not nested.
     if (submenu.size() > 0) // do not add empty submenus.
-      menu.add(type_name(), submenu);
-
+      menu.include(submenu);
+    
     if (params.recurse) {
       vcl_vector<vgui_tableau_sptr> children;
       get_children(&children);
