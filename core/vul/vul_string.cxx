@@ -258,12 +258,17 @@ bool vul_string_to_bool(const vcl_string &str)
 bool vul_string_expand_var(vcl_string &str)
 {
   vcl_string::size_type i = 0; // index to current char.
+  const vcl_string::size_type npos = vcl_string::npos;
 
   // If there is a problem, carry on trying to convert rest
   bool success=true; //  of string, but remember failure.
 
   enum {not_in_var, start_var, in_var, in_bracket_var} state = not_in_var;
   vcl_string::size_type var_begin = 0;
+
+  vcl_string::size_type bracket_type = npos; //index into open_brackets.
+  const vcl_string  open_brackets("{([");
+  const vcl_string close_brackets("})]");
 
   while (i<str.size())
   {
@@ -283,7 +288,7 @@ bool vul_string_expand_var(vcl_string &str)
         state=not_in_var;
         continue;
       }
-      else if (str[i] == '{')
+      else if ((bracket_type = open_brackets.find_first_of(str[i])) != npos)
       {
         state=in_bracket_var;
         break;
@@ -313,7 +318,7 @@ bool vul_string_expand_var(vcl_string &str)
       }
       break;
      case in_bracket_var:  // in a bracketed variable
-      if (str[i] == '}')
+      if (str[i] == close_brackets[bracket_type])
       {
         assert(var_begin+2 < str.size());
         assert(i > var_begin+1);

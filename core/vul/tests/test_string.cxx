@@ -80,9 +80,14 @@ void test_string()
     TEST("vul_string_expand_var", s, "wibble$VUL_3wobblebarsplatfoo");
   }
   {
-    vcl_string s("wibble$$$VUL_1 wobble${}");
+    vcl_string s("wibble$VUL_3wobble$VUL_2splat$(VUL_1)");
     TEST("vul_string_expand_var", vul_string_expand_var(s), false);
-    TEST("vul_string_expand_var", s, "wibble$foo wobble${}");
+    TEST("vul_string_expand_var", s, "wibble$VUL_3wobblebarsplatfoo");
+  }
+  {
+    vcl_string s("wibble$$$VUL_1 wobble$[]");
+    TEST("vul_string_expand_var", vul_string_expand_var(s), false);
+    TEST("vul_string_expand_var", s, "wibble$foo wobble$[]");
   }
 
 }
