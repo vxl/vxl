@@ -143,6 +143,12 @@ SOURCE=.\sdet_grid_finder.cxx
 # Begin Source File
 SOURCE=.\sdet_grid_finder_params.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\sdet_tracker.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\sdet_tracker_params.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"
@@ -193,6 +199,12 @@ SOURCE=.\sdet_grid_finder.h
 # End Source File
 # Begin Source File
 SOURCE=.\sdet_grid_finder_params.h
+# End Source File
+# Begin Source File
+SOURCE=.\sdet_tracker.h
+# End Source File
+# Begin Source File
+SOURCE=.\sdet_tracker_params.h
 # End Source File
 # End Group
 # End Target
