@@ -27,7 +27,7 @@ private:
   //  Options are '' (ie rely on image), 'Grey' or 'RGB'
   vcl_string colour_;
 
-  vcl_string guessFileType(const vcl_string& path) const;
+  static vcl_string guessFileType(const vcl_string& path);
 
 public:
 
@@ -71,9 +71,9 @@ public:
 
   //: Attempt to save image to named file
   // \param filetype  String defining what format to save in
-  bool saveTheImage(const mil_image_2d_of<vil_byte>& image,
+  static bool saveTheImage(const mil_image_2d_of<vil_byte>& image,
                          const vcl_string& path,
-                         const vcl_string& filetype) const;
+                         const vcl_string& filetype);
 
   //: Version number for I/O
   short version_no() const;

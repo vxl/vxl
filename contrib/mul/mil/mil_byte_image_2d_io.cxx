@@ -6,10 +6,10 @@
 //  \brief Load and save mil_image_2d_of<vil_byte> from named files.
 //  \author Tim Cootes
 
+#include <mil/mil_byte_image_2d_io.h>
 #include <vcl_cstdlib.h>
 #include <vcl_string.h>
 #include <vsl/vsl_indent.h>
-#include <mil/mil_byte_image_2d_io.h>
 #include <vcl_cassert.h>
 
 #include <vil/vil_load.h>
@@ -70,7 +70,7 @@ bool mil_byte_image_2d_io::saveImage(const vcl_string& path,
 }
 
 
-vcl_string mil_byte_image_2d_io::guessFileType(const vcl_string& path) const
+vcl_string mil_byte_image_2d_io::guessFileType(const vcl_string& path)
 {
   int n = path.size();
   if (n<=4) return "Unknown";
@@ -181,7 +181,7 @@ bool mil_byte_image_2d_io::loadTheImage(mil_image_2d_of<vil_byte>& image,
 // \param filetype  String defining what format to save in
 bool mil_byte_image_2d_io::saveTheImage(const mil_image_2d_of<vil_byte>& image,
             const vcl_string& path,
-            const vcl_string& f_type) const
+            const vcl_string& f_type)
 {
   vcl_string filetype = f_type;
   if (f_type=="")
