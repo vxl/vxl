@@ -1,0 +1,32 @@
+# data file for the Fltk User Interface Designer (fluid)
+version 1.00 
+header_name {.h} 
+code_name {.cc} 
+gridx 1 
+gridy 1 
+snap 3
+Function {make_window()} {open
+} {
+  Fl_Window {} {open
+    xywh {242 135 538 486} labelfont 2 align 16 resizable visible
+  } {
+    Fl_Group stackpane_frame {open
+      xywh {5 51 525 429} box ENGRAVED_BOX align 64 resizable
+    } {
+      Fl_Box flpane {
+        label VGUI_Fl_adaptor
+        xywh {10 58 514 414} resizable
+        code0 {\#include <VGUI_Fl/VGUI_Fl_adaptor.h>}
+        class VGUI_Fl_adaptor
+      }
+    }
+    Fl_Value_Slider alpha_slider {
+      label {alpha :}
+      callback alpha_sliderCB
+      xywh {96 14 194 25} type Horizontal color 41 labelfont 5 labelsize 18 align 4 step 0.01 textsize 14 textcolor 7
+    }
+    Fl_Box pad {selected
+      xywh {302 15 81 24} hide
+    }
+  }
+} 

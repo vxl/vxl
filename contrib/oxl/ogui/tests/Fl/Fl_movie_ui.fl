@@ -1,0 +1,79 @@
+# data file for the Fltk User Interface Designer (fluid)
+version 1.00 
+header_name {.h} 
+code_name {.cc} 
+gridx 1 
+gridy 1 
+snap 3
+Function {make_window()} {open
+} {
+  Fl_Window {} {open
+    xywh {217 135 538 486} labelfont 2 align 16 resizable visible
+  } {
+    Fl_Group stackpane_frame {open
+      xywh {5 60 525 420} box ENGRAVED_BOX align 64 resizable
+    } {
+      Fl_Box flpane {
+        label VGUI_Fl_adaptor selected
+        xywh {10 90 514 366} resizable
+        code0 {\#include <VGUI_Fl/VGUI_Fl_adaptor.h>}
+        class VGUI_Fl_adaptor
+      }
+      Fl_Group stackcontrol {open
+        xywh {10 65 515 25}
+      } {
+        Fl_Output image_name {
+          callback image_nameCB
+          xywh {10 65 125 20} textsize 12
+        }
+      }
+      Fl_Scrollbar scroll_pane {
+        callback scroll_paneCB
+        xywh {9 460 515 15} type Horizontal maximum 10 slider_size 0.1
+      }
+    }
+    Fl_Group decoration {open
+      xywh {0 -15 530 70}
+    } {
+      Fl_Group movieplayer {open
+        xywh {185 10 345 35} box BORDER_BOX color 41 align 0
+      } {
+        Fl_Button play {
+          label {@>}
+          callback playCB
+          xywh {190 15 30 25} type Toggle down_box DOWN_BOX labeltype SYMBOL_LABEL
+        }
+        Fl_Button stop {
+          label {@||}
+          callback stopCB
+          xywh {225 15 30 25} down_box DOWN_BOX labeltype SYMBOL_LABEL align 16
+        }
+        Fl_Roller speed {
+          callback speedCB
+          xywh {265 20 110 15} type Horizontal minimum -125 maximum 125 step 1 value 5
+        }
+        Fl_Button start {
+          label {@<<}
+          callback startCB
+          xywh {465 15 25 25} down_box DOWN_BOX labeltype SYMBOL_LABEL align 16
+        }
+        Fl_Button end {
+          label {@>>}
+          callback endCB
+          xywh {495 15 25 25} down_box DOWN_BOX labeltype SYMBOL_LABEL align 16
+        }
+        Fl_Output fps {
+          label {fps:}
+          xywh {410 15 40 20} labelsize 12 labelcolor 7 textsize 12
+        }
+      }
+      Fl_Group title {
+        label TargetJr open
+        xywh {15 10 80 30} box ENGRAVED_BOX color 41 selection_color 41 labeltype SHADOW_LABEL labelfont 1 labelcolor 49 align 0
+      } {}
+      Fl_Group padding2 {open
+        xywh {110 50 55 5} box FLAT_BOX resizable
+      } {}
+    }
+  }
+} 
