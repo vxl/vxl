@@ -30,8 +30,8 @@ class vgui_soview3D : public vgui_soview
 class vgui_point3D : public vgui_soview3D
 {
  public:
-  vgui_point3D() {};
-  vgui_point3D(float x_, float y_, float z_) : x(x_), y(y_), z(z_) {};
+  vgui_point3D() {}
+  vgui_point3D(float x_, float y_, float z_) : vgui_soview3D(), x(x_), y(y_), z(z_) {}
 
   virtual void draw() const;
   virtual vcl_ostream& print(vcl_ostream&) const;
@@ -45,7 +45,7 @@ class vgui_point3D : public vgui_soview3D
 class vgui_lineseg3D : public vgui_soview3D
 {
  public:
-  vgui_lineseg3D() {};
+  vgui_lineseg3D() {}
   vgui_lineseg3D( float x0_, float y0_, float z0_,
                   float x1_, float y1_, float z1_ );
 
@@ -61,7 +61,7 @@ class vgui_lineseg3D : public vgui_soview3D
 class vgui_triangle3D : public vgui_soview3D
 {
  public:
-  vgui_triangle3D() {};
+  vgui_triangle3D() {}
   vgui_triangle3D( float x0_, float y0_, float z0_,
                    float x1_, float y1_, float z1_,
                    float x2_, float y2_, float z2_ );
