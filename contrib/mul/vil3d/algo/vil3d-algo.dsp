@@ -99,13 +99,40 @@ LIB32=link.exe -lib
 # Begin Group "Source Files"
 # PROP Default_Filter ""
 # Begin Source File
-SOURCE=.\vil3d_algo_dummy.cxx
+SOURCE=.\vil3d_grad_1x3.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vil3d_grad_1x3+byte.float-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vil3d_grad_1x3+float.float-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vil3d_threshold+byte-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vil3d_threshold+float-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vil3d_threshold+int-.cxx
 # End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter ""
 # Begin Source File
 SOURCE=.\vil3d_gauss_reduce.h
+# End Source File
+# Begin Source File
+SOURCE=.\vil3d_grad_1x3.h
+# End Source File
+# Begin Source File
+SOURCE=.\vil3d_grad_1x3.txx
+# End Source File
+# Begin Source File
+SOURCE=.\vil3d_threshold.h
+# End Source File
+# Begin Source File
+SOURCE=.\vil3d_threshold.txx
 # End Source File
 # End Group
 # End Target
