@@ -17,6 +17,7 @@
 #include <vnl/vnl_double_3.h>
 #include <vnl/vnl_double_4.h>
 #include <vnl/vnl_double_3x4.h>
+#include <vnl/vnl_double_3x3.h>
 #include <vnl/vnl_rotation_matrix.h>
 #include <vnl/vnl_inverse.h>
 #include <vnl/vnl_identity_3x3.h>
@@ -28,7 +29,6 @@
 bmrf_curve_3d_builder::bmrf_curve_3d_builder()
  : network_(NULL), min_alpha_(0.0), max_alpha_(0.0), bb_xform_(0.0)
 {
-  init_intrinsic();
 }
 
 
@@ -36,48 +36,25 @@ bmrf_curve_3d_builder::bmrf_curve_3d_builder()
 bmrf_curve_3d_builder::bmrf_curve_3d_builder(const bmrf_network_sptr& network)
  : network_(network), min_alpha_(0.0), max_alpha_(0.0), bb_xform_(0.0)
 {
-  init_intrinsic();
-  init_cameras();
-}
-
-
-//: Constructor
-bmrf_curve_3d_builder::bmrf_curve_3d_builder( const bmrf_network_sptr& network,
-                                              const vnl_double_3x4& C0 )
- : network_(network), min_alpha_(0.0), max_alpha_(0.0), bb_xform_(0.0)
-{
-  init_intrinsic();
-  init_cameras(C0);
-}
-
-
-//: Initialize the intrinsic camera parameters
-void
-bmrf_curve_3d_builder::init_intrinsic()
-{
   // For our camera images are 1024 x 768
   // The focal length is 12.5mm / (6.25 um/pixel) = 2000 pixels
-  K_[0][0] = 2000;  K_[0][1] = 0;     K_[0][2] = 512;
-  K_[1][0] = 0;     K_[1][1] = 2000;  K_[1][2] = 384;
-  K_[2][0] = 0;     K_[2][1] = 0;     K_[2][2] = 1;
-}
+  vnl_double_3x3 K;
+  K[0][0] = 2000;  K[0][1] = 0;     K[0][2] = 512;
+  K[1][0] = 0;     K[1][1] = 2000;  K[1][2] = 384;
+  K[2][0] = 0;     K[2][1] = 0;     K[2][2] = 1;
 
-
-//: Initialize the camera matrices
-void
-bmrf_curve_3d_builder::init_cameras()
-{
   // Use the identity camera by default
   vnl_double_3x4 C;
   C[0][0] = 1;  C[0][1] = 0;  C[0][2] = 0;  C[0][3] = 0;
   C[1][0] = 0;  C[1][1] = 1;  C[1][2] = 0;  C[1][3] = 0;
   C[2][0] = 0;  C[2][1] = 0;  C[2][2] = 1;  C[2][3] = 0;
-  this->init_cameras(K_*C);
+  this->init_cameras(K*C);
 }
+
 
 //: Initialize the camera matrices
 void
-bmrf_curve_3d_builder::init_cameras(const vnl_double_3x4& C0)
+bmrf_curve_3d_builder::init_cameras(const vnl_double_3x4& C0, double scale)
 {
   C_.clear();
   if (!network_)
@@ -101,7 +78,7 @@ bmrf_curve_3d_builder::init_cameras(const vnl_double_3x4& C0)
   vnl_double_3x4 Ef = C0;
   for ( vcl_set<int>::const_iterator fitr = frames.begin();
         fitr != frames.end();  ++fitr ) {
-    double dt = -double(*fitr);
+    double dt = -double(*fitr)*scale;
     Ef.set_column(3,C0.get_column(3) + dt*e);
     C_[*fitr] = Ef;
   }
@@ -113,7 +90,6 @@ void
 bmrf_curve_3d_builder::set_network(const bmrf_network_sptr& network)
 {
   network_ = network;
-  init_cameras();
 }
 
 
@@ -246,7 +222,7 @@ bmrf_curve_3d_builder::compute_bounding_box(double inlier_fraction, bool align_e
 
 //: Build the curves
 bool
-bmrf_curve_3d_builder::build(int min_prj, int min_len, float sigma)
+bmrf_curve_3d_builder::build(int min_prj, int min_len)
 {
   if (!network_)
     return false;
@@ -292,12 +268,22 @@ bmrf_curve_3d_builder::build(int min_prj, int min_len, float sigma)
     this->stat_trim_curve(const_cast<vcl_list<bmrf_curvel_3d_sptr> &> (*itr), 0.001);
     if ( itr->size() < (unsigned int)min_len )
       curves_.erase(itr);
-    else
-      this->reconstruct_curve(const_cast<vcl_list<bmrf_curvel_3d_sptr> &> (*itr), sigma);
     itr = next_itr;
   }
 
   return true;
+}
+
+
+//: Reconstruct the 3D curves from the curvel chains
+void 
+bmrf_curve_3d_builder::reconstruct(float sigma)
+{
+  for ( vcl_set<vcl_list<bmrf_curvel_3d_sptr> >::iterator itr = curves_.begin();
+        itr != curves_.end();  ++itr)
+  {
+    this->reconstruct_curve(const_cast<vcl_list<bmrf_curvel_3d_sptr> &> (*itr), sigma);  
+  }
 }
 
 

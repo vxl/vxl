@@ -15,7 +15,6 @@
 #include <bmrf/bmrf_network_sptr.h>
 #include <bmrf/bmrf_node_sptr.h>
 #include <bmrf/bmrf_arc_sptr.h>
-#include <vnl/vnl_double_3x3.h>
 #include <vnl/vnl_double_3x4.h>
 #include <vnl/vnl_double_4x4.h>
 #include <vgl/vgl_vector_3d.h>
@@ -36,16 +35,22 @@ class bmrf_curve_3d_builder
   //: Constructor
   bmrf_curve_3d_builder();
   bmrf_curve_3d_builder(const bmrf_network_sptr&);
-  bmrf_curve_3d_builder(const bmrf_network_sptr&, const vnl_double_3x4& C0);
   //: Destructor
   ~bmrf_curve_3d_builder() {}
 
   //: Set the network
   void set_network(const bmrf_network_sptr& network);
 
+  //: Initialize the camera matrices (using a specified camera)
+  // \param scale determines the separation between cameras
+  void init_cameras(const vnl_double_3x4& C0, double scale = 1.0);
+
   //: Build The curves
   //  Curves with less than \p min_prj projections are removed
-  bool build(int min_prj = 3, int min_len = 10, float sigma = 0.5);
+  bool build(int min_prj = 3, int min_len = 10);
+
+  //: Reconstruct the 3D curves from the curvel chains
+  void reconstruct(float sigma = 0.5);
 
   //: Compute the bounding box aligned with vehicle direction
   bool compute_bounding_box(double inlier_fraction = 0.95, bool align_ep = false);
@@ -63,15 +68,6 @@ class bmrf_curve_3d_builder
   vnl_double_4x4 bb_xform() const;
 
  protected:
-  //: Initialize the intrinsic camera parameters
-  void init_intrinsic();
-
-  //: Initialize the camera matrices (using the identity camera)
-  void init_cameras();
-
-  //: Initialize the camera matrices (using a specified camera)
-  void init_cameras(const vnl_double_3x4& C0);
-
   //: Determine the alpha bounds from the network
   void find_alpha_bounds();
   
@@ -122,9 +118,6 @@ class bmrf_curve_3d_builder
   double max_alpha_;
 
   vcl_set<vcl_list<bmrf_curvel_3d_sptr> > curves_;
-
-  //: Camera intrinsic parameters
-  vnl_double_3x3 K_;
 
   //: Map from frame numbers to cameras
   vcl_map<int,vnl_double_3x4> C_;
