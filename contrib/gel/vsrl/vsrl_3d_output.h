@@ -18,6 +18,25 @@
 
 class vsrl_3d_output
 {
+  // the matcher used to compute the data
+
+  vsrl_dense_matcher *matcher_;
+
+  // the image buffers
+
+  vil_memory_image_of<int> buffer1_;
+  vil_memory_image_of<int> buffer2_;
+
+  // the projective transform used to convert the initial values
+  // of X into the true values of X
+
+  vnl_matrix<double> H_;
+
+  vsrl_image_correlation image_correlation_; // the image correlation object
+
+  vil_image image1_; // the first image
+  vil_image image2_; // the second image
+
  public:
 
   // the constructor
@@ -42,32 +61,11 @@ class vsrl_3d_output
 
   void write_output(char *filename);
 
-
  private:
-
-  // the matcher used to compute the data
-
-  vsrl_dense_matcher *_matcher;
-
-  // the image buffers
-
-  vil_memory_image_of<int> _buffer1;
-  vil_memory_image_of<int> _buffer2;
-
-  // the projective transform used to convert the initial values
-  // of X into the true values of X
-
-  vnl_matrix<double> _H;
 
   bool non_valid_point(int x, int y); // identifies non valid points
 
-  vsrl_image_correlation _image_correlation; // the image correlation object
-
-  vil_image _image1; // the first image
-  vil_image _image2; // the second image
-
-
- void  write_disparity_image(char *filename,vsrl_diffusion *diff);
+  void  write_disparity_image(char *filename,vsrl_diffusion *diff);
 };
 
 #endif // vsrl_3d_output_h

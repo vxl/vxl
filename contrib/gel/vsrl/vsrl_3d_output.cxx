@@ -13,19 +13,19 @@
 
 // the constructor
 vsrl_3d_output::vsrl_3d_output(const vil_image &im1, const vil_image &im2):
-_buffer1(im1),
-_buffer2(im2),
-_H(4,4),
-_image_correlation(im1,im2)
+buffer1_(im1),
+buffer2_(im2),
+H_(4,4),
+image_correlation_(im1,im2)
 {
-  _matcher=0;
-  _H.fill(0.0);
-  _H(0,0)=1;
-  _H(1,1)=1;
-  _H(2,2)=1;
-  _H(3,3)=1;
-  _image1=im1;
-  _image2=im2;
+  matcher_=0;
+  H_.fill(0.0);
+  H_(0,0)=1;
+  H_(1,1)=1;
+  H_(2,2)=1;
+  H_(3,3)=1;
+  image1_=im1;
+  image2_=im2;
 }
 
 // the destructor
@@ -37,7 +37,7 @@ vsrl_3d_output::~vsrl_3d_output()
 
 void vsrl_3d_output::set_matcher(vsrl_dense_matcher *matcher)
 {
-  _matcher = matcher;
+  matcher_ = matcher;
 }
 
 
@@ -45,7 +45,7 @@ void vsrl_3d_output::set_matcher(vsrl_dense_matcher *matcher)
 
 void vsrl_3d_output::set_projective_transform(vnl_matrix<double> &H)
 {
-  _H=H;
+  H_=H;
 
   return;
 }
@@ -59,13 +59,13 @@ void vsrl_3d_output::write_output(char *filename)
   // implies an interpretation of (x,y,d,1)
   // is a valid reconstruction which should look pretty decent
 
-  if (!_matcher){
+  if (!matcher_){
     return;
   }
 
   // make a step_diffusion object to make better disparities
 
-  vsrl_step_diffusion step_diffusion(_matcher);
+  vsrl_step_diffusion step_diffusion(matcher_);
   step_diffusion.execute();
 
   // this->write_disparity_image("test0_disp.ppm",&step_diffusion);
@@ -73,14 +73,14 @@ void vsrl_3d_output::write_output(char *filename)
   // determine the saliency of each point in the image
 
   // vcl_cout << "Perform the image correlation routines" << endl;
-  // _image_correlation.initial_calculations();
+  // image_correlation_.initial_calculations();
 
-  // vsrl_token_saliency ts(&_image_correlation);
+  // vsrl_token_saliency ts(&image_correlation_);
   // ts.create_saliency_image("test_sal.ppm");
 
   // use the token saliency to initiliaze a vsrl_saliency_diffusion object
 
-  // vsrl_saliency_diffusion sal_diffusion(_matcher);
+  // vsrl_saliency_diffusion sal_diffusion(matcher_);
 
 
   // sal_diffusion.set_initial_disparity(&step_diffusion);
@@ -111,8 +111,8 @@ void vsrl_3d_output::write_output(char *filename)
   vnl_matrix<double> input(4,1);
   vnl_matrix<double> output(4,1);
 
-  double width = _matcher->get_width();
-  double height = _matcher->get_height();
+  double width = matcher_->get_width();
+  double height = matcher_->get_height();
 
   double difuse_d;
   int x,y; // image coordinates and disparity
@@ -121,7 +121,7 @@ void vsrl_3d_output::write_output(char *filename)
 
   // keep track of the indices
 
-  vnl_matrix<int> point_index(_matcher->get_width(),_matcher->get_height());
+  vnl_matrix<int> point_index(matcher_->get_width(),matcher_->get_height());
   point_index.fill(-1);
   int index=0;
 
@@ -136,7 +136,7 @@ void vsrl_3d_output::write_output(char *filename)
         difuse_d=0.0;
       }
 
-      // d = _matcher->get_disparity(x,y);
+      // d = matcher_->get_disparity(x,y);
       if (difuse_d > 0-999){
 
         input(0,0)=x;
@@ -145,9 +145,9 @@ void vsrl_3d_output::write_output(char *filename)
         input(3,0)=1.0; // change me based on image scale
 
 
-        // comput the output = _H * input
+        // comput the output = H_ * input
 
-        output = _H * input;
+        output = H_ * input;
 
 
         // normalize to X,Y,Z,1
@@ -207,7 +207,7 @@ void vsrl_3d_output::write_output(char *filename)
 
   // OK we can now compute the conectivity between points
 
-  vcl_cout << "computing the triangles" << vcl_endl;
+  vcl_cout << "computing the triangles\n";
 
   // these are the vertex lists
 
@@ -248,7 +248,7 @@ void vsrl_3d_output::write_output(char *filename)
     }
   }
 
-  vcl_cout << "writing triangles" << vcl_endl;
+  vcl_cout << "writing triangles\n";
 
   // write the number of triangles
   length = vert1.size();
@@ -310,7 +310,7 @@ void vsrl_3d_output::read_projective_transform(char *filename)
     }
   }
 
-  vcl_cout << "Seting transform to " << vcl_endl << H << vcl_endl;
+  vcl_cout << "Seting transform to\n" << H << vcl_endl;
   this->set_projective_transform(H);
 }
 
@@ -319,14 +319,14 @@ void vsrl_3d_output::read_projective_transform(char *filename)
 
 bool vsrl_3d_output::non_valid_point(int x, int y)
 {
-  if (x>=0 && x < _buffer1.width() && y>=0 && y <_buffer1.height()){
-    if (_buffer1(x,y)==3){
+  if (x>=0 && x < buffer1_.width() && y>=0 && y <buffer1_.height()){
+    if (buffer1_(x,y)==3){
       return true;
     }
   }
 
-  if (x>=0 && x < _buffer2.width() && y>=0 && y <_buffer2.height()){
-    if (_buffer2(x,y)==3){
+  if (x>=0 && x < buffer2_.width() && y>=0 && y <buffer2_.height()){
+    if (buffer2_(x,y)==3){
       return true;
     }
   }
@@ -341,7 +341,7 @@ void vsrl_3d_output::write_disparity_image(char *filename,vsrl_diffusion *diff)
 
   // make a buffer which has the size of image1
 
-  vil_memory_image_of<int> buffer(_image1);
+  vil_memory_image_of<int> buffer(image1_);
 
   int x,y;
   int disparity;
@@ -370,6 +370,6 @@ void vsrl_3d_output::write_disparity_image(char *filename,vsrl_diffusion *diff)
     }
 
   // save the file
-  // vil_save(buffer, filename, _image1.file_format());
+  // vil_save(buffer, filename, image1_.file_format());
   vil_save(buffer, filename);
 }

@@ -46,7 +46,7 @@ class vvid_live_stereo_manager : public vgui_grid_tableau
   unsigned get_width(){return width_;}
 
   //: properties of the camera setup
-  int get_N_views(){return _N_views;}
+  int get_N_views(){return N_views_;}
 
   //: control live video actions
   void set_camera_params();
@@ -66,8 +66,8 @@ class vvid_live_stereo_manager : public vgui_grid_tableau
   void set_process_mono_image(vil_memory_image_of<unsigned char>& im);
 
   //: access to the window
-  vgui_window* get_window(){return _win;}
-  void set_window(vgui_window* win){_win=win;}
+  vgui_window* get_window(){return win_;}
+  void set_window(vgui_window* win){win_=win;}
 
   //: the virtual handle function
   virtual bool handle(const vgui_event&);
@@ -77,21 +77,21 @@ class vvid_live_stereo_manager : public vgui_grid_tableau
   //utility functions
   void run_frames();
   //flags
-  bool _init_successful;
-  bool _live_capture;
-  int _N_views;
+  bool init_successful_;
+  bool live_capture_;
+  int N_views_;
   unsigned width_;
   unsigned height_;
-  vgui_window* _win;
+  vgui_window* win_;
 
-  vgui_image_tableau_sptr _it;
-  vgui_viewer2D_tableau_sptr _v2D;
-  vcl_vector<vvid_live_video_tableau_sptr> _vframes;
-  cmu_1394_camera_params _cp;
-  vil_memory_image_of< vil_rgb<unsigned char> > _process_rgb;
-  vil_memory_image_of<unsigned char> _process_mono;
-  vvid_video_process_sptr _video_process;
-  static vvid_live_stereo_manager *_instance;
+  vgui_image_tableau_sptr it_;
+  vgui_viewer2D_tableau_sptr v2D_;
+  vcl_vector<vvid_live_video_tableau_sptr> vframes_;
+  cmu_1394_camera_params cp_;
+  vil_memory_image_of< vil_rgb<unsigned char> > process_rgb_;
+  vil_memory_image_of<unsigned char> process_mono_;
+  vvid_video_process_sptr video_process_;
+  static vvid_live_stereo_manager *instance_;
 };
 
 #endif // vvid_live_stereo_manager_h_

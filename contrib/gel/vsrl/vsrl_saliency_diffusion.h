@@ -11,7 +11,10 @@
 
 class vsrl_saliency_diffusion : public vsrl_diffusion
 {
-public:
+ protected:
+  vsrl_token_saliency *saliency_; // the object that defines the salieny of each point
+
+ public:
 
   // constructor
   vsrl_saliency_diffusion(vsrl_dense_matcher *matcher);
@@ -34,8 +37,6 @@ public:
 
   // modify based on the the pixel saliency measures
   void consider_saliency();
-
-  vsrl_token_saliency *_saliency; // the object that defines the salieny of each point
 };
 
 #endif

@@ -33,15 +33,15 @@ public:
   vcl_ostream& operator << (vcl_ostream& os, const cmu_1394_camera_params& cpp);
 
   //The parameters
-  int _video_format;
-  int _video_mode;
-  int _frame_rate;
-  int _brightness;
-  int _sharpness;
-  int _exposure;
-  int _gain;
-  bool _capture;//vs acquisition
-  bool _rgb;//color image vs monochrome
+  int video_format_;
+  int video_mode_;
+  int frame_rate_;
+  int brightness_;
+  int sharpness_;
+  int exposure_;
+  int gain_;
+  bool capture_;//vs acquisition
+  bool rgb_;//color image vs monochrome
 };
  
 

@@ -16,13 +16,13 @@ void vsrl_step_diffusion::set_initial_disparity()
 {
   // we want to set the initial disparity
 
-  for (int x=0;x<_width;x++)
+  for (int x=0;x<get_width();x++)
   {
-    for (int y=0;y<_height;y++)
+    for (int y=0;y<get_height();y++)
     {
-      int d = _matcher->get_disparity(x,y);
+      int d = matcher_->get_disparity(x,y);
       double dd =d;
-      (*_disparity_matrix)(x,y)=dd;
+      (*disparity_matrix_)(x,y)=dd;
     }
   }
 }
@@ -40,11 +40,11 @@ void vsrl_step_diffusion::interpolate_disparity()
 
   // find all points do not have a defined disparity
 
-  for (y=0;y<_height;y++)
+  for (y=0;y<get_height();y++)
   {
-    for (x=0;x<_width;x++)
+    for (x=0;x<get_width();x++)
     {
-      v = (*_disparity_matrix)(x,y);
+      v = (*disparity_matrix_)(x,y);
 
       if (v<low_val)
       {
@@ -55,7 +55,7 @@ void vsrl_step_diffusion::interpolate_disparity()
         x1=x-1;
         while (x1>=0 && !flag1)
         {
-          d1=(*_disparity_matrix)(x1,y);
+          d1=(*disparity_matrix_)(x1,y);
           if (d1>low_val)
           {
             flag1=1;
@@ -70,9 +70,9 @@ void vsrl_step_diffusion::interpolate_disparity()
 
         flag2=0;
         x2=x+1;
-        while (x2<_width && !flag2)
+        while (x2<get_width() && !flag2)
         {
-          d2=(*_disparity_matrix)(x2,y);
+          d2=(*disparity_matrix_)(x2,y);
           if (d2>low_val)
           {
             flag2=1;
@@ -92,20 +92,20 @@ void vsrl_step_diffusion::interpolate_disparity()
           len2 = x2-x1;
           alpha = len1/len2;
           d= (1.0-alpha)*d1 + (alpha)*d2;
-          (*_disparity_matrix)(x,y)=d;
+          (*disparity_matrix_)(x,y)=d;
         }
       }
     }
   }
 
-  for (y=0;y<_height;y++)
+  for (y=0;y<get_height();y++)
   {
-    for (x=0;x<_width;x++)
+    for (x=0;x<get_width();x++)
     {
-      v = (*_disparity_matrix)(x,y);
+      v = (*disparity_matrix_)(x,y);
       if (v<low_val)
       {
-        (*_disparity_matrix)(x,y)=0.0;
+        (*disparity_matrix_)(x,y)=0.0;
       }
     }
   }
@@ -121,13 +121,13 @@ void vsrl_step_diffusion::clear_borders(int width)
 
   // find all points do not have a defined disparity
 
-  for (y=0;y<_height;y++)
+  for (y=0;y<get_height();y++)
   {
     for (x=0;x<width;x++)
-      (*_disparity_matrix)(x,y)=0;
+      (*disparity_matrix_)(x,y)=0;
 
-    for (x=_width-width;x<_width;x++)
-      (*_disparity_matrix)(x,y)=0;
+    for (x=get_width()-width;x<get_width();x++)
+      (*disparity_matrix_)(x,y)=0;
   }
 }
 
@@ -143,9 +143,9 @@ void vsrl_step_diffusion::difuse_disparity()
   // We then start the diffusion process to smooth things
   // out.
 
-  vcl_cout << "Starting to diffuse" << vcl_endl;
+  vcl_cout << "Starting to diffuse\n";
 
-  vnl_matrix<double> mat1= (*_disparity_matrix);
+  vnl_matrix<double> mat1= (*disparity_matrix_);
   vnl_matrix<double> T1 = mat1;
   vnl_matrix<double> T2 = mat1;
 
@@ -159,9 +159,9 @@ void vsrl_step_diffusion::difuse_disparity()
 
   int x,y;
 
-  for (x=0;x<_width;x++)
+  for (x=0;x<get_width();x++)
   {
-    for (y=0;y<_height;y++)
+    for (y=0;y<get_height();y++)
     {
       T1(x,y)=T1(x,y) - 1;
       T2(x,y)=T2(x,y) + 1;
@@ -181,9 +181,9 @@ void vsrl_step_diffusion::difuse_disparity()
    {
      vcl_cout << "Iteration " << dif_num << vcl_endl;
 
-     for (x=1;x<_width -1;x++)
+     for (x=1;x<get_width() -1;x++)
      {
-       for (y=1;y<_height - 1;y++)
+       for (y=1;y<get_height() - 1;y++)
        {
          // get the average value of mat1(x,y)'s neighborhood
          N=0;
@@ -223,9 +223,9 @@ void vsrl_step_diffusion::difuse_disparity()
    }
 
    // copy the new results
-   (*_disparity_matrix)=(*mstar1);
+   (*disparity_matrix_)=(*mstar1);
 
-   vcl_cout << "Finished the diffusion " << vcl_endl;
+   vcl_cout << "Finished the diffusion\n";
 }
 
 void vsrl_step_diffusion::execute()

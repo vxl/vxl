@@ -30,12 +30,12 @@ void cmu_1394_camera::update_settings()
    if (!_camera_present)
      return;
   cmu_1394_camera_params::constrain();
-  C1394Camera::SetVideoFormat(_video_format);
-  C1394Camera::SetVideoMode(_video_mode);
-  C1394Camera::SetVideoFrameRate(_frame_rate);
-  C1394Camera::SetBrightness(_brightness);
-  C1394Camera::SetAutoExposure(_exposure);
-  C1394Camera::SetGain(_gain);
+  C1394Camera::SetVideoFormat(video_format_);
+  C1394Camera::SetVideoMode(video_mode_);
+  C1394Camera::SetVideoFrameRate(frame_rate_);
+  C1394Camera::SetBrightness(brightness_);
+  C1394Camera::SetAutoExposure(exposure_);
+  C1394Camera::SetGain(gain_);
 }
 bool cmu_1394_camera::init(int node)
 {
@@ -63,7 +63,7 @@ void cmu_1394_camera::start()
 
  if (!_running)
  {
-   if (_capture)
+   if (capture_)
      C1394Camera::StartImageCapture();
    else
      C1394Camera::StartImageAcquisition();
@@ -86,7 +86,7 @@ void cmu_1394_camera::stop()
       vcl_cout << "In cmu_1394_camera::stop() -- already stopped\n";
       return;
     }
-  if (_capture)
+  if (capture_)
     C1394Camera::StopImageCapture();
   else
     C1394Camera::StopImageAcquisition();
@@ -103,7 +103,7 @@ bool cmu_1394_camera::get_frame()
     }
     if (_running)
       {
-        if (_capture)
+        if (capture_)
           C1394Camera::CaptureImage();
         else
           C1394Camera::AcquireImage();

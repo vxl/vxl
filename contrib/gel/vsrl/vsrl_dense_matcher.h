@@ -7,6 +7,11 @@
 
 class vsrl_dense_matcher
 {
+ protected:
+
+  vil_image image1_;
+  int correlation_range_;
+
  public:
 
   // constructor
@@ -31,13 +36,8 @@ class vsrl_dense_matcher
 
   // get the width and height of image1
 
-  int get_width();
-  int get_height();
-
-protected:
-
-  vil_image _image1;
-  int _correlation_range;
+  int get_width() { return image1_.width(); }
+  int get_height() { return image1_.height(); }
 };
 
 #endif

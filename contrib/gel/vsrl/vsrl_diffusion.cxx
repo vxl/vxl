@@ -8,35 +8,25 @@
 #include <vsrl/vsrl_parameters.h>
 
 vsrl_diffusion::vsrl_diffusion(vsrl_dense_matcher *matcher)
+: matcher_(matcher)
+, width_(matcher->get_width())
+, height_(matcher->get_height())
+, disparity_matrix_(new vnl_matrix<double>(width_,height_))
 {
-  _matcher = matcher;
-  _width = matcher->get_width();
-  _height = matcher->get_height();
-  _disparity_matrix = new vnl_matrix<double>(_width,_height);
 }
 
 vsrl_diffusion::~vsrl_diffusion()
 {
-  delete _disparity_matrix;
-}
-
-int vsrl_diffusion::get_width()
-{
-  return _width;
-}
-
-int vsrl_diffusion::get_height()
-{
-  return _height;
+  delete disparity_matrix_;
 }
 
 double vsrl_diffusion::get_disparity(int x, int y)
 {
   // we want to get the disparity for the point x, y
 
-  if (x>=0 && x<_width && y>=0 && y < _height) {
+  if (x>=0 && x<get_width() && y>=0 && y < get_height()) {
 
-    return (*_disparity_matrix)(x,y);
+    return (*disparity_matrix_)(x,y);
   }
   return 0;
 }
@@ -67,7 +57,7 @@ void vsrl_diffusion::write_image(char *file_name,int it_num, vnl_matrix<double> 
 
 void vsrl_diffusion::write_image(char *file_name,vnl_matrix<double> *mat)
 {
-  // write an image of the _disparity_matrix
+  // write an image of the disparity_matrix_
 
    // we want to write a disparity image
 
@@ -75,7 +65,7 @@ void vsrl_diffusion::write_image(char *file_name,vnl_matrix<double> *mat)
 
   vcl_cout << "Writing file " << file_name << vcl_endl;
 
-  vil_memory_image_of<vil_byte> buffer(_width,_height);
+  vil_memory_image_of<vil_byte> buffer(get_width(),get_height());
 
   int x,y;
   int disparity;
@@ -108,11 +98,11 @@ void vsrl_diffusion::write_image(char *file_name,vnl_matrix<double> *mat)
   }
 
   // save the file
-  // vil_save(buffer, filename, _image1.file_format());
+  // vil_save(buffer, filename, image1_.file_format());
   vil_save(buffer, file_name);
 }
 
 void vsrl_diffusion::write_disparity_image(char *filename)
 {
-  write_image(filename,_disparity_matrix);
+  write_image(filename,disparity_matrix_);
 }

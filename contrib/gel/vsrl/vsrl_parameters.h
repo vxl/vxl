@@ -10,7 +10,11 @@
 
 class vsrl_parameters
 {
-public:
+ protected:
+
+  static vsrl_parameters* instance_;
+
+ public:
 
   // the constructor
   vsrl_parameters();
@@ -52,10 +56,6 @@ public:
 
   // a method to read in the parameters
   void load(char *filename);
-
-protected:
-
-  static vsrl_parameters* _instance;
 };
 
 #endif

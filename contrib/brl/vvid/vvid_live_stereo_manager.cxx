@@ -5,7 +5,6 @@
 // \author J.L. Mundy
 
 #include "vvid_live_stereo_manager.h"
-#include <math.h>
 #include <vcl_cstdlib.h> // for vcl_exit()
 #include <vcl_iostream.h>
 #include <vil/vil_memory_image_of.h>
@@ -32,14 +31,14 @@
 #include <vvid/vvid_epipolar_space_process.h>
 
 //static live_video_manager instance
-vvid_live_stereo_manager *vvid_live_stereo_manager::_instance = 0;
+vvid_live_stereo_manager *vvid_live_stereo_manager::instance_ = 0;
 
 
 vvid_live_stereo_manager *vvid_live_stereo_manager::instance()
 {
-  if (!_instance)
-    _instance = new vvid_live_stereo_manager();
-  return vvid_live_stereo_manager::_instance;
+  if (!instance_)
+    instance_ = new vvid_live_stereo_manager();
+  return vvid_live_stereo_manager::instance_;
 }
 
 //-----------------------------------------------------------
@@ -47,15 +46,15 @@ vvid_live_stereo_manager *vvid_live_stereo_manager::instance()
 //
 vvid_live_stereo_manager::
 vvid_live_stereo_manager() : vgui_grid_tableau(2,2),
-                            _cp(cmu_1394_camera_params())
+                            cp_(cmu_1394_camera_params())
 {
   width_ = 960;
   height_ = 480;
-  _win = 0;
-  _live_capture = false;
-  _N_views = 2;
-  _video_process = (vvid_video_process*)new vvid_epipolar_space_process();
-  _init_successful = false;
+  win_ = 0;
+  live_capture_ = false;
+  N_views_ = 2;
+  video_process_ = (vvid_video_process*)new vvid_epipolar_space_process();
+  init_successful_ = false;
   this->set_grid_size_changeable(true);
 }
 vvid_live_stereo_manager::~vvid_live_stereo_manager()
@@ -72,27 +71,27 @@ bool vvid_live_stereo_manager::handle(const vgui_event &e)
 }
 void vvid_live_stereo_manager::set_camera_params()
 {
-  if (!_vframes.size())
+  if (!vframes_.size())
     {
       vcl_cout << "in vvid_live_stereo_manager::set_camera_params() - no live"
                << " video frames\n";
       return;
     }
   vgui_dialog cam_dlg("Camera Parameters");
-  cam_dlg.field("video_format",_cp._video_format);
-  cam_dlg.field("video_mode",_cp._video_mode);
-  cam_dlg.field("frame_rate",_cp._frame_rate);
-  cam_dlg.field("brightness",_cp._brightness);
-  cam_dlg.field("sharpness",_cp._sharpness);
-  cam_dlg.field("exposure",_cp._exposure);
-  cam_dlg.field("gain",_cp._gain);
-  cam_dlg.checkbox("image capture(acquisition) ", _cp._capture);
-  cam_dlg.checkbox("RGB(monochrome) ", _cp._rgb);
+  cam_dlg.field("video_format",cp_.video_format_);
+  cam_dlg.field("video_mode",cp_.video_mode_);
+  cam_dlg.field("frame_rate",cp_.frame_rate_);
+  cam_dlg.field("brightness",cp_.brightness_);
+  cam_dlg.field("sharpness",cp_.sharpness_);
+  cam_dlg.field("exposure",cp_.exposure_);
+  cam_dlg.field("gain",cp_.gain_);
+  cam_dlg.checkbox("image capture(acquisition) ", cp_.capture_);
+  cam_dlg.checkbox("RGB(monochrome) ", cp_.rgb_);
   if (!cam_dlg.ask())
     return;
-  _cp.constrain();//constrain the parameters to be consistent
-  for (int i = 0; i<_N_views; i++)
-    _vframes[i]->set_camera_params(_cp);
+  cp_.constrain();//constrain the parameters to be consistent
+  for (int i = 0; i<N_views_; i++)
+    vframes_[i]->set_camera_params(cp_);
 }
 //----------------------------------------------------------
 // determine the number of active cameras and install the reduced
@@ -101,16 +100,16 @@ void vvid_live_stereo_manager::set_camera_params()
 void vvid_live_stereo_manager::setup_views()
 {
   //Determine the number of active cameras
-  // for now we assume use a pre-defined _N_views
-  _init_successful = true;
-  _vframes.clear();
-  for (int i = 0; i<_N_views; i++)
+  // for now we assume use a pre-defined N_views_
+  init_successful_ = true;
+  vframes_.clear();
+  for (int i = 0; i<N_views_; i++)
     {
       vvid_live_video_tableau_sptr vf =
         vvid_live_video_tableau_new(i, 2, cmu_1394_camera_params());
-      _vframes.push_back(vf);
-      _init_successful = _init_successful&&vf->attach_live_video();
-      if (!_init_successful)
+      vframes_.push_back(vf);
+      init_successful_ = init_successful_&&vf->attach_live_video();
+      if (!init_successful_)
         {
           vcl_cout << "In vvid_live_stereo_manager::setup_views() - bad camera"
                    << " initialization\n";
@@ -127,63 +126,63 @@ void vvid_live_stereo_manager::setup_views()
       this->add_at(vgui_viewer2D_tableau_new(vf), 1,i);
     }
 
-  _it = vgui_image_tableau_new();  
-  _v2D = vgui_viewer2D_tableau_new(_it);
-  this->add_at(_v2D, 0,0);
+  it_ = vgui_image_tableau_new();
+  v2D_ = vgui_viewer2D_tableau_new(it_);
+  this->add_at(v2D_, 0,0);
 }
 
 void vvid_live_stereo_manager::run_frames()
 {
-  if (!_init_successful)
+  if (!init_successful_)
     return;
-  while (_live_capture){
-    for (int i=0; i<_N_views; i++)
-    _vframes[i]->update_frame();
+  while (live_capture_){
+    for (int i=0; i<N_views_; i++)
+    vframes_[i]->update_frame();
 
-    if (!_cp._rgb&&_N_views==2)//i.e. grey scale
+    if (!cp_.rgb_&&N_views_==2)//i.e. grey scale
       {
         vil_memory_image_of<unsigned char> i1, i2;
         vil_memory_image_of<vil_rgb<unsigned char> > im;
 
-        _video_process->clear_input();
+        video_process_->clear_input();
 
-        if (_vframes[0]->get_current_mono_image(2,i1))
-          _video_process->add_input_image(i1);
+        if (vframes_[0]->get_current_mono_image(2,i1))
+          video_process_->add_input_image(i1);
         else return;
-        if (_vframes[1]->get_current_mono_image(2,i2))
-          _video_process->add_input_image(i2);
+        if (vframes_[1]->get_current_mono_image(2,i2))
+          video_process_->add_input_image(i2);
         else
           return;
-       if (_video_process->execute())
-         _it->set_image(_video_process->get_output_image());
+       if (video_process_->execute())
+         it_->set_image(video_process_->get_output_image());
        else
          return;
       }
-    _v2D->post_redraw();
+    v2D_->post_redraw();
     vgui::run_till_idle();
   }
 }
 void vvid_live_stereo_manager::start_live_video()
 {
-  if (!_init_successful)
+  if (!init_successful_)
     this->setup_views();
-  if (!_init_successful)
+  if (!init_successful_)
     return;
 
-  for (int i=0; i<_N_views; i++)
-    _vframes[i]->start_live_video();
+  for (int i=0; i<N_views_; i++)
+    vframes_[i]->start_live_video();
 
-  _live_capture=true;
+  live_capture_=true;
   this->run_frames();
 }
 
 void vvid_live_stereo_manager::stop_live_video()
 {
-  _live_capture=false;
-  if (!_init_successful)
+  live_capture_=false;
+  if (!init_successful_)
     return;
-  for (int i=0; i<_N_views; i++)
-    _vframes[i]->stop_live_video();
+  for (int i=0; i<N_views_; i++)
+    vframes_[i]->stop_live_video();
 }
 
 void vvid_live_stereo_manager::quit()
@@ -193,45 +192,45 @@ void vvid_live_stereo_manager::quit()
 }
 bool
 vvid_live_stereo_manager::get_current_rgb_image(int view_no,
-                                               int pix_sample_interval,
-                                               vil_memory_image_of< vil_rgb<unsigned char> >& im)
+                                                int pix_sample_interval,
+                                                vil_memory_image_of< vil_rgb<unsigned char> >& im)
 {
-  if (!_init_successful)
+  if (!init_successful_)
     return false;
-  if (_vframes.size()< view_no+1)
+  if (vframes_.size()< view_no+1)
     {
       vcl_cout << "In vvid_live_video_manger::get_current_rgb_imge(..) -"
                << " view_no out of range\n";
       return false;
     }
 
-  return _vframes[view_no]->get_current_rgb_image(pix_sample_interval, im);
+  return vframes_[view_no]->get_current_rgb_image(pix_sample_interval, im);
 }
 
 bool vvid_live_stereo_manager::
 get_current_mono_image(int view_no, int pix_sample_interval,
                        vil_memory_image_of<unsigned char>& im)
 {
-  if (!_init_successful)
+  if (!init_successful_)
     return false;
-  if (_vframes.size()< view_no+1)
+  if (vframes_.size()< view_no+1)
     {
       vcl_cout << "In vvid_live_video_manger::get_current_mono_imge(..) -"
                << " view_no out of range\n";
       return false;
     }
 
-  return _vframes[view_no]->get_current_mono_image(pix_sample_interval, im);
+  return vframes_[view_no]->get_current_mono_image(pix_sample_interval, im);
 }
 
 void vvid_live_stereo_manager::
 set_process_rgb_image(vil_memory_image_of< vil_rgb<unsigned char> >& im)
 {
-  _process_rgb = im;
+  process_rgb_ = im;
 }
 
 void vvid_live_stereo_manager::
 set_process_mono_image(vil_memory_image_of<unsigned char>& im)
 {
-  _process_mono = im;
+  process_mono_ = im;
 }

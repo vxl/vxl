@@ -103,17 +103,17 @@ void vvid_live_video_manager::set_camera_params()
                << " video tableau \n";
       return;
     }
-  cp_._rgb=false;
+  cp_.rgb_=false;
   vgui_dialog cam_dlg("Camera Parameters");
-  cam_dlg.field("video_format",cp_._video_format);
-  cam_dlg.field("video_mode",cp_._video_mode);
-  cam_dlg.field("frame_rate",cp_._frame_rate);
-  cam_dlg.field("brightness",cp_._brightness);
-  cam_dlg.field("sharpness",cp_._sharpness);
-  cam_dlg.field("exposure",cp_._exposure);
-  cam_dlg.field("gain",cp_._gain);
-  cam_dlg.checkbox("image capture(acquisition) ", cp_._capture);
-  cam_dlg.checkbox("RGB(monochrome) ", cp_._rgb);
+  cam_dlg.field("video_format",cp_.video_format_);
+  cam_dlg.field("video_mode",cp_.video_mode_);
+  cam_dlg.field("frame_rate",cp_.frame_rate_);
+  cam_dlg.field("brightness",cp_.brightness_);
+  cam_dlg.field("sharpness",cp_.sharpness_);
+  cam_dlg.field("exposure",cp_.exposure_);
+  cam_dlg.field("gain",cp_.gain_);
+  cam_dlg.checkbox("image capture(acquisition) ", cp_.capture_);
+  cam_dlg.checkbox("RGB(monochrome) ", cp_.rgb_);
   if (!cam_dlg.ask())
     return;
   cp_.constrain();//constrain the parameters to be consistent
@@ -164,7 +164,7 @@ void vvid_live_video_manager::run_frames()
   while (live_capture_) {
     vul_timer t;
     vtab_->update_frame();
-    if (!cp_._rgb&&video_process_)//i.e. grey scale
+    if (!cp_.rgb_&&video_process_)//i.e. grey scale
       {
         vil_memory_image_of<unsigned char> image;
         video_process_->clear_input();

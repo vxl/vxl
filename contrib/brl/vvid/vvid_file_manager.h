@@ -86,10 +86,10 @@ class vvid_file_manager : public vgui_grid_tableau
   void easy2D_tableau_demo();
 
   //: get the window of this player
-  vgui_window* get_window(){return _win;}
+  vgui_window* get_window(){return win_;}
 
   //: set the window
-  void set_window(vgui_window* win){_win=win;}
+  void set_window(vgui_window* win){win_=win;}
 
   //: tableau handle function
   virtual bool handle(const vgui_event&);
@@ -100,18 +100,18 @@ class vvid_file_manager : public vgui_grid_tableau
   //utility functions
 
   //flags
-  bool _cache_frames;
-  bool _play_video;
-  bool _pause_video;
-  bool _next_frame;
-  bool _prev_frame;
-  float _time_interval;
+  bool cache_frames_;
+  bool play_video_;
+  bool pause_video_;
+  bool next_frame_;
+  bool prev_frame_;
+  float time_interval_;
   unsigned width_;
   unsigned height_;
-  vidl_movie_sptr _my_movie;
-  vgui_window* _win;
-  vcl_vector<vgui_easy2D_tableau_sptr> _tabs;
-  vgui_viewer2D_tableau_sptr _v2D;
-  static vvid_file_manager *_instance;
+  vidl_movie_sptr my_movie_;
+  vgui_window* win_;
+  vcl_vector<vgui_easy2D_tableau_sptr> tabs_;
+  vgui_viewer2D_tableau_sptr v2D_;
+  static vvid_file_manager *instance_;
 };
 #endif // vvid_file_manager_h_

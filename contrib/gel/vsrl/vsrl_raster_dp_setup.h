@@ -45,17 +45,15 @@ class vsrl_raster_dp_setup
 
   double execute();
 
-
-
  private:
 
   // the image correlation mechanism
 
-  vsrl_image_correlation *_image_correlation;
+  vsrl_image_correlation *image_correlation_;
 
   // the raster line to be processed
 
-  int _raster_line;
+  int raster_line_;
 
   // the token lists
 
@@ -71,13 +69,13 @@ class vsrl_raster_dp_setup
   void clear_token_list(vcl_vector<vsrl_intensity_token*> &tok_list);
 
   // the search range used
-  int _search_range;
+  int search_range_;
 
   // the bias cost
-  double _bias_cost;
+  double bias_cost_;
 
   // the prior raster
-  vsrl_raster_dp_setup *_prior_raster;
+  vsrl_raster_dp_setup *prior_raster_;
 
   // a method that uses the prior_raster to bias the next raster
   void set_token_biases();

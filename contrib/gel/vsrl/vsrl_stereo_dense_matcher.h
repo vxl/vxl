@@ -19,7 +19,12 @@
 
 class vsrl_stereo_dense_matcher : public vsrl_dense_matcher
 {
-public:
+  vsrl_image_correlation image_correlation_;
+  vsrl_raster_dp_setup **raster_array_;
+  int num_raster_;
+  int correlation_range_; // the correlation range of the data
+
+ public:
 
   // constructor
   vsrl_stereo_dense_matcher(const vil_image &im1, const vil_image &im2);
@@ -46,12 +51,7 @@ public:
   // print out the correlation costs for point x,y
   void print_correlation_cost(int x, int y);
 
-private:
-
-  vsrl_image_correlation _image_correlation;
-  vsrl_raster_dp_setup **_raster_array;
-  int _num_raster;
-  int _correlation_range; // the correlation range of the data
+ private:
 
   void evaluate_raster(int i); // performs the dynamic program on the raster
 };

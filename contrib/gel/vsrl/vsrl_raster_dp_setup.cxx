@@ -13,11 +13,11 @@ vsrl_raster_dp_setup::vsrl_raster_dp_setup(int raster_line, vsrl_image_correlati
 {
   tok_list1.clear();
   tok_list2.clear();
-  _raster_line = raster_line;
-  _image_correlation = image_correlation;
-  _search_range=image_correlation->get_correlation_range();
-  _prior_raster=0;
-  _bias_cost=vsrl_parameters::instance()->bias_cost; // probably 0.2
+  raster_line_ = raster_line;
+  image_correlation_ = image_correlation;
+  search_range_=image_correlation->get_correlation_range();
+  prior_raster_=0;
+  bias_cost_=vsrl_parameters::instance()->bias_cost; // probably 0.2
 }
 
 
@@ -31,13 +31,13 @@ vsrl_raster_dp_setup::~vsrl_raster_dp_setup()
 
 int vsrl_raster_dp_setup::get_image1_width()
 {
-  return _image_correlation->get_image1_width();
+  return image_correlation_->get_image1_width();
 }
 
 
 int vsrl_raster_dp_setup::get_image2_width()
 {
-  return _image_correlation->get_image2_width();
+  return image_correlation_->get_image2_width();
 }
 
 int vsrl_raster_dp_setup::get_assignment(int x)
@@ -77,7 +77,7 @@ void vsrl_raster_dp_setup::create_token_list(int width,
 
 
   double x,y;
-  y= _raster_line;
+  y= raster_line_;
   int index = 0;
 
   for (x=0;x<width;x++)
@@ -119,7 +119,7 @@ double vsrl_raster_dp_setup::execute()
 {
   // create the token lists
 
-  create_token_list(get_image1_width(),_image_correlation,tok_list1,1.0);
+  create_token_list(get_image1_width(),image_correlation_,tok_list1,1.0);
   create_token_list(get_image2_width(),0,tok_list2,1.0);
 
   // set the bias information for token list1 based the previous raster
@@ -147,9 +147,9 @@ double vsrl_raster_dp_setup::execute()
 
   vsrl_dynamic_program dyn_prog;
 
-  if (_search_range)
+  if (search_range_)
   {
-    dyn_prog.set_search_range(_search_range);
+    dyn_prog.set_search_range(search_range_);
   }
 
   dyn_prog.set_tokens(list1,list2);
@@ -167,17 +167,17 @@ double vsrl_raster_dp_setup::execute()
 
 void vsrl_raster_dp_setup::set_search_range(int range)
 {
-  _search_range=range;
+  search_range_=range;
 }
 
 void  vsrl_raster_dp_setup::set_prior_raster(vsrl_raster_dp_setup *prior_raster)
 {
-  _prior_raster=prior_raster;
+  prior_raster_=prior_raster;
 }
 
 void vsrl_raster_dp_setup::set_bias_cost(double bias_cost)
 {
-  _bias_cost=bias_cost;
+  bias_cost_=bias_cost;
 }
 
 void vsrl_raster_dp_setup::set_token_biases()
@@ -185,14 +185,14 @@ void vsrl_raster_dp_setup::set_token_biases()
   // the idea here is to set the bias for each token based on the
   // the assignments made in the prior raster
 
-  if (!_prior_raster)
+  if (!prior_raster_)
   {
     // no prior information
     return;
   }
 
   int y1=this->get_raster_line();
-  int y2=_prior_raster->get_raster_line();
+  int y2=prior_raster_->get_raster_line();
 
 
   vcl_vector<vsrl_intensity_token*>::iterator i;
@@ -207,16 +207,16 @@ void vsrl_raster_dp_setup::set_token_biases()
 
     // if the intensity values are the same, set the bias function
 
-    double int_diff = _image_correlation->get_image_value1(x,y1) - _image_correlation->get_image_value1(x,y2);
+    double int_diff = image_correlation_->get_image_value1(x,y1) - image_correlation_->get_image_value1(x,y2);
 
     if (int_diff*int_diff <= bias_diff*bias_diff)
     {
-      int bias = _prior_raster->get_assignment(x);
+      int bias = prior_raster_->get_assignment(x);
       if (bias>0)
       {
         // we can now set the bias for token i
         (*i)->set_bias(bias);
-        (*i)->set_bias_cost(_bias_cost);
+        (*i)->set_bias_cost(bias_cost_);
       }
     }
   }
@@ -233,5 +233,5 @@ void vsrl_raster_dp_setup::set_token_biases()
 //: get the raster line that this dynamic program uses
 int vsrl_raster_dp_setup::get_raster_line()
 {
-  return _raster_line;
+  return raster_line_;
 }

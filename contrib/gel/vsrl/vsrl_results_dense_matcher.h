@@ -15,6 +15,10 @@
 
 class vsrl_results_dense_matcher : public vsrl_dense_matcher
 {
+ protected:
+
+  vil_memory_image_of<int> disparity_; //!< memory images of the disparities
+
  public:
 
   // constructor
@@ -28,10 +32,6 @@ class vsrl_results_dense_matcher : public vsrl_dense_matcher
 
   // get the disparity of pixel x,y
   virtual int get_disparity(int x, int y);
-
- protected:
-
-  vil_memory_image_of<int> _disparity; //!< memory images of the disparities
 };
 
 #endif

@@ -7,19 +7,19 @@
 #include <vcl_fstream.h>
 #include <vcl_cstring.h> // for strcmp()
 
-// initialize the _instance variable
-vsrl_parameters* vsrl_parameters::_instance = 0;
+// initialize the instance_ variable
+vsrl_parameters* vsrl_parameters::instance_ = 0;
 
 //: Returns the one instance of a vsrl_parameters.
 //  One is created on the first call to Instance
 
 vsrl_parameters* vsrl_parameters::instance()
 {
-  if (vsrl_parameters::_instance == 0){
-    vsrl_parameters::_instance = new vsrl_parameters;
+  if (vsrl_parameters::instance_ == 0){
+    vsrl_parameters::instance_ = new vsrl_parameters;
   }
 
-  return vsrl_parameters::_instance;
+  return vsrl_parameters::instance_;
 }
 
 

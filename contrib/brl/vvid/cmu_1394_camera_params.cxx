@@ -11,29 +11,29 @@ cmu_1394_camera_params::cmu_1394_camera_params(int video_format, int video_mode,
                                                int exposure, int gain,
                                                bool capture, bool rgb)
 {
-  _video_format=video_format;
-  _video_mode=video_mode;
-  _frame_rate=frame_rate;
-  _brightness=brightness;
-  _sharpness=sharpness;
-  _exposure=exposure;
-  _gain = gain;
-  _capture=capture;
-  _rgb=rgb;
+  video_format_=video_format;
+  video_mode_=video_mode;
+  frame_rate_=frame_rate;
+  brightness_=brightness;
+  sharpness_=sharpness;
+  exposure_=exposure;
+  gain_ = gain;
+  capture_=capture;
+  rgb_=rgb;
   this->constrain();
 }
 
 void cmu_1394_camera_params::set_params(const cmu_1394_camera_params& cp)
 {
-  _video_format=cp._video_format;
-  _video_mode=cp._video_mode;
-  _frame_rate=cp._frame_rate;
-  _brightness=cp._brightness;
-  _sharpness=cp._sharpness;
-  _exposure=cp._exposure;
-  _gain = cp._gain;
-  _capture=cp._capture;
-  _rgb=cp._rgb;
+  video_format_=cp.video_format_;
+  video_mode_=cp.video_mode_;
+  frame_rate_=cp.frame_rate_;
+  brightness_=cp.brightness_;
+  sharpness_=cp.sharpness_;
+  exposure_=cp.exposure_;
+  gain_ = cp.gain_;
+  capture_=cp.capture_;
+  rgb_=cp.rgb_;
   this->constrain();
 }
 
@@ -46,22 +46,22 @@ cmu_1394_camera_params::cmu_1394_camera_params(const cmu_1394_camera_params& cp)
 void cmu_1394_camera_params::constrain()
 {
   //rgb vs monochrome - the boolean flag is considered dominant
-  if (_rgb)
-    _video_mode = 4;
+  if (rgb_)
+    video_mode_ = 4;
   else
-    _video_mode = 5;
+    video_mode_ = 5;
 }
 
 vcl_ostream& operator << (vcl_ostream& os, const cmu_1394_camera_params& cp)
 {
-  os << "video_format: " << cp._video_format << vcl_endl;
-  os << "video_mode: " << cp._video_mode << vcl_endl;
-  os << "frame_rate: " << cp._frame_rate << vcl_endl;
-  os << "brightness: " << cp._brightness << vcl_endl;
-  os << "sharpness: " << cp._sharpness << vcl_endl;
-  os << "exposure: " << cp._exposure << vcl_endl;
-  os << "capture: " << cp._capture << vcl_endl;
-  os << "gain: " << cp._gain << vcl_endl;
-  os << "rgb: " << cp._rgb << vcl_endl;
+  os << "video_format: " << cp.video_format_ << vcl_endl;
+  os << "video_mode: " << cp.video_mode_ << vcl_endl;
+  os << "frame_rate: " << cp.frame_rate_ << vcl_endl;
+  os << "brightness: " << cp.brightness_ << vcl_endl;
+  os << "sharpness: " << cp.sharpness_ << vcl_endl;
+  os << "exposure: " << cp.exposure_ << vcl_endl;
+  os << "capture: " << cp.capture_ << vcl_endl;
+  os << "gain: " << cp.gain_ << vcl_endl;
+  os << "rgb: " << cp.rgb_ << vcl_endl;
   return os;
 }
