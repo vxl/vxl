@@ -48,7 +48,7 @@ TARGET_LINK_LIBRARIES(basic_app vgui vul vbl)
 # vgui must have been compiled with gtk1 support for these
 # to work.
 INCLUDE(${CMAKE_ROOT}/Modules/FindGTK.cmake)
-IF(VGUI_USE_GTK)
+IF(GTK_GL_FOUND)
  INCLUDE_DIRECTORIES( ${GTK_INCLUDE_DIR} )
 
  ADD_EXECUTABLE( gtk1_display_image gtk1_display_image.cxx)
@@ -59,7 +59,7 @@ IF(VGUI_USE_GTK)
 
  ADD_EXECUTABLE( gtk3_vidl gtk3_vidl.cxx)
  TARGET_LINK_LIBRARIES( gtk3_vidl vidl_vil1 ${GTK_LIBRARIES} )
-ENDIF(VGUI_USE_GTK)
+ENDIF(GTK_GL_FOUND)
 
 # GLUT examples
 #--------------
