@@ -30,11 +30,9 @@
 #include <vcl_iosfwd.h>
 #include "vnl_vector.h"
 #include "vnl_vector_ref.h"
-#include "vnl_vector_fixed_ref.h"
 #include "vnl_c_vector.h"
 #include "vnl_matrix.h" // outerproduct
 #include <vcl_deprecated.h> // mark x(), y(), z(), t() as deprecated
-
 
 //: Fixed length  stack-stored, space-efficient vector.
 // vnl_vector_fixed is a fixed-length, stack storage vector. It has
@@ -52,10 +50,10 @@
 //    template<class T>
 //    void do_something( const vnl_vector<T>& v );
 //    ...
-//    vnl_vector_fixed<double,5> my_vec;
+//    vnl_vector_fixed<double,4> my_vec;
 //
 //    do_something( my_vec );
-//      // Error: no do_something( vnl_vector_fixed<double,5> ) found
+//      // Error: no do_something( vnl_vector_fixed<double,4> ) found
 //
 //    do_something( my_vec.as_ref() );  // works
 // \endcode
@@ -67,7 +65,7 @@
 // \code
 //    void mutator( vnl_vector<double>& v );
 //    ...
-//    vnl_vector_fixed<double,5> my_vec;
+//    vnl_vector_fixed<double,4> my_vec;
 //    mutator( my_vec.as_ref().non_const() );
 // \endcode
 // If the mutator only accesses the data, all should be fine. If the
@@ -286,13 +284,14 @@ class vnl_vector_fixed
   // explicit as_ref() method instead.
   operator const vnl_vector_ref<T>() const { return vnl_vector_ref<T>( n, const_cast<T*>(data_) ); }
 
+#if 0 // Commented out  -  compile errors with gcc - PVr
   //----------------------------------------------------------------------
   // Conversion to vnl_vector_fixed_ref. Similar to above
 
   vnl_vector_fixed_ref<T,n> as_fixed_ref() { return vnl_vector_fixed_ref<T,n>( data_block() ); }
 
   const vnl_vector_fixed_ref<T,n> as_fixed_ref() const { return vnl_vector_fixed_ref<T,n>( const_cast<T*>(data_block()) ); }
-
+#endif
   //----------------------------------------------------------------------
 
   //: Type defs for iterators
