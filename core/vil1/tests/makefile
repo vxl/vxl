@@ -7,6 +7,7 @@ TRY_PNG  := 1
 ## vil_stream_url uses tcp sockets.
 USE_SOCKETS := 1
 
+TESTS += test_all.cxx
 TESTS += test_assign.cxx
 
 # general reader/saver tester
