@@ -6,7 +6,6 @@
 #include <vcl_cmath.h> // for fabs()
 
 #include <vil/vil_image_view.h>
-#include <vul/vul_printf.h>
 #include <vil/vil_print.h>
 #include <vil/algo/vil_gauss_filter.h>
 #include <vxl_config.h>
@@ -80,9 +79,11 @@ void test_algo_vil_gauss_filter_gen_ntaps()
   vcl_vector<double> filter1(7);
   vcl_cout << "filter1 = 7 tap gaussian(sd=1.5)\n";
   vil_gauss_filter_gen_ntap(1.5, 0, filter1);
-//  for(unsigned i =0; i < 7; ++i)
-//    vul_printf(vcl_cout,"%5.7f ",filter1[i]);
-//  vcl_cout << vcl_endl;
+#ifdef DEBUG
+  for(unsigned i =0; i < 7; ++i)
+    vcl_cout << ' ' << filter1[i];
+  vcl_cout << vcl_endl;
+#endif
 
   // golden data using matlab command
   // y=subs(int(diff('exp(-1/2*(x^2)/v)','x',xderiv),'a','b')); y/sum(abs(y))
