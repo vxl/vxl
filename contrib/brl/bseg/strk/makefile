@@ -26,6 +26,8 @@ MANPAGE_SOURCES += strk_epi_seg_sptr.h
 SOURCES += strk_epipolar_grouper.cxx
 SOURCES += strk_epipolar_grouper_params.cxx
 SOURCES += strk_epipolar_grouper_process.cxx
+SOURCES += strk_region_info.cxx
+SOURCES += strk_region_info_params.cxx
 
 ################################
 include ${IUEROOT}/config/top.mk
