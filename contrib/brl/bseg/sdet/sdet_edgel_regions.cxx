@@ -186,7 +186,7 @@ sdet_edgel_regions::sdet_edgel_regions(int array_scale,bool verbose,
   debug_ = debug;
   verbose_ = verbose;
   s_ = array_scale; //Some boundaries can approach less than 1/2 pixel proximity
-#if 0
+#ifdef DEBUG
   debug_data_ = debug_ ? new topo_debug_data : 0;
 #endif
   image_source_ = false;
@@ -265,7 +265,7 @@ bool sdet_edgel_regions::compute_edgel_regions(gevd_bufferxy* buf,
 //  - Connected components
 //  - Edge-label assignment
 //  - Collect region boundaries
-//  - Construct vtol_intensity_faces 
+//  - Construct vtol_intensity_faces
 //  - Calculate intensity fit
 bool sdet_edgel_regions::
 compute_edgel_regions(vil1_image& image,
@@ -283,7 +283,7 @@ bool sdet_edgel_regions::
 compute_edgel_regions(vcl_vector<vtol_edge_2d_sptr>& sgrp,
                       vcl_vector<vtol_intensity_face_sptr>& faces)
 {
-#if 0
+#ifdef DEBUG
   if (debug_data_)
   {
     debug_data_->clear();
@@ -377,8 +377,8 @@ bool sdet_edgel_regions::InsertRegionEquivalence(unsigned int label_b,
 
 //--------------------------------------------------------------
 //: Get the most basic label equivalent to a given label.
-//    If the label_map_ is not defined, this function uses the
-//    forward label hash table.  Otherwise 0 is returned.
+//  If the label_map_ is not defined, this function uses the
+//  forward label hash table.  Otherwise 0 is returned.
 unsigned int sdet_edgel_regions::BaseLabel(unsigned int label)
 {
   vcl_map<unsigned int, unsigned int >::iterator lmtest;
@@ -392,8 +392,8 @@ unsigned int sdet_edgel_regions::BaseLabel(unsigned int label)
 //------------------------------------------------------------
 //: Return label image (255/0) indicating edgels.
 //  Paint the edgels into the region label array and then
-//    output an image where the value is 255 if the pixel is an
-//    edge, 0 otherwise
+//  output an image where the value is 255 if the pixel is an
+//  edge, 0 otherwise
 vil1_image sdet_edgel_regions::GetEdgeImage(vcl_vector<vtol_edge_2d_sptr>& sg)
 {
   if (!this->InitRegionArray(sg)) return NULL;
@@ -412,7 +412,6 @@ vil1_image sdet_edgel_regions::GetEdgeImage(vcl_vector<vtol_edge_2d_sptr>& sg)
 
 //-----------------------------------------------------------
 //: Populate the label_map_ to reflect the equivalences between labels.
-//
 void sdet_edgel_regions::PropagateEquivalence()
 {
   vcl_map<unsigned int, vcl_vector<unsigned int>* >::iterator  esi;
@@ -433,11 +432,9 @@ void sdet_edgel_regions::PropagateEquivalence()
 }
 
 //---------------------------------------------------------------------
-//:
-//  Find the set of labels equivalent to label from a given hash table
-//    and merge into equivalence_set_. cur_label is the
-//    equivalence set being formed. label is the table key of equivalences
-//    to be merged. The labels equivalent to label are in the input map, tab.
+//: Find the set of labels equivalent to label from a given hash table and merge into equivalence_set_.
+//  cur_label is the equivalence set being formed. label is the table key of equivalences
+//  to be merged. The labels equivalent to label are in the input map, tab.
 bool sdet_edgel_regions::
 merge_equivalence(vcl_map<unsigned int, vcl_vector<unsigned int>* >& tab,
                   unsigned int cur_label,
@@ -528,18 +525,18 @@ bool sdet_edgel_regions::get_next_label(vcl_vector<unsigned int>* labels,
 }
 
 //----------------------------------------------------------------
-//:   Form equivalence classes by transitive closure on each label.
-//    The resulting label equivalence is stored in the map, equivalence_set_.
+//: Form equivalence classes by transitive closure on each label.
+//  The resulting label equivalence is stored in the map, equivalence_set_.
 //
-//    The idea is to add labels to the current equivalence set, cur_set,
-//    from either forward or reverse equivalence classes until no
-//    new equivalences can be found.  The current equivalence class,
-//    cur_set, is repeatedly scanned when new labels are added to pick up
-//    new equivalence groups.  Old equivalence entries are removed from
-//    forward and reverse forward and reverse equivalence maps as they
-//    are used.  When the cur_set is completely closed, i.e. no new labels
-//    can be added, then a new label not in cur_set is used to
-//    seed a new equivalence class.
+//  The idea is to add labels to the current equivalence set, cur_set,
+//  from either forward or reverse equivalence classes until no
+//  new equivalences can be found.  The current equivalence class,
+//  cur_set, is repeatedly scanned when new labels are added to pick up
+//  new equivalence groups.  Old equivalence entries are removed from
+//  forward and reverse forward and reverse equivalence maps as they
+//  are used.  When the cur_set is completely closed, i.e. no new labels
+//  can be added, then a new label not in cur_set is used to
+//  seed a new equivalence class.
 //
 void sdet_edgel_regions::GrowEquivalenceClasses()
 {
@@ -621,7 +618,6 @@ void sdet_edgel_regions::GrowEquivalenceClasses()
 
 //------------------------------------------------------------
 //: Check if the vtol_edge list sg (spatial group) contains edge(s) - NYI
-//
 bool sdet_edgel_regions::GroupContainsEdges(vcl_vector<vtol_edge_2d_sptr>& /* sg */)
 {
 #if 0
@@ -635,8 +631,8 @@ bool sdet_edgel_regions::GroupContainsEdges(vcl_vector<vtol_edge_2d_sptr>& /* sg
 
 //----------------------------------------------------------
 //: A utility for inserting an edgel into the region_label_array_.
-//    An edgel and a previous edgel in the chain are used to interpolate
-//    intermediate edgels to take account of pixel quantization
+//  An edgel and a previous edgel in the chain are used to interpolate
+//  intermediate edgels to take account of pixel quantization
 bool sdet_edgel_regions::insert_edgel(float pre_x, float pre_y,
                                       float xedgel, float yedgel,
                                       sdet_region_edge_sptr const& re)
@@ -729,7 +725,7 @@ bool sdet_edgel_regions::InitRegionArray(vcl_vector< vtol_edge_2d_sptr>& sg)
   region_label_array_.fill(UNLABELED);
   edge_boundary_array_.fill(NULL);
 
-  switch(this->bytes_per_pix())
+  switch (this->bytes_per_pix())
   {
    case 1:     // Grey scale image with one byte per pixel
     ubuf_ = new unsigned char[this->GetXSize()];
@@ -832,7 +828,6 @@ bool sdet_edgel_regions::InitRegionArray(vcl_vector< vtol_edge_2d_sptr>& sg)
 
 //---------------------------------------------------------------
 //: Get code for a given label.
-//
 unsigned char sdet_edgel_regions::label_code(unsigned int label)
 {
   unsigned char result;
@@ -878,9 +873,8 @@ bool sdet_edgel_regions::add_to_forward(unsigned int key, unsigned int value)
 
 //----------------------------------------------------------------
 //: Add a new pair to the reverse equivalence list.
-//    That is, b==>a. Note that there can be multiple equivalences which are
-//    stored in a vcl_vector
-//
+//  That is, b==>a. Note that there can be multiple equivalences which are
+//  stored in a vcl_vector
 bool sdet_edgel_regions::add_to_reverse(unsigned int key, unsigned int value)
 {
   bool result = true;
@@ -917,9 +911,8 @@ bool sdet_edgel_regions::add_to_reverse(unsigned int key, unsigned int value)
 //         ul ur          UNLABELED, EDGE, LABEL
 //         ll lr              0       1      2
 //  \endverbatim
-//    The encoding maps the 2x2 pattern to an unsigned char.  The layout
-//    of the uchar is:  [ul|ur|ll|lr] with 2 bits for the state of each
-//    position.
+//  The encoding maps the 2x2 pattern to an unsigned char.  The layout
+//  of the uchar is:  [ul|ur|ll|lr] with 2 bits for the state of each position.
 unsigned char
 sdet_edgel_regions::EncodeNeighborhood(unsigned int ul, unsigned int ur,
                                        unsigned int ll, unsigned int lr)
@@ -946,7 +939,6 @@ sdet_edgel_regions::EncodeNeighborhood(unsigned int ul, unsigned int ur,
 
 //----------------------------------------------------------------------
 //: This is the fundamental assignment of label equivalence
-//
 void sdet_edgel_regions::insert_equivalence(unsigned int ll, unsigned int ur, unsigned int& lr)
 {
   if (ll!=ur)//Is a=b?
@@ -966,17 +958,18 @@ void sdet_edgel_regions::insert_equivalence(unsigned int ll, unsigned int ur, un
 
 //-------------------------------------------------------------------
 //: Propagate connected components.
-//    Uses an unsigned char encoding
-//    a 2x2 neighborhood to propagate region labels. For example:
-//    aa ->   aa
-//    xx ->   aa
-//    Here the lower two labels are set to the upper label.
-//    This method operates directly on the region_label_array_.
+//  Uses an unsigned char encoding
+//  a 2x2 neighborhood to propagate region labels. For example:
+//  \verbatim
+//  aa ->   aa
+//  xx ->   aa
+//  \endverbatim
+//  Here the lower two labels are set to the upper label.
+//  This method operates directly on the region_label_array_.
 //
-//    Note that the 2x2 neighborhood is encoded as uchar = [ul|ur|ll|lr]
+//  Note that the 2x2 neighborhood is encoded as uchar = [ul|ur|ll|lr]
 //                                                          2  2  2  2  bits
 void sdet_edgel_regions::UpdateConnectedNeighborhood(unsigned int x, unsigned int y)
-
 {
   unsigned int &ul = region_label_array_[y][x];
   unsigned int &ur = region_label_array_[y][x+1];
@@ -984,206 +977,174 @@ void sdet_edgel_regions::UpdateConnectedNeighborhood(unsigned int x, unsigned in
   unsigned int &lr = region_label_array_[y+1][x+1];
 
   unsigned char nhood = this->EncodeNeighborhood(ul, ur, ll, lr);
-  switch(int(nhood))
+  switch (int(nhood))
   {
    case 0:
-     //xx xx
-     //xx xx
-     return;
+    //xx xx
+    //xx xx
+    return;
    case 1:
-     //xx xx
-     //xe xe
-     return;
+    //xx xx
+    //xe xe
+    return;
    case 5:
-     //xx xx
-     //ee ee
-     return;
-
+    //xx xx
+    //ee ee
+    return;
    case 17:
-     //xe xe
-     //xe xe
-     return;
-
+    //xe xe
+    //xe xe
+    return;
    case 20:
-     //xe xe
-     //ex ea
-     lr = max_region_label_++;
-     return;
-
+    //xe xe
+    //ex ea
+    lr = max_region_label_++;
+    return;
    case 21:
-     //xe xe
-     //ee ee
-     return;
-
+    //xe xe
+    //ee ee
+    return;
    case 22:
-     //xe xe
-     //ea ea
-     return;
-
+    //xe xe
+    //ea ea
+    return;
    case 68:
-     //ex ex
-     //ex ex
-     return;
-
+    //ex ex
+    //ex ex
+    return;
    case 72:
-     //ex ex
-     //ax ax
-     return;
-
+    //ex ex
+    //ax ax
+    return;
    case 133:
-     //ax aa
-     //ee ee
-     return;
-
+    //ax aa
+    //ee ee
+    return;
    case 136:
-     //ax ax
-     //ax ax
-     return;
-
+    //ax ax
+    //ax ax
+    return;
    case 160:
-     //aa aa
-     //xx aa
-     ll = ul;
-     lr = ul;
-     return;
-
+    //aa aa
+    //xx aa
+    ll = ul;
+    lr = ul;
+    return;
    case 161:
-     //aa aa
-     //xe ae
-     ll = ul;
-     return;
-
+    //aa aa
+    //xe ae
+    ll = ul;
+    return;
    case 168:
-     //aa aa
-     //ax aa
-     insert_equivalence(ll, ur, lr);
-     return;
-
+    //aa aa
+    //ax aa
+    insert_equivalence(ll, ur, lr);
+    return;
    case 169:
-     //aa aa
-     //ae ae
-     return;
-
+    //aa aa
+    //ae ae
+    return;
    case 164:
-     //aa aa
-     //ex ea
-     lr = ul;
-     return;
-
+    //aa aa
+    //ex ea
+    lr = ul;
+    return;
    case 165:
-     //aa aa
-     //ee ee
-     return;
-
+    //aa aa
+    //ee ee
+    return;
    case 144:
-     //ae ae
-     //xx aa
-     ll = ul;
-     lr = ul;
-     return;
-
+    //ae ae
+    //xx aa
+    ll = ul;
+    lr = ul;
+    return;
    case 145:
-     //ae ae
-     //xe ae
-     ll = ul;
-     return;
-
+    //ae ae
+    //xe ae
+    ll = ul;
+    return;
    case 152:
-     //ae ae
-     //ax aa
-     lr = ul;
-     return;
-
+    //ae ae
+    //ax aa
+    lr = ul;
+    return;
    case 153:
-     //ae ae
-     //ae ae
-     return;
-
+    //ae ae
+    //ae ae
+    return;
    case 148:
-     //ae ae
-     //ex eb
-     lr = max_region_label_++;
-     return;
-
+    //ae ae
+    //ex eb
+    lr = max_region_label_++;
+    return;
    case 149:
-     //ae ae
-     //ee ee
-     return;
-
+    //ae ae
+    //ee ee
+    return;
    case 96:
-     //ea ea
-     //xx aa
-     ll = ur;
-     lr = ur;
-     return;
-
+    //ea ea
+    //xx aa
+    ll = ur;
+    lr = ur;
+    return;
    case 97:
-     //ea ea
-     //xe be
-     ll = max_region_label_++;
-     return;
-
+    //ea ea
+    //xe be
+    ll = max_region_label_++;
+    return;
    case 104:
-     //ea ea
-     //bx aa
-     insert_equivalence(ll, ur, lr);
-     return;
-
+    //ea ea
+    //bx aa
+    insert_equivalence(ll, ur, lr);
+    return;
    case 105:
-     //ea ea
-     //ae ae
-     return;
-
+    //ea ea
+    //ae ae
+    return;
    case 100:
-     //ea ea
-     //ex ea
-     lr = ur;
-     return;
-
+    //ea ea
+    //ex ea
+    lr = ur;
+    return;
    case 101:
-     //ea ea
-     //ee ee
-     return;
-
+    //ea ea
+    //ee ee
+    return;
    case 80:
-     //ee ee
-     //xx bb
-     ll = max_region_label_++;
-     lr = ll;
-     return;
-
+    //ee ee
+    //xx bb
+    ll = max_region_label_++;
+    lr = ll;
+    return;
    case 81:
-     //ee ee
-     //xe be
-     ll = max_region_label_++;
-     return;
-
+    //ee ee
+    //xe be
+    ll = max_region_label_++;
+    return;
    case 88:
-     //ee ee
-     //ax aa
-     lr = ll;
-     return;
-
+    //ee ee
+    //ax aa
+    lr = ll;
+    return;
    case 89:
-     //ee ee
-     //ae ae
-     return;
-
+    //ee ee
+    //ae ae
+    return;
    case 84:
-     //ee ee
-     //ex eb
-     lr = max_region_label_++;
-     return;
-
+    //ee ee
+    //ex eb
+    lr = max_region_label_++;
+    return;
    case 85:
-     //ee ee
-     //ee ee
-     return;
+    //ee ee
+    //ee ee
+    return;
    default:
-     vcl_cout << "In sdet_edgel_regions::UpdateNeigborhood(..)"
-              << "impossible pattern(" << x << ' ' << y << ") = " << (int)nhood << '\n'
-              << int(label_code(ul)) << ' ' << int(label_code(ur)) << '\n'
-              << int(label_code(ll)) << ' ' << int(label_code(lr)) << "\n\n";
+    vcl_cout << "In sdet_edgel_regions::UpdateNeigborhood(..)"
+             << "impossible pattern(" << x << ' ' << y << ") = " << (int)nhood << '\n'
+             << int(label_code(ul)) << ' ' << int(label_code(ur)) << '\n'
+             << int(label_code(ll)) << ' ' << int(label_code(lr)) << "\n\n";
   }
 }
 
@@ -1214,7 +1175,7 @@ void sdet_edgel_regions::print_edge_colis(unsigned int x, unsigned int y,
 
 //------------------------------------------------------
 //:
-//  the top of the T is embedded in a boundary.  This routine tests
+//  The top of the T is embedded in a boundary.  This routine tests
 //  a dangling edge, called "bar" to see if the "T" vertex, "v", joins
 //  the contour in a connected chain.  That is, the top of the "T" is
 //  part of a chain.  This condition is called "embedded".  This routine
@@ -1251,12 +1212,12 @@ static bool embedded_T(vtol_vertex_sptr v, vtol_edge_2d_sptr bar, vcl_vector<vto
 
 //--------------------------------------------------------------------
 //: Remove hairs from region boundary.
-//    This condition can occur because
-//    the region labels are not sub-pixel.  A "hair" is an extra edge joined
-//    at a vertex which is part of a continuous chain. Unattached vertices
-//    are detected by incrementing a count at each vertex for each
-//    attached edge in the input array, "edges".  Such hairs are removed from
-//    the input array.
+//  This condition can occur because
+//  the region labels are not sub-pixel.  A "hair" is an extra edge joined
+//  at a vertex which is part of a continuous chain. Unattached vertices
+//  are detected by incrementing a count at each vertex for each
+//  attached edge in the input array, "edges".  Such hairs are removed from
+//  the input array.
 bool sdet_edgel_regions::remove_hairs(vcl_vector<vtol_edge_2d_sptr>& edges)
 {
   vcl_vector<vtol_edge_2d_sptr> hairs;
@@ -1308,17 +1269,16 @@ bool sdet_edgel_regions::remove_hairs(vcl_vector<vtol_edge_2d_sptr>& edges)
 
 //-------------------------------------------------------------------
 //:
-//    After connected components have been generated pass over the
-//    array and assign region labels to the sdet_region_edge(s).
-//    As in ::UpdateConnectedNeighborhood, the algorithm uses a 2x2 neigborhood
-//    E.G.,
-//    ee But the purpose is to assign labels. No updating of the
-//    aa region_label_array_ is carried out.
+//  After connected components have been generated pass over the
+//  array and assign region labels to the sdet_region_edge(s).
+//  As in ::UpdateConnectedNeighborhood, the algorithm uses a 2x2 neigborhood
+//  E.G.,
+//  ee But the purpose is to assign labels. No updating of the
+//  aa region_label_array_ is carried out.
 //
-//    Note that the 2x2 neighborhood is encoded as uchar = [ul|ur|ll|lr]
+//  Note that the 2x2 neighborhood is encoded as uchar = [ul|ur|ll|lr]
 //                                                          2  2  2  2  bits
 void sdet_edgel_regions::AssignEdgeLabels(unsigned int x, unsigned int y)
-
 {
   unsigned int ul = region_label_array_[y][x];
   unsigned int ur = region_label_array_[y][x+1];
@@ -1329,148 +1289,134 @@ void sdet_edgel_regions::AssignEdgeLabels(unsigned int x, unsigned int y)
   sdet_region_edge_sptr const& rll = edge_boundary_array_[y+1][x];
   sdet_region_edge_sptr const& rlr = edge_boundary_array_[y+1][x+1];
   unsigned char nhood = this->EncodeNeighborhood(ul, ur, ll, lr);
-  switch(int(nhood))
+  switch (int(nhood))
   {
    case 170:
-     //aa
-     //aa
-     return;
-
+    //aa
+    //aa
+    return;
    case 169:
-     //aa
-     //ae
-     rlr->Prop(rlr, ul, max_region_label_);
-     return;
-
+    //aa
+    //ae
+    rlr->Prop(rlr, ul, max_region_label_);
+    return;
    case 166:
-     //aa
-     //ea
-     rll->Prop(rll, ul, max_region_label_);
-     return;
-
+    //aa
+    //ea
+    rll->Prop(rll, ul, max_region_label_);
+    return;
    case 165:
-     //aa
-     //ee
-     rll->Prop(rll, ul, max_region_label_);
-     print_edge_colis(x, y, rll, rlr);
-     return;
-
+    //aa
+    //ee
+    rll->Prop(rll, ul, max_region_label_);
+    print_edge_colis(x, y, rll, rlr);
+    return;
    case 154:
-     //ae
-     //aa
-     rur->Prop(rur, ul, max_region_label_);
-     return;
-
+    //ae
+    //aa
+    rur->Prop(rur, ul, max_region_label_);
+    return;
    case 153:
-     //ae
-     //ae
-     rlr->Prop(rur, ul, max_region_label_);
-     print_edge_colis(x, y, rur, rlr);
-     return;
-
+    //ae
+    //ae
+    rlr->Prop(rur, ul, max_region_label_);
+    print_edge_colis(x, y, rur, rlr);
+    return;
    case 150:
-     //ae
-     //ea
-     rur->Prop(rll, ul, max_region_label_);
-     rur->Prop(rll, lr, max_region_label_);
-     print_edge_colis(x, y, rur, rll);
-     return;
-
+    //ae
+    //ea
+    rur->Prop(rll, ul, max_region_label_);
+    rur->Prop(rll, lr, max_region_label_);
+    print_edge_colis(x, y, rur, rll);
+    return;
    case 149:
-     //ae
-     //ee
-     rll->Prop(rll, ul, max_region_label_);
-     rur->Prop(rlr, ul, max_region_label_);
-     if (!(rlr->is_vertex()))
-     {
-       print_edge_colis(x, y, rur, rlr);
-       print_edge_colis(x, y, rll, rur);
-       print_edge_colis(x, y, rll, rlr);
-     }
-     return;
-
+    //ae
+    //ee
+    rll->Prop(rll, ul, max_region_label_);
+    rur->Prop(rlr, ul, max_region_label_);
+    if (!(rlr->is_vertex()))
+    {
+      print_edge_colis(x, y, rur, rlr);
+      print_edge_colis(x, y, rll, rur);
+      print_edge_colis(x, y, rll, rlr);
+    }
+    return;
    case 106:
-     //ea
-     //aa
-     rul->Prop(rul, ll, max_region_label_);
-     return;
-
+    //ea
+    //aa
+    rul->Prop(rul, ll, max_region_label_);
+    return;
    case 105:
-     //ea
-     //ae
-     rlr->Prop(rul, ll, max_region_label_);
-     rlr->Prop(rul, ur, max_region_label_);
-     print_edge_colis(x, y, rul, rlr);
-     return;
-
+    //ea
+    //ae
+    rlr->Prop(rul, ll, max_region_label_);
+    rlr->Prop(rul, ur, max_region_label_);
+    print_edge_colis(x, y, rul, rlr);
+    return;
    case 102:
-     //ea
-     //ea
-     rll->Prop(rul, ur, max_region_label_);
-     print_edge_colis(x, y, rul, rll);
-     return;
-
+    //ea
+    //ea
+    rll->Prop(rul, ur, max_region_label_);
+    print_edge_colis(x, y, rul, rll);
+    return;
    case 101:
-     //ea
-     //ee
-     if (!(rll->is_vertex()))
-     {
-       print_edge_colis(x, y, rul, rll);
-       print_edge_colis(x, y, rul, rlr);
-       print_edge_colis(x, y, rll, rlr);
-     }
-     return;
-
+    //ea
+    //ee
+    if (!(rll->is_vertex()))
+    {
+      print_edge_colis(x, y, rul, rll);
+      print_edge_colis(x, y, rul, rlr);
+      print_edge_colis(x, y, rll, rlr);
+    }
+    return;
    case 90:
-     //ee
-     //aa
-     rul->Prop(rul,ll, max_region_label_);
-     print_edge_colis(x, y, rul, rur);
-     return;
-
+    //ee
+    //aa
+    rul->Prop(rul,ll, max_region_label_);
+    print_edge_colis(x, y, rul, rur);
+    return;
    case 89:
-     //ee
-     //ae
-     rul->Prop(rul, ll, max_region_label_);
-     rlr->Prop(rur, ll, max_region_label_);
-     if (!(rur->is_vertex()))
-     {
-       print_edge_colis(x, y, rul, rur);
-       print_edge_colis(x, y, rul, rlr);
-       print_edge_colis(x, y, rur, rlr);
-     }
-     return;
-
+    //ee
+    //ae
+    rul->Prop(rul, ll, max_region_label_);
+    rlr->Prop(rur, ll, max_region_label_);
+    if (!(rur->is_vertex()))
+    {
+      print_edge_colis(x, y, rul, rur);
+      print_edge_colis(x, y, rul, rlr);
+      print_edge_colis(x, y, rur, rlr);
+    }
+    return;
    case 86:
-     //ee
-     //ea
-     rul->Prop(rul, lr, max_region_label_);
-     if (!(rul->is_vertex()))
-     {
-       print_edge_colis(x, y, rul, rur);
-       print_edge_colis(x, y, rul, rll);
-       print_edge_colis(x, y, rur, rll);
-     }
-     return;
+    //ee
+    //ea
+    rul->Prop(rul, lr, max_region_label_);
+    if (!(rul->is_vertex()))
+    {
+      print_edge_colis(x, y, rul, rur);
+      print_edge_colis(x, y, rul, rll);
+      print_edge_colis(x, y, rur, rll);
+    }
+    return;
    case 85:
-     //ee
-     //ee
-     if (!((rul->is_vertex())||(rur->is_vertex())||
-           (rll->is_vertex())||(rlr->is_vertex())))
-     {
-       print_edge_colis(x, y, rul ,rur);
-       print_edge_colis(x, y, rul ,rll);
-       print_edge_colis(x, y, rul ,rlr);
-       print_edge_colis(x, y, rur ,rll);
-       print_edge_colis(x, y, rur ,rlr);
-       print_edge_colis(x, y, rll ,rlr);
-     }
-     return;
+    //ee
+    //ee
+    if (!((rul->is_vertex())||(rur->is_vertex())||
+          (rll->is_vertex())||(rlr->is_vertex())))
+    {
+      print_edge_colis(x, y, rul ,rur);
+      print_edge_colis(x, y, rul ,rll);
+      print_edge_colis(x, y, rul ,rlr);
+      print_edge_colis(x, y, rur ,rll);
+      print_edge_colis(x, y, rur ,rlr);
+      print_edge_colis(x, y, rll ,rlr);
+    }
+    return;
    default:
-     vcl_cout << "In sdet_edgel_regions::UpdateNeigborhood(..)"
-              << " impossible pattern = " << (int)nhood << '\n'
-              << int(label_code(ul)) <<' '<< int(label_code(ur)) << '\n'
-              << int(label_code(ll)) <<' '<< int(label_code(lr)) << "\n\n";
+    vcl_cout << "In sdet_edgel_regions::UpdateNeigborhood(..)"
+             << " impossible pattern = " << (int)nhood << '\n'
+             << int(label_code(ul)) <<' '<< int(label_code(ur)) << '\n'
+             << int(label_code(ll)) <<' '<< int(label_code(lr)) << "\n\n";
   }
 }
 
@@ -1502,11 +1448,11 @@ bool sdet_edgel_regions::out_of_bounds(unsigned int x, unsigned int y)
 }
 
 //: Get the a region label for an edge used to construct the boundaries.
-//   A return corresponding to UNLABELED means the domain outside the ROI
-//   or nr is larger than the number of adjacent regions.
-unsigned int sdet_edgel_regions::GetLabel(vtol_edge_2d_sptr e, unsigned int nr)
+//  A return corresponding to UNLABELED means the domain outside the ROI
+//  or nr is larger than the number of adjacent regions.
+unsigned int sdet_edgel_regions::GetLabel(vtol_edge_2d_sptr e, unsigned int nr) const
 {
-  vcl_map<int,sdet_region_edge_sptr >::iterator reit = region_edges_.find(e->get_id());
+  vcl_map<int,sdet_region_edge_sptr >::const_iterator reit = region_edges_.find(e->get_id());
   if ( reit == region_edges_.end())
     return UNLABELED;
   return reit->second->GetLabel(nr, max_region_label_);
@@ -1514,7 +1460,6 @@ unsigned int sdet_edgel_regions::GetLabel(vtol_edge_2d_sptr e, unsigned int nr)
 
 //--------------------------------------------------------------------
 //: Insert an Edge into the adjacency list for a region
-//
 void sdet_edgel_regions::insert_adjacency(unsigned int r, vtol_edge_2d_sptr e)
 {
   if (!e) return;
@@ -1533,7 +1478,6 @@ void sdet_edgel_regions::insert_adjacency(unsigned int r, vtol_edge_2d_sptr e)
 
 //------------------------------------------------------------------
 //: Get the edges adjacent to each region
-//
 void sdet_edgel_regions::CollectEdges()
 {
   if (debug_)
@@ -1560,9 +1504,9 @@ void sdet_edgel_regions::CollectEdges()
 
 //---------------------------------------------------------------------
 //: Trace through the topology network keeping regions on the left.
-//    At this point, we have a list of edges for each region. We will
-//    trace out the list and form OneCycle(s).  Then the set of OneCycle(s)
-//    will form the boundary of the face corresponding to the region.
+//  At this point, we have a list of edges for each region. We will
+//  trace out the list and form OneCycle(s).  Then the set of OneCycle(s)
+//  will form the boundary of the face corresponding to the region.
 void sdet_edgel_regions::CollectFaceEdges()
 {
   vul_timer t;
@@ -1604,7 +1548,7 @@ void sdet_edgel_regions::CollectFaceEdges()
               vcl_cout << "\n Bad Edge(\n" << *((*eit)->v1())
                        << *((*eit)->v2()) <<")\n";
           }
-#if 0
+#ifdef DEBUG
           if (debug_data_)
           {
             debug_data_->set_verts(bad_verts);
@@ -1640,8 +1584,8 @@ void sdet_edgel_regions::CollectFaceEdges()
 
 //----------------------------------------------------------------
 //: Construct face(s) from edge(s) in the face_edge_index_ array.
-//    This method has been made virtual so that sub-classes of
-//    vtol_intensity_face can be constructed by sub-classes of sdet_edgel_regions.
+//  This method has been made virtual so that sub-classes of
+//  vtol_intensity_face can be constructed by sub-classes of sdet_edgel_regions.
 void sdet_edgel_regions::ConstructFaces()
 {
   vul_timer t;
@@ -1664,13 +1608,15 @@ void sdet_edgel_regions::ConstructFaces()
     vtol_cycle_processor cp(*edge_list);
     vcl_vector<vtol_one_chain_sptr> one_chains;
     cp.nested_one_cycles(one_chains, 0.5);
-#if 0
-    if (!one_chains.size()&&debug_data_)
+    if (one_chains.size() == 0)
     {
-      debug_data_->set_edges(*edge_list);
+#ifdef DEBUG
+      if (debug_data_)
+        debug_data_->set_edges(*edge_list);
+#endif
+      // Do not construct a face without edges
       continue;
     }
-#endif
     vtol_intensity_face_sptr face = new vtol_intensity_face(one_chains);
 
     //Check if the Face has valid Edges, since the Face
@@ -1694,14 +1640,13 @@ void sdet_edgel_regions::ConstructFaces()
 
 //--------------------------------------------------------------
 //: get a row from a BufferXY
-//
 void sdet_edgel_regions::get_buffer_row(unsigned int row)
 {
   if (!buf_source_)
     return;
   int y = (int)row, xsize = this->GetXSize();
   for (int x = 0; x<xsize; x++)
-    switch(this->bytes_per_pix())
+    switch (this->bytes_per_pix())
     {
      case 1:   // Grey scale image with one byte per pixel
       ubuf_[x]= bytePixel(buf_, x, y);
@@ -1805,7 +1750,6 @@ void sdet_edgel_regions::AccumulateMeans()
 
 //---------------------------------------------------------------------
 //: Insert region pixels into the vtol_intensity_face arrays
-//
 void sdet_edgel_regions::AccumulateRegionData()
 {
   vul_timer t;
@@ -1843,11 +1787,8 @@ void sdet_edgel_regions::AccumulateRegionData()
 }
 
 //---------------------------------------------------------------------
-//:
-//    Do both a scatter matrix update and insertion into the region pixel
-//    arrays of each intensity face.  AccumulateScatterData is done first
-//    so that the number of pixels can be determined.
-//
+//: Do both a scatter matrix update and insertion into the region pixel arrays of each intensity face.
+//  AccumulateScatterData is done first so that the number of pixels can be determined.
 void sdet_edgel_regions::InsertFaceData()
 {
   this->AccumulateMeans();
