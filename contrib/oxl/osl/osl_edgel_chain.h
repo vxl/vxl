@@ -13,29 +13,29 @@
 
 struct osl_edgel_chain
 {
-  int n;
+  unsigned int n;
   float *x, *y, *grad, *theta;
 
   osl_edgel_chain();
-  osl_edgel_chain(int n_);
+  osl_edgel_chain(unsigned int n_);
   osl_edgel_chain(osl_edgel_chain const &);
   void operator=(osl_edgel_chain const &);
   ~osl_edgel_chain();
-  void SetLength(int);
+  void SetLength(unsigned int);
 
-  float  GetGrad(int i) const;
+  float  GetGrad(unsigned int i) const;
   float *GetGrad() const;
-  float  GetTheta(int i) const;
+  float  GetTheta(unsigned int i) const;
   float *GetTheta() const;
-  float  GetX(int i) const;
+  float  GetX(unsigned int i) const;
   float *GetX() const;
-  float  GetY(int i) const;
+  float  GetY(unsigned int i) const;
   float *GetY() const;
-  void SetGrad(float v, int i);
-  void SetTheta(float v, int i);
-  void SetX(float v, int i);
-  void SetY(float v, int i);
-  int size() const;
+  void SetGrad(float v, unsigned int i);
+  void SetTheta(float v, unsigned int i);
+  void SetX(float v, unsigned int i);
+  void SetY(float v, unsigned int i);
+  unsigned int size() const;
   //
   void write_ascii(vcl_ostream &) const;
   void read_ascii(vcl_istream &);

@@ -48,17 +48,17 @@
 #include <osl/osl_canny_port.h>
 #include <osl/osl_OrthogRegress.h>
 
-class osl_fit_lines : public osl_fit_lines_params {
-public:
+class osl_fit_lines : public osl_fit_lines_params
+{
+ public:
   osl_fit_lines(osl_fit_lines_params const & params, double scale=1.0, double x0=0.0, double y0=0.0);
   ~osl_fit_lines();
 
-
   inline void SetSqrOrMean(bool sm)    { use_square_fit_ = sm; }
-  inline void SetMinFitLength(int l)   { min_fit_length_ = l; }
+  inline void SetMinFitLength(unsigned int l)   { min_fit_length_ = l; }
   inline void SetThreshold(double th)  { threshold_ = th;  }
   inline void SetTheta(double theta)   {  theta_ = theta;  }
-  inline void SetIgnoreEndEdgels(int ignore) {ignore_end_edgels_ = ignore; }
+  inline void SetIgnoreEndEdgels(unsigned int ignore) {ignore_end_edgels_ = ignore; }
 
   // NB. these have the undesirable behaviour of deleting the given edges.
   // beware of future changes. use at own risk. complain to fsm
@@ -67,13 +67,13 @@ public:
   void simple_fit_to_list(vcl_list<osl_edge *> *in,
                           vcl_list<osl_edge *> *out);
 
-//private:
+ //private:
   void SquareIncrementalFit(vcl_list<osl_edgel_chain*> *curves_, osl_edge*);
   void MeanIncrementalFit(vcl_list<osl_edgel_chain*> *curves_, osl_edge*);
   void OutputLine(vcl_list<osl_edgel_chain*> *curves_, int,int, osl_edgel_chain*,float);
   void MergeLines(vcl_list<osl_edgel_chain*> *curves_);
   static float MyGetCost(osl_OrthogRegress const *, int, int, osl_edgel_chain *);
-
+ private:
   osl_OrthogRegress *data_;
   int old_finish_;
 };

@@ -43,7 +43,8 @@ osl_canny_rothwell::osl_canny_rothwell(osl_canny_rothwell_params const &params)
 
 //-----------------------------------------------------------------------------
 
-osl_canny_rothwell::~osl_canny_rothwell() {
+osl_canny_rothwell::~osl_canny_rothwell()
+{
   osl_canny_base_free_raw_image(smooth_);
   osl_canny_base_free_raw_image(dx_);
   osl_canny_base_free_raw_image(dy_);
@@ -193,7 +194,8 @@ void osl_canny_rothwell::detect_edges(vil1_image const &image, vcl_list<osl_edge
 // of the peak position by parabolic fitting.  Writes edges into the thick_
 // image.
 //
-void osl_canny_rothwell::Non_maximal_suppression() {
+void osl_canny_rothwell::Non_maximal_suppression()
+{
   float h1=0,h2=0;
   float k = 180.0f/float(vnl_math::pi);
 
@@ -215,65 +217,59 @@ void osl_canny_rothwell::Non_maximal_suppression() {
         int orient = int(theta/45.0+8) % 4;
 
         // And now compute the interpolated heights
-        switch( orient ) {
-        case 0: {
-          float grad = dy[y+1]/dx[y+1];
+        float grad=0.f;
+        switch ( orient ) {
+         case 0:
+          grad = dy[y+1]/dx[y+1];
           h1 = grad*g0[y] + (1 - grad)*g0[y+1];
           h2 = grad*g2[y] + (1 - grad)*g2[y+1];
           break;
-        }
-        case 1: {
-          float grad = dx[y+1]/dy[y+1];
+         case 1:
+          grad = dx[y+1]/dy[y+1];
           h1 = grad*g0[y] + (1 - grad)*g1[y];
           h2 = grad*g2[y] + (1 - grad)*g1[y];
           break;
-        }
-        case 2: {
-          float grad = -dx[y+1]/dy[y+1];
+         case 2:
+          grad = -dx[y+1]/dy[y+1];
           h1 = grad*g2[y] + (1 - grad)*g1[y];
           h2 = grad*g0[y] + (1 - grad)*g1[y];
           break;
-        }
-        case 3: {
-          float grad = -dy[y+1]/dx[y+1];
+         case 3:
+          grad = -dy[y+1]/dx[y+1];
           h1 = grad*g2[y] + (1 - grad)*g2[y+1];
           h2 = grad*g0[y] + (1 - grad)*g0[y+1];
           break;
-        }
-        default:
-          //vcl_cerr << "*** ERROR ON SWITCH IN NMS ***\n";
+         default:
+          vcl_cerr << "*** ERROR ON SWITCH IN NMS ***: orient="<< orient<< '\n';
           vcl_abort();
         }
 
         // If the edge is greater than h1 and h2 we are at a peak,
         // therefore do subpixel interpolation by fitting a parabola
         // along the NMS line and finding its peak
-        if ( (g1[y+1]>h1) && (g1[y+1]>h2) ) {
+        if ( (g1[y+1]>h1) && (g1[y+1]>h2) )
+        {
           float fraction = (h1-h2)/(2*(h1-2*g1[y+1]+h2));
-          float newx=0,newy=0;
-          switch( orient ) {
-          case 0:
+          float newx=0.f, newy=0.f;
+          switch ( orient ) {
+           case 0:
             newx = x + fraction;
             newy = y + dy[y+1]/dx[y+1]*fraction;
             break;
-
-          case 1:
+           case 1:
             newx = x + dx[y+1]/dy[y+1]*fraction;
             newy = y + fraction;
             break;
-
-          case 2:
+           case 2:
             newx = x + dx[y+1]/dy[y+1]*fraction;
             newy = y + fraction;
             break;
-
-          case 3:
+           case 3:
             newx = x - fraction;
             newy = y - dy[y+1]/dx[y+1]*fraction;
             break;
-
-          default:
-            //vcl_cerr << "*** ERROR ON SWITCH IN NMS ***\n";
+           default:
+            vcl_cerr<<"*** ERROR ON SWITCH IN NMS ***: orient="<< orient<< '\n';
             vcl_abort();
           }
 
@@ -300,8 +296,8 @@ void osl_canny_rothwell::Non_maximal_suppression() {
 // the good edgelchains are re-written to the thin_ image for further
 // processing.
 //
-void osl_canny_rothwell::Initial_hysteresis() {
-
+void osl_canny_rothwell::Initial_hysteresis()
+{
   vcl_list<int> xcoords,ycoords;
   vcl_list<float> grad;
   vcl_list<osl_edgel_chain*> edges;
@@ -342,7 +338,7 @@ void osl_canny_rothwell::Initial_hysteresis() {
     px = edgels->GetX();
     py = edgels->GetY();
     pg = edgels->GetGrad();
-    for (int i=0; i<edgels->size(); ++i)
+    for (unsigned int i=0; i<edgels->size(); ++i)
       thin_[int(px[i])][int(py[i])] = pg[i];
     delete edgels;
   }
@@ -361,7 +357,8 @@ extern osl_Vertex *osl_find(vcl_list<osl_Vertex*> const *l, float x, float y);
 // phase, all edges greater than low_ will be by default good and so have a member
 // greater than high_.
 //
-void osl_canny_rothwell::Final_hysteresis(vcl_list<osl_edge*> *edges) {
+void osl_canny_rothwell::Final_hysteresis(vcl_list<osl_edge*> *edges)
+{
   vcl_list<int> xcoords,ycoords;
   vcl_list<float> grad;
   float *thin,*px,*py,*pg,*pt,val;
@@ -519,7 +516,8 @@ void osl_canny_rothwell::Final_hysteresis(vcl_list<osl_edge*> *edges) {
 // an edge location, and removing it if it is not a dangling chain as has
 // genus zero.
 //
-void osl_canny_rothwell::Thin_edges() {
+void osl_canny_rothwell::Thin_edges()
+{
   int i,count;
   float threshold;
 
@@ -572,8 +570,8 @@ void osl_canny_rothwell::Thin_edges() {
 //: Searches for single pixel breaks near dangling ends and patches them up.
 // This is destructive on the dangling lists.
 //
-void osl_canny_rothwell::Jump_single_breaks() {
-
+void osl_canny_rothwell::Jump_single_breaks()
+{
   // Take each dangling end in turn and determine whether there is
   // another edgel within the sixteen one-pixel-distant-neighbours.
 
@@ -655,7 +653,8 @@ void osl_canny_rothwell::Jump_single_breaks() {
 // its radius of influence is only two pixels; at that stage pixel-jumping should
 // fix any problems.
 //
-void osl_canny_rothwell::Adaptive_Canny(vil1_image const &image) {
+void osl_canny_rothwell::Adaptive_Canny(vil1_image const &image)
+{
   // Reset the smoothing kernel parameters by
   // halfing the size of the smoothing sigma
   old_sigma_ = sigma_;  sigma_ /= 2.0;
@@ -778,7 +777,8 @@ void osl_canny_rothwell::Best_eight_way(int x, int y, float **grad, int *xnew, i
 //
 //: Searches for the junctions in the image.
 //
-void osl_canny_rothwell::Find_dangling_ends() {
+void osl_canny_rothwell::Find_dangling_ends()
+{
   // Reset the dangling ends
   xdang_->clear();
   ydang_->clear();

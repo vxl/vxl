@@ -3,13 +3,13 @@
 //:
 // \file
 
-osl_fit_lines_params::osl_fit_lines_params(int min_fit_len,
+osl_fit_lines_params::osl_fit_lines_params(unsigned int min_fit_len,
                                            bool use_sqr,
                                            double thresh,
                                            double th,
                                            bool dc,
                                            bool inc,
-                                           int ignore_end_edgels)
+                                           unsigned int ignore_end_edgels)
 : min_fit_length_(min_fit_len)
   , use_square_fit_(use_sqr)
   , threshold_(thresh)
@@ -20,7 +20,8 @@ osl_fit_lines_params::osl_fit_lines_params(int min_fit_len,
 {}
 
 //: Checks that parameters are within acceptable bounds
-bool osl_fit_lines_params::SanityCheck() {
+bool osl_fit_lines_params::SanityCheck()
+{
   bool valid = true;
 
   if (min_fit_length_ < 3) {

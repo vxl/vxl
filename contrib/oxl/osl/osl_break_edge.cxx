@@ -29,14 +29,14 @@ void osl_break_edge(osl_edge const *in,
   // make array of vertices, one for each break.
   vcl_vector<osl_vertex*> verts;
   verts.push_back(in->GetV1()); // maintain topology.
-  for (unsigned i=1; i<where.size()-1; ++i)
+  for (unsigned int i=1; i+1<where.size(); ++i)
     verts.push_back(new osl_vertex(x[where[i]], y[where[i]]));
   verts.push_back(in->GetV2()); // maintain topology.
 
   // make new edges and push them onto the given list.
-  for (unsigned i=0; i<where.size()-1; ++i) {
+  for (unsigned int i=0; i+1<where.size(); ++i) {
     osl_edge *fragment = new osl_edge(where[i+1]-where[i] + 1, verts[i], verts[i+1]);
-    for (int j=0; j<fragment->size(); ++j) {
+    for (unsigned int j=0; j<fragment->size(); ++j) {
       fragment->SetX(x[j + where[i]], j);
       fragment->SetY(y[j + where[i]], j);
     }
@@ -84,7 +84,7 @@ void osl_break_edge(osl_edge const *in,
   breaks.push_back(0);   // first edgel
   while (true) {
     int pos = breaks.back();
-    if (pos >= n-1)
+    if (pos+1 >= n)
       break; // reached the end - done.
 
     // else, there are at least two edgels available, pos and pos+1 :

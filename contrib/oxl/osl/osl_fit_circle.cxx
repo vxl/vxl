@@ -22,7 +22,7 @@ osl_fit_circle::osl_fit_circle(const osl_edgel_chain &chain)
     // may cause overhead.
     vcl_list<vgl_point_2d<double> > points;
 
-    for (int i = 0; i < chain.size(); i++)
+    for (unsigned int i = 0; i < chain.size(); i++)
     {
         points.push_back(vgl_point_2d<double>(
             chain.GetX(i), chain.GetY(i)));

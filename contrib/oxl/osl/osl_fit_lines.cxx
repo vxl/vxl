@@ -66,7 +66,7 @@ void osl_fit_lines::simple_fit_to_list(vcl_list<osl_edge *> *myedges,
         // Since some code sets Theta in degrees, and some radians!
         // This is an attempt to guess whether the angles are degrees
         // or radians
-        for (int ii=0; ii<dc->size(); ii++)
+        for (unsigned int ii=0; ii<dc->size(); ii++)
         {
           if (dc->GetTheta(ii) > 3.2 || dc->GetTheta(ii) < -3.2)
           {
@@ -77,7 +77,7 @@ void osl_fit_lines::simple_fit_to_list(vcl_list<osl_edge *> *myedges,
         data_->Reset();
         double angle = 0.7853981;
         int  orient0 = int((dc->GetTheta(0) * using_degrees + angle/2.0) / angle);
-        for (int ii=0;ii<dc->size();ii++)
+        for (unsigned int ii=0;ii<dc->size();ii++)
         {
           data_->IncrByXY(dc->GetX(ii), dc->GetY(ii));
           int orient = int((dc->GetTheta(ii) * using_degrees + angle/2.0)/angle);
@@ -212,12 +212,12 @@ void osl_fit_lines::MeanIncrementalFit(vcl_list<osl_edgel_chain*> *curves_, osl_
     return;
 
   bool added = false;
-  int i,j,segment_length;
+  unsigned int i,j,segment_length;
 
   // Set up the data class for the first set of Edgels in the DigitalCurve
-  int start = ignore_end_edgels_;
+  unsigned int start = ignore_end_edgels_;
   old_finish_ = 1;  // set old_finish_ so we record from the start
-  int finish = start + min_fit_length_;
+  unsigned int finish = start + min_fit_length_;
 
   data_->Reset();
   for (i=start;i<finish;i++)
@@ -280,7 +280,7 @@ void osl_fit_lines::MeanIncrementalFit(vcl_list<osl_edgel_chain*> *curves_, osl_
           // capes Aug 1999 - now backtrack by ignore_end_edgels_ and
           // refit to avoid fitting to the garbage end edgels which are curving away
           // from the line
-          for (int ii=0; ii<ignore_end_edgels_; ++ii)
+          for (unsigned int ii=0; ii<ignore_end_edgels_; ++ii)
             data_->DecrByXY(dc->GetX(finish-1-ii), dc->GetY(finish-1-ii));
           data_->Fit();
           new_cost = MyGetCost(data_, start, finish-ignore_end_edgels_, dc);
@@ -332,7 +332,7 @@ void osl_fit_lines::MeanIncrementalFit(vcl_list<osl_edgel_chain*> *curves_, osl_
         start++;
 
         if ( segment_length > min_fit_length_ )
-          while ( (segment_length-1) > min_fit_length_ )
+          while ( segment_length > min_fit_length_+1 )
           {
             data_->DecrByXY(dc->GetX(finish),dc->GetY(finish));
             finish--;
@@ -353,7 +353,7 @@ void osl_fit_lines::MeanIncrementalFit(vcl_list<osl_edgel_chain*> *curves_, osl_
   // Finally, record any junk edgels at the end of the edgelchain that
   // have not been described by a straight line, that is so long as
   // a line has been fitted
-  int length = dc->size() - old_finish_;
+  unsigned int length = dc->size() - old_finish_;
   if ( curves_->size() && length )
   {
     osl_edgel_chain *ndc = new osl_edgel_chain(length);
@@ -388,12 +388,12 @@ void osl_fit_lines::SquareIncrementalFit(vcl_list<osl_edgel_chain*> *curves_, os
     return;
 
   bool added = false;
-  int i,j,segment_length;
+  unsigned int i,j,segment_length;
 
   // Set up the data class for the first set of Edgels in the DigitalCurve
-  int start = ignore_end_edgels_;
+  unsigned int start = ignore_end_edgels_;
   old_finish_ = 1;  // set old_finish_ so we record from the start
-  int finish = start + min_fit_length_;
+  unsigned int finish = start + min_fit_length_;
 
   data_->Reset();
   for (i=start;i<finish;i++)
@@ -457,7 +457,7 @@ void osl_fit_lines::SquareIncrementalFit(vcl_list<osl_edgel_chain*> *curves_, os
           // capes Aug 1999 - now backtrack by ignore_end_edgels_ and
           // refit to avoid fitting to the garbage end edgels which are curving away
           // from the line
-          for (int ii=0; ii<ignore_end_edgels_; ++ii)
+          for (unsigned int ii=0; ii<ignore_end_edgels_; ++ii)
             data_->DecrByXY(dc->GetX(finish-1-ii), dc->GetY(finish-1-ii));
           data_->Fit();
 
@@ -502,7 +502,7 @@ void osl_fit_lines::SquareIncrementalFit(vcl_list<osl_edgel_chain*> *curves_, os
   // Finally, record any junk edgels at the end of the edgelchain that
   // have not been described by a straight line, that is so long as
   // a line has been fitted.
-  int length = dc->size() - old_finish_;
+  unsigned int length = dc->size() - old_finish_;
   if ( curves_->size() && length )
   {
     osl_edgel_chain *ndc = new osl_edgel_chain(length);
@@ -579,9 +579,9 @@ void osl_fit_lines::MergeLines(vcl_list<osl_edgel_chain*> *curves_)
 #ifndef fsm_is_cute
   osl_ortho_regress fitter;
   fitter.reset();
-  for (int i=0; i<dc1->size(); ++i)
+  for (unsigned int i=0; i<dc1->size(); ++i)
     fitter.add_point(dc1->GetX(i), dc1->GetY(i));
-  for (int i=0; i<dc2->size(); ++i)
+  for (unsigned int i=0; i<dc2->size(); ++i)
     fitter.add_point(dc2->GetX(i), dc2->GetY(i));
   double a, b, c;
   fitter.fit(&a, &b, &c);
@@ -594,14 +594,14 @@ void osl_fit_lines::MergeLines(vcl_list<osl_edgel_chain*> *curves_)
   {
     // FIXME: what if endpoints are equal?
     osl_edgel_chain *dc = new osl_edgel_chain(dc1->size() + dc2->size());
-    for (int i=0; i<dc1->size(); ++i)
+    for (unsigned int i=0; i<dc1->size(); ++i)
     {
       dc->SetX(dc1->GetX(i), i);
       dc->SetY(dc1->GetY(i), i);
       dc->SetGrad(dc1->GetGrad(i), i);
       dc->SetTheta(dc1->GetTheta(i), i);
     }
-    for (int i=0; i<dc2->size(); ++i)
+    for (unsigned int i=0; i<dc2->size(); ++i)
     {
       dc->SetX(dc2->GetX(i), i + dc1->size());
       dc->SetY(dc2->GetY(i), i + dc1->size());
