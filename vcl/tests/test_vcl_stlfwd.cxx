@@ -3,8 +3,11 @@
 #include <vcl_string.h> // C++ specific includes first
 
 #if TEST == 1
-// Normal
+// STL included later - this does not work with vcl/emulation because of "redefinition of default argument"
 #include <vcl_stlfwd.h>
+#include <vcl_map.h>
+#include <vcl_set.h>
+#include <vcl_list.h>
 
 #else
 #if TEST == 2
@@ -16,11 +19,8 @@
 #include <vcl_stlfwd.h>
 
 #else
-// STL included later
+// Normal
 #include <vcl_stlfwd.h>
-#include <vcl_map.h>
-#include <vcl_set.h>
-#include <vcl_list.h>
 
 #endif
 #endif
