@@ -652,6 +652,7 @@ typedef vcl_pair<void*, int> pair_Pv_i;
 typedef vcl_list<pair_Pv_i> list_Pv_i;
 static list_Pv_i *timer_posts = 0;
 
+//: timeout is in milliseconds
 void vgui_glut_adaptor::post_timer(float timeout, int name)
 {
   vgui_glut_adaptor_callback_data *ff = new vgui_glut_adaptor_callback_data;   // <*> acquire resource
@@ -668,7 +669,7 @@ void vgui_glut_adaptor::post_timer(float timeout, int name)
   timer_posts->push_front(pair_Pv_i(ff, value));
 
   // pass 'value' to the GLUT api.
-  glutTimerFunc(int(timeout*1000), vgui_glut_adaptor::timer_callback, value);
+  glutTimerFunc(int(timeout), vgui_glut_adaptor::timer_callback, value);
 }
 
 void vgui_glut_adaptor::timer_callback(int value)

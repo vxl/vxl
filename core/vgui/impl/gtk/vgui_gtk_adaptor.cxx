@@ -150,13 +150,14 @@ typedef struct
   int name;
 } vgui_gtk_adaptor_callback_data;
 
+//: timeout is in milliseconds
 void vgui_gtk_adaptor::post_timer(float timeout, int name)
 {
   vgui_gtk_adaptor_callback_data *cd = new vgui_gtk_adaptor_callback_data; // <*> acquire
   cd->adapt = this;
   cd->name = name;
 
-  gtk_timeout_add(int(timeout*1000), // timeout in milliseconds
+  gtk_timeout_add(int(timeout), 
                   timeout_callback,
                   cd);
 }
