@@ -7,6 +7,8 @@
 #include "bmrf_gamma_func.h"
 #include "bmrf_epi_seg.h"
 #include <vcl_algorithm.h>
+#include <vsl/vsl_vector_io.h>
+#include <vsl/vsl_map_io.h>
 
 
 //: Constructor
@@ -256,3 +258,117 @@ bmrf_curvel_3d::show_stats() const
     }
   }
 }
+
+
+
+//: Binary save self to stream.
+void
+bmrf_curvel_3d::b_write( vsl_b_ostream& os ) const
+{
+  vsl_b_write(os, version());
+
+  vsl_b_write(os, this->x());
+  vsl_b_write(os, this->y());
+  vsl_b_write(os, this->z());
+  vsl_b_write(os, this->projs_2d_);
+  vsl_b_write(os, this->pseudo_points_);
+  vsl_b_write(os, this->proj_error_);
+}
+
+
+//: Binary load self from stream.
+void
+bmrf_curvel_3d::b_read( vsl_b_istream& is )
+{
+  if (!is) return;
+
+  short ver;
+  vsl_b_read(is, ver);
+  switch (ver)
+  {
+   case 1:
+   {
+    double x, y, z;
+    vsl_b_read(is, x);
+    vsl_b_read(is, y);
+    vsl_b_read(is, z);
+    this->set(x,y,z);
+    vsl_b_read(is, this->projs_2d_);
+    vsl_b_read(is, this->pseudo_points_);
+    vsl_b_read(is, this->proj_error_);
+    this->stats_valid_ = false;
+    
+    for(unsigned int i=0; i<this->projs_2d_.size(); ++i)
+      if( this->projs_2d_[i].second )
+        ++num_projections_;
+
+    break;
+   }
+
+   default:
+    vcl_cerr << "I/O ERROR: bmrf_curvel_3d::b_read(vsl_b_istream&)\n"
+             << "           Unknown version number "<< ver << '\n';
+    is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+    return;
+  }
+}
+
+
+//: Return IO version number;
+short
+bmrf_curvel_3d::version() const
+{
+  return 1;
+}
+
+
+//: Print an ascii summary to the stream
+void
+bmrf_curvel_3d::print_summary( vcl_ostream& os ) const
+{
+  os << "num_proj=" << this->num_projections_;
+}
+
+//-----------------------------------------------------------------------------------------
+// External functions
+//-----------------------------------------------------------------------------------------
+
+//: Binary save bmrf_curvel_3d to stream.
+void
+vsl_b_write(vsl_b_ostream &os, const bmrf_curvel_3d* c)
+{
+  if (c==0) {
+    vsl_b_write(os, false); // Indicate null pointer stored
+  }
+  else{
+    vsl_b_write(os,true); // Indicate non-null pointer stored
+    c->b_write(os);
+  }
+}
+
+
+//: Binary load bmrf_curvel_3d from stream.
+void
+vsl_b_read(vsl_b_istream &is, bmrf_curvel_3d* &c)
+{
+  delete c;
+  bool not_null_ptr;
+  vsl_b_read(is, not_null_ptr);
+  if (not_null_ptr) {
+    c = new bmrf_curvel_3d();
+    c->b_read(is);
+  }
+  else
+    c = 0;
+}
+
+
+//: Print an ASCII summary to the stream
+void
+vsl_print_summary(vcl_ostream &os, const bmrf_curvel_3d* c)
+{
+  os << "bmrf_curvel_3d{ ";
+  c->print_summary(os);
+  os << " }";
+}
+

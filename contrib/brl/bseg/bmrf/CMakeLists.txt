@@ -23,7 +23,7 @@ AUX_SOURCE_DIRECTORY(Templates bmrf_sources)
 
 ADD_LIBRARY(bmrf ${bmrf_sources})
 
-TARGET_LINK_LIBRARIES(bmrf bugl vtol gevd vdgl vbl_io vnl_algo vil vgl vsl)
+TARGET_LINK_LIBRARIES(bmrf bugl vtol gevd vdgl vbl_io vnl_algo vnl_io vil vgl vsl)
 
 IF(BUILD_TESTING)
   SUBDIRS(tests)

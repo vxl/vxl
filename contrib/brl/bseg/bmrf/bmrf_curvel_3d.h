@@ -18,6 +18,7 @@
 #include <vnl/vnl_double_3x3.h>
 #include <vnl/vnl_double_2.h>
 #include <vbl/vbl_ref_count.h>
+#include <vsl/vsl_binary_io.h>
 #include <vcl_vector.h>
 #include <vcl_map.h>
 #include <vcl_utility.h>
@@ -83,6 +84,18 @@ class bmrf_curvel_3d : public bugl_gaussian_point_3d<double>, public vbl_ref_cou
 
   void show_stats() const;
 
+  //: Binary save self to stream.
+  void b_write(vsl_b_ostream &os) const;
+
+  //: Binary load self from stream.
+  void b_read(vsl_b_istream &is);
+
+  //: Return IO version number;
+  short version() const;
+
+  //: Print an ascii summary to the stream
+  void print_summary(vcl_ostream &os) const;
+  
  protected:
   //: Compute the gamma statistics on the current projections
   void compute_statistics();
@@ -108,5 +121,15 @@ class bmrf_curvel_3d : public bugl_gaussian_point_3d<double>, public vbl_ref_cou
   //: The error in the projection;
   double proj_error_;
 };
+
+
+//: Binary save bmrf_curvel_3d* to stream.
+void vsl_b_write(vsl_b_ostream &os, const bmrf_curvel_3d* n);
+
+//: Binary load bmrf_curvel_3d* from stream.
+void vsl_b_read(vsl_b_istream &is, bmrf_curvel_3d* &n);
+
+//: Print an ASCII summary to the stream
+void vsl_print_summary(vcl_ostream &os, const bmrf_curvel_3d* n);
 
 #endif // bmrf_curvel_3d_h_
