@@ -38,6 +38,9 @@ public:
     M(0,0) = r00;    M(0,1) = r01;    M(0,2) = r02;
     M(1,0) = r10;    M(1,1) = r11;    M(1,2) = r12;
   }
+
+  vnl_double_2x3(Base const& M) :
+    Base(M) { }
 };
 
 #endif // vnl_double_2x3_h_
