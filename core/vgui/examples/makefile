@@ -30,6 +30,7 @@ MINI_PROG_SOURCES += example_multiple_windows.cxx
 MINI_PROG_SOURCES += example_poly_tableau.cxx
 MINI_PROG_SOURCES += example_satellite_tableau.cxx
 MINI_PROG_SOURCES += example_vgui_observer.cxx
+MINI_PROG_SOURCES += example_sprite.cxx
 
 PROGRAM := basic_app
 SOURCES += basic_app.cxx
