@@ -1,15 +1,15 @@
 // This is mul/vil2/tests/test_image_view_maths.cxx
-#include <vcl_iostream.h>
-#include <vcl_vector.h>
 #include <vil2/vil2_math.h>
 #include <vil2/vil2_copy.h>
+#include <vcl_iostream.h>
+#include <vxl_config.h> // for vxl_byte
 #include <testlib/testlib_test.h>
 
 void test_image_view_maths_byte()
 {
-  vcl_cout << "*****************************\n";
-  vcl_cout << " Testing vil2_image_view_maths\n";
-  vcl_cout << "*****************************\n";
+  vcl_cout << "*******************************\n"
+           << " Testing vil2_image_view_maths\n"
+           << "*******************************\n";
 
   int n=10, m=8;
 
@@ -19,7 +19,7 @@ void test_image_view_maths_byte()
   double sum2 = 0;
   for (int y=0;y<imA.nj();++y)
     for (int x=0;x<imA.ni();++x)
-	{
+    {
       imA(x,y) = 1+x+y*10; sum2+= imA(x,y)*imA(x,y);
       imB(x,y) = 1+y+x*10;
     }
