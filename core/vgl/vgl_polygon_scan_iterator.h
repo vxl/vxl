@@ -70,7 +70,7 @@ class vgl_polygon_scan_iterator : public vgl_region_scan_iterator
   vgl_box_2d<T> win;//!< clipping window
   bool have_window;
 
-  vgl_polygon<T> poly_; //: the polygon
+  vgl_polygon<T> poly_; //!< the polygon
 
  public:
   // Stores coordinates of a 2d point

@@ -87,12 +87,12 @@ class vgl_conic
   // DATA MEMBERS
 
   vgl_conic_type type_;
-  T a_; //: coefficient of \a x^2
-  T b_; //: coefficient of \a xy
-  T c_; //: coefficient of \a y^2
-  T d_; //: coefficient of \a xw
-  T e_; //: coefficient of \a yw
-  T f_; //: coefficient of \a w^2
+  T a_; //!< coefficient of \a x^2
+  T b_; //!< coefficient of \a xy
+  T c_; //!< coefficient of \a y^2
+  T d_; //!< coefficient of \a xw
+  T e_; //!< coefficient of \a yw
+  T f_; //!< coefficient of \a w^2
 
  public:
   inline vgl_conic_type type() const { return type_; }
