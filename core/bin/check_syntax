@@ -396,7 +396,9 @@ foreach $f (@FILES)
       unless ($fl =~ m/$j\>[^\003]*\b$i\b/ || $f =~ m/\/$ii\./ || $f =~ m/\btests\/test_include\.cxx$/);
   }
   print "$f\t\# should have #include <vcl_cassert.h>\n" if (! $found_cassert && $file =~ m/\n\s*assert\s*\(/);
-  print "$f\t\# should have #include <vcl_iostream.h> or <vcl_iosfwd.h>\n" if (! $found_iostream && $f =~ m/\.h$/ && $f !~ m/vcl_/ && $fl =~ m/\bvcl_(cin|cout|cerr|clog|(i|o)stream|endl|ends|flush|stream(pos|buf|size))\b/);
+  print "$f\t\# should have #include <vcl_iostream.h> or <vcl_iosfwd.h>\n"
+    if (! $found_iostream && $f =~ m/\.h$/ && $f !~ m/vcl_/ && $f !~ m!core/vgui/vgui_macro.h$! &&
+        $fl =~ m/\bvcl_(cin|cout|cerr|clog|(i|o)stream|endl|ends|flush|stream(pos|buf|size))\b/);
 
   print "$f\t\# suspicious $1\n"
     if ($f !~ m/\bvcl\/\S*vcl_\S+\.(h|txx)$/ &&
