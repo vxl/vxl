@@ -13,13 +13,13 @@ static
 vnl_matrix<double> const&
 identity_matrix( unsigned size )
 {
-  static vnl_matrix<double>* matrices[5] = { 0, 0, 0, 0, 0 };
+  static vnl_matrix<double> matrices[5] = { vnl_matrix<double>(0, 0, vnl_matrix_identity ),
+                                            vnl_matrix<double>(1, 1, vnl_matrix_identity ),
+                                            vnl_matrix<double>(2, 2, vnl_matrix_identity ),
+                                            vnl_matrix<double>(3, 3, vnl_matrix_identity ),
+                                            vnl_matrix<double>(4, 4, vnl_matrix_identity ) };
   assert( size < 5 );
-  if( matrices[size] == 0 ) {
-    matrices[size] = new vnl_matrix<double>( size, size, vnl_matrix_identity );
-  }
-
-  return *matrices[size];
+  return matrices[size];
 }
 
 
