@@ -11,12 +11,9 @@
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
 
-bcal_euclidean_transformation::bcal_euclidean_transformation()
+bool bcal_euclidean_transformation::is_valid(void) const
 {
-}
-
-bcal_euclidean_transformation::~bcal_euclidean_transformation()
-{
+  return trans_.size()!=0;
 }
 
 void bcal_euclidean_transformation::set_beat(vcl_vector<double> const& new_beat)
@@ -59,17 +56,10 @@ vnl_vector<double> bcal_euclidean_transformation::inverse(const vnl_vector<doubl
   return v;
 }
 
-void bcal_euclidean_transformation::set_transformations(vcl_vector<vgl_h_matrix_3d<double> > &trans)
-{
-  trans_ = trans; 
-}
-
-
 void bcal_euclidean_transformation::print(vcl_ostream& os)
 {
-  int size = trans_.size();
-  for (int i=0; i<size; i++){
-    os << "\n the "<<i<<"-th transformation is: \n"<< trans_[i];
+  for (unsigned int i=0; i<trans_.size(); i++){
+    os << "\n the "<<i+1<<"-th transformation is:\n"<< trans_[i];
   }
 }
 

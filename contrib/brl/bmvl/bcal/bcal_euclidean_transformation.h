@@ -29,17 +29,18 @@ class bcal_euclidean_transformation : public vcsl_spatial_transformation
   vcl_vector<vgl_h_matrix_3d<double> > trans_;
 
  public: // constructor and deconstructor
-  bcal_euclidean_transformation();
-  virtual ~bcal_euclidean_transformation();
+  bcal_euclidean_transformation() {}
+  virtual ~bcal_euclidean_transformation() {}
 
  public: // operators
-  void set_transformations(vcl_vector<vgl_h_matrix_3d<double> > &trans);
+  void set_transformations(vcl_vector<vgl_h_matrix_3d<double> > &t) {trans_=t;}
+
   vnl_vector<double> inverse(const vnl_vector<double> &v, double time) const;
   virtual vnl_vector<double> execute(const vnl_vector<double> &v, double tims) const;
   virtual bool is_invertible(double time) const; // for abstract interface
   virtual void set_beat(vcl_vector<double> const& new_beat);
   vnl_double_4x4 get_trans_matrix(int i);
-
+  virtual bool is_valid() const;
 
   // for debugging
   // print information
