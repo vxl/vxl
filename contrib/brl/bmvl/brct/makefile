@@ -1,5 +1,5 @@
 # 3D reconstruction from multiple views library
-USES += contrib/brl contrib/brl/bbas contrib/brl/bmvl contrib/brl/bseg contrib/gel contrib/oxl core
+USES += contrib/brl contrib/brl/bbas contrib/brl/bmvl contrib/brl/bseg contrib/gel contrib/oxl contrib/rpl core
 
 LIBRARY := brct
 VERSION := 1.0
@@ -14,7 +14,7 @@ SOURCES += brct_plane_sweeper.cxx
 SOURCES += brct_plane_sweeper_params.cxx
 SOURCES += brct_volume_processor.cxx
 SOURCES += brct_volume_processor_params.cxx
-#SOURCES += brct_dense_reconstructor.cxx
+SOURCES += brct_dense_reconstructor.cxx
 SOURCES += brct_plane_corr.cxx
 MANPAGE_SOURCES += brct_plane_corr_sptr.h
 
