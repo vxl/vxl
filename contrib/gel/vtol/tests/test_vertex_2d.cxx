@@ -157,7 +157,7 @@ int main(int, char **)
   Assert(!(v1v->valid_inferior_type(*(new_edge))));
 
   vcl_cout << "Testing superiors_list" << vcl_endl;
-  vcl_cout << "ve before "<< vcl_endl;
+  vcl_cout << "ve before superiors access "<< vcl_endl;
   bool found = false;
   const vcl_list<vtol_topology_object*>* sups =
     ve->cast_to_topology_object()->superiors_list();
@@ -175,7 +175,7 @@ int main(int, char **)
         }
       }
 
-  vcl_cout << "ve after " << *ve << vcl_endl;
+  vcl_cout << "ve after superiors " << *ve << vcl_endl;
   Assert(found);
   vcl_cout << "finished testing vertex 2d" << vcl_endl;
   vcl_cout << "Test Summary: " << success << " tests succeeded, "
