@@ -14,7 +14,7 @@ void test_homg_plane_3d_double_io()
            << "***********************\n";
 
   //// test constructors, accessors
-  vgl_homg_plane_3d<double> p_out(1.2,3.4,5.6,7.8), p_in;
+  vgl_homg_plane_3d<double> p_out(1.25,3.5,5.625,7.875), p_in;
 
   vsl_b_ofstream bfs_out("vgl_homg_plane_3d_test_double_io.bvl.tmp");
   TEST ("Created vgl_homg_plane_3d_test_double_io.bvl.tmp for writing",
