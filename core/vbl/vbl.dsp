@@ -268,6 +268,11 @@ SOURCE=.\Templates/vbl_sparse_array_2d+int-.cxx
 # End Source File
 # Begin Source File
 
+SOURCE=.\Templates/vbl_big_sparse_array_3d+double-.cxx
+
+# End Source File
+# Begin Source File
+
 SOURCE=.\Templates/vbl_sparse_array_3d+double-.cxx
 
 # End Source File
