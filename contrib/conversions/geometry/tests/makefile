@@ -1,6 +1,6 @@
 USES := conversions vxl gel
 USE_NETLIB := 1
-IULIBS := -lvdgl -lvsol -lvgl -lvnl-algo -lvnl -lvbl -lvul
+IULIBS := -lvdgl -lvsol -lvgl-algo -lvgl -lvnl-algo -lvnl -lvbl -lvul
 
 ifneq (,$(wildcard $(IUEROOT)/SpatialObjects))
 USES += COOL GeneralUtility SpatialObjects Numerics
