@@ -3,6 +3,7 @@ USES += contrib/mul core
 LIBRARY := vil3d
 VERSION := 1.0
 
+MANPAGE_SOURCES += vil3d_fwd.h
 MANPAGE_SOURCES += vil3d_property.h
 MANPAGE_SOURCES += vil3d_image_view_base.h
 MANPAGE_SOURCES += vil3d_image_view.txx
@@ -26,6 +27,8 @@ MANPAGE_SOURCES += vil3d_convert.h
 SOURCES += file_formats/vil3d_gipl_format.cxx
 SOURCES += file_formats/vil3d_dicom.cxx
 SOURCES += file_formats/vil3d_slice_list.cxx
+SOURCES += vil3d_copy.cxx
+SOURCES += vil3d_save.cxx
 
 SUBDIRS += algo io
 
