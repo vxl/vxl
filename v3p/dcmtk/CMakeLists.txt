@@ -93,6 +93,30 @@ MACRO(CHECK_PROTOTYPE_EXISTS FUNC INCLUDE VARIABLE)
 ENDMACRO(CHECK_PROTOTYPE_EXISTS)
 
 
+# The DCMTK HAVE_STD_NAMESPACE has a looser definition than the vcl
+# ALLOWS_STD_NAMESPACE
+IF( DCMTK_HAVE_STD_NAMESPACE MATCHES "DCMTK_HAVE_STD_NAMESPACE" )
+  MESSAGE(STATUS "Checking if the compiler has namespace std")
+  FILE(WRITE ${CMAKE_BINARY_DIR}/CMakeTmp/test_have_namespace.cxx
+    "#include <iostream>\n"
+    "using namespace std;\n"
+    "int main() { cout << \"Hello World\" << endl; return 0; }\n" )
+  TRY_COMPILE( DCMTK_HAVE_STD_NAMESPACE
+    ${CMAKE_BINARY_DIR}
+    ${CMAKE_BINARY_DIR}/CMakeTmp/test_have_namespace.cxx
+    CMAKE_FLAGS -DCOMPILE_DEFINITIONS:STRING=${CMAKE_REQUIRED_FLAGS}
+    OUTPUT_VARIABLE OUTPUT )
+  IF( DCMTK_HAVE_STD_NAMESPACE )
+    FILE(APPEND ${CMAKE_BINARY_DIR}/CMakeOutput.log
+      "Checking for namespace std passed with the following output:\n"
+      "${OUTPUT}\n\n" )
+  ELSE( DCMTK_HAVE_STD_NAMESPACE )
+    FILE(APPEND ${CMAKE_BINARY_DIR}/CMakeOutput.log
+      "Checking for namespace std failed with the following output:\n"
+      "${OUTPUT}\n\n" )
+  ENDIF( DCMTK_HAVE_STD_NAMESPACE )
+ENDIF( DCMTK_HAVE_STD_NAMESPACE MATCHES "DCMTK_HAVE_STD_NAMESPACE" )
+
 
 CHECK_TYPE_SIZE( long DCMTK_SIZEOF_LONG )
 
