@@ -158,7 +158,7 @@ while( <INFO>)
   {
     # patch together multi-lines
     $_ .= <INFO> while( s/\\\s*$//);
-    s/$iueroot\//\//g if( $iueroot);
+    s/$iueroot\/?/\//g if( $iueroot);
 
     $currentlineweb= webify_string($_);
 
