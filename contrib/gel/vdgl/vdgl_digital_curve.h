@@ -61,6 +61,7 @@ public:
   //---------------------------------------------------------------------------
   //: Return `this' if `this' is a digital_curve, 0 otherwise
   //---------------------------------------------------------------------------
+  virtual vdgl_digital_curve const*cast_to_digital_curve(void)const{return this;}
   virtual vdgl_digital_curve *cast_to_digital_curve(void) {return this;}
 
   // INTERNALS-----------------------------------------------------------------
