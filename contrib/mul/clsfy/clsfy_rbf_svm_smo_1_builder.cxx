@@ -8,8 +8,6 @@
 
 //=======================================================================
 
-#include <mbl/mbl_print.h>
-
 #include <clsfy/clsfy_smo_1.h>
 #include <clsfy/clsfy_rbf_svm_smo_1_builder.h>
 #include <vcl_string.h>
