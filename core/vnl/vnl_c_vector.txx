@@ -286,9 +286,19 @@ void vnl_c_vector_inf_norm(T const *p, unsigned n, S *out)
 
 //---------------------------------------------------------------------------
 
-// this should not be changed at run-time anyway.
+#ifdef VNL_C_VECTOR_USE_VNL_ALLOC
+// if set in build environment, go with that.
+#else
+// else, see what vnl_config.h has to say about it.
+# include <vnl/vnl_config.h>
+# if VNL_CONFIG_THREAD_SAFE
+#  define VNL_C_VECTOR_USE_VNL_ALLOC 0
+# else
+#  include <vnl/vnl_alloc.h>
+#  define VNL_C_VECTOR_USE_VNL_ALLOC 1
+# endif
+#endif
 
-#include <vnl/vnl_alloc.h>
 //#include <vcl_iostream.h>
 
 inline void* vnl_c_vector_alloc(int n, int size)
