@@ -40,14 +40,14 @@ class vidl_avicodec : public vidl_codec
   virtual vidl_avicodec* castto_vidl_avicodec(){return this;}
 
  protected:
-  int seek(int frame_num);
-  int next_frame();
+  int seek(int frame_num) const;
+  int next_frame() const;
 
   bool load_avi(const char* fname, char mode);
 
  private:
 
-  int current_frame_;
+  mutable int current_frame_;
   //vxl_byte* buffer_;
   IAviReadFile* moviefile_;
   IAviReadStream* moviestream_;

@@ -15,7 +15,7 @@
 #include <vul/vul_file.h>
 
 #include <vcl_iostream.h>
-
+#include <vcl_cassert.h>
 
 //: Constructor
 vidl_avicodec::vidl_avicodec()
@@ -118,13 +118,14 @@ vidl_avicodec::get_view( int position,
                          int x0, int xs,
                          int y0, int ys ) const
 {
+  assert (moviestream_);
   if (!moviestream_) return NULL;
 
-  if ( const_cast<vidl_avicodec *>(this)->seek(position) < 0) return NULL;
+  assert (seek(position) >= 0);
+  if ( seek(position) < 0) return NULL;
 
-  CImage* cim;
-
-  cim=moviestream_->GetFrame();
+  CImage* cim=moviestream_->GetFrame();
+  assert (cim);
   if (cim==0) return NULL;
 
   CImage* im24;
@@ -158,14 +159,16 @@ vidl_avicodec::put_view( int /*position*/,
                          const vil_image_view_base &/*im*/,
                          int /*x0*/, int /*y0*/)
 {
-  vcl_cerr << "vidl_avicodec::put_section not implemented\n";
+  vcl_cerr << "vidl_avicodec::put_view not implemented\n";
   return false;
 }
 
 
 int
-vidl_avicodec::seek(int frame_number)
+vidl_avicodec::seek(int frame_number) const
 {
+  assert (moviestream_);
+  assert ((unsigned int)frame_number <= moviestream_->GetLength());
   if (!moviestream_ || (unsigned int)frame_number > moviestream_->GetLength())
     return -1;
 
@@ -204,8 +207,9 @@ vidl_avicodec::seek(int frame_number)
 
 
 int
-vidl_avicodec::next_frame()
+vidl_avicodec::next_frame() const
 {
+  assert (moviestream_);
   if (!moviestream_) return -1;
 
   moviestream_->ReadFrame();
