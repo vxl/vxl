@@ -57,14 +57,14 @@ public:
 
 xcv_tableau* xcv_tab;
 
-//-----------------------------------------------------------------------------
-//-----------------------------------------------------------------------------
+//: Get file last used for saving data.
 vcl_string* get_savefile()
 {
   static vcl_string savefile = "";
   return &savefile;
 }
 
+//: Get file last used for loading data.
 vcl_string* get_loadfile()
 {
   static vcl_string loadfile = "";
@@ -72,7 +72,7 @@ vcl_string* get_loadfile()
 }
 
 //-----------------------------------------------------------------------------
-//-- Displays given message on the status bar.
+//: Displays given message on the status bar.
 //-----------------------------------------------------------------------------
 void post_to_status_bar(const char* msg)
 {
@@ -84,7 +84,7 @@ vgui_tableau_ref get_top(unsigned col,unsigned row)
 }
 
 //-----------------------------------------------------------------------------
-//-- Gets the list of all image tableaux in xcv.
+//: Gets the list of all image tableaux in xcv.
 //-----------------------------------------------------------------------------
 vcl_vector<xcv_image_tableau_ref> get_image_list()
 {
@@ -100,7 +100,7 @@ vcl_vector<xcv_image_tableau_ref> get_image_list()
 }
 
 //-----------------------------------------------------------------------------
-//-- Gets the list of all easy2D tableaux in xcv.
+//: Gets the list of all easy2D tableaux in xcv.
 //-----------------------------------------------------------------------------
 vcl_vector<vgui_easy2D_ref> get_easy2D_list()
 {
@@ -116,7 +116,7 @@ vcl_vector<vgui_easy2D_ref> get_easy2D_list()
 }
 
 //-----------------------------------------------------------------------------
-//-- Gets the last selected row and column position.
+//: Gets the last selected row and column position.
 //-----------------------------------------------------------------------------
 void get_current(unsigned* col, unsigned* row)
 {
@@ -124,7 +124,7 @@ void get_current(unsigned* col, unsigned* row)
 }
 
 //-----------------------------------------------------------------------------
-//-- Returns true if there are exactly two selected views.
+//: Returns true if there are exactly two selected views.
 //-----------------------------------------------------------------------------
 bool get_twoviews(vcl_vector<int>* col_pos, vcl_vector<int>* row_pos) 
 {
@@ -135,6 +135,9 @@ bool get_twoviews(vcl_vector<int>* col_pos, vcl_vector<int>* row_pos)
     for(unsigned int i = 0; i < xcv_tab->rows(); ++i)
       for(unsigned int j = 0; j < xcv_tab->cols(); ++j)
         xcv_tab->set_selected(i,j, false);
+    cols.clear();
+    rows.clear();
+    times.clear();
     xcv_tab->set_selected(0,0, true);
     xcv_tab->set_selected(0,1, true);
     nb_views = xcv_tab->get_selected_positions(&cols, &rows, &times);
@@ -167,7 +170,7 @@ bool get_twoviews(vcl_vector<int>* col_pos, vcl_vector<int>* row_pos)
 }
 
 //-----------------------------------------------------------------------------
-//-- Returns true if there are exactly three selected views.
+//: Returns true if there are exactly three selected views.
 //-----------------------------------------------------------------------------
 bool get_threeviews(vcl_vector<int>* col_pos, vcl_vector<int>* row_pos)
 {
@@ -206,7 +209,7 @@ bool get_threeviews(vcl_vector<int>* col_pos, vcl_vector<int>* row_pos)
 }
 
 //-----------------------------------------------------------------------------
-//-- Return the underlying rubberbander from the tableau at the given position.
+//:  Return the underlying rubberbander from the tableau at the given position.
 //   This function returns NULL if it fails.
 //-----------------------------------------------------------------------------
 vgui_rubberbander_ref get_rubberbander_at(unsigned col, unsigned row)
@@ -224,7 +227,7 @@ vgui_rubberbander_ref get_rubberbander_at(unsigned col, unsigned row)
 }
 
 //-----------------------------------------------------------------------------
-//-- Return the underlying easy2D from the tableau at the given position.
+//:  Return the underlying easy2D from the tableau at the given position.
 //   This function returns NULL if it fails.
 //-----------------------------------------------------------------------------
 vgui_easy2D_ref get_easy2D_at(unsigned col, unsigned row)
@@ -242,7 +245,7 @@ vgui_easy2D_ref get_easy2D_at(unsigned col, unsigned row)
 }
 
 //-----------------------------------------------------------------------------
-//-- Return the underlying easy2D from the tableau at the given position.
+//:  Return the underlying easy2D from the tableau at the given position.
 //   This function returns NULL if it fails.
 //-----------------------------------------------------------------------------
 vgui_composite_ref get_composite_at(unsigned col, unsigned row)
@@ -286,7 +289,7 @@ vgui_easy2D_ref get_current_easy2D()
 }
 
 //-----------------------------------------------------------------------------
-//-- Gets the image tableau from the tableau at the given position.
+//:  Gets the image tableau from the tableau at the given position.
 //   This function returns NULL if it fails.
 //-----------------------------------------------------------------------------
 xcv_image_tableau_ref get_image_tableau_at(unsigned col, unsigned row)
@@ -304,7 +307,7 @@ xcv_image_tableau_ref get_image_tableau_at(unsigned col, unsigned row)
 }
 
 //-----------------------------------------------------------------------------
-//-- Gets the underlying image from the tableau at the given position
+//:  Gets the underlying image from the tableau at the given position
 //   and returns it in the given image pointer.
 //   Returns true if the image is OK, otherwise returns false.
 //-----------------------------------------------------------------------------
@@ -322,7 +325,7 @@ bool get_image_at(vil_image* img, unsigned col, unsigned row)
 }
 
 //-----------------------------------------------------------------------------
-//-- Displays the given image on XCV at the given position.
+//: Displays the given image on XCV at the given position.
 //-----------------------------------------------------------------------------
 void add_image_at(vcl_string image_filename, unsigned col, unsigned row)
 {
@@ -349,7 +352,7 @@ void add_image(vil_image& img)
 }
 
 //-----------------------------------------------------------------------------
-//-- Removes the image at the given posistion from the display.
+//: Removes the image at the given posistion from the display.
 //-----------------------------------------------------------------------------
 void remove_image_at(unsigned col, unsigned row)
 {
@@ -357,9 +360,9 @@ void remove_image_at(unsigned col, unsigned row)
 }
 
 //-----------------------------------------------------------------------------
-//-- Create the menubar.
+//: Create the menubar.
 //-----------------------------------------------------------------------------
-  vgui_menu xcv_menubar;
+vgui_menu xcv_menubar;
 
 vgui_menu create_menubar()
 {
@@ -375,12 +378,11 @@ vgui_menu create_menubar()
 }
 
 //-----------------------------------------------------------------------------
-// choosing a window size
-//-----------------------------------------------------------------------------             
-
+//: Choosing a window size
 // This function chooses a window size by adding up the total image size
 // along each row (column) and choosing the row (column) sum which is 
 // greatest as the window width (height).
+//-----------------------------------------------------------------------------  
 void xcv_window_size_traditional(int rows, int cols,
 				 vcl_vector<xcv_image_tableau_ref> const &images,
 				 unsigned *window_w, unsigned *window_h,
@@ -416,8 +418,8 @@ void xcv_window_size_traditional(int rows, int cols,
   }
 }
 
-// This function tries to resize the window to fill some proportion of the
-// screen. Useful for very small or very large images.
+//: This function tries to resize the window to fill some proportion of the screen. 
+//  Useful for very small or very large images.
 void xcv_window_size_adaptive(int rows, int cols,
 			      vcl_vector<xcv_image_tableau_ref> const &images,
 			      unsigned *window_w, unsigned *window_h,
