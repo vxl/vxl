@@ -35,7 +35,7 @@ void do_test(bool with_grad)
 
   vnl_levenberg_marquardt lm(f);
 
-  vnl_vector<double> x1 = x0;
+  vnl_vector<double> x1 = x0.as_vector();
   if (f.has_gradient())
     lm.minimize_using_gradient(x1);
   else
