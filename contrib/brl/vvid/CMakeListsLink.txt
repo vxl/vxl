@@ -1,0 +1,3 @@
+# ./brl/vvid/CMakeListsLink.txt
+
+LINK_LIBRARIES( vvid )
