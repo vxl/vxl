@@ -3,11 +3,12 @@
 //
 // This is xcv/xcv_geometry.h
 //
-//: Creates a menu for, and provides an interface to geometric operations
-//  contained in vxl.
-//
+//:
 // \file
 // \author   K.Y.McGaul
+// \brief  Interface to geometry functions.
+//  Creates a menu for, and provides an interface to geometric operations
+//  contained in vxl.
 // \verbatim
 //  Modifications:
 //   K.Y.McGaul     27-JAN-2000    Initial version.

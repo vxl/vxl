@@ -3,11 +3,12 @@
 //
 // This is xcv/xcv_segmentation.h
 //
-//: Creates a menu for, and provides an interface to egmentation operations
-//  contained in vxl.
 //
 // \file
 // \author  K.Y.McGaul
+// \brief   Interface for segmentation operations.
+//  Creates a menu for, and provides an interface to segmentation operations
+//  contained in vxl.
 // \verbatim
 //  Modifications
 //   K.Y.McGaul     27-JAN-2000    Initial version.

@@ -92,7 +92,7 @@ void xcv_file::save_image()
 }
 
 //-----------------------------------------------------------------------------
-//: Save image and spatial objects to specified postscript file.
+//: Save image and spatial objects to specified file.
 //-----------------------------------------------------------------------------
 void xcv_file::save_as_ps()
 {
