@@ -4,7 +4,7 @@
 //
 // .NAME        vtol_block - Highest node in a 3D topological structure
 // .LIBRARY     vtol
-// .HEADER      vxl package
+// .HEADER      gel package
 // .INCLUDE     vtol/vtol_block.h
 // .FILE        vtol_block.cxx
 //
@@ -27,10 +27,12 @@
 
 #include <vtol/vtol_topology_object.h>
 
-class vtol_two_chain;
-class vsol_point;
 class vtol_vertex;
-class vsol_box;
+class vtol_edge;
+class vtol_zero_chain;
+class vtol_one_chain;
+class vtol_face;
+class vtol_two_chain;
 
 class vtol_block
   : public vtol_topology_object
