@@ -1,12 +1,12 @@
 #   DESCRIPTION:
 #
-#   This is the zlib directory of v3p.  Current version is 1.1.3.
+#   This is the zlib directory of v3p.  Current version is 1.1.4.
 
 USES := # nothing
 USE_STDC++ := 0
 
 LIBRARY := z
-VERSION := 1.1.3
+VERSION := 1.1.4
 
 SOURCES += adler32.c
 SOURCES += compress.c
