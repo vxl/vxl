@@ -91,7 +91,7 @@ bool vpro_curve_tracking_process::execute()
   {
     bdgl_tracker_curve_sptr test_curve1=get_output_curve(t,i);
     bdgl_tracker_curve_sptr new_curve,old_curve;
-    vtol_edge_2d_sptr edc=test_curve1->get_curve_set();
+    vtol_edge_2d_sptr edc=test_curve1->get_curve();
 
     vdgl_digital_curve_sptr dc = bdgl_curve_algs::create_digital_curves(test_curve1->desc->points_);
 
@@ -127,10 +127,12 @@ bool vpro_curve_tracking_process::write_to_file()
     while (bmn)
     {
       cnt++;
+	  //vcl_cout<<"\nthe euc dist is "<<bmn->match_curve_set[0]->get_best_match_next()->euc_<<"\t";
       bmn=bmn->match_curve_set[0]->get_best_match_next();
+	  
     }
 
-    if (cnt>7)
+    if (cnt>5)
     {
       vcl_ostringstream o; o<<k;
       vcl_string curve_num=o.str();
