@@ -32,7 +32,7 @@ IF(HAS_XERCES)
  ADD_DEFINITIONS(-DHAS_XERCES)
  TARGET_LINK_LIBRARIES(bmvv bxml)
 ENDIF(HAS_XERCES)
-TARGET_LINK_LIBRARIES(bmvv sdet brip btol bdgl vtol vdgl bgui vgui vsol vul vbl vcl)
+TARGET_LINK_LIBRARIES(bmvv brct sdet brip btol bdgl vtol vdgl bgui vgui vsol vul vbl vcl)
 
 # the main executable
 SUBDIRS(mvbin)
