@@ -13,7 +13,6 @@
 #include "CameraNode.h"
 #include <vcl_vector.h>
 #include <vgl/vgl_homg_point_2d.h>
-#include <vcl_fstream.h>
 
 class ZhangCameraNode : public CameraNode
 {
@@ -22,7 +21,7 @@ class ZhangCameraNode : public CameraNode
    int nViews_;
  public:
    vcl_vector< vgl_homg_point_2d<double> >& getPoints(int iView) { return pPointLists_[iView];}
-	 int readData(char* fname, int iView);  // for debugging
+   int readData(char* fname, int iView);  // for debugging
    ZhangCameraNode(int id, int nViews);
    virtual ~ZhangCameraNode();
 };

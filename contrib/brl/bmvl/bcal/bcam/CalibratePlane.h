@@ -22,10 +22,9 @@
 
 class CalibratePlane : public CalibrationObject
 {
-private:
   vcl_vector<vgl_homg_point_2d<double> > pts_;
-public:
-	int readData(char* fname);
+ public:
+  int readData(char* fname);
   CalibratePlane();
   virtual ~CalibratePlane();
 };
