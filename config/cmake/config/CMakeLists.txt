@@ -485,9 +485,9 @@ DETERMINE_TYPE(IEEE_96  0 96  "float;double;long double")
 DETERMINE_TYPE(IEEE_128 0 128 "float;double;long double")
 IF (${VXL_INT_64} MATCHES "^long$")
   SET(VXL_INT_64_IS_LONG 1)
-ELSE
+ELSE(${VXL_INT_64} MATCHES "^long$")
   SET(VXL_INT_64_IS_LONG 0)
-ENDIF
+ENDIF(${VXL_INT_64} MATCHES "^long$")
 
 #
 # Check unistd stuff
