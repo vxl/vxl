@@ -678,20 +678,24 @@ vnl_matrix<double> kalman_filter::get_predicted_curve()
   return t;
 }
 
-vcl_vector<vcl_vector<vgl_point_2d<double> > > kalman_filter::get_back_projection()
+vcl_vector<vnl_matrix<double> > kalman_filter::get_back_projection()
 {
- vcl_vector<vcl_vector<vgl_point_2d<double> > > t(memory_size_);
+ vcl_vector<vnl_matrix<double> > res(memory_size_);
  for(int f=0; f<memory_size_; f++)
   {
     vnl_double_3x4 P = get_projective_matrix(motions_[f]);
     
-    t[f].resize(num_points_);
+    vnl_matrix<double> t(2, num_points_);
 
     for (int i=0; i<num_points_; i++)
     {
-      t[f][i] = brct_algos::projection_3d_point(curve_3d_[i], P);
+      vgl_point_2d<double> p = brct_algos::projection_3d_point(curve_3d_[i], P);
+      t[0][i] = p.x();
+      t[1][i] = p.y();
     }
+
+    res[f] = t;
   }
 
-  return t;
+  return res;
 }
