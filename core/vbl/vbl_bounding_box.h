@@ -23,11 +23,19 @@
 //: A class to hold and update a bounding box.
 //  Save valuable time not writing
 //    if (x > xmax).....
-template <class T, int DIM>
-class vbl_bounding_box {
-public:
+
+#if defined(VCL_SUNPRO_CC_50)
+// Non-type template parameters are not allowed for function templates.
+#endif
+
+template <int DIM>
+struct vbl_bounding_box_DIM { enum { value = DIM }; };
+
+template <class T, class DIM_>
+struct vbl_bounding_box_base
+{
   //: Construct an empty bounding box.
-  vbl_bounding_box() : initialized_(false) { }
+  vbl_bounding_box_base() : initialized_(false) { }
 
   //: Incorporate 2d point x, y
   void update(T const& x, T const& y) {
@@ -41,14 +49,17 @@ public:
     update(tmp);
   }
 
+  //: return dimension.
+  int dimension() const { return DIM_::value; }
+
   //: Incorporate DIM-d point
   void update(T const* point) {
     if (!initialized_) {
       initialized_ = true;
-      for(int i = 0; i < DIM; ++i)
+      for(int i = 0; i < dimension(); ++i)
         min_[i] = max_[i] = point[i];
     } else {
-      for(int i = 0; i < DIM; ++i) {
+      for(int i = 0; i < dimension(); ++i) {
         if (point[i] < min_[i]) min_[i] = point[i];
         if (point[i] > max_[i]) max_[i] = point[i];
       }
@@ -82,7 +93,7 @@ public:
 
   //:  inside test for arbitrary dimension
   bool inside(T const* point) {
-    for( int i=0; i<DIM; ++i )
+    for( int i=0; i<dimension(); ++i )
       if( point[i] < min_[i] || max_[i] < point[i] )
         return false;
     return true;
@@ -92,7 +103,7 @@ public:
   T volume() const {
     if (!initialized_) return T(0);
     T vol = 1;
-    for (int i=0; i<DIM; ++i)
+    for (int i=0; i<dimension(); ++i)
       vol *= max_[i] - min_[i];
     return vol;
   }
@@ -117,55 +128,48 @@ public:
   // any problems.
 //protected:
   bool initialized_;
-  T min_[DIM];
-  T max_[DIM];
+  T min_[DIM_::value];
+  T max_[DIM_::value];
+};
+
+template <class T, int DIM>
+class vbl_bounding_box : public vbl_bounding_box_base<T, vbl_bounding_box_DIM<DIM> >
+{
+public:
 };
 
 //------------------------------------------------------------
 
-#if defined(VCL_SUNPRO_CC_50)
-// Error: Non-type template parameters are not allowed for function templates.
-#else
-template <class T, int DIM>
+template <class T, class DIM_>
 inline // this is "operator \subseteq"
-bool nested(vbl_bounding_box<T,DIM> const &a, vbl_bounding_box<T,DIM> const &b)
+bool nested(vbl_bounding_box_base<T,DIM_> const &a, vbl_bounding_box_base<T,DIM_> const &b)
 {
-  for (int i=0; i<DIM; ++i)
+  for (int i=0; i<DIM_::value; ++i)
     if (a.min_[i] < b.min_[i] || a.max_[i] > b.max_[i])
       return false;
   return true;
 }
 
-template <class T, int DIM>
+template <class T, class DIM_>
 inline
-bool disjoint(vbl_bounding_box<T,DIM> const &a, 
-              vbl_bounding_box<T,DIM> const &b)
+bool disjoint(vbl_bounding_box_base<T,DIM_> const &a, 
+              vbl_bounding_box_base<T,DIM_> const &b)
 {
-  for (int i=0; i<DIM; ++i)
+  for (int i=0; i<DIM_::value; ++i)
     if (a.min_[i] > b.max_[i] || a.max_[i] < b.min_[i])
       return true;
   return false;
 }
 
-template <class T, int DIM>
+template <class T, class DIM_>
 inline
-bool meet(vbl_bounding_box<T,DIM> const &a, 
-          vbl_bounding_box<T,DIM> const &b)
+bool meet(vbl_bounding_box_base<T,DIM_> const &a, 
+          vbl_bounding_box_base<T,DIM_> const &b)
 { return ! disjoint(a, b); }
-#endif
 
 // VC50 has trouble with this
-#if !defined (VCL_WIN32) && !defined(VCL_SUNPRO_CC)
-template <class T, int DIM>
-vcl_ostream& operator << (vcl_ostream& s, const vbl_bounding_box<T,DIM>& bbox)
+template <class T, class DIM_>
+vcl_ostream& operator << (vcl_ostream& s, const vbl_bounding_box_base<T,DIM_>& bbox)
  { return bbox.print(s); }
-#else
-template <class T>
-vcl_ostream& operator << (vcl_ostream& s, const vbl_bounding_box<T,2>& bbox)
- { return bbox.print(s); }
-template <class T>
-vcl_ostream& operator << (vcl_ostream& s, const vbl_bounding_box<T,3>& bbox)
- { return bbox.print(s); }
-#endif
 
 #endif // vbl_bounding_box_h_

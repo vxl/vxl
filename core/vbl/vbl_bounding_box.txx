@@ -1,3 +1,5 @@
+#ifndef vbl_bounding_box_txx_
+#define vbl_bounding_box_txx_
 // This is vxl/vbl/vbl_bounding_box.txx
 
 //-*- c++ -*-------------------------------------------------------------------
@@ -12,14 +14,14 @@
 
 #include <vcl_iostream.h>
 
-template <class T, int DIM>
-vcl_ostream& vbl_bounding_box<T, DIM>::print(vcl_ostream& s) const
+template <class T, class DIM_>
+vcl_ostream& vbl_bounding_box_base<T, DIM_>::print(vcl_ostream& s) const
 {
   s << "<bbox(";
-  for(int i = 0; i < DIM; ++i)
+  for(int i = 0; i < DIM_::value; ++i)
     s << min_[i] << " ";
   s << ") to (";
-  for(int i = 0; i < DIM; ++i)
+  for(int i = 0; i < DIM_::value; ++i)
     s << max_[i] << " ";
   s << ")>";
   return s;
@@ -32,16 +34,18 @@ vcl_ostream& vbl_bounding_box<T, DIM>::print(vcl_ostream& s) const
 # define vbl_bbox_inst_inline(x) template x
 #endif
 
-#if defined(VCL_SUNPRO_CC_50)
-# define vbl_bbox_inst_functions(T,DIM) /* */
-#else
-# define vbl_bbox_inst_functions(T,DIM) \
-VCL_INSTANTIATE_INLINE(bool nested  (vbl_bounding_box<T,DIM> const &, vbl_bounding_box<T,DIM> const &)); \
-VCL_INSTANTIATE_INLINE(bool disjoint(vbl_bounding_box<T,DIM> const &, vbl_bounding_box<T,DIM> const &)); \
-VCL_INSTANTIATE_INLINE(bool meet    (vbl_bounding_box<T,DIM> const &, vbl_bounding_box<T,DIM> const &));
-#endif
+#define vbl_bbox_inst_functions(T, DIM) \
+VCL_INSTANTIATE_INLINE(bool nested  (vbl_bounding_box_base<T, vbl_bounding_box_DIM<DIM> > const &, \
+                                     vbl_bounding_box_base<T, vbl_bounding_box_DIM<DIM> > const &)); \
+VCL_INSTANTIATE_INLINE(bool disjoint(vbl_bounding_box_base<T, vbl_bounding_box_DIM<DIM> > const &, \
+                                     vbl_bounding_box_base<T, vbl_bounding_box_DIM<DIM> > const &)); \
+VCL_INSTANTIATE_INLINE(bool meet    (vbl_bounding_box_base<T, vbl_bounding_box_DIM<DIM> > const &, \
+                                     vbl_bounding_box_base<T, vbl_bounding_box_DIM<DIM> > const &))
 
-#define VBL_BOUNDING_BOX_INSTANTIATE(T,DIM) \
+#define VBL_BOUNDING_BOX_INSTANTIATE(T, DIM) \
+template class vbl_bounding_box_base<T , vbl_bounding_box_DIM<DIM> >; \
 template class vbl_bounding_box<T , DIM >; \
-vbl_bbox_inst_inline(vcl_ostream& operator << (vcl_ostream&, vbl_bounding_box<T,DIM> const &)); \
+vbl_bbox_inst_inline(vcl_ostream& operator << (vcl_ostream&, vbl_bounding_box_base<T, vbl_bounding_box_DIM<DIM> > const &)); \
 vbl_bbox_inst_functions(T,DIM)
+
+#endif
