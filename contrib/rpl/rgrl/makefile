@@ -49,6 +49,7 @@ SOURCES += rgrl_trans_mixed_spline.cxx
 SOURCES += rgrl_trans_quadratic.cxx
 SOURCES += rgrl_trans_reduced_quad.cxx
 SOURCES += rgrl_trans_reader.cxx
+SOURCES += rgrl_trans_homography2d.cxx
 
 SOURCES += rgrl_estimator.cxx
 MANPAGE_SOURCES += rgrl_estimator_sptr.h
@@ -59,6 +60,7 @@ SOURCES += rgrl_est_spline.cxx
 SOURCES += rgrl_est_similarity2d.cxx
 SOURCES += rgrl_est_quadratic.cxx
 SOURCES += rgrl_est_reduced_quad2d.cxx
+SOURCES += rgrl_est_homography2d.cxx
 
 SOURCES += rgrl_scale.cxx
 MANPAGE_SOURCES += rgrl_scale_sptr.h
