@@ -1,14 +1,14 @@
+// This is ./vxl/vil/vil_load.cxx
 #ifdef __GNUC__
 #pragma implementation
 #endif
-
-// This is vxl/vil/vil_load.cxx
 
 #include "vil_load.h"
 
 #include <vcl_cstdio.h>   // sprintf()
 #include <vcl_cstdlib.h>  // atoi()
 #include <vcl_cstring.h>
+#include <vcl_iostream.h>
 
 #include <vil/vil_file_format.h>
 #include <vil/vil_stream_fstream.h>
@@ -48,7 +48,7 @@ vil_image vil_load_raw(char const* filename)
   if (!filename || !*filename)
     return 0;
 
-  vil_stream *is = new vil_stream_fstream(filename, "r");
+  vil_stream *is = new vil_stream_fstream(filename, "r+");
   is->ref();
   // current block scope is owner of stream.
 
@@ -69,15 +69,6 @@ vil_image vil_load_raw(char const* filename)
     if (l > 4 && vcl_strncmp(filename, "http://", 7) == 0) {
       is->unref();
       is = new vil_stream_url(filename);
-      is->ref();
-    }
-
-    // or a picture of a pig?
-    if (l > 4 && vcl_strncmp(filename, "pig:", 4) == 0) {
-      is->unref();
-      char buf[4096];
-      vcl_sprintf(buf, "http://www.robots.ox.ac.uk/~vxl/images/pig%d.jpg", vcl_atoi(filename+4));
-      is = new vil_stream_url(buf);
       is->ref();
     }
   }

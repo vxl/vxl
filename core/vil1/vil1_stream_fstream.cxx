@@ -1,4 +1,4 @@
-// This is vxl/vil/vil_stream_fstream.cxx
+// This is ./vxl/vil/vil_stream_fstream.cxx
 #ifdef __GNUC__
 #pragma implementation
 #endif
@@ -13,11 +13,19 @@ static vcl_ios_openmode modeflags(char const* mode)
   if (*mode == 0)
     return vcl_ios_openmode(0);
 
-  if (*mode == 'r')
-    return vcl_ios_in | modeflags(mode+1);
+  if (*mode == 'r') {
+    if (mode[1] == '+')
+      return vcl_ios_in | vcl_ios_out | modeflags(mode+2);
+    else
+      return vcl_ios_in | modeflags(mode+1);
+  }
 
-  if (*mode == 'w')
-    return vcl_ios_out | modeflags(mode+1);
+  if (*mode == 'w') {
+    if (mode[1] == '+')
+      return vcl_ios_in | vcl_ios_out | vcl_ios_trunc | modeflags(mode+2);
+    else
+      return vcl_ios_out | modeflags(mode+1);
+  }
 
   vcl_cerr << "DODGY MODE " << mode << vcl_endl;
   return vcl_ios_openmode(0);
@@ -33,9 +41,11 @@ vil_stream_fstream::vil_stream_fstream(char const* fn, char const* mode):
 {
   id_ = ++id;
   xerr << "vil_stream_fstream(\"" << fn << "\", \""<<mode<<"\") = " << id_ << "\n";
-//  if (!f_) {
-//    vcl_cerr << "vil_stream_fstream::Could not open [" << fn << "]\n";
-//  }
+#if 0
+  if (!f_) {
+    vcl_cerr << "vil_stream_fstream::Could not open [" << fn << "]\n";
+  }
+#endif // 0
 }
 
 #if 0
