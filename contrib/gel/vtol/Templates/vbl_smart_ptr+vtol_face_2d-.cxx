@@ -1,5 +1,5 @@
 #include <vtol/vtol_face_2d.h>
-#ifdef VCL_KAI
+#if defined(VCL_KAI) || defined(VCL_SGI_CC)
 # include <vsol/vsol_region_2d.h>
 #endif
 #include <vbl/vbl_smart_ptr.txx>
