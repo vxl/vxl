@@ -337,7 +337,7 @@ void vgl_rtree_iterator_base<V, B, C>::operator_pp() {
 }
 
 template <class V, class B, class C>
-void vgl_rtree_iterator_base<V, B, C>::operator_mm() { abort(); }
+void vgl_rtree_iterator_base<V, B, C>::operator_mm() { vcl_abort(); }
 
 template <class V, class B, class C>
 bool operator==(vgl_rtree_iterator_base<V, B, C> const &a,
@@ -359,7 +359,7 @@ template bool operator==(itVBC##tag const &, itVBC##tag const &); \
 VCL_INSTANTIATE_INLINE(bool operator!=(itVBC##tag const &, itVBC##tag const &)); \
 template class vgl_rtree_iterator<V, B, C >; \
 template class vgl_rtree_const_iterator<V, B, C >; \
-template class vgl_rtree<V, B, C >;
+template class vgl_rtree<V, B, C >
 
 // the __LINE__ tag gets expanded here
 #define VGL_RTREE_INSTANTIATE_expand(tag, V, B, C) \

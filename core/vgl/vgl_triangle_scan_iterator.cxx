@@ -80,20 +80,20 @@ void vgl_triangle_scan_iterator::reset()
   double min, max;
 
   min_n_max(a.x, b.x, c.x, &min, &max);
-  x0 = (int) ceil (min);
-  x1 = (int) floor(max);
+  x0 = (int) vcl_ceil (min);
+  x1 = (int) vcl_floor(max);
   //cerr << "x0 x1 = " << x0 << ' ' << x1 << endl;
 
   min_n_max(a.y, b.y, c.y, &min, &max);
-  y0 = (int) ceil (min);
-  y1 = (int) floor(max);
+  y0 = (int) vcl_ceil (min);
+  y1 = (int) vcl_floor(max);
   //cerr << "y0 y1 = " << y0 << ' ' << y1 << endl;
 
   scany_ = y0 - 1;
 
   // compute centroid
-  g.x = floor((a.x + b.x + c.x)/3);
-  g.y = floor((a.y + b.y + c.y)/3);
+  g.x = vcl_floor((a.x + b.x + c.x)/3);
+  g.y = vcl_floor((a.y + b.y + c.y)/3);
   //cerr << "g = " << g.x << ' ' << g.y << endl;
 
   //
@@ -140,10 +140,10 @@ bool vgl_triangle_scan_iterator::next()
 #else
   if (++scany_ > y1)
     return false;
-  
+
   double minx = x0 - g.x;
   double maxx = x1 - g.x;
-  
+
   //cerr << "minx maxx = " << minx << ' ' << maxx << endl;
   for (int i=0; i<3; ++i) {
     double a_ = data[i][0];
@@ -165,10 +165,10 @@ bool vgl_triangle_scan_iterator::next()
     }
     //cerr << "minx maxx = " << minx << ' ' << maxx << endl;
   }
-  
-  startx_ = (int) ceil (minx + g.x);
-  endx_   = (int) floor(maxx + g.x);
-  
+
+  startx_ = (int) vcl_ceil (minx + g.x);
+  endx_   = (int) vcl_floor(maxx + g.x);
+
   return (scany_ == y0) || (startx_ <= endx_);
 #endif
 }

@@ -7,7 +7,7 @@
 // This is vxl/vgl/vgl_line_2d.h
 
 //:
-// \file 
+// \file
 // \author Don Hamilton, Peter Tu, Peter VANROOSE, François BERTEL, Franck Bettinger
 //
 // \verbatim
@@ -24,8 +24,8 @@ template <class Type>
 class vgl_line_2d;
 
 #include <vcl_iostream.h>
-#include <vcl_cmath.h> // for sqrt()
-#include <vcl_string.h> 
+#include <vcl_cmath.h> // for vcl_sqrt()
+#include <vcl_string.h>
 
 template <class Type>
 class vgl_point_2d;
@@ -81,10 +81,10 @@ public:
   inline void get_normal(Type& nx, Type& ny) const { nx=normal_x(); ny=normal_y(); }
 
   //: x component of unit vector describing direction of line
-  inline Type dir_x() const { return -b()/(sqrt(a()*a() + b()*b())); }
+  inline Type dir_x() const { return -b()/(vcl_sqrt(a()*a() + b()*b())); }
 
   //: y component of unit vector describing direction of line
-  inline Type dir_y() const { return a()/(sqrt(a()*a() + b()*b())); }
+  inline Type dir_y() const { return a()/(vcl_sqrt(a()*a() + b()*b())); }
 
   //: x component of unit vector orthogonal to line
   inline Type normal_x() const { return -dir_y(); }

@@ -42,7 +42,7 @@ double vgl_distance_to_linesegment(double x1, double y1,
            double x2, double y2,
            double x, double y)
 {
-  return sqrt(vgl_distance2_to_linesegment(x1, y1, x2, y2, x, y));
+  return vcl_sqrt(vgl_distance2_to_linesegment(x1, y1, x2, y2, x, y));
 }
 
 double vgl_distance_to_non_closed_polygon(float const px[], float const py[], unsigned n,
@@ -50,7 +50,7 @@ double vgl_distance_to_non_closed_polygon(float const px[], float const py[], un
 {
   double dd = -1;
   for (unsigned i=0; i<n-1; ++i) {
-    double nd = vgl_distance_to_linesegment(px[i  ], py[i  ], 
+    double nd = vgl_distance_to_linesegment(px[i  ], py[i  ],
               px[i+1], py[i+1],
               x, y);
     if (dd<0 || nd<dd)
@@ -64,13 +64,13 @@ double vgl_distance_to_closed_polygon(float const px[], float const py[], unsign
 {
   double dd = -1;
   for (unsigned i=0; i<n-1; ++i) {
-    double nd = vgl_distance_to_linesegment(px[i  ], py[i  ], 
+    double nd = vgl_distance_to_linesegment(px[i  ], py[i  ],
               px[i+1], py[i+1],
               x, y);
     if (dd<0 || nd<dd)
       dd = nd;
   }
-  double nd = vgl_distance_to_linesegment(px[n-1], py[n-1], 
+  double nd = vgl_distance_to_linesegment(px[n-1], py[n-1],
             px[0  ], py[0  ],
             x, y);
   if (dd<0 || nd<dd)
@@ -82,13 +82,13 @@ double vgl_distance_to_closed_polygon(float const px[], float const py[], unsign
 template <class Type>
 Type dist_origin(vgl_homg_line_2d<Type> const& l)
 {
-  return l.c() / sqrt( square(l.a())+square(l.b()) );
+  return l.c() / vcl_sqrt( square(l.a())+square(l.b()) );
 }
 
 template <class Type>
 Type dist_origin(vgl_line_2d<Type> const& l)
 {
-  return l.c() / sqrt( square(l.a())+square(l.b()) );
+  return l.c() / vcl_sqrt( square(l.a())+square(l.b()) );
 }
 
 template float dist_origin(vgl_line_2d<float> const&);
@@ -99,25 +99,25 @@ template double dist_origin(vgl_homg_line_2d<double> const&);
 template <class Type>
 Type vgl_distance(vgl_point_2d<Type>const& p1, vgl_point_2d<Type>const& p2)
 {
-  return sqrt(square(p1.x()-p2.x())+square(p1.y()-p2.y()));
+  return vcl_sqrt(square(p1.x()-p2.x())+square(p1.y()-p2.y()));
 }
 
 template <class Type>
 Type vgl_distance(vgl_point_3d<Type>const& p1, vgl_point_3d<Type>const& p2)
 {
-  return sqrt(square(p1.x()-p2.x())+square(p1.y()-p2.y())+square(p1.z()-p2.z()));
+  return vcl_sqrt(square(p1.x()-p2.x())+square(p1.y()-p2.y())+square(p1.z()-p2.z()));
 }
 
 template <class Type>
 Type vgl_distance(vgl_homg_point_2d<Type>const& p1, vgl_homg_point_2d<Type>const& p2)
 {
-  return sqrt(square(p1.x()/p1.w()-p2.x()/p2.w())+square(p1.y()/p1.w()-p2.y()/p2.w()));
+  return vcl_sqrt(square(p1.x()/p1.w()-p2.x()/p2.w())+square(p1.y()/p1.w()-p2.y()/p2.w()));
 }
 
 template <class Type>
 Type vgl_distance(vgl_homg_point_3d<Type>const& p1, vgl_homg_point_3d<Type>const& p2)
 {
-  return sqrt(square(p1.x()/p1.w()-p2.x()/p2.w())+square(p1.y()/p1.w()-p2.y()/p2.w())+square(p1.z()/p1.w()-p2.z()/p2.w()));
+  return vcl_sqrt(square(p1.x()/p1.w()-p2.x()/p2.w())+square(p1.y()/p1.w()-p2.y()/p2.w())+square(p1.z()/p1.w()-p2.z()/p2.w()));
 }
 
 template float vgl_distance(vgl_point_2d<float>const&, vgl_point_2d<float>const&);

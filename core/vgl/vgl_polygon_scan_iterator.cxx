@@ -153,26 +153,26 @@ void vgl_polygon_scan_iterator::init()
   if(have_window)
   {
       if(boundp)
-        y0 = (int)MAX(win.get_min_y(), floor( miny - fsm_OFFSET));
+        y0 = (int)MAX(win.get_min_y(), vcl_floor( miny - fsm_OFFSET));
       else
-        y0 = (int)MAX(win.get_min_y(), ceil( miny - fsm_OFFSET));
+        y0 = (int)MAX(win.get_min_y(), vcl_ceil( miny - fsm_OFFSET));
 
       if(boundp)
-        y1 = (int)MIN(win.get_max_y()-1, ceil( maxy - fsm_OFFSET));
+        y1 = (int)MIN(win.get_max_y()-1, vcl_ceil( maxy - fsm_OFFSET));
       else
-        y1 = (int)MIN(win.get_max_y()-1, floor( maxy - fsm_OFFSET));
+        y1 = (int)MIN(win.get_max_y()-1, vcl_floor( maxy - fsm_OFFSET));
   }
   else
   {
       if(boundp)
-        y0 = (int)floor( miny - fsm_OFFSET);
+        y0 = (int)vcl_floor( miny - fsm_OFFSET);
       else
-        y0 = (int)ceil( miny - fsm_OFFSET);
+        y0 = (int)vcl_ceil( miny - fsm_OFFSET);
 
       if(boundp)
-        y1 = (int)ceil( maxy - fsm_OFFSET);
+        y1 = (int)vcl_ceil( maxy - fsm_OFFSET);
       else
-        y1 = (int)floor(  maxy - fsm_OFFSET);
+        y1 = (int)vcl_floor(  maxy - fsm_OFFSET);
   }
 }
 
@@ -243,7 +243,7 @@ void vgl_polygon_scan_iterator::reset()
 //===============================================================
 static inline int irnd(double x)
 {
-  return (int) floor(x + 0.5); //(x + ((x<0) ? -0.5 : 0.5));
+  return (int) vcl_floor(x + 0.5); //(x + ((x<0) ? -0.5 : 0.5));
 }
 
 //===============================================================
@@ -262,10 +262,10 @@ bool vgl_polygon_scan_iterator::next( )
       fxr = crossedges[curcrossedge+1].x;
       if(boundp)
         // left end of span with boundary
-        xl = (int)floor( crossedges[curcrossedge].x - fsm_OFFSET);
+        xl = (int)vcl_floor( crossedges[curcrossedge].x - fsm_OFFSET);
       else
         // left end of span without boundary
-        xl = (int)ceil( crossedges[curcrossedge].x - fsm_OFFSET);
+        xl = (int)vcl_ceil( crossedges[curcrossedge].x - fsm_OFFSET);
 
       if( have_window && xl < irnd(win.get_min_x()) )
         {
@@ -275,10 +275,10 @@ bool vgl_polygon_scan_iterator::next( )
 
       if ( boundp )
         //right end of span with boundary
-        xr = (int)ceil( crossedges[curcrossedge+1].x - fsm_OFFSET);
+        xr = (int)vcl_ceil( crossedges[curcrossedge+1].x - fsm_OFFSET);
       else
         // right end of span without boundary
-        xr = (int)floor( crossedges[curcrossedge+1].x - fsm_OFFSET);
+        xr = (int)vcl_floor( crossedges[curcrossedge+1].x - fsm_OFFSET);
 
       if ( have_window && xr >= irnd(win.get_max_x()) )
         {
