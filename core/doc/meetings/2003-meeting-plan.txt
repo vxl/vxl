@@ -121,7 +121,6 @@ rpl/rrel might be a good candidate.
 Trigger for promotion was "Multiple sites using same library"
 
 *** Contrib - What are people working on?  Are there more opportunities to share code?
-Remove this line to "second" this item if you think this is something we should discuss.
 
 *** Communication - CVS commit mailing list painful to read
 Summary to VXL maintainers after major changes better (or CHANGES.txt)
