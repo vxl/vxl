@@ -4,6 +4,7 @@
 // \file
 
 #include <vsl/vsl_indent.h>
+#include <vcl_sstream.h>
 #include <vcl_string.h>
 
 #include <mbl/mbl_parse_block.h>
@@ -101,6 +102,21 @@ mbl_read_props_type mbl_read_props(vcl_istream &afs)
         if (c != ':')
         {
           vcl_getline(afs, str1);
+          // The next loop replaces any characters outside the ASCII range
+          // 32-126 with their XML equivalent, e.g. a TAB with &#9;
+          // This is necessary for the tests dashboard since otherwise the
+          // the Dart server gives up on interpreting the XML file sent. - PVr
+          for (int i=-1; i<256; ++i)
+          {
+            char c= i<0 ? '&' : char(i); vcl_string s(1,c); // first do '&'
+            if (i>=32 && i<127 && c!='<') continue; // keep "normal" chars
+            vcl_ostringstream os; os << "&#" << (i<0?int(c):i) << ';';
+            vcl_string::size_type pos;
+            while ((pos=str1.find(s)) != vcl_string::npos)
+              str1.replace(pos,1,os.str());
+            while ((pos=label.find(s)) != vcl_string::npos)
+              label.replace(pos,1,os.str());
+          }
           vcl_cerr << "ERROR: mbl_read_props. Could not find colon ':'"
                    << " separator while reading line "
                    << label << " " << str1 << '\n';
