@@ -167,6 +167,7 @@ inline void vil2_algo_convolve_edge_1d(const srcT* src, unsigned n, int s_step,
 
 //: Convolve kernel[x] x in [k_lo,k_hi] with srcT
 // Assumes dest and src same size (nx)
+// \relates vil2_image_view
 template <class srcT, class destT, class kernelT, class accumT>
 inline void vil2_algo_convolve_1d(const srcT* src0, unsigned nx, int s_step,
                                   destT* dest0, int d_step,
@@ -216,10 +217,12 @@ inline void vil2_algo_convolve_1d(const vil2_image_view<srcT>& src_im,
 
   for (int p=0;p<src_im.nplanes();++p)
   {
+    // Select first row of p-th plane
     const srcT*  src_row  = src_im.top_left_ptr()+p*src_im.pstep();
     const destT* dest_row = dest_im.top_left_ptr()+p*dest_im.pstep();
 
-    for (int j=0;j<nj;++j,src_row+=s_jstep,dest_row+=d_jstep)
+	// Apply convolution to each row in turn
+	for (int j=0;j<nj;++j,src_row+=s_jstep,dest_row+=d_jstep)
       vil2_algo_convolve_1d(src_row,ni,s_istep,  dest_row,d_istep,
                             kernel,l_lo,k_hi,ac,start_option,end_option);
   }

@@ -9,6 +9,7 @@
 //: Compute gradients of an image using 3x3 Sobel filters
 //  Computes both i and j gradients of an ni x nj plane of data
 //  1 pixel border around grad images is set to zero
+// \relates vil2_image_view
 template<class srcT, class destT>
 void vil2_algo_sobel_3x3(vil2_image_view<srcT>& src,
                          vil2_image_view<destT>& grad_i,
@@ -19,6 +20,7 @@ void vil2_algo_sobel_3x3(vil2_image_view<srcT>& src,
 //  grad_ij has twice as many planes as src, with dest plane (2i) being the i-gradient
 //  of source plane i and dest plane (2i+1) being the j-gradient.
 //  1 pixel border around grad images is set to zero
+// \relates vil2_image_view
 template<class srcT, class destT>
 void vil2_algo_sobel_3x3(vil2_image_view<srcT>& src,
                          vil2_image_view<destT>& grad_ij);

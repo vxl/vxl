@@ -47,6 +47,7 @@ inline void vil2_algo_exp_filter_1d(destT* dest, int dstep,
 //: Apply exponential filter to src_im to produce dest_im
 //  Symmetric exponential filter of the form exp(c*|x|) applied. c=log(k)
 //  Uses fast recursive implementation.
+// \relates vil2_image_view
 template <class srcT, class destT, class accumT>
 inline void vil2_algo_exp_filter_1d(const vil2_image_view<srcT>& src_im,
                                     vil2_image_view<destT>& dest_im,

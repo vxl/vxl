@@ -1,6 +1,8 @@
 // The following text is included in the main documentation page by doxygen
-/*! \mainpage vil2 : Proposed new core image library
+/*! \mainpage vil2 : New core image library (in development)
 * A set of classes to represent and manipulate images
+*
+* NOTE: This library will in time replace vil as the core image library for vxl
 *
 * Broadly there are two sorts of image one is interested in - images in memory
 * (all parts of which can be accessed directly) and external images (eg in files)
@@ -168,14 +170,7 @@ vil2_image_view<vil2_byte> filtered_image = vil2_transpose(tmp_image2);
 * - vil2_sample_profile_bilin : Sample values along a line (using bilin. interpolation)
 * - vil2_sample_grid_bilin : Sample values over a grid (using bilin. interpolation)
 *
-* \section reg_im Registered images
-* These meet two needs, a common base class for 2D and 3D images, and a means of
-* associating a world to image transform with an image.
-*
 * \section Examples examples
 * There are plenty of working examples in the examples subdirectory - these can be
 * treated as a mini-tutorial
-*
-* \subsection cav_user CAVEAT User
-* vil2 is a proposal. It may replace vil in part.
 */

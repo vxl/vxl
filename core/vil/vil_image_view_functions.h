@@ -14,9 +14,9 @@
 template<class T>
 vil2_image_view<T> vil2_view_as_planes(const vil2_image_view<vil_rgb<T> >& rgb_view);
 
-//: \relates vil2_image_view
-//  Return an RGB component view of a 3-plane image.
+//: Return an RGB component view of a 3-plane image.
 //  Aborts if plane image not in correct format (ie planestep()!=1)
+// \relates vil2_image_view
 template<class T>
 vil2_image_view<vil_rgb<T> > vil2_view_as_rgb(const vil2_image_view<T>& plane_view);
 
