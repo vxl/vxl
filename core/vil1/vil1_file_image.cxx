@@ -38,5 +38,5 @@ bool vil1_file_image::load(char const* filename, verbosity v)
   }
 
   vil1_image::operator= (i);
-  return operator safe_bool ();
+  return (*this)?true:false;
 }
