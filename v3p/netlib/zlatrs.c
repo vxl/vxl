@@ -29,7 +29,7 @@ ftnlen normin_len;
     /* System generated locals */
     integer i__1;
     doublereal d__1;
-    doublecomplex z__1, z__2;
+    doublecomplex z__1;
 
     /* Local variables */
     static integer jinc;

@@ -21,7 +21,7 @@ ftnlen diag_len;
 {
     /* System generated locals */
     integer i__1;
-    doublecomplex z__1, z__2;
+    doublecomplex z__1;
 
     /* Builtin functions */
     void d_cnjg();
