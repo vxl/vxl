@@ -49,7 +49,7 @@ void vsl_print_summary(vcl_ostream & os,const vnl_vector<T> & p)
   for ( int i =0; i < p.size() && i < 5; ++i )
     os << p.operator()(i) <<" " ;
   if (p.size() > 5) os << " ...";
-  os << ")" << vcl_endl;
+  os << ")";
 }
 
 #define VNL_IO_VECTOR_INSTANTIATE(T) \

@@ -14,10 +14,8 @@ SOURCES += vnl_io_real_npolynomial.cxx
 
 MANPAGE_SOURCES += vnl_io_diag_matrix.txx
 MANPAGE_SOURCES += vnl_io_matrix.txx
-MANPAGE_SOURCES += vnl_io_matrix_fixed.txx
 MANPAGE_SOURCES += vnl_io_sparse_matrix.txx
 MANPAGE_SOURCES += vnl_io_vector.txx
-MANPAGE_SOURCES += vnl_io_vector_fixed.txx
 
 ifndef NOTEST
 SUBDIRS += tests
