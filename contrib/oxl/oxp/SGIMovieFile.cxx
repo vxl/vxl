@@ -93,8 +93,6 @@ SGIMovieFilePrivates::SGIMovieFilePrivates(char const* fn):
   //   word version;
   //   word pad;
 
-  int pad;
-
   ifstream f(fn);
   char buf[4];
   f.read(buf,4);
@@ -112,13 +110,13 @@ SGIMovieFilePrivates::SGIMovieFilePrivates(char const* fn):
     if (MovieFileInterface::verbose) vbl_printf(cerr, "SGIMovieFile: Old format, version = %d\n", version);
     width = get_u16(f);
     height = get_u16(f);
-    pad = get_u16(f);
+    /* int pad = */ get_u16(f);
   } else {
     int version1 = get_u16(f);
     version = (version << 16) + version1;
     if (MovieFileInterface::verbose) vbl_printf(cerr, "SGIMovieFile: New format, version = %d\n", version);
 
-    pad = get_u32(f);
+    /* int pad = */ get_u32(f);
   }
 
 //   SGIMV_Variables glob;
