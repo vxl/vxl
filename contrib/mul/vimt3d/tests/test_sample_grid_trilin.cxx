@@ -18,11 +18,11 @@ void compare_images(const vimt3d_image_3d_of<vxl_int_32> &image1,
     if (image1.world2im()==image2.world2im())
     {
         different=false;
-        for (int i=0;i<image1.image().ni();++i)
+        for (unsigned int i=0;i<image1.image().ni();++i)
         {
-            for (int j=0;j<image1.image().nj();++j)
+            for (unsigned int j=0;j<image1.image().nj();++j)
             {
-                for (int k=0;k<image1.image().nk();++k)
+                for (unsigned int k=0;k<image1.image().nk();++k)
                 {
                     double val1=image1.image()(i,j,k);
                     double val2=image2.image()(i,j,k);
