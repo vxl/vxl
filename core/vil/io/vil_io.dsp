@@ -117,9 +117,6 @@ SOURCE=.\vil2_io_smart_ptr.txx
 SOURCE=.\vil2_io_smart_ptr.h
 # End Source File
 # Begin Source File
-SOURCE=.\vil2_io_image_view.txx
-# End Source File
-# Begin Source File
 SOURCE=.\vil2_io_image_view.h
 # End Source File
 # End Group
