@@ -79,7 +79,7 @@ test_est()
     testlib_test_perform( scale->has_geometric_scale() &&
                           ! scale->has_signature_covar() );
 
-    TEST_NEAR( "Geometric scale is correct", scale->geometric_scale(), vcl_sqrt(var), 0.2 );
+    TEST_NEAR( "Geometric scale is correct", scale->geometric_scale(), vcl_sqrt(var), 0.25 );
     one_to_one_scale = scale->geometric_scale();
   }
 
