@@ -63,10 +63,10 @@ void test_vector_fixed_ref()
   }
 
   {
+#if 0 // cannot assign to a vnl_vector_fixed_ref_const
   //    assign from vfr
   vcl_generate(other.begin(),other.end(),rand);
   vfr ref2(other);
-#if 0 // cannot assign to a vnl_vector_fixed_ref_const
   ref = ref2;
   TEST("assign_ref", ref, other);
   // test different adresses

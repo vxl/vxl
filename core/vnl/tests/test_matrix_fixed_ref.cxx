@@ -104,10 +104,10 @@ void test_matrix_fixed_ref()
   }
 
   {
+#if 0 // cannot assign to a vnl_matrix_fixed_ref_const
   //    assign from mfr
   vcl_generate(other.begin(),other.end(),rand);
   mfr ref2(other);
-#if 0 // cannot assign to a vnl_matrix_fixed_ref_const
   ref = ref2;
   TEST("assign_ref", ref, other);
   // test different adresses
