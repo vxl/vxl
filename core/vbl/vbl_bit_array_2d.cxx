@@ -6,7 +6,7 @@
 // \file
 
 #include <vcl_iostream.h>
-#include <vcl_limits.h>  // for CHAR_BIT
+#include <vcl_climits.h>  // for CHAR_BIT
 #include <vcl_cassert.h>
 #include <vcl_cstring.h> // for memcmp()
 
