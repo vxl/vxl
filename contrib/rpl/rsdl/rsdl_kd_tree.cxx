@@ -544,7 +544,7 @@ rsdl_kd_tree :: bounded_at_leaf ( const rsdl_point& query_point,
     return false;
   }
 
-  double radius = vnl_math_sqrt( sq_distances[ n-1 ] );
+  double radius = vcl_sqrt( sq_distances[ n-1 ] );
 
   for ( int i = 0; i < Nc_; ++ i ) {
     double x = query_point.cartesian( i );
