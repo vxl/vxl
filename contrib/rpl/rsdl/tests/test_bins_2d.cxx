@@ -1,6 +1,6 @@
+// This is rpl/rsdl/tests/test_bins_2d.cxx
 #include <vcl_vector.h>
 #include <vcl_algorithm.h>
-#include <vcl_utility.h>
 
 #include <vnl/vnl_vector_fixed.h>
 #include <vnl/vnl_math.h>
