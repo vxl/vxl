@@ -16,13 +16,15 @@
 class gtrl_vertex : public vbl_ref_count
 {
  public:
-  gtrl_vertex( double x, double y) : x_(x), y_(y) {}
+  gtrl_vertex(double x, double y) : vbl_ref_count(), x_(x), y_(y) {}
+  // copy constructor - compiler-provided one sets ref_count to nonzero which is wrong -PVr
+  gtrl_vertex(gtrl_vertex const& v) : vbl_ref_count(), x_(v.x_), y_(v.y_) {}
 
   double x() const { return x_; }
   double y() const { return y_; }
 
-  void set_x( const double x) { x_= x; }
-  void set_y( const double y) { y_= y; }
+  void set_x(double x) { x_= x; }
+  void set_y(double y) { y_= y; }
 
  protected:
   double x_;

@@ -1,7 +1,7 @@
 #ifndef VPGL_BASIC_CAMERA_H
 #define VPGL_BASIC_CAMERA_H
 //:
-//  \file
+// \file
 // \brief Base class for cameras
 //
 // The code is taken and adapted from BasicCamera.h of TargetJr for VxL photogrammetry library.
@@ -27,6 +27,8 @@ class vpgl_basic_camera : public vbl_ref_count
  public:
  // Constructors
   vpgl_basic_camera();
+  // copy constructor - compiler-provided one sets ref_count to nonzero which is wrong -PVr
+  vpgl_basic_camera(vpgl_basic_camera const& c) : vbl_ref_count(), init_pt(c.init_pt) {}
  // Destructors
   virtual ~vpgl_basic_camera();
 
@@ -45,29 +47,17 @@ class vpgl_basic_camera : public vbl_ref_count
                               vnl_vector<double>& world, double u, double v);
 
   //: A function to set the initialization point
-  virtual void set_init_pt(const vnl_vector<double>& pt);
+  virtual void set_init_pt(vnl_vector<double> const& pt);
   //: A function to get the initialization point
   virtual void get_init_pt(vnl_vector<double>& pt);
 
-  virtual void get_matrix(vnl_matrix<double>&) const;
-
-#if 0
-  inline friend vcl_ostream &operator<<(vcl_ostream &os, const vpgl_basic_camera& obj)
-    {obj.Print(os); return os;}
-  inline friend vcl_ostream &operator<<(vcl_ostream &os, const vpgl_basic_camera* obj)
-    {if (obj) obj->Print(os); else os << "NULL Camera"; return os;}
-#endif
+  //: fill passed in matrix with camera matrix.
+  // this is only implemented when MatrixProjection returns true.
+  virtual void get_matrix(vnl_matrix<double>&) const = 0;
 
  protected:
   //: Holds a 3D point used for Levenberg Marquardt initialization in ImageToSurface
   vnl_vector<double> init_pt;
 };
 
-//: fill passed in matrix with camera matrix.
-// this only is implemented when MatrixProjection returns true.
-inline void vpgl_basic_camera::get_matrix(vnl_matrix<double>&) const
-{
-  vcl_cerr<<"Nothing returned";
-}
-
-#endif   // VPGL_BASIC_CAMERA_H
+#endif // VPGL_BASIC_CAMERA_H

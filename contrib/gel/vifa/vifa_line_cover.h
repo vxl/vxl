@@ -1,7 +1,6 @@
 // This is gel/vifa/vifa_line_cover.h
 #ifndef VIFA_LINE_COVER_H
 #define VIFA_LINE_COVER_H
-
 //-----------------------------------------------------------------------------
 //:
 // \file
@@ -28,7 +27,6 @@
 #include <vbl/vbl_smart_ptr.h>
 #include <vifa/vifa_typedefs.h>
 
-
 class vifa_line_cover : public vbl_ref_count
 {
   int           dim_;
@@ -40,33 +38,33 @@ class vifa_line_cover : public vbl_ref_count
  public:
   // Constructors and Destructors
   vifa_line_cover();
-  vifa_line_cover(imp_line_sptr  prototype_line,
-                  int            index_dimension
-                 );
+  vifa_line_cover(imp_line_sptr prototype_line,
+                  int           index_dimension);
+  // copy constructor - compiler-provided one sets ref_count to nonzero which is wrong -PVr
+  inline vifa_line_cover(vifa_line_cover const& c)
+    : vbl_ref_count(), dim_(c.dim_), index_(c.index_),
+      max_extent_(c.max_extent_), min_extent_(c.min_extent_), line_(c.line_) {}
   ~vifa_line_cover();
 
   // Indexing methods
-  void  InsertLine(imp_line_sptr  l);
+  void InsertLine(imp_line_sptr l);
 
   // Data Access methods
-  double  GetCoverage();
-  double  GetDenseCoverage();
-  double  GetCustomCoverage(const double  norm);
-  void  GetExtent(imp_line_sptr&  lmin,
-                  imp_line_sptr&  lmax
-                 );
+  double GetCoverage();
+  double GetDenseCoverage();
+  double GetCustomCoverage(const double norm);
+  void   GetExtent(imp_line_sptr& lmin,
+                   imp_line_sptr& lmax);
 
  protected:
-  int        get_index_min();
-  int        get_index_max();
-  double      get_signed_distance(vgl_point_2d<double> const &  p);
-  imp_line_sptr  get_offset_line(int    start,
-                                 int    end,
-                                 double dist
-                                );
+  int    get_index_min();
+  int    get_index_max();
+  double get_signed_distance(vgl_point_2d<double> const& p);
+  imp_line_sptr get_offset_line(int    start,
+                                int    end,
+                                double dist);
 };
 
-typedef vbl_smart_ptr<vifa_line_cover>  vifa_line_cover_sptr;
-
+typedef vbl_smart_ptr<vifa_line_cover> vifa_line_cover_sptr;
 
 #endif  // VIFA_LINE_COVER_H

@@ -20,6 +20,12 @@ class vmal_multi_view_data: public vbl_ref_count
  public:
   vmal_multi_view_data();
   vmal_multi_view_data(int nbviews);
+  // copy constructor - compiler-provided one sets ref_count to nonzero which is wrong -PVr
+  vmal_multi_view_data(vmal_multi_view_data const& d)
+    : vbl_ref_count(), nbviews_(d.nbviews_), nbfeatures_(d.nbfeatures_),
+      size_vect_ft_(d.size_vect_ft_), matchnum_(d.matchnum_),
+      closed_track_(d.closed_track_), MVM(d.MVM), all_pts(d.all_pts) {}
+
   ~vmal_multi_view_data();
 
   void new_track();
@@ -40,7 +46,7 @@ class vmal_multi_view_data: public vbl_ref_count
            vcl_vector<T> &);
 
   bool get_pred_match(int view_num,T obj,T & res);
-  int get_nb_views(){return nbviews_;};
+  int get_nb_views() const { return nbviews_; }
 
   void remove(int view_num, T match);
 

@@ -1,6 +1,5 @@
 #ifndef rgrl_command_h_
 #define rgrl_command_h_
-
 //:
 // \file
 // \brief Base class for callback/observer method
@@ -8,9 +7,6 @@
 // \date April 2004
 
 #include <vbl/vbl_ref_count.h>
-//#include "rgrl_object.h"
-//#include "rgrl_event.h"
-
 class rgrl_object;
 class rgrl_event;
 
@@ -21,24 +17,24 @@ class rgrl_event;
 //  method is called to run the command.
 class rgrl_command: public vbl_ref_count
 {
-public:
-  //: 
+ public:
+  //:
   rgrl_command() {}
 
-  //: 
+  // copy constructor - compiler-provided one sets ref_count to nonzero which is wrong -PVr
+  rgrl_command(rgrl_command const&) : vbl_ref_count() {}
+
+  //:
   virtual ~rgrl_command() {}
 
   //: Abstract method that defines the action to be taken by the command
-  virtual 
-  void execute(rgrl_object* caller, const rgrl_event & event ) = 0;
+  virtual void execute(rgrl_object* caller, rgrl_event const& event ) = 0;
 
   //: Abstract method that defines the action to be taken by the command.
   //
-  //  This variant is expected to be used when requests comes from a
+  //  This variant is expected to be used when requests come from a
   //  const rgrl_object
-  virtual 
-  void execute(const rgrl_object* caller, const rgrl_event & event ) = 0;
+  virtual void execute(const rgrl_object* caller, rgrl_event const& event ) = 0;
 };
-
 
 #endif

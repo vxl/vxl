@@ -1,7 +1,6 @@
 // This is gel/vifa/vifa_bbox.h
 #ifndef _VIFA_BBOX_H_
 #define _VIFA_BBOX_H_
-
 //-----------------------------------------------------------------------------
 //:
 // \file
@@ -25,11 +24,13 @@ class vifa_bbox : public vul_timestamp,
                   public vgl_box_2d<double>
 {
  public:
-  //: Default constructor
+  // Default constructor
   inline vifa_bbox(void) {}
+  // copy constructor - compiler-provided one sets ref_count to nonzero which is wrong -PVr
+  inline vifa_bbox(vifa_bbox const& b)
+    : vul_timestamp(), vbl_ref_count(), vgl_box_2d<double>(b) {}
 };
 
-typedef vbl_smart_ptr<vifa_bbox>  vifa_bbox_sptr;
+typedef vbl_smart_ptr<vifa_bbox> vifa_bbox_sptr;
 
-
-#endif  // _VIFA_BBOX_H_
+#endif // _VIFA_BBOX_H_

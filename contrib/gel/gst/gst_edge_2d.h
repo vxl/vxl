@@ -17,8 +17,12 @@ class gst_edge_2d : public vbl_ref_count
 {
  public:
   // constructor
-  gst_edge_2d( const gst_vertex_2d_sptr start, const gst_vertex_2d_sptr end)
-  : start_( start), end_( end) {}
+  gst_edge_2d(gst_vertex_2d_sptr start, gst_vertex_2d_sptr end)
+  : start_(start), end_(end) {}
+
+  // copy constructor - compiler-provided one sets ref_count to nonzero which is wrong -PVr
+  gst_edge_2d(gst_edge_2d const& e)
+  : vbl_ref_count(), start_(e.start_), end_(e.end_) {}
 
   // getters (no setters)
 
