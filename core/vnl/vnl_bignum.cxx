@@ -154,7 +154,7 @@ static bool is_decimal(const char *s)
   if (*s < '1' || *s > '9') return false;
   while (*s >= '0' && *s <= '9') ++s;
   if (*s == 'l' || *s == 'L') ++s;
-  return (*s == '\0');
+  return *s == '\0';
 }
 static bool is_exponential(const char *s)
 {
@@ -165,7 +165,7 @@ static bool is_exponential(const char *s)
   ++s;
   if (*s < '1' || *s > '9') return false;
   while (*s >= '0' && *s <= '9') ++s;
-  return (*s == '\0');
+  return *s == '\0';
 }
 static bool is_hexadecimal(const char *s)
 {
@@ -181,7 +181,7 @@ static bool is_hexadecimal(const char *s)
          (*s >= 'a' && *s <= 'f') ||
          (*s >= 'A' && *s <= 'F')) ++s;
   if (*s == 'l' || *s == 'L') ++s;
-  return (*s == '\0');
+  return *s == '\0';
 }
 static bool is_octal(const char *s)
 {
@@ -189,7 +189,7 @@ static bool is_octal(const char *s)
   if (*s != '0') return false;
   while (*s >= '0' && *s <= '7') ++s;
   if (*s == 'l' || *s == 'L') ++s;
-  return (*s == '\0');
+  return *s == '\0';
 }
 #else // new implementation, also to be used for operator>>
 
@@ -487,9 +487,9 @@ bool vnl_bignum::operator< (const vnl_bignum& rhs) const {
   if (this->sign < rhs.sign) return true;       // Different signs?
   if (this->sign > rhs.sign) return false;
   if (this->sign == 1)                          // Both signs == 1
-    return (magnitude_cmp(*this,rhs) < 0);      // this must be smaller
+    return magnitude_cmp(*this,rhs) < 0;        // this must be smaller
   else                                          // Both signs == -1
-    return (magnitude_cmp(*this,rhs) > 0);      // this must be larger
+    return magnitude_cmp(*this,rhs) > 0;        // this must be larger
 }
 
 
@@ -525,15 +525,14 @@ vcl_string& vnl_bignum_to_string (vcl_string& s, const vnl_bignum& b)
 
   vnl_bignum d = b;                     // Copy the input vnl_bignum
   if (d.sign == -1) {                   // If it's negative
-    s.insert(0,'-');                    //   Output leading minus sign
+    s.insert(insert_point,"-");         //   Output leading minus sign
     d.sign = 1;                         //   Make d positive for divide
-    insert_point = 1;                   // keep record of location of first number.
+    ++insert_point;                     // keep record of location of first number.
   }
   vnl_bignum q,r;                       // Temp quotient and remainder
-  Counter i = 0;
   do {                                  // repeat:
     divide(d,10L,q,r);                  //   Divide vnl_bignum by ten
-    s.insert(insert_point, 1, char(long(r) + '0'));    //   Get one's digit, and insert it at head.
+    s.insert(insert_point, 1, char('0'+long(r))); //   Get one's digit, and insert it at head.
     d = q;                              //   Then discard one's digit
     q = r = 0L;                         //   Prep for next divide
   } while (d != 0L);                    // until no more one's digits
