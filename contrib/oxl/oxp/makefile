@@ -53,7 +53,6 @@ endif
 
 SOURCES += oxp_yuv_to_rgb.cxx
 MANPAGE_SOURCES += MapInverter.h
-MANPAGE_SOURCES += POX.h
 
 ######################################
 include $(IUEROOT)/config/top-rules.mk
