@@ -16,6 +16,6 @@
 
 #ifndef vcl_emulation_utility_h
 #define vcl_emulation_utility_h
-# include "vcl_function.h"
-# include "vcl_pair.h"
+# include <vcl/emulation/vcl_functional.h>
+# include <vcl/emulation/vcl_pair.h>
 #endif // vcl_emulation_utility_h

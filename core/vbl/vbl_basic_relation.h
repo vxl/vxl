@@ -16,14 +16,14 @@
 //
 //-----------------------------------------------------------------------------
 #include <vcl/vcl_compiler.h>
+#include <vcl/vcl_cassert.h>
 #include <vcl/vcl_string.h>
 #include <vcl/vcl_iosfwd.h>
-#include <vcl/vcl_function.h>
+#include <vcl/vcl_functional.h>
 #include <vbl/vbl_basic_optional.h>
 #include <vbl/vbl_basic_tuple.h>
 #include <vbl/vbl_br_impl.h>
 #include <vbl/vbl_basic_relation_type.h>
-#include <assert.h>
 
 #define BR_DEFAULT1 VCL_DFL_TMPL_ARG(vbl_basic_optional)
 #define BR_DEFAULT2 BR_DEFAULT1 VCL_DFL_TMPL_ARG(vbl_basic_optional)
@@ -32,7 +32,7 @@
 #ifndef vbl_basic_relation_where_h
 template <class T1, class T2, 
   VCL_DFL_TYPE_PARAM_STLDECL(T3,vbl_basic_optional), 
-  VCL_DFL_TYPE_PARAM_STLDECL (T4, vbl_basic_optional), 
+  VCL_DFL_TYPE_PARAM_STLDECL(T4,vbl_basic_optional), 
   VCL_DFL_TYPE_PARAM_STLDECL(T5,vbl_basic_optional)>
 class vbl_basic_relation_where;
 #endif
@@ -42,7 +42,7 @@ class vbl_basic_relation_where;
 // does the implementation.
 template <class T1, class T2, 
   VCL_DFL_TYPE_PARAM_STLDECL(T3,vbl_basic_optional), 
-  VCL_DFL_TYPE_PARAM_STLDECL (T4, vbl_basic_optional), 
+  VCL_DFL_TYPE_PARAM_STLDECL(T4,vbl_basic_optional), 
   VCL_DFL_TYPE_PARAM_STLDECL(T5,vbl_basic_optional)>
 class vbl_basic_relation_iterator
 {

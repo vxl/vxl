@@ -8,7 +8,7 @@
 
 #include "vbl_array_3d.h"
 
-#include <assert.h>
+#include <vcl/vcl_cassert.h>
 
 //--------------------------------------------------------------
 //

@@ -1,6 +1,6 @@
 
 #include <vcl/vcl_iostream.h>
-#include <vcl/vcl_function.h>
+#include <vcl/vcl_functional.h>
 #include <vcl/vcl_set.h>
 
 int main()

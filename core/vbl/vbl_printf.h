@@ -19,10 +19,10 @@
 //
 //-----------------------------------------------------------------------------
 
-#include <stdio.h> // just to ensure no clashes with weirdo stdios
+//#include <vcl/vcl_cstdio.h> // just to ensure no clashes with weirdo stdios
 #include <vcl/vcl_iosfwd.h>
 
 // -- vbl_printf(cout, "%d\n", 12);
-ostream& vbl_printf(ostream&, const char* fmt, ...);
+vcl_ostream& vbl_printf(vcl_ostream&, char const* fmt, ...);
 
 #endif   // DO NOT ADD CODE AFTER THIS LINE! END OF DEFINITION FOR CLASS vbl_printf.

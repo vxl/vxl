@@ -7,7 +7,7 @@
 # include <vcl/emulation/vcl_deque.h>
 #else
 # ifdef __GNUC__
-#  include <deque.h>
+#  include_next <deque.h>
 #  define vcl_deque deque
 # else
 #  include <deque>

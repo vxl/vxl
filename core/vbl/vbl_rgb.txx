@@ -40,7 +40,8 @@ vbl_rgb<U> vbl_clamp(const vbl_rgb<V>& d, vbl_rgb<U>* dummy)
 extern vbl_rgb<unsigned char> vbl_clamp(const vbl_rgb<double>& d, vbl_rgb<unsigned char> *);
 #else
 // just declare the most commonly needed specialization(s) :
-VCL_DECLARE_SPECIALIZATION(vbl_rgb<unsigned char> vbl_clamp(const vbl_rgb<double>& d, vbl_rgb<unsigned char> *));
+// VCL_DECxLARE_SPECIALIZATION(vbl_rgb<unsigned char> vbl_clamp(const vbl_rgb<double>& d, vbl_rgb<unsigned char> *));
+VCL_DEFINE_SPECIALIZATION
 inline
 vbl_rgb<unsigned char> vbl_clamp(const vbl_rgb<double>& d, vbl_rgb<unsigned char>* dummy)
 {

@@ -14,7 +14,7 @@
 #include "vbl_file.h"
 
 #include <sys/stat.h>
-#include <stdlib.h>
+#include <vcl/vcl_cstdlib.h>
 
 #ifdef WIN32
 #include <direct.h> // for getcwd, mkdir
@@ -35,7 +35,7 @@ vcl_string vbl_file::get_cwd()
 bool vbl_file::make_directory(char const* name)
 {
 #ifdef WIN32
-  return mkdir(name);
+  return mkdir(name); // awf: what does win32 mkdir return for success?
 #else 
   return -1 != mkdir(name, 0755);
 #endif
@@ -107,7 +107,7 @@ vcl_string vbl_file::expand_tilde(char const* vbl_filename)
   
   if (dir.size() == 0) {
     // Was just ~, use getenv(HOME)
-    char * home_directory = getenv("HOME");
+    char const * home_directory = getenv("HOME");
     if (!home_directory) home_directory = "";
     return vcl_string(home_directory) + fn;
   }

@@ -11,7 +11,7 @@
 //  Peter Vanroose, 29 Feb 2000: several minor fixes
 
 #include <vcl/vcl_iostream.h>
-#include <vcl/vcl_function.h> // for vcl_min()
+#include <vcl/vcl_algorithm.h>
 #include <vcl/vcl_cmath.h> // for fabs()
 
 template <class Type>

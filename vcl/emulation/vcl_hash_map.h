@@ -38,24 +38,59 @@
 #ifndef vcl_emulation_hash_map_h
 #define vcl_emulation_hash_map_h
 
-#include "vcl_hashtable.h"
+#include <vcl/vcl_compiler.h>
+#include <vcl/emulation/vcl_hashtable.h>
+//#include <vcl/vcl_alloc.h>
+#include "vcl_alloc.h"
+#include <vcl/vcl_functional.h>
 
-__BEGIN_STL_FULL_NAMESPACE
-# define  vcl_hash_map      __WORKAROUND_RENAME(vcl_hash_map)
-# define  vcl_hash_multimap __WORKAROUND_RENAME(vcl_hash_multimap)
+#ifdef __FULL_NAME
+# define VCL_FULL_NAME(x) __FULL_NAME(x)
+# define VCL_IMPORT_CONTAINER_TYPEDEFS(super) __IMPORT_CONTAINER_TYPEDEFS(super)
+# define VCL_IMPORT_ITERATORS(super) __IMPORT_ITERATORS(super)
+# define VCL_IMPORT_REVERSE_ITERATORS(super) __IMPORT_REVERSE_ITERATORS(super)
+#else
+// Using emulated hashtable, but not stlconf -- mini stlconf is built here
 
-template <class Key, class T, VCL_DFL_TMPL_PARAM_STLDECL(HashFcn,vcl_hash<Key>),
+#define VCL_FULL_NAME(x) x
+
+#  define VCL_IMPORT_CONTAINER_TYPEDEFS(super)                            \
+    typedef typename super::value_type value_type;                               \
+    typedef typename super::reference reference;                                 \
+    typedef typename super::size_type size_type;                                 \
+    typedef typename super::const_reference const_reference;                     \
+    typedef typename super::difference_type difference_type;
+
+#  define VCL_IMPORT_ITERATORS(super)                                              \
+    typedef typename super::iterator iterator;                                   \
+    typedef typename super::const_iterator const_iterator; 
+
+#  define VCL_IMPORT_REVERSE_ITERATORS(super)                                      \
+    typedef typename super::const_reverse_iterator  const_reverse_iterator;      \
+    typedef typename super::reverse_iterator reverse_iterator;
+
+# ifndef __STL_DEFAULT_TYPE_PARAM
+#  define vcl_hash_map  VCL_hash_map__
+#  define vcl_hash_multimap  VCL_hash_multimap__
+# endif
+#endif
+
+//# define  vcl_hash_map      vcl_hM
+//# define  vcl_hash_multimap vcl_hmM
+
+template <class Key, class T,
+          VCL_DFL_TMPL_PARAM_STLDECL(HashFcn,vcl_hash<Key>),
           VCL_DFL_TMPL_PARAM_STLDECL(EqualKey,vcl_equal_to<Key>),
           VCL_DFL_TYPE_PARAM_STLDECL(Alloc,vcl_alloc) >
 class vcl_hash_map
 {
 private:
-  typedef vcl_hashtable<vcl_pair<const Key, T>, Key, HashFcn,
-      vcl_select1st<vcl_pair<const Key, T> >, EqualKey, Alloc> ht;
+  typedef vcl_select1st<vcl_pair<const Key, T> > sel1st;
+  typedef vcl_hashtable<vcl_pair<const Key, T>, Key, HashFcn, sel1st, EqualKey, Alloc> ht;
   typedef vcl_hash_map<Key, T, HashFcn, EqualKey, Alloc> self;
 public:
-  __IMPORT_CONTAINER_TYPEDEFS(ht)
-  __IMPORT_ITERATORS(ht)
+  VCL_IMPORT_CONTAINER_TYPEDEFS(ht)
+  VCL_IMPORT_ITERATORS(ht)
   typedef typename ht::key_type key_type;
   typedef typename ht::hasher hasher;
   typedef typename ht::key_equal key_equal;
@@ -159,8 +194,8 @@ private:
       vcl_select1st<vcl_pair<const Key, T> >, EqualKey, Alloc> ht;
   typedef vcl_hash_multimap<Key, T, HashFcn, EqualKey, Alloc> self;
 public:
-  __IMPORT_CONTAINER_TYPEDEFS(ht)
-  __IMPORT_ITERATORS(ht)
+  VCL_IMPORT_CONTAINER_TYPEDEFS(ht)
+  VCL_IMPORT_ITERATORS(ht)
   typedef typename ht::key_type key_type;
   typedef typename ht::hasher hasher;
   typedef typename ht::key_equal key_equal;
@@ -244,48 +279,45 @@ public:
   size_type elems_in_bucket(size_type n) const
     { return rep.elems_in_bucket(n); }
 };
-__END_STL_FULL_NAMESPACE
+
+template <class Key, class T, class HashFcn, class EqualKey, class Alloc>
+inline bool operator==(const vcl_hash_map<Key, T, HashFcn, EqualKey, Alloc>& hm1,
+                       const vcl_hash_map<Key, T, HashFcn, EqualKey, Alloc>& hm2)
+{
+  return hm1.rep == hm2.rep;
+}
+
+template <class Key, class T, class HashFcn, class EqualKey, class Alloc>
+inline bool operator==(const vcl_hash_multimap<Key, T, HashFcn, EqualKey, Alloc>& hm1,
+                       const vcl_hash_multimap<Key, T, HashFcn, EqualKey, Alloc>& hm2)
+{
+  return hm1.rep == hm2.rep;
+}
 
 // do a cleanup
 # undef vcl_hash_map
 # undef vcl_hash_multimap
 
-# define __hash_map__ __FULL_NAME(vcl_hash_map)
-# define __hash_multimap__ __FULL_NAME(vcl_hash_multimap)
-
-template <class Key, class T, class HashFcn, class EqualKey, class Alloc>
-inline bool operator==(const __hash_map__<Key, T, HashFcn, EqualKey, Alloc>& hm1,
-                       const __hash_map__<Key, T, HashFcn, EqualKey, Alloc>& hm2)
-{
-  return hm1.rep == hm2.rep;
-}
-
-template <class Key, class T, class HashFcn, class EqualKey, class Alloc>
-inline bool operator==(const __hash_multimap__<Key, T, HashFcn, EqualKey, Alloc>& hm1,
-                       const __hash_multimap__<Key, T, HashFcn, EqualKey, Alloc>& hm2)
-{
-  return hm1.rep == hm2.rep;
-}
-
 # if defined (__STL_CLASS_PARTIAL_SPECIALIZATION )
 template <class Key, class T, class HashFcn, class EqualKey, class Alloc>
-inline void swap(__hash_map__<Key, T, HashFcn, EqualKey, Alloc>& a,
-                 __hash_map__<Key, T, HashFcn, EqualKey, Alloc>& b) { a.swap(b); }
+inline void swap(VCL_hash_map__<Key, T, HashFcn, EqualKey, Alloc>& a,
+                 VCL_hash_map__<Key, T, HashFcn, EqualKey, Alloc>& b) { a.swap(b); }
 template <class Key, class T, class HashFcn, class EqualKey, class Alloc>
-inline void swap(__hash_multimap__<Key, T, HashFcn, EqualKey, Alloc>& a,
-                 __hash_multimap__<Key, T, HashFcn, EqualKey, Alloc>& b) { a.swap(b); }
+inline void swap(VCL_hash_multimap__<Key, T, HashFcn, EqualKey, Alloc>& a,
+                 VCL_hash_multimap__<Key, T, HashFcn, EqualKey, Alloc>& b) { a.swap(b); }
 # endif
 
 # ifndef __STL_DEFAULT_TYPE_PARAM
+
 // provide a "default" vcl_hash_map adaptor
 template <class Key, class T, class HashFcn, class EqualKey >
-class vcl_hash_map : public __hash_map__<Key, T, HashFcn, EqualKey, vcl_alloc>
+class vcl_hash_map : public VCL_hash_map__<Key, T, HashFcn, EqualKey, vcl_alloc >
 {
   typedef vcl_hash_map<Key, T, HashFcn, EqualKey> self;
 public:
-//rick  typedef typename __hash_map__<Key, T, HashFcn, EqualKey, vcl_alloc> super;
-  typedef __hash_map__<Key, T, HashFcn, EqualKey, vcl_alloc> super;
-  __IMPORT_CONTAINER_TYPEDEFS(super)
+//rick  typedef typename VCL_hash_map__<Key, T, HashFcn, EqualKey, vcl_alloc> super;
+  typedef VCL_hash_map__<Key, T, HashFcn, EqualKey, vcl_alloc> super;
+  VCL_IMPORT_CONTAINER_TYPEDEFS(super)
   typedef typename super::key_type key_type;
   typedef typename super::hasher hasher;
   typedef typename super::key_equal key_equal;
@@ -323,12 +355,12 @@ inline bool operator==(const vcl_hash_map<Key, T, HashFcn,EqualKey>& hm1,
 
 // provide a "default" vcl_hash_multimap adaptor
 template <class Key, class T, class HashFcn, class EqualKey >
-class vcl_hash_multimap : public __hash_multimap__<Key, T, HashFcn, EqualKey, vcl_alloc>
+class vcl_hash_multimap : public VCL_hash_multimap__<Key, T, HashFcn, EqualKey, vcl_alloc>
 {
   typedef vcl_hash_multimap<Key, T, HashFcn, EqualKey> self;
 public:
-  typedef __hash_multimap__<Key, T, HashFcn, EqualKey, vcl_alloc> super;
-  __IMPORT_CONTAINER_TYPEDEFS(super)
+  typedef VCL_hash_multimap__<Key, T, HashFcn, EqualKey, vcl_alloc> super;
+  VCL_IMPORT_CONTAINER_TYPEDEFS(super)
   typedef typename super::key_type key_type;
   typedef typename super::hasher hasher;
   typedef typename super::key_equal key_equal;
@@ -363,7 +395,6 @@ inline bool operator==(const vcl_hash_multimap<Key, T, HashFcn,EqualKey>& hm1,
     return (const super&)hm1 == (const super&)hm2; 
 }
 
-# endif /* __STL_DEFAULT_TYPE_PARAM */
+# endif /* VCL_STL_DEFAULT_TYPE_PARAM */
 
-#define VCL_HASH_MAP_INSTANTIATE(Key, Value, Hash, Comp) extern "please include vcl_hash_map.txx"
 #endif // vcl_emulation_hash_map_h

@@ -53,7 +53,7 @@
 #include <limits.h>
 #include <stddef.h>
 #include <stdlib.h>
-#include "vcl_pair.h"
+#include <vcl/emulation/vcl_pair.h>
 
 template <class T>
 vcl_pair<T*, ptrdiff_t> get_temporary_buffer(ptrdiff_t len, T*) {

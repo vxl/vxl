@@ -115,7 +115,7 @@
 //
 
 #include <vbl/vbl_reg_exp.h>	// Include class specification 
-#include <stdio.h>
+#include <vcl/vcl_cstdio.h>
 #include <vcl/vcl_string.h>
 
 // vbl_reg_exp -- Copies the given regular expression.
@@ -917,6 +917,10 @@ void         regdump ();
 static char* regprop ();
 #endif
 
+bool vbl_reg_exp::find (vcl_string const& s) {
+return find(s.c_str());
+}
+
 
 
 // find -- Matches the regular expression to the given string.
@@ -951,7 +955,7 @@ bool vbl_reg_exp::find (const char* string) {
 
     // Simplest case:  anchored match need be tried only once.
     if (this->reganch)
-	return (regtry(string, this->startp, this->endp, this->program));
+	return (regtry(string, this->startp, this->endp, this->program) != 0);
     
     // Messy cases:  unanchored match.
     s = string;

@@ -43,8 +43,8 @@
 #define vcl_emulation_bvector_h
 
 #include <stddef.h>
-#include "vcl_algobase.h"
-#include "vcl_alloc.h"
+#include <vcl/emulation/vcl_algobase.h>
+#include <vcl/emulation/vcl_alloc.h>
 
 #define __WORD_BIT (int(CHAR_BIT*sizeof(unsigned int)))
 

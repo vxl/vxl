@@ -13,4 +13,4 @@
 
 #undef VBL_RGBA_INSTANTIATE
 #define VBL_RGBA_INSTANTIATE(T)\
-template class vbl_rgba<T >;
+template struct vbl_rgba<T >;

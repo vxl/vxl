@@ -36,37 +36,37 @@
 // specific notes.
 //
 
-#ifndef vbl_timerh
-#define vbl_timerh
+#ifndef vbl_timer_h
+#define vbl_timer_h
 
 #ifndef WIN32
-#include <sys/times.h>                // system/user times with times()
-#include <sys/time.h>                // real time through ftime() system call
+# include <sys/times.h>               // system/user times with times()
+# include <sys/time.h>                // real time through ftime() system call
 #else
-#include <time.h>
-#include <sys/timeb.h>
+# include <vcl/vcl_ctime.h>
+# include <sys/timeb.h>
 #endif
 
 #include <vcl/vcl_iosfwd.h>
 
 class vbl_timer {
 public:
-  vbl_timer () {mark();}	// constructor & mark
+  vbl_timer() {mark();}	// construct & mark
   
-  void mark ();			// mark timer
-  long real ();			// real        time (ms) since last Mark
+  void mark();			// mark timer
+  long real();			// real        time (ms) since last Mark
   
-  long user ();			// user        time (ms) since last Mark
-  long system ();		// system      time (ms) since last Mark
-  long all ();			// user+system time (ms) since last Mark
+  long user();			// user        time (ms) since last Mark
+  long system();		// system      time (ms) since last Mark
+  long all();			// user+system time (ms) since last Mark
 
   void print(ostream& s);
   
 private:
 
 #ifndef WIN32
-  tms usage0;			          // usage mark. 
-  struct timeval real0;			// wall clock mark.
+  tms usage0;                    // usage mark. 
+  struct timeval real0;          // wall clock mark.
 #else
  clock_t usage0;
  struct _timeb real0;

@@ -53,9 +53,9 @@
 #define vcl_emulation_list_h
 
 #include <stddef.h>
-#include "vcl_algobase.h"
-#include "vcl_iterator.h"
-#include "vcl_alloc.h"
+#include <vcl/emulation/vcl_algobase.h>
+#include <vcl/emulation/vcl_iterator.h>
+#include <vcl/emulation/vcl_alloc.h>
 
 # if defined ( __STL_USE_ABBREVS )
 #  define __list_iterator         vcl_LIt
@@ -646,5 +646,4 @@ template <class T, class Alloc>
 inline void swap(__list__<T,Alloc>& a, __list__<T,Alloc>& b) { a.swap(b); }
 # endif
 
-#define VCL_LIST_INSTANTIATE(T)	extern "please include vcl_list.txx"
 #endif // vcl_emulation_list_h

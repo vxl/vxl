@@ -24,12 +24,14 @@ extern vcl_string& vbl_string_trim(vcl_string&, const char*);
 extern vcl_string& vbl_string_left_trim(vcl_string&, const char*);
 extern vcl_string& vbl_string_right_trim(vcl_string&, const char*);
 
-// from GenString
-extern void vbl_string_compile (const char*);           // Compile regexp in argument
-extern bool vbl_string_find (vcl_string&);                  // Search for first/next regexp
-extern long vbl_string_start ();                 // Return start index of match
-extern long vbl_string_end ();                   // Return end index of match
+// awf: These routines should be deprecated as they use a static regexp, meaning that two such
+// queries cannot run simultaneously.  use vbl_reg_exp instead.
+// // from GenString
+// extern void vbl_string_compile (const char*);           // Compile regexp in argument
+// extern bool vbl_string_find (vcl_string&);                  // Search for first/next regexp
+// extern long vbl_string_start ();                 // Return start index of match
+// extern long vbl_string_end ();                   // Return end index of match
  
-extern int  vbl_string_atoi(vcl_string&);
+extern int  vbl_string_atoi(vcl_string const&);
 
 #endif

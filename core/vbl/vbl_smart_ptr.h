@@ -40,7 +40,7 @@
 	// vbl_ref_count.  For example, image.
 	// Note : This code is just for example, and is commented out
 
-	typedef vbl_smart_ptr<vil_image> vil_image_ref;
+	typedef vbl_smart_ptr<vil_image> vil_image;
 
 	// To instantiate create a .cxx file in the Templates directory of
 	// the class you want the smart pointer of.  In the file do this:

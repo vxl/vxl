@@ -14,7 +14,7 @@
 //
 //-----------------------------------------------------------------------------
 
-#include <stdlib.h>
+#include <vcl/vcl_cstdlib.h>
 #include <vcl/vcl_vector.h>
 
 //: Collection of common predicates for "C" library and COOL sort routines

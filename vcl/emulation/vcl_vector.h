@@ -53,8 +53,8 @@
 #define vcl_emulation_vector_h
 
 #include <stddef.h>
-#include "vcl_algobase.h"
-#include "vcl_alloc.h"
+#include <vcl/emulation/vcl_algobase.h>
+#include <vcl/emulation/vcl_alloc.h>
 
 template <class T, class Alloc>
 class __vector_base  
@@ -487,5 +487,4 @@ template <class T, class Alloc>
     inline void swap(__vector__<T,Alloc>& a, __vector__<T,Alloc>& b) { a.swap(b); }
 # endif
 
-#define VCL_VECTOR_INSTANTIATE(T)  extern "please include vcl_vector.txx"
 #endif // vcl_emulation_vector_h

@@ -14,12 +14,12 @@
 
 #include "vbl_sprintf.h"
 
-#include <stdarg.h>
-#include <stdio.h>
-#include <vcl/vcl_string.h>
+#include <vcl/vcl_cstdarg.h>
+#include <vcl/vcl_cstdio.h>
+#include <vcl/vcl_iomanip.h>
 
+#include <vcl/vcl_string.h>
 #include <vcl/vcl_iostream.h>
-#include <iomanip.h>
 
 const unsigned vbl_sprintf_BUFSIZE=16384;
 
@@ -32,7 +32,7 @@ static void do_vbl_sprintf(vcl_string &str,const char *fmt,va_list ap)
   str = s;
 }
 
-vbl_sprintf::vbl_sprintf(const char *fmt, ...) : vcl_string("")
+vbl_sprintf::vbl_sprintf(const char *fmt, ...) : super("")
 {
   va_list ap;
   va_start(ap, fmt);

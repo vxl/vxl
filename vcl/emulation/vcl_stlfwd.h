@@ -20,7 +20,7 @@
 #ifdef __STL_USE_ABBREVS
 
 // from vcl_alloc.h:
-#include "vcl_alloc.h"
+#include <vcl/emulation/vcl_alloc.h>
 
 // from vcl_deque.h:
 # define __deque_iterator         vcl_dQIt

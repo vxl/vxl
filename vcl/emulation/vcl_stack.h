@@ -42,10 +42,10 @@
 
 #include <vcl/vcl_compiler.h>	// for configuration macros
 
-#include "vcl_function.h"
-#include "vcl_heap.h"
-#include "vcl_vector.h"
-#include "vcl_deque.h"
+#include <vcl/emulation/vcl_functional.h>
+#include <vcl/emulation/vcl_heap.h>
+#include <vcl/emulation/vcl_vector.h>
+#include <vcl/emulation/vcl_deque.h>
 
 template <class T, VCL_DFL_TMPL_PARAM_STLDECL(Sequence,vcl_vector<T>) >
 class vcl_stack {

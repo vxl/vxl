@@ -4,16 +4,15 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
-// .NAME    vbl_rgba<byte>  - Templated three-value colour cell
-// .HEADER  GeneralUtility Package
-// .LIBRARY vbl
-// .INCLUDE vbl/vbl_rgba<byte> .h
-// .FILE    vbl_rgba<byte> .h
+// class vbl_rgba<T>:
+//    This is the appropriate pixel type for RGBA colour images.
+// The purpose of rgba<T> is to provide an object which consists of four Ts arranged
+// in order and which can be referred to as 'R', 'G', 'B' and 'A'. Thus, if win32
+// does something funny when blitting an rgba bitmap to screen, that's up to the
+// renderer to sort out.
 //
-// .SECTION Description
-//    This is the appropriate pixel type for 24-bit colour images.
 //    Currently also includes the following `utilities':
-//    (1) conversion to ubyte (luminance of vbl_rgba: weights (0.299,0.587,0.114)).
+//    (1) conversion to ubyte (luminance of vbl_rgba: weights (0.299, 0.587, 0.114, 0)).
 //    (2) min and max of vbl_rgba<byte>  values, useful for morphological operations.
 //    (3) arithmetic operations
 //
@@ -29,12 +28,12 @@ struct vbl_rgba {
 public:
   typedef T value_type;
   
-  // -- The rgb values
-#ifdef WIN32
-  T  A, B, G, R;
-#else
-  T  R, G, B, A;
-#endif
+  // -- The values.
+  // #ifdef WIN32
+  //   T  A, B, G, R;
+  // #else
+  T  R; T G; T B; T A;
+  // #endif
   
   // -- Create (0,0,0,0) vbl_rgba cell. We need the default ctor to do this as the STL
   // effectively mandates that T() produces a nil value.
@@ -46,7 +45,7 @@ public:
   vbl_rgba(T v):
     R(v), G(v), B(v), A(1) {}
   
-  // -- Construct an vbl_rgba value.
+  // -- Construct from four values.
   vbl_rgba(T red, T green, T blue, T alpha):
     R(red), G(green), B(blue), A(alpha) {}
 
@@ -75,7 +74,7 @@ public:
   }
 #else
   // Special-case for dumb compilers.
-# ifdef __SUNPRO_CC
+# ifdef VCL_SUNPRO_CC
   inline 
 # endif
   vbl_rgba(const vbl_rgba<double>& that) {
@@ -84,7 +83,7 @@ public:
     B=((T)that.B);
     A=((T)that.A);
   }
-# ifdef __SUNPRO_CC
+# ifdef VCL_SUNPRO_CC
   inline 
 # endif
   vbl_rgba(const vbl_rgba<unsigned char>& that) {

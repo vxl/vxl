@@ -1,6 +1,6 @@
 #include <vcl/vcl_compiler.h>
 #include <vcl/vcl_iterator.txx>
-#include <vcl/vcl_algorithm.h>
+#include <vcl/vcl_algorithm.txx>
 #include <vcl/vcl_vector.h>
 #include <vcl/vcl_vector.txx>
 

@@ -4,6 +4,10 @@
   fsm@robots.ox.ac.uk
 */
 
+#ifdef WIN32
+#include <iomanip>
+#else
 #include <iomanip.h>
+#endif
 
 #endif

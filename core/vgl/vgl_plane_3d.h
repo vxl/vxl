@@ -12,6 +12,7 @@
 //  Peter Vanroose, 29 Feb 2000: several minor fixes
 
 #include <vcl/vcl_iostream.h>
+#include <vcl/vcl_algorithm.h>
 #include <vgl/vgl_point_3d.h> // necessary for some inline functions
 
 template <class Type>

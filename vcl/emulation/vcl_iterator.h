@@ -42,7 +42,7 @@
 
 #include <stddef.h>
 #include <iostream.h>
-#include "vcl_function.h"
+#include <vcl/emulation/vcl_functional.h>
 
 #include <vcl/vcl_compiler.h>	// for configuration macros
 

@@ -2,17 +2,38 @@
 include ${IUEROOT}/config/top-params.mk
 #######################################
 
-SUBDIRS += vcl # standard C/C++
-SUBDIRS += val # abstract
-SUBDIRS += vbl # basics
-SUBDIRS += vnl # numerics
-SUBDIRS += vgl # geometry
-SUBDIRS += vil # image
+# standard C/C++
+SUBDIRS += vcl
 
-SUBDIRS += vsl # something
+# abstract
+SUBDIRS += val
 
-SUBDIRS += vseg # segmentation
-SUBDIRS += vgui # OpenGL ui library
+# basics
+SUBDIRS += vbl
+
+# numerics
+ifneq (1,$(strip $(HAS_NATIVE_NETLIB)))
+SUBDIRS += ../Numerics/netlib
+endif
+SUBDIRS += vnl
+
+# geometry
+SUBDIRS += vgl
+
+# image
+ifneq (1,$(strip $(HAS_NATIVE_JPEG)))
+SUBDIRS += ../Image/JPEG
+endif
+ifneq (1,$(strip $(HAS_NATIVE_TIFF)))
+SUBDIRS += ../Image/TIFF
+endif
+SUBDIRS += vil
+
+# segmentation
+SUBDIRS += vsl
+
+# OpenGL ui library
+SUBDIRS += vgui
 
 ######################################
 include ${IUEROOT}/config/top-rules.mk

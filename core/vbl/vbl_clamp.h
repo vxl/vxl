@@ -31,9 +31,10 @@ U vbl_clamp(const V& b, U*)
 {
    return U(b);
 }
-// vbl_clamp.cxx defines specializations for float/double to byte :
-VCL_DECLARE_SPECIALIZATION(unsigned char vbl_clamp(const float & d, unsigned char *))
-VCL_DECLARE_SPECIALIZATION(unsigned char vbl_clamp(const double& d, unsigned char *))
 #endif
+
+// vbl_clamp.cxx defines specializations for float/double to byte
+// VCL_DECxLARE_SPECIALIZATION(unsigned char vbl_clamp(const float & d, unsigned char *))
+// VCL_DECxLARE_SPECIALIZATION(unsigned char vbl_clamp(const double& d, unsigned char *))
 
 #endif // vbl_clamp_h_

@@ -19,7 +19,7 @@
 
 #include <vcl/vcl_map.h>
 #include <vcl/vcl_compiler.h>
-#include <vcl/vcl_iosfwd.h>
+#include <vcl/vcl_iostream.h>
 
 //: Sparse array allowing space efficient access of the form s[3000] = 2;
 //
@@ -27,7 +27,7 @@ template <class T>
 class vbl_sparse_array {
   typedef vcl_map<unsigned, T, vcl_less<unsigned> 
 #ifdef VCL_SUNPRO_CC
-, allocator<pair<unsigned,T> >
+, allocator<vcl_pair<unsigned,T> >
 #endif
  > Map;
 public:
@@ -61,7 +61,7 @@ public:
   const_iterator end() const { return storage_.end(); }
   
   // Data Control--------------------------------------------------------------
-  ostream& print(ostream&) const;
+  vcl_ostream& print(vcl_ostream&) const;
   //  friend ostream& operator >> (ostream&, const vbl_sparse_array<T>& );
 
 protected:

@@ -1,4 +1,4 @@
-#include <iostream.h>
+#include <vcl/vcl_iostream.h>
 #include <vcl/vcl_deque.h>
 
 int main()

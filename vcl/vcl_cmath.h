@@ -6,14 +6,6 @@
 
 #include <vcl/vcl_compiler.h>
 
-#if defined(sparc) && defined(sun) && defined(unix) && defined(__SVR4)
-// Peter.Vanroose@esat.kuleuven.ac.be : on solaris 2.6, if __EXTENSIONS__
-// is defined, or _XOPEN_SOURCE is undefined, /usr/include/math.h includes
-// the file /usr/include/floatingpoint.h , which contains errors.
-// And we don't need whatever is in there, so pretend the file was included.
-#define _FLOATINGPOINT_H
-#endif
-
 // Include system math.h :
 #include <math.h>
 
@@ -21,6 +13,19 @@
 #pragma interface "vcl_cmath.h"
 #endif
 
+#ifdef WIN32
+template <class T>
+inline T vcl_max(T const& a, T const& b)
+{
+  return (a > b) ? a : b;
+}
+
+template <class T>
+inline T vcl_min(T const& a, T const& b)
+{
+  return (a < b) ? a : b;
+}
+#endif
 
 // fsm@robots
 #if defined (linux) && defined (__OPTIMIZE__)
@@ -32,7 +37,7 @@
 #endif
 
 
-#if !defined(VCL_GCC_295)
+#if 0
 // fsm: 2.95 defines these symbols, so defining them here would
 // be an error. which architecture does need them?
 extern "C++" {

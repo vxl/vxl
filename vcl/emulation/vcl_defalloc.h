@@ -31,8 +31,8 @@
 #include <stddef.h>
 #include <stdlib.h>
 #include <limits.h>
-#include "vcl_alloc.h"
-#include "vcl_algobase.h"
+#include <vcl/emulation/vcl_alloc.h>
+#include <vcl/emulation/vcl_algobase.h>
 
 // This file is obsolete; provided only for backward compatibility
 // with code that use vcl_allocator<T>

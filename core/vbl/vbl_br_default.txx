@@ -6,7 +6,7 @@
 
 #include <vbl/vbl_br_default.h>
 #include <vbl/vbl_basic_optional.h>
-#include <assert.h>
+#include <vcl/vcl_cassert.h>
 
 //--------------------------------------------------------------------------------
 // Methods for the regular iterator.

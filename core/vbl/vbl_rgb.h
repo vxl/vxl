@@ -97,6 +97,22 @@ public:
     B=((T)that.B);
     return *this;
   }
+
+  vbl_rgb<T>& operator=(const vbl_rgb<int>& that)
+  {
+    R=((T)that.R);
+    G=((T)that.G);
+    B=((T)that.B);
+    return *this;
+  }
+
+  vbl_rgb<T>& operator=(const vbl_rgb<long>& that)
+  {
+    R=((T)that.R);
+    G=((T)that.G);
+    B=((T)that.B);
+    return *this;
+  }
 #endif
 
  
@@ -105,7 +121,8 @@ public:
   
   // Who wants this? It's a pain in the ass.
   // ImageProcessing/IIFOperators use this a lot!
-  operator T() const { return int(0.5+R*0.299+0.587*G+0.114*B); }
+  // Why can we not use .gray()?  This adds ambiguities.
+  // operator T() const { return int(0.5+R*0.299+0.587*G+0.114*B); }
   
   // -- equality
   inline bool operator== (vbl_rgb<T> const&) const;
@@ -152,7 +169,7 @@ ostream& operator<<(ostream& s, const vbl_rgb<T>& rgb)
 }
 
 // Specialization to get vbl_rgb<byte> right.
-VCL_DECLARE_SPECIALIZATION(ostream& operator<<(ostream& s, const vbl_rgb<unsigned char>& rgb))
+// VCL_DECxLARE_SPECIALIZATION(ostream& operator<<(ostream& s, const vbl_rgb<unsigned char>& rgb))
 
 // ** Arithmetic operators
 

@@ -40,7 +40,7 @@
 //-----------------------------------------------------------------------------
 
 #include "vbl_sparse_array_3d.h"
-#include <assert.h>
+#include <vcl/vcl_cassert.h>
 #include <vcl/vcl_iostream.h>
 #include <vcl/vcl_pair.h>
 

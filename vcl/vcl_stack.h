@@ -7,7 +7,7 @@
 # include <vcl/emulation/vcl_stack.h>
 #else
 # ifdef __GNUC__
-#  include <stack.h>
+#  include_next <stack.h>
 #  define vcl_stack stack
 # else
 #  include <stack>

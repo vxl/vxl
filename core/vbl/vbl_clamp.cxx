@@ -9,6 +9,9 @@
 //
 //-----------------------------------------------------------------------------
 
+#include <vbl/vbl_clamp.h>
+
+VCL_DEFINE_SPECIALIZATION
 unsigned char vbl_clamp(const float& d, unsigned char *)
 {
   if (d > 255.0)
@@ -19,6 +22,7 @@ unsigned char vbl_clamp(const float& d, unsigned char *)
     return (unsigned char)d; 
 }
 
+VCL_DEFINE_SPECIALIZATION
 unsigned char vbl_clamp(const double& d, unsigned char *)
 {
   if (d > 255.0)

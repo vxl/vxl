@@ -4,7 +4,7 @@
 
 //template struct __stl_prime<false>;
 
-const unsigned long __stl_prime<false>::list_[] =
+const unsigned long VCL_prime<false>::list_[] =
 {
   53,         97,         193,       389,       769,
   1543,       3079,       6151,      12289,     24593,

@@ -9,4 +9,6 @@
 
 #include <assert.h>
 
+#define vcl_assert(x) assert(x)
+
 #endif

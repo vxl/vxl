@@ -27,11 +27,12 @@
 //    what you get from a stop watch timer.
 //
 
-#include <limits.h>		// for CLK_TCK
-#include <vbl/vbl_timer.h>
+#include "vbl_timer.h"
+
+#include <vcl/vcl_climits.h>   // for CLK_TCK
 #include <vcl/vcl_iostream.h>
 
-#if !defined(VCL_NO_SYS_TIME_H)
+#if !defined(VCL_NO_SYS_TIME_H) && !defined(VCL_WIN32)
 #include <sys/time.h>
 #else
 #ifdef SYSV
@@ -43,7 +44,7 @@ extern "C" int gettimeofday(struct timeval*, struct timezone*);
 
 #ifndef WIN32
 //#define CLK_TCK _sysconf(3) in <limits.h> has error
-#include <unistd.h>		// for sysconf
+#include <unistd.h> // for sysconf. vcl_unistd.h won't do.
 #undef CLK_TCK
 #define CLK_TCK sysconf(_SC_CLK_TCK)
 #endif

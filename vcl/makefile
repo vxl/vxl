@@ -13,6 +13,8 @@ ifndef NOTEST
 SUBDIRS = tests
 endif
 
+SOURCES += vcl_unistd.cxx
+
 ifndef USE_NATIVE_STL
 SOURCES += emulation/vcl_straits.cxx
 SOURCES += emulation/vcl_hashtable.cxx

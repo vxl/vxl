@@ -1,35 +1,3 @@
-// <begin copyright notice>
-// ---------------------------------------------------------------------------
-//
-//                   Copyright (c) 1997 Tvbl_argetJr Consortium
-//               GE Corporate Research and Development (GE CRD)
-//                             1 Research Circle
-//                            Niskayuna, NY 12309
-//                            All Rights Reserved
-//              Reproduction rights limited as described below.
-//                               
-//      Permission to use, copy, modify, distribute, and sell this software
-//      and its documentation for any purpose is hereby granted without fee,
-//      provided that (i) the above copyright notice and this permission
-//      notice appear in all copies of the software and related documentation,
-//      (ii) the name Tvbl_argetJr Consortium (represented by GE CRD), may not be
-//      used in any advertising or publicity relating to the software without
-//      the specific, prior written permission of GE CRD, and (iii) any
-//      modifications are clearly marked and summarized in a change history
-//      log.
-//       
-//      THE SOFTWARE IS PROVIDED "AS IS" AND WITHOUT WARRANTY OF ANY KIND,
-//      EXPRESS, IMPLIED OR OTHERWISE, INCLUDING WITHOUT LIMITATION, ANY
-//      WARRANTY OF MERCHANTABILITY OR FITNESS FOR A PARTICULAR PURPOSE.
-//      IN NO EVENT SHALL THE Tvbl_argETJR CONSORTIUM BE LIABLE FOR ANY SPECIAL,
-//      INCIDENTAL, INDIRECT OR CONSEQUENTIAL DAMAGES OF ANY KIND OR ANY
-//      DAMAGES WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS,
-//      WHETHER OR NOT ADVISED OF THE POSSIBILITY OF SUCH DAMAGES, OR ON
-//      ANY THEORY OF LIABILITY ARISING OUT OF OR IN CONNECTION WITH THE
-//      USE OR PERFORMANCE OF THIS SOFTWARE.
-//
-// ---------------------------------------------------------------------------
-// <end copyright notice>
 //-*- c++ -*-------------------------------------------------------------------
 //
 // Class: test_vbl_arg
@@ -41,13 +9,15 @@
 
 #include <vbl/vbl_arg.h>
 #include <vcl/vcl_cstring.h> // needed for strcmp()
+#include <vcl/vcl_list.h>
+#include <vcl/vcl_algorithm.h>
 
 void Assert(char const* msg, bool expr)
 {
   cout << msg << " - " << (expr?"passed":"failed") << "." << endl;
 }
 
-char * vbl_argv_1[] = {
+char const * my_argv_1[] = {
   "progname",
   "f",
   "-int", "3",
@@ -55,16 +25,22 @@ char * vbl_argv_1[] = {
   "-bool1",
   "-bool1",
   "-bool2",
+  "-list",
+  "1:2,10,21:2:25,-1:-2:-7",
   "h",
   "i",
   "j",
   0
 };
 
-int count_vbl_args(char ** vbl_argv)
+int list_contents[] = {
+  1,2,10,21,23,25,-1,-3,-5,-7,
+};
+
+int count_my_args(char const * const * my_argv)
 {
   int c = 0;
-  for(; *vbl_argv; ++vbl_argv)
+  for(; *my_argv; ++my_argv)
     ++c;
   return c;
 }
@@ -76,21 +52,34 @@ void test_do_vbl_arg()
   vbl_arg<bool> bool1("-bool1", "And another", false);
   vbl_arg<bool> bool2("-bool2", "And another", true);
   vbl_arg<bool> bool3("-bool3", "And a final help test just to finish off...", true);
+  vbl_arg<vcl_list<int> > list1("-list", "List...");
   vbl_arg<char*> filename1;
 
-  int vbl_argc = count_vbl_args(vbl_argv_1);
-  char ** vbl_argv = vbl_argv_1;
-  cerr << "vbl_argc = " << vbl_argc
-       << ", bool1 = " << (bool)bool1
-       << ", bool2 = " << (bool)bool2
-       << ", bool3 = " << (bool)bool3 << endl;
+  int my_argc = count_my_args(my_argv_1);
+  cerr << "vbl_argc = " << my_argc
+       << ", bool1 = " << bool1()
+       << ", bool2 = " << bool2()
+       << ", bool3 = " << bool3() << endl;
+  char **my_argv = (char**) my_argv_1;
 
-  vbl_arg_base::parse(vbl_argc, vbl_argv);
+  vbl_arg_parse(my_argc, my_argv);
   
-  bool b = (int)int1 == 3;
+  bool b = int1() == 3;
   Assert("int1", b);
-  Assert("int2", (int)int2 == 2);
-  Assert("filename == f", !strcmp((char*)filename1, "f"));  
+  Assert("int2", int2() == 2);
+  Assert("filename == f", !strcmp(filename1(), "f"));
+
+  int true_list_length = sizeof list_contents / sizeof list_contents[0];
+  vcl_list<int> l = list1();
+  Assert("list length", l.size() == true_list_length);
+  bool ok = true;
+  for(int i = 0; i < true_list_length; ++i) {
+    if (vcl_find(l.begin(), l.end(), list_contents[i]) == l.end()) {
+      cerr << "Integer [" << list_contents[i] << "] not found in list\n";
+      ok = false;
+    }
+  }
+  Assert("list contents", ok);
 }
 
 extern "C"
@@ -99,8 +88,9 @@ void test_vbl_arg()
   test_do_vbl_arg();
 }
 
-main()
+int main()
 {
   cout << "Running" << endl;
   test_vbl_arg();
+  return 0;
 }

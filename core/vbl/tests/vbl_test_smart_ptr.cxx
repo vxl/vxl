@@ -97,7 +97,7 @@ SmartPointerTest_ref newSmartPointerTest (int k)
 int doit ()
 {
   SmartPointerTest_ref p;
-  if (p == NULL) // This is actually unnecessary - just to demonstrate ==
+  if (p == 0) // This is actually unnecessary - just to demonstrate ==
     p = new SmartPointerTest();
 
   SmartPointerTest_ref a = new SmartPointerTest (5);

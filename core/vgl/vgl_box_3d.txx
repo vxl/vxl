@@ -13,6 +13,7 @@
 //--------------------------------------------------------------
 
 #include <vgl/vgl_box_3d.h> 
+#include <vgl/vgl_point_3d.h> 
 
 // Constructors/Destructors--------------------------------------------------
 
@@ -130,11 +131,11 @@ void vgl_box_3d<Type>::set_depth(const Type depth)
 }
 
 template <class Type>
-void vgl_box_3d<Type>::set_min_point(vgl_point_3d<Type>& min_point)
+void vgl_box_3d<Type>::set_min_point(vgl_point_3d<Type> const& min_point)
 {
   _min_pos[0]=min_point.x();
   _min_pos[1]=min_point.y();
-  _min_pos[2]=min_point.Z();
+  _min_pos[2]=min_point.z();
  
   if(_max_pos[0] < _min_pos[0]){
     _max_pos[0]=_min_pos[0];
@@ -148,11 +149,11 @@ void vgl_box_3d<Type>::set_min_point(vgl_point_3d<Type>& min_point)
 }
 
 template <class Type>
-void vgl_box_3d<Type>::set_max_point(vgl_point_3d<Type>& max_point)
+void vgl_box_3d<Type>::set_max_point(vgl_point_3d<Type> const& max_point)
 {
   _max_pos[0]=max_point.x();
   _max_pos[1]=max_point.y();
-  _max_pos[2]=max_point.Z();
+  _max_pos[2]=max_point.z();
 
   if(_max_pos[0] < _min_pos[0]){
     _min_pos[0]=_max_pos[0];
@@ -166,7 +167,7 @@ void vgl_box_3d<Type>::set_max_point(vgl_point_3d<Type>& max_point)
 }
 
 template <class Type>
-void vgl_box_3d<Type>::set_centroid(vgl_point_3d<Type>& centroid)
+void vgl_box_3d<Type>::set_centroid(vgl_point_3d<Type> const& centroid)
 {
   set_centroid_x(centroid.x());
   set_centroid_y(centroid.y());

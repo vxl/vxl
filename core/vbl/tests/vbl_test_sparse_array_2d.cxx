@@ -1,6 +1,7 @@
+#include <vcl/vcl_iostream.h>
 #include <vbl/vbl_sparse_array_2d.h>
-extern "C"
 
+extern "C"
 void Assert(char const* msg, bool expr)
 {
   cout << msg << " - " << (expr?"passed":" *** failed") << "." << endl;

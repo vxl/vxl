@@ -72,7 +72,7 @@ public:
   vcl_dynamic_cast(const void*) {}
   operator T () { return 0; }
 };
-#define VCL_DYNAMIC_CAST_INSTANTIATE(X) template class vcl_dynamic_cast<X*>
+#define VCL_DYNAMIC_CAST_INSTANTIATE(X) template class vcl_dynamic_cast<X*>;
 
 #else
 #define VCL_DYNAMIC_CAST_INSTANTIATE(X) 

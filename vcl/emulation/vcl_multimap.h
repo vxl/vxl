@@ -39,7 +39,7 @@
 #ifndef vcl_emulation_multimap_h
 #define vcl_emulation_multimap_h
 
-#include "vcl_tree.h"
+#include <vcl/emulation/vcl_tree.h>
 
 __BEGIN_STL_FULL_NAMESPACE
 #define vcl_multimap __WORKAROUND_RENAME(vcl_multimap)

@@ -38,7 +38,7 @@
 #ifndef vcl_emulation_hash_set_h
 #define vcl_emulation_hash_set_h
 
-#include "vcl_hashtable.h"
+#include <vcl/emulation/vcl_hashtable.h>
 
 __BEGIN_STL_FULL_NAMESPACE
 # define  vcl_hash_set      __WORKAROUND_RENAME(vcl_hash_set)

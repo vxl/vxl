@@ -45,7 +45,7 @@
 
 #include "vbl_awk.h"
 
-#include <ctype.h>
+#include <vcl/vcl_cctype.h>
 #include <vcl/vcl_iostream.h>
 
 // -- Construct from input stream

@@ -1,6 +1,5 @@
-//-*- c++ -*-------------------------------------------------------------------
-#ifndef vcl_gcc_295_map_txx_
-#define vcl_gcc_295_map_txx_
+#ifndef vcl_gcc295_map_txx_
+#define vcl_gcc295_map_txx_
 
 #include <vcl/vcl_map.h>
 #include <vcl/vcl_compiler.h>

@@ -1,5 +1,5 @@
 
-#include <assert.h>
+#include <vcl/vcl_cassert.h>
 #include <vcl/vcl_string.h>
 #include <vcl/vcl_iostream.h>
 

@@ -23,7 +23,7 @@
 #ifdef __OPTIMIZE__
 #define RANGECHECK(i,j,k) ((void)0)
 #else
-#include <assert.h>
+#include <vcl/vcl_cassert.h>
 #define RANGECHECK(i,j,k) assert(((i1 < _row1_count) && (i2 < _row2_count) && (i3 < _row3_count)) || !"vbl_array_3d Rangecheck")
 #endif
 

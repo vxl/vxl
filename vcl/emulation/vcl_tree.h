@@ -78,9 +78,9 @@ iterators invalidated are those referring to the deleted node.
 */
 
 #include <stddef.h>
-#include "vcl_algobase.h"
-#include "vcl_iterator.h"
-#include "vcl_alloc.h"
+#include <vcl/emulation/vcl_algobase.h>
+#include <vcl/emulation/vcl_iterator.h>
+#include <vcl/emulation/vcl_alloc.h>
 
 # if defined ( __STL_USE_ABBREVS )
 // ugliness is intentional - to reduce conflicts possibility

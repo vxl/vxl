@@ -4,11 +4,12 @@
 #
 #   DEPENDENCIES:  libvcl
 
+VXL := 1 
+
 ##########################################
 include ${IUEROOT}/config/top-params.mk
 ##########################################
 
-VXL := 1 
 USES += vxl
 IULIBS := -lvcl
 
@@ -32,10 +33,12 @@ SOURCES += vbl_sparse_array_2d_base.cxx
 SOURCES += vbl_sprintf.cxx
 SOURCES += vbl_string.cxx
 SOURCES += vbl_timer.cxx
-SOURCES += vbl_timestamp.cxx
+SOURCES += vbl_get_timestamp.cxx
+SOURCES += vbl_timestamp.cxx  # ??
 SOURCES += vbl_types.cxx
 SOURCES += vbl_user_info.cxx
 SOURCES += vbl_bool_ostream.cxx
+SOURCES += vbl_qsort.cxx
 
 DEFINES += -DBUILDING_VBL_DLL
 

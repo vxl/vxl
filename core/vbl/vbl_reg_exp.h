@@ -82,18 +82,19 @@ const int NSUBEXP = 10;
 class vbl_reg_exp {
 public:
   inline vbl_reg_exp ();			// vbl_reg_exp with program=NULL
-  inline vbl_reg_exp (const char*);	// vbl_reg_exp with compiled char*
-  vbl_reg_exp (const vbl_reg_exp&);	// Copy constructor
+  inline vbl_reg_exp (char const*);	// vbl_reg_exp with compiled char*
+  vbl_reg_exp (vbl_reg_exp const&);	// Copy constructor
   inline ~vbl_reg_exp();			// Destructor 
 
-  void compile (const char*);		// Compiles char* --> regexp
-  bool find (const char*);		// true if regexp in char* arg
+  void compile (char const*);		// Compiles char* --> regexp
+  bool find (char const*);		// true if regexp in char* arg
+  bool find (vcl_string const&);		// true if regexp in char* arg
   inline long start() const;		// Index to start of first find
   inline long end() const;		// Index to end of first find
 
-  bool operator== (const vbl_reg_exp&) const;	// Equality operator
-  inline bool operator!= (const vbl_reg_exp&) const; // Inequality operator
-  bool deep_equal (const vbl_reg_exp&) const;	// Same regexp and state?
+  bool operator== (vbl_reg_exp const&) const;	// Equality operator
+  inline bool operator!= (vbl_reg_exp const&) const; // Inequality operator
+  bool deep_equal (vbl_reg_exp const&) const;	// Same regexp and state?
   
   inline bool is_valid() const;		// true if compiled regexp
   inline void set_invalid();		// Invalidates regexp

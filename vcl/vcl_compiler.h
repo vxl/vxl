@@ -8,13 +8,7 @@
 
 //--------------------------------------------------------------------------------
 
-// -- VCL_USE_NATIVE_STL
-// Use the compiler's STL. Set from command-line define
-#ifdef IUE_USE_NATIVE_STL
-#define VCL_USE_NATIVE_STL 1
-#else
-#define VCL_USE_NATIVE_STL 0
-#endif
+#include <vxl_compiler_config.h>
 
 // -- VCL_USE_NATIVE_COMPLEX
 // Use the compiler's complex. Set from VCL_USE_NATIVE_STL at the moment.
@@ -30,27 +24,9 @@
 
 // -- VCL_VOID_RETURN
 //
-// Used as a return type where void is expected,
+// VCL_VOID_RETURN is used as a return type where void is expected,
 // as in return VCL_VOID_RETURN ;
 #define VCL_VOID_RETURN /*empty*/
-
-// -- VCL_HAS_MEMBER_TEMPLATES:
-// 
-// True if the compiler supports template members of template classes.  e.g.
-//     template <class U> class A {
-//     	 template <class V> void f(V);
-//     }
-//#define VCL_HAS_MEMBER_TEMPLATES 1
-
-
-// -- VCL_CAN_DO_PARTIAL_SPECIALIZATION
-// 
-// True if the compiler supports partial specializations of templates. e.g.
-// template <class T>
-// class vector<T*> : public vector<void *> { .. inline methods .. };
-//
-//#define VCL_CAN_DO_PARTIAL_SPECIALIZATION 0
-
 
 // -- VCL_HAS_DYNAMIC_CAST
 // 
@@ -92,12 +68,30 @@
 // -- VCL_FOR_SCOPE_HACK:
 // 
 // True if the compiler uses old-style 'for' loop scoping.
-// Setting this causes the Henderson trick to be used.
+// Setting this nonzero causes the Henderson trick to be used.
 //#define VCL_FOR_SCOPE_HACK 0
 
 
 
 // ** Various template issues.
+
+// -- VCL_HAS_MEMBER_TEMPLATES:
+// 
+// True if the compiler supports template members of template classes.  e.g.
+//     template <class U> class A {
+//     	 template <class V> void f(V);
+//     }
+//#define VCL_HAS_MEMBER_TEMPLATES 1
+
+
+// -- VCL_CAN_DO_PARTIAL_SPECIALIZATION
+// 
+// True if the compiler supports partial specializations of templates. e.g.
+// template <class T>
+// class vector<T*> : public vector<void *> { .. inline methods .. };
+//
+//#define VCL_CAN_DO_PARTIAL_SPECIALIZATION 0
+
 
 // -- VCL_INSTANTIATE_INLINE:
 // 
@@ -107,7 +101,7 @@
 //     inline T max(T a, T b) { return ....; }
 // Then instantiate using
 //     VCL_INSTANTIATE_INLINE(T max(T,T))
-//#define VCL_INSTANTIATE_INLINE(fn_decl) template fn_decl
+//#define VCL_INSTANTIATE_INLINE(fn_decl) template fn_decl ;
 
 
 // -- VCL_DO_NOT_INSTANTIATE:
@@ -129,8 +123,7 @@
 // dummy specialization of T::bad_method that returns something mundane and
 // stops the standard bad_method from being generated.  For this, use:
 //     VCL_DO_NOT_INSTANTIATE(int T::bad_method(), some_return_value)
-// if the function is void, use VCL_EMPTY_MACRO as the return value
-#define VCL_EMPTY_MACRO
+// if the function is void, use VCL_VOID_RETURN as the return value
 //#define VCL_DO_NOT_INSTANTIATE(text,ret)
 
 
@@ -162,14 +155,14 @@
 //      VCL_UNINSTANTIATE_STATIC_TEMPLATE_MEMBER(A<int>::var)
 // afterwards
 //
-//#define VCL_INSTANTIATE_STATIC_TEMPLATE_MEMBER(x) x
+//#define VCL_INSTANTIATE_STATIC_TEMPLATE_MEMBER(x) x;
 
 
 // -- VCL_NEED_FRIEND_FOR_TEMPLATE_OVERLOAD(text)
 //
 // On some compilers (in particular gcc 2.7.2.3), the compiler doesn't
 // know how to cast a templated derived class to a templated base class
-// (eg. MatrixFixed<3,3,double> -> VCL_matrix<double>) when doing overload 
+// (eg. vnl_matrix_fixed<3,3,double> -> vnl_matrix<double>) when doing overload 
 // resolution. Making the overloaded function a friend of the class makes
 // the problem go away.
 
@@ -182,6 +175,20 @@
 // The symptom of not doing so is that specializations are ignored.
 // Use VCL_DECLARE_SPECIALIZATION just before any specializations to remain
 // compatible with older compilers
+// *** the use of this macro is deprecated ***
+
+// -- VCL_DEFINE_SPECIALIZATION
+// 
+// In order to *define* a template (function or class) specialization, the
+// definition must be preceded by "template <>" on ISO-conforming compilers.
+// Some compilers (eg gcc 2.7.2) make no distinction between an instance
+// of a templated function and a function with the same name and signature,
+// and so do not support the use of "template <>". Use VCL_DEFINE_SPECIALIZATION
+// instead.
+// Note that you DO NOT need to forward declare a specialization. E.g. if 
+// foo.h says "template <class T> void foo(T *);" and foo.cxx specializes
+// void foo<int>(int *), the client doesn't need to know that the template
+// symbol he links against is a specialization.
 
 // -- VCL_STL_NULL_TMPL_ARGS
 //
@@ -302,7 +309,7 @@
 #endif
 
 // -----------------------------------------------------------------------------
-// work-around to get template instatiation to work correctly with SunPro
+// work-around to get template instantiation to work correctly with SunPro
 // check flag to turn on inlining
 #undef IUEi_STL_INLINE
 #if defined(INLINE_EXPLICIT_FLAG) && defined(VCL_SUNPRO_CC) && defined(INSTANTIATE_TEMPLATES)
@@ -320,15 +327,16 @@
 #define VCL_STATIC_CONST_INIT_FLOAT(x) = x
 #define VCL_STATIC_CONST_INIT_INT(x) = x
 #define VCL_IMPLEMENT_STATIC_CONSTS 0
-#define VCL_INSTANTIATE_INLINE(fn_decl) template fn_decl
+#define VCL_INSTANTIATE_INLINE(fn_decl) template fn_decl ;
 #define VCL_DO_NOT_INSTANTIATE(text,ret) text {return ret;}
 #define VCL_UNINSTANTIATE_SPECIALIZATION(x)
-#define VCL_UNINSTANTIATE_UNSEEN_SPECIALIZATION(x) extern x
-#define VCL_INSTANTIATE_STATIC_TEMPLATE_MEMBER(x) x
+#define VCL_UNINSTANTIATE_UNSEEN_SPECIALIZATION(x) extern x;
+#define VCL_INSTANTIATE_STATIC_TEMPLATE_MEMBER(x) x;
 #define VCL_UNINSTANTIATE_STATIC_TEMPLATE_MEMBER(x)
-#define VCL_NEED_FRIEND_FOR_TEMPLATE_OVERLOAD(text) friend text
-#define VCL_DECLARE_SPECIALIZATION(f) /* template <> */
-#define VCL_STL_NULL_TMPL_ARGS
+#define VCL_NEED_FRIEND_FOR_TEMPLATE_OVERLOAD(text) friend text;
+#define VCL_DECLARE_SPECIALIZATION(f) /* template <> f; */
+#define VCL_DEFINE_SPECIALIZATION /* template <> */
+#define VCL_STL_NULL_TMPL_ARGS /* <> */
 #define VCL_DEFAULT_VALUE(x) =x
 #define VCL_DFL_TYPE_PARAM_STLDECL(A,a) class A = a
 #define VCL_DFL_TMPL_PARAM_STLDECL(A,a) class A
@@ -349,10 +357,11 @@
 #define VCL_DO_NOT_INSTANTIATE(text,ret) text {return ret;}
 #define VCL_UNINSTANTIATE_SPECIALIZATION(x)
 #define VCL_UNINSTANTIATE_UNSEEN_SPECIALIZATION(x)
-#define VCL_INSTANTIATE_STATIC_TEMPLATE_MEMBER(x) x
+#define VCL_INSTANTIATE_STATIC_TEMPLATE_MEMBER(x) x;
 #define VCL_UNINSTANTIATE_STATIC_TEMPLATE_MEMBER(x)
 #define VCL_NEED_FRIEND_FOR_TEMPLATE_OVERLOAD(text)
 #define VCL_DECLARE_SPECIALIZATION(f) template <> f;
+#define VCL_DEFINE_SPECIALIZATION template <>
 #define VCL_STL_NULL_TMPL_ARGS <>
 #define VCL_DEFAULT_VALUE(x)
 #define VCL_DFL_TYPE_PARAM_STLDECL(A,a) class A = a
@@ -374,10 +383,11 @@
 #define VCL_DO_NOT_INSTANTIATE(text,ret) text {return ret;}
 #define VCL_UNINSTANTIATE_SPECIALIZATION(x)
 #define VCL_UNINSTANTIATE_UNSEEN_SPECIALIZATION(x)
-#define VCL_INSTANTIATE_STATIC_TEMPLATE_MEMBER(x) x
+#define VCL_INSTANTIATE_STATIC_TEMPLATE_MEMBER(x) x;
 #define VCL_UNINSTANTIATE_STATIC_TEMPLATE_MEMBER(x)
 #define VCL_NEED_FRIEND_FOR_TEMPLATE_OVERLOAD(text)
 #define VCL_DECLARE_SPECIALIZATION(f) template <> f;
+#define VCL_DEFINE_SPECIALIZATION template <>
 #define VCL_STL_NULL_TMPL_ARGS <>
 #define VCL_DEFAULT_VALUE(x) =x
 #define VCL_DFL_TYPE_PARAM_STLDECL(A,a) class A = a
@@ -399,12 +409,13 @@
 #define VCL_DO_NOT_INSTANTIATE(text,ret) text {return ret;}
 #define VCL_UNINSTANTIATE_SPECIALIZATION(x)
 #define VCL_UNINSTANTIATE_UNSEEN_SPECIALIZATION(x)
-#define VCL_INSTANTIATE_STATIC_TEMPLATE_MEMBER(x) x
+#define VCL_INSTANTIATE_STATIC_TEMPLATE_MEMBER(x) x;
 #define VCL_UNINSTANTIATE_STATIC_TEMPLATE_MEMBER(x)
 #define VCL_NEED_FRIEND_FOR_TEMPLATE_OVERLOAD(text)
 #define VCL_DECLARE_SPECIALIZATION(f) template <> f;
+#define VCL_DEFINE_SPECIALIZATION template <>
 // Rather splendidly, gcc 2.95.1 bails if these are correctly specified...
-#define VCL_STL_NULL_TMPL_ARGS
+#define VCL_STL_NULL_TMPL_ARGS /* <> */
 #define VCL_DEFAULT_VALUE(x)
 #define VCL_DFL_TYPE_PARAM_STLDECL(A,a) class A = a
 #define VCL_DFL_TMPL_PARAM_STLDECL(A,a) class A = a
@@ -425,15 +436,16 @@
 #define VCL_STATIC_CONST_INIT_FLOAT(x)
 #define VCL_STATIC_CONST_INIT_INT(x)
 #define VCL_IMPLEMENT_STATIC_CONSTS 1
-#define VCL_INSTANTIATE_INLINE(fn_decl) template fn_decl
+#define VCL_INSTANTIATE_INLINE(fn_decl) template fn_decl ;
 #define VCL_DO_NOT_INSTANTIATE(text,ret) text {return ret;}
 #define VCL_UNINSTANTIATE_SPECIALIZATION(x)
 #define VCL_UNINSTANTIATE_UNSEEN_SPECIALIZATION(x)
-#define VCL_INSTANTIATE_STATIC_TEMPLATE_MEMBER(x) x
+#define VCL_INSTANTIATE_STATIC_TEMPLATE_MEMBER(x) x;
 #define VCL_UNINSTANTIATE_STATIC_TEMPLATE_MEMBER(x)
 #define VCL_NEED_FRIEND_FOR_TEMPLATE_OVERLOAD(text)
-#define VCL_DECLARE_SPECIALIZATION(f) /* template <> */
-#define VCL_STL_NULL_TMPL_ARGS
+#define VCL_DECLARE_SPECIALIZATION(f) /* template <> f; */
+#define VCL_DEFINE_SPECIALIZATION /* template <> */
+#define VCL_STL_NULL_TMPL_ARGS /* <> */
 #define VCL_DEFAULT_VALUE(x)
 #define VCL_DFL_TYPE_PARAM_STLDECL(A,a) class A = a
 #define VCL_DFL_TMPL_PARAM_STLDECL(A,a) class A
@@ -456,11 +468,12 @@
 #define VCL_UNINSTANTIATE_SPECIALIZATION(text) @pragma do_not_instantiate text@
 #define VCL_UNINSTANTIATE_UNSEEN_SPECIALIZATION(x) @pragma do_not_instantiate x@
 #define VCL_UNINSTANTIATE_STATIC_TEMPLATE_MEMBER(x) @pragma do_not_instantiate x@
-#define VCL_INSTANTIATE_STATIC_TEMPLATE_MEMBER(x) x
-#define VCL_NEED_FRIEND_FOR_TEMPLATE_OVERLOAD(text) friend text
+#define VCL_INSTANTIATE_STATIC_TEMPLATE_MEMBER(x) x;
+#define VCL_NEED_FRIEND_FOR_TEMPLATE_OVERLOAD(text) friend text;
 #define __SGI_STL_NO_ARROW_OPERATOR
-#define VCL_DECLARE_SPECIALIZATION(f) /* template <> */
-#define VCL_STL_NULL_TMPL_ARGS
+#define VCL_DECLARE_SPECIALIZATION(f) /* template <> f; */
+#define VCL_DEFINE_SPECIALIZATION /* template <> */
+#define VCL_STL_NULL_TMPL_ARGS /* <> */
 #define VCL_DEFAULT_VALUE(x)
 #define VCL_DFL_TYPE_PARAM_STLDECL(A,a) class A = a
 #define VCL_DFL_TMPL_PARAM_STLDECL(A,a) class A = a
@@ -482,11 +495,12 @@
 #define VCL_UNINSTANTIATE_SPECIALIZATION(text)
 #define VCL_UNINSTANTIATE_UNSEEN_SPECIALIZATION(x) @pragma do_not_instantiate x@
 #define VCL_UNINSTANTIATE_STATIC_TEMPLATE_MEMBER(x) @pragma do_not_instantiate x@
-#define VCL_INSTANTIATE_STATIC_TEMPLATE_MEMBER(x) x
-#define VCL_NEED_FRIEND_FOR_TEMPLATE_OVERLOAD(text) friend text
+#define VCL_INSTANTIATE_STATIC_TEMPLATE_MEMBER(x) x;
+#define VCL_NEED_FRIEND_FOR_TEMPLATE_OVERLOAD(text) friend text;
 #define __SGI_STL_NO_ARROW_OPERATOR
-#define VCL_DECLARE_SPECIALIZATION(f) /* template <> */
-#define VCL_STL_NULL_TMPL_ARGS
+#define VCL_DECLARE_SPECIALIZATION(f) /* template <> f; */
+#define VCL_DEFINE_SPECIALIZATION /* template <> */
+#define VCL_STL_NULL_TMPL_ARGS /* <> */
 #define VCL_DEFAULT_VALUE(x)
 #define VCL_DFL_TYPE_PARAM_STLDECL(A,a) class A = a
 #define VCL_DFL_TMPL_PARAM_STLDECL(A,a) class A = a
@@ -505,13 +519,14 @@
 #define VCL_IMPLEMENT_STATIC_CONSTS 1
 #define VCL_INSTANTIATE_INLINE(fn_decl) 
 #define VCL_DO_NOT_INSTANTIATE(text,ret) text {return ret;}
-#define VCL_INSTANTIATE_STATIC_TEMPLATE_MEMBER(x) x
+#define VCL_INSTANTIATE_STATIC_TEMPLATE_MEMBER(x) x; 
 #define VCL_UNINSTANTIATE_STATIC_TEMPLATE_MEMBER(x)
 #define VCL_UNINSTANTIATE_SPECIALIZATION(x)
 #define VCL_UNINSTANTIATE_UNSEEN_SPECIALIZATION(x)
 #define VCL_NEED_FRIEND_FOR_TEMPLATE_OVERLOAD(text)
-#define VCL_DECLARE_SPECIALIZATION(f) /* template <> */
-#define VCL_STL_NULL_TMPL_ARGS
+#define VCL_DECLARE_SPECIALIZATION(f) /* template <> f; */
+#define VCL_DEFINE_SPECIALIZATION /* template <> */
+#define VCL_STL_NULL_TMPL_ARGS /* <> */
 #define VCL_DEFAULT_VALUE(x)
 #define VCL_DFL_TYPE_PARAM_STLDECL(A,a) class A
 #define VCL_DFL_TMPL_PARAM_STLDECL(A,a) class A
@@ -519,7 +534,7 @@
 // The sunpro is ok with static data as long as it is only seen
 // at instantiation time, like in stl
 #define VCL_NO_STATIC_DATA_MEMBERS 1
-#define VCL_SUNPRO_ALLOCATOR_HACK(T) T ,allocator<T >
+#define VCL_SUNPRO_ALLOCATOR_HACK(T) T , allocator<T >
 #endif
 
 // SunPro 5.0
@@ -533,13 +548,14 @@
 #define VCL_IMPLEMENT_STATIC_CONSTS 1
 #define VCL_INSTANTIATE_INLINE(fn_decl) 
 #define VCL_DO_NOT_INSTANTIATE(text,ret) template <> text {return ret;}
-#define VCL_INSTANTIATE_STATIC_TEMPLATE_MEMBER(x) x
+#define VCL_INSTANTIATE_STATIC_TEMPLATE_MEMBER(x) x; 
 #define VCL_UNINSTANTIATE_STATIC_TEMPLATE_MEMBER(x)
 #define VCL_UNINSTANTIATE_SPECIALIZATION(x)
 #define VCL_UNINSTANTIATE_UNSEEN_SPECIALIZATION(x)
 #define VCL_NEED_FRIEND_FOR_TEMPLATE_OVERLOAD(text)
 #define VCL_DECLARE_SPECIALIZATION(f) template <> f;
-#define VCL_STL_NULL_TMPL_ARGS
+#define VCL_DEFINE_SPECIALIZATION template <>
+#define VCL_STL_NULL_TMPL_ARGS /* <> */
 #define VCL_DEFAULT_VALUE(x)
 #define VCL_DFL_TYPE_PARAM_STLDECL(A,a) class A
 #define VCL_DFL_TMPL_PARAM_STLDECL(A,a) class A
@@ -547,7 +563,7 @@
 // The sunpro is ok with static data as long as it is only seen
 // at instantiation time, like in stl
 #define VCL_NO_STATIC_DATA_MEMBERS 1
-#define VCL_SUNPRO_ALLOCATOR_HACK(T) T ,allocator<T >
+#define VCL_SUNPRO_ALLOCATOR_HACK(T) T , std :: allocator<T >
 #endif
 
 //--------------------------------------------------------------------------------
@@ -560,33 +576,13 @@ typedef long double VCL_long_double;
 typedef double VCL_long_double;
 #endif
 
-#if 0 // defined(VCL_SGI_CC)
-#include <iostream.h>
-inline istream& operator>>(istream& s, signed char& c) {
-  char i;
-  s >> i;
-  c = i;
-  return s;
-}
-#endif
-
-#if defined(VCL_VC50) || defined(VCL_VC60)
-#include <iostream.h>
-inline istream& operator>>(istream& s, bool& c) {
-  int i;
-  s >> i;
-  c = (i != 0);
-  return s;
-}
-#endif
-
-#if defined(VCL_FOR_SCOPE_HACK)
+#if VCL_FOR_SCOPE_HACK
 # undef for
 # define for if (0) {} else for
 typedef int saw_VCL_FOR_SCOPE_HACK;
 #endif
 
 // fix to instantiate template functions
-#define VCL_INSTANTIATE_NONINLINE(fn_decl) template fn_decl
+#define VCL_INSTANTIATE_NONINLINE(fn_decl) template fn_decl ;
 
 #endif   // DO NOT ADD CODE AFTER THIS LINE! END OF VCL_compiler.

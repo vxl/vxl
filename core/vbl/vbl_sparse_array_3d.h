@@ -52,7 +52,7 @@ protected:
   // Data Members--------------------------------------------------------------
   typedef vcl_map<unsigned, T, vcl_less<unsigned>
 #ifdef VCL_SUNPRO_CC
-  , allocator<pair<unsigned,T> >
+  , allocator<vcl_pair<unsigned,T> >
 #endif
   > Map;
 

@@ -27,15 +27,15 @@ vbl_user_info::vbl_user_info(const char* name)
 }
 
 // -- Lookup info from login name
-vbl_user_info::vbl_user_info(const vcl_string& name)
+vbl_user_info::vbl_user_info(const vcl_string& name_)
 {
-  init(name.c_str());
+  init(name_.c_str());
 }
 
 // -- Lookup info from numeric user-id
-vbl_user_info::vbl_user_info(uid_type uid)
+vbl_user_info::vbl_user_info(uid_type uid_)
 {
-  init(uid);
+  init(uid_);
 }
 
 //  uid_type uid;
@@ -51,16 +51,16 @@ void vbl_user_info::init(uid_type /*uid*/)
   cerr << "Not implemented\n";
 }
 
-void vbl_user_info::init(char const* name)
+void vbl_user_info::init(char const* name_)
 {
 #ifndef WIN32
-  struct passwd* pw = getpwnam(name);
+  struct passwd* pw = getpwnam(name_);
   if (!pw) {
 #endif
     this->ok = false;
     this->uid = 0;
     this->gid = 0;
-    this->name = name;
+    this->name = name_;
 #ifndef WIN32
   } else {
     this->ok = true;

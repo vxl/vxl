@@ -56,24 +56,39 @@
 // vcl_hash_set, vcl_hash_map, vcl_hash_multiset, and vcl_hash_multimap.
 
 
-#include <stdlib.h>
-#include <stddef.h>
+#include <vcl/vcl_cstdlib.h>
 
-#include "vcl_algorithm.h"
-#include "vcl_function.h"
-#include "vcl_vector.h"
+//#include <vcl/vcl_alloc.h>
+#include "vcl_alloc.h"
+#include <vcl/vcl_algorithm.h>
+#include <vcl/vcl_iterator.h>
+#include <vcl/vcl_functional.h>
+#include <vcl/vcl_vector.h>
+#include <vcl/vcl_pair.h>
+#include <vcl/vcl_exception.h>
+#include <vcl/vcl_memory.h>
 
 #if defined ( __STL_USE_ABBREVS )
-# define __hashtable_iterator         vcl_hTIt
-# define __hashtable_const_iterator   vcl_hTcIt
-# define __hashtable_node             vcl_hTN
-# define __hashtable_base             vcl_hTB
+# define vcl_hashtable_iterator         vcl_hTIt
+# define vcl_hashtable_const_iterator   vcl_hTcIt
+# define vcl_hashtable_node             vcl_hTN
+# define vcl_hashtable_base             vcl_hTB
 # define vcl_hashtable                vcl_hT
+#endif
+
+#if defined(VCL_EMULATION_STLCONF_H_INCLUDED)
+#define VCL_debug_do(x) __stl_debug_do(x)
+#define VCL_debug_check(x) __stl_debug_check(x)
+#define VCL_verbose_assert(expr, msg) __stl_verbose_assert(expr, msg)
+#else
+#define VCL_debug_do(x)
+#define VCL_debug_check(x)
+#define VCL_verbose_assert(expr, msg)
 #endif
 
 template <class Key> struct vcl_hash { };
 
-inline size_t __stl_hash_string(const char* s)
+inline size_t VCL_hash_string(const char* s)
 {
   unsigned long h = 0; 
   for ( ; *s; ++s)
@@ -84,12 +99,12 @@ inline size_t __stl_hash_string(const char* s)
 
 struct vcl_hash<char*>
 {
-  size_t operator()(const char* s) const { return __stl_hash_string(s); }
+  size_t operator()(const char* s) const { return VCL_hash_string(s); }
 };
 
 struct vcl_hash<const char*>
 {
-  size_t operator()(const char* s) const { return __stl_hash_string(s); }
+  size_t operator()(const char* s) const { return VCL_hash_string(s); }
 };
 
 struct vcl_hash<char> {
@@ -121,9 +136,9 @@ struct vcl_hash<unsigned long> {
 };
 
 template <class Value>
-struct __hashtable_node
+struct vcl_hashtable_node
 {
-  typedef __hashtable_node<Value> self;
+  typedef vcl_hashtable_node<Value> self;
   self* next;
   Value val;
 };  
@@ -132,23 +147,23 @@ template <class Value, class Key, class HashFcn, class ExtractKey, class EqualKe
 class vcl_hashtable;
 
 template <class Value, class Key, class HashFcn, class ExtractKey, class EqualKey, class Alloc>
-struct __hashtable_iterator;
+struct vcl_hashtable_iterator;
 
 template <class Value, class Key, class HashFcn, class ExtractKey, class EqualKey, class Alloc>
-struct __hashtable_const_iterator;
+struct vcl_hashtable_const_iterator;
 
 template <class Value, class Key, class HashFcn, class ExtractKey, class EqualKey, class Alloc>
-struct __hashtable_iterator 
+struct vcl_hashtable_iterator 
 {
   typedef vcl_hashtable<Value, Key, HashFcn, ExtractKey, EqualKey, Alloc>
           hash_table;
-  typedef __hashtable_iterator<Value, Key, HashFcn, 
+  typedef vcl_hashtable_iterator<Value, Key, HashFcn, 
                                ExtractKey, EqualKey, Alloc>
           iterator;
-  typedef __hashtable_const_iterator<Value, Key, HashFcn, 
+  typedef vcl_hashtable_const_iterator<Value, Key, HashFcn, 
                                      ExtractKey, EqualKey, Alloc>
           const_iterator;
-  typedef __hashtable_node<Value> node;
+  typedef vcl_hashtable_node<Value> node;
   typedef size_t size_type;
   typedef Value& reference;
   typedef const Value& const_reference;
@@ -156,35 +171,35 @@ struct __hashtable_iterator
   node* cur;
   hash_table* ht;
 
-  __hashtable_iterator(node* n, hash_table* tab) : cur(n), ht(tab) {}
-  __hashtable_iterator() {}
+  vcl_hashtable_iterator(node* n, hash_table* tab) : cur(n), ht(tab) {}
+  vcl_hashtable_iterator() {}
   reference operator*() const { 
-        __stl_verbose_assert(valid() && cur!=0,__STL_MSG_NOT_DEREFERENCEABLE);
+        VCL_verbose_assert(valid() && cur!=0,__STL_MSG_NOT_DEREFERENCEABLE);
         return cur->val; 
   }
   IUEi_STL_INLINE iterator& operator++();
   IUEi_STL_INLINE iterator operator++(int);
   bool operator==(const iterator& it) const { 
-      __stl_debug_check(__check_same_owner(*this,it));
+      VCL_debug_check(__check_same_owner(*this,it));
       return cur == it.cur; 
   }
   bool operator!=(const iterator& it) const { 
-      __stl_debug_check(__check_same_owner(*this,it));
+      VCL_debug_check(__check_same_owner(*this,it));
       return cur != it.cur; 
   }
 };
 
 
 template <class Value, class Key, class HashFcn, class ExtractKey, class EqualKey, class Alloc>
-struct __hashtable_const_iterator 
+struct vcl_hashtable_const_iterator 
 {
   typedef vcl_hashtable<Value, Key, HashFcn, ExtractKey, EqualKey, Alloc>
           hash_table;
-  typedef __hashtable_iterator<Value, Key, HashFcn, 
+  typedef vcl_hashtable_iterator<Value, Key, HashFcn, 
      ExtractKey, EqualKey, Alloc> iterator;
-  typedef __hashtable_const_iterator<Value, Key, HashFcn, 
+  typedef vcl_hashtable_const_iterator<Value, Key, HashFcn, 
      ExtractKey, EqualKey, Alloc> const_iterator;
-  typedef __hashtable_node<Value> node;
+  typedef vcl_hashtable_node<Value> node;
   typedef size_t size_type;
   typedef Value& reference;
   typedef const Value& const_reference;
@@ -192,47 +207,47 @@ struct __hashtable_const_iterator
   const node* cur;
   const hash_table* ht;
 
-  __hashtable_const_iterator(const node* n, const hash_table* tab) : cur(n), ht(tab) {}
-  __hashtable_const_iterator() {}
-  __hashtable_const_iterator(const iterator& it) : cur(it.cur), ht(it.ht) {}
+  vcl_hashtable_const_iterator(const node* n, const hash_table* tab) : cur(n), ht(tab) {}
+  vcl_hashtable_const_iterator() {}
+  vcl_hashtable_const_iterator(const iterator& it) : cur(it.cur), ht(it.ht) {}
 
   const_reference operator*() const { 
-      __stl_verbose_assert(valid() && cur!=0,__STL_MSG_NOT_DEREFERENCEABLE);
+      VCL_verbose_assert(valid() && cur!=0,__STL_MSG_NOT_DEREFERENCEABLE);
       return cur->val; 
   }
   IUEi_STL_INLINE const_iterator& operator++();
   IUEi_STL_INLINE const_iterator operator++(int);
   bool operator==(const const_iterator& it) const { 
-      __stl_debug_check(__check_same_owner(*this,it));
+      VCL_debug_check(__check_same_owner(*this,it));
       return cur == it.cur; 
   }
   bool operator!=(const const_iterator& it) const { 
-      __stl_debug_check(__check_same_owner(*this,it));
+      VCL_debug_check(__check_same_owner(*this,it));
       return cur != it.cur; 
   }
 };
 
 // Note: assumes long is at least 32 bits.
 // fbp: try to avoid intances in every module
-enum { __stl_num_primes = 28 };
+enum { VCL_num_primes = 28 };
 
 #if ( __STL_STATIC_TEMPLATE_DATA > 0 ) && ! defined (WIN32)
-#  define __stl_prime_list __stl_prime<false>::list_
+#  define VCL_prime_list VCL_prime<false>::list_
    template <bool dummy>
-   struct __stl_prime {
+   struct VCL_prime {
    public:
        static const unsigned long list_[];
    };
 //rick put vcl_list in single .o  dummy here so array constant parses
 //   template <bool dummy>
-//   const unsigned long __stl_prime<dummy>::list_[] =
-      static const unsigned long __stl_prime_list_dummy[__stl_num_primes] =
+//   const unsigned long VCL_prime<dummy>::list_[] =
+      static const unsigned long VCL_prime_list_dummy[VCL_num_primes] =
 #  else
 #  if ( __STL_WEAK_ATTRIBUTE > 0 )
-      extern const unsigned long __stl_prime_list[__stl_num_primes] __attribute__((weak)) =
+      extern const unsigned long VCL_prime_list[VCL_num_primes] __attribute__((weak)) =
 #  else
       // give up
-      static const unsigned long __stl_prime_list[__stl_num_primes] =
+      static const unsigned long VCL_prime_list[VCL_num_primes] =
 #  endif /* __STL_WEAK_ATTRIBUTE */
 #endif /* __STL_STATIC_TEMPLATE_DATA */
 {
@@ -244,25 +259,26 @@ enum { __stl_num_primes = 28 };
   1610612741, 3221225473U, 4294967291U
 };
 
-inline unsigned long __stl_next_prime(unsigned long n)
+inline unsigned long VCL_next_prime(unsigned long n)
 {
-  const unsigned long* first = __stl_prime_list;
-  const unsigned long* last = __stl_prime_list;
-  last += __stl_num_primes;
-  const unsigned long* pos = lower_bound(first, last, n);
+  const unsigned long* first = VCL_prime_list;
+  const unsigned long* last = VCL_prime_list;
+  last += VCL_num_primes;
+  const unsigned long* pos = vcl_lower_bound(first, last, n);
   return pos == last ? *(last - 1) : *pos;
 }
 
 template <class Value, class Alloc>
-class __hashtable_base 
+class vcl_hashtable_base 
 {
 private:
     typedef Value value_type;
     typedef size_t size_type;
-    typedef __hashtable_node<Value> node;
+    typedef vcl_hashtable_node<Value> node;
     typedef vcl_simple_alloc<node, Alloc> node_allocator;
 public:	// These are public to get around restriction on protected access
-    __vector__<node*, Alloc> buckets;
+    typedef vcl_vector<VCL_SUNPRO_ALLOCATOR_HACK(node*) > vcl_buckets_type ;
+    vcl_buckets_type buckets; // awf killed optional allocator
     size_type num_elements;
 protected:
     IUEi_STL_INLINE void clear();
@@ -270,38 +286,38 @@ protected:
     node* new_node(const value_type& obj)
 	{
             node* n = node_allocator::allocate();
-            IUEg__TRY {
-                construct(&(n->val), obj);
+            vcl_try {
+	      new (&(n->val)) value_type(obj);
             }
-#  if defined (__STL_USE_EXCEPTIONS)
-            catch(...) {
-                node_allocator::deallocate(n);
-                throw;
+            vcl_catch_all {
+	      node_allocator::deallocate(n);
+	      vcl_throw "";
             }
-#  endif
             n->next = 0;
             return n;
 	}
 	
     void delete_node(node* n)
 	{
-            destroy(&(n->val));
+#define vcli_destroy(T, p)    ((T*)p)->~T()
+            vcli_destroy(Value, &(n->val));
+#undef vcli_destroy
             node_allocator::deallocate(n);
 	}
 
-    IUEi_STL_INLINE void copy_from(const __hashtable_base<Value,Alloc>& ht);
+    IUEi_STL_INLINE void copy_from(const vcl_hashtable_base<Value,Alloc>& ht);
 	
 public:	// These are public to get around restriction on protected access
-    __hashtable_base() : num_elements(0) { }
-//    __hashtable_base(size_type n) : num_elements(0) {}
-    ~__hashtable_base() { clear(); __stl_debug_do(invalidate()); }
+    vcl_hashtable_base() : num_elements(0) { }
+//    vcl_hashtable_base(size_type n) : num_elements(0) {}
+    ~vcl_hashtable_base() { clear(); VCL_debug_do(invalidate()); }
 };
 
 
 template <class Value, class Key, class HashFcn, class ExtractKey, class EqualKey, class Alloc>
-class vcl_hashtable : protected __hashtable_base<Value, Alloc> 
+class vcl_hashtable : protected vcl_hashtable_base<Value, Alloc> 
 {
-  typedef __hashtable_base<Value, Alloc> super;
+  typedef vcl_hashtable_base<Value, Alloc> super;
   typedef vcl_hashtable<Value, Key, HashFcn, ExtractKey, EqualKey, Alloc> self;
 public:
   typedef Key key_type;
@@ -324,16 +340,16 @@ private:
   key_equal equals;
   ExtractKey get_key;
 
-  typedef __hashtable_node<Value> node;
+  typedef vcl_hashtable_node<Value> node;
   typedef vcl_simple_alloc<node, Alloc> node_allocator;
 
 public:
-  typedef __hashtable_iterator<Value, Key, HashFcn, ExtractKey, EqualKey, Alloc> iterator;
-  typedef __hashtable_const_iterator<Value, Key, HashFcn, ExtractKey, EqualKey,Alloc> const_iterator;
+  typedef vcl_hashtable_iterator<Value, Key, HashFcn, ExtractKey, EqualKey, Alloc> iterator;
+  typedef vcl_hashtable_const_iterator<Value, Key, HashFcn, ExtractKey, EqualKey,Alloc> const_iterator;
   friend struct
-  __hashtable_iterator<Value, Key, HashFcn, ExtractKey, EqualKey, Alloc>;
+  vcl_hashtable_iterator<Value, Key, HashFcn, ExtractKey, EqualKey, Alloc>;
   friend struct
-  __hashtable_const_iterator<Value, Key, HashFcn, ExtractKey, EqualKey, Alloc>;
+  vcl_hashtable_const_iterator<Value, Key, HashFcn, ExtractKey, EqualKey, Alloc>;
 
 public:
   vcl_hashtable(size_type n,
@@ -341,7 +357,7 @@ public:
             const EqualKey&   eql,
             const ExtractKey& ext)
       : hashfun(hf), equals(eql), get_key(ext) {
-        __stl_debug_do(safe_init(this));
+        VCL_debug_do(safe_init(this));
         initialize_buckets(n);
     }
 
@@ -349,13 +365,13 @@ public:
             const HashFcn&    hf,
             const EqualKey&   eql)
       : hashfun(hf), equals(eql), get_key(ExtractKey()) {
-        __stl_debug_do(safe_init(this));
+        VCL_debug_do(safe_init(this));
         initialize_buckets(n);
     }
 
   vcl_hashtable(const self& ht)
     : hashfun(ht.hashfun), equals(ht.equals), get_key(ht.get_key) {
-        __stl_debug_do(safe_init(this));
+        VCL_debug_do(safe_init(this));
         copy_from(ht);
   }
 
@@ -385,7 +401,7 @@ public:
     __STL_NAMESPACE::swap(get_key, ht.get_key);
     buckets.swap(ht.buckets);
     __STL_NAMESPACE::swap(num_elements, ht.num_elements);
-    __stl_debug_do(swap_owners(ht));
+    VCL_debug_do(swap_owners(ht));
   }
 
   iterator begin()
@@ -415,7 +431,7 @@ public:
   size_type bucket_count() const { return buckets.size(); }
 
   size_type max_bucket_count() const
-    { return __stl_prime_list[__stl_num_primes - 1]; } 
+    { return VCL_prime_list[VCL_num_primes - 1]; } 
 
   size_type elems_in_bucket(size_type bucket) const
   {
@@ -455,6 +471,13 @@ public:
     for ( ; n > 0; --n)
       insert_equal_noresize(*f++);
   }
+
+#if defined(WIN32)
+  static void distance(const_iterator f, const_iterator l, size_type& n) {
+    while (f != l) { ++f; ++n; }
+  }
+#endif
+
 
  void insert_unique(const_iterator f, const_iterator l)
   {
@@ -520,9 +543,9 @@ public:
   IUEi_STL_INLINE void erase(const_iterator first, const_iterator last);
 
   IUEi_STL_INLINE void resize(size_type num_elements_hint);
-  void clear() { super::clear(); __stl_debug_do(invalidate_all()); }
+  void clear() { super::clear(); VCL_debug_do(invalidate_all()); }
 private:
-    size_type next_size(size_type n) const { return __stl_next_prime(n); }
+    size_type next_size(size_type n) const { return VCL_next_prime(n); }
 
     void initialize_buckets(size_type n)
     {
@@ -558,7 +581,7 @@ private:
 #  define __size_type__       size_t
 #  define __value_type__      Value
 #  define __key_type__        Key
-#  define __node__            __hashtable_node<Value>
+#  define __node__            vcl_hashtable_node<Value>
 #  define __reference__       Value&
 # else
 #  define __difference_type__  vcl_hashtable<Value, Key, HashFcn, ExtractKey, EqualKey, Alloc>::difference_type
@@ -570,11 +593,11 @@ private:
 # endif
 
 template <class Value, class Key, class HashFcn, class ExtractKey, class EqualKey, class Alloc>
-INLINE_LOOP __hashtable_iterator<Value, Key, HashFcn, ExtractKey, EqualKey, Alloc>&
-__hashtable_iterator<Value, Key, HashFcn, ExtractKey, EqualKey, Alloc>::operator++()
+inline vcl_hashtable_iterator<Value, Key, HashFcn, ExtractKey, EqualKey, Alloc>&
+vcl_hashtable_iterator<Value, Key, HashFcn, ExtractKey, EqualKey, Alloc>::operator++()
 {
   const node* old = cur;
-  __stl_verbose_assert(old!=0,__STL_MSG_INVALID_ADVANCE);
+  VCL_verbose_assert(old!=0,__STL_MSG_INVALID_ADVANCE);
   cur = cur->next;
   if (!cur) {
     size_type bucket = ht->bkt_num(old->val);
@@ -585,8 +608,8 @@ __hashtable_iterator<Value, Key, HashFcn, ExtractKey, EqualKey, Alloc>::operator
 }
 
 template <class Value, class Key, class HashFcn, class ExtractKey, class EqualKey, class Alloc>
-inline __hashtable_iterator<Value, Key, HashFcn, ExtractKey, EqualKey, Alloc>
-__hashtable_iterator<Value, Key, HashFcn, ExtractKey, EqualKey, Alloc>::operator++(int)
+inline vcl_hashtable_iterator<Value, Key, HashFcn, ExtractKey, EqualKey, Alloc>
+vcl_hashtable_iterator<Value, Key, HashFcn, ExtractKey, EqualKey, Alloc>::operator++(int)
 {
   iterator tmp = *this;
   ++*this;
@@ -594,11 +617,11 @@ __hashtable_iterator<Value, Key, HashFcn, ExtractKey, EqualKey, Alloc>::operator
 }
 
 template <class Value, class Key, class HashFcn, class ExtractKey, class EqualKey, class Alloc>
-INLINE_LOOP __hashtable_const_iterator<Value, Key, HashFcn, ExtractKey, EqualKey, Alloc>&
-__hashtable_const_iterator<Value, Key, HashFcn, ExtractKey, EqualKey, Alloc>::operator++()
+inline vcl_hashtable_const_iterator<Value, Key, HashFcn, ExtractKey, EqualKey, Alloc>&
+vcl_hashtable_const_iterator<Value, Key, HashFcn, ExtractKey, EqualKey, Alloc>::operator++()
 {
   const node* old = cur;
-  __stl_verbose_assert(old!=0,__STL_MSG_INVALID_ADVANCE);
+  VCL_verbose_assert(old!=0,__STL_MSG_INVALID_ADVANCE);
   cur = cur->next;
   if (!cur) {
     size_type bucket = ht->bkt_num(old->val);
@@ -609,8 +632,8 @@ __hashtable_const_iterator<Value, Key, HashFcn, ExtractKey, EqualKey, Alloc>::op
 }
 
 template <class Value, class Key, class HashFcn, class ExtractKey, class EqualKey, class Alloc>
-inline __hashtable_const_iterator<Value, Key, HashFcn, ExtractKey, EqualKey, Alloc>
-__hashtable_const_iterator<Value, Key, HashFcn, ExtractKey, EqualKey, Alloc>::operator++(int)
+inline vcl_hashtable_const_iterator<Value, Key, HashFcn, ExtractKey, EqualKey, Alloc>
+vcl_hashtable_const_iterator<Value, Key, HashFcn, ExtractKey, EqualKey, Alloc>::operator++(int)
 {
   const_iterator tmp = *this;
   ++*this;
@@ -619,42 +642,42 @@ __hashtable_const_iterator<Value, Key, HashFcn, ExtractKey, EqualKey, Alloc>::op
 
 template <class Value, class Key, class HashFcn, class ExtractKey, class EqualKey, class Alloc>
 inline forward_iterator_tag
-iterator_category(const __hashtable_iterator<Value, Key, HashFcn, ExtractKey, EqualKey, Alloc>&)
+iterator_category (const vcl_hashtable_iterator<Value, Key, HashFcn, ExtractKey, EqualKey, Alloc>&)
 {
   return forward_iterator_tag();
 }
 
 template <class Value, class Key, class HashFcn, class ExtractKey, class EqualKey, class Alloc>
 inline Value* 
-value_type(const __hashtable_iterator<Value, Key, HashFcn, ExtractKey, EqualKey, Alloc>&)
+value_type(const vcl_hashtable_iterator<Value, Key, HashFcn, ExtractKey, EqualKey, Alloc>&)
 {
   return (Value*) 0;
 }
 
 template <class Value, class Key, class HashFcn, class ExtractKey, class EqualKey, class Alloc>
 inline ptrdiff_t*
-distance_type(const __hashtable_iterator<Value, Key, HashFcn, ExtractKey, EqualKey, Alloc>&)
+distance_type(const vcl_hashtable_iterator<Value, Key, HashFcn, ExtractKey, EqualKey, Alloc>&)
 {
   return (ptrdiff_t*) 0;
 }
 
 template <class Value, class Key, class HashFcn, class ExtractKey, class EqualKey, class Alloc>
 inline forward_iterator_tag
-iterator_category(const __hashtable_const_iterator<Value, Key, HashFcn, ExtractKey, EqualKey, Alloc>&)
+iterator_category (const vcl_hashtable_const_iterator<Value, Key, HashFcn, ExtractKey, EqualKey, Alloc>&)
 {
   return forward_iterator_tag();
 }
 
 template <class Value, class Key, class HashFcn, class ExtractKey, class EqualKey, class Alloc>
 inline Value* 
-value_type(const __hashtable_const_iterator<Value, Key, HashFcn, ExtractKey, EqualKey, Alloc>&)
+value_type(const vcl_hashtable_const_iterator<Value, Key, HashFcn, ExtractKey, EqualKey, Alloc>&)
 {
   return (Value*) 0;
 }
 
 template <class Value, class Key, class HashFcn, class ExtractKey, class EqualKey, class Alloc>
 inline ptrdiff_t*
-distance_type(const __hashtable_const_iterator<Value, Key, HashFcn, ExtractKey, EqualKey, Alloc>&)
+distance_type(const vcl_hashtable_const_iterator<Value, Key, HashFcn, ExtractKey, EqualKey, Alloc>&)
 {
   return (ptrdiff_t*) 0;
 }
@@ -681,9 +704,8 @@ bool operator==(const vcl_hashtable<Value, Key, HashFcn, ExtractKey, EqualKey, A
   return true;
 }  
 
-
 template <class Value, class Key, class HashFcn, class ExtractKey, class EqualKey, class Alloc>
-vcl_pair<__hashtable_iterator<Value, Key, HashFcn, ExtractKey, EqualKey, Alloc>, bool> 
+vcl_pair<vcl_hashtable_iterator<Value, Key, HashFcn, ExtractKey, EqualKey, Alloc>, bool> 
 vcl_hashtable<Value, Key, HashFcn, ExtractKey, EqualKey, Alloc>::insert_unique_noresize(const __value_type__& obj)
 {
   const size_type n = bkt_num(obj);
@@ -701,7 +723,7 @@ vcl_hashtable<Value, Key, HashFcn, ExtractKey, EqualKey, Alloc>::insert_unique_n
 }
 
 template <class Value, class Key, class HashFcn, class ExtractKey, class EqualKey, class Alloc>
-__hashtable_iterator<Value, Key, HashFcn, ExtractKey, EqualKey, Alloc> 
+vcl_hashtable_iterator<Value, Key, HashFcn, ExtractKey, EqualKey, Alloc> 
 vcl_hashtable<Value, Key, HashFcn, ExtractKey, EqualKey, Alloc>::insert_equal_noresize(const __value_type__& obj)
 {
   const size_type n = bkt_num(obj);
@@ -744,8 +766,8 @@ vcl_hashtable<Value, Key, HashFcn, ExtractKey, EqualKey, Alloc>::find_or_insert(
 }
 
 template <class Value, class Key, class HashFcn, class ExtractKey, class EqualKey, class Alloc>
-vcl_pair<__hashtable_iterator<Value, Key, HashFcn, ExtractKey, EqualKey, Alloc>,
-     __hashtable_iterator<Value, Key, HashFcn, ExtractKey, EqualKey, Alloc> > 
+vcl_pair<vcl_hashtable_iterator<Value, Key, HashFcn, ExtractKey, EqualKey, Alloc>,
+     vcl_hashtable_iterator<Value, Key, HashFcn, ExtractKey, EqualKey, Alloc> > 
 vcl_hashtable<Value, Key, HashFcn, ExtractKey, EqualKey, Alloc>::equal_range(const __key_type__& key)
 {
   typedef vcl_pair<iterator, iterator> pii;
@@ -767,8 +789,8 @@ vcl_hashtable<Value, Key, HashFcn, ExtractKey, EqualKey, Alloc>::equal_range(con
 }
 
 template <class Value, class Key, class HashFcn, class ExtractKey, class EqualKey, class Alloc>
-vcl_pair<__hashtable_const_iterator<Value, Key, HashFcn, ExtractKey, EqualKey, Alloc>, 
-     __hashtable_const_iterator<Value, Key, HashFcn, ExtractKey, EqualKey, Alloc> > 
+vcl_pair<vcl_hashtable_const_iterator<Value, Key, HashFcn, ExtractKey, EqualKey, Alloc>, 
+     vcl_hashtable_const_iterator<Value, Key, HashFcn, ExtractKey, EqualKey, Alloc> > 
 vcl_hashtable<Value, Key, HashFcn, ExtractKey, EqualKey, Alloc>::equal_range(const __key_type__& key) const
 {
   typedef vcl_pair<const_iterator, const_iterator> pii;
@@ -825,9 +847,9 @@ vcl_hashtable<Value, Key, HashFcn, ExtractKey, EqualKey, Alloc>::erase(const __k
 
 template <class Value, class Key, class HashFcn, class ExtractKey, class EqualKey, class Alloc>
 void 
-vcl_hashtable<Value, Key, HashFcn, ExtractKey, EqualKey, Alloc>::erase(const __hashtable_iterator<Value, Key, HashFcn, ExtractKey, EqualKey, Alloc>& it)
+vcl_hashtable<Value, Key, HashFcn, ExtractKey, EqualKey, Alloc>::erase(const vcl_hashtable_iterator<Value, Key, HashFcn, ExtractKey, EqualKey, Alloc>& it)
 {
-  __stl_verbose_assert(it.owner()==this, __STL_MSG_NOT_OWNER);
+  VCL_verbose_assert(it.owner()==this, __STL_MSG_NOT_OWNER);
   node* const p = it.cur;
   if (p) {
     const size_type n = bkt_num(p->val);
@@ -858,13 +880,13 @@ vcl_hashtable<Value, Key, HashFcn, ExtractKey, EqualKey, Alloc>::erase(const __h
 
 template <class Value, class Key, class HashFcn, class ExtractKey, class EqualKey, class Alloc>
 void 
-vcl_hashtable<Value, Key, HashFcn, ExtractKey, EqualKey, Alloc>::erase(__hashtable_iterator<Value, Key, HashFcn, ExtractKey, EqualKey, Alloc> first, 
-                                        __hashtable_iterator<Value, Key, HashFcn, ExtractKey, EqualKey, Alloc> last)
+vcl_hashtable<Value, Key, HashFcn, ExtractKey, EqualKey, Alloc>::erase(vcl_hashtable_iterator<Value, Key, HashFcn, ExtractKey, EqualKey, Alloc> first, 
+                                        vcl_hashtable_iterator<Value, Key, HashFcn, ExtractKey, EqualKey, Alloc> last)
 {
   size_type f_bucket = first.cur ? bkt_num(first.cur->val) : buckets.size();
   size_type l_bucket = last.cur ? bkt_num(last.cur->val) : buckets.size();
-  __stl_debug_check(__check_if_owner(this,first)&&__check_if_owner(this,last));
-  __stl_verbose_assert(f_bucket <= l_bucket, __STL_MSG_INVALID_RANGE);
+  VCL_debug_check(__check_if_owner(this,first)&&__check_if_owner(this,last));
+  VCL_verbose_assert(f_bucket <= l_bucket, __STL_MSG_INVALID_RANGE);
   if (first.cur == last.cur)
     return;
   else if (f_bucket == l_bucket)
@@ -880,8 +902,8 @@ vcl_hashtable<Value, Key, HashFcn, ExtractKey, EqualKey, Alloc>::erase(__hashtab
 
 template <class Value, class Key, class HashFcn, class ExtractKey, class EqualKey, class Alloc>
 inline void
-vcl_hashtable<Value, Key, HashFcn, ExtractKey, EqualKey, Alloc>::erase(__hashtable_const_iterator<Value, Key, HashFcn, ExtractKey, EqualKey, Alloc> first, 
-                                        __hashtable_const_iterator<Value, Key, HashFcn, ExtractKey, EqualKey, Alloc> last)
+vcl_hashtable<Value, Key, HashFcn, ExtractKey, EqualKey, Alloc>::erase(vcl_hashtable_const_iterator<Value, Key, HashFcn, ExtractKey, EqualKey, Alloc> first, 
+                                        vcl_hashtable_const_iterator<Value, Key, HashFcn, ExtractKey, EqualKey, Alloc> last)
 {
   erase(iterator(__CONST_CAST(node*,first.cur),
                  __CONST_CAST(self*,first.ht)),
@@ -891,7 +913,7 @@ vcl_hashtable<Value, Key, HashFcn, ExtractKey, EqualKey, Alloc>::erase(__hashtab
 
 template <class Value, class Key, class HashFcn, class ExtractKey, class EqualKey, class Alloc>
 inline void
-vcl_hashtable<Value, Key, HashFcn, ExtractKey, EqualKey, Alloc>::erase(const __hashtable_const_iterator<Value, Key, HashFcn, ExtractKey, EqualKey, Alloc>& it)
+vcl_hashtable<Value, Key, HashFcn, ExtractKey, EqualKey, Alloc>::erase(const vcl_hashtable_const_iterator<Value, Key, HashFcn, ExtractKey, EqualKey, Alloc>& it)
 {
   erase(iterator(__CONST_CAST(node*,it.cur),
                  __CONST_CAST(self*,it.ht)));
@@ -905,7 +927,10 @@ vcl_hashtable<Value, Key, HashFcn, ExtractKey, EqualKey, Alloc>::resize(__size_t
     if (num_elements_hint > old_n) {
         const size_type n = next_size(num_elements_hint);
         if (n > old_n) {
-            __vector__<node*, Alloc> tmp(n, (node*) 0);
+#if !defined(VCL_GCC_27)
+            typename // 2.7 chokes on this
+#endif
+	    vcl_buckets_type tmp(n, (node*) 0);
             for (size_type bucket = 0; bucket < old_n; ++bucket) {
                 node* first = buckets[bucket];
                 while (first) {
@@ -926,8 +951,8 @@ vcl_hashtable<Value, Key, HashFcn, ExtractKey, EqualKey, Alloc>::resize(__size_t
 template <class Value, class Key, class HashFcn, class ExtractKey, class EqualKey, class Alloc>
 void 
 vcl_hashtable<Value, Key, HashFcn, ExtractKey, EqualKey, Alloc>::erase_bucket(const size_t n, 
-                                             __hashtable_node<Value>* first, 
-                                             __hashtable_node<Value>* last)
+                                             vcl_hashtable_node<Value>* first, 
+                                             vcl_hashtable_node<Value>* last)
 {
   node* cur = buckets[n];
   if (cur == first)
@@ -948,7 +973,7 @@ vcl_hashtable<Value, Key, HashFcn, ExtractKey, EqualKey, Alloc>::erase_bucket(co
 template <class Value, class Key, class HashFcn, class ExtractKey, class EqualKey, class Alloc>
 void 
 vcl_hashtable<Value, Key, HashFcn, ExtractKey, EqualKey, Alloc>::erase_bucket(const size_t n,
-                                                            __hashtable_node<Value>* last)
+                                                            vcl_hashtable_node<Value>* last)
 {
 	node* cur = buckets[n];
 	while (cur != last) {
@@ -961,7 +986,7 @@ vcl_hashtable<Value, Key, HashFcn, ExtractKey, EqualKey, Alloc>::erase_bucket(co
 }
 
 template <class Value, class Alloc>
-void __hashtable_base<Value, Alloc>::clear()
+void vcl_hashtable_base<Value, Alloc>::clear()
 {
 	for (size_type i = 0; i < buckets.size(); ++i) {
 		node* cur = buckets[i];
@@ -977,7 +1002,7 @@ void __hashtable_base<Value, Alloc>::clear()
 	
 	
 template <class Value, class Alloc>
-void __hashtable_base<Value, Alloc>::copy_from(const __hashtable_base<Value, Alloc>& ht)
+void vcl_hashtable_base<Value, Alloc>::copy_from(const vcl_hashtable_base<Value, Alloc>& ht)
 {
 	buckets.reserve(ht.buckets.size());
 	buckets.insert(buckets.end(), ht.buckets.size(), (node*) 0);

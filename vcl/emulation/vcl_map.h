@@ -37,9 +37,9 @@
  */
 
 #ifndef vcl_emulation_map_h
-#define vcl_emulation_map_h
+# define vcl_emulation_map_h
 
-#include "vcl_tree.h"
+#include <vcl/emulation/vcl_tree.h>
 
 __BEGIN_STL_FULL_NAMESPACE
 #define vcl_map __WORKAROUND_RENAME(vcl_map)
@@ -243,5 +243,4 @@ inline bool operator<(const vcl_map<Key, T, Compare>& x,
 
 # endif /*  __STL_DEFAULT_TYPE_PARAM */
 
-#define VCL_MAP_INSTANTIATE(T, Key, Comp) extern "please include vcl_map.txx"
 #endif // vcl_emulation_map_h

@@ -2,6 +2,8 @@
 
 #include <vcl/vcl_compiler.h>
 
+#undef VCL_MAP_INSTANTIATE
+
 #if !VCL_USE_NATIVE_STL
 # include <vcl/emulation/vcl_map.txx>
 #else

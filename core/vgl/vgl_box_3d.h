@@ -129,7 +129,7 @@ inline ostream&  operator<<(ostream& s, vgl_box_3d<Type> const& p) {
 }
 
 template <class Type>
-inline istream&  operator>>(istream& is,  vgl_point_3d<Type>& p) {
+inline istream&  operator>>(istream& is,  vgl_box_3d<Type>& p) {
   return is >> p->_min_pos[0] >> p->_min_pos[1] >> p->_min_pos[2]
             >> p->_max_pos[0] >> p->_max_pos[1] >> p->_max_pos[2];
 }

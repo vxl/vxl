@@ -6,6 +6,7 @@
 #endif
 
 #include <vcl/vcl_iosfwd.h>
+#include <vcl/vcl_functional.h> // vcl_equal_to()
 #include <vcl/vcl_hash_map.h>
 #include <vcl/vcl_pair.h>
 

@@ -1,15 +1,8 @@
-#ifndef vcl_gcc_295_vector_txx_
-#define vcl_gcc_295_vector_txx_
+#ifndef vcl_gcc295_vector_txx_
+#define vcl_gcc295_vector_txx_
 
 #include <vcl/vcl_vector.h>
 #include <vcl/vcl_compiler.h>
-
-/////////////////////////////////////////////////////////////////////////////
-
-// --- Vector ---
-
-// * You can't call INSTANTIATE_MAP twice from within the same macro
-// as the __LINE__ will be the same.
 
 #define VCL_VECTOR_STLINST_uninitialized_copy(Inp, Fwd, Size) \
 template Fwd __uninitialized_copy_aux(Inp, Inp, Fwd, __false_type);\

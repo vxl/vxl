@@ -1,0 +1,263 @@
+Microsoft Developer Studio Workspace File, Format Version 6.00
+# WARNING: DO NOT EDIT OR DELETE THIS WORKSPACE FILE!
+
+###############################################################################
+
+Project: "allvxl"=.\allvxl\allvxl.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name netlib
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name vbl
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name vcl
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name vgl
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name vil
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name vnl
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name vnl_algo
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name vsl
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "netlib"=..\Numerics\netlib\netlib.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "test_save_load_image"=.\vil\tests\test_save_load_image.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name vcl
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name vil
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "vbl"=.\vbl\vbl.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "vbl_tests"=.\vbl\vbl_tests\vbl_tests.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "vcl"=.\vcl\vcl.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "vcl_tests"=.\vcl\tests\vcl_tests.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "vgl"=.\vgl\vgl.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "vgui"=.\vgui\vgui.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "vgui_glut"=.\vgui\impl\glut\vgui_glut.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "vil"=.\vil\vil.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "vnl"=.\vnl\vnl.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "vnl_algo"=.\vnl\algo\vnl_algo.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "vnl_calc"=.\examples\vnl_calc\vnl_calc.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "vsl"=.\vsl\vsl.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "vxl_view"=.\vxl_view\vxl_view.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "w32app"=.\w32app\w32app.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "zzz"=.\zzz\zzz.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Global:
+
+Package=<5>
+{{{
+}}}
+
+Package=<3>
+{{{
+}}}
+
+###############################################################################
+

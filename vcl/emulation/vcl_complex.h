@@ -2,27 +2,24 @@
 #define vcl_emulation_complex_h
 #define VCL_COMPLEX_AVAILABLE
 
-#include <vcl/vcl_cmath.h>
+#include <math.h>
 #include <vcl/vcl_compiler.h>
+#include <vcl/vcl_iostream.h>
 
 // The Sunpro 4.2 compiler has a bug that it will not instantiate
 // inline friend functions with global linkage, so we remove
 // all the inline's while instantiation is taking place.
 
-#ifdef __SUNPRO_CC
-#ifdef INSTANTIATE_TEMPLATES
-#define inline
-#endif
+#if defined(__SUNPRO_CC) && defined(INSTANTIATE_TEMPLATES)
+# define inline
 #endif
 
-#include "vcl_function.h" // for op!=
-#include <iostream.h>
+#include <vcl/emulation/vcl_functional.h> // for op!=
 
 // implementation of class vcl_complex<FLOAT>, copied from g++ 2.7.2 - PVR
 
 #if defined (VCL_VC50)
-template <class FLOAT>
-class vcl_complex;
+template <class FLOAT> class vcl_complex;
 typedef vcl_complex<double> vcl_double_complex;
 typedef vcl_complex<float> vcl_float_complex;
 #endif
@@ -454,5 +451,4 @@ inline vcl_complex<float> operator*(const vcl_complex<float>& c, double d)
   return vcl_complex<float>(c.real() * f, c.imag() * f);
 }
 
-#define VCL_COMPLEX_INSTANTIATE(FLOAT) extern "please include vcl_complex.txx"
 #endif // vcl_emulation_complex_h

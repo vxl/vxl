@@ -5,6 +5,8 @@
 #include <vcl/vcl_complex.h>
 #include <vcl/vcl_compiler.h>
 
+#undef VCL_COMPLEX_INSTANTIATE
+
 #if !VCL_USE_NATIVE_COMPLEX
 # include <vcl/emulation/vcl_complex.txx>
 #else

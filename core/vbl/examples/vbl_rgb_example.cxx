@@ -35,7 +35,7 @@
 //
 // Author: Peter Vanroose, KULeuven/ESAT, December 1999
 
-#include <iostream.h>
+#include <vcl/vcl_iostream.h>
 #include <vbl/vbl_rgb.txx>
 typedef vbl_rgb<unsigned char> vbl_rgb_cell;
 

@@ -1,12 +1,9 @@
 
-#include <stdlib.h>
+#include <vcl/vcl_cstdlib.h>
 #include <vcl/vcl_cstring.h>
 #include <vcl/vcl_string.h>
 #include <vbl/vbl_string.h>
 #include <vbl/vbl_reg_exp.h>
-
-static vbl_reg_exp* rgexp = 0;
-static long rgexp_index = 0;
 
 
 #define TO_LOWER tolower                        // use ANSI functions
@@ -175,40 +172,40 @@ vcl_string& right_trim(vcl_string& sr, const char* rem)
   return sr;
 }
 
-// compile -- Compiles a given regular expression s so that it is
-// ready for pattern matching. Remember to recompile if the string is modified.
-void vbl_string_compile(const char* s) {
-  if (rgexp == NULL)                      // If no regexp object
-    rgexp = new vbl_reg_exp;              // Allocate storage for regexp
-  rgexp->compile (s);                     // Compile regular expression
-  rgexp_index = 0;                        // Reset search index position
-}
+// // compile -- Compiles a given regular expression s so that it is
+// // ready for pattern matching. Remember to recompile if the string is modified.
+// void vbl_string_compile(const char* s) {
+//   if (rgexp == NULL)                      // If no regexp object
+//     rgexp = new vbl_reg_exp;              // Allocate storage for regexp
+//   rgexp->compile (s);                     // Compile regular expression
+//   rgexp_index = 0;                        // Reset search index position
+// }
+// 
+// // find -- Searches the string for the previously compiled regular expression.
+// // Returns true if a match is found.
+// bool vbl_string_find (vcl_string& s) {
+// #if ERROR_CHECKING
+//   if (rgexp == NULL || !rgexp->is_valid()) // Valid regexp?
+//     //this->find_error ();                        // Raise exception
+// #endif
+//   rgexp_index += rgexp->end ();     // Use index from last search
+//   if (rgexp_index >= s.length())        // If at end of search
+//     return false;                               // Indicate failure
+//   bool result = rgexp->find (s.c_str() + rgexp_index);
+//   return result;                                // Return match result
+// }
+// 
+// long vbl_string_start () {
+//   return (rgexp_index + rgexp->start ());
+// }
+// 
+// // Returns the zero-relative star/end index of the last string
+// // which matches the regular expression..
+// long vbl_string_end () {
+//   return (rgexp_index + rgexp->end ());
+// }
 
-// find -- Searches the string for the previously compiled regular expression.
-// Returns true if a match is found.
-bool vbl_string_find (vcl_string& s) {
-#if ERROR_CHECKING
-  if (rgexp == NULL || !rgexp->is_valid()) // Valid regexp?
-    //this->find_error ();                        // Raise exception
-#endif
-  rgexp_index += rgexp->end ();     // Use index from last search
-  if (rgexp_index >= s.length())        // If at end of search
-    return false;                               // Indicate failure
-  bool result = rgexp->find (s.c_str() + rgexp_index);
-  return result;                                // Return match result
-}
-
-long vbl_string_start () {
-  return (rgexp_index + rgexp->start ());
-}
-
-// Returns the zero-relative star/end index of the last string
-// which matches the regular expression..
-long vbl_string_end () {
-  return (rgexp_index + rgexp->end ());
-}
-
-int vbl_string_atoi(const vcl_string& s)
+int vbl_string_atoi(vcl_string const& s)
 {
   return atoi(s.c_str());
 }

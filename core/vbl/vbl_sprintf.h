@@ -33,6 +33,7 @@
 
 class vbl_sprintf : public vcl_string {
 public:
+  typedef vcl_string super;
   // ISO C++ does not allow reference type for the argument preceding ...
   // If you can't afford to pass a string by value, use string::c_str()
   //vbl_sprintf(const vcl_string& fmt, ...); 
@@ -46,9 +47,11 @@ public:
   vbl_sprintf(const char *fmt, ...); 
  ~vbl_sprintf();
 
+#ifndef VCL_WIN32
   // assignment
   vbl_sprintf& operator=(const vcl_string& s) { vcl_string::operator=(s); return *this; }
   vbl_sprintf& operator=(const char* s) { vcl_string::operator=(s); return *this; }
+#endif
 
   // cast to const char *
   operator const char* () const;

@@ -40,7 +40,7 @@
 #include <vcl/vcl_compiler.h>
 #include <vcl/vcl_iosfwd.h> 
 
-#include "vcl_straits.h"
+#include <vcl/emulation/vcl_straits.h>
 
 #if _G_USE_EXCEPTIONS
 
@@ -688,5 +688,4 @@ struct vcl_string : public vcl_basic_string <char, vcl_string_char_traits <char>
 typedef vcl_basic_string <char, vcl_string_char_traits <char> > vcl_string;
 #endif
 
-#define VCL_BASIC_STRING_INSTANTIATE(charT,traits) extern "please include vcl_string.txx"
 #endif // vcl_emulation_string_h

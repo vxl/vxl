@@ -46,7 +46,6 @@
 
 __BEGIN_STL_FULL_NAMESPACE
 #define vcl_set __WORKAROUND_RENAME(vcl_set)
-
 template <class Key, VCL_DFL_TMPL_PARAM_STLDECL(Compare,vcl_less<Key>), 
                      VCL_DFL_TYPE_PARAM_STLDECL(Alloc,vcl_alloc) >
 class vcl_set {
@@ -227,5 +226,4 @@ inline bool operator<(const vcl_set<Key, Compare>& x,
 #  endif
 # endif /*  __STL_DEFAULT_TYPE_PARAM */
 
-#define VCL_SET_INSTANTIATE(T, Comp) extern "please include vcl_set.txx"
 #endif // vcl_emulation_set_h
