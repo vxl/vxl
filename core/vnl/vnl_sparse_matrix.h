@@ -167,8 +167,7 @@ class vnl_sparse_matrix
   void scale_row(unsigned int r, T scale);
 
   //: Resizes the array to have r rows and c cols
-  //    Currently not implemented.
-  void resize( int r, int c );
+  void set_size( int r, int c );
 
   //: Resets the internal iterator
   void reset();

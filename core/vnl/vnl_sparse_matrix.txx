@@ -490,10 +490,9 @@ void vnl_sparse_matrix<T>::scale_row(unsigned int r, T scale)
 
 //------------------------------------------------------------
 //: Resizes the matrix so that it has r rows and c columns.
-//    Currently not implemented.
 //
 template <class T>
-void vnl_sparse_matrix<T>::resize( int r, int c)
+void vnl_sparse_matrix<T>::set_size( int r, int c)
 {
   rs_ = r;
   cs_ = c;
