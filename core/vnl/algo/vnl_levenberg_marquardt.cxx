@@ -46,8 +46,8 @@ void vnl_levenberg_marquardt::init(vnl_least_squares_function* f)
   gtol = 1e-5;           // Termination tolerance on Grad(F)' * F = 0
   epsfcn = xtol * 0.001; // Step length for FD Jacobian
 
-  int m = f_->get_number_of_residuals();        // I     Number of residuals, must be > #unknowns
-  int n = f_->get_number_of_unknowns();         // I     Number of unknowns
+  unsigned int m = f_->get_number_of_residuals(); // I  Number of residuals, must be > #unknowns
+  unsigned int n = f_->get_number_of_unknowns();  // I  Number of unknowns
 
   set_covariance_ = false;
   fdjac_.set_size(n,m);
@@ -96,16 +96,16 @@ vnl_levenberg_marquardt* vnl_levenberg_marquardt_Activate::current = 0;
 #ifdef VCL_SUNPRO_CC
 extern "C"
 #endif
-void vnl_levenberg_marquardt::lmdif_lsqfun(int* n,          // I    Number of residuals
-                                           int* p,          // I    Number of unknowns
-                                           double* x,       // I    Solution vector, size n
-                                           double* fx,      // O    Residual vector f(x)
-                                           int* iflag)      // IO   0 ==> print, -1 ==> terminate
+void vnl_levenberg_marquardt::lmdif_lsqfun(int* n,     // I   Number of residuals
+                                           int* p,     // I   Number of unknowns
+                                           double* x,  // I   Solution vector, size n
+                                           double* fx, // O   Residual vector f(x)
+                                           int* iflag) // IO  0 ==> print, -1 ==> terminate
 {
   vnl_levenberg_marquardt* active = vnl_levenberg_marquardt_Activate::current;
   vnl_least_squares_function* f = active->f_;
-  assert(*p == f->get_number_of_unknowns());
-  assert(*n == f->get_number_of_residuals());
+  assert(*p == (int)f->get_number_of_unknowns());
+  assert(*n == (int)f->get_number_of_residuals());
   vnl_vector_ref<double> ref_x(*p, const_cast<double*>(x));
   vnl_vector_ref<double> ref_fx(*n, fx);
 
@@ -156,8 +156,8 @@ bool vnl_levenberg_marquardt::minimize_without_gradient(vnl_vector<double>& x)
   }
 
   // e04fcf
-  int m = f_->get_number_of_residuals();        // I     Number of residuals, must be > #unknowns
-  int n = f_->get_number_of_unknowns();         // I     Number of unknowns
+  int m = f_->get_number_of_residuals(); // I  Number of residuals, must be > #unknowns
+  int n = f_->get_number_of_unknowns();  // I  Number of unknowns
 
   if (m < n) {
     vcl_cerr << "vnl_levenberg_marquardt: Number of unknowns("<<n<<") greater than number of data ("<<m<<")\n";
@@ -237,18 +237,18 @@ bool vnl_levenberg_marquardt::minimize_without_gradient(vnl_vector<double>& x)
 #ifdef VCL_SUNPRO_CC
 extern "C"
 #endif
-void vnl_levenberg_marquardt::lmder_lsqfun(int* n,          // I    Number of residuals
-                                           int* p,          // I    Number of unknowns
-                                           double* x,       // I    Solution vector, size n
-                                           double* fx,      // O    Residual vector f(x)
-                                           double* fJ,      // O    m * n Jacobian f(x)
+void vnl_levenberg_marquardt::lmder_lsqfun(int* n,     // I   Number of residuals
+                                           int* p,     // I   Number of unknowns
+                                           double* x,  // I   Solution vector, size n
+                                           double* fx, // O   Residual vector f(x)
+                                           double* fJ, // O   m * n Jacobian f(x)
                                            int*,
-                                           int* iflag)      // I    1 -> calc fx, 2 -> calc fjac
+                                           int* iflag) // I   1 -> calc fx, 2 -> calc fjac
 {
   vnl_levenberg_marquardt* active = vnl_levenberg_marquardt_Activate::current;
   vnl_least_squares_function* f = active->f_;
-  assert(*p == f->get_number_of_unknowns());
-  assert(*n == f->get_number_of_residuals());
+  assert(*p == (int)f->get_number_of_unknowns());
+  assert(*n == (int)f->get_number_of_residuals());
   vnl_vector_ref<double> ref_x(*p, (double*)x); // const violation!
   vnl_vector_ref<double> ref_fx(*n, fx);
   vnl_matrix_ref<double> ref_fJ(*n, *p, fJ);
@@ -271,7 +271,8 @@ void vnl_levenberg_marquardt::lmder_lsqfun(int* n,          // I    Number of re
     ref_fJ.inplace_transpose();
 
     // check derivative?
-    if( active->check_derivatives_ > 0 ) {
+    if ( active->check_derivatives_ > 0 )
+    {
       active->check_derivatives_--;
 
       // use finite difference to compute Jacobian 
@@ -290,13 +291,12 @@ void vnl_levenberg_marquardt::lmder_lsqfun(int* n,          // I    Number of re
               wa1.data_block());
       // compute difference
       diff = (ref_fJ-finite_jac).array_two_norm();
-      if(  diff > vcl_sqrt(active->epsfcn) ) {
-        vcl_cerr << "Current x value:\n" << ref_x << vcl_endl;
-        vcl_cerr << "Analytical Jacobian is different form finite difference by " << diff << vcl_endl;
-        vcl_cerr << "  Analytical Jacobian is: \n " << ref_fJ.transpose() << vcl_endl;
-        vcl_cerr << "  Finite-difference Jacobian is: \n " << finite_jac.transpose() << vcl_endl;
-        vcl_cerr << vcl_endl;
-      }
+      if ( diff > vcl_sqrt(active->epsfcn) )
+        vcl_cerr << "Current x value:\n" << ref_x << vcl_endl
+                 << "Analytical Jacobian is different form finite difference by " << diff << vcl_endl
+                 << "  Analytical Jacobian is:\n   " << ref_fJ.transpose() << vcl_endl
+                 << "  Finite-difference Jacobian is:\n   " << finite_jac.transpose() << vcl_endl
+                 << vcl_endl;
     }
   }
 
@@ -316,8 +316,8 @@ bool vnl_levenberg_marquardt::minimize_using_gradient(vnl_vector<double>& x)
     return false;
   }
 
-  int m = f_->get_number_of_residuals();        // I     Number of residuals, must be > #unknowns
-  int n = f_->get_number_of_unknowns();         // I     Number of unknowns
+  int m = f_->get_number_of_residuals(); // I  Number of residuals, must be > #unknowns
+  int n = f_->get_number_of_unknowns();  // I  Number of unknowns
 
   if (m < n) {
     vcl_cerr << __FILE__ ": Number of unknowns("<<n<<") greater than number of data ("<<m<<")\n";
@@ -414,7 +414,7 @@ void vnl_levenberg_marquardt::diagnose_outcome(vcl_ostream& s) const
     s << (whoami ": OIOIOI: unkown info code from lmder.\n");
     break;
   }
-  int m = f_->get_number_of_residuals();
+  unsigned int m = f_->get_number_of_residuals();
   s << whoami ": " << num_iterations_ << " iterations, "
     << num_evaluations_ << " evaluations, "<< m <<" residuals.  RMS error start/end "
     << get_start_error() << '/' << get_end_error() << vcl_endl;
@@ -443,7 +443,7 @@ vnl_matrix<double> const& vnl_levenberg_marquardt::get_JtJ()
   if (!set_covariance_)
   {
     vcl_cerr << __FILE__ ": get_covariance() not confirmed tested  yet\n";
-    int n = fdjac_.rows ();
+    unsigned int n = fdjac_.rows();
 
     // matrix in FORTRAN is column-wise.
     // transpose it to get C style order
@@ -451,8 +451,8 @@ vnl_matrix<double> const& vnl_levenberg_marquardt::get_JtJ()
     // r is upper triangular matrix according to documentation.
     // But the lower part has non-zeros somehow.
     // clear the lower part
-    for( int i=0; i<n; i++ )
-      for( int j=0; j<i; j++ )
+    for (unsigned int i=0; i<n; ++i)
+      for (unsigned int j=0; j<i; ++j)
         r(i,j) = 0.0;
 
     // compute r^T * r
@@ -462,20 +462,20 @@ vnl_matrix<double> const& vnl_levenberg_marquardt::get_JtJ()
 
     // Permute. First order columns.
     // Note, *ipvt_ contains 1 to n, not 0 to n-1
-    vnl_vector<int> jpvt (n);
-    for (int j = 0; j < n; j++) {
-      int i = 0;
+    vnl_vector<int> jpvt(n);
+    for (unsigned int j = 0; j < n; ++j) {
+      unsigned int i = 0;
       for (; i < n; i++) {
-        if (ipvt_[i] == j+1) {
+        if (ipvt_[i] == (int)j+1) {
           jpvt (j) = i;
           break;
         }
       }
-      rtrpt.set_column (j, rtr.get_column (i));
+      rtrpt.set_column(j, rtr.get_column(i));
     }
 
     // Now order rows
-    for (int j = 0; j < n; j++) {
+    for (unsigned int j = 0; j < n; ++j) {
       inv_covar_.set_row (j, rtrpt.get_row (jpvt(j)));
     }
 
