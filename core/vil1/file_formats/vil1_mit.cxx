@@ -79,11 +79,11 @@ vil_image_impl* vil_mit_file_format::make_input_image(vil_stream* is)
   /*int width =*/ vil_16bit_read_little_endian(is);
   /*int height=*/ vil_16bit_read_little_endian(is);
 
-  //cerr << __FILE__ " : here we go:\n";
-  //cerr << __FILE__ " : type_ = " << type << endl;
-  //cerr << __FILE__ " : bits_per_pixel_ = " << bits_per_pixel << endl;
-  //cerr << __FILE__ " : width_ = " << width << endl;
-  //cerr << __FILE__ " : height_ = " << height << endl;
+  //vcl_cerr << __FILE__ " : here we go:\n";
+  //vcl_cerr << __FILE__ " : type_ = " << type << vcl_endl;
+  //vcl_cerr << __FILE__ " : bits_per_pixel_ = " << bits_per_pixel << vcl_endl;
+  //vcl_cerr << __FILE__ " : width_ = " << width << vcl_endl;
+  //vcl_cerr << __FILE__ " : height_ = " << height << vcl_endl;
 
   return new vil_mit_generic_image(is);
 }

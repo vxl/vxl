@@ -286,14 +286,15 @@ sub process_headers {
       s/(\s)::((sort|find|swap_ranges|copy|fill|find_if)\s*\()/$1vcl_$2/;
 
       # std::cout, std::cerr, std::endl etc
-      s/\b(std::)\s*(cout|cerr|endl|(i|o|f|if|of)stream)\b/vcl_$2/g;
-      s/\b(cout|cerr|endl|(i|o|f|if|of)stream)\b/vcl_$1/g;
+      s/\b(std::)\s*(cout|cerr|endl|ends|(i|o|f|if|of|str|ostr)stream)\b/vcl_$2/g;
+      s/\b(cout|cerr|endl|ends|ios|(i|o|f|if|of|str|ostr)stream)\b/vcl_$1/g;
 
       # misc functions names.
       s/\b(memcpy|memset|memmove|strcat|strchr|strcmp|strncmp|strcpy|strncpy|strlen)\b/vcl_$1/g;
       s/\b(sprintf|printf|fprintf|fwrite|fread|fopen|fclose)\b/vcl_$1/g;
       s/\b(abort|exit|abs|atoi|atof)\b/vcl_$1/g;
-      s/\b(sqrt|exp|log|atan2|cos|sin|tan|pow)\b/vcl_$1/g;
+      s/\b(sqrt|exp|log|atan2|cos|sin|tan|pow|acos|asin|atan|ceil|floor|fabs)\b/vcl_$1/g;
+      s/\b(ptrdiff_t|size_t|time_t)\b/vcl_$1/g;
 
       # remember what we saw
       $saw_functional_h = 1 if m/include <vcl_functional\.h>/;

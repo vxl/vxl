@@ -89,7 +89,7 @@ int doit ()
     vcl_cout << "List of video sequences" << vcl_endl;
     for (vcl_list<base_sptr>::const_iterator i = videos.begin(); i != videos.end(); i++)
       vcl_cout << " " << *i << vcl_endl;
-    //cout << videos << endl;
+    //vcl_cout << videos << vcl_endl;
 
     // Clear the list
     videos.clear();
@@ -106,7 +106,7 @@ int doit ()
     vcl_cout << "List of video sequences" << vcl_endl;
     for (vcl_list<base_sptr>::const_iterator i = videos.begin(); i != videos.end(); i++)
       vcl_cout << " " << *i << vcl_endl;
-    //cout << videos << endl;
+    //vcl_cout << videos << vcl_endl;
   }
   return 0;
 }

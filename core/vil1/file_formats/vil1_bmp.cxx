@@ -27,7 +27,7 @@ vil_image_impl* vil_bmp_file_format::make_input_image(vil_stream* is)
   if ( hdr.signature_valid() )
     return new vil_bmp_generic_image(is);
 
-  //cerr << "not a .bmp file" << endl;
+  //vcl_cerr << "not a .bmp file" << vcl_endl;
   return 0;
 }
 

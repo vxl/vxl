@@ -72,8 +72,8 @@ int vil_memory_image_window::sum_squared_differences(const vil_memory_image_of<v
     for (int col_index = col_start; col_index < col_end; col_index++) {
       int p1 = image1_(mask1_col_index_ + col_index, mask1_row_index_ + row_index);
       int p2 =  image2( mask2_col_index + col_index,  mask2_row_index + row_index);
-      //      cout << "  int = " << mask1_col_index_ + col_index << " " << mask1_row_index_ + row_index << endl;
-      // cout << "  int = " << p1 << " " << p2 << endl;
+      //      vcl_cout << "  int = " << mask1_col_index_ + col_index << " " << mask1_row_index_ + row_index << vcl_endl;
+      // vcl_cout << "  int = " << p1 << " " << p2 << vcl_endl;
 
       difference_total += p1>p2 ? p1-p2 : p2-p1; // avoid vnl dependency - PVr
 

@@ -101,6 +101,10 @@ foreach $f (@FILES)
     print "$f\t\# contains long /*...*/ comments\n";
     $printed = 1;
   }
+  if ($file =~ m/^\s*\/\/\s*vcl_c(out|err)\s*\<\<[^\n]*(\n\s*\/\/[^\n]*){5,}/) {
+    print "$f\t\# consider commenting out code sections with #if 0 or #ifdef DEBUG\n";
+    $printed = 1;
+  }
 
 # 8. RCS indications
   if ($file =~ m/(\$RCSfile)/) {
@@ -246,8 +250,8 @@ foreach $f (@FILES)
       $printed = 1;
     }
   }
-  foreach $wd (split(' ',"cin cout cerr clog endl istream ostream fstream ifstream ofstream")) {
-    if ($f !~ m/\bvcl(\/iso|\/generic|\/sgi)?\/vcl_(iosfwd|[iof]+stream)\.h/ &&
+  foreach $wd (split(' ',"cin cout cerr clog endl ends ios istream ostream fstream ifstream ofstream strstream ostrstream")) {
+    if ($f !~ m/\bvcl(\/iso|\/generic|\/sgi)?\/vcl_(ios|iosfwd|[siof]+stream|strstream)\.h/ &&
         $f !~ m/\bvcl\/Templates\/stream-instances\.cxx$/ &&
         $file_s =~ m/\b$wd\b/) {
       print "$f\t\# $wd must be vcl_$wd\n";

@@ -13,5 +13,5 @@ int main(int argc, char** argv)
   vidl_io::register_codec(new vidl_avicodec);
 
   vidl_movie_sptr movie = vidl_io::load_movie(argv[1]);
-  cerr << "Length = " << movie->length() << endl;
+  vcl_cerr << "Length = " << movie->length() << vcl_endl;
 }

@@ -36,7 +36,7 @@
 #endif
 
 #if 0
-#define ww cout << "reached " __FILE__ ":" << __LINE__ << endl
+#define ww vcl_cout << "reached " __FILE__ ":" << __LINE__ << vcl_endl
 #endif
 
 //: Test to see if all the pixels in two images are equal

@@ -9,7 +9,7 @@
 #define safety_assert(x) assert(x)
 
 //#include <vcl_iostream.h>
-//#define trace(str) { cerr << str << endl; }
+//#define trace(str) { vcl_cerr << str << vcl_endl; }
 
 //--------------------------------------------------------------------------------
 

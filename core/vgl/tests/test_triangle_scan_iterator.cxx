@@ -16,15 +16,15 @@ int main(int, char **)
   vgl_polygon p(x, y, 3);
   vgl_polygon_scan_iterator pi(p, false);
 
-  vcl_cerr << "triangle:" << vcl_endl;
+  vcl_cout << "triangle:" << vcl_endl;
   for (ti.reset(); ti.next(); )
-    vcl_cerr << ti.scany() << ' ' << ti.startx() << ' ' << ti.endx() << vcl_endl;
-  vcl_cerr << vcl_endl;
+    vcl_cout << ti.scany() << ' ' << ti.startx() << ' ' << ti.endx() << vcl_endl;
+  vcl_cout << vcl_endl;
 
-  vcl_cerr << "polygon:" << vcl_endl;
+  vcl_cout << "polygon:" << vcl_endl;
   for (pi.reset(); pi.next(); )
-    vcl_cerr << pi.scany() << ' ' << pi.startx() << ' ' << pi.endx() << vcl_endl;
-  vcl_cerr << vcl_endl;
+    vcl_cout << pi.scany() << ' ' << pi.startx() << ' ' << pi.endx() << vcl_endl;
+  vcl_cout << vcl_endl;
 
   return 0;
 }

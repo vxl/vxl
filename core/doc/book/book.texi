@@ -550,7 +550,7 @@ int main()
   vil_memory_image_of<unsigned char> buf(img);
 
   // Access pixel (100,100) and print its value as an int.
-  vcl_cerr << "Pixel 100,100 = " << (int) buf(100,100) << endl;
+  vcl_cerr << "Pixel 100,100 = " << (int) buf(100,100) << vcl_endl;
 @}
 @end example
 
@@ -1418,7 +1418,7 @@ The @code{vnl_vector} is equally straightforward.  Here we make a 4-element
 vector of doubles, premultiply it by @var{P}, and print the result:
 @example
 vnl_vector<double> X(4);
-cerr << P*X;
+vcl_cerr << P*X;
 @end example
 Several more examples are shown in the figure below. @comment @ref{fig:matrixbasics}
 

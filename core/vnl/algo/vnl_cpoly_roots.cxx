@@ -37,7 +37,7 @@ vnl_cpoly_roots::vnl_cpoly_roots(vnl_vector<double> const & a_real,
   for (unsigned i=0; i<N; ++i)
     a[i] = vcl_complex<double>(a_real[i], a_imag[i]);
 
-  //cerr << "a = " << a << endl;
+  //vcl_cerr << "a = " << a << vcl_endl;
   compute(a);
-  //cerr << "s = " << solns << endl;
+  //vcl_cerr << "s = " << solns << vcl_endl;
 }

@@ -235,7 +235,7 @@ vil_tiff_generic_image::vil_tiff_generic_image(vil_stream* is, int planes,
   components_ = components;
   bits_per_component_ = bits_per_component;
 
-  // cerr << "\n\n *** \n";
+  // vcl_cerr << "\n\n *** \n";
   write_header();
 }
 
@@ -289,7 +289,7 @@ bool vil_tiff_generic_image::read_header()
     this->bits_per_component_ = bitspersample;
     break;
   default:
-    // cerr << "vil_tiff: Saw " << samplesperpixel << " samples @ " << bitspersample << "\n";
+    // vcl_cerr << "vil_tiff: Saw " << samplesperpixel << " samples @ " << bitspersample << "\n";
     TIFFError("TIFFImageRH: ", "Can only handle 1-channel gray scale or 3-channel color");
     return(false);
   }

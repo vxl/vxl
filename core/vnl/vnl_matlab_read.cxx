@@ -92,11 +92,11 @@ void vnl_matlab_readhdr::read_hdr() {
   if (varname)
     delete [] varname;
   varname = new char[hdr.namlen+1];
-// cerr << "type:" << hdr.type << endl;
-// cerr << "rows:" << hdr.rows << endl;
-// cerr << "cols:" << hdr.cols << endl;
-// cerr << "imag:" << hdr.imag << endl;
-// cerr << "namlen:" << hdr.namlen << endl;
+// vcl_cerr << "type:" << hdr.type << vcl_endl;
+// vcl_cerr << "rows:" << hdr.rows << vcl_endl;
+// vcl_cerr << "cols:" << hdr.cols << vcl_endl;
+// vcl_cerr << "imag:" << hdr.imag << vcl_endl;
+// vcl_cerr << "namlen:" << hdr.namlen << vcl_endl;
 
   ::vnl_read_bytes(s, varname, hdr.namlen);
   varname[hdr.namlen] = '\0';

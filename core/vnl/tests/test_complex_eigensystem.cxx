@@ -37,26 +37,26 @@ void test_complex_eigensystem()
                               true,  // left and right
                               true); // eigenvectors
 
-  //cout << "A = " << A << endl;
-  //cout << "eigenvalues = " << eig.W << endl;
-  //cout << "L = " << eig.L << endl;
-  //cout << "R = " << eig.R << endl;
+  //vcl_cout << "A = " << A << vcl_endl;
+  //vcl_cout << "eigenvalues = " << eig.W << vcl_endl;
+  //vcl_cout << "L = " << eig.L << vcl_endl;
+  //vcl_cout << "R = " << eig.R << vcl_endl;
 
   for (unsigned i=0;i<N;i++) {
-    //cout << "i=" << i << endl;
+    //vcl_cout << "i=" << i << vcl_endl;
     //
     vcl_complex<double> w = eig.W[i];
     vnl_vector<vcl_complex<double> > err;
-    //cout << "  w = " << w << endl;
+    //vcl_cout << "  w = " << w << vcl_endl;
     //
     vnl_vector<vcl_complex<double> > l(eig.left_eigen_vector(i));
     err = (l*A - l*w);
-    //cout << "  " << err << endl;
+    //vcl_cout << "  " << err << vcl_endl;
     vnl_test_assert("  Left  eigenvalue", err.magnitude() < 1e-10);
     //
     vnl_vector<vcl_complex<double> > r(eig.right_eigen_vector(i));
     err = (A*r - w*r);
-    //cout << "  " << err << endl;
+    //vcl_cout << "  " << err << vcl_endl;
     vnl_test_assert("  Right eigenvalue", err.magnitude() < 1e-10);
   }
 }

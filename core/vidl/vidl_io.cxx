@@ -272,7 +272,7 @@ bool vidl_io::save(vidl_movie* movie, const char* fname, const char* type)
   while ((i != supported_types_.end()) && (vcl_strcmp((*i)->type(), type)))
     {
       // const char* debug = (*i)->type();
-      // cout << "debug : " << debug << " type : " << type << endl;
+      // vcl_cout << "debug : " << debug << " type : " << type << vcl_endl;
       ++i;
     }
 

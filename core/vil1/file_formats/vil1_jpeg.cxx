@@ -97,7 +97,7 @@ vil_jpeg_generic_image::vil_jpeg_generic_image(vil_stream *s,
   // store size
   jc->jobj.image_width = width;
   jc->jobj.image_height = height;
-  //cerr << "w h = " << jobj.image_width << ' ' << jobj.image_height << endl;
+  //vcl_cerr << "w h = " << jobj.image_width << ' ' << jobj.image_height << vcl_endl;
 
   assert(bits_per_component == CHAR_BIT); // FIXME.
   assert(format == VIL_COMPONENT_FORMAT_UNSIGNED_INT); // FIXME
@@ -124,7 +124,7 @@ bool vil_jpeg_generic_image::get_section(void *buf, int x0, int y0, int w, int h
     vcl_cerr << "attempted put_section() failed -- no jpeg decompressor" << vcl_endl;
     return false;
   }
-  //cerr << "get_section " << buf << ' ' << x0 << ' ' << y0 << ' ' << w << ' ' << h << endl;
+  //vcl_cerr << "get_section " << buf << ' ' << x0 << ' ' << y0 << ' ' << w << ' ' << h << vcl_endl;
 
   // number of bytes per pixel
   unsigned bpp = jd->jobj.output_components;

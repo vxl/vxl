@@ -54,7 +54,7 @@ bool vil_resample_image_impl::get_property(char const *, void *) const
 bool vil_resample_image_impl::get_section(void *buf, int x0, int y0, int w, int h) const
 {
   assert(buf);
-  //cerr << "x0 y0 w h = " << x0 << ' ' << y0 << ' ' << w << ' ' << h << endl;
+  //vcl_cerr << "x0 y0 w h = " << x0 << ' ' << y0 << ' ' << w << ' ' << h << vcl_endl;
 
   if (base.bits_per_component() % CHAR_BIT) {
     vcl_cerr << __FILE__ " : urgh!" << vcl_endl;

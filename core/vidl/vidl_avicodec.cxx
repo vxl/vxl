@@ -107,10 +107,10 @@ bool vidl_avicodec::get_section(
   DIB = (byte*) AVIStreamGetFrame(avi_get_frame_, position);
 
   WORD BitsPerPixel = ((LPBITMAPINFOHEADER)DIB)->biBitCount;
-  //cout << "Number of bits : " << BitsPerPixel << "  Number of bytes : " << get_bytes_pixel() << endl;
+  //vcl_cout << "Number of bits : " << BitsPerPixel << "  Number of bytes : " << get_bytes_pixel() << vcl_endl;
 
   WORD ColorsUsed = ((LPBITMAPINFOHEADER)DIB)->biClrUsed;
-  //cout << "Number of colors used : " << ColorsUsed << endl;
+  //vcl_cout << "Number of colors used : " << ColorsUsed << vcl_endl;
   // Not sure we can handle the stream if ColorsUsed!=0
 
   //For the moment

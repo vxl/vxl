@@ -217,8 +217,8 @@ int vnl_sparse_symmetric_eigensystem::CalculateNPairs(vnl_sparse_matrix<double>&
   values = new double[n];
   for (int i=0; i<n; ++i) {
     values[i] = temp_vals[i];
-    // cout << "value " << temp_vals[i]
-    //   << " accuracy " << temp_vals[i+n*2] << endl;
+    // vcl_cout << "value " << temp_vals[i]
+    //   << " accuracy " << temp_vals[i+n*2] << vcl_endl;
     vnl_vector<double> vec(dim,0.0);
     for (int j=0; j<dim; ++j)
       vec[j] = temp_vecs[j + dim*i];
@@ -261,7 +261,7 @@ int vnl_sparse_symmetric_eigensystem::SaveVectors(int n, int m,
 
   double* temp = new double[n*m];
   vcl_memcpy(temp,q,n*m*sizeof(double));
-  //  cout << "Save vectors " << base << " " << temp << endl;
+  //  vcl_cout << "Save vectors " << base << " " << temp << vcl_endl;
 
   temp_store.push_back(temp);
 
@@ -282,7 +282,7 @@ int vnl_sparse_symmetric_eigensystem::RestoreVectors(int n, int m,
 
   double* temp = temp_store[read_idx];
   vcl_memcpy(q,temp,n*m*sizeof(double));
-  //  cout << "Restore vectors " << base << " " << temp << endl;
+  //  vcl_cout << "Restore vectors " << base << " " << temp << vcl_endl;
 
   read_idx++;
   return 0;

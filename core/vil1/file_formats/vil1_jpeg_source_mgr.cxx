@@ -32,7 +32,7 @@ typedef vil_jpeg_stream_source_mgr *vil_jpeg_srcptr;
 STATIC
 void
 vil_jpeg_init_source (j_decompress_ptr cinfo) {
-  //cerr << "vil_jpeg_init_source()" << endl;
+  //vcl_cerr << "vil_jpeg_init_source()" << vcl_endl;
 
   vil_jpeg_srcptr src = ( vil_jpeg_srcptr )( cinfo->src );
 
@@ -152,7 +152,7 @@ vil_jpeg_stream_src_set (j_decompress_ptr cinfo, vil_stream *vs) {
 
   assert(! src); // this function must be called only once on each cinfo.
 
-  //cerr << "vil_jpeg_stream_src() : creating new data source" << endl;
+  //vcl_cerr << "vil_jpeg_stream_src() : creating new data source" << vcl_endl;
 
   src = (vil_jpeg_srcptr) // allocate
     (*cinfo->mem->alloc_small) ((j_common_ptr) cinfo,

@@ -152,7 +152,7 @@ bool vnl_levenberg_marquardt::minimize_without_gradient(vnl_vector<double>& x)
   vnl_vector<double> wa3(n);
   vnl_vector<double> wa4(m);
 
-  //cerr << "STATUS: " << failure_code_ << endl;
+  //vcl_cerr << "STATUS: " << failure_code_ << vcl_endl;
   vnl_levenberg_marquardt_Activate activator(this);
 
   double errors[2] = {0,0};
@@ -184,7 +184,7 @@ bool vnl_levenberg_marquardt::minimize_without_gradient(vnl_vector<double>& x)
 #ifdef _SGI_CC_6_
   // Something fundamentally odd about the switch below on SGI native... FIXME
   vcl_cerr << "vnl_levenberg_marquardt: termination code = " << failure_code_ << vcl_endl;
-  // diagnose_outcome(cerr);
+  // diagnose_outcome(vcl_cerr);
   return 1;
 #endif
 
