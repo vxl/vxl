@@ -1,15 +1,10 @@
-//
-// This is contrib/mul/vil3d/vil3d_resample_trilinear.txx
-//
+// This is mul/vil3d/vil3d_resample_trilinear.txx
 #ifndef vil3d_resample_trilinear_txx_
 #define vil3d_resample_trilinear_txx_
-
-
 //:
 // \file
 // \brief Resample a 3D image by an integer factor in each dimension
 // \author Kevin de Souza
-
 
 #include <vil3d/vil3d_resample_trilinear.h>
 #include <vil3d/vil3d_trilin_interp.h>
@@ -22,8 +17,8 @@
 template <class T >
 void vil3d_resample_trilinear(const vil3d_image_view< T >& src_image,
                               vil3d_image_view< T >& dst_image,
-                              const unsigned dx, 
-                              const unsigned dy, 
+                              const unsigned dx,
+                              const unsigned dy,
                               const unsigned dz)
 {
   // Assume planes are the same for both images
@@ -48,7 +43,7 @@ void vil3d_resample_trilinear(const vil3d_image_view< T >& src_image,
   const vcl_ptrdiff_t d_pstep = dst_image.planestep();
   T* d_plane = dst_image.origin_ptr();
 
-  // Loop over all voxels in the destination image and 
+  // Loop over all voxels in the destination image and
   // sample from the corresponding point in the source image
   for (unsigned p=0; p<np; ++p, s_plane+=s_pstep, d_plane+=d_pstep)
   {
@@ -61,7 +56,7 @@ void vil3d_resample_trilinear(const vil3d_image_view< T >& src_image,
         T* d_pix = d_row;
         for (unsigned i=0; i<dni; ++i, d_pix+=d_istep)
         {
-          *d_pix = vil3d_trilin_interp_safe_extend(i/dx, j/dy, k/dz, s_plane, 
+          *d_pix = vil3d_trilin_interp_safe_extend(i/dx, j/dy, k/dz, s_plane,
                                                    sni, snj, snk,
                                                    s_istep, s_jstep, s_kstep);
         }
@@ -71,13 +66,12 @@ void vil3d_resample_trilinear(const vil3d_image_view< T >& src_image,
 }
 
 
-
 #define VIL3D_RESAMPLE_TRILINEAR_INSTANTIATE( T ) \
-template void vil3d_resample_trilinear(const vil3d_image_view< T >& src_image,  \
-                                       vil3d_image_view< T >& dst_image,  \
+template void vil3d_resample_trilinear(const vil3d_image_view< T >& src_image, \
+                                       vil3d_image_view< T >& dst_image, \
                                        const unsigned dx, \
                                        const unsigned dy, \
-                                       const unsigned dz);
+                                       const unsigned dz)
 
 
 #endif // vil3d_resample_trilinear_txx_
