@@ -278,7 +278,11 @@ void vgui_slot::assign(vgui_tableau_ref const &t)
 
 bool vgui_slot::handle(vgui_event const &e)
 {
-  return pimpl && pimpl->child () && pimpl->child()->handle(e);
+  if (!pimpl) return false; 
+  vgui_tableau* c = pimpl->child();
+  if (!c) return false;
+  
+  return c->handle(e);
 }
 
 vgui_slot::operator bool() const
