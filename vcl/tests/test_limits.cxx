@@ -88,20 +88,18 @@ int test_limits_main(int argc,char* argv[])
            << "rnder = " << vcl_numeric_limits<float>::round_error() << vcl_endl;
 
   TEST("dmax", vcl_numeric_limits<double>::max() > 1e308, true);
-#ifndef __alpha__ // on alpha, infinity() == max()
-  TEST("dinf", vcl_numeric_limits<double>::infinity() >
+  if (vcl_numeric_limits<double>::has_infinity)
+    TEST("dinf", vcl_numeric_limits<double>::infinity() >
                vcl_numeric_limits<double>::max(), true);
-#endif
   TEST("dmin", vcl_numeric_limits<double>::min() < 1e-307 &&
                vcl_numeric_limits<double>::min() > 0, true);
   TEST("deps", vcl_numeric_limits<double>::epsilon() < 1e-12 &&
                vcl_numeric_limits<double>::epsilon() > 0, true);
   TEST("rnder",vcl_numeric_limits<double>::round_error(), 0.5);
   TEST("fmax", vcl_numeric_limits<float>::max() > 1e38f, true);
-#ifndef __alpha__ // on alpha, infinity() == max()
-  TEST("finf", vcl_numeric_limits<float>::infinity() >
+  if (vcl_numeric_limits<double>::has_infinity)
+    TEST("finf", vcl_numeric_limits<float>::infinity() >
                vcl_numeric_limits<float>::max(), true);
-#endif
   TEST("fmin", vcl_numeric_limits<float>::min() < 1e-37f &&
                vcl_numeric_limits<float>::min() > 0, true);
   TEST("feps", vcl_numeric_limits<float>::epsilon() < 1e-6f &&
