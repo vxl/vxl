@@ -66,15 +66,15 @@ void ipts_scale_space_peaks_2d(vcl_vector<vgl_point_3d<double> >& peak_pts,
         // Check it is also above all pixels nearby in level below
         vgl_point_2d<double> p0 = to_below(i,j);
         const T* pixel_below=&im_below(int(p0.x()+0.5),int(p0.y()+0.5));
-//        if (ipts_is_above_3x3(*pixel,pixel_below,
-//                              im_below.istep(),im_below.jstep()))
+        if (ipts_is_above_3x3(*pixel,pixel_below,
+                              im_below.istep(),im_below.jstep()))
         {
           // (i,j) is local maxima at the level below
           // Check it is also above all pixels nearby in level above
           vgl_point_2d<double> p1 = to_above(i,j);
           const T* pixel_above=&im_above(int(p1.x()+0.5),int(p1.y()+0.5));
-//          if (ipts_is_above_3x3(*pixel,pixel_above,
-//                                im_above.istep(),im_above.jstep()))
+          if (ipts_is_above_3x3(*pixel,pixel_above,
+                                im_above.istep(),im_above.jstep()))
           {
             vgl_point_2d<double> p = to_base(i,j);
             peak_pts.push_back(vgl_point_3d<double>(p.x(),p.y(),scale));
