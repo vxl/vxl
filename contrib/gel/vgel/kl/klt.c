@@ -330,7 +330,7 @@ void KLTChangeTCPyramid(
        search_range =
        window_halfwidth * (8^nPyramidLevels - 1)/(8 - 1).
        Then, the value is rounded up to the nearest integer. */
-    float val = (float)log(7.0*subsampling+1.0)/log(8.0);
+    float val = (float)(log(7.0*subsampling+1.0)/log(8.0));
     tc->nPyramidLevels = (int) (val + 0.99);
     tc->subsampling = 8;
   }
