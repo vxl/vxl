@@ -185,6 +185,9 @@ SOURCE=.\Templates/vil2_threshold+float-.cxx
 # Begin Source File
 SOURCE=.\Templates/vil2_threshold+int-.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\Templates/vil2_gauss_filter+byte.byte-.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter ""
