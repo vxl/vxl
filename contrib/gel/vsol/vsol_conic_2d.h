@@ -30,7 +30,7 @@ class vsol_conic_2d;
 #include <vsol/vsol_curve_2d.h>
 #include <vsol/vsol_point_2d_sptr.h>
 #include <vnl/vnl_double_3x3.h>
-#include <vnl/vnl_math.h>
+#include <vcl_cmath.h> // for vcl_abs(double)
 
 class vsol_conic_2d
   :public vsol_curve_2d
@@ -280,9 +280,9 @@ private:
   //---------------------------------------------------------------------------
   inline static bool are_equal(double x, double y) {
     // epsilon is a fixed fraction of the absolute average of x and y
-    const double epsilon=1e-6*(vnl_math_abs(x)+vnl_math_abs(y));
+    const double epsilon=1e-6*(vcl_abs(x)+vcl_abs(y));
     // <=epsilon but not <epsilon, to compare to null values
-    return vnl_math_abs(x-y)<=epsilon;
+    return vcl_abs(x-y)<=epsilon;
   }
 
   //---------------------------------------------------------------------------
@@ -290,7 +290,7 @@ private:
   //  the comparison uses a fixed epsilon, as the adaptive one from
   //  are_equal() makes no sense here.
   //---------------------------------------------------------------------------
-  static bool is_zero(double x) { return vnl_math_abs(x)<=1e-6; }
+  static bool is_zero(double x) { return vcl_abs(x)<=1e-6; }
 
 private:
   //***************************************************************************

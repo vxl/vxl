@@ -309,7 +309,7 @@ void vsol_conic_2d::ellipse_parameters(double &cx,
     cy=(b2*d2-a_*e2)/det;
   }
 
-  double f0=a_*cx*cx+b_*cx*cy+c_*vnl_math_sqr(cy)+d_*cx+e_*cy+f_;
+  double f0=a_*cx*cx+b_*cx*cy+c_*cy*cy+d_*cx+e_*cy+f_;
 
   if (is_zero(f0)) // avoid dividing by zero
     f0=1;
@@ -324,10 +324,8 @@ void vsol_conic_2d::ellipse_parameters(double &cx,
 
   const double cosphi=vcl_cos(phi);
   const double sinphi=vcl_sin(phi);
-  width=vnl_math_sqrt(1/(a0*cosphi*cosphi+2*b0*cosphi*sinphi
-                         +c0*sinphi*sinphi));
-  height=vnl_math_sqrt(1/(a0*sinphi*sinphi-2*b0*cosphi*sinphi
-                          +c0*cosphi*cosphi));
+  width =vcl_sqrt(1.0/(a0*cosphi*cosphi+2*b0*cosphi*sinphi+c0*sinphi*sinphi));
+  height=vcl_sqrt(1.0/(a0*sinphi*sinphi-2*b0*cosphi*sinphi+c0*cosphi*cosphi));
 }
 
 //---------------------------------------------------------------------------
@@ -348,8 +346,8 @@ void vsol_conic_2d::parabola_parameters(double &cx,
   // Hence norm cannot be zero since the parabola is not degererate:
   const double norm=a_+c_;
   // The parabola direction is then (-m,n):
-  cosphi=-vnl_math_sqrt(c_/norm);
-  sinphi=vnl_math_sqrt(a_/norm);
+  cosphi=-vcl_sqrt(c_/norm);
+  sinphi=vcl_sqrt(a_/norm);
   // Finally, the top can be found as the point with tangent direction
   // orthogonal to the direction of the axis:
   // TODO
@@ -428,5 +426,5 @@ bool vsol_conic_2d::in(const vsol_point_2d_sptr &p) const
 {
   const double x=p->x();
   const double y=p->y();
-  return is_zero(a_*vnl_math_sqr(x)+b_*x*y+c_*vnl_math_sqr(y)+d_*x+e_*y+f_);
+  return is_zero(a_*x*x+b_*x*y+c_*y*y+d_*x+e_*y+f_);
 }
