@@ -181,7 +181,7 @@ foreach $f (@FILES)
     next if ($j eq "vcl_cstdlib.h" && $f =~ m/\bvcl\/emulation\/vcl_algobase\.h$/);
     next if ($j eq "vcl_ctime.h" && $f =~ m/\bvcl\/emulation\/vcl_alloc\.h$/);
     next if ($j eq "vcl_algorithm.h" && $f =~ m/\bvcl\/gcc-295\/vcl_deque\.txx$/);
-    next if ($i =~ m/^(vnl|vil[12]?|vsl|vul|vpl|vgl|vbl)_fwd$/ || $i =~ m/^vgui_glu?x?t?$/ || $i eq "StdAfx");
+    next if ($i =~ m/^(vnl|vil[12]?|vsl|vul|vpl|vgl|vgl_algo|vbl)_fwd$/ || $i =~ m/^vgui_glu?x?t?$/ || $i eq "StdAfx");
     next if ($i =~ m/^mil_/ && $f =~ m/\bmul\/mil\/mil_all\.h$/);
     next if ($j eq "mil/mil_all.h" && $f =~ m/\bmul\/mil\/mil_add_all_loaders\.cxx$/);
     next if ($i =~ m/^(v.l)_io_/ && $f =~ m/\/$1\/io\//);
@@ -433,7 +433,7 @@ foreach $f (@FILES)
     $printed = 1;
   }
   #typos
-  if ($file =~ m/\b(octover|milisecond|destuct[a-z]*|constuct[a-z]*|detruct[a-z]*|contruct[a-z]*|continou[a-z]*|defaut|condtion|intial[a-z]*|hierach[a-z]*|implemen[^t][a-z]*|ouput|outputing|supres[a-z]*|judicous|posible|begining|decend[a-z]*|verticies|matricies|vertexes|assignement|auxiliar\b|distingish|documenation|Eucl[ie]dian|independant|initialli\S+|initili\S+|measurment|miscelaneous|receipe|(re)?determing|retreive|seciton|thse|utilitites|accomodate|accpet|accurary|adaptative|addresss|alement|alife|anj\b|appication|arangement|arbitar\S+|aready|argree|assembing|authentification|auxilary|auxillary|aynchronous|azimutha|blted|bondary|borgefor\b|chaching|changeble|cicurmstance|cirle|coefficent|coeficient|colinear|colum\b|columnn|comparision|compatibilty|compilant|conjuction|continguous|controled|coordiate|corespondence|decompostion|desctruction|despatch|difuse|difusion|digtial|dimensinal|dimensionnal|documenation|doen|efficents|eigenvale|elment|elminate|encapsuate|encounterd|enquiries|eqivalence|estiamte|expalin|exression|filname|fomatted|fractino|frequence|functon|gettt\S+|graident|hasnt|highlighed|homegenous|homogaphy|homogenious|homogenous|idential|implementatation|incredibably|indentical|indicies|inherance|inhert|initilization|intepolat\S*|intitial|lable|magnitde|maxium|minimially|mininated|neccessary|necesary|nonhomogenous|objet|occured|occurence|oor|openned|orientarion|parallal|parameteric|parametesr|paramters|parapraph|parbolic|perimit|posistion|potetially|preceeding|prefered|progam\S*|protocal|refernce|regualr|reponsib\S+|represet|repsonsib\S+|rreuiqred|samping|severla|simulataneously|singlton|staight|subsitution|succesful\b|suppy|symetric|symmetic|sytem|tableaus|tableax|tableu|talbeau|techinques|tesselate|tesselation|toggeling|tolerence|tranform|tranpose|traveral|unecess\S+|verfication|verson|vlolume|whan|whould|wil\b|wraping|writted|yeild|bandwith|comare|containins|contrain|contor|corrdinate|dependant|dependending|exprimed|hight|heirachy|interator|labled|likelyhood|liklihood|maximun|messsage|minmum|objects\'s|perfrom|polyon|postion|repending|seting|singletion|substract|tablea\b|transfrom|valuse|wether|argumement)/i)
+  if ($file =~ m/\b(octover|milisecond|destuct[a-z]*|constuct[a-z]*|detruct[a-z]*|contruct[a-z]*|continou[a-z]*|defaut|condtion|intial[a-z]*|hierach[a-z]*|implemen[^t][a-z]*|ouput|outputing|supres[a-z]*|judicous|posible|begining|decend[a-z]*|verticies|matricies|vertexes|assignement|auxiliar\b|distingish|documenation|Eucl[ie]dian|independant|initialli\S+|initili\S+|measurment|miscelaneous|receipe|(re)?determing|retreive|seciton|thse|utilitites|accomodate|accpet|accurary|adaptative|addresss|alement|alife|anj\b|appication|arangement|arbitar\S+|aready|argree|assembing|authentification|auxilary|auxillary|aynchronous|azimutha|blted|bondary|borgefor\b|chaching|changeble|cicurmstance|cirle|coefficent|coeficient|colinear|colum\b|columnn|comparision|compatibilty|compilant|conjuction|continguous|controled|coordiate|corespondence|decompostion|desctruction|despatch|difuse|difusion|digtial|dimensinal|dimensionnal|documenation|doen|efficents|eigenvale|elment|elminate|encapsuate|encounterd|enquiries|eqivalence|estiamte|expalin|exression|filname|fomatted|fractino|frequence|functon|gettt\S+|graident|hasnt|highlighed|homegenous|homogaphy|homogenious|homogenous|idential|implementatation|incredibably|indentical|indicies|inherance|inhert|initilization|intepolat\S*|intitial|lable|magnitde|maxium|minimially|mininated|neccessary|necesary|nonhomogenous|objet|occured|occurence|oor|openned|orientarion|parallal|parameteric|parametesr|paramters|parapraph|parbolic|perimit|posistion|potetially|preceeding|prefered|progam\S*|protocal|refernce|regualr|reponsib\S+|represet|repsonsib\S+|rreuiqred|samping|severla|simulataneously|singlton|staight|subsitution|succesful\b|suppy|symetric|symmetic|sytem|tableaus|tableax|tableu|talbeau|techinques|tesselate|tesselation|toggeling|tolerence|tranform|tranpose|traveral|unecess\S+|verfication|verson|vlolume|whan|whould|wil\b|wraping|writted|yeild|bandwith|comare|containins|contrain|contor|corrdinate|dependant|dependending|exprimed|hight|heirachy|interator|labled|likelyhood|liklihood|maximun|messsage|minmum|objects\'s|perfrom|polyon|postion|repending|seting|singletion|substract|tablea\b|transfrom|valuse|wether|argumement|epiplar|lenth)/i)
   {
     print "$f\t\# probably a mistyping: $1\n";
   }
@@ -474,7 +474,7 @@ foreach $f (@FILES)
     $printed = 1;
   }
 # 11. Inclusion guard and file name
-  if ($file_s =~ m/^\s*\#ifndef\s+(\S+)\s*\n#define\s+\1\s*(\s.*)?\n/)
+  if ($file_s =~ m/^\s*\#ifndef\s+(\S+)\s*\n\#define\s+\1\s*(\s.*)?\n/)
   {
     $guard = $1;
     if (defined($inclusion_guards{"$guard"}))
@@ -485,6 +485,10 @@ foreach $f (@FILES)
     else
     {
       $inclusion_guards{"$guard"} = "$f";
+    }
+    if ($file =~ m/\#endif\s*(\/\/|\/\*)\s*(\S+)\s*(\*\/)?$/ && $2 ne $guard)
+    {
+      print "$f\t\# last line: change $2 to $guard\n";
     }
     undef $guard;
   }
