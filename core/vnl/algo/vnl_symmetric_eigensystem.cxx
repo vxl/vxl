@@ -15,6 +15,7 @@
 #include <vcl_cmath.h> // for sqrt(double), acos, etc.
 #include <vcl_iostream.h>
 #include <vnl/vnl_copy.h>
+#include <vnl/vnl_math.h>
 #include <vnl/algo/vnl_netlib.h> // rs_()
 
 //: Find eigenvalues of a symmetric 3x3 matrix
@@ -29,35 +30,58 @@ void vnl_symmetric_eigensystem_compute_eigenvals(
                           double M33,
   double &l1, double &l2, double &l3)
 {
-  const double third = 0.333333333333333333333;
-  const double sqrt_three = 1.73205080756887729353;
   // Characteristic eqtn |M - xI| = 0
   // x^3 + b x^2 + c x + d = 0
   const double b = -M11-M22-M33;
   const double c =  M11*M22 +M11*M33 +M22*M33  -M12*M12 -M13*M13 -M23*M23;
   const double d = M11*M23*M23 +M12*M12*M33 +M13*M13*M22 -2.0*M12*M13*M23 -M11*M22*M33;
 
-  // Using the real cubic solver on http://www.1728.com/cubic2.htm
-  const double f = c - b*b*third;
-  const double g = 0.074074074074074074074*b*b*b - third*b*c + d; // 0.074 == 2/27
-  const double h = 0.25*g*g + 0.037037037037037037037*f*f*f;      // 0.037 == 1/27
-  assert (h <= 1e-6); // allow for minor rounding error; h should be nonpositive
+ 
+  // Using a numerically tweaked version of the real cubic solver http://www.1728.com/cubic2.htm
+  const double b_3 = b/3.0;
+  const double f = b_3*b_3 -  c/3.0 ;
+  const double g = b*c/6.0 - b_3*b_3*b_3 - 0.5*d;
 
-  if (h>=0)
+
+  if (f == 0.0 && g == 0.0)
   {
-    l1 = l2 = l3 = vcl_pow(-d,third);
+    l1 = l2 = l3 = - b_3 ;
     return;
   }
 
-  const double i = vcl_sqrt((0.25*g*g) - h);
-  const double j = vcl_pow(i, third);
-  const double k = vcl_acos (- (g / (2.0*i)));
-  const double m = vcl_cos (third * k);
-  const double n = sqrt_three * vcl_sin(third * k);
-  const double p = -(third * b);
-  l1 = 2.0*j*m + p;
-  l2 = -j * (m + n) + p;
-  l3 = -j * (m - n) + p;
+  
+  const double f3 = f*f*f;
+  const double g2 = g*g;
+  const double sqrt_f = -vcl_sqrt(f);
+      
+  // deal explicitly with repeated root and treat
+  // complex conjugate roots as numerically inaccurate repeated roots.
+  
+  // first check we are not too numerically innacurate
+  assert((g2 - f3) / vnl_math_sqr(vnl_math_cube(b)) < 1e-8);  
+  
+  if (g2 >= f3)
+  {
+    if (g < 0.0)
+      {
+        l1 = 2.0 * sqrt_f  - b_3;
+        l2 = l3 = - sqrt_f - b_3;
+      }
+    else
+      {
+        l1 = l2 = sqrt_f  - b_3;
+        l3 = -2.0 * sqrt_f - b_3;
+      }
+    return;
+  }
+  
+
+  const double sqrt_f3 = sqrt_f * sqrt_f * sqrt_f;
+  const double k = vcl_acos(g / sqrt_f3) / 3.0;
+  const double j = 2.0 * sqrt_f;
+  l1 = j * vcl_cos(k) - b_3;
+  l2 = j * vcl_cos(k + vnl_math::pi * 2.0 / 3.0) - b_3;
+  l3 = j * vcl_cos(k - vnl_math::pi * 2.0 / 3.0) - b_3;
 
   if (l2 < l1) vcl_swap(l2, l1);
   if (l3 < l2)
@@ -65,6 +89,9 @@ void vnl_symmetric_eigensystem_compute_eigenvals(
     vcl_swap(l2, l3);
     if (l2 < l1) vcl_swap(l2, l1);
   }
+
+
+
 }
 
 bool vnl_symmetric_eigensystem_compute(vnl_matrix<float> const & A,

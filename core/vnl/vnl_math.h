@@ -182,6 +182,14 @@ inline long         vnl_math_sqr(long x) { return x*x; }
 inline float        vnl_math_sqr(float x) { return x*x; }
 inline double       vnl_math_sqr(double x) { return x*x; }
 
+// cube
+inline bool         vnl_math_cube(bool x) { return x; }
+inline int          vnl_math_cube(int x) { return x*x*x; }
+inline unsigned int vnl_math_cube(unsigned int x) { return x*x*x; }
+inline long         vnl_math_cube(long x) { return x*x*x; }
+inline float        vnl_math_cube(float x) { return x*x*x; }
+inline double       vnl_math_cube(double x) { return x*x*x; }
+
 // sgn (sign in -1, 0, +1)
 inline int vnl_math_sgn(int x) { return x?((x>0)?1:-1):0; }
 inline int vnl_math_sgn(long x) { return x?((x>0)?1:-1):0; }
