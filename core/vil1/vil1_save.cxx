@@ -15,7 +15,7 @@
 #include <vil/vil_stream_fstream.h>
 #include <vil/vil_image.h>
 #include <vil/vil_copy.h>
-#include <vil/vil_property.h> // for vil_property_top_row_first
+#include <vil/vil_property.h>
 #include <vil/vil_flipud.h>
 #include <vil/vil_flip_components.h>
 
@@ -35,10 +35,10 @@ bool vil_save(vil_image i, char const* filename, char const* file_format)
     vcl_cerr << __FILE__ ": (vil_save) Cannot save to type [" << file_format << "]\n";
     return false;
   }
-  bool top_first;
+  bool top_first, bgr;
   if (out.get_property(vil_property_top_row_first, &top_first) && !top_first)
     i = vil_flipud(i);
-  if (i.components() == 3 && out.get_property(vil_property_component_order_is_BGR))
+  if (i.components() == 3 && out.get_property(vil_property_component_order_is_BGR, &bgr) && bgr)
     i = vil_flip_components(i);
   vil_copy(i, out);
   return true;

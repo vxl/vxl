@@ -15,7 +15,7 @@
 #include <vil/vil_stream_core.h>
 #include <vil/vil_stream_url.h>
 #include <vil/vil_image.h>
-#include <vil/vil_property.h> // for vil_property_top_row_first
+#include <vil/vil_property.h>
 #include <vil/vil_flipud.h>
 #include <vil/vil_flip_components.h>
 
@@ -115,10 +115,10 @@ vil_image vil_load_raw(char const* filename)
 vil_image vil_load(char const* filename)
 {
   vil_image i = vil_load_raw(filename);
-  bool top_first;
+  bool top_first, bgr;
   if (i.get_property(vil_property_top_row_first, &top_first) && !top_first)
     i = vil_flipud(i);
-  if (i.components() == 3 && i.get_property(vil_property_component_order_is_BGR))
+  if (i.components() == 3 && i.get_property(vil_property_component_order_is_BGR,&bgr) && bgr)
     i = vil_flip_components(i);
   return i;
 }
