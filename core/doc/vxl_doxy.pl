@@ -41,6 +41,7 @@ $verbatim = 0;
 $should_end_verbatim = 0;
 
 $debug = 0;
+$replace_relates = $ENV{"REPLACE_RELATES_WITH_RELATESALSO"};
 
 # mainloop
 while (<>)
@@ -56,7 +57,7 @@ while (<>)
 
     # perform this replacement temporarily. Make it permanent in the code
     # when doxygen 1.3.4 is more widely distributed
-    if ( !$ENV{"REPLACE_RELATES_WITH_RELATESALSO"} )
+    if ( defined($replace_relates) && $replace_relates ne "")
     {
         s/\\relates\b/\\relatesalso/;
     }
