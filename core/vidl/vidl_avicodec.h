@@ -20,6 +20,8 @@
 #include <vidl/vidl_avicodec_sptr.h>
 #ifdef VCL_VC
 #include <windows.h>
+#undef min
+#undef max
 #include <vfw.h>
 #endif
 #include <vidl/vidl_codec.h>
