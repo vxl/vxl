@@ -14,11 +14,10 @@ int malloc_count = 0;
 
 // FIXME: Win32 will have different operator new in vnl dll from
 // the one generated here, so this test fails - RWMC.
+# define reset_count malloc_count = 0
 #ifndef WIN32
-# define reset_count malloc_count = 0
-# define check_count if (malloc_count<=1) vcl_printf("mallocs - PASSED\n"); else vcl_printf("mallocs - FAILED\t***\n")
+# define check_count TEST("mallocs",malloc_count<=1,true) 
 #else
-# define reset_count malloc_count = 0
 # define check_count /* */
 #endif
 
@@ -50,7 +49,9 @@ void test_matrix_fixed()
   vcl_printf("splork = [ %g %g %g ]\n", splork(0), splork(1), splork(2));
   
   // This shouldn't compile...
-  // vnl_matrix<double>* base = new vnl_double_3x3(datablock);
+#if 0
+  vnl_matrix<double>* base = new vnl_double_3x3(datablock);
+#endif
 
   vcl_printf("Now watch the mallocs\n");
   vnl_matrix<double>& CX = X;
