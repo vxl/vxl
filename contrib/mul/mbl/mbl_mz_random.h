@@ -50,6 +50,8 @@ class mbl_mz_random
     //  generator is used to generate the 37 ulongs needed
     //  as the real seed. The same seed will produce the
     //  same series of random numbers.
+    //
+    //  9667566  is a good seed.
     mbl_mz_random(unsigned long seed);
 
     //: Construct with seed.
