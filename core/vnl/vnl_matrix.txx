@@ -267,9 +267,9 @@ template<class T>
 ostream& operator<< (ostream& os, vnl_matrix<T> const& m) {
   for (unsigned i = 0; i < m.rows(); i++) {        // For each row in m
     for (unsigned j = 0; j < m.columns(); j++) {   // For each column
-      char buf[1024];
 #if 0 // This does not work when T is not a built-in type, e.g. T is complex:
       if (vnl_matrix<T>::print_format_set()) {
+	char buf[1024];
 	sprintf(buf, vnl_matrix<T>::get_print_format(), m.get(i,j));
 	os << buf << " ";
       }
