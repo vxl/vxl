@@ -1,3 +1,10 @@
+// [27.8.2.1]
+//
+// macros:
+//   BUFSIZ        FOPEN_MAX SEEK_CUR TMP_MAX _IONBF stdout
+//   EOF           L_tmpnam  SEEK_END _IOFBF  stderr
+//   FILENAME_MAX  NULL      SEEK_SET _IOLBF  stdin
+
 @FILE
 @fpos_t
 // NB: size_t is declared in <cstddef>, not <cstdio>
@@ -16,6 +23,23 @@
 @perror
 @clearerr
 @rename
+@fputc
+@fputs
+@freopen
+@fsetpos
+@getc
+@getchar
+@gets
+@putc
+@putchar
+@puts
+@remove
+@rewind
+@setbuf
+@setvbuf
+@tmpfile
+@tmpnam
+@ungetc
 
 // printf() family
 @printf
@@ -32,4 +56,3 @@
 @vscanf
 @vsscanf
 @vfscanf
-

@@ -3,6 +3,13 @@
 
 // THIS IS A GENERATED FILE. DO NOT EDIT! -- Edit the source .hhh and run make instead
 
+// [27.8.2.1]
+//
+// macros:
+//   BUFSIZ        FOPEN_MAX SEEK_CUR TMP_MAX _IONBF stdout
+//   EOF           L_tmpnam  SEEK_END _IOFBF  stderr
+//   FILENAME_MAX  NULL      SEEK_SET _IOLBF  stdin
+
 // FILE
 #ifndef vcl_FILE
 #define vcl_FILE vcl_generic_cstdio_STD :: FILE
@@ -71,6 +78,74 @@
 // rename
 #ifndef vcl_rename
 #define vcl_rename vcl_generic_cstdio_STD :: rename
+#endif
+// fputc
+#ifndef vcl_fputc
+#define vcl_fputc vcl_generic_cstdio_STD :: fputc
+#endif
+// fputs
+#ifndef vcl_fputs
+#define vcl_fputs vcl_generic_cstdio_STD :: fputs
+#endif
+// freopen
+#ifndef vcl_freopen
+#define vcl_freopen vcl_generic_cstdio_STD :: freopen
+#endif
+// fsetpos
+#ifndef vcl_fsetpos
+#define vcl_fsetpos vcl_generic_cstdio_STD :: fsetpos
+#endif
+// getc
+#ifndef vcl_getc
+#define vcl_getc vcl_generic_cstdio_STD :: getc
+#endif
+// getchar
+#ifndef vcl_getchar
+#define vcl_getchar vcl_generic_cstdio_STD :: getchar
+#endif
+// gets
+#ifndef vcl_gets
+#define vcl_gets vcl_generic_cstdio_STD :: gets
+#endif
+// putc
+#ifndef vcl_putc
+#define vcl_putc vcl_generic_cstdio_STD :: putc
+#endif
+// putchar
+#ifndef vcl_putchar
+#define vcl_putchar vcl_generic_cstdio_STD :: putchar
+#endif
+// puts
+#ifndef vcl_puts
+#define vcl_puts vcl_generic_cstdio_STD :: puts
+#endif
+// remove
+#ifndef vcl_remove
+#define vcl_remove vcl_generic_cstdio_STD :: remove
+#endif
+// rewind
+#ifndef vcl_rewind
+#define vcl_rewind vcl_generic_cstdio_STD :: rewind
+#endif
+// setbuf
+#ifndef vcl_setbuf
+#define vcl_setbuf vcl_generic_cstdio_STD :: setbuf
+#endif
+// setvbuf
+#ifndef vcl_setvbuf
+#define vcl_setvbuf vcl_generic_cstdio_STD :: setvbuf
+#endif
+// tmpfile
+#ifndef vcl_tmpfile
+#define vcl_tmpfile vcl_generic_cstdio_STD :: tmpfile
+#endif
+// tmpnam
+#ifndef vcl_tmpnam
+#define vcl_tmpnam vcl_generic_cstdio_STD :: tmpnam
+#endif
+// ungetc
+#ifndef vcl_ungetc
+#define vcl_ungetc vcl_generic_cstdio_STD :: ungetc
 #endif
 
 // printf() family
