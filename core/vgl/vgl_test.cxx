@@ -17,6 +17,7 @@
 #include "vgl_test.h"
 #include <vcl_cmath.h> // for vcl_abs(double)
 #include <vcl_iostream.h>
+#include <vcl_iomanip.h> // for setfill, setw (replaces cout.form())
 
 static int num_test;
 static int tests_passed;
@@ -37,12 +38,14 @@ void vgl_test_start(const char* name = 0) {
 
 void vgl_test_begin(const char* msg) {
   num_test++;
-#if defined(__GNUG__) && !defined(GNU_LIBSTDCXX_V3)
+#if 0 // .form() is non-ANSI // #if defined(__GNUG__) && !defined(GNU_LIBSTDCXX_V3)
   vcl_cout.form(" Test %03d: %-53s --> ", num_test, msg);
-#else
-  vcl_cout << " Test " << num_test << ": " << msg << " --> ";
-#endif
   vcl_cout.flush();
+#else
+  vcl_cout <<" Test "<< vcl_setw(3) << vcl_right << vcl_setfill('0') << num_test
+           <<": "<< vcl_setw(53) << vcl_left << vcl_setfill(' ')<< msg <<" --> "
+           << vcl_flush;
+#endif
 }
 
 // NOTE: We don't pass in the message (see test_begin) because
@@ -52,12 +55,11 @@ void vgl_test_begin(const char* msg) {
 void vgl_test_perform(int success) {
   if (success) {
     tests_passed++;
-    vcl_cout << "  PASSED\n";
+    vcl_cout << "  PASSED\n" << vcl_flush;
   } else {
     tests_failed++;
-    vcl_cout << "**FAILED**\n";
+    vcl_cout << "**FAILED**\n" << vcl_flush;
   }
-  vcl_cout.flush();
 }
 
 int vgl_test_summary() {
