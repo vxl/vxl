@@ -8,7 +8,7 @@
 #include <vcl/vcl_iostream.h>
 
 // include compiler header.
-#ifdef WIN32
+#if defined(VCL_WIN32) && defined(VCL_USE_NATIVE_STL)
 #include <fstream>
 using std :: fstream;
 using std :: ofstream;
