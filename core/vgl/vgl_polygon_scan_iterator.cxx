@@ -9,6 +9,25 @@
 
 #include <vgl/vgl_box_2d.h>
 
+// It used to be necessary to add 0.5 to the scanline coordinates 
+// obtained from a vgl_polygon_scan_iterator. Presumably this had 
+// something to do with pixels and rendering them, but that issue is
+// irrelevant to a polygon_scan_iterator.
+//
+// I think it is clear what a vgl_polygon_scan_iterator should do: tell
+// me which points inside my polygon have integer coordinates.
+//
+// If you cannot live without a polygon_scan_iterator which offsets
+// things by 0.5, make a new class called something like
+//   vgl_polygon_scan_iterator_which_adds_one_half
+// and change the value of fsm_OFFSET back to 0.5 for that class.
+//
+// fsm@robots.ox.ac.uk
+//
+//#define fsm_OFFSET 0.5
+#define fsm_OFFSET 0.0
+
+
 
 #ifndef MIN
 #define MIN(a,b)	(((a)<(b))?(a):(b))	
@@ -116,26 +135,26 @@ void vgl_polygon_scan_iterator::init()
   if(have_window)
      {
        if(boundp)
- 	y0 = (int)MAX(win.get_min_y(), floor( miny - .5));
+ 	y0 = (int)MAX(win.get_min_y(), floor( miny - fsm_OFFSET));
        else
- 	y0 = (int)MAX(win.get_min_y(), ceil( miny - .5));
+ 	y0 = (int)MAX(win.get_min_y(), ceil( miny - fsm_OFFSET));
 
        if(boundp)
- 	y1 = (int)MIN(win.get_max_y()-1, ceil( maxy - .5));
+ 	y1 = (int)MIN(win.get_max_y()-1, ceil( maxy - fsm_OFFSET));
        else
- 	y1 = (int)MIN(win.get_max_y()-1, floor( maxy - .5));
+ 	y1 = (int)MIN(win.get_max_y()-1, floor( maxy - fsm_OFFSET));
      }
    else
      {
        if(boundp)
- 	y0 = (int)floor( miny - .5);
+ 	y0 = (int)floor( miny - fsm_OFFSET);
        else
-       	y0 = (int)ceil( miny - .5);
+       	y0 = (int)ceil( miny - fsm_OFFSET);
 
        if(boundp)
- 	y1 = (int)ceil( maxy - .5);
+ 	y1 = (int)ceil( maxy - fsm_OFFSET);
        else
-	y1 = (int)floor(  maxy - .5);
+	y1 = (int)floor(  maxy - fsm_OFFSET);
     }
 }
 
@@ -180,7 +199,7 @@ void vgl_polygon_scan_iterator::insert_edge( vertind v )
 
      // initialize x position at intersection of edge with scanline y 
      crossedges[numcrossedges].dx = dx = (q.x() - p.x()) / (q.y() - p.y());
-     crossedges[numcrossedges].x = dx * ( fy + 0.5 - p.y() ) + p.x();
+     crossedges[numcrossedges].x = dx * ( fy + fsm_OFFSET - p.y() ) + p.x();
      crossedges[numcrossedges].v = v;
      numcrossedges++;
 }
@@ -203,14 +222,15 @@ void vgl_polygon_scan_iterator::reset()
 
 static inline int irnd(double x)
 {
-  return (int) (x + ((x<0) ? -.5 : .5));
+  return (int) floor(x + 0.5); //(x + ((x<0) ? -0.5 : 0.5));
 }
 
 //----------------------------------------------------------------------
-// -- Moves iterator to the next scan segment.  Scanline y is at 
-//    y+.5 in continuous coordinates check vertices between previous 
-//    scanline and current one, if any to simplify. If pt.y=y+.5, 
-//    pretend it's above invariant: y-.5 < pt[i].y <= y+.5.
+// -- Moves iterator to the next scan segment.
+// Scanline y is at y+fsm_OFFSET.
+//
+//??? Check vertices between previous scanline and current one, if any to simplify.
+//??? If pt.y=y+0.5,  pretend it's above invariant: y-0.5 < pt[i].y <= y+.5.
 //
 bool vgl_polygon_scan_iterator::next( )
 {
@@ -221,10 +241,10 @@ bool vgl_polygon_scan_iterator::next( )
       fxr = crossedges[curcrossedge+1].x;
       if(boundp)
         // left end of span with boundary
-	xl = (int)floor( crossedges[curcrossedge].x - .5); 
+	xl = (int)floor( crossedges[curcrossedge].x - fsm_OFFSET);
       else
         // left end of span without boundary
-	xl = (int)ceil( crossedges[curcrossedge].x - .5);    
+	xl = (int)ceil( crossedges[curcrossedge].x - fsm_OFFSET);
 
       if( have_window && xl < irnd(win.get_min_x()) ) 
 	{
@@ -234,10 +254,10 @@ bool vgl_polygon_scan_iterator::next( )
       
       if ( boundp )
         //right end of span with boundary
-	xr = (int)ceil( crossedges[curcrossedge+1].x - .5);  
+	xr = (int)ceil( crossedges[curcrossedge+1].x - fsm_OFFSET);
       else
         // right end of span without boundary
-	xr = (int)floor( crossedges[curcrossedge+1].x - .5); 
+	xr = (int)floor( crossedges[curcrossedge+1].x - fsm_OFFSET);
 
       if ( have_window && xr >= irnd(win.get_max_x()) ) 
 	{
@@ -262,7 +282,7 @@ bool vgl_polygon_scan_iterator::next( )
   if ( y <= y1 )
     {
       fy = (float)y;
-      for (; k<numverts && get_y(yverts[k]) <= (fy+.5); k++) 
+      for (; k<numverts && get_y(yverts[k]) <= (fy+fsm_OFFSET); k++) 
       {
 	  curvert = yverts[ k ];	
 	  
@@ -270,16 +290,16 @@ bool vgl_polygon_scan_iterator::next( )
 	  // from crossedges list if they cross scanline y
           get_prev_vert( curvert, prevvert );
     
-	  if ( get_y( prevvert ) <= (fy-.5))  // old edge, remove from active list
+	  if ( get_y( prevvert ) <= (fy-fsm_OFFSET))  // old edge, remove from active list
 	    delete_edge( prevvert );
-	  else if ( get_y( prevvert ) > (fy+.5))  // new edge, add to active list
+	  else if ( get_y( prevvert ) > (fy+fsm_OFFSET))  // new edge, add to active list
 	    insert_edge( prevvert );
 
           get_next_vert( curvert, nextvert );
 
-	  if ( get_y( nextvert ) <= (fy-.5))  // old edge, remove from active list
+	  if ( get_y( nextvert ) <= (fy-fsm_OFFSET))  // old edge, remove from active list
 	    delete_edge( curvert );
-	  else if ( get_y( nextvert ) > (fy+.5))  // new edge, add to active list
+	  else if ( get_y( nextvert ) > (fy+fsm_OFFSET))  // new edge, add to active list
 	    insert_edge( curvert );
       }
 

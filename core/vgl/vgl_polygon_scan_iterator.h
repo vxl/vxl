@@ -70,10 +70,10 @@ public:
   typedef vgl_polygon::point_t Point2;
   
   // returns current scan line
-  int scany() {return (y-1);}
+  int scany() { return (y-1); }
 
   // returns start of current span
-  int startx(){return xl;}
+  int startx() { return xl; }
 
   // returns end of current span
   int endx(){return xr;}

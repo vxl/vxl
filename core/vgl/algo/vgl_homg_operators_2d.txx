@@ -17,6 +17,7 @@
 
 #include <vgl/algo/vgl_homg_operators_2d.h>
 #include <vnl/vnl_numeric_limits.h> // for infinity
+#include <vnl/algo/vnl_symmetric_eigensystem.h>
 
 //-----------------------------------------------------------------------------
 
@@ -36,12 +37,12 @@ vnl_vector<Type> vgl_homg_operators_2d<Type>::get_vector(vgl_homg_point_2d<Type>
 template <class Type>
 vnl_vector<Type> vgl_homg_operators_2d<Type>::get_vector(vgl_homg_line_2d<Type> &l)
 {
-  // make a vnl_vector for the point p
+  // make a vnl_vector for the line l
 
   vnl_vector<Type> v(3);
-  v.put(0,p.a());
-  v.put(1,p.b());
-  v.put(2,p.c());
+  v.put(0,l.a());
+  v.put(1,l.b());
+  v.put(2,l.c());
  
 
   return v;
@@ -50,7 +51,7 @@ vnl_vector<Type> vgl_homg_operators_2d<Type>::get_vector(vgl_homg_line_2d<Type> 
 
 // -- Cross product of two vgl_homg_point_2d<Type>s
 template <class Type>
-void vgl_homg_operators_2d<Type>::cross(const vgl_homg_point_2d<Type>& a, const vgl_homg_point_2d<Type>& b, vgl_homg_point_2d<Type>& a_cross_b)
+void vgl_homg_operators_2d<Type>::cross(const vgl_homg_point_2d<Type>& a, const vgl_homg_point_2d<Type>& b, vgl_homg_line_2d<Type>& a_cross_b)
 {
   double x1 = a.x();
   double y1 = a.y();
@@ -59,6 +60,23 @@ void vgl_homg_operators_2d<Type>::cross(const vgl_homg_point_2d<Type>& a, const 
   double x2 = b.x();
   double y2 = b.y();
   double w2 = b.w();
+
+  a_cross_b.set(y1 * w2 - w1 * y2,
+		  w1 * x2 - x1 * w2,
+		  x1 * y2 - y1 * x2);
+}
+
+template <class Type>
+void vgl_homg_operators_2d<Type>::cross(const vgl_homg_line_2d<Type>& a, 
+  const vgl_homg_line_2d<Type>& b, vgl_homg_point_2d<Type>& a_cross_b)
+{
+  double x1 = a.a();
+  double y1 = a.b();
+  double w1 = a.c();
+  
+  double x2 = b.a();
+  double y2 = b.b();
+  double w2 = b.c();
 
   a_cross_b.set(y1 * w2 - w1 * y2,
 		  w1 * x2 - x1 * w2,
@@ -81,6 +99,13 @@ double vgl_homg_operators_2d<Type>::dot(const vgl_homg_point_2d<Type>& a, const 
   return x1*x2 + y1*y2 + w1*w2;
 }
 
+template <class Type>
+double vgl_homg_operators_2d<Type>::dot(const vgl_homg_line_2d<Type>&l,
+  const vgl_homg_point_2d<Type>& p)
+{
+  return l.a()*p.x() + l.b()+p.y() + l.c()*p.w();
+}
+
 //-----------------------------------------------------------------------------
 // -- Normalize vgl_homg_point_2d<Type> to unit magnitude
 
@@ -91,9 +116,9 @@ void vgl_homg_operators_2d<Type>::unitize(vgl_homg_point_2d<Type>& a)
   double y = a.y();
   double z = a.w();
 
-  double norm = vnl_math::sqr (vnl_math::sqr(x) + 
-                               vnl_math::sqr(y) + 
-                               vnl_math::sqr(z));
+  double norm = vnl_math_sqr (vnl_math_sqr(x) + 
+                              vnl_math_sqr(y) + 
+                              vnl_math_sqr(z));
   
   if (norm == 0.0) {
     cerr << "vgl_homg_operators_2d<Type>::unitize() -- Zero length vector\n";
@@ -127,8 +152,8 @@ double vgl_homg_operators_2d<Type>::distance_squared (const vgl_homg_point_2d<Ty
   double scale1 = 1.0/z1;
   double scale2 = 1.0/z2;
   
-  return (vnl_math::sqr (x1 * scale1 - x2 * scale2) +
-	  vnl_math::sqr (y1 * scale1 - y2 * scale2));
+  return (vnl_math_sqr (x1 * scale1 - x2 * scale2) +
+	  vnl_math_sqr (y1 * scale1 - y2 * scale2));
 }
 
 //-----------------------------------------------------------------------------
@@ -143,15 +168,15 @@ double vgl_homg_operators_2d<Type>::distance_squared (const vgl_homg_point_2d<Ty
 template <class Type>
 double vgl_homg_operators_2d<Type>::perp_dist_squared (const vgl_homg_point_2d<Type>& point, const vgl_homg_line_2d<Type>& line)
 {
-  if (line.ideal() || point.ideal()) {
+  if ((line.a()==0 && line.b()== 0) || point.w()==0) {
     cerr << "vgl_homg_operators_2d<Type>::perp_dist_squared() -- line or point at infinity";
     // return Homg::infinity;
     return 10000000; // TODO make an infinity for homg operators 
   }
   
-  double numerator = vnl_math::sqr (dot(line, point));
-  double denominator = (vnl_math::sqr (line.x()) + vnl_math::sqr(line.y())) *
-    vnl_math::sqr (point.w());
+  double numerator = vnl_math_sqr (dot(line, point));
+  double denominator = (vnl_math_sqr (line.a()) + vnl_math_sqr(line.b())) *
+    vnl_math_sqr (point.w());
 
   return numerator / denominator;
 }
@@ -164,7 +189,7 @@ double vgl_homg_operators_2d<Type>::perp_dist_squared (const vgl_homg_point_2d<T
 template <class Type>
 double vgl_homg_operators_2d<Type>::line_angle(const vgl_homg_line_2d<Type>& line)
 {
-  return atan2 (line.y(), line.x());
+  return atan2 (line.b(), line.a());
 }
 
 //-----------------------------------------------------------------------------
@@ -175,7 +200,7 @@ double vgl_homg_operators_2d<Type>::abs_angle(const vgl_homg_line_2d<Type>& line
   double angle1 = line_angle (line1);
   double angle2 = line_angle (line2);
 
-  double diff = vnl_math::abs(angle2 - angle1);
+  double diff = vnl_math_abs(angle2 - angle1);
   
   if (diff > vnl_math::pi)
     diff -= vnl_math::pi;
@@ -283,10 +308,10 @@ template <class Type>
 vgl_homg_line_2d<Type> vgl_homg_operators_2d<Type>::perp_line_through_point (const vgl_homg_line_2d<Type>& line,
 						    const vgl_homg_point_2d<Type>& point)
 {
-  vgl_homg_line_2d<Type> direction(line.x(), line.y(), 0);  
+  vgl_homg_point_2d<Type> direction(line.a(), line.b(), 0);  
   vgl_homg_line_2d<Type> answer;
   cross(direction, point, answer);
-  unitize(answer);
+  //unitize(answer);
   return answer;
 }
 
@@ -323,24 +348,24 @@ vgl_homg_point_2d<Type> vgl_homg_operators_2d<Type>::midpoint (const vgl_homg_po
 
 // - Kanatani sect 2.2.2.
 template <class Type>
-vnl_vector<double> vgl_homg_operators_2d<Type>::most_orthogonal_vector(const vcl_vector<vgl_homg_line_2d<Type> >& inpoints)
+vnl_vector<Type> vgl_homg_operators_2d<Type>::most_orthogonal_vector(const vcl_vector<vgl_homg_line_2d<Type> >& inpoints)
 {
-  vnl_scatter_3x3<double> scatter_matrix;
+  vnl_scatter_3x3<Type> scatter_matrix;
   
-  for (int i = 0; i < inpoints.size(); i++)
+  for (unsigned i = 0; i < inpoints.size(); i++)
     scatter_matrix.add_outer_product(get_vector(inpoints[i]));
   
-  return vnl_symmetric_eigensystem(scatter_matrix).get_nullvector();
+  return vnl_symmetric_eigensystem<Type>(scatter_matrix).nullvector();
 }
 
 #include <vnl/algo/vnl_svd.h>
 
 template <class Type>
-vnl_vector<double> vgl_homg_operators_2d<Type>::most_orthogonal_vector_svd(const vcl_vector<vgl_homg_line_2d<Type> >& lines)
+vnl_vector<Type> vgl_homg_operators_2d<Type>::most_orthogonal_vector_svd(const vcl_vector<vgl_homg_line_2d<Type> >& lines)
 {
   vnl_matrix<Type> D(lines.size(), 3);
   
-  for (int i = 0; i < lines.size(); i++){
+  for (unsigned i = 0; i < lines.size(); i++){
   
     D.set_row(i, get_vector(lines[i]));
   }
@@ -363,10 +388,17 @@ vgl_homg_point_2d<Type> vgl_homg_operators_2d<Type>::lines_to_point(const vcl_ve
   // ho_triveccam_aspect_lines_to_point
   assert(lines.size() >= 2);
 
+  
   if (lines_to_point_use_svd)
-    return most_orthogonal_vector_svd(lines);
+  {
+    vnl_vector<double> mov = most_orthogonal_vector_svd(lines);
+    return vgl_homg_point_2d<Type>(mov[0], mov[1], mov[2]);
+  }
   else
-    return most_orthogonal_vector(lines);
+  {
+    vnl_vector<double> mov = most_orthogonal_vector(lines);
+    return vgl_homg_point_2d<Type>(mov[0], mov[1], mov[2]);
+  }
 }
 
 // @{ MISCELLANEOUS @}
