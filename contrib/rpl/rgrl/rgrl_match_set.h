@@ -139,13 +139,14 @@ class rgrl_match_set
     match_info( rgrl_feature_sptr to_feat,
                 double geometric_wgt,
                 double signature_wgt,
-                double cumulative_wgt = 0.0,
-                double geometric_err = 0.0);
+                double cumulative_wgt,
+                double geometric_err );
 
     //:  Initialize the signature weight only
     //
     match_info( rgrl_feature_sptr to_feat,
-                double signature_wgt );
+                double signature_wgt,
+                double geometric_err );
 
     rgrl_feature_sptr to_feature;
     double geometric_weight;

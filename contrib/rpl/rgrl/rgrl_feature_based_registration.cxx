@@ -407,7 +407,8 @@ register_single_feature( rgrl_mask_box            image_region,
       //
       DebugMacro(  2, " Updating scale estimates and checking for validity\n" );
 
-      match_set->remap_from_features( *current_xform_estimate_ );
+      // match_set->remap_from_features( *current_xform_estimate_ );
+      match_set->update_geometric_error( current_xform_estimate_ );
       weighter->compute_weights( *scale, *match_set );
 
       // compute the scaling factors  
@@ -687,7 +688,8 @@ register_multi_feature( rgrl_mask_box            image_region,
       DebugMacro(  2, " Updating scale estimates and checking for validity\n" );
       for ( unsigned int fs=0; fs < data_count; ++fs ) {
         if ( current_match_sets_[fs]->from_size() > 0 ) {
-          current_match_sets_[fs]->remap_from_features( *current_xform_estimate_ );
+          // current_match_sets_[fs]->remap_from_features( *current_xform_estimate_ );
+          current_match_sets_[fs]->update_geometric_error( current_xform_estimate_ );
           weighters[fs]->compute_weights( *scales[fs], *current_match_sets_[fs] );
 
       // compute image scaling factors  
