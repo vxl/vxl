@@ -263,6 +263,20 @@ text { return ret; }
 # define VCL_UNINSTANTIATE_STATIC_TEMPLATE_MEMBER(symbol) /* which compiler needs this ? */
 #endif
 
+
+// -- VCL_CAN_DO_NON_TYPE_FUNCTION_TEMPLATE_PARAMETER
+//
+// Some compilers (e.g. SunPro 5.0) do not accept non-type template
+// parameters in function templates. E.g. 
+//
+// template <class T, int n> struct vicky { T data[n]; } // can do
+//
+// template <class T, int n>
+// void a_function_template(vicky<T, n> const &) { ... } // cannot
+//
+#define VCL_CAN_DO_NON_TYPE_FUNCTION_TEMPLATE_PARAMETER @VCL_CAN_DO_NON_TYPE_FUNCTION_TEMPLATE_PARAMETER@
+
+
 //----------------------------------------------------------------------
 // overload resolution problems.
 

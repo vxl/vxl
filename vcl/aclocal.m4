@@ -1077,3 +1077,40 @@ VCL_CAN_DO_STATIC_TEMPLATE_MEMBER="0"
 ])
 export VCL_CAN_DO_STATIC_TEMPLATE_MEMBER
 ])
+
+
+
+### 
+AC_DEFUN(AC_CXX_CAN_DO_NON_TYPE_FUNCTION_TEMPLATE_PARAMETER,[
+AC_MSG_CHECKING(whether the C++ compiler accepts non-type template parameters to function templates)
+AC_LANG_SAVE
+AC_LANG_CPLUSPLUS
+
+VCL_COMPILE_CXX
+
+AC_TRY_COMPILE([
+template <class T, int n>
+struct splek
+{
+  T data[n];
+};
+
+template <class T, int n>
+void splok_that_splek(splek<T, n> &s)
+{
+  for (int i=0; i<n; ++i)
+    s.data[i] = T(27);
+}
+
+template struct splek<double, 3>;
+template void splok_that_splek(splek<double, 3> &);
+],[
+],[
+AC_MSG_RESULT("yes")
+VCL_CAN_DO_NON_TYPE_FUNCTION_TEMPLATE_PARAMETER="1"
+],[
+AC_MSG_RESULT("no")
+VCL_CAN_DO_NON_TYPE_FUNCTION_TEMPLATE_PARAMETER="0"
+])
+export VCL_CAN_DO_NON_TYPE_FUNCTION_TEMPLATE_PARAMETER
+])
