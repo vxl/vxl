@@ -248,7 +248,7 @@ void vil3d_grad_1x3_mag_sq_1plane(const vil3d_image_view<float>& src_im,
         // Compute gradient in k
         float dz = s[dk1] - s[dk2];
 
-        *pg = 0.25*(dx*dx + dy*dy + dz*dz);
+        *pg = 0.25f*(dx*dx + dy*dy + dz*dz);
 
         s   += src_im.istep();
         pg += grad_mag2.istep();

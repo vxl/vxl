@@ -85,7 +85,7 @@ void test_image_view(S d1, vcl_string s_name, T d2)
 
   for (unsigned int j=0;j<image0.nj();++j)
      for (unsigned int i=0;i<image0.ni();++i)
-       image0(i,j) = i+j;
+       image0(i,j) = S(i+j);
 
   vil2_print_all(vcl_cout, image0);
 

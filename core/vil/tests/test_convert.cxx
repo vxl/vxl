@@ -35,8 +35,8 @@ void test_convert_stretch_range()
   vcl_cout<<"testing vil2_convert_stretch_range(src,dest):"<<vcl_endl;
   vil2_image_view<float> f_image(10,10);
   for (unsigned j=0;j<f_image.nj();++j)
-    for (unsigned i=0;i<f_image.ni();++i)  f_image(i,j)=0.1f*i+0.01f*j+5.0;
-  
+    for (unsigned i=0;i<f_image.ni();++i)  f_image(i,j)=0.1f*i+0.01f*j+5.f;
+
   vil2_print_all(vcl_cout, f_image) ;
 
   vil2_image_view<vxl_byte> b_image;

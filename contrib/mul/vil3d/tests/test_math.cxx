@@ -18,7 +18,7 @@ void test_image_view_maths_float()
    for (unsigned int j=0;j<imA.nj();++j)
     for (unsigned int i=0;i<imA.ni();++i)
     {
-      imA(i,j,k) = 1+i+j*ni+3*k; sum0+=imA(i,j,k); sum_sq0+= imA(i,j,k)*imA(i,j,k);
+      imA(i,j,k) = 1.f+i+j*ni+3*k; sum0+=imA(i,j,k); sum_sq0+= imA(i,j,k)*imA(i,j,k);
     }
 
   double sum;
@@ -33,7 +33,6 @@ void test_image_view_maths_float()
   vil3d_math_sum_squares(sum,sum_sq,imA,0);
   TEST_NEAR("Sum",sum,sum0,1e-8);
   TEST_NEAR("Sum of squares",sum_sq,sum_sq0,1e-8);
-
 }
 
 MAIN( test_math )

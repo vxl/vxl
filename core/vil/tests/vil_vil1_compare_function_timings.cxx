@@ -253,7 +253,7 @@ int main(int argc, char** argv)
   int n_loops = int(200000/t); // Number required for about half a sec running time
   vcl_cout << "Testing using n_loops = " << n_loops << vcl_endl << vcl_endl;
   vcl_cout << "Float alignment ";
-  if ((((unsigned long)float_2image.top_left_ptr()) % 4ul)>0)
+  if ((((unsigned long)(void*)float_2image.top_left_ptr()) % 4ul)>0)
     vcl_cout << "not on 4-byte boundary\n";
   else
     vcl_cout << "on 4-byte boundary\n";
