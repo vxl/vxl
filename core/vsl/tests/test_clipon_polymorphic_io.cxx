@@ -41,7 +41,7 @@ public:
     vcl_ostream& os, const test2_base_class& base) const =0;
 
   virtual test2_base_class_io* clone() const =0;
-  
+
   virtual vcl_string target_classname() const =0;
 
   virtual bool is_io_for(const test2_base_class& base) const =0;
@@ -128,7 +128,6 @@ public:
     return new test2_derived_class;
   }
 
-
   virtual void b_write_by_base(
     vsl_b_ostream& os, const test2_base_class& base) const
   {
@@ -160,7 +159,6 @@ public:
   virtual bool is_io_for(const test2_base_class& base) const
   { return (base.is_a()==target_classname()); }
 };
-
 
 
 void test_clipon_polymorphic_io()

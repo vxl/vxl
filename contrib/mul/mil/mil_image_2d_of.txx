@@ -365,6 +365,17 @@ vcl_string mil_image_2d_of<T>::is_a() const
 }
 
 //=======================================================================
+// Method: is_class
+//=======================================================================
+
+template<class T>
+bool mil_image_2d_of<T>::is_class(vcl_string const& s) const
+{
+  static const vcl_string s_ = "mil_image_2d_of<T>";
+  return s==s_ || mil_image_2d::is_class(s);
+}
+
+//=======================================================================
 // Method: version_no
 //=======================================================================
 

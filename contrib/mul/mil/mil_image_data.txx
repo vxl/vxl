@@ -87,6 +87,13 @@ vcl_string mil_image_data<T>::is_a() const
     return vcl_string("mil_image_data<T>");
 }
 
+//: Does the name of the class match the argument?
+template<class T>
+bool mil_image_data<T>::is_class(vcl_string const& s) const
+{
+  static const vcl_string s_ = "mil_image_data<T>";
+  return s==s_;
+}
 
 //: Print class to os
 template<class T>

@@ -22,13 +22,13 @@ class mil_image {
 
 public:
 
-        //: Dflt ctor
+    //: Dflt ctor
     mil_image();
 
-        //: Destructor
+    //: Destructor
     virtual ~mil_image();
 
-        //: Number of dimensions of image
+    //: Number of dimensions of image
     virtual int n_dims() const = 0;
 
     //: Width of image
@@ -43,54 +43,57 @@ public:
     //: Number of planes of image
     virtual int nPlanes() const = 0;
 
-        //: Version number for I/O
+    //: Version number for I/O
     short version_no() const;
 
-        //: Name of the class
+    //: Name of the class
     virtual vcl_string is_a() const = 0;
 
-        //: Create a copy on the heap and return base class pointer
+    //: Does the name of the class match the argument?
+    virtual bool is_class(vcl_string const&) const = 0;
+
+    //: Create a copy on the heap and return base class pointer
     virtual mil_image* clone() const = 0;
 
-        //: Print class to os
+    //: Print class to os
     virtual void print_summary(vcl_ostream& os) const = 0;
 
-        //: Print whole image to os
+    //: Print whole image to os
     virtual void print_all(vcl_ostream& os) const = 0;
 
-        //: Save class to binary file stream
-        //!in: bfs: Target binary file stream
+    //: Save class to binary file stream
+    //!in: bfs: Target binary file stream
     virtual void b_write(vsl_b_ostream& bfs) const = 0;
 
-        //: Load class from binary file stream
-        //!out: bfs: Target binary file stream
+    //: Load class from binary file stream
+    //!out: bfs: Target binary file stream
     virtual void b_read(vsl_b_istream& bfs) = 0;
 };
 
-    //: Allows derived class to be loaded by base-class pointer
-    //  A loader object exists which is invoked by calls
-    //  of the form "vsl_b_read(bfs,base_ptr);".  This loads derived class
-    //  objects from the disk, places them on the heap and
-    //  returns a base class pointer.
-    //  In order to work the loader object requires
-    //  an instance of each derived class that might be
-    //  found.  This function gives the model class to
-    //  the appropriate loader.
+ //: Allows derived class to be loaded by base-class pointer
+ //  A loader object exists which is invoked by calls
+ //  of the form "vsl_b_read(bfs,base_ptr);".  This loads derived class
+ //  objects from the disk, places them on the heap and
+ //  returns a base class pointer.
+ //  In order to work the loader object requires
+ //  an instance of each derived class that might be
+ //  found.  This function gives the model class to
+ //  the appropriate loader.
 void vsl_add_to_binary_loader(const mil_image& b);
 
-    //: Binary file stream output operator for class reference
+ //: Binary file stream output operator for class reference
 void vsl_b_write(vsl_b_ostream& bfs, const mil_image& b);
 
-    //: Binary file stream output operator for pointer to class
+ //: Binary file stream output operator for pointer to class
 void vsl_b_write(vsl_b_ostream& bfs, const mil_image* b);
 
-    //: Binary file stream input operator for class reference
+ //: Binary file stream input operator for class reference
 void vsl_b_read(vsl_b_istream& bfs, mil_image& b);
 
-    //: Stream output operator for class reference
+ //: Stream output operator for class reference
 vcl_ostream& operator<<(vcl_ostream& os,const mil_image& b);
 
-    //: Stream output operator for class pointer
+ //: Stream output operator for class pointer
 vcl_ostream& operator<<(vcl_ostream& os,const mil_image* b);
 
 #endif

@@ -69,8 +69,9 @@ public:
 
     //: Name of the class
   virtual vcl_string is_a() const;
-    //: Name of the class
-  virtual bool is_a(vcl_string const& s) const;
+
+    //: Does the name of the class match the argument?
+  virtual bool is_class(vcl_string const& s) const;
 
     //: Create a copy on the heap and return base class pointer
     // caller is responsible for deletion

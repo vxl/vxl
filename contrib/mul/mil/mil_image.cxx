@@ -40,7 +40,18 @@ short mil_image::version_no() const
 
 vcl_string mil_image::is_a() const
 {
-  return vcl_string("mil_image");
+  static const vcl_string c_ = "mil_image";
+  return c_;
+}
+
+//=======================================================================
+// Method: is_class
+//=======================================================================
+
+bool mil_image::is_class(vcl_string const& s) const
+{
+  static const vcl_string s_ = "mil_image";
+  return s==s_;
 }
 
 //=======================================================================

@@ -31,9 +31,9 @@
 // class you just have to append it to the list of
 // classes of the singletion, viz:
 //     vsl_binary_loader::instance().append(my_object)
-// The BaseClass MUST implement is_a(),clone(),b_write() and b_read()
-// virtual functions.  The b_write function MUST save is_a()
-// as an string "is<<vcl_string(is_a());" first.
+// The BaseClass MUST implement is_a(),is_class(),clone(),b_write() and
+// b_read() virtual functions.  The b_write function MUST save is_a()
+// as a string "is<<vcl_string(is_a());" first.
 //
 // To indicate a null pointer (0), save the string "VSL_NULL_PTR"
 // to the stream.

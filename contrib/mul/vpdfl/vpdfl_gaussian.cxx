@@ -325,14 +325,20 @@ void vpdfl_gaussian::nearest_plausible(vnl_vector<double>& x, double log_p_min) 
 // Method: is_a
 //=======================================================================
 
-vcl_string  vpdfl_gaussian::is_a() const
+vcl_string vpdfl_gaussian::is_a() const
 {
-  return vcl_string("vpdfl_gaussian");
+  static vcl_string class_name_ = "vpdfl_gaussian";
+  return class_name_;
 }
 
-bool vpdfl_gaussian::is_a(vcl_string const& s) const
+//=======================================================================
+// Method: is_class
+//=======================================================================
+
+bool vpdfl_gaussian::is_class(vcl_string const& s) const
 {
-  return vpdfl_pdf_base::is_a(s) || s==vcl_string("vpdfl_gaussian");
+  static vcl_string class_name_ = "vpdfl_gaussian";
+  return vpdfl_pdf_base::is_class(s) || s==class_name_;
 }
 
 //=======================================================================

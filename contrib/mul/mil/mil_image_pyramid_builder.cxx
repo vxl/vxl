@@ -55,6 +55,16 @@ vcl_string mil_image_pyramid_builder::is_a() const
 }
 
 //=======================================================================
+// Method: is_class
+//=======================================================================
+
+bool mil_image_pyramid_builder::is_class(vcl_string const& s) const
+{
+  static const vcl_string s_ = "mil_image_pyramid_builder";
+  return s==s_;
+}
+
+//=======================================================================
 // Associated function: operator<<
 //=======================================================================
 

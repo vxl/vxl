@@ -56,14 +56,14 @@ double vpdfl_pdf_base::log_prob_thresh(double pass_proportion) const
   vnl_vector<double> x;
 
   vpdfl_sampler_base *sampler = new_sampler();
-  if (pass_proportion > 0.5) 
+  if (pass_proportion > 0.5)
   {
     vcl_priority_queue<double, vcl_vector<double>, vcl_less<double> > pq;
     //We want at n_stat samples outside the cut-off.
     nSamples = (unsigned)(((double)n_stat / (1.0 - pass_proportion)) + 0.5);
 
     for (i = 0; i < n_stat+1; i++)
-    { 
+    {
       sampler->sample(x);
       pq.push(log_p(x));
     }
@@ -93,7 +93,7 @@ double vpdfl_pdf_base::log_prob_thresh(double pass_proportion) const
     nSamples = (unsigned)(((double)n_stat / pass_proportion) + 0.5);
 
     for (i = 0; i < n_stat+1; i++)
-    { 
+    {
       sampler->sample(x);
       pq.push(log_p(x));
     }
@@ -117,7 +117,7 @@ double vpdfl_pdf_base::log_prob_thresh(double pass_proportion) const
   }
 
   delete sampler;
- 
+
   // Find geometric mean of probability densities to get boundary (arithmetic mean of logProbs.)
 #if 0
   return (above + below)/2.0;
@@ -156,12 +156,18 @@ void vsl_add_to_binary_loader(const vpdfl_pdf_base& b)
 
 vcl_string vpdfl_pdf_base::is_a() const
 {
-  return vcl_string("vpdfl_pdf_base");
+  static vcl_string class_name_ = "vpdfl_pdf_base";
+  return class_name_;
 }
 
-bool vpdfl_pdf_base::is_a(vcl_string const& s) const
+//=======================================================================
+// Method: is_class
+//=======================================================================
+
+bool vpdfl_pdf_base::is_class(vcl_string const& s) const
 {
-  return s==vcl_string("vpdfl_pdf_base");
+  static vcl_string class_name_ = "vpdfl_pdf_base";
+  return s==class_name_;
 }
 
 //=======================================================================

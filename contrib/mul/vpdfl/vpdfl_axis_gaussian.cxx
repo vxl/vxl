@@ -171,14 +171,20 @@ void vpdfl_axis_gaussian::nearest_plausible(vnl_vector<double>& x, double log_p_
 // Method: is_a
 //=======================================================================
 
-vcl_string  vpdfl_axis_gaussian::is_a() const
+vcl_string vpdfl_axis_gaussian::is_a() const
 {
-  return vcl_string("vpdfl_axis_gaussian");
+  static const vcl_string s_ = "vpdfl_axis_gaussian";
+  return s_;
 }
 
-bool vpdfl_axis_gaussian::is_a(vcl_string const& s) const
+//=======================================================================
+// Method: is_class
+//=======================================================================
+
+bool vpdfl_axis_gaussian::is_class(vcl_string const& s) const
 {
-  return vpdfl_pdf_base::is_a(s) || s==vcl_string("vpdfl_axis_gaussian");
+  static const vcl_string s_ = "vpdfl_axis_gaussian";
+  return s==s_ || vpdfl_pdf_base::is_class(s);
 }
 
 //=======================================================================

@@ -216,6 +216,17 @@ vcl_string mil_gaussian_pyramid_builder_2d<T>::is_a() const
 }
 
 //=======================================================================
+// Method: is_class
+//=======================================================================
+
+template<class T>
+bool mil_image_pyramid_builder_2d<T>::is_class(vcl_string const& s) const
+{
+  static const vcl_string s_ = "mil_image_pyramid_builder_2d<T>";
+  return s==s_ || mil_image_pyramid_builder::is_class(s);
+}
+
+//=======================================================================
 // Method: version_no
 //=======================================================================
 

@@ -68,6 +68,9 @@ public:
     //: Name of the class
     vcl_string is_a() const;
 
+    //: Does the name of the class match the argument?
+    virtual bool is_class(vcl_string const& s) const;
+
     //: Save class to binary file stream
     void b_write(vsl_b_ostream& bfs) const;
 

@@ -183,11 +183,14 @@ public:
         //: Get range of values over all planes
     void getRange(T& min_v, T& max_v) const;
 
-    //: Version number for I/O
+        //: Version number for I/O
     short version_no() const;
 
         //: Name of the class
     virtual vcl_string is_a() const;
+
+        //: Does the name of the class match the argument?
+    virtual bool is_class(vcl_string const& s) const;
 
         //: Create a copy on the heap and return base class pointer
     virtual mil_image* clone() const;

@@ -14,7 +14,6 @@
 // \endverbatim
 
 
-
 //=======================================================================
 // inclusions
 #include <vpdfl/vpdfl_builder_base.h>
@@ -78,16 +77,14 @@ public:
                       const vnl_vector<double>& mean,
                       const vnl_matrix<double>& covar) const;
 
-
-
     //: Version number for I/O
   short version_no() const;
 
     //: Name of the class
   virtual vcl_string is_a() const;
 
-    //: Name of the class
-  virtual bool is_a(vcl_string const&) const;
+    //: Does the name of the class match the argument?
+  virtual bool is_class(vcl_string const&) const;
 
     //: Create a copy on the heap and return base class pointer
   virtual vpdfl_builder_base* clone() const;
@@ -99,17 +96,9 @@ public:
     //!in: bfs: Target binary file stream
   virtual void b_write(vsl_b_ostream& bfs) const;
 
-
-
     //: Load class from binary file stream
     //!out: bfs: Target binary file stream
   virtual void b_read(vsl_b_istream& bfs);
-
-
-private:
-
-    //: To record name of class, returned by is_a() method
-  static vcl_string class_name_;
 };
 
 #endif //vpdfl_gaussian_builder_h

@@ -152,6 +152,13 @@ vcl_string vpdfl_mixture_sampler::is_a() const
 
 //=======================================================================
 
+bool vpdfl_mixture_sampler::is_class(vcl_string const& s) const
+{
+  return vpdfl_sampler_base::is_class(s) || s==vcl_string("vpdfl_mixture_sampler");
+}
+
+//=======================================================================
+
 short vpdfl_mixture_sampler::version_no() const
 {
   return 1;

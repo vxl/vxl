@@ -26,7 +26,10 @@ public:
   virtual ~mbl_data_collector_base();
 
   //: Name of the class
-  virtual vcl_string is_a() const = 0;
+  virtual vcl_string is_a() const;
+
+  //: Does the name of the class match the argument?
+  virtual bool is_class(vcl_string const& s) const;
 
   //: Create a copy on the heap and return base class pointer
   virtual mbl_data_collector_base* clone() const = 0;

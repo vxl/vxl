@@ -153,7 +153,7 @@ void vpdfl_mixture_builder::weighted_build(vpdfl_pdf_base& base_model,
             mbl_data_wrapper<vnl_vector<double> >& data,
             const vcl_vector<double>& wts) const
 {
-  assert(base_model.is_a()=="vpdfl_mixture");
+  assert(base_model.is_class("vpdfl_mixture"));
   vpdfl_mixture& model = (vpdfl_mixture&) base_model;
 
   int n = builder_.size();
@@ -352,6 +352,13 @@ double vpdfl_mixture_builder::m_step(vpdfl_mixture& model,
 vcl_string vpdfl_mixture_builder::is_a() const
 {
   return vcl_string("vpdfl_mixture_builder");
+}
+
+//=======================================================================
+
+bool vpdfl_mixture_builder::is_class(vcl_string const& s) const
+{
+  return vpdfl_builder_base::is_class(s) || s==vcl_string("vpdfl_mixture_builder");
 }
 
 //=======================================================================

@@ -52,6 +52,16 @@ vcl_string mbl_data_collector_base::is_a() const
 }
 
 //=======================================================================
+// Method: is_class
+//=======================================================================
+
+bool mbl_data_collector_base::is_class(vcl_string const& s) const
+{
+  static const vcl_string s_ = "mbl_data_collector_base";
+  return s==s_;
+}
+
+//=======================================================================
 // Associated function: operator<<
 //=======================================================================
 

@@ -66,7 +66,7 @@ void vpdfl_pc_gaussian_builder::set_proportion_partition( double proportion)
 vpdfl_pc_gaussian& vpdfl_pc_gaussian_builder::gaussian(vpdfl_pdf_base& model) const
 {
     // need a vpdfl_gaussian
-  assert(model.is_a()==vcl_string("vpdfl_pc_gaussian"));
+  assert(model.is_class("vpdfl_pc_gaussian"));
   return (vpdfl_pc_gaussian&) model;
 }
 
@@ -81,12 +81,12 @@ void vpdfl_pc_gaussian_builder::build(vpdfl_pdf_base& model,
 {
   vpdfl_pc_gaussian& g = gaussian(model);
   int n = mean.size();
-  
+
   // Generate an identity matrix for eigenvectors
   vnl_matrix<double> P(n,n);
   P.fill(0);
   P.fill_diagonal(1.0);
-  
+
   g.set(mean,P,vnl_vector<double>(0), min_var());
 }
 
@@ -345,9 +345,20 @@ unsigned vpdfl_pc_gaussian_builder::decide_partition(const vnl_vector<double>& e
 // Method: is_a
 //=======================================================================
 
-vcl_string  vpdfl_pc_gaussian_builder::is_a() const
+vcl_string vpdfl_pc_gaussian_builder::is_a() const
 {
-  return vcl_string("vpdfl_pc_gaussian_builder");
+  static vcl_string class_name_ = "vpdfl_pc_gaussian_builder";
+  return class_name_;
+}
+
+//=======================================================================
+// Method: is_class
+//=======================================================================
+
+bool vpdfl_pc_gaussian_builder::is_class(vcl_string const& s) const
+{
+  static vcl_string class_name_ = "vpdfl_pc_gaussian_builder";
+  return vpdfl_gaussian_builder::is_class(s) || s==class_name_;
 }
 
 //=======================================================================

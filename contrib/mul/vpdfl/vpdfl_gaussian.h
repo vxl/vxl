@@ -109,8 +109,9 @@ public:
 
     //: Name of the class
   virtual vcl_string is_a() const;
-    //: Name of the class
-  virtual bool is_a(vcl_string const& s) const;
+
+    //: Does the name of the class match the argument?
+  virtual bool is_class(vcl_string const& s) const;
 
     //: Create a copy on the heap and return base class pointer
   virtual vpdfl_pdf_base* clone() const;
@@ -126,11 +127,6 @@ public:
     //: Load class from binary file stream
     //!out: bfs: Target binary file stream
   virtual void b_read(vsl_b_istream& bfs);
-
-private:
-
-    //: To record name of class, returned by is_a() method
-  static vcl_string class_name_;
 };
 
 #endif // vpdfl_gaussian_h

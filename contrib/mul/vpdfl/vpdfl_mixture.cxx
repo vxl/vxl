@@ -160,6 +160,13 @@ vcl_string vpdfl_mixture::is_a() const
 
 //=======================================================================
 
+bool vpdfl_mixture::is_class(vcl_string const& s) const
+{
+  return vpdfl_pdf_base::is_class(s) || s==vcl_string("vpdfl_mixture");
+}
+
+//=======================================================================
+
 short vpdfl_mixture::version_no() const
 {
   return 1;

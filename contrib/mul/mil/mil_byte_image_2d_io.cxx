@@ -207,6 +207,16 @@ vcl_string mil_byte_image_2d_io::is_a() const
 }
 
 //=======================================================================
+// Method: is_class
+//=======================================================================
+
+bool mil_byte_image_2d_io::is_class(vcl_string const& s) const
+{
+  static const vcl_string s_ = "mil_byte_image_2d_io";
+  return s==s_ || mil_image_io::is_class(s);
+}
+
+//=======================================================================
 // Method: version_no
 //=======================================================================
 

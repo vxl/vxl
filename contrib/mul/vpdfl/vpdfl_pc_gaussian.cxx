@@ -190,9 +190,18 @@ vpdfl_sampler_base* vpdfl_pc_gaussian::sampler() const
 // Method: is_a
 //=======================================================================
 
-vcl_string  vpdfl_pc_gaussian::is_a() const
+vcl_string vpdfl_pc_gaussian::is_a() const
 {
   return vcl_string("vpdfl_pc_gaussian");
+}
+
+//=======================================================================
+// Method: is_class
+//=======================================================================
+
+bool vpdfl_pc_gaussian::is_class(vcl_string const& s) const
+{
+  return vpdfl_gaussian::is_class(s) || s==vcl_string("vpdfl_pc_gaussian");
 }
 
 //=======================================================================

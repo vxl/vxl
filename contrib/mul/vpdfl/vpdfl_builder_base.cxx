@@ -58,7 +58,11 @@ vcl_string vpdfl_builder_base::is_a() const
   return vcl_string("vpdfl_builder_base");
 }
 
-bool vpdfl_builder_base::is_a(vcl_string const& s) const
+//=======================================================================
+// Method: is_class
+//=======================================================================
+
+bool vpdfl_builder_base::is_class(vcl_string const& s) const
 {
   return s==vcl_string("vpdfl_builder_base");
 }

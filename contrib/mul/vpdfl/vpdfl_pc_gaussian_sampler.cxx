@@ -21,9 +21,18 @@
 //=======================================================================
 // Method: is_a
 //=======================================================================
-vcl_string  vpdfl_pc_gaussian_sampler::is_a() const
+vcl_string vpdfl_pc_gaussian_sampler::is_a() const
 {
   return vcl_string("vpdfl_pc_gaussian_sampler");
+}
+
+//=======================================================================
+// Method: is_class
+//=======================================================================
+
+bool vpdfl_pc_gaussian_sampler::is_class(vcl_string const& s) const
+{
+  return vpdfl_gaussian_sampler::is_class(s) || s==vcl_string("vpdfl_pc_gaussian_sampler");
 }
 
 //=======================================================================

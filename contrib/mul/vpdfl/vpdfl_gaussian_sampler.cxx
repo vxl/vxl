@@ -41,9 +41,13 @@ vcl_string vpdfl_gaussian_sampler::is_a() const
   return vcl_string("vpdfl_gaussian_sampler");
 }
 
-bool vpdfl_gaussian_sampler::is_a(vcl_string const& s) const
+//=======================================================================
+// Method: is_class
+//=======================================================================
+
+bool vpdfl_gaussian_sampler::is_class(vcl_string const& s) const
 {
-  return vpdfl_sampler_base::is_a(s) || s==vcl_string("vpdfl_gaussian_sampler");
+  return vpdfl_sampler_base::is_class(s) || s==vcl_string("vpdfl_gaussian_sampler");
 }
 
 //=======================================================================

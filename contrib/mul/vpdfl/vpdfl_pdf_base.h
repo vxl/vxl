@@ -86,14 +86,14 @@ public:
   virtual bool is_valid_pdf() const;
 
 
-
     //: Version number for I/O
   short version_no() const;
 
     //: Name of the class
-  virtual vcl_string is_a() const = 0;
-    //: Name of the class
-  virtual bool is_a(vcl_string const& s) const;
+  virtual vcl_string is_a() const;
+
+    //: Does the name of the class match the argument?
+  virtual bool is_class(vcl_string const& s) const;
 
     //: Create a copy on the heap and return base class pointer
   virtual vpdfl_pdf_base* clone() const = 0;
@@ -110,13 +110,6 @@ public:
     //: Load class from binary file stream
     //!out: bfs: Target binary file stream
   virtual void b_read(vsl_b_istream& bfs) = 0;
-
-protected:
-
-private:
-
-    //: To record name of class, returned by is_a() method
-  static vcl_string class_name_;
 };
 
   //: Allows derived class to be loaded by base-class pointer

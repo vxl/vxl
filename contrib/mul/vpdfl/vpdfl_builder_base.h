@@ -61,15 +61,14 @@ public:
                               mbl_data_wrapper<vnl_vector<double> >& data,
                               const vcl_vector<double>& wts) const = 0;
 
-
-
     //: Version number for I/O
   short version_no() const;
 
     //: Name of the class
-  virtual vcl_string is_a() const = 0;
-    //: Name of the class
-  virtual bool is_a(vcl_string const& s) const;
+  virtual vcl_string is_a() const;
+
+    //: Does the name of the class match the argument?
+  virtual bool is_class(vcl_string const& s) const;
 
     //: Create a copy on the heap and return base class pointer
   virtual vpdfl_builder_base* clone() const = 0;
@@ -81,11 +80,11 @@ public:
     //!in: bfs: Target binary file stream
   virtual void b_write(vsl_b_ostream& bfs) const = 0;
 
-
     //: Load class from binary file stream
     //!out: bfs: Target binary file stream
   virtual void b_read(vsl_b_istream& bfs) = 0;
 };
+
 
   //: Allows derived class to be loaded by base-class pointer
   //  A loader object exists which is invoked by calls
