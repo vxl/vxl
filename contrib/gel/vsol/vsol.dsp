@@ -344,6 +344,15 @@ SOURCE=.\vsol_digital_curve_2d.cxx
 # Begin Source File
 SOURCE=.\vsol_digital_curve_3d.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\vsol_box.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\vsol_flags_id.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\vsol_spatial_object.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"
@@ -520,6 +529,24 @@ SOURCE=.\vsol_digital_curve_3d.h
 # End Source File
 # Begin Source File
 SOURCE=.\vsol_digital_curve_3d_sptr.h
+# End Source File
+# Begin Source File
+SOURCE=.\vsol_box.h
+# End Source File
+# Begin Source File
+SOURCE=.\vsol_box_sptr.h
+# End Source File
+# Begin Source File
+SOURCE=.\vsol_flags_id.h
+# End Source File
+# Begin Source File
+SOURCE=.\vsol_flags_id_sptr.h
+# End Source File
+# Begin Source File
+SOURCE=.\vsol_spatial_object.h
+# End Source File
+# Begin Source File
+SOURCE=.\vsol_spatial_object_sptr.h
 # End Source File
 # End Group
 # End Target
