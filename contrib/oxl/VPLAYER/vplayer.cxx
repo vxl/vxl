@@ -42,7 +42,7 @@ typedef vgui_tableau_sptr_t<xcv_tableau> xcv_tableau_sptr;
 
 xcv_tableau_sptr xcv_tab;
 //-----------------------------------------------------------------------------
-//-- Gets the list of all easy2D tableaux in xcv.
+//: Gets the list of all easy2D tableaux in xcv.
 //-----------------------------------------------------------------------------
 vcl_vector<vgui_easy2D_sptr> get_easy2D_list()
 {
@@ -58,15 +58,15 @@ vcl_vector<vgui_easy2D_sptr> get_easy2D_list()
   return easy_tabs;
 }
 //-----------------------------------------------------------------------------
-//-- Gets the last selected row and column position.
+//: Gets the last selected row and column position.
 //-----------------------------------------------------------------------------
 void get_current(unsigned* col, unsigned* row)
 {
   xcv_tab->get_last_selected_position(col, row);
 }
 //-----------------------------------------------------------------------------
-//-- Return the underlying rubberbander from the tableau at the given position.
-//   This function returns NULL if it fails.
+//: Return the underlying rubberbander from the tableau at the given position.
+//  This function returns NULL if it fails.
 //-----------------------------------------------------------------------------
 vgui_rubberbander_sptr get_rubberbander_at(unsigned col, unsigned row)
 {
@@ -85,8 +85,8 @@ vgui_rubberbander_sptr get_rubberbander_at(unsigned col, unsigned row)
 }
 
 //-----------------------------------------------------------------------------
-//-- Return the underlying easy2D from the tableau at the given position.
-//   This function returns NULL if it fails.
+//: Return the underlying easy2D from the tableau at the given position.
+//  This function returns NULL if it fails.
 //-----------------------------------------------------------------------------
 vgui_easy2D_sptr get_easy2D_at(unsigned col, unsigned row)
 {
@@ -101,8 +101,8 @@ vgui_easy2D_sptr get_easy2D_at(unsigned col, unsigned row)
   return 0;
 }
 //-----------------------------------------------------------------------------
-//-- Gets the image tableau from the tableau at the given position.
-//   This function returns NULL if it fails.
+//: Gets the image tableau from the tableau at the given position.
+//  This function returns NULL if it fails.
 //-----------------------------------------------------------------------------
 vgui_image_tableau_sptr get_image_tableau_at(unsigned col, unsigned row)
 {
@@ -121,7 +121,6 @@ vgui_menu vplayer_menubar;
 
 vgui_menu create_menubar()
 {
-
   vplayer_menubar.add("File", vplayer_file::create_file_menu());
   vplayer_menubar.add("Geometry", vplayer_geometry::create_geometry_menu());
   vplayer_menubar.add("Video",vplayer_video::create_video_menu());

@@ -27,7 +27,7 @@ easy2D_sequencer *seq;
 vcl_vector<vgui_easy2D_sptr> tableaux_;
 
 //-----------------------------------------------------------------------------
-//-- Loads a video sequence into memory
+//: Loads a video sequence into memory
 //-----------------------------------------------------------------------------
 void vplayer_file::load_video_sequence()
 {
@@ -67,7 +67,7 @@ void vplayer_file::load_video_sequence()
 }
 
 //-----------------------------------------------------------------------------
-//-- Loads a video sequence into memory
+//: Loads a video sequence into memory
 //-----------------------------------------------------------------------------
 void vplayer_file::load_video_file()
 {
@@ -99,7 +99,7 @@ void vplayer_file::load_video_file()
 }
 
 //-----------------------------------------------------------------------------
-//-- Loads overlay geometry sequence into memory
+//: Loads overlay geometry sequence into memory
 //-----------------------------------------------------------------------------
 void vplayer_file::load_geometry_sequence()
 {
@@ -122,19 +122,19 @@ void vplayer_file::load_geometry_sequence()
 }
 
 //-----------------------------------------------------------------------------
-//-- Save geometry sequence into memory
+//: Save geometry sequence into memory
 //-----------------------------------------------------------------------------
 void vplayer_file::save_geometry_sequence()
 {
 }
 //-----------------------------------------------------------------------------
-//-- Save geometry sequence into memory
+//: Save geometry sequence into memory
 //-----------------------------------------------------------------------------
 void vplayer_file::save_video_sequence()
 {
 }
 //-----------------------------------------------------------------------------
-//-- Quit the video player
+//: Quit the video player
 //-----------------------------------------------------------------------------
 void vplayer_file::exit_vplayer()
 {
@@ -146,7 +146,7 @@ void vplayer_file::exit_vplayer()
 }
 
 //-----------------------------------------------------------------------------
-//-- Creates a menu containing all the functions in this file.
+//: Creates a menu containing all the functions in this file.
 //-----------------------------------------------------------------------------
 vgui_menu vplayer_file::create_file_menu()
 {

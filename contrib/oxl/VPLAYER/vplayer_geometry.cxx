@@ -19,7 +19,7 @@ extern void get_current(unsigned*, unsigned*);
 extern vcl_vector<vgui_easy2D_sptr> get_easy2D_list();
 
 //-----------------------------------------------------------------------------
-//-- Draw a point onto the currently selected tableau.
+//: Draw a point onto the currently selected tableau.
 //-----------------------------------------------------------------------------
 void vplayer_geometry::create_point(const void*)
 {
@@ -31,7 +31,7 @@ void vplayer_geometry::create_point(const void*)
 }
 
 //-----------------------------------------------------------------------------
-//-- Rubberband a line on the currently selected tableau.
+//: Rubberband a line on the currently selected tableau.
 //-----------------------------------------------------------------------------
 void vplayer_geometry::create_line(const void*)
 {
@@ -43,7 +43,7 @@ void vplayer_geometry::create_line(const void*)
 }
 
 //-----------------------------------------------------------------------------
-//-- Rubberband a circle on the currently selected tableau.
+//: Rubberband a circle on the currently selected tableau.
 //-----------------------------------------------------------------------------
 void vplayer_geometry::create_circle(const void*)
 {
@@ -55,7 +55,7 @@ void vplayer_geometry::create_circle(const void*)
 }
 
 //-----------------------------------------------------------------------------
-//-- Rubberband a polygon on the currently selected tableau.
+//: Rubberband a polygon on the currently selected tableau.
 //-----------------------------------------------------------------------------
 void vplayer_geometry::create_polygon(const void*)
 {
@@ -66,7 +66,7 @@ void vplayer_geometry::create_polygon(const void*)
     rubber->rubberband_polygon();
 }
 //-----------------------------------------------------------------------------
-//-- Rubberband a linestrip on the currently selected tableau.
+//: Rubberband a linestrip on the currently selected tableau.
 //-----------------------------------------------------------------------------
 void vplayer_geometry::create_linestrip(const void*)
 {
@@ -77,7 +77,7 @@ void vplayer_geometry::create_linestrip(const void*)
     rubber->rubberband_linestrip();
 }
 //-----------------------------------------------------------------------------
-//-- Rubberband infinite line on the currently selected tableau.
+//: Rubberband infinite line on the currently selected tableau.
 //-----------------------------------------------------------------------------
 void vplayer_geometry::create_infinite_line(const void*)
 {
@@ -88,7 +88,7 @@ void vplayer_geometry::create_infinite_line(const void*)
     rubber->rubberband_infinite_line();
 }
 //-----------------------------------------------------------------------------
-//-- Change the color of all the selected geometric objects.
+//: Change the color of all the selected geometric objects.
 //-----------------------------------------------------------------------------
 void vplayer_geometry::change_sel_color(const void*)
 {
@@ -113,7 +113,7 @@ void vplayer_geometry::change_sel_color(const void*)
   }
 }
 //-----------------------------------------------------------------------------
-//-- Change the radius of all the selected points.
+//: Change the radius of all the selected points.
 //-----------------------------------------------------------------------------
 void vplayer_geometry::change_sel_radius(const void*)
 {
@@ -138,7 +138,7 @@ void vplayer_geometry::change_sel_radius(const void*)
 }
 
 //-----------------------------------------------------------------------------
-//-- Change the line widths of all the selected geometric objects
+//: Change the line widths of all the selected geometric objects
 // (that aren't points).
 //-----------------------------------------------------------------------------
 void vplayer_geometry::change_sel_width(const void*)
@@ -164,7 +164,7 @@ void vplayer_geometry::change_sel_width(const void*)
 }
 
 //-----------------------------------------------------------------------------
-//-- Delete all the selected geometric objects.
+//: Delete all the selected geometric objects.
 //-----------------------------------------------------------------------------
 void vplayer_geometry::delete_sel_objs(const void*)
 {
@@ -185,7 +185,7 @@ void vplayer_geometry::delete_sel_objs(const void*)
   }
 }
 //-----------------------------------------------------------------------------
-//-- Delete all geometric objects.
+//: Delete all geometric objects.
 //-----------------------------------------------------------------------------
 void vplayer_geometry::delete_all(const void*)
 {
@@ -214,7 +214,7 @@ void vplayer_geometry::delete_all(const void*)
 }
 
 //-----------------------------------------------------------------------------
-//-- Delete all points
+//: Delete all points
 //-----------------------------------------------------------------------------
 void vplayer_geometry::delete_points(const void *)
 {
@@ -241,7 +241,7 @@ void vplayer_geometry::delete_points(const void *)
   }
 }
 //-----------------------------------------------------------------------------
-//-- Delete all lines
+//: Delete all lines
 //-----------------------------------------------------------------------------
 void vplayer_geometry::delete_lines(const void *)
 {
@@ -268,7 +268,7 @@ void vplayer_geometry::delete_lines(const void *)
   }
 }
 //-----------------------------------------------------------------------------
-//-- Delete all infinite lines
+//: Delete all infinite lines
 //-----------------------------------------------------------------------------
 void vplayer_geometry::delete_inf_lines(const void *)
 {
@@ -295,7 +295,7 @@ void vplayer_geometry::delete_inf_lines(const void *)
   }
 }
 //-----------------------------------------------------------------------------
-//-- Delete all circles
+//: Delete all circles
 //-----------------------------------------------------------------------------
 void vplayer_geometry::delete_circles(const void *)
 {
@@ -322,7 +322,7 @@ void vplayer_geometry::delete_circles(const void *)
   }
 }
 //-----------------------------------------------------------------------------
-//-- Delete all linestrips
+//: Delete all linestrips
 //-----------------------------------------------------------------------------
 void vplayer_geometry::delete_linestrips(const void *)
 {
@@ -350,7 +350,7 @@ void vplayer_geometry::delete_linestrips(const void *)
 }
 
 //-----------------------------------------------------------------------------
-//-- Change the default color for geometric objects.
+//: Change the default color for geometric objects.
 //   Note, this will apply to geometric objects created in the future, not
 //   to geometric objects already on the tableau.
 //-----------------------------------------------------------------------------
@@ -371,7 +371,7 @@ void vplayer_geometry::change_default_color(const void*)
 }
 
 //-----------------------------------------------------------------------------
-//-- Change the default radius for points.
+//: Change the default radius for points.
 //   Note, this will apply to points created in the future, not to points
 //   already on the tableau.
 //-----------------------------------------------------------------------------
@@ -391,7 +391,7 @@ void vplayer_geometry::change_default_radius(const void*)
 }
 
 //-----------------------------------------------------------------------------
-//-- Change the default line width for geometric objects.
+//: Change the default line width for geometric objects.
 //   Note, this will apply to geometric objects created in the future, not
 //   to geometric objects already on the tableau.
 //-----------------------------------------------------------------------------
@@ -408,12 +408,10 @@ void vplayer_geometry::change_default_width(const void*)
     easy_list[i]->set_line_width(line_width);
 }
 //-----------------------------------------------------------------------------
-//-- Write coordinates into a file
+//: Write coordinates into a file
 //-----------------------------------------------------------------------------
 void vplayer_geometry::save(const char *object_type,const char *dialog_name)
 {
-
-
   unsigned col, row;
   get_current(&col, &row);
   vgui_easy2D_sptr easy_tab = get_easy2D_at(col, row);
@@ -479,12 +477,10 @@ void vplayer_geometry::save_linestrips(const void *)
   save("vgui_soview2D_linestrip","Save linestrip");
 }
 //-----------------------------------------------------------------------------
-//-- Load coordinates from a file
+//: Load coordinates from a file
 //-----------------------------------------------------------------------------
 void vplayer_geometry::load(const char *object_type,const char *dialog_name)
 {
-
-
   unsigned col, row;
   get_current(&col, &row);
   vgui_easy2D_sptr easy_tab = get_easy2D_at(col, row);
@@ -550,7 +546,7 @@ void vplayer_geometry::load_linestrips(const void *)
 }
 
 //-----------------------------------------------------------------------------
-//-- Create a menu containing all the functions in this file.
+//: Create a menu containing all the functions in this file.
 //-----------------------------------------------------------------------------
 void vplayer_geometry::create_box(const void *)
 {

@@ -54,7 +54,7 @@ void vplayer_video::play_video(const void *)
         ++pframe;
         it++;
        }
-       // -- Make sure we remove the previous client from memory. Otherwise we have MLK
+       //: Make sure we remove the previous client from memory. Otherwise we have MLK
        delete r->get_client();
        r->init(*it,new vgui_rubberbander_easy2D_client(*it));
        (*it)->post_redraw();
@@ -83,7 +83,7 @@ void vplayer_video::go_to_frame(const void *)
   if(frame_num<my_movie->length())
   {
     pframe = my_movie->get_frame(frame_num);
-    // -- Make sure we remove the previous client from memory. Otherwise we have MLK
+    //: Make sure we remove the previous client from memory. Otherwise we have MLK
     delete r->get_client();
     r->init(tableaux_[frame_num],new vgui_rubberbander_easy2D_client(tableaux_[frame_num]));
     tableaux_[frame_num]->post_redraw();
@@ -106,7 +106,7 @@ void vplayer_video::next_frame(const void *)
         ++pframe;
       frame_num++;
       frame_num%=my_movie->length();
-      // -- Make sure we remove the previous client from memory. Otherwise we have MLK
+      //: Make sure we remove the previous client from memory. Otherwise we have MLK
       delete r->get_client();
       r->init(tableaux_[frame_num],new vgui_rubberbander_easy2D_client(tableaux_[frame_num]));
       tableaux_[frame_num]->post_redraw();
@@ -129,14 +129,13 @@ void vplayer_video::prev_frame(const void *)
       frame_num--;
       if(frame_num<0)
          frame_num = my_movie->length()-1;
-      // -- Make sure we remove the previous client from memory. Otherwise we have MLK
+      //: Make sure we remove the previous client from memory. Otherwise we have MLK
       delete r->get_client();
       r->init(tableaux_[frame_num],new vgui_rubberbander_easy2D_client(tableaux_[frame_num]));
       tableaux_[frame_num]->post_redraw();
       vgui::out<<endl<<"Frame: "<<frame_num;
       DRAW();
     }
-
 }
 void vplayer_video::set_speed(const void *)
 {
