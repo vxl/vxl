@@ -8,7 +8,6 @@
 int main(int argc, char *argv[])
 {
   extern char *optarg;
-  extern int optind;
   int opt;
   bool debug=false;
   int width=320, height=240;
