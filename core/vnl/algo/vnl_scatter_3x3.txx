@@ -63,7 +63,7 @@ void vnl_scatter_3x3<T>::compute_eigensystem()
   if (symmetricp)
     vnl_symmetric_eigensystem<T>::compute(S, V_, D);
   else
-    cerr << "Unsymmetric scatter not handled now\n";
+    vcl_cerr << "Unsymmetric scatter not handled now\n";
  
   eigenvectors_currentp = true;
 }

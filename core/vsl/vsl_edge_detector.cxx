@@ -104,14 +104,14 @@ void vsl_edge_detector::detect_edges(vil_image const &image,
   _jy = Make_int_image(_xsize,_ysize);
   
   if (_verbose)
-    cerr << "Doing canny on image region "
-	 << _xsize << " by " << _ysize << endl
-	 << "Gaussian tail = " << _gauss_tail << endl
-	 << "Sigma         = " << _sigma << endl
-	 << "Kernel size   = " << _k_size << endl
-	 << "Threshold     = " << _low << endl;
+    vcl_cerr << "Doing canny on image region "
+	 << _xsize << " by " << _ysize << vcl_endl
+	 << "Gaussian tail = " << _gauss_tail << vcl_endl
+	 << "Sigma         = " << _sigma << vcl_endl
+	 << "Kernel size   = " << _k_size << vcl_endl
+	 << "Threshold     = " << _low << vcl_endl;
 
-  if (_verbose) cerr << "setting convolution kernel and zeroing images\n";
+  if (_verbose) vcl_cerr << "setting convolution kernel and zeroing images\n";
   vsl_kernel_DOG(_sigma, _kernel, _k_size, _width); 
 
   vsl_canny_base_fill_raw_image(_thin, _xsize, _ysize, 0.0f);
@@ -124,44 +124,44 @@ void vsl_edge_detector::detect_edges(vil_image const &image,
   
   // Do the traditional Canny parts, and use non-maximal supression to
   // set the thresholds.
-  if (_verbose) cerr << "smoothing the image\n";
+  if (_verbose) vcl_cerr << "smoothing the image\n";
   vsl_canny_smooth_rothwell(image, _kernel, _width, _k_size, _smooth);
 
-  if (_verbose) cerr << "computing x,y derivatives and norm of gradient\n";
+  if (_verbose) vcl_cerr << "computing x,y derivatives and norm of gradient\n";
   vsl_canny_gradient(_xsize, _ysize, _smooth, _dx, _dy, _grad);
 
-  if (_verbose) cerr << "doing sub-pixel interpolation\n";
+  if (_verbose) vcl_cerr << "doing sub-pixel interpolation\n";
   Sub_pixel_interpolation();
 
-  if (_verbose) cerr << "assigning thresholds\n";
+  if (_verbose) vcl_cerr << "assigning thresholds\n";
   Set_thresholds(); // _ghist is computed here
 
   // If we don't want to maintain the strict measurement of the topology
   // (ie. we want to stop the junction regions becoming too extensive), we
   // fill in single pixel holes in the edge description.
   if ( !maintain_topology ) {
-    cerr << "Filling holes\n";
+    vcl_cerr << "Filling holes\n";
     Fill_holes();
   }
   
   // Thin the edge image, though keep the original thick one
-  if (_verbose) cerr << "thinning edges\n";
+  if (_verbose) vcl_cerr << "thinning edges\n";
   Thin_edges();
 
   // Locate junctions in the edge image and joint the clusters together
   // as we have no confidence in the geometry around them.
-  if (_verbose) cerr << "locating junctions in the edge image - ";
+  if (_verbose) vcl_cerr << "locating junctions in the edge image - ";
   Find_junctions();
-  if (_verbose) cerr << _xjunc->size() << " junctions found\n";
+  if (_verbose) vcl_cerr << _xjunc->size() << " junctions found\n";
 
   Find_junction_clusters();
-  if (_verbose) cerr << _vlist->size() << " junction clusters found\n";
+  if (_verbose) vcl_cerr << _vlist->size() << " junction clusters found\n";
 
   // Finally do edge following to extract the edge data from the _thin image
-  if (_verbose) cerr << "doing final edge following\n";
+  if (_verbose) vcl_cerr << "doing final edge following\n";
   Follow_curves(edges);
 
-  if (_verbose) cerr << "finished vsl_edge_detector\n";
+  if (_verbose) vcl_cerr << "finished vsl_edge_detector\n";
 }
 
 //-----------------------------------------------------------------------------
@@ -502,7 +502,7 @@ void vsl_edge_detector::Thin_edges() {
   int x,y,a,b,c,d,e,f,g,h,genus,count;
   bool do_output = true;
 
-  cerr << __FILE__ ": Fast Sort" << endl;
+  vcl_cerr << __FILE__ ": Fast Sort" << vcl_endl;
   vsl_edge_detector_xyfloat* edgel_array = new vsl_edge_detector_xyfloat[_xsize * _ysize];
   int edgel_array_len = 0;
   int pos = 0;
@@ -532,9 +532,9 @@ void vsl_edge_detector::Thin_edges() {
     // To assist in setting the thresholds:
     if (  do_output && (edgel_array_len > 0) ) {
 	   
-      cerr << "vsl_Edgel strengths range from "
+      vcl_cerr << "vsl_Edgel strengths range from "
 	   << edgel_array[0].thin << " to "
-	   << edgel_array[edgel_array_len-1].thin << endl;
+	   << edgel_array[edgel_array_len-1].thin << vcl_endl;
       do_output = false;
     }
 

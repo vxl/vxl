@@ -53,7 +53,7 @@ void vsl_easy_canny(int which_canny,
   } break;
 
   default:
-    cerr << __FILE__ ": unrecognised which_canny=" << which_canny << endl;
+    vcl_cerr << __FILE__ ": unrecognised which_canny=" << which_canny << vcl_endl;
     break;
   }
 

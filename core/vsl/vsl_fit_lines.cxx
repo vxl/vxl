@@ -9,9 +9,9 @@
 
 #define warn_if_empty(e) \
 if (true && e->size()==0) \
-  cerr << __FILE__ ":" << __LINE__ << "edge \'" #e "' has zero length" << endl;
+  vcl_cerr << __FILE__ ":" << __LINE__ << "edge \'" #e "' has zero length" << vcl_endl;
 
-#define WARN if (false) { } else (cerr << __FILE__ ":" << __LINE__ << " ")
+#define WARN if (false) { } else (vcl_cerr << __FILE__ ":" << __LINE__ << " ")
 
 //--------------------------------------------------------------------------------
 
@@ -812,7 +812,7 @@ void vsl_fit_lines::MergeLines(vcl_list<vsl_edgel_chain*> *_curves) {
     return;
   }
   else 
-    WARN << "Lines merged with a cost " << sqrt(cost) << endl;
+    WARN << "Lines merged with a cost " << sqrt(cost) << vcl_endl;
   
   // We now have the parameters for the re-fitted line
   vec3 = - (1.0/S22) * S12.transpose() * eigenvector;

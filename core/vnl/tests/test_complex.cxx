@@ -31,8 +31,8 @@ void test_complex() {
     vnl_vector<vnl_double_complex> a(5); fill_rand(a.begin(), a.end());
     vnl_vector<vnl_double_complex> b(5); fill_rand(b.begin(), b.end());
     
-    cout << "a=" << a << endl;
-    cout << "b=" << b << endl;
+    vcl_cout << "a=" << a << vcl_endl;
+    vcl_cout << "b=" << b << vcl_endl;
     
     vnl_double_complex i(0,1);
     

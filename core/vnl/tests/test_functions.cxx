@@ -73,23 +73,23 @@ int testFunctions()
 	  float cdf = vnl_chi_squared_cumulative(chisq,n);
 	  Assert("vnl_chi_squared CDF", fabs(cdf - cdf_baseline[idx]) < 1e-15);
 	  if (! (fabs(cdf - cdf_baseline[idx]) < 1e-15))
-	    cout << "Error = "
+	    vcl_cout << "Error = "
 	      /// win32		 <<  setprecision(16)
-                 <<  fabs(cdf - cdf_baseline[idx]) << endl;
+                 <<  fabs(cdf - cdf_baseline[idx]) << vcl_endl;
 	  ++idx;
 	}
     }
   
-  cout << "cdf(7.88,1) = " << vnl_chi_squared_cumulative(7.88F,1) 
-       << " should be about 0.995 " << endl;
-  cout << "cdf(14.8,12) = " << vnl_chi_squared_cumulative(14.8F,12)
-       << " should be about 0.75 " << endl;
-  cout << "cdf(10.1,19) = " << vnl_chi_squared_cumulative(10.1F,19)
-       << " should be about 0.05 " << endl;
-  cout << "cdf(39.3,40) = " << vnl_chi_squared_cumulative(39.3F,40)
-       << " should be about 0.50 " << endl;
-  cout << "cdf(109.1,100) = " << vnl_chi_squared_cumulative(109.1F,100)
-       << " should be about 0.75 " << endl;
+  vcl_cout << "cdf(7.88,1) = " << vnl_chi_squared_cumulative(7.88F,1) 
+       << " should be about 0.995 " << vcl_endl;
+  vcl_cout << "cdf(14.8,12) = " << vnl_chi_squared_cumulative(14.8F,12)
+       << " should be about 0.75 " << vcl_endl;
+  vcl_cout << "cdf(10.1,19) = " << vnl_chi_squared_cumulative(10.1F,19)
+       << " should be about 0.05 " << vcl_endl;
+  vcl_cout << "cdf(39.3,40) = " << vnl_chi_squared_cumulative(39.3F,40)
+       << " should be about 0.50 " << vcl_endl;
+  vcl_cout << "cdf(109.1,100) = " << vnl_chi_squared_cumulative(109.1F,100)
+       << " should be about 0.75 " << vcl_endl;
 
   float hist1[20];
   float hist2[20];
@@ -102,14 +102,14 @@ int testFunctions()
   chisq = 0;
   for (i=0; i<20; i++)
     {
-      cout << i << " " << hist1[i] << " " << hist2[i] << endl;
+      vcl_cout << i << " " << hist1[i] << " " << hist2[i] << vcl_endl;
       float delta = hist1[i] - hist2[i];
       chisq += delta*delta/(hist1[i] + hist2[i]);
     }
-  cout << "cdf(" << chisq << ",20) = " 
+  vcl_cout << "cdf(" << chisq << ",20) = " 
        << vnl_chi_squared_cumulative(chisq,20)
        << " so P(same dist) = " << (1.0 - vnl_chi_squared_cumulative(chisq,20))
-       << endl;
+       << vcl_endl;
   return 0;
 }
 

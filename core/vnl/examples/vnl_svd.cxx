@@ -13,7 +13,7 @@ vnl_matrix<D> solve_with_warning(vnl_matrix<D>const& M,
   vnl_svd<D> svd(M, 1e-8);
   // Check for rank-deficiency
   if (svd.singularities() > 1)
-    cerr << "Warning: Singular matrix, condition = " << svd.well_condition() << endl;
+    vcl_cerr << "Warning: Singular matrix, condition = " << svd.well_condition() << vcl_endl;
   return svd.solve(B);
 }
 
@@ -24,8 +24,8 @@ int main() {
   vnl_matrix<double> M (data, 3, 3);
   vnl_matrix<double> B (3, 1, 7.0); // column vector [7 7 7]^T
   vnl_matrix<double> result = solve_with_warning(M,B);
-  cerr << result << endl;
+  vcl_cerr << result << vcl_endl;
   M(2,2)=5; result = solve_with_warning(M,B);
-  cerr << result << endl;
+  vcl_cerr << result << vcl_endl;
   return 0;
 }

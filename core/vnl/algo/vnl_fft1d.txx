@@ -25,8 +25,8 @@ vnl_fft1d<T>::vnl_fft1d (const vnl_vector<T> &R) : base (R.size())
   
   vnl_fftxd_prime_factors<T> oPF (R.size ());
   if (!oPF) {
-    cerr << "vnl_fft1d<T>::vnl_fft1d (const vnl_vector<T> &R): vector size (";
-    cerr << R.size () << ") not of format 2^P*3^Q*5^R\n";
+    vcl_cerr << "vnl_fft1d<T>::vnl_fft1d (const vnl_vector<T> &R): vector size (";
+    vcl_cerr << R.size () << ") not of format 2^P*3^Q*5^R\n";
     abort();
   }
   doFFT (oPF, +1);
@@ -39,8 +39,8 @@ vnl_fft1d<T>::vnl_fft1d (vnl_vector<vnl_complex<T> > const &Z, int dir) : base (
 {
   vnl_fftxd_prime_factors<T> oPF (Z.size ());
   if (!oPF) {
-    cerr << "vnl_fft1d<T>::vnl_fft1d (const vnl_vector<vnl_complex<T> > &Z): vector size (";
-    cerr << Z.size () << ") not of format 2^P*3^Q*5^R\n";
+    vcl_cerr << "vnl_fft1d<T>::vnl_fft1d (const vnl_vector<vnl_complex<T> > &Z): vector size (";
+    vcl_cerr << Z.size () << ") not of format 2^P*3^Q*5^R\n";
     abort();
   }
   doFFT (oPF, dir);

@@ -18,7 +18,7 @@ vnl_matlab_filewrite::vnl_matlab_filewrite(char const *file_name,
   : basename_(basename ? basename : "targetvar"), variable_int_(0), out_(file_name) 
 { 
   if (out_.bad())
-    cerr << __FILE__ ":" << __LINE__ << ", WARNING : output stream is bad" << endl;
+    vcl_cerr << __FILE__ ":" << __LINE__ << ", WARNING : output stream is bad" << vcl_endl;
 }
 
 vcl_string vnl_matlab_filewrite::make_var_name(char const* variable_name)

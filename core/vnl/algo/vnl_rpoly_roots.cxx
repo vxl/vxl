@@ -33,9 +33,9 @@ vnl_rpoly_roots::vnl_rpoly_roots(const vnl_vector<double>& a)
       has_nans=true;
 
   if (has_nans) {
-    cerr << __FILE__ " these coefficients are invalid :" << endl;
+    vcl_cerr << __FILE__ " these coefficients are invalid :" << vcl_endl;
     for (unsigned i=0;i<a.size();i++)
-      cerr << i << ' ' << a(i) << endl;
+      vcl_cerr << i << ' ' << a(i) << vcl_endl;
     abort();
   }
 
@@ -87,9 +87,9 @@ bool vnl_rpoly_roots::compute()
   num_roots_found_ = n;
 
   if (coeffs_[0] == 0.0)
-    cerr << "vnl_rpoly_roots: Leading coefficient is zero.  Not allowed.\n";
+    vcl_cerr << "vnl_rpoly_roots: Leading coefficient is zero.  Not allowed.\n";
   else
-    cerr << "vnl_rpoly_roots: Calculation failed, only " << n << " roots found\n";
+    vcl_cerr << "vnl_rpoly_roots: Calculation failed, only " << n << " roots found\n";
 
   return false;
 }

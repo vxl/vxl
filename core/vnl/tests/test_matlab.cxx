@@ -12,7 +12,7 @@
 #include <vnl/vnl_matlab_read.h>
 
 static void fsm_assert_(int lineno, bool pass, char const *expr) {
-  cout << __FILE__ ":" << lineno << endl;
+  vcl_cout << __FILE__ ":" << lineno << vcl_endl;
   Assert(expr, pass);
 }
 #define fsm_assert(c) fsm_assert_(__LINE__, c, #c);
@@ -28,11 +28,11 @@ void test_matlab() {
       M(i,j) = i*j;
   
   { // vnl_matlab_print
-    cout << v << endl;
-    vnl_matlab_print(cout, v, "v");
+    vcl_cout << v << vcl_endl;
+    vnl_matlab_print(vcl_cout, v, "v");
     
-    cout << M << endl;
-    vnl_matlab_print(cout, M, "M") << endl;
+    vcl_cout << M << vcl_endl;
+    vnl_matlab_print(vcl_cout, M, "M") << vcl_endl;
   }
   
   // vnl_matlab_write, vnl_matlab_read

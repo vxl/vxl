@@ -30,14 +30,14 @@ vnl_cholesky::vnl_cholesky(vnl_matrix<double> const & M, Operation mode):
   assert(n == M.rows());
   num_dims_rank_def_ = -1;
   if (fabs(M(0,n-1) - M(n-1,0)) > 1e-8) {
-    cerr << "vnl_cholesky: WARNING: unsymmetric: " << M << endl;
+    vcl_cerr << "vnl_cholesky: WARNING: unsymmetric: " << M << vcl_endl;
   }
 
   if (mode != estimate_condition) {
     // Quick factorization
     dpofa_(A_.data_block(), n, n, &num_dims_rank_def_);
     if (mode == verbose && num_dims_rank_def_ != 0)
-      cerr << "vnl_cholesky:: " << num_dims_rank_def_ << " dimensions of non-posdeffness\n";
+      vcl_cerr << "vnl_cholesky:: " << num_dims_rank_def_ << " dimensions of non-posdeffness\n";
   } else {
     vnl_vector<double> nullvector(n);
     dpoco_(A_.data_block(), n, n, &rcond_, nullvector.data_block(), &num_dims_rank_def_);

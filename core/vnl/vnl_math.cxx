@@ -15,7 +15,7 @@
 # include <ieeefp.h>
 
 #elif VXL_MATH_HAS_FINITE
-# include <math.h>
+# include <math.h>  // this is *not* supposed to be <cmath>
 
 #elif defined(SYSV) && !defined(hppa)
 // needed on platforms with finite() declared in strange places, e.g. on alpha

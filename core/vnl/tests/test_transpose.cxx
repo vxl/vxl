@@ -13,22 +13,22 @@ void test_transpose()
 
   vnl_matrix<double> old_X(X);
 
-  vnl_matlab_print(cout, X, "X");
+  vnl_matlab_print(vcl_cout, X, "X");
 
   X.inplace_transpose();
   
-  vnl_matlab_print(cout, X, "X");
+  vnl_matlab_print(vcl_cout, X, "X");
 
   if (X != old_X.transpose()) {
-    cerr << "inplace_transpose **FAILED**" << endl;
+    vcl_cerr << "inplace_transpose **FAILED**" << vcl_endl;
   }
   
   X.inplace_transpose();
 
-  vnl_matlab_print(cout, X, "X");
+  vnl_matlab_print(vcl_cout, X, "X");
 
   if (X != old_X) {
-    cerr << "inplace_transpose **FAILED**" << endl;
+    vcl_cerr << "inplace_transpose **FAILED**" << vcl_endl;
   }
 }
 

@@ -576,7 +576,7 @@ static int Perform_Distributed_Task(int points,vnl_rnpoly_solve_cmplx sols[LEN][
 #ifdef DEBUG
   FILE *F = fopen("/tmp/cont.results","w");
   if (!F) {
-    cerr<<"could not open /tmp/cont.results\nplease erase it if you need it\n";
+    vcl_cerr<<"could not open /tmp/cont.results\nplease erase it if you need it\n";
     F = stderr;
   }
 #endif
@@ -618,15 +618,15 @@ static int Perform_Distributed_Task(int points,vnl_rnpoly_solve_cmplx sols[LEN][
     }
 #ifdef DEBUG
     // print something out for each root
-    if (solflag) cout << ".";
-    else cout << '*';
-    cout.flush();
+    if (solflag) vcl_cout << ".";
+    else vcl_cout << '*';
+    vcl_cout.flush();
 #endif
   }
 
 #ifdef DEBUG
   if (F != stderr) fclose(F);
-  cout<<endl;
+  vcl_cout<< vcl_endl;
 #endif
 
   return NumSols;
@@ -683,19 +683,19 @@ bool vnl_rnpoly_solve::compute()
   // Print out the answers
   vnl_vector<double> * rp, *ip;
 #ifdef DEBUG
-  cout << "Numsolutions are: " << NumSols << endl;
+  vcl_cout << "Numsolutions are: " << NumSols << vcl_endl;
 #endif
   for (i=0;i<NumSols;i++) {
     rp=new vnl_vector<double>(p);  r_.push_back(rp);
     ip=new vnl_vector<double>(p);  i_.push_back(ip);
     for (j=0;j<p;j++) {
 #ifdef DEBUG
-      cout << ans[i][j].R << " + j " << ans[i][j].C << endl;
+      vcl_cout << ans[i][j].R << " + j " << ans[i][j].C << vcl_endl;
 #endif
       (*rp)[j]=ans[i][j].R; (*ip)[j]=ans[i][j].C;
     }
 #ifdef DEBUG
-    cout<<endl;
+    vcl_cout<< vcl_endl;
 #endif
   }
   return true;

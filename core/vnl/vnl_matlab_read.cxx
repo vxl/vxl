@@ -4,10 +4,10 @@
 #ifdef __GNUC__
 #pragma implementation
 #endif
-//fsm:why? #include <vcl/vcl_iostream.h> // must be first!
 #include "vnl_matlab_read.h"
 #include <vcl/vcl_iostream.h>
 #include <vcl/vcl_cstdlib.h> // abort()
+#include <vcl/vcl_cstring.h> // memset()
 #include <vnl/vnl_c_vector.h>
 #include <vnl/vnl_complex.h>
 #include <vnl/vnl_complex_traits.h>
@@ -85,6 +85,7 @@ bool vnl_matlab_readhdr::is_bigendian() const {
 //: internal
 // increment 'current', record the file position and read the header.
 void vnl_matlab_readhdr::read_hdr() {
+  memset(&hdr, 0, sizeof hdr);
   ::vnl_read_bytes(s, &hdr, sizeof(hdr));
   if (varname)
     delete [] varname;

@@ -56,7 +56,7 @@ bool vnl_symmetric_eigensystem<T>::compute(vnl_matrix<T> const& A, vnl_matrix<T>
   rs_(n, n, A.data_block(), &D[0], want_eigenvectors, &Vvec[0], &work1[0], &work2[0], &ierr);
   
   if (ierr) {
-    cerr << "SymmetricEigenSystem: ierr = " << ierr << endl;
+    vcl_cerr << "SymmetricEigenSystem: ierr = " << ierr << vcl_endl;
     return false;
   }
 
@@ -89,7 +89,7 @@ vnl_matrix<T> vnl_symmetric_eigensystem<T>::pinverse() const
   vnl_diag_matrix<T> invD(n);
   for (unsigned i=0; i<n; ++i)
     if (D(i, i) == 0) {
-      cerr << __FILE__ ": pinverse(): some eigenvalues are zero." << endl;
+      vcl_cerr << __FILE__ ": pinverse(): some eigenvalues are zero." << vcl_endl;
       invD(i, i) = 0;
     }
     else
@@ -104,7 +104,7 @@ vnl_matrix<T> vnl_symmetric_eigensystem<T>::square_root() const
   vnl_diag_matrix<T> sqrtD(n);
   for (unsigned i=0; i<n; ++i)
     if (D(i, i) < 0) {
-      cerr << __FILE__ ": square_root(): some eigenvalues are negative." << endl;
+      vcl_cerr << __FILE__ ": square_root(): some eigenvalues are negative." << vcl_endl;
       sqrtD(i, i) = sqrt(-D(i, i)); // gives square root of the absolute value of T.
     }
     else
@@ -119,7 +119,7 @@ vnl_matrix<T> vnl_symmetric_eigensystem<T>::inverse_square_root() const
   vnl_diag_matrix<T> inv_sqrtD(n);
   for (unsigned i=0; i<n; ++i)
     if (D(i, i) <= 0) {
-      cerr << __FILE__ ": square_root(): some eigenvalues are non-positive." << endl;
+      vcl_cerr << __FILE__ ": square_root(): some eigenvalues are non-positive." << vcl_endl;
       inv_sqrtD(i, i) = sqrt(-1.0/D(i, i)); // ??
     }
     else

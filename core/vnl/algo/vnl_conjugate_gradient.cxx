@@ -44,7 +44,7 @@ public:
 
   vnl_conjugate_gradient_Activate(vnl_conjugate_gradient* minimizer) {
     if (current) {
-      cerr << "vnl_conjugate_gradient: ERROR: Nested minimizations not supported.\n";
+      vcl_cerr << "vnl_conjugate_gradient: ERROR: Nested minimizations not supported.\n";
       abort();
       // This is a copy of what goes on in LevenbergMarquardt, so if awf decides to
       // fix that one, then maybe he could do the same here...
@@ -202,5 +202,5 @@ void vnl_conjugate_gradient::diagnose_outcome(ostream& os) const
      << "/" 
      << f_->reported_error(end_error_)
      << " . Final step size = " << final_step_size_
-     << endl;
+     << vcl_endl;
 }

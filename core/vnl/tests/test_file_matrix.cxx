@@ -11,11 +11,11 @@ void test_file_matrix()
 {
   vnl_file_matrix<double> H("data_3x3_matrix");
 
-  vnl_matlab_print(cout, H, "H");
+  vnl_matlab_print(vcl_cout, H, "H");
 
   H /= H[0][0];
 
-  vnl_matlab_print(cout, H, "H");
+  vnl_matlab_print(vcl_cout, H, "H");
 }
 
 TESTMAIN(test_file_matrix);

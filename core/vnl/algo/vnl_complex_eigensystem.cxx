@@ -72,10 +72,10 @@ void vnl_complex_eigensystem::compute(vnl_matrix<vnl_double_complex> const & A,
     // success
   }
   else if (info < 0) {
-    cerr << (-info) << "th argument has illegal value" << endl;
+    vcl_cerr << (-info) << "th argument has illegal value" << vcl_endl;
   }
   else if (info > 0) {
-    cerr << "vnl_qr algorithm failed." << endl;
+    vcl_cerr << "vnl_qr algorithm failed." << vcl_endl;
   }
   else {
     assert(false); // blah

@@ -59,7 +59,7 @@ public:
   // Coping with failure-------------------------------------------------------
 
 // -- Provide an ASCII diagnosis of the last minimization on ostream.
-  void diagnose_outcome(/*cerr*/) const;
+  void diagnose_outcome(/*vcl_cerr*/) const;
   void diagnose_outcome(ostream&) const;
 
 // -- Return J'*J computed at last minimum.

@@ -29,7 +29,7 @@ bool vnl_scalar_join_iterator_indexed_pair<T>::operator <  (const vnl_scalar_joi
 template <class T>
 ostream& operator<<(ostream& s, const vnl_scalar_join_iterator_indexed_pair<T>& p)
 {
-  return s << p.original_index << " " << *(p.object) << endl;
+  return s << p.original_index << " " << *(p.object) << vcl_endl;
 }
 
 template <class T>
@@ -139,6 +139,6 @@ unsigned vnl_scalar_join_iterator<T>::row2()
 template <class T>
 vnl_scalar_join_iterator<T>& vnl_scalar_join_iterator<T>::operator++(int)
 {
-  cerr << "This should not happen! postfix ++ called\n";
+  vcl_cerr << "This should not happen! postfix ++ called\n";
   return *this;
 }

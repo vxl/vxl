@@ -34,9 +34,9 @@ vnl_svd<T>::vnl_svd(vnl_matrix<T> const& M, double zero_out_tol):
 {
   // fsm added this sanity check
   if (m_==0 || n_==0) {
-    cerr << __FILE__ " : matrix M has size " << M.rows() << 'x' << M.columns() << endl
-	 << "  That makes no sense!" << endl
-	 << "  &M = " << (void*)&M << endl;
+    vcl_cerr << __FILE__ " : matrix M has size " << M.rows() << 'x' << M.columns() << vcl_endl
+	 << "  That makes no sense!" << vcl_endl
+	 << "  &M = " << (void*)&M << vcl_endl;
     abort();
   }
 
@@ -104,13 +104,13 @@ vnl_svd<T>::vnl_svd(vnl_matrix<T> const& M, double zero_out_tol):
     double n = vnl_math_abs(M.fro_norm());
     double thresh = m_ * vnl_math::eps * n;
     if (recomposition_residual > thresh) {
-      cerr << "vnl_svd<T>::vnl_svd<T>() -- Warning, recomposition_residual = "
-	   << recomposition_residual << endl;
-      cerr << "fro_norm(M) = " << n << endl; 
-      cerr << "eps*fro_norm(M) = " << thresh << endl;
-      cerr << "Press return to continue\n";
+      vcl_cerr << "vnl_svd<T>::vnl_svd<T>() -- Warning, recomposition_residual = "
+	   << recomposition_residual << vcl_endl;
+      vcl_cerr << "fro_norm(M) = " << n << vcl_endl; 
+      vcl_cerr << "eps*fro_norm(M) = " << thresh << vcl_endl;
+      vcl_cerr << "Press return to continue\n";
       char x[1];
-      cin.get(x, 1, '\n');
+      vcl_cin.get(x, 1, '\n');
     }
   }
 
@@ -161,10 +161,10 @@ static void foo()
 { 
   DiagMatrix<double> DD;
   DiagMatrix<float> FF;
-  cout << DD  << FF;
+  vcl_cout << DD  << FF;
   vnl_matrix<float> U;//  =  svd.U_;
   vnl_matrix<double> dU;//  = svd.U_;
-  cout << U << dU;
+  vcl_cout << U << dU;
 }
 #endif
 
@@ -179,7 +179,7 @@ ostream& operator<<(ostream& s, const vnl_svd<T>& svd)
   s << "U = [\n" << svd.U() << "]\n";
   s << "W = " << svd.W() << "\n";
   s << "V = [\n" << svd.V() << "]\n";
-  s << "rank = " << svd.rank() << endl;
+  s << "rank = " << svd.rank() << vcl_endl;
   return s;
 }
 
@@ -330,21 +330,21 @@ vnl_vector<T> vnl_svd<T>::solve(vnl_vector<T> const& y)  const
 {
   // fsm sanity check :
   if (y.size() != U_.rows()) {
-    cerr << __FILE__ << ": size of rhs is incompatible with no. of rows in U_" << endl;
-    cerr << "y =" << y << endl;
-    cerr << "m_=" << m_ << endl;
-    cerr << "n_=" << n_ << endl;
-    cerr << "U_=" << endl << U_;
-    cerr << "V_=" << endl << V_;
-    cerr << "W_=" << endl << W_;
+    vcl_cerr << __FILE__ << ": size of rhs is incompatible with no. of rows in U_" << vcl_endl;
+    vcl_cerr << "y =" << y << vcl_endl;
+    vcl_cerr << "m_=" << m_ << vcl_endl;
+    vcl_cerr << "n_=" << n_ << vcl_endl;
+    vcl_cerr << "U_=" << vcl_endl << U_;
+    vcl_cerr << "V_=" << vcl_endl << V_;
+    vcl_cerr << "W_=" << vcl_endl << W_;
   }
   
   vnl_vector<T> x(V_.rows());                   // Solution matrix.
   if (U_.rows() < U_.columns()) {               // Augment y with extra rows of
     vnl_vector<T> yy(U_.rows(), 0);             // zeros, so that it matches
     if (yy.size()<y.size()) { // fsm
-      cerr << "yy=" << yy << endl;
-      cerr << "y =" << y  << endl;
+      vcl_cerr << "yy=" << yy << vcl_endl;
+      vcl_cerr << "y =" << y  << vcl_endl;
       // the update() call on the next line will abort...
     }
     yy.update(y);                               // cols of u.transpose.
@@ -374,7 +374,7 @@ void vnl_svd<T>::solve_preinverted(vnl_vector<T> const& y, vnl_vector<T>* x_out)
 {
   vnl_vector<T> x;              // solution matrix
   if (U_.rows() < U_.columns()) {               // augment y with extra rows of
-    cout << "vnl_svd<T>::solve_preinverted() -- Augmenting y\n";
+    vcl_cout << "vnl_svd<T>::solve_preinverted() -- Augmenting y\n";
     vnl_vector<T> yy(U_.rows(), 0);     // zeros, so that it match
     yy.update(y);                               // cols of u.transpose. ??
     x = U_.conjugate_transpose() * yy;
@@ -393,7 +393,7 @@ vnl_matrix <T> vnl_svd<T>::nullspace()  const
 {
   int k = rank();
   if (k == n_)
-    cerr << "vnl_svd<T>::nullspace() -- Matrix is full rank." << last_tol_ << endl;
+    vcl_cerr << "vnl_svd<T>::nullspace() -- Matrix is full rank." << last_tol_ << vcl_endl;
   return nullspace(n_-k);
 }
 
@@ -412,7 +412,7 @@ vnl_matrix <T> vnl_svd<T>::left_nullspace()  const
 {
   int k = rank();
   if (k == n_)
-    cerr << "vnl_svd<T>::left_nullspace() -- Matrix is full rank." << last_tol_ << endl;
+    vcl_cerr << "vnl_svd<T>::left_nullspace() -- Matrix is full rank." << last_tol_ << vcl_endl;
   return U_.extract(U_.rows(), n_-k, 0, k);
 }
 

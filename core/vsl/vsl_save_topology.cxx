@@ -35,24 +35,24 @@ void vsl_save_topology(ostream &f, vcl_list<vsl_edge*> const &es, vcl_list<vsl_v
   }
   
   // version string
-  f << "vsl_save_topology 1.0" << endl
-    << endl;
+  f << "vsl_save_topology 1.0" << vcl_endl
+    << vcl_endl;
   
   // write the vertices :
-  f << stashed.size() << " vertices" << endl;
+  f << stashed.size() << " vertices" << vcl_endl;
   for (vcl_list<vsl_vertex*>::iterator i=stashed.begin(); i!=stashed.end(); ++i) {
     int stashid = (int) (*i)->stash_retrieve(name);
-    f << stashid << ' ' << (*i)->GetId() << ' ' << (*i)->GetX() << ' ' << (*i)->GetY() << endl;
+    f << stashid << ' ' << (*i)->GetId() << ' ' << (*i)->GetX() << ' ' << (*i)->GetY() << vcl_endl;
   }
-  f << endl;
+  f << vcl_endl;
 
   // write the edges :
-  f << es.size() << " edges" << endl;
+  f << es.size() << " edges" << vcl_endl;
   for (vcl_list<vsl_edge*>::const_iterator i=es.begin(); i!=es.end(); ++i) {
     int stashid1 = (int) (*i)->GetV1()->stash_retrieve(name);
     int stashid2 = (int) (*i)->GetV2()->stash_retrieve(name);
-    f << stashid1 << ' ' << stashid2 << endl; // endpoints
-    f << (*i)->GetId() << endl; // id of edge
+    f << stashid1 << ' ' << stashid2 << vcl_endl; // endpoints
+    f << (*i)->GetId() << vcl_endl; // id of edge
     (*i)->vsl_edgel_chain::write_ascii(f);
   }
 

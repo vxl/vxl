@@ -27,13 +27,13 @@ void vsl_harris::prepare_buffers(int w, int h)
   image_w = w;
 
   if (params_.verbose)
-    cerr << "Doing harris on image region "
-	 << image_h << " by " << image_w << endl
-	 << "Maximum no of corners                     = " << params_.corner_count_max << endl
-	 << "Gaussian sigma                            = " << params_.gauss_sigma << endl
-	 << "Expected ratio lowest/max corner strength = " << params_.relative_minimum << endl
-	 << "Auto-correlation scale factor             = " << params_.scale_factor << endl
-	 << "Computing cornerness operator response...." << flush;
+    vcl_cerr << "Doing harris on image region "
+	 << image_h << " by " << image_w << vcl_endl
+	 << "Maximum no of corners                     = " << params_.corner_count_max << vcl_endl
+	 << "Gaussian sigma                            = " << params_.gauss_sigma << vcl_endl
+	 << "Expected ratio lowest/max corner strength = " << params_.relative_minimum << vcl_endl
+	 << "Auto-correlation scale factor             = " << params_.scale_factor << vcl_endl
+	 << "Computing cornerness operator response...." << vcl_flush;
   
   // response images (no realloc performed unless size actually changes).
   image_buf           .resize(image_w, image_h);
@@ -59,9 +59,9 @@ void vsl_harris::compute_gradients(vil_image const &image)
   
   // compute gradients
   if (params_.verbose) {
-    cerr << " gradient" << flush << endl;
-    for(int i = 0; i < 10; ++i)
-      cerr << i << ": " << (int)image_buf(i,i+4) << endl;
+    vcl_cerr << " gradient" << vcl_flush << vcl_endl;
+    //    for(int i = 0; i < 10; ++i)
+    //      cerr << i << ": " << (int)image_buf(i,i+4) << endl;
   }
 
   // trim the window
@@ -79,7 +79,7 @@ void vsl_harris::compute_2nd_moments()
 {
   // compute 2nd moment matrices
   if (params_.verbose)
-    cerr << " fxx,fxy,fyy" << flush;
+    vcl_cerr << " fxx,fxy,fyy" << vcl_flush;
   window_str.row_start_index += 2;
   window_str.col_start_index += 2;
   window_str.row_end_index   -= 2;
@@ -97,7 +97,7 @@ void vsl_harris::compute_2nd_moments()
 
   // smoothe the 2nd moment matrix maps
   if (params_.verbose)
-    cerr << " convolution" << flush;
+    vcl_cerr << " convolution" << vcl_flush;
   { // we use the cornerness map as a temporary scratch area.
     vil_memory_image_of<float> *tmp = &image_cornerness_buf;
     vsl_convolve(&window_str, &gauss_mask, &image_fxx_buf, tmp);
@@ -116,7 +116,7 @@ void vsl_harris::compute_cornerness()
 {
   // compute cornerness map
   if (params_.verbose)
-    cerr << " cornerness" << flush;
+    vcl_cerr << " cornerness" << vcl_flush;
   image_cornerness_buf.fill(0);
   corner_max = droid::compute_cornerness (&window_str,
 					  &image_fxx_buf,
@@ -126,13 +126,13 @@ void vsl_harris::compute_cornerness()
 					  &image_cornerness_buf);
   //
   if (params_.verbose) {
-    cerr << "------\n";
-    for(int i = 0; i < 10; ++i)
-      cerr << i << ": " << (float)image_cornerness_buf(i,i+4) << endl;
+    vcl_cerr << "------\n";
+    //    for(int i = 0; i < 10; ++i)
+    //      cerr << i << ": " << (float)image_cornerness_buf(i,i+4) << endl;
   }
 
   if (params_.verbose)
-    cerr << "  done" << endl;
+    vcl_cerr << "  done" << vcl_endl;
 }
 
 void vsl_harris::compute_corners()
@@ -161,7 +161,7 @@ void vsl_harris::compute_corners()
       }
     }
   }
-  cerr << "vsl_harris: Final corner count " << cc.size() << endl;
+  vcl_cerr << "vsl_harris: Final corner count " << cc.size() << vcl_endl;
 }
 
 //--------------------------------------------------------------------------------
@@ -176,16 +176,16 @@ void vsl_harris::do_non_adaptive(double *corner_min) {
   // iterate if not enough corners.
   
   if (params_.verbose) 
-    cerr << "Found " << maxima_count << " corners\n";
+    vcl_cerr << "Found " << maxima_count << " corners\n";
   
   if (maxima_count < (float) params_.corner_count_max * 0.9) {
     for (int i=0 ; i<10 && maxima_count < (float) params_.corner_count_max * 0.9; i++) {
       params_.relative_minimum *= 0.5;
       *corner_min = params_.relative_minimum * corner_max;
       if (params_.verbose) 
-	cerr << "Found " << maxima_count
+	vcl_cerr << "Found " << maxima_count
 	     << "... iterating with relmin = " << params_.relative_minimum
-	     << endl;
+	     << vcl_endl;
       maxima_count = droid::find_corner_maxima (*corner_min,
 						&window_str,
 						&image_cornerness_buf,
@@ -205,9 +205,9 @@ void vsl_harris::do_non_adaptive(double *corner_min) {
     
     params_.relative_minimum = *corner_min / corner_max;
     if (params_.verbose) 
-      cerr << "vsl_harris: Too many: " << maxima_count
+      vcl_cerr << "vsl_harris: Too many: " << maxima_count
 	   << "... iterating with relmin = " << params_.relative_minimum
-	   << endl;
+	   << vcl_endl;
   }
 }
 
@@ -216,14 +216,14 @@ void vsl_harris::do_non_adaptive(double *corner_min) {
 //: internal
 void vsl_harris::do_adaptive() {
   if (params_.verbose)
-    cerr << "No. of corners before density thresholding= " << params_.corner_count_max << endl;
+    vcl_cerr << "No. of corners before density thresholding= " << params_.corner_count_max << vcl_endl;
 
   double corner_min = params_.relative_minimum * corner_max;
   int maxima_count = droid::find_corner_maxima (corner_min,
 						&window_str,
 						&image_cornerness_buf,
 						&image_cornermax_buf);
-  cerr << "harris: " << maxima_count << " corners with response above " << corner_min << endl;
+  vcl_cerr << "harris: " << maxima_count << " corners with response above " << corner_min << vcl_endl;
 
   // Store all corners in an array.
   int TILE_WIDTH = params_.adaptive_window_size; // 32
@@ -243,7 +243,7 @@ void vsl_harris::do_adaptive() {
   if (params_.corner_count_max == 0)
     IDEAL_NUM_PER_TILE = params_.corner_count_low;
 
-  cerr << "Tiles " << n_tiles_x << " x " << n_tiles_y 
+  vcl_cerr << "Tiles " << n_tiles_x << " x " << n_tiles_y 
        << ", NUM_PER_TILE " << IDEAL_NUM_PER_TILE;
   
   vcl_vector<double> cornerness(maxima_count, 0.0);
@@ -255,7 +255,7 @@ void vsl_harris::do_adaptive() {
   for(int pass = 0; pass < 2; ++pass) {
     int win_offset = pass * TILE_WIDTH / 2;
     if (params_.verbose)
-      cerr << endl << "pass " << pass;
+      vcl_cerr << vcl_endl << "pass " << pass;
     for(int tile_y = 0; tile_y < n_tiles_y; ++tile_y) {
       int window_row_start_index = tile_y * TILE_WIDTH + row_min + win_offset;
       int window_row_end_index = vcl_min(window_row_start_index+TILE_WIDTH, row_max);
@@ -272,8 +272,8 @@ void vsl_harris::do_adaptive() {
 	  for(int col = window_col_start_index; col < window_col_end_index; col++)
 	    if (corner_present[row][col])
 	      cornerness[n++] = corner_strength[row][col];
-        if (params_.verbose)
-	  cerr << endl << setw(3) << n << ' ';
+	//        if (params_.verbose)
+	//	  vcl_cerr << vcl_endl << vcl_setw(3) << n << ' ';
 
 	//
 	double THIS_TILE_AREA = 
@@ -301,7 +301,7 @@ void vsl_harris::do_adaptive() {
       }
     }
   }
-  cerr << endl;
+  vcl_cerr << vcl_endl;
 
   // Copy keep to present
   vil_copy(keep,image_cornermax_buf);
@@ -323,7 +323,7 @@ void vsl_harris::get_corners(vcl_vector<float> &corx, vcl_vector<float> &cory) c
 //: convenience method
 void vsl_harris::save_corners(ostream &f) const {
   for (unsigned i=0; i<cc.size(); ++i)
-    f << cc[i].first << ' ' << cc[i].second << endl;
+    f << cc[i].first << ' ' << cc[i].second << vcl_endl;
 }
 void vsl_harris::save_corners(char const *filename) const {
   ofstream f(filename);

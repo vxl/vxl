@@ -154,13 +154,13 @@ void vnl_sparse_matrix<T>::mult(unsigned int prows, unsigned int pcols,
     for (int cc = 0; cc<pcols; cc++)
       pd(rr,cc) = p[rr + cc*prows];
 
-  cout << "Initial p: " << endl;
+  vcl_cout << "Initial p: " << vcl_endl;
   for (int rr = 0; rr<prows; rr++) {
     for (int cc = 0; cc<pcols; cc++) {
       T pval = p[rr + cc*prows];
-      cout << pval << " ";
+      vcl_cout << pval << " ";
     }
-    cout << endl;
+    vcl_cout << vcl_endl;
   }
 #endif
 
@@ -202,15 +202,15 @@ void vnl_sparse_matrix<T>::mult(unsigned int prows, unsigned int pcols,
   }
   
 #ifdef DEBUG_SPARSE
-  cout << "Final q: " << endl;
+  vcl_cout << "Final q: " << vcl_endl;
   for (int rr = 0; rr<prows; rr++) {
     for (int cc = 0; cc<pcols; cc++) {
       T pval = q[rr + cc*prows];
-      cout << pval << " ";
+      vcl_cout << pval << " ";
     }
-    cout << endl;
+    vcl_cout << vcl_endl;
   }
-  cout << "nonsparse: " << md*pd << endl;
+  vcl_cout << "nonsparse: " << md*pd << vcl_endl;
 #endif
 }
 
@@ -482,7 +482,7 @@ void vnl_sparse_matrix<T>::scale_row(unsigned int r, T scale)
 template <class T>
 void vnl_sparse_matrix<T>::resize( int /*r*/, int /*c*/)
 {
-  cerr << "Warning: vnl_sparse_matrix::resize not implemented." << endl;
+  vcl_cerr << "Warning: vnl_sparse_matrix::resize not implemented." << vcl_endl;
   abort();
 }
 

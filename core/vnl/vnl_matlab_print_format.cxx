@@ -31,7 +31,7 @@ void vnl_matlab_print_format_pop()
 {
   vnl_matlab_print_format_init();
   if (format_stack->empty())
-    cerr << __FILE__ ": format stack empty" << endl;
+    vcl_cerr << __FILE__ ": format stack empty" << vcl_endl;
   else {
     the_format = vnl_matlab_print_format(format_stack->back());
     format_stack->pop_back();

@@ -96,14 +96,14 @@ bool vnl_lbfgs::minimize(vnl_vector<double>& x)
   
   vnl_vector<double> w(n * (2*m+1)+2*m);
   
-  cerr << "vnl_lbfgs: n = "<< n <<", memory = "<< m <<", Workspace = "<< w.size()
+  vcl_cerr << "vnl_lbfgs: n = "<< n <<", memory = "<< m <<", Workspace = "<< w.size()
        << "[ "<< ( w.size() / 128.0 / 1024.0) <<" MB], ErrorScale = "
-       << f_->reported_error(1) <<", xnorm = "<< x.magnitude() << endl;
+       << f_->reported_error(1) <<", xnorm = "<< x.magnitude() << vcl_endl;
   
   bool we_trace = (verbose_ && !trace);
 
   if (we_trace)
-    cerr << "vnl_lbfgs: ";
+    vcl_cerr << "vnl_lbfgs: ";
 
   double best_f = 0;
   vnl_vector<double> best_x;
@@ -133,27 +133,27 @@ bool vnl_lbfgs::minimize(vnl_vector<double>& x)
     }
 
     if (verbose_ && check_derivatives_) {
-      cerr << "vnl_lbfgs: f = " << f_->reported_error(f) << ", computing FD gradient\n";
+      vcl_cerr << "vnl_lbfgs: f = " << f_->reported_error(f) << ", computing FD gradient\n";
       vnl_vector<double> fdg = f_->fdgradf(x);
 #if defined(__GNUG__) && !defined(GNU_LIBSTDCXX_V3)
       int l = n;
       int limit = 100;
       int limit_tail = 10;
       if (l > limit + limit_tail) {
-	cerr << " [ Showing only first " <<limit<< " components ]\n";
+	vcl_cerr << " [ Showing only first " <<limit<< " components ]\n";
 	l = limit;
       }
-      cerr.form("%6s %20s %20s %20s %20s\n", "i", "x", "g", "fdg", "dg");
-      cerr.form("%6s %20s %20s %20s %20s\n", "-", "-", "-", "---", "--");
+      vcl_cerr.form("%6s %20s %20s %20s %20s\n", "i", "x", "g", "fdg", "dg");
+      vcl_cerr.form("%6s %20s %20s %20s %20s\n", "-", "-", "-", "---", "--");
       for(int i = 0; i < l; ++i)
-	cerr.form("%6d %20g %20g %20g %20g\n", i, x[i], g[i], fdg[i], g[i] - fdg[i]);
+	vcl_cerr.form("%6d %20g %20g %20g %20g\n", i, x[i], g[i], fdg[i], g[i] - fdg[i]);
       if (n > limit) {
-	cerr << "   ...\n";
+	vcl_cerr << "   ...\n";
 	for(int i = n - limit_tail; i < n; ++i)
-	  cerr.form("%6d %20g %20g %20g %20g\n", i, x[i], g[i], fdg[i], g[i] - fdg[i]);
+	  vcl_cerr.form("%6d %20g %20g %20g %20g\n", i, x[i], g[i], fdg[i], g[i] - fdg[i]);
       }
 #endif
-      cerr << "   ERROR = " << (fdg - g).squared_magnitude() / sqrt(double(n)) << "\n";
+      vcl_cerr << "   ERROR = " << (fdg - g).squared_magnitude() / sqrt(double(n)) << "\n";
     }
 
     iprint[0] = trace ? 1 : -1; // -1 no o/p, 0 start and end, 1 every iter.
@@ -162,7 +162,7 @@ bool vnl_lbfgs::minimize(vnl_vector<double>& x)
 	   iprint, &eps, &local_xtol, w.data_block(), &iflag);
     
     if (we_trace)
-      cerr << iflag << ":" << f_->reported_error(f) << " ";
+      vcl_cerr << iflag << ":" << f_->reported_error(f) << " ";
       
     if (iflag == 0) {
       // Successful return
@@ -174,7 +174,7 @@ bool vnl_lbfgs::minimize(vnl_vector<double>& x)
 
     if (iflag < 0) {
       // Eeek.
-      cerr << "vnl_lbfgs: ** EEEK **\n";
+      vcl_cerr << "vnl_lbfgs: ** EEEK **\n";
       ok = false;
       x = best_x;
       break;
@@ -187,7 +187,7 @@ bool vnl_lbfgs::minimize(vnl_vector<double>& x)
       break;
     }
   }
-  if (we_trace) cerr << "done\n";
+  if (we_trace) vcl_cerr << "done\n";
   
   return ok;
 }

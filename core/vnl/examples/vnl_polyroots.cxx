@@ -17,20 +17,20 @@ int main(int argc, char* argv[])
   // Read coefficients from stdin, or from command line
   vnl_vector<double> pts(argc);
   if (argc == 0) {
-    cout << "Give the polynomial coefficients, and end with EOF (CTRL-Z)\n";
-    cin >> pts;
+    vcl_cout << "Give the polynomial coefficients, and end with EOF (CTRL-Z)\n";
+    vcl_cin >> pts;
   }
   else for (int i=0; i<argc; ++i) pts[i] = atof(argv[i]);
   
-  cout << "Coefficients = [ " << pts << " ]\n";
-  cout << "Polynomial = ";
+  vcl_cout << "Coefficients = [ " << pts << " ]\n";
+  vcl_cout << "Polynomial = ";
   for (unsigned i=0; i+2<pts.size(); ++i) if (pts[i] != 0)
-    cout << pts[i] << " X^" << pts.size()-i-1 << " + ";
-  cout << pts[pts.size()-2] << " X + " << pts[pts.size()-1] << endl;
+    vcl_cout << pts[i] << " X^" << pts.size()-i-1 << " + ";
+  vcl_cout << pts[pts.size()-2] << " X + " << pts[pts.size()-1] << vcl_endl;
   
   vnl_rpoly_roots r(pts);
 
-  cout << "Roots = [ " << r.roots() << " ]\n";
+  vcl_cout << "Roots = [ " << r.roots() << " ]\n";
 
   return 0;
 }

@@ -22,11 +22,11 @@ int doTest1()
     m1(i,(i+3)%n) = 1.0;
   }
 
-  cout << "m1:\n";
+  vcl_cout << "m1:\n";
   for (unsigned i=0; i<n; i++) {
     for (unsigned j=0; j<n; j++)
-      cout << m1(i,j) << " ";
-    cout << endl;
+      vcl_cout << m1(i,j) << " ";
+    vcl_cout << vcl_endl;
   }
   
   vnl_sparse_matrix<double> m2(n,n);
@@ -35,41 +35,41 @@ int doTest1()
     m2(i,(i+n-3)%n) = 1.0;
   }
 
-  cout << "m2:\n";
+  vcl_cout << "m2:\n";
   for (unsigned i=0; i<n; i++) {
     for (unsigned j=0; j<n; j++)
-      cout << m2(i,j) << " ";
-    cout << endl;
+      vcl_cout << m2(i,j) << " ";
+    vcl_cout << vcl_endl;
   }
 
   vnl_sparse_matrix<double> prod;
   m1.mult(m2,prod);
 
-  cout << "prod:\n";
+  vcl_cout << "prod:\n";
   for (unsigned i=0; i<n; i++) {
     for (unsigned j=0; j<n; j++)
-      cout << prod(i,j) << " ";
-    cout << endl;
+      vcl_cout << prod(i,j) << " ";
+    vcl_cout << vcl_endl;
   }
 
   vnl_sparse_matrix<double> sum;
   m1.add(m2,sum);
 
-  cout << "sum:\n";
+  vcl_cout << "sum:\n";
   for (unsigned i=0; i<n; i++) {
     for (unsigned j=0; j<n; j++)
-      cout << sum(i,j) << " ";
-    cout << endl;
+      vcl_cout << sum(i,j) << " ";
+    vcl_cout << vcl_endl;
   }
   
   vnl_sparse_matrix<double> diff;
   m1.subtract(m2,diff);
 
-  cout << "diff:\n";
+  vcl_cout << "diff:\n";
   for (unsigned i=0; i<n; i++) {
     for (unsigned j=0; j<n; j++)
-      cout << diff(i,j) << " ";
-    cout << endl;
+      vcl_cout << diff(i,j) << " ";
+    vcl_cout << vcl_endl;
   }
   
   return 0;
@@ -95,7 +95,7 @@ int doTest2()
     m1.mult(m2,prod);
     
     clock_t tn = clock();
-    cout << n << " " << tn - t << endl;
+    vcl_cout << n << " " << tn - t << vcl_endl;
     t = tn;
   }
   
@@ -116,28 +116,28 @@ int doTest3()
     // ms(i,i) = md(i,i) = 1.0*(i+1)*(i+1);
   }
 
-  cout << "ms:" << endl;
+  vcl_cout << "ms:" << vcl_endl;
   for (unsigned i=0; i<n; i++) {
     for (unsigned j=0; j<n; j++)
-      cout << ms(i,j) << " ";
-    cout << endl;
+      vcl_cout << ms(i,j) << " ";
+    vcl_cout << vcl_endl;
   }
-  cout << "md:" << endl << md << endl;
+  vcl_cout << "md:" << vcl_endl << md << vcl_endl;
   
   const unsigned int nvals = 2;
   vnl_symmetric_eigensystem<double> ed(md);
   vnl_sparse_symmetric_eigensystem es;
   if (0 == es.CalculateNPairs(ms,nvals,true,20))
-    cout << "vnl_sparse_symmetric_eigensystem::CalculateNPairs() succeeded\n";
+    vcl_cout << "vnl_sparse_symmetric_eigensystem::CalculateNPairs() succeeded\n";
   else
-    cout << "vnl_sparse_symmetric_eigensystem::CalculateNPairs() failed\n";
+    vcl_cout << "vnl_sparse_symmetric_eigensystem::CalculateNPairs() failed\n";
   
   // Report 'em.
   for (unsigned i=0; i<nvals; i++) {
-    cout << "Dense[" << i << "] : " << ed.D(i,i) << " -> " 
-	 << ed.get_eigenvector(i) << endl;
-    cout << "Sparse[" << i << "]: " << es.get_eigenvalue(i) << " -> " 
-	 << es.get_eigenvector(i) << endl;
+    vcl_cout << "Dense[" << i << "] : " << ed.D(i,i) << " -> " 
+	 << ed.get_eigenvector(i) << vcl_endl;
+    vcl_cout << "Sparse[" << i << "]: " << es.get_eigenvalue(i) << " -> " 
+	 << es.get_eigenvector(i) << vcl_endl;
   }
 
   return 0;
@@ -161,18 +161,18 @@ int doTest4()
   vnl_symmetric_eigensystem<double> ed(md);
   vnl_sparse_symmetric_eigensystem es;
   if (0 == es.CalculateNPairs(ms,nvals))
-    cout << "vnl_sparse_symmetric_eigensystem::CalculateNPairs() succeeded\n";
+    vcl_cout << "vnl_sparse_symmetric_eigensystem::CalculateNPairs() succeeded\n";
   else
-    cout << "vnl_sparse_symmetric_eigensystem::CalculateNPairs() failed\n";
+    vcl_cout << "vnl_sparse_symmetric_eigensystem::CalculateNPairs() failed\n";
 
   // Report 'em.
   for (unsigned i=0; i<nvals; i++) {
     double dense = ed.D(i,i);
     double sparse = es.get_eigenvalue(i);
-    cout << "Dense[" << i << "] : " << dense << endl;
-    cout << "Sparse[" << i << "]: " << sparse << endl;
+    vcl_cout << "Dense[" << i << "] : " << dense << vcl_endl;
+    vcl_cout << "Sparse[" << i << "]: " << sparse << vcl_endl;
     double err = fabs(dense - sparse);
-    cout << "Error: " << err << endl;
+    vcl_cout << "Error: " << err << vcl_endl;
     Assert("vnl_sparse_symmetric_eigensystem eigenvalue error", err < 1e-10);
   }
   return 0;
@@ -181,13 +181,13 @@ int doTest4()
 extern "C"
 int test_sparse_matrix()
 {
-  cout << "Starting test 1\n";
+  vcl_cout << "Starting test 1\n";
   int r = doTest1();
-  cout << "Starting test 2\n";
+  vcl_cout << "Starting test 2\n";
   r = r + doTest2();
-  cout << "Starting test 3\n";
+  vcl_cout << "Starting test 3\n";
   r = r + doTest3();
-  cout << "Starting test 4\n";
+  vcl_cout << "Starting test 4\n";
   r = r + doTest4();
   return r;
 }

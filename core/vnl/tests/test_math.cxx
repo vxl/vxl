@@ -9,8 +9,8 @@
 int main(int,char**) {
   vnl_double_complex z(1,2);
   
-  cout << "z=" << z << endl;
-  cout << "abs(z)=" << vnl_math_abs(z) << endl;
+  vcl_cout << "z=" << z << vcl_endl;
+  vcl_cout << "abs(z)=" << vnl_math_abs(z) << vcl_endl;
   
   return 0;
 }

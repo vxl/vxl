@@ -14,7 +14,7 @@ int main()
 {
   // Read points from stdin
   vnl_matrix<double> pts;
-  cin >> pts;
+  vcl_cin >> pts;
 
   // Build design matrix D
   int npts = pts.rows();
@@ -29,14 +29,14 @@ int main()
   {
     vnl_svd<double> svd(D);
     vnl_vector<double> a = svd.nullvector();
-    cout << "SVD residual = " << (D * a).magnitude() << endl;
+    vcl_cout << "SVD residual = " << (D * a).magnitude() << vcl_endl;
   }
 
   // 2. Compute using eigensystem of D'*D
   {
     vnl_symmetric_eigensystem<double> eig(D.transpose() * D);
     vnl_vector<double> a = eig.get_eigenvector(0);
-    cout << "Eig residual = " << (D * a).magnitude() << endl;
+    vcl_cout << "Eig residual = " << (D * a).magnitude() << vcl_endl;
   }
 
   return 0;

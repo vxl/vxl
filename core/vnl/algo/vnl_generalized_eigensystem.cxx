@@ -56,10 +56,10 @@ void vnl_generalized_eigensystem::compute_eispack(const vnl_matrix<double>& A,
     const double THRESH = 1e-8;
     vnl_symmetric_eigensystem<double> eig(B);
     if (eig.D(0,0) < -THRESH) {
-      cerr << "**** vnl_generalized_eigensystem: ERROR\n";
-      cerr << "Matrix B is not nonneg-definite\n";
+      vcl_cerr << "**** vnl_generalized_eigensystem: ERROR\n";
+      vcl_cerr << "Matrix B is not nonneg-definite\n";
       MATLABPRINT(B);
-      cerr << "**** eigenvalues(B) = " << eig.D << endl;
+      vcl_cerr << "**** eigenvalues(B) = " << eig.D << vcl_endl;
       return;
     }
     // hmmmmm -- all this crap below is worse than
@@ -71,7 +71,7 @@ void vnl_generalized_eigensystem::compute_eispack(const vnl_matrix<double>& A,
       ++rank_deficiency;
     int rank = B.columns() - rank_deficiency;
 
-    cerr << "vnl_generalized_eigensystem: B rank def by " << rank_deficiency << endl;
+    vcl_cerr << "vnl_generalized_eigensystem: B rank def by " << rank_deficiency << vcl_endl;
     // M is basis for non-nullspace of B
     vnl_matrix<double> M = eig.V.get_n_columns(rank_deficiency, rank);
     vnl_matrix<double> N = eig.V.get_n_columns(0, rank_deficiency);
@@ -81,7 +81,7 @@ void vnl_generalized_eigensystem::compute_eispack(const vnl_matrix<double>& A,
     vnl_generalized_eigensystem reduced(M.transpose() * A * M,
 					M.transpose() * B * M);
     
-    cerr << "AN: " << reduced.D << endl;
+    vcl_cerr << "AN: " << reduced.D << vcl_endl;
 
     vnl_matrix<double> V05 = M * reduced.V.transpose();
     vnl_svd<double> sv6(V05.transpose());
@@ -91,7 +91,7 @@ void vnl_generalized_eigensystem::compute_eispack(const vnl_matrix<double>& A,
       D(i,i) = reduced.D(i,i);
     for(unsigned i = rank; i < B.columns(); ++i)
       D(i,i) = 0;
-    cerr << "AN: " << D << endl;
+    vcl_cerr << "AN: " << D << vcl_endl;
     
     return;
 #endif
@@ -108,16 +108,16 @@ void vnl_generalized_eigensystem::compute_eispack(const vnl_matrix<double>& A,
   // Diagnose errors
   if (ierr) {
     if (ierr == 10*n)
-      cerr << "vnl_generalized_eigensystem: N is greater than NM.  Bug in interface to rsg.f\n";
+      vcl_cerr << "vnl_generalized_eigensystem: N is greater than NM.  Bug in interface to rsg.f\n";
     else {
-      cerr << "vnl_generalized_eigensystem: The " <<
+      vcl_cerr << "vnl_generalized_eigensystem: The " <<
 	ierr << "-th eigenvalue has not been determined after 30 iterations.\n";
-      cerr << "The eigenvalues should be correct for indices 1.." << ierr-1;
-      cerr << ", but no eigenvcl_vcl_vcl_vcl_vectors are computed.\n";
-      cerr << "A = " << A << endl;
-      cerr << "singular values(A) = " << vnl_svd<double>(A).W() << endl;
-      cerr << "B = " << B << endl;
-      cerr << "singular values(B) = " << vnl_svd<double>(B).W() << endl;
+      vcl_cerr << "The eigenvalues should be correct for indices 1.." << ierr-1;
+      vcl_cerr << ", but no eigenvcl_vcl_vcl_vcl_vectors are computed.\n";
+      vcl_cerr << "A = " << A << vcl_endl;
+      vcl_cerr << "singular values(A) = " << vnl_svd<double>(A).W() << vcl_endl;
+      vcl_cerr << "B = " << B << vcl_endl;
+      vcl_cerr << "singular values(B) = " << vnl_svd<double>(B).W() << vcl_endl;
     }
   }
 }

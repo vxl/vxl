@@ -40,7 +40,7 @@ void test_fft1d () {
    **************************************************/
   vnl_fftxd_prime_factors<fsm_real> oPFx (ciArraySizeX); 
   if (!oPFx) {
-    cerr << "cannot decompose X-size " << ciArraySizeX << ")into the form (2^P)(3^Q)(5^R)\n";
+    vcl_cerr << "cannot decompose X-size " << ciArraySizeX << ")into the form (2^P)(3^Q)(5^R)\n";
     abort();
   }
 
@@ -142,8 +142,8 @@ void test_fft1d () {
     }
   }
 
-  cout << "total real absolute error = " << fRealError << " (== " << fRealError/ciArraySizeX << " per element)\n";
-  cout << "total imag absolute error = " << fImagError << " (== " << fImagError/ciArraySizeX << " per element)\n";
+  vcl_cout << "total real absolute error = " << fRealError << " (== " << fRealError/ciArraySizeX << " per element)\n";
+  vcl_cout << "total imag absolute error = " << fImagError << " (== " << fImagError/ciArraySizeX << " per element)\n";
   Assert ("real error", fRealError/ciArraySizeX < maxRealErrorPrecision);
   Assert ("imag error", fImagError/ciArraySizeX < maxImagErrorPrecision);
 }

@@ -143,8 +143,8 @@ vnl_vector<T> vnl_quaternion<T>::axis () const {
   vnl_vector<T> direc = this->imaginary(); // direc parallel to imag. part
   T mag = direc.magnitude();
   if (mag == 0) {
-    cout << "Axis not well defined for zero Quaternion. Use (0,0,1) instead."
-	 << endl;
+    vcl_cout << "Axis not well defined for zero Quaternion. Use (0,0,1) instead."
+	 << vcl_endl;
     direc.z() = 1.0;			// or signal exception here.
   } else 
     direc /= mag;			// normalize direction vector

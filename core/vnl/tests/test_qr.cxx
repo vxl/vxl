@@ -45,8 +45,8 @@ void old_test()
   vnl_vector<double> b(b_data, 4);
   vnl_qr<double> qr(A);
 
-  vnl_matlab_print(cout, qr.Q(), "Q");
-  vnl_matlab_print(cout, qr.R(), "R");
+  vnl_matlab_print(vcl_cout, qr.Q(), "Q");
+  vnl_matlab_print(vcl_cout, qr.R(), "R");
   
   vnl_vector<double> x = qr.solve(b);
   
@@ -110,23 +110,23 @@ void new_test(T *) {
   
   vnl_matrix<T> A(m, n);
   A = A.apply(traits<T>::rand);
-  vnl_matlab_print(cout, A, "A");
+  vnl_matlab_print(vcl_cout, A, "A");
 
   vnl_vector<T> b(m);
   b = b.apply(traits<T>::rand);
-  vnl_matlab_print(cout, b, "b");
+  vnl_matlab_print(vcl_cout, b, "b");
 
   vnl_qr<T> qr(A);
   vnl_matrix<T> const &Q = qr.Q();
   vnl_matrix<T> const &R = qr.R();
   vnl_vector<T> x = qr.solve(b);
 
-  vnl_matlab_print(cout, Q, "Q");
-  vnl_matlab_print(cout, R, "R");
-  vnl_matlab_print(cout, x, "x");
+  vnl_matlab_print(vcl_cout, Q, "Q");
+  vnl_matlab_print(vcl_cout, R, "R");
+  vnl_matlab_print(vcl_cout, x, "x");
   
   vnl_matrix<T> QR(Q * R);
-  vnl_matlab_print(cout, QR, "QR");
+  vnl_matlab_print(vcl_cout, QR, "QR");
   
   vnl_matrix<T> I(m, m); I.set_identity();
   vnl_test_assert_near("||Q'Q - 1||", (Q.conjugate_transpose()*Q - I).fro_norm(), 0, traits<T>::eps());
@@ -147,13 +147,13 @@ inst(vnl_double_complex);
 extern "C" void test_qr() {
   old_test();
 
-  cout << "-------------------- float" << endl;
+  vcl_cout << "-------------------- float" << vcl_endl;
   new_test((float*)0);
-  cout << "-------------------- double" << endl;
+  vcl_cout << "-------------------- double" << vcl_endl;
   new_test((double*)0);
-  cout << "-------------------- float_complex" << endl;
+  vcl_cout << "-------------------- float_complex" << vcl_endl;
   new_test((vnl_float_complex*)0);
-  cout << "-------------------- double_complex" << endl;
+  vcl_cout << "-------------------- double_complex" << vcl_endl;
   new_test((vnl_double_complex*)0);
 }
 

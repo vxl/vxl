@@ -16,7 +16,7 @@ void vsl_load_topology(char const *f, vcl_list<vsl_edge*> &e, vcl_list<vsl_verte
 }
 
 #define streamok \
-{ if (f.bad()) { cerr << __FILE__ ":" << __LINE__ << " stream bad at this point" << endl; return; } }
+{ if (f.bad()) { vcl_cerr << __FILE__ ":" << __LINE__ << " stream bad at this point" << vcl_endl; return; } }
 
 void vsl_load_topology(istream &f, vcl_list<vsl_edge*> &es, vcl_list<vsl_vertex*> &vs) {
   es.clear();
@@ -29,7 +29,7 @@ void vsl_load_topology(istream &f, vcl_list<vsl_edge*> &es, vcl_list<vsl_vertex*
   f >> vcl_ws;
   f.getline(buf, sizeof(buf));
   if (strcmp("vsl_save_topology 1.0", buf) != 0) {
-    cerr << __FILE__ ": version string mismatch" << endl;
+    vcl_cerr << __FILE__ ": version string mismatch" << vcl_endl;
     return;
   }
   streamok;
@@ -39,13 +39,13 @@ void vsl_load_topology(istream &f, vcl_list<vsl_edge*> &es, vcl_list<vsl_vertex*
   f.getline(buf, sizeof(buf));
   int numverts = -1;
   if (sscanf(buf, "%d%[ ]vertices", &numverts, tmp) != 2) {
-    cerr << __FILE__ ": error reading number of vertices" << endl;
+    vcl_cerr << __FILE__ ": error reading number of vertices" << vcl_endl;
     return;
   } 
   assert(numverts >= 0);
   streamok;
   // read vertices :
-  cerr << "reading " << numverts << " vertices..." << endl;
+  vcl_cerr << "reading " << numverts << " vertices..." << vcl_endl;
   vcl_vector<vsl_vertex*> vert(numverts+1, (vsl_vertex*)0);
   for (unsigned i=0; i<numverts; ++i) {
     int stashid;
@@ -64,13 +64,13 @@ void vsl_load_topology(istream &f, vcl_list<vsl_edge*> &es, vcl_list<vsl_vertex*
   f.getline(buf, sizeof(buf));
   int numedges = -1;
   if (sscanf(buf, "%d%[ ]edges", &numedges, tmp) != 2) {
-    cerr << __FILE__ ": error reading number of edges" << endl;
+    vcl_cerr << __FILE__ ": error reading number of edges" << vcl_endl;
     return;
   }
   assert(numedges >= 0);
   streamok;
   // read edges :
-  cerr << "reading " << numedges << " edges..." << endl;
+  vcl_cerr << "reading " << numedges << " edges..." << vcl_endl;
   for (unsigned i=0; i<numedges; ++i) {
     int stashid1 = -1, stashid2 = -1;
     f >> vcl_ws >> stashid1 >> stashid2;

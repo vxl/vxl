@@ -26,7 +26,7 @@ vnl_fft2d<T>::vnl_fft2d (const vnl_matrix<T> &R) : base (R.rows(), R.columns())
   vnl_fftxd_prime_factors<T> oPFx (R.rows ());
   vnl_fftxd_prime_factors<T> oPFy (R.cols ());
   if (!oPFx || !oPFy) {
-    cerr << __FILE__ " : image dimensions not of form 2^P*3^Q*5^R" << endl;
+    vcl_cerr << __FILE__ " : image dimensions not of form 2^P*3^Q*5^R" << vcl_endl;
     abort();
   }
   
@@ -41,7 +41,7 @@ vnl_fft2d<T>::vnl_fft2d (const vnl_matrix<vnl_complex<T> > &Z, int dir) : base (
   vnl_fftxd_prime_factors<T> oPFx (Z.rows ());
   vnl_fftxd_prime_factors<T> oPFy (Z.cols ());
   if (!oPFx || !oPFy) {
-    cerr << __FILE__ " : image dimensions not of form 2^P*3^Q*5^R" << endl;
+    vcl_cerr << __FILE__ " : image dimensions not of form 2^P*3^Q*5^R" << vcl_endl;
     abort();
   }
   

@@ -36,7 +36,7 @@ public:
 
   vnl_lsqr_Activate(vnl_lsqr* minimizer) {
     if (current) {
-      cerr << "vnl_lsqr: ERROR: Nested minimizations not supported.\n";
+      vcl_cerr << "vnl_lsqr: ERROR: Nested minimizations not supported.\n";
       abort();
       // This is a copy of what goes on in LevenbergMarquardt, so if awf decides to
       // fix that one, then maybe he could do the same here...
@@ -119,11 +119,11 @@ int vnl_lsqr::minimize(vnl_vector<double>& result)
   A_condition_estimate_ = acond;
 
 #if 0
-  cerr << "A Fro norm estimate      = " << anorm << endl;
-  cerr << "A condition estimate     = " << acond << endl;
-  cerr << "Residual norm estimate   = " << rnorm << endl;
-  cerr << "A'(Ax - b) norm estimate = " << arnorm << endl;
-  cerr << "x norm estimate          = " << xnorm << endl;
+  vcl_cerr << "A Fro norm estimate      = " << anorm << vcl_endl;
+  vcl_cerr << "A condition estimate     = " << acond << vcl_endl;
+  vcl_cerr << "Residual norm estimate   = " << rnorm << vcl_endl;
+  vcl_cerr << "A'(Ax - b) norm estimate = " << arnorm << vcl_endl;
+  vcl_cerr << "x norm estimate          = " << xnorm << vcl_endl;
 #endif
 
   return 0; // return value not used
@@ -132,10 +132,10 @@ int vnl_lsqr::minimize(vnl_vector<double>& result)
 void vnl_lsqr::diagnose_outcome(ostream& os) const
 {
   translate_return_code(os, return_code_);
-  os << __FILE__ " : residual norm estimate = " << resid_norm_estimate_ << endl;
-  os << __FILE__ " : result norm estimate   = " << result_norm_estimate_ << endl;
-  os << __FILE__ " : condition no. estimate = " << A_condition_estimate_ << endl;
-  os << __FILE__ " : iterations             = " << num_iter_ << endl;
+  os << __FILE__ " : residual norm estimate = " << resid_norm_estimate_ << vcl_endl;
+  os << __FILE__ " : result norm estimate   = " << result_norm_estimate_ << vcl_endl;
+  os << __FILE__ " : condition no. estimate = " << A_condition_estimate_ << vcl_endl;
+  os << __FILE__ " : iterations             = " << num_iter_ << vcl_endl;
 }
 
 void vnl_lsqr::translate_return_code(ostream& os, int rc)
@@ -152,9 +152,9 @@ void vnl_lsqr::translate_return_code(ostream& os, int rc)
   };
 
   if
-    (rc < 0 || rc > 7) os << __FILE__ " : Illegal return code : " << rc << endl;
+    (rc < 0 || rc > 7) os << __FILE__ " : Illegal return code : " << rc << vcl_endl;
   else
-    os << __FILE__ " : " << vnl_lsqr_reasons[rc] << endl;
+    os << __FILE__ " : " << vnl_lsqr_reasons[rc] << vcl_endl;
 
 }
 

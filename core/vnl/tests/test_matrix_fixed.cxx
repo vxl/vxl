@@ -20,16 +20,16 @@ void testvnl_matrix_fixed()
     31, 32, 33,
   };
   
-  cout << "Calling ctor -- should be no mallocs\n";
+  vcl_cout << "Calling ctor -- should be no mallocs\n";
   //Refvnl_double_3x3 X(datablock);
   malloc_count = 0;
   vnl_double_3x3 X(datablock);
-  cout << "X = [" << X << "]\n";
+  vcl_cout << "X = [" << X << "]\n";
 
   vnl_double_3 v(10,11,12);
-  cout << "v = [ " << v << "]\n";
+  vcl_cout << "v = [ " << v << "]\n";
   
-  cout << "X v = " << X * (v + v) << endl;
+  vcl_cout << "X v = " << X * (v + v) << vcl_endl;
   // This shouldn't compile...
   // vnl_matrix<double>* base = new vnl_double_3x3(datablock);
 
@@ -39,10 +39,10 @@ void testvnl_matrix_fixed()
   Assert("mallocs", malloc_count <= 1);
 #endif
   
-  cout << "Now watch them mallocs\n";
+  vcl_cout << "Now watch them mallocs\n";
   vnl_matrix<double>& CX = X;
   vnl_vector<double>& cv = v;
-  cout << "X v = " << CX * (cv + cv) << endl;
+  vcl_cout << "X v = " << CX * (cv + cv) << vcl_endl;
   
   verbose_malloc = false;  
 }
@@ -61,7 +61,7 @@ void* operator new(size_t s)
   ++malloc_count;
   
   if (verbose_malloc) 
-    cout << "malloc: " << r << " for " << s << endl;
+    vcl_cout << "malloc: " << r << " for " << s << vcl_endl;
  
   return r;
 }
@@ -69,7 +69,7 @@ void* operator new(size_t s)
 void operator delete(void* s)
 {
   if (verbose_malloc)
-    cout << "delete: " << s << endl;
+    vcl_cout << "delete: " << s << vcl_endl;
   free(s);
 }
 #endif

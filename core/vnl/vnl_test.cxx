@@ -28,21 +28,21 @@ void vnl_test_start(const char* name = NULL) {
   tests_passed = 0;
   tests_failed = 0;
   test_name = name;
-  cout << "-----------------------------------------------------------------------------\n";
-  cout << "Start Testing";	
-  if (test_name != NULL) cout << " " << test_name;
-  cout << ":\n-----------------------------------------------------------------------------\n";
-  cout.flush();
+  vcl_cout << "-----------------------------------------------------------------------------\n";
+  vcl_cout << "Start Testing";	
+  if (test_name != NULL) vcl_cout << " " << test_name;
+  vcl_cout << ":\n-----------------------------------------------------------------------------\n";
+  vcl_cout.flush();
  }
 
 void vnl_test_begin(const char* msg) {
   num_test++;
 #if defined(__GNUG__) && !defined(GNU_LIBSTDCXX_V3)
-  cout.form(" Test %03d: %-53s --> ", num_test, msg);
+  vcl_cout.form(" Test %03d: %-53s --> ", num_test, msg);
 #else
-  cout << " Test " << num_test << ": " << msg << " --> ";
+  vcl_cout << " Test " << num_test << ": " << msg << " --> ";
 #endif
-  cout.flush();
+  vcl_cout.flush();
 }
 
 // NOTE: We don't pass in the message (see test_begin) because
@@ -52,35 +52,35 @@ void vnl_test_begin(const char* msg) {
 void vnl_test_perform(int success) {
   if (success) {
     tests_passed++;
-    cout << "  PASSED\n";
+    vcl_cout << "  PASSED\n";
   } else {
     tests_failed++;
-    cout << "**FAILED**\n";
+    vcl_cout << "**FAILED**\n";
   }
-  cout.flush();
+  vcl_cout.flush();
 }
 
 int vnl_test_summary() {
-  cout << "-----------------------------------------------------------------------------\n";
-  if (test_name != NULL) cout << test_name << " ";
-  cout << "Test Summary: ";
+  vcl_cout << "-----------------------------------------------------------------------------\n";
+  if (test_name != NULL) vcl_cout << test_name << " ";
+  vcl_cout << "Test Summary: ";
   if (tests_failed > 0)
-    cout<<tests_passed<<" tests succeeded, "<<tests_failed<<" tests didn't\t\t\t*****";
+    vcl_cout<<tests_passed<<" tests succeeded, "<<tests_failed<<" tests didn't\t\t\t*****";
   else
-    cout<<"All "<<tests_passed<<" tests succeeded";
-  cout << "\n-----------------------------------------------------------------------------\n";
-  cout.flush();
+    vcl_cout<<"All "<<tests_passed<<" tests succeeded";
+  vcl_cout << "\n-----------------------------------------------------------------------------\n";
+  vcl_cout.flush();
   return tests_failed;
 }
 
 void vnl_test_assert(const vcl_string& msg, bool expr)
 {
-  cout << msg << " - ";
+  vcl_cout << msg << " - ";
   vnl_test_perform(expr);
 }
 
 void vnl_test_assert_near(const vcl_string& msg, double expr, double target, double tol)
 {
-  cout << msg << " should be " << target << ", is " << expr << ", ";
+  vcl_cout << msg << " should be " << target << ", is " << expr << ", ";
   vnl_test_perform(fabs(expr - target) < tol);
 }

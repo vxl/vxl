@@ -48,7 +48,7 @@ bool epsilon_equals (const vnl_diag_matrix<T>& m1, const vnl_diag_matrix<T>& m2,
 {
   if (alt_epsilon < 0)
     {
-      cerr << "Negative alt_epsilon passed to epsilon_equals: returning false\n";
+      vcl_cerr << "Negative alt_epsilon passed to epsilon_equals: returning false\n";
       return false;
     }
 

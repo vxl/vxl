@@ -38,8 +38,8 @@ vnl_real_eigensystem::vnl_real_eigensystem(vnl_matrix<double> const & M):
   rg_(n, n, mf, wr.data_block(), wi.data_block(), matz, devout.data_block(), iv1.data_block(), fv1.data_block(), &ierr);
   
   if (ierr != 0) {
-    cerr << " *** vnl_real_eigensystem: Failed on " << ierr << "th eigenvalue\n";
-    cerr << M << endl;
+    vcl_cerr << " *** vnl_real_eigensystem: Failed on " << ierr << "th eigenvalue\n";
+    vcl_cerr << M << vcl_endl;
   }
 
   // Copy out eigenvalues and eigenvectors

@@ -71,10 +71,10 @@ int main()
   vnl_levenberg_marquardt levmarq(f, x);
 
   // Summarize the results
-  cout << "** LevenbergMarquardt default **" << endl;
-  cout << "Rosenbrock min of " << levmarq.get_end_error() << " at " << x << endl;
-  cout << "Iterations: " << levmarq.get_num_iterations() << "    ";
-  cout << "Evaluations: " << levmarq.get_num_evaluations() << endl;
+  vcl_cout << "** LevenbergMarquardt default **" << vcl_endl;
+  vcl_cout << "Rosenbrock min of " << levmarq.get_end_error() << " at " << x << vcl_endl;
+  vcl_cout << "Iterations: " << levmarq.get_num_iterations() << "    ";
+  vcl_cout << "Evaluations: " << levmarq.get_num_evaluations() << vcl_endl;
   levmarq.diagnose_outcome();
 
   // Now rerun the optimizer with a new, looser, X tolerance.
@@ -85,40 +85,40 @@ int main()
 
   // Summarize the results. It has taken fewer iterations to reach the same
   // answer.
-  cout << "** LevenbergMarquardt xtol=0.1 **" << endl;
-  cout << "Rosenbrock min of " << levmarq.get_end_error() << " at " << x << endl;
-  cout << "Iterations: " << levmarq.get_num_iterations() << "    ";
-  cout << "Evaluations: " << levmarq.get_num_evaluations() << endl;
+  vcl_cout << "** LevenbergMarquardt xtol=0.1 **" << vcl_endl;
+  vcl_cout << "Rosenbrock min of " << levmarq.get_end_error() << " at " << x << vcl_endl;
+  vcl_cout << "Iterations: " << levmarq.get_num_iterations() << "    ";
+  vcl_cout << "Evaluations: " << levmarq.get_num_evaluations() << vcl_endl;
   levmarq.diagnose_outcome();
 
   {
     // Make a vnl_cost_function, and use vnl_amoeba
-    cout << "** Amoeba (Nelder Meade downhill simplex)  ** \n";
+    vcl_cout << "** Amoeba (Nelder Meade downhill simplex)  ** \n";
     vnl_least_squares_cost_function cf(&f);
     vnl_amoeba amoeba(cf);
     x = x0;
     amoeba.minimize(x);
-    cout << "Rosenbrock min of " << cf.f(x) << " at " << x << endl;
-    cout << "Evaluations: " << amoeba.get_num_evaluations() << endl;
+    vcl_cout << "Rosenbrock min of " << cf.f(x) << " at " << x << vcl_endl;
+    vcl_cout << "Evaluations: " << amoeba.get_num_evaluations() << vcl_endl;
   }
   {
-    cout << "** Conjugate Gradient ** \n";
+    vcl_cout << "** Conjugate Gradient ** \n";
     vnl_rosenbrock_grad_cost_fun rcf;
     vnl_conjugate_gradient cg(rcf);
     x = x0;
     cg.minimize(x);
-    cout << "CG min of " << rcf.f(x) << " at " << x << endl;
+    vcl_cout << "CG min of " << rcf.f(x) << " at " << x << vcl_endl;
     cg.diagnose_outcome();
   }
   {
-    cout << "** LBFGS (Limited memory Broyden Fletcher Goldfarb Shanno) ** \n";
+    vcl_cout << "** LBFGS (Limited memory Broyden Fletcher Goldfarb Shanno) ** \n";
     vnl_rosenbrock_grad_cost_fun rcf;
     vnl_lbfgs lbfgs(rcf);
     x = x0;
     lbfgs.minimize(x);
     //    assert(lbfgs.get_end_error() == rcf.f(x));
-    cout << "L-BFGS min of " << lbfgs.get_end_error() << " at " << x << endl;
-    cout << "Evaluations: " << lbfgs.get_num_evaluations() << endl;
+    vcl_cout << "L-BFGS min of " << lbfgs.get_end_error() << " at " << x << vcl_endl;
+    vcl_cout << "Evaluations: " << lbfgs.get_num_evaluations() << vcl_endl;
   }
   return 0;
 }

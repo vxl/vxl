@@ -48,7 +48,7 @@ void vsl_canny_smooth_rothwell(vil_image const &image_in,
   macro(VIL_FLOAT, float)
 #undef macro
   else {
-    cerr << "Image must be either UBYTE, SHORT, RGB or FLOAT." << endl;
+    vcl_cerr << "Image must be either UBYTE, SHORT, RGB or FLOAT." << vcl_endl;
     abort();
   }
 }
@@ -71,7 +71,7 @@ void vsl_canny_smooth_rothwell_adaptive(vil_image const &image_in,
   macro(VIL_FLOAT, float)
 #undef macro
   else {
-    cerr << "Image must be either UBYTE, SHORT, RGB or FLOAT." << endl;
+    vcl_cerr << "Image must be either UBYTE, SHORT, RGB or FLOAT." << vcl_endl;
     abort();
   }
 }
@@ -93,7 +93,7 @@ void vsl_canny_smooth(vil_image const &image_in,
   macro(VIL_FLOAT, float)
 #undef macro
   else {
-    cerr << "Image must be either UBYTE, SHORT, RGB or FLOAT." << endl;
+    vcl_cerr << "Image must be either UBYTE, SHORT, RGB or FLOAT." << vcl_endl;
     abort();
   }
 }

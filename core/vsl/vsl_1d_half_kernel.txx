@@ -38,7 +38,7 @@ void vsl_create_gaussian (T gauss_sigma, vsl_1d_half_kernel<T> *mask_ptr) {
     gauss_weight = vsl_compute_gauss_weight (gauss_sigma, mask_index);
     
     if (mask_index == mask_ptr->capacity) {
-      cerr << "mask size equal to capacity - must recompile with new mask size";
+      vcl_cerr << "mask size equal to capacity - must recompile with new mask size";
       assert (false);
     }	
   }

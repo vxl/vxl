@@ -42,6 +42,7 @@ SOURCES += vnl_matlab_print.cxx
 SOURCES += vnl_matlab_print_format.cxx
 SOURCES += vnl_matlab_print_scalar.cxx
 SOURCES += vnl_matlab_print2.cxx
+SOURCES += vnl_matlab_header.cxx
 SOURCES += vnl_matlab_write.cxx
 SOURCES += vnl_matlab_read.cxx
 SOURCES += vnl_matlab_filewrite.cxx
@@ -71,6 +72,7 @@ SOURCES += vnl_double_2.cxx
 SOURCES += vnl_double_3.cxx
 SOURCES += vnl_double_4.cxx
 SOURCES += vnl_double_2x3.cxx
+SOURCES += vnl_double_3x2.cxx
 
 # optimization
 SOURCES += vnl_cost_function.cxx

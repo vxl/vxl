@@ -75,11 +75,11 @@ void test_fft2d () {
   vnl_fftxd_prime_factors<fsm_real> pry (fsm_cols); 
 
   if (!prx) {
-    cerr << "cannot decompose X-size " << fsm_rows << ")into the form (2^P)(3^Q)(5^R)\n";
+    vcl_cerr << "cannot decompose X-size " << fsm_rows << ")into the form (2^P)(3^Q)(5^R)\n";
     abort();
   }
   if (!pry) {
-    cerr << "cannot decompose Y-size (" << fsm_cols << ") into the form (2^P)(3^Q)(5^R)\n";
+    vcl_cerr << "cannot decompose Y-size (" << fsm_cols << ") into the form (2^P)(3^Q)(5^R)\n";
     abort();
   }
 
@@ -131,7 +131,7 @@ void test_fft2d () {
     vnl_fft2d<fsm_real> bwd(fwd, prx, pry, -1);
 
     double error = (bwd - vnl_double_complex(cplx_matrix.size())*cplx_matrix).inf_norm();
-    cout << "error = " << error << endl;
+    vcl_cout << "error = " << error << vcl_endl;
     Assert ("fwd-bwd error", error < 1e-8); // increase for float
   }
 }

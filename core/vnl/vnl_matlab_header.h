@@ -7,10 +7,8 @@
   fsm@robots.ox.ac.uk
 */
 
-//#undef LITTLE_ENDIAN
-//#undef BIG_ENDIAN
-
-struct vnl_matlab_header/*MATFileHeader*/ {
+struct vnl_matlab_header
+{
   long type; // sum of one byte order, one storage specifier and one precision specifier
   long rows;
   long cols;

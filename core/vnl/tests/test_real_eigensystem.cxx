@@ -32,12 +32,12 @@ void test_real_eigensystem()
 	D(i,i) = real(eig.D(i,i));
       }
 
-      cout << "D = " << eig.D << endl;
-      cout << "V = " << eig.V << endl;
+      vcl_cout << "D = " << eig.D << vcl_endl;
+      vcl_cout << "V = " << eig.V << vcl_endl;
     
       vnl_matrix<vnl_double_complex> diff = vnl_complexify(S*eig.Vreal) - vnl_complexify(eig.Vreal)*D;
-      cout << "X*V - V*D = " << diff << endl;
-      cout << "residual = " << diff.inf_norm() << endl;
+      vcl_cout << "X*V - V*D = " << diff << vcl_endl;
+      vcl_cout << "residual = " << diff.inf_norm() << vcl_endl;
       Assert("recompose residual",  diff.inf_norm() < 1e-12);
     }
   
@@ -55,14 +55,14 @@ void test_real_eigensystem()
 
     vnl_real_eigensystem eig(X);
 
-    cout << "D = " << eig.D << endl;
-    cout << "V = " << eig.V << endl;
+    vcl_cout << "D = " << eig.D << vcl_endl;
+    vcl_cout << "V = " << eig.V << vcl_endl;
 
     vnl_matrix<vnl_double_complex> XC = vnl_complexify(X);
 
     vnl_matrix<vnl_double_complex> diff = XC*eig.V - eig.V*eig.D;
-    cout << "X*V - V*D = " << diff << endl;
-    cout << "residual = " << diff.inf_norm() << endl;
+    vcl_cout << "X*V - V*D = " << diff << vcl_endl;
+    vcl_cout << "residual = " << diff.inf_norm() << vcl_endl;
     Assert("recompose residual",  diff.inf_norm() < 1e-11);
   }
 }

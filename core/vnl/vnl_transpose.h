@@ -39,7 +39,7 @@ public:
 
 // -- Noisily convert a vnl_transpose to a matrix
   operator vnl_matrix<double> () const {
-    cerr << "vnl_transpose being converted to matrix -- help! I don't wanna go!\n";
+    vcl_cerr << "vnl_transpose being converted to matrix -- help! I don't wanna go!\n";
     return M_.transpose();
   }
 

@@ -42,7 +42,7 @@ ostream &vnl_matlab_print(ostream &s,
 			  vnl_matlab_print_format format VCL_DEFAULT_VALUE(vnl_matlab_print_format_default))
 {
   for (int i=0; i<rows; ++i)
-    vnl_matlab_print(s, array[i], cols, format);
+    vnl_matlab_print(s, array[i], cols, format) << vcl_endl;
   return s;
 }
 
@@ -132,6 +132,7 @@ void vnl_dbprintmx(vnl_matrix<double> const& p)
 
 #define inst(T) \
 template ostream &vnl_matlab_print(ostream &, T const *, unsigned, vnl_matlab_print_format); \
+template ostream &vnl_matlab_print(ostream &, T const * const *, unsigned, unsigned, vnl_matlab_print_format); \
 template ostream &vnl_matlab_print(ostream &, vnl_diag_matrix<T> const &, char const *, vnl_matlab_print_format); \
 template ostream &vnl_matlab_print(ostream &, vnl_matrix<T> const &, char const *, vnl_matlab_print_format); \
 template ostream &vnl_matlab_print(ostream &, vnl_vector<T> const &, char const *, vnl_matlab_print_format);

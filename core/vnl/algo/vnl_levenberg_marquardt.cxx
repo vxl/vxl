@@ -59,7 +59,7 @@ public:
 
   vnl_levenberg_marquardt_Activate(vnl_levenberg_marquardt* minimizer) {
     if (current) {
-      cerr << "vnl_levenberg_marquardt: ERROR: Nested minimizations not supported.\n";
+      vcl_cerr << "vnl_levenberg_marquardt: ERROR: Nested minimizations not supported.\n";
       abort();
       // Ask awf to fix this if you need to run one minimization inside another.
       // Or just make "current" a stack.
@@ -121,7 +121,7 @@ bool vnl_levenberg_marquardt::minimize(vnl_vector<double>& x)
 {
   //fsm
   if (f_->has_gradient()) {
-    cerr << __FILE__ " : WARNING. calling minimize(), but f_ has gradient." << endl;
+    vcl_cerr << __FILE__ " : WARNING. calling minimize(), but f_ has gradient." << vcl_endl;
   }
 
   // e04fcf
@@ -129,13 +129,13 @@ bool vnl_levenberg_marquardt::minimize(vnl_vector<double>& x)
   int n = f_->get_number_of_unknowns();         // I     Number of unknowns
 
   if (m < n) {
-    cerr << "vnl_levenberg_marquardt: Number of unknowns("<<n<<") greater than number of data ("<<m<<")\n";
+    vcl_cerr << "vnl_levenberg_marquardt: Number of unknowns("<<n<<") greater than number of data ("<<m<<")\n";
     failure_code_ = ERROR_DODGY_INPUT;
     return false;
   }
 
   if (int(x.size()) != n) {
-    cerr << "vnl_levenberg_marquardt: Input vector length ("<<x.size()<<") not equal to num unknowns ("<<n<<")\n";
+    vcl_cerr << "vnl_levenberg_marquardt: Input vector length ("<<x.size()<<") not equal to num unknowns ("<<n<<")\n";
     failure_code_ = ERROR_DODGY_INPUT;
     return false;
   }
@@ -183,7 +183,7 @@ bool vnl_levenberg_marquardt::minimize(vnl_vector<double>& x)
   
 #ifdef _SGI_CC_6_
   // Something fundamentally odd about the switch below on SGI native... FIXME
-  cerr << "vnl_levenberg_marquardt: termination code = " << failure_code_ << endl;
+  vcl_cerr << "vnl_levenberg_marquardt: termination code = " << failure_code_ << vcl_endl;
   // diagnose_outcome(cerr);
   return 1;
 #endif
@@ -253,7 +253,7 @@ bool vnl_levenberg_marquardt::minimize_using_gradient(vnl_vector<double>& x)
 {
   //fsm
   if (! f_->has_gradient()) {
-    cerr << __FILE__ ": called method minimize_using_gradient(), but f_ has no gradient." << endl;
+    vcl_cerr << __FILE__ ": called method minimize_using_gradient(), but f_ has no gradient." << vcl_endl;
     return false;
   }
 
@@ -261,7 +261,7 @@ bool vnl_levenberg_marquardt::minimize_using_gradient(vnl_vector<double>& x)
   int n = f_->get_number_of_unknowns();         // I     Number of unknowns
 
   if (m < n) {
-    cerr << __FILE__ ": Number of unknowns("<<n<<") greater than number of data ("<<m<<")\n";
+    vcl_cerr << __FILE__ ": Number of unknowns("<<n<<") greater than number of data ("<<m<<")\n";
     failure_code_ = ERROR_DODGY_INPUT;
     return false;
   }
@@ -307,7 +307,7 @@ bool vnl_levenberg_marquardt::minimize_using_gradient(vnl_vector<double>& x)
 
 void vnl_levenberg_marquardt::diagnose_outcome() const 
 {
-  diagnose_outcome(cerr);
+  diagnose_outcome(vcl_cerr);
 }
 
 // fsm: should this function be a method on vnl_nonlinear_minimizer?
@@ -357,7 +357,7 @@ void vnl_levenberg_marquardt::diagnose_outcome(ostream& s) const
   int m = f_->get_number_of_residuals();
   s << whoami ": " << num_iterations_ << " iterations, "
     << num_evaluations_ << " evaluations, "<< m <<" residuals.  RMS error start/end "
-    << get_start_error() << "/" << get_end_error() << endl;
+    << get_start_error() << "/" << get_end_error() << vcl_endl;
 #undef whoami
 }
 
@@ -384,7 +384,7 @@ vnl_matrix<double> const& vnl_levenberg_marquardt::get_JtJ()
 {
   
   if (!set_covariance_) {
-    cerr << __FILE__ ": get_covariance() not implemented yet\n";
+    vcl_cerr << __FILE__ ": get_covariance() not implemented yet\n";
     set_covariance_ = true;
   }
   return *covariance_;

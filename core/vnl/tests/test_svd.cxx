@@ -17,7 +17,7 @@ vnl_matrix<double> solve_with_warning(const vnl_matrix<double>& M,
   vnl_svd<double> svd(M, 1e-8);
   // Check for rank-deficiency
   if (svd.singularities() > 1)
-    cout << "Warning: Singular matrix, condition = " << svd.well_condition() << endl;
+    vcl_cout << "Warning: Singular matrix, condition = " << svd.well_condition() << vcl_endl;
   return svd.solve(B);
 }
 
@@ -29,17 +29,17 @@ void test_hilbert()
     for(int j = 0; j < 5; ++j)
       H(i,j) = 1.0 / (i+j+1); // sic, because i,j are zero based
   
-  cout << "H = [ " << H << "]\n";
+  vcl_cout << "H = [ " << H << "]\n";
 
   vnl_svd<double> svd(H);
   
-  cout << "rcond(H) = " << svd.well_condition() << endl;
+  vcl_cout << "rcond(H) = " << svd.well_condition() << vcl_endl;
   
   vnl_matrix<double> Hinv = svd.inverse();
 
   vnl_matrix<double> X = Hinv * H;
 
-  cout << "H*inv(H) = " << X << endl;
+  vcl_cout << "H*inv(H) = " << X << vcl_endl;
 
   vnl_matrix<double> I(5,5);
   I = 0.0;
@@ -73,17 +73,17 @@ void test_ls()
     // Add sawtooth "noise"
     y(n) = fx + (n%4 - 2) / 10.0;
   }}
-  cout << "y = [" << y << "]\n";
+  vcl_cout << "y = [" << y << "]\n";
 
   // Extract vnl_svd<double>
   vnl_svd<double> svd(D);
 
   // Solve for parameteers
   vnl_double_3 A = svd.solve(y);
-  cout << "A = " << A << "\n";
+  vcl_cout << "A = " << A << "\n";
 
   vnl_double_3 T(a,b,c);
-  cout << "residual = " << (A - T).squared_magnitude() << endl;
+  vcl_cout << "residual = " << (A - T).squared_magnitude() << vcl_endl;
   Assert("Least squares residual", (A - T).squared_magnitude() < 0.005);
 }  
 
@@ -98,9 +98,9 @@ double test_fmatrix()
   vnl_matrix<double> P(pdata, 3,4);
   vnl_svd<double> svd(P);
   vnl_matrix<double> N = svd.nullspace();
-  cout << "null(P) = " << N << endl;
+  vcl_cout << "null(P) = " << N << vcl_endl;
   
-  cout << "P * null(P) = " << P*N << endl;
+  vcl_cout << "P * null(P) = " << P*N << vcl_endl;
   
   return sqrt(dot_product(P*N, P*N));
 }
@@ -117,29 +117,29 @@ void test_pmatrix()
   vnl_svd<double> svd(P, 1e-8);
 
   vnl_matrix<double> res = svd.recompose() - P;
-  cout << "Recomposition residual = " << res.inf_norm() << endl;
+  vcl_cout << "Recomposition residual = " << res.inf_norm() << vcl_endl;
   Assert("PMatrix recomposition residual", res.inf_norm() < 1e-12);
-  cout << " Inv = " << svd.inverse() << endl;
+  vcl_cout << " Inv = " << svd.inverse() << vcl_endl;
 
   Assert("singularities = 2", svd.singularities() == 2);
   Assert("rank = 2", svd.rank() == 2);
 
   vnl_matrix<double> N = svd.nullspace();
   Assert("nullspace dimension", N.columns() == 2);
-  cout << "null(P) = \n" << N << endl;
+  vcl_cout << "null(P) = \n" << N << vcl_endl;
   
   vnl_matrix<double> PN = P*N;
-  cout << "P * null(P) = \n" << PN << endl;
-  cout << "nullspace residual = " << PN.inf_norm() << endl;
+  vcl_cout << "P * null(P) = \n" << PN << vcl_endl;
+  vcl_cout << "nullspace residual = " << PN.inf_norm() << vcl_endl;
   Assert("P nullspace residual", PN.inf_norm() < 1e-12);
   
   vnl_vector<double> n = svd.nullvector();
-  cout << "nullvector residual = " << (P*n).magnitude() << endl;
+  vcl_cout << "nullvector residual = " << (P*n).magnitude() << vcl_endl;
   Assert("P nullvector residual", (P*n).magnitude() < 1e-12);
 
   vnl_vector<double> l = svd.left_nullvector();
-  cout << "left_nullvector(P) = " << l << endl;
-  cout << "left_nullvector residual = " << (l*P).magnitude() << endl;
+  vcl_cout << "left_nullvector(P) = " << l << vcl_endl;
+  vcl_cout << "left_nullvector residual = " << (l*P).magnitude() << vcl_endl;
   Assert("P left nullvector residual", (l*P).magnitude() < 1e-12);
 }
 
@@ -152,7 +152,7 @@ void test_I()
   };
   vnl_matrix<double> P(3, 4, 12, Idata);
   vnl_svd<double> svd(P);
-  cout << svd;
+  vcl_cout << svd;
 }
 
 // a templated function may not call a static function.
@@ -167,21 +167,21 @@ template <class T>
 void test_svd_recomposition(char const *type, double maxres, T */*tag*/)
 {
   // Test inversion of 5x5 matrix of T :
-  cout << "----- testing vnl_svd<" << type << "> recomposition -----" << endl;
+  vcl_cout << "----- testing vnl_svd<" << type << "> recomposition -----" << vcl_endl;
 
   vnl_matrix<T> A(5,5);
   for (unsigned i = 0; i < A.rows(); ++i)
     for (unsigned j = 0; j < A.columns(); ++j)
       fill_random(A(i, j));
   
-  cout << "A = [ " << endl << A << "]" << endl;
+  vcl_cout << "A = [ " << vcl_endl << A << "]" << vcl_endl;
   vnl_svd<T> svd(A);
   
   vnl_matrix<T> B=svd.recompose();
-  cout << "B = [ " << endl << B << "]" << endl;
+  vcl_cout << "B = [ " << vcl_endl << B << "]" << vcl_endl;
   
   double residual=(A - B).inf_norm();
-  cout << "residual=" << residual << endl;
+  vcl_cout << "residual=" << residual << vcl_endl;
   Assert("vnl_svd<float> recomposition residual", residual < maxres);
 }
 

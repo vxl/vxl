@@ -40,7 +40,7 @@ vsl_edgel_chain::vsl_edgel_chain(vsl_edgel_chain const &that)
   }
 }
 void vsl_edgel_chain::operator=(vsl_edgel_chain const &that) {
-  cerr << __FILE__ ": assignment to vsl_edgel_chain" << endl;
+  vcl_cerr << __FILE__ ": assignment to vsl_edgel_chain" << vcl_endl;
   if (this != &that) {
     this->~vsl_edgel_chain();
     new (this) vsl_edgel_chain(that);
@@ -77,9 +77,9 @@ void vsl_edgel_chain::SetLength(int nn) {
 }
 
 void vsl_edgel_chain::write_ascii(ostream &os) const {
-  os << n << endl; // length
+  os << n << vcl_endl; // length
   for (unsigned i=0; i<n; ++i)
-    os << x[i] << ' ' << y[i] << ' ' << grad[i] << ' ' << theta[i] << endl;
+    os << x[i] << ' ' << y[i] << ' ' << grad[i] << ' ' << theta[i] << vcl_endl;
 }
 
 void vsl_edgel_chain::read_ascii(istream &is) {
@@ -87,7 +87,7 @@ void vsl_edgel_chain::read_ascii(istream &is) {
     int n_ = -1;
     is >> vcl_ws >> n_;
     if (n_<0 || is.bad()) {
-      cerr << __FILE__ ": failed to read length of vsl_edgel_chain" << endl;
+      vcl_cerr << __FILE__ ": failed to read length of vsl_edgel_chain" << vcl_endl;
       return;
     }
     //SetLength(n_);
@@ -98,7 +98,7 @@ void vsl_edgel_chain::read_ascii(istream &is) {
   for (unsigned i=0; i<n; ++i)
     is >> vcl_ws >> x[i] >> y[i] >> grad[i] >> theta[i];
   if (is.bad()) {
-    cerr << __FILE__ ": stream bad before end of vsl_edgel_chain" << endl;
+    vcl_cerr << __FILE__ ": stream bad before end of vsl_edgel_chain" << vcl_endl;
     return;
   }
   

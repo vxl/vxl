@@ -24,9 +24,9 @@ main()
   vbl_timer t;
   for(int n = 0; n < 20; ++n)
     vnl_fastops_dot(&x[0], &y[0], x.size());
-  cerr << "Method = " << METHOD << ", Optimized = " << OPTIMIZED << ", "
+  vcl_cerr << "Method = " << METHOD << ", Optimized = " << OPTIMIZED << ", "
        << "Result = " << vnl_fastops_dot(&x[0], &y[0], x.size()) << ", ";
-  t.print(cerr);
+  t.print(vcl_cerr);
 }
 
 double vnl_fastops_dot(const double* a, const double* b, int n)

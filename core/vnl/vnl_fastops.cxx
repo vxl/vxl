@@ -20,7 +20,7 @@ void vnl_fastops::AtA(const vnl_matrix<double>& A, vnl_matrix<double>* AtA)
   unsigned n = A.columns();
   // Verify output is the right size
   if (AtA->rows() != n || AtA->columns() != n) {
-    cerr << "vnl_fastops::AtA: " << AtA->rows() << "x" << AtA->columns() << " is not " << n << "x" << n << endl;
+    vcl_cerr << "vnl_fastops::AtA: " << AtA->rows() << "x" << AtA->columns() << " is not " << n << "x" << n << vcl_endl;
     abort();
   }
   
@@ -48,13 +48,13 @@ void vnl_fastops::AB(const vnl_matrix<double>& A, const vnl_matrix<double>& B, v
 
   // Verify matrices compatible
   if (na != mb) {
-    cerr << "vnl_fastops::AB: " << na << " != " << mb << endl;
+    vcl_cerr << "vnl_fastops::AB: " << na << " != " << mb << vcl_endl;
     abort();
   }
 
   // Verify output is the right size
   if (out_ptr->rows() != ma || out_ptr->columns() != nb) {
-    cerr << "vnl_fastops::AB: " << out_ptr->rows() << "x" << out_ptr->columns() << " is not " << ma << "x" << nb << endl;
+    vcl_cerr << "vnl_fastops::AB: " << out_ptr->rows() << "x" << out_ptr->columns() << " is not " << ma << "x" << nb << vcl_endl;
     abort();
   }
   
@@ -81,13 +81,13 @@ void vnl_fastops::AtB(const vnl_matrix<double>& A, const vnl_matrix<double>& B, 
 
   // Verify matrices compatible
   if (ma != mb) {
-    cerr << "vnl_fastops::AtA: " << ma << " != " << mb << endl;
+    vcl_cerr << "vnl_fastops::AtA: " << ma << " != " << mb << vcl_endl;
     abort();
   }
 
   // Verify output is the right size
   if (out_ptr->rows() != na || out_ptr->columns() != nb) {
-    cerr << "vnl_fastops::AtA: " << out_ptr->rows() << "x" << out_ptr->columns() << " is not " << na << "x" << nb << endl;
+    vcl_cerr << "vnl_fastops::AtA: " << out_ptr->rows() << "x" << out_ptr->columns() << " is not " << na << "x" << nb << vcl_endl;
     abort();
   }
   
@@ -113,13 +113,13 @@ void vnl_fastops::AtB(const vnl_matrix<double>& A, const vnl_vector<double>& B, 
 
   // Verify matrices compatible
   if (m != l) {
-    cerr << "vnl_fastops::AtB: " << m << " != " << l << endl;
+    vcl_cerr << "vnl_fastops::AtB: " << m << " != " << l << vcl_endl;
     abort();
   }
 
   // Verify output is the right size
   if (out_ptr->size() != n) {
-    cerr << "vnl_fastops::AtA: Output vector wrong size.  Is " << out_ptr->size() << ", should be " << n << endl;
+    vcl_cerr << "vnl_fastops::AtA: Output vector wrong size.  Is " << out_ptr->size() << ", should be " << n << vcl_endl;
     abort();
   }
   
@@ -145,13 +145,13 @@ void vnl_fastops::ABt(const vnl_matrix<double>& A, const vnl_matrix<double>& B, 
 
   // Verify matrices compatible
   if (na != nb) {
-    cerr << "vnl_fastops::ABt: " << na << " != " << nb << endl;
+    vcl_cerr << "vnl_fastops::ABt: " << na << " != " << nb << vcl_endl;
     abort();
   }
 
   // Verify output is the right size
   if (out_ptr->rows() != ma || out_ptr->columns() != mb) {
-    cerr << "vnl_fastops::ABt: " << out_ptr->rows() << "x" << out_ptr->columns() << " is not " << ma << "x" << mb << endl;
+    vcl_cerr << "vnl_fastops::ABt: " << out_ptr->rows() << "x" << out_ptr->columns() << " is not " << ma << "x" << mb << vcl_endl;
     abort();
   }
   
@@ -176,7 +176,7 @@ void vnl_fastops::inc_X_by_AtA(vnl_matrix<double>& X, const vnl_matrix<double>& 
   unsigned l = A.rows();
 
   if (m != n || m != A.columns()) {
-    cerr << "vnl_fastops::inc_X_by_AtA: size error\n";
+    vcl_cerr << "vnl_fastops::inc_X_by_AtA: size error\n";
     abort();
   }
 
@@ -219,13 +219,13 @@ void vnl_fastops::inc_X_by_AtB(vnl_matrix<double>& X, const vnl_matrix<double>& 
 
   // Verify matrices compatible
   if (ma != mb) {
-    cerr << "vnl_fastops::inc_X_by_AtB: A " << ma << " != B " << mb << endl;
+    vcl_cerr << "vnl_fastops::inc_X_by_AtB: A " << ma << " != B " << mb << vcl_endl;
     abort();
   }
   
   // Verify output is the right size
   if (mx != na || nx != nb) {
-    cerr << "vnl_fastops::inc_X_by_AtB: X " << mx << "x" << nx << " is not A " << na << "x" << nb << endl;
+    vcl_cerr << "vnl_fastops::inc_X_by_AtB: X " << mx << "x" << nx << " is not A " << na << "x" << nb << vcl_endl;
     abort();
   }
   
@@ -252,13 +252,13 @@ void vnl_fastops::inc_X_by_AtB(vnl_vector<double>& X, const vnl_matrix<double>& 
 
   // Verify matrices compatible
   if (ma != mb) {
-    cerr << "vnl_fastops::inc_X_by_AtB: " << ma << " != " << mb << endl;
+    vcl_cerr << "vnl_fastops::inc_X_by_AtB: " << ma << " != " << mb << vcl_endl;
     abort();
   }
   
   // Verify output is the right size
   if (mx != na) {
-    cerr << "vnl_fastops::inc_X_by_AtB: " << mx << "x" << 1 << " is not " << na << "x" << 1 << endl;
+    vcl_cerr << "vnl_fastops::inc_X_by_AtB: " << mx << "x" << 1 << " is not " << na << "x" << 1 << vcl_endl;
     abort();
   }
   
@@ -286,13 +286,13 @@ void vnl_fastops::dec_X_by_AtB(vnl_matrix<double>& X, const vnl_matrix<double>& 
 
   // Verify matrices compatible
   if (ma != mb) {
-    cerr << "vnl_fastops::inc_X_by_AtB: " << ma << " != " << mb << endl;
+    vcl_cerr << "vnl_fastops::inc_X_by_AtB: " << ma << " != " << mb << vcl_endl;
     abort();
   }
   
   // Verify output is the right size
   if (mx != na || nx != nb) {
-    cerr << "vnl_fastops::inc_X_by_AtB: " << mx << "x" << nx << " is not " << na << "x" << nb << endl;
+    vcl_cerr << "vnl_fastops::inc_X_by_AtB: " << mx << "x" << nx << " is not " << na << "x" << nb << vcl_endl;
     abort();
   }
   
@@ -343,13 +343,13 @@ void vnl_fastops::dec_X_by_ABt(vnl_matrix<double>& X, const vnl_matrix<double>& 
 
   // Verify matrices compatible
   if (na != nb) {
-    cerr << "vnl_fastops::dec_X_by_ABt: A.columns " << na << " != B.columns " << nb << endl;
+    vcl_cerr << "vnl_fastops::dec_X_by_ABt: A.columns " << na << " != B.columns " << nb << vcl_endl;
     abort();
   }
 
   // Verify output is the right size
   if (mx != ma || nx != mb) {
-    cerr << "vnl_fastops::dec_X_by_ABt: X size " << mx << "x" << nx << " is not AB^T " << ma << "x" << mb << endl;
+    vcl_cerr << "vnl_fastops::dec_X_by_ABt: X size " << mx << "x" << nx << " is not AB^T " << ma << "x" << mb << vcl_endl;
     abort();
   }
   

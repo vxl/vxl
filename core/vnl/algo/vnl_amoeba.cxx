@@ -202,9 +202,9 @@ void vnl_amoebaFit::amoeba(vnl_vector<double>& x)
   sort_simplex(simplex);
 
   if (verbose > 1) {
-    cerr << "initial\n" << simplex;
+    vcl_cerr << "initial\n" << simplex;
   } else if (verbose) {
-    cerr << "initial: " << simplex << endl;
+    vcl_cerr << "initial: " << simplex << vcl_endl;
   }
 
   // Iterate until the diameter of the simplex is less than X_tolerance.
@@ -277,11 +277,11 @@ void vnl_amoebaFit::amoeba(vnl_vector<double>& x)
     if (verbose) {
       char buf[16383];
       sprintf(buf, "iter %5d: %s ", cnt, how);
-      cerr << buf;
+      vcl_cerr << buf;
       if (verbose > 1)
-	cerr << endl << simplex << endl;
+	vcl_cerr << vcl_endl << simplex << vcl_endl;
       else if (verbose)
-	cerr << simplex << endl;
+	vcl_cerr << simplex << vcl_endl;
     }
   }
   num_evaluations_ = cnt;

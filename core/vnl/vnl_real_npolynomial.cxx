@@ -206,5 +206,5 @@ ostream& operator<<(ostream& os, vnl_real_npolynomial const& P)
     }
     if (totaldeg == 0 && fabs(P.coeffs_(i)) == 1) os << P.coeffs_(i);
   }
-  os << endl; return os;
+  os << vcl_endl; return os;
 }

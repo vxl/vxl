@@ -424,7 +424,7 @@ ostream& operator<< (ostream& os, vnl_matrix<T> const& m) {
       else
 	os << m(i, j) << " ";
     }
-    os << endl;
+    os << vcl_endl;
   }
   return os;
 }
@@ -1040,8 +1040,8 @@ void vnl_matrix<T>::assert_finite() const
   if (is_finite()) 
     return;
 
-  cerr << "*** NAN FEVER **\n";
-  cerr << *this;
+  vcl_cerr << "*** NAN FEVER **\n";
+  vcl_cerr << *this;
   abort();
 }
 
@@ -1050,8 +1050,8 @@ template <class T>
 void vnl_matrix<T>::assert_size(unsigned rs,unsigned cs) const
 {
   if (this->rows()!=rs || this->cols()!=cs) {
-    cerr << "vnl_matrix : has size " << this->rows() << 'x' << this->cols() 
-	 << ". Should be " << rs << 'x' << cs << endl;
+    vcl_cerr << "vnl_matrix : has size " << this->rows() << 'x' << this->cols() 
+	 << ". Should be " << rs << 'x' << cs << vcl_endl;
     abort();
   }
 }
@@ -1062,7 +1062,7 @@ template <class T>
 bool vnl_matrix<T>::read_ascii(istream& s)
 {
   if (!s.good()) {
-    cerr << "vnl_matrix<T>::read_ascii: Called with bad istream\n";
+    vcl_cerr << "vnl_matrix<T>::read_ascii: Called with bad istream\n";
     return false;
   }
 
@@ -1080,7 +1080,7 @@ bool vnl_matrix<T>::read_ascii(istream& s)
   
   vcl_vector<T> first_row_vals;
   if (debug)
-    cerr << "vnl_matrix<T>::read_ascii: Determining file dimensions: ";
+    vcl_cerr << "vnl_matrix<T>::read_ascii: Determining file dimensions: ";
 
   int c = ' ';
   for (;;) {
@@ -1091,7 +1091,7 @@ bool vnl_matrix<T>::read_ascii(istream& s)
 	goto loademup;
       if (!isspace(c)) {
 	if (!s.putback(c).good())
-	  cerr << "vnl_matrix<T>::read_ascii: Could not push back '" << c << "'\n";
+	  vcl_cerr << "vnl_matrix<T>::read_ascii: Could not push back '" << c << "'\n";
 	
 	goto readfloat;
       }
@@ -1110,7 +1110,7 @@ bool vnl_matrix<T>::read_ascii(istream& s)
  loademup:
   int colz = first_row_vals.size();
 
-  if (debug) cerr << colz << " cols, ";
+  if (debug) vcl_cerr << colz << " cols, ";
 
   if (colz == 0)
     return false;
@@ -1130,7 +1130,7 @@ bool vnl_matrix<T>::read_ascii(istream& s)
   while (1) {
     T* row = vnl_c_vector<T>::allocate_T(colz);
     if (row == 0) {
-      cerr << "vnl_matrix<T>::read_ascii: Error, Out of memory on row " << row_vals.size() << endl;
+      vcl_cerr << "vnl_matrix<T>::read_ascii: Error, Out of memory on row " << row_vals.size() << vcl_endl;
       return false;
     }
     s >> row[0];
@@ -1138,12 +1138,12 @@ bool vnl_matrix<T>::read_ascii(istream& s)
       break;
     for (int k = 1; k < colz; ++k) {
       if (s.eof()) {
-	cerr << "vnl_matrix<T>::read_ascii: Error, EOF on row " << row_vals.size() << ", column " << k << endl;
+	vcl_cerr << "vnl_matrix<T>::read_ascii: Error, EOF on row " << row_vals.size() << ", column " << k << vcl_endl;
 	return false;
       }
       s >> row[k];
       if (!s.good()) {
-	cerr << "vnl_matrix<T>::read_ascii: Error, row " << row_vals.size() << " failed on column " << k << endl;
+	vcl_cerr << "vnl_matrix<T>::read_ascii: Error, row " << row_vals.size() << " failed on column " << k << vcl_endl;
 	return false;
       }
     }
@@ -1153,7 +1153,7 @@ bool vnl_matrix<T>::read_ascii(istream& s)
   int rowz = row_vals.size();
 
   if (debug)
-    cerr << rowz << " rows.\n";
+    vcl_cerr << rowz << " rows.\n";
 
   resize(rowz, colz);
 
@@ -1453,7 +1453,7 @@ void vnl_matrix<T>::inplace_transpose()
   int mn = m*n;
   ::vnl_inplace_transpose(data_block(), &n, &m, &mn, move.data_block(), &iwrk, &iok);
   if (iok != 0)
-    cerr << __FILE__ " : inplace_transpose() -- iok = " << iok << endl;
+    vcl_cerr << __FILE__ " : inplace_transpose() -- iok = " << iok << vcl_endl;
 
   this->num_rows = n;
   this->num_cols = m;

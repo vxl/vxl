@@ -133,7 +133,7 @@ int main()
 {
   char* p = (char*)vnl_alloc::allocate(10);
   strcpy(p, "fred\n");
-  cerr << p << endl;
+  vcl_cerr << p << vcl_endl;
   vnl_alloc::deallocate(p,10);
   
 }

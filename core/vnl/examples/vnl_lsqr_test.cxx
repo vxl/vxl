@@ -37,7 +37,7 @@ int main (int argc, char** argv) {
   vnl_lsqr lsqr(linear_system);
   vnl_vector<double> result(1000);
   lsqr.minimize(result);
-  lsqr.diagnose_outcome(cerr);
+  lsqr.diagnose_outcome(vcl_cerr);
 
-  cerr << "Ground truth relative residual : " << (x - result).two_norm() / x.two_norm() << endl;
+  vcl_cerr << "Ground truth relative residual : " << (x - result).two_norm() / x.two_norm() << vcl_endl;
 }

@@ -35,11 +35,11 @@ void test_generalized_eigensystem()
   
   vnl_generalized_eigensystem gev(C, S);
 
-  cout << "V = " << gev.V << endl;
-  cout << "D = " << gev.D << endl;
-  cout << "residual = " << C * gev.V - S * gev.V * gev.D << endl;
+  vcl_cout << "V = " << gev.V << vcl_endl;
+  vcl_cout << "D = " << gev.D << vcl_endl;
+  vcl_cout << "residual = " << C * gev.V - S * gev.V * gev.D << vcl_endl;
   double err = (C * gev.V - S * gev.V * gev.D).inf_norm();
-  cout << "Recomposition residual = " << err << endl;
+  vcl_cout << "Recomposition residual = " << err << vcl_endl;
 
   Assert("Recomposition residual < 1e-12", err < 1e-12);
 }

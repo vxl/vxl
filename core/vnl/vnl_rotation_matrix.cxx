@@ -32,13 +32,13 @@ bool vnl_rotation_matrix(double const x[3], double **R)
 #if 0
   //cerr << "axis = [" << axis[0] << ' ' << axis[1] << ' ' << axis[2] << "];" << endl;
   
-  cerr << "R=[" << endl;
+  vcl_cerr << "R=[" << vcl_endl;
   for (unsigned i=0; i<3; ++i) {
     for (unsigned j=0; j<3; ++j)
-      cerr << ' ' << R[i][j];
-    cerr << endl;
+      vcl_cerr << ' ' << R[i][j];
+    vcl_cerr << vcl_endl;
   }
-  cerr << "];" << endl;
+  vcl_cerr << "];" << vcl_endl;
   exit(1);
 #endif
   return true;

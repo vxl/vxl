@@ -700,8 +700,8 @@ void vnl_vector<T>::assert_finite() const {
   if (this->is_finite())
     return;
 
-  cerr << "*** NAN FEVER **\n";
-  cerr << *this;
+  vcl_cerr << "*** NAN FEVER **\n";
+  vcl_cerr << *this;
   abort();
 }
 
@@ -709,7 +709,7 @@ void vnl_vector<T>::assert_finite() const {
 template <class T>
 void vnl_vector<T>::assert_size(unsigned sz) const {
   if (this->size() != sz) {
-    cerr << "vnl_vector : has size " << this->size() << ". Should be " << sz << endl;
+    vcl_cerr << "vnl_vector : has size " << this->size() << ". Should be " << sz << vcl_endl;
     abort();
   }
 }

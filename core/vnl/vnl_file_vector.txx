@@ -14,7 +14,7 @@ vnl_file_vector<T>::vnl_file_vector(char const* filename) :
     ok_=read_ascii(o);
   }
   else
-    ok_=read_ascii(cin);
+    ok_=read_ascii(vcl_cin);
   //cerr << "length=" << this->length() << endl;
 }
 

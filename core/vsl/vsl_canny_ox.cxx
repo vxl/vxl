@@ -78,16 +78,16 @@ void vsl_canny_ox::detect_edges(vil_image const &image_in, vcl_list<vsl_Edge*> *
   _ystart = 0;
 
   if (verbose)
-    cerr << "Doing Canny on image region " 
-	 << _xsize << " by " << _ysize << endl
-	 << "Sigma               = " << _sigma << endl
-         << "Gaussian tail       = " << _gauss_tail << endl
-         << "Max kernel size     = " << _max_width_OX << endl
-	 << "Upper threshold     = " << _high << endl
-	 << "Lower threshold     = " << _low << endl
-         << "Min edgel intensity = " << _edge_min_OX << endl
-         << "Min edge length     = " << _min_length_OX << endl
-         << "Image border size   = " << _border_size_OX << endl << endl;
+    vcl_cerr << "Doing Canny on image region " 
+	 << _xsize << " by " << _ysize << vcl_endl
+	 << "Sigma               = " << _sigma << vcl_endl
+         << "Gaussian tail       = " << _gauss_tail << vcl_endl
+         << "Max kernel size     = " << _max_width_OX << vcl_endl
+	 << "Upper threshold     = " << _high << vcl_endl
+	 << "Lower threshold     = " << _low << vcl_endl
+         << "Min edgel intensity = " << _edge_min_OX << vcl_endl
+         << "Min edge length     = " << _min_length_OX << vcl_endl
+         << "Image border size   = " << _border_size_OX << vcl_endl << vcl_endl;
 
   // Allocate internal bitmaps ..
   _smooth = vsl_canny_base_make_raw_image(_xsize, _ysize, (float*)0);
@@ -113,25 +113,25 @@ void vsl_canny_ox::detect_edges(vil_image const &image_in, vcl_list<vsl_Edge*> *
 
   // Do the traditional Canny parts
 
-  if (verbose) cerr << "setting convolution kernel and zeroing images\n";
+  if (verbose) vcl_cerr << "setting convolution kernel and zeroing images\n";
   vsl_kernel_DOG(_kernel, _sub_area_OX, _k_size,
 		 _sigma, _gauss_tail,
 		 _max_width_OX, _width);
-  if (verbose) cerr << "Kernel size     = " << _k_size << endl;
+  if (verbose) vcl_cerr << "Kernel size     = " << _k_size << vcl_endl;
 
   
-  if (verbose) cerr << "smoothing the image\n";
+  if (verbose) vcl_cerr << "smoothing the image\n";
   vsl_canny_smooth(image_in,
 		   _kernel, _width, _sub_area_OX,
 		   _smooth);
 
-  if (verbose) cerr << "computing x derivatives, y derivatives and norm of gradient\n";
+  if (verbose) vcl_cerr << "computing x derivatives, y derivatives and norm of gradient\n";
   vsl_canny_gradient(_xsize, _ysize, _smooth, _dx, _dy, _grad);
 
 
-  if (verbose) cerr << "doing non-maximal supression\n";
+  if (verbose) vcl_cerr << "doing non-maximal supression\n";
   int n_edgels_NMS = vsl_canny_nms(_xsize, _ysize, _dx, _dy, _grad, _thick, _theta);
-  if (verbose) cerr << "Number of edgels after NMS = " << n_edgels_NMS << endl;
+  if (verbose) vcl_cerr << "Number of edgels after NMS = " << n_edgels_NMS << vcl_endl;
 
 
 
@@ -150,10 +150,10 @@ void vsl_canny_ox::detect_edges(vil_image const &image_in, vcl_list<vsl_Edge*> *
   vsl_EdgelChain *edgels_NMS = Get_NMS_edgelsOX(n_edgels_NMS, _x, _y);
 
 
-  if (verbose) cerr << "doing hysteresis\n";
+  if (verbose) vcl_cerr << "doing hysteresis\n";
   int *status = new int[n_edgels_NMS];
   int n_edgels_Hysteresis = HysteresisOX(edgels_NMS, status);
-  if (verbose) cerr << "Number of edgels after Hysteresis = " << n_edgels_Hysteresis << endl;
+  if (verbose) vcl_cerr << "Number of edgels after Hysteresis = " << n_edgels_Hysteresis << vcl_endl;
 
   vsl_EdgelChain *edgels_Hysteresis = new vsl_EdgelChain(n_edgels_Hysteresis);
   Get_hysteresis_edgelsOX(edgels_NMS,status,edgels_Hysteresis, _x, _y);
@@ -185,17 +185,17 @@ void vsl_canny_ox::detect_edges(vil_image const &image_in, vcl_list<vsl_Edge*> *
   if (_junction_option_OX) { 
 
     // Locate junctions in the edge image
-    if (verbose) cerr << "locating junctions in the edge image - ";
+    if (verbose) vcl_cerr << "locating junctions in the edge image - ";
     Find_junctionsOX();
-    if (verbose) cerr << _xjunc->size() << " junctions found\n";
+    if (verbose) vcl_cerr << _xjunc->size() << " junctions found\n";
     Find_junction_clustersOX();
-    if (verbose)  cerr << _vlist->size() << " junction clusters found\n";
+    if (verbose)  vcl_cerr << _vlist->size() << " junction clusters found\n";
   }
 
   // Finally do edge following to extract the edge data from the _thin image
-  if (verbose) cerr << "doing final edge following\n";
+  if (verbose) vcl_cerr << "doing final edge following\n";
   FollowerOX(edges);
-  if (verbose) cerr << "finished vsl_canny_ox\n";
+  if (verbose) vcl_cerr << "finished vsl_canny_ox\n";
 }
 
 

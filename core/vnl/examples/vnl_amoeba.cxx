@@ -36,7 +36,7 @@ int main()
   vnl_amoeba::minimize(f, x);
 
   // Summarize the results
-  cout << "Rosenbrock min at " << x << endl;
+  vcl_cout << "Rosenbrock min at " << x << vcl_endl;
 
   return 0;
 }

@@ -48,7 +48,7 @@ public:
 
   // Operations----------------------------------------------------------------
 
-  void diagnose_outcome(ostream& = cout) const;
+  void diagnose_outcome(ostream& = vcl_cout) const;
 
   // Computations--------------------------------------------------------------
 

@@ -18,13 +18,13 @@ int main(int, char **)
   v[2] =  0.777;
 
   vnl_matrix<double> X = vnl_cross_product_matrix(v);
-  vnl_matlab_print(cout, X, "[v]");
+  vnl_matlab_print(vcl_cout, X, "[v]");
   
   vnl_matrix<double> expX = vnl_matrix_exp(X);
-  vnl_matlab_print(cout, expX, "matrix exp([v])");
+  vnl_matlab_print(vcl_cout, expX, "matrix exp([v])");
 
   vnl_matrix<double> rotv = vnl_rotation_matrix(v);
-  vnl_matlab_print(cout, rotv, "rotate exp([v])");
+  vnl_matlab_print(vcl_cout, rotv, "rotate exp([v])");
 
   return 0;
 }

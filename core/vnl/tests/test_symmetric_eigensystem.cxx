@@ -26,8 +26,8 @@ void test_symmetric_eigensystem()
   {
     vnl_symmetric_eigensystem<double> eig(S);
     vnl_matrix<double> res = eig.recompose() - S;
-    cout << "V'*D*V - S = " << res << endl;
-    cout << "residual = " << res.inf_norm() << endl;
+    vcl_cout << "V'*D*V - S = " << res << vcl_endl;
+    vcl_cout << "residual = " << res.inf_norm() << vcl_endl;
     Assert("recompose residual",  res.inf_norm() < 1e-12);
   }
 
@@ -45,8 +45,8 @@ void test_symmetric_eigensystem()
   {
     vnl_symmetric_eigensystem<double> eig(C);
     vnl_matrix<double> res = eig.recompose() - C;
-    cout << "V'*D*V - C = " << res << endl;
-    cout << "residual = " << res.inf_norm() << endl;
+    vcl_cout << "V'*D*V - C = " << res << vcl_endl;
+    vcl_cout << "residual = " << res.inf_norm() << vcl_endl;
     Assert("recompose residual", res.inf_norm() < 1e-12);
   }
 

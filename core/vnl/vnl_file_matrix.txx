@@ -16,12 +16,12 @@ vnl_file_matrix<T>::vnl_file_matrix(char const* filename)
     ifstream o(filename);
     ok_=read_ascii(o);
     if (!ok_)
-      cerr << "vnl_file_matrix: ERROR loading " << filename << endl;
+      vcl_cerr << "vnl_file_matrix: ERROR loading " << filename << vcl_endl;
   }
   else {
-    ok_=read_ascii(cin);
+    ok_=read_ascii(vcl_cin);
     if (!ok_)
-      cerr << "vnl_file_matrix: ERROR loading from stdin " << endl;
+      vcl_cerr << "vnl_file_matrix: ERROR loading from stdin " << vcl_endl;
   }
 }
 

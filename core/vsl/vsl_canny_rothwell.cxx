@@ -77,14 +77,14 @@ void vsl_canny_rothwell::detect_edges(vil_image const &image, vcl_list<vsl_Edge*
   _ystart = 0;
 
   if (verbose)
-    cerr << "Doing Canny on image region "
-	 << _xsize << " by " << _ysize << endl
-	 << "Gaussian tail   = " << _gauss_tail << endl
-	 << "Sigma           = " << _sigma << endl
-	 << "Kernel size     = " << _k_size << endl
-	 << "Upper threshold = " << _high << endl
-	 << "Lower threshold = " << _low << endl
-	 << "Smoothing range = " << _range << endl << endl;
+    vcl_cerr << "Doing Canny on image region "
+	 << _xsize << " by " << _ysize << vcl_endl
+	 << "Gaussian tail   = " << _gauss_tail << vcl_endl
+	 << "Sigma           = " << _sigma << vcl_endl
+	 << "Kernel size     = " << _k_size << vcl_endl
+	 << "Upper threshold = " << _high << vcl_endl
+	 << "Lower threshold = " << _low << vcl_endl
+	 << "Smoothing range = " << _range << vcl_endl << vcl_endl;
 
   _smooth   = vsl_canny_base_make_raw_image(_xsize, _ysize, (float*)0);
   _dx       = vsl_canny_base_make_raw_image(_xsize, _ysize, (float*)0);
@@ -107,25 +107,25 @@ void vsl_canny_rothwell::detect_edges(vil_image const &image, vcl_list<vsl_Edge*
   vsl_canny_base_fill_raw_image(_thin,  _xsize, _ysize, 0.0f);
 
   // Do the traditional Canny parts
-  if (verbose) cerr << "setting convolution kernel and zeroing images\n";
+  if (verbose) vcl_cerr << "setting convolution kernel and zeroing images\n";
   vsl_kernel_DOG(_sigma, _kernel, _k_size, _width);
 
-  if (verbose) cerr << "smoothing the image\n";
+  if (verbose) vcl_cerr << "smoothing the image\n";
   vsl_canny_smooth_rothwell(image, _kernel, _width, _k_size, _smooth);
 
-  if (verbose) cerr << "computing derivatives\n";
+  if (verbose) vcl_cerr << "computing derivatives\n";
   vsl_canny_gradient_central(_xsize, _ysize, _smooth, _dx, _dy, _grad);
 
-  if (verbose) cerr << "doing non-maximal supression\n";
+  if (verbose) vcl_cerr << "doing non-maximal supression\n";
   Non_maximal_supression();
 
   // Thin the edge image, though keep the original thick one
-  if (verbose) cerr << "thinning edges\n";
+  if (verbose) vcl_cerr << "thinning edges\n";
   vsl_canny_base_copy_raw_image(VCL_OVERLOAD_CAST(float const*const*, _thick), 
 				VCL_OVERLOAD_CAST(float *const*, _thin), _xsize, _ysize);
   Thin_edges();
 
-  if (verbose) cerr << "doing hysteresis\n";
+  if (verbose) vcl_cerr << "doing hysteresis\n";
   Initial_hysteresis();
 
   if ( adaptive ) {
@@ -133,51 +133,51 @@ void vsl_canny_rothwell::detect_edges(vil_image const &image, vcl_list<vsl_Edge*
     // topology. We wish to do the adaptive Canny until the region of
     // influence is less than `range' pixels
     float min_sigma = _range / sqrt(-2.0*log(_gauss_tail));
-    if (verbose) cerr << "\nadaptive Canny with smoothing sigma bound = " << min_sigma << endl;
+    if (verbose) vcl_cerr << "\nadaptive Canny with smoothing sigma bound = " << min_sigma << vcl_endl;
 
     // Try to fix single pixel breaks in the edgel chains
-    if (verbose) cerr << "searching for dangling ends\n";
+    if (verbose) vcl_cerr << "searching for dangling ends\n";
     Find_dangling_ends();
-    if (verbose) cerr << _xdang->size() << " dangling edges found initially\n"
+    if (verbose) vcl_cerr << _xdang->size() << " dangling edges found initially\n"
 		      << "looking for single pixel breaks - ";
     Jump_single_breaks();
     Thin_edges();   // Must thin after jumping
     Find_dangling_ends();
-    if (verbose) cerr << _xdang->size() << " dangling edges found after joining\n";
+    if (verbose) vcl_cerr << _xdang->size() << " dangling edges found after joining\n";
 
     while ( _sigma > min_sigma ) {
       // Locate junctions in the edge image
-      if (verbose) cerr << "computing current junction set";
+      if (verbose) vcl_cerr << "computing current junction set";
       Find_junctions();
 
-      if (verbose) cerr << "\nrunning adaptive Canny\n";
+      if (verbose) vcl_cerr << "\nrunning adaptive Canny\n";
       Adaptive_Canny(image);
 
       // Repeat the thinning and pixel-jumping process
-      if (verbose) cerr << "thinning edges - reprise\n";
+      if (verbose) vcl_cerr << "thinning edges - reprise\n";
       Thin_edges();
 
       Find_dangling_ends();
-      if (verbose) cerr << _xdang->size() << " dangling edges found after scale reduction\n"
+      if (verbose) vcl_cerr << _xdang->size() << " dangling edges found after scale reduction\n"
 			<< "looking for single pixel breaks - ";
       Jump_single_breaks();
       Thin_edges();
       Find_dangling_ends();
-      if (verbose) cerr << _xdang->size() << " dangling edges found after re-joining\n";
+      if (verbose) vcl_cerr << _xdang->size() << " dangling edges found after re-joining\n";
     }
   }
 
   // Locate junctions in the edge image
-  if (verbose) cerr << "locating junctions in the edge image - ";
+  if (verbose) vcl_cerr << "locating junctions in the edge image - ";
   Find_junctions();
-  if (verbose) cerr << _xjunc->size() << " junctions found\n";
+  if (verbose) vcl_cerr << _xjunc->size() << " junctions found\n";
   Find_junction_clusters();
-  if (verbose)  cerr << _vlist->size() << " junction clusters found\n";
+  if (verbose)  vcl_cerr << _vlist->size() << " junction clusters found\n";
 
   // Finally do edge following to extract the edge data from the _thin image
-  if (verbose) cerr << "doing final edge following\n";
+  if (verbose) vcl_cerr << "doing final edge following\n";
   Final_hysteresis(edges);
-  if (verbose) cerr << "finished Canny\n";
+  if (verbose) vcl_cerr << "finished Canny\n";
 }
 
 //-----------------------------------------------------------------------------
@@ -678,10 +678,10 @@ void vsl_canny_rothwell::Adaptive_Canny(vil_image const &image) {
   int image_size = _old_k_size + _k_size - 1;
   int half_size = (image_size - 1)/2;
 
-  if (verbose) cerr << "new image region "
-		    << image_size << " by " << image_size << endl
-		    << "Sigma           = " << _sigma << endl
-		    << "Kernel size     = " << _k_size << endl;
+  if (verbose) vcl_cerr << "new image region "
+		    << image_size << " by " << image_size << vcl_endl
+		    << "Sigma           = " << _sigma << vcl_endl
+		    << "Kernel size     = " << _k_size << vcl_endl;
 
   // Set up the new images
   float **dx   = vsl_canny_base_make_raw_image(image_size,image_size, (float*)0);
@@ -690,7 +690,7 @@ void vsl_canny_rothwell::Adaptive_Canny(vil_image const &image) {
 
   // For each dangling-end (X,Y), search for more edges at the reduced scale
   int count=0;
-  if (verbose) cerr << "percentage of endings examined =   0";
+  if (verbose) vcl_cerr << "percentage of endings examined =   0";
   typedef vcl_list<int>::iterator it;
   for (it i=_xdang->begin(), j=_ydang->begin(); i!=_xdang->end() && j!=_ydang->end(); ++i, ++j) {
     //_xdang->reset(),_ydang->reset(); _xdang->next(),_ydang->next(); )  {
@@ -734,7 +734,7 @@ void vsl_canny_rothwell::Adaptive_Canny(vil_image const &image) {
       }
     if (verbose) fprintf(stderr,"\b\b\b%3d", 10*((++count)*10/_xdang->size()));
   }
-  if (verbose)   cerr << endl;
+  if (verbose)   vcl_cerr << vcl_endl;
 
   // Remove the image arrays
   vsl_canny_base_free_raw_image(dx);
