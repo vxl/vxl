@@ -150,12 +150,15 @@ void brct_windows_frame::add_curve2d(vcl_vector<vgl_point_2d<double> > &pts)
   assert(size > 1);
   curves_2d_.resize(size-1);
   instance_->easy_2d_->set_foreground(1, 0, 0);
-  for (int i=0; i<size-1; i++)
+  for (int i=0; i<size; i++)
   {
     vgl_point_2d<double>& s = pts[i];
-    vgl_point_2d<double>& e = pts[i+1];
-    //vgui_soview2D* so = instance_->easy_2d_->add_line(s.x(), s.y(), e.x(), e.y());
+#if 1
     vgui_soview2D *so = instance_->easy_2d_->add_point(s.x(), s.y());
+#else
+    vgl_point_2d<double>& e = i<size-1 ? pts[i+1] : pts[0];
+    vgui_soview2D* so = instance_->easy_2d_->add_line(s.x(), s.y(), e.x(), e.y());
+#endif
     so->set_point_size(2);
     so->set_colour(1, 0, 0);
     curves_2d_[i] = so;
@@ -176,7 +179,7 @@ void brct_windows_frame::add_curve3d(bugl_curve_3d& c3d)
   int size = c3d.get_num_points();
   if (size > 1){
     instance_->tab_3d_->set_foreground(1, 1, 1);
-    for (int i=0; i<size-1; i++)
+    for (int i=0; i<size; i++)
     {
       bugl_normal_point_3d_sptr s = c3d.get_point(i);
       bugl_normal_point_3d_sptr e = c3d.get_neighbor(i, 1);
@@ -279,8 +282,8 @@ void brct_windows_frame::add_predicted_curve2d(vcl_vector<vgl_point_2d<double> >
 {
   int size = pts.size();
   assert(size > 1);
-  predicted_curves_2d_.resize(size-1);
-  for (int i=0; i<size-1; i++) {
+  predicted_curves_2d_.resize(size);
+  for (int i=0; i<size; i++) {
     vgl_point_2d<double>& s = pts[i];
     vgui_soview2D* so = instance_->easy_2d_->add_point(s.x(), s.y());
     so->set_colour(0, 0, 1);
@@ -291,18 +294,20 @@ void brct_windows_frame::add_predicted_curve2d(vcl_vector<vgl_point_2d<double> >
   instance_->post_redraw();
 }
 
-void brct_windows_frame::add_next_observes(vcl_vector<vgl_point_2d<double> > &pts)
+void brct_windows_frame::add_next_observes(vcl_vector<vgl_point_2d<double> >&pts)
 {
   int size = pts.size();
   assert(size > 1);
-  debug_curves_2d_.resize(size-1);
+  debug_curves_2d_.resize(size);
   instance_->easy_2d_->set_foreground(0, 0, 1);
-  for (int i=0; i<size-1; i++) {
+  for (int i=0; i<size; i++) {
     vgl_point_2d<double>& s = pts[i];
-    vgl_point_2d<double>& e = pts[i+1];
-    //vgui_soview2D* so = instance_->easy_2d_->add_line(s.x(), s.y(), e.x(), e.y());
-    vgui_soview2D* so = instance_->easy_2d_->add_point(s.x(), s.y());
-    debug_curves_2d_[i] = so;
+#if 1
+    debug_curves_2d_[i]= instance_->easy_2d_->add_point(s.x(), s.y());
+#else
+    vgl_point_2d<double>& e = i<size-1 ? pts[i+1] : pts[0];
+    debug_curves_2d_[i]= instance_->easy_2d_->add_line(s.x(),s.y(),e.x(),e.y());
+#endif
   }
 
   instance_->post_redraw();
@@ -326,11 +331,17 @@ void brct_windows_frame::show_back_projection()
     int size = c2d[f].cols();
     assert(size > 1);
 
-    for (int i=0; i<size-1; i++) {
-      double x1 = c2d[f][0][i], x2 = c2d[f][0][i+1];
-      double y1 = c2d[f][1][i], y2 = c2d[f][1][i+1];
-      //vgui_soview2D* so = instance_->easy_2d_->add_line(x1, y1, x2, y2);
+    for (int i=0; i<size; i++)
+    {
+      double x1 = c2d[f][0][i],
+             y1 = c2d[f][1][i];
+#if 1
       vgui_soview2D* so = instance_->easy_2d_->add_point(x1, y1);
+#else
+      double x2 = i<size-1 ? c2d[f][0][i+1] : c2d[f][0][0],
+             y2 = i<size-1 ? c2d[f][1][i+1] : c2d[f][1][0];
+      vgui_soview2D* so = instance_->easy_2d_->add_line(x1, y1, x2, y2);
+#endif
       so->set_colour(0, 0, 1);
       so->set_point_size(2);
       debug_curves_2d_.push_back(so);
@@ -497,7 +508,7 @@ void brct_windows_frame::write_vrml_file()
         <<  "   point[\n";
 
     for (int i=0; i<size; i++) {
-      out<<"\t\t\t"<<c3d.get_point(i)->x()<<" "<<c3d.get_point(i)->y()<<" "<<c3d.get_point(i)->z()<<",\n";
+      out<<"\t\t\t"<<c3d.get_point(i)->x()<<' '<<c3d.get_point(i)->y()<<' '<<c3d.get_point(i)->z()<<",\n";
     }
     out <<  "   ]\n"
         <<  "  }\n"
