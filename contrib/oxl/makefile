@@ -7,12 +7,10 @@ SUBDIRS += oxp
 SUBDIRS += mvox
 SUBDIRS += vrml
 
-# xcv is built from this directory because
-# it depends on the libraries from oxl.
 ifeq (1,$(strip $(HAS_OPENGL)))
-ifneq (,$(strip $(wildcard mvl)))
-SUBDIRS += ../vxl/xcv
-endif
+SUBDIRS += vgui
+SUBDIRS += xcv
+#no makefile?? SUBDIRS += VPLAYER
 endif
 
 ######################################

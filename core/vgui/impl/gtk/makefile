@@ -1,4 +1,4 @@
-USES += vxl
+USES += vxl oxl
 USE_OPENGL := 1
 USE_GTKGLAREA := 1
 

@@ -1,4 +1,4 @@
-USES += vxl
+USES += vxl oxl
 USE_OPENGL:=1
 TRY_GLUT := 1 # vgui_text needs glut. fsm.
 TRY_X11 := 1

@@ -1,8 +1,8 @@
-USES += vxl
+USES += vxl oxl
 TRY_X11 := 1
 
 ###############################################
-include ${IUELOCALROOT}/vxl/vgui/easy-client.mk
+include ${IUELOCALROOT}/oxl/vgui/easy-client.mk
 ###############################################
 
 MINI_PROG_SOURCES += test_timer.cxx

@@ -2,7 +2,7 @@ ifndef vgui_easy_client_mk
 vgui_easy_client_mk := 1
 
 ##########################################
-include $(IUELOCALROOT)/vxl/vgui/client.mk
+include $(IUELOCALROOT)/oxl/vgui/client.mk
 include ${IUEROOT}/config/top-params.mk
 ##########################################
 

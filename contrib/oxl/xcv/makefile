@@ -1,5 +1,5 @@
 ##########################################
-include $(IUEROOT)/vxl/vgui/easy-client.mk
+include $(IUEROOT)/oxl/vgui/easy-client.mk
 ##########################################
 
 USES += vxl oxl

@@ -1,5 +1,5 @@
 USES += v3p # for Qv
-USES += vxl
+USES += vxl oxl
 USE_OPENGL:=1
 
 LIBRARY := vgui-vrml

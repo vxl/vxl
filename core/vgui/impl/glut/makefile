@@ -1,4 +1,4 @@
-USES += vxl
+USES += vxl oxl
 TRY_X11 := 1
 
 USE_OPENGL := 1
