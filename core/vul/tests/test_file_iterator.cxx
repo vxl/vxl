@@ -1,4 +1,4 @@
-// This is vxl/vul/tests/test_file_iterator.cxx
+// This is core/vul/tests/test_file_iterator.cxx
 #include <vcl_iostream.h>
 #include <vcl_fstream.h>
 #include <vcl_map.h>
@@ -14,7 +14,7 @@
 
 static void touch(char const* fn)
 {
-  vcl_ofstream(fn) << ".";
+  vcl_ofstream f(fn); f << ".";
 }
 
 void test_file_iterator_unix()
