@@ -21,17 +21,17 @@
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_matrix.h>
 
-//: Calculate inverse of a matrix using QR
+//: Calculate QR decomposition of a matrix.
 //  More detailed description not available
 
-template <class T>
+export template <class T>
 class vnl_qr {
 public:
   vnl_qr(vnl_matrix<T> const & M);
  ~vnl_qr();
   
-  vnl_matrix<T> inverse () const;
-  vnl_matrix<T> tinverse () const;
+  vnl_matrix<T> inverse () const;   // inverse
+  vnl_matrix<T> tinverse () const;  // transpose-inverse
   vnl_matrix<T> recompose () const;
 
   vnl_matrix<T> solve (const vnl_matrix<T>& rhs) const;
@@ -47,13 +47,13 @@ public:
 private:
   vnl_matrix<T> qrdc_out_;
   vnl_vector<T> qraux_;
-  vnl_vector<int>    jpvt_;
+  vnl_vector<int> jpvt_;
   vnl_matrix<T>* Q_;
   vnl_matrix<T>* R_;
   
   // Disallow assignment until I decide whether it's a good idea
-  vnl_qr(const vnl_qr<T> & that);
-  vnl_qr& operator=(const vnl_qr<T> & that);
+  vnl_qr(const vnl_qr<T> &) { }
+  void operator=(const vnl_qr<T> &) { }
 };
 
 //: Compute determinant of matrix "M" using QR.
@@ -63,7 +63,7 @@ inline T vnl_qr_determinant(vnl_matrix<T> const& m)
   return vnl_qr<T>(m).determinant();
 }
 
-template <class T>
+export template <class T>
 vcl_ostream& operator<<(vcl_ostream&, vnl_qr<T> const & qr);
 
 #endif // vnl_qr_h_
