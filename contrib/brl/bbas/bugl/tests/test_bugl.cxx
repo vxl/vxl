@@ -15,5 +15,7 @@ int main()
   vnl_double_3x3 s3(0.0);
   s3[0][0] = 1; s3[1][1] = 3; s3[2][2] = 5;
   bugl_gaussian_point_3d<double> p3d(100, 100, 100, s3);
+
+  vnl_double_3x3 t = p3d.get_covariant_matrix();
   return 0;
 }
