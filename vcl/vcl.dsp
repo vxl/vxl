@@ -1422,6 +1422,9 @@ SOURCE=.\win32-vc70/vcl_cstdlib.h
 SOURCE=.\vcl_where_root_dir.h.in
 # End Source File
 # Begin Source File
+SOURCE=.\vcl_where_root_dir.h
+# End Source File
+# Begin Source File
 SOURCE=.\vcl_config_compiler.h.in
 # End Source File
 # Begin Source File
