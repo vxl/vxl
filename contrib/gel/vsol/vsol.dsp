@@ -275,6 +275,12 @@ SOURCE=.\vsol_triangle_3d.cxx
 # Begin Source File
 SOURCE=.\vsol_volume_3d.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\Templates/vbl_smart_ptr+vsol_polyline_2d-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\vsol_polyline_2d.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter ""
@@ -427,6 +433,12 @@ SOURCE=.\vsol_triangle_3d_sptr.h
 # End Source File
 # Begin Source File
 SOURCE=.\vsol_volume_3d_sptr.h
+# End Source File
+# Begin Source File
+SOURCE=.\vsol_polyline_2d.h
+# End Source File
+# Begin Source File
+SOURCE=.\vsol_polyline_2d_sptr.h
 # End Source File
 # End Group
 # End Target
