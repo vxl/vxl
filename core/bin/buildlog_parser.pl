@@ -80,6 +80,7 @@ $gmake_errorindirectory = q/^g?make(\[\d+\])?: \*\*\* \[(x?all|subdirs|.*recurse
 $gmake_errorintest = q/^g?make(\[\d+\])?: \*\*\* \[.*\.out\]/;
 $gmake_errortestfail = q/Test Summary:.*\*\*\*/;
 $gmake_error_segfault = q/^g?make(\[\d+\])?: \[.*\.out\]\s+Error\s+139/;
+$gmake_error_assert = q/:\d+: failed assertion /;
 $gmake_error = q/^g?make(\[\d+\])?: \*\*\* \[/;
 
 ############
@@ -229,7 +230,7 @@ while( <INFO>)
         $buildwarnings[$index]++;
         $currentlineweb="<font color=\"AA0000\">$currentlineweb</font>";
       }
-    elsif( m/$gmake_error_segfault/ || m/$gmake_error/)
+    elsif( m/$gmake_error_segfault/ || m/$gmake_error_assert/ || m/$gmake_error/)
       {
         $builderrors[$index]++;
 	$currentlineweb="<a name=\"ERRORLINK$htmlerrorlink\">" .$currentlineweb;
