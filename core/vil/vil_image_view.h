@@ -40,11 +40,11 @@ class vil2_image_view : public vil2_image_view_base
   //: Pointer to pixel at origin.
   T * top_left_;
   //: Add this to a pixel pointer to move one column left.
-  int istep_;
+  vcl_ptrdiff_t istep_;
   //: Add this to a pixel pointer to move one row down.
-  int jstep_;
+  vcl_ptrdiff_t jstep_;
   //: Add this to a pixel pointer to move one plane back.
-  int planestep_;
+  vcl_ptrdiff_t planestep_;
 
   //: Reference to actual image data.
   vil2_memory_chunk_sptr ptr_;
