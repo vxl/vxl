@@ -536,7 +536,7 @@ void vtol_one_chain::compute_bounding_box(void) const
 }
 
 //---------------------------------------------------------------------------
-//: Redeterming the directions of all edges in the onechain.
+//: Redetermining the directions of all edges in the onechain.
 // Require: is_cycle()
 //---------------------------------------------------------------------------
 void vtol_one_chain::determine_edge_directions(void)
