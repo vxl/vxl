@@ -1,9 +1,10 @@
+#include "brip_float_ops.h"
 #include <vcl_fstream.h>
 #include <vul/vul_timer.h>
 #include <vnl/vnl_numeric_traits.h>
 #include <vnl/vnl_math.h>
 #include <vil/vil_smooth.h>
-#include "brip_float_ops.h"
+
 //------------------------------------------------------------
 //  Convolve with a kernel
 //   It's assumed that the kernel is square with odd dimensions
@@ -98,14 +99,15 @@ void brip_float_ops::gradient_3x3(vil_memory_image_of<float> const & input,
 // Compute the sqrt of the product of the eigenvalues of the
 // gradient matrix over a 2n+1 x 2n+1 neigborhood
 // That is,
+// \verbatim
 //                        _                           _
 //                       | (dI/dx)^2    (dI/dx)(dI/dy) |
 //                       |                             |
 //  A = Sum(neighborhood)|                             |
 //                       |(dI/dx)(dI/dy)   (dI/dx)^2   |
 //                       |_                           _|
-//
-//  The output image is sqrt(lamba_1*lambda_2) where lambda_i are the
+// \endverbatim
+//  The output image is $\sqrt{\lamba_1*\lambda_2}$ where $\lambda_i$ are the
 //  eigenvalues
 //
 vil_memory_image_of<float>
@@ -259,34 +261,34 @@ brip_float_ops::convert_to_float(vil_memory_image_of<unsigned char> const & imag
 //
 vbl_array_2d<float> brip_float_ops::load_kernel(vcl_string const & file)
 {
-   vcl_ifstream instr(file.c_str(), vcl_ios::in);
-   if (!instr)
-     {
-       vcl_cout << "In brip_float_ops::load_kernel - failed to load kernel\n";
-       return vbl_array_2d<float>(0,0);
-     }
-    int n;
-    float scale;
-    float v =0;
-    instr >> n;
-    instr >> scale;
-    int N = 2*n+1;
-    vbl_array_2d<float> output(N, N);
-   for (int y = 0; y<N; y++)
-     for (int x = 0; x<N; x++)
-       {
-         instr >> v;
-         output.put(x, y, v/scale);
-       }
-   vcl_cout << "The Kernel\n";
-   for (int y = 0; y<N; y++)
-     {
-       for (int x = 0; x<N; x++)
-         {
-           float t = output[x][y];
-           vcl_cout << t << " ";
-         }
-       vcl_cout << "\n";
-     }
+  vcl_ifstream instr(file.c_str(), vcl_ios::in);
+  if (!instr)
+    {
+      vcl_cout << "In brip_float_ops::load_kernel - failed to load kernel\n";
+      return vbl_array_2d<float>(0,0);
+    }
+  int n;
+  float scale;
+  float v =0;
+  instr >> n;
+  instr >> scale;
+  int N = 2*n+1;
+  vbl_array_2d<float> output(N, N);
+  for (int y = 0; y<N; y++)
+    for (int x = 0; x<N; x++)
+      {
+        instr >> v;
+        output.put(x, y, v/scale);
+      }
+  vcl_cout << "The Kernel\n";
+  for (int y = 0; y<N; y++)
+    {
+      for (int x = 0; x<N; x++)
+        {
+          float t = output[x][y];
+          vcl_cout << t << " ";
+        }
+      vcl_cout << "\n";
+    }
   return output;
 }
