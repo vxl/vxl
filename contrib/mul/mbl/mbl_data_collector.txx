@@ -81,7 +81,7 @@ unsigned long MergeAllData(mbl_data_collector<T> &dest,
 }
 
 #define MBL_DATA_COLLECTOR_INSTANTIATE(T) \
-template class mbl_data_wrapper< T >; \
+template class mbl_data_collector< T >; \
 template unsigned long CopyAllData(mbl_data_collector<T > &dest, \
                                     mbl_data_wrapper<T > &src);\
 template unsigned long MergeAllData(mbl_data_collector<T > &dest,\
