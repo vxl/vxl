@@ -39,7 +39,7 @@ class vgl_homg_line_2d
 
   //: Construct from three Types.
   //  The three given numbers should not be all 0
-  inline vgl_homg_line_2d(T a, T b, T c) : a_(a), b_(b), c_(c) {assert(a||b||c);}
+  inline vgl_homg_line_2d(T va, T vb, T vc) : a_(va), b_(vb), c_(vc) {assert(va||vb||vc);}
 
   //: Construct from 3-vector.
   //  The three given numbers should not be all 0
@@ -95,7 +95,7 @@ class vgl_homg_line_2d
   //: Set a b c.
   //  The three given numbers should not be all 0
   //  Note that it does not make sense to set a, b or c separately
-  inline void set(T a, T b, T c) {assert(a||b||c); a_=a; b_=b; c_=c;}
+  inline void set(T va, T vb, T vc) {assert(va||vb||vc); a_=va; b_=vb; c_=vc;}
 
   //: Return true iff this line is the line at infinity
   //  This version checks (max(|a|,|b|) <= tol * |c|
