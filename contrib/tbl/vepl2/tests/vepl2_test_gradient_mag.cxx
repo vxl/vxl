@@ -13,18 +13,22 @@
 #include "test_driver.h"
 
 int vepl2_test_gradient_mag() {
-  vcl_cout << "Starting vepl2_gradient_mag tests\n";
-  vcl_cout << "Creating test and output images ...";
+  vcl_cout << "Starting vepl2_gradient_mag tests\n"
+           << "Creating test and output images ...";
   vil2_image_view_base_sptr byte_img = CreateTest8bitImage(32,32),  byte_ori = CreateTest8bitImage(32,32);
   vil2_image_view_base_sptr shrt_img = CreateTest16bitImage(32,32), shrt_ori = CreateTest16bitImage(32,32);
+  vil2_image_view_base_sptr int__img = CreateTest32bitImage(32,32), int__ori = CreateTest32bitImage(32,32);
   vil2_image_view_base_sptr flot_img = CreateTestfloatImage(32,32), flot_ori = CreateTestfloatImage(32,32);
+  vil2_image_view_base_sptr dble_img = CreateTestdoubleImage(32,32),dble_ori = CreateTestdoubleImage(32,32);
   vcl_cout << " done\n";
 
   vcl_string m = "vepl2_gradient_mag";
 #define args
-  ONE_TEST(vepl2_gradient_mag,byte_img,byte_ori,unsigned char,84514,m+"_byte",args);
-  ONE_TEST(vepl2_gradient_mag,shrt_img,shrt_ori,unsigned short,21757474,m+"_short",args);
-  ONE_TEST(vepl2_gradient_mag,flot_img,flot_ori,float,288,m+"_float",args);
+  ONE_TEST(vepl2_gradient_mag,byte_img,byte_ori,,84514,m+"_byte",args);
+  ONE_TEST(vepl2_gradient_mag,shrt_img,shrt_ori,,21757474,m+"_short",args);
+  ONE_TEST(vepl2_gradient_mag,int__img,int__ori,,1957900120,m+"_int",args);
+  ONE_TEST(vepl2_gradient_mag,flot_img,flot_ori,,288,m+"_float",args);
+  ONE_TEST(vepl2_gradient_mag,dble_img,dble_ori,,288,m+"_double",args);
 
   return 0;
 }
