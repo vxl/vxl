@@ -29,6 +29,7 @@ int main(int argc, char ** argv)
   vil_image out = vil_new(output_filename, w, h, in, output_format);
 
   vil_scale(in, w, h, out);
+  return 0;
 }
 
 
@@ -350,7 +351,7 @@ void pnmscaleT<T, longT>::go()
     }
 }
 
-template class pnmscaleT<unsigned char, long>;
+template struct pnmscaleT<unsigned char, long>;
 
 #if defined(VCL_SGI_CC)
 // fsm@robots
@@ -370,7 +371,7 @@ vil_rgb<long> operator*(long const &a, vil_rgb<unsigned char> const &b) {
                        a*long(b.b));
 }
 #endif
-template class pnmscaleT<vil_rgb<unsigned char>, vil_rgb<long> >;
+template struct pnmscaleT<vil_rgb<unsigned char>, vil_rgb<long> >;
 
 void vil_scale(vil_image in, int newxsize, int newysize, vil_image out)
 {
