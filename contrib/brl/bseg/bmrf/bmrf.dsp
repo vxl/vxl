@@ -129,9 +129,6 @@ SOURCE=.\Templates/vbl_smart_ptr+bmrf_gamma_func-.cxx
 SOURCE=.\Templates/vbl_smart_ptr+bmrf_curvel_3d-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\bmrf_gamma_func.cxx
-# End Source File
-# Begin Source File
 SOURCE=.\bmrf_epi_point.cxx
 # End Source File
 # Begin Source File
