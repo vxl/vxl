@@ -2,6 +2,7 @@
 #include <vdgl/vdgl_interpolator_cubic.h>
 #include <vdgl/vdgl_digital_curve.h>
 #include <vdgl/vdgl_fit_line.h>
+#include <vsol/vsol_point_2d.h>
 #include <vsol/vsol_line_2d.h>
 #include <vdgl/vdgl_edgel.h>
 
@@ -45,7 +46,7 @@ int main(void)
   vdgl_digital_curve_sptr dc = new vdgl_digital_curve(p0, p1);
   vdgl_interpolator_sptr intrp = dc->get_interpolator();
   int Nc = intrp->get_edgel_chain()->size();
-  for (double t = 0.1; t<Nc; t++)
+  for (double t = 0.1; t<(Nc-1); t++)
     vcl_cout << "angle( " << t << ") = " << intrp->get_tangent_angle(t) << '\n';
 
   return 0;
