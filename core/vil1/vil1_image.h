@@ -70,6 +70,10 @@ public:
 #undef vil_image_delegate
   // -------------------- convenience --------------------
 
+  //
+  int rows() const { return height(); }
+  int cols() const { return width(); }
+
   //: return size in bytes.
   int get_size_bytes() const;
     
