@@ -41,10 +41,11 @@ class segv_menus
   SEGV_DLL_DATA static void create_polygon_callback();
   SEGV_DLL_DATA static void set_foreground_face_callback();
   SEGV_DLL_DATA static void set_background_face_callback();
+#if 0
   SEGV_DLL_DATA static void compute_parallel_coverage_callback();
   SEGV_DLL_DATA static void compute_watershed_regions_callback();
   SEGV_DLL_DATA static void find_vehicle_callback();
-
+#endif
 #if 0
 #ifdef HAS_XERCES
   SEGV_DLL_DATA static void read_xml_edges_callback();
