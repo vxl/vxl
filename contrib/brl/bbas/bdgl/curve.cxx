@@ -80,10 +80,10 @@ Curve::operator=(const Curve &rhs)
 //Print x,y coordinates of all points.
 void Curve::printElems()
 {
-  vcl_cout << "Num Points " << numPoints_ <<"\n";
+  vcl_cout << "Num Points " << numPoints_ <<'\n';
   vcl_vector<vgl_point_2d<double> >::iterator iter;
   for (iter=ptArray_.begin();iter!=ptArray_.end();iter++)
-    vcl_cout<<"\n"<<iter->x()<<"\t"<<iter->y();
+    vcl_cout<<'\n'<<iter->x()<<'\t'<<iter->y();
 }
 
 
@@ -258,7 +258,6 @@ void Curve::computeAngles()
   double px,py;
   double cx,cy;
   double theta;
-  int i;
 
   angle_.clear();
   angle_.push_back(0.0);
@@ -266,7 +265,7 @@ void Curve::computeAngles()
 
   px=ptArray_[0].x();
   py=ptArray_[0].y();
-  for (i=1;i<numPoints_;i++)
+  for (int i=1;i<numPoints_;i++)
   {
     cx=ptArray_[i].x();
     cy=ptArray_[i].y();
@@ -289,7 +288,7 @@ void Curve::computeAngles()
   if (numPoints_>2)
   {
     angle_[0]=angle_[1];
-    for (i=1;i<angle_.size();i++)
+    for (unsigned int i=1;i<angle_.size();i++)
       totalAngleChange_+=vcl_fabs(angle_[i]-angle_[i-1]);
   }
 }
@@ -317,7 +316,7 @@ void Curve::readDataFromFile(vcl_string fileName)
   vcl_ifstream infp(fileName.c_str(),vcl_ios::in);
   if (!infp)
   {
-    vcl_cout << " Error opening file  " << fileName << "\n";
+    vcl_cout << " Error opening file  " << fileName << '\n';
     vcl_exit(1);
   }
 
@@ -326,8 +325,8 @@ void Curve::readDataFromFile(vcl_string fileName)
   infp.getline(magicNum,200);
   if (vcl_strncmp(magicNum,"CONTOUR",7))
   {
-    vcl_cerr << "Invalid File " << fileName.c_str() << "\n";
-    vcl_cerr << "Should be CONTOUR " << magicNum <<"\n";
+    vcl_cerr << "Invalid File " << fileName.c_str() << '\n'
+             << "Should be CONTOUR " << magicNum <<'\n';
     vcl_exit(1);
   }
 
@@ -338,8 +337,8 @@ void Curve::readDataFromFile(vcl_string fileName)
   else if (!vcl_strncmp(openFlag,"CLOSE",5))
     isOpen_ = false;
   else{
-    vcl_cerr << "Invalid File " << fileName.c_str() << "\n";
-    vcl_cerr << "Should be OPEN/CLOSE " << openFlag << "\n";
+    vcl_cerr << "Invalid File " << fileName.c_str() << '\n'
+             << "Should be OPEN/CLOSE " << openFlag << '\n';
     vcl_exit(1);
   }
 
