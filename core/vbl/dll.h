@@ -1,12 +1,12 @@
 #ifndef vbl_dll_h_
 #define vbl_dll_h_
+// This is vxl/vbl/dll.h
 
 #define VBL_DLL_DATA
 
 #if defined(WIN32) && !defined(BUILDING_VBL_DLL)
-// This is vxl/vbl/dll.h
 
-// if win32 and not buiding the DLL then you need a dllimport 
+// if win32 and not buiding the DLL then you need a dllimport
 // Only if you are building a DLL linked application.
 # ifdef BUILD_DLL
 #  undef VBL_DLL_DATA

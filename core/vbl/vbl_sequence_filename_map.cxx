@@ -4,7 +4,6 @@
 #ifdef __GNUC__
 #pragma implementation
 #endif
-//
 
 // Author: David Capel, Oxford RRG
 // Created: 15 April 2000
@@ -158,7 +157,7 @@ void vbl_sequence_filename_map::parse()
   image_dir_ = temp;
 
   // Now to fill in any blanks
-
+  //
   // Image dir and extension both blank :
   //  1 - Look in cwd for basename-compatible files with common image extensions
   //  2 - Look for basename-compatible files in common image dirs with corresponding image extensions
@@ -317,9 +316,11 @@ vcl_ostream& vbl_sequence_filename_map::print (vcl_ostream& s) const
   s << "vbl_sequence_filename_map : " << image_dir_ << basename_ << index_format_ << image_extension_ << " ";
   s << "[" << indices_[0] << ":" << indices_[1] - indices_[0] << ":" << indices_.back() << "]" << vcl_endl;
 
-//  s << vbl_sprintf("vbl_sequence_filename_map : %s%s%s [%i:%i:%i]",
-//                   image_dir_.c_str(), basename_.c_str(), index_format_.c_str(), image_extension_.c_str(),
-//                   indices_[0], indices_[1] - indices_[0], indices_.back());
+#if 0
+  s << vbl_sprintf("vbl_sequence_filename_map : %s%s%s [%i:%i:%i]",
+                   image_dir_.c_str(), basename_.c_str(), index_format_.c_str(), image_extension_.c_str(),
+                   indices_[0], indices_[1] - indices_[0], indices_.back());
+#endif
   return s;
 }
 

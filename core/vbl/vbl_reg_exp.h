@@ -12,7 +12,7 @@
 // PDA (Manchester) 21/03/2001: Tidied up the documentation
 // Peter Vanroose   27/05/2001: Corrected the documentation
 // \endverbatim
-
+//
 // Original Copyright notice:
 // Copyright (C) 1991 Texas Instruments Incorporated.
 //
@@ -81,7 +81,7 @@ const int NSUBEXP = 10;
 class vbl_reg_exp {
 public:
     //: Creates an empty regular expression.
-  inline vbl_reg_exp () { this->program = NULL; } 
+  inline vbl_reg_exp () { this->program = NULL; }
     //: Creates a regular expression from string s, and compiles s.
   inline vbl_reg_exp (char const* s) { this->program = NULL; compile(s); }
     //: Copy constructor

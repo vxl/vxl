@@ -12,25 +12,26 @@
 //
 // Texas Instruments Incorporated provides this software "as is" without
 // express or implied warranty.
+
 //:
 // \file
 // \brief A timing facility for C++
 //
-// The Timer class and provides an interface to system timing.
+// The vbl_timer class provides an interface to system timing.
 // It allows a C++ program to record the time between  a  reference
 // point (mark) and now. This class uses the system
-// time(2) interface to provide time resolution at either mil-
-// lisecond  or microsecond granularity, depending upon operat-
-// ing system support and features. Since the time duration  is
+// time(2) interface to provide time resolution at either
+// millisecond  or microsecond granularity, depending upon
+// operating system support and features. Since the time duration  is
 // stored  in  a  32-bit  word,  the maximum time period before
 // rollover occurs is about 71 minutes.
 //
 // Due to operating system dependencies, the  accuracy  of  all
-// member  function results may not be as documented. For exam-
-// ple, some operating  systems  do  not  support  timers  with
+// member  function results may not be as documented. For  example,
+// some operating  systems  do  not  support  timers  with
 // microsecond  resolution. In those cases, the values returned
 // are provided to the nearest millisecond  or  other  unit  of
-// time  as  appropriate. See the Timer header file for system-
+// time  as  appropriate. See the Timer header file for system
 // specific notes.
 //
 // The Timer class provides timing code for performance evaluation.

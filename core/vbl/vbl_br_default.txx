@@ -280,6 +280,7 @@ vbl_br_default<T1,T2,T3,T4,T5>::vbl_br_default(vbl_br_default<T1,T2,T3,T4,T5> co
   // sufficient to insert all the tuples found in the first map.  Note
   // here that we use the non-virtual insert method, since we are
   // still in the constructor.
+  //
 
   // Have to cast away const here.
   first_map* map = (first_map*)&(i.i1);

@@ -10,24 +10,26 @@
 #include <vcl_string.h>
 
 // C string functions:
+
 //: Converts all alphabetical characters to uppercase.
 extern char* vbl_string_c_upcase(char*);
 //: Converts all alphabetical characters to lowercase.
 extern char* vbl_string_c_downcase (char*);
-//: Capitalizes all words in a string. 
-// A word is defined as a sequence of characters separated by 
+//: Capitalizes all words in a string.
+// A word is defined as a sequence of characters separated by
 // non-alphanumerics.
 extern char* vbl_string_c_capitalize (char*);
 //: Removes any occurrences of rem from str, and returns the modified string.
-extern char* vbl_string_c_trim (char* str, const char* rem); 
+extern char* vbl_string_c_trim (char* str, const char* rem);
 //: Removes any prefix occurrence of rem from str and returns modified string.
 extern char* vbl_string_c_left_trim (char* str, const char* rem);
 //: Removes any suffix occurrence of rem from str and returns modified string.
 extern char* vbl_string_c_right_trim (char* str, const char* rem);
-// Reverses the order of the characters in char*.
+//: Reverses the order of the characters in char*.
 extern void  vbl_string_c_reverse(char*);
 
 // vcl_string functions:
+
 //: Converts all alphabetical characters to uppercase.
 extern vcl_string& vbl_string_upcase(vcl_string&);
 //: Converts all alphabetical characters to lowercase.

@@ -1,5 +1,7 @@
 // This is vxl/vbl/vbl_arg.cxx
 
+//:
+// \file
 // Note that even though this file defines instances of a templated
 // class, it is a .cxx file and not a .txx file because it does not
 // supply a class definition for use by clients.
@@ -304,7 +306,7 @@ void vbl_arg_info_list::parse(int& argc, char **& argv, bool warn_about_unrecogn
   argv[argc] = 0;
 
   // 4. Error checking.
-
+  //
   // 4.2 Sometimes it's bad if all args weren't used (i.e. trailing args)
   if (autonomy_ == all) {
     vcl_cerr << "vbl_arg_info_list: Some arguments were unused: ";
@@ -387,20 +389,22 @@ static int list_parse(vcl_list<int> &out, char ** argv)
 
     // this is the current token.
     vcl_string token = str.substr(start, end);
-//cout << "KYM token = " << token << endl;
+//  vcl_cout << "KYM token = " << token << endl;
     vcl_string match1 = range_regexp.match(1);
-//cout << "KYM match1 = " << match1 << endl;
+//  vcl_cout << "KYM match1 = " << match1 << endl;
     vcl_string match2 = range_regexp.match(2);
-//cout << "KYM match2 = " << match2 << endl;
+//  vcl_cout << "KYM match2 = " << match2 << endl;
     vcl_string match3 = range_regexp.match(3);
-//cout << "KYM match3 = " << match3 << endl;
+//  vcl_cout << "KYM match3 = " << match3 << endl;
 
     // Remove this match from the front of string.
     str.erase(0, end + 1);
 
- // cerr << "Range regexp matched [" << token <<  "]: parts ["
- //      <<match1<<"] ["<<match2<<"] ["<<match3<<"]\n";
- // cerr << "  str->[" << str << "]" << endl;
+#if 0
+    vcl_cerr << "Range regexp matched [" << token <<  "]: parts ["
+             << match1<<"] ["<<match2<<"] ["<<match3<<"]\n"
+             << "  str->[" << str << "]" << vcl_endl;
+#endif
 
     bool matched2 = range_regexp.match(2).size() > 0;
     bool matched3 = range_regexp.match(3).size() > 0;
@@ -420,7 +424,7 @@ static int list_parse(vcl_list<int> &out, char ** argv)
       e = s;
     }
 
-    // cerr << "  " << s << ":" << d << ":" << e << endl;
+    // vcl_cerr << "  " << s << ":" << d << ":" << e << vcl_endl;
     if (e >= s) {
       if (d < 0) {
         vcl_cerr << "WARNING: d < 0\n";

@@ -81,12 +81,6 @@ public:
   void error(vcl_ostream&, char const* message, int field = -1,
              int char_within_field = 0);
 
-  // Computations--------------------------------------------------------------
-
-  // Data Access---------------------------------------------------------------
-
-  // Data Control--------------------------------------------------------------
-
 protected:
   // Data Members--------------------------------------------------------------
   vcl_istream& fd_;

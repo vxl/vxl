@@ -1,9 +1,7 @@
+// This is vxl/vbl/vbl_test.h
 #ifndef vbl_test_h_
 #define vbl_test_h_
 
-// This is vxl/vbl/vbl_test.h
-
-//
 // Copyright (C) 1991 Texas Instruments Incorporated.
 //
 // Permission is granted to any individual or institution to use, copy, modify,
@@ -13,6 +11,7 @@
 //
 // Texas Instruments Incorporated provides this software "as is" without
 // express or implied warranty.
+
 //:
 // \file
 // \brief Test functions for vbl.
@@ -32,7 +31,7 @@ int  vbl_test_summary();
 //: output msg, then perform test in expr
 void vbl_test_assert(const vcl_string& msg, bool expr);
 //: output msg, then perform test to see if expr is within tol of target
-void vbl_test_assert_near(const vcl_string& msg, double expr, 
+void vbl_test_assert_near(const vcl_string& msg, double expr,
                           double target = 0, double tol = 1e-12);
 
 #define Assert vbl_test_assert
