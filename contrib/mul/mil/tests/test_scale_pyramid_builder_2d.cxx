@@ -6,7 +6,7 @@
 #include <mil/mil_image_2d_of.h>
 #include <mil/mil_scale_pyramid_builder_2d.h>
 #include <mil/mil_image_pyramid.h>
-#include <vil1/vil1_byte.h>
+#include <vxl_config.h>
 #include <vsl/vsl_binary_loader.h>
 
 #ifndef LEAVE_FILES_BEHIND
@@ -20,7 +20,7 @@ void test_scale_pyramid_builder_2d()
            << " Testing mil_scale_pyramid_builder_2d (byte)(nx="<<nx<<")\n"
            << "****************************************************\n";
 
-  mil_image_2d_of<vil1_byte> image0;
+  mil_image_2d_of<vxl_byte> image0;
   image0.resize(nx,ny);
 
   // Use smooth plane pattern
@@ -28,7 +28,7 @@ void test_scale_pyramid_builder_2d()
      for (int x=0;x<image0.nx();++x)
        image0(x,y) = x+y*10;
 
-  mil_scale_pyramid_builder_2d<vil1_byte> builder;
+  mil_scale_pyramid_builder_2d<vxl_byte> builder;
   int default_n_levels = builder.maxLevels();
   builder.setMaxLevels(2);
   builder.set_scale_step(1.2);
@@ -43,7 +43,7 @@ void test_scale_pyramid_builder_2d()
 
   TEST("Found correct number of levels", image_pyr.n_levels(), 2);
 
-  const mil_image_2d_of<vil1_byte>& image1 = (const mil_image_2d_of<vil1_byte>&) image_pyr(1);
+  const mil_image_2d_of<vxl_byte>& image1 = (const mil_image_2d_of<vxl_byte>&) image_pyr(1);
   TEST("Level 1 size x",image1.nx(),(int)(nx/1.2+0.5));
   TEST("Level 1 size y",image1.ny(),(int)(ny/1.2+0.5));
   TEST("Pixel (0,0)",image1(0,0),0);
@@ -78,7 +78,7 @@ void test_scale_pyramid_builder_2d()
 
   vcl_cout<<"\n\n======== TESTING I/O ===========\n";
 
-  vsl_add_to_binary_loader(mil_scale_pyramid_builder_2d<vil1_byte>());
+  vsl_add_to_binary_loader(mil_scale_pyramid_builder_2d<vxl_byte>());
 
   vcl_string test_path = "test_scale_pyramid_builder_2d.bvl.tmp";
   vsl_b_ofstream bfs_out(test_path);
@@ -87,7 +87,7 @@ void test_scale_pyramid_builder_2d()
   vsl_b_write(bfs_out, (mil_image_pyramid_builder*)(&builder));
   bfs_out.close();
 
-  mil_scale_pyramid_builder_2d<vil1_byte> builder_in;
+  mil_scale_pyramid_builder_2d<vxl_byte> builder_in;
   mil_image_pyramid_builder* ptr_in=0;
 
   vsl_b_ifstream bfs_in(test_path);

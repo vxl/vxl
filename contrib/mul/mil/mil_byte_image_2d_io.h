@@ -6,12 +6,12 @@
 #endif
 //:
 //  \file
-//  \brief Load and save mil_image_2d_of<vil1_byte> from named files.
+//  \brief Load and save mil_image_2d_of<vxl_byte> from named files.
 //  \author Tim Cootes
 
 #include <mil/mil_image_io.h>
 #include <mil/mil_image_2d_of.h>
-#include <vil1/vil1_byte.h>
+#include <vxl_config.h>
 #include <vcl_iosfwd.h>
 class mil_image;
 
@@ -22,12 +22,12 @@ enum mil_byte_image_2d_io_std_depths
   mil_byte_image_2d_io_depth_rgb = 3
 };
 
-//: Load and save mil_image_2d_of<vil1_byte> from named files.
+//: Load and save mil_image_2d_of<vxl_byte> from named files.
 class mil_byte_image_2d_io : public mil_image_io
 {
   //: Current image object
   //  image() returns a reference to this
-  mil_image_2d_of<vil1_byte> image_;
+  mil_image_2d_of<vxl_byte> image_;
 
 #if 0
   //: Define whether to load images as colour or grey-scale
@@ -84,13 +84,13 @@ class mil_byte_image_2d_io : public mil_image_io
   // \param filetype  String hinting at what image format is.
   //  If filetype=="", then guess the format from the path extension
   // \return true if successful
-  bool loadTheImage(mil_image_2d_of<vil1_byte>& image,
+  bool loadTheImage(mil_image_2d_of<vxl_byte>& image,
                     const vcl_string& filepath,
                     const vcl_string& filetype);
 
   //: Attempt to save image to named filepath
   // \param filetype  String defining what format to save in.
-  static bool saveTheImage(const mil_image_2d_of<vil1_byte>& image,
+  static bool saveTheImage(const mil_image_2d_of<vxl_byte>& image,
                            const vcl_string& filepath,
                            const vcl_string& filetype);
 

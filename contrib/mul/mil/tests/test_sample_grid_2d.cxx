@@ -3,7 +3,7 @@
 #include <vnl/vnl_vector.h>
 #include <mil/mil_image_2d_of.h>
 #include <mil/mil_sample_grid_2d.h>
-#include <vil1/vil1_byte.h>
+#include <vxl_config.h>
 #include <testlib/testlib_test.h>
 
 void test_sample_grid_2d_byte()
@@ -12,7 +12,7 @@ void test_sample_grid_2d_byte()
            << " Testing mil_sample_grid_2d\n"
            << "****************************\n";
 
-  mil_image_2d_of<vil1_byte> image0;
+  mil_image_2d_of<vxl_byte> image0;
   image0.resize(10,10);
 
   for (int y=0;y<image0.ny();++y)

@@ -6,20 +6,20 @@
 #include <mil/mil_image_2d_of.h>
 #include <mil/mil_gaussian_pyramid_builder_2d.h>
 #include <mil/mil_image_pyramid.h>
-#include <vil1/vil1_byte.h>
+#include <vxl_config.h>
 #include <vsl/vsl_binary_loader.h>
 
 #ifndef LEAVE_FILES_BEHIND
 #define LEAVE_FILES_BEHIND 0
 #endif
 
-void test_gaussian_pyramid_builder_2d_build(mil_gaussian_pyramid_builder_2d<vil1_byte>& builder)
+void test_gaussian_pyramid_builder_2d_build(mil_gaussian_pyramid_builder_2d<vxl_byte>& builder)
 {
   int nx = 20, ny = 20;
-  vcl_cout<<"Filter Width: "<<builder.filter_width()<<vcl_endl;
-  vcl_cout<<"Image Size: "<<nx<<" x "<<ny<<vcl_endl;
+  vcl_cout<<"Filter Width: "<<builder.filter_width()<<vcl_endl
+          <<"Image Size: "<<nx<<" x "<<ny<<vcl_endl;
 
-  mil_image_2d_of<vil1_byte> image0;
+  mil_image_2d_of<vxl_byte> image0;
   image0.resize(nx,ny);
 
   for (int y=0;y<image0.ny();++y)
@@ -39,7 +39,7 @@ void test_gaussian_pyramid_builder_2d_build(mil_gaussian_pyramid_builder_2d<vil1
 
   int nx2 = (nx+1)/2;
   int ny2 = (ny+1)/2;
-  const mil_image_2d_of<vil1_byte>& image1 = (const mil_image_2d_of<vil1_byte>&) image_pyr(1);
+  const mil_image_2d_of<vxl_byte>& image1 = (const mil_image_2d_of<vxl_byte>&) image_pyr(1);
   TEST("Level 1 size x",image1.nx(),(nx+1)/2);
   TEST("Level 1 size y",image1.ny(),(ny+1)/2);
   TEST("Pixel (0,0)",image0(0,0),image1(0,0));
@@ -56,11 +56,11 @@ void test_gaussian_pyramid_builder_2d_build(mil_gaussian_pyramid_builder_2d<vil1
 
 void test_gaussian_pyramid_builder_2d()
 {
-  vcl_cout << "************************************************\n";
-  vcl_cout << " Testing mil_gaussian_pyramid_builder_2d (byte)\n";
-  vcl_cout << "************************************************\n";
+  vcl_cout << "************************************************\n"
+           << " Testing mil_gaussian_pyramid_builder_2d (byte)\n"
+           << "************************************************\n";
 
-  mil_gaussian_pyramid_builder_2d<vil1_byte> builder;
+  mil_gaussian_pyramid_builder_2d<vxl_byte> builder;
   builder.set_filter_width(3);
   test_gaussian_pyramid_builder_2d_build(builder);
   builder.set_filter_width(5);
@@ -68,7 +68,7 @@ void test_gaussian_pyramid_builder_2d()
 
   vcl_cout<<"\n\n======== TESTING I/O ===========\n";
 
-  vsl_add_to_binary_loader(mil_gaussian_pyramid_builder_2d<vil1_byte>());
+  vsl_add_to_binary_loader(mil_gaussian_pyramid_builder_2d<vxl_byte>());
 
   vcl_string test_path = "test_gaussian_pyramid_builder_2d.bvl.tmp";
   vsl_b_ofstream bfs_out(test_path);
@@ -77,7 +77,7 @@ void test_gaussian_pyramid_builder_2d()
   vsl_b_write(bfs_out, (mil_image_pyramid_builder*)(&builder));
   bfs_out.close();
 
-  mil_gaussian_pyramid_builder_2d<vil1_byte> builder_in;
+  mil_gaussian_pyramid_builder_2d<vxl_byte> builder_in;
   mil_image_pyramid_builder* ptr_in=0;
 
   vsl_b_ifstream bfs_in(test_path);

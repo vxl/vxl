@@ -9,7 +9,7 @@
 //  a) Each type tends to need a slightly different implementation
 //  b) Let's not have too many templates.
 
-#include <vil1/vil1_byte.h>
+#include <vxl_config.h>
 
 //: Smooth and subsample single plane src_im in x to produce dest_im
 //  Applies 1-5-8-5-1 filter in x, then samples
@@ -20,9 +20,9 @@
 //
 //  By applying three times we can obtain a full Gaussian smoothed and
 //  sub-sampled 3D image (see mil3d_gauss_pyramid_builder_3d)
-void mil3d_gauss_reduce_3d(vil1_byte* dest_im,
+void mil3d_gauss_reduce_3d(vxl_byte* dest_im,
                            int d_x_step, int d_y_step, int d_z_step,
-                           const vil1_byte* src_im,
+                           const vxl_byte* src_im,
                            int src_nx, int src_ny, int src_nz,
                            int s_x_step, int s_y_step, int s_z_step);
 

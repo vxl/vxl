@@ -2,16 +2,16 @@
 #include <vcl_iostream.h>
 #include <mil/mil_image_2d_of.h>
 #include <mil/mil_bilin_interp_2d.h>
-#include <vil1/vil1_byte.h>
+#include <vxl_config.h>
 #include <testlib/testlib_test.h>
 
 void test_bilin_interp_2d_byte()
 {
-  vcl_cout << "*****************************\n";
-  vcl_cout << " Testing mil_bilin_interp_2d\n";
-  vcl_cout << "*****************************\n";
+  vcl_cout << "*****************************\n"
+           << " Testing mil_bilin_interp_2d\n"
+           << "*****************************\n";
 
-  mil_image_2d_of<vil1_byte> image0;
+  mil_image_2d_of<vxl_byte> image0;
   image0.resize(5,5);
 
   for (int y=0;y<image0.ny();++y)
@@ -37,7 +37,7 @@ void test_bilin_interp_2d_byte()
      int ny = image0.ny();
      int xstep = image0.xstep();
      int ystep = image0.ystep();
-     const vil1_byte* data = image0.plane(0);
+     const vxl_byte* data = image0.plane(0);
 
      double v1 = mil_safe_bilin_interp_2d(3,3,data,nx,ny,ystep);
      TEST_NEAR("mil_safe_bilin_interp_2d at grid point",v1,33,1e-8);

@@ -48,7 +48,7 @@ bool mil_byte_image_2d_io_plugin::is_class(vcl_string const& s) const
 //=======================================================================
 
 bool mil_byte_image_2d_io_plugin::loadTheImage (
-    mil_image_2d_of<vil1_byte>& image,
+    mil_image_2d_of<vxl_byte>& image,
     const vcl_string & path, const vcl_string & filetype,
     const vcl_string & colour)
 {

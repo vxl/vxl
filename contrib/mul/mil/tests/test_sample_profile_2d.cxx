@@ -3,17 +3,17 @@
 #include <vnl/vnl_vector.h>
 #include <mil/mil_image_2d_of.h>
 #include <mil/mil_sample_profile_2d.h>
-#include <vil1/vil1_byte.h>
+#include <vxl_config.h>
 #include <testlib/testlib_test.h>
 
 void test_sample_profile_2d_byte()
 {
-  vcl_cout << "*******************************\n";
-  vcl_cout << " Testing mil_sample_profile_2d\n";
-  vcl_cout << "*******************************\n";
+  vcl_cout << "*******************************\n"
+           << " Testing mil_sample_profile_2d\n"
+           << "*******************************\n";
 
-  vcl_cout<< "One plane image"<<vcl_endl;
-  mil_image_2d_of<vil1_byte> image1;
+  vcl_cout<< "One plane image\n";
+  mil_image_2d_of<vxl_byte> image1;
   image1.resize(10,10);
 
   for (int y=0;y<image1.ny();++y)
@@ -36,7 +36,7 @@ void test_sample_profile_2d_byte()
   TEST_NEAR("First value",vec[0],55,1e-6);
   TEST_NEAR("Last value (outside image)",vec[7],0,1e-6);
 
-  vcl_cout<< "Three plane image (float)"<<vcl_endl;
+  vcl_cout<< "Three plane image (float)\n";
   mil_image_2d_of<float> image3;
   image3.resize(10,10,3);
 

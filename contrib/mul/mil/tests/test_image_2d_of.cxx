@@ -4,14 +4,14 @@
 #include <vcl_iostream.h>
 #include <vpl/vpl.h> // vpl_unlink()
 #include <mil/mil_image_2d_of.h>
-#include <vil1/vil1_byte.h>
+#include <vxl_config.h>
 
 #ifndef LEAVE_FILES_BEHIND
 #define LEAVE_FILES_BEHIND 0
 #endif
 
-bool Equal(const mil_image_2d_of<vil1_byte>& im0,
-           const mil_image_2d_of<vil1_byte>& im1)
+bool Equal(const mil_image_2d_of<vxl_byte>& im0,
+           const mil_image_2d_of<vxl_byte>& im1)
 {
   return im0.n_planes()==im1.n_planes()
       && im0.nx() == im1.nx()
@@ -27,7 +27,7 @@ void test_image_2d_of_byte()
            << " Testing mil_image_2d_of<byte>\n"
            << "*******************************\n";
 
-  mil_image_2d_of<vil1_byte> image0;
+  mil_image_2d_of<vxl_byte> image0;
   image0.resize(10,8);
   vcl_cout<<"image0: "<<image0<<vcl_endl;
 
@@ -45,7 +45,7 @@ void test_image_2d_of_byte()
 
   {
     // Test the shallow copy
-    mil_image_2d_of<vil1_byte> image1;
+    mil_image_2d_of<vxl_byte> image1;
     image1 = image0;
 
     TEST("Shallow copy (size)",
@@ -57,10 +57,10 @@ void test_image_2d_of_byte()
   }
 
 
-  mil_image_2d_of<vil1_byte> image2;
+  mil_image_2d_of<vxl_byte> image2;
   {
     // Check data remains valid if a copy taken
-    mil_image_2d_of<vil1_byte> image3;
+    mil_image_2d_of<vxl_byte> image3;
     image3.set_n_planes(3);
     image3.resize(4,5);
     image3.fill(111);
@@ -78,19 +78,19 @@ void test_image_2d_of_byte()
 
   {
     // Test the deep copy
-    mil_image_2d_of<vil1_byte> image4;
+    mil_image_2d_of<vxl_byte> image4;
     image4.deepCopy(image0);
     TEST("Deep copy (size)",image0.nx()==image4.nx()
                          && image0.ny()==image4.ny()
                          && image0.n_planes()==image4.n_planes(), true);
     TEST("Deep copy (values)",image4(4,6),image0(4,6));
 
-    vil1_byte v46 = image0(4,6);
+    vxl_byte v46 = image0(4,6);
     image0(4,6)=255;
     TEST("Deep copy (values really separate)",image4(4,6),v46);
   }
 
-  mil_image_2d_of<vil1_byte> image_win;
+  mil_image_2d_of<vxl_byte> image_win;
   image_win.setToWindow(image0,2,5,3,6);
   TEST("setToWindow size",
        image_win.nx()==4 && image_win.ny()==4 &&
@@ -99,15 +99,15 @@ void test_image_2d_of_byte()
   image0(2,3)=222;
   TEST("setToWindow is shallow copy",image_win(0,0),222);
 
-  TEST("is_a() specialisation for vil1_byte",
-       image0.is_a(),"mil_image_2d_of<vil1_byte>");
+  TEST("is_a() specialisation for vxl_byte",
+       image0.is_a(),"mil_image_2d_of<vxl_byte>");
 }
 
 void test_image_2d_byte_io()
 {
   // -------- Test the binary I/O --------
-  mil_image_2d_of<vil1_byte> image_out0;
-  mil_image_2d_of<vil1_byte> image_out1;
+  mil_image_2d_of<vxl_byte> image_out0;
+  mil_image_2d_of<vxl_byte> image_out1;
   image_out0.set_n_planes(2);
   image_out0.resize(5,6);
   for (int i=0;i<2;++i)
@@ -123,7 +123,7 @@ void test_image_2d_byte_io()
   vsl_b_write(bfs_out, image_out1);
   bfs_out.close();
 
-  mil_image_2d_of<vil1_byte> image_in0,image_in1;
+  mil_image_2d_of<vxl_byte> image_in0,image_in1;
 
   vsl_b_ifstream bfs_in("test_image_2d_of.bvl.tmp");
   TEST("Opened test_image_2d_of.bvl.tmp for reading", (!bfs_in), false);

@@ -14,11 +14,11 @@
 
 #include <vcl_string.h>
 #include <mil/mil_image_2d_of.h>
-#include <vil1/vil1_byte.h>
+#include <vxl_config.h>
 
 //=======================================================================
 
-//: A base class for mil_byte_image_2d_of<vil1_byte> loading
+//: A base class for mil_byte_image_2d_of<vxl_byte> loading
 // This class provides an interface for loading images in new formats
 class mil_byte_image_2d_io_plugin
 {
@@ -41,7 +41,7 @@ class mil_byte_image_2d_io_plugin
   // \param colour    define whether to load images as colour or grey-scale.
   //        Options are '' (i.e. rely on image), 'Grey' or 'RGB'
   // \ret   true if successful
-  virtual bool loadTheImage (mil_image_2d_of<vil1_byte>& image,
+  virtual bool loadTheImage (mil_image_2d_of<vxl_byte>& image,
                              const vcl_string & path,
                              const vcl_string & filetype,
                              const vcl_string & colour);

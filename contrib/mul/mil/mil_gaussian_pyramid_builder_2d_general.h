@@ -11,7 +11,7 @@
 #include <mil/mil_image_2d_of.h>
 #include <vcl_iosfwd.h>
 
-//: Build pyramids of mil_image_2d_of<vil1_byte> at any scale step
+//: Build pyramids of mil_image_2d_of<vxl_byte> at any scale step
 
 template <class T>
 class mil_gaussian_pyramid_builder_2d_general : public mil_gaussian_pyramid_builder_2d<T>

@@ -4,7 +4,7 @@
 #endif
 //:
 // \file
-// \brief Load and save mil_image_2d_of<vil1_byte> from named files.
+// \brief Load and save mil_image_2d_of<vxl_byte> from named files.
 // \author Tim Cootes
 
 #include "mil_byte_image_2d_io.h"
@@ -117,7 +117,7 @@ const mil_image& mil_byte_image_2d_io::image() const
 // \param filetype  String hinting at what image format is
 // \return true if successful
 bool mil_byte_image_2d_io::loadImage(const vcl_string& path,
-              const vcl_string& filetype)
+                                     const vcl_string& filetype)
 {
   return loadTheImage(image_,path,filetype);
 }
@@ -129,8 +129,8 @@ bool mil_byte_image_2d_io::saveImage(const mil_image& image,
                                      const vcl_string& path,
                                      const vcl_string& filetype) const
 {
-  assert(image.is_class("mil_image_2d_of<vil1_byte>"));
-  return saveTheImage((const mil_image_2d_of<vil1_byte>&) image,path,filetype);
+  assert(image.is_class("mil_image_2d_of<vxl_byte>"));
+  return saveTheImage((const mil_image_2d_of<vxl_byte>&) image,path,filetype);
 }
 
 
@@ -166,9 +166,9 @@ vcl_string mil_byte_image_2d_io::guessFileType(const vcl_string& path)
 // \return true if successful
 // \retval image The loaded image. The object also stores the image
 // which can be found by subsequent calls to image()
-bool mil_byte_image_2d_io::loadTheImage(mil_image_2d_of<vil1_byte>& image,
-              const vcl_string& path,
-              const vcl_string& f_type)
+bool mil_byte_image_2d_io::loadTheImage(mil_image_2d_of<vxl_byte>& image,
+                                        const vcl_string& path,
+                                        const vcl_string& f_type)
 {
   mil_byte_image_2d_io_plugin plugin;
   if ( plugin.loadTheImage(image,path,f_type,colour()) )
@@ -194,7 +194,7 @@ bool mil_byte_image_2d_io::loadTheImage(mil_image_2d_of<vil1_byte>& image,
     if (img_is_grey)
     {
       // convert grey to grey
-      vil1_memory_image_of<vil1_byte> buf(img);
+      vil1_memory_image_of<vxl_byte> buf(img);
       mil_convert_vil_gv2gm(image_,buf);
     }
     else
@@ -228,7 +228,7 @@ bool mil_byte_image_2d_io::loadTheImage(mil_image_2d_of<vil1_byte>& image,
     if (img_is_grey)
     {
       //copy grey image as grey
-      vil1_memory_image_of<vil1_byte> buf(img);
+      vil1_memory_image_of<vxl_byte> buf(img);
       mil_convert_vil_gv2gm(image_,buf);
     }
     else
@@ -252,9 +252,9 @@ bool mil_byte_image_2d_io::loadTheImage(mil_image_2d_of<vil1_byte>& image,
 
 //: Attempt to save image to named file
 // \param filetype  String defining what format to save in
-bool mil_byte_image_2d_io::saveTheImage(const mil_image_2d_of<vil1_byte>& image,
-            const vcl_string& path,
-            const vcl_string& f_type)
+bool mil_byte_image_2d_io::saveTheImage(const mil_image_2d_of<vxl_byte>& image,
+                                        const vcl_string& path,
+                                        const vcl_string& f_type)
 {
   vcl_string filetype = f_type;
   if (f_type=="")
@@ -268,7 +268,7 @@ bool mil_byte_image_2d_io::saveTheImage(const mil_image_2d_of<vil1_byte>& image,
 
   //convert mil_image to vil1_image
   //if colour=>vil1_memory_image_of<vil1_rgb_byte>
-  //if grey=>vil1_memory_image_of<vil1_byte>
+  //if grey=>vil1_memory_image_of<vxl_byte>
   //then use vil1_save with appropriate "filetype"
 
   bool image_is_grey=false,image_is_colour=false;
@@ -284,7 +284,7 @@ bool mil_byte_image_2d_io::saveTheImage(const mil_image_2d_of<vil1_byte>& image,
 
   if (image_is_grey)
   {
-    vil1_memory_image_of<vil1_byte> buf;
+    vil1_memory_image_of<vxl_byte> buf;
     mil_convert_vil_gm2gv(buf,image);
     vil1_save(buf,path.c_str(),filetype.c_str());
     return true;
@@ -371,7 +371,7 @@ void mil_byte_image_2d_io::b_read(vsl_b_istream& bfs)
     break;
   default:
     vcl_cerr << "I/O ERROR: mil_byte_image_2d_io::b_read(vsl_b_istream&)\n"
-             << "           Unknown version number "<< version << "\n";
+             << "           Unknown version number "<< version << '\n';
     bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
     return;
   }

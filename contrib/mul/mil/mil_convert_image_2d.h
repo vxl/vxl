@@ -7,36 +7,36 @@
 //  \author Tim Cootes
 
 #include <mil/mil_image_2d_of.h>
-#include <vil1/vil1_byte.h>
+#include <vxl_config.h>
 
 //: Copies src_im (of bytes) into dest_im (of float)
 void mil_convert_image_2d(mil_image_2d_of<float>& dest_im,
-                          mil_image_2d_of<vil1_byte>const& src_im);
+                          mil_image_2d_of<vxl_byte>const& src_im);
 
 
 //: Copies src_im (of bytes) into dest_im (of float) and flips actual data
 void mil_convert_image_2d_flip(mil_image_2d_of<float>& dest_im,
-                               mil_image_2d_of<vil1_byte>const& src_im);
+                               mil_image_2d_of<vxl_byte>const& src_im);
 
 
 //: Copies src_im (of float) into dest_im (of byte)
-void mil_convert_image_2d(mil_image_2d_of<vil1_byte>& dest_im,
+void mil_convert_image_2d(mil_image_2d_of<vxl_byte>& dest_im,
                           mil_image_2d_of<float>const& src_im);
 
 //: Copies src_im (of float) into dest_im (of byte) and stretches to 0-255 range
-void mil_convert_image_2d_stretch(mil_image_2d_of<vil1_byte>& dest,
+void mil_convert_image_2d_stretch(mil_image_2d_of<vxl_byte>& dest,
                                   mil_image_2d_of<float>const& src);
 
 //: Copies src_im (of float) into dest_im (of byte) after linear transform
 //  Applies scale and offset to pixels of src_im and puts results in dest_im
 //  Useful to compress range of data for display
-void mil_convert_image_2d(mil_image_2d_of<vil1_byte>& dest_im,
+void mil_convert_image_2d(mil_image_2d_of<vxl_byte>& dest_im,
                           mil_image_2d_of<float>const& src_im,
                           double scale, double offset);
 
 //: Convert 3plane RGB image to 1 plane greyscale image
-void mil_rgb_to_greyscale(mil_image_2d_of<vil1_byte>& g_im,
-                          mil_image_2d_of<vil1_byte>const& rgb_im);
+void mil_rgb_to_greyscale(mil_image_2d_of<vxl_byte>& g_im,
+                          mil_image_2d_of<vxl_byte>const& rgb_im);
 
 //: Convert 3plane RGB image to 1 plane greyscale image
 void mil_rgb_to_greyscale(mil_image_2d_of<float>& g_im,

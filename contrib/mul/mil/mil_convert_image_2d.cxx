@@ -9,7 +9,7 @@
 
 //: Copies src_im (of bytes) into dest_im (of float)
 void mil_convert_image_2d(mil_image_2d_of<float>& dest,
-                          const mil_image_2d_of<vil1_byte>& src)
+                          const mil_image_2d_of<vxl_byte>& src)
 {
   int n = src.n_planes();
   int nx = src.nx();
@@ -21,12 +21,12 @@ void mil_convert_image_2d(mil_image_2d_of<float>& dest,
   int dystep=dest.ystep();
   for (int i=0;i<n;++i)
   {
-    const vil1_byte* s_row = src.plane(i);
+    const vxl_byte* s_row = src.plane(i);
     float* d_row = dest.plane(i);
 
     for (int y=0;y<ny;++y)
     {
-      const vil1_byte* s = s_row;
+      const vxl_byte* s = s_row;
       float * d = d_row;
 
       for (int x=0;x<nx;++x)
@@ -46,7 +46,7 @@ void mil_convert_image_2d(mil_image_2d_of<float>& dest,
 
 //: Copies src_im (of bytes) into dest_im (of float) and flips actual data
 void mil_convert_image_2d_flip(mil_image_2d_of<float>& dest,
-                          const mil_image_2d_of<vil1_byte>& src)
+                               const mil_image_2d_of<vxl_byte>& src)
 {
   int n = src.n_planes();
   int nx = src.nx();
@@ -58,12 +58,12 @@ void mil_convert_image_2d_flip(mil_image_2d_of<float>& dest,
   int dystep=dest.ystep();
   for (int i=0;i<n;++i)
   {
-    const vil1_byte* s_row = src.plane(i)+(ny-1)*systep;
+    const vxl_byte* s_row = src.plane(i)+(ny-1)*systep;
     float* d_row = dest.plane(i);
 
     for (int y=0;y<ny;++y)
     {
-      const vil1_byte* s = s_row;
+      const vxl_byte* s = s_row;
       float * d = d_row;
 
       for (int x=0;x<nx;++x)
@@ -82,9 +82,9 @@ void mil_convert_image_2d_flip(mil_image_2d_of<float>& dest,
 }
 
 
-//: Converts float plane image to vil1_byte and stretches to 0-255 range
-void mil_convert_image_2d_stretch(mil_image_2d_of<vil1_byte>& dest,
-                          const mil_image_2d_of<float>& src)
+//: Converts float plane image to vxl_byte and stretches to 0-255 range
+void mil_convert_image_2d_stretch(mil_image_2d_of<vxl_byte>& dest,
+                                  const mil_image_2d_of<float>& src)
 {
   float min, max;
   src.getRange(min,max);
@@ -92,7 +92,7 @@ void mil_convert_image_2d_stretch(mil_image_2d_of<vil1_byte>& dest,
 }
 
 //: Copies src_im (of float) into dest_im (of byte)
-void mil_convert_image_2d(mil_image_2d_of<vil1_byte>& dest,
+void mil_convert_image_2d(mil_image_2d_of<vxl_byte>& dest,
                           const mil_image_2d_of<float>& src)
 {
   mil_convert_image_2d(dest,src,1.0,0);
@@ -100,7 +100,7 @@ void mil_convert_image_2d(mil_image_2d_of<vil1_byte>& dest,
 
 //: Copies src_im (of float) into dest_im (of byte) after linear transform
 //  Applies scale and offset to pixels of src_im and puts results in dest_im
-void mil_convert_image_2d(mil_image_2d_of<vil1_byte>& dest,
+void mil_convert_image_2d(mil_image_2d_of<vxl_byte>& dest,
                           const mil_image_2d_of<float>& src,
                           double scale, double offset)
 {
@@ -115,17 +115,17 @@ void mil_convert_image_2d(mil_image_2d_of<vil1_byte>& dest,
   for (int i=0;i<n;++i)
   {
     const float* s_row = src.plane(i);
-    vil1_byte* d_row = dest.plane(i);
+    vxl_byte* d_row = dest.plane(i);
 
     for (int y=0;y<ny;++y)
     {
       const float* s = s_row;
-      vil1_byte * d = d_row;
+      vxl_byte * d = d_row;
 
       for (int x=0;x<nx;++x)
       {
-        *d = vil1_byte( (*s + offset)* scale );
-        //*d = vil1_byte(*s * scale + offset);
+        *d = vxl_byte( (*s + offset)* scale );
+        //*d = vxl_byte(*s * scale + offset);
         s+=sxstep;
         d+=dxstep;
       }
@@ -137,8 +137,8 @@ void mil_convert_image_2d(mil_image_2d_of<vil1_byte>& dest,
 }
 
 //: Convert 3plane RGB image to 1 plane greyscale image
-void mil_rgb_to_greyscale(mil_image_2d_of<vil1_byte>& g_im,
-                          const mil_image_2d_of<vil1_byte>& rgb_im)
+void mil_rgb_to_greyscale(mil_image_2d_of<vxl_byte>& g_im,
+                          const mil_image_2d_of<vxl_byte>& rgb_im)
 {
   assert(rgb_im.n_planes()==3);
 
@@ -150,21 +150,21 @@ void mil_rgb_to_greyscale(mil_image_2d_of<vil1_byte>& g_im,
   int gxstep=g_im.xstep();
   int gystep=g_im.ystep();
 
-  const vil1_byte* c0_row = rgb_im.plane(0);
-  const vil1_byte* c1_row = rgb_im.plane(1);
-  const vil1_byte* c2_row = rgb_im.plane(2);
-  vil1_byte* grey_row = g_im.plane(0);
+  const vxl_byte* c0_row = rgb_im.plane(0);
+  const vxl_byte* c1_row = rgb_im.plane(1);
+  const vxl_byte* c2_row = rgb_im.plane(2);
+  vxl_byte* grey_row = g_im.plane(0);
 
   for (int y=0;y<ny;++y)
   {
-    const vil1_byte* c0 = c0_row;
-    const vil1_byte* c1 = c1_row;
-    const vil1_byte* c2 = c2_row;
-    vil1_byte * g = grey_row;
+    const vxl_byte* c0 = c0_row;
+    const vxl_byte* c1 = c1_row;
+    const vxl_byte* c2 = c2_row;
+    vxl_byte * g = grey_row;
 
     for (int x=0;x<nx;++x)
     {
-      *g = vil1_byte((int(*c0)+int(*c1)+int(*c2))/3);
+      *g = vxl_byte((int(*c0)+int(*c1)+int(*c2))/3);
       g+=gxstep;
       c0+=cxstep;
       c1+=cxstep;
