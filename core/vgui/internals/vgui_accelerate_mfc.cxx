@@ -130,7 +130,7 @@ vidfmt::vidfmt()
         break;
     }
     default:
-      abort();
+      vcl_abort();
     }
     if (debug) printf("\n");
 
@@ -371,7 +371,6 @@ bool vgui_accelerate_mfc::vgui_glDrawPixels( GLsizei width, GLsizei height, GLen
     y = vp[3]-y;
     if(x<0)
     {
-
       x_crop = -x;
       width_crop-=x_crop;
       x = 0;

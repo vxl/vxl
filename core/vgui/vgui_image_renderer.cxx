@@ -122,7 +122,7 @@ void vgui_image_renderer::render() {
     if (debug) vcl_cerr << "New x1 y1:" << x1 << ", " << y1 << vcl_endl;
     if (debug) vcl_cerr << "New x0 y0:" << x0 << ", " << y0 << vcl_endl;
 
-    buffer->draw_image_as_cached_textures(x0, y0, fabs(x1-x0), fabs(y1-y0)) || buffer->draw_as_rectangle();
+    buffer->draw_image_as_cached_textures(x0, y0, vcl_fabs(x1-x0), vcl_fabs(y1-y0)) || buffer->draw_as_rectangle();
     vgui_macro_report_errors;
   }
   else {

@@ -7,6 +7,7 @@
 #include "vgui_glut_slab.h"
 
 #include <vcl_csetjmp.h>
+#include <vcl_cstdlib.h> // for vcl_abort()
 #include <vcl_map.h>
 #include <vcl_functional.h>
 #include <vcl_utility.h>
@@ -199,7 +200,7 @@ void vgui_glut_slab::name##_callback proto \
  if (v) \
    v->name args; \
  else \
-   abort(); \
+   vcl_abort(); \
 }
 implement_static_callback(display,(),());
 implement_static_callback(overlay_display,(),());

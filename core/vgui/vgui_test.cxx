@@ -4,6 +4,7 @@
 #include "vgui_test.h"
 
 #include <vcl_cmath.h>
+#include <vnl/vnl_math.h>
 
 #include <vgui/vgui_gl.h>
 #include <vgui/vgui_event.h>
@@ -47,7 +48,7 @@ bool vgui_test_thingy2d::handle(const vgui_event &e) {
   unsigned N=36;
   glBegin(GL_LINE_LOOP);
   for (unsigned i=0; i<N; ++i) {
-    float v=2*3.14159*i/N;
+    float v=2*vnl_math::pi*i/N;
     glVertex2f(vcl_cos(v), vcl_sin(v));
   }
   glEnd(); // GL_LINE_LOOP

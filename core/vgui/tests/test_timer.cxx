@@ -18,7 +18,7 @@ public:
       if (e.timer_id == 1234) {
         // timer loop
         vcl_cerr << "*" << vcl_flush;
-        float dt = (1.1-sin(ct/10.0))/5;
+        float dt = (1.1-vcl_sin(ct/10.0))/5;
         ++ct;
         e.origin->post_timer(dt, 1234);
         return true;

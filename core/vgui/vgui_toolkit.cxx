@@ -7,6 +7,7 @@
 #include "vgui_toolkit.h"
 
 #include <vcl_iostream.h>
+#include <vcl_cstdlib.h> // for vcl_exit()
 #include <vcl_cassert.h>
 #include <vcl_algorithm.h>
 
@@ -91,7 +92,7 @@ void vgui_toolkit::quit()
 {
   vgui_macro_warning << "vgui_toolkit::quit() called." << vcl_endl;
   vgui_macro_warning << "calling exit()" << vcl_endl;
-  exit(0);
+  vcl_exit(0);
 }
 
 void vgui_toolkit::run()

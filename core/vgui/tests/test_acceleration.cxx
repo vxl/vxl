@@ -92,7 +92,7 @@ int main (int /*argc*/, char** /*argv*/)
 
   // GLX window code straight out of
   // http://www.eecs.tulane.edu/www/graphics/doc/OpenGL-Man-Pages/glXIntro.html
-  vcl_cerr << "Opening double-buffered, RGBA GLX context...\n" << vcl_endl;
+  vcl_cerr << "Opening double-buffered, RGBA GLX context...\n\n";
   Display* display = XOpenDisplay(0);
   XVisualInfo* visualinfo = glXChooseVisual (display, DefaultScreen(display), attribs);
   GLXContext context = glXCreateContext (display, visualinfo, 0, GL_TRUE);

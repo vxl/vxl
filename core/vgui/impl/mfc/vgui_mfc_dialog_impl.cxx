@@ -200,9 +200,11 @@ bool vgui_mfc_dialog_impl::ask()
   height = 45*(elements.size()+fbsr_count+1)+6*8;
   fbsr_count++;
   // Create dialog box window
-  CreateEx(WS_EX_CONTROLPARENT, AfxRegisterWndClass(0,::LoadCursor(NULL, IDC_ARROW),
-                                                    (HBRUSH)(COLOR_WINDOW)), _T(title.c_str()),WS_CAPTION|WS_VISIBLE|WS_SYSMENU|WS_POPUP|DS_MODALFRAME
-           ,100, 100, width, height, NULL, NULL, 0);
+  CreateEx(WS_EX_CONTROLPARENT,
+           AfxRegisterWndClass(0,::LoadCursor(NULL, IDC_ARROW),(HBRUSH)(COLOR_WINDOW)),
+           _T(title.c_str()),
+           WS_CAPTION|WS_VISIBLE|WS_SYSMENU|WS_POPUP|DS_MODALFRAME,
+           100, 100, width, height, NULL, NULL, 0);
   UpdateWindow();
   ShowWindow(SW_SHOW);
 

@@ -79,7 +79,6 @@ bool vgui_section_render(void const *pixels,
     return true;
 
 
-
   // From device to viewport coordinates, the transformation is :
   // [ vp_w   0  vp_x ] [ 1/2  0  1/2 ]
   // [   0  vp_h vp_y ] [  0  1/2 1/2 ]
@@ -133,8 +132,8 @@ bool vgui_section_render(void const *pixels,
   // Round up and down so we only render whole pixels (i.e. we render at
   // most the amount asked to render) and so that the raster position we
   // set is valid :
-  int i_x0 = int(ceil (x0)), i_y0 = int(ceil (y0));
-  int i_x1 = int(floor(x1)), i_y1 = int(floor(y1));
+  int i_x0 = int(vcl_ceil (x0)), i_y0 = int(vcl_ceil (y0));
+  int i_x1 = int(vcl_floor(x1)), i_y1 = int(vcl_floor(y1));
 
   // Set raster position
 #if 1

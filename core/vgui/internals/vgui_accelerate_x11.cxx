@@ -280,26 +280,26 @@ bool vgui_accelerate_x11::vgui_glDrawPixels( GLsizei width, GLsizei height,
         int src_x_max = width;
         int src_y_max = height;
 
-        float abs_px_x = fabs(pixel_zoom_x);
-        float abs_px_y = fabs(pixel_zoom_y);
+        float abs_px_x = vcl_fabs(pixel_zoom_x);
+        float abs_px_y = vcl_fabs(pixel_zoom_y);
 
         if (dest_x_min < window_x_min) {
-          int dw = (int)ceil((window_x_min - dest_x_min)/abs_px_x);
+          int dw = (int)vcl_ceil((window_x_min - dest_x_min)/abs_px_x);
           src_x_min += dw;
           dest_x_min += dw * abs_px_x;
         }
         if (dest_x_max > window_x_max) {
-          int dw = (int)ceil((dest_x_max - window_x_max)/abs_px_x);
+          int dw = (int)vcl_ceil((dest_x_max - window_x_max)/abs_px_x);
           src_x_max -= dw;
           dest_x_max -= dw * abs_px_x;
         }
         if (dest_y_min < window_y_min) {
-          int dh = (int)ceil((window_y_min - dest_y_min)/abs_px_y);
+          int dh = (int)vcl_ceil((window_y_min - dest_y_min)/abs_px_y);
           src_y_min += dh;
           dest_y_min += dh * abs_px_y;
         }
         if (dest_y_max > window_y_max) {
-          int dh = (int)ceil((dest_y_max - window_y_max)/abs_px_y);
+          int dh = (int)vcl_ceil((dest_y_max - window_y_max)/abs_px_y);
           src_y_max -= dh;
           dest_y_max -= dh * abs_px_y;
         }
@@ -331,7 +331,7 @@ bool vgui_accelerate_x11::vgui_glDrawPixels( GLsizei width, GLsizei height,
         if (row_length == 0) row_length = width;
         GLint unpack_alignment;
         glGetIntegerv (GL_UNPACK_ALIGNMENT, &unpack_alignment);
-        int src_pitch = (int)ceil(row_length * (src_format->bits >> 3) / unpack_alignment);
+        int src_pitch = (int)vcl_ceil(row_length * (src_format->bits >> 3) / unpack_alignment);
 
         // Now choose a renderer depending on the sign of pixel_zoom_y
         if (pixel_zoom_y > 0) {

@@ -27,7 +27,7 @@
 #include <vgui/vgui_image_tableau.h> // for centering
 
 // to transform from window coords (x,y) to image coords (ix,iy)
-// 
+//
 //   ix = (x - token.offsetX) / token.scaleX;
 //   iy = (y - token.offsetY) / token.scaleY;
 
@@ -326,8 +326,8 @@ bool vgui_viewer2D::mouse_drag(int x, int y,  vgui_button /*button*/, vgui_modif
     new_y = y;
 
     // compute the size of the sweep area in pixels on the screen :
-    float xdiff = fabs(zoom_x - new_x);
-    float ydiff = fabs(zoom_y - new_y);
+    float xdiff = vcl_fabs(zoom_x - new_x);
+    float ydiff = vcl_fabs(zoom_y - new_y);
 
     // this bit here makes sure the swept out region has the
     // same shape as the viewport :

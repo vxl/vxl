@@ -31,7 +31,7 @@ void vgui_macro_error_reporter(char const *FILE, int LINE)
 
     if (++numerrors >= 20 && vgui_glerrors_are_bad) {
       vcl_cerr << "too many errors -- calling exit(1);" << vcl_endl;
-      exit(1);
+      vcl_exit(1);
     }
   }
 

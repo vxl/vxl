@@ -4,7 +4,7 @@
 #include "vgui_projection_inspector.h"
 
 #include <vcl_cassert.h>
-#include <vcl_cstdlib.h> // abort()
+#include <vcl_cstdlib.h> // vcl_abort()
 #include <vcl_iostream.h>
 
 #include <vnl/vnl_vector.h>
@@ -207,7 +207,7 @@ void vgui_projection_inspector::window_to_image_coordinates(int x,int y,
   if (!diagonal_scale_3d) {
     vcl_cerr << "vgui_projection_inspector::window_to_image_coordinates() - ERROR: Need diagonal GL matrices\n";
     print(vcl_cerr);
-    abort();
+    vcl_abort();
   }
 
   // size of viewport :
@@ -306,7 +306,5 @@ bool vgui_projection_inspector::image_viewport(float& a0, float& b0, float& a1, 
 
   return true;
 }
-
-
 
 //--------------------------------------------------------------------------------

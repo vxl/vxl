@@ -12,6 +12,7 @@
 #include "vgui_gtk_utils.h"
 
 #include <vcl_iostream.h>
+#include <vcl_cstdlib.h> // for vcl_abort()
 
 #include <vgui/vgui_gl.h>
 #include <gdk/gdkkeysyms.h>
@@ -33,7 +34,7 @@ vgui_button vgui_gtk_utils::translate_button(int button)
   else if (button == 3)
     return vgui_RIGHT;
 
-  abort();
+  vcl_abort();
   return vgui_BUTTON_NULL;
 }
 
@@ -102,7 +103,6 @@ bool vgui_gtk_utils::is_modifier(GdkEvent const *gev)
   }
   return false;
 }
-
 
 
 static void execute_command(GtkWidget*, gpointer c)
@@ -232,12 +232,10 @@ void vgui_gtk_utils::set_menu(GtkWidget *widget, const vgui_menu& menu, bool is_
 
       gtk_menu_item_set_submenu(GTK_MENU_ITEM(item), submenu);
 
-
       if (is_menubar)
         gtk_menu_bar_append(GTK_MENU_BAR(widget), item);
       else
         gtk_menu_append(GTK_MENU(widget), item);
-
 
       gtk_widget_show(item);
 

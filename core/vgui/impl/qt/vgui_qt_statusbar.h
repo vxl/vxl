@@ -21,9 +21,9 @@
 
 #include <qstatusbar.h>
 
-class vgui_qt_statusbar : 
+class vgui_qt_statusbar :
    public QStatusBar,
-   public vgui_statusbar 
+   public vgui_statusbar
 {
    Q_OBJECT
 public:
@@ -35,7 +35,7 @@ public:
 
    vcl_string linebuffer;
    vgui_statusbuf* statusbuf;
-   ostream out;  
+   vcl_ostream out;
 };
 
 #endif // VGUI_QT_STATUSBAR_H_

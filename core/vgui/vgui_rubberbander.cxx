@@ -8,6 +8,7 @@
 #include <vcl_cmath.h>
 #include <vcl_iostream.h>
 #include <vgl/vgl_clip.h>
+#include <vnl/vnl_math.h>
 
 #include <vgui/vgui_matrix_state.h>
 #include <vgui/vgui_projection_inspector.h>
@@ -189,8 +190,8 @@ void vgui_rubberbander::draw_circle(float x, float y, float r)
 
 
   for(int i=0;i<100;i++){
-    double angle = (2*3.1415926/100.0)*i;
-    glVertex2d(cos(angle)*r + x, sin(angle)*r + y);
+    double angle = (2*vnl_math::pi/100.0)*i;
+    glVertex2d(vcl_cos(angle)*r + x, vcl_sin(angle)*r + y);
   }
   glEnd();
 }

@@ -42,7 +42,7 @@ void vgui_pixel_convert_span(S const *src, D *dst, unsigned size) {
   }
 }
 #define VGUI_PIXEL_CONVERT_SPAN_INSTANTIATE(S, D) \
-template void vgui_pixel_convert_span(S const *, D *, unsigned);
+template void vgui_pixel_convert_span(S const *, D *, unsigned)
 #endif
 
 //: Set an int of unknown size to all-bits-one

@@ -270,7 +270,6 @@ inline bool gotmods(vgui_event const& event)
 
 bool vgui_viewer3D::mouse_down(int x, int y, vgui_button button, vgui_modifier /*modifier*/)
 {
-
   if (c_mouse_rotate(event) || c_mouse_translate(event) || c_mouse_zoom(event)) {
     beginx = x;
     beginy = y;
@@ -322,11 +321,11 @@ bool vgui_viewer3D::mouse_drag(int x, int y, vgui_button button, vgui_modifier m
     double dx = (beginx - x) / width;
     double dy = (beginy - y) / height;
 
-    double scalefactor = pow(5, dy);
+    double scalefactor = vcl_pow(5, dy);
     if (!lock_dolly)
       this->token.scale = lastpos.scale * scalefactor;
 
-    double zoomfactor = pow(5,dx);
+    double zoomfactor = vcl_pow(5,dx);
     if (!lock_zoom) {
       this->token.fov = lastpos.fov * zoomfactor;
       vgui::out << "viewer3D : fov " << this->token.fov << vcl_endl;

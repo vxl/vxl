@@ -17,6 +17,7 @@
 
 #include <vgl/vgl_clip.h>
 #include <vgl/vgl_distance.h>
+#include <vnl/vnl_math.h>
 
 #include <vgui/vgui_gl.h>
 #include <vgui/vgui_style.h>
@@ -165,7 +166,6 @@ vcl_ostream& vgui_soview2D_infinite_line::print(vcl_ostream& s) const {
 }
 
 
-
 extern bool vgui_draw_line(double a, double b, double c);
 
 void vgui_soview2D_infinite_line::draw() {
@@ -217,14 +217,12 @@ void vgui_soview2D_infinite_line::translate(float tx, float ty)
 
 const int vgui__CIRCLE2D_LIST = 1;
 
-// it's easier to search for "3.141" than blah::pi, PI, Pi or whatever.
-
 void vgui_soview2D_circle::compile() {
   glNewList(vgui__CIRCLE2D_LIST, GL_COMPILE);
   glBegin(GL_LINE_LOOP); // <--- should be GL_LINE_LOOP?
   for(int i=0;i<100;i++){
-    double angle = i*(2*3.1415926/100);
-    glVertex2d(cos(angle), sin(angle));
+    double angle = i*(2*vnl_math::pi/100);
+    glVertex2d(vcl_cos(angle), vcl_sin(angle));
   }
   glEnd();
   glEndList();
@@ -239,8 +237,8 @@ vcl_ostream& vgui_soview2D_circle::print(vcl_ostream& s) const {
 void vgui_soview2D_circle::draw() {
   glBegin(GL_LINE_LOOP);
   for(int i=0;i<100;i++){
-    double angle = i*(2*3.1415926/100);
-    glVertex2d(x+r*cos(angle), y+r*sin(angle));
+    double angle = i*(2*vnl_math::pi/100);
+    glVertex2d(x+r*vcl_cos(angle), y+r*vcl_sin(angle));
   }
   glEnd();
 }
@@ -250,7 +248,7 @@ float vgui_soview2D_circle::distance_squared(float x, float y) {
   float dy = this->y - y;
 
   // distance from point to centre
-  float dcentre = sqrt(dx*dx + dy*dy);
+  float dcentre = vcl_sqrt(dx*dx + dy*dy);
 
   // signed distance from point to circumference
   float dcircum = dcentre - this->r;
