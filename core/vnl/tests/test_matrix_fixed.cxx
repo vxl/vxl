@@ -62,6 +62,9 @@ void test_matrix_fixed()
   verbose_malloc = false;
 }
 
+#if 0 // BAD-BAD-BAD these operators new/delete are picked up by *all* tests!!!
+      //  The problem is that they don't provide new[] and delete[].  - PVr
+
 // with gcc 3.0, formatted stream output uses operator
 // new so printing to cout here causes stack overflow.
 
@@ -91,5 +94,7 @@ void operator delete(void* s)
 
   vcl_free(s);
 }
+
+#endif // 0
 
 TESTMAIN(test_matrix_fixed);
