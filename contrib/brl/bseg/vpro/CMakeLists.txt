@@ -21,6 +21,8 @@ SET(vpro_sources
     vpro_edge_line_process.cxx       vpro_edge_line_process.h
     vpro_grid_finder_process.cxx     vpro_grid_finder_process.h
     vpro_corr_tracker_process.cxx    vpro_corr_tracker_process.h
+    vpro_info_tracker_process.cxx    vpro_info_tracker_process.h
+    vpro_track_display_process.cxx   vpro_track_display_process.h	
 )
 
 AUX_SOURCE_DIRECTORY(Templates vpro_sources)

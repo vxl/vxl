@@ -1,6 +1,8 @@
 // This is brl/bseg/vpro/vpro_corr_tracker_process.cxx
 #include <vcl_iostream.h>
 #include <vtol/vtol_topology_object.h>
+#include <vtol/vtol_vertex_sptr.h>
+#include <vtol/vtol_vertex_2d.h>
 #include <vtol/vtol_face_2d.h>
 #include <vil1/vil1_memory_image_of.h>
 #include <sdet/sdet_tracker.h>
@@ -17,6 +19,7 @@ vpro_corr_tracker_process::~vpro_corr_tracker_process()
 {
   tracker_.clear();
 }
+
 
 bool vpro_corr_tracker_process::execute()
 {
@@ -66,14 +69,9 @@ bool vpro_corr_tracker_process::execute()
 
   tracker_.set_image_i(img);
   tracker_.track();
-#if 0
-  vcl_vector<vtol_face_2d_sptr> samples;
-  tracker_.get_samples(samples);
-   for (vcl_vector<vtol_face_2d_sptr>::iterator fit = samples.begin();
-        fit != samples.end(); fit++)
-     output_topo_objs_.push_back((*fit)->cast_to_face());
-#else
-  output_topo_objs_.push_back(tracker_.get_best_sample()->cast_to_face());
-#endif
+  vtol_face_2d_sptr f = tracker_.get_best_sample();
+  vtol_topology_object_sptr to = 
+    (vtol_topology_object*)(f->cast_to_face());
+  output_topo_objs_.push_back(to);
   return true;
 }

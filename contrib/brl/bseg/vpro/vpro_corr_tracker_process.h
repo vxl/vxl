@@ -13,6 +13,7 @@
 //   J.L. Mundy August 21, 2002    Initial version.
 // \endverbatim
 //---------------------------------------------------------------------------
+#include <vcl_string.h>
 #include <sdet/sdet_tracker_params.h>
 #include <sdet/sdet_tracker.h>
 #include <vpro/vpro_video_process.h>
