@@ -8,8 +8,6 @@
 
 #include "vil3d_dicom.h"
 #include <vcl_cstdlib.h>
-#include <vul/vul_file.h>
-#include <vil/vil_stream_fstream.h>
 #include <vil3d/vil3d_image_view.h>
 #include <vil/file_formats/vil_dicom_header.h>
 
@@ -30,15 +28,10 @@ vil3d_image_resource_sptr vil3d_dicom_format::make_input_image(const char * file
   vil_image_resource_sptr im = dicom_reader.make_input_image(is.as_pointer());
   if (!im) return 0;
 
-
-
-
-
   // Now deduce filename numbering format.
   // start at the front and find all continuous groups of numeric characters.
   // For each group, search for all contiguously numbered files
   // Try and load each group of contiguously
-
 
   return 0;
 }
@@ -57,5 +50,5 @@ vil3d_image_resource_sptr vil3d_dicom_format::make_output_image
   return 0;
 }
 
-#endif
+#endif // 0
 

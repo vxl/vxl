@@ -1,4 +1,3 @@
-#include <vcl_iostream.h>
 #include <bmvl/brct/kalman_filter.h>
 
 int main()
