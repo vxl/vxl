@@ -15,11 +15,11 @@
 #include <vcl_string.h>
 
 //: initialise test counters, check test name 'name' exists
-void testlib_test_start(const char* name);
+void testlib_test_start(const char* name = 0);
 //: increment number of tests, then output msg
 void testlib_test_begin(const char* msg);
 //: increment success/failure counters
-void testlib_test_perform(int success);
+void testlib_test_perform(bool success);
 //: output summary of tests performed
 int  testlib_test_summary();
 
@@ -27,7 +27,7 @@ int  testlib_test_summary();
 void testlib_test_assert(const vcl_string& msg, bool expr);
 //: output msg, then perform test to see if expr is within tol of target
 void testlib_test_assert_near(const vcl_string& msg, double expr,
-                          double target = 0, double tol = 1e-12);
+                              double target = 0, double tol = 1e-12);
 
 #define Assert testlib_test_assert
 #define AssertNear testlib_test_assert_near

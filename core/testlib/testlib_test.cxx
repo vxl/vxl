@@ -26,7 +26,7 @@ static int tests_passed;
 static int tests_failed;
 static const char* test_name;
 
-void testlib_test_start(const char* name = 0) {
+void testlib_test_start(const char* name) {
   num_test = 0;
   tests_passed = 0;
   tests_failed = 0;
@@ -49,7 +49,7 @@ void testlib_test_begin(const char* msg) {
 //       we want to ensure that the message is printed BEFORE
 //       the test is executed.  This way when a test crashes
 //       we can tell if it was during a test, or between tests.
-void testlib_test_perform(int success) {
+void testlib_test_perform(bool success) {
   if (success) {
     tests_passed++;
     vcl_cout << "  PASSED" << vcl_endl;
