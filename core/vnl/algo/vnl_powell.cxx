@@ -74,8 +74,7 @@ void vnl_powell::set_initial_step(double step)
   initial_step_ = step;
 }
 
-vnl_nonlinear_minimizer::ReturnCodes
-vnl_powell::minimize(vnl_vector<double>& p)
+void vnl_powell::minimize(vnl_vector<double>& p)
   //double p[], double **xi, int n
 {
  // verbose_ = true;
