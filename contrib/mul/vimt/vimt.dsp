@@ -117,6 +117,9 @@ SOURCE=.\vimt_transform_2d.cxx
 SOURCE=.\vimt_gaussian_pyramid_builder_2d_general.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\vimt_add_all_binary_loaders.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\Templates/vimt_sample_grid_bilin+byte.double-.cxx
 # End Source File
 # Begin Source File
@@ -233,8 +236,9 @@ SOURCE=.\vimt_scale_pyramid_builder_2d.h
 # Begin Source File
 SOURCE=.\vimt_scale_pyramid_builder_2d.txx
 # End Source File
-# End Group
-# PROP Default_Filter "ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe"
+# Begin Source File
+SOURCE=.\vimt_add_all_binary_loaders.h
+# End Source File
 # End Group
 # End Target
 # End Project
