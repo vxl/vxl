@@ -14,6 +14,8 @@
 // no requirement that the element type have a default constructor.
 // .SECTION Author
 //  fsm@robots.ox.ac.uk
+// .SECTION Modifications
+//    Peter Vanroose 5apr2001 added operator==
 
 #include <vcl_new.h>
 
@@ -47,6 +49,14 @@ struct vbl_array_1d
     this->~vbl_array_1d();
     new (this) vbl_array_1d<T>(that.begin_, that.end_);
     return *this;
+  }
+
+  bool operator==(vbl_array_1d<T> const& that) const {
+    T* i = begin_; 
+    T* j = that.begin_; 
+    for ( ; i!=end_ && j!=that.end_; ++i, ++j)
+      if (!(*i == *j)) return false;
+    return (i == end_ && j == that.end_);
   }
 
   ~vbl_array_1d() {
