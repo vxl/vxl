@@ -118,5 +118,5 @@ void vsl_print_summary(vcl_ostream &os, const vil_image_impl * b)
 }
 
 // Explicitly instantiate loader
-VSL_CLIPON_BINARY_LOADER_INSTANTIATE(vil_image_impl, vil_io_image_impl)
+VSL_CLIPON_BINARY_LOADER_INSTANTIATE(vil_image_impl, vil_io_image_impl);
 

@@ -171,4 +171,4 @@ void test_polymorphic_io()
 TESTMAIN(test_polymorphic_io);
 
 // Explicitly instantiate loader
-VNL_BINARY_LOADER_INSTANTIATE(test_base_class)
+VNL_BINARY_LOADER_INSTANTIATE(test_base_class);

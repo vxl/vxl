@@ -212,4 +212,4 @@ void test_clipon_polymorphic_io()
 TESTMAIN(test_clipon_polymorphic_io);
 
 // Explicitly instantiate loader
-VSL_CLIPON_BINARY_LOADER_INSTANTIATE(test2_base_class, test2_base_class_io)
+VSL_CLIPON_BINARY_LOADER_INSTANTIATE(test2_base_class, test2_base_class_io);
