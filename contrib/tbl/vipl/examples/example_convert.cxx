@@ -37,69 +37,79 @@ main(int argc, char** argv) {
   vil_image in = vil_load(argv[1]);
 
   // The output image:
-  vil_memory_image_of<ubyte> out_grey(in);
-  vil_memory_image_of<rgbcell> out_rgb(in);
+  vil_memory_image_of<ubyte> out(in);
 
   if (in.component_format() == VIL_COMPONENT_FORMAT_UNSIGNED_INT) {
     if (in.planes() == 1 && in.components() == 1) { // monochrome
       if (in.bits_per_component() == 8) {
-        vcl_cerr<<"Warning: no conversion necessary\n";
-        vipl_convert<vil_image,vil_image,ubyte,ubyte VCL_DFL_TMPL_ARG(vipl_trivial_pixeliter)> op;
-        op.put_in_data_ptr(&in); op.put_out_data_ptr(&out_grey); op.filter();
+        // no conversion necessary
+        out = in;
         vcl_cout << "vipl_converted ubyte image to PGM image " << argv[2] << vcl_endl;
       } else if (in.bits_per_component() == 16) {
         vipl_convert<vil_image,vil_image,short,ubyte VCL_DFL_TMPL_ARG(vipl_trivial_pixeliter)> op;
-        op.put_in_data_ptr(&in); op.put_out_data_ptr(&out_grey); op.filter();
+        op.put_in_data_ptr(&in); op.put_out_data_ptr(&out); op.filter();
         vcl_cout << "vipl_converted short image to PGM image " << argv[2] << vcl_endl;
       } else if (in.bits_per_component() == 32) {
         vipl_convert<vil_image,vil_image,int,ubyte VCL_DFL_TMPL_ARG(vipl_trivial_pixeliter)> op;
-        op.put_in_data_ptr(&in); op.put_out_data_ptr(&out_grey); op.filter();
+        op.put_in_data_ptr(&in); op.put_out_data_ptr(&out); op.filter();
         vcl_cout << "vipl_converted int image to PGM image " << argv[2] << vcl_endl;
       } else if (in.bits_per_component() == 64) {
         vcl_cerr << "Please instantiate the vipl_convert IP filter for type long\n";
+        return 1;
       } else {
         vcl_cerr<<"Don't know an integer type with "<<in.bits_per_component()<<" bits\n";
+        return 1;
       }
     } else if (in.planes() == 1 && in.components() == 3) { // colour (RGB)
       if (in.bits_per_component() == 8) {
-        vipl_convert<vil_image,vil_image,rgbcell,ubyte VCL_DFL_TMPL_ARG(vipl_trivial_pixeliter)> op;
-        op.put_in_data_ptr(&in); op.put_out_data_ptr(&out_rgb); op.filter();
-        vcl_cout << "vipl_converted RGB image to PPM image " << argv[2] << vcl_endl;
+        vipl_convert<vil_image,vil_image,rgbcell,ubyte> op;
+        op.put_in_data_ptr(&in); op.put_out_data_ptr(&out); op.filter();
+        vcl_cout << "vipl_converted RGB image to PGM image " << argv[2] << vcl_endl;
       } else {
         vcl_cerr<<"Don't know a colour type with "<<in.bits_per_component()<<" bits per component\n";
+        return 1;
       }
     }
-    else vcl_cerr << "Cannot handle image with "<< in.planes() <<" planes and "<< in.components() <<" components\n";
+    else {
+      vcl_cerr << "Cannot handle image with "<< in.planes() <<" planes and "<< in.components() <<" components\n";
+      return 1;
+    }
   }
   else if (in.component_format() == VIL_COMPONENT_FORMAT_IEEE_FLOAT) {
     if (in.components() == 1 && in.planes() == 1) { // monochrome
       if (in.bits_per_component() == 32) {
-        vipl_convert<vil_image,vil_image,float,ubyte VCL_DFL_TMPL_ARG(vipl_trivial_pixeliter)> op;
-        op.put_in_data_ptr(&in); op.put_out_data_ptr(&out_grey); op.filter();
+        vipl_convert<vil_image,vil_image,float,ubyte> op;
+        op.put_in_data_ptr(&in); op.put_out_data_ptr(&out); op.filter();
         vcl_cout << "vipl_converted float image to PGM image " << argv[2] << vcl_endl;
       } else if (in.bits_per_component() == 64) {
-        vipl_convert<vil_image,vil_image,double,ubyte VCL_DFL_TMPL_ARG(vipl_trivial_pixeliter)> op;
-        op.put_in_data_ptr(&in); op.put_out_data_ptr(&out_grey); op.filter();
+        vipl_convert<vil_image,vil_image,double,ubyte> op;
+        op.put_in_data_ptr(&in); op.put_out_data_ptr(&out); op.filter();
         vcl_cout << "vipl_converted double image to PGM image " << argv[2] << vcl_endl;
-      } else
+      } else {
         vcl_cerr << "Cannot handle float image with "<< in.bits_per_component() <<" bits per component\n";
-    } else
+        return 1;
+      }
+    } else {
       vcl_cerr << "Cannot handle float image with "<< in.planes() <<" planes and "<< in.components() <<" components\n";
+      return 1;
+    }
   } else if (in.component_format() == VIL_COMPONENT_FORMAT_COMPLEX) {
       vcl_cerr << "Cannot currently handle complex pixel type images\n";
+      return 1;
 #if 0
   } else if (in.component_format() == VIL_COMPONENT_FORMAT_PYRAMID) {
       vcl_cerr << "Cannot currently handle pyramid images\n";
+      return 1;
   } else if (in.component_format() == VIL_COMPONENT_FORMAT_BANDED) {
       vcl_cerr << "Cannot currently handle banded images\n";
+      return 1;
 #endif
   }
-  else vcl_cerr << "Never heared of image format " << in.component_format() << vcl_endl;
+  else {
+    vcl_cerr << "Never heared of image format " << int(in.component_format()) << vcl_endl;
+    return 1;
+  }
 
-  if (in.planes() == 1 && in.components() == 1)
-    vil_save(out_grey, argv[2], "pnm");
-  else
-    vil_save(out_rgb, argv[2], "pnm");
-
+  vil_save(out, argv[2], "pnm");
   return 0;
 }
