@@ -31,74 +31,88 @@ class CheckPixel
   virtual bool operator() ( int p, int i, int j, int k, const vcl_vector<TruePixelType>& pixel ) const = 0;
 };
 
+
 template<class T>
-class CheckGrey : public CheckPixel
+class CheckPixelT : public CheckPixel
 {
  public:
-  CheckGrey( const char* file )
+  CheckPixelT( const char* file )
   {
     vil3d_image_resource_sptr ir = vil3d_load_image_resource(file );
     if ( !ir )
-      vcl_cout << "[ couldn't read header from " << file << " ]\n";
-    vil3d_image_view_base_sptr im = ir->get_copy_view(0,ir->ni(),0,ir->nj(),0,ir->nk());
-    if ( !im )
-      vcl_cout << "[ couldn't read image data from " << file << " ]\n";
-    else
     {
-      img_ = im;
-#ifdef DEBUG
-      vcl_cout << '\n' << vcl_flush; vil2_print_all(vcl_cout, img_);
-#endif
+      vcl_cout << "[ couldn't read header from " << file << "]\n";
+      return;
     }
-  };
+    unsigned ni = ir->ni();
+    unsigned nj = ir->nj();
+    unsigned nk = ir->nk();
+    vil3d_image_view_base_sptr im = ir->get_copy_view(0, ni, 0, nj, 0, nk);
+    if ( !im )
+    {
+      vcl_cout << "[ couldn't read full image data from " << file << "]\n";
+      return;
+    }
+    img_ = im;
+#ifdef DEBUG
+    vcl_cout << '\n' << vcl_flush; vil3d_print_all(vcl_cout, img_);
+#endif
+// Now read just part of the image.
+    im = ir->get_copy_view(ni/2, ni-ni/2, nj/2, nj-nj/2, nk/2, nk-nk/2);
+    if ( !im )
+    {
+      vcl_cout << "[ couldn't read far octant image data from " << file << "]\n";
+      return;
+    }
+    far_oct_img_ = im;
+#ifdef DEBUG
+    vcl_cout << '\n' << vcl_flush; vil3d_print_all(vcl_cout, far_oct_img_);
+#endif
 
-  bool operator() ( int p, int i, int j, int k, const vcl_vector<TruePixelType>& pixel ) const
+  }
+ protected:
+  vil3d_image_view< T > img_;
+  vil3d_image_view< T > far_oct_img_;
+};
+
+
+
+template<class T>
+class CheckGrey : public CheckPixelT<T>
+{
+ public:
+  CheckGrey( const char* file ): CheckPixelT<T>(file) {}
+
+  bool operator() ( int p, int i, int j, int k,
+                    const vcl_vector<TruePixelType>& pixel ) const
   {
     assert( p == 0 );
-    return img_
-      && pixel.size() == 1 &&
-      pixel[0] == (TruePixelType)img_(i,j,k);
+    return img_ && pixel.size() == 1 &&
+      pixel[0] == (TruePixelType)img_(i,j,k) &&
+      ( !(i > img_.ni()/2 && j > img_.nj()/2 && k > img_.nk()/2)
+        || pixel[0] == (TruePixelType)far_oct_img_(i-img_.ni()/2,
+        j-img_.nj()/2, k-img_.nk()/2) );
   }
- protected:
-  vil3d_image_view< T > img_;
 };
 
 template<class T>
-class CheckColourPlanes : public CheckPixel
+class CheckColourPlanes : public CheckPixelT<T>
 {
  public:
-  CheckColourPlanes( const char* file )
-  {
-    vil3d_image_resource_sptr ir = vil3d_load_image_resource(file );
-    if ( !ir )
-      vcl_cout << "[ couldn't read header from " << file << "]\n";
-    else
-    {
-      vil3d_image_view_base_sptr im = ir->get_copy_view(0,ir->ni(),0,ir->nj(),0,ir->nk());
-      if ( !im )
-        vcl_cout << "[ couldn't read image data from " << file << "]\n";
-      else
-      {
-        img_ = im;
-#ifdef DEBUG
-        vcl_cout << '\n' << vcl_flush; vil3d_print_all(vcl_cout, img_);
-#endif
-      }
-    }
-  }
+  CheckColourPlanes( const char* file ): CheckPixelT<T>(file) {}
 
-  bool operator() ( int p, int i, int j, int k, const vcl_vector<TruePixelType>& pixel
-) const
+  bool operator() ( int p, int i, int j, int k,
+                    const vcl_vector<TruePixelType>& pixel) const
   {
-    return img_ && pixel.size() == 1 && pixel[0] == img_(i,j,k,p);
+    return img_ && pixel.size() == 1 && pixel[0] == img_(i,j,k,p) &&
+      ( !(i > img_.ni()/2 && j > img_.nj()/2 && k > img_.nk()/2)
+        || pixel[0] == (TruePixelType)far_oct_img_(i-img_.ni()/2,
+        j-img_.nj()/2, k-img_.nk()/2) );
   }
- protected:
-  vil3d_image_view< T > img_;
 };
 
 
-bool
-test( const char* true_data_file, const CheckPixel& check )
+bool test( const char* true_data_file, const CheckPixel& check )
 {
   // The true data is a ASCII file consisting of a sequence of numbers. The first set of numbers are:
   //    number of planes (P)
@@ -150,6 +164,9 @@ test( const char* true_data_file, const CheckPixel& check )
     }
   }
 
+
+
+
   return true;
 }
 
@@ -168,6 +185,11 @@ int test_file_format_read_main( int argc, char* argv[] )
   testlib_test_begin( "  List of ppm slices" );
   testlib_test_perform( test( "ff_3planes8bit_true.txt",
                               CheckColourPlanes<vxl_byte>( "ff_rgb8bit_ascii.1.ppm:ff_rgb8bit_ascii.2.ppm" ) ) );
+
+  vcl_cout << "GIPL images)\n";
+  testlib_test_begin( "  List of ppm slices" );
+  testlib_test_perform( test( "ff_grey_cross16bit_true.txt",
+                              CheckGrey<vxl_uint_16>( "ff_grey_cross.gipl" ) ) );
 
   if (res==cwd) vpl_chdir(cwd);
   return testlib_test_summary();

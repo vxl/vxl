@@ -18,7 +18,6 @@ class vil3d_slice_list_format : public vil3d_file_format
 {
  public:
   vil3d_slice_list_format();
-  //: The destructor must be virtual so that the memory chunk is destroyed.
   virtual ~vil3d_slice_list_format();
 
   virtual vil3d_image_resource_sptr make_input_image(const char *) const;
@@ -54,7 +53,7 @@ class vil3d_slice_list_image: public vil3d_image_resource
   friend vil3d_image_resource_sptr
     vil3d_slice_list_to_volume(const vcl_vector<vil2_image_resource_sptr> &);
   friend class vil3d_slice_list_format;
- 
+
  protected:
   vil3d_slice_list_image(const vcl_vector<vil2_image_resource_sptr>&);
 

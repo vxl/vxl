@@ -12,6 +12,7 @@
 #include <vil3d/vil3d_file_format.h>
 #include <vil2/vil2_stream.h>
 
+
 //: Reader/Writer for GIPL format images.
 class vil3d_gipl_format : public vil3d_file_format
 {
@@ -34,16 +35,70 @@ public:
   //: default filename tag for this image.
   virtual const char * tag() const {return "gipl";}
 
-
-    //: Read header and image from given stream if possible
-  virtual bool read_stream(vil3d_header_data_sptr& header,
-                           vil3d_image_view_base_sptr& image,
-                           vil2_stream *is);
-
-    //: Write header and image to given stream if possible
-  virtual bool write_stream(const vil3d_header_data_sptr& header,
-                            const vil3d_image_view_base_sptr& image,
-                            vil2_stream *os);
 };
+
+// You can't create one of these yourself.
+// Use vil3d_gipl_format instead.
+class vil3d_gipl_image: public vil3d_image_resource
+{
+  vil2_smart_ptr<vil2_stream> is_;
+  //: image dimensions
+  unsigned dim1_, dim2_, dim3_;
+  
+  //: Physical Voxel dimensions ( in mm )
+  float vox_width1_, vox_width2_, vox_width3_;
+
+  bool read_header(vil2_stream *is);
+
+  //: Expected pixel type.
+  enum vil2_pixel_format pixel_format_;
+ public:
+  vil3d_gipl_image(vil2_stream *);
+  virtual ~vil3d_gipl_image();
+
+  //: Dimensions:  nplanes x ni x nj x nk.
+  // This concept is treated as a synonym to components.
+  virtual unsigned nplanes() const;
+  //: Dimensions:  nplanes x ni x nj x nk.
+  // The number of pixels in each row.
+  virtual unsigned ni() const;
+  //: Dimensions:  nplanes x ni x nj x nk.
+  // The number of pixels in each column.
+  virtual unsigned nj() const;
+  //: Dimensions:  nplanes x ni x nj x nk.
+  // The number of slices per image.
+  virtual unsigned nk() const;
+
+  //: Pixel Format.
+  virtual enum vil2_pixel_format pixel_format() const;
+
+
+  //: Create a read/write view of a copy of this data.
+  // This function will always return a
+  // multi-plane scalar-pixel view of the data.
+  // \return 0 if unable to get view of correct size, or if resource is write-only.
+  virtual vil3d_image_view_base_sptr get_copy_view(unsigned i0, unsigned ni,
+                                                   unsigned j0, unsigned nj,
+                                                   unsigned k0, unsigned nk) const;
+
+  //: Put the data in this view back into the image source.
+  // The view must be of scalar components. Assign your
+  // view to a scalar-component view if this is not the case.
+  // \return false if failed, because e.g. resource is read-only,
+  // format of view is not correct (if it is a compound pixel type, try
+  // assigning it to a multi-plane scalar pixel view.)
+  virtual bool put_view(const vil3d_image_view_base& im,
+                        unsigned i0, unsigned j0, unsigned k0);
+
+  //: Return a string describing the file format.
+  // Only file images have a format, others return 0
+  virtual char const* file_format() const { return "gipl"; }
+
+  //: Extra property information
+  // This will just return the property of the first slice in the list.
+  virtual bool get_property(char const* tag, void* property_value = 0) const;
+};
+
+
 
 #endif

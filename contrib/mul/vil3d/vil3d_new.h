@@ -25,4 +25,16 @@ vil3d_image_resource_sptr vil3d_new_image_resource(const char* filename, unsigne
                                                    vil2_pixel_format format,
                                                    char const* file_format = 0);
 
+
+//: Create an image view whose i step is 1.
+template <class T>
+vil3d_image_view<T> vil3d_new_image_view_plane_k_j_i(unsigned ni, unsigned nj,
+  unsigned nk, unsigned nplanes, T /*dummy*/)
+{
+  vil2_memory_chunk_sptr chunk = new vil2_memory_chunk(ni*nj*nk*nplanes*sizeof(T),
+    vil2_pixel_format_component_format(vil2_pixel_format_of(T())));
+  return vil3d_image_view<T>(chunk, reinterpret_cast<T *>(chunk->data()), ni, nj, nk,
+    nplanes, 1, ni, ni*nj, ni*nj*nk);
+}
+
 #endif // vil3d_new_h_

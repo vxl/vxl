@@ -50,7 +50,7 @@ class vil3d_file_formats
   vcl_vector<vil3d_file_format *> v;
   vil3d_file_formats()
   {
- //   v.push_back(new vil3d_gipl_format);
+    v.push_back(new vil3d_gipl_format);
     v.push_back(new vil3d_slice_list_format);
   }
   ~vil3d_file_formats()

@@ -10,9 +10,10 @@
 #include "vil3d_gipl_format.h"
 #include <vcl_cassert.h>
 #include <vcl_cstdlib.h>
-#include <vil2/vil2_stream_16bit.h>
-#include <vil2/vil2_stream_32bit.h>
+#include <vil2/vil2_stream_read.h>
+#include <vil2/vil2_stream_fstream.h>
 #include <vil3d/vil3d_image_view.h>
+#include <vil3d/vil3d_new.h>
 
 // GIPL magic number
 const unsigned GIPL_MAGIC = 719555000;
@@ -36,19 +37,20 @@ const unsigned GIPL_MAGIC = 719555000;
 #define GIPL_C_DOUBLE     193
 
 
-// The following function should be moved to relevant places in vil2 soon
-static void swap16(char *a, unsigned n)
+inline void swap16_for_big_endian(char *a, unsigned n)
 {
+#if VXL_LITTLE_ENDIAN
   char c;
   for (unsigned i = 0; i < n * 2; i += 2)
   {
     c = a[i]; a[i] = a[i+1]; a[i+1] = c;
   }
+#endif //VXL_LITTLE_ENDIAN
 }
 
-// The following function should be moved to relevant places in vil2 soon
-static void swap32(char *a, unsigned n)
+inline void swap32_for_big_endian(char *a, unsigned n)
 {
+#if VXL_LITTLE_ENDIAN
   char c;
   for (unsigned i = 0; i < n * 4; i += 4)
   {
@@ -59,30 +61,31 @@ static void swap32(char *a, unsigned n)
     a[i+1] = a[i+2];
     a[i+2] = c;
   }
+#endif //VXL_LITTLE_ENDIAN
 }
 
-// The following function should be moved to relevant places in vil2 soon
-inline float vil2_stream_32bit_read_big_endian_float(vil2_stream* is)
+inline void swap64_for_big_endian(char *a, unsigned n)
 {
-  float f;
-  is->read((char*)&f,4);
-#ifdef VXL_LITTLE_ENDIAN
-  swap32((char*)&f,1);
-#endif
-  return f;
+#if VXL_LITTLE_ENDIAN
+  char c;
+  for (unsigned i = 0; i < n * 8; i += 8)
+  {
+    c = a[i];
+    a[i] = a[i+7];
+    a[i+7] = c;
+    c = a[i+1];
+    a[i+1] = a[i+6];
+    a[i+6] = c;
+    c = a[i+2];
+    a[i+2] = a[i+5];
+    a[i+5] = c;
+    c = a[i+3];
+    a[i+3] = a[i+4];
+    a[i+4] = c;
+  }
+#endif //VXL_LITTLE_ENDIAN
 }
 
-// The following function should be moved to relevant places in vil2 soon
-// Reads in n shorts, assumed to be two bytes, into data[i]
-inline void vil2_stream_16bit_read_big_endian_shorts(vil2_stream* is,
-                                                     vxl_uint_16* data, unsigned n)
-{
-  assert(sizeof(short)==2);
-  is->read((char*)data,n*2);
-#ifdef VXL_LITTLE_ENDIAN
-  swap16((char*)data,n);
-#endif
-}
 
 vil3d_gipl_format::vil3d_gipl_format() {}
 
@@ -92,11 +95,16 @@ vil3d_gipl_format::~vil3d_gipl_format()
 }
 
 
-vil3d_image_resource_sptr vil3d_gipl_format::make_input_image(const char *) const
+vil3d_image_resource_sptr vil3d_gipl_format::make_input_image(const char *filename) const
 {
-  vcl_cerr <<"vil3d_gipl_format::make_input_image() NYI\n";
-  vcl_abort();
-  return 0;
+  vil2_smart_ptr<vil2_stream> is = new vil2_stream_fstream(filename,"r");
+  if (!is->ok()) return 0;
+
+  is->seek(252);
+  unsigned magic_number = vil2_stream_read_big_endian_uint_32(is.as_pointer());
+  if (magic_number!=GIPL_MAGIC) return 0;
+
+  return new vil3d_gipl_image(is.as_pointer());
 }
 
 
@@ -114,95 +122,193 @@ vil3d_image_resource_sptr vil3d_gipl_format::make_output_image
 }
 
 
-//: Read header and image from given stream if possible
-bool vil3d_gipl_format::read_stream(vil3d_header_data_sptr& header,
-                                    vil3d_image_view_base_sptr& image,
-                                    vil2_stream *is)
+
+
+
+
+
+vil3d_gipl_image::vil3d_gipl_image(vil2_stream *is): is_(is)
 {
-  is->seek(252);
-  unsigned magic_number = vil2_stream_32bit_read_big_endian(is);
-  if (magic_number!=GIPL_MAGIC) return false;
-
-  // Only read basic stuff from the header, so use base object
-  header = new vil3d_header_data;
-
-  // Return to start
-  is->seek(0);
-  unsigned short dim1 = vil2_stream_16bit_read_big_endian(is);
-  unsigned short dim2 = vil2_stream_16bit_read_big_endian(is);
-  unsigned short dim3 = vil2_stream_16bit_read_big_endian(is);
-
-  is->seek(8);
-  unsigned short gipl_pixel_type = vil2_stream_16bit_read_big_endian(is);
-
-  float vox_width1 = vil2_stream_32bit_read_big_endian_float(is);
-  float vox_width2 = vil2_stream_32bit_read_big_endian_float(is);
-  float vox_width3 = vil2_stream_32bit_read_big_endian_float(is);
-  vcl_cout<<"Voxel widths: "<<vox_width1<<" x "<<vox_width2<<" x "<<vox_width3<<vcl_endl;
-
-  header->set_size(dim1,dim2,dim3);
-  header->set_voxel_widths(vox_width1,vox_width2,vox_width3);
-
-  vil3d_image_view<vxl_byte>*  byte_image;
-//  vil3d_image_view<vxl_sbyte>* sbyte_image;
-  vil3d_image_view<vxl_uint_16>*  uint_16_image;
-  switch (gipl_pixel_type)
-  {
-    case (1): // Binary
-      vcl_cout<<"vil3d_gipl_format::read_stream()"
-              <<" Binary not yet implemented\n";
-      return false;
-#if 0
-      case (7): // Char
-      sbyte_image = new vil3d_image_view<vxl_sbyte>;
-      sbyte_image->set_size(dim1,dim2,dim3);
-      is->seek(GIPL_HEADERSIZE);
-      is->read(sbyte_image->origin_ptr(),sbyte_image->size());
-      image = sbyte_image;
-      header->set_pixel_format(sbyte_image->pixel_format());
-      return true;
-#endif
-    case (8): // UChar
-      byte_image = new vil3d_image_view<vxl_byte>;
-      byte_image->set_size(dim1,dim2,dim3);
-      is->seek(GIPL_HEADERSIZE);
-      is->read(byte_image->origin_ptr(),byte_image->size());
-      image = byte_image;
-      header->set_pixel_format(byte_image->pixel_format());
-      return true;
-    case (15): // Short
-      uint_16_image = new vil3d_image_view<vxl_uint_16>;
-      uint_16_image->set_size(dim1,dim2,dim3);
-      is->seek(GIPL_HEADERSIZE);
-      vil2_stream_16bit_read_big_endian_shorts(is,uint_16_image->origin_ptr(),
-                                                  uint_16_image->size());
-      image = uint_16_image;
-      header->set_pixel_format(uint_16_image->pixel_format());
-      return true;
-    case (16): // UShort
-    case (31): // U Int
-    case (32): // Int
-    case (64): // Float
-    case (65): // Double
-    case (144): // C.Short
-    case (160): // C.Int
-    case (192): // C.Float
-    case (193): // C.Double
-    default:
-      vcl_cout<<"vil3d_gipl_format::read_stream()"
-              <<" Unknown pixel type\n";
-      return false;
-  }
-
-  return true;
+  read_header(is);
 }
 
-//: Write header and image to given stream if possible
-bool vil3d_gipl_format::write_stream(const vil3d_header_data_sptr& header,
-                                     const vil3d_image_view_base_sptr& image,
-                                     vil2_stream *os)
+vil3d_gipl_image::~vil3d_gipl_image() {}
+
+  //: Dimensions:  nplanes x ni x nj x nk.
+  // This concept is treated as a synonym to components.
+unsigned vil3d_gipl_image::nplanes() const
 {
-  vcl_cerr<<"Writing to GIPL format not yet implemented. Sorry.\n";
+  return 1;
+}
+  //: Dimensions:  nplanes x ni x nj x nk.
+  // The number of pixels in each row.
+unsigned vil3d_gipl_image::ni() const
+{
+  return dim1_;
+}
+  //: Dimensions:  nplanes x ni x nj x nk.
+  // The number of pixels in each column.
+unsigned vil3d_gipl_image::nj() const
+{
+  return dim2_;
+}
+  //: Dimensions:  nplanes x ni x nj x nk.
+  // The number of slices per image.
+unsigned vil3d_gipl_image::nk() const
+{
+  return dim3_;
+}
+
+  //: Pixel Format.
+enum vil2_pixel_format vil3d_gipl_image::pixel_format() const
+{
+  return pixel_format_;
+}
+
+
+
+//: Read header from given stream if possible
+bool vil3d_gipl_image::read_header(vil2_stream *is)
+{
+  // Return to start
+  is->seek(0);
+  dim1_ = vil2_stream_read_big_endian_uint_16(is);
+  dim2_ = vil2_stream_read_big_endian_uint_16(is);
+  dim3_ = vil2_stream_read_big_endian_uint_16(is);
+
+  is->seek(8);
+
+  unsigned short gipl_pixel_type = vil2_stream_read_big_endian_uint_16(is);
+
+  switch (gipl_pixel_type)
+  {
+  case 1  : pixel_format_ = VIL2_PIXEL_FORMAT_BOOL;    break;
+  case 7  : pixel_format_ = VIL2_PIXEL_FORMAT_SBYTE;   break;
+  case 8  : pixel_format_ = VIL2_PIXEL_FORMAT_BYTE;    break;
+  case 15 : pixel_format_ = VIL2_PIXEL_FORMAT_UINT_16; break;
+  case 16 : pixel_format_ = VIL2_PIXEL_FORMAT_INT_16;  break;
+  case 31 : pixel_format_ = VIL2_PIXEL_FORMAT_UINT_32; break;
+  case 32 : pixel_format_ = VIL2_PIXEL_FORMAT_INT_16;  break;
+  case 64 : pixel_format_ = VIL2_PIXEL_FORMAT_FLOAT;   break;
+  case 65 : pixel_format_ = VIL2_PIXEL_FORMAT_DOUBLE;  break;
+  case 144: // C.Short I don't want to support complex types.
+  case 160: // C.Int   Could maybe reimplement them as a 2-plane images
+  case 192: // C.Float
+  case 193: // C.Double
+  default : pixel_format_ = VIL2_PIXEL_FORMAT_UNKNOWN;
+  }
+
+  vox_width1_ = vil2_stream_read_big_endian_float(is);
+  vox_width2_ = vil2_stream_read_big_endian_float(is);
+  vox_width3_ = vil2_stream_read_big_endian_float(is);
+  // vcl_cout<<"Voxel widths: "<<vox_width1<<" x "<<vox_width2<<" x "<<vox_width3<<vcl_endl;
+}
+
+
+//: Get some oor all of the volume.
+vil3d_image_view_base_sptr vil3d_gipl_image::get_copy_view(
+  unsigned i0, unsigned ni, unsigned j0, unsigned nj,
+  unsigned k0, unsigned nk) const
+{
+  if (i0+ni > this->ni() || j0+nj > this->nj() || k0+nk > this->nk()) return 0;
+
+#define macro( type ) \
+  vil3d_image_view< type > im = \
+    vil3d_new_image_view_plane_k_j_i(ni, nj, nk, 1, type()); \
+  for (unsigned k=0; k<nk; ++k) \
+  { \
+    if (ni == this->ni()) \
+    { \
+      is_->seek(GIPL_HEADERSIZE + ((k+k0)*this->nj()*ni + \
+        j0*ni) * sizeof( type )); \
+      is_->read(&im(0,0,k), nj*ni * sizeof( type )); \
+    } \
+    else \
+      for (unsigned j=0; j<nj; ++j) \
+      { \
+        is_->seek(GIPL_HEADERSIZE + ((k+k0)*this->nj()*this->ni() + \
+          (j+j0)*this->ni() + i0) * sizeof( type )); \
+        is_->read(&im(0,j,k), ni * sizeof( type )); \
+      } \
+  }
+
+
+  switch (pixel_format())
+  {
+    case VIL2_PIXEL_FORMAT_SBYTE:
+    {
+      macro( vxl_sbyte );
+      return new vil3d_image_view<vxl_sbyte>(im);
+    }
+    case VIL2_PIXEL_FORMAT_BYTE:
+    {
+      macro( vxl_byte );
+      return new vil3d_image_view<vxl_byte>(im);
+    }
+    case VIL2_PIXEL_FORMAT_INT_16:
+    {
+      macro( vxl_int_16 );
+      swap16_for_big_endian((char *)(im.origin_ptr()),
+        ni*nj*nk);
+      return new vil3d_image_view<vxl_int_16>(im);
+    }
+    case VIL2_PIXEL_FORMAT_UINT_16:
+    {
+      macro( vxl_uint_16 );
+      swap16_for_big_endian((char *)(im.origin_ptr()),
+        ni*nj*nk);
+      return new vil3d_image_view<vxl_uint_16>(im);
+    }
+    case VIL2_PIXEL_FORMAT_UINT_32:
+    {
+      macro( vxl_uint_32 );
+      swap32_for_big_endian((char *)(im.origin_ptr()),
+        ni*nj*nk);
+      return new vil3d_image_view<vxl_uint_32>(im);
+    }
+    case VIL2_PIXEL_FORMAT_INT_32:
+    {
+      macro( vxl_int_32 );
+      swap32_for_big_endian((char *)(im.origin_ptr()),
+        ni*nj*nk);
+      return new vil3d_image_view<vxl_int_32>(im);
+    }
+    case VIL2_PIXEL_FORMAT_FLOAT:
+    {
+      macro( float );
+      swap32_for_big_endian((char *)(im.origin_ptr()),
+        ni*nj*nk);
+      return new vil3d_image_view<float>(im);
+    }
+    case VIL2_PIXEL_FORMAT_DOUBLE:
+    {
+      macro( double );
+      swap64_for_big_endian((char *)(im.origin_ptr()),
+        ni*nj*nk);
+      return new vil3d_image_view<double>(im);
+    }
+    case VIL2_PIXEL_FORMAT_BOOL:
+      vcl_cout<<"ERROR: vil3d_gipl_format::get_image_data()"
+              <<pixel_format() << " pixel type not yet implemented" << vcl_endl;
+      return false;
+    default:
+      vcl_cout<<"ERROR: vil3d_gipl_format::get_image_data()\n"
+              <<"Can't deal with pixel type " << pixel_format() << vcl_endl;
+      return false;
+  }
+}
+
+
+//: Get the properties (of the first slice)
+bool vil3d_gipl_image::get_property(char const *key, void * value) const
+{
   return false;
 }
 
+//: Set the contents of the volume.
+bool vil3d_gipl_image::put_view(const vil3d_image_view_base& vv,
+  unsigned i0, unsigned j0, unsigned k0)
+{
+  vcl_cerr << "ERROR: vil3d_gipl_image::put_view NYI\n" << vcl_endl;
+  return false;
+}
