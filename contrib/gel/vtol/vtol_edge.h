@@ -100,11 +100,13 @@ public:
   //: Set the first endpoint.
   //---------------------------------------------------------------------------
   virtual void set_v1(vtol_vertex *new_v1);
+  virtual void set_v1(vtol_vertex_sptr new_v1);
 
   //---------------------------------------------------------------------------
   //: Set the last endpoint
   //---------------------------------------------------------------------------
   virtual void set_v2(vtol_vertex *new_v2);
+  virtual void set_v2(vtol_vertex_sptr new_v2);
 
   //---------------------------------------------------------------------------
   //: Determine the endpoints of an edge from its inferiors

@@ -57,10 +57,35 @@ void vtol_edge::set_v1(vtol_vertex *new_v1)
   touch();
 }
 
+
+//---------------------------------------------------------------------------
+//: Set the first endpoint.
+//---------------------------------------------------------------------------
+void vtol_edge::set_v1(vtol_vertex_sptr new_v1)
+{
+  if (_v1&&_v1!=_v2)
+    zero_chain()->unlink_inferior(*_v1);
+  _v1=new_v1;
+  zero_chain()->link_inferior(*_v1);
+  touch();
+}
+
 //---------------------------------------------------------------------------
 //: Set the last endpoint.
 //---------------------------------------------------------------------------
 void vtol_edge::set_v2(vtol_vertex *new_v2)
+{
+  if (_v2&&_v2!=_v1)
+    zero_chain()->unlink_inferior(*_v2);
+  _v2=new_v2;
+  zero_chain()->link_inferior(*_v2);
+  touch();
+}
+
+//---------------------------------------------------------------------------
+//: Set the last endpoint.
+//---------------------------------------------------------------------------
+void vtol_edge::set_v2(vtol_vertex_sptr new_v2)
 {
   if (_v2&&_v2!=_v1)
     zero_chain()->unlink_inferior(*_v2);
