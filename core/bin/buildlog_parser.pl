@@ -40,6 +40,11 @@ if ( -f "/usr/local/bin/gzip" )
     $compress= "/usr/local/bin/gzip -c $tmpfilename1 > $tmpfilename2";
   }
 
+if ( -f "/bin/gzip" )
+  {
+    $compress= "/bin/gzip -c $tmpfilename1 > $tmpfilename2";
+  }
+
 if ( -f "/tmp/iup_opt/bin/gzip" )
   {
     $compress= "/tmp/iup_opt/bin/gzip -c $tmpfilename1 > $tmpfilename2";
