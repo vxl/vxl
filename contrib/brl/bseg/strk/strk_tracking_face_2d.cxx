@@ -131,10 +131,10 @@ strk_tracking_face_2d::strk_tracking_face_2d(strk_tracking_face_2d_sptr const& t
   gradient_info_ = tf->gradient_info_;
   if (gradient_info_)
   {
-    int n = intf_->Npix();
+    unsigned int n = intf_->Npix();
     Ix_ = new float[n];
     Iy_ = new float[n];
-    for (int i =0; i<n; i++)
+    for (unsigned int i =0; i<n; ++i)
     {
       Ix_[i]=tf->Ix(i);
       Iy_[i]=tf->Iy(i);
@@ -145,10 +145,10 @@ strk_tracking_face_2d::strk_tracking_face_2d(strk_tracking_face_2d_sptr const& t
   color_info_ = tf->color_info_;
   if (color_info_)
   {
-    int n = intf_->Npix();
+    unsigned int n = intf_->Npix();
     hue_ = new float[n];
     sat_ = new float[n];
-    for (int i =0; i<n; i++)
+    for (unsigned int i =0; i<n; ++i)
     {
       hue_[i]=tf->hue(i);
       sat_[i]=tf->sat(i);
@@ -189,10 +189,10 @@ strk_tracking_face_2d::strk_tracking_face_2d(strk_tracking_face_2d const& tf)
   gradient_info_ = tf.gradient_info_;
   if (gradient_info_)
   {
-    int n = intf_->Npix();
+    unsigned int n = intf_->Npix();
     Ix_ = new float[n];
     Iy_ = new float[n];
-    for (int i =0; i<n; i++)
+    for (unsigned int i =0; i<n; ++i)
     {
       Ix_[i]=tf.Ix(i);
       Iy_[i]=tf.Iy(i);
@@ -203,10 +203,10 @@ strk_tracking_face_2d::strk_tracking_face_2d(strk_tracking_face_2d const& tf)
   color_info_ = tf.color_info_;
   if (color_info_)
   {
-    int n = intf_->Npix();
+    unsigned int n = intf_->Npix();
     hue_ = new float[n];
     sat_ = new float[n];
-    for (int i =0; i<n; i++)
+    for (unsigned int i =0; i<n; ++i)
     {
       hue_[i]=tf.hue(i);
       sat_[i]=tf.sat(i);
@@ -244,10 +244,10 @@ strk_tracking_face_2d::~strk_tracking_face_2d()
 void strk_tracking_face_2d::set_gradient(vil1_memory_image_of<float> const& Ix,
                                          vil1_memory_image_of<float> const& Iy)
 {
-    int i = 0;
     if (!intf_||!Ix_||!Iy_)
       return;
-    for (intf_->reset(); intf_->next();i++)
+    intf_->reset();
+    for (int i = 0; intf_->next(); ++i)
     {
       int x = int(intf_->X()), y = int(intf_->Y());
       this->set_Ix(i, Ix(x,y));
@@ -258,10 +258,10 @@ void strk_tracking_face_2d::set_gradient(vil1_memory_image_of<float> const& Ix,
 void strk_tracking_face_2d::set_color(vil1_memory_image_of<float> const& hue,
                                       vil1_memory_image_of<float> const& sat)
 {
-    int i = 0;
     if (!intf_||!hue_||!sat_)
       return;
-    for (intf_->reset(); intf_->next();i++)
+    intf_->reset();
+    for (int i = 0; intf_->next();++i)
     {
       int x = int(intf_->X()), y = int(intf_->Y());
       this->set_hue(i, hue(x,y));
@@ -342,14 +342,14 @@ init_gradient_info(vil1_memory_image_of<float> const& Ix,
 {
   if (!intf_||!Ix||!Iy)
     return;
-  int n = intf_->Npix();
+  unsigned int n = intf_->Npix();
   Ix_ = new float[n];
   Iy_ = new float[n];
   bsta_histogram<float> model_gradient_dir_hist(360, 8);
   gradient_dir_hist_bins_ = model_gradient_dir_hist.nbins();
-  int i = 0;
-  double deg_rad = 180.0/vnl_math::pi;
-  for (intf_->reset(); intf_->next(); i++)
+  static const double deg_rad = 180.0/vnl_math::pi;
+  intf_->reset();
+  for (int i = 0; intf_->next(); ++i)
   {
     int x = int(intf_->X()), y = int(intf_->Y());
     float Ixi = Ix(x,y), Iyi = Iy(x,y);
@@ -376,13 +376,13 @@ init_color_info(vil1_memory_image_of<float> const& hue,
 {
   if (!intf_||!hue||!sat)
     return;
-  int n = intf_->Npix();
+  unsigned int n = intf_->Npix();
   hue_ = new float[n];
   sat_ = new float[n];
   bsta_histogram<float> model_color_hist(360, 8);
   color_hist_bins_ = model_color_hist.nbins();
-  int i = 0;
-  for (intf_->reset(); intf_->next(); i++)
+  intf_->reset();
+  for (int i = 0; intf_->next(); ++i)
   {
     int x = int(intf_->X()), y = int(intf_->Y());
     float hue_i = hue(x,y), sat_i = sat(x,y);
@@ -428,8 +428,8 @@ void strk_tracking_face_2d::transform_gradients(double theta)
   gradient_dir_hist_bins_ = model_gradient_dir_hist.nbins();
 
   // step through points in face
-  int i=0;
-  for (this->reset(); this->next(); ++i)
+  this->reset();
+  for (int i=0; this->next(); ++i)
   {
     float Ix0 = Ix_[i];
     float Iy0 = Iy_[i];
@@ -463,8 +463,8 @@ void strk_tracking_face_2d::transform_gradients(double theta)
   double c = vcl_cos(theta), s = vcl_sin(theta);
 
   // step through gradient values in face
-  int i=0;
-  for (this->reset(); this->next(); ++i)
+  this->reset();
+  for (int i=0; this->next(); ++i)
   {
     float Ix0 = Ix_[i];
     float Iy0 = Iy_[i];
@@ -558,7 +558,7 @@ compute_intensity_mutual_information(vil1_memory_image_of<float> const& image)
   if (!npix)
     return 0;
   int n = 0;
-  for (intf_->reset(); intf_->next();)
+  for (intf_->reset(); intf_->next(); ++n)
   {
     int x = int(intf_->X()), y = int(intf_->Y());
     if (x<0||x>=width||y<0||y>=height)
@@ -570,7 +570,6 @@ compute_intensity_mutual_information(vil1_memory_image_of<float> const& image)
 #ifdef DEBUG
     //    vcl_cout << '(' << x << ' ' << y << "):[" << Im << ' ' << Ii << ']' << vcl_endl;
 #endif
-    n++;
   }
   if (n<0.9*npix)
     return 0;
@@ -613,8 +612,9 @@ compute_gradient_mutual_information(vil1_memory_image_of<float> const& Ix,
   if (!npix)
     return 0;
   double deg_rad = 180.0/vnl_math::pi;
-  int i = 0, n = 0;
-  for (intf_->reset(); intf_->next(); ++i, ++n)
+  int n = 0;
+  intf_->reset();
+  for (int i=0; intf_->next(); ++i, ++n)
   {
     int x = int(intf_->X()), y = int(intf_->Y());
     if (x<0||x>=width||y<0||y>=height)
@@ -674,8 +674,9 @@ compute_color_mutual_information(vil1_memory_image_of<float> const& hue,
   if (!npix)
     return 0;
 
-  int i = 0, n = 0;
-  for (intf_->reset(); intf_->next(); ++i, ++n)
+  int n = 0;
+  intf_->reset();
+  for (int i=0; intf_->next(); ++i, ++n)
   {
     int x = int(intf_->X()), y = int(intf_->Y());
     if (x<0||x>=width||y<0||y>=height)
@@ -911,8 +912,8 @@ compute_color_joint_entropy(strk_tracking_face_2d_sptr const& other,
     return 0;
   bsta_joint_histogram<float> joint_color_hist;
   int width = hue.width(), height = hue.height();
-  unsigned int i = 0;
-  for (intf_->reset(); intf_->next(); i++)
+  intf_->reset();
+  for (int i = 0; intf_->next(); ++i)
   {
     int x = int(intf_->X()), y = int(intf_->Y());
     if (x<0||x>=width||y<0||y>=height)
@@ -1161,8 +1162,8 @@ print_gradient_histograms(vil1_memory_image_of<float> const& Ix,
   if (!npix)
     return;
   double deg_rad = 180.0/vnl_math::pi;
-  int i = 0;
-  for (intf_->reset(); intf_->next(); ++i)
+  intf_->reset();
+  for (int i = 0; intf_->next(); ++i)
   {
     int x = int(intf_->X()), y = int(intf_->Y());
     if (x<0||x>=width||y<0||y>=height)
@@ -1199,8 +1200,8 @@ print_color_histograms(vil1_memory_image_of<float> const& hue,
   int npix = intf_->Npix();
   if (!npix)
     return;
-  int i = 0;
-  for (intf_->reset(); intf_->next(); ++i)
+  intf_->reset();
+  for (int i = 0; intf_->next(); ++i)
   {
     int x = int(intf_->X()), y = int(intf_->Y());
     if (x<0||x>=width||y<0||y>=height)

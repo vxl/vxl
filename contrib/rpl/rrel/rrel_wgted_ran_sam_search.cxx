@@ -29,14 +29,14 @@ rrel_wgted_ran_sam_search::estimate( const rrel_estimation_problem * problem,
   // assume the weights are already sorted.
   // get similarity weights
   const vcl_vector<double>& wgts = problem->similarity_weights();
-  if( !wgts.empty() ) {
-
+  if ( !wgts.empty() )
+  {
     is_sim_wgt_set_ = true;
     assert( wgts.size() == problem->num_samples() );
-    
+
     // sums up weights
     double sum_wgt = 0.0;
-    for( unsigned i=0; i<wgts.size(); ++i )
+    for ( unsigned i=0; i<wgts.size(); ++i )
       sum_wgt += wgts[i];
 
     // build probility interval
@@ -44,7 +44,7 @@ rrel_wgted_ran_sam_search::estimate( const rrel_estimation_problem * problem,
     double next_lower;
     intervals_.resize( wgts.size() );
     prob_interval one;
-    for( unsigned i=0; i<wgts.size(); ++i ) {
+    for ( unsigned i=0; i<wgts.size(); ++i ) {
       one.index_ = i;
       one.lower_ = current_lower;
       next_lower = current_lower+wgts[i]/sum_wgt;
@@ -52,7 +52,7 @@ rrel_wgted_ran_sam_search::estimate( const rrel_estimation_problem * problem,
       intervals_[i] = one;
       current_lower = next_lower;
     }
-  } 
+  }
   // call same function in base class
   return rrel_ran_sam_search::estimate( problem, obj_fcn );
 }
@@ -65,7 +65,7 @@ rrel_wgted_ran_sam_search::next_sample( unsigned int taken,
                                   unsigned int points_per_sample )
 {
   typedef vcl_vector<prob_interval>::iterator interval_iter;
-  
+
   if ( generate_all_ || !is_sim_wgt_set_ ) {
     rrel_ran_sam_search::next_sample( taken, num_points, sample, points_per_sample );
     return;
@@ -77,15 +77,15 @@ rrel_wgted_ran_sam_search::next_sample( unsigned int taken,
     unsigned int k=0, counter=0;
     prob_interval one;
     interval_iter iter;
-    unsigned int id;
+    int id;
     while ( k<points_per_sample ) // This might be an infinite loop!
     {
       one.upper_ = generator_->drand32();
       iter = vcl_lower_bound( intervals_.begin(), intervals_.end(), one );
       // though this should not happen
-      if( iter == intervals_.end() )
+      if ( iter == intervals_.end() )
         continue;
-        
+
       // get index;
       id = iter->index_;
       ++counter;
