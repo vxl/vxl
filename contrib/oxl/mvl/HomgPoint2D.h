@@ -53,6 +53,7 @@ class HomgPoint2D : public Homg2D
   vnl_double_2 get_double2() const;
   inline vnl_double_2 get_nonhomogeneous() const { return get_double2(); }
 
+  bool rescale_w(double new_w = 1.0);
   HomgPoint2D get_unitized() const;
 
   // Utility Methods---------------------------------------------------------

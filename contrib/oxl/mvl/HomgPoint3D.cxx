@@ -46,9 +46,34 @@ HomgPoint3D::get_double3() const
 }
 
 //-----------------------------------------------------------------------------
+//--------------------------------------------------------------
+//
+//: Rescale point
+// If the point is at infinity, return false
+bool
+HomgPoint3D::rescale_w(double new_w)
+{
+  double hx = x();
+  double hy = y();
+  double hz = z();
+  double hw = w();
+
+  if (hw == 0)
+    return false;
+
+  hw = new_w/hw;
+
+  homg_vector_[0] = hx*hw;
+  homg_vector_[1] = hy*hw;
+  homg_vector_[2] = hz*hw;
+  homg_vector_[3] = new_w;
+
+  return true;
+}
+
 //
 //: Print to vcl_ostream
 vcl_ostream& operator<<(vcl_ostream& s, const HomgPoint3D& p)
 {
-  return s << "<HomgPoint3D " << p.get_vector() << ">";
+  return s << "<HomgPoint3D " << p.get_vector() << '>';
 }

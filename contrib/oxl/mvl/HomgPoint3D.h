@@ -47,6 +47,7 @@ class HomgPoint3D : public Homg3D
   bool get_nonhomogeneous(double& x, double& y, double& z) const;
   vnl_double_3 get_double3() const;
   double radius() const { return get_double3().magnitude(); }
+  bool rescale_w(double new_w = 1.0);
   double squared_radius() const { return get_double3().squared_magnitude(); }
 };
 

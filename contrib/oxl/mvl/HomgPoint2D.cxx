@@ -42,6 +42,30 @@ vnl_double_2 HomgPoint2D::get_double2() const
 }
 
 //-----------------------------------------------------------------------------
+//--------------------------------------------------------------
+//
+//: Rescale point (defaults to w = 1)
+// If the point is at infinity, return false
+bool
+HomgPoint2D::rescale_w(double new_w)
+{
+  double hx = x();
+  double hy = y();
+  double hw = w();
+
+  if (hw == 0)
+    return false;
+
+  hw = new_w/hw;
+
+  set(hx*hw, hy*hw, new_w);
+  //(*this)[0] = hx*hw;
+  //(*this)[1] = hy*hw;
+  //(*this)[2] = new_w;
+
+  return true;
+}
+
 //
 //: returns a unit-norm scaled copy of this.
 HomgPoint2D HomgPoint2D::get_unitized() const
@@ -62,7 +86,7 @@ HomgPoint2D HomgPoint2D::get_unitized() const
 //: Print to vcl_ostream as <HomgPoint2D x y z>
 vcl_ostream& operator<<(vcl_ostream& s, const HomgPoint2D& p)
 {
-  return s << "<HomgPoint2D " << p.get_vector() << ">";
+  return s << "<HomgPoint2D " << p.get_vector() << '>';
 }
 
 //-----------------------------------------------------------------------------
