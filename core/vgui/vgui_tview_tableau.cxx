@@ -24,9 +24,6 @@
 #include <vgui/vgui_popup_params.h>
 #include <vgui/vgui_menu.h>
 
-static bool debug = false;
-
-
 vcl_string vgui_tview_tableau::type_name() const {return "vgui_tview_tableau";}
 
 
@@ -240,8 +237,11 @@ void vgui_tview_tableau::add_icons(vcl_vector<vgui_tview_tableau::icon>* icons, 
   icons->push_back(this_icon);
 }
 
-vgui_tableau_sptr vgui_tview_tableau::find_closest_icon(vcl_vector<vgui_tview_tableau::icon> const& icons, float ix, float iy) {
-  //vcl_cerr << "number of icons " << icons.size() << vcl_endl;
+vgui_tableau_sptr vgui_tview_tableau::find_closest_icon(vcl_vector<vgui_tview_tableau::icon> const& icons, float ix, float iy)
+{
+#ifdef DEBUG
+  vcl_cerr << "vgui_tview_tableau::find_closest_icon() number of icons = " << icons.size() << '\n';
+#endif
 
   float closest_dist /*quell SunPro warning*/= -1;
   vgui_tableau_sptr closest;
@@ -263,7 +263,8 @@ vgui_tableau_sptr vgui_tview_tableau::find_closest_icon(vcl_vector<vgui_tview_ta
 }
 
 
-vcl_string strip_preceeding_numerals(const char* name) {
+vcl_string strip_preceeding_numerals(const char* name)
+{
   vcl_string str(name);
 
   vcl_string::iterator s_iter = str.begin();
@@ -279,9 +280,11 @@ vcl_string strip_preceeding_numerals(const char* name) {
   return str;
 }
 
-bool vgui_tview_tableau::handle(const vgui_event& e) {
-
-  if (debug) vcl_cerr << "vgui_tview_tableau::handle\n";
+bool vgui_tview_tableau::handle(const vgui_event& e)
+{
+#ifdef DEBUG
+  vcl_cerr << "vgui_tview_tableau::handle\n";
+#endif
 
   GLfloat vp[4];
   glGetFloatv(GL_VIEWPORT, vp); // ok
@@ -324,10 +327,14 @@ bool vgui_tview_tableau::handle(const vgui_event& e) {
     vgui_tableau_sptr t = find_closest_icon(icons, ix, iy);
     active_icon = t;
 
-    //vcl_cerr << "icon is " << (void*) t << vcl_endl;
+#ifdef DEBUG
+    vcl_cerr << "icon is " << (void*) t << '\n';
+#endif
     if (t) {
       vcl_cerr << "---------\n"
-    //         << "| type : " << strip_preceeding_numerals(typeid(*t).name()) << vcl_endl
+#ifdef DEBUG
+               << "| type : " << strip_preceeding_numerals(typeid(*t).name()) << '\n'
+#endif
                << "| type_name   : " << t->type_name() << vcl_endl
                << "| file_name   : " << t->file_name() << vcl_endl
                << "| pretty_name : " << t->pretty_name() << vcl_endl

@@ -27,9 +27,6 @@
 #include <vgui/vgui_menu.h>
 #include <vgui/vgui_popup_params.h>
 
-// change 'true' to 'false' to turn on debugging.
-#define debug if (true) { } else vcl_cerr
-
 // static data
 //------------
 // Every tableau is on this array.
@@ -43,8 +40,9 @@ static vgui_DLLDATA vcl_vector<vgui_tableau*>* all = 0;
 vgui_tableau::vgui_tableau()
   : references(0)
 {
-  debug << "vgui_tableau constructor: this = " << (void*)this << vcl_endl;
-
+#ifdef DEBUG
+  vcl_cerr << "vgui_tableau constructor: this = " << (void*)this << '\n';
+#endif
   // register :
   if (all == 0) {
     all = new vcl_vector<vgui_tableau*>;
@@ -56,7 +54,9 @@ vgui_tableau::vgui_tableau()
 //: Destructor - called by vgui_tableau_sptr when ref count is zero.
 vgui_tableau::~vgui_tableau()
 {
-  debug << "vgui_tableau destructor : this = " << (void*)this << vcl_endl;
+#ifdef DEBUG
+  vcl_cerr << "vgui_tableau destructor : this = " << (void*)this << '\n';
+#endif
 
   if (references != 0)
     vgui_macro_warning << "there are still " << references
@@ -125,42 +125,54 @@ bool vgui_tableau::handle(vgui_event const &event) {
 //-----------------------------------------------------------------------------
 //: Called by default handle when it receives a mouse down event.
 bool vgui_tableau::mouse_down(int, int, vgui_button, vgui_modifier) {
-  //debug << "vgui_tableau::mouse_down\n";
+#ifdef DEBUG
+  vcl_cerr << "vgui_tableau::mouse_down\n";
+#endif
   return false;
 }
 
 //-----------------------------------------------------------------------------
 //: Called by default handle when it receives a mouse up event.
 bool vgui_tableau::mouse_up(int, int, vgui_button, vgui_modifier) {
-  //debug << "vgui_tableau::mouse_up\n";
+#ifdef DEBUG
+  vcl_cerr << "vgui_tableau::mouse_up\n";
+#endif
   return false;
 }
 
 //-----------------------------------------------------------------------------
 //: Called by default handle when it receives a mouse motion event.
 bool vgui_tableau::motion(int, int) {
-  //debug << "vgui_tableau::motion\n";
+#ifdef DEBUG
+  vcl_cerr << "vgui_tableau::motion\n";
+#endif
   return false;
 }
 
 //-----------------------------------------------------------------------------
 //: Caled by default handle when it receives a key press event.
 bool vgui_tableau::key_press(int, int, vgui_key, vgui_modifier) {
-  //debug << "vgui_tableau::key_press\n";
+#ifdef DEBUG
+  vcl_cerr << "vgui_tableau::key_press\n";
+#endif
   return false;
 }
 
 //-----------------------------------------------------------------------------
 //: Called by default handle when it receives a '?' pressed event.
 bool vgui_tableau::help() {
-  //debug << "vgui_tableau::help\n";
+#ifdef DEBUG
+  vcl_cerr << "vgui_tableau::help\n";
+#endif
   return false;
 }
 
 //-----------------------------------------------------------------------------
 //: Called by default handle when it receives a draw event.
 bool vgui_tableau::draw() {
-  //debug << "vgui_tableau::draw\n";
+#ifdef DEBUG
+  vcl_cerr << "vgui_tableau::draw\n";
+#endif
   return false;
 }
 

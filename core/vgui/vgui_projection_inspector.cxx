@@ -151,7 +151,6 @@ void vgui_projection_inspector::inspect()
     M.inplace_transpose();
   }
 
-
   // compute total transformation T from world to clip coordinates :
   vnl_matrix_fixed<double,4,4> T = P*M;
 
@@ -191,7 +190,9 @@ void vgui_projection_inspector::inspect()
   else
   {
     diagonal_scale_3d = false;
-    // vcl_cerr << "T =\n" << T << vcl_endl;
+#ifdef DEBUG
+     vcl_cerr << "T =\n" << T << '\n';
+#endif
   }
 }
 
@@ -264,8 +265,8 @@ void vgui_projection_inspector::image_to_window_coordinates(float ix,float iy,fl
 
 //-----------------------------------------------------------------------------
 bool vgui_projection_inspector::compute_as_2d_affine(int width, int height,
-                                        float* offsetX, float* offsetY,
-                                        float* scaleX, float* scaleY)
+                                                     float* offsetX, float* offsetY,
+                                                     float* scaleX, float* scaleY)
 {
   if (!diagonal_scale_3d)
     return false;

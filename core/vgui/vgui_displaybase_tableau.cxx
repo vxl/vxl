@@ -40,8 +40,6 @@ bool vgui_displaybase_tableau_selection_callback::deselect_all()
   return false;
 }
 
-static bool debug=false;
-
 vgui_displaybase_tableau::vgui_displaybase_tableau()
 {
   id = vgui_soview::create_id();
@@ -164,20 +162,20 @@ void vgui_displaybase_tableau::clear()
 void vgui_displaybase_tableau::draw_soviews_render()
 {
   vgui_macro_report_errors;
-  if (debug)
-    vcl_cerr << "vgui_style_factory::use_factory : "
-             << vbl_bool_ostream::true_false(vgui_style_factory::use_factory)
-             << " (but doing as if it is false)\n";
+#ifdef DEBUG
+  vcl_cerr << "vgui_style_factory::use_factory : "
+           << vbl_bool_ostream::true_false(vgui_style_factory::use_factory)
+           << " (but doing as if it is false)\n";
+#endif
 
 #if 0 // commented out the case vgui_style_factory::use_factory == true
   if (vgui_style_factory::use_factory)
   {
     vcl_vector<vgui_style*> styles_copy;
-
     vgui_style_factory::get_styles(styles_copy);
-    if (debug)
-      vcl_cerr << "found " << styles_copy.size() << " styles\n";
-
+#ifdef DEBUG
+    vcl_cerr << "found " << styles_copy.size() << " styles\n";
+#endif
     // get all the styles held by the style factory
     for (vcl_vector<vgui_style*>::iterator s_iter = styles_copy.begin();
          s_iter != styles_copy.end(); ++s_iter)
@@ -188,10 +186,9 @@ void vgui_displaybase_tableau::draw_soviews_render()
 
       vcl_vector<vgui_soview*> soviews;
       vgui_style_factory::get_soviews(*s_iter, soviews);
-
-      if (debug)
-        vcl_cerr << "found " << soviews.size() << " soviews with this style\n";
-
+#ifdef DEBUG
+      vcl_cerr << "found " << soviews.size() << " soviews with this style\n";
+#endif
       // for each soview with this style
       for (vcl_vector<vgui_soview*>::iterator so_iter = soviews.begin();
            so_iter != soviews.end(); ++so_iter)
@@ -208,8 +205,9 @@ void vgui_displaybase_tableau::draw_soviews_render()
       }
     }
 
-    if (debug)
-      vcl_cerr << "setting color\ndrawing " << selections.size() << " selected soviews\n";
+#ifdef DEBUG
+    vcl_cerr << "setting color\ndrawing " << selections.size() << " selected soviews\n";
+#endif
 
     for (vcl_vector<unsigned>::iterator id_iter = selections.begin();
          id_iter != selections.end(); ++id_iter )
@@ -459,8 +457,9 @@ vgui_soview* vgui_displaybase_tableau::contains_hit(vcl_vector<unsigned> names)
   {
     // get id of soview
     unsigned soview_id = (*i)->get_id();
-    //vcl_cerr << "vgui_displaybase_tableau::contains_hit soview_id" << soview_id << vcl_endl;
-
+#ifdef DEBUG
+    vcl_cerr << "vgui_displaybase_tableau::contains_hit soview_id=" << soview_id << '\n';
+#endif
     vcl_vector<unsigned>::iterator ni = vcl_find(names.begin(), names.end(), soview_id);
     if (ni != names.end())
       return *i;

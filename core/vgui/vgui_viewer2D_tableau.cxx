@@ -183,7 +183,7 @@ bool vgui_viewer2D_tableau::handle(const vgui_event& e)
     return child->handle(e);
   }
   //center the scroll bars if the image is centered
-  //normally this would be in the key press event 
+  //normally this would be in the key press event
   //routine, but we need to get our hands on the window
   //and the event is not passed into the key_press method.
   if (e.type ==vgui_KEY_PRESS)
@@ -200,7 +200,7 @@ bool vgui_viewer2D_tableau::handle(const vgui_event& e)
         npos_x = cpos;
         npos_y = cpos;
       }
-  //We really want to be able to scroll the entire 
+  //We really want to be able to scroll the entire
   //image through the viewport.  The token offset should be
   //adjusted proportionally to the size of the image
   //added routine to get image size JLM
@@ -210,10 +210,9 @@ bool vgui_viewer2D_tableau::handle(const vgui_event& e)
     int w, h;
     this->image_size(w,h);
     float xs = w/100.0;
-        this->token.offsetX -= 
-          this->token.scaleX*xs*(*((const int *)e.data)-npos_x);
-        this->post_redraw();
-        npos_x = *((const int *)e.data);
+    this->token.offsetX -= this->token.scaleX*xs*(*((const int*)e.data)-npos_x);
+    this->post_redraw();
+    npos_x = *((const int *)e.data);
   }
   // This deals with vertical scroll message
   if (e.type == vgui_VSCROLL)
@@ -221,7 +220,7 @@ bool vgui_viewer2D_tableau::handle(const vgui_event& e)
     int w, h;
     this->image_size(w, h);
     float ys = h/100.0;
-    this->token.offsetY -= this->token.scaleY*ys*(*((const int *)e.data)-npos_y);
+    this->token.offsetY -= this->token.scaleY*ys*(*((const int*)e.data)-npos_y);
     this->post_redraw();
     npos_y = *((const int *)e.data);
   }
@@ -243,7 +242,7 @@ bool vgui_viewer2D_tableau::mouse_down(int x, int y, vgui_button button, vgui_mo
   if (c_pan(button, modifier))
   {
 #ifdef DEBUG
-    vcl_cerr << "vgui_viewer2D_tableau_handler::middle\n";
+    vcl_cerr << "vgui_viewer2D_tableau::mouse_down: middle\n";
 #endif
     prev_x = x;
     prev_y = y;
@@ -255,7 +254,7 @@ bool vgui_viewer2D_tableau::mouse_down(int x, int y, vgui_button button, vgui_mo
     if (button == vgui_LEFT && (modifier & vgui_CTRL))
     {
 #ifdef DEBUG
-      vcl_cerr << "vgui_viewer2D_tableau_handler::left\n";
+      vcl_cerr << "vgui_viewer2D_tableau::mouse_down: left\n";
 #endif
       this->zoomin(zoom_factor, int(x), int(y));
       this->post_redraw();
@@ -264,7 +263,7 @@ bool vgui_viewer2D_tableau::mouse_down(int x, int y, vgui_button button, vgui_mo
     else if (button == vgui_RIGHT && (modifier & vgui_CTRL))
     {
 #ifdef DEBUG
-      vcl_cerr << "vgui_viewer2D_tableau_handler::right\n";
+      vcl_cerr << "vgui_viewer2D_tableau::mouse_down: right\n";
 #endif
       this->zoomout(zoom_factor, int(x), int(y));
       this->post_redraw();
@@ -276,7 +275,7 @@ bool vgui_viewer2D_tableau::mouse_down(int x, int y, vgui_button button, vgui_mo
     if (button == vgui_LEFT && (modifier & vgui_CTRL))
     {
 #ifdef DEBUG
-      vcl_cerr << "vgui_viewer2D_tableau_handler::left\n";
+      vcl_cerr << "vgui_viewer2D_tableau::mouse_down: left\n";
 #endif
       prev_x = x;
       prev_y = y;
@@ -297,9 +296,13 @@ bool vgui_viewer2D_tableau::mouse_down(int x, int y, vgui_button button, vgui_mo
     zoom_x = x;
     zoom_y = y;
     sweep_zooming = true;
-    //vcl_cerr << "copy_back_to_front..." << flush;
+#ifdef DEBUG
+    vcl_cerr << "copy_back_to_front...";
+#endif
     vgui_utils::copy_back_to_front();
-    //vcl_cerr << "done\n";
+#ifdef DEBUG
+    vcl_cerr << "done\n";
+#endif
 
     return true;
   }
@@ -344,13 +347,18 @@ bool vgui_viewer2D_tableau::mouse_drag(int x, int y,  vgui_button /*button*/, vg
     // and (c) remember where the mouse pointer was (in new_x, new_y).
     vgui_matrix_state gl_state;  gl_state.save();
 
-    //vcl_cerr << "begin_sw_overlay..." << flush;
+#ifdef DEBUG
+    vcl_cerr << "begin_sw_overlay...";
+#endif
     vgui_utils::begin_sw_overlay();
-    //vcl_cerr << "done\n";
-
-    //vcl_cerr << "copy_back_to_front..." << flush;
+#ifdef DEBUG
+    vcl_cerr << "done\n"
+             << "copy_back_to_front...";
+#endif
     vgui_utils::copy_back_to_front();
-    //vcl_cerr << "done\n";
+#ifdef DEBUG
+    vcl_cerr << "done\n";
+#endif
 
     // set projection*modelview matrices to render in **viewport** coordinates :
     GLdouble vp[4];
@@ -443,7 +451,6 @@ bool vgui_viewer2D_tableau::mouse_up(int /*x*/, int /*y*/,  vgui_button button, 
     this->post_redraw(); // we probably need one now
   }
 
-
   if (smooth_zooming && button == vgui_LEFT)
     smooth_zooming = false;
 
@@ -455,27 +462,26 @@ bool vgui_viewer2D_tableau::mouse_up(int /*x*/, int /*y*/,  vgui_button button, 
 
 bool vgui_viewer2D_tableau::help()
 {
-  vcl_cerr << "\n-- vgui_viewer2D_tableau ----------\n";
-  vcl_cerr << "|     mouse               |\n";
-  vcl_cerr << "| ctrl+left       zoom in |\n";
-  vcl_cerr << "| ctrlt+middle        pan |\n";
-  vcl_cerr << "| ctrl+right     zoom out |\n";
-  vcl_cerr << "|                         |\n";
-  vcl_cerr << "|     keys                |\n";
-  vcl_cerr << "| ctrl+`c'   center image |\n";
-  vcl_cerr << "| ctrl+`x'   resize image |\n";
-  vcl_cerr << "| `-'   lower zoom factor |\n";
-  vcl_cerr << "| `='   raise zoom factor |\n";
-  vcl_cerr << "| `n'     toggle aliasing |\n";
-  vcl_cerr << "| `z'    toggle zoom type |\n";
-  vcl_cerr << "| `d'          sweep zoom |\n";
-  vcl_cerr << "--------------------------\n\n";
+  vcl_cerr << "\n-- vgui_viewer2D_tableau ----------\n"
+           << "|     mouse               |\n"
+           << "| ctrl+left       zoom in |\n"
+           << "| ctrlt+middle        pan |\n"
+           << "| ctrl+right     zoom out |\n"
+           << "|                         |\n"
+           << "|     keys                |\n"
+           << "| ctrl+`c'   center image |\n"
+           << "| ctrl+`x'   resize image |\n"
+           << "| `-'   lower zoom factor |\n"
+           << "| `='   raise zoom factor |\n"
+           << "| `n'     toggle aliasing |\n"
+           << "| `z'    toggle zoom type |\n"
+           << "| `d'          sweep zoom |\n"
+           << "--------------------------\n\n";
   return false;
 }
 bool vgui_viewer2D_tableau::image_size(int& width, int& height)
 {
-  vgui_tableau_sptr t = vgui_find_below_by_type_name(this, 
-    "vgui_image_tableau");
+  vgui_tableau_sptr t = vgui_find_below_by_type_name(this,"vgui_image_tableau");
   if (!t)
     t = vgui_find_below_by_type_name(this, "xcv_image_tableau");
   if (t)
@@ -487,8 +493,7 @@ bool vgui_viewer2D_tableau::image_size(int& width, int& height)
   }
   else
   {
-    t = vgui_find_below_by_type_name(this, 
-                                     "vgui_vil_image_tableau");
+    t = vgui_find_below_by_type_name(this, "vgui_vil_image_tableau");
     if (t)
     {
       vgui_vil_image_tableau_base_sptr im;

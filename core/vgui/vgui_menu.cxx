@@ -80,7 +80,7 @@ vgui_menu_item const & vgui_menu::operator[](unsigned i) const
 
 //--------------------------------------------------------------------------------
 
-#define im_here do { /* vcl_cerr << __FILE__ ":" << __LINE__ << vcl_endl; */ } while (false)
+#define im_here do { /* vcl_cerr << __FILE__ " : " << __LINE__ << vcl_endl; */ } while (false)
 
 void vgui_menu::add(vcl_string const &n,
                     vgui_command *c,
@@ -131,7 +131,6 @@ void vgui_menu::add(vcl_string const &n,
   items.push_back(i);
 }
 
-#if 1
 void vgui_menu::add(vcl_string const &n,
                     bool initial,
                     vgui_key key,
@@ -141,13 +140,14 @@ void vgui_menu::add(vcl_string const &n,
   vgui_menu_item i;
   i.name = n;
   i.cmnd = new vgui_command_toggle(initial);
-  //vcl_cerr << "new toggle : " << (void*) i.cmnd.as_pointer() << vcl_endl;
+#ifdef DEBUG
+  vcl_cerr << "vgui_menu::add : new toggle : " << (void*) i.cmnd.as_pointer() << '\n';
+#endif
   i.short_cut.key = key;
   i.short_cut.mod = modifiers;
   i.is_toggle = true;
   items.push_back(i);
 }
-#endif
 
 void vgui_menu::separator()
 {
@@ -175,7 +175,7 @@ static void dump(vgui_menu const &This, vcl_ostream &os, vcl_string const &pre)
 {
   for (unsigned i=0;i<This.size();i++) {
     // name
-    os << pre << "\"" << This[i].name << "\" ";
+    os << pre << " \"" << This[i].name << "\" ";
 
     // shortcut
     if (This[i].short_cut.mod & vgui_CTRL)
@@ -190,7 +190,7 @@ static void dump(vgui_menu const &This, vcl_ostream &os, vcl_string const &pre)
       os << '\'' << char(This[i].short_cut.key) << '\'';
     else
       os << "\'\'"; //"(none)";
-    os << " ";
+    os << ' ';
 
     // what it does
     if (This[i].is_command())

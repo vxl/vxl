@@ -19,7 +19,6 @@
 #include <vgui/vgui_matrix_state.h>
 #include <vgui/vgui_projection_inspector.h>
 
-//static bool debug = false;
 vgui_rubberband_tableau::object_type vgui_rubberband_tableau::obj_type = none_enum;
 
 #ifdef __GNUC__ /* __FUNCTION__ is a GNU extension */
@@ -210,7 +209,9 @@ void vgui_rubberband_tableau::draw_point(float x, float y)
 {
   glColor3f(1,1,1);
   glBegin(GL_POINTS);
-  // vcl_cerr << "vgui_rubberband_tableau::draw_point(" << x << ',' << y << ")\n";
+#ifdef DEBUG
+   vcl_cerr << "vgui_rubberband_tableau::draw_point(" << x << ',' << y << ")\n";
+#endif
   glVertex2f(x,y);
   glEnd();
 }

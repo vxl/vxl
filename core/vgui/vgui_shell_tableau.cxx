@@ -105,7 +105,9 @@ bool vgui_shell_tableau::handle(vgui_event const &e)
 
     for ( unsigned i=0; i<children.size(); ++i ) {
       //PM.restore();
-      //vcl_cerr << "DRAW";
+#ifdef DEBUG
+      vcl_cerr << "DRAW";
+#endif
       if ( active[i] && children[i] )
         if ( !children[i]->handle(e) )
           retv=false;

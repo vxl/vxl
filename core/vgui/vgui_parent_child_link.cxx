@@ -143,7 +143,9 @@ vgui_parent_child_link_impl::vgui_parent_child_link_impl(vgui_tableau *p_, vgui_
 
   // register.
   if (all == 0) {
-    //vcl_cerr << __FILE__ ": CREATING parent_child_link cache\n";
+#ifdef DEBUG
+    vcl_cerr << __FILE__ " : CREATING parent_child_link cache\n";
+#endif
     all = new all_t;
     all_refs = 0;
   }
@@ -171,7 +173,9 @@ vgui_parent_child_link_impl::~vgui_parent_child_link_impl()
   assert(i != all->end());
   all->erase(i);
   if (--all_refs == 0) {
-    //vcl_cerr << __FILE__ ": DELETING parent_child_link cache\n";
+#ifdef DEBUG
+    vcl_cerr << __FILE__ " : DELETING parent_child_link cache\n";
+#endif
     delete all;
     all = 0;
   }
@@ -354,14 +358,11 @@ void vgui_parent_child_link::get_parents_of (vgui_tableau_sptr const& tab,
 void vgui_parent_child_link::replace_child_everywhere(vgui_tableau_sptr const &old_child,
                                                       vgui_tableau_sptr const &new_child)
 {
-  // the default is 'false'. don't check in 'true'.
-  static bool debug = false;
-
-  if (debug)
-    vcl_cerr << "vgui_parent_child_link replace_child_everywhere\n"
-             << "old_child : " << old_child->pretty_name()
-             << '\t'
-             << "new child : " << new_child->pretty_name() << vcl_endl;
+#ifdef DEBUG
+  vcl_cerr << "vgui_parent_child_link::replace_child_everywhere\n"
+           << "  old_child : " << old_child->pretty_name() << '\t'
+           << "  new child : " << new_child->pretty_name() << '\n';
+#endif
 
   if (old_child == new_child)
     vcl_cerr << "vgui_parent_child_link::replace_child_everywhere: old_child == new_child\n";
@@ -372,20 +373,21 @@ void vgui_parent_child_link::replace_child_everywhere(vgui_tableau_sptr const &o
     vgui_parent_child_link_impl *ptr
       = static_cast<vgui_parent_child_link_impl*>(*i);
 
-    if (debug) {
-      vcl_cerr << "parent_child_link  "
-               << "parent : " << ptr->parent()->pretty_name()
-               << "\tchild : ";
-      if (! ptr->child())
-        vcl_cerr << "0\n";
-      else
-        vcl_cerr << ptr->child()->pretty_name() << vcl_endl;
-    }
+#ifdef DEBUG
+    vcl_cerr << "  parent_child_link\t"
+             << "parent : " << ptr->parent()->pretty_name()
+             << "\tchild : ";
+    if (! ptr->child())
+      vcl_cerr << "0\n";
+    else
+      vcl_cerr << ptr->child()->pretty_name() << '\n';
+#endif
 
     if ( ptr->child() == old_child.operator->() ) {
       assert(ptr->parent() != new_child.operator->() );
-      if (debug)
-        vcl_cerr << "replace: " << ptr->child() << vcl_endl;
+#ifdef DEBUG
+      vcl_cerr << "  replaced by: " << ptr->child() << '\n';
+#endif
       ptr->parent()->notify_replaced_child(old_child, new_child);
       ptr->assign(new_child.operator->());
     }

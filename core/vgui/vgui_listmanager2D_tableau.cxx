@@ -158,14 +158,14 @@ void vgui_listmanager2D_tableau::find_closest(float x, float y, vcl_vector<vcl_v
   closest_so = 0;
 
 #ifdef DEBUG
-  vcl_cerr << "hits->size() " << hits->size() << vcl_endl;
+  vcl_cerr << "vgui_listmanager2D_tableau::find_closest: hits->size() = " << hits->size() << '\n';
 #endif
   for (vcl_vector<vcl_vector<unsigned> >::iterator h_iter = hits->begin();
        h_iter != hits->end(); ++h_iter)
   {
     vcl_vector<unsigned> names = *h_iter;
 #ifdef DEBUG
-    vcl_cerr << "vgui_listmanager2D_tableau::find_closest names.size() " << names.size() << vcl_endl;
+    vcl_cerr << "vgui_listmanager2D_tableau::find_closest: names.size() " << names.size() << '\n';
 #endif
 
     // first see if this hit is in a displaylist managed by this listmanager2D
@@ -173,7 +173,7 @@ void vgui_listmanager2D_tableau::find_closest(float x, float y, vcl_vector<vcl_v
     if (display)
     {
 #ifdef DEBUG
-      vcl_cerr << "hit in display " << display->get_id() << vcl_endl;
+      vcl_cerr << "vgui_listmanager2D_tableau::find_closest: hit in display " << display->get_id() << '\n';
 #endif
       vgui_soview2D *so = static_cast<vgui_soview2D*>(display->contains_hit(names));
       if (so)
@@ -241,7 +241,7 @@ bool vgui_listmanager2D_tableau::motion(int x, int y)
 
 #ifdef DEBUG
   if (closest_so && closest_display)
-    vcl_cerr << "hit " << closest_so->get_id()
+    vcl_cerr << "vgui_listmanager2D_tableau::motion: hit " << closest_so->get_id()
              << " in vcl_list " << closest_display->get_id() << vcl_endl;
 #endif
 
@@ -266,7 +266,9 @@ bool vgui_listmanager2D_tableau::motion(int x, int y)
 
   if (closest_so)
   {
-    //vcl_cerr << "highlighting : " << closest_id << vcl_endl;
+#ifdef DEBUG
+    vcl_cerr << "vgui_listmanager2D_tableau::motion highlighting : " << closest_id << '\n';
+#endif
     vgui_soview* so = closest_so;
     vgui_style* style = so->get_style();
     style->apply_point_size();
@@ -318,7 +320,7 @@ bool vgui_listmanager2D_tableau::mouse_down(int x, int y, vgui_button button, vg
 bool vgui_listmanager2D_tableau::key_press(int /*x*/, int /*y*/, vgui_key key, vgui_modifier)
 {
 #ifdef DEBUG
-  vcl_cerr << "vgui_listmanager2D_tableau_handler::key_press " << key << vcl_endl;
+  vcl_cerr << "vgui_listmanager2D_tableau_handler::key_press " << key << '\n';
 #endif
 
   if (key >= '1' && key <= '9')

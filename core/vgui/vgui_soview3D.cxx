@@ -58,7 +58,9 @@ vcl_ostream& vgui_lineseg3D::print(vcl_ostream& s) const
 
 void vgui_lineseg3D::draw() const
 {
-  //vcl_cerr << "line id : " << id << vcl_endl;
+#ifdef DEBUG
+  vcl_cerr << "vgui_lineseg3D::draw() line id=" << id << '\n';
+#endif
 
   bool lighting = false;
   if (glIsEnabled(GL_LIGHTING)) {

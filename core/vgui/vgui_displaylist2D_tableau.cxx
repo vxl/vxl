@@ -121,8 +121,9 @@ unsigned vgui_displaylist2D_tableau::find_closest(float x, float y,
     assert( so ); // NULL => something is wrong.
 
     float dist = so->distance_squared(x,y);
-    //vcl_cerr << " distance to " << (void*)so << " = " << dist << vcl_endl;
-
+#ifdef DEBUG
+    vcl_cerr << "vgui_displaylist2D_tableau::find_closest distance to " << (void*)so << " is " << dist << '\n';
+#endif
     if (closest_dist<0 || dist<closest_dist) {
       closest_dist = dist;
       closest = *h_iter;
@@ -159,9 +160,8 @@ bool vgui_displaylist2D_tableau::mouse_down(int x, int y, vgui_button button, vg
   if (button == vgui_LEFT && modifier == 0)
   {
 #ifdef DEBUG
-    vcl_cerr << "selecting at " << x << ' ' << y << vcl_endl;
+    vcl_cerr << "vgui_displaylist2D_tableau::mouse_down: selecting at " << x << ',' << y << '\n';
 #endif
-
     vcl_vector<unsigned> hits;
     get_hits(x,y,hits);
     unsigned closest_id = find_closest(ix,iy,hits);
@@ -180,7 +180,7 @@ bool vgui_displaylist2D_tableau::mouse_down(int x, int y, vgui_button button, vg
     if (modifier & vgui_SHIFT)
     {
 #ifdef DEBUG
-      vcl_cerr << "deselecting all\n";
+      vcl_cerr << "vgui_displaylist2D_tableau::mouse_down: deselecting all\n";
 #endif
       this->deselect_all();
       this->post_redraw();
@@ -188,9 +188,8 @@ bool vgui_displaylist2D_tableau::mouse_down(int x, int y, vgui_button button, vg
     }
 
 #ifdef DEBUG
-    vcl_cerr << "deselecting at " << x << ' ' << y << vcl_endl;
+    vcl_cerr << "vgui_displaylist2D_tableau::mouse_down: deselecting at " << x << ' ' << y << '\n';
 #endif
-
     vcl_vector<unsigned> hits;
     get_hits(x,y,hits);
     unsigned closest_id = find_closest(ix,iy,hits);

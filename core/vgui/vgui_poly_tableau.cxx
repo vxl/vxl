@@ -33,8 +33,6 @@
 #include <vgui/vgui_matrix_state.h>
 #include <vgui/vgui_popup_params.h>
 
-#define debug if (true) { } else vcl_cerr
-
 //-----------------------------------------------------------------------------
 //: The constructor takes a snapshot of the current viewport and scissor areas.
 //  The destructor restores that state.
@@ -100,18 +98,18 @@ bool vgui_poly_tableau::item::inside(GLint const vp[4],int vx, int vy) const
   float ry = float(vy-vp[1])/vp[3];
 
   bool ans = (x<=rx && rx<x+w) && (y<=ry && ry<y+h);
-
+#ifdef DEBUG
   if (ans)
-    debug << "Point " << vx << ' ' << vy << " inside sub-window: " << id << vcl_endl;
-
+    vcl_cerr << "Point "<< vx << ' '<< vy <<" inside sub-window: "<< id << '\n';
+#endif
   return ans;
 }
 
 //-----------------------------------------------------------------------------
 //: Constructor - don't use this, use vgui_poly_tableu_new.
-vgui_poly_tableau::vgui_poly_tableau() 
+vgui_poly_tableau::vgui_poly_tableau()
   : vgui_tableau()
-  , current(-1) 
+  , current(-1)
   , may_switch_child(true)
 {
 }
@@ -123,7 +121,7 @@ vgui_poly_tableau::~vgui_poly_tableau()
 }
 
 //-----------------------------------------------------------------------------
-//: Erase the item at the given position from the list of items. 
+//: Erase the item at the given position from the list of items.
 void vgui_poly_tableau::erase(iterator i)
 {
   assert(sub.begin()<=i && i<sub.end()); // wrong iterator for this container.
@@ -191,8 +189,8 @@ vgui_tableau_sptr vgui_poly_tableau::get(int id) const
 
 //-----------------------------------------------------------------------------
 //: Sets the color that the tableau is outlined with .
-void vgui_poly_tableau::set_outline_color(const int id, const int r, 
-  const int g, const int b) 
+void vgui_poly_tableau::set_outline_color(const int id, const int r,
+                                          const int g, const int b)
 {
   for (unsigned i=0; i<sub.size(); ++i) {
     if (sub[i].id == id) {
@@ -207,19 +205,20 @@ void vgui_poly_tableau::set_outline_color(const int id, const int r,
 //: Adds the given tableau to the given proportion of the viewport.
 //  x,y,w,h specify a portion of the vgui_poly_tableau's viewport in coordinates
 //  which go from 0 to 1.
-int vgui_poly_tableau::add(vgui_tableau_sptr const& t, float x, float y, 
-  float w, float h) {
+int vgui_poly_tableau::add(vgui_tableau_sptr const& t, float x, float y,
+                           float w, float h)
+{
   static int counter = 0;
   assert(counter < 1000000); // a million. FIXME.
   item it(this, t, x, y, w, h, ++counter) ;
   sub.push_back(it);
-
-  debug << "id = " << sub.back().id << vcl_endl
-        << "x  = " << sub.back().x << vcl_endl
-        << "y  = " << sub.back().y << vcl_endl
-        << "w  = " << sub.back().w << vcl_endl
-        << "h  = " << sub.back().h << vcl_endl;
-
+#ifdef DEBUG
+  vcl_cerr << "id = " << sub.back().id << '\n'
+           << "x  = " << sub.back().x << '\n'
+           << "y  = " << sub.back().y << '\n'
+           << "w  = " << sub.back().w << '\n'
+           << "h  = " << sub.back().h << '\n';
+#endif
   return counter;
 }
 
@@ -256,7 +255,9 @@ void vgui_poly_tableau::set_current(GLint const vp[4], int index)
   }
 
   // switch :
-  //vcl_cerr << "switch from " << current << " to " << index << vcl_endl;
+#ifdef DEBUG
+  vcl_cerr << "vgui_poly_tableau::set_current: switch from " << current << " to " << index << '\n';
+#endif
   current = index;
 
   // send enter event to new current subtableau :
@@ -269,7 +270,7 @@ void vgui_poly_tableau::set_current(GLint const vp[4], int index)
 
 //-----------------------------------------------------------------------------
 //: Handles events for this tableau and passes unused ones to the correct child.
-bool vgui_poly_tableau::handle(GLint const vp[4], vgui_event const &e) 
+bool vgui_poly_tableau::handle(GLint const vp[4], vgui_event const &e)
 {
   // Draw events must go to all children, in the right order.
   if (e.type==vgui_DRAW || e.type==vgui_DRAW_OVERLAY) {
@@ -291,8 +292,9 @@ bool vgui_poly_tableau::handle(GLint const vp[4], vgui_event const &e)
       if (e.type == vgui_DRAW) {
         // draw border of child.
         vgui_matrix_state::identity_gl_matrices();
-        glColor3f(sub[i].outline_color[0], sub[i].outline_color[1], 
-          sub[i].outline_color[2]);
+        glColor3f(sub[i].outline_color[0],
+                  sub[i].outline_color[1],
+                  sub[i].outline_color[2]);
         glLineWidth(1);
         glMatrixMode(GL_PROJECTION);
         glLoadIdentity();
@@ -347,14 +349,14 @@ vcl_string vgui_poly_tableau::type_name() const
 
 //-----------------------------------------------------------------------------
 //: Handle all events sent to this tableau.
-bool vgui_poly_tableau::handle(vgui_event const &e) 
+bool vgui_poly_tableau::handle(vgui_event const &e)
 {
   // Take snapshot of the viewport and scissor areas
   vgui_poly_tableau_vp_sc_snapshot snap;
   glEnable(GL_SCISSOR_TEST);
 
   // pointer motion
-  if (e.type == vgui_MOTION) 
+  if (e.type == vgui_MOTION)
   {
     // switch child, if necessary
     if (may_switch_child) {
@@ -366,7 +368,7 @@ bool vgui_poly_tableau::handle(vgui_event const &e)
   }
 
   // button down
-  else if (e.type == vgui_BUTTON_DOWN) 
+  else if (e.type == vgui_BUTTON_DOWN)
   {
     // disallow child switch
     may_switch_child = false;
@@ -375,7 +377,7 @@ bool vgui_poly_tableau::handle(vgui_event const &e)
   }
 
   // button up
-  else if (e.type == vgui_BUTTON_UP) 
+  else if (e.type == vgui_BUTTON_UP)
   {
     // Call this first because the button might be released over a
     // child other than the current one.

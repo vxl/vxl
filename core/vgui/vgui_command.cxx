@@ -13,12 +13,16 @@
 //-----------------------------------------------------------------------------
 vgui_command::vgui_command()
 {
-  //vcl_cerr << "command ctor : " << (void*)this << vcl_endl;
+#ifdef DEBUG
+  vcl_cerr << "vgui_command ctor : " << (void*)this << '\n';
+#endif
 }
 
 vgui_command::~vgui_command()
 {
-  //vcl_cerr << "command dtor : " << (void*)this << vcl_endl;
+#ifdef DEBUG
+  vcl_cerr << "vgui_command dtor : " << (void*)this << '\n';
+#endif
 }
 
 //-----------------------------------------------------------------------------
@@ -61,8 +65,12 @@ vgui_command_toggle::~vgui_command_toggle()
 //-----------------------------------------------------------------------------
 void vgui_command_toggle::execute()
 {
-  //vcl_cerr << vcl_endl << "toggle. old state : " << state << vcl_endl;
+#ifdef DEBUG
+  vcl_cerr << "\nvgui_command_toggle. old state : " << state;
+#endif
   state = !state;
-  //vcl_cerr << "toggle. new state : " << state << vcl_endl << vcl_endl;
+#ifdef DEBUG
+  vcl_cerr << "; new state : " << state << ".\n\n";
+#endif
 }
 
