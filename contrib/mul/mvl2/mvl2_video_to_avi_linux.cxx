@@ -44,11 +44,11 @@ bool mvl2_video_to_avi::set_codec(char a, char b, char c, char d)
   // hack to get correct orientation with DIVX codec
   if (fourcc_==fccDIVX)
   {
-    upside_down_=true;
+    upside_down_=false;
   }
   else
   {
-    upside_down_=false;
+    upside_down_=true;
   }
 
   return true;
