@@ -52,6 +52,7 @@
 #include <vcl_map.h>
 #include <vbl/vbl_array_2d.h>
 #include <vil1/vil1_image.h>
+#include <vil/vil_image_resource.h>
 #include <vtol/vtol_edge_2d_sptr.h>
 #include <gevd/gevd_bufferxy.h>
 #include <vtol/vtol_intensity_face_sptr.h>
@@ -66,9 +67,14 @@ class sdet_edgel_regions
                      bool debug = false);
   ~sdet_edgel_regions();
   //Main process method
-  bool compute_edgel_regions(vil1_image& image,
+  bool compute_edgel_regions(vil1_image const& image,
                              vcl_vector<vtol_edge_2d_sptr>& sgrp,
                              vcl_vector<vtol_intensity_face_sptr>& faces);
+
+  bool compute_edgel_regions(vil_image_resource_sptr const& image,
+                             vcl_vector<vtol_edge_2d_sptr>& sgrp,
+                             vcl_vector<vtol_intensity_face_sptr>& faces);
+
 
   bool compute_edgel_regions(gevd_bufferxy* buf,
                              vcl_vector<vtol_edge_2d_sptr>& sgrp,

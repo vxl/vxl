@@ -76,7 +76,8 @@ class gevd_bufferxy;
 #include <vcl_vector.h>
 #include <vcl_iostream.h>
 #include <vil1/vil1_image.h>
-
+#include <vil/vil_image_resource.h>
+#include <vil/vil_memory_image.h>
 #include <vtol/vtol_vertex_2d_sptr.h>
 #include <vtol/vtol_edge_2d_sptr.h>
 #include "sdet_detector_params.h"
@@ -88,9 +89,16 @@ class sdet_detector : public sdet_detector_params
   // be the most important in controlling performance - JLM
   //
   sdet_detector(sdet_detector_params& params);
+
   sdet_detector(vil1_image, float smoothSigma = 1.0, float noiseSigma =2.0,
                 float contourFactor = 1.0, float junctionFactor = 1.5,
                 int minLength = 6, float maxGap = 2.23606, float minJump=1.0);
+
+  sdet_detector(vil_image_resource_sptr &, float smoothSigma = 1.0,
+                float noiseSigma =2.0, float contourFactor = 1.0,
+                float junctionFactor = 1.5, int minLength = 6,
+                float maxGap = 2.23606, float minJump=1.0);
+
   ~sdet_detector();
 
   // External interfaces
@@ -98,7 +106,12 @@ class sdet_detector : public sdet_detector_params
   bool DoContour();
 
   //Fold contour detection
-  void DoFoldContourDetector(vil1_image image, vcl_vector<vtol_edge_2d_sptr >& edgels);
+  void DoFoldContourDetector(vil1_image image,
+                             vcl_vector<vtol_edge_2d_sptr >& edgels);
+
+  void DoFoldContourDetector(vil_image_resource_sptr const& image,
+                             vcl_vector<vtol_edge_2d_sptr >& edgels);
+
 
   //Corner detection using curvature on edgel chains
   //GEOFF  void  DoCornerDetector(vil1_image image, IUPointGroup& corners);
@@ -116,11 +129,15 @@ class sdet_detector : public sdet_detector_params
   bool DoStep();
   bool DoFold();
 
-  gevd_bufferxy* GetBufferFromImage();
+  gevd_bufferxy* GetBufferFromImage(); //!< vil1 image conversion
+  gevd_bufferxy* GetBufferFromVilImage();//!< vil image conversion
 
   vcl_vector<vtol_vertex_2d_sptr> *GetVertices() {return vertices;}
   vcl_vector<vtol_edge_2d_sptr> *GetEdges() {return edges;}
-  void SetImage(vil1_image img) {image = img;}
+
+  //:The last type set is used in the execution if both types are valid
+  void SetImage(vil1_image img);
+  void SetImage(vil_image_resource_sptr const& img);
 
   void print(vcl_ostream &strm=vcl_cout) const;
 
@@ -128,8 +145,9 @@ class sdet_detector : public sdet_detector_params
   void ClearData(); //!< clear buffer
 
  protected:
+  bool use_vil_image;//there could be both types set on class
   vil1_image image;
-
+  vil_image_resource_sptr vimage;
   float noise; //!< noise estimation/threshold
 
   gevd_bufferxy *edgel,                      //!< output from DoStep

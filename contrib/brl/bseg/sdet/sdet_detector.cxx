@@ -24,22 +24,45 @@ sdet_detector::sdet_detector(sdet_detector_params& params)
     angle(NULL), junctionx(NULL), junctiony(NULL), njunction(0),
     vertices(NULL), edges(NULL),
     filterFactor(2), hysteresisFactor(2.0), noiseThreshold(0.0)
-{
+{   
   if (params.automatic_threshold)
     noise = -params.noise_weight;
   else
     noise = params.noise_multiplier;
+//don't really know but have to pick one
+  use_vil_image = true;
+  image=0;
+  vimage=0;
 }
 
 sdet_detector::sdet_detector(vil1_image img, float smoothSigma, float noiseSigma,
                              float contour_factor, float junction_factor, int min_length,
                              float maxgap, float min_jump)
-  : image(img), noise(noiseSigma), edgel(NULL), direction(NULL),
+  : image(img), vimage(0), noise(noiseSigma), edgel(NULL), direction(NULL),
     locationx(NULL), locationy(NULL), grad_mag(NULL),
     angle(NULL), junctionx(NULL), junctiony(NULL), njunction(0),
     vertices(NULL), edges(NULL),
     filterFactor(2), hysteresisFactor(2.0), noiseThreshold(0.0)
 {
+  use_vil_image = false;
+  sdet_detector_params::smooth = smoothSigma;
+  sdet_detector_params::contourFactor = contour_factor;
+  sdet_detector_params::junctionFactor = junction_factor;
+  sdet_detector_params::minLength = min_length;
+  sdet_detector_params::maxGap = maxgap;
+  sdet_detector_params::minJump = min_jump;
+}
+
+sdet_detector::sdet_detector(vil_image_resource_sptr & img, float smoothSigma, float noiseSigma,
+                             float contour_factor, float junction_factor, int min_length,
+                             float maxgap, float min_jump)
+  : image(0),vimage(img), noise(noiseSigma), edgel(NULL), direction(NULL),
+    locationx(NULL), locationy(NULL), grad_mag(NULL),
+    angle(NULL), junctionx(NULL), junctiony(NULL), njunction(0),
+    vertices(NULL), edges(NULL),
+    filterFactor(2), hysteresisFactor(2.0), noiseThreshold(0.0)
+{
+  use_vil_image = true;
   sdet_detector_params::smooth = smoothSigma;
   sdet_detector_params::contourFactor = contour_factor;
   sdet_detector_params::junctionFactor = junction_factor;
@@ -181,7 +204,11 @@ bool sdet_detector::DoStep()
 {
   if (edgel) return true;
 
-  const gevd_bufferxy* source = GetBufferFromImage();
+  const gevd_bufferxy* source=0;
+  if(use_vil_image)
+    source = GetBufferFromVilImage();
+  else
+    source = GetBufferFromImage();
   if (!source) {
     vcl_cout << " cannot get image buffer\n";
     return false;
@@ -249,6 +276,8 @@ bool sdet_detector::DoFold()
 //
 //: Transform data in the image as float buffer.
 //
+// two versions so as not to break anything from the ancient code JLM
+// vil1_image version
 gevd_bufferxy* sdet_detector::GetBufferFromImage()
 {
   gevd_bufferxy* image_float_buf = 0;
@@ -305,6 +334,43 @@ gevd_bufferxy* sdet_detector::GetBufferFromImage()
 
   return image_float_buf;
 }
+// vil_image version
+gevd_bufferxy* sdet_detector::GetBufferFromVilImage()
+{
+  gevd_bufferxy* image_float_buf = 0;
+
+  if (image_float_buf) return image_float_buf;
+  //Tests for validity
+  
+  if(!use_vil_image||!vimage->ni()||!vimage->nj())
+  {
+    vcl_cout << "In sdet_detector::GetBufferFromVilImage() - no image\n";
+    return 0;
+  }
+  if (vimage->nplanes()!=1)
+  {
+    vcl_cout << "In sdet_detector::GetBufferFromImage() -"
+             << " not exactly one component\n";
+    return 0;
+  }
+
+  int sizey= vimage->nj();
+  int sizex= vimage->ni();
+
+  image_float_buf = new gevd_bufferxy(sizex, sizey,8*sizeof(float));
+
+
+
+  gevd_bufferxy image_buf(vimage);
+
+  if (! gevd_float_operators::BufferToFloat(image_buf, *image_float_buf))
+  {
+    delete image_float_buf;
+    image_float_buf = 0;
+  }
+
+  return image_float_buf;
+}
 
 void sdet_detector::print(vcl_ostream &strm) const
 {
@@ -342,4 +408,17 @@ void sdet_detector::DoBreakCorners(vcl_vector<vtol_edge_2d_sptr >& /* in_edgels 
                                    vcl_vector<vtol_edge_2d_sptr >& /* out_edgels */)
 {
   vcl_cerr << "sdet_detector::DoBreakCorners() NYI\n";
+}
+
+void sdet_detector::SetImage(vil1_image img)
+{
+  use_vil_image = false;
+  image = img;
+}
+
+
+void sdet_detector::SetImage(vil_image_resource_sptr const& img)
+{
+  use_vil_image = true;
+  vimage = img;
 }

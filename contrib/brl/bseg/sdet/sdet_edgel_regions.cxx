@@ -267,14 +267,49 @@ bool sdet_edgel_regions::compute_edgel_regions(gevd_bufferxy* buf,
 //  - Construct vtol_intensity_faces
 //  - Calculate intensity fit
 bool sdet_edgel_regions::
-compute_edgel_regions(vil1_image& image,
+compute_edgel_regions(vil1_image const& image,
                       vcl_vector<vtol_edge_2d_sptr>& sgrp,
                       vcl_vector<vtol_intensity_face_sptr>& faces)
 {
+#if 0
   image_ = image;
   buf_ = NULL;
   image_source_=true;
   buf_source_ = false;
+#endif
+  //change to uniform use of bufferxy for ease of interfacing to different
+  //image types
+  image_ = 0;
+  image_source_=false;
+  buf_source_ = false;
+  buf_ = new gevd_bufferxy(image);
+  if(buf_)
+    buf_source_ = true;
+  else
+    return false;
+  return compute_edgel_regions(sgrp, faces);
+}
+bool sdet_edgel_regions::
+compute_edgel_regions(vil_image_resource_sptr const& image,
+                      vcl_vector<vtol_edge_2d_sptr>& sgrp,
+                      vcl_vector<vtol_intensity_face_sptr>& faces)
+{
+#if 0
+  image_ = image;
+  buf_ = NULL;
+  image_source_=true;
+  buf_source_ = false;
+#endif
+  //change to uniform use of bufferxy for ease of interfacing to different
+  //image types
+  image_ = 0;
+  image_source_=false;
+  buf_source_ = false;
+  buf_ = new gevd_bufferxy(image);
+  if(buf_)
+    buf_source_ = true;
+  else
+    return false;
   return compute_edgel_regions(sgrp, faces);
 }
 

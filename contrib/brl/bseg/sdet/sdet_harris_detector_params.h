@@ -20,7 +20,8 @@ class sdet_harris_detector_params : public gevd_param_mixin
                               const float thresh = 2.0,
                               const int n=1,
                               const float percent_corners=80.0,
-                              const float scale_factor = 0.04);
+                              const float scale_factor = 0.04,
+                              const bool use_vil_harris=false);
 
   sdet_harris_detector_params(const sdet_harris_detector_params& old_params);
  ~sdet_harris_detector_params(){}
@@ -33,7 +34,8 @@ class sdet_harris_detector_params : public gevd_param_mixin
                   float thresh,
                   int n,
                   float percent_corners,
-                  float scale_factor);
+                  float scale_factor,
+                  bool use_vil_harris);
  public:
   //
   // Parameter blocks and parameters
@@ -43,6 +45,7 @@ class sdet_harris_detector_params : public gevd_param_mixin
   int n_;             //!< size of the gradient matrix neighorhood (2n+1)x(2n+1)
   float percent_corners_; //!< maximum of corners as a percent of total
   float scale_factor_;    //!< Harris trace weight
+  bool use_vil_harris_;  //!< use vil/algo/vil_corners for strength
 };
 
 #endif // sdet_harris_detector_params_h_

@@ -20,7 +20,8 @@ sdet_harris_detector_params(const sdet_harris_detector_params& hdp)
              hdp.thresh_,
              hdp.n_,
              hdp.percent_corners_,
-             hdp.scale_factor_
+             hdp.scale_factor_,
+             hdp.use_vil_harris_
             );
 }
 
@@ -29,17 +30,19 @@ sdet_harris_detector_params(const float sigma,
                             const float thresh,
                             const int n,
                             const float percent_corners,
-                            const float scale_factor
+                            const float scale_factor,
+                            const bool use_vil_harris
                            )
 {
-  InitParams(sigma, thresh, n, percent_corners, scale_factor);
+  InitParams(sigma, thresh, n, percent_corners, scale_factor,use_vil_harris);
 }
 
 void sdet_harris_detector_params::InitParams(float sigma,
                                              float thresh,
                                              int n,
                                              float percent_corners,
-                                             float scale_factor
+                                             float scale_factor,
+                                             bool use_vil_harris
                                             )
 {
   sigma_= sigma;
@@ -47,6 +50,7 @@ void sdet_harris_detector_params::InitParams(float sigma,
   n_ = n;
   percent_corners_ = percent_corners;
   scale_factor_=scale_factor;
+  use_vil_harris_ = use_vil_harris;
 }
 
 //-----------------------------------------------------------------------------
@@ -100,5 +104,6 @@ vcl_ostream& operator<< (vcl_ostream& os, const sdet_harris_detector_params& hdp
      << "n " << hdp.n_ << vcl_endl
      << "max_no_corners(percent) " << hdp.percent_corners_ << vcl_endl
      << "scale_factor " << hdp.scale_factor_ << vcl_endl
+     << "vil_harris?" << hdp.use_vil_harris_ << vcl_endl
      << "---]" << vcl_endl;
 }

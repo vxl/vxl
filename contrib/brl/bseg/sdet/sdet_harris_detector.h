@@ -31,12 +31,13 @@
 //
 // \verbatim
 //  Modifications
-//   <none>
+// J.L. MUndy December 28, 2004 - added iterface for vil images
 // \endverbatim
 //
 //-------------------------------------------------------------------------
 #include <vcl_vector.h>
 #include <vil1/vil1_image.h>
+#include <vil/vil_image_resource.h>
 #include <vsol/vsol_point_2d_sptr.h>
 #include <sdet/sdet_harris_detector_params.h>
 
@@ -48,7 +49,9 @@ class sdet_harris_detector : public sdet_harris_detector_params
 
   ~sdet_harris_detector();
   //Accessors
-  void set_image(vil1_image& image);
+  void set_image(vil1_image const& image);
+  void set_image_resource(vil_image_resource_sptr const& image);
+
   vcl_vector<vsol_point_2d_sptr>& get_points(){return points_;}
 
   //Utility Methods
@@ -57,10 +60,18 @@ class sdet_harris_detector : public sdet_harris_detector_params
 
  protected:
   //protected methods
+  bool extract_corners_vil1(vcl_vector<float>& x_pos,
+                            vcl_vector<float>& y_pos,
+                            vcl_vector<float>& val);
 
+  bool extract_corners_vil(vcl_vector<float>& x_pos,
+                           vcl_vector<float>& y_pos,
+                           vcl_vector<float>& val);
   //members
   bool points_valid_;      //process state flag
+  bool use_vil_image_;
   vil1_image image_;  //input image
+  vil_image_resource_sptr vimage_;  //input image
   vcl_vector<vsol_point_2d_sptr> points_; //resulting corners
 };
 
