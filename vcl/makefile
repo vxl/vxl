@@ -219,6 +219,7 @@ MANPAGE_SOURCES += sgi/vcl_iomanip.h
 MANPAGE_SOURCES += sgi/vcl_ios.h
 MANPAGE_SOURCES += sgi/vcl_iostream.h
 MANPAGE_SOURCES += sgi/vcl_algorithm.txx
+MANPAGE_SOURCES += sgi/vcl_bitset.h
 MANPAGE_SOURCES += sgi/vcl_complex.txx
 MANPAGE_SOURCES += sgi/vcl_deque.txx
 MANPAGE_SOURCES += sgi/vcl_functional.txx
