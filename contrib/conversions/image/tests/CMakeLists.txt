@@ -14,11 +14,11 @@ ENDIF(HAS_IMAGE)
 ADD_EXECUTABLE( conversions_image_test_all
   test_driver.cxx
 
-  test_vil_vbl_conversions.cxx
+  test_vil1_vbl_conversions.cxx
   test_image_conversions.cxx
 )
 
-ADD_TEST( conversions_test_vil_vbl_conversions conversions_image_test_all test_vil_vbl_conversions )
+ADD_TEST( conversions_test_vil1_vbl_conversions conversions_image_test_all test_vil1_vbl_conversions )
 ADD_TEST( conversions_test_image_conversions conversions_image_test_all test_image_conversions )
 
 ADD_EXECUTABLE( conversions_image_test_include test_include.cxx )
