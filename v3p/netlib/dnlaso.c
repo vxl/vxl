@@ -1452,7 +1452,7 @@ doublereal *eigvec, *atol, *artol, *bound, *atemp, *d, *vtemp;
 
 /*  LOOP OVER EIGENVALUES */
 
-    sigma = bound[(nval + 1 << 1) + 2];
+    sigma = bound[(nval << 1) + 4];
     i__1 = nval;
     for (j = 1; j <= i__1; ++j) {
         numl = j;
@@ -1500,7 +1500,7 @@ L30:
 
 /*  ACCEPT EIGENVALUE IF THE INTERVAL IS SMALL ENOUGH */
 
-        if (bound[(j + 1 << 1) + 2] - bound[(j + 1 << 1) + 1] < *atol * 3.) {
+        if (bound[(j << 1) + 4] - bound[(j << 1) + 3] < *atol * 3.) {
             goto L300;
         }
 
@@ -1508,7 +1508,7 @@ L30:
 
         errb = resid;
 /* Computing MIN */
-        d__1 = bound[(j + 2 << 1) + 1] - rq, d__2 = rq - bound[(j << 1) + 2];
+        d__1 = bound[(j << 1) + 5] - rq, d__2 = rq - bound[(j << 1) + 2];
         gap = min(d__1,d__2);
         if (gap > resid) {
 /* Computing MAX */
@@ -1518,28 +1518,27 @@ L30:
 
 /*  TENTATIVE NEW SHIFT */
 
-        sigma = (bound[(j + 1 << 1) + 1] + bound[(j + 1 << 1) + 2]) * .5;
+        sigma = (bound[(j << 1) + 3] + bound[(j << 1) + 4]) * .5;
 
 /*  CHECK FOR TERMINALTION */
 
         if (resid > *atol * 2.) {
             goto L40;
         }
-        if (rq - errb > bound[(j << 1) + 2] && rq + errb < bound[(j + 2 << 1)
-                + 1]) {
+        if (rq - errb > bound[(j << 1) + 2] && rq + errb < bound[(j << 1) + 5]) {
             goto L310;
         }
 
 /*  RQ IS TO THE LEFT OF THE INTERVAL */
 
 L40:
-        if (rq >= bound[(j + 1 << 1) + 1]) {
+        if (rq >= bound[(j << 1) + 3]) {
             goto L50;
         }
         if (rq - errb > bound[(j << 1) + 2]) {
             goto L100;
         }
-        if (rq + errb < bound[(j + 1 << 1) + 1]) {
+        if (rq + errb < bound[(j << 1) + 3]) {
             dlaran_(n, &eigvec[j * eigvec_dim1 + 1]);
         }
         goto L200;
@@ -1547,21 +1546,21 @@ L40:
 /*  RQ IS TO THE RIGHT OF THE INTERVAL */
 
 L50:
-        if (rq <= bound[(j + 1 << 1) + 2]) {
+        if (rq <= bound[(j << 1) + 4]) {
             goto L100;
         }
-        if (rq + errb < bound[(j + 2 << 1) + 1]) {
+        if (rq + errb < bound[(j << 1) + 5]) {
             goto L100;
         }
 
 /*  SAVE THE REJECTED VECTOR IF INDICATED */
 
-        if (rq - errb <= bound[(j + 1 << 1) + 2]) {
+        if (rq - errb <= bound[(j << 1) + 4]) {
             goto L200;
         }
         i__2 = nval;
         for (i = j; i <= i__2; ++i) {
-            if (bound[(i + 1 << 1) + 2] > rq) {
+            if (bound[(i << 1) + 4] > rq) {
                 goto L70;
             }
 /* L60: */
@@ -1595,7 +1594,7 @@ L100:
 L200:
         i__2 = nval;
         for (i = j; i <= i__2; ++i) {
-            if (sigma < bound[(i + 1 << 1) + 1]) {
+            if (sigma < bound[(i << 1) + 3]) {
                 goto L220;
             }
 /* L210: */
@@ -1637,21 +1636,20 @@ L227:
         }
         i__2 = nval;
         for (i = j; i <= i__2; ++i) {
-            if (sigma < bound[(i + 1 << 1) + 1]) {
+            if (sigma < bound[(i << 1) + 3]) {
                 goto L20;
             }
             if (numl < i) {
-                bound[(i + 1 << 1) + 1] = sigma;
+                bound[(i << 1) + 3] = sigma;
             }
             if (numl >= i) {
-                bound[(i + 1 << 1) + 2] = sigma;
+                bound[(i << 1) + 4] = sigma;
             }
 /* L230: */
         }
         if (numl < nval + 1) {
-/* Computing MAX */
-            d__1 = sigma, d__2 = bound[(nval + 2 << 1) + 1];
-            bound[(nval + 2 << 1) + 1] = max(d__1,d__2);
+            if (sigma > bound[(nval << 1) + 5])
+                bound[(nval << 1) + 5] = sigma;
         }
         goto L20;
 
@@ -1664,7 +1662,7 @@ L300:
 
 L305:
         flag__ = FALSE_;
-        rq = (bound[(j + 1 << 1) + 1] + bound[(j + 1 << 1) + 2]) * .5;
+        rq = (bound[(j << 1) + 3] + bound[(j << 1) + 4]) * .5;
         i__2 = (*nband << 1) - 1;
         dlabfc_(n, nband, &a[a_offset], &rq, &numvec, lde, &eigvec[j *
                 eigvec_dim1 + 1], &numl, &i__2, &atemp[1], &d[1], atol);
@@ -2019,12 +2017,12 @@ L30:
         bound[(i << 1) + 2] = *tmax;
     }
     bound[4] = *tmax;
-    bound[(nval + 2 << 1) + 1] = *tmin;
+    bound[(nval << 1) + 5] = *tmin;
     if (*nl == 1) {
         bound[4] = *tmin;
     }
     if (*nr == *n) {
-        bound[(nval + 2 << 1) + 1] = *tmax;
+        bound[(nval << 1) + 5] = *tmax;
     }
 
     dlabcm_(n, nband, nl, nr, &a[a_offset], &eigval[1], lde, &eigvec[
