@@ -32,21 +32,20 @@ class brct_windows_frame : public vgui_wrapper_tableau
   void quit();
   void add_curve3d(vcl_vector<vgl_point_3d<double> >& pts);
   void remove_curve3d();
-  
+
+#if 0
   //: access to the window
-  //vgui_window* get_window(){return win_;}
-  void set_window(vgui_window* win){win_=win;}
+  vgui_window* get_window() { return win_; }
+#endif // 0
+  //: access to the window
+  void set_window(vgui_window* win) { win_=win; }
   void init();
-  
+
   //: the virtual handle function
   virtual bool handle(const vgui_event&);
 
- protected:
-  //:internal utility methods
-	 
-
  private:
-   //: get track of all the 3d points added into 3d tableau
+  //: get track of all the 3d points added into 3d tableau
   vgui_window* win_;
   vcl_vector<vgui_point3D* > points_3d_;
   vgui_easy3D_tableau_sptr tab_3d_;
