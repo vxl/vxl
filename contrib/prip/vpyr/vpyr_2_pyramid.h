@@ -86,8 +86,11 @@ class vpyr_2_pyramid
   {
     base_map_.set_structure(arg) ;
     level_.clear() ;
-    level_.insert(typename level_array_type::value_type(::vmap_top_level_index(),
-                  level_type(::vmap_top_level_index(),(typename level_type::pyramid_type&) *this))) ;
+    typedef typename level_array_type::value_type value_type ;
+    typedef typename level_type::pyramid_type pyramid_type ;
+    level_.insert(value_type(::vmap_top_level_index(),
+                             level_type(::vmap_top_level_index(),
+                                        (pyramid_type&)(*this)))) ;
   }
 
   //: Returns the base level of the pyramid.
