@@ -1,6 +1,5 @@
 #ifndef rrel_estimation_problem_h_
 #define rrel_estimation_problem_h_
-
 //:
 // \file
 // \author Chuck Stewart
@@ -30,8 +29,9 @@ class rrel_wls_obj;
 // does not implement compute_weights(), then attempting to solve that
 // problem with IRLS will cause an abort at runtime.
 
-class rrel_estimation_problem {
-public:
+class rrel_estimation_problem
+{
+ public:
   //: Type of scale information this problem provides.
   //  NONE: problem does not provide any scale information. SINGLE:
   //  problem provides a single prior scale (homoscedastic
@@ -39,7 +39,7 @@ public:
   //  (heteroscedastic data).
   enum scale_t { NONE = 0, SINGLE = 1, MULTIPLE = 2 };
 
-public:
+ public:
   //: Constructor.
   // See the comments for param_dof() and num_samples_to_instantiate()
   // for the meaning of these two parameters.
@@ -79,7 +79,7 @@ public:
   // much greater than the number of "unique samples" (which would be
   // the number of points from one image).
   //
-  // This is used by random sampling techinques to determine the
+  // This is used by random sampling techniques to determine the
   // number of samples required to get a given probability of success.
   virtual unsigned int num_unique_samples( ) const { return num_samples(); }
 
@@ -151,7 +151,7 @@ public:
                                            vnl_matrix<double>& norm_covar,
                                            const vcl_vector<double>* weights=0 ) const = 0;
 
-protected:
+ protected:
   //: Set the degrees of freedom.
   void set_param_dof( unsigned int dof ) { dof_ = dof; }
 
@@ -161,7 +161,7 @@ protected:
   //: Set the type of prior scale.
   void set_scale_type( scale_t t ) { scale_type_ = t; }
 
-private:
+ private:
   unsigned int dof_;
   unsigned int num_samples_for_fit_;
   scale_t scale_type_;
