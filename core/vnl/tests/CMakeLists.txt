@@ -103,6 +103,6 @@ IF(NETLIB_FOUND)
   ADD_TEST( vnl_test_transpose                vnl_test_driver test_transpose               )
   ADD_TEST( vnl_test_vector                   vnl_test_driver test_vector                  )
   ADD_TEST( vnl_test_gamma                    vnl_test_driver test_gamma                   )
-  ADD_TEST( vnl_test_gamma                    vnl_test_driver test_arithmetic              )
+  ADD_TEST( vnl_test_arithmetic               vnl_test_driver test_arithmetic              )
 
 ENDIF(NETLIB_FOUND)
