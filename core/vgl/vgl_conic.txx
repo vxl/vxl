@@ -43,7 +43,7 @@ typename vgl_conic<T>::vgl_conic_type vgl_conic<T>::type_by_name(vcl_string cons
 }
 
 template <class T>
-vcl_string vgl_conic<T>::type_by_number(enum vgl_conic::vgl_conic_type type)
+vcl_string vgl_conic<T>::type_by_number(typename vgl_conic<T>::vgl_conic_type type)
 {
   if (type <= 0 || type >= num_conic_types) return vgl_conic_name[no_type];
   return vgl_conic_name[type];

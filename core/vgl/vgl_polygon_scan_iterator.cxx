@@ -6,6 +6,7 @@
 #include <vcl_cstring.h>
 #include <vcl_cmath.h>
 #include <vcl_iostream.h>
+#include <vcl_cstdlib.h>
 
 // It used to be necessary to add 0.5 to the scanline coordinates
 // obtained from a vgl_polygon_scan_iterator. Presumably this had
@@ -140,7 +141,7 @@ void vgl_polygon_scan_iterator::init()
   // sort vertices by y coordinate
   chs = &poly_[0]; // a hack -- but apparently must do it to use qsort
 //  qsort(yverts, numverts, sizeof(yverts[0]), (Callback2)compare_vertind_x);
-  qsort(yverts, numverts, sizeof(yverts[0]), (Callback2)compare_vertind);
+  vcl_qsort(yverts, numverts, sizeof(yverts[0]), (Callback2)compare_vertind);
 
   float miny, maxy;   // min and max y coordinate of vertices
   miny = get_y( yverts[ 0 ] );
@@ -340,8 +341,8 @@ bool vgl_polygon_scan_iterator::next( )
       }
 
       // sort edges crossing scan line by their intersection with scan line
-      qsort( crossedges, numcrossedges, sizeof crossedges[0],
-             (Callback2)compare_crossedges);
+      vcl_qsort( crossedges, numcrossedges, sizeof crossedges[0],
+                 (Callback2)compare_crossedges);
 
       curcrossedge = 0; // Process the next set of horizontal spans
       y++;

@@ -57,7 +57,7 @@ vgl_norm_trans_2d<T>::vgl_norm_trans_2d(const T* H)
 
 //: Destructor
 template <class T>
-vgl_norm_trans_2d<T>::~vgl_norm_trans_2d<T>()
+vgl_norm_trans_2d<T>::~vgl_norm_trans_2d()
 {
 }
 

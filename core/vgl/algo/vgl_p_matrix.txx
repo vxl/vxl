@@ -162,7 +162,8 @@ static bool ok(vcl_istream& f) { return f.good() || f.eof(); }
 template <class T>
 bool vgl_p_matrix<T>::read_ascii(vcl_istream& f)
 {
-  f >> (vnl_matrix<T>&)this->p_matrix_;
+  vnl_matrix_ref<T> ref = this->p_matrix_;
+  f >> ref;
   clear_svd();
 
   if (!ok(f)) {

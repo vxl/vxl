@@ -49,7 +49,7 @@ vgl_box_2d<Type>::vgl_box_2d(Type xmin, Type xmax, Type ymin, Type ymax)
 template <class Type>
 vgl_box_2d<Type>::vgl_box_2d(Type const ref_point[2],
                              Type width, Type height,
-                             enum point_type t) // enum necessary for C++.NET 2003
+                             typename vgl_box_2d<Type>::point_type t)
 {
   if (t == vgl_box_2d<Type>::centre)
   {
@@ -79,7 +79,7 @@ vgl_box_2d<Type>::vgl_box_2d(Type const ref_point[2],
 template <class Type>
 vgl_box_2d<Type>::vgl_box_2d(vgl_point_2d<Type> const& ref_point,
                              Type width, Type height,
-                             point_type t)
+                             typename vgl_box_2d<Type>::point_type t)
 {
   if (t == vgl_box_2d<Type>::centre)
   {
