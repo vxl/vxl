@@ -2,8 +2,6 @@
 
 PROJECT( vcl )
 
-SET( VCL_INCLUDE_DIR ${VCL_SOURCE_DIR} CACHE STATIC "VCL include files" )
-
 # Set up vcl_where_root_dir.h to have a macro set to $VCL_SOURCE_ROOT_DIR
 CONFIGURE_FILE(
       ${vxl_SOURCE_DIR}/vcl/vcl_where_root_dir.h.in

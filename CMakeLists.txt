@@ -10,18 +10,17 @@ PROJECT(vxl)
 SET( LIBRARY_OUTPUT_PATH ${vxl_BINARY_DIR}/lib CACHE PATH
      "Output directory for the vxl libraries" )
 
-# This prevents UseVXL.cmake from attempting to load the main vxl
-# cache.
-SET( BUILDING_IN_VXL_TREE "YES" )
+# CMake support directory.
+SET(VXL_CMAKE_DIR ${vxl_SOURCE_DIR}/config/cmake)
 
-INCLUDE( ${vxl_SOURCE_DIR}/UseVXL.cmake )
+INCLUDE( ${VXL_CMAKE_DIR}/VXLStandardOptions.cmake )
 # INCLUDE( ${vxl_SOURCE_DIR}/UseSTLPort.cmake )
 
 # Copy the UseVXL.cmake file to the binary directory so that client
 # projects don't need to find the source directory first. They can run
 # the UseVXL.cmake from the vxl binary directory, and determine the
 # vxl source directory by loading the cache.
-CONFIGURE_FILE( ${vxl_SOURCE_DIR}/UseVXL.cmake
+CONFIGURE_FILE( ${VXL_CMAKE_DIR}/UseVXL.cmake
                 ${vxl_BINARY_DIR}/UseVXL.cmake COPYONLY )
 
 # To avoid typing for the FindXXX.cmake modules
@@ -73,3 +72,30 @@ ELSE( ${vxl_BINARY_DIR} MATCHES ${vxl_SOURCE_DIR} )
   INCLUDE( ${vxl_SOURCE_DIR}/CMakeListsLocal.txt OPTIONAL )
   INCLUDE( ${vxl_BINARY_DIR}/CMakeListsLocal.txt OPTIONAL )
 ENDIF( ${vxl_BINARY_DIR} MATCHES ${vxl_SOURCE_DIR} )
+
+# Standard include directories.
+SET(VXLCORE_INCLUDE_DIR ${vxl_BINARY_DIR}/core ${vxl_SOURCE_DIR}/core)
+SET(VCL_INCLUDE_DIR ${vxl_BINARY_DIR}/vcl ${vxl_SOURCE_DIR}/vcl)
+IF(WIN32)
+  IF(NOT CYGWIN)
+    SET(VCL_INCLUDE_DIR ${vxl_SOURCE_DIR}/vcl/config.win32 ${VCL_INCLUDE_DIR})
+  ENDIF(NOT CYGWIN)
+ENDIF(WIN32)
+
+INCLUDE_DIRECTORIES(${VCL_INCLUDE_DIR} ${VXLCORE_INCLUDE_DIR})
+
+#-----------------------------------------------------------------------------
+# Help other projects use VXL.
+
+# Save the compiler settings so another project can import them.
+INCLUDE(${CMAKE_ROOT}/Modules/CMakeExportBuildSettings.cmake)
+SET(VXL_BUILD_SETTINGS_FILE ${vxl_BINARY_DIR}/VXLBuildSettings.cmake)
+CMAKE_EXPORT_BUILD_SETTINGS(${VXL_BUILD_SETTINGS_FILE})
+
+# Save library dependencies.
+SET(VXL_LIBRARY_DEPENDS_FILE ${vxl_BINARY_DIR}/VXLLibraryDepends.cmake)
+EXPORT_LIBRARY_DEPENDENCIES(${VXL_LIBRARY_DEPENDS_FILE})
+
+# Create the VXLConfig.cmake file for the build tree.
+CONFIGURE_FILE(${VXL_CMAKE_DIR}/VXLConfig.cmake.in
+               ${vxl_BINARY_DIR}/VXLConfig.cmake @ONLY IMMEDIATE)

@@ -2,10 +2,6 @@
 
 PROJECT( vxlcore )
 
-SET( VXLCORE_INCLUDE_DIR ${vxlcore_SOURCE_DIR} CACHE STATIC "Core VXL include files" )
-
-INCLUDE_DIRECTORIES(${VXLCORE_INCLUDE_DIR})
-
 SET(global_sources
  vxl_copyright.h
  vxl_config.h.in
