@@ -9,7 +9,7 @@
 #include "vnl_matlab_filewrite.h"
 
 #include <vcl_fstream.h>
-#include <vcl_strstream.h>
+#include <vcl_sstream.h>
 #include <vcl_complex.h>
 
 #include <vnl/vnl_vector.h>
@@ -30,9 +30,9 @@ vcl_string vnl_matlab_filewrite::make_var_name(char const* variable_name)
   if (variable_name)
     return vcl_string(variable_name);
   else {
-    vcl_ostrstream ss;
+    vcl_stringstream ss;
     ss << variable_int_++;
-    return basename_ + vcl_string(ss.str());
+    return basename_ + ss.str();
   }
 }
 
