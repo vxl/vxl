@@ -24,14 +24,14 @@ SUBDIRS += vsrl
 # Triangulation code
 SUBDIRS += gtrl
 
-# digital geometry
-SUBDIRS += vdgl
-
 # spatial objects
 SUBDIRS += vsol
 
 # topology
 SUBDIRS += gst vtol
+
+# digital geometry
+SUBDIRS += vdgl
 
 # general examples
 ifndef NOTEST
