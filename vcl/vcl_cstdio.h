@@ -16,6 +16,7 @@
 #elif defined(VCL_VC)
 # include "win32/vcl_cstdio.h"
 #else
+# include "vcl_cstddef.h" // for size_t
 # include "iso/vcl_cstdio.h"
 #endif
 

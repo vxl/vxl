@@ -14,6 +14,7 @@
 #elif defined(VCL_VC)
 # include <cstddef>
 #else
+# undef __size_t // this is a bug fix for HPPA
 # include "iso/vcl_cstddef.h"
 using std::size_t;
 using std::ptrdiff_t;
