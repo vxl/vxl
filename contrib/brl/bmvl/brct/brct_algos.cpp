@@ -1,4 +1,6 @@
-// brct_algos.cpp: implementation of the brct_algos class.
+//:
+// \file
+// \brief implementation of the brct_algos class.
 //
 //////////////////////////////////////////////////////////////////////
 
@@ -18,7 +20,6 @@
 #include <bbas/bdgl/bdgl_curve_algs.h>
 #include <vsol/vsol_box_3d.h>
 #include <vcl_cassert.h>
-#include "brct_algos.h"
 
 // Construction/Destruction
 
@@ -61,22 +62,19 @@ bugl_gaussian_point_2d<double> brct_algos::project_3d_point(const vnl_double_3x4
   vnl_double_4 Y(X.x(),X.y(),X.z(),1.0);
   vnl_double_3 u = P*Y;
 
-
-  // compute week prospect matrix, i.e., the car is far away from the camera
+  // compute weak prospect matrix, i.e., the car is far away from the camera
   vnl_double_2x3 H;
 
   // sum_{k=1}^{3} {P_{3k}Y_k + P_{34}
-  double t = 0;
+  double t = P[2][3];
   for (int k=0; k<3; k++)
     t += P[2][k]*Y[k];
-  t+=P[2][3];
 
   // 
   for (int i=0; i<2; i++){
-    double t1 = 0;
+    double t1 = P[i][3];
     for (int k = 0; k<3; k++)
       t1 += P[i][k]*Y[k];
-    t1+= P[i][3];
 
     for (int j=0; j<3; j++)
       H[i][j] = P[i][j] / t - P[2][j]* t1 / t/t;
@@ -92,13 +90,13 @@ bugl_gaussian_point_2d<double> brct_algos::project_3d_point(const vnl_double_3x4
 
 vgl_point_3d<double> brct_algos::bundle_reconstruct_3d_point(vcl_vector<vnl_double_2> &pts, vcl_vector<vnl_double_3x4> &Ps)
 {
-  int nviews = pts.size();
   assert(pts.size() == Ps.size());
+  unsigned int nviews = pts.size();
 
   vnl_matrix<double> A(2*nviews, 4, 0.0);
 
-  for (int v = 0; v<nviews; v++)
-    for (int i=0; i<4; i++) {
+  for (unsigned int v = 0; v<nviews; v++)
+    for (unsigned int i=0; i<4; i++) {
       A[2*v  ][i] = pts[v][0]*Ps[v][2][i] - Ps[v][0][i];
       A[2*v+1][i] = pts[v][1]*Ps[v][2][i] - Ps[v][1][i];
     }
@@ -111,9 +109,9 @@ vsol_box_3d_sptr brct_algos::get_bounding_box(vcl_vector<vgl_point_3d<double> > 
 {
   vsol_box_3d_sptr box = new vsol_box_3d;
 
-  int size = pts_3d.size();
+  unsigned int size = pts_3d.size();
 
-  for (int i=0; i<size; i++){
+  for (unsigned int i=0; i<size; i++) {
     vgl_point_3d<double> &pt = pts_3d[i];
     box->add_point(pt.x(), pt.y(), pt.z());
   }
@@ -167,21 +165,19 @@ vgl_point_2d<double> brct_algos::most_possible_point(vdgl_digital_curve_sptr dc,
  
 vnl_double_2 brct_algos::projection_3d_point(const vnl_double_3x4 &P, const vnl_double_3 &X)
 {
-    vnl_double_2 z;
-    double t1 = 0;
+  double t1 = P[2][3];
+  for (int k=0; k<3; k++)
+    t1 += P[2][k]*X[k];
+
+  vnl_double_2 z;
+  for (int i=0; i<2; i++)
+  {
+    double t0 = P[i][3];
     for (int k=0; k<3; k++)
-      t1 += P[2][k]*X[k];
-    t1 += P[2][3];
+      t0 += P[i][k]*X[k];
 
-    for (int i=0; i<2; i++)
-    {
-      double t0 =0;
-      for (int k=0; k<3; k++)
-        t0 += P[i][k]*X[k];
-      t0 += P[i][3];
+    z[i] = t0/t1;
+  }
 
-      z[i] = t0/t1;
-    }
-
-    return z;
+  return z;
 }
