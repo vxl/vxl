@@ -56,8 +56,7 @@ vcl_string vil_clamp_image_impl::is_a() const
 //: Return true if the name of the class matches the argument
 bool vil_clamp_image_impl::is_class(vcl_string const& s) const
 {
-  static const vcl_string class_name_="vil_clamp_image_impl";
-  return s==class_name_ || vil_image_impl::is_class(s);
+  return s==vil_clamp_image_impl::is_a() || vil_image_impl::is_class(s);
 }
 
 /* END_MANCHESTER_BINARY_IO_CODE */

@@ -305,8 +305,7 @@ vcl_string vil_image_as_impl<vil_byte>::is_a() const
 VCL_DEFINE_SPECIALIZATION
 bool vil_image_as_impl<vil_byte>::is_class(vcl_string const& s) const
 {
-  static const vcl_string class_name_="vil_image_as_impl<vil_byte>";
-  return s==class_name_ || vil_image_impl::is_class(s);
+  return s==vil_image_as_impl<vil_byte>::is_a() || vil_image_impl::is_class(s);
 }
 
 /* END_MANCHESTER_BINARY_IO_CODE */
@@ -367,8 +366,7 @@ vcl_string vil_image_as_impl<vxl_uint_16>::is_a() const
 VCL_DEFINE_SPECIALIZATION
 bool vil_image_as_impl<vxl_uint_16>::is_class(vcl_string const& s) const
 {
-  static const vcl_string class_name_="vil_image_as_impl<vxl_uint_16>";
-  return s==class_name_ || vil_image_impl::is_class(s);
+  return s==vil_image_as_impl<vxl_uint_16>::is_a() || vil_image_impl::is_class(s);
 }
 
 /* END_MANCHESTER_BINARY_IO_CODE */
@@ -430,8 +428,7 @@ vcl_string vil_image_as_impl<int>::is_a() const
 VCL_DEFINE_SPECIALIZATION
 bool vil_image_as_impl<int>::is_class(vcl_string const& s) const
 {
-  static const vcl_string class_name_="vil_image_as_impl<int>";
-  return s==class_name_ || vil_image_impl::is_class(s);
+  return s==vil_image_as_impl<int>::is_a() || vil_image_impl::is_class(s);
 }
 
 /* END_MANCHESTER_BINARY_IO_CODE */
@@ -492,8 +489,7 @@ vcl_string vil_image_as_impl<float>::is_a() const
 VCL_DEFINE_SPECIALIZATION
 bool vil_image_as_impl<float>::is_class(vcl_string const& s) const
 {
-  static const vcl_string class_name_="vil_image_as_impl<float>";
-  return s==class_name_ || vil_image_impl::is_class(s);
+  return s==vil_image_as_impl<float>::is_a() || vil_image_impl::is_class(s);
 }
 
 /* END_MANCHESTER_BINARY_IO_CODE */
@@ -555,8 +551,7 @@ vcl_string vil_image_as_impl<double>::is_a() const
 VCL_DEFINE_SPECIALIZATION
 bool vil_image_as_impl<double>::is_class(vcl_string const& s) const
 {
-  static const vcl_string class_name_="vil_image_as_impl<double>";
-  return s==class_name_ || vil_image_impl::is_class(s);
+  return s==vil_image_as_impl<double>::is_a() || vil_image_impl::is_class(s);
 }
 
 /* END_MANCHESTER_BINARY_IO_CODE */
@@ -621,8 +616,7 @@ vcl_string vil_image_as_impl<vil_rgb<unsigned char> >::is_a() const
 VCL_DEFINE_SPECIALIZATION
 bool vil_image_as_impl<vil_rgb<unsigned char> >::is_class(vcl_string const& s) const
 {
-  static const vcl_string class_name_="vil_image_as_impl<vil_rgb<unsigned char> >";
-  return s==class_name_ || vil_image_impl::is_class(s);
+  return s==vil_image_as_impl<vil_rgb<unsigned char> >::is_a() || vil_image_impl::is_class(s);
 }
 
 /* END_MANCHESTER_BINARY_IO_CODE */
@@ -689,8 +683,7 @@ vcl_string vil_image_as_impl<vil_rgb<float> >::is_a() const
 VCL_DEFINE_SPECIALIZATION
 bool vil_image_as_impl<vil_rgb<float> >::is_class(vcl_string const& s) const
 {
-  static const vcl_string class_name_="vil_image_as_impl<vil_rgb<float> >";
-  return s==class_name_ || vil_image_impl::is_class(s);
+  return s==vil_image_as_impl<vil_rgb<float> >::is_a() || vil_image_impl::is_class(s);
 }
 
 /* END_MANCHESTER_BINARY_IO_CODE */
@@ -758,8 +751,7 @@ vcl_string vil_image_as_impl<vil_rgb<vxl_uint_16> >::is_a() const
 VCL_DEFINE_SPECIALIZATION
 bool vil_image_as_impl<vil_rgb<vxl_uint_16> >::is_class(vcl_string const& s) const
 {
-  static const vcl_string class_name_="vil_image_as_impl<vil_rgb<vxl_uint_16> >";
-  return s==class_name_ || vil_image_impl::is_class(s);
+  return s==vil_image_as_impl<vil_rgb<vxl_uint_16> >::is_a() || vil_image_impl::is_class(s);
 }
 
 /* END_MANCHESTER_BINARY_IO_CODE */
