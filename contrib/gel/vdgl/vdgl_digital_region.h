@@ -57,7 +57,6 @@
 #include <vnl/vnl_math.h>     // for sqrt(2)
 #include <vgl/vgl_point_2d.h>
 #include <vtol/vtol_face_2d.h>
-#include <vdgl/vdgl_digital_region_sptr.h>
 
 class vdgl_digital_region
 {
