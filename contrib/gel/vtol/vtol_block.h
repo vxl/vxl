@@ -1,5 +1,5 @@
-#ifndef vtol_block_H
-#define vtol_block_H
+#ifndef vtol_block_h
+#define vtol_block_h
 //-----------------------------------------------------------------------------
 //
 // .NAME        vtol_block - Highest node in a 3D topological structure
@@ -53,9 +53,9 @@ public:
   explicit vtol_block(vtol_two_chain &faceloop);
 
   //---------------------------------------------------------------------------
-  //: Constructor from a list of two-chains. The first two-chain is the
-  //: outside boundary. The remaining two-chains are considered holes
-  //: inside the the outside volume.
+  //: Constructor from a list of two-chains.
+  //  The first two-chain is the outside boundary.
+  //  The remaining two-chains are considered holes inside the outside volume.
   //---------------------------------------------------------------------------
   explicit vtol_block(two_chain_list &faceloops);
 
@@ -76,11 +76,11 @@ public:
 
   //---------------------------------------------------------------------------
   //: Clone `this': creation of a new object and initialization
-  //: See Prototype pattern
+  //  See Prototype pattern
   //---------------------------------------------------------------------------
   virtual vsol_spatial_object_3d_sptr clone(void) const;
 
-  //: Accessors
+  // Accessors
 
   //---------------------------------------------------------------------------
   //: Return the topology type
@@ -132,7 +132,7 @@ public:
   virtual face_list *outside_boundary_faces(void);
   virtual two_chain_list *outside_boundary_two_chains(void);
 
- //: Warning these methods should not be used by clients
+ // WARNING these methods should not be used by clients
 
   virtual vcl_vector<vtol_vertex *> *compute_vertices(void);
   virtual vcl_vector<vtol_edge *> *compute_edges(void);
@@ -167,4 +167,5 @@ public:
   virtual void describe(vcl_ostream &strm=vcl_cout,
                         int blanking=0) const;
 };
-#endif
+
+#endif // vtol_block_h

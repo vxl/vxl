@@ -1,5 +1,5 @@
-#ifndef vtol_face_2d_H
-#define vtol_face_2d_H
+#ifndef vtol_face_2d_h
+#define vtol_face_2d_h
 // .NAME vtol_face_2d - Represents the basic 2D topological entity
 // .LIBRARY vtol
 // .HEADER gel Package
@@ -62,7 +62,7 @@ public:
 
   //---------------------------------------------------------------------------
   //: Constructor
-  //: REQUIRE: verts.size()>2
+  //  REQUIRE: verts.size()>2
   //---------------------------------------------------------------------------
   explicit vtol_face_2d(vertex_list &verts);
 
@@ -94,11 +94,11 @@ public:
 
   //---------------------------------------------------------------------------
   //: Clone `this': creation of a new object and initialization
-  //: See Prototype pattern
+  //  See Prototype pattern
   //---------------------------------------------------------------------------
   virtual vsol_spatial_object_3d_sptr clone(void) const;
 
-  //: Accessors
+  // Accessors
 
   virtual vsol_region_2d_sptr surface(void) const;
   virtual void set_surface(vsol_region_2d *const newsurf);
@@ -138,20 +138,15 @@ public:
                         int blanking=0) const;
 
   //: provide a mechanism to compare geometry
-
   virtual bool compare_geometry(const vtol_face &other) const;
 
-
   //: this should not called by a client
-
   virtual vtol_face *
   copy_with_arrays(vcl_vector<vtol_topology_object_sptr> &verts,
                    vcl_vector<vtol_topology_object_sptr> &edges) const;
-
-
 
 private:
   vsol_region_2d_sptr _surface;
 };
 
-#endif
+#endif // vtol_face_2d_h

@@ -1,5 +1,5 @@
-#ifndef VTOL_VERTEX_H
-#define VTOL_VERTEX_H
+#ifndef vtol_vertex_h
+#define vtol_vertex_h
 // .NAME vtol_vertex - Topological container for a spatial point
 // .LIBRARY vtol
 // .HEADER gel Package
@@ -61,18 +61,14 @@ public:
   //---------------------------------------------------------------------------
   virtual vtol_topology_object_type topology_type(void) const;
 
-
-
   //---------------------------------------------------------------------------
   //: create a list of all connected vertices
   //---------------------------------------------------------------------------
-
   virtual void explore_vertex(vertex_list &);
 
   //---------------------------------------------------------------------------
   //: Is `this' has the same coordinates for its point than `other' ?
   //---------------------------------------------------------------------------
-
   virtual bool operator==(const vtol_vertex &other) const;
   bool operator==(const vsol_spatial_object_3d& obj) const; // virtual of vsol_spatial_object
 
@@ -95,7 +91,6 @@ public:
   //---------------------------------------------------------------------------
   virtual vtol_vertex *cast_to_vertex(void);
 
-
   //---------------------------------------------------------------------------
   //: Return `this' if `this' is a 2D vertex, 0 otherwise
   //---------------------------------------------------------------------------
@@ -105,8 +100,6 @@ public:
   //: Return `this' if `this' is a 2D vertex, 0 otherwise
   //---------------------------------------------------------------------------
   virtual vtol_vertex_2d *cast_to_vertex_2d(void) {return NULL;}
-
-
 
   //---------------------------------------------------------------------------
   //: Return `this' if `this' is a 3D vertex, 0 otherwise
@@ -138,24 +131,22 @@ public:
 
   //---------------------------------------------------------------------------
   //: Is `this' connected with `v2' ?
-  //: ie has a superior of `this' `v2' as inferior ?
+  //  ie has a superior of `this' `v2' as inferior ?
   //---------------------------------------------------------------------------
   virtual bool is_connected(const vtol_vertex &v2);
 
   //---------------------------------------------------------------------------
-  //: Create a line edge from `this' and `other' only if this edge does not
-  //: exist. Otherwise it just returns the existing edge
-  //: REQUIRE: other.ptr()!=0 and other.ptr()!=this
+  //: Create a line edge from `this' and `other' only if this edge does not exist.
+  //  Otherwise it just returns the existing edge
+  //  REQUIRE: other.ptr()!=0 and other.ptr()!=this
   //---------------------------------------------------------------------------
 
   // methods that will be defined by inherited classes
 
   //: create a new edge from these two veritces
-
   virtual vtol_edge *new_edge(vtol_vertex &other)=0;
 
   //: check to see if the vertex is part of the edge
-
   bool is_endpoint (const vtol_edge &);
 
   void print(vcl_ostream &strm=vcl_cout) const;
@@ -164,10 +155,8 @@ public:
 protected:
 
   //: have the inherited classes copy the geometry
-
   virtual void copy_geometry(const vtol_vertex &other)=0;
   virtual bool compare_geometry(const vtol_vertex &other) const =0;
-
 
 public:
 
@@ -183,4 +172,4 @@ public:
 
 inline bool operator!=(vtol_vertex const &a, vtol_vertex const &b) { return !(a == b); }
 
-#endif
+#endif // vtol_vertex_h

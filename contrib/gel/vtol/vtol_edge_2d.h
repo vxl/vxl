@@ -68,9 +68,8 @@ public:
   explicit vtol_edge_2d(void);
 
   //---------------------------------------------------------------------------
-  //: Constructor from the two endpoints `new_v1', `new_v2' and from a
-  //: curve `new_curve'. If `new_curve' is 0, a line is created from
-  //: `new_v1' and `new_v2'.
+  //: Constructor from the two endpoints `new_v1', `new_v2' and from a curve `new_curve'.
+  //  If `new_curve' is 0, a line is created from `new_v1' and `new_v2'.
   //---------------------------------------------------------------------------
   explicit vtol_edge_2d(vtol_vertex_2d &new_v1,
                         vtol_vertex_2d &new_v2,
@@ -107,7 +106,7 @@ public:
 
   //---------------------------------------------------------------------------
   //: Clone `this': creation of a new object and initialization
-  //: See Prototype pattern
+  //  See Prototype pattern
   //---------------------------------------------------------------------------
   virtual vsol_spatial_object_3d_sptr clone(void) const;
 
@@ -150,6 +149,6 @@ public:
   // comparison of geometry
 
   virtual bool compare_geometry(const vtol_edge &other) const;
-
 };
-#endif
+
+#endif // vtol_edge_2d_h

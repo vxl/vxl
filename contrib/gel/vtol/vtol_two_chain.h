@@ -1,5 +1,5 @@
-#ifndef vtol_two_chain_H
-#define vtol_two_chain_H
+#ifndef vtol_two_chain_h
+#define vtol_two_chain_h
 //-----------------------------------------------------------------------------
 //
 // .NAME        vtol_two_chain - Represents a set of vtol_face
@@ -30,8 +30,6 @@
 #include <vtol/vtol_two_chain_sptr.h>
 
 #include <vcl_vector.h>
-//#include <vtol/vtol_topology_object.h>
-//#include <vtol/vtol_hierarchy_node.h>
 #include <vtol/vtol_chain.h>
 
 class vtol_vertex;
@@ -42,7 +40,6 @@ class vtol_face;
 class vtol_block;
 
 class vtol_two_chain
-//: public vtol_topology_object,
   : public vtol_chain
 {
 public:
@@ -84,7 +81,7 @@ public:
 
   //---------------------------------------------------------------------------
   //: Clone `this': creation of a new object and initialization
-  //: See Prototype pattern
+  //  See Prototype pattern
   //---------------------------------------------------------------------------
   virtual vsol_spatial_object_3d_sptr clone(void) const;
 
@@ -99,7 +96,6 @@ public:
   virtual vtol_topology_object_type topology_type(void) const;
 
   //: get the direction of the face
-
   signed char direction(vtol_face const& f) const;
 
   virtual vtol_face *face(int i) { return (vtol_face *)(_inferiors[i].ptr()); }
@@ -152,7 +148,7 @@ public:
   //---------------------------------------------------------------------------
   virtual bool valid_chain_type(vtol_chain const& chain_inf_sup) const;
 
-  //: network access methods
+  // network access methods
 
   virtual vertex_list *outside_boundary_vertices(void);
   virtual zero_chain_list *outside_boundary_zero_chains(void);
@@ -164,7 +160,7 @@ public:
   virtual two_chain_list *inferior_two_chains(void);
   virtual two_chain_list *superior_two_chains(void);
 
-  //: Warning these methods should not be used by clients
+  // WARNING these methods should not be used by clients
 
   virtual vcl_vector<vtol_vertex*> *compute_vertices(void);
   virtual vcl_vector<vtol_edge*> *compute_edges(void);
@@ -195,4 +191,4 @@ public:
   virtual bool break_into_connected_components(vcl_vector<vtol_topology_object *> &components);
 };
 
-#endif   // vtol_two_chain.h
+#endif // vtol_two_chain_h

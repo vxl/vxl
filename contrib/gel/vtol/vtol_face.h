@@ -1,5 +1,5 @@
-#ifndef vtol_face_H
-#define vtol_face_H
+#ifndef vtol_face_h
+#define vtol_face_h
 // .NAME vtol_face - Represents the basic 2D topological entity
 // .LIBRARY vtol
 // .HEADER gel Package
@@ -66,9 +66,7 @@ public:
   //---------------------------------------------------------------------------
   virtual ~vtol_face();
 
-
-
-  //: Accessors
+  // Accessors
 
   //---------------------------------------------------------------------------
   //: Return the topology type
@@ -101,8 +99,6 @@ public:
   //---------------------------------------------------------------------------
   virtual vtol_face *cast_to_face(void);
 
-
-
   //---------------------------------------------------------------------------
   //: Return `this' if `this' is a face, 0 otherwise
   //---------------------------------------------------------------------------
@@ -112,8 +108,6 @@ public:
   //: Return `this' if `this' is a face, 0 otherwise
   //---------------------------------------------------------------------------
   virtual vtol_face_2d *cast_to_face_2d(void) {return NULL;}
-
-
 
   //---------------------------------------------------------------------------
   //: Return `this' if `this' is a face, 0 otherwise
@@ -147,7 +141,7 @@ public:
   virtual edge_list *outside_boundary_edges(void);
   virtual one_chain_list *outside_boundary_one_chains(void);
 
-  //: Warning these methods should not be used by clients
+  // WARNING these methods should not be used by clients
 
   virtual vcl_vector<vtol_vertex*> *compute_vertices(void);
   virtual vcl_vector<vtol_edge*> *compute_edges(void);
@@ -161,7 +155,6 @@ public:
   virtual vcl_vector<vtol_zero_chain*> *outside_boundary_compute_zero_chains(void);
   virtual vcl_vector<vtol_edge*> *outside_boundary_compute_edges(void);
   virtual vcl_vector<vtol_one_chain*> *outside_boundary_compute_one_chains(void);
-
 
 
   virtual void add_one_chain(vtol_one_chain &);
@@ -188,16 +181,13 @@ public:
   virtual void describe(vcl_ostream &strm=vcl_cout,
                         int blanking=0) const;
   //---------------------------------------------------------------------------
-  //: Does `this' share an edge with `f' ? Comparison of edge pointers,
-  //: not geometric values
+  //: Does `this' share an edge with `f' ?
+  // Comparison of edge pointers, not geometric values
   //---------------------------------------------------------------------------
   virtual bool shares_edge_with(vtol_face &f);
 
-  //: compare the geomerty
-
+  //: compare the geometry
   virtual bool compare_geometry(const vtol_face &other) const =0;
-
 };
 
-
-#endif
+#endif // vtol_face_h

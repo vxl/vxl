@@ -118,15 +118,15 @@ public:
 
   //---------------------------------------------------------------------------
   //: Link `this' with an inferior `chain_inferior'
-  //: REQUIRE: valid_chain_type(chain_inferior)
-  //:          and !is_chain_inferior(chain_inferior)
+  //  REQUIRE: valid_chain_type(chain_inferior)
+  //           and !is_chain_inferior(chain_inferior)
   //---------------------------------------------------------------------------
   virtual void link_chain_inferior(vtol_chain &chain_inferior);
 
   //---------------------------------------------------------------------------
   //: Unlink `this' with the chain_inferior `chain_inferior'
-  //: REQUIRE: valid_chain_type(chain_inferior)
-  //:          and is_chain_inferior(chain_inferior)
+  //  REQUIRE: valid_chain_type(chain_inferior)
+  //           and is_chain_inferior(chain_inferior)
   //---------------------------------------------------------------------------
   virtual void unlink_chain_inferior(vtol_chain &chain_inferior);
 
@@ -180,20 +180,20 @@ private:
 
   //---------------------------------------------------------------------------
   //: Link `this' with a chain superior `chain_superior'
-  //: REQUIRE: valid_chain_type(chain_superior)
-  //:          and !is_chain_superior(chain_superior)
+  //  REQUIRE: valid_chain_type(chain_superior)
+  //           and !is_chain_superior(chain_superior)
   //---------------------------------------------------------------------------
   virtual void link_chain_superior(vtol_chain &chain_superior);
 
   //---------------------------------------------------------------------------
   //: Unlink `this' with its chain superior `chain_superior'
-  //: REQUIRE: valid_chain_type(chain_superior)
-  //:          and is_chain_superior(chain_superior)
+  //  REQUIRE: valid_chain_type(chain_superior)
+  //           and is_chain_superior(chain_superior)
   //---------------------------------------------------------------------------
   virtual void unlink_chain_superior(vtol_chain &chain_superior);
 
   //***************************************************************************
-  //: Implementation
+  // Implementation
   //***************************************************************************
 protected:
   //---------------------------------------------------------------------------
@@ -209,4 +209,5 @@ protected:
   bool _is_cycle; // True if `this' is a connected chain
   vcl_vector<signed char> _directions;
 };
-#endif
+
+#endif // vtol_chain_h_

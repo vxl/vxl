@@ -1,5 +1,5 @@
-#ifndef TOPOLOGY_OBJECT_H
-#define TOPOLOGY_OBJECT_H
+#ifndef topology_object_h
+#define topology_object_h
 
 //
 // .NAME        vtol_topology_object - base class for topology objects
@@ -272,13 +272,13 @@ public:
 
   //---------------------------------------------------------------------------
   //: Link `this' with an inferior `inferior'
-  //: REQUIRE: valid_inferior_type(inferior) and !is_inferior(inferior)
+  //  REQUIRE: valid_inferior_type(inferior) and !is_inferior(inferior)
   //---------------------------------------------------------------------------
   virtual void link_inferior(vtol_topology_object &inferior);
 
   //---------------------------------------------------------------------------
   //: Unlink `this' with the inferior `inferior'
-  //: REQUIRE: valid_inferior_type(inferior) and is_inferior(inferior)
+  //  REQUIRE: valid_inferior_type(inferior) and is_inferior(inferior)
   //---------------------------------------------------------------------------
   virtual void unlink_inferior(vtol_topology_object &inferior);
 
@@ -302,14 +302,12 @@ public:
   //---------------------------------------------------------------------------
   //: Get lists of zero chains
   //---------------------------------------------------------------------------
-
   zero_chain_list *zero_chains(void);
   void zero_chains(zero_chain_list &list);
 
   //---------------------------------------------------------------------------
   //: Get lists of edges
   //---------------------------------------------------------------------------
-
   edge_list *edges(void);
   void edges(edge_list &list);
 
@@ -317,38 +315,30 @@ public:
   //---------------------------------------------------------------------------
   //: Get lists of one chains
   //---------------------------------------------------------------------------
-
   one_chain_list *one_chains(void);
   void one_chains(one_chain_list &list);
 
   //---------------------------------------------------------------------------
   //: Get lists of faces
   //---------------------------------------------------------------------------
-
   face_list *faces(void);
   void faces(face_list &list);
-
 
   //---------------------------------------------------------------------------
   //: Get lists of two chains
   //---------------------------------------------------------------------------
-
   two_chain_list *two_chains(void);
   void two_chains(two_chain_list &list);
-
 
   //---------------------------------------------------------------------------
   //: Get lists of blocks
   //---------------------------------------------------------------------------
-
   block_list *blocks(void);
   void blocks(block_list &list);
-
 
   //---------------------------------------------------------------------------
   //: print and describe the objects
   //---------------------------------------------------------------------------
-
   virtual void print(vcl_ostream &strm=vcl_cout) const;
   virtual void describe_inferiors(vcl_ostream &strm=vcl_cout,
                                   int blanking=0) const;
@@ -366,13 +356,13 @@ private:
 
   //---------------------------------------------------------------------------
   //: Link `this' with a superior `superior'
-  //: REQUIRE: valid_superior_type(superior) and !is_superior(superior)
+  //  REQUIRE: valid_superior_type(superior) and !is_superior(superior)
   //---------------------------------------------------------------------------
   virtual void link_superior(vtol_topology_object &superior);
 
   //---------------------------------------------------------------------------
   //: Unlink `this' with its superior `superior'
-  //: REQUIRE: valid_superior_type(superior) and is_superior(superior)
+  //  REQUIRE: valid_superior_type(superior) and is_superior(superior)
   //---------------------------------------------------------------------------
   virtual void unlink_superior(vtol_topology_object &superior);
 
@@ -380,43 +370,43 @@ public:
 
   //---------------------------------------------------------------------------
   //: compute lists of vertices
-  // - Warning should not be used by clients
+  // WARNING should not be used by clients
   //---------------------------------------------------------------------------
   virtual vcl_vector<vtol_vertex*> *compute_vertices(void);
 
   //---------------------------------------------------------------------------
   //: compute lists of zero chains
-  // - Warning should not be used by clients
+  // WARNING should not be used by clients
   //---------------------------------------------------------------------------
   virtual vcl_vector<vtol_zero_chain*> *compute_zero_chains(void);
 
   //---------------------------------------------------------------------------
   //: compute lists of edges
-  // - Warning should not be used by clients
+  // WARNING should not be used by clients
   //---------------------------------------------------------------------------
   virtual vcl_vector<vtol_edge*> *compute_edges(void);
 
   //---------------------------------------------------------------------------
   //: compute lists of one chains
-  // - Warning should not be used by clients
+  // WARNING should not be used by clients
   //---------------------------------------------------------------------------
   virtual vcl_vector<vtol_one_chain*> *compute_one_chains(void);
 
   //---------------------------------------------------------------------------
   //: compute lists of faces
-  // - Warning should not be used by clients
+  // WARNING should not be used by clients
   //---------------------------------------------------------------------------
   virtual vcl_vector<vtol_face*> *compute_faces(void);
 
   //---------------------------------------------------------------------------
   //: compute lists of two chains
-  // - Warning should not be used by clients
+  // WARNING should not be used by clients
   //---------------------------------------------------------------------------
   virtual vcl_vector<vtol_two_chain*> *compute_two_chains(void);
 
   //---------------------------------------------------------------------------
   //: compute lists of blocks
-  // - Warning should not be used by clients
+  // WARNING should not be used by clients
   //---------------------------------------------------------------------------
   virtual vcl_vector<vtol_block*> *compute_blocks(void);
 
@@ -442,4 +432,4 @@ private:
   friend class vtol_topology_cache;
 };
 
-#endif //TOPOLOGY_OBJECT_H
+#endif // topology_object_h

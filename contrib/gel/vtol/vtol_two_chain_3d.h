@@ -1,5 +1,5 @@
-#ifndef vtol_two_chain_3d_H
-#define vtol_two_chain_3d_H
+#ifndef vtol_two_chain_3d_h
+#define vtol_two_chain_3d_h
 //-----------------------------------------------------------------------------
 //
 // .NAME        vtol_two_chain_3d - Represents a set of vtol_face_3d
@@ -53,7 +53,7 @@ public:
 
   //---------------------------------------------------------------------------
   //: Clone `this': creation of a new object and initialization
-  //: See Prototype pattern
+  //  See Prototype pattern
   //---------------------------------------------------------------------------
   virtual vsol_spatial_object_3d_sptr clone(void) const;
 
@@ -137,7 +137,6 @@ public:
   virtual bool disconnect( vcl_vector< vtol_topology_object_3d * > & changes,
                            vcl_vector< vtol_topology_object_3d * > & deleted );
   bool  break_into_connected_components( vcl_vector<vtol_topology_object_3d*> & components );
-
 };
 
-#endif   // vtol_two_chain_3d.h
+#endif // vtol_two_chain_3d_h

@@ -47,7 +47,7 @@
 #include <vtol/vtol_vertex_3d.h>
 #include <vsol/vsol_curve_3d_sptr.h>
 
-//: \brief topological edge
+//: topological edge
 
 class vtol_edge_3d
   : public vtol_topology_object_3d
@@ -62,7 +62,7 @@ private:
 
 public:
 
-  //: \brief Constructors and Destructors
+  // Constructors and Destructors
 
   vtol_edge_3d(void);
   vtol_edge_3d(vtol_vertex_3d *,
@@ -89,11 +89,11 @@ public:
 
   //---------------------------------------------------------------------------
   //: Clone `this': creation of a new object and initialization
-  //: See Prototype pattern
+  //  See Prototype pattern
   //---------------------------------------------------------------------------
   virtual vsol_spatial_object_3d_sptr clone(void) const;
 
-  //: \brief Accessors
+  // Accessors
 
   //---------------------------------------------------------------------------
   //: Return the topology type
@@ -107,29 +107,17 @@ public:
   void set_curve(vsol_curve_3d_sptr newcurve,
                  vsol_curve_3d_sptr &oldcurve);
 
-  //:
-  // get the vertices
+  //: get the vertices
+  inline vtol_vertex_3d *get_v1(void) { return _v1; }
+  inline vtol_vertex_3d *get_v2(void) { return _v2; }
 
-  inline vtol_vertex_3d *get_v1(void)
-  {
-    return _v1;
-  }
-  inline vtol_vertex_3d *get_v2(void)
-  {
-    return _v2;
-  }
-
-  //:
-  // get the zero chain
-
+  //: get the zero chain
   inline vtol_zero_chain_3d *get_zero_chain(void)
   {
     return (vtol_zero_chain_3d*)_inferiors[0];
   }
 
-
-  //:
-  // set the vertices
+  //: set the vertices
   void set_v1(vtol_vertex_3d *v);
   void set_v2(vtol_vertex_3d *v);
 
@@ -147,7 +135,6 @@ public:
   bool add_edge_loop(vtol_one_chain_3d *);
   bool remove_edge_loop(vtol_one_chain_3d *);
 
-  //:
   // Inferior/Superior Accessor Methods
 
   vtol_edge_3d *cast_to_edge_3d(void)
@@ -163,18 +150,11 @@ public:
   vcl_vector<vtol_block_3d*> *blocks(void);
   vcl_vector<vtol_vertex_3d*> *endpoints(void);
 
-  //:
   // Utility Functions
 
-  vtol_edge_3d *copy(void)
-  {
-    return new vtol_edge_3d(*this);
-  }
+  vtol_edge_3d *copy(void) { return new vtol_edge_3d(*this); }
   virtual vtol_topology_object_3d *shallow_copy_with_no_links(void);
-  virtual vsol_spatial_object_3d *spatial_copy(void)
-  {
-    return this->copy();
-  }
+  virtual vsol_spatial_object_3d *spatial_copy(void) { return this->copy(); }
   bool share_vertex_with(vtol_edge_3d *e);
 
   bool add_vertex(vtol_vertex_3d *);
@@ -202,4 +182,4 @@ public:
                           vcl_vector<vtol_topology_object_3d *> &deleted);
 };
 
-#endif
+#endif // vtol_edge_3d_h

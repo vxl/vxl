@@ -1,5 +1,5 @@
-#ifndef VTOL_VERTEX_2D_H
-#define VTOL_VERTEX_2D_H
+#ifndef vtol_vertex_2d_h
+#define vtol_vertex_2d_h
 // .NAME vtol_vertex_2d - Topological container for a spatial point
 // .LIBRARY vtol
 // .HEADER gel Package
@@ -42,7 +42,7 @@ public:
 
   //---------------------------------------------------------------------------
   //: Constructor from a point (the point is not copied)
-  //: REQUIRE: new_point!=0
+  //  REQUIRE: new_point!=0
   //---------------------------------------------------------------------------
   explicit vtol_vertex_2d(vsol_point_2d &new_point);
 
@@ -69,7 +69,7 @@ public:
 
   //---------------------------------------------------------------------------
   //: Clone `this': creation of a new object and initialization
-  //: See Prototype pattern
+  //  See Prototype pattern
   //---------------------------------------------------------------------------
   virtual vsol_spatial_object_3d_sptr clone(void) const;
 
@@ -82,10 +82,9 @@ public:
 
   //---------------------------------------------------------------------------
   //: Set the point (the point is not copied)
-  //: REQUIRE: new_point.ptr()!=0
+  //  REQUIRE: new_point.ptr()!=0
   //---------------------------------------------------------------------------
   virtual void set_point(vsol_point_2d &new_point);
-
 
 
   // Methods called on Vertex
@@ -141,9 +140,9 @@ public:
   virtual vtol_vertex_2d *cast_to_vertex_2d(void);
 
   //---------------------------------------------------------------------------
-  //: Create a line edge from `this' and `other' only if this edge does not
-  //: exist. Otherwise it just returns the existing edge
-  //: REQUIRE: other.ptr()!=0 and other.ptr()!=this
+  //: Create a line edge from `this' and `other' only if this edge does not exist.
+  //  Otherwise it just returns the existing edge
+  //  REQUIRE: other.ptr()!=0 and other.ptr()!=this
   //---------------------------------------------------------------------------
 
   virtual vtol_edge *new_edge(vtol_vertex &other);
@@ -162,15 +161,11 @@ protected:
   //---------------------------------------------------------------------------
   vsol_point_2d_sptr _point;
 
-   //:  copy the geometry
-
+  //:  copy the geometry
   virtual void copy_geometry(const vtol_vertex &other);
 
-  // : compare the geometry
-
+  //: compare the geometry
   virtual bool compare_geometry(const vtol_vertex &other) const;
-
-
 };
 
-#endif
+#endif // vtol_vertex_2d_h

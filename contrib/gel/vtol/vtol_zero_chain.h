@@ -1,5 +1,5 @@
-#ifndef vtol_zero_chain_H
-#define vtol_zero_chain_H
+#ifndef vtol_zero_chain_h
+#define vtol_zero_chain_h
 //-----------------------------------------------------------------------------
 //
 // .NAME    vtol_zero_chain - Represents a set of Vertices
@@ -49,14 +49,14 @@ public:
 
   //---------------------------------------------------------------------------
   //: Constructor from two vertices (to make an edge creation easier)
-  //: REQUIRE: v1.ptr()!=0 and v2.ptr()!=0 and v1.ptr()!=v2.ptr()
+  //  REQUIRE: v1.ptr()!=0 and v2.ptr()!=0 and v1.ptr()!=v2.ptr()
   //---------------------------------------------------------------------------
   explicit vtol_zero_chain(vtol_vertex &v1,
-                              vtol_vertex &v2);
+                           vtol_vertex &v2);
 
   //---------------------------------------------------------------------------
   //: Constructor from an array of vertices
-  //: REQUIRE: new_vertices.size()>0
+  //  REQUIRE: new_vertices.size()>0
   //---------------------------------------------------------------------------
   explicit
   vtol_zero_chain(const vcl_vector<vtol_vertex_sptr> &new_vertices);
@@ -73,7 +73,7 @@ public:
 
   //---------------------------------------------------------------------------
   //: Clone `this': creation of a new object and initialization
-  //: See Prototype pattern
+  //  See Prototype pattern
   //---------------------------------------------------------------------------
   virtual vsol_spatial_object_3d_sptr clone(void) const;
 
@@ -141,10 +141,8 @@ protected:
   virtual vcl_vector<vtol_face*> *compute_faces(void);
   virtual vcl_vector<vtol_two_chain*> *compute_two_chains(void);
   virtual vcl_vector<vtol_block*> *compute_blocks(void);
-
-
 };
 
 inline bool operator!=(vtol_zero_chain const &a, vtol_zero_chain const &b) { return !(a == b); }
 
-#endif // #ifndef vtol_zero_chain_H
+#endif // vtol_zero_chain_h

@@ -1,6 +1,5 @@
-
-#ifndef vtol_face_3d_H
-#define vtol_face_3d_H
+#ifndef vtol_face_3d_h
+#define vtol_face_3d_h
 // .NAME vtol_face_3d - Represents the basic 3D topological entity
 // .LIBRARY vtol
 // .HEADER gel Package
@@ -65,11 +64,11 @@ public:
   virtual ~vtol_face_3d();
   //---------------------------------------------------------------------------
   //: Clone `this': creation of a new object and initialization
-  //: See Prototype pattern
+  //  See Prototype pattern
   //---------------------------------------------------------------------------
   virtual vsol_spatial_object_3d_sptr clone(void) const;
 
-  //: Accessors
+  // Accessors
 
   //---------------------------------------------------------------------------
   //: Return the topology type
@@ -151,4 +150,4 @@ public:
   vsol_surface_3d_sptr _surface;
 };
 
-#endif
+#endif // vtol_face_3d_h

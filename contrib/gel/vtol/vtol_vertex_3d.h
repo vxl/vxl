@@ -1,5 +1,5 @@
-#ifndef VTOL_VERTEX_3D_H
-#define VTOL_VERTEX_3D_H
+#ifndef vtol_vertex_3d_h
+#define vtol_vertex_3d_h
 
 // .NAME vtol_vertex_3d - Topological container for a spatial point
 // .LIBRARY vtol
@@ -51,7 +51,7 @@ public:
 
   //---------------------------------------------------------------------------
   //: Clone `this': creation of a new object and initialization
-  //: See Prototype pattern
+  //  See Prototype pattern
   //---------------------------------------------------------------------------
   virtual vsol_spatial_object_3d_sptr clone(void) const;
 
@@ -139,5 +139,4 @@ protected:
   vsol_point_3d_sptr _point;
 };
 
-#endif
-
+#endif // vtol_vertex_3d_h

@@ -84,14 +84,11 @@ public:
 
   //---------------------------------------------------------------------------
   //: Clone `this': creation of a new object and initialization
-  //: See Prototype pattern
+  //  See Prototype pattern
   //---------------------------------------------------------------------------
   virtual vsol_spatial_object_3d_sptr clone(void) const;
 
-  // Easy access methods
-
-
-  //: \brief Access methods
+  // Access methods
 
   //---------------------------------------------------------------------------
   //: Return the topology type
@@ -147,7 +144,7 @@ public:
   virtual one_chain_list *inferior_one_chains(void);
   virtual one_chain_list *superior_one_chains(void);
 
-  //: \brief Utilities
+  // Utilities
 
   virtual void reverse_directions(void);
 
@@ -164,7 +161,7 @@ public:
   virtual void add_edge(vtol_edge &, bool);
   virtual void remove_edge(vtol_edge &, bool);
 
-  //: \brief Operators
+  // Operators
 
   virtual bool operator==(vtol_one_chain const& other) const;
   bool operator==(vsol_spatial_object_3d const& obj) const; // virtual of vsol_spatial_object_3d
