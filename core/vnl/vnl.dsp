@@ -235,6 +235,11 @@ SOURCE=.\vnl_bignum.cxx
 # End Source File
 # Begin Source File
 
+SOURCE=.\vnl_bignum_traits.cxx
+
+# End Source File
+# Begin Source File
+
 SOURCE=.\Templates/vnl_c_vector+double_complex-.cxx
 
 # End Source File
@@ -735,11 +740,6 @@ SOURCE=.\Templates/vnl_matrix+vnl_rational-.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=.\Templates/vnl_matrix+vcl_complex+vnl_rational--.cxx
-
-# End Source File
-# Begin Source File
-
 SOURCE=.\Templates/vnl_diag_matrix+vnl_rational-.cxx
 
 # End Source File
@@ -1145,6 +1145,11 @@ SOURCE=.\vnl_rational.cxx
 # End Source File
 # Begin Source File
 
+SOURCE=.\vnl_rational_traits.cxx
+
+# End Source File
+# Begin Source File
+
 SOURCE=.\vnl_real_npolynomial.cxx
 
 # End Source File
@@ -1190,22 +1195,12 @@ SOURCE=.\Templates/vcl_algorithm+vnl_bignum-.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=.\Templates/vcl_complex+vnl_bignum-.cxx
-
-# End Source File
-# Begin Source File
-
 SOURCE=.\Templates/vcl_vector+vnl_bignum-.cxx
 
 # End Source File
 # Begin Source File
 
 SOURCE=.\Templates/vcl_vector+vnl_bignum~-.cxx
-
-# End Source File
-# Begin Source File
-
-SOURCE=.\Templates/vnl_c_vector+vcl_complex+vnl_bignum--.cxx
 
 # End Source File
 # Begin Source File
@@ -1221,11 +1216,6 @@ SOURCE=.\Templates/vnl_det+vnl_bignum-.cxx
 # Begin Source File
 
 SOURCE=.\Templates/vnl_diag_matrix+vnl_bignum-.cxx
-
-# End Source File
-# Begin Source File
-
-SOURCE=.\Templates/vnl_matrix+vcl_complex+vnl_bignum--.cxx
 
 # End Source File
 # Begin Source File
@@ -1251,11 +1241,6 @@ SOURCE=.\Templates/vnl_matrix_ref+vnl_bignum-.cxx
 # Begin Source File
 
 SOURCE=.\Templates/vnl_sparse_matrix+vnl_bignum-.cxx
-
-# End Source File
-# Begin Source File
-
-SOURCE=.\Templates/vnl_vector+vcl_complex+vnl_bignum--.cxx
 
 # End Source File
 # Begin Source File
@@ -1314,6 +1299,11 @@ SOURCE=.\vnl_block.h
 # Begin Source File
 
 SOURCE=.\vnl_bignum.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vnl_bignum_traits.h
 
 # End Source File
 # Begin Source File
@@ -1624,6 +1614,11 @@ SOURCE=.\vnl_quaternion.txx
 # Begin Source File
 
 SOURCE=.\vnl_rational.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vnl_rational_traits.h
 
 # End Source File
 # Begin Source File
