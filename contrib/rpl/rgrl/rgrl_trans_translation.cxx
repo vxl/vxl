@@ -12,7 +12,6 @@
 rgrl_trans_translation::
 rgrl_trans_translation( unsigned int dimension )
   : trans_( vnl_vector<double>( dimension, 0.0 ) ),
-    covar_( vnl_matrix<double>( dimension, dimension, 0.0 ) ),
     from_centre_( dimension, 0.0 )
 {
 }
@@ -20,18 +19,19 @@ rgrl_trans_translation( unsigned int dimension )
 rgrl_trans_translation::
 rgrl_trans_translation( vnl_vector<double> const& in_trans,
                         vnl_matrix<double> const& in_covar )
-  : trans_( in_trans ),
-    covar_( in_covar ),
+  : rgrl_transformation( in_covar ),
+    trans_( in_trans ),
     from_centre_( in_trans.size(), 0.0 )
 {
-  assert ( covar_.rows() == covar_.cols() );
-  assert ( covar_.rows() == trans_.size() );
+  if( is_covar_set() ) {
+    assert ( covar_.rows() == covar_.cols() );
+    assert ( covar_.rows() == trans_.size() );
+  }
 }
 
 rgrl_trans_translation::
 rgrl_trans_translation( vnl_vector<double> const& in_trans )
   : trans_( in_trans ),
-    covar_( vnl_matrix<double>( in_trans.size(), in_trans.size(), 0.0 ) ),
     from_centre_( in_trans.size(), 0.0 )
 {
   assert ( covar_.rows() == covar_.cols() );
@@ -43,12 +43,14 @@ rgrl_trans_translation( vnl_vector<double> const& in_trans,
                         vnl_matrix<double> const& in_covar,
                         vnl_vector<double> const& in_from_centre,
                         vnl_vector<double> const& in_to_centre )
-  : trans_( in_trans + in_to_centre ),
-    covar_( in_covar ),
+  : rgrl_transformation( in_covar ),
+    trans_( in_trans + in_to_centre ),
     from_centre_( in_from_centre )
-{
-  assert ( covar_.rows() == covar_.cols() );
-  assert ( covar_.rows() == trans_.size() );
+{ 
+  if( is_covar_set() ) {
+    assert ( covar_.rows() == covar_.cols() );
+    assert ( covar_.rows() == trans_.size() );
+  }
   assert ( from_centre_.size() == trans_.size() );
 }
 
@@ -78,15 +80,9 @@ vnl_matrix<double>
 rgrl_trans_translation::
 transfer_error_covar( vnl_vector<double> const& p  ) const
 {
+  assert ( is_covar_set() );
   assert ( p.size() == trans_.size() );
 
-  return covar_;
-}
-
-vnl_matrix<double>
-rgrl_trans_translation::
-covar() const
-{
   return covar_;
 }
 

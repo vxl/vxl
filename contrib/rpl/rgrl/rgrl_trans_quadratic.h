@@ -72,7 +72,8 @@ class rgrl_trans_quadratic
   //   covar matrix is for a vector
   //     ( a_1^T, trans[0], ... , a_n^T, trans[n] )^T
   //
-  vnl_matrix<double> covar() const;
+  // defined in base class
+  // vnl_matrix<double> covar() const;
 
   //: The 2nd-order component of the quadratic transform
   vnl_matrix<double> const& Q() const;
@@ -119,7 +120,6 @@ class rgrl_trans_quadratic
   vnl_matrix<double> Q_;
   vnl_matrix<double> A_;
   vnl_vector<double> trans_;
-  vnl_matrix<double> covar_;
   vnl_vector<double> from_centre_;
 };
 

@@ -14,6 +14,13 @@
 #include <vnl/vnl_double_2.h>
 
 rgrl_transformation::
+rgrl_transformation( const vnl_matrix<double>& cov )
+  : is_covar_set_(false)
+{
+  set_covar( cov );
+}
+
+rgrl_transformation::
 ~rgrl_transformation()
 {
 }
@@ -223,6 +230,26 @@ inv_map( const vnl_vector<double>& /*to*/,
          vnl_vector<double>& /*from_next_est*/) const
 {
   assert ( ! "rgrl_transformation::inv_map() is not defined" );
+}
+
+//:  Parameter covariance matrix
+vnl_matrix<double> 
+rgrl_transformation::
+covar() const
+{
+  assert( is_covar_set_ );
+  return covar_;
+}
+
+//:  set parameter covariance matrix
+void 
+rgrl_transformation::
+set_covar( const vnl_matrix<double>& covar )
+{
+  covar_ = covar;
+  if( covar.rows() > 0 && covar.cols() > 0 ) {
+    is_covar_set_ = true;
+  }
 }
 
 void

@@ -13,7 +13,6 @@ rgrl_trans_similarity::
 rgrl_trans_similarity( unsigned int dimension )
   : A_( vnl_matrix<double>( dimension, dimension, vnl_matrix_identity ) ),
     trans_( vnl_vector<double>( dimension, 0.0 ) ),
-    covar_( vnl_matrix<double>( 2*dimension, 2*dimension, 0.0 ) ),
     from_centre_( dimension, 0.0 )
 {
 }
@@ -23,30 +22,30 @@ rgrl_trans_similarity( vnl_matrix<double> const& rot_and_scale,
                        vnl_vector<double> const& in_trans )
   : A_( rot_and_scale ),
     trans_( in_trans ),
-    covar_( vnl_matrix<double>( 2*in_trans.size(), 2*in_trans.size(), 0.0 ) ),
     from_centre_( in_trans.size(), 0.0 )
 {
   assert ( A_.rows() == A_.cols() );
   assert ( A_.rows() == trans_.size() );
-  assert ( covar_.rows() == covar_.cols() );
-  assert ( ( A_.rows() != 2 || covar_.rows() == 4 ) ); // 2d has 4 params
-  assert ( ( A_.rows() != 3 || covar_.rows() == 7 ) ); // 3d has 7 params
+  // assert ( ( A_.rows() != 2 || covar_.rows() == 4 ) ); // 2d has 4 params
+  // assert ( ( A_.rows() != 3 || covar_.rows() == 7 ) ); // 3d has 7 params
 }
 
 rgrl_trans_similarity::
 rgrl_trans_similarity( vnl_matrix<double> const& rot_and_scale,
                        vnl_vector<double> const& in_trans,
                        vnl_matrix<double> const& in_covar )
-  : A_( rot_and_scale ),
+  : rgrl_transformation( in_covar ),
+    A_( rot_and_scale ),
     trans_( in_trans ),
-    covar_( in_covar ),
     from_centre_( in_trans.size(), 0.0 )
 {
   assert ( A_.rows() == A_.cols() );
   assert ( A_.rows() == trans_.size() );
-  assert ( covar_.rows() == covar_.cols() );
-  assert ( ( A_.rows() != 2 || covar_.rows() == 4 ) ); // 2d has 4 params
-  assert ( ( A_.rows() != 3 || covar_.rows() == 7 ) ); // 3d has 7 params
+  if( is_covar_set() ) {
+    assert ( covar_.rows() == covar_.cols() );
+    assert ( ( A_.rows() != 2 || covar_.rows() == 4 ) ); // 2d has 4 params
+    assert ( ( A_.rows() != 3 || covar_.rows() == 7 ) ); // 3d has 7 params
+  }
 }
 
 rgrl_trans_similarity::
@@ -55,17 +54,19 @@ rgrl_trans_similarity( vnl_matrix<double> const& in_A,
                        vnl_matrix<double> const& in_covar,
                        vnl_vector<double> const& in_from_centre,
                        vnl_vector<double> const& in_to_centre )
-  : A_( in_A ),
+  : rgrl_transformation( in_covar ),
+    A_( in_A ),
     trans_( in_trans + in_to_centre ),
-    covar_( in_covar ),
     from_centre_( in_from_centre )
 {
   assert ( A_.rows() == A_.cols() );
   assert ( A_.rows() == trans_.size() );
-  assert ( covar_.rows() == covar_.cols() );
-  assert ( ( A_.rows() != 2 || covar_.rows() == 4 ) ); // 2d has 4 params
-  assert ( ( A_.rows() != 3 || covar_.rows() == 7 ) ); // 3d has 7 params
   assert ( from_centre_.size() == trans_.size() );
+  if( is_covar_set() ) {
+    assert ( covar_.rows() == covar_.cols() );
+    assert ( ( A_.rows() != 2 || covar_.rows() == 4 ) ); // 2d has 4 params
+    assert ( ( A_.rows() != 3 || covar_.rows() == 7 ) ); // 3d has 7 params
+  }
 }
 
 void
@@ -95,6 +96,7 @@ transfer_error_covar( vnl_vector<double> const& p  ) const
 {
   unsigned const m = A_.rows();
 
+  assert ( is_covar_set() );
   assert ( p.size() == m && m == 2); //only deal with 2D for now
 
   vnl_matrix<double> temp( 2, 4, 0.0 );
@@ -106,13 +108,6 @@ transfer_error_covar( vnl_vector<double> const& p  ) const
   temp(1,3) = 1;
 
   return temp * covar_ * temp.transpose();
-}
-
-vnl_matrix<double>
-rgrl_trans_similarity::
-covar() const
-{
-  return covar_;
 }
 
 vnl_matrix<double> const&

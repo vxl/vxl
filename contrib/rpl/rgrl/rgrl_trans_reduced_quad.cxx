@@ -15,7 +15,6 @@ rgrl_trans_reduced_quad( unsigned int dim)
   : Q_( vnl_matrix<double>( dim, dim + int(dim*(dim-1)/2), 0.0 ) ),
     A_( vnl_matrix<double>( dim, dim, vnl_matrix_identity ) ),
     trans_( vnl_vector<double>( dim, 0.0 ) ),
-    covar_( vnl_matrix<double>( 6 ,6, 0.0 ) ),
     from_centre_( dim, 0.0 )
 {
 }
@@ -26,16 +25,15 @@ rgrl_trans_reduced_quad( vnl_matrix<double> const& in_Q,
                          vnl_matrix<double> const& in_A,
                          vnl_vector<double> const& in_trans,
                          vnl_matrix<double> const& in_covar )
-  : Q_( in_Q ),
+  : rgrl_transformation( in_covar ),
+    Q_( in_Q ),
     A_( in_A ),
     trans_( in_trans ),
-    covar_( in_covar ),
     from_centre_( in_trans.size(), 0.0 )
 {
   assert ( Q_.rows() + Q_.rows()*(Q_.rows()-1)/2 == Q_.cols() );
   assert ( A_.rows() == A_.cols() );
   assert ( A_.rows() == trans_.size() );
-  assert ( covar_.rows() == covar_.cols() );//6 for 2D
 }
 
 rgrl_trans_reduced_quad::
@@ -45,7 +43,6 @@ rgrl_trans_reduced_quad( vnl_matrix<double> const& in_Q,
   : Q_( in_Q ),
     A_( in_A ),
     trans_( in_trans ),
-    covar_( vnl_matrix<double>( 6 ,6, 0.0 ) ),
     from_centre_( in_trans.size(), 0.0 )
 {
   assert ( Q_.rows() + Q_.rows()*(Q_.rows()-1)/2 == Q_.cols() );
@@ -61,16 +58,15 @@ rgrl_trans_reduced_quad( vnl_matrix<double> const& in_Q,
                          vnl_matrix<double> const& in_covar,
                          vnl_vector<double> const& in_from_centre,
                          vnl_vector<double> const& in_to_centre )
-  : Q_( in_Q ),
+  : rgrl_transformation( in_covar ),
+    Q_( in_Q ),
     A_( in_A ),
     trans_( in_trans ),
-    covar_( in_covar ),
     from_centre_( in_from_centre )
 {
   assert ( Q_.rows() + Q_.rows()*(Q_.rows()-1)/2 == Q_.cols() );
   assert ( A_.rows() == A_.cols() );
   assert ( A_.rows() == trans_.size() );
-  assert ( covar_.rows() == covar_.cols() );
   assert ( from_centre_.size() == trans_.size() );
 
   vnl_vector<double> new_trans;
@@ -147,6 +143,7 @@ vnl_matrix<double>
 rgrl_trans_reduced_quad::
 transfer_error_covar( vnl_vector<double> const& p  ) const
 {
+  assert ( is_covar_set());
   assert ( p.size() == 2 ); //only deal with 2D for now
 
   vnl_matrix<double> temp( 2, 6, 0.0 );
@@ -158,14 +155,6 @@ transfer_error_covar( vnl_vector<double> const& p  ) const
   temp(0,4) = temp(1,5) = 1;
 
   return temp * covar_ * temp.transpose();
-}
-
-
-vnl_matrix<double>
-rgrl_trans_reduced_quad::
-covar() const
-{
-  return covar_;
 }
 
 

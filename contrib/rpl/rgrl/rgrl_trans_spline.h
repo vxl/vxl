@@ -40,8 +40,6 @@ class rgrl_trans_spline
 
   vnl_matrix<double> transfer_error_covar( vnl_vector<double> const& p ) const;
 
-  vnl_matrix<double> covar() const;
-
   rgrl_transformation_sptr get_global_xform( ) const { return xform_; }
   rgrl_spline_sptr get_spline( unsigned i ) const { return splines_[i]; }
 
@@ -84,7 +82,6 @@ class rgrl_trans_spline
   // each other's variables are 0.  So I don't save the covariance
   // between them.  However, the covariance between the parameters is
   // the same for each spline. So here, only one covariance is saved.
-  vnl_matrix<double> covar_;
   vnl_vector< double >  x0_;
   vnl_vector<double> delta_;
 };

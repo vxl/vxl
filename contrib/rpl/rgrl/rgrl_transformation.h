@@ -34,6 +34,12 @@ class rgrl_transformation
  public:
   virtual ~rgrl_transformation();
 
+  //: default constructor
+  rgrl_transformation() :  is_covar_set_(false) {  }
+
+  //: initialize with covariance matrix
+  rgrl_transformation( const vnl_matrix<double>& cov );
+
   //:  Apply the transformation to create a new (mapped) location
   //
   void map_location( vnl_vector<double> const& from,
@@ -111,7 +117,13 @@ class rgrl_transformation
                         vnl_vector<double>& from_next_est) const ;
 
   //:  Parameter covariance matrix
-  virtual vnl_matrix<double> covar() const = 0;
+  vnl_matrix<double> covar() const;
+
+  //:  set parameter covariance matrix
+  void set_covar( const vnl_matrix<double>& covar );
+
+  //: is covariance set?
+  bool is_covar_set() const { return is_covar_set_; }
 
   //:  Inverse map based on the transformation.
   //   This function only exist for certain transformations.
@@ -157,6 +169,16 @@ class rgrl_transformation
   void map_dir( vnl_vector<double> const& from_loc,
                 vnl_vector<double> const& from_dir,
                 vnl_vector<double>      & to_dir    ) const = 0;
+
+ protected:
+  
+  //: covariance matrix
+  //  Unlike transformation parameters, covariance is always a mtrix of double. 
+  vnl_matrix<double> covar_; 
+  
+  //: flag of setting covariance 
+  //  Check it before using covariance matrix
+  bool is_covar_set_;
 };
 
 vcl_ostream& 

@@ -54,8 +54,9 @@ class rgrl_trans_similarity
   //
   //   for 2D, the covar matrix is for the vector [a b tx ty], where
   //   [a -b tx; b a ty] = [A_ trans]
-  //
-  vnl_matrix<double> covar() const;
+  // 
+  // defined in base class
+  // vnl_matrix<double> covar() const;
 
   //: The scaling and rotation component of the transform
   vnl_matrix<double> const& A() const;
@@ -108,7 +109,6 @@ class rgrl_trans_similarity
  private:
   vnl_matrix<double> A_;
   vnl_vector<double> trans_;
-  vnl_matrix<double> covar_;
   vnl_vector<double> from_centre_;
 };
 

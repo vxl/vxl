@@ -24,7 +24,7 @@ rgrl_trans_spline( vcl_vector<rgrl_spline_sptr> const& splines,
     x0_( x0 ), delta_( delta )
 {
   assert( x0_.size() == delta_.size() );
-  covar_ = vnl_matrix< double >( splines[0]->num_of_control_points(), splines[0]->num_of_control_points(), 0.0 );
+  // covar_ = vnl_matrix< double >( splines[0]->num_of_control_points(), splines[0]->num_of_control_points(), 0.0 );
 }
 
 rgrl_trans_spline::
@@ -32,7 +32,8 @@ rgrl_trans_spline( vcl_vector<rgrl_spline_sptr> const& splines,
                    vnl_vector< double > const& x0, vnl_vector< double > const& delta,
                    vnl_matrix< double > const& covar,
                    rgrl_transformation_sptr xform )
-  : xform_( xform ), splines_( splines ), covar_( covar ), x0_( x0 ), delta_( delta )
+  : rgrl_transformation( covar ), 
+    xform_( xform ), splines_( splines ), x0_( x0 ), delta_( delta )
 {
   assert( x0_.size() == delta_.size() );
 }
@@ -120,7 +121,8 @@ vnl_matrix<double>
 rgrl_trans_spline::
 transfer_error_covar( vnl_vector<double> const& p ) const
 {
-  unsigned dim = p.size();
+  const unsigned dim = p.size();
+  assert(is_covar_set());
   assert(dim==splines_.size());
 
   vnl_matrix<double> transfer_err_cov(dim,dim,0);
@@ -134,15 +136,6 @@ transfer_error_covar( vnl_vector<double> const& p ) const
       transfer_err_cov[i][i] += f_prime[j] * tmp[j];
   }
   return transfer_err_cov;
-}
-
-vnl_matrix<double>
-rgrl_trans_spline::
-covar() const
-{
-  //  if ( covar_cached )
-  vcl_cerr << "rgrl_trans_spline::covar() is called\n";
-  return covar_;
 }
 
 void

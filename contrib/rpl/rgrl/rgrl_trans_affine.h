@@ -57,7 +57,8 @@ class rgrl_trans_affine
   //   form of the covar matrix is for a vector
   //     ( a_1^T, trans[0], ... , a_n^T, trans[n] )^T
   //
-  vnl_matrix<double> covar() const;
+  // defined in base class
+  // vnl_matrix<double> covar() const;
 
   //: The non-translation component of the affine transform
   vnl_matrix<double> const& A() const;
@@ -110,7 +111,6 @@ class rgrl_trans_affine
  private:
   vnl_matrix<double> A_;
   vnl_vector<double> trans_;
-  vnl_matrix<double> covar_;
   vnl_vector<double> from_centre_;
 };
 

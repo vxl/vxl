@@ -15,8 +15,6 @@ rgrl_trans_quadratic( unsigned int dim)
   : Q_( vnl_matrix<double>( dim, dim + int(dim*(dim-1)/2), 0.0 ) ),
     A_( vnl_matrix<double>( dim, dim, vnl_matrix_identity ) ),
     trans_( vnl_vector<double>( dim, 0.0 ) ),
-    covar_( vnl_matrix<double>( dim*(2*dim + int(dim*(dim-1)/2)+1),
-                                dim*(2*dim + int(dim*(dim-1)/2)+1), 0.0 ) ),
     from_centre_( dim, 0.0 )
 {
 }
@@ -26,17 +24,19 @@ rgrl_trans_quadratic( vnl_matrix<double> const& in_Q,
                       vnl_matrix<double> const& in_A,
                       vnl_vector<double> const& in_trans,
                       vnl_matrix<double> const& in_covar )
-  : Q_( in_Q ),
+  : rgrl_transformation( in_covar ),
+    Q_( in_Q ),
     A_( in_A ),
     trans_( in_trans ),
-    covar_( in_covar ),
     from_centre_( in_trans.size(), 0.0 )
 {
   assert ( Q_.rows() + Q_.rows()*(Q_.rows()-1)/2 == Q_.cols() );
   assert ( A_.rows() == A_.cols() );
   assert ( A_.rows() == trans_.size() );
-  assert ( covar_.rows() == covar_.cols() );
-  assert ( covar_.rows() == A_.rows()* (Q_.cols()+A_.cols() + 1 ) );
+  if( is_covar_set() ) {
+    assert ( covar_.rows() == covar_.cols() );
+    assert ( covar_.rows() == A_.rows()* (Q_.cols()+A_.cols() + 1 ) );
+  }
 }
 
 rgrl_trans_quadratic::
@@ -49,14 +49,9 @@ rgrl_trans_quadratic( vnl_matrix<double> const& in_Q,
     from_centre_( in_trans.size(), 0.0 )
 {
   int dim = trans_.size();
-  covar_ = vnl_matrix<double>( dim*(2*dim + int(dim*(dim-1)/2)+1),
-                               dim*(2*dim + int(dim*(dim-1)/2)+1), 0.0 );
-
   assert ( Q_.rows() + Q_.rows()*(Q_.rows()-1)/2 == Q_.cols() );
   assert ( A_.rows() == A_.cols() );
   assert ( A_.rows() == trans_.size() );
-  assert ( covar_.rows() == covar_.cols() );
-  assert ( covar_.rows() == A_.rows()* (Q_.cols()+A_.cols() + 1 ) );
 }
 
 
@@ -67,18 +62,20 @@ rgrl_trans_quadratic( vnl_matrix<double> const& in_Q,
                       vnl_matrix<double> const& in_covar,
                       vnl_vector<double> const& in_from_centre,
                       vnl_vector<double> const& in_to_centre )
-  : Q_( in_Q ),
+  : rgrl_transformation( in_covar ),
+    Q_( in_Q ),
     A_( in_A ),
     trans_( in_trans ),
-    covar_( in_covar ),
     from_centre_( in_from_centre )
 {
   assert ( Q_.rows() + Q_.rows()*(Q_.rows()-1)/2 == Q_.cols() );
   assert ( A_.rows() == A_.cols() );
   assert ( A_.rows() == trans_.size() );
-  assert ( covar_.rows() == covar_.cols() );
-  assert ( covar_.rows() == A_.rows()* ( Q_.cols() + A_.cols() + 1) );
   assert ( from_centre_.size() == trans_.size() );
+  if( is_covar_set() ) {
+    assert ( covar_.rows() == covar_.cols() );
+    assert ( covar_.rows() == A_.rows()* ( Q_.cols() + A_.cols() + 1) );
+  }   
 
   // Uncenter the transform
   vnl_vector<double> new_trans;
@@ -156,6 +153,7 @@ transfer_error_covar( vnl_vector<double> const& p  ) const
 {
   unsigned const m = A_.rows();
 
+  assert ( is_covar_set() );
   assert ( p.size() == m );
   int num_terms = m+int(m*(m-1)/2) + m +1;
 
@@ -177,15 +175,6 @@ transfer_error_covar( vnl_vector<double> const& p  ) const
 
   return temp * covar_ * temp.transpose();
 }
-
-
-vnl_matrix<double>
-rgrl_trans_quadratic::
-covar() const
-{
-  return covar_;
-}
-
 
 vnl_matrix<double> const&
 rgrl_trans_quadratic::

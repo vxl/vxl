@@ -42,10 +42,6 @@ class rgrl_trans_translation
 
   vnl_matrix<double> transfer_error_covar( vnl_vector<double> const& p  ) const;
 
-  //:  Provide the covariance matrix of the estimate (scale is factored in)
-  //
-  vnl_matrix<double> covar() const;
-
   //: The translation component of the translation transform
   vnl_vector<double> t() const;
 
@@ -92,7 +88,6 @@ class rgrl_trans_translation
 
  private:
   vnl_vector<double> trans_;
-  vnl_matrix<double> covar_;
   vnl_vector<double> from_centre_;
 };
 

@@ -13,8 +13,7 @@
 rgrl_trans_rigid::
 rgrl_trans_rigid( unsigned int dimension )
   : R_( vnl_matrix<double>( dimension, dimension, vnl_matrix_identity ) ),
-    trans_( vnl_vector<double>( dimension, 0.0 ) ),
-    covar_( vnl_matrix<double>( 3*(dimension - 1), 3*(dimension - 1), 0.0 ) )
+    trans_( vnl_vector<double>( dimension, 0.0 ) )
 {
   // only accept 2d or 3d rigid transformation
   assert (dimension==2 || dimension==3);
@@ -24,29 +23,27 @@ rgrl_trans_rigid::
 rgrl_trans_rigid( vnl_matrix<double> const& rot,
                   vnl_vector<double> const& in_trans )
   : R_( rot ),
-    trans_( in_trans ),
-    covar_( vnl_matrix<double>( 3*(in_trans.size()-1), 3*(in_trans.size()-1), 0.0 ) )
+    trans_( in_trans )
 {
   assert ( R_.rows() == R_.cols() );  //make sure rotation is square matrix
   assert ( R_.rows() == trans_.size() );
-  assert ( covar_.rows() == covar_.cols() );
-  assert ( ( R_.rows() != 2 || covar_.rows() == 3 ) ); // 2d has 3 params (1 angle + 2 displacements)
-  assert ( ( R_.rows() != 3 || covar_.rows() == 6 ) ); // 3d has 6 params (3 angles + 3 displacements)
 }
 
 rgrl_trans_rigid::
 rgrl_trans_rigid( vnl_matrix<double> const& rot,
                   vnl_vector<double> const& in_trans,
                   vnl_matrix<double> const& in_covar )
-  : R_( rot ),
-    trans_( in_trans ),
-    covar_( in_covar )
+  : rgrl_transformation( in_covar ),
+    R_( rot ),
+    trans_( in_trans )
 {
   assert ( R_.rows() == R_.cols() );
   assert ( R_.rows() == trans_.size() );
-  assert ( covar_.rows() == covar_.cols() );
-  assert ( ( R_.rows() != 2 || covar_.rows() == 3 ) ); // 2d has 3 params
-  assert ( ( R_.rows() != 3 || covar_.rows() == 6 ) ); // 3d has 6 params
+  if( is_covar_set() ) {
+    assert ( covar_.rows() == covar_.cols() );
+    assert ( ( R_.rows() != 2 || covar_.rows() == 3 ) ); // 2d has 3 params (1 angle + 2 displacements)
+    assert ( ( R_.rows() != 3 || covar_.rows() == 6 ) ); // 3d has 6 params (3 angles + 3 displacements)
+  }
 }
 
 void rgrl_trans_rigid::set_translation(double tx, double ty, double tz)
@@ -140,6 +137,7 @@ vnl_matrix<double>
 rgrl_trans_rigid::
 transfer_error_covar( vnl_vector<double> const& p  ) const
 {
+  assert ( is_covar_set() );
   assert ( p.size() == trans_.size() );
   vnl_matrix<double> jacobian(3,6,0.0);
 
@@ -173,13 +171,6 @@ transfer_error_covar( vnl_vector<double> const& p  ) const
   jacobian.update(vnl_matrix<double>(3,3,vnl_matrix_identity),0,3);
 
   return jacobian * covar_ * jacobian.transpose();
-}
-
-vnl_matrix<double>
-rgrl_trans_rigid::
-covar() const
-{
-  return covar_;
 }
 
 vnl_matrix<double> const&

@@ -68,7 +68,8 @@ class rgrl_trans_reduced_quad
   //   vector [c d a b tx ty]^t, where c and d are for the 2nd order terms,
   //   and a, b, tx and ty are for the similarity transform.
   //
-  vnl_matrix<double> covar() const;
+  // defined in base class
+  // vnl_matrix<double> covar() const;
 
   //: The 2nd-order component of the quadratic transform
   vnl_matrix<double> const& Q() const;
@@ -116,7 +117,6 @@ class rgrl_trans_reduced_quad
   vnl_matrix<double> Q_;
   vnl_matrix<double> A_;
   vnl_vector<double> trans_;
-  vnl_matrix<double> covar_;
   vnl_vector<double> from_centre_;
 };
 

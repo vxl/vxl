@@ -65,9 +65,6 @@ class rgrl_trans_rigid
 
   vnl_matrix<double> transfer_error_covar( vnl_vector<double> const& p  ) const;
 
-  //:  Provide the covariance matrix of the estimate
-  vnl_matrix<double> covar() const;
-
   //: The rotation component of this transform
   vnl_matrix<double> const& R() const;
 
@@ -119,7 +116,6 @@ class rgrl_trans_rigid
  private:
   vnl_matrix<double> R_;
   vnl_vector<double> trans_;
-  vnl_matrix<double> covar_;
 };
 
 

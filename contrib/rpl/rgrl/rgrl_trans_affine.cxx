@@ -18,7 +18,6 @@ rgrl_trans_affine::
 rgrl_trans_affine( unsigned int dimension )
   : A_( vnl_matrix<double>( dimension, dimension, vnl_matrix_identity ) ),
     trans_( vnl_vector<double>( dimension, 0.0 ) ),
-    covar_( vnl_matrix<double>( dimension*(dimension+1), dimension*(dimension+1), 0.0 ) ),
     from_centre_( dimension, 0.0 )
 {
 }
@@ -28,15 +27,17 @@ rgrl_trans_affine::
 rgrl_trans_affine( vnl_matrix<double> const& in_A,
                    vnl_vector<double> const& in_trans,
                    vnl_matrix<double> const& in_covar )
-  : A_( in_A ),
+  : rgrl_transformation( in_covar ),
+    A_( in_A ),
     trans_( in_trans ),
-    covar_( in_covar ),
     from_centre_( in_trans.size(), 0.0 )
 {
   assert ( A_.rows() == A_.cols() );
   assert ( A_.rows() == trans_.size() );
-  assert ( covar_.rows() == covar_.cols() );
-  assert ( covar_.rows() == A_.rows()* (A_.rows()+1) );
+  if( is_covar_set() ) {
+    assert ( covar_.rows() == covar_.cols() );
+    assert ( covar_.rows() == A_.rows()* (A_.rows()+1) );
+  }
 }
 
 rgrl_trans_affine::
@@ -47,12 +48,9 @@ rgrl_trans_affine( vnl_matrix<double> const& in_A,
     from_centre_( in_trans.size(), 0.0 )
 {
   int dim = in_trans.size();
-  covar_ = vnl_matrix<double>( dim*(dim+1), dim*(dim+1), 0.0 );
 
   assert ( A_.rows() == A_.cols() );
   assert ( A_.rows() == trans_.size() );
-  assert ( covar_.rows() == covar_.cols() );
-  assert ( covar_.rows() == A_.rows()* (A_.rows()+1) );
 }
 
 rgrl_trans_affine::
@@ -61,16 +59,18 @@ rgrl_trans_affine( vnl_matrix<double> const& in_A,
                    vnl_matrix<double> const& in_covar,
                    vnl_vector<double> const& in_from_centre,
                    vnl_vector<double> const& in_to_centre )
-  : A_( in_A ),
+  : rgrl_transformation( in_covar ),
+    A_( in_A ),
     trans_( in_trans + in_to_centre ),
-    covar_( in_covar ),
     from_centre_( in_from_centre )
 {
   assert ( A_.rows() == A_.cols() );
   assert ( A_.rows() == trans_.size() );
-  assert ( covar_.rows() == covar_.cols() );
-  assert ( covar_.rows() == A_.rows()* (A_.rows()+1) );
   assert ( from_centre_.size() == trans_.size() );
+  if( is_covar_set() ) {
+    assert ( covar_.rows() == covar_.cols() );
+    assert ( covar_.rows() == A_.rows()* (A_.rows()+1) );
+  }
 }
 
 
@@ -102,7 +102,8 @@ rgrl_trans_affine::
 transfer_error_covar( vnl_vector<double> const& p  ) const
 {
   unsigned const m = A_.rows();
-
+  
+  assert ( is_covar_set() );
   assert ( p.size() == m );
 
   vnl_matrix<double> temp( m, m*(m+1), 0.0 );
@@ -116,15 +117,6 @@ transfer_error_covar( vnl_vector<double> const& p  ) const
 
   return temp * covar_ * temp.transpose();
 }
-
-
-vnl_matrix<double>
-rgrl_trans_affine::
-covar() const
-{
-  return covar_;
-}
-
 
 vnl_matrix<double> const&
 rgrl_trans_affine::
