@@ -12,6 +12,7 @@
 
 #include <vcl_cstdarg.h>
 #include <vcl_iostream.h>
+#include <vcl_stdio.h> // for vsprintf()
 
 vcl_ostream& vul_printf(vcl_ostream& s, char const * fmt, ...)
 {
@@ -19,7 +20,7 @@ vcl_ostream& vul_printf(vcl_ostream& s, char const * fmt, ...)
 
   va_list ap;
   va_start(ap, fmt);
-  vsprintf(buf, fmt, ap);
+  vcl_vsprintf(buf, fmt, ap);
   va_end(ap);
 
   return s << buf;
