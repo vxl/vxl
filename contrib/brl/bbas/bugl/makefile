@@ -9,8 +9,8 @@ MANPAGE_SOURCES += bugl_normal_point_2d.h
 MANPAGE_SOURCES += bugl_normal_point_2d_sptr.h
 MANPAGE_SOURCES += bugl_normal_point_3d.h
 MANPAGE_SOURCES += bugl_normal_point_3d_sptr.h
-MANPAGE_SOURCES += bugl_uncertainty_point_2d.txx
-MANPAGE_SOURCES += bugl_uncertainty_point_3d.txx
+MANPAGE_SOURCES += bugl_uncertainty_point_2d.h
+MANPAGE_SOURCES += bugl_uncertainty_point_3d.h
 SOURCES += bugl_curve_3d.cxx
 
 #######################################
