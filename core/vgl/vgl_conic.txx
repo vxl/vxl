@@ -95,29 +95,25 @@ vgl_conic<T>::vgl_conic(T a, T b, T c, T d, T e, T f)
   set_type_from_equation();
 }
 
-//: ctor using centre, signed radii, and angle
+//: ctor using centre, signed radii, and angle, or (for parabola) top + excentricity
 template <class T>
 vgl_conic<T>::vgl_conic(vgl_homg_point_2d<T> const& c, T rx, T ry, T theta)
 {
   if (c.w() == 0) { // This is a parabola
-    rx = (rx < 0) ? (-1/(rx*rx)) : (rx > 0) ? (1/(rx*rx)) : 0;
-    ry = (ry < 0) ? (-1/(ry*ry)) : (ry > 0) ? (1/(ry*ry)) : 0;
-
     a_ = c.y()*c.y();
     b_ = -2*c.x()*c.y();
     c_ = c.x()*c.x();
-    // tangent in (rx,ry) must have direction (c.y(),-c.x()):
-    // the line c.y()*(x-rx) = c.x()*(y-ry) has double intersection with conic:
-    // d_*c.x() + e_*c.y() = 0;
-    d_ = c.y(); e_ = -c.x(); // up to a scale factor
-    T r = vcl_sqrt(d_*d_+e_*e_); // cannot be 0
-    d_ *= theta/r;  e_ *= theta/r;
+    // polar line of (rx,ry) must have direction (c.y(),-c.x()), hence
+    // 2*a_*rx + b_*ry + d_ = 2*t*c.x() and b_*rx + 2*c_*ry +e_ = 2*t*c.y() :
+    theta /= vcl_sqrt(c.x()*c.x()+c.y()*c.y()); // cannot be 0
+    d_ = -2*a_*rx - b_*ry + 2*theta*c.x();
+    e_ = -2*c_*ry - b_*rx + 2*theta*c.y();
     // conic must go through (rx,ry):
     f_ = -a_*rx*rx-b_*rx*ry-c_*ry*ry-d_*rx-e_*ry;
   }
-  else {
-    rx = (rx < 0) ? (-1*(rx*rx)) : (rx > 0) ? (rx*rx) : 0;
-    ry = (ry < 0) ? (-1*(ry*ry)) : (ry > 0) ? (ry*ry) : 0;
+  else { // hyperbola or ellipse
+    rx = (rx < 0) ? (-rx*rx) : (rx > 0) ? (rx*rx) : 0;
+    ry = (ry < 0) ? (-ry*ry) : (ry > 0) ? (ry*ry) : 0;
 
     T ct = vcl_cos(-theta);
     T st = vcl_sin(-theta);
