@@ -30,7 +30,6 @@ export template <class T> class vnl_matrix;
 #define m vnl_matrix<T>
 template <class T> T      dot_product (v const&, v const&);
 template <class T> T      inner_product (v const&, v const&);
-template <class T> T      euclid_dist (v const&, v const&);
 template <class T> T      bracket (v const &, m const &, v const &);
 template <class T> T      cos_angle(v const&, v const& );
 template <class T> double angle (v const&, v const&);
@@ -348,7 +347,6 @@ protected:
 # define m vnl_matrix<T>
   friend T      dot_product      VCL_NULL_TMPL_ARGS (v const&, v const&);
   friend T      inner_product    VCL_NULL_TMPL_ARGS (v const&, v const&);
-  friend T      euclid_dist      VCL_NULL_TMPL_ARGS (v const&, v const&);
   friend T      bracket          VCL_NULL_TMPL_ARGS (v const&, m const&, v const&);
   friend T      cos_angle        VCL_NULL_TMPL_ARGS (v const&, v const&);
   friend double angle            VCL_NULL_TMPL_ARGS (v const&, v const&);
