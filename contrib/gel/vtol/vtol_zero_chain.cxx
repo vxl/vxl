@@ -114,9 +114,16 @@ vtol_zero_chain::~vtol_zero_chain()
 //: Clone `this': creation of a new object and initialization
 // See Prototype pattern
 //---------------------------------------------------------------------------
-vsol_spatial_object_2d_sptr vtol_zero_chain::clone(void) const
+vsol_spatial_object_2d* vtol_zero_chain::clone(void) const
 {
   return new vtol_zero_chain(vtol_zero_chain_sptr(const_cast<vtol_zero_chain*>(this)));
+}
+
+
+//: Return a platform independent string identifying the class
+vcl_string vtol_zero_chain::is_a() const
+{
+  return vcl_string("vtol_zero_chain");
 }
 
 //---------------------------------------------------------------------------

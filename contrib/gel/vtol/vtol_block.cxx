@@ -171,10 +171,18 @@ vtol_block::~vtol_block()
 //: Clone `this': creation of a new object and initialization
 // See Prototype pattern
 //---------------------------------------------------------------------------
-vsol_spatial_object_2d_sptr vtol_block::clone(void) const
+vsol_spatial_object_2d* vtol_block::clone(void) const
 {
   return new vtol_block(vtol_block_sptr(const_cast<vtol_block*>(this)));
 }
+
+
+//: Return a platform independent string identifying the class
+vcl_string vtol_block::is_a() const
+{
+  return vcl_string("vtol_block");
+}
+
 
 //: outside boundary vertices
 

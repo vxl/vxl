@@ -20,9 +20,15 @@
 
 #define near_zero(a) (vcl_fabs (a) < MAX_ROUNDOFF)
 
-vsol_spatial_object_2d_sptr vdgl_digital_region::clone() const
+vsol_spatial_object_2d* vdgl_digital_region::clone() const
 {
   return new vdgl_digital_region(*this);
+}
+
+//: Return a platform independent string identifying the class
+vcl_string vdgl_digital_region::is_a() const
+{
+  return vcl_string("vdgl_digital_region");
 }
 
 //-----------------------------------------------------------

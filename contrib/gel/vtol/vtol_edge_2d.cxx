@@ -249,9 +249,16 @@ vtol_edge_2d::vtol_edge_2d(vsol_curve_2d &edgecurve)
 //: Clone `this': creation of a new object and initialization
 // See Prototype pattern
 //---------------------------------------------------------------------------
-vsol_spatial_object_2d_sptr vtol_edge_2d::clone(void) const
+vsol_spatial_object_2d* vtol_edge_2d::clone(void) const
 {
   return new vtol_edge_2d(vtol_edge_2d_sptr(const_cast<vtol_edge_2d*>(this)));
+}
+
+
+//: Return a platform independent string identifying the class
+vcl_string vtol_edge_2d::is_a() const
+{
+  return vcl_string("vtol_edge_2d");
 }
 
 //---------------------------------------------------------------------------

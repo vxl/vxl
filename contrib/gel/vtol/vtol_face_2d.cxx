@@ -81,9 +81,15 @@ vtol_face_2d::~vtol_face_2d()
 //: Clone `this': creation of a new object and initialization.
 // See Prototype pattern
 //---------------------------------------------------------------------------
-vsol_spatial_object_2d_sptr vtol_face_2d::clone(void) const
+vsol_spatial_object_2d* vtol_face_2d::clone(void) const
 {
   return new vtol_face_2d(vtol_face_2d_sptr(const_cast<vtol_face_2d*>(this)));
+}
+
+//: Return a platform independent string identifying the class
+vcl_string vtol_face_2d::is_a() const
+{
+  return vcl_string("vtol_face_2d");
 }
 
 vsol_region_2d_sptr vtol_face_2d::surface(void) const

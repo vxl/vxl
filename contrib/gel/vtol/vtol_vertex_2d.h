@@ -87,7 +87,10 @@ class vtol_vertex_2d : public vtol_vertex
   //: Clone `this': creation of a new object and initialization
   //  See Prototype pattern
   //---------------------------------------------------------------------------
-  virtual vsol_spatial_object_2d_sptr clone(void) const;
+  virtual vsol_spatial_object_2d* clone(void) const;
+  
+  //: Return a platform independent string identifying the class
+  vcl_string is_a() const;
 
   // Accessors
 

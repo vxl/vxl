@@ -114,7 +114,10 @@ class vdgl_digital_region : public vsol_region_2d
   void DoPlaneFit() const; //!< Fit a plane to the region intensities
   void PrintFit() const;
 
-  virtual vsol_spatial_object_2d_sptr clone() const;
+  virtual vsol_spatial_object_2d* clone() const;
+  
+  //: Return a platform independent string identifying the class
+  vcl_string is_a() const;
 
  protected:
   //

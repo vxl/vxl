@@ -81,9 +81,15 @@ vtol_vertex_2d::~vtol_vertex_2d()
 //: Clone `this': creation of a new object and initialization
 // See Prototype pattern
 //---------------------------------------------------------------------------
-vsol_spatial_object_2d_sptr vtol_vertex_2d::clone(void) const
+vsol_spatial_object_2d* vtol_vertex_2d::clone(void) const
 {
   return new vtol_vertex_2d(vtol_vertex_2d_sptr(const_cast<vtol_vertex_2d*>(this)));
+}
+
+//: Return a platform independent string identifying the class
+vcl_string vtol_vertex_2d::is_a() const
+{
+  return vcl_string("vtol_vertex_2d");
 }
 
 //*****************************************************

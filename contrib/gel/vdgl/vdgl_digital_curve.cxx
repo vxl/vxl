@@ -31,9 +31,15 @@ vdgl_digital_curve::vdgl_digital_curve(vsol_point_2d_sptr const& p0,
   interpolator_ = new vdgl_interpolator_linear(ec);
 }
 
-vsol_spatial_object_2d_sptr vdgl_digital_curve::clone(void) const
+vsol_spatial_object_2d* vdgl_digital_curve::clone(void) const
 {
   return new vdgl_digital_curve(interpolator_);
+}
+
+//: Return a platform independent string identifying the class
+vcl_string vdgl_digital_curve::is_a() const
+{
+  return vcl_string("vdgl_digital_curve");
 }
 
 double vdgl_digital_curve::get_x( const double s) const

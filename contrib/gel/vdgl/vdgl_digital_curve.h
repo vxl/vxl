@@ -38,7 +38,11 @@ class vdgl_digital_curve : public vsol_curve_2d
   vsol_point_2d_sptr p0() const;
   vsol_point_2d_sptr p1() const;
   double length() const;
-  vsol_spatial_object_2d_sptr clone(void) const;
+  vsol_spatial_object_2d* clone(void) const;
+
+  //: Return a platform independent string identifying the class
+  vcl_string is_a() const;
+
   // warning: the results of these methods are undefined
   void set_p0(const vsol_point_2d_sptr &);
   void set_p1(const vsol_point_2d_sptr &);

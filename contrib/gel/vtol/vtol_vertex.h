@@ -134,6 +134,9 @@ class vtol_vertex : public vtol_topology_object
   void print(vcl_ostream &strm=vcl_cout) const;
   void describe(vcl_ostream &strm=vcl_cout, int blanking=0) const;
 
+  //: Return a platform independent string identifying the class
+  vcl_string is_a() const;
+
   //: have the inherited classes copy the geometry
   virtual void copy_geometry(const vtol_vertex &other)=0;
   virtual bool compare_geometry(const vtol_vertex &other) const =0;

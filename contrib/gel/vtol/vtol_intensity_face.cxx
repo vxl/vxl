@@ -97,9 +97,15 @@ vtol_intensity_face::~vtol_intensity_face()
 //: Clone `this': creation of a new object and initialization
 // See Prototype pattern
 //---------------------------------------------------------------------------
-vsol_spatial_object_2d_sptr vtol_intensity_face::clone(void) const
+vsol_spatial_object_2d* vtol_intensity_face::clone(void) const
 {
   return new vtol_intensity_face(vtol_intensity_face_sptr(const_cast<vtol_intensity_face*>(this)));
+}
+
+//: Return a platform independent string identifying the class
+vcl_string vtol_intensity_face::is_a() const
+{
+  return vcl_string("vtol_intensity_face");
 }
 
 //----------------------------------------------------

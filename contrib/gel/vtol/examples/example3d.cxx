@@ -40,7 +40,8 @@ class example_edge_3d : public vtol_edge
  public:
   T(V const& v1, V const& v2);
   T(vtol_vertex_sptr const& v1, vtol_vertex_sptr const& v2);
-  virtual vsol_spatial_object_2d_sptr clone() const {return new T(v1_,v2_); }
+  virtual vsol_spatial_object_2d* clone() const {return new T(v1_,v2_); }
+  vcl_string is_a() const { return vcl_string("example_edge_3d"); }
 
   bool operator==(T const& e) const { return v1_==e.v1() && v2_==e.v2(); }
   bool operator==(E const& e) const { return !e.cast_to_edge_2d() && operator==((T const&)e); }
@@ -96,7 +97,8 @@ class example_vertex_3d : public vtol_vertex
     }
     return new example_edge_3d(this,v);
   }
-  virtual vsol_spatial_object_2d_sptr clone() const {return new T(x(),y(),z()); }
+  virtual vsol_spatial_object_2d* clone() const {return new T(x(),y(),z()); }
+  vcl_string is_a() const { return vcl_string("example_vertex_3d"); }
   virtual void copy_geometry(const vtol_vertex&v) { assert(v.cast_to_vertex_2d()==0); operator=(*(T const*)(&v)); }
   virtual bool compare_geometry(const vtol_vertex&v) const { return v.cast_to_vertex_2d()==0 && operator==(*(T const*)(&v)); }
 
@@ -143,8 +145,10 @@ class example_face_3d : public vtol_face
     }
     link_inferior(new vtol_one_chain(elist,dirs,true));
   }
-  virtual vsol_spatial_object_2d_sptr clone() const {vertex_list* vl=(const_cast<T*>(this))->vertices();
+  virtual vsol_spatial_object_2d* clone() const {vertex_list* vl=(const_cast<T*>(this))->vertices();
                                                      T* f=new T(*vl);delete vl;return f;}
+  
+  vcl_string is_a() const { return vcl_string("example_face_3d"); }
   bool operator==(T const&) const { return false; }
   bool operator==(F const&) const { return false; }
   bool operator==(S const&) const { return false; }

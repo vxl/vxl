@@ -119,6 +119,12 @@ void vtol_vertex::describe(vcl_ostream &strm,
 }
 
 
+//: Return a platform independent string identifying the class
+vcl_string vtol_vertex::is_a() const
+{
+  return vcl_string("vtol_vertex");
+}
+
 //******************************************************
 //*
 //*    Implementor Functions
