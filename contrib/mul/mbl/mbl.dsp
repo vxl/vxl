@@ -99,461 +99,283 @@ LIB32=link.exe -lib
 # Begin Group "Source Files"
 # PROP Default_Filter ""
 # Begin Source File
-
 SOURCE=.\mbl_screen_counter.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\Templates/mbl_data_wrapper+double-.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\Templates/mbl_data_wrapper_mixer+vnl_vector+double--.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\Templates/mbl_data_array_wrapper+double-.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\Templates/mbl_data_array_wrapper+vnl_vector+double--.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\Templates/mbl_data_collector+vnl_vector+double--.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\Templates/mbl_data_collector_list+vnl_vector+double--.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\Templates/mbl_data_wrapper+vnl_vector+double--.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\mbl_rbf_network.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\Templates/mbl_stochastic_data_collector+vnl_vector+double--.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\Templates/vcl_vector+mbl_data_collector_base~-.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\Templates/vsl_binary_loader+mbl_data_collector_base-.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\Templates/vsl_vector_io+mbl_chord-.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\Templates/vsl_vector_io+mbl_stats_1d-.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\Templates/vsl_vector_io+mbl_sum_1d-.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\Templates/mbl_data_array_ptr_wrapper+vnl_vector+double--.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\Templates/mbl_selected_data_wrapper+double-.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\Templates/mbl_selected_data_wrapper+vnl_vector+double--.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\Templates/mbl_file_data_collector+vnl_vector+double--.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\Templates/mbl_file_data_wrapper+double-.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\Templates/mbl_file_data_wrapper+vnl_vector+double--.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\Templates/mbl_data_collector+vcl_vector+vbl_triple+double.int.int---.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\Templates/mbl_data_wrapper+vcl_vector+vbl_triple+double.int.int---.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\Templates/mbl_file_data_collector+vcl_vector+vbl_triple+double.int.int---.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\Templates/mbl_file_data_wrapper+vcl_vector+vbl_triple+double.int.int---.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\Templates/mbl_data_array_wrapper+vcl_vector+vbl_triple+double.int.int---.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\Templates/mbl_data_collector_list+vcl_vector+vbl_triple+double.int.int---.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\mbl_data_collector_base.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\mbl_gamma.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\mbl_k_means.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\mbl_matrix_products.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\mbl_matxvec.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\mbl_mz_random.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\mbl_read_double.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\mbl_read_int.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\mbl_read_str.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\mbl_read_props.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\mbl_stats_1d.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\mbl_sum_1d.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\mbl_lda.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\mbl_thin_plate_spline_2d.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\mbl_histogram.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\mbl_clamped_plate_spline_2d.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\mbl_read_yes.cxx
-
 # End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter ""
 # Begin Source File
-
 SOURCE=.\mbl_data_wrapper_mixer.txx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\mbl_data_wrapper_mixer.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\mbl_data_array_wrapper.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\mbl_data_array_wrapper.txx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\mbl_data_collector.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\mbl_data_collector.txx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\mbl_data_collector_base.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\mbl_data_collector_list.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\mbl_data_collector_list.txx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\mbl_data_wrapper.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\mbl_data_wrapper.txx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\mbl_gamma.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\mbl_k_means.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\mbl_lda.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\mbl_matrix_products.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\mbl_matxvec.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\mbl_mz_random.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\mbl_rbf_network.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\mbl_read_double.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\mbl_read_int.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\mbl_read_str.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\mbl_read_props.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\mbl_screen_counter.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\mbl_stats_1d.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\mbl_stochastic_data_collector.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\mbl_stochastic_data_collector.txx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\mbl_sum_1d.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\mbl_chord.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\mbl_cloneable_ptr.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\mbl_index_sort.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\mbl_lru_cache.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\mbl_print.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\mbl_priority_bounded_queue.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\mbl_data_array_ptr_wrapper.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\mbl_data_array_ptr_wrapper.txx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\mbl_stl.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\mbl_selected_data_wrapper.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\mbl_selected_data_wrapper.txx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\mbl_thin_plate_spline_2d.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\mbl_histogram.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\mbl_clamped_plate_spline_2d.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\mbl_read_yes.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\mbl_file_data_collector.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\mbl_file_data_collector.txx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\mbl_file_data_wrapper.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\mbl_file_data_wrapper.txx
-
+# End Source File
+# Begin Source File
+SOURCE=.\mbl_combination.h
 # End Source File
 # End Group
 # PROP Default_Filter "ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe"
 # End Group
 # End Target
 # End Project
-
