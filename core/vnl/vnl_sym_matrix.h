@@ -180,7 +180,7 @@ inline vnl_sym_matrix<T>::vnl_sym_matrix(vnl_matrix<T> const& that):
     }
 }
 
-//: Convert a vnl_sym_matrix to a Matrix.
+//: Convert a vnl_sym_matrix to a vnl_matrix.
 template <class T>
 inline vnl_matrix<T> vnl_sym_matrix<T>::as_matrix() const
 {
