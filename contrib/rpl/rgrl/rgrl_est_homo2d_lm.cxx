@@ -13,8 +13,10 @@
 #include <vnl/vnl_double_3.h>
 #include <vnl/vnl_matrix_fixed.h>
 #include <vnl/vnl_math.h>
+#include <vnl/vnl_fastops.h>
 #include <vnl/vnl_least_squares_function.h>
 #include <vnl/algo/vnl_levenberg_marquardt.h>
+#include <vnl/algo/vnl_svd.h>
 
 #include <vcl_cassert.h>
 
@@ -84,9 +86,17 @@ class rgrl_homo2d_func
   rgrl_homo2d_func( rgrl_set_of<rgrl_match_set_sptr> const& matches,
                     int num_res, bool with_grad = true )
   : vnl_least_squares_function( 9, num_res, with_grad ? use_gradient : no_gradient ),
-    matches_ptr_( &matches )
+    matches_ptr_( &matches ), 
+    from_centre_(2, 0.0), to_centre_(2, 0.0)
   {      }
 
+  void set_centres( vnl_vector<double> const& fc, vnl_vector<double> const& tc )
+  {
+    assert( fc.size() == 2 && tc.size() == 2 );
+    from_centre_ = fc;
+    to_centre_ = tc;
+  }
+  
   //: obj func value
   void f(vnl_vector<double> const& x, vnl_vector<double>& fx);
 
@@ -98,6 +108,7 @@ class rgrl_homo2d_func
   typedef FIter::to_iterator TIter;
 
   rgrl_set_of<rgrl_match_set_sptr> const* matches_ptr_;
+  vnl_double_2                            from_centre_, to_centre_;
 };
 
 void
@@ -113,10 +124,12 @@ f(vnl_vector<double> const& x, vnl_vector<double>& fx)
       for ( FIter fi=one_set.from_begin(); fi!=one_set.from_end(); ++fi ) {
         // map from point
         from = fi.from_feature()->location();
+        from -= from_centre_;
         map_inhomo_point( mapped, x, from );
 
         for ( TIter ti=fi.begin(); ti!=fi.end(); ++ti ) {
           to = ti.to_feature()->location();
+          to -= to_centre_;
           error_proj = ti.to_feature()->error_projector();
           double const wgt = vcl_sqrt(ti.cumulative_weight());
           diff = error_proj * (mapped - to);
@@ -152,6 +165,7 @@ gradf(vnl_vector<double> const& x, vnl_matrix<double>& jacobian)
       for ( FIter fi=one_set.from_begin(); fi!=one_set.from_end(); ++fi ) {
         // map from point
         from = fi.from_feature()->location();
+        from -= from_centre_;
         map_homo_point( homo, x, from );
         // homogeneous coordinate
         jf(0,0) = jf(1,3) = jf(2,6) = from[0]; // x
@@ -233,9 +247,6 @@ estimate( rgrl_set_of<rgrl_match_set_sptr> const& matches,
     init_H = trans.H();
   }
 
-  // convert to vector form
-  vnl_vector<double> initp;
-  H2h( init_H, initp );
   // count the number of constraints/residuals
   typedef rgrl_match_set::const_from_iterator FIter;
   typedef FIter::to_iterator TIter;
@@ -248,8 +259,55 @@ estimate( rgrl_set_of<rgrl_match_set_sptr> const& matches,
       }
     }
 
+  // Determine the weighted centres for the purpose of computing more stable 
+  // covariance matrix of homography parameters
+  //
+  vnl_vector<double> from_centre( 2, 0.0 );
+  vnl_vector<double> to_centre( 2, 0.0 );
+  vnl_vector<double> from_pt( 2 );
+  vnl_vector<double> to_pt( 2 );
+  double sum_wgt = 0.0;
+  unsigned count=0;  //for debugging
+  for ( unsigned ms=0; ms < matches.size(); ++ms ) {
+    rgrl_match_set const& match_set = *matches[ms];
+    for ( FIter fi = match_set.from_begin(); fi != match_set.from_end(); ++fi ) {
+      for ( TIter ti = fi.begin(); ti != fi.end(); ++ti ) {
+        double const wgt = ti.cumulative_weight();
+        from_pt = fi.from_feature()->location();
+        from_pt *= wgt;
+        from_centre += from_pt;
+        to_pt = ti.to_feature()->location();
+        to_pt *= wgt;
+        to_centre   += to_pt;
+        sum_wgt += wgt;
+      }
+    }
+  }
+  from_centre /= sum_wgt;
+  to_centre /= sum_wgt;
+
+  // make the init homography as a CENTERED one
+  {
+    // centered H_ = to_matrix * H * from_matrix^-1
+    //
+    vnl_matrix<double> to_trans( 3, 3, vnl_matrix_identity );
+    to_trans(0,2) = -to_centre[0];
+    to_trans(1,2) = -to_centre[1];
+    
+    vnl_matrix<double> from_inv( 3, 3, vnl_matrix_identity );
+    from_inv(0,2) = from_centre[0];
+    from_inv(1,2) = from_centre[1];
+    
+    init_H = to_trans * init_H * from_inv;
+  }
+  // convert to vector form
+  vnl_vector<double> initp;
+  H2h( init_H, initp );
+
   // construct least square cost function
   rgrl_homo2d_func homo_func( matches, tot_num, with_grad_ );
+  homo_func.set_centres( from_centre, to_centre );
+  
   vnl_levenberg_marquardt lm( homo_func );
   // lm.set_trace( true );
   // lm.set_check_derivatives( 10 );
@@ -268,9 +326,27 @@ estimate( rgrl_set_of<rgrl_match_set_sptr> const& matches,
   initp /= initp.two_norm();
   // convert parameters back into matrix form
   h2H( initp, init_H );
-  vnl_vector<double> center(2,0.0);
-  vnl_matrix<double> covar ( lm.get_JtJ() );
-  return new rgrl_trans_homography2d( init_H, covar, center, center );
+  vnl_vector<double> centre(2,0.0);
+  
+  // compute covariance
+  // JtJ is INVERSE of jacobian
+  // vnl_svd<double> svd( lm.get_JtJ(), 1e-4 );
+  // Cannot use get_JtJ() because it is affected by the 
+  // scale in homography parameter vector
+  // Thus, use the nomalized p vector to compute Jacobian again
+  vnl_matrix<double> jac(tot_num, 9), jtj(9, 9);
+  homo_func.gradf( initp, jac );
+  vnl_fastops::AtA( jtj, jac );
+  vnl_svd<double> svd( jtj, 1e-4 );
+  // vcl_cout << "Singular values: " << svd.W() << vcl_endl;
+  // the second least singular value shall be greater than 0
+  // or Rank 8
+  if( svd.rank() < 8 ) {
+    WarningMacro( "The covariance of homography ranks less than 8! ");
+  }
+  // pseudo inverse only use first 8 singular values
+  vnl_matrix<double> covar ( svd.pinverse(8) );
+  return new rgrl_trans_homography2d( init_H, covar, from_centre, to_centre );
 }
 
 
