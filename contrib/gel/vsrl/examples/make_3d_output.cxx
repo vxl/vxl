@@ -1,8 +1,5 @@
-// gtk-display-two-images
-// We wish to display two images side by side.
-
+// This is gel/vsrl/examples/make_3d_output.cxx
 #include <vcl_iostream.h>
-#include <vcl_fstream.h>
 #include <vsrl/vsrl_results_dense_matcher.h>
 #include <vsrl/vsrl_3d_output.h>
 
