@@ -1,6 +1,7 @@
-/*
-  fsm
-*/
+//:
+// \file
+// \author fsm
+
 #include <vcl_cassert.h>
 #include <vcl_cmath.h>
 #include <vcl_vector.h>
@@ -54,8 +55,8 @@ struct example_ptab : public vgui_tableau
       glEnd();
 
       // draw interior points
-      vgl_polygon p(&x[0], &y[0], n);
-      vgl_polygon_scan_iterator si(p, boundary);
+      vgl_polygon<float> p(&x[0], &y[0], n);
+      vgl_polygon_scan_iterator<float> si(p, boundary);
       si.reset();
       glColor3f(0, 1, 0); // green
       glBegin(GL_POINTS);

@@ -1,13 +1,14 @@
 // This is core/vgl/vgl_ellipse_scan_iterator.h
 #ifndef vgl_ellipse_scan_iterator_h_
 #define vgl_ellipse_scan_iterator_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \author Amitha Perera
 // \date   31 August 2001
+// \verbatim
+//  Modifications
+//   Nov.2003 - Peter Vanroose - made class vgl_ellipse_scan_iterator templated
+// \endverbatim
 
 #include <vgl/vgl_region_scan_iterator.h>
 
@@ -21,6 +22,7 @@
 //  For a convex region like an ellipse, such a scan line is fully determined
 //  by the two end points (startx(),scany()) and (endx(),scany()).
 //
+template <class T>
 class vgl_ellipse_scan_iterator : public vgl_region_scan_iterator
 {
  public:
@@ -29,7 +31,7 @@ class vgl_ellipse_scan_iterator : public vgl_region_scan_iterator
   //  rx and \a ry (the radii along the principle axes) and by \a theta,
   //  the rotation of the main axis (in radians) about the centre of the
   //  ellipse w.r.t\. the horizontal direction (X-axis).
-  vgl_ellipse_scan_iterator( double xc, double yc, double rx, double ry, double theta );
+  vgl_ellipse_scan_iterator( T xc, T yc, T rx, T ry, T theta );
 
   //: Destructor
   virtual ~vgl_ellipse_scan_iterator();
@@ -55,7 +57,7 @@ class vgl_ellipse_scan_iterator : public vgl_region_scan_iterator
  private:
   //: Parameters of the ellipse being scan converted.
   //  Centre, squared radii, and angle of rotation about the centre.
-  double xc_, yc_, rx_, ry_, theta_;
+  T xc_, yc_, rx_, ry_, theta_;
 
   //: Current scan line
   int y_;
@@ -69,5 +71,7 @@ class vgl_ellipse_scan_iterator : public vgl_region_scan_iterator
   //: End of current scan line
   int end_x_;
 };
+
+#define VGL_ELLIPSE_SCAN_ITERATOR_INSTANTIATE(T) extern "please include <vgl/vgl_ellipse_scan_iterator.txx> instead"
 
 #endif // vgl_ellipse_scan_iterator_h_

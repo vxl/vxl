@@ -37,13 +37,13 @@ class vrml_out
   void write_vertices(vcl_vector<vgl_point_3d<double> > const&);
   void write_points(vcl_vector<vgl_point_3d<double> > const& l) { return write_vertices(l); }
   void write_edges(vcl_vector<vgl_line_segment_3d<double> > const&);
-  void write_faces(vcl_list<vgl_polygon> const& triangles);
-  void write_faces_textured(vcl_list<vgl_polygon> const& triangles, char const* imagefilename, int xsize, int ysize);
-  void write_faces_textured(vcl_list<vgl_polygon> const& triangles, char const* imagefilename, int xsize, int ysize,
+  void write_faces(vcl_list<vgl_polygon<float> > const& triangles);
+  void write_faces_textured(vcl_list<v<float> gl_polygon> const& triangles, char const* imagefilename, int xsize, int ysize);
+  void write_faces_textured(vcl_list<v<float> gl_polygon> const& triangles, char const* imagefilename, int xsize, int ysize,
                             vnl_matrix<double> const& Pmatrix);
-  void write_faces_textured(vcl_list<vgl_polygon> const& triangles, char const* imagefilename, int xsize, int ysize,
+  void write_faces_textured(vcl_list<v<float> gl_polygon> const& triangles, char const* imagefilename, int xsize, int ysize,
                             vcl_vector<vcl_pair<vgl_point_3d<double>, vgl_point_3d<double> > >&);
-  void write_faces_textured(vcl_list<vgl_polygon> const& triangles, char const* imagefilename,
+  void write_faces_textured(vcl_list<v<float> gl_polygon> const& triangles, char const* imagefilename,
                             vrml_out_vertex_to_texture const& textures);
   void write_block(Block* topology);
   void write_topology(TopologyObject* topology);

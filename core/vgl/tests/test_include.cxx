@@ -8,6 +8,7 @@
 #include <vgl/vgl_clip.h>
 #include <vgl/vgl_closest_point.h>
 #include <vgl/vgl_conic.h>
+#include <vgl/vgl_convex.h>
 #include <vgl/vgl_distance.h>
 #include <vgl/vgl_ellipse_scan_iterator.h>
 #include <vgl/vgl_homg.h>
@@ -34,10 +35,10 @@
 #include <vgl/vgl_vector_2d.h>
 #include <vgl/vgl_vector_3d.h>
 #include <vgl/vgl_window_scan_iterator.h>
+#include <vgl/algo/vgl_fit_lines_2d.h>
 #include <vgl/algo/vgl_homg_operators_1d.h>
 #include <vgl/algo/vgl_homg_operators_2d.h>
 #include <vgl/algo/vgl_homg_operators_3d.h>
-#include <vgl/algo/vgl_rtree.h>
 #include <vgl/algo/vgl_h_matrix_1d.h>
 #include <vgl/algo/vgl_h_matrix_1d_compute.h>
 #include <vgl/algo/vgl_h_matrix_1d_compute_3point.h>
@@ -48,9 +49,9 @@
 #include <vgl/algo/vgl_h_matrix_2d_compute_4point.h>
 #include <vgl/algo/vgl_h_matrix_2d_compute_linear.h>
 #include <vgl/algo/vgl_h_matrix_3d.h>
-#include <vgl/algo/vgl_p_matrix.h>
-#include <vgl/algo/vgl_norm_trans_2d.h>
-#include <vgl/algo/vgl_fit_lines_2d.h>
 #include <vgl/algo/vgl_line_2d_regression.h>
+#include <vgl/algo/vgl_norm_trans_2d.h>
+#include <vgl/algo/vgl_p_matrix.h>
+#include <vgl/algo/vgl_rtree.h>
 
 int main() { return 0; }

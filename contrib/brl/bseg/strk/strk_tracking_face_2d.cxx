@@ -136,7 +136,7 @@ double strk_joint_histf::p(const int a, const int b)
     compute_volume();
   if (!volume_)
     return 0;
-  return  counts_[a][b]/volume_;
+  return counts_[a][b]/volume_;
 }
 
 void strk_joint_histf::print()
@@ -265,7 +265,7 @@ double strk_double_joint_histf::p(const int a, const int b)
     compute_volume();
   if (!volume_)
     return 0;
-  return  counts_[a][b]/volume_;
+  return counts_[a][b]/volume_;
 }
 
 void strk_double_joint_histf::print()
@@ -335,32 +335,32 @@ strk_tracking_face_2d::strk_tracking_face_2d (vtol_intensity_face_sptr const& in
 
 strk_tracking_face_2d::strk_tracking_face_2d(strk_tracking_face_2d_sptr const& tf)
 {
-   vcl_vector<vtol_vertex_sptr> verts, new_verts;
-   vtol_intensity_face_sptr intf = tf->face();
-   intf->vertices(verts);
-   for (vcl_vector<vtol_vertex_sptr>::iterator vit = verts.begin();
-        vit!= verts.end(); vit++)
-     new_verts.push_back(new vtol_vertex_2d((*vit)->cast_to_vertex_2d()->x(),
-                                            (*vit)->cast_to_vertex_2d()->y()));
+  vcl_vector<vtol_vertex_sptr> verts, new_verts;
+  vtol_intensity_face_sptr intf = tf->face();
+  intf->vertices(verts);
+  for (vcl_vector<vtol_vertex_sptr>::iterator vit = verts.begin();
+       vit!= verts.end(); vit++)
+    new_verts.push_back(new vtol_vertex_2d((*vit)->cast_to_vertex_2d()->x(),
+                                           (*vit)->cast_to_vertex_2d()->y()));
 
-    vtol_face_2d_sptr f2d = new vtol_face_2d(new_verts);
-   intf_= new vtol_intensity_face(f2d, intf->Npix(),
-                                  intf->Xj(), intf->Yj(),
-                                  intf->Ij());
+  vtol_face_2d_sptr f2d = new vtol_face_2d(new_verts);
+  intf_= new vtol_intensity_face(f2d, intf->Npix(),
+                                 intf->Xj(), intf->Yj(),
+                                 intf->Ij());
 
   Ix_ = 0;
   Iy_ = 0;
   gradient_info_ = tf->gradient_info_;
   if (gradient_info_)
   {
-  int n = intf_->Npix();
-  Ix_ = new float[n];
-  Iy_ = new float[n];
-  for (int i =0; i<n; i++)
-  {
-    Ix_[i]=tf->Ix(i);
-    Iy_[i]=tf->Iy(i);
-  }
+    int n = intf_->Npix();
+    Ix_ = new float[n];
+    Iy_ = new float[n];
+    for (int i =0; i<n; i++)
+    {
+      Ix_[i]=tf->Ix(i);
+      Iy_[i]=tf->Iy(i);
+    }
   }
   intensity_mi_ = tf->int_mutual_info();
   gradient_dir_mi_ = tf->grad_mutual_info();
@@ -384,7 +384,7 @@ strk_tracking_face_2d::init_face_info(vil1_memory_image_of<float> const& image,
   bool use_grad = (Ix && Iy);//this is ugly - fix me !!
   int width = image.width(), height = image.height();
   intf_->ResetPixelData();
-  vgl_polygon p;
+  vgl_polygon<float> p;
   p.new_sheet();
   vcl_vector<vtol_vertex_sptr> verts;
   intf_->vertices(verts);
@@ -392,7 +392,7 @@ strk_tracking_face_2d::init_face_info(vil1_memory_image_of<float> const& image,
        vit != verts.end(); vit++)
     p.push_back(float((*vit)->cast_to_vertex_2d()->x()),
                 float((*vit)->cast_to_vertex_2d()->y()));
-  vgl_polygon_scan_iterator psi(p, true);
+  vgl_polygon_scan_iterator<float> psi(p, true);
 
   //go throught the pixels once to gather statistics for the face Npix etc.
   for (psi.reset(); psi.next();)
@@ -403,7 +403,7 @@ strk_tracking_face_2d::init_face_info(vil1_memory_image_of<float> const& image,
         continue;
 
       unsigned short v = (unsigned short)image(x, y);
-      intf_->IncrementMeans(x, y, v);
+      intf_->IncrementMeans(float(x), float(y), v);
     }
   intf_->InitPixelArrays();
 
@@ -424,7 +424,7 @@ strk_tracking_face_2d::init_face_info(vil1_memory_image_of<float> const& image,
         continue;
       unsigned short v = (unsigned short)image(x, y);
       model_intensity_hist.upcount(v);
-      intf_->InsertInPixelArrays(x, y, v);
+      intf_->InsertInPixelArrays(float(x), float(y), v);
       if (use_grad)
       {
         float Ixi = Ix(x,y), Iyi = Iy(x,y);
@@ -526,8 +526,8 @@ void strk_tracking_face_2d::transform(const double tx, const double ty,
   {
     double x = this->X(), y = this->Y();
     double xp =(x-xo)*scale, yp =(y-yo)*scale;
-    this->set_X(xp*c - yp*s + xo + tx);
-    this->set_Y(xp*s + yp*c + yo + ty);
+    this->set_X(float(xp*c - yp*s + xo + tx));
+    this->set_Y(float(xp*s + yp*c + yo + ty));
   }
 }
 
@@ -560,13 +560,14 @@ compute_intensity_mutual_information(vil1_memory_image_of<float> const& image)
   float frac = nf/npixf;
   if (frac<0.9)
     return 0;
-  // vcl_cout << "Model Hist\n";
-  //    model_intensity_hist_->print();
-  //    vcl_cout << "Image Hist\n";
-  //    image_hist.print();
-  //    vcl_cout << "Joint Hist\n";
-  //    joint_hist.print();
-
+#ifdef DEBUG
+  vcl_cout << "Model Hist\n";
+  model_intensity_hist_->print();
+  vcl_cout << "Image Hist\n";
+  image_hist.print();
+  vcl_cout << "Joint Hist\n";
+  joint_hist.print();
+#endif
   //compute the mutual information
   int nbins = image_hist.nbins();
   double enti = 0, jent=0;
@@ -585,8 +586,10 @@ compute_intensity_mutual_information(vil1_memory_image_of<float> const& image)
   enti /= vcl_log(2.0);
   jent /= vcl_log(2.0);
   mi = model_intensity_entropy_ + enti - jent;
-  //   vcl_cout << "Entropies:(M,I,J, MI)=(" << model_intensity_entropy_ << " "
-  //            << enti << " " << jent << " " << mi <<")\n";
+#ifdef DEBUG
+  vcl_cout << "Entropies:(M,I,J, MI)=(" << model_intensity_entropy_ << ' '
+           << enti << ' ' << jent << ' ' << mi <<")\n";
+#endif
   return mi;
 }
 
@@ -611,17 +614,17 @@ compute_gradient_mutual_information(vil1_memory_image_of<float> const& Ix,
     int x = int(intf_->X()), y = int(intf_->Y());
     if (x<0||x>=width||y<0||y>=height)
       continue;
-    float Ix0 = this->Ix(i), Iy0 =  this->Iy(i);
+    float Ix0 = this->Ix(i), Iy0 = this->Iy(i);
     double ang0 = (deg_rad*vcl_atan2(Iy0, Ix0))+180.0;
-    //    double mag0 = vcl_sqrt(Ix0*Ix0 + Iy0*Iy0);
-    double mag0 = vcl_fabs(Ix0)+vcl_fabs(Iy0);
-    //    vcl_cout << "ang0, mag0 " << ang0 << " " << mag0 << "\n";
+    double mag0 = vcl_fabs(Ix0)+vcl_fabs(Iy0); // was: vcl_sqrt(Ix0*Ix0 + Iy0*Iy0);
     float Ixi = Ix(x,y), Iyi = Iy(x,y);
-    //    vcl_cout << "Ixi, Iyi " << Ixi << " " << Iyi << "\n";
     double angi = (deg_rad*vcl_atan2(Iyi, Ixi))+180.0;
-    //    double magi = vcl_sqrt(Ixi*Ixi + Iyi*Iyi);
-    double magi = vcl_fabs(Ixi)+vcl_fabs(Iyi);
-    //    vcl_cout << "angi, magi " << angi << " " << magi << "\n";
+    double magi = vcl_fabs(Ixi)+vcl_fabs(Iyi); // was: vcl_sqrt(Ixi*Ixi + Iyi*Iyi);
+#ifdef DEBUG
+    vcl_cout << "ang0, mag0 " << ang0 << " " << mag0 << "\n"
+             << "Ixi, Iyi " << Ixi << " " << Iyi << "\n"
+             << "angi, magi " << angi << " " << magi << "\n";
+#endif
     image_dir_hist.upcount(angi, magi);
     joint_dir_hist.upcount(ang0,mag0,angi,magi);
     n++;
@@ -656,8 +659,10 @@ compute_gradient_mutual_information(vil1_memory_image_of<float> const& Ix,
   enti /= vcl_log(2.0);
   jent /= vcl_log(2.0);
   mi = model_gradient_dir_entropy_ + enti - jent;
-  //   vcl_cout << "Dir Entropies:(M,I,J, MI)=(" << model_intensity_entropy_ << " "
-  //            << enti << " " << jent << " " << mi <<")\n";
+#ifdef DEBUG
+  vcl_cout << "Dir Entropies:(M,I,J, MI)=(" << model_intensity_entropy_ << ' '
+           << enti << ' ' << jent << ' ' << mi <<")\n";
+#endif
   return mi;
 }
 
@@ -677,7 +682,6 @@ compute_mutual_information(vil1_memory_image_of<float> const& image,
 
   this->set_int_mutual_info(this->compute_intensity_mutual_information(image));
   if (gradient_info_)
-    this->set_grad_mutual_info(this->
-                               compute_gradient_mutual_information(Ix, Iy));
+    this->set_grad_mutual_info(this->compute_gradient_mutual_information(Ix,Iy));
   return true;
 }

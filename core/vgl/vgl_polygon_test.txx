@@ -1,7 +1,6 @@
-// This is core/vgl/vgl_polygon_test.cxx
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma implementation
-#endif
+// This is core/vgl/vgl_polygon_test.txx
+#ifndef vgl_polygon_test_txx_
+#define vgl_polygon_test_txx_
 //:
 // \file
 // \author fsm
@@ -50,7 +49,8 @@ bool vgl_polygon_test_inside(T const *xs, T const *ys, unsigned n, T x, T y)
 
 //--------------------------------------------------------------------------------
 
-#define inst(T) \
-template bool vgl_polygon_test_inside(T const *, T const *, unsigned, T, T);
-inst(float);
-inst(double);
+#undef VGL_POLYGON_TEST_INSTANTIATE
+#define VGL_POLYGON_TEST_INSTANTIATE(T) \
+template bool vgl_polygon_test_inside(T const*, T const*, unsigned, T, T)
+
+#endif // vgl_polygon_test_txx_

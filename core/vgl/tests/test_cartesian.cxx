@@ -5,7 +5,6 @@
 // \author Peter.Vanroose@esat.kuleuven.ac.be
 // \date  4 July, 2001
 
-#define APPROX(a,b,c) TEST(a,((b)-(c)<1e-6 && (c)-(b)<1e-6),true)
 #include <vcl_iostream.h>
 
 #include <vgl/vgl_point_2d.h>
@@ -21,11 +20,6 @@
 #include <vgl/vgl_box_3d.h>
 #include <vgl/vgl_clip.h>
 #include <vgl/vgl_distance.h>
-//#include <vgl/vgl_polygon.h>
-//#include <vgl/vgl_polygon_scan_iterator.h>
-//#include <vgl/vgl_region_scan_iterator.h>
-//#include <vgl/vgl_triangle_scan_iterator.h>
-//#include <vgl/vgl_window_scan_iterator.h>
 #include <vgl/vgl_lineseg_test.h>
 //#include <vgl/vgl_polygon_test.h>
 //#include <vgl/vgl_triangle_test.h>
@@ -63,7 +57,7 @@ static void test_vector_2d()
 
   TEST("dot_product", dot_product(v,v1), 4.890625);
   TEST("cross_product", cross_product(v1,v), 0.625*1.5);
-  APPROX("angle", angle(v1,v), 0.18939573); // 10^51'06"
+  TEST_NEAR("angle", angle(v1,v), 0.18939573, 1e-8); // 10^51'06"
 
   TEST("parallel", (parallel(v,v)), true);
   TEST("parallel", (parallel(v,vgl_vector_2d<float>())), true); // parallel to (0,0)
@@ -72,12 +66,12 @@ static void test_vector_2d()
   TEST("ratio", v/v, 1);
   TEST("ratio", (-v*3.5)/v, -3.5);
 
-  APPROX("ratio", v1/v, 1.852071);
+  TEST_NEAR("ratio", v1/v, 1.852071, 1e-6);
 
-  APPROX("normalized", length(length(v1)*normalized(v1) -v1), 0.0);
+  TEST_NEAR("normalized", length(length(v1)*normalized(v1) -v1), 0.0, 1e-6);
   v0=v1;
   normalize(v1);
-  APPROX("normalize", length(length(v0)*v1 - v0), 0.0);
+  TEST_NEAR("normalize", length(length(v0)*v1 - v0), 0.0, 1e-6);
 
   TEST("orthogonal", orthogonal(v,vgl_vector_2d<float>()), true); // orthogonal to (0,0)
   TEST("!orthogonal", orthogonal(v,v1,0.1), false); // even not with tolorance
@@ -117,7 +111,7 @@ static void test_vector_3d()
 
   TEST("dot_product", dot_product(v,v1), 4.890625);
   TEST("cross_product", cross_product(v1,v).z(), 0.625*1.5);
-  APPROX("angle", angle(v1,v), 0.18939573); // 10^51'06"
+  TEST_NEAR("angle", angle(v1,v), 0.18939573, 1e-8); // 10^51'06"
 
   TEST("parallel", (parallel(v,v)), true);
   TEST("parallel", (parallel(v,vgl_vector_3d<float>())), true); // parallel to (0,0)
@@ -125,12 +119,12 @@ static void test_vector_3d()
 
   TEST("ratio", v/v, 1);
   TEST("ratio", (-v*3.5)/v, -3.5);
-  APPROX("ratio", v1/v, 1.852071);
+  TEST_NEAR("ratio", v1/v, 1.852071, 1e-6);
 
-  APPROX("normalized", length(length(v1)*normalized(v1) -v1), 0.0);
+  TEST_NEAR("normalized", length(length(v1)*normalized(v1) -v1), 0.0, 1e-9);
   v0=v1;
   normalize(v1);
-  APPROX("normalize", length(length(v0)*v1 - v0), 0.0);
+  TEST_NEAR("normalize", length(length(v0)*v1 - v0), 0.0, 1e-9);
 
   TEST("orthogonal", orthogonal(v,vgl_vector_3d<float>()), true); // orthogonal to (0,0)
   TEST("!orthogonal", orthogonal(v,v1,0.1), false); // even not with tolorance
@@ -667,7 +661,7 @@ static void test_1d_basis()
   vcl_cout << "  TEST OF PROJECTIVE BASIS WITH 1D POINTS\n";
 
   float p11=0.f, p12=1.f, p13=1e33f; // almost infinity ;-)
-  vgl_1d_basis<float>  b_1_p(p11,p12,p13);
+  vgl_1d_basis<float> b_1_p(p11,p12,p13);
   // The following is essentially just a mapping
   // from float to vgl_homg_point_1d<double> :
   vgl_homg_point_1d<double> p = b_1_p.project(p11);
@@ -677,12 +671,12 @@ static void test_1d_basis()
   p = b_1_p.project(p13);
   TEST("infinity point", p, vgl_homg_point_1d<double>(1.0,0.0));
   p = b_1_p.project(-3.f);
-  TEST_NEAR("point at -3", vgl_distance (p, vgl_homg_point_1d<double>(-3.0)), 0.0, 1e-6);
+  TEST_NEAR("point at -3", vgl_distance(p, vgl_homg_point_1d<double>(-3.0)), 0.0, 1e-9);
 
   vcl_cout << "  TEST OF PROJECTIVE BASIS ON A 2D LINE\n";
 
   vgl_point_2d<int> p21(0,1), p22(1,3), p23(2,5); // On the line 2x-y+1=0
-  vgl_1d_basis<vgl_point_2d<int> >  b_2_p(p21,p22,p23);
+  vgl_1d_basis<vgl_point_2d<int> > b_2_p(p21,p22,p23);
   p = b_2_p.project(p21);
   TEST("origin", p, vgl_homg_point_1d<double>(0.0));
   p = b_2_p.project(p22);
@@ -695,7 +689,7 @@ static void test_1d_basis()
   vcl_cout << "  TEST OF PROJECTIVE BASIS ON A 3D LINE\n";
 
   vgl_point_3d<double> p31(0,1,3), p32(1,3,2), p33(2,5,1); // On the line 2x-y+1=0,x+z=3
-  vgl_1d_basis<vgl_point_3d<double> >  b_3_p(p31,p32,p33);
+  vgl_1d_basis<vgl_point_3d<double> > b_3_p(p31,p32,p33);
   p = b_3_p.project(p31);
   TEST("origin", p, vgl_homg_point_1d<double>(0.0));
   p = b_3_p.project(p32);
@@ -708,7 +702,7 @@ static void test_1d_basis()
   vcl_cout << "  TEST OF PROJECTIVE BASIS OF CONCURRENT 2D LINES\n";
 
   vgl_line_2d<int> l21(0,1,1), l22(1,3,1), l23(2,5,1); // Through the point (2,-1,1)
-  vgl_1d_basis<vgl_line_2d<int> >  b_2_l(l21,l22,l23);
+  vgl_1d_basis<vgl_line_2d<int> > b_2_l(l21,l22,l23);
   p = b_2_l.project(l21);
   TEST("origin", p, vgl_homg_point_1d<double>(0.0));
   p = b_2_l.project(l22);

@@ -27,27 +27,28 @@ SET( vgl_sources
 
   # Other curves
   vgl_conic.h                    vgl_conic.txx
-  vgl_polygon.h                  vgl_polygon.cxx
+  vgl_polygon.h                  vgl_polygon.txx
 
   # Planes
   vgl_plane_3d.h                 vgl_plane_3d.txx
   vgl_homg_plane_3d.h            vgl_homg_plane_3d.txx
 
   # Functions
-  vgl_closest_point.h            vgl_closest_point.cxx
-  vgl_distance.h                 vgl_distance.cxx
-  vgl_clip.h                     vgl_clip.cxx
-  vgl_area.h                     vgl_area.cxx
+  vgl_closest_point.h            vgl_closest_point.txx
+  vgl_distance.h                 vgl_distance.txx
+  vgl_clip.h                     vgl_clip.txx
+  vgl_area.h                     vgl_area.txx
+  vgl_convex.h                   vgl_convex.txx
 
-  vgl_lineseg_test.h             vgl_lineseg_test.cxx
-  vgl_triangle_test.h            vgl_triangle_test.cxx
-  vgl_polygon_test.h             vgl_polygon_test.cxx
+  vgl_lineseg_test.h             vgl_lineseg_test.txx
+  vgl_triangle_test.h            vgl_triangle_test.txx
+  vgl_polygon_test.h             vgl_polygon_test.txx
 
-  vgl_region_scan_iterator.h     vgl_region_scan_iterator.cxx
-  vgl_triangle_scan_iterator.h   vgl_triangle_scan_iterator.cxx
-  vgl_window_scan_iterator.h     vgl_window_scan_iterator.cxx
-  vgl_polygon_scan_iterator.h    vgl_polygon_scan_iterator.cxx
-  vgl_ellipse_scan_iterator.h    vgl_ellipse_scan_iterator.cxx
+  vgl_region_scan_iterator.h
+  vgl_triangle_scan_iterator.h   vgl_triangle_scan_iterator.txx
+  vgl_window_scan_iterator.h     vgl_window_scan_iterator.txx
+  vgl_polygon_scan_iterator.h    vgl_polygon_scan_iterator.txx
+  vgl_ellipse_scan_iterator.h    vgl_ellipse_scan_iterator.txx
 
   # internals
   internals/gpc.h                internals/gpc.c

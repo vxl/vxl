@@ -1,7 +1,6 @@
-// This is core/vgl/vgl_triangle_test.cxx
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma implementation
-#endif
+// This is core/vgl/vgl_triangle_test.txx
+#ifndef vgl_triangle_test_txx_
+#define vgl_triangle_test_txx_
 //:
 // \file
 // \author fsm
@@ -40,10 +39,9 @@ bool vgl_triangle_test_inside(T x1, T y1,
 
 //----------------------------------------
 
-#undef inst
-#define inst(T) \
+#undef VGL_TRIANGLE_TEST_INSTANTIATE
+#define VGL_TRIANGLE_TEST_INSTANTIATE(T) \
 template T    vgl_triangle_test_discriminant(T, T, T, T, T, T); \
-template bool vgl_triangle_test_inside(T, T, T, T, T, T, T, T);
+template bool vgl_triangle_test_inside(T, T, T, T, T, T, T, T)
 
-inst(float);
-inst(double);
+#endif // vgl_triangle_test_txx_

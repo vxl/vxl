@@ -2,7 +2,7 @@
 #include "strk_tracker.h"
 //:
 // \file
-#include <vcl_cmath.h>   // for vcl_fabs(double)
+#include <vcl_cmath.h> // for vcl_fabs(double)
 #include <vcl_algorithm.h>
 #include <vul/vul_timer.h>
 #include <vnl/vnl_math.h>
@@ -30,9 +30,9 @@ strk_correlated_face::~strk_correlated_face()
 void strk_correlated_face::set_face(vtol_intensity_face_sptr const& f)
 {
   f_ = f;
-  if(Ix_)
+  if (Ix_)
     delete [] Ix_;
-  if(Iy_)
+  if (Iy_)
     delete [] Iy_;
   int n = f->Npix();
   Ix_ = new float[n];
@@ -79,16 +79,16 @@ void strk_tracker::set_gradient(strk_correlated_face* cf,
                                 vil1_memory_image_of<float> const& Ix,
                                 vil1_memory_image_of<float> const& Iy)
 {
-  if(!cf)
+  if (!cf)
     return;
   vtol_intensity_face_sptr f = cf->face();
   int i = 0;
-  for(f->reset(); f->next();i++)
-    {
-      int x = int(f->X()), y = int(f->Y());
-      cf->set_Ix(i, Ix(x,y));
-      cf->set_Iy(i, Iy(x,y));
-    }
+  for (f->reset(); f->next();i++)
+  {
+    int x = int(f->X()), y = int(f->Y());
+    cf->set_Ix(i, Ix(x,y));
+    cf->set_Iy(i, Iy(x,y));
+  }
 }
 
 //-------------------------------------------------------------------------
@@ -144,7 +144,7 @@ void strk_tracker::fill_face(vtol_intensity_face_sptr const& face,
     return;
   int width = image.width(), height = image.height();
   face->ResetPixelData();
-  vgl_polygon p;
+  vgl_polygon<float> p;
   p.new_sheet();
   vcl_vector<vtol_vertex_sptr> verts;
   face->vertices(verts);
@@ -152,7 +152,7 @@ void strk_tracker::fill_face(vtol_intensity_face_sptr const& face,
        vit != verts.end(); vit++)
     p.push_back(float((*vit)->cast_to_vertex_2d()->x()),
                 float((*vit)->cast_to_vertex_2d()->y()));
-  vgl_polygon_scan_iterator psi(p, true);
+  vgl_polygon_scan_iterator<float> psi(p, true);
 
   //go throught the pixels once to gather statistics for the face Npix etc.
   for (psi.reset(); psi.next(); )
@@ -243,7 +243,7 @@ strk_tracker::transform_face(vtol_intensity_face_sptr const& face,
     new vtol_intensity_face(f2d, npix, X, Y, I);
 #ifdef DEBUG
   vcl_cout << "Transformed Face Centroid (" << new_int_face->Xo()<< ' '
-           <<  new_int_face->Yo() << ")\n";
+           << new_int_face->Yo() << ")\n";
 #endif // DEBUG
 
   delete [] X;
@@ -303,8 +303,6 @@ bool strk_tracker::compute_motion(strk_correlated_face* cf,
   //    = --- |              |
   // ty   det |-IxIy    IxIx | by
   //           -            -
-  //  tx = 1/det ( IyIy*bx - IxIy*by)
-  //  ty = 1/det (-IxIy*bx + IxIx*by)
   //
   tx = ( IyIy*bx - IxIy*by)/det;
   ty = (-IxIy*bx + IxIx*by)/det;
@@ -341,7 +339,6 @@ double strk_tracker::compute_gradient_angle(strk_correlated_face* cf)
   return theta_deg;
 }
 
- 
 
 double strk_tracker::compute_angle_motion(strk_correlated_face* cf)
 {
@@ -451,13 +448,13 @@ void strk_tracker::correlate_face(strk_correlated_face* cf)
 
   sx+=tx; sy+=ty;
 #ifdef DEBUG
-  vcl_cout << "Initial corr("<< tx << ' ' << ty <<  ")= " << this->compute_correlation(cf, tx, ty)<< '\n';
+  vcl_cout << "Initial corr("<< tx << ' ' << ty << ")= " << this->compute_correlation(cf, tx, ty)<< '\n';
 #endif // DEBUG
   //refine the position of the sample so that translation falls below a threshold
   bool done = false;
   int max_iter = 3;
   double thresh = 0.1;
-  
+
   while ((!done)&&max_iter>0)
   {
     this->transform_sample_in_place(cf, tx, ty, theta, scale);
@@ -476,7 +473,7 @@ void strk_tracker::correlate_face(strk_correlated_face* cf)
   }
   c = this->compute_correlation(cf);
 #ifdef DEBUG
-  vcl_cout << "Final corr(" << sx << " " << sy << " " << sth << " " << psc 
+  vcl_cout << "Final corr(" << sx << " " << sy << " " << sth << " " << psc
            << ")= " << vcl_sqrt(c) << '\n';
 #endif //DEBUG
   cf->set_correlation((float)vcl_sqrt(c));
@@ -633,7 +630,7 @@ void strk_tracker::track()
   this->generate_samples();
   this->cull_samples();
 
-  strk_correlated_face* best = current_samples_[0];
+  //strk_correlated_face* best = current_samples_[0];
 }
 
 void strk_tracker::clear()

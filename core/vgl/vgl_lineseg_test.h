@@ -1,12 +1,13 @@
 // This is core/vgl/vgl_lineseg_test.h
 #ifndef vgl_lineseg_test_h_
 #define vgl_lineseg_test_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \author fsm
+// \verbatim
+//  Modifications
+//   Nov.2003 - Peter Vanroose - made all functions templated
+// \endverbatim
 
 #include <vgl/vgl_line_segment_2d.h>
 
@@ -33,5 +34,7 @@ inline bool vgl_lineseg_test_lineseg(vgl_line_segment_2d<T> const& l1,
                                   l2.point1().x(),l2.point1().y(),
                                   l2.point2().x(),l2.point2().y());
 }
+
+#define VGL_LINESEG_TEST_INSTANTIATE(T) extern "please include vgl/vgl_lineseg_test.txx instead"
 
 #endif // vgl_lineseg_test_h_

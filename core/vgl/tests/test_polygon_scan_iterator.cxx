@@ -15,9 +15,9 @@
 #include <vgl/vgl_polygon.h>
 #include <vgl/vgl_polygon_scan_iterator.h>
 
-typedef vgl_polygon::point_t       Point_type;
-typedef vgl_polygon                Polygon_type;
-typedef vgl_polygon_scan_iterator  Polygon_scan;
+typedef vgl_polygon<float>::point_t        Point_type;
+typedef vgl_polygon<float>                 Polygon_type;
+typedef vgl_polygon_scan_iterator<float>   Polygon_scan;
 
 static void
 test_without_boundary()
@@ -58,11 +58,11 @@ test_with_boundary()
   // There are points within the polygon. This includes points with
   // integer valued coordinates and the ones at the boundary
   // (each scan line begins at the boundary of the polygon).
-  testlib_test_perform( count == 16  );
+  testlib_test_perform( count == 16 );
 }
 
 static void
-test_denegrate_polygon()
+test_degenerate_polygon()
 {
   {
     Polygon_type poly;
@@ -72,12 +72,11 @@ test_denegrate_polygon()
     poly.push_back( Point_type( 39, 39) );
     poly.push_back( Point_type( 10, 10) );
 
-    testlib_test_begin("zero-lengthed edges");
+    testlib_test_begin("zero-length edges");
     Polygon_scan scan_itr( poly );
     unsigned int count=0;
-    for ( scan_itr.reset(); scan_itr.next(); ) {
+    for ( scan_itr.reset(); scan_itr.next(); )
       count += scan_itr.endx() - scan_itr.startx() + 1;
-    }
     // There are 465 points with integer-valued coordinates
     // within the polygon.
     testlib_test_perform( count == 465 );
@@ -89,9 +88,8 @@ test_denegrate_polygon()
     testlib_test_begin("empty polygon");
     Polygon_scan scan_itr( poly );
     unsigned int count=0;
-    for ( scan_itr.reset(); scan_itr.next(); ) {
+    for ( scan_itr.reset(); scan_itr.next(); )
       count += scan_itr.endx() - scan_itr.startx() + 1;
-    }
     testlib_test_perform( count == 0 );
   }
 }
@@ -101,7 +99,7 @@ static void test_polygon_scan_iterator()
 {
   test_without_boundary();
   test_with_boundary();
-  test_denegrate_polygon();
+  test_degenerate_polygon();
 }
 
 TESTMAIN(test_polygon_scan_iterator);

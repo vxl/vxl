@@ -88,6 +88,7 @@ bool almost_equal(const double& a, const double& b)
 {
   return almost_equal_helper(a, b);
 }
+
 bool almost_equal(const float& a, const float& b)
 {
   return almost_equal_helper(a, b);
@@ -195,7 +196,8 @@ inline bool almost_equal(const vgl_box_3d<T>& b1, const vgl_box_3d<T>& b2)
          almost_equal(b1.max_z(), b2.max_z());
 }
 
-inline bool almost_equal(vgl_polygon const& p1, vgl_polygon const& p2)
+template <class T>
+inline bool almost_equal(vgl_polygon<T> const& p1, vgl_polygon<T> const& p2)
 {
   if (p1.num_sheets() != p2.num_sheets())
     return false;
@@ -351,11 +353,10 @@ void golden_test_vgl_io(bool save_file)
 
   // vgl_polygon
 
-  vgl_polygon polygon_out(3),polygon_in;
+  vgl_polygon<float> polygon_out(3),polygon_in;
   for (int i=0;i<3;i++)
     for (int j=0;j<5;j++)
-      polygon_out[i].push_back(vgl_point_2d<float>((float)i+((float)j)/10.0f,
-                               (float)i-((float)j)/10.0f));
+      polygon_out[i].push_back(vgl_point_2d<float>(i+j/10.0f,i-j/10.0f));
 
   // Save if option set
   if (save_file)

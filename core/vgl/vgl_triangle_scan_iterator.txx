@@ -1,7 +1,6 @@
-// This is core/vgl/vgl_triangle_scan_iterator.cxx
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma implementation
-#endif
+// This is core/vgl/vgl_triangle_scan_iterator.txx
+#ifndef vgl_triangle_scan_iterator_txx_
+#define vgl_triangle_scan_iterator_txx_
 //:
 // \file
 // \author fsm
@@ -46,13 +45,15 @@ void min_n_max(T a, T b, T c, T *min, T *max)
 
 #if use_polygon_scan_iterator
 #include <vgl/vgl_polygon_scan_iterator.h>
-struct vgl_triangle_scan_iterator::data_t : public vgl_polygon_scan_iterator
+template <class T>
+struct vgl_triangle_scan_iterator<T>::data_t : public vgl_polygon_scan_iterator<T>
 {
-  typedef vgl_polygon_scan_iterator base;
-  data_t(vgl_polygon const &p) : base(p) { }
+  typedef vgl_polygon_scan_iterator<T> base;
+  data_t(vgl_polygon<T> const &p) : base(p) {}
 };
 
-vgl_triangle_scan_iterator::~vgl_triangle_scan_iterator()
+template <class T>
+vgl_triangle_scan_iterator<T>::~vgl_triangle_scan_iterator()
 {
   if (data)
     delete data;
@@ -64,18 +65,19 @@ vgl_triangle_scan_iterator::~vgl_triangle_scan_iterator()
 //# define w(a, b, c) ( b.x*c.y - b.x*a.y - a.x*c.y - c.x*b.y + c.x*a.y + a.x*b.y )
 #endif
 
-void vgl_triangle_scan_iterator::reset()
+template <class T>
+void vgl_triangle_scan_iterator<T>::reset()
 {
 #if use_polygon_scan_iterator
   if (data)
     delete data;
-  float x[3] = { a.x, b.x, c.x };
-  float y[3] = { a.y, b.y, c.y };
-  vgl_polygon p(x, y, 3);
+  T x[3] = { a.x, b.x, c.x };
+  T y[3] = { a.y, b.y, c.y };
+  vgl_polygon<T> p(x, y, 3);
   data = new data_t(p);
   data->reset();
 #else
-  double min, max;
+  T min, max;
 
   min_n_max(a.x, b.x, c.x, &min, &max);
   x0 = (int) vcl_ceil (min);
@@ -103,13 +105,13 @@ void vgl_triangle_scan_iterator::reset()
   data[1][0] = cg.y - ag.y; data[1][1] = ag.x - cg.x; data[1][2] = cg.x * ag.y - cg.y * ag.x;
   data[2][0] = ag.y - bg.y; data[2][1] = bg.x - ag.x; data[2][2] = ag.x * bg.y - ag.y * bg.x;
 
-  double tmp = ( bg.x*cg.y - bg.x*ag.y - ag.x*cg.y - cg.x*bg.y + cg.x*ag.y + ag.x*bg.y );
+  T tmp = ( bg.x*cg.y - bg.x*ag.y - ag.x*cg.y - cg.x*bg.y + cg.x*ag.y + ag.x*bg.y );
   if (tmp < 0)
     tmp = -1;
   else
     tmp = +1;
   for (int i=0; i<3; ++i) {
-    double f = tmp; // / sqrt(data[i][0]*data[i][0] + data[i][1]*data[i][1]);
+    T f = tmp; // / sqrt(data[i][0]*data[i][0] + data[i][1]*data[i][1]);
     for (int j=0; j<3; ++j)
       data[i][j] *= f;
   }
@@ -125,7 +127,8 @@ void vgl_triangle_scan_iterator::reset()
 #endif // use_polygon_scan_iterator
 }
 
-bool vgl_triangle_scan_iterator::next()
+template <class T>
+bool vgl_triangle_scan_iterator<T>::next()
 {
 #if use_polygon_scan_iterator
   if (data->next()) {
@@ -140,19 +143,19 @@ bool vgl_triangle_scan_iterator::next()
   if (++scany_ > y1)
     return false;
 
-  double minx = x0 - g.x;
-  double maxx = x1 - g.x;
+  T minx = x0 - g.x;
+  T maxx = x1 - g.x;
 
   //vcl_cerr << "minx maxx = " << minx << ' ' << maxx << vcl_endl;
   for (int i=0; i<3; ++i) {
-    double a_ = data[i][0];
-    double b_ = data[i][1] * (scany_ - g.y) + data[i][2];
+    T a_ = data[i][0];
+    T b_ = data[i][1] * (scany_ - g.y) + data[i][2];
     // ax + b >= 0
     if (a_ == 0) {
       // bif bif
     }
     else {
-      double x = -b_/a_;
+      T x = -b_/a_;
       if (a_ > 0) {
         if (x > minx)
           minx = x;
@@ -171,3 +174,9 @@ bool vgl_triangle_scan_iterator::next()
   return (scany_ == y0) || (startx_ <= endx_);
 #endif
 }
+
+#undef VGL_TRIANGLE_SCAN_ITERATOR_INSTANTIATE
+#define VGL_TRIANGLE_SCAN_ITERATOR_INSTANTIATE(T) \
+template class vgl_triangle_scan_iterator<T >
+
+#endif // vgl_triangle_scan_iterator_txx_

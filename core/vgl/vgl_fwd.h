@@ -21,10 +21,11 @@ template <class T> class vgl_plane_3d;
 template <class T> class vgl_box_2d;
 template <class T> class vgl_box_3d;
 template <class T> class vgl_conic;
-class vgl_polygon;
-class vgl_polygon_scan_iterator;
-struct vgl_region_scan_iterator;
-struct vgl_triangle_scan_iterator;
-struct vgl_window_scan_iterator;
+template <class T> class vgl_polygon;
+class vgl_region_scan_iterator;
+template <class T> class vgl_ellipse_scan_iterator;
+template <class T> class vgl_polygon_scan_iterator;
+template <class T> class vgl_triangle_scan_iterator;
+template <class T> class vgl_window_scan_iterator;
 
 #endif // vgl_fwd_h_

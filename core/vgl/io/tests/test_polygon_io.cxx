@@ -13,7 +13,7 @@ static void test_polygon_io()
            << "************************\n";
 
   //// test constructors, accessors
-  vgl_polygon p_out(1), p_in;
+  vgl_polygon<float> p_out(1), p_in;
   p_out.push_back(1.1f, 1.2f);
   p_out.push_back(2.1f, 2.2f);
   p_out.push_back(3.1f, 3.2f);

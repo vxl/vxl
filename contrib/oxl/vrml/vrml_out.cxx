@@ -3,7 +3,7 @@
 #pragma implementation
 #endif
 //:
-//  \file
+// \file
 
 #include "vrml_out.h"
 
@@ -105,7 +105,7 @@ void vrml_out::display_pointset ()
 
 // -----------------------------------------------------------------------------
 
-#if 0
+#if 0 // commented out
 struct VRML_IO_VertexRememberer
 {
   vrml_out* vrml_;
@@ -113,10 +113,8 @@ struct VRML_IO_VertexRememberer
   Map vertex_ids;
   int current_vertex_id;
 
-  VRML_IO_VertexRememberer(vrml_out* vrml, int /*approx_numverts*/):
-    vrml_(vrml),
-    current_vertex_id(0)
-  {}
+  VRML_IO_VertexRememberer(vrml_out* vrml, int /*approx_numverts*/)
+    : vrml_(vrml), current_vertex_id(0) {}
   bool send_vertex(void*);
   int vertex_id(void*);
 };
@@ -171,14 +169,14 @@ void vrml_out::write_edges(vcl_list<vgl_line_segment_3d<double> >& edges)
   end_lineset();
 }
 
-void vrml_out::write_faces(vcl_list<vgl_polygon>& triangles)
+void vrml_out::write_faces(vcl_list<vgl_polygon<float> >& triangles)
 {
   VRML_IO_VertexRememberer vertexer(this, triangles.length() * 3/2);
 
   // Send vertices
   begin_pointset();
   for (triangles.reset(); triangles.next(); ) {
-    vgl_polygon face = triangles.value();
+    vgl_polygon<float> face = triangles.value();
     vcl_list<vgl_point_3d<double> > vertices = face->Vertices();
     for (vertices->reset(); vertices->next();)
       vertexer.send_vertex(vertices->value());
@@ -188,7 +186,7 @@ void vrml_out::write_faces(vcl_list<vgl_polygon>& triangles)
   // Now send triangles
   begin_faceset();
   for (triangles.reset(); triangles.next(); ) {
-    vgl_polygon face = triangles.value();
+    vgl_polygon<float> face = triangles.value();
     vcl_list<vgl_point_3d<double> > vertices = face->Vertices();
     face_open();
     for (vertices->reset(); vertices->next();)
@@ -198,11 +196,10 @@ void vrml_out::write_faces(vcl_list<vgl_polygon>& triangles)
   end_faceset();
 }
 
-void vrml_out::write_faces_textured(
-        vcl_list<vgl_polygon>& triangles,
-        char const* texfile,
-        vrml_out_vertex_to_texture const& v2t
-       )
+void vrml_out::write_faces_textured(vcl_list<vgl_polygon<float> >& triangles,
+                                    char const* texfile,
+                                    vrml_out_vertex_to_texture const& v2t
+                                   )
 {
   VRML_IO_VertexRememberer vertexer(this, triangles.length() * 3/2);
 
@@ -211,7 +208,7 @@ void vrml_out::write_faces_textured(
 
   begin_pointset();
   for (triangles.reset(); triangles.next(); ) {
-    vgl_polygon face = triangles.value();
+    vgl_polygon<float> face = triangles.value();
     vcl_list<vgl_point_3d<double> > vertices = face->Vertices();
     for (vertices->reset(); vertices->next();) {
       Vertex *v = vertices->value();
@@ -237,10 +234,12 @@ void vrml_out::write_faces_textured(
 
   begin_texture(texfile);
   int last_id = -1;
-  for (triangles.reset(); triangles.next(); ) {
-    vgl_polygon face = triangles.value();
+  for (triangles.reset(); triangles.next(); )
+  {
+    vgl_polygon<float> face = triangles.value();
     vcl_list<vgl_point_3d<double> > vertices = face->Vertices();
-    for (vertices->reset(); vertices->next();) {
+    for (vertices->reset(); vertices->next();)
+    {
       Vertex *v = vertices->value();
       int id = vertexer.vertex_id(v);
       if (id > last_id) {
@@ -260,7 +259,7 @@ void vrml_out::write_faces_textured(
   // Now send triangles
   begin_faceset();
   for (triangles.reset(); triangles.next(); ) {
-    vgl_polygon face = triangles.value();
+    vgl_polygon<float> face = triangles.value();
     vcl_list<vgl_point_3d<double> > vertices = face->Vertices();
     face_open();
     for (vertices->reset(); vertices->next();)
@@ -272,33 +271,27 @@ void vrml_out::write_faces_textured(
 
 struct Hack_VertexToTexture : public vrml_out_vertex_to_texture
 {
-  Hack_VertexToTexture(
-        int xsize,
-        int ysize
-       ) :vrml_out_vertex_to_texture(xsize, ysize)
-    {}
+  Hack_VertexToTexture(int xsize, int ysize)
+    : vrml_out_vertex_to_texture(xsize, ysize) {}
 
-  void get_texture_coords(
-        const vgl_point_3d<double> vertex,
-        double* u, double* v) const
-    {
-      // Ugh - assume P matrix is [I 0];
-      double tu = vertex->GetX() / vertex->GetZ();
-      double tv = vertex->GetY() / vertex->GetZ();
+  void get_texture_coords(const vgl_point_3d<double> vertex,
+                          double* u, double* v) const
+  {
+    // Ugh - assume P matrix is [I 0];
+    double tu = vertex->GetX() / vertex->GetZ();
+    double tv = vertex->GetY() / vertex->GetZ();
 
-      // Ugh ugh - assume C = [f 0 u; 0 f v; 0 0 1];
-      double fhak = (image_xsize + image_ysize) * 0.5; // FIXME
-      *u = tu * fhak + 0.5 * image_xsize; // 0..xsize
-      *v = tv * fhak + 0.5 * image_ysize; // 0..ysize
-    }
+    // Ugh ugh - assume C = [f 0 u; 0 f v; 0 0 1];
+    double fhak = (image_xsize + image_ysize) * 0.5; // FIXME
+    *u = tu * fhak + 0.5 * image_xsize; // 0..xsize
+    *v = tv * fhak + 0.5 * image_ysize; // 0..ysize
+  }
 };
 
-void vrml_out::write_faces_textured(
-        vcl_list<vgl_polygon>& triangles,
-        char const* imagefilename,
-        int xsize,
-        int ysize
-       )
+void vrml_out::write_faces_textured(vcl_list<vgl_polygon<float> >& triangles,
+                                    char const* imagefilename,
+                                    int xsize, int ysize
+                                   )
 {
   vcl_cerr << "vrml_out::write_faces_textured() -- hacking image-world transform\n";
   Hack_VertexToTexture hack(xsize, ysize);
@@ -325,13 +318,11 @@ class VTT : public vrml_out_vertex_to_texture
   vnl_matrix<double> Pmatrix;
 };
 
-void vrml_out::write_faces_textured(
-        vcl_list<vgl_polygon>& triangles,
-        char const* imagefilename,
-        int xsize,
-        int ysize,
-        vnl_matrix<double> const& Pmatrix
-       )
+void vrml_out::write_faces_textured(vcl_list<vgl_polygon<float> >& triangles,
+                                    char const* imagefilename,
+                                    int xsize, int ysize,
+                                    vnl_matrix<double> const& Pmatrix
+                                   )
 {
   VTT vtt(xsize, ysize, Pmatrix);
   write_faces_textured(triangles, imagefilename, vtt);
@@ -353,16 +344,16 @@ void vrml_out::write_topology(TopologyObject* topobj)
     return;
   }
 
-  vgl_polygon face = topobj->CastToFace();
+  vgl_polygon<float> face = topobj->CastToFace();
   if (face) {
     begin_separator();
-    vcl_list<vgl_polygon> faces; faces.push(face);
+    vcl_list<vgl_polygon<float> > faces; faces.push(face);
     write_faces(faces);
     end_separator();
     return;
   }
 
-  vgl_line_segment_3d<double>  edge = topobj->CastToEdge();
+  vgl_line_segment_3d<double> edge = topobj->CastToEdge();
   if (edge) {
     begin_separator();
     vcl_list<vgl_line_segment_3d<double> > edges(edge);

@@ -21,7 +21,7 @@
 #include <vgui/vgui_viewer2D_tableau.h>
 #include <vgui/vgui_projection_inspector.h>
 
-#define hypot(x,y) vcl_sqrt((x)*(x)+(y)*(y))  // hypot is not in C++98, and therefore not in vcl.
+#define hypot(x,y) vcl_sqrt((x)*(x)+(y)*(y)) // hypot is not in C++98, and therefore not in vcl.
 
 struct example_polygon_tableau : public vgui_tableau
 {
@@ -31,23 +31,23 @@ struct example_polygon_tableau : public vgui_tableau
   vcl_vector<float> y;
 
   example_polygon_tableau(unsigned n, bool boundary_)
-   : boundary(boundary_), v(-1) 
+   : boundary(boundary_), v(-1)
   {
-    for (unsigned i=0; i<n; ++i) 
+    for (unsigned i=0; i<n; ++i)
     {
       double t = 2*vnl_math::pi*i/n;
-      x.push_back(vcl_cos(t));
-      y.push_back(vcl_sin(t));
+      x.push_back(float(vcl_cos(t)));
+      y.push_back(float(vcl_sin(t)));
     }
   }
 
-  bool handle(vgui_event const &e) 
+  bool handle(vgui_event const &e)
   {
     unsigned n = x.size(); assert(n == y.size());
 
-    switch (e.type) 
+    switch (e.type)
     {
-    case vgui_DRAW: 
+    case vgui_DRAW:
     {
       glColor3f(1, 1, 1);
 
@@ -66,8 +66,8 @@ struct example_polygon_tableau : public vgui_tableau
       glEnd();
 
       // draw interior points
-      vgl_polygon p(&x[0], &y[0], n);
-      vgl_polygon_scan_iterator si(p, boundary);
+      vgl_polygon<float> p(&x[0], &y[0], n);
+      vgl_polygon_scan_iterator<float> si(p, boundary);
       si.reset();
       glColor3f(0, 1, 0); // green
       glBegin(GL_POINTS);
@@ -83,7 +83,7 @@ struct example_polygon_tableau : public vgui_tableau
       return true;
     }
 
-    case vgui_MOTION: 
+    case vgui_MOTION:
     {
       if (v == -1)
         return false;
@@ -97,7 +97,7 @@ struct example_polygon_tableau : public vgui_tableau
       return true;
     }
 
-    case vgui_BUTTON_DOWN: 
+    case vgui_BUTTON_DOWN:
     {
       if (v >= 0)
         return false;
@@ -106,10 +106,10 @@ struct example_polygon_tableau : public vgui_tableau
       pi.window_to_image_coordinates(e.wx, e.wy, ix, iy);
       double bd=0;
       int bi = -1;
-      for (unsigned int i=0; i<n; ++i) 
+      for (unsigned int i=0; i<n; ++i)
       {
         double d = hypot(ix - x[i], iy - y[i]);
-        if (bi == -1 || d<bd) 
+        if (bi == -1 || d<bd)
         {
           bd = d;
           bi = i;

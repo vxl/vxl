@@ -1,12 +1,13 @@
 // This is core/vgl/vgl_triangle_test.h
 #ifndef vgl_triangle_test_h_
 #define vgl_triangle_test_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \author fsm
+// \verbatim
+//  Modifications
+//   Nov.2003 - Peter Vanroose - made functions templated
+// \endverbatim
 
 //: Compute discriminant function
 // Returns determinant of
@@ -28,5 +29,7 @@ bool vgl_triangle_test_inside(T x1, T y1,
                               T x2, T y2,
                               T x3, T y3,
                               T x , T y );
+
+#define VGL_TRIANGLE_TEST_INSTANTIATE(T) extern "please include vgl/vgl_triangle_test.txx instead"
 
 #endif // vgl_triangle_test_h_

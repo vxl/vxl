@@ -1,7 +1,6 @@
-// This is core/vgl/vgl_clip.cxx
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma implementation
-#endif
+// This is core/vgl/vgl_clip.txx
+#ifndef vgl_clip_txx_
+#define vgl_clip_txx_
 //:
 // \file
 // \author fsm
@@ -11,35 +10,38 @@
 #include <vcl_cstdio.h> // for vcl_fprintf()
 #include <vcl_algorithm.h> // for swap
 
-bool vgl_clip_lineseg_to_line(double &x1, double &y1,
-                              double &x2, double &y2,
-                              double a,double b,double c)
+template <class T>
+bool vgl_clip_lineseg_to_line(T &x1, T &y1,
+                              T &x2, T &y2,
+                              T a,T b,T c)
 {
-  double f1 = a*x1+b*y1+c;
-  double f2 = a*x2+b*y2+c;
+  T f1 = a*x1+b*y1+c;
+  T f2 = a*x2+b*y2+c;
   if (f1<0) {
-    if (f2<0)
-      return false; // both out
+    if (f2<0) // both out
+      return false;
     // 1 out, 2 in
     x1 = (f2*x1 - f1*x2)/(f2-f1);
     y1 = (f2*y1 - f1*y2)/(f2-f1);
     return true;
   }
   else {
-    if (f2>0)
-      return true;  // both in
-    // 1 in, 2 out
-    x2 = (f2*x1 - f1*x2)/(f2-f1);
-    y2 = (f2*y1 - f1*y2)/(f2-f1);
+    if (f2<0)  // 1 in, 2 out
+    {
+      x2 = (f2*x1 - f1*x2)/(f2-f1);
+      y2 = (f2*y1 - f1*y2)/(f2-f1);
+    }
+    // both in
     return true;
   }
 }
 
-bool vgl_clip_line_to_box(double a, double b, double c, // line coefficients.
-                          double x1, double y1,  // bounding
-                          double x2, double y2,  // box.
-                          double &bx, double &by,  // start and
-                          double &ex, double &ey)  // end points.
+template <class T>
+bool vgl_clip_line_to_box(T a, T b, T c, // line coefficients.
+                          T x1, T y1,    // bounding
+                          T x2, T y2,    // box.
+                          T &bx, T &by,  // start and
+                          T &ex, T &ey)  // end points.
 {
   if (x1>x2) vcl_swap(x1,x2);
   if (y1>y2) vcl_swap(y1,y2);
@@ -57,8 +59,8 @@ bool vgl_clip_line_to_box(double a, double b, double c, // line coefficients.
     // Intersection point with the line y=y2:
     ey = y2; ex = -(b*y2+c)/a;
 
-    b_set  =  bx >= x1 && bx <= x2; // does this intersection point
-    e_set  =  ex >= x1 && ex <= x2; // lie on the bounding box?
+    b_set =  bx >= x1 && bx <= x2; // does this intersection point
+    e_set =  ex >= x1 && ex <= x2; // lie on the bounding box?
   }
 
   if (b_set && e_set) return true;
@@ -69,13 +71,13 @@ bool vgl_clip_line_to_box(double a, double b, double c, // line coefficients.
   {
     // Intersection point with the line x=x1:
     bx = x1; by = -(a*x1+c)/b;
-    b_set  =  by >= y1 && by <= y2;
+    b_set =  by >= y1 && by <= y2;
     if (b_set && e_set) return true;
     if (b_set) { vcl_swap(bx,ex); vcl_swap(by,ey); vcl_swap(b_set,e_set); }
 
     // Intersection point with the line x=x2:
     bx = x2; by = -(a*x2+c)/b;
-    b_set  =  by >= y1 && ey <= y2;
+    b_set =  by >= y1 && ey <= y2;
   }
 
   return b_set && e_set;
@@ -86,18 +88,19 @@ extern "C" {
 #include "internals/gpc.h"
 }
 
-#define MALLOC(p, T, c, s) {if ((c) > 0) { \
+#define MALLOC(p, T, c, s) { if ((c) > 0) { \
                             p= (T*)vcl_malloc(c * sizeof(T)); if (!(p)) { \
                             vcl_fprintf(stderr, "vgl: gpc malloc failure: %s\n", s); \
-                            vcl_exit(0);}} else p= NULL;}
+                            vcl_exit(0);}} else p=NULL; }
 
-#define FREE(p)            {if (p) {vcl_free(p); (p)= NULL;}}
+#define FREE(p)            { if (p) { vcl_free(p); (p)= NULL; } }
 
 namespace {
   //: Creates a gpc polygon from a vgl_polygon.
   // The caller is responsible for freeing the gpc_polygon.
+  template <class T>
   gpc_polygon
-  vgl_to_gpc( const vgl_polygon& vgl_poly )
+  vgl_to_gpc( const vgl_polygon<T>& vgl_poly )
   {
     gpc_polygon gpc_poly;
     gpc_poly.num_contours = vgl_poly.num_sheets();
@@ -117,21 +120,23 @@ namespace {
   }
 
   //: Adds a gpc_polygon to a given vgl_polygon.
+  template <class T>
   void
-  add_gpc_to_vgl( vgl_polygon& vgl_poly, const gpc_polygon& gpc_poly )
+  add_gpc_to_vgl( vgl_polygon<T>& vgl_poly, const gpc_polygon& gpc_poly )
   {
     for ( int c=0; c < gpc_poly.num_contours; ++c ) {
       vgl_poly.new_sheet();
       for ( int p=0; p < gpc_poly.contour[c].num_vertices; ++p ) {
-        vgl_poly.push_back( float(gpc_poly.contour[c].vertex[p].x),
-                            float(gpc_poly.contour[c].vertex[p].y) );
+        vgl_poly.push_back( T(gpc_poly.contour[c].vertex[p].x),
+                            T(gpc_poly.contour[c].vertex[p].y) );
       }
     }
   }
 }
 
-vgl_polygon
-vgl_clip( const vgl_polygon& poly1, const vgl_polygon& poly2, vgl_clip_type op )
+template <class T>
+vgl_polygon<T>
+vgl_clip(vgl_polygon<T> const& poly1, vgl_polygon<T> const& poly2, vgl_clip_type op )
 {
   // Check for the null case
   if ( poly1.num_sheets() == 0 )
@@ -142,7 +147,7 @@ vgl_clip( const vgl_polygon& poly1, const vgl_polygon& poly2, vgl_clip_type op )
   gpc_polygon p1 = vgl_to_gpc( poly1 );
   gpc_polygon p2 = vgl_to_gpc( poly2 );
   gpc_polygon p3;
-  vgl_polygon result;
+  vgl_polygon<T> result;
 
   gpc_op g_op = GPC_INT;
   switch( op ) {
@@ -161,3 +166,11 @@ vgl_clip( const vgl_polygon& poly1, const vgl_polygon& poly2, vgl_clip_type op )
 
   return result;
 }
+
+#undef VGL_CLIP_INSTANTIATE
+#define VGL_CLIP_INSTANTIATE(T) \
+template vgl_polygon<T > vgl_clip(vgl_polygon<T >const&,vgl_polygon<T >const&,vgl_clip_type); \
+template bool vgl_clip_lineseg_to_line(T&,T&,T&,T&,T,T,T); \
+template bool vgl_clip_line_to_box(T,T,T,T,T,T,T,T&,T&,T&,T&)
+
+#endif // vgl_clip_txx_

@@ -1,9 +1,9 @@
-#ifndef VGL_AREA_H_
-#define VGL_AREA_H_
+#ifndef vgl_area_h_
+#define vgl_area_h_
 //:
 // \file
 
-class vgl_polygon;
+template <class T> class vgl_polygon;
 
 //: Computes the signed area of a polygon.
 // The sign is positive if the polygon is oriented counter-clockwise
@@ -13,13 +13,13 @@ class vgl_polygon;
 // contour must have opposite orientation to the enclosing contour.
 // \sa vgl_area
 // \relates vgl_polygon
-float
-vgl_area_signed( const vgl_polygon& poly );
+template <class T> T vgl_area_signed(vgl_polygon<T> const& poly);
 
 //: The area of a polygon.
 // \sa vgl_area_signed
 // \relates vgl_polygon
-float
-vgl_area( const vgl_polygon& poly );
+template <class T> T vgl_area(vgl_polygon<T> const& poly);
 
-#endif
+#define VGL_AREA_INSTANTIATE(T) extern "please include vgl/vgl_area.txx instead"
+
+#endif // vgl_area_h_

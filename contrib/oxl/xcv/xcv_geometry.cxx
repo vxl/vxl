@@ -1,7 +1,7 @@
 // This is oxl/xcv/xcv_geometry.cxx
 #include "xcv_geometry.h"
 //:
-//  \file
+// \file
 // See xcv_geometry.h for a description of this file.
 // \author K.Y.McGaul
 
@@ -82,6 +82,7 @@ void xcv_geometry::create_polygon()
   if (rubber)
     rubber->rubberband_polygon();
 }
+
 //-----------------------------------------------------------------------------
 //: Rubberband a linestrip on the currently selected tableau.
 //-----------------------------------------------------------------------------
@@ -93,6 +94,7 @@ void xcv_geometry::create_linestrip()
   if (rubber)
     rubber->rubberband_linestrip();
 }
+
 //-----------------------------------------------------------------------------
 //: Rubberband infinite line on the currently selected tableau.
 //-----------------------------------------------------------------------------
@@ -104,12 +106,13 @@ void xcv_geometry::create_infinite_line()
   if (rubber)
     rubber->rubberband_infinite_line();
 }
+
 //-----------------------------------------------------------------------------
 //: Change the color of all the selected geometric objects.
 //-----------------------------------------------------------------------------
 void xcv_geometry::change_sel_color()
 {
-  static vcl_string  color_value = "yellow";
+  static vcl_string color_value = "yellow";
   vgui_dialog color_dl("Colour of selected objects");
   color_dl.inline_color("New colour for selected objects:", color_value);
   if (!color_dl.ask())
@@ -130,6 +133,7 @@ void xcv_geometry::change_sel_color()
     easy_list[i]->deselect_all();
   }
 }
+
 //-----------------------------------------------------------------------------
 //: Change the radius of all the selected points.
 //-----------------------------------------------------------------------------
@@ -202,6 +206,7 @@ void xcv_geometry::delete_sel_objs()
       easy_list[i]->remove((vgui_soview*)(*j));
   }
 }
+
 //-----------------------------------------------------------------------------
 //: Delete all geometric objects.
 //-----------------------------------------------------------------------------
@@ -248,7 +253,7 @@ void xcv_geometry::delete_points()
   vgui_easy2D_tableau_sptr easy_tab = get_easy2D_at(col,row);
   if (!easy_tab)
   {
-    vgui_macro_warning << "Unable to get current easy2D to delete  points\n";
+    vgui_macro_warning << "Unable to get current easy2D to delete points\n";
     return;
   }
   vcl_vector<vgui_soview*> all_objs = easy_tab->get_all();
@@ -258,6 +263,7 @@ void xcv_geometry::delete_points()
         easy_tab->remove((vgui_soview*)(*i));
   }
 }
+
 //-----------------------------------------------------------------------------
 //: Delete all lines.
 //-----------------------------------------------------------------------------
@@ -285,6 +291,7 @@ void xcv_geometry::delete_lines()
         easy_tab->remove((vgui_soview*)(*i));
   }
 }
+
 //-----------------------------------------------------------------------------
 //: Delete all infinite lines.
 //-----------------------------------------------------------------------------
@@ -312,6 +319,7 @@ void xcv_geometry::delete_inf_lines()
         easy_tab->remove((vgui_soview*)(*i));
   }
 }
+
 //-----------------------------------------------------------------------------
 //: Delete all circles.
 //-----------------------------------------------------------------------------
@@ -339,6 +347,7 @@ void xcv_geometry::delete_circles()
         easy_tab->remove((vgui_soview*)(*i));
   }
 }
+
 //-----------------------------------------------------------------------------
 //: Delete all linestrips.
 //-----------------------------------------------------------------------------
@@ -374,7 +383,7 @@ void xcv_geometry::delete_linestrips()
 //-----------------------------------------------------------------------------
 void xcv_geometry::change_default_color()
 {
-  static vcl_string  color_value = "yellow";
+  static vcl_string color_value = "yellow";
   vgui_dialog color_dl("Default colour");
   color_dl.inline_color("New default color:", color_value);
   if (!color_dl.ask())
@@ -426,6 +435,7 @@ void xcv_geometry::change_default_width()
   for (unsigned i=0; i<easy_list.size(); i++)
     easy_list[i]->set_line_width(line_width);
 }
+
 //-----------------------------------------------------------------------------
 //: Write coordinates into a file
 //-----------------------------------------------------------------------------
@@ -446,15 +456,14 @@ void xcv_geometry::save(const char *object_type,const char *dialog_name)
       vgui_soview* sv = (vgui_soview*)(*i);
       if (!sv)
       {
-         vgui_macro_warning << "Object in soview list is null\n";
-         return;
+        vgui_macro_warning << "Object in soview list is null\n";
+        return;
       }
       bool matched = (object_type == 0) || (sv->type_name() == object_type);
       vcl_string svtype = sv->type_name();
       vgui_style* style = sv->get_style();
       if (style)
-        fs << "c " << style->rgba[0] << " " << style->rgba[1]
-           <<  " " << style->rgba[2] << vcl_endl
+        fs << "c " << style->rgba[0] << " " << style->rgba[1] <<  " " << style->rgba[2] << vcl_endl
            << "r " << style->point_size << vcl_endl
            << "w " << style->line_width << vcl_endl;
 
@@ -528,6 +537,7 @@ void xcv_geometry::save_geometry()
 {
   save(0,"Save geometry");
 }
+
 //-----------------------------------------------------------------------------
 //: Load coordinates from a file
 //-----------------------------------------------------------------------------
@@ -637,14 +647,14 @@ void xcv_geometry::load_geometry()
 }
 
 //: Add sheets to gui
-static void add(vgl_polygon const& p)
+static void add(vgl_polygon<float> const& p)
 {
   unsigned col, row;
   get_current(&col, &row);
   vgui_easy2D_tableau_sptr easy_tab = get_easy2D_at(col, row);
 
   for (int i = 0; i < p.num_sheets(); ++i) {
-    vgl_polygon_sheet_as_array sp(p[i]);
+    vgl_polygon_sheet_as_array<float> sp(p[i]);
     easy_tab->add_polygon(sp.n, sp.x, sp.y);
   }
 }
@@ -653,7 +663,7 @@ static void add(vgl_polygon const& p)
 //:  Intersect two polygons to get a set of non-intersecting polygons.
 void xcv_geometry::polygon_intersect()
 {
-  vcl_vector<vgl_polygon> all_polys;
+  vcl_vector<vgl_polygon<float> > all_polys;
 
   vcl_vector<vgui_easy2D_tableau_sptr> easy_list = get_easy2D_list();
   vcl_vector<vgui_soview*> all_soviews;
@@ -665,7 +675,7 @@ void xcv_geometry::polygon_intersect()
       vgui_soview* sv = (vgui_soview*)(*it);
       if (sv->type_name() == "vgui_soview2D_polygon") {
         vgui_soview2D_polygon* pv = (vgui_soview2D_polygon*)sv;
-        all_polys.push_back(vgl_polygon(pv->x, pv->y, pv->n));
+        all_polys.push_back(vgl_polygon<float>(pv->x, pv->y, pv->n));
         all_soviews.push_back(sv);
       }
     }

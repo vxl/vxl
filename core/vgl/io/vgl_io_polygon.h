@@ -1,9 +1,6 @@
 // This is core/vgl/io/vgl_io_polygon.h
 #ifndef vgl_io_polygon_h
 #define vgl_io_polygon_h
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \author Nick Costen
@@ -14,13 +11,15 @@
 #include <vsl/vsl_binary_io.h>
 
 //: Binary save vgl_polygon to stream.
-void vsl_b_write(vsl_b_ostream &os, const vgl_polygon & v);
+template <class T>
+void vsl_b_write(vsl_b_ostream &os, const vgl_polygon<T> & v);
 
 //: Binary load vgl_box_3d from stream.
-void vsl_b_read(vsl_b_istream &is, vgl_polygon & v);
+template <class T>
+void vsl_b_read(vsl_b_istream &is, vgl_polygon<T> & v);
 
 //: Print human readable summary of object to a stream
-void vsl_print_summary(vcl_ostream& os,const vgl_polygon & b);
-
+template <class T>
+void vsl_print_summary(vcl_ostream& os,const vgl_polygon<T> & b);
 
 #endif // vgl_io_polygon_h

@@ -1,26 +1,14 @@
 #include <vgl/vgl_polygon.h>
 #include <vgl/vgl_clip.h>
+#include <vcl_cmath.h> // for abs(float/double)
 
 #include <testlib/testlib_test.h>
 
-#include "test_driver.h"
-
-static int num_cont( const vgl_polygon& poly ) { return poly.num_sheets(); }
-
-static unsigned int num_vert( const vgl_polygon& poly )
-{
-  unsigned int count = 0;
-  for ( int i=0; i < poly.num_sheets(); ++i )
-    count += poly[i].size();
-  return count;
-}
-
-
-static bool is_vertex( const vgl_polygon& poly, float x, float y )
+template <class T> inline static bool is_vertex(vgl_polygon<T> const& poly, T x, T y)
 {
   for ( int i=0; i < poly.num_sheets(); ++i )
     for ( unsigned int p=0; p < poly[i].size(); ++p )
-      if ( close( x, poly[i][p].x() ) && close( y, poly[i][p].y() ) )
+      if ( vcl_abs(x - poly[i][p].x()) < 1e-6 && vcl_abs(y - poly[i][p].y()) < 1e-6 )
         return true;
 
   return false;
@@ -29,38 +17,38 @@ static bool is_vertex( const vgl_polygon& poly, float x, float y )
 
 static void test_union()
 {
-  float cont1[] = { 0,0,  5,0,  5,5,  0,5 };
-  vgl_polygon poly1 = new_polygon( cont1 );
+  double cont1[] = { 0,0,  5,0,  5,5,  0,5 };
+  vgl_polygon<double> poly1(cont1, 4);
 
   {
-    vgl_polygon poly2;
+    vgl_polygon<double> poly2;
 
     testlib_test_begin("union with null polygon");
-    vgl_polygon result = vgl_clip( poly1, poly2, vgl_clip_type_union );
-    testlib_test_perform( num_cont(result) == 1 &&
-                          num_vert(result) == 4 );
+    vgl_polygon<double> result = vgl_clip( poly1, poly2, vgl_clip_type_union );
+    testlib_test_perform( result.num_sheets() == 1 &&
+                          result.num_vertices() == 4 );
   }
 
   {
-    float cont2[] = { 6,0,  8,1,  6,2 };
-    vgl_polygon poly2 = new_polygon( cont2 );
+    double cont2[] = { 6,0,  8,1,  6,2 };
+    vgl_polygon<double> poly2(cont2, 3);
 
     testlib_test_begin("disjoint union");
-    vgl_polygon result = vgl_clip( poly1, poly2, vgl_clip_type_union );
-    testlib_test_perform( num_cont(result) == 2 &&
-                          num_vert(result) == 7 );
+    vgl_polygon<double> result = vgl_clip( poly1, poly2, vgl_clip_type_union );
+    testlib_test_perform( result.num_sheets() == 2 &&
+                          result.num_vertices() == 7 );
   }
 
   {
-    float cont2[] = { 4,1,  8,1,  8,6, 4,6 };
-    vgl_polygon poly2 = new_polygon( cont2 );
+    double cont2[] = { 4,1,  8,1,  8,6,  4,6 };
+    vgl_polygon<double> poly2(cont2, 4);
 
     testlib_test_begin("overlapping union");
-    vgl_polygon result = vgl_clip( poly1, poly2, vgl_clip_type_union );
-    testlib_test_perform( num_cont(result) == 1 &&
-                          num_vert(result) == 8 &&
-                          is_vertex(result, 5,1) &&
-                          is_vertex(result, 4,6) );
+    vgl_polygon<double> result = vgl_clip( poly1, poly2, vgl_clip_type_union );
+    testlib_test_perform( result.num_sheets() == 1 &&
+                          result.num_vertices() == 8 &&
+                          is_vertex(result, 5.0,1.0) &&
+                          is_vertex(result, 4.0,6.0) );
   }
 }
 
@@ -68,48 +56,48 @@ static void test_union()
 static void test_intersection()
 {
   float cont1[] = { 0,0,  5,0,  5,5,  0,5 };
-  vgl_polygon poly1 = new_polygon( cont1 );
+  vgl_polygon<float> poly1(cont1, 4);
 
   {
-    vgl_polygon poly2;
+    vgl_polygon<float> poly2;
 
     testlib_test_begin("intersection with null polygon");
-    vgl_polygon result = vgl_clip( poly1, poly2, vgl_clip_type_intersect );
-    testlib_test_perform( num_cont(result) == 1 &&
-                          num_vert(result) == 4 );
+    vgl_polygon<float> result = vgl_clip( poly1, poly2, vgl_clip_type_intersect );
+    testlib_test_perform( result.num_sheets() == 1 &&
+                          result.num_vertices() == 4 );
   }
 
   {
     float cont2[] = { 6,0,  8,1,  6,2 };
-    vgl_polygon poly2 = new_polygon( cont2 );
+    vgl_polygon<float> poly2(cont2, 3);
 
     testlib_test_begin("disjoint simple intersection");
-    vgl_polygon result = vgl_clip( poly1, poly2, vgl_clip_type_intersect );
-    testlib_test_perform( num_cont(result) == 0 &&
-                          num_vert(result) == 0 );
+    vgl_polygon<float> result = vgl_clip( poly1, poly2, vgl_clip_type_intersect );
+    testlib_test_perform( result.num_sheets() == 0 &&
+                          result.num_vertices() == 0 );
   }
 
   {
-    float cont2[] = { 4,1,  8,1,  8,6, 4,6 };
-    vgl_polygon poly2 = new_polygon( cont2 );
+    float cont2[] = { 4,1,  8,1,  8,6,  4,6 };
+    vgl_polygon<float> poly2(cont2, 4);
 
     testlib_test_begin("overlapping simple intersection");
-    vgl_polygon result = vgl_clip( poly1, poly2, vgl_clip_type_intersect );
-    testlib_test_perform( num_cont(result) == 1 &&
-                          num_vert(result) == 4 &&
-                          is_vertex(result, 4,1) );
+    vgl_polygon<float> result = vgl_clip( poly1, poly2, vgl_clip_type_intersect );
+    testlib_test_perform( result.num_sheets() == 1 &&
+                          result.num_vertices() == 4 &&
+                          is_vertex(result, 4.f,1.f) );
   }
 
   {
-    float cont2[] = { -3,-3,  8,-3,  8,8, -3,8 };
-    float cont3[] = { -1,-1,  6,-1,  6,6, -1,6 };
-    vgl_polygon poly2 = new_polygon( cont2 );
-    add_contour( poly2, cont3 );
+    float cont2[] = { -3,-3,  8,-3,  8,8,  -3,8 };
+    float cont3[] = { -1,-1,  6,-1,  6,6,  -1,6 };
+    vgl_polygon<float> poly2(cont2, 4);
+    poly2.add_contour(cont3, 4);
 
     testlib_test_begin("disjoint holey intersection");
-    vgl_polygon result = vgl_clip( poly1, poly2, vgl_clip_type_intersect );
-    testlib_test_perform( num_cont(result) == 0 &&
-                          num_vert(result) == 0 );
+    vgl_polygon<float> result = vgl_clip( poly1, poly2, vgl_clip_type_intersect );
+    testlib_test_perform( result.num_sheets() == 0 &&
+                          result.num_vertices() == 0 );
   }
 }
 

@@ -12,13 +12,13 @@ static void test_triangle_scan_iterator()
   float x[3] = { 10.23f, 20.12f, 30.73f };
   float y[3] = { 20.54f, 10.39f, 30.11f };
 
-  vgl_triangle_scan_iterator ti;
+  vgl_triangle_scan_iterator<float> ti;
   ti.a.x = x[0]; ti.a.y = y[0];
   ti.b.x = x[1]; ti.b.y = y[1];
   ti.c.x = x[2]; ti.c.y = y[2];
 
-  vgl_polygon p(x, y, 3);
-  vgl_polygon_scan_iterator pi(p, false);
+  vgl_polygon<float> p(x, y, 3);
+  vgl_polygon_scan_iterator<float> pi(p, false);
 
   bool failed = false;
   ti.reset(); bool ti_more = ti.next();

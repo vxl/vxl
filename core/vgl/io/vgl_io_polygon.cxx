@@ -1,15 +1,12 @@
 // This is core/vgl/io/vgl_io_polygon.cxx
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma implementation
-#endif
+#include "vgl_io_polygon.h"
 //:
 // \file
 
-#include "vgl_io_polygon.h"
-
 //====================================================================================
 //: Binary save self to stream.
-void vsl_b_write(vsl_b_ostream &os, const vgl_polygon & p)
+template <class T>
+void vsl_b_write(vsl_b_ostream &os, vgl_polygon<T> const& p)
 {
     const short io_version_no = 1;
     vsl_b_write(os, io_version_no);
@@ -21,10 +18,13 @@ void vsl_b_write(vsl_b_ostream &os, const vgl_polygon & p)
             vsl_b_write(os, p[i][j]);
     }
 }
+template void vsl_b_write(vsl_b_ostream&, vgl_polygon<float> const&);
+template void vsl_b_write(vsl_b_ostream&, vgl_polygon<double> const&);
 
 //====================================================================================
 //: Binary load self from stream.
-void vsl_b_read(vsl_b_istream &is, vgl_polygon & p)
+template <class T>
+void vsl_b_read(vsl_b_istream &is, vgl_polygon<T> & p)
 {
   if (!is) return;
 
@@ -41,7 +41,7 @@ void vsl_b_read(vsl_b_istream &is, vgl_polygon & p)
         p.new_sheet();
         int npoints;
         vsl_b_read(is, npoints);
-        vgl_point_2d<float> point;
+        vgl_point_2d<T> point;
         for (int j=0;j<npoints;j++)
         {
             vsl_b_read(is, point);
@@ -51,16 +51,20 @@ void vsl_b_read(vsl_b_istream &is, vgl_polygon & p)
     break;
 
   default:
-    vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vgl_polygon&)\n"
+    vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vgl_polygon<T>&)\n"
              << "           Unknown version number "<< v << '\n';
     is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
     return;
   }
 }
 
+template void vsl_b_read(vsl_b_istream&, vgl_polygon<float>&);
+template void vsl_b_read(vsl_b_istream&, vgl_polygon<double>&);
+
 //====================================================================================
 //: Output a human readable summary to the stream
-void vsl_print_summary(vcl_ostream& os,const vgl_polygon & p)
+template <class T>
+void vsl_print_summary(vcl_ostream& os, vgl_polygon<T>const& p)
 {
   os<<"Polygon with points defined by sheets :\n";
   for (int i=0;i<p.num_sheets();i++)
@@ -70,3 +74,6 @@ void vsl_print_summary(vcl_ostream& os,const vgl_polygon & p)
       os<<vcl_endl;
   }
 }
+
+template void vsl_print_summary(vcl_ostream&, vgl_polygon<float>const&);
+template void vsl_print_summary(vcl_ostream&, vgl_polygon<double>const&);

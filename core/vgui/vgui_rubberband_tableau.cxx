@@ -22,56 +22,30 @@
 //static bool debug = false;
 vgui_rubberband_tableau::object_type vgui_rubberband_tableau::obj_type = none_enum;
 
-#ifdef __GNUC__
-# define function_macro __FUNCTION__ /* GNU extension */
+#ifdef __GNUC__ /* __FUNCTION__ is a GNU extension */
+# define function_macro { vcl_cerr << __FUNCTION__ << " not yet implemented\n"; }
 #else
-# define function_macro __FILE__ ":" << __LINE__
+# define function_macro { vcl_cerr << __FILE__ ":" << __LINE__ << " not yet implemented\n"; } 
 #endif
-void vgui_rubberband_client::add_point(float, float)
-{
-  vcl_cerr << function_macro << " not implemented!\n";
-}
-void vgui_rubberband_client::add_line(float,float,float,float)
-{
-  vcl_cerr << function_macro << " not implemented!\n";
-}
-void vgui_rubberband_client::add_infinite_line(float,float,float)
-{
-  vcl_cerr << function_macro << " not implemented!\n";
-}
-void vgui_rubberband_client::add_circle(float,float,float)
-{
-  vcl_cerr << function_macro << " not implemented!\n";
-}
-void vgui_rubberband_client::add_linestrip(int /*n*/,float const *,float const *)
-{
-  vcl_cerr << function_macro << " not implemented!\n";
-}
-void vgui_rubberband_client::add_polygon(int /*n*/,float const*,float const*)
-{
-  vcl_cerr << function_macro << " not implemented!\n";
-}
-void vgui_rubberband_client::add_box(float,float,float,float)
-{
-  vcl_cerr << function_macro << " not implemented!\n";
-}
-void vgui_rubberband_client::clear_highlight()
-{
-  vcl_cerr << function_macro << " not implemented!\n";
-}
+void vgui_rubberband_client::add_point(float, float) function_macro
+void vgui_rubberband_client::add_line(float,float,float,float) function_macro
+void vgui_rubberband_client::add_infinite_line(float,float,float) function_macro
+void vgui_rubberband_client::add_circle(float,float,float) function_macro
+void vgui_rubberband_client::add_linestrip(int /*n*/,float const *,float const *) function_macro
+void vgui_rubberband_client::add_polygon(int /*n*/,float const*,float const*) function_macro
+void vgui_rubberband_client::add_box(float,float,float,float) function_macro
+void vgui_rubberband_client::clear_highlight() function_macro
 #undef function_macro
 
 
 //---------------------------------------------------------------------------
 //                                              vgui_rubberband_easy2D_client
 
-
 vgui_rubberband_easy2D_client::
 vgui_rubberband_easy2D_client(vgui_easy2D_tableau_sptr const& e)
   : easy(e)
 {
 }
-
 
 void
 vgui_rubberband_easy2D_client::
@@ -80,14 +54,12 @@ add_point(float x, float y)
   easy->add_point(x,y);
 }
 
-
 void
 vgui_rubberband_easy2D_client::
 add_line(float x0, float y0, float x1, float y1)
 {
   easy->add_line(x0, y0, x1, y1);
 }
-
 
 void
 vgui_rubberband_easy2D_client::
@@ -96,7 +68,6 @@ add_infinite_line(float a, float b, float c)
   easy->add_infinite_line(a, b, c);
 }
 
-
 void
 vgui_rubberband_easy2D_client::
 add_circle(float x, float y, float r)
@@ -104,14 +75,12 @@ add_circle(float x, float y, float r)
   easy->add_circle(x, y, r);
 }
 
-
 void
 vgui_rubberband_easy2D_client::
 add_linestrip(int n, float const* x, float const* y)
 {
   easy->add_linestrip(n, x, y);
 }
-
 
 void
 vgui_rubberband_easy2D_client::
@@ -140,7 +109,6 @@ clear_highlight()
 
 //---------------------------------------------------------------------------
 //                                                    vgui_rubberband_tableau
-
 
 void vgui_rubberband_tableau::init(vgui_rubberband_client* the_client)
 {
@@ -208,8 +176,8 @@ void vgui_rubberband_tableau::rubberband_circle()
 void vgui_rubberband_tableau::rubberband_polygon()
 {
   obj_type = polygon_enum;
-  gesture0 = vgui_event_condition(vgui_LEFT,   vgui_MODIFIER_NULL, true); // begin
-  gesture1 = vgui_event_condition(vgui_LEFT,   vgui_MODIFIER_NULL, true); // new point
+  gesture0 = vgui_event_condition(vgui_LEFT, vgui_MODIFIER_NULL, true); // begin
+  gesture1 = vgui_event_condition(vgui_LEFT, vgui_MODIFIER_NULL, true); // new point
   // vgui_RIGHT will conflict with popup menus in many cases. add a
   // gesture3 field if you really need to respond to both.
   gesture2 = vgui_event_condition(vgui_MIDDLE, vgui_MODIFIER_NULL, true); // last point
@@ -218,8 +186,8 @@ void vgui_rubberband_tableau::rubberband_polygon()
 void vgui_rubberband_tableau::rubberband_linestrip()
 {
   obj_type = linestrip_enum;
-  gesture0 = vgui_event_condition(vgui_LEFT,   vgui_MODIFIER_NULL, true); // begin
-  gesture1 = vgui_event_condition(vgui_LEFT,   vgui_MODIFIER_NULL, true); // new point
+  gesture0 = vgui_event_condition(vgui_LEFT, vgui_MODIFIER_NULL, true); // begin
+  gesture1 = vgui_event_condition(vgui_LEFT, vgui_MODIFIER_NULL, true); // new point
   // see above comment.
   gesture2 = vgui_event_condition(vgui_MIDDLE, vgui_MODIFIER_NULL, true); // last point
 }
@@ -268,8 +236,8 @@ void vgui_rubberband_tableau::draw_infinite_line(float a, float b, float c)
   float x0, y0, x1, y1;
   pi.image_viewport(x0,y0,x1,y1);
 
-  double x3, y3;
-  double x4, y4;
+  float x3, y3;
+  float x4, y4;
   bool f = vgl_clip_line_to_box(a,b,c, x0, y0, x1, y1, x3, y3, x4,y4);
   if (!f)
     return; // no intersection
@@ -302,7 +270,7 @@ void vgui_rubberband_tableau::draw_polygon(float px, float py)
   if (n==0)
     return;
 
-  vgui_matrix_state M;  M.save();
+  vgui_matrix_state M; M.save();
 
   glLineWidth(1);
   glColor3f(1,1,1);
@@ -340,11 +308,11 @@ void vgui_rubberband_tableau::draw_box(float x0,float y0,float x1,float y1)
 //: Render the rubber line strip
 void vgui_rubberband_tableau::draw_linestrip(float px,float py)
 {
- unsigned n=x_coords.size(); assert(n==y_coords.size());
+  unsigned n=x_coords.size(); assert(n==y_coords.size());
   if (n==0)
     return;
 
-  vgui_matrix_state M;  M.save();
+  vgui_matrix_state M; M.save();
 
   glLineWidth(1);
   glColor3f(1,1,1);
@@ -481,6 +449,7 @@ bool vgui_rubberband_tableau::handle_polygon(vgui_event const &e, float ix, floa
   }
   return false;
 }
+
 bool vgui_rubberband_tableau::handle_box(vgui_event const &e, float ix,float iy)
 {
   if ((use_overlays && e.type == vgui_DRAW_OVERLAY) || (!use_overlays && e.type == vgui_DRAW))
@@ -498,6 +467,7 @@ bool vgui_rubberband_tableau::handle_box(vgui_event const &e, float ix,float iy)
   }
   return false;
 }
+
 bool vgui_rubberband_tableau::handle_linestrip(vgui_event const &e, float ix, float iy)
 {
   unsigned n = x_coords.size();
@@ -540,14 +510,14 @@ bool vgui_rubberband_tableau::handle(vgui_event const &e)
       active = true;
       if (use_overlays) post_overlay_redraw(); else post_redraw();
       client_->clear_highlight();
-      
+
       lastx = ix;
       lasty = iy;
       x_coords.clear();
       y_coords.clear();
       x_coords.push_back(ix);
       y_coords.push_back(iy);
-  
+
       return true;
     }
     else
@@ -560,7 +530,7 @@ bool vgui_rubberband_tableau::handle(vgui_event const &e)
     lasty = iy;
     if (use_overlays) post_overlay_redraw(); else post_redraw();
     client_->clear_highlight();
-    
+
     return true;
   }
 

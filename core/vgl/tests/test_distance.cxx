@@ -11,7 +11,7 @@
 
 static void test_point_to_polygon()
 {
-  vgl_polygon p;
+  vgl_polygon<float> p;
   p.new_sheet();
   p.push_back( 0.0f, 0.0f );
   p.push_back( 5.0f, 0.0f );

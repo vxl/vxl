@@ -86,7 +86,7 @@ float bgui_linked_vsol_soview2D_line_seg::distance_squared(float x, float y) con
 {
   return vgl_distance2_to_linesegment(sptr->p0()->x(), sptr->p0()->y(),
                                       sptr->p1()->x(), sptr->p1()->y(),
-                                      x, y);
+                                      double(x), double(y));
 }
 
 void bgui_linked_vsol_soview2D_line_seg::get_centroid(float* x, float* y) const
@@ -117,13 +117,13 @@ bgui_linked_vsol_soview2D_polyline::bgui_linked_vsol_soview2D_polyline(vsol_poly
 vcl_ostream& bgui_linked_vsol_soview2D_polyline::print(vcl_ostream& s) const
 {
   unsigned int n = sptr->size();
-  s << "[bgui_linked_vsol_soview2D_polyline ";
- 
-  for (unsigned int i=0; i<n - 1;i++)
+  s << "[ bgui_linked_vsol_soview2D_polyline ";
+
+  for (unsigned int i=0; i<n; ++i)
   {
-     s << sptr->vertex(i)->x() << " , " << sptr->vertex(i)->y()  << " -- ";
+    s << sptr->vertex(i)->x() << ',' << sptr->vertex(i)->y();
+    if (i!=n-1) s << " -- ";
   }
-  s << sptr->vertex( n - 1 )->x() << " , " << sptr->vertex( n - 1 )->y();
   return vgui_soview::print( s ) << " ]";
 }
 
@@ -187,7 +187,8 @@ void bgui_linked_vsol_soview2D_polyline::translate(float tx, float ty)
   }
 }
 
-#if 0
+#if 0 // commented out
+
 //--------------------------------------------------------------------------
 //: vdgl_digital_curve dotted view
 //--------------------------------------------------------------------------
@@ -200,10 +201,10 @@ bgui_linked_vsol_soview2D_dotted_digital_curve::
 bgui_linked_vsol_soview2D_dotted_digital_curve(vdgl_digital_curve_sptr const& dc)
 {
   if (!dc)
-    {
-      vcl_cout << "In bgui_linked_vsol_soview2D_dotted_digital_curve(..) - null input dc\n";
-      return;
-    }
+  {
+    vcl_cout << "In bgui_linked_vsol_soview2D_dotted_digital_curve(..) - null input dc\n";
+    return;
+  }
 
   //get the edgel chain
   vdgl_interpolator_sptr itrp = dc->get_interpolator();
@@ -214,13 +215,13 @@ bgui_linked_vsol_soview2D_dotted_digital_curve(vdgl_digital_curve_sptr const& dc
 
   float x = 0, y=0;
   for (unsigned int i=0; i<n;i++)
-    {
-      vdgl_edgel ed = (*ech)[i];
-      x=ed.get_x();
-      y=ed.get_y();
-      bgui_soview2D* p = new bgui_soview2D_point(x, y);
-      ls.push_back(p);
-    }
+  {
+    vdgl_edgel ed = (*ech)[i];
+    x=ed.get_x();
+    y=ed.get_y();
+    bgui_soview2D* p = new bgui_soview2D_point(x, y);
+    ls.push_back(p);
+  }
   return;
 }
 #endif // 0
@@ -388,7 +389,8 @@ void bgui_linked_vsol_soview2D_polygon::translate( float x , float y )
   }
 }
 
-#if 0
+#if 0 // commented out
+
 //--------------------------------------------------------------------------
 //: vsol_line_2d group view
 //--------------------------------------------------------------------------

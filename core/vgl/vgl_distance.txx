@@ -1,7 +1,6 @@
-// This is core/vgl/vgl_distance.cxx
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma implementation
-#endif
+// This is core/vgl/vgl_distance.txx
+#ifndef vgl_distance_txx_
+#define vgl_distance_txx_
 //:
 // \file
 // \author fsm
@@ -23,19 +22,20 @@
 #include <vcl_cmath.h> // for vcl_sqrt()
 #include <vcl_utility.h> // for vcl_pair<T,U>
 
-template <class Type>
-static inline Type square(Type x) { return x*x; }
+template <class T>
+static inline T square(T x) { return x*x; }
 
-double vgl_distance2_to_linesegment(double x0, double y0,
-                                    double x1, double y1,
-                                    double x, double y)
+template <class T>
+T vgl_distance2_to_linesegment(T x0, T y0,
+                               T x1, T y1,
+                               T x, T y)
 {
   // squared distance between endpoints :
-  double ddh = square(x1-x0) + square(y1-y0);
+  T ddh = square(x1-x0) + square(y1-y0);
 
   // squared distance to endpoints :
-  double dd0 = square(x-x0) + square(y-y0);
-  double dd1 = square(x-x1) + square(y-y1);
+  T dd0 = square(x-x0) + square(y-y0);
+  T dd1 = square(x-x1) + square(y-y1);
 
   // if closest to the start point :
   if (dd1 > ddh + dd0)
@@ -46,22 +46,24 @@ double vgl_distance2_to_linesegment(double x0, double y0,
     return dd1;
 
   // squared perpendicular distance to line :
-  double a = y0-y1;
-  double b = x1-x0;
-  double c = x0*y1-x1*y0;
-  double ddn = square(a*x + b*y + c)/(a*a + b*b);
+  T a = y0-y1;
+  T b = x1-x0;
+  T c = x0*y1-x1*y0;
+  T ddn = square(a*x + b*y + c)/(a*a + b*b);
   return ddn;
 }
 
-double vgl_distance_to_linesegment(double x1, double y1,
-                                   double x2, double y2,
-                                   double x, double y)
+template <class T>
+double vgl_distance_to_linesegment(T x1, T y1,
+                                   T x2, T y2,
+                                   T x, T y)
 {
   return vcl_sqrt(vgl_distance2_to_linesegment(x1, y1, x2, y2, x, y));
 }
 
-double vgl_distance_to_non_closed_polygon(float const px[], float const py[], unsigned n,
-                                          double x, double y)
+template <class T>
+double vgl_distance_to_non_closed_polygon(T const px[], T const py[], unsigned n,
+                                          T x, T y)
 {
   double dd = -1;
   for (unsigned i=0; i<n-1; ++i) {
@@ -74,8 +76,9 @@ double vgl_distance_to_non_closed_polygon(float const px[], float const py[], un
   return dd;
 }
 
-double vgl_distance_to_closed_polygon(float const px[], float const py[], unsigned n,
-                                      double x, double y)
+template <class T>
+double vgl_distance_to_closed_polygon(T const px[], T const py[], unsigned n,
+                                      T x, T y)
 {
   double dd = vgl_distance_to_linesegment(px[n-1], py[n-1],
                                           px[0  ], py[0  ],
@@ -98,9 +101,6 @@ double vgl_distance_origin(vgl_homg_line_2d<Type> const& l)
   else return vcl_abs(l.c()) / vcl_sqrt( l.a()*l.a()+l.b()*l.b() );
 }
 
-template double vgl_distance_origin(vgl_homg_line_2d<float> const&);
-template double vgl_distance_origin(vgl_homg_line_2d<double> const&);
-
 template <class Type>
 double vgl_distance_origin(vgl_line_2d<Type> const& l)
 {
@@ -108,28 +108,12 @@ double vgl_distance_origin(vgl_line_2d<Type> const& l)
   else return vcl_abs(l.c()) / vcl_sqrt( l.a()*l.a()+l.b()*l.b() );
 }
 
-template double vgl_distance_origin(vgl_line_2d<float> const&);
-template double vgl_distance_origin(vgl_line_2d<double> const&);
-
 template <class Type>
 double vgl_distance(vgl_homg_point_1d<Type>const& p1,
                     vgl_homg_point_1d<Type>const& p2)
 {
   return vcl_abs(p1.x()/p1.w() - p2.x()/p2.w());
 }
-
-template double vgl_distance(vgl_homg_point_1d<float>const&, vgl_homg_point_1d<float>const&);
-template double vgl_distance(vgl_homg_point_1d<double>const&, vgl_homg_point_1d<double>const&);
-
-template double vgl_distance(vgl_point_2d<float>const&, vgl_point_2d<float>const&);
-template double vgl_distance(vgl_point_2d<double>const&, vgl_point_2d<double>const&);
-template double vgl_distance(vgl_homg_point_2d<float>const&, vgl_homg_point_2d<float>const&);
-template double vgl_distance(vgl_homg_point_2d<double>const&, vgl_homg_point_2d<double>const&);
-
-template double vgl_distance(vgl_point_3d<float>const&, vgl_point_3d<float>const&);
-template double vgl_distance(vgl_point_3d<double>const&, vgl_point_3d<double>const&);
-template double vgl_distance(vgl_homg_point_3d<float>const&, vgl_homg_point_3d<float>const&);
-template double vgl_distance(vgl_homg_point_3d<double>const&, vgl_homg_point_3d<double>const&);
 
 template <class Type>
 double vgl_distance(vgl_line_2d<Type> const& l, vgl_point_2d<Type> const& p)
@@ -139,11 +123,6 @@ double vgl_distance(vgl_line_2d<Type> const& l, vgl_point_2d<Type> const& p)
   else return vcl_abs(num) / vcl_sqrt(l.a()*l.a() + l.b()*l.b());
 }
 
-template double vgl_distance(vgl_line_2d<float> const&, vgl_point_2d<float> const&);
-template double vgl_distance(vgl_line_2d<double> const&, vgl_point_2d<double> const&);
-template double vgl_distance(vgl_point_2d<float> const&, vgl_line_2d<float> const&);
-template double vgl_distance(vgl_point_2d<double> const&, vgl_line_2d<double> const&);
-
 template <class Type>
 double vgl_distance(vgl_homg_line_2d<Type> const& l, vgl_homg_point_2d<Type> const& p)
 {
@@ -151,11 +130,6 @@ double vgl_distance(vgl_homg_line_2d<Type> const& l, vgl_homg_point_2d<Type> con
   if (num == 0) return 0.0; // always return 0 when point on line, even at infinity
   else return vcl_abs(num) / vcl_sqrt(l.a()*l.a() + l.b()*l.b()) / p.w(); // could be inf
 }
-
-template double vgl_distance(vgl_homg_line_2d<float> const&, vgl_homg_point_2d<float> const&);
-template double vgl_distance(vgl_homg_line_2d<double> const&, vgl_homg_point_2d<double> const&);
-template double vgl_distance(vgl_homg_point_2d<float> const&, vgl_homg_line_2d<float> const&);
-template double vgl_distance(vgl_homg_point_2d<double> const&, vgl_homg_line_2d<double> const&);
 
 template <class Type>
 double vgl_distance(vgl_plane_3d<Type> const& l, vgl_point_3d<Type> const& p)
@@ -165,11 +139,6 @@ double vgl_distance(vgl_plane_3d<Type> const& l, vgl_point_3d<Type> const& p)
   else return vcl_abs(num) / vcl_sqrt(l.nx()*l.nx() + l.ny()*l.ny() + l.nz()*l.nz());
 }
 
-template double vgl_distance(vgl_plane_3d<float> const& l, vgl_point_3d<float> const& p);
-template double vgl_distance(vgl_plane_3d<double> const& l, vgl_point_3d<double> const& p);
-template double vgl_distance(vgl_point_3d<float> const& p, vgl_plane_3d<float> const& l);
-template double vgl_distance(vgl_point_3d<double> const& p, vgl_plane_3d<double> const& l);
-
 template <class Type>
 double vgl_distance(vgl_homg_plane_3d<Type> const& l, vgl_homg_point_3d<Type> const& p)
 {
@@ -178,13 +147,8 @@ double vgl_distance(vgl_homg_plane_3d<Type> const& l, vgl_homg_point_3d<Type> co
   else return vcl_abs(num/p.w()) / vcl_sqrt(l.nx()*l.nx() + l.ny()*l.ny() + l.nz()*l.nz());
 }
 
-template double vgl_distance(vgl_homg_plane_3d<float> const& l, vgl_homg_point_3d<float> const& p);
-template double vgl_distance(vgl_homg_plane_3d<double> const& l, vgl_homg_point_3d<double> const& p);
-template double vgl_distance(vgl_homg_point_3d<float> const& p, vgl_homg_plane_3d<float> const& l);
-template double vgl_distance(vgl_homg_point_3d<double> const& p, vgl_homg_plane_3d<double> const& l);
-
 template <class Type>
-double vgl_distance(vgl_polygon const& poly, vgl_point_2d<Type> const& point, bool closed)
+double vgl_distance(vgl_polygon<Type> const& poly, vgl_point_2d<Type> const& point, bool closed)
 {
   double dist = -1;
   for ( int s=0; s < poly.num_sheets(); ++s )
@@ -211,9 +175,6 @@ double vgl_distance(vgl_polygon const& poly, vgl_point_2d<Type> const& point, bo
   return dist;
 }
 
-template double vgl_distance(vgl_polygon const&, vgl_point_2d<float> const&, bool);
-template double vgl_distance(vgl_polygon const&, vgl_point_2d<double> const&, bool);
-
 template <class Type>
 double vgl_distance(vgl_homg_line_3d_2_points<Type> const& line1,
                     vgl_homg_line_3d_2_points<Type> const& line2)
@@ -226,8 +187,6 @@ double vgl_distance(vgl_homg_line_3d_2_points<Type> const& line1,
     return vgl_distance(line1.point_finite(), line2);
 }
 
-template double vgl_distance(vgl_homg_line_3d_2_points<float> const&, vgl_homg_line_3d_2_points<float> const&);
-template double vgl_distance(vgl_homg_line_3d_2_points<double> const&, vgl_homg_line_3d_2_points<double> const&);
 
 template <class Type>
 double vgl_distance(vgl_homg_line_3d_2_points<Type> const& l,
@@ -237,7 +196,30 @@ double vgl_distance(vgl_homg_line_3d_2_points<Type> const& l,
   return vgl_distance(p,q);
 }
 
-template double vgl_distance(vgl_homg_line_3d_2_points<float> const&, vgl_homg_point_3d<float> const&);
-template double vgl_distance(vgl_homg_line_3d_2_points<double> const&, vgl_homg_point_3d<double> const&);
-template double vgl_distance(vgl_homg_point_3d<float> const&, vgl_homg_line_3d_2_points<float> const&);
-template double vgl_distance(vgl_homg_point_3d<double> const&, vgl_homg_line_3d_2_points<double> const&);
+#undef VGL_DISTANCE_INSTANTIATE
+#define VGL_DISTANCE_INSTANTIATE(T) \
+template T      vgl_distance2_to_linesegment(T,T,T,T,T,T); \
+template double vgl_distance_to_linesegment(T,T,T,T,T,T); \
+template double vgl_distance_to_non_closed_polygon(T const[],T const[],unsigned int,T,T); \
+template double vgl_distance_to_closed_polygon(T const[],T const[],unsigned int,T,T); \
+template double vgl_distance_origin(vgl_homg_line_2d<T >const&); \
+template double vgl_distance_origin(vgl_line_2d<T >const&); \
+template double vgl_distance(vgl_homg_point_1d<T >const&,vgl_homg_point_1d<T >const&); \
+template double vgl_distance(vgl_point_2d<T >const&,vgl_point_2d<T >const&); \
+template double vgl_distance(vgl_homg_point_2d<T >const&,vgl_homg_point_2d<T >const&); \
+template double vgl_distance(vgl_point_3d<T >const&,vgl_point_3d<T >const&); \
+template double vgl_distance(vgl_homg_point_3d<T >const&,vgl_homg_point_3d<T >const&); \
+template double vgl_distance(vgl_line_2d<T >const&,vgl_point_2d<T >const&); \
+template double vgl_distance(vgl_point_2d<T >const&,vgl_line_2d<T >const&); \
+template double vgl_distance(vgl_homg_line_2d<T >const&,vgl_homg_point_2d<T >const&); \
+template double vgl_distance(vgl_homg_point_2d<T >const&,vgl_homg_line_2d<T >const&); \
+template double vgl_distance(vgl_plane_3d<T >const&,vgl_point_3d<T >const&); \
+template double vgl_distance(vgl_point_3d<T >const&,vgl_plane_3d<T >const&); \
+template double vgl_distance(vgl_homg_plane_3d<T >const&,vgl_homg_point_3d<T >const&); \
+template double vgl_distance(vgl_homg_point_3d<T >const&,vgl_homg_plane_3d<T >const&); \
+template double vgl_distance(vgl_polygon<T >const&,vgl_point_2d<T >const&,bool); \
+template double vgl_distance(vgl_homg_line_3d_2_points<T >const&,vgl_homg_line_3d_2_points<T >const&); \
+template double vgl_distance(vgl_homg_line_3d_2_points<T >const&,vgl_homg_point_3d<T >const&); \
+template double vgl_distance(vgl_homg_point_3d<T > const&,vgl_homg_line_3d_2_points<T > const&)
+
+#endif // vgl_distance_txx_

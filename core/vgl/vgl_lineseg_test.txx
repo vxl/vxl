@@ -1,7 +1,6 @@
-// This is core/vgl/vgl_lineseg_test.cxx
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma implementation
-#endif
+// This is core/vgl/vgl_lineseg_test.txx
+#ifndef vgl_lineseg_test_txx_
+#define vgl_lineseg_test_txx_
 //:
 // \file
 // \author fsm
@@ -29,8 +28,9 @@ bool vgl_lineseg_test_lineseg(T x1, T y1, T x2, T y2, T x3, T y3, T x4, T y4)
 
 //--------------------------------------------------------------------------------
 
-#define inst(T) \
+#undef VGL_LINESEG_TEST_INSTANTIATE
+#define VGL_LINESEG_TEST_INSTANTIATE(T) \
 template bool vgl_lineseg_test_line(T, T, T, T, T, T, T, T); \
 template bool vgl_lineseg_test_lineseg(T, T, T, T, T, T, T, T)
-inst(float);
-inst(double);
+
+#endif // vgl_lineseg_test_txx_
