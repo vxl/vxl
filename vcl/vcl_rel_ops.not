@@ -4,15 +4,6 @@
   fsm
 */
 
-// Purpose: To provide a portable way of getting inline
-// function templates
-//      operator!=      ... !(x == y)
-//      operator>       ...  (y <  x)
-//      operator<=      ... !(y <  x)
-//      operator>=      ... !(x <  y)
-//
-// For ISO compilers, these live in namespace std::rel_ops.
-//
 // PLEASE DON'T USE THIS HEADER FILE. If you are using a class
 // type, A, which provides operator== but not operator!= you
 // can do
