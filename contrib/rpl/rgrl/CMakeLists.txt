@@ -96,6 +96,7 @@ SET( rgrl_sources
   rgrl_initializer.h                   rgrl_initializer.cxx          
   rgrl_initializer_sptr.h
   rgrl_initializer_prior.h             rgrl_initializer_prior.cxx
+  rgrl_initializer_reader.h            rgrl_initializer_reader.cxx
   rgrl_initializer_ran_sam.h           rgrl_initializer_ran_sam.cxx
   rgrl_initializer_inv_indexing.h      rgrl_initializer_inv_indexing.cxx
 
