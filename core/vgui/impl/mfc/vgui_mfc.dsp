@@ -19,6 +19,7 @@ CFG=vgui_mfc - Win32 Debug
 !MESSAGE 
 !MESSAGE "vgui_mfc - Win32 Release" (based on "Win32 (x86) Static Library")
 !MESSAGE "vgui_mfc - Win32 Debug" (based on "Win32 (x86) Static Library")
+!MESSAGE "vgui_mfc - Win32 ReleaseWithDBInfo" (based on "Win32 (x86) Static Library")
 !MESSAGE 
 
 # Begin Project
@@ -82,12 +83,41 @@ LIB32=xilink6.exe -lib
 # ADD BASE LIB32 /nologo
 # ADD LIB32 /nologo /out:"..\..\..\Debug\vgui_mfc.lib"
 
+!ELSEIF  "$(CFG)" == "vgui_mfc - Win32 ReleaseWithDBInfo"
+
+# PROP BASE Use_MFC 5
+# PROP BASE Use_Debug_Libraries 0
+# PROP BASE Output_Dir "vgui_mfc___Win32_ReleaseWithDBInfo"
+# PROP BASE Intermediate_Dir "vgui_mfc___Win32_ReleaseWithDBInfo"
+# PROP BASE Target_Dir ""
+# PROP Use_MFC 5
+# PROP Use_Debug_Libraries 0
+# PROP Output_Dir "ReleaseWithDBInfo"
+# PROP Intermediate_Dir "ReleaseWithDBInfo"
+# PROP Target_Dir ""
+MTL=midl.exe
+# ADD BASE MTL /nologo /D "NDEBUG" /mktyplib203 /win32
+# ADD MTL /nologo /D "NDEBUG" /mktyplib203 /win32
+# ADD BASE CPP /nologo /MT /W3 /GX /O2 /Ob2 /I "$(IUEROOT)" /I "$(IUEROOT)\vcl\config.win32-VC60" /I "$(IUEROOT)\vcl" /I "$(IUEROOT)/vxl" /I "$(IUEROOT)/oxl" /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /D "_MBCS" /FD /c
+# SUBTRACT BASE CPP /YX
+# ADD CPP /nologo /MT /W3 /GX /Zi /O2 /Ob2 /I "$(IUEROOT)" /I "$(IUEROOT)\vcl\config.win32-VC60" /I "$(IUEROOT)\vcl" /I "$(IUEROOT)/vxl" /I "$(IUEROOT)/oxl" /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /D "_MBCS" /FD /c
+# SUBTRACT CPP /YX
+# ADD BASE RSC /l 0x809 /d "NDEBUG"
+# ADD RSC /l 0x809 /d "NDEBUG"
+BSC32=bscmake.exe
+# ADD BASE BSC32 /nologo
+# ADD BSC32 /nologo
+LIB32=xilink6.exe -lib
+# ADD BASE LIB32 /nologo /out:"..\..\..\Release\vgui_mfc.lib"
+# ADD LIB32 /nologo /out:"..\..\..\Release\vgui_mfc.lib"
+
 !ENDIF 
 
 # Begin Target
 
 # Name "vgui_mfc - Win32 Release"
 # Name "vgui_mfc - Win32 Debug"
+# Name "vgui_mfc - Win32 ReleaseWithDBInfo"
 # Begin Group "Source Files"
 
 # PROP Default_Filter "cpp;c;cxx;rc;def;r;odl;idl;hpj;bat"
