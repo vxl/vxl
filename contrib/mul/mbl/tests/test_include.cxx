@@ -1,3 +1,4 @@
+#include <mbl/mbl_add_all_loaders.h>
 #include <mbl/mbl_ar_process.h>
 #include <mbl/mbl_chord.h>
 #include <mbl/mbl_clamped_plate_spline_2d.h>
@@ -36,6 +37,7 @@
 #include <mbl/mbl_selected_data_wrapper.h>
 #include <mbl/mbl_select_n_from_m.h>
 #include <mbl/mbl_stats_1d.h>
+#include <mbl/mbl_stats_nd.h>
 #include <mbl/mbl_stl.h>
 #include <mbl/mbl_stochastic_data_collector.h>
 #include <mbl/mbl_sum_1d.h>
@@ -43,6 +45,5 @@
 #include <mbl/mbl_thin_plate_spline_2d.h>
 #include <mbl/mbl_thin_plate_spline_3d.h>
 #include <mbl/mbl_thin_plate_spline_weights_3d.h>
-#include <mbl/mbl_add_all_loaders.h>
 
 int main() { return 0; }
