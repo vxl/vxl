@@ -1,23 +1,20 @@
 #ifndef VGUI_GL_SELECTION_MACROS_H_
 #define VGUI_GL_SELECTION_MACROS_H_
-
 //:
 // \file
 // \author Amitha Perera
 //
-// This collection of macros is used to simply the selection of the
+// This collection of macros is used to simplify the selection of the
 // vgui_pixel_* type based on the GL format and GL type. Suppose the
 // current format is in fmt and the current type is in typ. First
 // define a macro "Code" that containing the code that relies on the
 // corresponding vgui_pixel_type, and then call ConditionListBegin,
 // ConditionListBody, ConditionListFail. This will generate a
 // collection of if statements that will run "Code" with the
-// appropriate type. For example: (ignore the dots--they are there to
-// avoid multiline comment warnings)
+// appropriate type. For example:
 //
-// #define Code( pixel_type ) \                         .
-//    buffer_of<pixel_type> buffer; \                   .
-//    convert_to_buffer( in_image, buffer );
+// \code
+// #define Code(pixel_type) buffer_of<pixel_type > buffer; convert_to_buffer(in_image,buffer);
 //
 //    ConditionListBegin;
 //    ConditionListBody( fmt, typ );
@@ -27,21 +24,24 @@
 //    }
 //
 // #undef Code
+// \endcode
 //
 // will generate code like
 //
+// \code
 // if( fmt==GL_RGB && typ==GL_UNSIGNED ) {
-//   buffer_of< vgui_pixel_rgb888 > buffer;
-//   convert_to_buffer( in_image, buffer );
+//   buffer_of<vgui_pixel_rgb888 > buffer;
+//   convert_to_buffer(in_image,buffer);
 // } else if( fmt==GL_RGB && typ==GL_UNSIGNED_SHORT_5_6_5 ) {
-//   buffer_of< vgui_pixel_rgb565 > buffer;
-//   convert_to_buffer( in_image, buffer );
+//   buffer_of<vgui_pixel_rgb565 > buffer;
+//   convert_to_buffer(in_image,buffer);
 // } else if(
 //      ...
 // } else {
 //   vcl_cerr << "don't know " << fmt << " and " << typ << "\n";
 //   return false;
 // }
+// \endcode
 //
 // If you don't want to handle the failure condition, you can replace
 // ConditionListFail with ConditionListEnd.
@@ -92,9 +92,8 @@
   ConditionList4(format,type) \
   else if(0)do{}while(0)
 
-
 #define ConditionListBegin if(0)do{}while(0)
 #define ConditionListFail else
 #define ConditionListEnd  else { /* null */ }
 
-#endif VGUI_GL_SELECTION_MACROS_H_
+#endif // VGUI_GL_SELECTION_MACROS_H_
