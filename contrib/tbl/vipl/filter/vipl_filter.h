@@ -13,16 +13,16 @@ template < class ImgIn, class ImgOut, class DataIn, class DataOut, int Arity, cl
 #include <vipl/section/vipl_section_iterator.h>
 
 #include <vcl_stlfwd.h> // forward declaration for vcl_vector
-// -- Here is how the get/set macros are used.
+//: Here is how the get/set macros are used.
 // First note there are 4 types of access:
 // for each of get and set we can do it with or without bounds/cache checking.
-// These are respectively defined in 4 macros: 
+// These are respectively defined in 4 macros:
 // GET_PIXEL SET_PIXEL FGET_PIXEL FSET_PIXEL (fast get...)
 // Arguments for GET_PIXEL and FGET_PIXEL are (x,y)  (i.e. column,row) and they return the value.
 // For SET_PIXEL FSET_PIXEL, the syntax is SET_PIXEL(x,y,value).
 // Note that SET_PIXEL is expected to return value!
 // We support operator() being the access, or if the used defines USE_NAMED_ACCESSORS, the named accessors.
-// For the named accessors the user can #define the names to use. 
+// For the named accessors the user can #define the names to use.
 // (And if they really want to, they can change the #defines for GET_PIXEL SET_PIXEL...
 //  but be careful as existing code uses the args in the given order.)
 
@@ -86,10 +86,10 @@ extern const void * DAhelp(vipl_trivial_pixeliter const*,int level=0);
 template < class ImgIn, class ImgOut, class DataIn, class DataOut, int Arity, class PixelItr >
 class vipl_filter          : public vipl_filter_abs {
   // declare some static consts....
-  static const VIPL_FILTER_STATE Not_Ready	/* = 0 */;
-  static const VIPL_FILTER_STATE Ready	        /* = 1 */;
-  static const VIPL_FILTER_STATE Unchanged	/* = 2 */;
-  static const VIPL_FILTER_STATE Filter_Owned	/* = 4 */;
+  static const VIPL_FILTER_STATE Not_Ready      /* = 0 */;
+  static const VIPL_FILTER_STATE Ready          /* = 1 */;
+  static const VIPL_FILTER_STATE Unchanged      /* = 2 */;
+  static const VIPL_FILTER_STATE Filter_Owned   /* = 4 */;
   // typedef iterators from our "iterator" class
 
  public: typedef typename PixelItr::Titerator Titerator;
@@ -114,7 +114,7 @@ class vipl_filter          : public vipl_filter_abs {
  public: DataOut & ref_def_fill_value() { return hsdef_fill_value; }
   // we track "state" for input, output and overall filter using these
   // ints. g++ had problems with nested enums as types outside of class
- private: VIPL_FILTER_STATE  hsinput_state; 
+ private: VIPL_FILTER_STATE  hsinput_state;
  public: VIPL_FILTER_STATE input_state() const { return hsinput_state; }
  public: VIPL_FILTER_STATE & ref_input_state() { return hsinput_state; }
  private: VIPL_FILTER_STATE  hsfilter_state;
@@ -216,7 +216,7 @@ class vipl_filter          : public vipl_filter_abs {
   virtual ~vipl_filter();
   vipl_filter();
   vipl_filter(const vipl_filter< ImgIn, ImgOut, DataIn, DataOut, Arity, PixelItr > &);
-  
+
   // begin method list for class filter
 
   //:
@@ -343,7 +343,7 @@ class vipl_filter          : public vipl_filter_abs {
   // parameters required before the filtering operation can
   // proceed.  Allows filter to "proceed" on warnings so not public
   virtual bool check_params_1(bool& proceed_on_warn) const ;
-  
+
  public:
 
   //:
@@ -366,7 +366,7 @@ class vipl_filter          : public vipl_filter_abs {
   // composition may change the filter!.
   bool compose_with( vipl_filter_abs& to);
 #endif
-  
+
 }; // end of class definition
 
 #endif // file guard
