@@ -203,9 +203,14 @@ void vgui_grid_tableau::add_next(vgui_tableau_sptr const& tab)
 //------------------------------------------------------------------------------
 void vgui_grid_tableau::add_at(vgui_tableau_sptr const& tab, unsigned col_pos, unsigned row_pos)
 {
-  // FIXME: this function leaks core because a tableau which is replaced by another
+  // This function leaks core because a tableau which is replaced by another
   // is still referenced by the smart pointer in `tabs'. why do we need a separate
   // array of tableaux? can't we just put them in the grid_data structure? -- fsm
+
+  // kym - This isn't a core leak!! It is intentional that pointers to tableaux are 
+  // kept - this means that we can flip through the list of tableaux using page up 
+  // and down but not display all tableaux at the same time (see xcv for an example 
+  // of this).  Each grid position provides a view of the deck of tableaux kept in 'tabs'.
   if (col_pos < nb_cols && row_pos < nb_rows)
   {
 //  if (debug)
@@ -616,7 +621,6 @@ void vgui_grid_tableau::deselect_current()
 //------------------------------------------------------------------------------
 bool vgui_grid_tableau::handle(const vgui_event &e)
 {
-  //vcl_cout << "KYM grid handle, e =" << e << vcl_endl;
   if (cond_row_add(e))
   {
     add_row();
