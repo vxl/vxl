@@ -14,8 +14,8 @@ bmrf_avg_distance_ratio( const bmrf_epi_seg_sptr& ep1, const bmrf_epi_seg_sptr& 
 
   double s1 = 0.0, s2 = 0.0;
   for (double alpha = min_alpha; alpha <= max_alpha; alpha += d_alpha) {
-    s1 += ep1->s(alpha);
-    s2 += ep2->s(alpha);
+    s1 += ep1->s(alpha) * ep1->s(alpha); // s1(alpha)^2
+    s2 += ep2->s(alpha) * ep1->s(alpha); // s1(alpha) * s2(alpha)
   }
   return s1 / s2;
 }
