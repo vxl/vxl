@@ -175,7 +175,7 @@ void vil_nitf_message_header::display_header_info (vcl_string caller) const
 
 }  // end method display_header_info
 
-unsigned long vil_nitf_message_header::get_image_data_length (unsigned image_num) const
+unsigned long vil_nitf_message_header::get_image_data_length (int image_num) const
 {
     unsigned long data_length = 0 ;
 
