@@ -7,16 +7,19 @@
 
 #include <vcl_string.h>
 
-#include <avifile/avifile.h>
-#include <avifile/videodecoder.h>
-#include <avifile/infotypes.h>
-#include <avifile/except.h>
-#include <avifile/version.h>
-#include <avifile/avm_default.h>
-#include <avifile/avm_fourcc.h>
+//#include <avifile/avifile.h>
+//#include <avifile/videodecoder.h>
+//#include <avifile/infotypes.h>
+//#include <avifile/except.h>
+//#include <avifile/version.h>
+//#include <avifile/avm_default.h>
+//#include <avifile/avm_fourcc.h>
 
 #include <vil2/vil2_image_view.h>
 #include <mvl2/mvl2_video_reader.h>
+
+class IAviReadFile*;
+class IAviReadStream*;
 
 //: A class to get video input from avi file
 class mvl2_video_from_avi: public mvl2_video_reader
