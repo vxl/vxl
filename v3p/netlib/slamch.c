@@ -1,4 +1,5 @@
 #include "f2c.h"
+#include <stdio.h>
 
 doublereal slamch_(char *cmach)
 {
