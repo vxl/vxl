@@ -23,3 +23,28 @@ Method 1 Mean: 5.95333ms   sd:0.06ms
 Method 2 Mean: 6.42ms   sd:0.0163299ms
 Method 3 Mean: 0.00666667ms   sd:0.0133333ms
 Method 4 Mean: 0.00666667ms   sd:0.0133333ms
+
+
+850Mhz P3 Windows 2000, using MSVC 6.0 SP5
+------------------------------------------
+No Optimisation (Debug)
+Times to fill a 256 x 256 image of 3 planes
+Method 1) Mean: 14.3103ms   sd:0.0559454ms
+Method 2) Mean: 11.9907ms   sd:0.0138884ms
+Method 3) Mean: 0.0233333ms   sd:0.0152753ms
+Method 4) Mean: 0.00666667ms   sd:0.0133333ms
+
+Optimisation with specified inlining (with debug info added) (RelwithDebInfo)
+Times to fill a 256 x 256 image of 3 planes
+Method 1) Mean: 3.53167ms   sd:0.0195078ms
+Method 2) Mean: 3.21133ms   sd:0.0127541ms
+Method 3) Mean: 0.00333333ms   sd:0.01ms
+Method 4) Mean: 0.00333333ms   sd:0.01ms
+
+Optimisation with optimiser controlled inlining (with debug info added)
+Times to fill a 256 x 256 image of 3 planes
+Method 1) Mean: 3.54867ms   sd:0.030485ms
+Method 2) Mean: 3.221ms   sd:0.0226593ms
+Method 3) Mean: 0.00666667ms   sd:0.0133333ms
+Method 4) Mean: 0.00333333ms   sd:0.01ms
+
