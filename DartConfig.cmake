@@ -16,7 +16,9 @@ SET (TRIGGER_SITE "http://cgi.cs.rpi.edu/~perera/vxl/submit-testing-results.cgi"
 #
 SET (CVS_WEB_URL "http://cvs.sourceforge.net/cgi-bin/viewcvs.cgi/vxl/vxl/")
 
-SET (DELIVER_CONTINUOUS_EMAIL "ON")  #  (not TRUE, not YES, just ON)
+#  (not TRUE, not YES, just ON)
+SET (DELIVER_CONTINUOUS_EMAIL "ON")
+
 SET (CONTINUOUS_FROM "vxl-maintainers@lists.sourceforge.net")
 # This is probably best set on the server build's cache
 # SET (SMTP_MAILHOST "a smtp server")
