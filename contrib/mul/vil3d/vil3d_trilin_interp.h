@@ -55,9 +55,9 @@ inline double vil3d_trilin_interp_safe(double x, double y, double z, const T* da
   if (x<0) return 0.0;
   if (y<0) return 0.0;
   if (z<0) return 0.0;
-  if (x>nx-1) return 0.0;
-  if (y>ny-1) return 0.0;
-  if (z>nz-1) return 0.0;
+  if (x>=nx-1) return 0.0;
+  if (y>=ny-1) return 0.0;
+  if (z>=nz-1) return 0.0;
   return vil3d_trilin_interp_raw(x,y,z,data,xstep,ystep,zstep);
 }
 
