@@ -45,8 +45,6 @@
 #include "xcv_image_tableau.h"
 #include "xcv_picker_tableau.h"
 
-#include <vgui/vgui_linker_hack.h>
-
 class xcv_tableau : public vgui_grid_tableau
 {
 public:
@@ -486,9 +484,6 @@ void xcv_window_size_adaptive(int rows, int cols,
  
 int main(int argc, char** argv)
 {
-  //fsm: explicit calls to toolkit tag functions now live
-  //in vgui_linker_hack.h -- please keep them there.
-
   // Select the toolkit: command line or environment variable
   // can override, but the default is 'gtk' or 'mfc'.
   if (! vgui::select(argc, argv)) {
@@ -496,6 +491,8 @@ int main(int argc, char** argv)
       vgui::select("gtk");
     else if (vgui::exists("mfc"))
       vgui::select("mfc");
+    else if (vgui::exists("qt"))
+      vgui::select("qt");
     else {
       // ??
     }
