@@ -34,7 +34,7 @@ public:
 class similarity_from_matches : public rrel_estimation_problem {
 public:
   similarity_from_matches() : rrel_estimation_problem(2,2) {}
-  similarity_from_matches( const vcl_vector<image_point_match> matches );
+  similarity_from_matches( const vcl_vector<image_point_match>& matches );
   ~similarity_from_matches() {}
   virtual unsigned int num_unique_samples( ) const{ return num_points_to_match_; }
   virtual unsigned int num_samples( ) const; 

@@ -10,7 +10,7 @@
 #include <rrel/rrel_lms_obj.h>
 #include <rrel/rrel_ran_sam_search.h>
 
-#include "similarity_from_matches.h"
+#include <rrel/tests/similarity_from_matches.h>
 
 #include <mbl/mbl_mz_random.h>
 

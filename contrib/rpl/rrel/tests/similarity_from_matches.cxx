@@ -13,7 +13,7 @@ static double noise( double sigma ) { static mbl_mz_random rand; return rand.nor
 
 // Assume throughout that the format of the parameter vector is a, b, tx, ty
 
-similarity_from_matches::similarity_from_matches( const vcl_vector<image_point_match> matches )
+similarity_from_matches::similarity_from_matches( const vcl_vector<image_point_match>& matches )
   : rrel_estimation_problem(2,2),
     matches_(matches)
 {
