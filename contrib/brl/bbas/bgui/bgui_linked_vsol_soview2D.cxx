@@ -15,12 +15,6 @@
 #include <vdgl/vdgl_digital_curve.h>
 #include <vdgl/vdgl_interpolator.h>
 #include <vdgl/vdgl_edgel_chain.h>
-#if 0 // not needed for now
-#include <vsol/vsol_conic_2d.h>
-#include <vsol/vsol_group_2d.h>
-#include <vsol/vsol_rectangle_2d.h>
-#include <vsol/vsol_triangle_2d.h>
-#endif // 0
 
 #include "bgui_linked_vsol_soview2D.h"
 #include <vgl/vgl_distance.h>

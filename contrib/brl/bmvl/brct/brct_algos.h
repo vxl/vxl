@@ -18,7 +18,6 @@
 #include <vgl/vgl_point_3d.h>
 #include <vgl/vgl_point_2d.h>
 #include <vnl/vnl_double_2.h>
-#include <vnl/vnl_double_3.h>
 #include <vnl/vnl_double_3x4.h>
 #include <vsol/vsol_box_3d_sptr.h>
 #include <vdgl/vdgl_digital_curve.h>
@@ -35,7 +34,7 @@ class brct_algos
   static void add_box_vrml(double xmin, double ymin, double zmin, double xmax, double ymax, double zmax);
   static vsol_box_3d_sptr get_bounding_box(vcl_vector<vgl_point_3d<double> > &pts_3d);
   static vgl_point_3d<double> bundle_reconstruct_3d_point(vcl_vector<vnl_double_2> &pts,
-                                                  vcl_vector<vnl_double_3x4>  &P);
+                                                          vcl_vector<vnl_double_3x4> &P);
   static vgl_point_2d<double> projection_3d_point(const vgl_point_3d<double> & x, const vnl_double_3x4& P);
   //: get closet point from a digital curve
   static vgl_point_2d<double>  closest_point(vdgl_digital_curve_sptr dc, vgl_point_2d<double> pt);

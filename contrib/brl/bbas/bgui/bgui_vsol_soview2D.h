@@ -21,13 +21,6 @@
 #include <vsol/vsol_polyline_2d_sptr.h>
 #include <vsol/vsol_polygon_2d_sptr.h>
 #include <vdgl/vdgl_digital_curve_sptr.h>
-#if 0 // currently not needed
-#include <vsol/vsol_point_2d_sptr.h>
-#include <vsol/vsol_conic_2d_sptr.h>
-#include <vsol/vsol_rectangle_2d_sptr.h>
-#include <vsol/vsol_triangle_2d_sptr.h>
-#include <vsol/vsol_group_2d_sptr.h>
-#endif
 
 #include <vgui/vgui_soview2D.h>
 #include <vgui/vgui_style.h>

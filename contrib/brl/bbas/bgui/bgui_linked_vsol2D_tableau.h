@@ -27,13 +27,6 @@
 #include <vsol/vsol_point_2d_sptr.h>
 #include <vsol/vsol_line_2d_sptr.h>
 #include <vsol/vsol_polyline_2d_sptr.h>
-#if 0
-#include <vsol/vsol_conic_2d_sptr.h>
-#include <vsol/vsol_polygon_2d_sptr.h>
-#include <vsol/vsol_rectangle_2d_sptr.h>
-#include <vsol/vsol_triangle_2d_sptr.h>
-#include <vsol/vsol_group_2d_sptr.h>
-#endif
 
 #include <vdgl/vdgl_digital_curve_sptr.h>
 #include <vdgl/vdgl_edgel_chain_sptr.h>

@@ -1,7 +1,6 @@
 #include <vcl_iostream.h>
 #include <vcl_fstream.h>
 #include <vul/vul_arg.h>
-#include <vil1/vil1_save.h>
 #include <vidl/vidl_io.h>
 #include <vidl/vidl_movie_sptr.h>
 #include <vidl/vidl_movie.h>
@@ -47,7 +46,7 @@ int main(int argc, char** argv)
   vidl_movie_sptr my_movie = vidl_io::load_movie(video_file().c_str());
   if (!my_movie)
     {
-      vcl_cout << "Failed to load movie \n";
+      vcl_cout << "Failed to load movie\n";
       return -1;
     }
 
@@ -64,12 +63,12 @@ int main(int argc, char** argv)
   int width = my_movie->get_frame(0)->get_codec()->width();
   int height = my_movie->get_frame(0)->get_codec()->height();
   int bytes_pixel = my_movie->get_frame(0)->get_codec()->get_bytes_pixel();
-  *s << "<vxl>\n";
-  *s << "<video_description length=\"" << length << "\" format=\""
+  *s << "<vxl>\n"
+     << "<video_description length=\"" << length << "\" format=\""
      << type << "\" horizontal_resolution=\"" << width 
      << "\" vertical_resolution=\"" << height 
-     << "\" bytes_pixel=\"" << bytes_pixel << "\" />\n";
-  *s << "</vxl>\n";
+     << "\" bytes_pixel=\"" << bytes_pixel << "\" />\n"
+     << "</vxl>\n";
   s->close();
   delete s;
   return  0;
