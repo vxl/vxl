@@ -59,8 +59,8 @@ AC_LANG_CPLUSPLUS
 VCL_COMPILE_CXX
 AC_TRY_COMPILE([
 #include <typeinfo>
-class A { public: virtual ~A(); virtual void f(); };
-class B : public A { public: void f(); };
+class A { public: virtual ~A() {} virtual void f() {} };
+class B : public A { public: void f() {} };
 bool try_rtti() { B*b=0; A*a1=b,*a2=b; return typeid(a1)==typeid(a2); }
 ],,[VCL_HAS_RTTI=1;AC_MSG_RESULT(yes)],[VCL_HAS_RTTI=0;AC_MSG_RESULT(no)])
 export VCL_HAS_RTTI
