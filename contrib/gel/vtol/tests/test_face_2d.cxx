@@ -99,6 +99,22 @@ static void test_face_2d()
   TEST("vtol_one_chain::valid_inferior_type()", oc1->valid_inferior_type(f1->cast_to_topology_object()), false);
   TEST("vtol_face_2d::get_num_edges()", f1->get_num_edges(), 4);
   TEST("vtol_face_2d::shares_edge_with()", f1->shares_edge_with(*new_f), true);
+
+  vertex_list *w_list = f1->outside_boundary_vertices();
+  TEST("vtol_face::outside_boundary_vertices()", w_list->size(), 4);
+  delete w_list;
+
+  zero_chain_list *z_list = f1->outside_boundary_zero_chains();
+  TEST("vtol_face::outside_boundary_zero_chains()", z_list->size(), 8);
+  delete z_list;
+
+  edge_list *ed_list = f1->outside_boundary_edges();
+  TEST("vtol_face::outside_boundary_edges()", ed_list->size(), 4);
+  delete ed_list;
+
+  one_chain_list *o_list = f1->outside_boundary_one_chains();
+  TEST("vtol_face::outside_boundary_one_chains()", o_list->size(), 1);
+  delete o_list;
 }
 
 TESTMAIN(test_face_2d);

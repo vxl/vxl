@@ -2,6 +2,7 @@
 #include <testlib/testlib_test.h>
 #include <vtol/vtol_vertex_sptr.h>
 #include <vtol/vtol_vertex_2d.h>
+#include <vtol/vtol_zero_chain.h>
 #include <vtol/vtol_face_2d.h>
 #include <vtol/vtol_face_sptr.h>
 #include <vtol/vtol_two_chain.h>
@@ -78,6 +79,28 @@ static void test_two_chain()
   tc1->link_chain_inferior(tc2);
   vtol_two_chain_sptr new_copy = new vtol_two_chain(tc1);
   TEST("vtol_two_chain deep copy (pseudo copy constructor)", *new_copy, *tc1);
+
+  vertex_list *v_list = tc1->outside_boundary_vertices();
+  TEST("vtol_two_chain::outside_boundary_vertices()", v_list->size(), 8);
+  delete v_list;
+
+  zero_chain_list *z_list = tc1->outside_boundary_zero_chains();
+  TEST("vtol_two_chain::outside_boundary_zero_chains()", z_list->size(), 16);
+  for (unsigned int i=0; i<z_list->size(); ++i)
+    (*z_list)[i]->describe(vcl_cout,8);
+  delete z_list;
+
+  edge_list *ed_list = tc1->outside_boundary_edges();
+  TEST("vtol_two_chain::outside_boundary_edges()", ed_list->size(), 8);
+  delete ed_list;
+
+  one_chain_list *o_list = tc1->outside_boundary_one_chains();
+  TEST("vtol_two_chain::outside_boundary_one_chains()", o_list->size(), 2);
+  delete o_list;
+
+  face_list *f_list = tc1->outside_boundary_faces();
+  TEST("vtol_two_chain::outside_boundary_faces()", f_list->size(), 2);
+  delete f_list;
 }
 
 TESTMAIN(test_two_chain);

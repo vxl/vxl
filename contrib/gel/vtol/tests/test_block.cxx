@@ -100,6 +100,30 @@ static void test_block()
   TEST("vtol_block::valid_inferior_type()",b1->valid_inferior_type(tc1),true);
   TEST("vtol_block::valid_superior_type()",b1->valid_superior_type(b1->cast_to_topology_object()),false);
   TEST("vtol_two_chain::valid_superior_type()",tc1->valid_superior_type(b1),true);
+
+  vertex_list *v_list = b1->outside_boundary_vertices();
+  TEST("vtol_block::outside_boundary_vertices()", v_list->size(), 8);
+  delete v_list;
+
+  zero_chain_list *z_list = b1->outside_boundary_zero_chains();
+  TEST("vtol_block::outside_boundary_zero_chains()", z_list->size(), 16);
+  delete z_list;
+
+  edge_list *ed_list = b1->outside_boundary_edges();
+  TEST("vtol_block::outside_boundary_edges()", ed_list->size(), 8);
+  delete ed_list;
+
+  one_chain_list *o_list = b1->outside_boundary_one_chains();
+  TEST("vtol_block::outside_boundary_one_chains()", o_list->size(), 2);
+  delete o_list;
+
+  face_list *f_list = b1->outside_boundary_faces();
+  TEST("vtol_block::outside_boundary_faces()", f_list->size(), 2);
+  delete f_list;
+
+  two_chain_list *t_list = b1->outside_boundary_two_chains();
+  TEST("vtol_block::outside_boundary_two_chains()", t_list->size(), 1);
+  delete t_list;
 }
 
 TESTMAIN(test_block);
