@@ -32,6 +32,7 @@ TESTS += test_matrix_exp.cxx
 TESTS += test_transpose.cxx
 TESTS += test_levenberg_marquardt.cxx
 TESTS += $(wildcard test_tensor.cxx)
+TESTS += test_minimizers.cxx
 
 IULIBS += -lvnl-algo -lvnl -lvpl # vpl_unlink used in test_matlab
 
