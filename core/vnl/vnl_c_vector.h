@@ -27,7 +27,7 @@
 template <class T>
 class vnl_c_vector {
 public:
-  typedef vnl_numeric_traits<T>::abs_t abs_t;
+  typedef typename vnl_numeric_traits<T>::abs_t abs_t;
 
   static T sum(const T* v, unsigned n);
   static inline abs_t squared_magnitude(T const *p, unsigned n) { return two_nrm2(p,n); }
