@@ -12,7 +12,7 @@ void test_integrant()
 {
   my_test_integrant f;
   
-  vcl_cout <<"test integrant f = x/(1+x^2) when x=1, f is "<<  f.f_(1) << "\n";
+  TEST_NEAR("test integrant f = x/(1+x^2) when x=1, f is ", f.f_(1), 0.5, 1e-13);
 
 }
 
