@@ -7,7 +7,7 @@
 #include <vidl/vidl_clip.h>
 #include <vidl/vidl_image_list_codec.h>
 
-#ifdef VCL_WIN32
+#ifdef HAS_AVI
 # include <vidl/vidl_avicodec.h>
 #endif
 
