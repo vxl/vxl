@@ -183,8 +183,7 @@ bool vgui_adaptor::dispatch_to_tableau(vgui_event const &e) {
     vgui_matrix_state::identity_gl_matrices(); // to identity
 
 #if 1
-    if (e.type == vgui_DRAW && 
-      !(vgui_accelerate::vgui_mfc_acceleration || vgui_accelerate::vgui_mfc_ogl_acceleration)) {
+    if (e.type == vgui_DRAW && !vgui_accelerate::vgui_mfc_acceleration) {
       GLint buffer;
       glGetIntegerv(GL_DRAW_BUFFER,&buffer);
       if (buffer != GL_BACK) {

@@ -11,12 +11,18 @@
 #include <vgui/impl/mfc/stdafx.h>
 extern CDC *vgui_mfc_adaptor_global_dc;
 #endif
+
 #include "vgui_accelerate.h"
+
 #include <vcl_iostream.h>
+#include <vcl_cassert.h>
+
+#include <vgui/vgui_gl.h>
+#include <vgui/vgui_utils.h>
 
 bool vgui_accelerate::vgui_no_acceleration = false;
 bool vgui_accelerate::vgui_mfc_acceleration = true;
-bool vgui_accelerate::vgui_mfc_ogl_acceleration = false;
+
 static int accelerator_level = 0;
 static vgui_accelerate* vgui_accelerator = 0;
 vgui_accelerate* vgui_accelerate::instance()
@@ -46,13 +52,15 @@ vgui_accelerate::~vgui_accelerate()
   vcl_cerr << "vgui_accelerate::~vgui_accelerate()" << vcl_endl;
 }
 
-bool vgui_accelerate::vgui_glClear( GLbitfield mask )
+bool
+vgui_accelerate::vgui_glClear( GLbitfield mask )
 {
   glClear(mask);
   return false;
 }
 
-bool vgui_accelerate::vgui_glDrawPixels( GLsizei width, GLsizei height, GLenum format, GLenum type, const GLvoid *pixels )
+bool
+vgui_accelerate::vgui_glDrawPixels( GLsizei width, GLsizei height, GLenum format, GLenum type, const GLvoid *pixels )
 {
   glDrawPixels( width, height, format, type, pixels);
   return false;
@@ -60,7 +68,8 @@ bool vgui_accelerate::vgui_glDrawPixels( GLsizei width, GLsizei height, GLenum f
 
 // 32 bit RGBA seems to be acceptable/fast on most platforms.
 // -- u97mb RGBA is not acceptable on Mesa(too slow) so we use GL_RGBA instead
-bool vgui_accelerate::vgui_choose_cache_format( GLenum* format, GLenum* type)
+bool
+vgui_accelerate::vgui_choose_cache_format( GLenum* format, GLenum* type)
 {
 #ifdef VGUI_MESA 
   (*format) = GL_RGB;

@@ -38,6 +38,8 @@ public:
   static unsigned leave_pick_mode();
   static void process_hits(int num_hits, GLuint* ptr, vcl_vector<vcl_vector<unsigned> >& hits);
   
+  static int bits_per_pixel(GLenum format, GLenum type);
+  
 private:
   static void do_copy();
 };
