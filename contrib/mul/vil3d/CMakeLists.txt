@@ -3,7 +3,7 @@
 SET( vil3d_sources ${vil3d_sources}
 
   # basic things
-  vil3d_image_view_base.cxx vil3d_image_view_base.h
+  vil3d_image_view_base.h vil3d_image_view_base.cxx
   vil3d_image_view.h      vil3d_image_view.txx
   vil3d_print.h
   vil3d_plane.h
@@ -11,6 +11,7 @@ SET( vil3d_sources ${vil3d_sources}
   vil3d_crop.h
   vil3d_trilin_interp.h
   vil3d_sample_profile_trilin.h  vil3d_sample_profile_trilin.txx
+  vil3d_switch_axes.h
 )
 
 AUX_SOURCE_DIRECTORY(Templates vil3d_sources)
