@@ -249,3 +249,11 @@ scale_by( double /*scale*/ ) const
   assert ( ! "rgrl_transformation::scale_by() is not defined" );
   return 0;
 }
+
+vcl_ostream& 
+operator<< (vcl_ostream& os, rgrl_transformation const& xform )
+{
+  xform.write( os );
+  return os;
+}
+

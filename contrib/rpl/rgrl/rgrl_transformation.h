@@ -159,5 +159,7 @@ class rgrl_transformation
                 vnl_vector<double>      & to_dir    ) const = 0;
 };
 
+vcl_ostream& 
+operator<< (vcl_ostream& os, rgrl_transformation const& xform );
 
 #endif
