@@ -1,4 +1,4 @@
-// This is mul/vil2/algo/vil2_normalised_correlation_2d.h
+// This is core/vil2/algo/vil2_normalised_correlation_2d.h
 #ifndef vil2_normalised_correlation_2d_h_
 #define vil2_normalised_correlation_2d_h_
 //:
@@ -6,7 +6,6 @@
 // \brief 2D normalised correlation
 // \author Tim Cootes
 
-#include <vil2/algo/vil2_convolve_1d.h>
 #include <vcl_compiler.h>
 #include <vcl_cassert.h>
 #include <vcl_cmath.h>  // for vcl_sqrt()

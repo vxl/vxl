@@ -1,4 +1,4 @@
-// This is mul/vil2/vil2_image_view.h
+// This is core/vil2/vil2_image_view.h
 #ifndef vil2_image_view_h_
 #define vil2_image_view_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
@@ -14,7 +14,6 @@
 #include <vcl_cassert.h>
 #include <vcl_cstddef.h>
 #include <vil2/vil2_image_view_base.h>
-#include <vil2/vil2_smart_ptr.h>
 #include <vil2/vil2_memory_chunk.h>
 #include <vil2/vil2_pixel_format.h>
 

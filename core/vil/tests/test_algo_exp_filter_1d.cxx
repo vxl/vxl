@@ -1,10 +1,9 @@
-// This is mul/vil2/tests/test_algo_exp_filter_1d.cxx
+// This is core/vil2/tests/test_algo_exp_filter_1d.cxx
 #include <testlib/testlib_test.h>
 #include <vcl_vector.h>
 #include <vcl_iostream.h>
 #include <vxl_config.h> // for vxl_byte
 #include <vil2/algo/vil2_exp_filter_1d.h>
-#include <vil2/vil2_print.h>
 
 void test_algo_exp_filter_1d_byte_float()
 {

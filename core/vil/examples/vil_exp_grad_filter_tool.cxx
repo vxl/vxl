@@ -10,7 +10,6 @@
 #include <vil2/vil2_image_view.h>
 #include <vil2/algo/vil2_exp_grad_filter_1d.h>
 #include <vil2/vil2_convert.h>
-#include <vil2/vil2_print.h>
 
 int main(int argc, char** argv)
 {

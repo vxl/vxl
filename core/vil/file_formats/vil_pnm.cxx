@@ -1,4 +1,4 @@
-// This is mul/vil2/file_formats/vil2_pnm.cxx
+// This is core/vil2/file_formats/vil2_pnm.cxx
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
@@ -17,7 +17,6 @@
 #include <vxl_config.h> // for VXL_BIG_ENDIAN and vxl_byte
 
 #include <vil2/vil2_stream.h>
-#include <vil2/vil2_property.h>
 #include <vil2/vil2_image_resource.h>
 #include <vil2/vil2_image_view.h>
 #include <vil2/vil2_memory_chunk.h>

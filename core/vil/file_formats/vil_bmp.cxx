@@ -1,4 +1,4 @@
-// This is mul/vil2/file_formats/vil2_bmp.cxx
+// This is core/vil2/file_formats/vil2_bmp.cxx
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
@@ -9,7 +9,6 @@
 #include <vcl_iostream.h>
 #include <vcl_vector.h>
 #include <vil2/vil2_stream.h>
-#include <vil2/vil2_property.h>
 #include <vil2/vil2_memory_chunk.h>
 #include <vil2/vil2_image_view.h>
 

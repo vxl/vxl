@@ -1,4 +1,4 @@
-// This is mul/vil2/file_formats/vil2_jpeg.cxx
+// This is core/vil2/file_formats/vil2_jpeg.cxx
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
@@ -23,7 +23,6 @@
 #include <vxl_config.h> // vxl_byte
 
 #include <vil2/vil2_stream.h>
-#include <vil2/vil2_property.h>
 #include <vil2/vil2_image_view.h>
 #include <vil2/vil2_new.h>
 
@@ -66,8 +65,8 @@ vil2_image_resource_sptr
 {
   if (format != VIL2_PIXEL_FORMAT_BYTE)
   {
-    vcl_cout<<"ERROR! vil2_jpeg_file_format::make_output_image()"<<vcl_endl;
-    vcl_cout<<"Pixel format should be byte, but is "<<format<<" instead."<<vcl_endl;
+    vcl_cout<<"ERROR! vil2_jpeg_file_format::make_output_image()\n";
+    vcl_cout<<"Pixel format should be byte, but is "<<format<<" instead.\n";
     return 0;
   }
   return new vil2_jpeg_image(vs, nx, ny, nplanes, format);

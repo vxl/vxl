@@ -1,4 +1,4 @@
-// This is mul/vil2/io/vil2_io_image_view.h
+// This is core/vil2/io/vil2_io_image_view.h
 #ifndef vil2_io_image_view_h_
 #define vil2_io_image_view_h_
 //:
@@ -8,7 +8,6 @@
 #include <vcl_cstddef.h>
 #include <vil2/vil2_image_view.h>
 #include <vil2/io/vil2_io_memory_chunk.h>
-#include <vil2/io/vil2_io_smart_ptr.h>
 
 //: Binary save vil2_image_view<T> to stream.
 template<class T>

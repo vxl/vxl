@@ -1,4 +1,4 @@
-// This is mul/vil2/vil2_decimate.cxx
+// This is core/vil2/vil2_decimate.cxx
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
@@ -10,7 +10,6 @@
 
 #include "vil2_decimate.h"
 #include <vcl_cassert.h>
-#include <vil2/vil2_property.h>
 #include <vil2/vil2_copy.h>
 #include <vil2/vil2_crop.h>
 

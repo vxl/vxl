@@ -5,20 +5,18 @@
 
 #include <vcl_iostream.h>
 #include <vil2/vil2_load.h>
-#include <vil2/vil2_crop.h>
 #include <vil2/vil2_image_view.h>
 #include <vil2/vil2_print.h>
-
 
 int main(int argc, char** argv)
 {
   if (argc < 2)
   {
-    vcl_cerr << "Specify an image filename" <<vcl_endl;
+    vcl_cerr << "Specify an image filename\n";
     return 3;
   }
-  
-  vcl_cout<<"Load " << argv[1] << " into an image data object" << vcl_endl;
+
+  vcl_cout<<"Load " << argv[1] << " into an image data object\n";
 
 
   // This is how we initialise an image data object.

@@ -1,9 +1,8 @@
-// This is mul/vil2/tests/test_vil1.cxx
+// This is core/vil2/tests/test_vil1.cxx
 #include <vil2/vil2_vil1.h>
 #include <vxl_config.h> // for vxl_byte
 #include <vcl_iostream.h>
 #include <testlib/testlib_test.h>
-#include <vil2/vil2_print.h>
 #include <vil/vil_memory_image_of.h>
 #include <vil/vil_load.h>
 #include <vil2/vil2_load.h>
@@ -64,9 +63,6 @@ vcl_string image_base;
     image1 = resource1->get_view(0, resource1->ni(), 0, resource1->nj());
     TEST("Loaded images correctly via vil1", vil2_image_view_deep_equality(image1, ppm_image),true);
   }
-//  vil2_print_all(vcl_cout, image1);
-//  vil2_print_all(vcl_cout, ppm_image);
-
 
   // Check if we can create a image_view and put it into a vil1_image
   vil_memory_image_of<double> vil2_mem(10,8);

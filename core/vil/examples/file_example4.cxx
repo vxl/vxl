@@ -6,7 +6,6 @@
 #include <vcl_iostream.h>
 #include <vxl_config.h> // for vxl_byte
 #include <vil2/vil2_load.h>
-#include <vil2/vil2_save.h>
 #include <vil2/vil2_image_view.h>
 #include <vil2/vil2_print.h>
 
@@ -14,11 +13,11 @@ int main(int argc, char** argv)
 {
   if (argc < 3)
   {
-    vcl_cerr << "Usage: vil2_file_example4 rgb_file grey_file" <<vcl_endl;
+    vcl_cerr << "Usage: vil2_file_example4 rgb_file grey_file\n";
     return 3;
   }
-  
-  vcl_cout<<"Load " << argv[1] << " into an image data object" << vcl_endl;
+
+  vcl_cout<<"Load " << argv[1] << " into an image data object\n";
 
 
   // This is how we quickly load an rgb image view.
@@ -31,7 +30,6 @@ int main(int argc, char** argv)
     return 3;
   }
 
-  
   vil2_print_all(vcl_cout, b_im);
 
   // Note that if we try assign an image to a non compatible view type,

@@ -1,4 +1,4 @@
-// This is mul/vil2/vil2_load.cxx
+// This is core/vil2/vil2_load.cxx
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
@@ -10,9 +10,7 @@
 #include <vil2/vil2_open.h>
 #include <vil2/vil2_file_format.h>
 #include <vil2/vil2_stream.h>
-#include <vil2/vil2_property.h>
 #include <vil2/vil2_image_resource.h>
-
 
 vil2_image_resource_sptr vil2_load_image_resource_raw(vil2_stream *is)
 {

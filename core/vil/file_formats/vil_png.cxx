@@ -1,4 +1,4 @@
-// This is mul/vil2/file_formats/vil2_png.cxx
+// This is core/vil2/file_formats/vil2_png.cxx
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
@@ -14,7 +14,6 @@
 
 #include <vil2/vil2_stream.h>
 #include <vil2/vil2_image_view.h>
-#include <vil2/vil2_property.h>
 
 #include <png.h>
 #if (PNG_LIBPNG_VER_MAJOR == 0)
@@ -60,10 +59,10 @@ vil2_image_resource_sptr vil2_png_file_format::make_output_image(vil2_stream* vs
   if (format != VIL2_PIXEL_FORMAT_BYTE &&
       format != VIL2_PIXEL_FORMAT_UINT_16)
   // FIXME || format != VIL2_PIXEL_FORMAT_BOOL
-   
+
   {
-    vcl_cout<<"ERROR! vil2_png_file_format::make_output_image()"<<vcl_endl;
-    vcl_cout<<"Pixel format should be byte, but is "<<format<<" instead."<<vcl_endl;
+    vcl_cout<<"ERROR! vil2_png_file_format::make_output_image()\n";
+    vcl_cout<<"Pixel format should be byte, but is "<<format<<" instead.\n";
     return 0;
   }
 

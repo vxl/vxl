@@ -1,4 +1,4 @@
-// This is mul/vil2/vil2_flip.cxx
+// This is core/vil2/vil2_flip.cxx
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
@@ -9,7 +9,6 @@
 //-----------------------------------------------------------------------------
 
 #include "vil2_flip.h"
-#include <vil2/vil2_property.h>
 
 vil2_image_resource_sptr vil2_flip_lr(const vil2_image_resource_sptr &src)
 {
@@ -21,7 +20,7 @@ vil2_flip_lr_image_resource::vil2_flip_lr_image_resource(vil2_image_resource_spt
 {
 }
 
-vil2_image_view_base_sptr vil2_flip_lr_image_resource::get_copy_view(unsigned i0, unsigned ni, 
+vil2_image_view_base_sptr vil2_flip_lr_image_resource::get_copy_view(unsigned i0, unsigned ni,
                                                                      unsigned j0, unsigned nj) const
 {
   if (i0 + ni > src_->ni()) return 0;
@@ -84,7 +83,7 @@ bool vil2_flip_lr_image_resource::put_view(const vil2_image_view_base& im, unsig
   {
 #define macro( F, T ) \
   case F : \
-    return src_->put_view(vil2_flip_lr(static_cast<const vil2_image_view<T >&>(im)), src_->ni()-i0-im.ni(), j0); 
+    return src_->put_view(vil2_flip_lr(static_cast<const vil2_image_view<T >&>(im)), src_->ni()-i0-im.ni(), j0);
 
   macro(VIL2_PIXEL_FORMAT_BYTE, vxl_byte)
   macro(VIL2_PIXEL_FORMAT_SBYTE, vxl_sbyte)
@@ -111,7 +110,7 @@ vil2_flip_ud_image_resource::vil2_flip_ud_image_resource(vil2_image_resource_spt
 }
 
 
-vil2_image_view_base_sptr vil2_flip_ud_image_resource::get_copy_view(unsigned i0, unsigned ni, 
+vil2_image_view_base_sptr vil2_flip_ud_image_resource::get_copy_view(unsigned i0, unsigned ni,
                                                                      unsigned j0, unsigned nj) const
 {
   if (j0 + nj > src_->nj()) return 0;
