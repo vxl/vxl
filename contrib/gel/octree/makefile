@@ -11,8 +11,6 @@ SOURCES += Voxel.cxx
 SOURCES += OctreeLevel.cxx
 SOURCES += Cube.cxx
 SOURCES += ConvexHull.cxx
-SOURCES += BitArray3D.cxx
-SOURCES += BigSparseArray3D.cxx
 SOURCES += BaseCube.cxx
 
 IULIBS += -lmvl -lvgl -lvbl -lvul -lvnl-algo -lvnl -lvil
