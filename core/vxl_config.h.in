@@ -62,7 +62,7 @@
 #endif
 
 #if defined(_MSC_VER) && (_MSC_VER == 1200)
-// The __int64 bit tye exists on MSVC6.0, but using it causes many problems.
+// The __int64 bit type exists on MSVC6.0, but using it causes many problems.
 # define VXL_HAS_INT_64 0
 # define VXL_INT_64_STRING "void"
 # define vxl_int_64  void
@@ -71,7 +71,7 @@
 #else
 # define VXL_HAS_INT_64 @VXL_HAS_INT_64@
 # define VXL_INT_64_STRING "@VXL_INT_64@"
-# if @VXL_HAS_INT_64@ && MSC_VER
+# if @VXL_HAS_INT_64@
   typedef          @VXL_INT_64@ vxl_int_64;
   typedef   signed @VXL_INT_64@ vxl_sint_64;
   typedef unsigned @VXL_INT_64@ vxl_uint_64;
