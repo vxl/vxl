@@ -27,6 +27,7 @@ TESTS += test_file_format_read.cxx
 PARAMS_test_file_format_read := file_read_data
 TESTS += test_include.cxx
 TESTS += test_assign.cxx
+TESTS += test_load_gen.cxx
 
 #########################################
 include ${IUEROOT}/config/static-tests.mk
