@@ -12,7 +12,7 @@
 
 class gtrl_vertex : public vbl_ref_count
 {
-protected:
+public:
   gtrl_vertex( const double x, const double y);
 
   double x() const { return x_;}
@@ -21,7 +21,7 @@ protected:
   void set_x( const double x) { x_= x; }
   void set_y( const double y) { y_= y; }
 
-public:
+protected:
   double x_;
   double y_;
 };

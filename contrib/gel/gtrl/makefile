@@ -7,10 +7,21 @@ include $(IUEROOT)/vxl/vgui/easy-client.mk
 
 USES += v3p vxl gel
 
-LIBRARY = makefile
+LIBRARY = gtrl
 
+# main class
+SOURCES += gtrl_triangulation.cxx
+
+# helpers
 SOURCES += gtrl_triangle.cxx
 SOURCES += gtrl_vertex.cxx
+SOURCES += gtrl_polygon.cxx
+
+# from netlib
+DEFINES += -DANSI_DECLARATORS
+DEFINES += -DTRILIBRARY
+SOURCES += gtrl_netlib_triangle.c
+
 
 ######################################
 include ${IUEROOT}/config/top-rules.mk
