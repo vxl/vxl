@@ -33,7 +33,7 @@ rgrl_scale_est_closest::
 rgrl_scale_sptr
 rgrl_scale_est_closest::
 estimate_unweighted( rgrl_match_set const& match_set,
-                     rgrl_scale_sptr const& current_scales /*unused*/,
+                     rgrl_scale_sptr const& /*current_scales*/,
                      bool penalize_scaling ) const
 {
   rgrl_scale_sptr scales = new rgrl_scale;
@@ -165,7 +165,7 @@ rgrl_scale_sptr
 rgrl_scale_est_closest::
 estimate_weighted( rgrl_match_set const& match_set,
                    rgrl_scale_sptr const& scales,
-                   bool use_signature_only,
+                   bool /*use_signature_only*/,
                    bool penalize_scaling ) const
 {
   return estimate_unweighted( match_set, scales, penalize_scaling );
