@@ -64,7 +64,7 @@ public:
   virtual vpdfl_pdf_builder_base* clone() const;
 
     //: Print class to os
-  virtual void print_summary(ostream& os) const;
+  virtual void print_summary(vcl_ostream& os) const;
 
     //: Save class to binary file stream
     //!in: bfs: Target binary file stream

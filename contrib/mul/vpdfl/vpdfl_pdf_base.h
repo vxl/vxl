@@ -95,7 +95,7 @@ public:
   virtual vpdfl_pdf_base* clone() const = 0;
 
     //: Print class to os
-  virtual void print_summary(ostream& os) const = 0;
+  virtual void print_summary(vcl_ostream& os) const = 0;
 
     //: Save class to binary file stream
     //!in: bfs: Target binary file stream
@@ -137,9 +137,9 @@ void vsl_b_write(vsl_b_ostream& bfs, const vpdfl_pdf_base* b);
 void vsl_b_read(vsl_b_istream& bfs, vpdfl_pdf_base& b);
 
   //: Stream output operator for class reference
-ostream& operator<<(ostream& os,const vpdfl_pdf_base& b);
+vcl_ostream& operator<<(vcl_ostream& os,const vpdfl_pdf_base& b);
 
   //: Stream output operator for class pointer
-ostream& operator<<(ostream& os,const vpdfl_pdf_base* b);
+vcl_ostream& operator<<(vcl_ostream& os,const vpdfl_pdf_base* b);
 
 #endif // vpdfl_pdf_base_h

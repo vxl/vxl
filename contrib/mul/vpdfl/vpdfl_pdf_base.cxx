@@ -9,7 +9,7 @@
 // \brief Base class for Multi-Variate Probability Density Function classes.
 
 #include <vcl_cassert.h>
-#include <math.h>
+#include <vcl_cmath.h>
 #include <vpdfl/vpdfl_pdf_base.h>
 #include <vsl/vsl_indent.h>
 #include <vsl/vsl_binary_loader.h>
@@ -71,7 +71,7 @@ vcl_string vpdfl_pdf_base::is_a() const
 //=======================================================================
 
   // required if data is present in this base class
-void vpdfl_pdf_base::print_summary(ostream& os) const
+void vpdfl_pdf_base::print_summary(vcl_ostream& os) const
 {
   os << vsl_indent() << "N. Dims : "<< mean_.size();
 }
@@ -147,7 +147,7 @@ void vsl_b_read(vsl_b_istream& bfs, vpdfl_pdf_base& b)
 // Associated function: operator<<
 //=======================================================================
 
-ostream& operator<<(ostream& os,const vpdfl_pdf_base& b)
+vcl_ostream& operator<<(vcl_ostream& os,const vpdfl_pdf_base& b)
 {
   os << b.is_a() << ": ";
   vsl_inc_indent(os);
@@ -160,7 +160,7 @@ ostream& operator<<(ostream& os,const vpdfl_pdf_base& b)
 // Associated function: operator<<
 //=======================================================================
 
-ostream& operator<<(ostream& os,const vpdfl_pdf_base* b)
+vcl_ostream& operator<<(vcl_ostream& os,const vpdfl_pdf_base* b)
 {
   if (b)
   return os << *b;

@@ -211,7 +211,7 @@ vpdfl_pdf_base* vpdfl_axis_gaussian::clone() const
 // Method: print
 //=======================================================================
 
-void vpdfl_axis_gaussian::print_summary(ostream& os) const
+void vpdfl_axis_gaussian::print_summary(vcl_ostream& os) const
 {
   os<<vcl_endl;
   vpdfl_pdf_base::print_summary(os);

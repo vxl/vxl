@@ -96,7 +96,7 @@ void vsl_b_read(vsl_b_istream& bfs, vpdfl_pdf_builder_base& b)
 // Associated function: operator<<
 //=======================================================================
 
-ostream& operator<<(ostream& os,const vpdfl_pdf_builder_base& b)
+vcl_ostream& operator<<(vcl_ostream& os,const vpdfl_pdf_builder_base& b)
 {
   os << b.is_a() << ": ";
   vsl_inc_indent(os);
@@ -109,7 +109,7 @@ ostream& operator<<(ostream& os,const vpdfl_pdf_builder_base& b)
 // Associated function: operator<<
 //=======================================================================
 
-ostream& operator<<(ostream& os,const vpdfl_pdf_builder_base* b)
+vcl_ostream& operator<<(vcl_ostream& os,const vpdfl_pdf_builder_base* b)
 {
   if (b)
     return os << *b;
