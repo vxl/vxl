@@ -261,6 +261,8 @@ bool vtol_face::shares_edge_with(vtol_face &f)
       for(ei1=thisedges->begin();!result&&ei1!=thisedges->end();++ei1)
         for(ei2= fedges->begin();!result&&ei2!=fedges->end();++ei2)
           result=(*ei1)==(*ei2);
+      delete thisedges;
+      delete fedges;
     }
   return result;
 }
