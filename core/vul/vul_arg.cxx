@@ -366,6 +366,10 @@ void vul_arg_info_list::parse(int& argc, char **& argv, bool warn_about_unrecogn
 static int list_parse(vcl_list<int> &out, char ** argv)
 {
   out.clear();
+
+  // Empty list specified as the last argument.
+  if( !argv[0] ) return 0;
+
   vcl_string str(argv[0]);
 
 #define REGEXP_INTEGER "\\-?[0123456789]+"
@@ -594,6 +598,8 @@ VDS void print_value(vcl_ostream &s, vul_arg<vcl_vector<int> > const &argmt) {
 VDS int parse(vul_arg<vcl_vector<int> >* argmt, char ** argv) {
   vcl_list<int> tmp;
   int retval = list_parse(tmp,argv);
+  // Defaults should be cleared when the user supplies a value
+  argmt->value_.clear();
   for (vcl_list<int>::iterator i=tmp.begin() ; i!=tmp.end() ; ++i)
     argmt->value_.push_back( *i );
   return retval;
@@ -609,6 +615,8 @@ VDS void print_value(vcl_ostream &s, vul_arg<vcl_vector<unsigned> > const &argmt
 VDS int parse(vul_arg<vcl_vector<unsigned> >* argmt, char ** argv) {
   vcl_list<int> tmp;
   int retval = list_parse(tmp,argv);
+  // Defaults should be cleared when the user supplies a value
+  argmt->value_.clear();
   for (vcl_list<int>::iterator i=tmp.begin() ; i!=tmp.end() ; ++i)
     argmt->value_.push_back( unsigned(*i) );
   return retval;
@@ -623,6 +631,8 @@ VDS void print_value(vcl_ostream &s, vul_arg<vcl_vector<double> > const &argmt) 
 }
 VDS int parse(vul_arg<vcl_vector<double> >* argmt, char ** argv) {
   int sucked = 0;
+  // Defaults should be cleared when the user supplies a value
+  argmt->value_.clear();
   while (argv[0]) {
     char* endptr = 0;
     double tmp = strtod(argv[0], &endptr);
