@@ -150,38 +150,3 @@ void vsl_add_to_binary_loader(const vsol_spatial_object_2d& b)
   vsl_binary_loader<vsol_spatial_object_2d>::instance().add(b);
 }
 
-/*
-// Save with base class pointers
-void vsl_b_read(vsl_b_istream& is, vsol_spatial_object_2d * &p)
-{
-  vsol_spatial_object_2d * n = p->clone();
-  delete p;
-  bool not_null_ptr;
-  vsl_b_read(is, not_null_ptr);
-  if (not_null_ptr)
-  {
-    p = n;
-    vsl_b_read(is, *p);
-  }
-  else
-  {
-    p = 0;
-    delete n;
-  }
-}
-
-template<class T>
-void vsl_b_write(vsl_b_ostream& os, const vsol_spatial_object_2d *p)
-{
-  if (p==0)
-  {
-    vsl_b_write(os, false); // Indicate null pointer stored 
-  }
-  else
-  {
-    vsl_b_write(os,true); // Indicate non-null pointer stored 
-    p->b_write(os);
-  }
-}
-*/
- 
