@@ -68,11 +68,19 @@ int test_vcl_cstdio_main( const char* filename )
 // platforms. If someone has a conflicting platform, perhaps they
 // could conditionally define the appropriate code for their platform.
 
-
-#include <unistd.h>
-
 // Return 0 on success, non-zero on error.
+
+#ifdef VCL_VC
+# include <io.h>
+int close_stdin()
+{
+  return _close( 0 );
+}
+#else
+# include <unistd.h>
 int close_stdin()
 {
   return close( 0 );
 }
+#endif
+
