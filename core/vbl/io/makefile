@@ -13,7 +13,6 @@ MANPAGE_SOURCES += vbl_io_array_2d.txx
 MANPAGE_SOURCES += vbl_io_array_3d.txx
 MANPAGE_SOURCES += vbl_io_bounding_box.txx
 MANPAGE_SOURCES += vbl_io_smart_ptr.txx
-MANPAGE_SOURCES += vbl_io_sparse_array.txx
 MANPAGE_SOURCES += vbl_io_sparse_array_base.txx
 MANPAGE_SOURCES += vbl_io_quadruple.txx
 MANPAGE_SOURCES += vbl_io_sparse_array_1d.h
