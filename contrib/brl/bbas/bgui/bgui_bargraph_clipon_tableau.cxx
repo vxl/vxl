@@ -61,7 +61,7 @@ void bgui_bargraph_clipon_tableau::update(vcl_vector<float> const& bars,
                                           const float scale)
 {
   //if not fixed then scale max to graph_height_
-  int nbars = bars.size();
+  unsigned int nbars = bars.size();
   bars_.resize(nbars);
   if(!nbars)
     {
