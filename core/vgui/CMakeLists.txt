@@ -1,8 +1,12 @@
 # oxl/vgui/CMakeLists.txt
 
-# Please default this to "yes" in the repository so that
-# dashboards will try to compile vgui.
-OPTION( BUILD_VGUI "Build VGUI" "YES" )
+# Default the dashboard builds to "YES" so that
+# we have some clients that try to compile vgui
+IF( DART_ROOT )
+  OPTION( BUILD_VGUI "Build VGUI" "YES" )
+ELSE( DART_ROOT )
+  OPTION( BUILD_VGUI "Build VGUI" "NO" )
+ENDIF( DART_ROOT )
 
 IF( BUILD_VGUI )
 
@@ -423,18 +427,14 @@ ENDIF (OPENGL_GLU_FOUND)
 ENDIF (OPENGL_FOUND)
 
 IF( NOT CAN_BUILD_VGUI )
-  # For the dashboard and other repository builds,
-  # this should be a warning, not an error. This way, machines
-  # with incomplete OpenGL can still continue to build everything
-  # else.
-  MESSAGE(           "vgui could not be built.\n"
-                     "Make sure the OpenGL libraries "
-                     "(GL and GLU) are specified correctly,\n"
-                     "or set BUILD_VGUI to OFF." )
-  #  MESSAGE(SEND_ERROR "vgui could not be built.\n"
-  #                     "Make sure the OpenGL libraries "
-  #                     "(GL and GLU) are specified correctly,\n"
-  #                     "or set BUILD_VGUI to OFF." )
+  # Dashboard builds will try to build vgui if possible,
+  # so don't warn if we can't.
+  IF( NOT DART_ROOT )
+    MESSAGE(SEND_ERROR "vgui could not be built.\n"
+                       "Make sure the OpenGL libraries "
+                       "(GL and GLU) are specified correctly,\n"
+                       "or set BUILD_VGUI to OFF." )
+  ENDIF( NOT DART_ROOT )
 ENDIF( NOT CAN_BUILD_VGUI )
 
 ENDIF( BUILD_VGUI )
