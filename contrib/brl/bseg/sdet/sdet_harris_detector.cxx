@@ -1,13 +1,11 @@
-//----*-c++-*----tells emacs to use C++ mode----------
 // This is brl/bseg/sdet/sdet_harris_detector.cxx
-
+#include "sdet_harris_detector.h"
 //:
 // \file
 #include <vcl_cstdlib.h>   // for vcl_abs(int) and vcl_qsort()
 #include <vil/vil_memory_image_of.h>
 #include <brip/brip_float_ops.h>
 #include <vsol/vsol_point_2d.h>
-#include <sdet/sdet_harris_detector.h>
 
 //A container to support sorting of corners
 //Will result in decending order according to strength
@@ -64,7 +62,7 @@ void sdet_harris_detector::set_image(vil_image& image)
   points_valid_ = false;
   image_ = image;
 }
-  
+
 //--------------------------------------------------------------------------
 //: extract a set of vsol_point_2d(s)
 void sdet_harris_detector::extract_corners()
@@ -96,7 +94,7 @@ void sdet_harris_detector::extract_corners()
   brip_float_ops::non_maximum_supression(c, n_, thresh_, x_pos, y_pos, val);
   int n_corners = x_pos.size();
   vcl_cout << "Found " << n_corners << " above the threshold\n";
-  if(!n_corners)
+  if (!n_corners)
     {
       vcl_cout << "sdet_harris_detector::extract_corners()- "
                << "No Corners Found \n";
@@ -104,7 +102,7 @@ void sdet_harris_detector::extract_corners()
     }
   //Sort the corners according to strength
   sdet_harris_point* point_array = new sdet_harris_point[n_corners];
-  for(int i = 0; i<n_corners; i++)
+  for (int i = 0; i<n_corners; i++)
     {
       vsol_point_2d_sptr p = new vsol_point_2d(x_pos[i], y_pos[i]);
       point_array[i].set_point(p);
@@ -113,9 +111,9 @@ void sdet_harris_detector::extract_corners()
   vcl_qsort(point_array, n_corners, sizeof(sdet_harris_point),
             (int (*)(const void *, const void *))&compare);
   //ouput the corners (limit by maximum number of corners)
-  if(n_corners>n_corners_)
-	  n_corners = n_corners_;
-  for(int i=0; i<n_corners; i++)
+  if (n_corners>n_corners_)
+    n_corners = n_corners_;
+  for (int i=0; i<n_corners; i++)
     {
       points_.push_back(point_array[i].point());
       // vcl_cout <<"s[" << i << "]=" << point_array[i].strength() << "\n";
