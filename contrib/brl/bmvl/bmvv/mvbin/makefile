@@ -2,7 +2,6 @@ USES := contrib/brl contrib/brl/bbas contrib/brl/bmvl contrib/gel contrib/oxl co
 include ../config.mk
 
 PROGRAM := mviewer
-SOURCES += bmvv_menus.cxx
 SOURCES += mviewer.cxx
 
 ################################

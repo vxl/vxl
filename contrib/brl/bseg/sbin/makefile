@@ -5,7 +5,6 @@ include ${IUEROOT}/core/vgui/config.mk
 
 PROGRAM := seg
 SOURCES += seg.cxx
-SOURCES += segv_menus.cxx
 
 ################################
 include ${IUEROOT}/config/top.mk
