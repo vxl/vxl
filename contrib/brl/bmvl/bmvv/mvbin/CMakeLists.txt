@@ -12,3 +12,6 @@ INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bmvl )
 ADD_EXECUTABLE (recon recon.cxx)
 TARGET_LINK_LIBRARIES(recon bmvv brct)
 
+ADD_EXECUTABLE (cal cal.cxx)
+TARGET_LINK_LIBRARIES(cal bmvv brct)
+

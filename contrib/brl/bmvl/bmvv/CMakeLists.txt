@@ -15,9 +15,11 @@ IF(HAS_VGUI)
     #bmvv_multiview_manager.cxx     bmvv_multiview_manager.h
     #bmvv_tomography_manager.cxx    bmvv_tomography_manager.h
      bmvv_recon_manager.cxx         bmvv_recon_manager.h
+     bmvv_cal_manager.cxx           bmvv_cal_manager.h
     #bmvv_menus.cxx                 bmvv_menus.h
     #bmvv_tomg_menus.cxx            bmvv_tomg_menus.h
      bmvv_recon_menus.cxx           bmvv_recon_menus.h
+     bmvv_cal_menus.cxx             bmvv_cal_menus.h
  )
 
  ADD_LIBRARY(bmvv ${bmvv_sources})
@@ -30,7 +32,7 @@ IF(HAS_VGUI)
   TARGET_LINK_LIBRARIES(bmvv bxml)
  ENDIF(HAS_XERCES)
 
- TARGET_LINK_LIBRARIES(bmvv brct sdet brip bdgl mvl vtol vdgl bgui vgui vsol vgl vnl vil1)
+ TARGET_LINK_LIBRARIES(bmvv brct sdet brip bdgl mvl vtol vdgl bgui vgui vsol vgl vnl vil vil1)
 
  # the main executable
  SUBDIRS(mvbin)
