@@ -30,24 +30,34 @@
 
 // this is an empty class template.
 // only the specializations make sense.
+#if !defined(VCL_VC70)
 template <class T>
 class vnl_numeric_traits;
-#if 0
+#else 
+// However, *some* compilers require the template to be defined
+// under some circumstances...
+// Since the non-specialized template doesn't make any sense, make
+// sure that any types "accidently" derived from it will cause
+// compiler errors.
+class vnl_numeric_traits_not_a_valid_type { };
+template <class T>
+class vnl_numeric_traits
 {
+	public:
   //: Additive identity
-  static const T zero;
+  static const vnl_numeric_traits_not_a_valid_type zero;
 
   //: Multiplicative identity
-  static const T one;
+  static const vnl_numeric_traits_not_a_valid_type one;
 
   //: Return value of abs()
-  typedef T abs_t;
+  typedef vnl_numeric_traits_not_a_valid_type abs_t;
 
   //: Name of a type twice as long as this one for accumulators and products.
-  typedef /* long */ double double_t;
+  typedef vnl_numeric_traits_not_a_valid_type double_t;
 
   //: Name of type which results from multiplying this type with a double
-  typedef double real_t;
+  typedef vnl_numeric_traits_not_a_valid_type real_t;
 };
 #endif
 
