@@ -117,6 +117,9 @@ bool vgui_tableau::handle(vgui_event const &event) {
     else
       return key_press(event.wx, event.wy, event.key, event.modifier);
 
+  case vgui_IDLE:
+    return idle();
+
   default:
     return false;
   }
@@ -177,6 +180,14 @@ bool vgui_tableau::draw() {
 }
 
 
+bool vgui_tableau::idle() {
+#ifdef DEBUG
+  vcl_cerr << "vgui_tableau::idle\n";
+#endif
+  return false; // no idle processing
+}
+
+
 //-----------------------------------------------------------------------------
 //: Return the bounding box of this tableau.
 //  If infinite in extent, or nothing is drawn, or you can't be bothered to
@@ -211,6 +222,16 @@ void vgui_tableau::post_overlay_redraw() {
   for (unsigned i=0; i<ps.size(); ++i)
     ps[i]->post_overlay_redraw();
 }
+
+
+//-----------------------------------------------------------------------------
+void vgui_tableau::post_idle_request() {
+  vcl_vector<vgui_tableau_sptr> ps;
+  get_parents(&ps);
+  for (unsigned i=0; i<ps.size(); ++i)
+    ps[i]->post_idle_request();
+}
+
 
 //-----------------------------------------------------------------------------
 //: Return the name of the tableau.

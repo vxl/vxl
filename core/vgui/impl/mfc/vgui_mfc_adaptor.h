@@ -86,6 +86,10 @@ class vgui_mfc_adaptor : public CView, public vgui_adaptor, public vgui_adaptor_
   //: MFC implementation from vgui_adaptor  - redraw everything now.
   void draw();
 
+  // Do any idle processing that needs to be done.
+  // Return true if idle processing is not complete
+  bool do_idle();
+
   // 0.5 fsm stuff
   //--------------
   //: Redraws the OpenGL area.
@@ -96,6 +100,9 @@ class vgui_mfc_adaptor : public CView, public vgui_adaptor, public vgui_adaptor_
 
   //: Sets timer to dispatch WM_TIME event to a mainframe every time milliseconds
   void post_timer(float,int);
+
+  //: Flags than a child requests idle processing
+  void post_idle_request();
 
   //: Return the default popup menu (not yet implemented).
   vgui_menu get_popup();
@@ -143,6 +150,9 @@ class vgui_mfc_adaptor : public CView, public vgui_adaptor, public vgui_adaptor_
 
   //: True while a overlay redraw event has been requested but not implemented.
   bool overlay_redraw_posted_;
+
+  //: True while an idle time has been requested but not implemented.
+  bool idle_request_posted_;
 
  protected:
   //: The window associated with this adaptor if it is not the main window.

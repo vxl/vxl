@@ -116,6 +116,7 @@ class vgui_adaptor
   //: Redraw the rendering area.
   virtual void post_redraw() =0;
   virtual void post_overlay_redraw() =0;
+  virtual void post_idle_request();
   virtual void post_message(char const *, void const *);
   virtual void post_destroy();
 

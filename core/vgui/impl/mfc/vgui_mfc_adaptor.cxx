@@ -37,7 +37,8 @@ IMPLEMENT_DYNCREATE(vgui_mfc_adaptor, CView)
 vgui_mfc_adaptor::vgui_mfc_adaptor( )
   : win_(0),
     redraw_posted_(true),
-    overlay_redraw_posted_(true)
+    overlay_redraw_posted_(true),
+    idle_request_posted_(false)
 {
   if (vgui_mfc_use_bitmap)
     // kym - double buffering is not available with
@@ -130,6 +131,12 @@ void vgui_mfc_adaptor::post_redraw()
   }
   redraw_posted_ = true;
 }
+
+void vgui_mfc_adaptor::post_idle_request()
+{
+  idle_request_posted_ = true;
+}
+
 
 //: MFC implementation of vgui_adaptor function - make this the current GL rendering context.
 void vgui_mfc_adaptor::make_current()
@@ -409,6 +416,7 @@ void vgui_mfc_adaptor::post_timer(float tm,int id)
   wnd->SetTimer(id,tm,NULL);
 }
 
+
 //: Called by MFC when a draw event is required - overridden to draw this view.
 void vgui_mfc_adaptor::OnDraw(CDC* pDC)
 {
@@ -426,6 +434,15 @@ void vgui_mfc_adaptor::draw()
   post_redraw();
   service_redraws();
 }
+
+bool vgui_mfc_adaptor::do_idle()
+{
+  if( idle_request_posted_ ) {
+    idle_request_posted_ =  dispatch_to_tableau( vgui_event( vgui_IDLE ) );
+  }
+  return idle_request_posted_;
+}
+
 
 //: Called by MFC when the application requests part of the window is redrawn.
 void vgui_mfc_adaptor::OnPaint()

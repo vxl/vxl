@@ -188,3 +188,31 @@ BOOL vgui_mfc_app::Run()
 /////////////////////////////////////////////////////////////////////////////
 //: vgui_mfc_app message handlers
 void f() {}
+
+BOOL vgui_mfc_app::OnIdle( LONG lCount )
+{
+  // counts 0 and 1 are used by the MFC framework to update menus and
+  // such. Process those first.
+  //
+  if (CWinApp::OnIdle(lCount))
+    return TRUE;   
+
+  // Send an idle event to each adaptor.
+  POSITION tmpl_pos = this->GetFirstDocTemplatePosition();
+  while( tmpl_pos ) {
+    CDocTemplate *tmpl = this->GetNextDocTemplate(tmpl_pos);
+    POSITION doc_pos = tmpl->GetFirstDocPosition();
+    while( doc_pos ) {
+      CDocument *pdoc = tmpl->GetNextDoc(doc_pos);
+      POSITION view_pos = pdoc->GetFirstViewPosition();
+      while( view_pos ) {
+        vgui_mfc_adaptor *adaptor = (vgui_mfc_adaptor *)pdoc->GetNextView(view_pos);
+        if( adaptor->do_idle() ) {
+          return TRUE;
+        }
+      }
+    }
+  }
+
+  return FALSE;
+}

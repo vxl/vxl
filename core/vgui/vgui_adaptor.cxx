@@ -263,3 +263,8 @@ void vgui_adaptor::post_destroy()
 {
   vgui_macro_warning << "post_destroy() not implemented\n";
 }
+
+void vgui_adaptor::post_idle_request()
+{
+  // ignore idle processing by default.
+}

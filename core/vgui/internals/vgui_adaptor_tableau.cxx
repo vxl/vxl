@@ -47,3 +47,9 @@ void vgui_adaptor_tableau::post_overlay_redraw()
   if (adaptor)
     adaptor->post_overlay_redraw();
 }
+
+void vgui_adaptor_tableau::post_idle_request()
+{
+  if (adaptor)
+    adaptor->post_idle_request();
+}

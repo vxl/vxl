@@ -49,6 +49,7 @@ enum vgui_event_type {
   vgui_HSCROLL,
   vgui_VSCROLL,
   vgui_DESTROY,
+  vgui_IDLE,
   vgui_OTHER,
   vgui_EVENT_MAX
 };

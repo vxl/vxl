@@ -145,6 +145,22 @@ class vgui_tableau : public vgui_parent_child_link_data
   //  go and override it.
   virtual void post_overlay_redraw();
 
+  //: Post an idle request event.
+  //  The fact that this is virtual does not imply that you should
+  //  go and override it.
+  //
+  //  Posting an idle event request means that your tableau has some
+  //  idle processing that it'd like to do. This means that your
+  //  tableau will continue to receive vgui_IDLE events until the
+  //  event handler returns false (i.e. all idle processing is
+  //  complete). The idle event handler should return false when it
+  //  has no idle processing, or has completed its idle processing. It
+  //  may return true if has only partially completed its idle
+  //  processing; in this case, it will receive more idle event to
+  //  allow it to complete processing.
+  //
+  virtual void post_idle_request();
+
   //: Handle all events sent to this tableau.
   //  Override in subclass to give the tableau some appearance and behaviour.
   virtual bool handle(vgui_event const &);
@@ -172,6 +188,13 @@ class vgui_tableau : public vgui_parent_child_link_data
 
   //: Called by default handle when it receives a '?' pressed event.
   virtual bool help(); // this is called if '?' is pressed
+
+  //: Called when the application is otherwise idle Override if you
+  // want to do idle processing. Return false once your idle
+  // processing is complete, or if you have no need for more idle
+  // processing. Return true if you need more idle processing time.
+  //
+  virtual bool idle();
 
   //: Increase the reference count by one (for smart pointers).
   //  "const" is for convenience, it is cast away internally.

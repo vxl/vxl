@@ -35,6 +35,7 @@ class vgui_mfc_app : public CWinApp
 
   virtual BOOL InitInstance();
   virtual BOOL Run();
+  virtual BOOL OnIdle( LONG lcount );
 };
 
 

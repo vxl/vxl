@@ -39,6 +39,7 @@ class vgui_adaptor_tableau : private vgui_tableau
   void post_message(char const *, void const *);
   void post_redraw();
   void post_overlay_redraw();
+  void post_idle_request();
 };
 
 #endif // vgui_adaptor_tableau_h_

@@ -31,6 +31,7 @@ ADD_EXECUTABLE( example_enhance_tableau example_enhance_tableau.cxx)
 ADD_EXECUTABLE( example_poly_tableau example_poly_tableau.cxx)
 ADD_EXECUTABLE( example_sprite example_sprite.cxx )
 TARGET_LINK_LIBRARIES( example_sprite vgui vil vul )
+ADD_EXECUTABLE( example_idle_processing example_idle_processing.cxx )
 
 SET(basic_sources
     basic_app.cxx
