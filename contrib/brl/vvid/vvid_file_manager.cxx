@@ -8,6 +8,7 @@
 #include <vcl_iostream.h>
 #include <vul/vul_timer.h>
 #include <vil1/vil1_image.h>
+#include <vil1/vil1_save.h>
 #include <vil1/vil1_memory_image_of.h>
 #include <vidl_vil1/vidl_vil1_movie.h>
 #include <vidl_vil1/vidl_vil1_clip.h>
@@ -23,6 +24,7 @@
 #include <vgui/vgui_style.h>
 #include <bgui/bgui_image_tableau.h>
 #include <bgui/bgui_vtol2D_tableau.h>
+#include <bgui/bgui_picker_tableau.h>
 #include <vgui/vgui_viewer2D_tableau.h>
 #include <vgui/vgui_grid_tableau.h>
 #include <vgui/vgui_image_tableau.h>
@@ -32,16 +34,18 @@
 #include <vsol/vsol_point_2d.h>
 #include <vtol/vtol_face_2d.h>
 #include <brip/brip_vil1_float_ops.h>
+#include <bsol/bsol_algs.h>
 #include <btol/btol_face_algs.h>
 #include <sdet/sdet_harris_detector_params.h>
 #include <sdet/sdet_detector_params.h>
 #include <sdet/sdet_fit_lines_params.h>
 #include <sdet/sdet_grid_finder_params.h>
+#include <sdet/sdet_vehicle_finder_params.h>
+#include <sdet/sdet_vehicle_finder.h>
 #include <strk/strk_tracker_params.h>
 #include <strk/strk_info_tracker_params.h>
 #include <strk/strk_info_model_tracker_params.h>
 #include <strk/strk_art_info_model.h>
-
 #include <vpro/vpro_frame_diff_process.h>
 #include <vpro/vpro_motion_process.h>
 #include <vpro/vpro_lucas_kanade_process.h>
@@ -60,6 +64,7 @@
 #include <strk/strk_epipolar_grouper_params.h>
 #include <strk/strk_epipolar_grouper_process.h>
 #include <vpro/vpro_ihs_process.h>
+#include <vpro/vpro_half_res_process.h>
 
 //static manager instance
 vvid_file_manager *vvid_file_manager::instance_ = 0;
@@ -90,7 +95,8 @@ void vvid_file_manager::init()
 
   rubber0_ = vgui_rubberband_tableau_new(cl0);
   vgui_composite_tableau_new comp0(easy0_,rubber0_);
-  v2D0_ = vgui_viewer2D_tableau_new(comp0);
+  picktab0_ = bgui_picker_tableau_new(comp0);
+  v2D0_ = vgui_viewer2D_tableau_new(picktab0_);
   grid_->add_at(v2D0_, 0,0);
 
   itab1_ = bgui_image_tableau_new();
@@ -103,6 +109,7 @@ void vvid_file_manager::init()
   long_tip_ =0;
   short_tip_=0;
   art_model_=0;
+  background_model_ = 0;
   display_frame_repeat_=1;
 
   on_style_  = vgui_style::new_style(0.0, 1.0, 0.0, 3.0, 4.0);
@@ -676,7 +683,6 @@ void vvid_file_manager::compute_grid_match()
   video_process_  = new vpro_grid_finder_process(dp, flp, gfp);
 }
 
-
 void vvid_file_manager::compute_corr_tracking()
 {
   static strk_tracker_params tp;
@@ -709,8 +715,10 @@ void vvid_file_manager::compute_info_tracking()
   tracker_dialog.field("Smooth Sigma", tp.sigma_);
   tracker_dialog.field("Min Gradient Mag", tp.min_gradient_);
   tracker_dialog.field("Parzen Sigma", tp.parzen_sigma_);
+  tracker_dialog.checkbox("Model Background", tp.use_background_);
   tracker_dialog.checkbox("Add Gradient Info", tp.gradient_info_);
   tracker_dialog.checkbox("Add Color Info", tp.color_info_);
+  tracker_dialog.checkbox("Renyi Joint Entropy", tp.renyi_joint_entropy_);
   tracker_dialog.checkbox("Output Track Data", output_track);
   tracker_dialog.checkbox("Verbose", tp.verbose_);
   tracker_dialog.checkbox("Debug", tp.debug_);
@@ -734,6 +742,12 @@ void vvid_file_manager::compute_info_tracking()
     strk_info_tracker_process* vitp = new strk_info_tracker_process(tp);
     video_process_ = vitp;
     video_process_->add_input_topology_object(to);
+    if(tp.use_background_)
+      if(!background_model_)
+        vcl_cout << "In vvid_file_manager::compute_info_tracking() -"
+                 << " no background model\n";
+      else
+        video_process_->add_input_topology_object(background_model_->cast_to_topology_object());
     if (output_track)
       if (!vitp->set_output_file(track_file))
         return;
@@ -1040,4 +1054,99 @@ void vvid_file_manager::display_ihs()
 {
   video_process_  = new vpro_ihs_process();
 }
+  
+void vvid_file_manager::create_background_model()
+{
+  vcl_cout << "Make the background model polygon ...\n";
+  background_model_ = 0;
+  vtol_topology_object_sptr to = easy0_->get_temp();
+  if (!to)
+  {
+    vcl_cout << "Failed\n";
+    return;
+  }
+  else
+    vcl_cout << "Background model complete\n";
+  background_model_ = to->cast_to_face()->cast_to_face_2d();
+}
 
+void vvid_file_manager::save_frame()
+{
+  vil1_image img = itab0_->get_image(); 
+  if(!img)
+    {
+      vcl_cout << "In vvid_file_manager::save_frame() - no image\n";
+      return;
+    }
+  vgui_dialog file_dialog("Frame Image File");
+  static vcl_string image_file;
+  static vcl_string ext = "tif";
+  file_dialog.file("Track File:", ext, image_file);
+  if (!file_dialog.ask())
+    return;
+  if(!vil1_save(img, image_file.c_str()))
+    vcl_cout << "In vvid_file_manager::save_frame() - save failed\n";
+}
+
+void vvid_file_manager::save_half_res()
+{
+  vgui_dialog file_dialog("Half Resolution Output File");
+  static vcl_string video_file;
+  static vcl_string ext = "avi";
+  file_dialog.file("Video File:", ext, video_file);
+  if (!file_dialog.ask())
+    return;
+  vpro_half_res_process* hrp = new vpro_half_res_process(video_file);
+  video_process_ = hrp;
+  this->play_video();
+}  
+
+void vvid_file_manager::create_c_and_g_tracking_face()
+{
+  easy0_->clear_all();
+  static bool show_region_boxes = false;
+  static sdet_vehicle_finder_params vfp;
+  vgui_dialog vehicle_finder_dialog("Click and Go(Not Ready for Prime Time!)");
+  vehicle_finder_dialog.field("Watershed Sigma", vfp.wrpp_.wp_.sigma_);
+  vehicle_finder_dialog.field("Watershed Grad Diff Thresh",
+                              vfp.wrpp_.wp_.thresh_);
+  vehicle_finder_dialog.field("Region Merge Tolerance",
+                              vfp.wrpp_.merge_tol_);
+  vehicle_finder_dialog.field("Para proj width", vfp.pcp_.proj_width_);
+  vehicle_finder_dialog.field("Para proj height", vfp.pcp_.proj_height_);
+  vehicle_finder_dialog.field("Min Region Area", vfp.wrpp_.min_area_);
+  vehicle_finder_dialog.checkbox("Watershed Verbose", vfp.wrpp_.wp_.verbose_);
+  vehicle_finder_dialog.field("Vehicle Search Radius", vfp.search_radius_);
+  vehicle_finder_dialog.field("Shadow Thresh", vfp.shadow_thresh_);
+  vehicle_finder_dialog.field("Para Cvrg Thresh", vfp.para_thresh_);
+  vehicle_finder_dialog.field("Region Distance Scale", vfp.distance_scale_);
+  vehicle_finder_dialog.checkbox("Show Para and Shadow Boxes",
+                                 show_region_boxes);
+  vehicle_finder_dialog.checkbox("Verbose", vfp.verbose_);
+
+  if (!vehicle_finder_dialog.ask())
+    return;
+  vil1_image image = itab0_->get_image();
+  sdet_vehicle_finder vf(vfp);
+  vf.set_image(image);
+  //User picks point
+  vcl_cout << "\nPick vehicle...\n";
+  float x0=0, y0=0;
+  picktab0_->pick_point(&x0,&y0);
+  vcl_cout << "Pick(" << x0 << ' ' << y0 << ")\n";
+  //Display the search box
+  vf.set_pick((int)x0, (int)y0);
+  vsol_box_2d_sptr box = vf.search_box();
+  vsol_polygon_2d_sptr poly = bsol_algs::poly_from_box(box);
+  easy0_->add_vsol_polygon_2d(poly);
+  //Get the tracking face
+  if(!vf.detect_vehicle())
+    {
+      vcl_cout << "Vehicle Detection Failed\n";
+      return;
+    }
+  vtol_face_2d_sptr f = vf.vehicle_track_face();
+  easy0_->set_temp(f->cast_to_topology_object());
+  easy0_->add_face(f);
+  easy0_->post_redraw();
+}

@@ -20,6 +20,7 @@
 #include <vgui/vgui_rubberband_tableau_sptr.h>
 #include <vgui/vgui_style_sptr.h>
 #include <bgui/bgui_vtol2D_tableau_sptr.h>
+#include <bgui/bgui_picker_tableau_sptr.h>
 #include <vgui/vgui_viewer2D_tableau_sptr.h>
 #include <strk/strk_art_info_model_sptr.h>
 #include <vtol/vtol_face_2d_sptr.h>
@@ -154,7 +155,8 @@ class vvid_file_manager : public vgui_wrapper_tableau
   void create_stem();
   void create_long_arm_tip();
   void create_short_arm_tip();
-
+  //: create a background model polygon
+  void create_background_model();
   //: test model
   void exercise_art_model();
 
@@ -166,6 +168,15 @@ class vvid_file_manager : public vgui_wrapper_tableau
 
   //: display intensity hue and saturation 
   void display_ihs();
+
+  //: save the current frame in pane 0
+  void save_frame();
+
+  //: save half resolution version of the current video
+  void save_half_res();
+
+  //: click and go tracking face
+  void create_c_and_g_tracking_face();
 
   //: get the window of this player
   vgui_window* get_window() { return win_; }
@@ -211,6 +222,7 @@ class vvid_file_manager : public vgui_wrapper_tableau
   bgui_vtol2D_tableau_sptr easy1_;
   vgui_image_tableau_sptr itab0_;
   vgui_rubberband_tableau_sptr rubber0_;
+  bgui_picker_tableau_sptr picktab0_;
   vgui_image_tableau_sptr itab1_;
   vpro_video_process_sptr video_process_;
   vgui_grid_tableau_sptr grid_;
@@ -223,6 +235,7 @@ class vvid_file_manager : public vgui_wrapper_tableau
   vtol_face_2d_sptr long_tip_;
   vtol_face_2d_sptr short_tip_;
   strk_art_info_model_sptr art_model_;
+  vtol_face_2d_sptr background_model_;
   vgui_style_sptr on_style_;
   vgui_style_sptr off_style_;
 };

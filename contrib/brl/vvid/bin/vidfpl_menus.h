@@ -51,11 +51,16 @@ class vidfpl_menus
   static void create_long_arm_tip_callback();
   static void create_short_arm_tip_callback();
   static void create_stem_callback();
+  static void create_background_model_callback();
   static void exercise_art_model_callback();
   static void track_art_model_callback();
   static void display_art_model_track_callback();
   static void epipolar_grouping_callback();
   static void display_ihs_callback();
+  static void save_frame_callback();
+  static void save_half_res_callback();
+  static void create_c_and_g_tracking_face_callback();
+
   static void quit_callback();
   static vgui_menu get_menu();
  private:

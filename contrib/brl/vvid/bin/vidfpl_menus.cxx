@@ -128,7 +128,6 @@ void vidfpl_menus::compute_grid_match_callback()
   vvid_file_manager::instance()->compute_grid_match();
 }
 
-
 void vidfpl_menus::compute_corr_tracking_callback()
 {
   vvid_file_manager::instance()->compute_corr_tracking();
@@ -199,6 +198,12 @@ void vidfpl_menus::create_short_arm_tip_callback()
   vvid_file_manager::instance()->create_short_arm_tip();
 }
 
+void vidfpl_menus::create_background_model_callback()
+{
+  vvid_file_manager::instance()->create_background_model();
+}
+
+
 void vidfpl_menus::exercise_art_model_callback()
 {
   vvid_file_manager::instance()->exercise_art_model();
@@ -217,6 +222,21 @@ void vidfpl_menus::epipolar_grouping_callback()
 void vidfpl_menus::display_ihs_callback()
 {
   vvid_file_manager::instance()->display_ihs();
+}
+
+void vidfpl_menus::save_frame_callback()
+{
+  vvid_file_manager::instance()->save_frame();
+}
+
+void vidfpl_menus::save_half_res_callback()
+{
+  vvid_file_manager::instance()->save_half_res();
+}
+
+void vidfpl_menus::create_c_and_g_tracking_face_callback()
+{
+  vvid_file_manager::instance()->create_c_and_g_tracking_face();
 }
 
 void vidfpl_menus::quit_callback()
@@ -242,6 +262,8 @@ vgui_menu vidfpl_menus::get_menu()
   menufile.add( "Start Save Display", start_save_display_callback);
   menufile.add( "End Save Display", end_save_display_callback,
                 (vgui_key)'e', vgui_CTRL);
+  menufile.add( "Save Current Frame", save_frame_callback);
+  menufile.add( "Save Half Resolution Video", save_half_res_callback);
 
   //view menu entries
   menuview.add( "Play", play_video_callback);
@@ -255,6 +277,11 @@ vgui_menu vidfpl_menus::get_menu()
   //edit menu entries
   menuedit.add( "Create Box", create_box_callback);
   menuedit.add( "Create Polygon", create_polygon_callback,(vgui_key)'a', vgui_CTRL);
+  menuedit.add( "Click and Go Polygon", create_c_and_g_tracking_face_callback);
+
+  menuedit.add( "Create Background Model", create_background_model_callback,
+                (vgui_key)'4', vgui_CTRL);
+
   menuedit.add( "Create Stem", create_stem_callback,
                 (vgui_key)'1', vgui_CTRL);
   menuedit.add( "Create Long Arm Tip", create_long_arm_tip_callback,
