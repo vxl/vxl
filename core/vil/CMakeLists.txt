@@ -25,7 +25,6 @@ SET( vil2_sources ${vil2_sources}
   vil2_file_format.cxx vil2_file_format.h
   vil2_memory_image.cxx vil2_memory_image.h
 
-
   # file format readers/writers (see below for conditional ones)
   file_formats/vil2_pnm.cxx file_formats/vil2_pnm.h
 
@@ -51,6 +50,7 @@ SET( vil2_sources ${vil2_sources}
   vil2_bilin_interp.h
   vil2_sample_profile_bilin.txx vil2_sample_profile_bilin.h
   vil2_sample_grid_bilin.txx    vil2_sample_grid_bilin.h
+  vil2_resample_bilin.txx       vil2_resample_bilin.h
 
   # Stuff
   vil2_smart_ptr.txx vil2_smart_ptr.h
