@@ -13,16 +13,16 @@
 //  Contains classes: vgui_tableau.
 //
 // \verbatim
-//  Modifications:
+//  Modifications
 //   21-SEP-1999 fsm various changes.
 //   05-OCT-1999 fsm
 //   11-OCT-1999 fsm. removed old build_chain code.
 //   12-OCT-1999 fsm. added type_name() method. various cleanup.
 //   13-OCT-1999 fsm. deprecated draw_impl() and draw_overlay_impl().
 //   16-OCT-1999 fsm. deprecated draw(), draw_overlay() + two minor
-//                      methods. added get_popup().
+//                    methods. added get_popup().
 //   11-NOV-1999 fsm. added add_popup() now that get_popup() has a
-//                      different meaning. Added exists().
+//                    different meaning. Added exists().
 //   07-AUG-2002 K.Y.McGaul - Changed to and added Doxygen style comments.
 //   08-OCT-2002 K.Y.McGaul - Removed unused adopt and disown functions.
 // \endverbatim
@@ -117,7 +117,7 @@ class vgui_tableau : public vgui_parent_child_link_data
   //: Push all tableaux onto the given vector.
   static void get_all(vcl_vector<vgui_tableau_sptr> *out);
 
-  //: Returns true if the given addresss points to a valid tableau.
+  //: Returns true if the given address points to a valid tableau.
   static bool exists(vgui_tableau_sptr const &);
 
   //: Called whenever a child of this tableau is about to be forcibly replaced
