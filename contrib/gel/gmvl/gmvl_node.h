@@ -35,8 +35,8 @@ public:
   friend ostream &operator<<( ostream &os, gmvl_node &node);
 
   // to allow the cache to access ref 
-  friend gmvl_node_cache;
-  friend gmvl_connection_cache;
+  friend class gmvl_node_cache;
+  friend class gmvl_connection_cache;
 
 protected:
 
