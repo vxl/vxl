@@ -191,12 +191,6 @@ vgl_h_matrix_3d<T> vgl_h_matrix_3d<T>::get_inverse() const
   vnl_matrix_fixed<T, 4, 4> temp = vnl_inverse(t12_matrix_);
   return vgl_h_matrix_3d<T>(temp);
 }
-//: Set to identity
-template <class T>
-void vgl_h_matrix_3d<T>::set_identity ()
-{
-  t12_matrix_.set_identity();
-}
 
 //: Set to 4x4 row-stored matrix
 template <class T>
@@ -212,6 +206,44 @@ template <class T>
 void vgl_h_matrix_3d<T>::set (vnl_matrix_fixed<T,4,4> const& H)
 {
   t12_matrix_ = H;
+}
+
+//: Set to identity
+template <class T>
+void vgl_h_matrix_3d<T>::set_identity ()
+{
+  t12_matrix_.set_identity();
+}
+
+//: Set to translation
+template <class T>
+void vgl_h_matrix_3d<T>::set_translation(T tx = 0, T ty = 0, T tz =0)
+{
+  //not implemented yet
+}
+
+//: Set to rotation about an axis
+template <class T>
+void vgl_h_matrix_3d<T>::
+set_rotation_about_axis(vnl_vector_fixed<T,3> axis, T angle)
+{
+  //not implemented yet
+}
+
+//: Set to roll, pitch and yaw specified rotation
+template <class T>
+void vgl_h_matrix_3d<T>::
+set_rotation_roll_pitch_yaw(T rx, T ry, T rz)
+{
+  //not implemented yet
+}
+
+//: Set to rotation specified by euler angles
+template <class T>
+void vgl_h_matrix_3d<T>::
+set_rotation_euler(T rz1, T ry, T rz2)
+{
+  //not implemented yet
 }
 
 

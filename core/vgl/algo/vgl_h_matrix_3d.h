@@ -59,9 +59,13 @@ class vgl_h_matrix_3d
   const vnl_matrix_fixed<T,4,4>& get_matrix() const { return t12_matrix_; }
   vgl_h_matrix_3d get_inverse() const;
 
-  void set_identity();
-  void set(const T *t_matrix);
-  void set(vnl_matrix_fixed<T,4,4> const& t_matrix);
+    void set(const T *t_matrix);
+    void set(vnl_matrix_fixed<T,4,4> const& t_matrix);
+    void set_identity();
+    void set_translation(T tx, T ty, T tz);
+    void set_rotation_about_axis(vnl_vector_fixed<T,3> axis, T angle);
+    void set_rotation_roll_pitch_yaw(T rx, T ry, T rz);
+    void set_rotation_euler(T rz1, T ry, T rz2);
 };
 
 // stream I/O
