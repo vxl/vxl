@@ -77,7 +77,7 @@ bool vgui_deck_tableau::key_press(int x, int y, vgui_key key, vgui_modifier) {
   switch(key) {
   case vgui_PAGE_UP:
     this->next();
-    if (children[index_]) {
+    if (index_ok(index_) && children[index_]) {
       vgui_event e(vgui_ENTER);
       e.wx = x;
       e.wy = y;
@@ -87,7 +87,7 @@ bool vgui_deck_tableau::key_press(int x, int y, vgui_key key, vgui_modifier) {
     return true;
   case vgui_PAGE_DOWN:
     this->prev();
-    if (children[index_]) {
+    if (index_ok(index_) && children[index_]) {
       vgui_event e(vgui_ENTER);
       e.wx = x;
       e.wy = y;
