@@ -30,9 +30,12 @@ private:
   //  image() returns a reference to this
   mil_image_2d_of<vil_byte> image_;
 
+#if 0
   //: Define whether to load images as colour or grey-scale
   //  Options are '' (ie rely on image), 'Grey' or 'RGB'
-//  vcl_string colour_;
+  vcl_string colour_;
+#endif
+
   //: The colour depth of the image to be loaded by the codes listed above
   mil_byte_image_2d_io_std_depths colour_code_;
 
