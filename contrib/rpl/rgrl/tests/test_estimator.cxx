@@ -1546,7 +1546,7 @@ void test_homography2d()
     rgrl_estimator_sptr estimator = new rgrl_est_homography2d();
     rgrl_transformation_sptr dummy_trans = new rgrl_trans_homography2d();
     rgrl_transformation_sptr est = estimator->estimate( ms, *dummy_trans);
-    rgrl_trans_homography2d* homo_est = rgrl_cast<rgrl_trans_homography2d*>(est);
+    rgrl_trans_homography2d* homo_est = rgrl_cast<rgrl_trans_homography2d*>(est.as_pointer());
     est_H = homo_est->H();
     for (int i=0;i<3;i++)
       for (int j=0;j<3;j++)
