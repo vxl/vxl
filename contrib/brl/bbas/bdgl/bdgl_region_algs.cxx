@@ -28,12 +28,12 @@ mahanabolis_distance(vdgl_digital_region_sptr const& r1,
   //need at this this many points for standard deviation and mean
   //to be valid
   int min_npts = 5;
-  float HUGE = vnl_numeric_traits<float>::maxval;
+  float MY_HUGE = vnl_numeric_traits<float>::maxval;
   float SMALL = 1;
   if(!r1||!r2)
-    return HUGE;
+    return MY_HUGE;
   if(r1->Npix()<min_npts||r2->Npix()<min_npts)
-    return HUGE;
+    return MY_HUGE;
   float m1 = r1->Io(), m2 = r2->Io();
   float s1 = r1->Io_sd(), s2 = r2->Io_sd();
   //make sure the standard deviations are well-behaved  
@@ -58,6 +58,8 @@ bool bdgl_region_algs::merge(vdgl_digital_region_sptr const& r1,
   if(n2==0)
     return r1;
   int n = n1 + n2;
+  if(!n)
+    return false;
   float* Xm = new float[n];
   float* Ym = new float[n];
   unsigned short* Im = new unsigned short[n];
