@@ -104,6 +104,9 @@ SOURCE=.\frame_extractor.cxx
 # Begin Source File
 SOURCE=.\video_description.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\motion_test.cxx
+# End Source File
 # End Group
 # End Target
 # End Project
