@@ -2,17 +2,21 @@
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
+//:
+// \file
 
 #include "vdgl_interpolator_cubic.h"
+#include <vcl_cassert.h>
 #include <vcl_cmath.h> // for sqrt()
 #include <vnl/vnl_matrix.h>
+#include <vnl/vnl_math.h>
 #include <vdgl/vdgl_edgel.h>
 #include <vdgl/vdgl_edgel_chain.h>
 #include <vnl/algo/vnl_svd.h>
 
 
-vdgl_interpolator_cubic::vdgl_interpolator_cubic( vdgl_edgel_chain_sptr chain)
-  : vdgl_interpolator( chain)
+vdgl_interpolator_cubic::vdgl_interpolator_cubic(vdgl_edgel_chain_sptr chain)
+  : vdgl_interpolator(chain)
 {
   recompute_all();
 }
@@ -22,18 +26,20 @@ vdgl_interpolator_cubic::~vdgl_interpolator_cubic()
 }
 
 
-double vdgl_interpolator_cubic::get_x( const double index)
+double vdgl_interpolator_cubic::get_x(double index)
 {
-  int a= int( index);
+  const int N = chain_->size();
+  int a= int(index)-1;
+  if (index == N-2) --a; // take previous interval if we are on edgel N-2
   int b= a+1;
   int c= b+1;
   int d= c+1;
+  assert(a >= 0 && d < N);
 
-  vdgl_edgel ae( chain_->edgel( a));
-  vdgl_edgel be( chain_->edgel( b));
-  vdgl_edgel ce( chain_->edgel( c));
-  vdgl_edgel de( chain_->edgel( d));
-
+  vdgl_edgel ae(chain_->edgel(a));
+  vdgl_edgel be(chain_->edgel(b));
+  vdgl_edgel ce(chain_->edgel(c));
+  vdgl_edgel de(chain_->edgel(d));
 
   vnl_matrix<double> A(4,1);
   vnl_matrix<double> M(4,4);
@@ -60,17 +66,20 @@ double vdgl_interpolator_cubic::get_x( const double index)
 }
 
 
-double vdgl_interpolator_cubic::get_y( const double index)
+double vdgl_interpolator_cubic::get_y(double index)
 {
-  int a= int( index);
+  const int N = chain_->size();
+  int a= int(index)-1;
+  if (index == N-2) --a; // take previous interval if we are on edgel N-2
   int b= a+1;
   int c= b+1;
   int d= c+1;
+  assert(a >= 0 && d < N);
 
-  vdgl_edgel ae( chain_->edgel( a));
-  vdgl_edgel be( chain_->edgel( b));
-  vdgl_edgel ce( chain_->edgel( c));
-  vdgl_edgel de( chain_->edgel( d));
+  vdgl_edgel ae(chain_->edgel(a));
+  vdgl_edgel be(chain_->edgel(b));
+  vdgl_edgel ce(chain_->edgel(c));
+  vdgl_edgel de(chain_->edgel(d));
 
   vnl_matrix<double> A(4,1);
   vnl_matrix<double> M(4,4);
@@ -90,17 +99,20 @@ double vdgl_interpolator_cubic::get_y( const double index)
   return P(0,0) * index * index * index  + P(1,0) *  index * index + P(2,0) * index  + P(3,0);
 }
 
-double vdgl_interpolator_cubic::get_theta( const double index)
+double vdgl_interpolator_cubic::get_theta(double index)
 {
-  int a= int( index);
+  const int N = chain_->size();
+  int a= int(index)-1;
+  if (index == N-2) --a; // take previous interval if we are on edgel N-2
   int b= a+1;
   int c= b+1;
   int d= c+1;
+  assert(a >= 0 && d < N);
 
-  vdgl_edgel ae( chain_->edgel( a));
-  vdgl_edgel be( chain_->edgel( b));
-  vdgl_edgel ce( chain_->edgel( c));
-  vdgl_edgel de( chain_->edgel( d));
+  vdgl_edgel ae(chain_->edgel(a));
+  vdgl_edgel be(chain_->edgel(b));
+  vdgl_edgel ce(chain_->edgel(c));
+  vdgl_edgel de(chain_->edgel(d));
 
   vnl_matrix<double> A(4,1);
   vnl_matrix<double> M(4,4);
@@ -119,24 +131,57 @@ double vdgl_interpolator_cubic::get_theta( const double index)
   return P(0,0) * index * index * index  + P(1,0) *  index * index + P(2,0) * index  + P(3,0);
 }
 
-double vdgl_interpolator_cubic::get_tangent_angle( const double index)
+//: Compute the angle using four adjacent edgels.
+//  This is done by fitting a 3rd degree spline through these 4 points,
+//  and calculating the derived point at index.
+double vdgl_interpolator_cubic::get_tangent_angle(double index)
 {
-  //not implemented
-  return 0;
-}
-
-
-double vdgl_interpolator_cubic::get_curvature( const double index)
-{
-  int a= int( index);
+  const int N = chain_->size();
+  int a= int(index)-1;
+  if (index == N-2) --a; // take previous interval if we are on edgel N-2
   int b= a+1;
   int c= b+1;
   int d= c+1;
+  assert(a >= 0 && d < N);
 
-  vdgl_edgel ae( chain_->edgel( a));
-  vdgl_edgel be( chain_->edgel( b));
-  vdgl_edgel ce( chain_->edgel( c));
-  vdgl_edgel de( chain_->edgel( d));
+  vdgl_edgel ae = chain_->edgel(a),
+             be = chain_->edgel(b),
+             ce = chain_->edgel(c),
+             de = chain_->edgel(d);
+
+  double xa = ae.x(), ya = ae.y(),
+         xb = be.x(), yb = be.y(),
+         xc = ce.x(), yc = ce.y(),
+         xd = de.x(), yd = de.y(),
+
+         x2 = xd-4.5*xc+9*xb-5.5*xa,
+         y2 = yd-4.5*yc+9*yb-5.5*ya,
+         x1 = -x2-0.5*xc+4*xb-3.5*xa,
+         y1 = -y2-0.5*yc+4*yb-3.5*ya,
+         x0 = x2/2+0.75*xc-3*xb+2.25*xa,
+         y0 = y2/2+0.75*yc-3*yb+2.25*ya,
+
+         xp = x0*index*index + x1*index + x2/3, // derived point at index
+         yp = y0*index*index + y1*index + y2/3;
+
+  return 180.0*vnl_math::one_over_pi*vcl_atan2(yp, xp);
+}
+
+
+double vdgl_interpolator_cubic::get_curvature(double index)
+{
+  const int N = chain_->size();
+  int a= int(index)-1;
+  if (index == N-2) --a; // take previous interval if we are on edgel N-2
+  int b= a+1;
+  int c= b+1;
+  int d= c+1;
+  assert(a >= 0 && d < N);
+
+  vdgl_edgel ae(chain_->edgel(a));
+  vdgl_edgel be(chain_->edgel(b));
+  vdgl_edgel ce(chain_->edgel(c));
+  vdgl_edgel de(chain_->edgel(d));
 
   vnl_matrix<double> A(4,1);
   vnl_matrix<double> M(4,4);
@@ -164,7 +209,7 @@ double vdgl_interpolator_cubic::get_curvature( const double index)
 double vdgl_interpolator_cubic::get_length()
 {
   // length is cached (because it's expensive to compute)
-  if ( older( chain_.ptr()))
+  if ( older(chain_.ptr()) )
     recompute_all();
 
   return lengthcache_;
@@ -173,7 +218,7 @@ double vdgl_interpolator_cubic::get_length()
 
 double vdgl_interpolator_cubic::get_min_x()
 {
-  if ( older( chain_.ptr()))
+  if ( older(chain_.ptr()) )
     recompute_all();
 
   return minxcache_;
@@ -182,7 +227,7 @@ double vdgl_interpolator_cubic::get_min_x()
 
 double vdgl_interpolator_cubic::get_max_x()
 {
-  if ( older( chain_.ptr()))
+  if ( older(chain_.ptr()) )
     recompute_all();
 
   return maxxcache_;
@@ -191,7 +236,7 @@ double vdgl_interpolator_cubic::get_max_x()
 
 double vdgl_interpolator_cubic::get_min_y()
 {
-  if ( older( chain_.ptr()))
+  if ( older(chain_.ptr()) )
     recompute_all();
 
   return minycache_;
@@ -200,7 +245,7 @@ double vdgl_interpolator_cubic::get_min_y()
 
 double vdgl_interpolator_cubic::get_max_y()
 {
-  if ( older( chain_.ptr()))
+  if ( older(chain_.ptr()) )
     recompute_all();
 
   return maxycache_;
@@ -218,33 +263,33 @@ void vdgl_interpolator_cubic::recompute_all()
 
 void vdgl_interpolator_cubic::recompute_length()
 {
+  const int N = chain_->size();
   lengthcache_= 0;
+  if (N <= 1) return;
 
-  for (int i=0; i< chain_->size(); i++)
+  for (int i=N-1, j=i-1; j>=0; --i,--j)
   {
-    int j = i==0 ? chain_->size()-1 : i-1;
     vgl_point_2d<double> p1= chain_->edgel(j).get_pt();
     vgl_point_2d<double> p2= chain_->edgel(i).get_pt();
 
-    // NOTE THERE IS A PROBLEM HERE UNDER WINDOWS
-    //   WHICH I WILL HAVE TO FIX AT SOME POINT - FIXME
-    // Maybe solved now by using vgl_vector_2d<double> ? - PVr.
     lengthcache_ += length(p2-p1);
   }
 }
 
 void vdgl_interpolator_cubic::recompute_bbox()
 {
-  minxcache_= chain_->edgel( 0).get_x();
-  maxxcache_= chain_->edgel( 0).get_x();
-  minycache_= chain_->edgel( 0).get_y();
-  maxycache_= chain_->edgel( 0).get_y();
+  const int N = chain_->size();
+  if (N == 0) return;
+  minxcache_= chain_->edgel(0).get_x();
+  maxxcache_= chain_->edgel(0).get_x();
+  minycache_= chain_->edgel(0).get_y();
+  maxycache_= chain_->edgel(0).get_y();
 
-  for (int i=1; i< chain_->size(); i++)
-    {
-      if ( chain_->edgel( i).get_x()< minxcache_) minxcache_= chain_->edgel( i).get_x();
-      if ( chain_->edgel( i).get_x()> maxxcache_) maxxcache_= chain_->edgel( i).get_x();
-      if ( chain_->edgel( i).get_y()< minycache_) minycache_= chain_->edgel( i).get_y();
-      if ( chain_->edgel( i).get_y()> maxycache_) maxycache_= chain_->edgel( i).get_y();
-    }
+  for (int i=1; i< N; i++)
+  {
+    if (chain_->edgel(i).get_x()< minxcache_) minxcache_= chain_->edgel(i).get_x();
+    if (chain_->edgel(i).get_x()> maxxcache_) maxxcache_= chain_->edgel(i).get_x();
+    if (chain_->edgel(i).get_y()< minycache_) minycache_= chain_->edgel(i).get_y();
+    if (chain_->edgel(i).get_y()> maxycache_) maxycache_= chain_->edgel(i).get_y();
+  }
 }

@@ -9,6 +9,11 @@
 // \brief Represents a 2D interpolator_cubic for a vdgl_edgel_chain
 // \author
 //    Geoff Cross
+//
+// \verbatim
+// Modifications
+//  4-Dec-2002  Peter Vanroose  Implemented get_tangent_angle
+// \endverbatim
 
 #include <vdgl/vdgl_interpolator.h>
 
@@ -26,15 +31,15 @@ class vdgl_interpolator_cubic : public vdgl_interpolator
   // Operators----------------------------------------------------------------
 
   //: interpolation 0th degree
-  double get_x( const double index);
-  double get_y( const double index);
+  double get_x(double index);
+  double get_y(double index);
 
   //: interpolation 1st degree
-  double get_theta( const double index);
-  double get_tangent_angle( const double index);
+  double get_theta(double index);
+  double get_tangent_angle(double index);
 
   //: interpolation 2nd degree
-  double get_curvature( const double index);
+  double get_curvature(double index);
 
   //: integral
   double get_length();
