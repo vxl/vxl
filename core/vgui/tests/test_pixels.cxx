@@ -1,7 +1,7 @@
 // \author fsm
 
-#include <vcl_cstdio.h>
 #include <vcl_iostream.h>
+#include <vul/vul_sprintf.h>
 #include <vgui/vgui_gl.h>
 #include <vgui/vgui_pixel.h>
 
@@ -84,7 +84,7 @@ test_pixels()
 
   for (int i=0; i<32; ++i)
   {
-    char buf[64]; vcl_sprintf(buf, "0x1<<%3d", i);
+    const char* buf = vul_sprintf("0x1<<%3d", i);
     GLuint  w = (0x1 << i);
     print_binary(buf, &w, sizeof(w));
   }

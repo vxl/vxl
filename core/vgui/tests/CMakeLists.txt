@@ -32,7 +32,7 @@ IF( HAS_VGUI )
     test_pixels.cxx
     test_image_tableau.cxx
   )
-  TARGET_LINK_LIBRARIES( vgui_test_all vgui testlib )
+  TARGET_LINK_LIBRARIES( vgui_test_all vgui vul testlib )
 
   ADD_TEST( vgui_test_displaybase         vgui_test_all test_displaybase )
   ADD_TEST( vgui_test_pixels              vgui_test_all test_pixels )

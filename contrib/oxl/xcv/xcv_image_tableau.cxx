@@ -13,8 +13,8 @@
 
 #include <vcl_string.h>
 #include <vcl_cmath.h>
-#include <vcl_cstdio.h> // sprintf
 
+#include <vul/vul_sprintf.h>
 #include <vil1/vil1_crop.h>
 #include <vil1/vil1_image.h>
 #include <vil1/vil1_rgba.h>
@@ -49,8 +49,8 @@ vil1_image xcv_image_tableau::get_image() const
     return base::get_image();
   else
     return vil1_crop(base::get_image(),
-                    int(roi_.x+0.5),int(roi_.y+0.5),
-                    int(roi_.width),int(roi_.height));
+                     int(roi_.x+0.5),int(roi_.y+0.5),
+                     int(roi_.width),int(roi_.height));
 }
 
 void xcv_image_tableau::set_roi(float x,float y,float w,float h)
@@ -166,9 +166,7 @@ bool xcv_image_tableau::handle(vgui_event const &e)
                  &pixel);
 
     // Display on status bar:
-    char msg[100];
-    vcl_sprintf(msg, "(%d, %d)   R=%d,G=%d,B=%d", intx, inty,
-      (int)pixel.r, (int)pixel.g, (int)pixel.b);
+    const char* msg = vul_sprintf("(%d, %d)   R=%d,G=%d,B=%d", intx, inty, (int)pixel.r, (int)pixel.g, (int)pixel.b);
     post_to_status_bar(msg);
   }
 

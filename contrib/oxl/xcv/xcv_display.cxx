@@ -12,13 +12,13 @@
 // \endverbatim
 //
 
-#include <vcl_cstdio.h> // sprintf()
 #include <vcl_string.h>
 #include <vcl_iostream.h>
 #include <vcl_vector.h>
 #include <vcl_cmath.h>
 #include <vxl_config.h>
 
+#include <vul/vul_sprintf.h>
 #include <vil1/vil1_memory_image_of.h>
 #include <vil1/vil1_image_as.h>
 #include <vnl/vnl_math.h>
@@ -113,8 +113,7 @@ void xcv_display::toggle_enhance()
 
     is_enhancing = true;
 
-    char msg[100];
-    vcl_sprintf(msg, "Enhance lens added to position (%d, %d).", col, row);
+    const char* msg = vul_sprintf("Enhance lens added to position (%d, %d).", col, row);
     post_to_status_bar(msg);
   }
   else
@@ -284,12 +283,9 @@ void xcv_display::show_line_slice()
 
   line_profile(img, fx0, fy0, fx1, fy1, num_points+1, x, y, val);
 
-  char tmp_heading[200];
-  vcl_sprintf(tmp_heading,
-              "Image Intensity Profile across (%.0f, %.0f) to (%.0f, %.0f)",
-              fx0, fy0, fx1, fy1);
-
+  const char* tmp_heading = vul_sprintf("Image Intensity Profile across (%.0f, %.0f) to (%.0f, %.0f)", fx0, fy0, fx1, fy1);
   xcv_axes_tableau_new axes(tmp_heading, "X", "Intensity");
+
   for (int i=0; i<num_points+1; i++)
     axes->add_point(x[i], val[i]);
   axes->compute_axes();

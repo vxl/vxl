@@ -10,8 +10,8 @@
 //   K.Y.McGaul 26-APR-2001   Initial version.
 // \endverbatim
 
-#include <vcl_cstdio.h>
 #include <vcl_cmath.h>
+#include <vul/vul_sprintf.h>
 
 #include <vgui/vgui.h>
 #include <vgui/vgui_gl.h>
@@ -22,7 +22,7 @@
 //========================================================================
 //: Constructor takes all the labels used on the graph.
 xcv_axes_tableau::xcv_axes_tableau(vcl_string heading, vcl_string x_axes_label,
-  vcl_string y_axes_label)
+                                   vcl_string y_axes_label)
 {
   xlow_ = 0.0;
   xhigh_ = 0.0;
@@ -117,18 +117,18 @@ void xcv_axes_tableau::compute_axes()
                       tmp_width+xspacing, top_offset+graph_height);
 
     // numbering:
-    char tmp_number_string[20];
     if (xlimits_.tick_spacing < 1)
     {
       float tmp_number = xlimits_.tick_start + (xcounter*xlimits_.tick_spacing);
-      vcl_sprintf(tmp_number_string, "%.1f", tmp_number);
+      const char* tmp_number_string = vul_sprintf("%.1f", tmp_number).c_str();
+      text_->add(tmp_width-10, top_offset+graph_height+20, tmp_number_string);
     }
     else
     {
       int tmp_number = (int)vcl_ceil(xlimits_.tick_start + (xcounter*xlimits_.tick_spacing));
-      vcl_sprintf(tmp_number_string, "%d", tmp_number);
+      const char* tmp_number_string = vul_sprintf("%d", tmp_number).c_str();
+      text_->add(tmp_width-10, top_offset+graph_height+20, tmp_number_string);
     }
-    text_->add(tmp_width-10, top_offset+graph_height+20, tmp_number_string);
   }
 
   float yspacing = graph_height / (2*ylimits_.tick_n);
@@ -143,18 +143,18 @@ void xcv_axes_tableau::compute_axes()
                       left_offset, tmp_height+yspacing);
 
     // numbering:
-    char tmp_number_string[20];
     if (ylimits_.tick_spacing < 1)
     {
       float tmp_number = ylimits_.tick_end - (ycounter*ylimits_.tick_spacing);
-      vcl_sprintf(tmp_number_string, "%.1f", tmp_number);
+      const char* tmp_number_string = vul_sprintf("%.1f", tmp_number).c_str();
+      text_->add(left_offset-40, tmp_height+3, tmp_number_string);
     }
     else
     {
       int tmp_number = (int)vcl_ceil(ylimits_.tick_end - (ycounter*ylimits_.tick_spacing));
-      vcl_sprintf(tmp_number_string, "%d", tmp_number);
+      const char* tmp_number_string = vul_sprintf("%d", tmp_number).c_str();
+      text_->add(left_offset-40, tmp_height+3, tmp_number_string);
     }
-    text_->add(left_offset-40, tmp_height+3, tmp_number_string);
   }
 
   // Re-calibrate points and add them to the graph:

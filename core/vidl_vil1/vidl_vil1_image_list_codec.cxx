@@ -5,7 +5,6 @@
 #include "vidl_vil1_image_list_codec.h"
 
 #include <vcl_cassert.h>
-#include <vcl_cstdio.h>
 #include <vcl_iostream.h>
 
 #include <vul/vul_sprintf.h>
@@ -76,17 +75,17 @@ bool vidl_vil1_image_list_codec::init()
   if (images_.empty())
     return false;
 
-//   unfinished !!!!! TODO
+  //   unfinished !!!!! TODO
 
-     set_number_frames(images_.size());
-     vil1_image first = images_[0];
+  set_number_frames(images_.size());
+  vil1_image first = images_[0];
 
-// Come from TargetJr, don't know the vxl equivalent
-//   set_format(first->get_format());
-//   set_image_class(first->get_image_class());
-     set_bits_pixel(first.bits_per_component() * first.components());
-     set_width(first.width());
-     set_height(first.height());
+  // Comes from TargetJr, don't know the vxl equivalent
+//set_format(first->get_format());
+//set_image_class(first->get_image_class());
+  set_bits_pixel(first.bits_per_component() * first.components());
+  set_width(first.width());
+  set_height(first.height());
 
   return true;
 }
@@ -106,28 +105,28 @@ int vidl_vil1_image_list_codec::put_section(int /*position*/, void* /*ib*/, int 
 }
 
 //: Load from a file name.
+// fname should contain "%d", which will be replaced with 0, 1, 2, etc. in turn.
 vidl_vil1_codec_sptr vidl_vil1_image_list_codec::load(const char* fname, char mode)
 {
   // will try and load as many images as possible starting with
   //   index 0 and stopping when we run out of images
   assert(mode == 'r');
 
-  for ( int i=0; true; i++)
-    {
-      const char *name = vul_sprintf( fname, i).c_str();
-      vil1_image img= vil1_load(name);
+  for (int i=0; true; i++)
+  {
+    vil1_image img = vil1_load(vul_sprintf(fname, i).c_str());
 
-      if (img!=0)
-        images_.push_back(img);
-      else
-        break;
-    }
+    if (img)
+      images_.push_back(img);
+    else
+      break;
+  }
 
   if (!init())
-    {
-      vcl_cerr << "Failed to initialize the ImageList Codec.\n";
-      return NULL;
-    }
+  {
+    vcl_cerr << "Failed to initialize the ImageList Codec.\n";
+    return NULL;
+  }
 
   return this;
 }
@@ -140,21 +139,18 @@ vidl_vil1_codec_sptr vidl_vil1_image_list_codec::load(const vcl_list<vcl_string>
   assert(mode == 'r');
 
   for (vcl_list<vcl_string>::const_iterator i = fnames.begin(); i!=fnames.end(); ++i)
-    {
-      const char* name = (*i).c_str();
-      vil1_image img =  vil1_load(name);
-      if (img!=0)
-      {
-        images_.push_back(img);
-      }
-    }
+  {
+    vil1_image img =  vil1_load((*i).c_str());
+    if (img)
+      images_.push_back(img);
+  }
 
   // Initialize the codec
   if (!init())
-    {
-      vcl_cerr << "Failed to initialize the ImageList Codec.\n";
-      return NULL;
-    }
+  {
+    vcl_cerr << "Failed to initialize the ImageList Codec.\n";
+    return NULL;
+  }
 
   // Every thing was all right,
   // return myself
@@ -169,20 +165,18 @@ vidl_vil1_codec_sptr vidl_vil1_image_list_codec::load(const vcl_vector<vcl_strin
   assert(mode == 'r');
 
   for (vcl_vector<vcl_string>::const_iterator i = fnames.begin(); i!=fnames.end(); ++i)
-    {
-      const char* name = (*i).c_str();
-      vil1_image img =  vil1_load(name);
-
-      if (img!=0)
-        images_.push_back(img);
-    }
+  {
+    vil1_image img =  vil1_load((*i).c_str());
+    if (img)
+      images_.push_back(img);
+  }
 
   // Initialize the codec
   if (!init())
-    {
-      vcl_cerr << "Failed to initialize the ImageList Codec.\n";
-      return NULL;
-    }
+  {
+    vcl_cerr << "Failed to initialize the ImageList Codec.\n";
+    return NULL;
+  }
 
   // Every thing was all right,
   // return myself
@@ -227,21 +221,18 @@ bool vidl_vil1_image_list_codec::save(
   for (vidl_vil1_movie::frame_iterator pframe = movie->begin();
        pframe <= movie->last();
        ++pframe)
-    {
-      // Get the image from the frame
-      vil1_image image = pframe->get_image();
+  {
+    // Get the image from the frame
+    vil1_image image = pframe->get_image();
 
-      // Create a name for the current image to be saved
-      char currentname [100];
-      vcl_sprintf (currentname, "%s%05d.%s",
-                   fname, pframe.current_frame_number(), extension.c_str());
+    // Create a name for the current image to be saved
+    const char* currentname = vul_sprintf("%s%05d.%s", fname,
+                                          pframe.current_frame_number(),
+                                          extension.c_str()).c_str();
 
-      bool saved_image = vil1_save(image, currentname, type);
-
-      if (!saved_image)
-        ret = false;
-    }
+    if (! vil1_save(image, currentname, type))
+      ret = false;
+  }
 
   return ret;
 }
-
