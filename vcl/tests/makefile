@@ -1,6 +1,8 @@
+TESTS += vcl_tests.cxx
+TESTS += test_vcl_rel_ops.cxx
+# All other tests are included in vcl_tests.cxx
 #TESTS += test_vcl_compiler.cxx
 #TESTS += test_vcl_headers.cxx
-#TESTS += test_vcl_rel_ops.cxx
 #TESTS += test_vcl_iterator.cxx
 #TESTS += test_vcl_iostream.cxx
 #TESTS += test_vcl_fstream.cxx
@@ -18,7 +20,6 @@
 #TESTS += test_vcl_stlfwd.cxx
 #TESTS += test_vcl_exception.cxx
 #TESTS += test_vcl_cctype.cxx
-TESTS += vcl_tests.cpp
 
 #########################################
 include ${IUEROOT}/config/static-tests.mk
