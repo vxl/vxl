@@ -155,6 +155,9 @@ SOURCE=.\strk_feature_capture_process.cxx
 # Begin Source File
 SOURCE=.\strk_io.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\strk_snippet_extractor_process.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"
@@ -214,6 +217,9 @@ SOURCE=.\strk_feature_capture_process.h
 # End Source File
 # Begin Source File
 SOURCE=.\strk_io.h
+# End Source File
+# Begin Source File
+SOURCE=.\strk_snippet_extractor_process.h
 # End Source File
 # End Group
 # End Target
