@@ -1,8 +1,0 @@
-#ifndef vcl_iso_stack_h_
-#define vcl_iso_stack_h_
-
-#include <stack>
-
-@stack
-
-#endif
