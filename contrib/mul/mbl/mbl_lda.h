@@ -51,6 +51,10 @@ class mbl_lda
   //: Destructor
   virtual ~mbl_lda();
 
+  //: Classify a new data point
+  // projects into discriminant space and picks closest mean class vector
+  int classify( const vnl_vector<double>& x );
+
   //: Perform LDA on data
   // \param n  Number of examples
   // \param label  integer indices

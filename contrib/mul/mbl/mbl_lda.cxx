@@ -34,18 +34,25 @@ mbl_lda::~mbl_lda()
 {
 }
 
-//=======================================================================
-#if 0
-static void ZeroMatrix(vnl_matrix<double>& M)
+
+//: Classify a new data point
+// projects into discriminant space and picks closest mean class vector
+int mbl_lda::classify( const vnl_vector<double>& x )
 {
-  int nr=M.rows();
-  int nc=M.columns();
-  double** m = M.data_array();
-  for (int i=0;i<nr;++i)
-    for (int j=0;j<nc;++j)
-      m[i][j]=0.0;
+  vnl_vector<double> d;
+  x_to_d(d, x);
+  int nc=n_classes();
+  double min_d=1000000;
+  int min_i=-1;
+  for (int i=0;i<nc; ++i)
+  {
+    double dist=(d-d_class_mean(i)).squared_magnitude();
+    if (dist<min_d ) { min_d= dist; min_i=i; }
+  }
+  return min_i;
 }
-#endif
+
+
 //=======================================================================
 
 void mbl_lda::updateCovar(vnl_matrix<double>& S, const vnl_vector<double>& V)
