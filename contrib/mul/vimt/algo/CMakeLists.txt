@@ -4,6 +4,7 @@ SET( vimt_algo_sources
                         vimt_convolve_2d.h
                         vimt_find_peaks.h
                         vimt_find_troughs.h
+						vimt_normalised_correlation_2d.h
   # This file merely forces the creation of an actual library
   vimt_dummy.cxx
 )
