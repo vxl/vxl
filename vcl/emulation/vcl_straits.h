@@ -88,7 +88,7 @@ struct vcl_char_traits {
       return l;
     }
 
-  // -- s1 = s2[0..n)
+  //: s1 = s2[0..n)
   static char_type* copy (char_type* s1, const char_type* s2, size_t n)
     {
       for (; n--; )
@@ -96,7 +96,7 @@ struct vcl_char_traits {
       return s1;
     }
 
-  // -- s1 = s2[0..n), possible overlap.
+  //: s1 = s2[0..n), possible overlap.
   static char_type* move (char_type* s1, const char_type* s2, size_t n)
     {
       char_type a[n];

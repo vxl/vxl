@@ -96,27 +96,27 @@ public:
   = static_cast<size_type>(-1)
 #endif
        ;
-// -- Return pointer to internal data
+//: Return pointer to internal data
   const charT* data () const
   { return data_; }
 
-// -- Return length in chars
+//: Return length in chars
   size_type length () const
   { return strlen_; }
 
-// -- Return length in chars
+//: Return length in chars
   size_type size () const
   { return strlen_; }
 
-// -- Return current amount of memory allocated
+//: Return current amount of memory allocated
   size_type capacity () const
   { return current_size_; }
-
-// -- Return maximum possible size
+  
+//: Return maximum possible size
   size_type max_size () const
     { return (npos - 1)/sizeof (charT); }  // XXX
 
-// -- Return true iff length is 0
+//: Return true iff length is 0
   bool empty () const
     { return strlen_ == 0; }
 
@@ -126,29 +126,29 @@ public:
 
 // @{ CONSTRUCTORS @}
 
-// -- Default ctor
+//: Default ctor
   explicit vcl_basic_string (): data_(0),strlen_(0),current_size_(0) { }
 
-// -- Copy ctor
+//: Copy ctor
   vcl_basic_string (const vcl_basic_string& str):
     data_(0),strlen_(0),current_size_(0)
   {
     *this = str;
   }
 
-// -- Assign str[pos .. pos+n]
+//: Assign str[pos .. pos+n]
   vcl_basic_string (const vcl_basic_string& str, size_type pos, size_type n = npos)
     : data_(0),strlen_(0),current_size_(0) { assign (str, pos, n); }
 
-// -- Assign s[0..n]
+//: Assign s[0..n]
   vcl_basic_string (const charT* s, size_type n)
     : data_(0),strlen_(0),current_size_(0) { assign (s, n); }
 
-// -- Assign s
+//: Assign s
   vcl_basic_string (const charT* s)
     : data_(0),strlen_(0),current_size_(0) { assign (s); }
 
-// -- Fill with n copies of 'c'
+//: Fill with n copies of 'c'
   vcl_basic_string (size_type n, charT c)
     : data_(0),strlen_(0),current_size_(0) { assign (n, c); }
 
@@ -168,7 +168,7 @@ public:
 
 // @{ APPENDING, ASSIGNMENT @}
 
-// -- append str[pos..pos+n] etc.
+//: append str[pos..pos+n] etc.
   vcl_basic_string& append (const vcl_basic_string& str, size_type pos = 0,
                         size_type n = npos)
     { return replace (length (), 0, str, pos, n); }
@@ -184,7 +184,7 @@ public:
     vcl_basic_string& append(InputIterator first, InputIterator last);
 #endif
 
-// -- assign str[pos..pos+n] etc.
+//: assign str[pos..pos+n] etc.
   vcl_basic_string& assign (const vcl_basic_string& str, size_type pos = 0,
                         size_type n = npos)
     { return replace (0, npos, str, pos, n); }
@@ -204,7 +204,7 @@ public:
   vcl_basic_string& operator= (charT c)
     { return assign (1, c); }
 
-// -- append rhs
+//: append rhs
   vcl_basic_string& operator+= (const vcl_basic_string& rhs)
     { return append (rhs); }
   vcl_basic_string& operator+= (const charT* s)
@@ -214,28 +214,28 @@ public:
 
 // @{ INSERTION @}
 
-// -- insert str[pos2..pos2+n] after position pos1.
+//: insert str[pos2..pos2+n] after position pos1.
   vcl_basic_string& insert (size_type pos1, const vcl_basic_string& str,
                         size_type pos2 = 0, size_type n = npos)
     { return replace (pos1, 0, str, pos2, n); }
 
-// -- insert s[0..n] after position pos.
+//: insert s[0..n] after position pos.
   vcl_basic_string& insert (size_type pos, const charT* s, size_type n)
     { return replace (pos, 0, s, n); }
 
-// -- insert s after position pos.
+//: insert s after position pos.
   vcl_basic_string& insert (size_type pos, const charT* s)
     { return insert (pos, s, traits::length (s)); }
 
-// -- insert n copies of c after position pos.
+//: insert n copies of c after position pos.
   vcl_basic_string& insert (size_type pos, size_type n, charT c)
     { return replace (pos, 0, n, c); }
 
-// -- insert c after position indicated by iterator p.
+//: insert c after position indicated by iterator p.
   iterator insert(iterator p, charT c)
     { size_type pos = p - begin (); insert (pos, 1, c); return pos +begin (); }
 
-// -- insert n copies of c after position indicated by  iterator p.
+//: insert n copies of c after position indicated by  iterator p.
   iterator insert(iterator p, size_type n, charT c)
     { size_type pos = p - begin (); insert (pos, n, c); return pos +begin (); }
 #if 0
@@ -245,17 +245,17 @@ public:
 
 // @{ ERASING @}
 
-// -- erase [pos..pos+n]
+//: erase [pos..pos+n]
   vcl_basic_string& erase (size_type pos = 0, size_type n = npos)
     { return replace (pos, n, (size_type)0, (charT)0); }
 
-// -- erase 1 character at pos.
+//: erase 1 character at pos.
   iterator erase (iterator p)
     { size_type __o = p - begin();
       replace (__o, 1, (size_type)0, (charT)0);
       return begin() + __o; }
 
-// -- erase from first to last.
+//: erase from first to last.
   iterator erase (iterator f, iterator l)
     { size_type __o = f - begin();
       replace (__o, l-f, (size_type)0, (charT)0);
@@ -264,26 +264,26 @@ public:
 
 // @{ REPLACING @}
 
-// -- replace this[pos1..pos1+n1] with str[pos2..pos2+n2].
+//: replace this[pos1..pos1+n1] with str[pos2..pos2+n2].
   vcl_basic_string& replace (size_type pos1, size_type n1, const vcl_basic_string& str,
                          size_type pos2 = 0, size_type n2 = npos);
 
-// -- replace this[pos1..pos1+n1] with s[0..n2].
+//: replace this[pos1..pos1+n1] with s[0..n2].
   vcl_basic_string& replace (size_type pos1, size_type n1, const charT* s,
                          size_type n2);
 
-// -- replace this[pos1..pos1+n1] with s.
+//: replace this[pos1..pos1+n1] with s.
   vcl_basic_string& replace (size_type pos1, size_type n1, const charT* s)
     { return replace (pos1, n1, s, traits::length (s)); }
 
-// -- replace this[pos1..pos1+n1] with n2 copies of c.
+//: replace this[pos1..pos1+n1] with n2 copies of c.
   vcl_basic_string& replace (size_type pos, size_type n1, size_type n2, charT c);
 
-// -- replace this[pos..pos+n] with c.
+//: replace this[pos..pos+n] with c.
   vcl_basic_string& replace (size_type pos, size_type n, charT c)
     { return replace (pos, n, 1, c); }
 
-// -- replace this[i1..i2] with str. etc.
+//: replace this[i1..i2] with str. etc.
   vcl_basic_string& replace (iterator i1, iterator i2, const vcl_basic_string& str)
     { return replace (i1 - begin (), i2 - i1, str); }
   vcl_basic_string& replace (iterator i1, iterator i2, const charT* s, size_type n)
@@ -303,7 +303,7 @@ public:
 
 // @{ MISCELLANEOUS @}
 
-// -- swap with that.
+//: swap with that.
   void swap (vcl_basic_string &that) {
 #define vcl_string_swap_aux(T,m) {T d = that.m; that.m = this->m; this->m = d;}
     vcl_string_swap_aux(charT*, data_);
@@ -311,7 +311,7 @@ public:
     vcl_string_swap_aux(size_t, current_size_);
   }
 
-// -- Return [reference to] char at pos
+//: Return [reference to] char at pos
   charT operator[] (size_type pos) const
     {
       return data_[pos];
@@ -320,7 +320,7 @@ public:
   reference operator[] (size_type pos)
     { return data_[pos]; }
 
-// -- Return [reference to] char at pos
+//: Return [reference to] char at pos
   reference at (size_type pos)
     {
       OUTOFRANGE (pos >= length ());
@@ -332,36 +332,36 @@ public:
       return data ()[pos];
     }
 
-// -- Return pointer to C-style string
+//: Return pointer to C-style string
   const charT* c_str () const
     { return data_; }
 
-// -- Resize to n, filling with c.
+//: Resize to n, filling with c.
   void resize (size_type n, charT c);
 
-// -- Resize to n, filling with 0.
+//: Resize to n, filling with 0.
   void resize (size_type n)
     { resize (n, EOS); }
 
-// -- Pre-expand size.  [unimplemented]
+//: Pre-expand size.  [unimplemented]
   void reserve (size_type) { }
 
-// -- Take a copy of s[0..n], placing after pos.
+//: Take a copy of s[0..n], placing after pos.
   size_type copy (charT* s, size_type n, size_type pos = 0);
 
 // @{ SEARCHING @}
 
-// -- Return index of first occurrence of str, starting at pos.
+//: Return index of first occurrence of str, starting at pos.
   size_type find (const vcl_basic_string& str, size_type pos = 0) const
     { return find (str.data(), pos, str.length()); }
-// -- Find first occurrence of s[0..n], starting at pos.
+//: Find first occurrence of s[0..n], starting at pos.
   size_type find (const charT* s, size_type pos, size_type n) const;
-// -- Find first occurrence of s, starting at pos.
+//: Find first occurrence of s, starting at pos.
   size_type find (const charT* s, size_type pos = 0) const
     { return find (s, pos, traits::length (s)); }
   size_type find (charT c, size_type pos = 0) const;
 
-// -- Find, starting from end. etc.
+//: Find, starting from end. etc.
   size_type rfind (const vcl_basic_string& str, size_type pos = npos) const
     { return rfind (str.data(), pos, str.length()); }
   size_type rfind (const charT* s, size_type pos, size_type n) const;
@@ -369,7 +369,7 @@ public:
     { return rfind (s, pos, traits::length (s)); }
   size_type rfind (charT c, size_type pos = npos) const;
 
-// -- Return index of the first occurrence of any character from str.
+//: Return index of the first occurrence of any character from str.
   size_type find_first_of (const vcl_basic_string& str, size_type pos = 0) const
     { return find_first_of (str.data(), pos, str.length()); }
   size_type find_first_of (const charT* s, size_type pos, size_type n) const;
@@ -378,7 +378,7 @@ public:
   size_type find_first_of (charT c, size_type pos = 0) const
     { return find (c, pos); }
 
-// -- Return index of the last occurrence of any character from str.
+//: Return index of the last occurrence of any character from str.
   size_type find_last_of (const vcl_basic_string& str, size_type pos = npos) const
     { return find_last_of (str.data(), pos, str.length()); }
   size_type find_last_of (const charT* s, size_type pos, size_type n) const;
@@ -387,7 +387,7 @@ public:
   size_type find_last_of (charT c, size_type pos = npos) const
     { return rfind (c, pos); }
 
-// -- Return index of the first occurrence of any character not in str.
+//: Return index of the first occurrence of any character not in str.
   size_type find_first_not_of (const vcl_basic_string& str, size_type pos = 0) const
     { return find_first_not_of (str.data(), pos, str.length()); }
   size_type find_first_not_of (const charT* s, size_type pos, size_type n) const;
@@ -395,7 +395,7 @@ public:
     { return find_first_not_of (s, pos, traits::length (s)); }
   size_type find_first_not_of (charT c, size_type pos = 0) const;
 
-// -- Return index of the last occurrence of any character not in str.
+//: Return index of the last occurrence of any character not in str.
   size_type find_last_not_of (const vcl_basic_string& str, size_type pos = npos) const
     { return find_last_not_of (str.data(), pos, str.length()); }
   size_type find_last_not_of (const charT* s, size_type pos, size_type n) const;
@@ -403,13 +403,13 @@ public:
     { return find_last_not_of (s, pos, traits::length (s)); }
   size_type find_last_not_of (charT c, size_type pos = npos) const;
 
-// -- Extract substring of length n chars staring at pos (written "this[pos..pos+n]")
+//: Extract substring of length n chars staring at pos (written "this[pos..pos+n]")
   vcl_basic_string substr (size_type pos = 0, size_type n = npos) const
     { return vcl_basic_string (*this, pos, n); }
 
 // @{ COMPARISON @}
 
-// -- Return -,0,+ comparing str to this[pos,pos+n].
+//: Return -,0,+ comparing str to this[pos,pos+n].
   int compare (const vcl_basic_string& str, size_type pos = 0, size_type n = npos) const;
   // There is no 'strncmp' equivalent for charT pointers.
   int compare (const charT* s, size_type pos, size_type n) const;
@@ -418,13 +418,12 @@ public:
 
 // @{ STL ITERATORS @}
 
-// --
   iterator begin () { return data_; }
-// --
+
   iterator end () { return data_ + strlen_; }
-// --
+
   const_iterator begin () const { return data_; }
-// --
+
   const_iterator end () const { return data_ + strlen_; }
 
 #if 0

@@ -1,13 +1,12 @@
 #ifndef vcl_iostream_h_
 #define vcl_iostream_h_
 
-// .NAME vcl_iostream
-// .INCLUDE vcl_iostream.h
-// .SECTION Author
-//    awf@robots.ox.ac.uk
-// .SECTION Description
-//  include compiler's <iostream.h> in a uniform way.
-//  in particular, define the following
+//: 
+// \file
+// \brief Include compiler's <iostream.h> in a uniform way.
+// \author awf@robots.ox.ac.uk
+//
+//  In particular, define the following
 // \verbatim
 //   vcl_ostream
 //   vcl_ios_X (as in ios::X)

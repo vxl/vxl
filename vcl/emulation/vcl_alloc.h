@@ -28,20 +28,21 @@
 
 #include "vcl_stlconf.h"
 
-// .NAME vcl_alloc
-// .INCLUDE emulation/vcl_alloc.h
-// .FILE emulation/vcl_alloc.cxx
-//
-// .SECTION Description
-// This implements some standard node allocators.  These are
+//:
+// \file
+// \brief This implements some standard node allocators
+// These are
 // NOT the same as the allocators in the C++ draft standard or in
 // in the original STL.  They do not encapsulate different pointer
 // types; indeed we assume that there is only one pointer type.
 // The allocation primitives are intended to allocate individual objects,
 // not larger arenas as with the original STL allocators.
-
-// .SECTION Modifications:
+//
+// \verbatim
+// Modifications
 //   180598 AWF Indented ifdefs properly. Very important task that.
+// \endverbatim
+
 
 #ifndef __ALLOC
 #   define __ALLOC vcl_alloc

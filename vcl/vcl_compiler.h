@@ -157,14 +157,14 @@ typedef int saw_VCL_FOR_SCOPE_HACK;
 
 // -------------------- handy macros
 
-// -- VCL_COMMA
+//: VCL_COMMA
 //
 // Handy for passing things with commas in them to CPP macros.  e.g. 
 // DO_MACRO(pair<A,B>) can be replaced by DO_MACRO(pair<A VCL_COMMA B>).
 #define VCL_COMMA ,
 
 
-// -- VCL_VOID_RETURN
+//: VCL_VOID_RETURN
 //
 // VCL_VOID_RETURN is used as a return type where void is expected,
 // as in return VCL_VOID_RETURN ;

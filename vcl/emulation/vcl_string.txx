@@ -49,9 +49,7 @@ operator= (const vcl_basic_string& str)
   return *this;
 }
 
-
-// -- Private, ensures string is large enough to hold `new_capacity'
-// characters.
+//: Private, ensures string is large enough to hold `new_capacity' characters.
 template <class charT, class traits>
 void vcl_basic_string <charT, traits>::
 realloc(int new_capacity)
@@ -89,7 +87,7 @@ realloc(int new_capacity)
   }
 }
 
-// -- Replace this[pos1..pos1+n1) with str[pos2..pos2+n2).
+//: Replace this[pos1..pos1+n1) with str[pos2..pos2+n2).
 template <class charT, class traits>
 vcl_basic_string <charT, traits>& vcl_basic_string <charT, traits>::
 replace (size_t pos1, size_t n1,
@@ -108,7 +106,7 @@ replace (size_t pos1, size_t n1,
   return replace (pos1, n1, str.data () + pos2, n2);
 }
 
-// -- Replace this[pos..pos+n1) with str[0..n2).
+//: Replace this[pos..pos+n1) with str[0..n2).
 template <class charT, class traits>
 vcl_basic_string <charT, traits>& vcl_basic_string <charT, traits>::
 replace (size_t pos, size_t n1, const charT* s, size_t n2)
