@@ -118,7 +118,7 @@ vil_iris_generic_image::vil_iris_generic_image(vil_stream* is,
 
 vil_iris_generic_image::~vil_iris_generic_image()
 {
-  is_ -> unref();
+  is_->unref();
 }
 
 bool vil_iris_generic_image::read_header()
@@ -222,6 +222,25 @@ bool vil_iris_generic_image::write_header()
 }
 
 
+static inline void swap(void* p,int length)
+{
+  char* t = (char*)p;
+#ifdef DEBUG
+  if (length == sizeof(vxl_uint_32) && *(vxl_uint_32*)p != 0) {
+    vcl_cerr << "Swapping " << *(vxl_uint_32*)p;
+    if (length == sizeof(float)) vcl_cerr << " (or " << *(float*)p << ')';
+  }
+#endif
+  for (int j=0;2*j<length;++j) { char c = t[j]; t[j] = t[length-j-1]; t[length-j-1] = c; }
+#ifdef DEBUG
+  if (length == sizeof(vxl_uint_32) && *(vxl_uint_32*)p != 0) {
+    vcl_cerr << " to " << *(vxl_uint_32*)p;
+    if (length == sizeof(float)) vcl_cerr << " (or " << *(float*)p << ')';
+    vcl_cerr << '\n';
+  }
+#endif
+}
+
 vil_image_view_base_sptr vil_iris_generic_image::get_copy_view( unsigned int x0, unsigned int xs,
                                                                 unsigned int y0, unsigned int ys) const
 {
@@ -258,6 +277,10 @@ vil_image_view_base_sptr vil_iris_generic_image::get_section_verbatim(unsigned i
       is_->read(cbi, row_len);
     }
   }
+  if (VXL_LITTLE_ENDIAN && pix_size > 1) // IRIS image data is big-endian
+    for (unsigned int i=0;i<xs*ys*nplanes_;++i)
+      swap(ob+i,pix_size);
+
   // Note that jskip is negative!  Hence data ref pt is not ib but ib+xs*(ys-1)
   if (format_ == VIL_PIXEL_FORMAT_BYTE)
     return new vil_image_view<vxl_byte>(buf,ib+xs*(ys-1),xs,ys,nplanes_,1,-xs,xs*ys);
@@ -322,32 +345,66 @@ bool vil_iris_generic_image::put_view( vil_image_view_base const& buf, unsigned 
     return false;
   }
 #ifdef DEBUG
-  vcl_cerr<<"vil_iris_image::put_view() : buf="
-          <<buf.ni()<<'x'<<buf.nj()<<'x'<< buf.nplanes()<<'p'
-          <<" at ("<<x0<<','<<y0<<")\n";
+  vcl_cerr << "vil_iris_image::put_view() : buf="
+           << buf.ni()<<'x'<<buf.nj()<<'x'<< buf.nplanes()<<'p'
+           << " at ("<<x0<<','<<y0<<")\n";
 #endif
   const unsigned char* ob = static_cast<vil_image_view<unsigned char> const&>(buf).top_left_ptr();
   unsigned int pix_size = vil_pixel_format_sizeof_components(format_);
 
   vxl_uint_32 rowsize = pix_size*buf.ni();
-  // for each channel
-  for (unsigned int channel = 0; channel<nplanes_; ++channel) {
-    ob += rowsize*buf.nj();
-    // number of rows to write
-    for (unsigned int y = nj_-y0-buf.nj(); y < nj_-y0; ++y) {
-      ob -= rowsize;
-      // skip to start of section
-      is_->seek(512L + (channel * ni_*nj_ + y * ni_ + x0) * pix_size);
-      if ((vil_streampos)rowsize != is_->write(ob, rowsize))
-        vcl_cerr << "WARNING: " << __FILE__ << ":\n"
-                 << " could not write "<<rowsize<<" bytes to stream;\n"
-                 << " channel="<<channel<<", y="<<y<<'\n';
+
+  if (VXL_LITTLE_ENDIAN && pix_size > 1) // IRIS image data is big-endian
+  {
+    // buffer for swapping bytes
+    vxl_byte* tempbuf = new vxl_byte[rowsize];
+    // for each channel
+    for (unsigned int channel = 0; channel<nplanes_; ++channel) {
+      ob += rowsize*buf.nj();
+      // number of rows to write
+      for (unsigned int y = nj_-y0-buf.nj(); y < nj_-y0; ++y) {
+        ob -= rowsize;
+        // skip to start of section
+        is_->seek(512L + (channel * ni_*nj_ + y * ni_ + x0) * pix_size);
+        // swap bytes before writing
+        vcl_memcpy(tempbuf,ob,rowsize);
+        for (unsigned int i=0;i<buf.ni();++i)
+          swap(tempbuf+i*pix_size,pix_size);
+        // write swapped bytes
+        if ((vil_streampos)rowsize != is_->write(tempbuf, rowsize))
+          vcl_cerr << "WARNING: " << __FILE__ << ":\n"
+                   << " could not write "<<rowsize<<" bytes to stream;\n"
+                   << " channel="<<channel<<", y="<<y<<'\n';
 #ifdef DEBUG
-      else
-        vcl_cerr << "written "<<rowsize<<" bytes to stream; channel="<<channel<<", y="<<y<<'\n';
+        else
+          vcl_cerr << "written "<<rowsize<<" bytes to stream; channel="<<channel<<", y="<<y<<'\n';
 #endif
+      }
+      ob += rowsize*buf.nj();
     }
-    ob += rowsize*buf.nj();
+    delete[] tempbuf;
+  }
+  else // (VXL_BIG_ENDIAN || pix_size == 1)
+  {
+    // for each channel
+    for (unsigned int channel = 0; channel<nplanes_; ++channel) {
+      ob += rowsize*buf.nj();
+      // number of rows to write
+      for (unsigned int y = nj_-y0-buf.nj(); y < nj_-y0; ++y) {
+        ob -= rowsize;
+        // skip to start of section
+        is_->seek(512L + (channel * ni_*nj_ + y * ni_ + x0) * pix_size);
+        if ((vil_streampos)rowsize != is_->write(ob, rowsize))
+          vcl_cerr << "WARNING: " << __FILE__ << ":\n"
+                   << " could not write "<<rowsize<<" bytes to stream;\n"
+                   << " channel="<<channel<<", y="<<y<<'\n';
+#ifdef DEBUG
+        else
+          vcl_cerr << "written "<<rowsize<<" bytes to stream; channel="<<channel<<", y="<<y<<'\n';
+#endif
+      }
+      ob += rowsize*buf.nj();
+    }
   }
   return true;
 }
