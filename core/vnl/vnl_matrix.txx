@@ -1,4 +1,4 @@
-// This is vxl/vnl/vnl_matrix.txx
+// This is core/vnl/vnl_matrix.txx
 #ifndef vnl_matrix_txx_
 #define vnl_matrix_txx_
 //:
@@ -427,8 +427,8 @@ template<class T>
 void vnl_matrix<T>::print(vcl_ostream& os) const {
   for (unsigned int i = 0; i < this->rows(); i++) {
     for (unsigned int j = 0; j < this->columns(); j++)
-      os << this->data[i][j] << " ";
-    os << "\n";
+      os << this->data[i][j] << ' ';
+    os << '\n';
   }
 }
 
@@ -439,8 +439,8 @@ template<class T>
 vcl_ostream& operator<< (vcl_ostream& os, vnl_matrix<T> const& m) {
   for (unsigned int i = 0; i < m.rows(); ++i) {
     for (unsigned int j = 0; j < m.columns(); ++j)
-      os << m(i, j) << " ";
-    os << vcl_endl;
+      os << m(i, j) << ' ';
+    os << '\n';
   }
   return os;
 }
@@ -1119,20 +1119,19 @@ void vnl_matrix<T>::assert_finite_internal() const
   if (is_finite())
     return;
 
-  vcl_cerr << vcl_endl << vcl_endl;
-  vcl_cerr << __FILE__ ":" << __LINE__ << ": matrix has non-finite elements" << vcl_endl;
+  vcl_cerr << "\n\n" __FILE__ ":" << __LINE__ << ": matrix has non-finite elements\n";
 
   if (rows() <= 20 && cols() <= 20) {
     vcl_cerr << __FILE__ ": here it is:\n" << *this;
   }
   else {
-    vcl_cerr << __FILE__ ": it is quite big (" << rows() << 'x' << cols() << ")" << vcl_endl;
-    vcl_cerr << __FILE__ ": in the following picture '-' means finite and '*' means non-finite:" << vcl_endl;
+    vcl_cerr << __FILE__ ": it is quite big (" << rows() << 'x' << cols() << ")\n"
+             << __FILE__ ": in the following picture '-' means finite and '*' means non-finite:\n";
 
     for (unsigned int i=0; i<rows(); ++i) {
       for (unsigned int j=0; j<cols(); ++j)
         vcl_cerr << char(vnl_math_isfinite((*this)(i, j)) ? '-' : '*');
-      vcl_cerr << vcl_endl;
+      vcl_cerr << '\n';
     }
   }
   vcl_cerr << __FILE__ ": calling abort()\n";
@@ -1225,7 +1224,8 @@ bool vnl_matrix<T>::read_ascii(vcl_istream& s)
   while (1) {
     T* row = vnl_c_vector<T>::allocate_T(colz);
     if (row == 0) {
-      vcl_cerr << "vnl_matrix<T>::read_ascii: Error, Out of memory on row " << row_vals.size() << vcl_endl;
+      vcl_cerr << "vnl_matrix<T>::read_ascii: Error, Out of memory on row "
+               << row_vals.size() << vcl_endl;
       return false;
     }
     s >> row[0];
@@ -1233,12 +1233,14 @@ bool vnl_matrix<T>::read_ascii(vcl_istream& s)
       break;
     for (unsigned int k = 1; k < colz; ++k) {
       if (s.eof()) {
-        vcl_cerr << "vnl_matrix<T>::read_ascii: Error, EOF on row " << row_vals.size() << ", column " << k << vcl_endl;
+        vcl_cerr << "vnl_matrix<T>::read_ascii: Error, EOF on row "
+                 << row_vals.size() << ", column " << k << vcl_endl;
         return false;
       }
       s >> row[k];
       if (s.fail()) {
-        vcl_cerr << "vnl_matrix<T>::read_ascii: Error, row " << row_vals.size() << " failed on column " << k << vcl_endl;
+        vcl_cerr << "vnl_matrix<T>::read_ascii: Error, row "
+                 << row_vals.size() << " failed on column " << k << vcl_endl;
         return false;
       }
     }
@@ -1256,7 +1258,7 @@ bool vnl_matrix<T>::read_ascii(vcl_istream& s)
   for (unsigned int i = 0; i < rowz; ++i) {
     for (unsigned int j = 0; j < colz; ++j)
       *p++ = row_vals[i][j];
-    if (i > 0) vnl_c_vector<T>::deallocate(row_vals[i], colz);
+    /*if (i>0)*/ vnl_c_vector<T>::deallocate(row_vals[i], colz);
   }
 
   return true;

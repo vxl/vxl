@@ -1,4 +1,4 @@
-// This is vxl/vil/vil_convolve_1d.txx
+// This is core/vil/vil_convolve_1d.txx
 #ifndef vil_convolve_1d_txx_
 #define vil_convolve_1d_txx_
 //:

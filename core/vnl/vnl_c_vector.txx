@@ -1,4 +1,4 @@
-// This is vxl/vnl/vnl_c_vector.txx
+// This is core/vnl/vnl_c_vector.txx
 #ifndef vnl_c_vector_txx_
 #define vnl_c_vector_txx_
 //:
@@ -435,7 +435,7 @@ template<class T>
 vcl_ostream& print_vector(vcl_ostream& s, T const* v, unsigned size)
 {
   for (unsigned i = 0; i+1 < size; ++i)   // For each index in vector
-    s << v[i] << " ";                              // Output data element
+    s << v[i] << ' ';                     // Output data element
   if (size > 0)  s << v[size-1];
   return s;
 }

@@ -1,4 +1,4 @@
-// This is vxl/doc/vxl_doc_rules.h
+// This is core/doc/vxl_doc_rules.h
 #ifndef vxl_doc_rules_h_
 #define vxl_doc_rules_h_
 //            (This is an example of how to code document your    )
