@@ -22,16 +22,26 @@ template void __introsort_loop(I, I, I, long)
 #define VCL_COPY_INSTANTIATE(Inp, Out) \
 template Out copy(Inp, Inp, Out)
 
-#define VCL_FIND_INSTANTIATE_ITER(I, T) \
+//fsm: the instantiation macro for find() needs to instantiate find(I, I, T, tag)
+//however, there seems to be no way to get the iterator category of I other than
+//using iterator_traits<I>::iterator_category. the problem then is that find()
+//is only defined for input_iterators and random_access_iterators. since a
+//bidirectional_iterator_tag is an input_iterator, the following should be harmless.
+template <class _BdIter, class _Tp>
+inline _BdIter find(_BdIter __first,
+                    _BdIter __last,
+                    _Tp const & __val,
+                    bidirectional_iterator_tag)
+{
+  return ::find(__first, __last, __val, input_iterator_tag());
+}
+
+#define VCL_FIND_INSTANTIATE(I, T) \
 template <int N> struct fsm_find_tickler; /* empty template */ \
 template <> struct fsm_find_tickler<__LINE__> { void method(I, I, T const &); }; \
 void fsm_find_tickler<__LINE__>::method(I b, I e, T const &v) { find(b, e, v); } \
-template I find(I, I, T const &)
-
-#define VCL_FIND_INSTANTIATE(I, T) \
-VCL_FIND_INSTANTIATE_ITER(I, T); \
-/*template I find(I, I, T const &, iterator_traits<I >::iterator_category);*/ \
-template I find<I,T>(I, I, T const&, random_access_iterator_tag)
+template I find(I, I, T const&); \
+template I find(I, I, T const&, iterator_traits<I >::iterator_category)
 
 #define VCL_FIND_IF_INSTANTIATE_ITER(I, P) \
 template I find_if(I, I, P)
