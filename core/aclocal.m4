@@ -77,13 +77,13 @@ cat > check_vxl_words.cc <<EOF
 
 int main(int, char **) {
   // 8bit word
-  macro(VXL_INT8, 1, char);
+  macro(VXL_INT_8, 1, char);
   // 16bit word
-  macro(VXL_INT16, 2, short);
+  macro(VXL_INT_16, 2, short);
   // 32bit word
-  macro(VXL_INT32, 4, int);
+  macro(VXL_INT_32, 4, int);
   // 64bit word
-  macro(VXL_INT64, 8, long long);
+  macro(VXL_INT_64, 8, long long);
   return 0;
 }
 EOF
