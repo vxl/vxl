@@ -39,9 +39,12 @@
 #if !VCL_USE_NATIVE_STL
 # include "emulation/vcl_rel_ops.h"
 
-#elif defined(VCL_GCC) && !defined(GNU_LIBSTDCXX_V3)
-// this header is wrong. v2 of the GNU library is wrong wrong wrong.
-# include "vcl_functional.h"
+#elif defined(VCL_GCC) && defined(VCL_CXX_HAS_HEADER_FUNCTIONAL)
+# include "vcl_utility.h"
+using std::operator!=;
+using std::operator>;
+using std::operator<=;
+using std::operator>=;
 
 #elif defined(VCL_SGI_CC)
 # include "vcl_utility.h"

@@ -9,7 +9,7 @@
 # undef vcl_functional_h_STD
 
 // -------------------- gcc with non-standard library
-#elif defined(VCL_GCC) && !defined(GNU_LIBSTDCXX_V3)
+#elif defined(VCL_GCC) && !defined(VCL_CXX_HAS_HEADER_FUNCTIONAL)
 # include <function.h>
 # define vcl_functional_h_STD ::
 
