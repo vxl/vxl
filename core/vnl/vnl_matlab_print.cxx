@@ -25,7 +25,7 @@ vcl_ostream &vnl_matlab_print(vcl_ostream& s,
 			  vnl_matlab_print_format format VCL_DEFAULT_VALUE(vnl_matlab_print_format_default))
 {
   char buf[1024];
-  for (int j=0; j<length; j++ ) {
+  for (unsigned j=0; j<length; j++ ) {
     // Format according to selected style
     // In both cases an exact 0 goes out as such
     vnl_matlab_print_scalar(array[j], buf, format);
@@ -41,7 +41,7 @@ vcl_ostream &vnl_matlab_print(vcl_ostream &s,
 			  unsigned rows, unsigned cols,
 			  vnl_matlab_print_format format VCL_DEFAULT_VALUE(vnl_matlab_print_format_default))
 {
-  for (int i=0; i<rows; ++i)
+  for (unsigned i=0; i<rows; ++i)
     vnl_matlab_print(s, array[i], cols, format) << vcl_endl;
   return s;
 }
@@ -77,7 +77,7 @@ vcl_ostream& vnl_matlab_print(vcl_ostream& s,
   if (M.rows() == 0)
     return s << "];" << vcl_endl;
 
-  for (int i=0; i<M.rows(); i++ ) {
+  for (unsigned int i=0; i<M.rows(); i++ ) {
     vnl_matlab_print(s, M[i], M.cols(), format);
     
     if (variable_name && (i == M.rows()-1))

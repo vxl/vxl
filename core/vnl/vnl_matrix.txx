@@ -103,7 +103,7 @@ do { \
     /* Allocate memory to hold the elements of the matrix */ \
     T* elmns = vnl_c_vector<T>::allocate_T(this->num_rows * this->num_cols); \
     /* Fill in the array of row pointers */ \
-    for (int i = 0; i < this->num_rows; ++ i) \
+    for (unsigned int i = 0; i < this->num_rows; ++ i) \
       this->data[i] = elmns + i*this->num_cols; \
   } \
   else { \
@@ -141,8 +141,8 @@ template<class T>
 vnl_matrix<T>::vnl_matrix (unsigned rowz, unsigned colz, T const& value)
 {
   vnl_matrix_alloc_blah(rowz, colz);
-  for (unsigned i = 0; i < rowz; ++ i)
-    for (unsigned j = 0; j < colz; ++ j)
+  for (unsigned int i = 0; i < rowz; ++ i)
+    for (unsigned int j = 0; j < colz; ++ j)
       this->data[i][j] = value;
 }
 
@@ -153,8 +153,8 @@ vnl_matrix<T>::vnl_matrix(unsigned r, unsigned c, vnl_matrix_type t)
   vnl_matrix_alloc_blah(r, c);
   if (t == vnl_matrix_identity) {
     assert(r == c);
-    for (unsigned i = 0; i < r; ++ i)
-      for (unsigned j = 0; j < c; ++ j)
+    for (unsigned int i = 0; i < r; ++ i)
+      for (unsigned int j = 0; j < c; ++ j)
 	this->data[i][j] = (i==j) ? T(1) : T(0);
   }
 }
@@ -167,7 +167,7 @@ template<class T>
 vnl_matrix<T>::vnl_matrix (unsigned rowz, unsigned colz, int n, T const values[])
 {
   vnl_matrix_alloc_blah(rowz, colz);
-  if (n > rowz*colz)
+  if (unsigned (n) > rowz*colz)
     n = rowz*colz;
   T *dst = this->data[0];
   for (int k=0; k<n; ++k)
@@ -182,9 +182,9 @@ template<class T>
 vnl_matrix<T>::vnl_matrix (T const* datablck, unsigned rowz, unsigned colz)
 {
   vnl_matrix_alloc_blah(rowz, colz);
-  int n = rowz*colz;
+  unsigned int n = rowz*colz;
   T *dst = this->data[0];
-  for (int k=0; k<n; ++k)
+  for (unsigned int k=0; k<n; ++k)
     dst[k] = datablck[k];
 }
 
@@ -197,10 +197,10 @@ vnl_matrix<T>::vnl_matrix (vnl_matrix<T> const& from)
 {
   if (from.data) {
     vnl_matrix_alloc_blah(from.num_rows, from.num_cols);
-    int n = this->num_rows * this->num_cols;
+    unsigned int n = this->num_rows * this->num_cols;
     T *dst = this->data[0];
     T const *src = from.data[0];
-    for (int k=0; k<n; ++k)
+    for (unsigned int k=0; k<n; ++k)
       dst[k] = src[k];
   }
   else {
@@ -220,12 +220,12 @@ vnl_matrix<T>::vnl_matrix (vnl_matrix<T> const &A, vnl_matrix<T> const &B, vnl_t
   
   vnl_matrix_alloc_blah(A.num_rows, A.num_cols);
   
-  int n = A.num_rows * A.num_cols;
+  unsigned int n = A.num_rows * A.num_cols;
   T const *a = A.data[0];
   T const *b = B.data[0];
   T *dst = this->data[0];
 
-  for (int i=0; i<n; ++i)
+  for (unsigned int i=0; i<n; ++i)
     dst[i] = a[i] + b[i];
 }
 
@@ -237,12 +237,12 @@ vnl_matrix<T>::vnl_matrix (vnl_matrix<T> const &A, vnl_matrix<T> const &B, vnl_t
 
   vnl_matrix_alloc_blah(A.num_rows, A.num_cols);
 
-  int n = A.num_rows * A.num_cols;
+  unsigned int n = A.num_rows * A.num_cols;
   T const *a = A.data[0];
   T const *b = B.data[0];
   T *dst = this->data[0];
 
-  for (int i=0; i<n; ++i)
+  for (unsigned int i=0; i<n; ++i)
     dst[i] = a[i] - b[i];
 }
 
@@ -251,11 +251,11 @@ vnl_matrix<T>::vnl_matrix (vnl_matrix<T> const &M, T s, vnl_tag_mul)
 {
   vnl_matrix_alloc_blah(M.num_rows, M.num_cols);
 
-  int n = M.num_rows * M.num_cols;
+  unsigned int n = M.num_rows * M.num_cols;
   T const *m = M.data[0];
   T *dst = this->data[0];
 
-  for (int i=0; i<n; ++i)
+  for (unsigned int i=0; i<n; ++i)
     dst[i] = m[i] * s;
 }
 
@@ -264,11 +264,11 @@ vnl_matrix<T>::vnl_matrix (vnl_matrix<T> const &M, T s, vnl_tag_div)
 {
   vnl_matrix_alloc_blah(M.num_rows, M.num_cols);
 
-  int n = M.num_rows * M.num_cols;
+  unsigned int n = M.num_rows * M.num_cols;
   T const *m = M.data[0];
   T *dst = this->data[0];
 
-  for (int i=0; i<n; ++i)
+  for (unsigned int i=0; i<n; ++i)
     dst[i] = m[i] / s;
 }
 
@@ -277,11 +277,11 @@ vnl_matrix<T>::vnl_matrix (vnl_matrix<T> const &M, T s, vnl_tag_add)
 {
   vnl_matrix_alloc_blah(M.num_rows, M.num_cols);
 
-  int n = M.num_rows * M.num_cols;
+  unsigned int n = M.num_rows * M.num_cols;
   T const *m = M.data[0];
   T *dst = this->data[0];
 
-  for (int i=0; i<n; ++i)
+  for (unsigned int i=0; i<n; ++i)
     dst[i] = m[i] + s;
 }
 
@@ -290,11 +290,11 @@ vnl_matrix<T>::vnl_matrix (vnl_matrix<T> const &M, T s, vnl_tag_sub)
 {
   vnl_matrix_alloc_blah(M.num_rows, M.num_cols);
 
-  int n = M.num_rows * M.num_cols;
+  unsigned int n = M.num_rows * M.num_cols;
   T const *m = M.data[0];
   T *dst = this->data[0];
 
-  for (int i=0; i<n; ++i)
+  for (unsigned int i=0; i<n; ++i)
     dst[i] = m[i] - s;
 }
 
@@ -304,16 +304,16 @@ vnl_matrix<T>::vnl_matrix (vnl_matrix<T> const &A, vnl_matrix<T> const &B, vnl_t
   if (A.num_cols != B.num_rows)
     vnl_error_matrix_dimension("vnl_tag_mul", A.num_rows, A.num_cols, B.num_rows, B.num_cols);
   
-  int l = A.num_rows;
-  int m = A.num_cols; // == B.num_rows
-  int n = B.num_cols;
+  unsigned int l = A.num_rows;
+  unsigned int m = A.num_cols; // == B.num_rows
+  unsigned int n = B.num_cols;
 
   vnl_matrix_alloc_blah(l, n);
 
-  for (int i=0; i<l; ++i) {
-    for (int k=0; k<n; ++k) {
+  for (unsigned int i=0; i<l; ++i) {
+    for (unsigned int k=0; k<n; ++k) {
       T sum(0);
-      for (int j=0; j<m; ++j)
+      for (unsigned int j=0; j<m; ++j)
 	sum += A.data[i][j] * B.data[j][k];
       this->data[i][k] = sum;
     }
@@ -364,8 +364,8 @@ bool vnl_matrix<T>::resize (unsigned rowz, unsigned colz)
 
 template<class T> 
 void vnl_matrix<T>::fill (T const& value) {
-  for (unsigned i = 0; i < this->num_rows; i++)    // For each row in the Matrix
-    for (unsigned j = 0; j < this->num_cols; j++)  // For each element in column
+  for (unsigned int i = 0; i < this->num_rows; i++)    // For each row in the Matrix
+    for (unsigned int j = 0; j < this->num_cols; j++)  // For each element in column
       this->data[i][j] = value;                 // Assign fill value
 }
 
@@ -373,7 +373,7 @@ void vnl_matrix<T>::fill (T const& value) {
 
 template<class T> 
 void vnl_matrix<T>::fill_diagonal (T const& value) {
-  for (unsigned i = 0; i < this->num_rows && i < this->num_cols; i++)
+  for (unsigned int i = 0; i < this->num_rows && i < this->num_cols; i++)
     this->data[i][i] = value;                   // Assign fill value
 }
 
@@ -396,8 +396,8 @@ template<class T>
 vnl_matrix<T>& vnl_matrix<T>::operator= (vnl_matrix<T> const& rhs) {
   if (this != &rhs) {                           // make sure *this != m
     this->resize(rhs.num_rows, rhs.num_cols);
-    for (unsigned i = 0; i < this->num_rows; i++)  // For each row in the Matrix
-      for (unsigned j = 0; j < this->num_cols; j++) // For each element in column
+    for (unsigned int i = 0; i < this->num_rows; i++)  // For each row in the Matrix
+      for (unsigned int j = 0; j < this->num_cols; j++) // For each element in column
 	this->data[i][j] = rhs.data[i][j];      // Copy value
   }
   return *this;                                 // Return Matrix reference
@@ -405,8 +405,8 @@ vnl_matrix<T>& vnl_matrix<T>::operator= (vnl_matrix<T> const& rhs) {
 
 template<class T> 
 void vnl_matrix<T>::print(vcl_ostream& os) const {
-  for (unsigned i = 0; i < this->rows(); i++) {    // For each row in matrix
-    for (unsigned j = 0; j < this->columns(); j++) // For each column in matrix
+  for (unsigned int i = 0; i < this->rows(); i++) {    // For each row in matrix
+    for (unsigned int j = 0; j < this->columns(); j++) // For each column in matrix
       os << this->data[i][j] << " ";            // Output data element
     os << "\n";                                 // Output newline
   }
@@ -417,8 +417,8 @@ void vnl_matrix<T>::print(vcl_ostream& os) const {
 
 template<class T> 
 vcl_ostream& operator<< (vcl_ostream& os, vnl_matrix<T> const& m) {
-  for (unsigned i = 0; i < m.rows(); ++i) {        // For each row
-    for (unsigned j = 0; j < m.columns(); ++j) {   // For each column
+  for (unsigned int i = 0; i < m.rows(); ++i) {        // For each row
+    for (unsigned int j = 0; j < m.columns(); ++j) {   // For each column
       // Output data element
       if (vnl_matrix<T>::print_format_set()) {
 	char buf[1024];
@@ -451,32 +451,32 @@ void vnl_matrix<T>::inline_function_tickler()
 
 template<class T> 
 vnl_matrix<T>& vnl_matrix<T>::operator+= (T value) {
-  for (unsigned i = 0; i < this->num_rows; i++)
-    for (unsigned j = 0; j < this->num_cols; j++)
+  for (unsigned int i = 0; i < this->num_rows; i++)
+    for (unsigned int j = 0; j < this->num_cols; j++)
       this->data[i][j] += value;
   return *this;
 }
 
 template<class T> 
 vnl_matrix<T>& vnl_matrix<T>::operator-= (T value) {
-  for (unsigned i = 0; i < this->num_rows; i++)
-    for (unsigned j = 0; j < this->num_cols; j++)
+  for (unsigned int i = 0; i < this->num_rows; i++)
+    for (unsigned int j = 0; j < this->num_cols; j++)
       this->data[i][j] -= value;
   return *this;
 }
 
 template<class T> 
 vnl_matrix<T>& vnl_matrix<T>::operator*= (T value) {
-  for (unsigned i = 0; i < this->num_rows; i++)
-    for (unsigned j = 0; j < this->num_cols; j++)
+  for (unsigned int i = 0; i < this->num_rows; i++)
+    for (unsigned int j = 0; j < this->num_cols; j++)
       this->data[i][j] *= value;
   return *this;
 }
 
 template<class T> 
 vnl_matrix<T>& vnl_matrix<T>::operator/= (T value) {
-  for (unsigned i = 0; i < this->num_rows; i++)
-    for (unsigned j = 0; j < this->num_cols; j++)
+  for (unsigned int i = 0; i < this->num_rows; i++)
+    for (unsigned int j = 0; j < this->num_cols; j++)
       this->data[i][j] /= value;
   return *this;
 }
@@ -493,8 +493,8 @@ vnl_matrix<T>& vnl_matrix<T>::operator+= (vnl_matrix<T> const& rhs) {
     vnl_error_matrix_dimension ("operator+=", 
 			   this->num_rows, this->num_cols, 
 			   rhs.num_rows, rhs.num_cols);
-  for (unsigned i = 0; i < this->num_rows; i++)    // For each row
-    for (unsigned j = 0; j < this->num_cols; j++)  // For each element in column
+  for (unsigned int i = 0; i < this->num_rows; i++)    // For each row
+    for (unsigned int j = 0; j < this->num_cols; j++)  // For each element in column
       this->data[i][j] += rhs.data[i][j];       // Add elements
   return *this;
 }
@@ -511,8 +511,8 @@ vnl_matrix<T>& vnl_matrix<T>::operator-= (vnl_matrix<T> const& rhs) {
     vnl_error_matrix_dimension ("operator-=", 
 			   this->num_rows, this->num_cols, 
 			   rhs.num_rows, rhs.num_cols);
-  for (unsigned i = 0; i < this->num_rows; i++)
-    for (unsigned j = 0; j < this->num_cols; j++)
+  for (unsigned int i = 0; i < this->num_rows; i++)
+    for (unsigned int j = 0; j < this->num_cols; j++)
       this->data[i][j] -= rhs.data[i][j];
   return *this;
 }
@@ -521,8 +521,8 @@ vnl_matrix<T>& vnl_matrix<T>::operator-= (vnl_matrix<T> const& rhs) {
 template<class T>
 vnl_matrix<T> operator- (T const& value, vnl_matrix<T> const& m) {
   vnl_matrix<T> result(m.rows(),m.columns());
-  for (unsigned i = 0; i < m.rows(); i++)  // For each row
-    for (unsigned j = 0; j < m.columns(); j++) // For each elmt. in column
+  for (unsigned int i = 0; i < m.rows(); i++)  // For each row
+    for (unsigned int j = 0; j < m.columns(); j++) // For each elmt. in column
       result.put(i,j, value - m.get(i,j) );     // subtract from value elmt.
   return result;
 }
@@ -555,8 +555,8 @@ vnl_matrix<T> operator- (T const& value, vnl_matrix<T> const& m) {
 template<class T> 
 vnl_matrix<T> vnl_matrix<T>::operator- () const {
   vnl_matrix<T> result(this->num_rows, this->num_cols);
-  for (unsigned i = 0; i < this->num_rows; i++)
-    for (unsigned j = 0; j < this->num_cols; j++)
+  for (unsigned int i = 0; i < this->num_rows; i++)
+    for (unsigned int j = 0; j < this->num_cols; j++)
       result.data[i][j] = - this->data[i][j];
   return result;
 }
@@ -622,8 +622,8 @@ vnl_matrix<T> vnl_matrix<T>::apply(T (*f)(T)) const {
 template<class T> 
 vnl_matrix<T> vnl_matrix<T>::transpose() const {
   vnl_matrix<T> result(this->num_cols, this->num_rows);
-  for (unsigned i = 0; i < this->num_cols; i++)
-    for (unsigned j = 0; j < this->num_rows; j++)
+  for (unsigned int i = 0; i < this->num_cols; i++)
+    for (unsigned int j = 0; j < this->num_rows; j++)
       result.data[i][j] = this->data[j][i];
   return result;
 }
@@ -646,13 +646,13 @@ vnl_matrix<T> vnl_matrix<T>::conjugate_transpose() const  {
 template<class T> 
 vnl_matrix<T>& vnl_matrix<T>::update (vnl_matrix<T> const& m, 
 					    unsigned top, unsigned left) {
-  unsigned bottom = top + m.num_rows;
-  unsigned right = left + m.num_cols;
+  unsigned int bottom = top + m.num_rows;
+  unsigned int right = left + m.num_cols;
   if (this->num_rows < bottom || this->num_cols < right)
     vnl_error_matrix_dimension ("update", 
 			   bottom, right, m.num_rows, m.num_cols);
-  for (unsigned i = top; i < bottom; i++)
-    for (unsigned j = left; j < right; j++)
+  for (unsigned int i = top; i < bottom; i++)
+    for (unsigned int j = left; j < right; j++)
       this->data[i][j] = m.data[i-top][j-left];
   return *this;
 }
@@ -665,14 +665,14 @@ vnl_matrix<T>& vnl_matrix<T>::update (vnl_matrix<T> const& m,
 template<class T> 
 vnl_matrix<T> vnl_matrix<T>::extract (unsigned rowz, unsigned colz, 
 					    unsigned top, unsigned left) const{
-  unsigned bottom = top + rowz;
-  unsigned right = left + colz;
+  unsigned int bottom = top + rowz;
+  unsigned int right = left + colz;
   if ((this->num_rows < bottom) || (this->num_cols < right))
     vnl_error_matrix_dimension ("extract", 
 			   this->num_rows, this->num_cols, bottom, right);
   vnl_matrix<T> result(rowz, colz);
-  for (unsigned i = 0; i < rowz; i++)      // actual copy of all elements
-    for (unsigned j = 0; j < colz ; j++)   // in submatrix
+  for (unsigned int i = 0; i < rowz; i++)      // actual copy of all elements
+    for (unsigned int j = 0; j < colz ; j++)   // in submatrix
       result.data[i][j] = data[top+i][left+j];
   return result;
 }
@@ -725,8 +725,8 @@ vnl_matrix<T> element_product (vnl_matrix<T> const& m1,
     vnl_error_matrix_dimension ("element_product", 
 			m1.rows(), m1.columns(), m2.rows(), m2.columns());
   vnl_matrix<T> result(m1.rows(), m1.columns());
-  for (unsigned i = 0; i < m1.rows(); i++)
-    for (unsigned j = 0; j < m1.columns(); j++)
+  for (unsigned int i = 0; i < m1.rows(); i++)
+    for (unsigned int j = 0; j < m1.columns(); j++)
       result.put(i,j, m1.get(i,j) * m2.get(i,j) );
   return result;
 }
@@ -741,8 +741,8 @@ vnl_matrix<T> element_quotient (vnl_matrix<T> const& m1,
     vnl_error_matrix_dimension ("element_quotient", 
 			m1.rows(), m1.columns(), m2.rows(), m2.columns());
   vnl_matrix<T> result(m1.rows(), m1.columns());
-  for (unsigned i = 0; i < m1.rows(); i++)
-    for (unsigned j = 0; j < m1.columns(); j++)
+  for (unsigned int i = 0; i < m1.rows(); i++)
+    for (unsigned int j = 0; j < m1.columns(); j++)
       result.put(i,j, m1.get(i,j) / m2.get(i,j) );
   return result;
 }
@@ -753,7 +753,7 @@ template<class T>
 void vnl_matrix<T>::copy_in(T const *p)
 {
   T* dp = this->data[0];
-  int n = this->num_rows * this->num_cols;
+  unsigned int n = this->num_rows * this->num_cols;
   while (n--)
     *dp++ = *p++;
 }
@@ -764,7 +764,7 @@ template<class T>
 void vnl_matrix<T>::copy_out(T *p) const
 {
   T* dp = this->data[0];
-  int n = this->num_rows * this->num_cols;
+  unsigned int n = this->num_rows * this->num_cols;
   while (n--)
     *p++ = *dp++;
 }
@@ -775,8 +775,8 @@ void vnl_matrix<T>::set_identity()
 {
   if (this->num_rows != this->num_cols) // Size?
     vnl_error_matrix_nonsquare ("set_identity");
-  for (unsigned i = 0; i < this->num_rows; i++)    // For each row in the Matrix
-    for (unsigned j = 0; j < this->num_cols; j++)  // For each element in column
+  for (unsigned int i = 0; i < this->num_rows; i++)    // For each row in the Matrix
+    for (unsigned int j = 0; j < this->num_cols; j++)  // For each element in column
       this->data[i][j] = (i == j) ? 1 : 0; // Assign fill value
 }
 
@@ -785,17 +785,17 @@ void vnl_matrix<T>::set_identity()
 template<class T>
 void vnl_matrix<T>::normalize_rows()
 {
-  for (unsigned i = 0; i < this->num_rows; i++) {  // For each row in the Matrix
+  for (unsigned int i = 0; i < this->num_rows; i++) {  // For each row in the Matrix
     double norm = 0; // Double should do all, but this should be specialized for complex.
-    for (unsigned j = 0; j < this->num_cols; j++)  // For each element in row
+    for (unsigned int j = 0; j < this->num_cols; j++)  // For each element in row
       norm += vnl_math_squared_magnitude(this->data[i][j]);
 
     if (norm != 0) {
       vnl_numeric_traits<vnl_numeric_traits<T>::abs_t>::real_t scale = 1.0/sqrt(norm);
-      for (unsigned j = 0; j < this->num_cols; j++) {
+      for (unsigned int j = 0; j < this->num_cols; j++) {
         // FIXME need correct rounding here
 	// There is no *standard* no operator*(complex<float>, double).
-        this->data[i][j] *= scale;
+        this->data[i][j] *= T(scale);
       }
     }
   }
@@ -806,17 +806,17 @@ void vnl_matrix<T>::normalize_rows()
 template<class T>
 void vnl_matrix<T>::normalize_columns()
 {
-  for (unsigned j = 0; j < this->num_cols; j++) {  // For each column in the Matrix
+  for (unsigned int j = 0; j < this->num_cols; j++) {  // For each column in the Matrix
     double norm = 0; // Double should do all, but this should be specialized for complex.
-    for (unsigned i = 0; i < this->num_rows; i++)
+    for (unsigned int i = 0; i < this->num_rows; i++)
       norm += vnl_math_squared_magnitude(this->data[i][j]);
 
     if (norm != 0) {
       vnl_numeric_traits<vnl_numeric_traits<T>::abs_t>::real_t scale = 1.0/sqrt(norm);
-      for (unsigned i = 0; i < this->num_rows; i++) {
+      for (unsigned int i = 0; i < this->num_rows; i++) {
         // FIXME need correct rounding here
 	// There is no *standard* no operator*(complex<float>, double).
-        this->data[i][j] *= scale;
+        this->data[i][j] *= T(scale);
       }
     }
   }
@@ -828,7 +828,7 @@ void vnl_matrix<T>::scale_row(unsigned row_index, T value)
 {
   if (row_index >= this->num_rows)
     vnl_error_matrix_row_index("scale_row", row_index);
-  for (unsigned j = 0; j < this->num_cols; j++)    // For each element in row
+  for (unsigned int j = 0; j < this->num_cols; j++)    // For each element in row
     this->data[row_index][j] *= value;
 }
 
@@ -838,7 +838,7 @@ void vnl_matrix<T>::scale_column(unsigned column_index, T value)
 {
   if (column_index >= this->num_cols)
     vnl_error_matrix_col_index("scale_column", column_index);
-  for (unsigned j = 0; j < this->num_rows; j++)    // For each element in column
+  for (unsigned int j = 0; j < this->num_rows; j++)    // For each element in column
     this->data[j][column_index] *= value;
 }
 
@@ -859,8 +859,8 @@ vnl_matrix<T> vnl_matrix<T>::get_n_columns (unsigned column, unsigned n) const {
     vnl_error_matrix_col_index ("get_n_columns", column);
   
   vnl_matrix<T> result(this->num_rows, n);
-  for (unsigned c = 0; c < n; ++c)
-    for (unsigned r = 0; r < this->num_rows; ++r)
+  for (unsigned int c = 0; c < n; ++c)
+    for (unsigned int r = 0; r < this->num_rows; ++r)
       result(r, c) = data[r][column + c];
   return result;
 }
@@ -875,7 +875,7 @@ vnl_vector<T> vnl_matrix<T>::get_row(unsigned row_index) const
 #endif
 
   vnl_vector<T> v(this->num_cols);
-  for (unsigned j = 0; j < this->num_cols; j++)    // For each element in row
+  for (unsigned int j = 0; j < this->num_cols; j++)    // For each element in row
     v[j] = this->data[row_index][j];
   return v;
 }
@@ -890,7 +890,7 @@ vnl_vector<T> vnl_matrix<T>::get_column(unsigned column_index) const
 #endif
 
   vnl_vector<T> v(this->num_rows);
-  for (unsigned j = 0; j < this->num_rows; j++)    // For each element in row
+  for (unsigned int j = 0; j < this->num_rows; j++)    // For each element in row
     v[j] = this->data[j][column_index];
   return v;
 }
@@ -901,7 +901,7 @@ vnl_vector<T> vnl_matrix<T>::get_column(unsigned column_index) const
 template<class T>
 void vnl_matrix<T>::set_row(unsigned row_index, T const *v)
 {
-  for (unsigned j = 0; j < this->num_cols; j++)    // For each element in row
+  for (unsigned int j = 0; j < this->num_cols; j++)    // For each element in row
     this->data[row_index][j] = v[j];
 }
 
@@ -916,7 +916,7 @@ void vnl_matrix<T>::set_row(unsigned row_index, vnl_vector<T> const &v)
 template<class T>
 void vnl_matrix<T>::set_row(unsigned row_index, T v)
 {
-  for (unsigned j = 0; j < this->num_cols; j++)    // For each element in row
+  for (unsigned int j = 0; j < this->num_cols; j++)    // For each element in row
     this->data[row_index][j] = v;
 }
 
@@ -926,7 +926,7 @@ void vnl_matrix<T>::set_row(unsigned row_index, T v)
 template<class T>
 void vnl_matrix<T>::set_column(unsigned column_index, T const *v)
 {
-  for (unsigned i = 0; i < this->num_rows; i++)    // For each element in row
+  for (unsigned int i = 0; i < this->num_rows; i++)    // For each element in row
     this->data[i][column_index] = v[i];
 }
 
@@ -941,7 +941,7 @@ void vnl_matrix<T>::set_column(unsigned column_index, vnl_vector<T> const &v)
 template<class T>
 void vnl_matrix<T>::set_column(unsigned column_index, T v)
 {
-  for (unsigned j = 0; j < this->num_rows; j++)    // For each element in row
+  for (unsigned int j = 0; j < this->num_rows; j++)    // For each element in row
     this->data[j][column_index] = v;
 }
 
@@ -956,8 +956,8 @@ void vnl_matrix<T>::set_columns(unsigned starting_column, vnl_matrix<T> const& m
 				this->num_rows, this->num_cols, 
 				m.num_rows, m.num_cols);
   
-  for (unsigned j = 0; j < m.num_cols; ++j)
-    for (unsigned i = 0; i < this->num_rows; i++)    // For each element in row
+  for (unsigned int j = 0; j < m.num_cols; ++j)
+    for (unsigned int i = 0; i < this->num_rows; i++)    // For each element in row
       this->data[i][starting_column + j] = m.data[i][j];
 }
 
@@ -977,8 +977,8 @@ bool vnl_matrix<T>::operator_eq(vnl_matrix<T> const& rhs) const {
   if (this->num_rows != rhs.num_rows || this->num_cols != rhs.num_cols)
     return false;                                        // different sizes => not equal.
   
-  for (unsigned i = 0; i < this->num_rows; i++)     // For each row
-    for (unsigned j = 0; j < this->num_cols; j++)   // For each columne
+  for (unsigned int i = 0; i < this->num_rows; i++)     // For each row
+    for (unsigned int j = 0; j < this->num_cols; j++)   // For each columne
       if (!(this->data[i][j] == rhs.data[i][j]))            // different element ?
 	return false;                                    // Then not equal.
 
@@ -990,8 +990,8 @@ template <class T>
 bool vnl_matrix<T>::is_identity(double tol) const
 {
   T one = vnl_numeric_traits<T>::one;
-  for (unsigned i = 0; i < this->rows(); ++i)
-    for (unsigned j = 0; j < this->columns(); ++j) {
+  for (unsigned int i = 0; i < this->rows(); ++i)
+    for (unsigned int j = 0; j < this->columns(); ++j) {
       T xm = (*this)(i,j);
       double absdev = (i == j) ? vnl_math_abs(xm - one) : vnl_math_abs(xm);
       if (absdev > tol)
@@ -1004,8 +1004,8 @@ bool vnl_matrix<T>::is_identity(double tol) const
 template <class T>
 bool vnl_matrix<T>::is_zero(double tol) const
 {
-  for (unsigned i = 0; i < this->rows(); ++i)
-    for (unsigned j = 0; j < this->columns(); ++j)
+  for (unsigned int i = 0; i < this->rows(); ++i)
+    for (unsigned int j = 0; j < this->columns(); ++j)
       if (vnl_math_abs((*this)(i,j)) > tol)
 	return false;
 
@@ -1016,8 +1016,8 @@ bool vnl_matrix<T>::is_zero(double tol) const
 template <class T>
 bool vnl_matrix<T>::has_nans() const
 {
-  for (unsigned i = 0; i < this->rows(); ++i)
-    for (unsigned j = 0; j < this->columns(); ++j)
+  for (unsigned int i = 0; i < this->rows(); ++i)
+    for (unsigned int j = 0; j < this->columns(); ++j)
       if (vnl_math_isnan((*this)(i,j)))
 	return true;
 
@@ -1028,8 +1028,8 @@ bool vnl_matrix<T>::has_nans() const
 template <class T>
 bool vnl_matrix<T>::is_finite() const
 {
-  for (unsigned i = 0; i < this->rows(); ++i)
-    for (unsigned j = 0; j < this->columns(); ++j)
+  for (unsigned int i = 0; i < this->rows(); ++i)
+    for (unsigned int j = 0; j < this->columns(); ++j)
       if (!vnl_math_isfinite((*this)(i,j)))
 	return false;
 
@@ -1072,8 +1072,8 @@ bool vnl_matrix<T>::read_ascii(vcl_istream& s)
   bool size_known = (this->rows() != 0);
 
   if (size_known) {
-    for (unsigned i = 0; i < this->rows(); ++i)
-      for (unsigned j = 0; j < this->columns(); ++j)
+    for (unsigned int i = 0; i < this->rows(); ++i)
+      for (unsigned int j = 0; j < this->columns(); ++j)
 	s >> this->data[i][j];
 
     return s.good() || s.eof();
@@ -1112,7 +1112,7 @@ bool vnl_matrix<T>::read_ascii(vcl_istream& s)
       goto loademup;
   }
  loademup:
-  int colz = first_row_vals.size();
+  unsigned int colz = first_row_vals.size();
 
   if (debug) vcl_cerr << colz << " cols, ";
 
@@ -1126,7 +1126,7 @@ bool vnl_matrix<T>::read_ascii(vcl_istream& s)
   {
     // Copy first row.  Can't use first_row_vals, as may be a vector of bool...
     T* row = vnl_c_vector<T>::allocate_T(colz);
-    for (int k = 0; k < colz; ++k)
+    for (unsigned int k = 0; k < colz; ++k)
       row[k] = first_row_vals[k];
     row_vals.push_back(row);
   }
@@ -1140,7 +1140,7 @@ bool vnl_matrix<T>::read_ascii(vcl_istream& s)
     s >> row[0];
     if (!s.good())
       break;
-    for (int k = 1; k < colz; ++k) {
+    for (unsigned int k = 1; k < colz; ++k) {
       if (s.eof()) {
 	vcl_cerr << "vnl_matrix<T>::read_ascii: Error, EOF on row " << row_vals.size() << ", column " << k << vcl_endl;
 	return false;
@@ -1154,7 +1154,7 @@ bool vnl_matrix<T>::read_ascii(vcl_istream& s)
     row_vals.push_back(row);
   }
   
-  int rowz = row_vals.size();
+  unsigned int rowz = row_vals.size();
 
   if (debug)
     vcl_cerr << rowz << " rows.\n";
@@ -1162,8 +1162,8 @@ bool vnl_matrix<T>::read_ascii(vcl_istream& s)
   resize(rowz, colz);
 
   T* p = this->data[0];
-  for (int i = 0; i < rowz; ++i) {
-    for (int j = 0; j < colz; ++j)
+  for (unsigned int i = 0; i < rowz; ++i) {
+    for (unsigned int j = 0; j < colz; ++j)
       *p++ = row_vals[i][j];
     if (i > 0) vnl_c_vector<T>::deallocate(row_vals[i], colz);
   }
@@ -1229,14 +1229,14 @@ void vnl_matrix<T>::swap(vnl_matrix<T> &that)
 template <class T>
 void vnl_matrix<T>::flipud()
 {
-  int n = this->rows();
-  int colz = this->columns();
+  unsigned int n = this->rows();
+  unsigned int colz = this->columns();
 
-  int m = n / 2;
-  for (int r = 0; r < m; ++r) {
-    int r1 = r;
-    int r2 = n - 1 - r;
-    for (int c = 0; c < colz; ++c) {
+  unsigned int m = n / 2;
+  for (unsigned int r = 0; r < m; ++r) {
+    unsigned int r1 = r;
+    unsigned int r2 = n - 1 - r;
+    for (unsigned int c = 0; c < colz; ++c) {
       T tmp = (*this)(r1, c);
       (*this)(r1, c) = (*this)(r2, c);
       (*this)(r2, c) = tmp;
@@ -1247,14 +1247,14 @@ void vnl_matrix<T>::flipud()
 template <class T>
 void vnl_matrix<T>::fliplr()
 {
-  int n = this->cols();
-  int rowz = this->rows();
+  unsigned int n = this->cols();
+  unsigned int rowz = this->rows();
 
-  int m = n / 2;
-  for (int c = 0; c < m; ++c) {
-    int c1 = c;
-    int c2 = n - 1 - c;
-    for (int r = 0; r < rowz; ++r) {
+  unsigned int m = n / 2;
+  for (unsigned int c = 0; c < m; ++c) {
+    unsigned int c1 = c;
+    unsigned int c2 = n - 1 - c;
+    for (unsigned int r = 0; r < rowz; ++r) {
       T tmp = (*this)(r, c1);
       (*this)(r, c1) = (*this)(r, c2);
       (*this)(r, c2) = tmp;
@@ -1269,9 +1269,9 @@ typename vnl_matrix<T>::abs_t vnl_matrix<T>::operator_one_norm() const
 {
   //typedef vnl_numeric_traits<T>::abs_t abs_t;
   abs_t max = 0;
-  for (int j=0; j<this->num_cols; ++j) {
+  for (unsigned int j=0; j<this->num_cols; ++j) {
     abs_t tmp = 0;
-    for (int i=0; i<this->num_rows; ++i)
+    for (unsigned int i=0; i<this->num_rows; ++i)
       tmp += vnl_math_abs(this->data[i][j]);
     if (tmp > max)
       max = tmp;
@@ -1286,9 +1286,9 @@ typename vnl_matrix<T>::abs_t vnl_matrix<T>::operator_inf_norm() const
 {
   //typedef vnl_numeric_traits<T>::abs_t abs_t;
   abs_t max = 0;
-  for (int i=0; i<this->num_rows; ++i) {
+  for (unsigned int i=0; i<this->num_rows; ++i) {
     abs_t tmp = 0;
-    for (int j=0; j<this->num_cols; ++j)
+    for (unsigned int j=0; j<this->num_cols; ++j)
       tmp += vnl_math_abs(this->data[i][j]);
     if (tmp > max)
       max = tmp;
@@ -1482,8 +1482,8 @@ L190:
 template <class T>
 void vnl_matrix<T>::inplace_transpose()
 {
-  int m = rows();
-  int n = columns();
+  int m = (int) rows();
+  int n = (int)columns();
   int iwrk = (m+n)/2;
   vnl_vector<int> move(iwrk);
 

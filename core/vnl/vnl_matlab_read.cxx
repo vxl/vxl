@@ -183,7 +183,7 @@ bool vnl_matlab_read_or_die(vcl_istream &s,
   //assert(s/*bad stream?*/);
   if (name && *name)
     assert(strcmp(name, h.name())==0/*wrong name?*/);
-  if (v.size() != h.rows()*h.cols()) {
+  if (v.size() != unsigned(h.rows()*h.cols())) {
     vcl_destroy(&v);
     new (&v) vnl_vector<T>(h.rows()*h.cols());
   }
@@ -202,7 +202,7 @@ bool vnl_matlab_read_or_die(vcl_istream &s,
   //assert(s/*bad stream?*/);
   if (name && *name)
     assert(strcmp(name, h.name())==0/*wrong name?*/);
-  if (M.rows() != h.rows() || M.cols() != h.cols()) {
+  if (M.rows() != unsigned(h.rows()) || M.cols() != unsigned(h.cols())) {
     vcl_destroy(&M);
     new (&M) vnl_matrix<T>(h.rows(), h.cols());
   }

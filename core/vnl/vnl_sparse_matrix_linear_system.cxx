@@ -68,7 +68,7 @@ void vnl_sparse_matrix_linear_system<T>::apply_preconditioner(vnl_vector<double>
     vnl_vector<T> tmp(get_number_of_unknowns());
     A_.diag_AtA(tmp);
     const_cast<vnl_vector<double> &>(jacobi_precond_) = vnl_vector<double> (tmp.size());
-    for (int i=0; i < tmp.size(); ++i)
+    for (unsigned int i=0; i < tmp.size(); ++i)
       const_cast<vnl_vector<double> &>(jacobi_precond_)[i] = 1.0 / double(tmp[i]);
   }
   

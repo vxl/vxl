@@ -13,7 +13,7 @@ class vnl_powell_1dfun : public vnl_cost_function {
 public:
   vnl_powell* powell_;
   vnl_cost_function* f_;
-  int n_;
+  unsigned int n_;
   vnl_vector<double> x0_;
   vnl_vector<double> dx_;
   vnl_vector<double> tmpx_;
@@ -43,7 +43,7 @@ public:
   }
   
   void uninit(double lambda, vnl_vector<double>& out) {
-    for(int i = 0; i < n_; ++i)
+    for(unsigned int i = 0; i < n_; ++i)
       out[i] = x0_[i] + lambda * dx_[i];
   }
 };
@@ -103,7 +103,7 @@ vnl_powell::minimize(vnl_vector<double>& p)
       return CONVERGED_FTOL;
     }
 
-    if (num_iterations_ == maxfev) {
+    if (num_iterations_ == unsigned(maxfev)) {
       return FAILED_TOO_MANY_ITERATIONS;
     }
     
