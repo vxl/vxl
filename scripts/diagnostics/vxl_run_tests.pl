@@ -32,7 +32,7 @@ sub find_test_directories
       {  $new_dir= "$rel_dir/$_"; }
 
       $path = "$base_dir/$new_dir";
-      if (-d $path)
+      if (-d $path && ! -l $path)
       {
         if ($_ eq "tests")
         {
