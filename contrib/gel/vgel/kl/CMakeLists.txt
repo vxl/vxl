@@ -15,3 +15,5 @@ SET(vgel_kl_sources
 )
 
 ADD_LIBRARY(vgel_kl ${vgel_kl_sources})
+
+TARGET_LINK_LIBRARIES(vgel_kl m)

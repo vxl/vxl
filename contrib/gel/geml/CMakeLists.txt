@@ -6,3 +6,5 @@ SET(geml_sources
 )
 
 ADD_LIBRARY(geml ${geml_sources})
+
+TARGET_LINK_LIBRARIES(geml vil vnl)

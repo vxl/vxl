@@ -11,3 +11,5 @@ SET(gtrl_sources
 AUX_SOURCE_DIRECTORY(Templates gtrl_sources)
 
 ADD_LIBRARY(gtrl ${gtrl_sources})
+
+TARGET_LINK_LIBRARIES(gtrl vbl)

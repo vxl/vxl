@@ -21,3 +21,5 @@ SET(vmal_sources
 AUX_SOURCE_DIRECTORY(Templates vmal_sources)
 
 ADD_LIBRARY(vmal ${vmal_sources})
+
+TARGET_LINK_LIBRARIES(vmal vgel vtol vsol osl mvl vidl vil vnl vbl)
