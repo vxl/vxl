@@ -40,7 +40,7 @@ worldwide.  The job of @vxl{} is to make that many @emph{happy} users, by
 creating a set of libraries which have the same useful code, but which are
 light, fast, and not weird.
 
-@section Contents
+@section Core Libraries
 
 The core of @vxl{} was defined in February 2000, and comprises five
 libraries.
@@ -98,6 +98,17 @@ to depend on @code{vnl} (and if necessary even on @code{vul}).
 This section describes how to save and restore objects using a binary stream.
 It details how to add the appropriate functions to each class to make use
 of this facility.
+
+@section Additional Libraries
+
+@subsection vcsl: Co-ordinate Systems
+
+This library allows you to represent and manipulate transformations, transformation graphs,
+and units of measurement.
+
+@subsection vidl: Video
+
+Load and save images from video files and sources.
 
 @section Documentation
 @cindex book
@@ -340,4 +351,3 @@ a level 0.5 library - for smart pointers, and binary IO. In both cases
 it turned out to be relatively straight forward to provide the required
 functionality without the 0.5 library, and indeed the proposers have
 found the alternative implementations superior in many ways.
-

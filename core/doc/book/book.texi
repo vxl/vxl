@@ -47,6 +47,7 @@ Copyright @copyright{} 2000 Andrew Fitzgibbon
 * vul::
 * vnl::
 * vil::
+* vidl::
 * vgl::
 * vsl::
 * vcsl::
@@ -127,7 +128,7 @@ Copyright @copyright{} 2000 Andrew Fitzgibbon
 @node    vidl,    vgl, vil,      top
 @comment node-name, next,      previous, up
 @chapter vidl: Video Access
-@cindex video 
+@cindex video
 
 @include chapter_vidl.texi
 
