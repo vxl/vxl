@@ -19,7 +19,7 @@ IF (WIN32)
   ENDIF (NOT CYGWIN)
 ENDIF(WIN32)
 
-INCLUDE_DIRECTORIES( ${allvxl_SOURCE_DIR}/vcl )
+#INCLUDE_DIRECTORIES( ${allvxl_SOURCE_DIR}/vcl )
 
 IF(BUILD_TESTING)
   ADD_EXECUTABLE(test-compute-vrml-centroid test-compute-vrml-centroid.cxx)
