@@ -13,6 +13,7 @@ vbl_bool_ostream
 vbl_sort
 vbl_test
 vbl_qsort
+vbl_shared_pointer
 )
 
 AUX_SOURCE_DIRECTORY(Templates vbl_sources)
