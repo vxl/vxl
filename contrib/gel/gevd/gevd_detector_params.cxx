@@ -15,6 +15,7 @@ gevd_detector_params::gevd_detector_params(const gevd_detector_params& dp)
              dp.automatic_threshold, dp.aggressive_junction_closure,
              dp.minLength, dp.maxGap, dp.minJump, dp.contourFactor,
              dp.junctionFactor, dp.junctionp, dp.spacingp, dp.borderp,
+             dp.peaks_only, dp.valleys_only,
              dp.corner_angle, dp.separation, dp.min_corner_length,
              dp.cycle, dp.ndimension);
 }

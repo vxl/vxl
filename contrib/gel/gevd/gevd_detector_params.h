@@ -145,8 +145,8 @@ protected:
                   bool follow_b,  
                   bool peaks_only,
                   bool valleys_only,
-                  float ang = 10, float sep = 1, int min_corner_len = 5,
-                  int cyc = 2, int ndim = 2);
+                  float ang, float sep, int min_corner_len,
+                  int cyc, int ndim);
 
 public:
   //
