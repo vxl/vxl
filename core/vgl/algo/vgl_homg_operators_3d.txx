@@ -62,7 +62,7 @@ Type vgl_homg_operators_3d<Type>::distance_squared(const vgl_homg_point_3d<Type>
 }
 
 //-----------------------------------------------------------------------------
-//
+
 //: Return the Eucidean distance between the points
 //
 template <class Type>
@@ -73,7 +73,7 @@ Type vgl_homg_operators_3d<Type>::distance(const vgl_homg_point_3d<Type>&point1,
 }
 
 //-----------------------------------------------------------------------------
-//
+
 //: Return the intersection point of the line and plane
 //
 template <class Type>
@@ -139,7 +139,7 @@ vgl_homg_operators_3d<Type>::lines_to_point(const vcl_vector<vgl_homg_line_3d >&
 #endif
 
 //-----------------------------------------------------------------------------
-//
+
 //: Return the squared perpendicular distance between the line and point
 //
 template <class Type>
@@ -152,7 +152,7 @@ vgl_homg_operators_3d<Type>::perp_dist_squared(const vgl_homg_line_3d& l,
 }
 
 //-----------------------------------------------------------------------------
-//
+
 //: Return the line which is perpendicular to l and passes through p.
 //
 template <class Type>
@@ -186,7 +186,7 @@ vgl_homg_operators_3d<Type>::perp_line_through_point(const vgl_homg_line_3d& l,
 
 
 //-----------------------------------------------------------------------------
-//
+
 //: Compute the perpendicular projection point of p onto l.
 //
 template <class Type>
@@ -207,7 +207,20 @@ vgl_homg_operators_3d<Type>::perp_projection(const vgl_homg_line_3d& l,
 
 
 //-----------------------------------------------------------------------------
+
+//: Dihedral angle (of intersection) of 2 planes
 //
+template <class Type>
+Type vgl_homg_operators_3d<Type>::plane_plane_angle(const vgl_homg_plane_3d<Type>& plane1,
+                                                    const vgl_homg_plane_3d<Type>& plane2)
+{
+  double cosang = dot_product(plane1.normal(), plane2.normal());
+
+  return vcl_acos(cosang);
+}
+
+//-----------------------------------------------------------------------------
+
 //: Return the intersection line of the planes
 //
 template <class Type>
@@ -304,8 +317,10 @@ vgl_homg_operators_3d<Type>::points_to_plane(const vcl_vector<vgl_homg_point_3d<
 }
 #endif
 
-//: Compute best-fit intersection of planes in a point.
+//-----------------------------------------------------------------------------
 
+//: Compute best-fit intersection of planes in a point.
+//
 template <class Type>
 vgl_homg_point_3d<Type>
 vgl_homg_operators_3d<Type>::intersection(const vgl_homg_plane_3d<Type>& p1,

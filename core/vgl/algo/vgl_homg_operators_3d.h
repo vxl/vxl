@@ -79,6 +79,8 @@ class vgl_homg_operators_3d
                                                  const vgl_homg_point_3d<Type>& point);
   static vgl_homg_line_3d planes_to_line(const vgl_homg_plane_3d<Type>& plane1,
                                          const vgl_homg_plane_3d<Type>& plane2);
+  static Type plane_plane_angle(const vgl_homg_plane_3d<Type>& plane1, 
+                                const vgl_homg_plane_3d<Type>& plane2);
 #if 0 // not yet implemented
   static vgl_homg_line_3d planes_to_line(const vcl_vector<vgl_homg_plane_3d<Type> >& plane_list);
   static vgl_homg_line_3d points_to_line(const vgl_homg_point_3d<Type>& point1,
