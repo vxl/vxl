@@ -45,10 +45,10 @@ void vil_gauss_filter_5tap(const srcT* src_im, vcl_ptrdiff_t src_istep, vcl_ptrd
   {
     destT* work_row = work + y*work_jstep;
     const srcT* src_col3  = src_im + y*src_jstep;
-    const srcT* src_col2  = src_col3 - 1;
-    const srcT* src_col1  = src_col3 - 2;
-    const srcT* src_col4  = src_col3 + 1;
-    const srcT* src_col5  = src_col3 + 2;
+    const srcT* src_col2  = src_col3 - src_istep;
+    const srcT* src_col1  = src_col3 - 2 * src_istep;
+    const srcT* src_col4  = src_col3 + src_istep;
+    const srcT* src_col5  = src_col3 + 2 * src_istep;
 
     int x;
     int nx2 = nx-2;
