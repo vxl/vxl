@@ -679,6 +679,32 @@ brip_float_ops::convert_to_byte(vil_memory_image_of<float> const & image,
   return output;
 }
 
+vil_memory_image_of<unsigned short>
+brip_float_ops::convert_to_short(vil_memory_image_of<float> const & image,
+                                 const float min_val, const float max_val)
+{
+  int w = image.width(), h = image.height();
+  float max_short = 65355.0; 
+  vil_memory_image_of<unsigned char> output;
+  output.resize(w,h);
+  float range = max_val-min_val;
+  if (!range)
+    range = 1;
+  else
+    range = max_short/range;
+  for (int y = 0; y<h; y++)
+    for (int x = 0; x<w; x++)
+      {
+        float v = (image(x,y)-min_val)*range;
+        if (v>max_short)
+          v=max_short;
+        if (v<0)
+          v=0;
+        output(x,y) = (unsigned short)v;
+      }
+  return output;
+}
+
 vil_memory_image_of<float>
 brip_float_ops::convert_to_float(vil_memory_image_of<unsigned char> const & image)
 {
@@ -691,6 +717,43 @@ brip_float_ops::convert_to_float(vil_memory_image_of<unsigned char> const & imag
   return output;
 }
 
+vil_memory_image_of<float>
+brip_float_ops::convert_to_float(vil_memory_image_of<vil_rgb<unsigned char> > const & image)
+{
+  vil_memory_image_of<float> output;
+  int w = image.width(), h = image.height();
+  output.resize(w,h);
+  for (int y = 0; y<h; y++)
+    for (int x = 0; x<w; x++)
+      {
+        vil_rgb<unsigned char> rgb = image(x,y);
+        output(x,y) = (float)rgb.grey();
+      }
+  return output;
+}
+
+vil_memory_image_of<float>
+brip_float_ops::convert_to_float(vil_image const & image)
+{
+  vil_memory_image_of<float> fimg;
+  if(image.components()==1)
+    {
+      vil_memory_image_of<unsigned char> temp(image);
+      fimg = brip_float_ops::convert_to_float(temp);
+    }
+  else if(image.components()==3)
+    {
+      vil_memory_image_of<vil_rgb<unsigned char> > temp(image);
+      fimg = brip_float_ops::convert_to_float(temp);
+    }
+  else
+    {
+      vcl_cout << "In brip_float_ops::convert_to_float - "
+               << "input not color or grey\n";
+      return 0;
+  }
+  return fimg;
+}
 //--------------------------------------------------------------
 // Read a convolution kernel from file
 // Assumes a square kernel with odd dimensions, i.e., w,h = 2n+1
