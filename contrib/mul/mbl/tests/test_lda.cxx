@@ -2,12 +2,14 @@
 #include <vcl_iostream.h>
 #include <vcl_cassert.h>
 #include <vcl_vector.h>
+#include <vcl_algorithm.h>
 #include <vpl/vpl.h> // vpl_unlink()
 
 #include <mbl/mbl_lda.h>
 
-#include <vpdfl/vpdfl_axis_gaussian_sampler.h>
-#include <vpdfl/vpdfl_axis_gaussian.h>
+// nb can't use vpdfl here as built after mbl
+//#include <vpdfl/vpdfl_axis_gaussian_sampler.h>
+//#include <vpdfl/vpdfl_axis_gaussian.h>
 
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_matrix.h>
@@ -56,6 +58,25 @@ void add_data(vcl_vector< vnl_vector<double> >& d_vec,
   }
 }
 
+void sample_axis_gaussian( vcl_vector< vnl_vector<double> >& sample,
+                     vnl_vector<double>& mean, 
+                     vnl_vector<double>& var,
+                     int ns)
+{
+  mbl_mz_random mzr(3);
+  sample.resize(0);
+  int d= mean.size();
+  assert ( mean.size() == var.size() );
+  for (int i=0; i<ns; ++i)
+  { 
+    vnl_vector<double> s(d);
+    for (int j=0; j<d; ++j)
+      s(j)=mzr.normal()*vcl_sqrt( var(j) )+mean(j);
+    sample.push_back(s);
+  }
+    
+}
+
 
 void test_lda()
 {
@@ -65,35 +86,25 @@ void test_lda()
 
   //create 2 gaussian distributions
   vnl_vector<double> m0,v0,m1,v1;
-  vpdfl_axis_gaussian g0,g1;
-
+  
    // Create g0
   double m0_array[2] = {8, 6};
   arr2vec(m0,2,m0_array);
   double v0_array[2] = {3, 2};
   arr2vec(v0,2,v0_array);
-  g0.set( m0, v0 );
-
+  
    // Create g1
   double m1_array[2] = {1, 2};
   arr2vec(m1,2,m1_array);
   double v1_array[2] = {20, 30};
   arr2vec(v1,2,v1_array);
-  g1.set( m1, v1 );
-
+  
 
   //sample some data
-  vpdfl_axis_gaussian_sampler s0,s1;
-  s0.set_model(g0);
-  s1.set_model(g1);
-
   int n_data=50;
-  vcl_vector< vnl_vector<double> >d0(n_data),d1(n_data);
-  for (int i=0;i<n_data;++i)
-  {
-    s0.sample( d0[i] );
-    s1.sample( d1[i] );
-  }
+  vcl_vector< vnl_vector<double> >d0,d1;
+  sample_axis_gaussian( d0, m0, v0, n_data);
+  sample_axis_gaussian( d1, m1, v1, n_data);
 
   vnl_matrix<double> mat0;
   vec2mat( mat0, d0 );
@@ -128,14 +139,11 @@ void test_lda()
   vcl_cout<<"c_m1= "<<c_m1<<vcl_endl;
   TEST("Test classifying mean 1", c_m1==1 , true);
 
-  // Create some test data
-  vcl_vector< vnl_vector<double> >test_d0(n_data),test_d1(n_data);
-  for (int i=0;i<n_data;++i)
-  {
-    s0.sample( test_d0[i] );
-    s1.sample( test_d1[i] );
-  }
 
+  //sample some test data
+  vcl_vector< vnl_vector<double> > test_d0,test_d1;
+  sample_axis_gaussian( test_d0, m0, v0, n_data);
+  sample_axis_gaussian( test_d1, m1, v1, n_data);
 
   // Test classfication error is reasonable
   int c0_count=0;
