@@ -483,6 +483,18 @@ SOURCE=.\Templates/vil_rgba+uint_16-.cxx
 SOURCE=.\Templates/vil_rgba+uint_32-.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\Templates/vil_rgb+int_64-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vil_rgb+uint_64-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vil_rgba+int_64-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vil_rgba+uint_64-.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\Templates/vil_copy+int_64-.cxx
 # End Source File
 # Begin Source File
