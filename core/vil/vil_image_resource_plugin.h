@@ -40,28 +40,25 @@ class vil_image_resource_plugin : public vil_image_resource
   virtual unsigned nj() const { return 0; }
   virtual unsigned nplanes() const { return 0; }
 
-  virtual bool get_property (char const * /*tag*/, void * /*property_value*/=0) const { return false; }
-  virtual vil_image_view_base_sptr get_copy_view (unsigned /*i0*/, unsigned /*ni*/, unsigned /*j0*/, unsigned /*nj*/) const
+  virtual bool get_property(char const * /*tag*/, void * /*property_value*/=0) const { return false; }
+  virtual vil_image_view_base_sptr get_copy_view(unsigned /*i0*/, unsigned /*ni*/, unsigned /*j0*/, unsigned /*nj*/) const
   { return vil_image_view_base_sptr(0); }
 
-  virtual bool put_view (vil_image_view_base const& /*im*/, unsigned /*i0*/, unsigned /*j0*/) { return false; }
+  virtual bool put_view(vil_image_view_base const& /*im*/, unsigned /*i0*/, unsigned /*j0*/) { return false; }
+
+  //: Attempt to load image from named file.
+  // \return  true if successful
+  virtual bool load_the_image(vil_image_view_base_sptr& image, const vcl_string & path);
 
   //: Attempt to load image from named file.
   // \param filetype  String hinting at what image format is
   // \param colour    define whether to load images as colour or grey-scale.
   //        Options are '' (i.e. rely on image), 'Grey' or 'RGB'
   // \return  true if successful
-  virtual bool load_the_image (vil_image_view_base_sptr& image, const vcl_string & path);
-
-  //: Attempt to load image from named file.
-  // \param filetype  String hinting at what image format is
-  // \param colour    define whether to load images as colour or grey-scale.
-  //        Options are '' (i.e. rely on image), 'Grey' or 'RGB'
-  // \return  true if successful
-  virtual bool load_the_image (vil_image_view_base_sptr& image,
-                               const vcl_string & path,
-                               const vcl_string & filetype,
-                               const vcl_string & colour);
+  virtual bool load_the_image(vil_image_view_base_sptr& image,
+                              const vcl_string & path,
+                              const vcl_string & filetype,
+                              const vcl_string & colour);
 
   //: Register a vil_image_resource_plugin to the list of plugins
   static void register_plugin(vil_image_resource_plugin* plugin);
