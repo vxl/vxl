@@ -37,14 +37,6 @@
 #include "gevd_param_mixin.h"
 
 //------------------------------------------------------------
-//: Constructor.  By default a constructed parameter block is valid.
-gevd_param_mixin::gevd_param_mixin() : valid_(true) {}
-
-//------------------------------------------------------------
-//: Destructor.
-gevd_param_mixin::~gevd_param_mixin() {}
-
-//------------------------------------------------------------
 //: Check if parameters are valid.  The default does nothing.
 bool  gevd_param_mixin::SanityCheck() { return true; }
 
@@ -55,13 +47,13 @@ bool  gevd_param_mixin::SanityCheck() { return true; }
 void gevd_param_mixin::SetErrorMsg(const char* msg)
 {
   if (msg && msg[0])
-    {
-      error_msg_ = msg;
-      valid_ = false;
-    }
+  {
+    error_msg_ = msg;
+    valid_ = false;
+  }
   else
-    {
-      error_msg_ = "";
-      valid_ = true;
-    }
+  {
+    error_msg_ = "";
+    valid_ = true;
+  }
 }
