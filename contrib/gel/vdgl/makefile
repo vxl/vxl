@@ -22,8 +22,6 @@ SOURCES += vdgl_interpolator_cubic.cxx
 SOURCES += vdgl_digital_curve.cxx
 SOURCES += vdgl_digital_region.cxx
 
-SOURCES += vdgl_intensity_face.cxx
-
 SOURCES += vdgl_fit_line.cxx
 SOURCES += vdgl_ortho_regress.cxx
 SOURCES += vdgl_OrthogRegress.cxx
@@ -31,7 +29,6 @@ SOURCES += vdgl_OrthogRegress.cxx
 MANPAGE_SOURCES += vdgl_digital_curve_sptr.h
 MANPAGE_SOURCES += vdgl_edgel_chain_sptr.h
 MANPAGE_SOURCES += vdgl_interpolator_sptr.h
-MANPAGE_SOURCES += vdgl_intensity_face_sptr.h
 MANPAGE_SOURCES += vdgl_digital_region_sptr.h
 
 ifndef NOTEST
