@@ -1,9 +1,6 @@
 // This is vxl/vgl/algo/vgl_homg_operators_1d.h
 #ifndef vgl_homg_operators_1d_h_
 #define vgl_homg_operators_1d_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \brief 1D homogeneous functions
@@ -12,8 +9,11 @@
 //
 // \author
 //     Peter Vanroose, ESAT/PSI, Nov. 1998.
-//
 //-----------------------------------------------------------------------------
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
+#pragma interface
+#endif
+
 #include <vgl/vgl_homg_1d.h>
 #include <vgl/vgl_homg_point_1d.h>
 
@@ -31,7 +31,7 @@ class vgl_homg_operators_1d
 
   static T dot(const vgl_homg_1d<T>& a, const vgl_homg_1d<T>& b);
   static T cross(const vgl_homg_1d<T>& a, const vgl_homg_1d<T>& b);
-  static void unitize(vgl_homg_1d<T>* a);
+  static void unitize(vgl_homg_1d<T>& a);
 
   static T distance(const vgl_homg_point_1d<T>& point1, const vgl_homg_point_1d<T>& point2);
   static T distance_squared(const vgl_homg_point_1d<T>& point1, const vgl_homg_point_1d<T>& point2);

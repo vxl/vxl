@@ -1,7 +1,6 @@
+// This is vxl/vgl/algo/vgl_homg_operators_1d.txx
 #ifndef vgl_homg_operators_1d_txx_
 #define vgl_homg_operators_1d_txx_
-
-
 //:
 // \file
 
@@ -65,16 +64,15 @@ T vgl_homg_operators_1d<T>::dot(const vgl_homg_1d<T>& a, const vgl_homg_1d<T>& b
 //-----------------------------------------------------------------------------
 //: Normalize vgl_homg_1d to unit magnitude
 template <class T>
-void vgl_homg_operators_1d<T>::unitize(vgl_homg_1d<T>* a)
+void vgl_homg_operators_1d<T>::unitize(vgl_homg_1d<T>& a)
 {
-  T x = a->x(), w = a->w();
-  T norm = vcl_sqrt (x*x + w*w);
+  double norm = vcl_sqrt (a.x()*a.x() + a.w()*a.w());
   if (norm == 0.0) {
     vcl_cerr << "vgl_homg_operators_1d<T>::unitize() -- Zero length vector\n";
     return;
   }
   norm = 1.0/norm;
-  a->set(x*norm, w*norm);
+  a.set(T(a.x()*norm), T(a.w()*norm));
 }
 
 //: Get the distance between the two points.
@@ -122,9 +120,9 @@ template <class T>
 T vgl_homg_operators_1d<T>::conjugate(T x1, T x2, T x3, double cr)
 // Default for cr is -1.
 {
-  T a = x1 - x3;  T b = x2 - x3; T c = a-cr*b;
+  T a = x1 - x3;  T b = x2 - x3; T c = T(a-cr*b);
   if (c == 0) return (x2*a == cr*x1*b) ? 1 : vgl_homg<T>::infinity;
-  return (x2*a-cr*x1*b)/c;
+  return T((x2*a-cr*x1*b)/c);
 }
 
 template <class T>
@@ -138,7 +136,8 @@ vgl_homg_1d<T> vgl_homg_operators_1d<T>::conjugate(const vgl_homg_1d<T>& a,
   T x2 = b.x(), w2 = b.w();
   T x3 = c.x(), w3 = c.w();
   T k = x1*w3 - x3*w1, m = x2*w3 - x3*w2;
-  return vgl_homg_1d<T>(x2*k-cr*x1*m, k*w2-cr*m*w1); // could be (0,0) !!  not checked.
+  return vgl_homg_1d<T>(T(x2*k-cr*x1*m), T(k*w2-cr*m*w1));
+  // could be (0,0) !!  not checked.
 }
 
 #endif // vgl_homg_operators_1d_txx_
