@@ -19,8 +19,7 @@
 //=======================================================================
 
 
-//: Generate losts of samples using pdf, build new pdf with builder
-//  and compare the two
+//: Generate lots of samples using pdf, build new pdf with builder and compare the two
 void test_compare_to_pdf_ks()
 {
   vcl_cout << "\n\n************************" << vcl_endl;
