@@ -61,7 +61,8 @@ vgl_box_3d<Type>::vgl_box_3d(Type xmin, Type ymin, Type zmin,
 template <class Type>
 vgl_box_3d<Type>::vgl_box_3d(const Type ref_point[3],
                              Type width, Type height, Type depth,
-                             vgl_box_3d<Type>::point_type t)
+//                             vgl_box_3d<Type>::point_type t) // fails for C++.NET 2003
+                             enum point_type t)  // necessary for C++.NET 2003
 {
   if (t == vgl_box_3d<Type>::centre)
   {
@@ -110,7 +111,11 @@ vgl_box_3d<Type>::vgl_box_3d(const Type centroid[3],
 template <class Type>
 vgl_box_3d<Type>::vgl_box_3d(const vgl_point_3d<Type>& ref_point,
                              Type width, Type height, Type depth,
-                             vgl_box_3d<Type>::point_type t)
+#if 1
+                             typename vgl_box_3d<Type>::point_type t)
+#else
+                             point_type t)
+#endif                             
 {
   if (t == vgl_box_3d<Type>::centre)
   {

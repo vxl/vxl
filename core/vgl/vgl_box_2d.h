@@ -97,7 +97,7 @@ class vgl_box_2d
   //  argument to avoid confusion.
   vgl_box_2d(const Type ref_point[2],
              Type width, Type height,
-             point_type);
+             point_type t);
 
   //: \deprecated Deprecated; use the 4-argument constructor above.
   vgl_box_2d(const Type min_point[2], Type width, Type height);

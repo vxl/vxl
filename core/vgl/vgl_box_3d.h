@@ -79,7 +79,7 @@ class vgl_box_3d
   //  argument to avoid confusion.
   vgl_box_3d(const Type ref_point[3],
              Type width, Type height, Type depth,
-             point_type);
+             point_type t);
 
   //: \deprecated Deprecated; use the 5-argument constructor above.
   vgl_box_3d(const Type centroid[3], Type wd, Type ht, Type dp);
@@ -92,7 +92,7 @@ class vgl_box_3d
   //  argument to avoid confusion.
   vgl_box_3d(vgl_point_3d<Type> const& ref_point,
              Type width, Type height, Type depth,
-             point_type);
+             point_type t);
 
   //: \deprecated Deprecated; use the 5-argument constructor above.
   vgl_box_3d(const vgl_point_3d<Type>& centroid, Type wd, Type ht, Type dp);
