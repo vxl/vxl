@@ -25,7 +25,7 @@ class bgui_range_adjuster_tableau : public vgui_easy2D_tableau
   bgui_range_adjuster_tableau(const char* n="unnamed");
 
   bgui_range_adjuster_tableau(vgui_image_tableau_sptr const& it,
-                         const char* n="unnamed");
+                              const char* n="unnamed");
 
   bgui_range_adjuster_tableau(vgui_tableau_sptr const& t, const char* n="unnamed");
 
@@ -55,7 +55,7 @@ class bgui_range_adjuster_tableau : public vgui_easy2D_tableau
   //: Upper range limit histogram area fraction
   double upper_range_limit(const double frac);
 
-  //: Use OpenGL Hardware mapping 
+  //: Use OpenGL Hardware mapping
   void set_hardware(bool hardware ){hardware_=hardware;}
 
   //: Handles all events for this tableau.
@@ -106,12 +106,12 @@ struct bgui_range_adjuster_tableau_new : public bgui_range_adjuster_tableau_sptr
   bgui_range_adjuster_tableau_new(const char* n="unnamed") :
     base(new bgui_range_adjuster_tableau(n)) { }
   bgui_range_adjuster_tableau_new(vgui_image_tableau_sptr const& it,
-                             const char* n="unnamed") :
+                                  const char* n="unnamed") :
     base(new bgui_range_adjuster_tableau(it,n)) { }
 
   bgui_range_adjuster_tableau_new(vgui_tableau_sptr const& t, const char* n="unnamed")
     :  base(new bgui_range_adjuster_tableau(t, n)) { }
-  
+
   operator vgui_easy2D_tableau_sptr () const { vgui_easy2D_tableau_sptr tt; tt.vertical_cast(*this); return tt; }
 };
 
