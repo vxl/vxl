@@ -164,6 +164,9 @@ SOURCE=.\vil3d_structuring_element.h
 # Begin Source File
 SOURCE=.\vil3d_exp_filter.h
 # End Source File
+# Begin Source File
+SOURCE=.\vil3d_normalised_correlation_3d.h
+# End Source File
 # End Group
 # End Target
 # End Project
