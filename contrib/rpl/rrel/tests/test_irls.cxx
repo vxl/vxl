@@ -1,5 +1,3 @@
-
-
 #include <vcl_iostream.h>
 #include <vcl_cmath.h>
 #include <vcl_vector.h>
@@ -15,7 +13,7 @@
 
 #include <mbl/mbl_mz_random.h>
 
-#include <vbl/vbl_test.h>
+#include <vnl/vnl_test.h>
 
 bool close( double x, double y ) { return vnl_math_abs(x-y) < 1.0e-6; }
 
@@ -34,7 +32,6 @@ double noise( double sigma )
 VCL_VECTOR_INSTANTIATE( image_point_match );
 
 
-
 const double conv_tolerance=1.0e-5;
 
 
@@ -47,7 +44,7 @@ regression_points( const vnl_vector<double>& a,
   pts.resize( num_pts );
   double x, y, z;
   vnl_vector<double> p(3);
-  
+
   //  Initialize variables.
   x = 1.0; y=-0.5; z= a[0] + a[1]*x + a[2]*y;
   p[0] = x; p[1]=y; p[2]=z;  pts[0]=p;
@@ -109,8 +106,8 @@ regression_points( const vnl_vector<double>& a,
   x = 6.5; y=4.0;  z = a[0] + a[1]*x + a[2]*y;
   p[0] = x; p[1]=y; p[2]=z;  pts[19]=p;
 
-  for ( int i=0; i<num_pts; ++i ) 
-    if ( i%10 == 5 )  // 
+  for ( int i=0; i<num_pts; ++i )
+    if ( i%10 == 5 )  //
       pts[i].z() += noise( 20 * sigma);
     else
       pts[i].z() += noise( sigma );
@@ -126,9 +123,9 @@ check( const vnl_vector<double>& correct_params,
   vnl_vector<double> err_vector(res - correct_params);
 
   //  Get standardized error
-  double err = sqrt(dot_product( err_vector*covar, err_vector ));
+  double err = vcl_sqrt(dot_product( err_vector*covar, err_vector ));
   bool success = err < 0.1;
-  /*
+#if 0
   bool conv = ( irls->did_it_converge( ) );
   vcl_cout << "Finished:\n "
             << "  estimate = " << irls->estimate()
@@ -139,19 +136,19 @@ check( const vnl_vector<double>& correct_params,
             << "  iterations used = " << irls->iterations_used() << "\n"
             << "  did it converge? " << (conv ? "yes" : "no")
             << vcl_endl;
-  */
+#endif
  return success;
 }
 
- 
+
 int
 main()
 {
   test_similarity_from_matches();
 
-  vbl_test_start( "rrel_irls" );
+  vnl_test_start( "rrel_irls" );
 
-  //  Set true parameter estimate. 
+  //  Set true parameter estimate.
   double a[] = { 10.0, 0.02, -0.1 };
   vnl_vector<double> true_params(3, 3, a);
   vnl_vector<double> est_params;
@@ -168,10 +165,10 @@ main()
   rrel_wls_obj * m_est = new rrel_tukey_obj( dof );
   int max_iterations = 20;
   int trace_level=0;
-  vbl_test_begin( "ctor" );
+  vnl_test_begin( "ctor" );
   rrel_irls * irls = new rrel_irls( max_iterations );
-  vbl_test_perform( irls != 0 );
-  
+  vnl_test_perform( irls != 0 );
+
   //  Setting max iteration parameters.
   max_iterations = 15;
   irls->set_max_iterations( max_iterations );
@@ -179,52 +176,52 @@ main()
   //  Setting scale estimation parameters.
   int iterations_for_scale = 2;
   bool use_weighted_scale = false;
-  vbl_test_begin( "scale parameters for non-weighted scale" );
+  vnl_test_begin( "scale parameters for non-weighted scale" );
   irls->set_est_scale( iterations_for_scale, use_weighted_scale );
-  vbl_test_perform( true );
-  vbl_test_begin( "use convergence test" );
+  vnl_test_perform( true );
+  vnl_test_begin( "use convergence test" );
   irls->set_convergence_test( conv_tolerance );
-  vbl_test_perform( true );
+  vnl_test_perform( true );
 
-  vbl_test_begin( "irls with scale estimation" );
+  vnl_test_begin( "irls with scale estimation" );
   bool success = irls->estimate( lr, m_est ) && check( true_params, irls );
   vcl_cout << "scale:  correct = " << sigma << ", estimated = " << irls->scale() << vcl_endl;
-  vbl_test_perform( success );
+  vnl_test_perform( success );
 
   irls->reset_params();
   irls->reset_scale();
   use_weighted_scale = true;
   irls->set_est_scale( iterations_for_scale, use_weighted_scale );
 
-  vbl_test_begin( "irls with weighted scale" );
+  vnl_test_begin( "irls with weighted scale" );
   success = irls->estimate( lr, m_est ) && check( true_params, irls );
   vcl_cout << "scale:  correct = " << sigma << ", estimated = " << irls->scale() << vcl_endl;
-  vbl_test_perform( success );
-  vbl_test_begin( "did it converge?" );
-  vbl_test_perform( irls->converged() );
+  vnl_test_perform( success );
+  vnl_test_begin( "did it converge?" );
+  vnl_test_perform( irls->converged() );
 
   irls->reset_params();
   irls->reset_scale();
   irls->initialize_params( true_params );
-  vbl_test_begin( "irls with correct initial fit" );
+  vnl_test_begin( "irls with correct initial fit" );
   success = irls->estimate( lr, m_est ) && check( true_params, irls );
   vcl_cout << "scale:  correct = " << sigma << ", estimated = " << irls->scale() << vcl_endl;
-  vbl_test_perform( success );
- 
+  vnl_test_perform( success );
+
   irls->reset_params();
   irls->initialize_scale( sigma );
   irls->set_no_scale_est();
   irls->set_no_convergence_test();
 
-  vbl_test_begin( "irls with fixed scale" );
+  vnl_test_begin( "irls with fixed scale" );
   max_iterations=6;
   irls->set_max_iterations( max_iterations );
   success = irls->estimate( lr, m_est ) && check( true_params, irls );
-  vbl_test_perform( success );
-  vbl_test_begin( "scale unchanged" );
-  vbl_test_perform( irls->scale() == sigma );
-  vbl_test_begin( "iterations used" );
-  vbl_test_perform( irls->iterations_used() == max_iterations );
+  vnl_test_perform( success );
+  vnl_test_begin( "scale unchanged" );
+  vnl_test_perform( irls->scale() == sigma );
+  vnl_test_begin( "iterations used" );
+  vnl_test_perform( irls->iterations_used() == max_iterations );
 
 
   //  onto irls from matches
@@ -235,15 +232,15 @@ main()
   sigma = 0.25;
   generate_similarity_matches( params, sigma, matches );
   rrel_estimation_problem* match_prob = new similarity_from_matches( matches );
-  
+
   rrel_irls irls_m( 20 );
   irls_m.set_trace_level( trace_level );
   irls_m.set_est_scale( 2, true );  // use weighted
   irls_m.set_convergence_test();
   irls_m.initialize_params( params );
-  
-  vbl_test_begin( "non-unique matches -- params initialized correctly, weighted scale" );
-  vbl_test_perform( irls_m.estimate( match_prob, m_est ) &&
+
+  vnl_test_begin( "non-unique matches -- params initialized correctly, weighted scale" );
+  vnl_test_perform( irls_m.estimate( match_prob, m_est ) &&
                     check( params, &irls_m ) );
   vcl_cout << "true scale = " << sigma << ", weighted scale = " << irls_m.scale() << vcl_endl;
 
@@ -251,8 +248,8 @@ main()
   irls_m.initialize_params( params );
   irls_m.set_est_scale( 2, false );  // use un-weighted scale
   irls_m.set_convergence_test();
-  vbl_test_begin( "non-unique matches -- params initialized correctly, MAD scale" );
-  vbl_test_perform( irls_m.estimate( match_prob, m_est ) &&
+  vnl_test_begin( "non-unique matches -- params initialized correctly, MAD scale" );
+  vnl_test_perform( irls_m.estimate( match_prob, m_est ) &&
                     check( params, &irls_m ) );
   vcl_cout << "true scale = " << sigma << ", MAD scale = " << irls_m.scale() << vcl_endl;
 
@@ -261,13 +258,13 @@ main()
   irls_m.set_no_scale_est( );  // use no scale
   irls_m.initialize_scale( sigma );
   irls_m.set_convergence_test();
-  vbl_test_begin( "non-unique matches -- params initialized correctly, fixed scale" );
-  vbl_test_perform( irls_m.estimate( match_prob, m_est ) &&
+  vnl_test_begin( "non-unique matches -- params initialized correctly, fixed scale" );
+  vnl_test_perform( irls_m.estimate( match_prob, m_est ) &&
                     check( params, &irls_m ) );
-  vbl_test_begin( "scale unchanged" );
-  vbl_test_perform( close( sigma, irls_m.scale() ) );
+  vnl_test_begin( "scale unchanged" );
+  vnl_test_perform( close( sigma, irls_m.scale() ) );
 
-  vbl_test_summary();
-  
+  vnl_test_summary();
+
   return 0;
 }

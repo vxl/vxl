@@ -40,11 +40,11 @@ rrel_ran_sam_search::set_gen_all_samples()
 
 
 // ------------------------------------------------------------
-void 
+void
 rrel_ran_sam_search::set_sampling_params( double max_outlier_frac,
                                           double desired_prob_good,
                                           unsigned int max_populations_expected,
-                                          unsigned int min_samples ) 
+                                          unsigned int min_samples )
 {
   generate_all_ = false;
   max_outlier_frac_ = max_outlier_frac;
@@ -86,7 +86,7 @@ rrel_ran_sam_search::estimate( const rrel_estimation_problem * problem,
   //  value, and tests the value against the best found thus far.  If
   //  a sample doesn't yield a parameter vector, it is still counted
   //  toward the total number to take.  This prevents errors that
-  //  would arise when all samples are to be used, but still works 
+  //  would arise when all samples are to be used, but still works
   //  correctly for probabilistic sampling because the possibility
   //  is rare.
   //
@@ -118,7 +118,7 @@ rrel_ran_sam_search::estimate( const rrel_estimation_problem * problem,
         params_ = new_params;
       }
     }
-    else if (trace_level_ >= 1) 
+    else if (trace_level_ >= 1)
       vcl_cout << "No fit to sample.\n";
   }
 
@@ -128,7 +128,7 @@ rrel_ran_sam_search::estimate( const rrel_estimation_problem * problem,
 
   //
   // Estimation succeeded.  Now, estimate scale and then return.
-  // 
+  //
   problem->compute_residuals( params_, residuals );
   if ( trace_level_ >= 1) vcl_cout << "\nOptimum fit = " << params_ << vcl_endl;
   if ( trace_level_ >= 2) this->trace_residuals( residuals );
@@ -144,7 +144,7 @@ rrel_ran_sam_search::estimate( const rrel_estimation_problem * problem,
 }
 
 
-// ------------------------------------------------------------ 
+// ------------------------------------------------------------
 void
 rrel_ran_sam_search::calc_num_samples( const rrel_estimation_problem* problem )
 {
@@ -163,16 +163,16 @@ rrel_ran_sam_search::calc_num_samples( const rrel_estimation_problem* problem )
     samples_to_take_ = (unsigned int)( numer / denom );
   }
   else {
-    // 
+    //
     //  Calculate the probability that a sample is good.  Then, use this
     //  to determine the minimum number of samples required.
     //
     double prob_pt_inlier = (1 - max_outlier_frac_) * problem->num_unique_samples() / double(problem->num_samples());
     double prob_pt_good
       = max_populations_expected_
-        * pow( prob_pt_inlier / max_populations_expected_, problem->num_samples_to_instantiate());
-    samples_to_take_ = int(ceil( log(1.0 - desired_prob_good_) /
-                                 log(1.0 - prob_pt_good) ));
+        * vcl_pow( prob_pt_inlier / max_populations_expected_, (int)problem->num_samples_to_instantiate());
+    samples_to_take_ = int(vcl_ceil( vcl_log(1.0 - desired_prob_good_) /
+                                     vcl_log(1.0 - prob_pt_good) ));
     if ( samples_to_take_ < min_samples_ ) samples_to_take_ = min_samples_;
   }
 }
@@ -191,7 +191,7 @@ rrel_ran_sam_search::next_sample( unsigned int taken,
     if ( taken == 0 ) {  //  initial sample
       for ( unsigned int i=0; i<points_per_sample; ++i ) sample[i] = i;
     }
-    else if ( taken >= samples_to_take_ ) 
+    else if ( taken >= samples_to_take_ )
       vcl_cerr << "rrel_ran_sam_search::next_sample -- ERROR: used all samples\n";
     else {
       //
@@ -204,15 +204,15 @@ rrel_ran_sam_search::next_sample( unsigned int taken,
       for ( ++k, ++i; i<points_per_sample; ++i, ++k ) sample[i]=k;
     }
   }
-  
+
   else {
     if ( num_points == 1 ) {
       sample[0] = 0;
     } else {
       unsigned int k=0;
       while ( k<points_per_sample ) {
-        unsigned int id = generator_.lrand32( 0, num_points-1 ); 
-        if ( id < 0 || id >= num_points ) {   //  safety check
+        unsigned int id = generator_.lrand32( 0, num_points-1 );
+        if ( id >= num_points ) {   //  safety check
           vcl_cerr << "rrel_ran_sam_search::next_sample --- WARNING: random value "
                    << "out of range\n";
         }
@@ -247,14 +247,13 @@ rrel_ran_sam_search::trace_sample( const vcl_vector<int>& indices ) const
   for ( unsigned int i=0; i<indices.size(); ++i) vcl_cout << " " << indices[i];
   vcl_cout << vcl_endl;
 }
- 
+
 // ------------------------------------------------------------
-void   
+void
 rrel_ran_sam_search::trace_residuals( const vcl_vector<double>& residuals ) const
 {
   vcl_cout << "\nResiduals:\n";
-  for ( unsigned int i=0; i<residuals.size(); ++i ) 
+  for ( unsigned int i=0; i<residuals.size(); ++i )
     vcl_cout << "  " << i << ":  " << residuals[i] << "\n";
   vcl_cout << vcl_endl;
 }
-

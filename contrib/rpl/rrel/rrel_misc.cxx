@@ -10,10 +10,10 @@ double
 rrel_misc_erfcc( double x )
 {
     double t,z,ans;
- 
-    z=fabs(x);
+
+    z=vcl_fabs(x);
     t=1.0/(1.0+0.5*z);
-    ans=t*exp(-z*z-1.26551223+t*(1.00002368+t*(0.37409196+t*(0.09678418+
+    ans=t*vcl_exp(-z*z-1.26551223+t*(1.00002368+t*(0.37409196+t*(0.09678418+
            t*(-0.18628806+t*(0.27886807+t*(-1.13520398+t*(1.48851587+
                  t*(-0.82215223+t*0.17087277)))))))));
     return  x >= 0.0 ? ans : 2.0-ans;
@@ -34,18 +34,18 @@ rrel_misc_erfcc( double x )
 // 4.5 E-4 of the true value, 3 Newton-Raphson interations are used
 // to refine the approximation.
 //
-// Let,
-// Q(x) = (1/sqrt(2*pi)) Int_{x}^{infinity} e^{-t^2/2} dt
-//      = 0.5 * erfc(x/sqrt(2))
+// Let
+// $Q(x) = (1/\sqrt{2 pi}) \Int_{x}^{\infty} e^{-t^2/2} dt
+//       = 0.5 * erfc(x/\sqrt{2})$
 //
-// Given p, this function computes x such that Q(x) = p, for 0 < p < 1
+// Given p, this function computes x such that $Q(x) = p$, for $0 < p < 1$
 //
 // Note that the Gaussian CDF is defined as
-// P(x) = (1/sqrt(2*pi)) Int_{-infinity}{x} e^{-t^2/2} dt
-//      = 1 - Q(x)
+// $P(x) = (1/\sqrt{2 pi}) \Int_{-\infty}^{x} e^{-t^2/2} dt
+//       = 1 - Q(x)$
 //
-// This function has been modified to compute the inverse of P(x) instead
-// of Q(x).
+// This function has been modified to compute the inverse of $P(x)$ instead
+// of $Q(x)$.
 //
 double
 rrel_misc_gaussian_cdf_inv( double p )
@@ -68,10 +68,10 @@ rrel_misc_gaussian_cdf_inv( double p )
    else if (p >= 1.0)
      return vnl_huge_val(double(0));
 
-   
+
    /**  Step 1:  use 26.2.23 from Abramowitz and Stegun **/
 
-   dt = sqrt( -2.0 * log(dp) ) ;
+   dt = vcl_sqrt( -2.0 * vcl_log(dp) ) ;
    dx = dt
      - ((.010328e+0*dt + .802853e+0)*dt + 2.515517e+0)
      /(((.001308e+0*dt + .189269e+0)*dt + 1.432788e+0)*dt + 1.e+0) ;
@@ -80,7 +80,7 @@ rrel_misc_gaussian_cdf_inv( double p )
 
    for( newt=0 ; newt < 3 ; newt++ ){
      dq  = 0.5e+0 * rrel_misc_erfcc( dx / 1.414213562373095e+0 ) - dp ;
-     ddq = exp( -0.5e+0 * dx * dx ) / 2.506628274631000e+0 ;
+     ddq = vcl_exp( -0.5e+0 * dx * dx ) / 2.506628274631000e+0 ;
      dx  = dx + dq / ddq ;
    }
 
