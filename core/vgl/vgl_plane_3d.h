@@ -24,7 +24,7 @@
 #include <vgl/vgl_fwd.h> // forward declare vgl_homg_plane_3d, vgl_point_3d
 #include <vgl/vgl_vector_3d.h>
 
-//: Represents a Euclidian 3D plane
+//: Represents a Euclidean 3D plane
 //  the equation of the plane is (nx * x) + (ny * y) + (nz * z) + d = 0
 template <class Type>
 class vgl_plane_3d
