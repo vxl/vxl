@@ -2,7 +2,7 @@ USES = vxl
 include ${IUEROOT}/vxl/vil/config.mk
 
 # Examples may use vbl....
-IULIBS = -lvil -lvbl -lvpl
+IULIBS = -lvil -lvul -lvpl
 
 MINI_PROG_SOURCES += vil_convolve_1d.cxx
 MINI_PROG_SOURCES += vil_convolve.cxx

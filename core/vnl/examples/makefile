@@ -1,7 +1,7 @@
 USES += vxl
 include ${IUEROOT}/vxl/vnl/algo/config.mk
 
-IULIBS := -lvnl-algo -lvbl -lvnl
+IULIBS := -lvnl-algo -lvul -lvnl
 
 MINI_PROG_SOURCES += time_fastops.cxx
 MINI_PROG_SOURCES += vnl_amoeba.cxx
