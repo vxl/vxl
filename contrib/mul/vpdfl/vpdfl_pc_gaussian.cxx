@@ -129,7 +129,7 @@ void vpdfl_pc_gaussian::calcPartLogK()
 {
   const double *v_data = eigenvals().data_block();
   double log_v_sum = 0.0;
-  const int &n = partition_;
+  const unsigned& n = partition_;
 
   for (int i=0;i<n;i++) log_v_sum+=vcl_log(v_data[i]);
 
