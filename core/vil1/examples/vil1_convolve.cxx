@@ -3,7 +3,6 @@
 #pragma implementation "vul_arg.h"//otherwise "unresolved typeinfo vul_arg_base"
 #endif
 
-#include <vcl_cstring.h>
 #include <vcl_cmath.h>   // vcl_fabs()
 #include <vcl_iostream.h>
 
@@ -92,14 +91,14 @@ int main(int argc, char ** argv)
       for (int y = 0; y < kp->h; ++y)
         for (int x = 0; x < kp->w; ++x) {
           power += vcl_fabs(*v);
-          kernelimg[y][x] = *v;
+          kernelimg[y][x] = float(*v);
           ++v;
         }
       // Scale to unit power
       power = 1/power;
       for (int y = 0; y < kp->h; ++y)
         for (int x = 0; x < kp->w; ++x)
-          kernelimg[y][x] *= power;
+          kernelimg[y][x] *= float(power);
     }
   if (kernelimg.width() == 0) {
     vcl_cerr << "vil_convolve: unknown kernel [" << kernel << "]\n";

@@ -38,17 +38,17 @@ vil_image vil_smooth_gaussian(vil_image const & in, double sigma)
   int size = 2*radius + 1;
   vcl_vector<float> mask(size);
   double halfnorm = 0.0;
-  mask[radius] = 1.0;
+  mask[radius] = 1.0f;
   for (int x=1; x<=radius; ++x) {
     double v = vcl_exp(-0.5*x*x/(sigma*sigma));
-    mask[radius - x] = mask[radius + x] = v;
+    mask[radius - x] = mask[radius + x] = float(v);
     halfnorm += v;
   }
 
   // normalise mask
   double mass_scale = 1.0/(1 + 2*halfnorm);
   for (int x=0; x< size; ++x)
-    mask[x] *= mass_scale;
+    mask[x] *= float(mass_scale);
 
   // Call convolver
   if (vil_pixel_format(in) == VIL_BYTE)
