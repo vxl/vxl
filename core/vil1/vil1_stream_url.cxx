@@ -129,7 +129,7 @@ vil1_stream_url::vil1_stream_url(char const *url)
   vcl_string auth;
   int port = 80; // default
 
-  //authentification
+  //authentication
   for (unsigned int i=0; i<host.size(); ++i)
     if (host[i] == '@') {
       auth = vcl_string(host.c_str(), host.c_str()+i);
