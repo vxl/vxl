@@ -39,9 +39,11 @@
 
 class vtol_vertex;
 class vtol_edge;
+class vtol_face_2d;
 class vtol_one_chain;
 class vtol_two_chain;
-class vtol_face_2d;
+#include <vtol/vtol_one_chain.h>
+#include <vtol/vtol_two_chain.h>
 
 class vtol_face
   : public vtol_topology_object

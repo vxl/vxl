@@ -42,6 +42,7 @@
 #include <vtol/vtol_topology_object.h>
 #include <vcl_vector.h>
 #include <vtol/vtol_zero_chain.h>
+#include <vtol/vtol_one_chain.h>
 #include <vtol/vtol_vertex.h>
 class vtol_edge_2d;
 
