@@ -13,7 +13,9 @@
 #include <vgl/vgl_homg_point_2d.h>
 #include <vgl/vgl_homg_line_2d.h>
 #include <vgl/algo/vgl_homg_operators_2d.h>
+#if 0
 #include <mvl/FMatrix.h>
+#endif 
 #include <vnl/vnl_inverse.h>
 #include <vnl/vnl_quaternion.h>
 #include <vdgl/vdgl_edgel.h>
@@ -132,9 +134,9 @@ void brct_epi_reconstructor::init_state_3d_estimation()
   F[0][0] = 0;     F[0][1] = -e[2];  F[0][2] = e[1];
   F[1][0] = e[2];  F[1][1] = 0;      F[1][2] = -e[0];
   F[2][0] = -e[1]; F[2][1] = e[0];   F[2][2] = 0;
-
+#if 0
   FMatrix FM(F);
-
+#endif
   //
   // 3D estimation
   //
@@ -178,7 +180,10 @@ void brct_epi_reconstructor::init_state_3d_estimation()
       bugl_gaussian_point_2d<double> x0(p0, sigma1);
 
       //the epipolar line through the point
-      vgl_line_2d<double> lr(FM.image2_epipolar_line(p0h));
+
+      // Later we may use the vgpl f matrix but kill links to oxl now
+      //    vgl_line_2d<double> lr(FM.image2_epipolar_line(p0h));
+      vgl_line_2d<double> lr;
 
       //Construct the corresponding point by intersecting
       //the epipolar line with c1

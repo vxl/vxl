@@ -41,15 +41,6 @@ static vnl_double_3x4 theortical_P()
   return P;
 }
 
-static bool read_correspondences(vcl_vector<vgl_point_2d<double> >& image_points,
-                                 vcl_vector<vgl_point_3d<double> >& world_points)
-{
-  vcl_ifstream str("c:/images/Stereo/UHall/uhall-right.cm");
-  if (!str)
-    return false;
-  brct_algos::read_target_corrs(str, image_points, world_points);
-  return true;
-}
 
 
 static void brct_test_compute_P()
@@ -99,51 +90,6 @@ static void brct_test_compute_P()
   vcl_cout << "Original P\n" << P << '\n';
   vcl_cout << "P in real world and image coordinates\n" << 120.82*Pout << '\n';
 
-  image_points.clear();
-  world_points.clear();
-  read_correspondences(image_points, world_points);
-  vnl_double_3x4 Pright;
-  brct_algos::compute_euclidean_camera(image_points, world_points, K, Pright);
-  vcl_cout << "UHall Right Camera\n" << Pright << '\n';
-  vnl_double_4x4 T = brct_algos::convert_to_target(Pright);
-  vcl_cout << "T\n" << T << '\n';
-  vcl_ofstream str("c:/images/Stereo/UHall/uhall-right.trans");
-  if (!str)
-  {
-    vcl_cout << "Can't open stream\n";
-    return;
   }
-  brct_algos::write_target_camera(str, Pright);
-  for (unsigned int i = 0; i<image_points.size(); ++i)
-  {
-    vgl_point_3d<double>& wp = world_points[i];
-    vgl_point_2d<double>& pi = image_points[i];
-    vnl_double_3 wv(wp.x(), wp.y(), wp.z());
-    vnl_double_2 riv = brct_algos::target_project(T, wv);
-    vcl_cout << "pw[" << i << "]=(" << wp.x() << ' ' << wp.y()<< ' '
-             << wp.z() << ")\n"
-             << "pi[" << i << "]= (" << pi.x() << ' ' << pi.y() << ")\n"
-             << "riv[" << i << "]= (" << riv[0] << ' ' << riv[1] << ")\n";
-  }
-  vcl_cout << "Project Axes\n";
-  for (unsigned int i = 8; i<11; ++i)
-  {
-    prp = Pright*pw[i];
-    vcl_cout << "pw[" << i << "]=(" << pw[i][0] << ' ' << pw[i][1] << ' '
-             << pw[i][2] << ")\n"
-             << "prp[" << i << "]= (" << prp[0]/prp[2] << ' '
-             << prp[1]/prp[2] << ")\n";
-  }
-
-  P = theortical_P();
-  vcl_cout << "\n\n\n Computing Homography\n";
-  vgl_h_matrix_2d<double> H;
-  brct_algos::homography(world_points,image_points, H);
-  vcl_vector<vgl_point_2d<double> > proj_image_points;
-  brct_algos::project(world_points, H, proj_image_points);
-  for (unsigned int i = 0; i<world_points.size(); ++i)
-    vcl_cout << world_points[i] << "->" << image_points[i] << "->"
-             << proj_image_points[i] << '\n';
-}
 
 TESTMAIN(brct_test_compute_P);
