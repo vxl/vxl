@@ -54,19 +54,16 @@ int main()
   vdgl_digital_curve_sptr digital_curve= new vdgl_digital_curve( interpolator);
 
   // Now we can create an edge (although first we need to define
-  //  the starting and edging vertices of this edge---in this case
+  //  the starting and ending vertices of this edge---in this case
   //  they are the same)
   vsol_point_2d_sptr pointstart( digital_curve->p0().ptr());
   vsol_point_2d_sptr pointend( digital_curve->p1().ptr());
 
-  //  vtol_vertex_2d vertexstart( pointstart);
-  //  vtol_vertex_2d vertexend( pointend);
-  vtol_vertex_2d_sptr vertexstart= new vtol_vertex_2d( 1, 2);
-  vtol_vertex_2d_sptr vertexend  = new vtol_vertex_2d( 3, 4);
-
+  vtol_vertex_2d_sptr vertexstart= new vtol_vertex_2d(*pointstart);
+  vtol_vertex_2d_sptr vertexend  = new vtol_vertex_2d(*pointend);
 
   //  vtol_edge_2d edge( vertexstart, vertexend, vsol_curve_2d_sptr( digital_curve.ptr()));
-  vtol_edge_2d_sptr edge = new vtol_edge_2d( *(vertexstart.ptr()), *(vertexend.ptr()), digital_curve.ptr());
+  vtol_edge_2d_sptr edge = new vtol_edge_2d( *vertexstart, *vertexend, digital_curve.ptr());
 
   // Sample 50 points along the curve and print them out
   for( double i=0; i< 1; i+=0.02)
