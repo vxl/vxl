@@ -1,8 +1,7 @@
+// This is ./vxl/vil/vil_file_format.cxx
 #ifdef __GNUC__
 #pragma implementation
 #endif
-
-// This is vxl/vil/vil_file_format.cxx
 
 #include "vil_file_format.h"
 
@@ -15,7 +14,7 @@ vil_file_format::~vil_file_format()
 #define HAS_IRIS 1
 #define HAS_MIT  1
 #define HAS_BMP  1
-#define HAS_GIF  0
+#define HAS_GIF  1
 // This will be defined "outside" if there really is a JPEG library
 // #define HAS_JPEG 1
 #define HAS_GEN  1

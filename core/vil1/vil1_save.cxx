@@ -88,6 +88,7 @@ bool vil_save(vil_image const& i, char const* filename)
     macro(jpg, jpeg);
     macro(tif, tiff);
     macro(mit, mit);
+    macro(gif, gif);
     macro(png, png);
 #undef macro
     else {
