@@ -34,8 +34,7 @@ bool vil_interpolate_bilinear(vil_memory_image_of<T> const& img,
   int width = (int)img.width();
   int height = (int)img.height();
 
-  if (src_x < 0 || src_y < 0 ||
-      src_x > (width-1) || src_y > (height-1))
+  if (src_x < 0 || src_y < 0 || src_x >= (width-1) || src_y >= (height-1))
     return false;
 
   T pix00 = img(src_x_int  , src_y_int  );
@@ -46,7 +45,7 @@ bool vil_interpolate_bilinear(vil_memory_image_of<T> const& img,
   double u = src_x - src_x_int;
   double v = src_y - src_y_int;
 
-  // use bilinear interpolation on transfered point
+  // use bilinear interpolation on transferred point
   double weight00 = (u-1)*(v-1);
   double weight10 = u*(1-v);
   double weight01 = v*(1-u);
