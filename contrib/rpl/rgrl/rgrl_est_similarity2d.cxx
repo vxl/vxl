@@ -70,6 +70,7 @@ estimate( rgrl_set_of<rgrl_match_set_sptr> const& matches,
   vnl_vector<double> to_centre( m, 0.0 );
   vnl_vector<double> from_pt( m );
   vnl_vector<double> to_pt( m );
+  vnl_vector<double> DtBq;
   double sum_wgt = 0.0;
   for ( unsigned ms=0; ms < matches.size(); ++ms ) {
     rgrl_match_set const& match_set = *matches[ms];
@@ -116,7 +117,7 @@ estimate( rgrl_set_of<rgrl_match_set_sptr> const& matches,
         XtWX += wgt * D.transpose() * B * D;
 
         // add w*DtBq to XtWy
-        vnl_vector<double> DtBq = to_pt.pre_multiply( D.transpose()*B );
+        DtBq = to_pt.pre_multiply( D.transpose()*B );
         for ( unsigned i = 0; i<4; ++i)
           XtWy[i] += wgt * DtBq[i];
       }

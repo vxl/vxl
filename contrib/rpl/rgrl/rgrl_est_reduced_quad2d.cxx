@@ -69,6 +69,7 @@ estimate( rgrl_set_of<rgrl_match_set_sptr> const& matches,
   vnl_vector<double> XtWy( 6 );
   XtWX.fill( 0.0 );
   XtWy.fill( 0.0 );
+  vnl_matrix<double> D( 2, 6, 0.0 );
 
   // Determine the weighted centres for the reduced_quad transformation. We
   // take the centres of all the points in all the match sets.
@@ -77,6 +78,7 @@ estimate( rgrl_set_of<rgrl_match_set_sptr> const& matches,
   vnl_vector<double> to_centre( m, 0.0 );
   vnl_vector<double> from_pt( m );
   vnl_vector<double> to_pt( m );
+  vnl_vector<double> DtBq;
   double sum_wgt = 0.0;
   for ( unsigned ms=0; ms < matches.size(); ++ms ) {
     rgrl_match_set const& match_set = *matches[ms];
@@ -118,7 +120,7 @@ estimate( rgrl_set_of<rgrl_match_set_sptr> const& matches,
         // For each constraint, add w*XtBX to XtWX
         //
         // X  = [px^2+py^2 0 px -py 1 0; 0 px^2+py^2 py px 0 1]
-        vnl_matrix<double> D( 2, 6, 0.0 );
+        D.fill( 0.0 );
         D(0,0) = D(1,1) = vnl_math_sqr(from_pt[0]) + vnl_math_sqr(from_pt[1]);
         D(0,2) = D(1,3) = from_pt[0];
         D(0,3) = -from_pt[1];
@@ -128,7 +130,7 @@ estimate( rgrl_set_of<rgrl_match_set_sptr> const& matches,
         XtWX += wgt * D.transpose() * B * D;
 
         // add w*XtBq to XtWy
-        vnl_vector<double> DtBq = to_pt.pre_multiply( D.transpose()*B );
+        DtBq = to_pt.pre_multiply( D.transpose()*B );
         for ( unsigned i = 0; i<6; ++i)
           XtWy[i] += wgt * DtBq[i];
       }
