@@ -260,6 +260,7 @@ void test_adaboost()
   bfs_in.close();
 #if !LEAVE_FILES_BEHIND
   vpl_unlink(test_path.c_str());
+  vpl_unlink("temp.dat");
 #endif
 
   vcl_cout<<"Saved :\n";

@@ -3,6 +3,7 @@
 #include <vil/vil_byte.h>
 #include <testlib/testlib_test.h>
 #include <mil/mil_byte_image_2d_io.h>
+#include <vpl/vpl.h>
 
 
 void test_byte_image_2d_io()
@@ -33,6 +34,10 @@ void test_byte_image_2d_io()
   image_io.loadTheImage(loaded_image,"./tmp.bmp","bmp");
   image_io.saveTheImage(loaded_image,"./tmp_loaded.bmp","bmp");
 
+  // clean up
+  vpl_unlink ("./tmp.bmp");
+  vpl_unlink ("./tmp.jpg");
+  vpl_unlink ("./tmp_loaded.bmp");
 
   //nb have to use lossless image format ie bitmap, not JPEG!
 
