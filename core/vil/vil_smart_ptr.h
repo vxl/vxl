@@ -88,8 +88,8 @@ class vil_smart_ptr
     { return (ptr_ != (T*)0)? &safe_bool_dummy::dummy : 0; }
 
   //: Inverse bool
-  safe_bool operator!() const
-    { return (ptr_ != (T*)0)? 0 : &safe_bool_dummy::dummy; }
+  bool operator!() const
+    { return (ptr_ != (T*)0)? false : true; }
 
   //: Dereferencing the pointer
   T &operator * () const { return *ptr_; }
@@ -155,6 +155,32 @@ template <class T>
 inline bool operator!= (T const* p, vil_smart_ptr<T> const& a)
 {
   return a.as_pointer() != p;
+}
+
+// Work-around for Borland and safe_bool.
+template <class T>
+inline
+bool operator&&(const vil_smart_ptr<T>& ptr, bool b)
+{
+  return b && (ptr?true:false);
+}
+template <class T>
+inline
+bool operator&&(bool b, const vil_smart_ptr<T>& ptr)
+{
+  return b && (ptr?true:false);
+}
+template <class T>
+inline
+bool operator||(const vil_smart_ptr<T>& ptr, bool b)
+{
+  return b || (ptr?true:false);
+}
+template <class T>
+inline
+bool operator||(bool b, const vil_smart_ptr<T>& ptr)
+{
+  return b || (ptr?true:false);
 }
 
 // Sunpro and GCC need a vcl_ostream operator. It need not be inline

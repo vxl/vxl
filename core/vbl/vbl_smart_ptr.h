@@ -118,7 +118,7 @@ class vbl_smart_ptr
    operator safe_bool () const { return ptr_? &safe_bool_dummy::dummy : 0; }
 
   //: Inverse boolean value
-  safe_bool operator!() const { return ptr_? 0 : &safe_bool_dummy::dummy; }
+  bool operator!() const { return ptr_? false : true; }
 
   //: Dereferencing the pointer
   T &operator * () const { return *ptr_; }
@@ -202,6 +202,32 @@ template <class T>
 inline bool operator!= (T const* p, vbl_smart_ptr<T> const& a)
 {
   return a.as_pointer() != p;
+}
+
+// Work-around for Borland and safe_bool.
+template <class T>
+inline
+bool operator&&(const vbl_smart_ptr<T>& ptr, bool b)
+{
+  return b && (ptr?true:false);
+}
+template <class T>
+inline
+bool operator&&(bool b, const vbl_smart_ptr<T>& ptr)
+{
+  return b && (ptr?true:false);
+}
+template <class T>
+inline
+bool operator||(const vbl_smart_ptr<T>& ptr, bool b)
+{
+  return b || (ptr?true:false);
+}
+template <class T>
+inline
+bool operator||(bool b, const vbl_smart_ptr<T>& ptr)
+{
+  return b || (ptr?true:false);
 }
 
 // Sunpro and GCC need a vcl_ostream operator. It need not be inline

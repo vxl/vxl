@@ -157,8 +157,8 @@ class vil_image_view : public vil_image_view_base
     { return (top_left_ != (T*)0)? &safe_bool_dummy::dummy : 0; }
 
   //: Return false if pointing at some data.
-  safe_bool operator!() const
-    { return (top_left_ != (T*)0)? 0 : &safe_bool_dummy::dummy; }
+  bool operator!() const
+    { return (top_left_ != (T*)0)? false : true; }
 
   //: The number of bytes in the data
   inline unsigned size_bytes() const { return size() * sizeof(T); }
@@ -305,6 +305,31 @@ vcl_ostream& operator<<(vcl_ostream& s, vil_image_view<T> const& im)
   im.print(s); return s;
 }
 
+// Work-around for Borland and safe_bool.
+template <class T>
+inline
+bool operator&&(const vil_image_view<T>& view, bool b)
+{
+  return b && (view?true:false);
+}
+template <class T>
+inline
+bool operator&&(bool b, const vil_image_view<T>& view)
+{
+  return b && (view?true:false);
+}
+template <class T>
+inline
+bool operator||(const vil_image_view<T>& view, bool b)
+{
+  return b || (view?true:false);
+}
+template <class T>
+inline
+bool operator||(bool b, const vil_image_view<T>& view)
+{
+  return b || (view?true:false);
+}
 
 //: True if the actual images are identical.
 // $\bigwedge_{i,j,p} {\textstyle src}(i,j,p) == {\textstyle dest}(i,j,p)$
