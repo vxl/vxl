@@ -10,6 +10,7 @@ DECLARE( test_sample_profile_bilin );
 DECLARE( test_sample_grid_bilin );
 DECLARE( test_algo_gauss_reduce );
 DECLARE( test_algo_convolve_1d );
+DECLARE( test_algo_convolve_2d );
 DECLARE( test_algo_exp_filter_1d );
 
 void
@@ -25,6 +26,7 @@ register_tests()
   REGISTER( test_sample_grid_bilin );
   REGISTER( test_algo_gauss_reduce );
   REGISTER( test_algo_convolve_1d );
+  REGISTER( test_algo_convolve_2d );
   REGISTER( test_algo_exp_filter_1d );
 }
 

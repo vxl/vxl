@@ -211,9 +211,9 @@ inline void vil2_algo_convolve_1d(const vil2_image_view<srcT>& src_im,
   unsigned ni = src_im.ni();
   unsigned nj = src_im.nj();
   int s_istep = src_im.istep(), s_jstep = src_im.jstep();
-  int d_istep = dest_im.istep(),d_jstep = dest_im.jstep();
 
   dest_im.resize(ni,nj,src_im.nplanes());
+  int d_istep = dest_im.istep(),d_jstep = dest_im.jstep();
 
   for (int p=0;p<src_im.nplanes();++p)
   {
