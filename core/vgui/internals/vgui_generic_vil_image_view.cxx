@@ -58,6 +58,35 @@ namespace {
 // stored information, we need to find the concrete C++ type
 // corresponding to the stored pixel format. We use the same
 // recurvsive template idea to implement this.
+//
+// One practical issue that arises with this compile time recursion is
+// that some compilers have a maximum recursion depth, which we will
+// exceed. (17 seems to be a magic limit, while we have about 30 file
+// formats.) We work around this problem by creating "breaks" in the
+// recursion, by specializing the template at steps of 10. The idea is
+// that if the template f<n> calls f<n+1>, then we provide
+// specializations f<10>, f<20>, etc. When the compiler tries to
+// generate code for f<1>, it'll generate f<1> through f<9>. f<9> will
+// call the specialzied f<10>, so the recursive generation will
+// stop. Maximum recursive instantiation depth: about 10. When it
+// tries to generate the code for f<10>, it'll instantiate f<11>
+// through f<19>. And so on. Now, the body of these special "break"
+// specialization is the same as the normal template, except for a few
+// syntactic changes. So, we define the normal recursive body in a
+// macro, and use that macro for generating both the normal template
+// and for the breaks. This workaround is used for the extract and
+// try_view_of classes below.
+//
+// We use classes to implement the recursion because some compilers
+// (e.g. MSVC 6) is broken when it comes to functions and integral
+// template parameters.
+
+
+// We use this below to pass in a "blank" parameter to macros. At
+// least one compiler (MSVC6) requires a token between the commas in
+// the macro call.
+//
+#define NoParameter
 
 
 // ---------------------------------------------------------------------------
@@ -116,25 +145,45 @@ cast_and_extract( vil_image_view_base const& base_view,
 // ---------------------------------------------------------------------------
 //                                                                     extract
 
-// Extract the data if the image pixel format is fmt or higher.
+// Extract the data if the image pixel format is fmt or
+// higher. Terminate the recursion at VIL_PIXEL_FORMAT_ENUM_END, since
+// there are no valid pixels formats after that.
 //
-template< vil_pixel_format fmt >
-struct extract
-{
-  static view_data
-  process( vil_image_view_base const& other )
-    {
-      if( other.pixel_format() == fmt ) {
-        typedef typename vil_pixel_format_type_of<fmt>::type pixel_type;
-        return cast_and_extract( other, (pixel_type*)0 );
-      } else {
-        return extract< vil_pixel_format(fmt+1) >::process( other );
-      }
-    }
-};
 
-// Terminating condition. There are no pixel formats >=
-// VIL_PIXEL_FORMAT_ENUM_END.
+// See the comments above on why we have these macros
+
+// fmt is the current format enumeration. fmt_specialization is
+// nothing for the normal template, and is <fmt> for a
+// specialization. Typename is either the keyword "typename" (for a
+// normal tempalate) or is nothing (for a specialization)
+//
+#define ExtractDefinition( fmt, fmt_specialization, Typename )                  \
+  struct extract fmt_specialization                                             \
+  {                                                                             \
+    static view_data                                                            \
+    process( vil_image_view_base const& other )                                 \
+      {                                                                         \
+        if( other.pixel_format() == fmt ) {                                     \
+          typedef Typename vil_pixel_format_type_of<fmt>::type pixel_type;      \
+          return cast_and_extract( other, (pixel_type*)0 );                     \
+        } else {                                                                \
+          return extract< vil_pixel_format(fmt+1) >::process( other );          \
+        }                                                                       \
+      }                                                                         \
+  }
+
+#define ExtractRecursionBreak( fmt )                    \
+  VCL_DEFINE_SPECIALIZATION                             \
+  ExtractDefinition( vil_pixel_format( fmt ),           \
+                     < vil_pixel_format( fmt ) >,       \
+		     NoParameter /*no typename*/ )
+
+
+// This defines the normal, recucursively instantiating template
+template< vil_pixel_format fmt >
+ExtractDefinition( fmt, NoParameter /*no specialization*/, typename );
+
+// Terminating condition.
 //
 VCL_DEFINE_SPECIALIZATION
 struct extract<VIL_PIXEL_FORMAT_ENUM_END>
@@ -148,6 +197,12 @@ struct extract<VIL_PIXEL_FORMAT_ENUM_END>
       return view_data( 0, 0, 0, 0, 0 );
     }
 };
+
+// These specialization form "breaks" in the recursion. Must list in
+// descending order.
+ExtractRecursionBreak(30);
+ExtractRecursionBreak(20);
+ExtractRecursionBreak(10);
 
 
 // ---------------------------------------------------------------------------
@@ -202,20 +257,38 @@ create_view_of( vgui_generic_vil_image_view const& generic,
 
 // See if a pixel format >= fmt will fit the stored pixel format.
 //
-template< vil_pixel_format fmt >
-struct try_view_of
-{
-  static vil_image_view_base_sptr
-  process( vgui_generic_vil_image_view const& generic )
-    {
-      if( generic.pixel_format() == fmt ) {
-        typedef typename vil_pixel_format_type_of<fmt>::type pixel_type;
-        return create_view_of( generic, (pixel_type*)0 );
-      } else {
-        return try_view_of< vil_pixel_format(fmt+1) >::process( generic );
-      }
-    }
+
+// See the comments above on why we have these macros
+
+// fmt is the current format enumeration. fmt_specialization is
+// nothing for the normal template, and is <fmt> for a
+// specialization. Typename is either the keyword "typename" (for a
+// normal template) or is nothing (for a specialization).
+//
+#define TryViewOfDefinition( fmt, fmt_specialization, Typename )                \
+struct try_view_of fmt_specialization                                           \
+{                                                                               \
+  static vil_image_view_base_sptr                                               \
+  process( vgui_generic_vil_image_view const& generic )                         \
+    {                                                                           \
+      if( generic.pixel_format() == fmt ) {                                     \
+        typedef Typename vil_pixel_format_type_of< fmt >::type pixel_type;      \
+        return create_view_of( generic, (pixel_type*)0 );                       \
+      } else {                                                                  \
+        return try_view_of< vil_pixel_format( fmt + 1 ) >::process( generic );  \
+      }                                                                         \
+    }                                                                           \
 };
+
+#define TryViewOfRecursionBreak( fmt )                  \
+  VCL_DEFINE_SPECIALIZATION                             \
+  TryViewOfDefinition( vil_pixel_format( fmt ),         \
+                     < vil_pixel_format( fmt ) >,       \
+		     NoParameter /*no typename*/ )
+
+// This defines the normal, recucursively instantiating template
+template< vil_pixel_format fmt >
+TryViewOfDefinition( fmt, NoParameter /*no specialization*/, typename );
 
 // Terminating condition. There are no pixel formats >=
 // VIL_PIXEL_FORMAT_ENUM_END.
@@ -232,6 +305,12 @@ struct try_view_of<VIL_PIXEL_FORMAT_ENUM_END>
       return 0;
     }
 };
+
+// These specialization form "breaks" in the recursion. Must list in
+// descending order.
+TryViewOfRecursionBreak(30);
+TryViewOfRecursionBreak(20);
+TryViewOfRecursionBreak(10);
 
 
 // ---------------------------------------------------------------------------

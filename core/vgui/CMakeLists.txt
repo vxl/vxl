@@ -182,12 +182,6 @@ ENDIF( GLUT_FOUND )
 
 AUX_SOURCE_DIRECTORY(Templates vgui_sources)
 
-IF(CMAKE_COMPILER_IS_GNUCXX)
-  SET_SOURCE_FILES_PROPERTIES(internals/vgui_generic_vil_image_view.cxx
-                              COMPILE_FLAGS -ftemplate-depth-50)
-ENDIF(CMAKE_COMPILER_IS_GNUCXX)
-
-
 IF (QV_FOUND)
   INCLUDE_DIRECTORIES(${QV_INCLUDE_DIR})
   SET(vgui_sources ${vgui_sources}
