@@ -32,7 +32,7 @@ IF(HAS_XERCES)
  TARGET_LINK_LIBRARIES(segv bxml)
 ENDIF(HAS_XERCES)
 
-TARGET_LINK_LIBRARIES(segv bgui sdet bsol brip gevd vdgl vtol vsol vil1 vnl vbl)
+TARGET_LINK_LIBRARIES(segv bgui strk sdet bsol brip gevd vdgl vtol vsol vil1 vnl vbl)
 
 ENDIF(HAS_VGUI)
 

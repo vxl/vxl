@@ -96,9 +96,15 @@ void segv_menus::test_digital_lines_callback()
 segv_segmentation_manager::instance()->test_digital_lines();
 }
 
+
 void segv_menus::display_IHS_callback()
 {
 segv_segmentation_manager::instance()->display_IHS();
+}
+
+void segv_menus::display_epi_region_image_callback()
+{
+segv_segmentation_manager::instance()->display_epi_region_image();
 }
 
 //segv_menus definition
@@ -120,6 +126,7 @@ vgui_menu segv_menus::get_menu()
   menuview.add("Original Image", original_image_callback);
   menuview.add("Clear Display", clear_display_callback);
   menuview.add("Display IHS", display_IHS_callback);
+  menuview.add("Display Epi Region Image", display_epi_region_image_callback);
   //edit menu entries
   menuedit.add("Region Of Interest", roi_callback);
   menuedit.add("Gaussian", gaussian_callback);
@@ -133,6 +140,7 @@ vgui_menu segv_menus::get_menu()
   menuedit.add("TestFace", test_face_callback);
   menuedit.add("TestDigitalCurves", test_digital_lines_callback);
   menuedit.add("Test Camera Parms",test_camera_parms_callback);
+
   //Top level menu layout
   menubar.add( "File", menufile);
   menubar.add( "View", menuview);

@@ -16,6 +16,7 @@
 #include <vcl_vector.h>
 #include <vil1/vil1_image.h>
 #include <vsol/vsol_line_2d_sptr.h>
+#include <vsol/vsol_polyline_2d_sptr.h>
 #include <vtol/vtol_edge_2d_sptr.h>
 #include <vsol/vsol_point_2d_sptr.h>
 #include <vtol/vtol_intensity_face_sptr.h>
@@ -48,6 +49,7 @@ class segv_segmentation_manager : public vgui_wrapper_tableau
   void test_face();
   void test_digital_lines();
   void display_IHS();
+  void display_epi_region_image();
 #if 0
 #ifdef HAS_XERCES
   void read_xml_edges();
@@ -65,6 +67,7 @@ class segv_segmentation_manager : public vgui_wrapper_tableau
   void draw_lines(vcl_vector<vsol_line_2d_sptr> const & line_segs);
   void draw_lines(vcl_vector<vsol_line_2d_sptr> const & line_segs,
                   float r, float g, float b, int width);
+  void draw_polylines(vcl_vector<vsol_polyline_2d_sptr> const & polys);
   void draw_regions(vcl_vector<vtol_intensity_face_sptr>& regions,
                     bool verts=false);
   void draw_points(vcl_vector<vsol_point_2d_sptr> const & points,

@@ -54,6 +54,7 @@
 #include <bsol/bsol_hough_line_index.h>
 #include <sdet/sdet_region_proc_params.h>
 #include <sdet/sdet_region_proc.h>
+#include <strk/strk_epipolar_grouper.h>
 //static live_video_manager instance
 segv_segmentation_manager *segv_segmentation_manager::instance_ = 0;
 
@@ -184,6 +185,29 @@ draw_lines(vcl_vector<vsol_line_2d_sptr > const& lines)
        lit != lines.end(); lit++)
   {
     t2D_->add_vsol_line_2d(*lit);
+  }
+
+  t2D_->post_redraw();
+}
+//-----------------------------------------------------------------------------
+//: Draw polylines on the tableau
+//-----------------------------------------------------------------------------
+void segv_segmentation_manager::
+draw_polylines(vcl_vector<vsol_polyline_2d_sptr > const& polys)
+{
+  if (!t2D_)
+    return;
+  //this->clear_display();
+  vgui_image_tableau_sptr itab = t2D_->get_image_tableau();
+  if (!itab)
+  {
+    vcl_cout << "In segv_segmentation_manager::draw_edges - null image tab\n";
+    return;
+  }
+  for (vcl_vector<vsol_polyline_2d_sptr>::const_iterator pit = polys.begin();
+       pit != polys.end(); pit++)
+  {
+    t2D_->add_vsol_polyline_2d(*pit);
   }
 
   t2D_->post_redraw();
@@ -874,5 +898,62 @@ if(!in_image)
   brip_float_ops::convert_to_IHS(in_image, I, H, S);
   brip_float_ops::display_IHS_as_RGB(I, H, S, out_image);
   itab->set_image(out_image);
+  itab->post_redraw();
+}
+
+void segv_segmentation_manager::display_epi_region_image()
+{
+  if(!img_)
+    return;
+  vgui_image_tableau_sptr itab =  t2D_->get_image_tableau();
+  if (!itab)
+    {
+      vcl_cout << "In segv_segmentation_manager::display_epi_region_image() - null image tableau\n";
+      return;
+    }
+   static bool agr = false;
+  static sdet_detector_params dp;
+  static strk_epipolar_grouper_params egp;
+  dp.borderp = false;
+  dp.automatic_threshold = false;
+  dp.junctionp = false;
+  vgui_dialog epipolar_dialog("Epipolar Grouping");
+  epipolar_dialog.field("Gaussian sigma", dp.smooth);
+  epipolar_dialog.field("Noise Threshold", dp.noise_multiplier);
+  epipolar_dialog.checkbox("Automatic Threshold", dp.automatic_threshold);
+  epipolar_dialog.checkbox("Agressive Closure", agr);
+  epipolar_dialog.checkbox("Compute Junctions", dp.junctionp);
+  epipolar_dialog.field("Epi U ", egp.eu_);
+  epipolar_dialog.field("Epi V ", egp.ev_);
+  epipolar_dialog.field("Epi Line U ", egp.elu_);
+  epipolar_dialog.field("Epi Line Vmin ", egp.elv_min_);
+  epipolar_dialog.field("Epi Line Vmax ", egp.elv_max_);
+  epipolar_dialog.field("N samples in s", egp.Ns_);
+  epipolar_dialog.field("Angle Threshold", egp.angle_thresh_);
+  if (!epipolar_dialog.ask())
+    return;
+  if (agr)
+    dp.aggressive_junction_closure=1;
+  else
+    dp.aggressive_junction_closure=0;
+
+  sdet_detector det(dp);
+  det.SetImage(img_);
+
+  det.DoContour();
+  vcl_vector<vtol_edge_2d_sptr>* edges = det.GetEdges();
+  strk_epipolar_grouper eg(egp);
+  eg.init(1);//only one frame
+  vil1_memory_image_of<float> flt = 
+    brip_float_ops::convert_to_float(img_);
+  eg.set_image(flt);
+  eg.set_edges(0, *edges);
+  eg.group();
+  vil1_memory_image_of<unsigned char>& out = eg.epi_region_image();
+  if(!out)
+    return;
+  itab->set_image(out);
+  vcl_vector<vsol_polyline_2d_sptr> segs = eg.display_segs(0);
+  this->draw_polylines(segs);
   itab->post_redraw();
 }
