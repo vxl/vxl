@@ -50,6 +50,13 @@ public:
   virtual ~vsol_region_2d();
 
   //***************************************************************************
+  // virtuals of vsol_spatial_object_2d
+  //***************************************************************************
+
+  virtual vsol_region_2d* cast_to_region(void) { return this; }
+  virtual vsol_region_2d const* cast_to_region(void) const { return this; }
+
+  //***************************************************************************
   // Status report
   //***************************************************************************
 

@@ -12,6 +12,7 @@
 //     Patricia A. Vrobel
 // \verbatim
 // Modifications
+// 2002/12/12 Peter Vanroose   added cast_to_region()
 // 2000/05/12 François BERTEL  add cast_to_group() because VXL is not compiled
 //                             with -frtti :-(
 // 2000/05/03 Peter TU         ported
@@ -39,6 +40,7 @@
 #include <vcl_vector.h>
 class vsol_curve_3d;
 class vsol_group_3d;
+class vsol_region_3d;
 class vsol_volume_3d;
 class vtol_topology_object;
 class vsol_spatial_object_3d;
@@ -294,6 +296,8 @@ public:
   virtual const vsol_group_3d *cast_to_group(void) const {return 0;}
   virtual vsol_curve_3d *cast_to_curve(void) {return 0;}
   virtual const vsol_curve_3d *cast_to_curve(void) const {return 0;}
+  virtual vsol_region_3d* cast_to_region(void) { return 0; }
+  virtual vsol_region_3d const* cast_to_region(void) const { return 0; }
   virtual vsol_volume_3d* cast_to_volume(void) { return 0;}
   virtual vsol_volume_3d const* cast_to_volume() const { return 0;}
 

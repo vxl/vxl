@@ -50,6 +50,13 @@ public:
   virtual ~vsol_region_3d();
 
   //***************************************************************************
+  // virtuals of vsol_spatial_object_3d
+  //***************************************************************************
+
+  virtual vsol_region_3d* cast_to_region(void) { return this; }
+  virtual vsol_region_3d const* cast_to_region(void) const { return this; }
+
+  //***************************************************************************
   // Status report
   //***************************************************************************
 

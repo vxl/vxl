@@ -12,6 +12,7 @@
 //     Patricia A. Vrobel
 // \verbatim
 // Modifications
+// 2002/12/12 Peter Vanroose   added cast_to_region()
 // 2000/05/10 François BERTEL  add cast_to_group() because VXL is not compiled
 //                             with -frtti :-(
 // 2000/05/03 Peter TU         ported
@@ -41,6 +42,7 @@ class vsol_spatial_object_2d;
 #include <vsol/vsol_box_2d.h>
 #include <vcl_vector.h>
 class vsol_curve_2d;
+class vsol_region_2d;
 class vsol_group_2d;
 class vtol_topology_object;
 extern void iu_delete(vsol_spatial_object_2d *);
@@ -289,6 +291,8 @@ public:
   virtual const vsol_group_2d *cast_to_group(void) const {return 0;}
   virtual vsol_curve_2d *cast_to_curve(void) {return 0;}
   virtual const vsol_curve_2d *cast_to_curve(void) const {return 0;}
+  virtual vsol_region_2d* cast_to_region(void) { return 0; }
+  virtual const vsol_region_2d* cast_to_region(void) const { return 0; }
 
   inline virtual void print(vcl_ostream &strm=vcl_cout) const;
 
