@@ -13,9 +13,9 @@
 //  space of epipolar lines. The class supports interpolation to continuous
 //  values of alpha.  The properites of the segment that are needed for
 //  matching:
-//              tangent angle
-//              left intensity
-//              right intensity
+//     -        tangent angle
+//     -        left intensity
+//     -        right intensity
 //
 // \author
 //  J.L. Mundy - December 27, 2003
@@ -111,6 +111,7 @@ class bmrf_epi_seg :  public vbl_ref_count
                       bmrf_epi_seg_sptr const& sb);
 
   // ==== Binary IO methods ======
+
   //: Binary save self to stream.
   void b_write(vsl_b_ostream &os) const;
 
@@ -128,7 +129,6 @@ class bmrf_epi_seg :  public vbl_ref_count
 
   //: Return true if the argument matches the string identifying the class or any parent class
   bool is_class(const vcl_string& cls) const;
-
 
  protected:
   //: local methods

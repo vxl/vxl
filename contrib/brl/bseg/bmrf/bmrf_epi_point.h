@@ -1,11 +1,10 @@
-//---*-c++-*--
+// This is brl/bseg/bmrf/bmrf_epi_point.h
 #ifndef bmrf_epi_point_h_
 #define bmrf_epi_point_h_
 //---------------------------------------------------------------------
 //:
 // \file
 // \brief a point class to hold edgel and other pertinent info
-//
 //
 //  An epi_point is created by intersecting an epipolar line with
 //  an edgel curve.  The purpose of the epi_point is to hold attributes
@@ -60,7 +59,9 @@ class bmrf_epi_point:  public vbl_ref_count
   double grad_mag() const {return grad_mag_;}
   double grad_ang() const {return grad_ang_;}
   double tan_ang() const {return tan_ang_;}
+
   // ==== Binary IO methods ======
+
   //: Binary save self to stream.
   void b_write(vsl_b_ostream &os) const;
 
