@@ -282,6 +282,9 @@ inline vnl_rational operator+ (vnl_rational const& r1, vnl_rational const& r2) {
 inline vnl_rational operator+ (vnl_rational const& r1, long r2) {
   vnl_rational result(r1); return result += r2;
 }
+inline vnl_rational operator+ (vnl_rational const& r1, int r2) {
+  vnl_rational result(r1); return result += (long)r2;
+}
 inline vnl_rational operator+ (long r2, vnl_rational const& r1) {
   vnl_rational result(r1); return result += r2;
 }
@@ -295,6 +298,9 @@ inline vnl_rational operator- (vnl_rational const& r1, vnl_rational const& r2) {
 }
 inline vnl_rational operator- (vnl_rational const& r1, long r2) {
   vnl_rational result(r1); return result -= r2;
+}
+inline vnl_rational operator- (vnl_rational const& r1, int r2) {
+  vnl_rational result(r1); return result -= (long)r2;
 }
 inline vnl_rational operator- (long r2, vnl_rational const& r1) {
   vnl_rational result(-r1); return result += r2;
@@ -310,6 +316,9 @@ inline vnl_rational operator* (vnl_rational const& r1, vnl_rational const& r2) {
 inline vnl_rational operator* (vnl_rational const& r1, long r2) {
   vnl_rational result(r1); return result *= r2;
 }
+inline vnl_rational operator* (vnl_rational const& r1, int r2) {
+  vnl_rational result(r1); return result *= (long)r2;
+}
 inline vnl_rational operator* (long r2, vnl_rational const& r1) {
   vnl_rational result(r1); return result *= r2;
 }
@@ -323,6 +332,9 @@ inline vnl_rational operator/ (vnl_rational const& r1, vnl_rational const& r2) {
 }
 inline vnl_rational operator/ (vnl_rational const& r1, long r2) {
   vnl_rational result(r1); return result /= r2;
+}
+inline vnl_rational operator/ (vnl_rational const& r1, int r2) {
+  vnl_rational result(r1); return result /= (long)r2;
 }
 inline vnl_rational operator/ (long r1, vnl_rational const& r2) {
   vnl_rational result(r1); return result /= r2;
@@ -338,12 +350,28 @@ inline vnl_rational operator% (vnl_rational const& r1, vnl_rational const& r2) {
 inline vnl_rational operator% (vnl_rational const& r1, long r2) {
   vnl_rational result(r1); return result %= r2;
 }
+inline vnl_rational operator% (vnl_rational const& r1, int r2) {
+  vnl_rational result(r1); return result %= (long)r2;
+}
 inline vnl_rational operator% (long r1, vnl_rational const& r2) {
   vnl_rational result(r1); return result %= r2;
 }
 inline vnl_rational operator% (int r1, vnl_rational const& r2) {
   vnl_rational result((long)r1); return result %= r2;
 }
+
+inline bool operator== (int  r1, vnl_rational const& r2) { return r2==r1; }
+inline bool operator== (long r1, vnl_rational const& r2) { return r2==r1; }
+inline bool operator!= (int  r1, vnl_rational const& r2) { return r2!=r1; }
+inline bool operator!= (long r1, vnl_rational const& r2) { return r2!=r1; }
+inline bool operator<  (int  r1, vnl_rational const& r2) { return r2> r1; }
+inline bool operator<  (long r1, vnl_rational const& r2) { return r2> r1; }
+inline bool operator>  (int  r1, vnl_rational const& r2) { return r2< r1; }
+inline bool operator>  (long r1, vnl_rational const& r2) { return r2< r1; }
+inline bool operator<= (int  r1, vnl_rational const& r2) { return r2>=r1; }
+inline bool operator<= (long r1, vnl_rational const& r2) { return r2>=r1; }
+inline bool operator>= (int  r1, vnl_rational const& r2) { return r2<=r1; }
+inline bool operator>= (long r1, vnl_rational const& r2) { return r2<=r1; }
 
 inline long truncate (vnl_rational const& r) { return r.truncate(); }
 inline long floor (vnl_rational const& r) { return r.floor(); }

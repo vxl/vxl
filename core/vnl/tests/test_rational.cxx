@@ -9,21 +9,47 @@
 void test_rational() {
   {
     vnl_rational a(-5L), b(7,-1), c, d(3,7), e(2,0);
+    TEST("==", a==-5L, true);
+    TEST("==", 5L==-a, true);
+    TEST("==", b==-7, true);
+    TEST("==", -7==b, true);
     c = a + b; TEST("+", c, -12L);
     c = a - b; TEST("-", c, 2L);
     c = a * b; TEST("*", c, 35L);
     c = a / b; TEST("/", c, vnl_rational(5,7));
+    c = c % d; TEST("%", c, vnl_rational(2,7));
     c = a % b; TEST("%", c, -5L);
+    c = a % d; TEST("%", c, vnl_rational(-2,7));
+    c = d % a; TEST("%", c, d);
     c = a + 5L; TEST("+", c, 0L);
-    c = a - 5L; TEST("+", c, -10L);
-    c = a * 5L; TEST("+", c, -25L);
-    c = a / 5L; TEST("+", c, -1L);
-    c = a % 5L; TEST("+", c, 0L);
+    c = a - 5L; TEST("-", c, -10L);
+    c = a * 5L; TEST("*", c, -25L);
+    c = a / 5L; TEST("/", c, -1L);
+    c = a % 5L; TEST("%", c, 0L);
+    c = 5L + a; TEST("+", c, 0L);
+    c = 5L - a; TEST("-", c, 10L);
+    c = 5L * a; TEST("*", c, -25L);
+    c = 5L / a; TEST("/", c, -1L);
+    c = 5L % a; TEST("%", c, 0L);
+    c = 5 + a; TEST("+", c, 0L);
+    c = 5 - a; TEST("-", c, 10L);
+    c = 5 * a; TEST("*", c, -25L);
+    c = 5 / a; TEST("/", c, -1L);
+    c = 5 % a; TEST("%", c, 0L);
+    c = a + 5; TEST("+", c, 0L);
+    c = a - 5; TEST("-", c, -10L);
+    c = a * 5; TEST("*", c, -25L);
+    c = a / 5; TEST("/", c, -1L);
     TEST("<", a<d, true);
     TEST("<", a<1L, true);
+    TEST("<", a<-4.9, true);
     TEST(">", -b>d, true);
+    TEST(">", b>-8, true);
+    TEST(">", b>-7.1, true);
     TEST("<=", c<=e, true);
     TEST(">=", b>=-7L, true);
+    TEST("<=", 2L<=e, true);
+    TEST(">=", 1>=d, true);
     TEST("truncate", truncate(1L+d), 1L);
     TEST("truncate", truncate(-d-1L), -1L);
     TEST("round", round(1L+d), 1L);
@@ -34,6 +60,9 @@ void test_rational() {
     TEST("floor", floor(-d-1L), -2L);
     TEST("ceil", ceil(1L+d), 2L);
     TEST("ceil", ceil(-d-1L), -1L);
+    TEST("abs", vnl_math_abs(d), d);
+    TEST("abs", vnl_math_abs(b), -b);
+    TEST("sqr mag", vnl_math_squared_magnitude(d), vnl_rational(9,49));
     a += b;
     a -= b;
     a *= b;
@@ -55,10 +84,14 @@ void test_rational() {
     TEST("Inf+1", Inf.numerator() == 1 && Inf.denominator() == 0, true);
     Inf = -Inf;
     TEST("-Inf", Inf.numerator() == -1 && Inf.denominator() == 0, true);
+    TEST("vnl_math_isfinite", vnl_math_isfinite(Inf), false);
+    TEST("vnl_math_isnan", vnl_math_isnan(Inf), false);
   }
 
   {
     vnl_rational r(-15,-20);
+    TEST("vnl_math_isfinite", vnl_math_isfinite(r), true);
+    TEST("vnl_math_isnan", vnl_math_isnan(r), false);
     TEST("simplify", r.numerator() == 3 && r.denominator() == 4, true);
   }
   {
@@ -103,6 +136,25 @@ void test_rational() {
              << "Compare this with sqrt(2) in 20 decimals:                     "
              << sqrt2 << vcl_endl;
     TEST("sqrt(2)", sqrt2-sqrt_2 < 1e-18 && sqrt_2-sqrt2 < 1e-18, true);
+  }
+  {
+    vnl_rational n = vnl_numeric_traits<vnl_rational>::zero;
+    vnl_rational u = vnl_numeric_traits<vnl_rational>::one;
+    TEST("zero", n, 0L);
+    TEST("one", u, 1L);
+  }
+  {
+    vcl_complex<vnl_rational> c(0L,1L);
+    vnl_rational cc(-1L);
+    TEST("complex square", c*c, cc);
+    TEST("complex square", vnl_math_sqr(c), cc);
+    TEST("complex abs", vnl_math_abs(c), 1);
+    TEST("complex sqr mag", vnl_math_squared_magnitude(c), 1);
+    TEST("complex vnl_math_isfinite", vnl_math_isfinite(c), true);
+    TEST("complex vnl_math_isnan", vnl_math_isnan(c), false);
+    TEST("complex conjugate", vnl_complex_traits<vnl_rational>::conjugate(cc), cc);
+    TEST("complex conjugate", vnl_complex_traits<vcl_complex<vnl_rational> >::conjugate(c), -c);
+    TEST("complexify", vnl_complex_traits<vcl_complex<vnl_rational> >::complexify(cc), c*c);
   }
 }
 
