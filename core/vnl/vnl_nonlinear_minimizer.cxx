@@ -1,4 +1,4 @@
-// This is vxl/vnl/vnl_nonlinear_minimizer.cxx
+// This is core/vnl/vnl_nonlinear_minimizer.cxx
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
@@ -8,9 +8,9 @@
 // \author Andrew W. Fitzgibbon, Oxford RRG, 22 Aug 99
 //
 
+#include "vnl_nonlinear_minimizer.h"
 #include <vcl_cstdio.h>   // sprintf()
 #include <vcl_iostream.h>
-#include "vnl_nonlinear_minimizer.h"
 
 //: Default ctor sets verbosity etc.
 vnl_nonlinear_minimizer::vnl_nonlinear_minimizer()

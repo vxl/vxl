@@ -1,12 +1,12 @@
-// This is vxl/vgl/vgl_homg_line_3d_2_points.txx
+// This is core/vgl/vgl_homg_line_3d_2_points.txx
 #ifndef vgl_homg_line_3d_2_points_txx_
 #define vgl_homg_line_3d_2_points_txx_
 //:
 // \file
 
+#include "vgl_homg_line_3d_2_points.h"
 #include <vcl_iostream.h>
 #include <vcl_cassert.h>
-#include "vgl_homg_line_3d_2_points.h"
 
 //***************************************************************************
 // Initialization

@@ -1,11 +1,12 @@
-// This is vxl/vil/vil_convolve_1d_y.txx
+// This is core/vil/vil_convolve_1d_y.txx
 #ifndef vil_convolve_1d_y_txx_
 #define vil_convolve_1d_y_txx_
 
-#ifndef fsm_dont_croak
+#ifndef fsm_dont_croak // this file should only be #included from vil_convolve_1d.txx
 croak
 #endif
 
+#include "vil_convolve.h"
 #include <vcl_cstdlib.h> // for vcl_abort()
 
 template <class I1, class I2, class AC, class O>

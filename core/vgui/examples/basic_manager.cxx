@@ -1,4 +1,5 @@
 // This is core/vgui/examples/basic_manager.cxx
+#include "basic_manager.h"
 #include <vcl_cstdlib.h> // for vcl_exit()
 #include <vil/vil_load.h>
 #include <vgui/vgui.h>
@@ -6,7 +7,6 @@
 #include <vgui/vgui_viewer2D_tableau.h>
 #include <vgui/vgui_shell_tableau.h>
 #include <vgui/vgui_image_tableau.h>
-#include "basic_manager.h"
 
 //static basic_manager instance
 basic_manager *basic_manager::instance_ = 0;

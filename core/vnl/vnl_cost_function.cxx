@@ -1,4 +1,4 @@
-// This is vxl/vnl/vnl_cost_function.cxx
+// This is core/vnl/vnl_cost_function.cxx
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
@@ -9,8 +9,8 @@
 //
 //-----------------------------------------------------------------------------
 
-#include <vcl_cassert.h>
 #include "vnl_cost_function.h"
+#include <vcl_cassert.h>
 
 static bool f_calling_compute;
 

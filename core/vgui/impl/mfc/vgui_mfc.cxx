@@ -1,9 +1,9 @@
-// This is oxl/vgui/impl/mfc/vgui_mfc.cxx
+// This is core/vgui/impl/mfc/vgui_mfc.cxx
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
 //:
-//  \file
+// \file
 // See vgui_mfc.h for a description of this file.
 //
 // \author awf@robots.ox.ac.uk
@@ -15,8 +15,8 @@
 //                             Tidy up indentation and documentation.
 // \endverbatim
 //-----------------------------------------------------------------------------
-#include <vgui/vgui_adaptor.h>
 #include "vgui_mfc.h"
+#include <vgui/vgui_adaptor.h>
 #include "vgui_mfc_window.h"
 #include "vgui_mfc_dialog_impl.h"
 #include "vgui_mfc_utils.h"

@@ -1,4 +1,4 @@
-// This is vxl/vgl/vgl_lineseg_test.cxx
+// This is core/vgl/vgl_lineseg_test.cxx
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
@@ -6,7 +6,7 @@
 // \file
 // \author fsm
 
-#include "vgl_polygon_test.h"
+#include "vgl_lineseg_test.h"
 #include <vgl/vgl_triangle_test.h>
 
 template <class T>

@@ -1,9 +1,9 @@
+#include "basic_menus.h"
+#include "basic_manager.h"
 #include <vgui/vgui.h>
 #include <vgui/vgui_key.h>
 #include <vgui/vgui_modifier.h>
 #include <vgui/vgui_menu.h>
-#include "basic_manager.h"
-#include "basic_menus.h"
 
 //Static munu callback functions
 

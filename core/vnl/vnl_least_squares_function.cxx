@@ -1,4 +1,4 @@
-// This is vxl/vnl/vnl_least_squares_function.cxx
+// This is core/vnl/vnl_least_squares_function.cxx
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
@@ -7,8 +7,8 @@
 // \author Andrew W. Fitzgibbon, Oxford RRG
 // \date   31 Aug 96
 
-#include <vcl_iostream.h>
 #include "vnl_least_squares_function.h"
+#include <vcl_iostream.h>
 #include <vcl_cassert.h>
 
 vnl_least_squares_function::vnl_least_squares_function(int number_of_unknowns,

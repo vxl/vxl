@@ -1,16 +1,16 @@
-// This is vxl/vbl/vbl_bit_array_2d.cxx
+// This is core/vbl/vbl_bit_array_2d.cxx
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
 //:
 // \file
 
+#include "vbl_bit_array_2d.h"
+
 #include <vcl_iostream.h>
 #include <vcl_climits.h>  // for CHAR_BIT
 #include <vcl_cassert.h>
 #include <vcl_cstring.h> // for memcmp()
-
-#include "vbl_bit_array_2d.h"
 
 //: Copy constructor
 vbl_bit_array_2d::vbl_bit_array_2d(vbl_bit_array_2d const& that)

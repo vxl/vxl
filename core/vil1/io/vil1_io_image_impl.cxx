@@ -5,8 +5,8 @@
 //:
 // \file
 
-#include <vsl/vsl_binary_io.h>
 #include "vil_io_image_impl.h"
+#include <vsl/vsl_binary_io.h>
 #include <vsl/vsl_clipon_binary_loader.txx>
 
 //: Constructor

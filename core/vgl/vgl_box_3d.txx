@@ -1,12 +1,12 @@
-// This is vxl/vgl/vgl_box_3d.txx
+// This is core/vgl/vgl_box_3d.txx
 #ifndef vgl_box_3d_txx_
 #define vgl_box_3d_txx_
 //:
 // \file
 
-#include <vcl_iostream.h>
 #include "vgl_box_3d.h"
 #include <vgl/vgl_point_3d.h>
+#include <vcl_iostream.h>
 
 // Constructors/Destructor---------------------------------------------------
 

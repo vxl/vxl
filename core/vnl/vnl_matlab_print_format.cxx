@@ -1,5 +1,5 @@
-// This is vxl/vnl/vnl_matlab_print_format.cxx
-#include "vnl_matlab_print.h"
+// This is core/vnl/vnl_matlab_print_format.cxx
+#include "vnl_matlab_print_format.h"
 //:
 // \file
 

@@ -1,4 +1,4 @@
-// This is vxl/vnl/vnl_real_npolynomial.cxx
+// This is core/vnl/vnl_real_npolynomial.cxx
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
@@ -9,10 +9,10 @@
 //
 //  Implements a polynomial with N variables
 
+#include "vnl_real_npolynomial.h"
 #include <vcl_cassert.h>
 #include <vcl_cmath.h>    // vcl_fabs()
 #include <vcl_iostream.h>
-#include "vnl_real_npolynomial.h"
 
 //: Constructor
 //<PRE>

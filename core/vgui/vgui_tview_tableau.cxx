@@ -1,4 +1,4 @@
-// This is oxl/vgui/vgui_tview_tableau.cxx
+// This is core/vgui/vgui_tview_tableau.cxx
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
@@ -8,9 +8,9 @@
 // \date   12 Oct 99
 // \brief  See vgui_tview_tableau.h for a description of this file.
 
-#include <vcl_string.h>
 #include "vgui_tview_tableau.h"
 
+#include <vcl_string.h>
 #include <vcl_cmath.h>
 #include <vcl_iostream.h>
 
@@ -326,12 +326,12 @@ bool vgui_tview_tableau::handle(const vgui_event& e) {
 
     //vcl_cerr << "icon is " << (void*) t << vcl_endl;
     if (t) {
-      vcl_cerr << "---------\n";
-      //vcl_cerr << "| type : " << strip_preceeding_numerals(typeid(*t).name()) << vcl_endl;
-      vcl_cerr << "| type_name   : " << t->type_name() << vcl_endl;
-      vcl_cerr << "| file_name   : " << t->file_name() << vcl_endl;
-      vcl_cerr << "| pretty_name : " << t->pretty_name() << vcl_endl;
-      vcl_cerr << "---------\n\n";;
+      vcl_cerr << "---------\n"
+    //         << "| type : " << strip_preceeding_numerals(typeid(*t).name()) << vcl_endl
+               << "| type_name   : " << t->type_name() << vcl_endl
+               << "| file_name   : " << t->file_name() << vcl_endl
+               << "| pretty_name : " << t->pretty_name() << vcl_endl
+               << "---------\n\n";
     }
 
     post_redraw();
