@@ -48,9 +48,4 @@ extern int vul_string_atoi(vcl_string const&);
 // It ignores leading and trailing whitespace and capitalisation.
 extern bool vul_string_to_bool(const vcl_string &str);
 
-//: Convert a string to a boolean.
-// Looks for on, true, yes, 1 to mean true. everything else is false.
-// It ignores leading and trailing whitespace and capitalisation.
-extern bool vul_string_c_to_bool(const char *str);
-
 #endif // vul_string_h
