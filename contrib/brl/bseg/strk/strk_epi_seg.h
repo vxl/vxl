@@ -1,23 +1,22 @@
-//---*-c++-*--
 #ifndef strk_epi_seg_h_
 #define strk_epi_seg_h_
 //---------------------------------------------------------------------
 //:
 // \file
 // \brief a connected sequence of epi points to maintain edgel connectivity
-//    
+//
 //  An epi segment is a one-to-one and onto map between the original
 //  digital curve parametrization and the parameter space of epipolar lines.
-//  Because of the one-to-one and onto map it is possible to identify 
+//  Because of the one-to-one and onto map it is possible to identify
 //  potentially matching points on the curve as having the same epipolar
 //  parameter. The segment is parametrized by alpha which defines the
-//  space of epipolar lines. The class supports interpolation to continous
+//  space of epipolar lines. The class supports interpolation to continuous
 //  values of alpha.  The properites of the segment that are needed for
 //  matching:
 //              tangent angle
 //              left intensity
 //              right intensity
-//  
+//
 // \author
 //  J.L. Mundy - December 27, 2003
 //
@@ -35,35 +34,28 @@
 
 class strk_epi_seg :  public vbl_ref_count
 {
-  
  public:
 
   strk_epi_seg();
-
   strk_epi_seg(vcl_vector<strk_epi_point_sptr> const & points);
-
   virtual ~strk_epi_seg() {}
 
-  //: accessors  
+  //: accessors
   void add_int_sample(const double alpha,
                       const double left_ds,
-                      const double left_int, 
+                      const double left_int,
                       const double right_ds,
                       const double right_int);
-
 
   void set_min_index(int index){min_index_ = index;}
   void set_max_index(int index){max_index_ = index;}
   int min_index(){return min_index_;}
   int max_index(){return max_index_;}
 
-
   void add_point(strk_epi_point_sptr ep);
-
 
   int n_pts() const {return seg_.size();}
   strk_epi_point_sptr p(int i) const {return seg_[i];}
-  
 
   //: extremal geometry values
   double min_alpha();
@@ -97,22 +89,22 @@ class strk_epi_seg :  public vbl_ref_count
 
   //: static matching methods
   static double tan_ang_match(const double a,
-                              strk_epi_seg_sptr const& sa, 
+                              strk_epi_seg_sptr const& sa,
                               strk_epi_seg_sptr const& sb,
-                              const double ang_sd = 5.0); 
-  static double left_int_match(const double a, 
-                                   strk_epi_seg_sptr const& sa, 
-                                   strk_epi_seg_sptr const& sb); 
+                              const double ang_sd = 5.0);
+  static double left_int_match(const double a,
+                               strk_epi_seg_sptr const& sa,
+                               strk_epi_seg_sptr const& sb);
   static double right_int_match(const double a,
-                                    strk_epi_seg_sptr const& sa, 
-                                    strk_epi_seg_sptr const& sb); 
-  static double velocity_coef(const double a, 
-                              strk_epi_seg_sptr const& sa, 
+                                strk_epi_seg_sptr const& sa,
+                                strk_epi_seg_sptr const& sb);
+  static double velocity_coef(const double a,
+                              strk_epi_seg_sptr const& sa,
                               strk_epi_seg_sptr const& sb);
-  static double match(const double a, 
-                      strk_epi_seg_sptr const& sa, 
+  static double match(const double a,
+                      strk_epi_seg_sptr const& sa,
                       strk_epi_seg_sptr const& sb);
-  protected:
+ protected:
   //: local methods
   void compute_limits();
   void compute_int_values();
@@ -146,6 +138,6 @@ class strk_epi_seg :  public vbl_ref_count
   double max_right_int_;
 };
 
-vcl_ostream&  operator<<(vcl_ostream& s, strk_epi_seg const& ec);  
+vcl_ostream& operator<<(vcl_ostream& s, strk_epi_seg const& ec);
 
 #endif // strk_epi_seg_h_
