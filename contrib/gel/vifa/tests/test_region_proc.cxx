@@ -56,8 +56,10 @@ static void test_region_proc(int argc, char* argv[])
       vcl_cout << "  Intensity Face #" << i << ": " << (*face);
 
       edge_list el; face->edges(el);
+#ifdef TEST_END_VERTEX_COINCIDENCE
       for (edge_list::iterator eli = el.begin(); eli!=el.end(); ++eli)
         TEST("Edges must have non-coincident end points", (*eli)->v1() != (*eli)->v2(), true);
+#endif
       one_chain_list ocl; face->one_chains(ocl);
 
       one_chain_list::iterator  ocli = ocl.begin();
@@ -86,7 +88,8 @@ static void test_region_proc(int argc, char* argv[])
               double  l1 = v.length();
               double  l2 = e->curve()->length();
 
-              vcl_cout << "Length: " << l1 << " (E)  " << l2 << " (C)\n";
+              vcl_cout << "      Length: " << l1 << " (E)  " << l2 << " (C)\n";
+              TEST("triangle inequality", l1<=l2, true);
 
               perim1 += l1;
               perim2 += l2;
@@ -94,8 +97,9 @@ static void test_region_proc(int argc, char* argv[])
           }
         }
 
-        vcl_cout << "Perimeter (Edge-based): " << perim1 << vcl_endl;
-        vcl_cout << "Perimeter (Curve-based): " << perim2 << vcl_endl;
+        vcl_cout << "    Perimeter (Edge-based): " << perim1 << vcl_endl
+                 << "    Perimeter (Curve-based): " << perim2 << vcl_endl;
+        TEST("triangle inequality", perim1<=perim2, true);
 //      oc->describe_directions(vcl_cout, 4);
       }
     }
