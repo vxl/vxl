@@ -3,7 +3,7 @@
 #define vimt_dog_pyramid_builder_2d_txx_
 //:
 // \file
-//  \brief Build difference of gaussian pyramids of vimt_image_2d_of<T>
+// \brief Build difference of gaussian pyramids of vimt_image_2d_of<T>
 // \author Tim Cootes
 
 #include "vimt_dog_pyramid_builder_2d.h"
@@ -203,7 +203,7 @@ void vimt_dog_pyramid_builder_2d<T>::build_dog(vimt_image_pyramid& dog_pyr,
                                     dog1.image());
     else
       vil_math_image_difference(sub_sampled_image,smooth1.image(),
-                              dog1.image());
+                                dog1.image());
 
     smooth1.set_world2im(scaling_trans*smooth0.world2im());
     dog1.set_world2im(smooth1.world2im());
@@ -225,20 +225,11 @@ void vimt_dog_pyramid_builder_2d<T>::build_dog(vimt_image_pyramid& dog_pyr,
 //=======================================================================
 //: Extend pyramid (not implemented)
 template<class T>
-void vimt_dog_pyramid_builder_2d<T>::extend(vimt_image_pyramid& image_pyr) const
+void vimt_dog_pyramid_builder_2d<T>::extend(vimt_image_pyramid& ) const
 {
+  vcl_cerr << "vimt_dog_pyramid_builder_2d<T>::extend(vimt_image_pyramid&) NYI\n";
 }
 
-
-//=======================================================================
-
-#if 0
-template<class T>
-vcl_string vimt_dog_pyramid_builder_2d<T>::is_a() const
-{
-  return vcl_string("vimt_dog_pyramid_builder_2d<T>");
-}
-#endif
 
 //=======================================================================
 
@@ -293,13 +284,13 @@ void vimt_dog_pyramid_builder_2d<T>::b_read(vsl_b_istream& bfs)
   vsl_b_read(bfs,version);
   switch (version)
   {
-  // version number starts at 2 to follow on from the old mil stuff
-  case (1):
+   // version number starts at 2 to follow on from the old mil stuff
+   case (1):
     vsl_b_read(bfs,max_levels_);
     vsl_b_read(bfs,min_x_size_);
     vsl_b_read(bfs,min_y_size_);
     break;
-  default:
+   default:
     vcl_cerr << "I/O ERROR: vimt_dog_pyramid_builder_2d<T>::b_read(vsl_b_istream&)\n"
              << "           Unknown version number "<< version << '\n';
     bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
