@@ -225,5 +225,5 @@ vcl_ostream& gkll_multi_view_data<T>::print(vcl_ostream& str)
 }
 
 //gkll_multi_view_data+vtol_vertex_2d_sptr
-template gkll_multi_view_data<vtol_vertex_2d_sptr>;
-template gkll_multi_view_data<vtol_edge_2d_sptr>;
+template class gkll_multi_view_data<vtol_vertex_2d_sptr>;
+template class gkll_multi_view_data<vtol_edge_2d_sptr>;
