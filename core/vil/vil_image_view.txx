@@ -7,7 +7,7 @@
 //  \author Ian Scott
 
 #include "vil2_image_view.h"
-#include <vcl_iostream.h>
+#include <vcl_cstdlib.h>
 #include <vcl_string.h>
 #include <vcl_cassert.h>
 #include <vil2/vil2_smart_ptr.h>
@@ -26,6 +26,26 @@ vil2_image_view<T>::vil2_image_view(unsigned nx, unsigned ny, unsigned nplanes)
 {
   resize(nx,ny,nplanes);
 }
+
+//: Set this view to look at someone else's memory data.
+template<class T>
+vil2_image_view<T>::vil2_image_view(const T* top_left, unsigned nx, unsigned ny, unsigned nplanes,
+                  unsigned xstep, unsigned ystep, unsigned planestep)
+{
+  set_to_memory(top_left,nx,ny,nplanes,xstep,ystep,planestep);
+}
+
+//: Set this view to look at another view's data
+//  Need to pass the memory chunk to set up the internal smart ptr appropriately
+template<class T>
+vil2_image_view<T>::vil2_image_view(const vil2_smart_ptr<vil2_memory_chunk>& mem_chunk,
+                  const T* top_left, unsigned nx, unsigned ny, unsigned nplanes,
+                  unsigned xstep, unsigned ystep, unsigned planestep)
+{
+  ptr_ = mem_chunk;
+  set_to_memory(top_left,nx,ny,nplanes,xstep,ystep,planestep);
+}
+
 
 //: Perform deep copy of the src image, placing in this image
 template<class T>
@@ -52,14 +72,14 @@ void vil2_image_view<T>::deep_copy(const vil2_image_view<T>& src)
       for (int x=0;x<nx_;++x)
       {
         *p = *sp;
-        p+=xstep_;
+		p+=xstep_;
         sp+=s_xstep;
       }
       row += ystep_;
       src_row += s_ystep;
     }
-    src_data += s_planestep;
-    data += planestep_;
+	src_data += s_planestep;
+	data += planestep_;
   }
 }
 
@@ -140,12 +160,12 @@ void vil2_image_view<T>::resize(unsigned nx, unsigned ny, unsigned nplanes)
 
 //: Set this view to look at someone else's memory.
 template<class T>
-void vil2_image_view<T>::set_to_memory(T* top_left,
+void vil2_image_view<T>::set_to_memory(const T* top_left,
                              unsigned nx, unsigned ny, unsigned nplanes,
                              unsigned xstep, unsigned ystep, unsigned planestep)
 {
   release_data();
-  top_left_ = top_left;
+  top_left_ = (T*) top_left;  // Remove const, as view may end up manipulating data
 
   nx_ = nx;
   ny_ = ny;
@@ -154,6 +174,7 @@ void vil2_image_view<T>::set_to_memory(T* top_left,
   ystep_ = ystep;
   planestep_ = planestep;
 }
+
 
 
 //=======================================================================
@@ -212,8 +233,8 @@ vil2_image_view<T> vil2_image_view<T>::plane(int p) const
   return p_view;
 }
 
-//: Create a view which appears as the transpose of this view.
-//  I.e transpose()(x,y,p) = this(y,x,p)
+//: Create a view which appears as the transpose of this view
+//  ie transpose()(x,y,p) = this(y,x,p)
 template<class T>
 vil2_image_view<T> vil2_image_view<T>::transpose() const
 {

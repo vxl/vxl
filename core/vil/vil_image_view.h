@@ -13,7 +13,6 @@
 #include <vil2/vil2_smart_ptr.h>
 #include <vcl_iosfwd.h>
 #include <vcl_string.h>
-#include <vcl_cassert.h>
 #include <vil2/vil2_memory_chunk.h>
 
 //: An abstract base class of smart pointers to actual image data in memory.
@@ -30,15 +29,29 @@ protected:
   vil2_smart_ptr<vil2_memory_chunk> ptr_;
 public:
 
-  //: Dflt ctor
-  //  Creates an empty one plane image.
+    //: Dflt ctor
+    //  Creates an empty one plane image.
   vil2_image_view();
 
-  //: Create a n_plane plane image of nx x ny pixels
+    //: Create a n_plane plane image of nx x ny pixels
   vil2_image_view(unsigned nx, unsigned ny, unsigned n_planes=1);
 
-  //  Destructor
-  virtual ~vil2_image_view();
+    //: Set this view to look at someone else's memory data.
+    //  If the data goes out of scope then this view could be invalid, and
+    //  there's no way of knowing until its too late - so take care!
+  vil2_image_view(const T* top_left, unsigned nx, unsigned ny, unsigned nplanes,
+                  unsigned xstep, unsigned ystep, unsigned planestep);
+
+    //: Set this view to look at another view's data
+    //  Typically used by functions which generate a manipulated view of
+	//  another's image data.
+	//  Need to pass the memory chunk to set up the internal smart ptr appropriately
+  vil2_image_view(const vil2_smart_ptr<vil2_memory_chunk>& mem_chunk,
+                  const T* top_left, unsigned nx, unsigned ny, unsigned nplanes,
+                  unsigned xstep, unsigned ystep, unsigned planestep);
+
+	//  Destructor
+  ~vil2_image_view();
 
   // Standard container stuff
   // This assumes that the data is arranged contiguously.
@@ -78,6 +91,20 @@ public:
 
   //: The number of bytes in the data
   inline unsigned size_bytes() const { return size() * sizeof(T); }
+
+    //: Smart pointer to the object holding the data for this view
+	// Will be a null pointer if this view looks at `third-party' data,
+	// eg using set_to_memory.
+	//
+	// Typically used when creating new views of the data
+  const vil2_smart_ptr<vil2_memory_chunk>& memory_chunk() const { return ptr_; }
+
+    //: Smart pointer to the object holding the data for this view
+	// Will be a null pointer if this view looks at `third-party' data,
+	// eg using set_to_memory
+	//
+	// Typically used when creating new views of the data
+  vil2_smart_ptr<vil2_memory_chunk>& memory_chunk() { return ptr_; }
 
   // Ordinary image indexing stuff.
 
@@ -126,7 +153,12 @@ public:
   void release_data();
 
   //: Set this view to look at someone else's memory data.
-  void set_to_memory(T* top_left, unsigned nx, unsigned ny, unsigned nplanes,
+  //  If the data goes out of scope then this view could be invalid, and
+  //  there's no way of knowing until its too late - so take care!
+  //
+  //  Note that though top_left is passed in as const, the data may be manipulated
+  //  through the view.
+  void set_to_memory(const T* top_left, unsigned nx, unsigned ny, unsigned nplanes,
               unsigned xstep, unsigned ystep, unsigned planestep);
 
   //: Arrange that this is window on some planes of given image.
@@ -151,27 +183,27 @@ public:
   //: Print a 1-line summary of contents
   virtual void print(vcl_ostream&) const;
 
-  //: print all image data to os in a grid (rounds output to int)
+    //: print all image data to os in a grid (rounds output to int)
   virtual void print_all(vcl_ostream& os) const;
 
-  //: Return class name
+    //: Return class name
   virtual vcl_string is_a() const;
 
-  //: True if this is (or is derived from) class s
+    //: True if this is (or is derived from) class s
   virtual bool is_class(vcl_string const& s) const;
 
-  //: True if they share same view of same image data.
-  //  This does not do a deep equality on image data. If the images point
-  //  to different image data objects that contain identical images, then
-  //  the result will still be false.
+    //: True if they share same view of same image data.
+    //  This does not do a deep equality on image data. If the images point
+    //  to different image data objects that contain identical images, then
+    //  the result will still be false.
   bool operator==(const vil2_image_view<T> &other) const;
+
 };
 
 //: Print a 1-line summary of contents
 template <class T>
 inline
-vcl_ostream& operator<<(vcl_ostream& s, vil2_image_view<T> const& i)
-{
+vcl_ostream& operator<<(vcl_ostream& s, vil2_image_view<T> const& i) {
   return i.print(s);
 }
 

@@ -49,6 +49,12 @@ Best name for height, width, rows, cols, nx, ny?
 Should resize allow definition of assumed format (eg RGBRGB or RRR BBB GGG etc)
 Should deep_copy allow similar definition and thus possible re-ordering?
 Should we have void set_to_window(im,...) functions, or just the image_view window(..) function.
+Which of the following should really be member functions:
+  print_all, transpose, window, deep_copy, set_to_window  flipupdown, flip_leftright ...
+
+Pointers to data are often passed in as const, but may have the const removed.
+This is because it is rather complicated to keep track of whether the data is going to be
+changed or not.  Just try to be sensible, OK?
 
 Notes:
 

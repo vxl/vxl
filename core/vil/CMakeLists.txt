@@ -1,9 +1,5 @@
 # mul/vil2/CMakeLists.txt
 
-
-
-
-
 SET( vil2_sources 
 
   # basic things
@@ -11,7 +7,6 @@ SET( vil2_sources
   vil2_image_view_base.cxx vil2_image_view_base.h
   vil2_image_view.cxx vil2_image_view.h vil2_image_view.txx
   vil2_image_data.cxx vil2_image_data.h
-
 
   # file format readers/writers (see below for conditional ones)
 #  file_formats/vil2_pnm.cxx file_formats/vil2_pnm.h
