@@ -5,19 +5,19 @@
 
 #include "f2c.h"
 
-/* Table of constant values */
+/*
+ * Calling this ensures that the operands are spilled to
+ * memory and thus avoids excessive precision when compiling
+ * for x86 with heavy optimization (gcc). It is better to do
+ * this than to turn on -ffloat-store.
+ */
+static int fsm_ieee_doubles_equal(double *x, double *y);
 
+/* Table of constant values */
 static integer c__1 = 1;
 static doublereal c_b44 = -1.;
 
-// Calling this ensures that the operands are spilled to
-// memory and thus avoids excessive precision when compiling
-// for x86 with heavy optimization (gcc). It is better to do
-// this than to turn on -ffloat-store.
-static int fsm_ieee_doubles_differ(double *x, double *y);
-
-/* Subroutine */ void dsvdc_(x, ldx, n, p, s, e, u, ldu, v, ldv, work, job,
-        info)
+/* Subroutine */ void dsvdc_(x, ldx, n, p, s, e, u, ldu, v, ldv, work, job, info)
 doublereal *x;
 integer *ldx, *n, *p;
 doublereal *s, *e, *u;
@@ -62,109 +62,101 @@ integer *job, *info;
     static integer lm1, lp1, nct, ncu, nrt;
     static doublereal emm1, smm1;
 
-
-
-/*     dsvdc is a subroutine to reduce a double precision nxp matrix x */
-/*     by orthogonal transformations u and v to diagonal form.  the */
-/*     diagonal elements s(i) are the singular values of x.  the */
-/*     columns of u are the corresponding left singular vectors, */
-/*     and the columns of v the right singular vectors. */
-
-/*     on entry */
-
-/*         x         double precision(ldx,p), where ldx.ge.n. */
-/*                   x contains the matrix whose singular value */
-/*                   decomposition is to be computed.  x is */
-/*                   destroyed by dsvdc. */
-
-/*         ldx       integer. */
-/*                   ldx is the leading dimension of the array x. */
-
-/*         n         integer. */
-/*                   n is the number of rows of the matrix x. */
-
-/*         p         integer. */
-/*                   p is the number of columns of the matrix x. */
-
-/*         ldu       integer. */
-/*                   ldu is the leading dimension of the array u. */
-/*                   (see below). */
-
-/*         ldv       integer. */
-/*                   ldv is the leading dimension of the array v. */
-/*                   (see below). */
-
-/*         work      double precision(n). */
-/*                   work is a scratch array. */
-
-/*         job       integer. */
-/*                   job controls the computation of the singular */
-/*                   vectors.  it has the decimal expansion ab */
-/*                   with the following meaning */
-
-/*                        a.eq.0    do not compute the left singular */
-/*                                  vectors. */
-/*                        a.eq.1    return the n left singular vectors */
-/*                                  in u. */
-/*                        a.ge.2    return the first min(n,p) singular */
-/*                                  vectors in u. */
-/*                        b.eq.0    do not compute the right singular */
-/*                                  vectors. */
-/*                        b.eq.1    return the right singular vectors */
-/*                                  in v. */
-
-/*     on return */
-
-/*         s         double precision(mm), where mm=min(n+1,p). */
-/*                   the first min(n,p) entries of s contain the */
-/*                   singular values of x arranged in descending */
-/*                   order of magnitude. */
-
-/*         e         double precision(p), */
-/*                   e ordinarily contains zeros.  however see the */
-/*                   discussion of info for exceptions. */
-
-/*         u         double precision(ldu,k), where ldu.ge.n.  if */
-/*                                   joba.eq.1 then k.eq.n, if joba.ge.2 */
-/*                                   then k.eq.min(n,p). */
-/*                   u contains the matrix of left singular vectors. */
-/*                   u is not referenced if joba.eq.0.  if n.le.p */
-/*                   or if joba.eq.2, then u may be identified with x */
-/*                   in the subroutine call. */
-
-/*         v         double precision(ldv,p), where ldv.ge.p. */
-/*                   v contains the matrix of right singular vectors. */
-/*                   v is not referenced if job.eq.0.  if p.le.n, */
-/*                   then v may be identified with x in the */
-/*                   subroutine call. */
-
-/*         info      integer. */
-/*                   the singular values (and their corresponding */
-/*                   singular vectors) s(info+1),s(info+2),...,s(m) */
-/*                   are correct (here m=min(n,p)).  thus if */
-/*                   info.eq.0, all the singular values and their */
-/*                   vectors are correct.  in any event, the matrix */
-/*                   b = trans(u)*x*v is the bidiagonal matrix */
-/*                   with the elements of s on its diagonal and the */
-/*                   elements of e on its super-diagonal (trans(u) */
-/*                   is the transpose of u).  thus the singular */
-/*                   values of x and b are the same. */
-
-/*     linpack. this version dated 08/14/78 . */
-/*              correction made to shift 2/84. */
-/*     g.w. stewart, university of maryland, argonne national lab. */
+/*     dsvdc is a subroutine to reduce a double precision nxp matrix x  */
+/*     by orthogonal transformations u and v to diagonal form.  the     */
+/*     diagonal elements s(i) are the singular values of x.  the        */
+/*     columns of u are the corresponding left singular vectors,        */
+/*     and the columns of v the right singular vectors.                 */
+/*                                                                      */
+/*     on entry                                                         */
+/*                                                                      */
+/*         x         double precision(ldx,p), where ldx.ge.n.           */
+/*                   x contains the matrix whose singular value         */
+/*                   decomposition is to be computed.  x is             */
+/*                   destroyed by dsvdc.                                */
+/*                                                                      */
+/*         ldx       integer.                                           */
+/*                   ldx is the leading dimension of the array x.       */
+/*                                                                      */
+/*         n         integer.                                           */
+/*                   n is the number of rows of the matrix x.           */
+/*                                                                      */
+/*         p         integer.                                           */
+/*                   p is the number of columns of the matrix x.        */
+/*                                                                      */
+/*         ldu       integer.                                           */
+/*                   ldu is the leading dimension of the array u.       */
+/*                   (see below).                                       */
+/*                                                                      */
+/*         ldv       integer.                                           */
+/*                   ldv is the leading dimension of the array v.       */
+/*                   (see below).                                       */
+/*                                                                      */
+/*         work      double precision(n).                               */
+/*                   work is a scratch array.                           */
+/*                                                                      */
+/*         job       integer.                                           */
+/*                   job controls the computation of the singular       */
+/*                   vectors.  it has the decimal expansion ab          */
+/*                   with the following meaning                         */
+/*                                                                      */
+/*                        a.eq.0    do not compute the left singular    */
+/*                                  vectors.                            */
+/*                        a.eq.1    return the n left singular vectors  */
+/*                                  in u.                               */
+/*                        a.ge.2    return the first min(n,p) singular  */
+/*                                  vectors in u.                       */
+/*                        b.eq.0    do not compute the right singular   */
+/*                                  vectors.                            */
+/*                        b.eq.1    return the right singular vectors   */
+/*                                  in v.                               */
+/*                                                                      */
+/*     on return                                                        */
+/*                                                                      */
+/*         s         double precision(mm), where mm=min(n+1,p).         */
+/*                   the first min(n,p) entries of s contain the        */
+/*                   singular values of x arranged in descending        */
+/*                   order of magnitude.                                */
+/*                                                                      */
+/*         e         double precision(p),                               */
+/*                   e ordinarily contains zeros.  however see the      */
+/*                   discussion of info for exceptions.                 */
+/*                                                                      */
+/*         u         double precision(ldu,k), where ldu.ge.n.  if       */
+/*                                   joba.eq.1 then k.eq.n, if joba.ge.2*/
+/*                                   then k.eq.min(n,p).                */
+/*                   u contains the matrix of left singular vectors.    */
+/*                   u is not referenced if joba.eq.0.  if n.le.p       */
+/*                   or if joba.eq.2, then u may be identified with x   */
+/*                   in the subroutine call.                            */
+/*                                                                      */
+/*         v         double precision(ldv,p), where ldv.ge.p.           */
+/*                   v contains the matrix of right singular vectors.   */
+/*                   v is not referenced if job.eq.0.  if p.le.n,       */
+/*                   then v may be identified with x in the             */
+/*                   subroutine call.                                   */
+/*                                                                      */
+/*         info      integer.                                           */
+/*                   the singular values (and their corresponding       */
+/*                   singular vectors) s(info+1),s(info+2),...,s(m)     */
+/*                   are correct (here m=min(n,p)).  thus if            */
+/*                   info.eq.0, all the singular values and their       */
+/*                   vectors are correct.  in any event, the matrix     */
+/*                   b = trans(u)*x*v is the bidiagonal matrix          */
+/*                   with the elements of s on its diagonal and the     */
+/*                   elements of e on its super-diagonal (trans(u)      */
+/*                   is the transpose of u).  thus the singular         */
+/*                   values of x and b are the same.                    */
+/*                                                                      */
+/*     linpack. this version dated 08/14/78 .                           */
+/*              correction made to shift 2/84.                          */
+/*     g.w. stewart, university of maryland, argonne national lab.      */
 
 /*     dsvdc uses the following functions and subprograms. */
-
-/*     external drot */
-/*     blas daxpy,ddot,dscal,dswap,dnrm2,drotg */
-/*     fortran dabs,dmax1,max0,min0,mod,dsqrt */
-
-/*     internal variables */
-
-
-
-/*     set the maximum number of iterations. */
+/*                                                         */
+/*     external drot                                       */
+/*     blas daxpy,ddot,dscal,dswap,dnrm2,drotg             */
+/*     fortran dabs,dmax1,max0,min0,mod,dsqrt              */
 
     /* Parameter adjustments */
     --work;
@@ -180,7 +172,8 @@ integer *job, *info;
     x_offset = x_dim1 + 1;
     x -= x_offset;
 
-    /* Function Body */
+/*     set the maximum number of iterations. */
+
     maxit = 30;
 
 /*     determine what is to be computed. */
@@ -437,14 +430,11 @@ L360:
         }
         test = abs(s[l]) + abs(s[l + 1]);
         ztest = test + abs(e[l]);
-        if (fsm_ieee_doubles_differ(&ztest, &test)) {
-            goto L380;
-        }
-        e[l] = 0.;
+        if (fsm_ieee_doubles_equal(&ztest, &test)) {
+            e[l] = 0.;
 /*        ......exit */
-        goto L400;
-L380:
-        ;
+            goto L400;
+        }
     }
 L400:
     if (l != m - 1) {
@@ -467,14 +457,11 @@ L410:
             test += abs(e[ls - 1]);
         }
         ztest = test + abs(s[ls]);
-        if (fsm_ieee_doubles_differ(&ztest, &test)) {
-            goto L420;
-        }
-        s[ls] = 0.;
+        if (fsm_ieee_doubles_equal(&ztest, &test)) {
+            s[ls] = 0.;
 /*           ......exit */
-        goto L440;
-L420:
-        ;
+            goto L440;
+        }
     }
 L440:
     if (ls != l) {
@@ -520,8 +507,7 @@ L490:
         e[k - 1] = cs * e[k - 1];
 L500:
         if (wantv) {
-            drot_(p, &v[k * v_dim1 + 1], &c__1, &v[m * v_dim1 + 1], &c__1, &
-                    cs, &sn);
+            drot_(p, &v[k * v_dim1 + 1], &c__1, &v[m * v_dim1 + 1], &c__1, &cs, &sn);
         }
     }
     goto L360;
@@ -538,8 +524,7 @@ L520:
         f = -sn * e[k];
         e[k] = cs * e[k];
         if (wantu) {
-            drot_(n, &u[k * u_dim1 + 1], &c__1, &u[(l - 1) * u_dim1 + 1], &
-                    c__1, &cs, &sn);
+            drot_(n, &u[k * u_dim1 + 1], &c__1, &u[(l - 1) * u_dim1 + 1], &c__1, &cs, &sn);
         }
     }
     goto L360;
@@ -584,8 +569,7 @@ L550:
         g = sn * s[k + 1];
         s[k + 1] = cs * s[k + 1];
         if (wantv) {
-            drot_(p, &v[k * v_dim1 + 1], &c__1, &v[(k + 1) * v_dim1 + 1], &
-                    c__1, &cs, &sn);
+            drot_(p, &v[k * v_dim1 + 1], &c__1, &v[(k + 1) * v_dim1 + 1], &c__1, &cs, &sn);
         }
         drotg_(&f, &g, &cs, &sn);
         s[k] = f;
@@ -594,8 +578,7 @@ L550:
         g = sn * e[k + 1];
         e[k + 1] = cs * e[k + 1];
         if (wantu && k < *n) {
-            drot_(n, &u[k * u_dim1 + 1], &c__1, &u[(k + 1) * u_dim1 + 1], &
-                    c__1, &cs, &sn);
+            drot_(n, &u[k * u_dim1 + 1], &c__1, &u[(k + 1) * u_dim1 + 1], &c__1, &cs, &sn);
         }
     }
     e[m - 1] = f;
@@ -644,7 +627,7 @@ L600:
     goto L360;
 } /* dsvdc_ */
 
-int fsm_ieee_doubles_differ(double *x, double *y)
+int fsm_ieee_doubles_equal(double *x, double *y)
 {
-  return *x != *y;
+  return *x == *y;
 }
