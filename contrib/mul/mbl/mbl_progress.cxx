@@ -1,9 +1,10 @@
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
 
 #include <mbl/mbl_progress.h>
 #include <vcl_iostream.h>
+#include <vcl_config_compiler.h>
 #include <vsl/vsl_indent.h>
 
 
@@ -22,7 +23,7 @@ mbl_progress::~mbl_progress()
 
 //=======================================================================
 void mbl_progress::set_estimated_iterations(const vcl_string& identifier,
-                                            const int iterations, 
+                                            const int iterations,
                                             const vcl_string& display_text)
 {
   identifier2estimatediterations_[identifier] = iterations;
@@ -40,17 +41,19 @@ void mbl_progress::set_progress(const vcl_string& identifier,
   if (is_cancelled(identifier))
   {
     end_progress(identifier);
+#if VCL_HAS_EXCEPTIONS
     if (throw_exception_on_cancel_)
-    {	
+    {
       throw mbl_progress_cancel_exception();
     }
-  }  
-  
+#endif
+  }
+
   vcl_map<vcl_string, int>::iterator it = identifier2progress_.find(identifier);
   if (it != identifier2progress_.end())
   {
     it->second = progress;
-    on_set_progress(identifier, progress);  
+    on_set_progress(identifier, progress);
   }
 }
 
@@ -59,7 +62,7 @@ void mbl_progress::set_progress(const vcl_string& identifier,
 void mbl_progress::increment_progress(const vcl_string& identifier,
                                       const int n)
 {
-  vcl_map<vcl_string, int>::const_iterator it = 
+  vcl_map<vcl_string, int>::const_iterator it =
     identifier2progress_.find(identifier);
   if (it != identifier2progress_.end())
   {
@@ -80,7 +83,7 @@ void mbl_progress::end_progress(const vcl_string& identifier)
 int mbl_progress::progress(const vcl_string& identifier) const
 {
   int p = -1;
-  vcl_map<vcl_string, int>::const_iterator it = 
+  vcl_map<vcl_string, int>::const_iterator it =
     identifier2progress_.find(identifier);
   if (it != identifier2progress_.end())
   {
@@ -93,13 +96,13 @@ int mbl_progress::progress(const vcl_string& identifier) const
 //=======================================================================
 vcl_string mbl_progress::display_text(const vcl_string& identifier) const
 {
-  vcl_string dt;  
-  vcl_map<vcl_string, vcl_string>::const_iterator it = 
+  vcl_string dt;
+  vcl_map<vcl_string, vcl_string>::const_iterator it =
     identifier2displaytext_.find(identifier);
   if (it != identifier2displaytext_.end())
   {
     dt = it->second;
-  }  
+  }
   return dt;
 }
 
@@ -108,7 +111,7 @@ vcl_string mbl_progress::display_text(const vcl_string& identifier) const
 int mbl_progress::estimated_iterations(const vcl_string& identifier) const
 {
   int n = -1;
-  vcl_map<vcl_string, int>::const_iterator it = 
+  vcl_map<vcl_string, int>::const_iterator it =
     identifier2estimatediterations_.find(identifier);
   if (it != identifier2estimatediterations_.end())
   {
@@ -122,7 +125,7 @@ int mbl_progress::estimated_iterations(const vcl_string& identifier) const
 // Modify the flag to cancel the current process.
 // identifier: Progress object to cancel.
 //=======================================================================
-void mbl_progress::set_cancelled(const vcl_string& identifier, 
+void mbl_progress::set_cancelled(const vcl_string& identifier,
                                  const bool cancel)
 {
   vcl_map<vcl_string, bool>::iterator it = identifier2cancel_.find(identifier);
