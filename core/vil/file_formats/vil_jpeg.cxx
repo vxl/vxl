@@ -190,7 +190,7 @@ bool vil2_jpeg_image::put_view(const vil2_image_view_base &view,
   // write each scanline
   if (view2.planestep() == 1 || view2.nplanes() == 1)
   {
-    assert(view2.istep() == bpp);
+    assert(view2.istep() > 0 && unsigned(view2.istep()) == bpp);
     for (unsigned int j=0; j<view2.nj(); ++j) {
       JSAMPLE const *scanline = (JSAMPLE const*)
         &view2(0,j);
