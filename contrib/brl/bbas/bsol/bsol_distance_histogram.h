@@ -37,8 +37,10 @@ class bsol_distance_histogram
   //:update the histogram
   void up_count(const double value, const double count, const double weight = 1.0);
 
-  //:find the first (non-zero) distance peak
-  double second_distance_peak(double min_peak_height_ratio = 0.5);
+  //:find the first two (non-zero) distance peaks
+  bool distance_peaks(double& peak1, double& peak2,
+                      double min_peak_height_ratio = 0.5);
+
 
   //: utility functions
   double min_val() const;
@@ -52,6 +54,8 @@ class bsol_distance_histogram
  private:
   //:normalize the distance values which were weighted by the line length
   void normalize_distance();
+  //:perform a parabolic interpolation using adjacent bins.
+  double interpolate_peak(int initial_peak);
   double delta_; // bin value interval
   vcl_vector<double> bin_counts_;//histogram counts
   vcl_vector<double> bin_values_;//histogram values
