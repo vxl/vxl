@@ -36,9 +36,6 @@ SOURCES += vul_trace.cxx
 
 DEFINES += -DBUILDING_VUL_DLL
 
-# stream I/O
-SUBDIRS += io
-
 ifndef NOTEST
 SUBDIRS += tests
 SUBDIRS += examples

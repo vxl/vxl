@@ -57,7 +57,6 @@ MANPAGE_SOURCES += vgl_ellipse_scan_iterator.txx
 SOURCES += internals/gpc.c
 
 SUBDIRS += algo
-SUBDIRS += io
 
 #######################################
 include ${IUEROOT}/config/top-params.mk

@@ -7,9 +7,6 @@ SUBDIRS += testlib
 # POSIX layer
 SUBDIRS += vpl
 
-# stream I/O
-SUBDIRS += vsl
-
 # utilities
 SUBDIRS += vul
 
@@ -24,6 +21,9 @@ SUBDIRS += vgl
 
 # image
 SUBDIRS += vil vil1
+
+# stream I/O
+SUBDIRS += vsl vul/io vbl/io vnl/io vgl/io vil/io vil1/io
 
 # video
 SUBDIRS += vidl

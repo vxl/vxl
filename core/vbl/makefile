@@ -44,9 +44,6 @@ MANPAGE_SOURCES += vbl_basic_tuple.h
 
 DEFINES += -DBUILDING_VBL_DLL
 
-# stream I/O
-SUBDIRS += io
-
 #######################################
 include ${IUEROOT}/config/top-params.mk
 #######################################

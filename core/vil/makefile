@@ -117,7 +117,7 @@ SOURCES += vil_stream_read.cxx
 SOURCES += vil_stream_write.cxx
 SOURCES += vil_open.cxx
 
-SUBDIRS += algo io
+SUBDIRS += algo
 
 ifndef NOTEST
  SUBDIRS += tests examples

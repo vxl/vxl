@@ -119,7 +119,6 @@ MANPAGE_SOURCES += vil1_ip_traits.h
 
 # subdirectories
 #SUBDIRS += algo
-SUBDIRS += io
 
 ifndef NOTEST
 SUBDIRS += tests

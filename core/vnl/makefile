@@ -140,9 +140,6 @@ MANPAGE_SOURCES += vnl_identity.h
 # algo
 SUBDIRS += algo
 
-# stream I/O
-SUBDIRS += io
-
 #######################################
 include ${IUEROOT}/config/top-params.mk
 #######################################
