@@ -37,6 +37,24 @@ private:
   //: Whether weights changed during iterations
   bool weights_fixed_;
 
+    //: Assumes means set up.  Estimates starting components.
+	// \param mean_sep : Rough guess of mean separation between points
+  void initialise_given_means(vpdfl_mixture& model,
+                  const vnl_vector<double>* data,
+				  const vcl_vector<vnl_vector<double> >& mean,
+                  const vcl_vector<double>& wts) const;
+
+    //: Means centred on data[i*f]
+  void initialise_to_regular_samples(vpdfl_mixture& model,
+                  const vnl_vector<double>* data,
+                  const vcl_vector<double>& wts) const;
+
+    //: Select positions along diagonal of bounding box
+  void initialise_diagonal(vpdfl_mixture& model,
+                  const vnl_vector<double>* data,
+                  const vcl_vector<double>& wts) const;
+
+    //: Select positions and widths for components to start
   void initialise(vpdfl_mixture& model,
                   const vnl_vector<double>* data,
                   const vcl_vector<double>& wts) const;

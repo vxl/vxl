@@ -232,16 +232,58 @@ static void UpdateRange(vnl_vector<double>& min_vec, vnl_vector<double>& max_vec
   }
 }
 
+//: Assumes means set up.  Estimates starting components.
+void vpdfl_mixture_builder::initialise_given_means(vpdfl_mixture& model,
+                  const vnl_vector<double>* data,
+				  const vcl_vector<vnl_vector<double> >& mean,
+                  const vcl_vector<double>& wts) const
+{
+  int n_comp = builder_.size();
+  int n_samples = wts.size();
+
+  // Compute range of data
+  vnl_vector<double> min_v(mean[0]);
+  vnl_vector<double> max_v(min_v);
+  for (int i=1;i<n_comp;++i)
+    UpdateRange(min_v,max_v,mean[i]);
+
+  double mean_sep = vnl_vector_ssd(max_v,min_v)/n_comp;
+  if (mean_sep<=1e-6) mean_sep = 1e-6;
+
+
+  vcl_vector<double> wts_i(n_samples);
+
+  mbl_data_array_wrapper<vnl_vector<double> > data_array(data,n_samples);
+
+  for (int i=0;i<n_comp;++i)
+  {
+    // Compute weights proportional to inverse square to the mean
+    double w_sum = 0.0;
+    for (int j=0;j<n_samples;++j)
+    {
+      wts_i[j] = wts[j]*mean_sep/(mean_sep+ vnl_vector_ssd(data[j], mean[i]));
+      w_sum+=wts_i[j];
+    }
+
+    // Normalise so weights add to n_samples/n_comp
+    double f = n_samples/(n_comp*w_sum);
+    for (int j=0;j<n_samples;++j) wts_i[j]*=f;
+
+    // Build i'th component, biasing data toward mean(i)
+    builder_[i]->weighted_build(*(model.components()[i]),data_array,wts_i);
+  }
+
+}
+
+
 //=======================================================================
-void vpdfl_mixture_builder::initialise(vpdfl_mixture& model,
+void vpdfl_mixture_builder::initialise_diagonal(vpdfl_mixture& model,
           const vnl_vector<double>* data,
           const vcl_vector<double>& wts) const
 {
   // Build each component using randomly weighted data
   int n_comp = builder_.size();
   int n_samples = wts.size();
-
-  vcl_vector<double> wts_i(n_samples);
 
   // Compute range of data
   vnl_vector<double> min_v(data[0]);
@@ -259,26 +301,38 @@ void vpdfl_mixture_builder::initialise(vpdfl_mixture& model,
     mean[i] = (1-f)*min_v + f*max_v;
   }
 
-  mbl_data_array_wrapper<vnl_vector<double> > data_array(data,n_samples);
-  vnl_vector<double> dv;
+  initialise_given_means(model,data,mean,wts);
+}
 
+//=======================================================================
+void vpdfl_mixture_builder::initialise_to_regular_samples(vpdfl_mixture& model,
+          const vnl_vector<double>* data,
+          const vcl_vector<double>& wts) const
+{
+  // Build each component using randomly weighted data
+  int n_comp = builder_.size();
+  int n_samples = wts.size();
+
+  double f = double(n_samples)/n_comp;
+
+  // Select means from data
+  vcl_vector<vnl_vector<double> > mean(n_comp);
   for (int i=0;i<n_comp;++i)
   {
-    // Compute weights proportional to inverse square to the mean
-    double w_sum = 0.0;
-    for (int j=0;j<n_samples;++j)
-    {
-      wts_i[j] = mean_sep/(mean_sep+ vnl_vector_ssd(data[j], mean[i]));
-      w_sum+=wts_i[j];
-    }
-
-    // Normalise so weights add to n_samples/n_comp
-    double f = n_samples/(n_comp*w_sum);
-    for (int j=0;j<n_samples;++j) wts_i[j]*=f;
-
-    // Build i'th component, biasing data toward mean(i)
-    builder_[i]->weighted_build(*(model.components()[i]),data_array,wts_i);
+    int j = vnl_math_rnd((i+0.5)*f);
+	if (j>=n_samples) j=n_samples-1;
+    mean[i] = data[j];
   }
+
+  initialise_given_means(model,data,mean,wts);
+}
+
+void vpdfl_mixture_builder::initialise(vpdfl_mixture& model,
+          const vnl_vector<double>* data,
+          const vcl_vector<double>& wts) const
+{
+  // Later add a switch to decide on how to initialise
+  initialise_to_regular_samples(model,data,wts);
 }
 
 //=======================================================================
