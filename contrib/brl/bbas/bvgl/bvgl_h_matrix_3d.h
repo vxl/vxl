@@ -25,6 +25,7 @@
 template <class T>
 class bvgl_h_matrix_3d
 {
+ protected:
   vnl_matrix_fixed<T,4,4> t12_matrix_;
  public:
   bvgl_h_matrix_3d();

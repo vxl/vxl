@@ -15,6 +15,7 @@
 //    22 Mar 2003 - J.L. Mundy - preparing for upgrade to vgl
 // \endverbatim
 
+#include <vcl_vector.h>
 #include <vnl/vnl_matrix_fixed.h>
 #include <vgl/vgl_homg_point_2d.h>
 #include <vgl/vgl_homg_line_2d.h>
@@ -28,6 +29,7 @@ template <class T>
 class bvgl_h_matrix_2d
 {
   // Data Members--------------------------------------------------------------
+ protected:
   vnl_matrix_fixed<T,3,3> t12_matrix_;
 
  public:
@@ -40,6 +42,7 @@ class bvgl_h_matrix_2d
   bvgl_h_matrix_2d(const T* t_matrix);
   bvgl_h_matrix_2d(vcl_istream& s);
   bvgl_h_matrix_2d(char const* filename);
+
  ~bvgl_h_matrix_2d();
 
   // Operations----------------------------------------------------------------
@@ -73,6 +76,9 @@ class bvgl_h_matrix_2d
   void set_identity();
   void set(const T *t_matrix);
   void set(vnl_matrix_fixed<T,3,3> const& t_matrix);
+
+  //: transformation to projective basis (canonical frame)
+  bool projective_basis(vcl_vector<vgl_homg_point_2d<T> > const & four_points);
 
   bool read(vcl_istream& s);
   bool read(char const* filename);

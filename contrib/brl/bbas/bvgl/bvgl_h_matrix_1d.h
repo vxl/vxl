@@ -26,6 +26,7 @@ template <class T>
 class bvgl_h_matrix_1d
 {
   // Data Members--------------------------------------------------------------
+ protected:
   vnl_matrix_fixed<T,2,2> t12_matrix_;
 
  public:
