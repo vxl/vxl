@@ -30,7 +30,7 @@ class kalman_filter
  public:
 
    //: get backprojection for debugging
-   vcl_vector<vnl_matrix<double> > kalman_filter::get_back_projection();
+   vcl_vector<vnl_matrix<double> > get_back_projection();
 
   //: predict next curve.
   vnl_matrix<double> get_predicted_curve();
