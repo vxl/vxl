@@ -182,20 +182,16 @@ int mvl2_video_from_avi::seek(unsigned int frame_number)
   moviestream_->Seek(frame_number);
   moviestream_->SeekToPrevKeyFrame();
   unsigned int key_frame=moviestream_->GetPos();
-  vcl_cout << "[mvl2_video_from_avi::seek] key frame ";
-  vcl_cout << key_frame << "  -> uncomppress ";
-  vcl_cout << frame_number-key_frame << " frames\n";
-  for (unsigned int i=key_frame; i<=frame_number; ++i)
+  vcl_cout << "[mvl2_video_from_avi::seek] key frame " << key_frame
+           << "  -> uncompress " << frame_number-key_frame << " frames\n";
+  for (unsigned int i=key_frame; i<frame_number; ++i)
   {
-    //current_frame_=moviestream_->GetPos();
     moviestream_->ReadFrame();
-    if (i!=frame_number)
-    {
-      CImage* cim;
-      cim=moviestream_->GetFrame();
-    }
+    /* CImage* cim = */ moviestream_->GetFrame();
   }
+  moviestream_->ReadFrame();
+  current_frame_ = moviestream_->GetPos();
   // hack for GetPos bug with MJPG codec
-  current_frame_= moviestream_->GetPos()==0 ? frame_number : moviestream_->GetPos();
+  if (current_frame_ == 0) current_frame_ = frame_number;
   return current_frame_;
 }
