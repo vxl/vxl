@@ -15,6 +15,7 @@
 //   22 Mar 2003 - J. L. Mundy  - prep for moving to vgl
 // \endverbatim
 
+#include <vcl_vector.h>
 #include <vnl/vnl_fwd.h> // for vnl_vector_fixed<T,3>
 #include <vnl/vnl_matrix_fixed.h>
 #include <vgl/vgl_homg_point_3d.h>
@@ -61,9 +62,10 @@ class vgl_h_matrix_3d
 
   void set(const T *t_matrix);
   void set(vnl_matrix_fixed<T,4,4> const& t_matrix);
+  bool projective_basis(vcl_vector<vgl_homg_point_3d<T> > const & five_points);
   void set_identity();
-  void set_translation(T tx=0, T ty=0, T tz=0);
-  void set_rotation_about_axis(vnl_vector_fixed<T,3> axis, T angle);
+  void set_translation(T tx, T ty, T tz);
+  void set_rotation_about_axis(const vnl_vector_fixed<T,3>& axis, T angle);
   void set_rotation_roll_pitch_yaw(T rx, T ry, T rz);
   void set_rotation_euler(T rz1, T ry, T rz2);
 };
