@@ -44,12 +44,10 @@ MINI_PROG_SOURCES += example_x_gradient.cxx
 MINI_PROG_SOURCES += example_histogram.cxx
 endif
 
-ifneq ($(USE_IMPLICIT_TEMPLATES),1)
 IULIBS += -lvipl_with_vnl_matrix   # for B.
 IULIBS += -lvipl_with_vbl_array_2d # for C.
 ifneq (,$(wildcard $(IUELOCALROOT)/Image/ImageProcessingBasics/section.h))
 IULIBS += -lvipl_with_section      # for D.
-endif
 endif
 IULIBS += -lvnl                    # for B.
 IULIBS += -lvbl                    # for C.
