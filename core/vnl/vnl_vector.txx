@@ -103,11 +103,12 @@ vnl_vector<T>::vnl_vector (unsigned len, int n, T const values[])
   }
 }
 
-//: Creates a vector of length 2 and initializes with the arguments, px,py.
+#if VNL_CONFIG_LEGACY_METHODS // these constructors are deprecated and should not be used
 
 template<class T>
 vnl_vector<T>::vnl_vector (unsigned len, T const& px, T const& py)
 {
+  VXL_DEPRECATED("vnl_vector<T>::vnl_vector(2, T const& px, T const& py)");
   assert(len==2);
   vnl_vector_construct_hack();
   vnl_vector_alloc_blah(2);
@@ -115,11 +116,10 @@ vnl_vector<T>::vnl_vector (unsigned len, T const& px, T const& py)
   this->data[1] = py;
 }
 
-//: Creates a vector of length 3 and initializes with the arguments, px,py,pz.
-
 template<class T>
 vnl_vector<T>::vnl_vector (unsigned len, T const& px, T const& py, T const& pz)
 {
+  VXL_DEPRECATED("vnl_vector<T>::vnl_vector(3, T const& px, T const& py, T const& pz)");
   assert(len==3);
   vnl_vector_construct_hack();
   vnl_vector_alloc_blah(3);
@@ -128,11 +128,10 @@ vnl_vector<T>::vnl_vector (unsigned len, T const& px, T const& py, T const& pz)
   this->data[2] = pz;
 }
 
-//: Creates a vector of length 4 and initializes with the arguments.
-
 template<class T>
 vnl_vector<T>::vnl_vector (unsigned len, T const& px, T const& py, T const& pz, T const& pw)
 {
+  VXL_DEPRECATED("vnl_vector<T>::vnl_vector(4, T const& px, T const& py, T const& pz, T const& pt)");
   assert(len==4);
   vnl_vector_construct_hack();
   vnl_vector_alloc_blah(4);
@@ -142,48 +141,7 @@ vnl_vector<T>::vnl_vector (unsigned len, T const& px, T const& py, T const& pz, 
   this->data[3] = pw;
 }
 
-#if 0 // commented out
-//: Creates a vector of specified length and initialize first n elements with values in ... O(n).
-// Arguments in ... can only be pointers, primitive types like int,
-// and NOT OBJECTS passed by value, like vectors, matrices,
-// because constructors must be known and called at compile time!!!
-
-template<class T>
-vnl_vector<T>::vnl_vector (unsigned len, int n, T v00, ...)
-: num_elmts(len), data(vnl_c_vector<T>::allocate_T(len))
-{
-  vnl_vector_construct_hack();
-  vcl_cerr << "Please use automatic arrays instead variable arguments\n";
-  if (n > 0) {                               // If user specified values
-    va_list argp;                            // Declare argument list
-    va_start (argp, v00);                    // Initialize macro
-    for (int i = 0; i < len && n; i++, n--)  // For remaining values given
-      if (i == 0)
-     this->data[0] = v00;                    // Hack for v00 ...
-      else
-     this->data[i] = va_arg(argp, T);        // Extract and assign
-    va_end(argp);
-  }
-}
-
-template<class T>
-vnl_vector<T>::vnl_vector (unsigned len, int n, T v00, ...)
-: num_elmts(len), data(vnl_c_vector<T>::allocate_T(len))
-{
-  vnl_vector_construct_hack();
-  vcl_cerr << "Please use automatic arrays instead variable arguments\n";
-  if (n > 0) {                                  // If user specified values
-    va_list argp;                               // Declare argument list
-    va_start (argp, v00);                       // Initialize macro
-    for (int i = 0; i < len && n; i++, n--)     // For remaining values given
-      if (i == 0)
-        this->data[0] = v00;                    // Hack for v00 ...
-      else
-        this->data[i] = va_arg(argp, T);        // Extract and assign
-    va_end(argp);
-  }
-}
-#endif
+#endif // VNL_CONFIG_LEGACY_METHODS
 
 //: Creates a new copy of vector v. O(n).
 template<class T>

@@ -12,6 +12,7 @@
 // Modifications
 // Comments re-written by Tim Cootes, for his sins.
 //   Feb.2002 - Peter Vanroose - brief doxygen comment placed on single line
+//   Mar.2004 - Peter Vanroose - deprecated fixed-size constructors now compile only when VNL_CONFIG_LEGACY_METHODS==1
 // \endverbatim
 
 #include <vcl_iosfwd.h>
@@ -27,6 +28,9 @@
 # undef VNL_CONFIG_CHECK_BOUNDS
 # define VNL_CONFIG_CHECK_BOUNDS 0
 # undef ERROR_CHECKING
+#endif
+#if VNL_CONFIG_LEGACY_METHODS
+# include <vcl_deprecated.h>
 #endif
 
 export template <class T> class vnl_vector;
@@ -86,20 +90,25 @@ class vnl_vector
   //: Creates a vector of specified length and initialize first n elements with values. O(n).
   vnl_vector(unsigned len, int n, T const values[]);
 
+#if VNL_CONFIG_LEGACY_METHODS // these constructors are deprecated and should not be used
   //: Creates a vector of length 2 and initializes with the arguments, px,py.
   //  Requires that len==2.
   //  Consider using vnl_vector_fixed<T,2> instead!
+  // \deprecated
   vnl_vector(unsigned len, T const& px, T const& py);
 
   //: Creates a vector of length 3 and initializes with the arguments, px,py,pz.
   //  Requires that len==3.
   //  Consider using vnl_vector_fixed<T,3> instead!
+  // \deprecated
   vnl_vector(unsigned len, T const& px, T const& py, T const& pz);
 
   //: Creates a vector of length 4 and initializes with the arguments.
   //  Requires that len==4.
   //  Consider using vnl_vector_fixed<T,4> instead!
+  // \deprecated
   vnl_vector(unsigned len, T const& px, T const& py, T const& pz, T const& pw);
+#endif
 
   //: Create n element vector and copy data from data_block
   vnl_vector(T const* data_block,unsigned int n);
@@ -323,25 +332,32 @@ class vnl_vector
   //: Set this to that and that to this
   void swap(vnl_vector<T> & that);
 
+#if VNL_CONFIG_LEGACY_METHODS // these methods are deprecated and should not be used
   //: Return first element of vector
-  T& x() const { return data[0]; }
+  // \deprecated
+  T& x() const { VXL_DEPRECATED("vnl_vector<T>::x()"); return data[0]; }
   //: Return second element of vector
-  T& y() const { return data[1]; }
+  // \deprecated
+  T& y() const { VXL_DEPRECATED("vnl_vector<T>::y()"); return data[1]; }
   //: Return third element of vector
-  T& z() const { return data[2]; }
+  // \deprecated
+  T& z() const { VXL_DEPRECATED("vnl_vector<T>::z()"); return data[2]; }
   //: Return fourth element of vector
-  T& t() const { return data[3]; }
-
-#if VNL_CONFIG_LEGACY_METHODS
+  // \deprecated
+  T& t() const { VXL_DEPRECATED("vnl_vector<T>::t()"); return data[3]; }
   //: Set the first element (with bound checking)
-  void set_x(T const&xx) { if (size() >= 1) data[0] = xx; }
+  // \deprecated
+  void set_x(T const&xx) { VXL_DEPRECATED("vnl_vector<T>::set_x()"); if (size() >= 1) data[0] = xx; }
   //: Set the second element (with bound checking)
-  void set_y(T const&yy) { if (size() >= 2) data[1] = yy; }
+  // \deprecated
+  void set_y(T const&yy) { VXL_DEPRECATED("vnl_vector<T>::set_y()"); if (size() >= 2) data[1] = yy; }
   //: Set the third element (with bound checking)
-  void set_z(T const&zz) { if (size() >= 3) data[2] = zz; }
+  // \deprecated
+  void set_z(T const&zz) { VXL_DEPRECATED("vnl_vector<T>::set_z()"); if (size() >= 3) data[2] = zz; }
   //: Set the fourth element (with bound checking)
-  void set_t(T const&tt) { if (size() >= 4) data[3] = tt; }
-#endif
+  // \deprecated
+  void set_t(T const&tt) { VXL_DEPRECATED("vnl_vector<T>::set_t()"); if (size() >= 4) data[3] = tt; }
+#endif // VNL_CONFIG_LEGACY_METHODS
 
   //: Check that size()==sz if not, abort();
   // This function does or tests nothing if NDEBUG is defined
@@ -391,7 +407,6 @@ class vnl_vector
 
   //: Read from text stream
   static vnl_vector<T> read(vcl_istream& s);
-
 
  protected:
   unsigned num_elmts;           // Number of elements
