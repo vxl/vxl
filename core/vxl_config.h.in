@@ -35,6 +35,11 @@
 //#define vxl_ieee_96  @VXL_IEEE_96@
 //#define vxl_ieee_128 @VXL_IEEE_128@
 
+// -------------------- operating system services
+
+#define VXL_HAS_PTHREAD_H         @VXL_HAS_PTHREAD_H@
+#define VXL_HAS_SEMAPHORE_H       @VXL_HAS_SEMAPHORE_H@
+
 // -------------------- library quirks
 
 // these should be 1 if the symbol in question is declared

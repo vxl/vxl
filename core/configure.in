@@ -33,14 +33,15 @@ else
 fi
 
 # fsm@robots
+AC_CHECK_HEADER(pthread.h,[VXL_HAS_PTHREAD_H=1],[VXL_HAS_PTHREAD_H=0])
+AC_CHECK_HEADER(semaphore.h,[VXL_HAS_SEMAPHORE_H=1],[VXL_HAS_SEMAPHORE_H=0])
+AC_CHECK_HEADER(ieeefp.h,[VXL_HAS_IEEEFP_H=1],[VXL_HAS_IEEEFP_H=0])
 AC_VXL_UNISTD
 AC_VXL_WORDS
 AC_VXL_HAS_QSORT
-AC_CHECK_HEADER(ieeefp.h,[VXL_HAS_IEEEFP_H=1],[VXL_HAS_IEEEFP_H=0])
 AC_VXL_MATH_HAS_FINITE
 AC_VXL_IEEEFP_HAS_FINITE
 AC_VXL_STDLIB_RAND48
-
 
 # check for bigendian
 AC_C_BIGENDIAN
@@ -54,6 +55,10 @@ fi
 
 #--------------------------------------------------------------------------------
 # complete list of substitutions:
+
+# ...
+AC_SUBST(VXL_HAS_PTHREAD_H)
+AC_SUBST(VXL_HAS_SEMAPHORE_H)
 
 # libraries
 AC_SUBST(VXL_UNISTD_HAS_USECONDS_T)
