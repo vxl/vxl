@@ -100,7 +100,7 @@ bool vcsl_spatial::valid_time(const double time) const
   if(!result)
     result=((*beat_)[0]<=time)&&(time<=(*beat_)[beat_->size()-1]);
 
-  return result; 
+  return result;
 }
 
 //***************************************************************************
@@ -234,8 +234,7 @@ bool vcsl_spatial::recursive_path_from_local_to_cs_exists(const vcsl_spatial_spt
                                                           const double time)
 {
   bool result;
-  int i;
-  int j;
+  int i = -1; // dummy initialisation to avoid compiler warning
   vcl_vector<vcsl_spatial_sptr>::const_iterator child;
   if(parent_!=0)
     i=matching_interval(time);
@@ -261,17 +260,16 @@ bool vcsl_spatial::recursive_path_from_local_to_cs_exists(const vcsl_spatial_spt
                   result=!(*child)->reached();
                   if(result)
                     {
-                      j=(*child)->matching_interval(time);
+                      int j=(*child)->matching_interval(time);
                       result=(*(*child)->parent_)[j].ptr()==this;
+                      if(result)
+                        result=(*(*child)->motion_)[j]->is_invertible(time);
                     }
-                  if(result)
-                    result=(*(*child)->motion_)[j]->is_invertible(time);
                   if(result)
                     {
                       result=(*child)==other;
                       if(!result)
-                        result=(*child)->recursive_path_from_local_to_cs_exists(other,
-                                                                                time);
+                        result=(*child)->recursive_path_from_local_to_cs_exists(other, time);
                     }
                 }
             }
@@ -312,8 +310,7 @@ vcsl_spatial::recursive_path_from_local_to_cs(const vcsl_spatial_sptr &other,
                                               vcl_vector<bool> &sens)
 {
   bool result;
-  int i;
-  int j;
+  int i = -1; // dummy initialisation to avoid compiler warning
   vcl_vector<vcsl_spatial_sptr>::const_iterator child;
 
   if(parent_!=0)
@@ -326,63 +323,62 @@ vcsl_spatial::recursive_path_from_local_to_cs(const vcsl_spatial_sptr &other,
     result=(*parent_)[i]==other;
 
   if(result)
-    {
-      path.push_back((*motion_)[i]);
-      sens.push_back(false);
-    }
+  {
+    path.push_back((*motion_)[i]);
+    sens.push_back(false);
+  }
 
   if(!result)
-    {
-      if(!is_absolute(time))
-        if(!(*parent_)[i]->reached())
-          {
-            path.push_back((*motion_)[i]);
-            sens.push_back(false);
-            result=(*parent_)[i]->recursive_path_from_local_to_cs(other,time,
-                                                                  path,sens);
-            if(!result)
-              {
-                path.pop_back();
-                sens.pop_back();
-              }
-          }
-      if(!result)
+  {
+    if(!is_absolute(time))
+      if(!(*parent_)[i]->reached())
+      {
+        path.push_back((*motion_)[i]);
+        sens.push_back(false);
+        result=(*parent_)[i]->recursive_path_from_local_to_cs(other,time,
+                                                              path,sens);
+        if(!result)
         {
-          if(_potential_children!=0)
-            {
-              for(child=_potential_children->begin();
-                  child!=_potential_children->end()&&!result;
-                  ++child)
-                {
-                  result=!(*child)->reached();
-                  if(result)
-                    {
-                      j=(*child)->matching_interval(time);
-                      result=(*(*child)->parent_)[j].ptr()==this;
-                    }
-                  if(result)
-                    result=(*(*child)->motion_)[j]->is_invertible(time);
-                  if(result)
-                    {
-                      result=(*child)==other;
-                      path.push_back((*(*child)->motion_)[j]);
-                      sens.push_back(true);
-                      if(!result)
-                        {
-                          result=(*child)->recursive_path_from_local_to_cs(other,time,
-                                                                           path,sens);
-                        
-                          if(!result)
-                            {
-                              path.pop_back();
-                              sens.pop_back();
-                            }
-                        }
-                    }
-                }
-            }
+          path.pop_back();
+          sens.pop_back();
         }
+      }
+    if(!result)
+    {
+      if(_potential_children!=0)
+      {
+        for(child=_potential_children->begin();
+            child!=_potential_children->end()&&!result;
+            ++child)
+        {
+          result=!(*child)->reached();
+          if(result)
+          {
+            int j=(*child)->matching_interval(time);
+            result=(*(*child)->parent_)[j].ptr()==this;
+            if(result)
+              result=(*(*child)->motion_)[j]->is_invertible(time);
+            if(result)
+            {
+              result=(*child)==other;
+              path.push_back((*(*child)->motion_)[j]);
+              sens.push_back(true);
+              if(!result)
+              {
+                result=(*child)->recursive_path_from_local_to_cs(other,time,
+                                                                 path,sens);
+                if(!result)
+                {
+                  path.pop_back();
+                  sens.pop_back();
+                }
+              }
+            }
+          }
+        }
+      }
     }
+  }
 
   return result;
 }

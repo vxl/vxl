@@ -9,11 +9,12 @@ bool vipl_erode_disk <ImgIn,ImgOut,DataIn,DataOut,PixelItr> :: section_applyop()
   // circular mask was generated in preop(), we just use it here
 
   // apply filter:
-  register DataIn v, w;
   for(int j = start(Y_Axis()); j < stop(Y_Axis()); ++j)
     for(int i = start(X_Axis(),j); i < stop(X_Axis(),j); ++i) {
+      register DataIn
       v = fgetpixel(in, i, j, v); // set v to min of surrounding pixels:
       for (int x=0; x<=size; ++x) for (int y=0; y<=size; ++y) if (mask()[x][y]) {
+        register DataIn
         w = getpixel(in, i+x, j+y, w); if (w < v) v = w;
         w = getpixel(in, i-x, j+y, w); if (w < v) v = w;
         w = getpixel(in, i+x, j-y, w); if (w < v) v = w;

@@ -181,7 +181,7 @@ list_of_vectors *vcsl_rotation::axis(void) const
 {
   return axis_;
 }
-  
+
 //***************************************************************************
 // Basic operations
 //***************************************************************************
@@ -286,7 +286,7 @@ vnl_quaternion<double> *vcsl_rotation::quaternion(const double time) const
 {
   vnl_quaternion<double> *result;
 
-  vnl_vector<double> *axis_2d;
+  vnl_vector<double> *axis_2d = 0;
   int i;
   vnl_quaternion<double> *q0;
   vnl_quaternion<double> *q1;
@@ -308,7 +308,7 @@ vnl_quaternion<double> *vcsl_rotation::quaternion(const double time) const
   else
     {
       i=matching_interval(time);
-      
+
       if(_mode_2d)
         {
           axis_2d=new vnl_vector<double>(3);
@@ -316,7 +316,7 @@ vnl_quaternion<double> *vcsl_rotation::quaternion(const double time) const
           axis_2d->put(1,0);
           axis_2d->put(2,1);
         }
-      
+
       switch((*interpolator_)[i])
         {
         case vcsl_linear:

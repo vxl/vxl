@@ -95,21 +95,17 @@ vnl_vector<double> *vcsl_composition::execute(const vnl_vector<double> &v,
   // require
   assert(is_valid());
 
-  vnl_vector<double> *result;
-  const vnl_vector<double> *tmp2;
-  vnl_vector<double> *tmp;
+  vnl_vector<double> *result = 0;
+  const vnl_vector<double> *tmp2 = &v;
+
   vcl_vector<vcsl_spatial_transformation_sptr>::const_iterator i;
-  
-  tmp2=&v;
   for(i=transformations_->begin();i!=transformations_->end();++i)
     {
-      tmp=(*i)->execute(*tmp2,time);
+      result=(*i)->execute(*tmp2,time);
       if(tmp2!=&v)
         delete tmp2;
-      tmp2=tmp;
+      tmp2=result;
     }
-  result=tmp;
-
   return result;
 }
 
@@ -124,24 +120,19 @@ vnl_vector<double> *vcsl_composition::inverse(const vnl_vector<double> &v,
   // require
   assert(is_valid());
   assert(is_invertible(time));
-  
-  vnl_vector<double> *result;
-  const vnl_vector<double> *tmp2;
-  vnl_vector<double> *tmp;
-  vcl_vector<vcsl_spatial_transformation_sptr>::reverse_iterator i;
-  
-  tmp2=&v;
 
-  // Emulation STL does not provide != for reverse_iterator of 
+  vnl_vector<double> *result = 0;
+  const vnl_vector<double> *tmp2 = &v;
+
+  vcl_vector<vcsl_spatial_transformation_sptr>::reverse_iterator i;
+  // Emulation STL does not provide != for reverse_iterator of
   // vcl_vector<>:iterator.
   for(i=transformations_->rbegin();!(i==transformations_->rend());++i)
     {
-      tmp=(*i)->inverse(*tmp2,time);
+      result=(*i)->inverse(*tmp2,time);
       if(tmp2!=&v)
         delete tmp2;
-      tmp2=tmp;
+      tmp2=result;
     }
-  result=tmp;
-
   return result;
 }

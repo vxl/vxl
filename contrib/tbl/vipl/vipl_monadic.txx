@@ -2,7 +2,7 @@
 
 template <class ImgIn,class ImgOut,class DataIn,class DataOut,class PixelItr>
 bool vipl_monadic <ImgIn,ImgOut,DataIn,DataOut,PixelItr> :: section_applyop(){
-  DataIn dummy;
+  DataIn dummy = DataIn(); // dummy initialization to avoid compiler warning
   const ImgIn &in = in_data();
   ImgOut &out = out_data();
 
