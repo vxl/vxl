@@ -120,14 +120,21 @@ static void run_conversion_operator_tests() {
   TEST("int(vnl_bignum(0x7fffffffL)) == 0x7fffffff", int(vnl_bignum(0x7fffffffL)), 0x7fffffff);
   TEST("int(vnl_bignum(-0x7fffffffL)) == -0x7fffffff", int(vnl_bignum(-0x7fffffffL)), -0x7fffffff);
 
+  vcl_cout << "long conversion operator:\n";
   vnl_bignum b(0x7fffffffL);
   ++b;
-  TEST("vnl_bignum b(0x7fffffffL); ++b; (long)b == 0x80000000L", (long)b, 0x80000000L);
+  // Two casts are used here instead of a direct cast to unsigned long
+  // because vnl_bignum does not implement an overload of "cast to
+  // unsigned long".
+  TEST("vnl_bignum b(0x7fffffffL); ++b; (unsigned long)long(b) == 0x80000000UL", (unsigned long)long(b), 0x80000000UL);
   --b;
-  TEST("vnl_bignum b(0x80000000L); --b; (long)b == 0x7fffffffL", (long)b, 0x7fffffffL);
+  TEST("vnl_bignum b(0x80000000UL); --b; long(b) == 0x7fffffffL", long(b), 0x7fffffffL);
 
+  // Use -0x7fffffffL-0x1L below instead of -0x80000000L because the
+  // latter is parsed like -(0x80000000L) and 0x80000000L is promoted
+  // to unsigned long because it is too big to be a signed long.
   ++b; b = -b;
-  TEST("vnl_bignum b(0x7fffffffL); ++b; b=-b; (long)b == -0x80000000L", (long)b, -0x80000000L);
+  TEST("vnl_bignum b(0x7fffffffL); ++b; b=-b; long(b) == -0x7fffffffL-0x1L", long(b), -0x7fffffffL-0x1L);
 
   vcl_cout << "float conversion operator:\n";
   TEST("float(vnl_bignum(0.0)) == 0.0", ((float) vnl_bignum(0.0)), 0.0);
