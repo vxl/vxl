@@ -6,7 +6,7 @@
 #include <vtol/vtol_vertex_2d_sptr.h>
 #include <vtol/vtol_edge_2d.h>
 #include <vtol/vtol_edge_sptr.h>
-#include <vtol/Vtol_one_chain.h>
+#include <vtol/vtol_one_chain.h>
 #include <vtol/vtol_one_chain_sptr.h>
 #include <vdgl/vdgl_digital_curve.h>
 #include <vdgl/vdgl_interpolator.h>
@@ -159,7 +159,7 @@ int main(int, char **)
         }
     else
       vcl_cout << "No cycles were formed " << vcl_endl;
-    Assert(nested_chains.size()==2);
+    Assert(nested_chains.size()==1);
 	//Add an interior hole
     vsol_point_2d_sptr pi0 = new vsol_point_2d(1.0, 1.0);
     vsol_point_2d_sptr pi1 = new vsol_point_2d(7.0, 1.0);
@@ -191,6 +191,7 @@ int main(int, char **)
             vcl_cout << (*ceit)->cast_to_edge_2d() << vcl_endl;
           vcl_cout << vcl_endl;
         }
+		Assert(nested_chains.size()==2);
   }
 
   //
