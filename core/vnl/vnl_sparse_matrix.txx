@@ -493,10 +493,18 @@ void vnl_sparse_matrix<T>::scale_row(unsigned int r, T scale)
 //    Currently not implemented.
 //
 template <class T>
-void vnl_sparse_matrix<T>::resize( int /*r*/, int /*c*/)
+void vnl_sparse_matrix<T>::resize( int r, int c)
 {
-  vcl_cerr << "Warning: vnl_sparse_matrix::resize not implemented.\n";
-  vcl_abort();
+  rs_ = r;
+  cs_ = c;
+  elements.resize(r);
+  vnl_sparse_matrix_elements::iterator ie;
+  for(ie = elements.begin(); ie != elements.end(); ++ie)
+  {
+    // just set matrix to 0
+    ie->clear();
+  }
+  reset(); // reset iterator
 }
 
 //------------------------------------------------------------
