@@ -134,10 +134,12 @@ public:
   static void LookupTableRemove(vcl_vector<vtol_vertex_2d_sptr >& set, vtol_vertex_2d_sptr  elmt);
   static void LookupTableCompress(vcl_vector<vtol_vertex_2d_sptr >& set);
 
-  static void BeSilent() {talkative = false;}
-  static void BeTalkative() {talkative = true;}
+  void BeSilent() {talkative_ = false;}
+  void BeTalkative() {talkative_ = true;}
+  void SetDebug() {debug_ = true;}
+  void ClearDebug() {debug_ = false;}
   void propagate_chains(vcl_vector<vtol_edge_2d_sptr >& edges);
-  vcl_vector<vtol_vertex_2d_sptr>&  get_test_verts(){return _test_verts;}
+  vcl_vector<vtol_vertex_2d_sptr>&  get_test_verts(){return test_verts_;}
   static vtol_vertex_2d_sptr clear_vertex_superiors(vtol_vertex_sptr& v);
 protected:
   float minStrength;  // hysteresis or noise threshold
@@ -146,7 +148,7 @@ protected:
   int maxSpiral;      // number of spiral search for max_gap
   vbl_array_2d<vtol_edge_2d_sptr> *edgeMap;
   vbl_array_2d<vtol_vertex_2d_sptr> *vertexMap; // map pixel to junction/chain
-  vcl_vector<vtol_vertex_2d_sptr> _test_verts;
+  vcl_vector<vtol_vertex_2d_sptr> test_verts_;
   
 protected:
   int FindChains(gevd_bufferxy& edgels, // link pixels into chains
@@ -157,7 +159,8 @@ protected:
                     vcl_vector<vtol_edge_2d_sptr>& edges, // replace these global lists
                     vcl_vector<vtol_vertex_2d_sptr >& vertices);
 
-  static bool talkative; // output comentaries or not
+static  bool talkative_; // output comentaries or not
+  bool debug_;
 };
 
 #endif // sdet_contour_h_
