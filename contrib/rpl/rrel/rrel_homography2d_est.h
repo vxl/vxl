@@ -39,12 +39,16 @@ class rrel_homography2d_est : public rrel_estimation_problem {
 public:
 
   //: Constructor from vgl_homg_point_2d's
+  //  By default, we want a full 8-DOF homography
   rrel_homography2d_est( const vcl_vector< vgl_homg_point_2d<double> > & from_pts,
-                         const vcl_vector< vgl_homg_point_2d<double> > & to_pts );
+                         const vcl_vector< vgl_homg_point_2d<double> > & to_pts,
+                         const int homog_dof = 8 );
 
   //: Constructor from vnl_vectors
+  //  By default, we want a full 8-DOF homography
   rrel_homography2d_est( const vcl_vector< vnl_vector<double> > & from_pts,
-                         const vcl_vector< vnl_vector<double> > & to_pts );
+                         const vcl_vector< vnl_vector<double> > & to_pts,
+                         const int homog_dof = 8 );
 
   //: Destructor.
   virtual ~rrel_homography2d_est();
@@ -70,6 +74,16 @@ public:
                                    vnl_matrix<double>& norm_covar,
                                    const vcl_vector<double>* weights=0 ) const;
 
+  //: Convert a homography to a linear parameter list (for estimation).
+  //  Overloaded for specialized reduced-DOF homographies (i.e. affine)
+  virtual void  homog_to_params(const vnl_matrix<double>&  m,
+                                vnl_vector<double>&        p) const;
+
+  //: Convert a linear parameter list (from estimation) to a homography.
+  //  Overloaded for specialized reduced-DOF homographies (i.e. affine)
+  virtual void  params_to_homog(const vnl_vector<double>&  p,
+                                vnl_matrix<double>&        m) const;
+
 public:  // testing / debugging utility
     //: \brief Print information as a test utility.
   void print_points() const;
@@ -83,6 +97,8 @@ protected:
 protected:
   vcl_vector< vnl_vector< double > > from_pts_;
   vcl_vector< vnl_vector< double > > to_pts_;
+  int homog_dof_;
+  int min_num_pts_;
 };
 
 #endif // rrel_homography2d_est_h_

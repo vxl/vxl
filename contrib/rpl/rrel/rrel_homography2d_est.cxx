@@ -11,9 +11,11 @@
 #include <vcl_cmath.h>
 
 rrel_homography2d_est :: rrel_homography2d_est( const vcl_vector< vgl_homg_point_2d<double> > & from_pts,
-                                                const vcl_vector< vgl_homg_point_2d<double> > & to_pts )
-  : rrel_estimation_problem( 8 /*dof*/, 4 /*points to instantiate*/ )
+                                                const vcl_vector< vgl_homg_point_2d<double> > & to_pts,
+                                                const int homog_dof )
+  : rrel_estimation_problem( homog_dof /*dof*/, ( homog_dof / 2 ) /*points to instantiate*/ )
 {
+  assert( homog_dof == ( homog_dof / 2 ) * 2 ); // Make sure DOF is even
   assert( from_pts.size() == to_pts.size() );
   vnl_vector< double > p(3), q(3);
 
@@ -29,18 +31,26 @@ rrel_homography2d_est :: rrel_homography2d_est( const vcl_vector< vgl_homg_point
     assert( q[2] != 0 );
     to_pts_.push_back( q );
   }
+
+  homog_dof_ = homog_dof;
+  min_num_pts_ = homog_dof_ / 2;
 }
 
 rrel_homography2d_est :: rrel_homography2d_est( const vcl_vector< vnl_vector<double> > & from_pts,
-                                                const vcl_vector< vnl_vector<double> > & to_pts )
-  : rrel_estimation_problem( 8 /*dof*/, 4 /*points to instantiate*/ ),
+                                                const vcl_vector< vnl_vector<double> > & to_pts,
+                                                const int homog_dof )
+  : rrel_estimation_problem( homog_dof /*dof*/, ( homog_dof / 2 ) /*points to instantiate*/ ),
     from_pts_( from_pts ), to_pts_( to_pts )
 {
+  assert( homog_dof == ( homog_dof / 2 ) * 2 ); // Make sure DOF is even
   assert( from_pts_.size() == to_pts_.size() );
   for ( unsigned int i=0; i<from_pts_.size(); ++i ) {
     assert( from_pts_[ i ][ 2 ] != 0 );
     assert( to_pts_[ i ][ 2 ] != 0 );
   }
+
+  homog_dof_ = homog_dof;
+  min_num_pts_ = homog_dof_ / 2;
 }
 
 rrel_homography2d_est::~rrel_homography2d_est()
@@ -60,9 +70,9 @@ rrel_homography2d_est :: fit_from_minimal_set( const vcl_vector<int>& point_indi
                                                vnl_vector<double>& params ) const
 {
   vnl_matrix< double > A(9, 9, 0.0);
-  assert( point_indices.size() == 4 );
+  assert( point_indices.size() == min_num_pts_ );
 
-  for ( int i=0; i<4; ++i ) {
+  for ( int i=0; i<min_num_pts_; ++i ) {
     int loc = point_indices[ i ];
     A( 2*i, 0 ) = A( 2*i+1, 3 ) = from_pts_[ loc ][ 0 ] * to_pts_[ loc ][ 2 ];
     A( 2*i, 1 ) = A( 2*i+1, 4 ) = from_pts_[ loc ][ 1 ] * to_pts_[ loc ][ 2 ];
@@ -77,7 +87,7 @@ rrel_homography2d_est :: fit_from_minimal_set( const vcl_vector<int>& point_indi
 
   vnl_svd<double> svd( A, 1.0e-8 );
 
-  if ( svd.rank() < 8 ) {
+  if ( svd.rank() < homog_dof_ ) {
     return false;    // singular fit
   }
   else {
@@ -160,25 +170,20 @@ rrel_homography2d_est :: weighted_least_squares_fit( vnl_vector<double>& params,
   vnl_svd<double> svd( A, 1.0e-8 );
 
   bool result;
-  if ( svd.rank() < 8 ) {
+  if ( svd.rank() < homog_dof_ ) {
     result= false;
   }
   else {
     vnl_vector< double > nparams = svd.nullvector();
     vnl_matrix< double > normH( 3, 3 );
-    int r, c;
-    for ( r=0; r<3; ++r )
-      for ( c=0; c<3; ++c )
-        normH( r, c ) = nparams( 3*r + c );
+    params_to_homog(nparams, normH);
 
     vnl_svd<double> svd_norm_to( norm_matrix_to );
     assert( svd_norm_to.rank() == 3 );
     vnl_matrix< double > H = svd_norm_to.inverse() * normH * norm_matrix_from;
 
     params.set_size(9);
-    for ( r=0; r<3; ++r )
-      for ( c=0; c<3; ++c )
-        params( 3*r + c ) = H( r, c );
+    homog_to_params(H, params);
 
     result = true;
   }
@@ -189,6 +194,23 @@ rrel_homography2d_est :: weighted_least_squares_fit( vnl_vector<double>& params,
   return result;
 }
 
+void
+rrel_homography2d_est :: homog_to_params(const vnl_matrix<double>& m,
+                                         vnl_vector<double>&       p) const
+{
+    for ( int r=0; r<3; ++r )
+      for ( int c=0; c<3; ++c )
+        p( 3*r + c ) = m( r, c );
+}
+
+void
+rrel_homography2d_est :: params_to_homog(const vnl_vector<double>& p,
+                                         vnl_matrix<double>&       m) const
+{
+    for ( int r=0; r<3; ++r )
+      for ( int c=0; c<3; ++c )
+        m( r, c ) = p( 3*r + c );
+}
 
 void
 rrel_homography2d_est :: normalize( const vcl_vector< vnl_vector<double> >& pts,
