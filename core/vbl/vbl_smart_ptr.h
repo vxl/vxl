@@ -117,6 +117,9 @@ class vbl_smart_ptr
   //: Cast to bool
    operator safe_bool () const { return ptr_? &safe_bool_dummy::dummy : 0; }
 
+  //: Inverse boolean value
+  safe_bool operator!() const { return ptr_? 0 : &safe_bool_dummy::dummy; }
+
   //: Dereferencing the pointer
   T &operator * () const { return *ptr_; }
 
