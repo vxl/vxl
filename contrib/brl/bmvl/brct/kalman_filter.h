@@ -47,6 +47,8 @@ class kalman_filter
   virtual ~kalman_filter();
 
  protected:
+  //: update the matched point using closeset neighbour.
+  void update_observes();
   void init_velocity();
   void adjust_state_vector(vnl_double_2 const& pred, vnl_double_2 const& meas);
 

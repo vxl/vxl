@@ -334,6 +334,11 @@ vnl_double_2 kalman_filter::projection(vnl_double_3x4 &P, vnl_double_3 &X)
     return z;
 }
 
+void kalman_filter::update_observation()
+{
+  //TO DO
+}
+
 void kalman_filter::update_covariant()
 {
   P_ = A_*P_*A_.transpose() + Q_;
