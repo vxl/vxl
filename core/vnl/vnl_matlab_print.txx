@@ -13,6 +13,7 @@
 #include <vnl/vnl_matrix.h>
 #include <vnl/vnl_vector_fixed.h>
 #include <vnl/vnl_matrix_fixed.h>
+#include <vnl/vnl_matrix_ref.h>
 #include <vnl/vnl_diag_matrix.h>
 #include <vnl/vnl_matlab_print_scalar.h>
 
@@ -120,6 +121,31 @@ vcl_ostream& vnl_matlab_print(vcl_ostream& s,
     vnl_matlab_print(s, M[i], m, format);
 
     if (variable_name && (i == n-1))
+      s << " ]";
+
+    s << '\n';
+  }
+
+  return s;
+}
+
+template <class T>
+vcl_ostream& vnl_matlab_print(vcl_ostream& s,
+                              vnl_matrix_ref<T> const& M,
+                              char const* variable_name,
+                              vnl_matlab_print_format format)
+{
+  if (variable_name)
+    s << variable_name << " = [ ...\n";
+
+  if (variable_name && M.rows() == 0)
+    return s << "];\n";
+
+  for (unsigned int i=0; i<M.rows(); ++i )
+  {
+    vnl_matlab_print(s, M[i], M.cols(), format);
+
+    if (variable_name && (i == M.rows()-1))
       s << " ]";
 
     s << '\n';
