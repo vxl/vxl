@@ -23,14 +23,14 @@ SUBDIRS += vil
 # video
 SUBDIRS += vvl
 
-# segmentation
-SUBDIRS += vsl
-
 # spatial objects
 SUBDIRS += vsol
 
 # topology
 SUBDIRS += vtol
+
+# segmentation
+SUBDIRS += vsl
 
 ifeq (1,$(strip $(HAS_OPENGL)))
 # OpenGL ui library
