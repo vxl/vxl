@@ -133,7 +133,7 @@ void vil_stream_fstream::seek(vil_streampos position)
 
   if (fi && fo) {
     xerr << "seekg and seekp to " << position << vcl_endl;
-    if (position != f_.tellg()) {
+    if (position != vil_streampos(f_.tellg())) {
       f_.seekg(position);
       f_.seekp(position);
       assert(f_.good());
@@ -142,7 +142,7 @@ void vil_stream_fstream::seek(vil_streampos position)
 
   else if (fi) {
     xerr << "seek to " << position << vcl_endl;
-    if (position != f_.tellg()) {
+    if (position != vil_streampos(f_.tellg())) {
       f_.seekg(position);
       assert(f_.good());
     }
