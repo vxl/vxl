@@ -55,9 +55,7 @@ ENDIF (AVIFILE_FOUND)
 
 ADD_LIBRARY(mvl2 ${mvl2_sources})
 
-TARGET_LINK_LIBRARIES( mvl2
-                       vimt mbl vul ${AVIFILE_LIBRARIES}
-                     )
+TARGET_LINK_LIBRARIES( mvl2 vil2 mbl vul ${AVIFILE_LIBRARIES} )
 
 IF (AVIFILE_FOUND)
   SUBDIRS(examples)
