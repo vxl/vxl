@@ -4,12 +4,17 @@
 #   geoff.cross@crd.ge.com
 #
 
+INCLUDE(${CMAKE_SOURCE_DIR}/config.cmake/Modules/FindGLUT.cmake)
+
+IF(HAS_GLUT)
+  SUBDIRS(glut)
+ENDIF(HAS_GLUT)
+
 IF(WIN32)
   SUBDIRS(mfc)
 ELSE(WIN32)
 
   INCLUDE(${CMAKE_SOURCE_DIR}/config.cmake/Modules/FindGTK.cmake)
-  INCLUDE(${CMAKE_SOURCE_DIR}/config.cmake/Modules/FindGLUT.cmake)
 
   IF(HAS_X11)
     SUBDIRS(X)
@@ -22,10 +27,6 @@ ELSE(WIN32)
   IF(HAS_GTK)
     SUBDIRS(gtk)
   ENDIF(HAS_GTK)
-
-  IF(HAS_GLUT)
-    SUBDIRS(glut)
-  ENDIF(HAS_GLUT)
 
   IF(HAS_QT)
     SUBDIRS(qt)
