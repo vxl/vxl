@@ -137,7 +137,8 @@ decided that zero-based indexing was closer to being ``not weird''.
   vcl_cerr << A.@ttb{fro_norm}(); // Print sum of squares of elements
   vcl_cerr << A.@ttb{min_value}(); // Print minimum element
 
-  if (A.@ttb{is_zero}(1e-8)) vcl_cerr << "Each element of A is within 1e-8 of zero\n";
+  if (A.@ttb{is_zero}(1e-8))
+    vcl_cerr << "Each element of A is within 1e-8 of zero\n";
   if (A.@ttb{is_identity}(1e-8)) vcl_cerr << "(A - I) is_zero to 1e-8\n";
 
   A.@ttb{read_ascii}(vcl_cin); // Read A from standard input
@@ -148,7 +149,7 @@ decided that zero-based indexing was closer to being ``not weird''.
 Matrix basics.  A sample of the defined matrix operations.
 @anchor{fig:matrixbasics}
 @endcaption
-@end figure
+@endfigure
 
 
 @subsection Efficiency: Fixed-size matrices and vectors.
@@ -221,9 +222,11 @@ Because some operations such as multiplication have been specially coded
 for the fixed-size classes, they are also made more efficient by knowing
 the sizes in advance.  For example, this snippet
 @example
-vnl_double_3x3 R;               // Declare a 3x3 matrix
-vnl_double_3 x(1.0,2.0,3.0);    // Declare a 3-vector using local storage
-vnl_double_3 rx = R * x;        // Multiply R by x and place the result in rx
+vnl_double_3x3 R;              // Declare a 3x3 matrix
+vnl_double_3 x(1.0,2.0,3.0);   // Declare a 3-vector using
+                               // local storage
+vnl_double_3 rx = R * x;       // Multiply R by x and place
+                               // the result in rx
 @end example
 is expanded by many compilers into an open-coded sequence of 9 multiplies
 and 6 adds.  Note that as the fixed-size objects @code{vnl_*_fixed<T,n>}
@@ -316,7 +319,7 @@ Example of linear algebra operations. Points are read from stdin
 into matrix @code{pts}, and a hyperplane fitted using two different methods.
 @anchor{fig:planefit}
 @endcaption
-@end figure
+@endfigure
 
 @section Polynomials
 
@@ -426,7 +429,8 @@ general optimisation algorithm for functions which are well behaved
 @item @code{vnl_levenberg_marquardt}: The Levenberg-Marquardt algorithm for
 least-squares problems. This is usually the best method for any function
 which can be expressed as
-$f(x) = (f_{1}(x))^{2} + (f_{2}(x))^{2} + (f_{3}(x))^{2} + \ldots$
+@code{f(x) = (f_1 (x))^2 + (f_2(x))^2 + (f_3(x))^2 + \dots}
+@c Should get @math fixed. I think the @catcode92=12 is interfering.
 
 @end enumerate
 
@@ -435,15 +439,16 @@ test case, the ``notorious'' Rosenbrock function:
 @example
      f(x, y) = (10*(y - x^2))^2 + (1-x)^2
 @end example
-The graph of @math{f} is plotted below.
+The graph of @math{f} is plotted in Figure 2.
 
+@figure
 @image{rosenbrock,,1in}
-@quotation
-@anchor{fig:banana}
+@caption{2}
 The Rosenbrock ``banana'' function, used as an optimization test
 case.  Optimization starts on one side of the valley, and must find the
 minimum around the corner.
-@end quotation
+@endcaption
+@endfigure
 
 @subsection Function objects, derived from @code{vnl_cost_function}
 

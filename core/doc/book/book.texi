@@ -1,16 +1,18 @@
-% \input awffonts % should be *before* atexinfo.tex
-\input atexinfo   @c -*-texinfo-*-
+\input texinfo   @c -*-texinfo-*-
 
 @include book_header.texi
 
 @c make backslashes normal characters (used in eg "\brief")
+@c If we try to do this in book_header.texi, it seems be only valid
+@c in that file, so we have to do it here.
 @iftex
 @catcode92=12
 @end iftex
 
 @c -----------------------------------------------------------------------------
 
-@node Top, Introduction, (dir), (dir)
+@node Top
+@top
 
 @ifinfo
 This documents the VXL collection of C++ libraries.
@@ -41,7 +43,7 @@ Copyright @copyright{} 2000 Andrew Fitzgibbon
 
 @menu
 * Introduction::
-* eg::
+* Examples::
 * vcl::
 * vbl::
 * vul::
@@ -54,13 +56,12 @@ Copyright @copyright{} 2000 Andrew Fitzgibbon
 * structure::
 * build::
 * templates::
-* Adding To vnl::
+* Adding to vnl::
 * vsl for developers::
 * Concept Index::
 @end menu
 
-@node    Introduction, eg, Top, Top
-@comment node-name, next,           previous, up
+@node    Introduction
 @chapter Introduction
 @cindex Introduction
 @cindex IUE
@@ -69,14 +70,14 @@ Copyright @copyright{} 2000 Andrew Fitzgibbon
 @include chapter_intro.texi
 
 @comment ------------------------------------------------------------------
-@node    eg, vcl, Introduction, Top
+@node    Examples
 @comment node-name, next, previous,     up
-@chapter vxl example programs
+@chapter Example programs
 
 @include chapter_examples.texi
 
 @comment ------------------------------------------------------------------
-@node    vcl, vbl, eg, Top
+@node    vcl
 @comment node-name, next, previous,     up
 @chapter vcl: C++ compatibility
 @cindex vcl
@@ -87,7 +88,7 @@ Copyright @copyright{} 2000 Andrew Fitzgibbon
 @include chapter_vcl.texi
 
 @comment ------------------------------------------------------------------
-@node    vbl, vul, vcl, Top
+@node    vbl
 @comment node-name, next,           previous, up
 @chapter vbl: Basic Templates
 @cindex vbl
@@ -97,7 +98,7 @@ Copyright @copyright{} 2000 Andrew Fitzgibbon
 @include chapter_vbl.texi
 
 @comment ------------------------------------------------------------------
-@node    vul, vnl, vbl, Top
+@node    vul
 @comment node-name, next,           previous, up
 @chapter vul: Utilities
 @cindex vul
@@ -107,7 +108,7 @@ Copyright @copyright{} 2000 Andrew Fitzgibbon
 @include chapter_vul.texi
 
 @comment ------------------------------------------------------------------
-@node    vnl, vil, vul, Top
+@node    vnl
 @comment node-name, next, previous, up
 @chapter vnl: Numerics
 @cindex vnl
@@ -116,7 +117,7 @@ Copyright @copyright{} 2000 Andrew Fitzgibbon
 @include chapter_vnl.texi
 
 @comment ------------------------------------------------------------------
-@node    vil, vgl, vnl, Top
+@node    vil
 @comment node-name, next,    previous, up
 @chapter vil: Imaging
 @cindex vil
@@ -125,7 +126,17 @@ Copyright @copyright{} 2000 Andrew Fitzgibbon
 @include chapter_vil.texi
 
 @comment ------------------------------------------------------------------
-@node    vidl,    vgl, vil,      top
+@node    vgl
+@comment node-name, next,  previous, up
+@chapter vgl: Geometry
+@cindex vgl
+@cindex Geometry
+
+@include chapter_vgl.texi
+
+
+@comment ------------------------------------------------------------------
+@node    vidl
 @comment node-name, next,      previous, up
 @chapter vidl: Video Access
 @cindex video
@@ -134,16 +145,7 @@ Copyright @copyright{} 2000 Andrew Fitzgibbon
 
 
 @comment ------------------------------------------------------------------
-@node    vgl, vsl , vidl, top
-@comment node-name, next,  previous, up
-@chapter vgl: Geometry
-@cindex vgl
-@cindex Geometry
-
-@include chapter_vgl.texi
-
-@comment ------------------------------------------------------------------
-@node    vsl ,        vcsl,    vgl,      top
+@node    vsl
 @comment node-name,   next,    previous, up
 @chapter vsl: Binary I/O
 @cindex vsl
@@ -156,7 +158,7 @@ Copyright @copyright{} 2000 Andrew Fitzgibbon
 @include chapter_vsl.texi
 
 @comment ------------------------------------------------------------------
-@node    vcsl,      structure, vsl,      top
+@node    vcsl
 @comment node-name, next,      previous, up
 @chapter vcsl: Co-ordinate systems
 @cindex co-ordinate systems
@@ -164,7 +166,7 @@ Copyright @copyright{} 2000 Andrew Fitzgibbon
 @include chapter_vcsl.texi
 
 @comment ------------------------------------------------------------------
-@node    structure, build,    vcsl,     top
+@node    structure
 @comment node-name, next,     previous, up
 @appendix  Filenames and structure
 @cindex directories
@@ -172,7 +174,7 @@ Copyright @copyright{} 2000 Andrew Fitzgibbon
 @include appendix_structure.texi
 
 @comment ------------------------------------------------------------------
-@node    build,     templates, structure, top
+@node    build
 @comment node-name, next,      previous,  up
 @appendix  Build Systems
 @cindex Makefiles
@@ -181,28 +183,28 @@ Copyright @copyright{} 2000 Andrew Fitzgibbon
 @include appendix_build.texi
 
 @comment ------------------------------------------------------------------
-@node    templates, Adding To vnl, build,    top
+@node    templates
 @comment node-name, next,          previous, up
 @appendix  On The Use of Templates
 
 @include appendix_templates.texi
 
 @comment ------------------------------------------------------------------
-@node    Adding To vnl, vsl for developers, build,    top
+@node    Adding to vnl
 @comment node-name, next,          previous, up
 @appendix Adding to vnl_algo
 
 @include appendix_adding_to_vnl_algo.texi
 
 @comment ------------------------------------------------------------------
-@node    vsl for developers, Concept Index, Adding To vnl,    top
+@node    vsl for developers
 @comment node-name, next,          previous, up
 @appendix vsl Developer Topics
 
 @include appendix_vsl_for_developers.texi
 
 @comment ------------------------------------------------------------------
-@node    Concept Index,  top,  vsl for developers, top
+@node    Concept Index
 @comment node-name,      next, previous,  up
 @unnumbered Concept Index
 

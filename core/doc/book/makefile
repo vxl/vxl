@@ -22,7 +22,7 @@ TEXI2HTML = texi2html
 TEX = tex
 endif
 
-MAKEINFOFLAGS=-Dmakeinfo --no-validate
+MAKEINFOFLAGS=-Dmakeinfo
 
 SOURCEFILES=book.texi \
             appendix_adding_to_vnl_algo.texi \
@@ -43,7 +43,17 @@ SOURCEFILES=book.texi \
 
 all: book.html book.dvi
 
-thelot: book.info book.html book.dvi book.hpj 
+thelot: book.info book.html book.dvi book.hpj book.info
+
+# Generate figure for info
+rosenbrock.txt:
+	echo '[ Plot of the Rosenbrock "banana" function ]' > rosenbrock.txt
+
+# Generate figure for HTML
+rosenbrock.png: rosenbrock.eps
+	$(GS) -sDEVICE=png16m -sOutputFile=tmp.png -dQUIET -dNOPAUSE rosenbrock.eps -c showpage -c quit
+	$(PNGTOPNM) tmp.png | $(PNMCROP) | $(PNMTOPNG) > $@
+	rm tmp.png
 
 ifdef USE_MAKEINFO
 book.html: $(SOURCEFILES) rosenbrock.png
@@ -53,14 +63,9 @@ book.html: $(SOURCEFILES) rosenbrock.png
 	$(TEXI2HTML) -expand info -menu -number -split chapter -nosec_nav -frames book.texi
 endif
 
-# Generate figure for HTML
-rosenbrock.png: rosenbrock.eps
-	$(GS) -sDEVICE=png16m -sOutputFile=tmp.png -dQUIET -dNOPAUSE rosenbrock.eps -c showpage -c quit
-	$(PNGTOPNM) tmp.png | $(PNMCROP) | $(PNMTOPNG) > $@
-	rm tmp.png
 
 # TeX for paper printing
-book.dvi: $(SOURCEFILES) atexinfo.tex
+book.dvi: $(SOURCEFILES) rosenbrock.eps
 	$(TEX) book.texi || touch -t 200001010000 book.dvi
 
 
@@ -69,7 +74,7 @@ book.hpj book.rtf: book.texi
 	-mkinfrtf.exe $(MAKEINFOFLAGS) book --force -o book.rtf --hpj-output book.hpj
 
 # Emacs info file
-book.info: $(SOURCEFILES)
+book.info: $(SOURCEFILES) rosenbrock.txt
 	$(MAKEINFO) $(MAKEINFOFLAGS) book --force -o book.info
 
 ## awf private

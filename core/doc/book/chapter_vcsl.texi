@@ -85,7 +85,7 @@ The following example shows how to use and build a set of co-ordinate systems.
 #include <vcsl/vcsl_graph.h>
 ...
   //: Convenient indices for vectors representing points, etc.
-  enum AXES { X, Y, Z, T };
+  enum AXES @{ X, Y, Z, T @};
 
   //: Graph of defined CS (Co-ordinate system)
   // All CS must be added to this graph as they are created.
@@ -145,17 +145,17 @@ The following example shows how to use and build a set of co-ordinate systems.
 @item Write conversion between classic coordinate systems in the same than the
 class vcsl_cylindrical_to_cartesian_3d (singleton pattern)
     @itemize @bullet
-    @item vcsl_spherical_to_cartesian_3d
-    @item vcsl_polar_to_cartesian_2d
-    @item vcsl_geocentric_to_cartesian_3d
-    @item vcsl_geodetic_to_cartesian_3d
-    @item vcsl_lambertian_to_cartesian_3d
-    @item vcsl_utm_to_cartesian_3d
+    @item @code{vcsl_spherical_to_cartesian_3d}
+    @item @code{vcsl_polar_to_cartesian_2d}
+    @item @code{vcsl_geocentric_to_cartesian_3d}
+    @item @code{vcsl_geodetic_to_cartesian_3d}
+    @item @code{vcsl_lambertian_to_cartesian_3d}
+    @item @code{vcsl_utm_to_cartesian_3d}
     @end itemize
 
 @item Add other units and dimensions
 
-@item In vcsl_spatial_transformation, add
+@item In @code{vcsl_spatial_transformation}, add
 @example
 //: May `this' have a matrix representation ?
 virtual bool is_linear(void) const=0;

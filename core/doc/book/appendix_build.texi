@@ -1,3 +1,4 @@
+@anchor{CMake}
 @section CMake
 @cindex CMake
 @cindex CMakeLists.txt files
@@ -96,18 +97,18 @@ ADD_EXECUTABLE( foobar
 # sections.
 
 INCLUDE_DIRECTORIES(
-  ${allvxl_SOURCE_DIR}/vxl
-  ${allvxl_SOURCE_DIR}/gel
+  $@{allvxl_SOURCE_DIR@}/vxl
+  $@{allvxl_SOURCE_DIR@}/gel
 )
 
 # For INCLUDE_DIRECTORIES, the preferred practice is to specify a
-# directory exactly one level below ${allvxl_SOURCE_DIR} as an include
+# directory exactly one level below $@{allvxl_SOURCE_DIR@} as an include
 # directory, and then the further qualify include files in the source
 # code with commands like #include <vsol/vsol_box_2d.h>.  Do not do
 # either of the following.
 
-# NO # INCLUDE_DIRECTORIES( ${allvxl_SOURCE_DIR} )
-# NO # INCLUDE_DIRECTORIES( ${allvxl_SOURCE_DIR}/gel/vsol )
+# NO # INCLUDE_DIRECTORIES( $@{allvxl_SOURCE_DIR@} )
+# NO # INCLUDE_DIRECTORIES( $@{allvxl_SOURCE_DIR@}/gel/vsol )
 
 # Indicate which VXL libraries foobar depends on with the
 # TARGET_LINK_LIBRARIES command.  Include each library that is
@@ -141,7 +142,7 @@ TARGET_LINK_LIBRARIES( foobar vnl_algo vul vil vcl )
 # out whether zlib is available by including this module file, and use
 # it if it is.
 
-INCLUDE( ${MODULE_PATH}/FindZLIB.cmake )
+INCLUDE( $@{MODULE_PATH@}/FindZLIB.cmake )
 
 # Use AUX_SOURCE_DIRECTORY when there are .cxx files in a Templates
 # directory that instantiate templates in .txx files.  This command
@@ -162,8 +163,8 @@ AUX_SOURCE_DIRECTORY( Templates vfbl_instantiate )
 # The SET commands for a source list variable must come before the
 # ADD_LIBRARY or ADD_EXECUTABLE command that uses them.  Because we
 # are using SET and not SOURCE_FILES, the source list variable will be
-# referenced with "${vfbl_sources}" as opposed to simply
-# "vfbl_sources".  The ability to use ${vfbl_sources} to reference
+# referenced with "$@{vfbl_sources@}" as opposed to simply
+# "vfbl_sources".  The ability to use $@{vfbl_sources@} to reference
 # source lists is new in CMake 1.4, and is now preferred.
 
 SET( vfbl_sources
@@ -171,7 +172,7 @@ SET( vfbl_sources
   vfbl_foo.cxx vfbl_foo.h
   vfbl_bar.cxx vfbl_bar.h
   vfbl_baz.txx vfbl_baz.h
-  ${vfbl_instantiate}
+  $@{vfbl_instantiate@}
 )
 
 # Include the source file vfbl_zip.cxx when building the library only
@@ -179,7 +180,7 @@ SET( vfbl_sources
 # value, plus the new source file "vfbl_zip.cxx".
 
 IF( ZLIB_FOUND )
-  SET( vfbl_sources ${vfbl_sources} vfbl_zip.cxx )
+  SET( vfbl_sources $@{vfbl_sources@} vfbl_zip.cxx )
 ENDIF( ZLIB_FOUND )
 
 # The ADD_LIBRARY command configures a new library.  The first
@@ -190,7 +191,7 @@ ENDIF( ZLIB_FOUND )
 # holding a list of files, specified before the ADD_LIBRARY command
 # with one or more SET commands.
 
-ADD_LIBRARY( vfbl ${vfbl_sources} )
+ADD_LIBRARY( vfbl $@{vfbl_sources@} )
 
 # In general, include FindXXX.cmake to determine whether package XXX
 # is available.  In this example, XXX is ZLIB.  VXL has its own
@@ -207,14 +208,14 @@ ADD_LIBRARY( vfbl ${vfbl_sources} )
 # as shown below.
 
 IF( ZLIB_FOUND )
-  INCLUDE_DIRECTORIES( ${ZLIB_INCLUDE_DIR} )
-  ADD_DEFINITIONS( ${ZLIB_DEFINITIONS})
-  TARGET_LINK_LIBRARIES( vfbl ${ZLIB_LIBRARIES} )
+  INCLUDE_DIRECTORIES( $@{ZLIB_INCLUDE_DIR@} )
+  ADD_DEFINITIONS( $@{ZLIB_DEFINITIONS@})
+  TARGET_LINK_LIBRARIES( vfbl $@{ZLIB_LIBRARIES@} )
 ENDIF( ZLIB_FOUND )
 
 # As in Example 1, we will configure to include VXL header files.
 
-INCLUDE_DIRECTORIES( ${allvxl_SOURCE_DIR}/vxl )
+INCLUDE_DIRECTORIES( $@{allvxl_SOURCE_DIR@}/vxl )
 
 # Just as in Example 1, use the TARGET_LINK_LIBRARIES command to
 # specify each library that is directly used by this library.  CMake
@@ -270,7 +271,7 @@ PROJECT( foobar )
 # UseVXL.cmake holds all the necessary definitions that CMake needs to
 # use VXL.
 
-INCLUDE( ${VXL_BINARY_PATH}/UseVXL.cmake )
+INCLUDE( $@{VXL_BINARY_PATH@}/UseVXL.cmake )
 
 # The rest of this CMakeLists.txt file could contain commands as seen
 # in the previous examples, or might just be SUBDIRS commands.
@@ -302,7 +303,7 @@ one of these commands.  Here ``foobar'' is the name of the project
 (see Example 3).
 
 @example
-SET( LIBRARY_OUTPUT_PATH ${foobar_BINARY_DIR}/lib )
+SET( LIBRARY_OUTPUT_PATH $@{foobar_BINARY_DIR@}/lib )
 @end example
 or
 @example
@@ -429,6 +430,7 @@ will need a @file{CMakeLists.txt} file, but not a
 
 @section Other Build Systems
 @cindex .dsp files
+@cindex DSP files
 
 Your copy of VXL may contain control files for other build systems
 such as make or Developer Studio. Copies of these control files

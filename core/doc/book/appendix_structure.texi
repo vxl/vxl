@@ -1,14 +1,41 @@
+@section Basic structure
+
 The directory structure of @vxl{} is below
 @example
   $VXLSRC/vcl
-          vcl/config.$BUILD
           vxl/vnl
              /vul
              /vbl
              /vil
              /vgl
              /vsl
+             @dots{}
+          v3p/netlib
+             /jpeg
+             @dots{}
+          config.cmake
 @end example
+
+@table @samp
+@item vcl
+is the C++ compatibility layer (@pxref{vcl}).
+
+@item  vxl
+contains the core @vxl{} libraries.
+
+@item v3p
+(v-third-party) contains code that is available elsewhere and is used
+in implementing @vxl{}. @code{v3p/netlib} contains cleaned-up C
+versions of the high-quality Fortran code. @code{v3p/jpeg} and others
+contain image file format code used by vil. In theory, you don't need
+any of of the v3p libraries if you have locally installed versions. In
+practice, you need @code{v3p/netlib} but not the others.  the
+
+@item config.cmake
+contains the configuration files used by the CMake build system
+(@pxref{CMake}).
+
+@end table
 
 @section Other modules
 
@@ -19,47 +46,46 @@ modules beside vcl and vxl.
 @cindex gel
 @cindex oxl
 @cindex mul
+@cindex rpl
+@cindex brl
 @cindex tbl
+@cindex oul
 
 @table @samp
 @item gel
-Published libraries from General Electric's Corporate Research Department.
+Published libraries from General Electric Global Research.
 @item oxl
 Published libraries from the Robots Research
 Group at Oxford University.
 @item mul
 Published libraries from Imaging Science and Biomedical Engineering
 at the University of Manchester.
+@item rpl
+Published libraries from Rensselaer Polytechnic
+Institute
+@item brl
+Published libraries from Brown University
 @item tbl
 A set of image processing libraries.
+@item oul
+Published libraries from Otago University
 @item conversions
 A set of routines for converting between various @vxl{} and non-@vxl{} types.
 @end table
 
 These modules are presented as useful code, with even less guarantees
-than @vxl{},
-(which is not to suggest that we guarantee anything about @vxl{}.)
-In particular
-they may not work as advertised. They may not be documented. If you find them
-useful, and think they deserve full @vxl{}-status please contact the library's
-author to see about having the code tidied up and promoted to @vxl{}.
+than @vxl{} (which is not to suggest that we guarantee anything about
+@vxl{}).  In particular they may not work as advertised. They may not
+be documented. If you find them useful, and think they deserve full
+@vxl{}-status please contact the library's author to see about having
+the code tidied up and promoted to @vxl{}.
 
-You can find any overview documentation about these modules from the @vxl{}
-homepage.
+You can find any overview documentation about these modules from the
+@uref{http://vxl.sourceforge.net/,vxl homepage} by following the
+``documentation'' link.
 
 @section CVS Repository
 
-The VXL repository is provided by SourceForge - Thanks guys! You
-can get details of how to obtain the up-to-date CVS snapshot from
-@uref{http://sourceforge.net/projects/vxl/}
-
-Unfortunately there is an
-extra @code{vxl/} in the repository's directory tree. This means
-that if you check out vxl from @code{/home/work/myvxl} you will
-get everything from the VXL repository including vxl/vcl,
-vxl/vxl, vxl/gel, etc. This also means that your vxl root
-directory will be @code{/home/work/myvxl/vxl}, and
-@code{vnl_matrix.h} will be in
-@code{/home/work/myvxl/vxl/vxl/vnl/vnl_matrix.h}.
-Until SF provide a simple means of editing the Repositories directly,
-it is too much effort to remove the extra @code{vxl/} - sorry.
+The VXL repository is provided by SourceForge---Thanks guys! The
+instructions for downloading @vxl{} are documented at
+@url{http://vxl.sourceforge.net/#download}.

@@ -137,7 +137,7 @@ will recognise @code{vsl} files.
 #------------------------------------------------------------------------------
 # VXL: file(1) magic for VXL binary IO data files
 #
-# from Ian Scott <scottim@sf.net>
+# from Ian Scott <scottim@@sf.net>
 #
 # VXL is a collection of C++ libraries for Computer Vision.
 # See the vsl chapter in the VXL Book for more info

@@ -270,11 +270,11 @@ to is used:
 The file @code{vxl/vxl_stuff.h} exports only identifiers which
 begin with @code{vxl_stuff_}, and possibly @code{vxl_stuff} itself.
 @end quotation
-An example of a header file which obeys this rule is shown in figure 1.
+An example of a header file which obeys this rule is shown in Figure 1.1.
 
 @figure
 @cartouche
-@smallexample
+@example
 #ifndef vxl_stuff_h_
 #define vxl_stuff_h_
 
@@ -290,14 +290,14 @@ bool vxl_stuff_grok(vxl_stuff);
 extern int vxl_stuff_val;
 
 #endif
-@end smallexample
+@end example
 @end cartouche
-@caption{1}
+@caption{1.1}
 Example of a header file @code{vxl_stuff.h} which obeys the naming
 convention. Only identifiers that begin with @code{vxl_stuff_} may be
 defined.
 @endcaption
-@end figure
+@endfigure
 
 
 Of course, this rule is less helpful to clients of the library, who might
