@@ -7,7 +7,9 @@
 #include <vgui/vgui_style.h>
 #include <bgui/bgui_style.h>
 #include <vtol/vtol_face_2d.h>
-
+#include <vdgl/vdgl_edgel_chain.h>
+#include <vdgl/vdgl_interpolator.h>
+#include <vdgl/vdgl_digital_curve.h>
 bgui_vtol2D_tableau::bgui_vtol2D_tableau(const char* n) :
   vgui_easy2D_tableau(n) { this->init(); }
 
@@ -21,6 +23,22 @@ bgui_vtol2D_tableau::bgui_vtol2D_tableau(vgui_tableau_sptr const& t,
 
 bgui_vtol2D_tableau::~bgui_vtol2D_tableau()
 {
+}
+
+static void print_edgels(vtol_edge_2d_sptr const & e)
+{
+  vsol_curve_2d_sptr c = e->curve();
+  if (!c) return;
+  vdgl_digital_curve_sptr dc = c->cast_to_digital_curve();
+  if (!dc) return;
+  vdgl_interpolator_sptr trp = dc->get_interpolator();
+  if (!trp) return;
+  vdgl_edgel_chain_sptr ec = trp->get_edgel_chain();
+  if (!ec)
+    return;
+  int N = ec->size();
+  for(int i = 0; i<N; i++)
+    vcl_cout << "egl(" << i << ")" << (*ec)[i] << "\n";
 }
 
 void bgui_vtol2D_tableau::init()
@@ -129,6 +147,7 @@ bgui_vtol2D_tableau::add_vertex(vtol_vertex_2d_sptr const& v)
 bgui_vtol_soview2D_edge* 
 bgui_vtol2D_tableau::add_edge(vtol_edge_2d_sptr const& e)
 {
+  //  print_edgels(e);
   bgui_vtol_soview2D_edge* obj = new bgui_vtol_soview2D_edge(e);
   //set the default style
   bgui_style_sptr sty = style_map_[obj->type_name()];
