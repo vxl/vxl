@@ -31,12 +31,6 @@ MedianReduceImage::MedianReduceImage(vil_memory_image_of<byte> const& in, int SC
   vcl_vector<int> intensities(SCALE*SCALE);
   for(int ox = 0; ox < ow; ++ox)
     for(int oy = 0; oy < oh; ++oy) {
-#ifndef __GNUG__
-      int intensities[1024];
-      assert(SCALE*SCALE < 1024);
-#else
-      int intensities[SCALE*SCALE];
-#endif
       int k = 0;
       for(int ix = ox*SCALE; ix < ox*SCALE+SCALE; ++ix)
 	for(int iy = oy*SCALE; iy < oy*SCALE+SCALE; ++iy)
