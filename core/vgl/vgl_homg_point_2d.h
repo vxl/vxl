@@ -12,8 +12,8 @@
 // \author Don HAMILTON, Peter TU
 
 #include <vcl_iostream.h>
-#include <vcl_algorithm.h>
-#include <vcl_cmath.h> // for vcl_abs()
+#include <vcl_cmath.h> // for vcl_abs(double) etc
+#include <vcl_cstdlib.h> // for vcl_abs(int) etc
 
 template <class Type>
 class vgl_point_2d;
@@ -86,9 +86,10 @@ public:
   }
 
   //: Return true iff the point is at infinity (an ideal point).
-  // The method checks that |w| < tol * min(|x|,|y|)
+  // The method checks that |w| < tol * max(|x|,|y|)
   bool ideal(Type tol) {
-    return vcl_abs(w()) < tol * vcl_min(vcl_abs(x()),vcl_abs(y()));
+    return vcl_abs(w()) < tol * vcl_abs(x()) ||
+           vcl_abs(w()) < tol * vcl_abs(y());
   }
 
   // INTERNALS---------------------------------------------------------------
