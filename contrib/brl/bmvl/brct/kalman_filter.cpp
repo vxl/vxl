@@ -37,7 +37,11 @@ kalman_filter::kalman_filter(char* fname)
 {
   // read data into the pool
   read_data(fname);
+  init();
+}
 
+void kalman_filter::init()
+{
   // initialize the transit matrix
   dt_ = 1.0;
   init_transit_matrix();
@@ -49,6 +53,7 @@ kalman_filter::kalman_filter(char* fname)
 
   // init covariant matrix P_
   init_covariant_matrix();
+
 }
 
 kalman_filter::~kalman_filter()
@@ -445,7 +450,6 @@ void kalman_filter::read_data(char *fname)
         fp.getline(buffer,MAX_LEN);
         vcl_sscanf(buffer," [%lf, %lf]   %lf %lf  ", &(x), &(y), &(dir), &(conf));
         vdgl_edgel e;
-        //vcl_cout<<"\n " <<x;
         e.set_x(x);
         e.set_y(y);
         e.set_theta(0);
@@ -457,7 +461,6 @@ void kalman_filter::read_data(char *fname)
       vdgl_interpolator_sptr intp=new vdgl_interpolator_linear(ec);
       vdgl_digital_curve_sptr curve= new vdgl_digital_curve(intp);
 
-      vcl_cout<<"\n the length of the curve is : :"<<curve->length();
       curves_.push_back(curve);
       //read in the end of contour block
       fp.getline(buffer,MAX_LEN);

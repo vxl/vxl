@@ -25,6 +25,9 @@ class kalman_filter
  public:
   void read_data(char* fname);
   vcl_vector<vgl_point_3d<double> > kalman_filter::get_local_pts();
+
+  //: initialize the kalman filter states
+  void init();
   void inc();
   void update_covariant();
   vnl_vector_fixed<double, 2> projection(vnl_double_3x4 &P, vnl_vector_fixed<double, 3> &X);
