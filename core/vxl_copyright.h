@@ -4,7 +4,7 @@
 // <begin copyright notice>
 // ---------------------------------------------------------------------------
 //
-//                Copyright (c) 2000-2002 TargetJr Consortium
+//                Copyright (c) 2000-2003 TargetJr Consortium
 //               GE Corporate Research and Development (GE CRD)
 //                             1 Research Circle
 //                            Niskayuna, NY 12309
