@@ -14,8 +14,9 @@
 // Modifications
 //  Peter Vanroose, 20 Oct 1999: implementation simplified through "cmplx" class for doing complex arithmetic.
 //  dac (Manchester) 28/03/2001: tidied up documentation
-//   Feb.2002 - Peter Vanroose - brief doxygen comment placed on single line
-//   May.2002 - Peter Vanroose - added operator*=(cmplx) and operator/=(cmplx)
+//  Feb.2002 - Peter Vanroose - brief doxygen comment placed on single line
+//  May.2002 - Peter Vanroose - added operator*=(cmplx) and operator/=(cmplx)
+//  Mar.2003 - Peter Vanroose - renamed M to M_, T to T_
 // \endverbatim
 
 #include <vnl/vnl_vector.h>
@@ -34,13 +35,18 @@
 
 class vnl_rnpoly_solve
 {
+  // Data Members--------------------------------------------------------------
+  vcl_vector<vnl_real_npolynomial*> ps_;   // the input
+  vcl_vector<vnl_vector<double>*> r_; // the output (real part)
+  vcl_vector<vnl_vector<double>*> i_; // the output (imaginary part)
+
  public:
 #ifndef VCL_WIN32
-  static const unsigned int M = 11;   // Maximum dimension of problem
-  static const unsigned int T = 2500; // Max. number of terms in a polynomial
+  static const unsigned int M_ = 11;   // Maximum dimension of problem
+  static const unsigned int T_ = 2500; // Max. number of terms in a polynomial
 #else
-  enum { M = 11 };   // Maximum dimension of problem
-  enum { T = 2500 }; // Maximum number of terms in a polynomial
+  enum { M_ = 11 };   // Maximum dimension of problem
+  enum { T_ = 2500 }; // Maximum number of terms in a polynomial
 #endif
 
   // Constructor---------------------------------------------------------------
@@ -72,13 +78,8 @@ class vnl_rnpoly_solve
   //: Compute roots using continuation algorithm.
   bool compute();
 
-  int Read_Input(int ideg[M], int terms[M],
-                 int polyn[M][T][M], double coeff[M][T]);
-
-  // Data Members--------------------------------------------------------------
-  vcl_vector<vnl_real_npolynomial*> ps_;   // the input
-  vcl_vector<vnl_vector<double>*> r_; // the output (real part)
-  vcl_vector<vnl_vector<double>*> i_; // the output (imaginary part)
+  int Read_Input(int ideg[M_], int terms[M_],
+                 int polyn[M_][T_][M_], double coeff[M_][T_]);
 };
 
 #endif // vnl_rnpoly_solve_h_
