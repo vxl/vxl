@@ -25,7 +25,17 @@ MANPAGE_SOURCES += bgui_selector_tableau_sptr.h
 SOURCES += bgui_bmrf_soview2D.cxx
 SOURCES += bgui_bargraph_clipon_tableau.cxx
 MANPAGE_SOURCES += bgui_bargraph_clipon_tableau_sptr.h
+SOURCES += bgui_range_adjuster_tableau.cxx
+MANPAGE_SOURCES += bgui_range_adjuster_tableau_sptr.h
 
-################################
-include ${IUEROOT}/config/top.mk
-################################
+#######################################
+include ${IUEROOT}/config/top-params.mk
+#######################################
+
+ifndef NOTEST
+ SUBDIRS += tests
+endif
+
+######################################
+include ${IUEROOT}/config/top-rules.mk
+######################################

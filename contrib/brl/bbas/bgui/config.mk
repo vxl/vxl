@@ -1,5 +1,6 @@
 IULIBS += -lbgui
 USES += contrib/gel
+include ${IUEROOT}/contrib/brl/bbas/bsta/config.mk
 include ${IUEROOT}/contrib/brl/bseg/bmrf/config.mk
 include ${IUEROOT}/contrib/gel/vdgl/config.mk
 include ${IUEROOT}/contrib/gel/vtol/config.mk
