@@ -16,4 +16,4 @@ SET(vil3d_algo_sources
 AUX_SOURCE_DIRECTORY(Templates vil3d_algo_sources)
 
 ADD_LIBRARY(vil3d_algo ${vil3d_algo_sources})
-TARGET_LINK_LIBRARIES( vil3d_algo vil3d )
+TARGET_LINK_LIBRARIES( vil3d_algo vil3d vil_algo )
