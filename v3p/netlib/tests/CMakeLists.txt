@@ -1,8 +1,8 @@
 IF(BUILD_TESTS)
   # test
-  ADD_EXECUTABLE( lbfgs-example lbfgs-example )
+  ADD_EXECUTABLE( lbfgs-example lbfgs-example.c )
   # test
-  ADD_EXECUTABLE( lsqr-test lsqr-test )
+  ADD_EXECUTABLE( lsqr-test lsqr-test.c )
 ENDIF(BUILD_TESTS)
 
 
