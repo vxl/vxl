@@ -104,8 +104,9 @@ static void internal_run_till_idle()
   vcl_memcpy(&saved_buf, &internal_buf, sizeof internal_buf);
   
   // record current state/accept control after longjmp().
-  int t = vcl_setjmp(internal_buf);
-longjmp_target:  
+  int t = setjmp(internal_buf);
+  
+/*longjmp_target:*/
   // if we got back control after a longjmp(), restore
   // the previous jmp_buf and return to the caller now.
   if (t != 0) {
@@ -113,7 +114,8 @@ longjmp_target:
     vcl_memcpy(&internal_buf, &saved_buf, sizeof internal_buf);
     return;
   }
-next_statement:
+  
+/*next_statement:*/
   // set idle function.
   glutIdleFunc(internal_longjmp_idler);
   
