@@ -17,6 +17,7 @@
 #include <vcl_ctime.h>  // for CLOCKS_PER_SEC
 #include <vxl_config.h> // for VXL_BIG_ENDIAN and vxl_byte
 #include <vcl_cassert.h>
+#include <vcl_sys/times.h>
 
 #include <vcl_cstring.h>
 #include <vcl_iostream.h>
