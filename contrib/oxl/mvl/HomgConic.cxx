@@ -10,19 +10,19 @@
 #include <mvl/HomgPoint2D.h>
 #include <mvl/HomgLine2D.h>
 
-//: @{ Construct from implicit parameters. @}
+//: Construct from implicit parameters.
 HomgConic::HomgConic(double Axx, double Axy, double Ayy, double Ax, double Ay, double Ao)
 {
   set(Axx, Axy, Ayy, Ax, Ay, Ao);
 }
 
-//: @{ Construct from SpatialObjects conic. Not implemented. @}
+//: Construct from SpatialObjects conic. Not implemented.
 HomgConic::HomgConic(const Conic&)
 {
   assert(!"I am undone!");
 }
 
-//: @{ Set from implicit parameters. @}
+//: Set from implicit parameters.
 void HomgConic::set(double Axx, double Axy, double Ayy, double Ax, double Ay, double Ao)
 {
   _matrix(0,0) = Axx;   _matrix(0,1) = Axy/2;    _matrix(0,2) = Ax/2;
@@ -56,9 +56,9 @@ void HomgConic::get(vnl_matrix<double>& M)
 
 // Computations--------------------------------------------------------------
 
-// @{ OPERATIONS @}
+// OPERATIONS
 
-//: @{ Return algebraic distance from point to conic $D_{\cal A} = q(p)$. @}
+//: Return algebraic distance from point to conic $D_{\cal A} = q(p)$.
 double HomgConic::F(const HomgPoint2D& p)
 {
   double x = p.get_x();
@@ -75,14 +75,14 @@ double HomgConic::F(const HomgPoint2D& p)
   return A*x*x + B*x*y + C*y*y + D*x*w + E*y*w + F*w*w;
 }
 
-//: @{ Return polar as homogeneous line $\matx M \vect p$.
-// If $\vect p$ is on the conic, this is the tangent at $\vect p$. @}
+//: Return polar as homogeneous line $M \vec p$.
+// If $\vec p$ is on the conic, this is the tangent at $\vec p$.
 HomgLine2D HomgConic::polar(const HomgPoint2D& p)
 {
   return HomgLine2D(_matrix * p.get_vector());
 }
 
-//: @{ Return approximate geometric distance $q(\vect p) / \| \nabla_x q(\vect p) \| $ @}
+//: Return approximate geometric distance $q(\vec p) / \| \nabla_x q(\vec p) \| $
 double HomgConic::sampson_distance(const HomgPoint2D& p)
 {
   return F(p) / (4*(_matrix * p.get_vector()).magnitude());
@@ -104,11 +104,10 @@ HomgPoint2D HomgConic::closest_point(const HomgPoint2D& p)
   return d;
 }
 
-// @{ HELPER FUNCTIONS @}
+// HELPER FUNCTIONS
 
-//: @{Return closest point {\bf x}, distance to {\bf x} and gradient $\nabla q_x$, at {\bf x}.
+//: Return closest point \b x, distance to \b x and gradient $\nabla q_x$, at \b x.
 // If any of the output pointers are null, do not compute the corresponding quantity.
-// @}
 void HomgConic::closest_point(const HomgPoint2D& p, HomgPoint2D* pout, double *dout, vnl_vector<double>* gout)
 {
   // *** Canonicalize to Axx x^2 + Ayy y^2 = 1

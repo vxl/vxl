@@ -112,7 +112,7 @@ PMatrix::~PMatrix()
   delete _svd;
 }
 
-// @{ OPERATIONS @}
+// OPERATIONS
 
 //-----------------------------------------------------------------------------
 //
@@ -142,9 +142,9 @@ HomgLineSeg2D PMatrix::project (const HomgLineSeg3D& L) const
 
 //-----------------------------------------------------------------------------
 //
-//: @{ Return the 3D point $\vect X$ which is $\vect X = \matx P^+ \vect x $.
-// Equivalently, the 3D point of smallest norm such that $\matx P \vect X = \vect x$.
-// @} Uses svd().
+//: Return the 3D point $\vec X$ which is $\vec X = P^+ \vec x$.
+// Equivalently, the 3D point of smallest norm such that $P \vec X = \vec x$.
+// Uses svd().
 
 HomgPoint3D PMatrix::backproject_pseudoinverse (const HomgPoint2D& x) const
 {
@@ -234,7 +234,7 @@ PMatrix PMatrix::read(vcl_istream& s)
   return P;
 }
 
-// @{ COMPUTATIONS @}
+// COMPUTATIONS
 
 //-----------------------------------------------------------------------------
 //
@@ -319,7 +319,7 @@ PMatrix operator*(const PMatrix& P, const HMatrix3D& H)
   return PMatrix(P.get_matrix() * H.get_matrix());
 }
 
-// @{ DATA ACCESS @}
+// DATA ACCESS
 
 //-----------------------------------------------------------------------------
 //
