@@ -298,7 +298,7 @@ void vtol_topology_object_2d::link_inferior(vtol_topology_object_2d &inferior)
   _inferiors.push_back(&inferior);
   ref();
   inferior.link_superior(*this);
-  protected_--;
+  ref_count--;
   touch();
 }
 

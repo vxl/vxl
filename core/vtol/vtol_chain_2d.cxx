@@ -149,7 +149,7 @@ void vtol_chain_2d::link_chain_inferior(vtol_chain_2d &chain_inferior)
   _chain_inferiors.push_back(&chain_inferior);
   ref();
   chain_inferior.link_chain_superior(*this);
-  protected_--;
+  ref_count--;
   touch();
 }
 
