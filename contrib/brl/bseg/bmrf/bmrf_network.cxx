@@ -153,6 +153,19 @@ bmrf_network::num_frames() const
 }
 
 
+//: Returns the set of active frame numbers
+//: \note frame_numbers().size() == num_frames() but the numbers do not start at zero in general
+vcl_set<int> 
+bmrf_network::frame_numbers() const
+{
+  vcl_set<int> numbers;
+  for ( frame_node_map::const_iterator itr = nodes_from_frame_.begin();
+        itr != nodes_from_frame_.end(); ++itr )
+    numbers.insert(itr->first);
+  return numbers;
+}
+
+
 //: Returns the number of nodes in the network;
 int
 bmrf_network::size(int frame)

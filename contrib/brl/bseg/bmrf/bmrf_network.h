@@ -76,6 +76,10 @@ class bmrf_network : public vbl_ref_count
   //: Returns the number of frames in the network
   int num_frames() const;
 
+  //: Returns the set of active frame numbers
+  //: \note frame_numbers().size() == num_frames() but the numbers do not start at zero in general
+  vcl_set<int> frame_numbers() const;
+
   //: Returns the number of nodes in the network
   // \ note if the optional parameter \p frame is positive then the size is of that frame
   int size( int frame = -1 );

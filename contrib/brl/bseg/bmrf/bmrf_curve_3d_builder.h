@@ -21,6 +21,7 @@
 #include <vgl/vgl_vector_3d.h>
 #include <vcl_utility.h>
 #include <vcl_set.h>
+#include <vcl_map.h>
 #include <vcl_list.h>
 #include <vcl_vector.h>
 
@@ -52,7 +53,7 @@ class bmrf_curve_3d_builder
   vcl_set<vcl_list<bmrf_curvel_3d_sptr> > curves() const;
 
   //: Return the cameras used in the reconstruction
-  vcl_vector<vnl_double_3x4> cameras() const;
+  vcl_map<int,vnl_double_3x4> cameras() const;
 
   //: Return the 3D direction of motion of the curves
   vgl_vector_3d<double> direction() const;
@@ -121,8 +122,8 @@ class bmrf_curve_3d_builder
   //: Camera intrinsic parameters
   vnl_double_3x3 K_;
 
-  //: Vector of cameras
-  vcl_vector<vnl_double_3x4> C_;
+  //: Map from frame numbers to cameras
+  vcl_map<int,vnl_double_3x4> C_;
   
   //: 3D direction unit vector
   vgl_vector_3d<double> direction_;
