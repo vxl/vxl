@@ -195,7 +195,7 @@ public:
     if (r >= rows() || c>=cols())
     {
       vcl_cerr << "ERROR: vnl_vector::operator() called with (r,c) = (" <<r<<','<<c<<").\n";
-      vcl_cerr << "Valid range is (0.."<<rows()-1<<', '<<cols()-1<<")." << vcl_endl;
+      vcl_cerr << "Valid range is (0.."<<rows()-1<<", "<<cols()-1<<")." << vcl_endl;
       vcl_abort();
     }
 #endif;
@@ -210,7 +210,7 @@ public:
     if (r >= rows() || c>=cols())
     {
       vcl_cerr << "ERROR: vnl_vector::operator() called with (r,c) = (" <<r<<','<<c<<").\n";
-      vcl_cerr << "Valid range is (0.."<<rows()-1<<', '<<cols()-1<<")." << vcl_endl;
+      vcl_cerr << "Valid range is (0.."<<rows()-1<<", "<<cols()-1<<")." << vcl_endl;
       vcl_abort();
     }
 #endif;
