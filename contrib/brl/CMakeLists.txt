@@ -22,3 +22,9 @@ SUBDIRS(bmvl)
 
 # standalone executables
 SUBDIRS(bexe)
+
+#
+SUBDIRS(blem)
+
+# brown third part library
+SUBDIRS(b3p)
