@@ -20,8 +20,7 @@
 class btol_face_algs
 {
  public:
-  ~btol_face_algs();
-  static bool vtol_to_vgl(vtol_face_2d_sptr const & face, vgl_polygon<float>& poly);
+  static bool vtol_to_vgl(vtol_face_2d_sptr const & face, vgl_polygon<double>& poly);
   static bool edge_intersects(vtol_face_2d_sptr const & face,
                               vtol_edge_2d_sptr const & edge);
 
@@ -36,7 +35,9 @@ class btol_face_algs
   static vtol_face_2d_sptr box(const double x0, const double y0,
                                const double width, const double height);
  private:
-  btol_face_algs();
+  // Do not instantiate an object of this type, just use the static methods:
+  btol_face_algs() {}
+  ~btol_face_algs() {}
 };
 
 #endif

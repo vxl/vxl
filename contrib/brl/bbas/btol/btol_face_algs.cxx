@@ -11,16 +11,10 @@
 #include <bsol/bsol_algs.h>
 #include <btol/btol_face_algs.h>
 
-
-//: Destructor
-btol_face_algs::~btol_face_algs()
-{
-}
-
 //:convert a face to a vgl_polygon currently only works for singlely-connected faces.
 
 bool btol_face_algs::vtol_to_vgl(vtol_face_2d_sptr const & face,
-                                 vgl_polygon<float>& poly)
+                                 vgl_polygon<double>& poly)
 {
   if (!face)
     return false;
@@ -64,7 +58,7 @@ bool btol_face_algs::edge_intersects(vtol_face_2d_sptr const & face,
     return false;
   }
   //convert the face to a polygon
-  vgl_polygon<float> poly;
+  vgl_polygon<double> poly;
   btol_face_algs::vtol_to_vgl(face, poly);
   //iterate through the digital curve points
   vdgl_interpolator_sptr intp = dc->get_interpolator();
