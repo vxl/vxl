@@ -19,7 +19,6 @@
 
 #include <vidl/vidl_io.h>
 #include <vidl/vidl_frame.h>
-#include <vidl/vidl_avicodec.h>
 #include <jvid/jvx_manager.h>
 
 //-----------------------------------------------------------

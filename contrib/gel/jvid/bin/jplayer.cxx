@@ -14,9 +14,13 @@
 #endif
 
 #include <vidl/vidl_io.h>
-#include <vidl/vidl_avicodec.h>
-
 #include <jvid/jvx_manager.h>
+
+#ifdef VCL_WIN32
+#include <vidl/vidl_avicodec.h>
+#endif
+
+
 
 //-----------------------------------------------------------------------------
 // External refs
@@ -57,8 +61,10 @@ void play_callback()
 }
 int main(int argc, char** argv)
 {
-  // Register video codec
+  // Register video codecs
+#ifdef VCL_WIN32
   vidl_io::register_codec(new vidl_avicodec);
+#endif
 
 #ifdef HAS_GTK
   vgui_gtk_tag_function();

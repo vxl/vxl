@@ -7,8 +7,8 @@ INCLUDE_DIRECTORIES(${allvxl_SOURCE_DIR}/oxl)
 IF(HAS_OPENGL)
 
 # Uses the vidl_avicodec, and thus will only build under Windows
-IF(WIN32)
-IF (NOT CYGWIN)
+#IF(WIN32)
+#IF (NOT CYGWIN)
 
 SUBDIRS(bin)
 
@@ -20,6 +20,6 @@ SOURCE_FILES( jvid_sources
 
 AUX_SOURCE_DIRECTORY(Templates jvid_sources)
 
-ENDIF (NOT CYGWIN)
-ENDIF(WIN32)
+#ENDIF (NOT CYGWIN)
+#ENDIF(WIN32)
 ENDIF(HAS_OPENGL)
