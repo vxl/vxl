@@ -8,6 +8,11 @@ ENDIF(PNG_PNG_INCLUDE_DIR MATCHES "v3p.png")
 IF(BUILD_TESTING AND PNG_IS_V3P)
   INCLUDE_DIRECTORIES(${PNG_INCLUDE_DIR})
   LINK_LIBRARIES(${PNG_LIBRARIES})
+  # This is already set in v3p/png/CMakeLists.txt as dependency of libpng,
+  # so the next 3 lines should not be here; still it's necessary ..?! - PVr
+  IF (UNIX)
+    LINK_LIBRARIES(m)
+  ENDIF (UNIX)
   ADD_DEFINITIONS(${PNG_DEFINITIONS})
 
   ADD_EXECUTABLE(pngtest pngtest.c)
