@@ -196,13 +196,13 @@ class vpyr_2_pyramid_level_dart_base_iterator : protected FD
   }
 
   //:
-  Ptr operator->() const
+  const Ptr operator->() const
   {
-    return (Ptr) this;
+    return (const Ptr)this;
   }
 
   //:  Applies alpha.
-  self_type & alpha ()
+  self_type & alpha()
   {
     _it+=offset(vpyr_2_pyramid_base_alpha(link(),level())) ;
     set_link();

@@ -158,13 +158,13 @@ class vpyr_2_tpyramid_level_element_iterator : protected FD
   }
 
   //:
-  Ptr operator->() const
+  const Ptr operator->() const
   {
-    return (Ptr) this;
+    return (const Ptr) this;
   }
 
   //:
-  self_type & operator++ ()
+  self_type & operator++()
   {
     ++_it;
     set_link();
