@@ -232,7 +232,6 @@ MANPAGE_SOURCES += sgi/vcl_utility.txx
 MANPAGE_SOURCES += sgi/vcl_vector.txx
 
 MANPAGE_SOURCES += sunpro/vcl_cmath.h
-MANPAGE_SOURCES += sunpro/vcl_complex_fwd.h
 MANPAGE_SOURCES += sunpro/vcl_cstdlib.h
 MANPAGE_SOURCES += sunpro/vcl_stack.txx
 MANPAGE_SOURCES += sunpro/vcl_algorithm.txx
@@ -248,7 +247,6 @@ MANPAGE_SOURCES += sunpro/vcl_vector.txx
 
 MANPAGE_SOURCES += win32-vc60/vcl_cmath.h
 MANPAGE_SOURCES += win32-vc60/vcl_complex.h
-MANPAGE_SOURCES += win32-vc60/vcl_complex_fwd.h
 MANPAGE_SOURCES += win32-vc60/vcl_cstdlib.h
 MANPAGE_SOURCES += win32-vc60/vcl_string.h
 MANPAGE_SOURCES += win32-vc70/vcl_cmath.h
@@ -288,7 +286,6 @@ MANPAGE_SOURCES += emulation/vcl_rbtree.txx
 MANPAGE_SOURCES += emulation/vcl_algobase.h
 MANPAGE_SOURCES += emulation/vcl_bool.h
 MANPAGE_SOURCES += emulation/vcl_bvector.h
-MANPAGE_SOURCES += emulation/vcl_complex_fwd.h
 MANPAGE_SOURCES += emulation/vcl_defalloc.h
 MANPAGE_SOURCES += emulation/vcl_functionx.h
 MANPAGE_SOURCES += emulation/vcl_hash_set.h
