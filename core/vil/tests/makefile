@@ -65,6 +65,7 @@ TESTS += test_algo_trace_8con_boundary.cxx
 TESTS += test_algo_find_peaks.cxx
 TESTS += test_algo_region_finder.cxx
 TESTS += test_algo_cartesian_differential_invariants.cxx
+TESTS += test_algo_corners.cxx
 
 #MINI_PROG_SOURCES += vil_mil_gauss_general_timings.cxx
 #MINI_PROG_SOURCES += vil_vil_compare_access_timings.cxx
