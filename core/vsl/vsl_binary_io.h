@@ -362,7 +362,13 @@ void vsl_b_write(vsl_b_ostream& os,vxl_int_64 n );
 void vsl_b_read(vsl_b_istream& is,vxl_int_64& n );
 //: Print to a stream
 inline void vsl_print_summary(vcl_ostream& os, vxl_int_64 n )
-{  os << n; }
+{
+#if VCL_VC60
+  os << "****";
+#else
+  os << n;
+#endif
+}
 
 //: Write  to vsl_b_ostream
 void vsl_b_write(vsl_b_ostream& os,vxl_uint_64 n );
@@ -370,7 +376,13 @@ void vsl_b_write(vsl_b_ostream& os,vxl_uint_64 n );
 void vsl_b_read(vsl_b_istream& is,vxl_uint_64& n );
 //: Print to a stream
 inline void vsl_print_summary(vcl_ostream& os, vxl_uint_64 n )
-{  os << n; }
+{
+#if VCL_VC60
+  os << "****";
+#else
+  os << n;
+#endif
+}
 
 #endif // VXL_HAS_INT_64
 
