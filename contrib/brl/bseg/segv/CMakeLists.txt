@@ -10,7 +10,7 @@ INCLUDE( ${MODULE_PATH}/UseVGUI.cmake )
 IF(HAS_VGUI)
 
  SET(segv_sources
-     vil_dll.h
+     dll.h vil_dll.h
      segv_segmentation_manager.cxx     segv_segmentation_manager.h
      segv_vil_segmentation_manager.cxx segv_vil_segmentation_manager.h
      segv_menus.cxx                    segv_menus.h
