@@ -1,13 +1,13 @@
 //-*- c++ -*-------------------------------------------------------------------
 #ifndef xcv_axes_tableau_h_
 #define xcv_axes_tableau_h_
-// 
+//
 // This is xcv/xcv_axes_tableau.h
 //
 //: A tableau to display points on a set of axes.
 //  The graph is displayed using a text_tableau and an easy2D inside
 //  a composite tableau.
-//  Each point to be plotted is added using add_point and when all points 
+//  Each point to be plotted is added using add_point and when all points
 //  are added compute_axes should be called to lay out the graph.
 //
 // \file
@@ -32,10 +32,10 @@ class vgui_tableau;
 #include "xcv_axes_tableau_sptr.h"
 // </vgui_make_sptr>
 
-class xcv_axes_tableau : public vgui_tableau 
+class xcv_axes_tableau : public vgui_tableau
 {
 public:
- 
+
   //: Constructor takes all the labels used on the graph.
   xcv_axes_tableau(vcl_string heading, vcl_string x_axes_label, vcl_string y_axes_label);
   //: Destructor.
@@ -45,7 +45,7 @@ public:
   //: Lay out the graph
   void compute_axes();
   //: Return the name of this tableau.
-  vcl_string type_name() const { return "xcv_axes_tableau";}  
+  vcl_string type_name() const { return "xcv_axes_tableau";}
   //: Handles all events for this tableau.
   bool handle(const vgui_event&);
 
@@ -67,10 +67,11 @@ private:
 
 
 // <vgui_make_sptr>
-struct xcv_axes_tableau_new : public xcv_axes_tableau_sptr 
+struct xcv_axes_tableau_new : public xcv_axes_tableau_sptr
 {
   typedef xcv_axes_tableau_sptr base;
-  xcv_axes_tableau_new(vcl_string a=vcl_string(""), vcl_string b=vcl_string(""), vcl_string c=vcl_string("")) : base(new xcv_axes_tableau(a,b,c)) { }
+  xcv_axes_tableau_new(vcl_string a="", vcl_string b="", vcl_string c="")
+    : base(new xcv_axes_tableau(a,b,c)) { }
 };
 // <vgui_make_sptr>
 
