@@ -33,6 +33,7 @@
 
 #include <vcl_fstream.h>
 #include <vcl_cstdio.h>
+#include <vcl_cstring.h>
 
 #include "gevd_bufferxy.h"
 //#include <memory.h> // For memcpy()
@@ -88,7 +89,7 @@ gevd_bufferxy::~gevd_bufferxy()
 gevd_bufferxy::gevd_bufferxy(gevd_bufferxy const& buf) : gevd_memory_mixin(buf)
 {
   Init(buf.GetSizeX(), buf.GetSizeY(), buf.GetBitsPixel());
-  memcpy(yra[0], buf.yra[0], GetSizeX()*GetSizeY()*GetBytesPixel());
+  vcl_memcpy(yra[0], buf.yra[0], GetSizeX()*GetSizeY()*GetBytesPixel());
 }
 
 //: Write to file.  Note that this can be OS-specific!
