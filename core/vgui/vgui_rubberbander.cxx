@@ -137,7 +137,7 @@ void vgui_rubberbander::rubberband_none()
   obj_type = none_enum;
 }
 
-//-- Render the given point.
+//: Render the given point.
 void vgui_rubberbander::draw_point(float x, float y)
 {
   glColor3f(1,1,1);
@@ -147,7 +147,7 @@ void vgui_rubberbander::draw_point(float x, float y)
   glEnd();
 }
 
-//-- Render the finite line between the given points.
+//: Render the finite line between the given points.
 void vgui_rubberbander::draw_line(float x0, float y0, float x1, float y1)
 {
   glLineWidth(1);
@@ -159,7 +159,7 @@ void vgui_rubberbander::draw_line(float x0, float y0, float x1, float y1)
   glEnd();
 }
 
-// -- Render the infinite line ax + by + c = 0.
+//: Render the infinite line ax + by + c = 0.
 void vgui_rubberbander::draw_infinite_line(float a, float b, float c)
 {
   // Compute the bounding box.
@@ -180,7 +180,7 @@ void vgui_rubberbander::draw_infinite_line(float a, float b, float c)
   glEnd();
 }
 
-//-- Render the rubber circle.
+//: Render the rubber circle.
 void vgui_rubberbander::draw_circle(float x, float y, float r)
 {
   glLineWidth(1);
@@ -195,7 +195,7 @@ void vgui_rubberbander::draw_circle(float x, float y, float r)
   glEnd();
 }
 
-//-- Render the rubber polygon.
+//: Render the rubber polygon.
 void vgui_rubberbander::draw_polygon(float px, float py)
 {
   unsigned n=x_coords.size(); assert(n==y_coords.size());
@@ -217,7 +217,7 @@ void vgui_rubberbander::draw_polygon(float px, float py)
   glEnd();
 }
 
-// -- Render rubber box
+//: Render rubber box
 void vgui_rubberbander::draw_box(float x0,float y0,float x1,float y1)
 {
   float sx = x0>x1 ? x1:x0;
@@ -236,7 +236,8 @@ void vgui_rubberbander::draw_box(float x0,float y0,float x1,float y1)
 
   glEnd();
 }
-// -- Render the rubber line strip
+
+//: Render the rubber line strip
 void vgui_rubberbander::draw_linestrip(float px,float py)
 {
  unsigned n=x_coords.size(); assert(n==y_coords.size());

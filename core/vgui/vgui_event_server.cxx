@@ -28,14 +28,11 @@ public:
     {
     }
 
-
   bool handle(const vgui_event& event);
   vcl_string type_name() const {return "vgui_event_server";}
-
-
 };
 
-// -- Interaction (i.e. mouse/kb) events are saved, and said to be consumed.
+//: Interaction (i.e. mouse/kb) events are saved, and said to be consumed.
 bool vgui_event_server_interpose_tableau::handle(const vgui_event& event) {
 
 //if (debug)
@@ -56,8 +53,7 @@ bool vgui_event_server_interpose_tableau::handle(const vgui_event& event) {
   return true;
 }
 
-// -- Construct a vgui_event_server, which grabs all events intended for
-// tableau t.
+//: Construct a vgui_event_server, which grabs all events intended for tableau t
 vgui_event_server::vgui_event_server(vgui_tableau_sptr const& t):
   grabber_(0)
 {
@@ -85,7 +81,6 @@ vgui_event_server::~vgui_event_server()
 }
 
 void vgui_event_server::reset() {
-
 }
 
 bool vgui_event_server::next() {
@@ -100,5 +95,4 @@ bool vgui_event_server::next() {
 
 vgui_event vgui_event_server::last_event() {
   return last_event_;
-
 }

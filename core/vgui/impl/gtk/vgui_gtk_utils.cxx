@@ -78,21 +78,22 @@ bool vgui_gtk_utils::is_modifier(GdkEvent const *gev)
   {
     GdkEventKey *e = (GdkEventKey*)gev;
 
-    // -- This code would only return 'true' if any of the modifier is solely
+    // This code would only return 'true' if any of the modifier is solely
     // pressed. However we want to return 'true' so long as any of the
     // modifiers is pressed simultaneously with some other key. This is a must
-    // if want to allow menu accelerator keys. -- u97mb
+    // if want to allow menu accelerator keys. - u97mb
 
-    //if (e->keyval & GDK_Shift_L ||
-    //e->keyval & GDK_Shift_R ||
-    //e->keyval & GDK_Control_L ||
-    //e->keyval & GDK_Control_R ||
-    //e->keyval & GDK_Meta_L ||
-    //e->keyval & GDK_Meta_R ||
-    //e->keyval & GDK_Alt_L ||
-    //e->keyval & GDK_Alt_R)
-
-    // -- u97mb
+#if 0
+    if (e->keyval & GDK_Shift_L ||
+        e->keyval & GDK_Shift_R ||
+        e->keyval & GDK_Control_L ||
+        e->keyval & GDK_Control_R ||
+        e->keyval & GDK_Meta_L ||
+        e->keyval & GDK_Meta_R ||
+        e->keyval & GDK_Alt_L ||
+        e->keyval & GDK_Alt_R)
+#endif
+    // - u97mb
     // GDK_MOD1_MASK corresponds to META key(at least on Sun Solaris)
     if(e->state & GDK_CONTROL_MASK ||
        e->state & GDK_SHIFT_MASK ||
@@ -138,7 +139,7 @@ void vgui_gtk_utils::add_submenu(GtkWidget *widget, const vgui_menu& menu)
          menu[i].short_cut.key!=vgui_KEY_NULL)
         {
           gint mask = 0;
-          // -- Health warning -- It seems that GDK_MOD1_MASK corresponds
+          // Health warning - It seems that GDK_MOD1_MASK corresponds
           // to META on Solaris and ALT has no correspondance
           if(menu[i].short_cut.mod & vgui_CTRL)
             mask|=GDK_CONTROL_MASK;
@@ -196,7 +197,7 @@ void vgui_gtk_utils::set_menu(GtkWidget *widget, const vgui_menu& menu, bool is_
            menu[i].short_cut.key!=vgui_KEY_NULL)
           {
             gint mask = 0;
-            // -- Health warning -- It seems that GDK_MOD1_MASK corresponds
+            // Health warning - It seems that GDK_MOD1_MASK corresponds
             // to META on Solaris and ALT has no correspondance
             if(menu[i].short_cut.mod & vgui_CTRL)
               mask|=GDK_CONTROL_MASK;

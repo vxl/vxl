@@ -40,24 +40,24 @@ vgui_mfc* vgui_mfc::instance() {
 }
 
 //---------------------------------------------------------------------------------
-// -- Default constructor
+//: Default constructor
 vgui_mfc::vgui_mfc()
 {
         utils = vgui_mfc_utils::instance();
 }
 
 //--------------------------------------------------------------------------------
-// -- Pure virtual function from vgui (this must be implemented).  Returns the
+//: Pure virtual function from vgui (this must be implemented).  Returns the
 // name of the GUI toolkit.
 vcl_string vgui_mfc::name() const { return "mfc"; }
 
 
 //--------------------------------------------------------------------------------
-// -- Virtual function from vgui.  Initialise the implementation of vgui.
+//: Virtual function from vgui.  Initialise the implementation of vgui.
 void vgui_mfc::init(int &argc, char **argv) {
   if (debug) vcl_cerr << "vgui_mfc::init()" << vcl_endl;
 
-        // -- Initialise MFC foundation classes
+        //: Initialise MFC foundation classes
         if (!AfxWinInit(::GetModuleHandle(NULL), NULL, ::GetCommandLine(), SW_SHOW))
         {
                 // TODO: change error code to suit your needs
@@ -69,11 +69,11 @@ void vgui_mfc::init(int &argc, char **argv) {
 
 
 //--------------------------------------------------------------------------------
-// -- Virtual function from vgui.   Runs the event loop.
+//: Virtual function from vgui.   Runs the event loop.
 void vgui_mfc::run() {
   if (debug) vcl_cerr << "vgui_mfc::run()" << vcl_endl;
 
-  // -- Start the main thread
+  //: Start the main thread
   AfxGetThread()->Run();
   // Once the window has been closed Run() will terminate
   // and we clean-up the mess
@@ -122,7 +122,7 @@ void vgui_mfc::add_event(const vgui_event& event) {
 
 
 //--------------------------------------------------------------------------------
-// -- Virtual function from vgui.  Creates a new window with a menubar.
+//: Virtual function from vgui.  Creates a new window with a menubar.
 vgui_window* vgui_mfc::produce_window(int width, int height, const vgui_menu& menubar,
                                            const char* title) {
   return new vgui_mfc_window(width, height, menubar, title);
@@ -131,7 +131,7 @@ vgui_window* vgui_mfc::produce_window(int width, int height, const vgui_menu& me
 
 
 //--------------------------------------------------------------------------------
-// -- Virtual function from vgui.  Creates a new window.
+//: Virtual function from vgui.  Creates a new window.
 vgui_window* vgui_mfc::produce_window(int width, int height,
                                            const char* title) {
 
@@ -140,7 +140,7 @@ vgui_window* vgui_mfc::produce_window(int width, int height,
 
 
 //--------------------------------------------------------------------------------
-// -- Virtual function from vgui.  Creates a new dialog box.
+//: Virtual function from vgui.  Creates a new dialog box.
 vgui_dialog_impl* vgui_mfc::produce_dialog(const char* name) {
   return new vgui_mfc_dialog_impl(name);
   return 0;

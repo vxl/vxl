@@ -15,12 +15,13 @@
 #include "vgui_mfc_doc.h"
 #include "vgui_mfc_mainfrm.h"
 #include "resource.h"
-/*#ifdef _DEBUG
-#define new DEBUG_NEW
-#undef THIS_FILE
-static char THIS_FILE[] = __FILE__;
+#if 0
+  #ifdef _DEBUG
+  #define new DEBUG_NEW
+  #undef THIS_FILE
+  static char THIS_FILE[] = __FILE__;
+  #endif
 #endif
-*/
 /////////////////////////////////////////////////////////////////////////////
 // vgui_mfc_app construction
 
@@ -54,12 +55,13 @@ BOOL vgui_mfc_app::InitInstance()
         //  of your final executable, you should remove from the following
         //  the specific initialization routines you do not need.
 
-/*#ifdef _AFXDLL
+#if 0
+  #ifdef _AFXDLL
         Enable3dControls();       // Call this when using MFC in a shared DLL
-#else
+  #else
         Enable3dControlsStatic(); // Call this when linking to MFC statically
+  #endif
 #endif
-*/
         // Change the registry key under which our settings are stored.
         // TODO: You should modify this string to be something appropriate
         // such as the name of your company or organization.
@@ -99,19 +101,19 @@ BOOL vgui_mfc_app::InitInstance()
         m_pMainWnd = pFrame;
         pDocTemplate->InitialUpdateFrame(pFrame,pDocument);
         // The one and only window has been initialized, so show and update it.
-        /*
+#if 0
         m_pMainWnd->SetScrollRange(SB_HORZ,-1024,1024);
         m_pMainWnd->SetScrollRange(SB_VERT,-1024,1024);
         m_pMainWnd->SetScrollPos(SB_HORZ,0);
         m_pMainWnd->SetScrollPos(SB_VERT,0);
-        */
+#endif
         m_pMainWnd->ShowWindow(SW_SHOW);
         m_pMainWnd->UpdateWindow();
 
-
         return TRUE;
 }
-// -- CWinApp::Run() calls CWinThread::Run().
+
+//: CWinApp::Run() calls CWinThread::Run().
 BOOL vgui_mfc_app::Run()
 {
   // for tracking the idle time state
@@ -140,11 +142,11 @@ BOOL vgui_mfc_app::Run()
                            // Collapse multiple move events...
                            while(tmp_msg.message == WM_MOVE)
                            {
-                             // -- Remove the message from the queue
+                             // Remove the message from the queue
                              ::PeekMessage(&tmp_msg,NULL,NULL,NULL,PM_REMOVE);
-                             // -- Get the next message
+                             // Get the next message
                              BOOL status = ::PeekMessage(&tmp_msg,NULL,NULL,NULL,PM_NOREMOVE);
-                             // -- If there were no more messages in the queue or
+                             // If there were no more messages in the queue or
                              // the next message retrieved is not a move
                              // process the message
                              if (!status || !(tmp_msg.message == WM_MOVE))
@@ -152,8 +154,7 @@ BOOL vgui_mfc_app::Run()
                                 ::TranslateMessage(&tmp_msg);
                                 ::DispatchMessage(&tmp_msg);
                              }
-
-                          }
+                           }
                           }
                         }
 

@@ -35,47 +35,47 @@ vgui_mfc_window::vgui_mfc_window(char const *title,
   CWnd *main_wnd = app->GetMainWnd();
   ((vgui_mfc_mainfrm *)main_wnd)->SetStatusBar(statusbar);
   vgui::out.rdbuf(statusbar->statusbuf);
-  // -- This part of code changes the window size to the one requested
+  // This part of code changes the window size to the one requested
   WINDOWPLACEMENT w_placement;
-  // -- Obtain window geometry information
+  // Obtain window geometry information
   main_wnd->GetWindowPlacement(&w_placement);
-  // -- Modify bottom right corner coordinates to account for the width
+  // Modify bottom right corner coordinates to account for the width
   w_placement.rcNormalPosition.right = w_placement.rcNormalPosition.left+w;
   w_placement.rcNormalPosition.bottom = w_placement.rcNormalPosition.top+h;
-  // -- Store the geometry information back into window
+  // Store the geometry information back into window
   main_wnd->SetWindowPlacement(&w_placement);
 }
 
-vgui_mfc_window::vgui_mfc_window(unsigned w, unsigned h, vgui_menu const &menubar,
-                                                                 char const *title)
+vgui_mfc_window::vgui_mfc_window(unsigned w, unsigned h,
+                                 vgui_menu const &menubar,
+                                 char const *title)
   : vgui_window()
   , mfcwin(0)
 {
-        CWinApp *app = AfxGetApp();
-        app->GetMainWnd()->SetWindowText(title);
-        POSITION pos = app->GetFirstDocTemplatePosition();
-        CDocTemplate *tmpl = app->GetNextDocTemplate(pos);
-        pos = tmpl->GetFirstDocPosition();
-        CDocument *pdoc = tmpl->GetNextDoc(pos);
-        pos = pdoc->GetFirstViewPosition();
-        mfcwin = (vgui_mfc_adaptor *)pdoc->GetNextView(pos);
-        vgui_mfc::instance()->utils->set_menu(menubar);
-        statusbar = new vgui_mfc_statusbar();
-        CWnd *main_wnd = app->GetMainWnd();
-        ((vgui_mfc_mainfrm *)main_wnd)->SetStatusBar(statusbar);
-        vgui::out.rdbuf(statusbar->statusbuf);
-        //        vgui::out<<"Welcome to XCV revision 1.0a";
-        // -- This part of code changes the window size to the one requested
-        WINDOWPLACEMENT w_placement;
-        // -- Obtain window geometry information
-        main_wnd->GetWindowPlacement(&w_placement);
-        // -- Modify bottom right corner coordinates to account for the width
-        w_placement.rcNormalPosition.right = w_placement.rcNormalPosition.left+w;
-        w_placement.rcNormalPosition.bottom = w_placement.rcNormalPosition.top+h;
-        // -- Store the geometry information back into window
-        main_wnd->SetWindowPlacement(&w_placement);
+  CWinApp *app = AfxGetApp();
+  app->GetMainWnd()->SetWindowText(title);
+  POSITION pos = app->GetFirstDocTemplatePosition();
+  CDocTemplate *tmpl = app->GetNextDocTemplate(pos);
+  pos = tmpl->GetFirstDocPosition();
+  CDocument *pdoc = tmpl->GetNextDoc(pos);
+  pos = pdoc->GetFirstViewPosition();
+  mfcwin = (vgui_mfc_adaptor *)pdoc->GetNextView(pos);
+  vgui_mfc::instance()->utils->set_menu(menubar);
+  statusbar = new vgui_mfc_statusbar();
+  CWnd *main_wnd = app->GetMainWnd();
+  ((vgui_mfc_mainfrm *)main_wnd)->SetStatusBar(statusbar);
+  vgui::out.rdbuf(statusbar->statusbuf);
+//vgui::out<<"Welcome to XCV revision 1.0a";
+  // This part of code changes the window size to the one requested
+  WINDOWPLACEMENT w_placement;
+  // Obtain window geometry information
+  main_wnd->GetWindowPlacement(&w_placement);
+  // Modify bottom right corner coordinates to account for the width
+  w_placement.rcNormalPosition.right = w_placement.rcNormalPosition.left+w;
+  w_placement.rcNormalPosition.bottom = w_placement.rcNormalPosition.top+h;
+  // Store the geometry information back into window
+  main_wnd->SetWindowPlacement(&w_placement);
 }
-
 
 
 vgui_mfc_window::~vgui_mfc_window() {
@@ -91,18 +91,20 @@ void vgui_mfc_window::show() {
 }
 
 void vgui_mfc_window::hide() {
-
 }
+
 void vgui_mfc_window::enable_hscrollbar(bool show)
 {
         CWnd *wnd = AfxGetApp()->GetMainWnd();
         wnd->ShowScrollBar(SB_HORZ,show);
 }
+
 void vgui_mfc_window::enable_vscrollbar(bool show)
 {
         CWnd *wnd = AfxGetApp()->GetMainWnd();
         wnd->ShowScrollBar(SB_VERT,show);
 }
+
 void vgui_mfc_window::iconify() {
 }
 

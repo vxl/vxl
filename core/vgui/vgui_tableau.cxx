@@ -75,7 +75,7 @@ void vgui_tableau::unref() const
 
 //--------------------------------------------------------------------------------
 
-// -- Override in subclasses to give the tableau some appearance and behaviour.
+//: Override in subclasses to give the tableau some appearance and behaviour.
 bool vgui_tableau::handle(vgui_event const &event) {
   vgui_macro_report_errors;
 
@@ -134,8 +134,7 @@ bool vgui_tableau::draw() {
 }
 
 
-
-// -- Return the bounding box of this tableau.
+//: Return the bounding box of this tableau.
 // If infinite in extent, or nothing is drawn, or you can't be bothered to
 // implement it, return false.
 bool vgui_tableau::get_bounding_box(float /*low*/[3], float /*high*/[3]) const {
@@ -144,7 +143,7 @@ bool vgui_tableau::get_bounding_box(float /*low*/[3], float /*high*/[3]) const {
 
 //--------------------------------------------------------------------------------
 
-/*
+#if 0
 void vgui_tableau::post(const vgui_message &m) {
   //  // send message to all observers :
   //  notify(m);
@@ -155,7 +154,7 @@ void vgui_tableau::post(const vgui_message &m) {
   for (unsigned i=0;i<parents.size();i++)
     parents[i]->post(m);
 }
-*/
+#endif
 
 void vgui_tableau::post_message(char const *msg, void const *data) {
   vcl_vector<vgui_tableau_sptr> ps;
@@ -180,23 +179,23 @@ void vgui_tableau::post_overlay_redraw() {
 
 //--------------------------------------------------------------------------------
 
-// -- virtual. returns some sort of name.
+//: virtual. returns some sort of name.
 vcl_string vgui_tableau::name() const {
   return file_name();
 }
 
-// -- virtual. returns the name of a file associated with some tableau below.
+//: virtual. returns the name of a file associated with some tableau below.
 vcl_string vgui_tableau::file_name() const {
   return "(none)";
 }
 
-// -- virtual. used to provide an informative name for printouts, debugging
+//: virtual. used to provide an informative name for printouts, debugging
 // etc.  Often it's type_name() + some representation of the essential state.
 vcl_string vgui_tableau::pretty_name() const {
   return type_name();
 }
 
-// -- virtual. Return the name of the most derived (tableau) class. This
+//: virtual. Return the name of the most derived (tableau) class. This
 // ought never to be called as derived classes should implement type_name().
 vcl_string vgui_tableau::type_name() const {
   static bool warned=false;
@@ -236,7 +235,7 @@ bool vgui_tableau::remove_child(vgui_tableau_sptr const&) {
   return false;
 }
 
-// -- This method is called when some part of the program (typically the slot
+//: This method is called when some part of the program (typically the slot
 // mechanism) is about to forcibly replace a child of this tableau.
 // The canonical reason to override this is in order to invalidate caches.
 bool vgui_tableau::notify_replaced_child(vgui_tableau_sptr const& /*old_child*/,
@@ -248,7 +247,7 @@ bool vgui_tableau::notify_replaced_child(vgui_tableau_sptr const& /*old_child*/,
 //--------------------------------------------------------------------------------
 // @{ MENUS @}
 
-// -- This method is for tableaux to implement if they want to _add_ some items to
+//: This method is for tableaux to implement if they want to _add_ some items to
 // the popup menu. They can assign to or clear 'menu', but that is not recommended
 // as it would remove what other tableaux put there.
 // The recommended usage is to .add() items or to .include() another menu.
@@ -257,7 +256,7 @@ void vgui_tableau::add_popup(vgui_menu &/*menu*/) {
   // do nothing by default.
 }
 
-// -- Gets popup menu for this tableau. If recurse is, true, recursively add the
+//: Gets popup menu for this tableau. If recurse is, true, recursively add the
 // popup menus for children and children's children etc.
 // ** this is a mixin method. it does some work for you. **
 void vgui_tableau::get_popup(vgui_popup_params const &params, vgui_menu &menu) {

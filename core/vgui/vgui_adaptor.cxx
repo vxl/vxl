@@ -69,7 +69,7 @@ void vgui_adaptor::set_tableau(vgui_tableau_sptr const& t)
 
 //--------------------------------------------------------------------------------
 
-// -- returns concatenation of the adaptor's menu with the tableau's menu.
+//: returns concatenation of the adaptor's menu with the tableau's menu.
 vgui_menu vgui_adaptor::get_total_popup(vgui_popup_params &params) const
 {
   // set popup_params members
@@ -94,7 +94,7 @@ vgui_menu vgui_adaptor::get_total_popup(vgui_popup_params &params) const
 
 //--------------------------------------------------------------------------------
 
-// -- this method pops up a dialog for changing the popup modifier and button bindings.
+//: this method pops up a dialog for changing the popup modifier and button bindings.
 void vgui_adaptor::config_dialog() {
 
   // table stores the correspondence between vgui modifiers and pretty names.

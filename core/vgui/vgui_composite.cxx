@@ -43,7 +43,7 @@ vgui_composite::vgui_composite()
   enable_key_bindings = false;
 }
 
-// -- Constructor taking two children.   The first is on top, the second below.
+//: Constructor taking two children.   The first is on top, the second below.
 vgui_composite::vgui_composite(vgui_tableau_sptr const& child0, vgui_tableau_sptr const& child1)
   : c_enable_key_bindings(default_c_enable_key_bindings)
 {
@@ -52,7 +52,7 @@ vgui_composite::vgui_composite(vgui_tableau_sptr const& child0, vgui_tableau_spt
   enable_key_bindings = false;
 }
 
-// -- Three children, top to bottom.
+//: Three children, top to bottom.
 vgui_composite::vgui_composite(vgui_tableau_sptr const& child0, vgui_tableau_sptr const& child1, vgui_tableau_sptr const& child2)
   : c_enable_key_bindings(default_c_enable_key_bindings)
 {
@@ -62,7 +62,7 @@ vgui_composite::vgui_composite(vgui_tableau_sptr const& child0, vgui_tableau_spt
   enable_key_bindings = false;
 }
 
-// -- Many children, top to bottom.
+//: Many children, top to bottom.
 vgui_composite::vgui_composite(vcl_vector<vgui_tableau_sptr> const& the_children)
   : c_enable_key_bindings(default_c_enable_key_bindings)
 {
@@ -151,14 +151,14 @@ bool vgui_composite::handle(const vgui_event& event)
 
 void vgui_composite::notify() const {
   observers./*vgui_tableau::*/notify();
-/*
+#if 0
   for (vcl_vector<vgui_slot>::const_iterator t_iter = children.begin();
        t_iter != children.end(); ++t_iter) {
     vgui_tableau_sptr t = *t_iter;
     if(t)
       t->notify();
   }
-*/
+#endif
 }
 
 bool vgui_composite::get_bounding_box(float lo[3], float hi[3]) const {

@@ -3,7 +3,7 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
-// 
+//
 // .NAME vgui_mfc_dialog_impl - Provides support for a dialog box
 // .LIBRARY vgui-mfc
 // .HEADER vxl Package
@@ -25,9 +25,9 @@
 #include <vgui/internals/vgui_dialog_impl.h>
 #include "stdafx.h"
 #define MAX_ITEMS 255
-// -- MFC documentation says that our IDs should be in the range 0x8000-0xDFF
-#define ID_BROWSE_FILES 0x8000  // -- Assume that there won't be more than 100 browser buttons
-#define ID_CHOOSE_COLOUR 0x8100 // -- Assume that there won't be more than 100 color chooser buttons
+// MFC documentation says that our IDs should be in the range 0x8000-0xDFF
+#define ID_BROWSE_FILES 0x8000  // Assume that there won't be more than 100 browser buttons
+#define ID_CHOOSE_COLOUR 0x8100 // Assume that there won't be more than 100 color chooser buttons
 #define ID_EDIT 0x8200
 #define ID_COMBOBOX 0x8300
 
@@ -35,7 +35,7 @@ class vgui_mfc_dialog_impl : public CWnd,public vgui_dialog_impl {
 public:
   vgui_mfc_dialog_impl(const char* name);
   ~vgui_mfc_dialog_impl();
-  
+
   void* choice_field_widget(const char*, const vcl_vector<vcl_string>&, int&);
   //: Sets the modality of the dialog box.
   void modal(const bool);

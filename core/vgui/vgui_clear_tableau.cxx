@@ -55,7 +55,7 @@ bool vgui_clear_tableau::handle(const vgui_event& event)
     if (mask & GL_STENCIL_BUFFER_BIT)
       glClearStencil(stencil);
 
-    /*
+#if 0
       GLint vp[4]; // current viewport
       glGetIntegerv(GL_VIEWPORT,vp);
 
@@ -66,18 +66,18 @@ bool vgui_clear_tableau::handle(const vgui_event& event)
       // turn on scissor test and set the scissor box to the viewport :
       glEnable(GL_SCISSOR_TEST);
       glScissor(vp[0], vp[1], vp[2], vp[3]);
-    */
+#endif
 
     if (mask)
       vgui_accelerate::instance()->vgui_glClear(mask);
 
-    /*
+#if 0
     // turn off the scissor test, if it wasn't already on, and
     // restore old scissor settings :
     if (!sc_enabled)
       glDisable(GL_SCISSOR_TEST);
       glScissor(sc[0], sc[1], sc[2], sc[3]);
-    */
+#endif
 
     return true;
   }
@@ -126,7 +126,6 @@ void vgui_clear_tableau::config_dialog()
   bool accum_val = (mask & GL_ACCUM_BUFFER_BIT) != 0;
   bool stencil_val = (mask & GL_STENCIL_BUFFER_BIT) != 0;
 
-
   vgui_dialog mydialog("Clear Config");
   mydialog.checkbox("Colour",  colour_val);
   mydialog.checkbox("Depth", depth_val);
@@ -141,5 +140,4 @@ void vgui_clear_tableau::config_dialog()
     if (accum_val) mask |= GL_ACCUM_BUFFER_BIT;
     if (stencil_val) mask |= GL_STENCIL_BUFFER_BIT;
   }
-
 }

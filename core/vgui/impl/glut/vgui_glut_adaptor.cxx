@@ -227,7 +227,7 @@ bool vgui_glut_adaptor::glut_dispatch(vgui_event &e) {
             // The default color index values appear to be all transparent
             // which is not very helpful, so let's set some more useful
             // values here.
-            // -- fsm
+            // - fsm
             //           i  r  g  b
             glutSetColor(0, 0, 0, 0);
             glutSetColor(1, 0, 0, 1); // b

@@ -57,7 +57,6 @@ vgui_displaybase::vgui_displaybase()
 }
 
 
-
 vgui_displaybase::~vgui_displaybase()
 {
 }
@@ -107,9 +106,10 @@ void vgui_displaybase::clear()
 
 void vgui_displaybase::draw_soviews_render()
 {
-  if (debug) vcl_cerr << "vgui_style_factory::use_factory : "
-                  << vbl_bool_ostream::true_false(vgui_style_factory::use_factory) << vcl_endl;
-
+  if (debug)
+    vcl_cerr << "vgui_style_factory::use_factory : "
+             << vbl_bool_ostream::true_false(vgui_style_factory::use_factory)
+             << vcl_endl;
 
   if (vgui_style_factory::use_factory)
   {
@@ -149,8 +149,6 @@ void vgui_displaybase::draw_soviews_render()
       }
     }
 
-
-
     if (debug) vcl_cerr << "setting color" << vcl_endl;
     if (debug) vcl_cerr << "drawing " << selections.size() << " selected soviews" << vcl_endl;
 
@@ -166,7 +164,6 @@ void vgui_displaybase::draw_soviews_render()
 
       so->draw();
     }
-
   }
   else // vgui_style_factory::use_factory == false
   {
@@ -185,13 +182,11 @@ void vgui_displaybase::draw_soviews_render()
       so->draw();
     }//  for all soviews
   }
-
 }
 
 
 void vgui_displaybase::draw_soviews_select()
 {
-
   // push the name of this displaylist onto the name stack
   glPushName(id);
   for (vcl_vector<vgui_soview*>::iterator so_iter=objects.begin();
@@ -213,8 +208,6 @@ void vgui_displaybase::draw_soviews_select()
 }
 
 
-
-
 bool vgui_displaybase::handle(const vgui_event& e)
 {
   if (e.type == vgui_DRAW)
@@ -224,17 +217,17 @@ bool vgui_displaybase::handle(const vgui_event& e)
     else
       draw_soviews_render();
 
-    /*
-      else if (gl_display_list == GL_INVALID_VALUE) {
+#if 0
+    else if (gl_display_list == GL_INVALID_VALUE) {
       gl_display_list = glGenLists(1);
       glNewList(gl_display_list, GL_COMPILE_AND_EXECUTE);
       draw_soviews();
       glEndList();
-      }// gl_display_list == GL_INVALID_VALUE
-      else {
+    }// gl_display_list == GL_INVALID_VALUE
+    else {
       glCallList(gl_display_list);
-      }
-    */
+    }
+#endif
 
     return true;
   }
@@ -386,9 +379,11 @@ bool vgui_displaybase::highlight(unsigned id)
 
 vgui_soview* vgui_displaybase::contains_hit(vcl_vector<unsigned> names)
 {
-  //cerr << "vgui_displaybase::contains_hit names ";
-  //copy(names.begin(), names.end(), ostream_iterator<unsigned>(cerr, " "));
-  //cerr << endl;
+#if 0
+  vcl_cerr << "vgui_displaybase::contains_hit names ";
+  copy(names.begin(), names.end(), ostream_iterator<unsigned>(vcl_cerr, " "));
+  vcl_cerr << vcl_endl;
+#endif
 
   for (vcl_vector<vgui_soview*>::iterator i = objects.begin() ;
        i != objects.end() ; ++i)
@@ -403,6 +398,5 @@ vgui_soview* vgui_displaybase::contains_hit(vcl_vector<unsigned> names)
   }
 
   return 0;
-
 }
 

@@ -24,7 +24,7 @@
 static bool debug = false;
 
 // capes@robots. Catch window-manager closing window.
-// post_destroy on adaptor and block emission of "destroy" signal so that this window 
+// post_destroy on adaptor and block emission of "destroy" signal so that this window
 // is not prematurely destroyed.
 static gint delete_event_callback(GtkWidget* w, GdkEvent* e, gpointer data) {
   vgui_gtk_adaptor* adaptor = static_cast<vgui_gtk_adaptor*>(data);
@@ -37,19 +37,18 @@ static gint delete_event_callback(GtkWidget* w, GdkEvent* e, gpointer data) {
 }
 
 //--------------------------------------------------------------------------------
-// -- Constructor
-vgui_gtk_window::vgui_gtk_window(int w, int h, const char* title) 
+//: Constructor
+vgui_gtk_window::vgui_gtk_window(int w, int h, const char* title)
   : use_menubar(false)
   , use_statusbar(true)
   , last_menubar(new vgui_menu)
 {
   if (debug) vcl_cerr << "vgui_gtk_window::vgui_gtk_window" << vcl_endl;
-  
+
   window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
   gtk_window_set_title(GTK_WINDOW(window), title);
   gtk_window_set_default_size(GTK_WINDOW(window),w,h);
 
-  
   adaptor = new vgui_gtk_adaptor(this);
 
 #ifndef __SGI_CC // SGI's iostream does not allow re-initialising
@@ -61,19 +60,18 @@ vgui_gtk_window::vgui_gtk_window(int w, int h, const char* title)
 
 
 //--------------------------------------------------------------------------------
-// -- Constructor
-vgui_gtk_window::vgui_gtk_window(int w, int h, const vgui_menu& menu, const char* title) 
+//: Constructor
+vgui_gtk_window::vgui_gtk_window(int w, int h, const vgui_menu& menu, const char* title)
   : use_menubar(true)
   , use_statusbar(true)
   , last_menubar(new vgui_menu)
 {
   if (debug) vcl_cerr << "vgui_gtk_window::vgui_gtk_window" << vcl_endl;
-  
+
   window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
   gtk_window_set_title(GTK_WINDOW(window), title);
   gtk_window_set_default_size(GTK_WINDOW(window),w,h);
 
-  
   adaptor = new vgui_gtk_adaptor(this);
 
   set_menubar(menu);
@@ -87,8 +85,7 @@ vgui_gtk_window::vgui_gtk_window(int w, int h, const vgui_menu& menu, const char
 
 
 //--------------------------------------------------------------------------------
-// -- Destructor
-
+//: Destructor
 vgui_gtk_window::~vgui_gtk_window()
 {
   gtk_widget_destroy(window);
@@ -97,12 +94,12 @@ vgui_gtk_window::~vgui_gtk_window()
 
 
 //--------------------------------------------------------------------------------
-// -- Useful initialisation functions
+//: Useful initialisation functions
 void vgui_gtk_window::init() {
-  
+
   box = gtk_vbox_new(FALSE, 0);
   gtk_container_add(GTK_CONTAINER (window), box);
-  
+
   if (use_menubar) {
     gtk_box_pack_start(GTK_BOX(box), menubar, FALSE, TRUE, 0);
     gtk_widget_show(menubar);
@@ -115,34 +112,33 @@ void vgui_gtk_window::init() {
 
   gtk_box_pack_start(GTK_BOX(box), frame, TRUE, TRUE, 0);
   gtk_widget_show(frame);
-  
-  
+
+
   GtkWidget *glarea = adaptor->get_glarea_widget();
   gtk_container_add(GTK_CONTAINER(frame), glarea);
   gtk_widget_show(glarea);
-  
+
   if (use_statusbar) {
     statusbar.widget = gtk_statusbar_new();
     gtk_box_pack_start(GTK_BOX(box), statusbar.widget, FALSE, TRUE, 0);
     gtk_widget_show(statusbar.widget);
   }
-    
+
   gtk_widget_show(box);
 }
 
 
-
-//  -- Puts the given menubar onto the window.
+//: Puts the given menubar onto the window.
 void vgui_gtk_window::set_menubar(const vgui_menu &menu) {
   if (debug) vcl_cerr << "vgui_gtk_window::set_menubar" << vcl_endl;
 
   use_menubar = true;
 
-  // fsm -- assign menu to 'last_menubar' to ensure the commands 
+  // fsm -- assign menu to 'last_menubar' to ensure the commands
   // stay in scope for the lifetime of the menubar :
   *last_menubar = menu;
 
-  menubar = gtk_menu_bar_new();  
+  menubar = gtk_menu_bar_new();
   if(vgui_gtk_utils::accel_group == NULL)
     {
       vgui_gtk_utils::accel_group = gtk_accel_group_get_default();
@@ -157,7 +153,7 @@ void vgui_gtk_window::set_adaptor(vgui_adaptor* a) {
 }
 
 
-//  --  Returns the current adaptor (OpenGL widget holder).
+//: Returns the current adaptor (OpenGL widget holder).
 vgui_adaptor* vgui_gtk_window::get_adaptor() {
   return adaptor;
 }

@@ -27,7 +27,7 @@ vgui_menu vgui_gtk_adaptor::last_popup;
 static gint timeout_callback(gpointer);
 
 //--------------------------------------------------------------------------------
-// -- Constructors
+//: Constructors
 vgui_gtk_adaptor::vgui_gtk_adaptor(vgui_gtk_window* win) : win_(win), ovl_helper(0) {
 
   widget = gtk_gl_area_new_vargs(0/*NULL*/,         // no sharing
@@ -55,7 +55,7 @@ vgui_gtk_adaptor::vgui_gtk_adaptor(vgui_gtk_window* win) : win_(win), ovl_helper
   destroy_requested = false;
 }
 
-// -- Destructor
+//: Destructor
 vgui_gtk_adaptor::~vgui_gtk_adaptor() {
   if (ovl_helper)
     delete ovl_helper;
@@ -208,9 +208,7 @@ gint vgui_gtk_adaptor::handle(GtkWidget *widget,
 
     GdkEventButton *bevent = (GdkEventButton *)gev;
 
-
     GtkWidget *popup_menu = gtk_menu_new ();    /* Don't need to show menus */
-
 
     vgui_popup_params params;
     params.x = event.wx;
@@ -250,9 +248,8 @@ void vgui_gtk_adaptor::reshape() {
 }
 
 
-
 //--------------------------------------------------------------------------------
-// -- This is overriding the gtk draw() method.
+//: This is overriding the gtk draw() method.
 void vgui_gtk_adaptor::draw() {
   if (debug) vcl_cerr << "vgui_gtk_adaptor::draw" << vcl_endl;
   make_current();

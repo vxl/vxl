@@ -26,20 +26,13 @@
 #include <vgui/vgui_projection_inspector.h>
 #include <vgui/vgui_image_tableau.h> // for centering
 
-/*
+// to transform from window coords (x,y) to image coords (ix,iy)
+// 
+//   ix = (x - token.offsetX) / token.scaleX;
+//   iy = (y - token.offsetY) / token.scaleY;
 
-to transform from window coords (x,y) to image coords (ix,iy)
-
-  ix = (x - token.offsetX) / token.scaleX;
-  iy = (y - token.offsetY) / token.scaleY;
-
-*/
-
-/*
-  h = w * (H/W)
-  w = h * (W/H)
-
- */
+//  h = w * (H/W)
+//  w = h * (W/H)
 
 
 static bool debug=false;
@@ -94,7 +87,6 @@ void vgui_viewer2D::setup_gl_matrices()
   glTranslatef(token.offsetX, token.offsetY, 0);
   glScalef(token.scaleX, token.scaleY, 1);
 }
-
 
 
 // this routine will modify the token in such a way as to
@@ -161,7 +153,6 @@ bool vgui_viewer2D::handle(const vgui_event& e) {
     glDisable(GL_LIGHTING);
     glShadeModel(GL_FLAT);
 
-
     if (nice_points)
       glEnable(GL_POINT_SMOOTH);
     else
@@ -187,16 +178,15 @@ bool vgui_viewer2D::handle(const vgui_event& e) {
 
     return child->handle(e);
   }
-  // -- This deals with horizontal scroll message
+  // This deals with horizontal scroll message
   if(e.type == vgui_HSCROLL)
   {
         static int npos = 0;
         this->token.offsetX -= *((int *)e.data)-npos;
     this->post_redraw();
         npos = *((int *)e.data);
-
   }
-  // -- This deals with vertical scroll message
+  // This deals with vertical scroll message
   if(e.type == vgui_VSCROLL)
   {
         static int npos = 0;
@@ -272,7 +262,6 @@ bool vgui_viewer2D::mouse_down(int x, int y, vgui_button button, vgui_modifier m
       return true;
     }
   }
-
 
   return false;
 }

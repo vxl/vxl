@@ -44,7 +44,7 @@ vcl_string vgui_listmanager2D::type_name() const {
   return "vgui_composite";
 }
 
-// -- Add a child to the end of the vcl_list
+//: Add a child to the end of the vcl_list
 void vgui_listmanager2D::add(vgui_displaylist2D_sptr const& dl) {
   children.push_back( vgui_slot(this,dl) );
   active.push_back(true);
@@ -52,7 +52,7 @@ void vgui_listmanager2D::add(vgui_displaylist2D_sptr const& dl) {
   observers.notify();
 }
 
-// -- Remove the given child from the vcl_list.
+//: Remove the given child from the vcl_list.
 void vgui_listmanager2D::remove(vgui_displaylist2D_sptr const& t) {
   vcl_vector<bool>::iterator ia = active.begin();
   vcl_vector<bool>::iterator iv = visible.begin();
@@ -79,7 +79,6 @@ bool vgui_listmanager2D::is_active(int v) {
 void vgui_listmanager2D::set_visible(int v, bool b) {
   if (!index_ok(v)) return;
   visible[v] = b;
-
 }
 
 bool vgui_listmanager2D::is_visible(int v) {
@@ -184,7 +183,7 @@ void vgui_listmanager2D::find_closest(float x, float y, vcl_vector<vcl_vector<un
 }
 
 
-// -- vgui_listmanager2D events are send to the child displaylist which holds
+//: vgui_listmanager2D events are send to the child displaylist which holds
 // the closest soview2d.
 bool vgui_listmanager2D::handle(const vgui_event& event) {
 
@@ -277,11 +276,10 @@ bool vgui_listmanager2D::motion(int x, int y) {
   int ia = 0;
   for ( vcl_vector<vgui_slot>::iterator i = this->children.begin();
   i != this->children.end(); ++i, ++ia) {
-
-  if (this->visible[ia] && this->active[ia]) {
-  vgui_displaylist2D* list2D = static_cast<vgui_displaylist2D*>(i->child());
-  vcl_cerr << list2D->file_name() << vcl_endl;
-  }
+    if (this->visible[ia] && this->active[ia]) {
+      vgui_displaylist2D* list2D = static_cast<vgui_displaylist2D*>(i->child());
+      vcl_cerr << list2D->file_name() << vcl_endl;
+    }
   }
   vcl_cerr << vcl_endl;
   return false;
@@ -303,7 +301,6 @@ bool vgui_listmanager2D::mouse_down(int x, int y, vgui_button button, vgui_modif
     }
     return true;
   }
-
 
   // send the event only to the displaylist that contains the closest soview
   vgui_projection_inspector pi;

@@ -120,9 +120,9 @@ bool vgui_roi_tableau::handle(vgui_event const &e) {
 
   //
   if (e.type == vgui_DRAW) {
-    // -- ROI tableau will have only one child
+    // ROI tableau will have only one child
     get_child(0)->draw();
-    // -- Draw a region of interest
+    // Draw a region of interest
     glBegin(GL_LINE_LOOP);
     glVertex2f(roi_.sx,roi_.sy);
     glVertex2f(roi_.sx+roi_.width,roi_.sy);

@@ -109,7 +109,6 @@ bool vgui::select(int &argc, char **argv)
 }
 
 
-
 void vgui::init(int &argc, char **argv)
 {
   vgui_tag_call(); // see [*] above.
@@ -274,7 +273,7 @@ void vgui::add_event(vgui_event const& e) {
 
 // @{ Convenience methods @}
 
-// -- Display this tableau and run till dead.
+//: Display this tableau and run till dead.
 int vgui::run(vgui_tableau_sptr const& tableau, int width, int height,
               vcl_string const &title)
 {

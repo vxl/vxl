@@ -63,17 +63,17 @@ public:
   void erase(iterator );
 
   // "handle interface"
-  // -- add new subtableau. returns handle to child.
+  //: add new subtableau. returns handle to child.
   int add(vgui_tableau_sptr const&, float x, float y, float w, float h);
-  // -- remove subtableau, referred to by handle.
+  //: remove subtableau, referred to by handle.
   void remove(int id);
-  // -- move subtableau.
+  //: move subtableau.
   void move(int id, float x, float y, float w, float h);
-  // --
+  //:
   void replace(int id, vgui_tableau_sptr const& tab);
-  // -- get pointer to tableau from id.
+  //: get pointer to tableau from id.
   vgui_tableau_sptr get(int id) const;
-  // -- set color to outline tableau.
+  //: set color to outline tableau.
   void set_outline_color(const int id, const int r, const int g, const int b);
 
 protected:

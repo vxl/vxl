@@ -66,7 +66,7 @@ public:
   // event related.
   bool dispatch_to_tableau(vgui_event const &);
 
-  // -- This static datum points to the adaptor that last received a mouse
+  //: This static datum points to the adaptor that last received a mouse
   // event.  It is set to zero if its pointee receives a LEAVE event.  It will
   // often point to the adaptor which was current when a popup menu was
   // triggered, which is often what one wants it for.

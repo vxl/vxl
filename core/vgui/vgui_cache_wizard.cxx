@@ -26,7 +26,7 @@
 
 bool debug = false;
 vgui_cache_wizard *vgui_cache_wizard::instance_ = 0;
-// -- Constructor. Set the image quadrant width/height. Do use sensible values(i.e. powers of two)
+//: Constructor. Set the image quadrant width/height. Do use sensible values(i.e. powers of two)
 // Otherwise the cache wizard won't work
 vgui_cache_wizard::vgui_cache_wizard(int quadrant_width,
                                      int quadrant_height)
@@ -34,7 +34,7 @@ vgui_cache_wizard::vgui_cache_wizard(int quadrant_width,
   if(debug) vcl_cerr << __FILE__": this is the constructor" << vcl_endl;
   //*(int*)0 = 1;
 
-  // -- Get the maximum texture size. Note that this function returns the worst case scenario
+  //: Get the maximum texture size. Note that this function returns the worst case scenario
   // i.e. assumes the texture is 4bpp... So we are on the safe ground
   GLint max_texture_size;
   glGetIntegerv(GL_MAX_TEXTURE_SIZE, &max_texture_size);
@@ -49,14 +49,14 @@ vgui_cache_wizard::vgui_cache_wizard(int quadrant_width,
     quadrant_height_ = quadrant_height;
   else
     quadrant_height_ = max_texture_size;
-  // -- Assume 8M for now
+  //: Assume 8M for now
   max_texture_num_ = int(float(8388608.0)/float(quadrant_width_*quadrant_height_*4))*3;
-  // -- Generate the names for those textures;
+  //: Generate the names for those textures;
   texture_names_ = new GLuint[max_texture_num_];
   glGenTextures(max_texture_num_,texture_names_);
 }
 
-// -- Destructor
+//: Destructor
 vgui_cache_wizard::~vgui_cache_wizard()
 {
   vcl_list<GLuint>::iterator i;
@@ -65,7 +65,6 @@ vgui_cache_wizard::~vgui_cache_wizard()
     texture_names_[j] = *i;
   glDeleteTextures(cache_queue_.size(),texture_names_);
   delete texture_names_;
-
 }
 
 vgui_cache_wizard *vgui_cache_wizard::Instance()
@@ -75,23 +74,23 @@ vgui_cache_wizard *vgui_cache_wizard::Instance()
   return instance_;
 }
 
-// -- Loads an image
+//: Loads an image
 int vgui_cache_wizard::load_image(vil_image img)
 {
-  // -- Check whether the image pointer is already in memory
+  //: Check whether the image pointer is already in memory
   int j = 0;
   for(vcl_vector<wizard_image *>::iterator i = images_.begin();i!=images_.end();i++,j++)
     if((*i)->first == img)
       return j;
 
-  // -- Find out the size of image in quadrants
+  //: Find out the size of image in quadrants
   int cx,cy;
   cx = mb_jigerry_pokery(img.width(),quadrant_width_);
   cy = mb_jigerry_pokery(img.height(),quadrant_height_);
 
   dimension *dim = new dimension(cx,cy);
   dimensions_.push_back(dim);
-  // -- Initialize
+  //: Initialize
   image_cache_quadrants *mapping = new image_cache_quadrants;
   for(int i = 0;i<cy;i++)
     for(int j = 0;j<cx;j++)
@@ -102,21 +101,21 @@ int vgui_cache_wizard::load_image(vil_image img)
   return (images_.size()-1);
 }
 
-// -- Returns the texture names associated with the specified image region
+//: Returns the texture names associated with the specified image region
 bool vgui_cache_wizard::get_section(int id,int x,int y,int width,int height,
                                     image_cache_quadrants *quadrants,
                                     dimension *pos,
                                     dimension *size)
 {
-  // -- Find out which image it is
+  //: Find out which image it is
   wizard_image *wz = images_[id];
   vil_image img = wz->first;
   image_cache_quadrants *icq = wz->second;
   dimension *d = dimensions_[id];
-  // -- Work out which quadrant (x,y) lies in
+  //: Work out which quadrant (x,y) lies in
   int qx_c = x/quadrant_width_;
   int qy_c = y/quadrant_height_;
-  // -- Work out section width and height in quadrant units
+  //: Work out section width and height in quadrant units
   int qw_c = (x+width)/quadrant_width_-qx_c;//mb_jigerry_pokery(x+width,quadrant_width_);
   int qh_c = (y+height)/quadrant_height_-qy_c;//mb_jigerry_pokery(y+height,quadrant_height_);
   if (debug) vcl_cerr<<"X: "<<qx_c<<"Y: "<<qy_c<<"W:"<<qw_c<<" H:"<<qh_c<<vcl_endl;
@@ -125,7 +124,7 @@ bool vgui_cache_wizard::get_section(int id,int x,int y,int width,int height,
   size->first = qw_c;
   size->second = qh_c;
 
-  // -- This is the index of the upper left quadrant of the section
+  //: This is the index of the upper left quadrant of the section
   int ul_q = qy_c*d->first+qx_c;
   glEnable(GL_TEXTURE_2D);
   vgui_macro_report_errors;
@@ -133,10 +132,10 @@ bool vgui_cache_wizard::get_section(int id,int x,int y,int width,int height,
   for(int i = 0;i<=qh_c;i++)
     for(int j = 0;j<=qw_c;j++)
       {
-        // -- (i,j) relative to the upper left corner of the section
+        //: (i,j) relative to the upper left corner of the section
         // needs to be translated into image coordinates
         int index = ul_q+i*d->first+j;
-        // -- Check to see whether the quadrant is in cache
+        //: Check to see whether the quadrant is in cache
         if (index<0 || index>=icq->size()) { // fsm
                 vcl_cerr << __FILE__ ": index out of range" << vcl_endl;
                 return false;
@@ -149,19 +148,18 @@ bool vgui_cache_wizard::get_section(int id,int x,int y,int width,int height,
                   (*i)!=(*icq)[index];i++);
             cache_queue_.erase(i);
             cache_queue_.push_back((*icq)[index]);
-
           }
         else {
-          // -- If the quadrant is not in cache load it by dumping least recently used
+          //: If the quadrant is not in cache load it by dumping least recently used
           // texture block if necessary
           GLuint texture_name;
           if(cache_queue_.size() == max_texture_num_)
             {
-              // -- Time to dump LRU texture and use it for the quadrant of this image section
+              //: Time to dump LRU texture and use it for the quadrant of this image section
               texture_name = cache_queue_.front();
               vcl_cerr<<"Texture name: "<<texture_name<<vcl_endl;
               cache_queue_.pop_front();
-              // -- Find the image where texture_name has been used and invalidate
+              //: Find the image where texture_name has been used and invalidate
               // that qudrangle
               for(vcl_vector<wizard_image *>::iterator i = images_.begin();
                   i!=images_.end();i++)
@@ -180,7 +178,6 @@ bool vgui_cache_wizard::get_section(int id,int x,int y,int width,int height,
             texture_names_[k] = GLuint(-1);
           }
 
-
           glBindTexture(GL_TEXTURE_2D,texture_name);
           TexImage2D_Brownie(vil_crop(img,pos->first*quadrant_width_+j*quadrant_width_,
                                       pos->second*quadrant_height_+i*quadrant_height_,
@@ -188,12 +185,11 @@ bool vgui_cache_wizard::get_section(int id,int x,int y,int width,int height,
                                       quadrant_height_));
           quadrants->push_back(texture_name);
           cache_queue_.push_back(texture_name);
-          // -- Validate the appropriate quadrangle
+          //: Validate the appropriate quadrangle
           (*icq)[index] = texture_name;
         }
       }
   return true;
-
 }
 //--------------------------------------------------------------------------------
 //
@@ -289,7 +285,6 @@ void vgui_cache_wizard::TexImage2D_Brownie(vil_image img)
     fsm_macro_end;
   }
 
-
   glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
   vgui_macro_report_errors;
 
@@ -318,5 +313,4 @@ void vgui_cache_wizard::TexImage2D_Brownie(vil_image img)
                type,
                the_pixels);
   vgui_macro_report_errors;
-
 }

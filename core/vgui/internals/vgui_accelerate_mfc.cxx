@@ -15,12 +15,12 @@ extern CDC *vgui_mfc_adaptor_global_dc;
 
 static bool debug = false;
 
+#undef glDrawBuffer
 //: Used to overcome switching to GL_BACK when
 // acceleration is on. Note that there is nothing wrong with glDrawBuffer(GL_BACK)
 // when we have a single buffer, as it will just get ignored. However,
 // vgui_macro_report errors will print warning messages->inherently slows the
 // system
-#undef glDrawBuffer
 void mb_glDrawBufferWrapper(GLuint buffer)
 {
   if(buffer == GL_BACK && vgui_accelerate::vgui_mfc_acceleration)
@@ -49,7 +49,7 @@ bool vgui_accelerate_mfc::vgui_glClear(GLbitfield mask)
 }
 
 
-/* http://www.lesher.ws/vidfmt.c :  Check video display format */
+// http://www.lesher.ws/vidfmt.c :  Check video display format
 
 struct vidfmt {
   int bpp;
@@ -68,25 +68,22 @@ vidfmt::vidfmt()
     if (debug) vcl_cerr << "DEVMODE bpp = " << devmode.dmBitsPerPel << vcl_endl;
   }
 
-    /* Allocate enough space for a DIB header plus palette (for
-     * 8-bit modes) or bitfields (for 16- and 32-bit modes)
-     */
+    // Allocate enough space for a DIB header plus palette (for
+    // 8-bit modes) or bitfields (for 16- and 32-bit modes)
     const int dib_size = sizeof(BITMAPINFOHEADER) + 256 * sizeof (RGBQUAD);
     unsigned char buf[dib_size];
     LPBITMAPINFOHEADER dib_hdr = (LPBITMAPINFOHEADER) buf;
     memset(dib_hdr, 0, dib_size);
     dib_hdr->biSize = sizeof(BITMAPINFOHEADER);
 
-    /* Get a device-dependent bitmap that's compatible with the
-       screen.
-     */
+    // Get a device-dependent bitmap that's compatible with the
+    // screen.
     HDC hdc = AfxGetApp()->GetMainWnd()->GetDC()->GetSafeHdc();
     HBITMAP hbm = CreateCompatibleBitmap( hdc, 1, 1 );
 
-    /* Convert the DDB to a DIB.  We need to call GetDIBits twice:
-     * the first call just fills in the BITMAPINFOHEADER; the
-     * second fills in the bitfields or palette.
-     */
+    // Convert the DDB to a DIB.  We need to call GetDIBits twice:
+    // the first call just fills in the BITMAPINFOHEADER; the
+    // second fills in the bitfields or palette.
     GetDIBits(hdc, hbm, 0, 1, NULL, (LPBITMAPINFO) dib_hdr, DIB_RGB_COLORS);
     GetDIBits(hdc, hbm, 0, 1, NULL, (LPBITMAPINFO) dib_hdr, DIB_RGB_COLORS);
     DeleteObject(hbm);
@@ -189,7 +186,7 @@ vidfmt::vidfmt()
       }
     }
     if (debug) vcl_cerr << vcl_endl;
-    /*
+#if 0
       for(int component = 0; component < 3; ++component) {
         unsigned char rgb[3 * width];
         memset(rgb, 0, sizeof rgb);
@@ -214,7 +211,7 @@ vidfmt::vidfmt()
         for(int p = 0; p < width; ++p)
           vbl_printf(vcl_cerr, "%02x %02x | ", (int)opx[2*p + 1], (int)opx[2*p + 0]);
         vbl_printf(vcl_cerr, "\n");
-      */
+#endif
 }
 
 
@@ -352,7 +349,7 @@ bool vgui_accelerate_mfc::vgui_glDrawPixels( GLsizei width, GLsizei height, GLen
       binfo.bmiHeader.biClrUsed         = 0;
       binfo.bmiHeader.biClrImportant    = 0;
 
-      //::SetDIBits(vgui_mfc_adaptor_global_dc->GetSafeHdc(), bitmap, 0, b_h, pixels, &binfo, DIB_RGB_COLORS);
+   // ::SetDIBits(vgui_mfc_adaptor_global_dc->GetSafeHdc(), bitmap, 0, b_h, pixels, &binfo, DIB_RGB_COLORS);
       int n = ::SetDIBits(hdc, bitmap, 0, b_h, pixels, (BITMAPINFO*)&binfo, DIB_RGB_COLORS);
     }
 

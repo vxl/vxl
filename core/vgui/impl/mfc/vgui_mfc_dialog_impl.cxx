@@ -8,8 +8,8 @@
 // Created: 31 July 2000
 //
 // Modifications:
-//   03-MAR-2001 K.Y.McGaul -- Added correct modifiers to key press/release events.
-//                          -- Set checkboxes to display current value correctly.
+//  03-MAR-2001 K.Y.McGaul - Added correct modifiers to key press/release events
+//                         - Set checkboxes to display current value correctly
 //-----------------------------------------------------------------------------
 
 #include <vcl_string.h>
@@ -41,7 +41,7 @@ vgui_mfc_dialog_impl::vgui_mfc_dialog_impl(const char* name)
   : CWnd(),vgui_dialog_impl(name)
 {
   title = name;
-  // -- Set some default parameters
+  // Set some default parameters
   count_fbsr = 0;
   count_csr = 0;
   nResult = 0;
@@ -151,7 +151,6 @@ void vgui_mfc_dialog_impl::OnClose()
 //: Display the dialog box.
 bool vgui_mfc_dialog_impl::ask()
 {
-
   // Get the pointer to the main window
   CWnd *main_window = AfxGetApp()->GetMainWnd();
 
@@ -161,7 +160,6 @@ bool vgui_mfc_dialog_impl::ask()
   for (vcl_vector<element>::iterator e_iter = elements.begin();
        e_iter != elements.end(); ++e_iter)
     {
-
       element l = *e_iter;
       vgui_dialog_field *field = l.field;
       if(l.type!=bool_elem && l.type!=text_msg)
@@ -177,7 +175,7 @@ bool vgui_mfc_dialog_impl::ask()
               if(l.type == bool_elem)
               {
                 vgui_bool_field *field = static_cast<vgui_bool_field*>(l.field);
-          int field_length = strlen(field->label.c_str());
+                int field_length = strlen(field->label.c_str());
                 if(max_length<field_length)
                         max_length = field_length;
               }
@@ -201,7 +199,7 @@ bool vgui_mfc_dialog_impl::ask()
   max_length = max_length - 40;
   height = 45*(elements.size()+fbsr_count+1)+6*8;
   fbsr_count++;
-  // -- Create dialog box window
+  // Create dialog box window
   CreateEx(WS_EX_CONTROLPARENT, AfxRegisterWndClass(0,::LoadCursor(NULL, IDC_ARROW),
                                                     (HBRUSH)(COLOR_WINDOW)), _T(title.c_str()),WS_CAPTION|WS_VISIBLE|WS_SYSMENU|WS_POPUP|DS_MODALFRAME
            ,100, 100, width, height, NULL, NULL, 0);
@@ -274,17 +272,17 @@ bool vgui_mfc_dialog_impl::ask()
         l.type == double_elem ||
         l.type == string_elem) {
 
-      // -- Hard coded coordinates
+      // Hard coded coordinates
       r.left = 2*4;
       r.top+=4*8;
       r.bottom+=4*8;
       r.right = r.left+field->label.size()*8;
-      // -- Set static text first
+      // Set static text first
       CStatic *text = new CStatic();
       text->Create(_T(field->label.c_str()),WS_CHILD|WS_VISIBLE|SS_LEFT,r,this);
       text->SetFont(font);
       awlist.push_back(text);
-      // -- Now set the line editor next
+      // Now set the line editor next
       CEdit *edit = new CEdit();
       r.left = width-2*8-20*8;
       r.left = 2*4+max_length*8+2*8;
@@ -381,14 +379,14 @@ bool vgui_mfc_dialog_impl::ask()
         text->SetFont(font);
         awlist.push_back(text);
 
-        // -- Now set the line editor next
+        // Now set the line editor next
         CEdit *edit = new CEdit();
         int savey = r.top;
         r.left  = r.right+3*8;
         r.left = 2*4+max_length*8+2*8;
         r.right = width-2*8;//r.left+l.field->current_value().size()*8;
 
-        // -- CEdit::Create does not support extended window styles
+        // CEdit::Create does not support extended window styles
         //MFC impl:Create(_T("EDIT"), NULL, dwStyle, rect, pParentWnd, nID);
         // So we use CWnd::CreateEx. Note that the class name is EDIT
         edit->CreateEx(WS_EX_CLIENTEDGE,_T("EDIT"),NULL,
