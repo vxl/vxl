@@ -746,17 +746,12 @@ homography_muse(vcl_vector<vgl_point_3d<double> > const& world_points,
        pit != world_points.end(); pit++)
     h_world_points.push_back(vgl_homg_point_2d<double>((*pit).x(),(*pit).y()));
 
-  double max_outlier_frac = 0.5;
-  double desired_prob_good = 0.99;
-  int max_pops = 1;
   int trace_level = 0;
   rrel_homography2d_est hg( h_world_points, h_image_points);
-  rrel_ransac_obj* ransac = new rrel_ransac_obj();
   hg.set_no_prior_scale();
   rrel_muset_obj* muset = new rrel_muset_obj( world_points.size()+1 );
   rrel_ran_sam_search* ransam = new rrel_ran_sam_search;
   ransam->set_trace_level(trace_level);
-  //ransam->set_sampling_params( max_outlier_frac, desired_prob_good, max_pops);
   ransam->set_gen_all_samples();
   if ( !ransam->estimate( &hg, muset ) )
   {vcl_cout << "MUSE failed!!\n";
