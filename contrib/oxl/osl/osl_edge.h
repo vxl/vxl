@@ -4,16 +4,16 @@
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
-// .NAME osl_edge
-// .INCLUDE osl/osl_edge.h
-// .FILE osl_edge.cxx
+//:
+// \file
 // \author fsm@robots.ox.ac.uk
 
 #include <osl/osl_edgel_chain.h>
 #include <osl/osl_vertex.h>
 
-struct osl_edge : public osl_topology_base, public osl_edgel_chain
+class osl_edge : public osl_topology_base, public osl_edgel_chain
 {
+ public:
   // end-vertices (ref-counted)
   osl_vertex *v1, *v2;
 
