@@ -7,6 +7,7 @@
 
 #include <testlib/testlib_test.h>
 
+#if 0 // two unused "static" functions
 static
 void print_byte(GLubyte w)
 {
@@ -17,7 +18,6 @@ void print_byte(GLubyte w)
       vcl_cerr << '0';
 }
 
-#if 0
 static
 void print_word(GLuint w)
 {
@@ -27,7 +27,7 @@ void print_word(GLuint w)
     else
       vcl_cerr << '0';
 }
-#endif
+#endif // 0
 
 static
 void print_binary(char const *fmt, void const *addr, unsigned bytes)
