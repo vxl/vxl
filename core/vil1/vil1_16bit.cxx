@@ -6,7 +6,7 @@
 #endif
 #include "vil_16bit.h"
 #include <vil/vil_stream.h>
-#include <vxl_config.h>
+#include <vxl_misc_config.h>
 
 typedef vxl_uint8  word8;
 typedef vxl_uint16 word16;
