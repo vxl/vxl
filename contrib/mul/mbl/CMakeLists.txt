@@ -11,6 +11,7 @@ SET(mbl_sources
  mbl_data_collector_base.cxx       mbl_data_collector_base.h
  mbl_stats_1d.cxx                  mbl_stats_1d.h
  mbl_sum_1d.cxx                    mbl_sum_1d.h
+ mbl_parse_block.cxx               mbl_parse_block.h
  mbl_read_props.cxx                mbl_read_props.h
  mbl_lda.cxx                       mbl_lda.h
  mbl_screen_counter.cxx            mbl_screen_counter.h

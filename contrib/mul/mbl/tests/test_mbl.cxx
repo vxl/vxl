@@ -4,6 +4,7 @@
 #undef TESTLIB_DEFINE_MAIN
 #define TESTLIB_DEFINE_MAIN(x)
 
+#include "test_parse_block.cxx"
 #include "test_selected_data_wrapper.cxx"
 #include "test_stochastic_data_collector.cxx"
 #include "test_histogram.cxx"
@@ -33,7 +34,7 @@
 
 void run_test_mbl()
 {
-
+  test_parse_block();
   test_lda();
   test_file_data_wrapper();
   test_selected_data_wrapper();

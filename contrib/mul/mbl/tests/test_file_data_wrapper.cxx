@@ -12,6 +12,11 @@
 
 void test_file_data_wrapper()
 {
+
+  vcl_cout << "\n*********************************\n"
+           <<   " Testing mbl_file_data_collector \n"
+           <<   "*********************************\n";
+
   // create data
   vnl_vector<double> v1(2);
   v1(0)=-3;
