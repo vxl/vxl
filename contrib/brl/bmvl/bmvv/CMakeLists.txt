@@ -19,7 +19,7 @@ SET(bmvv_sources
 #bmvv_multiview_manager.cxx           bmvv_multiview_manager.h
 #bmvv_tomography_manager.cxx          bmvv_tomography_manager.h
 bmvv_recon_manager.cxx               bmvv_recon_manager.h
-bmvv_menus.cxx                       bmvv_menus.h
+#bmvv_menus.cxx                       bmvv_menus.h
 #bmvv_tomg_menus.cxx                  bmvv_tomg_menus.h
 bmvv_recon_menus.cxx                 bmvv_recon_menus.h
 )
