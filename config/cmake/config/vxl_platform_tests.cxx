@@ -817,21 +817,21 @@ int main()
 {
   const std::complex<double> neg1(-1.0, 0.0);
   const std::complex<double> half(0.5,0.0);
-
+  const std::complex<double> i(0.0, 1.0);
   std::complex<double> sqrt_neg1 = std::pow(neg1, 0.5);
-  if ( std::abs(sqrt_neg1-1.0) > 1e-6 )
+  if ( -std::abs(sqrt_neg1-i) > -1e-6 )
   {} // Deal with NaN case
   else
     return 1;
 
   sqrt_neg1 = std::pow(neg1, half);
-  if ( std::abs(sqrt_neg1-1.0) > 1.0e-6)
+  if ( -std::abs(sqrt_neg1-i) > -1.0e-6)
   {} // Deal with NaN case
   else
     return 1;
 
   sqrt_neg1 = std::pow(-1.0, half);
-  if ( std::abs(sqrt_neg1-1.0) > 1.0e-6)
+  if ( -std::abs(sqrt_neg1-i) > -1.0e-6)
   {} // Deal with NaN case
   else
     return 1;
