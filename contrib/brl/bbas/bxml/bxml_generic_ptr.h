@@ -15,9 +15,9 @@
 // \endverbatim
 //--------------------------------------------------------------------------------
 #include <vcl_ostream.h>
+#include <vcl_vector.h>
 
 //forward declarations
-class vcl_vector;
 class vsol_spatial_object_2d;
 
 class bxml_generic_ptr
@@ -30,12 +30,12 @@ class bxml_generic_ptr
 
   //:Constructing generic pointers from specific class hierarchies
   bxml_generic_ptr():type_(NO_TYPE){ptrs_.anyobject_ = 0;}
-  bxml_generic_ptr(vcl_vector* v):type_(VECT){ptrs_.vec_ptr_ =v;}
+  bxml_generic_ptr(vcl_vector<void*>* v):type_(VECT){ptrs_.vec_ptr_ =v;}
   bxml_generic_ptr(vsol_spatial_object_2d* so):type_(VSOL_SO){ptrs_.vso_ptr_ =so;}
 
   //:Accessing specific classes from a generic pointer
   inline void* get_anyobject() const {return ptrs_.anyobject_;}
-  inline vcl_vector* get_vector() const; 
+  inline vcl_vector<void*>* get_vector() const; 
   inline vsol_spatial_object_2d* get_vsol_spatial_object() const; 
 
   //:stream print
@@ -44,7 +44,7 @@ class bxml_generic_ptr
   union type_union
   {
     void*  anyobject_;
-    vcl_vector* vec_ptr_;
+    vcl_vector<void*>* vec_ptr_;
     vsol_spatial_object_2d* vso_ptr_;
   };
   //:utility functions
@@ -55,13 +55,14 @@ class bxml_generic_ptr
 };
 
 //: Ostream inline function implementation
-  inline vcl_ostream& operator<<(vcl_ostream& os, const bxml_generic_ptr& ptr) 
-  {
+inline vcl_ostream& operator<<(vcl_ostream& os, const bxml_generic_ptr& ptr) 
+{
   os << " bxml_generic_ptr type  " << int(ptr.type()) << vcl_endl;
   return os;
-  }
+}
+
 //: access for vcl_vector
-inline vcl_vector* bxml_generic_ptr::get_vector() const 
+inline vcl_vector<void*>* bxml_generic_ptr::get_vector() const 
 {
   if (type_==VECT)
     return ptrs_.vec_ptr_;
