@@ -61,7 +61,24 @@ foreach $f (@FILES)
     $printed = 1;
   }
 
-# 4. Comments: long /* ... */ and old-style // -- docs
+# 4. Consecutive comment blocks, separated by blank lines
+  if ($file =~ m+\n\s*//:[^\n]*\n( *// [^\n]*\n)*\s*\n\s*// +) {
+    print "$f\t\# contains comment blocks separated by a blank line; consider joining them\n";
+    $printed = 1;
+  }
+
+# 5. //: inside a comment block, or \file not after //:
+  if ($file =~ m+\n\s*//[ :][^\n]*\n *//:+) {
+    print "$f\t\# contains //: inside a comment block\n";
+    $printed = 1;
+  }
+  if ($file =~ m+\n\s*//[^:][^\n]*\n *// *\\file\b+ ||
+      $file =~ m+\n\s*[^\s/][^\n]*\n *// *\\file\b+) {
+    print "$f\t\# \\file is not preceeded by //:\n";
+    $printed = 1;
+  }
+
+# 7. Comments: long /* ... */ and old-style // -- docs
   $file =~ s/ +\n/\n/g;
   $file =~ s/\/\*/\001/g; $file =~ s/\/\001/\/\/\*/g;
   $file =~ s/\*\//\002/g;
@@ -85,13 +102,13 @@ foreach $f (@FILES)
     $printed = 1;
   }
 
-# 5. RCS indications
+# 8. RCS indications
   if ($file =~ m/(\$RCSfile)/) {
     print "$f\t\# contains RCS indication $1\n";
     $printed = 1;
   }
 
-# 6. Now remove comments and string constants before checking further:
+# 9. Now remove comments and string constants before checking further:
   $file_s = "\n" . $file;
   $file_s =~ s/\n\#if\s+0\s*\n.*?\n\#endif\s*\n/\n/g;
   # remove string constants, incl. multiline string constants with "correct syntax":
@@ -108,13 +125,15 @@ foreach $f (@FILES)
 #   print "$f\t\# contains nested comments\n";
 #   $printed = 1;
 # }
+# continuation lines:
+  $file_s =~ s/\\\n//g;
 
-# 7. Multi-line string constant
+# 10. Multi-line string constant
   if ($file_s =~ m/\"/) {
     print "$f\t\# contains multi-line string constant\n";
     $printed = 1;
   }
-# 8. Inclusion guard
+# 11. Inclusion guard
   if ($file_s =~ m/^\s*\#ifndef\s+(\S+)\n#define\s+\1\n/) {
     $guard = $1;
     if (defined($inclusion_guards{"$guard"})) {
@@ -140,14 +159,14 @@ foreach $f (@FILES)
     }
   }
 
-# 9. Constant pi written as 3.1415...
+# 12. Constant pi written as 3.1415...
   if ($f !~ m/\b(v[cibt]l|v3p)\// && $f !~ m/\bvxl\/vnl\/vnl_math\./ && $f !~ m/\.c$/ &&
       $file_s =~ m/\b(3\.14159\d*)/) {
     print "$f\t\# should maybe use vnl_math::pi instead of $1\n";
     $printed = 1;
   }
 
-# 9. Instantiation macro stuff
+# 13. Instantiation macro stuff
   if ($file_s =~ m/\#define\s+(\S*INSTANTIATE[^\s\(\)]*)[^\n]+;\s*\n/) {
     print "$f\t\# definition of $1 ends with ;\n";
     $printed = 1;
@@ -160,8 +179,13 @@ foreach $f (@FILES)
     print "$f\t\# definition of $1 has no space before > in $2\n";
     $printed = 1;
   }
+# Presence of VCL_*_INSTANTIATE inside *.cxx files
+  if ($f !~ m+/Templates/+ && $file_s =~ m+\n\s*(VCL_[_A-Z]*INSTANTIATE[_A-Z]*)+) {
+    print "$f\t\# $1 may only be used in Templates subdirectories\n";
+    $printed = 1;
+  }
 
-# 10. Missing vcl_
+# 14. Missing vcl_
   foreach $wd (split(' ',"abort exit")) {
     if ($f !~ m/\bv3p\/(netlib|jpeg|png|zlib)\// &&
         $f !~ m/\.c$/ &&
@@ -205,7 +229,7 @@ foreach $f (@FILES)
     }
   }
 
-# 11. Multiple empty lines, empty line before } or after {
+# 15. Multiple empty lines, empty line before } or after {
 #   (mentioned only if something else is already printed, or is -f given)
   if ($printed && $file =~ m/\n\n\n\n/) {
     print "$f\t\# contains multiple (>=3) empty lines\n";
@@ -217,7 +241,7 @@ foreach $f (@FILES)
   print "$f\t\# has empty lines after opening brace\n"
     if ($printed && $file =~ m/\n[ \t]*\{\s*\n\n/);
 
-# 12. no end-of-line at end-of-file
+# 16. no end-of-line at end-of-file
   $file =~ s/.*(.)//;
   unless ($file =~ m/\n/ || $file eq "") {
     print "$f\t\# has no final end-of-line\n";
