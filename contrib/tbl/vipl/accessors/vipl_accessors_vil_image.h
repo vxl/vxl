@@ -3,7 +3,7 @@
 #include <vil/vil_image.h>
 
 #undef FILTER_IMPTR_DEC_REFCOUNT
-#define FILTER_IMPTR_DEC_REFCOUNT(v) ((v)=0)
+#define FILTER_IMPTR_DEC_REFCOUNT(v) {delete (v); (v)=0;}
 #undef FILTER_IMPTR_INC_REFCOUNT
 #define FILTER_IMPTR_INC_REFCOUNT(v) 
 #undef FILTER_KERNPTR_DEC_REFCOUNT

@@ -2,7 +2,7 @@
 #define vipl_accessors_vbl_array_2d_h_
 #include <vbl/vbl_array_2d.h>
 
-#define FILTER_IMPTR_DEC_REFCOUNT(v) ((v)=0)
+#define FILTER_IMPTR_DEC_REFCOUNT(v) {delete (v); (v)=0;}
 #define FILTER_IMPTR_INC_REFCOUNT(v)
 #define FILTER_KERNPTR_DEC_REFCOUNT(v)
 
