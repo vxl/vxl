@@ -54,6 +54,13 @@ SOURCES += vnl_real_polynomial.cxx
 SOURCES += vnl_real_npolynomial.cxx
 #SOURCES += vnl_binary.cxx # deprecated: use vsl instead
 
+# alternative number representations
+SOURCES += vnl_rational.cxx
+#MANPAGE_SOURCES += vnl_finite_field.txx
+#MANPAGE_SOURCES += vnl_finite_ring.txx
+#SOURCES += vnl_padic_field.cxx
+#SOURCES += vnl_bignum.cxx
+
 # ops
 SOURCES += vnl_fastops.cxx
 SOURCES += vnl_linear_operators_3.cxx
@@ -64,7 +71,7 @@ SOURCES += vnl_numeric_limits.cxx
 SOURCES += vnl_numeric_traits.cxx
 SOURCES += vnl_complex_traits.cxx
 
-#
+# matrix and vector specialisations
 SOURCES += vnl_int_matrix.cxx     # ?
 SOURCES += vnl_int_2.cxx
 SOURCES += vnl_int_3.cxx

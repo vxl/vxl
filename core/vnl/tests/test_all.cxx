@@ -61,6 +61,7 @@
 #include <vnl/vnl_numeric_limits.h>
 #include <vnl/vnl_numeric_traits.h>
 #include <vnl/vnl_quaternion.h>
+#include <vnl/vnl_rational.h>
 #include <vnl/vnl_real_npolynomial.h>
 #include <vnl/vnl_real_polynomial.h>
 #include <vnl/vnl_rotation_matrix.h>
