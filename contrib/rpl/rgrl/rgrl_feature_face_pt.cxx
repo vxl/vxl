@@ -103,7 +103,13 @@ transform_scale( rgrl_transformation const& xform ) const
   
   if ( this->scale_ > 0.0 && scaling.size() == dim ) {
     //use the scaling factor projected onto normal direction
-    scale = dot_product( scaling, normal_ ) * this->scale_;
+    // CAUTION: it can become negative if use dot product
+    // SOLUTION: use the sum of product of ABSOLUTE value of normal
+    
+    scale = 0.0;
+    for( unsigned i=0; i<normal_.size(); ++i )
+      scale += vcl_abs(normal_[i]) * scaling[i];
+    scale *= this->scale_;
     
   } else if ( this-> scale_ > 0.0 ) {
     WarningMacro( "This feature has non-zero scale value, but transformation has no scaling factors."
