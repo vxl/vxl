@@ -62,7 +62,8 @@ elif test x"$GCC" = x"yes"; then
 elif test x"$CC" = x"tcc" -a x"`$CC -version 2>&1 | grep TenDRA`" != x""; then
     dnl TenDRA portability checking compiler
     TENDRA=yes
-    CFLAGS="-Xp -Yansi -f`pwd`/include/tendra.h -DELIDE_CODE"
+    dnl tendra.h moved to mpeg2dec in VXL
+    CFLAGS="-Xp -Yansi -f`pwd`/include/mpeg2dec/tendra.h -DELIDE_CODE"
     enable_mlib=no
     no_x=yes
     enable_sdl=no
@@ -89,9 +90,11 @@ dnl AC_PROG_LIBTOOL dnl not needed in VXL
 dnl Checks for libraries.
 
 dnl Checks for header files.
-INCLUDES='-I$(top_srcdir)/include -I$(top_builddir)/include'
+dnl includes that are not generated are moved to mpeg2dec in VXL
+INCLUDES='-I$(top_srcdir)/include/mpeg2dec -I$(top_builddir)/include'
 AC_SUBST([INCLUDES])
 AC_CHECK_HEADERS([sys/time.h])
+dnl inttypes.h moved to mpeg2dec in VXL
 AC_CHECK_GENERATE_INTTYPES([include])
 
 dnl Checks for typedefs, structures, and compiler characteristics.

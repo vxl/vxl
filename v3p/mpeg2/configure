@@ -2866,7 +2866,7 @@ echo "${ECHO_T}$ac_cv_try_cflags_ok" >&6
     esac
 elif test x"$CC" = x"tcc" -a x"`$CC -version 2>&1 | grep TenDRA`" != x""; then
         TENDRA=yes
-    CFLAGS="-Xp -Yansi -f`pwd`/include/tendra.h -DELIDE_CODE"
+        CFLAGS="-Xp -Yansi -f`pwd`/include/mpeg2dec/tendra.h -DELIDE_CODE"
     enable_mlib=no
     no_x=yes
     enable_sdl=no
@@ -2981,7 +2981,7 @@ fi
 
 
 
-INCLUDES='-I$(top_srcdir)/include -I$(top_builddir)/include'
+INCLUDES='-I$(top_srcdir)/include/mpeg2dec -I$(top_builddir)/include'
 
 echo "$as_me:$LINENO: checking for ANSI C header files" >&5
 echo $ECHO_N "checking for ANSI C header files... $ECHO_C" >&6

@@ -18,7 +18,7 @@ ELSE( UNIX )
   INCLUDE_DIRECTORIES( ${allvxl_SOURCE_DIR}/v3p/mpeg2/win32 )
 ENDIF( UNIX )
 
-INCLUDE_DIRECTORIES( ${allvxl_SOURCE_DIR}/v3p/mpeg2/include )
+INCLUDE_DIRECTORIES( ${allvxl_SOURCE_DIR}/v3p/mpeg2/include/mpeg2dec )
 
 SET( mpeg2_sources
   libmpeg2/decode.c

@@ -26,7 +26,13 @@ The subset of files copied were:
   vc++/config.h
   vc++/inttypes.h
 
-Directory vc++ was changes to win32.  The only files modified were:
+Header files were moved from directory 'include' to 'include/mpeg2dec'
+so that includes are where they would end up after an ordinary
+mpeg2dec build and install, and will be found with #include
+<mpeg2dec/mpeg2.h>.  Generated header files (config.h and inttypes.h)
+still go in 'include'.  Directory 'vc++' was renamed to 'win32' to
+avoid '+' signs in file names. The only files modified were to get
+this library working are listed here.
 
   configure.in
   aclocal.m4
@@ -35,7 +41,7 @@ Directory vc++ was changes to win32.  The only files modified were:
 For each of these files, the original was checked in to the CVS
 repository first, then the changes were checked in.  The autoconf
 configuration of mpeg2 was simplified since we are only building
-libmpeg2 and libvo, and not installing.  Autoconf still created the
+libmpeg2 and libvo, and not installing.  Autoconf still creates the
 config.h file, but not the makefiles.
 
 Rebuilding "configure"
