@@ -3,7 +3,7 @@
 #define VCL_COMPLEX_AVAILABLE
 
 #include <vcl/vcl_compiler.h>
-#include <vcl_vcl_cmath.h>
+#include <vcl/vcl_cmath.h>
 #include <vcl/vcl_iostream.h>
 
 // The Sunpro 4.2 compiler has a bug that it will not instantiate
