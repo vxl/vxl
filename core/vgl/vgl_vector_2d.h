@@ -114,7 +114,9 @@ template <class T> inline double cos_angle(v const& a, v const& b) { return inne
 template <class T>        double angle(v const& a, v const& b); // return acos(cos_angle(a,b));
 
 //: are two vectors parallel, i.e., is one a scalar multiple of the other?
-template <class T> inline bool   parallel(v const& a, v const& b) { return cross_product(a,b) != T(0); }
+// If the third argument is specified, it is taken as the "tolerance", i.e.
+// in that case this function returns true if the vectors are almost parallel.
+template <class T>        bool parallel(v const& a, v const& b, double eps=0.0);
 
 //: f=a/b: return the ratio of two vectors, if they are parallel.
 //  (If not, return a "least squares" approximation.)

@@ -17,6 +17,16 @@ double angle(vgl_vector_3d<T> const& a, vgl_vector_3d<T> const& b) {
   return vcl_acos(cos_angle(a,b));
 }
 
+template <class T>
+bool parallel(vgl_vector_3d<T> const& a, vgl_vector_3d<T> const& b, double eps)
+{
+  T cross = cross_product(a,b); // should be zero
+  if (eps <= 0 || cross == T(0)) return cross == T(0);
+  // Since cross != 0, a and b cannot have zero length:
+  double dev = cross / a.length() / a.length();
+  return (dev < eps && -dev < eps);
+}
+
 #undef VGL_VECTOR_3D_INSTANTIATE
 #define v vgl_vector_3d
 #define VGL_VECTOR_3D_INSTANTIATE(T) \
@@ -37,10 +47,10 @@ VCL_INSTANTIATE_INLINE(T      inner_product(vgl_vector_3d<T > const&, vgl_vector
 VCL_INSTANTIATE_INLINE(vgl_vector_3d<T >      cross_product(vgl_vector_3d<T > const&, vgl_vector_3d<T > const&));\
 VCL_INSTANTIATE_INLINE(double cos_angle    (vgl_vector_3d<T > const&, vgl_vector_3d<T > const&));\
 template               double angle        (vgl_vector_3d<T > const&, vgl_vector_3d<T > const&);\
-VCL_INSTANTIATE_INLINE(bool   parallel     (vgl_vector_3d<T > const& a, vgl_vector_3d<T > const& b));\
-VCL_INSTANTIATE_INLINE(double operator/    (vgl_vector_3d<T > const& a, vgl_vector_3d<T > const& b));\
-VCL_INSTANTIATE_INLINE(vgl_vector_3d<T >&     normalize    (vgl_vector_3d<T >& a));\
-VCL_INSTANTIATE_INLINE(vgl_vector_3d<T >      normalized   (vgl_vector_3d<T > const& a))
+template               bool   parallel     (vgl_vector_3d<T > const&, vgl_vector_3d<T > const&, double);\
+VCL_INSTANTIATE_INLINE(double operator/    (vgl_vector_3d<T > const&, vgl_vector_3d<T > const&));\
+VCL_INSTANTIATE_INLINE(vgl_vector_3d<T >&     normalize    (vgl_vector_3d<T >&));\
+VCL_INSTANTIATE_INLINE(vgl_vector_3d<T >      normalized   (vgl_vector_3d<T > const&))
 #undef v
 
 #endif // vgl_vector_3d_txx_
