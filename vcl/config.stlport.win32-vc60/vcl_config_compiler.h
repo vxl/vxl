@@ -79,17 +79,23 @@
 // And there is a speed advantage, so we want to use it where supported.
 // However, the standard also requires (9.4.2/4) that the constant be
 // defined in namespace scope. (That is, space must be allocated.)
-// To use the macro, use VCL_STATIC_CONST_INIT_DECL in the class
+// To make matters worse, some compilers (at least VC 7) mistakenly
+// allocate storage without the definition in namespace scope,
+// which results in multiply defined symbols.
+// To use the macro, use VCL_STATIC_CONST_INIT_INT_DECL in the class
 // definition (header file). This declares the constant.
 // \code
 //     class A {
 //       static const int x VCL_STATIC_CONST_INIT_INT_DECL(27);
 //     };
 // \endcode
-// Use VCL_STATIC_CONST_INIT_DEFN in some .cxx file to define
-// the constant.
+// Use VCL_STATIC_CONST_INIT_INT_DEFN in some .cxx file to define
+// the constant, but only if VCL_STATIC_CONST_INIT_INT_NO_DEFN
+// evaluates to false.
 // \code
-//     const int A::x VCL_STATIC_CONST_INIT_DEFN(27);
+//     #if !VCL_STATIC_CONST_INIT_INT_NO_DEFN
+//     const int A::x VCL_STATIC_CONST_INIT_INT_DEFN(27);
+//     #endif
 // \endcode
 //
 // In order to be able to query the setting of this, one actually must
@@ -244,7 +250,6 @@
 //
 // True if the compiler allows explicit instantiation of inline
 // function templates. The native SGI CC 7.2.1 does not.
-
 #define VCL_ALLOWS_INLINE_INSTANTIATION 1
 
 
@@ -252,7 +257,6 @@
 //
 // True if the compiler needs explicit instantiation of inline
 // function templates. gcc 2.7.2 (with -fno-implicit-templates) does.
-
 #define VCL_NEEDS_INLINE_INSTANTIATION 0
 
 
@@ -360,6 +364,7 @@ text { return ret; }
 //      VCL_UNINSTANTIATE_STATIC_TEMPLATE_MEMBER(A<int>::var)
 // \endcode
 // afterwards.
+
 //#define VCL_INSTANTIATE_STATIC_TEMPLATE_MEMBER(symbol) /* no need */
 //#define VCL_INSTANTIATE_STATIC_TEMPLATE_MEMBER(symbol) symbol;
 //
@@ -466,7 +471,7 @@ text { return ret; }
 
 //#define VCL_DEFAULT_TMPL_ARG(arg) /* no need */
 //#define VCL_DEFAULT_TMPL_ARG(arg) arg
-#define VCL_DEFAULT_TMPL_ARG(arg) @VCL_DEFAULT_TMPL_ARG@
+#define VCL_DEFAULT_TMPL_ARG(arg) 
 
 //
 #define VCL_CAN_DO_COMPLETE_DEFAULT_TYPE_PARAMETER 1
@@ -552,39 +557,7 @@ text { return ret; }
 #define VCL_NEEDS_NAMESPACE_STD 0
 
 //----------------------------------------------------------------------
-// architecture issues, like endianness.
 
-//: VCL_LITTLE_ENDIAN, VCL_BIG_ENDIAN
-// Set to 0,1 or 1,0 respectively, depending on the architecture.
-#define VCL_LITTLE_ENDIAN 1
-#define VCL_BIG_ENDIAN    0
-
-
-//: VCL_SIZEOF_type
-// These are useful to have as macros since you can't use the
-// preprocessor to conditionalize on the size of a data type.
-//
-//                                                      typical value
-//#define VCL_SIZEOF_bool     @VCL_SIZEOF_bool@         /* 4 */
-//#define VCL_SIZEOF_char     @VCL_SIZEOF_char@         /* 1 */
-//#define VCL_SIZEOF_short    @VCL_SIZEOF_short@        /* 2 */
-//#define VCL_SIZEOF_int      @VCL_SIZEOF_int@          /* 4 */
-//#define VCL_SIZEOF_long     @VCL_SIZEOF_long@         /* 4 */
-//#define VCL_SIZEOF_float    @VCL_SIZEOF_float@        /* 4 */
-//#define VCL_SIZEOF_double   @VCL_SIZEOF_double@       /* 8 */
-//#define VCL_SIZEOF_void_ptr @VCL_SIZEOF_void_ptr@     /* 4 */
-
-//: VCL_ALIGNMENT_type
-// Alignment requirements of various types.             typical value
-//#define VCL_ALIGNMENT_bool     @VCL_ALIGNMENT_bool@       /* 4 */
-//#define VCL_ALIGNMENT_char     @VCL_ALIGNMENT_char@       /* 1 */
-//#define VCL_ALIGNMENT_short    @VCL_ALIGNMENT_short@      /* 4 */
-//#define VCL_ALIGNMENT_int      @VCL_ALIGNMENT_int@        /* 4 */
-//#define VCL_ALIGNMENT_long     @VCL_ALIGNMENT_long@       /* 4 */
-//#define VCL_ALIGNMENT_float    @VCL_ALIGNMENT_float@      /* 4 */
-//#define VCL_ALIGNMENT_double   @VCL_ALIGNMENT_double@     /* 8 */
-//#define VCL_ALIGNMENT_void_ptr @VCL_ALIGNMENT_void_ptr@   /* 4 */
-
-//--------------------------------------------------------------------------------
+// architecture macros removed -- they're not in the C++ standard
 
 #endif
