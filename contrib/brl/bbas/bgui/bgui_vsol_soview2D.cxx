@@ -6,10 +6,23 @@
 #include <vgui/vgui_style.h>
 #include <vgui/vgui_projection_inspector.h>
 #include <vgui/internals/vgui_draw_line.h>
+
 #include <vsol/vsol_point_2d.h>
 #include <vsol/vsol_line_2d.h>
+#include <vsol/vsol_polyline_2d.h>
+#include <vsol/vsol_conic_2d.h>
 #include <vsol/vsol_polygon_2d.h>
+#include <vsol/vsol_rectangle_2d.h>
+#include <vsol/vsol_triangle_2d.h>
+#include <vsol/vsol_group_2d.h>
+#include <vdgl/vdgl_digital_curve.h>
+#include <vdgl/vdgl_interpolator.h>
+#include <vdgl/vdgl_edgel_chain.h>
+
 #include <bgui/bgui_vsol_soview2D.h>
+
+#include <vgui/vgui_soview2D.h>
+#include <vgui/vgui_style.h>
 
 //--------------------------------------------------------------------------
 //: vsol_point_2d view
@@ -20,6 +33,9 @@ s << "[bgui_vsol_soview2D_point " << x << "," << y << " ";
 s << " "; return vgui_soview2D::print(s) << "]";
 }
 
+//--------------------------------------------------------------------------
+//: vsol_line_2d view
+//--------------------------------------------------------------------------
 
 bgui_vsol_soview2D_line_seg::
 bgui_vsol_soview2D_line_seg(vsol_line_2d_sptr const& seg)
@@ -28,6 +44,108 @@ bgui_vsol_soview2D_line_seg(vsol_line_2d_sptr const& seg)
   vsol_point_2d_sptr p1 = seg->p1();
   x0=p0->x(); y0 = p0->y();
   x1=p1->x(); y1 = p1->y();
+}
+
+//--------------------------------------------------------------------------
+//: vsol_polyline_2d view
+//--------------------------------------------------------------------------
+
+vcl_ostream& bgui_vsol_soview2D_polyline::print(vcl_ostream& s) const
+{
+  return vgui_soview2D_linestrip::print(s);
+}
+
+bgui_vsol_soview2D_polyline::bgui_vsol_soview2D_polyline(vsol_polyline_2d_sptr const& pline)
+{
+  if (!pline)
+    {
+      vcl_cout << "In bgui_vsol_soview2D_polyline(..) - null input edge\n";
+      return;
+    }
+
+   //n, x, and y are in the parent class vgui_soview2D_linestrip
+   n = pline->size();
+
+   //offset the coordinates for display (may not be needed)
+   x = new float[n], y = new float[n];
+   for (unsigned int i=0; i<n;i++)
+   {
+      x[i] = pline->vertex(i)->x();
+      y[i] = pline->vertex(i)->y();
+   }
+   return;
+}
+
+//--------------------------------------------------------------------------
+//: vdgl_digital_curve dotted view
+//--------------------------------------------------------------------------
+vcl_ostream& bgui_vsol_soview2D_dotted_digital_curve::print(vcl_ostream& s) const
+{
+  return s;
+}
+
+bgui_vsol_soview2D_dotted_digital_curve::
+bgui_vsol_soview2D_dotted_digital_curve(vdgl_digital_curve_sptr const& dc)
+{
+  if (!dc)
+    {
+      vcl_cout << "In bgui_vsol_soview2D_dotted_digital_curve(..) - null input dc\n";
+      return;
+    }
+
+  //get the edgel chain
+  vdgl_interpolator_sptr itrp = dc->get_interpolator();
+  vdgl_edgel_chain_sptr ech = itrp->get_edgel_chain();
+
+  //n, x, and y are in the parent class vgui_soview2D_linestrip
+  unsigned int n = ech->size();
+
+  float x = 0, y=0;
+  for (unsigned int i=0; i<n;i++)
+    {
+      vdgl_edgel ed = (*ech)[i];
+      x=ed.get_x();
+      y=ed.get_y();
+      vgui_soview2D* p = new vgui_soview2D_point(x, y);
+      ls.push_back(p);
+    }
+  return;
+}
+
+//--------------------------------------------------------------------------
+//: vdgl_digital_curve regular view
+//--------------------------------------------------------------------------
+
+vcl_ostream& bgui_vsol_soview2D_digital_curve::print(vcl_ostream& s) const
+{
+  return s;
+}
+
+bgui_vsol_soview2D_digital_curve::
+bgui_vsol_soview2D_digital_curve(vdgl_digital_curve_sptr const& dc)
+{
+  if (!dc)
+    {
+      vcl_cout << "In bgui_vsol_soview2D_digital_curve(..) - null input dc\n";
+      return;
+    }
+
+  //get the edgel chain
+  vdgl_interpolator_sptr itrp = dc->get_interpolator();
+  vdgl_edgel_chain_sptr ech = itrp->get_edgel_chain();
+
+  //n, x, and y are in the parent class vgui_soview2D_linestrip
+  n = ech->size();
+
+  x = new float[n], y = new float[n];
+  for (unsigned int i=0; i<n;i++)
+    {
+      vdgl_edgel ed = (*ech)[i];
+      x[i]=ed.get_x();
+      y[i]=ed.get_y();
+    }
+
+  return;
 }
 
 //--------------------------------------------------------------------------
