@@ -252,11 +252,33 @@ void vvid_live_video_manager::init_capture()
 {
   this->stop_live_video();
   vgui_dialog save_video_dlg("Init Capture");
-  static vcl_string video_filename = "";
+  static vcl_string video_directory = vul_file::get_cwd();
   static vcl_string ext = "*.*";
-  save_video_dlg.file("Video Filename:", ext, video_filename);
+  static bool auto_increment = true;
+  static vcl_string dir_prefix = "video";
+  static int dir_index = 0;
+  save_video_dlg.file("Video Directory:", ext, video_directory);
+  save_video_dlg.checkbox("Automatically Create Incremental Subdirectories", auto_increment);
+  save_video_dlg.field("Directory Prefix", dir_prefix);
+  save_video_dlg.field("Current Directory Index", dir_index);
+  vcl_stringstream complete_path;
+  complete_path << "Complete Path: " << video_directory << "/" << dir_prefix << dir_index;
+  save_video_dlg.message(complete_path.str().c_str());
+
   if (!save_video_dlg.ask())
     return;
+
+  // if not a directory, use the base directory
+  if (!vul_file::is_directory(video_directory))
+    video_directory = vul_file::dirname(video_directory);
+
+  vcl_string video_filename = video_directory;
+  if (auto_increment){
+    vcl_stringstream auto_dir;
+    auto_dir << '/' << dir_prefix << dir_index++;
+    video_filename += auto_dir.str();
+    vul_file::make_directory(video_filename);
+  }
 
   for (unsigned i=0; i<num_cameras_; ++i)
   {
