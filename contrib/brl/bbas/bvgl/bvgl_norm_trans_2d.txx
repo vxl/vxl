@@ -7,6 +7,7 @@
 
 #include "bvgl_norm_trans_2d.h"
 #include <vgl/vgl_point_2d.h>
+#include <vcl_iostream.h>
 
 //--------------------------------------------------------------
 //
