@@ -1,0 +1,1649 @@
+No test name provided.  Attempting to run all tests.
+The registered test names are:
+   test_coll_lines_params
+   test_group_pgram_params
+   test_norm_params
+   test_parallel_params
+   test_int_face_attr_common_params
+   test_image_histogram
+   test_region_proc
+   test_int_face_attr
+   test_int_faces_attr
+   test_int_faces_adj_attr
+
+Omitting a test name, or specifying the name "all" will run all the tests.
+If you want to run a single test, specify one of the above on the command line.
+
+----------------------------------------
+Running: test_coll_lines_params
+----------------------------------------
+-----------------------------------------------------------------------------
+Start Testing test_coll_lines_params:
+-----------------------------------------------------------------------------
+vifa_coll_lines_params:
+  midpoint distance = 1
+  angle tolerance   = 5
+  discard threshold = 0.3
+  endpoint distance = 3
+-----------------------------------------------------------------------------
+test_coll_lines_params Test Summary: Test succeeded
+-----------------------------------------------------------------------------
+----------------------------------------
+test_coll_lines_params returned 0 (PASS)
+----------------------------------------
+----------------------------------------
+Running: test_group_pgram_params
+----------------------------------------
+-----------------------------------------------------------------------------
+Start Testing test_group_pgram_params:
+-----------------------------------------------------------------------------
+vifa_group_pgram_params:
+  angle increment     = 5
+  max suppress radius = 2
+  length ratio        = 0.1
+-----------------------------------------------------------------------------
+test_group_pgram_params Test Summary: Test succeeded
+-----------------------------------------------------------------------------
+----------------------------------------
+test_group_pgram_params returned 0 (PASS)
+----------------------------------------
+----------------------------------------
+Running: test_norm_params
+----------------------------------------
+-----------------------------------------------------------------------------
+Start Testing test_norm_params:
+-----------------------------------------------------------------------------
+vifa_norm_params:
+  low % thresh    = 0
+  high % thresh   = 0
+  low int thresh  = 0
+  high int thresh = 0
+  int min         = 0
+  int max         = 0
+-----------------------------------------------------------------------------
+test_norm_params Test Summary: Test succeeded
+-----------------------------------------------------------------------------
+----------------------------------------
+test_norm_params returned 0 (PASS)
+----------------------------------------
+----------------------------------------
+Running: test_parallel_params
+----------------------------------------
+-----------------------------------------------------------------------------
+Start Testing test_parallel_params:
+-----------------------------------------------------------------------------
+vifa_parallel_params:
+  min angle    = 0
+  max angle    = 180
+  # of buckets = 60
+-----------------------------------------------------------------------------
+test_parallel_params Test Summary: Test succeeded
+-----------------------------------------------------------------------------
+----------------------------------------
+test_parallel_params returned 0 (PASS)
+----------------------------------------
+----------------------------------------
+Running: test_int_face_attr_common_params
+----------------------------------------
+-----------------------------------------------------------------------------
+Start Testing test_int_face_attr_common_params:
+-----------------------------------------------------------------------------
+vifa_int_face_attr_common_params:
+  line fitting params: sdet_fit_lines_params:
+[---
+min fit length 6
+rms distance tolerance0.15
+---]
+  strong group parallelogram params: vifa_group_pgram_params:
+  angle increment     = 5
+  max suppress radius = 2
+  length ratio        = 0.1
+  weak group parallelogram params: vifa_group_pgram_params:
+  angle increment     = 20
+  max suppress radius = 2
+  length ratio        = 0.1
+  collinear lines params: vifa_coll_lines_params:
+  midpoint distance = 1
+  angle tolerance   = 5
+  discard threshold = 0.3
+  endpoint distance = 3
+  normalization params: vifa_norm_params:
+  low % thresh    = 0
+  high % thresh   = 0
+  low int thresh  = 0
+  high int thresh = 0
+  int min         = 0
+  int max         = 0
+-----------------------------------------------------------------------------
+test_int_face_attr_common_params Test Summary: Test succeeded
+-----------------------------------------------------------------------------
+----------------------------------------
+test_int_face_attr_common_params returned 0 (PASS)
+----------------------------------------
+----------------------------------------
+Running: test_image_histogram
+----------------------------------------
+-----------------------------------------------------------------------------
+Start Testing test_image_histogram:
+-----------------------------------------------------------------------------
+   0.0     0 |   1.0     0 |   2.0     0 |   3.0     0 |   4.0     0 |
+   5.0     0 |   6.0     0 |   7.0     0 |   8.0     0 |   9.0     0 |
+  10.0     0 |  11.0     0 |  12.0     0 |  13.0     0 |  14.0     0 |
+  15.0     0 |  16.0     0 |  17.0     0 |  18.0     0 |  19.0     0 |
+  20.0     0 |  21.0     0 |  22.0     0 |  23.0     0 |  24.0     1 |
+  25.0     0 |  26.0     0 |  27.0     0 |  28.0     0 |  29.0     0 |
+  30.0     0 |  31.0     0 |  32.0     0 |  33.0     0 |  34.0     0 |
+  35.0     0 |  36.0     0 |  37.0     0 |  38.0     2 |  39.0     1 |
+  40.0     0 |  41.0     1 |  42.0     0 |  43.0     4 |  44.0     3 |
+  45.0     2 |  46.0     6 |  47.0     8 |  48.0     4 |  49.0     6 |
+  50.0    10 |  51.0     3 |  52.0    13 |  53.0    11 |  54.0    17 |
+  55.0    15 |  56.0    19 |  57.0    26 |  58.0    34 |  59.0    31 |
+  60.0    36 |  61.0    45 |  62.0    39 |  63.0    46 |  64.0    47 |
+  65.0    35 |  66.0    45 |  67.0    49 |  68.0    50 |  69.0    66 |
+  70.0    55 |  71.0    82 |  72.0    83 |  73.0    91 |  74.0   106 |
+  75.0   114 |  76.0   118 |  77.0   132 |  78.0   146 |  79.0   131 |
+  80.0   141 |  81.0   158 |  82.0   133 |  83.0   136 |  84.0   133 |
+  85.0   165 |  86.0   183 |  87.0   217 |  88.0   173 |  89.0   203 |
+  90.0   192 |  91.0   210 |  92.0   215 |  93.0   210 |  94.0   204 |
+  95.0   220 |  96.0   234 |  97.0   229 |  98.0   227 |  99.0   240 |
+ 100.0   248 | 101.0   254 | 102.0   257 | 103.0   263 | 104.0   249 |
+ 105.0   278 | 106.0   281 | 107.0   280 | 108.0   301 | 109.0   290 |
+ 110.0   294 | 111.0   307 | 112.0   334 | 113.0   380 | 114.0   379 |
+ 115.0   358 | 116.0   390 | 117.0   430 | 118.0   410 | 119.0   446 |
+ 120.0   444 | 121.0   470 | 122.0   468 | 123.0   452 | 124.0   460 |
+ 125.0   440 | 126.0   448 | 127.0   461 | 128.0   427 | 129.0   493 |
+ 130.0   517 | 131.0   465 | 132.0   479 | 133.0   511 | 134.0   510 |
+ 135.0   588 | 136.0   544 | 137.0   571 | 138.0   610 | 139.0   573 |
+ 140.0   551 | 141.0   550 | 142.0   533 | 143.0   541 | 144.0   568 |
+ 145.0   550 | 146.0   536 | 147.0   540 | 148.0   521 | 149.0   525 |
+ 150.0   508 | 151.0   508 | 152.0   559 | 153.0   558 | 154.0   508 |
+ 155.0   543 | 156.0   534 | 157.0   483 | 158.0   474 | 159.0   447 |
+ 160.0   404 | 161.0   418 | 162.0   407 | 163.0   387 | 164.0   334 |
+ 165.0   364 | 166.0   347 | 167.0   267 | 168.0   260 | 169.0   271 |
+ 170.0   281 | 171.0   246 | 172.0   249 | 173.0   264 | 174.0   236 |
+ 175.0   259 | 176.0   268 | 177.0   247 | 178.0   269 | 179.0   258 |
+ 180.0   279 | 181.0   287 | 182.0   366 | 183.0   293 | 184.0   282 |
+ 185.0   287 | 186.0   283 | 187.0   264 | 188.0   282 | 189.0   286 |
+ 190.0   267 | 191.0   246 | 192.0   201 | 193.0   225 | 194.0   165 |
+ 195.0   142 | 196.0   110 | 197.0    80 | 198.0    83 | 199.0    77 |
+ 200.0    52 | 201.0    48 | 202.0    29 | 203.0    25 | 204.0    29 |
+ 205.0    17 | 206.0    13 | 207.0    10 | 208.0     5 | 209.0     5 |
+ 210.0     6 | 211.0     3 | 212.0     1 | 213.0     1 | 214.0     1 |
+ 215.0     0 | 216.0     1 | 217.0     0 | 218.0     0 | 219.0     0 |
+ 220.0     0 | 221.0     0 | 222.0     0 | 223.0     0 | 224.0     0 |
+ 225.0     0 | 226.0     0 | 227.0     0 | 228.0     0 | 229.0     0 |
+ 230.0     0 | 231.0     0 | 232.0     0 | 233.0     0 | 234.0     0 |
+ 235.0     0 | 236.0     0 | 237.0     0 | 238.0     0 | 239.0     0 |
+ 240.0     0 | 241.0     0 | 242.0     0 | 243.0     0 | 244.0     0 |
+ 245.0     0 | 246.0     0 | 247.0     0 | 248.0     0 | 249.0     0 |
+ 250.0     0 | 251.0     0 | 252.0     0 | 253.0     0 | 254.0     0 |
+ 255.0     0 |
+ MaxVal 216
+ MinVal 24
+ BucketSize 1
+ Resolution 256
+ Area 43240
+------------------------------------------------
+
+-----------------------------------------------------------------------------
+test_image_histogram Test Summary: Test succeeded
+-----------------------------------------------------------------------------
+----------------------------------------
+test_image_histogram returned 0 (PASS)
+----------------------------------------
+----------------------------------------
+Running: test_region_proc
+----------------------------------------
+-----------------------------------------------------------------------------
+Start Testing test_region_proc:
+-----------------------------------------------------------------------------
+unknown filename: Warning, unknown field with tag 32934 (0x80a6) ignored.
+sdet_region_proc_params:
+[---
+Edge Detector Params:
+ Smooth Sigma 1
+ Noise Weight -0.5
+ Noise Multiplier 2
+ Automatic Threshold? no
+ Agressive Closure yes
+ Recover Junctions 1
+ Minimum Chain Length 6
+ Peaks Only 0
+ Valleys Only 0
+
+Corner Detection Params: 
+ Corner Angle 10
+ Corner Separation 1
+ Min Corner Length 5
+ Close borders 1
+
+
+  ---
+debug 1
+verbose 1
+label array scale 1
+---]
+sdet_region_proc::extract_regions(): width = 45 height = 36
+bounding box(0 0 45 36)
+
+
+* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * 
+* 0 0 0 0 0 0 0 0 * 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 * 0 0 0 0 0 0 * 
+* 0 0 0 0 0 0 0 0 * 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 * 0 0 0 0 0 0 * 
+* 0 0 0 0 0 0 0 0 0 * 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 * 0 0 0 0 0 0 * 
+* 0 0 0 0 0 0 0 0 * * 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 * 0 0 0 0 0 0 * 
+* 0 0 0 0 0 0 0 * * 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 * 0 0 0 0 0 0 * 
+* 0 0 0 0 0 0 0 * 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 * 0 0 0 0 0 0 * 
+* 0 0 0 0 0 0 * * 0 * * * * * * * * 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 * * 0 0 0 0 0 * 
+* 0 0 0 0 0 0 0 * * * 0 0 0 0 0 0 * * * 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 * 0 0 0 0 0 * 
+* 0 0 0 0 0 0 * * 0 0 0 0 0 0 0 0 0 0 * * * 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 * 0 0 0 0 0 * 
+* 0 0 0 0 0 * * 0 0 0 0 0 0 0 0 0 0 0 0 0 * * 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 * 0 0 0 0 0 * 
+* 0 0 0 0 * * 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 * * 0 0 0 0 0 0 0 0 0 0 0 0 0 0 * * 0 0 0 0 * 
+* 0 0 0 0 * 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 * * * 0 0 0 0 0 0 0 0 0 0 0 0 0 * 0 0 0 0 * 
+* 0 0 0 * * 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 * * * * * * * * * * 0 0 0 0 * 0 0 0 0 * 
+* 0 0 0 * 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 * * * * 0 * * 0 0 0 * 
+* 0 0 0 0 * 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 * * * * 0 0 0 * 
+* 0 0 0 0 * * 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 * * 0 0 0 0 * 
+* 0 0 0 0 0 * 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 * 0 0 0 0 0 * 
+* 0 0 0 0 0 * * 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 * 0 0 0 0 0 * 
+* 0 0 0 0 0 0 * * 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 * 0 0 0 0 0 * 
+* 0 0 0 0 0 0 0 * 0 0 0 0 * * * 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 * * 0 0 0 0 * 
+* 0 0 0 0 0 0 0 * * 0 0 * * 0 * * * 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 * 0 0 0 0 * 
+* 0 0 0 0 0 0 0 * * * * * 0 0 0 0 * * 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 * * 0 0 0 * 
+* 0 0 0 0 0 0 * * 0 0 * * 0 0 0 0 0 * * 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 * 0 0 0 0 * 
+* 0 0 0 0 0 * * 0 0 0 0 * 0 0 0 0 0 0 * * 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 * 0 0 0 0 * 
+* 0 0 0 0 0 * 0 0 0 0 0 * 0 0 0 0 0 * * * * 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 * 0 0 0 * 
+* 0 0 0 0 * * 0 0 0 0 * * 0 0 0 0 0 * 0 0 * * * 0 0 0 0 0 0 0 0 0 0 0 0 0 0 * * * 0 0 0 * 
+* 0 0 0 0 * 0 0 0 0 0 * 0 0 0 0 0 0 * 0 0 0 0 * * 0 0 0 0 0 0 0 0 0 0 0 * * 0 * 0 0 0 0 * 
+* 0 0 0 * * 0 0 0 0 * * 0 0 0 0 0 0 * * 0 0 0 0 * * 0 0 0 0 0 0 0 0 0 * * 0 0 * 0 0 0 0 * 
+* 0 0 * * 0 0 0 0 0 * 0 0 0 0 0 0 0 0 * * 0 0 0 0 * * * * * 0 0 * * * * * 0 * * 0 0 0 0 * 
+* * * * 0 0 0 0 0 * * 0 0 0 0 0 0 0 0 0 * 0 0 0 0 0 0 0 0 * * * * 0 0 0 0 * * 0 0 0 0 0 * 
+* 0 0 0 0 0 0 * * * 0 0 0 0 0 0 0 0 0 0 * * 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 * 0 0 0 0 0 * 
+* 0 0 0 0 0 0 * 0 0 0 0 0 0 0 0 0 0 0 0 0 * 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 * 
+* 0 0 0 0 0 0 0 * 0 0 0 0 0 0 0 0 0 0 0 0 * 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 * 
+* 0 0 0 0 0 0 0 * 0 0 0 0 0 0 0 0 0 0 0 0 * 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 * 
+* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * 
+
+
+
+
+* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * 
+* 2 2 2 2 2 2 2 2 * 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 * 4 4 4 4 4 4 * 
+* 2 2 2 2 2 2 2 2 * 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 * 4 4 4 4 4 4 * 
+* 2 2 2 2 2 2 2 2 2 * 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 * 4 4 4 4 4 4 * 
+* 2 2 2 2 2 2 2 2 * * 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 * 4 4 4 4 4 4 * 
+* 2 2 2 2 2 2 2 * * 5 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 * 4 4 4 4 4 4 * 
+* 2 2 2 2 2 2 2 * 6 5 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 * 4 4 4 4 4 4 * 
+* 2 2 2 2 2 2 * * 6 * * * * * * * * 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 * * 4 4 4 4 4 * 
+* 2 2 2 2 2 2 2 * * * 7 7 7 7 7 7 * * * 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 * 4 4 4 4 4 * 
+* 2 2 2 2 2 2 * * 8 8 7 7 7 7 7 7 7 7 * * * 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 * 4 4 4 4 4 * 
+* 2 2 2 2 2 * * 9 8 8 7 7 7 7 7 7 7 7 7 7 * * 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 * 4 4 4 4 4 * 
+* 2 2 2 2 * * 10 9 8 8 7 7 7 7 7 7 7 7 7 7 7 * * 3 3 3 3 3 3 3 3 3 3 3 3 3 3 * * 4 4 4 4 * 
+* 2 2 2 2 * 11 10 9 8 8 7 7 7 7 7 7 7 7 7 7 7 7 * * * 3 3 3 3 3 3 3 3 3 3 3 3 3 * 4 4 4 4 * 
+* 2 2 2 * * 11 10 9 8 8 7 7 7 7 7 7 7 7 7 7 7 7 7 7 * * * * * * * * * * 3 3 3 3 * 4 4 4 4 * 
+* 2 2 2 * 12 11 10 9 8 8 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 * * * * 3 * * 4 4 4 * 
+* 2 2 2 2 * 12 10 9 8 8 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 * * * * 4 4 4 * 
+* 2 2 2 2 * * 12 9 8 8 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 * * 13 4 4 4 * 
+* 2 2 2 2 2 * 12 9 8 8 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 * 14 13 4 4 4 * 
+* 2 2 2 2 2 * * 12 8 8 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 * 14 13 4 4 4 * 
+* 2 2 2 2 2 2 * * 12 8 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 * 14 13 4 4 4 * 
+* 2 2 2 2 2 2 2 * 12 8 7 7 * * * 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 * * 14 4 4 4 * 
+* 2 2 2 2 2 2 2 * * 12 7 * * 15 * * * 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 * 14 4 4 4 * 
+* 2 2 2 2 2 2 2 * * * * * 16 15 15 15 * * 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 * * 14 4 4 * 
+* 2 2 2 2 2 2 * * 17 17 * * 16 15 15 15 15 * * 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 * 18 14 4 4 * 
+* 2 2 2 2 2 * * 19 17 17 17 * 16 15 15 15 15 15 * * 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 * 18 14 4 4 * 
+* 2 2 2 2 2 * 20 19 17 17 17 * 16 15 15 15 15 * * * * 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 * 18 4 4 * 
+* 2 2 2 2 * * 20 19 17 17 * * 16 15 15 15 15 * 21 21 * * * 7 7 7 7 7 7 7 7 7 7 7 7 7 7 * * * 18 4 4 * 
+* 2 2 2 2 * 22 20 19 17 17 * 23 16 15 15 15 15 * 21 21 21 21 * * 7 7 7 7 7 7 7 7 7 7 7 * * 24 * 25 18 4 4 * 
+* 2 2 2 * * 22 20 19 17 * * 23 16 15 15 15 15 * * 21 21 21 21 * * 7 7 7 7 7 7 7 7 7 * * 26 24 * 25 18 4 4 * 
+* 2 2 * * 27 22 20 19 17 * 28 23 16 15 15 15 15 15 * * 21 21 21 21 * * * * * 7 7 * * * * * 26 * * 25 18 4 4 * 
+* * * * 29 27 22 20 19 * * 28 23 16 15 15 15 15 15 15 * 21 21 21 21 21 21 21 21 * * * * 30 30 30 30 * * 31 25 18 4 4 * 
+* 32 32 32 29 27 22 * * * 33 28 23 16 15 15 15 15 15 15 * * 21 21 21 21 21 21 21 21 21 21 21 21 21 21 21 30 * 31 25 18 4 4 * 
+* 32 32 32 29 27 22 * 34 34 33 28 23 16 15 15 15 15 15 15 15 * 21 21 21 21 21 21 21 21 21 21 21 21 21 21 21 21 30 30 25 18 4 4 * 
+* 32 32 32 29 27 22 22 * 34 33 28 23 16 15 15 15 15 15 15 15 * 21 21 21 21 21 21 21 21 21 21 21 21 21 21 21 21 21 21 21 18 4 4 * 
+* 32 32 32 29 27 22 22 * 34 33 28 23 16 15 15 15 15 15 15 15 * 21 21 21 21 21 21 21 21 21 21 21 21 21 21 21 21 21 21 21 18 4 4 * 
+* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * 
+
+
+
+Label Equivalence:
+------------------
+5 == 3 
+6 == 5 
+8 == 7 
+9 == 8 
+10 == 9 
+11 == 10 
+12 == 11 10 9 8 7 
+13 == 4 
+14 == 13 4 
+16 == 15 
+18 == 14 4 
+19 == 17 
+20 == 19 
+21 == 18 
+22 == 20 
+23 == 16 
+25 == 18 21 
+26 == 24 
+27 == 22 
+28 == 23 
+29 == 27 
+30 == 21 25 
+31 == 25 30 
+32 == 29 
+33 == 28 
+34 == 33 
+
+
+Reverse Label Equivalence:
+--------------------------
+3 == 5 
+4 == 13 14 18 
+5 == 6 
+7 == 8 12 
+8 == 9 12 
+9 == 10 12 
+10 == 11 12 
+11 == 12 
+13 == 14 
+14 == 18 
+15 == 16 
+16 == 23 
+17 == 19 
+18 == 25 21 
+19 == 20 
+20 == 22 
+21 == 30 25 
+22 == 27 
+23 == 28 
+24 == 26 
+25 == 31 30 
+27 == 29 
+28 == 33 
+29 == 32 
+30 == 31 
+33 == 34 
+
+
+Base Label Equivalence:
+-----------------------
+2 == 2
+3 == 3
+4 == 4
+5 == 3
+6 == 3
+7 == 7
+8 == 7
+9 == 7
+10 == 7
+11 == 7
+12 == 7
+13 == 4
+14 == 4
+15 == 15
+16 == 15
+17 == 17
+18 == 4
+19 == 17
+20 == 17
+21 == 4
+22 == 17
+23 == 15
+24 == 24
+25 == 4
+26 == 24
+27 == 17
+28 == 15
+29 == 17
+30 == 4
+31 == 4
+32 == 17
+33 == 15
+34 == 15
+After Label Equivalence
+
+
+* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * 
+* 2 2 2 2 2 2 2 2 * 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 * 4 4 4 4 4 4 * 
+* 2 2 2 2 2 2 2 2 * 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 * 4 4 4 4 4 4 * 
+* 2 2 2 2 2 2 2 2 2 * 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 * 4 4 4 4 4 4 * 
+* 2 2 2 2 2 2 2 2 * * 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 * 4 4 4 4 4 4 * 
+* 2 2 2 2 2 2 2 * * 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 * 4 4 4 4 4 4 * 
+* 2 2 2 2 2 2 2 * 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 * 4 4 4 4 4 4 * 
+* 2 2 2 2 2 2 * * 3 * * * * * * * * 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 * * 4 4 4 4 4 * 
+* 2 2 2 2 2 2 2 * * * 7 7 7 7 7 7 * * * 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 * 4 4 4 4 4 * 
+* 2 2 2 2 2 2 * * 7 7 7 7 7 7 7 7 7 7 * * * 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 * 4 4 4 4 4 * 
+* 2 2 2 2 2 * * 7 7 7 7 7 7 7 7 7 7 7 7 7 * * 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 * 4 4 4 4 4 * 
+* 2 2 2 2 * * 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 * * 3 3 3 3 3 3 3 3 3 3 3 3 3 3 * * 4 4 4 4 * 
+* 2 2 2 2 * 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 * * * 3 3 3 3 3 3 3 3 3 3 3 3 3 * 4 4 4 4 * 
+* 2 2 2 * * 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 * * * * * * * * * * 3 3 3 3 * 4 4 4 4 * 
+* 2 2 2 * 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 * * * * 3 * * 4 4 4 * 
+* 2 2 2 2 * 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 * * * * 4 4 4 * 
+* 2 2 2 2 * * 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 * * 4 4 4 4 * 
+* 2 2 2 2 2 * 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 * 4 4 4 4 4 * 
+* 2 2 2 2 2 * * 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 * 4 4 4 4 4 * 
+* 2 2 2 2 2 2 * * 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 * 4 4 4 4 4 * 
+* 2 2 2 2 2 2 2 * 7 7 7 7 * * * 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 * * 4 4 4 4 * 
+* 2 2 2 2 2 2 2 * * 7 7 * * 15 * * * 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 * 4 4 4 4 * 
+* 2 2 2 2 2 2 2 * * * * * 15 15 15 15 * * 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 * * 4 4 4 * 
+* 2 2 2 2 2 2 * * 17 17 * * 15 15 15 15 15 * * 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 * 4 4 4 4 * 
+* 2 2 2 2 2 * * 17 17 17 17 * 15 15 15 15 15 15 * * 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 * 4 4 4 4 * 
+* 2 2 2 2 2 * 17 17 17 17 17 * 15 15 15 15 15 * * * * 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 * 4 4 4 * 
+* 2 2 2 2 * * 17 17 17 17 * * 15 15 15 15 15 * 4 4 * * * 7 7 7 7 7 7 7 7 7 7 7 7 7 7 * * * 4 4 4 * 
+* 2 2 2 2 * 17 17 17 17 17 * 15 15 15 15 15 15 * 4 4 4 4 * * 7 7 7 7 7 7 7 7 7 7 7 * * 24 * 4 4 4 4 * 
+* 2 2 2 * * 17 17 17 17 * * 15 15 15 15 15 15 * * 4 4 4 4 * * 7 7 7 7 7 7 7 7 7 * * 24 24 * 4 4 4 4 * 
+* 2 2 * * 17 17 17 17 17 * 15 15 15 15 15 15 15 15 * * 4 4 4 4 * * * * * 7 7 * * * * * 24 * * 4 4 4 4 * 
+* * * * 17 17 17 17 17 * * 15 15 15 15 15 15 15 15 15 * 4 4 4 4 4 4 4 4 * * * * 4 4 4 4 * * 4 4 4 4 4 * 
+* 17 17 17 17 17 17 * * * 15 15 15 15 15 15 15 15 15 15 * * 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 * 4 4 4 4 4 * 
+* 17 17 17 17 17 17 * 15 15 15 15 15 15 15 15 15 15 15 15 15 * 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 * 
+* 17 17 17 17 17 17 17 * 15 15 15 15 15 15 15 15 15 15 15 15 * 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 * 
+* 17 17 17 17 17 17 17 * 15 15 15 15 15 15 15 15 15 15 15 15 * 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 * 
+* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * 
+
+
+Collision at (8 0)
+Collision at (8 0)
+Collision at (9 0)
+Collision at (7 7)
+Collision at (7 7)
+Collision at (8 7)
+Collision at (8 7)
+Collision at (38 16)
+Collision at (38 16)
+Collision at (7 21)
+Collision at (11 21)
+Collision at (11 21)
+Collision at (8 22)
+Collision at (8 22)
+Collision at (12 22)
+Collision at (18 24)
+Collision at (18 24)
+Collision at (19 25)
+Collision at (36 28)
+Collision at (35 29)
+region_edges size in CollectEdges = 27
+
+Edge:vbl_smart_ptr<vtol_edge_2d>(0x396388)(vbl_smart_ptr<vtol_vertex>(0x382d30) vbl_smart_ptr<vtol_vertex>(0x381a08)):(l[0]:3 l[1]:7 )
+
+Edge:vbl_smart_ptr<vtol_edge_2d>(0x382078)(vbl_smart_ptr<vtol_vertex>(0x3817f8) vbl_smart_ptr<vtol_vertex>(0x381958)):(l[0]:7 l[1]:4 )
+
+Edge:vbl_smart_ptr<vtol_edge_2d>(0x38ac78)(vbl_smart_ptr<vtol_vertex>(0x382d30) vbl_smart_ptr<vtol_vertex>(0x3815e8)):(l[0]:3 l[1]:4 )
+
+Edge:vbl_smart_ptr<vtol_edge_2d>(0x381c70)(vbl_smart_ptr<vtol_vertex>(0x381698) vbl_smart_ptr<vtol_vertex>(0x381748)):(l[0]:2 l[1]:17 )
+
+Edge:vbl_smart_ptr<vtol_edge_2d>(0x381a68)(vbl_smart_ptr<vtol_vertex>(0x3817f8) vbl_smart_ptr<vtol_vertex>(0x37edd0)):(l[0]:7 l[1]:4 l[2]:24 )
+
+Edge:vbl_smart_ptr<vtol_edge_2d>(0x381bc8)(vbl_smart_ptr<vtol_vertex>(0x3818a8) vbl_smart_ptr<vtol_vertex>(0x381958)):(l[0]:15 l[1]:4 )
+
+Edge:vbl_smart_ptr<vtol_edge_2d>(0x383320)(vbl_smart_ptr<vtol_vertex>(0x381a08) vbl_smart_ptr<vtol_vertex>(0x396468)):(l[0]:2 l[1]:3 )
+
+Edge:vbl_smart_ptr<vtol_edge_2d>(0x396da0)(vbl_smart_ptr<vtol_vertex>(0x382c80) vbl_smart_ptr<vtol_vertex>(0x382908)):(l[0]:15 l[1]:17 )
+
+Edge:vbl_smart_ptr<vtol_edge_2d>(0x383140)(vbl_smart_ptr<vtol_vertex>(0x37edd0) vbl_smart_ptr<vtol_vertex>(0x382d30)):(l[0]:7 l[1]:4 )
+
+Edge:vbl_smart_ptr<vtol_edge_2d>(0x3820d0)(vbl_smart_ptr<vtol_vertex>(0x381748) vbl_smart_ptr<vtol_vertex>(0x382c80)):(l[0]:7 l[1]:17 )
+
+Edge:vbl_smart_ptr<vtol_edge_2d>(0x383258)(vbl_smart_ptr<vtol_vertex>(0x3829b8) vbl_smart_ptr<vtol_vertex>(0x3817f8)):(l[0]:7 l[1]:24 )
+
+Edge:vbl_smart_ptr<vtol_edge_2d>(0x381cc8)(vbl_smart_ptr<vtol_vertex>(0x381958) vbl_smart_ptr<vtol_vertex>(0x382c80)):(l[0]:7 l[1]:15 )
+
+Edge:vbl_smart_ptr<vtol_edge_2d>(0x397808)(vbl_smart_ptr<vtol_vertex>(0x381a08) vbl_smart_ptr<vtol_vertex>(0x381748)):(l[0]:2 l[1]:3 l[2]:7 )
+
+Edge:vbl_smart_ptr<vtol_edge_2d>(0x397db8)(vbl_smart_ptr<vtol_vertex>(0x381698) vbl_smart_ptr<vtol_vertex>(0x395af0)):(l[0]:2 l[1]:17 )
+
+Edge:vbl_smart_ptr<vtol_edge_2d>(0x397150)(vbl_smart_ptr<vtol_vertex>(0x396468) vbl_smart_ptr<vtol_vertex>(0x397ef0)):(l[0]:2 l[1]:3 )
+
+Edge:vbl_smart_ptr<vtol_edge_2d>(0x3974b8)(vbl_smart_ptr<vtol_vertex>(0x3815e8) vbl_smart_ptr<vtol_vertex>(0x397288)):(l[0]:3 l[1]:4 )
+
+Edge:vbl_smart_ptr<vtol_edge_2d>(0x398b70)(vbl_smart_ptr<vtol_vertex>(0x382908) vbl_smart_ptr<vtol_vertex>(0x397620)):(l[0]:17 l[1]:15 )
+
+Edge:vbl_smart_ptr<vtol_edge_2d>(0x399500)(vbl_smart_ptr<vtol_vertex>(0x3818a8) vbl_smart_ptr<vtol_vertex>(0x3992d0)):(l[0]:4 l[1]:15 )
+
+Edge:vbl_smart_ptr<vtol_edge_2d>(0x3996e8)(vbl_smart_ptr<vtol_vertex>(0x381d20) vbl_smart_ptr<vtol_vertex>(0x397ef0)):(l[0]:2 l[1]:3 )
+
+Edge:vbl_smart_ptr<vtol_edge_2d>(0x399a90)(vbl_smart_ptr<vtol_vertex>(0x397ef0) vbl_smart_ptr<vtol_vertex>(0x397288)):(l[0]:3 )
+
+Edge:vbl_smart_ptr<vtol_edge_2d>(0x399cc8)(vbl_smart_ptr<vtol_vertex>(0x397288) vbl_smart_ptr<vtol_vertex>(0x381e50)):(l[0]:4 )
+
+Edge:vbl_smart_ptr<vtol_edge_2d>(0x39a4c8)(vbl_smart_ptr<vtol_vertex>(0x381da0) vbl_smart_ptr<vtol_vertex>(0x397620)):(l[0]:17 )
+
+Edge:vbl_smart_ptr<vtol_edge_2d>(0x39a8b8)(vbl_smart_ptr<vtol_vertex>(0x397620) vbl_smart_ptr<vtol_vertex>(0x3992d0)):(l[0]:15 )
+
+Edge:vbl_smart_ptr<vtol_edge_2d>(0x39ac60)(vbl_smart_ptr<vtol_vertex>(0x3992d0) vbl_smart_ptr<vtol_vertex>(0x395a40)):(l[0]:4 )
+
+Edge:vbl_smart_ptr<vtol_edge_2d>(0x39ae50)(vbl_smart_ptr<vtol_vertex>(0x381d20) vbl_smart_ptr<vtol_vertex>(0x395af0)):(l[0]:2 )
+
+Edge:vbl_smart_ptr<vtol_edge_2d>(0x39b9d0)(vbl_smart_ptr<vtol_vertex>(0x395af0) vbl_smart_ptr<vtol_vertex>(0x381da0)):(l[0]:17 )
+
+Edge:vbl_smart_ptr<vtol_edge_2d>(0x39c0a8)(vbl_smart_ptr<vtol_vertex>(0x381e50) vbl_smart_ptr<vtol_vertex>(0x395a40)):(l[0]:4 )
+Propagate Regions and Collect Edges(33) in 26 msecs.
+Constructing Face-Edges: Building Region [2]
+Edge(<vtol_vertex_2d 3.74755,29.7386,0x381698> with id 2
+ <vtol_vertex_2d 9.16026,21.6595,0x381748> with id 2
+
+Edge(<vtol_vertex_2d 10.0503,8.11776,0x381a08> with id 2
+ <vtol_vertex_2d 10.1221,4.02467,0x396468> with id 2
+
+Edge(<vtol_vertex_2d 10.0503,8.11776,0x381a08> with id 2
+ <vtol_vertex_2d 9.16026,21.6595,0x381748> with id 2
+
+Edge(<vtol_vertex_2d 3.74755,29.7386,0x381698> with id 2
+ <vtol_vertex_2d 0,30,0x395af0> with id 2
+
+Edge(<vtol_vertex_2d 10.1221,4.02467,0x396468> with id 2
+ <vtol_vertex_2d 10,0,0x397ef0> with id 2
+
+Edge(<vtol_vertex_2d 0,0,0x381d20> with id 2
+ <vtol_vertex_2d 10,0,0x397ef0> with id 2
+
+Edge(<vtol_vertex_2d 0,0,0x381d20> with id 2
+ <vtol_vertex_2d 0,30,0x395af0> with id 2
+
+ Building Region [3]
+Edge(<vtol_vertex_2d 38.0752,15.8899,0x382d30> with id 2
+ <vtol_vertex_2d 10.0503,8.11776,0x381a08> with id 3
+
+Edge(<vtol_vertex_2d 38.0752,15.8899,0x382d30> with id 2
+ <vtol_vertex_2d 37.3175,3.97391,0x3815e8> with id 2
+
+Edge(<vtol_vertex_2d 10.0503,8.11776,0x381a08> with id 3
+ <vtol_vertex_2d 10.1221,4.02467,0x396468> with id 2
+
+Edge(<vtol_vertex_2d 10.1221,4.02467,0x396468> with id 2
+ <vtol_vertex_2d 10,0,0x397ef0> with id 3
+
+Edge(<vtol_vertex_2d 37.3175,3.97391,0x3815e8> with id 2
+ <vtol_vertex_2d 37,0,0x397288> with id 2
+
+Edge(<vtol_vertex_2d 10,0,0x397ef0> with id 3
+ <vtol_vertex_2d 37,0,0x397288> with id 2
+
+ Building Region [4]
+Edge(<vtol_vertex_2d 35.8455,28.785,0x3817f8> with id 2
+ <vtol_vertex_2d 20.0586,24.9125,0x381958> with id 2
+
+Edge(<vtol_vertex_2d 38.0752,15.8899,0x382d30> with id 2
+ <vtol_vertex_2d 37.3175,3.97391,0x3815e8> with id 2
+
+Edge(<vtol_vertex_2d 35.8455,28.785,0x3817f8> with id 2
+ <vtol_vertex_2d 39,23.8401,0x37edd0> with id 2
+
+Edge(<vtol_vertex_2d 20.9836,31.014,0x3818a8> with id 2
+ <vtol_vertex_2d 20.0586,24.9125,0x381958> with id 2
+
+Edge(<vtol_vertex_2d 39,23.8401,0x37edd0> with id 2
+ <vtol_vertex_2d 38.0752,15.8899,0x382d30> with id 2
+
+Edge(<vtol_vertex_2d 37.3175,3.97391,0x3815e8> with id 2
+ <vtol_vertex_2d 37,0,0x397288> with id 2
+
+Edge(<vtol_vertex_2d 20.9836,31.014,0x3818a8> with id 2
+ <vtol_vertex_2d 21,35,0x3992d0> with id 2
+
+Edge(<vtol_vertex_2d 37,0,0x397288> with id 2
+ <vtol_vertex_2d 44,0,0x381e50> with id 2
+
+Edge(<vtol_vertex_2d 21,35,0x3992d0> with id 2
+ <vtol_vertex_2d 44,35,0x395a40> with id 2
+
+Edge(<vtol_vertex_2d 44,0,0x381e50> with id 2
+ <vtol_vertex_2d 44,35,0x395a40> with id 2
+
+ Building Region [7]
+Edge(<vtol_vertex_2d 38.0752,15.8899,0x382d30> with id 2
+ <vtol_vertex_2d 10.0503,8.11776,0x381a08> with id 2
+
+Edge(<vtol_vertex_2d 35.8455,28.785,0x3817f8> with id 3
+ <vtol_vertex_2d 20.0586,24.9125,0x381958> with id 2
+
+Edge(<vtol_vertex_2d 35.8455,28.785,0x3817f8> with id 3
+ <vtol_vertex_2d 39,23.8401,0x37edd0> with id 2
+
+Edge(<vtol_vertex_2d 39,23.8401,0x37edd0> with id 2
+ <vtol_vertex_2d 38.0752,15.8899,0x382d30> with id 2
+
+Edge(<vtol_vertex_2d 9.16026,21.6595,0x381748> with id 2
+ <vtol_vertex_2d 11.9982,23.021,0x382c80> with id 2
+
+Edge(<vtol_vertex_2d 20.0586,24.9125,0x381958> with id 2
+ <vtol_vertex_2d 11.9982,23.021,0x382c80> with id 2
+
+Edge(<vtol_vertex_2d 10.0503,8.11776,0x381a08> with id 2
+ <vtol_vertex_2d 9.16026,21.6595,0x381748> with id 2
+
+ Building Region [15]
+Edge(<vtol_vertex_2d 20.9836,31.014,0x3818a8> with id 2
+ <vtol_vertex_2d 20.0586,24.9125,0x381958> with id 2
+
+Edge(<vtol_vertex_2d 11.9982,23.021,0x382c80> with id 2
+ <vtol_vertex_2d 8.3689,31.4712,0x382908> with id 2
+
+Edge(<vtol_vertex_2d 20.0586,24.9125,0x381958> with id 2
+ <vtol_vertex_2d 11.9982,23.021,0x382c80> with id 2
+
+Edge(<vtol_vertex_2d 8.3689,31.4712,0x382908> with id 2
+ <vtol_vertex_2d 8,35,0x397620> with id 2
+
+Edge(<vtol_vertex_2d 20.9836,31.014,0x3818a8> with id 2
+ <vtol_vertex_2d 21,35,0x3992d0> with id 2
+
+Edge(<vtol_vertex_2d 8,35,0x397620> with id 2
+ <vtol_vertex_2d 21,35,0x3992d0> with id 2
+
+ Building Region [17]
+Edge(<vtol_vertex_2d 3.74755,29.7386,0x381698> with id 2
+ <vtol_vertex_2d 9.16026,21.6595,0x381748> with id 2
+
+Edge(<vtol_vertex_2d 11.9982,23.021,0x382c80> with id 2
+ <vtol_vertex_2d 8.3689,31.4712,0x382908> with id 2
+
+Edge(<vtol_vertex_2d 9.16026,21.6595,0x381748> with id 2
+ <vtol_vertex_2d 11.9982,23.021,0x382c80> with id 2
+
+Edge(<vtol_vertex_2d 3.74755,29.7386,0x381698> with id 2
+ <vtol_vertex_2d 0,30,0x395af0> with id 2
+
+Edge(<vtol_vertex_2d 8.3689,31.4712,0x382908> with id 2
+ <vtol_vertex_2d 8,35,0x397620> with id 2
+
+Edge(<vtol_vertex_2d 0,35,0x381da0> with id 2
+ <vtol_vertex_2d 8,35,0x397620> with id 2
+
+Edge(<vtol_vertex_2d 0,30,0x395af0> with id 2
+ <vtol_vertex_2d 0,35,0x381da0> with id 2
+
+Region [24] is corrupt
+Bad Vertices
+<vtol_vertex_2d 39,23.8401,0x37edd0> with id 1
+<vtol_vertex_2d 38,26.7729,0x3829b8> with id 1
+
+ Bad Edge(
+<vtol_vertex_2d 35.8455,28.785,0x3817f8> with id 2
+<vtol_vertex_2d 39,23.8401,0x37edd0> with id 1
+)
+
+ Bad Edge(
+<vtol_vertex_2d 38,26.7729,0x3829b8> with id 1
+<vtol_vertex_2d 35.8455,28.785,0x3817f8> with id 2
+)
+ Building Region [24]
+Edge(<vtol_vertex_2d 35.8455,28.785,0x3817f8> with id 2
+ <vtol_vertex_2d 39,23.8401,0x37edd0> with id 1
+
+Edge(<vtol_vertex_2d 38,26.7729,0x3829b8> with id 1
+ <vtol_vertex_2d 35.8455,28.785,0x3817f8> with id 2
+
+
+Constructed Face-Edges(33) in 6 msecs.
+Constructing Faces:In vtol_cycle_processor:: sort_one_cycles(..) no cycles
+Tried to get bad edge_loop from face
+
+Constructed Faces(33) in 15 msecs.
+1 faces did not pass construction
+Accumulate Region Means(33) in 5 msecs.
+Normalized Time = 30.8642
+Accumulate Region Data(33) in 5 msecs.
+IntFaceAt(4.0283 13.8711):
+IntFaceAt(26.0687 6.30153):
+IntFaceAt(36.8186 22.6573):
+IntFaceAt(23.2126 18.557):
+IntFaceAt(15.1078 29.7647):
+IntFaceAt(6.65 29.8333):
+Compute Edgel Regions Total(6) in 58 msecs.
+bounding box(0 0 45 36)
+6 intensity faces found:
+  Intensity Face #1: <vtol_face_2d  7   0x395208>
+    One Chain #1: <one_chain 7  0x39c6b8>
+      Edge #1:       <vtol_edge_2d 0x397db8> with id 13
+      <vtol_vertex_2d 3.74755,29.7386,0x381698> with id 2
+      <vtol_vertex_2d 0,30,0x395af0> with id 2
+Length: 3.75666 (E)  8 (C)
+      Edge #2:       <vtol_edge_2d 0x39ae50> with id 24
+      <vtol_vertex_2d 0,0,0x381d20> with id 1
+      <vtol_vertex_2d 0,30,0x395af0> with id 2
+Length: 30 (E)  60 (C)
+      Edge #3:       <vtol_edge_2d 0x3996e8> with id 18
+      <vtol_vertex_2d 0,0,0x381d20> with id 1
+      <vtol_vertex_2d 10,0,0x397ef0> with id 3
+Length: 10 (E)  20 (C)
+      Edge #4:       <vtol_edge_2d 0x397150> with id 14
+      <vtol_vertex_2d 10.1221,4.02467,0x396468> with id 2
+      <vtol_vertex_2d 10,0,0x397ef0> with id 3
+Length: 4.02652 (E)  8 (C)
+      Edge #5:       <vtol_edge_2d 0x383320> with id 6
+      <vtol_vertex_2d 10.0503,8.11776,0x381a08> with id 2
+      <vtol_vertex_2d 10.1221,4.02467,0x396468> with id 2
+Length: 4.09372 (E)  11.0406 (C)
+      Edge #6:       <vtol_edge_2d 0x397808> with id 12
+      <vtol_vertex_2d 10.0503,8.11776,0x381a08> with id 2
+      <vtol_vertex_2d 9.16026,21.6595,0x381748> with id 2
+Length: 13.5709 (E)  30.9734 (C)
+      Edge #7:       <vtol_edge_2d 0x381c70> with id 3
+      <vtol_vertex_2d 3.74755,29.7386,0x381698> with id 2
+      <vtol_vertex_2d 9.16026,21.6595,0x381748> with id 2
+Length: 9.72468 (E)  19.8354 (C)
+Perimeter (Edge-based): 75.1725
+Perimeter (Curve-based): 157.849
+    <Dirs [7]: 1 -1 1 -1 -1 1 -1>
+  Intensity Face #2: <vtol_face_2d  6   0x393988>
+    One Chain #1: <one_chain 6  0x393778>
+      Edge #1:       <vtol_edge_2d 0x396388> with id 0
+      <vtol_vertex_2d 38.0752,15.8899,0x382d30> with id 2
+      <vtol_vertex_2d 10.0503,8.11776,0x381a08> with id 2
+Length: 29.0827 (E)  59.5484 (C)
+      Edge #2:       <vtol_edge_2d 0x383320> with id 6
+      <vtol_vertex_2d 10.0503,8.11776,0x381a08> with id 2
+      <vtol_vertex_2d 10.1221,4.02467,0x396468> with id 2
+Length: 4.09372 (E)  11.0406 (C)
+      Edge #3:       <vtol_edge_2d 0x397150> with id 14
+      <vtol_vertex_2d 10.1221,4.02467,0x396468> with id 2
+      <vtol_vertex_2d 10,0,0x397ef0> with id 3
+Length: 4.02652 (E)  8 (C)
+      Edge #4:       <vtol_edge_2d 0x399a90> with id 19
+      <vtol_vertex_2d 10,0,0x397ef0> with id 3
+      <vtol_vertex_2d 37,0,0x397288> with id 2
+Length: 27 (E)  54 (C)
+      Edge #5:       <vtol_edge_2d 0x3974b8> with id 15
+      <vtol_vertex_2d 37.3175,3.97391,0x3815e8> with id 2
+      <vtol_vertex_2d 37,0,0x397288> with id 2
+Length: 3.98657 (E)  8 (C)
+      Edge #6:       <vtol_edge_2d 0x38ac78> with id 2
+      <vtol_vertex_2d 38.0752,15.8899,0x382d30> with id 2
+      <vtol_vertex_2d 37.3175,3.97391,0x3815e8> with id 2
+Length: 11.94 (E)  26.7933 (C)
+Perimeter (Edge-based): 80.1295
+Perimeter (Curve-based): 167.382
+    <Dirs [6]: 1 1 1 1 -1 -1>
+  Intensity Face #3: <vtol_face_2d  10   0x39f118>
+    One Chain #1: <one_chain 10  0x394fe8>
+      Edge #1:       <vtol_edge_2d 0x381a68> with id 4
+      <vtol_vertex_2d 35.8455,28.785,0x3817f8> with id 2
+      <vtol_vertex_2d 39,23.8401,0x37edd0> with id 1
+Length: 5.86538 (E)  17.4952 (C)
+      Edge #2:       <vtol_edge_2d 0x383140> with id 8
+      <vtol_vertex_2d 39,23.8401,0x37edd0> with id 1
+      <vtol_vertex_2d 38.0752,15.8899,0x382d30> with id 2
+Length: 8.00386 (E)  17.6129 (C)
+      Edge #3:       <vtol_edge_2d 0x38ac78> with id 2
+      <vtol_vertex_2d 38.0752,15.8899,0x382d30> with id 2
+      <vtol_vertex_2d 37.3175,3.97391,0x3815e8> with id 2
+Length: 11.94 (E)  26.7933 (C)
+      Edge #4:       <vtol_edge_2d 0x3974b8> with id 15
+      <vtol_vertex_2d 37.3175,3.97391,0x3815e8> with id 2
+      <vtol_vertex_2d 37,0,0x397288> with id 2
+Length: 3.98657 (E)  8 (C)
+      Edge #5:       <vtol_edge_2d 0x399cc8> with id 20
+      <vtol_vertex_2d 37,0,0x397288> with id 2
+      <vtol_vertex_2d 44,0,0x381e50> with id 2
+Length: 7 (E)  14 (C)
+      Edge #6:       <vtol_edge_2d 0x39c0a8> with id 26
+      <vtol_vertex_2d 44,0,0x381e50> with id 2
+      <vtol_vertex_2d 44,35,0x395a40> with id 2
+Length: 35 (E)  70 (C)
+      Edge #7:       <vtol_edge_2d 0x39ac60> with id 23
+      <vtol_vertex_2d 21,35,0x3992d0> with id 2
+      <vtol_vertex_2d 44,35,0x395a40> with id 2
+Length: 23 (E)  46 (C)
+      Edge #8:       <vtol_edge_2d 0x399500> with id 17
+      <vtol_vertex_2d 20.9836,31.014,0x3818a8> with id 2
+      <vtol_vertex_2d 21,35,0x3992d0> with id 2
+Length: 3.98601 (E)  8 (C)
+      Edge #9:       <vtol_edge_2d 0x381bc8> with id 5
+      <vtol_vertex_2d 20.9836,31.014,0x3818a8> with id 2
+      <vtol_vertex_2d 20.0586,24.9125,0x381958> with id 2
+Length: 6.17123 (E)  14.0549 (C)
+      Edge #10:       <vtol_edge_2d 0x382078> with id 1
+      <vtol_vertex_2d 35.8455,28.785,0x3817f8> with id 2
+      <vtol_vertex_2d 20.0586,24.9125,0x381958> with id 2
+Length: 16.2549 (E)  33.9252 (C)
+Perimeter (Edge-based): 121.208
+Perimeter (Curve-based): 255.881
+    <Dirs [10]: 1 1 1 1 1 1 -1 -1 1 -1>
+  Intensity Face #4: <vtol_face_2d  7   0x39f4b8>
+    One Chain #1: <one_chain 7  0x39ee08>
+      Edge #1:       <vtol_edge_2d 0x383140> with id 8
+      <vtol_vertex_2d 39,23.8401,0x37edd0> with id 1
+      <vtol_vertex_2d 38.0752,15.8899,0x382d30> with id 2
+Length: 8.00386 (E)  17.6129 (C)
+      Edge #2:       <vtol_edge_2d 0x381a68> with id 4
+      <vtol_vertex_2d 35.8455,28.785,0x3817f8> with id 2
+      <vtol_vertex_2d 39,23.8401,0x37edd0> with id 1
+Length: 5.86538 (E)  17.4952 (C)
+      Edge #3:       <vtol_edge_2d 0x382078> with id 1
+      <vtol_vertex_2d 35.8455,28.785,0x3817f8> with id 2
+      <vtol_vertex_2d 20.0586,24.9125,0x381958> with id 2
+Length: 16.2549 (E)  33.9252 (C)
+      Edge #4:       <vtol_edge_2d 0x381cc8> with id 11
+      <vtol_vertex_2d 20.0586,24.9125,0x381958> with id 2
+      <vtol_vertex_2d 11.9982,23.021,0x382c80> with id 2
+Length: 8.27936 (E)  19.0824 (C)
+      Edge #5:       <vtol_edge_2d 0x3820d0> with id 9
+      <vtol_vertex_2d 9.16026,21.6595,0x381748> with id 2
+      <vtol_vertex_2d 11.9982,23.021,0x382c80> with id 2
+Length: 3.14762 (E)  6.42098 (C)
+      Edge #6:       <vtol_edge_2d 0x397808> with id 12
+      <vtol_vertex_2d 10.0503,8.11776,0x381a08> with id 2
+      <vtol_vertex_2d 9.16026,21.6595,0x381748> with id 2
+Length: 13.5709 (E)  30.9734 (C)
+      Edge #7:       <vtol_edge_2d 0x396388> with id 0
+      <vtol_vertex_2d 38.0752,15.8899,0x382d30> with id 2
+      <vtol_vertex_2d 10.0503,8.11776,0x381a08> with id 2
+Length: 29.0827 (E)  59.5484 (C)
+Perimeter (Edge-based): 84.2048
+Perimeter (Curve-based): 185.058
+    <Dirs [7]: -1 -1 1 1 -1 -1 -1>
+  Intensity Face #5: <vtol_face_2d  6   0x39f898>
+    One Chain #1: <one_chain 6  0x39f328>
+      Edge #1:       <vtol_edge_2d 0x399500> with id 17
+      <vtol_vertex_2d 20.9836,31.014,0x3818a8> with id 2
+      <vtol_vertex_2d 21,35,0x3992d0> with id 2
+Length: 3.98601 (E)  8 (C)
+      Edge #2:       <vtol_edge_2d 0x39a8b8> with id 22
+      <vtol_vertex_2d 8,35,0x397620> with id 2
+      <vtol_vertex_2d 21,35,0x3992d0> with id 2
+Length: 13 (E)  26 (C)
+      Edge #3:       <vtol_edge_2d 0x398b70> with id 16
+      <vtol_vertex_2d 8.3689,31.4712,0x382908> with id 2
+      <vtol_vertex_2d 8,35,0x397620> with id 2
+Length: 3.54804 (E)  8 (C)
+      Edge #4:       <vtol_edge_2d 0x396da0> with id 7
+      <vtol_vertex_2d 11.9982,23.021,0x382c80> with id 2
+      <vtol_vertex_2d 8.3689,31.4712,0x382908> with id 2
+Length: 9.19656 (E)  18.9923 (C)
+      Edge #5:       <vtol_edge_2d 0x381cc8> with id 11
+      <vtol_vertex_2d 20.0586,24.9125,0x381958> with id 2
+      <vtol_vertex_2d 11.9982,23.021,0x382c80> with id 2
+Length: 8.27936 (E)  19.0824 (C)
+      Edge #6:       <vtol_edge_2d 0x381bc8> with id 5
+      <vtol_vertex_2d 20.9836,31.014,0x3818a8> with id 2
+      <vtol_vertex_2d 20.0586,24.9125,0x381958> with id 2
+Length: 6.17123 (E)  14.0549 (C)
+Perimeter (Edge-based): 44.1812
+Perimeter (Curve-based): 94.1296
+    <Dirs [6]: 1 -1 -1 -1 -1 -1>
+  Intensity Face #6: <vtol_face_2d  7   0x39fc38>
+    One Chain #1: <one_chain 7  0x39faa8>
+      Edge #1:       <vtol_edge_2d 0x381c70> with id 3
+      <vtol_vertex_2d 3.74755,29.7386,0x381698> with id 2
+      <vtol_vertex_2d 9.16026,21.6595,0x381748> with id 2
+Length: 9.72468 (E)  19.8354 (C)
+      Edge #2:       <vtol_edge_2d 0x3820d0> with id 9
+      <vtol_vertex_2d 9.16026,21.6595,0x381748> with id 2
+      <vtol_vertex_2d 11.9982,23.021,0x382c80> with id 2
+Length: 3.14762 (E)  6.42098 (C)
+      Edge #3:       <vtol_edge_2d 0x396da0> with id 7
+      <vtol_vertex_2d 11.9982,23.021,0x382c80> with id 2
+      <vtol_vertex_2d 8.3689,31.4712,0x382908> with id 2
+Length: 9.19656 (E)  18.9923 (C)
+      Edge #4:       <vtol_edge_2d 0x398b70> with id 16
+      <vtol_vertex_2d 8.3689,31.4712,0x382908> with id 2
+      <vtol_vertex_2d 8,35,0x397620> with id 2
+Length: 3.54804 (E)  8 (C)
+      Edge #5:       <vtol_edge_2d 0x39a4c8> with id 21
+      <vtol_vertex_2d 0,35,0x381da0> with id 2
+      <vtol_vertex_2d 8,35,0x397620> with id 2
+Length: 8 (E)  16 (C)
+      Edge #6:       <vtol_edge_2d 0x39b9d0> with id 25
+      <vtol_vertex_2d 0,30,0x395af0> with id 2
+      <vtol_vertex_2d 0,35,0x381da0> with id 2
+Length: 5 (E)  10 (C)
+      Edge #7:       <vtol_edge_2d 0x397db8> with id 13
+      <vtol_vertex_2d 3.74755,29.7386,0x381698> with id 2
+      <vtol_vertex_2d 0,30,0x395af0> with id 2
+Length: 3.75666 (E)  8 (C)
+Perimeter (Edge-based): 42.3736
+Perimeter (Curve-based): 87.2487
+    <Dirs [7]: 1 1 1 1 -1 -1 -1>
+-----------------------------------------------------------------------------
+test_region_proc Test Summary: Test succeeded
+-----------------------------------------------------------------------------
+----------------------------------------
+test_region_proc returned 0 (PASS)
+----------------------------------------
+----------------------------------------
+Running: test_int_face_attr
+----------------------------------------
+-----------------------------------------------------------------------------
+Start Testing test_int_face_attr:
+-----------------------------------------------------------------------------
+unknown filename: Warning, unknown field with tag 32934 (0x80a6) ignored.
+Normalization params: 
+vifa_norm_params:
+  low % thresh    = 0.05
+  high % thresh   = 0.95
+  low int thresh  = 63
+  high int thresh = 175
+  int min         = 56.7778
+  int max         = 181.222
+sdet_fit_lines_params:
+[---
+min fit length 5
+rms distance tolerance0.15
+---]
+sdet_region_proc_params:
+[---
+Edge Detector Params:
+ Smooth Sigma 1
+ Noise Weight -0.5
+ Noise Multiplier 2
+ Automatic Threshold? no
+ Agressive Closure yes
+ Recover Junctions 1
+ Minimum Chain Length 6
+ Peaks Only 0
+ Valleys Only 0
+
+Corner Detection Params: 
+ Corner Angle 10
+ Corner Separation 1
+ Min Corner Length 5
+ Close borders 1
+
+
+  ---
+debug 0
+verbose 0
+label array scale 1
+---]
+sdet_region_proc::extract_regions(): width = 45 height = 36
+bounding box(0 0 45 36)
+In vtol_cycle_processor:: sort_one_cycles(..) no cycles
+Tried to get bad edge_loop from face
+6 intensity faces found:
+  Intensity Face #1 at (4.0283, 13.8711): <vtol_face_2d  7   0x390790>
+15 attributes, 15 attribute names:
+IntMax: 0.699854
+IntMin: 0.502425
+IntMean: 0.59562
+IntVar: 0.00661013
+Area: 159
+AspectRatio: 4.44936
+PerimeterLength: 157.849
+WeightedPerimeterLength: 16.3188
+Complexity: 156.707
+WeightedComplexity: 1.67486
+StrongParallel: 0
+WeakParallel: 0
+TwoPeakParallel: 0.955455
+FourPeakParallel: 0.323119
+EightyPercentParallel: 4
+  Intensity Face #2 at (26.0687, 6.30153): <vtol_face_2d  6   0x390b50>
+15 attributes, 15 attribute names:
+IntMax: 0.883977
+IntMin: 0.751062
+IntMean: 0.819864
+IntVar: 0.0030894
+Area: 262
+AspectRatio: 2.56665
+PerimeterLength: 167.382
+WeightedPerimeterLength: 26.9636
+Complexity: 106.934
+WeightedComplexity: 2.77494
+StrongParallel: 0.721371
+WeakParallel: 0.904948
+TwoPeakParallel: 0.984962
+FourPeakParallel: 0.479601
+EightyPercentParallel: 5
+  Intensity Face #3 at (36.8186, 22.6573): <vtol_face_2d  10   0x391070>
+15 attributes, 15 attribute names:
+IntMax: 0.770681
+IntMin: 0.109725
+IntMean: 0.371169
+IntVar: 0.0739653
+Area: 248
+AspectRatio: 2.09232
+PerimeterLength: 255.881
+WeightedPerimeterLength: 16.3201
+Complexity: 264.013
+WeightedComplexity: 1.07397
+StrongParallel: 0.370733
+WeakParallel: 0.441906
+TwoPeakParallel: 0.982923
+FourPeakParallel: 0.30524
+EightyPercentParallel: 4
+  Intensity Face #4 at (23.2126, 18.557): <vtol_face_2d  7   0x391410>
+15 attributes, 15 attribute names:
+IntMax: 0.371101
+IntMin: 0.253025
+IntMean: 0.316324
+IntVar: 0.00238712
+Area: 421
+AspectRatio: 2.48879
+PerimeterLength: 185.058
+WeightedPerimeterLength: 28.6449
+Complexity: 81.3459
+WeightedComplexity: 1.949
+StrongParallel: 0.282499
+WeakParallel: 0.573095
+TwoPeakParallel: 0.733988
+FourPeakParallel: 0.413547
+EightyPercentParallel: 7
+  Intensity Face #5 at (15.1078, 29.7647): <vtol_face_2d  6   0x3917f0>
+15 attributes, 15 attribute names:
+IntMax: 0.698721
+IntMin: 0.557987
+IntMean: 0.615572
+IntVar: 0.00343634
+Area: 102
+AspectRatio: 1.37289
+PerimeterLength: 94.1296
+WeightedPerimeterLength: 13.8469
+Complexity: 86.8665
+WeightedComplexity: 1.87977
+StrongParallel: 0
+WeakParallel: 0
+TwoPeakParallel: 0.988174
+FourPeakParallel: 0.631788
+EightyPercentParallel: 7
+  Intensity Face #6 at (6.65, 29.8333): <vtol_face_2d  7   0x391b90>
+15 attributes, 15 attribute names:
+IntMax: 0.963039
+IntMin: 0.69498
+IntMean: 0.864955
+IntVar: 0.00967264
+Area: 60
+AspectRatio: 2.92017
+PerimeterLength: 87.2487
+WeightedPerimeterLength: 11.1542
+Complexity: 126.872
+WeightedComplexity: 2.07359
+StrongParallel: 0
+WeakParallel: 0
+TwoPeakParallel: 0.988636
+FourPeakParallel: 0.398326
+EightyPercentParallel: 4
+-----------------------------------------------------------------------------
+test_int_face_attr Test Summary: Test succeeded
+-----------------------------------------------------------------------------
+----------------------------------------
+test_int_face_attr returned 0 (PASS)
+----------------------------------------
+----------------------------------------
+Running: test_int_faces_attr
+----------------------------------------
+-----------------------------------------------------------------------------
+Start Testing test_int_faces_attr:
+-----------------------------------------------------------------------------
+unknown filename: Warning, unknown field with tag 32934 (0x80a6) ignored.
+Normalization params: 
+vifa_norm_params:
+  low % thresh    = 0.05
+  high % thresh   = 0.95
+  low int thresh  = 63
+  high int thresh = 175
+  int min         = 56.7778
+  int max         = 181.222
+sdet_fit_lines_params:
+[---
+min fit length 5
+rms distance tolerance0.15
+---]
+sdet_region_proc_params:
+[---
+Edge Detector Params:
+ Smooth Sigma 1
+ Noise Weight -0.5
+ Noise Multiplier 2
+ Automatic Threshold? no
+ Agressive Closure yes
+ Recover Junctions 1
+ Minimum Chain Length 6
+ Peaks Only 0
+ Valleys Only 0
+
+Corner Detection Params: 
+ Corner Angle 10
+ Corner Separation 1
+ Min Corner Length 5
+ Close borders 1
+
+
+  ---
+debug 0
+verbose 0
+label array scale 1
+---]
+sdet_region_proc::extract_regions(): width = 45 height = 36
+bounding box(0 0 45 36)
+In vtol_cycle_processor:: sort_one_cycles(..) no cycles
+Tried to get bad edge_loop from face
+6 intensity faces found:
+40 attributes, 40 attribute names:
+gArea: 1252
+gPerimeterLength: 947.55
+gWeightedPerimeterLength: 21.5192
+gComplexity: 717.133
+gWeightedComplexity: 0.369867
+gStrongParallel: 0.362654
+gWeakParallel: 0.489388
+gTwoPeakParallel: 0.975168
+gFourPeakParallel: 0.426129
+gEightyPercentParallel: 5
+meanIntMax: 0.731229
+meanIntMin: 0.478201
+meanIntMean: 0.597251
+meanIntVar: 0.0165268
+meanArea: 208.667
+meanAspectRatio: 2.64836
+meanPerimeterLength: 157.925
+meanWeightedPerimeterLength: 18.8747
+meanComplexity: 137.123
+meanWeightedComplexity: 1.90436
+meanStrongParallel: 0.229101
+meanWeakParallel: 0.319991
+meanTwoPeakParallel: 0.939023
+meanFourPeakParallel: 0.42527
+meanEightyPercentParallel: 5.16667
+sdIntMax: 0.187242
+sdIntMin: 0.229084
+sdIntMean: 0.204774
+sdIntVar: 0.0258081
+sdArea: 119.32
+sdAspectRatio: 0.938582
+sdPerimeterLength: 56.9885
+sdWeightedPerimeterLength: 6.56799
+sdComplexity: 62.0993
+sdWeightedComplexity: 0.505199
+sdStrongParallel: 0.265425
+sdWeakParallel: 0.348397
+sdTwoPeakParallel: 0.092398
+sdFourPeakParallel: 0.109016
+sdEightyPercentParallel: 1.34371
+-----------------------------------------------------------------------------
+test_int_faces_attr Test Summary: Test succeeded
+-----------------------------------------------------------------------------
+----------------------------------------
+test_int_faces_attr returned 0 (PASS)
+----------------------------------------
+----------------------------------------
+Running: test_int_faces_adj_attr
+----------------------------------------
+-----------------------------------------------------------------------------
+Start Testing test_int_faces_adj_attr:
+-----------------------------------------------------------------------------
+unknown filename: Warning, unknown field with tag 32934 (0x80a6) ignored.
+Normalization params: 
+vifa_norm_params:
+  low % thresh    = 0.05
+  high % thresh   = 0.95
+  low int thresh  = 63
+  high int thresh = 175
+  int min         = 56.7778
+  int max         = 181.222
+sdet_fit_lines_params:
+[---
+min fit length 5
+rms distance tolerance0.15
+---]
+sdet_region_proc_params:
+[---
+Edge Detector Params:
+ Smooth Sigma 1
+ Noise Weight -0.5
+ Noise Multiplier 2
+ Automatic Threshold? no
+ Agressive Closure yes
+ Recover Junctions 1
+ Minimum Chain Length 6
+ Peaks Only 0
+ Valleys Only 0
+
+Corner Detection Params: 
+ Corner Angle 10
+ Corner Separation 1
+ Min Corner Length 5
+ Close borders 1
+
+
+  ---
+debug 0
+verbose 0
+label array scale 1
+---]
+sdet_region_proc::extract_regions(): width = 45 height = 36
+bounding box(0 0 45 36)
+In vtol_cycle_processor:: sort_one_cycles(..) no cycles
+Tried to get bad edge_loop from face
+6 intensity faces found:
+SEED - Intensity Face #1 at (4.0283, 13.8711): <vtol_face_2d  7   0x3ac268>
+  70 attributes, 70 attribute names:
+  gArea: 743
+  gPerimeterLength: 439.689
+  gWeightedPerimeterLength: 26.3955
+  gComplexity: 260.197
+  gWeightedComplexity: 0.937719
+  gStrongParallel: 0.411556
+  gWeakParallel: 0.601876
+  gTwoPeakParallel: 0.976126
+  gFourPeakParallel: 0.667336
+  gEightyPercentParallel: 7
+  meanIntMax: 0.739372
+  meanIntMin: 0.566355
+  meanIntMean: 0.667048
+  meanIntVar: 0.00504972
+  meanArea: 247.667
+  meanAspectRatio: 2.65854
+  meanPerimeterLength: 146.563
+  meanWeightedPerimeterLength: 22.2542
+  meanComplexity: 105.051
+  meanWeightedComplexity: 2.26584
+  meanStrongParallel: 0.334623
+  meanWeakParallel: 0.492681
+  meanTwoPeakParallel: 0.902529
+  meanFourPeakParallel: 0.430491
+  meanEightyPercentParallel: 5.33333
+  sdIntMax: 0.2624
+  sdIntMin: 0.222738
+  sdIntMean: 0.248682
+  sdIntVar: 0.00328145
+  sdArea: 147.726
+  sdAspectRatio: 0.187713
+  sdPerimeterLength: 42.5579
+  sdWeightedPerimeterLength: 7.87888
+  sdComplexity: 18.6337
+  sdWeightedComplexity: 0.363559
+  sdStrongParallel: 0.296796
+  sdWeakParallel: 0.373794
+  sdTwoPeakParallel: 0.119186
+  sdFourPeakParallel: 0.0352775
+  sdEightyPercentParallel: 1.24722
+  ratioIntMax: 0.97728
+  ratioIntMin: 0.959185
+  ratioIntMean: 0.957153
+  ratioIntVar: 1.00155
+  ratioArea: 0.643432
+  ratioAspectRatio: 1.48949
+  ratioPerimeterLength: 1.07648
+  ratioWeightedPerimeterLength: 0.744758
+  ratioComplexity: 1.48709
+  ratioWeightedComplexity: 0.81904
+  ratioStrongParallel: 0.749275
+  ratioWeakParallel: 0.669935
+  ratioTwoPeakParallel: 1.02782
+  ratioFourPeakParallel: 0.924941
+  ratioEightyPercentParallel: 0.789474
+  minRatioIntMax: 1.23977
+  minRatioIntMin: 1.19904
+  minRatioIntMean: 1.21218
+  minRatioIntVar: 1.00421
+  minRatioArea: 2.62295
+  minRatioAspectRatio: 1.56196
+  minRatioPerimeterLength: 1.80002
+  minRatioWeightedPerimeterLength: 1.42492
+  minRatioComplexity: 1.91518
+  minRatioWeightedComplexity: 0.907037
+  minRatioStrongParallel: 0.952381
+  minRatioWeakParallel: 0.952381
+  minRatioTwoPeakParallel: 1.12772
+  minRatioFourPeakParallel: 0.946217
+  minRatioEightyPercentParallel: 1
+SEED - Intensity Face #2 at (26.0687, 6.30153): <vtol_face_2d  6   0x3aea78>
+  70 attributes, 70 attribute names:
+  gArea: 828
+  gPerimeterLength: 598.789
+  gWeightedPerimeterLength: 28.8339
+  gComplexity: 433.03
+  gWeightedComplexity: 1.0041
+  gStrongParallel: 0.432447
+  gWeakParallel: 0.595197
+  gTwoPeakParallel: 0.96908
+  gFourPeakParallel: 0.39965
+  gEightyPercentParallel: 5
+  meanIntMax: 0.613878
+  meanIntMin: 0.288391
+  meanIntMean: 0.427704
+  meanIntVar: 0.0276542
+  meanArea: 276
+  meanAspectRatio: 3.01016
+  meanPerimeterLength: 199.596
+  meanWeightedPerimeterLength: 20.4279
+  meanComplexity: 167.355
+  meanWeightedComplexity: 1.56595
+  meanStrongParallel: 0.217744
+  meanWeakParallel: 0.338334
+  meanTwoPeakParallel: 0.890788
+  meanFourPeakParallel: 0.347302
+  meanEightyPercentParallel: 5
+  sdIntMax: 0.174088
+  sdIntMin: 0.162258
+  sdIntMean: 0.120827
+  sdIntVar: 0.0327923
+  sdArea: 108.778
+  sdAspectRatio: 1.03046
+  sdPerimeterLength: 41.3206
+  sdWeightedPerimeterLength: 5.81029
+  sdComplexity: 74.9529
+  sdWeightedComplexity: 0.365437
+  sdStrongParallel: 0.158126
+  sdWeakParallel: 0.24516
+  sdTwoPeakParallel: 0.11144
+  sdFourPeakParallel: 0.0474073
+  sdEightyPercentParallel: 1.41421
+  ratioIntMax: 1.16736
+  ratioIntMin: 1.35911
+  ratioIntMean: 1.27468
+  ratioIntVar: 0.976096
+  ratioArea: 0.949458
+  ratioAspectRatio: 0.889404
+  ratioPerimeterLength: 0.839408
+  ratioWeightedPerimeterLength: 1.30501
+  ratioComplexity: 0.641111
+  ratioWeightedComplexity: 1.47117
+  ratioStrongParallel: 1.41357
+  ratioWeakParallel: 1.42337
+  ratioTwoPeakParallel: 1.04981
+  ratioFourPeakParallel: 1.0982
+  ratioEightyPercentParallel: 1
+  minRatioIntMax: 1.37406
+  minRatioIntMin: 1.57792
+  minRatioIntMean: 1.38254
+  minRatioIntVar: 1.0007
+  minRatioArea: 1.64375
+  minRatioAspectRatio: 1.15339
+  minRatioPerimeterLength: 1.06001
+  minRatioWeightedPerimeterLength: 1.61464
+  minRatioComplexity: 1.31075
+  minRatioWeightedComplexity: 1.82015
+  minRatioStrongParallel: 1.6394
+  minRatioWeakParallel: 1.81424
+  minRatioTwoPeakParallel: 1.14474
+  minRatioFourPeakParallel: 1.13359
+  minRatioEightyPercentParallel: 1.2
+SEED - Intensity Face #3 at (36.8186, 22.6573): <vtol_face_2d  10   0x3aef98>
+  70 attributes, 70 attribute names:
+  gArea: 785
+  gPerimeterLength: 446.57
+  gWeightedPerimeterLength: 31.4516
+  gComplexity: 254.045
+  gWeightedComplexity: 1.26014
+  gStrongParallel: 0.462641
+  gWeakParallel: 0.655179
+  gTwoPeakParallel: 0.976548
+  gFourPeakParallel: 0.587715
+  gEightyPercentParallel: 6
+  meanIntMax: 0.651266
+  meanIntMin: 0.520691
+  meanIntMean: 0.58392
+  meanIntVar: 0.00297095
+  meanArea: 261.667
+  meanAspectRatio: 2.14278
+  meanPerimeterLength: 148.857
+  meanWeightedPerimeterLength: 23.1518
+  meanComplexity: 91.7156
+  meanWeightedComplexity: 2.20124
+  meanStrongParallel: 0.334623
+  meanWeakParallel: 0.492681
+  meanTwoPeakParallel: 0.902375
+  meanFourPeakParallel: 0.508312
+  meanEightyPercentParallel: 6.33333
+  sdIntMax: 0.212053
+  sdIntMin: 0.205026
+  sdIntMean: 0.206784
+  sdIntVar: 0.000436455
+  sdArea: 130.231
+  sdAspectRatio: 0.545321
+  sdPerimeterLength: 39.365
+  sdWeightedPerimeterLength: 6.61526
+  sdComplexity: 10.9948
+  sdWeightedComplexity: 0.406651
+  sdStrongParallel: 0.296796
+  sdWeakParallel: 0.373794
+  sdTwoPeakParallel: 0.119075
+  sdFourPeakParallel: 0.0913802
+  sdEightyPercentParallel: 0.942809
+  ratioIntMax: 1.07232
+  ratioIntMin: 0.72975
+  ratioIntMean: 0.865681
+  ratioIntVar: 1.07078
+  ratioArea: 0.94797
+  ratioAspectRatio: 0.983946
+  ratioPerimeterLength: 1.71418
+  ratioWeightedPerimeterLength: 0.717135
+  ratioComplexity: 2.85835
+  ratioWeightedComplexity: 0.647866
+  ratioStrongParallel: 1.02706
+  ratioWeakParallel: 0.965984
+  ratioTwoPeakParallel: 1.04234
+  ratioFourPeakParallel: 0.865365
+  ratioEightyPercentParallel: 0.681818
+  minRatioIntMax: 1.29143
+  minRatioIntMin: 0.885637
+  minRatioIntMean: 1.04167
+  minRatioIntVar: 1.07141
+  minRatioArea: 2.41748
+  minRatioAspectRatio: 1.30319
+  minRatioPerimeterLength: 2.70033
+  minRatioWeightedPerimeterLength: 1.16658
+  minRatioComplexity: 3.2183
+  minRatioWeightedComplexity: 0.720187
+  minRatioStrongParallel: 1.30546
+  minRatioWeakParallel: 1.37324
+  minRatioTwoPeakParallel: 1.14356
+  minRatioFourPeakParallel: 0.92338
+  minRatioEightyPercentParallel: 0.833333
+SEED - Intensity Face #4 at (23.2126, 18.557): <vtol_face_2d  7   0x3af338>
+  70 attributes, 70 attribute names:
+  gArea: 831
+  gPerimeterLength: 762.491
+  gWeightedPerimeterLength: 19.8847
+  gComplexity: 699.631
+  gWeightedComplexity: 0.475813
+  gStrongParallel: 0.362654
+  gWeakParallel: 0.489388
+  gTwoPeakParallel: 0.977952
+  gFourPeakParallel: 0.44703
+  gEightyPercentParallel: 5
+  meanIntMax: 0.803254
+  meanIntMin: 0.523236
+  meanIntMean: 0.653436
+  meanIntVar: 0.0193548
+  meanArea: 166.2
+  meanAspectRatio: 2.68028
+  meanPerimeterLength: 152.498
+  meanWeightedPerimeterLength: 16.9207
+  meanComplexity: 148.279
+  meanWeightedComplexity: 1.89543
+  meanStrongParallel: 0.218421
+  meanWeakParallel: 0.269371
+  meanTwoPeakParallel: 0.98003
+  meanFourPeakParallel: 0.427615
+  meanEightyPercentParallel: 4.8
+  sdIntMax: 0.10462
+  sdIntMin: 0.225403
+  sdIntMean: 0.177138
+  sdIntVar: 0.0274096
+  sdArea: 79.1464
+  sdAspectRatio: 1.02519
+  sdPerimeterLength: 60.9962
+  sdWeightedPerimeterLength: 5.37184
+  sdComplexity: 62.297
+  sdWeightedComplexity: 0.552985
+  sdStrongParallel: 0.289579
+  sdWeakParallel: 0.360946
+  sdTwoPeakParallel: 0.0124663
+  sdFourPeakParallel: 0.119283
+  sdEightyPercentParallel: 1.16619
+  ratioIntMax: 0.760348
+  ratioIntMin: 0.822607
+  ratioIntMean: 0.796114
+  ratioIntVar: 0.983355
+  ratioArea: 2.52392
+  ratioAspectRatio: 0.94797
+  ratioPerimeterLength: 1.21212
+  ratioWeightedPerimeterLength: 1.65423
+  ratioComplexity: 0.551625
+  ratioWeightedComplexity: 1.0185
+  ratioStrongParallel: 1.05259
+  ratioWeakParallel: 1.23927
+  ratioTwoPeakParallel: 0.875738
+  ratioFourPeakParallel: 0.990146
+  ratioEightyPercentParallel: 1.37931
+  minRatioIntMax: 0.807137
+  minRatioIntMin: 1.12913
+  minRatioIntMean: 0.960001
+  minRatioIntVar: 0.9993
+  minRatioArea: 6.91803
+  minRatioAspectRatio: 1.47027
+  minRatioPerimeterLength: 2.10834
+  minRatioWeightedPerimeterLength: 2.43907
+  minRatioComplexity: 0.93717
+  minRatioWeightedComplexity: 1.42191
+  minRatioStrongParallel: 1.22143
+  minRatioWeakParallel: 1.49819
+  minRatioTwoPeakParallel: 0.886744
+  minRatioFourPeakParallel: 1.08298
+  minRatioEightyPercentParallel: 1.6
+SEED - Intensity Face #5 at (15.1078, 29.7647): <vtol_face_2d  6   0x3af718>
+  70 attributes, 70 attribute names:
+  gArea: 729
+  gPerimeterLength: 528.189
+  gWeightedPerimeterLength: 22.6788
+  gComplexity: 382.693
+  gWeightedComplexity: 0.705527
+  gStrongParallel: 0.350166
+  gWeakParallel: 0.501971
+  gTwoPeakParallel: 0.975852
+  gFourPeakParallel: 0.50657
+  gEightyPercentParallel: 7
+  meanIntMax: 0.701607
+  meanIntMin: 0.352576
+  meanIntMean: 0.517483
+  meanIntVar: 0.028675
+  meanArea: 243
+  meanAspectRatio: 2.50043
+  meanPerimeterLength: 176.063
+  meanWeightedPerimeterLength: 18.7064
+  meanComplexity: 157.411
+  meanWeightedComplexity: 1.69886
+  meanStrongParallel: 0.217744
+  meanWeakParallel: 0.338334
+  meanTwoPeakParallel: 0.901849
+  meanFourPeakParallel: 0.372371
+  meanEightyPercentParallel: 5
+  sdIntMax: 0.246544
+  sdIntMin: 0.249083
+  sdIntMean: 0.246718
+  sdIntVar: 0.0321629
+  sdArea: 147.42
+  sdAspectRatio: 0.338068
+  sdPerimeterLength: 69.1373
+  sdWeightedPerimeterLength: 7.33723
+  sdComplexity: 77.6372
+  sdWeightedComplexity: 0.444777
+  sdStrongParallel: 0.158126
+  sdWeakParallel: 0.24516
+  sdTwoPeakParallel: 0.118719
+  sdFourPeakParallel: 0.0478735
+  sdEightyPercentParallel: 1.41421
+  ratioIntMax: 0.998304
+  ratioIntMin: 1.15187
+  ratioIntMean: 1.06464
+  ratioIntVar: 0.975465
+  ratioArea: 0.422131
+  ratioAspectRatio: 0.677885
+  ratioPerimeterLength: 0.537265
+  ratioWeightedPerimeterLength: 0.753405
+  ratioComplexity: 0.554676
+  ratioWeightedComplexity: 1.06703
+  ratioStrongParallel: 0.821191
+  ratioWeakParallel: 0.747198
+  ratioTwoPeakParallel: 1.04539
+  ratioFourPeakParallel: 1.18903
+  ratioEightyPercentParallel: 1.33333
+  minRatioIntMax: 1.23895
+  minRatioIntMin: 1.40394
+  minRatioIntMean: 1.22734
+  minRatioIntVar: 1.00105
+  minRatioArea: 1.68852
+  minRatioAspectRatio: 0.767348
+  minRatioPerimeterLength: 1.07797
+  minRatioWeightedPerimeterLength: 1.22155
+  minRatioComplexity: 1.06704
+  minRatioWeightedComplexity: 1.38853
+  minRatioStrongParallel: 0.952381
+  minRatioWeakParallel: 0.952381
+  minRatioTwoPeakParallel: 1.14659
+  minRatioFourPeakParallel: 1.25018
+  minRatioEightyPercentParallel: 1.6
+SEED - Intensity Face #6 at (6.65, 29.8333): <vtol_face_2d  7   0x3afab8>
+  70 attributes, 70 attribute names:
+  gArea: 682
+  gPerimeterLength: 437.037
+  gWeightedPerimeterLength: 26.4737
+  gComplexity: 280.061
+  gWeightedComplexity: 1.02765
+  gStrongParallel: 0.298395
+  gWeakParallel: 0.486602
+  gTwoPeakParallel: 0.965767
+  gFourPeakParallel: 0.467352
+  gEightyPercentParallel: 5
+  meanIntMax: 0.589892
+  meanIntMin: 0.437812
+  meanIntMean: 0.509172
+  meanIntVar: 0.00414453
+  meanArea: 227.333
+  meanAspectRatio: 2.77035
+  meanPerimeterLength: 145.679
+  meanWeightedPerimeterLength: 19.6035
+  meanComplexity: 108.306
+  meanWeightedComplexity: 1.83454
+  meanStrongParallel: 0.0941663
+  meanWeakParallel: 0.191032
+  meanTwoPeakParallel: 0.892539
+  meanFourPeakParallel: 0.456151
+  meanEightyPercentParallel: 6
+  sdIntMax: 0.154709
+  sdIntMin: 0.132619
+  sdIntMean: 0.136607
+  sdIntVar: 0.00179529
+  sdArea: 138.906
+  sdAspectRatio: 1.27164
+  sdPerimeterLength: 38.106
+  sdWeightedPerimeterLength: 6.47238
+  sdComplexity: 34.2985
+  sdWeightedComplexity: 0.1164
+  sdStrongParallel: 0.133171
+  sdWeakParallel: 0.27016
+  sdTwoPeakParallel: 0.112905
+  sdFourPeakParallel: 0.129564
+  sdEightyPercentParallel: 1.41421
+  ratioIntMax: 1.2347
+  ratioIntMin: 1.17886
+  ratioIntMean: 1.23575
+  ratioIntVar: 1.00551
+  ratioArea: 0.267153
+  ratioAspectRatio: 1.03974
+  ratioPerimeterLength: 0.601645
+  ratioWeightedPerimeterLength: 0.589907
+  ratioComplexity: 1.16985
+  ratioWeightedComplexity: 1.08433
+  ratioStrongParallel: 0.913938
+  ratioWeakParallel: 0.839608
+  ratioTwoPeakParallel: 1.05078
+  ratioFourPeakParallel: 0.960289
+  ratioEightyPercentParallel: 0.714286
+  minRatioIntMax: 1.43173
+  minRatioIntMin: 1.35271
+  minRatioIntMean: 1.41679
+  minRatioIntVar: 1.00727
+  minRatioArea: 0.592233
+  minRatioAspectRatio: 1.65207
+  minRatioPerimeterLength: 0.927668
+  minRatioWeightedPerimeterLength: 0.818633
+  minRatioComplexity: 1.55287
+  minRatioWeightedComplexity: 1.14907
+  minRatioStrongParallel: 0.952381
+  minRatioWeakParallel: 0.952381
+  minRatioTwoPeakParallel: 1.14686
+  minRatioFourPeakParallel: 1.05684
+  minRatioEightyPercentParallel: 1
+-----------------------------------------------------------------------------
+test_int_faces_adj_attr Test Summary: Test succeeded
+-----------------------------------------------------------------------------
+----------------------------------------
+test_int_faces_adj_attr returned 0 (PASS)
+----------------------------------------
+
+
+Combined result of 10 tests: PASS
