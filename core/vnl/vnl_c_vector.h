@@ -83,7 +83,6 @@ public:
   static T mean(T const *p, unsigned n) { return sum(p,n)/T(n); }
 
 
-
  
 
 
@@ -107,6 +106,10 @@ public:
   //: rms_norm : sqrt of mean sum of squared abs values
   static inline abs_t rms_norm(T const *p, unsigned n)
     { abs_t val; vnl_c_vector_rms_norm(p, n, &val); return val; }
+
+  //: Euclidean Distance between two vectors.
+  // Sum of Differences squared.
+  static T euclid_dist_sq(T const *, T const *, unsigned);
 
   //: Memory allocation
   static T** allocate_Tptr(int n);

@@ -210,6 +210,22 @@ T vnl_c_vector<T>::min_value(T const *src, unsigned n) {
   return tmp;
 }
 
+// Sum of Differences squared.
+template<class T>
+T vnl_c_vector<T>::euclid_dist_sq(T const *a, T const *b, unsigned n)
+{
+  T diff;
+  T sum(0);
+  for (unsigned i=0; i<n; ++i)
+  {
+    diff = a[i] - b[i];
+    sum += diff*diff;
+  }
+  return sum;
+}
+
+
+
 //------------------------------------------------------------
 
 template <class T, class S>
@@ -255,6 +271,8 @@ void vnl_c_vector_inf_norm(T const *p, unsigned n, S *out)
       *out = v;
   }
 }
+
+
 
 //---------------------------------------------------------------------------
 
