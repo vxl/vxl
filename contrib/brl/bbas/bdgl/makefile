@@ -5,7 +5,7 @@ VERSION := 1.0
 
 SOURCES += bdgl_curve_algs.cxx
 SOURCES += bdgl_curve_description.cxx
-#SOURCES += bdgl_curve_matcher.cxx
+SOURCES += bdgl_curve_matcher.cxx
 SOURCES += bdgl_curve_region.cxx
 SOURCES += bdgl_curve_tracker.cxx
 MANPAGE_SOURCES += bdgl_tracker_curve_sptr.h
