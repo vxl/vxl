@@ -1,6 +1,19 @@
 #include <vcl_vector.h>
 #include <rrel/rrel_util.txx>
 
+#if defined(VCL_GCC_30) || defined(VCL_ICC)
+
+// Apply explicit instantiation
+// ICC 8.1 has problems with the following 
+// implicit trigger function. There are weak 
+// symbols(V type) generated. But they did not
+// get through linking stage. 
+//
+typedef vcl_vector<float>::iterator Iter;
+RREL_UTIL_INSTANTIATE_RAN_ITER(float, Iter);
+ 
+#else
+
 // Trigger this implicitly, because on many compilers, the
 // vector::iterator conflicts with a pointer. With GCC 3.x (only?)
 // vector::iterator _is not_ a pointer. The implicit instantiation
@@ -30,3 +43,5 @@ rrel_util_vector_float_iterator_instantiation_tickler()
   rrel_util_intercept_adjustment_copy( itr, itr, val, val, 1 );
   rrel_util_intercept_adjust_stats_copy( itr, itr, val, val, val, 1 );
 }
+
+#endif
