@@ -1,10 +1,9 @@
 #ifndef vipl_erode_disk_txx_
 #define vipl_erode_disk_txx_
 
+#include "vipl_erode_disk.h"
 #include <vcl_algorithm.h>
 #include <vcl_iostream.h>
-
-#include "vipl_erode_disk.h"
 
 template <class ImgIn,class ImgOut,class DataIn,class DataOut,class PixelItr>
 bool vipl_erode_disk <ImgIn,ImgOut,DataIn,DataOut,PixelItr> :: section_applyop(){
@@ -31,9 +30,9 @@ bool vipl_erode_disk <ImgIn,ImgOut,DataIn,DataOut,PixelItr> :: section_applyop()
   vcl_cout << " run over image ...";
 #endif
   for (register int j = starty; j < stopy; ++j)
-    for (register int i = startx; i < stopx; ++i) {
-      register DataIn
-      v = fgetpixel(in, i, j, dummy); // set v to min of surrounding pixels:
+    for (register int i = startx; i < stopx; ++i)
+    {
+      DataIn v = fgetpixel(in, i, j, dummy); // set v to min of surrounding pixels:
       for (register int x=0; x<=size; ++x)
       for (register int y=0; y<=size; ++y)
         if (mask()[x][y]) {

@@ -1,9 +1,8 @@
 #ifndef vipl_dilate_disk_txx_
 #define vipl_dilate_disk_txx_
 
-#include <vcl_algorithm.h>
-
 #include "vipl_dilate_disk.h"
+#include <vcl_algorithm.h>
 
 template <class ImgIn,class ImgOut,class DataIn,class DataOut,class PixelItr>
 bool vipl_dilate_disk <ImgIn,ImgOut,DataIn,DataOut,PixelItr> :: section_applyop(){
@@ -18,9 +17,9 @@ bool vipl_dilate_disk <ImgIn,ImgOut,DataIn,DataOut,PixelItr> :: section_applyop(
   int stopy = stop(Y_Axis());
   const DataIn dummy = DataIn(0); // dummy initialisation to avoid compiler warning
   for (register int j = starty, ej =  stopy; j < ej  ; ++j)
-    for (register int i = startx, ei = stopx; i < ei ; ++i) {
-      register DataIn
-      v = fgetpixel(in, i, j, dummy); // set v to max of surrounding pixels:
+    for (register int i = startx, ei = stopx; i < ei ; ++i)
+    {
+      DataIn v = fgetpixel(in, i, j, dummy); // set v to max of surrounding pixels:
       for (register int x=0; x<=size; ++x)
       for (register int y=0; y<=size; ++y)
         if (mask()[x][y]) {
@@ -45,16 +44,16 @@ bool vipl_dilate_disk <ImgIn,ImgOut,DataIn,DataOut,PixelItr> :: preop(){
   if (mask() == 0)
          ref_mask() = new boolptr[1+size];
   else {
-        for (int x=0; x<=size; ++x)
-            if (mask()[x]) delete[] ref_mask()[x];
-        delete[] ref_mask();
-        ref_mask() = new boolptr[1+size];
-        }
-  {for (int x=0; x<=size; ++x) {
+    for (int x=0; x<=size; ++x)
+      if (mask()[x]) delete[] ref_mask()[x];
+    delete[] ref_mask();
+    ref_mask() = new boolptr[1+size];
+  }
+  for (int x=0; x<=size; ++x) {
     ref_mask()[x] = new bool[size+1];
     for (int y=0; y<=size; ++y)
       ref_mask()[x][y] = (x*x + y*y <= rs);
-  }}
+  }
   return true;
 }
 
@@ -63,7 +62,7 @@ bool vipl_dilate_disk <ImgIn,ImgOut,DataIn,DataOut,PixelItr> :: preop(){
 template <class ImgIn,class ImgOut,class DataIn,class DataOut,class PixelItr>
 bool vipl_dilate_disk <ImgIn,ImgOut,DataIn,DataOut,PixelItr> :: postop(){
   int size = (radius() < 0) ? 0 : int(radius());
-  if (mask()){
+  if (mask()) {
     for (int x=0; x<=size; ++x)
       if (mask()[x]) delete[] ref_mask()[x];
     delete[] ref_mask();
