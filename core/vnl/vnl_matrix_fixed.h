@@ -610,22 +610,6 @@ vnl_matrix_fixed<T,m,n> element_quotient( const vnl_matrix_fixed<T,m,n>& mat1,
 
 
 
-//: Multiply two conformant vnl_matrix_fixed (M x N) times (N x O)
-// \relates vnl_matrix_fixed
-template <class T, unsigned M, unsigned N, unsigned O>
-inline
-vnl_matrix_fixed<T, M, O> operator*(const vnl_matrix_fixed<T, M, N>& a, const vnl_matrix_fixed<T, N, O>& b)
-{
-  vnl_matrix_fixed<T, M, O> out;
-  for (unsigned i = 0; i < M; ++i)
-    for (unsigned j = 0; j < O; ++j) {
-      T accum = a(i,0) * b(0,j);
-      for (unsigned k = 1; k < N; ++k)
-        accum += a(i,k) * b(k,j);
-      out(i,j) = accum;
-    }
-  return out;
-}
 
 #ifndef VCL_VC60
 // The version for correct compilers
@@ -646,14 +630,77 @@ vnl_vector_fixed<T, M> operator*(const vnl_matrix_fixed<T, M, N>& a, const vnl_v
   }
   return out;
 }
+
+//: Multiply two conformant vnl_matrix_fixed (M x N) times (N x O)
+// \relates vnl_matrix_fixed
+template <class T, unsigned M, unsigned N, unsigned O>
+inline
+vnl_matrix_fixed<T, M, O> operator*(const vnl_matrix_fixed<T, M, N>& a, const vnl_matrix_fixed<T, N, O>& b)
+{
+  vnl_matrix_fixed<T, M, O> out;
+  for (unsigned i = 0; i < M; ++i)
+    for (unsigned j = 0; j < O; ++j) {
+      T accum = a(i,0) * b(0,j);
+      for (unsigned k = 1; k < N; ++k)
+        accum += a(i,k) * b(k,j);
+      out(i,j) = accum;
+    }
+  return out;
+}
+
+
 #else
-// For some reason MSVC6.0 cannot cope with this particular instance of template matching.
+// For some reason MSVC6.0 cannot cope with thess particular instances of template matching.
+
+
+//: Multiply two conformant vnl_matrix_fixed (M x N) times (N x O)
+// \relates vnl_matrix_fixed
+template <class T, unsigned M, unsigned N, unsigned O>
+inline
+vnl_matrix_fixed<T, M, O> vnl_matrix_fixed_m_mult_m_msvc6_hack(
+  const vnl_matrix_fixed<T, M, N>& a, const vnl_matrix_fixed<T, N, O>& b)
+{
+  vnl_matrix_fixed<T, M, O> out;
+  for (unsigned i = 0; i < M; ++i)
+    for (unsigned j = 0; j < O; ++j) {
+      T accum = a(i,0) * b(0,j);
+      for (unsigned k = 1; k < N; ++k)
+        accum += a(i,k) * b(k,j);
+      out(i,j) = accum;
+    }
+  return out;
+}
+
+
+# define macro( T, M, N, O ) inline \
+vnl_matrix_fixed<T, M, O > operator*(const vnl_matrix_fixed<T, M, N >& a, const vnl_matrix_fixed<T, N, O >& b) \
+{ return vnl_matrix_fixed_m_mult_m_msvc6_hack< T, M, N, O >(a, b); }
+
+macro(double, 2, 2, 2)
+macro(double, 2, 2, 3)
+macro(double, 2, 2, 6)
+macro(double, 2, 3, 2)
+macro(double, 2, 3, 3)
+macro(double, 3, 2, 2)
+macro(double, 3, 2, 3)
+macro(double, 3, 3, 3)
+macro(double, 3, 3, 4)
+macro(double, 3, 3, 12)
+macro(double, 3, 4, 3)
+macro(double, 3, 4, 4)
+macro(double, 4, 3, 3)
+macro(double, 4, 3, 4)
+macro(double, 4, 4, 3)
+macro(double, 4, 4, 4)
+macro(float, 3, 3, 3)
+# undef macro
+
 
 // Multiply  conformant vnl_matrix_fixed (M x N) and vector_fixed (N)
 // This version is used by MSVC60 to avoid an annoying instantiation problem.
 template <class T, unsigned M, unsigned N>
 inline
-vnl_vector_fixed<T, M> vnl_matrix_fixed_mult_msvc6_hack(const vnl_matrix_fixed<T, M, N>& a, const vnl_vector_fixed<T, N>& b)
+vnl_vector_fixed<T, M> vnl_matrix_fixed_m_mult_v_msvc6_hack(const vnl_matrix_fixed<T, M, N>& a, const vnl_vector_fixed<T, N>& b)
 {
   vnl_vector_fixed<T, M> out;
   for (unsigned i = 0; i < M; ++i) {
@@ -667,18 +714,22 @@ vnl_vector_fixed<T, M> vnl_matrix_fixed_mult_msvc6_hack(const vnl_matrix_fixed<T
 
 # define macro( T, M, N ) inline \
 vnl_vector_fixed<T, M > operator*(const vnl_matrix_fixed<T, M, N >& a, const vnl_vector_fixed<T, N >& b) \
-{ return vnl_matrix_fixed_mult_msvc6_hack< T, M, N >(a, b); }
+{ return vnl_matrix_fixed_m_mult_v_msvc6_hack< T, M, N >(a, b); }
 
-macro(double, 2 , 2 )
-macro(double, 2 , 3 )
-macro(double, 2 , 6 )
-macro(double, 3 , 2 )
-macro(double, 3 , 3 )
-macro(double, 3 , 4 )
-macro(double, 4 , 3 )
-macro(double, 4 , 4 )
-macro(float, 3 , 3 )
+macro(double, 2, 2)
+macro(double, 2, 3)
+macro(double, 2, 6)
+macro(double, 3, 2)
+macro(double, 3, 3)
+macro(double, 3, 4)
+macro(double, 3, 12)
+macro(double, 4, 3)
+macro(double, 4, 4)
+macro(float, 3, 3)
 # undef macro
+
+
+
 #endif
 
 
