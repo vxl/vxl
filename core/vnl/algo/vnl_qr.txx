@@ -1,4 +1,4 @@
-//-*- c++ -*-------------------------------------------------------------------
+// This is vxl/vnl/algo/vnl_qr.txx
 #ifndef vnl_qr_txx_
 #define vnl_qr_txx_
 // Author: Andrew W. Fitzgibbon, Oxford RRG
@@ -198,7 +198,7 @@ vnl_vector<T> vnl_qr<T>::solve(const vnl_vector<T>& b) const
                    (T*)0/*Ax*/,
                    JOB,
                    &info);
-  
+
   if (info > 0)
     vcl_cerr << "vnl_qr<T>::solve() : matrix is rank-deficient by " << info << vcl_endl;
 
@@ -238,8 +238,8 @@ vnl_vector<T> vnl_qr<T>::QtB(const vnl_vector<T>& b) const
 
 //--------------------------------------------------------------------------------
 
-#define VNL_QR_INSTANTIATE(T)\
- template class vnl_qr<T >;\
- VCL_INSTANTIATE_INLINE(T vnl_qr_determinant(vnl_matrix<T > const&));
+#define VNL_QR_INSTANTIATE(T) \
+ template class vnl_qr<T >; \
+ VCL_INSTANTIATE_INLINE(T vnl_qr_determinant(vnl_matrix<T > const&))
 
 #endif

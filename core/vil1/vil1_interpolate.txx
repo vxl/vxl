@@ -136,7 +136,6 @@ bool vil_interpolate_bicubic(vil_memory_image_of<T> const& img,
 template bool vil_interpolate_nearest(vil_memory_image_of<T > const&, double, double, U*); \
 template bool vil_interpolate_bilinear(vil_memory_image_of<T > const&, double, double, U*); \
 template bool vil_interpolate_bilinear_grad(vil_memory_image_of<T > const&, double, double, U*, U*, U*); \
-template bool vil_interpolate_bicubic(vil_memory_image_of<T > const&, double, double, U*);
+template bool vil_interpolate_bicubic(vil_memory_image_of<T > const&, double, double, U*)
 
-#endif
-
+#endif // vil_interpolate_txx_
