@@ -3,7 +3,7 @@ vcl \
 vnl
 
 LINK_DIRECTORIES = \
-${CMAKE_BINARY_DIR}/vxl/vcl 
+${CMAKE_BINARY_DIR}/vcl 
 
 
 LINK_LIBRARIES = \
@@ -14,7 +14,7 @@ ${CMAKE_BINARY_DIR} \
 ${CMAKE_SOURCE_DIR} \
 ${CMAKE_SOURCE_DIR}/vxl \
 ${CMAKE_BINARY_DIR}/vxl \
-${CMAKE_BINARY_DIR}/vxl/vcl \
-${CMAKE_SOURCE_DIR}/vxl/vcl
+${CMAKE_BINARY_DIR}/vcl \
+${CMAKE_SOURCE_DIR}/vcl
 
 
