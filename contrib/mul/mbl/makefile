@@ -29,6 +29,7 @@ SOURCES += mbl_read_yes.cxx
 SOURCES += mbl_random_n_from_m.cxx
 SOURCES += mbl_select_n_from_m.cxx
 SOURCES += mbl_parse_block.cxx
+SOURCES += mbl_correspond_points.cxx
 
 # Additional files to document:
 MANPAGE_SOURCES += mbl_data_array_ptr_wrapper.txx
