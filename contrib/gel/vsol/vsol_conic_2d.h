@@ -322,7 +322,7 @@ public:
   //---------------------------------------------------------------------------
   //: output description to stream
   //---------------------------------------------------------------------------
-  inline void vsol_conic_2d::describe(vcl_ostream &strm, int blanking=0) const
+  inline void describe(vcl_ostream &strm, int blanking=0) const
   {
     if (blanking < 0) blanking = 0; while (blanking--) strm << ' ';
     strm << static_cast<vgl_conic<double> >(*this) << '\n';
