@@ -86,11 +86,11 @@ sub get_dependencies
 }
 
 #-----------------------------------------------------------
-#  create_doxyfile($dfXXX, $doxydir, $opfile, $library, $pref, $deps, $strip, $header, $infilter,$havedot);
+#  create_doxyfile($dfXXX, $doxydir, $opfile, $library, $pref, $deps, $strip, $header, $stylesheet, $infilter,$havedot);
 
 sub  create_doxyfile
 {
-  my ($dfXXX, $doxydir, $opfile, $library, $pref, $deps, $strip, $header, $infilter,$havedot) = @_;
+  my ($dfXXX, $doxydir, $opfile, $library, $pref, $deps, $strip, $header, $stylesheet, $infilter,$havedot) = @_;
   open(IN, "$dfXXX")  || die "can't open file $dfXXX\n";
   open(OUT, ">$opfile") || die "can't open file $opfile\n";
 
@@ -109,6 +109,7 @@ sub  create_doxyfile
     s/SSSPREF/$pref/g;
     s/SSSPATH/$strip/g;
     s/SSSHEADER/$header/g;
+    s/SSSSTYLESHEET/$stylesheet/g;
     s/SSSINFILTER/$infilter/g;
     s/SSSOUTPUTDIR/$outputdir/g;
     s/SSSTAGFILE/$tagfile/g;
@@ -254,11 +255,12 @@ $opfile = "$doxydir/output/Doxyfile.$libname";
 $strip = cwd(); chomp $strip;
 $strip = $strip . "/";
 $header = "$script_dir/doxy_header.html";
+$stylesheet = "$script_dir/ourdoxygen.css";
 $infilter = $vxlsrc . "/vxl/doc/vxl_doxy.pl";
 $havedot = check_havedot($doxyoutputdir);
 
 #print "$strip\n";
-create_doxyfile($dfXXX, $doxydir, $opfile, $library, $pref, $deps, $strip, $header, $infilter, $havedot);
+create_doxyfile($dfXXX, $doxydir, $opfile, $library, $pref, $deps, $strip, $header, $stylesheet, $infilter, $havedot);
 
 
 # Work out how to get from current library to base

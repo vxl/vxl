@@ -1,4 +1,4 @@
-# Doxyfile 1.1.1
+# Doxyfile 1.2.18
 
 # This file describes the settings to be used by doxygen for a project
 #
@@ -184,7 +184,13 @@ SORT_MEMBER_DOCS     = YES
 # The TAB_SIZE tag can be used to set the number of spaces in a tab.
 # Doxygen uses this value to replace tabs by spaces in code fragments.
 
-TAB_SIZE             = 4
+TAB_SIZE             = 2
+
+##If the DETAILS_AT_TOP tag is set to YES then Doxygen will output the
+# detailed description near the top, like JavaDoc. If set to NO, the
+# detailed description appears after the member documentation. 
+
+DETAILS_AT_TOP       = YES
 
 #---------------------------------------------------------------------------
 # configuration options related to the input files
@@ -289,7 +295,7 @@ HTML_FOOTER          =
 # fine-tune the look of the HTML output. If the tag is left blank doxygen
 # will generate a default style sheet
 
-HTML_STYLESHEET      = 
+HTML_STYLESHEET      = SSSSTYLESHEET
 
 # If the HTML_ALIGN_MEMBERS tag is set to YES, the members of classes,
 # files or namespaces will be aligned in HTML using tables. If set to
