@@ -8,7 +8,7 @@
 // \file
 // \brief Represents a linear 2D interpolator for a vdgl_edgel_chain
 //  A 2d linear edgel chain interpolator
-//  \authorGeoff Cross
+// \author Geoff Cross
 
 #include <vdgl/vdgl_interpolator.h>
 
@@ -27,8 +27,9 @@ class vdgl_interpolator_linear : public vdgl_interpolator
   double get_x( const double index);
   double get_y( const double index);
 
-  //: interpolation 1st degree
-  //:  the image gradient direction
+  // interpolation 1st degree
+
+  //: the image gradient direction
   double get_theta( const double index);
   //:  the geometric tangent angle
   double get_tangent_angle(const double index);

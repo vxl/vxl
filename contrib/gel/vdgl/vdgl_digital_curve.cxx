@@ -6,7 +6,6 @@
 // \file
 
 #include "vdgl_digital_curve.h"
-#include <vnl/vnl_numeric_traits.h>
 #include <vsol/vsol_point_2d.h>
 #include <vdgl/vdgl_edgel_chain.h>
 #include <vdgl/vdgl_interpolator_linear.h>
@@ -98,8 +97,8 @@ bool vdgl_digital_curve::split(vsol_point_2d_sptr const& v,
   return true;
 }
 
-//: scan all the points on the curve and compute the bounds
-//  calling routine must insure that the box exists
+//: scan all the points on the curve and compute the bounds.
+//  Calling routine must insure that the box exists.
 void vdgl_digital_curve::compute_bounding_box(void)
 {
   bounding_box_->set_min_x(interpolator_->get_min_x());
