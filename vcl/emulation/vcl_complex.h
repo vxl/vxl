@@ -33,6 +33,7 @@ template <class FLOAT>
 class vcl_complex
 {
  public:
+  typedef FLOAT value_type;
   vcl_complex (FLOAT r = 0, FLOAT i = 0): re (r), im (i) { }
 #if VCL_HAS_MEMBER_TEMPLATES
   template <class T>
@@ -154,7 +155,7 @@ template <class FLOAT> inline vcl_complex<FLOAT>
 operator * (const vcl_complex<FLOAT>& x, const vcl_complex<FLOAT>& y)
 {
   return vcl_complex<FLOAT> (x.real() * y.real() - x.imag() * y.imag(),
-                           x.real() * y.imag() + x.imag() * y.real());
+                             x.real() * y.imag() + x.imag() * y.real());
 }
 
 template <class FLOAT> inline vcl_complex<FLOAT>
@@ -205,7 +206,6 @@ operator == (FLOAT x, const vcl_complex<FLOAT>& y)
   return x == y.real() && y.imag() == 0;
 }
 
-#if 1 // this is the way to go. do not use rel_ops.
 template <class FLOAT> inline bool
 operator != (const vcl_complex<FLOAT>& x, const vcl_complex<FLOAT>& y)
 {
@@ -223,7 +223,6 @@ operator != (FLOAT x, const vcl_complex<FLOAT>& y)
 {
   return x != y.real() || y.imag() != 0;
 }
-#endif
 
 template <class FLOAT> inline FLOAT
 vcl_abs (const vcl_complex<FLOAT>& x)
