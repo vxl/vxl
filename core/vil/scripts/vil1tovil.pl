@@ -42,7 +42,7 @@ s!\bvil/vil_ssd\b!vil/vil_math!g;
 s/\bvil1_ssd/vil_math_ssd/g;
 s!\bvil/vil_scale_intensities\b!vil/vil_math!g;
 s/\bvil1_scale_intensities/vil_math_scale_and_offset_values/g;
-s!(.*)vil/vil_(16|32)bit\b(.*)!$1vil/vil_stream_read$2\n$1vil/vil_stream_write$2!g;
+s!(.*)vil/vil_(16|32)bit\b(.*)!$1vil/vil_stream_read$3\n$1vil/vil_stream_write$3!g;
 s/\bvil1_(16|32)bit_/vil_stream_/g;
 
 
