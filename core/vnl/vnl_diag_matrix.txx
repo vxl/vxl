@@ -1,5 +1,5 @@
-#ifndef vnl_diag_matrix_C_
-#define vnl_diag_matrix_C_
+#ifndef vnl_diag_matrix_txx_
+#define vnl_diag_matrix_txx_
 
 // This is vxl/vnl/vnl_diag_matrix.txx
 
@@ -7,12 +7,6 @@
 
 #include <vcl_iostream.h>
 #include <vcl_cmath.h>
-
-#if defined(VCL_SUNPRO_CC) && defined(INSTANTIATE_TEMPLATES)
-# undef inline
-#endif
-
-
 
 
 //: Return inv(D) * b.
@@ -81,12 +75,6 @@ bool epsilon_equals (const vnl_diag_matrix<T>& m1, const vnl_diag_matrix<T>& m2,
 }
 #endif
 
-
-// Outside of STL, this seems to be the way to go
-#if defined(VCL_SUNPRO_CC)
-# undef VCL_INSTANTIATE_INLINE
-# define VCL_INSTANTIATE_INLINE(fn_decl)  template  fn_decl
-#endif
 
 #undef VNL_DIAG_MATRIX_INSTANTIATE
 #define VNL_DIAG_MATRIX_INSTANTIATE(T) \
