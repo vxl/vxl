@@ -31,8 +31,9 @@ template <class T>
 vil3d_image_view<T> vil3d_new_image_view_plane_k_j_i(unsigned ni, unsigned nj,
   unsigned nk, unsigned nplanes, T /*dummy*/)
 {
+  vil_pixel_format fmt = vil_pixel_format_of(T());
   vil_memory_chunk_sptr chunk = new vil_memory_chunk(ni*nj*nk*nplanes*sizeof(T),
-    vil_pixel_format_component_format(vil_pixel_format_of(T())));
+    vil_pixel_format_component_format(fmt));
   return vil3d_image_view<T>(chunk, reinterpret_cast<T *>(chunk->data()), ni, nj, nk,
     nplanes, 1, ni, ni*nj, ni*nj*nk);
 }
