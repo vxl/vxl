@@ -689,21 +689,15 @@ T cos_angle(vnl_vector<T> const& a, vnl_vector<T> const& b) {
   typedef typename vnl_numeric_traits<T>::abs_t abs_t;
 
   real_t ab = inner_product(a,b);
-#if defined(VCL_VC50x)
-  x"I don't believe vc50 needs this -- can someone confirm?";
-  T a_b = vcl_sqrt( a.squared_magnitude() * b.squared_magnitude() );
-  return T(ab)/T(a_b);
-#else
-  double/*abs_t*/ a_b = vcl_sqrt( double(a.squared_magnitude() * b.squared_magnitude()) );
-  return T( ab * abs_t(1.0 / a_b) );
-#endif
+  abs_t a_b = vcl_sqrt( abs_t(a.squared_magnitude() * b.squared_magnitude()) );
+  return T( ab / a_b);
 }
 
 //: Returns smallest angle between two non-zero n-dimensional vectors. O(n).
 
 template<class T>
 double angle (vnl_vector<T> const& a, vnl_vector<T> const& b) {
-  double cosine = vnl_math_abs( cos_angle(a, b) );
+  typename vnl_numeric_traits<T>::abs_t cosine = vnl_math_abs( cos_angle(a, b) );
   return vcl_acos(cosine);
 }
 
