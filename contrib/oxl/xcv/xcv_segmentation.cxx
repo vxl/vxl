@@ -75,7 +75,7 @@ void xcv_segmentation::perform_harris(vsl_harris_params& params,
     return;
   }
  
-  easy_tab->set_point_radius(3.0);
+  //easy_tab->set_point_radius(3.0);
   xcv_image_tableau_ref tableau = get_image_tableau_at(col,row);
   float low[3],high[3];
   tableau->get_bounding_box(low,high);
