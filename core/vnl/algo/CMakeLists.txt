@@ -27,6 +27,7 @@ SOURCE_FILES( vnl_algo_sources
 )
 
 AUX_SOURCE_DIRECTORY(Templates vnl_algo_sources)
+INCLUDE_DIRECTORIES(${allvxl_SOURCE_DIR}/v3p/netlib)
 
 IF (WIN32)
   IF (NOT CYGWIN)
