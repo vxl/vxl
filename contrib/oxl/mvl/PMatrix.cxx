@@ -109,7 +109,7 @@ PMatrix& PMatrix::operator=(const PMatrix& that)
 // - Destructor
 PMatrix::~PMatrix()
 {
-  delete _svd;
+  delete _svd; _svd = 0;
 }
 
 // OPERATIONS

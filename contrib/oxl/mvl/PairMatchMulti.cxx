@@ -54,7 +54,7 @@ PairMatchMulti& PairMatchMulti::operator=(const PairMatchMulti& that)
 //: Destructor
 PairMatchMulti::~PairMatchMulti()
 {
-  delete _scores;
+  delete _scores; _scores = 0;
 }
 
 void PairMatchMulti::add_match(int i1, int i2, double score)
