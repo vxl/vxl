@@ -6,6 +6,7 @@
 #endif
 #include "gmvl_connection_cache.h"
 
+#include <vcl/vcl_cassert.h>
 #include <vnl/vnl_math.h>
 
 // constructors / destructors

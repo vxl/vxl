@@ -7,7 +7,7 @@ include ${IUEROOT}/config/top-params.mk
 #######################################
 
 # van-duc region finder (ported from target)
-SUBDIRS += gevd
+#SUBDIRS += gevd
 
 # matcher
 SUBDIRS += geml

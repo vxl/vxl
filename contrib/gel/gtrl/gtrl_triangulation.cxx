@@ -31,8 +31,8 @@ gtrl_triangulation::gtrl_triangulation( gtrl_polygon poly)
 
 void gtrl_triangulation::run()
 {
-  REAL points[poly_.size()*2];
-  int markers[poly_.size()];
+  REAL *points= new REAL[poly_.size()*2];
+  int *markers= new int[poly_.size()];
 
   // for some reason, the markers don't seem to
   //   like starting at 0
@@ -103,4 +103,6 @@ void gtrl_triangulation::run()
   delete[] out.pointlist;
   delete[] out.pointmarkerlist;
   delete[] out.trianglelist;
+  delete[] points;
+  delete[] markers;
 }
