@@ -1,7 +1,3 @@
-#######################################
-include ${IUEROOT}/config/top-params.mk
-#######################################
-
 USES += vxl
 
 IMMEDIATE_LIBS := -lvcl
@@ -35,29 +31,13 @@ SOURCES += vil_flipud_impl.cxx
 SOURCES += vil_block_cache_image_impl.cxx
 SOURCES += vil_image_as.cxx
 
-# classes derived from vil_file_format 
+# classes derived from vil_file_format
 SOURCES += file_formats/vil_pnm.cxx
 SOURCES += file_formats/vil_viff.cxx
 SOURCES += file_formats/vil_viff_support.c
 SOURCES += file_formats/vil_iris.cxx
 SOURCES += file_formats/vil_mit.cxx
 SOURCES += file_formats/vil_bmp.cxx
-ifeq ($(HAS_PNG),1)
-USE_PNG := 1
-SOURCES += file_formats/vil_png.cxx
-endif
-ifeq ($(HAS_JPEG),1)
-USE_JPEG := 1
-SOURCES += file_formats/vil_jpeg.cxx
-SOURCES += file_formats/vil_jpeg_source_mgr.cxx
-SOURCES += file_formats/vil_jpeg_decompressor.cxx
-SOURCES += file_formats/vil_jpeg_destination_mgr.cxx
-SOURCES += file_formats/vil_jpeg_compressor.cxx
-endif
-ifeq ($(HAS_TIFF),1)
-USE_TIFF := 1
-SOURCES += file_formats/vil_tiff.cxx
-endif
 
 # Operations
 SOURCES += vil_new.cxx
@@ -80,10 +60,32 @@ FLAGS_Templates/vil_convolve_1d.cxx := $(optimize)
 FLAGS_Templates/vil_convolve_simple+byte.byte.int.int-.cxx := $(optimize)
 FLAGS_Templates/vil_convolve_simple+byte.float.float.byte-.cxx := $(optimize)
 
+#######################################
+include ${IUEROOT}/config/top-params.mk
+#######################################
+
+ifeq ($(HAS_PNG),1)
+USE_PNG := 1
+SOURCES += file_formats/vil_png.cxx
+endif
+ifeq ($(HAS_JPEG),1)
+USE_JPEG := 1
+SOURCES += file_formats/vil_jpeg.cxx
+SOURCES += file_formats/vil_jpeg_source_mgr.cxx
+SOURCES += file_formats/vil_jpeg_decompressor.cxx
+SOURCES += file_formats/vil_jpeg_destination_mgr.cxx
+SOURCES += file_formats/vil_jpeg_compressor.cxx
+endif
+ifeq ($(HAS_TIFF),1)
+USE_TIFF := 1
+SOURCES += file_formats/vil_tiff.cxx
+endif
+
+
 # subdirectories
 #SUBDIRS += algo
 ifndef NOTEST
-SUBDIRS += tests 
+SUBDIRS += tests
 SUBDIRS += examples
 endif
 
