@@ -1,33 +1,17 @@
 // This is core/vcsl/vcsl_spatial.cxx
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma implementation
-#endif
-//:
-// \file
-
 #include "vcsl_spatial.h"
-
 #include <vcl_cassert.h>
-
 #include <vcsl/vcsl_spatial_transformation.h>
 #include <vcsl/vcsl_graph.h>
-
-//***************************************************************************
-// Constructors/Destructor
-//***************************************************************************
 
 //---------------------------------------------------------------------------
 // Destructor
 //---------------------------------------------------------------------------
 vcsl_spatial::~vcsl_spatial()
 {
-  if (graph_.ptr()!=0)
+  if (graph_)
     graph_->remove(this);
 }
-
-//***************************************************************************
-// Status report
-//***************************************************************************
 
 //---------------------------------------------------------------------------
 // Is `time' between the two time bounds ?
@@ -38,18 +22,6 @@ bool vcsl_spatial::valid_time(double time) const
     return true;
   else
     return (beat_[0]<=time)&&(time<=beat_[beat_.size()-1]);
-}
-
-//***************************************************************************
-// Status setting
-//***************************************************************************
-
-//---------------------------------------------------------------------------
-//: Set the list of time clocks
-//---------------------------------------------------------------------------
-void vcsl_spatial::set_beat(vcl_vector<double> const& new_beat)
-{
-  beat_=new_beat;
 }
 
 //---------------------------------------------------------------------------
@@ -73,21 +45,13 @@ void vcsl_spatial::set_parent(vcl_vector<vcsl_spatial_sptr> const& new_parent)
 
     // Add 'this' to the list of the new parents' potential children
     for (i=parent_.begin();i!=parent_.end();++i)
-      if ((*i).ptr()!=0)
+      if (*i)
         (*i)->potential_children_.push_back(this);
   }
 }
 
 //---------------------------------------------------------------------------
-// Set the list of transformations along the time
-//---------------------------------------------------------------------------
-void vcsl_spatial::set_motion(vcl_vector<vcsl_spatial_transformation_sptr> const& new_motion)
-{
-  motion_=new_motion;
-}
-
-//---------------------------------------------------------------------------
-//: Set the unique parent and the unique motion
+// Set the unique parent and the unique motion
 //---------------------------------------------------------------------------
 void
 vcsl_spatial::set_unique(const vcsl_spatial_sptr &new_parent,
@@ -98,10 +62,6 @@ vcsl_spatial::set_unique(const vcsl_spatial_sptr &new_parent,
   set_parent(temp_parent);
   beat_.clear();
 }
-
-//***************************************************************************
-// Basic operations
-//***************************************************************************
 
 //---------------------------------------------------------------------------
 // Return the index of the beat inferior or equal to `time'
@@ -317,7 +277,7 @@ bool vcsl_spatial::is_absolute(double time) const
   {
     // If parent at given interval is NULL, 'this' must be absolute
     int i=matching_interval(time);
-    return parent_[i].ptr()==0;
+    return !parent_[i];
   }
 }
 
@@ -358,18 +318,8 @@ vcsl_spatial::from_local_to_cs(const vnl_vector<double> &v,
 
 void vcsl_spatial::set_graph(const vcsl_graph_sptr &new_graph)
 {
-  if (graph_.ptr()!=0)
+  if (graph_)
     graph_->remove(this);
   graph_=new_graph;
   graph_->put(this);
-}
-
-void vcsl_spatial::set_reached(const bool &new_reached)
-{
-  reached_=new_reached;
-}
-
-bool vcsl_spatial::reached(void) const
-{
-  return reached_;
 }
