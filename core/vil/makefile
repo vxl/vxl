@@ -50,6 +50,21 @@ USE_TIFF := 1
 SOURCES += file_formats/vil_tiff.cxx
 endif
 
+SOURCES += file_formats/vil_nitf.cxx
+SOURCES += file_formats/vil_nitf_extended_header.cxx
+SOURCES += file_formats/vil_nitf_header.cxx
+SOURCES += file_formats/vil_nitf_image_subheader.cxx
+SOURCES += file_formats/vil_nitf_image_subheader_v20.cxx
+SOURCES += file_formats/vil_nitf_message_header.cxx
+SOURCES += file_formats/vil_nitf_message_header_v20.cxx
+SOURCES += file_formats/vil_nitf_util.cxx
+SOURCES += file_formats/vil_nitf_version.cxx
+SOURCES += file_formats/vil_nitf_version_v20.cxx
+MANPAGE_SOURCES += file_formats/vil_nitf_blocking_info.h
+MANPAGE_SOURCES += file_formats/vil_nitf_header_v20.h
+MANPAGE_SOURCES += file_formats/vil_nitf_macro_defs.h
+MANPAGE_SOURCES += file_formats/vil_nitf_typeinfo.h
+
 # image operations
 SOURCES += vil_crop.cxx
 SOURCES += vil_clamp.cxx
