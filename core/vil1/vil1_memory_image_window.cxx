@@ -72,7 +72,7 @@ int vil_memory_image_window::sum_squared_differences(const vil_memory_image_of<v
       //      cout << "  int = " << mask1_col_index_ + col_index << " " << mask1_row_index_ + row_index << endl;
       // cout << "  int = " << p1 << " " << p2 << endl;
       
-      difference_total += ((p1 > p2) ? (p1 - p2) : (p2 - p1)); // avoid Numerics dependency - PVR
+      difference_total += p1>p2 ? p1-p2 : p2-p1; // avoid vnl dependency - PVr
 
       // Check to see if we can return early -- this is also useful as it implicitly
       // avoids accumulator overflow.

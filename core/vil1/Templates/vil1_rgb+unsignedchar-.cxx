@@ -3,7 +3,7 @@
 // #if !VCL_HAS_MEMBER_TEMPLATES
 // typedef vil_rgb<double> vil_rgb_double;
  
-// // VCL_DECxLARE_SPECIALIZATION(vil_rgb<unsigned char>::vil_rgb(const vil_rgb_double& r))
+// VCL_DECLARE_SPECIALIZATION(vil_rgb<unsigned char>::vil_rgb(const vil_rgb_double& r))
 // VCL_DEFINE_SPECIALIZATION
 // vil_rgb<unsigned char>::vil_rgb(const vil_rgb_double& r) {
 //   double r_R = r.R_;

@@ -42,7 +42,7 @@ void vil_convolve_simple(// input 1
 			 int x1, int y1, unsigned w1, unsigned h1,
 			 vil_memory_image_of<I2> const &IN2, // input 2
 			 int x2, int y2, unsigned w2, unsigned h2,
-			 AC *, //dumyy
+			 AC *, //dummy
 			 vil_memory_image_of<O>        &OUT, // output
 			 int xo, int yo);
 

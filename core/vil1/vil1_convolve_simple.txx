@@ -47,7 +47,7 @@ void vil_convolve_simple(I1 const* const* input1, unsigned w1, unsigned h1,
       // bounds.
       // The type unification complains there is no max(int, unsigned) 
       // template. On gcc 2.95 we could use max<int> to disambiguate,
-      // but SGI native doesn't accept that. Hence the explict casts.
+      // but SGI native doesn't accept that. Hence the explicit casts.
       // fsm
       int ibeg = vcl_max(int( 0), int(io-w2+1));
       int iend = vcl_min(int(w1), int(io+1));
