@@ -2,7 +2,7 @@
 SUBDIRS += bcal
 
 # 3-d reconstruction 
-#SUBDIRS += brct
+SUBDIRS += brct
 
 # 3-d tomography
 SUBDIRS += btom
