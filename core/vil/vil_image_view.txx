@@ -7,7 +7,7 @@
 //  \author Ian Scott
 
 #include "vil2_image_view.h"
-#include <vcl_cstdlib.h>
+#include <vcl_iostream.h>
 #include <vcl_string.h>
 #include <vcl_cassert.h>
 #include <vil2/vil2_smart_ptr.h>
@@ -52,14 +52,14 @@ void vil2_image_view<T>::deep_copy(const vil2_image_view<T>& src)
       for (int x=0;x<nx_;++x)
       {
         *p = *sp;
-		p+=xstep_;
+        p+=xstep_;
         sp+=s_xstep;
       }
       row += ystep_;
       src_row += s_ystep;
     }
-	src_data += s_planestep;
-	data += planestep_;
+    src_data += s_planestep;
+    data += planestep_;
   }
 }
 
@@ -156,7 +156,6 @@ void vil2_image_view<T>::set_to_memory(T* top_left,
 }
 
 
-
 //=======================================================================
 //: Arrange that this is window on given image.
 //  I.e. plane(i) points to im.plane(i+p0) + offset
@@ -213,8 +212,8 @@ vil2_image_view<T> vil2_image_view<T>::plane(int p) const
   return p_view;
 }
 
-//: Create a view which appears as the transpose of this view
-//  ie transpose()(x,y,p) = this(y,x,p)
+//: Create a view which appears as the transpose of this view.
+//  I.e transpose()(x,y,p) = this(y,x,p)
 template<class T>
 vil2_image_view<T> vil2_image_view<T>::transpose() const
 {
