@@ -32,7 +32,9 @@ static void test_temp_filename()
   {
     vcl_string filename1 = vul_temp_filename();
     vcl_cout << "vul_temp_filename() returns '" << filename1 << "'\n";
+    vcl_ofstream ostr1( filename1.c_str() );
     vcl_string filename2 = vul_temp_filename();
+    ostr1.close();
     vcl_cout << "vul_temp_filename() returns '" << filename2 << "'\n";
 
     TEST("Testing multiple calls", filename1 == filename2, false);
