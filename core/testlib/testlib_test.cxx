@@ -1,5 +1,5 @@
-// This is vxl/testlib/testlib_test.cxx
-
+// This is core/testlib/testlib_test.cxx
+#include "testlib_test.h"
 //
 // Copyright (C) 1991 Texas Instruments Incorporated.
 //
@@ -14,8 +14,6 @@
 // Created: 11-Mar-2001: TFC Copy of vnl_test
 // Created: 25-Apr-2002: AGAP Modified copy of testlib_test
 //
-
-#include "testlib_test.h"
 
 #include <vcl_cmath.h>
 #include <vcl_iostream.h>
@@ -32,8 +30,8 @@ void testlib_test_start(const char* name) {
   tests_passed = 0;
   tests_failed = 0;
   test_name = name;
-  vcl_cout << "-----------------------------------------------------------------------------\n";
-  vcl_cout << "Start Testing";
+  vcl_cout << "-----------------------------------------------------------------------------\n"
+           << "Start Testing";
   if (test_name != NULL) vcl_cout << " " << test_name;
   vcl_cout << ":\n-----------------------------------------------------------------------------\n";
   vcl_cout.flush();
@@ -53,10 +51,10 @@ void testlib_test_begin(const char* msg) {
 void testlib_test_perform(bool success) {
   if (success) {
     tests_passed++;
-    vcl_cout << "  PASSED" << vcl_endl;
+    vcl_cout << "  PASSED\n";
   } else {
     tests_failed++;
-    vcl_cout << "**FAILED**" << vcl_endl;
+    vcl_cout << "**FAILED**\n";
   }
 }
 
@@ -68,7 +66,7 @@ int testlib_test_summary() {
     vcl_cout<<tests_passed<<" tests succeeded, "<<tests_failed<<" tests failed\t\t\t*****";
   else
     vcl_cout<<"All "<<tests_passed<<" tests succeeded";
-  vcl_cout << "\n-----------------------------------------------------------------------------" << vcl_endl;
+  vcl_cout << "\n-----------------------------------------------------------------------------\n";
   return tests_failed;
 }
 
@@ -88,4 +86,16 @@ void testlib_test_assert_near(const vcl_string& msg, vcl_complex<double> expr, v
 {
   vcl_cout << msg << " should be " << target << ", is " << expr << ", ";
   testlib_test_perform(vcl_abs(expr - target) < tol);
+}
+
+void testlib_test_assert_far(const vcl_string& msg, double expr, double target, double tol)
+{
+  vcl_cout << msg << " should not be " << target << ", is " << expr << ", ";
+  testlib_test_perform(vcl_abs(expr - target) > tol);
+}
+
+void testlib_test_assert_far(const vcl_string& msg, vcl_complex<double> expr, vcl_complex<double> target, double tol)
+{
+  vcl_cout << msg << " should not be " << target << ", is " << expr << ", ";
+  testlib_test_perform(vcl_abs(expr - target) > tol);
 }

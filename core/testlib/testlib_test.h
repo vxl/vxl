@@ -1,7 +1,6 @@
-// This is vxl/testlib/testlib_test.h
+// This is core/testlib/testlib_test.h
 #ifndef testlib_test_h_
 #define testlib_test_h_
-
 //:
 // \file
 // \brief Testing software
@@ -32,9 +31,16 @@ void testlib_test_assert_near(const vcl_string& msg, double expr,
 //: output msg, then perform test to see if expr is within tol of target
 void testlib_test_assert_near(const vcl_string& msg, vcl_complex<double> expr,
                               vcl_complex<double> target, double tol = 1e-12);
+//: output msg, then perform test to see if expr is not within tol of target
+void testlib_test_assert_far(const vcl_string& msg, double expr,
+                             double target = 0, double tol = 1e-12);
+//: output msg, then perform test to see if expr is not within tol of target
+void testlib_test_assert_far(const vcl_string& msg, vcl_complex<double> expr,
+                             vcl_complex<double> target, double tol = 1e-12);
 
 #define Assert testlib_test_assert
 #define AssertNear testlib_test_assert_near
+#define AssertFar testlib_test_assert_far
 
 //: initialise test
 #define START(s) testlib_test_start(s);
@@ -51,6 +57,13 @@ do { \
 do { \
   testlib_test_begin(s); \
   testlib_test_assert_near("",p,v,t); \
+} while (0)
+
+//: TEST function, s is message, test to see if p is far from v, tolerence t
+#define TEST_FAR(s,p,v,t) \
+do { \
+  testlib_test_begin(s); \
+  testlib_test_assert_far("",p,v,t); \
 } while (0)
 
 //: run x, s is message, then test to see if p==v
