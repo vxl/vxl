@@ -12,6 +12,7 @@
 // \endverbatim
 
 #include <vcl_vector.h>
+#include <vcl_map.h>
 
 #include <bgui/bgui_selector_tableau_sptr.h>
 #include <vgui/vgui_tableau.h>
@@ -59,25 +60,40 @@ class bgui_selector_tableau : public vgui_tableau
   virtual void get_popup(const vgui_popup_params&, vgui_menu &m);
 
   //: Add a tableau to the list of child tableaux.
-  void add(vgui_tableau_sptr const&, vcl_string name = "");
+  void add(vgui_tableau_sptr const& tab, vcl_string name = "");
 
   //: Remove a tableau from the list of child tableaux.
-  void remove(vgui_tableau_sptr const&);
+  void remove(vgui_tableau_sptr const& tab);
+
+  //: Remove a tableau from the list of child tableaux by name.
+  bool remove(const vcl_string& name);
 
   //: Clear the list of child tableaux.
   void clear();
 
   //: Returns a smart pointer to the active tableau
   vgui_tableau_sptr active_tableau();
+
+  //: Returns the name of the active tableau
+  const vcl_string& active_name() const { return active_child_; }
+
+  //: Returns a smart pointer to the tableau with the given name
+  vgui_tableau_sptr get_tableau(const vcl_string& name);
   
-  //: Make the child tableau with the given position the active child.
-  void set_active(int i);
+  //: Make the child tableau with the given name the active child.
+  void set_active(const vcl_string& name);
 
-  //: Toggle the child tableau in the given position between visible/invisible.
-  bool toggle(int);
+  //: Toggle the child tableau with the given name between visible/invisible.
+  bool toggle(const vcl_string& name);
 
-  //: Returns true if the child tableau in the given position is active.
-  bool is_visible(int);
+  //: Returns true if the child tableau with the given name is active.
+  bool is_visible(const vcl_string& name) const;
+
+  //: Returns the number of children
+  int num_children() const { return child_map_.size(); }
+
+  //: Returns a vector containing the names of all children (in rendering order)
+  const vcl_vector<vcl_string>& child_names() const { return render_order_; }
 
  protected:
   //: Destructor - called by bgui_selector_tableau_sptr.
@@ -92,23 +108,20 @@ class bgui_selector_tableau : public vgui_tableau
   //: Remove given tableau from list of child tableaux.
   bool remove_child(vgui_tableau_sptr const& );
 
-  //: Returns true if the given integer could be an index to the child tableaux.
-  bool index_ok(int) const;
-
   // data
   // ----
 
-  //: List of child tableaux.
-  vcl_vector<vgui_parent_child_link> children_;
+  //: Whether each child is visible or not (ie. using events).
+  vcl_map<vcl_string, bool> visible_;
 
-  //: Whether each child is active or not (ie. using events).
-  vcl_vector<bool> visible_;
+  //: The unique child names sorted in rendering order
+  vcl_vector<vcl_string> render_order_;
 
-  //: An identifier string for each child tableau (used in selection menus)
-  vcl_vector<vcl_string> menu_names_;
+  //: A map from unique names to children
+  vcl_map<vcl_string, vgui_parent_child_link> child_map_;
 
-  //: The index of the active tableau
-  int active_index_;
+  //: The name of the active tableau
+  vcl_string active_child_;
 };
 
 //: Creates a smart-pointer to a bgui_selector_tableau tableau.

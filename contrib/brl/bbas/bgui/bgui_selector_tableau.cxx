@@ -25,7 +25,6 @@
 //----------------------------------------------------------------------------
 //: Constructor - don't use this, use bgui_selector_tableau_new.
 bgui_selector_tableau::bgui_selector_tableau()
-  : active_index_(-1)
 {
 }
 
@@ -37,7 +36,7 @@ bgui_selector_tableau::bgui_selector_tableau(vcl_vector<vgui_tableau_sptr> const
 {
   for (unsigned int i = 0; i < the_children.size(); ++i)
     add(the_children[i]);
-  active_index_ = the_children.size()-1;
+  active_child_ = render_order_.front();
 }
 
 //----------------------------------------------------------------------------
@@ -57,8 +56,9 @@ vcl_string bgui_selector_tableau::type_name() const
 //: Return the file name of the active tableau or just return the type.
 vcl_string bgui_selector_tableau::file_name() const
 {
-  if (index_ok(active_index_))
-    return children_[active_index_]->file_name();
+  vcl_map<vcl_string, vgui_parent_child_link>::const_iterator itr = child_map_.find(active_child_);
+  if (itr != child_map_.end())
+    return itr->second->file_name();
     
   return type_name();
 }
@@ -68,7 +68,7 @@ vcl_string bgui_selector_tableau::file_name() const
 //: Returns a nice version of the name, including info on the children.
 vcl_string bgui_selector_tableau::pretty_name() const
 {
-  vcl_stringstream s; s << type_name() << "[#kids=" << children_.size() << ']';
+  vcl_stringstream s; s << type_name() << "[#kids=" << child_map_.size() << ']';
   return s.str();
 }
 
@@ -79,16 +79,16 @@ bool bgui_selector_tableau::handle(const vgui_event& event)
   // Save current matrix state. Each active child will be
   // invoked with this matrix state.
   vgui_matrix_state PM;
-  unsigned int n = children_.size();
 
   // "DRAW" events. Return true unless some child returns false.
   if (event.type==vgui_DRAW || event.type==vgui_DRAW_OVERLAY) {
     bool retv = true;
 
-    for (unsigned ia = 0; ia<n; ++ia) {
-      if (visible_[ia] && children_[ia]) {
+    vcl_vector<vcl_string>::iterator itr = render_order_.begin();
+    for (; itr != render_order_.end(); ++itr){
+      if (visible_[*itr]) {
         PM.restore();
-        if ( !children_[ia]->handle(event) )
+        if ( !child_map_[*itr]->handle(event) )
           retv=false;
       }
     }
@@ -97,11 +97,12 @@ bool bgui_selector_tableau::handle(const vgui_event& event)
   }
 
   // all other events :
-  
-  if(!index_ok(active_index_))
+
+  vcl_map<vcl_string, vgui_parent_child_link>::iterator itr = child_map_.find(active_child_);
+  if (itr == child_map_.end())
     return false;
     
-  return children_[active_index_]->handle(event);
+  return itr->second->handle(event);
 }
 
 //----------------------------------------------------------------------------
@@ -109,27 +110,31 @@ bool bgui_selector_tableau::handle(const vgui_event& event)
 bool bgui_selector_tableau::get_bounding_box(float lo[3], float hi[3]) const
 {
   // it would be nice if we could return an empty bounding box.
-  if (children_.empty())
+  if (child_map_.empty())
     return false;
 
   // get bbox of first visible child.
-  unsigned first;
-  for (first=0; first<children_.size(); ++first) {
-    if (visible_[first]){
-      if (!children_[first]->get_bounding_box(lo, hi))
+  vcl_vector<vcl_string>::const_iterator o_itr = render_order_.begin();
+  for (; o_itr!=render_order_.end(); ++o_itr ){
+    vcl_map<vcl_string, bool>::const_iterator v_itr = visible_.find(*o_itr);
+    if ((v_itr != visible_.end()) && v_itr->second){
+      vcl_map<vcl_string, vgui_parent_child_link>::const_iterator t_itr = child_map_.find(*o_itr);
+      if (!t_itr->second->get_bounding_box(lo, hi))
         return false;
-      else break;
+      break;
     }
   }
   // See if any children where visible
-  if(first >= children_.size())
+  if(o_itr == render_order_.end())
     return false;
-  
-  for (unsigned i=first+1; i<children_.size(); ++i) {
-    if (visible_[i]){
-      // get bbox of child i.
+
+  for (; o_itr!=render_order_.end(); ++o_itr ){
+    vcl_map<vcl_string, bool>::const_iterator v_itr = visible_.find(*o_itr);
+    if ((v_itr != visible_.end()) && v_itr->second){
+      // get bbox of child *o_itr.
+      vcl_map<vcl_string, vgui_parent_child_link>::const_iterator t_itr = child_map_.find(*o_itr);
       float l[3], h[3];
-      if (!children_[i]->get_bounding_box(l, h))
+      if (!t_itr->second->get_bounding_box(l, h))
         return false;
 
       // enlarge if necessary.
@@ -143,12 +148,19 @@ bool bgui_selector_tableau::get_bounding_box(float lo[3], float hi[3]) const
 }
 
 //----------------------------------------------------------------------------
-//: Same as add_child().
-void bgui_selector_tableau::add(vgui_tableau_sptr const& t, vcl_string name)
+void bgui_selector_tableau::add(vgui_tableau_sptr const& tab, vcl_string name)
 {
-  add_child(t);
-  if(name == "") name = t->file_name();
-  menu_names_.push_back(name);
+  if(name == "") name = tab->file_name();
+  
+  vcl_map<vcl_string, vgui_parent_child_link>::iterator itr = child_map_.find(name);
+  bool exists = (itr != child_map_.end());
+  
+  child_map_[name] = vgui_parent_child_link(this,tab);
+  if(!exists){
+    render_order_.push_back(name);
+    visible_[name] = true;
+  }
+  if(active_child_ == "") active_child_ = name;
 }
 
 //----------------------------------------------------------------------------
@@ -156,9 +168,7 @@ void bgui_selector_tableau::add(vgui_tableau_sptr const& t, vcl_string name)
 // virtual
 bool bgui_selector_tableau::add_child(vgui_tableau_sptr const& t)
 {
-  children_.push_back( vgui_parent_child_link(this,t) );
-  visible_.push_back(true);
-  active_index_ = children_.size()-1;
+  this->add(t);
   return true;
 }
 
@@ -171,38 +181,63 @@ void bgui_selector_tableau::remove(vgui_tableau_sptr const& t)
 }
 
 //----------------------------------------------------------------------------
+//: Remove given tableau from list of child tableaux.
+bool bgui_selector_tableau::remove(const vcl_string& name)
+{
+  vcl_map<vcl_string, vgui_parent_child_link>::iterator itr = child_map_.find(name);
+  if (itr != child_map_.end())
+    return remove_child(itr->second.child());
+  return false;
+}
+
+//----------------------------------------------------------------------------
 void bgui_selector_tableau::clear()
 {
-  children_.clear();
+  child_map_.clear();
   visible_.clear();
-  active_index_ = -1;
+  render_order_.clear();
+  active_child_ = "";
 }
 
 //----------------------------------------------------------------------------
 //: Returns a smart pointer to the active tableau
 vgui_tableau_sptr bgui_selector_tableau::active_tableau()
 {
-  if (index_ok(active_index_))
-    return children_[active_index_];
-
-  return NULL;
+  vcl_map<vcl_string, vgui_parent_child_link>::iterator itr = child_map_.find(active_child_);
+  if (itr == child_map_.end()) return NULL;
+  return itr->second;
 }
 
 //----------------------------------------------------------------------------
 // virtual
 bool bgui_selector_tableau::remove_child(vgui_tableau_sptr const &t)
 {
-  vcl_vector<bool>::iterator iv = visible_.begin();
-  vcl_vector<vcl_string>::iterator in = menu_names_.begin();
-  int c=0;
-  for( vcl_vector<vgui_parent_child_link>::iterator i=children_.begin();
-       i!=children_.end(); ++i, ++iv, ++in, ++c )
-    if ( (*i) == t ) {
-      children_.erase(i);
-      visible_.erase(iv);
-      menu_names_.erase(in);
-      if (active_index_ >= c)
-        --active_index_;
+  for( vcl_map<vcl_string, vgui_parent_child_link>::iterator itr=child_map_.begin();
+       itr!=child_map_.end(); ++itr )
+    if ( (itr->second.child()) == t ) {
+      vcl_string name = itr->first;
+      child_map_.erase(itr);
+      
+      vcl_map<vcl_string, bool>::iterator v_itr = visible_.find(name);
+      if(v_itr != visible_.end())
+        visible_.erase(v_itr);
+        
+      for( vcl_vector<vcl_string>::iterator o_itr = render_order_.begin();
+           o_itr!=render_order_.end(); ++o_itr ){
+        if (name == *o_itr)
+          render_order_.erase(o_itr--);
+      }
+      
+      if (active_child_ == name){
+        active_child_ = "";
+        for( vcl_vector<vcl_string>::iterator o_itr = render_order_.begin();
+             o_itr!=render_order_.end(); ++o_itr ){
+          if(visible_[*o_itr]){
+            active_child_ = *o_itr;
+            break;
+          }
+        }
+      }
       return true;
     }
   return false;
@@ -210,57 +245,52 @@ bool bgui_selector_tableau::remove_child(vgui_tableau_sptr const &t)
 
 
 //----------------------------------------------------------------------------
-//: Returns true if given integer could be an index to the child tableaux.
-bool bgui_selector_tableau::index_ok(int v) const
+bool bgui_selector_tableau::toggle(const vcl_string& name)
 {
-  return v >= 0 && v < int(children_.size());
-}
-
-
-//----------------------------------------------------------------------------
-bool bgui_selector_tableau::toggle(int v)
-{
-  if (!index_ok(v)) return false;
-  bool state = visible_[v];
-  visible_[v] = !state;
+  vcl_map<vcl_string, bool>::iterator itr = visible_.find(name);
+  if (itr == visible_.end()) return false;
+  bool state = itr->second;
+  itr->second = !state;
 
   return true;
 }
 
 //----------------------------------------------------------------------------
-bool bgui_selector_tableau::is_visible(int v)
+bool bgui_selector_tableau::is_visible(const vcl_string& name) const
 {
-  if (!index_ok(v)) return false;
-  return visible_[v];
+  vcl_map<vcl_string, bool>::const_iterator itr = visible_.find(name);
+  if (itr == visible_.end()) return false;
+  return itr->second;
 }
 
 //----------------------------------------------------------------------------
 //: Make the child tableau with the given position the active child.
-void bgui_selector_tableau::set_active(int i)
+void bgui_selector_tableau::set_active(const vcl_string& name)
 {
-  if (index_ok(i)) active_index_ = i;
+  vcl_map<vcl_string, vgui_parent_child_link>::iterator itr = child_map_.find(name);
+  if (itr != child_map_.end()) active_child_ = name;
 }
 
 //----------------------------------------------------------------------------
 class bgui_selector_switch_command : public vgui_command
 {
  public:
-  bgui_selector_switch_command(bgui_selector_tableau* s, int i) : selector(s), index(i) {}
-  void execute() { selector->set_active(index); selector->post_redraw(); }
+  bgui_selector_switch_command(bgui_selector_tableau* s, const vcl_string& n) : selector(s), name(n) {}
+  void execute() { selector->set_active(name); selector->post_redraw(); }
 
   bgui_selector_tableau *selector;
-  int index;
+  vcl_string name;
 };
 
 //----------------------------------------------------------------------------
 class bgui_selector_toggle_command : public vgui_command
 {
  public:
-  bgui_selector_toggle_command(bgui_selector_tableau* s, int i) : selector(s), index(i) {}
-  void execute() { selector->toggle(index); selector->post_redraw(); }
+  bgui_selector_toggle_command(bgui_selector_tableau* s, const vcl_string& n) : selector(s), name(n) {}
+  void execute() { selector->toggle(name); selector->post_redraw(); }
 
   bgui_selector_tableau *selector;
-  int index;
+  vcl_string name;
 };
 
 
@@ -276,16 +306,15 @@ void bgui_selector_tableau::get_popup(const vgui_popup_params& params,
   vgui_menu visible_menu;
 
   vcl_string check;
-  int count = 0;
-  vcl_vector<vcl_string>::iterator i = menu_names_.begin();
-  for ( ; i!=menu_names_.end() ; ++i, ++count) {
-    if( count == active_index_ ) check = "[x] ";
+  vcl_vector<vcl_string>::iterator itr = render_order_.begin();
+  for ( ; itr != render_order_.end() ; ++itr) {
+    if( *itr == active_child_ ) check = "[x] ";
     else check = "[ ] ";
-    active_menu.add(check+i->c_str(), new bgui_selector_switch_command(this,count));
+    active_menu.add(check+(*itr), new bgui_selector_switch_command(this,*itr));
 
-    if( is_visible(count) ) check = "[x] ";
+    if( is_visible(*itr) ) check = "[x] ";
     else check = "[ ] ";
-    visible_menu.add(check+i->c_str(), new bgui_selector_toggle_command(this,count));
+    visible_menu.add(check+(*itr), new bgui_selector_toggle_command(this,*itr));
   }
 
   submenu.add("Select Active", active_menu);
