@@ -62,20 +62,20 @@ QvNode::~QvNode()
 void
 QvNode::ref() const
 {
-    ((QvNode *) this)->refCount++; // const violation !!
+    refCount++; // mutable const
 }
 
 void
 QvNode::unref() const
 {
-    if (--((QvNode *) this)->refCount == 0) // const violation !!
-        delete (QvNode *) this;
+    if (--refCount == 0) // mutable const
+        delete (QvNode *) this; // const violation!
 }
 
 void
 QvNode::unrefNoDelete() const
 {
-    ((QvNode *) this)->refCount--; // const violation !!
+    refCount--; // mutable const
 }
 
 int QvNode::isGroupNode ()

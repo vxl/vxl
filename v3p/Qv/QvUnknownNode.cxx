@@ -29,5 +29,5 @@ QvUnknownNode::~QvUnknownNode()
     delete instanceFieldData;
 
     if (className != NULL)
-        free((void *) className);
+        free((void *) className); // const violation
 }

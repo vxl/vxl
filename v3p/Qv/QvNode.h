@@ -69,7 +69,7 @@ public:
   virtual ~QvNode();
 
   // Reference counting:
-  long  refCount;
+  mutable long  refCount;
   void  ref() const;            // Adds reference
   void  unref() const;          // Removes reference, deletes if now 0
   void  unrefNoDelete() const;  // Removes reference, never deletes

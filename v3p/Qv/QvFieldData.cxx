@@ -79,7 +79,7 @@ QvField *
 QvFieldData::getField(const QvNode *object, int index) const
 {
     return (QvField *) ((const char *) object +
-                        ((QvFieldEntry *) fields[index])->offset);
+                        ((QvFieldEntry const *) fields[index])->offset);
 }
 
 #include <vcl_cctype.h>
