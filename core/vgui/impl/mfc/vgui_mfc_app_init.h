@@ -1,3 +1,12 @@
+//
+// This is vgui/impl/mfc/vgui_mfc_app_init.h
+
+//:
+// \file
+// \author  Oxford RRG
+// \brief   Initializes the MFC CWinApp object.
+//
+
 #ifndef vgui_mfc_app_init_h_
 #define vgui_mfc_app_init_h_
 #ifdef __GNUC__
