@@ -6,6 +6,7 @@
 #endif
 #include "vil_stream_url.h"
 
+#include <vcl_cassert.h>
 #include <vcl_cstdio.h>  // sprintf()
 #include <vcl_cstring.h>
 #include <vcl_cstdlib.h>
@@ -28,7 +29,6 @@
 #endif
 
 
-
 static const
 int base64_encoding[]=
 {
@@ -42,7 +42,6 @@ static char out_buf[4];
 
 static const char * encode_triplet(char data[3], unsigned n)
 {
-
   assert (n>0 && n <4);
   out_buf[0] = base64_encoding[(data[0] & 0xFC) >> 2];
 
@@ -80,38 +79,35 @@ static vcl_string encode_base64(const vcl_string& in)
     data[0] = in[i++];
     data[1] = data[2] = 0;
 
-        if(i == l)
-        {
+    if(i == l)
+    {
       out.append(encode_triplet(data,1),4);
       return out;
     }
 
     data[1] = in[i++];
 
-        if(i == l)
-        {
+    if(i == l)
+    {
       out.append(encode_triplet(data,2),4);
       return out;
-        }
+    }
 
-        data[2] = in[i++];
+    data[2] = in[i++];
 
     out.append(encode_triplet(data,3),4);
 
-        if(line_octets >= 68/4) // print carriage return
-        {
-            out.append("\r\n",2);
-        line_octets = 0;
-        }
-        else
-            ++line_octets;
+    if(line_octets >= 68/4) // print carriage return
+    {
+      out.append("\r\n",2);
+      line_octets = 0;
+    }
+    else
+      ++line_octets;
     }
 
     return out;
-
 }
-
-
 
 
 vil_stream_url::vil_stream_url(char const *url)
@@ -129,7 +125,6 @@ vil_stream_url::vil_stream_url(char const *url)
   while (*p && *p!='/')
     ++ p;
   host = vcl_string(url+7, p);
-
 
   if (*p)
     path = p+1;
