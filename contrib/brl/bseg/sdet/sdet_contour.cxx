@@ -591,9 +591,8 @@ bool sdet_contour:: DetectJunction(vtol_vertex_2d_sptr const& endv, int& index,
   // 0. Must be an end point of a dangling 1-chain
   if (endv->numsup() > 1)         // avoid junction and 1-cycle
     return false;
-  vcl_vector<vtol_edge_sptr>* edges = endv->edges();
-  weaker = (*edges)[0]->cast_to_edge_2d();      // dangling edge must be a weaker contour
-  delete edges;
+  vcl_vector<vtol_edge_sptr> edges; endv->edges(edges);
+  weaker = edges[0]->cast_to_edge_2d();      // dangling edge must be a weaker contour
   vdgl_digital_curve_sptr dc = weaker->curve()->cast_to_vdgl_digital_curve();
 
   const int len = dc->get_interpolator()->get_edgel_chain()->size();
@@ -1334,14 +1333,11 @@ sdet_contour::DetectTouch(vtol_vertex_2d_sptr const& endv,
 vtol_edge_2d_sptr
 DanglingEdge(vtol_vertex_2d_sptr const& v)
 {
-  vcl_vector<vtol_edge_sptr>* segs = v->edges();
-  vtol_edge_sptr e = NULL;
-
-  if (segs->size()==1)
-    e = (*segs)[0];
-
-  delete segs;
-  return e->cast_to_edge_2d();
+  vcl_vector<vtol_edge_sptr> segs; v->edges(segs);
+  if (segs.size()==1)
+    return segs[0]->cast_to_edge_2d();
+  else
+    return 0;
 }
 
 
@@ -1365,10 +1361,9 @@ sdet_contour::MergeEndPtsOfChain(vtol_vertex_2d_sptr const& endpt,
     vcl_cout << " Merging end points of same edge " << *endpt << ' '
              << *other << '\n';
 
-  vcl_vector<vtol_edge_sptr>* edges = endpt->edges();
+  vcl_vector<vtol_edge_sptr> edges; endpt->edges(edges);
   // dangling edge terminating at endpt
-  vtol_edge_2d_sptr edge = (*edges)[0]->cast_to_edge_2d();
-  delete edges;
+  vtol_edge_2d_sptr edge = edges[0]->cast_to_edge_2d();
   vdgl_digital_curve_sptr dc = edge->curve()->cast_to_vdgl_digital_curve();
   vdgl_edgel_chain_sptr cxy= dc->get_interpolator()->get_edgel_chain();
   int N = cxy->size();
@@ -1441,14 +1436,12 @@ sdet_contour::MergeEndPtTouchingEndPt(vtol_vertex_2d_sptr const& end1,
   // 1. Retrieve the dangling edges/chains
 
   // The single edge connected to end1
-  vcl_vector<vtol_edge_sptr>* edges = end1->edges();
-  vtol_edge_2d_sptr edge1 = (*edges)[0]->cast_to_edge_2d();
-  delete edges;
+  vcl_vector<vtol_edge_sptr> edges; end1->edges(edges);
+  vtol_edge_2d_sptr edge1 = edges[0]->cast_to_edge_2d();
 
   // The single edge connected to end2
-  edges = end2->edges();
-  vtol_edge_2d_sptr edge2 = (*edges)[0]->cast_to_edge_2d();
-  delete edges;
+  end2->edges(edges);
+  vtol_edge_2d_sptr edge2 = edges[0]->cast_to_edge_2d();
 
   // 2. Create merged edge/chain
   vdgl_digital_curve_sptr dc1 = edge1->curve()->cast_to_vdgl_digital_curve();
@@ -1611,10 +1604,9 @@ MergeEndPtTouchingJunction(vtol_vertex_2d_sptr const& endpt,
 {
   if (sdet_contour::debug_)
     vcl_cout << "Merge at Junction e" << *endpt<< " j"  << *junction << '\n';
-  vcl_vector<vtol_edge_sptr>* edges = endpt->edges();
+  vcl_vector<vtol_edge_sptr> edges; endpt->edges(edges);
   // dangling edge terminating at end pt
-  old_edge = (*edges)[0]->cast_to_edge_2d();
-  delete edges;
+  old_edge = edges[0]->cast_to_edge_2d();
   vdgl_digital_curve_sptr old_dc = old_edge->curve()->cast_to_vdgl_digital_curve();
   vdgl_edgel_chain_sptr old_cxy= old_dc->get_interpolator()->get_edgel_chain();
   int N = old_cxy->size();

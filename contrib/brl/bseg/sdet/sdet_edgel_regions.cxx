@@ -1183,16 +1183,16 @@ void sdet_edgel_regions::print_edge_colis(unsigned int x, unsigned int y,
 //  process.
 static bool embedded_T(vtol_vertex_sptr v, vtol_edge_2d_sptr bar, vcl_vector<vtol_edge_2d_sptr>& real_edges)
 {
-  vcl_vector<vtol_edge_sptr>* edges = v->edges();
+  vcl_vector<vtol_edge_sptr> edges; v->edges(edges);
   int tedges = 0;
   vcl_vector<vtol_edge_sptr>::iterator eit;
-  for ( eit = edges->begin(); eit != edges->end(); eit++)
+  for ( eit = edges.begin(); eit != edges.end(); ++eit)
   {
     vtol_edge_2d_sptr e = (*eit)->cast_to_edge_2d();
     if (vcl_find(real_edges.begin(), real_edges.end(), e) == real_edges.end())
       continue;
 
-    if ((*eit)->cast_to_edge_2d()==bar)
+    if (e==bar)
     {
       tedges++;
       continue;
@@ -1204,9 +1204,7 @@ static bool embedded_T(vtol_vertex_sptr v, vtol_edge_2d_sptr bar, vcl_vector<vto
       continue;
     }
   }
-  delete edges;
-  bool embedded = (tedges>=3);
-  return embedded;
+  return tedges>=3;
 }
 
 //--------------------------------------------------------------------
@@ -1620,15 +1618,14 @@ void sdet_edgel_regions::ConstructFaces()
 
     //Check if the Face has valid Edges, since the Face
     //constructor can fail (looks like an expensive call)
-    vcl_vector<vtol_edge_sptr>* face_edges = face->edges();
-    if (face_edges->size())
+    vcl_vector<vtol_edge_sptr> face_edges; face->edges(face_edges);
+    if (face_edges.size() != 0)
     {
       faces_->push_back(face);
       intensity_face_index_[i] = face;
     }
     else
       n_bad++;
-    delete face_edges;
   }
   if (verbose_)
     vcl_cout << "\nConstructed Faces("
