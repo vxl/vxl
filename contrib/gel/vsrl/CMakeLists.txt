@@ -22,7 +22,7 @@ SET(vsrl_sources
 AUX_SOURCE_DIRECTORY(Templates vsrl_sources)
 
 ADD_LIBRARY(vsrl ${vsrl_sources})
-TARGET_LINK_LIBRARIES(vsrl vil vbl vnl_algo vnl osl vcl)
+TARGET_LINK_LIBRARIES(vsrl vil vnl)
 
 IF (BUILD_EXAMPLES)
   SUBDIRS(examples)
