@@ -104,6 +104,9 @@ SOURCE=.\bdgl_curve_algs.cxx
 # Begin Source File
 SOURCE=.\bdgl_curve_region.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\bdgl_region_algs.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"
@@ -112,6 +115,9 @@ SOURCE=.\bdgl_curve_algs.h
 # End Source File
 # Begin Source File
 SOURCE=.\bdgl_curve_region.h
+# End Source File
+# Begin Source File
+SOURCE=.\bdgl_region_algs.h
 # End Source File
 # End Group
 # End Target
