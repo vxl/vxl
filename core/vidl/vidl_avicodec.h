@@ -85,7 +85,9 @@ class vidl_avicodec : public vidl_codec
   // Helpers
   HANDLE  make_dib(vidl_frame_sptr frame, UINT bits);
 
- protected:
+  bool load_avi(const char* fname, char mode);
+
+protected:
    bool read_header();
    bool write_header();
 };

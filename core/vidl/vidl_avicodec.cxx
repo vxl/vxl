@@ -203,6 +203,8 @@ bool vidl_avicodec::probe(const char* fname)
     // The file was opened with success
     // So, release it
     AVIFileRelease(avi_file_);
+    // Make sure it's set to NULL otherwise, delete() tries to release it again.
+    avi_file_=NULL;
     // and return sucess
     return true;
   }
@@ -210,7 +212,22 @@ bool vidl_avicodec::probe(const char* fname)
   return false;
 }
 
+//: This function creates a clone of 'this' (in order to allow 
+//  loading multiple avi videos at once) and loads the avi
+//  into the cloned codec. The cloned codec is the one that is returned
+//  by this function.
 vidl_codec_sptr vidl_avicodec::load(const char* fname, char mode)
+{
+  vidl_avicodec *cloned_avi_codec=new vidl_avicodec;
+
+  if(!cloned_avi_codec->load_avi(fname,mode)) return NULL;
+
+  vidl_codec_sptr codec(cloned_avi_codec);
+
+  return codec;
+}
+
+bool vidl_avicodec::load_avi(const char* fname, char mode)
 {
   int modenum;
   DWORD videostreamcode = 0x73646976; // corresponds to char string "vids"
@@ -231,14 +248,13 @@ vidl_codec_sptr vidl_avicodec::load(const char* fname, char mode)
   if (AVIFileGetStream(avi_file_, &avi_stream_, videostreamcode, 0) != AVIERR_OK)
     vcl_cerr << "[vidl_avicodec: no stream 0]";
 
-  if (!avi_file_ || !avi_stream_)
-    return NULL;
+  if (!avi_file_ || !avi_stream_) return false;
 
   avi_get_frame_ = AVIStreamGetFrameOpen(avi_stream_, NULL);
 
   if (!read_header()) {
     vcl_fprintf(stderr, "vidl_avicodec: error reading header\n");
-    return NULL;
+    return false;
   }
 
   set_format('L');
@@ -250,7 +266,7 @@ vidl_codec_sptr vidl_avicodec::load(const char* fname, char mode)
   byte* DIB = (byte*) AVIStreamGetFrame(avi_get_frame_, 0);
 
   if ( ! DIB )
-    return NULL;
+    return false;
 
   // Get the number of bits per pixel
   // and check the validity of width and height
@@ -282,10 +298,10 @@ vidl_codec_sptr vidl_avicodec::load(const char* fname, char mode)
   {
     vcl_cerr << "vidl_avicodec : Don't know how to process a "
              << BitsPerPixel << " bits per pixel AVI File.\n";
-    return NULL;
+    return false;
   }
-  else
-    return this;
+
+  return true;
 }
 
 
