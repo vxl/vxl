@@ -264,6 +264,10 @@ double clsfy_adaboost_sorted_builder::build(clsfy_classifier_base& model,
   }
 
 
+  // clear classifier 
+  // nb maybe shouldn't do this if going to build incrementally
+  // ie by rebuilding the training set from false positives of the 
+  // current classifier
   strong_classifier.clear();
   strong_classifier.set_n_dims(d);
   // nb have to set builder as a member variable elsewhere
@@ -343,35 +347,38 @@ double clsfy_adaboost_sorted_builder::build(clsfy_classifier_base& model,
       return clsfy_test_error(strong_classifier, inputs, outputs);
     }
 
+    // update the classifier 
     beta = min_error/(1.0-min_error);
     alpha  = -1.0*vcl_log(beta);
     strong_classifier.add_classifier( best_c1d, alpha, best_i);
+    
+    
+    // extract the best weak classifier results
+    wrapper.set_index(best_i);
+    const vcl_vector< vbl_triple<double,int,int> >& vec = wrapper.current();
 
+    // update the wts using the best weak classifier
+    for (unsigned int j=0;j<n;++j)
+      if (
 
-    if (r+1<n)  // ie round number less than number of examples used
-    {
-      // extract the best weak classifier results
-      wrapper.set_index(best_i);
-      const vcl_vector< vbl_triple<double,int,int> >& vec = wrapper.current();
-
-      // update the wts using the best weak classifier
-      for (unsigned int j=0;j<n;++j)
-        if (
               best_c1d-> classify( vec[j].first )
             ==
               (unsigned) vec[j].second
-           )
-          wts[vec[j].third]*=beta;
+          )
+      wts[vec[j].third]*=beta;
 
-      double w_sum= wts.mean()*n;
-      wts/=w_sum;
-    }
+    double w_sum= wts.mean()*n;
+    wts/=w_sum;
+    
   }
 
   delete c1d;
   delete best_c1d;
 
-
+  // does clsfy_test_error balk if have too much data?
+  // should be OK because just passes mbl_data_wrapper and evaluates
+  // one at a time, so if using mbl_file_data_wrapper should be OK!
+  vcl_cout<<"calculating training error"<<vcl_endl;
   return clsfy_test_error(strong_classifier, inputs, outputs);
 }
 
