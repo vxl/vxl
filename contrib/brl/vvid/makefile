@@ -10,6 +10,7 @@ IMMEDIATE_LIBS := vvid gevd vgui vidl_vil1 vul vil
 # sources that don't depend on the camera being present
 SOURCES += vvid_frame_trail.cxx
 SOURCES += vvid_file_manager.cxx
+SOURCES += vvid_command_line_player.cxx
 
 # sources that do depend on the camera being present
 SOURCES += cmu_1394_camera_params.cxx
