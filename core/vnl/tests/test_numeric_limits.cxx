@@ -1,9 +1,7 @@
 #include <vcl/vcl_iostream.h>
 #include <vnl/vnl_numeric_limits.h>
-//#include <math/numeric_limits_float.h>
-//#include <math/numeric_limits_double.h>
 
-main()
+int main()
 {
   vcl_cout << "dmax  = " << vnl_numeric_limits<double>::max() << vcl_endl;
   vcl_cout << "dmin  = " << vnl_numeric_limits<double>::min() << vcl_endl;
