@@ -16,8 +16,8 @@
 // Modifications
 //    24-SEP-1999  P.Pritchett - Initial version.
 //    20-JUL-2000  Marko Bacic - Provided support for printing linestrips
-//    25-APR-2002  domi@vision.ee.ethz.ch - make print_psfile work without
-//                                          image tableau
+//    25-APR-2002  domi at vision.ee.ethz.ch - make print_psfile work without
+//                                             image tableau
 //    26-APR-2002  K.Y.McGaul - Added some doxygen-style documentation.
 //    01-OCT-2002  K.Y.McGaul - Moved vgui_easy2D to vgui_easy2D_tableau.
 //                            - Added functions clear, remove, get_all.
