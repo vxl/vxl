@@ -370,7 +370,7 @@ vtol_extract_topology::
 edge_labels( unsigned i, unsigned j, unsigned dir,
              int& left, int& right ) const
 {
-  assert( 0 <= dir && dir <= 3 );
+  assert( dir <= 3 );
 
   // These are the offsets to get the "left" pixel position for each
   // direction given the vertex location (i,j).  The vertices occur at
@@ -397,8 +397,8 @@ unsigned
 vtol_extract_topology::
 vertex_index( unsigned i, unsigned j ) const
 {
-  assert( 0 <= i && i < index_img_.ni() &&
-          0 <= j && j < index_img_.nj() );
+  assert( i < index_img_.ni() &&
+          j < index_img_.nj() );
 
   return index_img_( i, j );
 }
@@ -411,8 +411,8 @@ void
 vtol_extract_topology::
 set_vertex_index( unsigned i, unsigned j, unsigned index )
 {
-  assert( 0 <= i && i < index_img_.ni() &&
-          0 <= j && j < index_img_.nj() );
+  assert( i < index_img_.ni() &&
+          j < index_img_.nj() );
 
   index_img_( i, j ) = index;
 }
@@ -673,7 +673,7 @@ construct_topology( )
           vcl_cerr << "Bad back link on vertex " << index << " ("<<node(index).i
                    << ',' << node(index).j << " in dir " << dir << '\n'
                    << "  link     " << dir << " = " << node(index).link[dir] << ";\n"
-                   << "  back_dir " << dir << " = " << node(index).back_dir[dir] << "\n";
+                   << "  back_dir " << dir << " = " << node(index).back_dir[dir] << '\n';
         }
       }
     }
@@ -947,20 +947,20 @@ chain_tree_node::
 print( vcl_ostream& ostr, unsigned indent ) const
 {
   for ( unsigned i = 0; i < indent; ++i ) {
-    ostr << " ";
+    ostr << ' ';
   }
-  ostr << "["<<children.size()<<"]";
+  ostr << '['<<children.size()<<']';
   if ( ! children.empty() ) {
     ostr << "___\n";
     for ( unsigned i = 0; i < indent; ++i ) {
-      ostr << " ";
+      ostr << ' ';
     }
     ostr << "      \\\n";
     for ( unsigned i = 0; i < children.size(); ++i ) {
       children[i]->print( ostr, indent+7 );
     }
   } else {
-    ostr << "\n";
+    ostr << '\n';
   }
 }
 
