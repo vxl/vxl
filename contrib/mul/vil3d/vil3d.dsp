@@ -200,6 +200,9 @@ SOURCE=.\vil3d_header_data.h
 # Begin Source File
 SOURCE=.\vil3d_load.h
 # End Source File
+# Begin Source File
+SOURCE=.\vil3d_transform.h
+# End Source File
 # End Group
 # End Target
 # End Project
