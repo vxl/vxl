@@ -4,7 +4,44 @@
 //:
 // \file
 // \brief base class for topology objects
-//
+// \author Patricia A. Vrobel.
+
+#include <vtol/vtol_topology_object_sptr.h>
+#include <vsol/vsol_spatial_object_2d.h> // parent class
+
+#include <vcl_vector.h>
+#include <vcl_list.h>
+#include <vcl_iosfwd.h>
+
+#include <vtol/vtol_vertex_sptr.h>
+#include <vtol/vtol_zero_chain_sptr.h>
+#include <vtol/vtol_edge_sptr.h>
+#include <vtol/vtol_one_chain_sptr.h>
+#include <vtol/vtol_face_sptr.h>
+#include <vtol/vtol_two_chain_sptr.h>
+#include <vtol/vtol_block_sptr.h>
+#include <vtol/vtol_chain_sptr.h>
+class vtol_topology_cache;
+
+// Useful typedefs
+typedef vcl_vector<vtol_topology_object_sptr> topology_list;
+typedef vcl_vector<vtol_vertex_sptr>          vertex_list;
+typedef vcl_vector<vtol_zero_chain_sptr>      zero_chain_list;
+typedef vcl_vector<vtol_edge_sptr>            edge_list;
+typedef vcl_vector<vtol_one_chain_sptr>       one_chain_list;
+typedef vcl_vector<vtol_face_sptr>            face_list;
+typedef vcl_vector<vtol_two_chain_sptr>       two_chain_list;
+typedef vcl_vector<vtol_block_sptr>           block_list;
+typedef vcl_vector<vtol_chain_sptr>           chain_list;
+
+//*****************************************************************************
+// ALL THE DERIVED AND NON-ABSTRACT CLASSES OF THIS CLASS MUST CALL
+// unlink_all_inferiors() IN THEIR DESTRUCTOR
+// unlink_all_inferiors() CANT BE CALLED DIRECTLY IN THIS CLASS, OTHERWISE
+// BAD VERSIONS OF METHODS SHOULD BE CALLED (C++ IS STUPID !)
+//*****************************************************************************
+
+//: Base class for topology objects
 // The vtol_topology_object class is the interface base class for all
 // topological entities. There are only access methods in this class.
 // vtol_topology_object inherits from vtol_spatial_object, which is
@@ -67,42 +104,6 @@
 //   dec.2002 - Peter Vanroose - added chain_list (typedef) and cast_to_chain()
 //   dec.2002 - Peter Vanroose - link_inferior() now takes smart pointer argument
 // \endverbatim
-
-#include <vtol/vtol_topology_object_sptr.h>
-#include <vsol/vsol_spatial_object_2d.h> // parent class
-
-#include <vcl_vector.h>
-#include <vcl_list.h>
-#include <vcl_iosfwd.h>
-
-#include <vtol/vtol_vertex_sptr.h>
-#include <vtol/vtol_zero_chain_sptr.h>
-#include <vtol/vtol_edge_sptr.h>
-#include <vtol/vtol_one_chain_sptr.h>
-#include <vtol/vtol_face_sptr.h>
-#include <vtol/vtol_two_chain_sptr.h>
-#include <vtol/vtol_block_sptr.h>
-#include <vtol/vtol_chain_sptr.h>
-class vtol_topology_cache;
-
-// Useful typedefs
-typedef vcl_vector<vtol_topology_object_sptr> topology_list;
-typedef vcl_vector<vtol_vertex_sptr>          vertex_list;
-typedef vcl_vector<vtol_zero_chain_sptr>      zero_chain_list;
-typedef vcl_vector<vtol_edge_sptr>            edge_list;
-typedef vcl_vector<vtol_one_chain_sptr>       one_chain_list;
-typedef vcl_vector<vtol_face_sptr>            face_list;
-typedef vcl_vector<vtol_two_chain_sptr>       two_chain_list;
-typedef vcl_vector<vtol_block_sptr>           block_list;
-typedef vcl_vector<vtol_chain_sptr>           chain_list;
-
-//*****************************************************************************
-// ALL THE DERIVED AND NON-ABSTRACT CLASSES OF THIS CLASS MUST CALL
-// unlink_all_inferiors() IN THEIR DESTRUCTOR
-// unlink_all_inferiors() CANT BE CALLED DIRECTLY IN THIS CLASS, OTHERWISE
-// BAD VERSIONS OF METHODS SHOULD BE CALLED (C++ IS STUPID !)
-//*****************************************************************************
-
 class vtol_topology_object : public vsol_spatial_object_2d
 {
   //***************************************************************************
