@@ -24,7 +24,7 @@ VNL_QR_INSTANTIATE(vcl_complex<float>);
 VCL_DEFINE_SPECIALIZATION
 vnl_vector<vcl_complex<float>> vnl_qr<vcl_complex<float>>::solve(const vnl_vector<vcl_complex<float>>& b) const
 {
-  assert(false);
+  assert(!"this does not work");
   int n = qrdc_out_.columns();
   int p = qrdc_out_.rows();
 
@@ -68,7 +68,7 @@ vnl_vector<vcl_complex<float>> vnl_qr<vcl_complex<float>>::solve(const vnl_vecto
 VCL_DEFINE_SPECIALIZATION
 vnl_vector<vcl_complex<float>> vnl_qr<vcl_complex<float>>::QtB(const vnl_vector<vcl_complex<float>>& b) const
 {
-  assert(false);
+  assert(!"this does not work");
   int n = qrdc_out_.columns();
   int p = qrdc_out_.rows();
 

@@ -117,17 +117,17 @@ vnl_matrix<double> vcsl_matrix::matrix_value(double time, bool type) const
         case vcsl_linear:
           return lmi(param_to_matrix(matrix_[i],type),param_to_matrix(matrix_[i+1],type),i,time);
         case vcsl_cubic:
-          assert(false); // Not yet implemented
+          assert(!"vcsl_cubic net yet implemented");
           break;
         case vcsl_spline:
-          assert(false); // Not yet implemented
+          assert(!"vcsl_spline net yet implemented");
           break;
         default:
-          assert(false); // Impossible
+          assert(!"This is impossible");
           break;
         }
     }
-  return vnl_matrix<double>(); // never reached
+  return vnl_matrix<double>(); // never reached if asserts are in effect
 }
 
 vnl_matrix<double>  vcsl_matrix::param_to_matrix(vcsl_matrix_param_sptr from,bool type ) const

@@ -215,13 +215,13 @@ vnl_quaternion<double> vcsl_rotation::quaternion(double time) const
           break;
         }
         case vcsl_cubic:
-          assert(false); // Not yet implemented
+          assert(!"vcsl_cubic net yet implemented");
           break;
         case vcsl_spline:
-          assert(false); // Not yet implemented
+          assert(!"vcsl_spline net yet implemented");
           break;
         default:
-          assert(false); // Impossible
+          assert(!"This is impossible");
           break;
         }
     }

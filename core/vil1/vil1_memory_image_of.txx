@@ -95,10 +95,8 @@ void vil_memory_image_of<T>::resize(int width, int height)
 template <class  T>
 void vil_memory_image_of<T>::resize(int planes, int width, int height)
 {
-  if (ptr)
-    vil_memory_image::resize(width, height);
-  else
-    assert(false);
+  assert(ptr);
+  vil_memory_image::resize(width, height);
 }
 
 template <class T>

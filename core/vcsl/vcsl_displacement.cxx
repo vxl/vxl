@@ -145,16 +145,16 @@ vnl_vector<double> vcsl_displacement::vector_value(double time) const
         case vcsl_linear:
           return lvi(point_[i],point_[i+1],i,time);
         case vcsl_cubic:
-          assert(false); // Not yet implemented
+          assert(!"vcsl_cubic net yet implemented");
           break;
         case vcsl_spline:
-          assert(false); // Not yet implemented
+          assert(!"vcsl_spline net yet implemented");
           break;
         default:
-          assert(false); // Impossible
+          assert(!"This is impossible");
           break;
         }
     }
-  return vnl_vector<double>(); // never reached
+  return vnl_vector<double>(); // never reached if asserts are in effect
 }
 

@@ -112,7 +112,7 @@ vil_gif_loader_saver::vil_gif_loader_saver(vil_stream *s_)
     // bit 3 should be zero
     if (b & 0x08) {
       vcl_cerr << "bit 3 is not zero\n";
-      assert(false);
+      assert(!"bit 3 should be zero");
     }
 
     int bits_per_pixel = 1 + (b & 0x07);
@@ -121,7 +121,7 @@ vil_gif_loader_saver::vil_gif_loader_saver(vil_stream *s_)
 #endif
     if (bits_per_pixel != 8) {
       vcl_cerr << "cannot read GIF with != 8 bits per pixel.\n";
-      assert(false);
+      assert(!"GIF with != 8 bits per pixel not implemented");
     }
 
     // create global colour map, if needed.
@@ -143,7 +143,7 @@ vil_gif_loader_saver::vil_gif_loader_saver(vil_stream *s_)
     s->read(&b, 1L);
     if (b) {
       vcl_cerr << "not zero\n";
-      assert(false);
+      assert(!"this byte should be zero");
     }
   }
 
@@ -195,7 +195,7 @@ vil_gif_loader_saver::vil_gif_loader_saver(vil_stream *s_)
         vcl_cerr << "[unprintable]";
       }
       vcl_cerr<< "\' (0x" << vcl_hex<< int(b) << vcl_dec<< ") in GIF stream\n";
-      assert(false);
+      assert(!"expected GIF separator here");
     }
 
     vil_gif_image_record *ir = new vil_gif_image_record;
@@ -244,13 +244,13 @@ vil_gif_loader_saver::vil_gif_loader_saver(vil_stream *s_)
 #endif
     if (ir->interlaced) {
       vcl_cerr << "can't read interlaced GIFs yet\n";
-      assert(false);
+      assert(!"interlaced GIF reading not implemented");
     }
 
     // bits 543 should be zero
     if (b & 0x38) {
       vcl_cerr << "bits 543 are not zero\n";
-      assert(false);
+      assert(!"incorrect bits 3,4,5");
     }
 
     //
@@ -261,7 +261,7 @@ vil_gif_loader_saver::vil_gif_loader_saver(vil_stream *s_)
 #endif
       if (ir->bits_per_pixel != 8) {
         vcl_cerr << "cannot cope with " << ir->bits_per_pixel << " bits per pixel\n";
-        assert(false);
+        assert(!"bpp != 8 not implemented");
       }
     }
     else

@@ -76,14 +76,11 @@ void vnl_complex_eigensystem::compute(vnl_matrix<vcl_complex<double> > const & A
     vcl_cerr << __FILE__ ": " << (-info) << "th argument has illegal value" << vcl_endl;
     assert(false);
   }
-  else if (info > 0) {
+  else /* if (info > 0) */ {
     vcl_cerr << __FILE__ ": info = " << info << vcl_endl;
     vcl_cerr << __FILE__ ": QR algorithm failed to compute all eigenvalues." << vcl_endl;
     vnl_matlab_print(vcl_cerr, A, "A", vnl_matlab_print_format_long);
     assert(false);
-  }
-  else {
-    assert(false); // blah
   }
 }
 

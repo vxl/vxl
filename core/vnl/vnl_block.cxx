@@ -14,6 +14,6 @@
 void vnl_block_raise_exception(char const *FILE, int LINE, char const *why)
 {
   vcl_cerr << FILE << ":" << LINE << ": " << why << vcl_endl;
-  assert(false);
+  assert(!"raise_exeption() called");
   // throw;
 }

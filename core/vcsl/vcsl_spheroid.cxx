@@ -138,7 +138,7 @@ void vcsl_spheroid::set_from_std(const vcsl_std_spheroid new_std_spheroid)
       b_=6356752.3142;
       break;
     default:
-      assert(false); // Impossible
+      assert(!"impossible");
     }
 
   f_=(a_-b_)/a_;
@@ -188,7 +188,7 @@ bool vcsl_spheroid::operator==(const vcsl_spheroid &other) const
 {
   bool result;
   result=this==&other;
-  if(!result)
+  if (!result)
     result=(a_==other.a_)&&(b_==other.b_)&&(e_==other.e_)&&(f_==other.f_);
   return result;
 }
@@ -202,7 +202,7 @@ bool vcsl_spheroid::operator==(const vcsl_spheroid &other) const
 //---------------------------------------------------------------------------
 vcsl_spheroid &vcsl_spheroid::operator=(const vcsl_spheroid &other)
 {
-  if(this!=&other)
+  if (this!=&other)
     {
       a_=other.a_;
       b_=other.b_;

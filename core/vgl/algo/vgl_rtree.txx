@@ -222,7 +222,7 @@ int vgl_rtree_node<V, B, C>::find_index_in_parent() const {
   for (int i=0; i<parent->local_chs; ++i)
     if (parent->chs[i] == this)
       return i;
-  assert(false);
+  assert(!"this not found in parent");
   return -1;
 }
 
@@ -339,7 +339,7 @@ void vgl_rtree_iterator_base<V, B, C>::operator_pp() {
 }
 
 template <class V, class B, class C>
-void vgl_rtree_iterator_base<V, B, C>::operator_mm() { assert(false); }
+void vgl_rtree_iterator_base<V, B, C>::operator_mm() { assert(!"not implemented"); }
 
 template <class V, class B, class C>
 bool operator==(vgl_rtree_iterator_base<V, B, C> const &a,

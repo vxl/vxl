@@ -32,7 +32,7 @@ vil_image vil_pyramid::operator[](unsigned i)
     case none: break;
     case memory: I = vil_memory_image(I /*, "silly hack"*/); break;
     case blocked: /* not implemented yet */
-    default: assert(false); break;
+    default: assert(!"not implemented"); break;
     }
     levels.push_back(I);
   }

@@ -10,25 +10,19 @@
 
 template<class T, int n>
 vnl_vector<T>& vnl_vector_fixed_ref<T,n>::pre_multiply (vnl_matrix<T> const& ) {
-    // cannot use pre_multiply on vnl_vector_fixed<T,n>, since it deallocates the
-    // data storage
-    assert(false);
+    assert(!"cannot use pre_multiply on vnl_vector_fixed<T,n>, since it deallocates the data storage");
     return *this;
 }
 
 template<class T, int n>
 vnl_vector<T>& vnl_vector_fixed_ref<T,n>::post_multiply (vnl_matrix<T> const& ) {
-    // cannot use post_multiply on vnl_vector_fixed_ref<T,n>, since it deallocates the
-    // data storage
-    assert(false);
+    assert(!"cannot use post_multiply on vnl_vector_fixed<T,n>, since it deallocates the data storage");
     return *this;
 }
 
 template<class T, int n>
 vnl_vector<T>& vnl_vector_fixed_ref<T,n>::operator*= (vnl_matrix<T> const& ) {
-    // cannot use pre_multiply on vnl_vector_fixed_ref<T,n>, since it deallocates the
-    // data storage
-    assert(false);
+    assert(!"cannot use pre_multiply on vnl_vector_fixed_ref<T,n>, since it deallocates the data storage");
     return *this;
 }
 
