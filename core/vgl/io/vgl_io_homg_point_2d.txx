@@ -32,7 +32,7 @@ void vsl_b_read(vsl_b_istream &is, vgl_homg_point_2d<T> & p)
 
   default:
     vcl_cerr << "vsl_b_read() Unknown version number "<< v << vcl_endl;
-    abort();
+    vcl_abort();
   }
 
 }
