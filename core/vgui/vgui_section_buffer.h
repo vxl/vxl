@@ -73,7 +73,10 @@ struct vgui_section_buffer
   //: semi-internal
   bool texture_begin(bool force_load = false) const;
   bool texture_end() const;
-
+  
+  int width () const { return w; }
+  int height() const { return h; }
+  
 public:
   vgui_accelerate_cached_image* cache_;
 
