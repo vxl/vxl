@@ -9,6 +9,6 @@
 #include <vcl_cstdio.h>
 
 void vbl_trace_function(char const *file, int line) {
-  fprintf(stderr, "[vbl_trace %s:%d]", file, line);
-  fflush(stderr);
+  vcl_fprintf(stderr, "[vbl_trace %s:%d]", file, line);
+  vcl_fflush(stderr);
 }

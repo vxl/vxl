@@ -33,7 +33,7 @@ vidl_image_list_codec::vidl_image_list_codec(vcl_list<vil_image>& images)
     images_.push_back(*i);
 
   if (!init())
-    cerr << "Failed to initialize the ImageList Codec." << endl;
+    vcl_cerr << "Failed to initialize the ImageList Codec." << vcl_endl;
 }
 
 // -- Constructor, from a vector of images
@@ -46,7 +46,7 @@ vidl_image_list_codec::vidl_image_list_codec(vcl_vector<vil_image>& images)
     images_.push_back(*i);
 
   if (!init())
-    cerr << "Failed to initialize the ImageList Codec." << endl;
+    vcl_cerr << "Failed to initialize the ImageList Codec." << vcl_endl;
 }
 
 // -- Basic constructor, Should not be called unless
@@ -81,8 +81,7 @@ bool vidl_image_list_codec::init()
 // Come from TargetJr, don't know the vxl equivalent
 //   set_format(first->get_format());
 //   set_image_class(first->get_image_class());
-//   set_bits_pixel(first->get_bits_pixel());
-     set_bits_pixel();
+     set_bits_pixel(first.bits_per_component() * first.components());
      set_width(first.width());
      set_height(first.height());
 
@@ -99,7 +98,7 @@ bool vidl_image_list_codec::get_section(int position, void* ib, int x0, int y0, 
 // -- Put a section of pixels in function of the frame number, position and size
 int vidl_image_list_codec::put_section(int position, void* ib, int x0, int y0, int w, int h)
 {
-  cerr << "vidl_image_list_codec::put_section not implemented" << endl;
+  vcl_cerr << "vidl_image_list_codec::put_section not implemented" << vcl_endl;
   return 0;
 }
 
@@ -124,7 +123,7 @@ vidl_codec_ref vidl_image_list_codec::load(const char* fname, char mode)
 
   if (!init())
     {
-      cerr << "Failed to initialize the ImageList Codec." << endl;
+      vcl_cerr << "Failed to initialize the ImageList Codec." << vcl_endl;
       return NULL;
     }
 
@@ -151,7 +150,7 @@ vidl_codec_ref vidl_image_list_codec::load(const vcl_list<vcl_string> &fnames, c
   // Initialize the codec
   if (!init())
     {
-      cerr << "Failed to initialize the ImageList Codec." << endl;
+      vcl_cerr << "Failed to initialize the ImageList Codec." << vcl_endl;
       return NULL;
     }
   
@@ -179,7 +178,7 @@ vidl_codec_ref vidl_image_list_codec::load(const vcl_vector<vcl_string> &fnames,
   // Initialize the codec
   if (!init())
     {
-      cerr << "Failed to initialize the ImageList Codec." << endl;
+      vcl_cerr << "Failed to initialize the ImageList Codec." << vcl_endl;
       return NULL;
     }
   
@@ -202,7 +201,7 @@ bool vidl_image_list_codec::save(vidl_movie* movie, const char* fname)
 {
   if (!default_image_type_)
     {
-      cerr << "No default image type defined to save the video as a list of images." << endl;
+      vcl_cerr << "No default image type defined to save the video as a list of images." << vcl_endl;
       return false;
     }
 

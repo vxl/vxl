@@ -41,13 +41,6 @@
 
 //--------------------------------------------------------------------------------
 
-//: Creates an empty vector. O(1).
-
-template<class T> 
-vnl_vector<T>::vnl_vector ()
-: num_elmts(0), data(0)
-{}
-
 // This macro allocates the dynamic storage used by a vnl_vector.
 #define vnl_vector_alloc_blah(size) \
 do { \
@@ -233,7 +226,7 @@ vnl_vector<T>::vnl_vector (vnl_vector<T> const &v, vnl_matrix<T> const &M, vnl_t
 //: Frees up the array inside vector. O(1).
 
 template<class T> 
-vnl_vector<T>::~vnl_vector()
+void vnl_vector<T>::destroy()
 {
   vnl_vector_free_blah;
 }
@@ -265,7 +258,7 @@ bool vnl_vector<T>::resize(unsigned n)
 // If the vector has nonzero size on input, read that many values.  
 // Otherwise, read to EOF.
 template <class T>
-bool vnl_vector<T>::read_ascii(istream& s)
+bool vnl_vector<T>::read_ascii(vcl_istream& s)
 {
   bool size_known = (this->size() != 0);
   if (size_known) {
@@ -293,7 +286,7 @@ bool vnl_vector<T>::read_ascii(istream& s)
 }
 
 template <class T>
-vnl_vector<T> vnl_vector<T>::read(istream& s)
+vnl_vector<T> vnl_vector<T>::read(vcl_istream& s)
 {
   vnl_vector<T> V;
   V.read_ascii(s);
@@ -733,7 +726,7 @@ bool vnl_vector<T>::operator_eq (vnl_vector<T> const& rhs) const {
 //: Overloads the output operator to print a vector. O(n).
 
 template<class T>
-ostream& operator<< (ostream& s, vnl_vector<T> const& v) {
+vcl_ostream& operator<< (vcl_ostream& s, vnl_vector<T> const& v) {
   for (unsigned i = 0; i < v.size()-1; ++i)   // For each index in vector
     s << v[i] << " ";                              // Output data element
   s << v[v.size()-1];
@@ -744,7 +737,7 @@ ostream& operator<< (ostream& s, vnl_vector<T> const& v) {
 // If the vector has nonzero size on input, read that many values.
 // Otherwise, read to EOF.
 template <class T>
-istream& operator>>(istream& s, vnl_vector<T>& M) {
+vcl_istream& operator>>(vcl_istream& s, vnl_vector<T>& M) {
   M.read_ascii(s); return s;
 }
 
@@ -782,6 +775,6 @@ template vnl_matrix<T > outer_product(vnl_vector<T > const &,vnl_vector<T > cons
 template T cross_2d(vnl_vector<T > const &, vnl_vector<T > const &); \
 template vnl_vector<T > cross_3d(vnl_vector<T > const &, vnl_vector<T > const &); \
 /* I/O */ \
-template ostream & operator<<(ostream &, vnl_vector<T > const &); \
-template istream & operator>>(istream &, vnl_vector<T >       &); \
+template vcl_ostream & operator<<(vcl_ostream &, vnl_vector<T > const &); \
+template vcl_istream & operator>>(vcl_istream &, vnl_vector<T >       &); \
 ;
