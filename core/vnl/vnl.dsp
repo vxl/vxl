@@ -372,9 +372,6 @@ SOURCE=.\Templates/vnl_matrix_fixed+int.2.2-.cxx
 SOURCE=.\Templates/vnl_matrix_fixed+int.3.4-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vnl_matrix_fixed_pairwise_ops.cxx
-# End Source File
-# Begin Source File
 SOURCE=.\Templates/vnl_matrix_ref+double-.cxx
 # End Source File
 # Begin Source File
@@ -1102,9 +1099,6 @@ SOURCE=.\vnl_definite_integral.h
 # End Source File
 # Begin Source File
 SOURCE=.\vnl_integrant_fnct.h
-# End Source File
-# Begin Source File
-SOURCE=.\vnl_util_fixed.h
 # End Source File
 # End Group
 # PROP Default_Filter "ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe"
