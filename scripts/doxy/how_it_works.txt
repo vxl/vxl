@@ -1,0 +1,57 @@
+build_all_doc.pl -v vxlsrc -l lib_file -b book_file -u -f [-o output_dir]
+----------------------------------------------------------------------------
+
+Currently just invokes
+1) gen_all_doxy.pl   - To generate the documentation of the code
+2) gen_books.pl      - To generate the html from the texi overview books
+3) gen_doxy_index.pl - To generate an index
+
+
+gen_all_doxy.pl gen_all_doxy.pl -v vxlsrc -l library_list -u -f [-o output_dir]
+-------------------------------------------------------------------------------
+
+Looks through the library_file and invokes rundoxy.pl
+for each library named.
+
+See core_library_list.txt for an example of a library_list file.
+
+rundoxy.pl -v vxlsrc -l library_list_file -n library_name [-o outputdir]
+------------------------------------------------------------------------
+
+1) Sets up directories in suitable places,
+eg
+  $vxlsrc/Doxy/$library_name
+              /output
+              /tags
+
+2) Gets the list of dependencies for the given library by scanning the library_file
+3) Creates a Doxygen control file (called, for instance, Doxyfile.vxl_vsl) by doing
+   appropriate searching and replacement on Doxyfile.XXX in this directory.
+   This includes a list of tags, which allow the system to generate cross links.
+4) Runs doxygen
+5) Creates a list of arguements to an installdox command.
+   installdox is created by doxygen when it is run, and should be run over the
+   doxygen output.  This allows it to link everything together.
+6) Runs the installdox with the appropriate arguements.
+
+
+gen_books.pl -v vxlsrc -b book_file -u -f [-o output_dir]
+-----------------------------------------
+Generate all books from source using texi2html
+
+
+gen_doxy_index.pl -v vxlsrc -l lib_file -b book_file [-o output_dir]
+----------------------------------------------------
+
+Generate index of all documentation and places in output_dir/index.html
+
+Uses library list and book list to locate the relevant files.
+
+
+checkout_packages.pl -v vxlsrc -p package_list
+----------------------------------------------
+Uses cvs to check out the packages listed in the package_list file if
+they don't already exist in vxlsrc.
+
+This is provided to help automate the process of getting documentation on
+a webserver.

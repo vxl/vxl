@@ -1,0 +1,30 @@
+Frequently Asked Questions
+--------------------------
+
+1) How do I get stuff to appear on the main page of the Doxygen output?
+
+Add a file called <introduction_doxy.txt> to your library.
+For example, the one in vnl looks like this:
+
+	// The following text is included in the main documentation page by doxygen
+	/*! \mainpage vnl : Numeric Library
+	* The numerics library, vnl is intended to provide an environment for numerical
+	* programming which combines the ease of use of packages like Mathematica and
+	* Matlab with the speed of C and the elegance of C++.
+	* It provides a C++ interface to the high-quality Fortran routines made available
+	* in the public domain by numerical analysis researchers.
+	*
+	* This release includes classes for
+	* - Matrices and Vectors (including specialised classes for particular forms)
+	* - Matrix decompositions
+	* - Polynomials
+	* - Optimization
+	* - Common functions (in vnl_math)
+	*/
+
+2) How do I get a brief description of my library to appear on the main index page?
+
+Add the <introduction_doxy.pl> file to your library (see (1) above).
+The gen_doxy_index.pl tool looks for the text following \mainpage and uses
+that on the index page.
+
