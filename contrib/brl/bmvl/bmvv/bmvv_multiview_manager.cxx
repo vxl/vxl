@@ -238,7 +238,8 @@ void bmvv_multiview_manager::vd_edges()
   vd_dialog->field("Noise Threshold", dp.noise_multiplier);
   vd_dialog->checkbox("Automatic Threshold", dp.automatic_threshold);
   vd_dialog->checkbox("Agressive Closure", agr);
-  if (!vd_dialog->ask())
+   vd_dialog->checkbox("Compute Junctions", dp.junctionp);
+ if (!vd_dialog->ask())
     return;
   if (agr)
     dp.aggressive_junction_closure=1;
