@@ -26,7 +26,7 @@ public:
 
   //: Classify the input vector.
   // Returns a number between 0 and nClasses-1 inclusive to represent the most likely class
-  unsigned virtual classify(double input) const
+  virtual unsigned classify(double input) const
     { if (s_*input<threshold_) return 0; else return 1; }
 
   //: Log likelyhood of being in the positive class/
@@ -39,13 +39,16 @@ public:
 
   //: The number of possible output classes.
   // 1 indicates a binary classifier
-  unsigned virtual n_classes() const { return 1;}
+  virtual unsigned  n_classes() const { return 1;}
 
   //: Return parameters defining classifier in a vector (format depends on classifier)
   virtual vnl_vector<double> params() const;
 
   //: Set parameters defining classifier with a vector (format depends on classifier)
   virtual void set_params(const vnl_vector<double>& p);
+
+  //: Equality operator for 1d classifiers
+  virtual bool operator==(const clsfy_classifier_1d& x) const;
 
   //: Version number for I/O
   short version_no() const;

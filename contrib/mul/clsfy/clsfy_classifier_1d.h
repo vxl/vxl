@@ -31,7 +31,7 @@ public:
 
   //: Classify the input vector
   // returns a number between 0 and nClasses-1 inclusive to represent the most likely class
-  unsigned virtual classify(double input) const;
+  virtual unsigned classify(double input) const;
 
   //: Return parameters defining classifier in a vector (format depends on classifier)
   virtual vnl_vector<double> params() const = 0;
@@ -41,10 +41,10 @@ public:
 
   //: Return the probability the input being in each class.
   // output(i) 0<=i<n_classes, contains the probability that the input is in class i
-  void virtual class_probabilities(vcl_vector<double> &outputs, double input) const = 0;
+  virtual void class_probabilities(vcl_vector<double> &outputs, double input) const = 0;
 
   //: Classify many input vectors
-  void virtual classify_many(vcl_vector<unsigned> &outputs, mbl_data_wrapper<double> &inputs) const;
+  virtual void classify_many(vcl_vector<unsigned> &outputs, mbl_data_wrapper<double> &inputs) const;
 
   //: Log likelyhood of being in class (binary classifiers only)
   // class probability = 1 / (1+exp(-log_l))
@@ -52,7 +52,10 @@ public:
   virtual double log_l(double input) const = 0;
 
   //: The number of possible output classes. If ==1, then it's a binary classifier.
-  unsigned virtual n_classes() const = 0;
+  virtual unsigned  n_classes() const = 0;
+
+  //: Equality operator for 1d classifiers
+  virtual bool operator==(const clsfy_classifier_1d& x) const = 0;
 
   //: Name of the class
   virtual vcl_string is_a() const;

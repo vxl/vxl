@@ -32,22 +32,24 @@ public:
   //: Create empty model
   virtual clsfy_classifier_1d* new_classifier() const = 0;
 
-  //: Train classifier, returning weighted error
-  //  Selects parameters of classifier which best separate n examples into
-  //  classes indicated by class_index[i],
-  //  weighting examples appropriately when estimating the missclassification rate.
-  // Return the weighted error over the training set.
-  // For many classifiers, you may use nClasses==1 to
-  // indicate a binary classifier
-  virtual double build(clsfy_classifier_1d& model,
-                       const double* value,
-                       const int* class_index,
-                       const double* wts,
-                       int n,
-                       unsigned nClasses) const = 0;
+  
+   //: Build a binary_threshold classifier
+    // Train classifier, returning weighted error
+    //  Selects parameters of classifier which best separate examples from two classes,
+    //  weighting examples appropriately when estimating the missclassification rate.
+    //  Returns weighted sum of error, e.wts, where e_i =0 for correct classifications,
+    //  e_i=1 for incorrect.
+  virtual double build(clsfy_classifier_1d& classifier,
+                                  vnl_vector<double>& egs0,
+                                  vnl_vector<double>& wts0,
+                                  vnl_vector<double>& egs1,
+                                  vnl_vector<double>& wts1) const = 0;
 
   //: Name of the class
   virtual vcl_string is_a() const;
+
+
+  
 
   //: Create a copy on the heap and return base class pointer
   virtual clsfy_builder_1d* clone() const = 0;
