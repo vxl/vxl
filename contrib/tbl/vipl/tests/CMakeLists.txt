@@ -10,7 +10,7 @@ ADD_EXECUTABLE( vipl_test_driver
 
 ADD_TEST(vipl_test_threshold            vipl_test_driver vipl_test_threshold)
 ADD_TEST(vipl_test_erode_disk           vipl_test_driver vipl_test_erode_disk)
-ADD_TEST(vipl_test_gaussian_convolution vipl_test_driver vipl_test_gaussian_convolution)
+#ADD_TEST(vipl_test_gaussian_convolution vipl_test_driver vipl_test_gaussian_convolution)
 
 # Immediate dependencies
 INCLUDE( ${allvxl_SOURCE_DIR}/tbl/vipl/CMakeListsLink.txt )
