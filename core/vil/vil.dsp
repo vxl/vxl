@@ -447,6 +447,12 @@ SOURCE=.\file_formats/vil_nitf_version.cxx
 SOURCE=.\file_formats/vil_nitf_version_v20.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\file_formats/vil_dicom2.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\file_formats/vil_dicom2_stream.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\Templates/vil_resample_bilin+float.float-.cxx
 # End Source File
 # Begin Source File
@@ -850,6 +856,15 @@ SOURCE=.\vil_nearest_neighbour_interp.h
 # End Source File
 # Begin Source File
 SOURCE=.\vil_warp.h
+# End Source File
+# Begin Source File
+SOURCE=.\file_formats/vil_dicom2.h
+# End Source File
+# Begin Source File
+SOURCE=.\file_formats/vil_dicom2_stream.h
+# End Source File
+# Begin Source File
+SOURCE=.\vil_config.h.in
 # End Source File
 # End Group
 # End Target
