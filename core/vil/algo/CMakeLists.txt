@@ -1,8 +1,9 @@
 # mul/vil2/algo/CMakeLists.txt
 
 SET( vil2_algo_sources
-  vil2_algo_sobel_3x3.cxx  vil2_algo_sobel_3x3.h  vil2_algo_sobel_3x3.txx
-  vil2_algo_gauss_reduce.cxx vil2_algo_gauss_reduce.h
+  vil2_algo_sobel_3x3.cxx    vil2_algo_sobel_3x3.h    vil2_algo_sobel_3x3.txx
+  vil2_algo_gauss_reduce.cxx vil2_algo_gauss_reduce.h vil2_algo_gauss_reduce.txx
+                             vil2_algo_convolve_1d.h
 )
 
 

@@ -1,6 +1,6 @@
 # mul/vil2/CMakeLists.txt
 
-SET( vil2_sources 
+SET( vil2_sources
 
   # basic things
   vil2_memory_chunk.cxx vil2_memory_chunk.h
@@ -23,13 +23,17 @@ SET( vil2_sources
   file_formats/vil2_pnm.cxx file_formats/vil2_pnm.h
 
   # image_data operations
-
   vil2_crop.cxx  vil2_crop.h
 
   # Operations
+  vil2_bilin_interp.h
+  vil2_sample_profile_bilin.txx vil2_sample_profile_bilin.h
+  vil2_sample_grid_bilin.txx    vil2_sample_grid_bilin.h
 
   # Stuff
   vil2_smart_ptr.txx vil2_smart_ptr.h
+  vil2_byte.h
+  vil2_pixel_traits.h
 )
 
 
