@@ -25,7 +25,7 @@
 //
 // top() returns the value that is closest to being thrown out,
 // which is the largest value in the case of the default predicate.
-template <class T, class C= vcl_vector<T>, class O= vcl_less<typename C::value_type> >
+template <class T, class C= vcl_vector<T>, class O= vcl_less< C::value_type> >
 class mbl_priority_bounded_queue
 {
 public:
