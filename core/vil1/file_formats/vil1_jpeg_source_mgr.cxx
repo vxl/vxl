@@ -10,20 +10,19 @@
 #include <vil/vil_stream.h>
 
 #define STATIC /*static*/
-/*
- * In ANSI C, and indeed any rational implementation, size_t is also the
- * type returned by sizeof().  However, it seems there are some irrational
- * implementations out there, in which sizeof() returns an int even though
- * size_t is defined as long or unsigned long.  To ensure consistent results
- * we always use this SIZEOF() macro in place of using sizeof() directly.
- */
 
+// In ANSI C, and indeed any rational implementation, size_t is also the
+// type returned by sizeof().  However, it seems there are some irrational
+// implementations out there, in which sizeof() returns an int even though
+// size_t is defined as long or unsigned long.  To ensure consistent results
+// we always use this SIZEOF() macro in place of using sizeof() directly.
+//
 #define SIZEOF(object) ((size_t) sizeof(object))
 
 // Implement a jpeg_source_manager for vil_stream *.
 // Adapted by fsm from the FILE * version in jdatasrc.c
 
-#define vil_jpeg_INPUT_BUF_SIZE  4096 /* choose an efficiently fread'able size */
+#define vil_jpeg_INPUT_BUF_SIZE  4096 // choose an efficiently fread'able size
 typedef vil_jpeg_stream_source_mgr *vil_jpeg_srcptr;
 
 
@@ -36,10 +35,9 @@ vil_jpeg_init_source (j_decompress_ptr cinfo) {
 
   vil_jpeg_srcptr src = ( vil_jpeg_srcptr )( cinfo->src );
 
-  /* We reset the empty-input-file flag for each image,
-   * but we don't clear the input buffer.
-   * This is correct behavior for reading a series of images from one source.
-   */
+  // We reset the empty-input-file flag for each image,
+  // but we don't clear the input buffer.
+  // This is correct behavior for reading a series of images from one source.
   src->start_of_file = TRUE;
 }
 
@@ -81,10 +79,10 @@ vil_jpeg_fill_input_buffer (j_decompress_ptr cinfo) {
   size_t nbytes = src->stream->read(src->buffer, vil_jpeg_INPUT_BUF_SIZE);
 
   if (nbytes <= 0) {
-    if (src->start_of_file) /* Treat empty input file as fatal error */
+    if (src->start_of_file) // Treat empty input file as fatal error
       ERREXIT(cinfo, JERR_INPUT_EMPTY);
     WARNMS(cinfo, JWRN_JPEG_EOF);
-    /* Insert a fake EOI marker */
+    // Insert a fake EOI marker
     src->buffer[0] = (JOCTET) 0xFF;
     src->buffer[1] = (JOCTET) JPEG_EOI;
     nbytes = 2;
@@ -111,17 +109,16 @@ void
 vil_jpeg_skip_input_data (j_decompress_ptr cinfo, long num_bytes) {
   vil_jpeg_srcptr src = ( vil_jpeg_srcptr )( cinfo->src );
 
-  /* Just a dumb implementation for now.  Could use fseek() except
-   * it doesn't work on pipes.  Not clear that being smart is worth
-   * any trouble anyway --- large skips are infrequent.
-   */
+  // Just a dumb implementation for now.  Could use fseek() except
+  // it doesn't work on pipes.  Not clear that being smart is worth
+  // any trouble anyway --- large skips are infrequent.
+  //
   if (num_bytes > 0) {
     while (num_bytes > (long) src->base.bytes_in_buffer) {
       num_bytes -= (long) src->base.bytes_in_buffer;
       vil_jpeg_fill_input_buffer(cinfo);
-      /* note we assume that fill_input_buffer will never return FALSE,
-       * so suspension need not be handled.
-       */
+      // note we assume that fill_input_buffer will never return FALSE,
+      // so suspension need not be handled.
     }
     src->base.next_input_byte += (size_t) num_bytes;
     src->base.bytes_in_buffer -= (size_t) num_bytes;
@@ -138,20 +135,18 @@ vil_jpeg_skip_input_data (j_decompress_ptr cinfo, long num_bytes) {
 STATIC
 void
 vil_jpeg_term_source (j_decompress_ptr /*cinfo*/) {
-  //cerr << "vil_jpeg_term_source()" << endl;
-  /* no work necessary here */
+  // no work necessary here
 }
 
 STATIC
 void
 vil_jpeg_stream_src_set (j_decompress_ptr cinfo, vil_stream *vs) {
-  /* The source object and input buffer are made permanent so that a series
-   * of JPEG images can be read from the same file by calling vil_jpeg_stream_src
-   * only before the first one.  (If we discarded the buffer at the end of
-   * one image, we'd likely lose the start of the next one.)
-   * This makes it unsafe to use this manager and a different source
-   * manager serially with the same JPEG object.  Caveat programmer.
-   */
+  // The source object and input buffer are made permanent so that a series
+  // of JPEG images can be read from the same file by calling vil_jpeg_stream_src
+  // only before the first one.  (If we discarded the buffer at the end of
+  // one image, we'd likely lose the start of the next one.)
+  // This makes it unsafe to use this manager and a different source
+  // manager serially with the same JPEG object.  Caveat programmer.
   vil_jpeg_srcptr src = ( vil_jpeg_srcptr )( cinfo->src );
 
   assert(! src); // this function must be called only once on each cinfo.
@@ -179,7 +174,7 @@ vil_jpeg_stream_src_set (j_decompress_ptr cinfo, vil_stream *vs) {
   src->base.init_source       = vil_jpeg_init_source;
   src->base.fill_input_buffer = vil_jpeg_fill_input_buffer;
   src->base.skip_input_data   = vil_jpeg_skip_input_data;
-  src->base.resync_to_restart =     jpeg_resync_to_restart; /* use default method */
+  src->base.resync_to_restart =     jpeg_resync_to_restart; // use default method
   src->base.term_source       = vil_jpeg_term_source;
 }
 
@@ -192,8 +187,8 @@ vil_jpeg_stream_src_rewind(j_decompress_ptr cinfo, vil_stream *vs) {
     assert(src->stream == vs);
   }
 
-  cinfo->src->bytes_in_buffer = 0; /* forces fill_input_buffer on first read */
-  cinfo->src->next_input_byte = 0; /* until buffer loaded */
+  cinfo->src->bytes_in_buffer = 0; // forces fill_input_buffer on first read
+  cinfo->src->next_input_byte = 0; // until buffer loaded
 
   vs->seek(0);
 }
