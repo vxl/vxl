@@ -24,16 +24,9 @@ int main(int argc, char** argv)
 
   // This is how we get some image pixels from it.
 
-  vil2_image_view_base * view = data->get_view(0,0,0,data->nx(), data->ny(), data->nplanes());
-
-  vcl_cout << "Created a view of type " << view->is_a() << vcl_endl;
-
-  vil2_image_view<unsigned char> uc_view= *view;
+  vil2_image_view<unsigned char> uc_view= data->get_view(0,0,data->ni(), data->nj());
 
   vil2_print_all(vcl_cout,uc_view);
-
-  // don't forget to delete view.
-  delete view;
 
   return 0;
 }

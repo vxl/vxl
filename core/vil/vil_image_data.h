@@ -16,6 +16,7 @@
 #include <vcl_string.h>
 #include <vil/vil_image.h> // for vil_component_format
 #include <vil2/vil2_smart_ptr.h>
+#include <vil2/vil2_image_view_base.h>
 #include <vil2/vil2_pixel_format.h>
 
 class vil2_image_view_base;
@@ -33,13 +34,15 @@ class vil2_image_data
   vil2_image_data();
   virtual ~vil2_image_data();
 
-  //: Dimensions:  Planes x W x H
+  //: Dimensions:  Planes x ni x nj.
   // This concept is treated as a synonym to components.
   virtual unsigned nplanes() const = 0;
-  //: Dimensions:  Planes x W x H
-  virtual unsigned nx() const = 0;
-  //: Dimensions:  Planes x W x H
-  virtual unsigned ny() const = 0;
+  //: Dimensions:  Planes x ni x nj.
+  // The number of pixels in each row.
+  virtual unsigned ni() const = 0;
+  //: Dimensions:  Planes x ni x nj.
+  // The number of pixels in each column.
+  virtual unsigned nj() const = 0;
 
   //: Format.
   //  A standard RGB RGB RGB of chars image has
@@ -49,27 +52,31 @@ class vil2_image_data
   //: Create a read/write view of the data.
   // Modifying this view might modify the actual data.
   // If you want to modify this data in place, call put_view after you done, and 
-  // it should work efficiently.
+  // it should work efficiently. This function will always return a
+  // multi-plane scalar-pixel view of the data.
   // \return 0 if unable to get view of correct size. Caller is responsible for
   // deleting the view.
   virtual vil2_image_view_base* get_view(unsigned x0, unsigned y0,
-    unsigned plane0, unsigned nx, unsigned ny, unsigned nplanes) const
-  { return get_copy_view (x0, y0, plane0, nx, ny, nplanes); }
+    unsigned nx, unsigned ny) const
+  { return get_copy_view (x0, y0, nx, ny); }
 
   //: Create a read/write view of a copy of this data.
   // \return 0 if unable to get view of correct size. Caller is responsible for
-  // deleting the view.
+  // deleting the view. This function will always return a
+  // multi-plane scalar-pixel view of the data.
   virtual vil2_image_view_base* get_copy_view(unsigned x0, unsigned y0,
-    unsigned plane0, unsigned nx, unsigned ny,
-    unsigned nplanes) const = 0;
+    unsigned nx, unsigned ny) const = 0;
 
   //: Put the data in this view back into the image source.
+  // The view must be of scalar components. Use vil2_view_as_planes
+  // to convert it if this is not the case.
   virtual bool put_view(const vil2_image_view_base& im, unsigned x0,
-    unsigned y0, unsigned plane0 = 0) = 0;
+    unsigned y0) = 0;
 
   //: Check that a view will fit into the data at the given offset.
+  // This includes checking that the pixel type is scalar.
   virtual bool view_fits(const vil2_image_view_base& im, unsigned x0,
-    unsigned y0, unsigned plane0 = 0);
+    unsigned y0);
 
   //: Return a string describing the file format.
   // Only file images have a format, others return 0

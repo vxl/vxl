@@ -5,38 +5,39 @@
 #include "vil2_algo_sobel_3x3.h"
 
 //: Compute gradients of single plane of 2D data using 3x3 Sobel filters
-//  Computes both x and y gradients of an nx x ny plane of data
-void vil2_algo_sobel_3x3_1plane(float* gx, int gx_xstep, int gx_ystep,
-                       float* gy, int gy_xstep, int gy_ystep,
-                       const unsigned char* src,
-                       int s_xstep, int s_ystep, unsigned nx, unsigned ny)
+//  Computes both i and j gradients of an ni x nj plane of data
+void vil2_algo_sobel_3x3_1plane(const unsigned char* src,
+                       int s_istep, int s_jstep,
+                       float* gi, int gi_istep, int gi_jstep,
+                       float* gj, int gj_istep, int gj_jstep,
+                       unsigned ni, unsigned nj)
 {
   const unsigned char* s_data = src;
-  float *gx_data = gx;
-  float *gy_data = gy;
+  float *gi_data = gi;
+  float *gj_data = gj;
 
-  if (nx==0 || ny==0) return;
-  if (nx==1)
+  if (ni==0 || nj==0) return;
+  if (ni==1)
   {
       // Zero the elements in the column
-    for (unsigned y=0;y<ny;++y)
+    for (unsigned j=0;j<nj;++j)
     {
-      *gx_data = 0;
-      *gy_data = 0;
-      gx_data += gx_ystep;
-      gy_data += gy_ystep;
+      *gi_data = 0;
+      *gj_data = 0;
+      gi_data += gi_jstep;
+      gj_data += gj_jstep;
     }
     return;
   }
-  if (ny==1)
+  if (nj==1)
   {
       // Zero the elements in the column
-    for (unsigned x=0;x<nx;++x)
+    for (unsigned i=0;i<ni;++i)
     {
-      *gx_data = 0;
-      *gy_data = 0;
-      gx_data += gx_xstep;
-      gy_data += gy_xstep;
+      *gi_data = 0;
+      *gj_data = 0;
+      gi_data += gi_istep;
+      gj_data += gj_istep;
     }
     return;
   }
@@ -45,101 +46,102 @@ void vil2_algo_sobel_3x3_1plane(float* gx, int gx_xstep, int gx_ystep,
   //  o1 o2 o3
   //  o4    o5
   //  o6 o7 o8
-  const int o1 = s_ystep - s_xstep;
-  const int o2 = s_ystep;
-  const int o3 = s_xstep + s_ystep;
-  const int o4 = -s_xstep;
-  const int o5 = s_xstep;
-  const int o6 = -s_xstep - s_ystep;
-  const int o7 = -s_ystep;
-  const int o8 = s_xstep - s_ystep;
+  const int o1 = s_jstep - s_istep;
+  const int o2 = s_jstep;
+  const int o3 = s_istep + s_jstep;
+  const int o4 = -s_istep;
+  const int o5 = s_istep;
+  const int o6 = -s_istep - s_jstep;
+  const int o7 = -s_jstep;
+  const int o8 = s_istep - s_jstep;
 
-  const unsigned nx1 = nx-1;
-  const unsigned ny1 = ny-1;
+  const unsigned ni1 = ni-1;
+  const unsigned nj1 = nj-1;
 
-  s_data += s_xstep + s_ystep;
-  gx_data += gx_ystep;
-  gy_data += gy_ystep;
+  s_data += s_istep + s_jstep;
+  gi_data += gi_jstep;
+  gj_data += gj_jstep;
 
-  for (unsigned y=1;y<ny1;++y)
+  for (unsigned j=1;j<nj1;++j)
   {
     const unsigned char* s = s_data;
-    float* pgx = gx_data;
-    float* pgy = gy_data;
+    float* pgi = gi_data;
+    float* pgj = gj_data;
 
     // Zero the first elements in the rows
-    *pgx = 0; pgx+=gx_xstep;
-    *pgy = 0; pgy+=gy_xstep;
+    *pgi = 0; pgi+=gi_istep;
+    *pgj = 0; pgj+=gj_istep;
 
-    for (unsigned x=1;x<nx1;++x)
+    for (unsigned i=1;i<ni1;++i)
     {
-      // Compute gradient in x
+      // Compute gradient in i
       // Note: Multiply each element individually
       //      to ensure conversion to float before addition
-      *pgx = (0.125f*s[o3] + 0.25f*s[o5] + 0.125f*s[o8])
+      *pgi = (0.125f*s[o3] + 0.25f*s[o5] + 0.125f*s[o8])
            - (0.125f*s[o1] + 0.25f*s[o4] + 0.125f*s[o6]);
-      // Compute gradient in y
-      *pgy = (0.125f*s[o1] + 0.25f*s[o2] + 0.125f*s[o3])
+      // Compute gradient in j
+      *pgj = (0.125f*s[o1] + 0.25f*s[o2] + 0.125f*s[o3])
            - (0.125f*s[o6] + 0.25f*s[o7] + 0.125f*s[o8]);
 
-      s+=s_xstep;
-      pgx += gx_xstep;
-      pgy += gy_xstep;
+      s+=s_istep;
+      pgi += gi_istep;
+      pgj += gj_istep;
     }
 
     // Zero the last elements in the rows
-    *pgx = 0;
-    *pgy = 0;
+    *pgi = 0;
+    *pgj = 0;
 
     // Move to next row
-    s_data  += s_ystep;
-    gx_data += gx_ystep;
-    gy_data += gy_ystep;
+    s_data  += s_jstep;
+    gi_data += gi_jstep;
+    gj_data += gj_jstep;
   }
 
   // Zero the first and last rows
-  for (unsigned x=0;x<nx;++x)
+  for (unsigned i=0;i<ni;++i)
   {
-    *gx=0; gx+=gx_xstep;
-    *gy=0; gy+=gy_xstep;
-    *gx_data = 0; gx_data+=gx_xstep;
-    *gy_data = 0; gy_data+=gy_xstep;
+    *gi=0; gi+=gi_istep;
+    *gj=0; gj+=gj_istep;
+    *gi_data = 0; gi_data+=gi_istep;
+    *gj_data = 0; gj_data+=gj_istep;
   }
 }
 
 //: Compute gradients of single plane of 2D data using 3x3 Sobel filters
-//  Computes both x and y gradients of an nx x ny plane of data
-void vil2_algo_sobel_3x3_1plane(float* gx, int gx_xstep, int gx_ystep,
-                       float* gy, int gy_xstep, int gy_ystep,
-                       const float* src,
-                       int s_xstep, int s_ystep, unsigned nx, unsigned ny)
+//  Computes both x and j gradients of an nx x nj plane of data
+void vil2_algo_sobel_3x3_1plane(const float* src,
+                       int s_istep, int s_jstep,
+                       float* gi, int gi_istep, int gi_jstep,
+                       float* gj, int gj_istep, int gj_jstep,
+                       unsigned ni, unsigned nj)
 {
   const float* s_data = src;
-  float *gx_data = gx;
-  float *gy_data = gy;
+  float *gi_data = gi;
+  float *gj_data = gj;
 
-  if (nx==0 || ny==0) return;
-  if (nx==1)
+  if (ni==0 || nj==0) return;
+  if (ni==1)
   {
       // Zero the elements in the column
-    for (unsigned y=0;y<ny;++y)
+    for (unsigned j=0;j<nj;++j)
     {
-      *gx_data = 0;
-      *gy_data = 0;
-      gx_data += gx_ystep;
-      gy_data += gy_ystep;
+      *gi_data = 0;
+      *gj_data = 0;
+      gi_data += gi_jstep;
+      gj_data += gj_jstep;
     }
     return;
   }
-  if (ny==1)
+  if (nj==1)
   {
       // Zero the elements in the column
-    for (unsigned x=0;x<nx;++x)
+    for (unsigned i=0;i<ni;++i)
     {
-      *gx_data = 0;
-      *gy_data = 0;
-      gx_data += gx_xstep;
-      gy_data += gy_xstep;
+      *gi_data = 0;
+      *gj_data = 0;
+      gi_data += gi_istep;
+      gj_data += gj_istep;
     }
     return;
   }
@@ -148,61 +150,61 @@ void vil2_algo_sobel_3x3_1plane(float* gx, int gx_xstep, int gx_ystep,
   //  o1 o2 o3
   //  o4    o5
   //  o6 07 o8
-  const int o1 = s_ystep - s_xstep;
-  const int o2 = s_ystep;
-  const int o3 = s_xstep + s_ystep;
-  const int o4 = -s_xstep;
-  const int o5 = s_xstep;
-  const int o6 = -s_xstep - s_ystep;
-  const int o7 = -s_ystep;
-  const int o8 = s_xstep - s_ystep;
+  const int o1 = s_jstep - s_istep;
+  const int o2 = s_jstep;
+  const int o3 = s_istep + s_jstep;
+  const int o4 = -s_istep;
+  const int o5 = s_istep;
+  const int o6 = -s_istep - s_jstep;
+  const int o7 = -s_jstep;
+  const int o8 = s_istep - s_jstep;
 
-  const unsigned nx1 = nx-1;
-  const unsigned ny1 = ny-1;
+  const unsigned ni1 = ni-1;
+  const unsigned nj1 = nj-1;
 
-  s_data += s_xstep + s_ystep;
-  gx_data += gx_ystep;
-  gy_data += gy_ystep;
+  s_data += s_istep + s_jstep;
+  gi_data += gi_jstep;
+  gj_data += gj_jstep;
 
-  for (unsigned y=1;y<ny1;++y)
+  for (unsigned j=1;j<nj1;++j)
   {
     const float* s = s_data;
-    float* pgx = gx_data;
-    float* pgy = gy_data;
+    float* pgi = gi_data;
+    float* pgj = gj_data;
 
     // Zero the first elements in the rows
-    *pgx = 0; pgx+=gx_xstep;
-    *pgy = 0; pgy+=gy_xstep;
+    *pgi = 0; pgi+=gi_istep;
+    *pgj = 0; pgj+=gj_istep;
 
-    for (unsigned x=1;x<nx1;++x)
+    for (unsigned i=1;i<ni1;++i)
     {
-    // Compute gradient in x
-      *pgx = 0.125f*(s[o3]+s[o8] - (s[o1]+s[o6])) + 0.25f*(s[o5]-s[o4]);
-    // Compute gradient in y
-      *pgy = 0.125f*(s[o1]+s[o3] - (s[o6]+s[o8])) + 0.25f*(s[o2]-s[o7]);
+    // Compute gradient in i
+      *pgi = 0.125f*(s[o3]+s[o8] - (s[o1]+s[o6])) + 0.25f*(s[o5]-s[o4]);
+    // Compute gradient in j
+      *pgj = 0.125f*(s[o1]+s[o3] - (s[o6]+s[o8])) + 0.25f*(s[o2]-s[o7]);
 
-      s+=s_xstep;
-      pgx += gx_xstep;
-      pgy += gy_xstep;
+      s+=s_istep;
+      pgi += gi_istep;
+      pgj += gj_istep;
     }
 
     // Zero the last elements in the rows
-    *pgx = 0;
-    *pgy = 0;
+    *pgi = 0;
+    *pgj = 0;
 
     // Move to next row
-    s_data  += s_ystep;
-    gx_data += gx_ystep;
-    gy_data += gy_ystep;
+    s_data  += s_jstep;
+    gi_data += gi_jstep;
+    gj_data += gj_jstep;
   }
 
   // Zero the first and last rows
-  for (unsigned x=0;x<nx;++x)
+  for (unsigned i=0;i<ni;++i)
   {
-    *gx=0; gx+=gx_xstep;
-    *gy=0; gy+=gy_xstep;
-    *gx_data = 0; gx_data+=gx_xstep;
-    *gy_data = 0; gy_data+=gy_xstep;
+    *gi=0; gi+=gi_istep;
+    *gj=0; gj+=gj_istep;
+    *gi_data = 0; gi_data+=gi_istep;
+    *gj_data = 0; gj_data+=gj_istep;
   }
 }
 

@@ -13,7 +13,7 @@ int main(int argc, char** argv)
 {
   // Create some data in memory
   vcl_vector<vil_byte> vec_data(64);
-  for (int i=0;i<vec_data.size();++i) vec_data[i] = i;
+  for (unsigned i=0;i<vec_data.size();++i) vec_data[i] = i;
 
   vcl_cout<<"Creating a view of some data in memory"<<vcl_endl;
   vil2_image_view<vil_byte> image(&vec_data[0],8,8,1,1,8,1);

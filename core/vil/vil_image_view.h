@@ -18,9 +18,9 @@
 #include <vil2/vil2_pixel_format.h>
 
 //: Concrete view of image data of type T held in memory
-//  Views nplanes() planes of data each of size nx() x ny().
-//  The with the (x,y) element of the p'th plane is given by
-//  im.top_left_ptr()[x*im.xstep() + y*im.ystep() + p*im.planestep]
+//  Views nplanes() planes of data each of size ni() x nj().
+//  The with the (i,j) element of the p'th plane is given by
+//  im.top_left_ptr()[i*im.istep() + j*im.jstep() + p*im.planestep]
 //  The actual image data is either allocated by the class
 //  (using resize), in which case it is deleted
 //  only when it has no views observing it, or is allocated outside (and is not deleted on
@@ -36,8 +36,8 @@ class vil2_image_view : public vil2_image_view_base
 {
 protected:
   T * top_left_;
-  int xstep_;
-  int ystep_;
+  int istep_;
+  int jstep_;
   int planestep_;
 
   vil2_smart_ptr<vil2_memory_chunk> ptr_;
@@ -47,27 +47,32 @@ public:
     //  Creates an empty one plane image.
   vil2_image_view();
 
-    //: Create a n_plane plane image of nx x ny pixels
-  vil2_image_view(unsigned nx, unsigned ny, unsigned n_planes=1);
+    //: Create a n_plane plane image of ni x nj pixels
+  vil2_image_view(unsigned ni, unsigned nj, unsigned n_planes=1);
 
     //: Set this view to look at someone else's memory data.
     //  If the data goes out of scope then this view could be invalid, and
     //  there's no way of knowing until its too late - so take care!
-  vil2_image_view(const T* top_left, unsigned nx, unsigned ny, unsigned nplanes,
-                  int xstep, int ystep, int planestep);
+  vil2_image_view(const T* top_left, unsigned ni, unsigned nj, unsigned nplanes,
+                  int istep, int jstep, int planestep);
 
     //: Set this view to look at another view's data
     //  Typically used by functions which generate a manipulated view of
     //  another's image data.
     //  Need to pass the memory chunk to set up the internal smart ptr appropriately
   vil2_image_view(const vil2_smart_ptr<vil2_memory_chunk>& mem_chunk,
-                  const T* top_left, unsigned nx, unsigned ny, unsigned nplanes,
-                  int xstep, int ystep, int planestep);
+                  const T* top_left, unsigned ni, unsigned nj, unsigned nplanes,
+                  int istep, int jstep, int planestep);
 
-    //: Copy constructor
+    //: Sort of copy constructor
     // If this view cannot set itself to view the other data (e.g. because the
     // types are incompatible) it will set itself to empty.
   vil2_image_view(const vil2_image_view_base& );
+
+    //: Sort of copy constructor
+    // If this view cannot set itself to view the other data (e.g. because the
+    // types are incompatible) it will set itself to empty.
+  vil2_image_view(const vil2_image_view_base_sptr& );
 
     //  Destructor
   virtual ~vil2_image_view();
@@ -98,19 +103,15 @@ public:
   //: Pointer to the first (top left in plane 0) pixel;
   const T * top_left_ptr() const { return top_left_; }
 
-  //: Add this to your pixel pointer to get next x pixel
-  int xstep() const { return xstep_; }
-  //: Add this to your pixel pointer to get next y pixel
-  int ystep() const { return ystep_; }
+  //: Add this to your pixel pointer to get next i pixel
+  int istep() const { return istep_; }
+  //: Add this to your pixel pointer to get next j pixel
+  int jstep() const { return jstep_; }
   //: Add this to your pixel pointer to get pixel on next plane
   int planestep() const { return planestep_; }
 
   //: Cast to bool is true if pointing at some data.
   operator bool () const { return top_left_ != (T*)0; }
-
-
-  //: The number of pixels.
-  inline unsigned size() const { return nx() * ny() * nplanes(); }
 
   //: The number of bytes in the data
   inline unsigned size_bytes() const { return size() * sizeof(T); }
@@ -131,36 +132,36 @@ public:
 
   // Ordinary image indexing stuff.
 
-  //: Return read-only reference to pixel at (x,y) in plane 0.
-  const T& operator()(unsigned x, unsigned y) const {
-    assert(x<nx_); assert(y<ny_);
-    return top_left_[ystep_*y+x*xstep_]; }
+  //: Return read-only reference to pixel at (i,j) in plane 0.
+  const T& operator()(unsigned i, unsigned j) const {
+    assert(i<ni_); assert(j<nj_);
+    return top_left_[jstep_*j+i*istep_]; }
 
-  //: Return read/write reference to pixel at (x,y) in plane 0.
-  T&       operator()(unsigned x, unsigned y) {
-    assert(x<nx_); assert(y<ny_);
-    return top_left_[ystep_*y+x*xstep_]; }
+  //: Return read/write reference to pixel at (i,j) in plane 0.
+  T&       operator()(unsigned i, unsigned j) {
+    assert(i<ni_); assert(j<nj_);
+    return top_left_[istep_*i+j*jstep_]; }
 
-  //: Return read-only reference to pixel at (x,y) in plane p.
-  const T& operator()(unsigned x, unsigned y, unsigned p) const {
-  assert(x<nx_); assert(y<ny_);
-   return top_left_[planestep_*p + ystep_*y + x*xstep_]; }
+  //: Return read-only reference to pixel at (i,j) in plane p.
+  const T& operator()(unsigned i, unsigned j, unsigned p) const {
+  assert(i<ni_); assert(j<nj_);
+   return top_left_[planestep_*p + jstep_*j + i*istep_]; }
 
-  //: Return read-only reference to pixel at (x,y) in plane p.
-  T&       operator()(unsigned x, unsigned y, unsigned p) {
-  assert(x<nx_); assert(y<ny_);
-   return top_left_[planestep_*p + ystep_*y + x*xstep_]; }
+  //: Return read-only reference to pixel at (i,j) in plane p.
+  T&       operator()(unsigned i, unsigned j, unsigned p) {
+  assert(i<ni_); assert(j<nj_);
+   return top_left_[planestep_*p + jstep_*j + i*istep_]; }
 
 
 // image stuff
 
-  //: resize current planes to nx x ny
+  //: resize current planes to ni x nj
   // If already correct size, this function returns quickly
-  virtual void resize(unsigned nx, unsigned ny);
+  virtual void resize(unsigned ni, unsigned nj);
 
-  //: resize to nx x ny x nplanes
+  //: resize to ni x ni x nplanes
   // If already correct size, this function returns quickly
-  virtual void resize(unsigned nx, unsigned ny, unsigned nplanes);
+  virtual void resize(unsigned ni, unsigned nj, unsigned nplanes);
 
   //: Make a copy of the data in src and set this to view it
   void deep_copy(const vil2_image_view<T>& src);
@@ -177,21 +178,21 @@ public:
   //
   //  Note that though top_left is passed in as const, the data may be manipulated
   //  through the view.
-  void set_to_memory(const T* top_left, unsigned nx, unsigned ny, unsigned nplanes,
-              int xstep, int ystep, int planestep);
+  void set_to_memory(const T* top_left, unsigned ni, unsigned nj, unsigned nplanes,
+              int istep, int jstep, int planestep);
 
   //: Arrange that this is window on some planes of given image.
   //  i.e. plane(i) points to im.plane(i+p0) + offset
   void set_to_window(const vil2_image_view& im,
-                     unsigned x0, unsigned nx, unsigned y0,
-                     unsigned ny, unsigned p0, unsigned np);
+                     unsigned i0, unsigned ni, unsigned j0,
+                     unsigned nj, unsigned p0, unsigned np);
 
   //: Arrange that this is window on all planes of given image.
   void set_to_window(const vil2_image_view& im,
-                     unsigned x0, unsigned nx, unsigned y0, unsigned ny);
+                     unsigned i0, unsigned ni, unsigned j0, unsigned nj);
 
-  //: Return an nx x ny window of this data with offset (x0,y0)
-  vil2_image_view<T> window(unsigned x0, unsigned nx, unsigned y0, unsigned ny) const;
+  //: Return an ni x nj window of this data with offset (x0,y0)
+  vil2_image_view<T> window(unsigned i0, unsigned ni, unsigned j0, unsigned nj) const;
 
   //: Return a view of plane p
   vil2_image_view<T> plane(unsigned p) const;
@@ -222,14 +223,17 @@ public:
     //  the result will still be false.
   bool operator==(const vil2_image_view<T> &other) const;
 
-  const vil2_image_view_base & operator = (const vil2_image_view_base & rhs);
+  const vil2_image_view<T> & operator = (const vil2_image_view_base & rhs);
+
+  const vil2_image_view<T> & operator = (const vil2_image_view_base_sptr & rhs)
+  { *this = *rhs; return *this; }
+
 };
 
 //: Print a 1-line summary of contents
 template <class T>
 inline
-vcl_ostream& operator<<(vcl_ostream& s, vil2_image_view<T> const& i) {
-  i.print(s); return s;
-}
+vcl_ostream& operator<<(vcl_ostream& s, vil2_image_view<T> const& im) {
+  im.print(s); return s; }
 
 #endif // vil_image_view_h_

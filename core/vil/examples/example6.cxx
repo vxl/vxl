@@ -15,10 +15,10 @@ vil2_image_view<vil_byte> view_as_planes(const vil2_image_view<vil_rgb<vil_byte>
 {
   assert(v.nplanes()==1);
 
-  // Image is RGBRGBRGB so x step = 3*v.xstep(), ystep=3*v.ystep()
+  // Image is RGBRGBRGB so i step = 3*v.istep(), jstep=3*v.jstep()
   return vil2_image_view<vil_byte>(v.memory_chunk(),(vil_byte*) v.top_left_ptr(),
-                                   v.nx(),v.ny(),3,
-                                   v.xstep()*3,v.ystep()*3,1);
+                                   v.ni(),v.nj(),3,
+                                   v.istep()*3,v.jstep()*3,1);
 }
 
 //: Example function to return an RGB view of a 3-plane image
@@ -26,25 +26,25 @@ vil2_image_view<vil_rgb<vil_byte> > view_as_rgb(const vil2_image_view<vil_byte>&
 {
   assert(v.nplanes()==3);
   assert(v.planestep()==1);
-  assert(v.xstep()==3 || v.ystep()==3);
+  assert(v.istep()==3 || v.jstep()==3);
 
   return vil2_image_view<vil_rgb<vil_byte> >(v.memory_chunk(),
                                              (vil_rgb<vil_byte>*) v.top_left_ptr(),
-                                             v.nx(),v.ny(),1,
-                                             v.xstep()/3,v.ystep()/3,1);
+                                             v.ni(),v.nj(),1,
+                                             v.istep()/3,v.jstep()/3,1);
 }
 
 int main(int argc, char** argv)
 {
-  int nx=6;
-  int ny=6;
-  vil2_image_view<vil_rgb<vil_byte> > rgb_image(nx,ny);
+  unsigned ni=6;
+  unsigned nj=6;
+  vil2_image_view<vil_rgb<vil_byte> > rgb_image(ni,nj);
 
   vcl_cout<<"Create an image of type vil2_image_view<vil_rgb<vil_byte> >"<<vcl_endl;
   // Slow fill
-  for (int y=0;y<ny;++y)
-    for (int x=0;x<nx;++x)
-      rgb_image(x,y) = vil_rgb<vil_byte>(x+10*y,x+10*y+100,x+10*y+200);
+  for (unsigned j=0;j<nj;++j)
+    for (unsigned i=0;i<ni;++i)
+      rgb_image(i,j) = vil_rgb<vil_byte>(i+10*j,i+10*j+100,i+10*j+200);
 
   vcl_cout<<"Original image:"<<vcl_endl;
   vil2_print_all(vcl_cout,rgb_image);

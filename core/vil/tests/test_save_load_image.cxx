@@ -18,6 +18,7 @@
 //  1 May 2001 - Peter Vanroose - now using vil_test.h
 // 7 June 2001 - Peter Vanroose - test added for pbm images
 // 14 Apr 2002 - Amitha Perera - switched from vil_test to testlib
+// 26 Aug 2002 - Ian Scott - Started conversion to vil2
 // \endverbatim
 
 #include <vcl_string.h>
@@ -37,6 +38,7 @@
 #include <vil2/vil2_load.h>
 #include <vil2/vil2_image_view.h>
 #include <vil2/vil2_pixel_format.h>
+#include <vil2/vil2_image_view_functions.h>
 
 #include <testlib/testlib_test.h>
 
@@ -58,13 +60,22 @@ bool test_image_equal(char const* type_name,
 {
   vil2_image_view<T> image2 = *pimage2;
 
-  int sizex = image.nx();
-  int sizey = image.ny();
+  int sizex = image.ni();
+  int sizey = image.nj();
   int planes = image.nplanes();
-  int sizex2 = image2.nx();
-  int sizey2 = image2.ny();
+  int sizex2 = image2.ni();
+  int sizey2 = image2.nj();
   int planes2 = image2.nplanes();
 
+  // make sure saved image has the same pixels as the original image
+  TEST ("Loaded image can be viewed as same type as saved image", (bool)image2,true);
+  if (!image)
+  {
+    vcl_cout << "read back image type has pixel type " << pimage2->pixel_format()
+             << " instead of (as written) " << image.pixel_format() << vcl_endl;
+    return false;
+  }
+  
   TEST ("Image dimensions", sizex == sizex2 && sizey == sizey2, true);
   if (sizex != sizex2 || sizey != sizey2)
   {
@@ -73,7 +84,7 @@ bool test_image_equal(char const* type_name,
     return false;
   }
 
-  TEST ("number of planes", planes == planes2, true);
+  TEST ("Number of planes", planes == planes2, true);
   if (planes != planes2)
   {
     vcl_cout << type_name << ": nplanes are " << planes2
@@ -100,11 +111,14 @@ bool test_image_equal(char const* type_name,
       {
         if( !(image(x,y,p) == image2(x,y,p)) )
         {
-    #ifdef DEBUG
+    #ifndef NDEBUG
           if (++bad < 20)
-            vcl_cout << "\n pixel (" << x << "," << y << "," << p <<  ") differs: "
-            << (vil2_print_value(image(x,y,p)) << " --> "  << vil2_print_value(image2(x,y,p))
-            << vcl_endl;
+		  {
+            vcl_cout << "pixel (" << x << "," << y << "," << p <<  ") differs: ";
+            vil2_print_value(vcl_cout, image(x,y,p));
+			vcl_cout << " ---> ";  vil2_print_value(vcl_cout,image2(x,y,p));
+            vcl_cout << vcl_endl;
+		  }
     #else
           ++bad; vcl_cout << "." << vcl_flush;
     #endif
@@ -116,7 +130,8 @@ bool test_image_equal(char const* type_name,
   TEST ("pixelwise comparison", bad, 0);
   if (bad)
   {
-    vcl_cout << type_name << ": number of unequal pixels: "  << bad << vcl_endl << vcl_flush;
+    vcl_cout << type_name << ": number of unequal pixels: "  << bad <<
+		"out of " << planes *sizex * sizey << vcl_endl;
     return false;
   }
   else
@@ -300,14 +315,7 @@ void vil_test_image_type(char const* type_name, // type for image to read and wr
       return; // fatal error
     }
 
-    // make sure saved image has the same pixels as the original image
-    bool tst = (image.pixel_format() == image2->pixel_format());
-    TEST ("compare image file formats", tst, true);
-    if (!tst)
-      vcl_cout << "read back image type is " << image2->pixel_format()
-               << " instead of written " << image.pixel_format() << vcl_endl << vcl_flush;
-    else
-      test_image_equal(type_name, image, image2, exact);
+    test_image_equal(type_name, image, image2, exact);
   }
 
 #if !LEAVE_IMAGES_BEHIND
@@ -419,7 +427,11 @@ MAIN( test_save_load_image )
   vil_test_image_type("pnm", image1);
   vil_test_image_type("pnm", image8);
   vil_test_image_type("pnm", image16);
+# ifdef VIL2_TO_BE_FIXED
   vil_test_image_type("pnm", image24);
+# endif
+  vil_test_image_type("pnm", image32);
+  vil_test_image_type("pnm", image3p);
 #endif
 
   // bmp

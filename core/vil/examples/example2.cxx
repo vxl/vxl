@@ -10,16 +10,16 @@
 
 int main(int argc, char** argv)
 {
-  int nx=8;
-  int ny=8;
-  int nplanes=2;
-  vil2_image_view<vil_byte> image(nx,ny,nplanes);
+  unsigned ni=8;
+  unsigned nj=8;
+  unsigned nplanes=2;
+  vil2_image_view<vil_byte> image(ni,nj,nplanes);
 
   // Slow fill
-  for (int i=0;i<nplanes;++i)
-    for (int y=0;y<ny;++y)
-      for (int x=0;x<nx;++x)
-        image(x,y,i) = vil_byte(x+10*y+100*i);
+  for (unsigned p=0;p<nplanes;++p)
+    for (unsigned j=0;j<nj;++j)
+      for (unsigned i=0;i<ni;++i)
+        image(i,j,p) = vil_byte(i+10*j+100*p);
 
   vcl_cout<<"Original image:"<<vcl_endl;
   vil2_print_all(vcl_cout,image);
@@ -48,14 +48,14 @@ int main(int argc, char** argv)
   vil2_print_all(vcl_cout,transpose);
 
   vcl_cout<<vcl_endl;
-  vcl_cout<<"Create view of plane reflected along x"<<vcl_endl;
-  vil2_image_view<vil_byte> ref_x = vil2_reflect_x(plane);
-  vil2_print_all(vcl_cout,ref_x);
+  vcl_cout<<"Create view of plane reflected along i"<<vcl_endl;
+  vil2_image_view<vil_byte> ref_i = vil2_flip_lr(plane);
+  vil2_print_all(vcl_cout,ref_i);
 
   vcl_cout<<vcl_endl;
-  vcl_cout<<"Create view of plane reflected along y"<<vcl_endl;
-  vil2_image_view<vil_byte> ref_y = vil2_reflect_y(plane);
-  vil2_print_all(vcl_cout,ref_y);
+  vcl_cout<<"Create view of plane reflected along j"<<vcl_endl;
+  vil2_image_view<vil_byte> ref_j = vil2_flip_ud(plane);
+  vil2_print_all(vcl_cout,ref_j);
 
   return 0;
 }

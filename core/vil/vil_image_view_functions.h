@@ -19,19 +19,19 @@ template<class T>
 vil2_image_view<vil_rgb<T> > vil2_view_as_rgb(const vil2_image_view<T>& plane_view);
 
 //: Create a view which appears as the transpose of this view.
-//  i.e vil2_transpose(view)(x,y,p) = view(y,x,p)
+//  i.e vil2_transpose(view)(i,j,p) = view(j,i,p)
 template<class T>
 vil2_image_view<T> vil2_transpose(const vil2_image_view<T>& view);
 
-//: Create a reflected view in which x -> (nx-1)-x
-//  i.e vil2_reflect_x(view)(x,y,p) = view(nx-1-x,y,p)
+//: Create a reflected view in which i -> (ni-1)-i
+//  i.e vil2_flip_lr(view)(i,j,p) = view(ni-1-i,j,p)
 template<class T>
-vil2_image_view<T> vil2_reflect_x(const vil2_image_view<T>& view);
+vil2_image_view<T> vil2_flip_lr(const vil2_image_view<T>& view);
 
-//: Create a reflected view in which y -> (ny-1)-y
-//  i.e vil2_reflect_y(view)(x,y,p) = view(x,ny-1-y,p)
+//: Create a reflected view in which y -> (nj-1)-j
+//  i.e vil2_flip_ud(view)(i,j,p) = view(i,nj-1-j,p)
 template<class T>
-vil2_image_view<T> vil2_reflect_y(const vil2_image_view<T>& view);
+vil2_image_view<T> vil2_flip_ud(const vil2_image_view<T>& view);
 
 //: Fill view with given value
 template<class T>
@@ -41,13 +41,13 @@ void vil2_fill(vil2_image_view<T>& view, T value);
 template<class T>
 void vil2_fill_line(T* data, unsigned n, int step, T value);
 
-//: Fill row y in view with given value
+//: Fill row j in view with given value
 template<class T>
-void vil2_fill_row(vil2_image_view<T>& view, unsigned y, T value);
+void vil2_fill_row(vil2_image_view<T>& view, unsigned j, T value);
 
-//: Fill column x in view with given value
+//: Fill column i in view with given value
 template<class T>
-void vil2_fill_col(vil2_image_view<T>& view, unsigned x, T value);
+void vil2_fill_col(vil2_image_view<T>& view, unsigned i, T value);
 
 //: Compute minimum and maximum values over view
 template<class T>

@@ -2,8 +2,9 @@
 //  \brief Ref. counted block of data on the heap
 //  \author Tim Cootes
 
-#include <vil2/vil2_memory_chunk.h>
+#include "vil2_memory_chunk.h"
 #include <vcl_cstring.h>
+#include <vcl_cassert.h>
 
 //: Dflt ctor
 vil2_memory_chunk::vil2_memory_chunk()
@@ -43,6 +44,7 @@ vil2_memory_chunk& vil2_memory_chunk::operator=(const vil2_memory_chunk& d)
 //: Decrement reference count and call destructor when it becomes zero
 void vil2_memory_chunk::unref()
 {
+  assert (ref_count_ >0);
   ref_count_--;
   if (ref_count_==0)
   {

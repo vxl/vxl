@@ -16,8 +16,8 @@
 // 20 Sep 2002  Ian Scott  - Coverted to vil2.
 //\endverbatim
 
-#include <vil2/vil2_file_format.h>
 #include <vil2/vil2_image_data.h>
+#include <vil2/vil2_file_format.h>
 
 class vil2_image_view_base;
 
@@ -56,30 +56,27 @@ class vil2_pnm_image : public vil2_image_data
   bool write_header();
 
   friend class vil2_pnm_file_format;
- public:
 
+public:
+  vil2_pnm_image (vil_stream* is, unsigned ni,
+    unsigned nj, unsigned nplanes, vil2_pixel_format format);
   vil2_pnm_image(vil_stream* is);
-  vil2_pnm_image(vil_stream* is,
-                 unsigned nx,
-                 unsigned ny,
-                 unsigned nplanes,
-                 vil2_pixel_format format);
   ~vil2_pnm_image();
 
   //: Dimensions:  planes x width x height x components
   virtual unsigned nplanes() const { return ncomponents_; }
-  virtual unsigned nx() const { return nx_; }
-  virtual unsigned ny() const { return ny_; }
+  virtual unsigned ni() const { return nx_; }
+  virtual unsigned nj() const { return ny_; }
 
   virtual enum vil2_pixel_format pixel_format() const {return format_; }
 
   //: Create a read/write view of a copy of this data.
   // \return 0 if unable to get view of correct size.
-  virtual vil2_image_view_base* get_copy_view(unsigned x0, unsigned y0, unsigned plane0,
-                                              unsigned nx, unsigned ny, unsigned nplanes) const;
+  virtual vil2_image_view_base* get_copy_view(unsigned i0, unsigned j0,
+    unsigned ni, unsigned nj) const;
 
   //: Put the data in this view back into the image source.
-  virtual bool put_view(const vil2_image_view_base& im, unsigned x0, unsigned y0, unsigned plane0 = 0);
+  virtual bool put_view(const vil2_image_view_base& im, unsigned i0, unsigned j0);
 
   char const* file_format() const;
   bool get_property(char const *tag, void *prop = 0) const;

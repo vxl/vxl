@@ -12,6 +12,7 @@
 #include <vcl_iosfwd.h>
 #include <vcl_string.h>
 #include <vil2/vil2_pixel_format.h>
+#include <vil2/vil2_smart_ptr.h>
 
 //: An abstract base class of smart pointers to actual image data in memory.
 // If you want an actual image, try instantiating vil_image_view<T>.
@@ -19,28 +20,30 @@
 class vil2_image_view_base
 {
 protected:
-  unsigned nx_;
-  unsigned ny_;
+  unsigned ni_;
+  unsigned nj_;
   unsigned nplanes_;
 
-  vil2_image_view_base(unsigned nx, unsigned ny, unsigned nplanes):
-  nx_(nx), ny_(ny), nplanes_(nplanes) {}
+  vil2_image_view_base(unsigned ni, unsigned nj, unsigned nplanes):
+  ni_(ni), nj_(nj), nplanes_(nplanes), reference_count_(0) {}
 
-    //: Default is an empty one plane image
+  //: Default is an empty one plane image
 	//  Don't set nplanes_ to zero as it confuses resize(nx,ny) later
-  vil2_image_view_base(): nx_(0), ny_(0), nplanes_(1) {}
+  vil2_image_view_base(): ni_(0), nj_(0), nplanes_(1) {}
 
+  // The destructor must be virtual so that the memory chunk is destroyed.
+  virtual ~vil2_image_view_base() {};
 public:
 
   //: Width
-  unsigned nx()  const {return nx_;}
+  unsigned ni()  const {return ni_;}
   //: Height
-  unsigned ny()  const {return ny_;}
+  unsigned nj()  const {return nj_;}
   //: Number of planes
   unsigned nplanes() const {return nplanes_;}
 
   //: The number of pixels.
-  unsigned size() const { return ny() * nx() * nplanes(); }
+  unsigned size() const { return ni_ * nj_ * nplanes_; }
 
   //: resize current planes to width x height
   // If already correct size, this function returns quickly
@@ -64,12 +67,25 @@ public:
 
   //: True if this is (or is derived from) class s
   virtual bool is_class(vcl_string const& s) const;
+
+ private:
+  // You probably should not use a vil2_image_view in a vbl_smart_ptr, so the
+  // ref functions are private
+  friend class vil2_smart_ptr<vil2_image_view_base>;
+  void ref() { ++reference_count_; }
+  void unref() {
+    assert(reference_count_>0);
+    if (--reference_count_<=0) delete this;}
+  int reference_count_;
+
 };
+
+typedef vil2_smart_ptr<vil2_image_view_base> vil2_image_view_base_sptr;
 
 //: Print a 1-line summary of contents
 inline
-vcl_ostream& operator<<(vcl_ostream& s, vil2_image_view_base const& i) {
-  i.print(s); return s;
+vcl_ostream& operator<<(vcl_ostream& s, vil2_image_view_base const& im) {
+  im.print(s); return s;
 }
 
 #endif // vil2_image_view_base_h_

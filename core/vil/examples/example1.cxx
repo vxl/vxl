@@ -10,30 +10,30 @@
 
 int main(int argc, char** argv)
 {
-  int nx=10;
-  int ny=10;
-  int nplanes=2;
-  vil2_image_view<vil_byte> image(nx,ny,nplanes);
+  unsigned ni=10;
+  unsigned nj=10;
+  unsigned nplanes=2;
+  vil2_image_view<vil_byte> image(ni,nj,nplanes);
 
   // Slow fill
-  for (int p=0;p<nplanes;++p)
-    for (int y=0;y<ny;++y)
-      for (int x=0;x<nx;++x)
-        image(x,y,p) = vil_byte(x+10*y+100*p);
+  for (unsigned p=0;p<nplanes;++p)
+    for (unsigned j=0;j<nj;++j)
+      for (unsigned i=0;i<ni;++i)
+        image(i,j,p) = vil_byte(i+10*j+100*p);
 
   vcl_cout<<"Slow fill image"<<vcl_endl;
   vil2_print_all(vcl_cout,image);
 
   // Fast fill
   vil_byte* plane = image.top_left_ptr();
-  for (unsigned int p=0;p<nplanes;++p,plane += image.planestep())
+  for (unsigned p=0;p<nplanes;++p,plane += image.planestep())
   {
     vil_byte* row = plane;
-    for (int y=0;y<ny;++y,row += image.ystep())
+    for (unsigned j=0;j<nj;++j,row += image.jstep())
     {
       vil_byte* pixel = row;
-      for (int x=0;x<nx;++x,pixel+=image.xstep())
-        *pixel = vil_byte(x+10*y+100*p);
+      for (unsigned i=0;i<ni;++i,pixel+=image.istep())
+        *pixel = vil_byte(i+10*j+100*p);
     }
   }
 

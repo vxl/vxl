@@ -14,31 +14,54 @@
 #include <vil/vil_property.h>
 #include <vil2/vil2_new.h>
 #include <vil2/vil2_image_data.h>
+#include <vil2/vil2_image_view_functions.h>
 
 
 //: Send vil2_image to disk.
-bool vil2_save(const vil2_image_view_base &i, char const* filename, char const* file_format)
+bool vil2_save(const vil2_image_view_base &im, char const* filename, char const* file_format)
 {
   vil_stream* os = vil_open(filename, "w");
   if (!os->ok()) {
     vcl_cerr << __FILE__ ": Invalid stream for \"" << filename << "\"\n";
     return false;
   }
-  vil2_image_data_sptr out = vil2_new_image_data(os, i.nx(), i.ny(), i.nplanes(),
-    i.pixel_format(), file_format);
+  vil2_image_data_sptr out = vil2_new_image_data(os, im.ni(), im.nj(),
+    im.nplanes() * vil2_pixel_format_num_components(im.pixel_format()),
+    im.pixel_format(), file_format);
   if (!out) {
     vcl_cerr << __FILE__ ": (vil2_save) Cannot save to type [" << file_format << "]\n";
     return false;
   }
-
-  return out->put_view(i, 0, 0, 0);
+  switch (im.pixel_format())
+  {
+  case VIL2_PIXEL_FORMAT_RGB_BYTE:
+    return out->put_view(vil2_view_as_planes(static_cast<const vil2_image_view<vil_rgb<vil_byte> >&>(im)),0,0);
+  case VIL2_PIXEL_FORMAT_RGB_UNSIGNED_SHORT:
+    return out->put_view(vil2_view_as_planes(static_cast<const vil2_image_view<vil_rgb<unsigned short> >&>(im)),0,0);
+#ifdef VIL2_TO_BE_FIXED
+  case VIL2_PIXEL_FORMAT_RGB_SIGNED_CHAR:
+    return out->put_view(vil2_view_as_planes(static_cast<const vil2_image_view<vil_rgb<signed char> >&>(im)),0,0);
+  case VIL2_PIXEL_FORMAT_RGB_SIGNED_SHORT:
+    return out->put_view(vil2_view_as_planes(static_cast<const vil2_image_view<vil_rgb<signed short> >&>(im)),0,0);
+  case VIL2_PIXEL_FORMAT_RGB_UNSIGNED_INT:
+    return out->put_view(vil2_view_as_planes(static_cast<const vil2_image_view<vil_rgb<unsigned int> >&>(im)),0,0);
+  case VIL2_PIXEL_FORMAT_RGB_SIGNED_INT:
+    return out->put_view(vil2_view_as_planes(static_cast<const vil2_image_view<vil_rgb<signed int> >&>(im)),0,0);
+  case VIL2_PIXEL_FORMAT_RGB_DOUBLE:
+    return out->put_view(vil2_view_as_planes(static_cast<const vil2_image_view<vil_rgb<double> >&>(im)),0,0);
+  case VIL2_PIXEL_FORMAT_RGB_FLOAT:
+    return out->put_view(vil2_view_as_planes(static_cast<const vil2_image_view<vil_rgb<float> >&>(im)),0,0);
+#endif
+  default:
+    return out->put_view(im, 0, 0);
+  }
 
 #ifdef VIL2_TO_BE_FIXED
   bool top_first, bgr;
   if (out.get_property(vil2_property_top_row_first, &top_first) && !top_first)
-    i = vil2_flipud(i);
+    im = vil2_flipud(i);
   if (i.components() == 3 && out.get_property(vil2_property_component_order_is_BGR, &bgr) && bgr)
-    i = vil2_flip_components(i);
+    im = vil2_flip_components(i);
 #endif
 }
 

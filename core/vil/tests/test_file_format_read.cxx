@@ -38,15 +38,15 @@ class CheckRGB : public CheckPixel
 public:
   CheckRGB( const char* file )
   {
-    vil2_image_view_base *i = vil2_load( (image_base + file).c_str() );
-    if ( !i )
+    vil2_image_view_base *im = vil2_load( (image_base + file).c_str() );
+    if ( !im )
       vcl_cout << "[ couldn't load " << file << "]\n";
     else
     {
-//      i->print(vcl_cout);
-      img_ = vil2_view_as_rgb(static_cast<vil2_image_view<T>&>(*i));
+//      im->print(vcl_cout);
+      img_ = vil2_view_as_rgb(static_cast<vil2_image_view<T>&>(*im));
     }
-    delete i;
+    delete im;
   }
 
   bool operator() ( int p, int x, int y, const vcl_vector<TruePixelType>& pixel ) const
@@ -64,16 +64,16 @@ class CheckColourPlanes : public CheckPixel
 public:
   CheckColourPlanes( const char* file )
   {
-    vil2_image_view_base *i = vil2_load( (image_base + file).c_str() );
-    if ( !i )
+    vil2_image_view_base *im = vil2_load( (image_base + file).c_str() );
+    if ( !im )
       vcl_cout << "[ couldn't load " << file << "]\n";
     else
     {
 //      i->print(vcl_cout);
-      img_ = static_cast<vil2_image_view<T>&>(*i);
+      img_ = static_cast<vil2_image_view<T>&>(*im);
 //      vil2_print_all(vcl_cout, img_);
     }
-    delete i;
+    delete im;
   }
 
   bool operator() ( int p, int x, int y, const vcl_vector<TruePixelType>& pixel ) const
@@ -90,16 +90,16 @@ class CheckGrey : public CheckPixel
 public:
   CheckGrey( const char* file )
   {
-    vil2_image_view_base *i = vil2_load( (image_base + file).c_str() );
-    if ( !i )
+    vil2_image_view_base *im = vil2_load( (image_base + file).c_str() );
+    if ( !im )
       vcl_cout << "[ couldn't load " << file << "]\n";
     else
     {
-//      i->print(vcl_cout);
-      img_ = static_cast<vil2_image_view<T>&>(*i);
+//      im->print(vcl_cout);
+      img_ = static_cast<vil2_image_view<T>&>(*im);
 //      vil2_print_all(vcl_cout, img_);
     }
-    delete i;
+    delete im;
   };
 
   bool operator() ( int p, int x, int y, const vcl_vector<TruePixelType>& pixel ) const

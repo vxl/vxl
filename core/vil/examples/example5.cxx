@@ -16,14 +16,14 @@ int main(int argc, char** argv)
 
   {
     vcl_cout<<"Create a second image"<<vcl_endl;
-    int nx=6;
-    int ny=6;
-    vil2_image_view<vil_byte> image_view2(nx,ny);
+    unsigned ni=9;
+    unsigned nj=6;
+    vil2_image_view<vil_byte> image_view2(ni,nj);
 
     // Slow fill
-    for (int y=0;y<ny;++y)
-      for (int x=0;x<nx;++x)
-        image_view2(x,y) = vil_byte(x+10*y);
+    for (unsigned j=0;j<nj;++j)
+      for (unsigned i=0;i<ni;++i)
+        image_view2(i,j) = vil_byte(i+10*j);
 
     vcl_cout<<"image_view2:"<<vcl_endl;
     vil2_print_all(vcl_cout,image_view2);

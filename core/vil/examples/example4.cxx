@@ -11,22 +11,22 @@
 //: Example function to return a transpose of the view
 vil2_image_view<vil_byte> transpose_view(const vil2_image_view<vil_byte>& v)
 {
-  // Create view with x and y switched
+  // Create view with i and j switched
   return vil2_image_view<vil_byte>(v.memory_chunk(),v.top_left_ptr(),
-                                   v.ny(),v.nx(),v.nplanes(),
-                                   v.ystep(),v.xstep(),v.planestep());
+                                   v.nj(),v.ni(),v.nplanes(),
+                                   v.jstep(),v.istep(),v.planestep());
 }
 
 int main(int argc, char** argv)
 {
-  int nx=8;
-  int ny=8;
-  vil2_image_view<vil_byte> image(nx,ny);
+  unsigned ni=9;
+  unsigned nj=8;
+  vil2_image_view<vil_byte> image(ni,nj);
 
   // Slow fill
-  for (int y=0;y<ny;++y)
-    for (int x=0;x<nx;++x)
-      image(x,y) = vil_byte(x+10*y);
+  for (unsigned j=0;j<nj;++j)
+    for (unsigned i=0;i<ni;++i)
+      image(i,j) = vil_byte(i+10*j);
 
   vcl_cout<<"Original image:"<<vcl_endl;
   vil2_print_all(vcl_cout,image);

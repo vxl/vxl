@@ -26,12 +26,12 @@ int main(int argc, char** argv)
 
   // We can apply some operation to it.
 
-  vil2_image_data_sptr cropped_data = vil2_crop(data, 1, 1, data->nx()-2, data->ny()-2);
+  vil2_image_data_sptr cropped_data = vil2_crop(data, 1, 1, data->ni()-2, data->nj()-2);
 
 
   // An then get the image pixels from it.
 
-  vil2_image_view_base * view = cropped_data->get_view(0,0,0,cropped_data->nx(), cropped_data->ny(), cropped_data->nplanes());
+  vil2_image_view_base * view = cropped_data->get_view(0,0,cropped_data->ni(), cropped_data->nj());
 
   vcl_cout << "Created a view of type " << view->is_a() << vcl_endl;
 

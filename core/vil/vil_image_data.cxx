@@ -42,11 +42,10 @@ bool vil2_image_data::is_class(vcl_string const& s) const
 
 
 //: Check that a view will fit into the data at the given offset.
-bool vil2_image_data::view_fits(const vil2_image_view_base& im, unsigned x0, unsigned y0,
-               unsigned plane0)
+// This includes checking that the pixel type is scalar.
+bool vil2_image_data::view_fits(const vil2_image_view_base& im, unsigned i0, unsigned j0)
 {
-  if (x0 + im.nx() > nx() || y0 + im. ny() > ny() ||
-    plane0 + im.nplanes() > nplanes())
-    return false;
-  return true;
+  return (i0 + im.ni() <= ni() && j0 + im.nj() <= nj() &&
+    im.nplanes() == nplanes() &&
+    vil2_pixel_format_num_components(im.pixel_format()) == 1);
 }

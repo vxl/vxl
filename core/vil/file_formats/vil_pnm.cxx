@@ -297,8 +297,8 @@ static bool operator>>(vil_stream& vs, int& a)
 }
 
 vil2_image_view_base* vil2_pnm_image::get_copy_view(
-  unsigned x0, unsigned y0, unsigned plane0,
-  unsigned nx, unsigned ny, unsigned nplanes) const
+  unsigned x0, unsigned y0,
+  unsigned nx, unsigned ny) const
 {
   bool* bb = 0;
   unsigned char* ib = 0;
@@ -351,15 +351,14 @@ vil2_image_view_base* vil2_pnm_image::get_copy_view(
       return 0;
     }
     if (bits_per_component_ <= 8)
-      return new vil2_image_view<unsigned char>(buf, ib, nx, ny, nplanes, nplanes, nx*nplanes, 1);
+      return new vil2_image_view<unsigned char>(buf, ib, nx, ny, ncomponents_, ncomponents_, nx*ncomponents_, 1);
     else if (bits_per_component_ <= 16)
-      return new vil2_image_view<unsigned short>(buf, jb, nx, ny, nplanes, nplanes, nx*nplanes, 1);
+      return new vil2_image_view<unsigned short>(buf, jb, nx, ny, ncomponents_, ncomponents_, nx*ncomponents_, 1);
     else
-      return new vil2_image_view<unsigned int>(buf, kb, nx, ny, nplanes, nplanes, nx*nplanes, 1);
+      return new vil2_image_view<unsigned int>(buf, kb, nx, ny, ncomponents_, ncomponents_, nx*ncomponents_, 1);
 
   } else if (magic_ == 4) // pbm (bitmap) raw image
   {
-    if (nplanes != 1) return 0;
 
     unsigned byte_width = (nx_+7)/8;
 
@@ -388,27 +387,23 @@ vil2_image_view_base* vil2_pnm_image::get_copy_view(
       // 1. Skip to column x0
       for (unsigned t = 0; t < x0*ncomponents_; ++t) { int a; (*vs_) >> a; }
       for (unsigned x = 0; x < nx; ++x) {
-      // 2. Skip to the starting component
-        for (unsigned t = 0; t < plane0; ++t) { int a; (*vs_) >> a; }
         // 3. Read the data
         if (bits_per_component_ <= 8)
-          for (unsigned p = 0; p < nplanes; ++p) { int a; (*vs_) >> a; *(ib++)=a; }
+          for (unsigned p = 0; p < ncomponents_; ++p) { int a; (*vs_) >> a; *(ib++)=a; }
         else if (bits_per_component_ <= 16)
-          for (unsigned p = 0; p < nplanes; ++p) { int a; (*vs_) >> a; *(jb++)=a; }
+          for (unsigned p = 0; p < ncomponents_; ++p) { int a; (*vs_) >> a; *(jb++)=a; }
         else
-          for (unsigned p = 0; p < nplanes; ++p) { int a; (*vs_) >> a; *(kb++)=a; }
-      // 4. Skip to the next column
-        for (unsigned t = 0; t < (ncomponents_-plane0-nplanes); ++t) { int a; (*vs_) >> a; }
+          for (unsigned p = 0; p < ncomponents_; ++p) { int a; (*vs_) >> a; *(kb++)=a; }
       }
       // 5. Skip to the next line
       for (unsigned t = 0; t < (nx_-x0-nx)*ncomponents_; ++t) { int a; (*vs_) >> a; }
     }
     if (bits_per_component_ <= 8)
-      return new vil2_image_view<unsigned char>(buf, (unsigned char*)buf->data(), nx, ny, nplanes, nplanes, nx*nplanes, 1);
+      return new vil2_image_view<unsigned char>(buf, (unsigned char*)buf->data(), nx, ny, ncomponents_, ncomponents_, nx*ncomponents_, 1);
     else if (bits_per_component_ <= 16)
-      return new vil2_image_view<unsigned short>(buf, (unsigned short*)buf->data(), nx, ny, nplanes, nplanes, nx*nplanes, 1);
+      return new vil2_image_view<unsigned short>(buf, (unsigned short*)buf->data(), nx, ny, ncomponents_, ncomponents_, nx*ncomponents_, 1);
     else
-      return new vil2_image_view<unsigned int>(buf, (unsigned int*)buf->data(), nx, ny, nplanes, nplanes, nx*nplanes, 1);
+      return new vil2_image_view<unsigned int>(buf, (unsigned int*)buf->data(), nx, ny, ncomponents_, ncomponents_, nx*ncomponents_, 1);
   }
 }
 
@@ -418,17 +413,17 @@ static void operator<<(vil_stream& vs, int a) {
 }
 
 bool vil2_pnm_image::put_view(const vil2_image_view_base& view,
-                                      unsigned x0, unsigned y0, unsigned plane0)
+                                      unsigned x0, unsigned y0)
 {
-  if (!view_fits(view, x0, y0, plane0)) return false;
+  if (!view_fits(view, x0, y0)) return false;
 
 
   if (view.pixel_format() == VIL2_PIXEL_FORMAT_UNSIGNED_INT &&
-        bits_per_component_ <= 32 ||
+        bits_per_component_ < 32 ||
       view.pixel_format() == VIL2_PIXEL_FORMAT_UNSIGNED_SHORT &&
-        bits_per_component_ <= 16 ||
+        bits_per_component_ < 16 ||
       view.pixel_format() == VIL2_PIXEL_FORMAT_BYTE &&
-        bits_per_component_ <= 8 ||
+        bits_per_component_ < 8 ||
       view.pixel_format() == VIL2_PIXEL_FORMAT_BOOL &&
         bits_per_component_ == 0)
   {
@@ -465,26 +460,29 @@ bool vil2_pnm_image::put_view(const vil2_image_view_base& view,
   {
     unsigned bytes_per_sample = (bits_per_component_+7)/8;
     unsigned bytes_per_pixel = ncomponents_ * bytes_per_sample;
-    vil_streampos byte_start = start_of_data_ + (y0 * nx_ + x0) * bytes_per_pixel;
+    vil_streampos byte_start = start_of_data_ + (y0 * nx_ + x0) *
+      bytes_per_pixel;
     unsigned byte_width = nx_ * bytes_per_pixel;
-    unsigned byte_out_width = view.nx() * bytes_per_pixel;
+    unsigned byte_out_width = view.ni() * bytes_per_pixel;
 
     if ( bytes_per_sample==1 || ( bytes_per_sample==2 && VXL_BIG_ENDIAN ) ) {
-      for (unsigned y = 0; y < view.ny(); ++y) {
-        vs_->seek(byte_start + y * byte_width);
-        vs_->write(ob + y * byte_out_width, byte_out_width);
-      }
+      for (unsigned y = 0; y < view.nj(); ++y) 
+        for (unsigned x = 0; x < view.ni(); ++x) {
+          vs_->seek(byte_start + y * byte_width + x * bytes_per_pixel);
+  	      for (unsigned p = 0; p < ncomponents_; p++)
+            vs_->write(&(*ob)(x,y,p),1 );
+        }
     } else if ( bytes_per_sample==2 ) {
       // Little endian host; must convert words to have MSB first.
-      // Can't convert the input buffer, because it's not ours.
-      // Convert line by line to avoid duplicating a potentially large image.
-      vcl_vector<unsigned char> tempbuf( byte_out_width );
-      for (int y = 0; y < view.ny(); ++y) {
-        vs_->seek(byte_start + y * byte_width);
-        vcl_memcpy( &tempbuf[0], ob + y * byte_out_width, byte_out_width );
-        ConvertHostToMSB( &tempbuf[0], view.ny()*ncomponents_ );
-        vs_->write(&tempbuf[0], byte_out_width);
-      }
+      unsigned short tempbuf[3];
+      for (int y = 0; y < view.nj(); ++y)
+        for (unsigned x = 0; x < view.ni(); ++x) {
+          vs_->seek(byte_start + y * byte_width + x*bytes_per_pixel);
+          for (unsigned p=0; p < ncomponents_; ++p)
+            tempbuf[p] = (*pb)(x,y,p);
+          ConvertHostToMSB( &tempbuf[0], ncomponents_  );
+          vs_->write(tempbuf, ncomponents_ * 2);
+        }
     } else {
       vcl_cerr << "ERROR: pnm: writing rawbits format with > 16bit samples\n";
       return false;
@@ -493,28 +491,25 @@ bool vil2_pnm_image::put_view(const vil2_image_view_base& view,
   else if (magic_ == 4) // pbm (bitmap) raw image
   {
     int byte_width = (nx_+7)/8;
-    int byte_out_width = (view.nx()+7)/8;
+    int byte_out_width = (view.ni()+7)/8;
 
-    for (int y = 0; y < view.ny(); ++y) {
+    for (int y = 0; y < view.nj(); ++y) {
       vil_streampos byte_start = start_of_data_ + (y0+y) * byte_width + x0/8;
       vs_->seek(byte_start);
       int s = x0&7; // = x0%8;
-      int t = 0;
-      unsigned char a = 0, b = (*ob)(0,y);
+      unsigned char a = 0;
       if (s) {
         vs_->read(&a, 1L);
         vs_->seek(byte_start);
         a &= ((1<<s)-1)<<(8-s); // clear the last 8-s bits of a
       }
-      for (int x = 0; x < view.nx(); ++x) {
-        if (b&(1<<(7-t))) a |= 1<<(7-s); // single bit; high bit = first
-        if (t >= 7) { b = (*ob)(x,y); t = 0; }
-        else ++t;
+      for (int x = 0; x < view.ni(); ++x) {
+        if ((*bb)(x,y)) a |= 1<<(7-s); // single bit; high bit = first
         if (s >= 7) { vs_->write(&a, 1L); ++byte_start; s = 0; a = 0; }
         else ++s;
       }
       if (s) {
-        if (x0+view.nx() < nx_) {
+        if (x0+view.ni() < nx_) {
           vs_->seek(byte_start);
           unsigned char c; vs_->read(&c, 1L);
           vs_->seek(byte_start);
@@ -527,18 +522,19 @@ bool vil2_pnm_image::put_view(const vil2_image_view_base& view,
   }
   else // ascii (non-raw) image data
   {
-    if (x0 > 0 || y0 > 0 || view.nx() < nx_)
+    if (x0 > 0 || y0 > 0 || view.ni() < nx_ || view.nj() < ny_)
       return false; // can only write the full image in this mode
     vs_->seek(start_of_data_);
-    for (int y = 0; y < view.ny(); ++y) {
-      if (bits_per_component_ <= 8)
-        for (int x = 0; x < view.nx()*ncomponents_; ++x) { (*vs_) << ob[x]; }
-      else if (bits_per_component_ <= 16)
-        for (int x = 0; x < view.nx()*ncomponents_; ++x) { (*vs_) << pb[x]; }
-      else
-        for (int x = 0; x < view.nx()*ncomponents_; ++x) { (*vs_) << qb[x]; }
-      ob += view.nx(); pb += view.nx(); qb += view.nx();
-    }
+    for (int y = 0; y < view.nj(); ++y) 
+      for (int x = 0; x < view.ni(); ++x) 
+        for (int p = 0; p < ncomponents_; ++p) {
+          if (bits_per_component_ <= 8)
+            { (*vs_) << (*ob)(x,y,p); }
+          else if (bits_per_component_ <= 16)
+            { (*vs_) << (*pb)(x,y,p); }
+          else
+            { (*vs_) << (*qb)(x,y,p); }
+        }
   }
 
   return true;

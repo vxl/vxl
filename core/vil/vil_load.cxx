@@ -25,9 +25,9 @@ vil2_image_data_sptr vil2_load_image_data_raw(vil_stream *is)
     vcl_cerr << __FILE__ " : trying \'" << (*p)->tag() << "\'\n";
 #endif
     is->seek(0);
-    vil2_image_data_sptr i = (*p)->make_input_image(is);
-    if (i)
-      return i;
+    vil2_image_data_sptr im = (*p)->make_input_image(is);
+    if (im)
+      return im;
   }
 
   // failed.
@@ -54,27 +54,27 @@ vil2_image_data_sptr vil2_load_image_data_raw(char const* filename)
 
 vil2_image_data_sptr vil2_load_image_data(char const* filename)
 {
-  vil2_image_data_sptr i = vil2_load_image_data_raw(filename);
-  if (!i) return i; // leave early if it hasn't loaded.
+  vil2_image_data_sptr im = vil2_load_image_data_raw(filename);
+  if (!im) return im; // leave early if it hasn't loaded.
 
   bool top_first=true, bgr=false;
-  i->get_property(vil_property_top_row_first, &top_first);
-  if (i->nplanes() == 3)
-    i->get_property(vil_property_component_order_is_BGR,&bgr);
+  im->get_property(vil_property_top_row_first, &top_first);
+  if (im->nplanes() == 3)
+    im->get_property(vil_property_component_order_is_BGR,&bgr);
 #ifdef VIL2_TO_BE_FIXED
   if (!top_first)
-    i = vil_flipud(i);
+    im = vil_flipud(im);
   if (bgr)
-    i = vil_flip_components(i);
+    im = vil_flip_components(im);
 #endif// VIL2_TO_BE_FIXED
-  return i;
+  return im;
 }
 
 
 //: Convenience function for loading an image into an image view.
-vil2_image_view_base * vil2_load(const char *file)
+vil2_image_view_base_sptr vil2_load(const char *file)
 {
   vil2_image_data_sptr data = vil2_load_image_data(file);
   if (!data) return 0;
-  return data -> get_view(0,0,0,data->nx(), data->ny(), data->nplanes());
+  return data -> get_view(0, 0, data->ni(), data->nj());
 }

@@ -67,34 +67,7 @@ unsigned vil2_pixel_format_sizeof_components(enum vil2_pixel_format f);
 //: Return the number of components in pixel format f
 unsigned vil2_pixel_format_num_components(enum vil2_pixel_format f);
 
-inline
-vcl_ostream & operator << (vcl_ostream &os, vil2_pixel_format f)
-{
-  switch(f) {
-    case VIL2_PIXEL_FORMAT_UNKNOWN:        os << "VIL2_PIXEL_FORMAT=UNKNOWN";
-
-    case VIL2_PIXEL_FORMAT_UNSIGNED_INT:   os << "VIL2_PIXEL_FORMAT=unsigned int";
-    case VIL2_PIXEL_FORMAT_SIGNED_INT:     os << "VIL2_PIXEL_FORMAT=signed int";
-    case VIL2_PIXEL_FORMAT_UNSIGNED_SHORT: os << "VIL2_PIXEL_FORMAT=unsigned short";
-    case VIL2_PIXEL_FORMAT_SIGNED_SHORT:   os << "VIL2_PIXEL_FORMAT=signed short";
-    case VIL2_PIXEL_FORMAT_BYTE:           os << "VIL2_PIXEL_FORMAT=vil_byte";
-    case VIL2_PIXEL_FORMAT_SIGNED_CHAR:    os << "VIL2_PIXEL_FORMAT=signed char";
-    case VIL2_PIXEL_FORMAT_FLOAT:          os << "VIL2_PIXEL_FORMAT=float";
-    case VIL2_PIXEL_FORMAT_DOUBLE:         os << "VIL2_PIXEL_FORMAT=double";
-    case VIL2_PIXEL_FORMAT_BOOL:           os << "VIL2_PIXEL_FORMAT=bool";
-
-    case VIL2_PIXEL_FORMAT_RGB_SIGNED_INT:     os << "VIL2_PIXEL_FORMAT=vil_rgb<signed int>";
-    case VIL2_PIXEL_FORMAT_RGB_UNSIGNED_INT:   os << "VIL2_PIXEL_FORMAT=vil_rgb<unsigned int>";
-    case VIL2_PIXEL_FORMAT_RGB_SIGNED_SHORT:   os << "VIL2_PIXEL_FORMAT=vil_rgb<signed short>";
-    case VIL2_PIXEL_FORMAT_RGB_UNSIGNED_SHORT: os << "VIL2_PIXEL_FORMAT=vil_rgb<unsigned short>";
-    case VIL2_PIXEL_FORMAT_RGB_BYTE:           os << "VIL2_PIXEL_FORMAT=vil_rgb<vil_byte>";
-    case VIL2_PIXEL_FORMAT_RGB_SIGNED_CHAR:    os << "VIL2_PIXEL_FORMAT=vil_rgb<signed char>";
-    case VIL2_PIXEL_FORMAT_RGB_FLOAT:          os << "VIL2_PIXEL_FORMAT=vil_rgb<float>";
-    case VIL2_PIXEL_FORMAT_RGB_DOUBLE:         os << "VIL2_PIXEL_FORMAT=vil_rgb<double>";
-
-    default:  os << "VIL2_PIXEL_FORMAT_INVALID";
-  }
-  return os;
-}
+//: output a pretty string representing the pixel format.
+vcl_ostream & operator << (vcl_ostream &os, vil2_pixel_format f);
 
 #endif // vil2_pixel_format

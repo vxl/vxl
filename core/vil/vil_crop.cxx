@@ -18,12 +18,12 @@ vil2_image_data_sptr vil2_crop(const vil2_image_data_sptr &src, unsigned x0,
 }
 
 
-vil2_crop_image_data::vil2_crop_image_data(vil2_image_data_sptr const& gi, int x0, int y0, int nx, int ny):
+vil2_crop_image_data::vil2_crop_image_data(vil2_image_data_sptr const& gi, int i0, int j0, int ni, int nj):
   gi_(gi),
-  x0_(x0),
-  y0_(y0),
-  nx_(nx),
-  ny_(ny)
+  i0_(i0),
+  j0_(j0),
+  ni_(ni),
+  nj_(nj)
 {
 }
 
