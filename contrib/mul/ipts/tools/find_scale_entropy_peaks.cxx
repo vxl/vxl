@@ -13,16 +13,16 @@
 void print_usage()
 {
   vcl_cout<<"find_scale_entropy_peaks -i input_image -s scale_step -h half_width -o out_image -e entropy_pyramid\n"
-          <<"Generates scale pyramid"<<vcl_endl
-          <<"computes local entropy in squares with given half width"<<vcl_endl
-          <<"looks for local peaks in the entropy pyramid"<<vcl_endl;
+          <<"Generates scale pyramid;\n"
+          <<"computes local entropy in squares with given half width;\n"
+          <<"looks for local peaks in the entropy pyramid.\n";
 }
 
 int main( int argc, char* argv[] )
 {
   vul_arg<vcl_string> in_path("-i","Input image path");
   vul_arg<vcl_string> out_path("-o","Output image file (peaks)","output.pnm");
-  vul_arg<int> half_width("-h","Half-width of square for entropy measurements",5);
+  vul_arg<unsigned> half_width("-h","Half-width of square for entropy measurements",5);
   vul_arg<vcl_string> entropy_path("-e","Output image file for entropy pyramid)");
   vul_arg<double> scale("-s","Scale step",1.41);
 
