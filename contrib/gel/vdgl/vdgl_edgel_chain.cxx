@@ -28,10 +28,10 @@ vdgl_edgel_chain::vdgl_edgel_chain( const double x0, const double y0,
   while (this->line_gen(x0, y0, x1, y1, init, done, x, y))
       es_.push_back(vdgl_edgel( x, y));
 }
+
 vdgl_edgel_chain::~vdgl_edgel_chain()
 {
 }
-
 
 bool vdgl_edgel_chain::add_edgel( const vdgl_edgel &e)
 {
@@ -138,7 +138,7 @@ bool vdgl_edgel_chain::split( double x, double y,
   return split_index > 0 && split_index < n;
 }
 
-//: Advance along a line and generate continguous pixels on the line.
+//: Advance along a line and generate contiguous pixels on the line.
 //
 bool vdgl_edgel_chain::line_gen(float xs, float ys, float xe, float ye,
                                 bool& init, bool& done,
@@ -151,8 +151,8 @@ bool vdgl_edgel_chain::line_gen(float xs, float ys, float xe, float ye,
     {
       xi = xs;
       yi = ys;
-      x = (unsigned int)(xi/pix_edge);
-      y = (unsigned int)(yi/pix_edge);
+      x = (float)(unsigned int)(xi/pix_edge);
+      y = (float)(unsigned int)(yi/pix_edge);
       init = false;
       return true;
     }
@@ -162,7 +162,8 @@ bool vdgl_edgel_chain::line_gen(float xs, float ys, float xe, float ye,
   float mag = vcl_sqrt(dx*dx + dy*dy);
   if (mag<pix_edge)//Can't reach the next pixel under any circumstances
     {             //so just output the target, xe, ye.
-      x = (unsigned int)xe; y = (unsigned int)ye;
+      x = (float)(unsigned int)xe;
+      y = (float)(unsigned int)ye;
       done = true;
       return true;
     }
