@@ -43,7 +43,7 @@
 
 #include <vcl/vcl_iostream.h>
 #include <vcl/vcl_cmath.h>
-#include <vcl/vcl_memory.h>
+//#include <vcl/vcl_memory.h>
 #include <vcl/vcl_cstdlib.h>
 #include <mvl/HomgLine3D.h>
 #include <mvl/HomgLineSeg3D.h>

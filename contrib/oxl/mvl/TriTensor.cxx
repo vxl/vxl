@@ -44,21 +44,20 @@
 
 #include <vcl/vcl_iostream.h>
 #include <vcl/vcl_cmath.h>
-#include <vcl/vcl_memory.h>
+//#include <vcl/vcl_memory.h>
 #include <vcl/vcl_cstdlib.h>
+#include <vcl/vcl_vector.h>
 
 #include <vbl/vbl_printf.h>
 
-#include <vcl/vcl_vector.h>
 #include <vnl/vnl_matrix.h>
 #include <vnl/vnl_matlab_print.h>
 #include <vnl/vnl_double_3.h>
 #include <vnl/vnl_double_3x3.h>
 #include <vnl/vnl_identity_3x3.h>
-// #include <vnl/OuterProduct3x3.h>
 #include <vnl/vnl_transpose.h>
-#include <vnl/algo/vnl_svd.h>
 #include <vnl/vnl_cross_product_matrix.h>
+#include <vnl/algo/vnl_svd.h>
 
 #include <mvl/HomgLine2D.h>
 #include <mvl/HomgPoint2D.h>
@@ -68,7 +67,6 @@
 #include <mvl/TriTensor.h>
 #include <mvl/PMatrixDecompAa.h>
 #include <mvl/HMatrix3D.h>
-
 #include <mvl/HomgOperator2D.h>
 #include <mvl/FManifoldProject.h>
 

@@ -31,7 +31,7 @@
 //
 //-----------------------------------------------------------------------------
 
-#include <vcl/vcl_memory.h>
+//#include <vcl/vcl_memory.h>
 #include <vcl/vcl_utility.h>
 #include <vcl/vcl_vector.h>
 #include <vcl/vcl_iosfwd.h>
@@ -39,11 +39,7 @@
 
 class mvl_multi_view_matches {
 public:
-  typedef vcl_map<unsigned int, unsigned int, vcl_less<unsigned int> 
-  //#ifdef VCL_SUNPRO_CC
-  //  , vcl_allocator<vcl_pair<unsigned const int, unsigned int> >
-  //#endif
-  > Map;
+  typedef vcl_map<unsigned int, unsigned int, vcl_less<unsigned int> > Map;
 
   mvl_multi_view_matches(char const* filename);
   mvl_multi_view_matches(vcl_vector<int> const& views);
