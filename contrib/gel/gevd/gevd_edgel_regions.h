@@ -52,7 +52,8 @@
 #include <gevd/gevd_region_edge.h>
 #include <gevd/gevd_bufferxy.h>
 #include <gevd/gevd_detector.h>
-#include <gevd/gevd_intensity_face.h>
+#include <vdgl/vdgl_intensity_face.h>
+#include <vdgl/vdgl_intensity_face_sptr.h>
 #include <vil/vil_image.h>
 
 
@@ -65,24 +66,25 @@ public:
   ~gevd_edgel_regions();
   //Main process method
   bool compute_edgel_regions(vil_image* image,
-                             vcl_vector<vsol_spatial_object_2d*>& sgrp,
-                             vcl_vector<gevd_intensity_face*>& faces);
+                             vcl_vector<vtol_edge_2d_sptr>& sgrp,
+                             vcl_vector<vdgl_intensity_face_sptr>& faces);
 
   bool compute_edgel_regions(gevd_bufferxy* buf,
-                             vcl_vector<vsol_spatial_object_2d*>& sgrp,
-                             vcl_vector<gevd_intensity_face*>& faces);
+                             vcl_vector<vtol_edge_2d_sptr>& sgrp,
+                             vcl_vector<vdgl_intensity_face_sptr>& faces);
   //Acessors
   void SetVerbose() {_verbose = true;}
   void ClearVerbose() {_verbose = false;}
   void SetDebug() {_debug = true;}
   void ClearDebug() {_debug = false;}
+  void set_magnification(float magnification){magnification_=magnification;}
   unsigned int BaseLabel(unsigned int label);
   unsigned int GetMaxRegionLabel(){return _max_region_label;}
   void SetMaxRegionLabel(unsigned int label){_max_region_label = label;}
   unsigned int** GetRegionArray(){return _region_label_array;}
   int GetXSize(){return (_xend - _xo + 1);}
   int GetYSize(){return (_yend - _yo + 1);}
-  vil_image* GetEdgeImage(vcl_vector<vsol_spatial_object_2d *>& edgels);
+  vil_image* GetEdgeImage(vcl_vector<vtol_edge_2d_sptr>& edgels);
 #if 0
   topo_debug_data_ref get_topo_debug_data(){return _debug_data;};
 #endif
@@ -99,8 +101,8 @@ public:
   void print_intensity_data();
 protected:
   //Utilities
-  bool GroupContainsEdges(vcl_vector<vsol_spatial_object_2d *>& sg);
-  bool InitRegionArray(vcl_vector<vsol_spatial_object_2d *>& sg);
+  bool GroupContainsEdges(vcl_vector<vtol_edge_2d_sptr>& sg);
+  bool InitRegionArray(vcl_vector<vtol_edge_2d_sptr>& sg);
   unsigned char label_code(unsigned int label);
   bool add_to_forward(unsigned int key, unsigned int value);
   bool add_to_reverse(unsigned int key, unsigned int value);
@@ -144,14 +146,14 @@ protected:
   int bytes_per_pix();
 
   //to be used after image or buf are set
-  bool compute_edgel_regions(vcl_vector<vsol_spatial_object_2d *>& sgrp,
-                             vcl_vector<gevd_intensity_face*>& faces);
+  bool compute_edgel_regions(vcl_vector<vtol_edge_2d_sptr>& sgrp,
+                             vcl_vector<vdgl_intensity_face_sptr>& faces);
   //members
   bool _verbose;
   bool _debug;
   bool _image_source;
   bool _buf_source;
-  int _magnification;
+  float magnification_;
   vil_image* _image;
   gevd_bufferxy* _buf;
   gevd_region_edge*** _edge_boundary_array;
@@ -172,9 +174,9 @@ protected:
   //hash table for Edge<->gevd_region_edge relationship
   vcl_map<int, gevd_region_edge*> _region_edges;
   vcl_map<unsigned int, vcl_vector<vtol_edge_2d_sptr>* > _region_edge_adjacency;
-  //Final output gevd_intensity_face(s) and relation to corresponding region label
-  vcl_vector<gevd_intensity_face*>* _faces;
-  gevd_intensity_face** _intensity_face_index;
+  //Final output vdgl_intensity_face(s) and relation to corresponding region label
+  vcl_vector<vdgl_intensity_face_sptr>* _faces;
+  vdgl_intensity_face_sptr* _intensity_face_index;
   vcl_vector<vtol_edge_2d_sptr>** _face_edge_index;
   vcl_vector<vtol_edge_2d_sptr>* _failed_insertions; //Short edges that fail
 #if 0

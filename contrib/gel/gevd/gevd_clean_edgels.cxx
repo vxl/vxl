@@ -143,12 +143,12 @@ void gevd_clean_edgels::detect_similar_edges(vcl_vector<vtol_edge_2d_sptr >& com
 void gevd_clean_edgels::remove_similar_edges(vtol_vertex_2d*& v1, vcl_vector<vtol_edge_2d_sptr >& deleted_edges)
 {
   float tol = 3.0f;
-  vcl_vector<vtol_edge*>* v1_edges = v1->compute_edges();
-  vcl_vector<vtol_vertex_2d*> opposite_v1_verts;
+  vcl_vector<vtol_edge_sptr>* v1_edges = v1->edges();
+  vcl_vector<vtol_vertex_2d_sptr> opposite_v1_verts;
   //Find all the vertics wes opposite from v1
-  for (vcl_vector<vtol_edge*>::iterator eit = v1_edges->begin(); eit != v1_edges->end(); eit++)
+  for (vcl_vector<vtol_edge_sptr>::iterator eit = v1_edges->begin(); eit != v1_edges->end(); eit++)
     {
-      vtol_vertex_2d* v11 = (vtol_vertex_2d*)(*eit)->v1().ptr(), *v12 = (vtol_vertex_2d*)(*eit)->v2().ptr();
+      vtol_vertex_2d_sptr v11 = (*eit)->v1()->cast_to_vertex_2d(), v12 = (*eit)->v2()->cast_to_vertex_2d();
       if (v11==v1)
         {opposite_v1_verts.push_back(v12); continue;}
       if (v12==v1)
@@ -157,7 +157,7 @@ void gevd_clean_edgels::remove_similar_edges(vtol_vertex_2d*& v1, vcl_vector<vto
     }
   //Then get the opposite vertices, v, with more than one edge between v1 and v
   //For these edges merge them into a common edge if they are too close
-  for (vcl_vector<vtol_vertex_2d*>::iterator vit = opposite_v1_verts.begin(); vit != opposite_v1_verts.end(); vit++)
+  for (vcl_vector<vtol_vertex_2d_sptr>::iterator vit = opposite_v1_verts.begin(); vit != opposite_v1_verts.end(); vit++)
     {
       vcl_vector<vtol_edge_2d_sptr > intersection;
       this->edge_exists(v1, (*vit), intersection);
@@ -173,9 +173,9 @@ bool gevd_clean_edgels::edge_exists(vtol_vertex_2d_sptr v1, vtol_vertex_2d_sptr 
   bool found = false;
   intersection.clear();
 
-  vcl_vector<vtol_edge*>* edges = v1->compute_edges();
+  vcl_vector<vtol_edge_sptr>* edges = v1->edges();
 
-  for (vcl_vector<vtol_edge*>::iterator eit = edges->begin(); eit != edges->end(); eit++)
+  for (vcl_vector<vtol_edge_sptr>::iterator eit = edges->begin(); eit != edges->end(); eit++)
     {
       vtol_edge_2d* e = (*eit)->cast_to_edge_2d();
       if (!e) continue;
@@ -193,13 +193,12 @@ bool gevd_clean_edgels::edge_exists(vtol_vertex_2d_sptr v1, vtol_vertex_2d_sptr 
 //: Remove edges which are aready connected to the given vertex.
 void gevd_clean_edgels::remove_connected_edges(vtol_vertex_2d* v, vcl_vector<vtol_edge_2d_sptr >& edges)
 {
-  // vcl_vector<vtol_edge_2d_sptr >* vert_edges = v->compute_edges();
 
   vcl_vector<vtol_edge_2d_sptr > tmp;
   for (vcl_vector<vtol_edge_2d_sptr >::iterator eit = edges.begin(); eit != edges.end(); eit++)
     {
     vtol_edge_2d_sptr e = (*eit);
-    if ( (vtol_vertex_2d*)e->v1().ptr() != v && (vtol_vertex_2d*)e->v2().ptr() != v )
+    if ( e->v1() != v && e->v2() != v )
       tmp.push_back ( e );
     }
   edges = tmp;
@@ -305,7 +304,7 @@ bool gevd_clean_edgels::split_edge(vtol_edge_2d_sptr e, vtol_vertex_2d_sptr new_
   vtol_vertex_sptr v2 = e->v2()->cast_to_vertex();
 
   edge2->set_v1(new_v->cast_to_vertex());     // link both directions v-e
-  edge2->set_v2(v2);            // unlink when stronger.UnProtect()
+  edge2->set_v2(v2.ptr());            // unlink when stronger.UnProtect()
 
 
 #if 0
@@ -523,7 +522,7 @@ void gevd_clean_edgels::RemoveBridges()
     for (vcl_vector<vtol_vertex_2d*>::iterator vit = verts.begin(); vit != verts.end(); vit++)
       {
       vtol_vertex_2d* v = *vit;
-      vcl_vector<vtol_edge*>* edges = v->compute_edges();
+      vcl_vector<vtol_edge_sptr>* edges = v->edges();
       if ( edges->size()==1 )
         {
         vtol_edge_sptr e = (*edges)[0];
@@ -540,7 +539,7 @@ void gevd_clean_edgels::RemoveBridges()
       //Remove the Edge(s) attached to order zero vertices
       for (vcl_vector<vtol_vertex_2d*>::iterator v1 = v_one.begin(); v1 != v_one.end(); v1++)
         {
-          vcl_vector<vtol_edge*>* v_edges = (*v1)->compute_edges();
+          vcl_vector<vtol_edge_sptr>* v_edges = (*v1)->edges();
           int order = v_edges->size();
           if (order<1 )
           {

@@ -79,6 +79,20 @@ gevd_bufferxy::gevd_bufferxy(int x, int y, int b, void* memptr) : gevd_memory_mi
   Init(x, y, b);
 }
 
+//: Construct a gevd_bufferxy from a vil_image
+gevd_bufferxy::gevd_bufferxy(vil_image &image) : gevd_memory_mixin( image.get_size_bytes() )
+{
+  int sizey= image.rows();
+  int sizex= image.cols();
+
+  Init(sizex, sizey, image.bits_per_component());
+
+  gevd_bufferxy image_buf(sizex, sizey, image.bits_per_component());
+
+  image.get_section(GetBufferPtr(),     // copy bytes image into buf
+		    0, 0, sizex, sizey);
+}
+
 gevd_bufferxy::~gevd_bufferxy()
 {
         delete [] yra;

@@ -15,10 +15,10 @@ SOURCE_FILES( gevd_sources
   gevd_contour.cxx
   gevd_clean_edgels.cxx
   gevd_edgel_regions.cxx
-  gevd_intensity_face.cxx
   gevd_region_edge.cxx
+  gevd_region_proc.cxx
+  gevd_region_proc_params.cxx
 )
-#  gevd_edgel_regions.cxx
 
 IF (WIN32)
   IF (NOT CYGWIN)

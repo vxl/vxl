@@ -3,10 +3,11 @@
 #include <iostream.h>
 #include <iomanip.h>
 #include <math.h>
-#include <vtol/vtol_edge.h>
+#include <vtol/vtol_edge_2d.h>
 #include <gevd/gevd_region_edge.h>
 
-gevd_region_edge::gevd_region_edge(vtol_edge_sptr e)
+
+gevd_region_edge::gevd_region_edge(vtol_edge_2d_sptr e)
 : edge_(e)
 {
 }
@@ -40,8 +41,8 @@ void gevd_region_edge::Prop(gevd_region_edge const* re, unsigned int label)
   //First try to propagate the labels
   //Do not allow propagation to occur
   //between different edges
-  vtol_edge_sptr source = re->get_edge();
-  vtol_edge_sptr target = this->get_edge();
+  vtol_edge_2d_sptr source = re->get_edge();
+  vtol_edge_2d_sptr target = this->get_edge();
   if (source&&target&&*source==*target)
     for (unsigned int i = 0; i<re->NumLabels(); ++i)
       this->SetNewLabel(re->GetLabel(i));

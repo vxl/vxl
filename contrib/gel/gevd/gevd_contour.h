@@ -108,6 +108,7 @@
 //-----------------------------------------------------------------------------
 
 #include <vcl_vector.h>
+#include <vbl\vbl_array_2d.h>
 #include <vtol/vtol_vertex_2d.h>
 #include <vtol/vtol_edge_2d.h>
 #include <gevd/gevd_bufferxy.h>
@@ -139,8 +140,6 @@ public:
                         const float tz = 0);
   static void ClearNetwork(vcl_vector<vtol_edge_2d_sptr>*& edges, // remove network of edges
                            vcl_vector<vtol_vertex_2d_sptr >*& vertices); // and vertices
-  static gevd_bufferxy* CreateEdgeMap(vcl_vector<vtol_edge_2d_sptr>&,
-                                 const int sizex, const int sizey);
   int CheckInvariants(vcl_vector<vtol_edge_2d_sptr>& edges, // return number of errors
                       vcl_vector<vtol_vertex_2d_sptr >& vertices);
 
@@ -180,7 +179,8 @@ protected:
   float minLength;    // number of pixels in shortest chain
   float minJump;      // change in strength at junction
   int maxSpiral;      // number of spiral search for max_gap
-  gevd_bufferxy *edgeMap, *vertexMap; // map pixel to junction/chain
+  vbl_array_2d<vtol_edge_2d_sptr> *edgeMap;
+  vbl_array_2d<vtol_vertex_2d_sptr> *vertexMap; // map pixel to junction/chain
 
 protected:
   int FindChains(gevd_bufferxy& edgels, // link pixels into chains
@@ -193,33 +193,5 @@ protected:
 
   static bool talkative; // output comentaries or not
 };
-
-
-// // Get reference to pixel as a edge/vertex pointer, at indexes (x, y).
-// Avoid intermediate cast to void*.
-
-inline vtol_edge_2d *&
-edgePtr(gevd_bufferxy& edgeMap, int x, int y)
-{
-  return (*((vtol_edge_2d **) edgeMap.GetElementAddr(x,y)));
-}
-
-inline vtol_edge_2d *
-edgePtr(const gevd_bufferxy& edgeMap, int x, int y)
-{
-  return (*((vtol_edge_2d *const *) edgeMap.GetElementAddr(x,y)));
-}
-
-inline vtol_vertex_2d *&
-vertexPtr(gevd_bufferxy& vertexMap, int x, int y)
-{
-  return (*((vtol_vertex_2d **)vertexMap.GetElementAddr(x,y)));
-}
-
-inline vtol_vertex_2d *
-vertexPtr(const gevd_bufferxy& vertexMap, int x, int y)
-{
-  return (* ((vtol_vertex_2d *const *)vertexMap.GetElementAddr(x,y)));
-}
 
 #endif

@@ -132,14 +132,8 @@ public:
   ~gevd_detector();
 
   // External interfaces
-  //Step contour detection - various return formats
-
-  void DoContourDetector(vcl_vector<vtol_edge_2d_sptr >*);
-
-  // New versions using the parameter block
-
-  vcl_vector<vtol_edge_2d *>  DoContourDetector(vil_image image);
-  void  DoContourDetector(vil_image image, vcl_vector<vtol_edge_2d_sptr >& edgels);
+  //Step contour detection
+  bool DoContour();
 
   //Fold contour detection
   void DoFoldContourDetector(vil_image image, vcl_vector<vtol_edge_2d_sptr >& edgels);
@@ -151,7 +145,6 @@ public:
   void  DoBreakCorners(vcl_vector<vtol_edge_2d_sptr >& in_edgels, vcl_vector<vtol_edge_2d_sptr >& out_edgels);
 
   // internal interfaces
-  bool DoContour();
   bool DoFoldContour();
   bool DoCorner( float angle = 10,      // smallest angle at corner
                  float separation = 1,  // |mean1-mean2|/sigma

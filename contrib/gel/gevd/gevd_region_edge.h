@@ -40,14 +40,14 @@
 // \endverbatim
 //-----------------------------------------------------------------------------
 
-#include <vtol/vtol_edge_sptr.h>
+#include <vtol/vtol_edge_2d_sptr.h>
 #include <vbl/vbl_ref_count.h>
 
 class gevd_region_edge : public vbl_ref_count
 {
 public:
   //Constructors/Destructors
-  gevd_region_edge(vtol_edge_sptr e);
+  gevd_region_edge(vtol_edge_2d_sptr e);
   ~gevd_region_edge();
   //Accessors
 #if 0 // now obsolete - JLM, March 1999
@@ -57,16 +57,17 @@ public:
   void SetRightRegion(unsigned int region);
 #endif
   void Prop(gevd_region_edge const* re, unsigned int label);
-  vtol_edge_sptr get_edge() const {return edge_;}
+  vtol_edge_2d_sptr get_edge() const {return edge_;}
   bool is_vertex() const;
   unsigned int NumLabels() const {return labels_.size();}
   unsigned int GetLabel(unsigned int i) const {return i<NumLabels() ? labels_[i] : 0;}
+
   //Utitities (especially for testing)
 protected:
   //Utilities
   bool SetNewLabel(unsigned int label);
   //members
-  vtol_edge_sptr edge_;
+  vtol_edge_2d_sptr edge_;
 #if 0 // now obsolete - JLM, March 1999
   unsigned int left_region_;
   unsigned int right_region_;
