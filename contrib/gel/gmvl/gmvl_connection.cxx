@@ -16,3 +16,10 @@ gmvl_connection::gmvl_connection( const gmvl_node_ref node1, const gmvl_node_ref
 gmvl_connection::~gmvl_connection()
 {
 }
+
+// input / output
+
+ostream &operator<<( ostream &os, const gmvl_connection &c)
+{
+  return os << "<Connection n1=" << c.n1_.ptr() << " n2=" << c.n2_.ptr() << ">";
+}

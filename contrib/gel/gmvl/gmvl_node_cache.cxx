@@ -39,6 +39,14 @@ void gmvl_node_cache::remove( const gmvl_node_ref node)
   nodes_= newnodes;
 }
 
+bool gmvl_node_cache::cached( const gmvl_node_ref node) const
+{
+  if( node->ref_== -1)
+    return false;
+
+  return true;
+}
+
 // clevel accessors
 
 // input and output

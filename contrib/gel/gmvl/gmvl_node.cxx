@@ -14,7 +14,6 @@ gmvl_node::gmvl_node( const vcl_string name)
 
 gmvl_node::~gmvl_node()
 {
-  cerr << "gmvl_node: " << this << " desctructor called..." << endl;
 }
 
 ostream &operator<<( ostream &os, gmvl_node &node)

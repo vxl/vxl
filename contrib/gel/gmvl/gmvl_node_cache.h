@@ -23,6 +23,8 @@ public:
   // normal accessors
   void add( const gmvl_node_ref node);
   void remove( const gmvl_node_ref node);
+
+  bool cached( const gmvl_node_ref node) const;
   
   // clever accessors
 

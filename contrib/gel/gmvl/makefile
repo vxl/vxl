@@ -16,6 +16,7 @@ SOURCES += gmvl_database.cxx
 SOURCES += gmvl_node.cxx
 SOURCES += gmvl_node_cache.cxx
 SOURCES += gmvl_connection.cxx
+SOURCES += gmvl_connection_cache.cxx
 
 # node implementations
 SOURCES += gmvl_image_node.cxx

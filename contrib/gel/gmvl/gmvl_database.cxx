@@ -22,6 +22,17 @@ void gmvl_database::remove_node( const gmvl_node_ref node)
   nodecache_.remove( node);
 }
 
+void gmvl_database::add_connection( const gmvl_node_ref node1, const gmvl_node_ref node2)
+{
+  if( !nodecache_.cached( node1))
+    add_node( node1);
+
+  if( !nodecache_.cached( node2))
+    add_node( node2);
+
+  connectioncache_.add( node1, node2);
+}
+
 ostream &operator<<( ostream &os, const gmvl_database db)
 {
   os << "gmvl_database:" << endl;
@@ -31,6 +42,8 @@ ostream &operator<<( ostream &os, const gmvl_database db)
   os << "    " << db.nodecache_ << endl;
 
   os << "  connections:" << endl;
+
+  os << "    " << db.connectioncache_ << endl;
 
   return os;
 }
