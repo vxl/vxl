@@ -231,8 +231,11 @@ public:
     //: Print class to os
     virtual void print_summary(vcl_ostream& os) const;
 
-    //: print all data to os
+    //: print all data to os (rounds output to int)
     virtual void print_all(vcl_ostream& os) const;
+
+    //: print all messily to data to os (doesn't round to int)
+    virtual void print_messy_all(vcl_ostream& os) const;
 
     //: Save class to binary file stream
     virtual void b_write(vsl_b_ostream& bfs) const;

@@ -460,6 +460,33 @@ void mil_image_2d_of<T>::print_all(vcl_ostream& os) const
   }
 }
 
+
+//=======================================================================
+//: print all data to os
+template<class T>
+void mil_image_2d_of<T>::print_messy_all(vcl_ostream& os) const
+{
+  os<<vsl_indent();
+  print_summary(os);
+  os<<vcl_endl;
+
+  for (int i=0;i<n_planes();++i)
+  {
+    if (n_planes()>1) os<<vsl_indent()<<"Plane "<<i<<":"<<vcl_endl;
+    const T* im_data = plane(i);
+    for (int y=0;y<ny_;++y)
+    {
+      os<<vsl_indent();
+      for (int x=0;x<nx_;++x)
+	  {
+		float v = float ( im_data[ystep_*y+x*xstep_] );
+		os<<v<<" ";
+	  }
+      os<<vcl_endl;
+    }
+  }
+}
+
 //=======================================================================
 
 template<class T>
