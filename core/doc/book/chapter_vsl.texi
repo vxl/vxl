@@ -39,7 +39,14 @@ binary files produced by any of the above should be readable by any other of the
 There is of-course an exception; large numbers saved on a 64-bit platform cannot
 be read on a 32-bit platform.
 
-
+@subsubsection caveats
+The code has been designed to work on as many platforms as possible. However if your
+platform uses any of the following, then it will probably not work (as presently coded.)
+@enumerate
+@item  A middle endian word encoding scheme.
+@item  Chars of length other than 8 bits.
+@item  Non-IEEE format floats and doubles.
+@end enumerate
 
 @section Using Binary I/O
 
@@ -128,6 +135,14 @@ else
 @end example
 
 (and similarly for loading them).
+
+The standard rule for ensuring trouble free I/O is
+@quotation
+Always write the input and output code in tandem - the output should
+precisely mirror the input.
+@end quotation
+
+
 
 @subsection Advanced Topics: Loading by baseclass pointer
 
@@ -308,6 +323,12 @@ pointer that was saved was NULL.  The loader will detect this and set the basecl
 pointer to zero.
 
 @section Adding Binary I/O to a New Class
+
+The golden rule for trouble free binary IO is
+@quotation
+Always write the input and output code in tandem - the output should
+precisely mirror the input.
+@end quotation
 
 First you need to evaluate whether the class needs binary I/O.
 For example, the @code{vnl_matrix_ref} can just be left to inherit from
