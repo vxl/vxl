@@ -78,20 +78,4 @@
 // true if <ieeefp.h> is available
 #define VXL_HAS_IEEEFP_H          @VXL_HAS_IEEEFP_H@
 
-#if 0
-// -------------------- availability of 3rd party packages
-
-// these should be 0 or 1, never empty.
-#define VXL_HAS_JPEG   @HAS_JPEG@
-#define VXL_HAS_TIFF   @HAS_TIFF@
-#define VXL_HAS_PNG    @HAS_PNG@
-#define VXL_HAS_ZLIB   @HAS_ZLIB@
-#define VXL_HAS_HERMES @HAS_HERMES@
-#define VXL_HAS_OPENGL @HAS_OPENGL@
-#define VXL_HAS_GLUT   @HAS_GLUT@
-#define VXL_HAS_FLTK   @HAS_FLTK@
-#define VXL_HAS_GTK    @HAS_GTK@
-#define VXL_HAS_SDL    @HAS_SDL@
-#endif
-
 #endif // vxl_config_h_
