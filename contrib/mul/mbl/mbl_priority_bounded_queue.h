@@ -1,9 +1,5 @@
 #ifndef mbl_priority_bounded_queue_h_
 #define mbl_priority_bounded_queue_h_
-//#ifdef __GNUC__
-//#pragma interface
-//#endif
-
 //:
 // \file
 // \brief Describes a bounded priority queue
@@ -67,13 +63,13 @@ public:
     while (bound_size > size()) pop();
     b_size_ = bound_size; }
 
-  bool empty() const {return (c_.empty()); }
+  bool empty() const {return c_.empty(); }
 
-  size_type size() const {return (c_.size()); }
+  size_type size() const {return c_.size(); }
 
-  value_type& top() {return (c_.front()); }
+  value_type& top() {return c_.front(); }
 
-  const value_type& top() const {return (c_.front()); }
+  const value_type& top() const {return c_.front(); }
 
   void push(const value_type & x) {
     if (size() >= b_size_)
