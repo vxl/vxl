@@ -51,7 +51,8 @@ class rgrl_feature_set_location_masked
   nearest_feature( rgrl_feature_sptr feature ) const
   {
     return mask_->inside(feature->location()) ?
-           rgrl_feature_set_location<N>::nearest_feature( feature ) : 0;
+           rgrl_feature_set_location<N>::nearest_feature( feature ) :
+           (rgrl_feature_sptr)0;
   }
 
   //: Return all features within a given Euclidean distance
