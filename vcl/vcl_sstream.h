@@ -1,9 +1,7 @@
 #ifndef vcl_sstream_h_
 #define vcl_sstream_h_
-/*
-  fsm
-*/
-
+// fsm
+#include "vcl_compiler.h"
 
 #if (defined(VCL_GCC) && !VCL_CXX_HAS_HEADER_SSTREAM) || defined(VCL_SGI_CC_720)
 // this is to get the vcl_ios_* macros.
