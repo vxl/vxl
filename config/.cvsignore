@@ -1,9 +1,0 @@
-iuproject_all.defs
-iu_class_table*
-rh_classes
-iu_library_table
-README.vars
-*.save
-try.mk
-config-auto.mk
-config-*-*.mk
