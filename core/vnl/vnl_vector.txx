@@ -652,12 +652,9 @@ vnl_vector<T> cross_3d (vnl_vector<T> const& v1, vnl_vector<T> const& v2) {
     vnl_error_vector_dimension ("cross_3d", v1.size(), v2.size());
   vnl_vector<T> result(v1.size());
 
-  vnl_vector<T>& vv1 = *((vnl_vector<T>*) &v1);
-  vnl_vector<T>& vv2 = *((vnl_vector<T>*) &v2);
-
-  result.x() = vv1.y() * vv2.z() - vv1.z() * vv2.y(); // work for both col/row
-  result.y() = vv1.z() * vv2.x() - vv1.x() * vv2.z(); // representation
-  result.z() = vv1.x() * vv2.y() - vv1.y() * vv2.x();
+  result.x() = v1.y() * v2.z() - v1.z() * v2.y(); // work for both col/row
+  result.y() = v1.z() * v2.x() - v1.x() * v2.z(); // representation
+  result.z() = v1.x() * v2.y() - v1.y() * v2.x();
   return result;
 }
 
