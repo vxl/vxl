@@ -9,7 +9,7 @@ INCLUDE_DIRECTORIES(${allvxl_SOURCE_DIR}/vxl)
 INCLUDE_DIRECTORIES(${allvxl_SOURCE_DIR}/oxl)
 
 SUBDIRS(mvl oxp vrml osl)
-
+SUBDIRS(oxltest)
 
 INCLUDE(${CMAKE_SOURCE_DIR}/config.cmake/Modules/FindOpenGL.cmake)
 
