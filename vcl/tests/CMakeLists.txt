@@ -9,4 +9,9 @@ INCLUDE( ${allvxl_SOURCE_DIR}/vcl/CMakeListsLink.txt )
 
 ADD_EXECUTABLE( vcl_tests vcl_tests.cpp)
 
+# Rel_ops conflicts with vector::iterator under GCC 3.0, so it can't
+# be put into the main test.
+ADD_EXECUTABLE( vcl_test_rel_ops test_vcl_rel_ops.cxx)
+
 ADD_TEST( vcl_tests vcl_tests)
+ADD_TEST( vcl_test_rel_ops vcl_test_rel_ops)

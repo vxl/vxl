@@ -19,11 +19,14 @@
 #include "test_vcl_map.cxx"
 #include "test_vcl_multimap.cxx"
 #include "test_vcl_new.cxx"
-#include "test_vcl_rel_ops.cxx"
 #include "test_vcl_set.cxx"
 #include "test_vcl_stlfwd.cxx"
 #include "test_vcl_string.cxx"
 #include "test_vcl_vector.cxx"
+
+// rel_ops conflicts with vector::iterator with GCC 3.0
+// rel_ops are bad. Don't use them.
+//#include "test_vcl_rel_ops.cxx"
 
 int result;
 
@@ -91,9 +94,6 @@ int main(int argc, char* argv[])
 
   testname( "test_vcl_new" );
   testresult( test_vcl_new_main() );
-
-  testname( "test_vcl_rel_ops" );
-  testresult( test_vcl_rel_ops_main() );
 
   testname( "test_vcl_set" );
   testresult( test_vcl_set_main() );
