@@ -308,12 +308,12 @@
     \fi
     % Now output figures in top if necessary
     \ifnum\AFGfiguresonpage>0      % check for insertion of figures
-	% moved up^ \unvbox\topins	% place the figure(s) on top
-	\ifnum\AFGfiguresonpage=2
-	    \setbox0=\lastbox   % remove the second figure
-	\fi
-	\setbox1=\lastbox
-	\unvbox1
+        % moved up^ \unvbox\topins      % place the figure(s) on top
+        \ifnum\AFGfiguresonpage=2
+            \setbox0=\lastbox   % remove the second figure
+        \fi
+        \setbox1=\lastbox
+        \unvbox1
     \fi
     % marginal hacks, juha@viisa.uucp (Juha Takala)
     % Place box \margin in the right margin
@@ -324,19 +324,19 @@
     % but if they're too small, leave this page with nothing but
     % figures, and move the small bit of text to the top of the next page. 
     \AFGpagesize=\ht#1
-    \advance\AFGpagesize by \dp#1	   % determine size of box #1
+    \advance\AFGpagesize by \dp#1          % determine size of box #1
     \ifdim\AFGpagesize>\minpagesize
         \dimen@=\dp#1 \unvbox#1  % the real page contents
     \else
-	\message{tekstsize = \the\ht#1, \the\dp#1}
-	\ifdim\ht#1=0pt            % box is empty
-	\else
-	   \vfil	           	   % to small so leave for next page
-	\fi
+        \message{tekstsize = \the\ht#1, \the\dp#1}
+        \ifdim\ht#1=0pt            % box is empty
+        \else
+           \vfil                           % to small so leave for next page
+        \fi
     \fi
     % Output the second figure if there is one.
     \ifnum\AFGfiguresonpage=2
-	\box0		% the second figure
+        \box0           % the second figure
     \fi
     % Output the footnote if present
     \ifvoid\footins\else % footnote info is present
@@ -5958,45 +5958,45 @@ should work if nowhere else does.}
 
 \def\AFGverbose#1{}
 
-\def\addfigure#1{%	add figure in box #1 to the document
+\def\addfigure#1{%      add figure in box #1 to the document
 \AFGverbose{CALL(\hbox to 1in{\copy #1})}
-    \ifnum\AFGfiguresonpage>1	% allready two figures on this page
-\AFGverbose{GT2}	\AFGaddtolist{#1}%		% so save for later
+    \ifnum\AFGfiguresonpage>1   % allready two figures on this page
+\AFGverbose{GT2}        \AFGaddtolist{#1}%              % so save for later
     \else
-	\ifnum\AFGfiguresonlist>0	% figlist is not empty
-\AFGverbose{ONALREADY}	    \AFGaddtolist{#1}	% so save for later
-	\else			% no figures left over, so try to fit this one
-\AFGverbose{FIRST}	    \dimen0=\ht#1
-	    \ifdim\dimen0<\vsize% not a pagesize figure
-	       \advance\dimen0 by \dp#1   % size of the box
-	       \advance\dimen0 by \AFGfigureskip  % extra space below or above
-	    \fi
-	    \advance\dimen0 by \pagetotal
-	    \ifdim\dimen0>\pagegoal  % no space on this page
-\AFGverbose{NOSPACE}		\AFGaddtolist{#1}	     % so save for later
-	    \else 
-		\advance\dimen0 by \AFGfiguresizeonpage
-		\ifdim\dimen0>\dimen\topins % exceding maximum insertion size
-\AFGverbose{GTMAX}		    \AFGaddtolist{#1}	      % so save for later
-		\else
-\AFGverbose{GO}		    \AFGfigureinsert{#1}	      % insert the figure
-		\fi
-	    \fi
-	\fi
+        \ifnum\AFGfiguresonlist>0       % figlist is not empty
+\AFGverbose{ONALREADY}      \AFGaddtolist{#1}   % so save for later
+        \else                   % no figures left over, so try to fit this one
+\AFGverbose{FIRST}          \dimen0=\ht#1
+            \ifdim\dimen0<\vsize% not a pagesize figure
+               \advance\dimen0 by \dp#1   % size of the box
+               \advance\dimen0 by \AFGfigureskip  % extra space below or above
+            \fi
+            \advance\dimen0 by \pagetotal
+            \ifdim\dimen0>\pagegoal  % no space on this page
+\AFGverbose{NOSPACE}            \AFGaddtolist{#1}            % so save for later
+            \else 
+                \advance\dimen0 by \AFGfiguresizeonpage
+                \ifdim\dimen0>\dimen\topins % exceding maximum insertion size
+\AFGverbose{GTMAX}                  \AFGaddtolist{#1}         % so save for later
+                \else
+\AFGverbose{GO}             \AFGfigureinsert{#1}              % insert the figure
+                \fi
+            \fi
+        \fi
     \fi
 \AFGverbose{DONE}
 
 }
 
-\def\AFGaddtolist#1{%	add box #1 to figlist
+\def\AFGaddtolist#1{%   add box #1 to figlist
     \global\setbox\AFGfiglist=\vbox{%
-	\nointerlineskip
-	\box#1
-	\unvbox\AFGfiglist}
+        \nointerlineskip
+        \box#1
+        \unvbox\AFGfiglist}
     \global\advance\AFGfiguresonlist by 1
 }
 
-\def\AFGfigureinsert#1{%	insert figure on this page
+\def\AFGfigureinsert#1{%        insert figure on this page
     \ifdim\ht#1<\vsize
 \ifnum\AFGfiguresonpage=0
 \AFGverbose{BOTINS}
@@ -6004,47 +6004,47 @@ should work if nowhere else does.}
 \AFGverbose{TOPINS}
 \fi
         \insert\topins{\vbox{%
-	    \ifnum\AFGfiguresonpage=0
-	        \unvbox#1\vskip\AFGfigureskip	% skip below the figure
-	    \else
-	        \vskip\AFGfigureskip\unvbox#1	% skip above the figure
-	    \fi
-	}}
+            \ifnum\AFGfiguresonpage=0
+                \unvbox#1\vskip\AFGfigureskip   % skip below the figure
+            \else
+                \vskip\AFGfigureskip\unvbox#1   % skip above the figure
+            \fi
+        }}
     \else
 \AFGverbose{PAGEINS}        \pageinsert
-	    \unvbox#1
-	\endinsert
+            \unvbox#1
+        \endinsert
     \fi
     \global\advance\AFGfiguresonpage by 1
     \global\advance\AFGfiguresizeonpage by \ht#1
     \global\advance\AFGfiguresizeonpage by \dp#1
     \global\advance\AFGfiguresizeonpage by \AFGfigureskip
 }
-\def\AFGcheckfiglist{%	see if there is a figure in the list that will
-		  % fit on the next page
+\def\AFGcheckfiglist{%  see if there is a figure in the list that will
+                  % fit on the next page
     \ifnum\AFGfiguresonlist>0
         \global\setbox\AFGfiglist=\vbox{%
-	    \unvbox\AFGfiglist
-	    \setbox0=\lastbox
-	    \global\advance\dimen0\ht0
-	    \ifdim\ht0<\vsize
-	        \global\advance\dimen0 by \dp0
-	        \global\advance\dimen0 by \AFGfigureskip
-	    \fi
-	    \ifdim\dimen0>\vsize
-	         \vbox{\box0}	% no room ; replace the figure
-	    \else
-	        \ifdim\dimen0>\dimen\topins
-      		    \vbox{\box0}
-  		\else
-		        \global\advance\AFGfiguresonlist by -1
-	        \fi
-	    \fi
-	    \global\setbox0=\box0
-	}
+            \unvbox\AFGfiglist
+            \setbox0=\lastbox
+            \global\advance\dimen0\ht0
+            \ifdim\ht0<\vsize
+                \global\advance\dimen0 by \dp0
+                \global\advance\dimen0 by \AFGfigureskip
+            \fi
+            \ifdim\dimen0>\vsize
+                 \vbox{\box0}   % no room ; replace the figure
+            \else
+                \ifdim\dimen0>\dimen\topins
+                    \vbox{\box0}
+                \else
+                        \global\advance\AFGfiguresonlist by -1
+                \fi
+            \fi
+            \global\setbox0=\box0
+        }
     \else
-	{\setbox1=\box0		% make box0 void
-	\global\setbox0=\box0}
+        {\setbox1=\box0         % make box0 void
+        \global\setbox0=\box0}
     \fi
 }
 
