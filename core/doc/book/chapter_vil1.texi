@@ -1,8 +1,10 @@
 @chapsummary
-Load images using @code{vil_load}. Access them
- using a @code{vil_memory_image_of<T>}.
+Load images using @code{vil1_load}. Access them
+ using a @code{vil1_memory_image_of<T>}.
 @endchapsummary
 
+vil1 is the original VXL image library, it has been replaced by vil2.
+vil1 is now deprecated.
 
 The @vxl{x} image library is an evolutionary rewrite of the TargetJr Image
 library.  As with its predecessor, its primary goal is to provide flexible
@@ -25,8 +27,8 @@ not have to load the entire 300 megabytes into memory.
 
 @item Efficient access to the native image layout.  Some systems convert
 all images to a consistent internal format when loading, for example, RGB
-top-to-bottom.  This is convenient for users, and is what vil's
-@code{vil_load_rgb} function does.  However, for some applications, the
+top-to-bottom.  This is convenient for users, and is what vil1's
+@code{vil1_load_rgb} function does.  However, for some applications, the
 disk format is specially designed for efficiency, so it must also be
 possible to get raw access to the disk format.
 
@@ -37,19 +39,19 @@ optimizations that only a human can apply.
 @end itemize
 
 @section Loading and saving
-Let's look at an example of vil in use.  This program makes an image from a
+Let's look at an example of vil1 in use.  This program makes an image from a
 disk file, copies it into memory, and prints the pixel at
 100,100.
 
 @example
 #include <vcl_iostream.h>
-#include <vil/vil_load.h>
-#include <vil/vil_memory_image_of.h>
+#include <vil1/vil1_load.h>
+#include <vil1/vil1_memory_image_of.h>
 
 int main()
 @{
-  vil_image img = vil_load("foo.ppm");
-  vil_memory_image_of<unsigned char> buf(img);
+  vil1_image img = vil1_load("foo.ppm");
+  vil1_memory_image_of<unsigned char> buf(img);
   vcl_cerr << "Pixel 100,100 = " << buf(100,100) << vcl_endl;
 @}
 @end example
@@ -60,13 +62,13 @@ have the value 255 at pixel 100,100.  Of course, 255 is an unlikely value
 for a pixel (as is 12, but that's not such a round number), so one
 immediately assumes there's a bug somewhere.  There wasn't.}, and see in
 detail what is happening.  The first interesting line is this call to
-@code{vil_load}
+@code{vil1_load}
 @example
-  vil_image img = vil_load("foo.ppm");
+  vil1_image img = vil1_load("foo.ppm");
 @end example
 The load function opens the file given to it, "foo.pgm" here, and examines
 its contents to determine what kind of image it is.  Then it makes a
-@code{vil_image} object which holds the open file, and remembers details
+@code{vil1_image} object which holds the open file, and remembers details
 like the image size.  It doesn't read the image yet, but it remembers
 enough to later read any rectangular section of the image.  This object is
 returned and assigned to the variable @var{img}. Image objects such as
@@ -77,7 +79,7 @@ easily and cheaply, because they always point to the same image.
 In this case we're not going to bother about handling large images, so the
 next line reads the whole lot into a memory buffer:
 @example
-  vil_memory_image_of<unsigned char> buf(img);
+  vil1_memory_image_of<unsigned char> buf(img);
 @end example
 This creates a 2D array of the same size as @var{img}, and reads the image
 data from disk into it.  We can now easily access the data using the
@@ -85,27 +87,27 @@ overloaded parenthesis operator, and print out the value.
 @example
   vcl_cerr << "Pixel 100,100 = " << buf(100,100) << vcl_endl;
 @end example
-Memory images are derived classes of vil_image, and they too can be passed
+Memory images are derived classes of vil1_image, and they too can be passed
 around cheaply, always referring to the same block of pixels.  To copy a
-memory image, use @code{vil_copy}.
+memory image, use @code{vil1_copy}.
 
 @subsection Loading and saving: The threshold program
 @cindex threshold example
-@cindex vil_save
+@cindex vil1_save
 Anyway, the usual next step in demonstrating an image handling library is
 to show thresholding, so let's have a look.  This program loads an image
 into memory, and creates a new image where all pixels greater than a
 threshold value are set to 255.
 @example
-#include <vil/vil_load.h>
-#include <vil/vil_save.h>
-#include <vil/vil_memory_image_of.h>
+#include <vil1/vil1_load.h>
+#include <vil1/vil1_save.h>
+#include <vil1/vil1_memory_image_of.h>
 
 int main()
 @{
-  vil_image img = vil_load("foo.ppm");
+  vil1_image img = vil1_load("foo.ppm");
 
-  vil_memory_image_of<unsigned char> buf(img);
+  vil1_memory_image_of<unsigned char> buf(img);
 
   for (int y = 0; y < buf.height(); ++y)
     for (int x = 0; x < buf.width(); ++x)
@@ -113,17 +115,17 @@ int main()
         buf(x,y) = 0;
 
 
-  vil_save(buf, "foothresh.ppm");
+  vil1_save(buf, "foothresh.ppm");
 @}
 @end example
-The call to @code{vil_save} sends the modified image in @var{buf} to disk.
+The call to @code{vil1_save} sends the modified image in @var{buf} to disk.
 The choice of file format is determined automatically from the extension of
 the filename.  In this case, the extension is "pgm", the Portable Gray Map
 format.  If one wants more control, a string can be appended to specify the
 format, e.g.
-@cindex vil_save, choosing a specific file format
+@cindex vil1_save, choosing a specific file format
 @example
-  vil_save(buf, "foothresh.ppm", "jpeg");
+  vil1_save(buf, "foothresh.ppm", "jpeg");
 @end example
 Of course, it's rarely sensible to have incompatible names and formats, but
 the user of your program may have chosen the name, so that you have no
@@ -140,118 +142,118 @@ convert all images to it.  In the examples above, a
 pretty safe choice is to convert all images to 24-bit RGB at load time.
 The colour threshold program looks like this:
 @example
-#include <vil/vil_load.h>
-#include <vil/vil_save.h>
-#include <vil/vil_memory_image_of.h>
-#include <vil/vil_rgb_byte.h>
-#include <vil/vil_image_as.h>
+#include <vil1/vil1_load.h>
+#include <vil1/vil1_save.h>
+#include <vil1/vil1_memory_image_of.h>
+#include <vil1/vil1_rgb_byte.h>
+#include <vil1/vil1_image_as.h>
 
 int main()
 @{
-  vil_image img = vil_load("foo.ppm");
+  vil1_image img = vil1_load("foo.ppm");
 
-  vil_image img_rgb = vil_image_as_rgb_byte(img);
+  vil1_image img_rgb = vil1_image_as_rgb_byte(img);
 
-  vil_memory_image_of<vil_rgb_byte> buf(img_rgb);
+  vil1_memory_image_of<vil1_rgb_byte> buf(img_rgb);
 
   for (int y = 0; y < buf.height(); ++y)
     for (int x = 0; x < buf.width(); ++x)
       if (buf(x,y).r < 200 && buf(x,y).g < 200 && buf(x,y).b < 200)
-        buf(x,y) = vil_rgb_byte(0,0,0);
+        buf(x,y) = vil1_rgb_byte(0,0,0);
 
-  vil_save(buf, "foothresh.ppm");
+  vil1_save(buf, "foothresh.ppm");
 @}
 @end example
-@cindex vil_image_as
-This code introduces @code{vil_image_as}, a set of functions
+@cindex vil1_image_as
+This code introduces @code{vil1_image_as}, a set of functions
 which force any image into the desired format.
-It also uses the @code{vil_rgb_byte} class, which is a
+It also uses the @code{vil1_rgb_byte} class, which is a
 simple way to handle RGB triples.
 
 @section Creating images from scratch
 @cindex images, creating
 Sometimes one would like to write a program which creates images, rather
 than modifying an existing one.  Of course, the programs above do this,
-because a @code{vil_memory_image_of<T>} is indeed a @code{vil_image}.
+because a @code{vil1_memory_image_of<T>} is indeed a @code{vil1_image}.
 An example where one creates a completely new image is in generating an
 image of constant value, perhaps to use as a background, or test image.  This
 program creates a 256x256 image filled with the value 128.
 @example
-#include <vil/vil_save.h>
-#include <vil/vil_memory_image_of.h>
+#include <vil1/vil1_save.h>
+#include <vil1/vil1_memory_image_of.h>
 
 int main()
 @{
-  vil_memory_image_of<unsigned char> buf(256, 256);
+  vil1_memory_image_of<unsigned char> buf(256, 256);
 
   buf.fill(128);
 
-  vil_save(buf, "foothresh.ppm");
+  vil1_save(buf, "foothresh.ppm");
 @}
 @end example
 
 @section Copying an image
-@anchor{sec:vil_copy}
+@anchor{sec:vil1_copy}
 @cindex images, copying
-You should know by now that copying @code{vil_image} objects does not
+You should know by now that copying @code{vil1_image} objects does not
 duplicate the data they point to.  This allows images to be passed into and
 out of functions efficiently.  It also means that modifying the data in one
-vil_image might change that in another.  Take this example
+vil1_image might change that in another.  Take this example
 @example
 ...
-vil_memory_image_of<float> a( vil_load("x") );
-vil_memory_image_of<float> b = a;
+vil1_memory_image_of<float> a( vil1_load("x") );
+vil1_memory_image_of<float> b = a;
 b(100,100) = 12;
 ...
 @end example
 After the assignment in line 3, both @code{a(100,100)} and @code{b(100,100)}
 are set to the value 12.  On the other hand, if we had used
-@code{vil_copy}, thus:
+@code{vil1_copy}, thus:
 @example
 ...
-vil_memory_image_of<float> a( vil_load("x") );
-vil_memory_image_of<float> b(a.width(), a.height());
-vil_copy(a, b);
+vil1_memory_image_of<float> a( vil1_load("x") );
+vil1_memory_image_of<float> b(a.width(), a.height());
+vil1_copy(a, b);
 b(100,100) = 12;
 ...
 @end example
 or
 @example
 ...
-vil_memory_image_of<float> a( vil_load("x") );
-vil_memory_image_of<float> b( vil_copy(a) );
+vil1_memory_image_of<float> a( vil1_load("x") );
+vil1_memory_image_of<float> b( vil1_copy(a) );
 b(100,100) = 12;
 ...
 @end example
 then @var{a} is unchanged after the assignment to @code{b(100,100)}.
-Note again that the actual copying is done in @code{vil_copy}; when the
+Note again that the actual copying is done in @code{vil1_copy}; when the
 return value is assigned to @var{b}, there is an efficient pointer copy.
 
 @section Dealing with large images
 
 Most users of @vxl{x} deal with small images, which it is sensible to copy
-into a @code{vil_memory_image} before operating on them.  If you are like
+into a @code{vil1_memory_image} before operating on them.  If you are like
 most users, or if this is your first time through the book, you may skip
 the rest of this chapter.  If you are like many programmers, however, you
-might like to know what vil is like under the hood.
+might like to know what vil1 is like under the hood.
 
 When a very large image does have to be analysed, it is generally faster to
 allow the image to remain on disk, and only load sections when needed (for
 example, when displayed on the screen).  Because it is computationally
-cheap to support this usage, vil does so.  To understand how large images
-are handled, we look again at the @code{vil_image} class.
+cheap to support this usage, vil1 does so.  To understand how large images
+are handled, we look again at the @code{vil1_image} class.
 
-@subsection The image class: @code{vil_image}
+@subsection The image class: @code{vil1_image}
 @cindex image layout
 @cindex planes
 @cindex components
 @cindex image, width and height
 
-The heart of the imaging library is the class @code{vil_image}, which
+The heart of the imaging library is the class @code{vil1_image}, which
 contains a handle to an image, which may be in memory, or on disk.  Most
 image-handling code in @vxl{x} operates on blocks of the image, so that
 large images can be processed efficiently.  As in TargetJr, the key
-operations on a @code{vil_image} are the block read and write operations:
+operations on a @code{vil1_image} are the block read and write operations:
 @smallexample
    i.get_section(buffer, rect_x0, rect_y0, rect_width, rect_height);
    i.put_section(buffer, rect_x0, rect_y0, rect_width, rect_height);
@@ -261,48 +263,48 @@ user-supplied memory in @code{buffer}, which must be pre-initialized to
 the appropriate size.
 
 @subsection Example: Printing a pixel from a greylevel image
-Without much more explanation, here is the vil code to print the value at
+Without much more explanation, here is the vil1 code to print the value at
 pixel location (100,200).  It assumes blithely that the file "theimage.pgm"
 exists, is readable, and contains a grey image whose size is at least 100
 by 200 pixels:
 @smallexample
 main()
 @{
-   vil_image img = vil_load("theimage.pgm");
-   vil_byte value; // buffer into which value will be read
+   vil1_image img = vil1_load("theimage.pgm");
+   vil1_byte value; // buffer into which value will be read
    img.get_section(&value, 100, 200, 1, 1);
    vcl_cerr << "val(100,200) = " << int(value) << vcl_endl;
 @}
 @end smallexample
 
 @subsection Image layout
-The vil image is a 2D array of pixels.  Pixels come in many guises and
+The vil1 image is a 2D array of pixels.  Pixels come in many guises and
 sizes: integers, floating point numbers, tuples of numbers such as RGB.
 It is important in VIL to know about layout, meaning the order in which the
 numbers are laid out in memory or on the disk.  The obvious order for an
 image which corresponds to a video signal is left-to-right, top-to-bottom;
 however not all images are video signals, and many alternatives are
 common.  Some of these types of alternative are handled explicitly by
-vil, most others can be handled easily using vil's extension facilities.
+vil1, most others can be handled easily using vil1's extension facilities.
 
 @figure
 @cartouche
 @example
 
 
-   vil_image      -- contains_a -->    vil_image_impl
+   vil1_image      -- contains_a -->    vil1_image_impl
     |                                   |
-    +vil_memory_image                   +vil_memory_image_impl
+    +vil1_memory_image                   +vil1_memory_image_impl
     | |                                 |
-    | +vil_memory_image_of<T>           +vil_pnm_image_impl
+    | +vil1_memory_image_of<T>           +vil1_pnm_image_impl
     |                                   |
-    +vil_file_image                     ... etc
+    +vil1_file_image                     ... etc
 
 
 @end example
 @end cartouche
 @caption{4}
-The parallel @code{vil_image} and @code{vil_image_impl} class hierarchies.
+The parallel @code{vil1_image} and @code{vil1_image_impl} class hierarchies.
 @endcaption
 @endfigure
 
