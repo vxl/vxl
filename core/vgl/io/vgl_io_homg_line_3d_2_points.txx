@@ -15,8 +15,8 @@ void vsl_b_write(vsl_b_ostream &os, const vgl_homg_line_3d_2_points<T> & p)
 {
   const short io_version_no = 1;
   vsl_b_write(os, io_version_no);
-  vsl_b_write(os, p.get_point_finite());
-  vsl_b_write(os, p.get_point_infinite());
+  vsl_b_write(os, p.point_finite());
+  vsl_b_write(os, p.point_infinite());
 }
 
 //============================================================================
@@ -28,9 +28,12 @@ void vsl_b_read(vsl_b_istream &is, vgl_homg_line_3d_2_points<T> & p)
   vsl_b_read(is, v);
   switch(v)
   {
-  case 1:
-    vsl_b_read(is, p.get_point_finite());
-    vsl_b_read(is, p.get_point_infinite());
+  case 1: {
+    vgl_homg_point_3d<T> p1, p2;
+    vsl_b_read(is, p1);
+    vsl_b_read(is, p2);
+    p.set(p1,p2);
+    }
     break;
 
   default:
@@ -46,9 +49,9 @@ template<class T>
 void vsl_print_summary(vcl_ostream& os,const vgl_homg_line_3d_2_points<T> & p)
 {
   os<<"(";
-  vsl_print_summary(os,p.get_point_finite());
+  vsl_print_summary(os,p.point_finite());
   os<<",";
-  vsl_print_summary(os,p.get_point_infinite());
+  vsl_print_summary(os,p.point_infinite());
   os << ")";
 }
 

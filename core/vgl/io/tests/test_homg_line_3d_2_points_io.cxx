@@ -28,9 +28,7 @@ void test_homg_line_3d_2_points_double_io()
   vsl_b_read(bfs_in, p_in);
   bfs_in.close();
 
-  TEST ("p_out == p_in",
-        p_out.get_point_finite() == p_in.get_point_finite() &&
-        p_out.get_point_infinite() == p_in.get_point_infinite(), true);
+  TEST ("p_out == p_in", p_out, p_in);
 
   vsl_print_summary(vcl_cout, p_out);
   vcl_cout << vcl_endl;
