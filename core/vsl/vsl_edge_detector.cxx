@@ -469,12 +469,12 @@ void vsl_edge_detector::Set_thresholds() {
   Free_float_image(a2th,_xsize);
 }
 
-struct xyfloat {
+struct vsl_edge_detector_xyfloat {
   int x;
   int y;
   float thin;
 };
-static int compare(xyfloat* xyf1, xyfloat* xyf2)
+static int compare(vsl_edge_detector_xyfloat* xyf1, vsl_edge_detector_xyfloat* xyf2)
 {
   if (xyf1->thin < xyf2->thin)
     return -1;
@@ -503,7 +503,7 @@ void vsl_edge_detector::Thin_edges() {
   bool do_output = true;
 
   cerr << __FILE__ ": Fast Sort" << endl;
-  xyfloat* edgel_array = new xyfloat[_xsize * _ysize];
+  vsl_edge_detector_xyfloat* edgel_array = new vsl_edge_detector_xyfloat[_xsize * _ysize];
   int edgel_array_len = 0;
   int pos = 0;
   count = 1;     // count set to dummy value
@@ -523,10 +523,10 @@ void vsl_edge_detector::Thin_edges() {
 
     // Now sort the list; this could be slow if we have a lot of potential.
     // edges - surely we have to do number of elements (not -1)?
-    //      qsort(edgel_array, edgel_array_len-1, sizeof(xyfloat), &compare);
+    //      qsort(edgel_array, edgel_array_len-1, sizeof(vsl_edge_detector_xyfloat), &compare);
     qsort(edgel_array,
 	  edgel_array_len, 
-	  sizeof(xyfloat),
+	  sizeof(vsl_edge_detector_xyfloat),
 	  (int (*)(const void *, const void *))&compare);
 
     // To assist in setting the thresholds:
