@@ -300,7 +300,7 @@ void vgui_grid_tableau::set_selected(int r, int c, bool onoff)
 {
   int time = onoff ? 1000 : -1;
 
-  if (r < nb_rows && c < nb_cols) {
+  if ((unsigned int)r < nb_rows && (unsigned int)c < nb_cols) {
     grid_pos(c,r).time_selected = time;
   } else {
     vcl_cerr << "vgui_grid_tableau::set_selected: (r,c) > (cols,rows)\n";

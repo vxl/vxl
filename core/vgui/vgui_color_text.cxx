@@ -47,7 +47,7 @@ vcl_string text_to_color(vcl_string txt)
   if (txt[0] == '0' || txt[0] == '1')
     color = txt;
 
-  for (int i = 0; i < NB_COLORS; i++)
+  for (unsigned int i = 0; i < NB_COLORS; i++)
   {
     if (txt == colors[i][0])
       color =  colors[i][1];

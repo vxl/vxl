@@ -9,7 +9,7 @@
 
 int main(int argc, char **argv)
 {
-  for (unsigned i=1; i<argc; ++i)
+  for (int i=1; i<argc; ++i)
   {
     vcl_cerr << argv[i] << " :" << vcl_endl;
     vil_image I = vil_load(argv[i]);

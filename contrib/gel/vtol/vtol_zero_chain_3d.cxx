@@ -30,7 +30,7 @@ vtol_zero_chain_3d::vtol_zero_chain_3d (vtol_zero_chain_3d const& zchain)
   topology_list_3d *infs = zc->get_inferiors();
   vtol_vertex_3d *newvertex;
   
-  for (int i = 0; i < infs->size() ; ++i)
+  for (unsigned int i = 0; i < infs->size() ; ++i)
     {
       newvertex = ((*infs)[i])->cast_to_vertex_3d()->copy();
       link_inferior(newvertex);
@@ -125,7 +125,7 @@ vtol_zero_chain_3d* vtol_zero_chain_3d::copy()
   vtol_zero_chain_3d *newzerochain = new vtol_zero_chain_3d();
   vtol_vertex_3d *newvertex;
   
-  for (int i = 0; i < _inferiors.size() ; ++i)
+  for (unsigned int i = 0; i < _inferiors.size() ; ++i)
     {
       newvertex = ((vtol_vertex_3d *)_inferiors[i])->copy();
       newzerochain->link_inferior(newvertex);

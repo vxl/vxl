@@ -28,15 +28,15 @@ void vbl_array_3d<T>::construct(int n1, int n2, int n3)
   // set the first level pointers and allocate the memory for the second level pointers.
   {
     element_[0] = new T* [n1 * n2];
-    for (unsigned row1_index = 0; row1_index < n1; row1_index++)
+    for (int row1_index = 0; row1_index < n1; row1_index++)
       element_ [row1_index] = element_[0] + n2 * row1_index;
   }
   
   T* array_ptr = new T [n1*n2*n3];
   
   // set the second level pointers.
-  for (unsigned row1_index = 0; row1_index < n1; row1_index++)
-    for (unsigned row2_index = 0; row2_index < n2; row2_index++) {
+  for (int row1_index = 0; row1_index < n1; row1_index++)
+    for (int row2_index = 0; row2_index < n2; row2_index++) {
       element_ [row1_index][row2_index] = array_ptr;
       array_ptr += n3;
     }
@@ -72,9 +72,9 @@ void vbl_array_3d<T>::resize(int n1, int n2, int n3)
 template <class T>
 void vbl_array_3d<T>::set(T const* p)
 {
-  for (unsigned int row1_index = 0; row1_index < row1_count_; row1_index++)
-    for (unsigned int row2_index = 0; row2_index < row2_count_; row2_index++)
-      for (unsigned int row3_index = 0; row3_index < row3_count_; row3_index++)
+  for (int row1_index = 0; row1_index < row1_count_; row1_index++)
+    for (int row2_index = 0; row2_index < row2_count_; row2_index++)
+      for (int row3_index = 0; row3_index < row3_count_; row3_index++)
 	element_ [row1_index][row2_index][row3_index] = *p++;
 }
 
@@ -82,9 +82,9 @@ void vbl_array_3d<T>::set(T const* p)
 template <class T>
 void vbl_array_3d<T>::get(T* p) const
 {
-  for (unsigned int row1_index = 0; row1_index < row1_count_; row1_index++)
-    for (unsigned int row2_index = 0; row2_index < row2_count_; row2_index++)
-      for (unsigned int row3_index = 0; row3_index < row3_count_; row3_index++)
+  for (int row1_index = 0; row1_index < row1_count_; row1_index++)
+    for (int row2_index = 0; row2_index < row2_count_; row2_index++)
+      for (int row3_index = 0; row3_index < row3_count_; row3_index++)
 	*p++ = element_ [row1_index][row2_index][row3_index];
 }
 

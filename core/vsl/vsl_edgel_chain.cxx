@@ -78,7 +78,7 @@ void vsl_edgel_chain::SetLength(int nn) {
 
 void vsl_edgel_chain::write_ascii(vcl_ostream &os) const {
   os << n << vcl_endl; // length
-  for (unsigned i=0; i<n; ++i)
+  for (int i=0; i<n; ++i)
     os << x[i] << ' ' << y[i] << ' ' << grad[i] << ' ' << theta[i] << vcl_endl;
 }
 
@@ -95,7 +95,7 @@ void vsl_edgel_chain::read_ascii(vcl_istream &is) {
     new (this) vsl_edgel_chain(n_); // construct
   }
   
-  for (unsigned i=0; i<n; ++i)
+  for (int i=0; i<n; ++i)
     is >> vcl_ws >> x[i] >> y[i] >> grad[i] >> theta[i];
   if (is.bad()) {
     vcl_cerr << __FILE__ ": stream bad before end of vsl_edgel_chain" << vcl_endl;

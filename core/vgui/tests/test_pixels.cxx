@@ -42,7 +42,7 @@ void print_binary(char const *fmt, void const *addr, unsigned bytes) {
 
   vcl_cerr << "| ";
 
-  for (int i=0; i<bytes; ++i) {
+  for (unsigned int i=0; i<bytes; ++i) {
     GLubyte b = ptr[i];
     for (int j=7; j>=0; --j)
       if ( (b & (0x1 << j)) )
@@ -52,7 +52,7 @@ void print_binary(char const *fmt, void const *addr, unsigned bytes) {
     vcl_cerr << ' ';
   }
 
-  for (int i=bytes; i<4; ++i)
+  for (unsigned int i=bytes; i<4; ++i)
     vcl_cerr << "--------" << ' ';
 
   vcl_cerr << vcl_endl;

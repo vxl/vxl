@@ -21,7 +21,6 @@ vtol_block_3d::vtol_block_3d()
 // the old block to the new block...
 vtol_block_3d::vtol_block_3d(vtol_block_3d const& block)
 {
- 
   vtol_block_3d* oldblock = (vtol_block_3d*)(&block);
   vcl_vector<vtol_edge_3d*>* edges = oldblock->edges();
   vcl_vector<vtol_vertex_3d*>* verts = oldblock->vertices();
@@ -31,20 +30,16 @@ vtol_block_3d::vtol_block_3d(vtol_block_3d const& block)
   vcl_vector<vtol_topology_object_3d*> newedges(elen);
   vcl_vector<vtol_topology_object_3d*> newverts(vlen);
  
-
-  int i =0;
-  vcl_vector<vtol_vertex_3d*>::iterator vi;
-  for(vi = verts->begin(); vi != verts->end(); ++vi, ++i)
+  vcl_vector<vtol_vertex_3d*>::iterator vi = verts->begin();
+  for(unsigned int i =0; vi != verts->end(); ++vi, ++i)
     {
       vtol_vertex_3d* v = (*vi);
       newverts[i] = v->copy();
       v->set_id(i);
     }
-  int j =0;
 
-  vcl_vector<vtol_edge_3d*>::iterator ei;
-
-  for(ei=edges->begin();ei!= edges->end();++ei, ++j)
+  vcl_vector<vtol_edge_3d*>::iterator ei=edges->begin();
+  for(unsigned int j =0;ei!= edges->end();++ei, ++j)
     {
       vtol_edge_3d* e = (*ei);
       newedges[j] = new vtol_edge_3d(newverts[e->get_v1()->get_id()]->cast_to_vertex_3d(),
@@ -55,7 +50,7 @@ vtol_block_3d::vtol_block_3d(vtol_block_3d const& block)
   vcl_vector<vtol_two_chain_3d*> *old2chains = oldblock->two_chains();
   vtol_two_chain_3d *new2ch;
 
-  for ( i = 0; i < old2chains->size(); ++i)
+  for (unsigned int i = 0; i < old2chains->size(); ++i)
     {
       new2ch = ((*old2chains)[i])->copy_with_arrays(newverts, newedges);
       link_inferior(new2ch);
@@ -88,7 +83,7 @@ vtol_block_3d::vtol_block_3d (vcl_vector<vtol_two_chain_3d*> &faceloops)
   vtol_two_chain_3d *twoch = get_boundary_cycle();
 
   if (twoch)
-    for (int i = 1; i < faceloops.size(); ++i)
+    for (unsigned int i = 1; i < faceloops.size(); ++i)
       twoch->add_inferior_two_chain(faceloops[i]);
 }
 
@@ -285,7 +280,7 @@ vtol_block_3d* vtol_block_3d::copy()
   vcl_vector<vtol_two_chain_3d*> twochlist;
   vtol_two_chain_3d *new2ch;
 
-  for (int i = 0 ; i < _inferiors.size(); ++i)
+  for (unsigned int i = 0 ; i < _inferiors.size(); ++i)
     {
       new2ch = ((vtol_two_chain_3d *)_inferiors[i])->copy();
       twochlist.push_back(new2ch);

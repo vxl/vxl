@@ -27,11 +27,10 @@ vsol_polygon_2d::vsol_polygon_2d(const vcl_vector<vsol_point_2d_ref> &new_vertic
 //---------------------------------------------------------------------------
 vsol_polygon_2d::vsol_polygon_2d(const vsol_polygon_2d &other)
 {
-  int i;
-  vsol_point_2d_ref p;
+  //vsol_point_2d_ref p;
 
   storage_=new vcl_vector<vsol_point_2d_ref>(*other.storage_);
-  for(i=0;i<storage_->size();++i)
+  for(unsigned int i=0;i<storage_->size();++i)
     (*storage_)[i]=new vsol_point_2d(*((*other.storage_)[i]));
 }
 
@@ -77,30 +76,27 @@ vsol_point_2d_ref vsol_polygon_2d::vertex(const int i) const
 //---------------------------------------------------------------------------
 bool vsol_polygon_2d::operator==(const vsol_polygon_2d &other) const
 {
-  bool result;
-  int i;
-  int j;
-  vsol_point_2d_ref p;
+  //vsol_point_2d_ref p;
 
-  result=this==&other;
+  bool result = (this==&other);
 
   if(!result)
     {
-      result=storage_->size()==other.storage_->size();
+      result = (storage_->size()==other.storage_->size());
       if(result)
         {
           p=(*storage_)[0];
           
           result=false;
-          for(i=0;i<storage_->size()&&!result;++i)
-            result=*p==*(*other.storage_)[i];
+          for(unsigned int i=0;i<storage_->size()&&!result;++i)
+            result = (*p==*(*other.storage_)[i]);
           if(result)
             {
-              j=i;
+              unsigned int j=i;
               i=1;
               while(i<size()&&result)
                 {
-                  result=(*storage_)[i]==(*storage_)[j];
+                  result = ((*storage_)[i]==(*storage_)[j]);
                   ++i;
                   ++j;
                   if(j>=storage_->size())
@@ -137,23 +133,15 @@ bool vsol_polygon_2d::operator!=(const vsol_polygon_2d &other) const
 //---------------------------------------------------------------------------
 void vsol_polygon_2d::compute_bounding_box(void)
 {
-  double xmin;
-  double ymin;
-  double xmax;
-  double ymax;
-  int i;
-  double x;
-  double y;
-  
-  xmin=(*storage_)[0]->x();
-  ymin=(*storage_)[0]->y();
-  xmax=xmin;
-  ymax=ymin;
+  double xmin=(*storage_)[0]->x();
+  double ymin=(*storage_)[0]->y();
+  double xmax=xmin;
+  double ymax=ymin;
 
-  for(i=0;i<storage_->size();++i)
+  for(unsigned int i=0;i<storage_->size();++i)
     {
-       x=(*storage_)[i]->x();
-       y=(*storage_)[i]->y();
+       double x=(*storage_)[i]->x();
+       double y=(*storage_)[i]->y();
        if(x<xmin)
          xmin=x;
        else if(x>xmax)

@@ -25,7 +25,7 @@ void gmvl_node_cache::add( const gmvl_node_ref node)
   // add to cache
   bool found= false;
   
-  for( int j=0; (j< typecache_.size()) && ( !found); j++)
+  for( unsigned int j=0; j< typecache_.size() && !found; ++j)
     {
       if( typecache_[j].first== node->type_)
 	{
@@ -50,7 +50,7 @@ void gmvl_node_cache::remove( const gmvl_node_ref node)
 {
   vcl_vector<gmvl_node_ref> newnodes;
 
-  for( int i=0; i< nodes_.size(); i++)
+  for( unsigned int i=0; i< nodes_.size(); ++i)
     {
       if( nodes_[i].ptr()!= node.ptr())
 	{
@@ -78,7 +78,7 @@ vcl_vector<gmvl_node_ref> gmvl_node_cache::get( const vcl_string type) const
 {
   vcl_vector<gmvl_node_ref> empty;
 
-  for( int i=0; i< typecache_.size(); i++)
+  for( unsigned int i=0; i< typecache_.size(); ++i)
     {
       if( typecache_[i].first== type)
 	{
@@ -93,11 +93,11 @@ void gmvl_node_cache::rebuild()
 {
   typecache_.clear();
 
-  for( int i=0; i< nodes_.size(); i++)
+  for( unsigned int i=0; i< nodes_.size(); ++i)
     {
       bool found= false;
 
-      for( int j=0; (j< typecache_.size()) && ( !found); j++)
+      for( unsigned int j=0; j< typecache_.size() && !found; ++j)
 	{
 	  if( typecache_[j].first== nodes_[i]->type_)
 	    {
@@ -122,7 +122,7 @@ void gmvl_node_cache::rebuild()
 // input and output
 ostream &operator<<( ostream &os, const gmvl_node_cache &c)
 {
-  for( int i=0; i< c.nodes_.size(); i++)
+  for( unsigned int i=0; i< c.nodes_.size(); ++i)
     os << *c.nodes_[i];
 
   return os;

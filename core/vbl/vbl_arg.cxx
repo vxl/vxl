@@ -614,7 +614,7 @@ template class vbl_arg<vcl_vector<unsigned> >;
 //: vcl_vector<double>
 VDS void settype(vbl_arg<vcl_vector<double> > &arg) { arg.type_ = "double list"; }
 VDS void print_value(vcl_ostream &s, vbl_arg<vcl_vector<double> > const &arg) {
-  for (int i=0; i<arg().size(); ++i)
+  for (unsigned int i=0; i<arg().size(); ++i)
     s << ' ' << arg()[i];
 }
 VDS int parse(vbl_arg<vcl_vector<double> >* arg, char ** argv) {

@@ -168,8 +168,8 @@ void mvl_multi_view_matches::add_track(vcl_vector<int> const& views, vcl_vector<
       update_maps(merged_track_index);
 
       for (vcl_set<unsigned int, vcl_less<unsigned int> >::reverse_iterator track_iterator = friend_tracks.rbegin(); !(track_iterator == friend_tracks.rend()); ++track_iterator) {
-	int dead_track_index = (*track_iterator);
-	if (dead_track_index != tracks_.size() - 1) {   // Don't try to shuffle the final track into itself
+	unsigned int dead_track_index = (*track_iterator);
+	if (dead_track_index+1 != tracks_.size()) {   // Don't try to shuffle the final track into itself
 	  tracks_[dead_track_index] = tracks_.back();
 	  update_maps(dead_track_index);
 	}
@@ -180,9 +180,9 @@ void mvl_multi_view_matches::add_track(vcl_vector<int> const& views, vcl_vector<
       // URK! The tracks pass different corners in the same frame!
       // No choice, but to throw out the new track and all its friend_tracks.
       for (vcl_set<unsigned int, vcl_less<unsigned int> >::reverse_iterator track_iterator = friend_tracks.rbegin(); !(track_iterator == friend_tracks.rend()); ++track_iterator) {
-	int dead_track_index = (*track_iterator);
+	unsigned int dead_track_index = (*track_iterator);
 	remove_maps(dead_track_index);
-	if (dead_track_index != tracks_.size() - 1) {   // Don't try to shuffle the final track into itself
+	if (dead_track_index+1 != tracks_.size()) {   // Don't try to shuffle the final track into itself
 	  tracks_[dead_track_index] = tracks_.back();
 	  update_maps(dead_track_index);
 	}
@@ -218,7 +218,7 @@ void mvl_multi_view_matches::remove_maps(int track_index)
 
 vcl_ostream& mvl_multi_view_matches::print(vcl_ostream& s) const
 {
-  for (int i=0; i < tracks_.size(); ++i) {
+  for (unsigned int i=0; i < tracks_.size(); ++i) {
     s << "Track " << i << " : ";
     for (Map::const_iterator m = tracks_[i].begin(); m != tracks_[i].end(); ++m)
       s << "(" << views_[(*m).first] << "," << (*m).second << ") ";
@@ -238,7 +238,7 @@ vcl_istream& mvl_multi_view_matches::read(vcl_istream& s)
   ++awk;
 
   vcl_cerr << __FILE__ << " : reading views ( ";
-  for (int i=0; i < views_.size(); ++i)
+  for (unsigned int i=0; i < views_.size(); ++i)
     vcl_cerr << views_[i] << " ";
   vcl_cerr << ")" << vcl_endl;
 
@@ -256,7 +256,7 @@ vcl_istream& mvl_multi_view_matches::read(vcl_istream& s)
   }
   tracks_.resize(max_track);
 
-  for (int i=0; i < tracks_.size(); ++i)
+  for (unsigned int i=0; i < tracks_.size(); ++i)
     update_maps(i);
 
   vcl_cerr << __FILE__ << " : read " << tracks_.size() << " tracks" << vcl_endl;
@@ -269,12 +269,12 @@ vcl_ostream& mvl_multi_view_matches::write(vcl_ostream& s) const
   if (!s.good()) return s;
   
   // Output the view indices on the first line
-  for (int i=0; i < views_.size(); ++i)
+  for (unsigned int i=0; i < views_.size(); ++i)
     s << i << " ";
   s << vcl_endl;
   
   // Now output the (track, internal frame, corner_index) triplets on each line
-  for (int i=0; i < tracks_.size(); ++i)
+  for (unsigned int i=0; i < tracks_.size(); ++i)
     for (Map::const_iterator m = tracks_[i].begin(); m != tracks_[i].end(); ++m)
       s << i << " " << (*m).first << " " << (*m).second << vcl_endl;
   

@@ -32,12 +32,11 @@ vnl_alloc::chunk_alloc(vcl_size_t size, int& nobjs)
     }
     start_free = (char*)vcl_malloc(bytes_to_get);
     if (0 == start_free) {
-      int i;
       obj *  * my_free_list, *p;
       // Try to make do with what we have.  That can't
       // hurt.  We do not try smaller requests, since that tends
       // to result in disaster on multi-process machines.
-      for (i = size; i <= VNL_ALLOC_MAX_BYTES; i += VNL_ALLOC_ALIGN) {
+      for (unsigned int i = size; i <= VNL_ALLOC_MAX_BYTES; i += VNL_ALLOC_ALIGN) {
 	my_free_list = free_list + FREELIST_INDEX(i);
 	p = *my_free_list;
 	if (0 != p) {

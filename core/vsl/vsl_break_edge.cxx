@@ -34,7 +34,7 @@ void vsl_break_edge(vsl_edge const *in,
   // make new edges and push them onto the given list.
   for (unsigned i=0; i<where.size()-1; ++i) {
     vsl_edge *fragment = new vsl_edge(where[i+1]-where[i] + 1, verts[i], verts[i+1]);
-    for (unsigned j=0; j<fragment->size(); ++j) {
+    for (int j=0; j<fragment->size(); ++j) {
       fragment->SetX(x[j + where[i]], j);
       fragment->SetY(y[j + where[i]], j);
     }
@@ -59,7 +59,7 @@ void vsl_break_edge(vsl_edge const *in,
   vcl_vector<unsigned> breaks;
 
   breaks.push_back(0);   // first edgel
-  for (int pos=nbhd_size; pos<n-nbhd_size; ++pos) {
+  for (unsigned int pos=nbhd_size; pos+nbhd_size<n; ++pos) {
 
     fitter.reset(); // we could make this more efficient.
     fitter.add_points(&x[pos-nbhd_size], &y[pos-nbhd_size], 2*nbhd_size+1);

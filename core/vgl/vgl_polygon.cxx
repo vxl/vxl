@@ -85,9 +85,9 @@ bool vgl_polygon::contains(float tx, float ty)
 }
 
 vcl_ostream& vgl_polygon::print(vcl_ostream& os) const {
-  for (int s = 0; s < sheets_.size(); ++s) {
+  for (unsigned int s = 0; s < sheets_.size(); ++s) {
     os << "Sheet " << s << " ";
-    for (int p = 0; p < sheets_[s].size(); ++p)
+    for (unsigned int p = 0; p < sheets_[s].size(); ++p)
       os << "(" << sheets_[s][p].x() << "," << sheets_[s][p].y() << ") ";
     os << vcl_endl;
   }

@@ -31,7 +31,7 @@ static container the_container;
 
 void vgui_event_loop_attach(vgui_slab *slab, vgui_tableau_ref const& tt)
 {
-  for (int i=0; i<the_container.size(); ++i) {
+  for (unsigned int i=0; i<the_container.size(); ++i) {
     vgui_slab_tableau *st = (vgui_slab_tableau*) the_container[i];
     if (st->slab == slab) {
       st->slot.assign(tt);
@@ -46,7 +46,7 @@ void vgui_event_loop_attach(vgui_slab *slab, vgui_tableau_ref const& tt)
 
 void vgui_event_loop_detach(vgui_slab *slab)
 {
-  for (int i=0; i<the_container.size(); ++i) {
+  for (unsigned int i=0; i<the_container.size(); ++i) {
     vgui_slab_tableau *st = (vgui_slab_tableau*) the_container[i];
     if (st->slab == slab) {
       the_container.erase(the_container.begin() + i);
@@ -68,7 +68,7 @@ void vgui_event_loop_service()
     return;
   }
   
-  for (int i=0; i<the_container.size(); ++i) {
+  for (unsigned int i=0; i<the_container.size(); ++i) {
     vgui_slab_tableau *st = (vgui_slab_tableau*) the_container[i];
 
     if ( st->slab->queue_empty() ) {

@@ -94,13 +94,9 @@ vnl_vector<double> *vcsl_translation::execute(const vnl_vector<double> &v,
   // require
   assert(is_valid());
 
-  vnl_vector<double> *result;
-  vnl_vector<double> *value;
-  int i;
-
-  value=vector_value(time);
-  result=new vnl_vector<double>(v.size());
-  for(i=0;i<v.size();++i)
+  vnl_vector<double> *value=vector_value(time);
+  vnl_vector<double> *result=new vnl_vector<double>(v.size());
+  for(unsigned int i=0;i<v.size();++i)
     result->put(i,v.get(i)+value->get(i));
 
   if(beat_!=0) // dynamic
@@ -121,13 +117,9 @@ vnl_vector<double> *vcsl_translation::inverse(const vnl_vector<double> &v,
   assert(is_valid());
   assert(is_invertible(time));
 
-  vnl_vector<double> *result;
-  vnl_vector<double> *value;
-  int i;
-
-  value=vector_value(time);
-  result=new vnl_vector<double>(v.size());
-  for(i=0;i<v.size();++i)
+  vnl_vector<double> *value=vector_value(time);
+  vnl_vector<double> *result=new vnl_vector<double>(v.size());
+  for(unsigned int i=0;i<v.size();++i)
     result->put(i,v.get(i)-value->get(i));
 
   if(beat_!=0) // dynamic

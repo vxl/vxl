@@ -72,7 +72,7 @@ void test_do_vbl_arg()
   vcl_list<int> l = list1();
   Assert("list length", l.size() == true_list_length);
   bool ok = true;
-  for(int i = 0; i < true_list_length; ++i) {
+  for(unsigned int i = 0; i < true_list_length; ++i) {
     if (vcl_find(l.begin(), l.end(), list_contents[i]) == l.end()) {
       vcl_cerr << "Integer [" << list_contents[i] << "] not found in list\n";
       ok = false;

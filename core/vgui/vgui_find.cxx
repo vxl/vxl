@@ -24,7 +24,7 @@ vgui_tableau_ref vgui_find_by_type_name(vgui_tableau_ref const& start, vcl_strin
   else
     start->get_parents (&tt); // get all parents.
   
-  for (int i=0; i<tt.size(); ++i) {
+  for (unsigned int i=0; i<tt.size(); ++i) {
     vgui_tableau_ref t = vgui_find_by_type_name(tt[i], tn, direction_down);
     if (t)
       return t; // found one.

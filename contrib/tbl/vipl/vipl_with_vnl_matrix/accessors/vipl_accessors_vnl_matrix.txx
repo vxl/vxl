@@ -10,12 +10,12 @@ void fsetpixel(vnl_matrix<DataType>& i, int x, int y, DataType e) {
 }
 template <class DataType>
 DataType getpixel(vnl_matrix<DataType> const& i, int x, int y, DataType /* dummy */) {
-  if (x<0 || y<0 || x>=i.columns() || y>=i.rows()) return DataType();
+  if (x<0 || y<0 || (unsigned)x>=i.columns() || (unsigned)y>=i.rows()) return DataType();
   return i(x,y);
 }
 template <class DataType>
 void setpixel(vnl_matrix<DataType>& i, int x, int y, DataType e) {
-  if (x<0 || y<0 || x>=i.columns() || y>=i.rows()) return;
+  if (x<0 || y<0 || (unsigned)x>=i.columns() || (unsigned)y>=i.rows()) return;
   i(x,y) = e;
 }
 

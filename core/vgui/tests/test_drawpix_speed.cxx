@@ -313,24 +313,24 @@ int main (int argc, char** argv)
   {
     vcl_cerr << vcl_endl << "glDrawPixels - " << vcl_endl;
     double fps;
-    vcl_cerr << "source -"; for (unsigned i=0; i<ft_size; ++i) vcl_cerr << "    " << ft_tab[i].nfixed; vcl_cerr << vcl_endl;
+    vcl_cerr << "source -"; for (int i=0; i<ft_size; ++i) vcl_cerr << "    " << ft_tab[i].nfixed; vcl_cerr << vcl_endl;
     //vbl_printf(cerr,"source -    LUM       RGB565    RGB       BGR       RGBA      BGRA      ABGR\n");
     vcl_cerr << "zoom 1.00x  ";
-    for (unsigned i=0; i<ft_size; ++i) {
+    for (int i=0; i<ft_size; ++i) {
       fps = fps_gl(ft_tab[i].format, ft_tab[i].type);
       vbl_printf(vcl_cerr,"%1.1e   ",512*512*fps);
     }
     vcl_cerr << vcl_endl;    
     vcl_cerr << "zoom 1.90x  "; 
     glPixelZoom(1.9,1.9);
-    for (unsigned i=0; i<ft_size; ++i) {
+    for (int i=0; i<ft_size; ++i) {
       fps = fps_gl(ft_tab[i].format, ft_tab[i].type);
       vbl_printf(vcl_cerr,"%1.1e   ",512*512*fps);
     }
     vcl_cerr << vcl_endl;
     vcl_cerr << "zoom 0.51x  "; 
     glPixelZoom(0.51,0.51);
-    for (unsigned i=0; i<ft_size; ++i) {
+    for (int i=0; i<ft_size; ++i) {
       fps = fps_gl(ft_tab[i].format, ft_tab[i].type);
       vbl_printf(vcl_cerr,"%1.1e   ",0.51*0.51*512*512*fps);
     }

@@ -265,7 +265,7 @@ vcl_vector<vgui_soview*> const & vgui_displaybase::get_all() const {
 
 vcl_vector<unsigned> const vgui_displaybase::get_all_ids() const {
   vcl_vector<unsigned> ids;
-  for( int i=0; i< objects.size(); i++)
+  for(unsigned int i=0; i< objects.size(); i++)
     ids.push_back( objects[i]->get_id());
 
   return ids;

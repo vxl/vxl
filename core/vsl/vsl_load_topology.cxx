@@ -47,8 +47,8 @@ void vsl_load_topology(vcl_istream &f, vcl_list<vsl_edge*> &es, vcl_list<vsl_ver
   // read vertices :
   vcl_cerr << "reading " << numverts << " vertices..." << vcl_endl;
   vcl_vector<vsl_vertex*> vert(numverts+1, (vsl_vertex*)0);
-  for (unsigned i=0; i<numverts; ++i) {
-    int stashid;
+  for (int i=0; i<numverts; ++i) {
+    unsigned int stashid;
     int id;
     float x, y;
     f >> vcl_ws >> stashid >> id >> x >> y;
@@ -71,11 +71,11 @@ void vsl_load_topology(vcl_istream &f, vcl_list<vsl_edge*> &es, vcl_list<vsl_ver
   streamok;
   // read edges :
   vcl_cerr << "reading " << numedges << " edges..." << vcl_endl;
-  for (unsigned i=0; i<numedges; ++i) {
-    int stashid1 = -1, stashid2 = -1;
+  for (int i=0; i<numedges; ++i) {
+    unsigned int stashid1 = vert.size(), stashid2 = vert.size();
     f >> vcl_ws >> stashid1 >> stashid2;
-    assert(0<=stashid1 && stashid1<vert.size() && vert[stashid1]);
-    assert(0<=stashid2 && stashid2<vert.size() && vert[stashid2]);
+    assert(stashid1<vert.size() && vert[stashid1]);
+    assert(stashid2<vert.size() && vert[stashid2]);
     
     int id; // edge id
     f >> vcl_ws >> id;

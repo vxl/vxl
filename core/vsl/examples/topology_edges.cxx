@@ -26,7 +26,7 @@ int main(int argc, char **argv) {
     vcl_cout << vcl_endl;
     vsl_Edge const *e = *i;
     vcl_cout << e->size() << vcl_endl;
-    for (unsigned j=0; j<e->size(); ++j)
+    for (int j=0; j<e->size(); ++j)
       vcl_cout << e->GetX(j) << ' ' << e->GetY(j) << vcl_endl;
   }
 

@@ -97,14 +97,12 @@ vnl_vector<double> *vcsl_displacement::execute(const vnl_vector<double> &v,
   vnl_vector<double> *translation;
   vnl_vector<double> *tmp;
 
-  int i;
-  
   translation=vector_value(time);
 
   tmp=new vnl_vector<double>(3);
   if(_mode_2d)
     tmp->put(2,0);
-  for(i=0;i<v.size();++i)
+  for(unsigned int i=0;i<v.size();++i)
     tmp->put(i,v.get(i)-translation->get(i));
 
   q=quaternion(time);
@@ -116,7 +114,7 @@ vnl_vector<double> *vcsl_displacement::execute(const vnl_vector<double> &v,
   tmp=result;
   if(_mode_2d)
     result=new vnl_vector<double>(2);
-  for(i=0;i<v.size();++i)
+  for(unsigned int i=0;i<v.size();++i)
     result->put(i,tmp->get(i)+translation->get(i));
   if(_mode_2d)
      delete tmp;
@@ -143,14 +141,13 @@ vnl_vector<double> *vcsl_displacement::inverse(const vnl_vector<double> &v,
   vnl_quaternion<double> *q1;
   vnl_vector<double> *translation;
   vnl_vector<double> *tmp;
-  int i;
 
   translation=vector_value(time);
 
   tmp=new vnl_vector<double>(3);
   if(_mode_2d)
     tmp->put(2,0);
-  for(i=0;i<v.size();++i)
+  for(unsigned int i=0;i<v.size();++i)
     tmp->put(i,v.get(i)-translation->get(i));
 
   q0=quaternion(time);
@@ -165,7 +162,7 @@ vnl_vector<double> *vcsl_displacement::inverse(const vnl_vector<double> &v,
   if(_mode_2d)
     result=new vnl_vector<double>(2);
 
-  for(i=0;i<v.size();++i)
+  for(unsigned int i=0;i<v.size();++i)
     result->put(i,tmp->get(i)+translation->get(i));
   if(_mode_2d)
     delete tmp;

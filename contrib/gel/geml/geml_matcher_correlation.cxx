@@ -41,12 +41,12 @@ vcl_vector< vcl_pair<int,int> > geml_matcher_correlation::get_matches()
   vnl_matrix<double> scores1to2(corners1_.size(),corners2_.size());
   vnl_matrix<double> scores2to1(corners2_.size(),corners1_.size());
   
-  for( int i=0; i< corners1_.size(); i++)
+  for( unsigned int i=0; i< corners1_.size(); ++i)
     {
       double x1= corners1_[i].first;
       double y1= corners1_[i].second;
 
-      for( int j=0; j< corners2_.size(); j++)
+      for( unsigned int j=0; j< corners2_.size(); ++j)
 	{
 	  double x2= corners2_[j].first;
 	  double y2= corners2_[j].second;
@@ -70,12 +70,12 @@ vcl_vector< vcl_pair<int,int> > geml_matcher_correlation::get_matches()
   vcl_vector<int> bestimage1match( corners1_.size());
   vcl_vector<double> bestimage1score( corners1_.size());
 
-  for( int i=0; i< corners1_.size(); i++)
+  for( unsigned int i=0; i< corners1_.size(); ++i)
     {
       double bestscore= NO_SCORE;
       double bestmatch= -1;
 
-      for( int j=0; j< corners2_.size(); j++)
+      for( unsigned int j=0; j< corners2_.size(); ++j)
 	{
 	  if( bestscore== NO_SCORE)
 	    {
@@ -98,12 +98,12 @@ vcl_vector< vcl_pair<int,int> > geml_matcher_correlation::get_matches()
   vcl_vector<int> bestimage2match( corners2_.size());
   vcl_vector<double> bestimage2score( corners2_.size());
 
-  for( int i=0; i< corners2_.size(); i++)
+  for( unsigned int i=0; i< corners2_.size(); ++i)
     {
       double bestscore= NO_SCORE;
       double bestmatch= -1;
 
-      for( int j=0; j< corners1_.size(); j++)
+      for( unsigned int j=0; j< corners1_.size(); ++j)
 	{
 	  if( bestscore== NO_SCORE)
 	    {
@@ -124,12 +124,12 @@ vcl_vector< vcl_pair<int,int> > geml_matcher_correlation::get_matches()
   // and check that the best match from image 1 to 2 is the
   //  same as the best match from image 2 to 1
   
-  for( int i=0; i< corners1_.size(); i++)
+  for( unsigned int i=0; i< corners1_.size(); i++)
     {
       int a= bestimage1match[i];
       int b= bestimage2match[a];
 
-      if( i==b)
+      if((int)i==b)
 	{
 	  cerr << i << " " << a << endl;
 	  cout << corners1_[i].first << " " << corners1_[i].second << " "

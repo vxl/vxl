@@ -482,7 +482,7 @@ void xcv_geometry::save(const char *object_type,const char *dialog_name)
       {
 	vgui_soview2D_linestrip *linestrip = (vgui_soview2D_linestrip *)sv;
         fs<<"L "<<linestrip->n;
-	for(int ii = 0; ii<linestrip->n; ++ii)
+	for(unsigned int ii = 0; ii<linestrip->n; ++ii)
         {
           fs<<" "<<linestrip->x[ii]<<" "<<linestrip->y[ii];
 	} 
@@ -492,7 +492,7 @@ void xcv_geometry::save(const char *object_type,const char *dialog_name)
       {
 	vgui_soview2D_polygon *polygon = (vgui_soview2D_polygon *)sv;
         fs<<"y "<<polygon->n;
-	for(int ii = 0; ii<polygon->n; ++ii)
+	for(unsigned int ii = 0; ii<polygon->n; ++ii)
         {
           fs<<" "<<polygon->x[ii]<<" "<<polygon->y[ii];
 	} 
@@ -691,7 +691,7 @@ void xcv_geometry::polygon_intersect()
 
   // Delete old polys
   for (unsigned i=0; i<easy_list.size(); i++)
-    for(int j =0; j < all_soviews.size(); ++j)
+    for(unsigned j =0; j < all_soviews.size(); ++j)
       easy_list[i]->remove(all_soviews[j]);
 
   // Intersect :  a and b

@@ -34,14 +34,13 @@ vtol_block_2d::vtol_block_2d(vtol_two_chain_2d &faceloop)
 //---------------------------------------------------------------------------
 vtol_block_2d::vtol_block_2d(two_chain_list_2d &faceloops)
 {
-  int i;
   if(faceloops.size()>0)
     link_inferior(*((vtol_topology_object_2d *)faceloops[0].ptr()));
 
   vtol_two_chain_2d *twoch=get_boundary_cycle();
   
   if(twoch!=0)
-    for(i=1;i<faceloops.size();++i)
+    for(unsigned int i=1;i<faceloops.size();++i)
       twoch->link_chain_inferior(*(faceloops[i]));
 }
 
@@ -86,7 +85,7 @@ vtol_block_2d::vtol_block_2d(const vtol_block_2d &other)
 
   vcl_vector<vtol_two_chain_2d_ref> *old2chains=oldblock->two_chains();
 
-  for(int k=0;k<old2chains->size();++k)
+  for(unsigned int k=0;k<old2chains->size();++k)
     {
       vtol_two_chain_2d_ref new2ch=((*old2chains)[k])->copy_with_arrays(newverts,newedges);
       link_inferior(*new2ch);

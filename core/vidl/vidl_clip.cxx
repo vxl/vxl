@@ -21,7 +21,7 @@ vidl_clip::vidl_clip(
 	int end, 
 	int increment) : frames_(codec->length())
 {
-  for (int i=0; i<frames_.size(); i++)
+  for (unsigned int i=0; i<frames_.size(); i++)
     frames_[i] = new vidl_frame(i, codec);
 
   coder_ = codec;

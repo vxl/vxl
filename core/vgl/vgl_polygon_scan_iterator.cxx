@@ -112,9 +112,9 @@ void vgl_polygon_scan_iterator::init()
 
   // create y-sorted array of vertices
   yverts = new vertind[ numverts ];
-  int i = 0, j, h;
-  for ( j = 0; j < numchains; j++ )
-    for ( h = 0; h < poly_[ j ].size(); h++ )
+  int i = 0;
+  for (int j = 0; j < numchains; j++ )
+    for (unsigned int h = 0; h < poly_[ j ].size(); h++ )
       {
 	yverts[ i ].chainnum = j;
 	yverts[ i ].vertnum = h;
@@ -324,7 +324,7 @@ bool vgl_polygon_scan_iterator::next( )
 void vgl_polygon_scan_iterator::get_next_vert( vertind v, vertind & nextvert ) 
 {
         nextvert = v;
-        nextvert.vertnum = nextvert.vertnum + 1;
+        nextvert.vertnum += 1;
         if ( nextvert.vertnum == poly_[nextvert.chainnum].size() )
             nextvert.vertnum = 0; // wrap around to first vertex        
 }
@@ -348,14 +348,13 @@ void vgl_polygon_scan_iterator::get_prev_vert( vertind v, vertind & prevvert )
 //
 void vgl_polygon_scan_iterator::display_chains()
 {
-    int c, v;
     vcl_cout << "Number of Chains: " << poly_.num_sheets() << vcl_endl;
     vcl_cout << "Number of Vertices: " << numverts << vcl_endl;
-    for ( c = 0; c < poly_.num_sheets(); c++ )
+    for (int c = 0; c < poly_.num_sheets(); c++ )
     {
         vcl_cout << "---- Chain # " << c << " ----" << vcl_endl;
         vcl_cout << "  Length: " << poly_[ c ].size() << vcl_endl;
-        for ( v = 0; v < poly_[ c ].size(); v++ )
+        for (unsigned int v = 0; v < poly_[ c ].size(); v++ )
 	{
             vcl_cout << "  [ " << poly_[ c ][ v ].x() 
                  << " " << poly_[ c ][ v ].y() << " ]" << vcl_endl; 

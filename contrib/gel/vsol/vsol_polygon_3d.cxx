@@ -29,11 +29,10 @@ vsol_polygon_3d::vsol_polygon_3d(const vcl_vector<vsol_point_3d_ref> &new_vertic
 //---------------------------------------------------------------------------
 vsol_polygon_3d::vsol_polygon_3d(const vsol_polygon_3d &other)
 {
-  int i;
-  vsol_point_3d_ref p;
+  //vsol_point_3d_ref p;
   
   storage_=new vcl_vector<vsol_point_3d_ref>(*other.storage_);
-  for(i=0;i<storage_->size();++i)
+  for(unsigned int i=0;i<storage_->size();++i)
     (*storage_)[i]=new vsol_point_3d(*((*other.storage_)[i]));
 }
 
@@ -79,31 +78,26 @@ vsol_point_3d_ref vsol_polygon_3d::vertex(const int i) const
 //---------------------------------------------------------------------------
 bool vsol_polygon_3d::operator==(const vsol_polygon_3d &other) const
 {
-  bool result;
-  int i;
-  int j;
-  vsol_point_3d_ref p;
-
-  result=this==&other;
+  bool result = (this==&other);
 
   if(!result)
     {
-      result=storage_->size()==other.storage_->size();
+      result = (storage_->size()==other.storage_->size());
       
       if(result)
         {
-          p=(*storage_)[0];
+          vsol_point_3d_ref p=(*storage_)[0];
           
           result=false;
-          for(i=0;i<storage_->size()&&!result;++i)
-            result=*p==*(*other.storage_)[i];
+          for(unsigned int i=0;i<storage_->size()&&!result;++i)
+            result = (*p==*(*other.storage_)[i]);
           if(result)
             {
-              j=i;
+              unsigned int j=i;
               i=1;
               while(i<size()&&result)
                 {
-                  result=(*storage_)[i]==(*storage_)[j];
+                  result = ((*storage_)[i]==(*storage_)[j]);
                   ++i;
                   ++j;
                   if(j>=storage_->size())
@@ -139,29 +133,18 @@ bool vsol_polygon_3d::operator!=(const vsol_polygon_3d &other) const
 //---------------------------------------------------------------------------
 void vsol_polygon_3d::compute_bounding_box(void)
 {
-  double xmin;
-  double ymin;
-  double zmin;
-  double xmax;
-  double ymax;
-  double zmax;
-  int i;
-  double x;
-  double y;
-  double z;
-  
-  xmin=(*storage_)[0]->x();
-  ymin=(*storage_)[0]->y();
-  zmin=(*storage_)[0]->z();
-  xmax=xmin;
-  ymax=ymin;
-  zmax=zmin;
+  double xmin=(*storage_)[0]->x();
+  double ymin=(*storage_)[0]->y();
+  double zmin=(*storage_)[0]->z();
+  double xmax=xmin;
+  double ymax=ymin;
+  double zmax=zmin;
 
-  for(i=0;i<storage_->size();++i)
+  for(unsigned int i=0;i<storage_->size();++i)
     {
-       x=(*storage_)[i]->x();
-       y=(*storage_)[i]->y();
-       z=(*storage_)[i]->z();
+       double x=(*storage_)[i]->x();
+       double y=(*storage_)[i]->y();
+       double z=(*storage_)[i]->z();
        if(x<xmin)
          xmin=x;
        else if(x>xmax)
@@ -208,35 +191,25 @@ double vsol_polygon_3d::area(void) const
 //---------------------------------------------------------------------------
 bool vsol_polygon_3d::is_convex(void) const
 {
-   bool result;
-   vnl_vector_fixed<double,3> *n;
-   vnl_vector_fixed<double,3> *n_old;
-   vnl_vector_fixed<double,3> *v1;
-   vnl_vector_fixed<double,3> *v2;
-   int i;
-   vsol_point_3d_ref p0;
-   vsol_point_3d_ref p1;
-   vsol_point_3d_ref p2;
-
-   result=storage_->size()==3; // A triangle is always convex
+   bool result = (storage_->size()==3); // A triangle is always convex
 
    if(!result)
      {
-       p0=(*storage_)[0];
-       p1=(*storage_)[1];
-       p2=(*storage_)[2];
-       v1=p0->to_vector(*p1);
-       v2=p1->to_vector(*p2);
-       n=new vnl_vector_fixed<double,3>(cross_3d(*v1,*v2));
+       vsol_point_3d_ref p0=(*storage_)[0];
+       vsol_point_3d_ref p1=(*storage_)[1];
+       vsol_point_3d_ref p2=(*storage_)[2];
+       vnl_vector_fixed<double,3> *v1=p0->to_vector(*p1);
+       vnl_vector_fixed<double,3> *v2=p1->to_vector(*p2);
+       vnl_vector_fixed<double,3> *n =
+         new vnl_vector_fixed<double,3>(cross_3d(*v1,*v2));
        delete v2;
        delete v1;
-       n_old=0;
+       vnl_vector_fixed<double,3> *n_old=0;
 
        result=true;
-       for(i=3;i<storage_->size()&&result;++i)
+       for(unsigned int i=3;i<storage_->size()&&result;++i)
          {
-           if(n_old!=0)
-             delete n_old;
+           delete n_old;
            n_old=n;
            p0=p1;
            p1=p2;
@@ -246,7 +219,7 @@ bool vsol_polygon_3d::is_convex(void) const
            n=new vnl_vector_fixed<double,3>(cross_3d(*v1,*v2));
            delete v2;
            delete v1;
-           result=dot_product(*n_old,*n)>=0;
+           result = (dot_product(*n_old,*n)>=0);
          }
        delete n;
      }
@@ -288,7 +261,7 @@ bool vsol_polygon_3d::valid_vertices(const vcl_vector<vsol_point_3d_ref> new_ver
   delete v1;
 
   bool result=true;
-  for(int i=3;i<new_vertices.size()&&result;++i)
+  for(unsigned int i=3;i<new_vertices.size()&&result;++i)
   {
     p2=new_vertices[i];
     v2=new vnl_vector_fixed<double,3>(p2->x()-p0->x(),

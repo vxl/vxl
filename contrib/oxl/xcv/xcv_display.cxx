@@ -78,7 +78,7 @@ void xcv_display::toggle_enhance()
     vcl_vector<xcv_image_tableau_ref> img_tabs = get_image_list();
     static int selected_image = 1;
     vcl_vector<vcl_string> labels;
-    for (int i=0; i<img_tabs.size(); i++)
+    for (unsigned int i=0; i<img_tabs.size(); i++)
       labels.push_back(img_tabs[i]->file_name());     
     vgui_dialog dl("Images");
     dl.choice("Enhance image:", labels, selected_image);

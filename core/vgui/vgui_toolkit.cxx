@@ -28,7 +28,7 @@ vcl_vector<vgui_toolkit*> *vgui_toolkit::registry()
 vgui_toolkit *vgui_toolkit::lookup(char const *name)
 {
   vcl_vector<vgui_toolkit*> *vv = registry();
-  for (int i=0; i<vv->size(); ++i)
+  for (unsigned int i=0; i<vv->size(); ++i)
     if ((*vv)[i]->name() == name)
       return (*vv)[i];
   vgui_macro_warning << "WARNING : no toolkit with name \'" << name << "\' found." << vcl_endl;

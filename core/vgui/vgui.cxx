@@ -59,7 +59,7 @@ bool vgui::exists(char const *toolkit)
   vgui_tag_call(); // see [*] above.
 
   vcl_vector<vgui_toolkit*> *tk = vgui_toolkit::registry();
-  for (int i=0; i<tk->size(); ++i)
+  for (unsigned int i=0; i<tk->size(); ++i)
     if ( (*tk)[i]->name() == toolkit )
       return true;
   return false;
@@ -70,7 +70,7 @@ void vgui::select(char const *toolkit)
   vgui_tag_call(); // see [*] above.
 
   vcl_vector<vgui_toolkit*> *tk = vgui_toolkit::registry();
-  for (int i=0; i<tk->size(); ++i) {
+  for (unsigned int i=0; i<tk->size(); ++i) {
     if ( (*tk)[i]->name() == toolkit ) {
       instance_ = (*tk)[i];
       return;

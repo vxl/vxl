@@ -404,7 +404,7 @@ void subst_vertex_on_edge(vtol_vertex_3d *v1,
 void vtol_vertex_3d::merge_references(vtol_vertex_3d *v2)
 {
   edge_list_3d *edgelist=v2->edges();
-  for (int i=0;i<edgelist->size();++i)
+  for (unsigned int i=0;i<edgelist->size();++i)
     subst_vertex_on_edge(this,v2,((*edgelist)[i])->cast_to_edge_3d());
 }
 
@@ -419,7 +419,7 @@ vtol_vertex_3d* min_z_vertex(vertex_list_3d* Verts)
 {
   vtol_vertex_3d* min_vertex = 0;
   double min_z = 1e32;
-  for(int i = 0; i < Verts->size();++i) 
+  for(unsigned int i = 0; i < Verts->size();++i) 
     {
       vtol_vertex_3d* tVert = (*Verts)[i];
       double tz = fabs(tVert->z());
@@ -438,16 +438,16 @@ vertex_list_3d *merge_vertices_listwise(vertex_list_3d *Verts)
   vertex_list_3d *newl=new vertex_list_3d();
   vtol_vertex_3d *tVertex;
   vtol_vertex_3d *tVertex2;
-  for(int a=0;a<Verts->size();++a) 
+  for(unsigned int a=0;a<Verts->size();++a) 
     {
       ((*Verts)[a])->unset_tagged_union_flag();
     }
-  for(int i=0;i<Verts->size();++i)
+  for(unsigned int i=0;i<Verts->size();++i)
     {
       tVertex=(*Verts)[i];
       if(!tVertex->get_tagged_union_flag())
 	{
-	  for(int k=0;k<Verts->size();++k) 
+	  for(unsigned int k=0;k<Verts->size();++k) 
 	    {
 	      if(k!=i) 
 		{

@@ -60,7 +60,7 @@ vcl_vector<int> gmvl_connection_cache::get_connected_nodes( const gmvl_node_ref 
   vcl_vector<int> c= get_connected_nodes( node1);
   vcl_vector<int> d;
 
-  for( int i=0; i< c.size(); i++)
+  for( unsigned int i=0; i< c.size(); ++i)
     if( cachebool_(node2->ref_,c[i]))
       d.push_back(c[i]);
 
@@ -74,7 +74,7 @@ vcl_vector<int> gmvl_connection_cache::get_connected_nodes( const gmvl_node_ref 
   vcl_vector<int> c= get_connected_nodes( node1);
   vcl_vector<int> d;
 
-  for( int i=0; i< c.size(); i++)
+  for( unsigned int i=0; i< c.size(); ++i)
     if( cachebool_(node2->ref_,c[i]) &&
 	cachebool_(node3->ref_,c[i]))
       d.push_back(c[i]);
@@ -87,11 +87,11 @@ vcl_vector<int> gmvl_connection_cache::get_connected_nodes( const vcl_vector<gmv
   vcl_vector<int> c= get_connected_nodes( nodes[0]);
   vcl_vector<int> d;
 
-  for( int i=0; i< c.size(); i++)
+  for( unsigned int i=0; i< c.size(); ++i)
     {
       bool ok= true;
 
-      for( int j=1; (j< nodes.size()) && ok; j++)
+      for( unsigned int j=1; j< nodes.size() && ok; ++j)
 	{
 	  if( !cachebool_(nodes[j]->ref_,c[i]))
 	    ok= false;
@@ -111,7 +111,7 @@ void gmvl_connection_cache::rebuild()
   cache_.clear();
   assert(false);
 
-  for( int i=0; i< connections_.size(); i++)
+  for( unsigned int i=0; i< connections_.size(); ++i)
     {
       gmvl_node_ref node1= connections_[i]->get_node1();
       gmvl_node_ref node2= connections_[i]->get_node2();
@@ -150,14 +150,14 @@ ostream &operator<<( ostream &os, const gmvl_connection_cache &c)
   //  for( int i=0; i< c.connections_.size(); i++)
   //    os << *c.connections_[i];
 
-  for( int i=0; i< c.cache_.size(); i++)
+  for( unsigned int i=0; i< c.cache_.size(); ++i)
     {
       os << "<" << i << " - ";
 
-      for( int j=0; j< c.cache_[i].size(); j++)
+      for( unsigned int j=0; j< c.cache_[i].size(); ++j)
 	{
 	  os << c.cache_[i][j];
-	  if( j!= (c.cache_[i].size()-1))
+	  if( j+1 != c.cache_[i].size())
 	    os << ", ";
 	}
       

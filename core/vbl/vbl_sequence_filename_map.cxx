@@ -314,7 +314,7 @@ vcl_ostream& vbl_sequence_filename_map::print (vcl_ostream& s) const
 
 bool vbl_sequence_filename_map::filter_dirent(char const* name, vcl_string const& extension)
 {
-  static int expected_length = 0;
+  static unsigned int expected_length = 0;
   if (expected_length == 0)
     expected_length = basename_.size() + 
     (vcl_string(vbl_sprintf(index_format_.c_str(),0)) + extension).size();

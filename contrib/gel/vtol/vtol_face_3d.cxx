@@ -263,7 +263,7 @@ vtol_face_3d::vtol_face_3d (vcl_vector<vtol_one_chain_3d *> &onechs)
 
   if (onech)
     {
-      for (int i = 1; i < onechs.size(); ++i)
+      for (unsigned int i = 1; i < onechs.size(); ++i)
         onech->add_inferior_one_chain(onechs[i]);
     }
 }
@@ -741,9 +741,7 @@ bool vtol_face_3d::operator==(const vsol_spatial_object_3d& obj) const
 // -- Returns the ith inferior vtol_one_chain_3d of the vtol_face_3d.
 
 vtol_one_chain_3d* vtol_face_3d::get_one_chain(int which)
-
 {
- 
   if (which < _inferiors.size())
     return (_inferiors[which])->cast_to_one_chain_3d();
   else
@@ -872,7 +870,7 @@ void vtol_face_3d::describe(vcl_ostream& strm,int blanking) const
 {
   for (int j=0; j<blanking; ++j) strm << ' ';
   print();
-  for(int i=0;i < _inferiors.size();++i)
+  for(unsigned int i=0;i < _inferiors.size();++i)
     {
       if((_inferiors[i])->cast_to_one_chain_3d()){
             (_inferiors[i])->cast_to_one_chain_3d()->describe(strm,blanking);

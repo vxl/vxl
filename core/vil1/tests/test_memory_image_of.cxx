@@ -52,8 +52,8 @@ int main()
   {
     vcl_cout << "bool" << vcl_endl;
     vil_memory_image_of<bool> map(451, 349);
-    for (unsigned x=0; x<map.width(); ++x)
-      for (unsigned y=0; y<map.height(); ++y)
+    for (int x=0; x<map.width(); ++x)
+      for (int y=0; y<map.height(); ++y)
 	map(x, y) = false;
   }
 

@@ -66,7 +66,7 @@ vgui_composite::vgui_composite(vgui_tableau_ref const& child0, vgui_tableau_ref 
 vgui_composite::vgui_composite(vcl_vector<vgui_tableau_ref> const& the_children)
   : c_enable_key_bindings(default_c_enable_key_bindings)
 {
-  for(int i = 0; i < the_children.size(); ++i)
+  for(unsigned int i = 0; i < the_children.size(); ++i)
     add(the_children[i]);
   enable_key_bindings = false;
 }
@@ -96,7 +96,7 @@ bool vgui_composite::handle(const vgui_event& event)
   // Save current matrix state. Each active child will be 
   // invoked with this matrix state. 
   vgui_matrix_state PM;
-  int n = children.size();
+  unsigned int n = children.size();
 
   // "DRAW" events. Return true unless some child returns false.
   // What is the logic behind this? I'm no longer sure....

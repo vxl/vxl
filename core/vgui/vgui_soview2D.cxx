@@ -98,21 +98,21 @@ void vgui_soview2D_lineseg::translate(float tx, float ty)
 vcl_ostream& vgui_soview2D_group::print(vcl_ostream& s) const {
   s << "[vgui_soview2D_group ";
 
-  for( int i=0; i< ls.size(); i++)
+  for(unsigned int i=0; i< ls.size(); i++)
     ls[i]->print(s);
   
   return vgui_soview2D::print(s) << "]";
 }
 
 void vgui_soview2D_group::draw() {
-  for( int i=0; i< ls.size(); i++)
+  for(unsigned int i=0; i< ls.size(); i++)
     ls[i]->draw();
 }
 
 float vgui_soview2D_group::distance_squared(float x, float y) {
   float min= -1;
 
-  for( int i=0; i< ls.size(); i++) {
+  for(unsigned int i=0; i< ls.size(); i++) {
     float d= ls[i]->distance_squared( x, y);
     
     if(( min== -1) || ( d< min))

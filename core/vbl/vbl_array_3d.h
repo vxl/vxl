@@ -24,7 +24,7 @@
 # define RANGECHECK(i,j,k) ((void)0)
 #else
 # include <vcl_cassert.h>
-# define RANGECHECK(i,j,k) assert((i < row1_count_) && (j < row2_count_) && (k < row3_count_))
+# define RANGECHECK(i,j,k) assert(((int)i < row1_count_) && ((int)j < row2_count_) && ((int)k < row3_count_))
 #endif
 
 //: Templated 3-dimensional array

@@ -130,7 +130,7 @@ bool vil_jpeg_generic_image::get_section(void *buf, int x0, int y0, int w, int h
   unsigned bpp = jd->jobj.output_components;
 
   //
-  for (unsigned i=0; i<h; ++i) {
+  for (int i=0; i<h; ++i) {
     JSAMPLE const *scanline = jd->read_scanline(y0+i);
     if (!scanline)
       return false; // failed
@@ -152,11 +152,11 @@ bool vil_jpeg_generic_image::put_section(void const *buf, int x0, int y0, int w,
   // "compression makes no sense unless the section covers the whole image."
   // Relaxed slightly.. awf.
   // It will work if you send entire scan lines sequentially
-  if (x0 != 0 || w != jc->jobj.image_width) {
+  if (x0 != 0 || (unsigned int)w != jc->jobj.image_width) {
     vcl_cerr << __FILE__ << " : Can only compress complete scanlines" << vcl_endl;
     return false;
   }
-  if (y0 != jc->jobj.next_scanline) {
+  if ((unsigned int)y0 != jc->jobj.next_scanline) {
     vcl_cerr << __FILE__ << " : Scanlines must be sent sequentially " << vcl_endl;
     return false;
   }

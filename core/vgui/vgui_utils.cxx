@@ -238,7 +238,7 @@ void vgui_utils::process_hits(int num_hits, GLuint* ptr, vcl_vector<vcl_vector<u
 
      if (debug) vcl_cerr << " the name is ";
      // for each name      
-     for (int j = 0; j < num_names; j++) {
+     for (unsigned int j = 0; j < num_names; j++) {
        names.push_back(*ptr);
        if (debug) vcl_cerr << *ptr << " ";
        ptr++;

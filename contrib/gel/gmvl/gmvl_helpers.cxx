@@ -17,7 +17,7 @@
 // input output
 ostream &operator<<( ostream &os, const vcl_vector<gmvl_node_ref> &r)
 {
-  for( int i=0; i< r.size(); i++) os << *r[i];
+  for( unsigned int i=0; i< r.size(); ++i) os << *r[i];
   return os;
 }
 

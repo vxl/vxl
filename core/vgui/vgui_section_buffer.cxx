@@ -91,7 +91,7 @@ vgui_section_buffer::vgui_section_buffer(int x_, int y_,
   switch (type) {
 #define fsm_alloc_buffer(GLtype) \
 { GLtype *ptr = new GLtype[components * allocw * alloch]; the_pixels = ptr; \
-  for (int i=0; i<h; ++i) the_rasters[i] = ptr + i*allocw*components; /* alignment ? */ }
+  for (unsigned int i=0; i<h; ++i) the_rasters[i] = ptr + i*allocw*components; /* alignment ? */ }
 
   case GL_UNSIGNED_BYTE:
   case GL_BYTE: 

@@ -92,7 +92,7 @@ static const int fsm_event_table_size = sizeof(fsm_event_table)/sizeof(fsm_event
 
 vcl_ostream& operator<<(vcl_ostream& s, vgui_event_type t)
 {
-  for (unsigned i=0; i<fsm_event_table_size; ++i)
+  for (int i=0; i<fsm_event_table_size; ++i)
     if (fsm_event_table[i].t == t)
       return s << fsm_event_table[i].name;
   return s << "[" __FILE__ " : bad event, code " << int(t) << "]";

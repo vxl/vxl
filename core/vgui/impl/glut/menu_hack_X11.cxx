@@ -74,7 +74,7 @@ static vgui_glut_menu_hack_bind_entry default_entries[] =
   {GLUT_RIGHT_BUTTON ,GLUT_ACTIVE_CTRL ,0},
   {GLUT_RIGHT_BUTTON ,GLUT_ACTIVE_ALT  ,0},
 };
-const int table_size = sizeof(default_entries)/sizeof(default_entries[0]);
+const unsigned int table_size = sizeof(default_entries)/sizeof(default_entries[0]);
 
 struct vgui_glut_menu_hack::per_window_record
 {

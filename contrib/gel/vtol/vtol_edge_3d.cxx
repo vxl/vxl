@@ -76,7 +76,7 @@ vtol_edge_3d::vtol_edge_3d(const vtol_edge_3d&olde)
   vtol_zero_chain_3d *zeroch;
   _curve=0;
 
-  for(int i=0;i<old_e->_inferiors.size();++i)
+  for(unsigned int i=0;i<old_e->_inferiors.size();++i)
     {
       zeroch=((vtol_zero_chain_3d *)old_e->_inferiors[i])->copy();
       link_inferior(zeroch);

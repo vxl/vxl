@@ -41,7 +41,7 @@ vil_stream_url::vil_stream_url(char const *url)
     path = "";
   
   // port?
-  for (int i=0; i<host.size(); ++i)
+  for (unsigned int i=0; i<host.size(); ++i)
     if (host[i] == ':') {
       port = vcl_atoi(host.c_str() + i + 1);
       host = vcl_string(host.c_str(), host.c_str() + i);

@@ -41,7 +41,7 @@ void vtol_hierarchy_node_3d::set_hierarchy_superiors(const hierarchy_node_list_3
 hierarchy_node_list_3d* vtol_hierarchy_node_3d::hierarchy_inferiors()
 {
   hierarchy_node_list_3d *new_list = new hierarchy_node_list_3d();
-  for(int i=0;i<_hierarchy_inferiors.size();i++)
+  for(unsigned int i=0;i<_hierarchy_inferiors.size();++i)
     new_list->push_back(_hierarchy_inferiors[i]);
   return new_list;
 }
@@ -52,7 +52,7 @@ hierarchy_node_list_3d* vtol_hierarchy_node_3d::hierarchy_inferiors()
 hierarchy_node_list_3d* vtol_hierarchy_node_3d::hierarchy_superiors()
 {
   hierarchy_node_list_3d *new_list = new hierarchy_node_list_3d();
-  for(int i=0;i<_hierarchy_superiors.size();i++)
+  for(unsigned int i=0;i<_hierarchy_superiors.size();++i)
     {
       new_list->push_back(_hierarchy_superiors[i]);
     }

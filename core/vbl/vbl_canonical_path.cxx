@@ -51,13 +51,13 @@ vcl_string vbl_canonical_path_internal(vcl_string path)
 
     // split the path into bits. a "bit" is either a single slash or a
     // sequence of non-slash characters.
-    for (int i=0; i<path.size(); ) {
+    for (unsigned int i=0; i<path.size(); ) {
       if (path[i] == '/') {
 	bits.push_back("/");
 	++i;
       }
       else {
-	int j=i;
+	unsigned int j=i;
 	while (j<path.size() && path[j]!='/')
 	  ++j;
 	bits.push_back(vcl_string(path.c_str()+i, path.c_str()+j));
@@ -68,7 +68,7 @@ vcl_string vbl_canonical_path_internal(vcl_string path)
     // process the bits
     while (true) {
       bool again = false;
-      for (int i=0; i<bits.size(); ++i) {
+      for (unsigned int i=0; i<bits.size(); ++i) {
 	// remove repeated /
 	if (i+1<bits.size() && bits[i] == "/" && bits[i+1] == "/") {
 	  bits.erase(bits.begin() + i);
@@ -76,7 +76,7 @@ vcl_string vbl_canonical_path_internal(vcl_string path)
 	}
 	
 	// remove trailing /
-	if (i == bits.size()-1 && bits[i] == "/") {
+	if (i+1 == bits.size() && bits[i] == "/") {
 	  bits.pop_back();
 	  again = true;
 	}
@@ -101,13 +101,13 @@ vcl_string vbl_canonical_path_internal(vcl_string path)
     
     // recompose the path from its bits
     path = "";
-    for (int i=0; i<bits.size(); ++i)
+    for (unsigned int i=0; i<bits.size(); ++i)
       path += bits[i];
     //cerr << "recomposed : " << path << endl;
   }
   
   // look for symbolic links to expand
-  for (int i=1; i<=path.size(); ++i) {
+  for (unsigned int i=1; i<=path.size(); ++i) {
     if (i==path.size() || path[i] == '/') {
       vcl_string sub(path.c_str(), path.c_str() + i);
       char buf[4096];

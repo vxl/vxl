@@ -132,8 +132,8 @@ bool get_twoviews(vcl_vector<int>* col_pos, vcl_vector<int>* row_pos)
   int nb_views = xcv_tab->get_selected_positions(&cols, &rows, &times);
   // if not selected,  pick top left pair.
   if (nb_views != 2) {
-    for(int i = 0; i < xcv_tab->rows(); ++i)
-      for(int j = 0; j < xcv_tab->cols(); ++j)
+    for(unsigned int i = 0; i < xcv_tab->rows(); ++i)
+      for(unsigned int j = 0; j < xcv_tab->cols(); ++j)
         xcv_tab->set_selected(i,j, false);
     xcv_tab->set_selected(0,0, true);
     xcv_tab->set_selected(0,1, true);
@@ -393,7 +393,7 @@ void xcv_window_size_traditional(int rows, int cols,
 
   // set width of window
   for (int i=0; i<rows; ++i) {
-    int winnie = 0;
+    unsigned int winnie = 0;
     for (int j=0; j<cols; ++j) {
       int d = i*cols + j;
       if (d < images.size())
@@ -405,7 +405,7 @@ void xcv_window_size_traditional(int rows, int cols,
   
   // set height of window
   for (int j=0; j<cols; ++j) {
-    int winnie = 0;
+    unsigned int winnie = 0;
     for (int i=0; i<rows; ++i) {
       int d = i*cols + j;
       if (d < images.size())
@@ -520,7 +520,7 @@ int main(int argc, char** argv)
     vcl_cerr << "window_width  = " << window_width << vcl_endl;
     vcl_cerr << "window_height = " << window_height << vcl_endl;
     
-    for (int i=0; i<viewers.size(); ++i) {
+    for (unsigned int i=0; i<viewers.size(); ++i) {
       vgui_viewer2D_ref v; v.vertical_cast(viewers[i]);
       v->token.scaleX *= viewer_scale;
       v->token.scaleY *= viewer_scale;

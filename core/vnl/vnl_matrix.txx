@@ -1314,7 +1314,7 @@ template <class doublereal>                        // ideally, char* should be b
 int vnl_inplace_transpose(doublereal *a, unsigned m, unsigned n, char* move, unsigned iwrk)
 {
   static doublereal b, c;
-  static const unsigned k = m * n - 1;
+  static const int k = m * n - 1;
   static int iter, i1, i2, im, i1c, i2c, ncount, max_;
 
 // *****
@@ -1409,7 +1409,7 @@ L80:
     ncount += 2;
     if (i2 == iter)
       break;
-    if (i2 == k-iter) {
+    if (i2+iter == k) {
       doublereal d = b; b = c; c = d; // interchange b and c
       break;
     }

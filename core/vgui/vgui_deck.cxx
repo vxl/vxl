@@ -161,12 +161,12 @@ void vgui_deck::begin() {
 }
 
 void vgui_deck::next() {
-  int tmp = index_;
+  unsigned int tmp = index_;
 
-  if (tmp == (children.size()-1))
+  if (tmp+1 >= children.size())
     tmp=0;
   else 
-    tmp++;
+    ++tmp;
 
   if (index_ok(tmp))
     index_=tmp;
@@ -181,7 +181,7 @@ void vgui_deck::prev() {
   if (tmp == 0)
     tmp=children.size()-1;
   else 
-    tmp--;
+    --tmp;
 
   if (index_ok(tmp))
     index_=tmp;

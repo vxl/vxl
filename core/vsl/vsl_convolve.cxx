@@ -289,7 +289,7 @@ void vsl_convolven (vsl_roi_window const *window,
     for (int col = col_min; col < col_max; col++) {
       (*scratch) [row][col] = (*image) [row][col] * mask->array [0];
       
-      for (int mask_index = 1; mask_index < mask->count; mask_index++)
+      for (unsigned int mask_index = 1; mask_index < mask->count; mask_index++)
 	(*scratch) [row][col]
 	  += ((*image) [row][col-mask_index]+(*image) [row][col+mask_index]) 
 	  *   mask->array [mask_index];
@@ -305,7 +305,7 @@ void vsl_convolven (vsl_roi_window const *window,
     for (int col = col_min; col < col_max; col++) {
       (*image) [row][col] = (*scratch) [row][col] * mask->array [0];
       
-      for (int mask_index = 1; mask_index < mask->count; mask_index++)
+      for (unsigned int mask_index = 1; mask_index < mask->count; mask_index++)
 	(*image) [row][col]
 	  += ((*scratch) [row-mask_index][col]+
 	      (*scratch) [row+mask_index][col])

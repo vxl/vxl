@@ -70,8 +70,8 @@ void test_cplx(vnl_fftxd_prime_factors<fsm_real> const &prx,
 
 
 void test_fft2d () {
-  const int fsm_rows = 64;
-  const int fsm_cols = 64;
+  const unsigned int fsm_rows = 64;
+  const unsigned int fsm_cols = 64;
   
   // calculate prime factors for this size array
   vnl_fftxd_prime_factors<fsm_real> prx (fsm_rows); 

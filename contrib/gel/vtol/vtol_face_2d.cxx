@@ -287,7 +287,7 @@ vtol_face_2d::vtol_face_2d(one_chain_list_2d &onechs)
 
   if(onech!=0)
     {
-      for(int i = 1; i < onechs.size(); ++i)
+      for(unsigned int i = 1; i < onechs.size(); ++i)
         onech->link_chain_inferior(*(onechs[i]));
     }
 }
@@ -707,9 +707,9 @@ void vtol_face_2d::compute_bounding_box()
 void vtol_face_2d::describe(vcl_ostream &strm,
                             int blanking) const
 {
-  for (int j=0; j<blanking; ++j) strm << ' ';
+  while (--blanking >= 0) strm << ' ';
   print();
-  for(int i=0;i<_inferiors.size();++i)
+  for(unsigned int i=0;i<_inferiors.size();++i)
     {
       if((_inferiors[i])->cast_to_one_chain()!=0)
         (_inferiors[i])->cast_to_one_chain()->describe(strm,blanking);

@@ -193,7 +193,7 @@ struct vil_png_structures {
       return (ok = problem("couldn't allocate space for image"));
     
     // Re-point rows.
-    for (int y = 1 ; y < info_ptr->height ; ++y)
+    for (unsigned int y = 1 ; y < info_ptr->height ; ++y)
       rows[y] = rows[0] + y * linesize;
 
     return true;
@@ -367,7 +367,7 @@ bool vil_png_generic_image::get_section(void* buf, int x0, int y0, int xs, int y
 
   int bytes_per_pixel = p->info_ptr->bit_depth * p->channels / 8;
   int bytes_per_row_dst = xs*bytes_per_pixel;
-  if (xs == p->info_ptr->width) {
+  if ((unsigned int)xs == p->info_ptr->width) {
     assert(x0 == 0);
     memcpy(buf, rows[y0], ys * bytes_per_row_dst);
   }
@@ -392,7 +392,7 @@ bool vil_png_generic_image::put_section(void const* buf, int x0, int y0, int xs,
   
   int bytes_per_pixel  = p->info_ptr->bit_depth*p->channels / 8;
   int bytes_per_row_dst = xs*bytes_per_pixel;
-  if (xs == p->info_ptr->width) {
+  if ((unsigned int)xs == p->info_ptr->width) {
     assert(x0 == 0);
     memcpy(rows[y0], buf, ys * bytes_per_row_dst);
   }

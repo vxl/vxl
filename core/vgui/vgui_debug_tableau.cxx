@@ -41,7 +41,7 @@ static void print_tableau(vcl_ostream& s, vcl_string indent, vgui_tableau_ref t)
   else
     indent += " ";
 
-  for(int i = 0; i < children.size(); ++i)
+  for(unsigned int i = 0; i < children.size(); ++i)
     print_tableau(s, indent, children[i]);
 }
 
