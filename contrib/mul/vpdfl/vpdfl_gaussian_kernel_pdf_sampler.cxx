@@ -77,7 +77,7 @@ void vpdfl_gaussian_kernel_pdf_sampler::set_model(const vpdfl_pdf_base& model)
 void vpdfl_gaussian_kernel_pdf_sampler::sample_component(vnl_vector<double>& x,
                                                          int j)
 {
-  const vpdfl_gaussian_kernel_pdf & kpdf = (const vpdfl_gaussian_kernel_pdf &) model();
+  const vpdfl_gaussian_kernel_pdf & kpdf = static_cast<const vpdfl_gaussian_kernel_pdf &>(model());
 
   int n_dims = kpdf.n_dims();
   x.resize(n_dims);
@@ -95,7 +95,7 @@ void vpdfl_gaussian_kernel_pdf_sampler::sample_component(vnl_vector<double>& x,
 
 void vpdfl_gaussian_kernel_pdf_sampler::sample(vnl_vector<double>& x)
 {
-  const vpdfl_gaussian_kernel_pdf & kpdf = (const vpdfl_gaussian_kernel_pdf &) model();
+  const vpdfl_gaussian_kernel_pdf & kpdf = static_cast<const vpdfl_gaussian_kernel_pdf &>(model());
   int n = kpdf.centre().size();
 
   // Select component
@@ -110,7 +110,7 @@ void vpdfl_gaussian_kernel_pdf_sampler::sample(vnl_vector<double>& x)
 void vpdfl_gaussian_kernel_pdf_sampler::regular_samples(
                        vcl_vector<vnl_vector<double> >& x)
 {
-  const vpdfl_gaussian_kernel_pdf & kpdf = (const vpdfl_gaussian_kernel_pdf &) model();
+  const vpdfl_gaussian_kernel_pdf & kpdf = static_cast<const vpdfl_gaussian_kernel_pdf &>(model());
   int n_k = kpdf.centre().size();
 
   int n_samples = x.size();
@@ -132,6 +132,6 @@ void vpdfl_gaussian_kernel_pdf_sampler::regular_samples(
 // This is properly cast.
 const vpdfl_gaussian_kernel_pdf& vpdfl_gaussian_kernel_pdf_sampler::gaussian_kernel_pdf() const
 {
-  return (const vpdfl_gaussian_kernel_pdf&) model();
+  return static_cast<const vpdfl_gaussian_kernel_pdf&>( model());
 }
 

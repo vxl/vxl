@@ -23,7 +23,7 @@ vil2_memory_chunk::vil2_memory_chunk(unsigned long n, vil2_pixel_format pixel_fo
 //: Destructor
 vil2_memory_chunk::~vil2_memory_chunk()
 {
-  delete [] (char*) data_;
+  delete [] static_cast<char*>( data_);
 }
 
 //: Copy ctor
@@ -50,7 +50,7 @@ void vil2_memory_chunk::unref()
   ref_count_--;
   if (ref_count_==0)
   {
-    delete [] (char*) data_; data_=0;
+    delete [] static_cast<char*>( data_); data_=0;
     delete this;
   }
 }
@@ -60,7 +60,7 @@ void vil2_memory_chunk::unref()
 void vil2_memory_chunk::set_size(unsigned long n, vil2_pixel_format pixel_form)
 {
   if (size_==n) return;
-  delete [] (char*) data_;
+  delete [] static_cast<char*>( data_);
   data_ = 0;
   if (n>0)
     data_ = new char[n];

@@ -59,7 +59,7 @@ void test_mixture()
   {
     mean[j]=2*j;
     var[j] =0.125*(j+1);
-    pdf1d_gaussian& gauss_j = (pdf1d_gaussian&) *(pdf.components()[j]);
+    pdf1d_gaussian& gauss_j = static_cast<pdf1d_gaussian&>(*(pdf.components()[j]));
     gauss_j.set(mean[j],var[j]);
   }
 
@@ -86,7 +86,7 @@ void test_mixture()
           <<"Mean: " << p_pdf->mean()<<vcl_endl
           <<"Var:  " << p_pdf->variance()<<vcl_endl;
 
-  pdf1d_mixture & gmm =  (pdf1d_mixture &) (*p_pdf);
+  pdf1d_mixture & gmm =  static_cast<pdf1d_mixture &>(*p_pdf);
 
   vcl_vector<double> test_wts(n_comp, 1.0/n_comp);
   TEST_NEAR("Weights are about correct",
@@ -112,9 +112,9 @@ void test_mixture()
   TEST(("Created "+test_path+" for writing").c_str(), (!bfs_out), false);
 
   vsl_b_write(bfs_out,builder);
-  vsl_b_write(bfs_out,(pdf1d_builder*) &builder);
+  vsl_b_write(bfs_out,static_cast<pdf1d_builder*>( &builder));
   vsl_b_write(bfs_out,p_pdf);
-  vsl_b_write(bfs_out,(pdf1d_pdf*) 0);
+  vsl_b_write(bfs_out,static_cast<pdf1d_pdf*>(0));
   bfs_out.close();
 
   vcl_cout<<"Loading data...\n";

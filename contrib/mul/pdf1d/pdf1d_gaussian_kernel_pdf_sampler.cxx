@@ -26,7 +26,7 @@ pdf1d_gaussian_kernel_pdf_sampler::~pdf1d_gaussian_kernel_pdf_sampler()
 
 const pdf1d_gaussian_kernel_pdf& pdf1d_gaussian_kernel_pdf_sampler::gaussian_kernel_pdf() const
 {
-  return (const pdf1d_gaussian_kernel_pdf&) model();
+  return static_cast<const pdf1d_gaussian_kernel_pdf&>(model());
 }
 
 

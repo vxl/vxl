@@ -39,7 +39,7 @@ pdf1d_gaussian& pdf1d_gaussian_builder::gaussian(pdf1d_pdf& model) const
 {
   // require a pdf1d_gaussian
   assert(model.is_class("pdf1d_gaussian"));
-  return (pdf1d_gaussian&) model;
+  return static_cast<pdf1d_gaussian&>(model);
 }
 
 pdf1d_pdf* pdf1d_gaussian_builder::new_model() const
@@ -109,7 +109,7 @@ void pdf1d_gaussian_builder::build(pdf1d_pdf& model, mbl_data_wrapper<double>& d
     {
       // Use more efficient build_from_array algorithm
       mbl_data_array_wrapper<double>& data_array =
-                       (mbl_data_array_wrapper<double>&) data;
+                       static_cast<mbl_data_array_wrapper<double>&>(data);
       build_from_array(model,data_array.data(),n_samples);
       return;
     }

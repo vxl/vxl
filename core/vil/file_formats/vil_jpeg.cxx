@@ -147,7 +147,7 @@ vil2_image_view_base_sptr vil2_jpeg_image::get_copy_view(unsigned x0,
     vcl_memcpy(static_cast<char*>(chunk->data()) + i*nx*bpp, &scanline[x0*bpp], nx*bpp);
   }
 
-  return new vil2_image_view<vxl_byte>(chunk, (vxl_byte *)chunk->data(), nx, ny, bpp, bpp, bpp*nx, 1);
+  return new vil2_image_view<vxl_byte>(chunk, static_cast<vxl_byte *>(chunk->data()), nx, ny, bpp, bpp, bpp*nx, 1);
 }
 
 //--------------------------------------------------------------------------------

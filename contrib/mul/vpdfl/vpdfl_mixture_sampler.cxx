@@ -72,7 +72,7 @@ vpdfl_mixture_sampler::~vpdfl_mixture_sampler()
 
 const vpdfl_mixture& vpdfl_mixture_sampler::mixture() const
 {
-  return (const vpdfl_mixture&) model();
+  return static_cast<const vpdfl_mixture&>(model());
 }
 
 // ====================================================================

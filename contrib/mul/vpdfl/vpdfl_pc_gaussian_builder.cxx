@@ -75,7 +75,7 @@ vpdfl_pc_gaussian& vpdfl_pc_gaussian_builder::gaussian(vpdfl_pdf_base& model) co
 {
     // need a vpdfl_gaussian
   assert(model.is_class("vpdfl_pc_gaussian"));
-  return (vpdfl_pc_gaussian&) model;
+  return static_cast<vpdfl_pc_gaussian&>( model);
 }
 
 //=======================================================================

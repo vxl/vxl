@@ -51,7 +51,7 @@ void vpdfl_calc_mean_var(vnl_vector<double>& mean,
   {
     // Use more efficient algorithm
     mbl_data_array_wrapper<vnl_vector<double> > array_data
-                 = (mbl_data_array_wrapper<vnl_vector<double> >&) data;
+                 = static_cast<mbl_data_array_wrapper<vnl_vector<double> >&>( data);
     vpdfl_calc_mean_var(mean,var,array_data.data(),array_data.size());
     return;
   }

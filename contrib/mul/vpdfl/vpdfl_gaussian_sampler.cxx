@@ -65,7 +65,7 @@ void vpdfl_gaussian_sampler::reseed(unsigned long seed)
 // This is properly cast.
 const vpdfl_gaussian& vpdfl_gaussian_sampler::gaussian() const
 {
-  return (const vpdfl_gaussian&) model();
+  return static_cast<const vpdfl_gaussian&>(model());
 }
 
 //=======================================================================

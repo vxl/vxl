@@ -191,7 +191,7 @@ class vil2_correlate_1d_resource : public vil2_image_resource
   virtual bool get_property(char const* tag, void* property_value = 0) const
   {
     if (0==vcl_strcmp(tag, vil2_property_read_only))
-      return property_value ? (*(bool*)property_value) = true : true;
+      return property_value ? (*static_cast<bool*>(property_value)) = true : true;
 
     return src_->get_property(tag, property_value);
   }

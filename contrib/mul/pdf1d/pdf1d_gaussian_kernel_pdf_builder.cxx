@@ -34,7 +34,7 @@ pdf1d_gaussian_kernel_pdf& pdf1d_gaussian_kernel_pdf_builder::gkpdf(pdf1d_pdf& m
 {
   // require a pdf1d_gaussian_kernel_pdf
   assert(model.is_class("pdf1d_gaussian_kernel_pdf"));
-  return (pdf1d_gaussian_kernel_pdf&) model;
+  return static_cast<pdf1d_gaussian_kernel_pdf&>( model);
 }
 
 pdf1d_pdf* pdf1d_gaussian_kernel_pdf_builder::new_model() const

@@ -35,13 +35,13 @@ void test_gaussian_pyramid_builder_2d_build(vimt_gaussian_pyramid_builder_2d<vxl
   image_pyr.print_all(vcl_cout);
 
   TEST("Found correct number of levels", image_pyr.n_levels(), 2);
-  const vimt_image_2d_of<vxl_byte>& v_image0 = (const vimt_image_2d_of<vxl_byte>&) image_pyr(0);
+  const vimt_image_2d_of<vxl_byte>& v_image0 = static_cast<const vimt_image_2d_of<vxl_byte>&>(image_pyr(0));
   TEST("Base width",v_image0.image().ni(),ni);
   TEST("Base height",v_image0.image().nj(),nj);
 
   unsigned ni2 = (ni+1)/2;
   unsigned nj2 = (nj+1)/2;
-  const vimt_image_2d_of<vxl_byte>& v_image1 = (const vimt_image_2d_of<vxl_byte>&) image_pyr(1);
+  const vimt_image_2d_of<vxl_byte>& v_image1 = static_cast<const vimt_image_2d_of<vxl_byte>&>( image_pyr(1));
   const vil2_image_view<vxl_byte>& image1 = v_image1.image();
   TEST("Level 1 size x",image1.ni(),(ni+1)/2);
   TEST("Level 1 size y",image1.nj(),(nj+1)/2);
@@ -77,7 +77,7 @@ void test_gaussian_pyramid_builder_2d_a()
   vsl_b_ofstream bfs_out(test_path);
   TEST(("Created " + test_path + " for writing").c_str(), (!bfs_out), false);
   vsl_b_write(bfs_out, builder);
-  vsl_b_write(bfs_out, (vimt_image_pyramid_builder*)(&builder));
+  vsl_b_write(bfs_out, static_cast<vimt_image_pyramid_builder*>(&builder));
   bfs_out.close();
 
   vimt_gaussian_pyramid_builder_2d<vxl_byte> builder_in;

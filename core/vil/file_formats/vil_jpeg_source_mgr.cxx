@@ -169,7 +169,7 @@ vil2_jpeg_stream_src_set (j_decompress_ptr cinfo, vil_stream *vs)
                                 JPOOL_PERMANENT,
                                 SIZEOF(vil2_jpeg_stream_source_mgr));
   // set pointer in cinfo
-  cinfo->src = (struct jpeg_source_mgr *) src;
+  cinfo->src = reinterpret_cast<struct jpeg_source_mgr *>(src);
 
   // set fields in src :
   src->stream = vs;

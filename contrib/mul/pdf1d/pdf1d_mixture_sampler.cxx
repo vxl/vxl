@@ -62,7 +62,7 @@ pdf1d_mixture_sampler::~pdf1d_mixture_sampler()
 
 const pdf1d_mixture& pdf1d_mixture_sampler::mixture() const
 {
-  return (const pdf1d_mixture&) model();
+  return static_cast<const pdf1d_mixture&>(model());
 }
 
 // ====================================================================

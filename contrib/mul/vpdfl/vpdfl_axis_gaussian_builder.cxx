@@ -37,7 +37,7 @@ vpdfl_axis_gaussian& vpdfl_axis_gaussian_builder::gaussian(vpdfl_pdf_base& model
 {
   // require a vpdfl_axis_gaussian
   assert(model.is_class("vpdfl_axis_gaussian"));
-  return (vpdfl_axis_gaussian&) model;
+  return static_cast<vpdfl_axis_gaussian&>(model);
 }
 
 vpdfl_pdf_base* vpdfl_axis_gaussian_builder::new_model() const

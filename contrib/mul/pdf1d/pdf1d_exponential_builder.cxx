@@ -40,7 +40,7 @@ pdf1d_exponential& pdf1d_exponential_builder::exponential(pdf1d_pdf& model) cons
 {
   // require a pdf1d_exponential
   assert(model.is_class("pdf1d_exponential"));
-  return (pdf1d_exponential&) model;
+  return static_cast<pdf1d_exponential&>(model);
 }
 
 pdf1d_pdf* pdf1d_exponential_builder::new_model() const
@@ -110,7 +110,7 @@ void pdf1d_exponential_builder::build(pdf1d_pdf& model, mbl_data_wrapper<double>
     {
       // Use more efficient build_from_array algorithm
       mbl_data_array_wrapper<double>& data_array =
-                       (mbl_data_array_wrapper<double>&) data;
+                       static_cast<mbl_data_array_wrapper<double>&>(data);
       build_from_array(model,data_array.data(),n_samples);
       return;
     }

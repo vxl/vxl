@@ -77,7 +77,7 @@ void vimt_gaussian_pyramid_builder_2d_general<T>::build(
   // Set up image pyramid
   check_pyr(im_pyr,maxlevels);
 
-  vimt_image_2d_of<T>& im0 = (vimt_image_2d_of<T>&) im_pyr(0);
+  vimt_image_2d_of<T>& im0 = static_cast<vimt_image_2d_of<T>&>(im_pyr(0));
 
   // Shallow copy of part of base_image
   im0 = vimt_crop(base_image,0,ni,0,nj);
@@ -159,8 +159,8 @@ void vimt_gaussian_pyramid_builder_2d_general<T>::extend(vimt_image_pyramid& ima
     for (int i=oldsize;i<maxlevels;i++)
     {
       image_pyr.data()[i] = new vimt_image_2d_of<T>;
-      vimt_image_2d_of<T>& im_i0 = (vimt_image_2d_of<T>&) image_pyr(i);
-      vimt_image_2d_of<T>& im_i1 = (vimt_image_2d_of<T>&) image_pyr(i-1);
+      vimt_image_2d_of<T>& im_i0 = static_cast<vimt_image_2d_of<T>&>(image_pyr(i));
+      vimt_image_2d_of<T>& im_i1 = static_cast<vimt_image_2d_of<T>&>(image_pyr(i-1));
       im_i0.image().set_size((unsigned)(ni/s+0.5),(unsigned)(nj/s+0.5),
         im_i1.image().nplanes());
 

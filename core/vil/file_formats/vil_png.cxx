@@ -74,13 +74,13 @@ char const* vil2_png_file_format::tag() const
 
 static void user_read_data(png_structp png_ptr, png_bytep data, png_size_t length)
 {
-  vil_stream* f = (vil_stream*)png_get_io_ptr(png_ptr);
+  vil_stream* f = static_cast<vil_stream*>(png_get_io_ptr(png_ptr));
   f->read(data, length);
 }
 
 static void user_write_data(png_structp png_ptr, png_bytep data, png_size_t length)
 {
-  vil_stream* f = (vil_stream*)png_get_io_ptr(png_ptr);
+  vil_stream* f = static_cast<vil_stream*>(png_get_io_ptr(png_ptr));
   f->write(data, length);
 }
 
@@ -126,7 +126,7 @@ static void pngtopnm_error_handler (png_structp png_ptr, png_const_charp msg)
     return;
   }
 
-  vil2_jmpbuf_wrapper  *jmpbuf_ptr = (vil2_jmpbuf_wrapper*) png_get_error_ptr(png_ptr);
+  vil2_jmpbuf_wrapper  *jmpbuf_ptr = static_cast<vil2_jmpbuf_wrapper*>(png_get_error_ptr(png_ptr));
   if (jmpbuf_ptr == NULL) {         // we are completely hosed now
     vcl_cerr << "pnmtopng:  EXTREMELY fatal error: jmpbuf unrecoverable; terminating.\n";
     vcl_exit(99);
@@ -416,7 +416,7 @@ vil2_image_view_base_sptr vil2_png_image::get_copy_view(unsigned x0,
     assert(x0 == 0);
 
     vcl_memcpy(static_cast<char*>(chunk->data()), rows[y0], ny * bytes_per_row_dst);
-    return new vil2_image_view<vxl_uint_16>(chunk, (vxl_uint_16*)chunk->data(),
+    return new vil2_image_view<vxl_uint_16>(chunk, static_cast<vxl_uint_16*>(chunk->data()),
       nx, ny, nplanes(), nplanes(), nplanes()*nx, 1);
   }
   if ((bit_depth ==8) &&
@@ -425,23 +425,23 @@ vil2_image_view_base_sptr vil2_png_image::get_copy_view(unsigned x0,
     assert(x0 == 0);
 
     vcl_memcpy(static_cast<char*>(chunk->data()), rows[y0], ny * bytes_per_row_dst);
-    return new vil2_image_view<vxl_byte>(chunk, (vxl_byte*)chunk->data(),
+    return new vil2_image_view<vxl_byte>(chunk, static_cast<vxl_byte*>(chunk->data()),
       nx, ny, nplanes(), nplanes(), nplanes()*nx, 1);
   }
   else if (bit_depth==16)
   {
-    png_byte* dst = (png_byte*)chunk->data();
+    png_byte* dst = static_cast<png_byte*>(chunk->data());
     for (unsigned y = 0; y < ny; ++y, dst += bytes_per_row_dst)
       vcl_memcpy(dst, &rows[y0+y][x0*bytes_per_pixel], nx*bytes_per_pixel);
-    return new vil2_image_view<vxl_uint_16>(chunk, (vxl_uint_16*)chunk->data(),
+    return new vil2_image_view<vxl_uint_16>(chunk, static_cast<vxl_uint_16*>(chunk->data()),
       nx, ny, nplanes(), nplanes(), nplanes()*nx, 1);
   }
   else if (bit_depth==8)
   {
-    png_byte* dst = (png_byte*)chunk->data();
+    png_byte* dst = static_cast<png_byte*>(chunk->data());
     for (unsigned y = 0; y < ny; ++y, dst += bytes_per_row_dst)
       vcl_memcpy(dst, &rows[y0+y][x0*bytes_per_pixel], nx*bytes_per_pixel);
-    return new vil2_image_view<vxl_byte>(chunk, (vxl_byte*)chunk->data(),
+    return new vil2_image_view<vxl_byte>(chunk, static_cast<vxl_byte*>(chunk->data()),
       nx, ny, nplanes(), nplanes(), nplanes()*nx, 1);
   }
   // FIXME Can't handle pixel depths of 1 2 or 4 pixels yet
@@ -498,7 +498,7 @@ bool vil2_png_image::put_view(const vil2_image_view_base &view,
     {
       for (unsigned y = 0; y < view.nj(); ++y)
         for (unsigned x=0; x < view.ni(); ++x)
-          *(vxl_uint_16*)&rows[y0+y][(x0+x)*2] = view2(x,y);
+          *reinterpret_cast<vxl_uint_16*>(&rows[y0+y][(x0+x)*2]) = view2(x,y);
     }
     else
     {
@@ -506,9 +506,9 @@ bool vil2_png_image::put_view(const vil2_image_view_base &view,
       for (unsigned y = 0; y < view.nj(); ++y)
         for (unsigned x=0; x < view.ni(); ++x)
         {
-          *(vxl_uint_16*)&rows[y0+y][(x0+x)*6] = view2(x,y,0);
-          *(vxl_uint_16*)&rows[y0+y][(x0+x)*6+2] = view2(x,y,1);
-          *(vxl_uint_16*)&rows[y0+y][(x0+x)*6+4] = view2(x,y,2);
+          *reinterpret_cast<vxl_uint_16*>(&rows[y0+y][(x0+x)*6]) = view2(x,y,0);
+          *reinterpret_cast<vxl_uint_16*>(&rows[y0+y][(x0+x)*6+2]) = view2(x,y,1);
+          *reinterpret_cast<vxl_uint_16*>(&rows[y0+y][(x0+x)*6+4]) = view2(x,y,2);
         }
     }
   }

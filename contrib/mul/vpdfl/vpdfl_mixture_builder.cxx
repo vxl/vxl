@@ -166,7 +166,7 @@ void vpdfl_mixture_builder::weighted_build(vpdfl_pdf_base& base_model,
                                            const vcl_vector<double>& wts) const
 {
   assert(base_model.is_class("vpdfl_mixture"));
-  vpdfl_mixture& model = (vpdfl_mixture&) base_model;
+  vpdfl_mixture& model = static_cast<vpdfl_mixture&>( base_model);
 
   unsigned int n = builder_.size();
 

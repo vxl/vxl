@@ -167,7 +167,7 @@ static int ReadInteger(vil_stream* vs, char& temp)
 static void ConvertMSBToHost( void* buf, int num_words )
 {
 #if VXL_LITTLE_ENDIAN
-  unsigned char* ptr = (unsigned char*)buf;
+  unsigned char* ptr = static_cast<unsigned char*>(buf);
   for ( int i=0; i < num_words; ++i )
   {
     unsigned char t = *ptr;
@@ -182,7 +182,7 @@ static void ConvertMSBToHost( void* buf, int num_words )
 static void ConvertHostToMSB( void* buf, int num_words )
 {
 #if VXL_LITTLE_ENDIAN
-  unsigned char* ptr = (unsigned char*)buf;
+  unsigned char* ptr = static_cast<unsigned char*>(buf);
   for ( int i=0; i < num_words; ++i )
   {
     unsigned char t = *ptr;
@@ -312,22 +312,22 @@ vil2_image_view_base_sptr vil2_pnm_image::get_copy_view(
   if (bits_per_component_ == 1)
   {
     buf = new vil2_memory_chunk(ni_ * nj_* nplanes() * sizeof(bool),VIL2_PIXEL_FORMAT_BOOL);
-    bb = (bool *) buf->data();
+    bb = static_cast<bool *>(buf->data());
   }
   else if (bits_per_component_ <= 8)
   {
     buf = new vil2_memory_chunk(ni_ * nj_* nplanes() * sizeof(unsigned char),VIL2_PIXEL_FORMAT_BYTE);
-    ib = (unsigned char *) buf->data();
+    ib = static_cast<unsigned char *>(buf->data());
   }
   else if (bits_per_component_ <= 16)
   {
     buf = new vil2_memory_chunk(ni_ * nj_* nplanes() * sizeof(unsigned short),VIL2_PIXEL_FORMAT_UINT_16);
-    jb = (unsigned short *) buf->data();
+    jb = static_cast<unsigned short *>(buf->data());
   }
   else
   {
     buf = new vil2_memory_chunk(ni_ * nj_* nplanes() * sizeof(unsigned int),VIL2_PIXEL_FORMAT_UINT_32);
-    kb = (unsigned int *) buf->data();
+    kb = static_cast<unsigned int *>(buf->data());
   }
 
   if (magic_ > 4) // pgm or ppm raw image
@@ -345,7 +345,7 @@ vil2_image_view_base_sptr vil2_pnm_image::get_copy_view(
       byte_start += byte_width;
     }
     if ( bytes_per_sample==2 && VXL_LITTLE_ENDIAN )
-      ConvertMSBToHost( (unsigned char *)buf->data(), ni*nj*nplanes() );
+      ConvertMSBToHost( static_cast<unsigned char *>(buf->data()), ni*nj*nplanes() );
     else if ( bytes_per_sample > 2 )
     {
       vcl_cerr << "ERROR: pnm: reading rawbits format with > 16bit samples\n";
@@ -421,21 +421,21 @@ vil2_image_view_base_sptr vil2_pnm_image::get_copy_view(
     if (ncomponents_ == 1) {
 #endif
       if (bits_per_component_ <= 1)
-        return new vil2_image_view<bool>(buf, (bool*)buf->data(), ni, nj, nplanes(), nplanes(), ni*nplanes(), 1);
+        return new vil2_image_view<bool>(buf, static_cast<bool*>(buf->data()), ni, nj, nplanes(), nplanes(), ni*nplanes(), 1);
       if (bits_per_component_ <= 8)
-        return new vil2_image_view<vxl_byte>(buf, (vxl_byte*)buf->data(), ni, nj, nplanes(), nplanes(), ni*nplanes(), 1);
+        return new vil2_image_view<vxl_byte>(buf, static_cast<vxl_byte*>(buf->data()), ni, nj, nplanes(), nplanes(), ni*nplanes(), 1);
       else if (bits_per_component_ <= 16)
-        return new vil2_image_view<vxl_uint_16>(buf,(vxl_uint_16*)buf->data(),ni, nj, nplanes(), nplanes(), ni*nplanes(), 1);
+        return new vil2_image_view<vxl_uint_16>(buf,static_cast<vxl_uint_16*>(buf->data()),ni, nj, nplanes(), nplanes(), ni*nplanes(), 1);
       else
-        return new vil2_image_view<vxl_uint_32>(buf, (vxl_uint_32*)buf->data(), ni, nj, nplanes(), nplanes(), ni*nplanes(), 1);
+        return new vil2_image_view<vxl_uint_32>(buf, static_cast<vxl_uint_32*>(buf->data()), ni, nj, nplanes(), nplanes(), ni*nplanes(), 1);
 #if 0 // never return vil2_image_view<vil_rgb<T> > : default image representation is planar
     } else if (ncomponents_ == 3) {
       if (bits_per_component_ <= 8)
-        return new vil2_image_view<vil_rgb<vxl_byte> >(buf, (vil_rgb<vxl_byte>*)buf->data(), ni, nj, 1, 1, ni, 1);
+        return new vil2_image_view<vil_rgb<vxl_byte> >(buf, static_cast<vil_rgb<vxl_byte>*>(buf->data()), ni, nj, 1, 1, ni, 1);
       else if (bits_per_component_ <= 16)
-        return new vil2_image_view<vil_rgb<vxl_uint_16> >(buf, (vil_rgb<vxl_uint_16>*)buf->data(), ni, nj, 1, 1, ni, 1);
+        return new vil2_image_view<vil_rgb<vxl_uint_16> >(buf, static_cast<vil_rgb<vxl_uint_16>*>(buf->data()), ni, nj, 1, 1, ni, 1);
       else
-        return new vil2_image_view<vil_rgb<vxl_uint_32> >(buf, (vil_rgb<vxl_uint_32>*)buf->data(), ni, nj, 1, 1, ni, 1);
+        return new vil2_image_view<vil_rgb<vxl_uint_32> >(buf, static_cast<vil_rgb<vxl_uint_32>*>(buf->data()), ni, nj, 1, 1, ni, 1);
     } else return 0;
 #endif // 0
   }

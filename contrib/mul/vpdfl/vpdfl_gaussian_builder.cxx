@@ -52,7 +52,7 @@ vpdfl_gaussian& vpdfl_gaussian_builder::gaussian(vpdfl_pdf_base& model) const
 {
     // need a vpdfl_gaussian
   assert(model.is_class("vpdfl_gaussian"));
-  return (vpdfl_gaussian&) model;
+  return static_cast<vpdfl_gaussian&>(model);
 }
 //=======================================================================
 

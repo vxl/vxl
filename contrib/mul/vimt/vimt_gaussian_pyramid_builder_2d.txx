@@ -149,7 +149,7 @@ void vimt_gaussian_pyramid_builder_2d<T>::build(vimt_image_pyramid& image_pyr,
   //  Require image vimt_image_2d_of<T>
   assert(im.is_a()==work_im_.is_a());
 
-  const vimt_image_2d_of<T>& base_image = (const vimt_image_2d_of<T>&) im;
+  const vimt_image_2d_of<T>& base_image = static_cast<const vimt_image_2d_of<T>&>(im);
 
   int ni = base_image.image().ni();
   int nj = base_image.image().nj();
@@ -170,7 +170,7 @@ void vimt_gaussian_pyramid_builder_2d<T>::build(vimt_image_pyramid& image_pyr,
   // Set up image pyramid
   check_pyr(image_pyr,max_levels);
 
-  vimt_image_2d_of<T>& im0 = (vimt_image_2d_of<T>&) image_pyr(0);
+  vimt_image_2d_of<T>& im0 = static_cast<vimt_image_2d_of<T>&>( image_pyr(0));
 
   // Shallow copy of part of base_image
   im0 = vimt_crop(base_image,0,ni,0,nj);
@@ -178,8 +178,8 @@ void vimt_gaussian_pyramid_builder_2d<T>::build(vimt_image_pyramid& image_pyr,
   int i;
   for (i=1;i<max_levels;i++)
   {
-    vimt_image_2d_of<T>& im_i0 = (vimt_image_2d_of<T>&) image_pyr(i);
-    vimt_image_2d_of<T>& im_i1 = (vimt_image_2d_of<T>&) image_pyr(i-1);
+    vimt_image_2d_of<T>& im_i0 = static_cast<vimt_image_2d_of<T>&>( image_pyr(i));
+    vimt_image_2d_of<T>& im_i1 = static_cast<vimt_image_2d_of<T>&>(image_pyr(i-1));
 
     gauss_reduce(im_i1,im_i0);
   }
@@ -207,7 +207,7 @@ void vimt_gaussian_pyramid_builder_2d<T>::extend(vimt_image_pyramid& image_pyr) 
 
   assert(image_pyr.scale_step() == scale_step());
 
-  vimt_image_2d_of<T>& im_base = (vimt_image_2d_of<T>&) image_pyr(0);
+  vimt_image_2d_of<T>& im_base = static_cast<vimt_image_2d_of<T>&>( image_pyr(0));
   int ni = im_base.image().ni();
   int nj = im_base.image().nj();
 
@@ -236,8 +236,8 @@ void vimt_gaussian_pyramid_builder_2d<T>::extend(vimt_image_pyramid& image_pyr) 
 
     for (i=oldsize;i<max_levels;i++)
     {
-      vimt_image_2d_of<T>& im_i0 = (vimt_image_2d_of<T>&) image_pyr(i);
-      vimt_image_2d_of<T>& im_i1 = (vimt_image_2d_of<T>&) image_pyr(i-1);
+      vimt_image_2d_of<T>& im_i0 = static_cast<vimt_image_2d_of<T>&>( image_pyr(i));
+      vimt_image_2d_of<T>& im_i1 = static_cast<vimt_image_2d_of<T>&>(image_pyr(i-1));
 
       gauss_reduce(im_i1,im_i0);
     }

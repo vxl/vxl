@@ -40,7 +40,7 @@ void test_scale_pyramid_builder_2d1()
 
   TEST("Found correct number of levels", image_pyr.n_levels(), 2);
 
-  const vimt_image_2d_of<vxl_byte>& image1 = (const vimt_image_2d_of<vxl_byte>&) image_pyr(1);
+  const vimt_image_2d_of<vxl_byte>& image1 = static_cast<const vimt_image_2d_of<vxl_byte>&>(image_pyr(1));
   TEST("Level 1 size x",image1.image().ni(),(int)(nx/1.2+0.5));
   TEST("Level 1 size y",image1.image().nj(),(int)(ny/1.2+0.5));
   TEST("Pixel (0,0)",image1.image()(0,0),0);
@@ -82,7 +82,7 @@ void test_scale_pyramid_builder_2d1()
   TEST (("Created " + test_path + " for writing").c_str(),
              (!bfs_out), false);
   vsl_b_write(bfs_out, builder);
-  vsl_b_write(bfs_out, (vimt_image_pyramid_builder*)(&builder));
+  vsl_b_write(bfs_out, static_cast<vimt_image_pyramid_builder*>(&builder));
   bfs_out.close();
 
   vimt_scale_pyramid_builder_2d<vxl_byte> builder_in;

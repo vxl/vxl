@@ -36,9 +36,9 @@ int main(int argc, char** argv)
   vgl_vector_2d<double> u(0.5,0.25);
   vnl_vector<double> v;
   vcl_cout<<"Sampling along (0.5,0.25) starting at (3,3) : "<<vcl_endl;
-  vimt_sample_profile_bilin(v,(const vimt_image_2d_of<vxl_byte>&) image_pyr(0),p0,u,7);
+  vimt_sample_profile_bilin(v,static_cast<const vimt_image_2d_of<vxl_byte>&>( image_pyr(0)),p0,u,7);
   vcl_cout<<"Level 0: "<<v<<vcl_endl;
-  vimt_sample_profile_bilin(v,(const vimt_image_2d_of<vxl_byte>&) image_pyr(1),p0,u,7);
+  vimt_sample_profile_bilin(v,static_cast<const vimt_image_2d_of<vxl_byte>&>(image_pyr(1)),p0,u,7);
   vcl_cout<<"Level 1: "<<v<<vcl_endl;
 
   vcl_cout<<"Notice that the projection of the world co-ordinates ";

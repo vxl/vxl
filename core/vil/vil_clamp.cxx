@@ -32,7 +32,7 @@ vil2_clamp_image_resource::vil2_clamp_image_resource(vil2_image_resource_sptr co
 bool vil2_clamp_image_resource::get_property(char const* tag, void* property_value) const
 {
   if (0==vcl_strcmp(tag, vil2_property_read_only))
-    return property_value ? (*(bool*)property_value) = true : true;
+    return property_value ? (*static_cast<bool*>(property_value)) = true : true;
 
   return src_->get_property(tag, property_value);
 }

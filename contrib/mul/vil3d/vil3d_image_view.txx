@@ -59,15 +59,18 @@ vil3d_image_view<T>::vil3d_image_view(const vil2_memory_chunk_sptr& mem_chunk,
  , planestep_(plane_step)
  , ptr_(mem_chunk)
 {
-  // check view and chunk are in rough agreement
-  assert(mem_chunk->size() >= n_planes*n_i*n_j*n_k*sizeof(T));
-  if (top_left < (const T*)mem_chunk->data() ||
-      top_left >= (const T*)mem_chunk->data() + mem_chunk->size())
-    vcl_cerr << "top_left at " << (const void*)top_left << ", memory_chunk at "
-             << (const void*)mem_chunk->data() << ", size " << mem_chunk->size()
-             << ", size of data type " << sizeof(T) << '\n';
-  assert(top_left >= (const T*)mem_chunk->data() &&
-         top_left  < (const T*)mem_chunk->data() + mem_chunk->size());
+  if (mem_chunk) // if we are doing a view transform on a non-owned image, then mem_chunk will be 0.
+  {
+    // check view and chunk are in rough agreement
+    assert(mem_chunk->size() >= n_planes*n_i*n_j*n_k*sizeof(T));
+    if (top_left < static_cast<const T*>(mem_chunk->data()) ||
+        top_left >= reinterpret_cast<const T*>(static_cast<char*>(mem_chunk->data()) + mem_chunk->size()))
+      vcl_cerr << "top_left at " << static_cast<const void*>(top_left) << ", memory_chunk at "
+               << static_cast<const void*>(mem_chunk->data()) << ", size " << mem_chunk->size()
+               << ", size of data type " << sizeof(T) << '\n';
+    assert(top_left >= static_cast<const T*>(mem_chunk->data()) &&
+           top_left  < reinterpret_cast<const T*>(static_cast<char*>(mem_chunk->data()) + mem_chunk->size()));
+  }
 }
 
 
@@ -172,7 +175,7 @@ void vil3d_image_view<T>::set_size(unsigned n_i, unsigned n_j, unsigned n_k, uns
   kstep_ = n_i*n_j;
   planestep_ = n_i*n_j*n_k;
 
-  top_left_ = (T*) ptr_->data();
+  top_left_ = static_cast<T*>( ptr_->data());
 }
 
 

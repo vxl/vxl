@@ -37,7 +37,7 @@ pdf1d_kernel_pdf& pdf1d_kernel_pdf_builder::kernel_pdf(pdf1d_pdf& model) const
 {
   // require a pdf1d_kernel_pdf
   assert(model.is_class("pdf1d_kernel_pdf"));
-  return (pdf1d_kernel_pdf&) model;
+  return static_cast<pdf1d_kernel_pdf&>(model);
 }
 
 //: Use fixed width kernels of given width when building.
@@ -140,7 +140,7 @@ void pdf1d_kernel_pdf_builder::build(pdf1d_pdf& model, mbl_data_wrapper<double>&
   if (data.is_a()=="mbl_data_array_wrapper<T>")
   {
     mbl_data_array_wrapper<double>& data_array =
-                   (mbl_data_array_wrapper<double>&) data;
+                   static_cast<mbl_data_array_wrapper<double>&>(data);
     build_from_array(model,data_array.data(),n);
     return;
   }
@@ -169,7 +169,7 @@ void pdf1d_kernel_pdf_builder::weighted_build(pdf1d_pdf& model,
 void pdf1d_kernel_pdf_builder::build_fixed_width(pdf1d_kernel_pdf& kpdf,
                                                  const double* data, int n, double width) const
 {
-  vnl_vector_ref<double> v_data(n,(double*) data); // const violation
+  vnl_vector_ref<double> v_data(n,const_cast<double*>(data)); // const violation
   kpdf.set_centres(v_data,width);
 }
 

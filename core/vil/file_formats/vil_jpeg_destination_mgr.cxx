@@ -121,7 +121,7 @@ vil2_jpeg_stream_dst_set (j_compress_ptr cinfo, vil_stream *vs) {
     (*cinfo->mem->alloc_small) ((j_common_ptr) cinfo,
                                 JPOOL_PERMANENT,
                                 SIZEOF(vil2_jpeg_stream_destination_mgr));
-  cinfo->dest = ( jpeg_destination_mgr *) dest;
+  cinfo->dest = reinterpret_cast<jpeg_destination_mgr *>(dest);
 
   // fill in methods in base
   dest->base.init_destination    = vil2_jpeg_init_destination;

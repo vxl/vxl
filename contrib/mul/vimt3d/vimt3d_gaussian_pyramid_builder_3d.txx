@@ -240,12 +240,12 @@ void vimt3d_gaussian_pyramid_builder_3d<T>::build(vimt_image_pyramid& image_pyr,
   assert(im.is_class("vimt3d_image_3d"));
 
   // Cast to the appropriate class
-  const vimt3d_image_3d &im3d = (const vimt3d_image_3d &) im;
+  const vimt3d_image_3d &im3d = static_cast<const vimt3d_image_3d &>(im);
 
   //  Require image vimt3d_image_3d_of<T>
   assert(im3d.image_base().is_a()==work_im1_.is_a());
 
-  const vimt3d_image_3d_of<T>& base_image = (const vimt3d_image_3d_of<T>&) im3d;
+  const vimt3d_image_3d_of<T>& base_image = static_cast<const vimt3d_image_3d_of<T>&>(im3d);
 
   int ni = base_image.image().ni();
   int nj = base_image.image().nj();
@@ -259,7 +259,7 @@ void vimt3d_gaussian_pyramid_builder_3d<T>::build(vimt_image_pyramid& image_pyr,
   // Set up image pyramid
   checkPyr(image_pyr,max_levels);
 
-  vimt3d_image_3d_of<T>& im0 = (vimt3d_image_3d_of<T>&) image_pyr(0);
+  vimt3d_image_3d_of<T>& im0 = static_cast<vimt3d_image_3d_of<T>&>(image_pyr(0));
 
   // Shallow copy of part of base_image
   im0=base_image;
@@ -267,8 +267,8 @@ void vimt3d_gaussian_pyramid_builder_3d<T>::build(vimt_image_pyramid& image_pyr,
   int i;
   for (i=1;i<max_levels;i++)
   {
-    vimt3d_image_3d_of<T>& im_i0 = (vimt3d_image_3d_of<T>&) image_pyr(i);
-    vimt3d_image_3d_of<T>& im_i1 = (vimt3d_image_3d_of<T>&) image_pyr(i-1);
+    vimt3d_image_3d_of<T>& im_i0 = static_cast<vimt3d_image_3d_of<T>&>(image_pyr(i));
+    vimt3d_image_3d_of<T>& im_i1 = static_cast<vimt3d_image_3d_of<T>&>(image_pyr(i-1));
 
     gauss_reduce(im_i0,im_i1);
   }
@@ -311,12 +311,12 @@ void vimt3d_gaussian_pyramid_builder_3d<T>::extend(vimt_image_pyramid& image_pyr
 
   assert(image_pyr.scale_step() == scale_step());
 
-  vimt3d_image_3d_of<T>& im_base = (vimt3d_image_3d_of<T>&) image_pyr(0);
+  vimt3d_image_3d_of<T>& im_base = static_cast<vimt3d_image_3d_of<T>&>(image_pyr(0));
   int ni = im_base.image().ni();
   int nj = im_base.image().nj();
   int nk = im_base.image().nk();
 
-  int max_levels=n_levels((const vimt3d_image_3d_of<T>&)image_pyr(0));
+  int max_levels=n_levels(static_cast<const vimt3d_image_3d_of<T>&>(image_pyr(0)));
 
   work_im1_.set_size(ni,nj,nk);
   work_im2_.set_size(ni,nj,nk);
@@ -333,8 +333,8 @@ void vimt3d_gaussian_pyramid_builder_3d<T>::extend(vimt_image_pyramid& image_pyr
 
     for (i=oldsize;i<max_levels;i++)
     {
-      vimt3d_image_3d_of<T>& im_i0 = (vimt3d_image_3d_of<T>&) image_pyr(i);
-      vimt3d_image_3d_of<T>& im_i1 = (vimt3d_image_3d_of<T>&) image_pyr(i-1);
+      vimt3d_image_3d_of<T>& im_i0 = static_cast<vimt3d_image_3d_of<T>&>(image_pyr(i));
+      vimt3d_image_3d_of<T>& im_i1 = static_cast<vimt3d_image_3d_of<T>&>(image_pyr(i-1));
 
       gauss_reduce(im_i0,im_i1);
     }

@@ -54,7 +54,7 @@ void test_gaussian_pyramid_builder_2d_general_a()
 
   TEST("Found correct number of levels", image_pyr.n_levels(), 2);
 
-  const vimt_image_2d_of<vil_byte>& image1 = (const vimt_image_2d_of<vil_byte>&) image_pyr(1);
+  const vimt_image_2d_of<vil_byte>& image1 = static_cast<const vimt_image_2d_of<vil_byte>&>(image_pyr(1));
   TEST("Level 1 size x",image1.image().ni(),(unsigned)(ni/1.2+0.5));
   TEST("Level 1 size y",image1.image().nj(),(unsigned)(nj/1.2+0.5));
   TEST("Pixel (0,0)",image1.image()(0,0),1);
@@ -95,7 +95,7 @@ void test_gaussian_pyramid_builder_2d_general_a()
   vsl_b_ofstream bfs_out(test_path);
   TEST(("Created " + test_path + " for writing").c_str(), (!bfs_out), false);
   vsl_b_write(bfs_out, builder);
-  vsl_b_write(bfs_out, (vimt_image_pyramid_builder*)(&builder));
+  vsl_b_write(bfs_out, static_cast<vimt_image_pyramid_builder*>(&builder));
   bfs_out.close();
 
   vimt_gaussian_pyramid_builder_2d_general<vil_byte> builder_in;

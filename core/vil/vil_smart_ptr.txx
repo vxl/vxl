@@ -30,7 +30,7 @@ vcl_ostream& operator<< (vcl_ostream& os, vil2_smart_ptr<T> const& r)
 {
   return os << "vil2_smart_ptr<"
             << vil2_smart_ptr_T_as_string<T>::str()
-            << ">(" << (const void*) r.as_pointer() << ")";
+            << ">(" << static_cast<const void*>( r.as_pointer()) << ")";
 }
 
 //--------------------------------------------------------------------------------

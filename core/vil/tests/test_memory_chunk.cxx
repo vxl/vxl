@@ -18,13 +18,13 @@ void test_memory_chunk1()
   TEST("size()",chunk1.size(),25*sizeof(double));
   TEST("format",chunk1.pixel_format(),VIL2_PIXEL_FORMAT_DOUBLE);
 
-  double* data1 = (double*) chunk1.data();
+  double* data1 = static_cast<double*>( chunk1.data());
   data1[3]= 17;
 
   vil2_memory_chunk chunk2 = chunk1;
   TEST("size()",chunk2.size(),25*sizeof(double));
   TEST("format",chunk2.pixel_format(),VIL2_PIXEL_FORMAT_DOUBLE);
-  double* data2 = (double*) chunk2.data();
+  double* data2 = static_cast<double*>( chunk2.data());
   TEST_NEAR("Deep Copy",data1[3],data2[3],1e-8);
 }
 

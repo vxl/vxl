@@ -39,7 +39,7 @@ pdf1d_flat& pdf1d_flat_builder::flat(pdf1d_pdf& model) const
 {
   // require a pdf1d_flat
   assert(model.is_class("pdf1d_flat"));
-  return (pdf1d_flat&) model;
+  return static_cast<pdf1d_flat&>(model);
 }
 
 pdf1d_pdf* pdf1d_flat_builder::new_model() const
@@ -119,7 +119,7 @@ void pdf1d_flat_builder::build(pdf1d_pdf& model, mbl_data_wrapper<double>& data)
   {
     // Use more efficient build_from_array algorithm
     mbl_data_array_wrapper<double>& data_array =
-                       (mbl_data_array_wrapper<double>&) data;
+                       static_cast<mbl_data_array_wrapper<double>&>(data);
     build_from_array(model,data_array.data(),n_samples);
     return;
   }

@@ -61,13 +61,13 @@ vil2_image_view<T>::vil2_image_view(const vil2_smart_ptr<vil2_memory_chunk>& mem
   if (mem_chunk) // if we are doing a view transform on a non-owned image, then mem_chunk will be 0.
   {
     assert(mem_chunk->size() >= n_planes*n_i*n_j*sizeof(T));
-    if (top_left < (const T*)mem_chunk->data() ||
-        top_left >= (const T*)mem_chunk->data() + mem_chunk->size())
-      vcl_cerr << "top_left at " << (const void*)top_left << ", memory_chunk at "
-               << (const void*)mem_chunk->data() << ", size " << mem_chunk->size()
+    if (top_left < static_cast<const T*>(mem_chunk->data()) ||
+        top_left >= reinterpret_cast<const T*>(static_cast<char*>(mem_chunk->data()) + mem_chunk->size()))
+      vcl_cerr << "top_left at " << static_cast<const void*>(top_left) << ", memory_chunk at "
+               << static_cast<const void*>(mem_chunk->data()) << ", size " << mem_chunk->size()
                << ", size of data type " << sizeof(T) << '\n';
-    assert(top_left >= (const T*)mem_chunk->data() &&
-           top_left  < (const T*)mem_chunk->data() + mem_chunk->size());
+    assert(top_left >= static_cast<const T*>(mem_chunk->data()) &&
+           top_left  < reinterpret_cast<const T*>(static_cast<char*>(mem_chunk->data()) + mem_chunk->size()));
   }
 #endif
 }
@@ -163,7 +163,7 @@ inline bool convert_components_from_planes(vil2_image_view<T> &lhs,
     // Check that the steps are suitable for viewing as components
     if (rhs.planestep() != 1 || vcl_abs(rhs.istep())<ncomp || vcl_abs(rhs.jstep())<ncomp ) return false;
     lhs = vil2_image_view<T >(rhs.memory_chunk(),
-                              (T const*) rhs.top_left_ptr(),
+                              reinterpret_cast<T const*>(rhs.top_left_ptr()),
                               rhs.ni(),rhs.nj(),1,
                               rhs.istep()/ncomp,rhs.jstep()/ncomp,1);
     return true;
@@ -540,7 +540,7 @@ void vil2_image_view<T>::set_size(unsigned n_i, unsigned n_j, unsigned n_planes)
   jstep_ = n_i;
   planestep_ = n_i*n_j;
 
-  top_left_ = (T*) ptr_->data();
+  top_left_ = static_cast<T*>( ptr_->data());
 }
 
 

@@ -70,7 +70,7 @@ void vsl_b_read(vsl_b_istream &is, vil2_smart_ptr<T> &p)
       unsigned long id; // Unique serial number indentifying object
       vsl_b_read(is, id);
 
-      T * pointer = (T *) is.get_serialisation_pointer(id);
+      T * pointer = static_cast<T *>( is.get_serialisation_pointer(id));
       if (first_time != (pointer == 0))
       {
         // This checks that the saving stream and reading stream

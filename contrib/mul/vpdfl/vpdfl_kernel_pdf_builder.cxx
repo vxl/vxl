@@ -47,7 +47,7 @@ vpdfl_kernel_pdf& vpdfl_kernel_pdf_builder::kernel_pdf(vpdfl_pdf_base& model) co
 {
   // require a vpdfl_kernel_pdf
   assert(model.is_class("vpdfl_kernel_pdf"));
-  return (vpdfl_kernel_pdf&) model;
+  return static_cast<vpdfl_kernel_pdf&>(model);
 }
 
 //: Use fixed width kernels of given width when building.
@@ -148,7 +148,7 @@ void vpdfl_kernel_pdf_builder::build(vpdfl_pdf_base& model, mbl_data_wrapper<vnl
   if (data.is_a()=="mbl_data_array_wrapper<T>")
   {
     mbl_data_array_wrapper<vnl_vector<double> >& data_array =
-                   (mbl_data_array_wrapper<vnl_vector<double> >&) data;
+                   static_cast<mbl_data_array_wrapper<vnl_vector<double> >&>( data);
     build_from_array(model,data_array.data(),n);
     return;
   }
