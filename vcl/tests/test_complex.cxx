@@ -1,7 +1,3 @@
-// check that forward declaration of vcl_complex<> works.
-#include <vcl_complex_fwd.h>
-vcl_complex<double> doublify(vcl_complex<float> const &);
-
 // now #include the definition of vcl_complex<>
 // and define the doublify() function.
 #include <vcl_complex.h>
