@@ -206,12 +206,12 @@ void bmvv_recon_menus::compute_change_callback()
 {
   bmvv_recon_manager::instance()->compute_change();
 }
-
+#if 0
 void bmvv_recon_menus::display_dense_match_callback()
 {
   bmvv_recon_manager::instance()->display_dense_match();
 }
-
+#endif
 void bmvv_recon_menus::read_f_matrix_callback()
 {
   bmvv_recon_manager::instance()->read_f_matrix();
@@ -290,8 +290,9 @@ vgui_menu bmvv_recon_menus::get_menu()
   menudebug.add("Harris Sweep", harris_sweep_callback);
   menudebug.add("Matched Corners at Z", display_matched_corners_callback);
   menudebug.add("Display Harris 3d", display_harris_3d_callback);
+#if 0
   menudebug.add("Display Dense Match", display_dense_match_callback);
-
+#endif
 
   //Top level menu layout
   menubar.add( "File", menufile);
