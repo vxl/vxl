@@ -124,6 +124,8 @@ MAIN( test_m_est_obj )
   testlib_test_perform( close(m_est3->wgt(1.0,2.0), 1.0/(2.0*2.0)) );
 
   delete m_est;
+  delete m_est2;
+  delete m_est3;
 
   SUMMARY();
 }
