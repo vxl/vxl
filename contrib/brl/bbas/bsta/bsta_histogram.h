@@ -8,11 +8,12 @@
 // \date 5/19/04
 //
 // A templated histogram class.  Supports entropy calculations
-// 
 //
 // \verbatim
 //  Modifications
 // \endverbatim
+
+#include <vcl_vector.h>
 
 template <class T> class bsta_histogram
 {
@@ -23,7 +24,7 @@ template <class T> class bsta_histogram
   unsigned int nbins() const { return nbins_; }
   void upcount(T dir, T mag);
   void parzen(const T sigma);
-  
+
   T p(unsigned int bin) const;
   T area() const;
   T entropy() const;
