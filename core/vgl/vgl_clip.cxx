@@ -83,7 +83,7 @@ bool vgl_clip_line_to_box(double a, double b, double c, // coefficients.
 
 
 extern "C" {
-#include <internals/gpc.h>
+#include "internals/gpc.h"
 }
 
 #define MALLOC(p, T, c, s) {if ((c) > 0) { \
