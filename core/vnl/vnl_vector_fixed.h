@@ -344,9 +344,11 @@ class vnl_vector_fixed
     return result;
   }
 
-
   //: Returns a subvector specified by the start index and length. O(n).
   vnl_vector<T> extract (unsigned int len, unsigned int start=0) const;
+
+  //: Convert to a vnl_vector.
+  vnl_vector<T> as_vector() const { return extract(n); }
 
   //: Replaces elements with index beginning at start, by values of v. O(n).
   vnl_vector_fixed& update (vnl_vector<T> const&, unsigned int start=0);
