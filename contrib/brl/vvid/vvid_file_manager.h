@@ -19,6 +19,7 @@
 #include <vgui/vgui_wrapper_tableau.h>
 #include <vgui/vgui_image_tableau_sptr.h>
 #include <vgui/vgui_rubberband_tableau_sptr.h>
+#include <vgui/vgui_style_sptr.h>
 #include <bgui/bgui_vtol2D_tableau_sptr.h>
 #include <vgui/vgui_viewer2D_tableau_sptr.h>
 #include <strk/strk_art_info_model_sptr.h>
@@ -226,6 +227,8 @@ class vvid_file_manager : public vgui_wrapper_tableau
   vtol_face_2d_sptr long_tip_;
   vtol_face_2d_sptr short_tip_;
   strk_art_info_model_sptr art_model_;
+  vgui_style_sptr on_style_;
+  vgui_style_sptr off_style_;
 };
 
 #endif // vvid_file_manager_h_

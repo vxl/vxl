@@ -24,6 +24,7 @@
 #include <vgui/vgui_wrapper_tableau.h>
 #include <vgui/vgui_grid_tableau_sptr.h>
 #include <vgui/vgui_rubberband_tableau_sptr.h>
+#include <vgui/vgui_style_sptr.h>
 #include <bgui/bgui_picker_tableau_sptr.h>
 #include <bgui/bgui_vtol2D_tableau_sptr.h>
 #include <bgui/bgui_image_tableau_sptr.h>
@@ -73,14 +74,13 @@ class segv_segmentation_manager : public vgui_wrapper_tableau
 
  protected:
   void draw_edges(vcl_vector<vtol_edge_2d_sptr>& edges, bool verts=false);
-  void draw_lines(vcl_vector<vsol_line_2d_sptr> const & line_segs);
   void draw_lines(vcl_vector<vsol_line_2d_sptr> const & line_segs,
-                  float r, float g, float b, int width);
+                  const vgui_style_sptr& style = NULL);
   void draw_polylines(vcl_vector<vsol_polyline_2d_sptr> const & polys);
   void draw_regions(vcl_vector<vtol_intensity_face_sptr>& regions,
                     bool verts=false);
   void draw_points(vcl_vector<vsol_point_2d_sptr> const & points,
-                   float r, float g, float b, int radius);
+                   const vgui_style_sptr& style);
 
   void set_selected_grid_image(vil1_image& image);
   void add_image(vil1_image& image);

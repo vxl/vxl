@@ -21,6 +21,7 @@
 #include <vgui/vgui_easy2D_tableau_sptr.h>
 #include <vgui/vgui_grid_tableau.h>
 #include <vgui/vgui_grid_tableau_sptr.h>
+#include <vgui/vgui_style_sptr.h>
 #include <mvl/FMatrix.h>
 #include <bgui/bgui_vtol2D_tableau_sptr.h>
 #include <bgui/bgui_picker_tableau_sptr.h>
@@ -98,17 +99,11 @@ class bmvv_recon_manager : public vgui_wrapper_tableau
   void draw_corr_point(const float x, const float y);
   void draw_vsol_points(const int cam,
                         vcl_vector<vsol_point_2d_sptr> const & points,
-                        bool clear = true,
-                        const float r = 0,
-                        const float g = 1,
-                        const float b = 0);
+                        bool clear = true, const vgui_style_sptr& style = NULL);
 
   void draw_vsol_point(const int cam,
                        vsol_point_2d_sptr const & point,
-                       bool clear = false,
-                       const float r = 0,
-                       const float g = 1,
-                       const float b = 0);
+                       bool clear = false, const vgui_style_sptr& style = NULL);
 
 void draw_vsol_3d_points(const int cam,
                          vcl_vector<vsol_point_3d_sptr> const& pts3d,

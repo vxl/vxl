@@ -20,6 +20,8 @@
 #include <vgui/vgui_tableau.h>
 #include <vgui/vgui_dialog.h>
 #include <vgui/vgui_utils.h>
+#include <vgui/vgui_style_sptr.h>
+#include <vgui/vgui_style.h>
 #include <bgui/bgui_image_tableau.h>
 #include <bgui/bgui_vtol2D_tableau.h>
 #include <vgui/vgui_easy2D_tableau.h>
@@ -87,7 +89,6 @@ void vvid_file_manager::init()
   //  itab0_ = vgui_image_tableau_new();
   itab0_ = bgui_image_tableau_new();
   easy0_ = bgui_vtol2D_tableau_new(itab0_);
-  easy0_->disable_highlight();
   bgui_vtol2D_rubberband_client* cl0 =  new bgui_vtol2D_rubberband_client(easy0_);
 
   rubber0_ = vgui_rubberband_tableau_new(cl0);
@@ -97,7 +98,6 @@ void vvid_file_manager::init()
 
   itab1_ = bgui_image_tableau_new();
   easy1_ = bgui_vtol2D_tableau_new(itab1_);
-  easy1_->disable_highlight();
   v2D1_ = vgui_viewer2D_tableau_new(easy1_);
   grid_->add_at(v2D1_, 1,0);
   vgui_shell_tableau_sptr shell = vgui_shell_tableau_new(grid_);
@@ -107,6 +107,9 @@ void vvid_file_manager::init()
   short_tip_=0;
   art_model_=0;
   display_frame_repeat_=1;
+
+  on_style_  = vgui_style::new_style(0.0, 1.0, 0.0, 3.0, 4.0);
+  off_style_ = vgui_style::new_style(1.0, 0.0, 0.0, 3.0, 4.0);
 }
 
 //-----------------------------------------------------------
@@ -183,7 +186,8 @@ void vvid_file_manager::display_spatial_objects()
         frame_trail_.get_spatial_objects(temp);
         for (unsigned int i=0;i<temp.size();i++) {
           set_changing_colors( temp[i]->get_tag_id() , &r, &g, &b );
-          easy0_->set_vsol_spatial_object_2d_style(temp[i], r, g, b, 1.0, 2.0 );
+          vgui_style_sptr style = vgui_style::new_style(r, g, b, 1.0, 2.0);
+          easy0_->set_vsol_spatial_object_2d_style(temp[i], style );
           easy0_->add_spatial_object(temp[i]);
         }
       }
@@ -194,7 +198,8 @@ void vvid_file_manager::display_spatial_objects()
 #ifdef DEBUG
           vcl_cout<<'('<<sos[i]->get_tag_id()<<")\n";
 #endif
-          easy0_->set_vsol_spatial_object_2d_style(sos[i], r, g, b, 1.0, 2.0 );
+          vgui_style_sptr style = vgui_style::new_style(r, g, b, 1.0, 2.0);
+          easy0_->set_vsol_spatial_object_2d_style(sos[i], style );
           easy0_->add_spatial_object(sos[i]);
         }
       }
@@ -213,12 +218,12 @@ void vvid_file_manager::display_spatial_objects()
       {
         if (toggle)
         {
-          easy0_->add_spatial_objects(sos, 1.0, 0.0, 0.0, 3.0, 4.0);
+          easy0_->add_spatial_objects(sos, off_style_);
           toggle = !toggle;
         }
         else
         {
-          easy0_->add_spatial_objects(sos, 0.0, 1.0, 0.0, 3.0, 4.0);
+          easy0_->add_spatial_objects(sos, on_style_);
           toggle = !toggle;
         }
       }

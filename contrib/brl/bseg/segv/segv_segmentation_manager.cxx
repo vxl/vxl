@@ -36,6 +36,8 @@
 #include <vgui/vgui_tableau.h>
 #include <vgui/vgui_dialog.h>
 #include <vgui/vgui_macro.h>
+#include <vgui/vgui_style_sptr.h>
+#include <vgui/vgui_style.h>
 #include <vgui/vgui_viewer2D_tableau.h>
 #include <vgui/vgui_shell_tableau.h>
 #include <vgui/vgui_grid_tableau.h>
@@ -310,30 +312,6 @@ segv_segmentation_manager::draw_edges(vcl_vector<vtol_edge_2d_sptr>& edges,
   t2D->post_redraw();
 }
 
-//-----------------------------------------------------------------------------
-//: Draw line segments on the tableau
-//-----------------------------------------------------------------------------
-void segv_segmentation_manager::
-draw_lines(vcl_vector<vsol_line_2d_sptr > const& lines)
-{
-  bgui_vtol2D_tableau_sptr t2D = this->selected_vtol2D_tab();
-  if (!t2D)
-    return;
-  //this->clear_display();
-  vgui_image_tableau_sptr itab = t2D->get_image_tableau();
-  if (!itab)
-  {
-    vcl_cout << "In segv_segmentation_manager::draw_edges - null image tab\n";
-    return;
-  }
-  for (vcl_vector<vsol_line_2d_sptr>::const_iterator lit = lines.begin();
-       lit != lines.end(); lit++)
-  {
-    t2D->add_vsol_line_2d(*lit);
-  }
-
-  t2D->post_redraw();
-}
 
 //-----------------------------------------------------------------------------
 //: Draw polylines on the tableau
@@ -365,7 +343,7 @@ draw_polylines(vcl_vector<vsol_polyline_2d_sptr > const& polys)
 //-----------------------------------------------------------------------------
 void segv_segmentation_manager::
 draw_lines(vcl_vector<vsol_line_2d_sptr > const& lines,
-           float r, float g, float b, int width)
+           const vgui_style_sptr& style)
 {
   bgui_vtol2D_tableau_sptr t2D = this->selected_vtol2D_tab();
   if (!t2D)
@@ -380,7 +358,7 @@ draw_lines(vcl_vector<vsol_line_2d_sptr > const& lines,
   for (vcl_vector<vsol_line_2d_sptr>::const_iterator lit = lines.begin();
        lit != lines.end(); lit++)
   {
-    t2D->add_vsol_line_2d(*lit,r,g,b,width);
+    t2D->add_vsol_line_2d(*lit,style);
   }
 
   t2D->post_redraw();
@@ -390,7 +368,7 @@ draw_lines(vcl_vector<vsol_line_2d_sptr > const& lines,
 //: Draw points on the tableau
 //-----------------------------------------------------------------------------
 void segv_segmentation_manager::
-draw_points(vcl_vector<vsol_point_2d_sptr> const& points, float r, float g, float b, int radius)
+draw_points(vcl_vector<vsol_point_2d_sptr> const& points, const vgui_style_sptr& style)
 {
   bgui_vtol2D_tableau_sptr t2D = this->selected_vtol2D_tab();
   if (!t2D)
@@ -405,7 +383,7 @@ draw_points(vcl_vector<vsol_point_2d_sptr> const& points, float r, float g, floa
   for (vcl_vector<vsol_point_2d_sptr>::const_iterator pit = points.begin();
        pit != points.end(); pit++)
   {
-    t2D->add_vsol_point_2d(*pit,r,g,b,radius);
+    t2D->add_vsol_point_2d(*pit,style);
   }
 
   t2D->post_redraw();
@@ -818,7 +796,8 @@ void segv_segmentation_manager::test_camera_parms()
     gf.transform_grid_points(K,M,calculated_points);
 
     // draw points on image
-    this->draw_points(calculated_points,1.0f,0.0f,0.0f,5);
+    vgui_style_sptr style = vgui_style::new_style(1.0f,0.0f,0.0f,5.0f,1.0f);
+    this->draw_points(calculated_points,style);
   }
   if (show_input_points)
   {
@@ -860,7 +839,8 @@ void segv_segmentation_manager::test_camera_parms()
       vsol_point_2d_sptr point = new vsol_point_2d(points_x[i],points_y[i]);
       input_points.push_back(point);
     }
-    this->draw_points(input_points,0.0f,1.0f,0.0f,4);
+    vgui_style_sptr style = vgui_style::new_style(0.0f,1.0f,0.0f,4.0f,1.0f);
+    this->draw_points(input_points,style);
     delete[] points_x;
     delete[] points_y;
   }
@@ -979,7 +959,8 @@ void segv_segmentation_manager::fit_lines()
     {
       gf.get_debug_lines(mapped_lines);
       gf.get_debug_grid_lines(mapped_grid_lines);
-      this->draw_lines(mapped_grid_lines,1.0f,0.0f,0.0f,1);
+      vgui_style_sptr style = vgui_style::new_style(1.0f,0.0f,0.0f,1.0f,1.0f);
+      this->draw_lines(mapped_grid_lines,style);
     }
     this->draw_lines(mapped_lines);
     return;

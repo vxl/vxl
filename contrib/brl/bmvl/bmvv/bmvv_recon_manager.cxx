@@ -15,6 +15,7 @@
 #include <vgui/vgui_dialog.h>
 #include <vgui/vgui_soview.h>
 #include <vgui/vgui_soview2D.h>
+#include <vgui/vgui_style.h>
 #include <vgui/vgui_image_tableau.h>
 #include <vgui/vgui_easy2D_tableau.h>
 #include <vgui/vgui_viewer2D_tableau.h>
@@ -542,7 +543,7 @@ void bmvv_recon_manager::overlapping_projections_z()
 
 void bmvv_recon_manager::
 draw_vsol_points(const int cam, vcl_vector<vsol_point_2d_sptr> const & points,
-                 bool clear, const float r, const float g, const float b)
+                 bool clear, const vgui_style_sptr& style)
 {
   bgui_vtol2D_tableau_sptr btab = vtol_tabs_[cam];
   if (!btab)
@@ -555,12 +556,12 @@ draw_vsol_points(const int cam, vcl_vector<vsol_point_2d_sptr> const & points,
     btab->clear_all();
   for (vcl_vector<vsol_point_2d_sptr>::const_iterator pit = points.begin();
       pit != points.end(); pit++)
-    btab->add_vsol_point_2d(*pit, r, g, b, 3);
+    btab->add_vsol_point_2d(*pit, style);
 }
 
 void bmvv_recon_manager::
 draw_vsol_point(const int cam, vsol_point_2d_sptr const & point,
-                bool clear, const float r, const float g, const float b)
+                bool clear, const vgui_style_sptr& style)
 {
   bgui_vtol2D_tableau_sptr btab = vtol_tabs_[cam];
   if (!btab)
@@ -571,7 +572,7 @@ draw_vsol_point(const int cam, vsol_point_2d_sptr const & point,
   }
   if (clear)
     btab->clear_all();
-  btab->add_vsol_point_2d(point, r, g, b, 3);
+  btab->add_vsol_point_2d(point, style);
 }
 
 //: color is determined by depth
@@ -604,7 +605,8 @@ draw_vsol_3d_points(const int cam, vcl_vector<vsol_point_3d_sptr> const& pts3d,
     float f = (float)(((*pit)->z()-zmin)*s);
     vcl_cout << "f(" << (*pit)->z() << ")=" << f << vcl_endl;
     vsol_point_2d_sptr p = new vsol_point_2d((*pit)->x(), (*pit)->y());
-    btab->add_vsol_point_2d(p, f, 0, 1-f, 3);
+    vgui_style_sptr style = vgui_style::new_style(f, 0.0f, 1-f, 3.0f, 1.0f);
+    btab->add_vsol_point_2d(p, style);
   }
 }
 
@@ -763,7 +765,8 @@ void bmvv_recon_manager::cross_correlate_harris_z()
   itab->set_image(img);
   itab->post_redraw();
   this->draw_vsol_points(0, orig_cnrs0);
-  this->draw_vsol_points(0, back_proj_cnrs, false, 1, 0, 0);
+  vgui_style_sptr style = vgui_style::new_style(1.0f, 0.0f, 0.0f, 3.0f, 1.0f);
+  this->draw_vsol_points(0, back_proj_cnrs, false, style);
   this->draw_vsol_points(1, matched_corners);
 }
 
@@ -961,8 +964,10 @@ void bmvv_recon_manager::map_harris_corners()
   vcl_vector<vsol_point_2d_sptr> mapped_to_points, orig_to_points;
   if (!sweep_.map_harris_corners(from_cam, z, mapped_to_points, orig_to_points))
     return;
-  this->draw_vsol_points(0, orig_to_points, true, 0, 1, 0);
-  this->draw_vsol_points(0, mapped_to_points, false, 1, 0, 0);
+  vgui_style_sptr orig_style = vgui_style::new_style(0.0f, 1.0f, 0.0f, 3.0f, 1.0f);
+  vgui_style_sptr mapped_style = vgui_style::new_style(1.0f, 0.0f, 0.0f, 3.0f, 1.0f);
+  this->draw_vsol_points(0, orig_to_points, true, orig_style);
+  this->draw_vsol_points(0, mapped_to_points, false, mapped_style);
 }
 
 void bmvv_recon_manager::match_harris_corners()
@@ -984,8 +989,10 @@ void bmvv_recon_manager::match_harris_corners()
   if (!sweep_.match_harris_corners(from_cam, z, matched_to_points,
                                    orig_to_points))
     return;
-  this->draw_vsol_points(0, orig_to_points, true, 0, 1, 0);
-  this->draw_vsol_points(0, matched_to_points, false, 1, 0, 0);
+  vgui_style_sptr orig_style = vgui_style::new_style(0.0f, 1.0f, 0.0f, 3.0f, 1.0f);
+  vgui_style_sptr mapped_style = vgui_style::new_style(1.0f, 0.0f, 0.0f, 3.0f, 1.0f);
+  this->draw_vsol_points(0, orig_to_points, true, orig_style);
+  this->draw_vsol_points(0, matched_to_points, false, mapped_style);
 }
 
 void bmvv_recon_manager::harris_sweep()
@@ -1028,7 +1035,8 @@ void bmvv_recon_manager::display_matched_corners()
   if (!n)
     return;
   //for now assume we display on pane 0
-  this->draw_vsol_points(0, matched_points, true, 0, 1, 0);
+  vgui_style_sptr style = vgui_style::new_style(0.0f, 1.0f, 0.0f, 3.0f, 1.0f);
+  this->draw_vsol_points(0, matched_points, true, style);
 }
 
 void bmvv_recon_manager::display_harris_3d()
