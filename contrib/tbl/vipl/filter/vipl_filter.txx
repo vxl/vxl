@@ -178,7 +178,7 @@ template < class ImgIn, class ImgOut, class DataIn, class DataOut, int Arity, cl
 
 template < class ImgIn, class ImgOut, class DataIn, class DataOut, int Arity, class PixelItr>
   vipl_filter< ImgIn, ImgOut, DataIn, DataOut, Arity, PixelItr >
-                         ::vipl_filter(const vipl_filter< ImgIn, ImgOut, DataIn, DataOut, Arity, PixelItr > &t)
+                         ::vipl_filter(vipl_filter< ImgIn, ImgOut, DataIn, DataOut, Arity, PixelItr > const& t)
   : vipl_filter_abs (t),
     hsimage_border_size(t.hsimage_border_size),
     hsdef_fill_value(t.hsdef_fill_value),
@@ -375,7 +375,7 @@ template < class ImgIn, class ImgOut, class DataIn, class DataOut, int Arity, cl
 // refcount
 template < class ImgIn, class ImgOut, class DataIn, class DataOut, int Arity, class PixelItr>
   bool vipl_filter< ImgIn, ImgOut, DataIn, DataOut, Arity, PixelItr >
-                        ::put_in_data_ptr(const ImgIn* fpointer , int index)
+                        ::put_in_data_ptr(ImgIn const* fpointer , int index)
 {
   if (UNCHANGED(input_state()) || NOT_READY(input_state()))
     ref_input_state() = Ready;
