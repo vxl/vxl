@@ -17,7 +17,6 @@ MANPAGE_SOURCES += vgl_vector_3d.txx
 SOURCES += vgl_1d_basis.cxx
 MANPAGE_SOURCES += vgl_1d_basis.txx
 SOURCES += vgl_homg.cxx
-MANPAGE_SOURCES += vgl_homg_1d.txx
 
 # Points
 MANPAGE_SOURCES += vgl_homg_point_1d.txx
@@ -30,6 +29,7 @@ MANPAGE_SOURCES += vgl_homg_point_3d.txx
 MANPAGE_SOURCES += vgl_line_2d.txx
 MANPAGE_SOURCES += vgl_homg_line_2d.txx
 MANPAGE_SOURCES += vgl_homg_line_3d_2_points.txx
+MANPAGE_SOURCES += vgl_line_3d_2_points.txx
 MANPAGE_SOURCES += vgl_line_segment_2d.txx
 MANPAGE_SOURCES += vgl_line_segment_3d.txx
 
