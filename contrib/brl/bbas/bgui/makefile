@@ -27,6 +27,8 @@ MANPAGE_SOURCES += bgui_easy2D_tableau_sptr.h
 SOURCES += bgui_linked_vsol2D_tableau.cxx
 MANPAGE_SOURCES += bgui_linked_vsol2D_tableau_sptr.h
 SOURCES += bgui_linked_vsol_soview2D.cxx
+SOURCES += bgui_histogram_tableau.cxx
+MANPAGE_SOURCES += bgui_histogram_tableau_sptr.h
 
 ################################
 include ${IUEROOT}/config/top.mk
