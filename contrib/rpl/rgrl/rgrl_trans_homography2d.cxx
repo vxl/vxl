@@ -6,6 +6,8 @@
 #include <vnl/algo/vnl_svd.h>
 #include <vnl/vnl_vector_fixed.h>
 #include <vnl/vnl_math.h>
+#include <vnl/vnl_double_2.h>
+#include <vnl/vnl_double_3.h>
 
 #include "rgrl_trans_homography2d.h"
 #include "rgrl_util.h"
@@ -66,30 +68,29 @@ transfer_error_covar( vnl_vector<double> const& from_loc  ) const
   assert ( is_covar_set() );
   assert ( from_loc.size() ==2 );
 
-  vnl_matrix<double> J_wrt_h( 2, 9, 0.0 );
-  vnl_vector<double> h_0 = H_.get_row(0);
-  vnl_vector<double> h_1 = H_.get_row(1);
-  vnl_vector<double> h_2 = H_.get_row(2);
-  vnl_vector_fixed<double,3> p(from_loc[0]-from_centre_[0], from_loc[1]-from_centre_[1], 1);
-  double h_0Tp = dot_product(h_0, p);
-  double h_1Tp = dot_product(h_1, p);
-  double h_2Tp_inv = 1/dot_product(h_2, p);
+  vnl_matrix_fixed<double, 2, 9 > base_jac, jac;
+  vnl_matrix_fixed<double, 3, 9 > jf(0.0); // homogeneous coordinate
+  vnl_matrix_fixed<double, 2, 3 > jg(0.0); // inhomo, [u/w, v/w]^T
+  vnl_double_3 from_homo( from_loc[0]-from_centre_[0],
+                          from_loc[1]-from_centre_[1],
+                          1.0 );
+  // transform coordinate
+  vnl_double_3 mapped_homo = H_ * from_homo;
 
-  J_wrt_h(0,0) = J_wrt_h(1,3) = p[0];
-  J_wrt_h(0,1) = J_wrt_h(1,4) = p[1];
-  J_wrt_h(0,2) = J_wrt_h(1,5) = p[2];
+  // homogeneous coordinate w.r.t homography parameters
+  jf(0,0) = jf(1,3) = jf(2,6) = from_homo[0]; // x
+  jf(0,1) = jf(1,4) = jf(2,7) = from_homo[1]; // y
+  jf(0,2) = jf(1,5) = jf(2,8) = 1.0;
+  // derivatives w.r.t division
+  jg(0,0) = 1.0/mapped_homo[2];
+  jg(0,2) = -mapped_homo[0]/vnl_math_sqr(mapped_homo[2]);
+  jg(1,1) = 1.0/mapped_homo[2];
+  jg(1,2) = -mapped_homo[1]/vnl_math_sqr(mapped_homo[2]);
+  // since Jab_g(f(p)) = Jac_g * Jac_f
+  jac = jg * jf;
 
-  J_wrt_h(0,6) = -1*p[0]*h_0Tp*h_2Tp_inv;
-  J_wrt_h(0,7) = -1*p[1]*h_0Tp*h_2Tp_inv;
-  J_wrt_h(0,8) = -1*p[2]*h_0Tp*h_2Tp_inv;
-
-  J_wrt_h(1,6) = -1*p[0]*h_1Tp*h_2Tp_inv;
-  J_wrt_h(1,7) = -1*p[1]*h_1Tp*h_2Tp_inv;
-  J_wrt_h(1,8) = -1*p[2]*h_1Tp*h_2Tp_inv;
-
-  J_wrt_h *= h_2Tp_inv;
-
-  return J_wrt_h * covar_ * J_wrt_h.transpose();
+  return jac * covar_ * jac.transpose();
+    
 }
 
 //: Inverse map using pseudo-inverse of H_.
