@@ -155,8 +155,61 @@ void test_lda()
   vcl_cout<<"c0 %correct= "<< prop0<<vcl_endl
           <<"c1 %correct= "<< prop1<<vcl_endl;
 
+
+  // extract principle eigenvector + use for classification
+  vnl_matrix<double> b= lda.basis();
+  vnl_vector<double> eig_vec= b.get_column(0);
+  vcl_cout<<"eig_vec= "<<eig_vec<<vcl_endl;
+
+   // Test classfication error is reasonable, just using one eigenvector.
+  //actually method above only uses one eigenvector anyway, so results are 
+  //the same!
+  double mean0=dot_product( lda.class_mean(0), eig_vec );
+  double mean1=dot_product( lda.class_mean(1), eig_vec );
+  c0_count=0;
+  c1_count=0;
+  for (int i=0;i<n_data;++i)
+  {
+    double dp0=dot_product( test_d0[i], eig_vec );
+    //vcl_cout<<"dp0= "<<dp0<<vcl_endl;
+  
+    double dm0, dm1;
+    dm0= (dp0-mean0)*(dp0-mean0);
+    dm1= (dp0-mean1)*(dp0-mean1);
+    int c0;
+    if ( dm0< dm1) 
+      c0=0;
+    else
+      c0=1;
+
+    if (c0 == 0) c0_count++;
+    
+    double dp1=dot_product( test_d1[i], eig_vec );
+    //vcl_cout<<"dp1= "<<dp1<<vcl_endl;
+    
+    dm0= (dp1-mean0)*(dp1-mean0);
+    dm1= (dp1-mean1)*(dp1-mean1);
+
+    int c1;
+    if ( dm0< dm1) 
+      c1=0;
+    else
+      c1=1;
+
+    if (c1 == 1) c1_count++;
+  }
+
+  prop0=c0_count*1.0/n_data;
+  prop1=c1_count*1.0/n_data;
+
+  
+  vcl_cout<<"c0 %correct= "<< prop0<<vcl_endl;
+  vcl_cout<<"c1 %correct= "<< prop1<<vcl_endl;
+
+
   TEST_NEAR("Test prop correct prop0>0.9", prop0, 1.0, 0.1);
   TEST_NEAR("Test prop correct prop1>0.8", prop1, 1.0, 0.2);
+
 }
 
 TESTLIB_DEFINE_MAIN(test_lda);
