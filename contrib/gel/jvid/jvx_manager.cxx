@@ -59,9 +59,10 @@ void jvx_manager::load_video_file()
   if (!load_image_dl.ask())
     return;
 
+#ifdef HAS_MPEG
   //need to define callbacks
   load_mpegcodec_callback = &jvid_load_mpegcodec_callback;
-
+#endif
   _my_movie = vidl_io::load_movie(image_filename.c_str());
   if (!_my_movie) {
     vgui_error_dialog("Failed to load movie file");

@@ -19,11 +19,17 @@
 #include <vgui/vgui_dialog.h>
 #include <vidl/vidl_movie.h>
 #include <vidl/vidl_codec_callbacks.h>
+
+#ifdef HAS_MPEG
 #include <vidl/vidl_mpegcodec.h>
 
 extern void (*load_mpegcodec_callback)(vidl_codec*);
 
-//define some callbacks here
+//define mpeg callback here
+//this dialog box queries the user for info
+//necessary to initialize the codec. normally, this
+//would be done by reading the header, but that is
+//not implemented here.
 void
 jvid_load_mpegcodec_callback(vidl_codec * vc)
 {
@@ -55,6 +61,7 @@ jvid_load_mpegcodec_callback(vidl_codec * vc)
   mpegcodec->init();
 }
 
+#endif
 class jvx_manager : public vgui_grid_tableau
 {
  public:
