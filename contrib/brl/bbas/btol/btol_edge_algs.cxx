@@ -54,10 +54,11 @@ bool btol_edge_algs::unlink_all_inferiors_twoway(vtol_edge_2d_sptr& e)
     }
   toe->unlink_inferior(*inf_two_chain);
   inf_two_chain->unlink_inferior(*tv1);
-  if(!(tv1==tv2))
-	inf_two_chain->unlink_inferior(*tv2);
+  if (!(tv1==tv2))
+    inf_two_chain->unlink_inferior(*tv2);
   return true;
 }
+
 //:
 //-----------------------------------------------------------------------------
 // Replaces va by vb on edge e.
@@ -84,6 +85,7 @@ bool btol_edge_algs::subst_vertex_on_edge(vtol_vertex_sptr& va,
     }
   return false;
 }
+
 //:
 //-----------------------------------------------------------------------------
 // Computes the bounding box for a set of edges
@@ -109,6 +111,7 @@ vsol_box_2d btol_edge_algs::bounding_box(vcl_vector<vtol_edge_2d_sptr>& edges)
     }
   return b;
 }
+
 //: a bit more convenient interface for finding edges than messing with iterators
 void btol_edge_algs::edge_2d_erase(vcl_vector<vtol_edge_2d_sptr>& edges,
                                    vtol_edge_2d_sptr& e)

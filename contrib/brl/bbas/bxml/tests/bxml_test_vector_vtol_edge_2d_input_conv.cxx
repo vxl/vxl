@@ -64,13 +64,13 @@ int main(int, char **)
   }
   bxml_input_converter::clear();
   int j = 0;
-  for(vcl_vector<vtol_edge_2d_sptr>::iterator eit = edges_2d.begin();
-      eit!= edges_2d.end(); eit++, j++)
+  for (vcl_vector<vtol_edge_2d_sptr>::iterator eit = edges_2d.begin();
+       eit!= edges_2d.end(); eit++, j++)
     vcl_cout << "eout[ " << j << "]" << *(*eit) << vcl_endl;
 
-  vcl_cout << "finished testing vxml_vtol_edge_2d_input_converter" 
-           << vcl_endl;
+  vcl_cout << "finished testing vxml_vtol_edge_2d_input_converter\n";
+
   vcl_cout << "Test Summary: " << success << " tests succeeded, "
            << failures << " tests failed" << (failures?"\t***\n":"\n");
-    return failures;
-  }
+  return failures;
+}

@@ -45,7 +45,6 @@ bgui_vtol_soview2D_face* bgui_vtol2D_tableau::add_face(vtol_face_2d_sptr& f)
   return obj;
 }
 
-
 void bgui_vtol2D_tableau::add_edges(vcl_vector<vtol_edge_2d_sptr>& edges,
                                     bool verts)
 {
@@ -97,5 +96,4 @@ bgui_vtol2D_tableau::add_faces(vcl_vector<vtol_face_2d_sptr>& faces,
            delete vts;
          }
      }
-
 }
