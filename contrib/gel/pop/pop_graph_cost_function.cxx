@@ -6,7 +6,7 @@
 //: constructor
 //  We send in the parameters that can change,
 //  the residuals that would be evaluated and the pop manager
-//  that is reponsible for updating the graph based on the
+//  that is responsible for updating the graph based on the
 //  current parameter values.
 pop_graph_cost_function::pop_graph_cost_function(vcl_vector<pop_parameter*> &params,
                                                  vcl_vector<pop_geometric_cost_function*> &cfs,
@@ -43,7 +43,7 @@ void pop_graph_cost_function::f(vnl_vector<double> const &x, vnl_vector<double> 
 }
 
 
-//: get the current parameter valuse
+//: get the current parameter value
 vnl_vector<double> pop_graph_cost_function::get_parameter_values()
 {
   vnl_vector<double> x(params_.size());

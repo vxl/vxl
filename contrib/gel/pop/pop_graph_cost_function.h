@@ -12,16 +12,12 @@
 //            Peter Tu April 2003
 //            General Electric
 //
-// \verbatim
-// \endverbatim
-//
 //-------------------------------------------------------------------------------
 #include <vnl/vnl_least_squares_function.h>
 #include <vcl_vector.h>
 #include <pop/pop_parameter.h>
 #include <pop/pop_geometric_cost_function.h>
 #include <pop/pop_manager.h>
-
 
 //: A parameter that can be optimized
 class pop_graph_cost_function : public vnl_least_squares_function
@@ -30,7 +26,7 @@ class pop_graph_cost_function : public vnl_least_squares_function
   //: constructor
   //  We send in the parameters that can change,
   //  the residuals that would be evaluated and the pop manager
-  //  that is reponsible for updating the graph based on the
+  //  that is responsible for updating the graph based on the
   //  current parameter values.
   pop_graph_cost_function(vcl_vector<pop_parameter*> &params,
                           vcl_vector<pop_geometric_cost_function*> &cfs,
