@@ -39,7 +39,7 @@ Package=<4>
     Project_Dep_Name vpl
     End Project Dependency
     Begin Project Dependency
-    Project_Dep_Name vtl
+    Project_Dep_Name vul
     End Project Dependency
     Begin Project Dependency
     Project_Dep_Name vcgl
@@ -1119,7 +1119,7 @@ Package=<4>
 
 ###############################################################################
 
-Project: "vtl"=.\vtl\vtl.dsp - Package Owner=<4>
+Project: "vul"=.\vul\vul.dsp - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -1191,7 +1191,7 @@ Package=<4>
     Project_Dep_Name vpl
     End Project Dependency
     Begin Project Dependency
-    Project_Dep_Name vtl
+    Project_Dep_Name vul
     End Project Dependency
     Begin Project Dependency
     Project_Dep_Name vcgl
