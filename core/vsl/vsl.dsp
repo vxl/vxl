@@ -206,6 +206,9 @@ SOURCE=.\vsl_binary_loader_base.cxx
 # Begin Source File
 SOURCE=.\vsl_indent.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\vsl_vector_io_vector_bool.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter ""
