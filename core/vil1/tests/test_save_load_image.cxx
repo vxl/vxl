@@ -516,7 +516,7 @@ MAIN( test_save_load_image )
   // SGI "iris" rgb
 #if 1
   vil1_test_image_type("iris", image8);
-//vil1_test_image_type("iris", image16); // not implemented yet
+  vil1_test_image_type("iris", image16);
   vil1_test_image_type("iris", image3p);
 #endif
 
