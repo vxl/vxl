@@ -34,6 +34,7 @@ public:
   vcl_vector<gmvl_node_ref> get_connected_nodes( const gmvl_node_ref node) const;
   vcl_vector<gmvl_node_ref> get_connected_nodes( const gmvl_node_ref node1, const gmvl_node_ref node2) const;
   vcl_vector<gmvl_node_ref> get_connected_nodes( const gmvl_node_ref node1, const gmvl_node_ref node2, const gmvl_node_ref node3) const;
+  vcl_vector<gmvl_node_ref> get_connected_nodes( const vcl_vector<gmvl_node_ref> nodes) const;
 
   // output
   friend ostream &operator<<( ostream &os, const gmvl_database db);

@@ -32,7 +32,6 @@ void gmvl_database::add_connection( const gmvl_node_ref node1, const gmvl_node_r
     add_node( node2);
 
   connectioncache_.add( node1, node2);
-  //  connectioncache_.rebuild();
 }
 
 void gmvl_database::add_connections( const gmvl_node_ref node1, vcl_vector<gmvl_node_ref> nodes)
@@ -92,6 +91,22 @@ vcl_vector<gmvl_node_ref> gmvl_database::get_connected_nodes( const gmvl_node_re
   
   return l;
 }
+
+// n way connection
+vcl_vector<gmvl_node_ref> gmvl_database::get_connected_nodes( const vcl_vector<gmvl_node_ref> nodes) const
+{
+  vcl_vector<int> c= connectioncache_.get_connected_nodes( nodes);
+  vcl_vector<gmvl_node_ref> l;
+
+  for( int i=0; i< c.size(); i++)
+    {
+      l.push_back( nodecache_.get( c[i]));
+    }
+  
+  return l;
+}
+
+
 
 
 // input / output

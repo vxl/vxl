@@ -30,11 +30,12 @@ public:
   vcl_vector<int> get_connected_nodes( const gmvl_node_ref node1,
 				       const gmvl_node_ref node2,
 				       const gmvl_node_ref node3) const;
+  vcl_vector<int> get_connected_nodes( const vcl_vector<gmvl_node_ref> nodes) const;
 
   void rebuild();
 
   // input output
-  friend ostream &operator<<( ostream &os, const gmvl_connection_cache c);
+  friend ostream &operator<<( ostream &os, const gmvl_connection_cache &c);
 
 protected:
 
@@ -48,6 +49,6 @@ protected:
   gbl_bit_array_2d cachebool_;
 };
 
-ostream &operator<<( ostream &os, const gmvl_connection_cache c);
+ostream &operator<<( ostream &os, const gmvl_connection_cache &c);
 
 #endif

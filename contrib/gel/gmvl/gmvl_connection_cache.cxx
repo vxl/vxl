@@ -39,22 +39,7 @@ void gmvl_connection_cache::add( const gmvl_node_ref node1, const gmvl_node_ref 
 
       if( biggest>= cachebool_.rows())
 	{
-	  cerr << "Creating stuff..." << endl;
-
-	  //	  gbl_bit_array_2d temp( (biggest+1)*2, (biggest+1)*2, false);
-
 	  cachebool_.enlarge( (biggest+1)*2, (biggest+1)*2);
-
-	  cerr << "Size = " << cachebool_.rows();
-	  //	  cerr << "Size = " << temp.rows();
-	  
-	  // 	  for( int ci=0; ci< cachebool_.rows(); ci++) 
-	  // 	    for( int cj=0; cj< cachebool_.cols(); cj++)
-	  // 	      temp.put(ci,cj, cachebool_(ci,cj));
-
-	  cerr << " done" << endl;
-
-	  //	  cachebool_= temp;
 	}
 
       cache_[node1->ref_].push_back( node2->ref_);
@@ -96,9 +81,34 @@ vcl_vector<int> gmvl_connection_cache::get_connected_nodes( const gmvl_node_ref 
   return d;
 }
 
+vcl_vector<int> gmvl_connection_cache::get_connected_nodes( const vcl_vector<gmvl_node_ref> nodes) const
+{
+  vcl_vector<int> c= get_connected_nodes( nodes[0]);
+  vcl_vector<int> d;
+
+  for( int i=0; i< c.size(); i++)
+    {
+      bool ok= true;
+
+      for( int j=1; (j< nodes.size()) && ok; j++)
+	{
+	  if( !cachebool_(nodes[j]->ref_,c[i]))
+	    ok= false;
+	}
+      
+      if( ok)
+	d.push_back(c[i]);
+    }
+
+  return d;
+}
+
+// house-keeping
+
 void gmvl_connection_cache::rebuild()
 {
   cache_.clear();
+  assert(false);
 
   for( int i=0; i< connections_.size(); i++)
     {
@@ -134,7 +144,7 @@ void gmvl_connection_cache::rebuild()
 
 // input / output
 
-ostream &operator<<( ostream &os, const gmvl_connection_cache c)
+ostream &operator<<( ostream &os, const gmvl_connection_cache &c)
 {
   //  for( int i=0; i< c.connections_.size(); i++)
   //    os << *c.connections_[i];
@@ -154,7 +164,6 @@ ostream &operator<<( ostream &os, const gmvl_connection_cache c)
     }
 
   os << endl << c.cachebool_ << endl;
-
 
   return os;
 }
