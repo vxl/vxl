@@ -403,8 +403,7 @@ void brip_vil1_float_ops::hessian_3x3(vil1_memory_image_of<float> const & input,
 vil1_memory_image_of<float>
 brip_vil1_float_ops::beaudet(vil1_memory_image_of<float> const & Ixx,
                              vil1_memory_image_of<float> const & Ixy,
-                             vil1_memory_image_of<float> const & Iyy
-                             )
+                             vil1_memory_image_of<float> const & Iyy)
 {
   int w = Ixx.width(), h = Ixx.height();
   vil1_memory_image_of<float> output;
@@ -841,7 +840,7 @@ convert_to_IHS(vil1_memory_image_of<vil1_rgb<unsigned char> >const& image,
       }
 }
 
-#if 0
+#if 0 // this method commented out
 void brip_vil1_float_ops::
 display_IHS_as_RGB(vil1_memory_image_of<float> const& I,
                    vil1_memory_image_of<float> const& H,
@@ -877,7 +876,7 @@ display_IHS_as_RGB(vil1_memory_image_of<float> const& I,
         image(c,r)=v;
       }
 }
-#endif
+#endif // 0
 
 //: map so that intensity is proportional to saturation and hue is color
 void brip_vil1_float_ops::
@@ -1484,38 +1483,38 @@ static bool clip_box(vsol_box_2d_sptr const& box, vsol_box_2d_sptr& clip)
 {
   clip = new vsol_box_2d();
   double xmin = 0, xmax =0, ymin = 0, ymax=0;
-  if(box->get_min_x()<0)
+  if (box->get_min_x()<0)
     xmin = 0;
-  if(box->get_min_y()<0)
+  if (box->get_min_y()<0)
     ymin = 0;
-  if(box->get_max_x()<0)
+  if (box->get_max_x()<0)
     return false;
-  if(box->get_max_y()<0)
+  if (box->get_max_y()<0)
     return false;
   xmax = box->get_max_x();
   ymax = box->get_max_y();
-  if(xmin == xmax)
+  if (xmin == xmax)
     return false;
-  if(ymin == ymax)
+  if (ymin == ymax)
     return false;
   clip->add_point(xmin, ymin);
   clip->add_point(xmax, ymax);
   return true;
 }
 //: Transform the input to the output by a homography.
-//  if the output size is fixed then only the corresponding 
+//  if the output size is fixed then only the corresponding
 //  region of input image space is transformed.
 bool brip_vil1_float_ops::homography(vil1_memory_image_of<float> const & input,
                                      vgl_h_matrix_2d<double>const& H,
                                      vil1_memory_image_of<float>& output,
                                      bool output_size_fixed)
 {
-  if(!input)
+  if (!input)
     return false;
   // smooth the input to condition interpolation
-  vil1_memory_image_of<float> gimage = 
+  vil1_memory_image_of<float> gimage =
     brip_vil1_float_ops::gaussian(input, 0.5);
-  
+
   //First, there is some rather complex bookeeping to insure that
   //the input and output image rois are consistent with the homography.
 
@@ -1533,60 +1532,60 @@ bool brip_vil1_float_ops::homography(vil1_memory_image_of<float> const & input,
   input_roi->add_point(win, hin);
   input_poly = bsol_algs::poly_from_box(input_roi);
   //Case I
-  // the output image size and input transform can be adjusted 
+  // the output image size and input transform can be adjusted
   // to map the transformed image onto the full range
-  if(!output_size_fixed)
-    {
-      if(!bsol_algs::homography(input_poly, H, output_poly))
-        return false;
-      vsol_box_2d_sptr temp = output_poly->get_bounding_box();
-      output.resize(temp->width(), temp->height());
-      for(int x = 0; x<output.width(); x++)
-        for(int y = 0; y<output.height(); y++)
-          output(x,y) = 0;
-      //offset the transform and transformed roi so that lower left is (0,0)
-      output_roi = new vsol_box_2d();
-      output_roi->add_point(0, 0);
-      output_roi->add_point(temp->width(), temp->height());
-      vnl_matrix_fixed<double,3, 3> Mt = H.get_matrix();      
-      Mt[0][2] -= temp->get_min_x();  Mt[1][2] -= temp->get_min_y();
-      vnl_matrix_fixed<double,3, 3> Mtinv = vnl_inverse(Mt);
-      Hinv = vgl_h_matrix_2d<double> (Mtinv);
-    }
-  else // Case II, the output image size is fixed so we have to find the 
-    {  // inverse mapping of the output roi and intersect with the input roi
-      //  to determine the domain of the mapping
-      if(!output)
-        return false;
-      //The output roi and poly
-      wout = output.width(); hout = output.height();
-      output_roi = new vsol_box_2d();
-      output_roi->add_point(0, 0);
-      output_roi->add_point(wout, hout);
-      output_poly = bsol_algs::poly_from_box(output_roi);
+  if (!output_size_fixed)
+  {
+    if (!bsol_algs::homography(input_poly, H, output_poly))
+      return false;
+    vsol_box_2d_sptr temp = output_poly->get_bounding_box();
+    output.resize(temp->width(), temp->height());
+    for (int x = 0; x<output.width(); x++)
+      for (int y = 0; y<output.height(); y++)
+        output(x,y) = 0;
+    //offset the transform and transformed roi so that lower left is (0,0)
+    output_roi = new vsol_box_2d();
+    output_roi->add_point(0, 0);
+    output_roi->add_point(temp->width(), temp->height());
+    vnl_matrix_fixed<double,3, 3> Mt = H.get_matrix();
+    Mt[0][2] -= temp->get_min_x();  Mt[1][2] -= temp->get_min_y();
+    vnl_matrix_fixed<double,3, 3> Mtinv = vnl_inverse(Mt);
+    Hinv = vgl_h_matrix_2d<double> (Mtinv);
+  }
+  else // Case II, the output image size is fixed so we have to find the
+  {  // inverse mapping of the output roi and intersect with the input roi
+    //  to determine the domain of the mapping
+    if (!output)
+      return false;
+    //The output roi and poly
+    wout = output.width(); hout = output.height();
+    output_roi = new vsol_box_2d();
+    output_roi->add_point(0, 0);
+    output_roi->add_point(wout, hout);
+    output_poly = bsol_algs::poly_from_box(output_roi);
 
-      //Construct the reverse mapping of the output bounds 
-      vsol_polygon_2d_sptr tpoly;      
-      Hinv = H.get_inverse();
-      if(!bsol_algs::homography(output_poly, Hinv, tpoly))
-        return false;
+    //Construct the reverse mapping of the output bounds
+    vsol_polygon_2d_sptr tpoly;
+    Hinv = H.get_inverse();
+    if (!bsol_algs::homography(output_poly, Hinv, tpoly))
+      return false;
 
-      //form the roi corresponding to the inverse mapped output bounds
-      vsol_box_2d_sptr tbox = tpoly->get_bounding_box();
+    //form the roi corresponding to the inverse mapped output bounds
+    vsol_box_2d_sptr tbox = tpoly->get_bounding_box();
 
-      //intersect with the input image bounds to get the input roi
-      vsol_box_2d_sptr temp;
-      if(!bsol_algs::intersection(tbox, input_roi, temp))
-        return false;
-      input_roi = temp;
-    }
+    //intersect with the input image bounds to get the input roi
+    vsol_box_2d_sptr temp;
+    if (!bsol_algs::intersection(tbox, input_roi, temp))
+      return false;
+    input_roi = temp;
+  }
   //At this point we have the correct bounds for the input and
   //the output image
 
   //Iterate over the output image space and map the location of each
   //pixel into the input image space. Then carry out interpolation to
   //get the value of each output pixel
- 
+
   // Dimensions of the input image
   int ailow  = input_roi->get_min_x();
   int aihigh = input_roi->get_max_x();
@@ -1601,87 +1600,85 @@ bool brip_vil1_float_ops::homography(vil1_memory_image_of<float> const & input,
 
   /* The inverse transform is used to map backwards from the output */
   const vnl_matrix_fixed<double,3,3>& Minv = Hinv.get_matrix();
-   
+
   /* Now use Hinv to transform the image */
-  for(int i = bilow; i<bihigh; i++)
-    for(int j = bjlow; j<bjhigh; j++)
+  for (int i = bilow; i<bihigh; i++)
+    for (int j = bjlow; j<bjhigh; j++)
+    {
+      /* Transform the pixel */
+      float val;
+      double u = Minv[0][0] * i + Minv[0][1] * j + Minv[0][2];
+      double v = Minv[1][0] * i + Minv[1][1] * j + Minv[1][2];
+      double w = Minv[2][0] * i + Minv[2][1] * j + Minv[2][2];
+      u /= w;
+      v /= w;
+
+      /* Now do linear interpolation */
       {
-        /* Transform the pixel */
-        float val;
-        double u = Minv[0][0] * i + Minv[0][1] * j + Minv[0][2];
-        double v = Minv[1][0] * i + Minv[1][1] * j + Minv[1][2];
-        double w = Minv[2][0] * i + Minv[2][1] * j + Minv[2][2];
-        u /= w;
-        v /= w;
+        int iu = (int) u;
+        int iv = (int) v;
+        double fu = u - iu;
+        double fv = v - iv;
 
-        /* Now do linear interpolation */
+        if ((iu < ailow || iu >= aihigh-1) ||
+            (iv < ajlow || iv >= ajhigh-1))
         {
-          int iu = (int) u;
-          int iv = (int) v;
-          double fu = u - iu;
-          double fv = v - iv;
-    
-          if ((iu < ailow || iu >= aihigh-1) ||
-              (iv < ajlow || iv >= ajhigh-1))
-            {
-              val = 0;
-              //             if (! zero_missed_pixels) continue;
-              continue;
-            }
-          else
-            {
-              /* Get the neighbouring pixels */
-              /*      (u  v)    (u+1  v)     */
-              /*      (u v+1)   (u+1 v+1)    */
-              /*                             */
-              double v00 = gimage(iu, iv);
-              double v01 = gimage(iu, iv+1);
-              double v10 = gimage(iu+1,iv);
-              double v11 = gimage(iu+1, iv+1);
-
-              double v0 = v00 + fv * (v01 - v00);
-              double v1 = v10 + fv * (v11 - v10);
-              val = (float) (v0 + fu * (v1 - v0));
-            }
-          /* Set the value */
-          output(i,j) = val;
+          val = 0;
+       // if (! zero_missed_pixels) continue;
+          continue;
         }
+        else
+        {
+          /* Get the neighbouring pixels */
+          /*      (u  v)    (u+1  v)     */
+          /*      (u v+1)   (u+1 v+1)    */
+          /*                             */
+          double v00 = gimage(iu, iv);
+          double v01 = gimage(iu, iv+1);
+          double v10 = gimage(iu+1,iv);
+          double v11 = gimage(iu+1, iv+1);
+
+          double v0 = v00 + fv * (v01 - v00);
+          double v1 = v10 + fv * (v11 - v10);
+          val = (float) (v0 + fu * (v1 - v0));
+        }
+        /* Set the value */
+        output(i,j) = val;
       }
-	return true;
+    }
+  return true;
 }
 
 //:rotate the input image counter-clockwise about the image origin.
 // demonstrates the use of image homograpy
-vil1_memory_image_of<float> 
+vil1_memory_image_of<float>
 brip_vil1_float_ops::rotate(vil1_memory_image_of<float> const & input,
                             const double theta_deg)
 {
   vil1_memory_image_of<float> out;
-  if(!input)
+  if (!input)
     return out;
   int w = input.width(), h = input.height();
   double ang = theta_deg;
   //map theta_deg to [0 360]
-  while(ang>360)
+  while (ang>360)
     ang-=360;
-  while(ang<0)
+  while (ang<0)
     ang+=360;
   //convert to radians
   double deg_to_rad = vnl_math::pi/180.0;
   double rang = deg_to_rad*ang;
   double c = vcl_cos(rang), s = vcl_sin(rang);
   vnl_matrix_fixed<double,3, 3> M;
-  //counter clockwise rotation about the image origin (0, 0) 
-  M[0][0]= c;   M[0][1]= -s;  M[0][2]= 0; 
+  //counter clockwise rotation about the image origin (0, 0)
+  M[0][0]= c;   M[0][1]= -s;  M[0][2]= 0;
   M[1][0]= s;   M[1][1]= c;   M[1][2]= 0;
   M[2][0]= 0;   M[2][1]= 0;   M[2][2]= 1;
   vgl_h_matrix_2d<double> H(M);
   vil1_memory_image_of<float> temp;
   //The transform is adjusted to map the full input domain onto
   //the output image.
-  if(!brip_vil1_float_ops::homography(input, H, temp))
+  if (!brip_vil1_float_ops::homography(input, H, temp))
     return out;
   return temp;
 }
-  
-    
