@@ -5,12 +5,11 @@ SET(ouml_sources
   image_database.h   image_database.cxx
   polygon_mesh.h     polygon_mesh.cxx
 
+  image_convert.h    image_convert.txx
   image_ops.h        image_ops.txx
   io.h               io.txx
 
   inlines.h
-
-  image_convert.txx
 )
 
 ADD_LIBRARY(ouml ${ouml_sources})
