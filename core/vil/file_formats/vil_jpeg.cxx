@@ -18,9 +18,9 @@
 #include "vil2_jpeg_compressor.h"
 
 #include <vcl_cassert.h>
-#include <vcl_climits.h> // CHAR_BIT
 #include <vcl_iostream.h>
 #include <vcl_cstring.h> // memcpy()
+#include <vxl_config.h> // vxl_byte
 
 #include <vil/vil_stream.h>
 #include <vil2/vil2_property.h>
@@ -145,7 +145,7 @@ vil2_image_view_base_sptr vil2_jpeg_image::get_copy_view(unsigned x0,
 
   vil2_memory_chunk_sptr chunk = new vil2_memory_chunk(bpp * nx * ny, pixel_format());
 
-  for (int i=0; i<ny; ++i) {
+  for (unsigned int i=0; i<ny; ++i) {
     JSAMPLE const *scanline = jd->read_scanline(y0+i);
     if (!scanline)
       return 0; // failed
@@ -175,11 +175,11 @@ bool vil2_jpeg_image::put_view(const vil2_image_view_base &view,
   // "compression makes no sense unless the section covers the whole image."
   // Relaxed slightly.. awf.
   // It will work if you send entire scan lines sequentially
-  if (x0 != 0 || (unsigned int)view2.ni() != jc->jobj.image_width) {
+  if (x0 != 0 || view2.ni() != jc->jobj.image_width) {
     vcl_cerr << __FILE__ << " : Can only compress complete scanlines\n";
     return false;
   }
-  if ((unsigned int)y0 != jc->jobj.next_scanline) {
+  if (y0 != jc->jobj.next_scanline) {
     vcl_cerr << __FILE__ << " : Scanlines must be sent sequentially \n";
     return false;
   }
@@ -188,6 +188,13 @@ bool vil2_jpeg_image::put_view(const vil2_image_view_base &view,
   unsigned bpp = jc->jobj.input_components;
 
   // write each scanline
+<<<<<<< vil2_jpeg.cxx
+  for (unsigned int j=0; j<view2.nj(); ++j) {
+    JSAMPLE const *scanline = (JSAMPLE const*)
+      ((char const*)view2.top_left_ptr() + j*view2.nj()*bpp);
+    if (!jc->write_scanline(y0+j, scanline))
+      return false;
+=======
   if (view2.planestep() == 1 || view2.nplanes() == 1)
   {
     assert(view2.istep() == bpp);
@@ -213,6 +220,7 @@ bool vil2_jpeg_image::put_view(const vil2_image_view_base &view,
       if (!jc->write_scanline(y0+j, scanline))
         return false;
     }
+>>>>>>> 1.3
   }
 
   return true;
