@@ -21,22 +21,31 @@ extern float vnl_chi_squared_cumulative(float chisq, int dof);
 
 //------------------------------------------------------------
 
+// A[] and B[] are (pointers to) arrays containing histograms.
+//
+// If the 'normalize' parameter is true, each histogram will
+// be implicitly normalized (so as to sum to 1) before the
+// statistic is calculated :
+// 
+//   a[i] = A[i] / \sum_j A[j]
+//   b[i] = B[i] / \sum_j B[j]
+//
 // *DO NOT* add scale factors to these functions or you will break 
 // the code written by those who read the documentation. fsm.
 
-//      (A[i] - B[i])^2
+//      (a[i] - b[i])^2
 // \sum ---------------
-//   i       A[i]
-double vnl_chi_squared_statistic_1 (int const *A, int const *B, int n);
+//   i       a[i]
+double vnl_chi_squared_statistic_1 (int const *A, int const *B, int n, bool normalize);
 
-//      (A[i] - B[i])^2
+//      (a[i] - b[i])^2
 // \sum ---------------
-//   i       B[i]
-double vnl_chi_squared_statistic_2 (int const *A, int const *B, int n);
+//   i       b[i]
+double vnl_chi_squared_statistic_2 (int const *A, int const *B, int n, bool normalize);
 
-//      (A[i] - B[i])^2
+//      (a[i] - b[i])^2
 // \sum ---------------
-//   i    A[i] + B[i]
-double vnl_chi_squared_statistic_12(int const *A, int const *B, int n);
+//   i    a[i] + b[i]
+double vnl_chi_squared_statistic_12(int const *A, int const *B, int n, bool normalize);
 
 #endif // vnl_chi_squared_h_
