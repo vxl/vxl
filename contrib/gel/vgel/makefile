@@ -11,7 +11,6 @@ MANPAGE_SOURCES += vgel_multi_view_data_vertex_sptr.h
 include ${IUEROOT}/config/top-params.mk
 #######################################
 
-SUBDIRS += kl
 ifndef NOTEST
 SUBDIRS += examples
 endif
