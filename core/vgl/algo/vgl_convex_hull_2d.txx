@@ -1,6 +1,9 @@
 #ifndef vgl_convex_hull_2d_txx_
 #define vgl_convex_hull_2d_txx_
 #include "vgl_convex_hull_2d.h"
+
+#include <vcl_cstdlib.h> // vcl_qsort
+
 //:
 // \file
 // \brief two-dimensional convex hull
@@ -65,7 +68,7 @@ static int cmph(const void *a, const void *b) {return cmpl(b,a);}
 
 static int make_chain(double** V, int n, int (*cmp)(const void*, const void*))
 {
-  qsort(V, n, sizeof(double*), cmp);
+  vcl_qsort(V, n, sizeof(double*), cmp);
   int s = 1;
   for (int i=2; i<n; i++) {
     while (s>=1 && ccw(V, i, s, s-1)) --s;
