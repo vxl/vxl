@@ -24,7 +24,8 @@ my $IUELOCALROOT=$ENV{'VXLROOT'};
 $IUELOCALROOT =~ s+[/\\]vxl[/\\]?$++ if $IUELOCALROOT;
 $IUELOCALROOT = $ENV{'IUELOCALROOT'} unless $IUELOCALROOT;
 $IUELOCALROOT = $ENV{'IUEROOT'} unless $IUELOCALROOT;
-$IUELOCALROOT || die "Cannot find iuelocalroot";
+$IUELOCALROOT || die "Cannot find \$IUELOCALROOT";
+die "Cannot find vxl_filter.pl" unless -f $IUELOCALROOT/vxl/bin/vxl_filter.pl;
 
 #
 my $dry_run = 0;
