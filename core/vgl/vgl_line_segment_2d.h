@@ -1,4 +1,4 @@
-// This is vxl/vgl/vgl_line_segment_2d.h
+// This is core/vgl/vgl_line_segment_2d.h
 #ifndef vgl_line_segment_2d_h_
 #define vgl_line_segment_2d_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
@@ -57,7 +57,8 @@ class vgl_line_segment_2d
   //: The inequality comparison operator.
   inline bool operator!=(vgl_line_segment_2d<Type>const& other)const{return !operator==(other);}
 
-  //: A consistent interface with vgl_line_2d
+  // A consistent interface with vgl_line_2d:
+
   //: Parameter a of line a*x + b*y + c = 0
   Type a() const;
 
@@ -73,9 +74,14 @@ class vgl_line_segment_2d
   //: unit vector orthogonal to line
   vgl_vector_2d<double> normal() const;
 
-  //: tangent angle in degrees
-  double tangent_angle() const;
-  
+  //: angle with the oriented horizontal line y=0, measured in radians.
+  //  Returns values between -pi and pi.
+  double slope_radians() const;
+
+  //: angle with the oriented horizontal line y=0, measured in 360-degrees.
+  //  Returns values between -180 and 180.
+  double slope_degrees() const;
+
   //: Assignment
   inline void set(vgl_point_2d<Type> const& p1, vgl_point_2d<Type> const& p2) {
     point1_ = p1; point2_ = p2; }
