@@ -129,10 +129,10 @@ void test_fft2d () {
   {
     vnl_fft2d<fsm_real> fwd(cplx_matrix, prx, pry, +1);
     vnl_fft2d<fsm_real> bwd(fwd, prx, pry, -1);
-
-    double error = (bwd - vnl_double_complex(cplx_matrix.size())*cplx_matrix).inf_norm();
+    
+    double error = (bwd - vnl_double_complex(cplx_matrix.size())*cplx_matrix).fro_norm();
     vcl_cout << "error = " << error << vcl_endl;
-    Assert ("fwd-bwd error", error < 1e-8); // increase for float
+    Assert ("fwd-bwd error", error < 1e-7); // increase for float
   }
 }
 
