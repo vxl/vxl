@@ -102,6 +102,15 @@ LIB32=link.exe -lib
 SOURCE=.\vil3d_grad_1x3.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\vil3d_binary_dilate.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\vil3d_binary_erode.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\vil3d_structuring_element.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\Templates/vil3d_grad_1x3+byte.float-.cxx
 # End Source File
 # Begin Source File
@@ -133,6 +142,24 @@ SOURCE=.\vil3d_threshold.h
 # End Source File
 # Begin Source File
 SOURCE=.\vil3d_threshold.txx
+# End Source File
+# Begin Source File
+SOURCE=.\vil3d_binary_closing.h
+# End Source File
+# Begin Source File
+SOURCE=.\vil3d_binary_dilate.h
+# End Source File
+# Begin Source File
+SOURCE=.\vil3d_binary_erode.h
+# End Source File
+# Begin Source File
+SOURCE=.\vil3d_binary_opening.h
+# End Source File
+# Begin Source File
+SOURCE=.\vil3d_structuring_element.h
+# End Source File
+# Begin Source File
+SOURCE=.\vil3d_exp_filter.h
 # End Source File
 # End Group
 # End Target
