@@ -1,4 +1,4 @@
-// This is core/vil3d/vil3d_copy.cxx
+// This is mul/vil3d/vil3d_copy.cxx
 
 //:
 // \file
@@ -33,7 +33,6 @@ bool vil3d_copy_deep(const vil3d_image_resource_sptr &src, vil3d_image_resource_
   if (!view_ref) return false;
   return dest->put_view(*view_ref);
 
-  
 #if 0
   const unsigned long large_image_limit = 1024ul * 1024ul * 16ul; //16M Pixels
   if (src->ni() * src->nj() * src->nk() * src->nplanes() < large_image_limit)
