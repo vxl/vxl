@@ -3,8 +3,12 @@
 #endif
 
 #include "vil_load.h"
+
+#include <vcl_cstring.h>
+
 #include <vil/vil_file_format.h>
 #include <vil/vil_stream_fstream.h>
+#include <vil/vil_stream_core.h>
 #include <vil/vil_image.h>
 
 vil_image vil_load_raw(vil_stream *is)
@@ -35,11 +39,24 @@ vil_image vil_load_raw(char const* filename)
   // check for null pointer or empty strings.
   if (!filename || !*filename)
     return 0;
-  
-  vil_stream* is = new vil_stream_fstream(filename, "r");
+
+  vil_stream *is = new vil_stream_fstream(filename, "r");
   is->ref();
   // current block scope is owner of stream.
-  
+
+  if (!is->ok()) {
+    // hacked check for filenames beginning "gen:".
+    int l = vcl_strlen(filename);
+    if (l > 4 && vcl_strncmp(filename, "gen:", 4) == 0) {
+      is->unref();
+      // Make an in-core stream...
+      vil_stream_core *cis = new vil_stream_core();
+      cis->ref();
+      cis->m_transfer((char*)filename, 0, l+1, false/*write*/);
+      is = cis;
+    }
+  }
+
   if (!is->ok()) {
     is->unref();
     // end of block scope coming up.

@@ -15,6 +15,7 @@ vil_file_format::~vil_file_format()
 #define HAS_BMP  1
 #define HAS_GIF  0
 #define HAS_JPEG 1
+#define HAS_GEN  1
 
 #if HAS_PNM
 #include <vil/file_formats/vil_pnm.h>
@@ -52,6 +53,10 @@ vil_file_format::~vil_file_format()
 #include <vil/file_formats/vil_gif.h>
 #endif
 
+#if HAS_GEN
+#include <vil/file_formats/vil_gen.h>
+#endif
+
 
 static vil_file_format** storage = 0;
 vil_file_format** vil_file_format::all()
@@ -86,6 +91,9 @@ vil_file_format** vil_file_format::all()
 #endif
 #if HAS_GIF
     storage[c++] = new vil_gif_file_format;
+#endif
+#if HAS_GEN
+    storage[c++] = new vil_gen_file_format;
 #endif
 
     storage[c++] = 0;
