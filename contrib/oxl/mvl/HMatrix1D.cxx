@@ -95,7 +95,7 @@ HomgPoint1D HMatrix1D::transform_to_plane1(const HomgPoint1D& x2) const
 
 HomgPoint1D HMatrix1D::operator()(const HomgPoint1D& x1) const
 {
-  vnl_double_2 v = t12_matrix_ * vnl_double_2(x1.x(),x1.w());
+  vnl_double_2 v = t12_matrix_ * vnl_double_2(x1.x(),x1.get_w());
   return HomgPoint1D(v[0], v[1]);
 }
 
@@ -104,7 +104,7 @@ HomgPoint1D HMatrix1D::operator()(const HomgPoint1D& x1) const
 
 HomgPoint1D HMatrix1D::preimage(const HomgPoint1D& x2) const
 {
-  vnl_double_2 v = t21_matrix_ * vnl_double_2(x2.x(),x2.w());
+  vnl_double_2 v = t21_matrix_ * vnl_double_2(x2.x(),x2.get_w());
   return HomgPoint1D(v[0], v[1]);
 }
 
