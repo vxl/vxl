@@ -4,8 +4,7 @@
 //-----------------------------------------------------------------------------
 //:
 // \file
-// \brief A child tableau of bgui_vsol2D_tableau that knows how to display 
-//  vtol objects.
+// \brief A child tableau of bgui_vsol2D_tableau that knows how to display vtol objects.
 // \author
 //   J.L. Mundy
 //
