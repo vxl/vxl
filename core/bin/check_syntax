@@ -73,6 +73,7 @@ foreach $f (@FILES)
   }
 
 # 5. //: inside a comment block, or \file not after //:
+  $file =~ s!//\s*[-=_]{40,}\n!!g;
   if ($file =~ m!\n\s*//[ :][^\n]*\n *//:!) {
     print "$f\t\# contains //: inside a comment block\n";
     $printed = 1;
@@ -84,7 +85,8 @@ foreach $f (@FILES)
   }
 
 # 5. Quick consistency check of Doxygen structured comments
-  if ($file =~ m!\n\s*//:! && $file !~ m!\n\s*//:(\s*\n\s*//)?\s*\\file\b!) {
+  if ($file =~ m!\n\s*//:! && $file !~ m!\n\s*//:(\s*\n\s*//)?\s*\\file\b! &&
+                              $file !~ m!^\s*//:(\s*\n\s*//)?\s*\\file\b!) {
     print "$f\t\# doxygen comments will not be shown without \\file\n";
     $printed = 1;
   }
@@ -111,7 +113,7 @@ foreach $f (@FILES)
   }
   if ($f !~ m/\.c$/ &&
       $f !~ m/_mocced\.cxx$/ &&
-      $f !~ m/\bv3p\/(tiff|netlib|jpeg|png|zlib|Qv)\// &&
+      $f !~ m/\bv3p\/(netlib|[jm]peg|tiff|png|zlib|Qv)\// &&
       $f !~ m/\bfile_formats\/vil_viff(header|_support)/ &&
       $f !~ m/\bvgui\/internals\/trackball/ &&
       $f !~ m/\bgel\/vgel\/kl\/.*\.h$/ &&
@@ -174,7 +176,7 @@ foreach $f (@FILES)
     unless ($f !~ m/\.(txx|h)$/ ||
             $f =~ m/vcl\/emulation\/.*stlco(nf|mp)\.h$/ ||
             $f =~ m/vcl\/vcl_typeinfo\.h$/ ||
-            $f =~ m/v3p\/(jpeg|tiff|zlib)\// ||
+            $f =~ m/v3p\/(netlib|[jm]peg|tiff|png|zlib)\// ||
             $f =~ m/\/resource\.h$/i ||
             $f =~ m/vcl(\/win32)?\/vcl_c(assert|string)/ ||
             $file_s eq "\n")
@@ -250,7 +252,7 @@ foreach $f (@FILES)
 
 # 14. Missing vcl_
   foreach $wd (split(' ',"abort exit")) {
-    if ($f !~ m/\bv3p\/(netlib|jpeg|png|zlib)\// &&
+    if ($f !~ m/\bv3p\/(netlib|[jm]peg|tiff|png|zlib)\// &&
         $f !~ m/\.c$/ &&
         "$f.$wd" !~ m/\bvcl\/tests\/test_vcl_exception\.cxx\.abort$/ &&
         $file_s =~ m/\b$wd\s*(\s*)\(/) {
@@ -258,16 +260,18 @@ foreach $f (@FILES)
       $printed = 1;
     }
   }
-  foreach $wd (split(' ',"complex real imag conj arg polar abs acos asin atan atan2 ceil cos exp fabs floor log min max pow sin sqrt")) {
+  foreach $wd (split(' ',"complex real imag conj arg polar abs acos asin atan atan2 ceil cos exp fabs floor log min max pow sin sqrt printf fprintf sprintf scanf fscanf sscanf fopen fclose fread fwrite")) {
     if ($f !~ m/\bvcl(\/[^\/]+)?\/vcl_(cmath|complex|cstdlib)\./ &&
-        $f !~ m/\bv3p\/(netlib|tiff|png)\// && $f !~ m/\bv3p\/Qv\/vectors\.h$/ &&
+        $f !~ m/\bv3p\/(netlib|[jm]peg|tiff|png|zlib)\// && $f !~ m/\bv3p\/Qv\/vectors\.h$/ &&
         $f !~ m/\.c$/ &&
         $f !~ m/\bvnl\/vnl_complex_ops\.txx$/ &&
+        "$f.$wd" !~ m/\/emulation\/[^\/]*-stlconf\.h\.f?printf$/ &&
         "$f.$wd" !~ m/_rational\.(h|cxx)\.sqrt$/ &&
         "$f.$wd" !~ m/\bvul\/vul_timer\.(h|cxx)\.real$/ &&
         "$f.$wd" !~ m/\bvnl\/vnl_quaternion\.h\.real$/ &&
         "$f.$wd" !~ m/\bvnl\/tests\/test_complex\.cxx\.acos$/ &&
         "$f.$wd" !~ m/\bvnl\/(vnl_rational\.h|tests\/test_rational\.cxx)\.(abs|ceil|floor)$/ &&
+        "$f.$wd" !~ m/\b(vnl\/vnl_bignum\.h|mbl\/mbl_arb_length_int\.h)\.abs$/ &&
         "$f.$wd" !~ m/\bvnl\/vnl_numeric_limits\.h\.(min|max)$/ &&
         "$f.$wd" !~ m/\bvil\/vil_rgb\.(h|txx)\.(min|max)$/ &&
         "$f.$wd" !~ m/\bvbl\/vbl_bounding_box\.(h|txx)\.(min|max)$/ &&
@@ -283,7 +287,7 @@ foreach $f (@FILES)
   foreach $wd (split(' ',"cin cout cerr clog endl ends flush ios istream ostream fstream ifstream ofstream strstream ostrstream streambuf streamoff streamsize fpos streampos stringstream")) {
     if ($f !~ m/\bvcl\/.*\bvcl_(ios|iosfwd|iomanip|[siof]+stream|strstream|streambuf)\.h/ &&
         $f !~ m/\bvcl\/Templates\/stream-instances\.cxx$/ &&
-        $f !~ m/\bv3p\/(netlib|jpeg|tiff|png|zlib)\// &&
+        $f !~ m/\bv3p\/(netlib|[jm]peg|tiff|png|zlib)\// &&
         $file_s =~ m/[^ .]\s*\b$wd\b\s*[^ (]/) {
       print "$f\t\# $wd must be vcl_$wd\n";
       $printed = 1;
@@ -291,7 +295,7 @@ foreach $f (@FILES)
   }
   foreach $wd (split(' ',"basefield floatfield adjustfield fmtflags seekdir")) {
     if ($f !~ m/\bvcl\/.*\bvcl_(ios|iosfwd|iomanip|[siof]+stream|strstream|streambuf)\.h/ &&
-        $f !~ m/\bv3p\/(netlib|jpeg|tiff|png|zlib)\// &&
+        $f !~ m/\bv3p\/(netlib|[jm]peg|tiff|png|zlib)\// &&
         $file_s =~ m/[^ .]\s*\b$wd\b\s*[^ (]/) {
       print "$f\t\# $wd must be vcl_ios_$wd\n";
       $printed = 1;
@@ -299,7 +303,7 @@ foreach $f (@FILES)
   }
   foreach $wd (split(' ',"beg cur end")) {
     if ($f !~ m/\bvcl\/.*\bvcl_(ios|iosfwd|iomanip|[siof]+stream|strstream|streambuf)\.h/ &&
-        $f !~ m/\bv3p\/(netlib|jpeg|tiff|png|zlib)\// &&
+        $f !~ m/\bv3p\/(netlib|[jm]peg|tiff|png|zlib)\// &&
         ($f !~ m/\bvcl\/emulation\/vcl_string\.h$/ || $wd !~ m/end/ ) &&
         ($f !~ m/\boxp\/oxp_mpeg_codec\.cxx$/ || $wd !~ m/end/ ) &&
         ($f !~ m/\b(rrel\/rrel_util|rsdl\/rsdl_borgefors)\.txx$/ || $wd !~ m/end/ ) &&
@@ -310,7 +314,7 @@ foreach $f (@FILES)
   }
   foreach $wd (split(' ',"boolalpha noboolalpha showbase noshowbase showpoint noshowpoint showpos noshowpos skipws noskipws uppercase nouppercase")) {
     if ($f !~ m/\bvcl\/.*\bvcl_(ios|iosfwd|iomanip|[siof]+stream|strstream|streambuf)\.h/ &&
-        $f !~ m/\bv3p\/(netlib|jpeg|tiff|png|zlib)\// &&
+        $f !~ m/\bv3p\/(netlib|[jm]peg|tiff|png|zlib)\// &&
         $file_s =~ m/[^ .]\s*\b$wd\b\s*[^ (]/) {
       print "$f\t\# $wd must be vcl_ios_$wd\n";
       $printed = 1;
@@ -323,7 +327,7 @@ foreach $f (@FILES)
   }
   foreach $wd (split(' ',"internal left right")) {
     if ($f !~ m/\bvcl\/.*\bvcl_(ios|iosfwd|iomanip|[siof]+stream|strstream|streambuf)\.h/ &&
-        $f !~ m/\bv3p\/(netlib|jpeg|tiff|png|zlib)\// &&
+        $f !~ m/\bv3p\/(netlib|[jm]peg|tiff|png|zlib)\// &&
         ($f !~ m/\bvcl\/emulation\/vcl_(algorithm|tree).h$/ || $wd !~ m/(left|right)/ ) &&
         ($f !~ m/\bvnl\/(vnl_matrix\.txx|algo\/vnl_complex_eigensystem\.cxx)$/ || $wd !~ m/(left|right)/ ) &&
         ($f !~ m/\b(oxl\/oxp\/vsl_conic_points\.cxx|gel\/gevd\/gevd_float_operators\.cxx)$/ || $wd !~ m/(left|right)/ ) &&
@@ -388,7 +392,7 @@ foreach $f (@FILES)
   }
   foreach $wd (split(' ',"size_t ptrdiff_t clock_t time_t")) {
     if ($f !~ m/\bvcl\/.*\bvcl_c(stddef|stdio|time)\./ &&
-        $f !~ m/\bv3p\/(jpeg|tiff|png)\// &&
+        $f !~ m/\bv3p\/(netlib|[jm]peg|tiff|png|zlib)\// &&
         $f !~ m/\.c$/ &&
         $file_s =~ m/\b$wd\b/) {
       print "$f\t\# $wd must be vcl_$wd\n";
@@ -397,7 +401,7 @@ foreach $f (@FILES)
   }
   foreach $wd (split(' ',"iterator_traits back_insert_iterator front_insert_iterator insert_iterator input_iterator_tag output_iterator_tag forward_iterator_tag bidirectional_iterator_tag random_access_iterator_tag")) {
     if ($f !~ m/\bvcl\/.*\bvcl_iterator\.(h|txx)$/ &&
-        $f !~ m/\bv3p\/(jpeg|tiff|png)\// &&
+        $f !~ m/\bv3p\/(netlib|[jm]peg|tiff|png|zlib)\// &&
         $file_s =~ m/\b$wd\b/) {
       print "$f\t\# $wd must be vcl_$wd\n";
       $printed = 1;
