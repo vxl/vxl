@@ -60,14 +60,14 @@ void vnl_c_vector<T>::copy(T const *src, T *dst, unsigned n)
 }
 
 template <class T>
-void vnl_c_vector<T>::scale(T const *x, T *y, unsigned n, T const &s_) {
-  T s = s_;
+void vnl_c_vector<T>::scale(T const *x, T *y, unsigned n, T const &a_) {
+  T a = a_;
   if (x == y)
     for (unsigned i=0; i<n; ++i)
-      y[i] *= s;
+      y[i] *= a;
   else
     for (unsigned i=0; i<n; ++i)
-      y[i] = s*x[i];
+      y[i] = a*x[i];
 }
 
 //----------------------------------------------------------------------------
