@@ -1,4 +1,4 @@
-// This is oxl/vgui/vgui_easy2D_tableau.cxx
+// This is core/vgui/vgui_easy2D_tableau.cxx
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
@@ -247,8 +247,7 @@ void vgui_easy2D_tableau::print_psfile(vcl_string filename, int reduction_factor
   // Write PostScript header
   vul_psfile psfile(filename.c_str(), false);
   psfile.set_reduction_factor(reduction_factor);
-  psfile.set_parameters(wd, ht);
-  psfile.postscript_header();
+  // psfile.set_parameters(wd, ht); // no longer needed - vul_psfile does this
 
   // Write image, if present
   if (get_image_tableau() && wd*ht > 0)
