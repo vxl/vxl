@@ -1,9 +1,7 @@
-// This is contrib/brl/bseg/bmrf/bmrf_gamma_func.cxx
+// This is brl/bseg/bmrf/bmrf_gamma_func.cxx
+#include "bmrf_gamma_func.h"
 //:
 // \file
-
-#include "bmrf_gamma_func.h"
-
 
 //----------------bmrf_const_gamma_func functions --------------------
 
