@@ -23,7 +23,7 @@ package: mul Manchester University Libraries
 mul mbl mbl_ build
 mul mil mil_ build
 mul vpdfl vpdfl_ build
-
+mul clsfy clsfy_ build
 
 package: tbl Various Image Processing Libraries
 tbl vipl vipl_ build
