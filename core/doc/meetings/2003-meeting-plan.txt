@@ -11,8 +11,8 @@ formation process in the hands of CVS.  Please modify and commit this
 file as you see fit, especially the agenda section.
 
 The VXL developer community will have a teleconference on November 11,
-2003 at 9:00 AM EST.  (Add other time zones here if you're confident
-about your conversions.)  E-mail Fred Wheeler, or add a note here if
+2003 at 7:00 MST(ouch) 9:00 AM EST, 14:00 GMT, 15:00 CET
+E-mail Fred Wheeler, or add a note here if
 that day/time is bad for you.  We will change the plan if the
 situation warrants.
 
