@@ -6,6 +6,7 @@
 #include <bugl/bugl_normal_point_3d_sptr.h>
 #include <vnl/vnl_double_2x2.h>
 #include <vnl/vnl_double_3x3.h>
+#include <vcl_iostream.h>
 
 int main()
 {
@@ -24,5 +25,12 @@ int main()
   // test smart pointer
   bugl_normal_point_2d_sptr p2d_ptr = new bugl_normal_point_2d(1, 1, s2);
   bugl_normal_point_3d_sptr p3d_ptr = new bugl_normal_point_3d(1, 1, 1, s3);
+  vcl_cout<<p3d_ptr->x()<<' '<<p3d_ptr->y()<<' '<<p3d_ptr->z()<<'\n';
+  
+  //: test set point
+  vgl_point_3d<double> pt(5.0,5.0,5.0);
+  p3d_ptr->set_point(pt);
+
+  vcl_cout<<p3d_ptr->x()<<' '<<p3d_ptr->y()<<' '<<p3d_ptr->z()<<'\n';
   return 0;
 }
