@@ -1,4 +1,4 @@
-// This is vxl/vil2/io/vil2_io_smart_ptr.h
+// This is mul/vil2/io/vil2_io_smart_ptr.h
 #ifndef vil2_io_smart_ptr_h
 #define vil2_io_smart_ptr_h
 //:

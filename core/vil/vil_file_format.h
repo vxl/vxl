@@ -24,7 +24,7 @@ class vil2_file_format
   //E.g. "pnm", "jpeg", etc.
   virtual char const* tag() const = 0;
 
-  //: Attempt to make a generic_image which will read from vil2_stream vs.
+  //: Attempt to make a generic_image which will read from vil_stream vs.
   // Reads enough of vs to determine if it's this format, and if not, returns 0.
   // If it is, returns a subclass of vil2_image_resource on which get_section may
   // be applied.

@@ -1,4 +1,4 @@
-// This is vxl/vil2/vil2_save.h
+// This is mul/vil2/vil2_save.h
 #ifndef vil2_save_h_
 #define vil2_save_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE

@@ -1,6 +1,20 @@
 # mul/vil2/CMakeLists.txt
+INCLUDE(${MODULE_PATH}/FindJPEG.cmake)
 
-SET( vil2_sources
+IF(JPEG_FOUND)
+  INCLUDE_DIRECTORIES( ${JPEG_INCLUDE_DIR} )
+  ADD_DEFINITIONS( ${JPEG_DEFINITIONS} -DHAS_JPEG )
+  SET( vil2_sources ${vil2_sources}
+    vil2_jpeglib.h
+    file_formats/vil2_jpeg.cxx file_formats/vil2_jpeg.h
+    file_formats/vil2_jpeg_source_mgr.cxx file_formats/vil2_jpeg_source_mgr.h
+    file_formats/vil2_jpeg_decompressor.cxx file_formats/vil2_jpeg_decompressor.h
+    file_formats/vil2_jpeg_destination_mgr.cxx file_formats/vil2_jpeg_destination_mgr.h
+    file_formats/vil2_jpeg_compressor.cxx file_formats/vil2_jpeg_compressor.h
+  )
+ENDIF(JPEG_FOUND)
+
+SET( vil2_sources ${vil2_sources}
 
   # basic things
   vil2_memory_chunk.cxx    vil2_memory_chunk.h

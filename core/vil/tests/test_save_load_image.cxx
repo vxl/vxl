@@ -416,6 +416,17 @@ MAIN( test_save_load_image )
   vil2_image_view<float>               imagefloat = CreateTestfloatImage(sizex, sizey);
 #endif
 
+
+  // JPEG
+#if HAS_JPEG
+  // lossy format ==> not guaranteed to be identical (hence arg. 3 set to false)
+  vil_test_image_type("jpeg", image8, false);
+# if 0 
+  vil_test_image_type("jpeg", image16);
+# endif
+  vil_test_image_type("jpeg", image3p, false);
+#endif
+
   // pnm ( = PBM / PGM / PPM )
 #if 1
   vil_test_image_type("pbm", image1);
@@ -456,14 +467,6 @@ MAIN( test_save_load_image )
   // lossy format ==> not guaranteed to be identical (hence arg. 3 set to false)
   vil_test_image_type("gif", image8, false);
   vil_test_image_type("gif", image3p, false);
-#endif
-
-  // JPEG
-#if 0
-  // lossy format ==> not guaranteed to be identical (hence arg. 3 set to false)
-  vil_test_image_type("jpeg", image8, false);
-  vil_test_image_type("jpeg", image16);
-  vil_test_image_type("jpeg", image3p, false);
 #endif
 
   // PNG
