@@ -125,7 +125,7 @@ bmrf_curve_3d_builder::build(int min_prj, int min_len, float sigma)
   {
     vcl_set<vcl_list<bmrf_curvel_3d_sptr> >::iterator next_itr = itr;
     ++next_itr;
-    if ( itr->size() < min_len )
+    if ( itr->size() < (unsigned int)min_len )
       curves_.erase(itr);
     else
       this->reconstruct_curve(const_cast<vcl_list<bmrf_curvel_3d_sptr> &> (*itr), sigma);
@@ -288,7 +288,7 @@ bmrf_curve_3d_builder::best_match( const bmrf_node_sptr& node,
     return list.end();
   if(matches.size() > 1){
     vcl_cout << "warning: "<< matches.size() <<" matches" << vcl_endl;
-    for (int i=0; i<matches.size(); ++i){
+    for (unsigned int i=0; i<matches.size(); ++i){
       vcl_cout << "   prob: " << arcs[i]->probability()<< vcl_endl;
     }
   }
@@ -358,7 +358,7 @@ bmrf_curve_3d_builder::best_match( const bmrf_curvel_3d_sptr& curvel,
     return choices.end(); // test to see if this stuff matters
 
     vcl_cout << "warning: "<< matches.size() <<" matches" << vcl_endl;
-    for (int i=0; i<matches.size(); ++i){
+    for (unsigned int i=0; i<matches.size(); ++i){
       if(arcs[i]->probability() > max_prob){
         best_index = i;
         max_prob = arcs[i]->probability();
