@@ -48,7 +48,7 @@ vifa_histogram::vifa_histogram(int xres, float val1, float val2)
 
   delta = (vmax - vmin) / xres;
   mean = (vmax + vmin) / 2.0;
-  standard_dev = (vmax - vmin) / (2.0 * sqrt(3.0));
+  standard_dev = (vmax - vmin) / (2.0 * vcl_sqrt(3.0));
   stats_consistent = 0;
   stats_consistent |= (MEAN_FLAG | SD_FLAG);
   delimiter = " ";
@@ -755,7 +755,7 @@ float vifa_histogram::GetStandardDev()
       else
         {
           stats_consistent |= SD_FLAG;
-          standard_dev = (float)sqrt(sum/area);
+          standard_dev = (float)vcl_sqrt(sum/area);
           return standard_dev;
         }
     }
@@ -1165,5 +1165,5 @@ float vifa_histogram::CompareToHistogram(vifa_histogram* h)
   if(m1==0||m2==0) return 0.0;//means exactly 0 indicate singular histogram
     
   // scale factor ln(2)/2 = 0.347 means M = 2 at exp = 0.5
-  return exp(- fabs( 0.693 * (m1 - m2) * sqrt(1.0/(v1*v1) + 1.0/(v2*v2))));
+  return exp(- fabs( 0.693 * (m1 - m2) * vcl_sqrt(1.0/(v1*v1) + 1.0/(v2*v2))));
 }

@@ -1,5 +1,6 @@
 // This is contrib/gel/vifa/vifa_int_faces_attr.cxx
 #include <vcl_algorithm.h>
+#include <vcl_cmath.h>
 #include <vcl_map.h>
 #include <vcl_list.h>
 #include <vcl_utility.h>
@@ -401,7 +402,7 @@ MakeAttrHist(vcl_vector<float>& attr_vals)
 	this->ComputeSingleFaceAttributes(false);
 
 	// Set the number of bins as sqrt(n), with a minimum of 20
-	int		num_bins = vcl_max(20, (int)sqrt(attr_vals.size()));
+	int		num_bins = vcl_max(20, (int)vcl_sqrt(attr_vals.size()));
 
 	// Get value range
 	float	max_val = 0;
@@ -482,7 +483,7 @@ GetSDAttr(int attr_index)
 			this->GetMeanAttr(attr_index);
 		}
 
-		return sqrt(attr_vec_[attr_index]->get_var());
+		return vcl_sqrt(attr_vec_[attr_index]->get_var());
 	}
 	else
 	{

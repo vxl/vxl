@@ -29,10 +29,10 @@ vifa_imp_line(vgl_vector_2d<Type>	d,
 }
 
 template <class Type> vifa_imp_line<Type>::
-vifa_imp_line<Type>(Type	a,
-					Type	b,
-					Type	c
-				   )
+vifa_imp_line(Type	a,
+			  Type	b,
+			  Type	c
+			 )
 {
 	// The values of a and b should not both be zero
 	assert (a || b);

@@ -110,7 +110,7 @@ public:
 
 	//: Area
 	float	Area()
-		{ return GetFace() ? _face->Npix() :  -1; }
+		{ return (float)(GetFace() ? _face->Npix() : -1); }
 
 	//: Ratio of major moments
 	float	AspectRatio();

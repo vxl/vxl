@@ -1,4 +1,5 @@
 // This is contrib/gel/vifa/vifa_parallel.cxx
+#include <vnl/vnl_math.h>
 #include <vdgl/vdgl_digital_curve.h>
 #include <vsol/vsol_curve_2d.h>
 #include <vtol/vtol_edge.h>
@@ -46,7 +47,7 @@ vifa_parallel(iface_list&			faces,
 					const vtol_vertex_2d*	v2 = e->v2()->cast_to_vertex_2d();
 					float	dy = v1->y() - v2->y();
 					float	dx = v1->x() - v2->x();
-					float	length = sqrt((dx * dx) + (dy * dy));
+					float	length = vcl_sqrt((dx * dx) + (dy * dy));
 
 					if (contrast_weighted)
 					{
@@ -70,10 +71,10 @@ vifa_parallel(iface_list&			faces,
 					float	orientation = atan2(dy, dx);
 					if (orientation < 0)
 					{
-						orientation += M_PI;
+						orientation += vnl_math::pi;
 					}
 
-					float	theta = orientation * 180.0 / M_PI;
+					float	theta = orientation * 180.0 / vnl_math::pi;
 					theta = map_x(theta);
 					raw_h_->SetCount(theta, raw_h_->GetCount(theta) + length);
 #else

@@ -21,7 +21,7 @@ vifa_coll_lines(vtol_edge_2d_sptr	e,
 
 	hypothesized_line_ = new imp_line(p1, p2);
 	contributors_.push_back(e);
-	projected_length_cutoff_ = cos(cutoff_angle_deg * M_PI / 180.0);
+	projected_length_cutoff_ = cos(cutoff_angle_deg * vnl_math::pi / 180.0);
 	endpt_distance_ = endpt_distance;
 	id_ = vifa_coll_lines::serial_num_++;
 	discard_flag_ = discard_flag;
