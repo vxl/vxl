@@ -66,7 +66,7 @@
 //=======================================================================
 
 #include "gevd_memory_mixin.h"
-#include <vcl/vcl_iostream.h>
+#include <vcl_iostream.h>
 
 class gevd_bufferxy : public gevd_memory_mixin
 {

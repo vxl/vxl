@@ -7,7 +7,7 @@
   crossge@crd.ge.com
 */
 
-#include <vcl/vcl_string.h>
+#include <vcl_string.h>
 #include <gmvl/gmvl_node.h>
 
 class gmvl_corner_node : public gmvl_node

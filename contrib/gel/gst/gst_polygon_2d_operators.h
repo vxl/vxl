@@ -7,7 +7,7 @@
   crossge@crd.ge.com
 */
 
-#include <vcl/vcl_vector.h>
+#include <vcl_vector.h>
 
 #include <gst/gst_edge_2d_ref.h>
 #include <gst/gst_polygon_2d_ref.h>

@@ -14,8 +14,8 @@
         coordinate systems (?)
 */
 
-#include <vcl/vcl_iostream.h>
-#include <vcl/vcl_string.h>
+#include <vcl_iostream.h>
+#include <vcl_string.h>
 #include <vbl/vbl_ref_count.h>
 
 class gmvl_node_cache;

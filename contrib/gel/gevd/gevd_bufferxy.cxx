@@ -31,7 +31,7 @@
 // ---------------------------------------------------------------------------
 // <end copyright notice>
 
-#include <vcl/vcl_fstream.h>
+#include <vcl_fstream.h>
 #include <stdio.h>
 
 #include "gevd_bufferxy.h"

@@ -72,7 +72,7 @@
 //======================================================================
 //#include <cool/String.h>
 //#include <Basics/types.h>
-#include <vcl/vcl_string.h>
+#include <vcl_string.h>
 
 class ParamModifier;
 

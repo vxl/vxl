@@ -7,7 +7,7 @@
   crossge@crd.ge.com
 */
 
-#include <vcl/vcl_string.h>
+#include <vcl_string.h>
 #include <vil/vil_image.h>
 #include <gmvl/gmvl_node.h>
 

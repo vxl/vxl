@@ -13,7 +13,7 @@ is light weight, and all interfacing should be done through the
 face class
 */
 
-#include <vcl/vcl_vector.h>
+#include <vcl_vector.h>
 #include <gst/gst_polygon_2d_ref.h>
 
 class gst_face_2d

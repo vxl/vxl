@@ -7,7 +7,7 @@
   crossge@crd.ge.com
 */
 
-#include <vcl/vcl_vector.h>
+#include <vcl_vector.h>
 #include <gtrl/gtrl_vertex.h>
 
 class gtrl_polygon

@@ -7,9 +7,9 @@
   crossge@crd.ge.com
 */
 
-#include <vcl/vcl_vector.h>
-#include <vcl/vcl_iostream.h>
-#include <vcl/vcl_utility.h>
+#include <vcl_vector.h>
+#include <vcl_iostream.h>
+#include <vcl_utility.h>
 
 #include <gmvl/gmvl_node_ref.h>
 

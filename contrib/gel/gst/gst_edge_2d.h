@@ -7,7 +7,7 @@
   crossge@crd.ge.com
 */
 
-#include <vcl/vcl_iostream.h>
+#include <vcl_iostream.h>
 #include <vbl/vbl_ref_count.h>
 
 #include <gst/gst_vertex_2d_ref.h>

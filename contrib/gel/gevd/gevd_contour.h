@@ -111,7 +111,7 @@
 //#include <Basics/bufferxy.h>	// for inline accessors
 //#include <Detection/dll.h>
 
-#include <vcl/vcl_vector.h>
+#include <vcl_vector.h>
 #include <vtol/vtol_vertex_2d.h>
 #include <vtol/vtol_edge_2d.h>
 

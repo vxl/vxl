@@ -7,8 +7,8 @@
   crossge@crd.ge.com
 */
 
-#include <vcl/vcl_vector.h>
-#include <vcl/vcl_string.h>
+#include <vcl_vector.h>
+#include <vcl_string.h>
 #include <gmvl/gmvl_node_ref.h>
 
 // to print out a lost of nodes

@@ -115,7 +115,7 @@
 
 class gevd_bufferxy;
 
-#include <vcl/vcl_vector.h>
+#include <vcl_vector.h>
 
 // #undef Image
 class vil_image;

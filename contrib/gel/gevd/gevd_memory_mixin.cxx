@@ -31,8 +31,8 @@
 // ---------------------------------------------------------------------------
 // <end copyright notice>
 
-#include <vcl/vcl_memory.h>
-#include <vcl/vcl_algorithm.h>
+#include <vcl_memory.h>
+#include <vcl_algorithm.h>
 
 #include "gevd_memory_mixin.h"
 

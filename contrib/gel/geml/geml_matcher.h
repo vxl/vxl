@@ -21,8 +21,8 @@
 //
 //-----------------------------------------------------------------------------
 
-#include <vcl/vcl_vector.h>
-#include <vcl/vcl_utility.h>
+#include <vcl_vector.h>
+#include <vcl_utility.h>
 
 #include <vil/vil_byte.h>
 #include <vil/vil_memory_image_of.h>
