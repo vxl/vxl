@@ -112,13 +112,13 @@ foreach $f (@FILES)
     print "$f:$tmp:\t\# has lines of more than 132 characters\n";
     $printed = 1;
   }
-  print "$f:1:\t\# has vcl_endl following a string: consider replacing with \\n\"\n"
+  print "$f:1:\t\# has vcl_endl following a string: consider replacing by \\n\"\n"
     if ($printed && $file =~ m!\"\s*\<\<\s*vcl_endl\b!);
   print "$f:1:\t\# consider joining consecutive \"\<\<\" output lines for $2\n"
     if ($printed && $file =~ m![{;:](\s*//.*\n)?\s*(\S+)\s*\<\<[^;]+\;\s*\2\s*\<\<!);
   print "$f:1:\t\# consider joining consecutive strings in output for $1\n"
     if ($printed && $file =~ m!(\S+)\s*\<\<[^;]*(..)\"\s*\<\<\s*\"! && $2 ne "\\n");
-  print "$f:1:\t\# consider replacing \"$2\" with \'$2\' in output for $1\n"
+  print "$f:1:\t\# consider replacing \"$2\" by \'$2\' in output for $1\n"
     if ($printed && $file =~ m!(\S+)\s*\<\<[^;]+\"([^\\]|\\.)\"!);
   print "$f:1:\t\# consider removing space before \\n\n"
     if ($printed && $file =~ m!(\s|\\t)\\n\b!);
@@ -145,17 +145,18 @@ foreach $f (@FILES)
   }
   if ($file =~ m!\n\s*//(:|\s*\\brief\b)[ \t]*(.{40,})\n *// *([a-z].*)!)
   {
-    unless ($2 =~ m/[.?!]$/ || $3 =~ m/^v[bcginpsu]l_/)
+    $first=$2; $second=$3;
+    unless ($first =~ m/[.?!]$/ || $second =~ m/^v[bcginpsu]l_/)
     {
       $tmp=$file; $tmp =~ s!\n\s*//(:|\s*\\brief\b)[ \t]*(.{40,})\n *//[^\000]*!!; $tmp =~ s/[^\n]*//g; $tmp=length($tmp)+2;
-      print "$f:$tmp:\t\# brief comment possibly continued on next line: \"$2\" + \"$3\"\n";
+      print "$f:$tmp:\t\# brief comment possibly continued on next line at line $tmp\n";
       $printed = 1;
     }
   }
   elsif ($file =~ m!\n\s*//(:|\s*\\brief\b)(.{40,}\b(and|if|but|since|that|,))\s*\n *// *(.+)!i)
   {
     $tmp=$file; $tmp =~ s!\n\s*//(:|\s*\\brief\b)(.{40,}\b(and|if|but|since|that|,))\s*\n *// *(.+)[^\000]*!!i; $tmp =~ s/[^\n]*//g; $tmp=length($tmp)+2;
-    print "$f:$tmp:\t\# brief comment possibly continued on next line: \"$2\" + \"$4\"\n";
+    print "$f:$tmp:\t\# brief comment possibly continued on next line at line $tmp\n";
     $printed = 1;
   }
 
@@ -448,7 +449,7 @@ foreach $f (@FILES)
   if ($cpp_file && $f !~ m!\bvcl/\S*vcl_\S+\.(h|txx)$! &&
       $file =~ m!\#\s*include\s*\<(assert|ctype|errno|float|iso646|limits|locale|math|setjmp|signal|stdarg|stddef|stdio|stdlib|string|time|wchar|wctype)\.h\>!) {
     $t=$1;
-    print "$f:1:\t\# replace #include <$t.h> with #include <vcl_c$t.h>\n"
+    print "$f:1:\t\# replace #include <$t.h> by #include <vcl_c$t.h>\n"
       unless (($f =~ m!\bcore/vnl/vnl_math\.cxx$! && $t eq "math") ||
               ($f =~ m!\bvcl/tests/test_driver\.cxx$! && $t eq "math") ||
               ($f =~ m!\bcore/testlib/testlib_main\.cxx$! && $t eq "math") ||
@@ -501,7 +502,7 @@ foreach $f (@FILES)
     $printed = 1;
   }
   # RCS indications
-  if ($file =~ m/(\$RCSfile)/)
+  if ($file =~ m/(\$RCSfile|\$(Author|Revision|Date): .* \$)/)
   {
     print "$f:1:\t\# contains RCS indication $1\n";
     $printed = 1;
@@ -858,7 +859,7 @@ foreach $f (@FILES)
     print "$f:1:\t\# incorrect indentation in line following \"$line\"\n"
       unless ($pre eq $post);
   }
-  undef($f_);
+  undef $f_;
   print "$f:1:\t\# $1 not preceded by space\n"
     if ($printed && $file =~ m/\n(public|private|protected)\s*\:/);
   print "$f:1:\t\# $1 preceded by more than one space\n"
