@@ -1,0 +1,157 @@
+#ifndef VSOL_POLYGON_3D_H
+#define VSOL_POLYGON_3D_H
+//*****************************************************************************
+//
+// .NAME vsol_polygon_3d - Polygon of a 3D space
+// .LIBRARY vsol
+// .INCLUDE vsol/vsol_polygon_3d.h
+// .FILE    vsol/vsol_polygon_3d.cxx
+//
+// .SECTION Description
+// The vertices are defined in the counterclockwise.
+// .SECTION Author
+// François BERTEL
+//
+// .SECTION Modifications
+// 2000/06/17 Peter Vanroose  Implemented all operator==()s and type info
+// 2000/05/09 François BERTEL Creation
+//*****************************************************************************
+
+class vsol_polygon_3d;
+
+//*****************************************************************************
+// External declarations for values
+//*****************************************************************************
+#include <vsol/vsol_polygon_3d_ref.h>
+#include <vsol/vsol_region_3d.h>
+
+#include <vsol/vsol_point_3d_ref.h>
+#include <vcl_vector.h>
+
+class vsol_polygon_3d
+  :public vsol_region_3d
+{
+  //***************************************************************************
+  // Initialization
+  //***************************************************************************
+public:
+  //---------------------------------------------------------------------------
+  //: Constructor from a vcl_vector (not a geometric vector but a list of
+  //: points)
+  //: REQUIRE: new_vertices.size()>=3 and valid_vertices(new_vertices)
+  //---------------------------------------------------------------------------
+  explicit vsol_polygon_3d(const vcl_vector<vsol_point_3d_ref> &new_vertices);
+
+  //---------------------------------------------------------------------------
+  //: Copy constructor
+  //---------------------------------------------------------------------------
+  vsol_polygon_3d(const vsol_polygon_3d &other);
+
+  //---------------------------------------------------------------------------
+  //: Destructor
+  //---------------------------------------------------------------------------
+  virtual ~vsol_polygon_3d();
+
+  //---------------------------------------------------------------------------
+  //: Clone `this': creation of a new object and initialization
+  //: See Prototype pattern
+  //---------------------------------------------------------------------------
+  virtual vsol_spatial_object_3d_ref clone(void) const;
+
+  //***************************************************************************
+  // Access
+  //***************************************************************************
+
+  //---------------------------------------------------------------------------
+  //: Return vertex `i'
+  //: REQUIRE: valid_index(i)
+  //---------------------------------------------------------------------------
+  virtual vsol_point_3d_ref vertex(const int i) const;
+
+  //***************************************************************************
+  // Comparison
+  //***************************************************************************
+
+  //---------------------------------------------------------------------------
+  //: Has `this' the same points than `other' in the same order ?
+  //---------------------------------------------------------------------------
+  virtual bool operator==(const vsol_polygon_3d &other) const;
+  virtual bool operator==(const vsol_spatial_object_3d& obj) const; // virtual of vsol_spatial_object_3d
+  
+  //---------------------------------------------------------------------------
+  //: Has `this' not the same points than `other' in the same order ?
+  //---------------------------------------------------------------------------
+  virtual bool operator!=(const vsol_polygon_3d &other) const;
+
+  //***************************************************************************
+  // Status report
+  //***************************************************************************
+
+  //---------------------------------------------------------------------------
+  //: Return the region type of a polygon.  Its spatial type is a REGION
+  //---------------------------------------------------------------------------
+  vsol_region_3d_type region_type(void) const { return vsol_region_3d::POLYGON; }
+
+  //---------------------------------------------------------------------------
+  //: Compute the bounding box of `this'
+  //---------------------------------------------------------------------------
+  virtual void compute_bounding_box(void);
+
+  //---------------------------------------------------------------------------
+  //: Return the number of vertices
+  //---------------------------------------------------------------------------
+  virtual int size(void) const;
+  
+  //---------------------------------------------------------------------------
+  //: Return the area of `this'
+  //---------------------------------------------------------------------------
+  virtual double area(void) const;
+
+  //---------------------------------------------------------------------------
+  //: Is `this' convex ?
+  //---------------------------------------------------------------------------
+  virtual bool is_convex(void) const;
+ 
+  //---------------------------------------------------------------------------
+  //: Is `i' a valid index for the list of vertices ?
+  //---------------------------------------------------------------------------
+  virtual bool valid_index(const int i) const;
+
+  //---------------------------------------------------------------------------
+  //: Are `new_vertices' valid vertices ? That is are all vertices in the same
+  //: plane ?
+  //---------------------------------------------------------------------------
+  virtual bool valid_vertices(const vcl_vector<vsol_point_3d_ref> new_vertices) const;
+
+  //***************************************************************************
+  // Basic operations
+  //***************************************************************************
+
+  //---------------------------------------------------------------------------
+  //: Is `p' in `this' ?
+  //---------------------------------------------------------------------------
+  virtual bool in(const vsol_point_3d_ref &p) const;
+
+  //---------------------------------------------------------------------------
+  //: Return the unit normal vector at point `p'. Have to be deleted manually
+  //: REQUIRE: in(p)
+  //---------------------------------------------------------------------------
+  virtual vnl_vector_fixed<double,3> *
+  normal_at_point(const vsol_point_3d_ref &p) const;
+
+  //***************************************************************************
+  // Implementation
+  //***************************************************************************
+protected:
+  //---------------------------------------------------------------------------
+  //: Default constructor. Do nothing. Just to enable inherance.
+  //---------------------------------------------------------------------------
+  vsol_polygon_3d(void);
+
+  //---------------------------------------------------------------------------
+  // Description: List of vertices
+  //---------------------------------------------------------------------------
+  vcl_vector<vsol_point_3d_ref> *storage_;
+};
+
+#endif // #ifndef VSOL_POLYGON_3D_H

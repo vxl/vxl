@@ -1,0 +1,155 @@
+#include <vsol/vsol_triangle_2d.h>
+
+//*****************************************************************************
+// External declarations for implementation
+//*****************************************************************************
+
+#include <vcl_cassert.h>
+#include <vsol/vsol_point_2d.h>
+
+//***************************************************************************
+// Initialization
+//***************************************************************************
+
+//---------------------------------------------------------------------------
+// -- Constructor from its 3 vertices
+//---------------------------------------------------------------------------
+vsol_triangle_2d::vsol_triangle_2d(const vsol_point_2d_ref &new_p0,
+                                   const vsol_point_2d_ref &new_p1,
+                                   const vsol_point_2d_ref &new_p2)
+{
+  storage_=new vcl_vector<vsol_point_2d_ref>(3);
+  (*storage_)[0]=new_p0;
+  (*storage_)[1]=new_p1;
+  (*storage_)[2]=new_p2;
+}
+
+//---------------------------------------------------------------------------
+// Copy constructor
+//---------------------------------------------------------------------------
+vsol_triangle_2d::vsol_triangle_2d(const vsol_triangle_2d &other)
+  : vsol_polygon_2d(other)
+{
+}
+
+//---------------------------------------------------------------------------
+// Destructor
+//---------------------------------------------------------------------------
+vsol_triangle_2d::~vsol_triangle_2d()
+{
+}
+
+//---------------------------------------------------------------------------
+// -- Clone `this': creation of a new object and initialization
+// See Prototype pattern
+//---------------------------------------------------------------------------
+vsol_spatial_object_2d_ref vsol_triangle_2d::clone(void) const
+{
+  return new vsol_triangle_2d(*this);
+}
+
+//***************************************************************************
+// Access
+//***************************************************************************
+
+//---------------------------------------------------------------------------
+// -- Return the first vertex
+//---------------------------------------------------------------------------
+vsol_point_2d_ref vsol_triangle_2d::p0(void) const
+{
+  return (*storage_)[0];
+}
+
+//---------------------------------------------------------------------------
+// -- Return the second vertex
+//---------------------------------------------------------------------------
+vsol_point_2d_ref vsol_triangle_2d::p1(void) const
+{
+  return (*storage_)[1];
+}
+
+//---------------------------------------------------------------------------
+// -- Return the last vertex
+//---------------------------------------------------------------------------
+vsol_point_2d_ref vsol_triangle_2d::p2(void) const
+{
+  return (*storage_)[2];
+}
+
+//***************************************************************************
+// Comparison
+//***************************************************************************
+
+//---------------------------------------------------------------------------
+// -- Has `this' the same points than `other' in the same order ?
+//---------------------------------------------------------------------------
+bool vsol_triangle_2d::operator==(const vsol_triangle_2d &other) const
+{
+  return vsol_polygon_2d::operator==(other);
+}
+
+bool vsol_triangle_2d::operator==(const vsol_polygon_2d &other) const
+{
+  return vsol_polygon_2d::operator==(other);
+}
+
+// -- spatial object equality
+
+bool vsol_triangle_2d::operator==(const vsol_spatial_object_2d& obj) const
+{
+  return
+   obj.spatial_type() == vsol_spatial_object_2d::REGION &&
+   ((vsol_region_2d const&)obj).region_type() == vsol_region_2d::POLYGON
+  ? *this == (vsol_polygon_2d const&) (vsol_region_2d const&) obj
+  : false;
+}
+
+//***************************************************************************
+// Status report
+//***************************************************************************
+
+//---------------------------------------------------------------------------
+// -- Return the area of `this'
+//---------------------------------------------------------------------------
+double vsol_triangle_2d::area(void) const
+{
+  double result;
+
+  result=(((*storage_)[0]->x()-(*storage_)[1]->x())
+          *((*storage_)[1]->y()-(*storage_)[2]->y())
+          -((*storage_)[1]->x()-(*storage_)[2]->x())
+          *((*storage_)[0]->y()-(*storage_)[1]->y()))/2;
+
+  return result;
+}
+
+//***************************************************************************
+// Element change
+//***************************************************************************
+
+//---------------------------------------------------------------------------
+// -- Set the first vertex
+//---------------------------------------------------------------------------
+void vsol_triangle_2d::set_p0(const vsol_point_2d_ref &new_p0)
+{
+  (*storage_)[0]=new_p0;
+}
+
+//---------------------------------------------------------------------------
+// -- Set the second vertex
+//---------------------------------------------------------------------------
+void vsol_triangle_2d::set_p1(const vsol_point_2d_ref &new_p1)
+{
+  (*storage_)[1]=new_p1;
+}
+
+//---------------------------------------------------------------------------
+// -- Set the last vertex
+//---------------------------------------------------------------------------
+void vsol_triangle_2d::set_p2(const vsol_point_2d_ref &new_p2)
+{
+  (*storage_)[2]=new_p2;
+}
+
+//#include <vcl_rel_ops.h> // gcc 2.7
+//VCL_INSTANTIATE_INLINE(bool operator!=(vsol_triangle_2d const &, vsol_triangle_2d const &));
