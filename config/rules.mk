@@ -193,9 +193,12 @@ $(configdir)/try.mk: $(configdir)/rules.mk
 # specific-to-general order.
 
 
-# Set VXL to 1 if "vxl" is in USES. Else, add v3p to
+# Set VXL to 1 if "core" is in USES. Else, add v3p to
 # USES, for backwards compatibility -- fsm.
-ifneq "" "$(findstring vxl,$(USES))"
+ifneq "" "$(findstring COOL,$(USES))"
+  USES += core
+endif
+ifneq "" "$(findstring core,$(USES))"
 VXL := 1
 else
 USES += v3p
@@ -357,7 +360,7 @@ endif
 
 # * COOL
 ifneq "" "$(findstring COOL,$(USES))"
-  IULIBS  += -lTJCOOL
+  IULIBS  += -lTJCOOL -lvnl
 endif
 
 # * Numerics
