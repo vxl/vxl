@@ -29,6 +29,7 @@
 #include "video_out.h"
 #include "mpeg2_internal.h"
 #include "attributes.h"
+#include "vlc.h"
 
 extern mpeg2_mc_t mpeg2_mc;
 extern void (* mpeg2_idct_copy) (int16_t * block, uint8_t * dest, int stride);
@@ -36,7 +37,6 @@ extern void (* mpeg2_idct_add) (int16_t * block, uint8_t * dest, int stride);
 extern void (* mpeg2_cpu_state_save) (cpu_state_t * state);
 extern void (* mpeg2_cpu_state_restore) (cpu_state_t * state);
 
-#include "vlc.h"
 
 static int non_linear_quantizer_scale [] = {
      0,  1,  2,  3,  4,  5,   6,   7,
@@ -598,12 +598,18 @@ static void get_non_intra_block (picture_t * picture)
     bit_ptr = picture->bitstream_ptr;
 
     NEEDBITS (bit_buf, bits, bit_ptr);
+    if (bit_buf >= 0x28000000) {
+        tab = DCT_B14DC_5 + (UBITS (bit_buf, 5) - 5);
+        goto entry_1;
+    } else
+        goto entry_2;
 
     while (1) {
         if (bit_buf >= 0x28000000) {
 
             tab = DCT_B14AC_5 + (UBITS (bit_buf, 5) - 5);
 
+        entry_1:
             i += tab->run;
             if (i >= 64)
                 break;  /* end of block */
@@ -627,6 +633,7 @@ static void get_non_intra_block (picture_t * picture)
             continue;
         }
 
+    entry_2:
         if (bit_buf >= 0x04000000) {
 
             tab = DCT_B14_8 + (UBITS (bit_buf, 8) - 4);
@@ -830,12 +837,18 @@ static void get_mpeg1_non_intra_block (picture_t * picture)
     bit_ptr = picture->bitstream_ptr;
 
     NEEDBITS (bit_buf, bits, bit_ptr);
+    if (bit_buf >= 0x28000000) {
+        tab = DCT_B14DC_5 + (UBITS (bit_buf, 5) - 5);
+        goto entry_1;
+    } else
+        goto entry_2;
 
     while (1) {
         if (bit_buf >= 0x28000000) {
 
             tab = DCT_B14AC_5 + (UBITS (bit_buf, 5) - 5);
 
+        entry_1:
             i += tab->run;
             if (i >= 64)
                 break;  /* end of block */
@@ -861,6 +874,7 @@ static void get_mpeg1_non_intra_block (picture_t * picture)
             continue;
         }
 
+    entry_2:
         if (bit_buf >= 0x04000000) {
 
             tab = DCT_B14_8 + (UBITS (bit_buf, 8) - 4);
@@ -1201,16 +1215,17 @@ static void motion_zero (picture_t * picture, motion_t * motion,
 {
     unsigned int offset;
 
-    table[0](picture->dest[0] + picture->offset,
-             motion->ref[0][0] + picture->offset + picture->v_offset * picture->stride,
-             picture->stride, 16);
+    table[0] (picture->dest[0] + picture->offset,
+              (motion->ref[0][0] + picture->offset +
+               picture->v_offset * picture->stride),
+              picture->stride, 16);
 
-    offset = (picture->offset >> 1) + (picture->v_offset >> 1) * picture->uv_stride;
-
-    table[4](picture->dest[1] + (picture->offset >> 1),
-             motion->ref[0][1] + offset, picture->uv_stride, 8);
-    table[4](picture->dest[2] + (picture->offset >> 1),
-             motion->ref[0][2] + offset, picture->uv_stride, 8);
+    offset = ((picture->offset >> 1) +
+              (picture->v_offset >> 1) * picture->uv_stride);
+    table[4] (picture->dest[1] + (picture->offset >> 1),
+              motion->ref[0][1] + offset, picture->uv_stride, 8);
+    table[4] (picture->dest[2] + (picture->offset >> 1),
+              motion->ref[0][2] + offset, picture->uv_stride, 8);
 }
 
 /* like motion_frame, but parsing without actual motion compensation */
