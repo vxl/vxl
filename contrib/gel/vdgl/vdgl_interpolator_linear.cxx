@@ -27,35 +27,34 @@ vdgl_interpolator_linear::~vdgl_interpolator_linear()
 
 vsol_point_2d_sptr vdgl_interpolator_linear::closest_point_on_curve ( vsol_point_2d_sptr p )
 {
-  double min_distance = 1e6;
+  double min_distance = -1.0;
   int index = -1;
   for ( int i=0; i< chain_->size(); i++)
   {
     vgl_point_2d<double> curve_point = chain_->edgel(i).get_pt();
     double d = p->distance ( vsol_point_2d ( curve_point ) );
-    if ( d < min_distance )
+    if ( min_distance < 0 || d < min_distance )
     {
       index = i;
       min_distance = d;
     }
   }
   if ( index == -1 )
-  {
     return NULL;
-  }
-  return new vsol_point_2d ( chain_->edgel(index).get_pt() );
+  else
+    return new vsol_point_2d ( chain_->edgel(index).get_pt() );
 }
 
 
 double vdgl_interpolator_linear::get_x( const double index)
 {
   assert(index >= 0 && index < chain_->size());
-  int a= int( index); // round down
-  double d= index- a;
+  int a = int(index); // round down
+  double d = index- a;
 
-  double ae = chain_->edgel( a).get_x();
+  double ae = chain_->edgel(a).get_x();
   if (d==0) return ae; // exactly at an edgel
-  double be = chain_->edgel( a+1).get_x();
+  double be = chain_->edgel(a+1).get_x();
 
   return be*d+ae*(1-d);
 }
@@ -64,26 +63,27 @@ double vdgl_interpolator_linear::get_x( const double index)
 double vdgl_interpolator_linear::get_y( const double index)
 {
   assert(index >= 0 && index < chain_->size());
-  int a= int( index); // round down
-  double d= index- a;
+  int a = int(index); // round down
+  double d = index- a;
 
-  double ae = chain_->edgel( a).get_y();
+  double ae = chain_->edgel(a).get_y();
   if (d==0) return ae; // exactly at an edgel
-  double be = chain_->edgel( a+1).get_y();
+  double be = chain_->edgel(a+1).get_y();
 
   return be*d+ae*(1-d);
 }
-//
+
 //: linearly interpolate the gradient direction
+//
 double vdgl_interpolator_linear::get_theta( const double index)
 {
   assert(index >= 0 && index < chain_->size());
-  int a= int( index); // round down
-  double d= index- a;
+  int a = int(index); // round down
+  double d = index-a;
 
-  double ae = chain_->edgel( a).get_theta();
+  double ae = chain_->edgel(a).get_theta();
   if (d==0) return ae; // exactly at an edgel
-  double be = chain_->edgel( a+1).get_theta();
+  double be = chain_->edgel(a+1).get_theta();
 
   return be*d+ae*(1-d);
 }
@@ -98,7 +98,7 @@ double vdgl_interpolator_linear::get_theta( const double index)
 double vdgl_interpolator_linear::get_tangent_angle( const double index)
 {
   int N = chain_->size();
-  assert(index >= 0 && index < chain_->size());
+  assert(index >= 0 && index <= chain_->size() - 1);
   if (N==1)
   {
     vcl_cout << " vdgl_interpolator_linear::get_theta(..) - can't compute angle"
@@ -106,36 +106,15 @@ double vdgl_interpolator_linear::get_tangent_angle( const double index)
     return 0;
   }
   int a = int(index); // round down
-  double d = index - a;
-  //cases to consider:
-  // Case I, N=2 or index == 0
-  if (N==2||a==0)
-    {
-      double x0 = (*chain_)[0].x(), y0 = (*chain_)[0].y();
-      double x1 = (*chain_)[1].x(), y1 = (*chain_)[1].y();
-      double angle = 180.0*vnl_math::one_over_pi*vcl_atan2((y1-y0), (x1-x0));
-      return angle;
-    }
-  // Case II - index is at n = N-1
-  if (a==(N-1))
-    {
-      double xi = (*chain_)[N-2].x(), yi = (*chain_)[N-2].y();
-      double xn = (*chain_)[N-1].x(), yn = (*chain_)[N-1].y();
-      double angle = 180.0*vnl_math::one_over_pi*vcl_atan2((yn-yi), (xn-xi));
-      return angle;
-    }
-  // Case III - index is in general position
-  if (a>0&&a<(N-1))
-    {
-      double xi = (*chain_)[a].x(), yi = (*chain_)[a].y();
-      double xip = (*chain_)[a+1].x(), yip = (*chain_)[a+1].y();
-      double angle = 180.0*vnl_math::one_over_pi*vcl_atan2((yip-yi), (xip-xi));
-      return angle;
-    }
-
-  vcl_cout << " vdgl_interpolator_linear::get_theta(..) - shouldn't happen\n";
-  return 0;
+  // if index is exactly at N-1, a+1 is invalid, so take the preceding interval:
+  if (a == N-1) --a;
+  assert(a>=0 && a<N-1); // just in case... this should not happen.
+  double xi = (*chain_)[a].x(), yi = (*chain_)[a].y();
+  double xip = (*chain_)[a+1].x(), yip = (*chain_)[a+1].y();
+  double angle = 180.0*vnl_math::one_over_pi*vcl_atan2((yip-yi), (xip-xi));
+  return angle;
 }
+
 
 double vdgl_interpolator_linear::get_curvature( const double index)
 {
@@ -213,9 +192,6 @@ void vdgl_interpolator_linear::recompute_length()
     vgl_point_2d<double> p1= chain_->edgel(j).get_pt();
     vgl_point_2d<double> p2= chain_->edgel(i).get_pt();
 
-    // NOTE THERE IS A PROBLEM HERE UNDER WINDOWS
-    //   WHICH I WILL HAVE TO FIX AT SOME POINT
-    // Maybe solved now with the use of vgl_vector_2d<double> ? - PVr
     lengthcache_ += length(p2-p1);
   }
 }
