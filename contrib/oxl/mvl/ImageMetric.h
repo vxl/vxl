@@ -33,19 +33,11 @@
 //-----------------------------------------------------------------------------
 
 #include <vnl/vnl_matrix.h>
-#if defined(VCL_GCC_27)
-# include <vnl/vnl_double_2.h>
-# include <mvl/HomgPoint2D.h>
-# include <mvl/HomgLineSeg2D.h>
-# include <mvl/HomgLine2D.h>
-# include <mvl/FMatrix.h>
-#else
 class vnl_double_2;
 class HomgPoint2D;
 class HomgLineSeg2D;
 class HomgLine2D;
 class FMatrix;
-#endif
 
 class ImageMetric {
 public:

@@ -47,12 +47,6 @@
 # define VCL_HAS_TYPE_INFO 1
 #endif
 
-// poor old gcc
-#ifdef VCL_GCC_27
-#define VCL_HAS_DYNAMIC_CAST 0
-#define VCL_HAS_TYPE_INFO 0
-#endif
-
 // other compilers
 #ifndef VCL_HAS_DYNAMIC_CAST
 # define VCL_HAS_DYNAMIC_CAST 1
