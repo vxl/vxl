@@ -1,31 +1,31 @@
-// vbl/io/tests/test_user_info_io.cxx
-#include <vbl/vbl_user_info.h>
+// vul/io/tests/test_user_info_io.cxx
+#include <vul/vul_user_info.h>
 #include <vcl_iostream.h>
 #include <vcl_fstream.h>
 #include <vcl_utility.h>
 
 #include <vbl/vbl_test.h>
-#include <vbl/io/vbl_io_user_info.h>
+#include <vul/io/vul_io_user_info.h>
 #include <vsl/vsl_binary_io.h>
 
 void test_user_info_io()
 {
   vcl_cout << "************************" << vcl_endl;
-  vcl_cout << "Testing vbl_user_info io" << vcl_endl;
+  vcl_cout << "Testing vul_user_info io" << vcl_endl;
   vcl_cout << "************************" << vcl_endl;
   //
   vcl_string name="cjb";
-  vbl_user_info p_out(name), p_in("");
+  vul_user_info p_out(name), p_in("");
   p_out.init("cjb");
 
 
-  vsl_b_ofstream bfs_out("vbl_user_info_test_io.bvl.tmp");
-  TEST ("Created vbl_user_info_test_io.bvl.tmp for writing", (!bfs_out), false);
+  vsl_b_ofstream bfs_out("vul_user_info_test_io.bvl.tmp");
+  TEST ("Created vul_user_info_test_io.bvl.tmp for writing", (!bfs_out), false);
   vsl_b_write(bfs_out, p_out);
   bfs_out.close();
 
-  vsl_b_ifstream bfs_in("vbl_user_info_test_io.bvl.tmp");
-  TEST ("Opened vbl_user_info_test_io.bvl.tmp for reading", (!bfs_in), false);
+  vsl_b_ifstream bfs_in("vul_user_info_test_io.bvl.tmp");
+  TEST ("Opened vul_user_info_test_io.bvl.tmp for reading", (!bfs_in), false);
   vsl_b_read(bfs_in, p_in);
   bfs_in.close();
 
