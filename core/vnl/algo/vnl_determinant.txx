@@ -66,6 +66,9 @@ T vnl_determinant(T const *const *rows, int size, bool balance)
   return vnl_determinant(tmp, balance);
 }
 
+//#include <vcl_cmath.h>
+//#include <vcl_algorithm.h>
+//#include <vcl_iostream.h>
 template <class T>
 T vnl_determinant(vnl_matrix<T> const &M, bool balance)
 {
@@ -80,20 +83,62 @@ T vnl_determinant(vnl_matrix<T> const &M, bool balance)
   default:
     if (balance) {
       vnl_matrix<T> tmp(M);
-      T scalings(1);
+      typedef typename vnl_numeric_traits<T>::abs_t abs_t;
+      abs_t scalings(1);
       for (int t=0; t<5; ++t) {
+#if 1
+        // normalize rows.
         for (int i=0; i<n; ++i) {
-          T rn = tmp.get_row(i).two_norm();
-          scalings *= rn;
-          tmp.scale_row(i, T(1)/rn);
+          abs_t rn = tmp.get_row   (i).rms();
+          if (rn > 0) {
+            scalings *= rn;
+            tmp.scale_row(i, abs_t(1)/rn);
+          }
         }
+#endif
+#if 1
+        // normalize columns.
         for (int i=0; i<n; ++i) {
-          T rn = tmp.get_row(i).two_norm();
-          scalings *= rn;
-          tmp.scale_column(i, T(1)/rn);
+          abs_t rn = tmp.get_column(i).rms();
+          if (rn > 0) {
+            scalings *= rn;
+            tmp.scale_column(i, abs_t(1)/rn);
+          }
         }
+#endif
+#if 0
+        // pivot
+        for (int k=0; k<n-1; ++k) {
+          // find largest element after (k, k):
+          int i0 = k, j0 = k;
+          abs_t v0(0);
+          for (int i=k; i<n; ++i) {
+            for (int j=k; j<n; ++j) {
+              abs_t v = vcl_abs(tmp[i][j]);
+              if (v > v0) {
+                i0 = i;
+                j0 = j;
+                v0 = v;
+              }
+            }
+          }
+          // largest element is in position (i0, j0).
+          if (i0 != k) {
+            for (int j=0; j<n; ++j)
+              vcl_swap(tmp[k][j], tmp[i0][j]);
+            scalings = -scalings;
+          }
+          if (j0 != k) {
+            for (int i=0; i<n; ++i)
+              vcl_swap(tmp[i][k], tmp[i][j0]);
+            scalings = -scalings;
+          }
+        }
+#endif
       }
-      return scalings * vnl_qr<T>(tmp).determinant();
+      T balanced_det = vnl_qr<T>(tmp).determinant();
+      //vcl_clog << __FILE__ ": scalings, balanced_det = " << scalings << ", " << balanced_det << vcl_endl;
+      return T(scalings) * balanced_det;
     }
     else
       return vnl_qr<T>(M).determinant();
