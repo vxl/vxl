@@ -28,4 +28,4 @@
 #define VCL_BASIC_STRING_INSTANTIATE \
 extern "include vcl/vcl_string.txx instead"
 
-#endif
+#endif // vcl_string_h_

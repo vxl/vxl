@@ -1,15 +1,14 @@
-//-*- c++ -*-------------------------------------------------------------------
 #ifndef vbl_sparse_array_h_
 #define vbl_sparse_array_h_
 #ifdef __GNUC__
 #pragma interface
 #endif
 //
-// .NAME vbl_sparse_array - Sparse array allowing space efficient access of the form s[3000] = 2;
-// .LIBRARY     vbl
+// .NAME	vbl_sparse_array - Sparse array allowing space efficient access of the form s[3000] = 2;
+// .LIBRARY	vbl
 // .HEADER	vxl package
-// .INCLUDE     vbl/vbl_sparse_array.h
-// .FILE        vbl/vbl_sparse_array.cxx
+// .INCLUDE	vbl/vbl_sparse_array.h
+// .FILE	vbl_sparse_array.cxx
 // .SECTION Author
 //     Andrew W. Fitzgibbon, Oxford RRG, 02 Oct 96
 //
@@ -43,14 +42,14 @@ public:
   bool fullp(unsigned) const;
   bool put(unsigned, const T&);
   T* get_addr(unsigned);
-  
+
   // Computations--------------------------------------------------------------
 // -- Return number of locations that have been assigned a value using "put".
   unsigned count_nonempty() const { return storage_.size(); }
 
   const_iterator begin() const { return storage_.begin(); }
   const_iterator end() const { return storage_.end(); }
-  
+
   // Data Control--------------------------------------------------------------
   vcl_ostream& print(vcl_ostream&) const;
   //  friend ostream& operator >> (ostream&, const vbl_sparse_array<T>& );
@@ -62,12 +61,11 @@ protected:
 
 template <class T>
 inline ostream& operator << (ostream& s, const vbl_sparse_array<T>& a)
-{ 
+{
   return a.print(s);
 }
 
 #define VBL_SPARSE_ARRAY_INSTANTIATE(T) \
 extern "please include vbl/vbl_sparse_array.txx instead"
 
-#endif   // DO NOT ADD CODE AFTER THIS LINE! END OF DEFINITION FOR CLASS vbl_sparse_array.
-
+#endif // vbl_sparse_array_h_

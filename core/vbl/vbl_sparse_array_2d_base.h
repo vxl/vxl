@@ -1,14 +1,13 @@
-//-*- c++ -*-------------------------------------------------------------------
 #ifndef vbl_sparse_array_2d_base_h_
 #define vbl_sparse_array_2d_base_h_
 #ifdef __GNUC__
 #pragma interface
 #endif
 //
-// .LIBRARY     vbl
+// .LIBRARY	vbl
 // .HEADER	vxl package
-// .INCLUDE     vbl/vbl_sparse_array_2d_base.h
-// .FILE        vbl/vbl_sparse_array_2d_base.cxx
+// .INCLUDE	vbl/vbl_sparse_array_2d_base.h
+// .FILE	vbl_sparse_array_2d_base.cxx
 // .SECTION Author
 //     Andrew W. Fitzgibbon, Oxford RRG, 29 Jun 97
 //
@@ -30,4 +29,4 @@ struct vbl_sparse_array_2d_base {
   }
 };
 
-#endif   // DO NOT ADD CODE AFTER THIS LINE! END OF DEFINITION FOR CLASS vbl_sparse_array_2d_base.
+#endif // vbl_sparse_array_2d_base_h_

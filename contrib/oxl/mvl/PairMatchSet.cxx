@@ -1,14 +1,6 @@
-//-*- c++ -*-------------------------------------------------------------------
 #ifdef __GNUC__
-#pragma implementation "PairMatchSet.h"
+#pragma implementation
 #endif
-//
-// Class: PairMatchSet
-// Author: Andrew W. Fitzgibbon, Oxford RRG
-// Created: 09 Aug 96
-// Modifications:
-//
-//-----------------------------------------------------------------------------
 
 #include <vcl/vcl_cstdlib.h>
 #include <vcl/vcl_cassert.h>

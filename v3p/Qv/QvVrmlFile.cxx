@@ -1,15 +1,6 @@
-//-*- c++ -*-------------------------------------------------------------------
 #ifdef __GNUC__
-#pragma implementation "QvVrmlFile.h"
+#pragma implementation
 #endif
-//
-// Class: QvVrmlFile
-// Author: Andrew W. Fitzgibbon, Oxford RRG
-// Created: 09 Jan 99
-// Modifications:
-//   990109 AWF Initial version.
-//
-//-----------------------------------------------------------------------------
 
 #include "QvVrmlFile.h"
 

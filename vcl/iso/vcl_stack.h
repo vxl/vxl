@@ -8,4 +8,4 @@
 #define vcl_stack std::stack
 #endif
 
-#endif
+#endif // vcl_iso_stack_h_

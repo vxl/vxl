@@ -1,11 +1,14 @@
-//-*- c++ -*-------------------------------------------------------------------
 #ifndef ImageMetric_h_
 #define ImageMetric_h_
 #ifdef __GNUC__
 #pragma interface
 #endif
 //
-// Class : ImageMetric
+// .NAME	ImageMetric - Converting between image and metric coordinates
+// .LIBRARY	MViewBasics
+// .HEADER	MultiView Package
+// .INCLUDE	mvl/ImageMetric.h
+// .FILE	ImageMetric.cxx
 //
 // .SECTION Description
 //    ImageMetric is the baseclass for classes that define how points in image
@@ -19,13 +22,8 @@
 //
 //    A general convention that is sometimes useful is that points in homogeneous
 //    coordinates have been conditioned, while nonhomogeneous primitives remain in
-//    image coordinates. 
+//    image coordinates.
 //
-// .NAME        ImageMetric - Converting between image and metric coordinates.
-// .LIBRARY     MViewBasics
-// .HEADER	MultiView Package
-// .INCLUDE     mvl/ImageMetric.h
-// .FILE        ImageMetric.cxx
 // .SECTION Author
 //     Andrew W. Fitzgibbon, Oxford RRG, 17 Aug 96
 //
@@ -52,12 +50,14 @@ class FMatrix;
 class ImageMetric {
 public:
   // Constructors/Destructors--------------------------------------------------
-  
+
   ImageMetric();
   virtual ~ImageMetric();
+  //ImageMetric(ImageMetric const& that); - use default
+  //ImageMetric& operator=(ImageMetric const& that); - use default
 
   // Operations----------------------------------------------------------------
-  
+
   // Computations--------------------------------------------------------------
 
   virtual HomgPoint2D homg_to_imagehomg(const HomgPoint2D&);
@@ -73,7 +73,7 @@ public:
   virtual HomgLine2D image_to_homg_line(const HomgLine2D&);
 
   virtual HomgLineSeg2D image_to_homg(const HomgLineSeg2D&);
-  virtual HomgLineSeg2D homg_to_image(const HomgLineSeg2D&);  
+  virtual HomgLineSeg2D homg_to_image(const HomgLineSeg2D&);
 
   virtual FMatrix image_to_homg_deprecated(const FMatrix&);
   virtual FMatrix homg_to_image_deprecated(const FMatrix&);
@@ -95,21 +95,13 @@ public:
   virtual double homg_to_image_distance(double image_distance) const;
 
   virtual ostream& print(ostream& s) const;
-  
+
   // Data Control--------------------------------------------------------------
 
   // Static functions to condition/decondition image relations
   static FMatrix decondition(const FMatrix& F, const ImageMetric* c1, const ImageMetric* c2);
-  
+
   inline friend ostream& operator <<(ostream& o, const ImageMetric& m) { return m.print(o); }
-  
-protected:
-  // Data Members--------------------------------------------------------------
-  
-private:
-  //ImageMetric(const ImageMetric& that); - use default
-  //ImageMetric& operator=(const ImageMetric& that); - use default
 };
 
-#endif   // DO NOT ADD CODE AFTER THIS LINE! END OF DEFINITION FOR CLASS ImageMetric.
-
+#endif // ImageMetric_h_

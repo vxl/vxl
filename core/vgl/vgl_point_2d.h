@@ -117,4 +117,4 @@ istream&  operator>>(istream& is,  vgl_point_2d<Type>& p) {
   return is >> p->data_[0] >> p->data_[1];
 }
 
-#endif
+#endif // vgl_point_2d_h

@@ -132,4 +132,4 @@ inline long double vcl_abs (long double x) { return fabs (x); }
 #define VCL_NO_DRAND48
 #endif
 
-#endif
+#endif // vcl_cmath_h_

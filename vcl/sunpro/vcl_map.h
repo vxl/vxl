@@ -28,4 +28,4 @@ struct vcl_multimap_sunpro_50 : public std::multimap<Key, Value, Comp, std::allo
   vcl_multimap_sunpro_50(base const &that) : base(that) { }
 };
 
-#endif
+#endif // vcl_sunpro_map_h_

@@ -1,14 +1,6 @@
-//-*- c++ -*-------------------------------------------------------------------
 #ifdef __GNUC__
-#pragma implementation "vrml_out.h"
+#pragma implementation
 #endif
-//
-// Class: vrml_out
-// Author: Andrew W. Fitzgibbon, Oxford RRG
-// Created: 17 Dec 96
-// Modifications:
-//
-//-----------------------------------------------------------------------------
 
 #include "vrml_out.h"
 

@@ -26,4 +26,4 @@ extern vcl_string& vbl_string_right_trim(vcl_string&, const char*);
  
 extern int vbl_string_atoi(vcl_string const&);
 
-#endif
+#endif // vbl_string_h

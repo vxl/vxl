@@ -14,4 +14,4 @@
 # include <vcl/iso/vcl_fstream.h>
 #endif
 
-#endif
+#endif // vcl_fstream_h_

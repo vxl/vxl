@@ -11,4 +11,4 @@
 
 #include <ctype.h>
 
-#endif
+#endif // vcl_cctype_h_

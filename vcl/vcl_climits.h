@@ -11,4 +11,4 @@
 
 #include <limits.h>
 
-#endif
+#endif // vcl_climits_h_

@@ -1,15 +1,6 @@
-//-*- c++ -*-------------------------------------------------------------------
 #ifdef __GNUC__
-#pragma implementation "ByteConvertImage.h"
+#pragma implementation
 #endif
-//
-// Class: ByteConvertImage
-// Author: Andrew W. Fitzgibbon, Oxford RRG
-// Created: 22 Dec 98
-// Modifications:
-//   981222 AWF Initial version.
-//
-//-----------------------------------------------------------------------------
 
 #include "ByteConvertImage.h"
 

@@ -23,4 +23,4 @@ struct vgl_region_scan_iterator
   virtual int  endx() const =0;
 };
 
-#endif
+#endif // vgl_region_scan_iterator_h_

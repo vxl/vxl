@@ -3,10 +3,10 @@
 
 //-----------------------------------------------------------------------------
 //
-// .LIBRARY vbl 
+// .LIBRARY vbl
 // .HEADER vxl Package
 // .INCLUDE vbl/vbl_basic_relation_where.h
-// .FILE vbl/vbl_basic_relation_where.cxx
+// .FILE vbl_basic_relation_where.cxx
 //
 // .SECTION Author
 //             Rupert W. Curwen, November 13, 1997
@@ -21,20 +21,20 @@
 //  This class is used internal to the vbl_basic_relation class to specify
 //  the attributes currently selected in the relation.
 //
-template <class T1, class T2, 
-  VCL_DFL_TYPE_PARAM_STLDECL(T3,vbl_basic_optional), 
-  VCL_DFL_TYPE_PARAM_STLDECL (T4, vbl_basic_optional), 
+template <class T1, class T2,
+  VCL_DFL_TYPE_PARAM_STLDECL(T3,vbl_basic_optional),
+  VCL_DFL_TYPE_PARAM_STLDECL (T4, vbl_basic_optional),
   VCL_DFL_TYPE_PARAM_STLDECL(T5,vbl_basic_optional)>
 class vbl_basic_relation_where : public vbl_basic_tuple<T1,T2,T3,T4,T5>
 {
 
 public:
   // Constructors.
-  vbl_basic_relation_where() 
-    : first_wild(true), 
-      second_wild(true), 
-      third_wild(true), 
-      fourth_wild(true), 
+  vbl_basic_relation_where()
+    : first_wild(true),
+      second_wild(true),
+      third_wild(true),
+      fourth_wild(true),
       fifth_wild(true)
   {
   }
@@ -42,9 +42,9 @@ public:
   // Copy constructor.
   vbl_basic_relation_where(const vbl_basic_relation_where<T1,T2,T3,T4,T5>& w)
     : vbl_basic_tuple<T1,T2,T3,T4,T5>(w),
-      first_wild(w.first_wild), 
-      second_wild(w.second_wild), 
-      third_wild(w.third_wild), 
+      first_wild(w.first_wild),
+      second_wild(w.second_wild),
+      third_wild(w.third_wild),
       fourth_wild(w.fourth_wild),
       fifth_wild(w.fifth_wild)
   {
@@ -53,22 +53,22 @@ public:
   // Construct exact clause.
   vbl_basic_relation_where(const vbl_basic_tuple<T1,T2,T3,T4,T5>& t)
     : vbl_basic_tuple<T1,T2,T3,T4,T5>(t),
-      first_wild(false), 
-      second_wild(false), 
-      third_wild(false), 
+      first_wild(false),
+      second_wild(false),
+      third_wild(false),
       fourth_wild(false),
       fifth_wild(false)
   {
   }
 
   // Destructor.
-  ~vbl_basic_relation_where() 
+  ~vbl_basic_relation_where()
   {
   }
-  
+
   // Operator =.
   inline vbl_basic_relation_where<T1,T2,T3,T4,T5>& operator=(const vbl_basic_relation_where<T1,T2,T3,T4,T5>& w)
-  { 
+  {
     if (this == &w) return *this;
 
     (*(vbl_basic_tuple<T1,T2,T3,T4,T5>*)this) = w;
@@ -86,7 +86,7 @@ public:
 
   // Test for match.
   inline bool match(const vbl_basic_tuple<T1,T2,T3,T4,T5>& w)
-  { 
+  {
     if ((!first_wild) && !(GetFirst() == w.GetFirst())) return false;
     if ((!second_wild) && !(GetSecond() == w.GetSecond())) return false;
     if (!vbl_basic_optional_traits<T3>::IsOptional)
@@ -100,13 +100,13 @@ public:
 
   // Test for match.
   inline bool match(const vbl_basic_tuple<T1,T2,T3,T4,T5>* w)
-  { 
+  {
     return match(*w);
   }
 
   // Print the where clause on cout.
   inline void Print() { Dump(cout); }
-  
+
   // Print the where clause on cerr or stream.
   void Dump(ostream& str = cerr) const
   {
@@ -139,7 +139,7 @@ public:
   inline bool FourthWild() { return fourth_wild; }
   inline bool FifthWild() { return fifth_wild; }
 
-  inline void SetFirst(T1 t) 
+  inline void SetFirst(T1 t)
   {
     vbl_basic_tuple<T1,T2,T3,T4,T5>::SetFirst(t);
     first_wild = false;
@@ -194,4 +194,4 @@ private:
 
 };
 
-#endif
+#endif // vbl_basic_relation_where_h

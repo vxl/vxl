@@ -1,55 +1,18 @@
-// <begin copyright notice>
-// ---------------------------------------------------------------------------
-//
-//                   Copyright (c) 1997 TargetJr Consortium
-//               GE Corporate Research and Development (GE CRD)
-//                             1 Research Circle
-//                            Niskayuna, NY 12309
-//                            All Rights Reserved
-//              Reproduction rights limited as described below.
-//                               
-//      Permission to use, copy, modify, distribute, and sell this software
-//      and its documentation for any purpose is hereby granted without fee,
-//      provided that (i) the above copyright notice and this permission
-//      notice appear in all copies of the software and related documentation,
-//      (ii) the name TargetJr Consortium (represented by GE CRD), may not be
-//      used in any advertising or publicity relating to the software without
-//      the specific, prior written permission of GE CRD, and (iii) any
-//      modifications are clearly marked and summarized in a change history
-//      log.
-//       
-//      THE SOFTWARE IS PROVIDED "AS IS" AND WITHOUT WARRANTY OF ANY KIND,
-//      EXPRESS, IMPLIED OR OTHERWISE, INCLUDING WITHOUT LIMITATION, ANY
-//      WARRANTY OF MERCHANTABILITY OR FITNESS FOR A PARTICULAR PURPOSE.
-//      IN NO EVENT SHALL THE TARGETJR CONSORTIUM BE LIABLE FOR ANY SPECIAL,
-//      INCIDENTAL, INDIRECT OR CONSEQUENTIAL DAMAGES OF ANY KIND OR ANY
-//      DAMAGES WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS,
-//      WHETHER OR NOT ADVISED OF THE POSSIBILITY OF SUCH DAMAGES, OR ON
-//      ANY THEORY OF LIABILITY ARISING OUT OF OR IN CONNECTION WITH THE
-//      USE OR PERFORMANCE OF THIS SOFTWARE.
-//
-// ---------------------------------------------------------------------------
-// <end copyright notice>
-//-*- c++ -*----------------------------------------------------------------
 #ifndef _FMatrix_h
 #define _FMatrix_h
 #ifdef __GNUC__
 #pragma interface
 #endif
 //
-// Class : FMatrix
-//
-// .SECTION Description:
-//
-// A class to hold a Fundamental Matrix of the general form and to
-// perform common operations e.g. generate epipolar lines
-//
-// .NAME FMatrix - General fundamental matrix.
+// .NAME FMatrix - General fundamental matrix
 // .LIBRARY MViewBasics
 // .HEADER MultiView package
-// .INCLUDE mvl/FMatrix.h 
+// .INCLUDE mvl/FMatrix.h
 // .FILE FMatrix.cxx
 //
+// .SECTION Description:
+// A class to hold a Fundamental Matrix of the general form and to
+// perform common operations e.g. generate epipolar lines
 //
 
 #include <vnl/vnl_double_3x3.h>
@@ -61,14 +24,12 @@
 class PMatrix;
 
 class FMatrix {
-  
+
   // PUBLIC INTERFACE-------------------------------------------------------
-  
 public:
-  
+
   // Constructors/Initializers/Destructors----------------------------------
-  
-  
+
   FMatrix();
   FMatrix(istream& f);
   FMatrix(const double *f_matrix);
@@ -80,7 +41,7 @@ public:
 
   static FMatrix read(char const* filename);
   static FMatrix read(istream& s);
-  
+
   // Operations------------------------------------------------------------
 
   HomgLine2D image1_epipolar_line (const HomgPoint2D& x2) const;
@@ -88,7 +49,7 @@ public:
 
   double image1_epipolar_distance_squared (HomgPoint2D *point1_ptr, HomgPoint2D *point2_ptr) const;
   double image2_epipolar_distance_squared (HomgPoint2D *point1_ptr, HomgPoint2D *point2_ptr) const;
-  
+
   // Computations------------------------------------------------------------
 
   void set_rank2_using_svd();
@@ -100,11 +61,11 @@ public:
 
   void find_nearest_perfect_match (const HomgPoint2D& in1, const HomgPoint2D& in2,
 				   HomgPoint2D *out1, HomgPoint2D *out2) const;
-  
+
   void find_nearest_perfect_match (const HomgPoint2D& in1, const HomgPoint2D& in2,
 				   const HomgPoint2D& e1, const HomgPoint2D& e2,
 				   HomgPoint2D *out1, HomgPoint2D *out2) const;
-  
+
   // Data Access------------------------------------------------------------
 
   double get (unsigned int row_index, unsigned int col_index) const;
@@ -131,7 +92,7 @@ friend ostream& operator<<(ostream& s, const FMatrix& F);
 friend istream& operator>>(istream& s, FMatrix& F);
 
   bool read_ascii(istream& f);
-  
+
   // INTERNALS---------------------------------------------------------------
 
 protected:
@@ -142,15 +103,15 @@ private:
 
 protected:
 
-  // Fundamental matrix 
+  // Fundamental matrix
   vnl_double_3x3 _f_matrix;
-  
+
   // vnl_transpose of Fundamental matrix
-  vnl_double_3x3 _ft_matrix; 
+  vnl_double_3x3 _ft_matrix;
 
   // True if the Fundamental matrix is rank 2
   // (the result of a linear computation is not normally a rank 2 matrix)
   bool _rank2_flag;
 };
 
-#endif
+#endif // _FMatrix_h

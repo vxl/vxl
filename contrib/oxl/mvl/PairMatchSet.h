@@ -1,11 +1,14 @@
-//-*- c++ -*-------------------------------------------------------------------
 #ifndef PairMatchSet_h_
 #define PairMatchSet_h_
 #ifdef __GNUC__
 #pragma interface
 #endif
 //
-// Class : PairMatchSet
+// .NAME	PairMatchSet - Set of pairs of integers
+// .LIBRARY	MViewBasics
+// .HEADER	MultiView Package
+// .INCLUDE	mvl/PairMatchSet.h
+// .FILE	PairMatchSet.cxx
 //
 // .SECTION Description
 //    A PairMatchSet stores tuples of integers (i1, i2), stored as
@@ -13,7 +16,7 @@
 //    therefore:
 //
 //    Indexing on i1 ("forward matches") is O(1)
-//    
+//
 //    Indexing on i2 ("backward matches") is O(n)
 //
 //    The first index must be unique (see PairMatchMulti to allow
@@ -23,11 +26,6 @@
 //    A class PairMatchSet::iterator is provided to allow traversal of
 //    the complete list of matches.
 //
-// .NAME        PairMatchSet - Set of pairs of integers.
-// .LIBRARY     MViewBasics
-// .HEADER	MultiView Package
-// .INCLUDE     mvl/PairMatchSet.h
-// .FILE        PairMatchSet.cxx
 // .SECTION Author
 //     Andrew W. Fitzgibbon, Oxford RRG, 09 Aug 96
 //
@@ -43,11 +41,11 @@ public:
   enum { use_existing = true };
 public:
   // Constructors/Destructors--------------------------------------------------
-  
+
   PairMatchSet(unsigned size = 0);
   PairMatchSet(const PairMatchSet& that);
   PairMatchSet& operator=(const PairMatchSet& that);
-  
+
   virtual ~PairMatchSet();
 
   // Data Control--------------------------------------------------------------
@@ -60,14 +58,14 @@ public:
 
   // Operations----------------------------------------------------------------
   int count() const { return _match_count; }
-  
+
   void update_feature_match_data();
   void clear();
 
   void update(const vcl_vector<bool>& inliers);
 
   int  size() const;
-  
+
   // Computations--------------------------------------------------------------
   int  compute_match_count();
 
@@ -104,7 +102,7 @@ public:
   void print_brief() const;
   void write_ascii(ostream& s) const;
   bool read_ascii(istream& s);
-  
+
   friend ostream& operator<<(ostream& s, const PairMatchSet& cc);
   friend istream& operator>>(istream& s, PairMatchSet& cc);
 
@@ -115,5 +113,4 @@ protected:
   int _match_count;
 };
 
-#endif   // DO NOT ADD CODE AFTER THIS LINE! END OF DEFINITION FOR CLASS PairMatchSet.
-
+#endif // PairMatchSet_h_

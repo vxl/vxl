@@ -1,5 +1,5 @@
-#ifndef _decls_h_
-#define _decls_h_
+#ifndef vbl_fwd_h_
+#define vbl_fwd_h_
 
 #ifdef __GNUG__
 #pragma interface
@@ -14,4 +14,4 @@ typedef tmpl_point2D<double> doublePoint2D;
 
 template <class T> struct fast_array2d;
 
-#endif
+#endif // vbl_fwd_h_

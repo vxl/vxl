@@ -1,12 +1,6 @@
-//-*- c++ -*-------------------------------------------------------------------
 #ifdef __GNUC__
-#pragma implementation "HMatrix2DSimilarityCompute.h"
+#pragma implementation
 #endif
-//
-// Class: HMatrix2DSimilarityCompute
-// Author: David Capel, Oxford RRG
-// Created: 13 May 98
-// Modifications:
 
 #include "HMatrix2DSimilarityCompute.h"
 

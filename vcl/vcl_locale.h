@@ -11,4 +11,4 @@
 
 #include <locale>
 
-#endif
+#endif // vcl_locale_h_

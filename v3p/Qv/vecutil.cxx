@@ -25,7 +25,7 @@
 
 //<file>
 //
-// Name:        vecutil.C
+// Name:        vecutil.cxx
 //
 // Purpose:     utilities for 3D vectors
 //

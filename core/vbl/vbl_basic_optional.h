@@ -6,7 +6,7 @@
 // .LIBRARY vbl
 // .HEADER vxl package
 // .INCLUDE vbl/vbl_basic_optional.h
-// .FILE vbl/vbl_basic_optional.cxx
+// .FILE vbl_basic_optional.cxx
 //
 // .SECTION Author:
 //             Rupert Curwen
@@ -28,7 +28,7 @@
 // vbl_basic_optional is templated and specialized to support
 // templated classes which have optional arguments.  The traits
 // class defined here enables compile time optimization of such
-// templates so that only the appropriate pieces of code are 
+// templates so that only the appropriate pieces of code are
 // included in each instantiation.
 //
 class vbl_basic_optional
@@ -63,12 +63,12 @@ inline ostream& operator<<(ostream& str, const vbl_basic_optional&)
   return str;
 }
 
-inline bool operator==(const vbl_basic_optional&, const vbl_basic_optional&) 
+inline bool operator==(const vbl_basic_optional&, const vbl_basic_optional&)
 {
   return true;
 }
 
-inline bool operator!=(const vbl_basic_optional&, const vbl_basic_optional&) 
+inline bool operator!=(const vbl_basic_optional&, const vbl_basic_optional&)
 {
   return false;
 }

@@ -1,15 +1,6 @@
-//-*- c++ -*-------------------------------------------------------------------
 #ifdef __GNUC__
-#pragma implementation "oxp_parse_seqname.h"
+#pragma implementation
 #endif
-//
-// Class: oxp_parse_seqname
-// Author: Andrew W. Fitzgibbon, Oxford RRG
-// Created: 22 Jul 00
-// Modifications:
-//   000722 AWF Initial version.
-//
-//-----------------------------------------------------------------------------
 
 #include "oxp_parse_seqname.h"
 

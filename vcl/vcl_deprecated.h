@@ -19,4 +19,4 @@
 // # pragma warning deprecated
 #endif
 
-#endif
+#endif // vcl_deprecated_h_

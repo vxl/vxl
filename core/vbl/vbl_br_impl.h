@@ -6,7 +6,7 @@
 // .LIBRARY vbl
 // .HEADER vxl package
 // .INCLUDE vbl/vbl_br_impl.h
-// .FILE vbl/vbl_br_impl.cxx
+// .FILE vbl_br_impl.cxx
 //
 // .SECTION Author:
 //             Rupert Curwen, January 14th, 1998
@@ -33,9 +33,9 @@ class vbl_basic_relation_factory;
 
 //------------------------------------------------------------
 //: Abstract base class for implementations of easy relation iterators.
-template <class T1, class T2, 
-  VCL_DFL_TYPE_PARAM_STLDECL(T3,vbl_basic_optional), 
-  VCL_DFL_TYPE_PARAM_STLDECL(T4,vbl_basic_optional), 
+template <class T1, class T2,
+  VCL_DFL_TYPE_PARAM_STLDECL(T3,vbl_basic_optional),
+  VCL_DFL_TYPE_PARAM_STLDECL(T4,vbl_basic_optional),
   VCL_DFL_TYPE_PARAM_STLDECL(T5,vbl_basic_optional)>
 class vbl_br_iter_impl
 {
@@ -75,9 +75,9 @@ public:
 // for those types.  This is an abstract base class, the only
 // functionality implemented here being the naming of
 // relations.
-template <class T1, class T2, 
-  VCL_DFL_TYPE_PARAM_STLDECL(T3,vbl_basic_optional), 
-  VCL_DFL_TYPE_PARAM_STLDECL (T4, vbl_basic_optional), 
+template <class T1, class T2,
+  VCL_DFL_TYPE_PARAM_STLDECL(T3,vbl_basic_optional),
+  VCL_DFL_TYPE_PARAM_STLDECL (T4, vbl_basic_optional),
   VCL_DFL_TYPE_PARAM_STLDECL(T5,vbl_basic_optional)>
 class vbl_br_impl : public vbl_ref_count
 {
@@ -159,4 +159,4 @@ protected:
   existing_map existing;
 };
 
-#endif
+#endif // vbl_br_impl_h

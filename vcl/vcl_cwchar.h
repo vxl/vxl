@@ -11,4 +11,4 @@
 
 #include <wchar.h>
 
-#endif
+#endif // vcl_cwchar_h_

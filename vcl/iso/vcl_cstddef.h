@@ -12,4 +12,4 @@
 #define vcl_size_t std::size_t
 #endif
 
-#endif
+#endif // vcl_iso_cstddef_h_

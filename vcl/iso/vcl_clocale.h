@@ -3,4 +3,4 @@
 
 #include <clocale>
 
-#endif
+#endif // vcl_iso_clocale_h_

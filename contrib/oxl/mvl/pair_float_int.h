@@ -28,4 +28,4 @@ ostream& operator<<(ostream& s, const pair_float_int& p)
 
 int pair_float_int_compare_ascend(pair_float_int const& p1, pair_float_int const& p2);
 
-#endif
+#endif // pair_float_int_h_

@@ -1,4 +1,3 @@
-//-*- c++ -*-------------------------------------------------------------------
 #ifndef vgl_polygon_h_
 #define vgl_polygon_h_
 #ifdef __GNUC__
@@ -58,5 +57,4 @@ protected:
   // Helpers-------------------------------------------------------------------
 };
 
-#endif   // DO NOT ADD CODE AFTER THIS LINE! END OF DEFINITION FOR CLASS vgl_polygon.
-
+#endif // vgl_polygon_h_

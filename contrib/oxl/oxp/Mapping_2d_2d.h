@@ -1,26 +1,23 @@
-//-*- c++ -*-------------------------------------------------------------------
 #ifndef Mapping_2d_2d_h_
 #define Mapping_2d_2d_h_
 #ifdef __GNUC__
 #pragma interface
 #endif
 //
-// Class : Mapping_2d_2d
+// .NAME	Mapping_2d_2d - Mapping from R^2 -> R^2
+// .LIBRARY	POX
+// .HEADER	Oxford Package
+// .INCLUDE	oxp/Mapping_2d_2d.h
+// .FILE	Mapping_2d_2d.cxx
 //
 // .SECTION Description
 //    Mapping_2d_2d is a base class for functions from R^2 -> R^2.
-//    Operations such as warping can take a Mapping_2d_2d object 
+//    Operations such as warping can take a Mapping_2d_2d object
 //    and therefore be able to perform arbitrary warps.
 //
 //    The user should subclass from Mapping_2d_2d, and write
 //    the virtual functions implement_map, and implement_inverse_map.
 //
-// .NAME        Mapping_2d_2d - Mapping from R^2 -> R^2
-// .LIBRARY     POX
-// .HEADER	Oxford Package
-// .INCLUDE     oxp/Mapping_2d_2d.h
-// .FILE        Mapping_2d_2d.h
-// .FILE        Mapping_2d_2d.cxx
 // .SECTION Author
 //     Andrew W. Fitzgibbon, Oxford RRG, 16 Mar 97
 //
@@ -53,11 +50,10 @@ struct Mapping_2d_2d {
     implement_inverse_map(in[0], in[1], &ret[0], &ret[1]);
     return ret;
   }
-  
+
 public:
   virtual void implement_map(double x1, double y1, double* x2, double* y2) = 0;
   virtual void implement_inverse_map(double x2, double y2, double* x1, double* y1) = 0;
 };
 
-#endif   // DO NOT ADD CODE AFTER THIS LINE! END OF DEFINITION FOR CLASS Mapping_2d_2d.
-
+#endif // Mapping_2d_2d_h_

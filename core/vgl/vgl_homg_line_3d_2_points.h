@@ -6,7 +6,7 @@
 // two points
 // .LIBRARY vgl
 // .INCLUDE vgl/vgl_homg_line_3d_2_points.h
-// .FILE    vgl/vgl_homg_line_3d_2_points.txx
+// .FILE    vgl_homg_line_3d_2_points.txx
 //
 // .SECTION Description
 // A class to hold a homogeneous representation of a 3D Line.  The line is
@@ -62,7 +62,7 @@ public:
   //+**************************************************************************
   // Data access
   //+**************************************************************************
-  
+
   vgl_homg_point_3d<Type>const& get_point_finite() const {return point_finite_;}
   vgl_homg_point_3d<Type>     & get_point_finite()       {return point_finite_;}
   vgl_homg_point_3d<Type>const& get_point_infinite()const{return point_infinite_;}
@@ -71,7 +71,7 @@ public:
   //+**************************************************************************
   // Utility methods
   //+**************************************************************************
-  
+
   //---------------------------------------------------------------------------
   //: force the point point_infinite_ to infinity, without changing the line
   //---------------------------------------------------------------------------

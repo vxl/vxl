@@ -1,6 +1,5 @@
-//-*- c++ -*-------------------------------------------------------------------
-#ifndef vcl_compiler_h_
-#define vcl_compiler_h_
+#ifndef old_vcl_compiler_h_
+#define old_vcl_compiler_h_
 
 // ** First declare the defaults and describe them, then fix individual
 // compilers.  Examples of each construct are provided, for those who don't keep
@@ -646,4 +645,4 @@ typedef int saw_VCL_FOR_SCOPE_HACK;
 // fix to instantiate template functions
 #define VCL_INSTANTIATE_NONINLINE(fn_decl) template fn_decl ;
 
-#endif   // DO NOT ADD CODE AFTER THIS LINE! END OF VCL_compiler.
+#endif // old_vcl_compiler_h_

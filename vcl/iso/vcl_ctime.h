@@ -56,4 +56,4 @@
 #define vcl_time std::time
 #endif
 
-#endif
+#endif // vcl_iso_ctime_h_

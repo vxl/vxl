@@ -20,4 +20,4 @@
 #define vcl_ofstream std::ofstream
 #endif
 
-#endif
+#endif // vcl_iso_fstream_h_

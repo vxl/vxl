@@ -118,4 +118,4 @@ inline T vcl_min(T const& a, T const& b)
 # define vcl_upper_bound       vcl_algorithm_h_STD upper_bound
 #endif
 
-#endif // inclusion guard
+#endif // vcl_algorithm_h_

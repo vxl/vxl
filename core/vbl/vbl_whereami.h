@@ -3,12 +3,13 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
-/*
-  fsm@robots.ox.ac.uk
-*/
+//
+// .SECTION Author
+//  fsm@robots.ox.ac.uk
+//
 
 #include <vcl/vcl_iostream.h>
 
 #define vbl_whereami (cerr << __FILE__ ", line " << __LINE__ << " : ")
 
-#endif
+#endif // vbl_whereami_h_

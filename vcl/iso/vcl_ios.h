@@ -108,4 +108,4 @@
 // the std::ios::(in|out|etc) flags should
 // live in this header file (27.4.2).
 
-#endif
+#endif // vcl_iso_ios_h_

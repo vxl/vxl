@@ -22,4 +22,4 @@
 # include <vcl/iso/vcl_vector.h>
 #endif
 
-#endif
+#endif // vcl_vector_h_

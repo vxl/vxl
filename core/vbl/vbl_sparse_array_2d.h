@@ -4,11 +4,11 @@
 #pragma interface
 #endif
 //
-// .NAME        vbl_sparse_array_2d - Sparse 2D array.
-// .LIBRARY     vbl
+// .NAME	vbl_sparse_array_2d - Sparse 2D array
+// .LIBRARY	vbl
 // .HEADER	vxl package
-// .INCLUDE     vbl/vbl_sparse_array_2d.h
-// .FILE        vbl/vbl_sparse_array_2d.cxx
+// .INCLUDE	vbl/vbl_sparse_array_2d.h
+// .FILE	vbl_sparse_array_2d.cxx
 //
 // .SECTION Description
 //    vbl_sparse_array_2d is a sparse 2D array allowing space efficient access of
@@ -55,22 +55,22 @@ public:
   T& operator () (unsigned i, unsigned j) {
     return Base::operator[](encode(i,j));
   }
-  
+
 // -- Return contents of (i,j).  Assertion failure if not yet filled.
-  const T& operator () (unsigned i, unsigned j) const { 
+  const T& operator () (unsigned i, unsigned j) const {
     return Base::operator[](encode(i,j));
   }
-   
+
 // -- Return true if location (i,j) has been filled.
   bool fullp(unsigned i, unsigned j) const {
     return Base::fullp(encode(i,j));
   }
-  
+
 // -- Return the address of location (i,j).  0 if not yet filled.
   T* get_addr(unsigned i, unsigned j) {
     return Base::get_addr(encode(i,j));
   }
-  
+
   // Computations--------------------------------------------------------------
 // -- Return number of locations that have been assigned a value using "put".
   vbl_sparse_array<T>::count_nonempty;
@@ -99,5 +99,4 @@ extern "please include vbl/vbl_sparse_array_2d.txx instead"
 #define VBL_SPARSE_ARRAY_2D_INSTANTIATE(T) \
 extern "please include vbl/vbl_sparse_array_2d.txx instead"
 
-#endif   // DO NOT ADD CODE AFTER THIS LINE! END OF DEFINITION FOR CLASS vbl_sparse_array_2d.
-
+#endif // vbl_sparse_array_2d_h_

@@ -17,14 +17,14 @@ const char *QvElement::nodeTypeNames[QvElement::NumNodeTypes] = {
 
 QvElement::QvElement()
 {
-    // These will be set to something real when the element is
-    // added to the state
-    depth = -1;
-    next = NULL;
+  // These will be set to something real when the element is
+  // added to the state
+  depth = -1;
+  next = NULL;
 
-    // Presumably, the caller will set these
-    data = NULL;
-    type = Unknown;
+  // Presumably, the caller will set these
+  data = NULL;
+  type = Unknown;
 }
 
 QvElement::~QvElement()
@@ -34,5 +34,5 @@ QvElement::~QvElement()
 void
 QvElement::print()
 {
-    printf("\t\tElement of type %s\n", nodeTypeNames[type]);
+  printf("\t\tElement of type %s\n", nodeTypeNames[type]);
 }

@@ -4,24 +4,24 @@
 #include "QvSFEnum.h"
 #include "QvSubNode.h"
 
-class QvMaterialBinding : public QvNode {
+class QvMaterialBinding : public QvNode
+{
+  QV_NODE_HEADER(QvMaterialBinding);
 
-    QV_NODE_HEADER(QvMaterialBinding);
+public:
+  enum Binding {
+    DEFAULT,
+    OVERALL,
+    PER_PART,
+    PER_PART_INDEXED,
+    PER_FACE,
+    PER_FACE_INDEXED,
+    PER_VERTEX,
+    PER_VERTEX_INDEXED
+  };
 
-  public:
-    enum Binding {
-	DEFAULT,
-	OVERALL,
-	PER_PART,
-	PER_PART_INDEXED,
-	PER_FACE,
-	PER_FACE_INDEXED,
-	PER_VERTEX,
-	PER_VERTEX_INDEXED
-    };
-
-    // Fields:
-    QvSFEnum		value;			
+  // Fields:
+  QvSFEnum		value;
 };
 
 #endif /* _QV_MATERIAL_BINDING_ */

@@ -132,63 +132,63 @@ QvMField::makeRoom(int newNum)
 QvBool
 QvMField::readValue(QvInput *in)
 {
-    char c;
-    int	curIndex = 0;
+  char	c;
+  int	curIndex = 0;
 
-    // TODO: check whether enlarging array in groups speeds up parsing
+  // TODO: check whether enlarging array in groups speeds up parsing
 
-    if (in->read(c) && c == OPEN_BRACE_CHAR) {
+  if (in->read(c) && c == OPEN_BRACE_CHAR) {
 
-	if (in->read(c) && c == CLOSE_BRACE_CHAR)
-	    ;				
-	else {
-	    in->putBack(c);
+    if (in->read(c) && c != CLOSE_BRACE_CHAR)
+    {
+      in->putBack(c);
 
-	    while (TRUE) {
+      while (true) {
 
-		if (curIndex >= num)
-		    makeRoom(curIndex + 1);
+	if (curIndex >= num)
+	  makeRoom(curIndex + 1);
 
-		if (! read1Value(in, curIndex++) || ! in->read(c)) {
-		    QvReadError::post(in, "Couldn't read value %d of field",
-				      curIndex);
-		    return FALSE;
-		}
-
-		if (c == VALUE_SEPARATOR_CHAR) {
-		    if (in->read(c)) {
-			if (c == CLOSE_BRACE_CHAR)
-			    break;
-			else
-			    in->putBack(c);
-		    }
-		}
-
-		else if (c == CLOSE_BRACE_CHAR)
-		    break;
-
-		else {
-		    QvReadError::post(in,
-				      "Expected '%c' or '%c' but got "
-				      "'%c' while reading value %d",
-				      VALUE_SEPARATOR_CHAR,
-				      CLOSE_BRACE_CHAR, c,
-				      curIndex);
-		    return FALSE;
-		}
-	    }
+	if (! read1Value(in, curIndex++) || ! in->read(c)) {
+	  QvReadError::post(in, "Couldn't read value %d of field",
+			    curIndex);
+	  return FALSE;
 	}
 
-	if (curIndex < num)
-	    makeRoom(curIndex);
+	if (c == VALUE_SEPARATOR_CHAR) {
+	  if (in->read(c)) {
+	    if (c == CLOSE_BRACE_CHAR)
+	      break;
+	    else
+	      in->putBack(c);
+	  }
+	}
+
+	else if (c == CLOSE_BRACE_CHAR)
+	  break;
+
+	else {
+	  QvReadError::post(in,
+			    "Expected '%c' or '%c' but got "
+			    "'%c' while reading value %d",
+			    VALUE_SEPARATOR_CHAR,
+			    CLOSE_BRACE_CHAR, c,
+			    curIndex);
+	  return FALSE;
+	}
+      }
     }
 
-    else {
-	in->putBack(c);
-	makeRoom(1);
-	if (! read1Value(in, 0))
-	    return FALSE;
-    }
+    if (curIndex < num)
+        makeRoom(curIndex);
+  }
 
-    return TRUE;
+  else // c != OPEN_BRACE_CHAR
+  {
+    in->putBack(c);
+    makeRoom(1);
+    if (! read1Value(in, 0))
+      return FALSE;
+  }
+
+  return TRUE;
 }

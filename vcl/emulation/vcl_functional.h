@@ -560,4 +560,4 @@ mem_fun1_ref(Result (Class::*ptr)(Arg)) {
 
 # endif
 
-#endif
+#endif // vcl_emulation_functional_h

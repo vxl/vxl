@@ -12,4 +12,4 @@
 template <class T>
 bool vgl_polygon_test_inside(T const *xs, T const *ys, unsigned n, T x, T y);
 
-#endif
+#endif // vgl_polygon_test_h_

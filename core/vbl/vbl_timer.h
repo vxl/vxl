@@ -11,7 +11,7 @@
 // Texas Instruments Incorporated provides this software "as is" without
 // express or implied warranty.
 //
-// .NAME vbl_timer - A timing facility for C++.
+// .NAME vbl_timer - A timing facility for C++
 // .LIBRARY vbl
 // .HEADER vxl package
 // .INCLUDE vbl/vbl_timer.h
@@ -20,15 +20,15 @@
 //
 //
 // .SECTION Description
-// The Timer class and provides an interface to system timing.  
-// It allows a C++ program to record the time between  a  reference  
+// The Timer class and provides an interface to system timing.
+// It allows a C++ program to record the time between  a  reference
 // point (mark) and now. This class uses the system
 // time(2) interface to provide time resolution at either mil-
 // lisecond  or microsecond granularity, depending upon operat-
 // ing system support and features. Since the time duration  is
 // stored  in  a  32-bit  word,  the maximum time period before
 // rollover occurs is about 71 minutes.
-// 
+//
 // Due to operating system dependencies, the  accuracy  of  all
 // member  function results may not be as documented. For exam-
 // ple, some operating  systems  do  not  support  timers  with
@@ -46,16 +46,16 @@ class vbl_timer {
 public:
   vbl_timer();   // construct and mark
   ~vbl_timer();
-  
+
   void mark();   // mark timer
 
   long real();   // real        time (ms) since last mark
   long user();   // user        time (ms) since last mark
   long system(); // system      time (ms) since last mark
   long all();    // user+system time (ms) since last mark
-  
+
   void print(ostream& s);
-  
+
 private:
   vbl_timer_data *data;
   // disallow.
@@ -63,4 +63,4 @@ private:
   void operator=(vbl_timer const &) { }
 };
 
-#endif
+#endif // vbl_timer_h

@@ -11,4 +11,4 @@
 
 #include <locale.h>
 
-#endif
+#endif // vcl_clocale_h_

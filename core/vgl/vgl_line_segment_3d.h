@@ -40,4 +40,4 @@ ostream&  operator<<(ostream& s, const vgl_line_segment_3d<Type>& p);
 template <class Type>
 istream&  operator>>(istream& is,  vgl_line_segment_3d<Type>& p);
 
-#endif 
+#endif // vgl_line_segment_3d_h_

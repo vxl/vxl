@@ -1,14 +1,6 @@
-//-*- c++ -*-------------------------------------------------------------------
 #ifdef __GNUC__
-#pragma implementation "FMPlanarNonLinFun.h"
+#pragma implementation
 #endif
-//
-// Class: FMPlanarNonLinFun
-// Author: Andrew W. Fitzgibbon, Oxford RRG
-// Created: 20 Aug 96
-// Modifications:
-//
-//-----------------------------------------------------------------------------
 
 #include "FMPlanarNonLinFun.h"
 

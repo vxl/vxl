@@ -113,4 +113,4 @@ public:
   virtual void get_texture_coords(const void* vertex, double* u, double* v) const = 0;
 };
 
-#endif
+#endif // vrml_io_h_

@@ -192,4 +192,4 @@ using std::fstream;
 using std::ifstream;
 using std::ofstream;
 
-#endif
+#endif // vcl_iso_iosfwd_h_

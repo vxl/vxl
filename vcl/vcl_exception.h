@@ -41,4 +41,4 @@ struct vcl_throw_handler {
 
 #endif
 
-#endif
+#endif // vcl_exception_h_

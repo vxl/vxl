@@ -16,4 +16,4 @@
 #define vcl_bad_typeid std::bad_typeid
 #endif
 
-#endif
+#endif // vcl_iso_typeinfo_h_

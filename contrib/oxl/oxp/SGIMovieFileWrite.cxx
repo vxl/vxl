@@ -1,15 +1,6 @@
-//-*- c++ -*-------------------------------------------------------------------
 #ifdef __GNUC__
-#pragma implementation "SGIMovieFileWrite.h"
+#pragma implementation
 #endif
-//
-// Class: SGIMovieFileWrite
-// Author: Andrew W. Fitzgibbon, Oxford RRG
-// Created: 11 Jan 99
-// Modifications:
-//   990111 AWF Initial version.
-//
-//-----------------------------------------------------------------------------
 
 #include "SGIMovieFileWrite.h"
 

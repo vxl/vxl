@@ -36,4 +36,4 @@ VCL_INSTANTIATE_INLINE(bool operator> (T const &, T const &)); \
 VCL_INSTANTIATE_INLINE(bool operator<=(T const &, T const &)); \
 VCL_INSTANTIATE_INLINE(bool operator>=(T const &, T const &));
 
-#endif
+#endif // vcl_rel_ops_h_

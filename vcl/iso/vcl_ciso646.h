@@ -3,4 +3,4 @@
 
 #include <ciso646>
 
-#endif
+#endif // vcl_iso_ciso646_h_

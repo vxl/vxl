@@ -117,4 +117,4 @@ istream&  operator>>(istream& is, vgl_plane_3d<Type>& p) {
   return is >> p.data_[0] >> p.data_[1] >> p.data_[2] >> p.data_[3];
 }
 
-#endif
+#endif // vgl_plane_3d_h

@@ -28,4 +28,4 @@
 #define vcl_getline std::getline
 #endif
 
-#endif
+#endif // vcl_iso_string_h_

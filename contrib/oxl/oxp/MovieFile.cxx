@@ -1,15 +1,6 @@
-//-*- c++ -*-------------------------------------------------------------------
 #ifdef __GNUC__
-#pragma implementation "MovieFile.h"
+#pragma implementation
 #endif
-//
-// Class: MovieFile
-// Author: Andrew W. Fitzgibbon, Oxford RRG
-// Created: 26 Aug 98
-// Modifications:
-//   980826 AWF Initial version.
-//
-//-----------------------------------------------------------------------------
 
 #include "MovieFile.h"
 

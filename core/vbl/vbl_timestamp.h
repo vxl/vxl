@@ -27,4 +27,4 @@ private:
   static unsigned long get_unique_timestamp();
 };
 
-#endif
+#endif // vbl_timestamp_h

@@ -5,4 +5,4 @@
 namespace std { template <class T> class complex; }
 # define vcl_complex std::complex
 
-#endif
+#endif // vcl_sunpro_complex_fwd_h_

@@ -20,4 +20,4 @@
 #define vcl_adjacent_difference std::adjacent_difference
 #endif
 
-#endif
+#endif // vcl_iso_numeric_h_

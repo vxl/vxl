@@ -1,27 +1,31 @@
-//-*- c++ -*-------------------------------------------------------------------
 #ifndef FManifoldProject_h_
 #define FManifoldProject_h_
 #ifdef __GNUC__
 #pragma interface
 #endif
-//
-// Class : FManifoldProject
+// .NAME	FManifoldProject - Fast 2-view Hartley-Sturm
+// .LIBRARY	MViewBasics
+// .HEADER	MultiView Package
+// .INCLUDE	mvl/FManifoldProject.h
+// .FILE	FManifoldProject.cxx
 //
 // .SECTION Description
 //    FManifoldProject is a class which allows repeated fast application of the
 //    manifold projection ("Hartley-Sturm") correction to points in two views.
 //
-// .NAME        FManifoldProject - Fast 2-view Hartley-Sturm.
-// .LIBRARY     MViewBasics
-// .HEADER	MultiView Package
-// .INCLUDE     mvl/FManifoldProject.h
-// .FILE        FManifoldProject.cxx
 // .SECTION Author
 //     Andrew W. Fitzgibbon, Oxford RRG, 22 Jan 97
 //
 // .SECTION Modifications:
-//     AWF 030897 Moved to MViewBasics
-//
+//   AWF 030897 Moved to MViewBasics
+//   210598 AWF Return squared error, as sqrt(|x - p|^2 + |x' - p'|^2) is meaningless.
+//   AWF Handle affine F.
+//   P. Torr added in a check for multiple solutions 
+//     this might be necessary to flag the instance when a particular correspondence
+//     might have severla possible closest points all near to each other,
+//     indicating high structure variability and high curvature in the F manifold.
+//     These points should be treated with care, but are interesting as
+//     they are in loci of high information.
 //-----------------------------------------------------------------------------
 
 #include <vnl/vnl_double_3x3.h>
@@ -54,5 +58,4 @@ private:
   vnl_vector<double> _coeffs;
 };
 
-#endif   // DO NOT ADD CODE AFTER THIS LINE! END OF DEFINITION FOR CLASS FManifoldProject.
-
+#endif // FManifoldProject_h_

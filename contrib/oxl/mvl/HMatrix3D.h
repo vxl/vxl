@@ -1,26 +1,22 @@
-//-*- c++ -*-------------------------------------------------------------------
 #ifndef _HMatrix3D_h
 #define _HMatrix3D_h
 #ifdef __GNUC__
 #pragma interface
 #endif
 //
-// Class : HMatrix2D
-//
-// .SECTION Description:
-//
-// A class to hold a 3D projective transformation matrix
-// and to perform common operations using it e.g. transfer point.
-//
-// .NAME HMatrix3D - 4x4 3D homography.
+// .NAME HMatrix3D - 4x4 3D homography
 // .LIBRARY MViewBasics
 // .HEADER MultiView package
 // .INCLUDE mvl/HMatrix3D.h
 // .FILE HMatrix3D.cxx
 //
+// .SECTION Description:
+// A class to hold a 3D projective transformation matrix
+// and to perform common operations using it e.g. transfer point.
+//
 #include <vnl/vnl_double_4x4.h>
-#include <mvl/HomgPoint3D.h>    
-#include <mvl/HomgLine3D.h>    
+#include <mvl/HomgPoint3D.h>
+#include <mvl/HomgLine3D.h>
 #include <mvl/HomgLineSeg3D.h>
 
 class PMatrix;
@@ -35,23 +31,23 @@ public:
   HMatrix3D(const double* t_matrix);
   HMatrix3D(istream&);
  ~HMatrix3D();
-  
+
   // Operations----------------------------------------------------------------
-  
+
   HomgPoint3D transform(const HomgPoint3D& x1) const;
   HomgLine3D transform(const HomgLine3D& l1) const;
-  
+
   bool load(istream&);
 
   // Data Access---------------------------------------------------------------
-  
+
   double get (unsigned int row_index, unsigned int col_index) const;
   void get (double *t_matrix) const;
   void get (vnl_matrix<double>* t_matrix) const;
 
   // @deprecated
   vnl_double_4x4& asMatrix () { return *this; }
- 
+
   // @deprecated
   const vnl_double_4x4& get_matrix () const { return *this; }
 
@@ -64,4 +60,4 @@ PMatrix operator* (const PMatrix&, const HMatrix3D& H);
 ostream &operator<<(ostream &,HMatrix3D const &);
 istream& operator>>(istream &,HMatrix3D       &);
 
-#endif
+#endif // _HMatrix3D_h

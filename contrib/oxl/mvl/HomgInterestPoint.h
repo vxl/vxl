@@ -1,22 +1,20 @@
-//-*- c++ -*-------------------------------------------------------------------
 #ifndef HomgInterestPoint_h_
 #define HomgInterestPoint_h_
 #ifdef __GNUC__
 #pragma interface
 #endif
 //
-// Class : HomgInterestPoint
+// .NAME	HomgInterestPoint - Homogeneous interest point/corner
+// .LIBRARY	MViewBasics
+// .HEADER	MultiView Package
+// .INCLUDE	mvl/HomgInterestPoint.h
+// .FILE	HomgInterestPoint.cxx
 //
 // .SECTION Description
 //    HomgInterestPoint is a representation of an interest point
 //    resulting from feature detection.  At Oxford this generally
 //    means a Harris corner.
 //
-// .NAME        HomgInterestPoint - Homogeneous interest point/corner.
-// .LIBRARY     MViewBasics
-// .HEADER	MultiView Package
-// .INCLUDE     mvl/HomgInterestPoint.h
-// .FILE        HomgInterestPoint.cxx
 // .SECTION Author
 //     Andrew W. Fitzgibbon, Oxford RRG, 17 Aug 96
 //
@@ -53,5 +51,4 @@ public:
 
 ostream& operator << (ostream& s, const HomgInterestPoint&);
 
-#endif   // DO NOT ADD CODE AFTER THIS LINE! END OF DEFINITION FOR CLASS HomgInterestPoint.
-
+#endif // HomgInterestPoint_h_

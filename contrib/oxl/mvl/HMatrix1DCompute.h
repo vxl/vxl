@@ -1,11 +1,7 @@
+#ifndef _HMatrix1DCompute_h
+#define _HMatrix1DCompute_h
+
 //--------------------------------------------------------------
-//
-// Class : HMatrix1DCompute
-//
-// .SECTION Description:
-//
-// Base class of classes to generate a line-to-line projectivity matrix from
-// a set of matched points.
 //
 // .NAME HMatrix1DCompute
 // .LIBRARY MViewCompute
@@ -13,12 +9,13 @@
 // .INCLUDE mvl/HMatrix1DCompute.h
 // .FILE HMatrix1DCompute.cxx
 //
+// .SECTION Description:
+// Base class of classes to generate a line-to-line projectivity matrix from
+// a set of matched points.
+//
 // .SECTION Author
 //  Frederik Schaffalitzky , Robotic Research Group
 //
-
-#ifndef _HMatrix1DCompute_h
-#define _HMatrix1DCompute_h
 
 class HMatrix1D;
 #include <mvl/HomgPoint1D.h>
@@ -30,8 +27,24 @@ class HMatrix1D;
 // definition of class :
 //
 class HMatrix1DCompute {
- private:
-  
+ public:
+  //
+  HMatrix1DCompute() : verbose_(false) { }
+  virtual ~HMatrix1DCompute() { }
+
+  //
+  void verbose(bool);	// set this to true for verbose run-time information
+
+  //
+  // Compute methods :
+  //
+  bool compute(const vcl_vector<HomgPoint1D>&,
+	       const vcl_vector<HomgPoint1D>&,
+	       HMatrix1D *);
+  bool compute(const double [],
+	       const double [],
+	       int,
+	       HMatrix1D *);
  protected:
   bool verbose_;
 
@@ -42,26 +55,6 @@ class HMatrix1DCompute {
 				 const double [],
 				 int N,
 				 HMatrix1D *);
- public:
-  //
-  HMatrix1DCompute() : verbose_(false) { }
-  virtual ~HMatrix1DCompute() { }
-
-  // 
-  void verbose(bool);	// set this to true for verbose run-time information
-
-  // 
-  // Compute methods :
-  //
-  bool compute(const vcl_vector<HomgPoint1D>&,
-	       const vcl_vector<HomgPoint1D>&, 
-	       HMatrix1D *);
-  bool compute(const double [],
-	       const double [],
-	       int,
-	       HMatrix1D *);
 };
 
-#endif
-
-
+#endif // _HMatrix1DCompute_h

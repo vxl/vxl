@@ -87,5 +87,4 @@ struct vcl_dummy_typeid {
 #define typeid(x) vcl_dummy_typeid()
 #endif
 
-#endif   // DO NOT ADD CODE AFTER THIS LINE! END OF DEFINITION FOR CLASS vcl_typeinfo.
-
+#endif // vcl_typeinfo_h_ 

@@ -1,11 +1,14 @@
-//-*- c++ -*-------------------------------------------------------------------
 #ifndef JPEG_Decompressor_h_
 #define JPEG_Decompressor_h_
 #ifdef __GNUC__
 #pragma interface
 #endif
 //
-// Class : JPEG_Decompressor
+// .NAME	JPEG_Decompressor - Simple interface to JPEG library
+// .LIBRARY	POX
+// .HEADER	Oxford Package
+// .INCLUDE	oxp/JPEG_Decompressor.h
+// .FILE	JPEG_Decompressor.cxx
 //
 // .SECTION Description
 //    JPEG_Decompressor is a simplified interface to the JPEG library.
@@ -19,12 +22,6 @@
 //    so the file pointer will not necessarily be pointing to the end
 //    of the jpeg.
 //
-// .NAME        JPEG_Decompressor - Simple interface to JPEG library.
-// .LIBRARY     POX
-// .HEADER	Oxford Package
-// .INCLUDE     oxp/JPEG_Decompressor.h
-// .FILE        JPEG_Decompressor.h
-// .FILE        JPEG_Decompressor.cxx
 // .SECTION Author
 //     Andrew W. Fitzgibbon, Oxford RRG, 30 Dec 98
 //
@@ -46,12 +43,12 @@ public:
   void* GetNextScanLine();
 
   unsigned long GetFilePosition();
-  
+
   void StartNextJPEG();
-  
+
 private:
   JPEG_DecompressorPrivates* pd;
   void init(int fd);
 };
 
-#endif   // DO NOT ADD CODE AFTER THIS LINE! END OF DEFINITION FOR CLASS JPEG_Decompressor.
+#endif // JPEG_Decompressor_h_

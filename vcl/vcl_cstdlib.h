@@ -40,4 +40,4 @@ inline int vcl_abs(long x) { return x >= 0 ? x : -x; }
 
 //inline ldiv_t vcl_div(long x, long y) { return ldiv (x, y); }
 
-#endif
+#endif // vcl_cstdlib_h_

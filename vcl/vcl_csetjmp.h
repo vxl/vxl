@@ -8,4 +8,4 @@
 #include <setjmp.h>
 /* This should define C-style stack unwinding */
 
-#endif
+#endif // vcl_csetjmp_h_

@@ -1,24 +1,22 @@
-//-*- c++ -*-------------------------------------------------------------------
 #ifndef PairMatchMulti_h_
 #define PairMatchMulti_h_
 #ifdef __GNUC__
 #pragma interface
 #endif
 //
-// Class : PairMatchMulti
+// .NAME    PairMatchMulti - Set of pairs of integers
+// .LIBRARY MViewBasics
+// .HEADER  MultiView Package
+// .INCLUDE mvl/PairMatchMulti.h
+// .FILE    PairMatchMulti.cxx
 //
 // .SECTION Description
 //    @{PairMatchMulti is a binary relationship between integers
 //    $i_1 \rightarrow i_2$ where there may be multiple $i_2$ for
-//    each $i_1$.
+//    each $i_1$. @}
 //
-//    The current implementation uses an STL multimap. @}
+//    The current implementation uses an STL multimap.
 //
-// .NAME        PairMatchMulti - Set of pairs of integers.
-// .LIBRARY MViewBasics
-// .HEADER	MultiView Package
-// .INCLUDE mvl/PairMatchMulti.h
-// .FILE        PairMatchMulti.cxx
 // .SECTION Author
 //     Andrew W. Fitzgibbon, Oxford RRG, 16 Sep 96
 //
@@ -48,7 +46,7 @@ public:
   friend class PairMatchMultiIterator;
 
   // Constructors/Destructors--------------------------------------------------
-  
+
   PairMatchMulti();
   PairMatchMulti(istream& s);
   PairMatchMulti(const PairMatchMulti& that);
@@ -57,7 +55,7 @@ public:
   PairMatchMulti& operator=(const PairMatchMulti& that);
 
   // Operations----------------------------------------------------------------
-  
+
 // -- @{ Add a match $(i_1, i_2)$ to the set @}
   void add_match(int i1, int i2) {
     _matches12.insert(i1, i2);
@@ -70,7 +68,7 @@ public:
 
   double get_score(int i1, int i2) const;
   void set_score(int i1, int i2, double score);
-  
+
 // -- Clear all matches
   void clear() {
     _matches12.erase(_matches12.begin(), _matches12.end());
@@ -80,17 +78,17 @@ public:
 
   // for compatibility with PairMatchSet
   int count() const { return _matches12.size(); }
-  
+
   unsigned count_matches_12(int i1);
 
   PairMatchMultiIterator get_match_12(int i1);
   PairMatchMultiIterator get_match_21(int i1);
 
   inline PairMatchMultiIterator iter();
-  
+
   // Computations--------------------------------------------------------------
   bool is_superset(PairMatchSet& unique_set);
-  
+
   // Data Access---------------------------------------------------------------
   bool operator==(PairMatchMulti const& that) const {
     if (this == &that) return true;
@@ -99,14 +97,14 @@ public:
 
   bool load(char const* filename);
   bool read_ascii(istream& s);
-  
+
   // Data Control--------------------------------------------------------------
-  
+
 protected:
   // Data Members--------------------------------------------------------------
   vcl_multimap_uint_uint _matches12;
   vbl_sparse_array_2d<double> *_scores;
-  
+
 private:
   // Helpers-------------------------------------------------------------------
 };
@@ -146,4 +144,4 @@ PairMatchMultiIterator PairMatchMulti::iter()
 ostream& operator << (ostream&, const PairMatchMulti&);
 istream& operator >> (istream&, PairMatchMulti&);
 
-#endif   // DO NOT ADD CODE AFTER THIS LINE! END OF DEFINITION FOR CLASS PairMatchMulti.
+#endif // PairMatchMulti_h_

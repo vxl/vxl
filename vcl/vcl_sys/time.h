@@ -36,4 +36,4 @@ extern "C" int gettimeofday(struct timeval*, struct timezone*);
 // int   select(int, fd_set *, fd_set *, fd_set *, struct timeval *);
 // int   utimes(const char *, const struct timeval [2]);
 
-#endif
+#endif // vcl_sys_time_h_

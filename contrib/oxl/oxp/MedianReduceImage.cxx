@@ -1,15 +1,5 @@
-//-*- c++ -*-------------------------------------------------------------------
-//
-// Module: medfilt
-// Purpose: None, totally pointless
-// Author: Andrew W. Fitzgibbon, Oxford RRG
-// Created: 19 Jun 98
-// Modifications:
-//
-//-----------------------------------------------------------------------------
-
 #ifdef __GNUC__
-#pragma implementation "POX.h"
+#pragma implementation
 #endif
 #include "POX.h"
 

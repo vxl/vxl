@@ -11,4 +11,4 @@
 
 #include <signal.h>
 
-#endif
+#endif // vcl_csignal_h_

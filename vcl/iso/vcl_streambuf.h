@@ -16,4 +16,4 @@
 #define vcl_streambuf std::streambuf
 #endif
 
-#endif
+#endif // vcl_iso_streambuf_h_

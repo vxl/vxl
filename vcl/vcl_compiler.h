@@ -9,4 +9,4 @@
 # include <vcl/old-vcl_compiler.h>
 #endif
 
-#endif
+#endif // vcl_compiler_wrapper_h_

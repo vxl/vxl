@@ -12,4 +12,4 @@
 #define vcl_swap std::swap
 #endif
 
-#endif
+#endif // vcl_iso_deque_h_

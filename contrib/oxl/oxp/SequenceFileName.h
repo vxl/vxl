@@ -1,21 +1,14 @@
-//-*- c++ -*-------------------------------------------------------------------
 #ifndef SequenceFileName_h_
 #define SequenceFileName_h_
 #ifdef __GNUC__
 #pragma interface
 #endif
 //
-// Class : SequenceFileName
-//
-// .SECTION Description
-//    SequenceFileName is a class that awf hasn't documented properly. FIXME
-//
-// .NAME        SequenceFileName - Undocumented class FIXME
-// .LIBRARY     POX
+// .NAME	SequenceFileName
+// .LIBRARY	POX
 // .HEADER	Oxford Package
-// .INCLUDE     oxp/SequenceFileName.h
-// .FILE        SequenceFileName.h
-// .FILE        SequenceFileName.cxx
+// .INCLUDE	oxp/SequenceFileName.h
+// .FILE	SequenceFileName.cxx
 // .SECTION Author
 //     Andrew W. Fitzgibbon, Oxford RRG, 26 Jan 99
 //
@@ -26,11 +19,11 @@
 
 class SequenceFileName {
 public:
-  
+
   // Initialize and infer start and step from any ",1:2:100" in the filename
   SequenceFileName(char const* s, char const* read_or_write = "r");
   SequenceFileName(char const* s, int start_frame, int step, char const* read_or_write = "r");
-  
+
   void set_default_extension(char const* ext);
   vcl_string name(int frame);
   ostream& print(ostream& s) const;
@@ -51,8 +44,8 @@ public:
     end_ = e;
     n_ = (end_ - start_frame_) / step_ + 1;
   }
-  
-public:  
+
+public:
 
   vcl_string fmt_;
   bool ok_;
@@ -69,5 +62,4 @@ protected:
 
 inline ostream& operator<<(ostream& s, const SequenceFileName& p) { return p.print(s); }
 
-#endif   // DO NOT ADD CODE AFTER THIS LINE! END OF DEFINITION FOR CLASS SequenceFileName.
-
+#endif // SequenceFileName_h_

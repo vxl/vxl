@@ -4,11 +4,13 @@
 #pragma interface
 #endif
 
-// .KEYWORDS    command-line arguments options switches getopt
-// .LIBRARY     vbl
-// .HEADER      vxl package
-// .INCLUDE     vbl/vbl_arg.h
-// .FILE        vbl/vbl_arg.cxx
+// .NAME	vbl_arg - command-line arguments
+// .LIBRARY	vbl
+// .HEADER	vxl package
+// .INCLUDE	vbl/vbl_arg.h
+// .FILE	vbl_arg.cxx
+// .KEYWORDS	command-line arguments options switches getopt
+//
 // .SECTION Author
 //     Andrew W. Fitzgibbon, Oxford RRG, 05 Feb 98
 //
@@ -48,7 +50,7 @@ public://protected:
   int optlen_;
   char const* help_;
   char const *type_;
-  
+
   vbl_arg_base(vbl_arg_info_list& l, char const* option_string, char const*helpstring);
   vbl_arg_base(char const* option_string, char const*helpstring);
   virtual ~vbl_arg_base() {}
@@ -104,18 +106,18 @@ inline void vbl_arg_display_usage_and_exit(char const* msg = 0)
 // </verb>
 // The latter is "better" but the former is easier to use so I chose it.
 //
-// Added by Geoff: call to vbl_arg_base::set_help_option("-?") means that a 
+// Added by Geoff: call to vbl_arg_base::set_help_option("-?") means that a
 // program call with something like aprog -? will display usage info derived
-// from the argument list.  Note: default is -? but can be anything. 
+// from the argument list.  Note: default is -? but can be anything.
 //
 template <class T>
 class vbl_arg : public vbl_arg_base {
-public: 
+public:
   //friend void settype     VCL_NULL_TMPL_ARGS (vbl_arg<T> &);
   //friend void print_value VCL_NULL_TMPL_ARGS (ostream &, vbl_arg<T> const &);
   //friend int  parse       VCL_NULL_TMPL_ARGS (vbl_arg<T>*, char**);
   T value_;// public so we don't have to worry about templated friends.
-  
+
   // -- Construct an vbl_arg<T> with command-line switch \arg{option_string}, and default
   // value \arg{default_value}.  Add this argument to the global list of arguments
   // that vbl_arg_base::parse() uses when it eventually gets the command line.
@@ -124,30 +126,30 @@ public:
   // If \arg{option_string} is null, then the argument is assigned to the first plain
   // word in the command line (warning: this causes problems for T=char *, but that
   // just means that you have to have a help string if you want a default... good)
-  vbl_arg(char const* option_string = 0, 
-	  char const* helpstring = 0, 
+  vbl_arg(char const* option_string = 0,
+	  char const* helpstring = 0,
 	  T default_value = T())
-    : vbl_arg_base(option_string,helpstring), value_(default_value) { settype(); }    
-  
+    : vbl_arg_base(option_string,helpstring), value_(default_value) { settype(); }
+
   // -- As above, but add the arg to the list \arg{l}, on which
   // l.parse can be called later.
   vbl_arg(vbl_arg_info_list & l,
 	  char const * option_string = 0,
-	  char const * helpstring = 0, 
+	  char const * helpstring = 0,
 	  T default_value = T())
-    : vbl_arg_base(l, option_string, helpstring), value_(default_value) { settype(); }    
-  
+    : vbl_arg_base(l, option_string, helpstring), value_(default_value) { settype(); }
+
   //: return the arg's current value, whether the default or the one from the command line.
   T      & operator () () { return value_; }
   T const& operator () () const { return value_; }
   //operator T& () { return value_; }
-  
+
   //: returns number of args chomped, or -1 on failure.
   int parse(char ** argv) { return ::parse(this, argv); }
 
-  //: print 
-  ostream& print_value(ostream &s) { 
-    ::print_value(s, *this); 
+  //: print
+  ostream& print_value(ostream &s) {
+    ::print_value(s, *this);
     return s; // << flush
   }
 
@@ -166,7 +168,7 @@ public:
   };
   vbl_arg_info_list(autonomy autonomy__ = subset);
   ~vbl_arg_info_list();
-  
+
   void add(vbl_arg_base* arg);
   void parse(int& argc, char **& argv, bool warn_about_unrecognized_arguments);
   void include(vbl_arg_info_list& l);
@@ -202,6 +204,6 @@ declare_specialization(vcl_list<int>);
 declare_specialization(vcl_string);
 
 #undef declare_specialization
-#endif
+#endif // VCL_KAI
 
-#endif
+#endif // vbl_arg_h_

@@ -2,11 +2,10 @@
 #define vxl_doc_rules_h_
 //-----------------------------------------------------------------------------
 //
+// everything after '-' in the next line is the 'brief' documentation in Doxygen
 // .NAME	vxl_doc_rules - Example file of how documentation should look
-// everything from the '-' in the previous line is the 'brief' documentation in
-// Doxygen
 // .LIBRARY	vxl_doc (not used by Doxygen)
-// .HEADER      vxl Package (not used by Doxygen)
+// .HEADER	vxl Package (not used by Doxygen)
 // .INCLUDE	doc/vxl_doc_rules.h (not used by Doxygen)
 // .FILE	vxl_doc_rules.cxx (not used by Doxygen)
 //
@@ -46,7 +45,6 @@ public:
     VXL_DOUBLE,     /*!< Remark the needed '<' for this ! */
   };
 
-
 };
 
-#endif
+#endif // vxl_doc_rules_h_

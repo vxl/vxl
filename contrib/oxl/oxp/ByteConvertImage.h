@@ -1,21 +1,14 @@
-//-*- c++ -*-------------------------------------------------------------------
 #ifndef ByteConvertImage_h_
 #define ByteConvertImage_h_
 #ifdef __GNUC__
 #pragma interface
 #endif
 //
-// Class : ByteConvertImage
-//
-// .SECTION Description
-//    ByteConvertImage is a class that awf hasn't documented properly. FIXME
-//
-// .NAME        ByteConvertImage - Undocumented class FIXME
-// .LIBRARY     oxp
+// .NAME	ByteConvertImage
+// .LIBRARY	oxp
 // .HEADER	oxl Package
-// .INCLUDE     oxp/ByteConvertImage.h
-// .FILE        ByteConvertImage.h
-// .FILE        ByteConvertImage.cxx
+// .INCLUDE	oxp/ByteConvertImage.h
+// .FILE	ByteConvertImage.cxx
 // .SECTION Author
 //     Andrew W. Fitzgibbon, Oxford RRG, 22 Dec 98
 //
@@ -35,7 +28,7 @@ struct ByteConvertImage : public vil_memory_image_of<vil_byte> {
   ByteConvertImage(vil_memory_image_of<double> const& in, double min, double max);
 
   void print(ostream&) const;
-  
+
 private:
   bool ignore_zero_;
   float min_;
@@ -44,5 +37,4 @@ private:
   void filter(vil_memory_image_of<double> const&);
 };
 
-#endif   // DO NOT ADD CODE AFTER THIS LINE! END OF DEFINITION FOR CLASS ByteConvertImage.
-
+#endif // ByteConvertImage_h_

@@ -30,4 +30,4 @@ inline
 void vcl_construct(U * p, V const & value) { new (p) U(value); }
 #endif
 
-#endif
+#endif // vcl_new_h_

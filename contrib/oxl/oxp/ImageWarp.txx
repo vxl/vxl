@@ -1,13 +1,3 @@
-//-*- c++ -*-------------------------------------------------------------------
-//
-// Class: ImageWarp
-// Author: Andrew W. Fitzgibbon, Oxford RRG
-// Created: 23 Jan 99
-// Modifications:
-//   990123 AWF Initial version.
-//
-//-----------------------------------------------------------------------------
-
 #include "ImageWarp.h"
 
 #include <vcl/vcl_cassert.h>

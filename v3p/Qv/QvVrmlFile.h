@@ -1,11 +1,10 @@
-//-*- c++ -*-------------------------------------------------------------------
 #ifndef QvVrmlFile_h_
 #define QvVrmlFile_h_
 #ifdef __GNUC__
 #pragma interface
 #endif
 //
-// .NAME QvVrmlFile - Parse VRML 1.0 file.
+// .NAME QvVrmlFile - Parse VRML 1.0 file
 // .INCLUDE QvVrmlFile.h
 // .FILE QvVrmlFile.cxx
 //
@@ -16,6 +15,9 @@
 // .SECTION Author
 //     Andrew W. Fitzgibbon, Oxford RRG, 09 Jan 99
 //
+// .SECTION Modifications:
+//   990109 AWF Initial version.
+//
 //-----------------------------------------------------------------------------
 
 struct QvVrmlFileData;
@@ -25,7 +27,7 @@ class  QvNode;
 class QvVrmlFile {
 public:
   // Constructors/Destructors--------------------------------------------------
-  
+
   QvVrmlFile(char const* filename);
   ~QvVrmlFile();
 
@@ -38,15 +40,14 @@ public:
 
   float centroid[3];
   float radius;
-  
+
 protected:
   // Data Members--------------------------------------------------------------
   QvVrmlFileData* p;
-  
+
   void traverse(QvVisitor* visitor, QvNode* node, int indent);
 
   // Helpers-------------------------------------------------------------------
 };
 
-#endif   // DO NOT ADD CODE AFTER THIS LINE! END OF DEFINITION FOR CLASS QvVrmlFile.
-
+#endif // QvVrmlFile_h_

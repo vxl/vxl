@@ -91,4 +91,4 @@ typedef vcl_complex<float>  vcl_float_complex;
 // bogus instantiation macro.
 #define VCL_COMPLEX_INSTANTIATE(T) extern "you must include vcl_complex.txx instead"
 
-#endif
+#endif // vcl_complex_h_

@@ -17,4 +17,4 @@
 
 #define VCL_QUEUE_INSTANTIATE(T) extern "you must #include vcl/vcl_queue.txx"
 
-#endif
+#endif // vcl_queue_h_

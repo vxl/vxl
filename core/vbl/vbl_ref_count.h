@@ -28,4 +28,4 @@ private:
   static VBL_DLL_DATA int verbosity_;
 };
 
-#endif
+#endif // vbl_ref_count_h

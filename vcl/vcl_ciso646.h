@@ -11,4 +11,4 @@
 
 #include <iso646.h>
 
-#endif
+#endif // vcl_ciso646_h_

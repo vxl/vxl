@@ -17,4 +17,4 @@ class HMatrix1DComputeOptimize1 : public HMatrix1DCompute
 
 typedef HMatrix1DComputeOptimize1 HMatrix1DComputeOptimise1;
 
-#endif
+#endif // _HMatrix1DComputeOptimize1_h_

@@ -8,4 +8,4 @@
 #define vcl_va_list std::va_list
 #endif
 
-#endif
+#endif // vcl_iso_cstdarg_h_

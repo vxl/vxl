@@ -1,15 +1,6 @@
-//-*- c++ -*-------------------------------------------------------------------
 #ifdef __GNUC__
-#pragma implementation "PMatrixDecompCR.h"
+#pragma implementation
 #endif
-//
-// Class: PMatrixDecompCR
-// Author: Andrew W. Fitzgibbon, Oxford RRG
-// Created: 08 Jun 98
-// Modifications:
-//   980608 AWF Initial version.
-//
-//-----------------------------------------------------------------------------
 
 #include "PMatrixDecompCR.h"
 

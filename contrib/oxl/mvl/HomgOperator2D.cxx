@@ -1,13 +1,6 @@
 #ifdef __GNUG__
 #pragma implementation
 #endif
-//--------------------------------------------------------------
-//
-// Class : HomgOperator2D
-//
-// Modifications : see HomgOperator2D.h
-//
-//-----------------------------------------------------------------------------
 
 #include <vcl/vcl_cassert.h>
 #include <vcl/vcl_iostream.h>

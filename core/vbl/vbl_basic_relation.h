@@ -6,7 +6,7 @@
 // .LIBRARY vbl
 // .HEADER vxl package
 // .INCLUDE vbl/vbl_basic_relation.h
-// .FILE vbl/vbl_basic_relation.cxx
+// .FILE vbl_basic_relation.cxx
 //
 // .SECTION Author:
 //             Rupert Curwen, October 31st, 1997
@@ -30,9 +30,9 @@
 #define BR_DEFAULT3 BR_DEFAULT2 VCL_DFL_TMPL_ARG(vbl_basic_optional)
 
 #ifndef vbl_basic_relation_where_h
-template <class T1, class T2, 
-  VCL_DFL_TYPE_PARAM_STLDECL(T3,vbl_basic_optional), 
-  VCL_DFL_TYPE_PARAM_STLDECL(T4,vbl_basic_optional), 
+template <class T1, class T2,
+  VCL_DFL_TYPE_PARAM_STLDECL(T3,vbl_basic_optional),
+  VCL_DFL_TYPE_PARAM_STLDECL(T4,vbl_basic_optional),
   VCL_DFL_TYPE_PARAM_STLDECL(T5,vbl_basic_optional)>
 class vbl_basic_relation_where;
 #endif
@@ -40,9 +40,9 @@ class vbl_basic_relation_where;
 //------------------------------------------------------------
 // -- vbl_basic_relation iterator.  Holds a sub-class of vbl_br_iter_impl which
 // does the implementation.
-template <class T1, class T2, 
-  VCL_DFL_TYPE_PARAM_STLDECL(T3,vbl_basic_optional), 
-  VCL_DFL_TYPE_PARAM_STLDECL(T4,vbl_basic_optional), 
+template <class T1, class T2,
+  VCL_DFL_TYPE_PARAM_STLDECL(T3,vbl_basic_optional),
+  VCL_DFL_TYPE_PARAM_STLDECL(T4,vbl_basic_optional),
   VCL_DFL_TYPE_PARAM_STLDECL(T5,vbl_basic_optional)>
 class vbl_basic_relation_iterator
 {
@@ -78,9 +78,9 @@ protected:
 // classes, from one to five.  This restriction of up to five
 // attributes per tuple may be increased as needed.
 //
-template <class T1, class T2, 
-  VCL_DFL_TYPE_PARAM_STLDECL(T3,vbl_basic_optional), 
-  VCL_DFL_TYPE_PARAM_STLDECL (T4, vbl_basic_optional), 
+template <class T1, class T2,
+  VCL_DFL_TYPE_PARAM_STLDECL(T3,vbl_basic_optional),
+  VCL_DFL_TYPE_PARAM_STLDECL (T4, vbl_basic_optional),
   VCL_DFL_TYPE_PARAM_STLDECL(T5,vbl_basic_optional)>
 class vbl_basic_relation : public vbl_basic_relation_type
 {
@@ -159,7 +159,7 @@ public:
 
   // Print the relation on cout.
   inline void print_relation() { dump_relation(cout); }
-  
+
   // Print the relation on cerr.
   void dump_relation(ostream& str = cerr);
 
@@ -176,11 +176,11 @@ protected:
 };
 
 
-template 
- <class T1, 
+template
+ <class T1,
   class T2,
-  class T3, 
-  class T4, 
+  class T3,
+  class T4,
   class T5>
 inline ostream& operator<<(ostream& str, vbl_basic_relation<T1,T2,T3,T4,T5>& rel)
 {
@@ -188,4 +188,4 @@ inline ostream& operator<<(ostream& str, vbl_basic_relation<T1,T2,T3,T4,T5>& rel
   return str;
 }
 
-#endif
+#endif // vbl_basic_relation_h

@@ -17,4 +17,4 @@
 #define VCL_DEQUE_INSTANTIATE \
 extern "include vcl/vcl_deque.txx instead"
 
-#endif
+#endif // vcl_deque_h_

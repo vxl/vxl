@@ -1,22 +1,18 @@
-//-*- c++ -*-------------------------------------------------------------------
 #ifndef MovieFile_h_
 #define MovieFile_h_
 #ifdef __GNUC__
 #pragma interface
 #endif
 //
-// Class : MovieFile
-//
 // .SECTION Description
 //    MovieFile is an interface to movie files and image sequences.
 //    It is currently read-only.
 //
-// .NAME        MovieFile - Read various movie formats.
-// .LIBRARY     POX
+// .NAME	MovieFile - Read various movie formats
+// .LIBRARY	POX
 // .HEADER	Oxford Package
-// .INCLUDE     oxp/MovieFile.h
-// .FILE        MovieFile.h
-// .FILE        MovieFile.cxx
+// .INCLUDE	oxp/MovieFile.h
+// .FILE	MovieFile.cxx
 // .SECTION Author
 //     Andrew W. Fitzgibbon, Oxford RRG, 26 Aug 98
 //
@@ -34,7 +30,7 @@ struct MovieFileInterface;
 class MovieFile {
 public:
   // Constructors/Destructors--------------------------------------------------
-  
+
   MovieFile(char const * filename, int start = 0, int step = 1, int end = -1);
   ~MovieFile();
 
@@ -47,7 +43,7 @@ public:
   int GetNumFrames();
 
   vil_image GetImage(int frame_index);
-  
+
   bool HasFrame(int frame_index);
   void GetFrame(int frame_index, vil_rgb_byte * frame);
   void GetFrame(int frame_index, vil_byte* frame);
@@ -66,4 +62,4 @@ protected:
   int index(int);
 };
 
-#endif   // DO NOT ADD CODE AFTER THIS LINE! END OF DEFINITION FOR CLASS MovieFile.
+#endif // MovieFile_h_

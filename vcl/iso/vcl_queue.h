@@ -12,4 +12,4 @@
 #define vcl_priority_queue std::priority_queue
 #endif
 
-#endif
+#endif // vcl_iso_queue_h_

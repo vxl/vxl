@@ -7,30 +7,28 @@ class QvInput;
 class QvNode;
 
 class QvField {
-  public:
-    virtual ~QvField();
+public:
+  virtual ~QvField();
 
-    QvBool		isDefault() const	{ return flags.hasDefault; }
+  QvBool	isDefault() const	{ return flags.hasDefault; }
 
-    QvNode *		getContainer() const	{ return container; }
+  QvNode *	getContainer() const	{ return container; }
 
-    void		setDefault(QvBool def)	{ flags.hasDefault = def; }
-    void		setContainer(QvNode *cont);
-    QvBool		read(QvInput *in, const QvName &name);
+  void		setDefault(QvBool def)	{ flags.hasDefault = def; }
+  void		setContainer(QvNode *cont);
+  QvBool	read(QvInput *in, const QvName &name);
 
-    QvField()		{ flags.hasDefault = TRUE; }
+  QvField()	{ flags.hasDefault = TRUE; }
 
-  public:
+private:
+  struct {
+    unsigned int hasDefault		: 1; // Field is set to default value
+  }			flags;
 
-  private:
-    struct {
-	unsigned int hasDefault		: 1; // Field is set to default value
-    }			flags;
+  QvNode		*container;
 
-    QvNode		*container;
-
-    static QvField *	createInstanceFromName(const QvName &className);
-    virtual QvBool	readValue(QvInput *in) = 0;
+  static QvField *	createInstanceFromName(const QvName &className);
+  virtual QvBool	readValue(QvInput *in) = 0;
 
 friend class QvFieldData;
 };

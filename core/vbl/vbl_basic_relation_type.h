@@ -6,7 +6,7 @@
 // .LIBRARY vbl
 // .HEADER vxl package
 // .INCLUDE vbl/vbl_basic_relation_type.h
-// .FILE vbl/vbl_basic_relation_type.cxx
+// .FILE vbl_basic_relation_type.cxx
 //
 // .SECTION Author:
 //             Rupert Curwen, August 28th, 1998
@@ -38,4 +38,4 @@ protected:
 
 };
 
-#endif
+#endif // vbl_basic_relation_type_h

@@ -27,4 +27,4 @@
 using std::ostringstream;
 using std::istringstream;
 
-#endif
+#endif // vcl_iso_sstream_h_

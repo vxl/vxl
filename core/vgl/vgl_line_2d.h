@@ -2,10 +2,10 @@
 #define vgl_line_2d_h_
 //-----------------------------------------------------------------------------
 //
-// .NAME vgl_line_2d - Represents an euclidian 2D line.
+// .NAME vgl_line_2d - Represents an euclidian 2D line
 // .LIBRARY vgl
 // .INCLUDE vgl/vgl_line_2d.h
-// .FILE    vgl/vgl_line_2d.txx
+// .FILE    vgl_line_2d.txx
 //
 // .SECTION Description
 // An interface for the line coefficients, [a,b,c], is provided in terms of the
@@ -40,15 +40,15 @@ template <class Type>
 class vgl_line_2d {
 
 // PUBLIC INTERFACE--------------------------------------------------------
-  
+
 public:
- 
+
   // Constructors/Initializers/Destructors-----------------------------------
 
-  // Default constructor  
+  // Default constructor
   // vgl_line_2d () {}
-  
-  // Default copy constructor  
+
+  // Default copy constructor
   // vgl_line_2d (const vgl_line_2d<Type>& that) {
   //   data_[0]=that.data_[0];
   //   data_[1]=that.data_[1];
@@ -59,20 +59,20 @@ public:
 
   //: -- Construct a vgl_line_2d from its equation, three Types.
   vgl_line_2d (Type a, Type b, Type c) { data_[0]=a; data_[1]=b; data_[2]=c; }
-  
+
   // -- Construct from two distinct points
   vgl_line_2d (vgl_point_2d<Type> const& p1, vgl_point_2d<Type> const& p2) {
     data_[0] = p1.y() - p2.y();
     data_[1] = p2.x() - p1.x();
     data_[2] = p1.x() * p2.y() - p1.y() * p2.x();
   }
-    
+
   //: -- Construct from its equation, a 3-vector.
   vgl_line_2d (const Type v[3]) { data_[0]=v[0];data_[1]=v[1];data_[2]=v[2]; }
-  
+
   // Default destructor:
   // ~vgl_line_2d () {}
-  
+
   // Default assignment operator:
   // vgl_line_2d<Type>& operator=(const vgl_line_2d<Type>& that){
   //   data_[0]=that.data_[0];
@@ -104,17 +104,17 @@ public:
 
   //: Get two points on the line; normally the intersection with X and Y axes.
   void get_two_points(vgl_point_2d<Type> &p1, vgl_point_2d<Type> &p2);
-    
-  
+
+
   // INTERNALS---------------------------------------------------------------
 
 protected:
-  // the data associated with this point 
+  // the data associated with this point
   Type data_[3];
 };
 
-//: stream operators 
-  
+//: stream operators
+
 template <class Type>
 ostream&  operator<<(ostream& s, const vgl_line_2d<Type>& p) {
   return s << " <vgl_line_2d " << p->data_[0] << " x + " << p->data_[1]
@@ -125,5 +125,5 @@ template <class Type>
 istream&  operator>>(istream& is,  vgl_line_2d<Type>& p) {
   return is >> p->data_[0] >> p->data_[1] >> p->data_[2];
 }
-  
+
 #endif // #ifndef vgl_line_2d_h_

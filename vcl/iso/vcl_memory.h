@@ -38,4 +38,4 @@
 #define vcl_auto_ptr std::auto_ptr
 #endif
 
-#endif
+#endif // vcl_iso_memory_h_

@@ -1,23 +1,6 @@
-//-*- c++ -*-------------------------------------------------------------------
 #ifdef __GNUC__
-#pragma implementation "FManifoldProject.h"
+#pragma implementation
 #endif
-//
-// Class: FManifoldProject
-// Author: Andrew W. Fitzgibbon, Oxford RRG
-// Created: 22 Jan 97
-// Modifications:
-//   210598 AWF Return squared error, as sqrt(|x - p|^2 + |x' - p'|^2) is meaningless.
-//
-//   AWF Handle affine F.
-//
-//P. Torr added in a check for multiple solutions 
-// this might be necessary to flag the instance when a particular correspondence
-// might have severla possible closest points all near to each other, indicating high structure variability 
-//and high curvature in the F manifold. These points should be treated with care, but are interesting
-// as they are in loci of high information.
-//
-//-----------------------------------------------------------------------------
 
 #include "FManifoldProject.h"
 

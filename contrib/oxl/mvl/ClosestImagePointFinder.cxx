@@ -1,14 +1,6 @@
-//-*- c++ -*-------------------------------------------------------------------
 #ifdef __GNUC__
-#pragma implementation "ClosestImagePointFinder.h"
+#pragma implementation
 #endif
-//
-// Class: ClosestImagePointFinder
-// Author: Andrew W. Fitzgibbon, Oxford RRG
-// Created: 21 Jan 97
-// Modifications:
-//
-//-----------------------------------------------------------------------------
 
 #include "ClosestImagePointFinder.h"
 #include <vcl/vcl_vector.h>

@@ -36,4 +36,4 @@
  */
 
 #endif
-#endif /* PNGASMRD_H */
+#endif // PNGASMRD_H

@@ -11,4 +11,4 @@
 
 #include <errno.h>
 
-#endif
+#endif // vcl_cerrno_h_

@@ -14,4 +14,4 @@
 # include <vcl/iso/vcl_valarray.h>
 #endif
 
-#endif
+#endif // vcl_valarray_h_

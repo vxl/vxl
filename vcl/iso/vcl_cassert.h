@@ -3,4 +3,4 @@
 
 #include <cassert>
 
-#endif
+#endif // vcl_iso_cassert_h_

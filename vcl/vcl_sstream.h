@@ -9,4 +9,4 @@
 
 #include <vcl/iso/vcl_sstream.h>
 
-#endif
+#endif // vcl_sstream_h_

@@ -1,24 +1,21 @@
-//-*- c++ -*-------------------------------------------------------------------
 #ifndef HomgInterestPointSet_h_
 #define HomgInterestPointSet_h_
 #ifdef __GNUC__
 #pragma interface
 #endif
 //
-// Class : HomgInterestPointSet
+// .NAME	HomgInterestPointSet - Set of interest points on an image
+// .LIBRARY	MViewBasics
+// .HEADER	MultiView Package
+// .INCLUDE	mvl/HomgInterestPointSet.h
+// .FILE	HomgInterestPointSet.cxx
 //
 // .SECTION Description
 //    HomgInterestPointSet holds a set of corners (or points of interest) computed
 //    from an image.  The current implementation provides a moderately
 //    abstract interface, but assumes that it is efficient to associate
 //    an index with each corner.  I *know* this ought to be elsewhere.
-//    
 //
-// .NAME        HomgInterestPointSet - Set of interest points on an image.
-// .LIBRARY     MViewBasics
-// .HEADER	MultiView Package
-// .INCLUDE     mvl/HomgInterestPointSet.h
-// .FILE        HomgInterestPointSet.cxx
 // .SECTION Author
 //     Andrew W. Fitzgibbon, Oxford RRG, 17 Aug 96
 //
@@ -44,7 +41,7 @@ class HomgInterestPoint;
 class HomgInterestPointSet {
 public:
   // Constructors/Destructors--------------------------------------------------
-  
+
   HomgInterestPointSet();
   HomgInterestPointSet(const HomgMetric&);
   HomgInterestPointSet(const char* filename, const HomgMetric& = 0);
@@ -77,7 +74,6 @@ public:
   const ImageMetric* get_conditioner() const { return (const ImageMetric*)_conditioner; }
   void set_conditioner(const HomgMetric& c);
 
-  
   // Data Control--------------------------------------------------------------
   bool add(double x, double y); // image coords
   bool add(const HomgPoint2D&);
@@ -85,7 +81,7 @@ public:
   bool add_preconditioned(const HomgPoint2D&);
   void set_image(vil_image const& image);
   void clear();
-  
+
   // Input/Output--------------------------------------------------------------
   bool read(const char* filename, const HomgMetric& c = 0);
   bool read(const char* filename, vil_image const& src, const HomgMetric& c = 0);
@@ -101,9 +97,6 @@ protected:
 
   void init_conditioner(const HomgMetric& c = 0);
   void delete_conditioner();
-
-private:
-  // Helpers-------------------------------------------------------------------
 };
 
-#endif   // DO NOT ADD CODE AFTER THIS LINE! END OF DEFINITION FOR CLASS HomgInterestPointSet.
+#endif // HomgInterestPointSet_h_

@@ -1,4 +1,3 @@
-//-*- c++ -*-------------------------------------------------------------------
 #ifndef oxp_parse_seqname_h_
 #define oxp_parse_seqname_h_
 #ifdef __GNUC__
@@ -27,5 +26,4 @@ public:
   void parse(char const* s);
 };
 
-#endif   // DO NOT ADD CODE AFTER THIS LINE! END OF DEFINITION FOR CLASS oxp_parse_seqname.
-
+#endif // oxp_parse_seqname_h_

@@ -137,4 +137,4 @@ inline istream&  operator>>(istream& is,  vgl_box_3d<Type>& p) {
             >> p->max_pos_[0] >> p->max_pos_[1] >> p->max_pos_[2];
 }
 
-#endif // _vgl_box_3d_h
+#endif // vgl_box_3d_h

@@ -1,6 +1,6 @@
 //-*- c++ -*-------------------------------------------------------------------
-#ifndef vcl_compiler_h_
-#define vcl_compiler_h_
+#ifndef new_vcl_compiler_h_
+#define new_vcl_compiler_h_
 
 // It's much better to determine the compiler automatically here than to depend
 // on command-line flags being set.
@@ -174,4 +174,4 @@ typedef int saw_VCL_FOR_SCOPE_HACK;
 // as in return VCL_VOID_RETURN ;
 #define VCL_VOID_RETURN /*empty*/
 
-#endif
+#endif // new_vcl_compiler_h_

@@ -76,4 +76,4 @@
 #define vcl_distance std::distance
 #endif
 
-#endif
+#endif // vcl_iso_iterator_h_

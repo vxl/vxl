@@ -30,4 +30,4 @@ inline std:: complex<double> operator*(double const& b, vcl_complex<float> const
   return vcl_complex<double>(a.real () * b, a.imag() * b);
 }
 
-#endif
+#endif // vcl_sunpro_complex_h_

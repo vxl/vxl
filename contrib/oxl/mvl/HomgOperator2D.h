@@ -80,4 +80,4 @@ public:
                           double cr);
 };
 
-#endif
+#endif // _HomgOperator2D_h

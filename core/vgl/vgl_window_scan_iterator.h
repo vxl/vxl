@@ -1,11 +1,14 @@
 #ifndef vgl_window_scan_iterator_h_
 #define vgl_window_scan_iterator_h_
 #ifdef __GNUC__
-#pragma interface "vgl_window_scan_iterator"
+#pragma interface
 #endif
-/*
-  fsm@robots.ox.ac.uk
-*/
+// .NAME vgl_scan_iterator
+// .INCLUDE vgl/vgl_scan_iterator.h
+// .FILE vgl_scan_iterator.cxx
+// .SECTION Author
+//  fsm@robots.ox.ac.uk
+//
 
 #include <vcl/vcl_cmath.h>
 #include <vgl/vgl_region_scan_iterator.h>
@@ -20,11 +23,11 @@ struct vgl_window_scan_iterator : vgl_region_scan_iterator
     , y1((int) ceil (y1_))
     , x2((int) floor(x2_))
     , y2((int) floor(y2_)) { }
-  
+
   ~vgl_window_scan_iterator() { }
-  
+
   int current_y;
-  
+
   void reset() { current_y = y1-1; }
   bool next() { return (++current_y) <= y2; }
   int  scany() const { return current_y; }
@@ -32,4 +35,4 @@ struct vgl_window_scan_iterator : vgl_region_scan_iterator
   int  endx() const { return x2; }
 };
 
-#endif
+#endif // vgl_window_scan_iterator_h_

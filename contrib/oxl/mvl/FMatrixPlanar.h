@@ -1,29 +1,25 @@
+#ifndef _FMatrixPlanar_h
+#define _FMatrixPlanar_h
+#ifdef __GNUC__
+#pragma interface
+#endif
+
 //--------------------------------------------------------------
 //
-// Class : FMatrixPlanar
+// .NAME FMatrixPlanar - planar fundamental matrix
+// .LIBRARY MViewBasics
+// .HEADER MultiView package
+// .INCLUDE mvl/FMatrixPlanar.h
+// .FILE FMatrixPlanar.cxx
 //
 // .SECTION Description:
-//
 // A class to hold a Fundamental Matrix of the planar form
 // which occurs when the translation is confined to the plane
 // perpendicular to the rotation axis.
 // Some common operations e.g. generate epipolar lines,
 // are inherited from the class FMatrix.
 //
-// .NAME FMatrixPlanar - planar fundamental matrix.
-// .LIBRARY MViewBasics
-// .HEADER MultiView package
-// .INCLUDE mvl/FMatrixPlanar.h 
-// .FILE FMatrixPlanar.cxx
-//
 
-#ifndef _FMatrixPlanar_h
-#define _FMatrixPlanar_h
-
-#ifdef __GNUC__
-#pragma interface
-#endif
-  
 #include <vnl/vnl_matrix.h>
 #include <mvl/HomgLine2D.h>
 #include <mvl/HomgPoint2D.h>
@@ -42,25 +38,17 @@ public:
   // Computations
   void init(const FMatrix& F);
 
-  inline void set_rank2_using_svd();  
+  inline void set_rank2_using_svd();
   inline FMatrixPlanar get_rank2_truncated();
   void find_nearest_perfect_match (const HomgPoint2D& in1, const HomgPoint2D& in2,
 				   HomgPoint2D *out1, HomgPoint2D *out2) const;
 
-
   // Data Access------------------------------------------------------------
-  
+
   bool set (const double* f_matrix );
   inline bool set (const vnl_matrix<double>& f_matrix );
   inline bool get_rank2_flag (void) const;
-  inline void set_rank2_flag (bool rank2_flag) const; 
+  inline void set_rank2_flag (bool rank2_flag) const;
 };
 
-#endif
-// _FMatrixPlanar_h
-
-// Some emacs stuff, to insure c++-mode rather than c-mode:
-// Local Variables:
-// mode: c++
-// End:
-
+#endif // _FMatrixPlanar_h

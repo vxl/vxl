@@ -1,15 +1,6 @@
-//-*- c++ -*-------------------------------------------------------------------
 #ifdef __GNUC__
-#pragma implementation "vsl_conic_as_params.h"
+#pragma implementation
 #endif
-//
-// Class: vsl_conic_as_params
-// Author: Andrew W. Fitzgibbon, Oxford RRG
-// Created: 12 Nov 99
-// Modifications:
-//   991112 AWF Initial version.
-//
-//-----------------------------------------------------------------------------
 
 #include "vsl_conic_as_params.h"
 

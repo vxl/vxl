@@ -3,9 +3,13 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
-/*
-  fsm@robots.ox.ac.uk
-*/
+//
+// .NAME vbl_trace
+// .INCLUDE vbl/vbl_trace.h
+// .FILE vbl_trace.cxx
+// .SECTION Author
+//  fsm@robots.ox.ac.uk
+//
 
 void vbl_trace_function(char const *file, int line);
 
@@ -16,4 +20,4 @@ void vbl_trace_function(char const *file, int line);
 # define vbl_trace /* */
 #endif
 
-#endif
+#endif // vbl_trace_h_

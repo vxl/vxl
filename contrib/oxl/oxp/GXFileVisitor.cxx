@@ -1,15 +1,6 @@
-//-*- c++ -*-------------------------------------------------------------------
 #ifdef __GNUC__
-#pragma implementation "GXFileVisitor.h"
+#pragma implementation
 #endif
-//
-// Class: GXFileVisitor
-// Author: Andrew W. Fitzgibbon, Oxford RRG
-// Created: 21 May 99
-// Modifications:
-//   990521 AWF Initial version.
-//
-//-----------------------------------------------------------------------------
 
 #include "GXFileVisitor.h"
 

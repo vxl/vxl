@@ -6,7 +6,7 @@
 // .LIBRARY vbl
 // .HEADER vxl package
 // .INCLUDE vbl/vbl_basic_tuple.h
-// .FILE vbl/vbl_basic_tuple.cxx
+// .FILE vbl_basic_tuple.cxx
 //
 // .SECTION Author:
 //             Rupert Curwen, January 13th, 1998
@@ -30,15 +30,15 @@
 // classes, from one to five.  This restriction of up to five
 // attributes per tuple may be increased as needed.
 //
-template <class T1, class T2, 
-  VCL_DFL_TYPE_PARAM_STLDECL(T3,vbl_basic_optional),	
-  VCL_DFL_TYPE_PARAM_STLDECL(T4,vbl_basic_optional), 
+template <class T1, class T2,
+  VCL_DFL_TYPE_PARAM_STLDECL(T3,vbl_basic_optional),
+  VCL_DFL_TYPE_PARAM_STLDECL(T4,vbl_basic_optional),
   VCL_DFL_TYPE_PARAM_STLDECL(T5,vbl_basic_optional)>
 class vbl_basic_tuple
 {
 public:
   // Constructors.
-  vbl_basic_tuple() 
+  vbl_basic_tuple()
   {
     vbl_protection_traits<T1>::def(first);
     vbl_protection_traits<T2>::def(second);
@@ -49,15 +49,15 @@ public:
     if (!vbl_basic_optional_traits<T5>::IsOptional)
       vbl_protection_traits<T5>::def(fifth);
   }
-  vbl_basic_tuple(T1 t1,T2 t2) 
-    : first(t1), second(t2) 
+  vbl_basic_tuple(T1 t1,T2 t2)
+    : first(t1), second(t2)
   {
     if (!vbl_basic_optional_traits<T3>::IsOptional || vbl_basic_optional_traits<T2>::IsOptional)
       vbl_basic_optional::Error("vbl_basic_tuple constructed with wrong number of arguments.");
     vbl_protection_traits<T1>::protect(first);
     vbl_protection_traits<T2>::protect(second);
   }
-  vbl_basic_tuple(T1 t1,T2 t2,T3 t3) 
+  vbl_basic_tuple(T1 t1,T2 t2,T3 t3)
     : first(t1), second(t2), third(t3)
   {
     if (!vbl_basic_optional_traits<T4>::IsOptional || vbl_basic_optional_traits<T3>::IsOptional)
@@ -113,7 +113,7 @@ public:
   }
 
   // Destructor.
-  ~vbl_basic_tuple() 
+  ~vbl_basic_tuple()
   {
     vbl_protection_traits<T1>::unprotect(first);
     vbl_protection_traits<T2>::unprotect(second);
@@ -124,10 +124,10 @@ public:
     if (!vbl_basic_optional_traits<T5>::IsOptional)
       vbl_protection_traits<T5>::unprotect(fifth);
   }
-  
+
   // Operator =.
   inline vbl_basic_tuple<T1,T2,T3,T4,T5>& operator=(const vbl_basic_tuple<T1,T2,T3,T4,T5>& tuple)
-  { 
+  {
     if (this == &tuple) return *this;
 
     T1 t1 = first;
@@ -169,7 +169,7 @@ public:
 
   // Print the tuple on cout.
   inline void Print() { Dump(cout); }
-  
+
   // Print the tuple on cerr.
   void Dump(ostream& str = cerr) const
   {
@@ -189,7 +189,7 @@ public:
   inline T4 GetFourth() const { return fourth; }
   inline T5 GetFifth() const { return fifth; }
 
-  inline void SetFirst(T1 t) 
+  inline void SetFirst(T1 t)
   {
     T1 t1 = first;
     first = t;
@@ -237,7 +237,7 @@ public:
 	vbl_protection_traits<T5>::unprotect(t5);
       }
   }
-  
+
 private:
   T1 first;
   T2 second;
@@ -247,13 +247,13 @@ private:
 
 };
 
-template 
-<class T1, 
+template
+<class T1,
   class T2,
-  class T3, 
-  class T4, 
+  class T3,
+  class T4,
   class T5>
-inline bool operator==(const vbl_basic_tuple<T1,T2,T3,T4,T5>& x, 
+inline bool operator==(const vbl_basic_tuple<T1,T2,T3,T4,T5>& x,
 		       const vbl_basic_tuple<T1,T2,T3,T4,T5>& y)
 {
   bool res = (x.GetFirst() == y.GetFirst()) && (x.GetSecond() == y.GetSecond());
@@ -266,11 +266,11 @@ inline bool operator==(const vbl_basic_tuple<T1,T2,T3,T4,T5>& x,
   return res;
 }
 
-template 
-<class T1, 
+template
+<class T1,
   class T2,
-  class T3, 
-  class T4, 
+  class T3,
+  class T4,
   class T5>
 inline ostream& operator<<(ostream& str, const vbl_basic_tuple<T1,T2,T3,T4,T5>& tuple)
 {
@@ -278,4 +278,4 @@ inline ostream& operator<<(ostream& str, const vbl_basic_tuple<T1,T2,T3,T4,T5>& 
   return str;
 }
 
-#endif
+#endif // vbl_basic_tuple_h

@@ -4,11 +4,11 @@
 #pragma interface
 #endif
 
-// .NAME        vbl_sort - Collection of common predicates for sorting.
-// .LIBRARY     vbl
+// .NAME	vbl_sort - Collection of common predicates for sorting
+// .LIBRARY	vbl
 // .HEADER	vxl package
-// .INCLUDE     vbl/vbl_sort.h
-// .FILE        vbl/vbl_sort.cxx
+// .INCLUDE	vbl/vbl_sort.h
+// .FILE	vbl_sort.cxx
 // .SECTION Author
 //     Andrew W. Fitzgibbon, Oxford RRG, 19 Nov 97
 //
@@ -33,11 +33,11 @@ public:
 
 protected:
   // Data Members--------------------------------------------------------------
-  
+
   // Helpers-------------------------------------------------------------------
 };
 
-template <class T> 
+template <class T>
 struct vbl_sort_helper {
   static int ascend(const void* a, const void* b) {
     const T& ta = *((const T*)a);
@@ -89,5 +89,4 @@ void vbl_qsort_descending(vcl_vector<T>& v)
 #define VBL_SORT_INSTANTIATE(T) \
 extern "please include vbl/vbl_sort.txx instead"
 
-#endif
-
+#endif // vbl_sort_h_

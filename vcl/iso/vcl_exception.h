@@ -12,4 +12,4 @@
 #define vcl_bad_exception std::bad_exception
 #endif
 
-#endif
+#endif // vcl_iso_exception_h_

@@ -56,4 +56,4 @@
 #define vcl_isspace std::isspace
 #endif
 
-#endif
+#endif // vcl_iso_cctype_h_

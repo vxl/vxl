@@ -1,16 +1,6 @@
-//-*- c++ -*-------------------------------------------------------------------
 #ifdef __GNUC__
-#pragma implementation "RadialLensCorrection.h"
+#pragma implementation
 #endif
-//
-// Class: RadialLensCorrection
-// Author: Andrew W. Fitzgibbon, Oxford RRG
-// Created: 13 Jul 98
-// Modifications:
-//   980713 AWF Initial version.
-//
-//-----------------------------------------------------------------------------
-
 
 #include "RadialLensCorrection.h"
 

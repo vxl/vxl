@@ -26,4 +26,4 @@
 vcl_string vbl_canonical_path/*cached*/(vcl_string path);
 vcl_string vbl_canonical_path_uncached (vcl_string path);
 
-#endif
+#endif // vbl_canonical_path_h_

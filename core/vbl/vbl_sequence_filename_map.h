@@ -1,14 +1,17 @@
-//-*- c++ -*-------------------------------------------------------------------
 #ifndef vbl_sequence_filename_map_h_
 #define vbl_sequence_filename_map_h_
 #ifdef __GNUC__
 #pragma interface
 #endif
 //
-// .NAME        vbl_sequence_filename_map - maps sequence frame indices to filenames
+// .NAME	vbl_sequence_filename_map - maps sequence frame indices to filenames
+// .LIBRARY	vbl
+// .HEADER	vxl package
+// .INCLUDE	vbl/vbl_sequence_filename_map.h
+// .FILE	vbl_sequence_filename_map.cxx
 //
 // .SECTION Description
-//    
+//
 // vbl_sequence_filename_map maps sequence frame indices to filenames. It also performs
 // some disk probing functions to discover the image extension, directories and sequence
 // template if not specified by the user.
@@ -19,10 +22,6 @@
 // The vector of indices specifies the mapping from sequence frame-index to filename-index.
 // If not specified, the image directory is probed to determine the sequence start/end frames.
 //
-// .LIBRARY     vbl
-// .HEADER	vxl package
-// .INCLUDE     vbl/vbl_sequence_filename_map.h
-// .FILE        vbl/vbl_sequence_filename_map.cxx
 // .SECTION Author
 //     David Capel, Oxford RRG, 15 April 2000
 //
@@ -63,7 +62,7 @@ public:
 
   // pretty print
   ostream& print(ostream& s) const;
-  
+
 protected:
   bool filter_dirent(char const* name, vcl_string const& extension);
   int extract_index(char const* name);
@@ -83,4 +82,4 @@ protected:
 
 ostream& operator<<(ostream &os, const vbl_sequence_filename_map& s);
 
-#endif   // DO NOT ADD CODE AFTER THIS LINE! END OF DEFINITION FOR CLASS vbl_sequence_filename_map.
+#endif // vbl_sequence_filename_map_h_

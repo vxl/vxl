@@ -1,4 +1,3 @@
-//-*- c++ -*-------------------------------------------------------------------
 #ifndef vbl_bounding_box_h_
 #define vbl_bounding_box_h_
 #ifdef __GNUC__
@@ -133,5 +132,4 @@ template <class T>
 ostream& operator << (ostream& s, const vbl_bounding_box<T,3>& bbox) { return bbox.print(s); }
 #endif
 
-#endif   // DO NOT ADD CODE AFTER THIS LINE! END OF DEFINITION FOR CLASS vbl_bounding_box.
-
+#endif // vbl_bounding_box_h_

@@ -28,7 +28,7 @@
 
 //<file>
 //
-// Name:        wrltraverse.C
+// Name:        wrltraverse.cxx
 //
 // Purpose:     sample traversal of a VRMLScene, prints scene information
 //

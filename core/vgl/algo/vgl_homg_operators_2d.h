@@ -90,4 +90,4 @@ public:
   static vnl_vector<double> most_orthogonal_vector_svd(const vcl_vector<vgl_homg_line_2d<Type> >& lines);
 };
 
-#endif
+#endif // vgl_homg_operations_2d_h

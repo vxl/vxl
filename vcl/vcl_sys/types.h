@@ -6,4 +6,4 @@
 
 #include <sys/types.h>
 
-#endif
+#endif // vcl_sys_types_h_

@@ -6,19 +6,19 @@
 
 #include "QvSFBitMask.h"
 
-class QvSeparator : public QvGroup {
+class QvSeparator : public QvGroup
+{
+  QV_NODE_HEADER(QvSeparator);
 
-    QV_NODE_HEADER(QvSeparator);
+public:
+  enum CullEnabled {	// Possible values for culling
+    OFF,		// Never cull
+    ON,			// Always cull
+    AUTO		// Decide based on some heuristic
+  };
 
-  public:
-    enum CullEnabled {		// Possible values for culling
-	OFF,			// Never cull
-	ON,			// Always cull
-	AUTO			// Decide based on some heuristic
-    };
-
-    // Fields
-    QvSFEnum renderCulling;
+  // Fields
+  QvSFEnum renderCulling;
 };
 
 #endif /* _QV_SEPARATOR_ */

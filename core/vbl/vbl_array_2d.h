@@ -4,10 +4,11 @@
 #pragma interface
 #endif
 //
-// .LIBRARY     vbl
+// .NAME	vbl_array_2d
+// .LIBRARY	vbl
 // .HEADER	vxl package
-// .INCLUDE     vbl/vbl_array_2d.h
-// .FILE        vbl/vbl_array_2d.cxx
+// .INCLUDE	vbl/vbl_array_2d.h
+// .FILE	vbl_array_2d.cxx
 // .SECTION Author
 //     Andrew W. Fitzgibbon, Oxford RRG, 05 Aug 96
 //
@@ -25,7 +26,7 @@ template <class T>
 class vbl_array_2d {
 public:
   vbl_array_2d();
-  vbl_array_2d(int m, int n);    
+  vbl_array_2d(int m, int n);
   vbl_array_2d(vbl_array_2d<T> const &);
  ~vbl_array_2d();
 
@@ -34,7 +35,7 @@ public:
   // Operations----------------------------------------------------------------
   void fill(T value);
   void resize(int m, int n);
-    
+
   // Data Access---------------------------------------------------------------
   T const& operator() (int i, int j) const { return rows_[i][j]; }
   T      & operator() (int i, int j) { return rows_[i][j]; }
@@ -52,18 +53,18 @@ public:
   T      *      * get_rows() { return rows_; }
   T const* const* get_rows() const { return rows_; }
 
-private: 
+private:
   //protected:
   T** rows_;
   int num_rows_;
   int num_cols_;
-  
+
   //protected:
   void destroy();
   void create(int m, int n);
 };
 
-template<class Type> 
+template<class Type>
 ostream& operator<< (ostream& os, const vbl_array_2d<Type> &v);
 
 #define VBL_ARRAY_2D_INSTANTIATE \

@@ -4,7 +4,11 @@
 #pragma interface
 #endif
 //
-// Class : FMatrixCompute
+// .NAME FMatrixCompute - Base class for fundamental matrix fitters
+// .LIBRARY MViewCompute
+// .HEADER MultiView package
+// .INCLUDE mvl/FMatrixCompute.h
+// .FILE FMatrixCompute.cxx
 //
 // .SECTION Description:
 //
@@ -17,19 +21,10 @@
 //
 // Currently implemented subclasses:
 //
-// * FMatrixComputeLinear -- Hartley's normalized linear method
-//
-// * FMatrixComputeRANSAC -- Oxford robust RANSAC computation
-//
-// * FMatrixComputeNonLinear -- Oxford nonlinear optimization
-//
-// * FMatrixCompute7Point -- Oxford implementation of 7-point algorithm.
-//
-// .NAME FMatrixCompute - Base class for fundamental matrix fitters.
-// .LIBRARY MViewCompute
-// .HEADER MultiView package
-// .INCLUDE mvl/FMatrixCompute.h
-// .FILE FMatrixCompute.cxx
+// * FMatrixComputeLinear	- Hartley's normalized linear method
+// * FMatrixComputeRANSAC	- Oxford robust RANSAC computation
+// * FMatrixComputeNonLinear	- Oxford nonlinear optimization
+// * FMatrixCompute7Point	- Oxford implementation of 7-point algorithm
 //
 
 #include <vcl/vcl_vector.h>
@@ -49,7 +44,7 @@ public:
   // Constructors/Initializers/Destructors----------------------------------
   FMatrixCompute();
   virtual ~FMatrixCompute();
-  
+
   // Compute interface------------------------------------------------------
   virtual bool compute (PairMatchSetCorner& matched_points, FMatrix* f_matrix_ptr);
   virtual bool compute (vcl_vector<HomgPoint2D>&, vcl_vector<HomgPoint2D>&, FMatrix* f_matrix_ptr);
@@ -57,4 +52,4 @@ public:
   virtual FMatrix compute (vcl_vector<HomgPoint2D>&, vcl_vector<HomgPoint2D>&);
 };
 
-#endif
+#endif // _FMatrixCompute_h

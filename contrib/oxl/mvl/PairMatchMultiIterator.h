@@ -4,17 +4,16 @@
 #pragma interface
 #endif
 //
-// Class : PairMatchMultiIterator
+// .NAME	PairMatchMultiIterator - Iterator for PairMatchMulti
+// .LIBRARY	MViewBasics
+// .HEADER	MultiView Package
+// .INCLUDE	mvl/PairMatchMultiIterator.h
+// .FILE	PairMatchMultiIterator.cxx
 //
 // .SECTION Description
 //    PairMatchMultiIterator is a helper class that iterates through
 //    a set of matches in a PairMatchMulti.
 //
-// .NAME        PairMatchMultiIterator - Iterator for PairMatchMulti
-// .LIBRARY     MViewBasics
-// .HEADER	MultiView Package
-// .INCLUDE     mvl/PairMatchMultiIterator.h
-// .FILE        PairMatchMultiIterator.cxx
 // .SECTION Author
 //     Andrew W. Fitzgibbon, Oxford RRG, 17 Sep 96
 //
@@ -37,14 +36,14 @@ public:
     _last(last)
   {
   }
-    
+
 // -- Construct a PairMatchMultiIterator which will scan all matches in a PairMatchMulti
   PairMatchMultiIterator(PairMatchMulti const& pmm):
     _first(pmm._matches12.begin()),
     _last(pmm._matches12.end())
   {
   }
-    
+
 // -- Return true if the iterator is still valid.
   operator bool() { return _first != _last; }
 
@@ -61,4 +60,4 @@ private:
   PairMatchMultiIterator& operator ++ (int /*postfix*/) {abort(); return *this;}
 };
 
-#endif   // DO NOT ADD CODE AFTER THIS LINE! END OF DEFINITION FOR CLASS PairMatchMultiIterator.
+#endif // PairMatchMultiIterator_h_

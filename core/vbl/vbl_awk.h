@@ -4,10 +4,11 @@
 #pragma interface
 #endif
 //
-// .LIBRARY     vbl
+// .NAME	vbl_awk
+// .LIBRARY	vbl
 // .HEADER	vxl package
-// .INCLUDE     vbl/vbl_awk.h
-// .FILE        vbl/vbl_awk.cxx
+// .INCLUDE	vbl/vbl_awk.h
+// .FILE	vbl_awk.cxx
 // .SECTION Author
 //     Andrew W. Fitzgibbon, Oxford RRG, 17 May 97
 // .SECTION Modifications
@@ -38,7 +39,7 @@ public:
     strip_comments = 0x02,
     backslash_continuations = 0x04
   };
-  
+
   vbl_awk(istream& s, ModeFlags mode = none);
   ~vbl_awk();
 
@@ -51,7 +52,7 @@ public:
     else
       return 0;
   }
-  
+
 // -- Return the current "record number", i.e. line number
   int NR() const { return line_number_; }
 
@@ -61,7 +62,7 @@ public:
 // -- Return the entire line
   char const* line() const { return (char const*)line_.c_str(); }
 
-// -- Return the remainder of the line, starting from field_number. 
+// -- Return the remainder of the line, starting from field_number.
 // (0 is from the first non-whitespace character)
   char const* line_from(int field_number) const;
 
@@ -74,9 +75,9 @@ public:
 // -- Display error message, line number, optional field number and char within field.
 
   void error(ostream&, char const* message, int field = -1, int char_within_field = 0);
-  
+
   // Computations--------------------------------------------------------------
-  
+
   // Data Access---------------------------------------------------------------
 
   // Data Control--------------------------------------------------------------
@@ -100,12 +101,11 @@ protected:
 
   // Set to true when the current line is the last one.
   bool done_;
-  
+
   void next();
 
   vbl_awk(const vbl_awk& that);
   vbl_awk& operator=(const vbl_awk& that);
 };
 
-#endif   // DO NOT ADD CODE AFTER THIS LINE! END OF DEFINITION FOR CLASS vbl_awk.
-
+#endif // vbl_awk_h_

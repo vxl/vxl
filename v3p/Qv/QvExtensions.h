@@ -1,9 +1,9 @@
 //<copyright>
-// 
+//
 // Copyright (c) 1995
 // Institute for Information Processing and Computer Supported New Media (IICM),
 // Graz University of Technology, Austria.
-// 
+//
 //</copyright>
 
 //<file>
@@ -35,32 +35,29 @@
 
 class QvLabel: public QvNode
 {
-    QV_NODE_HEADER(QvLabel);
+  QV_NODE_HEADER(QvLabel);
 
-  public:
-    // Fields
-    QvSFString label;
-    static int newinstance_;
+public:
+  // Fields
+  QvSFString label;
+  static int newinstance_;
 };
-
 
 class QvLightModel: public QvNode
 {
-    QV_NODE_HEADER(QvLightModel);
+  QV_NODE_HEADER(QvLightModel);
 
-  public:
-    enum Model {
-	BASE_COLOR,
-	PHONG
-    };
+public:
+  enum Model {
+    BASE_COLOR,
+    PHONG
+  };
 
-    // Fields
-    QvSFEnum model;
-    static int newinstance_;
+  // Fields
+  QvSFEnum model;
+  static int newinstance_;
 
-    int dolighting_;  // mpichler, 19950809
+  int dolighting_;  // mpichler, 19950809
 };
 
-
-
-#endif /* _QV_EXTENSIONS_H_ */
+#endif // _QV_EXTENSIONS_H_

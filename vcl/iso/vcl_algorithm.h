@@ -296,4 +296,4 @@
 #define vcl_upper_bound std::upper_bound
 #endif
 
-#endif
+#endif // vcl_iso_algorithm_h_

@@ -16,4 +16,4 @@
 #define vcl_signal std::signal
 #endif
 
-endif
+endif // vcl_iso_csignal_h_

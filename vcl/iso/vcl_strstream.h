@@ -15,4 +15,4 @@
 using std::istrstream;
 using std::ostrstream;
 
-#endif
+#endif // vcl_iso_strstream_h_

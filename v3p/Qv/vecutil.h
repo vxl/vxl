@@ -27,16 +27,12 @@
 
 //<file>
 //
-// .NAME        vecutil.h - utilities for 3D vectors
-// .INCLUDE     vecutil.h
-// .FILE        vecutil.cxx
-//
-// Purpose:     utilities for 3D vectors
+// .NAME	vecutil.h - utilities for 3D vectors
+// .INCLUDE	Qv/vecutil.h
+// .FILE	vecutil.cxx
 //
 // Created:     15 Mar 93   Michael Pichler
-//
 // Changed:     19 Mar 96   Michael Pichler
-//
 //
 //</file>
 
@@ -95,7 +91,7 @@ inline void computeNormal (const point3D& p, const point3D& q, const point3D& r,
 // returns 1 if point A is inside the (axis aligned) cube with vertices (min, max)
 // (min.x < max.x etc. required); returns 0 otherwise
 
-inline int pointinsidecube (const point3D& A, const point3D& min, const point3D& max) 
+inline int pointinsidecube (const point3D& A, const point3D& min, const point3D& max)
 {
   return (
     min.x <= A.x && A.x <= max.x &&
@@ -231,12 +227,8 @@ inline void extendBoundingbox (const point3D& pmin, const point3D& pmax, point3D
 /*** output (printing) operators ***/
 
 ostream& operator << (ostream&, const point3D&);
-
 ostream& operator << (ostream&, const point2D&);
-
 ostream& operator << (ostream&, const spherepoint&);
-
 ostream& operator << (ostream&, ARRAYconst matrix4D);
 
-
-#endif
+#endif // harmony_scene_vecutil_h

@@ -1,15 +1,6 @@
-//-*- c++ -*-------------------------------------------------------------------
 #ifdef __GNUC__
-#pragma implementation "SequenceFileName.h"
+#pragma implementation
 #endif
-//
-// Class: SequenceFileName
-// Author: Andrew W. Fitzgibbon, Oxford RRG
-// Created: 26 Jan 99
-// Modifications:
-//   990126 AWF Initial version.
-//
-//-----------------------------------------------------------------------------
 
 #include "SequenceFileName.h"
 

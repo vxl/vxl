@@ -3,4 +3,4 @@
 
 #include <cfloat>
 
-#endif
+#endif // vcl_iso_cfloat_h_

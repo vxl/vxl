@@ -3,9 +3,12 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
-/*
-  fsm@robots.ox.ac.uk
-*/
+// .NAME vgl_clip
+// .INCLUDE vgl/vgl_clip.h
+// .FILE vgl_clip.cxx
+// .SECTION Author
+//  fsm@robots.ox.ac.uk
+//
 
 //: clips away the portion where ax+by+c<0. return false if nothing left.
 //template <class double>
@@ -21,4 +24,4 @@ bool vgl_clip_line_to_box(double a, double b, double c, // line equation ax+by+c
 			  double &bx, double &by,  // clipped line
 			  double &ex, double &ey); // segment.
 
-#endif
+#endif // vgl_clip_h_

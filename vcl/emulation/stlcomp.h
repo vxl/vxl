@@ -384,4 +384,4 @@
 
 # undef __GIVE_UP_WITH_STL
 
-#endif
+#endif // __STLCOMP_H

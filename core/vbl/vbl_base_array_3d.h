@@ -7,7 +7,7 @@
 // .LIBRARY vbl
 // .HEADER vxl package
 // .INCLUDE vbl/vbl_base_array_3d.h
-// .FILE vbl/vbl_base_array_3d.cxx
+// .FILE vbl_base_array_3d.cxx
 //
 // .SECTION Author:
 //             Paul Beardsley, 29.03.96
@@ -24,13 +24,13 @@ class vbl_base_array_3d {
   // PUBLIC INTERFACE----------------------------------------------------------
 public:
   // Constructors/Initializers/Destructors-------------------------------------
-  
+
   vbl_base_array_3d(unsigned int n1, unsigned int n2, unsigned int n3);
 
   int get_row1_count () const { return row1_count_; }
   int get_row2_count () const { return row2_count_; }
   int get_row3_count () const { return row3_count_; }
-  
+
   // INTERNALS-----------------------------------------------------------------
 public:
   unsigned int row1_count_;

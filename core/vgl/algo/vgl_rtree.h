@@ -339,4 +339,4 @@ private:
 
 #define VGL_RTREE_INSTANTIATE(V, B, C) extern "you must include vgl_rtree.txx first"
 
-#endif
+#endif // vgl_rtree_h_

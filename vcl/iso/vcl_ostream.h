@@ -16,4 +16,4 @@
 #define vcl_wostream std::wostream
 #endif
 
-#endif
+#endif // vcl_iso_ostream_h_

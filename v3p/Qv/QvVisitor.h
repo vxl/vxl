@@ -1,24 +1,24 @@
-//-*- c++ -*-------------------------------------------------------------------
 #ifndef QvVisitor_h_
 #define QvVisitor_h_
 #ifdef __GNUC__
 #pragma interface
 #endif
 //
-// Class : QvVisitor
+// .NAME	QvVisitor - Traverse a VRML 1.0 file
+// .LIBRARY	vview
+// .HEADER	Oxford Package
+// .INCLUDE	vview/QvVisitor.h
+// .FILE	QvVisitor.cxx
 //
 // .SECTION Description
 //    QvVisitor is the best way to read a VRML 1.0 file.
 //    Derive your class from QvVisitor, and use QvFile to traverse it.
 //
-// .NAME        QvVisitor - Traverse a VRML 1.0 file.
-// .LIBRARY     vview
-// .HEADER	Oxford Package
-// .INCLUDE     vview/QvVisitor.h
-// .FILE        QvVisitor.h
-// .FILE        QvVisitor.C
 // .SECTION Author
 //     Andrew W. Fitzgibbon, Oxford RRG, 09 Jan 99
+//
+// .SECTION Modifications:
+//   990109 AWF Initial version.
 //
 //-----------------------------------------------------------------------------
 
@@ -114,5 +114,4 @@ private:
   int indent;
 };
 
-#endif   // DO NOT ADD CODE AFTER THIS LINE! END OF DEFINITION FOR CLASS QvVisitor.
-
+#endif // QvVisitor_h_

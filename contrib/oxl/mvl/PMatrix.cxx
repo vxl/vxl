@@ -1,13 +1,6 @@
 #ifdef __GNUG__
 #pragma implementation
 #endif
-//--------------------------------------------------------------
-//
-// Class : PMatrix
-//
-// Modifications : see PMatrix.h
-//
-//-----------------------------------------------------------------------------
 
 #include <vcl/vcl_cassert.h>
 #include <vcl/vcl_iostream.h>

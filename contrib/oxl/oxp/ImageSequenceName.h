@@ -1,21 +1,14 @@
-//-*- c++ -*-------------------------------------------------------------------
 #ifndef ImageSequenceName_h_
 #define ImageSequenceName_h_
 #ifdef __GNUC__
 #pragma interface
 #endif
 //
-// Class : ImageSequenceName
-//
-// .SECTION Description
-//    ImageSequenceName is a class that awf hasn't documented properly. FIXME
-//
-// .NAME        ImageSequenceName - Undocumented class FIXME
-// .LIBRARY     POX
+// .NAME	ImageSequenceName
+// .LIBRARY	POX
 // .HEADER	Oxford Package
-// .INCLUDE     oxp/ImageSequenceName.h
-// .FILE        ImageSequenceName.h
-// .FILE        ImageSequenceName.cxx
+// .INCLUDE	oxp/ImageSequenceName.h
+// .FILE	ImageSequenceName.cxx
 // .SECTION Author
 //     Andrew W. Fitzgibbon, Oxford RRG, 31 Dec 98
 //
@@ -29,5 +22,4 @@ struct ImageSequenceName : public SequenceFileName {
   void init(char const* read_or_write = "r", char const* default_extension = 0);
 };
 
-#endif   // DO NOT ADD CODE AFTER THIS LINE! END OF DEFINITION FOR CLASS ImageSequenceName.
-
+#endif // ImageSequenceName_h_

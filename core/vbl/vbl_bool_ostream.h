@@ -1,14 +1,16 @@
-//-*- c++ -*-------------------------------------------------------------------
 #ifndef vbl_bool_ostream_h_
 #define vbl_bool_ostream_h_
 #ifdef __GNUC__
 #pragma interface
 #endif
+// .NAME vbl_bool_ostream
+// .INCLUDE vbl/vbl_bool_ostream.h
+// .FILE vbl_bool_ostream.cxx
 
 #include <vcl/vcl_iostream.h>
 
-struct vbl_bool_ostream {
-  
+class vbl_bool_ostream {
+public:
   class on_off {
   public:
     on_off(const bool &val) : truth(&val) {}
@@ -20,7 +22,6 @@ struct vbl_bool_ostream {
     high_low(const bool &val) : truth(&val) {}
     const bool* truth; 
   };
-
 
   class true_false {
   public:
@@ -34,4 +35,4 @@ ostream& operator<<(ostream& s, const vbl_bool_ostream::high_low& proxy);
 ostream& operator<<(ostream& s, const vbl_bool_ostream::true_false& proxy);
 
 
-#endif   // DO NOT ADD CODE AFTER THIS LINE! END OF DEFINITION FOR CLASS bool_ostream.
+#endif // vbl_bool_ostream_h_

@@ -1,12 +1,6 @@
-//-*- c++ -*-------------------------------------------------------------------
 #ifdef __GNUC__
-#pragma implementation "HMatrix2DAffineCompute.h"
+#pragma implementation
 #endif
-//
-// Class: HMatrix2DAffineCompute
-// Author: David Capel, Oxford RRG
-// Created: 13 May 98
-// Modifications:
 
 #include <vcl/vcl_vector.h>
 #include <vnl/vnl_matrix.h>

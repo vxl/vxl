@@ -9,4 +9,4 @@
 
 #include <iterator>
 
-#endif
+#endif // vcl_sunpro_iterator_h_

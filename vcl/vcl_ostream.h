@@ -9,4 +9,4 @@
 
 #include <vcl/vcl_iostream.h> // this should do it.
 
-#endif
+#endif // vcl_ostream_h_

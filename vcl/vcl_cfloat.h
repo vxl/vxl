@@ -8,4 +8,4 @@
 #include <float.h>
 /* This should define C-style numeric floating point macros */
 
-#endif
+#endif // vcl_cfloat_h_

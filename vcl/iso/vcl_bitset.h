@@ -8,4 +8,4 @@
 #define vcl_bitset std::bitset
 #endif
 
-#endif
+#endif // vcl_iso_bitset_h_

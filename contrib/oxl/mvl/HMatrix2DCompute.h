@@ -1,11 +1,7 @@
+#ifndef _HMatrix2DCompute_h
+#define _HMatrix2DCompute_h
+
 //--------------------------------------------------------------
-//
-// Class : HMatrix2DCompute
-//
-// .SECTION Description:
-//
-// Base class of classes to generate a plane-to-plane projectivity matrix from
-// a set of matched features.
 //
 // .NAME HMatrix2DCompute
 // .LIBRARY MViewCompute
@@ -13,17 +9,18 @@
 // .INCLUDE mvl/HMatrix2DCompute.h
 // .FILE HMatrix2DCompute.cxx
 //
-// .SECTION Modifications:
-//      08-02-98 FSM
-//		 1. Added virtual compute methods that actually take arguments :
-//               generic estimator using points, lines or both.
-//               2. Obsoleted bool compute(HMatrix2D *). So don't use it!
-//		 3. made arguments to compute method 'const ... &',
-//		 thereby potentially breaking the code of certain other people.
+// .SECTION Description:
+// Base class of classes to generate a plane-to-plane projectivity matrix from
+// a set of matched features.
 //
-
-#ifndef _HMatrix2DCompute_h
-#define _HMatrix2DCompute_h
+// .SECTION Modifications:
+//   08-02-98 FSM
+//	1. Added virtual compute methods that actually take arguments :
+//	generic estimator using points, lines or both.
+//	2. Obsoleted bool compute(HMatrix2D *). So don't use it!
+//	3. made arguments to compute method 'const ... &',
+//	thereby potentially breaking the code of certain other people.
+//
 
 class HMatrix2D;
 class PairMatchSetCorner;
@@ -44,7 +41,7 @@ private:
 protected:
   bool verbose_;
 
-  // Derived classes should implement as many of 
+  // Derived classes should implement as many of
   // the following three methods as they can :
   virtual bool compute_p (const PointArray&,// points only.
 			  const PointArray&,
@@ -64,42 +61,41 @@ public:
   HMatrix2DCompute() : verbose_(false) { }
   virtual ~HMatrix2DCompute() { }
 
-  
-  // 
+  //
   void verbose(bool);	// set this to true for verbose run-time information
 
 
-  // 
+  //
   // Compute methods :
   //
-  // Some use point correspondences, some use line 
-  // correspondences, some use both. They are implemented 
+  // Some use point correspondences, some use line
+  // correspondences, some use both. They are implemented
   // in terms of the compute_(p|l|pl) methods.
   //
 
   bool compute(const PointArray&,
-	       const PointArray&, 
-	       HMatrix2D *);
-
-  bool compute(const LineArray&, 
-	       const LineArray&, 
-	       HMatrix2D *);
-
-  bool compute(const PointArray&, 
 	       const PointArray&,
-	       const LineArray&, 
+	       HMatrix2D *);
+
+  bool compute(const LineArray&,
 	       const LineArray&,
-	       HMatrix2D *);	
+	       HMatrix2D *);
+
+  bool compute(const PointArray&,
+	       const PointArray&,
+	       const LineArray&,
+	       const LineArray&,
+	       HMatrix2D *);
 
   HMatrix2D compute(const PointArray&,
 		    const PointArray&);
 
-  HMatrix2D compute(const LineArray&, 
+  HMatrix2D compute(const LineArray&,
 		    const LineArray&);
 
-  HMatrix2D compute(const PointArray&, 
+  HMatrix2D compute(const PointArray&,
 		    const PointArray&,
-		    const LineArray&, 
+		    const LineArray&,
 		    const LineArray&);
 
   bool compute(const PairMatchSetCorner &,
@@ -107,6 +103,4 @@ public:
   HMatrix2D compute(const PairMatchSetCorner &);
 };
 
-#endif
-
-
+#endif // _HMatrix2DCompute_h

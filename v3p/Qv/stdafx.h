@@ -2,4 +2,4 @@
 #define stdafx_h
 
 #define TRACE(a, b, c) fprintf(stderr, a, b, c);
-#endif
+#endif // stdafx_h

@@ -38,12 +38,13 @@ class vgl_point_2d;
 
 template <class Type>
 class vgl_box_2d {
-   // PUBLIC INTERFACE----------------------------------------------------------
+
+  // PUBLIC INTERFACE----------------------------------------------------------
 public:
-  
+
   // Constructors/Destructors--------------------------------------------------
   vgl_box_2d() {}
-  vgl_box_2d(const Type min_position[2], 
+  vgl_box_2d(const Type min_position[2],
              const Type max_position[2] );
   vgl_box_2d(const vgl_point_2d<Type>& min_position,
              const vgl_point_2d<Type>& max_pos);
@@ -92,7 +93,7 @@ public:
   void set_max_point(vgl_point_2d<Type>& max_point);
   void set_centroid(Type centroid[2]);
   void set_centroid(vgl_point_2d<Type>& centroid);
-  
+
   // Data Control--------------------------------------------------------------
 
   // Computations--------------------------------------------------------------
@@ -106,20 +107,20 @@ public:
   ostream& print(ostream&) const;
   ostream& write(ostream&) const;
   istream& read(istream&);
-  
+
   // INTERNALS-----------------------------------------------------------------
 protected:
   // Data Members--------------------------------------------------------------
   Type min_pos_[2];
   Type max_pos_[2];
-  
+
 private:
   // Helpers-------------------------------------------------------------------
 };
 
-// stream operators 
+// stream operators
 template <class Type>
-ostream&  operator<<(ostream& s, const vgl_box_2d<Type>& p) { 
+ostream&  operator<<(ostream& s, const vgl_box_2d<Type>& p) {
   return p.print(s);
 }
 
@@ -134,4 +135,4 @@ vgl_box_2d<Type> intersect(vgl_box_2d<Type> const& in1, vgl_box_2d<Type> const& 
 #define VGL_BOX_2D_INSTANTIATE(T) extern "Include vgl_box_2d.txx"
 
 
-#endif // _vgl_box_2d_h
+#endif // vgl_box_2d_h

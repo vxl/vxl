@@ -1,12 +1,6 @@
-//-*- c++ -*-------------------------------------------------------------------
 #ifdef __GNUC__
-#pragma implementation "HMatrix2DEuclideanCompute.h"
+#pragma implementation
 #endif
-//
-// Class: HMatrix2DEuclideanCompute
-// Author: David Capel, Oxford RRG
-// Created: 13 May 98
-// Modifications:
 
 #include "HMatrix2DEuclideanCompute.h"
 

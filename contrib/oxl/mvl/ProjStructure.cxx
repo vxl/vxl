@@ -1,15 +1,6 @@
-//-*- c++ -*-------------------------------------------------------------------
 #ifdef __GNUC__
-#pragma implementation "ProjStructure.h"
+#pragma implementation
 #endif
-//
-// Class: ProjStructure
-// Author: Andrew W. Fitzgibbon, Oxford RRG
-// Created: 17 Mar 00
-// Modifications:
-//   000317 AWF Initial version.
-//
-//-----------------------------------------------------------------------------
 
 #include "ProjStructure.h"
 

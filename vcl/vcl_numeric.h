@@ -8,4 +8,4 @@
 
 #include <vcl/iso/vcl_numeric.h>
 
-#endif
+#endif // vcl_numeric_h_

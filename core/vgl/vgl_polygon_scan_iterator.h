@@ -165,4 +165,4 @@ private:
 
 };
 
-#endif
+#endif // vgl_polygon_scan_iterator_h

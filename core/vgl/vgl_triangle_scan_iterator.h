@@ -47,4 +47,4 @@ private:
 #endif
 };
 
-#endif
+#endif // vgl_triangle_scan_iterator_h_

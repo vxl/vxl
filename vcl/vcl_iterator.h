@@ -68,4 +68,4 @@
 # define vcl_iterator_category_Iter_cat
 #endif
 
-#endif
+#endif // vcl_iterator_h_

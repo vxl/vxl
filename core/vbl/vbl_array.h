@@ -115,4 +115,4 @@ private:
   T *begin_, *end_, *alloc_;
 };
 
-#endif
+#endif // vbl_array_h_

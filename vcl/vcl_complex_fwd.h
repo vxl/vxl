@@ -59,4 +59,4 @@ namespace std {
 typedef vcl_complex<float>  vcl_float_complex;
 typedef vcl_complex<double> vcl_double_complex;
 
-#endif
+#endif // vcl_complex_fwd_h_

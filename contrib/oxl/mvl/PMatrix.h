@@ -6,7 +6,7 @@
 
 //--*- c++ -*------------------------------------------------------------------
 //
-// .NAME PMatrix - General 3x4 perspective projection matrix.
+// .NAME PMatrix - General 3x4 perspective projection matrix
 // .LIBRARY MViewBasics
 // .HEADER  MultiView package
 // .INCLUDE mvl/PMatrix.h
@@ -31,7 +31,7 @@
 #include <vnl/vnl_double_3x4.h>
 
 class HomgPoint2D;
-class HomgLine2D;  
+class HomgLine2D;
 class HomgLineSeg2D;
 
 class HomgPoint3D;
@@ -43,9 +43,9 @@ class HMatrix2D;
 
 class PMatrix {
 public:
-  
+
   // Constructors/Initializers/Destructors-------------------------------------
-  
+
   PMatrix();
   PMatrix(istream&);
   PMatrix(const double *c_matrix);
@@ -56,7 +56,7 @@ public:
 
   static PMatrix read(char const* filename);
   static PMatrix read(istream&);
-  
+
   // Operations----------------------------------------------------------------
 
   HomgPoint2D   project (const HomgPoint3D& X) const;
@@ -85,7 +85,7 @@ public:
   void fix_cheirality();
 
   // Data Access---------------------------------------------------------------
-  
+
   PMatrix& operator=(const PMatrix&);
 
   bool operator==(PMatrix const& p) const { return _p_matrix == p.get_matrix(); }
@@ -107,21 +107,12 @@ public:
   const vnl_matrix<double>& get_matrix() const { return _p_matrix; }
   // Can't implement this as it will blow the svd cache.
   // vnl_matrix<double>& get_matrix() { return _p_matrix; }
-  
+
   // Utility Methods-----------------------------------------------------------
   bool read_ascii(istream& f);
-  
-  // INTERNALS-----------------------------------------------------------------
 
-protected:
-  
-private:
-  
   // Data Members--------------------------------------------------------------
-  
-
 protected:
-
   vnl_double_3x4 _p_matrix;
   mutable vnl_svd<double>* _svd;
 };
@@ -141,5 +132,4 @@ PMatrix operator*(const vnl_matrix<double>& C, const PMatrix& P)
   return PMatrix(C * P.get_matrix());
 }
 
-#endif
-// _PMatrix_h
+#endif // _PMatrix_h

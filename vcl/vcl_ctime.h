@@ -14,4 +14,4 @@
 #include <sys/times.h>
 #endif
 
-#endif
+#endif // vcl_ctime_h_

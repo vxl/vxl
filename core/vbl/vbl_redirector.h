@@ -1,4 +1,3 @@
-//-*- c++ -*-------------------------------------------------------------------
 #ifndef vbl_redirector_h_
 #define vbl_redirector_h_
 #ifdef __GNUC__
@@ -51,5 +50,4 @@ private:
   vbl_redirector_data* p;
 };
 
-#endif   // DO NOT ADD CODE AFTER THIS LINE! END OF DEFINITION FOR CLASS vbl_redirector.
-
+#endif // vbl_redirector_h_

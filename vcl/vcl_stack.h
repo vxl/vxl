@@ -14,4 +14,4 @@
 # include <vcl/iso/vcl_stack.h>
 #endif
 
-#endif
+#endif // vcl_stack_h_

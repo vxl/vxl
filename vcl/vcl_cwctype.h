@@ -11,4 +11,4 @@
 
 #include <wctype.h>
 
-#endif
+#endif // vcl_cwctype_h_

@@ -1,4 +1,3 @@
-//-*- c++ -*-------------------------------------------------------------------
 #ifndef ImageWarp_h_
 #define ImageWarp_h_
 #ifdef __GNUC__
@@ -9,7 +8,6 @@
 // .LIBRARY	oxp
 // .HEADER	Oxford Package
 // .INCLUDE	oxp/ImageWarp.h
-// .FILE	ImageWarp.h
 // .FILE	ImageWarp.cxx
 //
 // .SECTION Description

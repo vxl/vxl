@@ -17,4 +17,4 @@
 #define VCL_LIST_INSTANTIATE \
 extern "include vcl/vcl_list.txx instead"
 
-#endif
+#endif // vcl_list_h_

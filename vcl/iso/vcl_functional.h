@@ -170,4 +170,4 @@
 //@constant_unary_fun  
 //@constant_binary_fun 
 
-#endif
+#endif // vcl_iso_functional_h_

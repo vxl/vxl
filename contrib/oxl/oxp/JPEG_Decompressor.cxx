@@ -1,15 +1,6 @@
-//-*- c++ -*-------------------------------------------------------------------
 #ifdef __GNUC__
-#pragma implementation "JPEG_Decompressor.h"
+#pragma implementation
 #endif
-//
-// Class: JPEG_Decompressor
-// Author: Andrew W. Fitzgibbon, Oxford RRG
-// Created: 30 Dec 98
-// Modifications:
-//   981230 AWF Initial version.
-//
-//-----------------------------------------------------------------------------
 
 #include "JPEG_Decompressor.h"
 

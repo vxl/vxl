@@ -13,4 +13,4 @@ inline bool operator<=(const T& x, const T& y) { return !(y <  x); }
 template <class T>
 inline bool operator>=(const T& x, const T& y) { return !(x <  y); }
 
-#endif
+#endif // vcl_emulation_rel_ops_h_

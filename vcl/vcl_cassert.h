@@ -14,4 +14,4 @@
 // here using #undef and #define.
 //#define vcl_assert(x) assert(x)
 
-#endif
+#endif // vcl_cassert_h_

@@ -1,15 +1,6 @@
-//-*- c++ -*-------------------------------------------------------------------
 #ifdef __GNUC__
-#pragma implementation "QvVisitor.h"
+#pragma implementation
 #endif
-//
-// Class: QvVisitor
-// Author: Andrew W. Fitzgibbon, Oxford RRG
-// Created: 09 Jan 99
-// Modifications:
-//   990109 AWF Initial version.
-//
-//-----------------------------------------------------------------------------
 
 #include "QvVisitor.h"
 

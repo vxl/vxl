@@ -25,7 +25,7 @@
 
 //<file>
 //
-// Name:        wrlbuild.C
+// Name:        wrlbuild.cxx
 //
 // Purpose:     preprocessing of VRML nodes
 //

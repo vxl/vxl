@@ -1,14 +1,6 @@
-//-*- c++ -*-------------------------------------------------------------------
 #ifdef __GNUC__
 #pragma implementation
 #endif
-//
-// Class: mvl_multi_view_matches
-// Author: David Capel, Oxford RRG
-// Created: 16 April 2000
-// Modifications:
-//
-//-----------------------------------------------------------------------------
 
 #include <mvl/mvl_multi_view_matches.h>
 

@@ -1,14 +1,6 @@
-//-*- c++ -*-------------------------------------------------------------------
 #ifdef __GNUC__
-#pragma implementation "PairMatchSet2D3D.h"
+#pragma implementation
 #endif
-//
-// Class: PairMatchSet2D3D
-// Author: Andrew W. Fitzgibbon, Oxford RRG
-// Created: 19 Sep 96
-// Modifications:
-//
-//-----------------------------------------------------------------------------
 
 #include "PairMatchSet2D3D.h"
 #include <mvl/HomgInterestPointSet.h>

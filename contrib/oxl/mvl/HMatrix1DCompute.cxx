@@ -1,11 +1,3 @@
-//--------------------------------------------------------------
-//
-// Class : HMatrix1DCompute
-//
-// Modifications : see HMatrix1DCompute.h
-//
-//--------------------------------------------------------------
-
 #include "HMatrix1DCompute.h"
 
 #include <vcl/vcl_cstdlib.h>

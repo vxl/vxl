@@ -17,4 +17,4 @@
 # include <vcl/iso/vcl_iomanip.h>
 #endif
 
-#endif
+#endif // vcl_iomanip_h_

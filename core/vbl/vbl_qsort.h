@@ -1,4 +1,3 @@
-//-*- c++ -*-------------------------------------------------------------------
 #ifndef vbl_qsort_h_
 #define vbl_qsort_h_
 #ifdef __GNUC__
@@ -120,4 +119,4 @@ VCL_INSTANTIATE_INLINE(void vbl_qsort_descending(T*,int));
 #define VBL_QSORT_INSTANTIATE_vector(T)\
 VCL_INSTANTIATE_INLINE(void vbl_qsort(vcl_vector<T>& v, int (*compare)(T const& a, T const& b)))
 
-#endif   // DO NOT ADD CODE AFTER THIS LINE! END OF DEFINITION FOR CLASS vbl_qsort.
+#endif // vbl_qsort_h_

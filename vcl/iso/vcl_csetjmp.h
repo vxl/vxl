@@ -12,4 +12,4 @@
 #define vcl_longjmp std::longjmp
 #endif
 
-#endif
+#endif // vcl_iso_csetjmp_h_

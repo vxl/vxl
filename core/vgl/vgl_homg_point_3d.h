@@ -5,7 +5,7 @@
 // .NAME vgl_homg_point_3d - Represents a homogeneous 3D point
 // .LIBRARY vgl
 // .INCLUDE vgl/vgl_homg_point_3d.h
-// .FILE    vgl/vgl_homg_point_3d.txx
+// .FILE    vgl_homg_point_3d.txx
 //
 // .SECTION Author
 // Don HAMILTON
@@ -28,18 +28,18 @@ class vgl_point_3d;
 
 template <class Type>
 class vgl_homg_point_3d
-{ 
+{
   //***************************************************************************
   // Initialization
   //***************************************************************************
 public:
-  
+
   //---------------------------------------------------------------------------
   //: Default constructor with (0,0,0,1)
   //---------------------------------------------------------------------------
   explicit vgl_homg_point_3d(void);
-  
-  // Default copy constructor  
+
+  // Default copy constructor
   // vgl_homg_point_3d (const vgl_homg_point_3d<Type>& that) {
   //   set(that.x(),that.y(),that.z(),that.w());
   // }
@@ -83,7 +83,7 @@ public:
   //   set(that.x(),that.y(),that.z(),that.w());
   //   return *this;
   // }
-  
+
   //***************************************************************************
   // Data Access
   //***************************************************************************
@@ -116,18 +116,18 @@ public:
     data_[3]=pw;
   }
 
-  // test for point at infinity  
+  // test for point at infinity
   // Return true when |w| < tol * min(|x|, |y|, |z|)
   bool ideal(Type tol)
   {
     return vcl_abs(w()) < tol * vcl_min(vcl_min(vcl_abs(x()),vcl_abs(y())),vcl_abs(z()));
   }
-  
+
   //***************************************************************************
   // Internals
   //***************************************************************************
 protected:
-  // the data associated with this point 
+  // the data associated with this point
   Type data_[4];
 };
 
@@ -139,15 +139,15 @@ ostream &operator<<(ostream &s,
                     const vgl_homg_point_3d<Type> &p)
 {
   return s << " <vgl_homg_point_3d ("
-           << p->data_[0] << "," << p->data_[1] << "," 
-           << p->data_[2] << "," << p->data_[3] << ") >";  
+           << p->data_[0] << "," << p->data_[1] << ","
+           << p->data_[2] << "," << p->data_[3] << ") >";
 }
 
 template <class Type>
 istream &operator>>(istream &is,
                     vgl_homg_point_3d<Type> &p)
 {
-  return is >> p->data_[0] >> p->data_[1] >> p->data_[2] >> p->data_[3]; 
+  return is >> p->data_[0] >> p->data_[1] >> p->data_[2] >> p->data_[3];
 }
 
 #endif // #ifndef vgl_homg_point_3d_h_

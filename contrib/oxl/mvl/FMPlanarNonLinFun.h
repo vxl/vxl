@@ -1,21 +1,19 @@
-//-*- c++ -*-------------------------------------------------------------------
 #ifndef FMPlanarNonLinFun_h_
 #define FMPlanarNonLinFun_h_
 #ifdef __GNUC__
 #pragma interface
 #endif
 //
-// Class : FMPlanarNonLinFun
+// .NAME	FMPlanarNonLinFun
+// .LIBRARY	MViewCompute
+// .HEADER	MultiView Package
+// .INCLUDE	mvl/FMPlanarNonLinFun.h
+// .FILE	FMPlanarNonLinFun.cxx
 //
 // .SECTION Description
-//    FMPlanarNonLinFun is a class that contains the functions required for 
+//    FMPlanarNonLinFun is a class that contains the functions required for
 //  FMPlanarComputeLinear.
 //
-// .NAME        FMPlanarNonLinFun 
-// .LIBRARY     MViewCompute
-// .HEADER      MultiView Package
-// .INCLUDE     mvl/FMPlanarNonLinFun.h
-// .FILE        FMPlanarNonLinFun.cxx
 // .SECTION Author
 //     Martin Armstrong, Oxford 21/11/96
 //
@@ -39,22 +37,22 @@ class ImageMetric;
 
 class FMPlanarNonLinFun : public vnl_least_squares_function {
 public:
-  
+
   // Constructors/Destructors--------------------------------------------------
   FMPlanarNonLinFun(const ImageMetric*, const ImageMetric*,
 			double outlier_distance_squared,
 			vcl_vector<HomgPoint2D>& points1,
 			vcl_vector<HomgPoint2D>& points2);
-  
+
   // Operations----------------------------------------------------------------
-  
+
   // Computations--------------------------------------------------------------
 
   bool compute(FMatrixPlanar* F);
-  
+
 // The virtual function from vnl_levenberg_marquardt
   void f(const vnl_vector<double>& x, vnl_vector<double>& fx);
-  
+
   // Data Access---------------------------------------------------------------
 
   // Data Control--------------------------------------------------------------
@@ -89,5 +87,4 @@ private:
   FMatrixPlanar params_to_fmatrix_mna(const vnl_vector<double>& params);
 };
 
-#endif   // DO NOT ADD CODE AFTER THIS LINE! END OF DEFINITION FOR CLASS FMPlanarNonLinFun.
-
+#endif // FMPlanarNonLinFun_h_

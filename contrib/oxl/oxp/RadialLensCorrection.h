@@ -1,21 +1,14 @@
-//-*- c++ -*-------------------------------------------------------------------
 #ifndef RadialLensCorrection_h_
 #define RadialLensCorrection_h_
 #ifdef __GNUC__
 #pragma interface
 #endif
 //
-// Class : RadialLensCorrection
-//
-// .SECTION Description
-//    RadialLensCorrection is a class that awf hasn't documented properly. FIXME
-//
-// .NAME        RadialLensCorrection - Undocumented class FIXME
-// .LIBRARY     POX
+// .NAME	RadialLensCorrection
+// .LIBRARY	POX
 // .HEADER	Oxford Package
-// .INCLUDE     oxp/RadialLensCorrection.h
-// .FILE        RadialLensCorrection.h
-// .FILE        RadialLensCorrection.cxx
+// .INCLUDE	oxp/RadialLensCorrection.h
+// .FILE	RadialLensCorrection.cxx
 // .SECTION Author
 //     Andrew W. Fitzgibbon, Oxford RRG, 13 Jul 98
 //
@@ -48,5 +41,4 @@ protected:
   double _invsy;
 };
 
-#endif   // DO NOT ADD CODE AFTER THIS LINE! END OF DEFINITION FOR CLASS RadialLensCorrection.
-
+#endif // RadialLensCorrection_h_

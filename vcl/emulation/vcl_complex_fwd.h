@@ -6,4 +6,4 @@
 
 template <class T> class vcl_complex;
 
-#endif
+#endif // vcl_emulation_complex_fwd_h_

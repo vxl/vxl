@@ -26,4 +26,4 @@
 # include <vcl/iso/vcl_streambuf.h>
 #endif
 
-#endif
+#endif // vcl_streambuf_h_

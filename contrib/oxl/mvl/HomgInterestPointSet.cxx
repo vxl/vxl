@@ -1,14 +1,6 @@
-//-*- c++ -*-------------------------------------------------------------------
 #ifdef __GNUC__
 #pragma implementation
 #endif
-//
-// Class: HomgInterestPointSet
-// Author: Andrew W. Fitzgibbon, Oxford RRG
-// Created: 17 Aug 96
-// Modifications:
-//
-//-----------------------------------------------------------------------------
 
 #include "HomgInterestPointSet.h"
 

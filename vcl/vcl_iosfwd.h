@@ -66,4 +66,4 @@ using std::ifstream;
 using std::ofstream;
 #endif
 
-#endif
+#endif // vcl_iosfwd_h_

@@ -16,4 +16,4 @@
 #define vcl_swap std::swap
 #endif
 
-#endif
+#endif // vcl_iso_map_h_

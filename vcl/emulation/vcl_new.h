@@ -11,4 +11,4 @@
 // for vcl_destroy() and vcl_construct() :
 #include <vcl/emulation/vcl_algobase.h>
 
-#endif
+#endif // vcl_emulation_new_h_

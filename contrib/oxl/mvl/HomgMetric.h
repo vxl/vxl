@@ -1,11 +1,14 @@
-//-*- c++ -*-------------------------------------------------------------------
 #ifndef HomgMetric_h_
 #define HomgMetric_h_
 #ifdef __GNUC__
 #pragma interface
 #endif
 //
-// Class : HomgMetric
+// .NAME	HomgMetric - Measurments on homogeneous coordinates
+// .LIBRARY	MViewBasics
+// .HEADER	MultiView Package
+// .INCLUDE	mvl/HomgMetric.h
+// .FILE	HomgMetric.cxx
 //
 // .SECTION Description
 //    HomgMetric is a class that allows measurements to be made between
@@ -16,11 +19,6 @@
 //    {\em does not} have responsibility for memory management, no more
 //    than any other pointer.
 //
-// .NAME        HomgMetric - Measurments on homogeneous coordinates
-// .LIBRARY     MViewBasics
-// .HEADER	MultiView Package
-// .INCLUDE     mvl/HomgMetric.h
-// .FILE        HomgMetric.cxx
 // .SECTION Author
 //     Andrew W. Fitzgibbon, Oxford RRG, 28 Jan 97
 //
@@ -46,7 +44,7 @@ class PMatrix;
 class HomgMetric {
 public:
   // Constructors/Destructors--------------------------------------------------
-  
+
   HomgMetric() { _metric = 0; }
   HomgMetric(const ImageMetric* metric);
 
@@ -55,7 +53,7 @@ public:
   // HomgMetric& operator=(const HomgMetric& that); - use default
 
   // Operations----------------------------------------------------------------
-  
+
   // ** Conversion to/from homogeneous coordinates
   vnl_double_2 homg_to_image(const HomgPoint2D&) const;
   void homg_to_image(const HomgPoint2D&, double* ix, double* iy) const;
@@ -69,7 +67,7 @@ public:
   HomgLine2D image_to_homg_line(const HomgLine2D&) const;
 
   HomgLineSeg2D image_to_homg(const HomgLineSeg2D&) const;
-  HomgLineSeg2D homg_to_image(const HomgLineSeg2D&) const;  
+  HomgLineSeg2D homg_to_image(const HomgLineSeg2D&) const;
 
   // ** Measurements
   double perp_dist_squared(const HomgPoint2D&, const HomgLine2D&) const;
@@ -118,4 +116,4 @@ private:
 
 inline ostream& operator<<(ostream& s, const HomgMetric& h) { return h.print(s); }
 
-#endif   // DO NOT ADD CODE AFTER THIS LINE! END OF DEFINITION FOR CLASS HomgMetric.
+#endif // HomgMetric_h_

@@ -15,4 +15,4 @@
 # include <vcl/vcl_deque.h>
 #endif
 
-#endif
+#endif // vcl_stlfwd_h_

@@ -3,11 +3,15 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
-/*
-  fsm@robots.ox.ac.uk
-*/
+//
+// .NAME vbl_get_timestamp
+// .INCLUDE vbl/vbl_get_timestamp.h
+// .FILE vbl_get_timestamp.cxx
+// .SECTION Author
+//   fsm@robots.ox.ac.uk
+//
 
 //: purpose: obtain time elapsed since 1 Jan 1970, in seconds and milliseconds.
 void vbl_get_timestamp(int &secs, int &msecs);
 
-#endif
+#endif // vbl_get_timestamp_h_

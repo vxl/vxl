@@ -96,4 +96,4 @@
 #define vcl_strxfrm std::strxfrm
 #endif
 
-#endif
+#endif // vcl_iso_cstring_h_

@@ -1,4 +1,3 @@
-//-*- c++ -*-------------------------------------------------------------------
 #ifndef ProjStructure_h_
 #define ProjStructure_h_
 #ifdef __GNUC__
@@ -48,5 +47,4 @@ public:
 
 };
 
-#endif   // DO NOT ADD CODE AFTER THIS LINE! END OF DEFINITION FOR CLASS ProjStructure.
-
+#endif // ProjStructure_h_

@@ -1,21 +1,14 @@
-//-*- c++ -*-------------------------------------------------------------------
 #ifndef GXFileVisitor_h_
 #define GXFileVisitor_h_
 #ifdef __GNUC__
 #pragma interface
 #endif
 //
-// Class : GXFileVisitor
-//
-// .SECTION Description
-//    GXFileVisitor is a class that awf hasn't documented properly. FIXME
-//
-// .NAME        GXFileVisitor - Undocumented class FIXME
-// .LIBRARY     POX
+// .NAME	GXFileVisitor
+// .LIBRARY	POX
 // .HEADER	Oxford Package
-// .INCLUDE     oxp/GXFileVisitor.h
-// .FILE        GXFileVisitor.h
-// .FILE        GXFileVisitor.cxx
+// .INCLUDE	oxp/GXFileVisitor.h
+// .FILE	GXFileVisitor.cxx
 // .SECTION Author
 //     Andrew W. Fitzgibbon, Oxford RRG, 21 May 99
 //
@@ -50,5 +43,4 @@ public:
   static bool do_antialias;
 };
 
-#endif   // DO NOT ADD CODE AFTER THIS LINE! END OF DEFINITION FOR CLASS GXFileVisitor.
-
+#endif // GXFileVisitor_h_

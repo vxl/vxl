@@ -80,4 +80,4 @@
 #define vcl_tanh std::tanh
 #endif
 
-#endif
+#endif // vcl_iso_complex_h_

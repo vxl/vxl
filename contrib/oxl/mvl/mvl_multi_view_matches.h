@@ -1,14 +1,17 @@
-//-*- c++ -*-------------------------------------------------------------------
 #ifndef mvl_multi_view_matches_h_
 #define mvl_multi_view_matches_h_
 #ifdef __GNUC__
 #pragma interface
 #endif
 //
-// Class : mvl_multi_view_matches
+// .NAME	mvl_multi_view_matches - Multiple view matches
+// .LIBRARY	mvl
+// .HEADER	MultiView Package
+// .INCLUDE	mvl/mvl_multi_view_matches.h
+// .FILE	mvl_multi_view_matches.cxx
+// .EXAMPLE	examples/mvl_multi_view_matches_example.cxx
 //
 // .SECTION Description
-// 
 //    A class to hold matches over multiple views, allowing for unmatched data.
 //    With each 3d feature there is associated a multiple-view match. A
 //    multiple-view match is a vector of integers which identify
@@ -17,14 +20,7 @@
 //    If for example a 3d point X has NViewMatch "Xmatches", then
 //    Xmatches[v] = i implies that the image of X in view "v" is the corner
 //    with index "i" in view "v".
-//    
 //
-// .NAME        mvl_multi_view_matches - Multiple view matches.
-// .LIBRARY     mvl
-// .HEADER      MultiView Package
-// .INCLUDE     mvl/mvl_multi_view_matches.h
-// .FILE        mvl_multi_view_matches.cxx
-// .EXAMPLE     ../examples/mvl_multi_view_matches_example.cxx
 // .SECTION Author
 //     David Capel, Oxford RRG, 16 April 2000
 // .SECTION Modifications:
@@ -69,7 +65,7 @@ public:
   //: Get the mapping from track frame to real view index (real_view_index = get_view_indices[track.first])
   vcl_vector<int>& get_view_indices () { return views_; }
 
-  //: Standard I/O 
+  //: Standard I/O
   ostream& print(ostream&) const;
   istream& read(istream&);
   ostream& write(ostream&) const;
@@ -86,10 +82,10 @@ protected:
 
   void init();
   void update_maps(int track_index);      // iterate over tracks_[track_index] and update the corner_to_track_maps_ to point to track_index
-  void remove_maps(int track_index);      // iterate over tracks_[track_index] and remove the corner_to_track_maps_           
+  void remove_maps(int track_index);      // iterate over tracks_[track_index] and remove the corner_to_track_maps_
 };
- 
+
 inline ostream& operator<<(ostream& s, mvl_multi_view_matches const& v) { return v.print(s); }
 inline istream& operator>>(istream& s, mvl_multi_view_matches& v) { return v.read(s); }
 
-#endif
+#endif // mvl_multi_view_matches_h_

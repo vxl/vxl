@@ -8,4 +8,4 @@
 #include <stddef.h>
 /* This should define: sizeof(), size_t, and ptrdiff_t */
 
-#endif
+#endif // vcl_cstddef_h_

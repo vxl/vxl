@@ -15,4 +15,4 @@ class HMatrix1DComputeDesign : public HMatrix1DCompute
   ~HMatrix1DComputeDesign();
 };
 
-#endif
+#endif // _HMatrix1DComputeDesign_h_

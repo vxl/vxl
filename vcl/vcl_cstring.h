@@ -7,4 +7,4 @@
 
 #include <string.h>
 
-#endif
+#endif // vcl_cstring_h_

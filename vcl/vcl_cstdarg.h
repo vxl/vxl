@@ -8,4 +8,4 @@
 
 #include <stdarg.h>
 
-#endif
+#endif // vcl_cstdarg_h_

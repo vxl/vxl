@@ -5,4 +5,4 @@
 #include <vpl/vpl_unistd.h>
 #define vcl_unlink vpl_unlink
 
-#endif
+#endif // vcl_unistd_h_

@@ -1,26 +1,20 @@
-//-*- c++ -*-------------------------------------------------------------------
 #ifndef HMatrix2DSimilarityCompute_h_
 #define HMatrix2DSimilarityCompute_h_
 #ifdef __GNUC__
 #pragma interface
 #endif
 //
-// Class : HMatrix2DSimilarityCompute
-//
-// .SECTION Description:
-//
-// @{ HMatrix2DSimilarityCompute contains a linear method to compute
-// a 2D similarity transformation. The H returned is such that
-// \[
-//     x_2 \sim H x_1
-// \] 
-// @}
-//
 // .NAME HMatrix2DSimilarityCompute
 // .LIBRARY MViewCompute
 // .HEADER MultiView package
 // .INCLUDE mvl/HMatrix2DSimilarityCompute.h
 // .FILE HMatrix2DSimilarityCompute.cxx
+//
+// .SECTION Description:
+// HMatrix2DSimilarityCompute contains a linear method to compute
+// a 2D similarity transformation. The H returned is such that
+// @{ \[ x_2 \sim H x_1 \] @}
+//
 // .SECTION Author
 //     David Capel, Oxford RRG, 13 May 98
 // .SECTION Modifications:
@@ -33,7 +27,7 @@ class HomgPoint2D;
 
 class HMatrix2DSimilarityCompute : public HMatrix2DCompute {
 protected:
-  bool compute_p(const vcl_vector<HomgPoint2D>&, 
+  bool compute_p(const vcl_vector<HomgPoint2D>&,
 		 const vcl_vector<HomgPoint2D>&,
 		 HMatrix2D *);
 public:
@@ -48,4 +42,5 @@ private:
 		       const PointArray&,
 		       HMatrix2D*);
 };
-#endif   // DO NOT ADD CODE AFTER THIS LINE! END OF DEFINITION FOR CLASS HMatrix2DSimilarityCompute.
+
+#endif // HMatrix2DSimilarityCompute_h_

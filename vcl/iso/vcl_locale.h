@@ -144,4 +144,4 @@
 #define vcl_messages_byname std::messages_byname
 #endif
 
-#endif
+#endif // vcl_iso_locale_h_

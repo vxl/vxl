@@ -44,7 +44,7 @@ char* strdup (const char* s)  // strdup not contained in system libraries
 // mpichler, 19951109
 // definition of a suffix would be sufficient for compilers,
 // but UNIX' makedepend does not check this
-// e.g. #define CPPSUFFIX ".C"
+// e.g. #define CPPSUFFIX ".cxx"
 // #include "QvXXX" CPPSUFFIX
 // gorasche, 19960229
 // VC++ now rejects them too, so we're back to the old, large ifdef

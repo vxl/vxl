@@ -30,4 +30,4 @@
 
 using std::setw;
 
-#endif
+#endif // vcl_iso_iomanip_h_

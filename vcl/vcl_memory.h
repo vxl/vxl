@@ -11,4 +11,4 @@
 # include <vcl/iso/vcl_memory.h>
 #endif
 
-#endif
+#endif // vcl_memory_h_

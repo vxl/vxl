@@ -1,14 +1,6 @@
-//-*- c++ -*-------------------------------------------------------------------
 #ifdef __GNUC__
-#pragma implementation "HomgMetric.h"
+#pragma implementation
 #endif
-//
-// Class: HomgMetric
-// Author: Andrew W. Fitzgibbon, Oxford RRG
-// Created: 30 Jan 97
-// Modifications:
-//
-//-----------------------------------------------------------------------------
 
 #include "HomgMetric.h"
 

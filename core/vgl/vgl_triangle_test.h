@@ -25,4 +25,4 @@ bool vgl_triangle_test_inside(T x1, T y1,
 			      T x , T y );
 
 
-#endif
+#endif // vgl_triangle_test_h_

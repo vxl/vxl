@@ -1,21 +1,19 @@
-//-*- c++ -*-------------------------------------------------------------------
 #ifndef ClosestImagePointFinder_h_
 #define ClosestImagePointFinder_h_
 #ifdef __GNUC__
 #pragma interface
 #endif
 //
-// Class : ClosestImagePointFinder
+// .NAME	ClosestImagePointFinder - HomgInterestPointSet closest points
+// .LIBRARY	MViewBasics
+// .HEADER	MultiView Package
+// .INCLUDE	mvl/ClosestImagePointFinder.h
+// .FILE	ClosestImagePointFinder.cxx
 //
 // .SECTION Description
 //    ClosestImagePointFinder allows fast access to closest-point
 //    operations on a HomgInterestPointSet.
 //
-// .NAME        ClosestImagePointFinder - HomgInterestPointSet closest points.
-// .LIBRARY     MViewBasics
-// .HEADER	MultiView Package
-// .INCLUDE     mvl/ClosestImagePointFinder.h
-// .FILE        ClosestImagePointFinder.cxx
 // .SECTION Author
 //     Andrew W. Fitzgibbon, Oxford RRG, 21 Jan 97
 //
@@ -41,7 +39,7 @@ class HomgPoint2D;
 class ClosestImagePointFinder {
 public:
   // Constructors/Destructors--------------------------------------------------
-  
+
   ClosestImagePointFinder(const HomgInterestPointSet& corners);
   ClosestImagePointFinder(const vcl_vector<HomgPoint2D>& corners);
   ~ClosestImagePointFinder();
@@ -55,7 +53,7 @@ public:
 
   int get_closest_within_region(double cx, double cy, double w, double h, int* out_index = 0);
   int get_closest_within_distance(double cx, double cy, double r, int* out_index = 0);
-  
+
   // Computations--------------------------------------------------------------
 
   // Data Access---------------------------------------------------------------
@@ -78,10 +76,9 @@ protected:
   double _last_d2;
   int _last_inrange;
   int _last_index;
-  
+
 private:
   // Helpers-------------------------------------------------------------------
 };
 
-#endif   // DO NOT ADD CODE AFTER THIS LINE! END OF DEFINITION FOR CLASS ClosestImagePointFinder.
-
+#endif // ClosestImagePointFinder_h_

@@ -1,24 +1,23 @@
-//-*- c++ -*-------------------------------------------------------------------
 #ifndef vbl_sprintf_h_
 #define vbl_sprintf_h_
 #ifdef __GNUC__
 #pragma interface
 #endif
 //
-// .NAME        vbl_sprintf - creates a formatted ANSI C++ string
-// .LIBRARY     vbl
+// .NAME	vbl_sprintf - creates a formatted ANSI C++ string
+// .LIBRARY	vbl
 // .HEADER	vxl package
-// .INCLUDE     vbl/vbl_sprintf.h
-// .FILE        vbl/vbl_sprintf.cxx
+// .INCLUDE	vbl/vbl_sprintf.h
+// .FILE	vbl_sprintf.cxx
 //
 // .SECTION Description
-//    
+//
 // vbl_sprintf is a C++ conforming replacement to the ANSI C functions sprintf
 // and printf.
-// It works in the same way as sprintf but is itself an ANSI C++ string 
-// which can either be kept or output directly using streams  e.g.  
+// It works in the same way as sprintf but is itself an ANSI C++ string
+// which can either be kept or output directly using streams  e.g.
 // \verbatim
-// cerr << vbl_sprintf("int %d, float %f ", 1, 3.14) 
+// cerr << vbl_sprintf("int %d, float %f ", 1, 3.14)
 //      << bigobject << endl;
 // \endverbatim
 //
@@ -39,7 +38,7 @@ public:
   typedef vcl_string super;
   // ISO C++ does not allow reference type for the argument preceding ...
   // If you can't afford to pass a string by value, use string::c_str()
-  //vbl_sprintf(const vcl_string& fmt, ...); 
+  //vbl_sprintf(const vcl_string& fmt, ...);
 
   // Nor does it allow parmN to be a structure type (in most cases) and
   // while that may work on many platforms, it breaks on native SGI.
@@ -47,7 +46,7 @@ public:
   //vbl_sprintf(vcl_string fmt, ...); // va_start() broken for parmN of type string.
 
   // constructor/destructor
-  vbl_sprintf(const char *fmt, ...); 
+  vbl_sprintf(const char *fmt, ...);
  ~vbl_sprintf();
 
 #ifndef VCL_WIN32
@@ -67,4 +66,4 @@ public:
 
 ostream& operator<<(ostream &os, const vbl_sprintf& s);
 
-#endif   // DO NOT ADD CODE AFTER THIS LINE! END OF DEFINITION FOR CLASS vbl_sprintf.
+#endif // vbl_sprintf_h_

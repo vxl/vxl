@@ -1,21 +1,18 @@
-//-*- c++ -*-------------------------------------------------------------------
 #ifndef SGIMovieFilePrivates_h_
 #define SGIMovieFilePrivates_h_
 #ifdef __GNUC__
 #pragma interface
 #endif
 //
-// Class : SGIMovieFilePrivates
+// .NAME	SGIMovieFilePrivates - Undocumented
+// .LIBRARY	POX
+// .HEADER	Oxford Package
+// .INCLUDE	oxp/SGIMovieFilePrivates.h
+// .FILE	SGIMovieFilePrivates.cxx
 //
 // .SECTION Description
 //    SGIMovieFilePrivates is deliberately undocumented.
 //
-// .NAME        SGIMovieFilePrivates - Undocumented
-// .LIBRARY     POX
-// .HEADER	Oxford Package
-// .INCLUDE     oxp/SGIMovieFilePrivates.h
-// .FILE        SGIMovieFilePrivates.h
-// .FILE        SGIMovieFilePrivates.cxx
 // .SECTION Author
 //     Andrew W. Fitzgibbon, Oxford RRG, 31 Dec 98
 //
@@ -43,10 +40,10 @@ struct SGIMV_Variables {
 
   int get_int(char const* s) { return get_int(vcl_string(s)); }
   int get_int(vcl_string const& s);
-  
+
   double get_double(char const* s) { return get_double(vcl_string(s)); }
   double get_double(vcl_string const& s);
-  
+
   void read(istream& f);
   ostream& print(ostream& s) const;
 };
@@ -63,7 +60,7 @@ struct SGIMV_FrameIndexArray : public vcl_vector<SGIMV_FrameIndex> {
 
 struct  SGIMovieFilePrivates {
   SGIMovieFilePrivates(char const* f);
-  ~SGIMovieFilePrivates() { 
+  ~SGIMovieFilePrivates() {
     delete glob;
   }
 
@@ -84,5 +81,4 @@ struct  SGIMovieFilePrivates {
   vcl_vector<vcl_vector<int> > field_indices;
 };
 
-#endif   // DO NOT ADD CODE AFTER THIS LINE! END OF DEFINITION FOR CLASS SGIMovieFilePrivates.
-
+#endif // SGIMovieFilePrivates_h_

@@ -96,4 +96,4 @@
 #define vcl_wctype std::wctype
 #endif
 
-#endif
+#endif // vcl_iso_cwctype_h_

@@ -216,4 +216,4 @@
 #define vcl_wscanf std::wscanf
 #endif
 
-#endif
+#endif // vcl_iso_cwchar_h_

@@ -1,12 +1,3 @@
-//-*- c++ -*-------------------------------------------------------------------
-//
-// Class: vbl_array_2d
-// Author: Andrew W. Fitzgibbon, Oxford RRG
-// Created: 05 Aug 96
-// Modifications: see vbl_array_2d.h
-//
-//-----------------------------------------------------------------------------
-
 #include <vcl/vcl_iostream.h>
 
 #include "vbl_array_2d.h"

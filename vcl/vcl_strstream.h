@@ -16,4 +16,4 @@
 # include <vcl/iso/vcl_strstream.h>
 #endif
 
-#endif
+#endif // vcl_strstream_h_

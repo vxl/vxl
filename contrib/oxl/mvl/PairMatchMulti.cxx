@@ -1,14 +1,6 @@
-//-*- c++ -*-------------------------------------------------------------------
 #ifdef __GNUC__
-#pragma implementation "PairMatchMulti.h"
+#pragma implementation
 #endif
-//
-// Class: PairMatchMulti
-// Author: Andrew W. Fitzgibbon, Oxford RRG
-// Created: 16 Sep 96
-// Modifications:
-//
-//-----------------------------------------------------------------------------
 
 #include "PairMatchMulti.h"
 

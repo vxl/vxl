@@ -2,7 +2,7 @@
   fsm@robots.ox.ac.uk
 */
 #ifdef __GNUC__
-#pragma implementation "vgl_window_scan_iterator"
+#pragma implementation
 #endif
 #include "vgl_window_scan_iterator.h"
 

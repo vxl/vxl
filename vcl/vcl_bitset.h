@@ -14,4 +14,4 @@
 # include <vcl/iso/vcl_bitset.h>
 #endif
 
-#endif
+#endif // vcl_bitset_h_

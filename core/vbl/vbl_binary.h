@@ -1,7 +1,7 @@
 #ifndef vbl_binary_h_
 #define vbl_binary_h_
 #ifdef __GNUC__
-#pragma interface "vbl_binary"
+#pragma interface
 #endif
 /*
   fsm@robots.ox.ac.uk
@@ -15,4 +15,4 @@
 template </*typename*/class T> void vbl_binary_save(ostream &, vcl_vector<T> const &);
 template </*typename*/class T> void vbl_binary_load(istream &, vcl_vector<T> &);
 
-#endif
+#endif // vbl_binary_h_

@@ -101,4 +101,4 @@ inline istream& operator>>(istream& s, signed char& c)
 # define vcl_ios_binary   ios::bin
 #endif
 
-#endif
+#endif // vcl_iostream_h_

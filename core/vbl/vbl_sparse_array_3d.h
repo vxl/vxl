@@ -4,11 +4,11 @@
 #pragma interface
 #endif
 //
-// .NAME        vbl_sparse_array_3d - Sparse 3D array.
-// .LIBRARY     vbl
+// .NAME	vbl_sparse_array_3d - Sparse 3D array
+// .LIBRARY	vbl
 // .HEADER	vxl package
-// .INCLUDE     vbl/vbl_sparse_array_3d.h
-// .FILE        vbl/vbl_sparse_array_3d.cxx
+// .INCLUDE	vbl/vbl_sparse_array_3d.h
+// .FILE	vbl_sparse_array_3d.cxx
 //
 // .SECTION Description
 //    vbl_sparse_array_3d is a sparse 3D array allowing space efficient access of
@@ -54,7 +54,7 @@ protected:
   unsigned n2_;
   unsigned n3_;
   Map storage_;
-  
+
 public:
   // Helpers-------------------------------------------------------------------
   // Potentially clunky
@@ -74,5 +74,4 @@ extern "please include vbl/vbl_sparse_array_3d.txx instead"
 #define VBL_SPARSE_ARRAY_3D_INSTANTIATE(T) \
 extern "please include vbl/vbl_sparse_array_3d.txx instead"
 
-#endif   // DO NOT ADD CODE AFTER THIS LINE! END OF DEFINITION FOR CLASS vbl_sparse_array_3d.
-
+#endif // vbl_sparse_array_3d_h_

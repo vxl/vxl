@@ -1,20 +1,14 @@
-//-*- c++ -*-------------------------------------------------------------------
 #ifndef PairMatchSet2D3D_h_
 #define PairMatchSet2D3D_h_
 #ifdef __GNUC__
 #pragma interface
 #endif
 //
-// Class : PairMatchSet2D3D
-//
-// .SECTION Description
-//    PairMatchSet2D3D is a class that awf hasn't documented properly. FIXME
-//
-// .NAME        PairMatchSet2D3D - Undocumented class FIXME
-// .LIBRARY     MViewDatabase
+// .NAME	PairMatchSet2D3D
+// .LIBRARY	MViewDatabase
 // .HEADER	MultiView Package
-// .INCLUDE     mvl/PairMatchSet2D3D.h
-// .FILE        PairMatchSet2D3D.cxx
+// .INCLUDE	mvl/PairMatchSet2D3D.h
+// .FILE	PairMatchSet2D3D.cxx
 // .SECTION Author
 //     Andrew W. Fitzgibbon, Oxford RRG, 19 Sep 96
 //
@@ -38,7 +32,7 @@ class PairMatchSetCorner;
 class PairMatchSet2D3D : public PairMatchSet {
 public:
   // Constructors/Destructors--------------------------------------------------
-  
+
   PairMatchSet2D3D();
   PairMatchSet2D3D(const HomgInterestPointSet* corners, vcl_vector<HomgPoint3D>* structure);
   PairMatchSet2D3D(const PairMatchSet2D3D& that);
@@ -58,7 +52,7 @@ public:
 
   const HomgPoint2D& get_point_2d(int i1) const;
   const HomgPoint3D& get_point_3d(int i2) const;
-  
+
 // -- Return the set of corners within which the i1 indices point
   const HomgInterestPointSet* get_corners() const;
 
@@ -67,11 +61,10 @@ public:
 
 // -- Return the projective structure within which the i2 indices point
   vcl_vector<HomgPoint3D>* get_structure() const { return _structure; }
-  
+
 private:
   const HomgInterestPointSet* _corners;
   vcl_vector<HomgPoint3D>* _structure;
 };
 
-#endif   // DO NOT ADD CODE AFTER THIS LINE! END OF DEFINITION FOR CLASS PairMatchSet2D3D.
-
+#endif // PairMatchSet2D3D_h_

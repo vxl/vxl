@@ -96,4 +96,4 @@
 #define vcl_tanh std::tanh
 #endif
 
-#endif
+#endif // vcl_iso_valarray_h_

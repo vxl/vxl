@@ -1,13 +1,6 @@
 #ifdef __GNUG__
 #pragma implementation
 #endif
-//--------------------------------------------------------------
-//
-// Class : vbl_base_array_3d
-//
-// Modifications : see vbl_base_array_3d.h
-//
-//-----------------------------------------------------------------------------
 
 #include "vbl_base_array_3d.h"
 

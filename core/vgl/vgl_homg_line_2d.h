@@ -114,4 +114,4 @@ istream&  operator>>(istream& is,  vgl_homg_line_2d<Type>& p) {
   return is >> p->pos_[0] >> p->pos_[1] >> p->pos_[2];
 }
 
-#endif
+#endif //  vgl_homg_line_2d_h

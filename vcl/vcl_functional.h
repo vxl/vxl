@@ -77,4 +77,4 @@ namespace std {
 #endif
 
 
-#endif // inclusion guard
+#endif // vcl_functional_h_

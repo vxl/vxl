@@ -47,4 +47,4 @@ private:
   vbl_smart_ptr<bigmatrix_impl> impl;
 };
 
-#endif
+#endif // vbl_smart_ptr_example_h_

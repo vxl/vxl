@@ -1,4 +1,3 @@
-//-*- c++ -*-
 #ifndef vbl_br_default_h
 #define vbl_br_default_h
 
@@ -7,7 +6,7 @@
 // .LIBRARY vbl
 // .HEADER vxl package
 // .INCLUDE vbl/vbl_br_default.h
-// .FILE vbl/vbl_br_default.cxx
+// .FILE vbl_br_default.cxx
 //
 // .SECTION Author:
 //             Rupert Curwen, January 14th, 1998
@@ -35,18 +34,18 @@
 #include <vbl/vbl_hash_map.h>
 
 // Forward declare the implementation.
-template <class T1, class T2, 
-  VCL_DFL_TYPE_PARAM_STLDECL(T3,vbl_basic_optional), 
-  VCL_DFL_TYPE_PARAM_STLDECL (T4, vbl_basic_optional), 
+template <class T1, class T2,
+  VCL_DFL_TYPE_PARAM_STLDECL(T3,vbl_basic_optional),
+  VCL_DFL_TYPE_PARAM_STLDECL (T4, vbl_basic_optional),
   VCL_DFL_TYPE_PARAM_STLDECL(T5,vbl_basic_optional)>
 class vbl_br_default;
 
 //------------------------------------------------------------
 // -- This iterator is used when the where clause has at least one
 // non-wild element.
-template <class T1, class T2, 
-  VCL_DFL_TYPE_PARAM_STLDECL(T3,vbl_basic_optional), 
-  VCL_DFL_TYPE_PARAM_STLDECL (T4, vbl_basic_optional), 
+template <class T1, class T2,
+  VCL_DFL_TYPE_PARAM_STLDECL(T3,vbl_basic_optional),
+  VCL_DFL_TYPE_PARAM_STLDECL (T4, vbl_basic_optional),
   VCL_DFL_TYPE_PARAM_STLDECL(T5,vbl_basic_optional)>
 class vbl_br_default_iter : public vbl_br_iter_impl<T1,T2,T3,T4,T5>
 {
@@ -88,9 +87,9 @@ protected:
 
 //------------------------------------------------------------
 // -- This iterator is used when the where clause has all wild elements.
-template <class T1, class T2, 
-  VCL_DFL_TYPE_PARAM_STLDECL(T3,vbl_basic_optional), 
-  VCL_DFL_TYPE_PARAM_STLDECL (T4, vbl_basic_optional), 
+template <class T1, class T2,
+  VCL_DFL_TYPE_PARAM_STLDECL(T3,vbl_basic_optional),
+  VCL_DFL_TYPE_PARAM_STLDECL (T4, vbl_basic_optional),
   VCL_DFL_TYPE_PARAM_STLDECL(T5,vbl_basic_optional)>
 class vbl_br_default_wild_iter : public vbl_br_iter_impl<T1,T2,T3,T4,T5>
 {
@@ -121,8 +120,8 @@ public:
 protected:
   first_map::iterator i1;
   implementation* impl;
-  tuple_list::iterator i2; 
-  tuple_list::iterator i2_end; 
+  tuple_list::iterator i2;
+  tuple_list::iterator i2_end;
 };
 
 //: Provides the default implementation for vbl_basic_relations
@@ -131,7 +130,7 @@ protected:
 // relation is implemented using one hash table for each attribute
 // as indices, with values being lists of tuple references.
 //
-template 
+template
 <class T1, class T2, class T3, class T4, class T5> // defaults for T3 T4 T5 already declared on line 76 -- PLEASE don't put them back here!! - PVr
 class vbl_br_default : public vbl_br_impl<T1,T2,T3,T4,T5>
 {
@@ -211,9 +210,9 @@ protected:
   bool u5;
 };
 
-template <class T1, class T2, 
-  VCL_DFL_TYPE_PARAM_STLDECL(T3,vbl_basic_optional), 
-  VCL_DFL_TYPE_PARAM_STLDECL (T4, vbl_basic_optional), 
+template <class T1, class T2,
+  VCL_DFL_TYPE_PARAM_STLDECL(T3,vbl_basic_optional),
+  VCL_DFL_TYPE_PARAM_STLDECL (T4, vbl_basic_optional),
   VCL_DFL_TYPE_PARAM_STLDECL(T5,vbl_basic_optional)>
 class vbl_br_default_factory : public vbl_basic_relation_factory<T1,T2,T3,T4,T5>
 {
@@ -223,4 +222,4 @@ public:
   virtual void CheckEmpty(vbl_br_impl<T1,T2,T3,T4,T5>* impl);
 };
 
-#endif
+#endif // vbl_br_default_h

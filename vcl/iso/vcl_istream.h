@@ -28,4 +28,4 @@
 #define vcl_wiostream std::wiostream
 #endif
 
-#endif
+#endif // vcl_iso_istream_h_

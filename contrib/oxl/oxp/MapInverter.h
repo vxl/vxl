@@ -1,21 +1,14 @@
-//-*- c++ -*-------------------------------------------------------------------
 #ifndef MapInverter_h_
 #define MapInverter_h_
 #ifdef __GNUC__
 #pragma interface
 #endif
 //
-// Class : MapInverter
-//
-// .SECTION Description
-//    MapInverter is a class that awf hasn't documented properly. FIXME
-//
-// .NAME        MapInverter - Undocumented class FIXME
-// .LIBRARY     POX
+// .NAME	MapInverter
+// .LIBRARY	POX
 // .HEADER	Oxford Package
-// .INCLUDE     oxp/MapInverter.h
-// .FILE        MapInverter.h
-// .FILE        MapInverter.C
+// .INCLUDE	oxp/MapInverter.h
+// .FILE	MapInverter.cxx
 // .SECTION Author
 //     Andrew W. Fitzgibbon, Oxford RRG, 13 Jul 98
 //
@@ -34,10 +27,9 @@ protected: // implementation of Mapping_2d_2d
   void implement_inverse_map(double x2, double y2, double* x1, double* y1) {
     _themap->inverse_map(x2, y2, x1, y1);
   }
-  
+
 protected:
   Mapping_2d_2d* _themap;
 };
 
-#endif   // DO NOT ADD CODE AFTER THIS LINE! END OF DEFINITION FOR CLASS MapInverter.
-
+#endif // MapInverter_h_

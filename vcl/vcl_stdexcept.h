@@ -11,4 +11,4 @@
 
 #include <stdexcept>
 
-#endif
+#endif // vcl_stdexcept_h_

@@ -1,29 +1,26 @@
-//-*- c++ -*-------------------------------------------------------------------
 #ifndef HomgPrettyPrint_h_
 #define HomgPrettyPrint_h_
 #ifdef __GNUC__
 #pragma interface
 #endif
 //
-// Class : HomgPrettyPrint
-//
-// .SECTION Description
-//    HomgPrettyPrint is a class that awf hasn't documented properly. FIXME
-//
-// .NAME        HomgPrettyPrint - Undocumented class FIXME
-// .LIBRARY     MViewBasics
+// .NAME	HomgPrettyPrint
+// .LIBRARY	MViewBasics
 // .HEADER	MultiView Package
-// .INCLUDE     mvl/HomgPrettyPrint.h
-// .FILE        HomgPrettyPrint.cxx
+// .INCLUDE	mvl/HomgPrettyPrint.h
+// .FILE	HomgPrettyPrint.cxx
 // .SECTION Author
 //     Andrew W. Fitzgibbon, Oxford RRG, 12 Oct 97
+//
+// .SECTION Modifications:
+//   971012 AWF Initial version.
 //
 //-----------------------------------------------------------------------------
 
 class HomgPrettyPrint {
 public:
   // Constructors/Destructors--------------------------------------------------
-  
+
   HomgPrettyPrint(bool new_value) {
     last_pretty_ = pretty;
     pretty = new_value;
@@ -33,7 +30,7 @@ public:
   }
 
   static bool pretty;
-  
+
 protected:
   // Data Members--------------------------------------------------------------
   bool last_pretty_;
@@ -41,5 +38,4 @@ protected:
   // Helpers-------------------------------------------------------------------
 };
 
-#endif   // DO NOT ADD CODE AFTER THIS LINE! END OF DEFINITION FOR CLASS HomgPrettyPrint.
-
+#endif // HomgPrettyPrint_h_

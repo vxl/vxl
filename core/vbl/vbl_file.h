@@ -1,14 +1,14 @@
-//-*- c++ -*-------------------------------------------------------------------
 #ifndef vbl_file_h_
 #define vbl_file_h_
 #ifdef __GNUC__
 #pragma interface
 #endif
 //
-// .LIBRARY     vbl
+// .NAME	vbl_file
+// .LIBRARY	vbl
 // .HEADER	vxl package
-// .INCLUDE     vbl/vbl_file.h
-// .FILE        vbl/vbl_file.cxx
+// .INCLUDE	vbl/vbl_file.h
+// .FILE	vbl_file.cxx
 // .SECTION Author
 //     Andrew W. Fitzgibbon, Oxford RRG, 02 Nov 98
 // .SECTION Modifications
@@ -39,7 +39,7 @@ struct vbl_file {
   }
 
   // -- Expand any leading ~ escapes in filename
-  static vcl_string expand_tilde(char const* filename);  
+  static vcl_string expand_tilde(char const* filename);
   static vcl_string expand_tilde(vcl_string const& filename) {
     return expand_tilde(filename.c_str());
   }
@@ -60,5 +60,4 @@ struct vbl_file {
   static vcl_string basename(char const* filename, char const* suffix = 0);
 };
 
-#endif   // DO NOT ADD CODE AFTER THIS LINE! END OF DEFINITION FOR CLASS vbl_file.
-
+#endif // vbl_file_h_

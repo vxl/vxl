@@ -1,21 +1,14 @@
-//-*- c++ -*-------------------------------------------------------------------
 #ifndef MovieFileInterface_h_
 #define MovieFileInterface_h_
 #ifdef __GNUC__
 #pragma interface
 #endif
 //
-// Class : MovieFileInterface
-//
-// .SECTION Description
-//    MovieFileInterface is a class that awf hasn't documented properly. FIXME
-//
-// .NAME        MovieFileInterface - Undocumented class FIXME
-// .LIBRARY     POX
+// .NAME	MovieFileInterface
+// .LIBRARY	POX
 // .HEADER	Oxford Package
-// .INCLUDE     oxp/MovieFileInterface.h
-// .FILE        MovieFileInterface.h
-// .FILE        MovieFileInterface.cxx
+// .INCLUDE	oxp/MovieFileInterface.h
+// .FILE	MovieFileInterface.cxx
 // .SECTION Author
 //     Andrew W. Fitzgibbon, Oxford RRG, 30 Dec 98
 //
@@ -42,7 +35,7 @@ struct MovieFileInterface {
 
   // -- Return true if frame_index is a valid frame.
   virtual bool HasFrame(int frame_index) = 0;
-  
+
   // -- Grab frame into supplied buffer, which is GetBitsPixel * SizeX * SizeY
   virtual bool GetFrame(int frame_index, void* buffer);
 
@@ -55,5 +48,4 @@ struct MovieFileInterface {
   static bool verbose;
 };
 
-#endif   // DO NOT ADD CODE AFTER THIS LINE! END OF DEFINITION FOR CLASS MovieFileInterface.
-
+#endif // MovieFileInterface_h_

@@ -5,10 +5,10 @@
 #endif
 //
 // .NAME vbl_user_info - Reads information about a user from the password file
-// .LIBRARY     vbl
+// .LIBRARY	vbl
 // .HEADER	vxl package
-// .INCLUDE     vbl/vbl_user_info.h
-// .FILE        vbl/vbl_user_info.cxx
+// .INCLUDE	vbl/vbl_user_info.h
+// .FILE	vbl_user_info.cxx
 // .SECTION Author
 //     Andrew W. Fitzgibbon, Oxford RRG, 08 Apr 99
 //
@@ -32,9 +32,9 @@ public:
   vcl_string full_name;
   vcl_string shell;
   vcl_string passwd;
-  
+
   // Constructors/Destructors--------------------------------------------------
-  
+
   vbl_user_info(uid_type uid);
   vbl_user_info(char const* name);
   vbl_user_info(vcl_string const& name);
@@ -43,5 +43,4 @@ public:
   void init(char const* name);
 };
 
-#endif   // DO NOT ADD CODE AFTER THIS LINE! END OF DEFINITION FOR CLASS vbl_user_info.
-
+#endif // vbl_user_info_h_

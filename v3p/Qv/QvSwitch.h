@@ -7,13 +7,13 @@
 #define QV_SWITCH_NONE		(-1)	/* Don't traverse any children	*/
 #define QV_SWITCH_ALL		(-3)	/* Traverse all children	*/
 
-class QvSwitch : public QvGroup {
+class QvSwitch : public QvGroup
+{
+  QV_NODE_HEADER(QvSwitch);
 
-    QV_NODE_HEADER(QvSwitch);
-
-  public:
-    // Fields
-    QvSFLong		whichChild;	// Child to traverse
+public:
+  // Fields
+  QvSFLong		whichChild;	// Child to traverse
 };
 
 #endif /* _QV_SWITCH_ */
