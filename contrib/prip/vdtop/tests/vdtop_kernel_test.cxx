@@ -26,4 +26,5 @@ int main(int argc, char* argv[])
   //vdtop_replace_quasi_8_minima(res,res2,(vxl_byte)255) ;
   //vil_convert_cast(res2, res) ;
   vil_save(res,argc>3 ? argv[3] : "lena.kernel.pgm");
+  return 0;
 }

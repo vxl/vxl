@@ -46,4 +46,5 @@ int main(int argc, char* argv[])
     res2.top_left_ptr()[map.position(*v)]=255 ;
   }
   vil_save(res2,argc>4 ? argv[4] : "res.pgm") ;
+  return 0;
 }
