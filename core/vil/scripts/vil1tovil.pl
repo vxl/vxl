@@ -20,7 +20,7 @@ open(INFILE,"<$backup") or die "Can't open $backup";
 while (<INFILE>)
 {
     # just Filenames
-    s/\bvxl\/vil\b/contrib\/mul\/vil/g;
+    s/\b(vxl|core)\/vil\b/core\/vil2/g;
     s/\bvil\/vil_fwd/vil2\/vil2_fwd/g;
 
     # Common functions
@@ -54,16 +54,16 @@ while (<INFILE>)
     s/vil_32bit_/vil2_stream_32bit_/g;
     s/\bvil\/vil_16bit\b/vil2\/vil2_stream_16bit/g;
     s/vil_16bit_/vil2_stream_16bit_/g;
-    
-    
+
+
     # Methods that have changed a lot
     s/\bget_section\(/get_view\( Fix params/g;
-    s/\bput_section\(/put_view\( Fix params/g; 
-    
-    # Methods that have changed name 
+    s/\bput_section\(/put_view\( Fix params/g;
+
+    # Methods that have changed name
     s/\.width\(\)/.ni()/g;
     s/\.height\(\)/.nj()/g;
-    
+
     # Classes
     s/\bvil\/vil_memory_image_of\b/vil2\/vil2_image_view/g;
     s/\bvil_memory_image_of\b/vil2_image_view/g;
@@ -75,7 +75,7 @@ while (<INFILE>)
     s/vil_pyramid/vimt_image_pyramid/g;
     s/\bvil\/vil_file_format\b/vil2\/vil2_file_format/g;
     s/vil_file_format/vil2_file_format/g;
-    
+
     # types
     s/\bvil\/vil_property\b/vil2\/vil2_property/g;
     s/vil_property_/vil2_property_/g;
@@ -96,7 +96,7 @@ while (<INFILE>)
 
     s/\bvil\/vil_open\b/vil2\/vil2_open/g;
     s/vil_open/vil2_open/g;
-	
+
 
     print OUTFILE;
 }

@@ -119,8 +119,8 @@ int main()
   vil2_image_view<vil2_rgb<vxl_byte> > img;
   img = vil2_load("foo.ppm");
 
-  for(unsigned j = 0; j < img.height(); ++j)
-    for(unsigned i = 0; i < img.width(); ++i)
+  for (unsigned j = 0; j < img.height(); ++j)
+    for (unsigned i = 0; i < img.width(); ++i)
       if (img(i,j).r < 200 && img(i,j).g < 200 && img(i,j).b < 200)
         img(i,j) = vil2_rgb<vxl_byte>(0,0,0);
 
@@ -281,7 +281,6 @@ Several image processing functions can be found in the algo
 subdirectory of vil2. Lets look at an example of finding the image
 gradient using a Sobel filter.
 
-
 @example
 #include <vcl_iostream.h>
 #include <vxl_config.h> // for vxl_byte
@@ -359,7 +358,7 @@ which takes a multi-planar image and passes one plane at a time to your algorith
 can be done with virtually no loss in efficiency, and indeed is how some of the code in
 @code{vil2/algo} is written.
 
-To help convert existing code there is a scripts (@code{contrib/mul/vil2/scripts/viltovil2.pl})
+To help convert existing code there is a script (@code{core/vil2/scripts/viltovil2.pl})
 It converts as much code as it can. However, it can really only deal with file and identifier
 name changes. There are large structural differences between vil and vil2, with many of the
 equivalent functions taking different parameters. The output of the conversion script
@@ -402,7 +401,6 @@ an ideal world we would be programming using natural language and
 a microphone.)
 We can make this optimisation explicit.
 
-
 @example
 template<class T>
 void vil2_image_view<T>::fill(T value)
@@ -429,7 +427,6 @@ default image layout in memory. Because of this common case it would
 be worth having the compiler generate machine-code for the inner-most
 loop in this special case. We can do this by explicitly testing for
 such a special case.
-
 
 @example
 template<class T>
@@ -463,11 +460,10 @@ void vil2_image_view<T>::fill(T value)
 @}
 @end example
 
-
 There are two other optimisations going on here. The first is that
 we are using the pointer indexing operator @code{[]}. Most compilers
-treat @code{while(++i<n)@{*(ptr++)=v;@} } differently from
-@code{while(++i<n)@{ptr[i]=v;@} }, with the latter often
+treat @code{while (++i<n) @{ *(ptr++)=v; @} } differently from
+@code{while (++i<n) @{ ptr[i]=v; @} }, with the latter often
 being significantly faster. This is especially true when @code{ptr}
 is a pointer to a character sized type.
 The other optimisation makes use of the fact that it is faster to count down to
@@ -479,7 +475,6 @@ compiler to avoid issuing a separate test instruction, since this sort
 of test is automatically performed by the processor after a decrement
 or other arithmetic operation.
 
-
 Since we are performing the same operation on every pixel independent
 of its absolute or relative position, there is one further optimisation
 that can be performed. In many cases an image will be stored as a
@@ -488,8 +483,6 @@ just to operate on this block of memory as a single dimensional array.
 In the case of fill, this may even allow a compiler to issue
 a specialised single machine instruction which performs the whole
 fill very very fast. This gives us our final implementation.
-
-
 
 @example
 template<class T>
@@ -531,10 +524,8 @@ void vil2_image_view<T>::fill(T value)
 @}
 @end example
 
-
 This optimised version was between two and ten times faster than the original
 depending on the compiler, image structure, and pixel type.
-
 
 It should always be born in mind that there is a trade-off in testing for
 special cases. Each test takes time, and this slows the function down
@@ -543,6 +534,6 @@ cases that have very significant potential speed improvements.
 
 Finally as with all optimisation - be rigorous in comparing the actual
 times for your original and optimised code. Run enough experiments to
-measure the statical spread to see if your improvements are significant.
+measure the statistical spread to see if your improvements are significant.
 It is quite common for compiler or processor
 quirks to make your optimised code slower than the original.
