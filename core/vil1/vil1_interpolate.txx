@@ -34,8 +34,8 @@ bool vil_interpolate_bilinear(vil_memory_image_of<T> const& img,
   int width = (int)img.width();
   int height = (int)img.height();
 
-  if (src_x_int < 0 || src_y_int < 0 ||
-      src_x_int+1 >= width || src_y_int+1 >= height)
+  if (src_x < 0 || src_y < 0 ||
+      src_x > (width-1) || src_y > (height-1))
     return false;
 
   T pix00 = img(src_x_int  , src_y_int  );
@@ -101,9 +101,10 @@ bool vil_interpolate_bicubic(vil_memory_image_of<T> const& img,
   int height = img.height();
 
   // Boundary - just return value with no interpolation
-  if (src_x_int <= 0 || src_y_int <= 0 || src_x_int >= width-2 || src_y_int >= height-2) {
+
+  if (src_x < 1 || src_y < 1 || src_x > width-2 || src_y > height-2) {
     //*out = U(img(src_x_int,src_y_int));
-    return true;
+    return false;
   }
 
   double u = src_x - src_x_int;
