@@ -51,7 +51,7 @@ bool vgl_line_2d<Type>::normalize()
   typedef typename vnl_numeric_traits<Type>::abs_t abs_t;
   typedef typename vnl_numeric_traits<Type>::real_t real_t;
   real_t mag_sq = a_*a_ + b_*b_;
-  abs_t mag = vcl_sqrt(mag_sq);
+  abs_t mag = abs_t(vcl_sqrt(mag_sq));
   if(mag)
     {
       a_ = a_/mag;
