@@ -58,10 +58,18 @@ bsol_intrinsic_curve_2d::~bsol_intrinsic_curve_2d()
 //: Clone `this': creation of a new object and initialization
 // See Prototype pattern
 //---------------------------------------------------------------------------
-vsol_spatial_object_2d_sptr bsol_intrinsic_curve_2d::clone(void) const
+vsol_spatial_object_2d* bsol_intrinsic_curve_2d::clone(void) const
 {
   return new bsol_intrinsic_curve_2d(*this);
 }
+
+
+//: Return a platform independent string identifying the class
+vcl_string bsol_intrinsic_curve_2d::is_a() const
+{
+  return vcl_string("bsol_intrinsic_curve_2d");
+}
+
 
 //***************************************************************************
 // Access
