@@ -24,6 +24,7 @@ TESTS += test_image_view_maths.cxx
 TESTS += test_convert.cxx
 PARAMS_test_convert := file_read_data
 TESTS += test_rotate_image.cxx
+TESTS += test_warp.cxx
 
 # Sampling Operations
 TESTS += test_bilin_interp.cxx
