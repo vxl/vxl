@@ -12,6 +12,7 @@ SET( vil3d_sources ${vil3d_sources}
   vil3d_trilin_interp.h
   vil3d_sample_profile_trilin.h  vil3d_sample_profile_trilin.txx
   vil3d_switch_axes.h
+  vil3d_math.h
 )
 
 AUX_SOURCE_DIRECTORY(Templates vil3d_sources)
