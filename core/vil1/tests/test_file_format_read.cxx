@@ -133,7 +133,7 @@ main( int argc, char* argv[] )
 #endif
   }
 
-  vil_test_start("test_vil_copy");
+  vil_test_start("test_file_format_read");
 
   vcl_cout << "Portable aNy Map [pnm]: pbm, pgm, ppm)\n";
   vil_test_begin( "  8-bit pgm ascii" );
