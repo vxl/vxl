@@ -77,6 +77,7 @@ class strk_info_tracker : public strk_info_tracker_params
   vtol_face_2d_sptr initial_model_;//initial model position
   vcl_vector<strk_tracking_face_2d_sptr> current_samples_;
   vcl_vector<strk_tracking_face_2d_sptr> hypothesized_samples_;
+  vcl_vector<strk_tracking_face_2d_sptr> track_history_;
   double model_intensity_entropy_;
   double model_gradient_dir_entropy_;
 };

@@ -1,5 +1,6 @@
 //----*-c++-*----tells emacs to use C++ mode----------
 // This is brl/bseg/strk/strk_art_info_model.cxx
+#include <vcl_cmath.h>   // for vcl_fabs(double)
 #include <strk/strk_art_info_model.h>
 #include <strk/strk_tracking_face_2d.h>
 #include <btol/btol_face_algs.h>

@@ -19,8 +19,8 @@
 #include <vil1/vil1_image.h>
 #include <vgl/vgl_point_2d.h>
 #include <vtol/vtol_face_2d_sptr.h>
-#include <sdet/sdet_tracker_params.h>
-#include <sdet/sdet_tracker.h>
+#include <strk/strk_tracker_params.h>
+#include <strk/strk_tracker.h>
 #include <vpro/vpro_video_process.h>
 
 class strk_track_display_process : public vpro_video_process

@@ -16,7 +16,9 @@
 
 //Gives a sort on mutual information
 static bool info_compare(strk_tracking_face_2d_sptr const f1,
-                         strk_tracking_face_2d_sptr const f2)
+                         strk_tracking_face_2d_sptr const f2,
+                         vcl_vector<strk_tracking_face_2d_sptr>* trk=0)
+
 {
   return f1->total_info() > f2->total_info();//JLM Switched
 }
@@ -180,14 +182,7 @@ void strk_info_tracker::cull_samples()
   current_samples_.clear();
   double sx =0, sy =0;
   for (int i =0; i<n_samples_; i++)
-    if(refresh_sample())
-         {
-           strk_tracking_face_2d_sptr tf =  
-             this->clone_and_refresh_data(hypothesized_samples_[i]);
-           current_samples_.push_back(tf);
-         }
-    else
-      current_samples_.push_back(hypothesized_samples_[i]);        
+    current_samples_.push_back(hypothesized_samples_[i]);        
       //     vcl_cout << "I[" << i << "]= " << hypothesized_samples_[i]->total_info() << "\n";
       //     vcl_cout << vcl_flush;
     
@@ -198,6 +193,10 @@ void strk_info_tracker::cull_samples()
              << ")\n";
   
   hypothesized_samples_.clear();
+  //save track history
+  strk_tracking_face_2d_sptr refreshed_best = 
+    clone_and_refresh_data(current_samples_[0]);
+  track_history_.push_back(refreshed_best);
 }
 
 #if 0
