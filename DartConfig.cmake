@@ -24,6 +24,6 @@ SET (CONTINUOUS_FROM "vxl-maintainers@lists.sourceforge.net")
 # SET (SMTP_MAILHOST "a smtp server")
 SET (DEFAULT_CONTINUOUS_DOMAIN "users.sourceforge.net")
 SET (CONTINUOUS_MONITOR_LIST "vxl-maintainers@lists.sourceforge.net")
-SET (CONTINUOUS_BASE_URL "http://www.cs.rpi.edu/research/vision/vxl/testing")
+SET (CONTINUOUS_BASE_URL "http://www.cs.rpi.edu/research/vision/vxl")
 SET (PROJECT_NAME "VXL")
 
