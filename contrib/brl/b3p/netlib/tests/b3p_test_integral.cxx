@@ -7,8 +7,10 @@ double f(float *x)
 }
 
 
-
-//int b3p_test_simpsonint(int argc, char * argv[])
+#if 0
+int b3p_test_integral(int argc, char * argv[])
+#endif
+  
 int main(int argc, char* argv[])
 {
   
