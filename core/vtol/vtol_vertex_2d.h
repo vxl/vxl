@@ -44,7 +44,7 @@ public:
   //: Constructor from a point (the point is not copied)
   //: REQUIRE: new_point!=0
   //---------------------------------------------------------------------------
-  explicit vtol_vertex_2d(vsol_point_2d_ref &new_point);
+  explicit vtol_vertex_2d(vsol_point_2d &new_point);
 
   //---------------------------------------------------------------------------
   //: Constructor from a vector
