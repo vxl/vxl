@@ -20,7 +20,7 @@
 
 template<class T>
 mil_gaussian_pyramid_builder_2d<T>::mil_gaussian_pyramid_builder_2d()
-: max_levels_(99)
+: max_levels_(99),filter_width_(5)
 {
   set_min_size(5, 5);
 }
@@ -72,6 +72,90 @@ double mil_gaussian_pyramid_builder_2d<T>::scale_step() const
   return 2.0;
 }
 
+//: Set current filter width (must be 3 or 5 at present)
+template<class T>
+void mil_gaussian_pyramid_builder_2d<T>::set_filter_width(unsigned w)
+{
+  assert(w==3 || w==5);
+	filter_width_ = w;
+}
+
+//=======================================================================
+//: Smooth and subsample src_im to produce dest_im
+//  Applies 1-2-1 filter in x and y, then samples every other pixel.
+template<class T>
+void mil_gaussian_pyramid_builder_2d<T>::gauss_reduce_121(mil_image_2d_of<T>& dest_im,
+                                                      const mil_image_2d_of<T>& src_im) const
+{
+  int nx = src_im.nx();
+  int ny = src_im.ny();
+  int n_planes = src_im.n_planes();
+
+  // Output image size
+  int nx2 = (nx+1)/2;
+  int ny2 = (ny+1)/2;
+
+  if (dest_im.n_planes()!=n_planes)
+    dest_im.set_n_planes(n_planes);
+  dest_im.resize(nx2,ny2);
+
+  // Reduce plane-by-plane
+  for (int i=0;i<n_planes;++i)
+  {
+    // Smooth and subsample in x, result in work_im
+    mil_gauss_reduce_121_2d(dest_im.plane(i),dest_im.xstep(),dest_im.ystep(),
+                            src_im.plane(i),nx,ny,
+                            src_im.xstep(),src_im.ystep());
+  }
+
+  // Sort out world to image transformation for destination image
+  mil_transform_2d scaling;
+  scaling.set_zoom_only(0.5,0,0);
+  dest_im.setWorld2im(scaling * src_im.world2im());
+}
+
+//=======================================================================
+//: Smooth and subsample src_im to produce dest_im
+//  Applies filter in x and y, then samples every other pixel.
+template<class T>
+void mil_gaussian_pyramid_builder_2d<T>::gauss_reduce_15851(mil_image_2d_of<T>& dest_im,
+                                                      const mil_image_2d_of<T>& src_im) const
+{
+  int nx = src_im.nx();
+  int ny = src_im.ny();
+  int n_planes = src_im.n_planes();
+
+  // Output image size
+  int nx2 = (nx+1)/2;
+  int ny2 = (ny+1)/2;
+
+  if (dest_im.n_planes()!=n_planes)
+    dest_im.set_n_planes(n_planes);
+  dest_im.resize(nx2,ny2);
+
+  if (work_im_.nx()<nx2 || work_im_.ny()<ny)
+    work_im_.resize(nx2,ny);
+
+  // Reduce plane-by-plane
+  for (int i=0;i<n_planes;++i)
+  {
+    // Smooth and subsample in x, result in work_im
+    mil_gauss_reduce_2d(work_im_.plane(0),work_im_.xstep(),work_im_.ystep(),
+      src_im.plane(i),nx,ny,
+      src_im.xstep(),src_im.ystep());
+
+    // Smooth and subsample in y (by implicitly transposing)
+    mil_gauss_reduce_2d(dest_im.plane(i),dest_im.ystep(),dest_im.xstep(),
+      work_im_.plane(0),ny,nx2,
+      work_im_.ystep(),work_im_.xstep());
+  }
+
+  // Sort out world to image transformation for destination image
+  mil_transform_2d scaling;
+  scaling.set_zoom_only(0.5,0,0);
+  dest_im.setWorld2im(scaling * src_im.world2im());
+}
+
 //=======================================================================
 //: Smooth and subsample src_im to produce dest_im
 //  Applies 1-5-8-5-1 filter in x and y, then samples
@@ -80,39 +164,19 @@ template<class T>
 void mil_gaussian_pyramid_builder_2d<T>::gauss_reduce(mil_image_2d_of<T>& dest_im,
                                                       const mil_image_2d_of<T>& src_im) const
 {
-  int nx = src_im.nx();
-  int ny = src_im.ny();
-  int n_planes = src_im.n_planes();
-  
-  // Output image size
-  int nx2 = (nx+1)/2;
-  int ny2 = (ny+1)/2;
-  
-  if (dest_im.n_planes()!=n_planes)
-    dest_im.set_n_planes(n_planes);
-  dest_im.resize(nx2,ny2);
-  
-  if (work_im_.nx()<nx2 || work_im_.ny()<ny)
-    work_im_.resize(nx2,ny);
-  
-  // Reduce plane-by-plane
-  for (int i=0;i<n_planes;++i)
-  {
-    // Smooth and subsample in x, result in work_im
-    mil_gauss_reduce_2d(work_im_.plane(0),work_im_.xstep(),work_im_.ystep(),
-      src_im.plane(i),nx,ny,
-      src_im.xstep(),src_im.ystep());
-    
-    // Smooth and subsample in y (by implicitly transposing)
-    mil_gauss_reduce_2d(dest_im.plane(i),dest_im.ystep(),dest_im.xstep(),
-      work_im_.plane(0),ny,nx2,
-      work_im_.ystep(),work_im_.xstep());
+  switch (filter_width_)
+	{
+	  case (3):
+		  gauss_reduce_121(dest_im,src_im);
+			break;
+    case (5):
+		  gauss_reduce_15851(dest_im,src_im);
+			break;
+    default:
+		  vcl_cerr<<"mil_gaussian_pyramid_builder_2d<T>::gauss_reduce() ";
+			vcl_cerr<<"Cannot cope with filter width of "<<filter_width_<<vcl_endl;
+			vcl_abort();
   }
-  
-  // Sort out world to image transformation for destination image
-  mil_transform_2d scaling;
-  scaling.set_zoom_only(0.5,0,0);
-  dest_im.setWorld2im(scaling * src_im.world2im());
 }
 
 //=======================================================================
@@ -282,7 +346,7 @@ bool mil_gaussian_pyramid_builder_2d<T>::is_class(vcl_string const& s) const
 template<class T>
 short mil_gaussian_pyramid_builder_2d<T>::version_no() const
 {
-  return 1;
+  return 2;
 }
 
 //=======================================================================
@@ -307,6 +371,7 @@ void mil_gaussian_pyramid_builder_2d<T>::b_write(vsl_b_ostream& bfs) const
 {
   vsl_b_write(bfs,version_no());
   vsl_b_write(bfs,max_levels_);
+	vsl_b_write(bfs,filter_width_);
 }
 
 //=======================================================================
@@ -322,6 +387,11 @@ void mil_gaussian_pyramid_builder_2d<T>::b_read(vsl_b_istream& bfs)
   {
   case (1):
     vsl_b_read(bfs,max_levels_);
+		filter_width_=5;
+    break;
+  case (2):
+    vsl_b_read(bfs,max_levels_);
+    vsl_b_read(bfs,filter_width_);
     break;
   default:
     vcl_cerr << "I/O ERROR: mil_gaussian_pyramid_builder_2d<T>::b_read(vsl_b_istream&) \n";

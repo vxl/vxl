@@ -24,6 +24,9 @@ private:
 
   mutable mil_image_2d_of<T> work_im_;
 
+	//: Filter width (usually 5 for a 15851 filter, or 3 for a 121 filter)
+  unsigned filter_width_;
+
   //:Minimum size in X direction of top layer of pyramid.
   unsigned minXSize_;
 
@@ -37,12 +40,30 @@ protected:
   //: Deletes all data in im_pyr
   void emptyPyr(mil_image_pyramid& im_pyr) const;
 
+  //: Smooth and subsample src_im to produce dest_im
+  //  Applies 1-5-8-5-1 filter in x and y, then samples
+  //  every other pixel.
+  void gauss_reduce_15851(mil_image_2d_of<T>& dest_im,
+                    const mil_image_2d_of<T>& src_im) const;
+
+  //: Smooth and subsample src_im to produce dest_im
+  //  Applies 1-2-1 filter in x and y, then samples
+  //  every other pixel.
+  void gauss_reduce_121(mil_image_2d_of<T>& dest_im,
+                    const mil_image_2d_of<T>& src_im) const;
+
 public:
   //: Dflt ctor
   mil_gaussian_pyramid_builder_2d();
 
   //: Destructor
   virtual ~mil_gaussian_pyramid_builder_2d();
+
+	//: Current filter width
+	unsigned filter_width() const { return filter_width_; }
+
+	//: Set current filter width (must be 3 or 5 at present)
+	void set_filter_width(unsigned);
 
   //: Create new (empty) pyramid on heap
   //  Caller responsible for its deletion
@@ -67,8 +88,8 @@ public:
   virtual void extend(mil_image_pyramid&) const;
 
   //: Smooth and subsample src_im to produce dest_im
-  //  Applies 1-5-8-5-1 filter in x and y, then samples
-  //  every other pixel.
+  //  Applies filter in x and y, then samples every other pixel.
+	//  Filter width defined by set_filter_width()
   void gauss_reduce(mil_image_2d_of<T>& dest_im,
                     const mil_image_2d_of<T>& src_im) const;
 
