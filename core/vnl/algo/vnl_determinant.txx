@@ -135,11 +135,17 @@ T vnl_determinant(vnl_matrix<T> const &M, bool balance)
 
 //--------------------------------------------------------------------------------
 
-#undef VNL_DETERMINANT_INSTANTIATE
-#define VNL_DETERMINANT_INSTANTIATE(T) \
+#define VNL_DETERMINANT_INSTANTIATE_1(T) \
 template T vnl_determinant(T const *, T const *); \
 template T vnl_determinant(T const *, T const *, T const *); \
-template T vnl_determinant(T const *, T const *, T const *, T const *); \
+template T vnl_determinant(T const *, T const *, T const *, T const *)
+
+#define VNL_DETERMINANT_INSTANTIATE_2(T) \
 template T vnl_determinant(vnl_matrix<T > const &, bool)
+
+#undef VNL_DETERMINANT_INSTANTIATE
+#define VNL_DETERMINANT_INSTANTIATE(T) \
+VNL_DETERMINANT_INSTANTIATE_1(T); \
+VNL_DETERMINANT_INSTANTIATE_2(T)
 
 #endif // vnl_algo_determinant_txx_
