@@ -4,7 +4,7 @@
 #include <vgui/vgui_command.h>
 #include <vgui/vgui_image_tableau.h>
 #include <vgui/internals/vgui_accelerate.h>
-#include <vidl/vidl_io.h>
+#include <vidl_vil1/vidl_vil1_io.h>
 #include "vidster_menus.h"
 #include <vvid/vvid_live_stereo_manager.h>
 

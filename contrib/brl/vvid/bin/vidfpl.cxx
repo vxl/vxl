@@ -3,32 +3,32 @@
 #include <vgui/vgui_window.h>
 #include <vgui/vgui_command.h>
 #include <vgui/vgui_image_tableau.h>
-#include <vidl/vidl_io.h>
+#include <vidl_vil1/vidl_vil1_io.h>
 #include "vidfpl_menus.h"
 #include <vvid/vvid_file_manager.h>
 
-#include <vidl/vidl_image_list_codec.h>
+#include <vidl_vil1/vidl_vil1_image_list_codec.h>
 
 #ifdef HAS_MPEG2
-# include <vidl/vidl_mpegcodec.h>
+# include <vidl_vil1/vidl_vil1_mpegcodec.h>
 #endif
 
 #ifdef VCL_WIN32
-#include <vidl/vidl_avicodec.h>
+#include <vidl_vil1/vidl_vil1_avicodec.h>
 #endif
 
 int main(int argc, char** argv)
 {
   // Register video codecs
-  vidl_io::register_codec(new vidl_image_list_codec);
+  vidl_vil1_io::register_codec(new vidl_vil1_image_list_codec);
 
 #ifdef VCL_WIN32
-  vidl_io::register_codec(new vidl_avicodec);
+  vidl_vil1_io::register_codec(new vidl_vil1_avicodec);
 #endif
 
 #ifdef HAS_MPEG2
   vcl_cout << " Has MPEG\n";
-  vidl_io::register_codec(new vidl_mpegcodec);
+  vidl_vil1_io::register_codec(new vidl_vil1_mpegcodec);
 #endif
    // Initialize the toolkit.
   vgui::init(argc, argv);

@@ -22,7 +22,7 @@
 #include <vgui/vgui_viewer2D_tableau_sptr.h>
 #include <vgui/vgui_dialog.h>
 #include <vgui/vgui_window.h>
-#include <vidl/vidl_movie.h>
+#include <vidl_vil1/vidl_vil1_movie.h>
 #include <vvid/cmu_1394_camera.h>
 #include <vpro/vpro_video_process_sptr.h>
 #include <vvid/vvid_live_video_tableau.h>

@@ -6,8 +6,8 @@
 #include <vvid/vvid_file_manager.h>
 #include <vvid/bin/vidfpl_menus.h>
 #ifdef HAS_MPEG2
-#include <vidl/vidl_mpegcodec.h>
-#include <vidl/vidl_io.h>
+#include <vidl_vil1/vidl_vil1_mpegcodec.h>
+#include <vidl_vil1/vidl_vil1_io.h>
 
 //define mpeg callback here
 //this dialog box queries the user for info
@@ -15,7 +15,7 @@
 //would be done by reading the header, but that is
 //not implemented here.
 static void
-vidfpl_load_mpegcodec_callback(vidl_codec * vc)
+vidfpl_load_mpegcodec_callback(vidl_vil1_codec * vc)
 {
   vgui_dialog dialog( "MPEG player setup");
 
@@ -34,7 +34,7 @@ vidfpl_load_mpegcodec_callback(vidl_codec * vc)
       vcl_cout << "vidfpl_load_mpegcodec_callback. did not initialize codec.\n";
     }
 
-  vidl_mpegcodec * mpegcodec = vc->castto_vidl_mpegcodec();
+  vidl_vil1_mpegcodec * mpegcodec = vc->castto_vidl_vil1_mpegcodec();
   if (!mpegcodec) return;
 
   mpegcodec->set_grey_scale(grey_scale);
@@ -51,7 +51,7 @@ void vidfpl_menus::load_video_callback()
 {
 #ifdef HAS_MPEG2
    //need to define callbacks
-   vidl_io::load_mpegcodec_callback = &vidfpl_load_mpegcodec_callback;
+   vidl_vil1_io::load_mpegcodec_callback = &vidfpl_load_mpegcodec_callback;
 #endif
    vvid_file_manager::instance()->load_video_file();
 }

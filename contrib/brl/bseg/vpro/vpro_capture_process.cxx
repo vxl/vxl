@@ -1,9 +1,9 @@
 #include <vcl_iostream.h>
 #include <vcl_fstream.h>
 #include <vil1/vil1_image.h>
-#include <vidl/vidl_movie.h>
-#include <vidl/vidl_clip.h>
-#include <vidl/vidl_io.h>
+#include <vidl_vil1/vidl_vil1_movie.h>
+#include <vidl_vil1/vidl_vil1_clip.h>
+#include <vidl_vil1/vidl_vil1_io.h>
 #include <vpro/vpro_capture_process.h>
 
 vul_timer vpro_capture_process::time_;
@@ -45,10 +45,10 @@ bool vpro_capture_process::finish()
 {
   if (!frames_.size())
     return false;
-  vidl_clip_sptr clip = new vidl_clip(frames_);
-  vidl_movie_sptr mov= new vidl_movie();
+  vidl_vil1_clip_sptr clip = new vidl_vil1_clip(frames_);
+  vidl_vil1_movie_sptr mov= new vidl_vil1_movie();
   mov->add_clip(clip);
-  if (!vidl_io::save(mov.ptr(), video_file_.c_str(), "png")){
+  if (!vidl_vil1_io::save(mov.ptr(), video_file_.c_str(), "png")){
     vcl_cout << "In vpro_capture_process::finish()"
              << " - failed to save video" << vcl_endl;
     return false;

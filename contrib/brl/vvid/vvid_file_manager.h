@@ -23,7 +23,7 @@
 #include <vpro/vpro_video_process_sptr.h>
 #include <vgui/vgui_dialog.h>
 #include <vgui/vgui_window.h>
-#include <vidl/vidl_movie.h>
+#include <vidl_vil1/vidl_vil1_movie.h>
 #include <vvid/vvid_frame_trail.h>
 
 //: A singleton manager class for playing videos.
@@ -155,7 +155,7 @@ class vvid_file_manager : public vgui_wrapper_tableau
   float time_interval_;
   unsigned width_;
   unsigned height_;
-  vidl_movie_sptr my_movie_;
+  vidl_vil1_movie_sptr my_movie_;
   vgui_window* win_;
   vcl_vector<bgui_vtol2D_tableau_sptr> tabs_;
   vgui_viewer2D_tableau_sptr v2D0_;

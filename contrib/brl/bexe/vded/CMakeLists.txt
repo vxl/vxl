@@ -11,7 +11,7 @@ ENDIF( MPEG2_FOUND )
 
 
 ADD_EXECUTABLE (frame_extractor frame_extractor.cxx)
-TARGET_LINK_LIBRARIES(frame_extractor vidl vil1 vul)
+TARGET_LINK_LIBRARIES(frame_extractor vidl_vil1 vil1 vul)
 
 ADD_EXECUTABLE (video_description video_description.cxx)
-TARGET_LINK_LIBRARIES(video_description vidl vil1 vul)
+TARGET_LINK_LIBRARIES(video_description vidl_vil1 vil1 vul)

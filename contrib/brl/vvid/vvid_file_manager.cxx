@@ -29,8 +29,8 @@
 #include <sdet/sdet_tracker_params.h>
 #include <bdgl/bdgl_curve_tracking.h>
 
-#include <vidl/vidl_io.h>
-#include <vidl/vidl_frame.h>
+#include <vidl_vil1/vidl_vil1_io.h>
+#include <vidl_vil1/vidl_vil1_frame.h>
 #include <vpro/vpro_frame_diff_process.h>
 #include <vpro/vpro_motion_process.h>
 #include <vpro/vpro_lucas_kanade_process.h>
@@ -93,7 +93,7 @@ vvid_file_manager::vvid_file_manager(): vgui_wrapper_tableau()
   color_label_ = false;
   window_ = 0;
   frame_trail_.clear();
-  my_movie_=(vidl_movie*)0;
+  my_movie_=(vidl_vil1_movie*)0;
   win_ = 0;
   cache_frames_ = false;
   play_video_ = true;
@@ -243,14 +243,14 @@ void vvid_file_manager::load_video_file()
   if (!load_video_dlg.ask())
     return;
 
-  my_movie_ = vidl_io::load_movie(image_filename.c_str());
+  my_movie_ = vidl_vil1_io::load_movie(image_filename.c_str());
   if (!my_movie_) {
     vgui_error_dialog("Failed to load movie file");
     return;
   }
   tabs_.clear();
 
-  vidl_movie::frame_iterator pframe = my_movie_->first();
+  vidl_vil1_movie::frame_iterator pframe = my_movie_->first();
   vil1_image img = pframe->get_image();
   vil1_image second = (++pframe)->get_image();
   height_ = img.height();
@@ -328,7 +328,7 @@ void vvid_file_manager::un_cached_play()
     vcl_cout << "No movie has been loaded\n";
     return;
   }
-  for (vidl_movie::frame_iterator pframe=my_movie_->begin();
+  for (vidl_vil1_movie::frame_iterator pframe=my_movie_->begin();
        pframe!=my_movie_->end() && play_video_;
        ++pframe)
   {
