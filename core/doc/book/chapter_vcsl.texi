@@ -98,6 +98,6 @@ virtual bool is_linear(void) const=0;
 //: Homogeneous matrix of `this' at time `time'
 // REQUIRE: is_valid()
 // REQUIRE: is_linear()
-virtual vnl_matrix<double> *matrix(const double time) const;
+virtual vnl_matrix<double> matrix_value(const double time, bool type) const;
 @end example
 @end enumerate
