@@ -18,6 +18,9 @@
 #include <vcl_fstream.h>
 #include <vcl_map.h>
 #include <vcl_utility.h>
+#ifdef VCL_VC70
+# include <vcl_cstddef.h> // for ptrdiff_t
+#endif
 
 //: A binary output adaptor for any vcl_ostream
 // Currently the main use of this is to encourage streams to be opened
