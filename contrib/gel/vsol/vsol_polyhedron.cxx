@@ -13,9 +13,9 @@
 
 //---------------------------------------------------------------------------
 //: Constructor from a vcl_vector (not a geometric vector but a list of points)
-// Require: new_vertices.size()>=3 and valid_vertices(new_vertices)
+// Require: new_vertices.size()>=4 and valid_vertices(new_vertices)
 //---------------------------------------------------------------------------
-vsol_polyhedron::vsol_polyhedron(vsol_point_list_3d const& new_vertices)
+vsol_polyhedron::vsol_polyhedron(vcl_vector<vsol_point_3d_sptr> const& new_vertices)
 {
   // require
   assert(new_vertices.size()>=4);
@@ -122,19 +122,8 @@ double vsol_polyhedron::volume(void) const
 //---------------------------------------------------------------------------
 bool vsol_polyhedron::is_convex(void) const
 {
-  if (storage_.size()<=4) return true; // A tetrahedron is always convex
-
-  vsol_point_3d_sptr const& p0 = storage_[0];
-  vsol_point_3d_sptr const& p1 = storage_[1];
-  vsol_point_3d_sptr const& p2 = storage_[2];
-  vsol_point_3d_sptr const& p3 = storage_[3];
-
-  for (int i=4;i<storage_.size();++i)
-  {
-    vsol_point_3d_sptr const& pi = storage_[i];
-    // TODO
-  }
-  return false;
+  // A polyhedron is always convex since the point order is irrelevant
+  return true;
 }
 
 //***************************************************************************
