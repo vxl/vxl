@@ -20,6 +20,8 @@
 #include <vbl/vbl_bool_ostream.h>
 #include <vbl/vbl_sort.h>
 #include <vbl/vbl_qsort.h>
+#include <vbl/vbl_checked_delete.h>
+#include <vbl/vbl_scoped_ptr.h>
 
 #if 0 // These files use the nonexistent vcl_hash_map.h and/or vcl_hash_string.h
 #include <vbl/vbl_hash_map.h>
