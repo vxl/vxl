@@ -98,6 +98,7 @@ into memory, and creates a new image where all pixels greater than a
 threshold value are set to 255.
 @example
 #include <vil/vil_load.h>
+#include <vil/vil_save.h>
 #include <vil/vil_memory_image_of.h>
 
 int main()
@@ -140,6 +141,7 @@ pretty safe choice is to convert all images to 24-bit RGB at load time.
 The colour threshold program looks like this:
 @example
 #include <vil/vil_load.h>
+#include <vil/vil_save.h>
 #include <vil/vil_memory_image_of.h>
 #include <vil/vil_rgb_byte.h>
 
@@ -171,7 +173,7 @@ An example where one creates a completely new image is in generating an
 image of constant value, perhaps to use as a background, or test image.  This
 program creates a 256x256 image filled with the value 128.
 @example
-#include <vil/vil_load.h>
+#include <vil/vil_save.h>
 #include <vil/vil_memory_image_of.h>
 
 int main()
