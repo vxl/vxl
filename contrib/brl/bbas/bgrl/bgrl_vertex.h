@@ -47,10 +47,10 @@ class bgrl_vertex : public vbl_ref_count
   int degree() const { return this->in_degree() + this->out_degree(); }
 
   //: Returns the number of incoming edges to this vertex 
-  int in_degree() const { return in_edges_.size(); }
+  unsigned int in_degree() const { return in_edges_.size(); }
 
   //: Returns the number of outgoing edges to this vertex 
-  int out_degree() const { return out_edges_.size(); }
+  unsigned int out_degree() const { return out_edges_.size(); }
 
   //: Binary save self to stream.
   void b_write(vsl_b_ostream &os) const;
@@ -93,14 +93,14 @@ class bgrl_vertex : public vbl_ref_count
 };
 
 
-//: Binary save bgrl_vertex* to stream.
+//: Binary save bgrl_vertex to stream.
 void vsl_b_write(vsl_b_ostream &os, const bgrl_vertex* v);
 
-//: Binary load bgrl_vertex* from stream.
+//: Binary load bgrl_vertex from stream.
 void vsl_b_read(vsl_b_istream &is, bgrl_vertex* &v);
 
 //: Print an ASCII summary to the stream
-void vsl_print_summary(vcl_ostream &os, const bgrl_vertex* v);
+void vsl_print_summary(vcl_ostream &os, bgrl_vertex_sptr v);
 
 
 #endif // bgrl_vertex_h_

@@ -230,7 +230,7 @@ bgrl_graph::breadth_iterator::next_vertex()
 void
 vsl_b_write(vsl_b_ostream &os, const bgrl_graph* n)
 {
-  if (n==0) {
+  if (!n) {
     vsl_b_write(os, false); // Indicate null pointer stored
   }
   else {
@@ -258,7 +258,7 @@ vsl_b_read(vsl_b_istream &is, bgrl_graph* &n)
 
 //: Print an ASCII summary to the stream
 void
-vsl_print_summary(vcl_ostream &os, const bgrl_graph* n)
+vsl_print_summary(vcl_ostream &os, bgrl_graph_sptr n)
 {
   os << "bgrl_graph{";
   n->print_summary(os);

@@ -30,7 +30,7 @@
 class bgrl_graph : public vbl_ref_count
 {
  public:
-  
+
   typedef vcl_set<bgrl_vertex_sptr>::iterator vertex_iterator;
   typedef vcl_set<bgrl_edge_sptr>::iterator edge_iterator;
 
@@ -67,7 +67,7 @@ class bgrl_graph : public vbl_ref_count
   //: Returns the beginning iterator to the set of vertices
   vertex_iterator begin();
 
-  //: Returns the end iterator to the set of vertices 
+  //: Returns the end iterator to the set of vertices
   vertex_iterator end();
 
   //: Binary save self to stream.
@@ -161,14 +161,14 @@ class bgrl_graph : public vbl_ref_count
 };
 
 
-//: Binary save bgrl_graph* to stream.
+//: Binary save bgrl_graph to stream.
 void vsl_b_write(vsl_b_ostream &os, const bgrl_graph* n);
 
-//: Binary load bgrl_graph* from stream.
+//: Binary load bgrl_graph from stream.
 void vsl_b_read(vsl_b_istream &is, bgrl_graph* &n);
 
 //: Print an ASCII summary to the stream
-void vsl_print_summary(vcl_ostream &os, const bgrl_graph* n);
+void vsl_print_summary(vcl_ostream &os, bgrl_graph_sptr n);
 
 
 #endif // bgrl_graph_h_

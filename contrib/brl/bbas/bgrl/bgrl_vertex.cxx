@@ -93,7 +93,7 @@ bgrl_vertex::add_edge_to( const bgrl_vertex_sptr& vertex )
   // verify that this edge is not already present
   for ( edge_iterator itr = out_edges_.begin();
         itr != out_edges_.end(); ++itr )
-    if ((*itr)->to_ == vertex.ptr())
+    if ((*itr)->to() == vertex)
       return bgrl_edge_sptr(NULL);
 
   // add the edge
@@ -219,10 +219,10 @@ bgrl_vertex::print_summary( vcl_ostream& os ) const
 void
 vsl_b_write(vsl_b_ostream &os, const bgrl_vertex* v)
 {
-  if (v==0) {
+  if (!v) {
     vsl_b_write(os, false); // Indicate null pointer stored
   }
-  else{
+  else {
     vsl_b_write(os,true); // Indicate non-null pointer stored
     v->b_write(os);
   }
@@ -247,7 +247,7 @@ vsl_b_read(vsl_b_istream &is, bgrl_vertex* &v)
 
 //: Print an ASCII summary to the stream
 void
-vsl_print_summary(vcl_ostream &os, const bgrl_vertex* v)
+vsl_print_summary(vcl_ostream &os, bgrl_vertex_sptr v)
 {
   os << "bgrl_vertex{ ";
   v->print_summary(os);
