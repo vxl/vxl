@@ -80,7 +80,7 @@ class gevd_detector_params : public gevd_param_mixin
                        int cyc = 2, int ndim = 2);
 
   gevd_detector_params(const gevd_detector_params& old_params);
-  ~gevd_detector_params(){};
+  ~gevd_detector_params() {}
 
   bool SanityCheck();
   void Describe(ParamModifier& mod);
@@ -108,33 +108,33 @@ class gevd_detector_params : public gevd_param_mixin
   //
   // Parameters for detecting edgel chains
   //
-  float smooth; // Smoothing kernal sigma
-  float noise_weight; //The weight between sensor noise and texture noise
-  float noise_multiplier; // The overal noise threshold scale factor
-  bool   automatic_threshold; // Determine the threshold values from image
-  int aggressive_junction_closure; //Close junctions agressively
-  int minLength;                // minimum chain length
-  float contourFactor;  //Threshold along contours
-  float junctionFactor; //Threshold at junctions
-  float filterFactor;   // ratio of sensor to texture noise
-  bool junctionp; // recover missing junctions
-  float minJump;  // change in strength at junction
-  float maxGap;   // Bridge small gaps up to max_gap across.
-  bool spacingp;  // equalize spacing?
-  bool borderp;   // insert virtual border for closure?
+  float smooth; // !< Smoothing kernel sigma
+  float noise_weight; //!< The weight between sensor noise and texture noise
+  float noise_multiplier; // !< The overal noise threshold scale factor
+  bool   automatic_threshold; // !< Determine the threshold values from image
+  int aggressive_junction_closure; //!< Close junctions agressively
+  int minLength;                // !< minimum chain length
+  float contourFactor;  //!< Threshold along contours
+  float junctionFactor; //!< Threshold at junctions
+  float filterFactor;   // !< ratio of sensor to texture noise
+  bool junctionp; // !< recover missing junctions
+  float minJump;  // !< change in strength at junction
+  float maxGap;   // !< Bridge small gaps up to max_gap across.
+  bool spacingp;  // !< equalize spacing?
+  bool borderp;   // !< insert virtual border for closure?
   //
   // Fold detection parameters
   //
-  bool peaks_only; //Only return peaks, d^2I/dn^2 < 0, n is normal dir to ridge
-  bool valleys_only; //Only return valeys, d^2I/dn^2 > 0
+  bool peaks_only; //!< Only return peaks, d^2I/dn^2 < 0, n is normal dir to ridge
+  bool valleys_only; //!< Only return valeys, d^2I/dn^2 > 0
   //
   // Parameters for corner detection on edgel chains
   //
-  float corner_angle; // smallest angle at corner
-  float separation; // |mean1-mean2|/sigma
-  int min_corner_length; // min length to find corners
-  int cycle; // number of corners in a cycle
-  int ndimension; // spatial dimension of edgel chains.
+  float corner_angle; // !< smallest angle at corner
+  float separation; // !< |mean1-mean2|/sigma
+  int min_corner_length; // !< min length to find corners
+  int cycle; // !< number of corners in a cycle
+  int ndimension; // !< spatial dimension of edgel chains.
 };
 
 #endif // gevd_detector_params_h_
