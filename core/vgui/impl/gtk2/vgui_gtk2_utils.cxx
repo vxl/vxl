@@ -54,6 +54,22 @@ vgui_key vgui_gtk2_utils::translate_key(GdkEventKey const *gev)
     return vgui_PAGE_UP;
    case GDK_Page_Down:
     return vgui_PAGE_DOWN;
+   case GDK_Home:
+    return vgui_HOME;
+   case GDK_End:
+    return vgui_END;
+   case GDK_Delete:
+    return vgui_DELETE;
+   case GDK_Insert:
+    return vgui_INSERT;
+   case GDK_Up:
+    return vgui_CURSOR_UP;
+   case GDK_Down:
+    return vgui_CURSOR_DOWN;
+   case GDK_Left:
+    return vgui_CURSOR_LEFT;
+   case GDK_Right:
+    return vgui_CURSOR_RIGHT;
   }
 
   return vgui_KEY_NULL;
