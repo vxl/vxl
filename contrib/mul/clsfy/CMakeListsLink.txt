@@ -1,0 +1,5 @@
+
+LINK_LIBRARIES( clsfy )
+LINK_DIRECTORIES( ${allvxl_BINARY_DIR}/mul/clsfy )
+
+INCLUDE( ${allvxl_SOURCE_DIR}/mul/vpdfl/CMakeListsLink.txt )
