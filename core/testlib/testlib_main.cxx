@@ -61,10 +61,13 @@ list_test_names( vcl_ostream& ostr )
 void
 testlib_enter_stealth_mode()
 {
-  // Don't allow Visual Studio to open critical error dialog boxes
+  // check for Dashboard test
+  char * env_var1 = getenv("DART_TEST_FROM_DART");
+  char * env_var2 = getenv("DASHBOARD_TEST_FROM_CTEST");  // DART Client built in CMake
+  if ( env_var1 || env_var2 ) {
+
+  // Don't allow DART test to open critical error dialog boxes
 #if defined(VCL_VC)
-  char * env_var = getenv("DART_TEST_FROM_DART");
-  if ( env_var ) {
     // No abort or ANSI assertion failure dialog box
     _CrtSetReportMode(_CRT_ERROR, _CRTDBG_MODE_FILE);
     _CrtSetReportFile(_CRT_ERROR, _CRTDBG_FILE_STDERR);
@@ -76,13 +79,14 @@ testlib_enter_stealth_mode()
     // No unhandled exceptions dialog box,
     // such as access violation and integer division by zero
     SetUnhandledExceptionFilter( vxl_exception_filter );
-  }
-#endif //defined(VCL_WIN32)
+#endif //defined(VCL_VC)
 
-  // Disable Borland's floating point exceptions.
+    // Disable Borland's floating point exceptions.
 #if defined(VCL_BORLAND)
-  _control87(MCW_EM, MCW_EM);
+    _control87(MCW_EM, MCW_EM);
 #endif // defined(VCL_BORLAND)
+  }
+
 }
 
 int
