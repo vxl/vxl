@@ -21,13 +21,14 @@ rrel_orthogonal_regression::rrel_orthogonal_regression( const vnl_matrix<double>
   set_num_samples_for_fit( param_dof() );
 }
 
+
 rrel_orthogonal_regression::rrel_orthogonal_regression( const vcl_vector<vnl_vector<double> >& pts )
   : vars_( pts.size(),pts[0].size() )
 {
   unsigned int num_pts = vars_.rows();
 
   for (unsigned int i=0;i<num_pts;i++)
-	 vars_.set_row(i, pts[i]);
+    vars_.set_row(i, pts[i]);
 
   set_param_dof( vars_.cols() ); // up to a scale
   if ( param_dof() > num_pts ) {
@@ -37,6 +38,7 @@ rrel_orthogonal_regression::rrel_orthogonal_regression( const vcl_vector<vnl_vec
   }
   set_num_samples_for_fit( param_dof() );
 }
+
 
 rrel_orthogonal_regression::~rrel_orthogonal_regression()
 {
@@ -69,23 +71,23 @@ rrel_orthogonal_regression::fit_from_minimal_set( const vcl_vector<int>& point_i
   vnl_vector<double> sum_vect(3, 0.0);
   for ( unsigned int i=0; i<param_dof(); ++i ) {
     int index = point_indices[i];
-	 sum_vect += vars_.get_row(index);
+    sum_vect += vars_.get_row(index);
   }
   vnl_vector<double> avg = sum_vect / param_dof();
   for (unsigned int i=0; i<param_dof(); ++i)
-	 A.set_row(i, vars_.get_row(i)-avg);
-  
+    A.set_row(i, vars_.get_row(i)-avg);
+
   vnl_svd<double> svd( A, 1.0e-8 );
   if ( (unsigned int)svd.rank() < param_dof() ) {
     vcl_cerr << "rrel_orthogonal_regression:: singular fit!\n";
     return false;    // singular fit
   }
   else {
-	 vnl_vector<double> norm = svd.nullvector();
+    vnl_vector<double> norm = svd.nullvector();
     params.resize( norm.size() + 1 );
-	 for (unsigned int i=0; i<norm.size(); i++)
-		params[i] = norm[i];
-	 params[ norm.size() ] = -1 * dot_product( norm, avg );
+    for (unsigned int i=0; i<norm.size(); i++)
+      params[i] = norm[i];
+    params[ norm.size() ] = -1 * dot_product( norm, avg );
     //params /= vcl_sqrt( 1 - vnl_math_sqr( params[ params.size()-1 ] ) );  // normal is a unit vector
   }
   return true;
@@ -102,7 +104,7 @@ rrel_orthogonal_regression::compute_residuals( const vnl_vector<double>& params,
     residuals.resize( vars_.rows() );
   vnl_vector<double> norm(params.size()-1);
   for (unsigned int i=0; i<params.size()-1; i++)
-	 norm[i] = params[i];
+    norm[i] = params[i];
 
   for ( unsigned int i=0; i<vars_.rows(); ++i ) {
     residuals[i] = dot_product(norm, vars_.get_row(i) ) + params[params.size()-1];
@@ -124,31 +126,31 @@ rrel_orthogonal_regression::weighted_least_squares_fit( vnl_vector<double>& para
 
   assert( !weights || weights->size() == vars_.rows() );
 
-  vnl_vector<double> sum_vect(3, 0.0);		
+  vnl_vector<double> sum_vect(3, 0.0);
   vnl_matrix<double> A(vars_.cols(), vars_.cols());
   vnl_vector<double> avg;
   vnl_matrix<double> shift_vars( vars_.rows(), vars_.cols() );
 
   if (weights) {
-	 double sum_weight=0;
-	 for (unsigned int i=0; i<vars_.rows(); ++i) {
-		sum_vect += vars_.get_row(i) * (*weights)[i];
-		sum_weight += (*weights)[i];
-	 }
-	 avg = sum_vect / sum_weight;
-	 for (unsigned int i=0; i<vars_.rows(); ++i)
-		shift_vars.set_row(i, (vars_.get_row(i)-avg) * vcl_sqrt((*weights)[i]));
+    double sum_weight=0;
+    for (unsigned int i=0; i<vars_.rows(); ++i) {
+      sum_vect += vars_.get_row(i) * (*weights)[i];
+      sum_weight += (*weights)[i];
+    }
+    avg = sum_vect / sum_weight;
+    for (unsigned int i=0; i<vars_.rows(); ++i)
+      shift_vars.set_row(i, (vars_.get_row(i)-avg) * vcl_sqrt((*weights)[i]));
   }
   else {
-	 for (unsigned int i=0; i<vars_.rows(); ++i) 
-		sum_vect += vars_.get_row(i);
-	 avg = sum_vect / vars_.rows();
-	 for (unsigned int i=0; i<vars_.rows(); ++i) 
-		shift_vars.set_row(i, vars_.get_row(i) -avg);
+    for (unsigned int i=0; i<vars_.rows(); ++i)
+      sum_vect += vars_.get_row(i);
+    avg = sum_vect / vars_.rows();
+    for (unsigned int i=0; i<vars_.rows(); ++i)
+      shift_vars.set_row(i, vars_.get_row(i) -avg);
   }
 
   A = shift_vars.transpose() * shift_vars;
-	 
+
   vnl_svd<double> svd( A, 1.0e-8 );
   if ( (unsigned int)svd.rank() < param_dof() ) {
     vcl_cerr << "rrel_orthogonal_regression::WeightedLeastSquaresFit --- singularity!\n";
@@ -156,11 +158,11 @@ rrel_orthogonal_regression::weighted_least_squares_fit( vnl_vector<double>& para
   }
   else {
     vnl_vector<double> norm = svd.nullvector();
-	 params.resize(norm.size()+1);
-	 for (unsigned int i=0; i<norm.size(); ++i) {
-		params[i] = norm[i];
-	 }
-	 params[norm.size()] = -1*dot_product(norm, avg);
+    params.resize(norm.size()+1);
+    for (unsigned int i=0; i<norm.size(); ++i) {
+      params[i] = norm[i];
+    }
+    params[norm.size()] = -1*dot_product(norm, avg);
     return true;
   }
 }
@@ -178,12 +180,3 @@ rrel_orthogonal_regression::print_points() const
     vcl_cout << " " << i << "   " << vars_.get_row (i) << "\n";
   }
 }
-
-
-
-
-
-
-
-
-
