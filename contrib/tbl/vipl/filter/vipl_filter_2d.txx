@@ -60,6 +60,8 @@ template < class ImgIn,class ImgOut,class DataIn,class DataOut, class PixelItr >
 template < class ImgIn,class ImgOut,class DataIn,class DataOut, class PixelItr >
   bool vipl_filter_2d< ImgIn,ImgOut,DataIn,DataOut,PixelItr > ::applyop()
 {
+  bool alloc_src_section = false;
+  bool alloc_dst_section = false;
   // assuming that the coordinate space of input, intermediate and output are
   // "locked" by sectioning
   if (ref_outf() == 0) {
@@ -70,6 +72,7 @@ template < class ImgIn,class ImgOut,class DataIn,class DataOut, class PixelItr >
   // do not generate a new one if there is one already.
   if (ref_dst_section() == 0) {
     ref_dst_section() = vipl_filterable_section_container_generator(*ref_outf(),(DataOut*) 0);
+    alloc_dst_section = true;
   }
   if (ref_dst_section() == 0) {
     vcl_cerr << "Warning: empty dst section in vipl_filter_2d::applyop, returning without processing\n";
@@ -77,6 +80,7 @@ template < class ImgIn,class ImgOut,class DataIn,class DataOut, class PixelItr >
   }
   if (ref_src_section() == 0) {
     ref_src_section() = vipl_filterable_section_container_generator(*ref_inf()[0], (DataIn*) 0);
+    alloc_src_section = true;
   }
   if (ref_src_section() == 0) {
     vcl_cerr << "Warning: empty src section in vipl_filter_2d::applyop, presuming output driving but cannot be ptr safe\n";
@@ -181,6 +185,8 @@ template < class ImgIn,class ImgOut,class DataIn,class DataOut, class PixelItr >
     }
   }
   postop(); // virtual function call
+  if (alloc_src_section) { delete ref_src_section(); ref_src_section() = 0; }
+  if (alloc_dst_section) { delete ref_dst_section(); ref_dst_section() = 0; }
   return true;
 }
 
