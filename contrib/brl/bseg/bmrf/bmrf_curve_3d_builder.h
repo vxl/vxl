@@ -11,6 +11,8 @@
 //  Modifications
 // \endverbatim
 
+
+#include <bmrf/bmrf_curve_3d_sptr.h>
 #include <bmrf/bmrf_curvel_3d_sptr.h>
 #include <bmrf/bmrf_network_sptr.h>
 #include <bmrf/bmrf_node_sptr.h>
@@ -21,7 +23,6 @@
 #include <vcl_utility.h>
 #include <vcl_set.h>
 #include <vcl_map.h>
-#include <vcl_list.h>
 #include <vcl_vector.h>
 
 
@@ -56,7 +57,7 @@ class bmrf_curve_3d_builder
   bool compute_bounding_box(double inlier_fraction = 0.95, bool align_ep = false);
 
   //: Return the constructed curves
-  vcl_set<vcl_list<bmrf_curvel_3d_sptr> > curves() const;
+  vcl_set<bmrf_curve_3d_sptr> curves() const;
 
   //: Return the cameras used in the reconstruction
   vcl_map<int,vnl_double_3x4> cameras() const;
@@ -77,7 +78,7 @@ class bmrf_curve_3d_builder
 
   //: extend all curves to the next alpha 
   vcl_set<bmrf_curvel_3d_sptr> 
-    extend_curves( vcl_set<vcl_list<bmrf_curvel_3d_sptr>*>& growing_curves, 
+    extend_curves( vcl_set<bmrf_curve_3d_sptr>& growing_curves, 
                    double alpha );
 
   //: Find all arcs where both nodes are valid at \p alpha
@@ -86,24 +87,9 @@ class bmrf_curve_3d_builder
   //: Reconstruct the 3d location of a curvel from its projections
   void reconstruct_point(bmrf_curvel_3d_sptr curvel) const;
 
-  //: Simultaneously reconstruct all points in a 3d curve
-  void reconstruct_curve(vcl_list<bmrf_curvel_3d_sptr>& curve, float sigma = 0.5) const;
-
-  //: Attempt to interpolate artificial values for missing correspondences
-  void interp_gaps(vcl_list<bmrf_curvel_3d_sptr>& curve);
-
-  //: Attempt to fill in missing correspondences
-  void fill_gaps(vcl_list<bmrf_curvel_3d_sptr>& curve, double da);
-
-  //: Trim the ends of the curve with few correspondences
-  void trim_curve(vcl_list<bmrf_curvel_3d_sptr>& curve, int min_prj);
-
-  //: Trim curvels with large deviation in gamma
-  void stat_trim_curve(vcl_list<bmrf_curvel_3d_sptr>& curve, double max_std);
-
   //: Match the \p curvels to the ends of the \p growing_curves
   void append_curvels(vcl_set<bmrf_curvel_3d_sptr>& curvels,
-                      vcl_set<vcl_list<bmrf_curvel_3d_sptr>*>& growing_curves,
+                      vcl_set<bmrf_curve_3d_sptr>& growing_curves,
                       int min_prj);
 
   //: Return a measure (0.0 to 1.0) of how well \p new_c matches \p prev_c
@@ -117,7 +103,7 @@ class bmrf_curve_3d_builder
   double min_alpha_;
   double max_alpha_;
 
-  vcl_set<vcl_list<bmrf_curvel_3d_sptr> > curves_;
+  vcl_set<bmrf_curve_3d_sptr> curves_;
 
   //: Map from frame numbers to cameras
   vcl_map<int,vnl_double_3x4> C_;

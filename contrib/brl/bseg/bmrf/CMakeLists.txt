@@ -17,6 +17,7 @@ SET(bmrf_sources
     bmrf_network_builder_params.cxx bmrf_network_builder_params.h
     bmrf_network_builder.cxx        bmrf_network_builder.h
     bmrf_curvel_3d.cxx              bmrf_curvel_3d.h      bmrf_curvel_3d_sptr.h
+    bmrf_curve_3d.cxx               bmrf_curve_3d.h       bmrf_curve_3d_sptr.h
     bmrf_curve_3d_builder.cxx       bmrf_curve_3d_builder.h
 )
 AUX_SOURCE_DIRECTORY(Templates bmrf_sources)
