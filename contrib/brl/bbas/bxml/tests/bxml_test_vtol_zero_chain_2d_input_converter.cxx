@@ -26,14 +26,11 @@ static void bxml_test_vtol_zero_chain_2d_input_converter(int argc, char * argv[]
     {
       vtol_zero_chain_sptr zc = to->cast_to_zero_chain();
       vcl_cout << "zero_chain " << *zc << vcl_endl;
-      vcl_vector<vtol_vertex_sptr>* verts = zc->vertices();
-      TEST("verts!=0", !verts, false);
-      if (verts)
-      {
-        vtol_vertex_2d_sptr v2d = zc->v0()->cast_to_vertex_2d();
-        vcl_cout << "v0" << *(zc->v0()->cast_to_vertex_2d()) << vcl_endl;
-        TEST_NEAR("v2d->x() == 191.468", v2d->x(), 191.468, 1e-3);
-      }
+      vcl_vector<vtol_vertex_sptr> verts; zc->vertices(verts);
+      TEST("verts not empty", verts.size()==0, false);
+      vtol_vertex_2d_sptr v2d = zc->v0()->cast_to_vertex_2d();
+      vcl_cout << "v0 = " << *v2d << vcl_endl;
+      TEST_NEAR("v0->x() == 191.468", v2d->x(), 191.468, 1e-3);
     }
   }
 }
