@@ -11,6 +11,7 @@
 #include <vcl_functional.h> // for std::less<T>
 #include <vil3d/vil3d_image_view.h>
 #include <vil3d/vil3d_plane.h>
+#include <vcl_algorithm.h>
 
 
 //: Compute minimum and maximum values over im
