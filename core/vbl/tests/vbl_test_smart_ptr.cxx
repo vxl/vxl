@@ -30,7 +30,9 @@ base_ref newbase_impl (int k)
 int doit ()
 {
   base_ref p;
-  if (p == 0) // This is actually unnecessary - just to demonstrate operator==()
+  if (!p) // This is actually unnecessary - just to demonstrate operator bool()
+    p = new base_impl;
+  if (p == (base_impl*)0) // identical result - just to demonstrate operator==()
     p = new base_impl;
 
   base_ref a = new base_impl (5);
