@@ -13,8 +13,6 @@
 
 void test_memory_image_of_io()
 {
-
-
   vcl_cout << "***********************" << vcl_endl;
   vcl_cout << "Testing vil_memory_image_of io" << vcl_endl;
   vcl_cout << "***********************" << vcl_endl;
@@ -37,23 +35,22 @@ void test_memory_image_of_io()
 
   // Test the save
   vsl_b_ofstream bfs_out("vil_memory_image_of_io.bvl.tmp");
-  TEST ("Created vil_memory_image_of_io.bvl.tmp for writing", 
+  TEST ("Created vil_memory_image_of_io.bvl.tmp for writing",
     (!bfs_out), false);
   vsl_b_write(bfs_out,p_out);
   bfs_out.close();
 
   // And the load
   vsl_b_ifstream bfs_in("vil_memory_image_of_io.bvl.tmp");
-  TEST ("Opened vil_memory_image_of_io.bvl.tmp for reading", 
+  TEST ("Opened vil_memory_image_of_io.bvl.tmp for reading",
     (!bfs_in), false);
   vsl_b_read(bfs_in,p_in);
   bfs_in.close();
 
 
-
   // Compare the images' size and so on
   TEST ("p_out == p_in (structure)",
-    p_out.size() == p_in.size() && 
+    p_out.size() == p_in.size() &&
     p_out.planes() == p_in.planes() &&
     p_out.height() == p_in.height() &&
     p_out.components() && p_in.components() &&
@@ -62,7 +59,7 @@ void test_memory_image_of_io()
 
    // Now get the data and compare them
   bool data_same = false;
-  for (int i=0;i<p_out.rows();i++)	
+  for (int i=0;i<p_out.rows();i++)
     for (int j=0;j<p_out.cols();j++)
      data_same = (p_out(i,j)==p_in(i,j));
   TEST ( "p_out == p_in (data)", data_same, true);
@@ -70,7 +67,6 @@ void test_memory_image_of_io()
   // And have a look at the summary
   vsl_print_summary(vcl_cout, p_in);
   vcl_cout << vcl_endl;
-
 }
 
 

@@ -58,47 +58,43 @@ void golden_test_vbl_io(bool save_file)
   // an example of each class. Otherwise it just fills them with values
   // for comparison to the values read in.
   //------------------------------------------------------------------------
-  
-  
+
+
   vcl_cout << "***********************" << vcl_endl;
   vcl_cout << "Testing a golden data file for cross platform consistency"
     << vcl_endl;
   vcl_cout << "***********************" << vcl_endl;
-  
-  
-  
-  
-  
-  
+
+
   // vbl_bounding_box
   vbl_bounding_box<double,2> b_box_in, b_box_out;
-  
+
   b_box_out.update(1.2, 3.4); // Bounding box now has only one point and therefore no size
   b_box_out.update(5.6, 7.8); // Socond point now defines a bounding box
-  
+
   // 1d Array
   int n = 50;
   vbl_array_1d<float> a1_out, a1_in;
-  
+
   a1_out.reserve(n+10);
   for (int i=0; i<n; i++)
   {
     a1_out.push_back(i*i);
   }
-  
-  
+
+
   // 2d Array
   const int array_rows = 8;
   const int array_cols = 6;
   vbl_array_2d<int> a2_out(array_rows, array_cols), a2_in;
-  
+
   for (int i=0; i<array_rows; i++)
   {
     for (int j=0; j< array_cols; j++)
       a2_out(i,j) = i*j*j;
   }
-  
-  
+
+
   // 3d Array
   const int array_row1 = 8;
   const int array_row2 = 7;
@@ -106,15 +102,15 @@ void golden_test_vbl_io(bool save_file)
   vbl_array_3d<int> a3_out(array_row1, array_row2, array_row3), a3_in;
   for (int i=0; i<array_row1; i++)
     for (int j=0; j< array_row2; j++)
-      for (unsigned k=0; k<array_row3; k++)   
+      for (unsigned k=0; k<array_row3; k++)
         a3_out(i,j,k) = i*j*j*k;
-      
-      
+
+
   // Sparse Array
   vbl_sparse_array_1d<double> sa_out, sa_in;
   unsigned key1=3,key2=4,key3=5;
   double data1=1.2, data2=3.4, data3=5.6;
-  
+
   //create a sparse array - more than 5 elements so only first 5 are written out
   sa_out(key1)=data1;
   sa_out(key2)=data2;
@@ -122,22 +118,23 @@ void golden_test_vbl_io(bool save_file)
   for (unsigned k=60; k<70; k++)
     sa_out(k)=data1;
 
-  
-/* This won't work on systems without a user called cbj!
+
+// This won't work on systems without a user called cbj!
+#if 0
   // User Info
   vcl_string name="cjb";
   vbl_user_info ui_out(name), ui_in("");
   ui_out.init("cjb");
-*/
+#endif
 
-  
+
   // Smart Pointer
   n = 50;
   vbl_smart_ptr<impl > sp1_out(new impl(n));
   vbl_smart_ptr<impl> sp2_out(sp1_out);
   vbl_smart_ptr<impl > sp1_in, sp2_in;
-  
-  
+
+
   // Save if option set
   if (save_file)
   {
@@ -147,48 +144,47 @@ void golden_test_vbl_io(bool save_file)
 
     vsl_b_write(bfs_out, b_box_out);
     vsl_b_write(bfs_out, a1_out);
-    vsl_b_write(bfs_out, a2_out);	
+    vsl_b_write(bfs_out, a2_out);
     vsl_b_write(bfs_out, a3_out);
     vsl_b_write(bfs_out, sa_out);
 //    vsl_b_write(bfs_out, ui_out);
     vsl_b_write(bfs_out, sp1_out);
     vsl_b_write(bfs_out, sp2_out);
-    
+
     bfs_out.close();
   }
-  
+
   // Read in file to each class in turn
-  
+
   vcl_cout << "Did we get this far ?" << vcl_endl;
-  
+
   vsl_b_ifstream bfs_in("golden_test_vbl_io.bvl");
-  
-  
-  
+
+
   TEST ("Opened golden_test_vbl_io.bvl for reading ", ! bfs_in, false);
-  
+
   vsl_b_read(bfs_in, b_box_in);
-  vsl_b_read(bfs_in, a1_in);	
-  vsl_b_read(bfs_in, a2_in);	
+  vsl_b_read(bfs_in, a1_in);
+  vsl_b_read(bfs_in, a2_in);
   vsl_b_read(bfs_in, a3_in);
   vsl_b_read(bfs_in, sa_in);
 //  vsl_b_read(bfs_in, ui_in);
   vsl_b_read(bfs_in, sp1_in);
   vsl_b_read(bfs_in, sp2_in);
-  
+
   bfs_in.close();
-  
-  
+
+
   // Test that each object created is the same as read in from the file.
-  
+
   // Test bounding box
   TEST ("vbl_bounding_box: b_box_out.initialized_ == b_box_in.initialized_", b_box_out.initialized_ == b_box_in.initialized_, true);
   TEST ("vbl_bounding_box: b_box_out.min_[0] == b_box_in.min_[0]", b_box_out.min_[0] == b_box_in.min_[0], true);
   TEST ("vbl_bounding_box: b_box_out.min_[1] == b_box_in.min_[1]", b_box_out.min_[1] == b_box_in.min_[1], true);
   TEST ("vbl_bounding_box: b_box_out.max_[0] == b_box_in.max_[0]", b_box_out.max_[0] == b_box_in.max_[0], true);
   TEST ("vbl_bounding_box: b_box_out.max_[1] == b_box_in.max_[1]", b_box_out.max_[1] == b_box_in.max_[1], true);
-  
-  
+
+
   //Test 1d array
   bool test_result1 = true;
   if (a1_out.size() != a1_in.size())
@@ -205,8 +201,8 @@ void golden_test_vbl_io(bool save_file)
     }
   }
   TEST ("vbl_array_1d: a1_out == a1_in", test_result1, true);
-  
-  
+
+
   // Test 2d array
   bool test_result2 = true;
   if (a2_out.rows() != a2_in.rows())
@@ -225,9 +221,8 @@ void golden_test_vbl_io(bool save_file)
     }
   }
   TEST ("vbl_array_2d: a2_out == a2_in", test_result2, true);
-  
-  
-  
+
+
   // Test 3d array
   bool test_result3 = true;
   if (a3_out.get_row1_count() != a3_in.get_row1_count())
@@ -248,8 +243,8 @@ void golden_test_vbl_io(bool save_file)
             test_result3 = false;
   }
   TEST ("vbl_array_3d: a3_out == a3_in", test_result3, true);
-  
-  
+
+
   // Test Sparse Array
   bool test_result4 = true;
   //same number of non zero elements?
@@ -258,7 +253,7 @@ void golden_test_vbl_io(bool save_file)
   else {
     //check every key/data pair, require same order too.
     vbl_sparse_array_1d<double>::const_iterator s = sa_in.begin();
-    //N.B. relies on sensible == operator for <T> 
+    //N.B. relies on sensible == operator for <T>
     for(vbl_sparse_array_1d<double>::const_iterator r = sa_out.begin(); r != sa_out.end(); ++r){
       if(((*s).first != (*r).first) || ((*s).second != (*r).second)) test_result4=false;
       s++;
@@ -267,21 +262,17 @@ void golden_test_vbl_io(bool save_file)
   TEST ("vbl_sparse_array_1d: sa_out == sa_in",test_result4, true);
 
 
-/*
+#if 0
   //Test User Info
   TEST ("ui_out == ui_in",ui_out.uid==ui_in.uid && ui_out.gid==ui_in.gid && ui_out.name==ui_in.name &&
     ui_out.home_directory==ui_in.home_directory && ui_out.full_name==ui_in.full_name &&
     ui_out.shell==ui_in.shell && ui_out.passwd==ui_in.passwd, true);
-*/
-  
-  
+#endif
+
+
   // Test Smart Pointer
   TEST ("vbl_smart_ptr: sp1_in == sp2_in", sp1_in == sp2_in, true);
   TEST ("vbl_smart_ptr: sp1_in->get_references() == 2", sp1_in->get_references() ==2, true);
-  
-  
-  
-  
-  
+
   return;
 }
