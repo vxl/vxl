@@ -17,7 +17,7 @@ ADD_EXECUTABLE( rgrl_test_driver
   test_initializer.cxx
   test_set_of.cxx
   test_initializer_ran_sam.cxx
-  test_matcher
+  test_matcher.cxx
 )
 TARGET_LINK_LIBRARIES( rgrl_test_driver rgrl testlib vnl_algo vnl mbl )
 
@@ -35,3 +35,6 @@ ADD_TEST( rgrl_initializer            rgrl_test_driver test_initializer )
 ADD_TEST( rgrl_set_of                 rgrl_test_driver test_set_of )
 ADD_TEST( rgrl_initializer_ran_sam    rgrl_test_driver test_initializer_ran_sam )
 ADD_TEST( rgrl_matcher                rgrl_test_driver test_matcher )
+
+ADD_EXECUTABLE( rgrl_test_include test_include.cxx )
+TARGET_LINK_LIBRARIES( rgrl_test_include rgrl )
