@@ -166,9 +166,6 @@ SOURCE=.\test_vector_fixed_ref.cxx
 SOURCE=.\test_minimizers.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\test_numeric_limits.cxx
-# End Source File
-# Begin Source File
 SOURCE=.\test_numeric_traits.cxx
 # End Source File
 # Begin Source File

@@ -152,6 +152,9 @@ SOURCE=.\test_vector.cxx
 # Begin Source File
 SOURCE=.\test_cstdio.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\test_limits.cxx
+# End Source File
 # End Group
 # End Target
 # End Project
