@@ -132,7 +132,7 @@ struct vul_file_iterator_data
     dir_handle_ = opendir(original_dirname_.c_str());
 
     // Strip unnecessary ./
-    if (original_dirname_ == "./") original_dirname_.clear();
+    if (original_dirname_ == "./") original_dirname_ = "";
 
     next();
   }
