@@ -170,6 +170,12 @@ SOURCE=.\strk_epipolar_grouper_params.cxx
 # Begin Source File
 SOURCE=.\strk_epipolar_grouper_process.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\strk_region_info.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\strk_region_info_params.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"
@@ -238,6 +244,12 @@ SOURCE=.\strk_epipolar_grouper_params.h
 # End Source File
 # Begin Source File
 SOURCE=.\strk_epipolar_grouper_process.h
+# End Source File
+# Begin Source File
+SOURCE=.\strk_region_info.h
+# End Source File
+# Begin Source File
+SOURCE=.\strk_region_info_params.h
 # End Source File
 # End Group
 # End Target
