@@ -83,8 +83,6 @@ public:
   
   vnl_quaternion<T> operator* (const vnl_quaternion<T>&) const; 
   vnl_vector<T> rotate (const vnl_vector<T>& v) const; // rotate 3D v
-  
-  inline friend ostream& operator<< (ostream& os, const vnl_quaternion<T>& q);
 };
 
 

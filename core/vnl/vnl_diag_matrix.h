@@ -52,7 +52,7 @@ public:
 // -- Construct a diagonal matrix with diagonal elements equal to value.
   vnl_diag_matrix(unsigned nn, T const& value) : diagonal_(nn, value) {}
 
-// -- Construct a diagonal matrix from a Vector.  The vcl_vector elements become
+// -- Construct a diagonal matrix from a Vector.  The vector elements become
 // the diagonal elements.
   vnl_diag_matrix(vnl_vector<T> const& that): diagonal_(that) {}
  ~vnl_diag_matrix() {}
@@ -114,8 +114,9 @@ private:
     return diagonal_[i];
   }
 
-  //
-  VCL_NEED_FRIEND_FOR_TEMPLATE_OVERLOAD(vnl_vector<T> operator*(vnl_diag_matrix<T> const&,vnl_vector<T> const&));
+#if VCL_NEED_FRIEND_FOR_TEMPLATE_OVERLOAD
+  friend vnl_vector<T> operator*(vnl_diag_matrix<T> const&,vnl_vector<T> const&);
+#endif
 };
 
 

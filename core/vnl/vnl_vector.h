@@ -24,9 +24,7 @@ template <class T> class vnl_matrix;
 
 //--------------------------------------------------------------------------------
 
-// forward declare friend functions
-//  Make sure the compiler knows that these are templated functions, just being
-// a friend does not mean that you are templated.
+// forward declare templated functions
 template <class T> T             dot_product (vnl_vector<T> const&, vnl_vector<T> const&);
 template <class T> T             inner_product (vnl_vector<T> const&, vnl_vector<T> const&);
 template <class T> T             bracket (vnl_vector<T> const &,
@@ -111,33 +109,6 @@ public:
 
   //--------------------------------------------------------------------------------
 
-  // friend functions.
-  // there's really no need for these to be friends, is there? fsm.
-
-  friend vnl_vector<T> operator+ VCL_STL_NULL_TMPL_ARGS (T const, vnl_vector<T> const&);
-  friend vnl_vector<T> operator- VCL_STL_NULL_TMPL_ARGS (T const, vnl_vector<T> const&);
-  friend vnl_vector<T> operator* VCL_STL_NULL_TMPL_ARGS (T const, vnl_vector<T> const&);
-  friend vnl_vector<T> operator* VCL_STL_NULL_TMPL_ARGS (vnl_matrix<T> const& , vnl_vector<T> const& );
-
-  friend vnl_vector<T> element_product     VCL_STL_NULL_TMPL_ARGS (vnl_vector<T> const&,
-								   vnl_vector<T> const&);
-  friend vnl_vector<T> element_quotient    VCL_STL_NULL_TMPL_ARGS (vnl_vector<T> const&, 
-								   vnl_vector<T> const&);
-  friend T             inner_product       VCL_STL_NULL_TMPL_ARGS (vnl_vector<T> const&, // conjugates
-								   vnl_vector<T> const&);// 2nd arg
-  friend T             dot_product         VCL_STL_NULL_TMPL_ARGS (vnl_vector<T> const&, // no conjugate
-								   vnl_vector<T> const&);
-  friend T             bracket             VCL_STL_NULL_TMPL_ARGS (vnl_vector<T> const&,
-								   vnl_matrix<T> const&,
-								   vnl_vector<T> const&);
-  friend vnl_matrix<T> outer_product       VCL_STL_NULL_TMPL_ARGS (vnl_vector<T> const&,
-								   vnl_vector<T> const&);
-  friend T             cross_2d (vnl_vector<T> const&, vnl_vector<T> const&); // 2d cross product
-  friend vnl_vector<T> cross_3d (vnl_vector<T> const&, vnl_vector<T> const&); // 3d cross product
-  friend T             cos_angle (vnl_vector<T> const& , vnl_vector<T> const&);
-  
-  //--------------------------------------------------------------------------------
-
   // -- access the contiguous block storing the elements in the vector. O(1).
   inline T const* data_block () const { return data; }
   inline       T* data_block () { return data; }
@@ -210,8 +181,30 @@ protected:
   unsigned num_elmts;           // Number of elements
   T* data;                      // Pointer to the vnl_vector
 
-//   // give ObjectStore support class access to data
-//   friend class vnl_vector_HelperObjectStore<T>;
+#if VCL_NEED_FRIEND_FOR_TEMPLATE_OVERLOAD
+# define v vnl_vector<T>
+# define m vnl_matrix<T>
+# define t VCL_STL_NULL_TMPL_ARGS
+  friend T      dot_product      t (v const&, v const&);
+  friend T      inner_product    t (v const&, v const&);
+  friend T      bracket          t (v const&, m const&, v const&);
+  friend T      cos_angle        t (v const&, v const&);
+  friend double angle            t (v const&, v const&);
+  friend m      outer_product    t (v const&, v const&);
+  friend v      operator+        t (T const, v const&);
+  friend v      operator-        t (T const, v const&);
+  friend v      operator*        t (T const, v const&);
+  friend v      operator*        t (m const&, v const&);
+  friend v      element_product  t (v const&, v const&);
+  friend v      element_quotient t (v const&, v const&);
+  friend T      cross_2d         t (v const&, v const&);
+  friend v      cross_3d         t (v const&, v const&); 
+# undef v
+# undef m
+# undef t
+#endif
+  //   // give ObjectStore support class access to data
+  //   friend class vnl_vector_HelperObjectStore<T>;
 };
 
 //--------------------------------------------------------------------------------

@@ -69,7 +69,6 @@ template <class T> istream& operator>> (istream& os, vnl_matrix<T>& m);
 
 //--------------------------------------------------------------------------------
 
-//
 template<class T>
 class vnl_matrix {
 public:
@@ -93,8 +92,8 @@ public:
   T    get (unsigned r, unsigned c) const;            // Get value.
 
   // return pointer to given row
-  inline T       * operator[] (unsigned r) { return data[r]; }
-  inline T const * operator[] (unsigned r) const { return data[r]; }
+  T       * operator[] (unsigned r) { return data[r]; }
+  T const * operator[] (unsigned r) const { return data[r]; }
 
   // no boundary checks here. meant to be fast.
 protected: // fsm: who uses these?
@@ -109,10 +108,10 @@ public:
   void fill_diagonal (T const&);
   void copy_in(T const *);       // laminate matrix rowwise from an array.
   void copy_out(T *) const;      // copy matrix rowwise into an array.
-  inline void set(T const *d) { copy_in(d); } 
+  void set(T const *d) { copy_in(d); } 
   
   // assignment from scalars and matrices :
-  inline vnl_matrix<T>& operator= (T const&v) { fill(v); return *this; } 
+  vnl_matrix<T>& operator= (T const&v) { fill(v); return *this; } 
   vnl_matrix<T>& operator= (vnl_matrix<T> const&);
   
   // arithmetic  
@@ -134,20 +133,6 @@ public:
   vnl_matrix<T> operator+ (vnl_matrix<T> const& rhs) const;
   vnl_matrix<T> operator- (vnl_matrix<T> const& rhs) const;
   vnl_matrix<T> operator* (vnl_matrix<T> const& rhs) const;
-
-  // binary friend operators
-  friend vnl_matrix<T> operator-        VCL_STL_NULL_TMPL_ARGS (T const&, vnl_matrix<T> const&);
-  friend vnl_matrix<T> operator+        VCL_STL_NULL_TMPL_ARGS (T const&, vnl_matrix<T> const&);
-  friend vnl_matrix<T> operator*        VCL_STL_NULL_TMPL_ARGS (T const&, vnl_matrix<T> const&);
-
-  friend vnl_matrix<T> element_product  VCL_STL_NULL_TMPL_ARGS (vnl_matrix<T> const&,
-								vnl_matrix<T> const&);
-  friend vnl_matrix<T> element_quotient VCL_STL_NULL_TMPL_ARGS (vnl_matrix<T> const&,
-								vnl_matrix<T> const&);
-  friend T             inner_product    VCL_STL_NULL_TMPL_ARGS (vnl_matrix<T> const&, // conjugates
-								vnl_matrix<T> const&);// 2nd arg
-  friend T             dot_product      VCL_STL_NULL_TMPL_ARGS (vnl_matrix<T> const&, // no conjugate
-								vnl_matrix<T> const&); 
 
   ////--------------------------- Additions ----------------------------
   
@@ -221,13 +206,13 @@ public:
   
   // -- access the contiguous block storing the elements in the matrix row-wise. O(1).
   // 1d array, row-major order.  
-  inline T const* data_block () const { return data[0]; }
-  inline T      * data_block () { return data[0]; }
+  T const* data_block () const { return data[0]; }
+  T      * data_block () { return data[0]; }
 
   // -- access the 2D array, so that elements can be accessed with array[row][col] directly.
   // 2d array, [row][column].
-  inline T const* const* data_array () const { return data; }
-  inline T      *      * data_array () { return data; }
+  T const* const* data_array () const { return data; }
+  T      *      * data_array () { return data; }
 
   // iterators
   typedef T element_type;
@@ -253,7 +238,7 @@ public:
   //--------------------------------------------------------------------------------
 
   // comparison
-  inline bool operator ==(vnl_matrix<T> const &that) const { return this->operator_eq(that); }
+  bool operator ==(vnl_matrix<T> const &that) const { return this->operator_eq(that); }
   bool operator_eq (vnl_matrix<T> const &) const;
   void print(ostream& os) const;
 
@@ -268,8 +253,26 @@ protected:
   // -- Holds the format for printf-style output
   static char* print_format;
 
-//   // give ObjectStore support class access to data
-//   friend class vnl_matrix_HelperObjectStore<T>;
+#if VCL_NEED_FRIEND_FOR_TEMPLATE_OVERLOAD
+# define v vnl_vector<T>
+# define m vnl_matrix<T>
+# define t VCL_STL_NULL_TMPL_ARGS
+  friend m operator+         t (T const&, m const&);
+  friend m operator-         t (T const&, m const&);
+  friend m operator*         t (T const&, m const&);
+  friend m element_product   t (m const&, m const&);
+  friend m element_quotient  t (m const&, m const&);
+  friend T dot_product       t (m const&, m const&); 
+  friend T inner_product     t (m const&, m const&); 
+  friend T cos_angle         t (m const&, m const&);
+  friend ostream& operator<< t (ostream&, m const&);
+  friend istream& operator>> t (istream&, m&);
+# undef v
+# undef m
+# undef t
+#endif
+  //   // give ObjectStore support class access to data
+  //   friend class vnl_matrix_HelperObjectStore<T>;
 };
 //
 

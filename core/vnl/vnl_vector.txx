@@ -457,7 +457,7 @@ vnl_vector<T> element_product (vnl_vector<T> const& v1, vnl_vector<T> const& v2)
     vnl_error_vector_dimension ("element_product", v1.size(), v2.size());
   vnl_vector<T> result(v1.size());
   for (unsigned i = 0; i < v1.size(); i++)
-    result.data_block()[i] = v1.data_block()[i] * v2.data_block()[i];
+    result[i] = v1[i] * v2[i];
   return result;				 
 }
 
@@ -470,7 +470,7 @@ vnl_vector<T> element_quotient (vnl_vector<T> const& v1, vnl_vector<T> const& v2
 			v1.size(), v2.size());
   vnl_vector<T> result(v1.size());
   for (unsigned i = 0; i < v1.size(); i++)
-    result.data[i] = v1.data[i] / v2.data[i];
+    result[i] = v1[i] / v2[i];
   return result;				 
 }
 
@@ -537,7 +537,7 @@ vnl_matrix<T> outer_product (vnl_vector<T> const& v1,
   vnl_matrix<T> out(v1.size(), v2.size());
   for (unsigned i = 0; i < out.rows(); i++)		// v1.column() * v2.row()
     for (unsigned j = 0; j < out.columns(); j++)
-      out(i, j) = v1.data[i] * v2.data[j];
+      out[i][j] = v1[i] * v2[j];
   return out;
 }
 
@@ -549,9 +549,7 @@ T cross_2d (vnl_vector<T> const& v1, vnl_vector<T> const& v2) {
   if (v1.size() < 2 || v2.size() < 2)
     vnl_error_vector_dimension ("cross_2d", v1.size(), v2.size());
 
-  return (v1.data[0] * v2.data[1]
-	  -					
-	  v1.data[1] * v2.data[0]);
+  return v1[0] * v2[1] - v1[1] * v2[0];
 }
 
 //: Returns the 3X1 cross-product of two 3d-vectors.

@@ -14,12 +14,12 @@
 // .SECTION Description
 //    vnl_real_npolynomial represents a polynomial in multiple variables.
 //    Used by vnl_rnpoly_solve which solves systems of polynomial equations.
-//    Representation:  an N-omial (N terms) is represented by (1) a vcl_vector
+//    Representation:  an N-omial (N terms) is represented by (1) a vector
 //    with the N coefficients (vnl_vector<double>), and (2) a matrix with
 //    N rows, the i-th row representing the exponents of term i, as follows:
 //    (vnl_matrix<int>) column k contains the (integer) exponent of variable
 //    k.  Example: the polynomial A*X^3 + B*X*Y + C*Y^2 + D*X*Y^2 is
-//    represented by the coefficients vcl_vector [A B C D] and the exponents
+//    represented by the coefficients vector [A B C D] and the exponents
 //    matrix
 //    [3 0]
 //    [1 1]
@@ -45,7 +45,7 @@ class vnl_real_npolynomial {
   friend class vnl_rnpoly_solve;
 public:
 // Constructor-----------------------------------------------------------------
-  vnl_real_npolynomial() { } // don't use this. only here for the STL vcl_vector class.
+  vnl_real_npolynomial() { } // don't use this. only here for the STL vector class.
   vnl_real_npolynomial(const vnl_vector<double>& c, const vnl_matrix<int>& p);
 
   // Computations--------------------------------------------------------------
