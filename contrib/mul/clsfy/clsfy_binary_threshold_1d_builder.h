@@ -1,7 +1,6 @@
 #ifndef clsfy_binary_threshold_1d_builder_h_
 #define clsfy_binary_threshold_1d_builder_h_
 
-
 //:
 // \file
 // \brief Describe an concrete classifier builder for scalar data
@@ -33,33 +32,29 @@ public:
   //: Create empty model
   virtual clsfy_classifier_1d* new_classifier() const;
 
-  
-
-    //: Build a binary_threshold classifier
-    // Train classifier, returning weighted error
-    //  Selects parameters of classifier which best separate examples from two classes,
-    //  weighting examples appropriately when estimating the missclassification rate.
-    //  Returns weighted sum of error, e.wts, where e_i =0 for correct classifications,
-    //  e_i=1 for incorrect.
+  //: Build a binary_threshold classifier
+  // Train classifier, returning weighted error
+  //  Selects parameters of classifier which best separate examples from two classes,
+  //  weighting examples appropriately when estimating the missclassification rate.
+  //  Returns weighted sum of error, e.wts, where e_i =0 for correct classifications,
+  //  e_i=1 for incorrect.
   virtual double build(clsfy_classifier_1d& classifier,
-                                  vnl_vector<double>& egs0,
-                                  vnl_vector<double>& wts0,
-                                  vnl_vector<double>& egs1,
-                                  vnl_vector<double>& wts1) const;
+                       vnl_vector<double>& egs0,
+                       vnl_vector<double>& wts0,
+                       vnl_vector<double>& egs1,
+                       vnl_vector<double>& wts1) const;
 
-    //: Train classifier, returning weighted error
-    //  Selects parameters of classifier which best separate examples,
-    //  weighting examples appropriately when estimating the missclassification rate.
-    //  data[i] is a triple, {value,class_number,weight}
-    //  Returns weighted sum of error.
-    //  Note that input data[i] may be sorted by this routine
+  //: Train classifier, returning weighted error
+  //  Selects parameters of classifier which best separate examples,
+  //  weighting examples appropriately when estimating the missclassification rate.
+  //  data[i] is a triple, {value,class_number,weight}
+  //  Returns weighted sum of error.
+  //  Note that input data[i] may be sorted by this routine
   virtual double build(clsfy_classifier_1d& classifier,
-                     vbl_triple<double,int,double> *data, 
-                     int n,
-                     double tot_wts0,
-                     double tot_wts1) const;
-
-   
+                       vbl_triple<double,int,double> *data,
+                       int n,
+                       double tot_wts0,
+                       double tot_wts1) const;
 
   //: Name of the class
   virtual vcl_string is_a() const;
@@ -68,7 +63,7 @@ public:
   short version_no() const;
 
   //: Create a copy on the heap and return base class pointer
-	virtual	clsfy_builder_1d*	clone()	const;
+  virtual clsfy_builder_1d* clone() const;
 
   //: Print class to os
   virtual void print_summary(vcl_ostream& os) const;

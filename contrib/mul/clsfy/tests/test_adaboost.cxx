@@ -29,14 +29,14 @@
 
 
 //: Extracts the j-th element of each vector in data and puts into v
-void get_1d_inputs(vnl_vector<double>& v, 
+void get_1d_inputs(vnl_vector<double>& v,
                                mbl_data_wrapper<vnl_vector<double> >& data, int j)
 {
   int n = data.size();
   v.resize(n);
   data.reset();
   for (int i=0;i<n;++i)
-  {  
+  {
     v[i] = data.current()[j];
     data.next();
   }
@@ -73,7 +73,7 @@ void test_adaboost()
   neg_models[2].set(vnl_vector<double>(1,-8), vnl_vector<double>(1,10) );
   neg_models[3].set(vnl_vector<double>(1,7), vnl_vector<double>(1,15) );
   //neg_models[4].set(vnl_vector<double>(1,-1), vnl_vector<double>(1,15) );
-  
+
   vcl_vector< vpdfl_axis_gaussian_sampler > pos_samplers(n_clfrs);
   vcl_vector< vpdfl_axis_gaussian_sampler > neg_samplers(n_clfrs);
   for (int i=0; i<n_clfrs; ++i)
@@ -107,7 +107,7 @@ void test_adaboost()
     }
   }
 
-    
+
   //create data wrappers
   mbl_data_array_wrapper< vnl_vector<double> > egs1(&pos_samples[0],n_pos);
   mbl_data_array_wrapper< vnl_vector<double> > egs0(&neg_samples[0],n_neg);
@@ -119,10 +119,9 @@ void test_adaboost()
   clsfy_adaboost_trainer adab_trainer;
   int n_rounds=5;
   adab_trainer.build_strong_classifier(*pClassifier, n_rounds, b_thresh_builder,
-                                          egs0, egs1 );
-  
+                                       egs0, egs1 );
 
- 
+
   pClassifier->print_summary(vcl_cout);
 
   // build clsfy_simple_adaboost using sorted method
@@ -132,9 +131,8 @@ void test_adaboost()
   clsfy_adaboost_sorted_trainer adab_sorted_trainer;
   adab_sorted_trainer.build_strong_classifier(*pClassifier2, n_rounds, b_thresh_sorted_builder,
                                           egs0, egs1 );
-  
-  pClassifier2->print_summary(vcl_cout);
 
+  pClassifier2->print_summary(vcl_cout);
 
 
   // compare alpha values
@@ -145,17 +143,17 @@ void test_adaboost()
 
   vcl_cout<<"diff= "<<diff<<vcl_endl;
 
-  TEST( "sorted classifier == normal classifier", 
+  TEST( "sorted classifier == normal classifier",
         diff< 0.001,
         true );
-  
+
 
   // test positive examples from training set
   // nb egs0 are the positive training examples
   vcl_vector<unsigned> outputs;
   int tp=0, fp=0;
   double tpr, fpr, adab_te, te;
-   
+
   for (int k=1; k<=pClassifier->alphas().size(); ++k)
   {
     tp=0;
@@ -163,7 +161,7 @@ void test_adaboost()
     pClassifier->set_n_clfrs_used(k);
     for (int i=0; i<n_pos; ++i)
       if ( pClassifier->classify( pos_samples[i] ) == 1 ) tp++;
-  
+
     for (int i=0; i<n_neg; ++i)
       if ( pClassifier->classify( neg_samples[i] ) == 1 ) fp++;
 
@@ -186,7 +184,6 @@ void test_adaboost()
   //Train individual classifiers on each of the 4 gaussian data sets
   for (int i=0; i<n_clfrs; ++i)
   {
-    
     vnl_vector<double> pos_egs, neg_egs;
     get_1d_inputs(pos_egs,egs1,i);
     get_1d_inputs(neg_egs,egs0,i);
@@ -194,12 +191,12 @@ void test_adaboost()
     int n_neg=neg_egs.size();
     vnl_vector<double> pos_wts(n_pos, 0.5/n_pos), neg_wts(n_neg, 0.5/n_neg);
 
-    /*
+#if 0
     vcl_cout<<"pos_egs= "<<pos_egs<<vcl_endl;
     vcl_cout<<"pos_wts= "<<pos_wts<<vcl_endl;
     vcl_cout<<"neg_egs= "<<neg_egs<<vcl_endl;
     vcl_cout<<"neg_wts= "<<neg_wts<<vcl_endl;
-    */
+#endif
 
     clsfy_classifier_1d* c1d2 = b_thresh_builder.new_classifier();
     double error=b_thresh_builder.build(*c1d2,neg_egs,neg_wts,pos_egs,pos_wts);
@@ -212,7 +209,7 @@ void test_adaboost()
     fp=0;
     for (int i=0; i<n_pos; ++i)
       if ( c1d2->classify( pos_egs[i] ) == 1 ) tp++;
-  
+
     for (int i=0; i<n_neg; ++i)
       if ( c1d2->classify( neg_egs[i] ) == 1 ) fp++;
 
@@ -228,14 +225,11 @@ void test_adaboost()
     delete c1d2;
   }
 
-  
-  
-   
 
   //nb I/O doesn't work ???
 
   vcl_cout<<"======== TESTING I/O ==========="<<vcl_endl;
-  
+
 
    // add binary loaders
   vsl_add_to_binary_loader(clsfy_binary_threshold_1d());
@@ -255,30 +249,27 @@ void test_adaboost()
 
   bfs_in.close();
 
-  
+
   vcl_cout<<"Saved : "<<vcl_endl;
   vcl_cout<< *pClassifier << vcl_endl;
   vcl_cout<<"Loaded: "<<vcl_endl;
   vcl_cout<< classifier_in << vcl_endl;
-  
-  /* 
+
+#if 0
   TEST("saved classifier == loaded classifier",
       pClassifier->classifiers()[0]->params() == classifier_in.classifiers()[0]->params() &&
       pClassifier->classifiers()[1]->params() == classifier_in.classifiers()[1]->params() &&
       pClassifier->alphas() == classifier_in.alphas(),
       true);
-  */
+#endif
 
 
   TEST("saved classifier == loaded classifier",
-     *pClassifier==classifier_in,  
+     *pClassifier==classifier_in,
     true);
-  
+
 
   delete pClassifier;
-  
-  
-
 }
 
 TESTMAIN(test_adaboost);
