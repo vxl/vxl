@@ -130,7 +130,7 @@ static void my_longjmp_idler()
 // while, in fact till it becomes idle.
 static void service_glut_events()
 {
-  if (vcl_setjmp(biffer) == 1234)
+  if (setjmp(biffer) == 1234)
     return;
   glutIdleFunc(my_longjmp_idler);
   glutMainLoop();
