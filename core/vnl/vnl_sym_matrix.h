@@ -48,7 +48,7 @@ public:
   { vnl_c_vector<T>::deallocate(data_, size());
     vnl_c_vector<T>::deallocate(index_, nn_);}
 
-  vnl_sym_matrix& operator=(vnl_sym_matrix<T> const& that);
+  vnl_sym_matrix<T>& operator=(vnl_sym_matrix<T> const& that);
 
   // Operations----------------------------------------------------------------
 
@@ -97,11 +97,25 @@ public:
   // Need this until we add a vnl_sym_matrix ctor to vnl_matrix;
   inline vnl_matrix<T> as_matrix() const;
 
+  //: Resize matrix to n by n.
   inline void resize(int n);
 
   //: Return pointer to the lower triangular elements as a contiguous 1D C array;
   T*       data_block()       { return data_; }
+  //: Return pointer to the lower triangular elements as a contiguous 1D C array;
   T const* data_block() const { return data_; }
+
+  //: Set the first i values of row i
+  // or the top i values of column i
+  void set_half_row (const vnl_vector<T> &half_row, unsigned i);
+ 
+  //: Replaces the symmetric submatrix of THIS matrix, with the elements of metrix x
+  // Starting at top left corner. Complexity is $O(m*m)$
+  vnl_sym_matrix<T>& update (vnl_sym_matrix<T> const& m,
+    unsigned diagonal_start=0);
+
+  //: Swap contents of m with THIS
+  void swap(vnl_sym_matrix &m);
 
 protected:
 //: Set up the index array
@@ -193,6 +207,11 @@ bool operator==(const vnl_sym_matrix<T> &a, const vnl_matrix<T> &b);
 
 template <class T>
 bool operator==(const vnl_matrix<T> &a, const vnl_sym_matrix<T> &b);
+
+//: Swap the contents of a and b.
+template <class T>
+void swap(vnl_sym_matrix<T> &a, vnl_sym_matrix<T> &b)
+{ a.swap(b); }
 
 
 #endif // vnl_sym_matrix_h_
