@@ -604,6 +604,94 @@ SOURCE=.\vepl_y_gradient.cxx
 
 # End Source File
 # End Group
+# Begin Group "Header Files"
+# PROP Default_Filter ""
+# Begin Source File
+
+SOURCE=.\vepl_add_random_noise.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vepl_convert.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vepl_convert.txx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vepl_dilate_disk.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vepl_dyadic.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vepl_erode_disk.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vepl_gaussian_convolution.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vepl_gradient_dir.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vepl_gradient_mag.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vepl_histogram.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vepl_median.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vepl_moment.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vepl_monadic.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vepl_sobel.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vepl_threshold.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vepl_x_gradient.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vepl_y_gradient.h
+
+# End Source File
+# End Group
 # PROP Default_Filter "ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe"
 # End Group
 # End Target
