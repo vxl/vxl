@@ -4,9 +4,9 @@
 
 #include "PairMatchSet.h"
 
-#include <vcl/vcl_cstdlib.h>
-#include <vcl/vcl_cassert.h>
-#include <vcl/vcl_vector.h>
+#include <vcl_cstdlib.h>
+#include <vcl_cassert.h>
+#include <vcl_vector.h>
 
 #include <mvl/MatchSet.h>
 

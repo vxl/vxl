@@ -1,7 +1,7 @@
 #ifndef vcl_sgi_cstdlib_h_
 #define vcl_sgi_cstdlib_h_
 // .NAME vcl_cstdlib
-// .INCLUDE vcl/vcl_cstdlib.h
+// .INCLUDE vcl_cstdlib.h
 // .FILE vcl_cstdlib.cxx
 
 // Include system stdlib.h

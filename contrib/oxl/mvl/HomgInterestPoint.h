@@ -23,7 +23,7 @@
 //
 //-----------------------------------------------------------------------------
 
-#include <vcl/vcl_iosfwd.h>
+#include <vcl_iosfwd.h>
 #include <vnl/vnl_int_2.h>
 #include <mvl/HomgPoint2D.h>
 

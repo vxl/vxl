@@ -8,11 +8,6 @@ IMMEDIATE_LIBS += -lvnl-algo -lvnl -lvbl -lvcl
 
 SUBDIRS = examples
 
-# Utilities 
-# FIXME these ought to go to GeneralUtility later 
-SOURCES += ModifyHandle.cxx
-SOURCES += pair_float_int.cxx
-
 # 1. Homogeneous objects  
 
 SOURCES += Homg.cxx

@@ -1,4 +1,4 @@
-#include <vcl/vcl_vector.h>
+#include <vcl_vector.h>
 #include <mvl/HMatrix2D.h>
 #include <mvl/HomgLine2D.h>
 #include <mvl/ProjectiveBasis2D.h>

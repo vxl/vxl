@@ -14,7 +14,7 @@
 #ifndef _PMatrixCompute_h
 #define _PMatrixCompute_h
 
-#include <vcl/vcl_list.h>
+#include <vcl_list.h>
 
 class PMatrix;
 class HomgMatchPoint3D2D;

@@ -20,7 +20,7 @@
 
 #include <vnl/vnl_double_3.h>
 #include <mvl/Homg3D.h>
-#include <vcl/vcl_iosfwd.h>
+#include <vcl_iosfwd.h>
 
 class HomgPoint3D : public Homg3D {
 

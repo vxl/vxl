@@ -21,7 +21,7 @@
 //
 
 #include <mvl/HomgPoint3D.h>
-#include <vcl/vcl_iosfwd.h>
+#include <vcl_iosfwd.h>
 
 class HomgLine3D {
 

@@ -10,9 +10,9 @@
 // Author: awf@robots.ox.ac.uk
 // Created: 19 Mar 00
 
-#include <vcl/vcl_iostream.h>
-#include <vcl/vcl_iosfwd.h>
-#include <vcl/vcl_vector.h>
+#include <vcl_iostream.h>
+#include <vcl_iosfwd.h>
+#include <vcl_vector.h>
 
 #include <vnl/vnl_vector.h>
 

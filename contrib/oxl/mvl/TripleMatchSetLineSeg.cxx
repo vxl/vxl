@@ -2,9 +2,9 @@
 #pragma implementation
 #endif
 
-#include <vcl/vcl_cassert.h>
+#include <vcl_cassert.h>
 
-#include <vcl/vcl_vector.h>
+#include <vcl_vector.h>
 #include <mvl/HomgLineSeg2D.h>
 
 #include <mvl/LineSegSet.h>

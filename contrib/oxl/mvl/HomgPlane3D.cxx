@@ -2,10 +2,10 @@
 #pragma implementation
 #endif
 
-#include <vcl/vcl_iostream.h>
-#include <vcl/vcl_cmath.h>
-//#include <vcl/vcl_memory.h>
-#include <vcl/vcl_cstdlib.h>
+#include <vcl_iostream.h>
+#include <vcl_cmath.h>
+//#include <vcl_memory.h>
+#include <vcl_cstdlib.h>
 #include <vnl/vnl_double_3.h>
 #include <mvl/Homg3D.h>
 #include <mvl/HomgPlane3D.h>

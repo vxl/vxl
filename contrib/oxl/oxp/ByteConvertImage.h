@@ -14,7 +14,7 @@
 //
 //-----------------------------------------------------------------------------
 
-#include <vcl/vcl_iostream.h>
+#include <vcl_iostream.h>
 
 #include <vil/vil_memory_image_of.h>
 #include <vil/vil_byte.h>

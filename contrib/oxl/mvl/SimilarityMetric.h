@@ -24,7 +24,7 @@
 
 #include <vnl/vnl_double_3x3.h>
 #include <mvl/ImageMetric.h>
-#include <vcl/vcl_iosfwd.h>
+#include <vcl_iosfwd.h>
 
 class Image;
 

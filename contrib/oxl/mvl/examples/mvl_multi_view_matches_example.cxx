@@ -1,4 +1,4 @@
-#include <vcl/vcl_fstream.h>
+#include <vcl_fstream.h>
 #include <vbl/vbl_timer.h>
 #include <mvl/mvl_multi_view_matches.h>
 

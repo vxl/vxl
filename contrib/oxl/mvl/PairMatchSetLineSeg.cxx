@@ -4,7 +4,7 @@
 
 #include "PairMatchSetLineSeg.h"
 
-#include <vcl/vcl_cstdlib.h>
+#include <vcl_cstdlib.h>
 
 #include <mvl/MatchSet.h>
 #include <mvl/LineSegSet.h>

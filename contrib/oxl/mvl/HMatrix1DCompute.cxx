@@ -1,11 +1,11 @@
 #include "HMatrix1DCompute.h"
 
-#include <vcl/vcl_cstdlib.h>
-#include <vcl/vcl_iostream.h>
+#include <vcl_cstdlib.h>
+#include <vcl_iostream.h>
 
 #include <mvl/HMatrix1D.h>
 #include <mvl/HomgPoint1D.h>
-#include <vcl/vcl_vector.h>
+#include <vcl_vector.h>
 
 //--------------------------------------------------------------------------------
 //

@@ -1,7 +1,7 @@
 #include "ImageWarp.h"
 
-#include <vcl/vcl_cassert.h>
-#include <vcl/vcl_iostream.h>
+#include <vcl_cassert.h>
+#include <vcl_iostream.h>
 #include <vnl/vnl_math.h>
 #include <vil/vil_file_image.h>
 #include <vil/vil_memory_image_of.h>
@@ -91,7 +91,7 @@ template <class PixelType>
 void ImageWarp<PixelType>::warp(Mapping_2d_2d& map, const vil_memory_image_of<PixelType>& in, vil_memory_image_of<PixelType>& out)
 {
   // out.Clear();
-//abort(); // is not defined without #include <vcl/vcl_cstdlib.h>
+//abort(); // is not defined without #include <vcl_cstdlib.h>
   int w = in.width();
   int h = in.height();
   int ngaps = 0;

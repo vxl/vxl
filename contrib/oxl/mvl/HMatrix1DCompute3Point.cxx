@@ -1,6 +1,6 @@
 #include "HMatrix1DCompute3Point.h"
 
-#include <vcl/vcl_vector.h>
+#include <vcl_vector.h>
 #include <mvl/HMatrix1D.h>
 
 //

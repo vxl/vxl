@@ -15,7 +15,7 @@
 // upto scale i.e. six points.
 //
 
-#include <vcl/vcl_list.h>
+#include <vcl_list.h>
 #include <mvl/PMatrixCompute.h>
 
 class PMatrixCompute6Point : public PMatrixCompute {

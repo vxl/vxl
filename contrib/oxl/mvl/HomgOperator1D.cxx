@@ -3,8 +3,8 @@
 #endif
 
 #include "HomgOperator1D.h"
-#include <vcl/vcl_cmath.h>
-#include <vcl/vcl_iostream.h>
+#include <vcl_cmath.h>
+#include <vcl_iostream.h>
 
 //-----------------------------------------------------------------------------
 // -- Calculates the crossratio of four collinear points p1, p2, p3 and p4.

@@ -3,7 +3,7 @@
 #endif
 
 #include "Homg.h"
-#include <vcl/vcl_cmath.h>
+#include <vcl_cmath.h>
 #ifdef VCL_SUNPRO_CC_50
 # include <math.h> // no HUGE_VAL in <cmath>
 #endif

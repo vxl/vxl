@@ -4,8 +4,8 @@
 
 #include "SequenceFileName.h"
 
-#include <vcl/vcl_cstdlib.h> // atoi()
-#include <vcl/vcl_iostream.h>
+#include <vcl_cstdlib.h> // atoi()
+#include <vcl_iostream.h>
 #include <vbl/vbl_reg_exp.h>
 #include <vbl/vbl_file.h>
 #include <vbl/vbl_sprintf.h>

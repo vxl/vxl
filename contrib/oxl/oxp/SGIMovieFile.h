@@ -19,7 +19,7 @@
 //
 //-----------------------------------------------------------------------------
 
-#include <vcl/vcl_iosfwd.h>
+#include <vcl_iosfwd.h>
 
 #include <oxp/MovieFileInterface.h>
 

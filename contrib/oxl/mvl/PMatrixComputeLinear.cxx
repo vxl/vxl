@@ -1,4 +1,4 @@
-#include <vcl/vcl_vector.h>
+#include <vcl_vector.h>
 #include <vnl/vnl_matrix.h>
 #include <vnl/algo/vnl_svd.h>
 

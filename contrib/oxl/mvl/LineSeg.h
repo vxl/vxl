@@ -14,7 +14,7 @@
 //     <none yet>
 //
 //-----------------------------------------------------------------------------
-#include <vcl/vcl_iosfwd.h>
+#include <vcl_iosfwd.h>
 
 
 class LineSeg {

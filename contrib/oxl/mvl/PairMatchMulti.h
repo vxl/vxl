@@ -25,9 +25,9 @@
 //
 //-----------------------------------------------------------------------------
 
-#include <vcl/vcl_functional.h>
-#include <vcl/vcl_map.h>
-#include <vcl/vcl_iosfwd.h>
+#include <vcl_functional.h>
+#include <vcl_map.h>
+#include <vcl_iosfwd.h>
 
 // conceptually a list of tuples (index1, index2, strength)
 class vcl_multimap_uint_uint : public vcl_multimap<unsigned,unsigned, vcl_less<unsigned> > {

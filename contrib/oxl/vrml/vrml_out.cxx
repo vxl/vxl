@@ -4,8 +4,8 @@
 
 #include "vrml_out.h"
 
-#include <vcl/vcl_fstream.h>
-#include <vcl/vcl_map.h>
+#include <vcl_fstream.h>
+#include <vcl_map.h>
 
 #include <vnl/vnl_matrix.h>
 

@@ -1,18 +1,17 @@
-#include <vcl/vcl_iostream.h>
-#include <vcl/vcl_list.h>
-#include <vcl/vcl_vector.h>
-#include <vcl/vcl_cmath.h>
+#include "HomgOperator3D.h"
 
-#include <vbl/vbl_qsort.h>
+#include <vcl_cmath.h>
+#include <vcl_iostream.h>
+#include <vcl_list.h>
+#include <vcl_vector.h>
+#include <vcl_utility.h>
+#include <vcl_algorithm.h>
 
 #include <vnl/algo/vnl_svd.h>
 
 #include <mvl/HomgLine3D.h>
-#include <mvl/HomgOperator3D.h>
 #include <mvl/HomgPoint3D.h>
 #include <mvl/HomgPlane3D.h>
-#include <mvl/pair_float_int.h>
-
 
 // -----------------------------------------------------------------------------
 
@@ -62,46 +61,48 @@ HomgOperator3D::sort_points(HomgPoint3D* points, int n)
 
   vnl_double_3 faraway_trivec = finite_trivec + 2.0 * distance_max * dir;
   HomgPoint3D faraway(faraway_trivec[0], faraway_trivec[1], faraway_trivec[2], 1.0);
-  
-  vcl_vector< pair_float_int > sort_table(n, pair_float_int());
+
+  typedef vcl_pair<float, int> pair_float_int;
+  vcl_vector< pair_float_int > sort_table(n);
   vcl_vector< HomgPoint3D > tempoints(points, points + n);
   
   for (int p_index = 0; p_index < n; p_index++) {
     HomgPoint3D* p = &points[p_index];
     if (p->get_w() != 0) {
-      sort_table[p_index]. i = p_index;
-      sort_table[p_index]. f = HomgOperator3D::distance_squared(faraway, *p);
+      sort_table[p_index].first = HomgOperator3D::distance_squared(faraway, *p);
+      sort_table[p_index].second = p_index;
     }
   }
 
-#if defined(VCL_WIN32)
-  vbl_qsort< pair_float_int >(sort_table, &pair_float_int_compare_ascend);
-#elif defined(VCL_SUNPRO_CC)
-  // fsm@robots: SunPro 5.0 fails on the following program, with the error
-  // 14: Error: Could not find a match for sort<>(float*, float*, int(*)(const float&,const float&)).
+  vcl_sort(sort_table.begin(), sort_table.end());
+
+
+
+
+
+
+
+
+
+
+
   
-  // template <class T> void sort(T *, T *, int (*)(T const &, T const &)) { }
-  //
-  // int compare(float const &a, float const &b) {
-  //   if (a<b) return -1;
-  //   if (a>b) return +1;
-  //   return 0;
-  // }
-  //
-  // int main(int, char **) {
-  //   int const n = 3;
-  //   float v[n] = {1, 3, 2};
-  //   sort(&v[0], &v[n], &compare); // <-- line 14
-  //   return 0;
-  // }
-  ::qsort(sort_table.begin(), sort_table.size(), sizeof(sort_table[0]), (int (*)(void const *, void const *))pair_float_int_compare_ascend);
-#else
-  vbl_qsort(sort_table, &pair_float_int_compare_ascend);
-#endif
+
+
+
+
+
+
+
+
+
+
+
+
 
   for (int sort_index = 0; sort_index < n; sort_index++) {
     pair_float_int* sort = &sort_table[sort_index];
-    tempoints[sort_index] = points[sort->i];
+    tempoints[sort_index] = points[sort->second];
   }
 
   for(int i = 0; i < n; ++i)

@@ -25,7 +25,7 @@
 //     110397 PVR Added operator==
 //
 
-#include <vcl/vcl_iosfwd.h>
+#include <vcl_iosfwd.h>
 
 #include <vnl/algo/vnl_algo_fwd.h>
 #include <vnl/vnl_double_3x4.h>

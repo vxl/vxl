@@ -2,7 +2,7 @@
 #pragma implementation
 #endif
 
-#include <vcl/vcl_iostream.h>
+#include <vcl_iostream.h>
 
 #include <mvl/HomgLine2D.h>
 #include <mvl/HomgLineSeg2D.h>

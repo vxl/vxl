@@ -1,13 +1,13 @@
 #include "HMatrix2DCompute.h"
 
-#include <vcl/vcl_cstdlib.h>
-#include <vcl/vcl_iostream.h>
+#include <vcl_cstdlib.h>
+#include <vcl_iostream.h>
 
 #include <mvl/HMatrix2D.h>
 #include <mvl/HomgLine2D.h>
 #include <mvl/HomgPoint2D.h>
 #include <mvl/PairMatchSetCorner.h>
-#include <vcl/vcl_vector.h>
+#include <vcl_vector.h>
 
 //--------------------------------------------------------------------------------
 //

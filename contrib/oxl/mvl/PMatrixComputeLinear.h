@@ -16,7 +16,7 @@
 // $P \vec X_i \sim \vec u_i$. @}
 //
 
-#include <vcl/vcl_list.h>
+#include <vcl_list.h>
 #include <mvl/PMatrixCompute.h>
 
 class PMatrixComputeLinear : public PMatrixCompute {

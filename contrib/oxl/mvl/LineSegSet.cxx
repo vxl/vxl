@@ -2,11 +2,11 @@
 #pragma implementation
 #endif
 
-#include <vcl/vcl_iostream.h>
-#include <vcl/vcl_fstream.h>
-#include <vcl/vcl_vector.h>
-#include <vcl/vcl_vector.txx>
-#include <vcl/vcl_list.h>
+#include <vcl_iostream.h>
+#include <vcl_fstream.h>
+#include <vcl_vector.h>
+#include <vcl_vector.txx>
+#include <vcl_list.h>
 
 #include <vnl/vnl_matops.h> // use vnl_matlab_print.h for pretty printing
 

@@ -18,8 +18,8 @@
 //-----------------------------------------------------------------------------
 
 ////////////////#include <cool/decls.h>
-#include <vcl/vcl_vector.h>
-#include <vcl/vcl_vector.h>
+#include <vcl_vector.h>
+#include <vcl_vector.h>
 #include <mvl/HomgLineSeg2D.h>
 #include <mvl/HomgMetric.h>
 ////////////////#include <Geometry/IUPoint.h>

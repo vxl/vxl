@@ -37,7 +37,7 @@
 
 #include <vnl/vnl_matrix.h>
 #include <mvl/PMatrix.h>
-#include <vcl/vcl_iosfwd.h>
+#include <vcl_iosfwd.h>
 
 
 class PMatrixDec : public PMatrix {

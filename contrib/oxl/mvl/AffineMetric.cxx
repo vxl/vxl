@@ -4,7 +4,7 @@
 
 #include "AffineMetric.h"
 
-#include <vcl/vcl_iostream.h>
+#include <vcl_iostream.h>
 
 #include <vnl/algo/vnl_svd.h>
 

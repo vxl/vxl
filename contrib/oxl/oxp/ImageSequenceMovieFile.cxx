@@ -4,7 +4,7 @@
 
 #include "ImageSequenceMovieFile.h"
 
-#include <vcl/vcl_iostream.h>
+#include <vcl_iostream.h>
 #include <vbl/vbl_printf.h>
 #include <vil/vil_file_image.h>
 #include <oxp/ImageSequenceName.h>

@@ -19,7 +19,7 @@
 
 //
 
-#include <vcl/vcl_vector.h>
+#include <vcl_vector.h>
 
 #if defined(VCL_GCC_27)
 # include <mvl/HomgPoint2D.h>

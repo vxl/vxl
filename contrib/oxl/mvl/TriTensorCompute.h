@@ -27,7 +27,7 @@
 //
 //---------------------------------------------------------------------------
 
-#include <vcl/vcl_list.h>
+#include <vcl_list.h>
 
 class HomgMatchLineSeg2D2D2D;
 class HomgMatchPoint2D2D2D;

@@ -4,9 +4,9 @@
 
 #include <mvl/mvl_multi_view_matches.h>
 
-#include <vcl/vcl_fstream.h>
-#include <vcl/vcl_cassert.h>
-#include <vcl/vcl_set.h>
+#include <vcl_fstream.h>
+#include <vcl_cassert.h>
+#include <vcl_set.h>
 #include <vbl/vbl_awk.h>
 
 mvl_multi_view_matches::mvl_multi_view_matches(char const* filename)

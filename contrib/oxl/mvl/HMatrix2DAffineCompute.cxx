@@ -2,7 +2,7 @@
 #pragma implementation
 #endif
 
-#include <vcl/vcl_vector.h>
+#include <vcl_vector.h>
 #include <vnl/vnl_matrix.h>
 #include <vnl/vnl_vector.h>
 #include <mvl/HMatrix2D.h>

@@ -19,7 +19,7 @@
 //
 //-----------------------------------------------------------------------------
 
-#include <vcl/vcl_vector.h>
+#include <vcl_vector.h>
 
 #include <vnl/vnl_double_2.h>
 

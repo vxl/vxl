@@ -23,4 +23,4 @@
 @tan
 @tanh
 
-#endif
+#endif // vcl_iso_complex_h_

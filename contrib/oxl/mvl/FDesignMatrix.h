@@ -25,7 +25,7 @@
 //-----------------------------------------------------------------------------
 
 #include <vnl/vnl_matrix.h>
-#include <vcl/vcl_vector.h>
+#include <vcl_vector.h>
 #include <mvl/HomgPoint2D.h>
 
 class FDesignMatrix : public vnl_matrix<double> {

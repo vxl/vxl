@@ -3,12 +3,14 @@
 #endif
 
 #include "ClosestImagePointFinder.h"
-#include <vcl/vcl_vector.h>
-#include <vcl/vcl_map.h>
-#include <vcl/vcl_functional.h>
-#include <vcl/vcl_utility.h>
+#include <vcl_vector.h>
+#include <vcl_map.h>
+#include <vcl_functional.h>
+#include <vcl_utility.h>
 
 #include <vnl/vnl_math.h>
+#include <vnl/vnl_matlab_print.h>
+
 #include <mvl/HomgInterestPointSet.h>
 
 class vcl_multimap_double_int : public vcl_multimap<double, int, vcl_less <double> > {

@@ -4,8 +4,8 @@
 
 #include "GXFileVisitor.h"
 
-#include <vcl/vcl_cctype.h>
-#include <vcl/vcl_fstream.h>
+#include <vcl_cctype.h>
+#include <vcl_fstream.h>
 
 #include <vbl/vbl_reg_exp.h>
 #include <vbl/vbl_printf.h>

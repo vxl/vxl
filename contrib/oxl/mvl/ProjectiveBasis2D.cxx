@@ -2,8 +2,8 @@
 #pragma implementation
 #endif
 
-#include <vcl/vcl_iostream.h>
-#include <vcl/vcl_vector.h>
+#include <vcl_iostream.h>
+#include <vcl_vector.h>
 #include <vnl/vnl_double_3.h>
 #include <vnl/vnl_double_3x3.h>
 #include <vnl/vnl_double_3x4.h>

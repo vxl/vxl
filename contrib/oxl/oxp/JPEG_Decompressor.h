@@ -27,7 +27,7 @@
 //
 //-----------------------------------------------------------------------------
 
-#include <vcl/vcl_iosfwd.h>
+#include <vcl_iosfwd.h>
 
 struct JPEG_DecompressorPrivates;
 class JPEG_Decompressor {

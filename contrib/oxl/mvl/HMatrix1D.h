@@ -19,7 +19,7 @@
 
 #include <vnl/vnl_double_2x2.h>
 #include <mvl/HomgPoint1D.h>
-#include <vcl/vcl_iosfwd.h>
+#include <vcl_iosfwd.h>
 
 
 class HMatrix1D {

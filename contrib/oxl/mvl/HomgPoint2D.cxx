@@ -2,8 +2,7 @@
 #pragma implementation
 #endif
 
-#include <vcl/vcl_iostream.h>
-////////////////#include <Geometry/IUPoint.h>
+#include <vcl_iostream.h>
 #include <vnl/vnl_math.h>
 #include <vnl/vnl_double_2.h>
 #include <mvl/HomgPoint2D.h>

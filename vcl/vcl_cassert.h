@@ -3,7 +3,7 @@
 // C and C++ standards say so.
 
 // .NAME vcl_cassert
-// .INCLUDE vcl/vcl_cassert.h
+// .INCLUDE vcl_cassert.h
 // .FILE vcl_cassert.cxx
 // @author fsm@robots.ox.ac.uk
 

@@ -4,9 +4,9 @@
 
 #include "PairMatchMulti.h"
 
-#include <vcl/vcl_cassert.h>
-#include <vcl/vcl_fstream.h>
-#include <vcl/vcl_utility.h>
+#include <vcl_cassert.h>
+#include <vcl_fstream.h>
+#include <vcl_utility.h>
 
 #include <vbl/vbl_sparse_array_2d.h>
 #include <vnl/vnl_matops.h>
@@ -207,7 +207,7 @@ bool PairMatchMulti::load(char const* filename)
 }
 
 #ifdef TEST_PairMatchMulti
-#include <vcl/vcl_iostream.h>
+#include <vcl_iostream.h>
 
 main()
 {

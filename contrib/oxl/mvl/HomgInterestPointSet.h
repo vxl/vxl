@@ -24,7 +24,7 @@
 //
 //-----------------------------------------------------------------------------
 
-#include <vcl/vcl_vector.h>
+#include <vcl_vector.h>
 
 #include <vnl/vnl_int_2.h>
 #include <vnl/vnl_double_2.h>

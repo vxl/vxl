@@ -9,7 +9,7 @@
 // @author awf@robots.ox.ac.uk
 // Created: 22 Jul 00
 
-#include <vcl/vcl_string.h>
+#include <vcl_string.h>
 
 //: Match optional ,1:2:40 at end of filename and strip it.
 // Fields are -1 if not matched.

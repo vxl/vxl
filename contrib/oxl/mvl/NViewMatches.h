@@ -35,8 +35,8 @@
 //-----------------------------------------------------------------------------
 
 #include <vnl/vnl_vector.h>
-#include <vcl/vcl_vector.h>
-#include <vcl/vcl_iosfwd.h>
+#include <vcl_vector.h>
+#include <vcl_iosfwd.h>
 
 //template <class T> class vbl_sparse_array_2d;
 

@@ -19,7 +19,7 @@
 //   Peter Vanroose - 11 Mar 97 - added operator==
 //
 
-#include <vcl/vcl_iosfwd.h>
+#include <vcl_iosfwd.h>
 #include <vnl/vnl_math.h>
 #include <mvl/Homg2D.h>
 

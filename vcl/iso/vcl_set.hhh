@@ -7,4 +7,4 @@
 @multiset
 @swap
 
-#endif
+#endif // vcl_iso_set_h_

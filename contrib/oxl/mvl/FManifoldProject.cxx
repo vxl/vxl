@@ -4,7 +4,7 @@
 
 #include "FManifoldProject.h"
 
-#include <vcl/vcl_cstdlib.h>
+#include <vcl_cstdlib.h>
 
 #include <vnl/vnl_matlab_print.h>
 #include <vnl/vnl_double_2x2.h>

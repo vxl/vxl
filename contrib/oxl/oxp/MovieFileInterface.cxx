@@ -4,7 +4,7 @@
 
 #include "MovieFileInterface.h"
 
-#include <vcl/vcl_iostream.h>
+#include <vcl_iostream.h>
 
 bool MovieFileInterface::verbose = false;
 

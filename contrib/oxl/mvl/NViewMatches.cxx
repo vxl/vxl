@@ -4,8 +4,8 @@
 
 #include "NViewMatches.h"
 
-#include <vcl/vcl_cassert.h>
-#include <vcl/vcl_fstream.h>
+#include <vcl_cassert.h>
+#include <vcl_fstream.h>
 #include <vbl/vbl_awk.h>
 #include <vbl/vbl_printf.h>
 

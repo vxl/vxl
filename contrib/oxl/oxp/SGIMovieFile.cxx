@@ -5,9 +5,9 @@
 #include "SGIMovieFile.h"
 #include "SGIMovieFilePrivates.h"
 
-#include <vcl/vcl_fstream.h>
-#include <vcl/vcl_strstream.h>
-#include <vcl/vcl_cstdio.h>
+#include <vcl_fstream.h>
+#include <vcl_strstream.h>
+#include <vcl_cstdio.h>
 
 #include <vbl/vbl_printf.h>
 #include <oxp/JPEG_Decompressor.h>

@@ -4,7 +4,7 @@
 
 #include "HMatrix2DSimilarityCompute.h"
 
-#include <vcl/vcl_vector.h>
+#include <vcl_vector.h>
 
 #include <vnl/vnl_matrix.h>
 #include <vnl/vnl_vector.h>

@@ -4,7 +4,7 @@
 
 #include "SimilarityMetric.h"
 
-#include <vcl/vcl_iostream.h>
+#include <vcl_iostream.h>
 #include <vnl/vnl_math.h>
 
 #include <vnl/vnl_double_2.h>

@@ -15,7 +15,7 @@
 #ifndef _HomgOperator3D_h
 #define _HomgOperator3D_h
 
-#include <vcl/vcl_vector.h>
+#include <vcl_vector.h>
 
 #include <mvl/HomgLine3D.h>
 #include <mvl/HomgPoint3D.h>

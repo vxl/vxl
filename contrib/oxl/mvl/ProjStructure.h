@@ -9,7 +9,7 @@
 // Author: awf@robots.ox.ac.uk
 // Created: 17 Mar 00
 
-#include <vcl/vcl_vector.h>
+#include <vcl_vector.h>
 
 #include <mvl/ImageMetric.h>
 #include <mvl/PMatrix.h>

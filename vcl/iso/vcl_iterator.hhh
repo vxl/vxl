@@ -22,4 +22,4 @@
 @advance
 @distance
 
-#endif
+#endif // vcl_iso_iterator_h_

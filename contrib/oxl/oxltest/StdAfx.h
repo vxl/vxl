@@ -12,7 +12,7 @@
 
 #define WIN32_LEAN_AND_MEAN		// Exclude rarely-used stuff from Windows headers
 
-#include <vcl/vcl_cstdio.h>
+#include <vcl_cstdio.h>
 
 // TODO: reference additional headers your program requires here
 

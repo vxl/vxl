@@ -4,11 +4,11 @@
 
 #include "FMatrixPlanar.h"
 
-#include <vcl/vcl_cassert.h>
-#include <vcl/vcl_iostream.h>
-#include <vcl/vcl_cmath.h>
-//#include <vcl/vcl_memory.h>
-#include <vcl/vcl_cstdlib.h>
+#include <vcl_cassert.h>
+#include <vcl_iostream.h>
+#include <vcl_cmath.h>
+//#include <vcl_memory.h>
+#include <vcl_cstdlib.h>
 #include <vnl/vnl_matrix.h>
 
 #include <vnl/algo/vnl_svd.h>

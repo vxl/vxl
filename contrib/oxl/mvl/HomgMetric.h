@@ -29,7 +29,7 @@
 
 //
 #include <vnl/vnl_fwd.h>
-#include <vcl/vcl_iosfwd.h>
+#include <vcl_iosfwd.h>
 
 class vnl_double_2;
 class ImageMetric;

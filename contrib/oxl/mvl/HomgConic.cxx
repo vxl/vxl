@@ -4,7 +4,7 @@
 
 #include "HomgConic.h"
 
-#include <vcl/vcl_iostream.h>
+#include <vcl_iostream.h>
 #include <vnl/vnl_vector.h>
 #include <vnl/algo/vnl_rpoly_roots.h>
 #include <mvl/HomgPoint2D.h>

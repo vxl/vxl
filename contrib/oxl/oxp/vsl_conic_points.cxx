@@ -4,8 +4,8 @@
 
 #include "vsl_conic_points.h"
 
-#include <vcl/vcl_vector.h>
-#include <vcl/vcl_algorithm.h>
+#include <vcl_vector.h>
+#include <vcl_algorithm.h>
 
 #include <vnl/vnl_math.h>
 #include <vnl/vnl_diag_matrix.h>

@@ -19,7 +19,7 @@
 
 #include <mvl/HomgLine2D.h>
 #include <mvl/HomgPoint2D.h>
-#include <vcl/vcl_iosfwd.h>
+#include <vcl_iosfwd.h>
 
 class PMatrix;
 

@@ -27,7 +27,7 @@
 // * FMatrixCompute7Point	- Oxford implementation of 7-point algorithm
 //
 
-#include <vcl/vcl_vector.h>
+#include <vcl_vector.h>
 
 #if defined(VCL_GCC_27)
 # include <mvl/FMatrix.h>

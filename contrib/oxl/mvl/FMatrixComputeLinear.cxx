@@ -12,9 +12,9 @@
 
 #include "FMatrixComputeLinear.h"
 
-#include <vcl/vcl_cassert.h>
-#include <vcl/vcl_vector.h>
-#include <vcl/vcl_iostream.h>
+#include <vcl_cassert.h>
+#include <vcl_vector.h>
+#include <vcl_iostream.h>
 
 #include <vnl/algo/vnl_svd.h>
 

@@ -4,7 +4,7 @@
 
 #include "HMatrix1D.h"
 
-#include <vcl/vcl_fstream.h>
+#include <vcl_fstream.h>
 
 #include <vnl/algo/vnl_svd.h>
 #include <vnl/vnl_matops.h> // use vnl_matlab_print.h for pretty printing

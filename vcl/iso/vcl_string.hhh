@@ -10,4 +10,4 @@
 @swap
 @getline
 
-#endif
+#endif // vcl_iso_string_h_

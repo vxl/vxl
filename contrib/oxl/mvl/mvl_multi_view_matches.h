@@ -27,11 +27,11 @@
 //
 //-----------------------------------------------------------------------------
 
-//#include <vcl/vcl_memory.h>
-#include <vcl/vcl_utility.h>
-#include <vcl/vcl_vector.h>
-#include <vcl/vcl_iosfwd.h>
-#include <vcl/vcl_map.h>
+//#include <vcl_memory.h>
+#include <vcl_utility.h>
+#include <vcl_vector.h>
+#include <vcl_iosfwd.h>
+#include <vcl_map.h>
 
 class mvl_multi_view_matches {
 public:

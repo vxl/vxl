@@ -22,7 +22,7 @@
 #include <mvl/HomgLine3D.h>
 #include <mvl/HomgOperator3D.h>
 #include <mvl/HomgPoint3D.h>
-#include <vcl/vcl_iosfwd.h>
+#include <vcl_iosfwd.h>
 
 class HomgLineSeg3D : public HomgLine3D {
 

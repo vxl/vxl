@@ -20,13 +20,11 @@
 //   Peter Vanroose - 11 Mar 97 - added operator==
 //
 
-#include <vcl/vcl_iosfwd.h>
+#include <vcl_iosfwd.h>
 #include <vnl/vnl_double_2.h>
 #include <mvl/Homg2D.h>
 
 class HomgPoint2D : public Homg2D {
-
-  // PUBLIC INTERFACE--------------------------------------------------------
 public:
 
   // Constructors/Initializers/Destructors-----------------------------------
@@ -35,7 +33,6 @@ public:
   HomgPoint2D (const HomgPoint2D& that): Homg2D(that) {}
   HomgPoint2D (double px, double py, double pw = 1.0): Homg2D(px,py,pw) {}
   HomgPoint2D (const vnl_vector<double>& vector_ptr): Homg2D(vector_ptr) {}
-  ~HomgPoint2D () {}
 
   HomgPoint2D& operator=(const HomgPoint2D& that)
   {
@@ -50,8 +47,6 @@ public:
   inline vnl_double_2 get_nonhomogeneous() const { return get_double2(); }
 
   HomgPoint2D get_unitized() const;
-
-  // Data Access-------------------------------------------------------------
 
   // Utility Methods---------------------------------------------------------
   static HomgPoint2D read(istream&, bool is_homogeneous = false);

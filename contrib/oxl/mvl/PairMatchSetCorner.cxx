@@ -4,7 +4,7 @@
 
 #include "PairMatchSetCorner.h"
 
-#include <vcl/vcl_vector.h>
+#include <vcl_vector.h>
 #include <mvl/HomgInterestPointSet.h>
 
 // -- Constructor

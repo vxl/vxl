@@ -18,11 +18,11 @@
 //
 //-----------------------------------------------------------------------------
 
-#include <vcl/vcl_string.h>
-#include <vcl/vcl_vector.h>
-#include <vcl/vcl_map.h>
+#include <vcl_string.h>
+#include <vcl_vector.h>
+#include <vcl_map.h>
 
-#include <vcl/vcl_iosfwd.h>
+#include <vcl_iosfwd.h>
 
 typedef unsigned char  u8;
 typedef unsigned short u16;

@@ -1,7 +1,7 @@
 #ifndef vcl_gcc_cstdlib_h_
 #define vcl_gcc_cstdlib_h_
 // .NAME vcl_cstdlib
-// .INCLUDE vcl/vcl_cstdlib.h
+// .INCLUDE vcl_cstdlib.h
 // .FILE vcl_cstdlib.cxx
 
 #ifdef __GNUG__

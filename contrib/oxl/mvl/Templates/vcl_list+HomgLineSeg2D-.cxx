@@ -1,5 +1,5 @@
 // Instantiation of vcl_list<HomgLineSeg2D*>
-#include <vcl/vcl_list.txx>
+#include <vcl_list.txx>
 #include <mvl/HomgLineSeg2D.h>
 
 static bool operator<(HomgLineSeg2D const&, HomgLineSeg2D const&) { return false; }

@@ -26,7 +26,7 @@ class HMatrix2D;
 class PairMatchSetCorner;
 #include <mvl/HomgPoint2D.h>
 #include <mvl/HomgLine2D.h>
-#include <vcl/vcl_vector.h>
+#include <vcl_vector.h>
 
 // these make the headers easier to read (in my opinion) - fsm
 typedef vcl_vector<HomgPoint2D> PointArray;
