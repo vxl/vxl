@@ -17,12 +17,11 @@
 #include <vil2/vil2_rgb.h>
 #include <vil2/vil2_rgba.h>
 
-//: Return a 3-plane view of an RGB image, or a 4-plane view of an RGBA, or
-//  a 2-plane view of a complex image.
+//: Return a 3-plane view of an RGB image, or a 4-plane view of an RGBA, or a 2-plane view of a complex image.
+// Class T must be a compound pixel type.
 // \return an empty view if it can't do the conversion.
-//  O(1).
+// O(1).
 // \relates vil2_image_view
-// class T must be a compound pixel type.
 template<class T>
 inline vil2_image_view<typename T::value_type> vil2_view_as_planes(const vil2_image_view<T >& v)
 {
@@ -46,7 +45,7 @@ inline vil2_image_view<typename T::value_type> vil2_view_as_planes(const vil2_im
 
 //: Return an RGB component view of a 3-plane image.
 // \return an empty view if it can't do the conversion (e.g. planestep != 1)
-//  O(1).
+// O(1).
 // \relates vil2_image_view
 template<class T>
 inline vil2_image_view<vil2_rgb<T> > vil2_view_as_rgb(const vil2_image_view<T>& v)
@@ -62,7 +61,7 @@ inline vil2_image_view<vil2_rgb<T> > vil2_view_as_rgb(const vil2_image_view<T>& 
 
 //: Return an RGBA component view of a 4-plane image.
 // \return an empty view if it can't do the conversion (e.g. planestep != 1)
-//  O(1).
+// O(1).
 // \relates vil2_image_view
 template<class T>
 inline vil2_image_view<vil2_rgba<T> > vil2_view_as_rgba(const vil2_image_view<T>& v)
@@ -78,7 +77,7 @@ inline vil2_image_view<vil2_rgba<T> > vil2_view_as_rgba(const vil2_image_view<T>
 
 //: Return an complex component view of a 2N-plane image.
 // \return an empty view if it can't do the conversion (e.g. planestep != 1)
-//  O(1).
+// O(1).
 // \relates vil2_image_view
 template<class T>
 inline vil2_image_view<vcl_complex<T> >
