@@ -2,7 +2,7 @@
 #define bsol_intrinsic_curve_3d_h_
 //*****************************************************************************
 //:
-//  \file
+// \file
 // \brief Generic intrinsic curve in 3D that has intrinsic curvature, torsion, d_theta, d_s defined.
 // Note that to make the definition intrinsic, I inherit it from vsol_curve_3d.
 //
@@ -100,14 +100,10 @@ class bsol_intrinsic_curve_3d : public vsol_curve_3d
   //***************************************************************************
   // Access
 
-  //: Return the first point of `this'
-  virtual vsol_point_3d_sptr p0(void) const { // virtual of vsol_polyline_3d
-    return p0_;
-  }
-  //: Return the last point of `this'
-  virtual vsol_point_3d_sptr p1(void) const { // virtual of vsol_polyline_3d
-    return p1_;
-  }
+  //: Return the first point of `this';  pure virtual of vsol_curve_3d
+  virtual vsol_point_3d_sptr p0() const { return p0_; }
+  //: Return the last point of `this';   pure virtual of vsol_curve_3d
+  virtual vsol_point_3d_sptr p1() const { return p1_; }
   //: Is `i' a valid index for the list of vertices ?
   bool valid_index(unsigned int i) const { return i<size(); }
   //: Return vertex `i'
@@ -379,24 +375,11 @@ class bsol_intrinsic_curve_3d : public vsol_curve_3d
   bool LoadCON3File (vcl_string fileName);
   bool SaveCON3File (vcl_string fileName);
 
-  //: Compute the bounding box of `this'
-  virtual void compute_bounding_box(void) const;
-
-  //***************************************************************************
-  // Status report
-
-  //: Return the curve type
-  virtual vsol_curve_3d_type curve_type() const { return vsol_curve_3d::DIGITAL_CURVE; }
-  //: Return the real type of this. It is a CURVE
-  vsol_spatial_object_3d::vsol_spatial_object_3d_type spatial_type(void) const {
-    return CURVE;
-  }
-  //: Return `this' if `this' is an polyline, 0 otherwise
-  virtual bsol_intrinsic_curve_3d const*cast_to_intrinsic_curve_3d (void) const { return this; }
-  virtual bsol_intrinsic_curve_3d *cast_to_intrinsic_curve_3d (void) { return this; }
-
   //***************************************************************************
   // Basic operations
+
+  //: Compute the bounding box of `this'
+  virtual void compute_bounding_box(void) const;
 
   //: output description to stream
   inline void describe(vcl_ostream &strm, int blanking=0) const {
