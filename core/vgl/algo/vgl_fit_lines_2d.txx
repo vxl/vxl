@@ -62,13 +62,13 @@ bool vgl_fit_lines_2d<T>::fit()
   vgl_line_2d_regression<T> reg;
   // Start at the beginning of the curve with
   // a segment with minimum number of points
-  int ns = 0, nf = min_length_, seg_len = nf-ns, cur_len = curve_.size();
+  int ns = 0, nf = min_length_, cur_len = curve_.size();
   for (int i = ns; i<nf; i++)
     reg.increment_partial_sums(curve_[i].x(), curve_[i].y());
   //The main loop
   while (nf<=cur_len)
     {
-      seg_len = nf-ns;
+//    int seg_len = nf-ns;
       reg.fit();
       reg.init_rms_error_est();
       if (reg.get_rms_error()<tol_)
