@@ -46,7 +46,7 @@ unsigned int sdet_region_edge::NumLabels(unsigned int max_label) const
 //  small regions which don't have proper closure but
 //  whose edges are on the boundary of larger legitimate
 //  regions.
-void sdet_region_edge::Prop(sdet_region_edge const* re, unsigned int label,
+void sdet_region_edge::Prop(sdet_region_edge_sptr const& re, unsigned int label,
                             unsigned int max_label)
 {
   //First try to propagate the labels

@@ -40,10 +40,11 @@
 // \endverbatim
 //-----------------------------------------------------------------------------
 
+#include <vtol/vtol_edge_2d.h>
 #include <vtol/vtol_edge_2d_sptr.h>
 #include <vbl/vbl_ref_count.h>
 #include <vcl_stlfwd.h> // for vcl_vector
-
+#include <sdet/sdet_region_edge_sptr.h>
 class sdet_region_edge : public vbl_ref_count
 {
  public:
@@ -52,8 +53,11 @@ class sdet_region_edge : public vbl_ref_count
   ~sdet_region_edge();
   //Accessors
 
-  void Prop(sdet_region_edge const* re, unsigned int label, unsigned int max_label);
+  void Prop(sdet_region_edge_sptr const& re,
+            unsigned int label, unsigned int max_label);
+
   vtol_edge_2d_sptr get_edge() const {return edge_;}
+
   bool is_vertex() const;
   unsigned int NumLabels(unsigned int max_label) const;
   unsigned int GetLabel(unsigned int i, unsigned int max_label) const 

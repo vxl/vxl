@@ -53,7 +53,7 @@
 // Output: planar network of linked edges and vertices.
 //
 // Complexity: O(|edgels|) time and space.
-//             O(nlogn) time for quicksort if n=|chains| < 1000,
+//             O(nlogn) time for quicksort if n=|chains| < 100000,
 //             to make sure that junctions are found from
 //             longer/stronger chains first.
 //
@@ -66,10 +66,13 @@
 //  Joe Mundy       (1997) Added continous edgel orientation output \and
 //  Van-Duc Nguyen  (1998) Merge from end points of dangling chains only \and
 //  Joe Mundy       (1999) Modified ::InsertBorder to use ROI bounds
+//  Joe Mundy       (2002) Extensive repairs and consolidation after
+//                         conversion to VXL
 //-----------------------------------------------------------------------------
 
 #include <vcl_vector.h>
 #include <vbl/vbl_array_2d.h>
+#include <vdgl/vdgl_digital_curve_sptr.h>
 #include <vtol/vtol_vertex_2d_sptr.h>
 #include <vtol/vtol_edge_2d.h>
 #include <vtol/vtol_edge_2d_sptr.h>
@@ -83,84 +86,166 @@ public:
                float max_gap=2.236068f); // bridge small gaps (sqrt(5))
   ~sdet_contour();
 
-  bool FindNetwork(gevd_bufferxy& edgels, // link pixels into network
-                   const int njunction, // junctions detected previously
+  //: Trace the edgel locations to form a topological network (edges, vertices)
+  bool FindNetwork(gevd_bufferxy& edgels, 
+                   const int njunction, 
                    const int* junctionx, const int* junctiony,
                    vcl_vector<vtol_edge_2d_sptr>*& edges,
                    vcl_vector<vtol_vertex_2d_sptr >*& vertices);
-  void SubPixelAccuracy(vcl_vector<vtol_edge_2d_sptr>& edges, // insert subpixel
-                        vcl_vector<vtol_vertex_2d_sptr >& vertices, // accuracy
-                        const gevd_bufferxy& locationx, // along normal to
-                        const gevd_bufferxy& locationy); // contour only
-  void InsertBorder(vcl_vector<vtol_edge_2d_sptr>& edges, // border location = 3
-                    vcl_vector<vtol_vertex_2d_sptr >& vertices); // virtual chain/junction
 
-  static void EqualizeSpacing(vcl_vector<vtol_edge_2d_sptr>& chains); // uniform spacing
-  static void Translate(vcl_vector<vtol_edge_2d_sptr>& edges, // translate loc to center
-                        vcl_vector<vtol_vertex_2d_sptr >& vertices, // instead of upper-left
+  //: Use interpolation of the gradient to localize to sub-pixel accuracy
+  void SubPixelAccuracy(vcl_vector<vtol_edge_2d_sptr>& edges,
+                        vcl_vector<vtol_vertex_2d_sptr >& vertices, 
+                        const gevd_bufferxy& locationx, 
+                        const gevd_bufferxy& locationy);
+
+  //: Insert a border at the ROI boundary to support connected components
+  void InsertBorder(vcl_vector<vtol_edge_2d_sptr>& edges, 
+                    vcl_vector<vtol_vertex_2d_sptr >& vertices);
+
+  //: apply a smoothing filter to edgel_chain(s)
+  static void EqualizeSpacing(vcl_vector<vtol_edge_2d_sptr>& chains);
+
+
+  //: computation is carried out in a zero origin ROI - translate back
+  static void Translate(vcl_vector<vtol_edge_2d_sptr>& edges, 
+                        vcl_vector<vtol_vertex_2d_sptr >& vertices, 
                         const float tx=0.5, const float ty = 0.5,
                         const float tz = 0);
-  static void ClearNetwork(vcl_vector<vtol_edge_2d_sptr>*& edges, // remove network of edges
-                           vcl_vector<vtol_vertex_2d_sptr >*& vertices); // and vertices
-  int CheckInvariants(vcl_vector<vtol_edge_2d_sptr>& edges, // return number of errors
-                      vcl_vector<vtol_vertex_2d_sptr >& vertices);
 
-  static void MaskEdgels(const gevd_bufferxy& mask, // byte mask image
-                         gevd_bufferxy& edgels, // edge elements AND with mask
-                         int& njunction, // vertices AND with mask
-                         int* junctionx, int* junctiony);
+  //: clear network storage (edges and vertices)
+  static void ClearNetwork(vcl_vector<vtol_edge_2d_sptr>*& edges, 
+                           vcl_vector<vtol_vertex_2d_sptr >*& vertices);
+
+  //: Set edgel gradient and direction values from pixel arrays
   static void SetEdgelData(gevd_bufferxy& grad_mag, gevd_bufferxy& angle,
                            vcl_vector<vtol_edge_2d_sptr>& edges);
-  static void add_vertex_edgels(vcl_vector<vtol_edge_2d_sptr>& edges);
-#if 0 // commented out
-  static int ClosedRegions(vcl_vector<vtol_edge_2d*>& edges, // remove dangling/bridge
-                           vcl_vector<vtol_vertex_2d*>& vertices); //  edges/vertices
-  static void SetRayOrigin(const float x, const float y);
-  static int ClockWiseOrder(vtol_edge_2d* const& dc1, vtol_edge_2d* const& dc2);
-#endif
 
-  static int LengthCmp(vtol_edge_2d_sptr const& dc1, vtol_edge_2d_sptr const& dc2); // pixel length
-  static vcl_vector<vtol_edge_2d_sptr>* CreateLookupTable(vcl_vector<vtol_edge_2d_sptr>&);
-  static void LookupTableInsert(vcl_vector<vtol_edge_2d_sptr>& set, vtol_edge_2d_sptr elmt);
-  static void LookupTableReplace(vcl_vector<vtol_edge_2d_sptr>& set,
-                                 vtol_edge_2d_sptr deleted, vtol_edge_2d_sptr inserted);
-  static void LookupTableRemove(vcl_vector<vtol_edge_2d_sptr>& set, vtol_edge_2d_sptr elmt);
-  static void LookupTableCompress(vcl_vector<vtol_edge_2d_sptr>& set);
-
-  static vcl_vector<vtol_vertex_2d_sptr >* CreateLookupTable(vcl_vector<vtol_vertex_2d_sptr >&);
-  static void LookupTableInsert(vcl_vector<vtol_vertex_2d_sptr >& set, vtol_vertex_2d_sptr  elmt);
-  static void LookupTableReplace(vcl_vector<vtol_vertex_2d_sptr >& set,
-                                 vtol_vertex_2d_sptr  deleted, vtol_vertex_2d_sptr  inserted);
-  static void LookupTableRemove(vcl_vector<vtol_vertex_2d_sptr >& set, vtol_vertex_2d_sptr  elmt);
-  static void LookupTableCompress(vcl_vector<vtol_vertex_2d_sptr >& set);
 
   void BeSilent() {talkative_ = false;}
   void BeTalkative() {talkative_ = true;}
   void SetDebug() {debug_ = true;}
   void ClearDebug() {debug_ = false;}
-  void propagate_chains(vcl_vector<vtol_edge_2d_sptr >& edges);
-  vcl_vector<vtol_vertex_2d_sptr>&  get_test_verts(){return test_verts_;}
-  static vtol_vertex_2d_sptr clear_vertex_superiors(vtol_vertex_sptr& v);
+
+  static  bool talkative_; // output comentaries or not
+  static  bool debug_;
+
+  //: internal routines  
 protected:
+  //: link detected edgels and junctions into chains
+  int FindChains(gevd_bufferxy& edgels, 
+                 const int njunction, 
+                 const int* junctionx, const int* junctiony,
+                 vcl_vector<vtol_edge_2d_sptr>& edges);
+
+  //: Establish verticesimprove connectivity by jumping small gaps
+  int FindJunctions(gevd_bufferxy& edgels, 
+                    vcl_vector<vtol_edge_2d_sptr>& edges, 
+                    vcl_vector<vtol_vertex_2d_sptr >& vertices);
+
+  bool move_junction(vtol_vertex_2d_sptr const& junction, 
+                     int& index, vdgl_digital_curve_sptr const & dc);
+
+  void update_edgel_chain(vtol_edge_2d_sptr const& edge, 
+                          const int old_x, const int old_y,
+                          vtol_vertex_2d_sptr& v);
+  
+  bool near_border(vtol_vertex_2d_sptr const&  v);
+  
+  //: Detect a nearby vertex by carrying out a spiral search
+  bool DetectJunction(vtol_vertex_2d_sptr const& end, int& index,
+                      vtol_edge_2d_sptr& weaker,
+                      vtol_edge_2d_sptr& stronger,
+                      const int maxSpiral,
+                      const gevd_bufferxy& edgels);
+
+  //: Break a chain at a junction and form a "T"
+  void sdet_contour::BreakChain(vtol_vertex_2d_sptr const& junction,
+                              int& index,
+                              vtol_edge_2d_sptr const& stronger,
+                              vtol_edge_2d_sptr& longer,
+                              vtol_edge_2d_sptr& shorter);
+
+  //: Break a single edge at junction and form a loop
+  void LoopChain(vtol_vertex_2d_sptr const& junction, int& index,
+                 vtol_edge_2d_sptr const& chain,
+                 vtol_edge_2d_sptr& straight,
+                 vtol_edge_2d_sptr& curled);
+
+  //: Break a closed cycle and insert a vertex at junction
+    void BreakCycle(vtol_vertex_2d_sptr const& junction,
+                    int& index, vtol_edge_2d_sptr const& stronger,
+                    vtol_edge_2d_sptr & split);
+
+
+  //: Detect nearby vertices by searching in a spiral pattern
+  vtol_vertex_2d_sptr
+    DetectTouch(const vtol_vertex_2d_sptr const& end, const int maxSpiral);
+
+  //:Connect an isolated endpoint to a nearby single vertex on a different edge
+ void  MergeEndPtTouchingEndPt(vtol_vertex_2d_sptr const& end1,
+                               vtol_vertex_2d_sptr const& end2,
+                               vtol_edge_2d_sptr& merge,
+                               vtol_edge_2d_sptr& longer,
+                               vtol_edge_2d_sptr& shorter);
+
+  //:Connect an isolated endpoint to a nearby junction (2 or more edges)
+ bool  MergeEndPtTouchingJunction(vtol_vertex_2d_sptr const& endpt,
+                                  vtol_vertex_2d_sptr const& junction,
+                                  vtol_edge_2d_sptr& old_edge,
+                                  vtol_edge_2d_sptr& new_edge);
+
+  //:Connect an isolated endpoint to the other vertex on the same edge
+ bool MergeEndPtsOfChain(vtol_vertex_2d_sptr const& endpt,
+                         vtol_vertex_2d_sptr const& other,
+                         vtol_vertex_2d_sptr& removed_vert);
+
+
+  //: Lookup table operations for managing mutated vertices and edges
+
+  //: insert an edge into a table indexed by vsol id
+  static void LookupTableInsert(vcl_vector<vtol_edge_2d_sptr>& set,
+                                vtol_edge_2d_sptr elmt);
+
+  //: replace an edge in a table indexed by vsol id
+  static void LookupTableReplace(vcl_vector<vtol_edge_2d_sptr>& set,
+                                 vtol_edge_2d_sptr deleted,
+                                 vtol_edge_2d_sptr inserted);
+
+  //: remove an edge from a table indexed by vsol id
+  static void LookupTableRemove(vcl_vector<vtol_edge_2d_sptr>& set,
+                                vtol_edge_2d_sptr elmt);
+
+  //: elminate gaps in the table by removing empty entries
+  static void LookupTableCompress(vcl_vector<vtol_edge_2d_sptr>& set);
+
+
+  //: insert a vertex into a table indexed by vsol id
+  static void LookupTableInsert(vcl_vector<vtol_vertex_2d_sptr >& set,
+                                vtol_vertex_2d_sptr  elmt);
+
+  //: replace a vertex in a table indexed by vsol id
+  static void LookupTableReplace(vcl_vector<vtol_vertex_2d_sptr >& set,
+                                 vtol_vertex_2d_sptr  deleted,
+                                 vtol_vertex_2d_sptr  inserted);
+
+  //: remove a vertex from a table indexed by vsol id
+  static void LookupTableRemove(vcl_vector<vtol_vertex_2d_sptr >& set,
+                                vtol_vertex_2d_sptr  elmt);
+
+  //: elminate gaps in the table by removing empty entries
+  static void LookupTableCompress(vcl_vector<vtol_vertex_2d_sptr >& set);
+
+  //: class members
   float minStrength;  // hysteresis or noise threshold
   int minLength;      // number of pixels in shortest chain
   float minJump;      // change in strength at junction
+  int max_gap;        // largest gap to span
   int maxSpiral;      // number of spiral search for max_gap
   vbl_array_2d<vtol_edge_2d_sptr> *edgeMap;
   vbl_array_2d<vtol_vertex_2d_sptr> *vertexMap; // map pixel to junction/chain
   vcl_vector<vtol_vertex_2d_sptr> test_verts_;
-  
-protected:
-  int FindChains(gevd_bufferxy& edgels, // link pixels into chains
-                 const int njunction, // junctions detected
-                 const int* junctionx, const int* junctiony,
-                 vcl_vector<vtol_edge_2d_sptr>& edges);
-  int FindJunctions(gevd_bufferxy& edgels, // merge end/end and end/contour
-                    vcl_vector<vtol_edge_2d_sptr>& edges, // replace these global lists
-                    vcl_vector<vtol_vertex_2d_sptr >& vertices);
 
-static  bool talkative_; // output comentaries or not
-  bool debug_;
 };
 
 #endif // sdet_contour_h_

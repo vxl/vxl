@@ -36,7 +36,7 @@ public:
   //Utility Methods
   void extract_regions();
   void clear();
-
+  vil_image get_residual_image();
   //Debug methods
   vil_image get_edge_image(){return edge_image_;}
 protected:

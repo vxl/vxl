@@ -2,6 +2,8 @@
 
 //:
 // \file
+#include <vnl/vnl_numeric_traits.h>
+#include <vil/vil_memory_image_of.h>
 #include <gevd/gevd_float_operators.h>
 #include <sdet/sdet_edgel_regions.h>
 #include <vdgl/vdgl_intensity_face.h>
@@ -88,3 +90,39 @@ void sdet_region_proc::clear()
   regions_.clear();
 }
 
+//--------------------------------------------------------------------------
+//: Use a linear approximation to intensity to predict region data
+//  return the residual error
+vil_image sdet_region_proc::get_residual_image()
+{
+  if (!image_||!regions_valid_)
+    {
+      vcl_cout << "In sdet_region_proc::get_residual_image() - no regions\n";
+      return 0;
+    }
+  int xsize = image_.width(), ysize = image_.height();
+  vil_memory_image_of<unsigned char> res_image(xsize, ysize);
+  float min_res = (float)vnl_numeric_traits<unsigned short>::maxval;
+  for(vcl_vector<vdgl_intensity_face_sptr>::iterator fit = regions_.begin();
+      fit != regions_.end(); fit++)
+    for((*fit)->reset(); (*fit)->next();)
+      {
+        float res = (*fit)->Ir();
+        if(res<min_res)
+          min_res = res;
+      }
+
+  for(vcl_vector<vdgl_intensity_face_sptr>::iterator fit = regions_.begin();
+      fit != regions_.end(); fit++)
+    for((*fit)->reset(); (*fit)->next();)
+      {
+        int x = int((*fit)->X()), y = int((*fit)->Y());
+        float res = (*fit)->Ir();
+        float is = res-min_res;//to insure non-negative
+        if(is>255)
+          is = 255;//to insure within char
+        unsigned char pix = (unsigned char)is;
+        res_image(x, y)=pix;
+      }
+  return res_image;
+}

@@ -49,22 +49,6 @@ sdet_detector::sdet_detector(vil_image img, float smoothSigma, float noiseSigma,
   sdet_detector_params::minJump = min_jump;
 }
 
-//--------------------------------------------------------------------------
-//: UnProtect lists that are protected by Contour::
-void sdet_detector::UnProtectLists()
-{
-#if 0 // commented out
-  if (edges)//Need to mimic the protection of Contour
-  for (CoolListP<Edge*>::iterator eit = edges->begin();
-       eit != edges->end(); eit++)
-    (*eit)->UnProtect();
-  if (vertices)
-    for (CoolListP<Vertex*>::iterator vit = vertices->begin();
-         vit != vertices->end(); vit++)
-      (*vit)->UnProtect();
-#endif
-}
-
 
 //: Destructor.
 //  Caller has an obligation to clear all the created edges and vertices.
@@ -108,7 +92,7 @@ bool  sdet_detector::DoContour()
     vcl_cout << "***Fail on FindNetwork.\n";
     return false;
   }
-  this->set_test_verts(contour.get_test_verts());//JLM
+  
   //vcl_vector<vtol_edge_2d_sptr>::iterator edge;
   //  vcl_cout << "IN DoContour before SubPixelAccuracy\n";
   this->print(vcl_cout);
@@ -117,17 +101,20 @@ bool  sdet_detector::DoContour()
 //     vcl_cout << "Edgel output from DoContour:";
 //     (*edge)->describe(vcl_cout, 2);
 //     }
+  if (this->borderp)            // insert a virtual contour to enforce
+    contour.InsertBorder(*edges, *vertices); // closure at border
 
   contour.SubPixelAccuracy(*edges, *vertices, // insert subpixel
                            *locationx, *locationy); // accuracy
 
   if (this->spacingp)           // reduce zig-zags and space out pixels
     sdet_contour::EqualizeSpacing(*edges); // in chains
-  if (this->borderp)            // insert a virtual contour to enforce
-    contour.InsertBorder(*edges, *vertices); // closure at border
+
   if (grad_mag&&angle)
     sdet_contour::SetEdgelData(*grad_mag, *angle, *edges); //Continous edgel orientation.
-  sdet_contour::add_vertex_edgels(*edges);
+  //JLM mayabe a better way to do this
+  //sdet_contour::add_vertex_edgels(*edges);
+
 //   const RectROI* roi = image->GetROI();
 //   sdet_contour::Translate(*edges, *vertices, // display location at center
 //                      roi->GetOrigX()+0.5, // of pixel instead of
@@ -168,7 +155,7 @@ bool  sdet_detector::DoFoldContour()
     contour.InsertBorder(*edges, *vertices); // closure at border
   if (grad_mag&&angle)
     sdet_contour::SetEdgelData(*grad_mag, *angle, *edges); //Continous edgel orientation.
-  sdet_contour::add_vertex_edgels(*edges);
+//  sdet_contour::add_vertex_edgels(*edges);
 //   const RectROI* roi = image->GetROI();
 //   sdet_contour::Translate(*edges, *vertices, // display location at center
 //                      roi->GetOrigX()+0.5, // of pixel instead of

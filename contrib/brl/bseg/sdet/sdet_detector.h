@@ -125,11 +125,8 @@ public:
   void SetImage(vil_image img) {image = img;}
 
   void print(vcl_ostream &strm=vcl_cout) const;
-  vcl_vector<vtol_vertex_2d_sptr>&  get_test_verts(){return _test_verts;}
-  void set_test_verts(vcl_vector<vtol_vertex_2d_sptr>&  tverts){_test_verts=tverts;}
 
 protected:
-  void UnProtectLists();
   void ClearData(); // clear buffer
 
 protected:
@@ -140,13 +137,13 @@ protected:
   gevd_bufferxy *edgel,                      // output from DoStep
     *direction, *locationx, *locationy, *grad_mag, *angle; // detect step/fold
   int *junctionx, *junctiony, njunction; // junctions found
-  vcl_vector<vtol_vertex_2d_sptr >* vertices; // network of linked edges/vertices
-  vcl_vector<vtol_edge_2d_sptr >* edges;
+  
+  vcl_vector<vtol_vertex_2d_sptr >* vertices;//network of linked 
+  vcl_vector<vtol_edge_2d_sptr >* edges; // edges and vertices
 
   float filterFactor;     // factor in convolution filter
   float hysteresisFactor; // hysteresis factor
   float noiseThreshold;
-  vcl_vector<vtol_vertex_2d_sptr> _test_verts;
 };
 
 #endif // sdet_detector_h_
