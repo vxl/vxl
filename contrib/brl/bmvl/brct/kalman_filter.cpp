@@ -417,23 +417,26 @@ void kalman_filter::inc()
     vnl_matrix_fixed<double, 2, 6> H = get_H_matrix(P, X);
     
     vnl_matrix_fixed<double, 6, 6> Qpred = A_*Q_*A_.transpose() + Q0_;
-    
+#if 0    
     vcl_cout<<"P is \n";
-    for(int i=0; i<6; i++){
+    for(int l=0; l<6; l++){
       for(int j=0; j<6; j++)
-        vcl_cout<<Qpred[i][j]<<" ";
+        vcl_cout<<Qpred[l][j]<<" ";
       vcl_cout<<"\n";
     }
+    
+#endif
     
     K_ = Qpred*H.transpose()*vnl_inverse(H*Qpred*H.transpose()+R_);
-    
+#if 0    
     vcl_cout<<"K is \n";
-    for(int i=0; i<6; i++){
+    for(int l=0; l<6; l++){
       for(int j=0; j<2; j++)
-        vcl_cout<<Qpred[i][j]<<" ";
+        vcl_cout<<Qpred[l][j]<<" ";
       vcl_cout<<"\n";
     }
-    
+#endif
+
     vnl_double_2 z;
     
     for (int j=0; j<2; j++)
