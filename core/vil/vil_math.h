@@ -335,53 +335,63 @@ inline void vil2_math_add_image_fraction(vil2_image_view<aT>& imA, scaleT fa,
   }
 }
 
-//: Compute integral image im_sum(i,j) = sum (x<=i,y<=j) imA(x,y)
+//: Compute integral image im_sum(i+1,j+1) = sum (x<=i,y<=j) imA(x,y)
 //  Useful thing for quickly computing mean over large regions,
 //  as demonstrated in Viola and Jones (CVPR01).
 // The sum of elements in the ni x nj square with corner (i,j)
-// is given by im_sum(i,j)+im_sum(i+ni-1,j+nj-1)-im_sum(i+ni-1,j)-im_sum(i,j+nj-1)
+// is given by im_sum(i,j)+im_sum(i+ni,j+nj)-im_sum(i+ni,j)-im_sum(i,j+nj)
 // \relates vil2_image_view
 template<class aT, class sumT>
 inline void vil2_math_integral_image(const vil2_image_view<aT>& imA,
                               vil2_image_view<sumT>& im_sum)
 {
+
   assert(imA.nplanes()==1);
   unsigned ni = imA.ni(),nj = imA.nj();
-  im_sum.set_size(ni,nj,1);
+  unsigned ni1=ni+1;
+  unsigned nj1=nj+1;
+  im_sum.set_size(ni1,nj1,1);
 
-  vcl_ptrdiff_t istepA=imA.istep(),jstepA=imA.jstep();
-  vcl_ptrdiff_t istepS=im_sum.istep(),jstepS=im_sum.jstep();
-  const aT* rowA = imA.top_left_ptr();
+
+  // Put zeros along first row of im_sum
+  vcl_ptrdiff_t istepS=im_sum.istep(),jstepS=im_sum.jstep();  
   sumT* rowS     = im_sum.top_left_ptr();
-
-  // Compute running sum of first row
-  sumT sum=0;
-  const aT* pixelA = rowA;
   sumT* pixelS = rowS;
-  for (unsigned i=0;i<ni;++i,pixelA+=istepA,pixelS+=istepS)
-    { sum+= *pixelA; *pixelS=sum; }
+  for (unsigned i=0;i<ni1;++i,pixelS+=istepS)
+    { *pixelS=0; }
 
-  // For subsequent rows, include sum from row above as well
+  
+  // Now sum from original image (imA)
+  vcl_ptrdiff_t istepA=imA.istep(),jstepA=imA.jstep();
+  const aT* rowA = imA.top_left_ptr();
+
+  sumT sum;
+  const aT* pixelA = rowA;
   vcl_ptrdiff_t prev_j = -jstepS;
-  rowA += jstepA; rowS += jstepS;
-  for (unsigned j=1;j<nj;++j,rowA += jstepA,rowS += jstepS)
+  rowS += jstepS;
+
+  for (unsigned j=0;j<nj;++j,rowA += jstepA,rowS += jstepS)
   {
     pixelA = rowA;
     pixelS = rowS;
     sum = 0;
-    for (unsigned i=0;i<ni;++i,pixelA+=istepA,pixelS+=istepS)
+    // set first value at start of each row to zero! 
+    *pixelS = 0;
+    pixelS+=istepS;
+    for (unsigned i=1;i<ni1;++i,pixelA+=istepA,pixelS+=istepS)
     { sum+= *pixelA; *pixelS=sum + pixelS[prev_j];}
   }
+
 }
 
-//: Compute integral image im_sum_sq(i,j) = sum (x<=i,y<=j) imA(x,y)^2
-// Also computes sum im_sum(i,j) = sum (x<=i,y<=j) imA(x,y)
+//: Compute integral image im_sum_sq(i+1,j+1) = sum (x<=i,y<=j) imA(x,y)^2
+// Also computes sum im_sum(i+1,j+1) = sum (x<=i,y<=j) imA(x,y)
 //
 //  Useful thing for quickly computing mean and variance over large regions,
 //  as demonstrated in Viola and Jones (CVPR01).
 //
 // The sum of elements in the ni x nj square with corner (i,j)
-// is given by im_sum(i,j)+im_sum(i+ni-1,j+nj-1)-im_sum(i+ni-1,j)-im_sum(i,j+nj-1)
+// is given by im_sum(i,j)+im_sum(i+ni,j+nj)-im_sum(i+ni,j)-im_sum(i,j+nj)
 //
 // Similar result holds for sum of squares, allowing rapid calculation of variance etc.
 // \relates vil2_image_view
@@ -390,47 +400,67 @@ inline void vil2_math_integral_sqr_image(const vil2_image_view<aT>& imA,
                                   vil2_image_view<sumT>& im_sum,
                                   vil2_image_view<sumT>& im_sum_sq)
 {
+
   assert(imA.nplanes()==1);
   unsigned ni = imA.ni(),nj = imA.nj();
-  im_sum.set_size(ni,nj,1);
-  im_sum_sq.set_size(ni,nj,1);
+  unsigned ni1=ni+1;
+  unsigned nj1=nj+1;
+  im_sum.set_size(ni1,nj1,1);
+  im_sum_sq.set_size(ni1,nj1,1);
 
-  vcl_ptrdiff_t istepA=imA.istep(),jstepA=imA.jstep();
+
+  // Put zeros along first row of im_sum & im_sum_sq
   vcl_ptrdiff_t istepS=im_sum.istep(),jstepS=im_sum.jstep();
-  vcl_ptrdiff_t istepS2=im_sum_sq.istep(),jstepS2=im_sum_sq.jstep();
-  const aT* rowA = imA.top_left_ptr();
+  vcl_ptrdiff_t istepS2=im_sum_sq.istep(),jstepS2=im_sum_sq.jstep(); 
   sumT* rowS     = im_sum.top_left_ptr();
-  sumT* rowS2    = im_sum_sq.top_left_ptr();
+  sumT* rowS2     = im_sum_sq.top_left_ptr();
+  // im_sum
+  sumT* pixelS = rowS;
+  for (unsigned i=0;i<ni1;++i,pixelS+=istepS)
+    { *pixelS=0; }
 
-  // Compute running sum of first row
-  sumT sum=0,sum2=0;
+  // im_sum_sq
+  sumT* pixelS2 = rowS2;
+  for (unsigned i=0;i<ni1;++i,pixelS2+=istepS2)
+    { *pixelS2=0; }
+
+  
+  // Now sum from original image (imA)
+  vcl_ptrdiff_t istepA=imA.istep(),jstepA=imA.jstep();
+  const aT* rowA = imA.top_left_ptr();
+
+  sumT sum,sum2;
   const aT* pixelA = rowA;
-  sumT* pixelS     = rowS;
-  sumT* pixelS2    = rowS2;
-  for (unsigned i=0;i<ni;++i,pixelA+=istepA,pixelS+=istepS,pixelS2+=istepS2)
-  {
-    sum+= *pixelA; *pixelS=sum;
-    sum2+=sumT(*pixelA)*sumT(*pixelA); *pixelS2=sum2;
-  }
-
-  // For subsequent rows, include sum from row above as well
   vcl_ptrdiff_t prev_j = -jstepS;
   vcl_ptrdiff_t prev_j2 = -jstepS2;
-  rowA += jstepA; rowS += jstepS; rowS2 += jstepS2;
-  for (unsigned j=1;j<nj;++j,rowA += jstepA,rowS += jstepS,rowS2 += jstepS2)
+  rowS += jstepS;
+  rowS2 += jstepS2;
+
+  for (unsigned j=0;j<nj;++j,rowA += jstepA,rowS += jstepS,rowS2 += jstepS2)
   {
-    pixelA  = rowA;
-    pixelS  = rowS;
+    pixelA = rowA;
+    pixelS = rowS;
     pixelS2 = rowS2;
-    sum = 0; sum2 = 0;
-    for (unsigned i=0;i<ni;++i,pixelA+=istepA,pixelS+=istepS,pixelS2+=istepS2)
-    {
-      sum+= *pixelA;
+    sum = 0;
+    sum2 = 0;
+    // set first value at start of each row to zero! 
+    *pixelS = 0;
+    *pixelS2 = 0;
+    pixelS+=istepS;
+    pixelS2+=istepS2;
+    for (unsigned i=1;i<ni1;++i,pixelA+=istepA,pixelS+=istepS,pixelS2+=istepS2)
+    { 
+      sum+= *pixelA; 
       *pixelS=sum + pixelS[prev_j];
       sum2+=sumT(*pixelA)*sumT(*pixelA);
       *pixelS2 = sum2 + pixelS2[prev_j2];
+
     }
   }
+
+
+
+
 }
 
 #endif // vil2_math_h_
