@@ -1,5 +1,5 @@
 #include <vdgl/vdgl_edgel_chain.h>
-#include <vdgl/vdgl_interpolator_cubic.h>
+#include <vdgl/vdgl_interpolator.h>
 #include <vdgl/vdgl_digital_curve.h>
 #include <vdgl/vdgl_fit_line.h>
 #include <vsol/vsol_point_2d.h>
