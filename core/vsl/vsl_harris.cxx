@@ -299,7 +299,7 @@ void vsl_harris::save_corners(ostream &f) const {
 }
 void vsl_harris::save_corners(char const *filename) const {
   ofstream f(filename);
-  assert(f);
+  assert(f.good());
   save_corners(f);
   f.close();
 }
