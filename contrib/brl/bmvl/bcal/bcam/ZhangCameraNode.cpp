@@ -17,7 +17,7 @@ ZhangCameraNode::ZhangCameraNode(int nViews)
   pCam_ -> setLensModel(flags);
 
   // allocate space to store features.
-  pImageLists_ = new vcl_list< vgl_point_2d<double> > [nViews];
+  pImageLists_ = new vcl_list< vgl_homg_point_2d<double> > [nViews];
 }
 
 ZhangCameraNode::~ZhangCameraNode()

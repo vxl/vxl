@@ -45,6 +45,7 @@ class LensModel
 
 
 // an abstract camera definition.
+// it store the lens model and intrisic parameter of camera
 class Camera
 {
  private:
