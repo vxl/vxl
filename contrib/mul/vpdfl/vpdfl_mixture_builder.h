@@ -38,10 +38,10 @@ private:
   bool weights_fixed_;
 
     //: Assumes means set up.  Estimates starting components.
-	// \param mean_sep : Rough guess of mean separation between points
+    // \param mean_sep : Rough guess of mean separation between points
   void initialise_given_means(vpdfl_mixture& model,
                   const vnl_vector<double>* data,
-				  const vcl_vector<vnl_vector<double> >& mean,
+                  const vcl_vector<vnl_vector<double> >& mean,
                   const vcl_vector<double>& wts) const;
 
     //: Means centred on data[i*f]
@@ -70,7 +70,6 @@ private:
                 const vcl_vector<vnl_vector<double> >& probs,
                 const vnl_vector<double>* data,
                 const vcl_vector<double>& wts) const;
-
 
   void init();
   void delete_stuff();
