@@ -510,7 +510,7 @@ int main(int argc, char** argv)
       images.push_back(image);
       viewers.push_back(view);
     }
-    xcv_tab->set_grid_size_changeable(false); 
+    xcv_tab->set_grid_size_changeable(true); 
 
     double viewer_scale;
     if (a_adaptive())
