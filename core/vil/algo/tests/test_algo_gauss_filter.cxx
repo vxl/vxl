@@ -93,6 +93,31 @@ static void test_algo_gaussian_filter_5tap_byte_float()
   vcl_cout << "Destination\n";
   vil_print_all(vcl_cout,  dest);
 
+  src.set_size(3,n);
+  for (int i=0;i<n;++i)
+  {
+    src(0,i)=(i%3)*10+i;
+    src(1,i)=((i+1)%3)*10+i;
+    src(2,i)=((i+2)%3)*10+i;
+  }
+  vil_gauss_filter_5tap(src,dest, params);
+  vcl_cout << "Source\n";
+  vil_print_all(vcl_cout,  src);
+  vcl_cout << "Destination\n";
+  vil_print_all(vcl_cout,  dest);
+
+  src.set_size(n,2);
+  for (int i=0;i<n;++i)
+  {
+    src(i,0)=(i%2)*10+i;
+    src(i,1)=((i+1)%2)*10+i;
+  }
+  vil_gauss_filter_5tap(src,dest, params);
+  vcl_cout << "Source\n";
+  vil_print_all(vcl_cout,  src);
+  vcl_cout << "Destination\n";
+  vil_print_all(vcl_cout,  dest);
+
   src.set_size(3,3);
   for (int j=0;j<3;++j)
     for (int i=0;i<3;++i)

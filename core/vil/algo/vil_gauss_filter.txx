@@ -212,7 +212,8 @@ void vil_gauss_filter_5tap(const vil_image_view<srcT>& src_im,
       kernel[0] = kernel[4] = params.filt2();
       kernel[1] = kernel[3] = params.filt1();
       kernel[2] = params.filt0();
-      vil_convolve_1d(src_im,dest_im, kernel+2, -2, +2, double(), vil_convolve_trim, vil_convolve_trim);
+      vil_convolve_1d(src_im,work, kernel+2, -2, +2,
+        double(), vil_convolve_trim, vil_convolve_trim);
     }
     if (nj==2)
     {
@@ -264,8 +265,9 @@ void vil_gauss_filter_5tap(const vil_image_view<srcT>& src_im,
       kernel[0] = kernel[4] = params.filt2();
       kernel[1] = kernel[3] = params.filt1();
       kernel[2] = params.filt0();
-      vil_convolve_1d(vil_transpose(src_im),vil_transpose(dest_im),
-        kernel+2, -2, +2, double(), vil_convolve_trim, vil_convolve_trim);
+      vil_image_view<destT> rdest = vil_transpose(dest_im);
+      vil_convolve_1d(vil_transpose(work), rdest, kernel+2, -2, +2,
+        double(), vil_convolve_trim, vil_convolve_trim);
     }
   }
       
