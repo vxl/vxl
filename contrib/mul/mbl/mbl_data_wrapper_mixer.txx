@@ -138,10 +138,10 @@ void mbl_data_wrapper_mixer<T>::set_index(unsigned long n)
 
   // Determine which wrapper to use
   current_wrapper_=0;
-  int sum_n = wrapper_[0]->size();
+  unsigned long sum_n = wrapper_[0]->size();
   while (index_>=sum_n)
     { current_wrapper_++; sum_n += wrapper_[current_wrapper_]->size(); }
-  int offset = index_ - (sum_n - wrapper_[current_wrapper_]->size());
+  unsigned long offset = index_ - (sum_n - wrapper_[current_wrapper_]->size());
   wrapper_[current_wrapper_]->set_index(offset);
 }
 
