@@ -138,8 +138,8 @@ bool vnl_math_isfinite(double);
 bool vnl_math_isfinite(long double);
 
 // rnd (rounding; 0.5 rounds up)
-inline long vnl_math_rnd(float x) { return (x>=0.0)?(int)(x + 0.5):(int)(x - 0.5); }
-inline int  vnl_math_rnd(double x) { return (x>=0.0)?(int)(x + 0.5):(int)(x - 0.5); }
+inline int vnl_math_rnd(float  x) { return (x>=0.0)?(int)(x + 0.5):(int)(x - 0.5); }
+inline int vnl_math_rnd(double x) { return (x>=0.0)?(int)(x + 0.5):(int)(x - 0.5); }
 
 // abs
 inline bool           vnl_math_abs(bool x) { return x; }
