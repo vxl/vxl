@@ -6,9 +6,11 @@ exec perl -w -x $0 ${1+"$@"}
 
 # wheeler@crd.ge.com
 #
-# Usage: ./make_test_config.pl > test_config.cxx
-#
 # Prints test_config.cxx to stdout.
+#
+# Usage:
+#   cd $VXLSRC/vxl/tests
+#   ./make_test_config.pl > test_config.cxx
 
 use strict;
 use diagnostics;
@@ -150,7 +152,7 @@ for $var_exp (
   'VCL_USE_NATIVE_COMPLEX',
   'VCL_USE_IMPLICIT_TEMPLATES',
 
-  #from vxl_config.h
+  # from vxl_config.h
   'VXL_LITTLE_ENDIAN',
   'VXL_BIG_ENDIAN',
   'VXL_HAS_INT_8',
@@ -238,6 +240,7 @@ for $var_exp (
   '__CYGWIN__',         # cygwin
   '_WIN32',             # windows
   '__sgi',              # sgi
+  '__APPLE__',          # MacOS X
 
   # other
   '__DATE__',           # gcc

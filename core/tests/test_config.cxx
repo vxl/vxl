@@ -1415,6 +1415,14 @@ MAIN( test_config )
 #endif
   vcl_cout << vcl_endl;
 
+  vcl_cout << "__APPLE__ ";
+#ifdef __APPLE__
+  vcl_cout << "is set to " << quote(__APPLE__);
+#else
+  vcl_cout << "is not set";
+#endif
+  vcl_cout << vcl_endl;
+
   vcl_cout << "__DATE__ ";
 #ifdef __DATE__
   vcl_cout << "is set to " << quote(__DATE__);
