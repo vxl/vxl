@@ -122,12 +122,12 @@ static void run_conversion_operator_tests() {
 
   vnl_bignum b(0x7fffffffL);
   ++b;
-  TEST("vnl_bignum b(0x7fffffffL); ++b; (long)b == 0x80000000L", (long)b, 0x80000000L);
+  TEST("vnl_bignum b(0x7fffffffL); ++b; (long)b == 0x80000000L", (long)b, (long)0x80000000L);
   --b;
-  TEST("vnl_bignum b(0x80000000L); --b; (long)b == 0x7fffffffL", (long)b, 0x7fffffffL);
+  TEST("vnl_bignum b(0x80000000L); --b; (long)b == 0x7fffffffL", (long)b, (long)0x7fffffffL);
 
   ++b; b = -b;
-  TEST("vnl_bignum b(0x7fffffffL); ++b; b=-b; (long)b == -0x80000000L", (long)b, -0x80000000L);
+  TEST("vnl_bignum b(0x7fffffffL); ++b; b=-b; (long)b == -0x80000000L", (long)b, -(long)0x80000000L);
 
   vcl_cout << "float conversion operator:\n";
   TEST("float(vnl_bignum(0.0)) == 0.0", ((float) vnl_bignum(0.0)), 0.0);
