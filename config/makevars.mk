@@ -26,7 +26,8 @@ TJ_CORE_PACKAGES = \
 	SpatialObjects \
 	GeneralUtility \
 	COOL \
-	Numerics
+	Numerics \
+        core
 endif
 
 # Variable: IUE_USES
@@ -44,7 +45,7 @@ ifneq ($(strip $(IUE-CORE)),)
 endif
 
 IUE_CORE_PACKAGES = \
-	GeneralUtility COOL Numerics Image Dex2 \
+	GeneralUtility COOL Numerics Image Dex2 core \
 	Basics-IUE CoordSys-IUE Image-IUE SpatialObject-IUE \
 	ImageFeature-IUE SpatialIndex-IUE Statistics-IUE
 
@@ -75,7 +76,8 @@ IUE_LIBS = \
 	-lIUE-Container -lIUE-Root -lIUE-Unit \
 	-lIaf -lTraits -lDex2 \
 	$(NITF) -lImageClasses -ltiff -ljpeg -lBasics \
-	-lNumerics -lIUE-MathDex -liue-math-extensions
+	-lNumerics -lIUE-MathDex -liue-math-extensions \
+        -lvnl-algo -lnetlib -lvnl
 
 # NOTE: the 7 duplicate libraries following -lIUE-SO-BinaryOps are for linkers
 # (notably the one on SGI) that expect to find symbols to be resolved from a
@@ -137,7 +139,7 @@ ifeq ($(strip $(USE_RENDERING)),1)
 	-lCompGeom -lGroups -lTopology -lDigitalGeometry -lGeometry \
 	-lSpatialBasics -lSolver -lStat -lBasics -lTJCOOL \
 	-lDEXTableIO -ldex_generic \
-	-lDex2 -lTraits -lNumerics -lnetlib
+	-lDex2 -lTraits -lNumerics -lvnl-algo -lnetlib -lvnl
 
   IUE_VISTOOL_LIBS += -lfdisplay
 
