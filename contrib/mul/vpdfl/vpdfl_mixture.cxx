@@ -137,7 +137,7 @@ void vpdfl_mixture::set(const vcl_vector<vpdfl_pdf_base*> components, const vcl_
   assert (weights.size() == n);
 
   component_.resize(n);
-  for (int i=0;i<n;++i)
+  for (unsigned int i=0; i<n; ++i)
     component_[i] = components[i]->clone();
 
   weight_ = weights;
