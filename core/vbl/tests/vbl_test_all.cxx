@@ -13,7 +13,7 @@
 //#include <vbl/vbl_basic_tuple.h>
 #include <vbl/vbl_binary.h>
 #include <vbl/vbl_bool_ostream.h>
-#include <vbl/vbl_bounding_box.h>
+//#include <vbl/vbl_bounding_box.h>
 //#include <vbl/vbl_br_default.h>
 //#include <vbl/vbl_br_impl.h>
 #include <vbl/vbl_canonical_path.h>
@@ -32,9 +32,8 @@
 #include <vbl/vbl_sequence_filename_map.h>
 #include <vbl/vbl_smart_ptr.h>
 #include <vbl/vbl_sort.h>
-#include <vbl/vbl_sparse_array.h>
+#include <vbl/vbl_sparse_array_1d.h>
 #include <vbl/vbl_sparse_array_2d.h>
-#include <vbl/vbl_sparse_array_2d_base.h>
 #include <vbl/vbl_sparse_array_3d.h>
 #include <vbl/vbl_sprintf.h>
 #include <vbl/vbl_string.h>

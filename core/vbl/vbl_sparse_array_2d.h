@@ -13,87 +13,76 @@
 // \verbatim
 // Modifications:
 // 26 March 01 cjb updated documentation
+// 10 April 01 IMS (Manchester ISBE) modified to use vbl_sparse_array_base
 // \endverbatim
 //
-//-----------------------------------------------------------------------------
 
-#include <vbl/vbl_sparse_array.h>
-#include <vbl/vbl_sparse_array_2d_base.h>
+#include <vbl/vbl_sparse_array_base.h>
 #include <vcl_iosfwd.h>
 
+
+
+
+//: An index for 2d arrays
+// Used specifically with vbl_sparse_array_2d, but can be used
+// for other things.
+struct vbl_index_2d
+{
+  vbl_index_2d(unsigned index_i, unsigned index_j): i(index_i), j(index_j) {} 
+  unsigned i;
+  unsigned j;
+};
+
+//: Defines an ordering on vbl_index_2d
+inline bool operator< (const vbl_index_2d &a, const vbl_index_2d &other)
+{
+  if (a.i == other.i) return (a.j < other.j);
+  else return (a.i < other.i);
+}
+
+
+//: Sparse 2D array allowing space efficient access of the form  s(300,700) =2
 template <class T>
-//: Sparse 2D array allowing space efficient access of the form 
-// s(3000,7000) = 2;
-class vbl_sparse_array_2d : private vbl_sparse_array<T>, 
-                            public vbl_sparse_array_2d_base {
+class vbl_sparse_array_2d : public vbl_sparse_array_base<T, vbl_index_2d>
+{
 public:
-  // Constructors/Destructors--------------------------------------------------
 
-// - Construct a vbl_sparse_array_2d which can hold a maximum of (n1 x n2) 
-//  elements. Currently (n1*n2) must be representable in 32 bits, or about 64K 
-//  per dimension.  Powers of two might conceivably give better performance -- 
-//  they won't be worse.
-// not implemented
-// vbl_sparse_array_2d(unsigned max_dim_1 = 0x10000, 
-  //unsigned max_dim_2 = 0x10000);
-
-  //: default constructor
-  vbl_sparse_array_2d() {}
-  //: Copy constructor
-  vbl_sparse_array_2d(const vbl_sparse_array_2d<T>& that): 
-                  vbl_sparse_array<T>(that) {}
-  //: Assignment
-  vbl_sparse_array_2d& operator=(const vbl_sparse_array_2d<T>& that) {
-    vbl_sparse_array<T>::operator=(that);
-    return *this;
+    //: Put a value into location (i,j).
+  bool put(unsigned i, unsigned j, const T& t)
+  {
+    return vbl_sparse_array_base<T, vbl_index_2d>::put(vbl_index_2d(i, j), t);
   }
 
-  // Operations----------------------------------------------------------------
-
-//: Put a value into location (i,j).
-  bool put(unsigned i, unsigned j, const T& t) {
-    return Base::put(encode(i,j), t);
+    //: Return contents of location (i,j).
+    //  Returns an undefined value (in fact 
+    //  a T()) if location (i,j) has not been filled with a value.
+  T& operator () (unsigned i, unsigned j)
+  {
+    return vbl_sparse_array_base<T, vbl_index_2d>::operator() (vbl_index_2d(i, j));
   }
 
-//: Return contents of location (i,j).
-//  Returns an undefined value (in fact 
-//  a T()) if location (i,j) has not been filled with a value.
-  T& operator () (unsigned i, unsigned j) {
-    return Base::operator[](encode(i,j));
+    //: Return contents of (i,j).  Assertion failure if not yet filled.
+  const T& operator () (unsigned i, unsigned j) const
+  {
+    return vbl_sparse_array_base<T, vbl_index_2d>::operator() (vbl_index_2d(i, j));
   }
 
-//: Return contents of (i,j).  Assertion failure if not yet filled.
-  const T& operator () (unsigned i, unsigned j) const {
-    return Base::operator[](encode(i,j));
+    //: Return true if location (i,j) has been filled.
+  bool fullp(unsigned i, unsigned j) const
+  {
+    return vbl_sparse_array_base<T, vbl_index_2d>::fullp(vbl_index_2d(i, j));
   }
 
-//: Return true if location (i,j) has been filled.
-  bool fullp(unsigned i, unsigned j) const {
-    return Base::fullp(encode(i,j));
+    //: Return the address of location (i,j).  0 if not yet filled.
+  T* get_addr(unsigned i, unsigned j)
+  {
+    return vbl_sparse_array_base<T, vbl_index_2d>::get_addr(vbl_index_2d(i, j));
   }
 
-//: Return the address of location (i,j).  0 if not yet filled.
-  T* get_addr(unsigned i, unsigned j) {
-    return Base::get_addr(encode(i,j));
-  }
 
-  // Computations--------------------------------------------------------------
-//: Return number of locations that have been assigned a value using "put".
-  vbl_sparse_array<T>::count_nonempty;
-
-//: iterator over the sparse array
-  typedef vbl_sparse_array<T>::const_iterator const_iterator;
-  vbl_sparse_array<T>::begin;
-  vbl_sparse_array<T>::end;
-
-  // Data Control--------------------------------------------------------------
-//: Print the Array to a stream in "(i,j): value" format.
+    //: Print the Array to a stream in "(i,j): value" format.
   vcl_ostream& print(vcl_ostream&) const;
-  //friend ostream& operator >> (ostream&, const vbl_sparse_array_2d<T>& );
 
-protected:
-  // Data Members--------------------------------------------------------------
-  typedef vbl_sparse_array<T> Base;
 };
 
 template <class T>
@@ -102,8 +91,6 @@ inline vcl_ostream& operator <<
   return a.print(s);
 }
 
-#define VBL_SPARSE_ARRAY_2D_INSTANTIATE_base(T) \
-extern "please include vbl/vbl_sparse_array_2d.txx instead"
 
 #define VBL_SPARSE_ARRAY_2D_INSTANTIATE(T) \
 extern "please include vbl/vbl_sparse_array_2d.txx instead"

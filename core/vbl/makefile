@@ -18,7 +18,6 @@ SOURCES += vbl_printf.cxx
 SOURCES += vbl_redirector.cxx
 SOURCES += vbl_ref_count.cxx
 SOURCES += vbl_reg_exp.cxx
-SOURCES += vbl_sparse_array_2d_base.cxx
 SOURCES += vbl_sprintf.cxx
 SOURCES += vbl_string.cxx
 SOURCES += vbl_timer.cxx

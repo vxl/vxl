@@ -195,11 +195,11 @@ SOURCE=.\vbl_arg.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=".\Templates\vbl_array+double-.cxx"
+SOURCE=".\Templates\vbl_array_1d+double-.cxx"
 # End Source File
 # Begin Source File
 
-SOURCE=".\Templates\vbl_array+float-.cxx"
+SOURCE=".\Templates\vbl_array_1d+float-.cxx"
 # End Source File
 # Begin Source File
 
@@ -307,19 +307,15 @@ SOURCE=.\vbl_sort.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=".\Templates\vbl_sparse_array+double-.cxx"
+SOURCE=".\Templates\vbl_sparse_array_1d+double-.cxx"
 # End Source File
 # Begin Source File
 
-SOURCE=".\Templates\vbl_sparse_array+int-.cxx"
+SOURCE=".\Templates\vbl_sparse_array_1d+int-.cxx"
 # End Source File
 # Begin Source File
 
 SOURCE=".\Templates\vbl_sparse_array_2d+double-.cxx"
-# End Source File
-# Begin Source File
-
-SOURCE=.\vbl_sparse_array_2d_base.cxx
 # End Source File
 # Begin Source File
 
@@ -367,7 +363,7 @@ SOURCE=.\vbl_arg.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\vbl_array.h
+SOURCE=.\vbl_array_1d.h
 # End Source File
 # Begin Source File
 
@@ -499,7 +495,7 @@ SOURCE=.\vbl_sort.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\vbl_sparse_array.h
+SOURCE=.\vbl_sparse_array_1d.h
 # End Source File
 # Begin Source File
 
@@ -507,11 +503,11 @@ SOURCE=.\vbl_sparse_array_2d.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\vbl_sparse_array_2d_base.h
+SOURCE=.\vbl_sparse_array_3d.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\vbl_sparse_array_3d.h
+SOURCE=.\vbl_sparse_array_base.h
 # End Source File
 # Begin Source File
 
