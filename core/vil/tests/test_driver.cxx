@@ -7,6 +7,7 @@ DECLARE( test_bilin_interp );
 DECLARE( test_sample_profile_bilin );
 DECLARE( test_sample_grid_bilin );
 DECLARE( test_algo_gauss_reduce );
+DECLARE( test_algo_convolve_1d );
 
 void
 register_tests()
@@ -18,6 +19,7 @@ register_tests()
   REGISTER( test_sample_profile_bilin );
   REGISTER( test_sample_grid_bilin );
   REGISTER( test_algo_gauss_reduce );
+  REGISTER( test_algo_convolve_1d );
 }
 
 DEFINE_MAIN;

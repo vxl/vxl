@@ -10,6 +10,7 @@ ADD_EXECUTABLE( vil2_test_driver
   test_sample_profile_bilin.cxx
   test_sample_grid_bilin.cxx
   test_algo_gauss_reduce.cxx
+  test_algo_convolve_1d.cxx
 )
 TARGET_LINK_LIBRARIES( vil2_test_driver vil2_algo vil2 vpl vul testlib vcl )
 
@@ -21,3 +22,4 @@ ADD_TEST( test_bilin_interp           vil2_test_driver test_bilin_interp )
 ADD_TEST( test_sample_profile_bilin   vil2_test_driver test_sample_profile_bilin )
 ADD_TEST( test_sample_grid_bilin      vil2_test_driver test_sample_grid_bilin )
 ADD_TEST( test_algo_gauss_reduce      vil2_test_driver test_algo_gauss_reduce )
+ADD_TEST( test_algo_convolve_1d       vil2_test_driver test_algo_convolve_1d )
