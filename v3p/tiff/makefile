@@ -64,6 +64,10 @@ DOCFILES = tiff
 APP_CFLAGS += -DHAVE_IEEEFP=1
 
 
+ifeq ($(OS),win32)
+APP_CFLAGS += -D_tiff_mak
+endif
+
 ####### MAKE SURE THESE STAY IN CORRESPONDENCE WITH config/identify_os.mk #####
 
 ifeq ($(OS),irix5)

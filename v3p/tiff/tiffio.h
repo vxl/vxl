@@ -91,14 +91,25 @@ typedef	void* thandle_t;	/* client data handle */
  * Allow libtiff to be built as a Windows dll.
  */
 #ifdef _WIN32
+
+#ifdef BUILD_DLL
 #ifdef _tiff_mak
 #define EXTERN __declspec(dllexport)
 #else /* not building dll */
 #define EXTERN __declspec(dllimport)
 #endif
+#else /* not importing or exporting dll symbols */ 
+#ifndef _tiff_mak
+#define EXTERN extern
+#else
+#define EXTERN
+#endif
+#endif /* BUILD_DLL */
+
 #else /* not _WIN32 */
 #define EXTERN extern
 #endif
+
 
 #ifndef NULL
 #define	NULL	0
