@@ -1,5 +1,6 @@
 // This is vxl/vnl/tests/test_cholesky.cxx
 #include <testlib/testlib_test.h>
+#include <vcl_iostream.h>
 #include <vnl/vnl_matrix.h>
 #include <vnl/vnl_matlab_print.h>
 #include <vnl/algo/vnl_cholesky.h>
