@@ -28,16 +28,9 @@
 //
 
 #include <vcl_vector.h>
-
-#if defined(VCL_GCC_27)
-# include <mvl/FMatrix.h>
-# include <mvl/HomgPoint2D.h>
-# include <mvl/PairMatchSetCorner.h>
-#else
 class FMatrix;
 class HomgPoint2D;
 class PairMatchSetCorner;
-#endif
 
 class FMatrixCompute {
 public:
