@@ -1,20 +1,17 @@
-#include <vcl_iostream.h>
-#include <vcl_fstream.h>
-#include <vcl_utility.h>
-#include <vcl_cmath.h> // for vcl_fabs()
-
-#include <testlib/testlib_test.h>
-#include <vpdfl/vpdfl_axis_gaussian.h>
-#include <vpdfl/vpdfl_axis_gaussian_builder.h>
-#include <vpdfl/vpdfl_axis_gaussian_sampler.h>
-#include <mbl/mbl_data_array_wrapper.h>
-#include <vsl/vsl_binary_loader.h>
+// This is mul/vpdfl/tests/test_axis_gaussian.cxx
 
 //:
 // \file
 // \author Tim Cootes
 // \brief test vpdfl_axis_gaussian, building, sampling, saving, etc.
 
+#include <vcl_iostream.h>
+#include <vpdfl/vpdfl_axis_gaussian.h>
+#include <vpdfl/vpdfl_axis_gaussian_builder.h>
+#include <vpdfl/vpdfl_axis_gaussian_sampler.h>
+#include <mbl/mbl_data_array_wrapper.h>
+#include <vsl/vsl_binary_loader.h>
+#include <testlib/testlib_test.h>
 
 void test_axis_gaussian()
 {
@@ -37,7 +34,7 @@ void test_axis_gaussian()
 
   vcl_cout<<"Prob at zero: "<<gauss0(v0)<<vcl_endl;
 
-  TEST("gauss0(0)",vcl_fabs(gauss0(v0)-0.00273207)<1e-8,true);
+  TEST_NEAR("gauss0(0)",gauss0(v0),0.00273207,1e-8);
 
   // Generate lots of samples
   int n = 5000;

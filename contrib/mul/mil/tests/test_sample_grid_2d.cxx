@@ -1,13 +1,10 @@
+// This is mul/mil/tests/test_sample_grid_2d.cxx
 #include <vcl_iostream.h>
-#include <vcl_fstream.h>
-#include <vcl_utility.h>
-
-#include <testlib/testlib_test.h>
 #include <vnl/vnl_vector.h>
 #include <mil/mil_image_2d_of.h>
 #include <mil/mil_sample_grid_2d.h>
 #include <vil/vil_byte.h>
-#include <vcl_cmath.h> // for fabs()
+#include <testlib/testlib_test.h>
 
 void test_sample_grid_2d_byte()
 {
@@ -31,15 +28,15 @@ void test_sample_grid_2d_byte()
 
   mil_sample_grid_2d(vec,image0,p0,u0,v0,3,3);
   TEST("Profile correct length",vec.size(),9);
-  TEST("First value",vcl_fabs(vec[0]-55)<1e-6,true);
-  TEST("Third value",vcl_fabs(vec[2]-75)<1e-6,true);
-  TEST("Last value",vcl_fabs(vec[8]-77)<1e-6,true);
+  TEST_NEAR("First value",vec[0],55,1e-6);
+  TEST_NEAR("Third value",vec[2],75,1e-6);
+  TEST_NEAR("Last value",vec[8],77,1e-6);
 
   mil_sample_grid_2d(vec,image0,p0,v0,u0,3,3);
   TEST("Profile correct length",vec.size(),9);
-  TEST("First value",vcl_fabs(vec[0]-55)<1e-6,true);
-  TEST("Third value",vcl_fabs(vec[2]-57)<1e-6,true);
-  TEST("Last value",vcl_fabs(vec[8]-77)<1e-6,true);
+  TEST_NEAR("First value",vec[0],55,1e-6);
+  TEST_NEAR("Third value",vec[2],57,1e-6);
+  TEST_NEAR("Last value",vec[8],77,1e-6);
 }
 
 void test_sample_grid_2d()

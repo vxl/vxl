@@ -1,13 +1,12 @@
+// This is mul/mil/tests/test_algo_gaussian_filter.cxx
 #include <vcl_iostream.h>
-#include <vcl_fstream.h>
-#include <vcl_utility.h>
-
-#include <testlib/testlib_test.h>
-#include <mil/algo/mil_algo_gaussian_filter.h>
-#include <vil/vil_byte.h>
+#include <vcl_algorithm.h>
 #include <vcl_cstdlib.h> // for abs(int)
 #include <vcl_cmath.h> // for fabs()
-#include <vcl_algorithm.h>
+
+#include <mil/algo/mil_algo_gaussian_filter.h>
+#include <vil/vil_byte.h>
+#include <testlib/testlib_test.h>
 
 void test_algo_gaussian_filter_byte_float()
 {
@@ -66,7 +65,7 @@ void test_algo_gaussian_filter_byte_float()
     }
   TEST("impulse response is contained", fail1, false);
   TEST("response is centre maximum", fail2, false);
-  TEST("impulse response sums to input", vcl_fabs(sum-255.0f) < 0.001, true);
+  TEST_NEAR("impulse response sums to input", sum, 255.0f, 1e-3);
 }
 
 

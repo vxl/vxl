@@ -1,11 +1,8 @@
+// This is mul/mil/tests/test_normalise_image_2d.cxx
 #include <vcl_iostream.h>
-#include <vcl_fstream.h>
-#include <vcl_utility.h>
 #include <vcl_cmath.h>
-
-#include <testlib/testlib_test.h>
 #include <mil/mil_normalise_image_2d.h>
-
+#include <testlib/testlib_test.h>
 
 void test_normalise_image_2d()
 {
@@ -26,7 +23,7 @@ void test_normalise_image_2d()
   // Create original image
   for (int y=0;y<ny;++y)
     for (int x=0;x<nx;++x)
-      orig_image(x,y)=x;
+      orig_image(x,y)=1.25f*x;
 
   orig_image.print_summary(vcl_cout);
   orig_image.print_all(vcl_cout);
@@ -40,16 +37,16 @@ void test_normalise_image_2d()
   // create correct mean norm image
   for (int y=0;y<ny;++y)
     for (int x=0;x<nx;++x)
-      correct_mean_norm_image(x,y)=x-2;
+      correct_mean_norm_image(x,y)=1.25f*x-2.5f;
 
   // Calc Total difference over all pixels
   double diff1=0;
   for (int y=0;y<ny;++y)
     for (int x=0;x<nx;++x)
       diff1+=vcl_fabs( mean_norm_image(x,y)-
-                        correct_mean_norm_image(x,y) );
+                       correct_mean_norm_image(x,y) );
 
-  TEST("test mean normalisation",diff1<1e-6,true);
+  TEST_NEAR("test mean normalisation",diff1,0,1e-6);
 
   // test variance normalisation
   mil_var_norm_image_2d(var_norm_image, orig_image);
@@ -60,7 +57,7 @@ void test_normalise_image_2d()
   // create correct variance norm image
   for (int y=0;y<ny;++y)
     for (int x=0;x<nx;++x)
-      correct_var_norm_image(x,y)=(x-2)/ vcl_sqrt(2.0);
+      correct_var_norm_image(x,y)=(x-2.f)/ (float)vcl_sqrt(2.0);
 
   double diff2=0;
   for (int y=0;y<ny;++y)
@@ -68,7 +65,7 @@ void test_normalise_image_2d()
       diff2+=vcl_fabs( var_norm_image(x,y)-
                        correct_var_norm_image(x,y) );
 
-  TEST("test variance normalisation",diff2<1e-6,true);
+  TEST_NEAR("test variance normalisation",diff2,0,1e-6);
 }
 
 TESTLIB_DEFINE_MAIN(test_normalise_image_2d);

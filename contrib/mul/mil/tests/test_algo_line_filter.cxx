@@ -1,11 +1,8 @@
+// This is mul/mil/tests/test_algo_line_filter.cxx
 #include <vcl_iostream.h>
-#include <vcl_fstream.h>
-#include <vcl_utility.h>
-#include <vcl_cmath.h>
-
-#include <testlib/testlib_test.h>
 #include <mil/algo/mil_algo_line_filter.h>
 #include <mil/mil_image_2d_of.h>
+#include <testlib/testlib_test.h>
 
 static unsigned char black = 0, white = 10;
 
@@ -59,7 +56,7 @@ void test_algo_line_filter_byte()
   TEST("Size of line_dir",line_dir.nx()==n && line_dir.ny()==n,true);
   TEST("Size of line_str",line_str.nx()==n && line_str.ny()==n,true);
   TEST("Horizontal line",line_dir(5,5)==1,true);
-  TEST("Horizontal line str",vcl_fabs(line_str(5,5)-white)<1e-4,true);
+  TEST_NEAR("Horizontal line str",line_str(5,5),white,1e-4);
   TEST("Nearby points",line_dir(5,4)==0 && line_dir(5,6)==0,true);
 
   image.fill(black);
@@ -70,7 +67,7 @@ void test_algo_line_filter_byte()
   print_out(n, "image:", image, "line_dir:", line_dir, "line_str:", line_str);
 
   TEST("Vertical line",line_dir(5,5)==3,true);
-  TEST("Vertical line str",vcl_fabs(line_str(5,5)-white)<1e-4,true);
+  TEST_NEAR("Vertical line str",line_str(5,5),white,1e-4);
   TEST("Nearby points",line_dir(4,5)==0 && line_dir(6,5)==0,true);
 
   TEST("Left border",line_dir(0,5)==0,true);
@@ -85,7 +82,7 @@ void test_algo_line_filter_byte()
   print_out(n, "image:", image, "line_dir:", line_dir, "line_str:", line_str);
 
   TEST("Diagonal line",line_dir(5,5)==2,true);
-  TEST("Diagonal line str",vcl_fabs(line_str(5,5)-white)<1e-4,true);
+  TEST_NEAR("Diagonal line str",line_str(5,5),white,1e-4);
 
   image.fill(black);
   for (int i=0;i<n;++i) image(i,n-1-i)= white;
@@ -94,7 +91,7 @@ void test_algo_line_filter_byte()
   print_out(n, "image:", image, "line_dir:", line_dir, "line_str:", line_str);
 
   TEST("Reverse Diagonal line",line_dir(5,4)==4,true);
-  TEST("Reverse line str",vcl_fabs(line_str(5,4)-white)<1e-4,true);
+  TEST_NEAR("Reverse line str",line_str(5,4),white,1e-4);
 
 
   // ======================= dark_lines_3x3 ================
@@ -109,7 +106,7 @@ void test_algo_line_filter_byte()
   TEST("Size of line_dir",line_dir.nx()==n && line_dir.ny()==n,true);
   TEST("Size of line_str",line_str.nx()==n && line_str.ny()==n,true);
   TEST("Horizontal line",line_dir(5,5)==1,true);
-  TEST("Horizontal line str",vcl_fabs(line_str(5,5)-white)<1e-4,true);
+  TEST_NEAR("Horizontal line str",line_str(5,5),white,1e-4);
   TEST("Nearby points",line_dir(5,4)==0 && line_dir(5,6)==0,true);
 
   image.fill(white);
@@ -120,7 +117,7 @@ void test_algo_line_filter_byte()
   print_out(n, "image:", image, "line_dir:", line_dir, "line_str:", line_str);
 
   TEST("Vertical line",line_dir(5,5)==3,true);
-  TEST("Vertical line str",vcl_fabs(line_str(5,5)-white)<1e-4,true);
+  TEST_NEAR("Vertical line str",line_str(5,5),white,1e-4);
   TEST("Nearby points",line_dir(4,5)==0 && line_dir(6,5)==0,true);
 
   TEST("Left border",line_dir(0,5)==0,true);
@@ -135,7 +132,7 @@ void test_algo_line_filter_byte()
   print_out(n, "image:", image, "line_dir:", line_dir, "line_str:", line_str);
 
   TEST("Diagonal line",line_dir(5,5)==2,true);
-  TEST("Diagonal line str",vcl_fabs(line_str(5,5)-white)<1e-4,true);
+  TEST_NEAR("Diagonal line str",line_str(5,5),white,1e-4);
 
   image.fill(white);
   for (int i=0;i<n;++i) image(i,n-1-i)= black;
@@ -144,7 +141,7 @@ void test_algo_line_filter_byte()
   print_out(n, "image:", image, "line_dir:", line_dir, "line_str:", line_str);
 
   TEST("Reverse Diagonal line",line_dir(5,4)==4,true);
-  TEST("Reverse line str",vcl_fabs(line_str(5,4)-white)<1e-4,true);
+  TEST_NEAR("Reverse line str",line_str(5,4),white,1e-4);
 
   // ======================= light_lines_5x5 ================
   vcl_cout<<"----- light_lines_5x5() -------"<<vcl_endl;
@@ -158,7 +155,7 @@ void test_algo_line_filter_byte()
   TEST("Size of line_dir",line_dir.nx()==n && line_dir.ny()==n,true);
   TEST("Size of line_str",line_str.nx()==n && line_str.ny()==n,true);
   TEST("Horizontal line",line_dir(5,5)==1,true);
-  TEST("Horizontal line str",vcl_fabs(line_str(5,5)-white)<1e-4,true);
+  TEST_NEAR("Horizontal line str",line_str(5,5),white,1e-4);
 
   image.fill(black);
   line_dir.fill(77);
@@ -168,7 +165,7 @@ void test_algo_line_filter_byte()
   print_out(n, "image:", image, "line_dir:", line_dir, "line_str:", line_str);
 
   TEST("Vertical line",line_dir(5,5)==3,true);
-  TEST("Vertical line str",vcl_fabs(line_str(5,5)-white)<1e-4,true);
+  TEST_NEAR("Vertical line str",line_str(5,5),white,1e-4);
 
   TEST("Left border",line_dir(1,5)==0,true);
   TEST("Right border",line_dir(n-2,5)==0,true);
@@ -182,7 +179,7 @@ void test_algo_line_filter_byte()
   print_out(n, "image:", image, "line_dir:", line_dir, "line_str:", line_str);
 
   TEST("Diagonal line",line_dir(5,5)==2,true);
-  TEST("Diagonal line str",vcl_fabs(line_str(5,5)-white)<1e-4,true);
+  TEST_NEAR("Diagonal line str",line_str(5,5),white,1e-4);
 
   image.fill(black);
   for (int i=0;i<n;++i) image(i,n-1-i)= white;
@@ -191,7 +188,7 @@ void test_algo_line_filter_byte()
   print_out(n, "image:", image, "line_dir:", line_dir, "line_str:", line_str);
 
   TEST("Reverse Diagonal line",line_dir(5,4)==4,true);
-  TEST("Reverse line str",vcl_fabs(line_str(5,4)-white)<1e-4,true);
+  TEST_NEAR("Reverse line str",line_str(5,4),white,1e-4);
 
   // ======================= dark_lines_5x5 ================
   vcl_cout<<"----- dark_lines_5x5() -------"<<vcl_endl;
@@ -206,7 +203,7 @@ void test_algo_line_filter_byte()
   TEST("Size of line_dir",line_dir.nx()==n && line_dir.ny()==n,true);
   TEST("Size of line_str",line_str.nx()==n && line_str.ny()==n,true);
   TEST("Horizontal line",line_dir(5,5)==1,true);
-  TEST("Horizontal line str",vcl_fabs(line_str(5,5)-white)<1e-4,true);
+  TEST_NEAR("Horizontal line str",line_str(5,5),white,1e-4);
 
   image.fill(white);
   line_dir.fill(77);
@@ -216,7 +213,7 @@ void test_algo_line_filter_byte()
   print_out(n, "image:", image, "line_dir:", line_dir, "line_str:", line_str);
 
   TEST("Vertical line",line_dir(5,5)==3,true);
-  TEST("Vertical line str",vcl_fabs(line_str(5,5)-white)<1e-4,true);
+  TEST_NEAR("Vertical line str",line_str(5,5),white,1e-4);
 
   TEST("Left border",line_dir(1,5)==0,true);
   TEST("Right border",line_dir(n-2,5)==0,true);
@@ -230,7 +227,7 @@ void test_algo_line_filter_byte()
   print_out(n, "image:", image, "line_dir:", line_dir, "line_str:", line_str);
 
   TEST("Diagonal line",line_dir(5,5)==2,true);
-  TEST("Diagonal line str",vcl_fabs(line_str(5,5)-white)<1e-4,true);
+  TEST_NEAR("Diagonal line str",line_str(5,5),white,1e-4);
 
   image.fill(white);
   for (int i=0;i<n;++i) image(i,n-1-i)= 0;
@@ -239,7 +236,7 @@ void test_algo_line_filter_byte()
   print_out(n, "image:", image, "line_dir:", line_dir, "line_str:", line_str);
 
   TEST("Reverse Diagonal line",line_dir(5,4)==4,true);
-  TEST("Reverse line str",vcl_fabs(line_str(5,4)-white)<1e-4,true);
+  TEST_NEAR("Reverse line str",line_str(5,4),white,1e-4);
 }
 
 void test_algo_line_filter()
