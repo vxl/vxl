@@ -10,10 +10,10 @@
 #include <vcl/vcl_list.txx>
 
 #define VNL_SCALAR_JOIN_ITERATOR_INSTANTIATE(T)\
-template class indexed_pair<T >;\
+template class vnl_scalar_join_iterator_indexed_pair<T >;\
 template class vnl_scalar_join_iterator<T >; \
-template ostream& operator<<(ostream& s, const indexed_pair<T>& p);\
-VCL_LIST_INSTANTIATE(indexed_pair<T>)
+template ostream& operator<<(ostream& s, const vnl_scalar_join_iterator_indexed_pair<T>& p);\
+VCL_LIST_INSTANTIATE(vnl_scalar_join_iterator_indexed_pair<T>)
 
 #include <vcl/vcl_cassert.h>
 #include <vcl/vcl_iostream.h>
@@ -22,13 +22,13 @@ VCL_LIST_INSTANTIATE(indexed_pair<T>)
 // Helper class to hold the sorted arrays of indices.
 
 template <class T>
-bool indexed_pair<T>::operator == (const indexed_pair<T>& that) const { return (*that.object) == (*object); }
+bool vnl_scalar_join_iterator_indexed_pair<T>::operator == (const vnl_scalar_join_iterator_indexed_pair<T>& that) const { return (*that.object) == (*object); }
 
 template <class T>
-bool indexed_pair<T>::operator <  (const indexed_pair<T>& that) const { return (*object) < (*that.object); }
+bool vnl_scalar_join_iterator_indexed_pair<T>::operator <  (const vnl_scalar_join_iterator_indexed_pair<T>& that) const { return (*object) < (*that.object); }
 
 template <class T>
-ostream& operator<<(ostream& s, const indexed_pair<T>& p)
+ostream& operator<<(ostream& s, const vnl_scalar_join_iterator_indexed_pair<T>& p)
 {
   return s << p.original_index << " " << *(p.object) << endl;
 }
@@ -37,20 +37,20 @@ template <class T>
 vnl_scalar_join_iterator<T>::vnl_scalar_join_iterator(const vnl_matrix<T>& relation1, unsigned column1, const vnl_matrix<T>& relation2, unsigned column2):
   n1(relation1.rows()),
   n2(relation2.rows()),
-  pI1(new vcl_list<indexed_pair<T > >(n1)),
-  pI2(new vcl_list<indexed_pair<T > >(n2)),
+  pI1(new vcl_list<vnl_scalar_join_iterator_indexed_pair<T > >(n1)),
+  pI2(new vcl_list<vnl_scalar_join_iterator_indexed_pair<T > >(n2)),
   I1(*pI1),
   I2(*pI2)
 {
   // Sort on appropriate columns
   {
     for(unsigned i = 0; i < n1; ++i)
-      I1.push_back(indexed_pair<T>(&relation1(i, column1), i));
+      I1.push_back(vnl_scalar_join_iterator_indexed_pair<T>(&relation1(i, column1), i));
     I1.sort();
   }
   {
     for(unsigned i = 0; i < n2; ++i)
-      I2.push_back(indexed_pair<T>(&relation2(i, column2), i));
+      I2.push_back(vnl_scalar_join_iterator_indexed_pair<T>(&relation2(i, column2), i));
     I2.sort();
   }
 
