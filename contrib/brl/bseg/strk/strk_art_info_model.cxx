@@ -44,7 +44,7 @@ strk_art_info_model(vcl_vector<vtol_face_2d_sptr> const& faces,
   vil1_memory_image_of<float> null;
   for (vcl_vector<vtol_face_2d_sptr>::const_iterator fit = faces.begin();
        fit != faces.end(); fit++)
-    faces_.push_back(new strk_tracking_face_2d(*fit, image, null, null,null, null,0,1));
+    faces_.push_back(new strk_tracking_face_2d(*fit, image, null, null,null, null,0,1,0,0,0));
   stem_pivot_ = stem_pivot;
   //compute the arm radii
   long_arm_radius_ = arm_radius(faces_[LONG_TIP]);
@@ -61,7 +61,7 @@ strk_art_info_model(vcl_vector<vtol_face_2d_sptr> const& faces,
   vil1_memory_image_of<float> null;
   for (vcl_vector<vtol_face_2d_sptr>::const_iterator fit = faces.begin();
        fit != faces.end(); fit++)
-    faces_.push_back(new strk_tracking_face_2d(*fit, image, Ix, Iy, null, null,0,1));
+    faces_.push_back(new strk_tracking_face_2d(*fit, image, Ix, Iy, null, null,0,1,0,0,0));
   stem_pivot_ = stem_pivot;
   //compute the arm radii
   long_arm_radius_ = arm_radius(faces_[LONG_TIP]);

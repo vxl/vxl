@@ -22,14 +22,14 @@
 // \endverbatim
 //
 //-----------------------------------------------------------------------------
-#include<vbl/vbl_ref_count.h>
-#include<vbl/vbl_array_2d.h>
-#include<vnl/vnl_matrix_fixed.h>
-#include<vil1/vil1_memory_image_of.h>
-#include<vsol/vsol_line_2d_sptr.h>
-#include<vtol/vtol_intensity_face.h>
-#include<strk/strk_tracking_face_2d_sptr.h>
-
+#include <vbl/vbl_ref_count.h>
+#include <vbl/vbl_array_2d.h>
+#include <vnl/vnl_matrix_fixed.h>
+#include <vil1/vil1_memory_image_of.h>
+#include <vsol/vsol_line_2d_sptr.h>
+#include <vtol/vtol_intensity_face.h>
+#include <strk/strk_tracking_face_2d_sptr.h>
+#include <bsta/bsta_histogram.h>
 //
 //========================TRACKING_FACE_2D==================================
 //
@@ -43,9 +43,17 @@ class strk_tracking_face_2d : public vbl_ref_count
                         vil1_memory_image_of<float> const& hue,
                         vil1_memory_image_of<float> const& sat,
                         const float min_gradient,
-                        const float parzen_sigma);
+                        const float parzen_sigma,
+                        const unsigned int intensity_hist_bins,
+                        const unsigned int gradient_dir_hist_bins,
+                        const unsigned int color_hist_bins
+                        );
 
-  strk_tracking_face_2d(vtol_intensity_face_sptr const& intf);
+  strk_tracking_face_2d(vtol_intensity_face_sptr const& intf,
+                        const unsigned int intensity_hist_bins,
+                        const unsigned int gradient_dir_hist_bins,
+                        const unsigned int color_hist_bins
+                        );
   strk_tracking_face_2d(strk_tracking_face_2d_sptr const& tf);
   strk_tracking_face_2d(strk_tracking_face_2d const& tf);
   ~strk_tracking_face_2d();
@@ -76,6 +84,12 @@ class strk_tracking_face_2d : public vbl_ref_count
   void set_renyi_joint_entropy(){renyi_joint_entropy_=true;}
   void unset_renyi_joint_entropy(){renyi_joint_entropy_=false;}
   //:histogram properties
+  void set_intensity_hist_bins(const unsigned int n_bins)
+    {intensity_hist_bins_=n_bins;}
+  void set_gradient_dir_bins(const unsigned int n_bins)
+    {gradient_dir_hist_bins_ = n_bins;}
+  void set_color_dir_bins(const unsigned int n_bins)
+    {color_hist_bins_ = n_bins;}
   unsigned int intensity_hist_bins() const { return intensity_hist_bins_;}
   unsigned int gradient_dir_hist_bins() const {return gradient_dir_hist_bins_;}
   unsigned int color_hist_bins() const { return color_hist_bins_; }
@@ -165,11 +179,21 @@ class strk_tracking_face_2d : public vbl_ref_count
   void print_intensity_histograms(vil1_memory_image_of<float> const& image);
   void print_gradient_histograms(vil1_memory_image_of<float> const& Ix,
                                   vil1_memory_image_of<float> const& Iy);
-  void print_color_histograms(vil1_memory_image_of<float> const& Ix,
-                              vil1_memory_image_of<float> const& Iy);
+  void print_color_histograms(vil1_memory_image_of<float> const& hue,
+                              vil1_memory_image_of<float> const& sat);
+  bsta_histogram<float> 
+    intensity_histogram(vil1_memory_image_of<float> const& image);  
+  bsta_histogram<float> 
+    gradient_histogram(vil1_memory_image_of<float> const& Ix,
+                       vil1_memory_image_of<float> const& Iy);  
+  bsta_histogram<float> 
+    color_histogram(vil1_memory_image_of<float> const& hue,
+                    vil1_memory_image_of<float> const& sat);  
 
  private:
   // local functions
+  void init_bins();
+
   void set_gradient(vil1_memory_image_of<float> const& Ix,
                     vil1_memory_image_of<float> const& Iy);
   void set_color(vil1_memory_image_of<float> const& hue,

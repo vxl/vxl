@@ -14,6 +14,7 @@
 #include <vtol/vtol_vertex_2d.h>
 #include <btol/btol_face_algs.h>
 #include <brip/brip_vil1_float_ops.h>
+#include <bsta/bsta_histogram.h>
 #include <strk/strk_tracking_face_2d.h>
 
 //Gives a sort on mutual information decreasing order
@@ -131,6 +132,7 @@ void strk_info_tracker::set_initial_model(vtol_face_2d_sptr const& face)
   initial_model_ = face;
 }
 
+
 //--------------------------------------------------------------------------
 //: Initialize the info_tracker
 bool strk_info_tracker::init()
@@ -151,7 +153,13 @@ bool strk_info_tracker::init()
   tf = new strk_tracking_face_2d(initial_model_, image_0_,
                                  Ix_0_, Iy_0_, hue_0_, sat_0_,
                                  min_gradient_,
-                                 parzen_sigma_);
+                                 parzen_sigma_,
+                                 intensity_hist_bins_,
+                                 gradient_dir_hist_bins_,
+                                 color_hist_bins_
+                                 );
+
+  initial_tf_ = tf;
   if (renyi_joint_entropy_)
     tf->set_renyi_joint_entropy();
 
@@ -173,6 +181,7 @@ generate_randomly_positioned_sample(strk_tracking_face_2d_sptr const& seed)
   float s = (2.f*scale_range_)*float(vcl_rand()/(RAND_MAX+1.0)) - scale_range_;
   float scale = 1+s;
   strk_tracking_face_2d* tf = new strk_tracking_face_2d(seed);
+ 
   tf->transform(tx, ty, theta, scale);
   return tf;
 }
@@ -196,9 +205,10 @@ print_tracking_bounds(vcl_vector<strk_tracking_face_2d_sptr> const& faces)
   strk_tracking_face_2d_sptr f = faces[0];
   float search_area = (xmax-xmin)*(ymax-ymin);
   float R = f->Npix()/search_area;
-
-  vcl_cout << "S[(" << xmin << ' ' << xmax << ")(" << ymin << ' ' << ymax
-           << ")]= " << search_area << ", area ratio = " << R << '\n';
+#if 0
+   vcl_cout << "S[(" << xmin << ' ' << xmax << ")(" << ymin << ' ' << ymax
+            << ")]= " << search_area << ", area ratio = " << R << '\n';
+#endif
 }
 
 //--------------------------------------------------------------------------
@@ -257,7 +267,11 @@ clone_and_refresh_data(strk_tracking_face_2d_sptr const& sample)
     sample->face()->cast_to_face_2d();
   strk_tracking_face_2d_sptr tf;
   tf = new strk_tracking_face_2d(f, image_i_, Ix_i_, Iy_i_, hue_i_, sat_i_,
-                                 min_gradient_, parzen_sigma_);
+                                 min_gradient_, parzen_sigma_,
+                                 intensity_hist_bins_,
+                                 gradient_dir_hist_bins_,
+                                 color_hist_bins_
+                                 );
   if (renyi_joint_entropy_)
     tf->set_renyi_joint_entropy();
   return tf;
@@ -385,7 +399,12 @@ void strk_info_tracker::evaluate_info()
     new strk_tracking_face_2d(initial_model_, image_0_,
                               Ix_0_, Iy_0_, hue_0_, sat_0_,
                               min_gradient_,
-                              parzen_sigma_);
+                              parzen_sigma_,
+                              intensity_hist_bins_,
+                              gradient_dir_hist_bins_,
+                              color_hist_bins_
+                              );
+ 
   if (renyi_joint_entropy_)
     tf->set_renyi_joint_entropy();
 
@@ -470,15 +489,24 @@ construct_background_faces(vtol_face_2d_sptr const& current_model,
                                      Ix_0_, Iy_0_,
                                      hue_0_, sat_0_,
                                      min_gradient_,
-                                     parzen_sigma_);
+                                     parzen_sigma_,
+                                     intensity_hist_bins_,
+                                     gradient_dir_hist_bins_,
+                                     color_hist_bins_
+                                     );
     else
       tf = new strk_tracking_face_2d(f, image_i_,
                                      Ix_i_, Iy_i_,
                                      hue_i_, sat_i_,
                                      min_gradient_,
-                                     parzen_sigma_);
+                                     parzen_sigma_,
+                                     intensity_hist_bins_,
+                                     gradient_dir_hist_bins_,
+                                     color_hist_bins_
+                                     );
     if (!tf->Npix())
       continue;
+   
     if (renyi_joint_entropy_)
       tf->set_renyi_joint_entropy();
     tf->compute_mutual_information(image_i_,
@@ -498,4 +526,35 @@ strk_info_tracker::get_background_faces(vcl_vector<vtol_face_2d_sptr>& faces)
   for (vcl_vector<strk_tracking_face_2d_sptr>::iterator fit = background_faces_.begin(); fit != background_faces_.end(); fit++)
     faces.push_back((*fit)->face()->cast_to_face_2d());
   return true;
+}
+//: Assemble the intensity, gradient and color histograms into a single vector
+//  |intensity|gradient|color|
+
+vcl_vector<float> strk_info_tracker::histograms()
+{
+  strk_tracking_face_2d_sptr f = current_samples_[0];
+    //make the color index for display |intensity|gradient|color
+  unsigned int ibins = intensity_hist_bins_;
+  unsigned int gbins = gradient_dir_hist_bins_;
+  unsigned int cbins = color_hist_bins_;
+  unsigned int nbins = ibins + gbins + cbins;
+  vcl_vector<float> out(nbins, 0.0);
+ 
+  bsta_histogram<float> int_hist = f->intensity_histogram(image_i_);
+  for(unsigned int i = 0; i<ibins; ++i)
+    out[i]=int_hist.p(i);
+
+  if(gradient_info_)
+    { 
+      bsta_histogram<float> grad_hist = f->gradient_histogram(Ix_i_, Iy_i_);
+      for(unsigned int i = 0; i<gbins; ++i)
+	  out[i+ibins]=grad_hist.p(i);
+    }
+  if(color_info_)
+    {
+      bsta_histogram<float> color_hist = f->gradient_histogram(hue_i_, sat_i_);
+      for(unsigned int i = 0; i<cbins; ++i)
+      out[i+ibins+gbins]=color_hist.p(i);
+    }
+  return out;
 }

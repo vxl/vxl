@@ -25,6 +25,9 @@ class strk_info_tracker_params : public gevd_param_mixin
                            const bool color_info = false,
                            const float min_gradient = 0,
                            const float parzen_sigma = 0,
+                           const unsigned int intensity_hist_bins = 16,
+                           const unsigned int gradient_dir_hist_bins = 8,
+                           const unsigned int color_hist_bins = 8,
                            const bool use_background = false,
                            const bool renyi_joint_entropy = false,
                            const bool verbose = false,
@@ -46,6 +49,9 @@ class strk_info_tracker_params : public gevd_param_mixin
                   bool color_info,
                   float min_gradient,
                   float parzen_sigma,
+                  unsigned int intensity_hist_bins,
+                  unsigned int gradient_dir_hist_bins,
+                  unsigned int color_hist_bins,
                   bool use_background,
                   bool renyi_joint_entropy,
                   bool verbose,
@@ -63,6 +69,9 @@ class strk_info_tracker_params : public gevd_param_mixin
   bool color_info_;         //!< Combine color and intensity info
   float min_gradient_;      //!< minimum gradient magnitude to be considered
   float parzen_sigma_;      //!< smoothing for the histogram density
+  unsigned int intensity_hist_bins_; //!< number of intensity histogram bins
+  unsigned int gradient_dir_hist_bins_;//!< number of grad dir histogram bins
+  unsigned int color_hist_bins_;//!< number of color histogram bins
   bool use_background_;     //!< employ a background model
   bool renyi_joint_entropy_;//!< use renyi entropy for joint distributions
   bool verbose_;            //!< informative messages to cout

@@ -25,6 +25,9 @@ strk_info_tracker_params(const strk_info_tracker_params& tp)
              tp.color_info_,
              tp.min_gradient_,
              tp.parzen_sigma_,
+             tp.intensity_hist_bins_,
+             tp.gradient_dir_hist_bins_,
+             tp.color_hist_bins_,
              tp.use_background_,
              tp.renyi_joint_entropy_,
              tp.verbose_,
@@ -41,6 +44,9 @@ strk_info_tracker_params(const int n_samples,
                          const bool color_info,
                          const float min_gradient,
                          const float parzen_sigma,
+                         const unsigned int intensity_hist_bins,
+                         const unsigned int gradient_dir_hist_bins,
+                         const unsigned int color_hist_bins,
                          const bool use_background,
                          const bool renyi_joint_entropy,
                          const bool verbose,
@@ -55,6 +61,9 @@ strk_info_tracker_params(const int n_samples,
              color_info,
              min_gradient,
              parzen_sigma,
+             intensity_hist_bins,
+             gradient_dir_hist_bins,
+             color_hist_bins,
              use_background,
              renyi_joint_entropy,
              verbose,
@@ -70,6 +79,9 @@ void strk_info_tracker_params::InitParams(int n_samples,
                                           bool color_info,
                                           float min_gradient,
                                           float parzen_sigma,
+                                          unsigned int intensity_hist_bins,
+                                          unsigned int gradient_dir_hist_bins,
+                                          unsigned int color_hist_bins,
                                           bool use_background,
                                           bool renyi_joint_entropy,
                                           bool verbose,
@@ -84,6 +96,9 @@ void strk_info_tracker_params::InitParams(int n_samples,
   color_info_ = color_info;
   min_gradient_ = min_gradient;
   parzen_sigma_ = parzen_sigma;
+  intensity_hist_bins_=intensity_hist_bins; 
+  gradient_dir_hist_bins_=gradient_dir_hist_bins;
+  color_hist_bins_=color_hist_bins;
   use_background_ =   use_background;
   renyi_joint_entropy_ = renyi_joint_entropy;
   verbose_ = verbose;
@@ -120,6 +135,9 @@ vcl_ostream& operator << (vcl_ostream& os, const strk_info_tracker_params& tp)
      << "color_info " << tp.color_info_ << vcl_endl
      << "min_gradient " << tp.min_gradient_ << vcl_endl
      << "parzen_sigma " << tp.parzen_sigma_ << vcl_endl
+     << "n_intensity_bins " << tp.intensity_hist_bins_ << vcl_endl
+     << "n_gradient_dir_bins " << tp.gradient_dir_hist_bins_ << vcl_endl
+     << "n_color_bins " << tp.color_hist_bins_ << vcl_endl
      << "use background model " << tp.use_background_ << vcl_endl
      << "renyi joint entropy " << tp.renyi_joint_entropy_ << vcl_endl
      << "verbose " << tp.verbose_ << vcl_endl

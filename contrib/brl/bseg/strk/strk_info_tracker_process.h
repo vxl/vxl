@@ -27,17 +27,28 @@ class strk_info_tracker_process : public vpro_video_process
   //: track to next frame
   virtual bool execute();
   virtual bool finish();
-  bool set_output_file(vcl_string const& file_name);
+  bool set_track_output_file(vcl_string const& file_name);
+  bool set_hist_output_file(vcl_string const& file_name);
+
+  //: special methods
+  // for display
+  vcl_vector<unsigned char> color_index(){return color_index_;}
  private:
+  bool write_track_file();
+  bool write_hist_file();
   //members
   bool write_tracked_faces_;
+  bool write_tracked_hist_;
   vcl_string track_file_;
+  vcl_string hist_file_;
   bool failure_;
   bool first_frame_;
   strk_info_tracker tracker_;
   int n_verts_;
   int start_frame_;
   vcl_vector<vtol_face_2d_sptr> tracked_faces_;
+  vcl_vector<vcl_vector<float> > tracked_hist_;
+  vcl_vector<unsigned char> color_index_;
 };
 
 

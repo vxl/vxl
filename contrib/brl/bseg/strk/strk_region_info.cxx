@@ -177,7 +177,7 @@ void strk_region_info::evaluate_info()
     = new strk_tracking_face_2d(f, image_0_,
                                 Ix_0_, Iy_0_, hue_0_, sat_0_,
                                 min_gradient_,
-                                parzen_sigma_);
+                                parzen_sigma_,0,0,0);
   if (!tf->compute_mutual_information(image_i_, Ix_i_, Iy_i_, hue_i_, sat_i_))
     return;
 
@@ -212,7 +212,7 @@ void strk_region_info::evaluate_background_info()
     = new strk_tracking_face_2d(face_0_, image_0_,
                                 Ix_0_, Iy_0_, hue_0_, sat_0_,
                                 min_gradient_,
-                                parzen_sigma_);
+                                parzen_sigma_,0,0,0);
   tf->print_intensity_histograms(image_0_);
 
   if (!background_face_)
@@ -222,7 +222,7 @@ void strk_region_info::evaluate_background_info()
     = new strk_tracking_face_2d(background_face_, image_0_,
                                 Ix_0_, Iy_0_, hue_0_, sat_0_,
                                 min_gradient_,
-                                parzen_sigma_);
+                                parzen_sigma_,0,0,0);
   bf->print_intensity_histograms(image_0_);
   float x = tf->intensity_mutual_info_diff(bf, image_0_, true);
   vcl_cout << "intensity_mutual_info_diff = " << x << vcl_endl;
