@@ -3,8 +3,8 @@
 // Tests for vnl_finite_field_number<N>, written by Peter Vanroose, 6 May 2002.
 
 #include <vcl_iostream.h>
-#include <vnl/vnl_finite_field_number.h>
 #include <vnl/vnl_test.h>
+#include <vnl/vnl_finite_field_number.h>
 
 template <int N>
 void test_field(vnl_finite_field_number<N>) {
