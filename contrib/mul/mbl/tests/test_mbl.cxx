@@ -16,6 +16,7 @@
 #include <mbl/tests/test_gamma.cxx>
 #include <mbl/tests/test_index_sort.cxx>
 #include <mbl/tests/test_lru_cache.cxx>
+#include <mbl/mbl_print.h>
 
 #undef TESTMAIN
 #define TESTMAIN(x) int main() \

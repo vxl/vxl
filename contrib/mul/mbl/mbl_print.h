@@ -108,9 +108,55 @@ void mbl_print_vcl_vector_unsigned(const vcl_vector<unsigned>* v)
   vcl_cout << ")\n";
 }
 
+//: Print the first entries of an array of unsigned to vcl_cout
+// print at most n entries
+void mbl_print_vcl_vector_int(const vcl_vector<int>& v, int n)
+{
+  if (n>v.size()) n=v.size();
+  vcl_cout << "( ";
+  for (int i=0; i<n ;++i) vcl_cout << (v)[i] << " ";
+  if (v.size()>n) vcl_cout << "... ";
+  vcl_cout << ")\n";
+}
+
+//: Print the first entries of an array of unsigned to vcl_cout
+// print at most 5 entries
+void mbl_print_vcl_vector_int(const vcl_vector<int>& v)
+{
+  int n = 5;
+  if (n>v.size()) n=v.size();
+  vcl_cout << "( ";
+  for (int i=0; i<n ;++i) vcl_cout << (v)[i] << " ";
+  if (v.size()>n) vcl_cout << "... ";
+  vcl_cout << ")\n";
+}
+
+//: Print the first entries of an array of unsigned to vcl_cout
+// print at most n entries
+void mbl_print_vcl_vector_int(const vcl_vector<int>* v, int n)
+{
+  if (n>v->size()) n=v->size();
+  vcl_cout << "( ";
+  for (int i=0; i<n ;++i) vcl_cout << (*v)[i] << " ";
+  if (v->size()>n) vcl_cout << "... ";
+  vcl_cout << ")\n";
+}
+
+//: Print the first entries of an array of unsigned to vcl_cout
+// print at most 5 entries
+void mbl_print_vcl_vector_int(const vcl_vector<int>* v)
+{
+  int n = 5;
+  if (n>v->size()) n=v->size();
+  vcl_cout << "( ";
+  for (int i=0; i<n ;++i) vcl_cout << (*v)[i] << " ";
+  if (v->size()>n) vcl_cout << "... ";
+  vcl_cout << ")\n";
+}
+
 //: Print the first entries of the a vector to vcl_cout.
 // Print at most n entries
-void mbl_print_vnl_vector(const vnl_vector<double>* v, int n)
+void mbl_print_vnl_vecd(const vnl_vector<double>* v, int n)
 {
   if (n>v->size()) n=v->size();
   vcl_cout << "( ";
@@ -121,7 +167,7 @@ void mbl_print_vnl_vector(const vnl_vector<double>* v, int n)
 
 //: Print the first entries of the a vector to vcl_cout.
 // Print at most 5 entries
-void mbl_print_vnl_vector(const vnl_vector<double>* v)
+void mbl_print_vnl_vecd(const vnl_vector<double>* v)
 {
   int n = 5;
   if (n>v->size()) n=v->size();
@@ -133,7 +179,7 @@ void mbl_print_vnl_vector(const vnl_vector<double>* v)
 
 //: Print the first entries of the a matrix to vcl_cout.
 // Print at most m x n entries
-void mbl_print_vnl_matrix(const vnl_matrix<double>* A, int m, int n)
+void mbl_print_vnl_matd(const vnl_matrix<double>* A, int m, int n)
 {
   vcl_cout << A->rows() << " by " << A->columns() << " Matrix\n";
 
@@ -154,7 +200,7 @@ void mbl_print_vnl_matrix(const vnl_matrix<double>* A, int m, int n)
 
 //: Print the first entries of a matrix to vcl_cout.
 // Print at most 5 x 5 entries
-void mbl_print_vnl_matrix(const vnl_matrix<double>* A)
+void mbl_print_vnl_matd(const vnl_matrix<double>* A)
 {
   int m = 5; int n = 5;
   vcl_cout << A->rows() << " by " << A->columns() << " Matrix\n";
