@@ -114,18 +114,8 @@ vcl_ostream& vnl_matlab_print(vcl_ostream& s,
 extern "C"
 void vnl_dbprintmx(vnl_matrix<double> const& p)
 {
-#if defined(VCL_GCC_27)
-  // a mysterious error :
-  //vnl_matlab.cxx: In function `void dbprintmx(const class vnl_matrix<double> &)':
-  //336: call of overloaded `vnl_matlab_print' is ambiguous
-  //216: candidates are: vnl_matlab_print(ostream &, const vnl_matrix<double> &, const char *)
-  //                     vnl_matlab_print(ostream &, const vnl_matrix<double> &, const char *)
-  vcl_cerr << "[" << vcl_endl << p << "]" << vcl_endl;
-  abort();
-#else
   // why the cast? is it a const_cast?
   vnl_matlab_print(vcl_cerr, p, (char const*)"M", vnl_matlab_print_format_default);
-#endif
 }
 
 //--------------------------------------------------------------------------------
