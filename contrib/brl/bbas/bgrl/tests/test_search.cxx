@@ -57,19 +57,16 @@ void test_search()
   the_graph->add_edge(vertex_5, vertex_3);
 
   bgrl_vertex_sptr default_order[] = {vertex_1, vertex_2, vertex_3, vertex_4, vertex_5};
-  TEST("Testing default iterator", 
-       test_iterator(the_graph->begin(), default_order ),
-       true);
+  bgrl_graph::iterator default_itr = the_graph->begin();
+  TEST("Testing default iterator", test_iterator(default_itr, default_order ), true);
 
   bgrl_vertex_sptr depth_order[] = {vertex_4, vertex_5, vertex_3, vertex_2, vertex_1};
-  TEST("Testing depth_iterator", 
-       test_iterator(the_graph->begin(new bgrl_depth_search(vertex_4)), depth_order ),
-       true);
+  bgrl_graph::iterator depth_itr = the_graph->begin(new bgrl_depth_search(vertex_4));
+  TEST("Testing depth_iterator",  test_iterator(depth_itr, depth_order ), true);
 
   bgrl_vertex_sptr breadth_order[] = {vertex_4, vertex_2, vertex_3, vertex_5, vertex_1};
-  TEST("Testing breadth_iterator",  
-       test_iterator(the_graph->begin(new bgrl_breadth_search(vertex_4)), breadth_order ),
-       true);
+  bgrl_graph::iterator breadth_itr = the_graph->begin(new bgrl_breadth_search(vertex_4));
+  TEST("Testing breadth_iterator", test_iterator(breadth_itr, breadth_order ), true);
 
 }
 
