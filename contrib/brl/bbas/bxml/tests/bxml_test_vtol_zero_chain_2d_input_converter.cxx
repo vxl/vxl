@@ -20,19 +20,18 @@ static void bxml_test_vtol_zero_chain_2d_input_converter(int argc, char * argv[]
        pit != pts.end(); pit++)
   {
     vsol_spatial_object_2d* so  = (*pit).get_vsol_spatial_object();
-    vcl_cout << "Spatial Type " << so->spatial_type() << vcl_endl;
-    if (so->spatial_type()==1)
+    vcl_cout << "Spatial Type " << so->get_name() << vcl_endl;
+    vtol_topology_object* to = so->cast_to_topology_object();
+    if (to)
     {
-      vtol_topology_object* to = so->cast_to_topology_object();
-      vtol_zero_chain* zc = to->cast_to_zero_chain();
-      vtol_zero_chain_sptr zc2d = zc->cast_to_zero_chain();
-      vcl_cout << "zero_chain " << *zc2d << vcl_endl;
+      vtol_zero_chain_sptr zc = to->cast_to_zero_chain();
+      vcl_cout << "zero_chain " << *zc << vcl_endl;
       vcl_vector<vtol_vertex_sptr>* verts = zc->vertices();
       TEST("verts!=0", !verts, false);
       if (verts)
       {
-        vtol_vertex_2d_sptr v2d = zc2d->v0()->cast_to_vertex_2d();
-        vcl_cout << "v0" << *(zc2d->v0()->cast_to_vertex_2d()) << vcl_endl;
+        vtol_vertex_2d_sptr v2d = zc->v0()->cast_to_vertex_2d();
+        vcl_cout << "v0" << *(zc->v0()->cast_to_vertex_2d()) << vcl_endl;
         TEST_NEAR("v2d->x() == 191.468", v2d->x(), 191.468, 1e-3);
       }
     }

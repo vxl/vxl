@@ -14,12 +14,12 @@ void print_gp_point(bxml_generic_ptr& gp)
     vcl_cout << " null so in gp\n";
     return;
   }
-  if (so->spatial_type()!=2)
+  vsol_point_2d* p = so->cast_to_point();
+  if (!p)
   {
     vcl_cout << " so is not a point\n";
     return;
   }
-  vsol_point_2d* p = (vsol_point_2d*)so;
   vcl_cout << "point = (" << p->x() << ' ' << p->y() << ")\n";
 }
 
