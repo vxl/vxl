@@ -158,7 +158,7 @@ public:
   bool empty_row(unsigned int r) const { return elements[r].empty(); }
 
   //: This is occasionally useful.
-  double sum_row(unsigned int r);
+  T sum_row(unsigned int r);
 
   //: Useful for normalizing row sums in convolution operators
   void scale_row(unsigned int r, T scale);

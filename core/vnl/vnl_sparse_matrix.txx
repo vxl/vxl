@@ -229,7 +229,7 @@ void vnl_sparse_matrix<T>::mult(vnl_vector<T> const& rhs, vnl_vector<T>& result)
   assert(rhs.size() == columns());
 
   result.resize( rows() );
-  result.fill(0.0);
+  result.fill(T(0));
 
   int rhs_row_id =0;
   vcl_vector<row>::const_iterator lhs_row_iter = elements.begin();
@@ -256,7 +256,7 @@ void vnl_sparse_matrix<T>::pre_mult(const vnl_vector<T>& lhs, vnl_vector<T>& res
 
   // Resize and clear result vector
   result.resize( columns() );
-  result.fill(0.0);
+  result.fill(T(0));
 
   // Now, iterate over lhs values and rows of rhs
   unsigned lhs_col_id = 0;
@@ -412,7 +412,7 @@ template <class T>
 void vnl_sparse_matrix<T>::diag_AtA(vnl_vector<T> & result) const
 {
   result.resize( columns() );
-  result.fill(0.0);
+  result.fill(T(0));
 
   vcl_vector<row>::const_iterator row_iter = elements.begin();
   for ( ; row_iter != elements.end(); ++row_iter) {
@@ -465,11 +465,11 @@ vnl_sparse_matrix<T>& vnl_sparse_matrix<T>::vcat(vnl_sparse_matrix<T> const& A)
 //: This is occasionally useful.  Sums a row of the matrix
 // efficiently.
 template <class T>
-double vnl_sparse_matrix<T>::sum_row(unsigned int r)
+T vnl_sparse_matrix<T>::sum_row(unsigned int r)
 {
   assert(r < rows());
   row & rw = elements[r];
-  double sum = 0.0;
+  T sum = T(0);
   for (row::iterator ri = rw.begin(); ri != rw.end(); ++ri)
     sum += (*ri).second;
 
