@@ -62,7 +62,7 @@ const float    vnl_math::maxfloat     = 3.40282346638528860e+38F;
 
 //--------------------------------------------------------------------------------
 
-#if defined(__GNUC__) || defined(VCL_WIN32)
+#if (defined(__GNUC__) && !defined(__alpha__)) || defined(VCL_WIN32)
 //: Return true iff x is "Not a Number"
 bool vnl_math_isnan(float x) { return x != x; }
 //: Return true iff x is "Not a Number"
