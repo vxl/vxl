@@ -144,9 +144,8 @@ void vpdfl_axis_gaussian_builder::weighted_build(vpdfl_pdf_base& model,
   data.reset();
   unsigned long n_dims = data.current().size();
 
-  double wt = wts[0];
-  vnl_vector<double> sum = wt * data.current();
   double w_sum = wts[0];
+  vnl_vector<double> sum = data.current(); sum *= w_sum;
 
   for (unsigned long i=1;i<n_samples;i++)
   {
@@ -261,8 +260,8 @@ void vpdfl_axis_gaussian_builder::b_read(vsl_b_istream& bfs)
       vsl_b_read(bfs,min_var_);
       break;
     default:
-      vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vpdfl_axis_gaussian_builder &)\n";
-      vcl_cerr << "           Unknown version number "<< version << vcl_endl;
+      vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vpdfl_axis_gaussian_builder &)\n"
+               << "           Unknown version number "<< version << vcl_endl;
       bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
       return;
   }
