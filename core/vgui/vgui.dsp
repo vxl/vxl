@@ -160,22 +160,17 @@ SOURCE=.\Templates/vcl_vector+vgui_observer~-.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=.\Templates/vcl_vector+vgui_polytab+-item-.cxx
+SOURCE=.\Templates/vcl_vector+vgui_poly_tableau+-item-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=.\Templates/vcl_vector+vgui_rubberbander_sptr-.cxx
+SOURCE=.\Templates/vcl_vector+vgui_rubberband_tableau_sptr-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=.\Templates/vcl_vector+vgui_slab~-.cxx
-
-# End Source File
-# Begin Source File
-
-SOURCE=.\Templates/vcl_vector+vgui_slot-.cxx
+SOURCE=.\Templates/vcl_vector+vgui_parent_child_link-.cxx
 
 # End Source File
 # Begin Source File
@@ -220,12 +215,12 @@ SOURCE=.\Templates/vcl_vector+vgui_toolkit~-.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=.\Templates/vcl_vector+vgui_tview+-icon-.cxx
+SOURCE=.\Templates/vcl_vector+vgui_tview_tableau+-icon-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=.\Templates/vgui_command_simple+vgui_active_visible-.cxx
+SOURCE=.\Templates/vgui_command_simple+vgui_active_tableau-.cxx
 
 # End Source File
 # Begin Source File
@@ -325,11 +320,6 @@ SOURCE=.\internals/vgui_simple_field.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=.\internals/vgui_slot_data.cxx
-
-# End Source File
-# Begin Source File
-
 SOURCE=.\internals/vgui_string_field.cxx
 
 # End Source File
@@ -350,17 +340,7 @@ SOURCE=.\vgui.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=.\vgui_active_visible.cxx
-
-# End Source File
-# Begin Source File
-
 SOURCE=.\vgui_adaptor.cxx
-
-# End Source File
-# Begin Source File
-
-SOURCE=.\vgui_blackbox.cxx
 
 # End Source File
 # Begin Source File
@@ -400,11 +380,6 @@ SOURCE=.\vgui_command.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=.\vgui_composite.cxx
-
-# End Source File
-# Begin Source File
-
 SOURCE=.\vgui_debug_tableau.cxx
 
 # End Source File
@@ -420,42 +395,12 @@ SOURCE=.\vgui_dialog.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=.\vgui_displaybase.cxx
-
-# End Source File
-# Begin Source File
-
-SOURCE=.\vgui_displaylist2D.cxx
-
-# End Source File
-# Begin Source File
-
-SOURCE=.\vgui_displaylist3D.cxx
-
-# End Source File
-# Begin Source File
-
 SOURCE=.\vgui_drag_mixin.cxx
 
 # End Source File
 # Begin Source File
 
 SOURCE=.\vgui_drag_tableau.cxx
-
-# End Source File
-# Begin Source File
-
-SOURCE=.\vgui_easy2D.cxx
-
-# End Source File
-# Begin Source File
-
-SOURCE=.\vgui_easy3D.cxx
-
-# End Source File
-# Begin Source File
-
-SOURCE=.\vgui_enhance.cxx
 
 # End Source File
 # Begin Source File
@@ -471,11 +416,6 @@ SOURCE=.\vgui_event.cxx
 # Begin Source File
 
 SOURCE=.\vgui_event_condition.cxx
-
-# End Source File
-# Begin Source File
-
-SOURCE=.\vgui_event_loop.cxx
 
 # End Source File
 # Begin Source File
@@ -505,11 +445,6 @@ SOURCE=.\vgui_grid_tableau.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=.\vgui_image_blender.cxx
-
-# End Source File
-# Begin Source File
-
 SOURCE=.\vgui_image_renderer.cxx
 
 # End Source File
@@ -521,16 +456,6 @@ SOURCE=.\vgui_image_tableau.cxx
 # Begin Source File
 
 SOURCE=.\vgui_key.cxx
-
-# End Source File
-# Begin Source File
-
-SOURCE=.\vgui_listmanager2D.cxx
-
-# End Source File
-# Begin Source File
-
-SOURCE=.\vgui_load.cxx
 
 # End Source File
 # Begin Source File
@@ -575,11 +500,6 @@ SOURCE=.\vgui_pixel.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=.\vgui_polytab.cxx
-
-# End Source File
-# Begin Source File
-
 SOURCE=.\vgui_popup_params.cxx
 
 # End Source File
@@ -600,11 +520,6 @@ SOURCE=.\vgui_roi_tableau.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=.\vgui_rubberbander.cxx
-
-# End Source File
-# Begin Source File
-
 SOURCE=.\vgui_section_buffer.cxx
 
 # End Source File
@@ -621,16 +536,6 @@ SOURCE=.\vgui_section_render.cxx
 # Begin Source File
 
 SOURCE=.\vgui_shell_tableau.cxx
-
-# End Source File
-# Begin Source File
-
-SOURCE=.\vgui_slab.cxx
-
-# End Source File
-# Begin Source File
-
-SOURCE=.\vgui_slot.cxx
 
 # End Source File
 # Begin Source File
@@ -705,27 +610,7 @@ SOURCE=.\vgui_toolkit.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=.\vgui_tview.cxx
-
-# End Source File
-# Begin Source File
-
-SOURCE=.\vgui_tview_launcher.cxx
-
-# End Source File
-# Begin Source File
-
 SOURCE=.\vgui_utils.cxx
-
-# End Source File
-# Begin Source File
-
-SOURCE=.\vgui_viewer2D.cxx
-
-# End Source File
-# Begin Source File
-
-SOURCE=.\vgui_viewer3D.cxx
 
 # End Source File
 # Begin Source File
@@ -770,136 +655,6 @@ SOURCE=.\vgui_register_all.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=.\impl/Fl/vgui_Fl.cxx
-
-# End Source File
-# Begin Source File
-
-SOURCE=.\impl/Fl/vgui_Fl_adaptor.cxx
-
-# End Source File
-# Begin Source File
-
-SOURCE=.\impl/Fl/vgui_Fl_dialog_impl.cxx
-
-# End Source File
-# Begin Source File
-
-SOURCE=.\impl/Fl/vgui_Fl_statusbar.cxx
-
-# End Source File
-# Begin Source File
-
-SOURCE=.\impl/Fl/vgui_Fl_tag.cxx
-
-# End Source File
-# Begin Source File
-
-SOURCE=.\impl/Fl/vgui_Fl_utils.cxx
-
-# End Source File
-# Begin Source File
-
-SOURCE=.\impl/Fl/vgui_Fl_window.cxx
-
-# End Source File
-# Begin Source File
-
-SOURCE=.\impl/SDL/vgui_SDL.cxx
-
-# End Source File
-# Begin Source File
-
-SOURCE=.\impl/SDL/vgui_SDL_adaptor.cxx
-
-# End Source File
-# Begin Source File
-
-SOURCE=.\impl/SDL/vgui_SDL_factory.cxx
-
-# End Source File
-# Begin Source File
-
-SOURCE=.\impl/SDL/vgui_SDL_tag.cxx
-
-# End Source File
-# Begin Source File
-
-SOURCE=.\impl/SDL/vgui_SDL_window.cxx
-
-# End Source File
-# Begin Source File
-
-SOURCE=.\impl/X/vgui_X_utils.cxx
-
-# End Source File
-# Begin Source File
-
-SOURCE=.\impl/Xm/Templates/vcl_vector+Widget-.cxx
-
-# End Source File
-# Begin Source File
-
-SOURCE=.\impl/Xm/vgui_Xm.cxx
-
-# End Source File
-# Begin Source File
-
-SOURCE=.\impl/Xm/vgui_Xm_adaptor.cxx
-
-# End Source File
-# Begin Source File
-
-SOURCE=.\impl/Xm/vgui_Xm_dialog_impl.cxx
-
-# End Source File
-# Begin Source File
-
-SOURCE=.\impl/Xm/vgui_Xm_statusbar.cxx
-
-# End Source File
-# Begin Source File
-
-SOURCE=.\impl/Xm/vgui_Xm_tag.cxx
-
-# End Source File
-# Begin Source File
-
-SOURCE=.\impl/Xm/vgui_Xm_utils.cxx
-
-# End Source File
-# Begin Source File
-
-SOURCE=.\impl/Xm/vgui_Xm_window.cxx
-
-# End Source File
-# Begin Source File
-
-SOURCE=.\impl/glX/Templates/vcl_vector+vgui_glX_window~-.cxx
-
-# End Source File
-# Begin Source File
-
-SOURCE=.\impl/glX/vgui_glX.cxx
-
-# End Source File
-# Begin Source File
-
-SOURCE=.\impl/glX/vgui_glX_adaptor.cxx
-
-# End Source File
-# Begin Source File
-
-SOURCE=.\impl/glX/vgui_glX_tag.cxx
-
-# End Source File
-# Begin Source File
-
-SOURCE=.\impl/glX/vgui_glX_window.cxx
-
-# End Source File
-# Begin Source File
-
 SOURCE=.\impl/glut/Templates/vcl_vector+vgui_glut_adaptor~-.cxx
 
 # End Source File
@@ -935,11 +690,6 @@ SOURCE=.\impl/glut/vgui_glut_popup_impl.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=.\impl/glut/vgui_glut_slab.cxx
-
-# End Source File
-# Begin Source File
-
 SOURCE=.\impl/glut/vgui_glut_tag.cxx
 
 # End Source File
@@ -951,6 +701,16 @@ SOURCE=.\impl/glut/vgui_glut_window.cxx
 # Begin Source File
 
 SOURCE=.\impl/gtk/Templates/vcl_vector+GtkWidget~-.cxx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates/vcl_algorithm+vgui_rubberband_tableau_sptr-.cxx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates/vcl_vector+vgui_easy2D_tableau_sptr-.cxx
 
 # End Source File
 # Begin Source File
@@ -1035,11 +795,6 @@ SOURCE=.\impl/mfc/vgui_mfc_tag.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=.\impl/mfc/vgui_mfc_util.cxx
-
-# End Source File
-# Begin Source File
-
 SOURCE=.\impl/mfc/vgui_mfc_utils.cxx
 
 # End Source File
@@ -1106,6 +861,106 @@ SOURCE=.\impl/qt/vgui_qt_menu_mocced.cxx
 # Begin Source File
 
 SOURCE=.\impl/qt/vgui_qt_statusbar_mocced.cxx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\internals/vgui_parent_child_link_data.cxx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgui_active_tableau.cxx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgui_blackbox_tableau.cxx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgui_blender_tableau.cxx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgui_composite_tableau.cxx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgui_displaybase_tableau.cxx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgui_displaylist3D_tableau.cxx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgui_easy2D_tableau.cxx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgui_enhance_tableau.cxx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgui_listmanager2D_tableau.cxx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgui_parent_child_link.cxx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgui_poly_tableau.cxx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgui_rubberband_tableau.cxx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgui_tview_launcher_tableau.cxx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgui_tview_tableau.cxx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgui_viewer2D_tableau.cxx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgui_displaylist2D_tableau.cxx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgui_easy3D_tableau.cxx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgui_loader_tableau.cxx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgui_viewer3D_tableau.cxx
 
 # End Source File
 # End Group
@@ -1193,11 +1048,6 @@ SOURCE=.\internals/vgui_simple_field.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\internals/vgui_slot_data.h
-
-# End Source File
-# Begin Source File
-
 SOURCE=.\internals/vgui_string_field.h
 
 # End Source File
@@ -1218,17 +1068,7 @@ SOURCE=.\vgui.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\vgui_active_visible.h
-
-# End Source File
-# Begin Source File
-
 SOURCE=.\vgui_adaptor.h
-
-# End Source File
-# Begin Source File
-
-SOURCE=.\vgui_blackbox.h
 
 # End Source File
 # Begin Source File
@@ -1268,11 +1108,6 @@ SOURCE=.\vgui_command.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\vgui_composite.h
-
-# End Source File
-# Begin Source File
-
 SOURCE=.\vgui_debug_tableau.h
 
 # End Source File
@@ -1288,42 +1123,12 @@ SOURCE=.\vgui_dialog.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\vgui_displaybase.h
-
-# End Source File
-# Begin Source File
-
-SOURCE=.\vgui_displaylist2D.h
-
-# End Source File
-# Begin Source File
-
-SOURCE=.\vgui_displaylist3D.h
-
-# End Source File
-# Begin Source File
-
 SOURCE=.\vgui_drag_mixin.h
 
 # End Source File
 # Begin Source File
 
 SOURCE=.\vgui_drag_tableau.h
-
-# End Source File
-# Begin Source File
-
-SOURCE=.\vgui_easy2D.h
-
-# End Source File
-# Begin Source File
-
-SOURCE=.\vgui_easy3D.h
-
-# End Source File
-# Begin Source File
-
-SOURCE=.\vgui_enhance.h
 
 # End Source File
 # Begin Source File
@@ -1339,11 +1144,6 @@ SOURCE=.\vgui_event.h
 # Begin Source File
 
 SOURCE=.\vgui_event_condition.h
-
-# End Source File
-# Begin Source File
-
-SOURCE=.\vgui_event_loop.h
 
 # End Source File
 # Begin Source File
@@ -1373,11 +1173,6 @@ SOURCE=.\vgui_grid_tableau.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\vgui_image_blender.h
-
-# End Source File
-# Begin Source File
-
 SOURCE=.\vgui_image_renderer.h
 
 # End Source File
@@ -1389,16 +1184,6 @@ SOURCE=.\vgui_image_tableau.h
 # Begin Source File
 
 SOURCE=.\vgui_key.h
-
-# End Source File
-# Begin Source File
-
-SOURCE=.\vgui_listmanager2D.h
-
-# End Source File
-# Begin Source File
-
-SOURCE=.\vgui_load.h
 
 # End Source File
 # Begin Source File
@@ -1443,11 +1228,6 @@ SOURCE=.\vgui_pixel.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\vgui_polytab.h
-
-# End Source File
-# Begin Source File
-
 SOURCE=.\vgui_popup_params.h
 
 # End Source File
@@ -1468,21 +1248,6 @@ SOURCE=.\vgui_roi_tableau.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\vgui_rubberbander.h
-
-# End Source File
-# Begin Source File
-
-SOURCE=.\vgui_satellite.h
-
-# End Source File
-# Begin Source File
-
-SOURCE=.\vgui_satellite.txx
-
-# End Source File
-# Begin Source File
-
 SOURCE=.\vgui_section_buffer.h
 
 # End Source File
@@ -1499,16 +1264,6 @@ SOURCE=.\vgui_section_render.h
 # Begin Source File
 
 SOURCE=.\vgui_shell_tableau.h
-
-# End Source File
-# Begin Source File
-
-SOURCE=.\vgui_slab.h
-
-# End Source File
-# Begin Source File
-
-SOURCE=.\vgui_slot.h
 
 # End Source File
 # Begin Source File
@@ -1583,27 +1338,7 @@ SOURCE=.\vgui_toolkit.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\vgui_tview.h
-
-# End Source File
-# Begin Source File
-
-SOURCE=.\vgui_tview_launcher.h
-
-# End Source File
-# Begin Source File
-
 SOURCE=.\vgui_utils.h
-
-# End Source File
-# Begin Source File
-
-SOURCE=.\vgui_viewer2D.h
-
-# End Source File
-# Begin Source File
-
-SOURCE=.\vgui_viewer3D.h
 
 # End Source File
 # Begin Source File
@@ -1633,22 +1368,7 @@ SOURCE=.\vrml/vgui_vrml_texture_map.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\vgui_active_visible_sptr.h
-
-# End Source File
-# Begin Source File
-
-SOURCE=.\vgui_blackbox_sptr.h
-
-# End Source File
-# Begin Source File
-
 SOURCE=.\vgui_clear_tableau_sptr.h
-
-# End Source File
-# Begin Source File
-
-SOURCE=.\vgui_composite_sptr.h
 
 # End Source File
 # Begin Source File
@@ -1658,37 +1378,7 @@ SOURCE=.\vgui_debug_tableau_sptr.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\vgui_deck.h
-
-# End Source File
-# Begin Source File
-
 SOURCE=.\vgui_deck_tableau_sptr.h
-
-# End Source File
-# Begin Source File
-
-SOURCE=.\vgui_displaybase_sptr.h
-
-# End Source File
-# Begin Source File
-
-SOURCE=.\vgui_displaylist2D_sptr.h
-
-# End Source File
-# Begin Source File
-
-SOURCE=.\vgui_easy2D_sptr.h
-
-# End Source File
-# Begin Source File
-
-SOURCE=.\vgui_easy3D_sptr.h
-
-# End Source File
-# Begin Source File
-
-SOURCE=.\vgui_enhance_sptr.h
 
 # End Source File
 # Begin Source File
@@ -1713,106 +1403,6 @@ SOURCE=.\vgui_glx.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\impl/Fl/vgui_Fl.h
-
-# End Source File
-# Begin Source File
-
-SOURCE=.\impl/Fl/vgui_Fl_adaptor.h
-
-# End Source File
-# Begin Source File
-
-SOURCE=.\impl/Fl/vgui_Fl_dialog_impl.h
-
-# End Source File
-# Begin Source File
-
-SOURCE=.\impl/Fl/vgui_Fl_statusbar.h
-
-# End Source File
-# Begin Source File
-
-SOURCE=.\impl/Fl/vgui_Fl_utils.h
-
-# End Source File
-# Begin Source File
-
-SOURCE=.\impl/Fl/vgui_Fl_window.h
-
-# End Source File
-# Begin Source File
-
-SOURCE=.\impl/SDL/vgui_SDL.h
-
-# End Source File
-# Begin Source File
-
-SOURCE=.\impl/SDL/vgui_SDL_adaptor.h
-
-# End Source File
-# Begin Source File
-
-SOURCE=.\impl/SDL/vgui_SDL_factory.h
-
-# End Source File
-# Begin Source File
-
-SOURCE=.\impl/SDL/vgui_SDL_window.h
-
-# End Source File
-# Begin Source File
-
-SOURCE=.\impl/X/vgui_X_utils.h
-
-# End Source File
-# Begin Source File
-
-SOURCE=.\impl/Xm/vgui_Xm.h
-
-# End Source File
-# Begin Source File
-
-SOURCE=.\impl/Xm/vgui_Xm_adaptor.h
-
-# End Source File
-# Begin Source File
-
-SOURCE=.\impl/Xm/vgui_Xm_dialog_impl.h
-
-# End Source File
-# Begin Source File
-
-SOURCE=.\impl/Xm/vgui_Xm_statusbar.h
-
-# End Source File
-# Begin Source File
-
-SOURCE=.\impl/Xm/vgui_Xm_utils.h
-
-# End Source File
-# Begin Source File
-
-SOURCE=.\impl/Xm/vgui_Xm_window.h
-
-# End Source File
-# Begin Source File
-
-SOURCE=.\impl/glX/vgui_glX.h
-
-# End Source File
-# Begin Source File
-
-SOURCE=.\impl/glX/vgui_glX_adaptor.h
-
-# End Source File
-# Begin Source File
-
-SOURCE=.\impl/glX/vgui_glX_window.h
-
-# End Source File
-# Begin Source File
-
 SOURCE=.\impl/glut/vgui_glut_adaptor.h
 
 # End Source File
@@ -1824,11 +1414,6 @@ SOURCE=.\impl/glut/vgui_glut_impl.h
 # Begin Source File
 
 SOURCE=.\impl/glut/vgui_glut_popup_impl.h
-
-# End Source File
-# Begin Source File
-
-SOURCE=.\impl/glut/vgui_glut_slab.h
 
 # End Source File
 # Begin Source File
@@ -1908,11 +1493,6 @@ SOURCE=.\impl/mfc/vgui_mfc_statusbar.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\impl/mfc/vgui_mfc_util.h
-
-# End Source File
-# Begin Source File
-
 SOURCE=.\impl/mfc/vgui_mfc_utils.h
 
 # End Source File
@@ -1968,37 +1548,12 @@ SOURCE=.\vgui_image_tableau_sptr.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\vgui_linker_hack.h
-
-# End Source File
-# Begin Source File
-
-SOURCE=.\vgui_listmanager2D_sptr.h
-
-# End Source File
-# Begin Source File
-
-SOURCE=.\vgui_load_sptr.h
-
-# End Source File
-# Begin Source File
-
-SOURCE=.\vgui_polytab_sptr.h
-
-# End Source File
-# Begin Source File
-
 SOURCE=.\vgui_quit_tableau_sptr.h
 
 # End Source File
 # Begin Source File
 
 SOURCE=.\vgui_roi_tableau_sptr.h
-
-# End Source File
-# Begin Source File
-
-SOURCE=.\vgui_rubberbander_sptr.h
 
 # End Source File
 # Begin Source File
@@ -2018,32 +1573,222 @@ SOURCE=.\vgui_text_tableau_sptr.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\vgui_tview_launcher_sptr.h
-
-# End Source File
-# Begin Source File
-
-SOURCE=.\vgui_tview_sptr.h
-
-# End Source File
-# Begin Source File
-
-SOURCE=.\vgui_viewer2D_sptr.h
-
-# End Source File
-# Begin Source File
-
-SOURCE=.\vgui_viewer3D_sptr.h
-
-# End Source File
-# Begin Source File
-
 SOURCE=.\vgui_wrapper_tableau_sptr.h
 
 # End Source File
 # Begin Source File
 
+SOURCE=.\vgui_active_tableau.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgui_active_tableau_sptr.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgui_blackbox_tableau.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgui_blackbox_tableau_sptr.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgui_blender_tableau.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgui_blender_tableau_sptr.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgui_composite_tableau.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgui_composite_tableau_sptr.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgui_displaybase_tableau.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgui_displaybase_tableau_sptr.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgui_displaylist2D_tableau_sptr.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgui_displaylist3D_tableau_sptr.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgui_drag_tableau_sptr.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgui_easy2D_tableau_sptr.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgui_easy3D_tableau_sptr.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgui_enhance_tableau_sptr.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgui_function_tableau_sptr.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgui_listmanager2D_tableau.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgui_listmanager2D_tableau_sptr.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgui_loader_tableau_sptr.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgui_parent_child_link.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgui_poly_tableau.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgui_poly_tableau_sptr.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgui_rubberband_tableau.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgui_rubberband_tableau_sptr.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgui_satellite_tableau.txx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgui_tview_launcher_tableau.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgui_tview_launcher_tableau_sptr.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgui_tview_tableau_sptr.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgui_viewer2D_tableau.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgui_viewer2D_tableau_sptr.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgui_viewer3D_tableau_sptr.h
+
+# End Source File
+# Begin Source File
+
 SOURCE=.\impl/glut/menu_hack.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgui_displaylist2D_tableau.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgui_displaylist3D_tableau.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgui_easy2D_tableau.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgui_easy3D_tableau.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgui_enhance_tableau.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgui_loader_tableau.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgui_satellite_tableau.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgui_tview_tableau.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgui_viewer3D_tableau.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\internals/vgui_parent_child_link_data.h
 
 # End Source File
 # End Group
