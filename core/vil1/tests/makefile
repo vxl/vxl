@@ -18,6 +18,9 @@ TESTS += test_interpolate.cxx
 TESTS += test_flipud.cxx
 TESTS += test_colour_space.cxx
 TESTS += test_copy.cxx
+TESTS += test_file_format_read.cxx
+PARAMS_test_copy := square.pgm
+PARAMS_test_file_format_read := file_read_data
 
 IULIBS = -lvil -lvpl -lvul
 
