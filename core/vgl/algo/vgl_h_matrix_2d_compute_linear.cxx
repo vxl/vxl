@@ -1,10 +1,10 @@
 // This is core/vgl/algo/vgl_h_matrix_2d_compute_linear.cxx
 #include "vgl_h_matrix_2d_compute_linear.h"
 //:
-//  \file
+// \file
 
-#include <vcl_vector.h>
 #include <vcl_iostream.h>
+#include <vcl_cmath.h>
 #include <vcl_cassert.h>
 #include <vnl/vnl_inverse.h>
 #include <vnl/algo/vnl_svd.h>
@@ -142,7 +142,7 @@ compute_p(vcl_vector<vgl_homg_point_2d<double> > const& points1,
   // Next, hh has to be transformed back to the coordinate system of
   // the original point sets, i.e.,
   //  p1' = tr1 p1 , p2' = tr2 p2
-  // hh was detemined from the transform relation
+  // hh was determined from the transform relation
   //  p2' = hh p1', thus
   // (tr2 p2) = hh (tr1 p1)
   //  p2 = (tr2^-1 hh tr1) p1 = H p1
@@ -170,23 +170,22 @@ compute_l(vcl_vector<vgl_homg_line_2d<double> > const& lines1,
   vcl_vector<vgl_homg_point_2d<double> > tlines1, tlines2;
   for (vcl_vector<vgl_homg_line_2d<double> >::const_iterator
        lit = lines1.begin(); lit != lines1.end(); lit++)
-    {
-      // transform the lines according to the normalizing transform
-      vgl_homg_line_2d<double> l = tr1(*lit);
-      // convert the line to a point to use the same linear code
-      vgl_homg_point_2d<double> p(l.a(), l.b(), l.c());
-      tlines1.push_back(p);
-    }
+  {
+    // transform the lines according to the normalizing transform
+    vgl_homg_line_2d<double> l = tr1(*lit);
+    // convert the line to a point to use the same linear code
+    vgl_homg_point_2d<double> p(l.a(), l.b(), l.c());
+    tlines1.push_back(p);
+  }
   for (vcl_vector<vgl_homg_line_2d<double> >::const_iterator
        lit = lines2.begin(); lit != lines2.end(); lit++)
-    {
-      // transform the lines according to the normalizing transform
-      vgl_homg_line_2d<double> l = tr2(*lit);
-      // convert the line to a point to use the same linear code
-      vgl_homg_point_2d<double> p(l.a(), l.b(), l.c());
-      tlines2.push_back(p);
+  {
+    // transform the lines according to the normalizing transform
+    vgl_homg_line_2d<double> l = tr2(*lit);
+    // convert the line to a point to use the same linear code
+    vgl_homg_point_2d<double> p(l.a(), l.b(), l.c());
+    tlines2.push_back(p);
   }
-
 
   vgl_h_matrix_2d<double> hl,hp,tr2inv;
   if (!solve_linear_problem(equ_count, tlines1, tlines2, hl))
@@ -208,6 +207,55 @@ compute_l(vcl_vector<vgl_homg_line_2d<double> > const& lines1,
   H = tr2inv*hp*tr1;
   return true;
 }
+
+bool vgl_h_matrix_2d_compute_linear::
+compute_pl(vcl_vector<vgl_homg_point_2d<double> > const& points1,
+           vcl_vector<vgl_homg_point_2d<double> > const& points2,
+           vcl_vector<vgl_homg_line_2d<double> > const& lines1,
+           vcl_vector<vgl_homg_line_2d<double> > const& lines2,
+           vgl_h_matrix_2d<double>& H)
+{
+  //number of points must be the same
+  assert(points1.size() == points2.size());
+  int np = points1.size();
+  //number of lines must be the same
+  assert(lines1.size() == lines2.size());
+  int nl = lines1.size();
+
+  int equ_count = np * (allow_ideal_points_ ? 3 : 2) + 2*nl;
+  if ((np+nl)*2+1 < TM_UNKNOWNS_COUNT) {
+    vcl_cerr << "vgl_h_matrix_2d_compute_linear: Need at least 4 matches.\n";
+    if (np+nl == 0) vcl_cerr << "Could be vcl_vector setlength idiosyncrasies!\n";
+    return false;
+  }
+  //compute the normalizing transforms
+  vgl_norm_trans_2d<double> tr1, tr2;
+  if (!tr1.compute_from_points_and_lines(points1,lines1))
+    return false;
+  if (!tr2.compute_from_points_and_lines(points2,lines2))
+    return false;
+  vcl_vector<vgl_homg_point_2d<double> > tpoints1, tpoints2;
+  for (int i = 0; i<np; i++)
+  {
+    tpoints1.push_back(tr1(points1[i]));
+    tpoints2.push_back(tr2(points2[i]));
+  }
+  for (int i = 0; i<nl; i++)
+  {
+    double a=lines1[i].a(), b=lines1[i].b(), c=lines1[i].c(), d=vcl_sqrt(a*a+b*b);
+    tpoints1.push_back(tr1(vgl_homg_point_2d<double>(-a*c,-b*c,d)));
+    a=lines2[i].a(), b=lines2[i].b(), c=lines2[i].c(), d = vcl_sqrt(a*a+b*b);
+    tpoints2.push_back(tr2(vgl_homg_point_2d<double>(-a*c,-b*c,d)));
+  }
+  vgl_h_matrix_2d<double> hh;
+  if (!solve_linear_problem(equ_count, tpoints1, tpoints2, hh))
+    return false;
+
+  vgl_h_matrix_2d<double> tr2_inv = tr2.get_inverse();
+  H = tr2_inv*hh*tr1;
+  return true;
+}
+
 //--------------------------------------------------------
 //:
 //  The solution equations should be weighted by the length of
