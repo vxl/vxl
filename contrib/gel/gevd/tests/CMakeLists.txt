@@ -1,8 +1,10 @@
-LINK_LIBRARIES( gevd vgl_algo vnl_algo vbl vul testlib vcl )
+# gel/gevd/tests/CMakeLists.txt
 
-ADD_EXECUTABLE( test_gevd_param_mixin test_gevd_param_mixin.cxx )
-ADD_EXECUTABLE( test_gevd_memory_mixin test_gevd_memory_mixin.cxx )
-ADD_EXECUTABLE( test_gevd_bufferxy test_gevd_bufferxy.cxx )
-ADD_TEST(test_gevd_param_mixin test_gevd_param_mixin)
-ADD_TEST(test_gevd_memory_mixin test_gevd_memory_mixin)
-ADD_TEST(test_gevd_bufferxy test_gevd_bufferxy)
+LINK_LIBRARIES( gevd testlib )
+
+ADD_EXECUTABLE(test_gevd_param_mixin  test_gevd_param_mixin.cxx)
+ADD_TEST(      test_gevd_param_mixin  test_gevd_param_mixin)
+ADD_EXECUTABLE(test_gevd_memory_mixin test_gevd_memory_mixin.cxx)
+ADD_TEST(      test_gevd_memory_mixin test_gevd_memory_mixin)
+ADD_EXECUTABLE(test_gevd_bufferxy     test_gevd_bufferxy.cxx)
+ADD_TEST(      test_gevd_bufferxy     test_gevd_bufferxy)

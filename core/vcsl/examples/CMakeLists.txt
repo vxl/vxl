@@ -1,4 +1,6 @@
-LINK_LIBRARIES( vcsl vnl vbl vcl )
+# vxl/vcsl/examples/CMakeLists.txt
 
-ADD_EXECUTABLE( example1 example1.cxx )
-ADD_EXECUTABLE( vcsl_tutor vcsl_tutor.cxx )
+LINK_LIBRARIES( vcsl vnl )
+
+ADD_EXECUTABLE(example1   example1.cxx)
+ADD_EXECUTABLE(vcsl_tutor vcsl_tutor.cxx)
