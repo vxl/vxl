@@ -1,20 +1,6 @@
-#
 # ./vcl/tests/CMakeLists.txt
-#
-#   ian.m.scott@stud.man.ac.uk
-#
 
-LINK_DIRECTORIES(
-${allvxl_BINARY_DIR}/vcl
-)
-
-LINK_LIBRARIES(
-vcl
-)
-
-IF(UNIX)
-  LINK_LIBRARIES( m )
-ENDIF(UNIX)
+INCLUDE( ${allvxl_SOURCE_DIR}/vcl/CMakeListsLink.txt )
 
 ADD_EXECUTABLE( vcl_tests vcl_tests.cpp)
 ADD_EXECUTABLE( test_vcl_algorithm test_vcl_algorithm.cxx)
