@@ -82,9 +82,13 @@ void test_vsol_conic_2d()
   TEST("vsol_conic_2d::e()", p->e(), 5);
   TEST("vsol_conic_2d::f()", p->f(), 6);
 
+  vnl_double_3x3 m = p->matrix();
+  vcl_cout << "Matrix of p:\n" << m;
+
   p=new vsol_conic_2d(1,0,1,0,0,-1); // circle center=(0,0) r=1
   f(p->real_type());
   TEST("vsol_conic_2d::is_real_circle()", p->is_real_circle(), true);
+  TEST("vsol_conic_2d::midpoint()", *(p->midpoint()), vsol_point_2d(0,0));
   p->ellipse_parameters(cx,cy,phi,width,height);
   TEST("vsol_conic_2d::ellipse_parameters(): cx", cx, 0);
   TEST("vsol_conic_2d::ellipse_parameters(): cy", cy, 0);
@@ -98,6 +102,8 @@ void test_vsol_conic_2d()
   f(p->real_type());
   TEST("vsol_conic_2d::is_real_ellipse()", p->is_real_ellipse(), true);
   TEST("!vsol_conic_2d::is_real_circle()", p->is_real_circle(), false);
+  TEST("vsol_conic_2d::midpoint()", *(p->midpoint()), vsol_point_2d(0,0));
+  TEST("vsol_conic_2d::axis()", *(p->axis()), vsol_line_2d(vgl_vector_2d<double>(-1,0),vgl_point_2d<double>(0,0)));
   p->ellipse_parameters(cx,cy,phi,width,height);
   TEST("vsol_conic_2d::ellipse_parameters(): cx", cx, 0);
   TEST("vsol_conic_2d::ellipse_parameters(): cy", cy, 0);
@@ -110,6 +116,7 @@ void test_vsol_conic_2d()
   p=new vsol_conic_2d(5,6,5,-16,-16,8); // ellipse: centre 1,1; axes 2,1; dir -45 degrees
   f(p->real_type());
   TEST("vsol_conic_2d::is_real_ellipse()", p->is_real_ellipse(), true);
+  TEST("vsol_conic_2d::midpoint()", *(p->midpoint()), vsol_point_2d(1,1));
   p->ellipse_parameters(cx,cy,phi,width,height);
   q->set_central_parameters(vsol_point_2d(cx,cy), width, height, phi);
   // Ignore rounding errors:
@@ -121,6 +128,7 @@ void test_vsol_conic_2d()
   p=new vsol_conic_2d(52,-72,73,0,0,-100); // ellipse: centre 0,0; axes 2,1; dir atan(3/4)
   f(p->real_type());
   TEST("vsol_conic_2d::is_real_ellipse()", p->is_real_ellipse(), true);
+  TEST("vsol_conic_2d::midpoint()", *(p->midpoint()), vsol_point_2d(0,0));
   p->ellipse_parameters(cx,cy,phi,width,height);
   q->set_central_parameters(vsol_point_2d(cx,cy), width, height, phi);
   // Ignore rounding errors:
@@ -144,6 +152,7 @@ void test_vsol_conic_2d()
   p=new vsol_conic_2d(0,1,0,0,0,-1); // hyperbola: y=1/x, xy-1=0
   f(p->real_type());
   TEST("vsol_conic_2d::is_hyperbola()", p->is_hyperbola(), true);
+  TEST("vsol_conic_2d::midpoint()", *(p->midpoint()), vsol_point_2d(0,0));
   p->hyperbola_parameters(cx,cy,phi,width,height);
   q->set_central_parameters(vsol_point_2d(cx,cy), width, height, phi);
   // Ignore rounding errors:
@@ -155,6 +164,7 @@ void test_vsol_conic_2d()
   p=new vsol_conic_2d(11,-24,4,0,0,20); // hyperbola: centre 0,0; axes 2,-1; dir atan(4/3)
   f(p->real_type());
   TEST("vsol_conic_2d::is_hyperbola()", p->is_hyperbola(), true);
+  TEST("vsol_conic_2d::midpoint()", *(p->midpoint()), vsol_point_2d(0,0));
   p->hyperbola_parameters(cx,cy,phi,width,height);
   q->set_central_parameters(vsol_point_2d(cx,cy), width, height, phi);
   // Ignore rounding errors:
@@ -166,6 +176,7 @@ void test_vsol_conic_2d()
   p=new vsol_conic_2d(4,-24,11,16,2,-29); // hyperbola: centre 1,1; axes 1,-2; dir atan(-4/3)
   f(p->real_type());
   TEST("vsol_conic_2d::is_hyperbola()", p->is_hyperbola(), true);
+  TEST("vsol_conic_2d::midpoint()", *(p->midpoint()), vsol_point_2d(1,1));
   p->hyperbola_parameters(cx,cy,phi,width,height);
   q->set_central_parameters(vsol_point_2d(cx,cy), width, height, phi);
   // Ignore rounding errors:
