@@ -1,7 +1,7 @@
 USES += core
 include ../config.mk
 include ../algo/config.mk
-include ../io/config.mk
+#include ../io/config.mk
 include ${IUEROOT}/core/vul/config.mk
 include ${IUEROOT}/core/vpl/config.mk
 include ${IUEROOT}/core/testlib/config.mk
@@ -12,12 +12,14 @@ TESTMAIN = test_driver.cxx
 TESTS += test_image_resource.cxx
 TESTS += test_image_view.cxx
 TESTS += test_memory_chunk.cxx
-TESTS += test_stream.cxx 
 
 # file format readers/writers
 TESTS += test_file_format_read.cxx
 PARAMS_test_file_format_read := file_read_data
 TESTS += test_save_load_image.cxx
+TESTS += test_image_loader_robustness.cxx
+TESTS += test_stream.cxx 
+PARAMS_test_stream := file_read_data
 
 # image operations
 TESTS += test_deep_copy_3_plane.cxx
