@@ -46,9 +46,11 @@ Gary Yang (Rensselaer), yangg2 at cs.rpi.edu
 Web whiteboarding
 -----------------
 
-Amitha: if you want to go ahead with your plan for this, please add
-instructions here.  Can we just go live right now to discover any
-bugs/problems?
+I've set up a web-based whiteboard/chat tool at
+http://monica.cs.rpi.edu:8080/~perera/vxlchat/. It should work with
+any Java-enabled browser. I'm not sure how useful it'll be for the
+tcon. Perhaps we can type up the minutes in the chat window as we
+go. -- Amitha Perera.
 
 Agenda
 ------
@@ -72,6 +74,10 @@ Are we marking files properly?  Consistently?
 
 *** VXL Principles - Is VXL in danger of becoming like Target Jr.?
 Someone has suggested a concern about bloat and feature creep.  Any real danger here?
+
+*** VXL Principles - Backward compatibility and deprecating old APIs
+VXL is old enough that we have to be careful about backward
+compatibility. See note [1] below.
 
 *** Configuration - Windows DLLs
 Last year Fred Wheeler tried to do this the declspec code markup way,
@@ -136,6 +142,39 @@ We should brainstorm some more easy and hard to-do items to add to this list.
 *** Testing - Borland C++ dashboard builds (Part of the "deal" with Kitware)
 We are now in the middle of the Borland port.
 That's good, but is there any value to discussing this - IMS?
+
+
+
+Notes:
+
+[1]: Deprecating old APIs.
+     I think that VXL is now old enough that we have to be careful
+     about backward compatibility. We need a clear mechanism for
+     deprecating and changing interfaces. My suggestion: At a minimum,
+     it must be documented, either in meeting notes or on the mailing
+     list. It should be marked deprecated, and *in the comments* a
+     date or release number given for when the function will be
+     removed. In general, the deprecation must have a publically
+     posted rationale. This rationale could go into CHANGES.txt. I
+     further suggest something like this:
+
+          #if VXL_VERSION < 1003  // 1.0.3 (1.0.03)
+          //: document
+          // \deprecated Scheduled for removal in version 1.0.3.
+          // Replace uses of f() with calls to g() and h().
+          void f();
+          #endif // deprecated function
+
+     Further, the body of f() should be marked as deprecated with 
+     VXL_DEPRECATED, to provide run-time information about 
+     deprecated function calls. This code would stay within the 
+     #if-#endif block at least till version 1.0.4. After that it 
+     may be removed from the code entirely.
+
+     I think deprecating old and broken interfaces is important in 
+     making the VXL API clear and consistent. However, it is also 
+     important to advise users of impending deprecations and give 
+     enough time to correct internal code.
 
 
 
