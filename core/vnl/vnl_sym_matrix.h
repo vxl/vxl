@@ -116,10 +116,9 @@ public:
   // or the top i values of column i
   void set_half_row (const vnl_vector<T> &half_row, unsigned i);
  
-  //: Replaces the symmetric submatrix of THIS matrix, with the elements of metrix x
-  // Starting at top left corner. Complexity is $O(m*m)$
-  vnl_sym_matrix<T>& update (vnl_sym_matrix<T> const& m,
-    unsigned diagonal_start=0);
+  //: Replaces the symmetric submatrix of THIS matrix with the elements of matrix m.
+  // Starting at top left corner. Complexity is $O(m^2)$.
+  vnl_sym_matrix<T>& update (vnl_sym_matrix<T> const& m, unsigned diag_start=0);
 
   //: Swap contents of m with THIS
   void swap(vnl_sym_matrix &m);
@@ -147,8 +146,8 @@ inline vnl_sym_matrix<T>::vnl_sym_matrix(T const * data, unsigned nn):
   nn_(nn)
 {
   setup_index();
-  for(unsigned i = 0; i < nn_; ++i)
-    for(unsigned j = 0; j <= i; ++j)
+  for (unsigned i = 0; i < nn_; ++i)
+    for (unsigned j = 0; j <= i; ++j)
       fast(i,j) = *(data++);
 }
 
@@ -171,8 +170,8 @@ inline vnl_sym_matrix<T>::vnl_sym_matrix(vnl_matrix<T> const& that):
 {
   setup_index();
   assert (nn_ == that.cols());
-  for(unsigned i = 0; i < nn_; ++i)
-    for(unsigned j = 0; j <= i; ++j)
+  for (unsigned i = 0; i < nn_; ++i)
+    for (unsigned j = 0; j <= i; ++j)
     {
       assert( that(i,j) == that(j,i) );
       fast(i,j) = that(i,j);
@@ -184,8 +183,8 @@ template <class T>
 inline vnl_matrix<T> vnl_sym_matrix<T>::as_matrix() const
 {
   vnl_matrix<T> ret(nn_, nn_);
-  for(unsigned i = 0; i < nn_; ++i)
-    for(unsigned j = 0; j <= i; ++j)
+  for (unsigned i = 0; i < nn_; ++i)
+    for (unsigned j = 0; j <= i; ++j)
       ret(i,j) = ret(j,i) = fast(i,j);
   return ret;
 }
