@@ -50,7 +50,7 @@ void vpyr_2_pyramid<TLevel>::initialise_levels(int nb_levels)
   for (unsigned int i=0; i+1<level_.size(); ++i)
   {
     level_type tmp(i,(typename level_type::pyramid_type&)*this) ;
-    level_.insert(level_array_type::value_type(i,tmp)) ;
+    level_.insert(typename level_array_type::value_type(i,tmp)) ;
   }
   (--level_.end())->second.set_level_index(vmap_top_level_index()) ;
 }
@@ -75,7 +75,7 @@ TLevel * vpyr_2_pyramid<TLevel>::level_below(vmap_level_type type, const level_t
   {
     level_type tmp(above) ;
     tmp.set_level_index(level) ;
-    it=level_.insert(level_array_type::value_type(level,tmp)).first ;
+    it=level_.insert(typename level_array_type::value_type(level,tmp)).first ;
   }
   return &(*it) ;
 }

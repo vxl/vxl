@@ -8,7 +8,8 @@
 // \date 06/05/2004
 //
 // \verbatim
-//  06 May 2004 Jocelyn Marchadier
+//  Modifications
+//   06 May 2004 Jocelyn Marchadier
 // \endverbatim
 
 #include "vpyr_2_pyramid_level.h"
@@ -85,7 +86,7 @@ class vpyr_2_pyramid
   {
     base_map_.set_structure(arg) ;
     level_.clear() ;
-    level_.insert(level_array_type::value_type(::vmap_top_level_index(),
+    level_.insert(typename level_array_type::value_type(::vmap_top_level_index(),
                   level_type(::vmap_top_level_index(),(typename level_type::pyramid_type&) *this))) ;
   }
 

@@ -95,7 +95,7 @@ bool vmal_multi_view_data<T>::get_next_track(vcl_map<int,T,vcl_less<int> > & tra
       if (value !=NViewMatch::nomatch)
       {
         T tmp_edge=all_pts[value];
-        track.insert(vcl_map<int,T,vcl_less<int> >::value_type(i,tmp_edge));
+        track.insert(typename vcl_map<int,T,vcl_less<int> >::value_type(i,tmp_edge));
       }
     }
     matchnum_++;
