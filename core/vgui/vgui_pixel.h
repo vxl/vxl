@@ -19,6 +19,7 @@ template <int b, int g, int r> struct vgui_pixel_bgr;
 template <int r, int g, int b, int a> struct vgui_pixel_rgba;
 template <int a, int b, int g, int r> struct vgui_pixel_abgr;
 template <int b, int g, int r, int a> struct vgui_pixel_bgra;
+struct vgui_pixel_rgbfloat;
 
 VCL_DEFINE_SPECIALIZATION
 struct vgui_pixel_rgb<8,8,8> {
@@ -106,6 +107,13 @@ struct vgui_pixel_bgra<8,8,8,8> {
 typedef vgui_pixel_bgra<8,8,8,8> vgui_pixel_bgra8888;
 
 
+struct vgui_pixel_rgbfloat {
+  float R;
+  float G;
+  float B;
+};
+
+
 //: Convert a span of pixels from one format to another.
 // In general, the input range is assumed to be 0..255, so bitfields
 // narrower than 8 bits need to be shifted.  Floats are clamped to 0..255
@@ -140,5 +148,13 @@ void vgui_pixel_convert_span(vgui_pixel_rgba8888 const *, vgui_pixel_bgra5551 *,
 void vgui_pixel_convert_span(vgui_pixel_rgba8888 const *, vgui_pixel_rgba8888 *, unsigned size);
 void vgui_pixel_convert_span(vgui_pixel_rgba8888 const *, vgui_pixel_abgr8888 *, unsigned size);
 void vgui_pixel_convert_span(vgui_pixel_rgba8888 const *, vgui_pixel_bgra8888 *, unsigned size);
+
+void vgui_pixel_convert_span(vgui_pixel_rgbfloat const *, vgui_pixel_rgb888 *, unsigned size);
+void vgui_pixel_convert_span(vgui_pixel_rgbfloat const *, vgui_pixel_bgr888 *, unsigned size);
+void vgui_pixel_convert_span(vgui_pixel_rgbfloat const *, vgui_pixel_rgb565 *, unsigned size);
+void vgui_pixel_convert_span(vgui_pixel_rgbfloat const *, vgui_pixel_bgra5551 *, unsigned size);
+void vgui_pixel_convert_span(vgui_pixel_rgbfloat const *, vgui_pixel_rgba8888 *, unsigned size);
+void vgui_pixel_convert_span(vgui_pixel_rgbfloat const *, vgui_pixel_abgr8888 *, unsigned size);
+void vgui_pixel_convert_span(vgui_pixel_rgbfloat const *, vgui_pixel_bgra8888 *, unsigned size);
 
 #endif // vgui_pixel_h_
