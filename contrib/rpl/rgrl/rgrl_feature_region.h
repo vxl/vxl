@@ -8,7 +8,6 @@
 
 #include <vcl_vector.h>
 #include <vnl/vnl_vector.h>
-//#include <rgrl/rgrl_feature.h>
 
 class rgrl_transformation;
 
@@ -17,23 +16,26 @@ class rgrl_transformation;
 class rgrl_feature_region
 {
  public:
+  // default ctor
+  rgrl_feature_region()  : pixel_coordinates_cached_( false ) {}
 
-  //: ctor
-  rgrl_feature_region()  : pixel_coordinates_cached_( false )
-  {   }
+  // destructor
+  virtual ~rgrl_feature_region() {}
 
+#if 0
   // Defines type-related functions
-  // rgrl_type_macro( rgrl_feature_region, rgrl_feature );
+  rgrl_type_macro( rgrl_feature_region, rgrl_feature );
+#endif // 0
 
   virtual const vcl_vector< vnl_vector<int> >&
   pixel_coordinates();
-  
+
   //: get pixels coordinates within the region
   virtual const vcl_vector< vnl_vector<int> >&
   pixel_coordinates_ratio( vnl_vector< double > const& spacing_ratio );
 
   //: generate pixels coordinates within the region
-  virtual void 
+  virtual void
   generate_pixel_coordinates( vnl_vector< double > const& spacing_ratio ) = 0;
 
  protected:
@@ -44,6 +46,5 @@ class rgrl_feature_region
   vcl_vector< vnl_vector<int> > pixel_coordinates_;
   vnl_vector< double >          spacing_ratio_;
 };
-
 
 #endif
