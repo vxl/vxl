@@ -87,6 +87,10 @@ class vil_smart_ptr
   operator safe_bool () const
     { return (ptr_ != (T*)0)? &safe_bool_dummy::dummy : 0; }
 
+  //: Inverse bool
+  safe_bool operator!() const
+    { return (ptr_ != (T*)0)? 0 : &safe_bool_dummy::dummy; }
+
   //: Dereferencing the pointer
   T &operator * () const { return *ptr_; }
 

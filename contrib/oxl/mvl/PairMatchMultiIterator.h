@@ -53,6 +53,10 @@ class PairMatchMultiIterator
   operator safe_bool () const
     { return (first_ != last_)? &safe_bool_dummy::dummy : 0; }
 
+//: Return false if the iterator is still valid.
+  safe_bool operator!() const
+    { return (first_ != last_)? 0 : &safe_bool_dummy::dummy; }
+
 //: Advance to the next match.
   PairMatchMultiIterator& operator ++ (/*prefix*/) { ++first_; return *this; }
 

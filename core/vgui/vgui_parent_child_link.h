@@ -115,6 +115,9 @@ struct vgui_parent_child_link
   //: Return true if both parent and child tableaux exist.
   operator safe_bool () const;
 
+  //: Return false if both parent and child tableaux exist.
+  safe_bool operator!() const;
+
   //: Return a pointer to the child tableau.
   //  A parent_child_link behaves more like its child than its parent.
   operator vgui_tableau_sptr () const;

@@ -69,6 +69,11 @@ vnl_matlab_readhdr::operator vnl_matlab_readhdr::safe_bool () const
   return (s.good() && !s.eof())? &safe_bool_dummy::dummy : 0; // FIXME
 }
 
+vnl_matlab_readhdr::safe_bool vnl_matlab_readhdr::operator!() const
+{
+  return (s.good() && !s.eof())? 0 : &safe_bool_dummy::dummy; // FIXME
+}
+
 bool vnl_matlab_readhdr::is_single() const
 {
   return (hdr.type % (10*vnl_matlab_header::vnl_SINGLE_PRECISION)) >= vnl_matlab_header::vnl_SINGLE_PRECISION;

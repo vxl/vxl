@@ -32,6 +32,8 @@ class vnl_file_vector : public vnl_vector<T>
 
   operator safe_bool () const
     { return (ok_)? &safe_bool_dummy::dummy : 0; }
+  safe_bool operator!() const
+    { return (ok_)? 0 : &safe_bool_dummy::dummy; }
 
  private:
   bool ok_;

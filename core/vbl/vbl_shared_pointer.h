@@ -86,6 +86,10 @@ struct vbl_shared_pointer
   operator safe_bool () const
     { return (data != 0)? &safe_bool_dummy::dummy : 0; }
 
+  // inverse conversion to bool
+  safe_bool operator!() const
+    { return (data != 0)? 0 : &safe_bool_dummy::dummy; }
+
   // conversion to pointer
 #if !defined VBL_SHARED_POINTER_OF_NON_COMPOUND // Get rid of warning with vbl_shared_pointer<int>
       // VCL_DO_NOT_INSTANTIATE can't be used instead because the declaration of

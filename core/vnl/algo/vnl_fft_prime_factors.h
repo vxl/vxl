@@ -47,6 +47,8 @@ public:
 
   operator safe_bool () const
     { return (trigs_ && info_ >= 0)? &safe_bool_dummy::dummy : 0; }
+  safe_bool operator!() const
+    { return (trigs_ && info_ >= 0)? 0 : &safe_bool_dummy::dummy; }
 
   void resize(int N) {
     destruct();

@@ -144,6 +144,10 @@ class vil1_image
   operator safe_bool () const
     { return (ptr != 0)? &safe_bool_dummy::dummy : 0; }
 
+  //: inverse conversion to bool
+  safe_bool operator!() const
+    { return (ptr != 0)? 0 : &safe_bool_dummy::dummy; }
+
   //: use "sptr.impl()" to get a pointer to the impl object.
   vil1_image_impl *impl() const {
     return ptr;

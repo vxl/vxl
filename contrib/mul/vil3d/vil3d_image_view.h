@@ -161,6 +161,10 @@ class vil3d_image_view : public vil3d_image_view_base
   operator safe_bool () const
     { return (top_left_ != (T*)0)? &safe_bool_dummy::dummy : 0; }
 
+  //: Return false if pointing at some data.
+  safe_bool operator!() const
+    { return (top_left_ != (T*)0)? 0 : &safe_bool_dummy::dummy; }
+
   //: The number of bytes in the data
   inline unsigned size_bytes() const { return size() * sizeof(T); }
 
