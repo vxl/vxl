@@ -43,7 +43,7 @@ QvInput::~QvInput()
 }
 
 void
-QvInput::setFilePointer(FILE *newFP)
+QvInput::setFilePointer(vcl_FILE *newFP)
 {
     fp = newFP;
     lineNum = 1;

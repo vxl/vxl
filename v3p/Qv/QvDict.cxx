@@ -12,6 +12,12 @@
    typedef unsigned long intptr_t;
 # elif defined(__CYGWIN__)
 #  include <sys/types.h> /* for intptr_t on Cygwin */
+# elif defined(__BORLANDC__)
+#  if __BORLANDC__ < 0x0560
+    typedef unsigned long intptr_t;
+#  else
+#   include <stdint.h> /* for intptr_t on Borland 5.6. */
+#  endif
 # else
 #  include <inttypes.h> /* for intptr_t on e.g. SGI, Linux, Solaris */
 # endif
