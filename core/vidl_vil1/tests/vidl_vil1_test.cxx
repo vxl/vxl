@@ -59,8 +59,9 @@ int main ()
     }
 
   // Running over frames 10 to 20
-  vidl_vil1_movie::frame_iterator pframe = movie->begin();
-  for (int p=0; p<=20 && pframe!=movie->end(); ++p,++pframe)
+  int p=0;
+  for (vidl_vil1_movie::frame_iterator pframe = movie->begin();
+       pframe != movie->end() && p<=20; ++p,++pframe)
     if (p>=10)
       pframe->get_image();
 
