@@ -134,6 +134,11 @@ SOURCE=.\test_psfile.cxx
 # End Source File
 # Begin Source File
 
+SOURCE=.\test_regexp.cxx
+
+# End Source File
+# Begin Source File
+
 SOURCE=.\test_sprintf.cxx
 
 # End Source File
@@ -152,4 +157,3 @@ SOURCE=.\test_url.cxx
 # End Group
 # End Target
 # End Project
-
