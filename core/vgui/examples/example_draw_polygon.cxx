@@ -21,9 +21,7 @@
 #include <vgui/vgui_viewer2D_tableau.h>
 #include <vgui/vgui_projection_inspector.h>
 
-#if defined(VCL_BORLAND_56)
-# include <math.h>  /* hypot is not in C++98, and therefore not in vcl.  */
-#endif
+#define hypot(x,y) vcl_sqrt((x)*(x)+(y)*(y))  // hypot is not in C++98, and therefore not in vcl.
 
 struct example_polygon_tableau : public vgui_tableau
 {
