@@ -226,7 +226,8 @@ EXCLUDE              =
 EXCLUDE_PATTERNS     = */Linux2/* \
                        */Test/* \
                        */tests/* \
-                       */Templates/*
+                       */Templates/* \
+                       */example* 
 
 # The EXAMPLE_PATH tag can be used to specify one or more files or 
 # directories that contain example code fragments that are included (see 
