@@ -30,6 +30,7 @@
 
 #include "vnl_vector.h"
 
+#include <vcl_cstdlib.h> // abort()
 #include <vcl_vector.h>
 #include <vcl_iostream.h>
 #include <vcl_algorithm.h>
@@ -666,8 +667,8 @@ void vnl_vector<T>::swap(vnl_vector<T> &that)
 // of T. "double" is wrong since it won't work if T is complex.
 template <class T>
 T cos_angle(vnl_vector<T> const& a, vnl_vector<T> const& b) {
-  typedef vnl_numeric_traits<T>::real_t real_t;
-  typedef vnl_numeric_traits<T>::abs_t abs_t;
+  typedef typename vnl_numeric_traits<T>::real_t real_t;
+  typedef typename vnl_numeric_traits<T>::abs_t abs_t;
   
   real_t ab = inner_product(a,b);
 #if defined(VCL_VC50x)
@@ -706,7 +707,7 @@ void vnl_vector<T>::assert_finite() const {
 
   vcl_cerr << "*** NAN FEVER **\n";
   vcl_cerr << *this;
-  abort();
+  vcl_abort();
 }
 
 //
@@ -714,7 +715,7 @@ template <class T>
 void vnl_vector<T>::assert_size(unsigned sz) const {
   if (this->size() != sz) {
     vcl_cerr << "vnl_vector : has size " << this->size() << ". Should be " << sz << vcl_endl;
-    abort();
+    vcl_abort();
   }
 }
 
