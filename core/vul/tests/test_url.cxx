@@ -1,4 +1,4 @@
-// This is vxl/vul/tests/test_url.cxx
+// This is core/vul/tests/test_url.cxx
 // Copyright: (C) 2000 British Telecommunications PLC
 
 //:
@@ -73,29 +73,30 @@ void test_url()
 
   vcl_cout<<"======== http downloading ===========\n";
 
-#ifdef NO_DOWNLOAD
-  vcl_cout<<"Tests disabled, because too many users are behind mandatory caches;\n"
-          <<"vul_url does not support HTTP via a cache\n";
-#else
-  TEST("vul_url::exists(\"http://vxl.sourceforge.net/index.html\")",
-       vul_url::exists("http://vxl.sourceforge.net/index.html"), true);
-
-  TEST("! vul_url::exists(\"http://vxl.sourceforge.net/foobarwobble.html\")",
-       vul_url::exists("http://vxl.sourceforge.net/foobarwobble.html"), false);
-
-  vcl_istream* i = vul_url::open("http://vxl.sourceforge.net/");
-  TEST("vul_url::open(\"http://vxl.sourceforge.net/\")", bool(i), true);
-
-  if (i)
+  bool no_download = !vul_url::exists("http://vxl.sourceforge.net/index.html");
+  if (no_download)
+    vcl_cout<<"vul_url::exists() and vil_url::open() tests disabled: probably behind firewall\n";
+  else
   {
+    TEST("vul_url::exists(\"http://vxl.sourceforge.net/index.html\")",
+         vul_url::exists("http://vxl.sourceforge.net/index.html"), true);
+
+    TEST("! vul_url::exists(\"http://vxl.sourceforge.net/foobarwobble.html\")",
+         vul_url::exists("http://vxl.sourceforge.net/foobarwobble.html"), false);
+
+    vcl_istream* i = vul_url::open("http://vxl.sourceforge.net/");
+    TEST("vul_url::open(\"http://vxl.sourceforge.net/\")", bool(i), true);
+
     char b[]="<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\">\n<html>\n  <head>\n    <title>VXL homepage</title>";
-    int l = vcl_strlen(b);
-    char a[256];
-    i->read(a,1+l); a[1+l] = '\0';
-    vcl_cout << a;
-    TEST("test contents", vcl_strncmp(a,b,vcl_strlen(b)), 0);
+    if (i)
+    {
+      int l = vcl_strlen(b);
+      char a[256];
+      i->read(a,1+l); a[1+l] = '\0';
+      vcl_cout << a;
+      TEST("test contents", vcl_strncmp(a,b,vcl_strlen(b)), 0);
+    }
   }
-#endif
 }
 
 TESTMAIN(test_url);
