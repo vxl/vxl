@@ -649,7 +649,7 @@ bool vil_image_as_impl<vil_rgb<vxl_uint_16> >::get_section(void *buf,
 VCL_DEFINE_SPECIALIZATION
 vcl_string vil_image_as_impl<vil_rgb<vxl_uint_16> >::is_a() const
 {
-  const static vcl_string class_name_="vil_image_as_impl<vil_rgb<vxl_uint_16> >";
+  static const vcl_string class_name_="vil_image_as_impl<vil_rgb<vxl_uint_16> >";
   return class_name_;
 }
 
