@@ -16,6 +16,7 @@
 // -------------------- iso
 #else
 # include "iso/vcl_functional.h"
+# define vcl_alloc std::alloc
 #endif
 
 // Now #define vcl_blah to std::blah (except for emulation) :
