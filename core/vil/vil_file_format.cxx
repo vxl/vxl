@@ -13,7 +13,7 @@ vil_file_format::~vil_file_format()
 #define HAS_PNM   1
 #define HAS_VIFF  1
 #define HAS_IRIS  1
-#define HAS_MIT   0
+#define HAS_MIT   1
 #define HAS_BMP   1
 #define HAS_GIF   0
 // These will be defined "outside" if there really is a JPEG (PNG, TIFF) library

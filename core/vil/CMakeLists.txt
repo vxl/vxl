@@ -15,11 +15,11 @@ IF(JPEG_FOUND)
   ADD_DEFINITIONS( ${JPEG_DEFINITIONS} -DHAS_JPEG )
   SET( vil_sources ${vil_sources}
     file_formats/vil_jpeglib.h
-    file_formats/vil_jpeg.cxx file_formats/vil_jpeg.h
-    file_formats/vil_jpeg_source_mgr.cxx file_formats/vil_jpeg_source_mgr.h
-    file_formats/vil_jpeg_decompressor.cxx file_formats/vil_jpeg_decompressor.h
+    file_formats/vil_jpeg.cxx                 file_formats/vil_jpeg.h
+    file_formats/vil_jpeg_source_mgr.cxx      file_formats/vil_jpeg_source_mgr.h
+    file_formats/vil_jpeg_decompressor.cxx    file_formats/vil_jpeg_decompressor.h
     file_formats/vil_jpeg_destination_mgr.cxx file_formats/vil_jpeg_destination_mgr.h
-    file_formats/vil_jpeg_compressor.cxx file_formats/vil_jpeg_compressor.h
+    file_formats/vil_jpeg_compressor.cxx      file_formats/vil_jpeg_compressor.h
   )
 ENDIF(JPEG_FOUND)
 
@@ -35,84 +35,86 @@ ENDIF(TIFF_FOUND)
 SET( vil_sources ${vil_sources}
 
   # basic things
-  vil_memory_chunk.cxx     vil_memory_chunk.h
-  vil_image_view_base.cxx  vil_image_view_base.h
-  vil_image_view.h         vil_image_view.txx
-  vil_image_resource.cxx   vil_image_resource.h
+  vil_memory_chunk.cxx                  vil_memory_chunk.h
+  vil_image_view_base.cxx               vil_image_view_base.h
+  vil_image_view.h                      vil_image_view.txx
+  vil_image_resource.cxx                vil_image_resource.h
 
-  vil_file_format.cxx   vil_file_format.h
-  vil_memory_image.cxx  vil_memory_image.h
+  vil_file_format.cxx                   vil_file_format.h
+  vil_memory_image.cxx                  vil_memory_image.h
 
   # file format readers/writers (see above for conditional ones)
-  file_formats/vil_pnm.cxx  file_formats/vil_pnm.h
+  file_formats/vil_pnm.cxx              file_formats/vil_pnm.h
 
-  file_formats/vil_bmp_file_header.cxx file_formats/vil_bmp_file_header.h
-  file_formats/vil_bmp_core_header.cxx file_formats/vil_bmp_core_header.h
-  file_formats/vil_bmp_info_header.cxx file_formats/vil_bmp_info_header.h
-  file_formats/vil_bmp.cxx             file_formats/vil_bmp.h
+  file_formats/vil_bmp_file_header.cxx  file_formats/vil_bmp_file_header.h
+  file_formats/vil_bmp_core_header.cxx  file_formats/vil_bmp_core_header.h
+  file_formats/vil_bmp_info_header.cxx  file_formats/vil_bmp_info_header.h
+  file_formats/vil_bmp.cxx              file_formats/vil_bmp.h
 
-  file_formats/vil_ras.cxx  file_formats/vil_ras.h
+  file_formats/vil_ras.cxx              file_formats/vil_ras.h
 
-  file_formats/vil_iris.cxx          file_formats/vil_iris.h
+  file_formats/vil_iris.cxx             file_formats/vil_iris.h
 
-  file_formats/vil_dicom.cxx         file_formats/vil_dicom.h
-  file_formats/vil_dicom_header.cxx  file_formats/vil_dicom_header.h
+  file_formats/vil_mit.cxx              file_formats/vil_mit.h
 
-  file_formats/vil_viff.cxx          file_formats/vil_viff.h
-  file_formats/vil_viff_support.c    file_formats/vil_viff_support.h
+  file_formats/vil_dicom.cxx            file_formats/vil_dicom.h
+  file_formats/vil_dicom_header.cxx     file_formats/vil_dicom_header.h
+
+  file_formats/vil_viff.cxx             file_formats/vil_viff.h
+  file_formats/vil_viff_support.c       file_formats/vil_viff_support.h
   file_formats/vil_viffheader.h
 
   # image operations
-  vil_crop.cxx  vil_crop.h
-  vil_clamp.cxx vil_clamp.h
-  vil_transpose.cxx  vil_transpose.h
-  vil_flip.cxx  vil_flip.h
-  vil_plane.cxx vil_plane.h
+  vil_crop.cxx                          vil_crop.h
+  vil_clamp.cxx                         vil_clamp.h
+  vil_transpose.cxx                     vil_transpose.h
+  vil_flip.cxx                          vil_flip.h
+  vil_plane.cxx                         vil_plane.h
   vil_math.h
   vil_view_as.h
   vil_fill.h
   vil_transform.h
-  vil_decimate.h vil_decimate.cxx
+  vil_decimate.cxx                      vil_decimate.h
   vil_convert.h
-  vil_load.cxx  vil_load.h
-  vil_save.cxx  vil_save.h
-  vil_copy.txx  vil_copy.h
-  vil_new.cxx   vil_new.h
-  vil_print.cxx vil_print.h
+  vil_load.cxx                          vil_load.h
+  vil_save.cxx                          vil_save.h
+  vil_copy.txx                          vil_copy.h
+  vil_new.cxx                           vil_new.h
+  vil_print.cxx                         vil_print.h
 
   # Bilinear Sampling Operations
   vil_bilin_interp.h
-  vil_sample_profile_bilin.txx vil_sample_profile_bilin.h
-  vil_sample_grid_bilin.txx    vil_sample_grid_bilin.h
-  vil_resample_bilin.txx       vil_resample_bilin.h
-  vil_rotate.txx               vil_rotate.h
+  vil_sample_profile_bilin.txx          vil_sample_profile_bilin.h
+  vil_sample_grid_bilin.txx             vil_sample_grid_bilin.h
+  vil_resample_bilin.txx                vil_resample_bilin.h
+  vil_rotate.txx                        vil_rotate.h
 
   # Bicubic Sampling Operations
-  vil_bicub_interp.txx         vil_bicub_interp.h
-  vil_sample_profile_bicub.txx vil_sample_profile_bicub.h
-  vil_sample_grid_bicub.txx    vil_sample_grid_bicub.h
-  vil_resample_bicub.txx       vil_resample_bicub.h
+  vil_bicub_interp.txx                  vil_bicub_interp.h
+  vil_sample_profile_bicub.txx          vil_sample_profile_bicub.h
+  vil_sample_grid_bicub.txx             vil_sample_grid_bicub.h
+  vil_resample_bicub.txx                vil_resample_bicub.h
 
   # Stuff
-  vil_smart_ptr.txx vil_smart_ptr.h
+  vil_smart_ptr.txx                     vil_smart_ptr.h
   vil_property.h
-  vil_pixel_format.cxx vil_pixel_format.h
+  vil_pixel_format.cxx                  vil_pixel_format.h
   vil_pixel_traits.h
-  vil_rgb.txx vil_rgb.h
-  vil_rgba.txx vil_rgba.h
+  vil_rgb.txx                           vil_rgb.h
+  vil_rgba.txx                          vil_rgba.h
   vil_fwd.h
 
   # Streams
-  vil_stream.cxx vil_stream.h
-  vil_stream_fstream.cxx vil_stream_fstream.h
-  vil_stream_core.cxx vil_stream_core.h
-  vil_stream_section.cxx vil_stream_section.h
-  vil_open.cxx vil_open.h
-  vil_stream_read.cxx vil_stream_read.h
-  vil_stream_write.cxx vil_stream_write.h
+  vil_stream.cxx                        vil_stream.h
+  vil_stream_fstream.cxx                vil_stream_fstream.h
+  vil_stream_core.cxx                   vil_stream_core.h
+  vil_stream_section.cxx                vil_stream_section.h
+  vil_open.cxx                          vil_open.h
+  vil_stream_read.cxx                   vil_stream_read.h
+  vil_stream_write.cxx                  vil_stream_write.h
 
   # Plugin for image loading
-  vil_image_resource_plugin.cxx vil_image_resource_plugin.h
+  vil_image_resource_plugin.cxx         vil_image_resource_plugin.h
 )
 
 AUX_SOURCE_DIRECTORY(Templates vil_sources)

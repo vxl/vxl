@@ -20,6 +20,7 @@
 //   14 Apr 2002 - Amitha Perera - switched from vil1_test to testlib
 //   26 Aug 2002 - Ian Scott - Started conversion to vil
 //    2 Oct 2002 - Peter Vanroose - replaced image24 tests by image3p
+//      Jun 2003 - Peter Vanroose - added viff, iris, mit tests for vil
 // \endverbatim
 
 #include <vcl_cstring.h>
@@ -310,8 +311,6 @@ vil_image_view<vxl_uint_32> CreateTest32bitImage(int wd, int ht)
   return image;
 }
 
-#if 0 // read back pixel type will not match: ppm is always read in as 3-plane image
-
 // create a 24 bit color test image
 vil_image_view<vil_rgb<vxl_byte> > CreateTest24bitImage(int wd, int ht)
 {
@@ -321,8 +320,6 @@ vil_image_view<vil_rgb<vxl_byte> > CreateTest24bitImage(int wd, int ht)
       image(i,j) = vil_rgb<vxl_byte>(i%(1<<8), ((i-wd/2)*(j-ht/2)/16) % (1<<8), ((j/3)%(1<<8)));
   return image;
 }
-
-#endif // 0
 
 // create a 24 bit color test image, with 3 planes
 vil_image_view<vxl_byte> CreateTest3planeImage(int wd, int ht)
@@ -388,8 +385,10 @@ MAIN( test_save_load_image )
 #if HAS_JPEG
   // lossy format ==> not guaranteed to be identical (hence arg. 3 set to false)
   vil_test_image_type("jpeg", image8, false);
-//vil_test_image_type("jpeg", image16, false);
-//vil_test_image_type("jpeg", image3p, false);
+#if 0
+  vil_test_image_type("jpeg", image16, false);
+  vil_test_image_type("jpeg", image3p, false);
+#endif
 
   // Test small image
   {
@@ -452,7 +451,7 @@ MAIN( test_save_load_image )
   vil_test_image_type("tiff", image3p);
 #if 0
   vil_test_image_type("tiff", image1, true, true); // Test that boolean doesn't work
-  // Test that >1 byte pixels don't work:
+  // Test that >1 byte pixels don't work yet:
   vil_test_image_type("tiff", image16, true, true);
   vil_test_image_type("tiff", image32, true, true);
   vil_test_image_type("tiff", imagefloat, true, true);
@@ -477,9 +476,11 @@ MAIN( test_save_load_image )
 
 
   // mit
-#if 0
+#if 1
+//vil_test_image_type("mit", image1); // Test that boolean doesn't work
   vil_test_image_type("mit", image8);
   vil_test_image_type("mit", image16);
+  vil_test_image_type("mit", image32);
   vil_test_image_type("mit", image3p);
 #endif
 
