@@ -19,7 +19,6 @@
 #include <vbl/vbl_big_sparse_array_3d.h>
 
 #include <vbl/vbl_bool_ostream.h>
-#include <vbl/vbl_protection_traits.h>
 #include <vbl/vbl_sort.h>
 #include <vbl/vbl_qsort.h>
 
@@ -32,7 +31,12 @@
 #include <vbl/vbl_br_default.h>
 #include <vbl/vbl_br_impl.h>
 #endif
-#include <vbl/vbl_basic_relation_type.h>
+
 #include <vbl/vbl_sparse_array_base.h>
+
+#if 0 // These files are deprecated
+#include <vbl/vbl_basic_relation_type.h>
+#include <vbl/vbl_protection_traits.h>
+#endif
 
 int main() { return 0; }
