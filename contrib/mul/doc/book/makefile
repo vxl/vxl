@@ -21,11 +21,11 @@ endif
 MAKEINFOFLAGS=-Dmakeinfo --no-validate
 
 SOURCEFILES=book.texi \
-	chapter_mbl.texi \
-	chapter_vil2.texi \
-	chapter_clsfy.texi \
-	chapter_mil.texi \
-	chapter_vpdfl.texi
+            chapter_mbl.texi \
+            chapter_vil2.texi \
+            chapter_clsfy.texi \
+            chapter_mil.texi \
+            chapter_vpdfl.texi
 
 all: book.html book.dvi
 
