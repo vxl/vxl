@@ -7,10 +7,15 @@ PROJECT(allvxl)
 
 OPTION(BUILD_TESTS "Should the tests be built?" NO)
 OPTION(BUILD_SHARED_LIBS "Should shared libraries be the default?" NO)
-
 OPTION(WARN_DEPRECATED "Enable runtime warnings for deprecated functions?" YES)
 OPTION(WARN_DEPRECATED_ONCE "Only warn once per function (if runtime warnings are enabled)?" YES)
 OPTION(WARN_DEPRECATED_ABORT "Abort on executing a deprecated function (if runtime warnings are enabled)?" NO)
+
+OPTION(BUILD_MUL "Should the Manchester University Library be built?" YES)
+OPTION(BUILD_OXL "Should the Oxford University Library be built?" YES)
+OPTION(BUILD_GEL "Should the GE Library be built?" YES)
+OPTION(BUILD_TBL "Should the TB Library be built?" YES)
+OPTION(BUILD_CONVERSIONS "Should the Conversions Examples be built?" YES)
 
 IF(WARN_DEPRECATED)
   ADD_DEFINITIONS( -DVXL_WARN_DEPRECATED )
@@ -23,7 +28,28 @@ IF(WARN_DEPRECATED)
 ENDIF(WARN_DEPRECATED)
 
 
-SUBDIRS(vcl v3p vxl oxl gel mul tbl conversions)
+SUBDIRS(vcl v3p vxl)
+
+IF(BUILD_MUL)
+  SUBDIRS(mul)
+ENDIF(BUILD_MUL)
+
+IF(BUILD_GEL)
+  SUBDIRS(gel)
+ENDIF(BUILD_GEL)
+
+IF(BUILD_OXL)
+  SUBDIRS(oxl)
+ENDIF(BUILD_OXL)
+
+IF(BUILD_TBL)
+  SUBDIRS(tbl)
+ENDIF(BUILD_TBL)
+
+IF(BUILD_CONVERSIONS)
+  SUBDIRS(conversions)
+ENDIF(BUILD_CONVERSIONS)
+
 
 # For out of place builds, the configure generated headers are in the
 # binary directory
