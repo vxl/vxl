@@ -199,7 +199,7 @@ void vdgl_digital_region::IncrementMeans(float x, float y, unsigned short pix)
 //-----------------------------------------------------------------
 //:
 //    Used to scan through a set of pixels and acquire mean values
-//    for coordinates and intensity.  This approach is neccessary to
+//    for coordinates and intensity.  This approach is necessary to
 //    accumulate scatter matrices which have zero mean. One scans
 //    the region pixels twice. First to get the means and and number of
 //    region pixels and then to insert the pixel data into fixed arrays
@@ -557,7 +557,7 @@ void vdgl_digital_region::PrintFit() const
 
 #if 0
 //-----------------------------------------------------------
-//: Return a package of fitted coeficients
+//: Return a package of fitted coefficients
 //
 IntensityCoef_ref vdgl_digital_region::GetIntCoef() const
 {
