@@ -152,13 +152,15 @@ vil2_image_view<vil2_byte> filtered_image = vil2_transpose(tmp_image2);
 *
 * \section image_src Image sources
 * The vil2_image_data class is an abstract base class for image data, views of which can be
-* obtained (or changed) with the get_view()/set_view() functions.
-* The two main derived classes are
+* obtained (or changed) with the get_view()/put_view() functions.
+* The types of derived classes are
 * - vil2_filetype_image: Representing an image in a file
 * - vil2_memory_image: Representing an image in memory (essentially a wrapper around a view)
-*
+* - vil2_filter_image_data: Representing a filtered (e.g. cropped) version of an image in a file.
 * Most instances of vil2_image_data objects will be through smart pointers. So expect to see
-* lots of references to vil2_image_data_sptr types.
+* lots of references to vil2_image_data_sptr types. vil2_image_data objects in most cases
+* only deal with scalar-type pixels. Of course once you get a view of real image data in memory, you
+* can easily convert a multi-planar view into multi-component view.
 *
 * \section algo Algorithms and Image Processing
 * Some simple algorithms for manipulation images are included in the algo sub-directory.

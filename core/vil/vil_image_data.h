@@ -23,8 +23,11 @@ class vil2_image_view_base;
 // Abstract representation of an image source or image destination.
 // Most references to vil2_image_data objects should usually be done
 // through smart pointers - vil2_image_data_sptr;
-// All image data is presumed to be arranged in planes, not components.
-
+//
+// All image data is presumed to be in planes, not components. This
+// does not say whether the data is stored on disk or in memory
+// as RGBRGBRGB.. or RRR..GGG..BBB.., just that the interface will
+// always tell you that it has a multi-plane single-component view.
 class vil2_image_data
 {
  public:
@@ -41,9 +44,9 @@ class vil2_image_data
   // The number of pixels in each column.
   virtual unsigned nj() const = 0;
 
-  //: Format.
+  //: Pixel Format.
   //  A standard RGB RGB RGB of chars image has
-  // pixel_format() == VIL2_PIXEL_FORMAT_RGB_BYTE
+  // pixel_format() == VIL2_PIXEL_FORMAT_BYTE
   virtual enum vil2_pixel_format pixel_format() const = 0;
 
   //: Create a read/write view of the data.
@@ -64,8 +67,8 @@ class vil2_image_data
                                                   unsigned nx, unsigned ny) const = 0;
 
   //: Put the data in this view back into the image source.
-  // The view must be of scalar components. Use vil2_view_as_planes
-  // to convert it if this is not the case.
+  // The view must be of scalar components. Assign your
+  // view to a scalar-component view if this is not the case.
   virtual bool put_view(const vil2_image_view_base& im, unsigned x0, unsigned y0) = 0;
 
   //: Check that a view will fit into the data at the given offset.
