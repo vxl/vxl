@@ -56,7 +56,7 @@ public:
   //#endif
 
   // VC50 bombs with INTERNAL COMPILER ERROR on template member functions
-#if VCL_HAS_MEMBErTEMPLATES
+#if VCL_HAS_MEMBER_TEMPLATES
   template <class S>
   vil_rgba(const vil_rgba<S>& that) {
     r=((T)that.r);
