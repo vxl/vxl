@@ -41,12 +41,17 @@ void test_k_means()
 
   vcl_vector<vnl_vector<double> > centres;
   vcl_vector<unsigned> clusters;
-  mbl_data_array_wrapper<vnl_vector<double> > data_array1(data);
+  mbl_data_array_wrapper<vnl_vector<double> > data_array(data);
 
   unsigned nIts =
-    mbl_k_means(data_array1, nCentres, &centres, &clusters);
+    mbl_k_means(data_array, nCentres, &centres, &clusters);
   vcl_cout << "Took " << nIts << " iterations." << vcl_endl;
 
+  vcl_cout << "Found " << centres.size() << " clusters." << vcl_endl;
+  TEST ("Found as many clusters as asked for", centres.size(), nCentres);
+
+  
+  
   vbl_bounding_box<double, nDims> bbox;
   bbox.update(&((vnl_vector<double>(nDims, 0.0))[0]));
   bbox.update(&((vnl_vector<double>(nDims, 1.0))[0]));
@@ -107,18 +112,82 @@ void test_k_means()
 
   vcl_vector<unsigned> clusters2;    
  
-  mbl_data_array_wrapper<vnl_vector<double> > data_array2(data);
-  mbl_k_means(data_array2, nCentres, &centres, &clusters2);
+  mbl_k_means(data_array, nCentres, &centres, &clusters2);
 
 
   vcl_cout << "\n\n======Test Stability of solution" << vcl_endl;
   TEST("Cluster partitions do not change when restarting with the found centres", clusters2, clusters);
 
   centres.resize(0);
-  mbl_k_means(data_array2, nCentres, &centres, &clusters2);
+  mbl_k_means(data_array, nCentres, &centres, &clusters2);
   TEST("Cluster partitions do not change when restarting with the found partition", clusters2, clusters);
   vcl_cout << vcl_endl << vcl_endl;
 
+  vcl_cout << "\n\n======Test mbl_k_means_weighted" << vcl_endl;
+  vcl_vector<double> weights(nSamples, 1.0);
+  clusters2.resize(0);
+  centres.resize(0);
+  mbl_k_means_weighted(data_array, nCentres, weights, &centres, &clusters2);
+  TEST("Cluster partitions do not change when rerunning with equal weights",
+    clusters2 == clusters && centres.size() ==nCentres,
+    true);
+  vcl_cout << vcl_endl << vcl_endl;
+
+  vcl_cout << "=============With biased weighting:" << vcl_endl;
+
+  //  Set the weightings so that we expect the centres at x_0 > 0.5
+  for (i=0; i<nSamples; ++i)
+  {
+    if (data[i](0) < 0.5) weights[i] = 0.0;
+    else if (data[i](0) < 0.75) weights[i] = 0.3;
+    else weights[i] = 1.0;
+  } 
+
+  
+
+  clusters2.resize(0);
+  centres.resize(0);
+  mbl_k_means_weighted(data_array, nCentres, weights, &centres, &clusters2);
+  vcl_cout << "Found " << centres.size() << " clusters." << vcl_endl;
+
+    
+  i=0;
+  while ( i<centres.size() && bbox.inside(centres[i].data_block()) ) i++;
+  
+  TEST ("All cluster centres are inside bounding box", i, centres.size());
+
+  vcl_cout << "\n\n======Test spread of centres" << vcl_endl;
+
+  if(nDims == 2)
+  {
+    vbl_array_2d<unsigned> m(10, 10, 0u);
+    for (i=0; i<centres.size(); ++i)
+    {
+      m((unsigned)(centres[i](0) * 10.0),
+        (unsigned)(centres[i](1) * 10.0)) ++;
+    }
+    vcl_cout << "Distribution of centres in a 10x10 histogram:\n"
+             << m << vcl_endl;
+  }
+  else if (nDims == 3)
+  {
+    vbl_array_3d<unsigned> m(4, 4, 4, 0u);
+    for (i=0; i<centres.size(); ++i)
+    {
+      m((unsigned)(centres[i](0) * 4.0),
+        (unsigned)(centres[i](1) * 4.0),
+        (unsigned)(centres[i](2) * 4.0)) ++;
+    }
+    vcl_cout << "Distribution of centres in a 4x4x4 histogram:\n"
+             << m << vcl_endl;
+  }
+    
+  i=0;
+  while ( i<centres.size() && centres[i](0) > 0.5 ) i++;
+  TEST("All cluster centres are on correct side of bias decision line", 
+        i, centres.size());
+
+  vcl_cout << "\n\n" << vcl_endl;
 }
 
 TESTMAIN(test_mz_random);
