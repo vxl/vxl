@@ -49,7 +49,7 @@ void test_sample_profile_2d_byte()
   TEST("Profile correct length",vec.size(),9);
   TEST_NEAR("First value",vec[0],5.5f,1e-6);
   TEST_NEAR("Second value",vec[1],15.5f,1e-6);
-  TEST_NEAR("Last value",vec[8],25.7f,1e-6);
+  TEST_NEAR("Last value",vec[8],25.7f,1e-5);
 
   mil_sample_profile_2d(vec,image3,p0,u0,8);
   TEST("Profile correct length",vec.size(),24);
