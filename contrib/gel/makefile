@@ -39,6 +39,9 @@ SUBDIRS += mrc/vpgl
 # coordinate systems addon
 SUBDIRS += mrc/vcsl
 
+# Kanade-Lucas-Tomasi feature tracker
+SUBDIRS += vgel gkll
+
 # general examples
 ifndef NOTEST
 SUBDIRS += examples
