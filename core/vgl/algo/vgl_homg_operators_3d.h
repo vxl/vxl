@@ -15,7 +15,7 @@
 //   16-Mar-01 Tim Cootes - Tidied up documentation
 
 #include <vcl_vector.h>
-#include <vnl/vnl_vector.h>
+#include <vnl/vnl_fwd.h>
 #include <vgl/vgl_homg_line_3d_2_points.h>
 
 template <class Type> class vgl_homg_point_3d;
@@ -99,5 +99,20 @@ class vgl_homg_operators_3d
                             const vgl_homg_plane_3d<Type >& p3,
                             const vgl_homg_point_3d<Type >& p4);
 };
+
+//: Project a point through a 3x4 projective transformation matrix
+template <class T>
+vgl_homg_point_2d<T> operator*(vnl_matrix_fixed<T,3,4> const& m,
+                               vgl_homg_point_3d<T> const& p);
+
+//: Project a plane through a 3x4 projective transformation matrix
+template <class T>
+vgl_homg_line_2d<T> operator*(vnl_matrix_fixed<T,3,4> const& m,
+                              vgl_homg_plane_3d<T> const& l);
+
+//: Backproject a 2D line through a 4x3 projective transformation matrix
+template <class T>
+vgl_homg_plane_3d<T> operator*(vnl_matrix_fixed<T,4,3> const& m,
+                               vgl_homg_line_2d<T> const& l);
 
 #endif // _vgl_homg_operators_3d_h

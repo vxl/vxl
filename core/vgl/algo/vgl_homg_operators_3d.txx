@@ -16,6 +16,8 @@
 
 #include <vgl/vgl_homg_point_3d.h>
 #include <vgl/vgl_homg_plane_3d.h>
+#include <vgl/vgl_homg_line_2d.h>
+#include <vgl/vgl_homg_point_2d.h>
 
 //-----------------------------------------------------------------------------
 
@@ -380,6 +382,37 @@ double vgl_homg_operators_3d<Type>::cross_ratio(const vgl_homg_point_3d<Type>& a
   if (n == 0 && m == 0)
     vcl_cerr << "cross ratio not defined: three of the given points coincide\n";
   return n/m;
+}
+
+//: Project a point through a 3x4 projective transformation matrix
+template <class T>
+vgl_homg_point_2d<T> operator*(vnl_matrix_fixed<T,3,4> const& m,
+                               vgl_homg_point_3d<T> const& p)
+{
+  return vgl_homg_point_2d<T>(m(0,0)*p.x()+m(1,0)*p.y()+m(2,0)*p.z()+m(3,0)*p.w(),
+                              m(0,1)*p.x()+m(1,1)*p.y()+m(2,1)*p.z()+m(3,1)*p.w(),
+                              m(0,2)*p.x()+m(1,2)*p.y()+m(2,2)*p.z()+m(3,2)*p.w());
+}
+
+//: Project a plane through a 3x4 projective transformation matrix
+template <class T>
+vgl_homg_line_2d<T> operator*(vnl_matrix_fixed<T,3,4> const& m,
+                              vgl_homg_plane_3d<T> const& l)
+{
+  return vgl_homg_line_2d<T>(m(0,0)*l.a()+m(0,1)*l.b()+m(0,2)*l.c()+m(0,3)*l.d(),
+                             m(1,0)*l.a()+m(1,1)*l.b()+m(1,2)*l.c()+m(1,3)*l.d(),
+                             m(2,0)*l.a()+m(2,1)*l.b()+m(2,2)*l.c()+m(2,3)*l.d());
+}
+
+//: Backproject a 2D line through a 4x3 projective transformation matrix
+template <class T>
+vgl_homg_plane_3d<T> operator*(vnl_matrix_fixed<T,4,3> const& m,
+                               vgl_homg_line_2d<T> const& l)
+{
+  return vgl_homg_plane_3d<T>(m(0,0)*l.a()+m(0,1)*l.b()+m(0,2)*l.c(),
+                              m(1,0)*l.a()+m(1,1)*l.b()+m(1,2)*l.c(),
+                              m(2,0)*l.a()+m(2,1)*l.b()+m(2,2)*l.c(),
+                              m(3,0)*l.a()+m(3,1)*l.b()+m(3,2)*l.c());
 }
 
 #endif // vgl_homg_operators_3d_txx_

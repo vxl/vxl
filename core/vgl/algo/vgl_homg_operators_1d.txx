@@ -5,6 +5,7 @@
 // \file
 
 #include "vgl_homg_operators_1d.h"
+#include <vnl/vnl_matrix_fixed.h>
 #include <vgl/vgl_homg.h> // for infinity
 #include <vcl_cmath.h>
 #include <vcl_iostream.h>
@@ -139,6 +140,15 @@ vgl_homg_point_1d<T> vgl_homg_operators_1d<T>::conjugate(const vgl_homg_point_1d
   T k = x1*w3 - x3*w1, m = x2*w3 - x3*w2;
   return vgl_homg_point_1d<T>(T(x2*k-cr*x1*m), T(k*w2-cr*m*w1));
   // could be (0,0) !!  not checked.
+}
+
+//: Transform a point through a 2x2 projective transformation matrix
+template <class T>
+vgl_homg_point_1d<T> operator*(vnl_matrix_fixed<T,2,2> const& m,
+                               vgl_homg_point_1d<T> const& p)
+{
+  return vgl_homg_point_1d<T>(m(0,0)*p.x()+m(0,1)*p.w(),
+                              m(1,0)*p.x()+m(1,1)*p.w());
 }
 
 #endif // vgl_homg_operators_1d_txx_

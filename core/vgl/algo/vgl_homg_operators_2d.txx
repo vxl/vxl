@@ -17,6 +17,7 @@
 
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_matrix.h>
+#include <vnl/vnl_matrix_fixed.h>
 #include <vnl/vnl_math.h>
 #include <vnl/algo/vnl_scatter_3x3.h> // used in most_orthogonal_vector()
 #include <vnl/vnl_numeric_limits.h> // for infinity
@@ -859,6 +860,26 @@ vgl_homg_operators_2d<T>::compute_bounding_box(vgl_conic<T> const& c)
   if (x1 > x2) { T t = x1; x1 = x2; x2 = t; }
 
   return vgl_box_2d<T>(x1, x2, y1, y2);
+}
+
+//: Transform a point through a 3x3 projective transformation matrix
+template <class T>
+vgl_homg_point_2d<T> operator*(vnl_matrix_fixed<T,3,3> const& m,
+                               vgl_homg_point_2d<T> const& p)
+{
+  return vgl_homg_point_2d<T>(m(0,0)*p.x()+m(0,1)*p.y()+m(0,2)*p.w(),
+                              m(1,0)*p.x()+m(1,1)*p.y()+m(1,2)*p.w(),
+                              m(2,0)*p.x()+m(2,1)*p.y()+m(2,2)*p.w());
+}
+
+//: Transform a line through a 3x3 projective transformation matrix
+template <class T>
+vgl_homg_line_2d<T> operator*(vnl_matrix_fixed<T,3,3> const& m,
+                              vgl_homg_line_2d<T> const& l)
+{
+  return vgl_homg_line_2d<T>(m(0,0)*l.a()+m(0,1)*l.b()+m(0,2)*l.c(),
+                             m(1,0)*l.a()+m(1,1)*l.b()+m(1,2)*l.c(),
+                             m(2,0)*l.a()+m(2,1)*l.b()+m(2,2)*l.c());
 }
 
 #endif // vgl_homg_operators_2d_txx_
