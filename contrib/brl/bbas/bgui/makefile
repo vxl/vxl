@@ -1,4 +1,4 @@
-USES += contrib/brl contrib/gel contrib/brl/bbas core
+USES += contrib/brl contrib/gel contrib/brl/bbas contrib/brl/bseg core
 include ${IUEROOT}/core/vgui/config.mk
 
 LIBRARY := bgui
