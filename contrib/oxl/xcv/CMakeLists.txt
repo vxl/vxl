@@ -25,8 +25,6 @@ SET(xcv_sources
  xcv_axes_limits.cxx        xcv_axes_limits.h
 )
 
-AUX_SOURCE_DIRECTORY(Templates xcv_sources)
-
 IF(CMAKE_COMPILER_IS_GNUCXX)
   SET_SOURCE_FILES_PROPERTIES(xcv_geometry.cxx PROPERTIES COMPILE_FLAGS "-O0 -ftemplate-depth-100")
   SET_SOURCE_FILES_PROPERTIES(xcv_multiview.cxx PROPERTIES COMPILE_FLAGS -O0)
