@@ -5,15 +5,6 @@
 #
 
 LINK_LIBRARIES(
-vcl
-jpeg
-vbl
-vnl
-vnl_algo
-vil
-vul
-vil_file_formats
-vgl
 vidl
 vtol
 vsol
@@ -22,18 +13,14 @@ vgel_kl
 mvl
 )
 
+INCLUDE(${allvxl_SOURCE_DIR}/vxl/vnl/CMakeListsLink.txt)
+INCLUDE(${allvxl_SOURCE_DIR}/vxl/vil/CMakeListsLink.txt)
+INCLUDE(${allvxl_SOURCE_DIR}/vxl/vgl/CMakeListsLink.txt)
+INCLUDE(${allvxl_SOURCE_DIR}/vxl/vul/CMakeListsLink.txt)
+INCLUDE(${allvxl_SOURCE_DIR}/vxl/vbl/CMakeListsLink.txt)
+INCLUDE(${allvxl_SOURCE_DIR}/vcl/CMakeListsLink.txt)
+
 LINK_DIRECTORIES(
-${allvxl_BINARY_DIR}/vcl
-
-${allvxl_BINARY_DIR}/v3p/jpeg
-
-${allvxl_BINARY_DIR}/vxl/vbl
-${allvxl_BINARY_DIR}/vxl/vul
-${allvxl_BINARY_DIR}/vxl/vnl
-${allvxl_BINARY_DIR}/vxl/vnl/algo
-${allvxl_BINARY_DIR}/vxl/vil
-${allvxl_BINARY_DIR}/vxl/vil/file_formats
-${allvxl_BINARY_DIR}/vxl/vgl
 ${allvxl_BINARY_DIR}/vxl/vidl
 
 ${allvxl_BINARY_DIR}/gel/vtol
