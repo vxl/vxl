@@ -119,7 +119,7 @@
 #include <vbl/vbl_reg_exp.h> // Include class specification
 #include <vcl_cstdio.h>
 
-// vbl_reg_exp -- Copies the given regular expression.
+//: Copies the given regular expression.
 
 vbl_reg_exp::vbl_reg_exp (const vbl_reg_exp& rxp) {
   int ind;
@@ -145,7 +145,7 @@ vbl_reg_exp::vbl_reg_exp (const vbl_reg_exp& rxp) {
 }
 
 
-// operator== -- Returns true if two regular expressions have the same
+//: Returns true if two regular expressions have the same
 // compiled program for pattern matching.
 
 bool vbl_reg_exp::operator== (vbl_reg_exp const& rxp) const {
@@ -161,7 +161,7 @@ bool vbl_reg_exp::operator== (vbl_reg_exp const& rxp) const {
 }
 
 
-// deep_equal -- Returns true if have the same compiled regular expressions
+//: Returns true if have the same compiled regular expressions
 // and the same start and end pointers.
 
 bool vbl_reg_exp::deep_equal (const vbl_reg_exp& rxp) const {
@@ -179,66 +179,66 @@ bool vbl_reg_exp::deep_equal (const vbl_reg_exp& rxp) const {
 // whose  copyright statement appears  below.  It has been  changed to work
 // with the class concepts of C++ and COOL.
 
-/*
- * compile and find
- *
- * Copyright (c) 1986 by University of Toronto.
- * Written by Henry Spencer.  Not derived from licensed software.
- *
- * Permission is granted to anyone to use this software for any
- * purpose on any computer system, and to redistribute it freely,
- * subject to the following restrictions:
- *
- * 1. The author is not responsible for the consequences of use of
- *  this software, no matter how awful, even if they arise
- *  from defects in it.
- *
- * 2. The origin of this software must not be misrepresented, either
- *  by explicit claim or by omission.
- *
- * 3. Altered versions must be plainly marked as such, and must not
- *  be misrepresented as being the original software.
- *
- * Beware that some of this code is subtly aware of the way operator
- * precedence is structured in regular expressions.  Serious changes in
- * regular-expression syntax might require a total rethink.
- */
+//
+// compile and find
+//
+// Copyright (c) 1986 by University of Toronto.
+// Written by Henry Spencer.  Not derived from licensed software.
+//
+// Permission is granted to anyone to use this software for any
+// purpose on any computer system, and to redistribute it freely,
+// subject to the following restrictions:
+//
+// 1. The author is not responsible for the consequences of use of
+//  this software, no matter how awful, even if they arise
+//  from defects in it.
+//
+// 2. The origin of this software must not be misrepresented, either
+//  by explicit claim or by omission.
+//
+// 3. Altered versions must be plainly marked as such, and must not
+//  be misrepresented as being the original software.
+//
+// Beware that some of this code is subtly aware of the way operator
+// precedence is structured in regular expressions.  Serious changes in
+// regular-expression syntax might require a total rethink.
+//
 
-/*
- * The "internal use only" fields in regexp.h are present to pass info from
- * compile to execute that permits the execute phase to run lots faster on
- * simple cases.  They are:
- *
- * regstart  char that must begin a match; '\0' if none obvious
- * reganch   is the match anchored (at beginning-of-line only)?
- * regmust   string (pointer into program) that match must include, or NULL
- * regmlen   length of regmust string
- *
- * Regstart and reganch permit very fast decisions on suitable starting points
- * for a match, cutting down the work a lot.  Regmust permits fast rejection
- * of lines that cannot possibly match.  The regmust tests are costly enough
- * that compile() supplies a regmust only if the r.e. contains something
- * potentially expensive (at present, the only such thing detected is * or +
- * at the start of the r.e., which can involve a lot of backup).  Regmlen is
- * supplied because the test in find() needs it and compile() is computing
- * it anyway.
- */
+//
+// The "internal use only" fields in regexp.h are present to pass info from
+// compile to execute that permits the execute phase to run lots faster on
+// simple cases.  They are:
+//
+// regstart  char that must begin a match; '\0' if none obvious
+// reganch   is the match anchored (at beginning-of-line only)?
+// regmust   string (pointer into program) that match must include, or NULL
+// regmlen   length of regmust string
+//
+// Regstart and reganch permit very fast decisions on suitable starting points
+// for a match, cutting down the work a lot.  Regmust permits fast rejection
+// of lines that cannot possibly match.  The regmust tests are costly enough
+// that compile() supplies a regmust only if the r.e. contains something
+// potentially expensive (at present, the only such thing detected is * or +
+// at the start of the r.e., which can involve a lot of backup).  Regmlen is
+// supplied because the test in find() needs it and compile() is computing
+// it anyway.
+//
 
-/*
- * Structure for regexp "program".  This is essentially a linear encoding
- * of a nondeterministic finite-state machine (aka syntax charts or
- * "railroad normal form" in parsing technology).  Each node is an opcode
- * plus a "next" pointer, possibly plus an operand.  "Next" pointers of
- * all nodes except BRANCH implement concatenation; a "next" pointer with
- * a BRANCH on both ends of it is connecting two alternatives.  (Here we
- * have one of the subtle syntax dependencies:  an individual BRANCH (as
- * opposed to a collection of them) is never concatenated with anything
- * because of operator precedence.)  The operand of some types of node is
- * a literal string; for others, it is a node leading into a sub-FSM.  In
- * particular, the operand of a BRANCH node is the first node of the branch.
- * (NB this is *not* a tree structure:  the tail of the branch connects
- * to the thing following the set of BRANCHes.)  The opcodes are:
- */
+//
+// Structure for regexp "program".  This is essentially a linear encoding
+// of a nondeterministic finite-state machine (aka syntax charts or
+// "railroad normal form" in parsing technology).  Each node is an opcode
+// plus a "next" pointer, possibly plus an operand.  "Next" pointers of
+// all nodes except BRANCH implement concatenation; a "next" pointer with
+// a BRANCH on both ends of it is connecting two alternatives.  (Here we
+// have one of the subtle syntax dependencies:  an individual BRANCH (as
+// opposed to a collection of them) is never concatenated with anything
+// because of operator precedence.)  The operand of some types of node is
+// a literal string; for others, it is a node leading into a sub-FSM.  In
+// particular, the operand of a BRANCH node is the first node of the branch.
+// (NB this is *not* a tree structure:  the tail of the branch connects
+// to the thing following the set of BRANCHes.)  The opcodes are:
+//
 
 // definition   number  opnd?   meaning
 #define END     0    // no   End of program.
@@ -257,64 +257,61 @@ bool vbl_reg_exp::deep_equal (const vbl_reg_exp& rxp) const {
 // OPEN+1 is number 1, etc.
 #define CLOSE   30   // no   Analogous to OPEN.
 
-/*
- * Opcode notes:
- *
- * BRANCH       The set of branches constituting a single choice are hooked
- *              together with their "next" pointers, since precedence prevents
- *              anything being concatenated to any individual branch.  The
- *              "next" pointer of the last BRANCH in a choice points to the
- *              thing following the whole choice.  This is also where the
- *              final "next" pointer of each individual branch points; each
- *              branch starts with the operand node of a BRANCH node.
- *
- * BACK         Normal "next" pointers all implicitly point forward; BACK
- *              exists to make loop structures possible.
- *
- * STAR,PLUS    '?', and complex '*' and '+', are implemented as circular
- *              BRANCH structures using BACK.  Simple cases (one character
- *              per match) are implemented with STAR and PLUS for speed
- *              and to minimize recursive plunges.
- *
- * OPEN,CLOSE   ...are numbered at compile time.
- */
+//
+// Opcode notes:
+//
+// BRANCH       The set of branches constituting a single choice are hooked
+//              together with their "next" pointers, since precedence prevents
+//              anything being concatenated to any individual branch.  The
+//              "next" pointer of the last BRANCH in a choice points to the
+//              thing following the whole choice.  This is also where the
+//              final "next" pointer of each individual branch points; each
+//              branch starts with the operand node of a BRANCH node.
+//
+// BACK         Normal "next" pointers all implicitly point forward; BACK
+//              exists to make loop structures possible.
+//
+// STAR,PLUS    '?', and complex '*' and '+', are implemented as circular
+//              BRANCH structures using BACK.  Simple cases (one character
+//              per match) are implemented with STAR and PLUS for speed
+//              and to minimize recursive plunges.
+//
+// OPEN,CLOSE   ...are numbered at compile time.
+//
 
-/*
- * A node is one char of opcode followed by two chars of "next" pointer.
- * "Next" pointers are stored as two 8-bit pieces, high order first.  The
- * value is a positive offset from the opcode of the node containing it.
- * An operand, if any, simply follows the node.  (Note that much of the
- * code generation knows about this implicit relationship.)
- *
- * Using two bytes for the "next" pointer is vast overkill for most things,
- * but allows patterns to get big without disasters.
- */
+//
+// A node is one char of opcode followed by two chars of "next" pointer.
+// "Next" pointers are stored as two 8-bit pieces, high order first.  The
+// value is a positive offset from the opcode of the node containing it.
+// An operand, if any, simply follows the node.  (Note that much of the
+// code generation knows about this implicit relationship.)
+//
+// Using two bytes for the "next" pointer is vast overkill for most things,
+// but allows patterns to get big without disasters.
+//
 
 #define OP(p)           (*(p))
 #define NEXT(p)         (((*((p)+1)&0377)<<8) + (*((p)+2)&0377))
 #define OPERAND(p)      ((p) + 3)
 
 const unsigned char MAGIC = 0234;
-/*
- * Utility definitions.
- */
 
+//
+// Utility definitions.
+//
 #define UCHARAT(p)      ((const unsigned char*)(p))[0]
-
 
 #define FAIL(m) { regerror(m); return(NULL); }
 #define ISMULT(c)       ((c) == '*' || (c) == '+' || (c) == '?')
 #define META    "^$.[()|?+*\\"
 
-
-/*
- * Flags to be passed up and down.
- */
+//
+// Flags to be passed up and down.
+//
 #define HASWIDTH        01      // Known never to match null string.
 #define SIMPLE          02      // Simple enough to be STAR/PLUS operand.
 #define SPSTART         04      // Starts with * or +.
 #define WORST           0       // Worst case.
-
 
 
 /////////////////////////////////////////////////////////////////////////
@@ -324,18 +321,18 @@ const unsigned char MAGIC = 0234;
 /////////////////////////////////////////////////////////////////////////
 
 
-/*
- * Global work variables for compile().
- */
+//
+// Global work variables for compile().
+//
 static const char* regparse; // Input-scan pointer.
 static       int   regnpar; // () count.
 static       char  regdummy;
 static       char* regcode; // Code-emit pointer; &regdummy = don't.
 static       long  regsize; // Code size.
 
-/*
- * Forward declarations for compile()'s friends.
- */
+//
+// Forward declarations for compile()'s friends.
+//
 static       char* reg (int, int*);
 static       char* regbranch (int*);
 static       char* regpiece (int*);
@@ -353,23 +350,22 @@ static int strcspn ();
 #endif
 
 
+//
+// We can't allocate space until we know how big the compiled form will be,
+// but we can't compile it (and thus know how big it is) until we've got a
+// place to put the code.  So we cheat:  we compile it twice, once with code
+// generation turned off and size counting turned on, and once "for real".
+// This also means that we don't allocate space until we are sure that the
+// thing really will compile successfully, and we never have to move the
+// code and thus invalidate pointers into it.  (Note that it has to be in
+// one piece because free() must be able to free it all.)
+//
+// Beware that the optimization-preparation code in here knows about some
+// of the structure of the compiled regexp.
+//
 
-/*
- * We can't allocate space until we know how big the compiled form will be,
- * but we can't compile it (and thus know how big it is) until we've got a
- * place to put the code.  So we cheat:  we compile it twice, once with code
- * generation turned off and size counting turned on, and once "for real".
- * This also means that we don't allocate space until we are sure that the
- * thing really will compile successfully, and we never have to move the
- * code and thus invalidate pointers into it.  (Note that it has to be in
- * one piece because free() must be able to free it all.)
- *
- * Beware that the optimization-preparation code in here knows about some
- * of the structure of the compiled regexp.
- */
 
-
-// compile -- compile a regular expression into internal code
+//: compile a regular expression into internal code
 // for later pattern matching.
 
 void vbl_reg_exp::compile (char const* exp) {
@@ -462,15 +458,14 @@ void vbl_reg_exp::compile (char const* exp) {
 }
 
 
-/*
- - reg - regular expression, i.e. main body or parenthesized thing
- *
- * Caller must absorb opening parenthesis.
- *
- * Combining parenthesis handling with the base level of regular expression
- * is a trifle forced, but the need to tie the tails of the branches to what
- * follows makes it hard to avoid.
- */
+// regular expression, i.e. main body or parenthesized thing
+//
+// Caller must absorb opening parenthesis.
+//
+// Combining parenthesis handling with the base level of regular expression
+// is a trifle forced, but the need to tie the tails of the branches to what
+// follows makes it hard to avoid.
+//
 static char* reg (int paren, int *flagp) {
     register char* ret;
     register char* br;
@@ -547,11 +542,10 @@ static char* reg (int paren, int *flagp) {
 }
 
 
-/*
- - regbranch - one alternative of an | operator
- *
- * Implements the concatenation operator.
- */
+// one alternative of an | operator
+//
+// Implements the concatenation operator.
+//
 static char* regbranch (int *flagp) {
     register char* ret;
     register char* chain;
@@ -580,15 +574,15 @@ static char* regbranch (int *flagp) {
 }
 
 
-/*
- - regpiece - something followed by possible [*+?]
- *
- * Note that the branching code sequences used for ? and the general cases
- * of * and + are somewhat optimized:  they use the same NOTHING node as
- * both the endmarker for their branch list and the body of the last branch.
- * It might seem that this node could be dispensed with entirely, but the
- * endmarker role is not redundant.
- */
+//
+// something followed by possible [*+?]
+//
+// Note that the branching code sequences used for ? and the general cases
+// of * and + are somewhat optimized:  they use the same NOTHING node as
+// both the endmarker for their branch list and the body of the last branch.
+// It might seem that this node could be dispensed with entirely, but the
+// endmarker role is not redundant.
+//
 static char* regpiece (int *flagp) {
     register char* ret;
     register char  op;
@@ -650,14 +644,13 @@ static char* regpiece (int *flagp) {
 }
 
 
-/*
- - regatom - the lowest level
- *
- * Optimization:  gobbles an entire sequence of ordinary characters so that
- * it can turn them into a single node, which is smaller to store and
- * faster to run.  Backslashed characters are exceptions, each becoming a
- * separate node; the code is simpler that way and it's not worth fixing.
- */
+// the lowest level
+//
+// Optimization:  gobbles an entire sequence of ordinary characters so that
+// it can turn them into a single node, which is smaller to store and
+// faster to run.  Backslashed characters are exceptions, each becoming a
+// separate node; the code is simpler that way and it's not worth fixing.
+//
 static char* regatom (int *flagp) {
     register char* ret;
              int   flags;
@@ -777,10 +770,9 @@ static char* regatom (int *flagp) {
 }
 
 
-/*
- - regnode - emit a node
-   Location.
- */
+// emit a node
+// Location.
+//
 static char* regnode (char op) {
     register char* ret;
     register char* ptr;
@@ -801,9 +793,8 @@ static char* regnode (char op) {
 }
 
 
-/*
- - regc - emit (if appropriate) a byte of code
- */
+// emit (if appropriate) a byte of code
+//
 static void regc (unsigned char b) {
     if (regcode != &regdummy)
         *regcode++ = b;
@@ -812,11 +803,10 @@ static void regc (unsigned char b) {
 }
 
 
-/*
- - reginsert - insert an operator in front of already-emitted operand
- *
- * Means relocating the operand.
- */
+// insert an operator in front of already-emitted operand
+//
+// Means relocating the operand.
+//
 static void reginsert (char op, char* opnd) {
     register char* src;
     register char* dst;
@@ -840,9 +830,8 @@ static void reginsert (char op, char* opnd) {
 }
 
 
-/*
- - regtail - set the next-pointer at the end of a node chain
- */
+// set the next-pointer at the end of a node chain
+//
 static void regtail (char* p, const char* val) {
     register char* scan;
     register char* temp;
@@ -869,16 +858,14 @@ static void regtail (char* p, const char* val) {
 }
 
 
-/*
- - regoptail - regtail on operand of first argument; nop if operandless
- */
+// regtail on operand of first argument; nop if operandless
+//
 static void regoptail (char* p, const char* val) {
     // "Operandless" and "op != BRANCH" are synonymous in practice.
     if (p == NULL || p == &regdummy || OP(p) != BRANCH)
         return;
     regtail(OPERAND(p), val);
 }
-
 
 
 ////////////////////////////////////////////////////////////////////////
@@ -888,17 +875,17 @@ static void regoptail (char* p, const char* val) {
 ////////////////////////////////////////////////////////////////////////
 
 
-/*
- * Global work variables for find().
- */
+//
+// Global work variables for find().
+//
 static const char*  reginput; // String-input pointer.
 static const char*  regbol; // Beginning of input, for ^ check.
 static const char* *regstartp; // Pointer to startp array.
 static const char* *regendp; // Ditto for endp.
 
-/*
- * Forwards.
- */
+//
+// Forwards.
+//
 static int regtry (const char*, const char* *,
                    const char* *, const char*);
 static int regmatch (const char*);
@@ -915,8 +902,7 @@ return find(s.c_str());
 }
 
 
-
-// find -- Matches the regular expression to the given string.
+//: Matches the regular expression to the given string.
 // Returns true if found, and sets start and end indexes accordingly.
 
 bool vbl_reg_exp::find (char const* string) {
@@ -958,10 +944,9 @@ bool vbl_reg_exp::find (char const* string) {
             if (regtry(s, this->startp, this->endp, this->program))
                 return (1);
             s++;
-
         }
     else
-        // We don't -- general case.
+        // We don't - general case.
         do {
             if (regtry(s, this->startp, this->endp, this->program))
                 return (1);
@@ -972,10 +957,9 @@ bool vbl_reg_exp::find (char const* string) {
 }
 
 
-/*
- - regtry - try match at specific point
-   0 failure, 1 success
- */
+// try match at specific point
+// 0 failure, 1 success
+//
 static int regtry (const char* string, const char* *start,
                    const char* *end, const char* prog) {
     register       int    i;
@@ -1002,17 +986,16 @@ static int regtry (const char* string, const char* *start,
 }
 
 
-/*
- - regmatch - main matching routine
- *
- * Conceptually the strategy is simple:  check to see whether the current
- * node matches, call self recursively to see whether the rest matches,
- * and then act accordingly.  In practice we make some effort to avoid
- * recursion, in particular by going through "ordinary" nodes (that don't
- * need to know whether the rest of the match failed) by a loop instead of
- * by recursion.
- * 0 failure, 1 success
- */
+// main matching routine
+//
+// Conceptually the strategy is simple:  check to see whether the current
+// node matches, call self recursively to see whether the rest matches,
+// and then act accordingly.  In practice we make some effort to avoid
+// recursion, in particular by going through "ordinary" nodes (that don't
+// need to know whether the rest of the match failed) by a loop instead of
+// by recursion.
+// 0 failure, 1 success
+//
 static int regmatch (const char* prog) {
     register const char* scan; // Current node.
              const char* next; // Next node.
@@ -1162,7 +1145,7 @@ static int regmatch (const char* prog) {
                         if (nextch == '\0' || *reginput == nextch)
                             if (regmatch(next))
                                 return (1);
-                        // Couldn't or didn't -- back up.
+                        // Couldn't or didn't - back up.
                         no--;
                         reginput = save + no;
                     }
@@ -1180,7 +1163,7 @@ static int regmatch (const char* prog) {
     }
 
     //
-    //  We get here only if there's trouble -- normally "case END" is the
+    //  We get here only if there's trouble - normally "case END" is the
     //  terminating point.
     //
     //RAISE Error, SYM(vbl_reg_exp), SYM(Internal_Error),
@@ -1189,9 +1172,8 @@ static int regmatch (const char* prog) {
 }
 
 
-/*
- - regrepeat - repeatedly match something simple, report how many
- */
+// repeatedly match something simple, report how many
+//
 static int regrepeat (const char* p) {
     register       int   count = 0;
     register const char* scan;
@@ -1232,9 +1214,8 @@ static int regrepeat (const char* p) {
 }
 
 
-/*
- - regnext - dig the "next" pointer out of a node
- */
+// dig the "next" pointer out of a node
+//
 static const char* regnext (register const char* p) {
     register int offset;
 
