@@ -33,7 +33,7 @@ void test_form(vcl_vector<double>& B,
                pdf1d_compare_to_pdf_bhat& comparitor)
 {
   // This is inefficient
-  int n = builder.size();
+  unsigned int n = builder.size();
   if (B.size()!=n) B.resize(n);
   vnl_vector<double> b;
   for (int i=0;i<n;++i)
@@ -42,7 +42,8 @@ void test_form(vcl_vector<double>& B,
     B[i] = comparitor.bootstrap_compare_form(b,x.data_block(),x.size(),*builder[i],10);
     vcl_cout<<i+1<<") B: "<<B[i]<<vcl_endl;
     ofs<<i+1<<" "<<B[i]<<vcl_endl;
-    for (int j=0;j<b.size();++j) ofs<<i+1<<" "<<b[j]<<vcl_endl;
+    for (unsigned int j=0;j<b.size();++j)
+      ofs<<" "<<j+1<<" "<<b[j]<<vcl_endl;
   }
   vcl_cout<<"------------------------"<<vcl_endl;
 }
@@ -56,7 +57,7 @@ void select_form(vnl_vector<int>& histo,
   vnl_vector<double> x(n_samples);
   pdf1d_sampler *sampler = true_pdf.new_sampler();
 
-  int n = builder.size();
+  unsigned int n = builder.size();
   if (histo.size()!=n)
   {
     histo.resize(n);

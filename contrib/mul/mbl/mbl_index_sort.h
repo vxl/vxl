@@ -29,7 +29,7 @@ void mbl_index_sort(const T* data, int n, vcl_vector<int>& index)
   c.data = data;
 
   index.resize(n);
-  for(unsigned i =0;i < n; ++i) index[i] = i;
+  for (int i =0;i < n; ++i) index[i] = i;
 
   vcl_sort(index.begin(), index.end(), c);
 }
@@ -55,7 +55,7 @@ void mbl_index_sort(const vcl_vector<T>& data, vcl_vector<int>& index)
 
   unsigned n = data.size();
   index.resize(n);
-  for(unsigned i =0;i < n; ++i) index[i] = i;
+  for (unsigned i =0;i < n; ++i) index[i] = i;
 
   vcl_sort(index.begin(), index.end(), c);
 }
