@@ -431,7 +431,7 @@ void bsol_intrinsic_curve_2d::computeAngles()
   double px,py;
   double cx,cy;
   double theta;
-  int i;
+  unsigned int i;
 
   angle_.clear();
   angle_.push_back(0.0);
