@@ -30,7 +30,7 @@ static void test_identity_transform()
 }
 static void test_perspective_transform()
 {
-  vcl_cout << "Testing identity transform on point\n";
+  vcl_cout << "Testing perspective transform on point\n";
   vnl_matrix_fixed<double, 3, 3> M;
   vgl_homg_point_2d<double> p(3,2,1), pp, ppp;
   M.put(0,0,1);    M.put(0,1,2);   M.put(0,2,1);
