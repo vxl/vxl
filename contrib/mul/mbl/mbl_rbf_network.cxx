@@ -134,15 +134,14 @@ void mbl_rbf_network::calcWts(vnl_vector<double>& w, const vnl_vector<double>& n
 {
   unsigned int n = x_.size();
   if (w.size()!=n) w.set_size(n);
-
   if (v_.size()!=n) v_.set_size(n);
 
-  double* v_data = v_.begin();
-  const vnl_vector<double>* x_data = &(x_.front());
+  double* v_data = &v_[0];
+  const vnl_vector<double>* x_data = &x_[0];
 
   if (n==1)
   {
-    w(1)=1.0;
+    w(0)=1.0;
     return;
   }
 
@@ -151,25 +150,21 @@ void mbl_rbf_network::calcWts(vnl_vector<double>& w, const vnl_vector<double>& n
     // Use linear interpolation based on distance.
     double d0 = vcl_sqrt(distSqr(new_x,x_data[0]));
     double d1 = vcl_sqrt(distSqr(new_x,x_data[1]));
-    w(1) = d1/(d0+d1);
-    w(2) = 1.0 - w(1);
+    w(0) = d1/(d0+d1);
+    w(1) = 1.0 - w(0);
     return;
   }
 
   for (unsigned int i=0;i<n;++i)
   {
-    double v_i = rbf(new_x,x_data[i]);
-    v_data[i+1] = v_i;
+    v_data[i] = rbf(new_x,x_data[i]);
   }
 
   mbl_matxvec_prod_mv(W_,v_,w);
 
   if (sum_to_one_)
   {
-    double* w_data = w.begin();
-    double sum = 0.0;
-    for (unsigned int i=0;i<n;++i)
-      sum+=w_data[i];
+    double sum = w.sum();
     if (sum!=0) w/=sum;
   }
 }

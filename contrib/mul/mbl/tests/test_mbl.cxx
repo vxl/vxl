@@ -31,6 +31,7 @@
 #include "test_lda.cxx"
 #include "test_read_props.cxx"
 #include "test_correspond_points.cxx"
+#include "test_rbf_network.cxx"
 
 #undef TESTLIB_DEFINE_MAIN
 #define TESTLIB_DEFINE_MAIN(x) int main() \
@@ -65,6 +66,7 @@ void run_test_mbl()
   test_thin_plate_spline_weights_3d();
   test_read_props();
   test_correspond_points();
+  test_rbf_network();
 }
 
 TESTLIB_DEFINE_MAIN(run_test_mbl);
