@@ -190,6 +190,16 @@ vsol_spatial_object_2d_ref vtol_edge_2d::clone(void) const
 }
 
 //---------------------------------------------------------------------------
+// Name: curve
+// Task: Return the curve associated to `this'
+//---------------------------------------------------------------------------
+vsol_curve_2d_ref vtol_edge_2d::curve(void) const
+{
+  return _curve;
+}
+
+
+//---------------------------------------------------------------------------
 // Name: zero_chain
 // Task: Return the first zero-chain of `this'
 //---------------------------------------------------------------------------
@@ -453,6 +463,18 @@ bool vtol_edge_2d::operator==(const vtol_edge_2d &other) const
   if ((zc1.ptr()==0)||(zc2.ptr()==0))
     return false;
   return *zc1==*zc2;
+}
+
+//:
+// spatial object equality
+
+bool vtol_edge_2d::operator==(const vsol_spatial_object_2d& obj) const
+{
+  return
+   obj.spatial_type() == vsol_spatial_object_2d::TOPOLOGYOBJECT &&
+   ((vtol_topology_object_2d const&)obj).topology_type() == vtol_topology_object_2d::EDGE
+  ? *this == (vtol_edge_2d const&) (vtol_topology_object_2d const&) obj
+  : false;
 }
 
 /*

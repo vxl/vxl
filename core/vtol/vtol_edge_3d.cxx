@@ -532,14 +532,17 @@ bool vtol_edge_3d::operator==(const vtol_edge_3d &e) const
   return equiv;
 }
 
-bool vtol_edge_3d::operator==(const vsol_spatial_object_3d &obj) const 
-{
-  
-  if ((obj.spatial_type() == vsol_spatial_object_3d::TOPOLOGYOBJECT) &&
-      (((vtol_topology_object_3d&)obj).topology_type() == vtol_topology_object_3d::EDGE))
-    return (vtol_edge_3d &)*this == (vtol_edge_3d&) (vtol_topology_object_3d&) obj;
-  else return false;
+//:
+// spatial object equality
 
+bool vtol_edge_3d::operator==(const vsol_spatial_object_3d& obj) const
+{
+  return
+   obj.spatial_type() == vsol_spatial_object_3d::TOPOLOGYOBJECT &&
+   ((vtol_topology_object_3d const&)obj).topology_type() == vtol_topology_object_3d::EDGE
+  ? *this == (vtol_edge_3d const&) (vtol_topology_object_3d const&) obj
+  : false;
+}
 
 }
 

@@ -252,17 +252,18 @@ bool vtol_zero_chain_2d::operator==(const vtol_zero_chain_2d &other) const
 }
 
 
-#if 0
+//:
+// spatial object equality
+
 bool vtol_zero_chain_2d::operator==(const vsol_spatial_object_2d& obj) const
 {
- 
-  if ((obj.spatial_type() == vsol_spatial_object_2d::TOPOLOGYOBJECT) &&
-      (((vtol_topology_object_2d&)obj).topology_type() == vtol_topology_object_2d::ZEROCHAIN))
-    return (vtol_zero_chain_2d &)*this == (vtol_zero_chain_2d&) (vtol_topology_object_2d&) obj;
-  else return false;
- 
+  return
+   obj.spatial_type() == vsol_spatial_object_2d::TOPOLOGYOBJECT &&
+   ((vtol_topology_object_2d const&)obj).topology_type() == vtol_topology_object_2d::ZEROCHAIN
+  ? *this == (vtol_zero_chain_2d const&) (vtol_topology_object_2d const&) obj
+  : false;
 }
-#endif
+
 
 /*******  Print Methods   *************/
 

@@ -883,15 +883,16 @@ bool vtol_two_chain_3d::operator==(const vtol_two_chain_3d& obj) const
 }
 
 
+//:
+// spatial object equality
+
 bool vtol_two_chain_3d::operator==(const vsol_spatial_object_3d& obj) const
 {
-  
- if ((obj.spatial_type() == vsol_spatial_object_3d::TOPOLOGYOBJECT) &&
-      (((vtol_topology_object_3d&)obj).topology_type() == vtol_topology_object_3d::TWOCHAIN))
-    return (vtol_two_chain_3d &)*this == (vtol_two_chain_3d&) (vtol_topology_object_3d&) obj;
-  else return false;
- 
-
+  return
+   obj.spatial_type() == vsol_spatial_object_3d::TOPOLOGYOBJECT &&
+   ((vtol_topology_object_3d const&)obj).topology_type() == vtol_topology_object_3d::TWOCHAIN
+  ? *this == (vtol_two_chain_3d const&) (vtol_topology_object_3d const&) obj
+  : false;
 }
 
 

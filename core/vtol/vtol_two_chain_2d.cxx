@@ -804,18 +804,18 @@ bool vtol_two_chain_2d::operator==(const vtol_two_chain_2d &other) const
   return true;
 }
 
-#if 0
+//:
+// spatial object equality
+
 bool vtol_two_chain_2d::operator==(const vsol_spatial_object_2d& obj) const
 {
-  
-  if ((obj.spatial_type() == vsol_spatial_object_2d::TOPOLOGYOBJECT) &&
-      (((vtol_topology_object_2d&)obj).topology_type() == vtol_topology_object_2d::TWOCHAIN))
-    return (vtol_two_chain_2d &)*this == (vtol_two_chain_2d&) (vtol_topology_object_2d&) obj;
-  else return false;
- 
-
+  return
+   obj.spatial_type() == vsol_spatial_object_2d::TOPOLOGYOBJECT &&
+   ((vtol_topology_object_2d const&)obj).topology_type() == vtol_topology_object_2d::TWOCHAIN
+  ? *this == (vtol_two_chain_2d const&) (vtol_topology_object_2d const&) obj
+  : false;
 }
-#endif
+
 
 /*
  ******************************************************

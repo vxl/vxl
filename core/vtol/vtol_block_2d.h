@@ -159,6 +159,7 @@ public:
 
   //  virtual void update(void);
   virtual bool operator==(const vtol_block_2d &other) const;
+  virtual bool operator==(const vsol_spatial_object_2d& obj) const; // virtual of vsol_spatial_object_2d
 
   //: Printing Functions
   virtual void print(ostream &strm=cout) const;

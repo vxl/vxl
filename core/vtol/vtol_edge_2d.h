@@ -124,7 +124,7 @@ public:
   //---------------------------------------------------------------------------
   //: Return the curve associated to `this'
   //---------------------------------------------------------------------------
-  virtual vsol_curve_2d_ref curve(void) const { return _curve; }
+  virtual vsol_curve_2d_ref curve(void) const; // { return _curve; }
 
   //---------------------------------------------------------------------------
   //: Set the curve with `new_curve'
@@ -172,6 +172,7 @@ public:
                                  vtol_vertex_2d &);
  
   virtual bool operator==(const vtol_edge_2d &other) const;
+  bool operator==(const vsol_spatial_object_2d& obj) const; // virtual of vsol_spatial_object_2d
 
   virtual void add_edge_loop(vtol_one_chain_2d &);
   virtual void remove_edge_loop(vtol_one_chain_2d &);

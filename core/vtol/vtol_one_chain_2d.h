@@ -182,8 +182,8 @@ public:
   // Operators
   //: \brief Operators
 
-  //  virtual bool operator==(const vsol_spatial_object_2d& obj) const;
   virtual bool operator==(const vtol_one_chain_2d &other) const;
+  bool operator==(const vsol_spatial_object_2d& obj) const; // virtual of vsol_spatial_object_2d
 
   virtual void print(ostream &strm=cout) const;
   virtual void describe_directions(ostream &strm=cout,

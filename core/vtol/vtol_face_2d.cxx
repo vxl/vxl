@@ -598,6 +598,18 @@ bool vtol_face_2d::operator==(const vtol_face_2d &other) const
 }
 
 //:
+// spatial object equality
+
+bool vtol_face_2d::operator==(const vsol_spatial_object_2d& obj) const
+{
+  return
+   obj.spatial_type() == vsol_spatial_object_2d::TOPOLOGYOBJECT &&
+   ((vtol_topology_object_2d const&)obj).topology_type() == vtol_topology_object_2d::FACE
+  ? *this == (vtol_face_2d const&) (vtol_topology_object_2d const&) obj
+  : false;
+}
+
+//:
 // Returns the ith inferior vtol_one_chain_2d of the vtol_face_2d.
 
 vtol_one_chain_2d *vtol_face_2d::get_one_chain(int which)

@@ -122,15 +122,14 @@ public:
   //: Is `this' equal to `other' ?
   //---------------------------------------------------------------------------
   virtual bool operator==(const vtol_zero_chain_2d &other) const;
+  bool operator==(const vsol_spatial_object_2d& obj) const; // virtual of vsol_spatial_object_2d
   
   virtual void print(ostream &strm=cout) const;
   virtual void describe(ostream &strm=cout,
                         int blanking=0) const;
 
-  //  bool operator==(const vsol_spatial_object_2d& ) const;
-
   // : Warning - should not be used by clients
-  
+protected:
   virtual vcl_vector<vtol_vertex_2d*> *compute_vertices(void);
   virtual vcl_vector<vtol_edge_2d*> *compute_edges(void);
   virtual vcl_vector<vtol_zero_chain_2d*> *compute_zero_chains(void);

@@ -378,16 +378,18 @@ bool vtol_vertex_3d::eq(vtol_vertex_3d &overtex)
   return *this==overtex;
 }
 
-bool vtol_vertex_3d::operator==(const vsol_spatial_object_3d &obj) const
+//:
+// spatial object equality
+
+bool vtol_vertex_3d::operator==(const vsol_spatial_object_3d& obj) const
 {
- 
-  if ((obj.spatial_type() == vsol_spatial_object_3d::TOPOLOGYOBJECT) &&
-      (((vtol_topology_object_3d&)obj).topology_type() == vtol_topology_object_3d::VERTEX))
-    return (vtol_vertex_3d &)*this == (vtol_vertex_3d&) (vtol_topology_object_3d&) obj;
-  else return false;
- 
- 
+  return
+   obj.spatial_type() == vsol_spatial_object_3d::TOPOLOGYOBJECT &&
+   ((vtol_topology_object_3d const&)obj).topology_type() == vtol_topology_object_3d::VERTEX
+  ? *this == (vtol_vertex_3d const&) (vtol_topology_object_3d const&) obj
+  : false;
 }
+
 
 //:
 // This method returns true if the vertex is equivalent to v2.

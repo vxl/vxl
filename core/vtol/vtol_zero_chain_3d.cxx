@@ -186,13 +186,17 @@ bool vtol_zero_chain_3d::operator== (const vtol_zero_chain_3d & z2) const
 
 
 
-bool vtol_zero_chain_3d::operator==(const vsol_spatial_object_3d& obj) const 
+//:
+// spatial object equality
+
+bool vtol_zero_chain_3d::operator==(const vsol_spatial_object_3d& obj) const
 {
-  if ((obj.spatial_type() == vsol_spatial_object_3d::TOPOLOGYOBJECT) &&
-      (((vtol_topology_object_3d&)obj).topology_type() == vtol_topology_object_3d::ZEROCHAIN))
-    return (vtol_zero_chain_3d &)*this == (vtol_zero_chain_3d&) (vtol_topology_object_3d&) obj;
-  else return false;
- 
+  return
+   obj.spatial_type() == vsol_spatial_object_3d::TOPOLOGYOBJECT &&
+   ((vtol_topology_object_3d const&)obj).topology_type() == vtol_topology_object_3d::ZEROCHAIN
+  ? *this == (vtol_zero_chain_3d const&) (vtol_topology_object_3d const&) obj
+  : false;
+}
 
 
 }

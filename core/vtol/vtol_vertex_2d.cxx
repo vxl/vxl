@@ -426,18 +426,18 @@ vtol_vertex_2d &vtol_vertex_2d::operator=(const vtol_vertex_2d &other)
   return *this;
 }
 
-#if 0
-bool vtol_vertex_2d::operator==(const vsol_spatial_object_2d &obj) const
+//:
+// spatial object equality
+
+bool vtol_vertex_2d::operator==(const vsol_spatial_object_2d& obj) const
 {
- 
-  if ((obj.spatial_type() == vsol_spatial_object_2d::TOPOLOGYOBJECT) &&
-      (((vtol_topology_object_2d&)obj).topology_type() == vtol_topology_object_2d::VERTEX))
-    return (vtol_vertex_2d &)*this == (vtol_vertex_2d&) (vtol_topology_object_2d&) obj;
-  else return false;
- 
- 
+  return
+   obj.spatial_type() == vsol_spatial_object_2d::TOPOLOGYOBJECT &&
+   ((vtol_topology_object_2d const&)obj).topology_type() == vtol_topology_object_2d::VERTEX
+  ? *this == (vtol_vertex_2d const&) (vtol_topology_object_2d const&) obj
+  : false;
 }
-#endif
+
 
 //---------------------------------------------------------------------------
 // Name: ==

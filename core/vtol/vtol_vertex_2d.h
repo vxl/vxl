@@ -85,7 +85,7 @@ public:
   //---------------------------------------------------------------------------
   //: Return the point
   //---------------------------------------------------------------------------
-  virtual vsol_point_2d *point(void) const;
+  virtual vsol_point_2d_ref point(void) const;
 
   //---------------------------------------------------------------------------
   //: Set the point (the point is not copied)
@@ -120,12 +120,11 @@ public:
   //---------------------------------------------------------------------------
   virtual void set_y(const double new_y);
 
-  //  bool operator==(const vsol_spatial_object_2d &obj) const; // virtual of vsol_spatial_object_2d.
-
   //---------------------------------------------------------------------------
   //: Is `this' has the same coordinates for its point than `other' ?
   //---------------------------------------------------------------------------
   virtual bool operator==(const vtol_vertex_2d &other) const;
+  bool operator==(const vsol_spatial_object_2d& obj) const; // virtual of vsol_spatial_object_2d
 
   //---------------------------------------------------------------------------
   //: Assignment of `this' with `other' (copy the point not the links)

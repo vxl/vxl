@@ -143,8 +143,8 @@ public:
                          vtol_vertex_3d *);
  
 
-  bool operator==(const vsol_spatial_object_3d &obj) const;
   bool operator==(const vtol_edge_3d  &) const;
+  bool operator==(const vsol_spatial_object_3d& obj) const; // virtual of vsol_spatial_object_3d
 
   bool add_edge_loop(vtol_one_chain_3d *);
   bool remove_edge_loop(vtol_one_chain_3d *);

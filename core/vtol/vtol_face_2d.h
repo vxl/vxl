@@ -108,7 +108,7 @@ public:
   //---------------------------------------------------------------------------
   virtual vtol_topology_object_2d_type topology_type(void) const;
 
-  virtual vsol_region_2d *surface(void) const;
+  virtual vsol_region_2d_ref surface(void) const;
   virtual void set_surface(vsol_region_2d *const newsurf);
   virtual vtol_one_chain_2d *get_one_chain(int which = 0);
   virtual vtol_one_chain_2d *get_boundary_cycle(void);
@@ -192,6 +192,7 @@ public:
   virtual void compute_bounding_box(void); //A local implementation
 
   virtual bool operator==(const vtol_face_2d &other)const;
+  bool operator==(const vsol_spatial_object_2d& obj) const; // virtual of vsol_spatial_object_2d
 
   virtual void print(ostream &strm=cout) const;
 

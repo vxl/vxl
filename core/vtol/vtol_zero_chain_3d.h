@@ -85,8 +85,8 @@ public:
   void describe (ostream& strm =cout, int blanking = 0) const;
 
 
-  bool operator==(const vsol_spatial_object_3d& ) const;
   bool operator== (const vtol_zero_chain_3d&) const;
+  bool operator==(const vsol_spatial_object_3d& obj) const; // virtual of vsol_spatial_object_3d
 
   bool remove( vtol_vertex_3d * vertex,
                vcl_vector< vtol_topology_object_3d * > & changes,

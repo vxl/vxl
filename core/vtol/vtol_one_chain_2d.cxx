@@ -919,20 +919,18 @@ void vtol_one_chain_2d::reverse_directions(void)
     ((vtol_one_chain_2d *)((*hi)->clone().ptr()))->reverse_directions();
 }
 
-#if 0
 //:
-// comparison operator
+// spatial object equality
 
-bool vtol_one_chain_2d::operator==(const vsol_spatial_object_2d &obj) const
+bool vtol_one_chain_2d::operator==(const vsol_spatial_object_2d& obj) const
 {
- 
-  if ((obj.spatial_type() == vsol_spatial_object_2d::TOPOLOGYOBJECT) &&
-      (((vtol_topology_object_2d&)obj).topology_type() == vtol_topology_object_2d::ONECHAIN))
-    return (vtol_one_chain_2d &)*this == (vtol_one_chain_2d&) (vtol_topology_object_2d&) obj;
-  else return false;
-
+  return
+   obj.spatial_type() == vsol_spatial_object_2d::TOPOLOGYOBJECT &&
+   ((vtol_topology_object_2d const&)obj).topology_type() == vtol_topology_object_2d::ONECHAIN
+  ? *this == (vtol_one_chain_2d const&) (vtol_topology_object_2d const&) obj
+  : false;
 }
-#endif
+
 //:
 // Print Methods
 

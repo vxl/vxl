@@ -737,15 +737,17 @@ bool vtol_face_3d::operator==(const vtol_face_3d& otherf) const
 }
 
 
+//:
+// spatial object equality
+
 bool vtol_face_3d::operator==(const vsol_spatial_object_3d& obj) const
 {
-  if ((obj.spatial_type() == vsol_spatial_object_3d::TOPOLOGYOBJECT) &&
-      (((vtol_topology_object_3d&)obj).topology_type() == vtol_topology_object_3d::FACE))
-    return (vtol_face_3d &)*this == (vtol_face_3d&) (vtol_topology_object_3d&) obj;
-  else return false;
-
+  return
+   obj.spatial_type() == vsol_spatial_object_3d::TOPOLOGYOBJECT &&
+   ((vtol_topology_object_3d const&)obj).topology_type() == vtol_topology_object_3d::FACE
+  ? *this == (vtol_face_3d const&) (vtol_topology_object_3d const&) obj
+  : false;
 }
-
 
 //:
 // Returns the ith inferior vtol_one_chain_3d of the vtol_face_3d.
