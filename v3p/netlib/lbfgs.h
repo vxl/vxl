@@ -1,8 +1,6 @@
 #ifndef lbfgs_h_
 #define lbfgs_h_
 
-#include "f2c.h"
-
 struct lb3_1_ {
 /*
 C    GTOL is a DOUBLE PRECISION variable with default value 0.9, which
@@ -20,9 +18,9 @@ C        values need not be modified unless the exponents are too large
 C        for the machine being used, or unless the problem is extremely
 C        badly scaled (in which case the exponents should be increased).
 */
-  integer mp, lp; /* Fortran i/o stuff.  Unused here. */
-  doublereal gtol, stpmin, stpmax;
-  doublereal stpawf; /* line search default step length, added by awf */
+  int mp, lp; /* Fortran i/o stuff.  Unused here. */
+  double gtol, stpmin, stpmax;
+  double stpawf; /* line search default step length, added by awf */
 };
 
 /*#define lb3_1 (*(struct lb3_1_ *) &lb3_)*/
