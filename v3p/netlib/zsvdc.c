@@ -52,7 +52,7 @@ integer *job, *info;
     static doublereal shift;
     extern /* Subroutine */ int drotg_();
     static integer maxit;
-    extern /* Double Complex */ int zdotc_();
+    extern /* Double Complex */ void zdotc_();
     static logical wantu, wantv;
     extern /* Subroutine */ int zdrot_(), zswap_();
     static doublereal t1, ztest;
@@ -1164,7 +1164,7 @@ L20:
     return 0;
 } /* zaxpy_ */
 
-/* Double Complex */ int zdotc_( ret_val, n, zx, incx, zy, incy)
+/* Double Complex */ void zdotc_( ret_val, n, zx, incx, zy, incy)
 doublecomplex * ret_val;
 integer *n;
 doublecomplex *zx;
