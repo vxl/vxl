@@ -32,7 +32,7 @@
 #include <vtol/vtol_face_sptr.h>
 #include <vdgl/vdgl_intensity_face_sptr.h>
 
-class vdgl_intensity_face : public vtol_face_2d, public vdgl_digital_region
+class vdgl_intensity_face : public vdgl_digital_region, public vtol_face_2d 
 {
 public:
   //Constructors
@@ -47,13 +47,6 @@ public:
                 unsigned short *pix);
   ~vdgl_intensity_face();
 
-  //---------------------------------------------------------------------------
-  //: Clone `this': creation of a new object and initialization
-  //  See Prototype pattern
-  //---------------------------------------------------------------------------
-  virtual vsol_spatial_object_3d_sptr clone(void);
-
-  
   bool IsHoleP();
   inline vtol_topology_object::vtol_topology_object_type
     GetTopologyType() const { return vtol_topology_object::INTENSITYFACE; }

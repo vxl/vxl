@@ -3,6 +3,9 @@ SOURCE_FILES(vdgl_sources
   vdgl_digital_curve.h
   vdgl_digital_curve_sptr.h
   vdgl_digital_region.h
+  vdgl_digital_region_sptr.h
+  vdgl_intensity_face.h
+  vdgl_intensity_face_sptr.h
   vdgl_edgel.h
   vdgl_edgel_chain.h
   vdgl_edgel_chain_sptr.h

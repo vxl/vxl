@@ -51,18 +51,13 @@
 // .SECTION Modifications <none>
 //-----------------------------------------------------------------------------
 
-#if 0
-#include <math/matrix.h>
-#include <cool/Transform.h>
-#include <Basics/Histogram_ref.h>
-#include <DigitalGeometry/IntensityCoef_ref.h>
-#include <DigitalGeometry/DigitalRegion.h>
-#endif
-
 #include <vcl_iostream.h>
 #include <vcl_vector.h>
+#include <vnl/vnl_matrix.h>
 #include <vnl/vnl_math.h>     // for sqrt(2)
 #include <vgl/vgl_point_2d.h>
+#include <vtol/vtol_face_2d.h>
+#include <vdgl/vdgl_digital_region_sptr.h>
 
 class vdgl_digital_region
 {

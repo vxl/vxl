@@ -1,34 +1,9 @@
 //:
 // \file
-#if 0
-#include <list>
-#include <iostream.h>
-#include <math/matrix.h>
-#include <cool/Vector.h>
-#include <Numerics/SVD.h>
-#include <Basics/Histogram.h>
-#include <SpatialBasics/tolerance.h>
-#include <Geometry/Curve.h>
-#include <Geometry/IUPoint.h>
-#include <Geometry/ImplicitLine.h>
-#include <Geometry/ImplicitPlane.h>
-#include <DigitalGeometry/DigitalCurve.h>
-#include <Topology/Vertex.h>
-#include <Topology/Edge.h>
-#include <Topology/OneChain.h>
-#include <Topology/Face.h>
-#include <DigitalGeometry/IntensityCoef.h>
-#include <Detection/IntensityFace.h>
-#endif
 
 #include <vcl_vector.h>
 #include <vcl_iostream.h>
 #include <vnl/algo/vnl_svd.h>
-//#include <Basics/Histogram.h>
-//#include <SpatialBasics/tolerance.h>
-//#include <Geometry/Curve.h>
-//#include <Geometry/IUPoint.h>
-
 #include <vnl/vnl_matrix.h>
 #include <vdgl/vdgl_digital_curve.h>
 #include <vdgl/vdgl_digital_region.h>
@@ -68,6 +43,7 @@ vdgl_intensity_face::vdgl_intensity_face(one_chain_list& one_chains)
   :vtol_face_2d(one_chains)
 {
 }
+
 #if 0
 //: Uses given 2-d vtol_edges (not deep copy) with intensity information from dr.
 vdgl_intensity_face::vdgl_intensity_face(vcl_vector<vtol_edge_sptr>* edges, vdgl_digital_region& dr)
@@ -110,15 +86,6 @@ vdgl_intensity_face::~vdgl_intensity_face()
 {
 }
 
-
-//---------------------------------------------------------------------------
-//: Clone `this': creation of a new object and initialization
-// See Prototype pattern
-//---------------------------------------------------------------------------
-vsol_spatial_object_3d_sptr vdgl_intensity_face::clone(void)
-{
-  return new vdgl_intensity_face(*this);
-}
 
 //----------------------------------------------------
 //: A local method for the moment matrix.

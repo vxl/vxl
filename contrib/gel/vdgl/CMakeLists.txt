@@ -6,6 +6,7 @@ SOURCE_FILES(vdgl_sources
   vdgl_OrthogRegress.cxx
   vdgl_digital_curve.cxx
   vdgl_digital_region.cxx
+  vdgl_intensity_face.cxx
   vdgl_edgel.cxx
   vdgl_edgel_chain.cxx
   vdgl_fit_line.cxx

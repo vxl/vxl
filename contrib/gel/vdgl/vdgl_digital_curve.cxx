@@ -10,8 +10,8 @@
 vdgl_digital_curve::vdgl_digital_curve( vdgl_interpolator_sptr interpolator)
   : interpolator_( interpolator)
 {
-  int j = 0;
-  if (!interpolator) { int i = i / j; }
+  int i,j = 0;
+  if (!interpolator) { i = i / j; }
 }
 
 vsol_spatial_object_2d_sptr vdgl_digital_curve::clone(void) const
