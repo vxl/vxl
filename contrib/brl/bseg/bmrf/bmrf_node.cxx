@@ -26,22 +26,13 @@ bmrf_node::bmrf_node( const bmrf_epi_seg_sptr& epi_seg, int frame_num, double pr
 void
 bmrf_node::strip()
 {
-  for (arc_iterator itr = out_arcs_.begin(); itr != out_arcs_.end(); ++itr)
-  {
-    if ((*itr)->to_) {
-      bmrf_node_sptr other = (*itr)->to();
-      for (arc_iterator itr2 = other->in_arcs_.begin();
-           itr2 != other->in_arcs_.end(); ++itr2)
-        other->in_arcs_.erase(itr2);
-    }
-  }
-  out_arcs_.clear();
-  for (int t = 0; t<=ALL; ++t)
-    boundaries_[t] = out_arcs_.end();
+  for (int t = 0; t<ALL; ++t)
+    for (arc_iterator itr = boundaries_[t]; itr != boundaries_[t+1]; ++itr)
+      remove_helper(itr--, neighbor_type(t));
 
   for (arc_iterator itr = in_arcs_.begin(); itr != in_arcs_.end(); ++itr)
     if ((*itr)->from_)
-      (*itr)->from_->remove_neighbor(this, ALL);
+      (*(itr--))->from_->remove_neighbor(this, ALL);
 }
 
 
@@ -127,6 +118,17 @@ bmrf_node::probability()
 }
 
 
+//: Return the gamma funtion of this node
+bmrf_gamma_func_sptr 
+bmrf_node::gamma()
+{
+  if (!gamma_.ptr())
+    compute_probability();
+
+  return gamma_;
+}
+
+
 static bool 
 pair_dbl_arc_gt_cmp ( const vcl_pair<double,bmrf_node::arc_iterator>& lhs,
                       const vcl_pair<double,bmrf_node::arc_iterator>& rhs )
@@ -147,11 +149,11 @@ bmrf_node::compute_probability()
     int time_step = neighbor->frame_num() - this->frame_num();
     double gamma = (1.0 - dist_ratio) / time_step;
     bmrf_gamma_func_sptr gamma_func = new bmrf_const_gamma_func(gamma);
-    double prob = this->probability(gamma_func);
+    (*a_itr)->probability_ = this->probability(gamma_func);
 
     // select the probability of the best neighbor
-    if( prob > probability_ ){
-      probability_ = prob;
+    if( (*a_itr)->probability_ > probability_ ){
+      probability_ = (*a_itr)->probability_;
       gamma_ = gamma_func;
     }
   }
@@ -266,7 +268,7 @@ bmrf_node::remove_neighbor( bmrf_node_sptr node, neighbor_type type )
   {
     for (arc_iterator itr = boundaries_[t]; itr != boundaries_[t+1]; ++itr) {
       if ((*itr)->to_ == node) {
-        remove_helper(itr, neighbor_type(t));
+        remove_helper(itr--, neighbor_type(t));
         if (type != ALL) return true;
         removed = true;
       }

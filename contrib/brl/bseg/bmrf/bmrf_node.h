@@ -50,6 +50,8 @@ class bmrf_node : public vbl_ref_count
     //: Binary load self from stream.
     void b_read(vsl_b_istream &is);
 
+    double probability() { return probability_; }
+
     //: Smart pointer to the node where this arc originates
     bmrf_node_sptr from() { return bmrf_node_sptr(from_); }
 
@@ -91,6 +93,9 @@ class bmrf_node : public vbl_ref_count
   //: Return the probability of this node
   // \note probability is computed as needed
   double probability();
+
+  //: Return the gamma funtion of this node
+  bmrf_gamma_func_sptr gamma();
 
   //: Calculate the probability given the gamma function and neighbors
   double probability(const bmrf_gamma_func_sptr& gamma);
