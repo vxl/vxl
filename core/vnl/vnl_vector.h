@@ -46,7 +46,7 @@ template <class T> m      outer_product (v const&, v const&);
 template <class T> v      operator+(T, v const&);
 template <class T> v      operator-(T, v const&);
 template <class T> v      operator*(T, v const&);
-template <class T> v      operator*(m const&, v const&);
+// also exists as method: template <class T> v      operator*(m const&, v const&);
 template <class T> v      operator*(v const&, m const&);
 template <class T> v      element_product(v const&,v const&);
 template <class T> v      element_quotient(v const&,v const&);
