@@ -747,7 +747,7 @@ void vtol_two_chain::describe_directions(vcl_ostream &strm,
 
   vcl_vector<signed char>::const_iterator di;
   for (di=directions_.begin();di!=directions_.end();++di)
-    strm << ' ' << (int)(*d1);
+    strm << ' ' << (int)(*di);
   strm << ">\n";
 }
 
