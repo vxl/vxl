@@ -9,8 +9,13 @@ ${allvxl_BINARY_DIR}/vcl
 )
 
 LINK_LIBRARIES(
-vcl m
+vcl
 )
+
+IF(UNIX)
+  LINK_LIBRARIES( m )
+ENDIF(UNIX)
+
 
 ADD_EXECUTABLE(
 test_vcl_algorithm test_vcl_algorithm
