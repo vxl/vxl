@@ -24,6 +24,7 @@
 //---------------------------------------------------------------------------
 
 #include <vcl_iostream.h>
+#include <vcl_utility.h> // for vcl_pair<.,.>
 #include <vbl/vbl_sparse_array_base.h>
 
 //: Sparse 2D array allowing space efficient access of the form  s(300,700) =2
@@ -84,14 +85,10 @@ class vbl_sparse_array_2d : public vbl_sparse_array_base<T, vcl_pair<unsigned, u
 
 //: Stream operator - print the Array to a stream in "(i,j): value" format.
 template <class T>
-inline vcl_ostream& operator <<
-(vcl_ostream& s, const vbl_sparse_array_2d<T>& a) {
+inline vcl_ostream& operator<< (vcl_ostream& s, const vbl_sparse_array_2d<T>& a)
+{
   return a.print(s);
 }
-
-//#if VCL_CAN_DO_PARTIAL_SPECIALIZATION
-//# include <vbl/vbl_sparse_array_2d_partial_spec.h>
-//#endif
 
 #define VBL_SPARSE_ARRAY_2D_INSTANTIATE(T) \
 extern "please include vbl/vbl_sparse_array_2d.txx instead"
