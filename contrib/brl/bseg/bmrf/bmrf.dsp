@@ -132,6 +132,9 @@ SOURCE=.\Templates/vbl_io_smart_ptr+bmrf_network-.cxx
 SOURCE=.\Templates/vbl_smart_ptr+bmrf_gamma_func-.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\Templates/vbl_smart_ptr+bmrf_curvel_3d-.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\bmrf_gamma_func.cxx
 # End Source File
 # Begin Source File
@@ -157,6 +160,12 @@ SOURCE=.\bmrf_epi_transform.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\bmrf_epipole.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\bmrf_curve_3d_builder.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\bmrf_curvel_3d.cxx
 # End Source File
 # End Group
 # Begin Group "Header Files"
@@ -202,6 +211,15 @@ SOURCE=.\bmrf_gamma_func.h
 # End Source File
 # Begin Source File
 SOURCE=.\bmrf_gamma_func_sptr.h
+# End Source File
+# Begin Source File
+SOURCE=.\bmrf_curve_3d_builder.h
+# End Source File
+# Begin Source File
+SOURCE=.\bmrf_curvel_3d.h
+# End Source File
+# Begin Source File
+SOURCE=.\bmrf_curvel_3d_sptr.h
 # End Source File
 # End Group
 # End Target
