@@ -1,5 +1,6 @@
 #include <vcl_exception.h>
 #include <vcl_iostream.h>
+#include <vcl_cstdlib.h>
 
 extern "C" void abort() { vcl_cout << "abort()\n"; vcl_exit(1); }
 
