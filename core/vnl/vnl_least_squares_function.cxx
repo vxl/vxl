@@ -80,7 +80,7 @@ void vnl_least_squares_function::fdgradf(vnl_vector<double> const& x,
   int n = jacobian.rows();
   assert(dim == get_number_of_unknowns());
   assert(n == get_number_of_residuals());
-  assert(dim == jacobian.columns());
+  assert(dim == int(jacobian.columns()));
 
   vnl_vector<double> tx = x;
   vnl_vector<double> fplus(n);

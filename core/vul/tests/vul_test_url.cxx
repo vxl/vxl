@@ -47,7 +47,7 @@ void test_url()
     vcl_pair<vcl_string::iterator,vcl_string::iterator> x
       = vcl_mismatch(decoded.begin(), decoded.end(), data.begin());
     int k = x.first - decoded.begin();
-    if (k!=i+1)
+    if (k!=int(i+1))
       correct_decode = false;
     if (decoded != data)
     {
