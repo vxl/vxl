@@ -379,15 +379,7 @@ class vnl_vector
 
   //: Inequality test
   bool operator!=(vnl_vector<T> const &that) const { return !this->operator_eq(that); }
- private:
-  //: Resize to n elements.
-  // \deprecated Use set_size() instead.
-  bool resize (unsigned n) { return false; }
 
-  //: Resize to n elements.
-  // \deprecated Use set_size.
-  bool make_size (unsigned n) { return false; }
- public:
   //: Resize to n elements.
   // This is a destructive resize, in that the old data is lost if size() != \a n before the call.
   // If size() is already \a n, this is a null operation.
