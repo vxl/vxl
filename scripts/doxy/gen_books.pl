@@ -9,7 +9,7 @@ exec perl -w -x $0 ${1+"$@"}
 #  >ftype PerlScript=C:\Perl\bin\Perl.exe -x "%1" %*
 
 #-----------------------------------------------------------
-#  gen_books.pl -v vxlsrc -b ctrl_file -u -f [-o outputdir]
+#  gen_books.pl -v vxlsrc -l ctrl_file -u -f [-o outputdir]
 #  -u : Update cvs
 #  -f : Force build of book
 #-----------------------------------------------------------
@@ -34,7 +34,7 @@ sub xec
 }
 
 #-----------------------------------------------------------
-#  update_book($vxlsrc,$doxydir,$bookbasedir,$booklist,$forced,$cvsup);
+#  update_book($vxlsrc,$doxydir,$bookbasedir,$ctrllist,$forced,$cvsup);
 #-----------------------------------------------------------
 
 sub update_book
@@ -75,27 +75,20 @@ sub update_book
 
   if ($buildit eq "true")
   {
-    chdir $bookdir || die "Unable to chdir to $bookdir\n";
 
-        $booktexi = "$vxlsrc/$book/doc/book/book.texi";
-#    xec("texi2html -expandinfo -number -split_chapter $booktexi");
-    xec("texi2html -number $booktexi > $doxydir/output/texi2html_$book.out 2>&1");
+# First copy, or convert all images files in the source directory.
+# texi2html will only include the images if they are already there.
 
     $booksrcdir = "$vxlsrc/$book/doc/book";
 
     print "Going to open dir: $booksrcdir\n";
 
+    chdir $bookdir || die "Unable to chdir to $bookdir\n";
+
     opendir(BOOKSRCDIR,$booksrcdir) || die "Cannot open $booksrcdir: $!";
 
-
-# Now copy, or convert all images files in the source directory.
     while ($_ = readdir(BOOKSRCDIR))
     {
-      print "DIR: $_\n";
-
-      if (/\.png$/ || /\.jpg$/ || /\.jpeg$/ )
-      { copy("$booksrcdir/$_", $_); }
-
       if (/\.eps$/)
       {
         if ($havepnmutils ne "YES")
@@ -105,17 +98,35 @@ sub update_book
         else
         {
           $ppmfile = $_;
-	  $ppmfile = $ppmfile."001.ppm";
-          xec("pstopnm $booksrcdir/$_");
+          $ppmfile = $ppmfile."001.ppm";
+          xec("pstopnm -portrait $booksrcdir/$_");
           $pngfile = $_;
           $pngfile =~ s/eps$/png/;
+          unlink $pngfile;
           xec("pnmtopng $ppmfile > $pngfile");
-	  unlink $ppmfile;
+          unlink $ppmfile;
         }
       }
     }
     closedir(BOOKSRCDIR);
 
+    opendir(BOOKSRCDIR,$booksrcdir) || die "Cannot open $booksrcdir: $!";    
+    
+    while ($_ = readdir(BOOKSRCDIR))
+    {
+      # print "DIR: $_\n";
+
+      if (/\.png$/ || /\.jpg$/ || /\.jpeg$/ )
+      {
+        print("Copying $booksrcdir/$_ to book directory\n");
+        copy("$booksrcdir/$_", $_);
+      }
+    }
+    closedir(BOOKSRCDIR);
+
+    $booktexi = "$vxlsrc/$book/doc/book/book.texi";
+#    xec("texi2html -expandinfo -number -split_chapter $booktexi");
+    xec("texi2html -number $booktexi > $doxydir/output/texi2html_$book.out 2>&1");
 
 
   }
@@ -130,7 +141,7 @@ sub check_pnmutils
   my ($doxyoutputdir) = @_;
   my $psfile = "$doxyoutputdir/psfile.dot";
 
-  
+
   open(PSOUT, ">$psfile") || die "can't open file $psfile\n";
   print PSOUT "\n";
   close(PSOUT);
@@ -163,11 +174,11 @@ sub check_pnmutils
 
 
 my %options;
-getopts('v:s:b:o:fu', \%options);
+getopts('v:s:l:o:fu', \%options);
 
 my $vxlsrc = $options{v} || "";
 my $script_dir = $options{s} || "$vxlsrc/scripts/doxy";
-my $booklist = $options{b} || "$script_dir/data/library_list.txt";
+my $ctrllist = $options{l} || "$script_dir/data/library_list.txt";
 my $doxydir = $options{o} || "$vxlsrc/Doxy";
 
 $forced="false";
@@ -211,7 +222,7 @@ $havepnmutils = check_pnmutils($bookbasedir);
 #}
 
 # Read in list of libraries
-open(BOOKS, $booklist) || die "can't open $booklist\n";
+open(BOOKS, $ctrllist) || die "can't open $ctrllist\n";
 while (<BOOKS>)
 {
   # ignore empty lines

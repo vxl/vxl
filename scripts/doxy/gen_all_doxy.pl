@@ -12,7 +12,7 @@ use Cwd;
 use Getopt::Std;
 
 #-----------------------------------------------------------
-#  gen_all_doxy.pl -v vxlsrc -s script_dir -l library_file -u -f  [-o outputdir]
+#  gen_all_doxy.pl -v vxlsrc -s script_dir -l ctrl_file -u -f  [-o outputdir]
 #  -u : Update cvs
 #  -f : Force build
 #-----------------------------------------------------------
@@ -189,7 +189,7 @@ if (! $vxlsrc)
 {
   print "Generate all documentation from source using doxygen\n";
   print "syntax is:\n";
-  print "gen_all_doxy.pl -v vxlsrc -l library_file  [-o outputdir] -u -f\n";
+  print "gen_all_doxy.pl -v vxlsrc -l ctrl_file  [-o outputdir] -u -f\n";
     print " -u : Update cvs\n";
     print " -f : Force build\n";
   exit(1);

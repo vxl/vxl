@@ -30,10 +30,8 @@ All the scripts take one or more of the following parameters:
                 (default is $vxlsrc/vcl_scripts/doxy)
 -o OUTPUTDIR : Defines base output directory (default is $vxlsrc/Doxy)
                (html will be put in $OUTPUTDIR/html)
--l library_list : Defines file containing list of libraries and dependencies
-                  (Default is $script_dir/library_list.txt)
--l book_list : Defines file containing list of texi books
-                  (Default is $script_dir/library_list.txt)
+-l ctrl_file : Defines file containing list of libraries and dependencies, books,
+			and packages. (Default is $script_dir/data/library_list.txt)
 -u : Update each package from CVS and only build if changes occur
 -f : Force build of everything (useful every now and again to keep things in sync).
 
@@ -56,7 +54,7 @@ c) Create a book_list.txt file, based on the one in the data directory,
    indicating the extra texi books you have written
 d) Invoke
 
-build_all_doc.pl -v $VXLSRC -l my_library_list.txt -o OUTPUTDIR -b my_library_list.txt [-f] [-u]
+build_all_doc.pl -v $VXLSRC -l my_library_list.txt -o OUTPUTDIR [-f] [-u]
 
 That's all there is to it.
 

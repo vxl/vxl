@@ -12,7 +12,7 @@ use Cwd;
 use Getopt::Std;
 
 #-----------------------------------------------------------
-#  gen_all_doxy.pl -v vxlsrc -p package_list
+#  gen_all_doxy.pl -v vxlsrc -l ctrl_list
 #-----------------------------------------------------------
 sub xec
 {
@@ -32,16 +32,16 @@ sub xec
 #-----------------------------------------------------------
 
 my %options;
-getopts('v:p:', \%options);
+getopts('v:l:', \%options);
 
 my $vxlsrc  = $options{v} || "";
-my $package_list = $options{p} || "$vxlsrc/scripts/doxy/data/library_list.txt";
+my $ctrl_list = $options{l} || "$vxlsrc/scripts/doxy/data/library_list.txt";
 
 if (! $vxlsrc)
 {
   print "Check out all packages into $vxlsrc\n";
   print "Syntax is:\n";
-  print "gen_all_doxy.pl -v vxlsrc -p ctrl_file\n";
+  print "gen_all_doxy.pl -v vxlsrc -l ctrl_file\n";
   exit(1);
 }
 
@@ -53,7 +53,7 @@ my $label;
 my @textline;
 
 # Read in list of packages
-open(PACKAGES, $package_list) || die "can't open $package_list\n";
+open(PACKAGES, $ctrl_list) || die "can't open $ctrl_list\n";
 while (<PACKAGES>)
 {
   # ignore empty lines

@@ -40,8 +40,7 @@ getopts('v:l:s:b:o:fu', \%options);
 
 my $vxlsrc = $options{v} || "";
 my $script_dir = $options{s} || "$vxlsrc/scripts/doxy";
-my $library_list = $options{l} || "$script_dir/data/library_list.txt";
-my $book_list = $options{b} || "$script_dir/data/library_list.txt";
+my $ctrl_list = $options{l} || "$script_dir/data/library_list.txt";
 my $doxydir = $options{o} || "$vxlsrc/Doxy";
 
 $forcedflag="";
@@ -60,16 +59,14 @@ if ($vxlsrc eq "")
 {
   print "Update documentation files on webserver.\n";
     print "syntax is:\n";
-    print "build_all_doc.pl -v VXLSRC -s script_dir -l lib_file -b book_file [-o outputdir] -u -f\n\n";
+    print "build_all_doc.pl -v VXLSRC -s script_dir -l ctrl_file [-o outputdir] -u -f\n\n";
     print "  where VXLSRC is the path to the root of the vxl source tree.\n";
     print "  ie the directory which contains vcl,vxl,mul etc\n\n";
     print "  outputdir (default VXLSRC/Doxy) indicates where the documentation \n";
     print "  is to be placed.\n";
     print "  script_dir gives the location of the scripts\n";
     print "    default is VXLSRC/scripts/doxy\n";
-    print "  If lib_file is not supplied it is assumed to be\n";
-    print "  script_dir/library_list.txt\n";
-    print "  If book_file is not supplied it is assumed to be\n";
+    print "  If ctrl_file is not supplied it is assumed to be\n";
     print "  script_dir/library_list.txt\n";
     print "  Other options:\n";
     print "  -u : Update cvs\n";
@@ -94,11 +91,11 @@ if ($cvsupflag)
 
 $params = "-v $vxlsrc -s $script_dir -o $doxydir $forcedflag $cvsupflag";
 
-$gen_all_doxy_cmd = "$script_dir/gen_all_doxy.pl $params -l $library_list";
+$gen_all_doxy_cmd = "$script_dir/gen_all_doxy.pl $params -l $ctrl_list";
 xec($gen_all_doxy_cmd );
 
-$gen_book_cmd = "$script_dir/gen_books.pl $params -b $book_list";
+$gen_book_cmd = "$script_dir/gen_books.pl $params -l $ctrl_list";
 xec($gen_book_cmd );
 
-$gen_index_cmd = "$script_dir/gen_doxy_index.pl -v $vxlsrc -s $script_dir -l $library_list -b $book_list -o $doxydir";
+$gen_index_cmd = "$script_dir/gen_doxy_index.pl -v $vxlsrc -s $script_dir -l $ctrl_list -o $doxydir";
 xec($gen_index_cmd );

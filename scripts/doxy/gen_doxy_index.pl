@@ -9,7 +9,7 @@ exec perl -w -x $0 ${1+"$@"}
 #  >ftype PerlScript=C:\Perl\bin\Perl.exe -x "%1" %*
 
 #-----------------------------------------------------------
-#  gen_doxy_index.pl -v vxlsrc -s script_dir -l lib_file -b book_file  [-o outputdir]
+#  gen_doxy_index.pl -v vxlsrc -s script_dir -l ctrl_file [-o outputdir]
 #-----------------------------------------------------------
 
 #use File::Find;
@@ -166,12 +166,12 @@ print OF  "<HR>";
 }
 
 #-----------------------------------------------------------
-# print_book_index_links($vxlsrc,$book_list)
+# print_book_index_links($vxlsrc,$ctrl_list)
 #-----------------------------------------------------------
 
 sub print_book_index_links
 {
-  my($vxlsrc,$book_list)=@_;
+  my($vxlsrc,$ctrl_list)=@_;
   my @textline;
 
   print OF "<h2>Overview Documentation</h2>\n";
@@ -181,7 +181,7 @@ sub print_book_index_links
   print OF "<p>Overviews are compiled from the doc/book directories of each package.</p>\n";
 
   # Read in list of books
-  open(BOOKS, $book_list) || die "can't open $book_list\n";
+  open(BOOKS, $ctrl_list) || die "can't open $ctrl_list\n";
   while (<BOOKS>)
   {
     # ignore empty lines
@@ -233,27 +233,26 @@ print OF  "</html>\n";
 #-----------------------------------------------------------
 
 my %options;
-getopts('v:s:l:b:o:fu', \%options);
+getopts('v:s:l:o:fu', \%options);
 
 my $vxlsrc  = $options{v} || "";
 my $script_dir = $options{s} || "$vxlsrc/scripts/doxy";
-my $library_list = $options{l} || "$script_dir/data/library_list.txt";
-my $book_list = $options{b} || "$script_dir/data/library_list.txt";
+my $ctrl_list = $options{l} || "$script_dir/data/library_list.txt";
 my $doxydir = $options{o} || "$vxlsrc/Doxy";
 
 if (!$vxlsrc)
 {
   print "Generate index of all documentation from source\n";
   print "syntax is:\n";
-  print "gen_doxy_index.pl -v vxlsrc -s script_dir -l lib_file -b book_file  [-o outputdir]\n";
+  print "gen_doxy_index.pl -v vxlsrc -s script_dir -l lib_file [-o outputdir]\n";
   exit(1);
 }
 
 $index = "$doxydir/html/index.html";
 open(OF, ">$index");
-print_header($library_list);
-print_book_index_links($vxlsrc,$book_list);
-do_dirs($vxlsrc,$library_list);
+print_header($ctrl_list);
+print_book_index_links($vxlsrc,$ctrl_list);
+do_dirs($vxlsrc,$ctrl_list);
 print_tail();
 close(OF);
 

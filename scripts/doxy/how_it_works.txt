@@ -1,4 +1,4 @@
-build_all_doc.pl -v vxlsrc -l lib_file -b book_file -u -f [-o output_dir]
+build_all_doc.pl -v vxlsrc -l ctrl_file -u -f [-o output_dir]
 ----------------------------------------------------------------------------
 
 Currently just invokes
@@ -7,15 +7,15 @@ Currently just invokes
 3) gen_doxy_index.pl - To generate an index
 
 
-gen_all_doxy.pl gen_all_doxy.pl -v vxlsrc -l library_list -u -f [-o output_dir]
+gen_all_doxy.pl gen_all_doxy.pl -v vxlsrc -l ctrl_file -u -f [-o output_dir]
 -------------------------------------------------------------------------------
 
-Looks through the library_file and invokes rundoxy.pl
+See data/library_list.txt for the default control file.
+
+Looks through the library_list and invokes rundoxy.pl
 for each library named.
 
-See core_library_list.txt for an example of a library_list file.
-
-rundoxy.pl -v vxlsrc -l library_list_file -n library_name [-o outputdir]
+rundoxy.pl -v vxlsrc -l ctrl_file -n library_name [-o outputdir]
 ------------------------------------------------------------------------
 
 1) Sets up directories in suitable places,
@@ -35,25 +35,24 @@ eg
 6) Runs the installdox with the appropriate arguements.
 
 
-gen_books.pl -v vxlsrc -b book_file -u -f [-o output_dir]
+gen_books.pl -v vxlsrc -l ctrl_file -u -f [-o output_dir]
 -----------------------------------------
 Generate all books from source using texi2html
 
 
-gen_doxy_index.pl -v vxlsrc -l lib_file -b book_file [-o output_dir]
+gen_doxy_index.pl -v vxlsrc -l ctrl_file [-o output_dir]
 ----------------------------------------------------
 
 Generate index of all documentation and places in output_dir/index.html
 
-Uses library list and book list to locate the relevant files.
+Uses ctrl_file to locate the relevant files.
 
 
-checkout_packages.pl -v vxlsrc -p package_list
+checkout_packages.pl -v vxlsrc -l ctrl_file
 ----------------------------------------------
-Uses cvs to check out the packages listed in the package_list file if
+Uses cvs to check out the packages listed in the control file if
 they don't already exist in vxlsrc.
 
 This is provided to help automate the process of getting documentation on
 a webserver.
 
-Note that the package list, book file and package list can be (and are usually) the same file.  $linktext = get_summary_line($vxlsrc,$package,$library);
