@@ -759,20 +759,21 @@ vil1_memory_image_of<unsigned char>
 {
   if(!image)
     return image;
-
+  vil1_image img = (vil1_image)image;//cast away const apparently freebsd is
+                                     //a bit finnicky
   //Check if the image is a float
   if(image.components()==1 &&
      image.component_format()==VIL1_COMPONENT_FORMAT_IEEE_FLOAT)
-	 return brip_float_ops::convert_to_byte(vil1_memory_image_of<float>(image));
+	 return brip_float_ops::convert_to_byte(vil1_memory_image_of<float>(img));
 
   //Here we assume that the image is either unsigned char or unsigned short
   //In this case we should just return it.
   if(image.components()!=3)
-    return image;
+    return img;
 
   // the image is color so we should convert it to greyscale
   // Here we assume the color elements are unsigned char.
-  vil1_memory_image_of<vil1_rgb<unsigned char> > color_image(image);
+  vil1_memory_image_of<vil1_rgb<unsigned char> > color_image(img);
   int width = color_image.width(), height = color_image.height();
   // the output image
   vil1_memory_image_of<unsigned char> grey_image;
