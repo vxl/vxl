@@ -177,7 +177,7 @@ class vsol_rectangle_2d : public vsol_polygon_2d
   virtual vcl_string is_a() const { return "vsol_rectangle_2d"; }
 
   //: Return true if the argument matches the string identifying the class or any parent class
-  bool is_class(const vcl_string& cls) const;
+  bool is_class(const vcl_string& cls) const { return cls==is_a() || vsol_polygon_2d::is_class(cls); }
 
   //---------------------------------------------------------------------------
   //: Are `new_vertices' valid to build a rectangle ?

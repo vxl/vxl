@@ -162,7 +162,7 @@ class vsol_group_2d : public vsol_spatial_object_2d
   void print_summary(vcl_ostream &os) const;
 
   //: Return true if the argument matches the string identifying the class or any parent class
-  bool is_class(const vcl_string& cls) const;
+  bool is_class(const vcl_string& cls) const { return cls==is_a(); }
 
   //---------------------------------------------------------------------------
   //: output description to stream

@@ -33,6 +33,7 @@ class vsol_point_2d;
 #include <vsol/vsol_spatial_object_2d.h>
 #include <vgl/vgl_vector_2d.h>
 #include <vgl/vgl_point_2d.h>
+#include <vcl_iostream.h>
 
 class vsol_point_2d : public vsol_spatial_object_2d
 {
@@ -68,7 +69,7 @@ class vsol_point_2d : public vsol_spatial_object_2d
   //---------------------------------------------------------------------------
   //: Copy constructor
   //---------------------------------------------------------------------------
-  inline vsol_point_2d(const vsol_point_2d &pt) : vsol_spatial_object_2d(pt), p_(pt.x(),pt.y()) {}
+  inline vsol_point_2d(vsol_point_2d const& pt) : vsol_spatial_object_2d(pt), p_(pt.x(),pt.y()) {}
 
   //---------------------------------------------------------------------------
   //: Destructor
@@ -86,7 +87,7 @@ class vsol_point_2d : public vsol_spatial_object_2d
   //---------------------------------------------------------------------------
 
   virtual vsol_point_2d* cast_to_point(void) { return this;}
-  virtual const vsol_point_2d* cast_to_point(void) const { return this;}
+  virtual vsol_point_2d const* cast_to_point(void) const { return this;}
 
   //***************************************************************************
   // Access
@@ -109,13 +110,13 @@ class vsol_point_2d : public vsol_spatial_object_2d
   //---------------------------------------------------------------------------
   //: Has `this' the same coordinates than `other' ?
   //---------------------------------------------------------------------------
-  virtual bool operator==(const vsol_point_2d &other) const;
-  virtual bool operator==(const vsol_spatial_object_2d& obj) const; // virtual of vsol_spatial_object_2d
+  virtual bool operator==(vsol_point_2d const& other) const;
+  virtual bool operator==(vsol_spatial_object_2d const& obj) const; // virtual of vsol_spatial_object_2d
 
   //---------------------------------------------------------------------------
   //: Has `this' not the same coordinates than `other' ?
   //---------------------------------------------------------------------------
-  inline bool operator!=(const vsol_point_2d &o) const {return !operator==(o);}
+  inline bool operator!=(vsol_point_2d const& o) const {return !operator==(o);}
 
   //***************************************************************************
   // Status report
@@ -157,13 +158,13 @@ class vsol_point_2d : public vsol_spatial_object_2d
   //---------------------------------------------------------------------------
   //: Return the distance (N2) between `this' and `other'
   //---------------------------------------------------------------------------
-  virtual double distance(const vsol_point_2d &other) const;
+  virtual double distance(vsol_point_2d const& other) const;
   virtual double distance(vsol_point_2d_sptr other) const;
 
   //---------------------------------------------------------------------------
   //: Return the middle point between `this' and `other'
   //---------------------------------------------------------------------------
-  virtual vsol_point_2d_sptr middle(const vsol_point_2d &other) const;
+  virtual vsol_point_2d_sptr middle(vsol_point_2d const& other) const;
 
   //---------------------------------------------------------------------------
   //: Add `v' to `this'
@@ -178,7 +179,7 @@ class vsol_point_2d : public vsol_spatial_object_2d
   //---------------------------------------------------------------------------
   //: Return the vector `this',`other'.
   //---------------------------------------------------------------------------
-  virtual vgl_vector_2d<double> to_vector(const vsol_point_2d &other) const;
+  virtual vgl_vector_2d<double> to_vector(vsol_point_2d const& other) const;
 
   // ==== Binary IO methods ======
 
@@ -195,10 +196,10 @@ class vsol_point_2d : public vsol_spatial_object_2d
   void print_summary(vcl_ostream &os) const;
 
   //: Return a platform independent string identifying the class
-  vcl_string is_a() const;
+  vcl_string is_a() const { return vcl_string("vsol_point_2d"); }
 
   //: Return true if the argument matches the string identifying the class or any parent class
-  bool is_class(const vcl_string& cls) const;
+  bool is_class(const vcl_string& cls) const { return cls==is_a(); }
 
   //---------------------------------------------------------------------------
   //: output description to stream
@@ -211,7 +212,7 @@ class vsol_point_2d : public vsol_spatial_object_2d
 };
 
 //: Binary save vsol_point_2d* to stream.
-void vsl_b_write(vsl_b_ostream &os, const vsol_point_2d* p);
+void vsl_b_write(vsl_b_ostream &os, vsol_point_2d const* p);
 
 //: Binary load vsol_point_2d* from stream.
 void vsl_b_read(vsl_b_istream &is, vsol_point_2d* &p);

@@ -204,10 +204,10 @@ class vsol_polyline_2d : public vsol_curve_2d
   void print_summary(vcl_ostream &os) const;
 
   //: Return a platform independent string identifying the class
-  vcl_string is_a() const;
+  vcl_string is_a() const { return vcl_string("vsol_polyline_2d"); }
 
   //: Return true if the argument matches the string identifying the class or any parent class
-  bool is_class(const vcl_string& cls) const;
+  bool is_class(const vcl_string& cls) const { return cls==is_a(); }
 };
 
 //: Binary save vsol_polyline_2d* to stream.

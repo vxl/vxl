@@ -25,7 +25,7 @@ vsol_triangle_2d::vsol_triangle_2d()
   storage_->push_back(new vsol_point_2d(0.0,1.0));
   storage_->push_back(new vsol_point_2d(1.0,0.0));
 }
-  
+
 //---------------------------------------------------------------------------
 //: Constructor from its 3 vertices
 //---------------------------------------------------------------------------
@@ -182,31 +182,27 @@ void vsol_triangle_2d::b_write(vsl_b_ostream &os) const
 //: Binary load self from stream (not typically used)
 void vsol_triangle_2d::b_read(vsl_b_istream &is)
 {
-  if(!is)
+  if (!is)
     return;
   short ver;
   vsl_b_read(is, ver);
-  switch(ver)
+  switch (ver)
   {
-  case 1:
-    {
-      vsol_polygon_2d::b_read(is);
-      if(storage_->size()!=3){
-        vcl_cerr << "I/O ERROR: vsol_triangle_2d::b_read(vsl_b_istream&)\n"
-                 << "           Incorrect number of vertices: "<< storage_->size() << '\n';
-        is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
-        return;
-      }
+   case 1:
+    vsol_polygon_2d::b_read(is);
+    if (storage_->size()!=3) {
+      vcl_cerr << "I/O ERROR: vsol_triangle_2d::b_read(vsl_b_istream&)\n"
+               << "           Incorrect number of vertices: "<< storage_->size() << '\n';
+      is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
     }
     break;
-
-  default:
+   default:
     vcl_cerr << "I/O ERROR: vsol_triangle_2d::b_read(vsl_b_istream&)\n"
              << "           Unknown version number "<< ver << '\n';
     is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
-    return;
   }
 }
+
 //: Return IO version number;
 short vsol_triangle_2d::version() const
 {
@@ -217,12 +213,6 @@ short vsol_triangle_2d::version() const
 void vsol_triangle_2d::print_summary(vcl_ostream &os) const
 {
   os << *this;
-}
-
-  //: Return true if the argument matches the string identifying the class or any parent class
-bool vsol_triangle_2d::is_class(const vcl_string& cls) const
-{
-  return cls==vsol_triangle_2d::is_a();
 }
 
 //external functions

@@ -29,6 +29,8 @@
 #include <vsol/vsol_point_2d_sptr.h>
 #include <vcl_vector.h>
 #include <vsl/vsl_binary_io.h>
+class vsol_triangle_2d;
+class vsol_rectangle_2d;
 
 class vsol_polygon_2d : public vsol_region_2d
 {
@@ -167,10 +169,10 @@ class vsol_polygon_2d : public vsol_region_2d
   void print_summary(vcl_ostream &os) const;
 
   //: Return a platform independent string identifying the class
-  vcl_string is_a() const;
+  vcl_string is_a() const { return vcl_string("vsol_polygon_2d"); }
 
   //: Return true if the argument matches the string identifying the class or any parent class
-  bool is_class(const vcl_string& cls) const;
+  bool is_class(const vcl_string& cls) const { return cls==is_a(); }
 
   //---------------------------------------------------------------------------
   //: output description to stream

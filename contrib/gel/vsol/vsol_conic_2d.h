@@ -98,7 +98,7 @@ class vsol_conic_2d : public vsol_curve_2d, public vgl_conic<double>
   //  produces and invalid conic (needed for binary I/O)
   //---------------------------------------------------------------------------
   vsol_conic_2d();
-  
+
   //---------------------------------------------------------------------------
   //: Constructor from coefficients of the cartesian equation
   //  `a'x^2+`b'xy+`c'y^2+`d'x+`e'y+`f'
@@ -384,7 +384,7 @@ class vsol_conic_2d : public vsol_curve_2d, public vgl_conic<double>
 
   //: Return IO version number;
   short version() const;
-  
+
   //: Return a platform independent string identifying the class
   virtual vcl_string is_a() const { return "vsol_conic_2d"; }
 
@@ -392,9 +392,8 @@ class vsol_conic_2d : public vsol_curve_2d, public vgl_conic<double>
   void print_summary(vcl_ostream &os) const;
 
   //: Return true if the argument matches the string identifying the class or any parent class
-  bool is_class(const vcl_string& cls) const;
+  bool is_class(const vcl_string& cls) const { return cls==is_a(); }
 };
-
 
 //: Binary save vsol_conic_2d* to stream.
 void vsl_b_write(vsl_b_ostream &os, const vsol_conic_2d* p);

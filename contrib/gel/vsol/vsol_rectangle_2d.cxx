@@ -283,12 +283,6 @@ void vsol_rectangle_2d::print_summary(vcl_ostream &os) const
   os << *this;
 }
 
-//: Return true if the argument matches the string identifying the class or any parent class
-bool vsol_rectangle_2d::is_class(const vcl_string& cls) const
-{
-  return cls==vsol_rectangle_2d::is_a();
-}
-
 //external functions
 
 //: Binary save vsol_rectangle_2d* to stream.

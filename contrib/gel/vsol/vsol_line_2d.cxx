@@ -366,18 +366,6 @@ void vsol_line_2d::print_summary(vcl_ostream &os) const
   os << *this;
 }
 
-  //: Return a platform independent string identifying the class
-vcl_string vsol_line_2d::is_a() const
-{
-  return vcl_string("vsol_line_2d");
-}
-
-  //: Return true if the argument matches the string identifying the class or any parent class
-bool vsol_line_2d::is_class(const vcl_string& cls) const
-{
-  return cls==vsol_line_2d::is_a();
-}
-
 //: Binary save vsol_line_2d to stream.
 void
 vsl_b_write(vsl_b_ostream &os, const vsol_line_2d* p)

@@ -162,7 +162,7 @@ void vsol_point_2d::b_read(vsl_b_istream &is)
     return;
   short ver;
   vsl_b_read(is, ver);
-  switch(ver)
+  switch (ver)
   {
    case 1:
     vsol_spatial_object_2d::b_read(is);
@@ -191,18 +191,6 @@ short vsol_point_2d::version() const
 void vsol_point_2d::print_summary(vcl_ostream &os) const
 {
   os << *this;
-}
-
-//: Return a platform independent string identifying the class
-vcl_string vsol_point_2d::is_a() const
-{
-  return vcl_string("vsol_point_2d");
-}
-
-  //: Return true if the argument matches the string identifying the class or any parent class
-bool vsol_point_2d::is_class(const vcl_string& cls) const
-{
-  return cls==vsol_point_2d::is_a();
 }
 
 //: Binary save vsol_point_2d to stream.

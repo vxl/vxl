@@ -125,18 +125,6 @@ void vsol_box_2d::print_summary(vcl_ostream &os) const
   os << *this;
 }
 
-  //: Return a platform independent string identifying the class
-vcl_string vsol_box_2d::is_a() const
-{
-  return vcl_string("vsol_box_2d");
-}
-
-  //: Return true if the argument matches the string identifying the class or any parent class
-bool vsol_box_2d::is_class(const vcl_string& cls) const
-{
-  return cls==vsol_box_2d::is_a();
-}
-
 //external functions
 vcl_ostream& operator<<(vcl_ostream& s, vsol_box_2d const& b)
 {
