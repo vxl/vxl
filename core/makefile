@@ -53,9 +53,9 @@ SUBDIRS += vgui
 
 # new xcv
 # (must be compiled *after* mvl)
-#ifeq (,$(strip $(wildcard $(IUELOCALROOT)/oxl/mvox)))
-#SUBDIRS += xcv
-#endif
+ifeq (,$(strip $(wildcard $(IUELOCALROOT)/oxl/mvl)))
+SUBDIRS += xcv
+endif
 endif
 
 # examples

@@ -7,7 +7,7 @@ SUBDIRS += oxp
 SUBDIRS += mvox
 SUBDIRS += vrml
 ifeq (1,$(strip $(HAS_OPENGL)))
-ifneq (,$(strip $(wildcard mvox)))
+ifneq (,$(strip $(wildcard mvl)))
 SUBDIRS += ../vxl/xcv
 endif
 endif
