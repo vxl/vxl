@@ -14,8 +14,10 @@
 #include <bmrf/bmrf_curvel_3d_sptr.h>
 #include <bmrf/bmrf_network_sptr.h>
 #include <bmrf/bmrf_node_sptr.h>
+#include <bmrf/bmrf_arc_sptr.h>
 #include <vnl/vnl_double_3x3.h>
 #include <vnl/vnl_double_3x4.h>
+#include <vcl_utility.h>
 #include <vcl_set.h>
 #include <vcl_list.h>
 #include <vcl_vector.h>
@@ -25,6 +27,9 @@
 class bmrf_curve_3d_builder
 {
  public:
+  typedef vcl_pair<bmrf_arc_sptr, bmrf_curvel_3d_sptr> time_match;
+  typedef vcl_vector<time_match> match_vector;
+
   //: Constructor
   bmrf_curve_3d_builder();
   bmrf_curve_3d_builder(bmrf_network_sptr);
@@ -53,20 +58,21 @@ class bmrf_curve_3d_builder
 
   //: Build curvels by matching curves in all frames at \p alpha
   //  Curves with less than \p min projections are removed
-  vcl_list<bmrf_curvel_3d_sptr> build_curvels(double alpha, int min = 3);
+  vcl_list<bmrf_curvel_3d_sptr> build_curvels(double alpha);
 
   //: Find all curves that intersect \p alpha in \p frame
-  vcl_map<double, bmrf_node_sptr> find_curves_at(double alpha, int frame = -1);
-
-  //: return the curvel in \p list that best matches \p node at \p alpha
-  vcl_list<bmrf_curvel_3d_sptr>::iterator  best_match(const bmrf_node_sptr& node, 
-                                                      vcl_list<bmrf_curvel_3d_sptr>& list,
-                                                      double alpha) const;
+  vcl_set<bmrf_node_sptr> find_curves_at(double alpha, int frame = -1);
 
   //: return the node iterator in \p choices that best matches \p curvel at \p alpha
-  vcl_map<double, bmrf_node_sptr>::iterator best_match( const bmrf_curvel_3d_sptr& curvel, 
-                                                        vcl_map<double, bmrf_node_sptr>& choices,
-                                                        double alpha, int frame ) const;
+  bmrf_node_sptr best_match( const bmrf_curvel_3d_sptr& curvel, 
+                             vcl_set<bmrf_node_sptr>& choices,
+                             double alpha, int frame ) const;
+
+  //: return all valid matches from curvels to nodes in \p frame
+  void all_matches( const bmrf_curvel_3d_sptr& curvel,
+                    const vcl_set<bmrf_node_sptr>& choices,
+                    int frame,
+                    match_vector& matches) const;
 
   //: Reconstruct the 3d location of a curvel from its projections
   void reconstruct_point(bmrf_curvel_3d_sptr curvel) const;
@@ -76,6 +82,9 @@ class bmrf_curve_3d_builder
 
   //: Attempt to fill in missing correspondences
   void fill_gaps(vcl_list<bmrf_curvel_3d_sptr>& curve);
+
+  //: Trim the ends of the curve with few correspondences
+  void trim_curve(vcl_list<bmrf_curvel_3d_sptr>& curve, int min_prj);
 
   //: Match the \p curvels to the ends of the \p growing_curves
   void append_curvels(vcl_list<bmrf_curvel_3d_sptr> curvels,
