@@ -1,6 +1,4 @@
 #include <vnl/algo/vnl_algo_fwd.h>
-#include <vnl/algo/dll.h>
-
 
 #include <vnl/algo/vnl_adjugate.h>
 #include <vnl/algo/vnl_amoeba.h>

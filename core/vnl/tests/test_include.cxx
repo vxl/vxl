@@ -1,5 +1,4 @@
 #include <vnl/vnl_fwd.h>
-#include <vnl/dll.h>
 
 #include <vnl/vnl_T_n.h>
 #include <vnl/vnl_alloc.h>

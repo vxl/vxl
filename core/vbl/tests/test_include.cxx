@@ -1,5 +1,4 @@
 #include <vbl/vbl_fwd.h>
-#include <vbl/dll.h>
 
 #include <vbl/vbl_smart_ptr.h>
 #include <vbl/vbl_ref_count.h>

@@ -1,5 +1,3 @@
-#include <vidl_vil1/dll.h>
-
 #include <vcl_compiler.h>
 #ifdef VCL_WIN32
 #include <vidl_vil1/vidl_vil1_avicodec.h>

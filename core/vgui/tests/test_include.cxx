@@ -1,4 +1,3 @@
-#include <vgui/dll.h>
 #include <vgui/vgui.h>
 #include <vgui/vgui_active_tableau.h>
 #include <vgui/vgui_active_tableau_sptr.h>

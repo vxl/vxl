@@ -1,9 +1,4 @@
-#include <vidl/dll.h>
-
-#include <vcl_compiler.h>
-#ifdef HAS_AVI
 #include <vidl/vidl_avicodec.h>
-#endif
 #include <vidl/vidl_clip.h>
 #include <vidl/vidl_clip_sptr.h>
 #include <vidl/vidl_codec.h>
