@@ -5,6 +5,7 @@
 #include "brct_windows_frame.h"
 #include <vcl_cstdlib.h> // for vcl_exit()
 #include <vcl_iostream.h>
+#include <vcl_fstream.h>
 #include <vcl_cassert.h>
 #include <vgui/vgui.h>
 #include <vgui/vgui_dialog.h>
@@ -330,9 +331,9 @@ void brct_windows_frame::load_image()
   img_ = vil1_load(image_filename.c_str());
   if (img_2d_)
   {
-      img_2d_->set_image(img_);
-      instance_->post_redraw();
-      return;
+    img_2d_->set_image(img_);
+    instance_->post_redraw();
+    return;
   }
 
   vcl_cout << "In brct_windows_frame::load_image() - null tableau\n";
@@ -353,12 +354,12 @@ void brct_windows_frame::init_epipole()
     e_ = new vgl_point_2d<double>;
 
   assert(lines_.size() >= 2);
-   vgl_homg_point_2d<double> epipole = vgl_homg_operators_2d<double>::lines_to_point(lines_);
+  vgl_homg_point_2d<double> epipole = vgl_homg_operators_2d<double>::lines_to_point(lines_);
 
-   e_ -> set(epipole.x() / epipole.w(), epipole.y()/ epipole.w());
+  e_ -> set(epipole.x() / epipole.w(), epipole.y()/ epipole.w());
 
-   vcl_ofstream out("epipole.ini");
-   out<<e_->x()<<" "<<e_->y();
+  vcl_ofstream out("epipole.ini");
+  out<<e_->x()<<' '<<e_->y();
 }
 
 void brct_windows_frame::creat_line()
@@ -369,6 +370,4 @@ void brct_windows_frame::creat_line()
   vgl_homg_point_2d<double> p1(x1, y1, 1), p2(x2, y2, 1);
   vgl_homg_line_2d<double> l(p1, p2);
   lines_.push_back(l);
-
-
 }
