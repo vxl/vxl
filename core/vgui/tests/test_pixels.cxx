@@ -6,6 +6,8 @@
 #include <vgui/vgui_gl.h>
 #include <vgui/vgui_pixel.h>
 
+#include <testlib/testlib_test.h>
+
 void print_byte(GLubyte w) {
   for (int i=7; i>=0; --i)
     if ( (w & (0x1 << i)) )
@@ -60,7 +62,10 @@ void print_binary(char const *fmt, void const *addr, unsigned bytes) {
   vcl_cerr << vcl_endl;
 }
 
-int main(int, char **) {
+int main(int, char **)
+{
+  START( "vgui test pixels" );
+
 #if VXL_LITTLE_ENDIAN
   vcl_cerr << "this machine is little-endian" << vcl_endl;
 #endif
@@ -93,5 +98,13 @@ int main(int, char **) {
   // bgra
   { vgui_pixel_bgra<8,8,8,8> pix; pix.R=255; pix.G= 0; pix.B=255; pix.A= 0; print_binary("bgra8888", &pix, sizeof(pix)); }
 
-  return 0;
+  TEST( "size of rgb565", sizeof(vgui_pixel_rgb<5,6,5>), 2 );
+  TEST( "size of rgb888", sizeof(vgui_pixel_rgb<8,8,8>), 3 );
+  TEST( "size of bgr565", sizeof(vgui_pixel_bgr<5,6,5>), 2 );
+  TEST( "size of bgr888", sizeof(vgui_pixel_bgr<8,8,8>), 3 );
+  TEST( "size of rgba8888", sizeof(vgui_pixel_rgba<8,8,8,8>), 4 );
+  TEST( "size of abgr8888", sizeof(vgui_pixel_abgr<8,8,8,8>), 4 );
+  TEST( "size of bgra8888", sizeof(vgui_pixel_bgra<8,8,8,8>), 4 );
+
+  SUMMARY();
 }

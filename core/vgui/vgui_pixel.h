@@ -7,6 +7,11 @@
 //:
 // \file
 // \author fsm
+// \verbatim
+// Modifications:
+//  Jan 2003, Amitha Perera: added functionality used in displaying vil2 images.
+//     The vil and vil2 functionality could probably be coalesced for a cleaner design.
+// \endverbatim
 
 #include <vgui/vgui_gl.h>
 #include <vxl_config.h>
@@ -26,6 +31,9 @@ struct vgui_pixel_rgb<8,8,8>
   GLubyte R;
   GLubyte G;
   GLubyte B;
+  vgui_pixel_rgb<8,8,8>() { }
+  vgui_pixel_rgb<8,8,8>( vxl_byte red, vxl_byte green, vxl_byte blue, vxl_byte alpha )
+    { R = red; G = green; B = blue; }
 };
 typedef vgui_pixel_rgb<8,8,8> vgui_pixel_rgb888;
 
@@ -46,6 +54,9 @@ struct vgui_pixel_rgb<5,6,5>
   GLushort G : 6;
   GLushort B : 5;
 #endif
+  vgui_pixel_rgb<5,6,5>() { }
+  vgui_pixel_rgb<5,6,5>( vxl_byte red, vxl_byte green, vxl_byte blue, vxl_byte alpha )
+    { R = red>>3; G = green>>2; B = blue>>3; }
 };
 typedef vgui_pixel_rgb<5,6,5> vgui_pixel_rgb565;
 
@@ -61,6 +72,9 @@ struct vgui_pixel_bgr<5,6,5>
   GLushort G : 6;
   GLushort R : 5;
 #endif
+  vgui_pixel_bgr<5,6,5>() { }
+  vgui_pixel_bgr<5,6,5>( vxl_byte red, vxl_byte green, vxl_byte blue, vxl_byte alpha )
+    { R = red>>3; G = green>>2; B = blue>>3; }
 };
 typedef vgui_pixel_bgr<5,6,5> vgui_pixel_bgr565;
 
@@ -70,6 +84,9 @@ struct vgui_pixel_bgr<8,8,8>
   GLubyte B;
   GLubyte G;
   GLubyte R;
+  vgui_pixel_bgr<8,8,8>() { }
+  vgui_pixel_bgr<8,8,8>( vxl_byte red, vxl_byte green, vxl_byte blue, vxl_byte alpha )
+    { R = red; G = green; B = blue; }
 };
 typedef vgui_pixel_bgr<8,8,8> vgui_pixel_bgr888;
 
@@ -80,6 +97,9 @@ struct vgui_pixel_rgba<5,5,5,1>
   GLushort G:5;
   GLushort R:5;
   GLushort A:1;
+  vgui_pixel_rgba<5,5,5,1>() { }
+  vgui_pixel_rgba<5,5,5,1>( vxl_byte red, vxl_byte green, vxl_byte blue, vxl_byte alpha )
+    { R = red>>3; G = green>>3; B = blue>>3; A=alpha; }
 };
 typedef vgui_pixel_rgba<5,5,5,1> vgui_pixel_bgra5551;
 
@@ -90,6 +110,9 @@ struct vgui_pixel_rgba<8,8,8,8>
   GLubyte G;
   GLubyte B;
   GLubyte A;
+  vgui_pixel_rgba<8,8,8,8>() { }
+  vgui_pixel_rgba<8,8,8,8>( vxl_byte red, vxl_byte green, vxl_byte blue, vxl_byte alpha )
+    { R = red; G = green; B = blue; A=alpha; }
 };
 typedef vgui_pixel_rgba<8,8,8,8> vgui_pixel_rgba8888;
 
@@ -100,6 +123,9 @@ struct vgui_pixel_abgr<8,8,8,8>
   GLubyte B;
   GLubyte G;
   GLubyte R;
+  vgui_pixel_abgr<8,8,8,8>() { }
+  vgui_pixel_abgr<8,8,8,8>( vxl_byte red, vxl_byte green, vxl_byte blue, vxl_byte alpha )
+    { R = red; G = green; B = blue; A=alpha; }
 };
 typedef vgui_pixel_abgr<8,8,8,8> vgui_pixel_abgr8888;
 
@@ -110,9 +136,11 @@ struct vgui_pixel_bgra<8,8,8,8>
   GLubyte G;
   GLubyte R;
   GLubyte A;
+  vgui_pixel_bgra<8,8,8,8>() { }
+  vgui_pixel_bgra<8,8,8,8>( vxl_byte red, vxl_byte green, vxl_byte blue, vxl_byte alpha )
+    { R = red; G = green; B = blue; A=alpha; }
 };
 typedef vgui_pixel_bgra<8,8,8,8> vgui_pixel_bgra8888;
-
 
 struct vgui_pixel_rgbfloat
 {
@@ -120,6 +148,82 @@ struct vgui_pixel_rgbfloat
   float G;
   float B;
 };
+
+
+//: Clamps the given type into [0,255].
+//
+template<typename T>
+inline
+vxl_byte vgui_pixel_clamp( T in )
+{
+  if( in > 255 ) return 255u;
+  if( in < 0 ) return 0u;
+  return vxl_byte(in);
+}
+
+// provide overloads for efficiency and to avoid warnings about
+// unnecessary comparisons (e.g. against 0 for an unsigned type).
+
+//: Clamps the given type into [0,255].
+//
+// This overload is the null operation, and is provided for efficiency.
+inline
+vxl_byte vgui_pixel_clamp( vxl_byte in )
+{
+  return in;
+}
+
+//: Clamps the given type into [0,255].
+//
+// This overload only checks the upper bound, since the type is
+// unsigned.
+inline
+vxl_byte vgui_pixel_clamp( vxl_uint_16 in )
+{
+  if( in > 255 ) return 255u;
+  return in;
+}
+
+//: Clamps the given type into [0,255].
+//
+// This overload only checks the upper bound, since the type is
+// unsigned.
+inline
+vxl_byte vgui_pixel_clamp( vxl_uint_32 in )
+{
+  if( in > 255 ) return 255u;
+  return in;
+}
+
+
+//: Convert the given grey scale value to the appropriate OpenGL pixel type.
+template<class InT, class OutT>
+inline void
+vgui_pixel_convert( InT const& in, OutT& out )
+{
+  out = OutT( vgui_pixel_clamp( in ), vgui_pixel_clamp( in ),
+              vgui_pixel_clamp( in ), 255 );
+}
+
+//: Convert the given RGB value to the appropriate OpenGL pixel type.
+template<class InT, class OutT>
+inline void
+vgui_pixel_convert( InT const& R, InT const& G, InT const& B,
+                    OutT& out )
+{
+  out = OutT( vgui_pixel_clamp( R ), vgui_pixel_clamp( G ),
+              vgui_pixel_clamp( B ), 255 );
+}
+
+//: Convert the given RGBA value to the appropriate OpenGL pixel type.
+template<class InT, class OutT>
+inline void
+vgui_pixel_convert( InT const& R, InT const& G, InT const& B, InT const& A,
+                    OutT& out )
+{
+  out = OutT( vgui_pixel_clamp( R ), vgui_pixel_clamp( G ),
+              vgui_pixel_clamp( B ), vgui_pixel_clamp( A ) );
+}
 
 
 //: Convert a span of pixels from one format to another.

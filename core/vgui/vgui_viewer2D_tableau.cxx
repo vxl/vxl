@@ -25,6 +25,7 @@
 #include <vgui/vgui_find.h>
 #include <vgui/vgui_utils.h>
 #include <vgui/vgui_image_tableau.h> // for centering
+#include <vgui/vgui_vil2_image_tableau.h> // for centering
 
 // to transform from window coordinates (x,y) to image coordinates (ix,iy)
 //
@@ -485,10 +486,23 @@ bool vgui_viewer2D_tableau::image_size(int& width, int& height)
     return true;
   }
   else
+  {
+    t = vgui_find_below_by_type_name(this, 
+                                     "vgui_vil2_image_tableau");
+    if (t)
+    {
+      vgui_vil2_image_tableau_base_sptr im;
+      im.vertical_cast(t);
+      width = im->width();
+      height = im->height();
+      return true;
+    }
+    else
     {
       width = 0; height = 0;
       vcl_cerr << __FILE__ " : no image found\n";
     }
+  }
   return false;
 }
 void vgui_viewer2D_tableau::center_event()

@@ -55,7 +55,7 @@ SET(vgui_sources
   vgui_window.cxx               vgui_window.h
   vgui_adaptor.cxx              vgui_adaptor.h
   vgui_tableau.cxx              vgui_tableau.h          vgui_tableau_sptr.h
-  vgui_parent_child_link.cxx                 vgui_parent_child_link.h
+  vgui_parent_child_link.cxx    vgui_parent_child_link.h
   vgui_key.cxx                  vgui_key.h
   vgui_button.cxx               vgui_button.h
   vgui_modifier.cxx             vgui_modifier.h
@@ -90,6 +90,12 @@ SET(vgui_sources
   vgui_image_renderer.cxx       vgui_image_renderer.h
   vgui_image_tableau.cxx        vgui_image_tableau.h      vgui_image_tableau_sptr.h
   vgui_blender_tableau.cxx      vgui_blender_tableau.h    vgui_blender_tableau_sptr.h
+
+  # vil2 support
+  vgui_vil2_image_tableau.txx         vgui_vil2_image_tableau.h         vgui_vil2_image_tableau_sptr.h
+  vgui_vil2_image_renderer.txx        vgui_vil2_image_renderer.h
+  vgui_vil2_section_buffer.cxx        vgui_vil2_section_buffer.h
+  vgui_vil2_section_buffer_apply.txx  vgui_vil2_section_buffer_apply.h
 
   # tableau mixins and miscellaneous
   vgui_wrapper_tableau.cxx      vgui_wrapper_tableau.h    vgui_wrapper_tableau_sptr.h
@@ -164,6 +170,7 @@ SET(vgui_sources
   # Mesa-X11-mfc accelerated functions using Hermes
   internals/vgui_accelerate.cxx      internals/vgui_accelerate.h
   internals/vgui_accelerate_tag.cxx
+  internals/vgui_gl_selection_macros.h
 )
 
 IF( GLUT_FOUND )
@@ -377,7 +384,7 @@ SET( vgui_sources ${vgui_sources}
 ADD_LIBRARY(vgui ${vgui_sources})
 
 # Dependencies on other vxl libraries
-TARGET_LINK_LIBRARIES(vgui vnl_algo vnl vil vgl vpl vbl vul)
+TARGET_LINK_LIBRARIES(vgui vnl_algo vnl vil vil2 vgl vpl vbl vul)
 
 # Dependencies created by the toolkit implementations
 

@@ -2,10 +2,11 @@ INCLUDE( ${VXLCORE_INCLUDE_DIR}/vgui/UseVGUI.cmake )
 
 IF( HAS_VGUI )
 
-LINK_LIBRARIES( vgui vidl vul vbl )
+LINK_LIBRARIES( vgui )
 
 ADD_EXECUTABLE( basic01_display_image basic01_display_image.cxx)
 ADD_EXECUTABLE( basic01a_multiple_panes basic01a_multiple_panes.cxx)
+ADD_EXECUTABLE( basic01b_display_vil2_image basic01b_display_vil2_image.cxx)
 ADD_EXECUTABLE( basic01b_deck basic01b_deck.cxx)
 ADD_EXECUTABLE( basic02_display_line basic02_display_line.cxx)
 ADD_EXECUTABLE( basic03_display_text basic03_display_text.cxx)
