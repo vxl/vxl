@@ -361,7 +361,7 @@ void reshape(int w, int h)
 bool first_display = true;
 void display()
 {
-  // idle migh be called before 1st display
+  // idle might be called before 1st display
   if (first_display) {
     first_display = false;
     frame = start_frame;
@@ -382,12 +382,9 @@ void idle()
 {
   // Update frame counter
   frame += dir;
-  if (dir > 0) {
-    if (frame >= num_frames) frame = 0;
-  }
-  else {
-    if (frame < 0) frame = num_frames - 1;
-  }
+
+  if(frame<0) frame=num_frames-1;
+  else frame = frame % num_frames;
 
   glutPostRedisplay();
 }
@@ -466,6 +463,7 @@ void motion_callback(int x, int y)
 
 struct ShuttleCB : public CB {
   int down_frame;
+  double scale_factor;
 
   bool want(int button, int modifiers, int, int) {
     // Shuttle takes an unmodified left mouse button
@@ -483,9 +481,13 @@ struct ShuttleCB : public CB {
   }
   void motion(int x, int y) {
   //    double scale_factor = vcl_min(100, num_frames) / 800.0;
-    double scale_factor = (num_frames > 10000) ? 10 : 1;
+    //double scale_factor = (num_frames > 10000) ? 10 : 1;
+     double scale_factor = (double)num_frames/window_width;
+     // Keep reasonable sensitivity (1 ... 20 pixels/frame)
+     if (scale_factor>1.) scale_factor=1.;
+     if (scale_factor<1.0/20.) scale_factor=1.0/20;
     frame = down_frame + int((x - down_x) * scale_factor);
-//    vcl_cerr << "sc = " << scale_factor << vcl_endl;
+    //vcl_cerr << "sc = " << scale_factor << vcl_endl;
     if (frame < 0) {
       frame = 0;
       down_x = x;
@@ -700,12 +702,24 @@ void keyboard(unsigned char key, int x, int y)
     break;
   }
 
-  case ',': {
-    frame -= 1;
+  case 'a': {
+     dir = -dir;
+     break;
+  }
+
+  case 'c': {
+    pixel_zoom = 1.0;
+    pixel_zoom_tx = 0;
+    pixel_zoom_ty = TEXTHEIGHT;
     break;
   }
+
+  case ',': {
+     frame -= dir;
+     break;
+  }
   case '.': {
-    frame += 1;
+     frame += dir;
     break;
   }
 
@@ -722,6 +736,8 @@ void keyboard(unsigned char key, int x, int y)
     vcl_exit(0);
   }
   }
+  if(frame<0) frame=num_frames-1;
+  else frame = frame % num_frames;
   glutPostRedisplay();
 }
 
