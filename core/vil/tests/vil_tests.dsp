@@ -19,6 +19,9 @@ SOURCE=.\test_binary_dilate.cxx
 SOURCE=.\test_binary_erode.cxx
 SOURCE=.\test_resample_bilin.cxx
 SOURCE=.\test_vil1.cxx
+SOURCE=.\test_greyscale_dilate.cxx
+SOURCE=.\test_greyscale_erode.cxx
+SOURCE=.\test_median.cxx
 # End Group
 # Begin Group "Header Files"
 # End Group

@@ -155,6 +155,9 @@ SOURCE=.\vil3d_slice.h
 # Begin Source File
 SOURCE=.\vil3d_trilin_interp.h
 # End Source File
+# Begin Source File
+SOURCE=.\vil3d_crop.h
+# End Source File
 # End Group
 # End Target
 # End Project

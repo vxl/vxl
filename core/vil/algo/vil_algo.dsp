@@ -125,6 +125,24 @@ SOURCE=.\Templates/vil2_sobel_3x3+byte.float-.cxx
 # Begin Source File
 SOURCE=.\Templates/vil2_sobel_3x3+float.float-.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\Templates/vil2_greyscale_dilate+byte-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vil2_greyscale_dilate+float-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vil2_greyscale_erode+byte-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vil2_greyscale_erode+float-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vil2_median+byte-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vil2_median+float-.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter ""
@@ -157,6 +175,39 @@ SOURCE=.\vil2_binary_dilate.h
 # End Source File
 # Begin Source File
 SOURCE=.\vil2_structuring_element.h
+# End Source File
+# Begin Source File
+SOURCE=.\vil2_binary_closing.h
+# End Source File
+# Begin Source File
+SOURCE=.\vil2_binary_opening.h
+# End Source File
+# Begin Source File
+SOURCE=.\vil2_greyscale_closing.h
+# End Source File
+# Begin Source File
+SOURCE=.\vil2_greyscale_dilate.h
+# End Source File
+# Begin Source File
+SOURCE=.\vil2_greyscale_dilate.txx
+# End Source File
+# Begin Source File
+SOURCE=.\vil2_greyscale_erode.h
+# End Source File
+# Begin Source File
+SOURCE=.\vil2_greyscale_erode.txx
+# End Source File
+# Begin Source File
+SOURCE=.\vil2_greyscale_opening.h
+# End Source File
+# Begin Source File
+SOURCE=.\vil2_median.h
+# End Source File
+# Begin Source File
+SOURCE=.\vil2_median.txx
+# End Source File
+# Begin Source File
+SOURCE=.\vil2_normalised_correlation_2d.h
 # End Source File
 # End Group
 # PROP Default_Filter "ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe"
