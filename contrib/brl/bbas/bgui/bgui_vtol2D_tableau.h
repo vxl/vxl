@@ -11,7 +11,7 @@
 // \verbatim
 //  Modifications:
 //   J.L. Mundy November 28, 2002    Initial version.
-//   J.L. Mundy December 16, 2002    Added map between soviews and vtol objects
+//   J.L.Mundy December 16, 2002    Added map between soviews and vtol objects
 // \endverbatim
 //--------------------------------------------------------------------------------
 #include <vcl_vector.h>
