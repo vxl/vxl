@@ -1,4 +1,4 @@
-m\input atexinfo   @c -*-texinfo-*-
+\input atexinfo   @c -*-texinfo-*-
 @c %**start of header
 @setfilename vxl.info
 @settitle VXL
@@ -411,6 +411,12 @@ begin with @code{vxl_stuff_}, and possibly @code{vxl_stuff} itself.
 @end quotation
 An example of a header file which obeys this rule is shown in figure 1.
 
+
+@figure
+x
+@end figure
+
+
 @figure
 @cartouche
 @smallexample
@@ -436,6 +442,8 @@ Example of a header file @code{vxl_stuff.h} which obeys the naming
 convention. Only identifiers that begin with @code{vxl_stuff_} may be
 defined.
 @endcaption
+@end figure
+
 
 Of course, this rule is less helpful to clients of the library, who might
 remember that there is a class called @code{vtl_thing_doer}, but not know
@@ -962,7 +970,18 @@ remembering the line number for error messages.  It is used like this:
      vcl_cerr << "Field 2 = " << awk[2] << vcl_endl;
    @}
 @end smallexample
-
+If @code{myfile.txt} contained the text
+@smallexample
+  dapple dawn-drawn falcon,
+  solihull 1  grimsby 3
+@end smallexample
+the above program would print
+@smallexample
+  Field 0 = dapple
+  Field 2 = falcon,
+  Field 0 = solihull
+  Field 2 = grimsby
+@end smallexample
 
 @section Regular expression parsing: @code{vbl_reg_exp}
 @cindex regular expressions
@@ -1194,8 +1213,16 @@ after all), an O(n^2) copy or an O(1) @var{new} are not going to be hugely
 significant.
 
 However, for small matrices we should try to avoid calls to @var{new}, and
-vnl provides some fixed-size matrices and vectors which do so.  Thus a more
-efficient version of the above sequence would be
+vnl provides some fixed-size matrices and vectors which do so.  The templates
+which define these are called @code{vnl_vector_fixed} and
+@code{vnl_matrix_fixed}, and the template instances include the size of the
+vector or matrix in their parameters.  A vector of double with fixed length
+4 is defined using
+@example
+    vnl_vector_fixed<double, 4>
+@end example
+with analogous syntax for matrices.   Thus a more efficient version of the
+above sequence would be
 @example
 #include <vnl/vnl_matrix_fixed.h>
 #include <vnl/vnl_vector_fixed.h>
@@ -1207,7 +1234,8 @@ main() @{
 @end example
 It's a bit clumsy typing these long names, so it is common to use
 @code{typedef} to make shorter ones.  Indeed, a few are supplied with vnl,
-for example @code{vnl_double_3x4}, so a more compact rendition of our
+for example @code{vnl_double_3x4} (defined, of course, in a header called
+@code{vnl_double_3x4.h}).  So a more compact rendition of our
 example is
 @example
 #include <vnl/vnl_double_3x4.h>
@@ -1231,11 +1259,31 @@ vnl_double_3 x(1.0,2.0,3.0);    // Declare a 3-vector using local storage
 vnl_double_3 rx = R * x;        // Multiply R by x and place the result in rx
 @end example
 is expanded by many compilers into an open-coded sequence of 9 multiplies
-and 6 adds.  Note that as the fixed-size objects are subclasses of the
-generic objects, all the same operations apply to them.  Only those which
-have been specifically coded to do so enjoy the increase in speed.
+and 6 adds.  Note that as the fixed-size objects @code{vnl_*_fixed<T,n>}
+are subclasses of the generic objects @code{vnl_*<T>}, all the same
+operations apply to them.  Only those which have been specifically coded to
+do so enjoy the increase in speed.
 
 @section Example: Matrix decomposition
+
+The most frequently asked question about @code{vnl_matrix} is ``where is
+the @code{inverse} method'', and the answer is that the inverse is not
+defined as a method, because there are too many ways of forming it, each
+with different tradeoffs.  If you really don't care to hear about these
+things, you can use the @code{vnl_matrix_inverse} class to compute an
+inverse object:
+@example
+#include <vnl/algo/vnl_matrix_inverse.h>
+main() {
+  vcl_cerr << vnl_matrix_inverse(A) * B;
+}
+@end example
+
+If you want more control over how the inverse is taken, then you might want
+to look at one of the decomposition classes.
+
+xxx order in general-specific, give flop counts, show decomps.
+
 
 The following fragment demonstrates use of the @code{vnl_svd<double>} class
 to find the approximation of a 3x3 matrix @code{F} by the nearest matrix of
@@ -1301,18 +1349,116 @@ into matrix @code{pts}, and a hyperplane fitted using two different methods.
 @endcaption
 @end figure
 
-@section Optimization
-The package currently provides only for nonlinear least squares, rather
-than general function minimization.  This means that the function to be
-minimized must be the norm of a multivariate function.  However, this often
-the case in vision problems, and allows us to use the powerful
-Levenberg-Marquardt algorithm.  As an example of function minimization we
-shall consider the ``notorious'' Rosenbrock function:
+@section Polynomials
+
+The @code{vnl_rpoly_roots} class in @code{vnl/algo} is used to compute 
+the roots (or "zeros") of a real polynomial.   For example, given the
+cubic equation
 @example
-f(x, y) = [ 10(y - x^2) ]
-          [    1-x      ]
+     4 x^3 + 3 x^2 - 7 x + 5 = 0
 @end example
-The graph of @math{f^2} is plotted below.
+we can compute the values of @code{x} using @code{vnl_rpoly_roots}.
+The first step is to collect the coefficients into a vector, listing
+from the highest power down.  In the above example, we should make the
+vector
+@example
+     [4, 3, -7, 5]
+@end example
+In C++, this could be written
+@example
+     vnl_double_4 poly;
+     poly[0] = 4;
+     poly[1] = 3;
+     poly[2] = -7;
+     poly[3] = 5;
+@end example
+Having prepared the polynomial, we compute the roots:
+@example
+     vnl_rpoly_roots roots(poly);
+@end example
+Now, @code{roots} contains the roots, which can be made use of, or simply
+admired.  To facilitate the latter, we shall print them to the console:
+@example
+     for(int k = 0; k < 3; ++k) // Cubic polynomial ==> 3 roots
+       vcl_cerr << roots[k] << vcl_endl;
+@end example
+
+To get just the real or imaginary parts of the (generally complex) roots,
+convenience methods @code{real(int)} and @code{imag(int)} are provided.  So
+to print only the real roots, one might use
+@example
+     for(int k = 0; k < 3; ++k)
+       if (roots.imag(k) < 1e-8)
+         vcl_cerr << roots.real(k) << vcl_endl;
+@end example
+
+@subsection Implementation
+
+The implementation is a wrapper for the fortran code in algorithm 493 from
+the ACM Transactions on Mathematical Software.  This is the Jenkins-Traub
+algorithm, described by Numerical Recipes under "Other sure-fire
+techniques" as "practically a standard in black-box polynomial
+rootfinders".  (See M.A. Jenkins, ACM TOMS 1 (1975) pp. 178-189.).
+
+The algorithm fails if poly[0] is zero, so it's often good to try to write
+your problem so that the leading coefficient (i.e. poly[0]) is equal to 1.
+
+
+@section Nonlinear Optimization
+It is not uncommon in computer vision research to meet problems for which
+there is no known closed-form solution, and a common class of such problems 
+are of the form "find @math{x}, @math{y} and @math{z}, such that the
+function @math{f(x,y,z)} takes its minmimum value".  For example, fitting a
+line to a set of 2D points @{(x_i,y_i) | i=1..n@}. The problem is then
+to find a,b,c to minimize the sum of distances of each point to the line 
+(@math{a x + b y + c = 0})
+@example
+                  n   (a * x[i] + b * y[i] + c)^2
+      f(a,b,c) = sum  ---------------------------
+                 i=1         (a^2 + b^2)
+@end example
+In the case of line fitting, a closed-form solution can be found, but in
+many other problems, no such solution is known, and an iterative method
+must be employed.
+
+In those cases, one needs a good, general purpose nonlinear optimization
+routine.  Of course, such a panacea does not exist, so @code{vnl} provides
+several from which to choose.  The factor that decides which is best is
+most frequently the amount of knowledge that one has about the form of the
+function.  The more you know, the more quickly you can expect the
+optimization to proceed.  For example, if you can compute the function's
+derivatives, you would expect to achieve better performance.
+
+@subsection Choosing a minimizer
+
+The routines provided in vnl may be arranged roughly in decreasing order of
+generality---and correspondingly, increasing order of speed---as follows:
+@enumerate
+@item @code{vnl_amoeba}: Nelder-Meade downhill simplex.  The method of
+choice if you know absolutely nothing about your function, but fear the
+worst.  It you think the function might be noisy (i.e. the error surface
+has many small pockets), or you don't trust it to have reasonable
+derivatives, downhill simplex is a good choice.  If you want the code to
+run fast, it's not.
+
+@item @code{vnl_powell}: Powell's direction-set method.  Powell's method,
+like simplex, doesn't require that you supply the derivatives of @math{f}
+with respect to @math{a}, @math{b}, and @math{c}, but it does assume they
+are moderately well behaved.
+
+@item @code{vnl_conjugate_gradient}: Fletcher-Reeves form of the conjugate
+gradient algorithm.
+
+@item @code{vnl_levenberg_marquardt}: The Levenberg-Marquardt algorithm for
+least-squares problems.
+@end enumerate
+
+As an example of the use of the optimization routines, we'll use a common
+test case, the ``notorious'' Rosenbrock function:
+@example
+     f(x, y) = (10*(y - x^2))^2 + (1-x)^2
+@end example
+The graph of @math{f} is plotted below.
 
 @image{rosenbrock,,1in}
 @quotation
@@ -1322,41 +1468,94 @@ case.  Optimization starts on one side of the valley, and must find the
 minimum around the corner.
 @end quotation
 
+@subsection Function objects, derived from @code{vnl_cost_function}
 
-We first derive a function object from @code{vnl_least_squares_function}.
-The function object must initialize the base class with the number of
-variables, and the number of residuals or unknowns.  In this case, both
-domain and range are two dimensional.  The constructor must also supply a
-@code{no_gradient} flag if the function @code{gradf} has not been
-implemented.
+Running an optimization is a two step process.  The first is to describe
+the function to the program, and the second is to pass that description to
+one of the minimizers.  Functions are described by @emph{function objects},
+or "functors", which are classes which provide a method @code{f(...)} which
+takes a vector of parameters as input, and returns the error.  Such
+functors are derived from @code{vnl_cost_function}:
 @example
-struct Rosenbrock : public vnl_least_squares_function @{
-  Rosenbrock(): vnl_least_squares_function(2, 2, no_gradient) @{@}
-@};
+     struct my_rosenbrock_functor : public vnl_cost_function @{
+@end example
+The function is a method in the derived class.  Here's the continuation of
+the declaration of @code{my_rosenbrock_functor}.
+@example
+       double f(vnl_vector<double> const& params) @{
+         double x = params[0];
+         double y = params[1];
+         return vnl_math_sqr(10*(y-x*x)) + vnl_math_sqr(1-x);
+       @}
+@end example
+Because a @code{vnl_cost_function} can deal with cost functions of any
+dimension, not just the 2D example here, 
+@code{my_rosenbrock_functor} must tell the base class the size of the
+space it's working in.  This is done in the constructor as follows:
+@example
+       my_rosenbrock_functor():
+         vnl_cost_function(2) @{@}
+@end example
+And we can now close the declaration of @code{my_rosenbrock_functor}:
+@example
+     @}
 @end example
 
-Then the abstract method @code{f} is implemented, which evaluates the
-function.  Any data required for the evaluation can be stored in the class
-and will be available whenever @code{f} is called.
+
+@c 
+@c We first derive a function object from @code{vnl_least_squares_function}.
+@c The function object must initialize the base class with the number of
+@c variables, and the number of residuals or unknowns.  In this case, both
+@c domain and range are two dimensional.  The constructor must also supply a
+@c @code{no_gradient} flag if the function @code{gradf} has not been
+@c implemented.
+@c @example
+@c struct Rosenbrock : public vnl_least_squares_function @{
+@c   Rosenbrock(): vnl_least_squares_function(2, 2, no_gradient) @{@}
+@c @};
+@c @end example
+@c 
+@c Then the abstract method @code{f} is implemented, which evaluates the
+@c function.  Any data required for the evaluation can be stored in the class
+@c and will be available whenever @code{f} is called.
+@c @example
+@c   double f(const vnl_vector<double>& x, vnl_vector<double>& fx) @{
+@c     fx[0] = 10 * (x[1] - vnl_math_sqr(x[0]));
+@c     fx[1] = 1 - x[0];
+@c   @}
+@c @end example
+
+@subsection Running the minimization
+
+In order to perform the minimization, a @code{vnl_amoeba} compute
+object is constructed, passing the @code{vnl_cost_function}.
 @example
-  double f(const vnl_vector<double>& x, vnl_vector<double>& fx) @{
-    fx[0] = 10 * (x[1] - vnl_math_sqr(x[0]));
-    fx[1] = 1 - x[0];
-  @}
-@end example
-In order to perform the minimization, a @code{vnl_levenberg_marquardt} compute
-object is constructed, passing the @code{vnl_least_squares_function}.
-@example
-Rosenbrock f;
-vnl_levenberg_marquardt lm(f);
+my_rosenbrock_functor f;
+vnl_amoeba minimizer(f);
 @end example
 Having provided an initial estimate of the solution in vector @code{x}, the
 minimization is performed:
 @example
-lm.minimize(x);
+minimizer.minimize(x);
 @end example
 after which the vector @code{x} contains the minimizing parameters.
 
+@subsection Least-squares problems: The Levenberg-Marquardt algorithm.
+
+The Levenberg-Marquardt algorithm provides only for nonlinear least
+squares, rather than general function minimization.  This means that the
+function to be minimized must be the norm of a multivariate function.
+However, this often the case in vision problems, and allows us to use the
+powerful Levenberg-Marquardt algorithm.  The Rosenbrock function can also
+be written as a 2D-2D least squares problem as follows:
+@example
+f(x, y) = [ 10(y - x^2) ]
+          [    1-x      ]
+@end example
+In this case, we need to make a class derived from
+@code{vnl_least_squares_function}.  xxx
+
+@page
 @section Design issues
 This section documents some design decisions with which people might
 disagree.  Please let me know how you feel on these issues.  It's also a
@@ -2052,7 +2251,6 @@ Now, the function may be called as
           qraux.data_block(), jpvt.data_block(), w.data_block(),
           &do_pivoting);
 @end example
-
 
 @comment ------------------------------------------------------------------
 @node    Concept Index,     , , Top
