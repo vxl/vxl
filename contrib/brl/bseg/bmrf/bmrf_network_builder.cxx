@@ -193,7 +193,7 @@ extract_alpha_segments(vdgl_digital_curve_sptr const & dc,
   vcl_vector<bmrf_epi_point_sptr> samples;
 
   vdgl_edgel_chain_sptr ec = dc->get_interpolator()->get_edgel_chain(); 
-  for ( int i=0; i<ec->size(); ++i ){
+  for ( unsigned int i=0; i<ec->size(); ++i ){
     const vdgl_edgel & edgel = ec->edgel(i);
     double u = edgel.get_x(), v = edgel.get_y(), alpha=0.0, s=0.0;
     this->epi_coords(u, v, alpha, s);
