@@ -20,7 +20,11 @@ inline istream& operator>>(istream& s, signed char& c)
 #undef  vcl_streamsize
 #define vcl_streamsize   unsigned
 
-// The SGI compiler things that "enum | enum" is an int.
+// ios::openmode is a bitmap (but possibly implemented as an enum).
+// On SGI it's called ios::open_mode.
+// The SGI compiler thinks that "enum | enum" is an int,
+// while the standard says that "bitmap | bitmap" is a bitmap.
+// So we don't use ios::open_mode but define or own:
 #undef  vcl_ios_openmode
 #define vcl_ios_openmode vcl_ios_openmode
 struct vcl_ios_openmode
@@ -47,5 +51,4 @@ struct vcl_ios_openmode
 #undef  vcl_ios_binary
 #define vcl_ios_binary vcl_ios_openmode(0)
 
-
-#endif
+#endif // vcl_sgi_iostream_h_
