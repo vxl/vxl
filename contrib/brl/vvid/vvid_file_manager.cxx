@@ -27,8 +27,6 @@
 #include <sdet/sdet_fit_lines_params.h>
 #include <sdet/sdet_grid_finder_params.h>
 #include <sdet/sdet_tracker_params.h>
-#include <bdgl/bdgl_curve_tracker.h>
-#include <bdgl/bdgl_curve_matcher.h>
 #include <bdgl/bdgl_curve_tracking.h>
 
 #include <vidl/vidl_io.h>
@@ -681,8 +679,7 @@ void vvid_file_manager::compute_curve_tracking()
 
 void vvid_file_manager::compute_corr_tracking()
 {
-  static bool new_box = true;
-  static sdet_tracker_params tp;  
+  static sdet_tracker_params tp;
   vgui_dialog tracker_dialog("Correlation Tracker");
   tracker_dialog.field("Number of Samples", tp.n_samples_);
   tracker_dialog.field("Search Radius", tp.search_radius_);
@@ -690,15 +687,15 @@ void vvid_file_manager::compute_corr_tracking()
   if (!tracker_dialog.ask())
     return;
   vtol_topology_object_sptr to = easy0_->get_temp();
-  if(!to)
-    {
-      vcl_cout << "In vvid_file_manager::compute_corr_tracker() - no model\n";
-      return;
-    }
-  video_process_ = new vpro_corr_tracker_process(tp);
-  video_process_->add_input_topology_object(to);
+  if (!to)
+    vcl_cout << "In vvid_file_manager::compute_corr_tracking() - no model\n";
+  else
+  {
+    video_process_ = new vpro_corr_tracker_process(tp);
+    video_process_->add_input_topology_object(to);
+  }
 }
-  
+
 void vvid_file_manager::create_box()
 {
   rubber0_->rubberband_box();
