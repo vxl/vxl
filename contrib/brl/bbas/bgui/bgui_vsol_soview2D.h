@@ -16,7 +16,7 @@
 //   M.J. Leotta   April 3, 2004  Merged linked soviews back into this file
 //   Sancar Adali    May 5, 2004  Created a base class bgui_vsol_soview2D, a base
 //                                class for all bgui_vsol_soview2D_xxx objects
-//                                It has the sptr to the vsol data object  
+//                                It has the sptr to the vsol data object
 // \endverbatim
 //--------------------------------------------------------------------------------
 
@@ -33,7 +33,7 @@
 
 class bgui_vsol_soview2D : public vgui_soview2D
 {
-public:
+ public:
   //: Constructor - creates a default vsol_spatial_object_2d view
   bgui_vsol_soview2D( vsol_spatial_object_2d_sptr const & pt);
 
@@ -48,14 +48,13 @@ public:
 
   //: Render this 2D digital_curve on the display.
   virtual void draw() const=0;
-  
+
   //: Translate this 2D digital_curve by the given x and y distances.
   virtual void translate(float x, float y)=0;
-protected:
 
+ protected:
   //: Smart pointer to a vsol_spatial_object
   vsol_spatial_object_2d_sptr sptr_;
-
 };
 
 
@@ -63,8 +62,8 @@ class bgui_vsol_soview2D_point : public bgui_vsol_soview2D
 {
  public:
   //: Constructor - creates a default vsol_point_2d view
-  bgui_vsol_soview2D_point( vsol_point_2d_sptr const & pt);      
-         
+  bgui_vsol_soview2D_point( vsol_point_2d_sptr const & pt);
+
   ~bgui_vsol_soview2D_point() {}
 
   //: Returns the type of this class ('bgui_vsol_soview2D_point').
@@ -75,8 +74,8 @@ class bgui_vsol_soview2D_point : public bgui_vsol_soview2D
   void draw() const;
 
   // Returns vsol_point_2d_sptr of the vsol_spatial_object_2d_sptr
-  vsol_point_2d_sptr sptr() const;   
-  
+  vsol_point_2d_sptr sptr() const;
+
   //: Returns the distance squared from this 2D digital_curve to the given position.
   virtual float distance_squared(float x, float y) const;
 
@@ -85,7 +84,6 @@ class bgui_vsol_soview2D_point : public bgui_vsol_soview2D
 
   //: Translate this 2D digital_curve by the given x and y distances.
   void translate(float x, float y);
-
 };
 
 
@@ -108,7 +106,7 @@ class bgui_vsol_soview2D_line_seg : public bgui_vsol_soview2D
 
   // Returns a smart pointer to the line
   // \note cast from a vsol_spatial_object_2d_sptr in the base class
-  vsol_line_2d_sptr sptr() const; 
+  vsol_line_2d_sptr sptr() const;
 
   //: Returns the distance squared from this 2D digital_curve to the given position.
   virtual float distance_squared(float x, float y) const;
@@ -118,7 +116,6 @@ class bgui_vsol_soview2D_line_seg : public bgui_vsol_soview2D
 
   //: Translate this 2D digital_curve by the given x and y distances.
   virtual void translate(float x, float y);
-  
 };
 
 
@@ -151,7 +148,6 @@ class bgui_vsol_soview2D_polyline : public bgui_vsol_soview2D
 
   //: Translate this 2D digital_curve by the given x and y distances.
   void translate(float x, float y);
-  
 };
 
 
@@ -171,7 +167,7 @@ class bgui_vsol_soview2D_polygon : public bgui_vsol_soview2D
 
   // Returns a smart pointer to the polygon
   // \note cast from a vsol_spatial_object_2d_sptr in the base class
-  vsol_polygon_2d_sptr sptr() const;     
+  vsol_polygon_2d_sptr sptr() const;
 
   //: Render this 2D digital_curve on the display.
   void draw() const;
@@ -184,7 +180,6 @@ class bgui_vsol_soview2D_polygon : public bgui_vsol_soview2D
 
   //: Translate this 2D digital_curve by the given x and y distances.
   void translate(float x, float y);
- 
 };
 
 
@@ -194,8 +189,7 @@ class bgui_vsol_soview2D_digital_curve : public vgui_soview2D
  public:
   //: Constructor - creates a view of a vdgl_digital_curve
   bgui_vsol_soview2D_digital_curve(vdgl_digital_curve_sptr const& e, bool dotted = false)
-  : draw_dotted_(dotted)
-  { sptr = e; }
+  : draw_dotted_(dotted),  dc(e) {}
 
   //: Destructor - does nothing, smart pointers pass out of scope automatically
   ~bgui_vsol_soview2D_digital_curve() {}
@@ -219,10 +213,10 @@ class bgui_vsol_soview2D_digital_curve : public vgui_soview2D
   //: Translate this 2D digital_curve by the given x and y distances.
   void translate(float x, float y);
 
-  //: Smart pointer to vdgl_digital_curve
-  vdgl_digital_curve_sptr sptr;
-
  protected:
+  //: Smart pointer to vdgl_digital_curve
+  vdgl_digital_curve_sptr dc;
+
   bool draw_dotted_;
 };
 

@@ -214,7 +214,7 @@ vcl_ostream& bgui_vsol_soview2D_digital_curve::print(vcl_ostream& s) const
 void bgui_vsol_soview2D_digital_curve::draw() const
 {
   //get the edgel chain
-  vdgl_interpolator_sptr itrp = sptr->get_interpolator();
+  vdgl_interpolator_sptr itrp = this->dc->get_interpolator();
   vdgl_edgel_chain_sptr ech = itrp->get_edgel_chain();
 
   unsigned int n = ech->size();
@@ -241,7 +241,7 @@ void bgui_vsol_soview2D_digital_curve::draw() const
 float bgui_vsol_soview2D_digital_curve::distance_squared( float x , float y ) const
 {
   //get the edgel chain
-  vdgl_interpolator_sptr itrp = sptr->get_interpolator();
+  vdgl_interpolator_sptr itrp = this->dc->get_interpolator();
   vdgl_edgel_chain_sptr ech = itrp->get_edgel_chain();
 
   unsigned int n = ech->size();
@@ -266,7 +266,7 @@ float bgui_vsol_soview2D_digital_curve::distance_squared( float x , float y ) co
 void bgui_vsol_soview2D_digital_curve::get_centroid( float* x, float* y ) const
 {
   //get the edgel chain
-  vdgl_interpolator_sptr itrp = sptr->get_interpolator();
+  vdgl_interpolator_sptr itrp = this->dc->get_interpolator();
   vdgl_edgel_chain_sptr ech = itrp->get_edgel_chain();
 
   unsigned int n = ech->size();
@@ -288,7 +288,7 @@ void bgui_vsol_soview2D_digital_curve::get_centroid( float* x, float* y ) const
 void bgui_vsol_soview2D_digital_curve::translate( float x , float y )
 {
   //get the edgel chain
-  vdgl_interpolator_sptr itrp = sptr->get_interpolator();
+  vdgl_interpolator_sptr itrp = this->dc->get_interpolator();
   vdgl_edgel_chain_sptr ech = itrp->get_edgel_chain();
 
   unsigned int n = ech->size();
