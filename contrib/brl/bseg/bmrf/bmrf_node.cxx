@@ -3,10 +3,15 @@
 // \file
 
 #include "bmrf_node.h"
+#include <bmrf/bmrf_epi_transform.h>
 #include <vsl/vsl_binary_io.h>
 #include <vbl/io/vbl_io_smart_ptr.h>
 #include <vcl_algorithm.h>
+#include <vcl_limits.h>
+#include <vcl_cmath.h>
 
+#define MAX(a,b) ((a)>(b)?(a):(b))
+#define MIN(a,b) ((a)<(b)?(a):(b))
 
 //: Constructor
 bmrf_node::bmrf_node( const bmrf_epi_seg_sptr& epi_seg, int frame_num, double probability )
@@ -78,6 +83,58 @@ bmrf_node::probability(  )
 {
   // Have not yet determined how this will be computed
   return probability_;
+}
+
+
+// Helper function to compute match error between to segments
+static double
+bmrf_match_error( const bmrf_epi_seg_sptr& ep1, const bmrf_epi_seg_sptr& ep2 )
+{
+  double min_alpha = MAX(ep1->min_alpha(), ep2->min_alpha());
+  double max_alpha = MIN(ep1->max_alpha(), ep2->max_alpha());
+  double d_alpha =  MIN( (ep1->max_alpha() - ep1->min_alpha())/ep1->n_pts() ,
+                         (ep2->max_alpha() - ep2->min_alpha())/ep2->n_pts() );
+  int num_pts = 0;
+  double error = 0.0;
+  for(double alpha = min_alpha; alpha <= max_alpha; alpha += d_alpha, ++num_pts){
+    double ds = ep1->s(alpha) - ep2->s(alpha);
+    double dli = ep1->left_int(alpha) - ep2->left_int(alpha);
+    double dri = ep1->right_int(alpha) - ep2->right_int(alpha);
+    error += ds*ds + dli*dli + dri*dri;
+  }
+  return error * d_alpha / num_pts;
+}
+
+//: Calculate the error in similarity between this trasformed by \p xform 
+double
+bmrf_node::probability(const bmrf_epi_transform_sptr& xform)
+{
+  // precompute the segment in the next and previous frames since
+  // this should make up most of the neighbors
+  bmrf_epi_seg_sptr prev_seg = xform->apply(this->epi_seg(), -1.0);
+  bmrf_epi_seg_sptr next_seg = xform->apply(this->epi_seg(), 1.0);
+  double prob = 0.0;
+  int num_neighbors = 0;
+  for( arc_iterator a_itr = this->begin(TIME); a_itr != this->end(TIME); ++a_itr, ++num_neighbors ){
+    bmrf_node_sptr neighbor = (*a_itr)->to();
+    int time_step = neighbor->frame_num() - this->frame_num();
+    double error;
+    switch(time_step){
+    case -1:
+      error = bmrf_match_error(prev_seg, neighbor->epi_seg());
+      break;
+    case 1:
+      error = bmrf_match_error(next_seg, neighbor->epi_seg());
+      break;
+    default:
+      // compute less likely transformations as needed
+      bmrf_epi_seg_sptr xform_seg = xform->apply(this->epi_seg(), double(time_step));
+      error = bmrf_match_error(xform_seg, neighbor->epi_seg());
+    }
+    //vcl_cout << "Error = " << error << vcl_endl;
+    prob += vcl_exp(-error/2.0);
+  }
+  return prob / (num_neighbors * 2.50663);
 }
 
 
