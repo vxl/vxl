@@ -280,7 +280,7 @@ class vil_nitf_image_subheader : public vil_nitf_header
   virtual vil_nitf_header* Copy();
   virtual void Copy (const vil_nitf_image_subheader*);
   virtual vil_nitf_image_subheader_band * new_image_header_band (
-      vil_nitf_image_subheader_band * ish_band = 0) {return 0; }
+      vil_nitf_image_subheader_band * /*ish_band*/ = 0) {return 0; }
   const   vil_nitf_image_subheader& operator= (const vil_nitf_image_subheader&);
 
   // FIGURE OUT HOW TO PASS vcl_out.
