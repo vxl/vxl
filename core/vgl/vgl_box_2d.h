@@ -99,9 +99,9 @@ public:
   // Computations--------------------------------------------------------------
   bool contains(Type const& x, Type const& y) const {
     return (x >= min_pos_[0] &&
-	    x <= max_pos_[0] &&
-	    y >= min_pos_[1] &&
-	    y <= max_pos_[1]);
+            x <= max_pos_[0] &&
+            y >= min_pos_[1] &&
+            y <= max_pos_[1]);
   }
 
   vcl_ostream& print(vcl_ostream&) const;

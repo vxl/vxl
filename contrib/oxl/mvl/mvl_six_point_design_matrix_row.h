@@ -10,8 +10,8 @@
 #include <vnl/vnl_matrix.h>
 
 void mvl_six_point_design_matrix_row(vnl_matrix<double> const &A,
-				     vnl_matrix<double> const &B,
-				     double u, double v,
-				     double out_row[5]);
+                                     vnl_matrix<double> const &B,
+                                     double u, double v,
+                                     double out_row[5]);
 
 #endif

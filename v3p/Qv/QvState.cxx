@@ -21,7 +21,7 @@ QvState::QvState()
     stacks = new QvElement * [NumStacks];
 
     for (int i = 0; i < NumStacks; i++)
-	stacks[i] = NULL;
+        stacks[i] = NULL;
 
     depth = 0;
 }
@@ -29,7 +29,7 @@ QvState::QvState()
 QvState::~QvState()
 {
     while (depth > 0)
-	pop();
+        pop();
 
     delete [] stacks;
 }
@@ -54,11 +54,11 @@ QvState::pop()
     depth--;
 
     for (int i = 0; i < NumStacks; i++)
-	while (stacks[i] != NULL && stacks[i]->depth > depth)
+        while (stacks[i] != NULL && stacks[i]->depth > depth)
 #ifdef PMAX
-	    popElement((enum StackIndex) i);  // difficulties with cast, mpichler, 19950802
+            popElement((enum StackIndex) i);  // difficulties with cast, mpichler, 19950802
 #else
-	    popElement((StackIndex) i);
+            popElement((StackIndex) i);
 #endif
 }
 
@@ -77,13 +77,13 @@ QvState::print()
 
     for (int i = 0; i < NumStacks; i++) {
 
-	printf("\tStack [%2d] (%s):\n", i, stackNames[i]);
+        printf("\tStack [%2d] (%s):\n", i, stackNames[i]);
 
-	if (stacks[i] == NULL)
-	    printf("\t\tNULL\n");
+        if (stacks[i] == NULL)
+            printf("\t\tNULL\n");
 
-	else
-	    for (QvElement *elt = stacks[i]; elt != NULL; elt = elt->next)
-		elt->print();
+        else
+            for (QvElement *elt = stacks[i]; elt != NULL; elt = elt->next)
+                elt->print();
     }
 }

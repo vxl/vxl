@@ -73,79 +73,79 @@ doublereal *x;
     agiant = rgiant / floatn;
     i__1 = *n;
     for (i = 1; i <= i__1; ++i) {
-	xabs = (d__1 = x[i], abs(d__1));
-	if (xabs > rdwarf && xabs < agiant) {
-	    goto L70;
-	}
-	if (xabs <= rdwarf) {
-	    goto L30;
-	}
+        xabs = (d__1 = x[i], abs(d__1));
+        if (xabs > rdwarf && xabs < agiant) {
+            goto L70;
+        }
+        if (xabs <= rdwarf) {
+            goto L30;
+        }
 
 /*              sum for large components. */
 
-	if (xabs <= x1max) {
-	    goto L10;
-	}
+        if (xabs <= x1max) {
+            goto L10;
+        }
 /* Computing 2nd power */
-	d__1 = x1max / xabs;
-	s1 = one + s1 * (d__1 * d__1);
-	x1max = xabs;
-	goto L20;
+        d__1 = x1max / xabs;
+        s1 = one + s1 * (d__1 * d__1);
+        x1max = xabs;
+        goto L20;
 L10:
 /* Computing 2nd power */
-	d__1 = xabs / x1max;
-	s1 += d__1 * d__1;
+        d__1 = xabs / x1max;
+        s1 += d__1 * d__1;
 L20:
-	goto L60;
+        goto L60;
 L30:
 
 /*              sum for small components. */
 
-	if (xabs <= x3max) {
-	    goto L40;
-	}
+        if (xabs <= x3max) {
+            goto L40;
+        }
 /* Computing 2nd power */
-	d__1 = x3max / xabs;
-	s3 = one + s3 * (d__1 * d__1);
-	x3max = xabs;
-	goto L50;
+        d__1 = x3max / xabs;
+        s3 = one + s3 * (d__1 * d__1);
+        x3max = xabs;
+        goto L50;
 L40:
-	if (xabs != zero) {
+        if (xabs != zero) {
 /* Computing 2nd power */
-	    d__1 = xabs / x3max;
-	    s3 += d__1 * d__1;
-	}
+            d__1 = xabs / x3max;
+            s3 += d__1 * d__1;
+        }
 L50:
 L60:
-	goto L80;
+        goto L80;
 L70:
 
 /*           sum for intermediate components. */
 
 /* Computing 2nd power */
-	d__1 = xabs;
-	s2 += d__1 * d__1;
+        d__1 = xabs;
+        s2 += d__1 * d__1;
 L80:
 /* L90: */
-	;
+        ;
     }
 
 /*     calculation of norm. */
 
     if (s1 == zero) {
-	goto L100;
+        goto L100;
     }
     ret_val = x1max * sqrt(s1 + s2 / x1max / x1max);
     goto L130;
 L100:
     if (s2 == zero) {
-	goto L110;
+        goto L110;
     }
     if (s2 >= x3max) {
-	ret_val = sqrt(s2 * (one + x3max / s2 * (x3max * s3)));
+        ret_val = sqrt(s2 * (one + x3max / s2 * (x3max * s3)));
     }
     if (s2 < x3max) {
-	ret_val = sqrt(x3max * (s2 / x3max + x3max * s3));
+        ret_val = sqrt(x3max * (s2 / x3max + x3max * s3));
     }
     goto L120;
 L110:

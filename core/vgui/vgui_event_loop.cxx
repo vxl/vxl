@@ -81,26 +81,26 @@ void vgui_event_loop_service()
 
       // despatch it, ...
       if (ok) {
-	if (e.type == vgui_DRAW) {
-	  if (st->slab->overlay_active())
-	    st->slab->overlay_leave();
-	  st->slab->draw_begin();
-	  st->slot.handle(e);
-	  st->slab->draw_end();
-	}
-	else if (e.type == vgui_DRAW_OVERLAY) {
-	  if (! st->slab->overlay_active())
-	    st->slab->overlay_enter();
-	  st->slab->draw_begin();
-	  st->slot.handle(e);
-	  st->slab->draw_end();
-	}
-	else
-	  st->slot.handle(e);
+        if (e.type == vgui_DRAW) {
+          if (st->slab->overlay_active())
+            st->slab->overlay_leave();
+          st->slab->draw_begin();
+          st->slot.handle(e);
+          st->slab->draw_end();
+        }
+        else if (e.type == vgui_DRAW_OVERLAY) {
+          if (! st->slab->overlay_active())
+            st->slab->overlay_enter();
+          st->slab->draw_begin();
+          st->slot.handle(e);
+          st->slab->draw_end();
+        }
+        else
+          st->slot.handle(e);
       }
       // ...or discard it.
       else
-	{ /* ??? */ }
+        { /* ??? */ }
 
       // !! FIXME: the iterator might be invalid now !!
       break;

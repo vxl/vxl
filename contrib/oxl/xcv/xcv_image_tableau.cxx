@@ -37,8 +37,8 @@ vil_image xcv_image_tableau::get_image() const
     return base::get_image();
   else
     return vil_crop(base::get_image(),
-		    int(roi_.x+0.5),int(roi_.y+0.5),
-		    int(roi_.width),int(roi_.height));
+                    int(roi_.x+0.5),int(roi_.y+0.5),
+                    int(roi_.width),int(roi_.height));
 }
 
 void xcv_image_tableau::set_roi(float x,float y,float w,float h)
@@ -96,8 +96,8 @@ bool xcv_image_tableau::handle(vgui_event const &e)
     if(defined_) {
       // -- Draw a region of interest
       glLineWidth(1);
-	  glColor3f(0,1,0);
-	  glBegin(GL_LINE_LOOP);
+          glColor3f(0,1,0);
+          glBegin(GL_LINE_LOOP);
       glVertex2f(roi_.x,roi_.y);
       glVertex2f(roi_.x+roi_.width,roi_.y);
       glVertex2f(roi_.x+roi_.width,roi_.y+roi_.height);

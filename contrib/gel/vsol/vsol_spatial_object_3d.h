@@ -108,7 +108,7 @@ protected:
   inline vsol_spatial_object_3d(const vsol_spatial_object_3d &s);
   inline int not_applicable(const char *message) const
     { vcl_cerr << message << " Function call not applicable "
-	   << "\tfor spatial object " << get_name() << " ! "<< vcl_endl;
+           << "\tfor spatial object " << get_name() << " ! "<< vcl_endl;
     return 0;
     }
 public:
@@ -178,7 +178,6 @@ public:
 
   virtual vtol_topology_object* cast_to_topology_object() { return NULL;}
 
-
   //virtual GeometryObject* CastToGeometryObject() { return NULL;}
 // Data Control--------------------------------------------------------------
 
@@ -186,8 +185,7 @@ public:
 
   virtual void protected_destroy(void);
 
-
-//: \breif  Geometry Accessors
+//: \brief  Geometry Accessors
   virtual vcl_vector<double> *GetLocation(void)
   {
     return 0;
@@ -275,7 +273,7 @@ public:
     not_applicable("UpdateGeometry");
   }
 
-  /*
+#if 0 // commented out
   virtual  vcl_vector<double>  *GetCog()  { return NULL; }
   const vcl_vector<double> *GetCog() const  { return ((vsol_spatial_object_3d*)this)->GetCog(); }
 
@@ -288,8 +286,7 @@ public:
   virtual bool Rotate();	// moving GetOrientation() to (1,0,0)
   virtual bool Reflect();	// around GetOrientation() over 180 degrees
   virtual bool Shear(float);	// leaving GetOrientation() fixed
-
-  */
+#endif
 
   //: \brief bounding box accessors
 

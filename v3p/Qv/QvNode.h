@@ -130,7 +130,7 @@ private:
   static QvNode *	readReference(QvInput *in);
   static QvBool	readNode(QvInput *in, QvName &className,QvNode *&node);
   static QvBool	readNodeInstance(QvInput *in, const QvName &className,
-      				 const QvName &refName, QvNode *&node);
+      			         const QvName &refName, QvNode *&node);
   static QvNode *	createInstance(QvInput *in, const QvName &className);
   static QvNode *	createInstanceFromName(const QvName &className);
   static void		flushInput(QvInput *in);

@@ -42,7 +42,7 @@ class vtol_topology_io
   //: write a list of topology objects
 
   void write(vcl_list<vtol_topology_object_sptr> &topo_objects,
-	     vcl_ostream &strm=vcl_cout);
+             vcl_ostream &strm=vcl_cout);
 
  private:
 

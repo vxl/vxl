@@ -15,7 +15,7 @@ class QvNodeList : public QvPList {
     void		remove(int which);
     void		truncate(int start);
     QvNode *		operator [](int i) const
-	{ return ( (QvNode *) ( (* (const QvPList *) this) [i]) ); }
+        { return ( (QvNode *) ( (* (const QvPList *) this) [i]) ); }
 };
 
 #endif /* _QV_LISTS_ */

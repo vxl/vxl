@@ -109,8 +109,8 @@ void vgui_slot_impl::unlink(vgui_tableau *p, vgui_tableau *c)
     vcl_vector<vgui_tableau*> &vec = c->vgui_slot_data::parents;
     for (vcl_vector<vgui_tableau*>::iterator i=vec.begin(); i!=vec.end(); ++i) {
       if (*i == p) {
-	vec.erase(i);
-	break;
+        vec.erase(i);
+        break;
       }
     }
   }
@@ -305,11 +305,11 @@ vcl_ostream & operator<<(vcl_ostream &os, vgui_slot const &s)
   // the reason for the flush() is to get as much stuff as
   // possible printed before an eventual segfault.
   return os << "vgui_slot("
-	    << vcl_flush
-	    << static_cast<void*>( s.parent().operator->() ) << ", "
-	    << vcl_flush
-	    << static_cast<void*>( s.child ().operator->() ) << ")"
-	    << vcl_flush;
+            << vcl_flush
+            << static_cast<void*>( s.parent().operator->() ) << ", "
+            << vcl_flush
+            << static_cast<void*>( s.child ().operator->() ) << ")"
+            << vcl_flush;
 }
 
 //--------------------------------------------------------------------------------
@@ -339,16 +339,16 @@ void vgui_slot::get_parents_of (vgui_tableau_sptr const& tab, vcl_vector<vgui_ta
 }
 
 void vgui_slot::replace_child_everywhere (vgui_tableau_sptr const &old_child,
-					  vgui_tableau_sptr const &new_child)
+                                          vgui_tableau_sptr const &new_child)
 {
   // the default is 'false'. don't check in 'true'.
   static bool debug = false;
 
   if (debug)
     vcl_cerr << "vgui_slot replace_child_everywhere " << vcl_endl
-	     << "old_child : " << old_child->pretty_name()
-	     << "\t"
-	     << "new child : " << new_child->pretty_name() << vcl_endl;
+             << "old_child : " << old_child->pretty_name()
+             << "\t"
+             << "new child : " << new_child->pretty_name() << vcl_endl;
 
   if (old_child == new_child)
     vcl_cerr << "vgui_slot::replace_child_everywhere: old_child == new_child\n";
@@ -358,18 +358,18 @@ void vgui_slot::replace_child_everywhere (vgui_tableau_sptr const &old_child,
 
     if (debug) {
       vcl_cerr << "slot  "
-	       << "parent : " << ptr->parent()->pretty_name()
-	       << "\tchild : ";
+               << "parent : " << ptr->parent()->pretty_name()
+               << "\tchild : ";
       if (! ptr->child())
-	vcl_cerr << "0" << vcl_endl;
+        vcl_cerr << "0" << vcl_endl;
       else
-	vcl_cerr << ptr->child()->pretty_name() << vcl_endl;
+        vcl_cerr << ptr->child()->pretty_name() << vcl_endl;
     }
 
     if ( ptr->child() == old_child.operator->() ) {
       assert(ptr->parent() != new_child.operator->() );
       if (debug)
-	vcl_cerr << "replace: " << ptr->child() << vcl_endl;
+        vcl_cerr << "replace: " << ptr->child() << vcl_endl;
       ptr->parent()->notify_replaced_child(old_child, new_child);
       ptr->assign(new_child.operator->());
     }

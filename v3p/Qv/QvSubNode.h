@@ -34,9 +34,9 @@
 
 #define QV_NODE_CONSTRUCTOR(className)					      \
     if (fieldData == NULL)						      \
-	fieldData = new QvFieldData;					      \
+        fieldData = new QvFieldData;					      \
     else								      \
-	firstInstance = FALSE;						      \
+        firstInstance = FALSE;						      \
     isBuiltIn = FALSE;							      \
     nodetype_ = QvNodeType::className
 
@@ -44,13 +44,13 @@
 
 #define QV_NODE_ADD_FIELD(fieldName)					      \
     if (firstInstance)							      \
-	fieldData->addField(this, QV__QUOTE(fieldName), &this->fieldName);    \
+        fieldData->addField(this, QV__QUOTE(fieldName), &this->fieldName);    \
     this->fieldName.setContainer(this);
 
 #define QV_NODE_DEFINE_ENUM_VALUE(enumType,enumValue)			      \
     if (firstInstance)							      \
-	fieldData->addEnumValue(QV__QUOTE(enumType),			      \
-				QV__QUOTE(enumValue), enumValue)
+        fieldData->addEnumValue(QV__QUOTE(enumType),			      \
+                                QV__QUOTE(enumValue), enumValue)
 
 #endif /* _QV_SUB_NODE_ */
 

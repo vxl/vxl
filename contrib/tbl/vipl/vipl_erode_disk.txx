@@ -33,13 +33,13 @@ bool vipl_erode_disk <ImgIn,ImgOut,DataIn,DataOut,PixelItr> :: preop(){
   float rs = (radius() < 0) ? 0 : radius() * radius();
   typedef bool* boolptr;
   if(mask() == 0)
-	 ref_mask() = new boolptr[1+size];
+         ref_mask() = new boolptr[1+size];
   else {
-	for (int x=0; x<=size; ++x)
-	    if(mask()[x]) delete ref_mask()[x];
-	delete ref_mask();
-	ref_mask() = new boolptr[1+size];
-	}
+        for (int x=0; x<=size; ++x)
+            if(mask()[x]) delete ref_mask()[x];
+        delete ref_mask();
+        ref_mask() = new boolptr[1+size];
+        }
   {for (int x=0; x<=size; ++x) {
     ref_mask()[x] = new bool[size+1];
     for (int y=0; y<=size; ++y)

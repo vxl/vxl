@@ -26,7 +26,7 @@ ostream& operator<<(ostream& s, const vdgl_digital_region& d)
     {
       s << "( " << d.ps_[i].x() << ", " << d.ps_[i].y() << ")";
       if( i!= (d.ps_.size()-1))
-	s << ", ";
+        s << ", ";
     }
 
   return s << ")>";

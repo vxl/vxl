@@ -127,9 +127,9 @@ public:
     { return (vnl_vector_fixed<T,n>&) vnl_vector<T>::normalize(); }
 
   friend vnl_vector_fixed<T,n> element_product VCL_NULL_TMPL_ARGS (vnl_vector_fixed<T,n> const&,
-								       vnl_vector_fixed<T,n> const&);
+                                                                   vnl_vector_fixed<T,n> const&);
   friend vnl_vector_fixed<T,n> element_quotient VCL_NULL_TMPL_ARGS (vnl_vector_fixed<T,n> const&,
-									vnl_vector_fixed<T,n> const&);
+                                                                    vnl_vector_fixed<T,n> const&);
 
 public:
   // void these methods on vnl_vector_fixed, since they deallocate the underlying
@@ -158,7 +158,7 @@ inline vnl_vector_fixed<T,n> operator*(T const t, vnl_vector_fixed<T,n> const& r
 
 template <class T, int n>
 inline vnl_vector_fixed<T,n> element_product (vnl_vector_fixed<T,n> const& a,
-				       vnl_vector_fixed<T,n> const& b)
+                                       vnl_vector_fixed<T,n> const& b)
 {
   vnl_vector_fixed<T,n> ret (a);
   for (int i=0; i<n; i++) ret[i] *= b[i];
@@ -167,7 +167,7 @@ inline vnl_vector_fixed<T,n> element_product (vnl_vector_fixed<T,n> const& a,
 
 template <class T, int n>
 inline vnl_vector_fixed<T,n> element_quotient (vnl_vector_fixed<T,n> const& a,
-					vnl_vector_fixed<T,n> const& b)
+                                        vnl_vector_fixed<T,n> const& b)
 {
   vnl_vector_fixed<T,n> ret (a);
   for (int i=0; i<n; i++) ret[i] /= b[i];
@@ -186,11 +186,11 @@ vcl_ostream &operator<<(vcl_ostream &os, vnl_vector_fixed<T, n> const &v) {
 //                                        what's this?
 #if !defined (VCL_SUNPRO_CC) || ! defined (_ODI_OSSG_)
 vnl_vector_fixed<double,3> cross_3d (vnl_vector_fixed<double,3> const& vect1,
-				     vnl_vector_fixed<double,3> const& vect2);
+                                     vnl_vector_fixed<double,3> const& vect2);
 vnl_vector_fixed<float,3> cross_3d (vnl_vector_fixed<float,3> const& vect1,
-				    vnl_vector_fixed<float,3> const& vect2);
+                                    vnl_vector_fixed<float,3> const& vect2);
 vnl_vector_fixed<int,3> cross_3d (vnl_vector_fixed<int,3> const& vect1,
-				  vnl_vector_fixed<int,3> const& vect2);
+                                  vnl_vector_fixed<int,3> const& vect2);
 #endif
 
 #endif // vnl_vector_fixed_h_

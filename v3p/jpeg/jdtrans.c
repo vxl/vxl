@@ -57,10 +57,10 @@ jpeg_read_coefficients (j_decompress_ptr cinfo)
       break;
     /* Advance progress counter if appropriate */
     if (cinfo->progress != NULL &&
-	(retcode == JPEG_ROW_COMPLETED || retcode == JPEG_REACHED_SOS)) {
+        (retcode == JPEG_ROW_COMPLETED || retcode == JPEG_REACHED_SOS)) {
       if (++cinfo->progress->pass_counter >= cinfo->progress->pass_limit) {
-	/* startup underestimated number of scans; ratchet up one scan */
-	cinfo->progress->pass_limit += (long) cinfo->total_iMCU_rows;
+        /* startup underestimated number of scans; ratchet up one scan */
+        cinfo->progress->pass_limit += (long) cinfo->total_iMCU_rows;
       }
     }
   }

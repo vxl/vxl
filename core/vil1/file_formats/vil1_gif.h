@@ -50,12 +50,12 @@ struct vil_gif_loader_saver : public vil_image_impl
   vil_gif_loader_saver(vil_stream *);
 #if 0
   vil_gif_loader_saver(vil_stream *is,
-		       int planes,
-		       int width,
-		       int height,
-		       int components,
-		       int bits_per_component,
-		       vil_component_format format);
+                       int planes,
+                       int width,
+                       int height,
+                       int components,
+                       int bits_per_component,
+                       vil_component_format format);
 #endif
   ~vil_gif_loader_saver();
 

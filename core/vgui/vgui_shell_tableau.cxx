@@ -25,7 +25,7 @@ vgui_shell_tableau::vgui_shell_tableau(vgui_tableau_sptr const &t0) {
 }
 
 vgui_shell_tableau::vgui_shell_tableau(vgui_tableau_sptr const &t0,
-				       vgui_tableau_sptr const &t1)
+                                       vgui_tableau_sptr const &t1)
 {
   init();
   vgui_composite::add(t0);
@@ -33,8 +33,8 @@ vgui_shell_tableau::vgui_shell_tableau(vgui_tableau_sptr const &t0,
 }
 
 vgui_shell_tableau::vgui_shell_tableau(vgui_tableau_sptr const &t0,
-				       vgui_tableau_sptr const &t1,
-				       vgui_tableau_sptr const &t2)
+                                       vgui_tableau_sptr const &t1,
+                                       vgui_tableau_sptr const &t2)
 {
   init();
   vgui_composite::add(t0);
@@ -43,9 +43,9 @@ vgui_shell_tableau::vgui_shell_tableau(vgui_tableau_sptr const &t0,
 }
 
 vgui_shell_tableau::vgui_shell_tableau(vgui_tableau_sptr const &t0,
-				       vgui_tableau_sptr const &t1,
-				       vgui_tableau_sptr const &t2,
-				       vgui_tableau_sptr const &t3)
+                                       vgui_tableau_sptr const &t1,
+                                       vgui_tableau_sptr const &t2,
+                                       vgui_tableau_sptr const &t3)
 {
   init();
   vgui_composite::add(t0);
@@ -99,8 +99,8 @@ bool vgui_shell_tableau::handle(vgui_event const &e) {
       //PM.restore();
       //cerr << "DRAW";
       if (active[i] && children[i])
-	if ( !children[i]->handle(e) )
-	  retv=false;
+        if ( !children[i]->handle(e) )
+          retv=false;
     }
     return retv;
   }
@@ -111,7 +111,7 @@ bool vgui_shell_tableau::handle(vgui_event const &e) {
     //cerr << "EVEM";
     if (active[i] && children[i])
       if ( children[i]->handle(e) )
-	return true;
+        return true;
   }
 
   // Noone was interested....

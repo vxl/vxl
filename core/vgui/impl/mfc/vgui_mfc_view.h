@@ -16,44 +16,44 @@
 class vgui_mfc_view : public vgui_mfc_adaptor
 {
 protected: // create from serialization only
-	vgui_mfc_view();
-	DECLARE_DYNCREATE(vgui_mfc_view)
+        vgui_mfc_view();
+        DECLARE_DYNCREATE(vgui_mfc_view)
 
 // Attributes
 public:
-	CDocument* GetDocument();
+        CDocument* GetDocument();
 
 // Operations
 public:
 
-	// Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CAwfmfcView)
-	public:
-	virtual void OnDraw(CDC* pDC);  // overridden to draw this view
-	virtual BOOL PreCreateWindow(CREATESTRUCT& cs);
-	protected:
-	virtual BOOL OnPreparePrinting(CPrintInfo* pInfo);
-	virtual void OnBeginPrinting(CDC* pDC, CPrintInfo* pInfo);
-	virtual void OnEndPrinting(CDC* pDC, CPrintInfo* pInfo);
-	//}}AFX_VIRTUAL
+        // Overrides
+        // ClassWizard generated virtual function overrides
+        //{{AFX_VIRTUAL(CAwfmfcView)
+        public:
+        virtual void OnDraw(CDC* pDC);  // overridden to draw this view
+        virtual BOOL PreCreateWindow(CREATESTRUCT& cs);
+        protected:
+        virtual BOOL OnPreparePrinting(CPrintInfo* pInfo);
+        virtual void OnBeginPrinting(CDC* pDC, CPrintInfo* pInfo);
+        virtual void OnEndPrinting(CDC* pDC, CPrintInfo* pInfo);
+        //}}AFX_VIRTUAL
 
 // Implementation
 public:
-	virtual ~vgui_mfc_view();
+        virtual ~vgui_mfc_view();
 #ifdef _DEBUG
-	virtual void AssertValid() const;
-	virtual void Dump(CDumpContext& dc) const;
+        virtual void AssertValid() const;
+        virtual void Dump(CDumpContext& dc) const;
 #endif
 
 protected:
 
 // Generated message map functions
 protected:
-	//{{AFX_MSG(vgui_mfc_view)
-	afx_msg int OnCreate(LPCREATESTRUCT lpCreateStruct);
-	//}}AFX_MSG
-	DECLARE_MESSAGE_MAP()
+        //{{AFX_MSG(vgui_mfc_view)
+        afx_msg int OnCreate(LPCREATESTRUCT lpCreateStruct);
+        //}}AFX_MSG
+        DECLARE_MESSAGE_MAP()
 };
 
 #ifndef _DEBUG  // debug version in awfmfcView.cpp

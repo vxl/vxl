@@ -31,8 +31,6 @@ vtol_edge_2d::vtol_edge_2d(vtol_vertex_2d &new_v1,
                            vtol_vertex_2d &new_v2,
                            const vsol_curve_2d_sptr &new_curve)
 {
-
-
   vtol_topology_object *zc;
 
   if (!new_curve)
@@ -42,13 +40,9 @@ vtol_edge_2d::vtol_edge_2d(vtol_vertex_2d &new_v1,
   _v1=&new_v1;
   _v2=&new_v2;
 
-
   zc=new vtol_zero_chain(new_v1,new_v2);
 
-
   link_inferior(*zc);
-
-
 }
 
 //---------------------------------------------------------------------------
@@ -68,12 +62,7 @@ vtol_edge_2d::vtol_edge_2d(const vtol_edge_2d &other)
   vcl_vector<vtol_topology_object_sptr>::const_iterator i;
 
   for(i=other.inferiors()->begin();i!=other.inferiors()->end();++i){
-
-
-
     vtol_zero_chain_sptr zc = (*i)->clone()->cast_to_topology_object()->cast_to_zero_chain();
-
-
     link_inferior(*zc);
   }	
 
@@ -84,19 +73,19 @@ vtol_edge_2d::vtol_edge_2d(const vtol_edge_2d &other)
       _curve=(vsol_curve_2d *)(sr.ptr());
       // make sure the geometry and Topology are in sync
       if (_v1)
-	{
-	  if(_v1->cast_to_vertex_2d()){
-	    _curve->set_p0(_v1->cast_to_vertex_2d()->point());
-	    _curve->touch();
-	  }
-	}
+        {
+          if(_v1->cast_to_vertex_2d()){
+            _curve->set_p0(_v1->cast_to_vertex_2d()->point());
+            _curve->touch();
+          }
+        }
       if (_v2)
-	{
-	  if(_v1->cast_to_vertex_2d()){
-	    _curve->set_p1(_v2->cast_to_vertex_2d()->point());
-	    _curve->touch();
-	  }
-	}
+        {
+          if(_v1->cast_to_vertex_2d()){
+            _curve->set_p1(_v2->cast_to_vertex_2d()->point());
+            _curve->touch();
+          }
+        }
     }
   touch();
 }
@@ -120,7 +109,7 @@ vtol_edge_2d::vtol_edge_2d(vtol_zero_chain &new_zero_chain)
      && _v2->cast_to_vertex_2d())
     // Safe to assume that it is an Implicit Line.
     _curve=new vsol_line_2d(_v1->cast_to_vertex_2d()->point(),
-			    _v2->cast_to_vertex_2d()->point());
+                            _v2->cast_to_vertex_2d()->point());
   else
     // User must set the type of curve needed.
     // Since guessing could get confusing.
@@ -168,7 +157,7 @@ vtol_edge_2d::vtol_edge_2d(double x1,
   if (!curve)
     if(_v1->cast_to_vertex_2d() && _v2->cast_to_vertex_2d()){
       _curve=new vsol_line_2d(_v1->cast_to_vertex_2d()->point(),
-			      _v2->cast_to_vertex_2d()->point());
+                              _v2->cast_to_vertex_2d()->point());
     }
   else
     _curve=(vsol_curve_2d*)(curve->clone().ptr());
@@ -233,7 +222,6 @@ void vtol_edge_2d::set_curve(vsol_curve_2d &new_curve)
 //---------------------------------------------------------------------------
 vtol_edge_2d::~vtol_edge_2d()
 {
-
 }
 
 
@@ -343,5 +331,4 @@ bool vtol_edge_2d::compare_geometry(const vtol_edge &other) const
     return result;
   }
   return false;
-
 }

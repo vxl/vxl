@@ -44,18 +44,18 @@ protected:
   // Derived classes should implement as many of
   // the following three methods as they can :
   virtual bool compute_p (const PointArray&,// points only.
-			  const PointArray&,
-			  HMatrix2D *);
+                          const PointArray&,
+                          HMatrix2D *);
 
   virtual bool compute_l (const LineArray&, // lines only.
-			  const LineArray&,
-			  HMatrix2D *);
+                          const LineArray&,
+                          HMatrix2D *);
 
   virtual bool compute_pl(const PointArray&,// points and lines.
-			  const PointArray&,
-			  const LineArray&,
-			  const LineArray&,
-			  HMatrix2D *);
+                          const PointArray&,
+                          const LineArray&,
+                          const LineArray&,
+                          HMatrix2D *);
 public:
   // Constructors/Initializers/Destructors----------------------------------
   HMatrix2DCompute() : verbose_(false) { }
@@ -74,32 +74,32 @@ public:
   //
 
   bool compute(const PointArray&,
-	       const PointArray&,
-	       HMatrix2D *);
+               const PointArray&,
+               HMatrix2D *);
 
   bool compute(const LineArray&,
-	       const LineArray&,
-	       HMatrix2D *);
+               const LineArray&,
+               HMatrix2D *);
 
   bool compute(const PointArray&,
-	       const PointArray&,
-	       const LineArray&,
-	       const LineArray&,
-	       HMatrix2D *);
+               const PointArray&,
+               const LineArray&,
+               const LineArray&,
+               HMatrix2D *);
 
   HMatrix2D compute(const PointArray&,
-		    const PointArray&);
+                    const PointArray&);
 
   HMatrix2D compute(const LineArray&,
-		    const LineArray&);
+                    const LineArray&);
 
   HMatrix2D compute(const PointArray&,
-		    const PointArray&,
-		    const LineArray&,
-		    const LineArray&);
+                    const PointArray&,
+                    const LineArray&,
+                    const LineArray&);
 
   bool compute(const PairMatchSetCorner &,
-	       HMatrix2D *);
+               HMatrix2D *);
   HMatrix2D compute(const PairMatchSetCorner &);
 };
 

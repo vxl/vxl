@@ -29,12 +29,12 @@ gmvl_node_sptr gmvl_database::find_tag( const vcl_string &string) const
   vcl_vector<gmvl_node_sptr> tags= nodecache_.get( "gmvl_tag_node");
 
   for( unsigned int i=0; i< tags.size(); i++)
-    {
-      gmvl_node *ptr= tags[i].ptr();
+  {
+    gmvl_node *ptr= tags[i].ptr();
 
-      if( (( gmvl_tag_node *) ptr)->get()== string)
-	return tags[i];
-    }
+    if( (( gmvl_tag_node *) ptr)->get()== string)
+      return tags[i];
+  }
 
   return gmvl_node_sptr(0);
 }
@@ -72,9 +72,9 @@ vcl_vector<gmvl_node_sptr> gmvl_database::get_connected_nodes( const gmvl_node_s
   vcl_vector<gmvl_node_sptr> l;
 
   for( unsigned int i=0; i< c.size(); i++)
-    {
-      l.push_back( nodecache_.get( c[i]));
-    }
+  {
+    l.push_back( nodecache_.get( c[i]));
+  }
 
   return l;
 }
@@ -85,41 +85,41 @@ vcl_vector<gmvl_node_sptr> gmvl_database::get_connected_nodes( const gmvl_node_s
   vcl_vector<gmvl_node_sptr> m;
 
   for( unsigned int i=0; i< l.size(); i++)
-    {
-      if( l[i]->type()== type)
-	m.push_back( l[i]);
-    }
+  {
+    if( l[i]->type()== type)
+      m.push_back( l[i]);
+  }
 
   return m;
 }
 
 // two way connection
 vcl_vector<gmvl_node_sptr> gmvl_database::get_connected_nodes( const gmvl_node_sptr node1,
-							      const gmvl_node_sptr node2) const
+                                                              const gmvl_node_sptr node2) const
 {
   vcl_vector<int> c= connectioncache_.get_connected_nodes( node1, node2);
   vcl_vector<gmvl_node_sptr> l;
 
   for( unsigned int i=0; i< c.size(); i++)
-    {
-      l.push_back( nodecache_.get( c[i]));
-    }
+  {
+    l.push_back( nodecache_.get( c[i]));
+  }
 
   return l;
 }
 
 // three way connection
 vcl_vector<gmvl_node_sptr> gmvl_database::get_connected_nodes( const gmvl_node_sptr node1,
-							      const gmvl_node_sptr node2,
-							      const gmvl_node_sptr node3) const
+                                                              const gmvl_node_sptr node2,
+                                                              const gmvl_node_sptr node3) const
 {
   vcl_vector<int> c= connectioncache_.get_connected_nodes( node1, node2, node3);
   vcl_vector<gmvl_node_sptr> l;
 
   for( unsigned int i=0; i< c.size(); i++)
-    {
-      l.push_back( nodecache_.get( c[i]));
-    }
+  {
+    l.push_back( nodecache_.get( c[i]));
+  }
 
   return l;
 }
@@ -131,9 +131,9 @@ vcl_vector<gmvl_node_sptr> gmvl_database::get_connected_nodes( const vcl_vector<
   vcl_vector<gmvl_node_sptr> l;
 
   for( unsigned int i=0; i< c.size(); i++)
-    {
-      l.push_back( nodecache_.get( c[i]));
-    }
+  {
+    l.push_back( nodecache_.get( c[i]));
+  }
 
   return l;
 }
@@ -144,22 +144,20 @@ vcl_vector<gmvl_node_sptr> gmvl_database::get_connected_nodes( const vcl_vector<
   vcl_vector<gmvl_node_sptr> l;
 
   for( unsigned int i=0; i< c.size(); i++)
-    {
-      l.push_back( nodecache_.get( c[i]));
-    }
+  {
+    l.push_back( nodecache_.get( c[i]));
+  }
 
   vcl_vector<gmvl_node_sptr> m;
 
   for( unsigned int i=0; i< l.size(); i++)
-    {
-      if( l[i]->type()== type)
-	m.push_back( l[i]);
-    }
+  {
+    if( l[i]->type()== type)
+      m.push_back( l[i]);
+  }
 
   return m;
 }
-
-
 
 
 // input / output

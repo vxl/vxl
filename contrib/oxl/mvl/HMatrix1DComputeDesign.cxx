@@ -14,14 +14,13 @@
 //********************************************************************************
 
 
-
 HMatrix1DComputeDesign::HMatrix1DComputeDesign(void) : HMatrix1DCompute() { }
 HMatrix1DComputeDesign::~HMatrix1DComputeDesign() { }
 
 bool
 HMatrix1DComputeDesign::compute_cool_homg(const vcl_vector<HomgPoint1D>&P,
-					  const vcl_vector<HomgPoint1D>&Q,
-					  HMatrix1D *M)
+                                          const vcl_vector<HomgPoint1D>&Q,
+                                          HMatrix1D *M)
 {
   unsigned N=P.size(); assert(N==Q.size());
   vnl_matrix<double> D(N,4);

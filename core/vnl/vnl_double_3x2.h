@@ -28,8 +28,8 @@ public:
   vnl_double_3x2() {}
 
   vnl_double_3x2(double r00, double r01,
-		 double r10, double r11,
-		 double r20, double r21) {
+                 double r10, double r11,
+                 double r20, double r21) {
     vnl_matrix<double>& M = *this;
     M(0,0) = r00;    M(0,1) = r01;
     M(1,0) = r10;    M(1,1) = r11;

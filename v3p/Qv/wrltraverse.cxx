@@ -78,7 +78,7 @@ static void
 announce(const char *className)
 {
     for (int i = 0; i < indent; i++)
-	printf("\t");
+        printf("\t");
     printf("Traversing a %s\n", className);
 }
 #define ANNOUNCE(className) announce(QV__QUOTE(className))
@@ -108,7 +108,7 @@ QvGroup::traverse(QvState *state)
     ANNOUNCE(QvGroup);
     indent++;
     for (int i = 0; i < getNumChildren(); i++)
-	getChild(i)->traverse(state);
+        getChild(i)->traverse(state);
     indent--;
 }
 
@@ -121,7 +121,7 @@ QvLOD::traverse(QvState *state)
     // ??? In a real implementation, this would choose a child based
     // ??? on the distance to the eye point.
     if (getNumChildren() > 0)
-	getChild(0)->traverse(state);
+        getChild(0)->traverse(state);
 
     indent--;
 }
@@ -133,7 +133,7 @@ QvSeparator::traverse(QvState *state)
     state->push();
     indent++;
     for (int i = 0; i < getNumChildren(); i++)
-	getChild(i)->traverse(state);
+        getChild(i)->traverse(state);
     indent--;
     state->pop();
 }
@@ -147,15 +147,15 @@ QvSwitch::traverse(QvState *state)
     int which = (int) whichChild.value;
 
     if (which == QV_SWITCH_NONE)
-	;
+        ;
 
     else if (which == QV_SWITCH_ALL)
-	for (int i = 0; i < getNumChildren(); i++)
-	    getChild(i)->traverse(state);
+        for (int i = 0; i < getNumChildren(); i++)
+            getChild(i)->traverse(state);
 
     else
-	if (which < getNumChildren())
-	    getChild(which)->traverse(state);
+        if (which < getNumChildren())
+            getChild(which)->traverse(state);
 
     indent--;
 }
@@ -177,12 +177,12 @@ QvTransformSeparator::traverse(QvState *state)
 
     indent++;
     for (int i = 0; i < getNumChildren(); i++)
-	getChild(i)->traverse(state);
+        getChild(i)->traverse(state);
     indent--;
 
     // Now do the "pop"
     while (state->getTopElement(QvState::TransformationIndex) != markerElt)
-	state->popElement(QvState::TransformationIndex);
+        state->popElement(QvState::TransformationIndex);
 }
 
 //////////////////////////////////////////////////////////////////////////////

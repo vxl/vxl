@@ -36,11 +36,11 @@ public:
   virtual vcl_string name() const =0;
 
   virtual vgui_window* produce_window(int width, int height,
-				      vgui_menu const &menubar,
-				      const char *title);
+                                      vgui_menu const &menubar,
+                                      const char *title);
 
   virtual vgui_window* produce_window(int width, int height,
-				      char const *title);
+                                      char const *title);
 
   virtual vgui_dialog_impl* produce_dialog(char const *name);
 

@@ -29,7 +29,7 @@ bool vil_interpolate_bilinear(vil_memory_image_of<T> const& img, double src_x, d
 //: Compute bilinearly interpolated value, and image gradient Ix, Iy at img(src_x, src_y).
 template <class T, class U>
 bool vil_interpolate_bilinear_grad(vil_memory_image_of<T> const& img, double src_x, double src_y,
-				   U* out_i, U* out_dx, U* out_dy);
+                                   U* out_i, U* out_dx, U* out_dy);
 
 //: Compute bicubically interpolated value at img(src_x, src_y)
 template <class T, class U>

@@ -294,7 +294,7 @@ void vtol_topology_object::unlink_inferior(vtol_topology_object &inferior)
 
   // for(i=_inferiors.begin();(i!=_inferiors.end())&&(*(*i)!=inferior); ++i);
   for(i=_inferiors.begin();(i!=_inferiors.end())&&
-	((*i).ptr()!=&inferior); ++i);
+        ((*i).ptr()!=&inferior); ++i);
     ;
   inferior.unlink_superior(*this);
   _inferiors.erase(i);
@@ -365,7 +365,7 @@ void vtol_topology_object::unlink_superior(vtol_topology_object &superior)
 
   // for(i=_superiors.begin();(i!=_superiors.end())&&(*(*i)!=superior); ++i)
   for(i=_superiors.begin();(i!=_superiors.end())&&
-	((*i).ptr()!=&superior); ++i)
+        ((*i).ptr()!=&superior); ++i)
    ;
   // check
   assert(*(*i)==superior);

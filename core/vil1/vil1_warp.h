@@ -35,14 +35,14 @@ vil_image vil_warp(vil_image const& in, vil_warp_mapping const& mapper);
 
 //: Warp, specifying interpolation
 vil_image vil_warp(vil_image const& in, vil_warp_mapping const& mapper,
-		   vil_warp_interpolation_type i);
+                   vil_warp_interpolation_type i);
 
 
 //: Templated warper
 template <class PixelType, class Mapper>
 void vil_warp_output_driven(vil_memory_image_of<PixelType> const& in,
-			    vil_memory_image_of<PixelType>& out,
-			    Mapper const& mapper,
-			    vil_warp_interpolation_type);
+                            vil_memory_image_of<PixelType>& out,
+                            Mapper const& mapper,
+                            vil_warp_interpolation_type);
 
 #endif // vil_warp_h_

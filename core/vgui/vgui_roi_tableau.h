@@ -42,7 +42,7 @@ class vgui_roi_tableau : public vgui_tableau {
   }ROI;
   vgui_roi_tableau();
   vgui_roi_tableau(vil_image const &, char const *, float, float, float,
-		   float);
+                   float);
 
   ~vgui_roi_tableau();
   vcl_string type_name() const;

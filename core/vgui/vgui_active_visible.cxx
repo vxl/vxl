@@ -50,7 +50,7 @@ void vgui_active_visible::add_popup(vgui_menu& menu) {
   else active_label+="[off]";
 
   menu.add(active_label.c_str(),
-	   new vgui_command_simple<vgui_active_visible>(this, &vgui_active_visible::toggle_active));
+           new vgui_command_simple<vgui_active_visible>(this, &vgui_active_visible::toggle_active));
 
 
   vcl_string visible_label("Toggle visible ");
@@ -58,7 +58,7 @@ void vgui_active_visible::add_popup(vgui_menu& menu) {
   else visible_label+="[off]";
 
   menu.add(visible_label.c_str(),
-	   new vgui_command_simple<vgui_active_visible>(this, &vgui_active_visible::toggle_visible));
+           new vgui_command_simple<vgui_active_visible>(this, &vgui_active_visible::toggle_visible));
 
 }
 

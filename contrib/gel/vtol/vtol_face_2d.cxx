@@ -55,14 +55,14 @@ vtol_face_2d::vtol_face_2d(const vtol_face_2d &other)
       vtol_topology_object_sptr V2 = newverts[e->v2()->get_id()];
       if(!V1 || !V2)
         {
- 	  vcl_cerr << "Inconsistent topology in vtol_face_2d copy constructor\n";
- 	  vtol_one_chain_sptr inf = new vtol_one_chain();
+           vcl_cerr << "Inconsistent topology in vtol_face_2d copy constructor\n";
+           vtol_one_chain_sptr inf = new vtol_one_chain();
           link_inferior(*inf);
           return;
- 	}
+         }
       // make the topology and geometry match
       vtol_edge_sptr newedge=new vtol_edge_2d(*(V1->cast_to_vertex()->cast_to_vertex_2d()),
-					    *(V2->cast_to_vertex()->cast_to_vertex_2d()));
+                                            *(V2->cast_to_vertex()->cast_to_vertex_2d()));
 
 
       //newedges[j]=(vtol_topology_object_2d*)(newedge.ptr());
@@ -177,8 +177,6 @@ vtol_face_2d::vtol_face_2d(vertex_list &verts)
   // require
   assert(verts.size()>2);
 
-
-
   vsol_point_2d_sptr p0;
   vsol_point_2d_sptr p1;
   vsol_point_2d_sptr p2;
@@ -199,12 +197,10 @@ vtol_face_2d::vtol_face_2d(vertex_list &verts)
                                     new vsol_point_2d(xmax,ymin),
                                     new vsol_point_2d(xmax,ymax)));
 
-
   //generate a list of edges for edge loop
   done=false;
   vi=verts.begin();
   v01=(*vi);
-
 
   while(!done)
     {
@@ -212,42 +208,27 @@ vtol_face_2d::vtol_face_2d(vertex_list &verts)
       // verts->end() again to wrap around  This will close the loop
       ++vi;
 
-
-
       if(vi==verts.end())
         {
           vi=verts.begin();
           done=true;
         }
 
-
-
       v02=(*vi); // get the next vertex (may be first)
 
-
       newedge=v01->new_edge(*v02);
-
-
       elist.push_back(newedge);
 
-
       if(*v02 == *(newedge->v2()))
-	directions.push_back((signed char)1);
+        directions.push_back((signed char)1);
       else
-	directions.push_back((signed char)(-1));
+        directions.push_back((signed char)(-1));
       v01=v02;		// in the next go around v1 is v2 of the last
-
-
     }
-
-
 
   eloop=new vtol_one_chain(elist,directions,true);
 
-
   link_inferior(*eloop);
-
-
 }
 
 // --
@@ -346,7 +327,6 @@ bool vtol_face_2d::operator==(const vtol_face_2d &other) const
   if (numinf()!=other.numinf())
     return false;
 
-
   topology_list::const_iterator ti1;
   topology_list::const_iterator ti2;
 
@@ -356,9 +336,8 @@ bool vtol_face_2d::operator==(const vtol_face_2d &other) const
     {
 
       if (!(*(*ti1)== *(*ti2)))
-	return false;
+        return false;
     }
-
 
   return true;
 }

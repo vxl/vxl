@@ -14,11 +14,11 @@ int main(int argc, char **argv)
     vcl_cerr << argv[i] << " :" << vcl_endl;
     vil_image I = vil_load(argv[i]);
     vcl_cerr << "  planes             : " << I.planes() << vcl_endl
-	 << "  width              : " << I.width() << vcl_endl
-	 << "  height             : " << I.height() << vcl_endl
-	 << "  components         : " << I.components() << vcl_endl
-	 << "  bits per component : " << I.bits_per_component() << vcl_endl
-	 << "  component format   : ";
+         << "  width              : " << I.width() << vcl_endl
+         << "  height             : " << I.height() << vcl_endl
+         << "  components         : " << I.components() << vcl_endl
+         << "  bits per component : " << I.bits_per_component() << vcl_endl
+         << "  component format   : ";
     switch (I.component_format()) {
     case VIL_COMPONENT_FORMAT_UNKNOWN: vcl_cerr << "unknown" << vcl_endl; break;
     case VIL_COMPONENT_FORMAT_UNSIGNED_INT: vcl_cerr << "unsigned" << vcl_endl; break;

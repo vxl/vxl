@@ -97,7 +97,7 @@ struct vgui_slot
   static void get_parents_of (vgui_tableau_sptr const &tab, vcl_vector<vgui_tableau_sptr> *);
   //: In all slots, replace old_child with new_child.
   static void replace_child_everywhere (vgui_tableau_sptr const &old_child,
-					vgui_tableau_sptr const &new_child);
+                                        vgui_tableau_sptr const &new_child);
 
 private:
   friend class vgui_tableau;

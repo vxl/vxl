@@ -33,7 +33,7 @@ public:
   }
 
   vnl_double_2x3(double r00, double r01, double r02,
-	    double r10, double r11, double r12) {
+            double r10, double r11, double r12) {
     vnl_matrix<double>& M = *this;
     M(0,0) = r00;    M(0,1) = r01;    M(0,2) = r02;
     M(1,0) = r10;    M(1,1) = r11;    M(1,2) = r12;

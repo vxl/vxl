@@ -173,12 +173,12 @@ public:
   // -- C123 are line conditioning matrices.
   // If C * l = lhat, and l1 = T l2 l3, then lhat1 = That lhat2 lhat3
   TriTensor condition(const vnl_matrix<double>& line_1_denorm,
-		      const vnl_matrix<double>& line_2_norm,
-		      const vnl_matrix<double>& line_3_norm) const;
+                      const vnl_matrix<double>& line_2_norm,
+                      const vnl_matrix<double>& line_3_norm) const;
 
   TriTensor decondition(const vnl_matrix<double>& line_1_norm,
-			const vnl_matrix<double>& line_2_denorm,
-			const vnl_matrix<double>& line_3_denorm) const;
+                        const vnl_matrix<double>& line_2_denorm,
+                        const vnl_matrix<double>& line_3_denorm) const;
 
   // Data Members------------------------------------------------------------
 private:

@@ -51,13 +51,13 @@ public:
 
   // -- Copy inliers to three arrays, and record the original indices.
   void extract_matches(vcl_vector <HomgLineSeg2D>& linesegs1, vcl_vector <int>& lineseg_index_1,
-		       vcl_vector <HomgLineSeg2D>& linesegs2, vcl_vector <int>& lineseg_index_2,
-		       vcl_vector <HomgLineSeg2D>& linesegs3, vcl_vector <int>& lineseg_index_3) const;
+                       vcl_vector <HomgLineSeg2D>& linesegs2, vcl_vector <int>& lineseg_index_2,
+                       vcl_vector <HomgLineSeg2D>& linesegs3, vcl_vector <int>& lineseg_index_3) const;
 
   // -- Copy inliers to three arrays
   void extract_matches(vcl_vector <HomgLineSeg2D>& linesegs1,
-		       vcl_vector <HomgLineSeg2D>& linesegs2,
-		       vcl_vector <HomgLineSeg2D>& linesegs3) const;
+                       vcl_vector <HomgLineSeg2D>& linesegs2,
+                       vcl_vector <HomgLineSeg2D>& linesegs3) const;
 };
 
 #endif // TripleMatchSetLineSeg_h_

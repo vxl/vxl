@@ -158,11 +158,11 @@ public:
     static value_type *allocate(size_t n)
                 { return 0 == n? 0 : (value_type*) alloc_type::allocate(n * chunk); }
     static value_type *allocate(void)
-		{ return (value_type*) alloc_type::allocate(chunk); }
+                { return (value_type*) alloc_type::allocate(chunk); }
     static void deallocate(value_type *p, size_t n)
-		{ if (0 != n) alloc_type::deallocate(p, n * chunk); }
+                { if (0 != n) alloc_type::deallocate(p, n * chunk); }
     static void deallocate(value_type *p)
-		{ alloc_type::deallocate(p, chunk); }
+                { alloc_type::deallocate(p, chunk); }
 
 #undef chunk
 };
@@ -310,9 +310,9 @@ typedef vcl_malloc_alloc multithreaded_alloc;
 #      include <pthread.h>
 //     	 pthread_mutex_t __node_allocator_lock = PTHREAD_MUTEX_INITIALIZER;
 #      define __NODE_ALLOCATOR_LOCK \
-       	   if (threads) pthread_mutex_lock(&__node_allocator_lock)
+                  if (threads) pthread_mutex_lock(&__node_allocator_lock)
 #      define __NODE_ALLOCATOR_UNLOCK \
-       	   if (threads) pthread_mutex_unlock(&__node_allocator_lock)
+                  if (threads) pthread_mutex_unlock(&__node_allocator_lock)
 #      define __NODE_ALLOCATOR_THREADS true
 #      define __VOLATILE volatile  // Needed at -O3 on SGI
 #    endif /* _PTHREADS */
@@ -336,15 +336,15 @@ typedef vcl_malloc_alloc multithreaded_alloc;
 //     this one is needed to ensure correct initialization order
 //     and to avoid excess instances
        struct __stl_critical_section_wrapper {
-      	   CRITICAL_SECTION section;
-      	   __stl_critical_section_wrapper() {
-      	       InitializeCriticalSection(&section);
-      	   }
+                 CRITICAL_SECTION section;
+                 __stl_critical_section_wrapper() {
+                     InitializeCriticalSection(&section);
+                 }
        };
 #      define __NODE_ALLOCATOR_LOCK \
-      	   EnterCriticalSection(&__node_allocator_lock.section)
+                 EnterCriticalSection(&__node_allocator_lock.section)
 #      define __NODE_ALLOCATOR_UNLOCK \
-      	   LeaveCriticalSection(&__node_allocator_lock.section)
+                 LeaveCriticalSection(&__node_allocator_lock.section)
 #      define __NODE_ALLOCATOR_THREADS true
 #      define __VOLATILE volatile  // may not be needed
 #    endif /* __STL_WIN32THREADS */
@@ -354,9 +354,9 @@ typedef vcl_malloc_alloc multithreaded_alloc;
       // It is unlikely to even compile on nonSGI machines.
 #     include <malloc.h>
 #     define __NODE_ALLOCATOR_LOCK if (threads && __us_rsthread_malloc) \
-     		  { __lock(&__node_allocator_lock); }
+                       { __lock(&__node_allocator_lock); }
 #     define __NODE_ALLOCATOR_UNLOCK if (threads && __us_rsthread_malloc) \
-     		  { __unlock(&__node_allocator_lock); }
+                       { __unlock(&__node_allocator_lock); }
 #     define __NODE_ALLOCATOR_THREADS true
 #     define __VOLATILE volatile  // Needed at -O3 on SGI
 #    endif /* __STL_SGI_THREADS */
@@ -400,32 +400,32 @@ typedef vcl_malloc_alloc multithreaded_alloc;
       // Really we should use static const int x = N
       // instead of enum { x = N }, but few compilers accept the former.
 #       if ! (defined ( __SUNPRO_CC ) || defined ( _AIX ))
-    	enum {__ALIGN = 8};
-    	enum {__MAX_BYTES = 128};
-    	enum {__NFREELISTS = __MAX_BYTES/__ALIGN};
+            enum {__ALIGN = 8};
+            enum {__MAX_BYTES = 128};
+            enum {__NFREELISTS = __MAX_BYTES/__ALIGN};
 #     endif
 
 
     private:
       static size_t ROUND_UP(size_t bytes) {
-    	    return (((bytes) + __ALIGN-1) & ~(__ALIGN - 1));
+                return (((bytes) + __ALIGN-1) & ~(__ALIGN - 1));
       }
     __PRIVATE:
       union obj;
       friend union obj;
       union obj {
-    	    union obj * free_list_link;
-    	    char client_data[1];    /* The client sees this.        */
+                union obj * free_list_link;
+                char client_data[1];    /* The client sees this.        */
       };
     private:
 #       if defined ( __SUNPRO_CC ) || defined ( _AIX )
-    	static obj * __VOLATILE free_list[];
-    	    // Specifying a size results in duplicate def for 4.1
+            static obj * __VOLATILE free_list[];
+                // Specifying a size results in duplicate def for 4.1
 #     else
-    	static obj * __VOLATILE free_list[__NFREELISTS];
+            static obj * __VOLATILE free_list[__NFREELISTS];
 #     endif
       static  size_t FREELIST_INDEX(size_t bytes) {
-    	    return (((bytes) + __ALIGN-1)/__ALIGN - 1);
+                return (((bytes) + __ALIGN-1)/__ALIGN - 1);
       }
 
       // Returns an object of size n, and optionally adds to size n free vcl_list.
@@ -440,25 +440,25 @@ typedef vcl_malloc_alloc multithreaded_alloc;
       static size_t heap_size;
 
 #     ifdef __STL_SGI_THREADS
-    	static volatile unsigned long __node_allocator_lock;
-    	static void __lock(volatile unsigned long *);
-    	static inline void __unlock(volatile unsigned long *);
+            static volatile unsigned long __node_allocator_lock;
+            static void __lock(volatile unsigned long *);
+            static inline void __unlock(volatile unsigned long *);
 #     endif
 
 #     ifdef _PTHREADS
-    	static pthread_mutex_t __node_allocator_lock;
+            static pthread_mutex_t __node_allocator_lock;
 #     endif
 
 #     ifdef __STL_WIN32THREADS
-    	static __stl_critical_section_wrapper __node_allocator_lock;
+            static __stl_critical_section_wrapper __node_allocator_lock;
 #     endif
 
-    	class lock {
-    	    public:
-    		lock() { __NODE_ALLOCATOR_LOCK; }
-    		~lock() { __NODE_ALLOCATOR_UNLOCK; }
-    	};
-    	friend class lock;
+            class lock {
+                public:
+                    lock() { __NODE_ALLOCATOR_LOCK; }
+                    ~lock() { __NODE_ALLOCATOR_UNLOCK; }
+            };
+            friend class lock;
 
     public:
       // this one is needed for proper vcl_simple_alloc wrapping
@@ -467,48 +467,48 @@ typedef vcl_malloc_alloc multithreaded_alloc;
       /* n must be > 0      */
       static void * allocate(size_t n)
       {
-    	obj * __VOLATILE * my_free_list;
-    	obj * __RESTRICT result;
+            obj * __VOLATILE * my_free_list;
+            obj * __RESTRICT result;
 
-    	if (n > __MAX_BYTES) {
-    	    return(vcl_malloc_alloc::allocate(n));
-    	}
-    	my_free_list = free_list + FREELIST_INDEX(n);
-    	// Acquire the lock here with a constructor call.
-    	// This ensures that it is released in exit or during stack
-    	// unwinding.
-    	    /*REFERENCED*/
+            if (n > __MAX_BYTES) {
+                return(vcl_malloc_alloc::allocate(n));
+            }
+            my_free_list = free_list + FREELIST_INDEX(n);
+            // Acquire the lock here with a constructor call.
+            // This ensures that it is released in exit or during stack
+            // unwinding.
+                /*REFERENCED*/
 #     if !defined (_NOTHREADS)
-    	    lock lock_instance;
+                lock lock_instance;
 #     endif
-    	result = *my_free_list;
-    	if (result == 0) {
-    	    void *r = refill(ROUND_UP(n));
-    	    return r;
-    	}
-    	*my_free_list = result -> free_list_link;
-    	return (result);
+            result = *my_free_list;
+            if (result == 0) {
+                void *r = refill(ROUND_UP(n));
+                return r;
+            }
+            *my_free_list = result -> free_list_link;
+            return (result);
       };
 
       /* p may not be 0 */
       static void deallocate(void *p, size_t n)
       {
-    	obj *q = (obj *)p;
-    	obj * __VOLATILE * my_free_list;
+            obj *q = (obj *)p;
+            obj * __VOLATILE * my_free_list;
 
-    	if (n > __MAX_BYTES) {
-    	    vcl_malloc_alloc::deallocate(p, n);
-    	    return;
-    	}
-    	my_free_list = free_list + FREELIST_INDEX(n);
-    	// acquire lock
+            if (n > __MAX_BYTES) {
+                vcl_malloc_alloc::deallocate(p, n);
+                return;
+            }
+            my_free_list = free_list + FREELIST_INDEX(n);
+            // acquire lock
 #     if !defined (_NOTHREADS)
-    	    /*REFERENCED*/
-    	    lock lock_instance;
+                /*REFERENCED*/
+                lock lock_instance;
 #     endif
-    	q -> free_list_link = *my_free_list;
-    	*my_free_list = q;
-    	// lock is released here
+            q -> free_list_link = *my_free_list;
+            *my_free_list = q;
+            // lock is released here
       }
 
       static void * reallocate(void *p, size_t old_sz, size_t new_sz);
@@ -517,9 +517,9 @@ typedef vcl_malloc_alloc multithreaded_alloc;
 
     typedef __alloc<__NODE_ALLOCATOR_THREADS, 0> node_alloc;
 #       if defined ( __STL_DEBUG_ALLOC )
-    	  typedef debug_alloc<node_alloc> vcl_alloc;
+              typedef debug_alloc<node_alloc> vcl_alloc;
 #       else
-    	  typedef node_alloc vcl_alloc;
+              typedef node_alloc vcl_alloc;
 #       endif
     typedef __alloc<false, 0> single_client_alloc;
     typedef __alloc<true, 0>  multithreaded_alloc;
@@ -532,58 +532,58 @@ typedef vcl_malloc_alloc multithreaded_alloc;
     char*
     __alloc<threads, inst>::chunk_alloc(size_t size, int& nobjs)
     {
-    	char * result;
-    	size_t total_bytes = size * nobjs;
-    	size_t bytes_left = end_free - start_free;
+            char * result;
+            size_t total_bytes = size * nobjs;
+            size_t bytes_left = end_free - start_free;
 
-    	if (bytes_left >= total_bytes) {
-    	    result = start_free;
-    	    start_free += total_bytes;
-    	    return(result);
-    	} else if (bytes_left >= size) {
-    	    nobjs = bytes_left/size;
-    	    total_bytes = size * nobjs;
-    	    result = start_free;
-    	    start_free += total_bytes;
-    	    return(result);
-    	} else {
-    	    size_t bytes_to_get = 2 * total_bytes + ROUND_UP(heap_size >> 4);
-    	    // Try to make use of the left-over piece.
-    	    if (bytes_left > 0) {
-    		obj * __VOLATILE * my_free_list =
-    			    free_list + FREELIST_INDEX(bytes_left);
+            if (bytes_left >= total_bytes) {
+                result = start_free;
+                start_free += total_bytes;
+                return(result);
+            } else if (bytes_left >= size) {
+                nobjs = bytes_left/size;
+                total_bytes = size * nobjs;
+                result = start_free;
+                start_free += total_bytes;
+                return(result);
+            } else {
+                size_t bytes_to_get = 2 * total_bytes + ROUND_UP(heap_size >> 4);
+                // Try to make use of the left-over piece.
+                if (bytes_left > 0) {
+                    obj * __VOLATILE * my_free_list =
+    	                    free_list + FREELIST_INDEX(bytes_left);
 
-    		((obj *)start_free) -> free_list_link = *my_free_list;
-    		*my_free_list = (obj *)start_free;
-    	    }
-    	    start_free = (char *)malloc(bytes_to_get);
-    	    if (0 == start_free) {
-    		int i;
-    		obj * __VOLATILE * my_free_list, *p;
-    		// Try to make do with what we have.  That can't
-    		// hurt.  We do not try smaller requests, since that tends
-    		// to result in disaster on multi-process machines.
-    		for (i = size; i <= __MAX_BYTES; i += __ALIGN) {
-    		    my_free_list = free_list + FREELIST_INDEX(i);
-    		    p = *my_free_list;
-    		    if (0 != p) {
-    			*my_free_list = p -> free_list_link;
-    			start_free = (char *)p;
-    			end_free = start_free + i;
-    			return(chunk_alloc(size, nobjs));
-    			// Any leftover piece will eventually make it to the
-    			// right free vcl_list.
-    		    }
-    		}
-    		start_free = (char *)vcl_malloc_alloc::allocate(bytes_to_get);
-    		// This should either throw an
-    		// exception or remedy the situation.  Thus we assume it
-    		// succeeded.
-    	    }
-    	    heap_size += bytes_to_get;
-    	    end_free = start_free + bytes_to_get;
-    	    return(chunk_alloc(size, nobjs));
-    	}
+                    ((obj *)start_free) -> free_list_link = *my_free_list;
+                    *my_free_list = (obj *)start_free;
+                }
+                start_free = (char *)malloc(bytes_to_get);
+                if (0 == start_free) {
+                    int i;
+                    obj * __VOLATILE * my_free_list, *p;
+                    // Try to make do with what we have.  That can't
+                    // hurt.  We do not try smaller requests, since that tends
+                    // to result in disaster on multi-process machines.
+                    for (i = size; i <= __MAX_BYTES; i += __ALIGN) {
+                        my_free_list = free_list + FREELIST_INDEX(i);
+                        p = *my_free_list;
+                        if (0 != p) {
+    	                *my_free_list = p -> free_list_link;
+    	                start_free = (char *)p;
+    	                end_free = start_free + i;
+    	                return(chunk_alloc(size, nobjs));
+    	                // Any leftover piece will eventually make it to the
+    	                // right free vcl_list.
+                        }
+                    }
+                    start_free = (char *)vcl_malloc_alloc::allocate(bytes_to_get);
+                    // This should either throw an
+                    // exception or remedy the situation.  Thus we assume it
+                    // succeeded.
+                }
+                heap_size += bytes_to_get;
+                end_free = start_free + bytes_to_get;
+                return(chunk_alloc(size, nobjs));
+            }
     }
 
 
@@ -593,50 +593,50 @@ typedef vcl_malloc_alloc multithreaded_alloc;
     template <bool threads, int inst>
     void* __alloc<threads, inst>::refill(size_t n)
     {
-    	int nobjs = 20;
-    	char * chunk = chunk_alloc(n, nobjs);
-    	obj * __VOLATILE * my_free_list;
-    	obj * result;
-    	obj * current_obj, * next_obj;
-    	int i;
+            int nobjs = 20;
+            char * chunk = chunk_alloc(n, nobjs);
+            obj * __VOLATILE * my_free_list;
+            obj * result;
+            obj * current_obj, * next_obj;
+            int i;
 
-    	if (1 == nobjs) return(chunk);
-    	my_free_list = free_list + FREELIST_INDEX(n);
+            if (1 == nobjs) return(chunk);
+            my_free_list = free_list + FREELIST_INDEX(n);
 
-    	/* Build free vcl_list in chunk */
-    	  result = (obj *)chunk;
-    	  *my_free_list = next_obj = (obj *)(chunk + n);
-    	  for (i = 1; ; i++) {
-    	    current_obj = next_obj;
-    	    next_obj = (obj *)((char *)next_obj + n);
-    	    if (nobjs - 1 == i) {
-    		current_obj -> free_list_link = 0;
-    		break;
-    	    } else {
-    		current_obj -> free_list_link = next_obj;
-    	    }
-    	  }
-    	return(result);
+            /* Build free vcl_list in chunk */
+              result = (obj *)chunk;
+              *my_free_list = next_obj = (obj *)(chunk + n);
+              for (i = 1; ; i++) {
+                current_obj = next_obj;
+                next_obj = (obj *)((char *)next_obj + n);
+                if (nobjs - 1 == i) {
+                    current_obj -> free_list_link = 0;
+                    break;
+                } else {
+                    current_obj -> free_list_link = next_obj;
+                }
+              }
+            return(result);
     }
 
     template <bool threads, int inst>
     void*
     __alloc<threads, inst>::reallocate(void *p,
-    							  size_t old_sz,
-    							  size_t new_sz)
+    					                  size_t old_sz,
+    					                  size_t new_sz)
     {
-    	void * result;
-    	size_t copy_sz;
+            void * result;
+            size_t copy_sz;
 
-    	if (old_sz > __MAX_BYTES && new_sz > __MAX_BYTES) {
-    	    return(realloc(p, new_sz));
-    	}
-    	if (ROUND_UP(old_sz) == ROUND_UP(new_sz)) return(p);
-    	result = allocate(new_sz);
-    	copy_sz = new_sz > old_sz? old_sz : new_sz;
-    	memcpy(result, p, copy_sz);
-    	deallocate(p, old_sz);
-    	return(result);
+            if (old_sz > __MAX_BYTES && new_sz > __MAX_BYTES) {
+                return(realloc(p, new_sz));
+            }
+            if (ROUND_UP(old_sz) == ROUND_UP(new_sz)) return(p);
+            result = allocate(new_sz);
+            copy_sz = new_sz > old_sz? old_sz : new_sz;
+            memcpy(result, p, copy_sz);
+            deallocate(p, old_sz);
+            return(result);
     }
 
 
@@ -654,45 +654,45 @@ typedef vcl_malloc_alloc multithreaded_alloc;
     void
     __alloc<threads, inst>::__lock(volatile unsigned long *lock)
     {
-    	const unsigned low_spin_max = 30;  // spin cycles if we suspect uniprocessor
-    	const unsigned high_spin_max = 1000; // spin cycles for multiprocessor
-    	static unsigned spin_max = low_spin_max;
-    	unsigned my_spin_max;
-    	static unsigned last_spins = 0;
-    	unsigned my_last_spins;
-    	static struct timespec ts = {0, 1000};
-    	unsigned junk;
+            const unsigned low_spin_max = 30;  // spin cycles if we suspect uniprocessor
+            const unsigned high_spin_max = 1000; // spin cycles for multiprocessor
+            static unsigned spin_max = low_spin_max;
+            unsigned my_spin_max;
+            static unsigned last_spins = 0;
+            unsigned my_last_spins;
+            static struct timespec ts = {0, 1000};
+            unsigned junk;
 #       define __ALLOC_PAUSE junk *= junk; junk *= junk; junk *= junk; junk *= junk
-    	int i;
+            int i;
 
-    	if (!__test_and_set((unsigned long *)lock, 1)) {
-    	    return;
-    	}
-    	my_spin_max = spin_max;
-    	my_last_spins = last_spins;
-    	for (i = 0; i < my_spin_max; i++) {
-    	    if (i < my_last_spins/2 || *lock) {
-    		__ALLOC_PAUSE;
-    		continue;
-    	    }
-    	    if (!__test_and_set((unsigned long *)lock, 1)) {
-    		// got it!
-    		// Spinning worked.  Thus we're probably not being scheduled
-    		// against the other process with which we were contending.
-    		// Thus it makes sense to spin longer the next time.
-    		last_spins = i;
-    		spin_max = high_spin_max;
-    		return;
-    	    }
-    	}
-    	// We are probably being scheduled against the other process.  Sleep.
-    	spin_max = low_spin_max;
-    	for (;;) {
-    	    if (!__test_and_set((unsigned long *)lock, 1)) {
-    		return;
-    	    }
-    	    nanosleep(&ts, 0);
-    	}
+            if (!__test_and_set((unsigned long *)lock, 1)) {
+                return;
+            }
+            my_spin_max = spin_max;
+            my_last_spins = last_spins;
+            for (i = 0; i < my_spin_max; i++) {
+                if (i < my_last_spins/2 || *lock) {
+                    __ALLOC_PAUSE;
+                    continue;
+                }
+                if (!__test_and_set((unsigned long *)lock, 1)) {
+                    // got it!
+                    // Spinning worked.  Thus we're probably not being scheduled
+                    // against the other process with which we were contending.
+                    // Thus it makes sense to spin longer the next time.
+                    last_spins = i;
+                    spin_max = high_spin_max;
+                    return;
+                }
+            }
+            // We are probably being scheduled against the other process.  Sleep.
+            spin_max = low_spin_max;
+            for (;;) {
+                if (!__test_and_set((unsigned long *)lock, 1)) {
+                    return;
+                }
+                nanosleep(&ts, 0);
+            }
     }
 
     template <bool threads, int inst>
@@ -700,14 +700,14 @@ typedef vcl_malloc_alloc multithreaded_alloc;
     __alloc<threads, inst>::__unlock(volatile unsigned long *lock)
     {
 #       if defined(__GNUC__) && __mips >= 3
-    	    asm("sync");
-    	    *lock = 0;
+                asm("sync");
+                *lock = 0;
 #       elif __mips >= 3 && (defined (_ABIN32) || defined(_ABI64))
-    	    __lock_release(lock);
+                __lock_release(lock);
 #       else
-    	    *lock = 0;
-    	    // This is not sufficient on many multiprocessors, since
-    	    // writes to protected variables and the lock may be reordered.
+                *lock = 0;
+                // This is not sufficient on many multiprocessors, since
+                // writes to protected variables and the lock may be reordered.
 #       endif
     }
 #   endif /* ! __STL_SGI_THREADS */
@@ -740,7 +740,7 @@ typedef vcl_malloc_alloc multithreaded_alloc;
       __alloc<threads, inst>::obj * __VOLATILE
       __alloc<threads, inst>::free_list[
 #         if ! (defined ( __SUNPRO_CC ) || defined ( _AIX ))
-  	  __alloc<threads, inst>::__NFREELISTS]
+            __alloc<threads, inst>::__NFREELISTS]
 #         else
       __NFREELISTS]
 #         endif
@@ -760,48 +760,48 @@ typedef vcl_malloc_alloc multithreaded_alloc;
       __DECLARE_INSTANCE(size_t, single_client_alloc::heap_size,0);
 #         if defined ( __SUNPRO_CC ) || defined ( _AIX )
       __DECLARE_INSTANCE(single_client_alloc::obj * __VOLATILE,
-  			 single_client_alloc::free_list[__NFREELISTS],
-  			 {0});
+  	                 single_client_alloc::free_list[__NFREELISTS],
+  	                 {0});
 #         else
       __DECLARE_INSTANCE(single_client_alloc::obj * __VOLATILE,
-  			 single_client_alloc::free_list[single_client_alloc::__NFREELISTS],
-  			 {0});
+  	                 single_client_alloc::free_list[single_client_alloc::__NFREELISTS],
+  	                 {0});
 #         endif
       __DECLARE_INSTANCE(char *, multithreaded_alloc::start_free,0);
       __DECLARE_INSTANCE(char *, multithreaded_alloc::end_free,0);
       __DECLARE_INSTANCE(size_t, multithreaded_alloc::heap_size,0);
 #         if defined ( __SUNPRO_CC ) || defined ( _AIX )
       __DECLARE_INSTANCE(multithreaded_alloc::obj * __VOLATILE,
-  			 multithreaded_alloc::free_list[__NFREELISTS],
-  			 {0});
+  	                 multithreaded_alloc::free_list[__NFREELISTS],
+  	                 {0});
 #         else
       __DECLARE_INSTANCE(multithreaded_alloc::obj * __VOLATILE,
-  			 multithreaded_alloc::free_list[multithreaded_alloc::__NFREELISTS],
-  			 {0});
+  	                 multithreaded_alloc::free_list[multithreaded_alloc::__NFREELISTS],
+  	                 {0});
 #         endif
 #         ifdef __STL_WIN32THREADS
-  	  __DECLARE_INSTANCE(__stl_critical_section_wrapper,
-  			      single_client_alloc::__node_allocator_lock,
-  			      __stl_critical_section_wrapper());
-  	  __DECLARE_INSTANCE(__stl_critical_section_wrapper,
-  			      multithreaded_alloc::__node_allocator_lock,
-  			     __stl_critical_section_wrapper());
+            __DECLARE_INSTANCE(__stl_critical_section_wrapper,
+  	                      single_client_alloc::__node_allocator_lock,
+  	                      __stl_critical_section_wrapper());
+            __DECLARE_INSTANCE(__stl_critical_section_wrapper,
+  	                      multithreaded_alloc::__node_allocator_lock,
+  	                     __stl_critical_section_wrapper());
 #         endif
 #         ifdef _PTHREADS
-  	   __DECLARE_INSTANCE(pthread_mutex_t,
-  			      single_client_alloc::__node_allocator_lock,
-  			      PTHREAD_MUTEX_INITIALIZER);
-  	   __DECLARE_INSTANCE(pthread_mutex_t,
-  			      multithreaded_alloc::__node_allocator_lock,
-  			      PTHREAD_MUTEX_INITIALIZER);
+             __DECLARE_INSTANCE(pthread_mutex_t,
+  	                      single_client_alloc::__node_allocator_lock,
+  	                      PTHREAD_MUTEX_INITIALIZER);
+             __DECLARE_INSTANCE(pthread_mutex_t,
+  	                      multithreaded_alloc::__node_allocator_lock,
+  	                      PTHREAD_MUTEX_INITIALIZER);
 #         endif
 #         ifdef __STL_SGI_THREADS
-  	   __DECLARE_INSTANCE(volatile unsigned long,
-  			      single_client_alloc::__node_allocator_lock,
-  			      0);
-  	   __DECLARE_INSTANCE(volatile unsigned long,
-  			      multithreaded_alloc::__node_allocator_lock,
-  			      0);
+             __DECLARE_INSTANCE(volatile unsigned long,
+  	                      single_client_alloc::__node_allocator_lock,
+  	                      0);
+             __DECLARE_INSTANCE(volatile unsigned long,
+  	                      multithreaded_alloc::__node_allocator_lock,
+  	                      0);
 #         endif
 
 #   endif /* __STL_STATIC_TEMPLATE_DATA */

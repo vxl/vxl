@@ -39,22 +39,22 @@ class HMatrix1DCompute {
   // Compute methods :
   //
   bool compute(const vcl_vector<HomgPoint1D>&,
-	       const vcl_vector<HomgPoint1D>&,
-	       HMatrix1D *);
+               const vcl_vector<HomgPoint1D>&,
+               HMatrix1D *);
   bool compute(const double [],
-	       const double [],
-	       int,
-	       HMatrix1D *);
+               const double [],
+               int,
+               HMatrix1D *);
  protected:
   bool verbose_;
 
   virtual bool compute_cool_homg(const vcl_vector<HomgPoint1D> &,
-				 const vcl_vector<HomgPoint1D> &,
-				 HMatrix1D *);
+                                 const vcl_vector<HomgPoint1D> &,
+                                 HMatrix1D *);
   virtual bool compute_array_dbl(const double [],
-				 const double [],
-				 int N,
-				 HMatrix1D *);
+                                 const double [],
+                                 int N,
+                                 HMatrix1D *);
 };
 
 #endif // _HMatrix1DCompute_h

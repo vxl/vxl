@@ -11,8 +11,8 @@ QvMatrixTransform::QvMatrixTransform()
     QV_NODE_ADD_FIELD(matrix);
 
     for (int i = 0; i < 4; i++)
-	for (int j = 0; j < 4; j++)
-	    matrix.value[i][j] = (i == j ? 1.0 : 0.0);
+        for (int j = 0; j < 4; j++)
+            matrix.value[i][j] = (i == j ? 1.0 : 0.0);
 }
 
 QvMatrixTransform::~QvMatrixTransform()

@@ -763,7 +763,7 @@ void vcl_deque<T, Alloc>::insert(iterator position, size_type n, const T& x) {
       difference_type i = 0;
       while ((size_type)i < n) push_back(*(begin() + orig_len - n + i++));
       vcl_copy_backward(begin() + index, begin() + orig_len - n,
-			begin() + orig_len);
+                        begin() + orig_len);
       vcl_fill(begin() + index, begin() + index + n, x);
   }
   }
@@ -802,7 +802,7 @@ void vcl_deque<T, Alloc>::insert(iterator position, const T* first, const T* las
       difference_type i = 0;
       while ((size_type)i < n) push_back(*(begin() + orig_len - n + i++));
       vcl_copy_backward(begin() + index, begin() + orig_len - n,
-			begin() + orig_len);
+                        begin() + orig_len);
         vcl_copy(first, last, begin() + index);
     }
   }
@@ -841,7 +841,7 @@ void vcl_deque<T, Alloc>::insert(iterator position, const_iterator first, const_
       difference_type i = 0;
       while ((size_type)i < n) push_back(*(begin() + orig_len - n + i++));
       vcl_copy_backward(begin() + index, begin() + orig_len - n,
-			begin() + orig_len);
+                        begin() + orig_len);
       vcl_copy(first, last, begin() + index);
     }
   }

@@ -80,7 +80,7 @@ protected:
   vgui_displaylist2D_sptr contains_hit(vcl_vector<unsigned> const& names);
   void get_hits(float x, float y, vcl_vector<vcl_vector<unsigned> >* hits);
   void find_closest(float x, float y, vcl_vector<vcl_vector<unsigned> >* hits,
-		    vgui_soview2D** closest_so, vgui_displaylist2D_sptr * closest_display);
+                    vgui_soview2D** closest_so, vgui_displaylist2D_sptr * closest_display);
 };
 
 struct vgui_listmanager2D_new : public vgui_listmanager2D_sptr {

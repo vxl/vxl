@@ -43,10 +43,10 @@ public: double scale() const { return scale_; }
 public:
   inline vipl_y_gradient(double s=1.0, DataOut h=DataOut())
            : vipl_filter_2d<ImgIn,ImgOut,DataIn,DataOut,PixelItr>(),
-	     shift_(h), scale_(s) {}
+             shift_(h), scale_(s) {}
   inline vipl_y_gradient(vipl_y_gradient const& A)
            : vipl_filter_2d<ImgIn,ImgOut,DataIn,DataOut,PixelItr>(A),
-	     shift_(A.shift()), scale_(A.scale()) {}
+             shift_(A.shift()), scale_(A.scale()) {}
   inline ~vipl_y_gradient() {}
 
 // -+-+- required method for filters: -+-+-

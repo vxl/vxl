@@ -21,10 +21,10 @@ QvSFEnum::findEnumValue(const QvName &name, int &val) const
 
     // Look through names table for one that matches
     for (i = 0; i < numEnums; i++) {
-	if (name == enumNames[i]) {
-	    val = enumValues[i];
-	    return TRUE;
-	}
+        if (name == enumNames[i]) {
+            val = enumValues[i];
+            return TRUE;
+        }
     }
 
     return FALSE;
@@ -37,22 +37,22 @@ QvSFEnum::readValue(QvInput *in)
 
 #ifdef DEBUG
     if (enumValues == NULL) {
-	QvDebugError::post("QvSFEnum::readValue",
-			   "Enum values were never initialized");
-	QvReadError::post(in, "Couldn't read QvSFEnum value");
-	return FALSE;
+        QvDebugError::post("QvSFEnum::readValue",
+                           "Enum values were never initialized");
+        QvReadError::post(in, "Couldn't read QvSFEnum value");
+        return FALSE;
     }
 #endif /* DEBUG */
 
     // Read mnemonic value as a character string identifier
     if (! in->read(n, TRUE))
-	return FALSE;
+        return FALSE;
 
     if (findEnumValue(n, value))
-	return TRUE;
+        return TRUE;
 
     // Not found? Too bad
     QvReadError::post(in, "Unknown QvSFEnum enumeration value \"%s\"",
-		      n.getString());
+                      n.getString());
     return FALSE;
 }

@@ -44,9 +44,9 @@ public:
   inline FMatrixSkew get_rank2_truncated();
   bool get_epipoles (HomgPoint2D* e1_out, HomgPoint2D* e2_out) const;
   void decompose_to_skew_rank3 (vnl_matrix<double> *skew,
-				vnl_matrix<double> *rank3) const;
+                                vnl_matrix<double> *rank3) const;
   void find_nearest_perfect_match (const HomgPoint2D& in1, const HomgPoint2D& in2,
-				   HomgPoint2D *out1, HomgPoint2D *out2) const;
+                                   HomgPoint2D *out1, HomgPoint2D *out2) const;
 
 
   // Data Access------------------------------------------------------------

@@ -127,35 +127,35 @@ void vgui_tview::draw_icons(vgui_tableau_sptr const& parent, float x, float y) {
 
     int ia = 0;
     for (vcl_vector<vgui_tableau_sptr>::iterator i = children.begin();
-	 i != children.end(); ++i, ++ia) {
+         i != children.end(); ++i, ++ia) {
 
       glDisable(GL_LINE_STIPPLE);
       glColor3f(1,1,1);
 
       if (parent->type_name() == "vgui_deck") {
-	vgui_deck_sptr deck; deck.vertical_cast(parent);
-	if (deck->current() != *i) {
-	  glLineStipple (1, 0x1C47);  // dash/dot/dash
-	  glEnable (GL_LINE_STIPPLE);
-	}
+        vgui_deck_sptr deck; deck.vertical_cast(parent);
+        if (deck->current() != *i) {
+          glLineStipple (1, 0x1C47);  // dash/dot/dash
+          glEnable (GL_LINE_STIPPLE);
+        }
       }
       else if (parent->type_name() == "vgui_composite") {
-	vgui_composite_sptr comp; comp.vertical_cast(parent);
+        vgui_composite_sptr comp; comp.vertical_cast(parent);
 
-	if (!comp->is_active(ia)) {
-	  glLineStipple (1, 0x1C47);  // dash/dot/dash
-	  glEnable (GL_LINE_STIPPLE);
-	}
+        if (!comp->is_active(ia)) {
+          glLineStipple (1, 0x1C47);  // dash/dot/dash
+          glEnable (GL_LINE_STIPPLE);
+        }
       }
       else if (parent->type_name() == "vgui_listmanager2D") {
-	vgui_listmanager2D_sptr lman; lman.vertical_cast(parent);
-	if (!lman->is_active(ia)) {
-	  if (!lman->is_visible(ia))
-	    glLineStipple (1, 0x0101); // dotted
-	  else
-	    glLineStipple (1, 0x1C47);  // dash/dot/dash
-	  glEnable (GL_LINE_STIPPLE);
-	}
+        vgui_listmanager2D_sptr lman; lman.vertical_cast(parent);
+        if (!lman->is_active(ia)) {
+          if (!lman->is_visible(ia))
+            glLineStipple (1, 0x0101); // dotted
+          else
+            glLineStipple (1, 0x1C47);  // dash/dot/dash
+          glEnable (GL_LINE_STIPPLE);
+        }
       }
 
       glLineWidth(1);
@@ -211,7 +211,7 @@ void vgui_tview::draw_icons(vgui_tableau_sptr const& parent, float x, float y) {
 
 
 void vgui_tview::add_icons(vcl_vector<vgui_tview::icon>* icons, vgui_tableau_sptr const& parent,
-			   float x, float y)
+                           float x, float y)
 {
   vcl_vector<vgui_tableau_sptr> children;
   parent->get_children(&children);
@@ -227,7 +227,7 @@ void vgui_tview::add_icons(vcl_vector<vgui_tview::icon>* icons, vgui_tableau_spt
 
 
     for (vcl_vector<vgui_tableau_sptr>::iterator i = children.begin();
-	 i != children.end(); ++i) {
+         i != children.end(); ++i) {
 
       add_icons(icons, *i, start_x+offset_x, ny);
       offset_x+=spacing;

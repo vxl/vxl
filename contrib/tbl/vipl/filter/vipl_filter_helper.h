@@ -44,7 +44,7 @@ typedef unsigned int VIPL_FILTER_STATE;
       int je = (KERN).y_end(); int ie = (KERN).x_end();\
       for (int j = (KERN).y_start(), jj=y+j; j < je; ++j) {\
         for (int i = (KERN).x_start(), ii=x+i; i < ie; ++i)\
-	val += ((KERN) (i, j) * FGET_PIXEL((SRC), ii++, jj));\
+        val += ((KERN) (i, j) * FGET_PIXEL((SRC), ii++, jj));\
         ++jj;\
         FSET_PIXEL((DST), x, y, (CONVERT_TO_OUT(val)));\
       }\
@@ -62,7 +62,7 @@ typedef unsigned int VIPL_FILTER_STATE;
       int je = (KERN).y_end(); int ie = (KERN).x_end();\
       for (int j = (KERN).y_start(), jj=y+j; j < je; ++j) {\
         for (int i = (KERN).x_start(), ii=x+i; i < ie; ++i)\
-	val += ((KERN) (i, j) * GET_PIXEL((SRC), ii++, jj));\
+        val += ((KERN) (i, j) * GET_PIXEL((SRC), ii++, jj));\
         ++jj;\
         SET_PIXEL((DST), x, y, (CONVERT_TO_OUT(val)));\
       }\
@@ -82,7 +82,7 @@ typedef unsigned int VIPL_FILTER_STATE;
     for (int x = ((X1) ); x < ((X2) ); ++x) {\
       val = 0.0;\
       for (int i = (KERN).kernel_start(0),j=i+x; i < (KERN).kernel_end(0); ++i) \
-	val += ((KERN)(i) * FGET_PIXEL((SRC),j++, y));\
+        val += ((KERN)(i) * FGET_PIXEL((SRC),j++, y));\
       FSET_PIXEL((DST),x, y, (CONVERT_TO_OUT(val)));\
     }\
   }\
@@ -96,7 +96,7 @@ typedef unsigned int VIPL_FILTER_STATE;
     for (int x = ((X1) ); x < ((X2) ); ++x) {\
       val = 0.0;\
       for (int i = (KERN).kernel_start(0),j=i+x; i < (KERN).kernel_end(0); ++i) \
-	val += ((KERN)(i) * GET_PIXEL((SRC),j++, y));\
+        val += ((KERN)(i) * GET_PIXEL((SRC),j++, y));\
       SET_PIXEL((DST),x, y, (CONVERT_TO_OUT(val)));\
     }\
   }\
@@ -110,7 +110,7 @@ typedef unsigned int VIPL_FILTER_STATE;
     for (int y = ((Y1) ); y < ((Y2) ); ++y) {\
       val = 0;\
       for (int i = (KERN).kernel_start(0), j =y+i; i < (KERN).kernel_end(0); ++i)\
-	val += ((KERN)(i) * FGET_PIXEL((SRC),x, j++));\
+        val += ((KERN)(i) * FGET_PIXEL((SRC),x, j++));\
       FSET_PIXEL((DST),x, y, (CONVERT_TO_OUT(val)));\
     }\
   }\
@@ -124,7 +124,7 @@ typedef unsigned int VIPL_FILTER_STATE;
     for (int y = ((Y1) ); y < ((Y2) ); ++y) {\
       val = 0;\
       for (int i = (KERN).kernel_start(0), j =y+i; i < (KERN).kernel_end(0); ++i)\
-	val += ((KERN)(i) * GET_PIXEL((SRC),x, j++));\
+        val += ((KERN)(i) * GET_PIXEL((SRC),x, j++));\
       SET_PIXEL((DST),x, y, (CONVERT_TO_OUT(val)));\
     }\
   }\
@@ -140,7 +140,7 @@ typedef unsigned int VIPL_FILTER_STATE;
     for (int x = ((X1) + (DELTA_X)); x < ((X2) - (DELTA_X)); ++x) {\
       val = 0.0;\
       for (int i = (KERN).kernel_start(0); i < (KERN).kernel_end(0); ++i) \
-	val += ((KERN) (i) * FGET_PIXEL((SRC), x+i,y));\
+        val += ((KERN) (i) * FGET_PIXEL((SRC), x+i,y));\
       FSET_PIXEL((DST), y,x, (CONVERT_TO_OUT(val)));\
     }\
   }\
@@ -154,7 +154,7 @@ typedef unsigned int VIPL_FILTER_STATE;
     for (int x = ((X1) + (DELTA_X)); x < ((X2) - (DELTA_X)); ++x) {\
       val = 0.0;\
       for (int i = (KERN).kernel_start(0); i < (KERN).kernel_end(0); ++i) \
-	val += ((KERN) (i) * GET_PIXEL((SRC), x+i,y));\
+        val += ((KERN) (i) * GET_PIXEL((SRC), x+i,y));\
       SET_PIXEL((DST), y,x, (CONVERT_TO_OUT(val)));\
     }\
   }\
@@ -169,7 +169,7 @@ typedef unsigned int VIPL_FILTER_STATE;
     for (int y = ((Y1) + (DELTA_Y)); y < ((Y2) - (DELTA_Y)); ++y) {\
       val = 0;\
       for (int i = (KERN).kernel_start(0); i < (KERN).kernel_end(0); ++i)\
-	val += ((KERN) (i) * FGET_PIXEL((SRC),y+i,x));\
+        val += ((KERN) (i) * FGET_PIXEL((SRC),y+i,x));\
       FSET_PIXEL((DST),x, y, (CONVERT_TO_OUT(val)));\
     }\
   }\
@@ -183,7 +183,7 @@ typedef unsigned int VIPL_FILTER_STATE;
     for (int y = ((Y1) + (DELTA_Y)); y < ((Y2) - (DELTA_Y)); ++y) {\
       val = 0;\
       for (int i = (KERN).kernel_start(0); i < (KERN).kernel_end(0); ++i)\
-	val += ((KERN) (i) * GET_PIXEL((SRC),y+i,x));\
+        val += ((KERN) (i) * GET_PIXEL((SRC),y+i,x));\
       SET_PIXEL((DST),x, y, (CONVERT_TO_OUT(val)));\
     }\
   }\

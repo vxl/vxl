@@ -10,8 +10,8 @@
 #include <vcl_cassert.h>
 
 vnl_least_squares_function::vnl_least_squares_function(int number_of_unknowns,
-						       int number_of_residuals,
-						       UseGradient g)
+                                                       int number_of_residuals,
+                                                       UseGradient g)
   : failure(false)
 {
   n_ = number_of_residuals;
@@ -22,7 +22,7 @@ vnl_least_squares_function::vnl_least_squares_function(int number_of_unknowns,
 }
 
 void vnl_least_squares_function::init(int number_of_unknowns,
-				      int number_of_residuals)
+                                      int number_of_residuals)
 {
   n_ = number_of_residuals;
   p_ = number_of_unknowns;
@@ -47,13 +47,13 @@ void vnl_least_squares_function::clear_failure()
 }
 
 void vnl_least_squares_function::gradf(vnl_vector<double> const & /*x*/,
-				       vnl_matrix<double>       & /*jacobian*/)
+                                       vnl_matrix<double>       & /*jacobian*/)
 {
 }
 
 void vnl_least_squares_function::trace(int /* iteration */,
-				       vnl_vector<double> const & /*x*/,
-				 vnl_vector<double> const & /*fx*/)
+                                       vnl_vector<double> const & /*x*/,
+                                 vnl_vector<double> const & /*fx*/)
 {
 }
 

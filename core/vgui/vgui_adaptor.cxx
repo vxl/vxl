@@ -187,8 +187,8 @@ bool vgui_adaptor::dispatch_to_tableau(vgui_event const &e) {
       GLint buffer;
       glGetIntegerv(GL_DRAW_BUFFER,&buffer);
       if (buffer != GL_BACK) {
-	vgui_macro_warning << "setting draw buffer to back" << vcl_endl;
-	glDrawBuffer(GL_BACK);
+        vgui_macro_warning << "setting draw buffer to back" << vcl_endl;
+        glDrawBuffer(GL_BACK);
       }
     }
 #endif

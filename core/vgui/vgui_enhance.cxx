@@ -129,8 +129,8 @@ bool vgui_enhance::handle(const vgui_event& e) {
       //"vgui_enhance.cxx", line 113: remark(1552): variable "ms" was set but never used
       // here.
       {
-	vgui_matrix_state *ptr = &ms;
-	ptr = ptr;
+        vgui_matrix_state *ptr = &ms;
+        ptr = ptr;
       }
 #endif
       vnl_matrix<double> M = ms.modelview_matrix();
@@ -163,9 +163,9 @@ bool vgui_enhance::handle(const vgui_event& e) {
       glScalef(sx, sy, 1);
 
       if (slot2.child())
-	slot2->handle(e);
+        slot2->handle(e);
       else
-	slot1->handle(e);
+        slot1->handle(e);
 
       glMatrixMode(GL_MODELVIEW);
       glPopMatrix();

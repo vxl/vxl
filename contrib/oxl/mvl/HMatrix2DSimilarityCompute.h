@@ -28,8 +28,8 @@ class HomgPoint2D;
 class HMatrix2DSimilarityCompute : public HMatrix2DCompute {
 protected:
   bool compute_p(const vcl_vector<HomgPoint2D>&,
-		 const vcl_vector<HomgPoint2D>&,
-		 HMatrix2D *);
+                 const vcl_vector<HomgPoint2D>&,
+                 HMatrix2D *);
 public:
   HMatrix2DSimilarityCompute(void);
   ~HMatrix2DSimilarityCompute();
@@ -39,8 +39,8 @@ public:
   static HMatrix2D compute (const vcl_vector<HomgPoint2D>&p1, const vcl_vector<HomgPoint2D>&p2);
 private:
   static bool tmp_fun(const PointArray&,
-		       const PointArray&,
-		       HMatrix2D*);
+                       const PointArray&,
+                       HMatrix2D*);
 };
 
 #endif // HMatrix2DSimilarityCompute_h_

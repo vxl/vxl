@@ -37,9 +37,9 @@ public:
 
   // Constructors/Destructors--------------------------------------------------
   FMPlanarNonLinFun(const ImageMetric*, const ImageMetric*,
-			double outlier_distance_squared,
-			vcl_vector<HomgPoint2D>& points1,
-			vcl_vector<HomgPoint2D>& points2);
+                        double outlier_distance_squared,
+                        vcl_vector<HomgPoint2D>& points1,
+                        vcl_vector<HomgPoint2D>& points2);
 
   // Operations----------------------------------------------------------------
 

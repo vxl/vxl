@@ -236,10 +236,10 @@ vgui_tableau_sptr vgui_grid_tableau::get_tableau_at(unsigned col_pos, unsigned r
 
   if (col_pos >= nb_cols)
     vgui_macro_warning << "Given column number " << col_pos
-		       << " is out of range, max value = " << nb_cols-1 << vcl_endl;
+                       << " is out of range, max value = " << nb_cols-1 << vcl_endl;
   else if ( row_pos >= nb_rows)
     vgui_macro_warning << "Given row number " << row_pos
-		       << " is out of range, max value = " << nb_rows-1 << vcl_endl;
+                       << " is out of range, max value = " << nb_rows-1 << vcl_endl;
   else
     vgui_macro_warning << "Only default tableau at (" << col_pos << ", " << row_pos
     << ")." << vcl_endl;

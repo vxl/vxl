@@ -82,7 +82,7 @@ public:
 
   // Factory methods
   static vgui_window* produce_window(int width, int height,
-				     vgui_menu const & menubar, vcl_string const &title ="");
+                                     vgui_menu const & menubar, vcl_string const &title ="");
   static vgui_window* produce_window(int width, int height, vcl_string const &title ="");
 
   static vgui_dialog_impl* produce_dialog(vcl_string const &name);

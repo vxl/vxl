@@ -106,9 +106,9 @@ bool vgui_composite::handle(const vgui_event& event)
 
     for (unsigned ia = 0; ia<n; ++ia) {
       if (active[ia] && children[ia]) {
-	PM.restore();
-	if ( !children[ia]->handle(event) )
-	  retv=false;
+        PM.restore();
+        if ( !children[ia]->handle(event) )
+          retv=false;
       }
     }
 
@@ -141,7 +141,7 @@ bool vgui_composite::handle(const vgui_event& event)
     if (active[ia] && children[ia]) {
       PM.restore();
       if ( children[ia]->handle(event) )
-	return true;
+        return true;
     }
   }
 

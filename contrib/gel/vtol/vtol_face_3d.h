@@ -87,7 +87,7 @@ public:
 
   //: Inferior/Superior Accessor Methods
   vtol_face_3d *copy_with_arrays(vcl_vector<vtol_topology_object_3d *> &verts,
-				 vcl_vector<vtol_topology_object_3d *> &edges);
+                                 vcl_vector<vtol_topology_object_3d *> &edges);
 
   vtol_face_3d *cast_to_face_3d(void) { return this; }
 

@@ -480,22 +480,22 @@ void xcv_geometry::save(const char *object_type,const char *dialog_name)
       }
       else if(svtype == "vgui_soview2D_linestrip" && matched)
       {
-	vgui_soview2D_linestrip *linestrip = (vgui_soview2D_linestrip *)sv;
+        vgui_soview2D_linestrip *linestrip = (vgui_soview2D_linestrip *)sv;
         fs<<"L "<<linestrip->n;
-	for(unsigned int ii = 0; ii<linestrip->n; ++ii)
+        for(unsigned int ii = 0; ii<linestrip->n; ++ii)
         {
           fs<<" "<<linestrip->x[ii]<<" "<<linestrip->y[ii];
-	}
+        }
         fs << vcl_endl;
       }
       else if(svtype == "vgui_soview2D_polygon" && matched)
       {
-	vgui_soview2D_polygon *polygon = (vgui_soview2D_polygon *)sv;
+        vgui_soview2D_polygon *polygon = (vgui_soview2D_polygon *)sv;
         fs<<"y "<<polygon->n;
-	for(unsigned int ii = 0; ii<polygon->n; ++ii)
+        for(unsigned int ii = 0; ii<polygon->n; ++ii)
         {
           fs<<" "<<polygon->x[ii]<<" "<<polygon->y[ii];
-	}
+        }
         fs << vcl_endl;
       }
     }
@@ -600,14 +600,14 @@ void xcv_geometry::load(const char *object_type,const char *dialog_name)
         fs>>n;
         float x0,y0;
         fs>>x0>>y0;
-	for(int i = 1; i<n; i++)
+        for(int i = 1; i<n; i++)
         {
           float x1,y1;
           fs>>x1>>y1;
           easy_tab->add_line(x0,y0,x1,y1);
           x0 = x1;
           y0 = y1;
-	}
+        }
       }
       else if(tag == "y")
       {
@@ -615,7 +615,7 @@ void xcv_geometry::load(const char *object_type,const char *dialog_name)
         fs>>n;
         vcl_vector<float> x(n);
         vcl_vector<float> y(n);
-	for(int i = 0; i<n; i++)
+        for(int i = 0; i<n; i++)
           fs>>x[i]>>y[i];
         easy_tab->add_polygon(n, &x[0], &y[0]);
       }

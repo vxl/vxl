@@ -17,7 +17,7 @@ char vtol_dtd[] = "\
 <!-- vxl_point_[23]d\n\
         <vxl_point_2d x=\"1\" y=\"3\" w=\"4\"/>\n\
 \n\
-	x,y,z and w values (w defaults to 1)\n\
+        x,y,z and w values (w defaults to 1)\n\
         pointer (_sptr) exists\n\
   -->\n\
 \n\
@@ -46,7 +46,7 @@ char vtol_dtd[] = "\
      vxl_vertex_[23]d_sptr\n\
         <vxl_vertex_2d_sptr id=\"3\">\n\
 \n\
-	Vertex contains a vxl_point or a pointer to a vxl_point.\n\
+        Vertex contains a vxl_point or a pointer to a vxl_point.\n\
   -->\n\
 \n\
 <!ELEMENT vxl_vertex_2d ( vxl_point_2d | vxl_point_2d_sptr )>\n\
@@ -93,9 +93,9 @@ char vtol_dtd[] = "\
                 <vxl_edge_2d ...>\n\
           </vxl_one_chain_2d>\n\
 \n\
-	  One_Chain is a list of edges or edge pointers.\n\
-	  Closure is enforced by the list.\n\
-	  Pointer (_sptr) exists.\n\
+          One_Chain is a list of edges or edge pointers.\n\
+          Closure is enforced by the list.\n\
+          Pointer (_sptr) exists.\n\
   -->\n\
 \n\
 <!ELEMENT vxl_one_chain_2d ( ( ( vxl_edge_2d, vxl_flip? ) | \n\
@@ -111,9 +111,9 @@ char vtol_dtd[] = "\
            <vxl_point_2d><vxl_point_2d><vxl_point_2d>\n\
         </vxl_triangle_2d>\n\
 \n\
-	Three (no more, no less) vxl_vertices (The Lightweight Solution).\n\
+        Three (no more, no less) vxl_vertices (The Lightweight Solution).\n\
         At the same level as a one-chain.\n\
-	Pointer (_sptr) exists.\n\
+        Pointer (_sptr) exists.\n\
   -->\n\
 \n\
 <!ELEMENT vxl_triangle_2d ( ( vxl_vertex_2d | vxl_vertex_2d_sptr ), \n\
@@ -130,8 +130,8 @@ char vtol_dtd[] = "\
                  <vxl_one_chain_2d ...>\n\
            </vxl_face_2d>\n\
 \n\
-	   Face is a list of one chains or pointers to one chains.\n\
-	   Pointer (_sptr) exists.\n\
+           Face is a list of one chains or pointers to one chains.\n\
+           Pointer (_sptr) exists.\n\
   -->\n\
 \n\
 <!ELEMENT vxl_face_2d ( ( vxl_one_chain_2d | vxl_one_chain_2d_sptr |\n\
@@ -147,8 +147,8 @@ char vtol_dtd[] = "\
                      <vxl_face_2d ...>\n\
            </vxl_two_chain_2d>\n\
 \n\
-	   Two chain is a list of faces or pointers to faces.\n\
-	   Pointer (_sptr) exists.\n\
+           Two chain is a list of faces or pointers to faces.\n\
+           Pointer (_sptr) exists.\n\
   -->\n\
 \n\
 <!ELEMENT vxl_two_chain_2d ( ( vxl_face_2d | vxl_face_2d_sptr )+ )>\n\

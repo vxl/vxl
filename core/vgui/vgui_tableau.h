@@ -57,7 +57,7 @@ public:
 
   // Called whenever a child of this tableau is about to be forcibly replaced
   virtual bool notify_replaced_child(vgui_tableau_sptr const & old_child,
-				     vgui_tableau_sptr const & new_child);
+                                     vgui_tableau_sptr const & new_child);
 
   // methods related to popup menus.
   virtual void add_popup(vgui_menu &);

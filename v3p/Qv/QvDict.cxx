@@ -10,7 +10,7 @@ QvDict::QvDict( int entries )
     tableSize=entries;
     buckets=new QvDictEntry *[tableSize];
     for (int i = 0; i < tableSize; i++)
-	buckets[i] = NULL;
+        buckets[i] = NULL;
 }
 
 QvDict::~QvDict()
@@ -27,11 +27,11 @@ QvDict::clear()
 
     for (i = 0; i < tableSize; i++) {
 
-	for (entry = buckets[i]; entry != NULL; entry = nextEntry) {
-	    nextEntry = entry->next;
-	    delete entry;
-	}
-	buckets[i] = NULL;
+        for (entry = buckets[i]; entry != NULL; entry = nextEntry) {
+            nextEntry = entry->next;
+            delete entry;
+        }
+        buckets[i] = NULL;
     }
 }
 
@@ -41,13 +41,13 @@ QvDict::enter(u_long key, void *value)
     QvDictEntry		*&entry = findEntry(key);
 
     if (entry == NULL) {
-	entry = new QvDictEntry(key, value);
-	entry->next = NULL;
-	return TRUE;
+        entry = new QvDictEntry(key, value);
+        entry->next = NULL;
+        return TRUE;
     }
     else {
-	entry->value = value;
-	return FALSE;
+        entry->value = value;
+        return FALSE;
     }
 }
 
@@ -57,12 +57,12 @@ QvDict::find(u_long key, void *&value) const
     QvDictEntry		*&entry = findEntry(key);
 
     if (entry == NULL) {
-	value = NULL;
-	return FALSE;
+        value = NULL;
+        return FALSE;
     }
     else {
-	value = entry->value;
-	return TRUE;
+        value = entry->value;
+        return TRUE;
     }
 }
 
@@ -74,9 +74,9 @@ QvDict::findEntry(u_long key) const
     entry = &buckets[key % tableSize];
 
     while (*entry != NULL) {
-	if ((*entry)->key == key)
-	    break;
-	entry = &(*entry)->next;
+        if ((*entry)->key == key)
+            break;
+        entry = &(*entry)->next;
     }
     return *entry;
 }
@@ -88,11 +88,11 @@ QvDict::remove(u_long key)
     QvDictEntry		*tmp;
 
     if (entry == NULL)
-	return FALSE;
+        return FALSE;
     else {
-	tmp = entry;
-	entry = entry->next;
-	delete tmp;
-	return TRUE;
+        tmp = entry;
+        entry = entry->next;
+        delete tmp;
+        return TRUE;
     }
 }

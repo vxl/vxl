@@ -21,7 +21,6 @@ vtol_edge::vtol_edge(void)
 }
 
 
-
 //---------------------------------------------------------------------------
 // -- Return the first zero-chain of `this'
 //---------------------------------------------------------------------------
@@ -425,11 +424,11 @@ void vtol_edge::compute_bounding_box(void)
          {
            this->set_min_x(_curve->get_min_x());
            this->set_min_y(_curve->get_min_y());
-	   // this->set_min_z(_curve->get_min_z());
+           // this->set_min_z(_curve->get_min_z());
 
            this->set_max_x(_curve->get_max_x());
            this->set_max_y(_curve->get_max_y());
-	   //  this->set_max_z(_curve->get_max_z());
+           //  this->set_max_z(_curve->get_max_z());
          }
      }
 

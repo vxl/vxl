@@ -53,7 +53,7 @@ public:
 // traversal of the iterator runs through these to produce the join.
 // After construction the row1() and row2() methods indicate the first pair.
   vnl_scalar_join_iterator(const vnl_matrix<T>& relation1, unsigned column1,
-		     const vnl_matrix<T>& relation2, unsigned column2);
+                     const vnl_matrix<T>& relation2, unsigned column2);
 
   ~vnl_scalar_join_iterator();
 

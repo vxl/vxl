@@ -80,7 +80,7 @@ public:
     for(int j = 0; j < O; ++j) {
       T accum = a(i,0) * b(0,j);
       for(int k = 1; k < N; ++k)
-	accum += a(i,k) * b(k,j);
+        accum += a(i,k) * b(k,j);
       out(i,j) = accum;
     }
   return out;

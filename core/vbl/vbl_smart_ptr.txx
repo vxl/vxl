@@ -25,8 +25,8 @@ template <class T>
 vcl_ostream& operator<< (vcl_ostream& os, vbl_smart_ptr<T> const& r)
 {
   return os << "vbl_smart_ptr<"
-	    << vbl_smart_ptr_T_as_string<T>::str()
-	    << ">(" << (void*) r.as_pointer() << ")";
+            << vbl_smart_ptr_T_as_string<T>::str()
+            << ">(" << (void*) r.as_pointer() << ")";
 }
 
 //--------------------------------------------------------------------------------

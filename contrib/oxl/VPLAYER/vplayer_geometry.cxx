@@ -451,12 +451,12 @@ void vplayer_geometry::save(const char *object_type,const char *dialog_name)
       }
       else if(sv->type_name() == "vgui_soview2D_linestrip" && sv->type_name() == object_type)
       {
-	vgui_soview2D_linestrip *linestrip = (vgui_soview2D_linestrip *)sv;
+        vgui_soview2D_linestrip *linestrip = (vgui_soview2D_linestrip *)sv;
         fs<<linestrip->n<<endl;
-	for(int ii = 1; ii<linestrip->n; ++ii)
+        for(int ii = 1; ii<linestrip->n; ++ii)
         {
           fs<<linestrip->x[ii-1]<<" "<<linestrip->y[ii-1]<<" "<<linestrip->x[ii]<<" "<<linestrip->y[ii]<<endl;
-	}
+        }
       }
     }
   }
@@ -521,12 +521,12 @@ void vplayer_geometry::load(const char *object_type,const char *dialog_name)
       {
         int n;
         fs>>n;
-	for(int i = 1; i<n; i++)
+        for(int i = 1; i<n; i++)
         {
           float x0,y0,x1,y1;
           fs>>x0>>y0>>x1>>y1;
           easy_tab->add_line(x0,y0,x1,y1);
-	}
+        }
       }
     }
   }

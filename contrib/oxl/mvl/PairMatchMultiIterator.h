@@ -31,7 +31,7 @@ class PairMatchMultiIterator {
 public:
 // -- Construct a PairMatchMultiIterator from two multimap iterators
   PairMatchMultiIterator(const vcl_multimap_uint_uint::iterator& first,
-			 const vcl_multimap_uint_uint::iterator& last):
+                         const vcl_multimap_uint_uint::iterator& last):
     _first(first),
     _last(last)
   {

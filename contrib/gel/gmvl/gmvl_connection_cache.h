@@ -26,10 +26,10 @@ public:
   // clever accessors
   vcl_vector<int> get_connected_nodes( const gmvl_node_sptr node) const { return cache_[node->ref_]; }
   vcl_vector<int> get_connected_nodes( const gmvl_node_sptr node1,
-				       const gmvl_node_sptr node2) const;
+                                       const gmvl_node_sptr node2) const;
   vcl_vector<int> get_connected_nodes( const gmvl_node_sptr node1,
-				       const gmvl_node_sptr node2,
-				       const gmvl_node_sptr node3) const;
+                                       const gmvl_node_sptr node2,
+                                       const gmvl_node_sptr node3) const;
   vcl_vector<int> get_connected_nodes( const vcl_vector<gmvl_node_sptr> nodes) const;
 
   void rebuild();

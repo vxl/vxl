@@ -28,13 +28,13 @@ bool gst_polygon_2d::check_validity() const
       bool found= false;
 
       for( int i=0; ((i< edges_.size()) && !found); i++)
-	{
-	  if( edges_[i]->get_start().ptr()== end.ptr())
-	    {
-	      found= true;
-	      end= edges_[i]->get_end();
-	    }
-	}
+        {
+          if( edges_[i]->get_start().ptr()== end.ptr())
+            {
+              found= true;
+              end= edges_[i]->get_end();
+            }
+        }
 
       // if !found then the cycle isn't closed
       if( !found) return false;
@@ -105,17 +105,17 @@ bool gst_polygon_2d::inside( const double x, const double y) const
   for( int i=0, j= edges_.size()-1; i< edges_.size(); j= i++)
     {
       if ((((edges_[i]->get_start()->get_y()<= y) &&
-	    (y< edges_[j]->get_start()->get_y())) ||
-	   ((edges_[j]->get_start()->get_y()<= y) &&
-	    (y< edges_[i]->get_start()->get_y()))) &&
-	  (x< (edges_[j]->get_start()->get_x() -
-	       edges_[i]->get_start()->get_x()) * (y -
-						   edges_[i]->get_start()->get_y()) /
-	   (edges_[j]->get_start()->get_y() - edges_[i]->get_start()->get_y()) +
-	   edges_[i]->get_start()->get_x()))
-	{
-	  c=!c;
-	}
+            (y< edges_[j]->get_start()->get_y())) ||
+           ((edges_[j]->get_start()->get_y()<= y) &&
+            (y< edges_[i]->get_start()->get_y()))) &&
+          (x< (edges_[j]->get_start()->get_x() -
+               edges_[i]->get_start()->get_x()) * (y -
+                                                   edges_[i]->get_start()->get_y()) /
+           (edges_[j]->get_start()->get_y() - edges_[i]->get_start()->get_y()) +
+           edges_[i]->get_start()->get_x()))
+        {
+          c=!c;
+        }
 
     }
 

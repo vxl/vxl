@@ -41,7 +41,7 @@ public:
   inline void set_rank2_using_svd();
   inline FMatrixPlanar get_rank2_truncated();
   void find_nearest_perfect_match (const HomgPoint2D& in1, const HomgPoint2D& in2,
-				   HomgPoint2D *out1, HomgPoint2D *out2) const;
+                                   HomgPoint2D *out1, HomgPoint2D *out2) const;
 
   // Data Access------------------------------------------------------------
 

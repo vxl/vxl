@@ -179,7 +179,7 @@ vgui_soview2D_point* vgui_easy2D::add_point_3dv(double const p[3]) {
 
 vgui_soview2D_lineseg* vgui_easy2D::add_line_3dv_3dv(double const p[3], double const q[3]) {
   return add_line(p[0]/p[2], p[1]/p[2],
-		  q[0]/q[2], q[1]/q[2]);
+                  q[0]/q[2], q[1]/q[2]);
 }
 
 vgui_soview2D_infinite_line* vgui_easy2D::add_infinite_line_3dv(double const l[3]) {
@@ -251,11 +251,11 @@ void vgui_easy2D::print_psfile(vcl_string filename, int reduction_factor, bool p
       // Send style info if it has changed.
       vgui_style* svstyle = sv->get_style();
       if (svstyle != style) {
-	// rgba, line_width, point_size
-	style = svstyle;
-	psfile.set_line_width(style->line_width);
-	style_point_size = style->point_size;
- 	psfile.set_fg_color(style->rgba[0],style->rgba[1],style->rgba[2]);
+        // rgba, line_width, point_size
+        style = svstyle;
+        psfile.set_line_width(style->line_width);
+        style_point_size = style->point_size;
+         psfile.set_fg_color(style->rgba[0],style->rgba[1],style->rgba[2]);
       }
 
       if (sv->type_name() == "vgui_soview2D_point")
@@ -263,7 +263,7 @@ void vgui_easy2D::print_psfile(vcl_string filename, int reduction_factor, bool p
         vgui_soview2D_point* pt = (vgui_soview2D_point*)sv;
         psfile.point(pt->x, pt->y, style_point_size);
         if (debug)
-	  vcl_cerr << "  vgui_easy2D: Adding a point at " << pt->x << ", " << pt->y << vcl_endl;
+          vcl_cerr << "  vgui_easy2D: Adding a point at " << pt->x << ", " << pt->y << vcl_endl;
       }
 
       else if (sv->type_name() == "vgui_soview2D_circle")
@@ -282,20 +282,20 @@ void vgui_easy2D::print_psfile(vcl_string filename, int reduction_factor, bool p
       }
       else if(sv->type_name() == "vgui_soview2D_linestrip")
       {
-	vgui_soview2D_linestrip *linestrip = (vgui_soview2D_linestrip *)sv;
-	for(unsigned int ii = 1; ii<linestrip->n; ++ii)
-	  psfile.line(linestrip->x[ii-1],linestrip->y[ii-1],
-		      linestrip->x[ii  ],linestrip->y[ii  ]);
-	if(debug) vcl_cerr<< " vgui_easy2D: Adding linestrip " <<vcl_endl;
+        vgui_soview2D_linestrip *linestrip = (vgui_soview2D_linestrip *)sv;
+        for(unsigned int ii = 1; ii<linestrip->n; ++ii)
+          psfile.line(linestrip->x[ii-1],linestrip->y[ii-1],
+                      linestrip->x[ii  ],linestrip->y[ii  ]);
+        if(debug) vcl_cerr<< " vgui_easy2D: Adding linestrip " <<vcl_endl;
       }
       else if(sv->type_name() == "vgui_soview2D_polygon")
       {
-	vgui_soview2D_polygon *polygon = (vgui_soview2D_polygon *)sv;
-	for(unsigned int ii = 1; ii<polygon->n; ++ii)
-	  psfile.line(polygon->x[ii-1],polygon->y[ii-1],
-		      polygon->x[ii  ],polygon->y[ii  ]);
-	psfile.line(polygon->x[polygon->n - 1],polygon->y[polygon->n - 1], polygon->x[0], polygon->y[0]);
-	if(debug) vcl_cerr<< " vgui_easy2D: Adding polygon " <<vcl_endl;
+        vgui_soview2D_polygon *polygon = (vgui_soview2D_polygon *)sv;
+        for(unsigned int ii = 1; ii<polygon->n; ++ii)
+          psfile.line(polygon->x[ii-1],polygon->y[ii-1],
+                      polygon->x[ii  ],polygon->y[ii  ]);
+        psfile.line(polygon->x[polygon->n - 1],polygon->y[polygon->n - 1], polygon->x[0], polygon->y[0]);
+        if(debug) vcl_cerr<< " vgui_easy2D: Adding polygon " <<vcl_endl;
       }
       else
         vgui_macro_warning << "unknown soview typename = " << sv->type_name() << vcl_endl;

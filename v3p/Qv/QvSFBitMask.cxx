@@ -18,10 +18,10 @@ QvSFBitMask::readValue(QvInput *in)
 
 #ifdef DEBUG
     if (enumValues == NULL) {
-	QvDebugError::post("QvSFBitMask::readValue",
-			   "Enum values were never initialized");
-	QvReadError::post(in, "Couldn't read QvSFBitMask values");
-	return FALSE;
+        QvDebugError::post("QvSFBitMask::readValue",
+                           "Enum values were never initialized");
+        QvReadError::post(in, "Couldn't read QvSFBitMask values");
+        return FALSE;
     }
 #endif /* DEBUG */
 
@@ -29,55 +29,55 @@ QvSFBitMask::readValue(QvInput *in)
 
     // Read first character
     if (! in->read(c))
-	return FALSE;
+        return FALSE;
 
     // Check for parenthesized list of bitwise-or'ed flags
     if (c == OPEN_PAREN) {
 
-	// Read names separated by BITWISE_OR
-	while (TRUE) {
-	    if (in->read(n, TRUE) && ! (! n) ) {
+        // Read names separated by BITWISE_OR
+        while (TRUE) {
+            if (in->read(n, TRUE) && ! (! n) ) {
 
-		if (findEnumValue(n, v))
-		    value |= v;
+                if (findEnumValue(n, v))
+                    value |= v;
 
-		else {
-		    QvReadError::post(in, "Unknown QvSFBitMask bit "
-				      "mask value \"%s\"", n.getString());
-		    return FALSE;
-		}
-	    }
+                else {
+                    QvReadError::post(in, "Unknown QvSFBitMask bit "
+                                      "mask value \"%s\"", n.getString());
+                    return FALSE;
+                }
+            }
 
-	    if (! in->read(c)) {
-		QvReadError::post(in, "EOF reached before '%c' "
-				  "in QvSFBitMask value", CLOSE_PAREN);
-		return FALSE;
-	    }
+            if (! in->read(c)) {
+                QvReadError::post(in, "EOF reached before '%c' "
+                                  "in QvSFBitMask value", CLOSE_PAREN);
+                return FALSE;
+            }
 
-	    if (c == CLOSE_PAREN)
-		break;
+            if (c == CLOSE_PAREN)
+                break;
 
-	    else if (c != BITWISE_OR) {
-		QvReadError::post(in, "Expected '%c' or '%c', got '%c' ",
-				  "in QvSFBitMask value",
-				  BITWISE_OR, CLOSE_PAREN, c);
-		return FALSE;
-	    }
-	}
+            else if (c != BITWISE_OR) {
+                QvReadError::post(in, "Expected '%c' or '%c', got '%c' ",
+                                  "in QvSFBitMask value",
+                                  BITWISE_OR, CLOSE_PAREN, c);
+                return FALSE;
+            }
+        }
     }
 
     else {
-	in->putBack(c);
+        in->putBack(c);
 
-	// Read mnemonic value as a character string identifier
-	if (! in->read(n, TRUE))
-	    return FALSE;
+        // Read mnemonic value as a character string identifier
+        if (! in->read(n, TRUE))
+            return FALSE;
 
-	if (! findEnumValue(n, value)) {
-	    QvReadError::post(in, "Unknown QvSFBitMask bit "
-			      "mask value \"%s\"", n.getString());
-	    return FALSE;
-	}
+        if (! findEnumValue(n, value)) {
+            QvReadError::post(in, "Unknown QvSFBitMask bit "
+                              "mask value \"%s\"", n.getString());
+            return FALSE;
+        }
     }
 
     return TRUE;

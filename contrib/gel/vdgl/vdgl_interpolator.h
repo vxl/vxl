@@ -21,7 +21,7 @@
 #include <vdgl/vdgl_edgel_chain_sptr.h>
 
 class vdgl_interpolator : public vbl_timestamp,
-			  public vbl_ref_count {
+                          public vbl_ref_count {
    // PUBLIC INTERFACE----------------------------------------------------------
 public:
 

@@ -22,7 +22,7 @@ bool vipl_gaussian_convolution <ImgIn,ImgOut,DataIn,DataOut,PixelItr> :: section
       int buf_i = i - start(X_Axis(),j);
       double result = mask()[0] * fgetpixel(in, i, j, dummy);
       for (int x=1; x<size; ++x)
-	result += mask()[x] * (getpixel(in, i+x, j, dummy) + getpixel(in, i-x, j, dummy));
+        result += mask()[x] * (getpixel(in, i+x, j, dummy) + getpixel(in, i-x, j, dummy));
       buf[buf_i+width*buf_j] = result;
     }
   }
@@ -33,8 +33,8 @@ bool vipl_gaussian_convolution <ImgIn,ImgOut,DataIn,DataOut,PixelItr> :: section
       int buf_i = i - start(X_Axis(),j);
       double result = mask()[0] * buf[buf_i+width*buf_j];
       for (int y=1; y<size; ++y) {
-	if (buf_j+y < height) result += mask()[y] * buf[buf_i+width*(buf_j+y)];
-	if (buf_j >= y) result += mask()[y] * buf[buf_i+width*(buf_j-y)];
+        if (buf_j+y < height) result += mask()[y] * buf[buf_i+width*(buf_j+y)];
+        if (buf_j >= y) result += mask()[y] * buf[buf_i+width*(buf_j-y)];
       }
       fsetpixel(out, i, j, result);
     }

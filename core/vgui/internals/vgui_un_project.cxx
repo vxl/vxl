@@ -11,8 +11,8 @@
 #include <vnl/algo/vnl_svd.h>
 
 bool vgui_un_project(double const * const *H,
-		     double const X[4],
-		     double Y[4])
+                     double const X[4],
+                     double Y[4])
 {
   vnl_matrix<double> M(4, 4);
   M.set_row(0, H[0]);

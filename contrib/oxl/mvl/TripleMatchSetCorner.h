@@ -30,8 +30,8 @@ public:
 
   TripleMatchSetCorner();
   TripleMatchSetCorner(HomgInterestPointSet const* corners1,
-		       HomgInterestPointSet const* corners2,
-		       HomgInterestPointSet const* corners3);
+                       HomgInterestPointSet const* corners2,
+                       HomgInterestPointSet const* corners3);
 
   TripleMatchSetCorner(const TripleMatchSetCorner& that);
   TripleMatchSetCorner& operator=(const TripleMatchSetCorner& that);
@@ -41,13 +41,13 @@ public:
 
   // -- Copy inliers to three arrays, and record the original indices.
   void extract_matches(vcl_vector <HomgPoint2D>& points1, vcl_vector <int>& corner_index_1,
-		       vcl_vector <HomgPoint2D>& points2, vcl_vector <int>& corner_index_2,
-		       vcl_vector <HomgPoint2D>& points3, vcl_vector <int>& corner_index_3) const;
+                       vcl_vector <HomgPoint2D>& points2, vcl_vector <int>& corner_index_2,
+                       vcl_vector <HomgPoint2D>& points3, vcl_vector <int>& corner_index_3) const;
 
   // -- Copy inliers to three arrays
   void extract_matches(vcl_vector <HomgPoint2D>& points1,
-		       vcl_vector <HomgPoint2D>& points2,
-		       vcl_vector <HomgPoint2D>& points3) const;
+                       vcl_vector <HomgPoint2D>& points2,
+                       vcl_vector <HomgPoint2D>& points3) const;
 
   PairMatchSetCorner* get_matches12() { return (PairMatchSetCorner*)_match12; }
   PairMatchSetCorner* get_matches23() { return (PairMatchSetCorner*)_match23; }

@@ -180,7 +180,7 @@ int main(int argc, char** argv)
   // Create a window, add the tableau and show it on screen:
   vcl_string title = "Oxford RRG Video player - v0.5";
   vgui_window *win = vgui::produce_window(window_width, window_height,
-					  create_menubar(), title);
+                                          create_menubar(), title);
   win->get_adaptor()->set_tableau(xcv_tab);
   win->set_statusbar(true);
   win->enable_vscrollbar(false);

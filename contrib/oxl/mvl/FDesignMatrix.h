@@ -34,7 +34,7 @@ public:
   // Constructors/Destructors--------------------------------------------------
 
   FDesignMatrix(vcl_vector<HomgPoint2D>& points1,
-		vcl_vector<HomgPoint2D>& points2);
+                vcl_vector<HomgPoint2D>& points2);
 };
 
 #endif // FDesignMatrix_h_

@@ -18,8 +18,8 @@ struct SGIMovieFileWriteData;
 
 struct SGIMovieFileWrite {
   SGIMovieFileWrite(char const* filename,
-		    int w, int h,
-		    int length);
+                    int w, int h,
+                    int length);
   ~SGIMovieFileWrite();
 
   //void PutFrame(int i, void* buf = 0);

@@ -28,12 +28,12 @@ public:
     const int *_so_sf_enum_vals;				\
     const QvName *_so_sf_enum_names;				\
     fieldData->getEnumData(QV__QUOTE(enumType),			\
-			   _so_sf_enum_num,			\
-			   _so_sf_enum_vals,			\
-			   _so_sf_enum_names);			\
+                           _so_sf_enum_num,			\
+                           _so_sf_enum_vals,			\
+                           _so_sf_enum_names);			\
     fieldName.setEnums(	_so_sf_enum_num,			\
-			_so_sf_enum_vals,			\
-			_so_sf_enum_names);			\
+                        _so_sf_enum_vals,			\
+                        _so_sf_enum_names);			\
   } while (0)
 
 #endif /* _QV_SF_ENUM_ */

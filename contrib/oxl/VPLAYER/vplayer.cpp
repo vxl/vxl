@@ -19,24 +19,24 @@ using namespace std;
 
 int _tmain(int argc, TCHAR* argv[], TCHAR* envp[])
 {
-	int nRetCode = 0;
+        int nRetCode = 0;
 
-	// initialize MFC and print and error on failure
-	if (!AfxWinInit(::GetModuleHandle(NULL), NULL, ::GetCommandLine(), 0))
-	{
-		// TODO: change error code to suit your needs
-		cerr << _T("Fatal Error: MFC initialization failed") << endl;
-		nRetCode = 1;
-	}
-	else
-	{
-		// TODO: code your application's behavior here.
-		CString strHello;
-		strHello.LoadString(IDS_HELLO);
-		cout << (LPCTSTR)strHello << endl;
-	}
+        // initialize MFC and print and error on failure
+        if (!AfxWinInit(::GetModuleHandle(NULL), NULL, ::GetCommandLine(), 0))
+        {
+                // TODO: change error code to suit your needs
+                cerr << _T("Fatal Error: MFC initialization failed") << endl;
+                nRetCode = 1;
+        }
+        else
+        {
+                // TODO: code your application's behavior here.
+                CString strHello;
+                strHello.LoadString(IDS_HELLO);
+                cout << (LPCTSTR)strHello << endl;
+        }
 
-	return nRetCode;
+        return nRetCode;
 }
 
 

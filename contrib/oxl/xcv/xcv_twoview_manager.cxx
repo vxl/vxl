@@ -153,9 +153,9 @@ void xcv_twoview_manager::draw_f_matrix(vgui_event const& e, vgui_tableau_sptr c
   {
     line_coord_a = hl[0]; line_coord_b = hl[1]; line_coord_c = hl[2];
     event_coord_x = ix; event_coord_y = iy;
-	  if (use_overlays)
+          if (use_overlays)
       tabs[transfer_index]->post_overlay_redraw();
-  	else
+          else
       tabs[transfer_index]->post_redraw();
   }
 }
@@ -174,8 +174,8 @@ void xcv_twoview_manager::draw_overlay_f_matrix(vgui_tableau_sptr const& child_t
     else
       evt.type = vgui_DRAW_OVERLAY;
     easys[transfer_index]->handle(evt);
-	  rubberbands[transfer_index]->draw_infinite_line(line_coord_a,
-		  line_coord_b, line_coord_c);
+          rubberbands[transfer_index]->draw_infinite_line(line_coord_a,
+                  line_coord_b, line_coord_c);
   }
 }
 
@@ -224,9 +224,9 @@ void xcv_twoview_manager::draw_h_matrix(
   {
     event_coord_x = ix; event_coord_y = iy;
     point_coord_x = px; point_coord_y = py;
-	if (use_overlays)
-	  rubberbands[transfer_index]->post_overlay_redraw();
-	else
+        if (use_overlays)
+          rubberbands[transfer_index]->post_overlay_redraw();
+        else
       rubberbands[transfer_index]->post_redraw();
   }
 }
@@ -356,17 +356,17 @@ void xcv_twoview_manager::handle_tjunction_event(vgui_event const& e, vgui_table
   }
   if (dragging == true)
   {
-	  if ((use_overlays && e.type == vgui_DRAW_OVERLAY) || (!use_overlays && e.type == vgui_DRAW))
-	  {
+          if ((use_overlays && e.type == vgui_DRAW_OVERLAY) || (!use_overlays && e.type == vgui_DRAW))
+          {
       //awfawfxxx fix this.
       //if (child_tab == tabs[transfer_index])	
       //  rubberbands[transfer_index]->child->handle(e);
 
-	    if (child_tab == tabs[transfer_index])
-	    {
-		    easys[transfer_index]->handle(e);
-		    easys[transfer_index]->get_child(0)->handle(e);
-	    }
+            if (child_tab == tabs[transfer_index])
+            {
+                    easys[transfer_index]->handle(e);
+                    easys[transfer_index]->get_child(0)->handle(e);
+            }
 
       if (f_matrix != 0 && f_matrix_is_displayed)
         draw_overlay_f_matrix(child_tab);
@@ -374,6 +374,6 @@ void xcv_twoview_manager::handle_tjunction_event(vgui_event const& e, vgui_table
         draw_overlay_h_matrix(child_tab);
       if (corner_matches != 0 && corner_matches_are_displayed)
         draw_overlay_corner_matches(child_tab);
-	  }
+          }
   }
 }

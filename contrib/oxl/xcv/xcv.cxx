@@ -384,9 +384,9 @@ vgui_menu create_menubar()
 // greatest as the window width (height).
 //-----------------------------------------------------------------------------
 void xcv_window_size_traditional(int rows, int cols,
-				 vcl_vector<xcv_image_tableau_sptr> const &images,
-				 unsigned *window_w, unsigned *window_h,
-				 double *viewer_scale)
+                                 vcl_vector<xcv_image_tableau_sptr> const &images,
+                                 unsigned *window_w, unsigned *window_h,
+                                 double *viewer_scale)
 {
   assert(window_w && window_h && viewer_scale);
   *window_w = 0;
@@ -399,7 +399,7 @@ void xcv_window_size_traditional(int rows, int cols,
     for (int j=0; j<cols; ++j) {
       int d = i*cols + j;
       if (d < images.size())
-	winnie += images[d]->width();
+        winnie += images[d]->width();
     }
     if (winnie > *window_w)
       *window_w = winnie;
@@ -411,7 +411,7 @@ void xcv_window_size_traditional(int rows, int cols,
     for (int i=0; i<rows; ++i) {
       int d = i*cols + j;
       if (d < images.size())
-	winnie += images[d]->height();
+        winnie += images[d]->height();
     }
     if (winnie > *window_h)
       *window_h = winnie;
@@ -421,9 +421,9 @@ void xcv_window_size_traditional(int rows, int cols,
 //: This function tries to resize the window to fill some proportion of the screen.
 //  Useful for very small or very large images.
 void xcv_window_size_adaptive(int rows, int cols,
-			      vcl_vector<xcv_image_tableau_sptr> const &images,
-			      unsigned *window_w, unsigned *window_h,
-			      double *viewer_scale)
+                              vcl_vector<xcv_image_tableau_sptr> const &images,
+                              unsigned *window_w, unsigned *window_h,
+                              double *viewer_scale)
 {
   xcv_window_size_traditional(rows, cols, images, window_w, window_h, viewer_scale);
 
@@ -544,8 +544,8 @@ int main(int argc, char** argv)
 
   // Create a window, add the tableau and show it on screen:
   vgui_window *win = vgui::produce_window(window_width, window_height,
-					  create_menubar(),
-					  "xcv"); // title
+                                          create_menubar(),
+                                          "xcv"); // title
   win->get_adaptor()->set_tableau(vgui_shell_tableau_new(xcv_tab));
   win->set_statusbar(true);
   win->enable_vscrollbar(false);

@@ -14,7 +14,7 @@ class vil_image;
 
 #define vil_decl(T) \
 bool vil_clamp_image(vil_image const &base, double low, double high, \
-		     T *buf, int x0, int y0, int w, int h)
+                     T *buf, int x0, int y0, int w, int h)
 
 template <class T> vil_decl(T);
 

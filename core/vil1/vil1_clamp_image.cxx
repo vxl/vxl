@@ -14,7 +14,7 @@
 
 template <class T>
 bool vil_clamp_image(vil_image const& base, double low, double high,
-		     T *buf, int x0, int y0, int w, int h)
+                     T *buf, int x0, int y0, int w, int h)
 {
   if (!base.get_section(buf, x0, y0, w, h)) return false;
 
@@ -30,13 +30,13 @@ bool vil_clamp_image(vil_image const& base, double low, double high,
 #undef VIL_INSTANTIATE_CLAMP_IMAGE
 #define VIL_INSTANTIATE_CLAMP_IMAGE(T) \
 template bool vil_clamp_image(vil_image const& base, double low, double high, \
-			      T *buf, int x0, int y0, int w, int h)
+                              T *buf, int x0, int y0, int w, int h)
 
 #undef VIL_SPECIALIZE_CLAMP_IMAGE_RGB
 #define VIL_SPECIALIZE_CLAMP_IMAGE_RGB(T) \
 VCL_DEFINE_SPECIALIZATION \
 bool vil_clamp_image(vil_image const& base, double low, double high, \
-  		     vil_rgb<T> *buf, int x0, int y0, int w, int h) \
+                       vil_rgb<T> *buf, int x0, int y0, int w, int h) \
 { \
   if (!base.get_section(buf, x0, y0, w, h)) return false; \
   unsigned size = w*h; \

@@ -44,15 +44,15 @@ QvGroup::readInstance(QvInput *in)
 
     if (! isBuiltIn) {
         if (in->read(typeString, TRUE)) {
-	    if (typeString == "fields") {
-		if (! fieldData_auto->readFieldTypes(in, this)) {
-		    QvReadError::post(in, "Bad field specifications for node");
-		    return FALSE;
-		}
-	    }
-	    else
-		in->putBack(typeString.getString());
-	}
+            if (typeString == "fields") {
+                if (! fieldData_auto->readFieldTypes(in, this)) {
+                    QvReadError::post(in, "Bad field specifications for node");
+                    return FALSE;
+                }
+            }
+            else
+                in->putBack(typeString.getString());
+        }
     }
 
     return (fieldData_auto->read(in, this, FALSE) && readChildren(in));
@@ -65,18 +65,18 @@ QvGroup::readChildren(QvInput *in)
     QvBool	ret = TRUE;
 
     while (TRUE) {
-	if (read(in, child)) {
-	    if (child != NULL)
-		children->append(child);
-	    else
-		break;
-	}
-	else {
+        if (read(in, child)) {
+            if (child != NULL)
+                children->append(child);
+            else
+                break;
+        }
+        else {
 // mpichler, 19950711: continue on bad children
 // should work because QvNode::readNode cleans up after wrong nodes
 // 	    ret = FALSE;
 // 	    break;
-	}
+        }
     }
 
     return ret;

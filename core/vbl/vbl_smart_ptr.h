@@ -67,7 +67,7 @@ public:
       T *old_ptr = ptr_;
       ptr_ = 0;
       if (old_ptr)
-	unref(old_ptr);
+        unref(old_ptr);
     }
     else
       ptr_ = 0;
@@ -85,11 +85,11 @@ public:
       ptr_ = r;
 
       if (ptr_)
-	ref(ptr_);
+        ref(ptr_);
 
       // *this might get deleted now, but that's ok.
       if (old_ptr)
-	unref(old_ptr);
+        unref(old_ptr);
     }
     return *this;
   }

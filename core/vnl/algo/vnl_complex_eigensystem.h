@@ -38,10 +38,10 @@ class vnl_complex_eigensystem {
 public:
 
   vnl_complex_eigensystem(const vnl_matrix<double> &A_real,const vnl_matrix<double> &A_imag,
-		     bool right=true,bool left=false);
+                     bool right=true,bool left=false);
 
   vnl_complex_eigensystem(const vnl_matrix<vcl_complex<double> > &A,
-		     bool right=true,bool left=false);
+                     bool right=true,bool left=false);
 
   ~vnl_complex_eigensystem();
 

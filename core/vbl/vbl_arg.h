@@ -128,16 +128,16 @@ public:
   // word in the command line (warning: this causes problems for T=char *, but that
   // just means that you have to have a help string if you want a default... good)
   vbl_arg(char const* option_string = 0,
-	  char const* helpstring = 0,
-	  T default_value = T())
+          char const* helpstring = 0,
+          T default_value = T())
     : vbl_arg_base(option_string,helpstring), value_(default_value) { settype(); }
 
   // -- As above, but add the arg to the list \arg{l}, on which
   // l.parse can be called later.
   vbl_arg(vbl_arg_info_list & l,
-	  char const * option_string = 0,
-	  char const * helpstring = 0,
-	  T default_value = T())
+          char const * option_string = 0,
+          char const * helpstring = 0,
+          T default_value = T())
     : vbl_arg_base(l, option_string, helpstring), value_(default_value) { settype(); }
 
   //: return the arg's current value, whether the default or the one from the command line.

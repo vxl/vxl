@@ -6,6 +6,6 @@ QvBool
 QvSFVec3f::readValue(QvInput *in)
 {
     return (in->read(value[0]) &&
-	    in->read(value[1]) &&
-	    in->read(value[2]));
+            in->read(value[1]) &&
+            in->read(value[2]));
 }

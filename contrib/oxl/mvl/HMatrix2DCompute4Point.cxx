@@ -26,8 +26,8 @@
 
 bool
 HMatrix2DCompute4Point::compute_p(const vcl_vector<HomgPoint2D>& points1,
-				  const vcl_vector<HomgPoint2D>& points2,
-				  HMatrix2D *H)
+                                  const vcl_vector<HomgPoint2D>& points2,
+                                  HMatrix2D *H)
 {
   ProjectiveBasis2D basis1(points1);
   if ( basis1.collinear() ) return false;

@@ -10,7 +10,7 @@ QvUnknownNode::QvUnknownNode()
 
     // Set global field data to this instance's
     if (QV_NODE_IS_FIRST_INSTANCE())
-	delete fieldData;
+        delete fieldData;
     instanceFieldData = new QvFieldData;
     fieldData = instanceFieldData;
 }
@@ -24,10 +24,10 @@ QvUnknownNode::setClassName(const char *name)
 QvUnknownNode::~QvUnknownNode()
 {
     for (int i = 0; i < instanceFieldData->getNumFields(); i++)
-	delete instanceFieldData->getField(this, i);
+        delete instanceFieldData->getField(this, i);
 
     delete instanceFieldData;
 
     if (className != NULL)
-	free((void *) className);
+        free((void *) className);
 }

@@ -33,8 +33,8 @@ private:
 //--------------------------------------------------------------------------------=
 protected:
   bool compute_p(const PointArray&,
-		 const PointArray&,
-		 HMatrix2D* H);
+                 const PointArray&,
+                 HMatrix2D* H);
 //--------------------------------------------------------------------------------=
 public:
   HMatrix2DComputeLinear(bool allow_ideal_points = false);

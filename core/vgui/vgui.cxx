@@ -183,9 +183,9 @@ void vgui::init(int &argc, char **argv)
 //-----------------------------------------------------------------------
 
 vgui_window *vgui::produce_window(int width,
-				  int height,
-				  vgui_menu const &menubar,
-				  vcl_string const &title VCL_DEFAULT_VALUE(""))
+                                  int height,
+                                  vgui_menu const &menubar,
+                                  vcl_string const &title VCL_DEFAULT_VALUE(""))
 {
   if (instance_)
     return instance_->produce_window(width, height, menubar, title.c_str());
@@ -196,8 +196,8 @@ vgui_window *vgui::produce_window(int width,
 }
 
 vgui_window *vgui::produce_window(int width,
-				  int height,
-				  vcl_string const &title VCL_DEFAULT_VALUE(""))
+                                  int height,
+                                  vcl_string const &title VCL_DEFAULT_VALUE(""))
 {
   if (instance_)
     return instance_->produce_window(width, height, title.c_str());
@@ -276,14 +276,14 @@ void vgui::add_event(vgui_event const& e) {
 
 // -- Display this tableau and run till dead.
 int vgui::run(vgui_tableau_sptr const& tableau, int width, int height,
-	      vcl_string const &title VCL_DEFAULT_VALUE(""))
+              vcl_string const &title VCL_DEFAULT_VALUE(""))
 {
   adapt(tableau, width, height, title);
   return vgui::run();
 }
 
 int vgui::run(vgui_tableau_sptr const& tableau, int width, int height,
-	      vgui_menu const &menubar, vcl_string const &title)
+              vgui_menu const &menubar, vcl_string const &title)
 {
   adapt(tableau, width, height, menubar, title);
   return vgui::run();
@@ -291,7 +291,7 @@ int vgui::run(vgui_tableau_sptr const& tableau, int width, int height,
 
 //
 vgui_window *vgui::adapt(vgui_tableau_sptr const& tableau, int width, int height,
-			 vcl_string const &title VCL_DEFAULT_VALUE(""))
+                         vcl_string const &title VCL_DEFAULT_VALUE(""))
 {
   vgui_window *win = vgui::produce_window(width, height, title);
   win->get_adaptor()->set_tableau(tableau);
@@ -300,7 +300,7 @@ vgui_window *vgui::adapt(vgui_tableau_sptr const& tableau, int width, int height
 }
 
 vgui_window *vgui::adapt(vgui_tableau_sptr const& tableau, int width, int height,
-			 vgui_menu const &mb, vcl_string const &title VCL_DEFAULT_VALUE(""))
+                         vgui_menu const &mb, vcl_string const &title VCL_DEFAULT_VALUE(""))
 {
   vgui_window *win = vgui::produce_window(width, height, mb, title);
   win->get_adaptor()->set_tableau(tableau);

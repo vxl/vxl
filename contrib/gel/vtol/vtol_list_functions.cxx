@@ -23,8 +23,8 @@ void tagged_union(vcl_vector<vsol_spatial_object_3d*>* topolist)
   for (i=topolist->begin(); i!=topolist->end(); ++i)
     if (((vsol_spatial_object_3d*)(*i))->get_tagged_union_flag() == false)
       {
-	((vsol_spatial_object_3d*)(*i))->set_tagged_union_flag();
-	temp.push_back(*i);
+        ((vsol_spatial_object_3d*)(*i))->set_tagged_union_flag();
+        temp.push_back(*i);
       }
   (*topolist)=temp;
 }
@@ -47,9 +47,8 @@ void tagged_union(vcl_list<vtol_topology_object_sptr> *topolist)
   for (i=topolist->begin(); i!=topolist->end(); ++i)
     if (((*i))->get_tagged_union_flag() == false)
       {
-	((*i))->set_tagged_union_flag();
-	temp.push_back(*i);
+        ((*i))->set_tagged_union_flag();
+        temp.push_back(*i);
       }
   (*topolist)=temp;
 }
-

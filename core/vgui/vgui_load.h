@@ -52,10 +52,10 @@ public:
   //   l.set_ortho(0,h, w,0);
   // unless one wants the image upside down.
   void set_ortho(float x1, float y1, // bottom, left
-		 float x2, float y2);// top, right
+                 float x2, float y2);// top, right
 
   void set_ortho(float x1,float y1,float z1, // bottom, left hand, far corner.
-		 float x2,float y2,float z2);// top, right hand, near corner.
+                 float x2,float y2,float z2);// top, right hand, near corner.
 
   // default for a w-by-h image :
   void set_image(unsigned w, unsigned h) { set_ortho(0, h, w, 0); }

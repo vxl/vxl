@@ -36,8 +36,8 @@ public:
   // Computations--------------------------------------------------------------
 
   bool decompose_to_intrinsic_extrinsic_params (vnl_matrix<double> *camera_matrix,
-						vnl_matrix<double> *R,
-						vnl_vector<double> *t);
+                                                vnl_matrix<double> *R,
+                                                vnl_vector<double> *t);
 };
 
 #endif // _PMatrixEuclidean_h

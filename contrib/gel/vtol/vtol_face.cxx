@@ -325,7 +325,7 @@ bool vtol_face::operator==(const vtol_face &other) const
       ++ti1,++ti2)
     {
       if (!(*(*ti1)== *(*ti2))){
-	return false;
+        return false;
       }
     }
 

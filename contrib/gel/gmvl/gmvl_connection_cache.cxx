@@ -39,9 +39,9 @@ void gmvl_connection_cache::add( const gmvl_node_sptr node1, const gmvl_node_spt
       int biggest= vnl_math_max( node1->ref_, node2->ref_);
 
       if( biggest>= cachebool_.rows())
-	{
-	  cachebool_.enlarge( (biggest+1)*2, (biggest+1)*2);
-	}
+        {
+          cachebool_.enlarge( (biggest+1)*2, (biggest+1)*2);
+        }
 
       cache_[node1->ref_].push_back( node2->ref_);
       cache_[node2->ref_].push_back( node1->ref_);
@@ -55,7 +55,7 @@ void gmvl_connection_cache::add( const gmvl_node_sptr node1, const gmvl_node_spt
 // clever accessors
 
 vcl_vector<int> gmvl_connection_cache::get_connected_nodes( const gmvl_node_sptr node1,
-							    const gmvl_node_sptr node2) const
+                                                            const gmvl_node_sptr node2) const
 {
   vcl_vector<int> c= get_connected_nodes( node1);
   vcl_vector<int> d;
@@ -68,15 +68,15 @@ vcl_vector<int> gmvl_connection_cache::get_connected_nodes( const gmvl_node_sptr
 }
 
 vcl_vector<int> gmvl_connection_cache::get_connected_nodes( const gmvl_node_sptr node1,
-							    const gmvl_node_sptr node2,
-							    const gmvl_node_sptr node3) const
+                                                            const gmvl_node_sptr node2,
+                                                            const gmvl_node_sptr node3) const
 {
   vcl_vector<int> c= get_connected_nodes( node1);
   vcl_vector<int> d;
 
   for( unsigned int i=0; i< c.size(); ++i)
     if( cachebool_(node2->ref_,c[i]) &&
-	cachebool_(node3->ref_,c[i]))
+        cachebool_(node3->ref_,c[i]))
       d.push_back(c[i]);
 
   return d;
@@ -92,13 +92,13 @@ vcl_vector<int> gmvl_connection_cache::get_connected_nodes( const vcl_vector<gmv
       bool ok= true;
 
       for( unsigned int j=1; j< nodes.size() && ok; ++j)
-	{
-	  if( !cachebool_(nodes[j]->ref_,c[i]))
-	    ok= false;
-	}
+        {
+          if( !cachebool_(nodes[j]->ref_,c[i]))
+            ok= false;
+        }
 
       if( ok)
-	d.push_back(c[i]);
+        d.push_back(c[i]);
     }
 
   return d;
@@ -125,15 +125,15 @@ void gmvl_connection_cache::rebuild()
       int biggest= vnl_math_max( node1->ref_, node2->ref_);
 
       if( biggest>= cachebool_.rows())
-	{
-	  gbl_bit_array_2d temp( biggest+1, biggest+1, false);
+        {
+          gbl_bit_array_2d temp( biggest+1, biggest+1, false);
 
-	  for( int ci=0; ci< cachebool_.rows(); ci++)
-	    for( int cj=0; cj< cachebool_.cols(); cj++)
-	      temp.put(ci,cj, cachebool_(ci,cj));
+          for( int ci=0; ci< cachebool_.rows(); ci++)
+            for( int cj=0; cj< cachebool_.cols(); cj++)
+              temp.put(ci,cj, cachebool_(ci,cj));
 
-	  cachebool_= temp;
-	}
+          cachebool_= temp;
+        }
 
       cache_[node1->ref_].push_back( node2->ref_);
       cache_[node2->ref_].push_back( node1->ref_);
@@ -155,11 +155,11 @@ vcl_ostream &operator<<( vcl_ostream &os, const gmvl_connection_cache &c)
       os << "<" << i << " - ";
 
       for( unsigned int j=0; j< c.cache_[i].size(); ++j)
-	{
-	  os << c.cache_[i][j];
-	  if( j+1 != c.cache_[i].size())
-	    os << ", ";
-	}
+        {
+          os << c.cache_[i][j];
+          if( j+1 != c.cache_[i].size())
+            os << ", ";
+        }
 
       os << ">";
     }

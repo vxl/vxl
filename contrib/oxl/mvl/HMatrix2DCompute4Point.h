@@ -30,8 +30,8 @@ class HMatrix2DCompute4Point : public HMatrix2DCompute {
 //--------------------------------------------------------------------------------
 protected:
   bool compute_p(const PointArray &,
-		 const PointArray &,
-		 HMatrix2D *);
+                 const PointArray &,
+                 HMatrix2D *);
 };
 
 #endif // _HMatrix2DCompute4Point_h

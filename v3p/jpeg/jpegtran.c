@@ -73,7 +73,7 @@ usage (void)
 
 LOCAL(int)
 parse_switches (j_compress_ptr cinfo, int argc, char **argv,
-		int last_file_arg_seen, boolean for_real)
+                int last_file_arg_seen, boolean for_real)
 /* Parse optional switches.
  * Returns argv[] index of first file-name argument (== argc if none).
  * Any file names with indexes <= last_file_arg_seen are ignored;
@@ -100,8 +100,8 @@ parse_switches (j_compress_ptr cinfo, int argc, char **argv,
     if (*arg != '-') {
       /* Not a switch, must be a file name argument */
       if (argn <= last_file_arg_seen) {
-	outfilename = NULL;	/* -outfile applies to just one input file */
-	continue;		/* ignore this name if previously processed */
+        outfilename = NULL;	/* -outfile applies to just one input file */
+        continue;		/* ignore this name if previously processed */
       }
       break;			/* else done parsing switches */
     }
@@ -113,7 +113,7 @@ parse_switches (j_compress_ptr cinfo, int argc, char **argv,
       cinfo->arith_code = TRUE;
 #else
       fprintf(stderr, "%s: sorry, arithmetic coding not supported\n",
-	      progname);
+              progname);
       exit(EXIT_FAILURE);
 #endif
 
@@ -123,9 +123,9 @@ parse_switches (j_compress_ptr cinfo, int argc, char **argv,
       static boolean printed_version = FALSE;
 
       if (! printed_version) {
-	fprintf(stderr, "Independent JPEG Group's JPEGTRAN, version %s\n%s\n",
-		JVERSION, JCOPYRIGHT);
-	printed_version = TRUE;
+        fprintf(stderr, "Independent JPEG Group's JPEGTRAN, version %s\n%s\n",
+                JVERSION, JCOPYRIGHT);
+        printed_version = TRUE;
       }
       cinfo->err->trace_level++;
 
@@ -135,11 +135,11 @@ parse_switches (j_compress_ptr cinfo, int argc, char **argv,
       char ch = 'x';
 
       if (++argn >= argc)	/* advance to next argument */
-	usage();
+        usage();
       if (sscanf(argv[argn], "%ld%c", &lval, &ch) < 1)
-	usage();
+        usage();
       if (ch == 'm' || ch == 'M')
-	lval *= 1000L;
+        lval *= 1000L;
       cinfo->mem->max_memory_to_use = lval * 1000L;
 
     } else if (keymatch(arg, "optimize", 1) || keymatch(arg, "optimise", 1)) {
@@ -148,14 +148,14 @@ parse_switches (j_compress_ptr cinfo, int argc, char **argv,
       cinfo->optimize_coding = TRUE;
 #else
       fprintf(stderr, "%s: sorry, entropy optimization was not compiled\n",
-	      progname);
+              progname);
       exit(EXIT_FAILURE);
 #endif
 
     } else if (keymatch(arg, "outfile", 4)) {
       /* Set output file name. */
       if (++argn >= argc)	/* advance to next argument */
-	usage();
+        usage();
       outfilename = argv[argn];	/* save it away for later use */
 
     } else if (keymatch(arg, "progressive", 1)) {
@@ -165,7 +165,7 @@ parse_switches (j_compress_ptr cinfo, int argc, char **argv,
       /* We must postpone execution until num_components is known. */
 #else
       fprintf(stderr, "%s: sorry, progressive output was not compiled\n",
-	      progname);
+              progname);
       exit(EXIT_FAILURE);
 #endif
 
@@ -175,29 +175,29 @@ parse_switches (j_compress_ptr cinfo, int argc, char **argv,
       char ch = 'x';
 
       if (++argn >= argc)	/* advance to next argument */
-	usage();
+        usage();
       if (sscanf(argv[argn], "%ld%c", &lval, &ch) < 1)
-	usage();
+        usage();
       if (lval < 0 || lval > 65535L)
-	usage();
+        usage();
       if (ch == 'b' || ch == 'B') {
-	cinfo->restart_interval = (unsigned int) lval;
-	cinfo->restart_in_rows = 0; /* else prior '-restart n' overrides me */
+        cinfo->restart_interval = (unsigned int) lval;
+        cinfo->restart_in_rows = 0; /* else prior '-restart n' overrides me */
       } else {
-	cinfo->restart_in_rows = (int) lval;
-	/* restart_interval will be computed during startup */
+        cinfo->restart_in_rows = (int) lval;
+        /* restart_interval will be computed during startup */
       }
 
     } else if (keymatch(arg, "scans", 2)) {
       /* Set scan script. */
 #ifdef C_MULTISCAN_FILES_SUPPORTED
       if (++argn >= argc)	/* advance to next argument */
-	usage();
+        usage();
       scansarg = argv[argn];
       /* We must postpone reading the file in case -progressive appears. */
 #else
       fprintf(stderr, "%s: sorry, multi-scan output was not compiled\n",
-	      progname);
+              progname);
       exit(EXIT_FAILURE);
 #endif
 
@@ -218,7 +218,7 @@ parse_switches (j_compress_ptr cinfo, int argc, char **argv,
 #ifdef C_MULTISCAN_FILES_SUPPORTED
     if (scansarg != NULL)	/* process -scans if it was present */
       if (! read_scan_script(cinfo, scansarg))
-	usage();
+        usage();
 #endif
   }
 
@@ -282,14 +282,14 @@ main (int argc, char **argv)
   if (outfilename == NULL) {
     if (file_index != argc-2) {
       fprintf(stderr, "%s: must name one input and one output file\n",
-	      progname);
+              progname);
       usage();
     }
     outfilename = argv[file_index+1];
   } else {
     if (file_index != argc-1) {
       fprintf(stderr, "%s: must name one input and one output file\n",
-	      progname);
+              progname);
       usage();
     }
   }

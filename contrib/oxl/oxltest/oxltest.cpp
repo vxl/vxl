@@ -9,7 +9,7 @@ int main(int argc, char* argv[])
 {
   HomgOperator3D::sort_points(0,0);
 
-	printf("Hello World!\n");
-	return 0;
+        printf("Hello World!\n");
+        return 0;
 }
 

@@ -44,7 +44,7 @@ vgui_tableau::~vgui_tableau()
 
   if (references != 0)
     vgui_macro_warning << "there are still " << references
-		       << " references. this=" << (void*)this << vcl_endl;
+                       << " references. this=" << (void*)this << vcl_endl;
 
   // deregister :
   vcl_vector<vgui_tableau*>::iterator i=vcl_find(all->begin(), all->end(), this);
@@ -240,7 +240,7 @@ bool vgui_tableau::remove_child(vgui_tableau_sptr const&) {
 // mechanism) is about to forcibly replace a child of this tableau.
 // The canonical reason to override this is in order to invalidate caches.
 bool vgui_tableau::notify_replaced_child(vgui_tableau_sptr const& /*old_child*/,
-					 vgui_tableau_sptr const& /*new_child*/)
+                                         vgui_tableau_sptr const& /*new_child*/)
 {
   return true;
 }
@@ -289,7 +289,7 @@ void vgui_tableau::get_popup(vgui_popup_params const &params, vgui_menu &menu) {
       get_children(&children);
 
       for (unsigned i=0; i<children.size(); ++i)
-	if (children[i])
+        if (children[i])
           children[i]->get_popup(params, menu);
     }
   }

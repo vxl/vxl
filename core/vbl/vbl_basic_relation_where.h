@@ -118,18 +118,18 @@ public:
     else str << "," << GetSecond();
     if (!vbl_basic_optional_traits<T3>::IsOptional)
       {
-	if (third_wild) str << ",*";
-	else str << "," << GetThird();
+        if (third_wild) str << ",*";
+        else str << "," << GetThird();
       }
     if (!vbl_basic_optional_traits<T4>::IsOptional)
       {
-	if (fourth_wild) str << ",*";
-	else str << "," << GetFourth();
+        if (fourth_wild) str << ",*";
+        else str << "," << GetFourth();
       }
     if (!vbl_basic_optional_traits<T5>::IsOptional)
       {
-	if (fifth_wild) str << ",*";
-	else str << "," << GetFifth();
+        if (fifth_wild) str << ",*";
+        else str << "," << GetFifth();
       }
     str << ">";
   }

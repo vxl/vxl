@@ -22,8 +22,8 @@ class HMatrix2DCompute4Line : public HMatrix2DCompute {
 //--------------------------------------------------------------------------------
 protected:
   bool compute_l(const LineArray&,
-		 const LineArray&,
-		 HMatrix2D *);
+                 const LineArray&,
+                 HMatrix2D *);
 //--------------------------------------------------------------------------------
 public:
 

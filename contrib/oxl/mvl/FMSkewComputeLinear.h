@@ -49,8 +49,8 @@ public:
 
 private:
   bool compute_preconditioned (	vcl_vector<HomgPoint2D>& points1,
-				vcl_vector<HomgPoint2D>& points2,
-				FMatrixSkew *F);
+                                vcl_vector<HomgPoint2D>& points2,
+                                FMatrixSkew *F);
 
   bool _precondition;
 };

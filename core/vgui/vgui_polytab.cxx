@@ -73,8 +73,8 @@ public:
 
 // class vgui_popup_params::item
 vgui_polytab_base::item::item(vgui_tableau* p, vgui_tableau_sptr const&c,
-			      float x_, float y_, float w_, float h_,
-			      int id_ VCL_DEFAULT_VALUE(0))
+                              float x_, float y_, float w_, float h_,
+                              int id_ VCL_DEFAULT_VALUE(0))
   : tab(p, c)
   , x(x_), y(y_)
   , w(w_), h(h_)
@@ -162,9 +162,9 @@ void vgui_polytab_base::replace(int id, vgui_tableau_sptr const& tab) {
     if (i->id == id) {
       i->tab.assign(tab);
       if (tab)
-	tab->post_redraw();
+        tab->post_redraw();
       else
-	post_redraw();
+        post_redraw();
       return;
     }
   vgui_macro_warning << "no such id " << id << vcl_endl;
@@ -200,10 +200,10 @@ int vgui_polytab_base::add(vgui_tableau_sptr const& t, float x, float y, float w
   sub.push_back(it);
 
   debug << "id = " << sub.back().id << vcl_endl
-	<< "x  = " << sub.back().x << vcl_endl
-	<< "y  = " << sub.back().y << vcl_endl
-	<< "w  = " << sub.back().w << vcl_endl
-	<< "h  = " << sub.back().h << vcl_endl;
+        << "x  = " << sub.back().x << vcl_endl
+        << "y  = " << sub.back().y << vcl_endl
+        << "w  = " << sub.back().w << vcl_endl
+        << "h  = " << sub.back().h << vcl_endl;
 
   return counter;
 }
@@ -269,21 +269,21 @@ bool vgui_polytab_base::handle(GLint const vp[4], vgui_event const &e) {
       sub[i].tab && sub[i].tab->handle(e);
 
       if (e.type == vgui_DRAW) {
-	// draw border of child.
-	vgui_matrix_state::identity_gl_matrices();
+        // draw border of child.
+        vgui_matrix_state::identity_gl_matrices();
         glColor3f(sub[i].outline_color[0], sub[i].outline_color[1], sub[i].outline_color[2]);
-	glLineWidth(1);	
-	glMatrixMode(GL_PROJECTION);
-	glLoadIdentity();
-	glMatrixMode(GL_MODELVIEW);
-	glLoadIdentity();
-	glOrtho(0, vp[2], 0, vp[3], -1, +1);
-	glBegin(GL_LINE_LOOP);
-	glVertex2d(      0, 0);
-	glVertex2d(vp[2]-1, 0);
-	glVertex2d(vp[2]-1, vp[3]-1);
-	glVertex2d(      0, vp[3]-1);
-	glEnd();
+        glLineWidth(1);	
+        glMatrixMode(GL_PROJECTION);
+        glLoadIdentity();
+        glMatrixMode(GL_MODELVIEW);
+        glLoadIdentity();
+        glOrtho(0, vp[2], 0, vp[3], -1, +1);
+        glBegin(GL_LINE_LOOP);
+        glVertex2d(      0, 0);
+        glVertex2d(vp[2]-1, 0);
+        glVertex2d(vp[2]-1, vp[3]-1);
+        glVertex2d(      0, vp[3]-1);
+        glEnd();
       }
     }
 
@@ -299,8 +299,8 @@ bool vgui_polytab_base::handle(GLint const vp[4], vgui_event const &e) {
       PM.restore();
       sub[i].set_vp(vp);
       if (sub[i].tab && sub[i].tab->handle(e)) {
-	handled = true;
-	break;
+        handled = true;
+        break;
       }
     }
     return handled;
@@ -350,7 +350,7 @@ bool vgui_polytab::handle(vgui_event const &e) {
     if (may_switch_child) {
       int active = get_active(snap.vp, e.wx, e.wy);
       if (active!=-1 && active!=get_current())
-	set_current(snap.vp, active);
+        set_current(snap.vp, active);
     }
 
     // pass to base class
