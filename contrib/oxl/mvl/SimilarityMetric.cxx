@@ -110,12 +110,11 @@ vcl_ostream& SimilarityMetric::print(vcl_ostream& s) const
   return s<<"[SimilarityMetric ("<<_centre_x<<","<<_centre_y<<"), "<<_inv_scale << "]";
 }
 
-// @{ IMPLEMENTATION OF ImageMetric @}
+// IMPLEMENTATION OF ImageMetric
 
-//: @{ Convert 2D point $(x,y)$ to homogeneous coordinates.
+//: Convert 2D point $(x,y)$ to homogeneous coordinates.
 // The precise transformation is
 // $(x,y) \rightarrow (x - cx, y - cy, f)$
-// @}
 HomgPoint2D SimilarityMetric::image_to_homg(double x, double y)
 {
   double nx = x;
@@ -160,7 +159,7 @@ HomgPoint2D SimilarityMetric::imagehomg_to_homg(const HomgPoint2D& x)
 
 //: Compute distance (in image coordinates) between points
 // supplied in conditioned coordinates.
-double SimilarityMetric::distance_squared(const HomgPoint2D& p1, const HomgPoint2D& p2)
+double SimilarityMetric::distance_squared(HomgPoint2D const& p1, HomgPoint2D const& p2)
 {
   // ho_triveccam_noaspect_distance_squared
   double x1 = p1.get_x() / p1.get_w();
