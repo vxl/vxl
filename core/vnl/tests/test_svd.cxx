@@ -23,12 +23,12 @@ vnl_matrix<double> solve_with_warning(const vnl_matrix<double>& M,
 }
 
 template <class T, class S>
-void test_hilbert(T dummy, char * type, S residual)
+void test_hilbert(T dummy, char const* type, S residual)
 {
   // Test inversion and recomposition of 5x5 hilbert matrix
   vnl_matrix<T> H(5,5);
-  for(int i = 0; i < 5; ++i)
-    for(int j = 0; j < 5; ++j)
+  for (int i = 0; i < 5; ++i)
+    for (int j = 0; j < 5; ++j)
       H(i,j) = 1.0 / (i+j+1); // sic, because i,j are zero based
 
   vcl_cout << "H = <"<<type<<">[ " << H << "]\n";
@@ -48,7 +48,7 @@ void test_hilbert(T dummy, char * type, S residual)
   I.fill_diagonal(1.0);
 
   vnl_matrix<T> res = X - I;
-  vcl_cout << "Hilbert recomposition residual" << res.fro_norm() << vcl_endl;
+  vcl_cout << "Hilbert recomposition residual = " << res.fro_norm() << vcl_endl;
   vnl_test_assert("Hilbert recomposition residual", res.fro_norm() < residual);
 }
 
@@ -61,7 +61,7 @@ void test_ls()
 
   // Generate parabola design matrix
   vnl_matrix<double> D(100, 3);
-  for(int n = 0; n < 100; ++n) {
+  for (int n = 0; n < 100; ++n) {
     double x = n;
     D(n, 0) = x*x;
     D(n, 1) = x;
@@ -70,12 +70,12 @@ void test_ls()
 
   // Generate Y vector
   vnl_vector<double> y(100);
-  {for(int n = 0; n < 100; ++n) {
+  for (int n = 0; n < 100; ++n) {
     double x = n;
     double fx = a * x * x + b * x + c;
     // Add sawtooth "noise"
     y(n) = fx + (n%4 - 2) / 10.0;
-  }}
+  }
   vcl_cout << "y = [" << y << "]\n";
 
   // Extract vnl_svd<double>
