@@ -15,6 +15,7 @@
 // \verbatim
 // Modifications
 // PDA (Manchester) 21/03/2001: Tidied up the documentation
+//   Feb.2002 - Peter Vanroose - brief doxygen comment placed on single line
 // \endverbatim
 
 
@@ -130,8 +131,7 @@ public:
     : vul_arg_base(option_string,helpstring),
       value_(default_value) { settype(); }
 
-  //: As above, but add the arg to the list \a l, on which
-  // \c parse() can be called later.
+  //: As above, but add the arg to the list \a l, on which \c parse() can be called later.
   vul_arg(vul_arg_info_list & l,
           char const * option_string = 0,
           char const * helpstring = 0,
@@ -139,8 +139,7 @@ public:
     : vul_arg_base(l, option_string, helpstring),
       value_(default_value) { settype(); }
 
-  //: return the arg's current value, whether the default or the one from the
-  // command line.
+  //: return the arg's current value, whether the default or the one from the command line.
   T      & operator () () { return value_; }
   T const& operator () () const { return value_; }
   //operator T& () { return value_; }

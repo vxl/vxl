@@ -2,6 +2,9 @@
 #pragma implementation
 #endif
 
+//:
+//  \file
+
 #include "FMatrixPlanar.h"
 
 #include <vcl_cassert.h>
@@ -80,10 +83,9 @@ FMatrixPlanar::get_rank2_truncated()
 
 //--------------------------------------------------------------
 //
-//: Set the fundamental matrix using the two-dimensional
-// array f_matrix. Only returns true if f_matrix contained a
-// planar matrix, not an approximation to one.
-// Otherwise returns false and the matrix is not set.
+//: Set the fundamental matrix using the two-dimensional array f_matrix.
+// Only returns true if f_matrix contained a planar matrix, not an
+// approximation to one. Otherwise returns false and the matrix is not set.
 // Patch on FMatrixSkew::set (const vnl_matrix<double>& f_matrix ).
 
 bool FMatrixPlanar::set (const double* f_matrix )
@@ -95,11 +97,10 @@ bool FMatrixPlanar::set (const double* f_matrix )
 
 //--------------------------------------------------------------
 //
-//: Set the fundamental matrix using the vnl_matrix<double>
-// f_matrix. Only returns true if f_matrix contained a
-// planar matrix, not an approximation to one.
-// The test is against a Rank 2 constraint for
-// both @{${\tt F}$@} and the symmetric part @{\(({\tt F}+{\tt F}^\top)\)@}.
+//: Set the fundamental matrix using the vnl_matrix<double> f_matrix.
+// Only returns true if f_matrix contained a planar matrix, not an
+// approximation to one. The test is against a Rank 2 constraint for
+// both ${\tt F}$ and the symmetric part ({\tt F}+{\tt F}^\top).
 // Otherwise returns false and the matrix is not set.
 
 inline bool
@@ -176,8 +177,8 @@ FMatrixPlanar::set_rank2_flag (bool) const
 
 //----------------------------------------------------------------
 //
-//: Initilises the FMatrixPlanar using a general fundamental matrix F
-// by finding the nearest planar fundamental matrix to F.
+//: Initilises the FMatrixPlanar using a general fundamental matrix F.
+// Does so by finding the nearest planar fundamental matrix to F.
 // This should be used prior to FMPlanarComputeNonLinear to give
 // a initial value for the non-linear minimisation.
 // This function is rreuiqred as trying to set FMatrixPlanar using a

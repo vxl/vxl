@@ -1,9 +1,10 @@
 #ifdef __GNUC__
 #pragma implementation
 #endif
-//
+//:
+// \file
 // vnl_cholesky
-// Author: Andrew W. Fitzgibbon, Oxford RRG
+// \author Andrew W. Fitzgibbon, Oxford RRG
 // Created: 08 Dec 96
 //
 //-----------------------------------------------------------------------------
@@ -14,7 +15,8 @@
 #include <vcl_iostream.h>
 #include <vnl/algo/vnl_netlib.h> // dpofa_(), dposl_(), dpoco_(), dpodi_()
 
-//: Make cholesky decomposition of M optionally computing
+//: Cholesky decomposition.
+// Make cholesky decomposition of M optionally computing
 // the reciprocal condition number.  If mode is estimate_condition, the
 // condition number and an approximate nullspace are estimated, at a cost
 // of a factor of (1 + 18/n).  Here's a table of 1 + 18/n:
@@ -44,8 +46,9 @@ vnl_cholesky::vnl_cholesky(vnl_matrix<double> const & M, Operation mode):
   }
 }
 
-//: Solve least squares problem M x = b.  The right-hand-side vcl_vector x may be
-// b, which will give a fractional increase in speed.
+//: Solve least squares problem M x = b.
+//  The right-hand-side vcl_vector x may be b,
+//  which will give a fractional increase in speed.
 void vnl_cholesky::solve(vnl_vector<double> const& b, vnl_vector<double>* x) const
 {
   unsigned n = A_.columns();

@@ -2,6 +2,9 @@
 #pragma implementation
 #endif
 
+//:
+//  \file
+
 #include <vcl_iostream.h>
 #include <vcl_vector.h>
 #include <vnl/vnl_double_3.h>
@@ -44,7 +47,8 @@ ProjectiveBasis2D::~ProjectiveBasis2D()
 {
 }
 
-//: Find the transformation which maps the 4 points to the canonical
+//:
+// Find the transformation which maps the 4 points to the canonical
 // projective frame using the linear method of [Beardsley et. al., ECCV96].
 // If three of the four points are nearly collinear, an error message is
 // printed, but the computation is still carried out.

@@ -13,11 +13,12 @@
 // \verbatim
 // Modifications
 //  dac (Manchester) 28/03/2001: tidied up documentation
+//   Feb.2002 - Peter Vanroose - brief doxygen comment placed on single line
 // \endverbatim
 
 #include <vnl/vnl_diag_matrix.h>
 
-//: Solves the generalized eigenproblem Ax=La
+//: Solves the generalized eigenproblem Ax=Bx
 //  Solves the generalized eigenproblem of $A x = \lambda B x$,
 //  with $A$ symmetric and $B$ positive definite. \n
 //  See Golub and van Loan, Section 8.7.
@@ -27,7 +28,8 @@ public:
 // Public data members because they're unique.
   int n;
 
-//: Solve real generalized eigensystem $A x = \lambda B x$ for
+//: Solves the generalized eigenproblem Ax=Bx
+//  Solve real generalized eigensystem $A x = \lambda B x$ for
 //  $\lambda$ and $x$, where $A$ symmetric, $B$ positive definite.
 //  Initializes storage for the matrix $V = [ x_0 x_1 .. x_n ]$ and
 //  the vnl_diag_matrix $D = [ \lambda_0 \lambda_1 ... \lambda_n ]$.
@@ -42,12 +44,12 @@ public:
   vnl_generalized_eigensystem(const vnl_matrix<double>& A,
         const vnl_matrix<double>& B);
 
-//: Public eigenvectors.  After construction, this contains the matrix of
-// eigenvectors.
+//: Public eigenvectors.
+//  After construction, this contains the matrix of eigenvectors.
   vnl_matrix<double> V;
 
-//: Public eigenvalues.  After construction, this contains the diagonal
-// matrix of eigenvalues, stored as a vector.
+//: Public eigenvalues.
+//  After construction, this contains the diagonal matrix of eigenvalues, stored as a vector.
   vnl_diag_matrix<double> D;
 };
 

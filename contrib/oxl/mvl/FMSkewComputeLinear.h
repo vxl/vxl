@@ -28,7 +28,7 @@
 //     Martin Armstrong, Oxford RRG, 20 Nov 96
 //
 // .SECTION Modifications:
-//     <none yet>
+//   Feb.2002 - Peter Vanroose - brief doxygen comment placed on single line
 //
 //-----------------------------------------------------------------------------
 
@@ -38,8 +38,8 @@ class FMatrixSkew;
 
 class FMSkewComputeLinear : public FMatrixCompute {
 public:
-  //: Initialize FMSkewComputeLinear object.  If precondition = false,
-  // points are not conditioned prior to computation.
+  //: Initialize FMSkewComputeLinear object.
+  //  If precondition = false, points are not conditioned prior to computation.
   FMSkewComputeLinear(bool precondition = true);
 
   // Computations--------------------------------------------------------------

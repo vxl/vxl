@@ -2,6 +2,10 @@
 #ifndef vgl_line_2d_txx_
 #define vgl_line_2d_txx_
 
+
+//:
+// \file
+
 #include <vcl_iostream.h>
 #include "vgl_line_2d.h"
 #include <vgl/vgl_point_2d.h>
@@ -24,7 +28,8 @@ vgl_line_2d<Type>::vgl_line_2d (vgl_homg_line_2d<Type> const& l)
   assert(c_);
 }
 
-//: get two points on the line.  These two points are normally the intersections
+//: Get two points on the line.
+// These two points are normally the intersections
 // with the Y axis and X axis, respectively.  When the line is parallel to one
 // of these, the point with y=1 or x=1, resp. are taken.  When the line goes
 // through the origin, the second point is (b, -a).

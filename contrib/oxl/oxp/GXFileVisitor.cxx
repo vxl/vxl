@@ -2,6 +2,9 @@
 #pragma implementation
 #endif
 
+//:
+//  \file
+
 #include "GXFileVisitor.h"
 
 #include <vcl_cctype.h>
@@ -23,8 +26,7 @@ GXFileVisitor::GXFileVisitor()
   line_width = 0;
 }
 
-//: Open ".gx" file specified by filename, parse, and
-// call the various virtuals.
+//: Open ".gx" file specified by filename, parse, and call the various virtuals.
 bool GXFileVisitor::visit(char const* filename)
 {
   vcl_ifstream f(filename);
@@ -56,7 +58,6 @@ struct StringToFloat {
 
   double operator() () { return value; }
   bool ok() { return ok_; }
-
 };
 
 bool GXFileVisitor::visit(vcl_istream& s)
@@ -68,16 +69,22 @@ bool GXFileVisitor::visit(vcl_istream& s)
       continue;
     vcl_string instruction = awk[0];
     StringToFloat instruction_value(instruction.c_str());
-    if (instruction == "r") {        // Set point radius
+    if (instruction == "r")
+    {        // Set point radius
       this->point_radius = vcl_atof(awk[1]);
       this->set_point_radius(this->point_radius);
-
-    } else if (instruction == "p" || (instruction_value.ok() && NF == 2)) { // "p" x y, or just x y
+    }
+    else if (instruction == "p" || (instruction_value.ok() && NF == 2))
+    { // "p" x y, or just x y
       int base = (instruction == "p") ? 1 : 0;
       this->point("p", vcl_atof(awk[base+0]), vcl_atof(awk[base+1]));
-    } else if (instruction == "+") { // + sign
+    }
+    else if (instruction == "+")
+    { // + sign
       this->point("+", vcl_atof(awk[1]), vcl_atof(awk[2]));
-    } else if (instruction == "l" || (instruction_value.ok() && NF == 4)) { // Polyline
+    }
+    else if (instruction == "l" || (instruction_value.ok() && NF == 4))
+    { // Polyline
       bool numbers_only = instruction_value.ok();
       int npoints, base;
       if (numbers_only) {
@@ -166,8 +173,8 @@ bool GXFileVisitor::visit(vcl_istream& s)
       }
 
       this->set_color(color[0], color[1], color[2]);
-
-    } else {
+    }
+    else {
       vcl_cerr << "movie: bad gx line " << awk.line() << vcl_endl;
       return false; //fsm
     }

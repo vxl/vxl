@@ -1,3 +1,7 @@
+
+//:
+// \file
+
 #include "vidl_clip.h"
 
 #include <vcl_iostream.h>
@@ -13,8 +17,7 @@
 //------------------------------------------------------------------------
 // CONSTRUCTOR(S) AND DESTRUCTOR
 
-//: Constructor. Takes a vidl_codec, start, end and increment
-// frames are optional
+//: Constructor. Takes a vidl_codec, start, end and increment frames are optional.
 vidl_clip::vidl_clip(
         vidl_codec_sptr codec,
         int start,
@@ -29,8 +32,7 @@ vidl_clip::vidl_clip(
   init(start, end, increment);
 }
 
-//: Constructor. Create a clip from a vector of
-// images. Start, end and increment frames are optional
+//: Constructor. Create a clip from a vector of images. Start, end and increment frames are optional.
 vidl_clip::vidl_clip(
         vcl_vector<vil_image> &images,
         int start,
@@ -54,8 +56,7 @@ vidl_clip::vidl_clip(
   init(start, end, increment);
 }
 
-//: Constructor. Create a clip from a list of
-// images. Start, end and increment frames are optional
+//: Constructor. Create a clip from a list of images. Start, end and increment frames are optional.
 vidl_clip::vidl_clip(
                      vcl_list<vil_image> &images,
                      int start,
@@ -118,8 +119,7 @@ vidl_clip::~vidl_clip()
 }
 
 
-//: Get the frame numbered n inside the range
-// defined by startframe, endframe and increment.
+//: Get the frame numbered n inside the range defined by startframe, endframe and increment.
 // So, the returned frame is startframe_+n*increment_
 vidl_frame_sptr vidl_clip::get_frame(int n)
 {

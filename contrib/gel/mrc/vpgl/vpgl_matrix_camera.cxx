@@ -1,5 +1,8 @@
 #include <vpgl/vpgl_matrix_camera.h>
 
+//:
+//  \file
+
 #include <vnl/algo/vnl_svd.h>
 
 
@@ -62,8 +65,8 @@ void vpgl_matrix_camera::world_to_image(double x, double y, double z,
 
 #if 0 // image_to_world() commented out
 //-----------------------------------------------------------
-//: the virtual image to world projection.  This implementation
-//    uses two facts: 1) the camera center is given by the null vector
+//: the virtual image to world projection.
+//  This implementation uses two facts: 1) the camera center is given by the null vector
 //    of the projection matrix.  That is, 0 = T*C. Where T is the 3x4
 //    projection matrix and C is the 3-d homegenous position vector, O
 //    is a 3 elment column vector of all zeros.

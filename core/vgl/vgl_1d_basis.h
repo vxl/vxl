@@ -44,6 +44,7 @@
 //
 // \verbatim
 // Modifications
+//   Feb.2002 - Peter Vanroose - brief doxygen comment placed on single line
 // \endverbatim
 
 #include <vgl/vgl_fwd.h>
@@ -100,8 +101,8 @@ public:
   inline bool affine() const { return affine_; }
   inline bool projective() const { return !affine_; }
 
-  //: Construct from three collinear points (projective basis)
-  // which will serve as origin (0,1), unity (1,1) and point at infinity (1,0).
+  //: Construct from three collinear points (projective basis).
+  // It will serve as origin (0,1), unity (1,1) and point at infinity (1,0).
   // The points must be collinear, and different from each other.
   //
   // Note that there is no valid default constructor, since any sensible default
@@ -115,8 +116,8 @@ public:
     : origin_(o), unity_(u), inf_pt_(i), affine_(false)
       { assert(collinear(o,i,u) && o!=i && o!=u && i!=u); }
 
-  //: Construct from two points (affine basis)
-  // which will serve as origin (0,1) and unity point (1,1).
+  //: Construct from two points (affine basis).
+  // It will serve as origin (0,1) and unity point (1,1).
   // The points must be different from each other, and not at infinity.
   // This creates an affine basis, i.e., the point at infinity of the basis
   // will be the point at infinity of the line o-u in the source space.

@@ -3,6 +3,9 @@
 #ifdef __GNUG__
 #pragma interface
 #endif
+//:
+//  \file
+
 #include <vipl/section/vipl_section_descriptor.h>
 
 template < class DataType > class vipl_section_container_2d; //template forward reference
@@ -44,22 +47,26 @@ class vipl_section_descriptor_2d : public vipl_section_descriptor< DataType > {
   vipl_section_descriptor_2d(); //low_level c++ constructor
   //user accessed low_level c++ copy constructor
   vipl_section_descriptor_2d(const vipl_section_descriptor_2d< DataType > &);
-  //: This method takes in an argument called axis (i.e. 0 means the ``x'' axis,
+  //:
+  // This method takes in an argument called axis (i.e. 0 means the ``x'' axis,
   // 1 means ``y'' axis) etc... and returns an integer which describes the start
   // coordinate value for ``x'' (or ``y'' etc..) with respect to the ``image''
   // coordinate system.
   virtual int curr_sec_start( int axis) const;
-  //: This method takes in an argument called axis (i.e. 0 means the ``x'' axis,
+  //:
+  // This method takes in an argument called axis (i.e. 0 means the ``x'' axis,
   // 1 means ``y'' axis) etc... and returns an integer which describes the end
   // coordinate value for ``x'' (or ``y'' etc..) with respect to the ``image''
   // coordinate system.
   virtual int curr_sec_end( int axis) const;
-  //: This method takes in an argument called axis (i.e. 0 means the ``x'' axis,
+  //:
+  // This method takes in an argument called axis (i.e. 0 means the ``x'' axis,
   // 1 means ``y'' axis) etc... and returns an integer which describes the size
   // of the axis (end minus start) for ``x'' (or ``y'' etc..) with respect to
   // the ``image'' coordinate system.
   virtual int curr_sec_size( int axis) const;
-  //: This method takes in an argument called axis (i.e. 0 means the ``x'' axis,
+  //:
+  // This method takes in an argument called axis (i.e. 0 means the ``x'' axis,
   // 1 means ``y'' axis) etc... and returns an integer which describes the
   // offset of the next (i.e. associated with the higher coordinate value) data
   // item along the axis.
@@ -75,10 +82,12 @@ class vipl_section_descriptor_2d : public vipl_section_descriptor< DataType > {
   //: Returns a writable pointer to the ``real'' section descriptor.
   // If this method is called on a concrete instance, it should return 0.
   virtual vipl_section_descriptor< DataType >* inner_descriptor();
-  //: Returns a const pointer to the ``real'' section descriptor. If this method
+  //:
+  // Returns a const pointer to the ``real'' section descriptor. If this method
   // is called on a concrete instance, it should return 0.
   virtual const vipl_section_descriptor< DataType >* inner_descriptor() const;
-  //: Makes a new correct copy. It's just a bit more tricky because descriptors
+  //:
+  // Makes a new correct copy. It's just a bit more tricky because descriptors
   // have pointers to its ``real instance.''
  protected:
   virtual vipl_section_descriptor< DataType >* virtual_copy() const;

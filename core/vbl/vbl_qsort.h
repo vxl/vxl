@@ -15,6 +15,7 @@
 // Modifications
 // 971119 AWF Initial version
 // PDA (Manchester) 23/03/2001: Tidied up the documentation
+//   Feb.2002 - Peter Vanroose - brief doxygen comment placed on single line
 // \endverbatim
 
 
@@ -37,8 +38,9 @@
 
 typedef int (*vbl_qsort_compare_t)(const void* a, const void* b);
 
-//: Sort a C array into ascending order, using the standard comparison
-// operations for T, namely operator> and operator==.
+//: Sort a C array into ascending order.
+//  Do this using the standard comparison operations for T,
+//  namely operator> and operator==.
 template <class T>
 inline
 void vbl_qsort_ascending(T* base, int n)
@@ -50,8 +52,9 @@ void vbl_qsort_ascending(T* base, int n)
 #endif
 }
 
-//: Sort a C array into descending order, using the standard comparison
-// operations for T, namely "operator>" and "operator==".
+//: Sort a C array into descending order.
+//  Do this using the standard comparison operations for T,
+//  namely "operator>" and "operator==".
 template <class T>
 inline
 void vbl_qsort_descending(T* base, int n)
@@ -63,9 +66,10 @@ void vbl_qsort_descending(T* base, int n)
 #endif
 }
 
-//: Sort an STL vector into ascending order, using the standard comparison
-// operations for T, namely operator> and operator==.  I know STL has a sort,
-// but this is easier, and faster in the 20th century.
+//: Sort an STL vector into ascending order.
+// Do this using the standard comparison operations for T,
+// namely operator> and operator==.  I know STL has a sort,
+// but this is easier, and faster in the 21st century.
 template <class T>
 inline
 void vbl_qsort_ascending(vcl_vector<T>& v)
@@ -77,8 +81,9 @@ void vbl_qsort_ascending(vcl_vector<T>& v)
 #endif
 }
 
-//: Sort an STL vector into descending order, using the standard comparison
-// operations for T, namely "operator>" and "operator==".
+//: Sort an STL vector into descending order.
+// Do this using the standard comparison operations for T,
+// namely "operator>" and "operator==".
 template <class T>
 inline
 void vbl_qsort_descending(vcl_vector<T>& v)

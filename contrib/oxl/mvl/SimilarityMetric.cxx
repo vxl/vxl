@@ -2,6 +2,9 @@
 #pragma implementation
 #endif
 
+//:
+//  \file
+
 #include "SimilarityMetric.h"
 
 #include <vcl_iostream.h>
@@ -24,8 +27,7 @@ SimilarityMetric::SimilarityMetric()
   make_matrices();
 }
 
-//: Create a SimilarityMetric that transforms according to
-// (x,y) -> (x - cx, y - cy) * scale
+//: Create a SimilarityMetric that transforms according to (x,y) -> (x - cx, y - cy) * scale
 SimilarityMetric::SimilarityMetric(double cx, double cy, double scale)
 {
   _centre_x = cx;
@@ -36,8 +38,7 @@ SimilarityMetric::SimilarityMetric(double cx, double cy, double scale)
   make_matrices();
 }
 
-//: Create a SimilarityMetric that transforms coordinates in the
-// range (0..xsize, 0..ysize) to the square (-1..1, -1..1)
+//: Create a SimilarityMetric that transforms coordinates in the range (0..xsize, 0..ysize) to the square (-1..1, -1..1)
 SimilarityMetric::SimilarityMetric(int xsize, int ysize)
 {
   set_from_rectangle(xsize, ysize);
@@ -141,24 +142,21 @@ HomgPoint2D SimilarityMetric::image_to_homg(const vnl_double_2& p)
   return image_to_homg(p.x(), p.y());
 }
 
-//: Transform homogeneous point to image coordinates, leaving it in
-// homogeneous form.
+//: Transform homogeneous point to image coordinates, leaving it in homogeneous form.
 HomgPoint2D SimilarityMetric::homg_to_imagehomg(const HomgPoint2D& x)
 {
   // ho_cam2std_aspect_point
   return HomgPoint2D(cond_matrix * x.get_vector());
 }
 
-//: Transform homogeneous point in image coordinates to conditioned
-// coordinates.
+//: Transform homogeneous point in image coordinates to conditioned coordinates.
 HomgPoint2D SimilarityMetric::imagehomg_to_homg(const HomgPoint2D& x)
 {
   // ho_std2cam_aspect_point
   return HomgPoint2D(inv_cond_matrix * x.get_vector());
 }
 
-//: Compute distance (in image coordinates) between points
-// supplied in conditioned coordinates.
+//: Compute distance (in image coordinates) between points supplied in conditioned coordinates.
 double SimilarityMetric::distance_squared(HomgPoint2D const& p1, HomgPoint2D const& p2)
 {
   // ho_triveccam_noaspect_distance_squared
@@ -171,8 +169,7 @@ double SimilarityMetric::distance_squared(HomgPoint2D const& p1, HomgPoint2D con
   return vnl_math_sqr (_inv_scale) * (vnl_math_sqr (x1 - x2) + vnl_math_sqr (y1 - y2));
 }
 
-//: Compute perpendicular distance (in image coordinates) from
-// point to line (supplied in conditioned coordinates)
+//: Compute perpendicular distance (in image coordinates) from point to line (supplied in conditioned coordinates).
 double SimilarityMetric::perp_dist_squared(HomgPoint2D const & p, HomgLine2D const & l)
 {
   // ho_triveccam_aspect_perpdistance_squared

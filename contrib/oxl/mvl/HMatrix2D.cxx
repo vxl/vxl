@@ -2,6 +2,9 @@
 #pragma implementation
 #endif
 
+//:
+//  \file
+
 #include "HMatrix2D.h"
 
 #include <vcl_fstream.h>
@@ -69,7 +72,7 @@ HMatrix2D::~HMatrix2D()
 
 //-----------------------------------------------------------------------------
 //
-//: Return the transformed point given by @{$ x_2 = {\tt H} x_1 $@}
+//: Return the transformed point given by $ x_2 = {\tt H} x_1 $.
 
 HomgPoint2D HMatrix2D::transform_to_plane2(const HomgPoint2D& x1) const
 {
@@ -79,7 +82,7 @@ HomgPoint2D HMatrix2D::transform_to_plane2(const HomgPoint2D& x1) const
 
 //-----------------------------------------------------------------------------
 //
-//: Return the transformed line given by @{$ l_1 = {\tt H}^\top l_2 $@}
+//: Return the transformed line given by $ l_1 = {\tt H}^\top l_2 $.
 
 HomgLine2D HMatrix2D::transform_to_plane1(const HomgLine2D& l2) const
 {
@@ -191,8 +194,7 @@ HMatrix2D HMatrix2D::get_inverse() const
   return svd.inverse();
 }
 
-//: Return new axis-aligned bounding box after (x0,y0) -> (x1,y1) have been
-// premultiplied by H.
+//: Return new axis-aligned bounding box after (x0,y0) -> (x1,y1) have been premultiplied by H.
 vnl_double_4 HMatrix2D::transform_bounding_box(double x0, double y0, double x1, double y1)
 {
   vcl_cerr << "FIXME: HMatrix2D::transform_bounding_box() is not yet implemented\n";

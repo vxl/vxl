@@ -5,7 +5,8 @@
 #endif
 // This is vxl/vnl/vnl_fastops.h
 
-//: \file
+//:
+//  \file
 //  \brief Collection of C-style matrix functions
 //  \author Andrew W. Fitzgibbon, Oxford RRG
 //  \date   09 Dec 96
@@ -13,14 +14,15 @@
 // \verbatim
 //   Modifications
 //   LSB (Manchester) 23/3/01 Tidied documentation
+//   Feb.2002 - Peter Vanroose - brief doxygen comment placed on single line
 // \endverbatim
 
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_matrix.h>
-//:    Collection of C-style matrix functions for the most
-//    time-critical applications.  In general, however one should consider
-//    using the vnl_transpose envelope-letter class to achieve the same results
-//    with about a 10% speed penalty.
+
+//: Collection of C-style matrix functions for the most time-critical applications.
+// In general, however one should consider using the vnl_transpose envelope-letter
+// class to achieve the same results with about a 10% speed penalty.
 class vnl_fastops {
 public:
   static void AtA(const vnl_matrix<double>& A, vnl_matrix<double>* out);

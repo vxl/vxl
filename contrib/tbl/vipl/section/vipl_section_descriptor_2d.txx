@@ -1,6 +1,9 @@
 #ifndef vipl_section_descriptor_2d_txx_
 #define vipl_section_descriptor_2d_txx_
 
+//:
+//  \file
+
 #include <vipl/section/vipl_section_descriptor_2d.h>
 #include <vipl/section/vipl_section_iterator.h>
 #include <vipl/section/vipl_section_container.h>
@@ -95,7 +98,8 @@ vipl_section_descriptor_2d< DataType > ::vipl_section_descriptor_2d(const vipl_s
       //knowing their form.
 }
 
-//: This method takes in an argument called axis (i.e. 0 means the ``x'' axis,
+//:
+// This method takes in an argument called axis (i.e. 0 means the ``x'' axis,
 // 1 means ``y'' axis etc...) and returns an integer which describes the start
 // coordinate value for ``x'' (or ``y'' etc..) with respect to the ``image''
 // coordinate system
@@ -104,7 +108,8 @@ int vipl_section_descriptor_2d< DataType > ::curr_sec_start( int axis) const
 {
 }
 
-//: This method takes in an argument called axis (i.e. 0 means the ``x'' axis,
+//:
+// This method takes in an argument called axis (i.e. 0 means the ``x'' axis,
 // 1 means ``y'' axis etc...) and returns an integer which describes the end
 // coordinate value for ``x'' (or ``y'' etc..) with respect to the ``image''
 // coordinate system
@@ -113,7 +118,8 @@ int vipl_section_descriptor_2d< DataType > ::curr_sec_end( int axis) const
 {
 }
 
-//: This method takes in an argument called axis (i.e. 0 means the ``x'' axis,
+//:
+// This method takes in an argument called axis (i.e. 0 means the ``x'' axis,
 // 1 means ``y'' axis etc...) and returns an integer which describes the size
 // of the axis (end minus start) for ``x'' (or ``y'' etc..) with respect to the
 // ``image'' coordinate system
@@ -122,7 +128,8 @@ int vipl_section_descriptor_2d< DataType > ::curr_sec_size( int axis) const
 {
 }
 
-//: This method takes in an argument called axis (i.e. 0 means the ``x'' axis,
+//:
+// This method takes in an argument called axis (i.e. 0 means the ``x'' axis,
 // 1 means ``y'' axis etc...) and returns an integer which describes the offset
 // of the next (i.e. associated with the higher coordinate value) data item
 // along the axis.

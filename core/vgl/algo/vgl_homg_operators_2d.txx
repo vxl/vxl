@@ -2,6 +2,10 @@
 #ifndef vgl_homg_operators_2d_txx_
 #define vgl_homg_operators_2d_txx_
 
+
+//:
+// \file
+
 #include <vcl_cassert.h>
 #include <vcl_iostream.h>
 #include <vcl_cmath.h> // for vcl_sqrt()
@@ -94,7 +98,6 @@ vnl_vector<T> vgl_homg_operators_2d<T>::get_vector(vgl_conic<T> const& c)
 
 //-----------------------------------------------------------------------------
 //: Normalize vgl_homg_point_2d<T> to unit magnitude
-
 template <class T>
 void vgl_homg_operators_2d<T>::unitize(vgl_homg_point_2d<T>& a)
 {
@@ -134,10 +137,9 @@ vgl_homg_operators_2d<T>::distance_squared(
 //: Get the square of the perpendicular distance to a line.
 // This is just the homogeneous form of the familiar
 // \f$ \frac{a x + b y + c}{\sqrt{a^2+b^2}} \f$ :
-// \[ d = \frac{(l^\top p)}{p_z\sqrt{l_x^2 + l_y^2}} \]
+// \f\[ d = \frac{(l^\top p)}{p_z\sqrt{l_x^2 + l_y^2}} \f\]
 // If either the point or the line are at infinity an error message is
 // printed and Homg::infinity is returned.
-
 template <class T>
 double
 vgl_homg_operators_2d<T>::perp_dist_squared(
@@ -193,13 +195,12 @@ vgl_homg_operators_2d<T>::abs_angle(const vgl_homg_line_2d<T>& line1,
 
 //-----------------------------------------------------------------------------
 //
-//: Get the angle between two lines.  Although homogeneous coordinates are
+//: Get the angle between two lines.
+// Although homogeneous coordinates are
 // only defined up to scale, here it is assumed that a line with homogeneous
 // coordinates (m) is at 180 degrees to a line (-m), and this is why the term
 // "oriented_line" is used.  However, the overall scale (apart from sign) is
 // not significant.
-//
-
 template <class T>
 double
 vgl_homg_operators_2d<T>::angle_between_oriented_lines(
@@ -237,11 +238,9 @@ vgl_homg_operators_2d<T>::join (const vgl_homg_point_2d<T>& p1,
 
 //-----------------------------------------------------------------------------
 //
-//: Get the line through two points (the cross-product).  In this case, we assume
-// that the points are oriented, and ensure the cross is computed with positive point
-// omegas.
-//
-
+//: Get the line through two points (the cross-product).
+// In this case, we assume that the points are oriented, and ensure the
+// cross is computed with positive point omegas.
 template <class T>
 vgl_homg_line_2d<T>
 vgl_homg_operators_2d<T>::join_oriented(const vgl_homg_point_2d<T>&p1,
@@ -259,8 +258,6 @@ vgl_homg_operators_2d<T>::join_oriented(const vgl_homg_point_2d<T>&p1,
 //-----------------------------------------------------------------------------
 //
 //: Get the intersection point of two lines (the cross-product).
-//
-
 template <class T>
 vgl_homg_point_2d<T>
 vgl_homg_operators_2d<T>::intersection ( const vgl_homg_line_2d<T>& l1,
@@ -275,12 +272,8 @@ vgl_homg_operators_2d<T>::intersection ( const vgl_homg_line_2d<T>& l1,
 // Params are line \f$(a,b,c)\f$ and point \f$(x,y,1)\f$.
 // Then the cross product of \f$(x,y,1)\f$ and the line's direction \f$(a,b,0)\f$,
 // called \f$(p,q,r)\f$ satisfies
-//
-//   \f$ap+bq=0\f$ (perpendicular condition) and
-//
-//   \f$px+qy+r=0\f$ (incidence condition).
-
-
+// - \f$ap+bq=0\f$ (perpendicular condition) and
+// - \f$px+qy+r=0\f$ (incidence condition).
 template <class T>
 vgl_homg_line_2d<T>
 vgl_homg_operators_2d<T>::perp_line_through_point ( const vgl_homg_line_2d<T>& l,
@@ -293,8 +286,6 @@ vgl_homg_operators_2d<T>::perp_line_through_point ( const vgl_homg_line_2d<T>& l
 //-----------------------------------------------------------------------------
 //
 //: Get the perpendicular projection of point onto line.
-//
-
 template <class T>
 vgl_homg_point_2d<T> vgl_homg_operators_2d<T>::perp_projection(
                                   const vgl_homg_line_2d<T>& line,
@@ -403,7 +394,6 @@ double vgl_homg_operators_2d<T>::perp_distance_squared(const vgl_homg_line_2d<T>
 // can be used as parameters for cross_ratio (but of course the same for all
 // points). The most reliable answer will be obtained when the coordinate with
 // the largest spacing is used, i.e., the one with smallest slope.
-//
 template <class T>
 double vgl_homg_operators_2d<T>::cross_ratio(const vgl_homg_point_2d<T>& a,
                                              const vgl_homg_point_2d<T>& b,
@@ -448,7 +438,6 @@ vgl_homg_point_2d<T> vgl_homg_operators_2d<T>::conjugate(
 //                    [ B/2 C  E/2 ]
 //                    [ D/2 E/2 F  ]
 // \endverbatim
-
 template <class T>
 vgl_conic<T>
 vgl_homg_operators_2d<T>::vgl_conic_from_matrix(vnl_matrix<T> const& mat)
@@ -457,7 +446,7 @@ vgl_homg_operators_2d<T>::vgl_conic_from_matrix(vnl_matrix<T> const& mat)
   return vgl_conic<T>(mat[0][0], mat[1][0]+mat[0][1], mat[1][1], mat[0][2]+mat[2][0], mat[1][2]+mat[2][1], mat[2][2]);
 }
 
-//: returns 3x3 matrix containing conic coefficients:
+//: returns 3x3 matrix containing conic coefficients.
 // \verbatim
 // [A,B,C,D,E,F] ->   [ A  B/2 D/2 ]
 //                    [ B/2 C  E/2 ]
@@ -480,9 +469,9 @@ vgl_homg_operators_2d<T>::matrix_from_conic(vgl_conic<T> const& c)
 
 
 //-------------------------------------------------------------------------
-//: returns 3x3 matrix containing conic coefficients of dual conic, i.e.,
-// the inverse matrix (up to a scale factor) of the conic matrix.
-//
+//: returns 3x3 matrix containing conic coefficients of dual conic.
+// I.e., the inverse matrix (up to a scale factor) of the conic matrix.
+
 template <class T>
 vnl_matrix<T>
 vgl_homg_operators_2d<T>::matrix_from_dual_conic(vgl_conic<T> const& c)

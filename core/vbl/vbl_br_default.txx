@@ -2,6 +2,9 @@
 #ifndef vbl_br_default_txx_
 #define vbl_br_default_txx_
 
+//:
+// \file
+
 #include "vbl_br_default.h"
 #include <vbl/vbl_basic_optional.h>
 #include <vcl_cassert.h>
@@ -117,9 +120,9 @@ void vbl_br_default_iter<T1,T2,T3,T4,T5>::incr()
 }
 
 //------------------------------------------------------------
-//: Compare two iterators.  Since these are both from the same
-// relation, and tuples are unique within the relation, we can just
-// compare the addresses of tuples.
+//: Compare two iterators.
+//  Since these are both from the same relation, and tuples are unique within
+// the relation, we can just compare the addresses of tuples.
 template <class T1, class T2, class T3, class T4, class T5>
 bool vbl_br_default_iter<T1,T2,T3,T4,T5>::compare(vbl_br_iter_impl<T1,T2,T3,T4,T5> const& i) const
 {
@@ -127,9 +130,9 @@ bool vbl_br_default_iter<T1,T2,T3,T4,T5>::compare(vbl_br_iter_impl<T1,T2,T3,T4,T
 }
 
 //------------------------------------------------------------
-//: Step iterator through relation until match is valid.  Starts by
-// testing the current position, so this does not necessarily perform
-// an increment.
+//: Step iterator through relation until match is valid.
+//  Starts by testing the current position, so this does not necessarily
+// perform an increment.
 template <class T1, class T2, class T3, class T4, class T5>
 void vbl_br_default_iter<T1,T2,T3,T4,T5>::FindMatch()
 {
@@ -211,8 +214,8 @@ vbl_br_iter_impl<T1,T2,T3,T4,T5>* vbl_br_default_wild_iter<T1,T2,T3,T4,T5>::copy
 }
 
 //------------------------------------------------------------
-//: Dereference to return the current tuple.  Returns a pointer,
-// which is null if dereference is invalid for current position.
+//: Dereference to return the current tuple.
+//  Returns a pointer, which is null if dereference is invalid for current position.
 template <class T1, class T2, class T3, class T4, class T5>
 vbl_basic_tuple<T1,T2,T3,T4,T5>* vbl_br_default_wild_iter<T1,T2,T3,T4,T5>::deref() const
 {
@@ -392,8 +395,8 @@ bool vbl_br_default<T1,T2,T3,T4,T5>::Remove(vbl_basic_tuple<T1,T2,T3,T4,T5> cons
 }
 
 //------------------------------------------------------------
-//: Remove the tuples matching a where clause.  This uses wild cards
-// to search.  Return true if at least one tuple removed.
+//: Remove the tuples matching a where clause.
+//  This uses wild cards to search.  Return true if at least one tuple removed.
 template <class T1, class T2, class T3, class T4, class T5>
 bool vbl_br_default<T1,T2,T3,T4,T5>::Remove(vbl_basic_relation_where<T1,T2,T3,T4,T5> const& w)
 {
@@ -442,8 +445,7 @@ vbl_br_iter_impl<T1,T2,T3,T4,T5>* vbl_br_default<T1,T2,T3,T4,T5>::end(vbl_basic_
 }
 
 //------------------------------------------------------------
-//: Get the number of tuples in this relation which match the where
-// clause.
+//: Get the number of tuples in this relation which match the where clause.
 template <class T1, class T2, class T3, class T4, class T5>
 int vbl_br_default<T1,T2,T3,T4,T5>::size(vbl_basic_relation_where<T1,T2,T3,T4,T5> const& w)
 {
@@ -489,8 +491,9 @@ void* vbl_br_default<T1,T2,T3,T4,T5>::This()
 }
 
 //------------------------------------------------------------
-//: Add a tuple.  This method is used in the constructor hence it is
-// non-virtual.  Return false if tuple is already present.
+//: Add a tuple.
+//  This method is used in the constructor hence it is non-virtual.
+// Return false if tuple is already present.
 template <class T1, class T2, class T3, class T4, class T5>
 bool vbl_br_default<T1,T2,T3,T4,T5>::DoInsert(vbl_basic_tuple<T1,T2,T3,T4,T5> const& t)
 {
@@ -601,8 +604,8 @@ vbl_br_impl<T1,T2,T3,T4,T5>* vbl_br_default_factory<T1,T2,T3,T4,T5>::Generate(vc
 }
 
 //------------------------------------------------------------
-//: Check whether the implementation is empty, and only protected
-// here.  If so then remove and delete it.
+//: Check whether the implementation is empty, and only protected here.
+//  If so then remove and delete it.
 template <class T1, class T2, class T3, class T4, class T5>
 void vbl_br_default_factory<T1,T2,T3,T4,T5>::CheckEmpty(vbl_br_impl<T1,T2,T3,T4,T5>* impl)
 {

@@ -19,6 +19,7 @@
 //  Peter Vanroose, Jul 10 2001: Deprecated get_*() in favour of *(), and explicit casts
 //  NPC (Manchester) 14/03/2001: Tidied up the documentation + added binary_io
 //  Peter Vanroose, Feb 28 2000: lots of minor corrections
+//   Feb.2002 - Peter Vanroose - brief doxygen comment placed on single line
 // \endverbatim
 
 #include <vcl_iosfwd.h>
@@ -142,7 +143,7 @@ public:
 
   //: (min_x,min_y,min_z)
   vgl_point_3d<Type> min_point() const;
-  
+
   //: (max_x,max_y,max_z)
   vgl_point_3d<Type> max_point() const;
 
@@ -153,8 +154,8 @@ public:
     return (min_x() > max_x() || min_y() > max_y() || min_z() > max_z());
   }
 
-  //: Add a point to this box, by possibly enlarging the box
-  // so that the point just falls within the box.
+  //: Add a point to this box.
+  // Do this by possibly enlarging the box so that the point just falls within the box.
   // Adding a point to an empty box makes it a size zero box only containing p.
   void add(vgl_point_3d<Type> const& p);
 

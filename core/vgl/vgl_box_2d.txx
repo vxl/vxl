@@ -255,8 +255,8 @@ vgl_box_2d<Type> intersect(vgl_box_2d<Type> const& a, vgl_box_2d<Type> const& b)
     return vgl_box_2d<Type> (1,0,1,0);
 }
 
-//: Add a point to this box, by possibly enlarging the box
-// so that the point just falls within the box.
+//: Add a point to this box.
+// Do this by possibly enlarging the box so that the point just falls within the box.
 // Adding a point to an empty box makes it a size zero box only containing p.
 template <class Type>
 void vgl_box_2d<Type>::add(vgl_point_2d<Type> const& p)

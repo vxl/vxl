@@ -1,5 +1,8 @@
 #ifdef WIN32
 
+//:
+//  \file
+
 #include <vcl_cassert.h>
 #include <vcl_iostream.h>
 #include <vcl_cstdlib.h>
@@ -17,8 +20,8 @@ extern CDC *vgui_mfc_adaptor_global_dc;
 static bool debug = false;
 
 #undef glDrawBuffer
-//: Used to overcome switching to GL_BACK when
-// acceleration is on. Note that there is nothing wrong with glDrawBuffer(GL_BACK)
+//: Used to overcome switching to GL_BACK when acceleration is on.
+// Note that there is nothing wrong with glDrawBuffer(GL_BACK)
 // when we have a single buffer, as it will just get ignored. However,
 // vgui_macro_report errors will print warning messages->inherently slows the
 // system

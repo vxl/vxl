@@ -6,7 +6,8 @@
 // This is vxl/vnl/vnl_least_squares_function.h
 
 
-//: \file
+//:
+//  \file
 //  \brief Abstract base for minimising functions
 //  \author Andrew W. Fitzgibbon, Oxford RRG
 //  \date   31 Aug 96
@@ -17,13 +18,14 @@
 //                people were going to extra trouble to compute it.
 //     20 Apr 1999 FSM Added failure flag so that f() and grad() may signal failure to the caller.
 //     23/3/01 LSB (Manchester) Tidied documentation
+//   Feb.2002 - Peter Vanroose - brief doxygen comment placed on single line
 // \endverbatim
 //
 #include <vcl_string.h>
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_matrix.h>
 
-//:  Abstract base for minimising functions
+//:  Abstract base for minimising functions.
 //    vnl_least_squares_function is an abstract base for functions to be minimized
 //    by an optimizer.  To define your own function to be minimized, subclass
 //    from vnl_least_squares_function, and implement the pure virtual f (and
@@ -41,10 +43,11 @@ public:
   };
   bool failure;
 
-//: Construct vnl_least_squares_function, passing number of parameters
-// (unknowns, domain dimension) and number of residuals (range dimension).
-// The optional argument should be no_gradient if the gradf function has not
-// been implemented.
+  //: Construct vnl_least_squares_function.
+  // Passing number of parameters (unknowns, domain dimension) and number of
+  // residuals (range dimension).
+  // The optional argument should be no_gradient if the gradf function has not
+  // been implemented.
   vnl_least_squares_function(int number_of_unknowns, int number_of_residuals, UseGradient = use_gradient);
 
   virtual ~vnl_least_squares_function();
@@ -55,29 +58,29 @@ public:
 
   // Computations--------------------------------------------------------------
 
-//: The main function.  Given the parameter vector x, compute the vector
-// of residuals fx.  Fx has been sized appropriately before the call.
+  //: The main function.
+  //  Given the parameter vector x, compute the vector of residuals fx.
+  //  Fx has been sized appropriately before the call.
   virtual void f(vnl_vector<double> const & x, vnl_vector<double>& fx) = 0;
 
-//: Calculate the Jacobian, given the parameter vector x.
+  //: Calculate the Jacobian, given the parameter vector x.
   virtual void gradf(vnl_vector<double> const & x, vnl_matrix<double>& jacobian);
 
-//: Called after each LM iteration to print debugging etc.
+  //: Called after each LM iteration to print debugging etc.
   virtual void trace(int iteration, vnl_vector<double> const & x, vnl_vector<double> const & fx);
 
-//: Compute the rms error at x by calling f and returning the norm of the residual
-// vector.
+  //: Compute the rms error at x by calling f and returning the norm of the residual vector.
   double rms(vnl_vector<double> const & x);
 
   // Data Access---------------------------------------------------------------
 
-//: Return the number of unknowns
+  //: Return the number of unknowns
   int get_number_of_unknowns() const { return p_; }
 
-//: Return the number of residuals.
+  //: Return the number of residuals.
   int get_number_of_residuals() const { return n_; }
 
-//: Return true if the derived class has indicated that gradf has been implemented
+  //: Return true if the derived class has indicated that gradf has been implemented
   bool has_gradient() const { return use_gradient_; }
 
 protected:

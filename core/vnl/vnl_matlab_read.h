@@ -5,13 +5,15 @@
 #endif
 // This is vxl/vnl/vnl_matlab_read.h
 
-//: \file
+//:
+// \file
 // \brief Read from MATLAB files
 // \author fsm@robots.ox.ac.uk
 //
 // \verbatim
 // Modifications
 // LSB (Manchester) 23/3/01 documentation tidied
+//   Feb.2002 - Peter Vanroose - brief doxygen comment placed on single line
 // \endverbatim
 
 #include <vcl_iosfwd.h>
@@ -23,10 +25,10 @@
 template <class T> class vnl_vector;
 template <class T> class vnl_matrix;
 
-//: Attempt to read vector or matrix. If the MATLAB header cannot be
-// read, return false. Else, if a name is given, and it doesn't
-// match what's in the file, abort(). If the data in the file cannot
-// reasonably be read into the destination, abort().
+//: Attempt to read vector or matrix.
+// If the MATLAB header cannot be read, return false.
+// Else, if a name is given, and it doesn't match what's in the file, abort().
+// If the data in the file cannot reasonably be read into the destination, abort().
 //
 // The vector/matrix will be resized if necessary.
 template <class T> bool vnl_matlab_read_or_die(vcl_istream &, vnl_vector<T> &, char const *name =0);

@@ -2,6 +2,10 @@
 #ifndef vgl_box_3d_txx_
 #define vgl_box_3d_txx_
 
+
+//:
+// \file
+
 #include <vcl_iostream.h>
 #include "vgl_box_3d.h"
 #include <vgl/vgl_point_3d.h>
@@ -235,8 +239,8 @@ vcl_istream& vgl_box_3d<Type>::read(vcl_istream& s)
        >> max_pos_[0] >> max_pos_[1] >> max_pos_[2];
 }
 
-//: Add a point to this box, by possibly enlarging the box
-// so that the point just falls within the box.
+//: Add a point to this box.
+// Do this by possibly enlarging the box so that the point just falls within the box.
 // Adding a point to an empty box makes it a size zero box only containing p.
 template <class Type>
 void vgl_box_3d<Type>::add(vgl_point_3d<Type> const& p)

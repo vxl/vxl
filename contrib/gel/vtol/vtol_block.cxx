@@ -1,5 +1,8 @@
 #include <vtol/vtol_block.h>
 
+//:
+//  \file
+
 #include <vtol/vtol_edge.h>
 #include <vtol/vtol_macros.h>
 #include <vtol/vtol_list_functions.h>
@@ -29,9 +32,9 @@ vtol_block::vtol_block(vtol_two_chain &faceloop)
 }
 
 //---------------------------------------------------------------------------
-//: Constructor from a list of two-chains. The first two-chain is the
-//    outside boundary. The remaining two-chains are considered holes
-//    inside the the outside volume.
+//: Constructor from a list of two-chains.
+// The first two-chain is the outside boundary.
+// The remaining two-chains are considered holes inside the the outside volume.
 //---------------------------------------------------------------------------
 vtol_block::vtol_block(two_chain_list &faceloops)
 {

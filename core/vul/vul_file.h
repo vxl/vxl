@@ -15,6 +15,7 @@
 // Modifications
 // 981102 AWF Initial version.
 // PDA (Manchester) 21/03/2001: Tidied up the documentation
+//   Feb.2002 - Peter Vanroose - brief doxygen comment placed on single line
 // \endverbatim
 
 #include <vcl_string.h>
@@ -26,8 +27,9 @@ struct vul_file {
   //: Return current working directory
   static vcl_string get_cwd();
 
-  //: Make a writable directory.  You might imagine mkdir would be a
-  // better name, and then you might imagine a world w/out ms.
+  //: Make a writable directory.
+  // You might imagine mkdir would be a better name,
+  // and then you might imagine a world w/out ms.
   static bool make_directory(char const* filename);
   static bool make_directory(vcl_string const& filename) {
     return make_directory(filename.c_str());
@@ -75,7 +77,7 @@ struct vul_file {
   static vcl_string strip_extension(char const* filename);
 
   //: Delete 1 or more files using the Local OS prefered globbing.
-  // e.g. \c delete_file_glob("*"); will delete all the files in the
+  // E.g. \c delete_file_glob("*"); will delete all the files in the
   // current directory on most operating systems.
   // \return true if successful.
   static bool delete_file_glob(char const* file_glob);

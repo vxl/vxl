@@ -30,6 +30,9 @@
 //
 // ---------------------------------------------------------------------------
 // <end copyright notice>
+//:
+// \file
+
 //#include <ImageProcessing/FloatOperators.h>
 //#include <ImageProcessing/pixel.h>
 
@@ -46,8 +49,7 @@ const int INVALID = -1;
 const int KRADIUS = 10; // smooth raw histogram
 
 
-//: Generate the histogram curve at low responses to estimate
-// the sensor/texture noise in data.
+//: Generate the histogram curve at low responses to estimate the sensor/texture noise in data.
 
 gevd_noise::gevd_noise(const float* data, const int n, // data in typical region
              const int number_of_bins) // granularity of histogram
@@ -193,7 +195,8 @@ gevd_noise::EdgelsInCenteredROI(const gevd_bufferxy& magnitude,
   return edgels;
 }
 
-//: Fit a Raleigh distribution to the histogram curve of
+//:
+// Fit a Raleigh distribution to the histogram curve of
 // edgels with low magnitudes, h(x), to estimate the sensor noise,
 // as would be zero-crossing of dh(x), and texture noise as the dominant
 // peak in h(x). Setting the threshold at 3 times the sensor/texture
@@ -239,8 +242,8 @@ gevd_noise::EstimateSensorTexture(float& sensor, float& texture) const
 }
 
 
-//: Find would be zero-crossing of the derivative of the histogram
-// from its downward curvature. This is sensor noise in the ROI.  Protected.
+//: Find would be zero-crossing of the derivative of the histogram from its downward curvature.
+// This is sensor noise in the ROI.  Protected.
 
 bool
 gevd_noise::WouldBeZeroCrossing(const float* dhist, const int nbin,
@@ -292,7 +295,7 @@ gevd_noise::WouldBeZeroCrossing(const float* dhist, const int nbin,
 }
 
 
-//: Find real zero-crossing of the derivative of the histogram
+//: Find real zero-crossing of the derivative of the histogram.
 // This is texture noise in the ROI.  Protected.
 
 bool

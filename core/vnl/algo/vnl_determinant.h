@@ -17,6 +17,7 @@
 // \verbatim
 // Modifications
 //  dac (Manchester) 26/03/2001: tidied up documentation
+//   Feb.2002 - Peter Vanroose - brief doxygen comment placed on single line
 // \endverbatim
 
 #include <vnl/vnl_matrix.h>
@@ -37,8 +38,7 @@ template <class T> T vnl_determinant(T const *row0,
                                      T const *row2,
                                      T const *row3);
 
-//: evaluation using direct methods for sizes of 2x2, 3x3, and 4x4
-// or qr decompostion for other matrices.
+//: evaluation using direct methods for sizes of 2x2, 3x3, and 4x4 or qr decompostion for other matrices.
 template <class T>
 T vnl_determinant(vnl_matrix<T> const &M, bool balance = false);
 

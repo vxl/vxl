@@ -2,6 +2,9 @@
 #ifndef vnl_quaternion_txx_
 #define vnl_quaternion_txx_
 
+//:
+// \file
+
 //
 // Copyright (C) 1992 General Electric Company.
 //
@@ -15,8 +18,7 @@
 //
 // Created: VDN 06/23/92  design and implementation
 //
-// Quaternion IS-A vector, and and is a special case of
-// general n-dimensional space.
+// Quaternion IS-A vector, and is a special case of general n-dimensional space.
 // The IS-A relationship is enforced with public inheritance.
 // All member functions on vectors are applicable to quaternions.
 //
@@ -53,8 +55,7 @@ vnl_quaternion<T>::vnl_quaternion (T x, T y, T z, T r)
   this->operator()(3) = r;  // last element is real part
 }
 
-//: Creates a quaternion from the normalized axis direction
-// and the angle of rotation in radians.
+//: Creates a quaternion from the normalized axis direction and the angle of rotation in radians.
 
 template <class T>
 vnl_quaternion<T>::vnl_quaternion (const vnl_vector<T>& axis, T angle)
@@ -81,9 +82,9 @@ vnl_quaternion<T>::vnl_quaternion (const vnl_vector<T>& vec)
     this->operator()(i) = 0.0;
 }
 
-//: Creates a quaternion from a transform matrix,
-// whose orthonormal basis  vectors  are row-wise in the
-// top-left most block. The transform matrix may be any size,
+//: Creates a quaternion from a transform matrix.
+// Its orthonormal basis vectors are row-wise in the top-left most block.
+// The transform matrix may be any size,
 // but the rotation matrix must be the upper left 3x3.
 
 template <class T>
@@ -137,9 +138,8 @@ T vnl_quaternion<T>::angle () const {
                     this->real());                // angle is always positive
 }
 
-//: Queries the angle and the  direction  of  the  rotation
-// axis  of the quaternion.  A null quaternion will return
-// zero for angle and k direction for axis.
+//: Queries the angle and the direction of the rotation axis of the quaternion.
+//  A null quaternion will return zero for angle and k direction for axis.
 
 template <class T>
 vnl_vector<T> vnl_quaternion<T>::axis () const {
@@ -155,9 +155,8 @@ vnl_vector<T> vnl_quaternion<T>::axis () const {
 }
 
 
-//: Converts a normalized quaternion into a square rotation
-// matrix with dimension dim.  This is the reverse counterpart of
-// constructing a quaternion from a transformation matrix.
+//: Converts a normalized quaternion into a square rotation matrix with dimension dim.
+//  This is the reverse counterpart of constructing a quaternion from a transformation matrix.
 
 template <class T>
 vnl_matrix_fixed<T,3,3> vnl_quaternion<T>::rotation_matrix () const {
@@ -187,16 +186,15 @@ vnl_matrix_fixed<T,3,3> vnl_quaternion<T>::rotation_matrix () const {
   return rot;
 }
 
-//: Returns the conjugate of given quaternion, having same
-// real and opposite imaginary parts.
+//: Returns the conjugate of given quaternion, having same real and opposite imaginary parts.
 
 template <class T>
 vnl_quaternion<T> vnl_quaternion<T>::conjugate () const {
   return vnl_quaternion<T> (-x(), -y(), -z(), r());
 }
 
-//: Returns the  inverse  of  given  quaternion.  For  unit
-// quaternion  representing  rotation,  the inverse is the
+//: Returns the inverse of given quaternion.
+//  For unit quaternion representing rotation, the inverse is the
 // same as the conjugate.
 
 template <class T>
@@ -228,11 +226,9 @@ vnl_quaternion<T> vnl_quaternion<T>::operator* (const vnl_quaternion<T>& rhs) co
   return prod;
 }
 
-//: Rotates 3D vector v with source quaternion  and  stores
-// the  rotated  vector back into v. For speed and greater
-// accurary, first convert quaternion into an  orthonormal
-// matrix,  then  use matrix multiplication to rotate many
-// vectors.
+//: Rotates 3D vector v with source quaternion and stores the rotated vector back into v.
+// For speed and greater accurary, first convert quaternion into an orthonormal
+// matrix,  then  use matrix multiplication to rotate many vectors.
 
 template <class T>
 vnl_vector<T> vnl_quaternion<T>::rotate (const vnl_vector<T>& v) const {

@@ -2,6 +2,9 @@
 #ifndef vnl_matrix_txx_
 #define vnl_matrix_txx_
 
+//:
+// \file
+
 //
 // Copyright (C) 1991 Texas Instruments Incorporated.
 // Copyright (C) 1992 General Electric Company.
@@ -141,8 +144,7 @@ vnl_matrix<T>::vnl_matrix (unsigned rowz, unsigned colz)
   vnl_matrix_alloc_blah(rowz, colz);
 }
 
-//: Creates a matrix with given number of rows and columns,
-// and initialize all elements to value. O(m*n).
+//: Creates a matrix with given number of rows and columns, and initialize all elements to value. O(m*n).
 
 template<class T>
 vnl_matrix<T>::vnl_matrix (unsigned rowz, unsigned colz, T const& value)
@@ -153,7 +155,7 @@ vnl_matrix<T>::vnl_matrix (unsigned rowz, unsigned colz, T const& value)
       this->data[i][j] = value;
 }
 
-//: r rows, c cols, special type.  Currently implements "identity"
+//: r rows, c cols, special type.  Currently implements "identity".
 template <class T>
 vnl_matrix<T>::vnl_matrix(unsigned r, unsigned c, vnl_matrix_type t)
 {
@@ -167,8 +169,7 @@ vnl_matrix<T>::vnl_matrix(unsigned r, unsigned c, vnl_matrix_type t)
 }
 
 #if 1 // fsm: who uses this?
-//: Creates a matrix with given dimension (rows, cols) and initialize
-// first n elements, row-wise, to values. O(m*n).
+//: Creates a matrix with given dimension (rows, cols) and initialize first n elements, row-wise, to values. O(m*n).
 
 template<class T>
 vnl_matrix<T>::vnl_matrix (unsigned rowz, unsigned colz, unsigned n, T const values[])
@@ -448,8 +449,8 @@ vcl_ostream& operator<< (vcl_ostream& os, vnl_matrix<T> const& m) {
   return os;
 }
 
-//: Read an vnl_matrix from an ascii vcl_istream, automatically
-// determining file size if the input matrix has zero size.
+//: Read an vnl_matrix from an ascii vcl_istream.
+// Automatically determines file size if the input matrix has zero size.
 template<class T>
 vcl_istream& operator>>(vcl_istream& s, vnl_matrix<T>& M) {
   M.read_ascii(s);
@@ -605,9 +606,7 @@ vnl_matrix<T> vnl_matrix<T>::operator* (T const& value) const {
 }
 
 
-//: operator/
-// Returns new matrix with elements of lhs matrix divided by
-// value. O(m*n).
+//: Returns new matrix with elements of lhs matrix divided by value. O(m*n).
 template<class T>
 vnl_matrix<T> vnl_matrix<T>::operator/ (T const& value) const {
   vnl_matrix<T> result(this->num_rows, this->num_cols);
@@ -659,8 +658,8 @@ vnl_matrix<T> vnl_matrix<T>::conjugate_transpose() const  {
   return result;
 }
 
-//: Replaces the submatrix of THIS matrix, starting at top left corner,
-// by the elements of matrix m. O(m*n). This is the reverse of extract().
+//: Replaces the submatrix of THIS matrix, starting at top left corner, by the elements of matrix m. O(m*n).
+// This is the reverse of extract().
 
 template<class T>
 vnl_matrix<T>& vnl_matrix<T>::update (vnl_matrix<T> const& m,
@@ -677,8 +676,7 @@ vnl_matrix<T>& vnl_matrix<T>::update (vnl_matrix<T> const& m,
 }
 
 
-//: Returns a copy of submatrix of THIS matrix,
-// specified by the top-left corner and size in rows, cols. O(m*n).
+//: Returns a copy of submatrix of THIS matrix, specified by the top-left corner and size in rows, cols. O(m*n).
 // Use update() to copy new values of this submatrix back into THIS matrix.
 
 template<class T>
@@ -696,8 +694,8 @@ vnl_matrix<T> vnl_matrix<T>::extract (unsigned rowz, unsigned colz,
   return result;
 }
 
-//: Returns the dot product of the two matrices, which is
-// the sum of all pairwise product of the elements m1[i,j]*m2[i,j]. O(m*n).
+//: Returns the dot product of the two matrices. O(m*n).
+// This is the sum of all pairwise products of the elements m1[i,j]*m2[i,j].
 
 template<class T>
 T dot_product (vnl_matrix<T> const& m1, vnl_matrix<T> const& m2) {
@@ -766,8 +764,8 @@ vnl_matrix<T> element_quotient (vnl_matrix<T> const& m1,
   return result;
 }
 
-//: Fill this matrix with the given data.  We assume that p points to
-// a contiguous rows*cols array, stored rowwise.
+//: Fill this matrix with the given data.
+//  We assume that p points to a contiguous rows*cols array, stored rowwise.
 template<class T>
 void vnl_matrix<T>::copy_in(T const *p)
 {
@@ -777,8 +775,8 @@ void vnl_matrix<T>::copy_in(T const *p)
     *dp++ = *p++;
 }
 
-//: Fill the given array with this matrix.  We assume that p points to
-// a contiguous rows*cols array, stored rowwise.
+//: Fill the given array with this matrix.
+//  We assume that p points to a contiguous rows*cols array, stored rowwise.
 template<class T>
 void vnl_matrix<T>::copy_out(T *p) const
 {
@@ -1124,8 +1122,8 @@ void vnl_matrix<T>::assert_size_internal(unsigned rs,unsigned cs) const
   }
 }
 
-//: Read a vnl_matrix from an ascii vcl_istream, automatically
-// determining file size if the input matrix has zero size.
+//: Read a vnl_matrix from an ascii vcl_istream.
+// Automatically determines file size if the input matrix has zero size.
 template <class T>
 bool vnl_matrix<T>::read_ascii(vcl_istream& s)
 {
@@ -1236,8 +1234,8 @@ bool vnl_matrix<T>::read_ascii(vcl_istream& s)
   return true;
 }
 
-//: Read a vnl_matrix from an ascii vcl_istream, automatically
-// determining file size if the input matrix has zero size.
+//: Read a vnl_matrix from an ascii vcl_istream.
+// Automatically determines file size if the input matrix has zero size.
 // This is a static method so you can type
 // <verb>
 // vnl_matrix<float> M = vnl_matrix<float>::read(cin);
@@ -1447,8 +1445,8 @@ L80:
 } /* dtrans_ */
 
 
-//: Transpose matrix M in place.  Works for rectangular matrices using an
-// enormously clever algorithm from ACM TOMS.
+//: Transpose matrix M in place.
+//  Works for rectangular matrices using an enormously clever algorithm from ACM TOMS.
 template <class T>
 void vnl_matrix<T>::inplace_transpose()
 {

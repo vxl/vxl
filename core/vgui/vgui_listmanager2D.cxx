@@ -3,6 +3,9 @@
 #pragma implementation
 #endif
 //
+//:
+//  \file
+
 // .NAME vgui_listmanager2D
 // Author: Philip C. Pritchett, RRG, University of Oxford
 // Created: 21 Oct 99
@@ -183,8 +186,7 @@ void vgui_listmanager2D::find_closest(float x, float y, vcl_vector<vcl_vector<un
 }
 
 
-//: vgui_listmanager2D events are send to the child displaylist which holds
-// the closest soview2d.
+//: vgui_listmanager2D events are send to the child displaylist which holds the closest soview2d.
 bool vgui_listmanager2D::handle(const vgui_event& event) {
 
   // save current matrix state :

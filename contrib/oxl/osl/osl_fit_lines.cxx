@@ -1,3 +1,7 @@
+
+//:
+//  \file
+
 #include "osl_fit_lines.h"
 #include <vcl_cassert.h>
 #include <vcl_iostream.h>
@@ -120,8 +124,8 @@ void osl_fit_lines::simple_fit_to_list(vcl_list<osl_edge *> *myedges,
 }
 
 //-----------------------------------------------------------------------------
-//
-//: Method that takes a vcl_list<Edge*>* that represents the
+//:
+// Method that takes a vcl_list<Edge*>* that represents the
 // current segmentation and breaks off each Edge for further
 // investigation. An incremental fitting process is applied to
 // the osl_edgel_chain in each osl_edge. The resultant segmentation
@@ -252,8 +256,8 @@ void osl_fit_lines::incremental_fit_to_list(vcl_list<osl_edge *> *myedges,
 }
 
 //-----------------------------------------------------------------------------
-//
-//: This method is used to fit lines incrementally using the mean
+//:
+// This method is used to fit lines incrementally using the mean
 // absolute error instead of the mean square error. The difference
 // between this and SquareIncrementalFit is very small.
 void osl_fit_lines::MeanIncrementalFit(vcl_list<osl_edgel_chain*> *_curves, osl_edge *edge)
@@ -418,8 +422,8 @@ void osl_fit_lines::MeanIncrementalFit(vcl_list<osl_edgel_chain*> *_curves, osl_
 }
 
 //--------------------------------------------------------------------------------
-//
-//: Method that takes the canny edge data stored in an edge
+//:
+// Method that takes the canny edge data stored in an edge
 // and its associated DigitalCurve, and fits lines using
 // orthogonal regression with mean square error residual and incremental
 // fitting.
@@ -613,8 +617,8 @@ void osl_fit_lines::OutputLine(vcl_list<osl_edgel_chain*> *_curves,
 }
 
 //-----------------------------------------------------------------------------
-//
-//: Takes the top two lines from the vcl_list<ImplicitDigitalLine*>
+//:
+// Takes the top two lines from the vcl_list<ImplicitDigitalLine*>
 // and tests whether a single line fit would satisfy them both. The
 // process involves fitting a single line to the other two lines by
 // minimising the integral of the Euclidean distance between the

@@ -1,5 +1,9 @@
 #ifndef vgui_adaptor_h_
 #define vgui_adaptor_h_
+
+//:
+//  \file
+
 // .NAME vgui_adaptor
 // .INCLUDE vgui/vgui_adaptor.h
 // .FILE vgui_adaptor.cxx
@@ -31,6 +35,7 @@
 // 31 August   2000 u97mb@robots. Support for mfc acceleration
 // 07-SEP-2000      Marko Bacic,Oxford RRG -- Added pure virtual method "draw"
 // 20 Sept     2000 capes@robots. added post_destroy() method.
+//   Feb.2002 - Peter Vanroose - brief doxygen comment placed on single line
 
 #include "dll.h"
 #include <vgui/vgui_menu.h>
@@ -66,8 +71,8 @@ public:
   // event related.
   bool dispatch_to_tableau(vgui_event const &);
 
-  //: This static datum points to the adaptor that last received a mouse
-  // event.  It is set to zero if its pointee receives a LEAVE event.  It will
+  //: This static datum points to the adaptor that last received a mouse event.
+  //  It is set to zero if its pointee receives a LEAVE event.  It will
   // often point to the adaptor which was current when a popup menu was
   // triggered, which is often what one wants it for.
   static vgui_DLLDATA vgui_adaptor *current;

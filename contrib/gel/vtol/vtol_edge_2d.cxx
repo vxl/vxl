@@ -1,5 +1,8 @@
 #include "vtol_edge_2d.h"
 
+//:
+//  \file
+
 #include <vcl_cassert.h>
 #include <vtol/vtol_zero_chain.h>
 #include <vtol/vtol_one_chain.h>
@@ -23,9 +26,8 @@ vtol_edge_2d::vtol_edge_2d(void)
 }
 
 //---------------------------------------------------------------------------
-//: Constructor from the two endpoints `new_v1', `new_v2' and from a
-//    curve `new_curve'. If `new_curve' is 0, a line is created from
-//    `new_v1' and `new_v2'.
+//: Constructor from the two endpoints `new_v1', `new_v2' and from a curve `new_curve'.
+//  If `new_curve' is 0, a line is created from `new_v1' and `new_v2'.
 //---------------------------------------------------------------------------
 vtol_edge_2d::vtol_edge_2d(vtol_vertex_2d &new_v1,
                            vtol_vertex_2d &new_v2,

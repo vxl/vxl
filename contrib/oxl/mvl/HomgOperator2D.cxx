@@ -2,6 +2,9 @@
 #pragma implementation
 #endif
 
+//:
+//  \file
+
 #include <vcl_cassert.h>
 #include <vcl_iostream.h>
 #include <vcl_vector.h>
@@ -118,8 +121,8 @@ double HomgOperator2D::perp_dist_squared (const HomgPoint2D& point, const HomgLi
   return numerator / denominator;
 }
 
-//: Return the distance of a line segment to a line.  This is defined as the maximum of the
-// distances of the two endpoints to the line.
+//: Return the distance of a line segment to a line.
+//  This is defined as the maximum of the distances of the two endpoints to the line.
 double HomgOperator2D::distance_squared(const HomgLineSeg2D& segment, const HomgLine2D& line)
 {
   return vnl_math_max(perp_dist_squared(segment.get_point1(), line),
@@ -193,8 +196,8 @@ double HomgOperator2D::distance(const HomgLineSeg2D& ls, const HomgLineSeg2D& ll
 }
 
 
-//: Return the "Schmid distance" from a point to a line segment.  This is the
-// distance to the closest point on the segment, be it endpoint or interior.
+//: Return the "Schmid distance" from a point to a line segment.
+//  This is the distance to the closest point on the segment, be it endpoint or interior.
 // UNTESTED.
 double HomgOperator2D::distance_squared (const HomgLineSeg2D& lineseg, const HomgPoint2D& p)
 {
@@ -253,12 +256,11 @@ double HomgOperator2D::abs_angle(const HomgLine2D& line1, const HomgLine2D& line
 
 //-----------------------------------------------------------------------------
 //
-//: Get the angle between two lines.  Although homogeneous coordinates are
-// only defined up to scale, here it is assumed that a line with homogeneous
-// coordinates (m) is at 180 degrees to a line (-m), and this is why the term
-// "oriented_line" is used.  However, the overall scale (apart from sign) is
-// not significant.
-//
+//: Get the angle between two lines.
+// Although homogeneous coordinates are only defined up to scale, here it is
+// assumed that a line with homogeneous coordinates (m) is at 180 degrees to
+// a line (-m), and this is why the term "oriented_line" is used.  However,
+// the overall scale (apart from sign) is not significant.
 
 double HomgOperator2D::angle_between_oriented_lines (const HomgLine2D& line1,
                                                      const HomgLine2D& line2)
@@ -293,10 +295,9 @@ HomgLine2D HomgOperator2D::join (const HomgPoint2D& point1, const HomgPoint2D& p
 
 //-----------------------------------------------------------------------------
 //
-//: Get the line through two points (the cross-product).  In this case, we assume
-// that the points are oriented, and ensure the cross is computed with positive point
-// omegas.
-//
+//: Get the line through two points (the cross-product).
+//  In this case, we assume that the points are oriented, and ensure the cross
+// is computed with positive point omegas.
 
 HomgLine2D HomgOperator2D::join_oriented (const HomgPoint2D& point1, const HomgPoint2D& point2)
 {

@@ -1,6 +1,9 @@
 #ifndef vipl_section_descriptor_txx_
 #define vipl_section_descriptor_txx_
 
+//:
+//  \file
+
 #include <vipl/section/vipl_section_descriptor.h>
 #include <vipl/section/vipl_section_iterator.h>
 #include <vipl/section/vipl_section_container.h>
@@ -124,7 +127,8 @@ vipl_section_descriptor< DataType > ::vipl_section_descriptor(const vipl_section
     hsreal_container = t.hsreal_container->virtual_copy();
 }
 
-//: This method takes in an argument called axis (i.e. 0 means the ``x'' axis,
+//:
+// This method takes in an argument called axis (i.e. 0 means the ``x'' axis,
 // 1 means ``y'' axis etc...) and returns an integer which describes the offset
 // of the next (i.e. associated with the higher coordinate value) data item
 // along the axis.
@@ -153,7 +157,8 @@ const DataType* vipl_section_descriptor< DataType > ::data_ptr() const
   return 0;
 }
 
-//: This method takes in a section_descriptor (which can be thought of as a
+//:
+// This method takes in a section_descriptor (which can be thought of as a
 // filter's ROA) and updates this section to be the intersection of the ROA
 // and the original section. It returns 0 if the region is empty, 1 if nothing
 // changed and 2 if there was really a change in the section.

@@ -31,6 +31,9 @@
 // ---------------------------------------------------------------------------
 // <end copyright notice>
 
+//:
+// \file
+
 #include <vcl_iostream.h>
 #include <vcl_fstream.h>
 #include <vcl_algorithm.h>
@@ -212,8 +215,8 @@ gevd_float_operators::Read2dKernel(const char* filename)
   return kernel;
 }
 
-//: Convolves from image with two separable filters,
-// along directions x and y, and stores values in to image. O(m*n*k).
+//: Convolves from image with two separable filters, along directions x and y, and stores values in to image.
+// O(m*n*k).
 // The filter kernel has length 2*radius + 1, and is either even or odd.
 // Assume image data is in row-major order.
 
@@ -351,8 +354,8 @@ gevd_float_operators::Convolve(gevd_bufferxy& from, gevd_bufferxy*& to,
 }
 
 
-//: Convolves from image with a filter along x, and a running sum
-// along y-axis, then stores values in to image. O(m*n*k).
+//: Convolves from image with a filter along x, and a running sum along y-axis, then stores values in to image.
+// O(m*n*k).
 
 float
 gevd_float_operators::Convolve(gevd_bufferxy& from, gevd_bufferxy*& to,
@@ -532,8 +535,7 @@ gevd_float_operators::Convolve(float* from, float*& to, const int len,
   return 1;                     // assume normalized kernel
 }
 
-//: For large smoothing sigma, use running sum to avoid floating
-// multiplications.
+//: For large smoothing sigma, use running sum to avoid floating multiplications.
 
 float
 gevd_float_operators::RunningSum(float* from, float*& to, const int len,
@@ -608,7 +610,8 @@ gevd_float_operators::Read1dKernel(const char* filename,
 }
 
 
-//: Convolves the from image with a 2D Gaussian filter
+//:
+// Convolves the from image with a 2D Gaussian filter
 // with standard deviation sigma (default = 1). O(m*n*k).
 // The 2D convolution is decomposed into 2 1D convolutions:
 // Gxy * I = Gy * (Gx * I).
@@ -637,7 +640,8 @@ gevd_float_operators::Gaussian(gevd_bufferxy& from, gevd_bufferxy*& to, const fl
 }
 
 
-//: Returns the kernel array for Gaussian with given standard deviation
+//:
+// Returns the kernel array for Gaussian with given standard deviation
 // sigma [pixel], and cutoff at min/max = fuzz.
 // The area under the discrete Gaussian is normalized to 1.
 
@@ -680,7 +684,8 @@ gevd_float_operators::Gaussian(const float x, const float sigma)
 }
 
 
-//: Setup the cache for reflection/wraping at the borders,
+//:
+// Setup the cache for reflection/wraping at the borders,
 // and the center pipeline. Only cache should be deleted after
 // you're done, not the pipeline, since pipeline shares the same space.
 
@@ -1098,7 +1103,8 @@ gevd_float_operators::Curvature(float* from, float*& to, const int len,
 }
 
 
-//: Compute the local orientation at each pixel in the image,
+//:
+// Compute the local orientation at each pixel in the image,
 // and returns 2 images: twice the angle, and coherence measure (0,1).
 
 float
@@ -1205,7 +1211,8 @@ LocalMaximum(const gevd_bufferxy& magnitude,
 }
 
 
-//: Detect contour pixels as strict local maxima, and
+//:
+// Detect contour pixels as strict local maxima, and
 // interpolate the strength/location with a parabola through 3 points.
 // The location[xy]/direction[xy] buffers no longer share the same
 // space to avoid bogus values when the contour/junction pixels move
@@ -1368,8 +1375,7 @@ gevd_float_operators::InterpolateParabola(float y_1, float y_0, float y_2,
   return diff1 / (2 * diff2);   // interpolate x offset
 }
 
-//: Return the float value of pixel (x, y) in float buffer,
-// using bilinear interpolation.
+//: Return the float value of pixel (x, y) in float buffer, using bilinear interpolation.
 
 float
 gevd_float_operators::BilinearInterpolate(const gevd_bufferxy& buffer,
@@ -1443,8 +1449,8 @@ gevd_float_operators::SurfaceNormal(const gevd_bufferxy& range, gevd_bufferxy*& 
     }
 }
 
-
-//: Find local gaussian curvature at all pixels from the local surface
+//:
+// Find local gaussian curvature at all pixels from the local surface
 // normals, previously computed from the range z(x,y) image.
 // The gaussian curvature is estimated as the root mean square of the
 // two curvatures along the x- and y- axes.
@@ -1674,7 +1680,8 @@ _CurvatureInDir( const gevd_bufferxy& normal,
 }
 
 
-//: Estimate the maximum curvature at all pixels from the local
+//:
+// Estimate the maximum curvature at all pixels from the local
 // surface normals, previously computed from the range z(x,y) image.
 // This is similar to SurfaceCurvature above with two exceptions.
 // First, it explicitly recognizes image locations where no normal has
@@ -1739,8 +1746,7 @@ gevd_float_operators::SurfaceCurvatureD(const gevd_bufferxy& normal,
 }
 
 
-//: Shrinks the from image by 2 and stores into to image,
-// using Burt-Adelson reduction algorithm.
+//: Shrinks the from image by 2 and stores into to image, using Burt-Adelson reduction algorithm.
 // Convolution with a 5-point kernel [(0.5-ka)/2, 0.25, ka, 0.25, (0.5-ka)/2]
 // ka = 0.6  maximum decorrelation, wavelet for image compression.
 // ka = 0.5  linear interpolation,
@@ -1804,7 +1810,8 @@ gevd_float_operators::ShrinkBy2 (const gevd_bufferxy& from, gevd_bufferxy*& to,
   return 1;
 }
 
-//: Shrinks the yline by 2 along the x-axis. We compute every 2 pixels,
+//:
+// Shrinks the yline by 2 along the x-axis. We compute every 2 pixels,
 // the convolution of the 5 pixels along x, with the 5-point kernel.
 // [kc, kb, ka, kb, kc].
 
@@ -1855,7 +1862,8 @@ PrintAllPipes( float * y_s[],
 }
 
 
-//: Same as ShrinkBy2 except that it properly handles pixels that
+//:
+// Same as ShrinkBy2 except that it properly handles pixels that
 // have usable value ("dropouts" --- hence the appended "_D" in the
 // name).  These are pixel values "no_value".  One problem with this
 // function is that one pixel wide structures may or may not be
@@ -1988,7 +1996,8 @@ PrintPipe( float values[] )
   vcl_cout << values[4];
 }
 
-//: Create a smoothed and subsampled array of x values in the given
+//:
+// Create a smoothed and subsampled array of x values in the given
 // row.  This will return the weighted (but unnormalized) values (in
 // yline) and the weights (wline).
 //
@@ -2036,8 +2045,7 @@ gevd_float_operators::ShrinkBy2AlongX_D( const gevd_bufferxy& from,
 }
 
 
-//: Expands the from image by 2 and store into to image, using
-// Burt-Adelson expansion algorithm.
+//: Expands the from image by 2 and store into to image, using Burt-Adelson expansion algorithm.
 // Convolution with a 5-point kernel [(0.5-ka), 0.5, 2*ka, 0.5, (0.5-ka)]
 // ka = 0.6  maximum decorrelation, low-pass filter for image compression.
 // ka = 0.5  linear interpolation,
@@ -2087,8 +2095,8 @@ gevd_float_operators::ExpandBy2(const gevd_bufferxy& from, gevd_bufferxy*& to,
   return 1;
 }
 
-//: Expands the yline by 2 along the x-axis. Interpolation is done
-// by convolution with pixels at integral indexes only.
+//: Expands the yline by 2 along the x-axis.
+// Interpolation is done by convolution with pixels at integral indexes only.
 
 float
 gevd_float_operators::ExpandBy2AlongX(const gevd_bufferxy& from, const int y,
@@ -2114,7 +2122,8 @@ gevd_float_operators::ExpandBy2AlongX(const gevd_bufferxy& from, const int y,
 }
 
 
-//: Compute the pyramid by shrinking data sequence
+//:
+// Compute the pyramid by shrinking data sequence
 // by 2, nlevels-1 times, and return final shrunk length,
 // and reset number of levels in pyramid. O(n) time.
 // Coarse to fine is stored from left to right.
@@ -2422,7 +2431,8 @@ gevd_float_operators::FindWavelet (const int waveletno,
   return true;
 }
 
-//: Convolution with wavelets (lo_filter, hi_filter) and gather results into
+//:
+// Convolution with wavelets (lo_filter, hi_filter) and gather results into
 // consecutive blocks, with convolution of lo-filter (resp. hi-filter)
 // on the sides of low (resp. high) indices.
 // Wrap around edges of the array is done with modulo(n) replaced by
@@ -2949,7 +2959,8 @@ gevd_float_operators::WaveletTransformByBlock(const gevd_bufferxy& from, gevd_bu
                                        waveletno);
 }
 
-//: Delete all wavelet components, which have high frequency along both
+//:
+// Delete all wavelet components, which have high frequency along both
 // x- and y- axes. They are diagonal blocks, except the lowest frequency block.
 // This will throw away high frequency point-like features.
 // Return the number of coefficients deleted.
@@ -2973,7 +2984,8 @@ gevd_float_operators::DeleteMixedComponents(gevd_bufferxy& wave,
   return count;
 }
 
-//: Truncate to 0, all wavelet components with high frequency along
+//:
+// Truncate to 0, all wavelet components with high frequency along
 // either x- or y- axes only, not both. The relative magnitude of the
 // components must be smaller than the given threshold.
 // This will simulate reduced accuracy in presence of transmission errors.
@@ -3028,7 +3040,8 @@ gevd_float_operators::TruncateLowestFrequency(gevd_bufferxy& wave,
   return count;                         // number of pixels changed
 }
 
-//: Delete boundary artifacts in 1d-array, because its length is not
+//:
+// Delete boundary artifacts in 1d-array, because its length is not
 // a power of 2, and so wrapping will skip the last odd element.
 
 int
@@ -3052,7 +3065,8 @@ gevd_float_operators::DeleteBoundaryArtifacts(float* wave, const int n,
   }
 }
 
-//: Delete boundary artifacts because the dimension of the image
+//:
+// Delete boundary artifacts because the dimension of the image
 // is not a power of 2, and so wraping will skip the last odd element.
 
 int
@@ -3163,7 +3177,8 @@ gevd_float_operators::ProjectOntoY(const gevd_bufferxy& buf, float*& proj,
 // Full correlation must be implemented with FFT.
 // Local correlation with limited search is faster with direct convolution.
 
-//: Find correlation of given pattern to data, matching
+//:
+// Find correlation of given pattern to data, matching
 // pattern[radius+i] with data[index+i]. The linear correlation
 // coefficient, also called Pearson r, is computed, O(|pattern|).
 // Assumed pattern has length = 2*radius + 1.
@@ -3200,7 +3215,8 @@ gevd_float_operators::Correlation(const float* data, const int length,
 }
 
 
-//: Find correlations of given pattern to data, given maximum search
+//:
+// Find correlations of given pattern to data, given maximum search
 // from index. O(|pattern|*shift). Returns the array of
 // correlation values, with positive translation starting from
 // result[search+1], and negative translation starting from
@@ -3254,7 +3270,8 @@ gevd_float_operators::BestCorrelation(const float* data, const int length,
 }
 
 
-//: Search for best correlation, from coarse to fine,
+//:
+// Search for best correlation, from coarse to fine,
 // starting at a priori shift, and requiring minimum overlap. O(n) time.
 // Return last best correlation, and its corresponding shift.
 // The search is cutoff early, if no maximum is found, or
@@ -3407,8 +3424,7 @@ gevd_float_operators::Allocate(gevd_bufferxy* space, const gevd_bufferxy& model,
   return space;
 }
 
-//: Creates a new buffer similar to buf, unless dimension and precision
-// are given.
+//: Creates a new buffer similar to buf, unless dimension and precision are given.
 
 gevd_bufferxy*
 gevd_float_operators::SimilarBuffer(const gevd_bufferxy& buf,
@@ -3426,8 +3442,7 @@ gevd_float_operators::SimilarBuffer(const gevd_bufferxy& buf,
 }
 
 
-//: Two buffers are similar if they have the same dimensions,
-// and precision (bits_per_pixel).
+//: Two buffers are similar if they have the same dimensions, and precision (bits_per_pixel).
 
 bool
 gevd_float_operators::IsSimilarBuffer(const gevd_bufferxy& buf1,
@@ -3439,7 +3454,8 @@ gevd_float_operators::IsSimilarBuffer(const gevd_bufferxy& buf1,
 }
 
 
-//: Extract from buf, a float sub-buffer with dimensions (sizeX, sizeY),
+//:
+// Extract from buf, a float sub-buffer with dimensions (sizeX, sizeY),
 // from top-left corner (origX, origY).
 // Faster copying can be done with read/write chunks of memory.
 
@@ -3458,8 +3474,7 @@ gevd_float_operators::Extract (const gevd_bufferxy & buf,
   return &sub;
 }
 
-//: Update a float sub-buffer of buf, from top-left corner (origX, origY),
-// with values in sub.
+//: Update a float sub-buffer of buf, from top-left corner (origX, origY), with values in sub.
 // Faster copying can be done with read/write chunks of memory.
 
 void
@@ -3624,8 +3639,8 @@ gevd_float_operators::Threshold(gevd_bufferxy& buf, float noise,
 }
 
 
-
-//: Normalizes a float buffer so that the pixel values range
+//:
+// Normalizes a float buffer so that the pixel values range
 // from lo to hi, inclusive. If the buffer has constant value,
 // the value is mapped to lo. O(n*m).
 
@@ -3651,8 +3666,8 @@ gevd_float_operators::Normalize (gevd_bufferxy& buf, const float lo, const float
   }
 }
 
-//: Shift to positive values, by adding 30.0000,
-// and truncate all values to 0-60.000. O(n*m).
+//: Shift to positive values, by adding 30.0000, and truncate all values to 0-60.000.
+//  O(n*m).
 
 void
 gevd_float_operators::ShiftToPositive (gevd_bufferxy& buf)
@@ -3745,7 +3760,8 @@ gevd_float_operators::TruncateToCeiling (gevd_bufferxy& buf, float ceilng)
 }
 
 
-//: Converts from a unsigned char (8-bit) or a short (16-bit) buffer to a float buffer
+//:
+// Converts from a unsigned char (8-bit) or a short (16-bit) buffer to a float buffer
 // to avoid overflow/underflow and conversion for subsequent math computations.
 // O(n*m).
 
@@ -3866,7 +3882,8 @@ gevd_float_operators::Maximum (const float* data, const int length,
   return !(index == 0);
 }
 
-//:  Pad the buffer by repeating values at the border, so that the
+//:
+// Pad the buffer by repeating values at the border, so that the
 // new buffer has dimensions being powers of 2. The original buffer
 // is centered in the new buffer. Returns the buffer unchanged if it
 // already has dimensions being powers of 2.

@@ -3,6 +3,10 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
+
+//:
+//  \file
+
 // .NAME vgui_section_buffer
 // .INCLUDE vgui/vgui_section_buffer.h
 // .FILE vgui_section_buffer.cxx
@@ -48,8 +52,8 @@ struct vgui_section_buffer
                       bool alloc_as_texture = false);
   ~vgui_section_buffer();
 
-  //: These methods take arguments in original image coordinates and
-  // return false on failure. See .cxx file for more details.
+  //: These methods take arguments in original image coordinates and return false on failure.
+  // See .cxx file for more details.
   bool draw_as_image(float xlo, float ylo, float xhi, float yhi) const;
   bool draw_as_texture(float xlo, float ylo, float xhi, float yhi) const;
   bool draw_as_rectangle(float xlo, float ylo, float xhi, float yhi) const;
@@ -73,10 +77,10 @@ struct vgui_section_buffer
   //: semi-internal
   bool texture_begin(bool force_load = false) const;
   bool texture_end() const;
-  
+
   int width () const { return w; }
   int height() const { return h; }
-  
+
 public:
   vgui_accelerate_cached_image* cache_;
 

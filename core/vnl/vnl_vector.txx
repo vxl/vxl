@@ -2,6 +2,9 @@
 #ifndef vnl_vector_txx_
 #define vnl_vector_txx_
 
+//:
+// \file
+
 //
 // Created: VDN 02/21/92 new lite version adapted from Matrix.h
 //
@@ -104,10 +107,10 @@ vnl_vector<T>::vnl_vector (T const& px, T const& py, T const& pz)
 }
 
 #if 0 // commented out
-//: Creates a vector of specified length and initialize first n
-// elements with values in ... O(n).  Arguments in ... can only be pointers,
-// primitive types like int, and NOT OBJECTS passed by value, like vectors,
-// matrices, because constructors must be known and called at compile time!!!
+//: Creates a vector of specified length and initialize first n elements with values in ... O(n).
+// Arguments in ... can only be pointers, primitive types like int,
+// and NOT OBJECTS passed by value, like vectors, matrices,
+// because constructors must be known and called at compile time!!!
 
 template<class T>
 vnl_vector<T>::vnl_vector (unsigned len, int n, T v00, ...)

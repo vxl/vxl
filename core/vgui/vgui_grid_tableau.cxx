@@ -1,3 +1,7 @@
+
+//:
+//  \file
+
 #include "vgui_grid_tableau.h"
 #include <vcl_iostream.h>
 #include <vgui/vgui_macro.h>
@@ -128,8 +132,7 @@ float vgui_grid_tableau::get_w() { return 1.0/nb_cols; }
 float vgui_grid_tableau::get_h() { return 1.0/nb_rows; }
 
 //------------------------------------------------------------------------------
-//: Adds the default tableau to the given space in the grid
-//   (but not to the vcl_list of tableaux).
+//: Adds the default tableau to the given space in the grid (but not to the vcl_list of tableaux).
 //   Note, it is assumed that the given grid position is empty or uninitialized so
 //   nothing is removed from the grid position before the default is added.
 //------------------------------------------------------------------------------
@@ -146,8 +149,7 @@ void vgui_grid_tableau::add_default(unsigned col_pos, unsigned row_pos)
 }
 
 //------------------------------------------------------------------------------
-//: Adds a tableau to the next free space in the grid
-//   and to the end of the vcl_list of tableaux.
+//: Adds a tableau to the next free space in the grid and to the end of the vcl_list of tableaux.
 //   If there are no free spaces and the grid size is changeable then it adds a
 //   new column to the RHS of the grid and adds the new tableau to the top of it.
 //------------------------------------------------------------------------------
@@ -195,7 +197,8 @@ void vgui_grid_tableau::add_next(vgui_tableau_sptr const& tab)
 }
 
 //------------------------------------------------------------------------------
-//: Add (or replace the tableau at the given position with) the given tableau
+//:
+//   Add (or replace the tableau at the given position with) the given tableau
 //   and adds the given tableau to the end of the vcl_list of tableaux.
 //------------------------------------------------------------------------------
 void vgui_grid_tableau::add_at(vgui_tableau_sptr const& tab, unsigned col_pos, unsigned row_pos)
@@ -222,8 +225,9 @@ void vgui_grid_tableau::add_at(vgui_tableau_sptr const& tab, unsigned col_pos, u
 }
 
 //------------------------------------------------------------------------------
-//: Removes the tableau at the given grid coordinates from the display
-//   and from the vcl_list of tableau.  It is replaced in the grid by the default tableau.
+//:
+//  Removes the tableau at the given grid coordinates from the display
+//  and from the vcl_list of tableau.  It is replaced in the grid by the default tableau.
 //------------------------------------------------------------------------------
 void vgui_grid_tableau::remove_at(unsigned col_pos, unsigned row_pos)
 {
@@ -359,37 +363,41 @@ vcl_vector<int>* row_pos, vcl_vector<int>* times)
   return nb_selected;
 }
 
+#if 0
 //------------------------------------------------------------------------------
-//: Number of rows and columns in the grid is changeable if true is passed in
-//   (this is the default) otherwise if false is given then the number of rows
-//   and columns is fixed.
+//:
+// Number of rows and columns in the grid is changeable if true is passed in
+// (this is the default) otherwise if false is given then the number of rows
+// and columns is fixed.
 //------------------------------------------------------------------------------
-// void vgui_grid_tableau::set_uses_plus_minus_events(bool c)
-// {
-// //if (debug && c == false) vcl_cerr << "set_uses_plus_minus_events: set to false" << vcl_endl;
-//   uses_plus_minus_events = c;
-// }
+void vgui_grid_tableau::set_uses_plus_minus_events(bool c)
+{
+//if (debug && c == false) vcl_cerr << "set_uses_plus_minus_events: set to false" << vcl_endl;
+  uses_plus_minus_events = c;
+}
 
 //------------------------------------------------------------------------------
-//: If true is passed in then this tableau will use PageUp and PageDown events
+//:
+//   If true is passed in then this tableau will use PageUp and PageDown events
 //   to 'flip' through the vcl_list of tableaux it holds (this is the default).
 //   Otherwise if false is given then the PageUp and PageDown events will be
 //   passed to the base tableau.  (This might be handy if you wanted to display
 //   2 separate deck tableaux side by side for example.)
 //------------------------------------------------------------------------------
-// void vgui_grid_tableau::set_uses_paging_events(bool u)
-// {
-// //if (debug && u == false) vcl_cerr << "set_uses_paging_events: set to false" << vcl_endl;
-//   uses_paging_events = u;
-// }
+void vgui_grid_tableau::set_uses_paging_events(bool u)
+{
+//if (debug && u == false) vcl_cerr << "set_uses_paging_events: set to false" << vcl_endl;
+  uses_paging_events = u;
+}
 
 //------------------------------------------------------------------------------
 //: If false, any mouse down events will be ignored.
 //------------------------------------------------------------------------------
-// void vgui_grid_tableau::set_frames_selectable(bool p)
-// {
-//   frames_selectable = p;
-// }
+void vgui_grid_tableau::set_frames_selectable(bool p)
+{
+  frames_selectable = p;
+}
+#endif
 
 //------------------------------------------------------------------------------
 //: Redraw the grid of tableaux keeping each tableau in its current row and column.
@@ -409,8 +417,7 @@ void vgui_grid_tableau::layout_grid()
 }
 
 //------------------------------------------------------------------------------
-//: Redraw the grid of tableaux packing them in without gaps, filling each
-//   row from top left downwards.
+//: Redraw the grid of tableaux packing them in without gaps, filling each row from top left downwards.
 //------------------------------------------------------------------------------
 void vgui_grid_tableau::layout_grid2()
 {

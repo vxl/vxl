@@ -1,5 +1,8 @@
 #include <vtol/vtol_vertex_2d.h>
 
+//:
+//  \file
+
 #include <vtol/vtol_zero_chain.h>
 #include <vtol/vtol_edge_2d.h>
 #include <vtol/vtol_edge.h>
@@ -194,15 +197,14 @@ void vtol_vertex_2d::describe(vcl_ostream &strm,
  */
 
 //-----------------------------------------------------------------------------
-//: Create a line edge from `this' and `other' only if this edge does not
-//    exist. Otherwise it just returns the existing edge
+//: Create a line edge from `this' and `other' only if this edge does not exist.
+//  Otherwise it just returns the existing edge.
 // Require: other.ptr()!=0 and other.ptr()!=this
 //-----------------------------------------------------------------------------
 vtol_edge *vtol_vertex_2d::new_edge(vtol_vertex &other)
 {
   vtol_vertex_2d *other2d = other.cast_to_vertex_2d();
   assert(other2d!=0);
-
 
   // require
   //  assert(other.ptr()!=0);
@@ -216,7 +218,6 @@ vtol_edge *vtol_vertex_2d::new_edge(vtol_vertex &other)
   const vcl_vector<vtol_topology_object_sptr> *sups;
   vcl_vector<vtol_topology_object_sptr>::const_iterator ep;
   vtol_edge *e;
-
 
   // Scan Zero Chains
   found=false;
@@ -341,6 +342,7 @@ bool vtol_vertex_2d::compare_geometry(const vtol_vertex &other) const
 }
 
 
-
-//#include <vcl_rel_ops.h> // gcc 2.7
-//VCL_INSTANTIATE_INLINE(bool operator!=(vtol_vertex_2d const &, vtol_vertex_2d const &));
+#ifdef VCL_GCC_27
+#include <vcl_rel_ops.h>
+VCL_INSTANTIATE_INLINE(bool operator!=(vtol_vertex_2d const &, vtol_vertex_2d const &));
+#endif

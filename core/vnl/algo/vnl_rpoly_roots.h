@@ -15,6 +15,7 @@
 //  23 may 97, Peter Vanroose - "NO_COMPLEX" option added (until "complex" type is standardised)
 //  dac (Manchester) 28/03/2001: tidied up documentation
 //  Joris Van den Wyngaerd - June 2001 - impl for vnl_real_polynomial constr added
+//   Feb.2002 - Peter Vanroose - brief doxygen comment placed on single line
 //  \endverbatim
 
 #include <vcl_complex.h>
@@ -36,43 +37,42 @@ class vnl_rpoly_roots {
 public:
 // Constructors/Destructors--------------------------------------------------
 
-//: The constructor calculates the roots.
-// This is the most efficient interface
-// as all the result variables are initialized to the correct size.
-// The polynomial is $ a[0] x^d + a[1] x^{d-1} + \cdots + a[d] = 0 $.
-//
-// Note that if the routine fails, not all roots will be found.  In this case,
-// the "realroots" and "roots" functions will return fewer than n roots.
+  //: The constructor calculates the roots.
+  // This is the most efficient interface
+  // as all the result variables are initialized to the correct size.
+  // The polynomial is $ a[0] x^d + a[1] x^{d-1} + \cdots + a[d] = 0 $.
+  //
+  // Note that if the routine fails, not all roots will be found.  In this case,
+  // the "realroots" and "roots" functions will return fewer than n roots.
 
   vnl_rpoly_roots(const vnl_vector<double>& a);
 
-//: Calculate roots of a vnl_real_polynomial. Same comments apply.
+  //: Calculate roots of a vnl_real_polynomial. Same comments apply.
   vnl_rpoly_roots(const vnl_real_polynomial& poly);
 
   // Operations----------------------------------------------------------------
 
-//: Return i'th complex root
-  vcl_complex<double> operator [] (int i)
-        const { return vcl_complex<double>(r_[i], i_[i]); }
+  //: Return i'th complex root
+  vcl_complex<double> operator [] (int i) const { return vcl_complex<double>(r_[i], i_[i]); }
 
-//: Complex vector of all roots.
+  //: Complex vector of all roots.
   vnl_vector<vcl_complex<double> > roots() const;
 
-//: Real part of root I.
+  //: Real part of root I.
   const double& real(int i) const { return r_[i]; }
 
-//: Imaginary part of root I.
+  //: Imaginary part of root I.
   const double& imag(int i) const { return i_[i]; }
 
-//: Vector of real parts of roots
+  //: Vector of real parts of roots
   vnl_vector<double>& real() { return r_; }
 
-//: Vector of imaginary parts of roots
+  //: Vector of imaginary parts of roots
   vnl_vector<double>& imag() { return i_; }
 
-//: Return real roots only.  Roots are real if the absolute value
-// of their imaginary part is less than the optional argument TOL.
-// TOL defaults to 1e-12 [untested]
+  //: Return real roots only.
+  //  Roots are real if the absolute value of their imaginary part is less than
+  //  the optional argument TOL. TOL defaults to 1e-12 [untested]
   vnl_vector<double> realroots(double tol = 1e-12) const;
 
   // Computations--------------------------------------------------------------

@@ -1,6 +1,10 @@
 #ifndef vgl_homg_operators_1d_txx_
 #define vgl_homg_operators_1d_txx_
 
+
+//:
+// \file
+
 #include "vgl_homg_operators_1d.h"
 #include <vcl_cmath.h>
 #include <vcl_iostream.h>
@@ -21,7 +25,6 @@
 // can be used as parameters for cross_ratio (but of course the same for all
 // points). The most reliable answer will be obtained when the coordinate with
 // the largest spacing is used, i.e., the one with smallest slope.
-//
 template <class T>
 double vgl_homg_operators_1d<T>::cross_ratio(const vgl_homg_1d<T>& a,
                                              const vgl_homg_1d<T>& b,
@@ -61,7 +64,6 @@ T vgl_homg_operators_1d<T>::dot(const vgl_homg_1d<T>& a, const vgl_homg_1d<T>& b
 
 //-----------------------------------------------------------------------------
 //: Normalize vgl_homg_1d to unit magnitude
-
 template <class T>
 void vgl_homg_operators_1d<T>::unitize(vgl_homg_1d<T>* a)
 {
@@ -109,8 +111,8 @@ vgl_homg_point_1d<T> vgl_homg_operators_1d<T>::midpoint(const vgl_homg_point_1d<
   return vgl_homg_point_1d<T>(x1*w2+x2*w1, 2*w1*w2);
 }
 
-//: Calculate the projective conjugate point, or more generally, the point
-// with a given crossratio w.r.t. three other points:
+//: Calculate the projective conjugate point.
+// Or more generally, the point with a given crossratio w.r.t. three other points:
 // The cross ratio ((x1,x2;x3,answer)) is cr (default -1). When cr is -1,
 // the returned value and x3 are conjugate points w.r.t. the pair (x1,x2).
 // Because this function is transitive on coordinates, it is sufficient to

@@ -1,6 +1,9 @@
 // This is vgui/impl/mfc/vgui_mfc_adaptor.cxx
 // See vgui_mfc_adaptor.h for a description of this file
 //
+//:
+//  \file
+
 
 #include "vgui_mfc_adaptor.h"
 
@@ -529,8 +532,8 @@ void vgui_mfc_adaptor::domouse(vgui_event_type et, UINT nFlags, CPoint point, vg
       wnd = m_pCWnd;
     else
       wnd = AfxGetApp()->GetMainWnd();
-    //: 'point' is window coordinates whereas TrackPopup menu requires screen
-    // coordinates. So translate them into screen coordinates
+    //: 'point' is window coordinates whereas TrackPopup menu requires screen coordinates.
+    // So translate them into screen coordinates
     ClientToScreen(&point);
     popup->TrackPopupMenu(TPM_LEFTALIGN|TPM_RIGHTBUTTON,point.x,point.y,wnd);
     delete popup;

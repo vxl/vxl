@@ -2,11 +2,15 @@
 #pragma implementation
 #endif
 
+//:
+//  \file
+
 #include "vsl_conic_as_params.h"
 
 #include <vnl/vnl_math.h>
 
-//: Construct from geometric parameters center, radii (may be negative or zero
+//:
+// Construct from geometric parameters center, radii (may be negative or zero
 // to signify hyperbola or parabola), and counterclockwise angle between Rx axis
 // and X axis.
 vsl_conic_as_params::vsl_conic_as_params(double cx, double cy, double rx, double ry, double theta)

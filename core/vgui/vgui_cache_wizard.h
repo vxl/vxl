@@ -5,6 +5,9 @@
 #pragma interface
 #endif
 //
+//:
+//  \file
+
 // .NAME vgui_cache_wizard
 // .LIBRARY vgui
 // .HEADER vxl Package
@@ -18,7 +21,7 @@
 //    17-AUG-2000 Initial version. Marko Bacic,Oxford RRG
 //
 // .SECTION Modifications
-//      <none yet>
+//   Feb.2002 - Peter Vanroose - brief doxygen comment placed on single line
 //-----------------------------------------------------------------------------
 #include <vcl_vector.h>
 #include <vcl_list.h>
@@ -30,8 +33,7 @@
 
 class vgui_cache_wizard {
 public:
-  //: Each image consists of MxN quadrants. M,N is to be determined
-  // on runtime
+  //: Each image consists of MxN quadrants. M,N is to be determined on runtime
   typedef vcl_vector <GLuint> image_cache_quadrants;
   typedef vcl_pair<vil_image,image_cache_quadrants *> wizard_image;
   typedef vcl_pair<int,int> dimension;
@@ -64,7 +66,8 @@ private:
   //: Miscalleneous
   int quadrant_width_;
   int quadrant_height_;
-  //: Maximum number of textures(limited by memory size - driver dependent,
+  //:
+  // Maximum number of textures(limited by memory size - driver dependent,
   // as some drivers will do their one caching so that the number of textures
   // is only limited by the size of virtual memory
   int max_texture_num_;

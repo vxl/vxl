@@ -4,6 +4,9 @@
 #pragma interface
 #endif
 //--------------------------------------------------------------------------------
+//:
+//  \file
+
 // .NAME        vmal_track_lines
 // .INCLUDE     vmal/vmal_track_lines.h
 // .FILE        vmal_track_lines.cxx
@@ -13,6 +16,7 @@
 // .SECTION Author
 //   L. Guichard
 // .SECTION Modifications:
+//   Feb.2002 - Peter Vanroose - brief doxygen comment placed on single line
 //--------------------------------------------------------------------------------
 #include <vcl_vector.h>
 #include <vtol/vtol_edge_2d_sptr.h>
@@ -51,15 +55,17 @@ public:
            vmal_multi_view_data_edge_sptr matches);
 
 //---------------------------------------------------------------------------
-//: Sort the input matches. The first end-point of the first line of a match
+//: Sort the input matches.
+// The first end-point of the first line of a match
 // must be linked to the corresponding end-point of the second line.
 //---------------------------------------------------------------------------
   void sort_lines(vmal_multi_view_data_edge_sptr matches,
             vmal_multi_view_data_edge_sptr sorted_matches);
 
 //---------------------------------------------------------------------------
-//: Compute the correlation between two lines using the homography. It also
-// compute a translation vector to correct the error due to the homography.
+//: Compute the correlation between two lines using the homography.
+// It also computes a translation vector to correct the error due to
+// the homography.
 //---------------------------------------------------------------------------
   double lines_correlation(vtol_edge_2d_sptr line0,
                      vtol_edge_2d_sptr line1,
@@ -73,27 +79,25 @@ private:
   bool belong(vtol_edge_2d_sptr, vtol_edge_2d_sptr);
   double dist(vtol_edge_2d_sptr, vtol_edge_2d_sptr);
 //-----------------------------------------------------------------------------
-//: Project the point (x0,y0) on the line ((ax,ay),(bx,by)). The resulting
-// projected point is (x,y). It also returns the distance between the line
-// and the projected point. If (x,y) does not belong to the segment
-// [(ax,ay),(bx,by)], it sets (x,y) to (-1,-1).
+//: Project the point (x0,y0) on the line ((ax,ay),(bx,by)).
+// The resulting projected point is (x,y).
+// It also returns the distance between the line and the projected point.
+// If (x,y) does not belong to the segment [(ax,ay),(bx,by)], sets (x,y) to (-1,-1).
 //-----------------------------------------------------------------------------
   double project_point(double x0,double y0,
-             double ax,double ay,
-             double bx,double by,
-             double *x,double *y);
-
+                       double ax,double ay,
+                       double bx,double by,
+                       double *x,double *y);
 
   int is_cur_best(vtol_edge_2d_sptr trans_line,vtol_edge_2d_sptr fitted_line,vtol_edge_2d_sptr other_line);
 //-----------------------------------------------------------------------------
-//: Find the transfomed of line.
+//: Find the transformed of line.
 //-----------------------------------------------------------------------------
   vtol_edge_2d_sptr find_transfo(vtol_edge_2d_sptr line,
                    vcl_vector<vtol_edge_2d_sptr>& fit_lines,
                    const vcl_vector<vtol_edge_2d_sptr>& transformed_lines);
 //-----------------------------------------------------------------------------
-//: Compute two new lines by comparing the input lines and keeping their common part
-// through the homography.
+//: Compute two new lines by comparing the input lines and keeping their common part through the homography
 //-----------------------------------------------------------------------------
   void refine_line_at_min(vtol_edge_2d_sptr line0, vtol_edge_2d_sptr line1,
                 vtol_edge_2d_sptr &new_line0, vtol_edge_2d_sptr &new_line1,

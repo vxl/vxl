@@ -1,3 +1,7 @@
+
+//:
+//  \file
+
 #include "osl_canny_base.h"
 #include <osl/osl_canny_port.h>
 #include <vcl_cmath.h>
@@ -40,7 +44,8 @@ osl_canny_base::~osl_canny_base() {  }
 
 //-----------------------------------------------------------------------------
 
-//: Following routine looking for connectiveness of edgel chains
+//:
+// Following routine looking for connectiveness of edgel chains
 // and accounts for single pixel gaps in the chains.
 void osl_canny_base::Initial_follow(float * const *thin, int xsize, int ysize, float low,
                                     int x, int y,
@@ -81,7 +86,8 @@ void osl_canny_base::Initial_follow(float * const *thin, int xsize, int ysize, f
 
 //-----------------------------------------------------------------------------
 
-//: Following routine looking for connectiveness of edgel chains
+//:
+// Following routine looking for connectiveness of edgel chains
 // and accounts for single pixel gaps in the chains.
 void osl_canny_base::Final_follow(int x, int y,
                                   vcl_list<int> *xc,
@@ -195,8 +201,7 @@ void osl_canny_base::Follow_junctions(int * const *junction,
 
 //-----------------------------------------------------------------------------
 
-//: Finds which member of the lists lies closest to the centre
-// of gravity of the lists.
+//: Finds which member of the lists lies closest to the centre of gravity of the lists.
 void osl_canny_base::Cluster_centre_of_gravity(int * const *jx, int * const *jy,
                                                vcl_list<int> &xc,
                                                vcl_list<int> &yc,

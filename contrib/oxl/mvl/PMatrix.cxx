@@ -2,6 +2,9 @@
 #pragma implementation
 #endif
 
+//:
+//  \file
+
 #include <vcl_cassert.h>
 #include <vcl_iostream.h>
 #include <vcl_fstream.h>
@@ -46,7 +49,7 @@ PMatrix::PMatrix ():
 
 //--------------------------------------------------------------
 //
-//: Construct by loading from vcl_istream
+//: Construct by loading from vcl_istream.
 // <pre>
 //   PMatrix P(cin);
 // </pre>
@@ -163,8 +166,7 @@ HomgLine3D PMatrix::backproject (const HomgPoint2D& x) const
 
 //-----------------------------------------------------------------------------
 //
-//: Return the 3D plane which is the backprojection of the specified
-// line in the image, l
+//: Return the 3D plane which is the backprojection of the specified line l in the image
 HomgPlane3D PMatrix::backproject (const HomgLine2D& l) const
 {
   return HomgPlane3D(_p_matrix.transpose() * l.get_vector());
@@ -190,7 +192,7 @@ vcl_istream& operator>>(vcl_istream& i, PMatrix& p)
 
 static bool ok(vcl_istream& f) { return f.good() || f.eof(); }
 
-//: Load from file
+//: Load from file.
 // <pre>
 // P.read_ascii("file.P");
 // </pre>
@@ -207,7 +209,8 @@ bool PMatrix::read_ascii(vcl_istream& f)
   return true;
 }
 
-//: Load from file.  Static method, so you can say
+//: Load from file.
+// Static method, so you can say
 // <pre>
 // PMatrix P = PMatrix::read("file.P");
 // </pre>
@@ -238,8 +241,7 @@ PMatrix PMatrix::read(vcl_istream& s)
 
 //-----------------------------------------------------------------------------
 //
-//: Compute the svd of this P and cache it, so that future operations that
-// require it need not recompute it.
+//: Compute the svd of this P and cache it, so that future operations that require it need not recompute it.
 vnl_svd<double>* PMatrix::svd() const
 {
   if (_svd == 0) {
@@ -251,8 +253,8 @@ vnl_svd<double>* PMatrix::svd() const
   return _svd;
 }
 
-//: Discredit the cached svd.  This is necessary only in order to recover
-// the space used by it if the PMatrix is not being deleted.
+//: Discredit the cached svd.
+//  This is necessary only in order to recover the space used by it if the PMatrix is not being deleted.
 void PMatrix::clear_svd()
 {
   if (_svd) {
@@ -286,7 +288,7 @@ HomgPoint3D PMatrix::get_focal_point() const
                      nullspace(3,0));
 }
 
-//: Return the HMatrix3D s.t. P * H = [I 0];
+//: Return the HMatrix3D s.t. P * H = [I 0].
 // If P = [A a], then H = [inv(A) -inv(A)*a; 0 0 0 1];
 HMatrix3D PMatrix::get_canonical_H() const
 {
@@ -300,8 +302,8 @@ HMatrix3D PMatrix::get_canonical_H() const
   return HMatrix3D(svd.inverse(), -svd.solve(p.a));
 }
 
-//: Return true iff P is [I 0]. Equality is assumed if the
-// max abs diff is less than tol.
+//: Return true iff P is [I 0].
+// Equality is assumed if the max abs diff is less than tol.
 bool PMatrix::is_canonical(double tol) const
 {
   for(int r = 0; r < 3; ++r)
@@ -343,8 +345,7 @@ PMatrix::get (double* c_matrix) const
 
 //----------------------------------------------------------------
 //
-//: Return the 3x4 projection matrix in the vnl_matrix<double>,
-// p_matrix
+//: Return the 3x4 projection matrix in the vnl_matrix<double>, p_matrix
 void
 PMatrix::get (vnl_matrix<double>* p_matrix) const
 {

@@ -2,6 +2,9 @@
 #ifndef vbl_basic_relation_txx_
 #define vbl_basic_relation_txx_
 
+//:
+// \file
+
 #include <vbl/vbl_basic_relation.h>
 #include <vbl/vbl_basic_optional.h>
 #include <vbl/vbl_basic_tuple.h>
@@ -12,8 +15,8 @@
 // First the iterator methods.
 
 //------------------------------------------------------------
-//: Constructor.  The iterator controls the implementation passed
-// in, and must delete it when it gets deleted.
+//: Constructor.
+// The iterator controls the implementation passed in, and must delete it when it gets deleted.
 template <class T1, class T2, class T3, class T4, class T5>
 vbl_basic_relation_iterator<T1,T2,T3,T4,T5>::vbl_basic_relation_iterator(vbl_br_iter_impl<T1,T2,T3,T4,T5>* im)
   : impl(im)
@@ -21,8 +24,8 @@ vbl_basic_relation_iterator<T1,T2,T3,T4,T5>::vbl_basic_relation_iterator(vbl_br_
 }
 
 //------------------------------------------------------------
-//: Constructor.  The iterator controls the implementation passed
-// in, and must delete it when it gets deleted.
+//: Constructor.
+// The iterator controls the implementation passed in, and must delete it when it gets deleted.
 template <class T1, class T2, class T3, class T4, class T5>
 vbl_basic_relation_iterator<T1,T2,T3,T4,T5>::vbl_basic_relation_iterator()
   : impl(0)
@@ -73,9 +76,9 @@ vbl_basic_relation<T1,T2,T3,T4,T5>::vbl_basic_relation(const vcl_string& name)
 }
 
 //----------------------------------------------------------------------
-//: Copy constructor.  Both copies refer to the same relation since
-// the names are the same.  However the where clauses may be changed
-// independently.
+//: Copy constructor.
+// Both copies refer to the same relation since the names are the same.
+// However the where clauses may be changed independently.
 template <class T1, class T2, class T3, class T4, class T5>
 vbl_basic_relation<T1,T2,T3,T4,T5>::vbl_basic_relation(vbl_basic_relation<T1,T2,T3,T4,T5> const& erel)
   : impl(erel.impl), where(0)
@@ -91,8 +94,8 @@ vbl_basic_relation<T1,T2,T3,T4,T5>::vbl_basic_relation(vbl_basic_relation<T1,T2,
 }
 
 //----------------------------------------------------------------------
-//: Destructor gets rid of this reference to the relation
-// implementation.  The last reference to the implementation will
+//: Destructor gets rid of this reference to the relation implementation.
+// The last reference to the implementation will
 // cause it to be deleted if it is clear at the time.
 template <class T1, class T2, class T3, class T4, class T5>
 vbl_basic_relation<T1,T2,T3,T4,T5>::~vbl_basic_relation()
@@ -118,8 +121,7 @@ vbl_basic_relation_iterator<T1,T2,T3,T4,T5> vbl_basic_relation<T1,T2,T3,T4,T5>::
 }
 
 //------------------------------------------------------------
-//: Return an iterator which equals any iterator which has reached
-// the end of a relation.
+//: Return an iterator which equals any iterator which has reached the end of a relation.
 template <class T1, class T2, class T3, class T4, class T5>
 vbl_basic_relation_iterator<T1,T2,T3,T4,T5> vbl_basic_relation<T1,T2,T3,T4,T5>::end()
 {
@@ -127,8 +129,9 @@ vbl_basic_relation_iterator<T1,T2,T3,T4,T5> vbl_basic_relation<T1,T2,T3,T4,T5>::
 }
 
 //------------------------------------------------------------
-//: Clear a relation.  Clears all the tuples selected by the current
-// where clause.  Returns true if one or more tuples removed.
+//: Clear a relation.
+// Clears all the tuples selected by the current where clause.
+// Returns true if one or more tuples removed.
 template <class T1, class T2, class T3, class T4, class T5>
 bool vbl_basic_relation<T1,T2,T3,T4,T5>::clear()
 {
@@ -136,8 +139,8 @@ bool vbl_basic_relation<T1,T2,T3,T4,T5>::clear()
 }
 
 //------------------------------------------------------------
-//: Remove all tuples with the given first attribute.  Returns true
-// if one or more tuples removed.
+//: Remove all tuples with the given first attribute.
+//  Returns true if one or more tuples removed.
 template <class T1, class T2, class T3, class T4, class T5>
 bool vbl_basic_relation<T1,T2,T3,T4,T5>::remove_first(T1 t1)
 {
@@ -145,8 +148,8 @@ bool vbl_basic_relation<T1,T2,T3,T4,T5>::remove_first(T1 t1)
 }
 
 //------------------------------------------------------------
-//: Remove all tuples with the given second attribute.  Returns true
-// if one or more tuples removed.
+//: Remove all tuples with the given second attribute.
+//  Returns true if one or more tuples removed.
 template <class T1, class T2, class T3, class T4, class T5>
 bool vbl_basic_relation<T1,T2,T3,T4,T5>::remove_second(T2 t2)
 {
@@ -154,8 +157,8 @@ bool vbl_basic_relation<T1,T2,T3,T4,T5>::remove_second(T2 t2)
 }
 
 //------------------------------------------------------------
-//: Remove all tuples with the given third attribute.  Returns true
-// if one or more tuples removed.
+//: Remove all tuples with the given third attribute.
+//  Returns true if one or more tuples removed.
 template <class T1, class T2, class T3, class T4, class T5>
 bool vbl_basic_relation<T1,T2,T3,T4,T5>::remove_third(T3 t3)
 {
@@ -163,8 +166,8 @@ bool vbl_basic_relation<T1,T2,T3,T4,T5>::remove_third(T3 t3)
 }
 
 //------------------------------------------------------------
-//: Remove all tuples with the given fourth attribute.  Returns true
-// if one or more tuples removed.
+//: Remove all tuples with the given fourth attribute.
+//  Returns true if one or more tuples removed.
 template <class T1, class T2, class T3, class T4, class T5>
 bool vbl_basic_relation<T1,T2,T3,T4,T5>::remove_fourth(T4 t4)
 {
@@ -172,8 +175,8 @@ bool vbl_basic_relation<T1,T2,T3,T4,T5>::remove_fourth(T4 t4)
 }
 
 //------------------------------------------------------------
-//: Remove all tuples with the given fifth attribute. Returns true
-// if one or more tuples removed.
+//: Remove all tuples with the given fifth attribute.
+// Returns true if one or more tuples removed.
 template <class T1, class T2, class T3, class T4, class T5>
 bool vbl_basic_relation<T1,T2,T3,T4,T5>::remove_fifth(T5 t5)
 {
@@ -181,8 +184,7 @@ bool vbl_basic_relation<T1,T2,T3,T4,T5>::remove_fifth(T5 t5)
 }
 
 //------------------------------------------------------------
-//: Returns an vbl_basic_relation with a where clause selecting those
-// tuples with the given first attribute.
+//: Returns an vbl_basic_relation with a where clause selecting those tuples with the given first attribute.
 template <class T1, class T2, class T3, class T4, class T5>
 vbl_basic_relation<T1,T2,T3,T4,T5> vbl_basic_relation<T1,T2,T3,T4,T5>::where_first(T1 t1)
 {
@@ -192,8 +194,7 @@ vbl_basic_relation<T1,T2,T3,T4,T5> vbl_basic_relation<T1,T2,T3,T4,T5>::where_fir
 }
 
 //------------------------------------------------------------
-//: Returns an vbl_basic_relation with a where clause selecting those
-// tuples with the given second attribute.
+//: Returns an vbl_basic_relation with a where clause selecting those tuples with the given second attribute.
 template <class T1, class T2, class T3, class T4, class T5>
 vbl_basic_relation<T1,T2,T3,T4,T5> vbl_basic_relation<T1,T2,T3,T4,T5>::where_second(T2 t2)
 {
@@ -203,8 +204,7 @@ vbl_basic_relation<T1,T2,T3,T4,T5> vbl_basic_relation<T1,T2,T3,T4,T5>::where_sec
 }
 
 //------------------------------------------------------------
-//: Returns an vbl_basic_relation with a where clause selecting those
-// tuples with the given third attribute.
+//: Returns an vbl_basic_relation with a where clause selecting those tuples with the given third attribute.
 template <class T1, class T2, class T3, class T4, class T5>
 vbl_basic_relation<T1,T2,T3,T4,T5> vbl_basic_relation<T1,T2,T3,T4,T5>::where_third(T3 t3)
 {
@@ -214,8 +214,7 @@ vbl_basic_relation<T1,T2,T3,T4,T5> vbl_basic_relation<T1,T2,T3,T4,T5>::where_thi
 }
 
 //------------------------------------------------------------
-//: Returns an vbl_basic_relation with a where clause selecting those
-// tuples with the given fourth attribute.
+//: Returns an vbl_basic_relation with a where clause selecting those tuples with the given fourth attribute.
 template <class T1, class T2, class T3, class T4, class T5>
 vbl_basic_relation<T1,T2,T3,T4,T5> vbl_basic_relation<T1,T2,T3,T4,T5>::where_fourth(T4 t4)
 {
@@ -225,8 +224,7 @@ vbl_basic_relation<T1,T2,T3,T4,T5> vbl_basic_relation<T1,T2,T3,T4,T5>::where_fou
 }
 
 //------------------------------------------------------------
-//: Returns an vbl_basic_relation with a where clause selecting those
-// tuples with the given fifth attribute.
+//: Returns an vbl_basic_relation with a where clause selecting those tuples with the given fifth attribute.
 template <class T1, class T2, class T3, class T4, class T5>
 vbl_basic_relation<T1,T2,T3,T4,T5> vbl_basic_relation<T1,T2,T3,T4,T5>::where_fifth(T5 t5)
 {
@@ -258,8 +256,7 @@ void vbl_basic_relation<T1,T2,T3,T4,T5>::dump_relation(vcl_ostream& str)
 }
 
 //------------------------------------------------------------
-//: Return the address of a specific static variable, unique to this
-// class.
+//: Return the address of a specific static variable, unique to this class.
 template <class T1, class T2, class T3, class T4, class T5>
 void* vbl_basic_relation<T1,T2,T3,T4,T5>::get_type()
 {
@@ -284,8 +281,8 @@ void* vbl_basic_relation<T1,T2,T3,T4,T5>::get_static_type()
 }
 
 //------------------------------------------------------------
-//: Method to actually do a downcast.  Return NULL if r is not this
-// type.  This is a static.
+//: Method to actually do a downcast.  Return NULL if r is not this type.
+//  This is a static.
 template <class T1, class T2, class T3, class T4, class T5>
 vbl_basic_relation<T1,T2,T3,T4,T5>*
 vbl_basic_relation<T1,T2,T3,T4,T5>::cast(vbl_basic_relation_type* r)

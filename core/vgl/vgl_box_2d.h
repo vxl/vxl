@@ -18,6 +18,7 @@
 //  Peter Vanroose    5/10/2001: Added operator==() and is_empty()
 //  Peter Vanroose    6/10/2001: Added method add(vgl_point_2d<T>) to enlarge a box
 //  Peter Vanroose    7/10/2001: Removed deprecated get_*() functions
+//   Feb.2002 - Peter Vanroose - brief doxygen comment placed on single line
 // \endverbatim
 
 #include <vcl_iosfwd.h>
@@ -187,8 +188,8 @@ public:
     return (min_x() > max_x() || min_y() > max_y());
   }
 
-  //: Add a point to this box, by possibly enlarging the box
-  // so that the point just falls within the box.
+  //: Add a point to this box
+  // Do this by possibly enlarging the box so that the point just falls within the box.
   // Adding a point to an empty box makes it a size zero box only containing p.
   void add(vgl_point_2d<Type> const& p);
 

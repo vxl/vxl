@@ -2,6 +2,9 @@
 #pragma implementation
 #endif
 
+//:
+//  \file
+
 #include <vcl_cassert.h>
 #include <vcl_iostream.h>
 #include <vcl_cmath.h>
@@ -30,8 +33,8 @@ FMatrixAffine::~FMatrixAffine()
 
 //--------------------------------------------------------------
 //
-//: Set the fundamental matrix using the two-dimensional (C-storage)
-// array f_matrix. Only returns true if f_matrix contained a Fundamental
+//: Set the fundamental matrix using the two-dimensional (C-storage) array f_matrix.
+// Only returns true if f_matrix contained a Fundamental
 // matrix in the affine form, and not an approximation to one.
 // Otherwise returns false and the matrix is not set.
 // f_matrix must be 3x3, i.e., must contain 9 elements.

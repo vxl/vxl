@@ -13,6 +13,7 @@
 // Modifications:
 //  18 Feb 2000. fsm: templated.
 //  4/4/01 LSB (Manchester) documentation tidied
+//   Feb.2002 - Peter Vanroose - brief doxygen comment placed on single line
 // \endverbatim
 //-----------------------------------------------------------------------------
 
@@ -54,8 +55,7 @@ public:
     return vnl_vector_fixed<T,3>(V_(0,0), V_(1,0), V_(2,0));
   }
 
-  //: Return the column matrix of eigenvectors, sorted in increasing order
-  // of eigenvalue.
+  //: Return the column matrix of eigenvectors, sorted in increasing order of eigenvalue.
   vnl_matrix_fixed<T,3,3>& V() {
     if (!eigenvectors_currentp) compute_eigensystem();
     return V_;

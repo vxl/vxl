@@ -14,6 +14,7 @@
 //  971023 AWF Initial version
 //  dac (Manchester) 26/03/2001: tidied up documentation
 //  Tim Cootes 7-Jan-02: Added documentation and additional methods
+//   Feb.2002 - Peter Vanroose - brief doxygen comment placed on single line
 //  \endverbatim
 
 //-----------------------------------------------------------------------------
@@ -55,12 +56,12 @@ public:
   //: Define tolerance on function evaluation
   void set_f_tolerance(double tol);
 
-  //: Define scaling used to select starting vertices relative to intial x0
-  //  ie the i'th vertex has x[i] = x0[i]*(1+relative_diameter)
+  //: Define scaling used to select starting vertices relative to intial x0.
+  //  I.e. the i'th vertex has x[i] = x0[i]*(1+relative_diameter)
   void set_relative_diameter(double r);
 
-  //: Scaling used to select starting vertices relative to intial x0
-  //  ie the i'th vertex has x[i] = x0[i]*(1+relative_diameter)
+  //: Scaling used to select starting vertices relative to initial x0.
+  //  I.e. the i'th vertex has x[i] = x0[i]*(1+relative_diameter)
   double relative_diameter;
 
   //: Construct and supply function to be minimized
@@ -70,7 +71,8 @@ public:
   //  Start simplex defined by scaling elements of x
   void minimize(vnl_vector<double>& x);
 
-  //: Perform optimisation.  Start simplex defined by adding dx[i] to each x[i]
+  //: Perform optimisation.
+  //  Start simplex defined by adding dx[i] to each x[i]
   void minimize(vnl_vector<double>& x, const vnl_vector<double>& dx);
 
   //: Number of evaluations used in last call to minimize
@@ -101,8 +103,8 @@ protected:
   int num_evaluations_;
 };
 
-//: Private struct needs to be declared in the header file
-//  in order to instantiate STL container of it elsewhere.
+// Private struct needs to be declared in the header file
+// in order to instantiate STL container of it elsewhere.
 struct vnl_amoeba_SimplexCorner {
   vnl_vector<double> v;
   double fv;

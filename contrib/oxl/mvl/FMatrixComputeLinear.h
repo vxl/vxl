@@ -31,8 +31,8 @@
 
 class FMatrixComputeLinear : public FMatrixCompute {
 public:
-//: Initialize FMatrixComputeLinear object.  If precondition = false,
-// points are not conditioned prior to computation.
+//: Initialize FMatrixComputeLinear object.
+//  If precondition = false, points are not conditioned prior to computation.
 // If rank2_truncate = false, the resulting solution is not forced to rank 2
 // using the vnl_svd<double>.
   FMatrixComputeLinear(bool precondition = true, bool rank2_truncate = true);
@@ -46,11 +46,11 @@ public:
 //
   bool compute(PairMatchSetCorner&, FMatrix* F);
 
-//: Interface to above using arrays of HomgPoint2D.  Makes a PairMatchSetCorner,
-// and then calls the compute method above.
+//: Interface to above using arrays of HomgPoint2D.
+//  Makes a PairMatchSetCorner, and then calls the compute method above.
   bool compute(vcl_vector<HomgPoint2D>&, vcl_vector<HomgPoint2D>&, FMatrix* F);
 
-// - Interface to above using preconditioned points
+//: Interface to above using preconditioned points
   bool compute_preconditioned(vcl_vector<HomgPoint2D>&, vcl_vector<HomgPoint2D>&, FMatrix* F);
 
 //: Return an FMatrix computed as above.

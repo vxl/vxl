@@ -1,6 +1,10 @@
 /*
   fsm@robots.ox.ac.uk
 */
+
+//:
+//  \file
+
 #ifdef __GNUC__
 #pragma implementation
 #endif
@@ -11,7 +15,8 @@
 #include <osl/osl_edgel_chain.h>
 #include <osl/osl_OrthogRegress.h>
 
-//: Takes a DigitalCurve that is assumed to form a closed loop and finds the
+//:
+// Takes a DigitalCurve that is assumed to form a closed loop and finds the
 // largest corner in the chain. This point is then used as the starting point for
 // the chain and the rest of the points are reordered. Doing this improves the
 // segmentation for osl_edgel_chains composed of many straight lines.

@@ -1,5 +1,8 @@
 // This is vxl/vgl/vgl_polygon_scan_iterator.cxx
 
+//:
+// \file
+
 //--------------------------------------------------------------
 //
 // Class : vgl_polygon_scan_iterator
@@ -335,10 +338,10 @@ bool vgl_polygon_scan_iterator::next( )
 }
 
 //===============================================================
-//: Returns the vertex following v in v's chain.  The vertex
-//    is returned through the parameter nextvert.  I get a syntax error
-//    when I tried to return an object of type vertind.  Compiler error
-//    says the default return type is int???
+//: Returns the vertex following v in v's chain.
+//  The vertex is returned through the parameter nextvert.
+//  I get a syntax error when I tried to return an object of type vertind.
+//  Compiler error says the default return type is int???
 void vgl_polygon_scan_iterator::get_next_vert( vertind v, vertind & nextvert )
 {
         nextvert = v;
@@ -347,10 +350,10 @@ void vgl_polygon_scan_iterator::get_next_vert( vertind v, vertind & nextvert )
             nextvert.vertnum = 0; // wrap around to first vertex
 }
 
-//: Returns the vertex preceeding v in v's chain.  The vertex
-//    is returned through the parameter prevvert.  I get a syntax error
-//    when I tried to return an object of type vertind.  Compiler error
-//    says the default return type is int???
+//: Returns the vertex preceeding v in v's chain.
+//  The vertex is returned through the parameter prevvert.
+//  I get a syntax error when I tried to return an object of type vertind.
+//  Compiler error says the default return type is int???
 void vgl_polygon_scan_iterator::get_prev_vert( vertind v, vertind & prevvert )
 {
         prevvert = v;

@@ -3,6 +3,9 @@
 #pragma implementation
 #endif
 //
+//:
+//  \file
+
 // .NAME vgui_gtk_dialog_impl
 // Author: Philip C. Pritchett, RRG, University of Oxford
 // Created: 28 Dec 99
@@ -124,8 +127,9 @@ void choose_cb(GtkWidget* /*widget*/,
 
 
 //--------------------------------------------------------------------------------
-//: Changes the modality of the dialog.  True makes the dialog modal (i.e. the
-// dialog 'grabs' all events), this is the default.  False makes the dialog non-modal.
+//: Changes the modality of the dialog.
+//  True makes the dialog modal (i.e. the dialog 'grabs' all events), this is the default.
+//  False makes the dialog non-modal.
 void vgui_gtk_dialog_impl::modal(const bool m)
 {
   is_modal = m;
@@ -203,8 +207,8 @@ void browse_files(GtkWidget* /*w*/, gpointer data)
 }
 
 //-------------------------------------------------------------------------------
-//: Handles a change of color
-// by passing the value back to the text entry in the dialog box.
+//: Handles a change of color.
+// Done by passing the value back to the text entry in the dialog box.
 void color_changed_cb(GtkWidget* /*w*/, GtkColorSelection *colorsel) {
   // Get the color from the color chooser:
   gdouble color[3];
@@ -317,7 +321,6 @@ bool vgui_gtk_dialog_impl::ask() {
       gtk_widget_show(entry);
       gtk_widget_show(hbox);
       wlist.push_back(entry);
-
     }
     else if (l.type == bool_elem) {
       vgui_bool_field *field = static_cast<vgui_bool_field*>(l.field);
@@ -354,7 +357,6 @@ bool vgui_gtk_dialog_impl::ask() {
 
         gtk_signal_connect(GTK_OBJECT(item), "activate",
                            GTK_SIGNAL_FUNC(choose_cb), ip);
-
       }
 
       gtk_option_menu_set_menu(GTK_OPTION_MENU(entry), menu);

@@ -2,6 +2,9 @@
 #pragma implementation
 #endif
 
+//:
+//  \file
+
 #include "FMatrix.h"
 
 #include <vcl_cassert.h>
@@ -132,7 +135,7 @@ FMatrix FMatrix::read(vcl_istream& s)
 
 //--------------------------------------------------------------
 //
-//: @{ Return the epipolar line  $l_1$ in image 1: $l_1 = F^\top x_2$@}
+//: Return the epipolar line  $l_1$ in image 1: $l_1 = F^\top x_2$
 HomgLine2D FMatrix::image1_epipolar_line(const HomgPoint2D& x2) const
 {
   return HomgLine2D(_ft_matrix * x2.get_vector());
@@ -140,7 +143,7 @@ HomgLine2D FMatrix::image1_epipolar_line(const HomgPoint2D& x2) const
 
 //----------------------------------------------------------------
 //
-//: @{Return the epipolar line $l_2$ in image 2: $l_2 = F x_1$@}
+//: Return the epipolar line $l_2$ in image 2: $l_2 = F x_1$
 
 HomgLine2D FMatrix::image2_epipolar_line(const HomgPoint2D& x1) const
 {
@@ -213,7 +216,8 @@ FMatrix::get_epipoles(HomgPoint2D*epipole1_ptr, HomgPoint2D*epipole2_ptr) const
 
 //-----------------------------------------------------------------------------
 //
-//: For a specified pair of matching points, find the nearest (minimum sum
+//: Find nearest match which agrees with F.
+// For a specified pair of matching points, find the nearest (minimum sum
 // of squared image distances) match which is in perfect agreement with
 // the epipolar geometry of the F matrix.
 // (see R.I. Hartley and P. Sturm, ``Triangulation''. In
@@ -354,9 +358,9 @@ FMatrix::find_nearest_perfect_match(const HomgPoint2D& point1,
 
 //-------------------------------------------------------------------
 //
-//: Ensure the current Fundamental matrix is rank 2 by taking its vnl_svd<double>,
-// setting the smallest singular value to zero, and recomposing.
-// Set the _rank2_flag to true
+//: Ensure the current Fundamental matrix is rank 2.
+// Does this by taking its vnl_svd<double>, setting the smallest singular value
+// to zero, and recomposing.  Sets the _rank2_flag to true.
 
 void FMatrix::set_rank2_using_svd (void)
 {
@@ -426,9 +430,7 @@ void FMatrix::set_rank2_flag (bool rank2_flag)
 
 //--------------------------------------------------------------
 //
-//: Set the fundamental matrix using the C-storage array c_matrix,
-// and cache the transpose.
-//
+//: Set the fundamental matrix using the C-storage array c_matrix, and cache the transpose.
 // Always returns true for the base class - showing the set was a success.
 // When overridden by derived classes
 // it may return false, to indicate that the matrix violates the
@@ -448,11 +450,10 @@ bool FMatrix::set (const double *c_matrix)
 
 //--------------------------------------------------------------
 //
-//: Set the fundamental matrix using the vnl_matrix<double>
-// f_matrix.  Always returns true for the base class -
-// showing the set was a success.  When overridden by derived classes
-// it may return false, to indicate that the matrix violates the
-// constraints imposed by the derived classes.
+//: Set the fundamental matrix using the vnl_matrix<double> f_matrix.
+// Always returns true for the base class - showing the set was a success.
+// When overridden by derived classes it may return false, to indicate
+// that the matrix violates the constraints imposed by the derived classes.
 
 bool FMatrix::set (const vnl_matrix<double>& f_matrix)
 {

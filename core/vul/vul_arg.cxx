@@ -189,7 +189,7 @@ void vul_arg_info_list::include(vul_arg_info_list& l)
 }
 
 //: Display help about each option in the arg list.
-// note that this function does not exit at the end.
+// Note that this function does not exit at the end.
 void vul_arg_info_list::display_help( char const*progname)
 {
   if (progname)
@@ -253,8 +253,8 @@ void vul_arg_info_list::display_help( char const*progname)
       }
 }
 
-//: Parse the command line, using the current list of args.  Remove all
-// recognised arguments from the command line by modifying argc and argv.
+//: Parse the command line, using the current list of args.
+//  Remove all recognised arguments from the command line by modifying argc and argv.
 void vul_arg_info_list::parse(int& argc, char **& argv, bool warn_about_unrecognized_arguments)
 {
   vcl_vector<bool> done_once(nargs, false);
@@ -483,8 +483,9 @@ static int list_parse(vcl_list<int> &out, char ** argv)
 
 //------------------------------------------------------------------------------
 
-// specializations for specific types. C-s for "//: unsigned" to find the
-// implementation for vul_arg<unsigned>
+// specializations for specific types.
+// In emacs, C-s for "//: unsigned" to find the implementation for vul_arg<unsigned>
+// In vi: "/^\/\/: unsigned"
 
 #if 1
 # define VDS VCL_DEFINE_SPECIALIZATION

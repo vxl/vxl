@@ -32,6 +32,9 @@
 // <end copyright notice>
 //-----------------------------------------------------------------------------
 //
+//:
+// \file
+
 // see gevd_detector.h
 //
 //-----------------------------------------------------------------------------
@@ -98,8 +101,7 @@ void gevd_detector::UnProtectLists()
 
 
 //--------------------------------------------------------------------------------
-//: Destructor. Caller has an obligation to clear all the created edges and
-// vertices.
+//: Destructor. Caller has an obligation to clear all the created edges and vertices.
 gevd_detector::~gevd_detector()
 {
   ClearData();
@@ -118,7 +120,6 @@ void gevd_detector::ClearData()
   delete vertices;
   delete edges;
 }
-
 
 
 //-----------------------------------------------------------------------------

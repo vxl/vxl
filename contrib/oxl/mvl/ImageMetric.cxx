@@ -2,6 +2,9 @@
 #pragma implementation
 #endif
 
+//:
+//  \file
+
 #include "ImageMetric.h"
 
 #include <vcl_iostream.h>
@@ -38,8 +41,8 @@ ImageMetric::~ImageMetric()
 
 // TRANSFORMATIONS
 
-//: Condition the 2D point p.  Default implementation is simply
-// to return p in homogeneous coordinates
+//: Condition the 2D point p.
+//  Default implementation is simply to return p in homogeneous coordinates
 HomgPoint2D ImageMetric::image_to_homg(const vnl_double_2& p)
 {
   return HomgPoint2D(p.x(), p.y(), 1.0);
@@ -61,22 +64,19 @@ vnl_double_2 ImageMetric::homg_to_image(const HomgPoint2D& p)
   return vnl_double_2(x, y);
 }
 
-//: Convert homogeneous point in image coordinates to one in conditioned
-// coordinates
+//: Convert homogeneous point in image coordinates to one in conditioned coordinates
 HomgPoint2D ImageMetric::imagehomg_to_homg(const HomgPoint2D& x)
 {
   return x;
 }
 
-//: Convert homogeneous point in conditioned coordinates to one in image
-// coordinates
+//: Convert homogeneous point in conditioned coordinates to one in image coordinates
 HomgPoint2D ImageMetric::homg_to_imagehomg(const HomgPoint2D& x)
 {
   return x;
 }
 
-//: Convert homogeneous line in conditioned coordinates to one in image
-// coordinates.
+//: Convert homogeneous line in conditioned coordinates to one in image coordinates
 HomgLine2D ImageMetric::homg_to_image_line(const HomgLine2D& l)
 {
   if (is_linear())
@@ -104,8 +104,7 @@ HomgLine2D ImageMetric::image_to_homg_line(const HomgLine2D& l)
 }
 
 
-//: Convert homogeneous line segment in conditioned coordinates to one in image
-// coordinates.
+//: Convert homogeneous line segment in conditioned coordinates to one in image coordinates
 HomgLineSeg2D ImageMetric::homg_to_image(const HomgLineSeg2D& l)
 {
   // get points, decondition, and rejoin
@@ -123,8 +122,7 @@ HomgLineSeg2D ImageMetric::image_to_homg(const HomgLineSeg2D& l)
 
 // @{ MEASUREMENTS @}
 
-//: Compute perpendicular distance in image coordinates between point p and
-// line l, expressed in conditioned coordinates.
+//: Compute perpendicular distance in image coordinates between point p and line l, expressed in conditioned coordinates.
 double ImageMetric::perp_dist_squared(const HomgPoint2D & p, const HomgLine2D & l)
 {
   return HomgOperator2D::perp_dist_squared(homg_to_imagehomg(p), homg_to_image_line(l));
@@ -150,8 +148,8 @@ double ImageMetric::distance_squared(const HomgPoint2D & p1, const HomgPoint2D &
   return HomgOperator2D::distance_squared(homg_to_imagehomg(p1), homg_to_imagehomg(p2));
 }
 
-//: Get distance between a line segment and an infinite line.  The metric used
-// is the maximum of the two endpoint perp distances.
+//: Get distance between a line segment and an infinite line.
+//  The metric used is the maximum of the two endpoint perp distances.
 double ImageMetric::distance_squared(const HomgLineSeg2D& segment, const HomgLine2D& line)
 {
   // ca_distance_squared_lineseg_to_line
@@ -190,8 +188,7 @@ bool ImageMetric::can_invert_distance() const
 
 // @{ MATRIX REPRESENTATION @}
 
-//: Return true if the action of the conditioner can be represented as a
-// planar homography.
+//: Return true if the action of the conditioner can be represented as a planar homography.
 bool ImageMetric::is_linear() const
 {
   return false;
@@ -201,17 +198,15 @@ bool ImageMetric::is_linear() const
 
 static vnl_identity_3x3 I;
 
-//: Return conditioning matrix C that converts homogeneous image points to
-// homogeneous conditioned points.  If the ImageMetric used is nonlinear, then
-// we'll have to make other arrangements...
+//: Return conditioning matrix C that converts homogeneous image points to homogeneous conditioned points.
+//  If the ImageMetric used is nonlinear, then we'll have to make other arrangements...
 const vnl_matrix<double>& ImageMetric::get_C() const
 {
   warning("ImageMetric::get_C()") << "returning identity\n";
   return I;
 }
 
-//: Return conditioning matrix C that converts homogeneous conditioned points
-// to image coords.
+//: Return conditioning matrix C that converts homogeneous conditioned points to image coords.
 const vnl_matrix<double>& ImageMetric::get_C_inverse() const
 {
   warning("ImageMetric::get_C_inverse()") << "returning identity\n";
@@ -220,16 +215,14 @@ const vnl_matrix<double>& ImageMetric::get_C_inverse() const
 
 #include <mvl/FMatrix.h>
 
-//: Convert FMatrix F expressed in conditioned frame to one that is
-// valid in the image frame.
+//: Convert FMatrix F expressed in conditioned frame to one that is valid in the image frame.
 FMatrix ImageMetric::homg_to_image_deprecated(FMatrix const & F)
 {
   warning("ImageMetric::homg_to_image(FMatrix)") << "obsolete function, use HomgMetric::homg_to_image_F\n;";
   return F;
 }
 
-//: Convert FMatrix F expressed in image frame to one that is
-// valid in the conditioned frame.
+//: Convert FMatrix F expressed in image frame to one that is valid in the conditioned frame.
 FMatrix ImageMetric::image_to_homg_deprecated(FMatrix const & F)
 {
   warning("ImageMetric::image_to_homg(FMatrix)") << "obsolete function, use HomgMetric::image_to_homg_F\n";

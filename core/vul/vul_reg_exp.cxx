@@ -1,5 +1,8 @@
 // This is vxl/vul/vul_reg_exp.cxx
 
+//:
+// \file
+
 //
 // Copyright (C) 1991 Texas Instruments Incorporated.
 //
@@ -146,8 +149,7 @@ vul_reg_exp::vul_reg_exp (vul_reg_exp const& rxp) {
 }
 
 
-//: Returns true if two regular expressions have the same
-// compiled program for pattern matching.
+//: Returns true if two regular expressions have the same compiled program for pattern matching.
 
 bool vul_reg_exp::operator== (vul_reg_exp const& rxp) const {
   if (this != &rxp) {                           // Same address?
@@ -162,8 +164,7 @@ bool vul_reg_exp::operator== (vul_reg_exp const& rxp) const {
 }
 
 
-//: Returns true if have the same compiled regular expressions
-// and the same start and end pointers.
+//: Returns true if have the same compiled regular expressions and the same start and end pointers.
 
 bool vul_reg_exp::deep_equal (vul_reg_exp const& rxp) const {
   int ind = this->progsize;                     // Get regular expression size
@@ -366,8 +367,7 @@ static int strcspn ();
 //
 
 
-//: compile a regular expression into internal code
-// for later pattern matching.
+//: Compile a regular expression into internal code for later pattern matching.
 
 void vul_reg_exp::compile (char const* exp) {
     register const char* scan;

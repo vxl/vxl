@@ -11,6 +11,7 @@
 // \verbatim
 // Modifications
 // PDA (Manchester) 21/03/2001: Tidied up the documentation
+//   Feb.2002 - Peter Vanroose - brief doxygen comment placed on single line
 // \endverbatim
 
 
@@ -169,8 +170,8 @@ public:
   }
 
   //------------------------------------------------------------
-  //: Return the primary key for the where clause.  The primary key
-  // is the number of the first non-wild attribute in the where
+  //: Return the primary key for the where clause.
+  // The primary key is the number of the first non-wild attribute in the where
   // clause, with one being the first attribute.  If all attributes
   // are wild, zero is returned.
   int PrimaryKey() const

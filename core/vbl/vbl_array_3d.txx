@@ -2,8 +2,10 @@
 #ifndef vbl_array_3d_txx_
 #define vbl_array_3d_txx_
 
-#include "vbl_array_3d.h"
+//:
+// \file
 
+#include "vbl_array_3d.h"
 #include <vcl_cassert.h>
 
 //--------------------------------------------------------------
@@ -12,9 +14,9 @@
 //
 //--------------------------------------------------------------
 
-//: Constructor utility.  This allocates a 3D array which can be
-// referenced using the form myarray[a][b][c].  Useful in C although maybe
-// superfluous here as access is via a get function anyway.
+//: Constructor utility.
+// This allocates a 3D array which can be referenced using the form myarray[a][b][c].
+// Useful in C although maybe superfluous here as access is via a get function anyway.
 template <class T>
 void vbl_array_3d<T>::construct(int n1, int n2, int n3)
 {
@@ -70,9 +72,9 @@ void vbl_array_3d<T>::resize(int n1, int n2, int n3)
   construct(n1, n2, n3);
 }
 
-//: Fill from static array of Ts.  The final index fills fastest, so if
-// we consider the tensor as a set of matrices (M[i])[j][k] then the matrices are
-// filled in the usual C order.
+//: Fill from static array of Ts.
+//  The final index fills fastest, so if we consider the tensor as a set of
+// matrices (M[i])[j][k] then the matrices are filled in the usual C order.
 template <class T>
 void vbl_array_3d<T>::set(T const* p)
 {

@@ -4,6 +4,9 @@
 #pragma interface
 #endif
 //
+//:
+//  \file
+
 // .NAME    ImageWarp - namespace for static functions
 // .LIBRARY oxp
 // .HEADER  Oxford Package
@@ -25,7 +28,8 @@
 template <class PixelType>
 class ImageWarp {
 public:
-  //: The type of the return value of "bilinear" and "bicubic", which
+  //:
+  // The type of the return value of "bilinear" and "bicubic", which
   // will be a floating point version of the pixel type.
   typedef typename vnl_numeric_traits<PixelType>::real_t real_t;
 

@@ -6,21 +6,21 @@
 
 //:
 // \file
-// \brief Purpose: declare in a central place the list of symbols from netlib
+// \brief Declare in a central place the list of symbols from netlib
 // \author fsm@robots.ox.ac.uk
+//
+// Declare in a central place the list of symbols from netlib referenced from vnl-algo.
+// This list was auto-generated, so it is exhaustive as of 16 March 2000 (10pm).
+//
+// Note: the declarations are initially entered as "int f()", which
+// will conflict with the actual prototype. If you get a conflict,
+// enter the correct prototype in here.
 //
 // \verbatim
 // Modifications
 //  dac (Manchester) 28/03/2001: tidied up documentation
+//   Feb.2002 - Peter Vanroose - brief doxygen comment placed on single line
 // \endverbatim
-
-//: Purpose: declare in a central place the list of symbols from netlib
-//  referenced from vnl-algo. This list was auto-generated, so it is
-//  exhaustive as of 16 March 2000 (10pm)
-//
-//  Note: the declarations are initially entered as "int f()", which
-//  will conflict with the actual prototype. If you get a conflict,
-//  enter the correct prototype in here.
 
 #include <vcl_complex.h>
 

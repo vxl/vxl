@@ -1,3 +1,7 @@
+
+//:
+// \file
+
 #include <vidl/vidl_frame.h>
 #include <vidl/vidl_codec.h>
 #include <vidl/vidl_frame_as_image.h>
@@ -10,13 +14,10 @@
 //------------------------------------------------------------------------
 // CONSTRUCTOR(S) AND DESTRUCTOR
 
-//: Constructor, needs the frame position in the clip
-// and the coder used.
-vidl_frame::vidl_frame(int position, vidl_codec_sptr coder) : 
+//: Constructor, needs the frame position in the clip and the coder used.
+vidl_frame::vidl_frame(int position, vidl_codec_sptr coder) :
 position_(position), coder_(coder)
 {
-  
-
 }
 
 //: Destructor
@@ -33,13 +34,8 @@ vil_image vidl_frame::get_image()
   return image_;
 }
 
-//: Get the pixels for the rectangular window
-// starting at x0, y0 and width and heigth wide
- bool vidl_frame::get_section(void* ib, int x0, int y0, int width, int heigth) const
+//: Get the pixels for the rectangular window starting at x0, y0 and width and height wide.
+ bool vidl_frame::get_section(void* ib, int x0, int y0, int width, int height) const
 {
-  return coder_->get_section(position_, ib, x0, y0, width, heigth);
+  return coder_->get_section(position_, ib, x0, y0, width, height);
 }
-
-
-
-

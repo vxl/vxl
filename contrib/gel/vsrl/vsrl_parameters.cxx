@@ -1,3 +1,7 @@
+
+//:
+//  \file
+
 #include <vsrl/vsrl_parameters.h>
 #include <vcl_iostream.h>
 #include <vcl_fstream.h>
@@ -6,8 +10,8 @@
 // initialize the _instance variable
 vsrl_parameters* vsrl_parameters::_instance = 0;
 
-//: Returns the one instance of a vsrl_parameters.  One
-// is created on the first call to Instance
+//: Returns the one instance of a vsrl_parameters.
+//  One is created on the first call to Instance
 
 vsrl_parameters* vsrl_parameters::instance()
 {

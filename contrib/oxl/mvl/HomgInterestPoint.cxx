@@ -2,6 +2,9 @@
 #pragma implementation
 #endif
 
+//:
+//  \file
+
 #include "HomgInterestPoint.h"
 
 #include <vcl_iostream.h>
@@ -12,8 +15,8 @@ HomgInterestPoint::HomgInterestPoint()
 {
 }
 
-//: Create from HomgPoint2D in conditioned coordinates, using the given metric
-// to convert back to image coords.
+//: Create from HomgPoint2D in conditioned coordinates.
+// Using the given metric to convert back to image coords.
 HomgInterestPoint::HomgInterestPoint(const HomgPoint2D& h, const HomgMetric& metric, float mean_intensity):
   _homg(h),
   _double2(0, 0),

@@ -3,6 +3,9 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
+//:
+//  \file
+
 // .NAME    PairMatchSetCorner - Matches between corners
 // .LIBRARY MViewBasics
 // .HEADER  MultiView Package
@@ -17,7 +20,7 @@
 //     Andrew W. Fitzgibbon, Oxford RRG, 09 Aug 96
 //
 // .SECTION Modifications:
-//     <none yet>
+//   Feb.2002 - Peter Vanroose - brief doxygen comment placed on single line
 //
 //-----------------------------------------------------------------------------
 
@@ -45,8 +48,7 @@ public:
 
   void extract_matches(vcl_vector <HomgPoint2D>& points1, vcl_vector <HomgPoint2D>& points2) const;
 
-  //: Clear all matches and then set only those for which the corresponding
-  // inliers flag is set.
+  //: Clear all matches and then set only those for which the corresponding inliers flag is set.
   void set(const vcl_vector<bool>& inliers,
            const vcl_vector<int>&  corner_index_1,
            const vcl_vector<int>&  corner_index_2);
@@ -56,11 +58,9 @@ public:
 
 //: Return the set of corners within which the i1 indices point
   HomgInterestPointSet const* get_corners1() const { return _corners1; }
-  // HomgInterestPointSet* get_corners1() { return _corners1; }
 
 //: Return the set of corners within which the i2 indices point
   HomgInterestPointSet const* get_corners2() const { return _corners2; }
-  //   HomgInterestPointSet* get_corners2() { return _corners2; }
 
 private:
   HomgInterestPointSet const* _corners1;

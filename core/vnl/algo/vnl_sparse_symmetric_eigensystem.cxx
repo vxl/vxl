@@ -2,6 +2,9 @@
 #pragma implementation
 #endif
 
+//:
+// \file
+
 #include "vnl_sparse_symmetric_eigensystem.h"
 #include <vcl_cassert.h>
 #include <vcl_cstring.h>
@@ -42,9 +45,9 @@ static vnl_sparse_symmetric_eigensystem * current_system = 0;
 #endif
 
 //------------------------------------------------------------
-//: Callback for multiplying our matrix by a number of vectors.  The
-// input is p, which is an NxM matrix.  This function returns q = A p,
-// where A is the current sparse matrix.
+//: Callback for multiplying our matrix by a number of vectors.
+//  The input is p, which is an NxM matrix.
+//  This function returns q = A p, where A is the current sparse matrix.
 FUNCTION
 int sse_op_callback(const int* n,
                     const int* m,
@@ -84,8 +87,8 @@ vnl_sparse_symmetric_eigensystem::vnl_sparse_symmetric_eigensystem()
 }
 
 //------------------------------------------------------------
-//: Here is where the fortran converted code gets called.  The
-// sparse matrix M is assumed to be symmetric.  The n smallest
+//: Here is where the fortran converted code gets called.
+// The sparse matrix M is assumed to be symmetric.  The n smallest
 // eigenvalues and their corresponding eigenvectors are calculated if
 // smallest is true (the default).  Otherwise the n largest eigenpairs
 // are found.  The accuracy of the eigenvalues is to nfigures decimal

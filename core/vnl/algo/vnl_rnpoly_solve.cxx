@@ -1,6 +1,10 @@
 #ifdef __GNUC__
 #pragma implementation
 #endif
+
+//:
+// \file
+
 #include <vcl_cmath.h>
 #ifdef DEBUG
 #include <vul_temp_filename.h>
@@ -71,7 +75,8 @@ vcl_vector<vnl_vector<double>*> vnl_rnpoly_solve::realroots(double tol)
 
 
 //------------------------- INPTBR ---------------------------
-//: This will initialize the random variables which are used
+//: Initialize random variables
+// This will initialize the random variables which are used
 // to preturb the starting point so as to have measure zero
 // probability that we will start at a singular point.
 static void inptbr(int n, vnl_rnpoly_solve_cmplx p[M], vnl_rnpoly_solve_cmplx q[M])
@@ -133,8 +138,8 @@ static inline int degree(int index)
 
 
 //-------------------------- FFUNR -------------------------
-//: Evaluate the target system component of h.  This is the
-// system of equations that we are trying to find the roots.
+//: Evaluate the target system component of h.
+//  This is the system of equations that we are trying to find the roots.
 static void ffunr(double coeff[M][T], int polyn[M][T][M], int n,
                   int terms[M], vnl_rnpoly_solve_cmplx x[M], vnl_rnpoly_solve_cmplx pows[M*P],
                   int max_deg, vnl_rnpoly_solve_cmplx f[M], vnl_rnpoly_solve_cmplx df[M][M])
@@ -190,7 +195,8 @@ static void ffunr(double coeff[M][T], int polyn[M][T][M], int n,
 
 
 //--------------------------- GFUNR --------------------------
-//: Evaluate the starting system component of h from a system
+//: Evaluate starting system component
+// Evaluate the starting system component of h from a system
 // of equations that we already know the roots. (ex: x^n - 1)
 static void gfunr(int len, int ideg[M], vnl_rnpoly_solve_cmplx pdg[M], vnl_rnpoly_solve_cmplx qdg[M],
                   vnl_rnpoly_solve_cmplx /*x*/ [M], vnl_rnpoly_solve_cmplx pows[M*P],
@@ -221,8 +227,8 @@ static void gfunr(int len, int ideg[M], vnl_rnpoly_solve_cmplx pdg[M], vnl_rnpol
 
 
 //-------------------------- HFUNR --------------------------
-//: This is the routine that traces the curve from the gfunr
-// to the f function (i.e. Evaluate the continuation function)
+//: This is the routine that traces the curve from the gfunr to the f function
+//  (i.e. Evaluate the continuation function)
 static void hfunr(int len,int ideg[M], vnl_rnpoly_solve_cmplx pdg[M], vnl_rnpoly_solve_cmplx qdg[M],
                   double t, vnl_rnpoly_solve_cmplx x[M], vnl_rnpoly_solve_cmplx h[M], vnl_rnpoly_solve_cmplx dhx[M][M],
                   vnl_rnpoly_solve_cmplx dht[M], int polyn[M][T][M], double coeff[M][T],
@@ -360,8 +366,7 @@ static void lubksb(vnl_rnpoly_solve_cmplx a[M][M], int n, int indx[M],
 
 
 //-------------------------- LINNR -------------------
-//: Solve a complex system of equations by using l-u
-// decomposition and then back subsitution.
+//: Solve a complex system of equations by using l-u decomposition and then back subsitution.
 static int linnr(int len,vnl_rnpoly_solve_cmplx dhx[M][M],
                  vnl_rnpoly_solve_cmplx rhs[M],
                  vnl_rnpoly_solve_cmplx resid[M])
@@ -456,8 +461,8 @@ static int correct(int len,int ideg[M], int loop, double eps,
 
 
 //-------------------------- TRACE ---------------------------
-//: This is the continuation routine, it will trace a curve
-// from a known point in the complex plane to an unknown
+//: This is the continuation routine.
+// It will trace a curve from a known point in the complex plane to an unknown
 // point in the complex plane.  The new end point is the root
 // to a polynomial equation that we are trying to solve.
 // It will return the following codes:

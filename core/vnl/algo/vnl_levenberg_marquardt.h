@@ -16,6 +16,7 @@
 //              routine.
 //  RWMC 001097 Added verbose flag to get rid of all that blathering.
 //  AWF  151197 Added trace flag to increase blather.
+//   Feb.2002 - Peter Vanroose - brief doxygen comment placed on single line
 // \endverbatim
 //
 
@@ -52,21 +53,20 @@ public:
 
   ~vnl_levenberg_marquardt();
 
-  //: Minimize the function supplied in the constructor until
-  // convergence or failure.  On return, x is such that f(x) is the
-  // lowest value achieved.  Returns true for convergence, false for
-  // failure. Does not use the gradient even if the cost function
-  // provides one.
+  //: Minimize the function supplied in the constructor until convergence or failure.
+  //  On return, x is such that f(x) is the lowest value achieved.
+  //  Returns true for convergence, false for failure.
+  //  Does not use the gradient even if the cost function provides one.
   bool minimize_without_gradient(vnl_vector<double>& x);
 
-  //: Minimize the function supplied in the constructor until
-  // convergence or failure.  On return, x is such that f(x) is the
-  // lowest value achieved.  Returns true for convergence, false for
-  // failure. The cost function must provide a gradient.
+  //: Minimize the function supplied in the constructor until convergence or failure.
+  //  On return, x is such that f(x) is the lowest value achieved.
+  //  Returns true for convergence, false for failure.
+  //  The cost function must provide a gradient.
   bool minimize_using_gradient  (vnl_vector<double>& x);
 
   //: Calls minimize_using_gradient() or minimize_without_gradient()
-  // depending on whether the cost function provides a gradient.
+  // , depending on whether the cost function provides a gradient.
   bool minimize(vnl_vector<double>& x);
 
   // Coping with failure-------------------------------------------------------

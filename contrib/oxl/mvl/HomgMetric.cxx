@@ -2,6 +2,9 @@
 #pragma implementation
 #endif
 
+//:
+//  \file
+
 #include "HomgMetric.h"
 
 #include <vcl_iostream.h>
@@ -171,16 +174,14 @@ const vnl_matrix<double>& HomgMetric::get_C_inverse() const
 
 // @{ CONVERTING DISTANCES @}
 
-//: Return true if the metric is rotationally symmetric, i.e. can invert
-// distances.
+//: Return true if the metric is rotationally symmetric, i.e. can invert distances.
 bool HomgMetric::can_invert_distance() const
 {
   if (_metric) return _metric->can_invert_distance();
   else return true;
 }
 
-//: Given that can_invert_distance is true, convert an image distance (in
-// pixels) to a conditioned distance.
+//: Given that can_invert_distance is true, convert an image distance (in pixels) to a conditioned distance.
 double HomgMetric::image_to_homg_distance(double image_distance) const
 {
   if (_metric) return _metric->image_to_homg_distance(image_distance);
@@ -231,9 +232,8 @@ PMatrix HomgMetric::image_to_homg_P(const PMatrix& P, const HomgMetric& c)
   return PMatrix(c.get_C_inverse() * P.get_matrix());
 }
 
-//: Decondition a fundamental matrix (convert it from conditioned to image
-// coordinates) if possible.  If not possible, print a warning and do it
-// approximately.
+//: Decondition a fundamental matrix (convert it from conditioned to image coordinates).
+// If not possible, print a warning and do it approximately.
 FMatrix HomgMetric::homg_to_image_F(const FMatrix& F, const HomgMetric& c1, const HomgMetric& c2)
 {
   if (!c1.is_linear()) warning("homg_to_image_F") << "ImageMetric for image 1 is nonlinear\n";

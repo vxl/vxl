@@ -2,6 +2,9 @@
 #pragma implementation
 #endif
 
+//:
+//  \file
+
 #include "PairMatchSetCorner.h"
 
 #include <vcl_vector.h>
@@ -12,8 +15,7 @@ PairMatchSetCorner::PairMatchSetCorner() : _corners1(0) , _corners2(0)
 {
 }
 
-//: Construct a PairMatchSetCorner that will contain matches between the
-// given HomgInterestPointSets.
+//: Construct a PairMatchSetCorner that will contain matches between the given HomgInterestPointSets.
 // These objects are held by reference in the MatchSet and must therefore
 // live longer than the PairMatchSetCorner (for example in an MViewDatabase).
 PairMatchSetCorner::PairMatchSetCorner(HomgInterestPointSet const* corners1,
@@ -100,8 +102,8 @@ void PairMatchSetCorner::extract_matches(vcl_vector<HomgPoint2D>& points1,
   }
 }
 
-//: Clear all matches and then set only those for which the corresponding
-// inliers flag is set.  For example, if inliers[5] == true, then the match
+//: Clear all matches and then set only those for which the corresponding inliers flag is set.
+//  For example, if inliers[5] == true, then the match
 // (corner_index_1[5], corner_index_2[5]) is added to the set.
 void PairMatchSetCorner::set(const vcl_vector<bool>& inliers,
                              const vcl_vector<int>&  corner_index_1,

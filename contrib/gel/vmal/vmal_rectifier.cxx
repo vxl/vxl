@@ -1,5 +1,8 @@
 #include <vmal/vmal_rectifier.h>
 
+//:
+//  \file
+
 #include <vmal/vmal_convert.h>
 
 #include <vnl/algo/vnl_svd.h>
@@ -42,7 +45,6 @@ _is_f_compute(false)
     _height=ima_height;
     _width=ima_width;
   }
-
 }
 
 vmal_rectifier::~vmal_rectifier()
@@ -159,21 +161,22 @@ void vmal_rectifier::compute_joint_epipolar_transform_new (
   bool affine // = FALSE
 )
 {
-   /* Compute the pair of epipolar transforms to rectify matched points */
+   // Compute the pair of epipolar transforms to rectify matched points
    compute_initial_joint_epipolar_transforms (
   points0, points1, numpoints, H0, H1, sweeti, sweetj, affine);
 
-   /* Apply the affine correction */
+   // Apply the affine correction
    apply_affine_correction (points0, points1, numpoints, H0, H1);
-
-   /* Next set the range so that the overlap is properly placed */
-   //center_overlap_region (H0, im1_roi, H1, im2_roi, output_roi);
-
-   /* Rotate through 90 degrees */
+#if 0
+   // Next set the range so that the overlap is properly placed
+   center_overlap_region (H0, im1_roi, H1, im2_roi, output_roi);
+#endif
+   // Rotate through 90 degrees
    rectify_rotate90 (out_height,out_width, H0, H1);
-
-   /* Also, rotate a further 180 degrees if necessary */
-   //conditional_rectify_rotate180 (output_roi, H0, H1);
+#if 0
+   // Also, rotate a further 180 degrees if necessary
+   conditional_rectify_rotate180 (output_roi, H0, H1);
+#endif
 }
 
 void vmal_rectifier::compute_initial_joint_epipolar_transforms (
@@ -185,9 +188,8 @@ void vmal_rectifier::compute_initial_joint_epipolar_transforms (
    bool affine // = FALSE
    )
 {
-   /* Compute the pair of epipolar transforms to rectify matched points */
-   /* This does a minimally distorting correction to H0 and matches it
-    * with H1. */
+   // Compute the pair of epipolar transforms to rectify matched points
+   // This does a minimally distorting correction to H0 and matches it with H1.
 
   if (_is_f_compute)
   {
@@ -195,18 +197,17 @@ void vmal_rectifier::compute_initial_joint_epipolar_transforms (
     //the fundamental matrix.
     if ( !compute_initial_joint_epipolar_transforms (_F12,sweeti, sweetj, H0, H1))
     {
-      /* Error message and exit */
+      // Error message and exit
       vcl_cerr<<"Computation of epipolar transform failed"<<vcl_endl;
     }
-
   }
   else
   {
 #if 0
-    /* First of all compute the Q matrix */
+    // First of all compute the Q matrix
     rhMatrix Q(3, 3);
 
-    /* Compute and refine the estimate of the Q matrix */
+    // Compute and refine the estimate of the Q matrix
     if (affine)
     {
     // We do not call affine_optimum_solveQmatrix right now,
@@ -222,20 +223,18 @@ void vmal_rectifier::compute_initial_joint_epipolar_transforms (
     }
 
 
-    /* Compute the epipolar transforms. */
+    // Compute the epipolar transforms.
     if ( !compute_initial_joint_epipolar_transforms (Q, sweeti, sweetj, H0, H1))
     {
-      /* Error message and exit */
+      // Error message and exit
       error_message ("Computation of epipolar transform failed\n");
       bail_out (2);
     }
 #endif
   }
-
 }
 
-//: Computes a pair of transformation matrices for an image pair that
-// will define the joint epipolar projection.
+//: Computes a pair of transformation matrices for an image pair that will define the joint epipolar projection.
 // This does a minimially distortion-free correction to H0 and then
 // gets a matching H0.
 
@@ -246,57 +245,57 @@ int vmal_rectifier::compute_initial_joint_epipolar_transforms (
   vnl_double_3x3 &H1      // second transfrmtion matrix to be computed
   )
 {
-  /* First get the epipole e' */
+  // First get the epipole e'
   vnl_double_3 p1 = _epipoles[0];
 
-  /* Next, compute the mapping H' for the second image */
+  // Next, compute the mapping H' for the second image
 
-    /* First of all, translate the centre pixel to 0, 0 */
-    H0[0][0] = 1.0; H0[0][1] = 0.0; H0[0][2] = -ci;
-    H0[1][0] = 0.0; H0[1][1] = 1.0; H0[1][2] = -cj;
+  // First of all, translate the centre pixel to 0, 0
+  H0[0][0] = 1.0; H0[0][1] = 0.0; H0[0][2] = -ci;
+  H0[1][0] = 0.0; H0[1][1] = 1.0; H0[1][2] = -cj;
   H0[2][0] = 0.0; H0[2][1] = 0.0; H0[2][2] = 1.0;
 
-    /* Translate the epipole as well */
-    p1 = H0 * p1;
+  // Translate the epipole as well
+  p1 = H0 * p1;
 
-    /* Make sure that the epipole is not at the origin */
-    if (p1[0] == 0.0 && p1[1] == 0.0)
-    {
+  // Make sure that the epipole is not at the origin
+  if (p1[0] == 0.0 && p1[1] == 0.0)
+  {
     vcl_cerr<<"Error : Epipole is at image center"<<vcl_endl;
-        return (0);
-    }
+    return (0);
+  }
 
-    /* Next determine a rotation that will send the epipole to (1, 0, x) */
-    double theta = vcl_atan2 (p1[1], p1[0]);
-    double c = vcl_cos (theta);
-    double s = vcl_sin (theta);
+  // Next determine a rotation that will send the epipole to (1, 0, x)
+  double theta = vcl_atan2 (p1[1], p1[0]);
+  double c = vcl_cos (theta);
+  double s = vcl_sin (theta);
 
   vnl_double_3x3 T;
 
   T[0][0] =   c; T[0][1] =   s; T[0][2] = 0.0;
-    T[1][0] =  -s; T[1][1] =   c; T[1][2] = 0.0;
-    T[2][0] = 0.0; T[2][1] = 0.0; T[2][2] = 1.0;
+  T[1][0] =  -s; T[1][1] =   c; T[1][2] = 0.0;
+  T[2][0] = 0.0; T[2][1] = 0.0; T[2][2] = 1.0;
 
-    /* Multiply things out */
+    // Multiply things out
   H0 =  T * H0;
-    p1 = T * p1;
+  p1 = T * p1;
   vnl_double_3 ep1=H0*_epipoles[0];
 
-    /* Now send the epipole to infinity */
-    double x = p1[2]/p1[0];
+  // Now send the epipole to infinity
+  double x = p1[2]/p1[0];
 
   vnl_double_3x3 E;
   E[0][0] = 1.0; E[0][1] = 0.0; E[0][2] = 0.0;
   E[1][0] = 0.0; E[1][1] = 1.0; E[1][2] = 0.0;
   E[2][0] =  -x; E[2][1] = 0.0; E[2][2] = 1.0;
 
-  /* Multiply things out.  Put the result in H0 */
+  // Multiply things out.  Put the result in H0
   H0 = E * H0;
   ep1=H0*_epipoles[0];
-  /* Next compute the initial 2x */
+  // Next compute the initial 2x
   H1 = matching_transform (Q.transpose(), H0);
 
-  /* Return 1 value */
+  // Return 1 value
   return 1;
 }
 
@@ -329,7 +328,6 @@ void vmal_rectifier::factor_Q_matrix_SR (
   vnl_double_3x3 U(SVD.U());
   vnl_double_3x3 V(SVD.V());
 
-
   vnl_double_3x3 E(0.0);
   vnl_double_3x3 Z(0.0);
   E[1][0]=E[2][2]=1;
@@ -339,21 +337,21 @@ void vmal_rectifier::factor_Q_matrix_SR (
   r = SVD.W(0);
   s = SVD.W(1);
 
-  /* Transpose V, since we will need to multiply by it */
+  // Transpose V, since we will need to multiply by it
   vnl_double_3x3 Vt = V.transpose();
   vnl_double_3x3 Ut = U.transpose();
 
-  /* Define RS */
+  // Define RS
   vnl_double_3x3 RS;
   RS[0][0] =  r; RS[0][1] =  0; RS[0][2] =  0;
   RS[1][0] =  0; RS[1][1] =  s; RS[1][2] =  0;
   RS[2][0] =  0; RS[2][1] =  0; RS[2][2] =  s;
 
-  /* Construct the result */
-  /* First of all the R matrix */
+  // Construct the result
+  // First of all the R matrix
   R=(U * E * RS * Vt);
 
-  /* Next the S matrix */
+  // Next the S matrix
   S=(U * Z * Ut);
 }
 
@@ -372,7 +370,7 @@ vnl_double_3x3 vmal_rectifier::affine_correction (
   vnl_vector<double> x(numpoints);
    // Fill out the equations
    for (int i=0; i<numpoints; i++)
-      {
+   {
       // Compute the transformed points
       vnl_double_3 u2hat = H1 * points1[i];
       double uu2 = u2hat[0]/u2hat[2];
@@ -386,7 +384,7 @@ vnl_double_3x3 vmal_rectifier::affine_correction (
       E[i][1] = vv2;
       E[i][2] = 1.0;
       x[i] = uu1;
-      }
+   }
 
    // Now solve the equations
    vnl_svd<double> SVD(E);
@@ -409,13 +407,13 @@ void vmal_rectifier::apply_affine_correction (
    vnl_double_3x3 &H0, vnl_double_3x3 &H1   // The matrices to be returned
    )
 {
-   /* Correct H0 so that it matches with H1 best on the points given */
+   // Correct H0 so that it matches with H1 best on the points given
    vnl_double_3x3 A = affine_correction (points0, points1, numpoints, H0, H1);
 
-   /* Now correct H0 */
+   // Now correct H0
    H1 = A * H1;
 
-   /* Make both H0 and H1 have positive determinant) */
+   // Make both H0 and H1 have positive determinant)
    if (vnl_determinant (H1) < 0.0) H1 = -H1;
 }
 
@@ -425,24 +423,19 @@ void vmal_rectifier::rectify_rotate90 (
   vnl_double_3x3 &H1
   )
 {
-   /* Make a correction so that the horizontal lines come out horizontal
-    * instead of vertical
-    */
+   // Make a correction so that the horizontal lines come out horizontal
+   // instead of vertical
 
-   /* Define a matrix for rotating the images */
+   // Define a matrix for rotating the images
    vnl_double_3x3 R;
    R[0][0] = 0.0;  R[0][1] = -1.0; R[0][2] = height;
    R[1][0] = 1.0;  R[1][1] =  0.0; R[1][2] = 0.0;
    R[2][0] = 0.0;  R[2][1] =  0.0; R[2][2] = 1.0;
 
-   /* Multiply the matrices */
+   // Multiply the matrices
    H0 = R * H0;
    H1 = R * H1;
 
-   /* Now return the output image dimensions */
-  int oldidim = width;
-  int oldjdim = height;
-  width=oldjdim;
-  height=oldidim;
+   // Now return the output image dimensions
+   int t = width; width = height; height = t;
 }
-

@@ -1,10 +1,12 @@
 #ifndef vsrl_step_diffusion_h
 #define vsrl_step_diffusion_h
 
+//:
+//  \file
+
 #include <vsrl/vsrl_diffusion.h>
 
-//: this class will take the results of a dense matcher
-// and use difusion to get rid of "steps" in the data
+//: this class will take the results of a dense matcher and use difusion to get rid of "steps" in the data
 
 class vsrl_step_diffusion : public vsrl_diffusion
 {

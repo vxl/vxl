@@ -2,6 +2,9 @@
 #ifndef vnl_sparse_matrix_txx_
 #define vnl_sparse_matrix_txx_
 
+//:
+// \file
+
 #include "vnl_sparse_matrix.h"
 #include <vcl_cassert.h>
 #include <vcl_cstdlib.h>
@@ -135,11 +138,11 @@ void vnl_sparse_matrix<T>::mult(vnl_sparse_matrix<T> const& rhs, vnl_sparse_matr
 }
 
 //------------------------------------------------------------
-//: Multiply this*p, a fortran order matrix.  The matrix p has n
-// rows and m columns, and is in fortran order, ie. columns first.
+//: Multiply this*p, a fortran order matrix.
+//  The matrix p has n rows and m columns, and is in fortran order, ie. columns first.
 template <class T>
 void vnl_sparse_matrix<T>::mult(unsigned int prows, unsigned int pcols,
-        T const* p, T* q) const
+                                T const* p, T* q) const
 {
   assert(prows == columns());
 
@@ -462,8 +465,7 @@ vnl_sparse_matrix<T>& vnl_sparse_matrix<T>::vcat(vnl_sparse_matrix<T> const& A)
 
 
 //------------------------------------------------------------
-//: This is occasionally useful.  Sums a row of the matrix
-// efficiently.
+//: This is occasionally useful.  Sums a row of the matrix efficiently.
 template <class T>
 T vnl_sparse_matrix<T>::sum_row(unsigned int r)
 {
@@ -498,7 +500,6 @@ void vnl_sparse_matrix<T>::resize( int /*r*/, int /*c*/)
 
 //------------------------------------------------------------
 //: Resets the internal iterator
-//
 template <class T>
 void vnl_sparse_matrix<T>::reset()
 {

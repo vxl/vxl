@@ -1,5 +1,8 @@
 #include "vtol_face.h"
 
+//:
+//  \file
+
 #include <vcl_cassert.h>
 #include <vtol/vtol_macros.h>
 #include <vtol/vtol_two_chain.h>
@@ -167,8 +170,9 @@ vcl_vector<vtol_edge*> *vtol_face::outside_boundary_compute_edges(void)
   OUTSIDE_BOUNDARY(vtol_edge,vtol_one_chain, compute_edges);
 }
 
-//: get the outside boundary edges
-
+//---------------------------------------------------------------------------
+//: Get the outside boundary edges
+//---------------------------------------------------------------------------
 edge_list *vtol_face::outside_boundary_edges(void)
 {
   edge_list *new_ref_list = new edge_list();
@@ -242,8 +246,8 @@ vcl_vector<vtol_block*> *vtol_face::compute_blocks(void)
 }
 
 //---------------------------------------------------------------------------
-//: Does `this' share an edge with `f' ? Comparison of edge pointers,
-//       not geometric values
+//: Does `this' share an edge with `f' ?
+//  Comparison of edge pointers, not geometric values
 //---------------------------------------------------------------------------
 bool vtol_face::shares_edge_with(vtol_face &f)
 {
@@ -318,8 +322,9 @@ bool vtol_face::operator==(const vtol_face &other) const
   return true;
 }
 
-//: spatial object equality
-
+//---------------------------------------------------------------------------
+//: Spatial object equality
+//---------------------------------------------------------------------------
 bool vtol_face::operator==(const vsol_spatial_object_3d& obj) const
 {
   return
@@ -352,8 +357,9 @@ vtol_one_chain *vtol_face::get_boundary_cycle(void)
   return get_one_chain(0);
 }
 
+//---------------------------------------------------------------------------
 //: Adds a new hole to the face
-
+//---------------------------------------------------------------------------
 bool vtol_face::add_hole_cycle(vtol_one_chain &new_hole)
 {
   vtol_one_chain *onech=get_boundary_cycle();
@@ -403,7 +409,9 @@ int vtol_face::get_num_edges(void) const
   return result;
 }
 
-//: reverse the direction of the face
+//---------------------------------------------------------------------------
+//: Reverse the direction of the face
+//---------------------------------------------------------------------------
 void vtol_face::reverse_normal(void)
 {
   topology_list::iterator ti;
@@ -413,8 +421,8 @@ void vtol_face::reverse_normal(void)
 }
 
 //-----------------------------------------------------------------
-//: Compute bounds from the geometry of _surface. If the surface is
-//    not fully bounded, then use the vertices.
+//: Compute bounds from the geometry of _surface.
+//  If the surface is not fully bounded, then use the vertices.
 //
 void vtol_face::compute_bounding_box()
 {

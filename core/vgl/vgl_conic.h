@@ -24,6 +24,7 @@
 //   Peter Vanroose, 29 aug 2001 ported from Geometry to vgl
 //   Peter Vanroose, 30 aug 2001 complete rewrite of most of the code
 //   Peter Vanroose, 31 aug 2001 added extensive testing + fixed some bugs
+//   Feb.2002 - Peter Vanroose - brief doxygen comment placed on single line
 // \endverbatim
 //
 //-----------------------------------------------------------------------------
@@ -85,7 +86,8 @@ public:
   // DATA MEMBERS
 
   inline vgl_conic::vgl_conic_type type() const { return type_; }
-  //: Returns the type of the conic as a string.  Possible returned strings are:
+  //: Returns the type of the conic as a string.
+  // Possible returned strings are:
   // "real ellipse", "real circle", "imaginary ellipse", "imaginary circle",
   // "hyperbola", "parabola",
   // "real intersecting lines", "complex intersecting lines",
@@ -137,7 +139,7 @@ public:
   //  where $W$ is the homogeneous coordinate (sometimes denoted by $Z$).
   vgl_conic(T const coeff[]);
 
-  //: constructor using centre, signed radii, and angle
+  //: constructor using centre, signed radii, and angle.
   //  This constructor can only be used for non-degenerate, real
   //  conics: If the centre point c is a finite point and rx and ry
   //  have the same sign, an ellipse is defined (any ellipse can
@@ -173,8 +175,8 @@ public:
   //  Returns false if a parabola or two parallel or coinciding lines.
   bool is_central() const;
 
-  //: Returns true if the point pt belongs to the conic
-  //  i.e., if it *exactly* satisfies the conic equation.
+  //: Returns true if the point pt belongs to the conic.
+  //  I.e., if it *exactly* satisfies the conic equation.
   bool contains(vgl_homg_point_2d<T> const& pt) const;
 
   //: Returns the list of component lines, when degenerate and real components.
@@ -229,8 +231,7 @@ public:
   //: Returns the dual or tangential representation of this conic.
   vgl_conic tangential_form() const { return dual_conic(); }
 
-  //: Modify this conic by translating it over distance x in the X direction
-  //  and distance y in the Y direction.
+  //: Modify this conic by translating it over distance x in the X direction and distance y in the Y direction.
   void translate_by(T x, T y);
 
 private:

@@ -1,3 +1,7 @@
+
+//:
+//  \file
+
 #include "osl_canny_ox.h"
 #include <osl/osl_canny_port.h>
 #include <osl/osl_canny_ox_params.h>
@@ -232,8 +236,7 @@ osl_edgel_chain *osl_canny_ox::Get_NMS_edgelsOX(int n_edgels_NMS, int *_x, int *
 
 //-----------------------------------------------------------------------------
 //
-//: Hysteresis follows edgels that lie above the low threshold and have at
-// least one edgel above the high threshold.
+//: Hysteresis follows edgels that lie above the low threshold and have at least one edgel above the high threshold.
 //
 int osl_canny_ox::HysteresisOX(osl_edgel_chain *&edgels_NMS,
                                int *&status)
@@ -337,16 +340,17 @@ void osl_canny_ox::Add_linkOX(int edgel,
 
 //-------------------------------------------------------------------------
 //
-//: Link edgels.  First try pixels at distance 1 (direct neighbours),
+//: Link edgels.
+// First try pixels at distance 1 (direct neighbours),
 // then at sqrt(2) (diagonal), then at 2 (horizontal or vertical), then
 // at sqrt(5) (chess horse). I.e. in the following order:
-//
+// \verbatim
 //         4 3 4
 //       4 2 1 2 4
 //       3 1 0 1 3
 //       4 2 1 2 4
 //         4 3 4
-//
+// \endverbatim
 void osl_canny_ox::Link_edgelsOX(vcl_vector<unsigned> const &col,
                                  vcl_vector<unsigned> const &rows,
                                  osl_LINK *links[])
@@ -476,7 +480,7 @@ int osl_canny_ox::Get_n_edgels_hysteresisOX(osl_edgel_chain *&edgels_NMS,
 
 //-------------------------------------------------------------------------
 //
-//: Returns the edgels after hysteresis
+//: Returns the edgels after hysteresis.
 // Also fill the image _thin with the edgels after hysteresis for
 // further processing by the FollowerOX() part.
 //
@@ -506,7 +510,8 @@ void osl_canny_ox::Get_hysteresis_edgelsOX(osl_edgel_chain *& edgels_NMS,
 
 //----------------------------------------------------------------------------
 //
-//: NO_FollowerOX : In the case of _follow_strategy_OX = 0, this function
+//:
+// In the case of _follow_strategy_OX = 0, this function
 // returns an osl_edge * filled from osl_edgel_chain *edgels_Hysteresis.
 // i.e., the result of the Hysteresis part of Canny is returned in the osl_edge *.
 // The Follow part (FollowerOX) is not executed.
@@ -558,7 +563,8 @@ osl_Vertex *osl_find(vcl_list<osl_Vertex*> const *l, float x, float y) {
 
 //----------------------------------------------------------------------------
 //
-//: Go through every point in the image and for every one which is above a
+//:
+// Go through every point in the image and for every one which is above a
 // threshold:   follow from the point, in one direction and then the other.
 //
 void osl_canny_ox::FollowerOX(vcl_list<osl_edge*> *edges) {
@@ -700,7 +706,8 @@ void osl_canny_ox::FollowerOX(vcl_list<osl_edge*> *edges) {
 
 //-----------------------------------------------------------------------------
 //
-//: Adds point (x, y) to the current curve, sets its value in the image to
+//:
+// Adds point (x, y) to the current curve, sets its value in the image to
 // zero (any point may be included at most once in at most one curve)
 // then searches for adjacent pixels (in an order intended to make closed
 // curves ordered in a clockwise direction).
@@ -845,7 +852,8 @@ void Set_intsOX(int& int1, int& int2, int val1, int val2) {
 
 //----------------------------------------------------------------------------
 //
-//: The point (x, y) is the current curve point;
+//:
+// The point (x, y) is the current curve point;
 // (dx, dy) is the increment in position to (x, y) from the preceding point.
 // Based on dx and dy, it looks ahead in the same direction (or failing
 // that,  similar directions) for another point.
@@ -920,8 +928,7 @@ void osl_canny_ox::Scale_imageOX(float **image, float scale)
 
 //-----------------------------------------------------------------------------
 //
-//: Set size of pixels around image (border) to value, so follow can't
-// overrun.
+//: Set size of pixels around image (border) to value, so follow can't overrun.
 //
 void osl_canny_ox::Set_image_borderOX(float **image, int border_size, float value) {
   for (int i=0; i<border_size; ++i) {

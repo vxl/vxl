@@ -26,6 +26,7 @@
 //    050598 PVr added several operators ( + += - -= (T) ).
 //    140898 David Capel added clamping functions to ensure 0-255 range on bytes and vil_rgb<byte>
 //    090600 David Capel made clamping functions inline and removed all that partial specialization nonsense from the .txx file.
+//   Feb.2002 - Peter Vanroose - brief doxygen comment placed on single line
 //\endverbatim
 
 #include <vcl_iostream.h>
@@ -50,8 +51,8 @@ struct vil_rgb
 
   inline vil_rgb() { }
 
-  //:Create grey (v,v,v) vil_rgb cell from value v.  This provides a conversion
-  // from T to vil_rgb<T>, needed by e.g. two constructors in vil_filter.h.
+  //:Create grey (v,v,v) vil_rgb cell from value v.
+  // This provides a conversion from T to vil_rgb<T>, needed by e.g. two constructors in vil_filter.h.
 
   inline vil_rgb(T v):
     r(v), g(v), b(v) {}
@@ -76,7 +77,7 @@ struct vil_rgb
   inline operator T() const { return T(0.5+r*0.299+0.587*g+0.114*b); }
 #endif
 
-  //:equality
+  //: equality
   inline bool operator== (vil_rgb<T> const&) const;
 
   // operators

@@ -1,5 +1,8 @@
 #include <vsol/vsol_polygon_3d.h>
 
+//:
+//  \file
+
 //*****************************************************************************
 // External declarations for implementation
 //*****************************************************************************
@@ -13,7 +16,7 @@
 //***************************************************************************
 
 //---------------------------------------------------------------------------
-//: Constructor from a vcl_vector (not a geometric vector but a list of points)
+//: Constructor from a vcl_vector (not a geometric vector but a list of points).
 // Require: new_vertices.size()>=3 and valid_vertices(new_vertices)
 //---------------------------------------------------------------------------
 vsol_polygon_3d::vsol_polygon_3d(const vcl_vector<vsol_point_3d_sptr> &new_vertices)
@@ -46,7 +49,7 @@ vsol_polygon_3d::~vsol_polygon_3d()
 }
 
 //---------------------------------------------------------------------------
-//: Clone `this': creation of a new object and initialization
+//: Clone `this': creation of a new object and initialization.
 // See Prototype pattern
 //---------------------------------------------------------------------------
 vsol_spatial_object_3d_sptr vsol_polygon_3d::clone(void) const
@@ -59,7 +62,7 @@ vsol_spatial_object_3d_sptr vsol_polygon_3d::clone(void) const
 //***************************************************************************
 
 //---------------------------------------------------------------------------
-//: Return vertex `i'
+//: Return vertex `i'.
 // Require: valid_index(i)
 //---------------------------------------------------------------------------
 vsol_point_3d_sptr vsol_polygon_3d::vertex(const int i) const
@@ -111,8 +114,9 @@ bool vsol_polygon_3d::operator==(const vsol_polygon_3d &other) const
   return result;
 }
 
+//---------------------------------------------------------------------------
 //: spatial object equality
-
+//---------------------------------------------------------------------------
 bool vsol_polygon_3d::operator==(const vsol_spatial_object_3d& obj) const
 {
   return
@@ -252,8 +256,8 @@ bool vsol_polygon_3d::valid_index(const int i) const
 }
 
 //---------------------------------------------------------------------------
-//: Are `new_vertices' valid vertices ? That is are all vertices in the
-//    same plane ?
+//: Are `new_vertices' valid vertices ?
+//  That is are all vertices in the same plane ?
 //---------------------------------------------------------------------------
 bool vsol_polygon_3d::valid_vertices(const vcl_vector<vsol_point_3d_sptr> new_vertices) const
 {

@@ -1,18 +1,19 @@
+// This is vxl/vnl/vnl_vector.h
 #ifndef vnl_vector_h_
 #define vnl_vector_h_
 #ifdef __GNUC__
 #pragma interface
 #endif
 
-// This is vxl/vnl/vnl_vector.h
-
 //:
 // \file
 // \author Andrew W. Fitzgibbon
 //
-
+// \verbatim
+// Modifications
 // Comments re-written by Tim Cootes, for his sins.
-
+//   Feb.2002 - Peter Vanroose - brief doxygen comment placed on single line
+// \endverbatim
 
 #include <vcl_iosfwd.h>
 #include <vcl_cassert.h>
@@ -53,7 +54,7 @@ template <class T> void   swap(v &, v &);
 
 //----------------------------------------------------------------------
 
-//: Mathematical vector class, templated by type of element
+//: Mathematical vector class, templated by type of element.
 // The vnl_vector<T> class implements one-dimensional arithmetic
 // vectors to be used with the vnl_matrix<T> class. vnl_vector<T>
 // has size fixed by constructor time or changed by assignment
@@ -70,8 +71,8 @@ public:
   //: Creates an empty vector. O(1).
   vnl_vector () : num_elmts(0) , data(0) {}
 
-  //: Creates vector containing n elements
-  // Elements are not initialized
+  //: Creates vector containing n elements.
+  // Elements are not initialized.
   explicit vnl_vector (unsigned len);
 
   //: Creates vector of len elements, all set to v0
@@ -113,10 +114,10 @@ public:
   //: Return the length, number of elements, dimension of this vector.
   unsigned size() const { return num_elmts; }
 
-  //: put value at given position in vector.
+  //: Put value at given position in vector.
   inline void put (unsigned int i, T const&);
 
-  //: get value at element i
+  //: Get value at element i
   inline T get (unsigned int i) const;
 
   //: Set all values to v
@@ -183,27 +184,25 @@ public:
   //: Subtract rhs from this and return *this
   vnl_vector<T>& operator-= (vnl_vector<T> const& rhs);
 
-  //: *this = M*(*this) where M is a suitable matrix
+  //: *this = M*(*this) where M is a suitable matrix.
   //  this is treated as a column vector
   vnl_vector<T>& pre_multiply (vnl_matrix<T> const& M);
 
-  //: *this = (*this)*M where M is a suitable matrix
+  //: *this = (*this)*M where M is a suitable matrix.
   //  this is treated as a row vector
   vnl_vector<T>& post_multiply (vnl_matrix<T> const& M);
 
-  //: *this = (*this)*M where M is a suitable matrix
+  //: *this = (*this)*M where M is a suitable matrix.
   //  this is treated as a row vector
   vnl_vector<T>& operator*= (vnl_matrix<T> const& m) { return this->post_multiply(m); }
-
 
   //: Unary plus operator
   // Return new vector = (*this)
   vnl_vector<T> operator+ () const { return *this; }
 
-  //: Unary mnus operator
+  //: Unary minus operator
   // Return new vector = -1*(*this)
   vnl_vector<T> operator- () const;
-
 
   vnl_vector<T> operator+ (T v) const { return vnl_vector<T>(*this, v, vnl_tag_add()); }
   vnl_vector<T> operator- (T v) const { return vnl_vector<T>(*this, v, vnl_tag_sub()); }
@@ -464,9 +463,8 @@ inline T vnl_vector_ssd (vnl_vector<T> const& v1, vnl_vector<T> const& v2)
 }
 
 
-//: Read/write vector from/to a vcl_istream :
+//: Read/write vector from/to a vcl_istream
 export template <class T> vcl_ostream& operator<< (vcl_ostream &, vnl_vector<T> const&);
 export template <class T> vcl_istream& operator>> (vcl_istream &, vnl_vector<T>      &);
-
 
 #endif // vnl_vector_h_

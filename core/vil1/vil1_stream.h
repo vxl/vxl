@@ -18,12 +18,12 @@ public:
   //: Return false if the stream is broken.
   virtual bool ok() const = 0;
 
-  //: Write n bytes from buf. returns number of bytes written.
-  //  the return value is less than n only in case of device failure.
+  //: Write n bytes from buf. Returns number of bytes written.
+  //  The return value is less than n only in case of device failure.
   virtual int write(void const* buf, int n) = 0;
 
-  //: Read n bytes into buf
-  //  the return value is less than n only at eof.
+  //: Read n bytes into buf. Returns number of bytes read.
+  //  The return value is less than n only at eof.
   virtual int read(void* buf, int n) = 0;
 
   //: Return file pointer

@@ -21,6 +21,7 @@
 // Modifications
 // LSB Manchester 16/3/01 Binary I/O added
 // Paul Smyth     02/5/01 Inserted vnl_vector_fixed_ref as immediate base clase
+//   Feb.2002 - Peter Vanroose - brief doxygen comment placed on single line
 // \endverbatim
 
 #include <vcl_cstring.h> // memcpy()
@@ -42,8 +43,8 @@ public:
   //: Construct an uninitialized n-vector
   vnl_vector_fixed():Base(space) {}
 
-  //: Construct an n-vector copy of rhs.  Does not check that rhs
-  //  is the right size.
+  //: Construct an n-vector copy of rhs.
+  //  Does not check that rhs is the right size.
   vnl_vector_fixed(vnl_vector<T> const& rhs):Base(space) {
     if (rhs.size() != n)
       vnl_error_vector_dimension ("vnl_vector_fixed(const vnl_vector&) ", n, rhs.size());

@@ -31,6 +31,9 @@
 // ---------------------------------------------------------------------------
 // <end copyright notice>
 
+//:
+// \file
+
 #include <vcl_fstream.h>
 #include <vcl_cstdio.h>
 #include <vcl_cstring.h>
@@ -70,8 +73,7 @@ gevd_bufferxy::gevd_bufferxy(int x, int y, int b) : gevd_memory_mixin(x*y*(int)(
   Init(x, y, b);
 }
 
-//: Construct a gevd_bufferxy of width x, height y, and b bits per entry, and
-// load data from memptr.
+//: Construct a gevd_bufferxy of width x, height y, and b bits per entry, and load data from memptr.
 gevd_bufferxy::gevd_bufferxy(int x, int y, int b, void* memptr) : gevd_memory_mixin(x*y*(int)((b+7)/8),memptr)
 {
   Init(x, y, b);

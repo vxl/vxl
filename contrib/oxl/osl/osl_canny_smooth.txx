@@ -4,6 +4,9 @@
   fsm@robots.ox.ac.uk
 */
 
+//:
+//  \file
+
 // Notes
 // 1. if this file is not in Templates, gcc 2.7 does not instantiate.
 // 2. even if this file is in Templates, SunPro 5.0 will fail to
@@ -61,10 +64,8 @@ void osl_canny_smooth_rothwell(T const * const *image_in, int _xsize, int _ysize
         _smooth[x][y] += tmp[x][yy]*_kernel[i];
 }
 
-
 //
-//: Computes the gradient images with the origin at (x0,y0) and of square
-// size image_size.
+//: Computes the gradient images with the origin at (x0,y0) and of square size image_size.
 //
 template <class T>
 void osl_canny_smooth_rothwell_adaptive(T const * const *_image, int /*_xsize*/, int /*_ysize*/,

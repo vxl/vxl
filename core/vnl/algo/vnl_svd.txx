@@ -1,6 +1,9 @@
 #ifndef vnl_svd_txx_
 #define vnl_svd_txx_
 
+//:
+// \file
+
 #include "vnl_svd.h"
 
 #include <vcl_cstdlib.h> // vcl_abort()
@@ -167,8 +170,7 @@ vcl_ostream& operator<<(vcl_ostream& s, const vnl_svd<T>& svd)
 //-----------------------------------------------------------------------------
 // Chunky bits.
 
-//: find weights below threshold tol, zero them out, and update W_ and
-// Winverse_
+//: find weights below threshold tol, zero them out, and update W_ and Winverse_
 template <class T>
 void
 vnl_svd<T>::zero_out_absolute(double tol)
@@ -330,8 +332,8 @@ void vnl_svd<T>::solve(T const *y, T *x) const {
   solve(vnl_vector<T>(y, m_)).copy_out(x);
 }
 
-//: Solve the matrix-vector system M x = y, assuming that
-// the singular values W have been preinverted by the caller.
+//: Solve the matrix-vector system M x = y.
+// Assume that the singular values W have been preinverted by the caller.
 template <class T>
 void vnl_svd<T>::solve_preinverted(vnl_vector<T> const& y, vnl_vector<T>* x_out)  const
 {
@@ -388,9 +390,9 @@ vnl_matrix<T> vnl_svd<T>::left_nullspace(int /*required_nullspace_dimension*/) c
 
 
 //-----------------------------------------------------------------------------
-//: Return the rightmost column of V.  Does not check to see whether or
-// not the matrix actually was rank-deficient - the caller is assumed to have
-// examined W and decided that to his or her satisfaction.
+//: Return the rightmost column of V.
+//  Does not check to see whether or not the matrix actually was rank-deficient -
+//  the caller is assumed to have examined W and decided that to his or her satisfaction.
 template <class T>
 vnl_vector <T> vnl_svd<T>::nullvector()  const
 {
@@ -401,8 +403,8 @@ vnl_vector <T> vnl_svd<T>::nullvector()  const
 }
 
 //-----------------------------------------------------------------------------
-//: Return the rightmost column of U.  Does not check to see whether or
-// not the matrix actually was rank-deficient.
+//: Return the rightmost column of U.
+//  Does not check to see whether or not the matrix actually was rank-deficient.
 template <class T>
 vnl_vector <T> vnl_svd<T>::left_nullvector()  const
 {

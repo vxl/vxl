@@ -1,5 +1,8 @@
 // This is vxl/vul/vul_timer.cxx
 
+//:
+// \file
+
 //
 // Copyright (C) 1991 Texas Instruments Incorporated.
 //
@@ -153,8 +156,7 @@ long vul_timer::user()
 #endif
 }
 
-//: Returns the number of milliseconds spent in user-process or
-// operating system respectively, since last mark().
+//: Returns the number of milliseconds spent in user-process or operating system respectively, since last mark().
 
 long vul_timer::system()
 {

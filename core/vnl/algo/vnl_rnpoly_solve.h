@@ -14,6 +14,7 @@
 // Modifications
 //  Peter Vanroose, 20 Oct 1999: implementation simplified through "cmplx" class for doing complex arithmetic.
 //  dac (Manchester) 28/03/2001: tidied up documentation
+//   Feb.2002 - Peter Vanroose - brief doxygen comment placed on single line
 // \endverbatim
 
 #include <vnl/vnl_vector.h>
@@ -48,15 +49,15 @@ public:
 
   // Operations----------------------------------------------------------------
 
-//: Array of real parts of roots
+  //: Array of real parts of roots
   inline vcl_vector<vnl_vector<double>*> real() { return r_; }
 
-//: Array of imaginary parts of roots
+  //: Array of imaginary parts of roots
   inline vcl_vector<vnl_vector<double>*> imag() { return i_; }
 
-//: Return real roots only.  Roots are real if the absolute value
-// of their imaginary part is less than the optional argument tol,
-// which defaults to 1e-12 [untested]
+  //: Return real roots only.
+  //  Roots are real if the absolute value of their imaginary part is less than
+  //  the optional argument tol, which defaults to 1e-12 [untested]
   vcl_vector<vnl_vector<double>*> realroots(double tol = 1e-12);
 
   // Computations--------------------------------------------------------------

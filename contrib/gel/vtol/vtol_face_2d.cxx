@@ -1,3 +1,7 @@
+
+//:
+//  \file
+
 #include "vtol_face_2d.h"
 
 #include <vcl_cassert.h>
@@ -92,7 +96,7 @@ vtol_face_2d::~vtol_face_2d()
 }
 
 //---------------------------------------------------------------------------
-//: Clone `this': creation of a new object and initialization
+//: Clone `this': creation of a new object and initialization.
 // See Prototype pattern
 //---------------------------------------------------------------------------
 vsol_spatial_object_3d_sptr vtol_face_2d::clone(void) const
@@ -269,8 +273,8 @@ vtol_face_2d::vtol_face_2d(one_chain_list &onechs)
     }
 }
 
-//: Constructor of a Planar face from a vtol_one_chain.  This method uses
-// the vtol_one_chain, edgeloop, as the outside boundary of the face.
+//: Constructor of a Planar face from a vtol_one_chain.
+//  This method uses the vtol_one_chain, edgeloop, as the outside boundary of the face.
 
 vtol_face_2d::vtol_face_2d(vtol_one_chain &edgeloop)
   : _surface(0)

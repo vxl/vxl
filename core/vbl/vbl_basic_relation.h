@@ -11,6 +11,7 @@
 // \verbatim
 // Modifications
 // PDA (Manchester) 21/03/2001: Tidied up the documentation
+//   Feb.2002 - Peter Vanroose - brief doxygen comment placed on single line
 // \endverbatim
 //
 
@@ -36,8 +37,8 @@ class vbl_basic_relation_where;
 #endif
 
 //------------------------------------------------------------
-//: vbl_basic_relation iterator.  Holds a sub-class of vbl_br_iter_impl which
-// does the implementation.
+//: vbl_basic_relation iterator.
+// Holds a sub-class of vbl_br_iter_impl which does the implementation.
 template <class T1, class T2,
   VCL_DFL_TYPE_PARAM_STLDECL(T3,vbl_basic_optional),
   VCL_DFL_TYPE_PARAM_STLDECL(T4,vbl_basic_optional),

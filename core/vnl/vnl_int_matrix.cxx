@@ -1,5 +1,8 @@
 // This is vxl/vnl/vnl_int_matrix.cxx
 
+//:
+// \file
+
 //-*- c++ -*-------------------------------------------------------------------
 #ifdef __GNUC__
 #pragma implementation
@@ -17,14 +20,14 @@
 #include <vcl_cstdlib.h>
 #include <vcl_cctype.h>
 
-//: Construct from matrix of double.  The double-to-int conversion
-// is simply the standard (int) cast.
+//: Construct from matrix of double.
+//  The double-to-int conversion is simply the standard (int) cast.
 vnl_int_matrix::vnl_int_matrix(const vnl_matrix<double>& d):
   Base(d.rows(), d.columns())
 {
   unsigned m = d.rows();
   unsigned n = d.columns();
-  
+
   for (unsigned i = 0; i < m; ++i)
     for (unsigned j = 0; j < n; ++j)
       (*this)(i,j) = (int)d(i,j);

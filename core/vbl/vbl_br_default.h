@@ -13,6 +13,7 @@
 // 260498 AWF Conditionalized for gcc/sgi native.
 //              I can't find a mutually acceptable syntax at the moment.
 // PDA (Manchester) 21/03/2001: Tidied up the documentation
+//   Feb.2002 - Peter Vanroose - brief doxygen comment placed on single line
 // \endverbatim
 
 
@@ -39,8 +40,7 @@ template <class T1, class T2,
 class vbl_br_default;
 
 //------------------------------------------------------------
-//: This iterator is used when the where clause has at least one
-// non-wild element.
+//: This iterator is used when the where clause has at least one non-wild element.
 template <class T1, class T2,
   VCL_DFL_TYPE_PARAM_STLDECL(T3,vbl_basic_optional),
   VCL_DFL_TYPE_PARAM_STLDECL (T4, vbl_basic_optional),

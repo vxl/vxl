@@ -38,12 +38,12 @@ public:
 
   vil_rgba() {}
 
-  //:Create grey (v,v,v,1) vil_rgba cell from value v.  This provides a conversion
-  // from T to vil_rgba<T>, needed by e.g. two constructors in IUE_filter.h.
+  //: Create grey (v,v,v,1) vil_rgba cell from value v.
+  // This provides a conversion from T to vil_rgba<T>, needed by e.g. two constructors in IUE_filter.h.
   vil_rgba(T v):
     r(v), g(v), b(v), a(1) {}
 
-  //:Construct from four values.
+  //: Construct from four values.
   vil_rgba(T red, T green, T blue, T alpha = 1):
     r(red), g(green), b(blue), a(alpha) {}
 
@@ -110,10 +110,10 @@ public:
   }
 #endif
 
-  //:Convert vil_rgba to gray using standard (.299, .587, .114) RGB weighting.
+  //: Convert vil_rgba to gray using standard (.299, .587, .114) RGB weighting.
   T grey() const { return T(0.5+r*0.299+0.587*g+0.114*b); }
 
-  //:Convert vil_rgba to gray using standard (.299, .587, .114) RGB weighting.
+  //: Convert vil_rgba to gray using standard (.299, .587, .114) RGB weighting.
   operator T() const { return T(0.5+r*0.299+0.587*g+0.114*b); }
 };
 

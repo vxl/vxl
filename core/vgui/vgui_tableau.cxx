@@ -3,6 +3,9 @@
 #pragma implementation
 #endif
 
+//:
+//  \file
+
 #include "vgui_tableau.h"
 
 #include <vcl_cassert.h>
@@ -189,14 +192,14 @@ vcl_string vgui_tableau::file_name() const {
   return "(none)";
 }
 
-//: virtual. used to provide an informative name for printouts, debugging
-// etc.  Often it's type_name() + some representation of the essential state.
+//: virtual. used to provide an informative name for printouts, debugging etc.
+// Often it's type_name() + some representation of the essential state.
 vcl_string vgui_tableau::pretty_name() const {
   return type_name();
 }
 
-//: virtual. Return the name of the most derived (tableau) class. This
-// ought never to be called as derived classes should implement type_name().
+//: Return the name of the most derived (tableau) class.
+// virtual. This ought never to be called as derived classes should implement type_name().
 vcl_string vgui_tableau::type_name() const {
   static bool warned=false;
   if (!warned) {
@@ -235,7 +238,8 @@ bool vgui_tableau::remove_child(vgui_tableau_sptr const&) {
   return false;
 }
 
-//: This method is called when some part of the program (typically the slot
+//:
+// This method is called when some part of the program (typically the slot
 // mechanism) is about to forcibly replace a child of this tableau.
 // The canonical reason to override this is in order to invalidate caches.
 bool vgui_tableau::notify_replaced_child(vgui_tableau_sptr const& /*old_child*/,
@@ -247,17 +251,20 @@ bool vgui_tableau::notify_replaced_child(vgui_tableau_sptr const& /*old_child*/,
 //--------------------------------------------------------------------------------
 // @{ MENUS @}
 
-//: This method is for tableaux to implement if they want to _add_ some items to
+//:
+// This method is for tableaux to implement if they want to _add_ some items to
 // the popup menu. They can assign to or clear 'menu', but that is not recommended
 // as it would remove what other tableaux put there.
 // The recommended usage is to .add() items or to .include() another menu.
+//
 // ** this is an interface method. it abstracts a behaviour. **
 void vgui_tableau::add_popup(vgui_menu &/*menu*/) {
   // do nothing by default.
 }
 
-//: Gets popup menu for this tableau. If recurse is, true, recursively add the
-// popup menus for children and children's children etc.
+//: Gets popup menu for this tableau.
+// If recurse is, true, recursively add the popup menus for children and children's children etc.
+//
 // ** this is a mixin method. it does some work for you. **
 void vgui_tableau::get_popup(vgui_popup_params const &params, vgui_menu &menu) {
   // extract this tableau's popup menu into 'submenu'.

@@ -2,6 +2,9 @@
 #pragma implementation
 #endif
 
+//:
+//  \file
+
 #include <vcl_cassert.h>
 #include <vcl_iostream.h>
 #include <vcl_cmath.h>
@@ -108,7 +111,8 @@ FMatrixSkew::get_rank2_truncated()
 
 //-----------------------------------------------------------------------------
 //
-//: For a specified pair of matching points, find the nearest (minimum sum
+//: Find nearest match which is in agreement with F.
+// For a specified pair of matching points, find the nearest (minimum sum
 // of squared image distances) match which is in perfect agreement with
 // the epipolar geometry of the F matrix.
 // For skew symmetric matrix a reduced form with only a quadratic equation
@@ -179,8 +183,8 @@ FMatrixSkew::find_nearest_perfect_match(const HomgPoint2D& point1,
 
 //--------------------------------------------------------------
 //
-//: Set the fundamental matrix using the two-dimensional
-// array f_matrix. Only returns true if f_matrix contained a
+//: Set the fundamental matrix using the two-dimensional array f_matrix.
+// Only returns true if f_matrix contained a
 // skew matrix, not an approximation to one.
 // The test is against a 0.0 tolerance.
 // Otherwise returns false and the matrix is not set.
@@ -223,8 +227,8 @@ bool FMatrixSkew::set (const double* f_matrix )
 
 //--------------------------------------------------------------
 //
-//: Set the fundamental matrix using the vnl_matrix<double>
-// f_matrix. Only returns true if f_matrix contained a
+//: Set the fundamental matrix using the vnl_matrix<double> f_matrix.
+// Only returns true if f_matrix contained a
 // skew matrix, not an approximation to one.
 // Otherwise returns false and the matrix is not set.
 // Patch on FMatrixSkew::set (const double*).

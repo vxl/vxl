@@ -1,3 +1,7 @@
+
+//:
+//  \file
+
 extern "C" {
   typedef unsigned char uint8_t;
   typedef unsigned int uint32_t;
@@ -439,8 +443,8 @@ bool oxp_mpeg_codec::get_section(int position, // position of the frame in the s
 }
 
 
-//: put_section not implemented yet
-// we may need to change make_dib to
+//: put_section not implemented yet.
+// We may need to change make_dib to
 // be able to put a section different
 // of the entire frame.
 int oxp_mpeg_codec::put_section(int position,
@@ -453,8 +457,7 @@ int oxp_mpeg_codec::put_section(int position,
 }
 
 //-----------------------------------------------------------------------------
-//: probe the file fname, open it as an AVI file, if it works, close it and
-// return true. False otherwise.
+//: probe the file fname, open it as an AVI file. If it works, return true, false otherwise.
 
 bool oxp_mpeg_codec::probe(const char* fname)
 {

@@ -34,6 +34,9 @@
 #ifndef _gevd_param_mixin_h
 #define _gevd_param_mixin_h
 
+//:
+// \file
+
 //=========================== Basics ====================================
 //
 // .NAME    gevd_param_mixin - A mixin to package algorithm parameters
@@ -94,8 +97,7 @@ class ParamModifier
 {
 public:
   //------------------------------------------------------------
-  //: These are some standard boolean choice styles defined for
-  // convenience.
+  //: These are some standard boolean choice styles defined for convenience.
   enum BoolChoiceStyle { TrueFalse, OnOff, YesNo };
 
   //------------------------------------------------------------
@@ -123,8 +125,7 @@ public:
   //  virtual void AddParam(const vcl_string& name, int& value, UIChoice* choices) = 0;
 
   //------------------------------------------------------------
-  //: Add a boolean choice parameter, using one of the convenient
-  // standard styles.
+  //: Add a boolean choice parameter, using one of the convenient standard styles.
   virtual void AddParam(const vcl_string& name, bool& value,
                         BoolChoiceStyle style = TrueFalse) = 0;
 };

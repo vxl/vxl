@@ -1,5 +1,8 @@
 #include "osl_edge_detector.h"
 
+//:
+//  \file
+
 #include <vcl_cmath.h>
 #include <vcl_cstdlib.h>
 #include <vcl_cassert.h>
@@ -165,8 +168,8 @@ void osl_edge_detector::detect_edges(vil_image const &image,
 }
 
 //-----------------------------------------------------------------------------
-//
-//: A procedure that performs sub-pixel interpolation for all edges greater
+//:
+// A procedure that performs sub-pixel interpolation for all edges greater
 // than the threshold by parabolic fitting. Writes edges into the _thresh image
 // if they are maxima and above _low. This gives a good indication of the local
 // edge strengths. Stores sub-pixel positions in _dx and _dy, and set the
@@ -326,10 +329,9 @@ void osl_edge_detector::Sub_pixel_interpolation() {
 
 
 //-----------------------------------------------------------------------------
-//
-//: Thickens the threshold image around each good pixel to take account for
+//:
+// Thickens the threshold image around each good pixel to take account for
 // the smoothing kernel (almost a dilation with a square structuring element).
-//
 //
 void osl_edge_detector::Thicken_threshold(int x, int y) {
   // Experimental change 13/4/95 by CAR
@@ -349,8 +351,8 @@ void osl_edge_detector::Thicken_threshold(int x, int y) {
 
 
 //-----------------------------------------------------------------------------
-//
-//: Takes the _thresh image that contains threshold values near to where
+//:
+// Takes the _thresh image that contains threshold values near to where
 // non-maximal suppression succeeded, and zero elsewhere, and extend the
 // values to all areas of the image. This is done using chamfer masks so that
 // the final threshold assigned at any one point (ie. a point that was
@@ -482,8 +484,8 @@ static int compare(osl_edge_detector_xyfloat* xyf1, osl_edge_detector_xyfloat* x
 
 
 //-----------------------------------------------------------------------------
-//
-//: Method to thin the image using the variation of Tsai-Fu thinning used
+//:
+// Method to thin the image using the variation of Tsai-Fu thinning used
 // by Van-Duc Nguyen in Geo-Calc. This relies on computing the genus of
 // an edge location, and removing it if it is not a dangling chain as has
 // genus zero. We also order the edges by strength and try to remove the weaker
@@ -572,8 +574,8 @@ void osl_edge_detector::Thin_edges() {
 
 
 //-----------------------------------------------------------------------------
-//
-//: Finds all pixels that are surrounded by four edgels, but which are
+//:
+// Finds all pixels that are surrounded by four edgels, but which are
 // themselves not edgels. These `holes' cause the construction of complex
 // topological descriptions. To simplify matters, we raise the _thin value
 // of the central pixel and so force it to be an edgel.
@@ -603,7 +605,8 @@ void osl_edge_detector::Fill_holes() {
 // see osl_canny_ox.cxx
 extern osl_Vertex *osl_find(vcl_list<osl_Vertex*> const *l, osl_Vertex const &v);
 
-//: Follow all edgel chains that have pixel values above their corresponding
+//:
+// Follow all edgel chains that have pixel values above their corresponding
 // threshold values (_thin[x][y] > _thresh[x][y]).
 //
 void osl_edge_detector::Follow_curves(vcl_list<osl_edge*> *edges)
@@ -752,10 +755,9 @@ void osl_edge_detector::Follow_curves(vcl_list<osl_edge*> *edges)
   }
 }
 
-
 //-----------------------------------------------------------------------------
-//
-//: Following routine looking for connectiveness of edgel chains, and
+//:
+// Following routine looking for connectiveness of edgel chains, and
 // accounts for single pixel gaps in the chains.
 //
 void osl_edge_detector::Follow(int x, int y,

@@ -15,6 +15,7 @@
 // 2000.09.13 fsm@robots      Added rationale for unprotect().
 // PDA (Manchester) 23/03/2001: Tidied up the documentation
 // Peter Vanroose   27/05/2001: Corrected the documentation
+//   Feb.2002 - Peter Vanroose - brief doxygen comment placed on single line
 // \endverbatim
 
 #include <vcl_iosfwd.h>
@@ -136,8 +137,7 @@ public:
   bool is_protected() const { return protected_;};
 
 #if 0 // no longer needed
-  //: If a T_ref is converted to a pointer then back to a T_ref,
-  // you'll need to call this
+  //: If a T_ref is converted to a pointer then back to a T_ref, you'll need to call this
   void protect()
   {
     if (!protected_ && ptr_)
@@ -177,8 +177,7 @@ private:
   static void ref  (T *p);
   static void unref(T *p);
 
-  //: The protected flag says whether or not the object held will be
-  // unref()fed when the smart pointer goes out of scope.
+  //: The protected flag says whether or not the object held will be unref()fed when the smart pointer goes out of scope.
   bool protected_;
 
   //: Pointer to object, or 0.

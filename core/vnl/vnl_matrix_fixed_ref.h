@@ -5,7 +5,8 @@
 #endif
 // This is vxl/vnl/vnl_matrix_fixed_ref.h
 
-//: \file
+//:
+//  \file
 //  \brief Fixed size stack-stored vnl_matrix
 //
 //    vnl_matrix_fixed_ref is a fixed-size vnl_matrix for which the data space
@@ -32,6 +33,7 @@
 //            itself allocate the matrix storage.  Necessary because otherwise
 //            the compiler will itself generate a default constructor.
 //  4/4/01 LSB (Manchester) Tidied documentation
+//   Feb.2002 - Peter Vanroose - brief doxygen comment placed on single line
 // \endverbatim
 //
 //-----------------------------------------------------------------------------
@@ -62,11 +64,10 @@ class vnl_matrix_fixed_ref : public vnl_matrix<T> {
   T* rowspace[m];
 public:
 
-//: Construct a fixed size matrix which points to the row-stored
-// data space supplied.  The space must remain valid for the lifetime
-// of the vnl_matrix_fixed_ref.  Alterations to the locations pointed to by
-// space will be (obviously) visible to users of the vnl_matrix_fixed_ref
-// and vice versa.
+//: Construct a fixed size matrix which points to the row-stored data space supplied.
+// The space must remain valid for the lifetime of the vnl_matrix_fixed_ref.
+// Alterations to the locations pointed to by space will be (obviously) visible
+// to users of the vnl_matrix_fixed_ref and vice versa.
   vnl_matrix_fixed_ref(T *space = (T*)0) {
     Base::data = rowspace;  // thf. can't derive this from matrixref
     if (!space) space = vnl_c_vector<T>::allocate_T(m*n);
@@ -76,16 +77,15 @@ public:
     Base::num_cols = n;
   }
 
-//: Destroy this vnl_matrix_fixed_ref after detaching from the space
-// supplied to the constructor.
+//: Destroy this vnl_matrix_fixed_ref after detaching from the space supplied to the constructor.
   ~vnl_matrix_fixed_ref() {
     // Prevent base dtor from releasing our memory
     Base::data[0] = 0;
     Base::data = 0;
   }
 
-//: Copy a vnl_matrix into our space.  Will cause an assertion
-// failure (i.e. abort) if the rhs is not exactly the same size.
+//: Copy a vnl_matrix into our space.
+//  Will cause an assertion failure (i.e. abort) if the rhs is not exactly the same size.
   vnl_matrix_fixed_ref<T, m, n>& operator=(const vnl_matrix<T>& rhs) {
     assert(rhs.rows() == m && rhs.columns() == n);
     vcl_memcpy(data[0], rhs.data_block(), m*n*sizeof(T));

@@ -2,6 +2,9 @@
 #pragma implementation
 #endif
 
+//:
+//  \file
+
 #include "HomgInterestPointSet.h"
 
 #include <vcl_cassert.h>
@@ -31,8 +34,7 @@ HomgInterestPointSet::HomgInterestPointSet()
   init_conditioner(0);
 }
 
-//: Construct an empty corner set which will use the given conditioner to
-// convert from image to homogeneous coordinates.
+//: Construct an empty corner set which will use the given conditioner to convert from image to homogeneous coordinates.
 HomgInterestPointSet::HomgInterestPointSet(const HomgMetric& c)
 {
   _data = new HomgInterestPointSetData;
@@ -147,8 +149,7 @@ bool HomgInterestPointSet::add(double x, double y)
   return true;
 }
 
-//: Add a corner which has already been preconditioned by this cornerset's
-// imagemetric.
+//: Add a corner which has already been preconditioned by this cornerset's imagemetric.
 bool HomgInterestPointSet::add_preconditioned(const HomgPoint2D& h)
 {
   double x, y;
@@ -240,10 +241,8 @@ bool HomgInterestPointSet::read(vcl_istream& f, const ImageMetric* c)
   return true;
 }
 
-//: Load a corner set from a simple ASCII file of x y pairs,
-// and use Image to compute mean_intensities.
-// If ImageMetric is supplied, it is used to convert image coordinates to
-// homogeneous form.
+//: Load a corner set from a simple ASCII file of x y pairs, and use Image to compute mean_intensities.
+// If ImageMetric is supplied, it is used to convert image coordinates to homogeneous form.
 bool HomgInterestPointSet::read(const char* filename, vil_image const& src, const HomgMetric& c)
 {
   if (!read(filename, c))

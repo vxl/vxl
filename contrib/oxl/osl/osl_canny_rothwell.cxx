@@ -1,3 +1,7 @@
+
+//:
+//  \file
+
 #include "osl_canny_rothwell.h"
 #include <osl/osl_canny_rothwell_params.h>
 #include <osl/osl_kernel.h>
@@ -182,7 +186,8 @@ void osl_canny_rothwell::detect_edges(vil_image const &image, vcl_list<osl_edge*
 
 //-----------------------------------------------------------------------------
 //
-//: Non-maximally supresses the output image by searching along the edge
+//:
+// Non-maximally supresses the output image by searching along the edge
 // normal and checking that the test edge has a greater that the interpolated
 // neighbours in the direction. We have also included sub-pixel interpolation
 // of the peak position by parabolic fitting.  Writes edges into the _thick
@@ -298,7 +303,8 @@ void osl_canny_rothwell::Non_maximal_supression() {
 
 //-----------------------------------------------------------------------------
 //
-//: Hysteresis follows edgel chains that lie above the _low threshold and
+//:
+// Hysteresis follows edgel chains that lie above the _low threshold and
 // have at least one edgel above the _high threshold. Once we have followed,
 // the good edgelchains are re-writted to the _thin image for further
 // processing.
@@ -358,7 +364,8 @@ void osl_canny_rothwell::Initial_hysteresis() {
 extern osl_Vertex *osl_find(vcl_list<osl_Vertex*> const *l, osl_Vertex const &v);
 extern osl_Vertex *osl_find(vcl_list<osl_Vertex*> const *l, float x, float y);
 
-//: Hysteresis follows edgel chains that lie above the _low threshold and
+//:
+// Hysteresis follows edgel chains that lie above the _low threshold and
 // have at least one edgel above the _high threshold. Due to the Initial_hysteresis
 // phase, all edges greater than _low will be by default good and so have a member
 // greater than _high.
@@ -516,7 +523,8 @@ void osl_canny_rothwell::Final_hysteresis(vcl_list<osl_edge*> *edges) {
 
 //-----------------------------------------------------------------------------
 //
-//: Method to thin the image using the variation of Tsai-Fu thinning used
+//:
+// Method to thin the image using the variation of Tsai-Fu thinning used
 // by Van-Duc Nguyen in Geo-Calc. This relies on computing the genus of
 // an edge location, and removing it if it is not a dangling chain as has
 // genus zero.
@@ -572,8 +580,8 @@ void osl_canny_rothwell::Thin_edges() {
 
 //-----------------------------------------------------------------------------
 //
-//: Searches for single pixel breaks near dangling ends and patches them
-// up. This is destructive on the dangling lists.
+//: Searches for single pixel breaks near dangling ends and patches them up.
+// This is destructive on the dangling lists.
 //
 void osl_canny_rothwell::Jump_single_breaks() {
 
@@ -652,8 +660,8 @@ void osl_canny_rothwell::Jump_single_breaks() {
 
 //-----------------------------------------------------------------------------
 //
-//: Searches for high contrast changes in the vicinity of dangling ends. This
-// is done by halving the previously used Canny sigma to reduce the effects of
+//: Searches for high contrast changes in the vicinity of dangling ends.
+// This is done by halving the previously used Canny sigma to reduce the effects of
 // smoothing near corners. Ultimately the kernel size will be scaled down until
 // its radius of influence is only two pixels; at that stage pixel-jumping should
 // fix any problems.
@@ -740,8 +748,7 @@ void osl_canny_rothwell::Adaptive_Canny(vil_image const &image) {
 
 //-----------------------------------------------------------------------------
 //
-//: Wherever the _thick image has an edge marked set the new gradient value
-// to zero.
+//: Wherever the _thick image has an edge marked set the new gradient value to zero.
 void osl_canny_rothwell::Subtract_thick(int x0, int y0, int image_size, float **grad)
 {
   for (int x=_width; x<image_size-_width; ++x)

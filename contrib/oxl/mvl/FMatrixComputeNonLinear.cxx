@@ -2,6 +2,9 @@
 #pragma implementation
 #endif
 
+//:
+//  \file
+
 #include "FMatrixComputeNonLinear.h"
 
 #include <vcl_cassert.h>
@@ -62,7 +65,6 @@ FMatrixComputeNonLinear::FMatrixComputeNonLinear(PairMatchSetCorner* matches) :
 
 //-----------------------------------------------------------------------------
 //: Compute the F Matrix by augmenting a 7 point basis
-//
 
 bool FMatrixComputeNonLinear::compute_basis(FMatrix* F, vcl_vector<int> basis) {
   one_ = false;
@@ -190,9 +192,7 @@ bool FMatrixComputeNonLinear::compute(FMatrix* F)
 }
 
 //-----------------------------------------------------------------------------
-//: The virtual function from vnl_levenberg_marquardt which returns the RMS
-// epipolar error and a vector of residuals.
- //
+//: The virtual function from vnl_levenberg_marquardt which returns the RMS epipolar error and a vector of residuals.
 void FMatrixComputeNonLinear::f(const vnl_vector<double>& f_params, vnl_vector<double>& fx)
 {
   FMatrix F = params_to_fmatrix(f_params);

@@ -1,4 +1,3 @@
-//
 // This is xcv/xcv.cxx
 
 //:
@@ -10,6 +9,7 @@
 // \verbatim
 //  Modifications:
 //   K.Y.McGaul     27-JAN-2000    Initial version.
+//   Feb.2002 - Peter Vanroose - brief doxygen comment placed on single line
 // \endverbatim
 //
 
@@ -332,8 +332,7 @@ xcv_picker_tableau_sptr get_picker_tableau_at(unsigned col, unsigned row)
 }
 
 //-----------------------------------------------------------------------------
-//:  Gets the underlying image from the tableau at the given position
-//   and returns it in the given image pointer.
+//:  Gets the underlying image from the tableau at the given position and returns it in the given image pointer.
 //   Returns true if the image is OK, otherwise returns false.
 //-----------------------------------------------------------------------------
 bool get_image_at(vil_image* img, unsigned col, unsigned row)
@@ -365,7 +364,7 @@ void add_image_at(vcl_string image_filename, unsigned col, unsigned row)
 }
 
 
-//: add image to next available slot
+//: Add image to next available slot
 void add_image(vil_image& img)
 {
   xcv_image_tableau_new  image(img);
@@ -393,7 +392,7 @@ vgui_menu create_menubar()
 {
   xcv_menubar.add("File", xcv_file::create_file_menu());
   xcv_menubar.add("Display", xcv_display::create_display_menu());
-  //xcv_menubar.add("Image-processing", xcv_processing::create_processing_menu());
+  xcv_menubar.add("Image-processing", xcv_processing::create_processing_menu());
   xcv_menubar.add("Geometry", xcv_geometry::create_geometry_menu());
   xcv_menubar.add("Segmentation", xcv_segmentation::create_segmentation_menu());
   xcv_menubar.add("Multiview", xcv_multiview::create_multiview_menu());

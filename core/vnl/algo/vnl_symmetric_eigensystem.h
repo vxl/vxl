@@ -46,6 +46,7 @@
 // Modifications
 //  fsm@robots, 5 March 2000: templated
 //  dac (Manchester) 28/03/2001: tidied up documentation
+//   Feb.2002 - Peter Vanroose - brief doxygen comment placed on single line
 // \endverbatim
 
 #include <vnl/vnl_matrix.h>
@@ -77,14 +78,14 @@ protected:
   int n_;
 
 public:
-  //: Public eigenvectors.  After construction, the columns of V are the
-  // eigenvectors, sorted by increasing eigenvalue, from most negative to
-  // most positive.
+  //: Public eigenvectors.
+  //  After construction, the columns of V are the eigenvectors, sorted by
+  // increasing eigenvalue, from most negative to most positive.
   vnl_matrix<T> V;
 
-  //: Public eigenvalues.  After construction,  D contains the
-  // eigenvalues, sorted as described above.  Note that D is a vnl_diag_matrix,
-  // and is therefore stored as a vcl_vector while behaving as a matrix.
+  //: Public eigenvalues.
+  //  After construction,  D contains the eigenvalues, sorted as described above.
+  //  Note that D is a vnl_diag_matrix, and is therefore stored as a vcl_vector while behaving as a matrix.
   vnl_diag_matrix<T> D;
 
   //: Recover specified eigenvector after computation.
@@ -97,8 +98,8 @@ public:
   // It is deliberate that the signature is the same as on vnl_svd<T>.
   vnl_vector<T> nullvector() const { return get_eigenvector(0); }
 
-  //: Return the matrix $V  D  V^\top$.  This can be useful if you've
-  // modified $D$.  So an inverse is obtained using
+  //: Return the matrix $V  D  V^\top$.
+  //  This can be useful if you've modified $D$.  So an inverse is obtained using
   // \verbatim
   //   vnl_symmetric_eigensystem} eig(A);
   //   eig.D.invert_in_place}();

@@ -2,6 +2,9 @@
 #pragma implementation
 #endif
 
+//:
+//  \file
+
 #include "NViewMatches.h"
 
 #include <vcl_cassert.h>
@@ -20,9 +23,10 @@ vcl_ostream& operator<<(vcl_ostream& s, const NViewMatch& c)
   return s;
 }
 
-//: Return true if B is consistent with this match.  Matches are consistent if
-// they are identical in all non-wildcard positions.  However, it additionally
-// requires that they share at least min_overlap non-wildcard positions.
+//: Return true if B is consistent with this match.
+//  Matches are consistent if they are identical in all non-wildcard positions.
+//  However, it additionally requires that they share at least min_overlap
+//  non-wildcard positions.
 bool NViewMatch::matches(const NViewMatch& b, int min_overlap) const
 {
   unsigned l = size();
@@ -177,9 +181,9 @@ vcl_vector<int> NViewMatches::get_matches(const NViewMatch& match)
   return ret;
 }
 
-//: Add a new nview match to the set.   If it is just an update
-// of an existing match (filling in a wildcard), merge it.  Otherwise
-// add it at the end.
+//: Add a new nview match to the set.
+// If it is just an update of an existing match (filling in a wildcard),
+// merge it.  Otherwise add it at the end.
 //
 // If the new match is consistent with two existing consistent matches
 // then all 3 are merged.

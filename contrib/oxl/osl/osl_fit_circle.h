@@ -40,19 +40,19 @@ public:
     //: get center of circle as vgl_point_2d
     const vgl_point_2d<double>& center() const { return center_; }
 
-    //: get radius of circle as double
+    //: Get radius of circle as double
     double radius() const { return radius_; }
 
-    //: if error() returns true, there was an error during calculation,
-    // normally because of wrong or insufficient input data
+    //: If error() returns true, there was an error during calculation.
+    // Normally because of wrong or insufficient input data.
     bool error() const { return error_; }
 
-    //: returns the maximum difference between the points and the calculated
-    // circle (length of longest tangent from point to circle)
+    //: Returns the maximum difference between the points and the calculated circle
+    // (length of longest tangent from point to circle)
     double max_diff() const { return max_diff_; }
 
-    //: return the average difference between the points and the calculated
-    // circle (average of length of tangents from points to circle)
+    //: Return the average difference between the points and the calculated circle
+    // (average of length of tangents from points to circle)
     double avg_diff() const { return avg_diff_; }
 
 protected:

@@ -13,6 +13,7 @@
 // \verbatim
 //  Modifications
 //  IMS (Manchester) 16/03/2001: Tidied up the documentation + added binary_io
+//   Feb.2002 - Peter Vanroose - brief doxygen comment placed on single line
 // \endverbatim
 
 #include <vcl_cassert.h>
@@ -37,8 +38,8 @@ public:
   //: Construct a diagonal matrix with diagonal elements equal to value.
   vnl_diag_matrix(unsigned nn, T const& value) : diagonal_(nn, value) {}
 
-  //: Construct a diagonal matrix from a Vector.  The vector elements become
-  // the diagonal elements.
+  //: Construct a diagonal matrix from a vnl_vector.
+  //  The vector elements become the diagonal elements.
   vnl_diag_matrix(vnl_vector<T> const& that): diagonal_(that) {}
  ~vnl_diag_matrix() {}
 

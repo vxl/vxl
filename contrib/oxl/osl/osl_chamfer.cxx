@@ -1,6 +1,10 @@
 /*
   fsm@robots.ox.ac.uk
 */
+
+//:
+//  \file
+
 #ifdef __GNUC__
 #pragma implementation
 #endif
@@ -36,7 +40,8 @@ int osl_Minimum4(int a, int b, int c, int d)
 
 //-----------------------------------------------------------------------------
 //
-//: Performs a forward chamfer convolution on the dist image and associates
+//:
+// Performs a forward chamfer convolution on the dist image and associates
 // a send image (param) that reports on some parameter of the nearest pixel.
 // The image sizes are mxn.
 void osl_chamfer_Forward (int m, int n, int **dist, float **param)
@@ -118,7 +123,8 @@ void osl_chamfer_Backward(int m, int n, int **dist, float **param)
 
 //-----------------------------------------------------------------------------
 //
-//: Performs a chamfer convolution starting from (minx,maxy) on the dist image
+//:
+// Performs a chamfer convolution starting from (minx,maxy) on the dist image
 // and associates a send image (param) that reports on some parameter of the
 // nearest pixel. The image sizes are mxn.
 //
@@ -163,7 +169,8 @@ void osl_chamfer_Alt1(int m, int n, int **dist, float **param)
 
 //-----------------------------------------------------------------------------
 //
-//: Performs a chamfer convolution starting from (maxx,miny) on the dist image
+//:
+// Performs a chamfer convolution starting from (maxx,miny) on the dist image
 // and associates a send image (param) that reports on some parameter of the
 // nearest pixel. The image sizes are mxn.
 //

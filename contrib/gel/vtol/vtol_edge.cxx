@@ -1,5 +1,8 @@
 #include "vtol_edge.h"
 
+//:
+//  \file
+
 #include <vcl_cassert.h>
 #include <vtol/vtol_zero_chain.h>
 #include <vtol/vtol_one_chain.h>
@@ -410,8 +413,8 @@ vtol_vertex_sptr vtol_edge::other_endpoint(const vtol_vertex &overt) const
 }
 
 //-----------------------------------------------------------------
-//: Compute bounds from the geometry of _curve. If the curve is
-//    not fully bounded, then use the vertices.
+//: Compute bounds from the geometry of _curve.
+// If the curve is not fully bounded, then use the vertices.
 //
 void vtol_edge::compute_bounding_box(void)
 {

@@ -1,6 +1,9 @@
 #ifndef rsdl_borgefors_txx_
 #define rsdl_borgefors_txx_
 
+//:
+//  \file
+
 #include "rsdl_borgefors.h"
 #include <vcl_iostream.h>
 #include <vbl/vbl_array_2d.h>
@@ -93,8 +96,8 @@ rsdl_borgefors<T>::in_map(int x, int y) const
   return true;
 }
 
-//: Returns the approximated distance data between (x,y) and closest
-//  data record. If (x,y) is out of range, -1 is returned instead.
+//: Returns the approximated distance data between (x,y) and closest data record.
+//  If (x,y) is out of range, -1 is returned instead.
 //
 template <class T>
 double
@@ -106,8 +109,8 @@ rsdl_borgefors<T>::distance(int x, int y) const
   return distance_map_[y - org_y_][x - org_x_]/3.0;
 }
 
-//: Returns the data located closest to (x,y). If (x,y) is out of range,
-//  it aborts. Therefore, should always check in_map(x,y) first.
+//: Returns the data located closest to (x,y). If (x,y) is out of range, it aborts.
+//  Therefore, should always check in_map(x,y) first.
 //
 template <class T>
 rsdl_borgefors<T>::const_iterator_type
@@ -207,8 +210,7 @@ rsdl_borgefors<T>::minimum5(int a, int b, int c, int d, int e)
         return 5;
 }
 
-//: Performs a forward chamfer convolution on the distance_map_
-//  and update the index_map_ accordingly
+//: Performs a forward chamfer convolution on the distance_map_ and update the index_map_ accordingly
 //
 template <class T>
 void
@@ -248,8 +250,7 @@ rsdl_borgefors<T>::forward_chamfer()
       }
 }
 
-//: Performs a forward chamfer convolution on the distance_map_
-//  and update the index_map_ accordingly
+//: Performs a forward chamfer convolution on the distance_map_ and update the index_map_ accordingly
 //
 template <class T>
 void

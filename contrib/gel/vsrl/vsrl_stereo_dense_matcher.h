@@ -1,15 +1,19 @@
 #ifndef vsrl_stereo_dense_matcher_h
 #define vsrl_stereo_dense_matcher_h
 
+//:
+//  \file
+
 #include <vsrl/vsrl_raster_dp_setup.h>
 #include <vil/vil_image.h>
 #include <vsrl/vsrl_dense_matcher.h>
 #include <vsrl/vsrl_image_correlation.h>
 
-//: this class will take a pair of stereo images
+//:
+// This class will take a pair of stereo images
 // where each point on one raster matches a point
 // on the corresponding raster.
-// once two images are incerted, dynamic programing on
+// Once two images are inserted, dynamic programming on
 // each raster is performed. The user can then find the
 // point corespondences between each pixel in the image.
 

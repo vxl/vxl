@@ -4,6 +4,9 @@
 #pragma interface
 #endif
 //
+//:
+//  \file
+
 // .NAME    PairMatchMulti - Set of pairs of integers
 // .LIBRARY MViewBasics
 // .HEADER  MultiView Package
@@ -22,6 +25,7 @@
 //
 // .SECTION Modifications:
 //     June 97 - Peter Vanroose - operator==() added
+//   Feb.2002 - Peter Vanroose - brief doxygen comment placed on single line
 //
 //-----------------------------------------------------------------------------
 
@@ -58,14 +62,14 @@ public:
 
   // Operations----------------------------------------------------------------
 
-//: @{ Add a match $(i_1, i_2)$ to the set @}
+//: Add a match $(i_1, i_2)$ to the set
   void add_match(int i1, int i2) {
     _matches12.insert(i1, i2);
   }
 
   bool contains(int i1, int i2) const;
 
-//: @{ Add a match $(i_1, i_2)$ to the set @}
+//: Add a match $(i_1, i_2)$ to the set
   void add_match(int i1, int i2, double score);
 
   double get_score(int i1, int i2) const;
@@ -113,8 +117,8 @@ private:
 
 #include "PairMatchMultiIterator.h"
 
-//: Return an iterator which will run through the list of matches for feature
-// index i1.  Example usage: to print all matches for "target"
+//: Return an iterator which will run through the list of matches for feature index i1.
+//  Example usage: to print all matches for "target"
 // <verb>
 //   for(PairMatchMultiIterator p = mm.get_match_12(target); !p.done(); p.next())
 //     vcl_cout << p.get_i1() << " " << p.get_i2() << vcl_endl;
@@ -125,7 +129,8 @@ inline PairMatchMultiIterator PairMatchMulti::get_match_12(int i1)
   return PairMatchMultiIterator(_matches12.lower_bound(i1), _matches12.upper_bound(i1));
 }
 
-//: This may be expensive.  If it is used a lot, it may be worth maintaining
+//:
+// This may be expensive.  If it is used a lot, it may be worth maintaining
 // forward and backward maps.  Right now it's not even implemented.
 inline PairMatchMultiIterator PairMatchMulti::get_match_21(int) { vcl_abort(); return iter(); }
 

@@ -20,6 +20,7 @@
 //     010126 BJM (mccane@cs.otago.ac.nz) added constructor from
 //            previously allocated memory. This memory is not deallocated on
 //            destruction.
+//   Feb.2002 - Peter Vanroose - brief doxygen comment placed on single line
 //\endverbatim
 
 #include <vil/vil_byte.h>
@@ -75,13 +76,12 @@ public:
   //: Construct a w x h image, pixel format is determined from T
   vil_memory_image_of(int sizex, int sizey);
 
-  //: Construct a w x h image, pixel format is determined from T from
-  //memory previously created and pointed to by buf
+  //: Construct a w x h image, pixel format is determined from T from memory previously created and pointed to by buf
   vil_memory_image_of(T *buf, int sizex, int sizey);
-
-  //  //: Make memory imagebuffer, and fill with "value"
-  //  vil_memory_image_of(int sizex, int sizey, T const& value);
-
+#if 0
+  //: Make memory imagebuffer, and fill with "value"
+  vil_memory_image_of(int sizex, int sizey, T const& value);
+#endif
   //: Clearly, this will deallocate the memory buffer
   inline ~vil_memory_image_of() {}
 

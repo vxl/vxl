@@ -2,7 +2,9 @@
 #ifdef __GNUC__
 #pragma implementation
 #endif
-//
+//:
+// \file
+
 // vnl_real_eigensystem
 // Author: Andrew W. Fitzgibbon, Oxford RRG
 // Created: 23 Jan 97
@@ -15,8 +17,8 @@
 #include <vnl/vnl_fortran_copy.h>
 #include <vnl/algo/vnl_netlib.h> // rg_()
 
-//: Extract eigensystem of unsymmetric matrix M, using the EISPACK routine
-// rg.  Should probably switch to using LAPACK's dgeev to avoid transposing.
+//: Extract eigensystem of unsymmetric matrix M, using the EISPACK routine rg.
+//  Should probably switch to using LAPACK's dgeev to avoid transposing.
 vnl_real_eigensystem::vnl_real_eigensystem(vnl_matrix<double> const & M):
   Vreal(M.rows(), M.columns()),
   V(M.rows(), M.columns()),

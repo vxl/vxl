@@ -1,3 +1,7 @@
+
+//:
+//  \file
+
 /*
   fsm@robots.ox.ac.uk
 */
@@ -67,8 +71,7 @@ void vgui_image_renderer::set_image(vil_image const &image_) {
     trace << "image : " << the_image << vcl_flush;
 }
 
-//: Tell the image renderer that the image has been changed,
-// and should be re-read.
+//: Tell the image renderer that the image has been changed, and should be re-read.
 void vgui_image_renderer::reread_image()
 {
   delete buffer;

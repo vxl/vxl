@@ -33,11 +33,13 @@
 #ifndef _xpixel_h_
 #define _xpixel_h_
 
+//:
+// \file
+
 #include <vnl/vnl_vector.h>
 #include "gevd_bufferxy.h"
 
-//: Get reference to pixel as a pointer to a CoolVector<float>,
-// at indexes (x, y).
+//: Get reference to pixel as a pointer to a CoolVector<float>, at indexes (x, y).
 
 inline vnl_vector<float>*&
 fvectorPixel(gevd_bufferxy& buf, int x, int y)

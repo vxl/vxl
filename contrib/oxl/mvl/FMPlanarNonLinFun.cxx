@@ -2,6 +2,9 @@
 #pragma implementation
 #endif
 
+//:
+//  \file
+
 #include "FMPlanarNonLinFun.h"
 
 #include <vcl_cassert.h>
@@ -92,8 +95,7 @@ bool FMPlanarNonLinFun::compute(FMatrixPlanar* F)
 }
 
 //-----------------------------------------------------------------------------
-//: The virtual function from vnl_levenberg_marquardt which returns the RMS
-// epipolar error and a vector of residuals.
+//: The virtual function from vnl_levenberg_marquardt which returns the RMS epipolar error and a vector of residuals.
 //
 void FMPlanarNonLinFun::f(const vnl_vector<double>& f_params, vnl_vector<double>& fx)
 {

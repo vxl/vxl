@@ -2,6 +2,9 @@
 #pragma implementation
 #endif
 
+//:
+//  \file
+
 #include "MovieFile.h"
 
 #include <vcl_vector.h>
@@ -13,14 +16,14 @@
 
 /////////////////////////////////////////////////////////////////////////////
 
-//: The moviefile constructor takes the given filename, and opens it at a movie
-// file.  The possible values for filename are:
-//   blah.mv                The name of an SGI movie file.
-//   blah.###.jpg           The pattern for an image sequence.
-//   blah                   Assumed to be the basename of a pattern such as
-//                          blah.###.extension.   Various default extensions
-//                          are searched for using blah.{start}.{ext} until
-//                          one matches.
+//: The moviefile constructor takes the given filename, and opens it at a movie file.
+//  The possible values for filename are:
+//  - blah.mv                The name of an SGI movie file.
+//  - blah.###.jpg           The pattern for an image sequence.
+//  - blah                   Assumed to be the basename of a pattern such as
+//                           blah.###.extension.   Various default extensions
+//                           are searched for using blah.{start}.{ext} until
+//                           one matches.
 MovieFile::MovieFile(char const* filename, int start, int step, int end):
   filename_(filename),
   start_(start),

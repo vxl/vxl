@@ -35,6 +35,9 @@
 //#include <ImageProcessing/gevd_float_operators.h>
 //#include <ImageProcessing/pixel.h>
 
+//:
+// \file
+
 #include <vcl_vector.h>
 #include <vnl/vnl_math.h>
 
@@ -367,7 +370,8 @@ BestStepExtension(const gevd_bufferxy& smooth,
 }
 
 
-//: Find junctions by searching for extensions of contours from
+//:
+// Find junctions by searching for extensions of contours from
 // their dangling end points. Non maximum suppression insures that
 // contours have width < 2, and so we can find the left/right neighbors,
 // and deduce end points. By using a minimally smoothed image,
@@ -492,7 +496,8 @@ gevd_step::RecoverJunctions(const gevd_bufferxy& image,
   return njunction;
 }
 
-//: Return the standard deviation of raw noise, in the original image,
+//:
+// Return the standard deviation of raw noise, in the original image,
 // either estimated or given by the user. If the noise has not been
 // estimated, return 0.
 
@@ -502,7 +507,8 @@ gevd_step::NoiseSigma() const
   return (noiseSigma <= 0)? 0: noiseSigma;
 }
 
-//: Compute response of white noise through the filter dG, or
+//:
+// Compute response of white noise through the filter dG, or
 // second-derivative of the Gaussian. Using a threshold of 3 times
 // this noise response would eliminate 99% of the noise edges.
 
@@ -513,7 +519,8 @@ gevd_step::NoiseResponse() const
                                smoothSigma, filterFactor);
 }
 
-//: Return threshold for detecting contour or junction,
+//:
+// Return threshold for detecting contour or junction,
 // which is response of white gaussian noise, noise_sigma,
 // to step edge detector, i.e. first-order derivative of Gaussian,
 // smooth_sigma.
@@ -532,7 +539,8 @@ gevd_step::NoiseThreshold(bool shortp) const
                                 smooth, filterFactor));
 }
 
-//: Compute response of white noise through the filter dG, or
+//:
+// Compute response of white noise through the filter dG, or
 // first-derivative of the Gaussian. Using a threshold of 3 times
 // this noise response would eliminate 99% of the noise edges.
 

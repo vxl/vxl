@@ -1,3 +1,7 @@
+
+//:
+// \file
+
 #include "vidl_avicodec.h"
 #include <vidl/vidl_movie.h>
 
@@ -198,8 +202,7 @@ int vidl_avicodec::put_section(int position,
 }
 
 //-----------------------------------------------------------------------------
-//: probe the file fname, open it as an AVI file, if it works, close it and
-// return true. False otherwise.
+//: Probe the file fname, open it as an AVI file. If it works, return true, false otherwise.
 
 bool vidl_avicodec::probe(const char* fname)
 {
@@ -434,7 +437,7 @@ bool vidl_avicodec::save(vidl_movie* movie, const char* fname)
 }
 
 
-//: Create a DIB (Device Independant Bitmap) from a frame
+//: Create a DIB (Device Independant Bitmap) from a frame.
 // (Note : make_dib is not guaranteed to work with bits!=24 for the moment)
 HANDLE  vidl_avicodec::make_dib(vidl_frame_sptr frame, UINT bits)
 {

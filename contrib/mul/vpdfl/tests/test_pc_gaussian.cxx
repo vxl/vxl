@@ -19,8 +19,7 @@
 //=======================================================================
 
 
-//: Generate losts of samples using pdf, build new pdf with builder
-//  and compare the two
+//: Generate lots of samples using pdf, build new pdf with builder and compare the two
 void test_pc_gaussian()
 {
   vcl_cout << "**************************" << vcl_endl;

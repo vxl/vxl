@@ -1,5 +1,8 @@
 //-*- c++ -*-------------------------------------------------------------------
 //
+//:
+//  \file
+
 // Module: glmovie
 // Author: Andrew W. Fitzgibbon, Oxford RRG
 // Created: 21 May 99
@@ -418,8 +421,7 @@ int down_x, down_y;
 int down_button;
 bool down_modifiers;
 
-//: Run through down_cbs until one that likes this mouse event is found,
-// Then call it...
+//: Run through down_cbs until one that likes this mouse event is found, then call it
 void mouse_callback(int button, int state, int x, int y)
 {
   if (state == GLUT_DOWN) {

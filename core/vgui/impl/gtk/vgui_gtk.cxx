@@ -3,6 +3,9 @@
 #pragma implementation
 #endif
 //
+//:
+//  \file
+
 // .NAME vgui_gtk
 // Author: Philip C. Pritchett, RRG, University of Oxford
 // Created: 16 Sep 99
@@ -33,8 +36,8 @@ vgui_gtk::vgui_gtk()
 }
 
 //--------------------------------------------------------------------------------
-//: Pure virtual function from vgui (this must be implemented).  Returns the
-// name of the GUI toolkit.
+//: Pure virtual function from vgui (this must be implemented).
+//  Returns the name of the GUI toolkit.
 vcl_string vgui_gtk::name() const { return "gtk"; }
 
 

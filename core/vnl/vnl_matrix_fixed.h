@@ -19,6 +19,7 @@
 // Modifications:
 // Peter Vanroose, 23 Nov 1996:  added explicit copy constructor
 // LSB (Manchester) 15/03/2001:  added Binary I/O and tidied up the documentation
+//   Feb.2002 - Peter Vanroose - brief doxygen comment placed on single line
 // \endverbatim
 //-----------------------------------------------------------------------------
 
@@ -26,7 +27,6 @@
 #include <vnl/vnl_matrix_fixed_ref.h>
 
 //: Fixed size matrix
-//  vnl_matrix_fixed<T,m,n> - Fixed size matrix.
 //  A subclass of vnl_matrix_fixed_ref,
 //  all storage is local and all vnl_matrix operations are valid.
 
@@ -35,43 +35,43 @@ class vnl_matrix_fixed : public vnl_matrix_fixed_ref<T,m,n> {
   T space[m*n]; // Local storage
 public:
 
-//: Construct an empty m*n matrix
+  //: Construct an empty m*n matrix
   vnl_matrix_fixed() : vnl_matrix_fixed_ref<T,m,n>(space) {}
 
-//: Construct an m*n matrix and fill with value
+  //: Construct an m*n matrix and fill with value
   vnl_matrix_fixed(const T& value):vnl_matrix_fixed_ref<T,m,n>(space) {
     int i = m*n;
     while (i--)
       space[i] = value;
   }
 
-//: Construct an m*n Matrix and copy data into it row-wise.
+  //: Construct an m*n Matrix and copy data into it row-wise.
   vnl_matrix_fixed(const T* datablck) : vnl_matrix_fixed_ref<T,m,n>(space) {
     vcl_memcpy(space, datablck, m*n*sizeof(T));
   }
 
-//: Construct an m*n Matrix and copy rhs into it.   Abort if rhs is
-// not the same size.
+  //: Construct an m*n Matrix and copy rhs into it.
+  //  Abort if rhs is not the same size.
   vnl_matrix_fixed(const vnl_matrix<T>& rhs) : vnl_matrix_fixed_ref<T,m,n>(space) {
     assert(rhs.rows() == m && rhs.columns() == n);
     vcl_memcpy(space, rhs.data_block(), m*n*sizeof(T));
   }
 
-//  Destruct the m*n matrix.
-// An explicit destructor seems to be necessary, at least for gcc 3.0.0,
-// to avoid the compiler generating multiple versions of it.
-// (This way, a weak symbol is generated; otherwise not.  A bug of gcc 3.0.)
+  //  Destruct the m*n matrix.
+  // An explicit destructor seems to be necessary, at least for gcc 3.0.0,
+  // to avoid the compiler generating multiple versions of it.
+  // (This way, a weak symbol is generated; otherwise not.  A bug of gcc 3.0.)
   ~vnl_matrix_fixed() {}
 
-//: Copy a vnl_matrix into this.   Abort if rhs is
-// not the same size.
+  //: Copy a vnl_matrix into this.
+  //  Abort if rhs is not the same size.
   vnl_matrix_fixed<T,m,n>& operator=(const vnl_matrix<T>& rhs) {
     assert(rhs.rows() == m && rhs.columns() == n);
     vcl_memcpy(space, rhs.data_block(), m*n*sizeof(T));
     return *this;
   }
 
-//: Copy another vnl_matrix_fixed<T,m,n> into this.
+  //: Copy another vnl_matrix_fixed<T,m,n> into this.
   vnl_matrix_fixed<T,m,n>& operator=(const vnl_matrix_fixed<T, m, n>& rhs) {
     vcl_memcpy(space, rhs.data_block(), m*n*sizeof(T));
     return *this;
@@ -84,8 +84,8 @@ public:
 
 #ifndef VCL_SUNPRO_CC
 
- template <class T, int M, int N, int O>
  //: Multiply two conformant vnl_matrix_fixed (M x N) times (N x O)
+ template <class T, int M, int N, int O>
  vnl_matrix_fixed<T, M, O> operator*(const vnl_matrix_fixed<T, M, N>& a, const vnl_matrix_fixed<T, N, O>& b)
  {
   vnl_matrix_fixed<T, M, O> out;

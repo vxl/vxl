@@ -2,6 +2,9 @@
 #pragma implementation
 #endif
 
+//:
+//  \file
+
 #include <vcl_iostream.h>
 #include <vcl_cmath.h>
 //#include <vcl_memory.h>
@@ -27,8 +30,7 @@ HomgLine3D::HomgLine3D( const HomgLine3D &that)
 
 //--------------------------------------------------------------
 //
-//: Constructor, initialise using the specified distinct points
-// on the line.
+//: Constructor, initialise using the specified distinct points on the line.
 HomgLine3D::HomgLine3D (const HomgPoint3D& start,
                         const HomgPoint3D& end)
 {

@@ -1,6 +1,9 @@
 #ifndef vipl_section_iterator_txx_
 #define vipl_section_iterator_txx_
 
+//:
+//  \file
+
 #include <vipl/section/vipl_section_iterator.h>
 #include <vipl/section/vipl_section_container.h>
 #include <vipl/section/vipl_section_descriptor.h>
@@ -102,7 +105,8 @@ template < class DataType >
   return *real_descriptor();
 }
 
-//: The equality test is true if this and p have the same address, or
+//:
+// The equality test is true if this and p have the same address, or
 // if this and p both have null descriptors. If this XOR p have null descriptor
 // it is false. Finally, if this and p have linked containers which are equal,
 // AND the iterator's ++ counts are the same, it is true, otherwise false.

@@ -14,6 +14,7 @@
 // Modifications
 // 21-JUL-00  M.Bacic, Oxford RRG -- fixed 'pubsync' on gcc.
 // PDA (Manchester) 21/03/2001: Tidied up the documentation
+//   Feb.2002 - Peter Vanroose - brief doxygen comment placed on single line
 // \endverbatim
 
 #include <vcl_iostream.h>
@@ -26,8 +27,7 @@ struct vul_redirector_data;
 class vul_redirector {
 public:
 
-  //: Attach redirector to vcl_ostream s,
-  // so that all future output to s goes through this->putchunk
+  //: Attach redirector to vcl_ostream s, so that all future output to s goes through this->putchunk
    vul_redirector(vcl_ostream& s);
 
   //: Destroy redirector, restore stream to original.

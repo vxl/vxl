@@ -2,12 +2,16 @@
 #pragma implementation
 #endif
 
+//:
+//  \file
+
 #include <mvl/PairSetCorner.h>
 #include <mvl/FMatrixPlanar.h>
 #include <mvl/FMPlanarComputeNonLinear.h>
 #include <mvl/FMPlanarNonLinFun.h>
 
-//: Constructor.  The parameter outlier_threshold is not currently used, but
+//: Constructor.
+// The parameter outlier_threshold is not currently used, but
 // may be in future if this is converted to a Huber function.
 FMPlanarComputeNonLinear::FMPlanarComputeNonLinear(const ImageMetric* image_metric1,
                                                    const ImageMetric* image_metric2,

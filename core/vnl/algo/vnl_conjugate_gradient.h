@@ -13,6 +13,7 @@
 // Modifications
 // 990215 Geoff Initial version.
 // 000628 David Capel - Major rewrite. Now derived from vnl_nonlinear_minimizer and operates on a vnl_cost_function.
+//   Feb.2002 - Peter Vanroose - brief doxygen comment placed on single line
 // \endverbatim
 //
 //-----------------------------------------------------------------------------
@@ -52,8 +53,8 @@ public:
 
   // Computations--------------------------------------------------------------
 
-  //: Minimize the function supplied in the constructor until convergence
-  // or failure.  On return, x is such that f(x) is the lowest value achieved.
+  //: Minimize the function supplied in the constructor until convergence or failure.
+  // On return, x is such that f(x) is the lowest value achieved.
   // Returns true for convergence, false for failure.
   bool minimize(vnl_vector<double>& x);
 

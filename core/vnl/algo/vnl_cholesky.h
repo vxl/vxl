@@ -13,12 +13,13 @@
 //  Modifications
 //  Peter Vanroose, Leuven, Apr 1998: added L() (return decomposition matrix)
 //  dac (Manchester) 26/03/2001: tidied up documentation
+//   Feb.2002 - Peter Vanroose - brief doxygen comment placed on single line
 // \endverbatim
 
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_matrix.h>
 
-//: Decomposition of symmetric matrix
+//: Decomposition of symmetric matrix.
 //  A class to hold the Cholesky decomposition of a symmetric matrix and
 //  use that to solve linear systems, compute determinants and inverses.
 //  The cholesky decomposition decomposes symmetric A = L*L.transpose()
@@ -37,8 +38,7 @@ public:
     estimate_condition
   };
 
-  //: Make cholesky decomposition of M optionally computing
-  // the reciprocal condition number.
+  //: Make cholesky decomposition of M optionally computing the reciprocal condition number.
   vnl_cholesky(vnl_matrix<double> const& M, Operation mode = verbose);
  ~vnl_cholesky() {}
 
@@ -60,24 +60,22 @@ public:
   //: Return upper-triangular factor.
   vnl_matrix<double> upper_triangle() const;
 
-  //: return the decomposition matrix
+  //: Return the decomposition matrix
   vnl_matrix<double> const& L_badly_named_method() { return A_; }
 
   //: A Success/failure flag
   int rank_deficiency() const { return num_dims_rank_def_; }
 
-  //: Return reciprocal condition number (smallest/largest singular values)
+  //: Return reciprocal condition number (smallest/largest singular values).
   // As long as rcond()>sqrt(precision) the decomposition can be used for
   // solving equations safely.
   // Not calculated unless Operaton mode at construction was estimate_condition.
   double rcond() const { return rcond_; }
 
-  //: Return computed nullvector. Not calculated unless Operaton mode
-  // at construction was estimate_condition.
+  //: Return computed nullvector.
+  // Not calculated unless Operaton mode at construction was estimate_condition.
   vnl_vector<double>      & nullvector()       { return nullvector_; }
   vnl_vector<double> const& nullvector() const { return nullvector_; }
-
-  // Data Control--------------------------------------------------------------
 
 protected:
   // Data Members--------------------------------------------------------------
@@ -87,7 +85,6 @@ protected:
   vnl_vector<double> nullvector_;
 
 private:
-
   //: Copy constructor - privatised to avoid it being used
   vnl_cholesky(vnl_cholesky const & that);
   //: Assignment operator - privatised to avoid it being used

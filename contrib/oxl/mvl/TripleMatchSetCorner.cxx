@@ -2,6 +2,9 @@
 #pragma implementation
 #endif
 
+//:
+//  \file
+
 #include "TripleMatchSetCorner.h"
 
 #include <vcl_cassert.h>
@@ -48,8 +51,7 @@ TripleMatchSetCorner::TripleMatchSetCorner(const TripleMatchSetCorner& that):
 }
 
 
-//: Copy the inliers from the TripleMatchSetCorner into the given arrays
-// of corners and corner indices.
+//: Copy the inliers from the TripleMatchSetCorner into the given arrays of corners and corner indices.
 void TripleMatchSetCorner::extract_matches(vcl_vector<HomgPoint2D> &points1, vcl_vector<int> &indices1,
                                            vcl_vector<HomgPoint2D> &points2, vcl_vector<int> &indices2,
                                            vcl_vector<HomgPoint2D> &points3, vcl_vector<int> &indices3) const

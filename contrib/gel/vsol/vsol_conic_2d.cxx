@@ -1,3 +1,7 @@
+
+//:
+//  \file
+
 #include <vsol/vsol_conic_2d.h>
 #include <vgl/algo/vgl_homg_operators_2d.h>
 
@@ -247,9 +251,7 @@ bool vsol_conic_2d::is_coincident_lines(void) const
 }
 
 //---------------------------------------------------------------------------
-//: Return 3 ellipse parameters: centre (`cx',`cy'),
-//                                 orientation `phi',
-//                                 size (`width',`height')
+//: Return 3 ellipse parameters: centre (`cx',`cy'), orientation `phi', size (`width',`height')
 // Require: is_real_ellipse()
 //---------------------------------------------------------------------------
 void vsol_conic_2d::ellipse_parameters(double &cx,
@@ -297,9 +299,7 @@ void vsol_conic_2d::ellipse_parameters(double &cx,
 }
 
 //---------------------------------------------------------------------------
-//: Return 3 hyperbola parameters: centre (`cx',`cy'),
-//                                 orientation `phi',
-//                                 size (`half-axis',`half-secondary-axis')
+//: Return 3 hyperbola parameters: centre (`cx',`cy'), orientation `phi', size (`half-axis',`half-secondary-axis')
 // Require: is_hyperbola()
 //---------------------------------------------------------------------------
 void vsol_conic_2d::hyperbola_parameters(double &cx,
@@ -336,8 +336,7 @@ void vsol_conic_2d::hyperbola_parameters(double &cx,
 }
 
 //---------------------------------------------------------------------------
-//: Return 2 parabola parameters: top (`cx',`cy'),
-//                                  orientation (`cosphi',`sinphi')
+//: Return 2 parabola parameters: top (`cx',`cy'), orientation (`cosphi',`sinphi')
 // Require: is_parabola()
 //---------------------------------------------------------------------------
 void vsol_conic_2d::parabola_parameters(double &cx,

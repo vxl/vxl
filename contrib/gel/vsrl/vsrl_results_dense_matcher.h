@@ -1,12 +1,16 @@
 #ifndef vsrl_results_dense_matcher_h
 #define vsrl_results_dense_matcher_h
 
+//:
+//  \file
+
 #include <vil/vil_memory_image_of.h>
 #include <vil/vil_image.h>
 #include <vsrl/vsrl_dense_matcher.h>
 #include <vsrl/vsrl_image_correlation.h>
 
-//: this class will take a disparity image which is the output
+//:
+// This class will take a disparity image which is the output
 // of the dynamic programming and give results as is required
 
 class vsrl_results_dense_matcher : public vsrl_dense_matcher

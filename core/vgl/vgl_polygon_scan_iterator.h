@@ -14,6 +14,7 @@
 // \verbatim
 // Modifications:
 //  Binary IO added and documentation tidied up NPC, 20/03/01
+//   Feb.2002 - Peter Vanroose - brief doxygen comment placed on single line
 // \endverbatim
 
 #include <vgl/vgl_region_scan_iterator.h>
@@ -62,11 +63,10 @@ public:
 
   // Constructors/Destructor---------------------------------------------------
 
-    //: Construct with a ploygon and bool indicating whether bondary included
+    //: Construct with a polygon and bool indicating whether bondary included
   vgl_polygon_scan_iterator(vgl_polygon const& face, bool boundaryp = true);
 
-    //: Construct with a ploygon, bool indicating whether bondary included
-    // and window (area visble)
+    //: Construct with a polygon, bool indicating whether bondary included and window (area visible)
   vgl_polygon_scan_iterator(vgl_polygon const& face, bool boundaryp,
                             vgl_box_2d<float> const& window);
 
@@ -78,66 +78,65 @@ public:
   //: Resets iterator to first segment of first scan line
   void reset();
 
-    //: Moves iterator to next segment
+  //: Moves iterator to next segment
   bool next();
 
-    //: Returns current scan line
+  //: Returns current scan line
   inline int scany() const { return (y-1); }
 
-    //: Returns start of current span
+  //: Returns start of current span
   inline int startx() const { return xl; }
 
-    //: Returns end of current span
+  //: Returns end of current span
   inline int endx() const { return xr; }
 
-    //: Returns start of current span (float)
+  //: Returns start of current span (float)
   inline float fstartx() const { return fxl; }
 
-    //: Returns end of current span (float)
+  //: Returns end of current span (float)
   inline float fendx() const { return fxr; }
 
-    //: Returns current scan line (float)
+  //: Returns current scan line (float)
   inline float fscany() const { return fy; }
 
-    //: Vertex index - uniquely identifies a vertex in the array chains
-
+  //: Vertex index - uniquely identifies a vertex in the array chains
   struct vertind {
-    int chainnum;    // which chain the vertex is part of
-    int vertnum;     // which vertex in the chain
+    int chainnum; //: which chain the vertex is part of
+    int vertnum;  //: which vertex in the chain
     void display( char const * str ); // Print the
   };
 
   //: Describes an edge crossing the current scan line
   struct crossedge {
-    float x;  // x coord of edge's intersection with current scanline
-    float dx; // change in x with respect to y
-    vertind v;      // edge goes from vertex v.vertnum to v.vertnum + 1
+    float x;   //: x coord of edge's intersection with current scanline
+    float dx;  //: change in x with respect to y
+    vertind v; //: edge goes from vertex v.vertnum to v.vertnum + 1
   };
 
 // Internals ---------------------------------------------------------------
 
 private:
 
-  int boundp;       // boolean indicating if boundary should be included or not
-  int xl;           // left bound of current span
-  float fxl;        // left bound of current span (float)
-  int xr;           // right bound of current span
-  float fxr;        // right bound of current span (float)
-  int k;            // current index of vertices ordered by increasing y
-  int y0;           // bottommost scan line
-  int y1;           // topmost scan line
-  int y;            // current scan line
-  float fy;         // floating point value of current scan line (i.e. float(y))
-  int curcrossedge; // crossedge marking start of next scan segment
-  vgl_box_2d<float> win;       // clipping window
+  int boundp;       //: boolean indicating if boundary should be included or not
+  int xl;           //: left bound of current span
+  float fxl;        //: left bound of current span (float)
+  int xr;           //: right bound of current span
+  float fxr;        //: right bound of current span (float)
+  int k;            //: current index of vertices ordered by increasing y
+  int y0;           //: bottommost scan line
+  int y1;           //: topmost scan line
+  int y;            //: current scan line
+  float fy;         //: floating point value of current scan line (i.e. float(y))
+  int curcrossedge; //: crossedge marking start of next scan segment
+  vgl_box_2d<float> win; //: clipping window
   bool have_window;
 
-  vgl_polygon poly_; // the polygon
+  vgl_polygon poly_; //: the polygon
 
-  vertind * yverts;       // array of all vertices ordered by y coordinate
-  crossedge * crossedges; // array of edges crossing current scan line
-  int numcrossedges;      // number of edges currently crossing scan line
-  int numverts;           // total number of vertices comprising face
+  vertind * yverts;       //: array of all vertices ordered by y coordinate
+  crossedge * crossedges; //: array of edges crossing current scan line
+  int numcrossedges;      //: number of edges currently crossing scan line
+  int numverts;           //: total number of vertices comprising face
 
   // Returns x coord of vertex v
   inline float get_x(vertind v)const{return poly_[v.chainnum][v.vertnum].x();}

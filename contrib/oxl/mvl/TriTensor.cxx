@@ -2,6 +2,9 @@
 #pragma implementation
 #endif
 
+//:
+//  \file
+
 #include <vcl_iostream.h>
 #include <vcl_cmath.h>
 //#include <vcl_memory.h>
@@ -180,8 +183,8 @@ TriTensor::set(const PMatrix& P1, const PMatrix& P2, const PMatrix& P3)
   delete_caches();
 }
 
-//: Construct from 2 projection matrices, P2 and P3.  The first is assumed to
-// be the canonical [I | 0].
+//: Construct from 2 projection matrices, P2 and P3.
+//  The first is assumed to be the canonical [I | 0].
 void
 TriTensor::set(const PMatrix& P2, const PMatrix& P3)
 {
@@ -378,7 +381,7 @@ HMatrix2D TriTensor::get_hmatrix_21(const HomgLine2D& line3) const
 
 // @{ CONTRACTION WITH VECTORS @}
 
-//: @{ Compute ${\tt M}_{jk} = T_{ijk} v_i$. @}
+//: Compute ${\tt M}_{jk} = T_{ijk} v_i$.
 vnl_double_3x3 TriTensor::dot1(const vnl_vector<double>& v) const
 {
   vnl_double_3x3 answer; answer.fill(0.0);
@@ -389,7 +392,7 @@ vnl_double_3x3 TriTensor::dot1(const vnl_vector<double>& v) const
   return answer;
 }
 
-//: @{ Compute ${\tt M}_{ik} = T_{ijk} v_j$. @}
+//: Compute ${\tt M}_{ik} = T_{ijk} v_j$.
 vnl_double_3x3 TriTensor::dot2(const vnl_vector<double>& v) const
 {
   vnl_double_3x3 answer; answer.fill(0.0);
@@ -400,7 +403,7 @@ vnl_double_3x3 TriTensor::dot2(const vnl_vector<double>& v) const
   return answer;
 }
 
-//: @{ Compute ${\tt M}_{ij} = T_{ijk} v_k$. @}
+//: Compute ${\tt M}_{ij} = T_{ijk} v_k$.
 vnl_double_3x3 TriTensor::dot3(const vnl_vector<double>& v) const
 {
   vnl_double_3x3 answer; answer.fill(0.0);
@@ -411,7 +414,7 @@ vnl_double_3x3 TriTensor::dot3(const vnl_vector<double>& v) const
   return answer;
 }
 
-//: @{ Compute ${\tt M}_{kj} = T_{ijk} v_i$. (The transpose of dot1). @}
+//: Compute ${\tt M}_{kj} = T_{ijk} v_i$. (The transpose of dot1).
 vnl_double_3x3 TriTensor::dot1t(const vnl_vector<double>& v) const
 {
   vnl_double_3x3 answer; answer.fill(0.0);
@@ -422,7 +425,7 @@ vnl_double_3x3 TriTensor::dot1t(const vnl_vector<double>& v) const
   return answer;
 }
 
-//: @{ Compute ${\tt M}_{ki} = T_{ijk} v_j$. @}
+//: Compute ${\tt M}_{ki} = T_{ijk} v_j$.
 vnl_double_3x3 TriTensor::dot2t(const vnl_vector<double>& v) const
 {
   vnl_double_3x3 answer; answer.fill(0.0);
@@ -433,7 +436,7 @@ vnl_double_3x3 TriTensor::dot2t(const vnl_vector<double>& v) const
   return answer;
 }
 
-//: @{ Compute ${\tt M}_{ji} = T_{ijk} v_k$. @}
+//: Compute ${\tt M}_{ji} = T_{ijk} v_k$.
 vnl_double_3x3 TriTensor::dot3t(const vnl_vector<double>& v) const
 {
   vnl_double_3x3 answer; answer.fill(0.0);
@@ -480,7 +483,7 @@ TriTensor TriTensor::premultiply(unsigned tensor_axis, const vnl_matrix<double>&
   }
 }
 
-//: Compute @{$ S_{ijk} = T_{pjk} M_{pi} $@}
+//: Compute $ S_{ijk} = T_{pjk} M_{pi} $.
 TriTensor TriTensor::postmultiply1(const vnl_matrix<double>& M) const
 {
   TriTensor S;
@@ -495,7 +498,7 @@ TriTensor TriTensor::postmultiply1(const vnl_matrix<double>& M) const
   return S;
 }
 
-//: Compute @{$ S_{ijk} = T_{ipk} M_{pj} $@}
+//: Compute $ S_{ijk} = T_{ipk} M_{pj} $.
 TriTensor TriTensor::postmultiply2(const vnl_matrix<double>& M) const
 {
   TriTensor S;
@@ -510,7 +513,7 @@ TriTensor TriTensor::postmultiply2(const vnl_matrix<double>& M) const
   return S;
 }
 
-//: Compute @{$ S_{ijk} = T_{ijp} M_{pk} $@}
+//: Compute $ S_{ijk} = T_{ijp} M_{pk} $.
 TriTensor TriTensor::postmultiply3(const vnl_matrix<double>& M) const
 {
   TriTensor S;
@@ -525,7 +528,7 @@ TriTensor TriTensor::postmultiply3(const vnl_matrix<double>& M) const
   return S;
 }
 
-//: Compute @{$ S_{ijk} = M_{ip} T_{pjk} $@}
+//: Compute $ S_{ijk} = M_{ip} T_{pjk} $.
 TriTensor TriTensor::premultiply1(const vnl_matrix<double>& M) const
 {
   TriTensor S;
@@ -540,7 +543,7 @@ TriTensor TriTensor::premultiply1(const vnl_matrix<double>& M) const
   return S;
 }
 
-//: Compute @{$ S_{ijk} = M_{jp} T_{ipk} $@}
+//: Compute $ S_{ijk} = M_{jp} T_{ipk} $.
 TriTensor TriTensor::premultiply2(const vnl_matrix<double>& M) const
 {
   TriTensor S;
@@ -555,7 +558,7 @@ TriTensor TriTensor::premultiply2(const vnl_matrix<double>& M) const
   return S;
 }
 
-//: Compute @{$ S_{ijk} = M_{kp} T_{ijp} $@}
+//: Compute $ S_{ijk} = M_{kp} T_{ijp} $.
 TriTensor TriTensor::premultiply3(const vnl_matrix<double>& M) const
 {
   TriTensor S;
@@ -574,14 +577,14 @@ TriTensor TriTensor::premultiply3(const vnl_matrix<double>& M) const
 
 // @{ TRANSFORMATION @}
 
-//: @{ The ${\tt C}_{123}$ are line transformation matrices.  If
+//:
+// The ${\tt C}_{123}$ are line transformation matrices.  If
 // $ {\tt C}_v l_v = \hat l_v$ describes the transformation of each image plane under
 // a planar homography, and $l_1 = T l_2 l_3$ describes the action of this TriTensor, then
 // this routine computes $\hat T$ such that $\hat l_1 = \hat T \hat l_2 \hat l_3$.
 // \par Specifically $\hat T = T.\mbox{decondition}(C_1^{-1}, C_2, C_3)$ is the
 // transformed tensor.  Note that unless transfer is via Hartley-Sturm, the deconditioned
 // tensor will not be covariant with the conditioned one.
-// @}
 TriTensor TriTensor::condition(const vnl_matrix<double>& line_1_denorm,
                                const vnl_matrix<double>& line_2_norm,
                                const vnl_matrix<double>& line_3_norm) const

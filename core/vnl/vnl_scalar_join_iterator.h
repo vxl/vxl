@@ -34,6 +34,7 @@
 // \verbatim
 // Modifications:
 // LSB (Manchester) Documentation Tidied
+//   Feb.2002 - Peter Vanroose - brief doxygen comment placed on single line
 // \endverbatim
 //
 //-----------------------------------------------------------------------------
@@ -69,8 +70,7 @@ template <class T>
 class vnl_scalar_join_iterator {
 public:
 
-//:  Initialize this iterator to the join of
-// relation1(:,column1) and relation2(:,column2).
+//: Initialize this iterator to the join of relation1(:,column1) and relation2(:,column2).
 // The algorithm sorts an array of pointers to each row and
 // traversal of the iterator runs through these to produce the join.
 // After construction the row1() and row2() methods indicate the first pair.

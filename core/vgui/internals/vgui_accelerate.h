@@ -3,7 +3,10 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
-// 
+//
+//:
+//  \file
+
 // .NAME vgui_accelerate
 // .LIBRARY vgui
 // .HEADER vxl Package
@@ -17,6 +20,7 @@
 // .SECTION Modifications
 //   01-APR-2000   initial version
 //   10-JUL-2000   Marko Bacic, Oxford RRG - Speeded up rendering on Mesa by using GL_RGB instead of GL_RGBA
+//   Feb.2002 - Peter Vanroose - brief doxygen comment placed on single line
 //
 
 #include <vgui/vgui_gl.h>
@@ -29,12 +33,13 @@ public:
   static bool vgui_mfc_acceleration;
 
   static vgui_accelerate* instance();
-  
+
   virtual ~vgui_accelerate();
 
   virtual bool vgui_glClear( GLbitfield mask );
 
-  //: If you pass stuff to vgui_glDrawPixels, and the format and type are what you
+  //:
+  // If you pass stuff to vgui_glDrawPixels, and the format and type are what you
   // got from an earlier call to this baby, then it might go faster.
   virtual bool vgui_choose_cache_format( GLenum* format, GLenum* type);
 

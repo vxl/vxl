@@ -2,7 +2,9 @@
 #ifdef __GNUC__
 #pragma implementation
 #endif
-//
+//:
+// \file
+
 // vnl_amoeba
 // Author: Andrew W. Fitzgibbon, Oxford RRG
 // Created: 23 Oct 97
@@ -50,8 +52,8 @@ void vnl_amoeba::set_f_tolerance(double tol)
   F_tolerance = tol;
 }
 
-//: Define scaling used to select starting verticies relative to intial x0
-//  ie the i'th vertex has x[i] = x0[i]*(1+relative_diameter)
+//: Define scaling used to select starting vertices relative to initial x0.
+//  I.e. the i'th vertex has x[i] = x0[i]*(1+relative_diameter)
 void vnl_amoeba::set_relative_diameter(double r)
 {
   relative_diameter = r;
@@ -74,13 +76,13 @@ struct vnl_amoebaFit : public vnl_amoeba {
                                const vnl_vector<double>& x,
                                const vnl_vector<double>& dx);
 
-    //: Perform optimisation.  Start simplex defined by scaling elements of x
+  //: Perform optimisation.  Start simplex defined by scaling elements of x
   void amoeba(vnl_vector<double>& x);
 
-    //: Perform optimisation.  Start simplex defined by adding dx[i] to each x[i]
+  //: Perform optimisation.  Start simplex defined by adding dx[i] to each x[i]
   void amoeba(vnl_vector<double>& x, const vnl_vector<double>& dx);
 
-    //: Perform optimisation, given simplex to start
+  //: Perform optimisation, given simplex to start
   void amoeba(vnl_vector<double>& x, vcl_vector<vnl_amoeba_SimplexCorner>& simplex);
 
   double f(const vnl_vector<double>& x) {
@@ -195,7 +197,7 @@ bool operator==(const vnl_amoeba_SimplexCorner& a, const vnl_amoeba_SimplexCorne
 
 //: Initialise the simplex given one corner, x
 void vnl_amoebaFit::set_up_simplex_relative(vcl_vector<vnl_amoeba_SimplexCorner>& simplex,
-                      const vnl_vector<double>& x)
+                                            const vnl_vector<double>& x)
 {
   int n = x.size();
 
@@ -222,8 +224,8 @@ void vnl_amoebaFit::set_up_simplex_relative(vcl_vector<vnl_amoeba_SimplexCorner>
 
 //: Initialise the simplex given one corner, x and displacements of others
 void vnl_amoebaFit::set_up_simplex_absolute(vcl_vector<vnl_amoeba_SimplexCorner>& simplex,
-                    const vnl_vector<double>& x,
-                    const vnl_vector<double>& dx)
+                                            const vnl_vector<double>& x,
+                                            const vnl_vector<double>& dx)
 {
   int n = x.size();
 

@@ -4,6 +4,9 @@
 #pragma interface
 #endif
 //
+//:
+//  \file
+
 // .NAME    SequenceFileName
 // .LIBRARY oxp
 // .HEADER  Oxford Package
@@ -28,8 +31,7 @@ public:
   vcl_string name(int frame);
   vcl_ostream& print(vcl_ostream& s) const;
 
-  //: Set start_frame, end_frame by scanning the directory given by the
-  // pattern, and finding limits.
+  //: Set start_frame, end_frame by scanning the directory given by the pattern, and finding limits.
   void probe_limits();
 
   int real_index(int index) const { return start_frame_ + index * step_; }

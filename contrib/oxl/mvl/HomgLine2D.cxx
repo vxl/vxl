@@ -2,6 +2,9 @@
 #pragma implementation
 #endif
 
+//:
+//  \file
+
 #include <vcl_iostream.h>
 
 #include <vnl/vnl_math.h>
@@ -16,7 +19,7 @@
 ////////////////#include <Geometry/ImplicitLine.h>
 
 //--------------------------------------------------------------
-//: Return true iff the line is the line at infinity
+//: Return true iff the line is the line at infinity.
 // This version assumes x,y will be exactly 0 in this case.
 
 bool HomgLine2D::check_infinity() const
@@ -25,7 +28,7 @@ bool HomgLine2D::check_infinity() const
 }
 
 //--------------------------------------------------------------
-//: Return true iff the line is the line at infinity
+//: Return true iff the line is the line at infinity.
 // This version checks @{$min(|x|,|y|) < \mbox{tol} \times |z|$@}
 
 bool HomgLine2D::check_infinity(double tol) const
@@ -35,8 +38,8 @@ bool HomgLine2D::check_infinity(double tol) const
 
 //--------------------------------------------------------------
 //
-//: Construct an ImplicitLine by clipping against the given
-// bounding rectangle.  The return line has been allocated using new.
+//: Construct an ImplicitLine by clipping against the given bounding rectangle.
+//  The return line has been allocated using new.
 
 HomgLineSeg2D HomgLine2D::clip(int rect1_x, int rect1_y, int rect2_x, int rect2_y) const
 {
@@ -45,8 +48,8 @@ HomgLineSeg2D HomgLine2D::clip(int rect1_x, int rect1_y, int rect2_x, int rect2_
 
 //--------------------------------------------------------------
 //
-//: Return some two points which are on the line.  The algorithm actually
-// returns an orthonormal basis for the nullspace of l.
+//: Return some two points which are on the line.
+//  The algorithm actually returns an orthonormal basis for the nullspace of l.
 void HomgLine2D::get_2_points_on_line(HomgPoint2D* p1, HomgPoint2D* p2) const
 {
   vnl_matrix<double> M(get_vector().data_block(), 1, 3);

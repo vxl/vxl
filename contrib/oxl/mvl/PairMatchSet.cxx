@@ -2,6 +2,9 @@
 #pragma implementation
 #endif
 
+//:
+//  \file
+
 #include "PairMatchSet.h"
 
 #include <vcl_cstdlib.h>
@@ -16,7 +19,7 @@ PairMatchSet::iterator& PairMatchSet::iterator::operator ++ (int /*postfix*/)
   return *this;
 }
 
-//: @{Construct a PairMatchSet for values of $i_1$ between 0 and \argfont{size}.@}
+//: Construct a PairMatchSet for values of $i_1$ between 0 and size.
 PairMatchSet::PairMatchSet(unsigned size):
   _matches(size)
 {
@@ -64,8 +67,8 @@ bool PairMatchSet::add_match(int i1, int i2)
   return true;
 }
 
-//: Remove any match for i1.  Specifically, remove tuples whose first element
-// is i1.
+//: Remove any match for i1.
+//  Specifically, remove tuples whose first element is i1.
 void PairMatchSet::clear_match_1(int i1)
 {
   if ((unsigned)i1 >= _matches.size()) {
@@ -79,8 +82,8 @@ void PairMatchSet::clear_match_1(int i1)
   i2 = MatchSet::NoMatch;
 }
 
-//: Return any match for i1.  Specifically, return the second element of any
-// tuple whose first element is i1.
+//: Return any match for i1.
+//  Specifically, return the second element of any tuple whose first element is i1.
 int PairMatchSet::get_match_12(int i1) const
 {
   if (i1 == MatchSet::NoMatch)
@@ -95,9 +98,10 @@ int PairMatchSet::get_match_12(int i1) const
   return _matches[i1];
 }
 
-//: Return any match for i2.  Specifically, return the first element of any
-// tuple whose second element is i2.  This is currently O(n) in the number of
-// matches, consider adding an index to this class if you use it a lot.
+//: Return any match for i2.
+//  Specifically, return the first element of any tuple whose second element is
+//  i2.  This is currently O(n) in the number of matches, consider adding an
+//  index to this class if you use it a lot.
 int PairMatchSet::get_match_21(int i2) const
 {
   for(unsigned i = 0; i < _matches.size(); ++i)
@@ -304,23 +308,21 @@ bool PairMatchSet::iterator::next()
 // insert these here for documentation purposes
 
 #if 0
-//: Return the first component of the match currently "pointed to" by
-// the match iterator.
+//: Return the first component of the match currently "pointed to" by the match iterator.
 int PairMatchSet::iterator::get_i1() const
 {
   return i1;
 }
 
-//: Return the second component of the match currently "pointed to" by
-// the match iterator.
+//: Return the second component of the match currently "pointed to" by the match iterator.
 int PairMatchSet::iterator::get_i2() const
 {
   return i2;
 }
 #endif
 
-//: Return true if neither of the indices of the match pointed to by the
-// iterator is NoMatch.  [Users should not need this]
+//: Return true if neither of the indices of the match pointed to by the iterator is NoMatch.
+//  [Users should not need this]
 bool PairMatchSet::iterator::isfull() const
 {
   return (i1 != NoMatch && i2 != NoMatch);

@@ -1,5 +1,8 @@
 // This is vxl/vil/vil_new.cxx
 
+//:
+// \file
+
 //-*- c++ -*-------------------------------------------------------------------
 #ifdef __GNUC__
 #pragma implementation
@@ -62,8 +65,7 @@ vil_image vil_new(vil_stream* os,
   return 0;
 }
 
-//: Make a new vil_image_impl, writing to stream "os", size "w" x "h",
-// copying pixel format etc from "prototype".
+//: Make a new vil_image_impl, writing to stream "os", size "w" x "h", copying pixel format etc from "prototype".
 vil_image vil_new(vil_stream* os,
                   int width, int height,
                   vil_image const& prototype,
@@ -79,8 +81,7 @@ vil_image vil_new(vil_stream* os,
                  file_format ? file_format : prototype.file_format());
 }
 
-//: Make a new vil_image_impl, writing to file "filename", size "w" x "h",
-// copying pixel format etc from "prototype".
+//: Make a new vil_image_impl, writing to file "filename", size "w" x "h", copying pixel format etc from "prototype".
 vil_image vil_new(char const* filename,
                   int width, int height,
                   vil_image const& prototype,

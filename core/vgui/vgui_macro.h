@@ -3,6 +3,10 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
+
+//:
+//  \file
+
 // .NAME vgui_macro
 // .INCLUDE vgui/vgui_macro.h
 // .FILE vgui_macro.cxx
@@ -15,8 +19,8 @@
 // Do not include <vcl_iostream.h> from this file.
 
 
-//: Handy gl debugging macro.  Sprinkle this through your code, and
-// it will report any accumulated OpenGL errors.
+//: Handy gl debugging macro.
+//  Sprinkle this through your code, and it will report any accumulated OpenGL errors.
 #define vgui_macro_report_errors vgui_macro_error_reporter(__FILE__,__LINE__)
 
 

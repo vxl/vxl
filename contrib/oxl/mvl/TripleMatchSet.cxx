@@ -2,6 +2,9 @@
 #pragma implementation
 #endif
 
+//:
+//  \file
+
 #include <vnl/vnl_matops.h> // use vnl_matlab_print.h for pretty printing
 #include <vcl_cstdlib.h> // for vcl_abort()
 
@@ -118,8 +121,8 @@ vcl_istream& operator >> (vcl_istream& s, TripleMatchSet& matches)
 
 // @{ TRIPLET ACCESS @}
 
-//: Add triplet (i1, i2, i3) to the matchset.  Any existing matches
-// of the form (i1, *, *) are removed. O(1).
+//: Add triplet (i1, i2, i3) to the matchset.
+//  Any existing matches of the form (i1, *, *) are removed. O(1).
 bool TripleMatchSet::add_match(int i1, int i2, int i3)
 {
   if (get_match_23(i2) != MatchSet::NoMatch) {
@@ -156,8 +159,8 @@ void TripleMatchSet::clear_matches()
 }
 
 //-----------------------------------------------------------------------------
-//: Select(1 = i1).2, meaning take the 2nd component of the tuples
-// in which the first component equals i1.  Complexity O(1).
+//: Select(1 = i1).2, meaning take the 2nd component of the tuples in which the first component equals i1.
+// Complexity O(1).
 int TripleMatchSet::get_match_12(int i1) const
 {
   return _match12->get_match_12(i1);
@@ -194,7 +197,8 @@ int TripleMatchSet::get_match_32(int i3) const
   return _match23->get_match_21(i3);
 }
 
-//: Select({1,2} = {i1, i2}).3 Complexity O(1);
+//: Select({1,2} = {i1, i2}).3
+// Complexity O(1).
 int TripleMatchSet::get_match_123(int i1, int i2) const
 {
   int ii = _match12->get_match_12(i1);
@@ -204,8 +208,8 @@ int TripleMatchSet::get_match_123(int i1, int i2) const
     return get_match_23(i2);
 }
 
-//: Select(1 = c).{1,2,3}  Complexity O(1).  Returns true
-// iff a match was found.
+//: Select(1 = c).{1,2,3}
+//  Complexity O(1).  Returns true iff a match was found.
 bool TripleMatchSet::get_1(int c, int* i1, int* i2, int* i3) const
 {
   if (c >= _match12->size())
@@ -344,7 +348,7 @@ TripleMatchSet::iterator::operator bool () const
   return _match_index < _c->size();
 }
 
-// - Return true if the current "pointed-to" match is a proper triplet
+//: Return true if the current "pointed-to" match is a proper triplet.
 // Should never return false in normal use.
 bool TripleMatchSet::iterator::isfull() const
 {
