@@ -117,9 +117,6 @@ SOURCE=.\vimt_transform_2d.cxx
 SOURCE=.\vimt_gaussian_pyramid_builder_2d_general.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vimt_gaussian_pyramid_builder_2d_general+byte-.cxx
-# End Source File
-# Begin Source File
 SOURCE=.\Templates/vimt_sample_grid_bilin+byte.double-.cxx
 # End Source File
 # Begin Source File
@@ -135,7 +132,16 @@ SOURCE=.\Templates/vimt_gaussian_pyramid_builder_2d+byte-.cxx
 SOURCE=.\Templates/vimt_gaussian_pyramid_builder_2d+float-.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\Templates/vimt_gaussian_pyramid_builder_2d_general+byte-.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\Templates/vimt_gaussian_pyramid_builder_2d_general+float-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vimt_image_pyramid+vimt_image_2d_of+byte--.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vimt_image_pyramid+vimt_image_2d_of+float--.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\Templates/vimt_image_2d_of+byte-.cxx
