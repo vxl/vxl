@@ -128,6 +128,21 @@ SOURCE=.\Templates/vsl_set_io+bgrl_edge_sptr-.cxx
 # Begin Source File
 SOURCE=.\Templates/vsl_set_io+bgrl_vertex_sptr-.cxx
 # End Source File
+# End Source File
+SOURCE=.\Templates/vbl_smart_ptr+bgrl_search_func-.cxx
+# Begin Source File
+# End Source File
+SOURCE=.\Templates/vsl_binary_loader+bgrl_edge-.cxx
+# Begin Source File
+# End Source File
+SOURCE=.\Templates/vsl_binary_loader+bgrl_graph-.cxx
+# Begin Source File
+# End Source File
+SOURCE=.\Templates/vsl_binary_loader+bgrl_vertex-.cxx
+# Begin Source File
+# End Source File
+SOURCE=.\bgrl_search_func.cxx
+# Begin Source File
 # Begin Source File
 SOURCE=.\bgrl_edge.cxx
 # End Source File
@@ -157,6 +172,12 @@ SOURCE=.\bgrl_vertex.h
 # Begin Source File
 # End Source File
 SOURCE=.\bgrl_vertex_sptr.h
+# Begin Source File
+# End Source File
+SOURCE=.\bgrl_search_func.h
+# Begin Source File
+# End Source File
+SOURCE=.\bgrl_search_func_sptr.h
 # End Source File
 # End Group
 # End Target
