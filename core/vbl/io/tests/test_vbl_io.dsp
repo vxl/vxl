@@ -90,10 +90,6 @@ LINK32=link.exe
 
 SOURCE=.\test_vbl_io.cxx
 # End Source File
-# Begin Source File
-
-SOURCE=.\vbl_io_test_classes.cxx
-# End Source File
 # End Group
 # Begin Group "Header Files"
 
