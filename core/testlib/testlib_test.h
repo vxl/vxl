@@ -97,7 +97,7 @@ do { \
 //: A simplified version of the main test, just in one line.
 // Avoids compiler warnings about "unused argc and argv".
 #define TESTMAIN( testname ) \
-  int testname ## _main(int,char**) { START(#testname); testname(); SUMMARY(); }
+  int testname ## _main(int,char*[]) { START(#testname); testname(); SUMMARY(); }
 
 //: A simplified version of the main test, with parameter passing.
 #undef TESTMAIN_ARGS
