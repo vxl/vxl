@@ -30,13 +30,13 @@
 #include <vil1/vil1_rgb_byte.h>
 #include <vil1/vil1_pixel.h>
 
-#include <vidl/vidl_movie_sptr.h>
-#include <vidl/vidl_movie.h>
-#include <vidl/vidl_frame.h>
-#include <vidl/vidl_io.h>
+#include <vidl_vil1/vidl_vil1_movie_sptr.h>
+#include <vidl_vil1/vidl_vil1_movie.h>
+#include <vidl_vil1/vidl_vil1_frame.h>
+#include <vidl_vil1/vidl_vil1_io.h>
 
 #ifdef VCL_WIN32
-#include <vidl/vidl_avicodec.h>
+#include <vidl_vil1/vidl_vil1_avicodec.h>
 #endif
 #ifdef HAS_MPEG
 #include <oxp/oxp_vidl_mpeg_codec.h>
@@ -74,7 +74,7 @@ void overlayDisplay()
 
 const int TEXTHEIGHT = 24;
 
-vidl_movie_sptr moviefile;
+vidl_vil1_movie_sptr moviefile;
 int frame = 1;
 int dir = 1;
 int num_frames = 0;
@@ -754,10 +754,10 @@ void visible(int vis)
     setidle(vis == GLUT_VISIBLE);
 }
 
-static void convert(vidl_movie_sptr m, char const* out)
+static void convert(vidl_vil1_movie_sptr m, char const* out)
 {
   int i = 0;
-  for (vidl_movie::frame_iterator frame = m->begin(); frame != m->end(); ++frame) {
+  for (vidl_vil1_movie::frame_iterator frame = m->begin(); frame != m->end(); ++frame) {
     char buf[1024];
     vcl_sprintf(buf, out, i);
     vil1_save(frame->get_image(), buf);
@@ -798,10 +798,10 @@ int main(int argc, char ** argv)
 
   // Register video codec
 #ifdef VCL_WIN32
-  vidl_io::register_codec(new vidl_avicodec);
+  vidl_vil1_io::register_codec(new vidl_vil1_avicodec);
 #endif
 #if HAS_MPEG
-  vidl_io::register_codec(new oxp_vidl_mpeg_codec);
+  vidl_vil1_io::register_codec(new oxp_vidl_mpeg_codec);
 #endif
 
   // Register callbacks
@@ -834,9 +834,9 @@ int main(int argc, char ** argv)
   // Try to load the image
   if (vil1_image img = vil1_load(filename())) {
     vcl_vector<vcl_string> v(1, filename());
-    moviefile = new vidl_movie(vidl_io::load_images(v));
+    moviefile = new vidl_vil1_movie(vidl_vil1_io::load_images(v));
   } else {
-    moviefile = vidl_io::load_movie(filename(), 0, a_end_frame(), increment);
+    moviefile = vidl_vil1_io::load_movie(filename(), 0, a_end_frame(), increment);
   }
   if (!moviefile || moviefile->width() < 1) {
     vcl_cerr << "glmovie: Couldn't find any movie files. Stopping\n";

@@ -4,12 +4,12 @@
 #include <vul/vul_arg.h>
 #include <vul/vul_printf.h>
 
-#include <vidl/vidl_movie_sptr.h>
-#include <vidl/vidl_movie.h>
-#include <vidl/vidl_frame.h>
-#include <vidl/vidl_io.h>
+#include <vidl_vil1/vidl_vil1_movie_sptr.h>
+#include <vidl_vil1/vidl_vil1_movie.h>
+#include <vidl_vil1/vidl_vil1_frame.h>
+#include <vidl_vil1/vidl_vil1_io.h>
 #ifdef VCL_WIN32
-#include <vidl/vidl_avicodec.h>
+#include <vidl_vil1/vidl_vil1_avicodec.h>
 #endif
 #ifdef HAS_MPEG2
 #include <oxp/oxp_vidl_mpeg_codec.h>
@@ -28,17 +28,17 @@ int main(int argc, char ** argv)
 
   // Register video codecs
 #ifdef VCL_WIN32
-  vidl_io::register_codec(new vidl_avicodec);
+  vidl_vil1_io::register_codec(new vidl_vil1_avicodec);
 #endif
 #ifdef HAS_MPEG2
-  vidl_io::register_codec(new oxp_vidl_mpeg_codec);
+  vidl_vil1_io::register_codec(new oxp_vidl_mpeg_codec);
 #endif
 
   // Prime in case it's mpeg
   int s = a_frame() - 14;
   if (s < 0) s = 0;
 
-  vidl_movie_sptr moviefile = vidl_io::load_movie(a_filename());
+  vidl_vil1_movie_sptr moviefile = vidl_vil1_io::load_movie(a_filename());
   if (!moviefile || moviefile->width() < 1) {
      vcl_cerr << __FILE__ ": Couldn't find any movie files. Stopping\n";
      return -1;
@@ -53,7 +53,7 @@ int main(int argc, char ** argv)
 
   vil1_save(moviefile->get_frame(a_frame())->get_image(), a_outfile());
 
-  vidl_io::close(); // Need to call this to avoid segvs from naughty codecs.
+  vidl_vil1_io::close(); // Need to call this to avoid segvs from naughty codecs.
 
   vul_printf(vcl_clog, __FILE__ ": saved [%s]\n", a_outfile());
 

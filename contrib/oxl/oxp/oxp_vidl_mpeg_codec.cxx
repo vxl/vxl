@@ -12,7 +12,7 @@ oxp_vidl_mpeg_codec::type()
   return "MPEG";
 }
 
-vidl_codec_sptr
+vidl_vil1_codec_sptr
 oxp_vidl_mpeg_codec::load(const char* fname, char mode) 
 {
   if (!p.load(fname, mode))
@@ -35,7 +35,7 @@ oxp_vidl_mpeg_codec::load(const char* fname, char mode)
 }
 
 bool
-oxp_vidl_mpeg_codec::save(vidl_movie* movie, const char* fname)
+oxp_vidl_mpeg_codec::save(vidl_vil1_movie* movie, const char* fname)
 {
   assert(0);
   return false;

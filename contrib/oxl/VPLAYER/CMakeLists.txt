@@ -15,7 +15,7 @@ IF (HAS_VGUI)
     )
 
     ADD_EXECUTABLE(VPLAYER ${VPLAYER_sources})
-    TARGET_LINK_LIBRARIES(VPLAYER vfw32 osl mvl vgui vidl oxp)
+    TARGET_LINK_LIBRARIES(VPLAYER vfw32 osl mvl vgui vidl_vil1 oxp)
   ENDIF (NOT CYGWIN)
  ENDIF (WIN32)
 ENDIF (HAS_VGUI)

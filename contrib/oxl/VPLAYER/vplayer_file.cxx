@@ -19,12 +19,12 @@
 #include <vgui/vgui_easy2D_tableau.h>
 #include <vgui/vgui_rubberband_tableau.h>
 
-#include <vidl/vidl_io.h>
-#include <vidl/vidl_movie.h>
-#include <vidl/vidl_frame.h>
+#include <vidl_vil1/vidl_vil1_io.h>
+#include <vidl_vil1/vidl_vil1_movie.h>
+#include <vidl_vil1/vidl_vil1_frame.h>
 
-vidl_movie_sptr my_movie;
-vidl_movie::frame_iterator pframe(my_movie);
+vidl_vil1_movie_sptr my_movie;
+vidl_vil1_movie::frame_iterator pframe(my_movie);
 easy2D_sequencer *seq;
 vcl_vector<vgui_easy2D_tableau_sptr> tableaux_;
 
@@ -47,7 +47,7 @@ void vplayer_file::load_video_sequence()
     img_filenames.push_back(name);
     vcl_cerr<<"Registering image: "<<name<<vcl_endl;
   }
-  my_movie = vidl_io::load_movie(img_filenames);
+  my_movie = vidl_vil1_io::load_movie(img_filenames);
   if (!my_movie) {
     vgui_error_dialog("Failed to load movie");
     return;
@@ -79,7 +79,7 @@ void vplayer_file::load_video_file()
   load_image_dl.file("Filename:", glob, image_filename);
   if (!load_image_dl.ask())
     return;
-  my_movie = vidl_io::load_movie(image_filename.c_str());
+  my_movie = vidl_vil1_io::load_movie(image_filename.c_str());
   if (!my_movie) {
     vgui_error_dialog("Failed to load movie file");
     return;

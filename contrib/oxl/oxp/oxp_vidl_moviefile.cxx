@@ -7,20 +7,20 @@
 
 #include <vcl_cassert.h>
 
-#include <vidl/vidl_movie_sptr.h>
-#include <vidl/vidl_movie.h>
-#include <vidl/vidl_frame.h>
-#include <vidl/vidl_io.h>
+#include <vidl_vil1/vidl_vil1_movie_sptr.h>
+#include <vidl_vil1/vidl_vil1_movie.h>
+#include <vidl_vil1/vidl_vil1_frame.h>
+#include <vidl_vil1/vidl_vil1_io.h>
 
 #if defined(VCL_WIN32) && !defined(__CYGWIN__)
-#include <vidl/vidl_avicodec.h>
+#include <vidl_vil1/vidl_vil1_avicodec.h>
 #endif
 #if HAS_MPEG2
 #include <oxp/oxp_vidl_mpeg_codec.h>
 #endif
 
 struct oxp_vidl_moviefile_privates {
-  vidl_movie_sptr m;
+  vidl_vil1_movie_sptr m;
 };
 
 /////////////////////////////////////////////////////////////////////////////
@@ -33,10 +33,10 @@ void ensure_initialized()
 
   // Register video codec
 #if defined(VCL_WIN32) && !defined(__CYGWIN__)
-  vidl_io::register_codec(new vidl_avicodec);
+  vidl_vil1_io::register_codec(new vidl_vil1_avicodec);
 #endif
 #if HAS_MPEG2
-  vidl_io::register_codec(new oxp_vidl_mpeg_codec);
+  vidl_vil1_io::register_codec(new oxp_vidl_mpeg_codec);
 #endif
   init = true;
 }
@@ -49,7 +49,7 @@ oxp_vidl_moviefile::oxp_vidl_moviefile(char const* f)
   ensure_initialized();
 
   p = new oxp_vidl_moviefile_privates;
-  p->m = vidl_io::load_movie(f);
+  p->m = vidl_vil1_io::load_movie(f);
 }
 
 oxp_vidl_moviefile::~oxp_vidl_moviefile()
@@ -100,7 +100,7 @@ bool oxp_vidl_moviefile::HasFrame(int frame_index)
 
 bool oxp_vidl_moviefile::GetFrame(int frame_index, void* buffer)
 {
-  vidl_frame_sptr f = p->m->get_frame(frame_index);
+  vidl_vil1_frame_sptr f = p->m->get_frame(frame_index);
   return f->get_section(buffer, 0,0, f->width(), f->height());
 }
 

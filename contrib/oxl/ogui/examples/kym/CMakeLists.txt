@@ -1,4 +1,4 @@
-LINK_LIBRARIES( vgui vidl vul vbl )
+LINK_LIBRARIES( vgui vidl_vil1 vul vbl )
 
 ADD_EXECUTABLE( display-image display-image.cxx )
 ADD_EXECUTABLE( draw-line draw-line.cxx )
@@ -23,5 +23,5 @@ IF(GTK_FOUND)
  TARGET_LINK_LIBRARIES( gtk-movie-player ${GTK_LIBRARIES} )
 
  ADD_EXECUTABLE( vidl-demo vidl-demo.cxx )
- TARGET_LINK_LIBRARIES( vidl-demo vidl ${GTK_LIBRARIES} )
+ TARGET_LINK_LIBRARIES( vidl-demo vidl_vil1 ${GTK_LIBRARIES} )
 ENDIF(GTK_FOUND)

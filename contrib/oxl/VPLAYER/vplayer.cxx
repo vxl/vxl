@@ -22,8 +22,8 @@
 #include <vgui/vgui_grid_tableau.h>
 #include <vgui/vgui_image_tableau.h>
 
-#include <vidl/vidl_io.h>
-#include <vidl/vidl_avicodec.h>
+#include <vidl_vil1/vidl_vil1_io.h>
+#include <vidl_vil1/vidl_vil1_avicodec.h>
 
 class xcv_tableau : public vgui_grid_tableau
 {
@@ -131,7 +131,7 @@ extern int vgui_accelerate_mfc_tag_function();
 int main(int argc, char** argv)
 {
   // Register video codec
-  vidl_io::register_codec(new vidl_avicodec);
+  vidl_vil1_io::register_codec(new vidl_vil1_avicodec);
 
 #ifdef HAS_GTK
   vgui_gtk_tag_function();

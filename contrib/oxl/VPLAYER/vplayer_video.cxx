@@ -16,7 +16,7 @@
 #include <vgui/vgui_rubberband_tableau.h>
 #include <vgui/vgui_dialog.h>
 
-#include <vidl/vidl_movie.h>
+#include <vidl_vil1/vidl_vil1_movie.h>
 
 static vgui_adaptor* the_adaptor = 0;
 static void DRAW()
@@ -28,8 +28,8 @@ static void DRAW()
 }
 
 bool volatile playing = false;
-extern vidl_movie_sptr my_movie;
-extern vidl_movie::frame_iterator pframe;
+extern vidl_vil1_movie_sptr my_movie;
+extern vidl_vil1_movie::frame_iterator pframe;
 extern vcl_vector<vgui_easy2D_tableau_sptr> tableaux_;
 int frame_num = 2;
 long delta_t = 30;
