@@ -148,7 +148,7 @@ inline bool convert_components_from_planes(vil2_image_view<T> &lhs,
   if (// both sides have equal component types and rhs has scalar pixels and
       rhs_base.pixel_format() == vil2_pixel_format_component_format(vil2_pixel_format_of(T()) ) &&
       // lhs has number of components equal to rhs's number of planes.
-      ncomp == rhs_base.nplanes() )
+      ncomp == (int)rhs_base.nplanes() )
   {
     const vil2_image_view<comp_type> &rhs = static_cast<const vil2_image_view<comp_type>&>(rhs_base);
     // Check that the steps are suitable for viewing as components

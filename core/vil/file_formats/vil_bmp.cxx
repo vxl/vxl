@@ -370,7 +370,7 @@ bool vil2_bmp_image::put_view(const vil2_image_view_base& view,
   rowlen += (3-(rowlen+3)%4); // round up to a multiple of 4
 
   if ((view2.planestep() == -1||nplanes()==1)&&
-      view2.istep()==view2.nplanes())
+      view2.istep()==(int)view2.nplanes())
   {
     for (unsigned y=0; y<view2.nj(); ++y)
     {
