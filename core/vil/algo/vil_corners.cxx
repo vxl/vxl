@@ -55,8 +55,8 @@ void vil_corners(const vil_image_view<float>& grad_i,
   const vcl_ptrdiff_t oj1 = grad_j.jstep() - grad_j.istep();
   const vcl_ptrdiff_t oj2 = grad_j.jstep();
   const vcl_ptrdiff_t oj3 = grad_j.istep() + grad_j.jstep();
-  const vcl_ptrdiff_t oj4 = -grad_j.istep();
-  const vcl_ptrdiff_t oj5 = grad_j.istep();
+  //const vcl_ptrdiff_t oj4 = -grad_j.istep(); // unused
+  //const vcl_ptrdiff_t oj5 = grad_j.istep();  // unused
   const vcl_ptrdiff_t oj6 = -grad_j.istep() - grad_j.jstep();
   const vcl_ptrdiff_t oj7 = -grad_j.jstep();
   const vcl_ptrdiff_t oj8 = grad_j.istep() - grad_j.jstep();
