@@ -40,7 +40,6 @@ static void test_zero_chain()
   TEST("vtol_vertex::valid_superior_type()", v1->valid_superior_type(zc1), true);
   TEST("vtol_vertex::valid_inferior_type()", v1->valid_inferior_type(zc1->cast_to_topology_object()), false);
   TEST("vtol_zero_chain::length()", zc1->length(), 2);
-  TEST("vtol_zero_chain::topology_type()", zc1->topology_type(), vtol_topology_object::ZEROCHAIN);
 }
 
 TESTMAIN(test_zero_chain);

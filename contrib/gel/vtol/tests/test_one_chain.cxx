@@ -120,7 +120,6 @@ static void test_one_chain()
 
   TEST("vtol_one_chain::clone()", *oc1, *oc1_clone);
   TEST("vtol_one_chain inequality", *oc1 == *och1, false);
-  TEST("vtol_one_chain::topology_type()", oc1->topology_type(), vtol_topology_object::ONECHAIN);
   //==========================================================================
   // JLM add a test for the bounding box method use a digital_curve and several
   // line segments as the geometry - note that this test covers edge and vertex

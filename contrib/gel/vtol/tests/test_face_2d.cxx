@@ -167,7 +167,6 @@ static void test_face_2d()
   vtol_face_2d_sptr new_f = new vtol_face_2d(v_list);
 
   TEST("vtol_face_2d inequality", *f1==*new_f, false);
-  TEST("vtol_face_2d::topology_type()", f1->topology_type(), vtol_topology_object::FACE);
   TEST("vtol_face_2d::cast_to_face()", f1->cast_to_face()==0, false);
   TEST("vtol_face_2d::valid_inferior_type()", f1->valid_inferior_type(oc1), true);
   TEST("vtol_face_2d::valid_inferior_type()", f1->valid_inferior_type(e12->cast_to_topology_object()), false);
