@@ -1,21 +1,10 @@
 # rpl/rrel/tests/CMakeLists.txt
 
-SET( rrel_tests_sources
-  # empty list
-)
-# This is not needed, and causes an error with bcc 5.5.1 which does
-# not handle the + character in the name of the file in Templates/.
-# Comment out for now.  Will be removed if all goes well.
-# AUX_SOURCE_DIRECTORY( Templates rrel_tests_sources )
-
 ADD_EXECUTABLE( rrel_test_all
   test_driver.cxx
 
   # Supporting class
   similarity_from_matches.h  similarity_from_matches.cxx
-
-  # Template instantiations
-  ${rrel_tests_sources}
 
   # The tests
   test_homography2d_est.cxx
