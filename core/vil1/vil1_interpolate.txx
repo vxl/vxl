@@ -6,12 +6,13 @@
 
 #include <vil/vil_interpolate.h>
 
-template <class T>
-T vil_interpolate_nearest(vil_memory_image_of<T> const& img, double src_x, double src_y)
+template <class T, class U>
+bool vil_interpolate_nearest(vil_memory_image_of<T> const& img, double src_x, double src_y, U* out)
 {
   int src_x_int = (int)(src_x + 0.5);
   int src_y_int = (int)(src_y + 0.5);
-  return img(src_x_int,src_y_int);
+  *out = U(img(src_x_int,src_y_int));
+  return true;
 }
 
 template <class T, class U>
@@ -148,7 +149,7 @@ bool vil_interpolate_bicubic(vil_memory_image_of<T> const& img, double src_x, do
 }
 
 #define VIL_INTERPOLATE_INSTANTIATE(T, U) \
-template T vil_interpolate_nearest(vil_memory_image_of<T> const& img, double src_x, double src_y); \
+template bool vil_interpolate_nearest(vil_memory_image_of<T> const& img, double src_x, double src_y, U*); \
 template bool vil_interpolate_bilinear(vil_memory_image_of<T> const& img, double src_x, double src_y, U*); \
 template bool vil_interpolate_bilinear_grad(vil_memory_image_of<T> const&, double, double, U*, U*, U*); \
 template bool vil_interpolate_bicubic(vil_memory_image_of<T> const&, double, double, U*);

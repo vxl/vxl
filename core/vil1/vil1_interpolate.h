@@ -10,8 +10,10 @@
 #include <vil/vil_memory_image_of.h>
 
 //: Return nearest neighbour
-template <class T>
-T vil_interpolate_nearest(vil_memory_image_of<T> const& img, double src_x, double src_y);
+template <class T, class U>
+bool vil_interpolate_nearest(vil_memory_image_of<T> const& img, double src_x, double src_y, U* out);
+// fsm: changed signature to avoid having two instantiation
+// macros. [inst(float,float) conflicted with inst(float,double)].
 
 //: Compute bilinearly interpolated value from img(src_x, src_y), and place in *U
 //This form allows one to choose the return type, while the older one forced it to be
