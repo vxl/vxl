@@ -61,7 +61,7 @@ inline
 void vbl_qsort_descending(T* base, int n)
 {
 #if VXL_STDLIB_HAS_QSORT
-  vcl_qsort(base, n, sizeof base[0], vbl_qsort_helper<T>::ascend);
+  vcl_qsort(base, n, sizeof base[0], vbl_qsort_helper<T>::descend);
 #else
   vcl_sort(base, base+n, vcl_less<T>());
 #endif
