@@ -6,7 +6,13 @@
 // \file
 // \author Philip C. Pritchett, RRG, University of Oxford
 // \date   21 Oct 99
-// \brief
+// \brief  See vgui_tview_launcher.h for a description of this file.
+// 
+// \verbatim
+//  Modifications:
+//   04-OCT-2002 K.Y.McGaul - Sort out bug in vgui_event_condition.
+//                          - Launch tview in a dialog box instead of window.
+// \endverbatim
 
 
 #include "vgui_tview_launcher_tableau.h"
@@ -16,16 +22,17 @@
 #include <vgui/vgui_adaptor.h>
 #include <vgui/vgui_viewer2D_tableau.h>
 #include <vgui/vgui_tview_tableau.h>
+#include <vgui/vgui_dialog.h>
 
 vgui_tview_launcher_tableau::vgui_tview_launcher_tableau()
-  : c_graph(vgui_key('G')) { }
+  : c_graph(vgui_key('g'), vgui_SHIFT) { }
 
 vcl_string vgui_tview_launcher_tableau::type_name() const {
   return "vgui_tview_launcher_tableau";
 }
 
-bool vgui_tview_launcher_tableau::handle(const vgui_event& e) {
-
+bool vgui_tview_launcher_tableau::handle(const vgui_event& e) 
+{
   if (c_graph(e)) {
     go(e.origin);
     return true;
@@ -54,13 +61,11 @@ void vgui_tview_launcher_tableau::go(vgui_adaptor* a) {
   }
   vgui_tview_tableau_new tview(a->get_tableau());
   vgui_viewer2D_tableau_new viewer(tview);
-  vgui_window *popup = vgui::produce_window(200,200,"vgui Graph");
-  if (popup) {
-    popup->set_statusbar(false);
-    popup->get_adaptor()->set_tableau(viewer);
-    popup->show();
-  }
-  else {
-    vcl_cerr << "vgui_tview_launcher_tableau::handle()  Could not popup another vgui window\n";
-  }
+
+  vgui_dialog tview_dialog("Tableau hierachy");
+  tview_dialog.inline_tableau(viewer, 300,300);
+  tview_dialog.set_ok_button("close");
+  tview_dialog.set_cancel_button(0);
+  tview_dialog.ask(); 
+  this->post_redraw();
 }
