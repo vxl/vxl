@@ -83,4 +83,4 @@ ENDIF(WIN32)
 INCLUDE_DIRECTORIES(${VCL_INCLUDE_DIR} ${VXLCORE_INCLUDE_DIR})
 
 # This SUBDIRS command must be the last SUBDIRS command in this file
-SUBDIRS( config )
+SUBDIRS( config/cmake/export )
