@@ -62,12 +62,13 @@ public:
   static void divide  (T const *x, T const *y, T *z, unsigned);
 
 //: y[i]  = -x[i]
+// Note that this is a no-op when T is an unsigned type.
   static void negate  (T const *x, T       *y, unsigned);
 
 //: y[i]  = 1/x[i]
   static void invert  (T const *x, T       *y, unsigned);
 
- //:  y[i] += a*x[i]
+//:  y[i] += a*x[i]
   static void saxpy   (T const &a, T const *x, T *y, unsigned);
 
 //: x[i]  = v
