@@ -53,6 +53,9 @@ class kalman_filter
   virtual ~kalman_filter();
 
  protected:
+  //: update the confidence for each 3d point
+  void update_confidence();
+
   //: update the matched points in the next frame using closest neighbour.
   void update_observes(const vnl_double_3x4 &P, int iframe);
   void init_velocity();

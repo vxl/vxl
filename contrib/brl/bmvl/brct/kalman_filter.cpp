@@ -376,9 +376,51 @@ void kalman_filter::update_observes(const vnl_double_3x4 &P, int iframe)
   observes_[iframe%queue_size_] = t;
 }
 
+void kalman_filter::update_confidence()
+{
+  vcl_vector<vnl_double_3x4> cams;
+  cams.resize(cur_pos_+1); //cur_pos_ is 0 based
+  for(int i = 0; i < cur_pos_; i++){
+    cams[i] = get_projective_matrix(motions_[i]);
+  }
+
+  double normalization_factor = 0;
+  for (int i=0; i<num_points_; i++)
+  { 
+    double dist2 = 0; // square distance
+    
+    for(int f = 0; f<cur_pos_; f++){
+      vgl_point_3d<double> X(curve_3d_[i][0], curve_3d_[i][1], curve_3d_[i][2]);
+      vgl_point_2d<double> x = brct_algos::projection_3d_point(X, cams[f]);
+      vgl_point_2d<double> u = brct_algos::closest_point(curves_[f], x);
+
+      double dx = x.x() - u.x();
+      double dy = x.y() - u.y();
+      
+      dist2 += (dx*dx + dy*dy);
+      
+    }
+    
+    prob_[i] = exp(-dist2);
+    normalization_factor += prob_[i];
+  }
+
+  vcl_cout<<"normalization_factor = "<<normalization_factor;
+  // normalize the probability weight across all the points
+  for(int i=0; i<num_points_; i++)
+    prob_[i] /= normalization_factor;
+
+}
+
 void kalman_filter::inc()
 {
-    cur_pos_ ++;
+
+  if(cur_pos_ >= curves_.size()-1){ // end of the data
+    vcl_cout<<"\n at the end of last curve";
+    return;
+  }
+ 
+  cur_pos_ ++;
 
   //
   // prediction step:
@@ -454,7 +496,7 @@ void kalman_filter::inc()
   if (memory_size_ < queue_size_)
     ++memory_size_;
 
-  // update local coordinates
+  // update 3d reconstruction results
   vcl_vector<vnl_double_3x4> Ps(memory_size_);
   vcl_vector<vnl_double_2> pts(memory_size_);
 
@@ -471,6 +513,9 @@ void kalman_filter::inc()
     curve_3d_[i][1] = X3d.y();
     curve_3d_[i][2] = X3d.z();
   }
+
+  // update confidence level for each points
+  update_confidence();
 }
 
 void kalman_filter::read_data(char *fname)
