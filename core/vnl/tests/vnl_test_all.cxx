@@ -11,7 +11,6 @@
 #include <vnl/vnl_copy.h>
 #include <vnl/vnl_cost_function.h>
 #include <vnl/vnl_cross_product_matrix.h>
-#include <vnl/vnl_determinant.h>
 #include <vnl/vnl_diag_matrix.h>
 #include <vnl/vnl_double_2.h>
 #include <vnl/vnl_double_2x2.h>
