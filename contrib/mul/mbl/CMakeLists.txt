@@ -17,6 +17,7 @@ SOURCE_FILES(mbl_sources
   mbl_rbf_network.cxx
   mbl_read_int.cxx
   mbl_read_double.cxx
+  mbl_read_str.cxx
   mbl_arb_length_int.cxx
 )
 
