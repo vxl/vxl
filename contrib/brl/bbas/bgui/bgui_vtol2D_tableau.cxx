@@ -197,14 +197,10 @@ void bgui_vtol2D_tableau::add_edges(vcl_vector<vtol_edge_2d_sptr> const& edges,
     //optionally display the edge vertices
     if (verts)
     {
-      vcl_vector<vtol_vertex_sptr>* vts = (*eit)->vertices();
-      for (vcl_vector<vtol_vertex_sptr>::iterator vit = vts->begin();
-           vit != vts->end(); vit++)
-      {
-        vtol_vertex_2d_sptr v = (*vit)->cast_to_vertex_2d();
-        this->add_vertex(v , style);
-      }
-      delete vts;
+      vcl_vector<vtol_vertex_sptr> vts; (*eit)->vertices(vts);
+      for (vcl_vector<vtol_vertex_sptr>::iterator vit = vts.begin();
+           vit != vts.end(); vit++)
+        this->add_vertex((*vit)->cast_to_vertex_2d(), style);
     }
   }
 }
@@ -222,14 +218,10 @@ bgui_vtol2D_tableau::add_faces(vcl_vector<vtol_face_2d_sptr> const& faces,
     this->add_face(f , style );
     if (verts)
     {
-      vcl_vector<vtol_vertex_sptr>* vts = f->vertices();
-      for (vcl_vector<vtol_vertex_sptr>::iterator vit = vts->begin();
-           vit != vts->end(); vit++)
-      {
-        vtol_vertex_2d_sptr v = (*vit)->cast_to_vertex_2d();
-        this->add_vertex(v , style );
-      }
-      delete vts;
+      vcl_vector<vtol_vertex_sptr> vts; f->vertices(vts);
+      for (vcl_vector<vtol_vertex_sptr>::iterator vit = vts.begin();
+           vit != vts.end(); vit++)
+        this->add_vertex((*vit)->cast_to_vertex_2d(), style);
     }
   }
 }

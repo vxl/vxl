@@ -177,17 +177,14 @@ vcl_ostream& bgui_vtol_soview2D_edge_group::print(vcl_ostream& s) const
   return vgui_soview2D_group::print(s);
 }
 
-
 bgui_vtol_soview2D_edge_group::
 bgui_vtol_soview2D_edge_group(vcl_vector<vtol_edge_2d_sptr>& edges)
 {
   for (vcl_vector<vtol_edge_2d_sptr>::iterator eit = edges.begin();
        eit != edges.end(); eit++)
-  {
-    vgui_soview2D* sov = new bgui_vtol_soview2D_edge(*eit);
-    ls.push_back(sov);
-  }
+    ls.push_back(new bgui_vtol_soview2D_edge(*eit));
 }
+
 //--------------------------------------------------------------------------
 //: vtol_face_2d view
 //--------------------------------------------------------------------------
@@ -206,13 +203,7 @@ bgui_vtol_soview2D_face::bgui_vtol_soview2D_face(vtol_face_2d_sptr const& f)
     return;
   }
 
-  edge_list* edges = f->edges();
-
-  for (edge_list::iterator eit = edges->begin(); eit != edges->end(); eit++)
-  {
-    vtol_edge_2d_sptr e = (*eit)->cast_to_edge_2d();
-    vgui_soview2D* sov = new bgui_vtol_soview2D_edge(e);
-    ls.push_back(sov);
-  }
-  delete edges;
+  edge_list edges; f->edges(edges);
+  for (edge_list::iterator eit = edges.begin(); eit != edges.end(); ++eit)
+    ls.push_back(new bgui_vtol_soview2D_edge((*eit)->cast_to_edge_2d()));
 }
