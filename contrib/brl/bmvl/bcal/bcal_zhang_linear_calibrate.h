@@ -1,5 +1,5 @@
 //------------------------------------------------------------------------------
-// FileName             : zhang_linear_calibrate.h
+// FileName             : bcal_zhang_linear_calibrate.h
 // Author               : Kongbin Kang (kk@lems.brown.edu)
 // Company              : Brown University
 // Purpose              : zhang linear camera calibration from planary pattern
@@ -19,12 +19,12 @@
 #include <vnl/vnl_vector_fixed.h>
 #include <vnl/vnl_double_3x3.h>
 #include <vgl/algo/vgl_h_matrix_2d.h>
-#include "camera_graph.h"
-#include "calibrate_plane.h"
-#include "zhang_camera_node.h"
-#include "euclidean_transformation.h"
+#include "bcal_camera_graph.h"
+#include "bcal_calibrate_plane.h"
+#include "bcal_zhang_camera_node.h"
+#include "bcal_euclidean_transformation.h"
 
-class zhang_linear_calibrate
+class bcal_zhang_linear_calibrate
 {
  public:
   // compute extrinsic parameters of camera
@@ -35,9 +35,9 @@ class zhang_linear_calibrate
   int calibrate();
 
   // set camera graph
-  void setCameraGraph(camera_graph<calibrate_plane, zhang_camera_node, euclidean_transformation>* pG);
-  zhang_linear_calibrate();
-  virtual ~zhang_linear_calibrate();
+  void setCameraGraph(bcal_camera_graph<bcal_calibrate_plane, bcal_zhang_camera_node, bcal_euclidean_transformation>* pG);
+  bcal_zhang_linear_calibrate();
+  virtual ~bcal_zhang_linear_calibrate();
 
  protected:
   int calibrate_extrinsic();
@@ -56,7 +56,7 @@ class zhang_linear_calibrate
   int clear();
 
  private:
-  camera_graph<calibrate_plane, zhang_camera_node, euclidean_transformation>* cam_graph_ptr_;
+  bcal_camera_graph<bcal_calibrate_plane, bcal_zhang_camera_node, bcal_euclidean_transformation>* cam_graph_ptr_;
   vcl_vector<vgl_h_matrix_2d<double> *> h_matrice_;
   vcl_vector<int> num_views_;
 };

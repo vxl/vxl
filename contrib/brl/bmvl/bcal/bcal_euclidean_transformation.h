@@ -1,4 +1,4 @@
-// euclidean_transformation.h: interface for the euclidean_transformation class.
+// bcal_euclidean_transformation.h: interface for the bcal_euclidean_transformation class.
 //
 //////////////////////////////////////////////////////////////////////
 
@@ -13,14 +13,14 @@
 #include <vcsl/vcsl_spatial_transformation.h>
 #include <vgl/algo/vgl_h_matrix_3d.h>
 
-class euclidean_transformation : public vcsl_spatial_transformation
+class bcal_euclidean_transformation : public vcsl_spatial_transformation
 {
  private:
   vcl_vector<vgl_h_matrix_3d<double> > trans_;
 
  public: // constructor and deconstructor
-  euclidean_transformation();
-  virtual ~euclidean_transformation();
+  bcal_euclidean_transformation();
+  virtual ~bcal_euclidean_transformation();
 
  public: // operators
   void set_transformations(vcl_vector<vgl_h_matrix_3d<double> > &trans);

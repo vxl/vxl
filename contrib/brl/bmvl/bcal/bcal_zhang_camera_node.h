@@ -1,5 +1,5 @@
 //------------------------------------------------------------------------------
-// FileName        : zhang_camera_node.h
+// FileName        : bcal_zhang_camera_node.h
 // Author          : Kongbin Kang (kk@lems.brown.edu)
 // Company         : Brown University
 // Purpose         : Zhang Camera Node
@@ -15,18 +15,18 @@
 #pragma once
 #endif // _MSC_VER > 1000
 
-#include "camera_node.h"
+#include "bcal_camera_node.h"
 #include <vcl_vector.h>
 #include <vgl/vgl_homg_point_2d.h>
 
-class zhang_camera_node : public camera_node
+class bcal_zhang_camera_node : public bcal_camera_node
 {
  private:
    vcl_vector< vgl_homg_point_2d<double> > *point_lists_ptr_;
 
  public: // constructor and deconstructor
-   zhang_camera_node(int id=0);
-   virtual ~zhang_camera_node();
+   bcal_zhang_camera_node(int id=0);
+   virtual ~bcal_zhang_camera_node();
  public:
   int removeData();
 
