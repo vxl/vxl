@@ -89,7 +89,7 @@ int vnl_levenberg_marquardt::lmdif_lsqfun(int* n,          // I    Number of res
   vnl_least_squares_function* f = active->f_;
   assert(*p == f->get_number_of_unknowns());
   assert(*n == f->get_number_of_residuals());
-  vnl_vector_ref<double> ref_x(*p, (double*)x);
+  vnl_vector_ref<double> ref_x(*p, (double*)x); // const violation!
   vnl_vector_ref<double> ref_fx(*n, fx);
 
   if (*iflag == 0) {
@@ -234,7 +234,7 @@ int vnl_levenberg_marquardt::lmder_lsqfun(int* n,          // I    Number of res
   vnl_least_squares_function* f = active->f_;
   assert(*p == f->get_number_of_unknowns());
   assert(*n == f->get_number_of_residuals());
-  vnl_vector_ref<double> ref_x(*p, (double*)x);
+  vnl_vector_ref<double> ref_x(*p, (double*)x); // const violation!
   vnl_vector_ref<double> ref_fx(*n, fx);
   vnl_matrix_ref<double> ref_fJ(*n, *p, fJ);
 
