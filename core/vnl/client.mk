@@ -6,8 +6,7 @@ vnl_client_mk := 1
 
 USE_NETLIB := 1
 
-#FIXME: IUELOCALROOT ?
-include $(IUEROOT)/vxl/vcl/client.mk
+include $(IUELOCALROOT)/vxl/vcl/client.mk
 
 ald_libdeps += vnl:vcl
 ald_libdeps += vnl-algo:vnl,netlib

@@ -1,9 +1,8 @@
-#######################################
-include ${IUEROOT}/config/top-params.mk
-#######################################
-
-VXL := 1
-USES = v3p vxl
+USES = vxl
+# The following three are needed, as libvil uses tiff, jpeg, png if available:
+TRY_TIFF := 1
+TRY_JPEG := 1
+TRY_PNG  := 1
 
 # Examples may use vbl....
 IULIBS = -lvil -lvbl -lvpl -lvcl
@@ -19,8 +18,6 @@ MINI_PROG_SOURCES += vil_flipud.cxx
 MINI_PROG_SOURCES += vil_clamp_example.cxx
 MINI_PROG_SOURCES += vil_scale_intensities_example.cxx
 
-include ../vil_config.mk
-
-#######################################
-include ${IUEROOT}/config/top-rules.mk
-#######################################
+################################
+include ${IUEROOT}/config/top.mk
+################################

@@ -4,8 +4,7 @@ vil_client_mk := 1
 # fsm@robots.ox.ac.uk
 #
 
-#FIXME: IUELOCALROOT ?
-include $(IUEROOT)/vxl/vcl/client.mk
+include $(IUELOCALROOT)/vxl/vcl/client.mk
 
 TRY_TIFF := 1
 TRY_JPEG := 1

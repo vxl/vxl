@@ -14,7 +14,7 @@
 # The examples subdirectory contains example programs showing how to use the
 # filter classes with any 2D storage class of your choice.
 #
-ifneq (,$(wildcard $(IUEROOT)/Image/ImageProcessingBasics))
+ifneq (,$(wildcard $(IUEROOT)/Image/ImageProcessingBasics/section.h))
 SUBDIRS += vipl_with_section
 endif
 SUBDIRS += vipl_with_vnl_matrix

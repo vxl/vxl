@@ -1,7 +1,4 @@
-#######################################
-include ${IUEROOT}/config/top-params.mk
-#######################################
-USES += v3p vxl
+USES += vxl
 USE_NETLIB := 1
 
 IULIBS := -lvbl -lvnl-algo -lnetlib -lvnl -lvcl
@@ -16,9 +13,9 @@ MINI_PROG_SOURCES += vnl_rosenbrock.cxx
 MINI_PROG_SOURCES += vnl_svd.cxx
 MINI_PROG_SOURCES += vnl_lsqr_test.cxx
 
-######################################
-include ${IUEROOT}/config/top-rules.mk
-######################################
+################################
+include ${IUEROOT}/config/top.mk
+################################
 
 #all: $(RELOBJDIR)/time_fastops.40
 

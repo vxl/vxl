@@ -1,4 +1,4 @@
-USES := v3p vxl
+USES := vxl
 USE_NETLIB := 1
 
 TESTS += test_fft1d.cxx

@@ -34,7 +34,7 @@ MINI_PROG_SOURCES += example_median.cxx
 MINI_PROG_SOURCES += example_gradient_mag.cxx
 MINI_PROG_SOURCES += example_sobel.cxx
 
-ifneq (,$(wildcard $(IUEROOT)/Image/ImageProcessingBasics))
+ifneq (,$(wildcard $(IUELOCALROOT)/Image/ImageProcessingBasics/section.h))
 # D. using section<T,2> as 2D storage class:
 MINI_PROG_SOURCES += example_dilate_disk.cxx
 MINI_PROG_SOURCES += example_erode_disk.cxx
@@ -45,7 +45,7 @@ endif
 
 IULIBS += -lvipl_with_vnl_matrix -lvnl   # for B.
 IULIBS += -lvipl_with_vbl_array_2d -lvbl # for C.
-ifneq (,$(wildcard $(IUEROOT)/Image/ImageProcessingBasics))
+ifneq (,$(wildcard $(IUELOCALROOT)/Image/ImageProcessingBasics/section.h))
 IULIBS += -lvipl_with_section            # for D.
 endif
 IULIBS += -lvipl -lvil -lvpl -lvcl       # for all

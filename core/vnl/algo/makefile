@@ -1,7 +1,3 @@
-#######################################
-include ${IUEROOT}/config/top-params.mk
-#######################################
-
 USES := vxl
 LIBRARY := vnl-algo
 VERSION := 1.0
@@ -44,6 +40,6 @@ SOURCES += vnl_determinant.cxx
 SOURCES += vnl_chi_squared.cxx
 SOURCES += vnl_gaussian_kernel_1d.cxx
 
-######################################
-include ${IUEROOT}/config/top-rules.mk
-######################################
+################################
+include ${IUEROOT}/config/top.mk
+################################

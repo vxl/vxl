@@ -1,4 +1,4 @@
-USES = v3p vxl
+USES = vxl
 IULIBS += -lvtol
 IULIBS += -lvsol
 IULIBS += -lvgl
