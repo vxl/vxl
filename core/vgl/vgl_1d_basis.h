@@ -1,16 +1,14 @@
+// This is vxl/vgl/vgl_1d_basis.h
 #ifndef vgl_1d_basis_h_
 #define vgl_1d_basis_h_
 #ifdef __GNUC__
 #pragma interface
 #endif
-
-// This is vxl/vgl/vgl_1d_basis.h
-
 //:
 // \file
 // \brief storage for 3 collinear points to serve as 1-D projective basis
 //
-// vgl_1d_projective_basis<T> is a class templated on the point type that
+// vgl_1d_basis<T> is a class templated on the point type that
 // will be stored.  Typically, T will be vgl_point_2d<double> or
 // vgl_homg_point_2d<int> or even vgl_line_2d<float> or vgl_point_3d<T>.
 //
