@@ -55,23 +55,31 @@ template < class ImgIn, class ImgOut, class DataIn, class DataOut, int  Arity, c
     hsROA (NULL),
     hsis_input_driven(false)
 {
-//for(int j = numinputs()-1; j>=0; --j)
-// ref_inf()[j] = 0;
-  if(dst_img) {
+#if 0
+  for (int j = numinputs()-1; j>=0; --j)
+    ref_inf()[j] = 0;
+#endif
+  if (dst_img) {
     if (UNCHANGED(output_state()))
       put_output_state(output_state() ^ Unchanged);
     if (FILTER_OWNED(output_state())) {
       put_output_state(output_state() ^ Filter_Owned);
-//    if (READY(output_state())) FILTER_IMPTR_DEC_REFCOUNT(ref_outf());
+#if 0
+      if (READY(output_state())) FILTER_IMPTR_DEC_REFCOUNT(ref_outf());
+#endif
     }
     if (NOT_READY(output_state()))
       put_output_state(output_state() | Ready);
-//  FILTER_IMPTR_INC_REFCOUNT(dst_img);
+#if 0
+    FILTER_IMPTR_INC_REFCOUNT(dst_img);
+#endif
   }
-  for(int i=0; i< ninputs; i++) {
+  for (int i=0; i< ninputs; i++) {
     ref_inf()[i] = src_img;
-    if(src_img) src_img++; // if real, go to next one
-//  if(ref_inf()[i]) FILTER_IMPTR_INC_REFCOUNT(((ImgIn*)ref_inf()[i]));
+    if (src_img) src_img++; // if real, go to next one
+#if 0
+    if (ref_inf()[i]) FILTER_IMPTR_INC_REFCOUNT(((ImgIn*)ref_inf()[i]));
+#endif
   }
 }
 
@@ -106,25 +114,33 @@ template < class ImgIn, class ImgOut, class DataIn, class DataOut, int Arity, cl
     hsROA (NULL),
     hsis_input_driven(false)
 {
-//for(int j = numinputs()-1; j>=0; --j)
-// ref_inf()[j] = 0;
-  if(dst_img) {
+#if 0
+  for (int j = numinputs()-1; j>=0; --j)
+    ref_inf()[j] = 0;
+#endif
+  if (dst_img) {
     if (UNCHANGED(output_state()))
       put_output_state(output_state() ^ Unchanged);
     if (FILTER_OWNED(output_state())) {
       put_output_state(output_state() ^ Filter_Owned);
-//    if (READY(output_state())) FILTER_IMPTR_DEC_REFCOUNT(ref_outf());
+#if 0
+      if (READY(output_state())) FILTER_IMPTR_DEC_REFCOUNT(ref_outf());
+#endif
     }
     if (NOT_READY(output_state()))
       put_output_state(output_state() | Ready);
-//  FILTER_IMPTR_INC_REFCOUNT(dst_img);
+#if 0
+    FILTER_IMPTR_INC_REFCOUNT(dst_img);
+#endif
   }
-  for(int i=0; i< ninputs; i++, src_img++) {
-    if(src_img == 0)
+  for (int i=0; i< ninputs; i++, src_img++) {
+    if (src_img == 0)
       vcl_cerr << "filter ctor passed vector will null src_img pointers, ignored them watch out." << vcl_endl;
     else
       ref_inf()[i] = *src_img;
-//  if(ref_inf()[i]) FILTER_IMPTR_INC_REFCOUNT(((ImgIn*)ref_inf()[i]));
+#if 0
+    if (ref_inf()[i]) FILTER_IMPTR_INC_REFCOUNT(((ImgIn*)ref_inf()[i]));
+#endif
   }
 }
 
@@ -136,29 +152,32 @@ template < class ImgIn, class ImgOut, class DataIn, class DataOut, int Arity, cl
   vcl_cout << "destructor for abstract class filter called " << this << vcl_endl;
 #endif
 #ifdef NOSMARTPTR
-  if(ref_src_section()) FILTER_IMPTR_DEC_REFCOUNT(ref_src_section()); // dec_refcount or kill it
-  if(ref_dst_section()) FILTER_IMPTR_DEC_REFCOUNT(ref_dst_section()); // dec_refcount or kill it
-  if(ref_secp())        FILTER_IMPTR_DEC_REFCOUNT(ref_secp()); // dec_refcount or kill it
-  if(ref_insecp())      FILTER_IMPTR_DEC_REFCOUNT(ref_insecp()); // dec_refcount or kill it
-  if(ref_ROA())         FILTER_IMPTR_DEC_REFCOUNT(ref_ROA()); // dec_refcount or kill it
-  if(ref_inROA())       FILTER_IMPTR_DEC_REFCOUNT(ref_inROA()); // dec_refcount or kill it
+  if (ref_src_section()) FILTER_IMPTR_DEC_REFCOUNT(ref_src_section()); // dec_refcount or kill it
+  if (ref_dst_section()) FILTER_IMPTR_DEC_REFCOUNT(ref_dst_section()); // dec_refcount or kill it
+  if (ref_secp())        FILTER_IMPTR_DEC_REFCOUNT(ref_secp()); // dec_refcount or kill it
+  if (ref_insecp())      FILTER_IMPTR_DEC_REFCOUNT(ref_insecp()); // dec_refcount or kill it
+  if (ref_ROA())         FILTER_IMPTR_DEC_REFCOUNT(ref_ROA()); // dec_refcount or kill it
+  if (ref_inROA())       FILTER_IMPTR_DEC_REFCOUNT(ref_inROA()); // dec_refcount or kill it
 
-  for(int i=0; i< numinputs(); i++) {
-    if(ref_inf()[i]) { // no longer needed with smart pointers
+  for (int i=0; i< numinputs(); i++) {
+    if (ref_inf()[i]) { // no longer needed with smart pointers
       FILTER_IMPTR_DEC_REFCOUNT(
 //    ((ImgIn*) (ref_inf()[i]))); //SGI CC doesn't like this...
       *((ImgIn**)(ref_inf())+i)); //FIXME, cast cause inf is const Im**
     }
   }
   //???  we did new (poor man's array) so we use delete????
-  if(ref_inf()) {
+  if (ref_inf()) {
     delete [] ref_inf();
     // free up new'd space
     ref_inf() = 0;
   }
   // delete the output and intermediate functions if they are filter-owned
-  // if (FILTER_OWNED(hsoutput_state) && hsoutf)
-    if(ref_outf()) {
+#if 0
+    if (FILTER_OWNED(hsoutput_state) && hsoutf) {
+#else
+    if (ref_outf()) {
+#endif
       FILTER_IMPTR_DEC_REFCOUNT(ref_outf());
     }
 #endif
@@ -182,8 +201,10 @@ template < class ImgIn, class ImgOut, class DataIn, class DataOut, int Arity, cl
     hsROA (NULL),
     hsis_input_driven(false)
 {
-//for(int i = 0; i < numinputs(); i++)
-// ref_inf()[i] = 0;
+#if 0
+  for (int i = 0; i < numinputs(); i++)
+    ref_inf()[i] = 0;
+#endif
 }
 
 template < class ImgIn, class ImgOut, class DataIn, class DataOut, int Arity, class PixelItr>
@@ -213,9 +234,11 @@ template < class ImgIn, class ImgOut, class DataIn, class DataOut, int Arity, cl
   //want to change it here is should be hard because it
   //is always changed!) So don't change things without
   //knowing their form.
-  for(int i = 0; i < numinputs(); i++) {
+  for (int i = 0; i < numinputs(); i++) {
     ref_inf()[i] = t.inf()[i];
-//  if(ref_inf()[i]) FILTER_IMPTR_INC_REFCOUNT(((ImgIn*)ref_inf()[i]));
+#if 0
+    if (ref_inf()[i]) FILTER_IMPTR_INC_REFCOUNT(((ImgIn*)ref_inf()[i]));
+#endif
   }
 #ifdef NOSMARTPTR
   if (ref_outf()) FILTER_IMPTR_INC_REFCOUNT(ref_outf());
@@ -238,15 +261,15 @@ template < class ImgIn, class ImgOut, class DataIn, class DataOut, int Arity, cl
   int vipl_filter< ImgIn, ImgOut, DataIn, DataOut, Arity, PixelItr >
                    ::is_section_within_ROA(int axis) const
 {
-  if(is_input_driven()) { // if we are input driven
+  if (is_input_driven()) { // if we are input driven
     if (!inROA())
   // if we don't have an ROA we must be in it.
       return true;
     // should this consider insecp???????
-    if(insecp()) { // ok have a valid section .
-      for(int i =0; i < Arity; i++){
-        if((insecp()->curr_sec_start(axis) > inROA()->curr_sec_end(axis)) ||
-           (insecp()->curr_sec_end(axis) < inROA()->curr_sec_start(axis)))
+    if (insecp()) { // ok have a valid section .
+      for (int i =0; i < Arity; i++){
+        if ((insecp()->curr_sec_start(axis) > inROA()->curr_sec_end(axis)) ||
+            (insecp()->curr_sec_end(axis) < inROA()->curr_sec_start(axis)))
           return false;
       }
       return true;
@@ -256,11 +279,11 @@ template < class ImgIn, class ImgOut, class DataIn, class DataOut, int Arity, cl
     // if we don't have an ROA we must be in it.
     if (!ROA())
       return true;
-    // should this consider insecp???????
-    if(secp()) { // ok have a valid section .
-      for(int i =0; i < Arity; i++) {
-        if((secp()->curr_sec_start(axis) > ROA()->curr_sec_end(axis)) ||
-           (secp()->curr_sec_end(axis) < ROA()->curr_sec_start(axis)))
+    // should this consider secp or insecp???????
+    if (secp()) { // ok have a valid section .
+      for (int i =0; i < Arity; i++) {
+        if ((secp()->curr_sec_start(axis) > ROA()->curr_sec_end(axis)) ||
+            (secp()->curr_sec_end(axis) < ROA()->curr_sec_start(axis)))
           return false;
       }
       return true;
@@ -281,39 +304,40 @@ template < class ImgIn, class ImgOut, class DataIn, class DataOut, int Arity, cl
   int vipl_filter< ImgIn, ImgOut, DataIn, DataOut, Arity, PixelItr >
                      ::start(int axis) const
 {
-  if(is_input_driven()){
-    if(insecp()){ // ok have a valid section
+  if (is_input_driven()){
+    if (insecp()){ // ok have a valid section
       int ibs = image_border_size();
       int end = insecp()->curr_sec_end(axis);
       int st = insecp()->curr_sec_start(axis);
-      if(st > end){ // swap hack in case people get it wrong....
+      if (st > end){ // swap hack in case people get it wrong....
         int temp = end; end = st; st = temp;
       }
       st += ibs;
       end -= ibs;
-//#ifdef DEBUG
-      vcl_cerr << "i_ [" << axis << "] st ibs " << st << " " << ibs << vcl_endl;
-//#endif
-      if(inROA())
+      if (inROA())
         st =vcl_min(end,vcl_max(st,inROA()->curr_sec_start(axis)+ibs));
+#ifdef DEBUG
+      vcl_cerr << "i_ [" << axis << "] st=" << st << " ibs=" << ibs << vcl_endl;
+#endif
       return st;
     }
-  } else {
-    // should we consider insecp????
-    if(secp()){ // ok have a valid section
+  }
+  else {
+    // should we consider secp or insecp????
+    if (secp()){ // ok have a valid section
       int ibs = image_border_size();
       int end = secp()->curr_sec_end(axis);
       int st = secp()->curr_sec_start(axis);
-      if(st > end){ // swap hack in case people get it wrong....
+      if (st > end){ // swap hack in case people get it wrong....
         int temp = end; end = st; st = temp;
       }
       st += ibs;
       end -= ibs;
-//#ifdef DEBUG
-      vcl_cerr << "o_ [" << axis << "] st ibs " << st << " " << ibs << vcl_endl;
-//#endif
-      if(ROA())
+      if (ROA())
         st = vcl_min(end,vcl_max(st,ROA()->curr_sec_start(axis)+ibs));
+#ifdef DEBUG
+      vcl_cerr << "o_ [" << axis << "] st=" << st << " ibs=" << ibs << vcl_endl;
+#endif
       return st;
     }
   }
@@ -336,32 +360,34 @@ template < class ImgIn, class ImgOut, class DataIn, class DataOut, int Arity, cl
   int vipl_filter< ImgIn, ImgOut, DataIn, DataOut, Arity, PixelItr >
                      ::stop(int axis) const
 {
-  if(is_input_driven()){
-    if(insecp()){ // ok have a valid section
+  if (is_input_driven()){
+    if (insecp()){ // ok have a valid section
       int ibs = image_border_size();
       int end = insecp()->curr_sec_end(axis);
       int st = insecp()->curr_sec_start(axis);
-      if(st > end){ // swap hack in case people get it wrong....
+      if (st > end){ // swap hack in case people get it wrong....
         int temp = end; end = st; st = temp;
       }
       end -= ibs;
-//#ifdef DEBUG
-      vcl_cerr << "_i [" << axis << "] end ibs " << end << " " << ibs << vcl_endl;
-//#endif
+#ifdef DEBUG
+      vcl_cerr << "_i [" << axis << "] end=" << end << " ibs=" << ibs << vcl_endl;
+#endif
       return end;
     }
-  } else {
-    if(secp()){ // ok have a valid section
+  }
+  else {
+    // should we consider secp or insecp????
+    if (secp()){ // ok have a valid section
       int ibs = image_border_size();
       int end = secp()->curr_sec_end(axis);
       int st = secp()->curr_sec_start(axis);
-      if(st > end){ // swap hack in case people get it wrong....
+      if (st > end){ // swap hack in case people get it wrong....
         int temp = end; end = st; st = temp;
       }
       end -= ibs;
-//#ifdef DEBUG
-      vcl_cerr << "_o [" << axis << "] end ibs " << end << " " << ibs << vcl_endl;
-//#endif
+#ifdef DEBUG
+      vcl_cerr << "_o [" << axis << "] end=" << end << " ibs=" << ibs << vcl_endl;
+#endif
       return end;
     }
   }
@@ -384,13 +410,17 @@ template < class ImgIn, class ImgOut, class DataIn, class DataOut, int Arity, cl
 {
   if (UNCHANGED(input_state()) || NOT_READY(input_state()))
     ref_input_state() = Ready;
-  if( 0 <= index && index < numinputs()) {
-//  if(ref_inf()[index]) { // no longer needed for smart pointers
-//      FILTER_IMPTR_DEC_REFCOUNT(((ImgIn*)ref_inf()[index])); //SGI CC doesn't like this...
-//      FILTER_IMPTR_DEC_REFCOUNT(*((ImgIn**)(ref_inf())+index)); // release old
-//  }
+  if ( 0 <= index && index < numinputs()) {
+#if 0
+    if (ref_inf()[index]) { // no longer needed for smart pointers
+      // FILTER_IMPTR_DEC_REFCOUNT(((ImgIn*)ref_inf()[index])); //SGI CC doesn't like this...
+      FILTER_IMPTR_DEC_REFCOUNT(*((ImgIn**)(ref_inf())+index)); // release old
+    }
+#endif
     ref_inf()[index] = fpointer;
-//  if(fpointer) FILTER_IMPTR_INC_REFCOUNT(((ImgIn*)fpointer)); // mark new
+#if 0
+    if (fpointer) FILTER_IMPTR_INC_REFCOUNT(((ImgIn*)fpointer)); // mark new
+#endif
     return true;
   }
   // error if reaching this point:
@@ -417,12 +447,13 @@ template < class ImgIn, class ImgOut, class DataIn, class DataOut, int Arity, cl
   const ImgIn& vipl_filter< ImgIn, ImgOut, DataIn, DataOut, Arity, PixelItr>
                            ::in_data(int index) const
 {
-  if(0 <= index && index < numinputs()) {
-        if (inf()[index]) return *inf()[index];
-        else {
-           vcl_cerr << "Warning: input pointer is null returning image at index 0\n";
-           return *inf()[0];
-        }
+  if (0 <= index && index < numinputs()) {
+    if (inf()[index])
+      return *inf()[index];
+    else {
+      vcl_cerr << "Warning: input pointer is null returning image at index 0\n";
+      return *inf()[0];
+    }
   } //else
    vcl_cerr << "Warning: out of range is null, a new val, it will leak\n";
    return *inf()[0];
@@ -436,9 +467,13 @@ template < class ImgIn, class ImgOut, class DataIn, class DataOut, int Arity, cl
 {
   if (UNCHANGED(output_state()))    put_output_state(output_state() ^ Unchanged);
   if (FILTER_OWNED(output_state())) put_output_state(output_state() ^ Filter_Owned);
-//if (ref_outf())                   FILTER_IMPTR_DEC_REFCOUNT(ref_outf());
+#if 0
+  if (ref_outf())                   FILTER_IMPTR_DEC_REFCOUNT(ref_outf());
+#endif
   if (NOT_READY(output_state()))    put_output_state(output_state() | Ready);
-//FILTER_IMPTR_INC_REFCOUNT(fpointer); // we will keep a pointer, inc it
+#if 0
+  FILTER_IMPTR_INC_REFCOUNT(fpointer); // we will keep a pointer, inc it
+#endif
   put_outf(fpointer);
   return true;
 }
@@ -494,8 +529,7 @@ template < class ImgIn, class ImgOut, class DataIn, class DataOut, int Arity, cl
 
 // This is the method that implements the basic form for the filtering operation.
 // For each section, this method runs before section_applyop. Default at this
-// level is noop. (lower level class redefine it to ``fill'' the image
-// borders).
+// level is noop. (lower level class redefine it to ``fill'' the image borders).
 template < class ImgIn, class ImgOut, class DataIn, class DataOut, int Arity, class PixelItr>
   bool vipl_filter< ImgIn, ImgOut, DataIn, DataOut, Arity, PixelItr >
                       ::section_preop()
@@ -546,7 +580,9 @@ template < class ImgIn, class ImgOut, class DataIn, class DataOut, int Arity, cl
                                     CHANGED(input_state()))) {
     // be conservative - if input has changed, then may need to regen the
     // output since we can not compare respective sizes .
-//  if (outf()) FILTER_IMPTR_DEC_REFCOUNT(ref_outf());
+#if 0
+    if (outf()) FILTER_IMPTR_DEC_REFCOUNT(ref_outf());
+#endif
     vcl_cerr << "Warning: Input changed after output set.  Sizes may not match...\n";
   }
   if ((check_params_1(proceed_anyway) &&
