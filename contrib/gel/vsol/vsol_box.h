@@ -4,25 +4,19 @@
 //-----------------------------------------------------------------------------
 //:
 // \file
-// \brief 
-//  Abstract base class for vsol_box_(n)d, n=2,3,...
+// \brief Abstract base class for vsol_box_(n)d, n=1,2,3,...
 //
 // \author
 //     H.Can Aras
 //
-// \verbatim
-//  
-// \endverbatim
 //-----------------------------------------------------------------------------
 
 class vsol_box
 {
-public:
-	// Constructors/Destructors--------------------------------------------------
-	vsol_box() {}
-	virtual ~vsol_box() {}
-
-protected:
+ public:
+  // Constructors/Destructor---------------------------------------------------
+  vsol_box() {}
+  virtual ~vsol_box() {}
 };
 
 #endif // vsol_box_h_

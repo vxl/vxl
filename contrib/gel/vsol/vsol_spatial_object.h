@@ -4,15 +4,11 @@
 //-----------------------------------------------------------------------------
 //:
 // \file
-// \brief
-//  Abstract base class for vsol_spatial_object_(n)d, n=2,3,...
+// \brief Abstract base class for vsol_spatial_object_(n)d, n=2,3,...
 //
 // \author
 //     H.Can Aras
 //
-// \verbatim
-//  
-// \endverbatim
 //-----------------------------------------------------------------------------
 
 #include <vul/vul_timestamp.h>
@@ -21,12 +17,11 @@
 
 class vsol_spatial_object : public vul_timestamp, public vbl_ref_count, public vsol_flags_id
 {
-public:
-	// Constructors/Destructors--------------------------------------------------
-	virtual ~vsol_spatial_object();
-
-protected:
-	vsol_spatial_object();
+ public:
+  // Constructors/Destructor---------------------------------------------------
+  virtual ~vsol_spatial_object();
+ protected:
+  vsol_spatial_object();
 };
 
 #endif // vsol_spatial_object_h_

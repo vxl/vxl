@@ -4,16 +4,12 @@
 //-----------------------------------------------------------------------------
 //:
 // \file
-// \brief
-//  Base class for vsol_spatial_object
+// \brief  Base class for vsol_spatial_object
 //  Includes members related to id, tag and flags of a vsol_spatial_object
 //
 // \author
 //     H.Can Aras
 //
-// \verbatim
-//  
-// \endverbatim
 //-----------------------------------------------------------------------------
 
 #ifndef vsol_spatial_object_flags_
@@ -38,28 +34,28 @@ const unsigned int VSOL_FLAG_BITS      = 0xFF000000;
 
 class vsol_flags_id
 {
-protected:
+ protected:
   // Data Members--------------------------------------------------------------
-	unsigned int tag_;
+  unsigned int tag_;
   int id_;
-	static int tagcount_;// global count of all spatial objects.
+  static int tagcount_;// global count of all spatial objects.
 
-public:
-	// Constructors/Destructors--------------------------------------------------
-	virtual ~vsol_flags_id();
+ public:
+  // Constructors/Destructor---------------------------------------------------
+  virtual ~vsol_flags_id();
 
-protected:
-	vsol_flags_id();
+ protected:
+  vsol_flags_id();
 
-public:
   // Data Access---------------------------------------------------------------
-	//: get id of object
+ public:
+  //: get id of object
   int get_id() const { return id_; }
   //: set id of object
   void set_id(int i) { id_ = i; }
 
-	// Tag Flag and ID methods
-  //: set user flag 1-6
+  // Tag, Flag, and ID methods
+
   inline void set_user_flag(unsigned int flag);
   inline bool get_user_flag(unsigned int flag);
   inline void unset_user_flag(unsigned int flag);
