@@ -7,6 +7,7 @@
 #include <rgrl/rgrl_transformation.h>
 #include <rgrl/rgrl_trans_affine.h>
 #include <rgrl/rgrl_trans_quadratic.h>
+#include <rgrl/rgrl_trans_homography2d.h>
 #include <rgrl/rgrl_cast.h>
 #include <rgrl/rgrl_trans_spline.h>
 #include <rgrl/rgrl_trans_rigid.h>
@@ -183,6 +184,49 @@ test_trans_quadratic()
   testlib_test_perform( rgrl_cast<rgrl_trans_quadratic*>(xform2)->Q() == Q
                         && close(rgrl_cast<rgrl_trans_quadratic*>(xform2)->A(),uc_A)
                         && close(rgrl_cast<rgrl_trans_quadratic*>(xform2)->t(),uc_tt) );
+}
+
+void
+test_trans_homography()
+{
+  vnl_matrix<double> H(3,3);
+  H(0,0) = 1;  H(0,1) = 0;  H(0,2) = 1;
+  H(1,0) = 2;  H(1,1) = 4;  H(1,2) = 0;
+  H(2,0) = 3;  H(2,1) = 5;  H(2,2) = 6;
+  
+  testlib_test_begin( "Construct 2D homography transform object" );
+  rgrl_transformation_sptr xform = new rgrl_trans_homography2d( H );
+  testlib_test_perform( xform );
+
+  testlib_test_begin( "Transform 2D location" );
+
+  vnl_vector<double> point( 2 );
+  point[0] = 2.0;
+  point[1] = 3.0;
+
+  vnl_vector<double> true_point(2);
+  true_point[0] = 0.111111111111111;
+  true_point[1] = 0.592592592592593;
+
+  vnl_vector<double> xformed_point( 2 );
+
+  xform->map_location( point, xformed_point );
+  TEST_NEAR("transform points", (xformed_point-true_point).two_norm(), 0.0, 1e-4); 
+
+  vnl_vector<double> direction( 2 );
+  direction[0] =  2.0;
+  direction[1] =  3.0;
+  direction.normalize();
+
+  vnl_vector<double> true_direction( 2 );
+  true_direction[0] = -0.0933407086930583;
+  true_direction[1] = 0.995634226059288;
+  true_direction.normalize();
+
+  vnl_vector<double> xformed_direction( 2 );
+  xform->map_tangent( point, direction, xformed_direction );
+  TEST_NEAR("mapped tangent position", (xformed_direction - true_direction).two_norm(), 0.0, 1e-4);
+  
 }
 
 void
@@ -376,6 +420,6 @@ MAIN( test_transformation )
   test_trans_quadratic();
   test_trans_spline();
   test_trans_rigid();
-
+  test_trans_homography();
   SUMMARY();
 }
