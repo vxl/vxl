@@ -27,19 +27,22 @@ Package=<4>
     Project_Dep_Name vil
     End Project Dependency
     Begin Project Dependency
-    Project_Dep_Name vsl
-    End Project Dependency
-    Begin Project Dependency
     Project_Dep_Name vnl_algo
     End Project Dependency
     Begin Project Dependency
-    Project_Dep_Name vvl
+    Project_Dep_Name vidl
     End Project Dependency
     Begin Project Dependency
     Project_Dep_Name vpl
     End Project Dependency
     Begin Project Dependency
+    Project_Dep_Name vtl
+    End Project Dependency
+    Begin Project Dependency
     Project_Dep_Name vcgl
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name vcsl
     End Project Dependency
 }}}
 
@@ -153,6 +156,18 @@ Package=<4>
 
 ###############################################################################
 
+Project: "vcsl"=.\vcsl\vcsl.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
 Project: "vcl"=..\vcl\vcl.dsp - Package Owner=<4>
 
 Package=<5>
@@ -249,19 +264,7 @@ Package=<4>
 
 ###############################################################################
 
-Project: "vsl"=.\vsl\vsl.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-}}}
-
-###############################################################################
-
-Project: "vsl_harris"=.\vsl\examples\vsl_harris.dsp - Package Owner=<4>
+Project: "vtl"=.\vtl\vtl.dsp - Package Owner=<4>
 
 Package=<5>
 {{{
