@@ -1,16 +1,13 @@
-
-//	Copyright: (C) 2000 Britsh Telecommunications plc
-    
-
+// Copyright: (C) 2000 Britsh Telecommunications plc
 
 //:
 // \file
 // \brief Implement bits of an abstract classifier
 // \author Ian Scott
 // \date 2000/05/10
-// Modifications
 // \verbatim
-// 2 May 2001 IMS Converted to VXL
+//  Modifications
+//  2 May 2001 IMS Converted to VXL
 // \endverbatim
 
 #include <vcl_iostream.h>
@@ -36,11 +33,10 @@ clsfy_classifier_base::~clsfy_classifier_base()
 
 unsigned clsfy_classifier_base::classify(const vnl_vector<double> &input) const
 {
-	unsigned N = n_classes();
-  unsigned bestIndex = 0;
-	
-	vcl_vector<double> probs;
-	class_probabilities(probs, input);
+  unsigned N = n_classes();
+
+  vcl_vector<double> probs;
+  class_probabilities(probs, input);
 
   if (N == 1) // This is a binary classifier
   {
@@ -51,19 +47,19 @@ unsigned clsfy_classifier_base::classify(const vnl_vector<double> &input) const
   else
   {
     unsigned bestIndex = 0;
-	  unsigned i = 1;
-	  double bestProb = probs[bestIndex];
+    unsigned i = 1;
+    double bestProb = probs[bestIndex];
 
-	  while (i < N)
-	  {
-		  if (probs[i] > bestProb)
-		  {
-			  bestIndex = i;
-			  bestProb = probs[i];
-		  }
-		  i++;
-	  }
-	  return bestIndex;
+    while (i < N)
+    {
+      if (probs[i] > bestProb)
+      {
+        bestIndex = i;
+        bestProb = probs[i];
+      }
+      i++;
+    }
+    return bestIndex;
   }
 }
 
@@ -71,15 +67,15 @@ unsigned clsfy_classifier_base::classify(const vnl_vector<double> &input) const
 
 void clsfy_classifier_base::classify_many(vcl_vector<unsigned> &outputs, mbl_data_wrapper<vnl_vector<double> > &inputs) const
 {
-	outputs.resize(inputs.size());
+  outputs.resize(inputs.size());
 
-	inputs.reset();
-	unsigned i=0;
-	
-	do
-	{
-		outputs[i++] = classify(inputs.current());	
-	} while (inputs.next());
+  inputs.reset();
+  unsigned i=0;
+
+  do
+  {
+    outputs[i++] = classify(inputs.current());
+  } while (inputs.next());
 }
 
 //=======================================================================
@@ -93,28 +89,28 @@ vcl_string clsfy_classifier_base::is_a() const
 
 vcl_ostream& operator<<(vcl_ostream& os, clsfy_classifier_base const& b)
 {
-	os << b.is_a() << ": ";
-	vsl_indent_inc(os);
-	b.print_summary(os);
-	vsl_indent_dec(os);
-	return os;
+  os << b.is_a() << ": ";
+  vsl_indent_inc(os);
+  b.print_summary(os);
+  vsl_indent_dec(os);
+  return os;
 }
 
 //=======================================================================
 
 vcl_ostream& operator<<(vcl_ostream& os,const clsfy_classifier_base* b)
 {
-    if (b)	
-		return os << *b;
-    else			
-		return os << vsl_indent() << "No clsfy_classifier_base defined.";
+  if (b)
+    return os << *b;
+  else
+    return os << vsl_indent() << "No clsfy_classifier_base defined.";
 }
 
 //=======================================================================
 
 void vsl_add_to_binary_loader(const clsfy_classifier_base& b)
 {
-	vsl_binary_loader<clsfy_classifier_base>::instance().add(b);
+  vsl_binary_loader<clsfy_classifier_base>::instance().add(b);
 }
 
 //=======================================================================
