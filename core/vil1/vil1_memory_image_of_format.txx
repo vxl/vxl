@@ -19,6 +19,8 @@
 #include <vil/vil_memory_image_of.h>
 #include <vil/vil_rgb.h>
 
+#include <vxl_config.h>
+
 //: Map from Types to image formats
 template <class T>
 struct vil_memory_image_of_format : public vil_memory_image_format {
@@ -132,6 +134,15 @@ struct vil_memory_image_of_format<vil_rgb<unsigned char> > : public vil_memory_i
   vil_memory_image_of_format() {
     components = 3;
     bits_per_component = CHAR_BIT;
+    component_format = VIL_COMPONENT_FORMAT_UNSIGNED_INT;
+  }
+};
+
+VCL_DEFINE_SPECIALIZATION
+struct vil_memory_image_of_format<vil_rgb<vxl_uint_16> > : public vil_memory_image_format {
+  vil_memory_image_of_format() {
+    components = 3;
+    bits_per_component = 16;
     component_format = VIL_COMPONENT_FORMAT_UNSIGNED_INT;
   }
 };

@@ -9,6 +9,7 @@
 #include "vil_pixel.h"
 #include "vil_rgb.h"
 #include "vil_byte.h"
+#include <vxl_config.h>
 
 vil_image vil_scale_intensities_image_impl::get_plane(int p) const
 {
@@ -26,12 +27,16 @@ bool vil_scale_intensities_image_impl::get_section(void * buf, int x0, int y0, i
   switch ( vil_pixel_format(base) ) {
   case VIL_BYTE:
     return vil_scale_intensities_image(base, scale_, shift_, (vil_byte*)buf, x0, y0, w, h);
+  case VIL_UINT16:
+    return vil_scale_intensities_image(base, scale_, shift_, (vxl_uint_16*)buf, x0, y0, w, h);
   case VIL_RGB_BYTE:
     return vil_scale_intensities_image(base, scale_, shift_, (vil_rgb<vil_byte>*)buf, x0, y0, w, h);
   case VIL_FLOAT:
     return vil_scale_intensities_image(base, scale_, shift_, (float*)buf, x0, y0, w, h);
   case VIL_DOUBLE:
     return vil_scale_intensities_image(base, scale_, shift_, (double*)buf, x0, y0, w, h);
+  case VIL_RGB_UINT16:
+    return vil_scale_intensities_image(base, scale_, shift_, (vil_rgb<vxl_uint_16>*)buf, x0, y0, w, h);
   case VIL_RGB_FLOAT:
     return vil_scale_intensities_image(base, scale_, shift_, (vil_rgb<float>*)buf, x0, y0, w, h);
   case VIL_RGB_DOUBLE:

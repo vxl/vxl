@@ -6,6 +6,7 @@
 
 #include <vcl_cassert.h>
 #include <vcl_cstdio.h> // for sprintf
+#include <vcl_vector.h>
 
 #include <vcl_iostream.h>
 #include <vcl_cstring.h>
@@ -13,6 +14,8 @@
 #include <vil/vil_stream.h>
 #include <vil/vil_image_impl.h>
 #include <vil/vil_image.h>
+
+#include <vxl_config.h>
 
 char const* vil_pnm_format_tag = "pnm";
 
@@ -92,7 +95,8 @@ vil_pnm_generic_image::vil_pnm_generic_image(vil_stream* vs, int planes,
     else
       magic_ = 5;
   }
-  if (bits_per_component_ > 8) magic_ -= 3;
+  // from August 2000, pnm allows 16 bit samples in rawbits format, stored MSB.
+  if (bits_per_component_ > 16) magic_ -= 3;
 
   if (bits_per_component_ < 31)
     maxval_ = (1L<<bits_per_component_)-1;
@@ -149,6 +153,35 @@ static int ReadInteger(vil_stream* vs, char& temp)
   }
   return n;
 }
+
+// Convert the buffer of 16 bit words from MSB to host order
+static void ConvertMSBToHost( void* buf, int num_words )
+{
+#if VXL_LITTLE_ENDIAN
+  unsigned char* ptr = (unsigned char*)buf;
+  for( int i=0; i < num_words; ++i ) {
+    unsigned char t = *ptr;
+    *ptr = *(ptr+1);
+    *(ptr+1) = t;
+    ptr += 2;
+  }
+#endif
+}
+
+// Convert the buffer of 16 bit words from host order to MSB
+static void ConvertHostToMSB( void* buf, int num_words )
+{
+#if VXL_LITTLE_ENDIAN
+  unsigned char* ptr = (unsigned char*)buf;
+  for( int i=0; i < num_words; ++i ) {
+    unsigned char t = *ptr;
+    *ptr = *(ptr+1);
+    *(ptr+1) = t;
+    ptr += 2;
+  }
+#endif
+}
+
 
 //: This method accepts any valid PNM file (first 3 bytes "P1\n" to "P6\n")
 bool vil_pnm_generic_image::read_header()
@@ -248,7 +281,8 @@ bool vil_pnm_generic_image::get_section(void* buf, int x0, int y0, int xs, int y
   //
   if (magic_ > 4) // pgm or ppm raw image
   {
-    int bytes_per_pixel = components_ * ((bits_per_component_+7)/8);
+    int bytes_per_sample = (bits_per_component_+7)/8;
+    int bytes_per_pixel = components_ * bytes_per_sample;
     int byte_start = start_of_data_ + (y0 * width_ + x0) * bytes_per_pixel;
     int byte_width = width_ * bytes_per_pixel;
     int byte_out_width = xs * bytes_per_pixel;
@@ -257,6 +291,12 @@ bool vil_pnm_generic_image::get_section(void* buf, int x0, int y0, int xs, int y
       vs_->seek(byte_start + y * byte_width);
       vs_->read(ib + y * byte_out_width, byte_out_width);
     }
+    if( bytes_per_sample==2 && VXL_LITTLE_ENDIAN ) {
+      ConvertMSBToHost( buf, xs*ys*components_ );
+    } else if( bytes_per_sample > 2 ) {
+      vcl_cerr << "ERROR: pnm: reading rawbits format with > 16bit samples" << vcl_endl;
+      return false;
+    } 
   }
   else if (magic_ == 4) // pbm (bitmap) raw image
   {
@@ -320,15 +360,32 @@ bool vil_pnm_generic_image::put_section(void const* buf, int x0, int y0, int xs,
 
   if (magic_ > 4) // pgm or ppm raw image
   {
-    int bytes_per_pixel = components_ * ((bits_per_component_+7)/8);
+    int bytes_per_sample = (bits_per_component_+7)/8;
+    int bytes_per_pixel = components_ * bytes_per_sample;
     int byte_start = start_of_data_ + (y0 * width_ + x0) * bytes_per_pixel;
     int byte_width = width_ * bytes_per_pixel;
     int byte_out_width = xs * bytes_per_pixel;
 
-    for(int y = 0; y < ys; ++y) {
-      vs_->seek(byte_start + y * byte_width);
-      vs_->write(ob + y * byte_out_width, byte_out_width);
-    }
+    if( bytes_per_sample==1 || ( bytes_per_sample==2 && VXL_BIG_ENDIAN ) ) {
+      for(int y = 0; y < ys; ++y) {
+        vs_->seek(byte_start + y * byte_width);
+        vs_->write(ob + y * byte_out_width, byte_out_width);
+      }
+    } else if( bytes_per_sample==2 ) {
+      // Little endian host; must convert words to have MSB first.
+      // Can't convert the input buffer, because it's not ours.
+      // Convert line by line to avoid duplicating a potentially large image.
+      vcl_vector<unsigned char> tempbuf( byte_out_width );
+      for(int y = 0; y < ys; ++y) {
+        vs_->seek(byte_start + y * byte_width);
+        vcl_memcpy( &tempbuf[0], ob + y * byte_out_width, byte_out_width );
+        ConvertHostToMSB( &tempbuf[0], xs*components_ );
+        vs_->write(&tempbuf[0], byte_out_width);
+      }
+    } else {
+      vcl_cerr << "ERROR: pnm: writing rawbits format with > 16bit samples" << vcl_endl;
+      return false;
+    } 
   }
   else if (magic_ == 4) // pbm (bitmap) raw image
   {

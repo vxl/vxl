@@ -18,20 +18,8 @@
 #include <vil/vil_memory_image.h>
 #include <vil/vil_memory_image_of_format.txx>
 
-vil_image vil_image_as(vil_image const & img, vil_byte* dummy)
-{ return vil_image_as_byte(img); }
+#include <vxl_config.h>
 
-vil_image vil_image_as(vil_image const & img, int* dummy)
-{ return vil_image_as_int(img); }
-
-vil_image vil_image_as(vil_image const & img, float* dummy)
-{ return vil_image_as_float(img); }
-
-vil_image vil_image_as(vil_image const & img, double* dummy)
-{ return vil_image_as_double(img); }
-
-vil_image vil_image_as(vil_image const & img, vil_rgb<unsigned char>* dummy)
-{ return vil_image_as_rgb_byte(img); }
 
 template <class T>
 struct vil_image_as_impl : vil_image_impl, vil_memory_image_of_format<T>
@@ -72,63 +60,183 @@ struct vil_image_as_impl : vil_image_impl, vil_memory_image_of_format<T>
 
 //--------------------------------------------------------------------------------
 
+template<typename Inp, typename Out>
+bool convert_grey_to_grey( const vil_image& image, void* buf, int x0, int y0, int width, int height )
+{
+  vcl_vector<Inp> scan(width);
+  for (int j=0; j<height; ++j) {
+    if (!image.get_section(/* xxx */&scan[0], x0, y0+j, width, 1))
+      return false;
+    for (int i=0; i<width; ++i)
+      static_cast<Out*>(buf)[i + width*j] = Out(scan[i]);
+  }
+  return true;
+}
+
+
+template<typename Inp, typename Out>
+bool convert_rgb_to_grey( const vil_image& image, void* buf, int x0, int y0, int width, int height )
+{
+  vcl_vector<Inp> scan(3*width);
+  for (int j=0; j<height; ++j) {
+    if (!image.get_section(/* xxx */&scan[0], x0, y0+j, width, 1))
+      return false;
+    for (int i=0; i<width; ++i) {
+      Inp r(scan[3*i+0]);
+      Inp g(scan[3*i+1]);
+      Inp b(scan[3*i+2]);
+      // Weights convert from linear RGB to CIE luminance assuming a
+      // modern monitor.  See Charles Pontyon's Colour FAQ
+      // http://www.inforamp.net/~poynton/notes/colour_and_gamma/ColorFAQ.html
+      static_cast<Out*>(buf)[i + width*j] = Out(0.2125*r+0.7154*g+0.072*b);
+      // This are the old NTSC weights.
+      //static_cast<Out*>(buf)[i + width*j] = Out(0.5+r*0.299+0.587*g+0.114*b);
+    }
+  }
+  return true;
+}
+
+
+template<typename Inp, typename Out>
+bool convert_grey_to_rgb( const vil_image& image, void* buf, int x0, int y0, int width, int height )
+{
+  vcl_vector<Inp> scan(width);
+  for (int j=0; j<height; ++j) {
+    if (!image.get_section(/* xxx */&scan[0], x0, y0+j, width, 1))
+      return false;
+    for (int i=0; i<width; ++i) {
+      static_cast<Out*>(buf)[3*(i + width*j)+0] = Out(scan[i]);
+      static_cast<Out*>(buf)[3*(i + width*j)+1] = Out(scan[i]);
+      static_cast<Out*>(buf)[3*(i + width*j)+2] = Out(scan[i]);
+    }
+  }
+  return true;
+}
+
+
+template<typename Inp, typename Out>
+bool convert_rgb_to_rgb( const vil_image& image, void* buf, int x0, int y0, int width, int height )
+{
+  vcl_vector<Inp> scan(3*width);
+  for (int j=0; j<height; ++j) {
+    if (!image.get_section(/* xxx */&scan[0], x0, y0+j, width, 1))
+      return false;
+    for (int i=0; i<width; ++i) {
+      static_cast<Out*>(buf)[3*(i + width*j)+0] = Out(scan[3*i + 0]);
+      static_cast<Out*>(buf)[3*(i + width*j)+1] = Out(scan[3*i + 1]);
+      static_cast<Out*>(buf)[3*(i + width*j)+2] = Out(scan[3*i + 2]);
+    }
+  }
+  return true;
+}
+
+template<typename Inp, typename Out>
+bool convert_rgba_to_rgb( const vil_image& image, void* buf, int x0, int y0, int width, int height )
+{
+  vcl_vector<Inp> scan(4*width);
+  for (int j=0; j<height; ++j) {
+    if (!image.get_section(/* xxx */&scan[0], x0, y0+j, width, 1))
+      return false;
+    for (int i=0; i<width; ++i) {
+      static_cast<Out*>(buf)[3*(i + width*j)+0] = Out(scan[4*i + 0]);
+      static_cast<Out*>(buf)[3*(i + width*j)+1] = Out(scan[4*i + 1]);
+      static_cast<Out*>(buf)[3*(i + width*j)+2] = Out(scan[4*i + 2]);
+    }
+  }
+  return true;
+}
+
+
+// Explicitly instantiate the ones we use
+template bool convert_grey_to_grey<vil_byte,int>( const vil_image&, void*, int, int, int, int );
+template bool convert_grey_to_grey<vxl_uint_16,int>( const vil_image&, void*, int, int, int, int );
+//template bool convert_grey_to_grey<vxl_uint_32,int>( const vil_image&, void*, int, int, int, int );
+template bool convert_grey_to_grey<float,int>( const vil_image&, void*, int, int, int, int );
+template bool convert_grey_to_grey<double,int>( const vil_image&, void*, int, int, int, int );
+template bool convert_rgb_to_grey<vil_byte,int>( const vil_image&, void*, int, int, int, int );
+template bool convert_rgb_to_grey<vxl_uint_16,int>( const vil_image&, void*, int, int, int, int );
+template bool convert_rgb_to_grey<float,int>( const vil_image&, void*, int, int, int, int );
+template bool convert_rgb_to_grey<double,int>( const vil_image&, void*, int, int, int, int );
+
+//template bool convert_grey_to_grey<vil_byte,vil_byte>( const vil_image&, void*, int, int, int, int );
+template bool convert_grey_to_grey<vxl_uint_16,vil_byte>( const vil_image&, void*, int, int, int, int );
+template bool convert_grey_to_grey<vxl_uint_32,vil_byte>( const vil_image&, void*, int, int, int, int );
+template bool convert_grey_to_grey<float,vil_byte>( const vil_image&, void*, int, int, int, int );
+template bool convert_grey_to_grey<double,vil_byte>( const vil_image&, void*, int, int, int, int );
+template bool convert_rgb_to_grey<vil_byte,vil_byte>( const vil_image&, void*, int, int, int, int );
+template bool convert_rgb_to_grey<vxl_uint_16,vil_byte>( const vil_image&, void*, int, int, int, int );
+template bool convert_rgb_to_grey<float,vil_byte>( const vil_image&, void*, int, int, int, int );
+template bool convert_rgb_to_grey<double,vil_byte>( const vil_image&, void*, int, int, int, int );
+
+template bool convert_grey_to_grey<vil_byte,float>( const vil_image&, void*, int, int, int, int );
+template bool convert_grey_to_grey<vxl_uint_16,float>( const vil_image&, void*, int, int, int, int );
+template bool convert_grey_to_grey<vxl_uint_32,float>( const vil_image&, void*, int, int, int, int );
+template bool convert_grey_to_grey<float,float>( const vil_image&, void*, int, int, int, int );
+template bool convert_grey_to_grey<double,float>( const vil_image&, void*, int, int, int, int );
+template bool convert_rgb_to_grey<vil_byte,float>( const vil_image&, void*, int, int, int, int );
+template bool convert_rgb_to_grey<vxl_uint_16,float>( const vil_image&, void*, int, int, int, int );
+//template bool convert_rgb_to_grey<float,float>( const vil_image&, void*, int, int, int, int );
+template bool convert_rgb_to_grey<double,float>( const vil_image&, void*, int, int, int, int );
+
+template bool convert_grey_to_grey<vil_byte,double>( const vil_image&, void*, int, int, int, int );
+template bool convert_grey_to_grey<vxl_uint_16,double>( const vil_image&, void*, int, int, int, int );
+template bool convert_grey_to_grey<vxl_uint_32,double>( const vil_image&, void*, int, int, int, int );
+template bool convert_grey_to_grey<float,double>( const vil_image&, void*, int, int, int, int );
+//template bool convert_grey_to_grey<double,double>( const vil_image&, void*, int, int, int, int );
+template bool convert_rgb_to_grey<vil_byte,double>( const vil_image&, void*, int, int, int, int );
+template bool convert_rgb_to_grey<vxl_uint_16,double>( const vil_image&, void*, int, int, int, int );
+template bool convert_rgb_to_grey<float,double>( const vil_image&, void*, int, int, int, int );
+template bool convert_rgb_to_grey<double,double>( const vil_image&, void*, int, int, int, int );
+
+//template bool convert_grey_to_rgb<vil_byte,unsigned char>( const vil_image&, void*, int, int, int, int );
+template bool convert_grey_to_rgb<vxl_uint_16,unsigned char>( const vil_image&, void*, int, int, int, int );
+template bool convert_grey_to_rgb<vxl_uint_32,unsigned char>( const vil_image&, void*, int, int, int, int );
+template bool convert_grey_to_rgb<float,unsigned char>( const vil_image&, void*, int, int, int, int );
+template bool convert_grey_to_rgb<double,unsigned char>( const vil_image&, void*, int, int, int, int );
+template bool convert_rgb_to_rgb<vil_byte,unsigned char>( const vil_image&, void*, int, int, int, int );
+template bool convert_rgb_to_rgb<vxl_uint_16,unsigned char>( const vil_image&, void*, int, int, int, int );
+template bool convert_rgb_to_rgb<float,unsigned char>( const vil_image&, void*, int, int, int, int );
+template bool convert_rgb_to_rgb<double,unsigned char>( const vil_image&, void*, int, int, int, int );
+template bool convert_rgba_to_rgb<vil_byte,unsigned char>( const vil_image&, void*, int, int, int, int );
+
+template bool convert_grey_to_rgb<vil_byte,float>( const vil_image&, void*, int, int, int, int );
+template bool convert_grey_to_rgb<vxl_uint_16,float>( const vil_image&, void*, int, int, int, int );
+template bool convert_grey_to_rgb<vxl_uint_32,float>( const vil_image&, void*, int, int, int, int );
+template bool convert_grey_to_rgb<float,float>( const vil_image&, void*, int, int, int, int );
+template bool convert_grey_to_rgb<double,float>( const vil_image&, void*, int, int, int, int );
+template bool convert_rgb_to_rgb<vil_byte,float>( const vil_image&, void*, int, int, int, int );
+template bool convert_rgb_to_rgb<vxl_uint_16,float>( const vil_image&, void*, int, int, int, int );
+//template bool convert_rgb_to_rgb<float,float>( const vil_image&, void*, int, int, int, int );
+template bool convert_rgb_to_rgb<double,float>( const vil_image&, void*, int, int, int, int );
+template bool convert_rgba_to_rgb<vil_byte,float>( const vil_image&, void*, int, int, int, int );
+
+
+//--------------------------------------------------------------------------------
+
 VCL_DEFINE_SPECIALIZATION // specialize for int.
 bool vil_image_as_impl<int>::get_section(void *buf, int x0, int y0, int width, int height) const {
-  // byte greyscale
-  if (vil_pixel_format(image) == VIL_BYTE) {
-    vcl_vector<vil_byte> scan(width);
-    for (int j=0; j<height; ++j) {
-      if (!image.get_section(/* xxx */&scan[0], x0, y0+j, width, 1))
-        return false;
-      for (int i=0; i<width; ++i)
-        static_cast<int*>(buf)[i + width*j] = int(scan[i]);
-    }
-    return true;
-  }
+  typedef int Outtype;
 
-  // byte rgb
-  else if (vil_pixel_format(image) == VIL_RGB_BYTE) {
-    vcl_vector<vil_byte> scan(3*width);
-    for (int j=0; j<height; ++j) {
-      if (!image.get_section(/* xxx */&scan[0], x0, y0+j, width, 1))
-        return false;
-      for (int i=0; i<width; ++i) {
-        // use different weights?
-        unsigned char r(scan[3*i+0]);
-        unsigned char g(scan[3*i+1]);
-        unsigned char b(scan[3*i+2]);
-        static_cast<int*>(buf)[i + width*j] = int(0.5+r*0.299+0.587*g+0.114*b);
-      }
-    }
-    return true;
-  }
-
-  // float
-  else if (vil_pixel_format(image) == VIL_FLOAT) {
-    vcl_vector<float> scan(width);
-    for (int j=0; j<height; ++j) {
-      if (!image.get_section(/* xxx */&scan[0], x0, y0+j, width, 1))
-        return false;
-      for (int i=0; i<width; ++i)
-        static_cast<int*>(buf)[i + width*j] = int(scan[i]);
-    }
-    return true;
-  }
-
-  // double
-  else if (vil_pixel_format(image) == VIL_DOUBLE) {
-    vcl_vector<double> scan(width);
-    for (int j=0; j<height; ++j) {
-      if (!image.get_section(/* xxx */&scan[0], x0, y0+j, width, 1))
-        return false;
-      for (int i=0; i<width; ++i)
-        static_cast<int*>(buf)[i + width*j] = int(scan[i]);
-    }
-    return true;
-  }
-
-  //
-  else {
+  switch( vil_pixel_format(image) ) {
+  case VIL_BYTE:
+    return convert_grey_to_grey<vil_byte,Outtype>( image, buf, x0, y0, width, height );
+  case VIL_UINT16:
+    return convert_grey_to_grey<vxl_uint_16,Outtype>( image, buf, x0, y0, width, height );
+  case VIL_UINT32:
+    return image.get_section( buf, x0, y0, width, height );
+  case VIL_FLOAT:
+    return convert_grey_to_grey<float,Outtype>( image, buf, x0, y0, width, height );
+  case VIL_DOUBLE:
+    return convert_grey_to_grey<double,Outtype>( image, buf, x0, y0, width, height );
+  case VIL_RGB_BYTE:
+    return convert_rgb_to_grey<vil_byte,Outtype>( image, buf, x0, y0, width, height );
+  case VIL_RGB_UINT16:
+    return convert_rgb_to_grey<vxl_uint_16,Outtype>( image, buf, x0, y0, width, height );
+  case VIL_RGB_FLOAT:
+    return convert_rgb_to_grey<float,Outtype>( image, buf, x0, y0, width, height );
+  case VIL_RGB_DOUBLE:
+    return convert_rgb_to_grey<double,Outtype>( image, buf, x0, y0, width, height );
+  default:
     vcl_cerr << __FILE__ ": get_section() not implemented for " << image << vcl_endl;
     assert(false/* implement for your image type as needed */);
     return false;
@@ -160,63 +268,40 @@ vil_image vil_image_as_int(vil_image const &image) {
   return vil_image(new vil_image_as_impl<int>(image));
 }
 
+VCL_DEFINE_SPECIALIZATION
+vil_image vil_image_as<int>(vil_image const &image) {
+  return vil_image(new vil_image_as_impl<int>(image));
+}
+
 //--------------------------------------------------------------------------------
 
 VCL_DEFINE_SPECIALIZATION // specialize for byte.
 bool vil_image_as_impl<vil_byte>::get_section(void *buf, int x0, int y0, int width, int height) const {
-  // byte greyscale
-  switch (vil_pixel_format(image)) {
-  case VIL_BYTE: {
-    return image.get_section(buf, x0, y0, width, height);
-  }
+  typedef vil_byte Outtype;
 
-  // byte rgb
-  case VIL_RGB_BYTE: {
-    vcl_vector<vil_byte> scan(3*width);
-    for (int j=0; j<height; ++j) {
-      if (!image.get_section(/* xxx */&scan[0], x0, y0+j, width, 1))
-        return false;
-      for (int i=0; i<width; ++i) {
-        // use different weights?
-        unsigned char r(scan[3*i+0]);
-        unsigned char g(scan[3*i+1]);
-        unsigned char b(scan[3*i+2]);
-        static_cast<vil_byte*>(buf)[i + width*j] = unsigned(0.5+r*0.299+0.587*g+0.114*b);
-      }
-    }
-    return true;
-  }
-
-  // float
-  case VIL_FLOAT: {
-    vcl_vector<float> scan(width);
-    for (int j=0; j<height; ++j) {
-      if (!image.get_section(/* xxx */&scan[0], x0, y0+j, width, 1))
-        return false;
-      for (int i=0; i<width; ++i)
-        static_cast<vil_byte*>(buf)[i + width*j] = vil_byte(scan[i]);
-    }
-    return true;
-  }
-
-  // double
-  case VIL_DOUBLE: {
-    vcl_vector<double> scan(width);
-    for (int j=0; j<height; ++j) {
-      if (!image.get_section(/* xxx */&scan[0], x0, y0+j, width, 1))
-        return false;
-      for (int i=0; i<width; ++i)
-        static_cast<vil_byte*>(buf)[i + width*j] = vil_byte(scan[i]);
-    }
-    return true;
-  }
-
-  //
-  default: {
+  switch( vil_pixel_format(image) ) {
+  case VIL_BYTE:
+    return image.get_section( buf, x0, y0, width, height );
+  case VIL_UINT16:
+    return convert_grey_to_grey<vxl_uint_16,Outtype>( image, buf, x0, y0, width, height );
+  case VIL_UINT32:
+    return convert_grey_to_grey<vxl_uint_32,Outtype>( image, buf, x0, y0, width, height );
+  case VIL_FLOAT:
+    return convert_grey_to_grey<float,Outtype>( image, buf, x0, y0, width, height );
+  case VIL_DOUBLE:
+    return convert_grey_to_grey<double,Outtype>( image, buf, x0, y0, width, height );
+  case VIL_RGB_BYTE:
+    return convert_rgb_to_grey<vil_byte,Outtype>( image, buf, x0, y0, width, height );
+  case VIL_RGB_UINT16:
+    return convert_rgb_to_grey<vxl_uint_16,Outtype>( image, buf, x0, y0, width, height );
+  case VIL_RGB_FLOAT:
+    return convert_rgb_to_grey<float,Outtype>( image, buf, x0, y0, width, height );
+  case VIL_RGB_DOUBLE:
+    return convert_rgb_to_grey<double,Outtype>( image, buf, x0, y0, width, height );
+  default:
     vcl_cerr << __FILE__ ": get_section() not implemented for " << image << vcl_endl;
     assert(false/* implement for your image type as needed */);
     return false;
-  }
   }
 }
 /* START_MANCHESTER_BINARY_IO_CODE */
@@ -244,61 +329,37 @@ vil_image vil_image_as_byte(vil_image const &image) {
   return vil_image(new vil_image_as_impl<vil_byte>(image));
 }
 
+VCL_DEFINE_SPECIALIZATION
+vil_image vil_image_as<vil_byte>(vil_image const &image) {
+  return vil_image(new vil_image_as_impl<vil_byte>(image));
+}
+
 //--------------------------------------------------------------------------------
 
 VCL_DEFINE_SPECIALIZATION // specialize for float.
 bool vil_image_as_impl<float>::get_section(void *buf, int x0, int y0, int width, int height) const {
-  // byte greyscale
-  if (vil_pixel_format(image) == VIL_BYTE) {
-    vcl_vector<vil_byte> scan(width);
-    for (int j=0; j<height; ++j) {
-      if (!image.get_section(/* xxx */&scan[0], x0, y0+j, width, 1))
-        return false;
-      for (int i=0; i<width; ++i)
-        static_cast<float*>(buf)[i + width*j] = scan[i];
-    }
-    return true;
-  }
+  typedef float Outtype;
 
-  // int greyscale
-  if (vil_pixel_format(image) == VIL_UINT32) {
-    vcl_vector<unsigned int> scan(width);
-    for (int j=0; j<height; ++j) {
-      if (!image.get_section(/* xxx */&scan[0], x0, y0+j, width, 1))
-        return false;
-      const int SCALE = 0x01000000U;  // fixme?
-      for (int i=0; i<width; ++i)
-        static_cast<float*>(buf)[i + width*j] = scan[i] / SCALE;
-    }
-    return true;
-  }
-
-  // double greyscale
-  if (vil_pixel_format(image) == VIL_DOUBLE) {
-    vcl_vector<double> scan(width);
-    for (int j=0; j<height; ++j) {
-      if (!image.get_section(/* xxx */&scan[0], x0, y0+j, width, 1))
-        return false;
-      for (int i=0; i<width; ++i)
-        static_cast<float*>(buf)[i + width*j] = scan[i];
-    }
-    return true;
-  }
-
-  // byte rgb
-  else if (vil_pixel_format(image) == VIL_RGB_BYTE) {
-    vcl_vector<vil_byte> scan(3*width);
-    for (int j=0; j<height; ++j) {
-      if (!image.get_section(/* xxx */&scan[0], x0, y0+j, width, 1))
-        return false;
-      for (int i=0; i<width; ++i)
-        static_cast<float*>(buf)[i + width*j] = 0.299*scan[3*i+0] + 0.587*scan[3*i+1] + 0.114*scan[3*i+2];
-    }
-    return true;
-  }
-
-  //
-  else {
+  switch( vil_pixel_format(image) ) {
+  case VIL_BYTE:
+    return convert_grey_to_grey<vil_byte,Outtype>( image, buf, x0, y0, width, height );
+  case VIL_UINT16:
+    return convert_grey_to_grey<vxl_uint_16,Outtype>( image, buf, x0, y0, width, height );
+  case VIL_UINT32:
+    return convert_grey_to_grey<vxl_uint_32,Outtype>( image, buf, x0, y0, width, height );
+  case VIL_FLOAT:
+    return convert_grey_to_grey<float,Outtype>( image, buf, x0, y0, width, height );
+  case VIL_DOUBLE:
+    return convert_grey_to_grey<double,Outtype>( image, buf, x0, y0, width, height );
+  case VIL_RGB_BYTE:
+    return convert_rgb_to_grey<vil_byte,Outtype>( image, buf, x0, y0, width, height );
+  case VIL_RGB_UINT16:
+    return convert_rgb_to_grey<vxl_uint_16,Outtype>( image, buf, x0, y0, width, height );
+  case VIL_RGB_FLOAT:
+    return image.get_section( buf, x0, y0, width, height );
+  case VIL_RGB_DOUBLE:
+    return convert_rgb_to_grey<double,Outtype>( image, buf, x0, y0, width, height );
+  default:
     vcl_cerr << __FILE__ ": get_section() not implemented for " << image << vcl_endl;
     assert(false/* implement for your image type as needed */);
     return false;
@@ -330,47 +391,37 @@ vil_image vil_image_as_float(vil_image const &image) {
   return vil_image(new vil_image_as_impl<float>(image));
 }
 
+VCL_DEFINE_SPECIALIZATION
+vil_image vil_image_as<float>(vil_image const &image) {
+  return vil_image(new vil_image_as_impl<float>(image));
+}
+
 //--------------------------------------------------------------------------------
 
 VCL_DEFINE_SPECIALIZATION // specialize for double.
 bool vil_image_as_impl<double>::get_section(void *buf, int x0, int y0, int width, int height) const {
-  // byte greyscale
-  if (vil_pixel_format(image) == VIL_BYTE) {
-    vcl_vector<vil_byte> scan(width);
-    for (int j=0; j<height; ++j) {
-      if (!image.get_section(/* xxx */&scan[0], x0, y0+j, width, 1))
-        return false;
-      for (int i=0; i<width; ++i)
-        static_cast<double*>(buf)[i + width*j] = scan[i];
-    }
-    return true;
-  }
-  // float greyscale
-  if (vil_pixel_format(image) == VIL_FLOAT) {
-    vcl_vector<float> scan(width);
-    for (int j=0; j<height; ++j) {
-      if (!image.get_section(/* xxx */&scan[0], x0, y0+j, width, 1))
-        return false;
-      for (int i=0; i<width; ++i)
-        static_cast<double*>(buf)[i + width*j] = scan[i];
-    }
-    return true;
-  }
+  typedef double Outtype;
 
-  // byte rgb
-  else if (vil_pixel_format(image) == VIL_RGB_BYTE) {
-    vcl_vector<vil_byte> scan(3*width);
-    for (int j=0; j<height; ++j) {
-      if (!image.get_section(/* xxx */&scan[0], x0, y0+j, width, 1))
-        return false;
-      for (int i=0; i<width; ++i)
-        static_cast<double*>(buf)[i + width*j] = 0.299*scan[3*i+0] + 0.587*scan[3*i+1] + 0.114*scan[3*i+2];
-    }
-    return true;
-  }
-
-  //
-  else {
+  switch( vil_pixel_format(image) ) {
+  case VIL_BYTE:
+    return convert_grey_to_grey<vil_byte,Outtype>( image, buf, x0, y0, width, height );
+  case VIL_UINT16:
+    return convert_grey_to_grey<vxl_uint_16,Outtype>( image, buf, x0, y0, width, height );
+  case VIL_UINT32:
+    return convert_grey_to_grey<vxl_uint_32,Outtype>( image, buf, x0, y0, width, height );
+  case VIL_FLOAT:
+    return convert_grey_to_grey<float,Outtype>( image, buf, x0, y0, width, height );
+  case VIL_DOUBLE:
+    return convert_grey_to_grey<double,Outtype>( image, buf, x0, y0, width, height );
+  case VIL_RGB_BYTE:
+    return convert_rgb_to_grey<vil_byte,Outtype>( image, buf, x0, y0, width, height );
+  case VIL_RGB_UINT16:
+    return convert_rgb_to_grey<vxl_uint_16,Outtype>( image, buf, x0, y0, width, height );
+  case VIL_RGB_FLOAT:
+    return convert_rgb_to_grey<float,Outtype>( image, buf, x0, y0, width, height );
+  case VIL_RGB_DOUBLE:
+    return image.get_section( buf, x0, y0, width, height );
+  default:
     vcl_cerr << __FILE__ ": get_section() not implemented for " << image << vcl_endl;
     assert(false/* implement for your image type as needed */);
     return false;
@@ -403,6 +454,11 @@ vil_image vil_image_as_double(vil_image const &image) {
   return vil_image(new vil_image_as_impl<double>(image));
 }
 
+VCL_DEFINE_SPECIALIZATION
+vil_image vil_image_as<double>(vil_image const &image) {
+  return vil_image(new vil_image_as_impl<double>(image));
+}
+
 //--------------------------------------------------------------------------------
 
 VCL_DEFINE_SPECIALIZATION // specialize for rgb.
@@ -410,58 +466,30 @@ bool vil_image_as_impl<vil_rgb<unsigned char> >::get_section(void *buf,
                                                              int x0, int y0,
                                                              int width, int height) const
 {
-  // byte greyscale
-  if (vil_pixel_format(image) == VIL_BYTE) {
-    vcl_vector<vil_byte> scan(width);
-    for (int j=0; j<height; ++j) {
-      if (!image.get_section(/* xxx */&scan[0], x0, y0+j, width, 1))
-        return false;
-      for (int i=0; i<width; ++i) {
-        static_cast<vil_byte*>(buf)[3*(i + width*j)+0] = scan[i];
-        static_cast<vil_byte*>(buf)[3*(i + width*j)+1] = scan[i];
-        static_cast<vil_byte*>(buf)[3*(i + width*j)+2] = scan[i];
-      }
-    }
-    return true;
-  }
+  typedef unsigned char Outtype;
 
-  // float rgb
-  else if (vil_pixel_format(image) == VIL_RGB_FLOAT) {
-    vcl_vector<float> scan(3*width);
-    for (int j=0; j<height; ++j) {
-      if (!image.get_section(/* xxx */&scan[0], x0, y0+j, width, 1))
-        return false;
-      for (int i=0; i<width; ++i) {
-        static_cast<vil_byte*>(buf)[3*(i + width*j)+0] = vil_byte(scan[3*i+0]);
-        static_cast<vil_byte*>(buf)[3*(i + width*j)+1] = vil_byte(scan[3*i+1]);
-        static_cast<vil_byte*>(buf)[3*(i + width*j)+2] = vil_byte(scan[3*i+2]);
-      }
-    }
-    return true;
-  }
-
-
-  else if (vil_pixel_format(image) == VIL_RGBA_BYTE) {
-    vcl_vector<vil_byte> scan(4*width);
-    for (int j=0; j<height; ++j) {
-      if (!image.get_section(&scan[0], x0, y0+j, width, 1))
-        return false;
-      for (int i=0; i<width; ++i) {
-        static_cast<vil_byte*>(buf)[3*(i + width*j)+0] = vil_byte(scan[4*i+0]);
-        static_cast<vil_byte*>(buf)[3*(i + width*j)+1] = vil_byte(scan[4*i+1]);
-        static_cast<vil_byte*>(buf)[3*(i + width*j)+2] = vil_byte(scan[4*i+2]);
-      }
-    }
-    return true;
-  }
-
-
-  // byte rgb
-  else if (vil_pixel_format(image) == VIL_RGB_BYTE)
-    return image.get_section(buf, x0, y0, width, height);
-
-  //
-  else {
+  switch( vil_pixel_format(image) ) {
+  case VIL_BYTE:
+    return convert_grey_to_rgb<vil_byte,Outtype>( image, buf, x0, y0, width, height );
+  case VIL_UINT16:
+    return convert_grey_to_rgb<vxl_uint_16,Outtype>( image, buf, x0, y0, width, height );
+  case VIL_UINT32:
+    return convert_grey_to_rgb<vxl_uint_32,Outtype>( image, buf, x0, y0, width, height );
+  case VIL_FLOAT:
+    return convert_grey_to_rgb<float,Outtype>( image, buf, x0, y0, width, height );
+  case VIL_DOUBLE:
+    return convert_grey_to_rgb<double,Outtype>( image, buf, x0, y0, width, height );
+  case VIL_RGB_BYTE:
+    return image.get_section( buf, x0, y0, width, height );
+  case VIL_RGB_UINT16:
+    return convert_rgb_to_rgb<vxl_uint_16,Outtype>( image, buf, x0, y0, width, height );
+  case VIL_RGB_FLOAT:
+    return convert_rgb_to_rgb<float,Outtype>( image, buf, x0, y0, width, height );
+  case VIL_RGB_DOUBLE:
+    return convert_rgb_to_rgb<double,Outtype>( image, buf, x0, y0, width, height );
+  case VIL_RGBA_BYTE:
+    return convert_rgba_to_rgb<vil_byte,Outtype>( image, buf, x0, y0, width, height );
+  default:
     vcl_cerr << __FILE__ ": get_section() not implemented for " << image << vcl_endl;
     assert(false/* implement for your image type as needed */);
     return false;
@@ -492,6 +520,11 @@ vil_image vil_image_as_rgb_byte(vil_image const &image) {
   return vil_image(new vil_image_as_impl<vil_rgb<unsigned char> >(image));
 }
 
+VCL_DEFINE_SPECIALIZATION
+vil_image vil_image_as<vil_rgb<vil_byte> >(vil_image const &image) {
+  return vil_image(new vil_image_as_impl<vil_rgb<vil_byte> >(image));
+}
+
 //--------------------------------------------------------------------------------
 
 VCL_DEFINE_SPECIALIZATION // specialize for rgb.
@@ -499,41 +532,30 @@ bool vil_image_as_impl<vil_rgb<float> >::get_section(void *buf,
                                                      int x0, int y0,
                                                      int width, int height) const
 {
-  // byte greyscale
-  if (vil_pixel_format(image) == VIL_BYTE) {
-    vcl_vector<vil_byte> scan(width);
-    for (int j=0; j<height; ++j) {
-      if (!image.get_section(/* xxx */&scan[0], x0, y0+j, width, 1))
-        return false;
-      for (int i=0; i<width; ++i) {
-        static_cast<float*>(buf)[3*(i + width*j)+0] = scan[i];
-        static_cast<float*>(buf)[3*(i + width*j)+1] = scan[i];
-        static_cast<float*>(buf)[3*(i + width*j)+2] = scan[i];
-      }
-    }
-    return true;
-  }
+  typedef float Outtype;
 
-  else if (vil_pixel_format(image) == VIL_RGB_BYTE) {
-    vcl_vector<vil_byte> scan(3*width);
-    for (int j=0; j<height; ++j) {
-      if (!image.get_section(/* xxx */&scan[0], x0, y0+j, width, 1))
-        return false;
-      for (int i=0; i<width; ++i) {
-        static_cast<float*>(buf)[3*(i + width*j)+0] = scan[3*i + 0];
-        static_cast<float*>(buf)[3*(i + width*j)+1] = scan[3*i + 1];
-        static_cast<float*>(buf)[3*(i + width*j)+2] = scan[3*i + 2];
-      }
-    }
-    return true;
-  }
-
-  // float rgb
-  else if (vil_pixel_format(image) == VIL_RGB_FLOAT)
-    return image.get_section(buf, x0, y0, width, height);
-
-  //
-  else {
+  switch( vil_pixel_format(image) ) {
+  case VIL_BYTE:
+    return convert_grey_to_rgb<vil_byte,Outtype>( image, buf, x0, y0, width, height );
+  case VIL_UINT16:
+    return convert_grey_to_rgb<vxl_uint_16,Outtype>( image, buf, x0, y0, width, height );
+  case VIL_UINT32:
+    return convert_grey_to_rgb<vxl_uint_32,Outtype>( image, buf, x0, y0, width, height );
+  case VIL_FLOAT:
+    return convert_grey_to_rgb<float,Outtype>( image, buf, x0, y0, width, height );
+  case VIL_DOUBLE:
+    return convert_grey_to_rgb<double,Outtype>( image, buf, x0, y0, width, height );
+  case VIL_RGB_BYTE:
+    return convert_rgb_to_rgb<vil_byte,Outtype>( image, buf, x0, y0, width, height );
+  case VIL_RGB_UINT16:
+    return convert_rgb_to_rgb<vxl_uint_16,Outtype>( image, buf, x0, y0, width, height );
+  case VIL_RGB_FLOAT:
+    return image.get_section( buf, x0, y0, width, height );
+  case VIL_RGB_DOUBLE:
+    return convert_rgb_to_rgb<double,Outtype>( image, buf, x0, y0, width, height );
+  case VIL_RGBA_BYTE:
+    return convert_rgba_to_rgb<vil_byte,Outtype>( image, buf, x0, y0, width, height );
+  default:
     vcl_cerr << __FILE__ ": get_section() not implemented for " << image << vcl_endl;
     assert(false/* implement for your image type as needed */);
     return false;
@@ -566,3 +588,7 @@ vil_image vil_image_as_rgb_float(vil_image const &image) {
   return vil_image(new vil_image_as_impl<vil_rgb<float> >(image));
 }
 
+VCL_DEFINE_SPECIALIZATION
+vil_image vil_image_as<vil_rgb<float> >(vil_image const &image) {
+  return vil_image(new vil_image_as_impl<vil_rgb<float> >(image));
+}
