@@ -16,11 +16,11 @@
 #include <vidl/vidl_movie_sptr.h>
 #include <vidl/vidl_frame_sptr.h>
 #include <vidl/vidl_clip.h>
-#include <vil/vil_image_view.h>
+#include <vil/vil_image_view_base.h>
 #include <vcl_list.h>
 
 //: Video movie
-//   A vidl_movie is a movie sequence
+//   A vidl_movie is a movie sequence.
 //   It is basically a list of clips.
 // See also vidl_frame and vidl_clip.
 class vidl_movie : public vbl_ref_count

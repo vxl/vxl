@@ -1,4 +1,4 @@
-// This is core/vidl/example/vidl_player_manager.cxx
+// This is core/vidl/examples/vidl_player_manager.cxx
 #include "vidl_player_manager.h"
 //:
 // \file
@@ -6,7 +6,7 @@
 
 #include <vcl_iostream.h>
 #include <vul/vul_timer.h>
-#include <vil/vil_image_view.h>
+#include <vil/vil_image_view_base.h>
 #include <vgui/vgui.h>
 #include <vgui/vgui_error_dialog.h>
 #include <vgui/vgui_tableau.h>
@@ -75,7 +75,6 @@ bool vidl_player_manager::handle(const vgui_event &e)
 }
 
 
-
 //-----------------------------------------------------------------------------
 //: Loads a video file, e.g. avi into the viewer
 //-----------------------------------------------------------------------------
@@ -107,15 +106,15 @@ void vidl_player_manager::load_video_file()
     win_->reshape(width_, height_);
 
   itab_->set_image_view(*img_view);
-  
-  if (preload_frames_){
+
+  if (preload_frames_) {
     vidl_movie::frame_iterator pf = my_movie_->first();
-    for (pf = my_movie_->first(); pf!=my_movie_->last(); ++pf){
+    for (pf = my_movie_->first(); pf!=my_movie_->last(); ++pf) {
       // Cause the image to load from the disk (and cache in the frame)
       pf->get_view();
     }
   }
- 
+
   itab_->post_redraw();
   vgui::run_till_idle();
 }
@@ -134,8 +133,8 @@ void vidl_player_manager::redraw()
 //  unless paused or stopped first
 void vidl_player_manager::play_video()
 {
-  if(play_video_) return;
-  if (!my_movie_){
+  if (play_video_) return;
+  if (!my_movie_) {
     vcl_cout << "No movie has been loaded\n";
     return;
   }
@@ -143,15 +142,15 @@ void vidl_player_manager::play_video()
   play_video_ = true;
   vul_timer t;
 
-  for(; pframe_!=my_movie_->end() && play_video_;++pframe_){
+  for (; pframe_!=my_movie_->end() && play_video_;++pframe_) {
     this->redraw();
     //Delay until the time interval has passed
     while (t.all()<time_interval_);
     t.mark();
   }
-   
+
   // if played to the end, go back to the first frame;
-  if(play_video_)
+  if (play_video_)
     this->stop_video();
 }
 
@@ -174,15 +173,14 @@ void vidl_player_manager::pause_video()
 // and prompt for the frame number to jump to.
 void vidl_player_manager::go_to_frame()
 {
-  if(play_video_) return;
+  if (play_video_) return;
   static int frame_num = 0;
   vgui_dialog go_to_frame_dlg("Go to Frame");
   go_to_frame_dlg.field("Frame Number", frame_num);
   if (!go_to_frame_dlg.ask())
     return;
 
-  if( (frame_num < my_movie_->length()) &&
-      (frame_num >= 0) ){
+  if ( (frame_num < my_movie_->length()) && (frame_num >= 0) ) {
     pframe_ = frame_num;
     this->redraw();
   }
@@ -191,18 +189,18 @@ void vidl_player_manager::go_to_frame()
 //If the video is not playing go to the next frame
 void vidl_player_manager::next_frame()
 {
-  if(play_video_) return;
-  if (pframe_!=my_movie_->last()){ 
+  if (play_video_) return;
+  if (pframe_!=my_movie_->last()) {
     ++pframe_;
     this->redraw();
-  } 
+  }
 }
 
 //If the video is not playing go to the previous frame
 void vidl_player_manager::prev_frame()
 {
-  if(play_video_) return;
-  if(pframe_!=my_movie_->first()){
+  if (play_video_) return;
+  if (pframe_!=my_movie_->first()) {
     --pframe_;
     this->redraw();
   }
