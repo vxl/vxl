@@ -156,7 +156,7 @@ void test_I()
 }
 
 template <class T>
-void test_svd_recomposition(char const *type, double maxres, T */*tag*/)
+void test_svd_recomposition(char const *type, double maxres, T* /* tag */)
 {
   // Test inversion of 5x5 matrix of T :
   vcl_cout << "----- testing vnl_svd<" << type << "> recomposition -----" << vcl_endl;
