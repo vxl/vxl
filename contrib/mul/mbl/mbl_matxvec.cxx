@@ -18,7 +18,7 @@
 #include <vnl/vnl_matrix.h>
 #include <mbl/mbl_matxvec.h>
 #include <vcl_cassert.h>
-
+#include <vcl_iostream.h>
 
 
 
