@@ -39,11 +39,13 @@ void test_convolve()
   vnl_vector<double> l(10000), k3(2000);
   test_util_fill_random(l.begin(), l.end());
   test_util_fill_random(k3.begin(), k3.end());
+  const unsigned ntimes = 10; // repeat some expts to get more accurate timings.
+  vnl_vector<double> r9;
   vul_timer timer;
-  vnl_vector<double> r9 = vnl_convolve(l, k3);
+  for (unsigned i=0; i < ntimes; ++i)
+    r9 = vnl_convolve(l, k3);
   int ms1 = timer.user();
-  vcl_cout << "Done straightforward 10000x2000 convolution in " << ms1 << " milliseconds\n";
-  const unsigned ntimes = 3; // repeat some expts to get accurate timings.
+  vcl_cout << "Done straightforward 10000x2000 convolution in " << ms1/double(ntimes) << " milliseconds\n";
 
   vnl_vector<double> r10;
   timer.mark();
@@ -51,8 +53,8 @@ void test_convolve()
     r10 = vnl_convolve(l, k3, 16384);
   int ms2 = timer.user();
   TEST("vnl_convolve() with_fft(16384)", (r9-r10).two_norm() < 1e-6, true);
-  TEST("vnl_convolve() timing: should be at least 3x faster", 3*ms2 < ms1*double(ntimes), true);
   vcl_cout << "Done FFT-2-based 10000x2000 convolution in " << ms2/double(ntimes) << " milliseconds\n";
+  TEST("vnl_convolve() timing: should be at least 3x faster", 3*ms2 < ms1, true);
 
   vnl_vector<double> r11;
   timer.mark();
@@ -60,8 +62,8 @@ void test_convolve()
     r11 = vnl_convolve(l, k3, 12800);
   int ms3 = timer.user();
   TEST("vnl_convolve() with_fft(12800)", (r9-r11).two_norm() < 1e-6, true);
-  TEST("vnl_convolve() timing: should even be faster", ms3 < ms2, true);
   vcl_cout << "Done FFT-2,5-based 10000x2000 convolution in " << ms3/double(ntimes) << " milliseconds\n";
+  TEST("vnl_convolve() timing: should even be faster", ms3 < ms2, true);
 
   vnl_vector<double> r12;
   timer.mark();
@@ -69,8 +71,8 @@ void test_convolve()
     r12 = vnl_convolve(l, k3, 27648);
   int ms4 = timer.user();
   TEST("vnl_convolve() with_fft(27648)", (r9-r12).two_norm() < 1e-6, true);
-  TEST("vnl_convolve() timing: should be slower", ms4 > ms2, true);
   vcl_cout << "Done FFT-2,3-based 10000x2000 convolution in " << ms4/double(ntimes) << " milliseconds\n";
+  TEST("vnl_convolve() timing: should be slower", ms4 > ms2, true);
 
   double c1_data[] = { -1, 0, 1, 2, 3, 4 };
   vnl_vector<double> c1(6, 6, c1_data);
