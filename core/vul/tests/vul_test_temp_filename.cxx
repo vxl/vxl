@@ -20,13 +20,15 @@ int main()
     ostr << 1;
     ostr.close();
     // now reading back, to see if the file really exists:
-    vcl_ifstream istr( filename.c_str() );
-    TEST("Opening temporary file", istr.good(), true);
-    int i=0; istr >> i;
-    TEST("Writing to temporary file", i, 1);
-
+    {
+      vcl_ifstream istr( filename.c_str() );
+      TEST("Opening temporary file", istr.good(), true);
+      int i=0; istr >> i;
+      TEST("Writing to temporary file", i, 1);
+    }
     TEST("Removing temporary file", vpl_unlink(filename.c_str()) == -1, false);
   }
+
 
   {
     vcl_string filename1 = vul_temp_filename();
