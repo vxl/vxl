@@ -11,7 +11,7 @@
 # include <vcl/emulation/vcl_new.h>
 
 // -------------------- gcc with old library
-#elif defined(VCL_GCC) && !defined(GNU_LIBSTDCXX_V3)
+#elif (defined(VCL_GCC) && !defined(GNU_LIBSTDCXX_V3)) || defined(VCL_SGI_CC_720)
 # include <new.h>
 
 // -------------------- iso
