@@ -37,7 +37,6 @@ MANPAGE_SOURCES += vbl_protection_traits.txx
 MANPAGE_SOURCES += vbl_smart_ptr.txx
 MANPAGE_SOURCES += vbl_sort.txx
 
-#MANPAGE_SOURCES += vbl_sparse_array.txx # deprecated
 MANPAGE_SOURCES += vbl_sparse_array_base.txx
 MANPAGE_SOURCES += vbl_sparse_array_1d.txx
 MANPAGE_SOURCES += vbl_sparse_array_2d.txx
