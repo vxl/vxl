@@ -265,6 +265,7 @@ class vil2_image_view : public vil2_image_view_base
   // when the underlying data is formatted appropriately and the lhs has
   // as many components as the rhs has planes. O(1).
   // If the view types are not compatible this object will be set to empty.
+  // If the pointer is null, this object will be set to empty.
   const vil2_image_view<T> & operator = (const vil2_image_view_base_sptr & rhs)
   {
     if (!rhs) clear();

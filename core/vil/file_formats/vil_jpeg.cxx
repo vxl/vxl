@@ -135,7 +135,7 @@ vil2_image_view_base_sptr vil2_jpeg_image::get_copy_view(unsigned x0,
                                                          unsigned ny) const {
   if (!jd) {
     vcl_cerr << "attempted get_copy_view() failed -- no jpeg decompressor\n";
-    return false;
+    return 0;
   }
   //vcl_cerr << "get_copy_view " << ' ' << x0 << ' ' << nx << ' ' << y0 << ' ' << ny << vcl_endl;
 
@@ -147,7 +147,7 @@ vil2_image_view_base_sptr vil2_jpeg_image::get_copy_view(unsigned x0,
   for (int i=0; i<ny; ++i) {
     JSAMPLE const *scanline = jd->read_scanline(y0+i);
     if (!scanline)
-      return false; // failed
+      return 0; // failed
 
     vcl_memcpy(static_cast<char*>(chunk->data()) + i*nx*bpp, &scanline[x0*bpp], nx*bpp);
   }
@@ -224,7 +224,6 @@ vil2_pixel_format vil2_jpeg_image::pixel_format() const {
 }
 
 
-//:
 char const *vil2_jpeg_image::file_format() const {
   return jpeg_string;
 }
