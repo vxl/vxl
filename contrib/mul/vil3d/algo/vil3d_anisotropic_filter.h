@@ -10,11 +10,12 @@
 #include <vnl/vnl_math.h>
 #include <vil3d/vil3d_switch_axes.h>
 #include <vil3d/vil3d_convert.h>
+#include <vil3d/vil3d_print.h>
 
 
 //:
 // \file
-// \brief Functions to apply anistropic filters to 3D images.
+// \brief Functions to apply anisotropic filters to 3D images.
 //
 // \author Kevin de Souza and Ian Scott
 
@@ -96,7 +97,7 @@ void vil3d_anisotropic_gaussian_filter(const vil3d_image_view<T>& src,
   
   // Convert the results to destination type
   vil3d_convert_round(work3, dest);
-
+  
   
   ////////////////////////////////////////////////////////////////////////
   //
