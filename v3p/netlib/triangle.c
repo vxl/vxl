@@ -304,7 +304,18 @@
 
 #include <stdio.h>
 #include <string.h>
-#include <math.h>
+
+/* Borland compiler provides a "poly" function in math.h.  This
+   conflicts with the variable name used below.  Move the symbol out
+   of the way.  */
+#ifdef __BORLANDC__
+# define poly borland_poly
+# include <math.h>
+# undef poly
+#else
+# include <math.h>
+#endif
+
 #ifndef NO_TIMER
 #include <sys/time.h>
 #endif /* NO_TIMER */
@@ -763,6 +774,12 @@ static struct triedge recenttri;
    typedef unsigned long intptr_t;
 # elif defined(__CYGWIN__)
 #  include <sys/types.h> /* for intptr_t on Cygwin */
+# elif defined(__BORLANDC__)
+#  if __BORLANDC__ < 0x0560
+    typedef unsigned long intptr_t;
+#  else
+#   include <stdint.h> /* for intptr_t on Borland 5.6. */
+#  endif
 # else
 #  include <inttypes.h> /* for intptr_t on e.g. SGI, Linux, Solaris */
 # endif
