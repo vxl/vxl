@@ -38,4 +38,5 @@ int main()
   vcl_cout << "recover 2x scale matrix\n"
            << "Test Summary: " << success << " tests succeeded, "
            << failures << " tests failed" << (failures?"\t***\n":"\n");
+  return failures;
 }
