@@ -1,3 +1,5 @@
+//:
+// \file
 #include <vcl_algorithm.h> // vcl_find()
 #include <vdgl/vdgl_digital_curve.h>
 #include <btol/btol_edge_algs.h>
@@ -23,31 +25,31 @@ bool btol_edge_algs::split_edge_2d(vtol_vertex_2d_sptr& v, vtol_edge_2d_sptr& e,
                                    vtol_edge_2d_sptr& e1, vtol_edge_2d_sptr& e2)
 {
   vcl_cout << "tol " << btol_edge_algs::tol << vcl_endl;
-  vcl_cout << "btol_edge_algs::split_edge_2d - not implemented " << vcl_endl;
+  vcl_cout << "btol_edge_algs::split_edge_2d - not implemented\n";
  return true;
 }
 
 bool btol_edge_algs::unlink_all_inferiors_twoway(vtol_edge_2d_sptr& e)
 {
-	if(!e->v1()||!e->v2())
-			return false;
+  if (!e->v1()||!e->v2())
+    return false;
   vtol_topology_object_sptr tv1 = e->v1()->cast_to_topology_object();
   vtol_topology_object_sptr tv2 = e->v2()->cast_to_topology_object();
 
   vtol_topology_object_sptr toe = e->cast_to_topology_object();
   vcl_vector<vtol_topology_object_sptr>* infs = toe->inferiors();
   //this will be the zero_chain for the edge
-  if(infs->size()!=1)
+  if (infs->size()!=1)
     {
       vcl_cout << " In btol_edge_algs::unlink_all_inferiors_twoway(..) "
-               << " inferiors inconsistent size " << vcl_endl;
+               << " inferiors inconsistent size\n";
       return false;
     }
   vtol_topology_object_sptr inf_two_chain = (*infs)[0];
-  if(!inf_two_chain)
+  if (!inf_two_chain)
     {
       vcl_cout << " In btol_edge_algs::unlink_all_inferiors_twoway(..) "
-               << " null two chain " << vcl_endl;
+               << " null two chain\n";
       return false;
     }
   toe->unlink_inferior(*inf_two_chain);
@@ -59,22 +61,22 @@ bool btol_edge_algs::unlink_all_inferiors_twoway(vtol_edge_2d_sptr& e)
 //-----------------------------------------------------------------------------
 // Replaces va by vb on edge e.
 //-----------------------------------------------------------------------------
-bool btol_edge_algs::subst_vertex_on_edge(vtol_vertex_sptr& va, 
-                                          vtol_vertex_sptr& vb, 
+bool btol_edge_algs::subst_vertex_on_edge(vtol_vertex_sptr& va,
+                                          vtol_vertex_sptr& vb,
                                           vtol_edge_sptr& e)
 {
-  if(!va||!vb||!e)
+  if (!va||!vb||!e)
     return false;
   vtol_vertex_sptr v1 = e->v1();
   vtol_vertex_sptr v2 = e->v2();
-  if(!v1||!v2)
+  if (!v1||!v2)
     return false;
-  if(v1==va)
+  if (v1==va)
     {
       e->set_v1(vb);
       return true;
     }
-  if(v2==va)
+  if (v2==va)
     {
       e->set_v2(vb);
       return true;
@@ -88,22 +90,21 @@ bool btol_edge_algs::subst_vertex_on_edge(vtol_vertex_sptr& va,
 vsol_box_2d btol_edge_algs::bounding_box(vcl_vector<vtol_edge_2d_sptr>& edges)
 {
   vsol_box_2d b;//default box
-  
-  for(vcl_vector<vtol_edge_2d_sptr>::iterator eit = edges.begin();
-      eit != edges.end(); eit++)
+
+  for (vcl_vector<vtol_edge_2d_sptr>::iterator eit = edges.begin();
+       eit != edges.end(); eit++)
     {
       vsol_curve_2d_sptr c = (*eit)->curve();
-      if(!c)
+      if (!c)
         {
-          vcl_cout << "In btol_edge_algs::bounding_box(..) - null curve" 
-                   << vcl_endl;
+          vcl_cout << "In btol_edge_algs::bounding_box(..) - null curve\n";
           continue;
         }
-      if(c->cast_to_digital_curve())
+      if (c->cast_to_digital_curve())
         b.grow_minmax_bounds(*c->cast_to_digital_curve()->get_bounding_box());
       else
-        vcl_cout << "In btol_edge_algs::bounding_box(..) - curve has" 
-                 << " unknown geometry " << vcl_endl;
+        vcl_cout << "In btol_edge_algs::bounding_box(..) - curve has"
+                 << " unknown geometry\n";
     }
   return b;
 }
@@ -113,7 +114,7 @@ void btol_edge_algs::edge_2d_erase(vcl_vector<vtol_edge_2d_sptr>& edges,
 {
   vcl_vector<vtol_edge_2d_sptr>::iterator eit =
     vcl_find(edges.begin(), edges.end(), e);
-  if(eit == edges.end())
+  if (eit == edges.end())
     return;
   edges.erase(eit);
   return;
