@@ -18,5 +18,6 @@
 #include <bseg/bmrf/bmrf_curvel_3d.h>
 #include <bseg/bmrf/bmrf_curvel_3d_sptr.h>
 #include <bseg/bmrf/bmrf_curve_3d_builder.h>
+#include <bseg/bmrf/bmrf_epi_seg_compare.h>
 
 int main() { return 0; }
