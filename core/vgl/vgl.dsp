@@ -335,6 +335,12 @@ SOURCE=.\Templates/vgl_convex+double-.cxx
 # Begin Source File
 SOURCE=.\Templates/vgl_box_2d+unsigned-.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\Templates/vgl_homg_point_2d+unsigned-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vgl_point_2d+unsigned-.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter ""

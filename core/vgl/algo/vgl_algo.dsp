@@ -143,6 +143,15 @@ SOURCE=.\Templates/vgl_convex_hull_2d+double-.cxx
 SOURCE=.\Templates/vgl_norm_trans_3d+double-.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\Templates/vgl_h_matrix_1d+float-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vgl_h_matrix_2d+float-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vgl_h_matrix_3d+float-.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\vgl_h_matrix_1d_compute_3point.cxx
 # End Source File
 # Begin Source File
