@@ -1,11 +1,11 @@
 //:
 // \file
 //  Test of the vipl_histogram templated IP classes
-//  vipl_threshold<vil_image,vnl_vector,T,unsigned>
+//  vipl_histogram<vil_image,vnl_vector,T,unsigned>
 //  for T in { unsigned char, unsigned short, float }.
 //
 // \author Ian Scott, ISBE, Manchester.
-// \date   12 Sept. 2000
+// \date   22 May 2002
 //
 
 #include <vil/vil_memory_image_of.h>
@@ -25,12 +25,12 @@ vil_image vipl_test_histogram_CreateTest8bitImage(int wd, int ht)
   vil_memory_image_of<unsigned char> image(wd, ht);
   for (int x = 0; x < wd; x++) {
     for (int y = 0; y < ht; y++) {
-//      vcl_printf("%3d", j);
+//    vcl_printf("%3d", j);
       image.put_section(&j, x, y, 1, 1);
       i++;
       if (i >= j) {j++;i=0;}
     }
-//    vcl_printf("\n");
+//  vcl_printf("\n");
   }
   return image;
 }
