@@ -21,7 +21,3 @@ TESTS += test_vector_io.cxx
 ################################
 include ${IUEROOT}/config/top.mk
 ################################
-
-ifeq "$(TJ_GCC30)" "1"# otherwise gcc 3.0 needs too much virtual memory
-FLAGS_test_vnl_io.cxx := -O0
-endif
