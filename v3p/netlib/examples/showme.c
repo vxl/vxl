@@ -112,7 +112,7 @@
 /* exit() may or may not already be defined at this point.  I declare these  */
 /* functions explicitly because some non-ANSI C compilers lack stdlib.h.     */
 
-#ifndef _STDLIB_H_
+#if !defined(_STDLIB_H_) && !defined(_STDLIB_H)
 extern char *malloc();
 extern void free();
 extern void exit();
@@ -3058,7 +3058,7 @@ int eps;
   if (print_head(psfilename, &psfile, llcornerx, llcornery, eps)) {
     return;
   }
-  switch(image) {
+  switch (image) {
     case NODE:
       print_node(psfile, nodes[inc], node_dim[inc], nodeptr[inc],
                  xxscale, yyscale, xxoffset, yyoffset);
