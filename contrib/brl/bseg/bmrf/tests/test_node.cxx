@@ -10,21 +10,33 @@
 //: Test the node class
 void test_node()
 {
-  vcl_ostringstream text_stream;
-
   bmrf_node_sptr node_1 = new bmrf_node(1, 0.5);
   bmrf_node_sptr node_2 = new bmrf_node(2, 0.7);
+  bmrf_node_sptr node_3 = new bmrf_node(2, 0.2);
 
-  TEST("Testing add_neighbor()",node_1->add_neighbor(node_2.ptr(), bmrf_node::TIME), true);
+  TEST("Testing add_neighbor()",
+       node_1->add_neighbor(node_2.ptr(), bmrf_node::TIME) &&
+       node_1->add_neighbor(node_3.ptr(), bmrf_node::TIME) &&
+       node_2->add_neighbor(node_3.ptr(), bmrf_node::SPACE) &&
+       node_2->add_neighbor(node_3.ptr(), bmrf_node::ALPHA) &&
+       node_2->add_neighbor(node_1.ptr(), bmrf_node::ALPHA) &&
+       !node_2->add_neighbor(node_1.ptr(), bmrf_node::ALPHA), // can't add the same thing twice
+       true);
 
+  TEST("Testing remove_neighbor()",
+       node_2->remove_neighbor(node_1.ptr(), bmrf_node::ALPHA) &&
+       !node_2->remove_neighbor(node_1.ptr(), bmrf_node::ALPHA), // can't remove twice
+       true);
 
   testlib_test_begin("Testing frame_num() ");
   testlib_test_perform( node_1->frame_num() == 1 &&
-                        node_2->frame_num() == 2 );
+                        node_2->frame_num() == 2 &&
+                        node_3->frame_num() == 2 );
 
   testlib_test_begin("Testing probability()");
   testlib_test_perform( node_1->probability() == 0.5 &&
-                        node_2->probability() == 0.7 );
+                        node_2->probability() == 0.7 &&
+                        node_3->probability() == 0.2 );
 
 //----------------------------------------------------------------------------------------
 // I/O Tests
