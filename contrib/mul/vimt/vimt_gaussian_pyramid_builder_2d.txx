@@ -81,16 +81,16 @@ void vimt_gaussian_pyramid_builder_2d<T>::set_filter_width(unsigned w)
 //: Smooth and subsample src_im to produce dest_im
 //  Applies filter in x and y, then samples every other pixel.
 template<class T>
-void vimt_gaussian_pyramid_builder_2d<T>::gauss_reduce(vimt_image_2d_of<T>& dest_im,
-                                                      const vimt_image_2d_of<T>& src_im) const
+void vimt_gaussian_pyramid_builder_2d<T>::gauss_reduce(const vimt_image_2d_of<T>& src_im,
+                                                       vimt_image_2d_of<T>& dest_im) const
 {
   switch (filter_width_)
   {
     case (3):
-      vil2_algo_gauss_reduce_121(dest_im.image(),src_im.image(),work_im_.image());
+      vil2_algo_gauss_reduce_121(src_im.image(),dest_im.image(),work_im_.image());
       break;
     case (5):
-      vil2_algo_gauss_reduce(dest_im.image(),src_im.image(),work_im_.image());
+      vil2_algo_gauss_reduce(src_im.image(),dest_im.image(),work_im_.image());
       break;
     default:
       vcl_cerr<<"vimt_gaussian_pyramid_builder_2d<T>::gauss_reduce() ";
@@ -179,7 +179,7 @@ void vimt_gaussian_pyramid_builder_2d<T>::build(vimt_image_pyramid& image_pyr,
     vimt_image_2d_of<T>& im_i0 = (vimt_image_2d_of<T>&) image_pyr(i);
     vimt_image_2d_of<T>& im_i1 = (vimt_image_2d_of<T>&) image_pyr(i-1);
 
-    gauss_reduce(im_i0,im_i1);
+    gauss_reduce(im_i1,im_i0);
   }
 
   // Estimate width of pixels in base image
@@ -237,7 +237,7 @@ void vimt_gaussian_pyramid_builder_2d<T>::extend(vimt_image_pyramid& image_pyr) 
       vimt_image_2d_of<T>& im_i0 = (vimt_image_2d_of<T>&) image_pyr(i);
       vimt_image_2d_of<T>& im_i1 = (vimt_image_2d_of<T>&) image_pyr(i-1);
 
-      gauss_reduce(im_i0,im_i1);
+      gauss_reduce(im_i1,im_i0);
     }
   }
 }

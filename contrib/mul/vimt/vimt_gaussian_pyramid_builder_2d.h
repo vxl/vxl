@@ -76,8 +76,8 @@ class vimt_gaussian_pyramid_builder_2d : public vimt_image_pyramid_builder
   //: Smooth and subsample src_im to produce dest_im.
   //  Applies filter in x and y, then samples every other pixel.
   //  Filter width defined by set_filter_width()
-  void gauss_reduce(vimt_image_2d_of<T>& dest_im,
-                    const vimt_image_2d_of<T>& src_im) const;
+  void gauss_reduce(const vimt_image_2d_of<T>& src_im,
+	                  vimt_image_2d_of<T>& dest_im) const;
 
   //: Scale step between levels
   virtual double scale_step() const;
