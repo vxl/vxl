@@ -1,6 +1,7 @@
 USES := vxl mul
+include ${IUEROOT}/vxl/vnl/algo/config.mk
 
-IULIBS := -lpdf1d -lmbl -lvnl
+IULIBS := -lpdf1d -lmbl -lvgl-io -lvgl -lvnl-io -lvnl-algo -lvnl -lvsl
 
 MINI_PROG_SOURCES += compare_kernel_estimates.cxx
 MINI_PROG_SOURCES += plot_pdf_estimate.cxx
