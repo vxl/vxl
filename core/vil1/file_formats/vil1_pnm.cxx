@@ -283,18 +283,26 @@ bool vil_pnm_generic_image::get_section(void* buf, int x0, int y0, int xs, int y
   else // ascii (non-raw) image data
   {
     vs_->seek(start_of_data_);
+    //0. Skip to the starting line
+    //
     for(int t = 0; t < y0*width_*components_; ++t) { int a; (*vs_) >> a; }
     for(int y = 0; y < ys; ++y) {
+      // 1. Skip to column x0
+      //
       for(int t = 0; t < x0*components_; ++t) { int a; (*vs_) >> a; }
+      // 2. Read the data
+      //
       if (bits_per_component_ <= 8)
-        for(int x = 0; x < xs*components_; ++x) { int a; (*vs_) >> a; ib[x0+x]=a; }
+        for(int x = 0; x < xs*components_; ++x) { int a; (*vs_) >> a; ib[x]=a; }
       else if (bits_per_component_ <= 16)
-        for(int x = 0; x < xs*components_; ++x) { int a; (*vs_) >> a; jb[x0+x]=a; }
+        for(int x = 0; x < xs*components_; ++x) { int a; (*vs_) >> a; jb[x]=a; }
       else
-        for(int x = 0; x < xs*components_; ++x) { int a; (*vs_) >> a; kb[x0+x]=a; }
+        for(int x = 0; x < xs*components_; ++x) { int a; (*vs_) >> a; kb[x]=a; }
+      // 3. Skip to the next line
+      //
+      for(int t = 0; t < (width_-x0-xs)*components_; ++t) { int a; (*vs_) >> a; }
       ib += xs; jb += xs; kb += xs;
     }
-    for(int t = 0; t < (width_-x0-xs)*components_; ++t) { int a; (*vs_) >> a; }
   }
 
   return true;
