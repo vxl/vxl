@@ -51,8 +51,8 @@
 //
 // .SECTION Author:
 //     $Author: mlaymon $
-//     $Revision: 1.1 $ 
-//     $Date: 2003/12/11 18:16:46 $
+//     $Revision: 1.2 $ 
+//     $Date: 2003/12/11 19:23:35 $
 //
 //     GE Global Research
 //
@@ -148,7 +148,7 @@ public:
   //       does not declare world_to_image as const.  Let it go for now.  
   //       Fix in base class later ? TBD: mal 10dec2003
   void verify_camera (vnl_vector<double> UL,
-		      vnl_vector<double> UL,
+		      vnl_vector<double> UR,
 		      vnl_vector<double> LR,
 		      vnl_vector<double> LL) ;
 
@@ -199,8 +199,8 @@ public:
 
 protected:
 
-    static const double DEFAULT_SCALE_VALUE  = 1.0 ;
-    static const double DEFAULT_OFFSET_VALUE  = 0.0 ;
+    static const double DEFAULT_SCALE_VALUE ;
+    static const double DEFAULT_OFFSET_VALUE ;
 
     void init_scale_vectors (double scale = DEFAULT_SCALE_VALUE, 
                              double offset = DEFAULT_OFFSET_VALUE) ;
