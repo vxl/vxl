@@ -137,7 +137,7 @@ template <class V, class B, class C>
 class vgl_rtree_iterator : public vgl_rtree_iterator_base<V, B, C> {
 public:
   typedef vgl_rtree_iterator_base<V, B, C> base;
-  typedef typename vgl_rtree_iterator<V, B, C> self;
+  typedef vgl_rtree_iterator<V, B, C> self;
 
   vgl_rtree_iterator(node *root) : base(root) { }
   vgl_rtree_iterator() { }
@@ -156,7 +156,7 @@ template <class V, class B, class C>
 class vgl_rtree_const_iterator : public vgl_rtree_iterator_base<V, B, C> {
 public:
   typedef vgl_rtree_iterator_base<V, B, C> base;
-  typedef typename vgl_rtree_const_iterator<V, B, C> self;
+  typedef vgl_rtree_const_iterator<V, B, C> self;
 
   vgl_rtree_const_iterator(node *root) : base(root) { }
   vgl_rtree_const_iterator(vgl_rtree_iterator<V, B, C> const &that) : base(that) { }
