@@ -25,3 +25,6 @@ SUBDIRS(bugl)
 
 # Additions to vnl
 SUBDIRS(bvnl)
+
+# Brown Graph Library
+SUBDIRS(bgrl)
