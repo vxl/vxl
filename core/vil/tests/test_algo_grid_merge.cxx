@@ -1,14 +1,13 @@
-// This is mul/vil2/tests/test_algo_threshold.cxx
+// This is core/vil2/tests/test_algo_grid_merge.cxx
 #include <testlib/testlib_test.h>
 #include <vcl_iostream.h>
-#include <vxl_config.h> // for vxl_byte
 #include <vil2/algo/vil2_grid_merge.h>
 
 void test_grid_merge_byte()
 {
-  vcl_cout << "************************\n"
+  vcl_cout << "*************************\n"
            << " Testing vil2_grid_merge\n"
-           << "************************\n";
+           << "*************************\n";
 
   vil2_image_view<int> image1,image2, dest_image;
 
@@ -23,9 +22,7 @@ void test_grid_merge_byte()
   TEST("(3,4)",dest_image(3,4),image2(0,0));
   TEST("(6,1)",dest_image(6,1),image2(0,0));
   TEST("(6,4)",dest_image(6,4),image1(0,0));
-
 }
-
 
 
 MAIN( test_algo_grid_merge )
