@@ -50,7 +50,9 @@ const int bits_per_byte = sizeof(byte) * 8;
 // These macros will be used to get pixels with known type.
 // GetElementAddr is now overloaded with both gevd_bufferxy and const gevd_bufferxy.
 
-// --
+//: Get reference to pixel as a byte/char, unsigned/signed char
+// (8-bit) number, at indexes (x, y) in buf.
+// This function is used to get and set pixel on non-const gevd_bufferxy.
 
 inline byte&
 bytePixel(gevd_bufferxy& buf, int x, int y)
@@ -94,7 +96,7 @@ ptrPixel(gevd_bufferxy& buf, int x, int y)
   return (*((void**) buf.GetElementAddr(x,y)));
 }
 
-// --
+//: Get reference to pixel as a byte, at indexes (x, y).
 
 inline const byte&
 bytePixel(const gevd_bufferxy& buf, int x, int y)
@@ -103,13 +105,15 @@ bytePixel(const gevd_bufferxy& buf, int x, int y)
 }
 
 
+//: Get reference to pixel as a char, at indexes (x, y).
+
 inline const char&
 charPixel(const gevd_bufferxy& buf, int x, int y)
 {
   return (*((const char*)buf.GetElementAddr(x,y)));
 }
 
-// --
+//: Get reference to pixel as a short, at indexes (x, y).
 
 inline const short&
 shortPixel(const gevd_bufferxy& buf, int x, int y)
@@ -117,7 +121,7 @@ shortPixel(const gevd_bufferxy& buf, int x, int y)
   return (*((const short*)buf.GetElementAddr(x,y)));
 }
 
-// --
+//: Get reference to pixel as a float, at indexes (x, y).
 
 inline const float&
 floatPixel(const gevd_bufferxy& buf, int x, int y)

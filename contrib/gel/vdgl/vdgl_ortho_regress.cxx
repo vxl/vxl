@@ -1,4 +1,3 @@
-
 #ifdef __GNUC__
 #pragma implementation
 #endif
@@ -53,20 +52,20 @@ bool symmetric_2x2_eigen_system(double a, double b, double c,
   return true;
 }
 
-/*
-  The problem is to minimize total squared distance to
-  the line u.x + d = 0, ie. :
-  minimize     \sum_i | u.x_i + d |^2
-  subject to   |u|=1
-
-  Writing x_i = xbar + y_i, where xbar is the centroid
-  of the point set, the sum becomes
-  \sum | u.(x_i - xbar) |^2 + S1 | u.xbar + d |^2
-  , so that the optimal line must pass through the centroid.
-  To find u, we find the eigenvector of the scatter matrix
-  M = \sum (x_i - xbar)*(x_i - xbar)^t which has least
-  eigenvalue.
-*/
+//:
+// The problem is to minimize total squared distance to
+// the line u.x + d = 0, ie. :
+// minimize     \sum_i | u.x_i + d |^2
+// subject to   |u|=1
+//
+// Writing x_i = xbar + y_i, where xbar is the centroid
+// of the point set, the sum becomes
+// \sum | u.(x_i - xbar) |^2 + S1 | u.xbar + d |^2
+// , so that the optimal line must pass through the centroid.
+// To find u, we find the eigenvector of the scatter matrix
+// M = \sum (x_i - xbar)*(x_i - xbar)^t which has least
+// eigenvalue.
+//
 double vdgl_ortho_regress::cost(double a, double b, double c) const {
   return
     (Sxx*a*a + 2*Sxy*a*b + Syy*b*b + 2*Sx*a*c + 2*Sy*b*c + S1*c*c)/(a*a+b*b);
@@ -86,21 +85,21 @@ bool vdgl_ortho_regress::fit(double &a, double &b, double &c) const {
   return true;
 }
 
-/*
-  The problem is to minimize total squared distance from
-  a line passing through a given point x_0 :
-
-  minimize     \sum_i | u.x_i + d |^2
-  subject to   |u|=1
-               u.x_0 + d = 0
-
-  But u.x_i + d = u.(x_i - x_0), so that we have to minimize
-  u^t M u , where M = \sum_i (x_i - x_0)*(x_i - x_0)^t. This
-  is solved by taking the eigenvector of M of least
-  eigenvalue.
-*/
+//:
+// The problem is to minimize total squared distance from
+// a line passing through a given point x_0 :
+//
+// minimize     \sum_i | u.x_i + d |^2
+// subject to   |u|=1
+//              u.x_0 + d = 0
+//
+// But u.x_i + d = u.(x_i - x_0), so that we have to minimize
+// u^t M u , where M = \sum_i (x_i - x_0)*(x_i - x_0)^t. This
+// is solved by taking the eigenvector of M of least
+// eigenvalue.
+//
 bool vdgl_ortho_regress::fit_constrained(double x, double y,
-                                        double &a, double &b, double &c) const
+                                         double &a, double &b, double &c) const
 {
   assert(S1 >= 1);
 

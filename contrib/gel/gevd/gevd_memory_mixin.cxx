@@ -127,7 +127,7 @@ gevd_memory_mixin::ReadBytes(void* ib, int b)
         }
 
 //====================================================================
-// -- Read b bytes from location loc to buffer ib.  New @ 6/11/91 gbs
+//: Read b bytes from location loc to buffer ib.  New @ 6/11/91 gbs
 //====================================================================
 int
 gevd_memory_mixin::ReadBytes(void* ib, int b, int loc)
@@ -179,7 +179,7 @@ gevd_memory_mixin::ReadBytes(void* ib, int b, int* mapping)
         }
 
 //====================================================================
-// -- Read b bytes from loc to ib, thru mapping.  New @ 6/11/91 gbs
+//: Read b bytes from loc to ib, thru mapping.  New @ 6/11/91 gbs
 //====================================================================
 int
 gevd_memory_mixin::ReadBytes(void* ib, int b, int loc, int* mapping)
@@ -295,7 +295,7 @@ gevd_memory_mixin::WriteBytes(const void* ib, int b)
         }
 
 //====================================================================
-// -- Write b bytes to location loc from buffer ib.  New @ 6/11/91 gbs
+//: Write b bytes to location loc from buffer ib.  New @ 6/11/91 gbs
 //====================================================================
 int
 gevd_memory_mixin::WriteBytes(const void* ib, int b, int loc)
@@ -325,7 +325,7 @@ gevd_memory_mixin::WriteBytes(const void* ib, int b, int loc)
         }
 
 //====================================================================
-// -- Clear the memory and reset all of the appropriate variables.
+//: Clear the memory and reset all of the appropriate variables.
 //====================================================================
 void
 gevd_memory_mixin::Clear()

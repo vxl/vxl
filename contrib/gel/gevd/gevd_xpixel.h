@@ -7,7 +7,7 @@
 //                            Niskayuna, NY 12309
 //                            All Rights Reserved
 //              Reproduction rights limited as described below.
-//                               
+//
 //      Permission to use, copy, modify, distribute, and sell this software
 //      and its documentation for any purpose is hereby granted without fee,
 //      provided that (i) the above copyright notice and this permission
@@ -17,7 +17,7 @@
 //      the specific, prior written permission of GE CRD, and (iii) any
 //      modifications are clearly marked and summarized in a change history
 //      log.
-//       
+//
 //      THE SOFTWARE IS PROVIDED "AS IS" AND WITHOUT WARRANTY OF ANY KIND,
 //      EXPRESS, IMPLIED OR OTHERWISE, INCLUDING WITHOUT LIMITATION, ANY
 //      WARRANTY OF MERCHANTABILITY OR FITNESS FOR A PARTICULAR PURPOSE.
@@ -36,17 +36,17 @@
 #include <vnl/vnl_vector.h>
 #include "gevd_bufferxy.h"
 
-// -- Get reference to pixel as a pointer to a CoolVector<float>,
+//: Get reference to pixel as a pointer to a CoolVector<float>,
 // at indexes (x, y).
 
-inline vnl_vector<float>*& 
-fvectorPixel(gevd_bufferxy& buf, int x, int y) 
+inline vnl_vector<float>*&
+fvectorPixel(gevd_bufferxy& buf, int x, int y)
 {
   return (*((vnl_vector<float>**) buf.GetElementAddr(x,y)));
 }
 
 inline vnl_vector<float>*
-fvectorPixel(const gevd_bufferxy& buf, int x, int y) 
+fvectorPixel(const gevd_bufferxy& buf, int x, int y)
 {
   return (*((vnl_vector<float>**) buf.GetElementAddr(x,y)));
 }
@@ -54,7 +54,7 @@ fvectorPixel(const gevd_bufferxy& buf, int x, int y)
 inline void freeFVectors(gevd_bufferxy& buf)
 {
   for (int x = 0; x < buf.GetSizeX(); x++)
-    for (int y = 0; y < buf.GetSizeY(); y++) 
+    for (int y = 0; y < buf.GetSizeY(); y++)
       delete fvectorPixel(buf, x, y);
 }
 

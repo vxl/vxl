@@ -11,7 +11,7 @@
 //                            Niskayuna, NY 12309
 //                            All Rights Reserved
 //              Reproduction rights limited as described below.
-//                               
+//
 //      Permission to use, copy, modify, distribute, and sell this software
 //      and its documentation for any purpose is hereby granted without fee,
 //      provided that (i) the above copyright notice and this permission
@@ -21,7 +21,7 @@
 //      the specific, prior written permission of GE CRD, and (iii) any
 //      modifications are clearly marked and summarized in a change history
 //      log.
-//       
+//
 //      THE SOFTWARE IS PROVIDED "AS IS" AND WITHOUT WARRANTY OF ANY KIND,
 //      EXPRESS, IMPLIED OR OTHERWISE, INCLUDING WITHOUT LIMITATION, ANY
 //      WARRANTY OF MERCHANTABILITY OR FITNESS FOR A PARTICULAR PURPOSE.
@@ -40,13 +40,13 @@
 //
 // .NAME        vpgl_basic_camera - Base class for cameras
 // .LIBRARY     vpgl
-// .HEADER	    Photogrammetry Package
+// .HEADER      Photogrammetry Package
 // .INCLUDE     vpgl/vpgl_basic_camera.h
 // .FILE        vpgl_basic_camera.h
 // .FILE        vpgl_basic_camera.C
 //
 // .SECTION Description
-//   
+//
 //
 // .SECTION Author
 //     Patti Vrobel
@@ -66,11 +66,10 @@ class vpgl_basic_camera;
 class vpgl_matrix_camera;
 
 
-
 class vpgl_basic_camera : public vbl_ref_count
 {
 public:
- 
+
  // Constructors
   vpgl_basic_camera();
  // Destructors
@@ -81,51 +80,39 @@ public:
   //---------------------------------------
   // Different world-to-image methods
   virtual void world_to_image(const  vnl_vector<double>&, double&, double&);
-  
+
   virtual void world_to_image(
-	const double&, const double&, const double&, double&, double&);
+        const double&, const double&, const double&, double&, double&);
 
   //-----------------------------------------
-  virtual void image_to_world(vnl_vector<double>& ray3d_origin, 
-			    vnl_vector<double>& world, double u, double v);
+  virtual void image_to_world(vnl_vector<double>& ray3d_origin,
+                              vnl_vector<double>& world, double u, double v);
 
- 
-  // A function to set and get the initilization point
+  //: A function to set the initilization point
   virtual void set_init_pt(const vnl_vector<double>& pt);
+  //: A function to get the initilization point
   virtual void get_init_pt(vnl_vector<double>& pt);
- 
+
   virtual void get_matrix(vnl_matrix<double>&) const;
-   
-  
-//  inline friend ostream &operator<<(ostream &os, const vpgl_basic_camera& obj)
-// {obj.Print(os); return os;};
-//  inline friend ostream &operator<<(ostream &os, const vpgl_basic_camera* obj)
-//    {if(obj) obj->Print(os); else os << "NULL Camera"; return os;};
 
-
- 
+#if 0
+  inline friend ostream &operator<<(ostream &os, const vpgl_basic_camera& obj)
+    {obj.Print(os); return os;}
+  inline friend ostream &operator<<(ostream &os, const vpgl_basic_camera* obj)
+    {if(obj) obj->Print(os); else os << "NULL Camera"; return os;}
+#endif
 
 protected:
-  
-  // Holds a 3D point used for Levenberg Marquardt initialization in
-  // ImageToSurface.
+
+  //: Holds a 3D point used for Levenberg Marquardt initialization in ImageToSurface
   vnl_vector<double> init_pt;
-  
 };
 
-// -- 
-// fill passed in matrix with camera matrix.
+//: fill passed in matrix with camera matrix.
 // this only is implemented when MatrixProjection returns true.
 inline void vpgl_basic_camera::get_matrix(vnl_matrix<double>&) const
 {
   vcl_cerr<<"Nothing returned";
 }
 
-
-// -- 
-// Return true if a matrix projection
-// can be created from the camera.
-
-
-
-#endif   // BasicCamera
+#endif   // VPGL_BASIC_CAMERA_H

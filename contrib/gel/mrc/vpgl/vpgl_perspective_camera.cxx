@@ -15,7 +15,7 @@ vpgl_perspective_camera::vpgl_perspective_camera():
   lcs= new vcsl_spatial;
   graph = new vcsl_graph;
   acs->set_graph(graph);
-  lcs->set_graph(graph); 
+  lcs->set_graph(graph);
 
   // Focal length is 1 unit of length
   _params[f] = 1.0;
@@ -25,36 +25,34 @@ vpgl_perspective_camera::vpgl_perspective_camera():
   _params[uo] = _params[vo] = 0.0;
   // Image coordinate axes are orthogonal
   _params[theta] = vnl_math::pi/2;
- 
+
   // Now set the external camera parameters
 
   // Camera center is at origin
   _params[XL] = _params[YL] = _params[ZL] = 0.0;
   // Camera is not rotated
   _params[omega] = _params[phi] = _params[kappa] = 0.0;
-  
-  update();
 
-  
-  
+  update();
 }
 
 
 vpgl_perspective_camera::~vpgl_perspective_camera()
 {  }
 
-// -- Get parameter vector
+//: Get parameter vector
 vcl_vector<double> vpgl_perspective_camera::get_params() {return _params;}
 
-// -- Set parameter vector
+//: Set parameter vector
 void vpgl_perspective_camera::set_params(vcl_vector<double> new_params, const vcsl_spatial_ref & acs)
-  {_params = new_params;
-    
-	update();
+{
+  _params = new_params;
+  update();
 }
-   
-void vpgl_perspective_camera::update_intrinsic(){
-	double alpha_u = -_params[f]*_params[ku], alpha_v = -_params[f]*_params[kv];
+
+void vpgl_perspective_camera::update_intrinsic()
+{
+  double alpha_u = -_params[f]*_params[ku], alpha_v = -_params[f]*_params[kv];
   double cost = cos(_params[theta]), sint = sin(_params[theta]), cott=cost/sint;
   vnl_matrix<double> M(3, 3, 0.0);
   M(0,0) = alpha_u; M(0,1) = -alpha_u*cott; M(0,2) = _params[uo];
@@ -75,7 +73,7 @@ void vpgl_perspective_camera::update() {
    //vcsl_translation a;
   trans_param= new matrix_param;
   transformation = new vcsl_matrix;
-    
+
 
   // Create a camera if it doesn't exist
   if (_mat_cam==(vpgl_matrix_camera *)NULL) _mat_cam = new vpgl_matrix_camera();
@@ -88,53 +86,55 @@ void vpgl_perspective_camera::update() {
   trans_param->kappa=_params[kappa];
   transformation->set_static(trans_param);
   lcs->set_unique(acs,transformation.ptr());
-   
+
   update_intrinsic();
-  
 }
 
 //------------------------------------------------------------------------------
-// -- projects a 3D point to the image plane with this camera.
+//: projects a 3D point to the image plane with this camera.
 
 void vpgl_perspective_camera::world_to_image(const vnl_vector<double>& vect3d,
-				       double& imgu, double& imgv,double time)
+                                             double& imgu, double& imgv,
+                                             double time)
 {
   vnl_vector<double> * x;
-	x=acs->from_local_to_cs(vect3d,lcs,time);
+  x=acs->from_local_to_cs(vect3d,lcs,time);
   _mat_cam->world_to_image(*x, imgu, imgv);
-    delete x;
+  delete x;
 }
 
 //-------------------------------------------------------------------------------
-// -- projects a 3D point to the image plane with this camera.
+//: projects a 3D point to the image plane with this camera.
 
 void vpgl_perspective_camera::world_to_image(const double& x, const double& y,
-				       const double& z, double& ix, double& iy,double time)
+                                             const double& z,
+                                             double& ix, double& iy,double time)
 {
   vnl_vector<double> temp(3);
   vnl_vector<double> *transformed;
   temp(1)=x;
   temp(2)=y;
   temp(3)=z;
-  transformed=acs->from_local_to_cs(temp,lcs,time); 
+  transformed=acs->from_local_to_cs(temp,lcs,time);
   _mat_cam->world_to_image(*transformed,ix, iy);
   delete transformed;
 }
 
+#if 0
 //-------------------------------------------------------------------------
-// -- Project an image point as a 3-d world ray
+//: Project an image point as a 3-d world ray
 //
 
-/*void vpgl_perspective_camera::image_to_world(vnl_vector<double>& pos,
+void vpgl_perspective_camera::image_to_world(vnl_vector<double>& pos,
                                        vnl_vector<double>& wray,
                                        double x, double y)
 {
     _mat_cam->image_to_world(pos, wray, x, y);
-}*/
+}
+#endif
 
 
-
-// -- Set camera parameters
+//: Set camera parameters
 double& vpgl_perspective_camera::operator() (PerspParams param_index)
 {
   if ((param_index >=12) || (param_index < 0))
@@ -146,21 +146,22 @@ double& vpgl_perspective_camera::operator() (PerspParams param_index)
   return _params[param_index];
 }
 
+#if 0
 //---------------------------------------------------------------
-// -- Return the current camera position.  (the camera position is
+//: Return the current camera position.  (the camera position is
 //    -Translation * R.inverse, where R is the upper 3x3 matrix, and
 //    Translation is the vector at 3,0, 3,1, 3,2.
 
-/*vnl_vector<double> vpgl_perspective_camera::GetPosition() const
-{ 
+vnl_vector<double> vpgl_perspective_camera::GetPosition() const
+{
   CoolVector<double> position(3);
   // Get the camera translation
   position.x() = _params[XL];
   position.y() = _params[YL];
   position.z() = _params[ZL];
   return position;
-}*/
-
+}
+#endif
 
 void vpgl_perspective_camera::print_data(vcl_ostream &strm) const
 {
@@ -179,14 +180,17 @@ void vpgl_perspective_camera::print_data(vcl_ostream &strm) const
 }
 
 void vpgl_perspective_camera::set_lcs(const vcsl_spatial_ref & new_lcs){
-lcs=new_lcs;
+  lcs=new_lcs;
 }
+
 vcsl_spatial_ref  vpgl_perspective_camera::get_lcs() {
-return lcs;
+  return lcs;
 }
+
 void vpgl_perspective_camera::set_acs(const vcsl_spatial_ref &new_acs){
-acs= new_acs;
+  acs= new_acs;
 }
+
 vcsl_spatial_ref  vpgl_perspective_camera::get_acs() {
-return acs;
+  return acs;
 }

@@ -7,7 +7,7 @@
 //                            Niskayuna, NY 12309
 //                            All Rights Reserved
 //              Reproduction rights limited as described below.
-//                               
+//
 //      Permission to use, copy, modify, distribute, and sell this software
 //      and its documentation for any purpose is hereby granted without fee,
 //      provided that (i) the above copyright notice and this permission
@@ -17,7 +17,7 @@
 //      the specific, prior written permission of GE CRD, and (iii) any
 //      modifications are clearly marked and summarized in a change history
 //      log.
-//       
+//
 //      THE SOFTWARE IS PROVIDED "AS IS" AND WITHOUT WARRANTY OF ANY KIND,
 //      EXPRESS, IMPLIED OR OTHERWISE, INCLUDING WITHOUT LIMITATION, ANY
 //      WARRANTY OF MERCHANTABILITY OR FITNESS FOR A PARTICULAR PURPOSE.
@@ -33,19 +33,19 @@
 #include "gevd_param_mixin.h"
 
 //------------------------------------------------------------
-// -- Constructor.  By default a constructed parameter block is valid.
+//: Constructor.  By default a constructed parameter block is valid.
 gevd_param_mixin::gevd_param_mixin() : _valid(true) {}
 
 //------------------------------------------------------------
-// -- Destructor.
+//: Destructor.
 gevd_param_mixin::~gevd_param_mixin() {}
 
 //------------------------------------------------------------
-// -- Check if parameters are valid.  The default does nothing.
+//: Check if parameters are valid.  The default does nothing.
 bool  gevd_param_mixin::SanityCheck() { return true; }
 
 //------------------------------------------------------------
-// -- Set the error message for this parameter block.  If the message
+//: Set the error message for this parameter block.  If the message
 // is not empty, this sets the valid flag to be false.  An empty
 // message resets the valid flag to be true.
 void gevd_param_mixin::SetErrorMsg(const char* msg)

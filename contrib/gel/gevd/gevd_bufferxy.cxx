@@ -66,13 +66,13 @@ void gevd_bufferxy::Init(int x, int y, int b)
     yra[j] = GetBufferPtr() + j*x*GetBytesPixel();
 }
 
-// -- Construct a gevd_bufferxy of width x, height y, and b bits per entry.
+//: Construct a gevd_bufferxy of width x, height y, and b bits per entry.
 gevd_bufferxy::gevd_bufferxy(int x, int y, int b) : gevd_memory_mixin(x*y*(int)((b+7)/8))
 {
   Init(x, y, b);
 }
 
-// -- Construct a gevd_bufferxy of width x, height y, and b bits per entry, and
+//: Construct a gevd_bufferxy of width x, height y, and b bits per entry, and
 // load data from memptr.
 gevd_bufferxy::gevd_bufferxy(int x, int y, int b, void* memptr) : gevd_memory_mixin(x*y*(int)((b+7)/8),memptr)
 {
@@ -91,7 +91,7 @@ gevd_bufferxy::gevd_bufferxy(gevd_bufferxy const& buf) : gevd_memory_mixin(buf)
   memcpy(yra[0], buf.yra[0], GetSizeX()*GetSizeY()*GetBytesPixel());
 }
 
-// -- Write to file.  Note that this can be OS-specific!
+//: Write to file.  Note that this can be OS-specific!
 void gevd_bufferxy::dump(const char* filename)
 {
 #ifdef VCL_WIN32
@@ -133,7 +133,7 @@ static int read_from_file(const char* filename)
   return x*y*(int)((b+7)/8);
 }
 
-// -- Read from file.  Note that this can be OS-specific!
+//: Read from file.  Note that this can be OS-specific!
 gevd_bufferxy::gevd_bufferxy(const char* filename) : gevd_memory_mixin(read_from_file(filename)),
   yra(0), xra(0)
 {
