@@ -9,11 +9,21 @@
 
 #include <oxp/Mapping_2d_2d.h>
 
+// Visual Studio .NET 2003 has problems compiling functions with parameters
+// 'vnl_numeric_traits<PixelType>::real_t* out' (in mean_nz_intensity()).
+// Using the typename keyword fixes the problem.
+// Another solution is to omit the type information by using 
+// 'real_t* out' as the formal parameter.
+#if defined(VCL_VC71)
+#define VCL_USE_TYPENAME_ATTR typename
+#else
+#define VCL_USE_TYPENAME_ATTR /* */
+#endif
+
 template <class PixelType>
 void ImageWarp<PixelType>::mean_nz_intensity(const vil1_memory_image_of<PixelType>& in,
                                              int x, int y, int window_size,
-                                             ImageWarp<PixelType>::real_t* out,
-                                             //typename vnl_numeric_traits<PixelType>::real_t* out,
+                                             VCL_USE_TYPENAME_ATTR vnl_numeric_traits<PixelType>::real_t* out,
                                              int * nnzp)
 {
   // taking a const reference is slower and causes missing symbols (SunPro 5.0)
@@ -156,5 +166,7 @@ void ImageWarp<PixelType>::warp_inverse(Mapping_2d_2d& map,
 #endif
     }
 }
+
+#undef VCL_USE_TYPENAME_ATTR
 
 #endif // ImageWarp_txx_
