@@ -1,8 +1,6 @@
-// This is contrib/prip/vpyr/vpyr_2_tpyramid_base.h
-
+// This is prip/vpyr/vpyr_2_tpyramid_base.h
 #ifndef vpyr_2_tpyramid_base_h_
 #define vpyr_2_tpyramid_base_h_
-
 //:
 // \file
 // \brief provides the elements for the base structure of a topological pyramid.
@@ -14,7 +12,7 @@
 // \endverbatim
 
 #include "vpyr_2_pyramid_base.h"
-#include "vmap/vmap_2_tmap_elts.h"
+#include <vmap/vmap_2_tmap_elts.h>
 
 class vpyr_2_tpyramid_base_dart ;
 class vpyr_2_tpyramid_base_vertex ;
@@ -22,12 +20,15 @@ class vpyr_2_tpyramid_base_edge ;
 class vpyr_2_tpyramid_base_face ;
 
 //: The structure of a dart in the base level.
-class vpyr_2_tpyramid_base_dart : public vpyr_2_pyramid_base_dart, public vmap_2_tmap_tuple< vpyr_2_tpyramid_base_vertex, vpyr_2_tpyramid_base_edge, vpyr_2_tpyramid_base_face >
+class vpyr_2_tpyramid_base_dart : public vpyr_2_pyramid_base_dart,
+                                  public vmap_2_tmap_tuple< vpyr_2_tpyramid_base_vertex,
+                                                            vpyr_2_tpyramid_base_edge,
+                                                            vpyr_2_tpyramid_base_face >
 {
-public:
-  //: 
+ public:
+  //:
   typedef vmap_2_tmap_tuple< vpyr_2_tpyramid_base_vertex, vpyr_2_tpyramid_base_edge, vpyr_2_tpyramid_base_face > _BaseTuple ;
-  
+
   //: Associated edge.
   const vpyr_2_tpyramid_base_edge & edge() const
   {
@@ -82,46 +83,50 @@ public:
   //: Associated face.
   vpyr_2_tpyramid_base_face & face(vmap_level_index level) ;
 
-  //: 
+  //:
   void set_sequence_index(vmap_dart_index arg) ;
-} ;
+};
 
 template <class D>
 class vmap_2_tpd_dart : public vpyr_2_tpyramid_base_dart
 {
-public:
+ public:
 
-  //: 
+  //:
   typename D::value_type & data(vmap_level_index arg_level)
   {
     return _d.data(arg_level) ;
   }
 
-  //: 
+  //:
   const typename D::value_type & data(vmap_level_index arg_level) const
   {
     return _d.data(arg_level) ;
   }
-protected :
-  
-  //: 
+ protected :
+
+  //:
   D _d ;
 };
 
-//: 
-typedef vmap_2_map_dart_base_iterator<vpyr_2_tpyramid_base_dart&,vpyr_2_tpyramid_base_dart*,vpyr_2_tpyramid_base_dart**> vpyr_2_tpyramid_base_dart_iterator ;
+//:
+typedef vmap_2_map_dart_base_iterator<vpyr_2_tpyramid_base_dart&,
+                                      vpyr_2_tpyramid_base_dart*,
+                                      vpyr_2_tpyramid_base_dart**> vpyr_2_tpyramid_base_dart_iterator ;
 
-//: 
-typedef vmap_2_map_dart_base_iterator<const vpyr_2_tpyramid_base_dart&,const vpyr_2_tpyramid_base_dart*, vpyr_2_tpyramid_base_dart*const*> vpyr_2_tpyramid_const_base_dart_iterator ;
+//:
+typedef vmap_2_map_dart_base_iterator<const vpyr_2_tpyramid_base_dart&,
+                                      const vpyr_2_tpyramid_base_dart*,
+                                      vpyr_2_tpyramid_base_dart*const*> vpyr_2_tpyramid_const_base_dart_iterator ;
 
 //: class for vertices on the base.
 class vpyr_2_tpyramid_base_vertex : public vmap_2_tmap_vertex
 {
-public :
+ public :
 
   typedef vpyr_2_tpyramid_base_dart_iterator dart_iterator ;
-  
-  //: 
+
+  //:
   typedef vpyr_2_tpyramid_const_base_dart_iterator const_dart_iterator ;
 
   //: Returns the corresponding vertex at level "level".
@@ -130,8 +135,7 @@ public :
   //: Returns the corresponding vertex at level "level".
   vpyr_2_tpyramid_base_vertex* ancestor(vmap_level_index level) ;
 
-  //: Returns the number of edges adjacent to the vertex,
-  //  i.e. the cardinal of associated sigma*.
+  //: Returns the number of edges adjacent to the vertex, i.e., the cardinal of associated sigma*.
   int degree(vmap_level_index level) const ;
 
   //: Returns an iterator on the first dart of the associated sigma*.
@@ -164,43 +168,43 @@ public :
     _last_level = arg ;
   }
 
-private:
-  
-  //: 
+ private:
+
+  //:
   vmap_level_index _last_level ;
-} ;
+};
 
 template <class D>
 class vmap_2_tpd_vertex : public vpyr_2_tpyramid_base_vertex
 {
-public:
+ public:
 
-  //: 
+  //:
   typename D::value_type & data(vmap_level_index arg_level)
   {
     return _d.data(arg_level) ;
   }
 
-  //: 
+  //:
   const typename D::value_type  & data(vmap_level_index arg_level) const
   {
     return _d.data(arg_level) ;
   }
 
-protected :
-  
-  //: 
+ protected :
+
+  //:
   D _d ;
 };
 
 //: The class for faces of the base structure of a topological pyramid.
 class vpyr_2_tpyramid_base_face : public vmap_2_tmap_face
 {
-public :
+ public :
 
   typedef vpyr_2_tpyramid_base_dart_iterator dart_iterator ;
-  
-  //: 
+
+  //:
   typedef vpyr_2_tpyramid_const_base_dart_iterator const_dart_iterator ;
 
   //: Returns the corresponding face at level "level".
@@ -209,8 +213,7 @@ public :
   //: Returns the corresponding face at level "level".
   vpyr_2_tpyramid_base_face* ancestor(vmap_level_index level);
 
-  //: Returns the number of edges adjacent to the face,
-  //  i.e. the cardinal of associated phi*.
+  //: Returns the number of edges adjacent to the face, i.e., the cardinal of associated phi*.
   int degree(vmap_level_index level) const ;
 
   //: Returns an iterator on the first dart of the associated phi*.
@@ -243,50 +246,50 @@ public :
     _last_level = arg ;
   }
 
-private:
-  
-  //: 
+ private:
+
+  //:
   vmap_level_index _last_level ;
-} ;
+};
 
 template <class D>
 class vmap_2_tpd_face : public vpyr_2_tpyramid_base_face
 {
-public:
+ public:
 
-  //: 
+  //:
   typename D::value_type & data(vmap_level_index arg_level)
   {
     return _d.data(arg_level) ;
   }
 
-  //: 
+  //:
   const typename D::value_type & data(vmap_level_index arg_level) const
   {
     return _d.data(arg_level) ;
   }
 
-protected :
-  
-  //: 
+ protected :
+
+  //:
   D _d ;
 };
 
-//: 
+//:
 class vpyr_2_tpyramid_base_edge : public vmap_2_tmap_edge
 {
-public:
+ public:
 
-  //: 
+  //:
   typedef vpyr_2_tpyramid_base_dart_iterator dart_iterator ;
-  
-  //: 
+
+  //:
   typedef vpyr_2_tpyramid_const_base_dart_iterator const_dart_iterator ;
 
-  //: 
+  //:
   typedef vpyr_2_tpyramid_base_dart_iterator dart_iterator ;
-  
-  //: 
+
+  //:
   typedef vpyr_2_tpyramid_const_base_dart_iterator const_dart_iterator ;
 
   //: Returns the corresponding edge at level "level".
@@ -360,30 +363,30 @@ public:
   //: Sets the index of the last level of existence of the edge.
   void set_last_level(vmap_level_index arg)
   {}
-}
-;
+};
 
-//: 
+//:
 template <class D>
 class vmap_2_tpd_edge : public vpyr_2_tpyramid_base_edge
 {
-public:
+ public:
 
-  //: 
+  //:
   typename D::value_type & data(vmap_level_index arg_level)
   {
     return _d.data(arg_level) ;
   }
 
-  //: 
+  //:
   const typename D::value_type & data(vmap_level_index arg_level) const
   {
     return _d.data(arg_level) ;
   }
 
-protected :
-  
-  //: 
+ protected :
+
+  //:
   D _d ;
 };
+
 #endif

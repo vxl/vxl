@@ -1,4 +1,4 @@
-// This is contrib/prip/vmap/vmap_2_tmap_elts.h
+// This is prip/vmap/vmap_2_tmap_elts.h
 #ifndef vmap_2_tmap_elts_h_
 #define vmap_2_tmap_elts_h_
 //:
@@ -21,14 +21,14 @@ class vmap_2_tmap_face ;
 template <class V, class E, class F>
 class vmap_2_tmap_tuple
 {
-public:
+ public:
   vmap_2_tmap_tuple()
   {
     _edge=NULL ;
     _vertex=NULL ;
     _face=NULL ;
   }
-  
+
   //: Associated edge.
   const E & edge() const
   {
@@ -71,81 +71,82 @@ public:
     _vertex=arg ;
   }
 
-  //: 
+  //:
   void set_edge(E*arg)
   {
     _edge=arg ;
   }
 
-  //: 
+  //:
   void set_face(F*arg)
   {
     _face=arg ;
   }
 
-  //: 
+  //:
   V* get_vertex_pointer() const
   {
     return _vertex ;
   }
 
-  //: 
+  //:
   E* get_edge_pointer() const
   {
     return _edge ;
   }
 
-  //: 
+  //:
   F* get_face_pointer() const
   {
     return _face ;
   }
 
-  //: 
+  //:
   bool valid() const
   {
     return _edge!=NULL && _vertex!=NULL && _face != NULL ;
   }
 
-protected :
-  
-  //: 
+ protected :
+
+  //:
   E * _edge ;
-  
-  //: 
+
+  //:
   V * _vertex ;
-  
-  //: 
+
+  //:
   F * _face ;
-} ;
+};
 
 //: the base dart class of a topological map
-class vmap_2_tmap_dart : public vmap_2_map_dart, public vmap_2_tmap_tuple< vmap_2_tmap_vertex, vmap_2_tmap_edge, vmap_2_tmap_face >
+class vmap_2_tmap_dart : public vmap_2_map_dart,
+                         public vmap_2_tmap_tuple< vmap_2_tmap_vertex, vmap_2_tmap_edge, vmap_2_tmap_face >
 {
-public:
-  //: 
+ public:
+  //:
   void set_sequence_index(vmap_dart_index arg) ;
-} ;
+};
 
 
 //: Enables to iterate on the topology of a topological map.
 typedef vmap_2_map_dart_base_iterator< vmap_2_tmap_dart&,vmap_2_tmap_dart*,vmap_2_tmap_dart**> vmap_2_tmap_dart_iterator ;
 
 //: Enables to iterate on the topology of a topological map.
-typedef vmap_2_map_dart_base_iterator< const vmap_2_tmap_dart&,const vmap_2_tmap_dart*,vmap_2_tmap_dart*const*> vmap_2_tmap_const_dart_iterator ;
+typedef vmap_2_map_dart_base_iterator< const vmap_2_tmap_dart&,const vmap_2_tmap_dart*,vmap_2_tmap_dart*const*>
+        vmap_2_tmap_const_dart_iterator ;
 
 //: The public vertex_type class. Vertices are the orbits sigma* of the darts.
 class vmap_2_tmap_vertex
 {
-public :
+ public :
   //: the dart iterator of the associated darts.
   typedef vmap_2_tmap_dart_iterator dart_iterator ;
-  
+
   //: the dart iterator of the associated darts.
   typedef vmap_2_tmap_const_dart_iterator const_dart_iterator ;
 
-  //: Returns the number of edges adjacent to the vertex,
-  //  i.e. the cardinal of associated sigma*.
+  //: Returns the number of edges adjacent to the vertex, i.e., the cardinal of associated sigma*.
   int degree() const ;
 
   //: Returns an iterator on the first dart of the associated sigma*.
@@ -153,7 +154,7 @@ public :
   {
     return _begin ;
   }
-  
+
   //: Returns an iterator on the first dart of the associated sigma*.
   const_dart_iterator begin() const
   {
@@ -171,34 +172,33 @@ public :
   {
     return _sequence_index ;
   }
-  
-  //: 
+
+  //:
   void set_sequence_index(vmap_vertex_index arg)
   {
     _sequence_index=arg ;
   }
 
-protected :
-  
-  //: 
+ protected :
+
+  //:
   vmap_vertex_index _sequence_index ;
-  
-  //: 
+
+  //:
   dart_iterator _begin ;
-} ;
+};
 
 //: The public face_type class.  face_types are the orbits phi* of the darts.
 class vmap_2_tmap_face
 {
-public :
+ public :
   //: the dart iterator of the associated darts.
   typedef vmap_2_tmap_dart_iterator dart_iterator ;
-  
+
   //: the dart iterator of the associated darts.
   typedef vmap_2_tmap_const_dart_iterator const_dart_iterator ;
 
-  //: Returns the number of edges adjacent to the face,
-  //  i.e. the cardinal of associated phi*.
+  //: Returns the number of edges adjacent to the face, i.e., the cardinal of associated phi*.
   int degree() const ;
 
   //: Returns an iterator on the first dart of the associated phi*.
@@ -218,37 +218,37 @@ public :
   {
     _begin = arg ;
   }
-  
+
   //: An index of the map's face sequence.
   vmap_face_index sequence_index() const
   {
     return _sequence_index ;
   }
-  
-  //: 
+
+  //:
   void set_sequence_index(vmap_face_index arg)
   {
     _sequence_index=arg ;
   }
 
-protected :
-  //: 
+ protected :
+  //:
   vmap_face_index _sequence_index ;
-  
-  //: 
+
+  //:
   dart_iterator _begin ;
-} ;
+};
 
 //: The public edge class. Edges are the orbits alpha* of the darts.
 class vmap_2_tmap_edge
 {
-public :
-  //: 
+ public :
+  //:
   typedef vmap_2_tmap_dart_iterator dart_iterator ;
-  
-  //: 
+
+  //:
   typedef vmap_2_tmap_const_dart_iterator const_dart_iterator ;
-  
+
   //: Returns the cardinal of alpha*, i.e. 2.
   //    This is present for having an homogeneous view of the
   //    elements associated to permutations.
@@ -359,13 +359,12 @@ public :
     _sequence_index=arg ;
   }
 
-protected :
-  //: 
+ protected :
+  //:
   vmap_edge_index _sequence_index ;
-  
-  //: 
-  dart_iterator _begin ;
 
-} ;
+  //:
+  dart_iterator _begin ;
+};
 
 #endif
