@@ -148,6 +148,11 @@ SOURCE=.\gevd_contour.cxx
 SOURCE=.\gevd_bufferxy.cxx
 
 # End Source File
+# Begin Source File
+
+SOURCE=.\gevd_clean_edgels.cxx
+
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter ""
@@ -209,6 +214,11 @@ SOURCE=.\gevd_pixel.h
 # Begin Source File
 
 SOURCE=.\gevd_xpixel.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\gevd_clean_edgels.h
 
 # End Source File
 # End Group
