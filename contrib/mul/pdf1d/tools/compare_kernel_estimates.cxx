@@ -72,7 +72,7 @@ void test_comparison(int n_samples, int n_trials,
   vcl_cout<<"Sampling "<<n_samples;
   vcl_cout<<" values from pdf and computing overlap with kernel estimate."<<vcl_endl;
   vcl_cout<<"Averaging over "<<n_trials<<" trials."<<vcl_endl;
-  for (int i=0;i<B_stats.size();++i)
+  for (unsigned int i=0;i<B_stats.size();++i)
   {
     vcl_cout<<name[i]<<" : "<<vcl_endl;
     vcl_cout<<"Mean: "<<B_stats[i].mean()<<" Std.Err: "<<B_stats[i].stdError()<<vcl_endl;
