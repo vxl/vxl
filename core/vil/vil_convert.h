@@ -19,65 +19,87 @@ template <class In, class Out>
 class vil2_convert_cast_pixel
 {
   public:
-  Out operator () (In v) const { return (Out)v; }
+  void operator () (In v, Out &d) const { d = (Out)v; }
 };
 
 
 VCL_DEFINE_SPECIALIZATION
-inline vxl_byte vil2_convert_cast_pixel<float, vxl_byte>::operator () (float v) const
-{ return (vxl_byte)(v+0.5); }
+inline void vil2_convert_cast_pixel<float, vxl_byte>::operator () (float v, vxl_byte& d) const
+{ d = (vxl_byte)(v+0.5); }
 
 VCL_DEFINE_SPECIALIZATION
-inline vxl_byte vil2_convert_cast_pixel<double, vxl_byte>::operator () (double v) const
-{ return (vxl_byte)(v+0.5); }
+inline void vil2_convert_cast_pixel<double, vxl_byte>::operator () (double v, vxl_byte& d) const
+{ d = (vxl_byte)(v+0.5); }
 
 VCL_DEFINE_SPECIALIZATION
-inline vxl_sbyte vil2_convert_cast_pixel<float, vxl_sbyte>::operator () (float v) const
-{ return (vxl_sbyte)(v+0.5); }
+inline void vil2_convert_cast_pixel<float, vxl_sbyte>::operator () (float v, vxl_sbyte& d) const
+{ d = (vxl_sbyte)(v+0.5); }
 
 VCL_DEFINE_SPECIALIZATION
-inline vxl_sbyte vil2_convert_cast_pixel<double, vxl_sbyte>::operator () (double v) const
-{ return (vxl_sbyte)(v+0.5); }
+inline void vil2_convert_cast_pixel<double, vxl_sbyte>::operator () (double v, vxl_sbyte& d) const
+{ d = (vxl_sbyte)(v+0.5); }
 
 VCL_DEFINE_SPECIALIZATION
-inline vxl_uint_16 vil2_convert_cast_pixel<float, vxl_uint_16>::operator () (float v) const
-{ return (vxl_uint_16)(v+0.5); }
+inline void vil2_convert_cast_pixel<float, vxl_uint_16>::operator () (float v, vxl_uint_16& d) const
+{ d = (vxl_uint_16)(v+0.5); }
 
 VCL_DEFINE_SPECIALIZATION
-inline vxl_uint_16 vil2_convert_cast_pixel<double, vxl_uint_16>::operator () (double v) const
-{ return (vxl_uint_16)(v+0.5); }
+inline void vil2_convert_cast_pixel<double, vxl_uint_16>::operator () (double v, vxl_uint_16& d) const
+{ d = (vxl_uint_16)(v+0.5); }
 
 VCL_DEFINE_SPECIALIZATION
-inline vxl_int_16 vil2_convert_cast_pixel<float, vxl_int_16>::operator () (float v) const
-{ return (vxl_int_16)(v+0.5); }
+inline void vil2_convert_cast_pixel<float, vxl_int_16>::operator () (float v, vxl_int_16& d) const
+{ d = (vxl_int_16)(v+0.5); }
 
 VCL_DEFINE_SPECIALIZATION
-inline vxl_int_16 vil2_convert_cast_pixel<double, vxl_int_16>::operator () (double v) const
-{ return (vxl_int_16)(v+0.5); }
+inline void vil2_convert_cast_pixel<double, vxl_int_16>::operator () (double v, vxl_int_16& d) const
+{ d = (vxl_int_16)(v+0.5); }
 
 VCL_DEFINE_SPECIALIZATION
-inline vxl_uint_32 vil2_convert_cast_pixel<float, vxl_uint_32>::operator () (float v) const
-{ return (vxl_uint_32)(v+0.5); }
+inline void vil2_convert_cast_pixel<float, vxl_uint_32>::operator () (float v, vxl_uint_32& d) const
+{ d = (vxl_uint_32)(v+0.5); }
 
 VCL_DEFINE_SPECIALIZATION
-inline vxl_uint_32 vil2_convert_cast_pixel<double, vxl_uint_32>::operator () (double v) const
-{ return (vxl_uint_32)(v+0.5); }
+inline void vil2_convert_cast_pixel<double, vxl_uint_32>::operator () (double v, vxl_uint_32& d) const
+{ d = (vxl_uint_32)(v+0.5); }
 
 VCL_DEFINE_SPECIALIZATION
-inline vxl_int_32 vil2_convert_cast_pixel<float, vxl_int_32>::operator () (float v) const
-{ return (vxl_int_32)(v+0.5); }
+inline void vil2_convert_cast_pixel<float, vxl_int_32>::operator () (float v, vxl_int_32& d) const
+{ d = (vxl_int_32)(v+0.5); }
 
 VCL_DEFINE_SPECIALIZATION
-inline vxl_int_32 vil2_convert_cast_pixel<double, vxl_int_32>::operator () (double v) const
-{ return (vxl_int_32)(v+0.5); }
+inline void vil2_convert_cast_pixel<double, vxl_int_32>::operator () (double v, vxl_int_32& d) const
+{ d = (vxl_int_32)(v+0.5); }
 
 VCL_DEFINE_SPECIALIZATION
-inline vil_rgb<vxl_byte> vil2_convert_cast_pixel<float, vil_rgb<vxl_byte> >::operator () (float v) const
-{ return vil_rgb<vxl_byte>((vxl_byte)(v+0.5)); }
+inline void vil2_convert_cast_pixel<float, vil_rgb<vxl_byte> >::operator ()
+  (float v, vil_rgb<vxl_byte>& d) const
+{ d.r = d.g = d.b = (vxl_byte)(v+0.5); }
 
 VCL_DEFINE_SPECIALIZATION
-inline vil_rgb<vxl_byte> vil2_convert_cast_pixel<double, vil_rgb<vxl_byte> >::operator () (double v) const
-{ return vil_rgb<vxl_byte>((vxl_byte)(v+0.5)); }
+inline void vil2_convert_cast_pixel<double, vil_rgb<vxl_byte> >::operator ()
+  (double v, vil_rgb<vxl_byte>& d) const
+{ d.r = d.g = d.b = (vxl_byte)(v+0.5); }
+
+VCL_DEFINE_SPECIALIZATION
+inline void vil2_convert_cast_pixel<vxl_byte, vil_rgb<vxl_byte> >::operator ()
+  (vxl_byte v, vil_rgb<vxl_byte>& d) const
+{ d.r = d.g = d.b = v; }
+
+VCL_DEFINE_SPECIALIZATION
+inline void vil2_convert_cast_pixel<float, vil_rgba<vxl_byte> >::operator ()
+  (float v, vil_rgba<vxl_byte>& d) const
+{ d.r = d.g = d.b = (vxl_byte)(v+0.5); d.a = 255; }
+
+VCL_DEFINE_SPECIALIZATION
+inline void vil2_convert_cast_pixel<double, vil_rgba<vxl_byte> >::operator ()
+  (double v, vil_rgba<vxl_byte>& d) const
+{ d.r = d.g = d.b = (vxl_byte)(v+0.5); d.a = 255; }
+
+VCL_DEFINE_SPECIALIZATION
+inline void vil2_convert_cast_pixel<vxl_byte, vil_rgba<vxl_byte> >::operator ()
+  (vxl_byte v, vil_rgba<vxl_byte>& d) const
+{ d.r = d.g = d.b = v; d.a = 255; }
 
 
 //: Cast one pixel type to another (with rounding).
@@ -88,7 +110,8 @@ inline void vil2_convert_cast(const vil2_image_view<inP >&src, vil2_image_view<o
 {
   if (vil2_pixel_format_of(inP()) == vil2_pixel_format_of(outP()))
     dest = src;
-  vil2_transform(src, dest, vil2_convert_cast_pixel<inP, outP>());
+  else
+    vil2_transform2(src, dest, vil2_convert_cast_pixel<inP, outP>());
 }
 
 
@@ -101,10 +124,10 @@ public:
   vil2_convert_rgb_to_grey_pixel(double rw, double gw, double bw):
     rw_(rw), gw_(gw), bw_(bw) {}
 
-  outP operator() (vil_rgb<inP > v) const {
-    return vil2_convert_cast_pixel<double,outP>()(rw_*v.r+gw_*v.g+bw_*v.b); }
-  outP operator() (vil_rgba<inP > v) const {
-    return vil2_convert_cast_pixel<double,outP>()(rw_*v.r+gw_*v.g+bw_*v.b); }
+  void operator() (vil_rgb<inP> v, outP& d) const {
+    vil2_convert_cast_pixel<double,outP>()(rw_*v.r+gw_*v.g+bw_*v.b, d); }
+  void operator() (vil_rgba<inP> v, outP& d) const {
+    vil2_convert_cast_pixel<double,outP>()(rw_*v.r+gw_*v.g+bw_*v.b, d); }
 };
 
 //: Convert single plane rgb (or rgba) images to greyscale.
@@ -123,40 +146,9 @@ inline void vil2_convert_rgb_to_grey(const vil2_image_view<rgbP >&src, vil2_imag
   vil2_convert_rgb_to_grey_pixel<typename rgbP::value_type, outP> func(rw, gw, bw);
 #endif
   assert(src.nplanes() == 1);
-  vil2_transform(src, dest, func);
+  vil2_transform2(src, dest, func);
 }
 
-template <class inP, class outP>
-struct vil2_convert_grey_to_rgb_pixel
-{
-  vil_rgb<outP> operator() (inP v) const {
-    return vil_rgb<outP>(vil2_convert_cast_pixel<double,outP>()(v)); }
-};
-
-template <class inP, class outP>
-struct vil2_convert_grey_to_rgba_pixel
-{
-  vil_rgba<outP> operator() (inP v) const {
-    return vil_rgba<outP>(vil2_convert_cast_pixel<double,outP>()(v)); }
-};
-
-//: Convert grey images to rgb.
-// Component types can be different. Rounding will take place if appropriate.
-template <class inP, class outP >
-inline void vil2_convert_grey_to_rgb(const vil2_image_view<inP >&src, vil2_image_view<vil_rgb<outP> >&dest)
-{
-  assert(src.nplanes() == 1);
-  vil2_transform(src, dest, vil2_convert_grey_to_rgb_pixel<inP, outP>());
-}
-
-//: Convert grey images to rgba.
-// Component types can be different. Rounding will take place if appropriate.
-template <class inP, class outP>
-inline void vil2_convert_grey_to_rgba(const vil2_image_view<inP >&src, vil2_image_view<vil_rgba<outP> >&dest)
-{
-  assert(src.nplanes() == 1);
-  vil2_transform(src, dest, vil2_convert_grey_to_rgba_pixel<inP, outP>());
-}
 
 //: Convert first three planes of src image to grey, assuming rgb.
 // Pixel types can be different. Rounding will take place if appropriate.
@@ -176,8 +168,8 @@ inline void vil2_convert_planes_to_grey(const vil2_image_view<inP>&src,
   dest.set_size(src.ni(), src.nj(), 1);
   for (unsigned j = 0; j < src.nj(); ++j)
     for (unsigned i = 0; i < src.ni(); ++i)
-      dest(i,j) = vil2_convert_cast_pixel<double,outP>()(
-        src(i,j,0)*rw + src(i,j,1)*gw + src(i,j,2)*bw);
+      vil2_convert_cast_pixel<double,outP>()(
+        src(i,j,0)*rw + src(i,j,1)*gw + src(i,j,2)*bw, dest(i,j));
 }
 
 //: Convert src to byte image dest by stretching to range [0,255]
@@ -195,7 +187,7 @@ inline void vil2_convert_stretch_range(const vil2_image_view<T>& src,
   for (unsigned p = 0; p < src.nplanes(); ++p)
     for (unsigned j = 0; j < src.nj(); ++j)
       for (unsigned i = 0; i < src.ni(); ++i)
-        dest(i,j,p) = vil2_convert_cast_pixel<double,vxl_byte>()(a+b*src(i,j,p));
+         vil2_convert_cast_pixel<double,vxl_byte>()(a+b*src(i,j,p), dest(i,j,p));
 }
 
 //: Create a greyscale image of specified pixel type from any image src.

@@ -249,8 +249,8 @@ int main(int argc, char** argv)
   // Estimate time so we can set n_loops appropriately
   double t = fill(byte_1image,5000,false);
 
-  int n_loops = int(300000/t); // Number required for about half a sec running time
-  
+  int n_loops = int(200000/t); // Number required for about half a sec running time
+  vcl_cout << "Testing using n_loops = " << n_loops << vcl_endl << vcl_endl;
   vcl_cout << "Float alignment ";
   if ((((unsigned long)float_2image.top_left_ptr()) % 4ul)>0)
     vcl_cout << "not on 4-byte boundary " << vcl_endl;
@@ -271,31 +271,32 @@ int main(int argc, char** argv)
   compute_stats(2,byte_1image,n_loops);
   compute_stats(2,byte_2image,n_loops);
   vcl_cout<<"------------------------------"<<vcl_endl;
-  compute_stats(2,float_1image,n_loops);
-  compute_stats(2,float_2image,n_loops);
+  compute_stats(2,float_1image,1+n_loops/7);
+  compute_stats(2,float_2image,1+n_loops/3);
   vcl_cout<<"------------------------------"<<vcl_endl;
-  compute_stats(2,rgb_1image,n_loops);
-  compute_stats(2,rgb_2image,n_loops);
-  vcl_cout<<"------------------------------"<<vcl_endl;
-  vcl_cout << "\n\n";
-
-  n_loops/=5;
-  compute_stats(3,byte_1image,n_loops);
-  compute_stats(3,byte_2image,n_loops);
-  vcl_cout<<"------------------------------"<<vcl_endl;
-  compute_stats(3,float_1image,n_loops);
-  compute_stats(3,float_2image,n_loops);
+  compute_stats(2,rgb_1image,1+n_loops/4);
+  compute_stats(2,rgb_2image,1+n_loops/2);
   vcl_cout<<"------------------------------"<<vcl_endl;
   vcl_cout << "\n\n";
 
-  compute_stats(4,byte_1image,n_loops);
-  compute_stats(4,byte_2image,n_loops);
+  compute_stats(3,byte_1image,1+n_loops/20);
+  compute_stats(3,byte_2image,1+n_loops/8);
   vcl_cout<<"------------------------------"<<vcl_endl;
-  compute_stats(4,float_1image,n_loops);
-  compute_stats(4,float_2image,n_loops);
+  compute_stats(3,float_1image,1+n_loops/20);
+  compute_stats(3,float_2image,1+n_loops/9);
   vcl_cout<<"------------------------------"<<vcl_endl;
-  compute_stats(4,rgb_1image,n_loops);
-  compute_stats(4,rgb_2image,n_loops);
+  vcl_cout << "\n\n";
+
+  compute_stats(4,byte_1image,1+n_loops/2);
+  compute_stats(4,byte_2image,1+n_loops);
+  vcl_cout<<"------------------------------"<<vcl_endl;
+  compute_stats(4,float_1image,1+n_loops/33);
+  compute_stats(4,float_2image,1+n_loops/12);
+  vcl_cout<<"------------------------------"<<vcl_endl;
+  compute_stats(4,rgb_1image,1+n_loops/2);
+  vcl_cout << "The next one is very fast because vil2 realises that you are trying \n"
+              "to view an image as its existing type and so does a shallow copy" << vcl_endl;
+  compute_stats(4,rgb_2image,1+n_loops);
   vcl_cout<<"------------------------------"<<vcl_endl;
 
   return 0;
