@@ -53,8 +53,7 @@ bool vidl_avicodec::read_header()
 
   //Read in Width
   set_width(avi_file_info_.dwWidth);
-  if (avi_stream_info_.rcFrame.right-avi_stream_info_.rcFrame.left
-      != avi_file_info_.dwWidth)
+  if (avi_stream_info_.rcFrame.right != avi_file_info_.dwWidth+avi_stream_info_.rcFrame.left)
   {
     vcl_cerr << "vidl_avicodec::read_header width size screwed up\n"
              <<   "          size of avi file : " << avi_file_info_.dwWidth
@@ -65,8 +64,7 @@ bool vidl_avicodec::read_header()
 
   //Read in Height
   set_height(avi_file_info_.dwHeight);
-  if (avi_stream_info_.rcFrame.bottom-avi_stream_info_.rcFrame.top
-      != avi_file_info_.dwHeight)
+  if (avi_stream_info_.rcFrame.bottom != avi_file_info_.dwHeight+avi_stream_info_.rcFrame.top)
   {
     vcl_cerr << "vidl_avicodec::read_header Height size screwed up\n"
              <<   "          size of avi file : " << avi_file_info_.dwHeight
