@@ -27,22 +27,6 @@ IF( PKG_CONFIG )
     SET( GTK2_FOUND "YES" )
     SET( GTK2_DEFINITIONS "${GTK2_gtk_DEFINITIONS} ${GTK2_glext_DEFINITIONS}" )
     SET( GTK2_LIBRARIES   "${GTK2_gtk_LIBRARIES} ${GTK2_glext_LIBRARIES}" )
-    SET( GTK2_cached_DEFINITIONS ${GTK2_DEFINITIONS}
-         CACHE STRING "Cached value. Set to NOTFOUND to re-compute via pkg-config"
-         FORCE )
-    SET( GTK2_cached_LIBRARIES ${GTK2_LIBRARIES}
-         CACHE STRING "Cached value. Set to NOTFOUND to re-compute via pkg-config"
-         FORCE )
-
-  ELSE( ${GTK2_PKG_RET_VAL} MATCHES "0" )
-
-    # Set to spaces to indicate that we looked for the package, but didn't find it
-    SET( GTK2_cached_DEFINITIONS " "
-         CACHE STRING "Cached value. Set to NOTFOUND to re-compute via pkg-config"
-         FORCE )
-    SET( GTK2_cached_LIBRARIES " "
-         CACHE STRING "Cached value. Set to NOTFOUND to re-compute via pkg-config"
-         FORCE )
 
   ENDIF( ${GTK2_PKG_RET_VAL} MATCHES "0" )
 
