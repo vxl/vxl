@@ -124,10 +124,10 @@ class bmrf_network : public vbl_ref_count
     bmrf_node_sptr operator * () const { return curr_node_; }
 
     //: Equality comparison
-    bool operator == (const iterator& rhs) { return rhs.curr_node_ == this->curr_node_; }
+    bool operator == (const iterator& rhs) const { return rhs.curr_node_ == this->curr_node_; }
     
     //: Inequality comparison
-    bool operator != (const iterator& rhs) { return rhs.curr_node_ != this->curr_node_; }
+    bool operator != (const iterator& rhs) const { return rhs.curr_node_ != this->curr_node_; }
 
    protected:
     //: Increment the current node
