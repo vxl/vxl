@@ -4,6 +4,22 @@
 */
 
 #include "../f2c.h"
+#include "../netlib.h"
+extern double sin(double), cos(double), sqrt(double);
+
+/* Subroutine */ void lstp_(int*m, int*n, int*nduplc, int*npower, double*damp, double*x, double*b, double*d,
+                            double*hy, double*hz, double*w, double*acond, double*rnorm);
+
+/* Subroutine */ void aprod_(int*mode, int*m, int*n, double*x, double*y, int*leniw, int*lenrw, int*iw, double*rw);
+/* Subroutine */ void hprod_(int*n, double*hz, double*x, double*y);
+/* Subroutine */ void aprod1_(int*m, int*n, double*x, double*y, double*d, double*hy, double*hz, double*w);
+/* Subroutine */ void aprod2_(int*m, int*n, double*x, double*y, double*d, double*hy, double*hz, double*w);
+
+/* Subroutine */ void test_(int*m, int*n, int*nduplc, int*npower, double*damp);
+/* Subroutine */ void do_fio(integer* fp, char* buf, integer len);
+
+/* Subroutine */ void s_wsfe(cilist*); void s_wsfe(cilist* l) {}
+/* Subroutine */ void e_wsfe(void); void e_wsfe() {}
 
 /* Table of constant values */
 
@@ -81,7 +97,6 @@ integer *leniw, *lenrw, *iw;
 doublereal *rw;
 {
     static integer locd, locw, lochy, lochz;
-    extern /* Subroutine */ void aprod1_(), aprod2_();
 
 /*     ------------------------------------------------------------------
 */
@@ -121,7 +136,6 @@ doublereal *x, *y, *d, *hy, *hz, *w;
 
     /* Local variables */
     static integer i;
-    extern /* Subroutine */ void hprod_();
 
 /*     ------------------------------------------------------------------
 */
@@ -169,7 +183,6 @@ doublereal *x, *y, *d, *hy, *hz, *w;
 
     /* Local variables */
     static integer i;
-    extern /* Subroutine */ void hprod_();
 
 /*     ------------------------------------------------------------------
 */
@@ -249,15 +262,10 @@ doublereal *damp, *x, *b, *d, *hy, *hz, *w, *acond, *rnorm;
     integer i__1;
     doublereal d__1, d__2;
 
-    /* Builtin functions */
-    double sin(), cos(), pow_di(), sqrt();
-
     /* Local variables */
     static doublereal alfa, beta;
-    extern doublereal dnrm2_();
     static integer i, j;
     static doublereal t;
-    extern /* Subroutine */ void dscal_(), hprod_(), aprod1_();
     static doublereal dampsq, fourpi;
 
 /*     ------------------------------------------------------------------
@@ -407,26 +415,18 @@ The length of  RW  should be at least\002,i6)";
     integer i__1;
     doublereal d__1, d__2;
 
-    /* Builtin functions */
-    /* Subroutine */ void s_wsfe(), do_fio(), e_wsfe();
-    double sqrt();
-
     /* Local variables */
     static integer locd;
     static doublereal atol, btol, etol;
     static integer locw;
-    extern /* Subroutine */ void lsqr_(), lstp_();
     static integer nout;
-    extern doublereal dnrm2_();
     static doublereal b[200];
     static integer j;
     static doublereal acond, u[200], v[100], w[100], x[100];
-    extern /* Subroutine */ void dscal_(), aprod_();
     static doublereal anorm;
     static integer lochy;
     static doublereal enorm;
     static integer lochz;
-    extern /* Subroutine */ void dcopy_();
     static doublereal rnorm;
     static integer istop;
     static doublereal xnorm, xtrue[100], se[100];
@@ -604,16 +604,11 @@ L900:
 /*     ------------- */
 /*     Main program. */
 /*     ------------- */
-/* Main program */ int main()
+/* Main program */ int main(void)
 {
-    /* Builtin functions */
-    /* Subroutine */ void s_stop();
-
     /* Local variables */
     static doublereal zero;
-    extern /* Subroutine */ void test_();
     static doublereal damp1, damp2, damp3, damp4;
-
 
     zero = (float)0.;
     damp1 = (float).1;
@@ -626,10 +621,9 @@ L900:
     test_(&c__40, &c__40, &c__4, &c__4, &damp2);
     test_(&c__80, &c__40, &c__4, &c__4, &damp2);
     return 0;
- /* s_stop("", 0L); */
 } /* End of main program for testing LSQR */
 
-int abort();
+int abort(void);
 
 #include <stdio.h>
 
@@ -647,7 +641,3 @@ int abort();
     putchar('\n');
   }
 }
-
-/* Subroutine */ void s_wsfe() {}
-/* Subroutine */ void e_wsfe() {}
-/* Subroutine */ void s_stop() {}
