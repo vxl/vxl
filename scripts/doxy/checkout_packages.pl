@@ -58,9 +58,9 @@ while (<PACKAGES>)
   if ( /^#/ ) { next; }
 
 	chomp;
-  ($package,$cvsroot) = split /\s/;
+  ($package,$cvsroot) = split;
 
-	print "Checking for $package\n";
+	print "Checking for $package (CVSROOT=$cvsroot)\n";
 	if (! -e $package)
 	{
      xec("cvs -z3 -d$cvsroot co $package");
