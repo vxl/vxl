@@ -508,12 +508,12 @@ real slamch_(const char *cmach)
 /* ** Comment out this if block if EMIN is ok */
         if (iwarn) {
             first = TRUE_;
-            printf("\n\n WARNING. The value EMIN may be incorrect:- ");
+            printf("\n\n WARNING. The value EMIN may be incorrect: - ");
             printf("EMIN = %8i\n",lemin);
             printf("If, after inspection, the value EMIN looks acceptable");
-            printf("please comment out \n the IF block as marked within the");
-            printf("code of routine SLAMC2, \n otherwise supply EMIN");
-            printf("explicitly.\n");
+            printf(" please comment out\n the IF block as marked within the");
+            printf(" code of routine SLAMC2,\n otherwise supply EMIN");
+            printf(" explicitly.\n");
         }
 /* **     Assume IEEE arithmetic if we found denormalised  numbers above,
           or if arithmetic seems to round in the  IEEE style,  determined
@@ -550,9 +550,9 @@ real slamch_(const char *cmach)
 } /* slamc2_ */
 
 
-// Microsoft Visual C++ 2003 produces bad code when the following
-// routine is optimized.  Turn off the optimization for this one
-// routine and turn back on any optimizations after this routine.
+/* Microsoft Visual C++ 2003 produces bad code when the following */
+/* routine is optimized.  Turn off the optimization for this one  */
+/* routine and turn back on any optimizations after this routine. */
 #if defined(_WIN32) || defined(WIN32)
 #if (_MSC_VER >= 1310)
 #pragma optimize("", off)
@@ -585,7 +585,7 @@ real slamc3_(real *a, real *b)
     return *a + *b;
 } /* slamc3_ */
 
-// Turn the optimizations back on for Visual Studio .NET 2003
+/* Turn the optimizations back on for Visual Studio .NET 2003 */
 #if defined(_WIN32) || defined(WIN32)
 #if (_MSC_VER >= 1310)
 #pragma optimize("", on)
@@ -658,7 +658,7 @@ real slamc3_(real *a, real *b)
 } /* slamc4_ */
 
 /* Subroutine */ void slamc5_(integer *beta, integer *p, integer *emin,
-        logical *ieee, integer *emax, real *rmax)
+                              logical *ieee, integer *emax, real *rmax)
 {
 /*  -- LAPACK auxiliary routine (version 2.0) --
        Univ. of Tennessee, Univ. of California Berkeley, NAG Ltd.,
