@@ -70,16 +70,14 @@ typename M::const_dart_iterator find_dart(const M & map, int id)
 template <class K>
 void display_kernel(K & kernel)
 {
-  int i ;
-  vcl_cout<<'{' ; vcl_cout.flush() ;
+  vcl_cout<<'{'<<vcl_flush ;
   if (kernel.size()>0)
+    vcl_cout<<kernel.dart(0)->id()<<vcl_flush ;
+  for (unsigned int i=1; i<kernel.size(); ++i)
   {
-    for (i=0; i<kernel.size()-1; ++i)
-    {
-      vcl_cout<<kernel.dart(i)->id()<<',' ;vcl_cout.flush() ;
-    }
-    vcl_cout<<kernel.dart(i)->id()<<'}' ;
+    vcl_cout<<','<<kernel.dart(i)->id()<<vcl_flush ;
   }
+  vcl_cout<<'}' <<vcl_flush ;
 }
 
 #endif
