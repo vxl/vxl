@@ -272,7 +272,7 @@ void vul_arg_info_list::parse(int& argc, char **& argv, bool warn_about_unrecogn
   while (*my_argv) {
     char* argmt = *my_argv;
     bool eaten = false;
-    for (unsigned int i = 0; i < args.size(); ++i)
+    for (unsigned int i = 0; i < args.size(); ++i) {
       if (args[i]->option_) {
         if ( help == argmt ) { // look for the '-?' operator (i.e. HELP)
           display_help(argv[0]);
@@ -293,6 +293,7 @@ void vul_arg_info_list::parse(int& argc, char **& argv, bool warn_about_unrecogn
           }
         }
       }
+    }
     if (!eaten)
       ++my_argv;
   }
@@ -420,13 +421,13 @@ static int list_parse(vcl_list<int> &out, char ** argv)
 
     // this is the current token.
 //  vcl_string token = str.substr(start, endp);
-//  vcl_cout << "KYM token = " << token << endl;
+//  vcl_cerr << "token = " << token << vcl_endl;
     vcl_string match1 = range_regexp.match(1);
-//  vcl_cout << "KYM match1 = " << match1 << endl;
+//  vcl_cerr << "match1 = " << match1 << vcl_endl;
     vcl_string match2 = range_regexp.match(2);
-//  vcl_cout << "KYM match2 = " << match2 << endl;
+//  vcl_cerr << "match2 = " << match2 << vcl_endl;
     vcl_string match3 = range_regexp.match(3);
-//  vcl_cout << "KYM match3 = " << match3 << endl;
+//  vcl_cerr << "match3 = " << match3 << vcl_endl;
 
     // Remove this match from the front of string.
     str.erase(0, endp + 1);
