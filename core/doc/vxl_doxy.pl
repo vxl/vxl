@@ -17,10 +17,10 @@ exec perl -w -x $0 ${1+"$@"}
 
 
 # patterns to be matched
-$verbpatt = '\\verbatim';
-$endverbpatt = '\\endverbatim';
-$slashslashpatt = '^\s*//';
-$slashslashcolonpatt = '^\s*//:';
+$verbpatt = '\\\\verbatim';
+$endverbpatt = '\\\\endverbatim';
+$slashslashpatt = '^\\s*//';
+$slashslashcolonpatt = '^\\s*//:';
 $slashstarstarpatt = '/**';
 $spacespacepatt = '  ';
 $starpatt = '*';
@@ -41,6 +41,12 @@ $debug = 0;
 # mainloop
 while (<>)
 {
+    # preprocessing
+    s/\bVCL_SUNPRO_CLASS_SCOPE_HACK\s*\([^()]*\)//g;
+    s/\bVCL_SUNPRO_ALLOCATOR_HACK\s*\(([^()]*)\)/$1/g;
+    s/\bVCL_CAN_STATIC_CONST_INIT_(INT|FLOAT)\b/1/g;
+    s/\bVCL_STATIC_CONST_INIT_(INT|FLOAT)\s*\(([^()]*)\)/= $2/g;
+
     if ( $should_end_verbatim )
     {
         $verbatim = 0;
@@ -58,7 +64,11 @@ while (<>)
     {
         chomp;
         # escape all dots, and add a dot at the end:
-        s/\./\\\./g; s/\\\.\s*$//; s/$/.\n/;
+        s/\./\\\./g; s/(\\\.)?\s*$/.\n/;
+        # Remove that dot again, if the line is empty or only has '\file':
+        s/\.$// if (m!^\s*\/\*\*\s*(\\file)?\s*\.$!);
+        # Replace '\file' with '@file' (Java-style comment)
+        s/\\file\b/\@file/ if (m!^\s*\/\*\*\s*\\file\s*$!);
         if ($comment)
         {
             # Previous comment hasn't ended--two contiguous comment blocks.
@@ -69,10 +79,18 @@ while (<>)
         print; next;
     }
 
+    # Replace '\file' with '@file' (Java-style comment)
+    s/\\file\b/\@file/ if ($comment);
+
+    # Replace '$' with '\f$' (TeX math mode)
+    s/(\\f)?\$(.+?)(\\f)?\$/\\f\$$2\\f\$/g if ($comment);
+
     # found continuation of comment WITH verbatim -> no "*"
     if ( m!$slashslashpatt! && $verbatim && $comment)
     {
         s!$slashslashpatt!$spacespacepatt!;
+        # Make 'Modifications' a section title:
+        s!\b(Modifications?)\b\:?!\<H2\>$1\<\/H2\>!;
         print; next;
     }
 
