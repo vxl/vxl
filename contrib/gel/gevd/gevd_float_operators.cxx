@@ -20,7 +20,7 @@
 # include <vul/vul_timer.h>
 #endif
 
-#ifdef VCL_WIN32
+#if defined(VCL_VC) || defined(VCL_BORLAND)
 inline static double rint(double v)
 {
   return  v - vcl_floor(v) < 0.5  ?  vcl_floor(v)  :  vcl_ceil(v);

@@ -1,4 +1,7 @@
 // This is oxl/apps/glmovie/vobgetframe.cxx
+
+#include <vcl_compiler.h>
+
 #include <vil1/vil1_save.h>
 
 #include <vul/vul_arg.h>

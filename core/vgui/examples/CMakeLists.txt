@@ -72,7 +72,11 @@ ENDIF (GLUT_FOUND)
 
 # MFC example
 #------------
-INCLUDE(${CMAKE_ROOT}/Modules/FindMFC.cmake)
+IF(NOT MINGW)
+  # MFC is not available in MinGW.
+  # This should be fixed in FindMFC.cmake and then this IF can be removed
+  INCLUDE(${CMAKE_ROOT}/Modules/FindMFC.cmake)
+ENDIF(NOT MINGW)
 IF(MFC_FOUND)
    SUBDIRS( mfc_example )
 ENDIF(MFC_FOUND)

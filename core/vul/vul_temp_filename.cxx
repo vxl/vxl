@@ -12,7 +12,7 @@
 # include <vcl_cstdio.h> // for _tempnam on borland.
 #endif
 
-#if defined(VCL_VC) || defined(VCL_BORLAND)
+#if defined(VCL_VC) || defined(VCL_BORLAND) || defined(__MINGW32__)
   #include <Windows.h>
 #else
 #if defined(unix) || defined(__unix)
@@ -71,7 +71,7 @@
 vcl_string
 vul_temp_filename( )
 {
-#if defined(VCL_VC) || defined(VCL_BORLAND)
+#if defined(VCL_VC) || defined(VCL_BORLAND) || defined(__MINGW32__)
   char path[ _MAX_PATH ];
   char* file;
   if ( GetTempPath( _MAX_PATH, path ) == 0 )

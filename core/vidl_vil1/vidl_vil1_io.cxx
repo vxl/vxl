@@ -2,13 +2,14 @@
 // \file
 
 #include "vidl_vil1_io.h"
+#include <vcl_compiler.h>
 #include <vidl_vil1/vidl_vil1_movie.h>
 #include <vidl_vil1/vidl_vil1_clip.h>
 #include <vidl_vil1/vidl_vil1_image_list_codec.h>
 
-#ifdef _MSC_VER // Microsoft compiler
+#ifdef VCL_WIN32
 # include <vidl_vil1/vidl_vil1_avicodec.h>
-#endif // _MSC_VER
+#endif
 
 #if 0 // TODO
 #include <Basics/stat.h>

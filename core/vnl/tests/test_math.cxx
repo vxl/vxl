@@ -80,7 +80,7 @@ void test_math()
   {
     vcl_cout << "Your platform doesn't appear to have an infinity. VXL is in places relatively\n"
              << "dependent on the existence of an infinity. There are two solutions.\n"
-             << "A. If your platform really doesn have an infinity, VXL's configuration code\n"
+             << "A. If your platform really doesn't have an infinity, VXL's configuration code\n"
              << "   can be modified to correctly detect and use the infinity.\n"
              << "B. Fix VXL so that it can cope with the lack of an infinity.\n" << vcl_endl;
   }

@@ -4,6 +4,7 @@
 //  \file
 
 #include <vcl_vector.h>
+#include <vcl_compiler.h>
 
 #include "vplayer_file.h"
 #include "vplayer_geometry.h"
@@ -23,7 +24,9 @@
 #include <vgui/vgui_image_tableau.h>
 
 #include <vidl_vil1/vidl_vil1_io.h>
+#ifdef VCL_WIN32
 #include <vidl_vil1/vidl_vil1_avicodec.h>
+#endif
 
 class xcv_tableau : public vgui_grid_tableau
 {
@@ -127,7 +130,9 @@ extern int vgui_accelerate_mfc_tag_function();
 int main(int argc, char** argv)
 {
   // Register video codec
+#ifdef VCL_WIN32
   vidl_vil1_io::register_codec(new vidl_vil1_avicodec);
+#endif
 
 #ifdef HAS_GTK
   vgui_gtk_tag_function();

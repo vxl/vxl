@@ -21,7 +21,7 @@
 #include <vidl/vidl_codec.h>
 #include <vidl/vidl_avicodec_sptr.h>
 #include <vidl/vidl_frame_sptr.h>
-#if defined(VCL_VC) || defined(VCL_BORLAND)
+#ifdef VCL_WIN32
 # include <windows.h>
 # undef min
 # undef max

@@ -1,4 +1,5 @@
 // This is gel/jvid/bin/jplayer.cxx
+#include <vcl_compiler.h>
 #include <vcl_iostream.h>
 #include <vcl_cstdlib.h> // for vcl_exit()
 

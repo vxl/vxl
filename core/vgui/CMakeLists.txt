@@ -31,7 +31,11 @@ IF (OPENGL_FOUND)
   INCLUDE(${CMAKE_ROOT}/Modules/FindQt.cmake)
   INCLUDE(${CMAKE_ROOT}/Modules/FindGTK.cmake)
   INCLUDE(${MODULE_PATH}/NewCMake/FindGTK2.cmake)
-  INCLUDE(${CMAKE_ROOT}/Modules/FindMFC.cmake)
+  IF(NOT MINGW)
+    # MFC is not available in MinGW.
+    # This should be fixed in FindMFC.cmake and then this IF can be removed
+    INCLUDE(${CMAKE_ROOT}/Modules/FindMFC.cmake)
+  ENDIF(NOT MINGW)
 
   ADD_DEFINITIONS( -DHAS_OPENGL)
   INCLUDE_DIRECTORIES(${OPENGL_INCLUDE_DIR})

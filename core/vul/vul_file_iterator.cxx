@@ -27,7 +27,7 @@
 struct vul_file_iterator_data
 {
   struct _finddata_t data_;
-# if defined VCL_VC60 || defined VCL_VC50 || defined VCL_BORLAND_55
+# if defined VCL_VC60 || defined VCL_VC50 || defined VCL_BORLAND_55 || defined __MINGW32__
   typedef long handle_type;      // works with msvc6
 # else
   typedef intptr_t handle_type;  // not found by msvc6

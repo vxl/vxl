@@ -49,7 +49,7 @@ IF (WIN32)
     # installed correctly.  Make sure the ilink32.cfg file
     # lists the directory containing the library in the -L option.
     # For example: -L"c:\Borland\BCC55\Lib";"c:\Borland\BCC55\Lib\PSDK"
-    TARGET_LINK_LIBRARIES( vidl_vil1 vfw32.lib )
+    TARGET_LINK_LIBRARIES( vidl_vil1 vfw32 gdi32 )
   ENDIF (NOT CYGWIN)
 ENDIF (WIN32)
 

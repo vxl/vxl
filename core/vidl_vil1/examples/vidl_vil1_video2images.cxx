@@ -3,6 +3,7 @@
 // \brief Small application to convert a video file to image files
 // \author Fred Wheeler
 
+#include <vcl_compiler.h>
 #include <vcl_cstdlib.h>
 #include <vcl_iostream.h>
 #include <vcl_string.h>
@@ -23,7 +24,7 @@
 #if defined(HAS_MPEG2) || defined(VCL_WIN32)
 #include <vidl_vil1/vidl_vil1_mpegcodec.h>
 #endif
-#if defined(VCL_WIN32)
+#ifdef VCL_WIN32
 #include <vidl_vil1/vidl_vil1_avicodec.h>
 #endif
 
@@ -191,7 +192,7 @@ main (int argc, char **argv)
   vidl_vil1_io::register_codec (new vidl_vil1_mpegcodec);
   V1( "registered MPEG2 codec" );
 #endif
-#if defined(VCL_WIN32)
+#ifdef VCL_WIN32
   vidl_vil1_io::register_codec (new vidl_vil1_avicodec);
   V1( "registered AVI codec" );
 #endif

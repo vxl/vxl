@@ -1,3 +1,4 @@
+#include <vcl_compiler.h>
 #include <vcl_iostream.h>
 #include <vul/vul_arg.h>
 #include <vil1/vil1_save.h>

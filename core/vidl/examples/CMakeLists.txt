@@ -16,7 +16,7 @@ INCLUDE_DIRECTORIES( ${VXLCORE_INCLUDE_DIR} )
 SET(vidl_player_sources 
     vidl_player_main.cxx 
     vidl_player_menus.cxx      vidl_player_menus.h
-	vidl_player_manager.cxx    vidl_player_manager.h
+    vidl_player_manager.cxx    vidl_player_manager.h
 )
 
 ADD_EXECUTABLE (vidl_player ${vidl_player_sources})

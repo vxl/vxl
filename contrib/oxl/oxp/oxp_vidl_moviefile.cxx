@@ -5,6 +5,7 @@
 
 #include "oxp_vidl_moviefile.h"
 
+#include <vcl_compiler.h>
 #include <vcl_cassert.h>
 
 #include <vidl_vil1/vidl_vil1_movie_sptr.h>
@@ -12,7 +13,7 @@
 #include <vidl_vil1/vidl_vil1_frame.h>
 #include <vidl_vil1/vidl_vil1_io.h>
 
-#if defined(VCL_WIN32) && !defined(__CYGWIN__)
+#ifdef VCL_WIN32
 #include <vidl_vil1/vidl_vil1_avicodec.h>
 #endif
 #if defined(HAS_MPEG2)
@@ -32,7 +33,7 @@ void ensure_initialized()
   if (init) return;
 
   // Register video codec
-#if defined(VCL_WIN32) && !defined(__CYGWIN__)
+#ifdef VCL_WIN32
   vidl_vil1_io::register_codec(new vidl_vil1_avicodec);
 #endif
 #if defined(HAS_MPEG2)

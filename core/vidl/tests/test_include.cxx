@@ -1,7 +1,7 @@
 #include <vidl/dll.h>
 
 #include <vcl_compiler.h>
-#ifdef VCL_VC
+#ifdef VCL_WIN32
 #include <vidl/vidl_avicodec.h>
 #endif
 #include <vidl/vidl_avicodec_sptr.h>

@@ -6,25 +6,23 @@ SET(mvl2_sources
     mvl2_video_from_sequence.h mvl2_video_from_sequence.cxx
 )
 
-IF (NOT WIN32)
+IF (WIN32)
+  IF (NOT CYGWIN)
+    # Might be a good idea to SET (AVI_MS_NATIVE) here so below we
+    # can properly distinguish between MS native AVI support and AVI
+    # support from AVIFile.
+    SET(AVIFILE_FOUND "YES")
+    SET(AVIFILE_LIBRARIES "vfw32")
+  ENDIF (NOT CYGWIN)
+ENDIF (WIN32)
+
+IF (NOT AVIFILE_FOUND)
   INCLUDE(${CMAKE_ROOT}/Modules/FindAVIFile.cmake)
   IF(AVIFILE_FOUND)
     INCLUDE_DIRECTORIES( ${AVIFILE_INCLUDE_DIR} )
     ADD_DEFINITIONS (${AVIFILE_DEFINITIONS} )
   ENDIF(AVIFILE_FOUND)
-ELSE (NOT WIN32)
-  IF (CYGWIN)
-    INCLUDE(${CMAKE_ROOT}/Modules/FindAVIFile.cmake)
-    IF(AVIFILE_FOUND)
-      INCLUDE_DIRECTORIES( ${AVIFILE_INCLUDE_DIR} )
-      ADD_DEFINITIONS (${AVIFILE_DEFINITIONS} )
-    ENDIF(AVIFILE_FOUND)
-  ELSE (CYGWIN)
-    SET(AVIFILE_FOUND "YES")
-    SET(AVIFILE_LIBRARIES "vfw32")
-  ENDIF (CYGWIN)
-ENDIF (NOT WIN32)
-
+ENDIF (NOT AVIFILE_FOUND)
 
 IF (AVIFILE_FOUND)
   SET(mvl2_sources ${mvl2_sources}
