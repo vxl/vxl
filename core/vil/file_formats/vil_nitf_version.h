@@ -1,51 +1,48 @@
-// Source
-
-#ifndef _vil_nitf_version_h
-#define _vil_nitf_version_h
-
+// This is core/vil/file_formats/vil_nitf_version.h
+#ifndef vil_nitf_version_h_
+#define vil_nitf_version_h_
+//:
+// \file
+// \brief Minimal implementation of NITFVersion from TargetJr
+//   until decision made on whether full port should be done.  MAL 30sep2003
 //
-// Description:	Minimal implementation of NITFVersion from TargetJr until decision made 
-//     on whether full port should be done.  MAL 30sep2003
-//
-// $Revision: 1.1 $ 
-// $Date: 2003/12/26 00:22:34 $
-// $Author: mlaymon $
-//
+// \date: 2003/12/26
+// \author: mlaymon
 
 #include "vil_nitf_image_subheader.h"
 
 class vil_nitf_version
 {
-    public:
-         virtual ~vil_nitf_version() ;
+ public:
+  virtual ~vil_nitf_version();
 
-         const char*  GetTitle() ;
-         unsigned int GetVersion() ;
+  const char*  GetTitle();
+  unsigned int GetVersion();
 
-         bool operator== (const vil_nitf_version&) ;
+  bool operator== (const vil_nitf_version&);
 
-         virtual vil_nitf_image_subheader_band * newImageHeaderBand (
-	     vil_nitf_image_subheader_band * ish_band = 0) {return 0 ; }
+  virtual vil_nitf_image_subheader_band * newImageHeaderBand (
+      vil_nitf_image_subheader_band * ish_band = 0) {return 0; }
 
-    protected:
+ protected:
 
-         vil_nitf_version (const char* name) ;
+  vil_nitf_version (const char* name);
 
-    private:
+ private:
 
 #if 0  // COMMENTED OUT
-         struct nitfVersion
-         {
-             char*        name ;
-             unsigned int id ;
-             vil_nitf_version* version ;
-	 } ;
+  struct nitfVersion
+  {
+      char*        name;
+      unsigned int id;
+      vil_nitf_version* version;
+  };
 #endif
-         char * cvers ;
-         unsigned int	 uvers ;
-} ;
+  char * cvers;
+  unsigned int uvers;
+};
 
-inline const char * vil_nitf_version::GetTitle() {return (cvers) ; }
-inline unsigned int vil_nitf_version::GetVersion() {return (uvers) ; }
+inline const char * vil_nitf_version::GetTitle() {return cvers; }
+inline unsigned int vil_nitf_version::GetVersion() {return uvers; }
 
-#endif  // _vil_nitf_version_h
+#endif  // vil_nitf_version_h_

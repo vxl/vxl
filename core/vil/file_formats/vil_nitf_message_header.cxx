@@ -1,83 +1,84 @@
-// Source
+// This is core/vil/file_formats/vil_nitf_message_header.cxx
+#include "vil_nitf_message_header.h"
+//:
+// \file
 
 #include <vcl_iostream.h>
-
 #include "vil_nitf_util.h"
-#include "vil_nitf_message_header.h"
 
 //====================================================================
 // Implementation for the NITF Message header.
 //====================================================================
 
-vil_nitf_message_header::vil_nitf_message_header() 
+vil_nitf_message_header::vil_nitf_message_header()
     : OSTAID (ID), MDT (DT), MTITLE (TITLE), MSCLAS (CLAS),
       MSCODE (CODE), MSCTLH (CTLH), MSREL (REL),
       MSCAUT (CAUT), MSCTLN (CTLN), MSDWNG (DWNG),
       MSDEVT (DEVT)
 {
-    MHDR   = (char*) NULL ;
-    STRCPY (MHDR,   "") ;
+    MHDR   = (char*) NULL;
+    STRCPY (MHDR,   "");
 
     CLEVEL = 0;
 
-    STYPE  = 0 ;
+    STYPE  = 0;
     STRCPY(STYPE,  "");
 
     MSCOP = MSCPYS = 0;
 
-    ONAME = OPHONE = 0 ;
+    ONAME = OPHONE = 0;
 
-    STRCPY (ONAME,  "") ;
-    STRCPY (OPHONE, "") ;
+    STRCPY (ONAME,  "");
+    STRCPY (OPHONE, "");
 
     ML = HL = 0;
- 
+
     NUMDES = NUMI = NUML = NUMRES = NUMS = NUMT = 0;
 
-    DESSH    = (DES_SH**) NULL ;
-    IMAGESH  = 0 ;
-    LABELSH  = 0 ;
-    RESSH    = (RES_SH**) NULL ;
-    SYMBOLSH = 0 ;
-    TEXTSH   = 0 ;
+    DESSH    = (DES_SH**) NULL;
+    IMAGESH  = 0;
+    LABELSH  = 0;
+    RESSH    = (RES_SH**) NULL;
+    SYMBOLSH = 0;
+    TEXTSH   = 0;
 
     UDHDL = 0;
-    UDHD  = 0 ;
+    UDHD  = 0;
     XHD   = new vil_nitf_extended_header(0);
 }
 
 //====================================================================
-// -- Copy constructor for vil_nitf_message_header.
+//: Copy constructor for vil_nitf_message_header.
 //====================================================================
 vil_nitf_message_header::vil_nitf_message_header(const vil_nitf_message_header& header)
-    : vil_nitf_header(header),OSTAID(ID), MDT(DT), MTITLE(TITLE), MSCLAS(CLAS), 
-      MSCODE(CODE), MSCTLH(CTLH), MSREL(REL), MSCAUT(CAUT), MSCTLN(CTLN), 
+    : vil_nitf_header(header),OSTAID(ID), MDT(DT), MTITLE(TITLE), MSCLAS(CLAS),
+      MSCODE(CODE), MSCTLH(CTLH), MSREL(REL), MSCAUT(CAUT), MSCTLN(CTLN),
       MSDWNG(DWNG), MSDEVT(DEVT)
 {
-    MHDR   = new_strdup (header.MHDR) ;
-    CLEVEL = 0 ;
-    STYPE  = new_strdup (header.STYPE) ;
-    MSCOP  = header.MSCOP ;
-    MSCPYS = header.MSCPYS ;
-    ONAME  = new_strdup (header.ONAME) ;
-    OPHONE = new_strdup (header.OPHONE) ;
+    MHDR   = new_strdup (header.MHDR);
+    CLEVEL = 0;
+    STYPE  = new_strdup (header.STYPE);
+    MSCOP  = header.MSCOP;
+    MSCPYS = header.MSCPYS;
+    ONAME  = new_strdup (header.ONAME);
+    OPHONE = new_strdup (header.OPHONE);
 
-    ML = HL = 0 ;
- 
-    NUMDES = NUMI = NUML = NUMRES = NUMS = NUMT = 0 ;
+    ML = HL = 0;
 
-    DESSH    = (DES_SH**) NULL ;
-    IMAGESH  = 0 ;
-    LABELSH  = 0 ;
+    NUMDES = NUMI = NUML = NUMRES = NUMS = NUMT = 0;
+
+    DESSH    = (DES_SH**) NULL;
+    IMAGESH  = 0;
+    LABELSH  = 0;
     RESSH    = (RES_SH**)NULL;
-    SYMBOLSH = 0 ;
-    TEXTSH   = 0 ;
+    SYMBOLSH = 0;
+    TEXTSH   = 0;
 
     UDHDL = header.UDHDL;
     UDHD  = new char[UDHDL+1];
 
     UDHD[UDHDL] = (char)NULL;
-    memcpy(UDHD, header.UDHD, UDHDL);
+    vcl_memcpy(UDHD, header.UDHD, UDHDL);
 
     XHD   = new vil_nitf_extended_header(*header.XHD);
 }
@@ -109,13 +110,13 @@ vil_nitf_message_header::~vil_nitf_message_header()
 }
 
 //====================================================================
-// -- Method to return a copy of the vil_nitf_header.  The copy returned
-// *must* be deleted by the caller.
+//: Method to return a copy of the vil_nitf_header.
+//  The copy returned *must* be deleted by the caller.
 //====================================================================
 vil_nitf_header* vil_nitf_message_header::Copy()
 {
-    vil_nitf_header* rval = new vil_nitf_message_header (*this) ;
-    return (rval) ;
+    vil_nitf_header* rval = new vil_nitf_message_header (*this);
+    return rval;
 }
 
 void vil_nitf_message_header::Copy (const vil_nitf_message_header* h)
@@ -136,54 +137,48 @@ void vil_nitf_message_header::Copy (const vil_nitf_message_header* h)
 //void vil_nitf_message_header::display_header_info (vcl_ostream out)
 void vil_nitf_message_header::display_header_info (vcl_string caller) const
 {
-    static vcl_string method_name = "vil_nitf_message_header::display_header_info: " ;
+    static vcl_string method_name = "vil_nitf_message_header::display_header_info: ";
 
-    vcl_cout << method_name ;
+    vcl_cout << method_name;
     if (method_name.length() > 0) {
-      vcl_cout << " from " << caller ;
+      vcl_cout << " from " << caller;
     }
-    vcl_cout << vcl_endl ;
+    vcl_cout << vcl_endl;
 
-    vcl_cout << "message version from file = " << this->MHDR << vcl_endl ;
-    vcl_cout << "message header length  = " << this->HL << vcl_endl ;
-    vcl_cout << "message length = " << this->ML << vcl_endl ;
-    vcl_cout << "station ID = " << this->OSTAID << vcl_endl ;
-    vcl_cout << "message date and time = " << this->MDT << vcl_endl ;
+    vcl_cout << "message version from file = " << this->MHDR << vcl_endl
+             << "message header length  = " << this->HL << vcl_endl
+             << "message length = " << this->ML << vcl_endl
+             << "station ID = " << this->OSTAID << vcl_endl
+             << "message date and time = " << this->MDT << vcl_endl
 
-    vcl_cout << "number of image segments = " 
-	     << this->NUMI << vcl_endl ;
+             << "number of image segments = " << this->NUMI << vcl_endl;
     if (this->NUMI > 0) {
       for (int i = 0; i < this->NUMI; i++) {
-	vcl_cout << "\timage[" << i << "] header length = " 
-		 << this->IMAGESH[i]->LISH
-		 << "  image length = " << this->IMAGESH[i]->LI 
-		 << vcl_endl ;
-      }	
+        vcl_cout << "\timage[" << i << "] header length = "
+                 << this->IMAGESH[i]->LISH
+                 << "  image length = " << this->IMAGESH[i]->LI
+                 << vcl_endl;
+      }
     }
-    vcl_cout << "datalength  = " << this->get_data_length() << vcl_endl ;
+    vcl_cout << "datalength  = " << this->get_data_length() << vcl_endl;
 
-    vcl_cout << "number of symbol (graphic) segments = " 
-	     << this->NUMS << vcl_endl ;
-    vcl_cout << "number of label segments = " 
-	     << this->NUML << vcl_endl ;
-    vcl_cout << "number of text segments = " 
-	     << this->NUMT << vcl_endl ;
-    vcl_cout << "number of DES segments = " 
-	     << this->NUMDES << vcl_endl ;
-    vcl_cout << "number of RES segments = " 
-	     << this->NUMRES << vcl_endl ;
+    vcl_cout << "number of symbol (graphic) segments = " << this->NUMS << vcl_endl
+             << "number of label segments = " << this->NUML << vcl_endl
+             << "number of text segments = " << this->NUMT << vcl_endl
+             << "number of DES segments = " << this->NUMDES << vcl_endl
+             << "number of RES segments = " << this->NUMRES << vcl_endl;
 
 }  // end method display_header_info
 
 unsigned long vil_nitf_message_header::get_image_data_length (int image_num) const
 {
-    unsigned long data_length = 0 ;
+    unsigned long data_length = 0;
 
     if (this->NUMI > 0) {
       if (image_num < this->NUMI
-	  && (this->IMAGESH[image_num] != 0)) {
-  	  data_length = this->IMAGESH[image_num]->LI ; 
-      }	
+          && (this->IMAGESH[image_num] != 0)) {
+          data_length = this->IMAGESH[image_num]->LI;
+      }
     }
-    return data_length ;
+    return data_length;
 }
