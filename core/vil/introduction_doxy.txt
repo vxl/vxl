@@ -20,7 +20,7 @@
 * The vil2_image_view<T> represents a view of a multi-plane image of given type.
 * A pointer is stored to the top-left pixel in the first plane of the image (top_left_ptr())
 * and integers indicating how to get to neighbours in
-* the x (xstep()) y (ystep()) and plane (planestep()) directions.
+* the i (istep()), j (jstep()) and plane (planestep()) directions.
 *
 * The advantages of this approach are
 * - It is actually faster than pointer indirection on most architectures
@@ -86,10 +86,10 @@ for (int i=0;i<nplanes;++i)
   for (unsigned int p=0;p<nplanes;++p,plane += image.planestep())
   {
     vil2_byte* row = plane;
-    for (int y=0;y<ny;++y,row += image.ystep())
+    for (int y=0;y<ny;++y,row += image.jstep())
     {
       vil2_byte* pixel = row;
-      for (int x=0;x<nx;++x,pixel+=image.xstep())
+      for (int x=0;x<nx;++x,pixel+=image.istep())
         *pixel = vil2_byte(x+10*y+100*p);
     }
   }
@@ -108,7 +108,7 @@ for (int i=0;i<nplanes;++i)
 * change the data simply by changing ones view of it.
 *
 * For instance one can obtain a transposed view of an image simply by swapping nx-ny and
-* xstep-ystep.  This is particularly useful when implementing decomposable filters, as
+* istep-jstep.  This is particularly useful when implementing decomposable filters, as
 * one need only write it for one direction, then can apply it to the original image and
 * its transpose.
 * \verbatim
