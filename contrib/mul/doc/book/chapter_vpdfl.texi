@@ -195,7 +195,7 @@ delete sampler;
 
 
 It is straightforward to merge the above examples, demonstrating how to
-using a @acronym{PDF} and sampler
+use a @acronym{PDF} and sampler
 to generate some data, and then building a new @acronym{PDF} from that data.
 This is exactly what the test programs do.
 
