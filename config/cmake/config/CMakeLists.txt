@@ -210,30 +210,44 @@ MACRO(CHECK_FUNCTION_EXISTS_ZERO FUNCTION VARIABLE)
 ENDMACRO(CHECK_FUNCTION_EXISTS_ZERO FUNCTION VARIABLE)
 
 #
-# Determine which type matches the given size
+# Determine which C++ type matches the given size
 #
 
-MACRO(DETERMINE_TYPE VAR SIZE
-      TYPE1_SIZE TYPE1_NAME TYPE2_SIZE TYPE2_NAME TYPE3_SIZE TYPE3_NAME)
-  IF(${TYPE1_SIZE} MATCHES "^${SIZE}$")
-    SET("VXL_${VAR}" "${TYPE1_NAME}")
-    SET("VXL_HAS_${VAR}" "1")
-  ELSE(${TYPE1_SIZE} MATCHES "^${SIZE}$")
-    IF(${TYPE2_SIZE} MATCHES "^${SIZE}$")
-      SET("VXL_${VAR}" "${TYPE2_NAME}")
-      SET("VXL_HAS_${VAR}" "1")
-    ELSE(${TYPE2_SIZE} MATCHES "^${SIZE}$")
-      IF(${TYPE3_SIZE} MATCHES "^${SIZE}$")
-        SET("VXL_${VAR}" "${TYPE3_NAME}")
-        SET("VXL_HAS_${VAR}" "1")
-      ELSE(${TYPE3_SIZE} MATCHES "^${SIZE}$")
-        SET("VXL_${VAR}" "void")
-        SET("VXL_HAS_${VAR}" "0")
-      ENDIF(${TYPE3_SIZE} MATCHES "^${SIZE}$")
-    ENDIF(${TYPE2_SIZE} MATCHES "^${SIZE}$")
-  ENDIF(${TYPE1_SIZE} MATCHES "^${SIZE}$")
-ENDMACRO(DETERMINE_TYPE VAR SIZE
-         TYPE1_SIZE TYPE1_NAME TYPE2_SIZE TYPE2_NAME TYPE3_SIZE TYPE3_NAME)
+MACRO( DETERMINE_TYPE VAR SIZE TYPE_LIST )
+  # If we've tested this before, use the cached result and don't re-run
+  IF( NOT VXL_${VAR} )
+    SET( VXL_${VAR} "void" )
+    SET( VXL_HAS_${VAR} 0 )
+    FOREACH( TYPE ${TYPE_LIST} )
+      SET( MACRO_DETERMINE_TYPE_FLAGS "-DVXL_HAS_TYPE_OF_SIZE \"-DTHE_TYPE=${TYPE}\" -DTHE_SIZE=${SIZE}")
+      MESSAGE( STATUS "Looking for ${SIZE}-bit type. [Checking ${TYPE}...]" )
+      TRY_RUN( RUN_RESULT COMPILE_RESULT
+            ${CMAKE_BINARY_DIR}
+            ${vxl_config_SOURCE_DIR}/vxl_platform_tests.cxx
+            CMAKE_FLAGS -DCOMPILE_DEFINITIONS:STRING=${MACRO_DETERMINE_TYPE_FLAGS}
+                        -DLINK_LIBRARIES:STRING=${CMAKE_REQUIRED_LIBRARIES}
+            OUTPUT_VARIABLE OUTPUT )
+      IF( COMPILE_RESULT )
+        IF( NOT RUN_RESULT )
+          SET( VXL_${VAR} ${TYPE} )
+          SET( VXL_HAS_${VAR} 1 )
+        ENDIF( NOT RUN_RESULT )
+      ELSE( COMPILE_RESULT )
+        WRITE_FILE( ${CMAKE_BINARY_DIR}/CMakeError.log 
+          "Checking ${SIZE}-bit with ${TYPE} failed with the following output:\n${OUTPUT}\n"
+          APPEND )
+      ENDIF( COMPILE_RESULT )
+    ENDFOREACH( TYPE )
+    IF( VXL_HAS_${VAR} )
+      MESSAGE( STATUS "Looking for ${SIZE}-bit type. Found ${VXL_${VAR}}." )
+    ELSE( VXL_HAS_${VAR} )
+      MESSAGE( STATUS "Looking for ${SIZE}-bit type. Not found." )
+    ENDIF( VXL_HAS_${VAR} )
+    # Cache the value to prevent a second run of the test
+    SET(VXL_${VAR} ${VXL_${VAR}} CACHE INTERNAL "VXL test result")
+    SET(VXL_HAS_${VAR} ${VXL_HAS_${VAR}} CACHE INTERNAL "VXL test result")
+  ENDIF( NOT VXL_${VAR} )
+ENDMACRO( DETERMINE_TYPE VAR SIZE TYPE_LIST )
 
 #
 # Perform all the specific tests
@@ -400,31 +414,20 @@ ENDIF(NOT VCL_CAN_DO_IMPLICIT_TEMPLATES)
 # Check type sizes
 #
 
-#
-# We are assuming CHAR_BIN = 8. Here we guess that CMake probably does not work
-# on platform where this is not the case.
-#
-
 SET(CMAKE_REQUIRED_FLAGS ${CMAKE_ANSI_CFLAGS})
-CHECK_TYPE_SIZE("char" SIZEOF_CHAR)
-CHECK_TYPE_SIZE("short" SIZEOF_SHORT)
-CHECK_TYPE_SIZE("int" SIZEOF_INT)
-CHECK_TYPE_SIZE("long" SIZEOF_LONG)
-CHECK_TYPE_SIZE("__int64" SIZEOF___INT64)
-CHECK_TYPE_SIZE("long long" SIZEOF_LONG_LONG)
-CHECK_TYPE_SIZE("float" SIZEOF_FLOAT)
-CHECK_TYPE_SIZE("double" SIZEOF_DOUBLE)
-CHECK_TYPE_SIZE("long double" SIZEOF_LONG_DOUBLE)
 
-DETERMINE_TYPE(BYTE 1 "${SIZEOF_CHAR}" "char" "${SIZEOF_CHAR}" "char" "${SIZEOF_CHAR}" "char")
-DETERMINE_TYPE(INT_8 1 "${SIZEOF_CHAR}" "char" "${SIZEOF_SHORT}" "short" "${SIZEOF_CHAR}" "char")
-DETERMINE_TYPE(INT_16 2 "${SIZEOF_SHORT}" "short" "${SIZEOF_INT}" "int" "${SIZEOF_CHAR}" "char")
-DETERMINE_TYPE(INT_32 4 "${SIZEOF_INT}" "int" "${SIZEOF_LONG}" "long" "${SIZEOF_SHORT}" "short")
-DETERMINE_TYPE(INT_64 8 "${SIZEOF_LONG}" "long" "${SIZEOF_LONG_LONG}" "long long" "${SIZEOF___INT64}" "__int64")
-DETERMINE_TYPE(IEEE_32 4 "${SIZEOF_DOUBLE}" "double" "${SIZEOF_FLOAT}" "float" "${SIZEOF_LONG_DOUBLE}" "long double")
-DETERMINE_TYPE(IEEE_64 8 "${SIZEOF_DOUBLE}" "double" "${SIZEOF_LONG_DOUBLE}" "long double" "${SIZEOF_FLOAT}" "float")
-DETERMINE_TYPE(IEEE_96 12 "${SIZEOF_LONG_DOUBLE}" "long double" "${SIZEOF_DOUBLE}" "double" "${SIZEOF_FLOAT}" "float")
-DETERMINE_TYPE(IEEE_128 16 "${SIZEOF_LONG_DOUBLE}" "long double" "${SIZEOF_DOUBLE}" "double" "${SIZEOF_FLOAT}" "float")
+# The types are listed in reverse order of preference. That is, the
+# last type is should be the most preferred type name.
+#
+DETERMINE_TYPE(BYTE     8   "char")
+DETERMINE_TYPE(INT_8    8   "short;char")
+DETERMINE_TYPE(INT_16   16  "char;int;short")
+DETERMINE_TYPE(INT_32   32  "short;long;int")
+DETERMINE_TYPE(INT_64   64  "__int64;long long;long")
+DETERMINE_TYPE(IEEE_32  32  "long double;double;float")
+DETERMINE_TYPE(IEEE_64  64  "float;long double;double")
+DETERMINE_TYPE(IEEE_96  96  "float;double;long double")
+DETERMINE_TYPE(IEEE_128 128 "float;double;long double")
 
 #
 # Check unistd stuff

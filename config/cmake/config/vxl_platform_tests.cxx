@@ -5,7 +5,7 @@
 void function(int i, void *ptr, bool v) {}
 
 int main() { return 0; }
-#endif
+#endif // VCL_HAS_BOOL
 
 //-------------------------------------
 
@@ -15,7 +15,7 @@ template <typename T>
 class bingo { public: void bongo(T **); };
 
 int main() { return 0; }
-#endif
+#endif // VCL_HAS_TYPENAME
 
 //-------------------------------------
 
@@ -39,7 +39,7 @@ void g()
 }
 
 int main() { return 0; }
-#endif
+#endif // VCL_HAS_EXPORT
 
 //-------------------------------------
 
@@ -51,7 +51,7 @@ class X {
 };
 
 int main() { return 0; }
-#endif
+#endif // VCL_HAS_MUTABLE
 
 //-------------------------------------
 
@@ -60,7 +60,7 @@ int main() { return 0; }
 class X { public: explicit X(int) {} };
 
 int main() { return 0; }
-#endif
+#endif // VCL_HAS_EXPLICIT
 
 //-------------------------------------
 
@@ -71,7 +71,7 @@ struct boo : public foo { void f() { *(int*)0 = 1; } };
 boo *try_dynamic_cast() { boo *b = 0; foo *f = b; return dynamic_cast<boo*>(f); }
 
 int main() { return 0; }
-#endif
+#endif // VCL_HAS_DYNAMIC_CAST
 
 //-------------------------------------
 
@@ -85,7 +85,7 @@ void fn() {
 }
 
 int main() { return 0; }
-#endif
+#endif // VCL_FOR_SCOPE_HACK
 
 //-------------------------------------
 
@@ -99,7 +99,7 @@ void function(int x, char *ptr = "foo");
 void function(int x, char *ptr) { ++ ptr[x]; }
 
 int main() { return 0; }
-#endif
+#endif // VCL_DEFAULT_VALUE
 
 //-------------------------------------
 
@@ -119,7 +119,7 @@ void function()
 }
 
 int main() { return 0; }
-#endif
+#endif // VCL_HAS_MEMBER_TEMPLATES
 
 //-------------------------------------
 
@@ -153,7 +153,7 @@ template <class T> struct foo<T *, T *> { void bar() {} };
 template <class T> struct foo<int *, T> { void baz() {} };
 
 int main() { return 0; }
-#endif
+#endif // VCL_CAN_DO_PARTIAL_SPECIALIZATION
 
 //-------------------------------------
 
@@ -172,7 +172,7 @@ class traits<double> {
 };
 
 int main() { return 0; }
-#endif
+#endif // VCL_DEFINE_SPECIALIZATION
 
 //-------------------------------------
 
@@ -188,7 +188,7 @@ T dot(T const *a, T const *b)
 template double dot(double const *, double const *);
 
 int main() { return 0; }
-#endif
+#endif // VCL_ALLOWS_INLINE_INSTANTIATION
 
 //-------------------------------------
 
@@ -209,7 +209,7 @@ int function()
 // If the program links, the compiler inlined the function template.
 
 int main() { return 0; }
-#endif
+#endif // VCL_NEEDS_INLINE_INSTANTIATION
 
 //-------------------------------------
 
@@ -222,7 +222,7 @@ class A {
 };
 
 int main() { return 0; }
-#endif
+#endif // VCL_STATIC_CONST_INIT_INT
 
 //-------------------------------------
 
@@ -241,7 +241,7 @@ class A
 
 void f(const int&) {}
 int main() { f(A::x); return 0; }
-#endif
+#endif // VCL_STATIC_CONST_INIT_NO_DEFN
 
 //-------------------------------------
 
@@ -254,7 +254,7 @@ class A {
 };
 
 int main() { return 0; }
-#endif
+#endif // VCL_STATIC_CONST_INIT_FLOAT
 
 //-------------------------------------
 
@@ -264,7 +264,7 @@ template <class T> struct A { A() {} static char *fmt; };
 template <class T> char *A<T>::fmt = 0;
 
 int main() { return 0; }
-#endif
+#endif // VCL_CAN_DO_STATIC_TEMPLATE_MEMBER
 
 //-------------------------------------
 
@@ -283,7 +283,7 @@ template struct splek<double, 3>;
 template void splok_that_splek(splek<double, 3> &);
 
 int main() { return 0; }
-#endif
+#endif // VCL_CAN_DO_NON_TYPE_FUNCTION_TEMPLATE_PARAMETER
 
 //-------------------------------------
 
@@ -324,7 +324,7 @@ int function(victor_fixed<double, 3> const &a,
 }
 
 int main() { return 0; }
-#endif
+#endif // VCL_NEED_FRIEND_FOR_TEMPLATE_OVERLOAD
 
 //-------------------------------------
 
@@ -377,7 +377,7 @@ void do_vision(int w, int h, byte **image_i, float **image_f) {
 }
 
 int main() { return 0; }
-#endif
+#endif // VCL_OVERLOAD_CAST
 
 //-------------------------------------
 
@@ -418,7 +418,7 @@ double function(victor<double> const &u,
 }
 
 int main() { return 0; }
-#endif
+#endif // VCL_NULL_TMPL_ARGS
 
 //-------------------------------------
 
@@ -429,7 +429,7 @@ template <class T> class vvv { static T xxx; };
 template class vvv<int>;
 
 int main() { return 0; }
-#endif
+#endif // VCL_NO_STATIC_DATA_MEMBERS
 
 //-------------------------------------
 
@@ -452,7 +452,7 @@ void function(double *, int) {}
 // If the program links, the compiler didn't make a distinction.
 
 int main() { return 0; }
-#endif
+#endif // VCL_HAS_TEMPLATE_SYMBOLS
 
 //-------------------------------------
 
@@ -496,7 +496,7 @@ void f()
 }
 
 int main() { return 0; }
-#endif
+#endif // VCL_CAN_DO_IMPLICIT_TEMPLATES
 
 //-------------------------------------
 
@@ -522,7 +522,7 @@ X<int> a;
 X<int, less<short> > b;
 
 int main() { return 0; }
-#endif
+#endif // VCL_CAN_DO_COMPLETE_DEFAULT_TYPE_PARAMETER
 
 //-------------------------------------
 
@@ -534,7 +534,7 @@ X<int> a;
 X<int, less<short> > b;
 
 int main() { return 0; }
-#endif
+#endif // VCL_CAN_DO_TEMPLATE_DEFAULT_TYPE_PARAMETER
 
 //-------------------------------------
 
@@ -571,7 +571,7 @@ template class spoof < double >;
 // If the program compiles, we don't need the hack
 
 int main() { return 0; }
-#endif
+#endif // VCL_SUNPRO_CLASS_SCOPE_HACK
 
 //-------------------------------------
 
@@ -611,7 +611,7 @@ void monkeylette()
 }
 
 int main() { return 0; }
-#endif
+#endif // VCL_HAS_EXCEPTIONS
 
 //-------------------------------------
 
@@ -686,7 +686,7 @@ void flegg() {
 }
 
 int main() { return 0; }
-#endif
+#endif // VCL_HAS_NAMESPACES
 
 //-------------------------------------
 
@@ -703,7 +703,7 @@ void function() {
 }
 
 int main() { return 0; }
-#endif
+#endif // VCL_ALLOWS_NAMESPACE_STD
 
 //-------------------------------------
 
@@ -721,7 +721,7 @@ void function() {
 }
 
 int main() { return 0; }
-#endif
+#endif // VCL_NEEDS_NAMESPACE_STD
 
 //-------------------------------------
 
@@ -730,7 +730,7 @@ int main() { return 0; }
 #include <unistd.h>
 
 int main() { int x = usleep(0); return x*0; }
-#endif
+#endif // VXL_UNISTD_USLEEP_IS_VOID
 
 //-------------------------------------
 
@@ -742,7 +742,7 @@ int main() { int x = usleep(0); return x*0; }
 int f(const void *a,const void *b) { return 1; }
 
 int main() { int a[5]; qsort(a, 5, sizeof(int), f); return 0; }
-#endif
+#endif // VXL_STDLIB_HAS_QSORT
 
 //-------------------------------------
 
@@ -758,7 +758,7 @@ template <> struct A<int const> {};
 #else
 struct A<int> {};
 struct A<int const> {};
-#endif
+#endif // VCL_CANNOT_SPECIALIZE_CV
 
 int main() { return 0; }
 
@@ -783,7 +783,7 @@ int main()
   return 0;
 }
 
-#endif
+#endif // VCL_TEMPLATE_MATCHES_TOO_OFTEN
 
 //-------------------------------------
 
@@ -827,6 +827,29 @@ int main()
   return 0;
 }
 
-#endif
+#endif // VCL_HAS_SLICED_DESTRUCTOR_BUG
+
+//-------------------------------------
+
+#ifdef VXL_HAS_TYPE_OF_SIZE
+// This is used to check if (1) a type exists, (2) is has the required
+// size in bytes, and (3) it is functional. The last requirement is
+// driven by MSCV 6 which has __int64, but it is not fully
+// functional. (It can't be cast to a double, for example.)
+
+// CHAR_BIT is the number of bits per char.
+#include <limits.h>
+
+double cast( unsigned THE_TYPE a, signed THE_TYPE b )
+{
+  return double( a ) + double( b );
+}
+
+int main()
+{
+  return sizeof(THE_TYPE) * CHAR_BIT == THE_SIZE ? 0 : 1;
+}
+
+#endif // VXL_HAS_TYPE_OF_SIZE
 
 //-------------------------------------
