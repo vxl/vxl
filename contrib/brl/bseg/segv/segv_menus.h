@@ -32,8 +32,10 @@ class segv_menus
   SEGV_DLL_DATA static void regions_callback();
   SEGV_DLL_DATA static void fit_lines_callback();
   SEGV_DLL_DATA static void test_camera_parms_callback();
+#if 0
 #ifdef HAS_XERCES
   SEGV_DLL_DATA static void read_xml_edges_callback();
+#endif
 #endif
   SEGV_DLL_DATA static void test_face_callback();
   SEGV_DLL_DATA static void test_digital_lines_callback();

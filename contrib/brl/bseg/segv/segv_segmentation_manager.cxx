@@ -13,8 +13,10 @@
 #include <vil1/vil1_memory_image_of.h>
 #include <vdgl/vdgl_digital_curve.h>
 #include <vdgl/vdgl_digital_curve_sptr.h>
+#if 0
 #ifdef HAS_XERCES
 #include <bxml/bxml_vtol_io.h>
+#endif
 #endif
 #include <sdet/sdet_detector_params.h>
 #include <sdet/sdet_detector.h>
@@ -52,7 +54,6 @@
 #include <bsol/bsol_hough_line_index.h>
 #include <sdet/sdet_region_proc_params.h>
 #include <sdet/sdet_region_proc.h>
-
 //static live_video_manager instance
 segv_segmentation_manager *segv_segmentation_manager::instance_ = 0;
 
@@ -97,7 +98,7 @@ void segv_segmentation_manager::quit()
 
 void segv_segmentation_manager::load_image()
 {
-  static bool greyscale = false;
+  static bool greyscale = true;
   vgui_dialog load_image_dlg("Load image file");
   static vcl_string image_filename = "/home/dec/images/cal_image1.tif";
   static vcl_string ext = "*.*";
@@ -758,7 +759,7 @@ void segv_segmentation_manager::fit_lines()
   }
   this->draw_lines(lines);
 }
-
+#if 0
 #ifdef HAS_XERCES
 void segv_segmentation_manager::read_xml_edges()
 {
@@ -773,7 +774,7 @@ void segv_segmentation_manager::read_xml_edges()
     this->draw_edges(edges, true);
 }
 #endif
-
+#endif
 void segv_segmentation_manager::test_face()
 {
   if (!img_)

@@ -77,11 +77,13 @@ void segv_menus::test_camera_parms_callback()
 {
   segv_segmentation_manager::instance()->test_camera_parms();
 }
+#if 0
 #ifdef HAS_XERCES
 void segv_menus::read_xml_edges_callback()
 {
   segv_segmentation_manager::instance()->read_xml_edges();
 }
+#endif
 #endif
 
 void segv_menus::test_face_callback()
@@ -104,8 +106,10 @@ vgui_menu segv_menus::get_menu()
   //file menu entries
   menufile.add( "Quit", quit_callback,(vgui_key)'q', vgui_CTRL);
   menufile.add( "Load Image", load_image_callback,(vgui_key)'l', vgui_CTRL);
+#if 0
 #ifdef HAS_XERCES
   menufile.add( "Load XML Edges", read_xml_edges_callback);
+#endif
 #endif
   //view menu entries
   menuview.add("Original Image", original_image_callback);
