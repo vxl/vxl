@@ -2,42 +2,31 @@
 // \file
 #include <vcl_cmath.h>
 #include <vcl_cstdlib.h>
-#include <vnl/vnl_numeric_traits.h>
 #include <vdgl/vdgl_digital_region.h>
 #include <bdgl/bdgl_region_algs.h>
-
-
-//: Destructor
-bdgl_region_algs::~bdgl_region_algs()
-{
-}
 
 //:
 //--------------------------------------------------------------------------
 // Finds the Mahalanobis distance between the intensity distributions
 // of two regions.  If there are not enough pixels in either or both
-// regions to reliably determine the distance then max float is returned.
+// regions to reliably determine the distance then -1 is returned.
 //--------------------------------------------------------------------------
 float bdgl_region_algs::
 mahalanobis_distance(vdgl_digital_region_sptr const& r1,
                      vdgl_digital_region_sptr const& r2)
 {
-  //need at this this many points for standard deviation and mean
-  //to be valid
-  int min_npts = 5;
-  float MY_HUGE = vnl_numeric_traits<float>::maxval;
-  float SMALL = 1;
-  if (!r1||!r2)
-    return MY_HUGE;
-  if (r1->Npix()<min_npts||r2->Npix()<min_npts)
-    return MY_HUGE;
+  //need this many points for standard deviation and mean to be valid
+  const unsigned int min_npts = 5;
+  const float SMALL = 1;
+  if (!r1 || !r2)
+    return -1.f;
+  if (r1->Npix()<min_npts || r2->Npix()<min_npts)
+    return -1.f;
   float m1 = r1->Io(), m2 = r2->Io();
   float s1 = r1->Io_sd(), s2 = r2->Io_sd();
   //make sure the standard deviations are well-behaved
-  if (s1<SMALL)
-    s1 = SMALL;
-  if (s2<SMALL)
-    s2 = SMALL;
+  if (s1<SMALL) s1 = SMALL;
+  if (s2<SMALL) s2 = SMALL;
   float s_sq = (s1*s1*s2*s2)/(s1*s1 + s2*s2);
   float d = vcl_sqrt((m1-m2)*(m1-m2)/s_sq);
   vcl_cout << "MDistance||(" << r1->Npix()
@@ -51,13 +40,12 @@ mahalanobis_distance(vdgl_digital_region_sptr const& r1,
 float bdgl_region_algs::intensity_distance(vdgl_digital_region_sptr const& r1,
                                            vdgl_digital_region_sptr const& r2)
 {
-  int min_npts = 5;
-  float MY_HUGE = vnl_numeric_traits<float>::maxval;
-  float SMALL = 1;
-  if (!r1||!r2)
-    return MY_HUGE;
-  if (r1->Npix()<min_npts||r2->Npix()<min_npts)
-    return MY_HUGE;
+  const unsigned int min_npts = 5;
+  const float SMALL = 1;
+  if (!r1 || !r2)
+    return -1.f;
+  if (r1->Npix()<min_npts || r2->Npix()<min_npts)
+    return -1.f;
   float m1 = r1->Io(), m2 = r2->Io();
   if (vcl_fabs(m1-m2)<SMALL)
     return 0;
@@ -75,7 +63,7 @@ bool bdgl_region_algs::merge(vdgl_digital_region_sptr const& r1,
                              vdgl_digital_region_sptr const& r2,
                              vdgl_digital_region_sptr& rm)
 {
-  if (!r1||!r2)
+  if (!r1 || !r2)
     return false;
   //trivial cases
   int n1 = r1->Npix(), n2 = r2->Npix();
@@ -147,39 +135,28 @@ float
 bdgl_region_algs::earth_mover_distance(vdgl_digital_region_sptr const& r1,
                                        vdgl_digital_region_sptr const& r2)
 {
-  int min_npts = 5;
-  float MY_HUGE = vnl_numeric_traits<float>::maxval;
-  if (!r1||!r2)
-    return MY_HUGE;
-  int n1 = r1->Npix(), n2 = r2->Npix();
-  if (n1<min_npts||n2<min_npts)
-    return MY_HUGE;
-  int n_smaller = n1, n_larger = n2;
-  vdgl_digital_region_sptr r_smaller = r1, r_larger = r2;
-  if (n_smaller>n_larger)
-  {
-    n_smaller = n2;
-    n_larger = n1;
-    r_smaller = r2;
-    r_larger = r1;
-  }
+  unsigned int min_npts = 5;
+  if (!r1 || !r2)
+    return -1.f;
+  unsigned int n1 = r1->Npix(), n2 = r2->Npix();
+  if (n1<min_npts || n2<min_npts)
+    return -1.f;
+  unsigned short I1[n1], I2[n2];
+  vcl_memcpy(I1, r1->Ij(), n1*sizeof(unsigned short));
+  vcl_memcpy(I2, r2->Ij(), n2*sizeof(unsigned short));
   //Sort the intensities in each region
-  vcl_qsort( (void *)(r_smaller->Ij()), n_smaller,
-             sizeof( unsigned short ), increasing_compare );
-
-  vcl_qsort( (void *)(r_larger->Ij()), n_larger,
-             sizeof( unsigned short ), decreasing_compare );
+  vcl_qsort( (void*)I1, n1, sizeof(unsigned short), increasing_compare );
+  vcl_qsort( (void*)I2, n2, sizeof(unsigned short), decreasing_compare );
   //Match up the smallest intensities in the smaller region with
   //the largest intensities in the larger region.  This provides a
   //measure of the distance between the two regions
 
   float sum = 0;
-  for (int i = 0; i<n_smaller; i++)
+  unsigned int n_smaller = n1; if (n2<n_smaller) n_smaller=n2;
+  for (unsigned int i = 0; i<n_smaller; ++i)
   {
-    float Ini = (r_smaller->Ij())[i];
-    float Inj = (r_larger->Ij())[i];
-    float d = vcl_sqrt((Ini-Inj)*(Ini-Inj));
-    sum += d;
+    float d = I1[i] - I2[i];
+    sum += vcl_sqrt(d*d);
   }
   sum /= n_smaller;
 #ifdef DEBUG
