@@ -142,10 +142,12 @@ static void clear(vtol_edge_sptr& e)
   e->unset_user_flag(VSOL_FLAG2);
   e->unset_user_flag(VSOL_FLAG3);
 }
+#if 0 // only untouch(vtol_one_chain_sptr&) is used
 static void untouch(vtol_edge_sptr& e)
 {
   e->unset_user_flag(VSOL_FLAG3);
 }
+#endif
 
 static void touch(vtol_edge_sptr& e)
 {
@@ -172,16 +174,18 @@ static bool bridge_traverse(float angle)
 }
 
 //vtol_one_chain functions
+static void untouch(vtol_one_chain_sptr& ch)
+{
+  ch->unset_user_flag(VSOL_FLAG3);
+}
+#if 0 // only clear(vtol_edge_sptr& ) is used
 static void clear(vtol_one_chain_sptr& ch)
 {
   ch->unset_user_flag(VSOL_FLAG1);
   ch->unset_user_flag(VSOL_FLAG2);
   ch->unset_user_flag(VSOL_FLAG3);
 }
-static void untouch(vtol_one_chain_sptr& ch)
-{
-  ch->unset_user_flag(VSOL_FLAG3);
-}
+#endif
 
 static void touch(vtol_one_chain_sptr& ch)
 {
