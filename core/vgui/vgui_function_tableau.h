@@ -17,6 +17,7 @@
 //   25-NOV-1999 P.Pritchett - Initial version.
 //   02-OCT-2002 K.Y.McGaul - Added vgui_function_tableau_new.
 //                          - Added comments for the functions.
+//   14-OCT-2003 P.Vanroose - Added implementation for 5 missing tableau virtuals
 // \endverbatim
 
 #include <vgui/vgui_tableau.h>
@@ -41,21 +42,27 @@ class vgui_function_tableau : public vgui_tableau
 
   //: Call the given function when a draw event occurs.
   void draw(function f) {draw_ = f;}
+  virtual bool draw();
 
   //: Call the given function when a mouse up event occurs.
   void mouse_up(function f) {mouse_up_ = f;}
+  virtual bool mouse_up(int x, int y, vgui_button, vgui_modifier);
 
   //: Call the given function when a mouse down event occurs.
-  void mouse_down(function f) {mouse_down_ = f;};
+  void mouse_down(function f) {mouse_down_ = f;}
+  virtual bool mouse_down(int x, int y, vgui_button, vgui_modifier);
 
   //: Call the given function when a mouse motion event occurs.
   void motion(function f) {motion_ = f;}
+  virtual bool motion(int x, int y);
 
   //: Call the given function when a key is pressed by the user.
   void key_press(function f) {key_press_ = f;}
+  virtual bool key_press(int x, int y, vgui_key, vgui_modifier);
 
   //: Call the given function when the '?' or 'help' key is pressed by the user.
   void help(function f) {help_ = f;}
+  virtual bool help();
 
   static vgui_DLLDATA bool redraw;
 
