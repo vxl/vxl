@@ -10,6 +10,7 @@ template void distance (InputIterator , InputIterator , Distance& )
 
 #define VCL_SET_INSTANTIATE(T, Comp)\
 template class vcl_set<T, Comp >; \
+template class rb_tree<T, T, vcl_identity<T>, Comp>; \
 VCL_SET_INSTANTIATE_ITERATOR(vcl_set<T VCL_COMMA Comp >::iterator, unsigned);
 
 #endif
