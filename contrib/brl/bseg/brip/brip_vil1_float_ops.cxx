@@ -1525,7 +1525,6 @@ bool brip_vil1_float_ops::homography(vil1_memory_image_of<float> const & input,
   vgl_h_matrix_2d<double> Hinv;
   // set up the roi and poly for the input image
   const int win = input.width(), hin = input.height();
-  int wout = 0, hout = 0;
   input_roi = new vsol_box_2d();
   input_roi->add_point(0, 0);
   input_roi->add_point(win, hin);
@@ -1555,7 +1554,7 @@ bool brip_vil1_float_ops::homography(vil1_memory_image_of<float> const & input,
     if (!output)
       return false;
     //The output roi and poly
-    wout = output.width(); hout = output.height();
+    int wout = output.width(), hout = output.height();
     output.fill(output_fill_value);
     output_roi = new vsol_box_2d();
     output_roi->add_point(0, 0);
