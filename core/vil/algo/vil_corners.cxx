@@ -6,6 +6,8 @@
 #include "vil_corners.h"
 #include <vil/vil_fill.h>
 #include <vcl_cassert.h>
+#include <vil/algo/vil_gauss_filter.h>
+#include <vil/vil_math.h>
 
 //: Compute Forstner/Harris corner strength function given gradient images.
 //  grad_i and grad_j are assumed to be the i and j gradient images (single
@@ -92,3 +94,35 @@ void vil_corners(const vil_image_view<float>& grad_i,
     d_data  += dest.jstep();
   }
 }
+
+//: Compute corner strength using Rohr's recommended method
+//  This computes the determinant of the matrix C=g.g'
+//  after the elements of C have been smoothed.
+//  g is the vector of first derivatives (gx,gy)'
+//  It relies only on first derivatives.
+// 
+//  Currently uses somewhat inefficient multi-pass method.
+//  Could be improved.
+void vil_corners_rohr(const vil_image_view<float>& gx,
+                 const vil_image_view<float>& gy,
+                 vil_image_view<float>& corner_im)
+{
+  vil_image_view<float> tmp_im,work_im, gx2,gy2,gxy;
+  vil_gauss_filter_5tap_params smooth_params(1.0);
+
+  // Compute smoothed products of gradients
+  vil_math_image_product(gx,gx,tmp_im);
+  vil_gauss_filter_5tap(tmp_im,gx2,smooth_params,work_im);
+
+  vil_math_image_product(gy,gy,tmp_im);
+  vil_gauss_filter_5tap(tmp_im,gy2,smooth_params,work_im);
+
+  vil_math_image_product(gx,gy,tmp_im);
+  vil_gauss_filter_5tap(tmp_im,gxy,smooth_params,work_im);
+
+  // Compute gx2*gy2 - gxy*gxy at each pixel
+  vil_math_image_product(gx2,gy2,corner_im);
+  vil_math_image_product(gxy,gxy,tmp_im);
+  vil_math_add_image_fraction(corner_im,1.0f,tmp_im,-1.0f);
+}
+
