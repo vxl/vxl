@@ -596,9 +596,9 @@ will optimise them completely away.
 void vsl_print_summary(vcl_ostream& os,const vanyl_my_class& v)
 @{
   os << v.is_a() << ": ";
-  vsl_indent(os)++;
+  vsl_inc_indent(os);
   v.print_summary(os);
-  vsl_indent(os)--;
+  vsl_dec_indent(os);
 @}
 
 @end example
@@ -1352,6 +1352,115 @@ void vsl_b_read(vsl_b_istream &is, DerivedClass & p)
 
 There.  Nothing to it really.
 
+@section Tidy Printing with @code{vsl_indent}
+
+The utility functions and class in @code{vsl_indent} give a way of putting
+indentation into output streams to give more legible printed output.
+
+If each class implements it's printing (print(os) or print_summary(os))
+in such a way that at the beginning of each new line one inserts an
+indentation using
+@example
+os<<vsl_indent()<<"Rest of stuff.."<<vcl_endl;
+@end example
+and increases and decreases the current indentation for the stream with
+@code{vsl_inc_indent(os)} and @code{vsl_dec_indent(os)},
+then one can easily generate readable output for complex nested sets
+of classes.
+
+It's use is best described by example:
+
+@example
+vcl_cout<<vsl_indent()<<"No Indent"<<vcl_endl;
+vsl_inc_indent(vcl_cout);
+vcl_cout<<vsl_indent()<<"1 Indent"<<vcl_endl;
+vsl_inc_indent(vcl_cout);
+vcl_cout<<vsl_indent()<<"2 Indent"<<vcl_endl;
+vsl_dec_indent(vcl_cout);
+vcl_cout<<vsl_indent()<<"1 Indent"<<vcl_endl;
+vsl_dec_indent(vcl_cout);
+vcl_cout<<vsl_indent()<<"No Indent"<<vcl_endl;
+@end example
+
+This produces output of the form
+@example
+No Indent
+  1 Indent
+    2 Indent
+  1 Indent
+No Indent
+@end example
+
+Example of use in class output:
+@example
+class Fred
+{
+public:
+  void print(vcl_ostream& os) const { os<<vsl_indent(os)<<"Fred's data"; }
+};
+
+vcl_ostream& operator<<(vcl_ostream& os, const Fred& fred)
+{
+  os<<"Fred: "<<vcl_endl;
+  vsl_inc_indent(os);
+  fred.print(os);
+  vsl_dec_indent(os);
+  return os;
+}
+
+
+class Jim
+{
+private:
+  Fred fred_;
+public:
+  void print(vcl_ostream& os) const
+  {
+     os<<vsl_indent(os)<<fred_<<vcl_endl;
+     os<<vsl_indent(os)<<"Jim's other data";
+  }
+};
+
+vcl_ostream& operator<<(vcl_ostream& os, const Jim& jim)
+{
+  os<<"Jim: "<<vcl_endl;
+  vsl_inc_indent(os);
+  jim.print(os);
+  vsl_dec_indent(os);
+  return os;
+}
+
+main()
+{
+  Jim jim;
+  vcl_cout<<jim<<vcl_endl;
+}
+@end example
+
+This produces output:
+@example
+ Jim:
+   Fred's data
+   Jim's other data
+@end example
+
+If Jim were then included as a member of another class, Harry, one could get
+output of the form
+@example
+Harry:
+   Harry's basic data
+   jim1:
+     Fred's data
+     Jim's other data
+   jim2:
+     Fred's data
+     Jim's other data
+@end example
+
+and so forth.  The author humbly suggests that this makes the summaries
+quite readable.
+
+
 @section Test Programs
 
 It is important to write test programs for all the IO.  Below is a
@@ -1609,7 +1718,7 @@ avoids having to modify the shared object.
 
 Your principle designers for this chapter have been Tim Cootes and Ian Scott.
 We based the first draft on the design of the Binary IO system in RADIAL, which was
-originally in designed Manchester by Dave Bales and Dave Cooper.
+originally designed in Manchester by Dave Bailes and Dave Cooper.
 
 Finally, the hard work of programming @code{vsl} and the vxl/io libraries was performed by the
 C++ user's group at the Dept. of Imaging Science; Danny Allen, Tim Cootes, Nick Costen,
