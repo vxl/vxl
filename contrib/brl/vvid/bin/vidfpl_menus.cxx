@@ -101,6 +101,11 @@ void vidfpl_menus::compute_motion_callback()
   vvid_file_manager::instance()->compute_motion();
 }
 
+void vidfpl_menus::compute_lucas_kanade_callback()
+{
+  vvid_file_manager::instance()->compute_lucas_kanade();
+}
+
 void vidfpl_menus::quit_callback()
 {
   vcl_exit(1);
@@ -129,6 +134,7 @@ vgui_menu vidfpl_menus::get_menu()
   menuedit.add( "No Op", no_op_callback);
   menuedit.add( "Frame Difference", difference_frames_callback);
   menuedit.add( "Compute Motion", compute_motion_callback);
+  menuedit.add( "Compute Lucas-Kanade", compute_lucas_kanade_callback);
   //Top level menu layout
   menubar.add( "File", menufile);
   menubar.add( "View", menuview);

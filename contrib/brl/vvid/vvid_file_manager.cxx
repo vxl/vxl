@@ -25,6 +25,7 @@
 #include <vidl/vidl_frame.h>
 #include <vvid/vvid_frame_diff_process.h>
 #include <vvid/vvid_motion_process.h>
+#include <vvid/vvid_lucas_kanade_process.h>
 #include <vvid/vvid_file_manager.h>
 
 //static manager instance
@@ -106,6 +107,11 @@ void vvid_file_manager::display_image()
 //-----------------------------------------------------------------------------
 void vvid_file_manager::load_video_file()
 {
+  play_video_ = true;
+  pause_video_ = false;
+  next_frame_ = false;
+  prev_frame_ = false;
+  video_process_ = 0;
   vgui_dialog load_video_dlg("Load video file");
   static vcl_string image_filename = "";
   static vcl_string ext = "";
@@ -314,4 +320,9 @@ void vvid_file_manager::difference_frames()
 void vvid_file_manager::compute_motion()
 {
   video_process_ = new vvid_motion_process();
+}
+
+void vvid_file_manager::compute_lucas_kanade()
+{
+  video_process_ = new vvid_lucas_kanade_process();
 }

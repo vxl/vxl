@@ -29,6 +29,8 @@ bool vvid_capture_process::execute()
 
 bool vvid_capture_process::finish()
 {
+  if(!frames_.size())
+    return false;
   vidl_clip_sptr clip = new vidl_clip(frames_);
   vidl_movie_sptr mov= new vidl_movie();
   mov->add_clip(clip);

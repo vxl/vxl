@@ -96,6 +96,9 @@ class vvid_file_manager : public vgui_wrapper_tableau
   //: show the motion condition
   void compute_motion();
 
+  //: show the Lucas-Kanade vectors as color
+  void compute_lucas_kanade();
+
   //: get the window of this player
   vgui_window* get_window(){return win_;}
 

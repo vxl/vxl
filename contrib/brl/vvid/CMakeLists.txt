@@ -21,6 +21,7 @@ SET(vvid_sources
     vvid_capture_process.cxx         vvid_capture_process.h   
     vvid_frame_diff_process.cxx      vvid_frame_diff_process.h   
     vvid_motion_process.cxx          vvid_motion_process.h   
+    vvid_lucas_kanade_process.cxx    vvid_lucas_kanade_process.h   
     vvid_epipolar_space_process.cxx  vvid_epipolar_space_process.h   
     vvid_edge_process.cxx            vvid_edge_process.h   
     vvid_file_manager.cxx            vvid_file_manager.h

@@ -69,10 +69,10 @@ void vvid_live_video_manager::init()
 {
   //Determine the number of active cameras
   // for now we assume use a pre-defined _N_views
-  sample_ = 2;
+  sample_ = 1;
   init_successful_ = true;
   edges_ = true;
-  vtab_ = vvid_live_video_tableau_new(0, 2, cmu_1394_camera_params());
+  vtab_ = vvid_live_video_tableau_new(0, sample_, cmu_1394_camera_params());
   init_successful_ = init_successful_&&vtab_->attach_live_video();
   if (!init_successful_)
     {
@@ -85,8 +85,7 @@ void vvid_live_video_manager::init()
   vgui_viewer2D_tableau_sptr v2d = vgui_viewer2D_tableau_new(vt2D_);
   vgui_shell_tableau_sptr shell = vgui_shell_tableau_new(v2d);
   this->add_child(shell);
-  sdet_detector_params dp;
-  video_process_  = new vvid_edge_process(dp);
+  video_process_  = (vvid_video_process*)0;
 }
 
 //: make an event handler
@@ -105,7 +104,6 @@ void vvid_live_video_manager::set_camera_params()
                << " video tableau \n";
       return;
     }
-  cp_.rgb_=false;
   vgui_dialog cam_dlg("Camera Parameters");
   cam_dlg.field("video_format",cp_.video_format_);
   cam_dlg.field("video_mode",cp_.video_mode_);
@@ -120,6 +118,7 @@ void vvid_live_video_manager::set_camera_params()
     return;
   cp_.constrain();//constrain the parameters to be consistent
   vtab_->set_camera_params(cp_);
+  vcl_cout << "Current Camera Parameters \n" << cp_ << "\n";
 }
 void vvid_live_video_manager::set_detection_params()
 {
@@ -133,7 +132,6 @@ void vvid_live_video_manager::set_detection_params()
   bool live = vtab_->get_video_live();
   if (live)
     this->stop_live_video();
-  sample_ = 2;
   static bool agr = false;
   static sdet_detector_params dp;
   static float max_gap = 0;
@@ -156,6 +154,7 @@ void vvid_live_video_manager::set_detection_params()
     video_process_  = new vvid_edge_process(dp);
   else
     video_process_  = new vvid_region_process(dp);
+  sample_ = 2;
   if (live)
     this->start_live_video();
 }
