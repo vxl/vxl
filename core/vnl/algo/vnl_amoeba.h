@@ -5,20 +5,18 @@
 #pragma interface
 #endif
 //
-// Class : vnl_amoeba
+// .NAME	vnl_amoeba - Nelder-Meade downhill simplex
+// .LIBRARY	vnl-algo
+// .HEADER	vxl Package
+// .INCLUDE	vnl/algo/vnl_amoeba.h
+// .FILE	vnl_amoeba.cxx
 //
 // .SECTION Description
-//
 //    vnl_amoeba is an implementation of the Nelder-Meade downhill simplex
 //    algorithm.  For most problems, it's a few times slower than
 //    vnl_levenberg_marquardt, but it can perform much better on noisy error
 //    functions.
 //
-// .NAME        vnl_amoeba - Nelder-Meade downhill simplex.
-// .LIBRARY     vnl
-// .HEADER	Numerics Package
-// .INCLUDE     vnl/vnl_amoeba.h
-// .FILE        vnl/vnl_amoeba.cxx
 // .SECTION Author
 //     Andrew W. Fitzgibbon, Oxford RRG, 23 Oct 97
 //

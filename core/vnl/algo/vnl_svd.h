@@ -3,12 +3,12 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
-// .NAME        vnl_svd - Compute and cache the SVD of a Matrix.
-// .LIBRARY     vnl/algo
-// .HEADER	Numeircs Package
-// .INCLUDE     vnl/algo/vnl_svd.h
-// .FILE        vnl/algo/vnl_svd.cxx
-// .EXAMPLE     vnl/examples/svd.cxx
+// .NAME	vnl_svd - Compute and cache the SVD of a Matrix
+// .LIBRARY	vnl-algo
+// .HEADER	vxl Package
+// .INCLUDE	vnl/algo/vnl_svd.h
+// .FILE	vnl_svd.txx
+// .EXAMPLE	../examples/vnl_svd.cxx
 //
 // .SECTION Description
 // @{ vnl_svd holds the singular value decomposition of an vnl\_matrix.

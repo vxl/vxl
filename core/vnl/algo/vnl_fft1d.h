@@ -1,12 +1,13 @@
 // -*- c++ -*-
 #ifndef vnl_fft1d_h_
 #define vnl_fft1d_h_
-// .NAME        vnl_fft1d - 1D Fourier transform
-// .LIBRARY     vnl
-// .HEADER      vnl Package
-// .INCLUDE     vnl/algo/vnl_fft1d.h
-// .FILE        vnl/algo/vnl_fft1d.cxx
-// .EXAMPLE     vnl/tests/testvnl_fft1d.cxx
+
+// .NAME	vnl_fft1d - 1D Fourier transform
+// .LIBRARY	vnl-algo
+// .HEADER	vxl Package
+// .INCLUDE	vnl/algo/vnl_fft1d.h
+// .FILE	vnl_fft1d.txx
+// .EXAMPLE	../tests/test_fft1d.cxx
 //
 // .SECTION Description
 //
@@ -31,9 +32,9 @@
 //  of the 'number' (the size of the array) to be FFT'd.
 //  (integral part of Temperton's algorithm)
 //
-//  .SECTION Author
+// .SECTION Author
 //  Veit U.B. Schenk, Oxford RRG, 19 Mar 98
-//  .SECTION Modifications:
+// .SECTION Modifications:
 //-----------------------------------------------------------------------------
 
 #include <vnl/vnl_complex.h>

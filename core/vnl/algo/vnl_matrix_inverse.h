@@ -3,11 +3,11 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
-// .NAME        vnl_matrix_inverse - vnl_matrix_inverse via vnl_svd<double>
-// .LIBRARY     vnl
-// .HEADER	vnl Package
-// .INCLUDE     vnl/algo/vnl_matrix_inverse.h
-// .FILE        vnl/algo/vnl_matrix_inverse.cxx
+// .NAME	vnl_matrix_inverse - vnl_matrix_inverse via vnl_svd<double>
+// .LIBRARY	vnl-algo
+// .HEADER	vxl Package
+// .INCLUDE	vnl/algo/vnl_matrix_inverse.h
+// .FILE	vnl_matrix_inverse.txx
 //
 // .SECTION Description
 //    vnl_matrix_inverse is a wrapper around vnl_svd<double> that allows you to write

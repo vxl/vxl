@@ -5,23 +5,21 @@
 #pragma interface
 #endif
 //
-// Class : vnl_generalized_eigensystem
+// .NAME	vnl_generalized_eigensystem - Symmetric-definite generalized eigensystem
+// .LIBRARY	vnl-algo
+// .HEADER	vxl Package
+// .INCLUDE	vnl/algo/vnl_generalized_eigensystem.h
+// .FILE	vnl_generalized_eigensystem.cxx
 //
 // .SECTION Description
-//    Solve the generalized eigenproblem of @{ $A x = \lambda B x$, with $A$
-//    symmetric and $B$ positive definite.  See Golub and van Loan,
-//    Section 8.7.
+//    Solve the generalized eigenproblem of @{ $A x = \lambda B x$ @},
+//    with $A$ symmetric and $B$ positive definite.
+//    See Golub and van Loan, Section 8.7.
 //
 //    Uses the EISPACK routine RSG.
-// @}
 //
-// .NAME        vnl_generalized_eigensystem - Symmetric-definite generalized eigensystem
-// .LIBRARY     vnl
-// .HEADER	vnl Package
-// .INCLUDE     vnl/algo/vnl_generalized_eigensystem.h
-// .FILE        vnl/algo/vnl_generalized_eigensystem.cxx
-
-// Author:  Andrew W. Fitzgibbon, Oxford RRG, 29 Aug 96
+// .SECTION Author:
+// Andrew W. Fitzgibbon, Oxford RRG, 29 Aug 96
 
 #include <vnl/vnl_diag_matrix.h>
 

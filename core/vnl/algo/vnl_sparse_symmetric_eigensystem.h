@@ -3,6 +3,14 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
+//
+// .NAME	vnl_sparse_symmetric_eigensystem
+// .LIBRARY	vnl-algo
+// .HEADER	vxl Package
+// .INCLUDE	vnl/algo/vnl_sparse_symmetric_eigensystem.h
+// .FILE	vnl_sparse_symmetric_eigensystem.cxx
+//
+// .SECTION Description
 //    Solve the eigenproblem $A x = \lambda x$, with $A$ symmetric and
 //    sparse.  The block Lanczos algorithm is used to allow the
 //    recovery of a number of eigenvale/eigenvector pairs from either
@@ -10,7 +18,8 @@
 //
 //    Uses the dnlaso routine from the LASO package of netlib. 
 //
-// Author: Rupert W. Curwen, GE CR&D, 20 Oct 98
+// .SECTION Author
+//    Rupert W. Curwen, GE CR&D, 20 Oct 98
 
 #include <vnl/vnl_sparse_matrix.h>
 #include <vcl/vcl_vector.h>

@@ -5,17 +5,16 @@
 #pragma interface
 #endif
 //
-// Class : vnl_gaussian_kernel_1d
+// .NAME	vnl_gaussian_kernel_1d - 1D discrete Gaussian
+// .LIBRARY	vnl-algo
+// .HEADER	vxl Package
+// .INCLUDE	vnl/algo/vnl_gaussian_kernel_1d.h
+// .FILE	vnl_gaussian_kernel_1d.cxx
 //
 // .SECTION Description
 //    vnl_gaussian_kernel_1d is a class that holds one half of a discretely
 //    sampled 1D gaussian distribution.
 //
-// .NAME        vnl_gaussian_kernel_1d - 1D discrete Gaussian.
-// .LIBRARY     vnl
-// .HEADER	Numerics Package
-// .INCLUDE     vnl/vnl_gaussian_kernel_1d.h
-// .FILE        vnl/vnl_gaussian_kernel_1d.cxx
 // .SECTION Author
 //     Andrew W. Fitzgibbon, Oxford RRG, 07 Aug 97
 //

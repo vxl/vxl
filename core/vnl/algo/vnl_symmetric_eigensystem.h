@@ -3,9 +3,11 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
-// .NAME        vnl_symmetric_eigensystem - @{\boldmath Solve $A x = \lambda x$ using vnl_qr. @}
-// .INCLUDE     vnl/algo/vnl_symmetric_eigensystem.h
-// .FILE        vnl/algo/vnl_symmetric_eigensystem.cxx
+// .NAME	vnl_symmetric_eigensystem - Solve $A x = \lambda x$ using vnl_qr
+// .LIBRARY	vnl-algo
+// .HEADER	vxl Package
+// .INCLUDE	vnl/algo/vnl_symmetric_eigensystem.h
+// .FILE	vnl_symmetric_eigensystem.cxx
 //
 // .SECTION Description
 // @{
@@ -40,8 +42,11 @@
 // \end{quote}
 // @}
 //
-// Author: Andrew W. Fitzgibbon, Oxford RRG, 29 Aug 96
-// History: fsm@robots, 5 March 2000: templated
+// .SECTION Author
+//     Andrew W. Fitzgibbon, Oxford RRG, 29 Aug 96
+//
+// .SECTION Modifications
+//     fsm@robots, 5 March 2000: templated
 
 #include <vnl/vnl_matrix.h>
 #include <vnl/vnl_diag_matrix.h>

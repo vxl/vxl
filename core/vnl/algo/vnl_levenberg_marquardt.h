@@ -3,12 +3,12 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
-// .NAME        vnl_levenberg_marquardt - Levenberg Marquardt nonlinear least squares
-// .LIBRARY     vnl
-// .HEADER	vnl Package
-// .INCLUDE     vnl/algo/vnl_levenberg_marquardt.h
-// .FILE        vnl/algo/vnl_levenberg_marquardt.cxx
-// .EXAMPLE     vnl/examples/rosenbrock_example.cxx
+// .NAME	vnl_levenberg_marquardt - Levenberg Marquardt nonlinear least squares
+// .LIBRARY	vnl-algo
+// .HEADER	vxl Package
+// .INCLUDE	vnl/algo/vnl_levenberg_marquardt.h
+// .FILE	vnl_levenberg_marquardt.cxx
+// .EXAMPLE	../examples/vnl_rosenbrock.cxx
 //
 // .SECTION Description
 //    vnl_levenberg_marquardt is an interface to the MINPACK routine lmdif,
@@ -20,7 +20,8 @@
 //    (See Hartley in ``Applications of Invariance in Computer Vision''
 //    for example).
 //
-// Author:   Andrew W. Fitzgibbon, Oxford RRG, 31 Aug 96
+// .SECTION Author:
+//    Andrew W. Fitzgibbon, Oxford RRG, 31 Aug 96
 
 #include <vcl/vcl_iosfwd.h>
 #include <vnl/vnl_vector.h>

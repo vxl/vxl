@@ -1,11 +1,19 @@
 #ifndef vnl_discrete_diff_h_
 #define vnl_discrete_diff_h_
-/*
-  fsm@robots.ox.ac.uk
 
-  Functions to compute jacobians of vnl_least_squares_functions by discrete differencing.
-  They return false on failure and true on success.
-*/
+// .NAME	vnl_discrete_diff
+// .LIBRARY	vnl-algo
+// .HEADER	vxl Package
+// .INCLUDE	vnl/algo/vnl_discrete_diff.h
+// .FILE	vnl_discrete_diff.cxx
+//
+// .SECTION Description
+// Functions to compute jacobians of vnl_least_squares_functions by discrete differencing.
+// They return false on failure and true on success.
+//
+// .SECTION Author
+//   fsm@robots.ox.ac.uk
+//
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_matrix.h>
 class vnl_least_squares_function;

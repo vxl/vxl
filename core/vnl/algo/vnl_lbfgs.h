@@ -5,11 +5,12 @@
 #pragma interface
 #endif
 //
-// .NAME        vnl_lbfgs - Limited memory Broyden Fletcher Goldfarb Shannon minimization
-// .LIBRARY     vnl
-// .HEADER	vnl Package
-// .INCLUDE     vnl/algo/vnl_lbfgs.h
-// .FILE        vnl/algo/vnl_lbfgs.cxx
+// .NAME	vnl_lbfgs - Limited memory Broyden Fletcher Goldfarb Shannon minimization
+// .LIBRARY	vnl-algo
+// .HEADER	vxl Package
+// .INCLUDE	vnl/algo/vnl_lbfgs.h
+// .FILE	vnl_lbfgs.cxx
+//
 // .SECTION Description
 //    vnl_lbfgs is a class that awf hasn't documented properly. FIXME
 //

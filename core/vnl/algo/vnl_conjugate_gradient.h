@@ -5,16 +5,12 @@
 #pragma interface
 #endif
 //
-// Class : vnl_conjugate_gradient
+// .NAME	vnl_conjugate_gradient - real function minimization
+// .LIBRARY	vnl-algo
+// .HEADER	vxl Package
+// .INCLUDE	vnl/algo/vnl_conjugate_gradient.h
+// .FILE	vnl_conjugate_gradient.cxx
 //
-// .SECTION Description
-//    vnl_conjugate_gradient is a class that Geoff hasn't documented properly. FIXME
-//
-// .NAME        vnl_conjugate_gradient - Undocumented class FIXME
-// .LIBRARY     optimisation
-// .HEADER	src Package
-// .INCLUDE     vnl/algo/vnl_conjugate_gradient.h
-// .FILE        vnl/algo/vnl_conjugate_gradient.cxx
 // .SECTION Author
 //     Geoffrey Cross, Oxford RRG, 15 Feb 99
 //

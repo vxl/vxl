@@ -3,12 +3,16 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
-/*
-  fsm@robots.ox.ac.uk
-*/
 
 // *** under construction ***
 
+// .NAME	vnl_netlib
+// .LIBRARY	vnl-algo
+// .HEADER	vxl Package
+// .INCLUDE	vnl/algo/vnl_netlib.h
+// .FILE	vnl_netlib.cxx
+//
+// .SECTION Description
 // Purpose: declare in a central place the list of symbols from netlib
 // referenced from vnl-algo. This list was auto-generated, so it is
 // exhaustive as of 16 March 2000 (10pm)
@@ -16,6 +20,10 @@
 // Note: the declarations are initially entered as "int f()", which 
 // will conflict with the actual prototype. If you get a conflict,
 // enter the correct prototype in here.
+//
+// .SECTION Author
+//  fsm@robots.ox.ac.uk
+//
 
 #include <vnl/vnl_complex.h>
 

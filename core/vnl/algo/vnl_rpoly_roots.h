@@ -5,11 +5,11 @@
 #pragma interface
 #endif
 //
-// .NAME        vnl_rpoly_roots - Roots of real polynomial.
-// .LIBRARY     vnl/algo
-// .HEADER	Numerics package
-// .INCLUDE     vnl/algo/vnl_rpoly_roots.h
-// .FILE        vnl/algo/vnl_rpoly_roots.cxx
+// .NAME	vnl_rpoly_roots - Roots of real polynomial
+// .LIBRARY	vnl-algo
+// .HEADER	vxl Package
+// .INCLUDE	vnl/algo/vnl_rpoly_roots.h
+// .FILE	vnl_rpoly_roots.cxx
 //
 // .SECTION Description
 //    Find the roots of a real polynomial.  Uses algorithm 493 from

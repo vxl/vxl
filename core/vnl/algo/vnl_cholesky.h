@@ -3,8 +3,12 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
-// .NAME        vnl_cholesky - Decomposition of symmetric matrix
-// .FILE        vnl/algo/vnl_cholesky.cxx
+//
+// .NAME	vnl_cholesky - Decomposition of symmetric matrix
+// .LIBRARY	vnl-algo
+// .HEADER	vxl Package
+// .INCLUDE	vnl/algo/vnl_cholesky.h
+// .FILE	vnl_cholesky.cxx
 //
 // .SECTION Description
 //    A class to hold the Cholesky decomposition of a symmetric matrix and

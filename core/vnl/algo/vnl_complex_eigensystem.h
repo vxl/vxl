@@ -1,11 +1,13 @@
 #ifndef vnl_complex_eigensystem_h_
 #define vnl_complex_eigensystem_h_
-/*
-  fsm@robots.ox.ac.uk
-*/
-#include <vnl/vnl_complex.h>
-#include <vnl/vnl_vector.h>
-#include <vnl/vnl_matrix.h>
+//
+// .NAME	vnl_complex_eigensystem
+// .LIBRARY	vnl-algo
+// .HEADER	vxl Package
+// .INCLUDE	vnl/algo/vnl_complex_eigensystem.h
+// .FILE	vnl_complex_eigensystem.cxx
+//
+// .SECTION Description
 // Class to compute and hold the eigenvalues and (optionally) eigenvectors
 // of a square complex matrix, using the LAPACK routine zgeev.
 //
@@ -23,6 +25,13 @@
 //
 // The ith right eigenvector v satisfies A*v = W[i]*v
 // The ith left  eigenvector u satisfies u*A = W[i]*u (no conjugation)
+//
+// .SECTION Author
+//  fsm@robots.ox.ac.uk
+//
+#include <vnl/vnl_complex.h>
+#include <vnl/vnl_vector.h>
+#include <vnl/vnl_matrix.h>
 
 //: computes the eigenvalues [+eigenvectors] of a complex square matrix.
 class vnl_complex_eigensystem {

@@ -5,10 +5,10 @@
 #endif
 //
 // .NAME	vnl_rnpoly_solve - Solves for roots of system of real polynomials
-// .LIBRARY	vnl/algo
-// .HEADER	Numerics package
+// .LIBRARY	vnl-algo
+// .HEADER	vxl Package
 // .INCLUDE	vnl/algo/vnl_rnpoly_solve.h
-// .FILE	vnl/algo/vnl_rnpoly_solve.cxx
+// .FILE	vnl_rnpoly_solve.cxx
 //
 // .SECTION Description
 //    Calculates all the roots of a system of N polynomials in N variables
