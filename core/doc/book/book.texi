@@ -124,7 +124,7 @@ Copyright @copyright{} 2000 Andrew Fitzgibbon
 @include chapter_vgl.texi
 
 @comment ------------------------------------------------------------------
-@node    vsl ,        vgui,    vgl,      top
+@node    vsl ,        vcsl,    vgl,      top
 @comment node-name,   next,    previous, up
 @chapter vsl: Binary I/O
 @cindex vsl
@@ -137,7 +137,7 @@ Copyright @copyright{} 2000 Andrew Fitzgibbon
 @include chapter_vsl.texi
 
 @comment ------------------------------------------------------------------
-@node    vgui,      vcsl,     vsl,      top
+@node    vcsl,      vguil,     vsl,      top
 @comment node-name, next,    previous, up
 @chapter vcsl: Co-ordinate systems
 @cindex co-ordinate systems
@@ -145,7 +145,7 @@ Copyright @copyright{} 2000 Andrew Fitzgibbon
 @include chapter_vcsl.texi
 
 @comment ------------------------------------------------------------------
-@node    vcsl,      Conclusion,     vgui,      top
+@node    vgui,      Conclusion,     vcsl,      top
 @comment node-name, next,    previous, up
 @chapter vgui: cross-platform user interface
 @cindex vgui
