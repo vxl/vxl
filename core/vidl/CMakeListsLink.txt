@@ -1,6 +1,8 @@
 LINK_LIBRARIES( vidl )
-LINK_DIRECTORIES( ${allvxl_BINARY_DIR}/vxl/vidl )
 
 # Immediate dependencies
+IF(WIN32)
+  LINK_LIBRARIES( vfw32 )
+ENDIF(WIN32)
 INCLUDE( ${allvxl_SOURCE_DIR}/vcl/CMakeListsLink.txt )
 
