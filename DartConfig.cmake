@@ -6,6 +6,7 @@ SET (NIGHTLY_START_TIME "22:00:00 EST" CACHE STRING "Agreed CVS snapshot timesta
 # Client configuration
 #
 
+SET (DROP_METHOD "ftp" CACHE STRING "Method for dropping files. Can be ftp, scp or cp.")
 SET (DROP_SITE "ftp.cs.rpi.edu" CACHE STRING "Address of remote drop site.")
 SET (DROP_LOCATION "/private/vision/incoming" CACHE STRING "Directory of drop site.")
 SET (DROP_SITE_USER "ftp" CACHE STRING "Username for remote access to drop site.")
