@@ -14,12 +14,12 @@ vsrl_diffusion::vsrl_diffusion(vsrl_dense_matcher *matcher)
   _matcher = matcher;
   _width = matcher->get_width();
   _height = matcher->get_height();
-  _disparaty_matrix = new vnl_matrix<double>(_width,_height);
+  _disparity_matrix = new vnl_matrix<double>(_width,_height);
 }
 
 vsrl_diffusion::~vsrl_diffusion()
 {
-  delete _disparaty_matrix;
+  delete _disparity_matrix;
 }
 
 int vsrl_diffusion::get_width()
@@ -32,13 +32,13 @@ int vsrl_diffusion::get_height()
   return _height;
 }
 
-double vsrl_diffusion::get_disparaty(int x, int y)
+double vsrl_diffusion::get_disparity(int x, int y)
 {
-  // we want to get the disparaty for the point x, y
+  // we want to get the disparity for the point x, y
 
   if(x>=0 && x<_width && y>=0 && y < _height){
 
-    return (*_disparaty_matrix)(x,y);
+    return (*_disparity_matrix)(x,y);
   }
   return 0;
 }
@@ -69,7 +69,7 @@ void vsrl_diffusion::write_image(char *file_name,int it_num, vnl_matrix<double> 
 
 void vsrl_diffusion::write_image(char *file_name,vnl_matrix<double> *mat)
 {
-  // write an image of the _disparaty_matrix
+  // write an image of the _disparity_matrix
 
    // we want to write a disparity image
 
@@ -80,7 +80,7 @@ void vsrl_diffusion::write_image(char *file_name,vnl_matrix<double> *mat)
   vil_memory_image_of<vil_byte> buffer(_width,_height);
 
   int x,y;
-  int disparaty;
+  int disparity;
   int value;
 
 
@@ -90,14 +90,14 @@ void vsrl_diffusion::write_image(char *file_name,vnl_matrix<double> *mat)
     }
   }
 
-  // go through each point, get the disparaty and save it into the buffer
+  // go through each point, get the disparity and save it into the buffer
 
   int corr_range = vsrl_parameters::instance()->correlation_range;
 
   for(y=0;y<buffer.height();y++){
      for(x=0;x<buffer.width();x++){
-       disparaty = (int)((*mat)(x,y));
-       value = disparaty + corr_range+1;
+       disparity = (int)((*mat)(x,y));
+       value = disparity + corr_range+1;
        if(value < 0){
          value = 0;
        }
@@ -114,7 +114,7 @@ void vsrl_diffusion::write_image(char *file_name,vnl_matrix<double> *mat)
   vil_save(buffer, file_name);
 }
 
-void vsrl_diffusion::write_disparaty_image(char *filename)
+void vsrl_diffusion::write_disparity_image(char *filename)
 {
-  write_image(filename,_disparaty_matrix);
+  write_image(filename,_disparity_matrix);
 }

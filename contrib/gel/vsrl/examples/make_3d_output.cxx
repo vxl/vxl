@@ -26,7 +26,7 @@ int main(int argc, char ** argv)
   vil_image image1 = vil_load(argv[1]);
   vil_image image2 = vil_load(argv[2]);
 
-  // load the disparaty image
+  // load the disparity image
 
   vil_image disp_image = vil_load(argv[3]);
 

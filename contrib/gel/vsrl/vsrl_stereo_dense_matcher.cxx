@@ -49,7 +49,6 @@ void vsrl_stereo_dense_matcher::execute()
 
 void vsrl_stereo_dense_matcher::initial_calculations()
 {
-
   // we want to perform the dense matching between the two images
 
   // step 1 - compute the correlations between the two images
@@ -73,20 +72,16 @@ void vsrl_stereo_dense_matcher::initial_calculations()
   for(i=0;i<_num_raster;i++){
     _raster_array[i]=0;
   }
-
 }
 
-int vsrl_stereo_dense_matcher::get_disparaty(int x,int y)
+int vsrl_stereo_dense_matcher::get_disparity(int x,int y)
 {
   int new_x = get_assignment(x,y);
 
-  if(new_x >=0){
+  if(new_x >=0)
     return get_assignment(x,y)-x;
-  }
-  else{
+  else
     return 0-1000;
-  }
-
 }
 
 int vsrl_stereo_dense_matcher::get_assignment(int x, int y)
@@ -109,9 +104,8 @@ int vsrl_stereo_dense_matcher::get_assignment(int x, int y)
 
 void vsrl_stereo_dense_matcher::evaluate_raster(int i)
 {
-  if(i<0 || i>= _num_raster){
+  if(i<0 || i>= _num_raster)
     vcl_cout << "Warning tried to evaluate inapropriate raster " << vcl_endl;
-  }
 
   // we want to evaulate the raster i
 
@@ -124,14 +118,12 @@ void vsrl_stereo_dense_matcher::evaluate_raster(int i)
   // we wish to use this information to bias the new raster
 
   if(i>0){
-    if(_raster_array[i-1]){
+    if(_raster_array[i-1])
       raster->set_prior_raster(_raster_array[i-1]);
-    }
   }
   if(i<_num_raster-1){
-    if(_raster_array[i+1]){
+    if(_raster_array[i+1])
       raster->set_prior_raster(_raster_array[i+1]);
-    }
   }
 
   // set the correlation range for the raster
@@ -145,7 +137,7 @@ void vsrl_stereo_dense_matcher::evaluate_raster(int i)
 }
 
 
-void vsrl_stereo_dense_matcher::write_disparaty_image(char *filename)
+void vsrl_stereo_dense_matcher::write_disparity_image(char *filename)
 {
   // we want to write a disparity image
 
@@ -154,32 +146,27 @@ void vsrl_stereo_dense_matcher::write_disparaty_image(char *filename)
   vil_byte_buffer buffer(_image1);
 
   int x,y;
-  int disparaty;
+  int disparity;
   int value;
 
 
-  for(x=0;x<buffer.width();x++){
-    for(y=0;y<buffer.height();y++){
+  for(x=0;x<buffer.width();x++)
+    for(y=0;y<buffer.height();y++)
       buffer(x,y)=0;
-    }
-  }
 
-  // go through each point, get the disparaty and save it into the buffer
+  // go through each point, get the disparity and save it into the buffer
 
   for(y=0;y<buffer.height();y++){
      for(x=0;x<buffer.width();x++){
-       disparaty = this->get_disparaty(x,y);
-       value = disparaty + _correlation_range+1;
-       if(value < 0){
+       disparity = this->get_disparity(x,y);
+       value = disparity + _correlation_range+1;
+       if(value < 0)
          value = 0;
-       }
-       if(value>2*_correlation_range+1){
+       if(value>2*_correlation_range+1)
          value=0;
-       }
        buffer(x,y)=value;
      }
   }
-
 
   // save the file
   // vil_save(buffer, filename, _image1.file_format());
@@ -191,10 +178,7 @@ void vsrl_stereo_dense_matcher::write_disparaty_image(char *filename)
 void vsrl_stereo_dense_matcher::print_correlation_cost(int x, int y)
 {
   vcl_cout << "Correlation costs for pixel " << x << " " << y << vcl_endl;
-  int disp;
 
-  for(disp = 0-_correlation_range;disp < _correlation_range;disp++){
-
+  for(int disp = 0-_correlation_range;disp < _correlation_range;disp++)
     vcl_cout << disp << " -> " << _image_correlation.get_correlation(x,y,disp) << vcl_endl;
-  }
 }

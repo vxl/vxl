@@ -25,13 +25,11 @@ _image_correlation(im1,im2)
   _H(3,3)=1;
   _image1=im1;
   _image2=im2;
-
 }
 
 // the destructor
 vsrl_3d_output::~vsrl_3d_output()
 {
-
 }
 
 // set the matcher
@@ -49,9 +47,7 @@ void vsrl_3d_output::set_projective_transform(vnl_matrix<double> &H)
   _H=H;
 
   return;
-
 }
-
 
 
 void vsrl_3d_output::write_output(char *filename)
@@ -66,12 +62,12 @@ void vsrl_3d_output::write_output(char *filename)
     return;
   }
 
-  // make a step_diffusion object to make better disparaties
+  // make a step_diffusion object to make better disparities
 
   vsrl_step_diffusion step_diffusion(_matcher);
   step_diffusion.execute();
 
-  // this->write_disparaty_image("test0_disp.ppm",&step_diffusion);
+  // this->write_disparity_image("test0_disp.ppm",&step_diffusion);
 
   // determine the saliency of each point in the image
 
@@ -86,8 +82,7 @@ void vsrl_3d_output::write_output(char *filename)
   // vsrl_saliency_diffusion sal_diffusion(_matcher);
 
 
-
-  // sal_diffusion.set_initial_disparaty(&step_diffusion);
+  // sal_diffusion.set_initial_disparity(&step_diffusion);
 
   // sal_diffusion.set_saliency(&ts);
 
@@ -95,8 +90,7 @@ void vsrl_3d_output::write_output(char *filename)
 
   // write the output
 
-  // this->write_disparaty_image("test1_disp.ppm",&sal_diffusion);
-
+  // this->write_disparity_image("test1_disp.ppm",&sal_diffusion);
 
 
   // these are the outputs of the data
@@ -134,14 +128,14 @@ void vsrl_3d_output::write_output(char *filename)
     for(y=0;y<height;y++){
       // get the disparity
 
-      difuse_d = step_diffusion.get_disparaty(x,y);
-      // difuse_d = sal_diffusion.get_disparaty(x,y);
+      difuse_d = step_diffusion.get_disparity(x,y);
+      // difuse_d = sal_diffusion.get_disparity(x,y);
 
       if(non_valid_point(x,y)){
         difuse_d=0.0;
       }
 
-      // d = _matcher->get_disparaty(x,y);
+      // d = _matcher->get_disparity(x,y);
       if(difuse_d > 0-999){
 
         input(0,0)=x;
@@ -185,12 +179,10 @@ void vsrl_3d_output::write_output(char *filename)
           // keep track of the point indices
           point_index(x,y)=index;
           index++;
-
         }
       }
     }
   }
-
 
   vcl_vector<double>::iterator iX,iY,iZ,itx,ity;
 
@@ -200,8 +192,6 @@ void vsrl_3d_output::write_output(char *filename)
   vcl_ofstream file(filename);
   int length = X_out.size();
   file << length << vcl_endl;
-
-
 
 
   iY=Y_out.begin();
@@ -325,7 +315,6 @@ void vsrl_3d_output::read_projective_transform(char *filename)
 }
 
 
-
 // identify points which are not part of the recitfied image
 
 bool vsrl_3d_output::non_valid_point(int x, int y)
@@ -344,10 +333,9 @@ bool vsrl_3d_output::non_valid_point(int x, int y)
 
   // it looks like this is a valid point
   return false;
-
 }
 
-void vsrl_3d_output::write_disparaty_image(char *filename,vsrl_diffusion *diff)
+void vsrl_3d_output::write_disparity_image(char *filename,vsrl_diffusion *diff)
 {
   // we want to write a disparity image
 
@@ -356,34 +344,30 @@ void vsrl_3d_output::write_disparaty_image(char *filename,vsrl_diffusion *diff)
   vil_byte_buffer buffer(_image1);
 
   int x,y;
-  int disparaty;
+  int disparity;
   int value;
 
 
-  for(x=0;x<buffer.width();x++){
-    for(y=0;y<buffer.height();y++){
+  for(x=0;x<buffer.width();x++)
+    for(y=0;y<buffer.height();y++)
       buffer(x,y)=0;
-    }
-  }
 
-  // go through each point, get the disparaty and save it into the buffer
+  // go through each point, get the disparity and save it into the buffer
 
   int correlation_range = vsrl_parameters::instance()->correlation_range;
 
-  for(y=0;y<buffer.height();y++){
-     for(x=0;x<buffer.width();x++){
-       disparaty = (int)(diff->get_disparaty(x,y));
-       value = disparaty + correlation_range+1;
-       if(value < 0){
-         value = 0;
-       }
-       if(value>2*correlation_range+1){
-         value=0;
-       }
-       buffer(x,y)=value;
-     }
-  }
+  for(y=0;y<buffer.height();y++)
+    for(x=0;x<buffer.width();x++){
+      disparity = (int)(diff->get_disparity(x,y));
+      value = disparity + correlation_range+1;
+      if(value < 0)
+        value = 0;
 
+      if(value>2*correlation_range+1)
+        value=0;
+
+      buffer(x,y)=value;
+    }
 
   // save the file
   // vil_save(buffer, filename, _image1.file_format());

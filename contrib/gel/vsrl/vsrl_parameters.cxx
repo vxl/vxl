@@ -27,7 +27,7 @@ vsrl_parameters::vsrl_parameters(){
 
   // ***** used in many classes ******
 
-  // the largest amount of allowable disparaty -  default 10
+  // the largest amount of allowable disparity -  default 10
   correlation_range =10;
 
   // ****** used in dynamic_program ******

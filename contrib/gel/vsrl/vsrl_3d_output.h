@@ -67,7 +67,7 @@ class vsrl_3d_output
   vil_image _image2; // the second image
 
 
- void  write_disparaty_image(char *filename,vsrl_diffusion *diff);
+ void  write_disparity_image(char *filename,vsrl_diffusion *diff);
 };
 
 #endif // vsrl_3d_output_h

@@ -16,29 +16,24 @@ vsrl_step_diffusion::~vsrl_step_diffusion()
 }
 
 
-void vsrl_step_diffusion::set_initial_disparaty()
-
+void vsrl_step_diffusion::set_initial_disparity()
 {
-  // we want to set the initial dispararty
+  // we want to set the initial disparity
 
-  int x,y,d;
-  double dd;
-
-
-  for(x=0;x<_width;x++)
+  for(int x=0;x<_width;x++)
   {
-    for(y=0;y<_height;y++)
+    for(int y=0;y<_height;y++)
     {
-      d = _matcher->get_disparaty(x,y);
-      dd =d;
-      (*_disparaty_matrix)(x,y)=dd;
+      int d = _matcher->get_disparity(x,y);
+      double dd =d;
+      (*_disparity_matrix)(x,y)=dd;
     }
   }
 }
 
-void vsrl_step_diffusion::interpolate_disparaty()
+void vsrl_step_diffusion::interpolate_disparity()
 {
-  // we want to be able to interpolate the disparaty
+  // we want to be able to interpolate the disparity
   int x,y;
   double v;
   int x1,x2;
@@ -47,13 +42,13 @@ void vsrl_step_diffusion::interpolate_disparaty()
   int flag1, flag2;
   int low_val=0-99;
 
-  // find all points do not have a defined disparaty
+  // find all points do not have a defined disparity
 
   for(y=0;y<_height;y++)
   {
     for(x=0;x<_width;x++)
     {
-      v = (*_disparaty_matrix)(x,y);
+      v = (*_disparity_matrix)(x,y);
 
       if(v<low_val)
       {
@@ -64,7 +59,7 @@ void vsrl_step_diffusion::interpolate_disparaty()
         x1=x-1;
         while(x1>=0 && !flag1)
         {
-          d1=(*_disparaty_matrix)(x1,y);
+          d1=(*_disparity_matrix)(x1,y);
           if(d1>low_val)
           {
             flag1=1;
@@ -81,7 +76,7 @@ void vsrl_step_diffusion::interpolate_disparaty()
         x2=x+1;
         while(x2<_width && !flag2)
         {
-          d2=(*_disparaty_matrix)(x2,y);
+          d2=(*_disparity_matrix)(x2,y);
           if(d2>low_val)
           {
             flag2=1;
@@ -101,8 +96,7 @@ void vsrl_step_diffusion::interpolate_disparaty()
           len2 = x2-x1;
           alpha = len1/len2;
           d= (1.0-alpha)*d1 + (alpha)*d2;
-          (*_disparaty_matrix)(x,y)=d;
-
+          (*_disparity_matrix)(x,y)=d;
         }
       }
     }
@@ -112,43 +106,37 @@ void vsrl_step_diffusion::interpolate_disparaty()
   {
     for(x=0;x<_width;x++)
     {
-      v = (*_disparaty_matrix)(x,y);
+      v = (*_disparity_matrix)(x,y);
       if(v<low_val)
       {
-        (*_disparaty_matrix)(x,y)=0.0;
+        (*_disparity_matrix)(x,y)=0.0;
       }
     }
   }
-
 }
-
 
 
 void vsrl_step_diffusion::clear_borders(int width)
 {
-  // we want to put the border disparaties to 0
+  // we want to put the border disparities to 0
 
 
   int x,y;
 
-  // find all points do not have a defined disparaty
+  // find all points do not have a defined disparity
 
   for(y=0;y<_height;y++)
   {
     for(x=0;x<width;x++)
-    {
-      (*_disparaty_matrix)(x,y)=0;
-    }
+      (*_disparity_matrix)(x,y)=0;
 
     for(x=_width-width;x<_width;x++)
-    {
-      (*_disparaty_matrix)(x,y)=0;
-    }
+      (*_disparity_matrix)(x,y)=0;
   }
 }
 
 
-void vsrl_step_diffusion::difuse_disparaty()
+void vsrl_step_diffusion::difuse_disparity()
 {
   // OK we now want to use a difusion operator to try
   // and smooth over the steps that seem to crop up
@@ -161,7 +149,7 @@ void vsrl_step_diffusion::difuse_disparaty()
 
   vcl_cout << "Starting to diffuse" << vcl_endl;
 
-  vnl_matrix<double> mat1= (*_disparaty_matrix);
+  vnl_matrix<double> mat1= (*_disparity_matrix);
   vnl_matrix<double> T1 = mat1;
   vnl_matrix<double> T2 = mat1;
 
@@ -236,27 +224,25 @@ void vsrl_step_diffusion::difuse_disparaty()
      hold=mstar1;
      mstar1=mstar2;
      mstar2=hold;
-
    }
 
    // copy the new results
-   (*_disparaty_matrix)=(*mstar1);
+   (*_disparity_matrix)=(*mstar1);
 
    vcl_cout << "Finished the diffusion " << vcl_endl;
-
 }
 
 void vsrl_step_diffusion::execute()
 {
-  // execute the disparaty stuff
+  // execute the disparity stuff
 
-  // set the initial disparaty
-  set_initial_disparaty();
+  // set the initial disparity
+  set_initial_disparity();
 
   // interpolate the missing data
-  interpolate_disparaty();
+  interpolate_disparity();
 
   // run a diffusion algorithm
 
-   difuse_disparaty();
+   difuse_disparity();
 }

@@ -16,7 +16,7 @@ vsrl_results_dense_matcher::~vsrl_results_dense_matcher()
 }
 
 // get the disparity
-int vsrl_results_dense_matcher::get_disparaty(int x, int y)
+int vsrl_results_dense_matcher::get_disparity(int x, int y)
 {
   int disp;
 
@@ -37,7 +37,7 @@ int vsrl_results_dense_matcher::get_assignment(int x, int y)
 {
   // we want to get the assignment for pixel x y
 
-  int disp = this->get_disparaty(x,y);
+  int disp = this->get_disparity(x,y);
 
   if(disp > 0-999){
     return x+disp;
