@@ -132,7 +132,10 @@ SOURCE=.\Templates/vcl_list+vbl_smart_ptr+vidl_codec--.cxx
 SOURCE=.\Templates/vcl_vector+vbl_smart_ptr+vidl_frame--.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\vidl_avicodec.cxx
+SOURCE=.\vidl_win_avicodec.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\vidl_avifile_avicodec.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\vidl_clip.cxx
@@ -159,6 +162,12 @@ SOURCE=.\vidl_vob_frame_index.cxx
 # Begin Group "Header Files"
 # PROP Default_Filter ""
 # Begin Source File
+SOURCE=.\vidl_win_avicodec.h
+# End Source File
+# Begin Source File
+SOURCE=.\vidl_avifile_avicodec.h
+# End Source File
+# Begin Source File
 SOURCE=.\vidl_avicodec.h
 # End Source File
 # Begin Source File
@@ -175,9 +184,6 @@ SOURCE=.\vidl_io.h
 # End Source File
 # Begin Source File
 SOURCE=.\vidl_movie.h
-# End Source File
-# Begin Source File
-SOURCE=.\vidl_avicodec_sptr.h
 # End Source File
 # Begin Source File
 SOURCE=.\vidl_clip_sptr.h
