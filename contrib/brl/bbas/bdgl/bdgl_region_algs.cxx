@@ -62,13 +62,13 @@ float bdgl_region_algs::intensity_distance(vdgl_digital_region_sptr const& r1,
   if (vcl_fabs(m1-m2)<SMALL)
     return 0;
   float msq = (m1+m2)*(m1+m2);
-  float d = 2.0*vcl_sqrt((m1-m2)*(m1-m2)/msq);
+  double d = 2.0*vcl_sqrt((m1-m2)*(m1-m2)/msq);
   vcl_cout << "Intensity Distance||(" << r1->Npix()
            << ")(Xo:" << r1->Xo() << " Yo:" << r1 ->Yo()
            << " Io:" << r1 ->Io() << ")::(" << r2->Npix()
            << " Xo:" << r2->Xo() << " Yo:" << r2 ->Yo()
            << " Io:" << r2 ->Io() <<")||= " << d << vcl_endl;
-  return d;
+  return float(d);
 }
 
 bool bdgl_region_algs::merge(vdgl_digital_region_sptr const& r1,
