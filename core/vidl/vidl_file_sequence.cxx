@@ -36,7 +36,7 @@ bool vidl_file_sequence::open(char const* fmt)
     bool found_one = false;
     for (int i = 0; ; ++i) {
       const char* buf = vul_sprintf(fmt, i).c_str();
-      int s = vul_file::size(buf);
+      offset_t s = (offset_t)vul_file::size(buf);
       if (s > 0) {
         found_one = true;
         filenames.push_back(buf);
@@ -63,7 +63,7 @@ bool vidl_file_sequence::open(char const* fmt)
   unsigned int n = filenames.size();
 
   if (n == 0) {
-    vcl_cerr << "ERROR: Could not turn [" << fmt << "] into a list of files\n";
+    vcl_cerr << "vidl_file_sequence: ERROR: Could not turn [" << fmt << "] into a list of files\n";
     return false;
   }
 
@@ -71,8 +71,8 @@ bool vidl_file_sequence::open(char const* fmt)
   if (filesizes.size() < n) {
     filesizes.resize(n);
     for (unsigned int i = 0; i < n; ++i) {
-      int s = vul_file::size(filenames[i].c_str());
-      if (s <= 0)
+      offset_t s = (offset_t)vul_file::size(filenames[i].c_str());
+      if (s == 0)
         vcl_cerr << "WARNING: Zero size file [" << filenames[i] << "]\n";
       filesizes[i] = s;
     }
@@ -83,9 +83,9 @@ bool vidl_file_sequence::open(char const* fmt)
 
   // Fill start_bytes
   start_byte.resize(n);
-  start_byte[0] = 0;
+  start_byte[0] = 0L;
   for (unsigned int i = 1; i < filenames.size(); ++i)
-    start_byte[i] = start_byte[i-1] + (offset_t)filesizes[i-1];
+    start_byte[i] = start_byte[i-1] + filesizes[i-1];
 
   // Open them all
   fps.resize(n);
@@ -93,22 +93,22 @@ bool vidl_file_sequence::open(char const* fmt)
     char const* fn = filenames[i].c_str();
     fps[i] = vcl_fopen(fn, "rb");
     if (!fps[i]) {
-      vcl_cerr << "ERROR: Could not open [" << fn << "]\n";
+      vcl_cerr << "vidl_file_sequence::open(): ERROR: Could not open [" << fn << "]\n";
       current_file_index = -1;
       return false;
     }
   }
 
   // Summarize:
-  vcl_cerr << "files: sizeof offset_t = " << sizeof(offset_t) << '\n';
+  vcl_cerr << "files: sizeof(offset_t) = " << sizeof(offset_t) << '\n';
   for (unsigned int i = 0; i < n; ++i)
-    vcl_cerr << "   " << filenames[i].c_str() << "  " << (long)start_byte[i] << '\n';
+    vcl_cerr << "   " << filenames[i] << "  " << start_byte[i] << '\n';
   vcl_cerr << '\n';
 
   return true;
 }
 
-void vidl_file_sequence::seek(offset_t to)
+bool vidl_file_sequence::seek(offset_t to)
 {
   int newindex = -1;
   for (unsigned int i = 1; i < filesizes.size(); ++i)
@@ -120,23 +120,22 @@ void vidl_file_sequence::seek(offset_t to)
   if (newindex == -1) {
     int i = filesizes.size() - 1;
     // Know start_byte[i] <= to
-    if (to < start_byte[i] + (offset_t)filesizes[i])
+    if (to < start_byte[i] + filesizes[i])
       newindex = i;
   }
 
   if (newindex == -1) {
-    vcl_cerr << "ERROR: Could not seek to [" << to << "]\n";
-    return;
+    vcl_cerr << "vidl_file_sequence::seek(): ERROR: Could not seek to [" << to << "]\n";
+    return false;
   }
 
   current_file_index = newindex;
 
   offset_t file_ptr = to - start_byte[current_file_index];
-  vcl_cerr << " si = " << (double)start_byte[current_file_index] << " to = " << (double)to << '\n';
-  assert(file_ptr >= 0);
-  assert(file_ptr < (offset_t)filesizes[current_file_index]);
+  vcl_cerr << " si = " << start_byte[current_file_index] << " to = " << to << '\n';
+  assert(file_ptr < filesizes[current_file_index]);
 
-  vcl_fseek(fps[current_file_index], file_ptr, SEEK_SET);
+  return 0 <= vcl_fseek(fps[current_file_index], file_ptr, SEEK_SET);
 }
 
 vidl_file_sequence::offset_t vidl_file_sequence::tell() const
@@ -144,12 +143,12 @@ vidl_file_sequence::offset_t vidl_file_sequence::tell() const
   return start_byte[current_file_index] + ftell(fps[current_file_index]);
 }
 
-int vidl_file_sequence::read(void* buf, unsigned int len)
+vidl_file_sequence::offset_t vidl_file_sequence::read(void* buf, offset_t len)
 {
-  unsigned long space_left_in_this_file = filesizes[current_file_index] - ftell(fps[current_file_index]);
+  offset_t space_left_in_this_file = filesizes[current_file_index] - ftell(fps[current_file_index]);
 
-  int bytes_from_curr = len;
-  int bytes_from_next = 0;
+  offset_t bytes_from_curr = len;
+  offset_t bytes_from_next = 0L;
   if (space_left_in_this_file < len) {
     bytes_from_curr = space_left_in_this_file;
     bytes_from_next = len - space_left_in_this_file;
@@ -158,7 +157,7 @@ int vidl_file_sequence::read(void* buf, unsigned int len)
   if (bytes_from_next == 0)
     return vcl_fread(buf, 1, len, fps[current_file_index]);
 
-  int n1 = vcl_fread(buf, 1, bytes_from_curr, fps[current_file_index]);
+  offset_t n1 = vcl_fread(buf, 1, bytes_from_curr, fps[current_file_index]);
   if (n1 < bytes_from_curr)
     // First read stopped short, don't even bother with next one
     return n1;
@@ -168,7 +167,7 @@ int vidl_file_sequence::read(void* buf, unsigned int len)
 
   // First read was OK.  Advance to next file.
   ++current_file_index;
-  vcl_fseek(fps[current_file_index], 0, SEEK_SET); // need to seek(0) since we may have read from this file before.
+  vcl_fseek(fps[current_file_index], 0L, SEEK_SET); // need to seek(0) since we may have read from this file before.
   int n2 = vcl_fread((unsigned char*)buf + n1, 1, bytes_from_next, fps[current_file_index]);
   return n1 + n2;
 }

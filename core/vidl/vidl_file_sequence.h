@@ -4,41 +4,35 @@
 //:
 // \file
 // \author awf@robots.ox.ac.uk
-// Created: 18 Dec 01
-// copied by l.e.galup to vxl/vidl
+// \date 18 Dec 01
+// copied by l.e.galup from oxl/oxp/oxp_bunch_of_files
 // 10-18-02
 
 #include <vcl_cstdio.h>
 #include <vcl_vector.h>
 #include <vcl_string.h>
 
-#include <vxl_config.h> // for vxl_int_64
-
 class vidl_file_sequence
 {
-#if VXL_HAS_INT_64
-  typedef vxl_int_64 offset_t;
-#else // vcl_int_64 is #defined to void
-  typedef long offset_t;
-#endif
+  typedef unsigned long offset_t;
  public:
-  vidl_file_sequence(){}
+  vidl_file_sequence() {}
   vidl_file_sequence(char const* fmt);
-  ~vidl_file_sequence(){}
+  ~vidl_file_sequence() { close(); }
 
   bool open(char const* fmt);
   void close();
 
-  void seek(offset_t to);
+  bool seek(offset_t to);
   offset_t tell() const;
-  int read(void*, unsigned int);
+  offset_t read(void*, offset_t);
   bool ok() { return current_file_index != -1; }
 
  private:
   int current_file_index;
   vcl_vector<vcl_string> filenames;
   vcl_vector<vcl_FILE*> fps;
-  vcl_vector<unsigned int> filesizes;
+  vcl_vector<offset_t> filesizes;
   vcl_vector<offset_t> start_byte;
 };
 

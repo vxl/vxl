@@ -10,19 +10,13 @@
 #include <vcl_vector.h>
 #include <vcl_string.h>
 
-#include <vxl_config.h> // for vxl_int_64
-
 struct oxp_bunch_of_files
 {
-#if VXL_HAS_INT_64
-  typedef vxl_int_64 offset_t;
-#else // vcl_int_64 is typedef'd to void
-  typedef long offset_t;
-#endif
+  typedef unsigned long offset_t;
 
-  oxp_bunch_of_files();
+  oxp_bunch_of_files() {}
   oxp_bunch_of_files(char const* fmt);
-  ~oxp_bunch_of_files();
+  ~oxp_bunch_of_files() { close(); }
 
   bool open(char const* fmt);
   bool open_1(char const* fmt);
@@ -30,7 +24,7 @@ struct oxp_bunch_of_files
 
   bool seek(offset_t to);
   offset_t tell() const;
-  int read(void*, unsigned int);
+  offset_t read(void*, offset_t);
   bool ok() { return current_file_index != -1; }
 
  private:
@@ -39,7 +33,7 @@ struct oxp_bunch_of_files
   int current_file_index;
   vcl_vector<vcl_string> filenames;
   vcl_vector<vcl_FILE*> fps;
-  vcl_vector<unsigned int> filesizes;
+  vcl_vector<offset_t> filesizes;
   vcl_vector<offset_t> start_byte;
 };
 
