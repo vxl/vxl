@@ -56,13 +56,6 @@ struct NViewMatch : public vnl_vector<int> {
 };
 vcl_ostream& operator<<(vcl_ostream& s, const NViewMatch& c);
 
-#ifdef VCL_GCC_27
-inline bool operator==(const NViewMatch& a, const NViewMatch& b)
-{
-  return *(vnl_vector<int> const*)&a == *(vnl_vector<int> const*)&b;
-}
-#endif
-
 class NViewMatches : public vcl_vector<NViewMatch> {
 public:
 
