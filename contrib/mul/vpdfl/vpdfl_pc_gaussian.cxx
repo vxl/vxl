@@ -28,8 +28,8 @@
 //=======================================================================
 
 //: Dflt ctor
-vpdfl_pc_gaussian::vpdfl_pc_gaussian(): partition_chooser_(0),
-partition_(0), log_k_principal_(0.0)
+vpdfl_pc_gaussian::vpdfl_pc_gaussian()
+  : partition_(0), log_k_principal_(0.0), partition_chooser_(0)
 {
 }
 //=======================================================================
@@ -51,7 +51,6 @@ double vpdfl_pc_gaussian::log_p(const vnl_vector<double>& x) const
   int m = n_principal_components();
   int n = n_dims();
   assert(x.size() == n);
-
 
   if (m>=n-1) // it is probably not worth the speed up unless we avoid calculating more than one basis vector.
     return vpdfl_gaussian::log_p(x);
@@ -181,14 +180,12 @@ void vpdfl_pc_gaussian::set(const vnl_vector<double>& mean,
 // Turn off assertions to remove error checking.
 void vpdfl_pc_gaussian::set(const vnl_vector<double>& mean,  const vnl_matrix<double>& evecs, const vnl_vector<double>& evals)
 {
-
 #ifndef NDEBUG
   if (!partition_chooser_)
   {
-    vcl_cerr << "ERROR: vpdfl_pc_gaussian::set()\n"<<
-      "Using this function requires partition_chooser_ to be set to a real builder\n"
-      << vcl_endl;
-    abort();
+    vcl_cerr << "ERROR: vpdfl_pc_gaussian::set()\nUsing this function requires"
+             << " partition_chooser_ to be set to a real builder\n\n";
+    vcl_abort();
   }
 #endif
 
@@ -219,8 +216,6 @@ vpdfl_sampler_base* vpdfl_pc_gaussian::sampler() const
   i->set_model(*this);
   return i;
 }
-
-
 
 //=======================================================================
 
