@@ -85,6 +85,10 @@ sub files_differ {
   do {
       $aline = <A>;
       $bline = <B>;
+      if (!defined($aline) && !defined($bline)) {
+        close A; close B; return 0;
+      }
+      goto fail if (!defined($aline) || !defined($bline));
       if ($aline ne $bline) {
           # print STDERR "$aline >> $bline\n";
           goto fail;
@@ -125,7 +129,6 @@ sub main {
   }
   if ($#options == -1) {
     print STDERR "no options given, consider using -vcl\n";
-    #exit 0;
   }
 
   # for each file, $f :
@@ -163,4 +166,5 @@ sub main {
     #
     print STDERR "\n";
   }
+  return 0;
 }
