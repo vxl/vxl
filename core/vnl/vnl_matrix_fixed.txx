@@ -233,11 +233,11 @@ vnl_matrix_fixed<T,nrows,ncols>::copy_in(T const *p)
     *dp++ = *p++;
 }
 
-template<class T>
-void vnl_matrix<T>::copy_out(T *p) const
+template<class T, unsigned nrows, unsigned ncols>
+void vnl_matrix_fixed<T,nrows,ncols>::copy_out(T *p) const
 {
   T* dp = this->data_block();
-  unsigned int i = this->rows() * this->cols();
+  unsigned int i = nrows*ncols;
   while (i--)
     *p++ = *dp++;
 }
@@ -592,7 +592,7 @@ vnl_matrix_fixed<T,nrows,ncols>::read_ascii(vcl_istream& s)
 {
   if (!s.good())
   {
-    vcl_cerr << __FILE__ ": vnl_matrix<T>::read_ascii: Called with bad stream\n";
+    vcl_cerr << __FILE__ ": vnl_matrix_fixed<T,nrows,ncols>::read_ascii: Called with bad stream\n";
     return false;
   }
 
