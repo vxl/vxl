@@ -15,19 +15,19 @@ exec perl -w -x $0 ${1+"$@"}
 $filename = $ARGV[0];
 
 # patterns to be matched
-$verbpatt = "\verbatim";
-$endverbpatt = "\endverbatim";
-$namepatt = ".NAME";
-$authorpatt = ".SECTION Author";
-$modificationpatt = ".SECTION Modifications";
-$descriptionpatt = ".SECTION Description";
-$slashslashpatt = "//";
-$slashslashcolonpatt = "//:";
-$slashslashspacedashdashpatt = "// --";
-$slashstarstarpatt = "/**";
-$spacespacepatt = "  ";
-$starpatt = "*";
-$starslashpatt = "*/";
+$verbpatt = '\\\\verbatim';
+$endverbpatt = '\\\\endverbatim';
+$namepatt = '\\.NAME';
+$authorpatt = '\\.SECTION Author';
+$modificationpatt = '\\.SECTION Modifications';
+$descriptionpatt = '\\.SECTION Description';
+$slashslashpatt = '^//';
+$slashslashcolonpatt = '^//:';
+$slashslashspacedashdashpatt = '^// --';
+$slashstarstarpatt = '/**';
+$spacespacepatt = '  ';
+$starpatt = '*';
+$starslashpatt = '*/';
 
 # variables that keep state:
 
@@ -60,13 +60,13 @@ $gotonextlinemod = 0;
 while (<>)
   {
     # found verbatim ?
-    if ( /$verbpatt/ ) { $verbatim = 1; };
+    if ( m/$verbpatt/ ) { $verbatim = 1; };
     
     # found endverbatim ?
-    if ( /$endverbpatt/ ) { $verbatim = 0; };
+    if ( m/$endverbpatt/ ) { $verbatim = 0; };
     
     # found start of comment: either "//:" or "// --" ?
-    if ( s/$slashslashcolonpatt/$slashstarstarpatt/ || s/$slashslashspacedashdashpatt/$slashstarstarpatt/ )
+    if ( s!$slashslashcolonpatt!$slashstarstarpatt! || s!$slashslashspacedashdashpatt!$slashstarstarpatt! )
       {
 	chomp; print; print ".\n";
 	$comment = 1;
@@ -74,29 +74,29 @@ while (<>)
       }
     
     # found continuation of comment WITH verbatim -> no "*"
-    if ( /$slashslashpatt/ && $verbatim && $comment)
+    if ( m!$slashslashpatt! && $verbatim && $comment)
       {
-	s/$slashslashpatt/$spacespacepatt/;
+	s!$slashslashpatt!$spacespacepatt!;
 	print; next;
       }
     
     # found continuation of comment WITHOUT verbatim -> start line with "*"
-    if ( /$slashslashpatt/ && $comment )
+    if ( m!$slashslashpatt! && $comment )
       {
-	s/$slashslashpatt/$starpatt/;
+	s!$slashslashpatt!$starpatt!;
 	print;
 	next;
       }
     
     # found end of comment -> start line with */
-    if ( $comment && ! /$slashslashpatt/  )
+    if ( $comment && ! m!$slashslashpatt!  )
       {
 	print "$starslashpatt\n";
 	$comment = 0;
       }
     
     # found .NAME -> header found !
-    if ( /$namepatt/ && !$weareinfile)
+    if ( m/$namepatt/ && !$weareinfile)
       {
 	$weareinfile = 1;
 	@listname = split /\s+/;
@@ -114,7 +114,7 @@ while (<>)
       }
 
     # in header and found AUTHOR -> start scanning lines for authors
-    if ( $weareinfile && /$authorpatt/ && !$gotonextlinedescription)
+    if ( $weareinfile && m/$authorpatt/ && !$gotonextlinedescription)
       {
 	$gotonextlineauthor = 1;
 	next;
@@ -135,7 +135,7 @@ while (<>)
 	    next;
 	  }
 	# end of authors by ".SECTION Description -> print authors and start searching for Description
-	if (/$descriptionpatt/)
+	if (m/$descriptionpatt/)
 	  {
 	    foreach $name ( @authornames )
 	      {
@@ -148,7 +148,7 @@ while (<>)
 	  }
 
 	# end of authors by ".SECTION Modifications -> print authors and start searching for Modifications
-	if (/$modificationpatt/)
+	if (m/$modificationpatt/)
 	  {
 	    foreach $name ( @authornames )
 	      {
@@ -170,7 +170,7 @@ while (<>)
       }
 
     # in header and found MODIFICATION -> start scanning lines for modifications
-    if ( $weareinfile && /$modificationpatt/)
+    if ( $weareinfile && m/$modificationpatt/)
       {
 	$gotonextlinemod = 1;
 	print " * \\bug\n";
@@ -199,7 +199,7 @@ while (<>)
       }
     
     # .SESCTION Description found
-    if ( $weareinfile && /$descriptionpatt/)
+    if ( $weareinfile && m/$descriptionpatt/)
       {
       	$gotonextlinedescription = 1;
 	next;
@@ -209,7 +209,7 @@ while (<>)
     if ($gotonextlinedescription)
       {
 	# end of description by ".SECTION Modifications -> print description and start searching for Modifications
-	if (/$modificationpatt/)
+	if (m/$modificationpatt/)
 	  {
 	    print " * \n";
 	    foreach $name ( @descriptions )
@@ -223,7 +223,7 @@ while (<>)
 	  }
 
 	# end of description by ".SECTION Author -> print description and start searching for Authors
-	if (/$authorpatt/)
+	if (m/$authorpatt/)
 	  {
 	    print " * \n";
 	    foreach $name ( @descriptions )
@@ -246,7 +246,7 @@ while (<>)
       }
 
     # in header and found MODIFICATION -> start scanning lines for modifications
-    if (  $weareinfile && /$modificationpatt/)
+    if (  $weareinfile && m/$modificationpatt/)
       {
 	$gotonextlinemod = 1;
 	print " * \\bug\n";
