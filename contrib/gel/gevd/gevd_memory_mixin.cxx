@@ -86,7 +86,7 @@ gevd_memory_mixin::gevd_memory_mixin(int s, void* ib, unsigned int type)
     if (!buffer)
       SetStatus(MM_NIL_BUFFER|MM_WARN);
     else
-      SetStatus(MM_FOREIGN_BLOCK|MM_DIRTY);
+      SetStatus(MM_PROTECTED|MM_FOREIGN_BLOCK|MM_DIRTY);
   }
   current = buffer;
 }
@@ -266,7 +266,7 @@ gevd_memory_mixin::SetMemoryPtr(int s, void* ib)
     if (!buffer)
       SetStatus(MM_NIL_BUFFER|MM_WARN);
     else
-      SetStatus(MM_FOREIGN_BLOCK|MM_DIRTY);
+      SetStatus(MM_PROTECTED|MM_FOREIGN_BLOCK|MM_DIRTY);
   }
 
   current = buffer;
