@@ -21,7 +21,7 @@ void vnl_fft_prime_factors<T>::construct(int N)
   vnl_fft_setgpfa (trigs_, number_, pqr_, &info_);
   // info_ == -1 if cannot split into primes
   if (info_ == -1)
-    assert(/* you probably gave a signal size not of the form 2^p 3^q 5^r */false);
+    assert(!"you probably gave a signal size not of the form 2^p 3^q 5^r");
 }
 
 template <class T>
