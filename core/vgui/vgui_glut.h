@@ -25,7 +25,7 @@ inline void glutChangeToMenuEntry(long item, const char* label, long value) {
   glutChangeToMenuEntry(int(item),label,int(value)); }
 inline void glutChangeToSubMenu(long item, const char* label, long sub) {
   glutChangeToSubMenu(int(item),label,int(sub)); }
-#elif
+#else
 inline void glutAddMenuEntry(const char* label, int value) { glutAddMenuEntry(const_cast<char*>(label),value); }
 inline void glutAddMenuEntry(const char* label, long value) { glutAddMenuEntry(const_cast<char*>(label),int(value)); }
 inline int glutCreateWindow(const char* title) { return glutCreateWindow(const_cast<char*>(title)); }
