@@ -95,7 +95,7 @@ bool FMatrixComputeRobust::compute(PairMatchSetCorner& matches, FMatrix *F)
   }
   vcl_cerr << "Final Figures...\n";
   vcl_cerr << "Ds : " << Ds << vcl_endl;
-  vnl_matrix<double> sample = Fs.get_matrix();
+  vnl_double_3x3 sample = Fs.get_matrix();
   HomgPoint2D one, two;
   Fs.get_epipoles(&one, &two);
   vnl_double_2 o = one.get_double2();

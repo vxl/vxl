@@ -150,10 +150,10 @@ bool FMatrixComputeNonLinear::compute(FMatrix* F)
     F_orig_ = norm_F;
     vnl_vector<double> f_params(FMatrixComputeNonLinear_nparams, 0.0);
     FMatrix res = params_to_fmatrix(f_params);
-    vnl_matrix<double> mat1 = norm_F.get_matrix();
-    vnl_matrix<double> mat2 = res.get_matrix();
-    mat1 /= mat1.get(2, 2);
-    mat2 /= mat2.get(2, 2);
+    vnl_double_3x3 mat1 = norm_F.get_matrix();
+    vnl_double_3x3 mat2 = res.get_matrix();
+    mat1 /= mat1(2, 2);
+    mat2 /= mat2(2, 2);
 
     vnl_levenberg_marquardt lm(*this);
 
@@ -271,7 +271,7 @@ FMatrix FMatrixComputeNonLinear::params_to_fmatrix(const vnl_vector<double>& par
   FMatrix ret;
 
   if (one_) {
-    vnl_matrix<double> ref = ret.get_matrix();
+    vnl_double_3x3 ref = ret.get_matrix();
     // Again the d is moved about through the different parametrizations
     int c1= 0, r1 = 0, c2 = 0, r2 = 0;
     get_plan(r1, c1, r2, c2);

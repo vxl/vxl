@@ -44,7 +44,7 @@ double FMatrixComputeRANSAC::calculate_residual(HomgPoint2D& one, HomgPoint2D& t
 
   // This Sampson Approximation to the full polynomial correction (Hartley).
   // (First Order Geometric Correction)!
-  vnl_matrix<double> matrix = F->get_matrix();
+  vnl_double_3x3 matrix = F->get_matrix();
   double const* const* mat = matrix.data_array();
 
   vnl_double_2 p1 = one.get_nonhomogeneous();
