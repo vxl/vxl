@@ -13,6 +13,7 @@
 // François BERTEL
 //
 // .SECTION Modifications
+// 2001/07/03 Peter Vanroose  Replaced vnl_double_2 by vgl_vector_2d
 // 2000/06/17 Peter Vanroose  Implemented all operator==()s and type info
 // 2000/05/08 François BERTEL Creation
 //*****************************************************************************

@@ -13,6 +13,7 @@
 // François BERTEL
 //
 // .SECTION Modifications
+// 2001/07/03 Peter Vanroose  Corrected the implementation of is_convex()
 // 2000/06/17 Peter Vanroose  Implemented all operator==()s and type info
 // 2000/05/09 François BERTEL Creation
 //*****************************************************************************

@@ -19,8 +19,6 @@
 int main(int argc,
          char *argv[])
 {
-  int result=0;
-
   vcl_cout<<"Constructor from extremities"<<vcl_endl;
   vsol_point_2d_sptr p=new vsol_point_2d(10,4);
   vsol_point_2d_sptr q=new vsol_point_2d(5,1);
@@ -36,16 +34,14 @@ int main(int argc,
   assert(*a==*b);
 
   vcl_cout<<"Constructor from direction and middle point"<<vcl_endl;
-  vnl_vector_fixed<double,2> *v=new vnl_vector_fixed<double,2>();
-  (*v)[0]=10;
-  (*v)[1]=-5;
+  vgl_vector_2d<double> v(10,-5);
 
-  vsol_line_2d_sptr c=new vsol_line_2d(*v,p);
+  vsol_line_2d_sptr c=new vsol_line_2d(v,p);
 
   vcl_cout<<"middle()"<<vcl_endl;
   assert(*(c->middle())==*p);
   vcl_cout<<"direction()"<<vcl_endl;
-  assert(*(c->direction())==*v);
+  assert(c->direction()==v);
 
   vcl_cout<<"length()"<<vcl_endl;
   vcl_cout<<c->length()<<vcl_endl;
@@ -63,6 +59,5 @@ int main(int argc,
   c->set_p1(q);
   assert(*(c->p1())==*q);
 
-  delete v;
-  return result;
+  return 0;
 }

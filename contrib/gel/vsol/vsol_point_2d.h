@@ -11,6 +11,9 @@
 // François BERTEL
 //
 // .SECTION Modifications
+// 2001/07/03 Peter Vanroose  Replaced new/delete by vgl_point_2d as member
+// 2001/07/03 Peter Vanroose  Replaced vnl_double_2 by vgl_vector_2d
+// 2001/06/30 Peter Vanroose  Added constructor from vgl_point_2d
 // 2000/06/17 Peter Vanroose  Implemented all operator==()s and type info
 // 2000/05/12 François BERTEL Replacement of vnl_vector_fixed<double,2> by
 //                            vnl_double_2
@@ -27,7 +30,7 @@ class vsol_point_2d;
 //*****************************************************************************
 #include <vsol/vsol_point_2d_sptr.h>
 #include <vsol/vsol_spatial_object_2d.h>
-#include <vnl/vnl_double_2.h>
+#include <vgl/vgl_vector_2d.h>
 #include <vgl/vgl_point_2d.h>
 
 class vsol_point_2d
@@ -38,15 +41,19 @@ class vsol_point_2d
   //***************************************************************************
 public:
   //---------------------------------------------------------------------------
-  //: Constructor from cartesian coordinates `new_x' and `new_y'
+  //: Constructor from vgl_point_2d (automatic cast)
   //---------------------------------------------------------------------------
-  explicit vsol_point_2d(const double new_x,
-                         const double new_y);
+  inline vsol_point_2d(vgl_point_2d<double> const& p) : p_(p) {}
+
+  //---------------------------------------------------------------------------
+  //: Constructor from cartesian coordinates `x' and `y'
+  //---------------------------------------------------------------------------
+  inline vsol_point_2d(double x, double y) : p_(x,y) {}
 
   //---------------------------------------------------------------------------
   //: Copy constructor
   //---------------------------------------------------------------------------
-  vsol_point_2d(const vsol_point_2d &other);
+  inline vsol_point_2d(const vsol_point_2d &pt) : p_(pt.x(),pt.y()) {}
 
   //---------------------------------------------------------------------------
   //: Destructor
@@ -66,12 +73,12 @@ public:
   //---------------------------------------------------------------------------
   //: Return the abscissa
   //---------------------------------------------------------------------------
-  virtual double x(void) const;
+  inline double x(void) const { return p_.x(); }
 
   //---------------------------------------------------------------------------
   //: Return the ordinate
   //---------------------------------------------------------------------------
-  virtual double y(void) const;
+  inline double y(void) const { return p_.y(); }
 
   //***************************************************************************
   // Comparison
@@ -136,19 +143,17 @@ public:
   //---------------------------------------------------------------------------
   //: Add `v' to `this'
   //---------------------------------------------------------------------------
-  virtual void add_vector(const vnl_double_2 &v);
+  virtual void add_vector(const vgl_vector_2d<double> &v);
 
   //---------------------------------------------------------------------------
   //: Add `v' and `this'
   //---------------------------------------------------------------------------
-  virtual vsol_point_2d_sptr
-  plus_vector(const vnl_double_2 &v) const;
+  virtual vsol_point_2d_sptr plus_vector(vgl_vector_2d<double> const&v) const;
 
   //---------------------------------------------------------------------------
-  //: Return the vector `this',`other'. Has to be deleted manually
+  //: Return the vector `this',`other'.
   //---------------------------------------------------------------------------
-  virtual vnl_double_2 *
-  to_vector(const vsol_point_2d &other) const;
+  virtual vgl_vector_2d<double> to_vector(const vsol_point_2d &other) const;
 
   //***************************************************************************
   // Implementation
@@ -157,7 +162,7 @@ private:
   //---------------------------------------------------------------------------
   //: Coordinates of the point
   //---------------------------------------------------------------------------
-  vgl_point_2d<double> *p_;
+  vgl_point_2d<double> p_;
 };
 
 #endif // vsol_point_2d_h

@@ -4,7 +4,7 @@
 // External declarations for implementation
 //*****************************************************************************
 #include <vcl_cassert.h>
-#include <vnl/vnl_vector_fixed.h>
+#include <vgl/vgl_vector_2d.h>
 #include <vsol/vsol_point_2d.h>
 
 //***************************************************************************
@@ -87,14 +87,9 @@ vsol_point_2d_sptr vsol_rectangle_2d::p2(void) const
 //---------------------------------------------------------------------------
 vsol_point_2d_sptr vsol_rectangle_2d::p3(void) const
 {
-  vsol_point_2d_sptr result;
-  vnl_vector_fixed<double,2> *v;
-
-  result=new vsol_point_2d(*(*storage_)[0]);
-  v=(*storage_)[1]->to_vector(*(*storage_)[2]);
-  result->add_vector(*v);
-  delete v;
-
+  vsol_point_2d_sptr result=new vsol_point_2d(*(*storage_)[0]);
+  vgl_vector_2d<double> v=(*storage_)[1]->to_vector(*(*storage_)[2]);
+  result->add_vector(v);
   return result;
 }
 
@@ -216,10 +211,8 @@ double vsol_rectangle_2d::area(void) const
 bool vsol_rectangle_2d::valid_vertices(const vcl_vector<vsol_point_2d_sptr> new_vertices) const
 {
   if (new_vertices.size() != 3) return false;
-  vnl_vector_fixed<double,2>* a=new_vertices[0]->to_vector(*(new_vertices[1]));
-  vnl_vector_fixed<double,2>* b=new_vertices[1]->to_vector(*(new_vertices[2]));
-  bool result=dot_product(*a,*b)==0;
-  delete b;
-  delete a;
-  return result;
+  vgl_vector_2d<double> a=new_vertices[0]->to_vector(*(new_vertices[1]));
+  vgl_vector_2d<double> b=new_vertices[1]->to_vector(*(new_vertices[2]));
+  // the two vectors should be orthogonal:
+  return dot_product(a,b)==0;
 }

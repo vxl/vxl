@@ -14,6 +14,8 @@
 // François BERTEL
 //
 // .SECTION Modifications
+// 2001/07/03 Peter Vanroose  Replaced vnl_double_2 by vgl_vector_2d
+// 2001/07/03 Peter Vanroose  Added constructor from vgl_line_segment_2d
 // 2000/06/17 Peter Vanroose  Implemented all operator==()s and type info
 // 2000/04/28 François BERTEL Creation
 //*****************************************************************************
@@ -28,8 +30,7 @@ class vsol_line_2d;
 #include <vsol/vsol_curve_2d.h>
 #include <vsol/vsol_point_2d_sptr.h>
 
-#include <vnl/vnl_vector_fixed.h>
-#include <vgl/vgl_homg_line_2d.h>
+#include <vgl/vgl_fwd.h> // vgl_line_segment_2d, vgl_homg_line_2d, vgl_point_2d
 
 class vsol_line_2d
   :public vsol_curve_2d
@@ -41,7 +42,7 @@ public:
   //---------------------------------------------------------------------------
   //: Constructor from the direction and the middle point
   //---------------------------------------------------------------------------
-  explicit vsol_line_2d(const vnl_vector_fixed<double,2> &new_direction,
+  explicit vsol_line_2d(const vgl_vector_2d<double> &new_direction,
                         const vsol_point_2d_sptr &new_middle);
 
   //---------------------------------------------------------------------------
@@ -49,6 +50,16 @@ public:
   //---------------------------------------------------------------------------
   explicit vsol_line_2d(const vsol_point_2d_sptr &new_p0,
                         const vsol_point_2d_sptr &new_p1);
+
+  //---------------------------------------------------------------------------
+  //: Constructor from two vgl_point_2d (end points)
+  //---------------------------------------------------------------------------
+  vsol_line_2d(vgl_point_2d<double> const& p0, vgl_point_2d<double> const& p1);
+
+  //---------------------------------------------------------------------------
+  //: Constructor from a vgl_line_segment_2d
+  //---------------------------------------------------------------------------
+  vsol_line_2d(const vgl_line_segment_2d<double> &l);
 
   //---------------------------------------------------------------------------
   //: Copy constructor
@@ -82,9 +93,9 @@ public:
   virtual vsol_point_2d_sptr middle(void) const;
 
   //---------------------------------------------------------------------------
-  //: direction of the straight line segment. Has to be deleted manually
+  //: direction of the straight line segment.
   //---------------------------------------------------------------------------
-  virtual vnl_vector_fixed<double,2> *direction(void) const;
+  virtual vgl_vector_2d<double> direction(void) const;
 
   //---------------------------------------------------------------------------
   //: First point of the straight line segment

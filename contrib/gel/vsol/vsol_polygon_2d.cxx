@@ -5,6 +5,7 @@
 //*****************************************************************************
 #include <vcl_cassert.h>
 #include <vsol/vsol_point_2d.h>
+#include <vgl/vgl_vector_2d.h>
 
 //***************************************************************************
 // Initialization
@@ -178,77 +179,52 @@ double vsol_polygon_2d::area(void) const
 
 //---------------------------------------------------------------------------
 //: Is `this' convex ?
+// A polygon is convex if the direction of "turning" at every vertex is
+// the same.  This is checked by calculating the cross product of two
+// consecutive edges and verifying that these all have the same sign.
 //---------------------------------------------------------------------------
 bool vsol_polygon_2d::is_convex(void) const
 {
-  bool result;
+   if (storage_->size()==3) return true; // A triangle is always convex
 
-  double nz_old; // cote of the previous normal
-  double nz; // cote of the current normal
-  double dx;
-  double dy;
-  double tmp;
-  double x_old;
-  double y_old;
-  double x;
-  double y;
-  int i;
+   // First find a non-zero cross product.  This is certainly present,
+   // unless the polygon collapses to a line segment.
+   // Note that cross-product=0 means that two edges are parallel, which
+   // is perfectly valid, but the other "turnings" should still all be in
+   // the same direction.  An earlier implementation allowed for turning
+   // in the other direction after a cross-product=0.
 
-  result=size()==3; // A triangle is always convex
-
-  // Initialization: computation of the first normal
-
-  if(!result)
-    {
-      x_old=(*storage_)[0]->x();
-      y_old=(*storage_)[0]->y();
-      x=(*storage_)[1]->x();
-      y=(*storage_)[1]->y();
-      dx=x-x_old;
-      dy=y-y_old;
-
-      nz=dx;
-      x_old=x;
-      x=x=(*storage_)[2]->x();
-      dx=x-x_old;
-      tmp=dx*dy;
-      y_old=y;
-      y=(*storage_)[2]->y();
-      dy=y-y_old;
-      nz=nz*dy-tmp;
-
-      result=true;
-      for(i=3;i<size()&&result;++i)
-        {
-          nz_old=nz;
-          nz=dx;
-          x_old=x;
-          x=x=(*storage_)[i]->x();
-          dx=x-x_old;
-          tmp=dx*dy;
-          y_old=y;
-          y=(*storage_)[i]->y();
-          dy=y-y_old;
-          nz=nz*dy-tmp;
-          result=(nz<0&&nz_old<0)||(nz>0&&nz_old>0);
-        }
-      if(result)
-        {
-          nz_old=nz;
-          nz=dx;
-          x_old=x;
-          x=x=(*storage_)[0]->x();
-          dx=x-x_old;
-          tmp=dx*dy;
-          y_old=y;
-          y=(*storage_)[0]->y();
-          dy=y-y_old;
-          nz=nz*dy-tmp;
-          result=(nz<0&&nz_old<0)||(nz>0&&nz_old>0);
-        }
-    }
-
-  return result;
+   double n = 0.0;
+   for(unsigned int i=0; i<storage_->size(); ++i)
+   {
+     int j = (i>1) ? i-2 : i-2+storage_->size();
+     int k = (i>0) ? i-1 : i-1+storage_->size();
+     vsol_point_2d_sptr p0=(*storage_)[k];
+     vsol_point_2d_sptr p1=(*storage_)[j];
+     vsol_point_2d_sptr p2=(*storage_)[i];
+     vgl_vector_2d<double> v1=p0->to_vector(*p1);
+     vgl_vector_2d<double> v2=p1->to_vector(*p2);
+     n = cross_product(v1,v2);
+     if (n != 0.0)
+       break;
+   }
+   if (n == 0.0)
+     return true;
+     
+   for(unsigned int i=0; i<storage_->size(); ++i)
+   {
+     int j = (i>1) ? i-2 : i-2+storage_->size();
+     int k = (i>0) ? i-1 : i-1+storage_->size();
+     vsol_point_2d_sptr p0=(*storage_)[k];
+     vsol_point_2d_sptr p1=(*storage_)[j];
+     vsol_point_2d_sptr p2=(*storage_)[i];
+     vgl_vector_2d<double> v1=p0->to_vector(*p1);
+     vgl_vector_2d<double> v2=p1->to_vector(*p2);
+     double n2 = cross_product(v1,v2);
+     if (n2*n < 0)
+       return false; // turns in the other direction
+   }
+   return true;
 }
 
 //---------------------------------------------------------------------------

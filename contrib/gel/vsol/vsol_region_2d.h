@@ -22,7 +22,6 @@ class vsol_region_2d;
 //*****************************************************************************
 #include <vsol/vsol_region_2d_sptr.h>
 #include <vsol/vsol_spatial_object_2d.h>
-#include <vnl/vnl_vector.h>
 
 class vsol_region_2d
   :public vsol_spatial_object_2d
