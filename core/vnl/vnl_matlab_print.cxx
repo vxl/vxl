@@ -17,6 +17,7 @@
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_matrix.h>
 #include <vnl/vnl_diag_matrix.h>
+#include <vnl/vnl_matlab_print_scalar.h>
 
 //--------------------------------------------------------------------------------
 
