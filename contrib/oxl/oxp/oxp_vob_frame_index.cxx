@@ -45,7 +45,7 @@ bool oxp_vob_frame_index::load(char const* filename)
   // assert that l is sorted by frame
   for (unsigned int i = 0; i+1 < l.size(); ++i)
     assert(l[i+1].frame > l[i].frame);
-  vcl_fprintf(stderr, "Loaded %ld entries from [%s]\n", l.size(), filename);
+  vcl_fprintf(stderr, "Loaded %d entries from [%s]\n", l.size(), filename);
   if (l.size() == 0) {
     vcl_fprintf(stderr, "WARNING: No index entries -- all seeks from start\n");
   }
