@@ -5,7 +5,7 @@ DECLARE( test_trilin_interp );
 DECLARE( test_sample_profile_trilin );
 DECLARE( test_gauss_reduce );
 DECLARE( test_algo_threshold );
-
+DECLARE( test_algo_structuring_element );
 void
 register_tests()
 {
@@ -14,6 +14,7 @@ register_tests()
   REGISTER( test_sample_profile_trilin );
   REGISTER( test_gauss_reduce );
   REGISTER( test_algo_threshold );
+  REGISTER( test_algo_structuring_element );
 }
 
 DEFINE_MAIN;
