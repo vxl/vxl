@@ -1,10 +1,8 @@
 #ifndef mil_scale_pyramid_builder_2d_txx_
 #define mil_scale_pyramid_builder_2d_txx_
-
 //: \file
 //  \brief Build gaussian image pyramids at any scale separation
 //  \author Ian Scott
-
 
 #include <mil/mil_scale_pyramid_builder_2d.h>
 #include <vcl_cstdlib.h>
@@ -26,7 +24,6 @@ mil_scale_pyramid_builder_2d<T>::mil_scale_pyramid_builder_2d()
   set_scale_step(2.0);
   set_min_size(5, 5);
 }
-
 
 //: Consturct with given scale_step
 template <class T>
@@ -54,10 +51,9 @@ void mil_scale_pyramid_builder_2d<T>::scale_reduce(
   int ystep = src_im.ystep();
   int n_planes = src_im.n_planes();
 
-
   // Reduce plane-by-plane
 
-  // use n-1 because we are trying to align inter-pixel spaces, so that the 
+  // use n-1 because we are trying to align inter-pixel spaces, so that the
   // centre pixel is most accurately registered despite buildup of rounding errors.
   double init_x = 0.5 * (src_nx - 1 - (dest_nx-1)*scale_step());
   double init_y = 0.5 * (src_ny - 1 - (dest_ny-1)*scale_step());
@@ -123,7 +119,6 @@ void mil_scale_pyramid_builder_2d<T>::scale_reduce(
            const T* src_im,
            int src_nx, int src_ny, int dest_nx, int dest_ny, int src_ystep) const
 {
-  
   T* dest_row = dest_im;
 
   const double init_x = 0.5 * (src_nx-1 - (dest_nx-1)*scale_step());
@@ -149,8 +144,7 @@ void mil_scale_pyramid_builder_2d<T>::set_scale_step(double scaleStep)
 {
   assert(scaleStep> 1.0  && scaleStep<=2.0);
   scale_step_ = scaleStep;
-
-};
+}
 
 
 //=======================================================================
@@ -194,7 +188,6 @@ void mil_scale_pyramid_builder_2d<T>::build(
                   mil_image_pyramid& im_pyr,
                   const mil_image& im) const
 {
- 
   const mil_image_2d_of<T>& base_image = (const mil_image_2d_of<T>&) im;
 
   int nx = base_image.nx();
@@ -204,7 +197,7 @@ void mil_scale_pyramid_builder_2d<T>::build(
   // than minXSize_ x minYSize_
   double s = scale_step();
   int max_levels = 1;
-  while ( ((unsigned int)(nx/s+0.5)>=min_x_size_) 
+  while ( ((unsigned int)(nx/s+0.5)>=min_x_size_)
           &&
           ((unsigned int)(ny/s+0.5)>=min_y_size_)
         )
@@ -250,15 +243,12 @@ void mil_scale_pyramid_builder_2d<T>::build(
 }
 
 
-
-
 //=======================================================================
 //: Extend pyramid
 // The first layer of the pyramid must already be set.
 template<class T>
 void mil_scale_pyramid_builder_2d<T>::extend(mil_image_pyramid& image_pyr) const
 {
- 
   assert(image_pyr.scale_step() == scale_step());
 
   const int nx = image_pyr(0).nx();
@@ -372,7 +362,6 @@ mil_image_pyramid_builder* mil_scale_pyramid_builder_2d<T>::clone() const
 template <class T>
 void mil_scale_pyramid_builder_2d<T>::print_summary(vcl_ostream& os) const
 {
-  mil_scale_pyramid_builder_2d<T>::print_summary(os);
 }
 
 //=======================================================================
@@ -381,7 +370,6 @@ template <class T>
 void mil_scale_pyramid_builder_2d<T>::b_write(vsl_b_ostream& bfs) const
 {
   vsl_b_write(bfs,version_no());
-  mil_scale_pyramid_builder_2d<T>::b_write(bfs);
   vsl_b_write(bfs,scale_step());
 }
 
@@ -399,8 +387,6 @@ void mil_scale_pyramid_builder_2d<T>::b_read(vsl_b_istream& bfs)
   switch (version)
   {
   case (1):
-    mil_scale_pyramid_builder_2d<T>::b_read(bfs);
-
     vsl_b_read(bfs,scale);
     set_scale_step(scale);
     break;
