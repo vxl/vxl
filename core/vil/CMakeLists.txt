@@ -39,7 +39,6 @@ SET( vil2_sources
 
   # Stuff
   vil2_smart_ptr.txx vil2_smart_ptr.h
-  vil2_pixel_traits.h
   vil2_property.h
   vil2_pixel_format.cxx vil2_pixel_format.h
 )

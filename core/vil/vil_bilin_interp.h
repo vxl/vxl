@@ -50,6 +50,7 @@ inline double vil2_bilin_interp_safe(double x, double y, const T* data,
 //: Compute bilinear interpolation at (x,y), with bound checks
 //  If (x,y) is outside interpolatable image region, zero is returned.
 //  The safe interpolatable region is [0,view.ni)*[0,view.nj).
+// \relates vil2_image_view
 template<class T>
 inline double vil2_bilin_interp_safe(const vil2_image_view<T> &view, 
                                      double x, double y, unsigned p=0)
