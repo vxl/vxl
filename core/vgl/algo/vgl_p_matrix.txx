@@ -1,9 +1,8 @@
-// This is brl/vgl/algo/vgl_p_matrix.txx
+// This is core/vgl/algo/vgl_p_matrix.txx
 #ifndef vgl_p_matrix_txx_
 #define vgl_p_matrix_txx_
-
 //:
-//  \file
+// \file
 
 #include <vgl/algo/vgl_p_matrix.h>
 
@@ -19,8 +18,6 @@
 
 //--------------------------------------------------------------
 //
-//: Constructor. Set up a canonical P matrix.
-//
 template <class T>
 vgl_p_matrix<T>::vgl_p_matrix():
   svd_(0)
@@ -35,10 +32,6 @@ vgl_p_matrix<T>::vgl_p_matrix():
 
 //--------------------------------------------------------------
 //
-//: Construct by loading from vcl_istream.
-// <pre>
-//   vgl_p_matrix P(cin);
-// </pre>
 template <class T>
 vgl_p_matrix<T>::vgl_p_matrix(vcl_istream& i) :
   svd_(0)
@@ -48,7 +41,6 @@ vgl_p_matrix<T>::vgl_p_matrix(vcl_istream& i) :
 
 //--------------------------------------------------------------
 //
-//: Construct from 3x4 matrix
 template <class T>
 vgl_p_matrix<T>::vgl_p_matrix(vnl_matrix_fixed<T, 3, 4> const& pmatrix) :
   p_matrix_ (pmatrix),
@@ -58,7 +50,6 @@ vgl_p_matrix<T>::vgl_p_matrix(vnl_matrix_fixed<T, 3, 4> const& pmatrix) :
 
 //--------------------------------------------------------------
 //
-//: Construct from 3x3 matrix A and vector a. P = [A a].
 template <class T>
 vgl_p_matrix<T>::vgl_p_matrix(const vnl_matrix<T>& A, const vnl_vector<T>& a) :
   svd_(0)
@@ -68,7 +59,6 @@ vgl_p_matrix<T>::vgl_p_matrix(const vnl_matrix<T>& A, const vnl_vector<T>& a) :
 
 //--------------------------------------------------------------
 //
-//: Construct from row-stored array of 12 elements
 template <class T>
 vgl_p_matrix<T>::vgl_p_matrix(const T *c_matrix) :
   p_matrix_ (c_matrix),
@@ -109,7 +99,6 @@ vgl_p_matrix<T>::~vgl_p_matrix()
 
 //-----------------------------------------------------------------------------
 //
-//: Return the image line which is the projection of the specified 3D line L
 template <class T>
 vgl_homg_line_2d<T> vgl_p_matrix<T>::operator () (const vgl_homg_line_3d_2_points<T>& L) const
 {
@@ -118,7 +107,6 @@ vgl_homg_line_2d<T> vgl_p_matrix<T>::operator () (const vgl_homg_line_3d_2_point
 
 //-----------------------------------------------------------------------------
 //
-//: Return the image linesegment which is the projection of the specified 3D linesegment L
 template <class T>
 vgl_line_segment_2d<T> vgl_p_matrix<T>::operator ()(vgl_line_segment_3d<T> const& L) const
 {
@@ -129,9 +117,6 @@ vgl_line_segment_2d<T> vgl_p_matrix<T>::operator ()(vgl_line_segment_3d<T> const
 
 //-----------------------------------------------------------------------------
 //
-//: Return the 3D point $\vec X$ which is $\vec X = P^+ \vec x$.
-// Equivalently, the 3D point of smallest norm such that $P \vec X = \vec x$.
-// Uses svd().
 template <class T>
 vgl_homg_point_3d<T> vgl_p_matrix<T>::backproject_pseudoinverse (const vgl_homg_point_2d<T>& x) const
 {
@@ -143,8 +128,6 @@ vgl_homg_point_3d<T> vgl_p_matrix<T>::backproject_pseudoinverse (const vgl_homg_
 
 //-----------------------------------------------------------------------------
 //
-//: Return the 3D line which is the backprojection of the specified image point, x.
-// Uses svd().
 template <class T>
 vgl_homg_line_3d_2_points<T> vgl_p_matrix<T>::backproject (const vgl_homg_point_2d<T>& x) const
 {
@@ -153,7 +136,6 @@ vgl_homg_line_3d_2_points<T> vgl_p_matrix<T>::backproject (const vgl_homg_point_
 
 //-----------------------------------------------------------------------------
 //
-//: Return the 3D plane which is the backprojection of the specified line l in the image
 template <class T>
 vgl_homg_plane_3d<T> vgl_p_matrix<T>::backproject (const vgl_homg_line_2d<T>& l) const
 {
@@ -161,7 +143,6 @@ vgl_homg_plane_3d<T> vgl_p_matrix<T>::backproject (const vgl_homg_line_2d<T>& l)
 }
 
 //-----------------------------------------------------------------------------
-//: Print p on vcl_ostream
 template <class T>
 vcl_ostream& operator<<(vcl_ostream& s, const vgl_p_matrix<T>& p)
 {
@@ -169,7 +150,6 @@ vcl_ostream& operator<<(vcl_ostream& s, const vgl_p_matrix<T>& p)
 }
 
 //-----------------------------------------------------------------------------
-//: Load p from ascii vcl_istream
 template <class T>
 vcl_istream& operator>>(vcl_istream& i, vgl_p_matrix<T>& p)
 {
@@ -178,11 +158,6 @@ vcl_istream& operator>>(vcl_istream& i, vgl_p_matrix<T>& p)
 }
 
 static bool ok(vcl_istream& f) { return f.good() || f.eof(); }
-
-//: Load from file.
-// <pre>
-// P.read_ascii("file.P");
-// </pre>
 
 template <class T>
 bool vgl_p_matrix<T>::read_ascii(vcl_istream& f)
@@ -198,11 +173,6 @@ bool vgl_p_matrix<T>::read_ascii(vcl_istream& f)
   return true;
 }
 
-//: Load from file.
-// Static method, so you can say
-// <pre>
-// vgl_p_matrix P = vgl_p_matrix::read("file.P");
-// </pre>
 template <class T>
 vgl_p_matrix<T> vgl_p_matrix<T>::read(const char* filename)
 {
@@ -219,7 +189,6 @@ vgl_p_matrix<T> vgl_p_matrix<T>::read(const char* filename)
   return P;
 }
 
-//: Load from vcl_istream
 template <class T>
 vgl_p_matrix<T> vgl_p_matrix<T>::read(vcl_istream& s)
 {
@@ -232,7 +201,6 @@ vgl_p_matrix<T> vgl_p_matrix<T>::read(vcl_istream& s)
 
 //-----------------------------------------------------------------------------
 //
-//: Compute the svd of this P and cache it, so that future operations that require it need not recompute it.
 template <class T>
 vnl_svd<T>* vgl_p_matrix<T>::svd() const
 {
@@ -243,8 +211,6 @@ vnl_svd<T>* vgl_p_matrix<T>::svd() const
   return svd_;
 }
 
-//: Discredit the cached svd.
-//  This is necessary only in order to recover the space used by it if the vgl_p_matrix is not being deleted.
 template <class T>
 void vgl_p_matrix<T>::clear_svd() const
 {
@@ -253,13 +219,11 @@ void vgl_p_matrix<T>::clear_svd() const
 
 //-----------------------------------------------------------------------------
 //
-//: Return the 3D point representing the focal point of the camera.
-// Uses svd().
 template <class T>
 vgl_homg_point_3d<T> vgl_p_matrix<T>::get_focal() const
 {
   if (svd()->singularities() > 1) {
-    vcl_cerr << "vgl_p_matrix::get_focal: "
+    vcl_cerr << "vgl_p_matrix::get_focal:\n"
              << "  Nullspace dimension is " << svd()->singularities()
              << "\n  Returning an invalid point (a vector of zeros)\n";
     return vgl_homg_point_3d<T>(0,0,0,0);
@@ -270,9 +234,6 @@ vgl_homg_point_3d<T> vgl_p_matrix<T>::get_focal() const
   return vgl_homg_point_3d<T>(ns(0,0), ns(1,0), ns(2,0), ns(3,0));
 }
 
-
-//: Return the HMatrix3D s.t. P * H = [I 0].
-// If P = [A a], then H = [inv(A) -inv(A)*a; 0 0 0 1];
 template <class T>
 vgl_h_matrix_3d<T> vgl_p_matrix<T>::get_canonical_H() const
 {
@@ -283,8 +244,6 @@ vgl_h_matrix_3d<T> vgl_p_matrix<T>::get_canonical_H() const
   return vgl_h_matrix_3d<T>(svd.inverse(), -svd.solve(a));
 }
 
-//: Return true iff P is [I 0].
-// Equality is assumed if the max abs diff is less than tol.
 template <class T>
 bool vgl_p_matrix<T>::is_canonical(T tol) const
 {
@@ -297,7 +256,6 @@ bool vgl_p_matrix<T>::is_canonical(T tol) const
   return true;
 }
 
-//: Postmultiply vgl_p_matrix by vgl_h_matrix_3d<T>
 template <class T>
 vgl_p_matrix<T> operator*(const vgl_p_matrix<T>& P, const vgl_h_matrix_3d<T>& H)
 {
@@ -309,7 +267,6 @@ vgl_p_matrix<T> operator*(const vgl_p_matrix<T>& P, const vgl_h_matrix_3d<T>& H)
 
 //-----------------------------------------------------------------------------
 //
-//: Return the element of the matrix at the specified indices
 template <class T>
 T vgl_p_matrix<T>::get (unsigned int row_index, unsigned int col_index) const
 {
@@ -318,7 +275,6 @@ T vgl_p_matrix<T>::get (unsigned int row_index, unsigned int col_index) const
 
 //-----------------------------------------------------------------------------
 //
-//: Return the 3x4 projection matrix in the array, p_matrix
 template <class T>
 void vgl_p_matrix<T>::get (T* c_matrix) const
 {
@@ -329,16 +285,6 @@ void vgl_p_matrix<T>::get (T* c_matrix) const
 
 //----------------------------------------------------------------
 //
-//: Return the 3x4 projection matrix in p_matrix
-template <class T>
-void vgl_p_matrix<T>::get(vnl_matrix_fixed<T, 3,4>& p_matrix) const
-{
-  p_matrix = p_matrix_;
-}
-
-//----------------------------------------------------------------
-//
-//: Return the 3x3 matrix and 3x1 column vector of P = [A a].
 template <class T>
 void
 vgl_p_matrix<T>::get(vnl_matrix<T>* A, vnl_vector<T>* a) const
@@ -362,7 +308,6 @@ vgl_p_matrix<T>::get(vnl_matrix<T>* A, vnl_vector<T>* a) const
 
 //----------------------------------------------------------------
 //
-//: Return the 3x3 matrix and 3x1 column vector of P = [A a].
 template <class T>
 void
 vgl_p_matrix<T>::get (vnl_matrix_fixed<T,3,3>* A, vnl_vector_fixed<T,3>* a) const
@@ -386,7 +331,6 @@ vgl_p_matrix<T>::get (vnl_matrix_fixed<T,3,3>* A, vnl_vector_fixed<T,3>* a) cons
 
 //----------------------------------------------------------------
 //
-//: Return the rows of P = [a b c]'.
 template <class T>
 void
 vgl_p_matrix<T>::get_rows (vnl_vector<T>* a, vnl_vector<T>* b, vnl_vector<T>* c) const
@@ -409,12 +353,11 @@ vgl_p_matrix<T>::get_rows (vnl_vector<T>* a, vnl_vector<T>* b, vnl_vector<T>* c)
 
 //----------------------------------------------------------------
 //
-//: Return the rows of P = [a b c]'.
 template <class T>
 void
-vgl_p_matrix<T>::get_rows(vnl_vector_fixed<T,4>* a, 
-                  vnl_vector_fixed<T,4>* b, 
-                  vnl_vector_fixed<T,4>* c) const
+vgl_p_matrix<T>::get_rows(vnl_vector_fixed<T,4>* a,
+                          vnl_vector_fixed<T,4>* b,
+                          vnl_vector_fixed<T,4>* c) const
 {
   a->put(0, p_matrix_(0, 0));
   a->put(1, p_matrix_(0, 1));
@@ -432,9 +375,30 @@ vgl_p_matrix<T>::get_rows(vnl_vector_fixed<T,4>* a,
   c->put(3, p_matrix_(2, 3));
 }
 
+//----------------------------------------------------------------
+//
+template <class T>
+void
+vgl_p_matrix<T>::set_rows (vnl_vector<T> const& a, vnl_vector<T> const& b, vnl_vector<T> const& c)
+{
+  p_matrix_.put(0, 0, a(0));
+  p_matrix_.put(0, 1, a(1));
+  p_matrix_.put(0, 2, a(2));
+  p_matrix_.put(0, 3, a(3));
+
+  p_matrix_.put(1, 0, b(0));
+  p_matrix_.put(1, 1, b(1));
+  p_matrix_.put(1, 2, b(2));
+  p_matrix_.put(1, 3, b(3));
+
+  p_matrix_.put(2, 0, c(0));
+  p_matrix_.put(2, 1, c(1));
+  p_matrix_.put(2, 2, c(2));
+  p_matrix_.put(2, 3, c(3));
+}
+
 //-----------------------------------------------------------------------------
 //
-//: Set the 3x4 projective matrix with the matrix in the array, p_matrix
 template <class T>
 void
 vgl_p_matrix<T>::set (const T p_matrix [3][4])
@@ -447,7 +411,6 @@ vgl_p_matrix<T>::set (const T p_matrix [3][4])
 
 //-----------------------------------------------------------------------------
 //
-//: Set the 3x4 projective matrix with the matrix in the array, p_matrix
 template <class T>
 void
 vgl_p_matrix<T>::set (const T *p)
@@ -459,21 +422,8 @@ vgl_p_matrix<T>::set (const T *p)
 }
 
 
-//--------------------------------------------------------------
-//
-//: Set the internal matrix using the vnl_matrix<double> p_matrix.
-template <class T>
-void
-vgl_p_matrix<T>::set (vnl_matrix_fixed<T,3,4> const& p_matrix)
-{
-  p_matrix_ = p_matrix;
-  clear_svd();
-}
-
-
 //----------------------------------------------------------------
 //
-//: Set from 3x3 matrix and 3x1 column vector of P = [A a].
 template <class T>
 void
 vgl_p_matrix<T>::set (const vnl_matrix<T>& A, const vnl_vector<T>& a)
@@ -496,7 +446,6 @@ vgl_p_matrix<T>::set (const vnl_matrix<T>& A, const vnl_vector<T>& a)
 }
 //----------------------------------------------------------------
 //
-//: Set the camera to an identity projection. X->u, Y->v
 template <class T>
 void vgl_p_matrix<T>::set_identity()
 {
@@ -515,13 +464,12 @@ void vgl_p_matrix<T>::set_identity()
   p_matrix_(0,3) = 0;
   p_matrix_(1,3) = 0;
   p_matrix_(2,3) = 0;
-}  
-//: Scale P so determinant of first 3x3 is 1.
+}
+
 template <class T>
 void
 vgl_p_matrix<T>::fix_cheirality()
 {
-  
   vnl_matrix_fixed<T,3,3> A;
   vnl_vector_fixed<T,3> a;
   this->get(&A, &a);
@@ -545,9 +493,6 @@ vgl_p_matrix<T>::fix_cheirality()
     svd_->W() *= scale;
 }
 
-//: Return true if the 3D point X is behind the camera represented by this P.
-// This depends on the overall sign of the P matrix having been set correctly, a
-// la Hartley cheirality paper.
 template <class T>
 bool vgl_p_matrix<T>::is_behind_camera(const vgl_homg_point_3d<T>& hX)
 {
@@ -558,7 +503,6 @@ bool vgl_p_matrix<T>::is_behind_camera(const vgl_homg_point_3d<T>& hX)
   return dot < 0;
 }
 
-//: Change the overall sign of the P matrix.
 template <class T>
 void vgl_p_matrix<T>::flip_sign()
 {
@@ -567,7 +511,6 @@ void vgl_p_matrix<T>::flip_sign()
     svd_->W() *= -1;
 }
 
-//: Splendid hack that tries to detect if the P is an image-coords P or a normalized P.
 template <class T>
 bool vgl_p_matrix<T>::looks_conditioned()
 {
@@ -576,14 +519,12 @@ bool vgl_p_matrix<T>::looks_conditioned()
   return cond < 100;
 }
 
-//: Postmultiply by 4x4 matrix.
 template <class T>
 vgl_p_matrix<T> vgl_p_matrix<T>::postmultiply(vnl_matrix_fixed<T,4,4> const& H) const
 {
   return vgl_p_matrix<T>(p_matrix_ * H);
 }
 
-//: Premultiply by 3x3 matrix.
 template <class T>
 vgl_p_matrix<T> vgl_p_matrix<T>::premultiply(vnl_matrix_fixed<T,3,3> const& H) const
 {
