@@ -662,6 +662,19 @@ vnl_matrix_fixed<T,nrows,ncols>::operator_inf_norm() const
   return max;
 }
 
+//: Transpose square matrix M in place.
+template <class T, unsigned nrows, unsigned ncols>
+void vnl_matrix_fixed<T,nrows,ncols>::inplace_transpose()
+{
+  assert(nrows==ncols); // cannot inplace_transpose non-square fixed size matrix
+  for (unsigned i = 0; i < nrows; ++i)
+  for (unsigned j = i+1; j < ncols; ++j) {
+    T t = (*this)(i,j);
+    (*this)(i,j) = (*this)(j,i);
+    t = (*this)(j,i) = t;
+  }
+}
+
 
 #undef VNL_MATRIX_FIXED_INSTANTIATE
 #define VNL_MATRIX_FIXED_INSTANTIATE(T, M, N) \

@@ -19,6 +19,7 @@
 //   Feb.2002 - Peter Vanroose - brief doxygen comment placed on single line
 //   Oct.2002 - Amitha Perera  - separated vnl_matrix and vnl_matrix_fixed,
 //                               removed necessity for vnl_matrix_fixed_ref
+// 26Oct.2002 - Peter Vanroose - added inplace_transpose() method
 // \endverbatim
 //-----------------------------------------------------------------------------
 
@@ -183,6 +184,9 @@ public:
   // a contiguous rows*cols array, stored rowwise.
   // No bounds checking on the array
   void copy_out(T *) const;
+
+  //: Transpose this matrix efficiently, if it is a square matrix
+  void inplace_transpose();
 
 
 // Arithmetic ----------------------------------------------------
