@@ -45,15 +45,17 @@ vil_memory_image_of<T>::vil_memory_image_of(int sizex, int sizey):
 {
 }
 
-// template <class T>
-// vil_memory_image_of<T>::vil_memory_image_of(int sizex, int sizey, T const& value):
-//   vil_memory_image(1, sizex, sizey, vil_memory_image_of_format<T>())
-// {
-//   T *p = (T*)get_buffer();
-//   T *e = p + planes() * width() * height();
-//   while (p != e)
-//     *p++ = value;
-// }
+#if 0 // this method was removed
+template <class T>
+vil_memory_image_of<T>::vil_memory_image_of(int sizex, int sizey, T const& value):
+  vil_memory_image(1, sizex, sizey, vil_memory_image_of_format<T>())
+{
+  T *p = (T*)get_buffer();
+  T *e = p + planes() * width() * height();
+  while (p != e)
+    *p++ = value;
+}
+#endif
 
 template <class T>
 void vil_memory_image_of<T>::set(vil_image const& image)
