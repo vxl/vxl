@@ -262,9 +262,9 @@ inline bool operator!=(const __rb_tree_base_iterator& x,
   return x.node != y.node;
 }
 
-inline bidirectional_iterator_tag
+inline vcl_bidirectional_iterator_tag
 iterator_category(const __rb_tree_base_iterator&) {
-  return bidirectional_iterator_tag();
+  return vcl_bidirectional_iterator_tag();
 }
 
 inline __rb_tree_base_iterator::distance_type*
@@ -599,8 +599,7 @@ public:
   typedef __rb_tree_iterator<value_type> iterator;
   typedef __rb_tree_const_iterator<value_type> const_iterator;
   typedef reverse_bidirectional_iterator<iterator, value_type, reference,
-                                         difference_type>
-      reverse_iterator;
+                                         difference_type> reverse_iterator;
   typedef reverse_bidirectional_iterator<const_iterator, value_type,
                                          const_reference, difference_type>
       const_reverse_iterator;

@@ -35,21 +35,21 @@
 
 // from iterator.h:
 // ugliness is intentional - to reduce conflicts
-# define input_iterator_tag             vcl_InItT
-# define output_iterator_tag            vcl_OuItT
-# define bidirectional_iterator_tag     vcl_BdItT
-# define random_access_iterator_tag     vcl_RaItT
-# define input_iterator                 vcl_InIt
-# define output_iterator                vcl_OuIt
-# define bidirectional_iterator         vcl_BdIt
-# define random_access_iterator         vcl_RaIt
-# define reverse_bidirectional_iterator vcl_rBdIt
-# define reverse_iterator               vcl_rIt
-# define back_insert_iterator           vcl_bIIt
-# define front_insert_iterator          vcl_fIIt
-# define raw_storage_iterator           vcl_rSIt
-# define istream_iterator               vcl_iSIt
-# define ostream_iterator               vcl_oSIt
+# define vcl_input_iterator_tag             vcl_InItT
+# define vcl_output_iterator_tag            vcl_OuItT
+# define vcl_bidirectional_iterator_tag     vcl_BdItT
+# define vcl_random_access_iterator_tag     vcl_RaItT
+# define vcl_input_iterator                 vcl_InIt
+# define vcl_output_iterator                vcl_OuIt
+# define vcl_bidirectional_iterator         vcl_BdIt
+# define vcl_random_access_iterator         vcl_RaIt
+# define vcl_reverse_bidirectional_iterator vcl_rBdIt
+# define vcl_reverse_iterator               vcl_rIt
+# define vcl_back_insert_iterator           vcl_bIIt
+# define vcl_front_insert_iterator          vcl_fIIt
+# define vcl_raw_storage_iterator           vcl_rSIt
+# define vcl_istream_iterator               vcl_iSIt
+# define vcl_ostream_iterator               vcl_oSIt
 
 // from vcl_list.h:
 # define __list_iterator         vcl_LIt

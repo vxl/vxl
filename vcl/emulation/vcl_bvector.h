@@ -261,10 +261,10 @@ public:
     }
 };
 
-inline random_access_iterator_tag
-iterator_category(const __bvec_iterator&) {return random_access_iterator_tag();}
-inline random_access_iterator_tag
-iterator_category(const __bvec_const_iterator&) {return random_access_iterator_tag();}
+inline vcl_random_access_iterator_tag
+iterator_category(const __bvec_iterator&) {return vcl_random_access_iterator_tag();}
+inline vcl_random_access_iterator_tag
+iterator_category(const __bvec_const_iterator&) {return vcl_random_access_iterator_tag();}
 inline vcl_ptrdiff_t*
 distance_type(const __bvec_iterator&) {return (vcl_ptrdiff_t*)0;}
 inline vcl_ptrdiff_t*
@@ -272,7 +272,7 @@ distance_type(const __bvec_const_iterator&) {return (vcl_ptrdiff_t*)0;}
 inline bool* value_type(const __bvec_iterator&) {return (bool*)0;}
 inline bool* value_type(const __bvec_const_iterator&) {return (bool*)0;}
 
-class vcl_bit_vector   {
+class vcl_bit_vector {
 public:
     typedef bool value_type;
     typedef vcl_size_t size_type;
@@ -282,9 +282,9 @@ public:
     typedef __bvec_reference reference;
     typedef bool const_reference;
 
-    typedef reverse_iterator<const_iterator, value_type, const_reference,
-                             difference_type> const_reverse_iterator;
-    typedef reverse_iterator<iterator, value_type, reference, difference_type>
+    typedef vcl_reverse_iterator<const_iterator, value_type, const_reference,
+                                 difference_type> const_reverse_iterator;
+    typedef vcl_reverse_iterator<iterator, value_type, reference, difference_type>
         reverse_iterator;
 protected:
     typedef vcl_simple_alloc<unsigned int, Alloc> data_allocator;
@@ -356,13 +356,13 @@ public:
     }
     vcl_bit_vector(const_iterator first, const_iterator last) {
         size_type n = 0;
-        distance(first, last, n);
+        vcl_distance(first, last, n);
         initialize(n);
         copy(first, last, start);
     }
     vcl_bit_vector(const bool* first, const bool* last) {
         size_type n = 0;
-        distance(first, last, n);
+        vcl_distance(first, last, n);
         initialize(n);
         copy(first, last, start);
     }
@@ -413,7 +413,7 @@ public:
                 const_iterator last) {
       if (first == last) return;
       size_type n = 0;
-      distance(first, last, n);
+      vcl_distance(first, last, n);
       if (capacity() - size() >= n) {
         copy_backward(position, end(), finish + n);
         copy(first, last, position);
@@ -433,7 +433,7 @@ public:
     void insert(iterator position, const bool* first, const bool* last) {
       if (first == last) return;
       size_type n = 0;
-      distance(first, last, n);
+      vcl_distance(first, last, n);
       if (capacity() - size() >= n) {
         copy_backward(position, end(), finish + n);
         copy(first, last, position);

@@ -474,7 +474,7 @@ public:
   }
 
 #if defined(WIN32)
-  static void distance(const_iterator f, const_iterator l, size_type& n) {
+  static void vcl_distance(const_iterator f, const_iterator l, size_type& n) {
     while (f != l) { ++f; ++n; }
   }
 #endif
@@ -483,7 +483,7 @@ public:
   void insert_unique(const_iterator f, const_iterator l)
   {
     size_type n = 0;
-    distance(f, l, n);
+    vcl_distance(f, l, n);
     resize(num_elements + n);
     for ( ; n > 0; --n)
       insert_unique_noresize(*f++);
@@ -492,7 +492,7 @@ public:
   void insert_equal(const_iterator f, const_iterator l)
   {
     size_type n = 0;
-    distance(f, l, n);
+    vcl_distance(f, l, n);
     resize(num_elements + n);
     for ( ; n > 0; --n)
       insert_equal_noresize(*f++);
@@ -642,10 +642,10 @@ vcl_hashtable_const_iterator<Value, Key, HashFcn, ExtractKey, EqualKey, Alloc>::
 }
 
 template <class Value, class Key, class HashFcn, class ExtractKey, class EqualKey, class Alloc>
-inline forward_iterator_tag
+inline vcl_forward_iterator_tag
 iterator_category (const vcl_hashtable_iterator<Value, Key, HashFcn, ExtractKey, EqualKey, Alloc>&)
 {
-  return forward_iterator_tag();
+  return vcl_forward_iterator_tag();
 }
 
 template <class Value, class Key, class HashFcn, class ExtractKey, class EqualKey, class Alloc>
@@ -663,10 +663,10 @@ distance_type(const vcl_hashtable_iterator<Value, Key, HashFcn, ExtractKey, Equa
 }
 
 template <class Value, class Key, class HashFcn, class ExtractKey, class EqualKey, class Alloc>
-inline forward_iterator_tag
+inline vcl_forward_iterator_tag
 iterator_category (const vcl_hashtable_const_iterator<Value, Key, HashFcn, ExtractKey, EqualKey, Alloc>&)
 {
-  return forward_iterator_tag();
+  return vcl_forward_iterator_tag();
 }
 
 template <class Value, class Key, class HashFcn, class ExtractKey, class EqualKey, class Alloc>

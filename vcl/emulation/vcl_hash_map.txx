@@ -64,8 +64,8 @@ VCL_PAIR_INSTANTIATE(HTIter ## TAG, HTIter ## TAG); \
 template struct vcl_hashtable_const_iterator<Value, Key, Hash, GetKey, Compare, vcl_alloc >; \
 typedef vcl_hashtable_const_iterator<Value, Key, Hash, GetKey, Compare, vcl_alloc > HTIterc ## TAG; \
 VCL_ITER_FWD_INSTANTIATE(HTIterc ## TAG); \
-VCL_INSTANTIATE_INLINE(void distance(HTIterc ## TAG, HTIterc ## TAG, vcl_size_t&)); \
-VCL_INSTANTIATE_INLINE(void __distance(HTIterc ## TAG, HTIterc ## TAG const &, vcl_size_t &, forward_iterator_tag)); \
+VCL_INSTANTIATE_INLINE(void vcl_distance(HTIterc ## TAG, HTIterc ## TAG, vcl_size_t&)); \
+VCL_INSTANTIATE_INLINE(void __distance(HTIterc ## TAG, HTIterc ## TAG const &, vcl_size_t &, vcl_forward_iterator_tag)); \
 VCL_PAIR_INSTANTIATE(HTIterc ## TAG, bool); \
 VCL_PAIR_INSTANTIATE(HTIterc ## TAG, HTIterc ## TAG); \
 template struct vcl_hashtable_node<Value > ; \

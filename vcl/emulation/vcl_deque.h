@@ -286,9 +286,9 @@ public:
 
 
 template <class T>
-inline random_access_iterator_tag
+inline vcl_random_access_iterator_tag
 iterator_category(const __deque_iterator<T>&) {
-  return random_access_iterator_tag();
+  return vcl_random_access_iterator_tag();
 }
 
 template <class T>
@@ -304,9 +304,9 @@ distance_type(const __deque_iterator<T>&) {
 }
 
 template <class T>
-inline random_access_iterator_tag
+inline vcl_random_access_iterator_tag
 iterator_category(const __deque_const_iterator<T>&) {
-  return random_access_iterator_tag();
+  return vcl_random_access_iterator_tag();
 }
 
 template <class T>
@@ -404,10 +404,10 @@ public:
   typedef vcl_ptrdiff_t difference_type;
   typedef __deque_iterator<T> iterator;
   typedef __deque_const_iterator<T> const_iterator;
-  typedef reverse_iterator<const_iterator, value_type, const_reference,
-  difference_type>  const_reverse_iterator;
-  typedef reverse_iterator<iterator, value_type, reference, difference_type>
-  reverse_iterator;
+  typedef vcl_reverse_iterator<const_iterator, value_type, const_reference,
+                               difference_type>  const_reverse_iterator;
+  typedef vcl_reverse_iterator<iterator, value_type, reference, difference_type>
+          reverse_iterator;
 protected:
   typedef pointer* map_pointer;
   IUEi_STL_INLINE void allocate_at_begin();
@@ -572,8 +572,7 @@ public:
         erase(vcl_copy(x.begin(), x.end(), begin()), end());
       else
         vcl_copy(x.begin() + size(), x.end(),
-                 inserter(*this, vcl_copy(x.begin(), x.begin() + size(),
-                                          begin())));
+                 vcl_inserter(*this, vcl_copy(x.begin(), x.begin() + size(), begin())));
       __stl_debug_do(invalidate_all());
     }
     return *this;
@@ -583,9 +582,9 @@ public:
 
 # if defined ( __STL_NESTED_TYPE_PARAM_BUG )
 // qualified references
-#   define __iterator__           __deque_iterator<T>
-#   define iterator               __iterator__
-#   define const_iterator         __deque_const_iterator<T>
+#  define __iterator__           __deque_iterator<T>
+#  define iterator               __iterator__
+#  define const_iterator         __deque_const_iterator<T>
 #  define size_type              vcl_size_t
 # else
 #  define __iterator__           vcl_deque<T,Alloc>::iterator

@@ -129,10 +129,10 @@ public:
     typedef vcl_size_t size_type;
     typedef __iterator__ iterator;
     typedef __const_iterator__ const_iterator;
-    typedef reverse_iterator<const_iterator, value_type, const_reference,
-            difference_type>  const_reverse_iterator;
-    typedef reverse_iterator<iterator, value_type, reference, difference_type>
-    reverse_iterator;
+    typedef vcl_reverse_iterator<const_iterator, value_type, const_reference,
+                                 difference_type>  const_reverse_iterator;
+    typedef vcl_reverse_iterator<iterator, value_type, reference,
+                                 difference_type> reverse_iterator;
 protected:
     IUEi_STL_INLINE void insert_aux(pointer position, const T& x);
 public:

@@ -86,10 +86,10 @@ public:
   typedef pointer iterator;
   typedef const_pointer const_iterator;
 #if 0
-  typedef reverse_iterator<iterator, value_type,
-                           reference, difference_type> reverse_iterator;
-  typedef reverse_iterator<const_iterator, value_type, const_reference,
-                           difference_type> const_reverse_iterator;
+  typedef vcl_reverse_iterator<iterator, value_type,
+                               reference, difference_type> reverse_iterator;
+  typedef vcl_reverse_iterator<const_iterator, value_type, const_reference,
+                               difference_type> const_reverse_iterator;
 #endif
   static const size_type npos
 #ifdef __GNUG__
@@ -428,11 +428,9 @@ public:
 
 #if 0
   reverse_iterator       rbegin() { return reverse_iterator (end ()); }
-  const_reverse_iterator rbegin() const
-    { return const_reverse_iterator (end ()); }
+  const_reverse_iterator rbegin() const { return const_reverse_iterator (end ()); }
   reverse_iterator       rend() { return reverse_iterator (begin ()); }
-  const_reverse_iterator rend() const
-    { return const reverse_iterator (begin ()); }
+  const_reverse_iterator rend() const { return const reverse_iterator (begin ()); }
 #endif
 
 private:
@@ -661,9 +659,9 @@ operator<< (vcl_ostream &o, const vcl_basic_string <charT, traits>& s)
 
 template <class charT, class traits> vcl_istream&
 #ifdef __SUNPRO_CC
-getline (vcl_istream&, vcl_basic_string <charT, traits>&, charT delim);
+vcl_getline (vcl_istream&, vcl_basic_string <charT, traits>&, charT delim);
 #else
-getline (vcl_istream&, vcl_basic_string <charT, traits>&, charT delim ='\n');
+vcl_getline (vcl_istream&, vcl_basic_string <charT, traits>&, charT delim ='\n');
 #endif
 } // extern "C++"
 

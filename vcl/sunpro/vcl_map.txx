@@ -2,13 +2,14 @@
 #define vcl_sunpro_map_txx_
 
 #include <vcl_map.h>
+#include <vcl_iterator.h>
 
 // the business
 #define VCL_MAP_INSTANTIATE_internal(tag, Key, T, Comp) \
 typedef vcl_map_sunpro_50<Key, T, Comp >::base grik##tag; \
 template class grik##tag; \
 template class grik##tag :: __rep_type; \
-template void std::__distance(grik##tag::iterator, grik##tag::iterator, unsigned &, std::bidirectional_iterator_tag); \
+template void std::__distance(grik##tag::iterator, grik##tag::iterator, unsigned &, vcl_bidirectional_iterator_tag); \
 template struct vcl_map_sunpro_50<Key, T, Comp >
 
 

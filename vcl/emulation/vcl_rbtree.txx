@@ -33,21 +33,21 @@ VCL_INSTANTIATE_INLINE(TAG iterator_category(I const &))
 
 #define VCL_ITER_FWD_INSTANTIATE(ForwardIterator) \
 VCL_OPERATOR_NE_INSTANTIATE(ForwardIterator)\
-VCL_TAGS_INSTANTIATE(ForwardIterator, forward_iterator_tag)
+VCL_TAGS_INSTANTIATE(ForwardIterator, vcl_forward_iterator_tag)
 
 #if 0
 #define VCL_ITER_BD_Distance_INSTANTIATE(BidirectionalIterator, Distance) \
-VCL_INSTANTIATE_INLINE(void advance(BidirectionalIterator&,Distance));\
-VCL_INSTANTIATE_INLINE(void __advance(BidirectionalIterator&,Distance,bidirectional_iterator_tag));\
-VCL_INSTANTIATE_INLINE(void distance(BidirectionalIterator,BidirectionalIterator,Distance&));\
-VCL_INSTANTIATE_INLINE(void __distance(BidirectionalIterator,BidirectionalIterator const&,Distance&,bidirectional_iterator_tag))
+VCL_INSTANTIATE_INLINE(void vcl_advance(BidirectionalIterator&,Distance));\
+VCL_INSTANTIATE_INLINE(void __advance(BidirectionalIterator&,Distance,vcl_bidirectional_iterator_tag));\
+VCL_INSTANTIATE_INLINE(void vcl_distance(BidirectionalIterator,BidirectionalIterator,Distance&));\
+VCL_INSTANTIATE_INLINE(void __distance(BidirectionalIterator,BidirectionalIterator const&,Distance&,vcl_bidirectional_iterator_tag))
 
 #define VCL_ITER_RA_Distance_INSTANTIATE(RandomAccessIterator, Distance) \
-VCL_INSTANTIATE_INLINE(void advance(RandomAccessIterator&,Distance));\
-VCL_INSTANTIATE_INLINE(void __advance(RandomAccessIterator&,Distance,random_access_iterator_tag));\
-VCL_INSTANTIATE_INLINE(void distance(RandomAccessIterator,RandomAccessIterator,Distance&));\
+VCL_INSTANTIATE_INLINE(void vcl_advance(RandomAccessIterator&,Distance));\
+VCL_INSTANTIATE_INLINE(void __advance(RandomAccessIterator&,Distance,vcl_random_access_iterator_tag));\
+VCL_INSTANTIATE_INLINE(void vcl_distance(RandomAccessIterator,RandomAccessIterator,Distance&));\
 VCL_INSTANTIATE_INLINE(void __distance(RandomAccessIterator const&,RandomAccessIterator const&,\
-                                       Distance&,random_access_iterator_tag))
+                                       Distance&,vcl_random_access_iterator_tag))
 #endif
 
 // --- Vcl_List ---

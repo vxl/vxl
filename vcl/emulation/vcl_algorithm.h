@@ -167,9 +167,9 @@ ForwardIterator1 __search(ForwardIterator1 first1, ForwardIterator1 last1,
                           ForwardIterator2 first2, ForwardIterator2 last2,
                           Distance1*, Distance2*) {
     Distance1 d1 = 0;
-    distance(first1, last1, d1);
+    vcl_distance(first1, last1, d1);
     Distance2 d2 = 0;
-    distance(first2, last2, d2);
+    vcl_distance(first2, last2, d2);
 
     if (d1 < d2) return last1;
 
@@ -203,9 +203,9 @@ ForwardIterator1 __search(ForwardIterator1 first1, ForwardIterator1 last1,
                           ForwardIterator2 first2, ForwardIterator2 last2,
                           BinaryPredicate binary_pred, Distance1*, Distance2*) {
     Distance1 d1 = 0;
-    distance(first1, last1, d1);
+    vcl_distance(first1, last1, d1);
     Distance2 d2 = 0;
-    distance(first2, last2, d2);
+    vcl_distance(first2, last2, d2);
 
     if (d1 < d2) return last1;
 
@@ -372,7 +372,7 @@ ForwardIterator vcl_remove_if(ForwardIterator first, ForwardIterator last,
 template <class InputIterator, class ForwardIterator>
 IUEi_STL_INLINE
 ForwardIterator __unique_copy(InputIterator first, InputIterator last,
-                              ForwardIterator result, forward_iterator_tag) {
+                              ForwardIterator result, vcl_forward_iterator_tag) {
     *result = *first;
     while (++first != last)
         if (*result != *first) *++result = *first;
@@ -383,16 +383,16 @@ template <class InputIterator, class BidirectionalIterator>
 inline BidirectionalIterator __unique_copy(InputIterator first,
                                            InputIterator last,
                                            BidirectionalIterator result,
-                                           bidirectional_iterator_tag) {
-    return __unique_copy(first, last, result, forward_iterator_tag());
+                                           vcl_bidirectional_iterator_tag) {
+    return __unique_copy(first, last, result, vcl_forward_iterator_tag());
 }
 
 template <class InputIterator, class RandomAccessIterator>
 inline RandomAccessIterator __unique_copy(InputIterator first,
                                           InputIterator last,
                                           RandomAccessIterator result,
-                                          random_access_iterator_tag) {
-    return __unique_copy(first, last, result, forward_iterator_tag());
+                                          vcl_random_access_iterator_tag) {
+    return __unique_copy(first, last, result, vcl_forward_iterator_tag());
 }
 
 template <class InputIterator, class OutputIterator, class T>
@@ -412,7 +412,7 @@ OutputIterator __unique_copy(InputIterator first, InputIterator last,
 template <class InputIterator, class OutputIterator>
 inline OutputIterator __unique_copy(InputIterator first, InputIterator last,
                                     OutputIterator result,
-                                    output_iterator_tag) {
+                                    vcl_output_iterator_tag) {
     return __unique_copy(first, last, result, value_type(first));
 }
 
@@ -428,7 +428,7 @@ IUEi_STL_INLINE
 ForwardIterator __unique_copy(InputIterator first, InputIterator last,
                               ForwardIterator result,
                               BinaryPredicate binary_pred,
-                              forward_iterator_tag) {
+                              vcl_forward_iterator_tag) {
     *result = *first;
     while (++first != last)
         if (!binary_pred(*result, *first)) *++result = *first;
@@ -440,9 +440,9 @@ inline BidirectionalIterator __unique_copy(InputIterator first,
                                            InputIterator last,
                                            BidirectionalIterator result,
                                            BinaryPredicate binary_pred,
-                                           bidirectional_iterator_tag) {
+                                           vcl_bidirectional_iterator_tag) {
     return __unique_copy(first, last, result, binary_pred,
-                         forward_iterator_tag());
+                         vcl_forward_iterator_tag());
 }
 
 template <class InputIterator, class RandomAccessIterator, class BinaryPredicate>
@@ -450,9 +450,9 @@ inline RandomAccessIterator __unique_copy(InputIterator first,
                                           InputIterator last,
                                           RandomAccessIterator result,
                                           BinaryPredicate binary_pred,
-                                          random_access_iterator_tag) {
+                                          vcl_random_access_iterator_tag) {
     return __unique_copy(first, last, result, binary_pred,
-                         forward_iterator_tag());
+                         vcl_forward_iterator_tag());
 }
 
 template <class InputIterator, class OutputIterator, class BinaryPredicate, class T>
@@ -474,14 +474,14 @@ template <class InputIterator, class OutputIterator, class BinaryPredicate>
 inline OutputIterator __unique_copy(InputIterator first, InputIterator last,
                                     OutputIterator result,
                                     BinaryPredicate binary_pred,
-                                    output_iterator_tag) {
+                                    vcl_output_iterator_tag) {
     return __unique_copy(first, last, result, binary_pred, value_type(first));
 }
 
 template <class InputIterator, class OutputIterator, class BinaryPredicate>
 inline OutputIterator vcl_unique_copy(InputIterator first, InputIterator last,
-                                  OutputIterator result,
-                                  BinaryPredicate binary_pred) {
+                                      OutputIterator result,
+                                      BinaryPredicate binary_pred) {
     __stl_debug_check(__check_range(first, last));
     if (first == last) return result;
     return __unique_copy(first, last, result, binary_pred,
@@ -499,7 +499,7 @@ ForwardIterator vcl_unique(ForwardIterator first, ForwardIterator last) {
 template <class ForwardIterator, class BinaryPredicate>
 IUEi_STL_INLINE
 ForwardIterator vcl_unique(ForwardIterator first, ForwardIterator last,
-                       BinaryPredicate binary_pred) {
+                           BinaryPredicate binary_pred) {
     __stl_debug_check(__check_range(first, last));
     first = vcl_adjacent_find(first, last, binary_pred);
     return vcl_unique_copy(first, last, first, binary_pred);
@@ -508,7 +508,7 @@ ForwardIterator vcl_unique(ForwardIterator first, ForwardIterator last,
 template <class BidirectionalIterator>
 IUEi_STL_INLINE
 void __reverse(BidirectionalIterator first, BidirectionalIterator last,
-               bidirectional_iterator_tag) {
+               vcl_bidirectional_iterator_tag) {
     while (true)
         if (first == last || first == --last)
             return;
@@ -521,7 +521,7 @@ void __reverse(BidirectionalIterator first, BidirectionalIterator last,
 template <class RandomAccessIterator>
 IUEi_STL_INLINE
 void __reverse(RandomAccessIterator first, RandomAccessIterator last,
-               random_access_iterator_tag) {
+               vcl_random_access_iterator_tag) {
     for (; first < last; ++first) iter_swap(first, --last);
 }
 
@@ -533,8 +533,8 @@ inline void vcl_reverse(BidirectionalIterator first, BidirectionalIterator last)
 
 template <class BidirectionalIterator, class OutputIterator>
 INLINE_LOOP OutputIterator vcl_reverse_copy(BidirectionalIterator first,
-                                        BidirectionalIterator last,
-                                        OutputIterator result) {
+                                            BidirectionalIterator last,
+                                            OutputIterator result) {
     __stl_debug_check(__check_range(first, last));
     for (; first != last; ++result) *result = *--last;
     return result;
@@ -543,7 +543,7 @@ INLINE_LOOP OutputIterator vcl_reverse_copy(BidirectionalIterator first,
 template <class ForwardIterator, class Distance>
 IUEi_STL_INLINE
 void __rotate(ForwardIterator first, ForwardIterator middle,
-              ForwardIterator last, Distance*, forward_iterator_tag) {
+              ForwardIterator last, Distance*, vcl_forward_iterator_tag) {
     for (ForwardIterator i = middle; ;) {
         iter_swap(first, i);
         ++first;
@@ -560,7 +560,7 @@ template <class BidirectionalIterator, class Distance>
 IUEi_STL_INLINE
 void __rotate(BidirectionalIterator first, BidirectionalIterator middle,
               BidirectionalIterator last, Distance*,
-              bidirectional_iterator_tag) {
+              vcl_bidirectional_iterator_tag) {
     vcl_reverse(first, middle);
     vcl_reverse(middle, last);
     vcl_reverse(first, last);
@@ -599,7 +599,7 @@ void __rotate_cycle(RandomAccessIterator first, RandomAccessIterator last,
 template <class RandomAccessIterator, class Distance>
 INLINE_LOOP void __rotate(RandomAccessIterator first, RandomAccessIterator middle,
                           RandomAccessIterator last, Distance*,
-                          random_access_iterator_tag) {
+                          vcl_random_access_iterator_tag) {
     Distance n = __gcd(last - first, middle - first);
     while (n--)
         __rotate_cycle(first, last, first + n, middle - first,
@@ -656,7 +656,7 @@ OutputIterator vcl_random_sample_n(ForwardIterator first, ForwardIterator last,
 {
     __stl_debug_check(__check_range(first, last));
     Distance remaining = 0;
-    distance(first, last, remaining);
+    vcl_distance(first, last, remaining);
     Distance m = vcl_min(n, remaining);
 
     while (m > 0) {
@@ -680,7 +680,7 @@ OutputIterator vcl_random_sample_n(ForwardIterator first, ForwardIterator last,
 {
     __stl_debug_check(__check_range(first, last));
     Distance remaining = 0;
-    distance(first, last, remaining);
+    vcl_distance(first, last, remaining);
     Distance m = vcl_min(n, remaining);
 
     while (m > 0) {
@@ -793,7 +793,7 @@ ForwardIterator __inplace_stable_partition(ForwardIterator first,
                                            Predicate pred, Distance len) {
     if (len == 1) return pred(*first) ? last : first;
     ForwardIterator middle = first;
-    advance(middle, len / 2);
+    vcl_advance(middle, len / 2);
     ForwardIterator
         first_cut = __inplace_stable_partition(first, middle, pred, len / 2);
     ForwardIterator
@@ -801,8 +801,8 @@ ForwardIterator __inplace_stable_partition(ForwardIterator first,
                                                 len - len / 2);
     rotate(first_cut, middle, second_cut);
     len = 0;
-    distance(middle, second_cut, len);
-    advance(first_cut, len);
+    vcl_distance(middle, second_cut, len);
+    vcl_advance(first_cut, len);
     return first_cut;
 }
 
@@ -881,7 +881,7 @@ inline ForwardIterator __stable_partition_aux(ForwardIterator first,
                                               ForwardIterator last,
                                               Predicate pred, Distance*, T*) {
     Distance len = 0;
-    distance(first, last, len);
+    vcl_distance(first, last, len);
     __stl_tempbuf<T,Distance> buf(len);
     return __stable_partition(first, last, pred, len, buf);
 }
@@ -1498,17 +1498,17 @@ inline void vcl_nth_element(RandomAccessIterator first, RandomAccessIterator nth
 template <class ForwardIterator, class T, class Distance>
 IUEi_STL_INLINE
 ForwardIterator __lower_bound(ForwardIterator first, ForwardIterator last,
-                                 const T& value, Distance*,
-                                 forward_iterator_tag) {
+                              const T& value, Distance*,
+                              vcl_forward_iterator_tag) {
     Distance len = 0;
-    distance(first, last, len);
+    vcl_distance(first, last, len);
     Distance half;
     ForwardIterator middle;
 
     while (len > 0) {
         half = len / 2;
         middle = first;
-        advance(middle, half);
+        vcl_advance(middle, half);
         if (*middle < value) {
             first = middle;
             ++first;
@@ -1521,18 +1521,18 @@ ForwardIterator __lower_bound(ForwardIterator first, ForwardIterator last,
 
 template <class ForwardIterator, class T, class Distance>
 inline ForwardIterator __lower_bound(ForwardIterator first,
-                                        ForwardIterator last,
-                                        const T& value, Distance*,
-                                        bidirectional_iterator_tag) {
+                                     ForwardIterator last,
+                                     const T& value, Distance*,
+                                     vcl_bidirectional_iterator_tag) {
   return __lower_bound(first, last, value, (Distance*)0,
-                          forward_iterator_tag());
+                       vcl_forward_iterator_tag());
 }
 
 template <class RandomAccessIterator, class T, class Distance>
 IUEi_STL_INLINE
 RandomAccessIterator __lower_bound(RandomAccessIterator first,
-                                      RandomAccessIterator last, const T& value,
-                                      Distance*, random_access_iterator_tag) {
+                                   RandomAccessIterator last, const T& value,
+                                   Distance*, vcl_random_access_iterator_tag) {
     Distance len = last - first;
     Distance half;
     RandomAccessIterator middle;
@@ -1560,17 +1560,17 @@ inline ForwardIterator vcl_lower_bound(ForwardIterator first, ForwardIterator la
 template <class ForwardIterator, class T, class Compare, class Distance>
 IUEi_STL_INLINE
 ForwardIterator __lower_bound(ForwardIterator first, ForwardIterator last,
-                                 const T& value, Compare comp, Distance*,
-                                 forward_iterator_tag) {
+                              const T& value, Compare comp, Distance*,
+                              vcl_forward_iterator_tag) {
     Distance len = 0;
-    distance(first, last, len);
+    vcl_distance(first, last, len);
     Distance half;
     ForwardIterator middle;
 
     while (len > 0) {
         half = len / 2;
         middle = first;
-        advance(middle, half);
+        vcl_advance(middle, half);
         if (comp(*middle, value)) {
             first = middle;
             ++first;
@@ -1583,19 +1583,19 @@ ForwardIterator __lower_bound(ForwardIterator first, ForwardIterator last,
 
 template <class ForwardIterator, class T, class Compare, class Distance>
 inline ForwardIterator __lower_bound(ForwardIterator first,
-                                        ForwardIterator last,
-                                        const T& value, Compare comp, Distance*,
-                                        bidirectional_iterator_tag) {
+                                     ForwardIterator last,
+                                     const T& value, Compare comp, Distance*,
+                                     vcl_bidirectional_iterator_tag) {
     return __lower_bound(first, last, value, comp, (Distance*)0,
-                            forward_iterator_tag());
+                         vcl_forward_iterator_tag());
 }
 
 template <class RandomAccessIterator, class T, class Compare, class Distance>
 IUEi_STL_INLINE
 RandomAccessIterator __lower_bound(RandomAccessIterator first,
-                                      RandomAccessIterator last,
-                                      const T& value, Compare comp, Distance*,
-                                      random_access_iterator_tag) {
+                                   RandomAccessIterator last,
+                                   const T& value, Compare comp, Distance*,
+                                   vcl_random_access_iterator_tag) {
     Distance len = last - first;
     Distance half;
     RandomAccessIterator middle;
@@ -1624,16 +1624,16 @@ template <class ForwardIterator, class T, class Distance>
 IUEi_STL_INLINE
 ForwardIterator __upper_bound(ForwardIterator first, ForwardIterator last,
                               const T& value, Distance*,
-                              forward_iterator_tag) {
+                              vcl_forward_iterator_tag) {
     Distance len = 0;
-    distance(first, last, len);
+    vcl_distance(first, last, len);
     Distance half;
     ForwardIterator middle;
 
     while (len > 0) {
         half = len / 2;
         middle = first;
-        advance(middle, half);
+        vcl_advance(middle, half);
         if (value < *middle)
             len = half;
         else {
@@ -1649,16 +1649,16 @@ template <class ForwardIterator, class T, class Distance>
 inline ForwardIterator __upper_bound(ForwardIterator first,
                                      ForwardIterator last,
                                      const T& value, Distance*,
-                                     bidirectional_iterator_tag) {
+                                     vcl_bidirectional_iterator_tag) {
     return __upper_bound(first, last, value, (Distance*)0,
-                         forward_iterator_tag());
+                         vcl_forward_iterator_tag());
 }
 
 template <class RandomAccessIterator, class T, class Distance>
 IUEi_STL_INLINE
 RandomAccessIterator __upper_bound(RandomAccessIterator first,
                                    RandomAccessIterator last, const T& value,
-                                   Distance*, random_access_iterator_tag) {
+                                   Distance*, vcl_random_access_iterator_tag) {
     Distance len = last - first;
     Distance half;
     RandomAccessIterator middle;
@@ -1688,16 +1688,16 @@ template <class ForwardIterator, class T, class Compare, class Distance>
 IUEi_STL_INLINE
 ForwardIterator __upper_bound(ForwardIterator first, ForwardIterator last,
                               const T& value, Compare comp, Distance*,
-                              forward_iterator_tag) {
+                              vcl_forward_iterator_tag) {
     Distance len = 0;
-    distance(first, last, len);
+    vcl_distance(first, last, len);
     Distance half;
     ForwardIterator middle;
 
     while (len > 0) {
         half = len / 2;
         middle = first;
-        advance(middle, half);
+        vcl_advance(middle, half);
         if (comp(value, *middle))
             len = half;
         else {
@@ -1713,9 +1713,9 @@ template <class ForwardIterator, class T, class Compare, class Distance>
 inline ForwardIterator __upper_bound(ForwardIterator first,
                                      ForwardIterator last,
                                      const T& value, Compare comp, Distance*,
-                                     bidirectional_iterator_tag) {
+                                     vcl_bidirectional_iterator_tag) {
     return __upper_bound(first, last, value, comp, (Distance*)0,
-                         forward_iterator_tag());
+                         vcl_forward_iterator_tag());
 }
 
 template <class RandomAccessIterator, class T, class Compare, class Distance>
@@ -1723,7 +1723,7 @@ IUEi_STL_INLINE
 RandomAccessIterator __upper_bound(RandomAccessIterator first,
                                    RandomAccessIterator last,
                                    const T& value, Compare comp, Distance*,
-                                   random_access_iterator_tag) {
+                                   vcl_random_access_iterator_tag) {
     Distance len = last - first;
     Distance half;
     RandomAccessIterator middle;
@@ -1753,16 +1753,16 @@ template <class ForwardIterator, class T, class Distance>
 IUEi_STL_INLINE
 vcl_pair<ForwardIterator, ForwardIterator>
 __equal_range(ForwardIterator first, ForwardIterator last, const T& value,
-              Distance*, forward_iterator_tag) {
+              Distance*, vcl_forward_iterator_tag) {
     Distance len = 0;
-    distance(first, last, len);
+    vcl_distance(first, last, len);
     Distance half;
     ForwardIterator middle, left, right;
 
     while (len > 0) {
         half = len / 2;
         middle = first;
-        advance(middle, half);
+        vcl_advance(middle, half);
         if (*middle < value) {
             first = middle;
             ++first;
@@ -1771,7 +1771,7 @@ __equal_range(ForwardIterator first, ForwardIterator last, const T& value,
             len = half;
         else {
             left = vcl_lower_bound(first, middle, value);
-            advance(first, len);
+            vcl_advance(first, len);
             right = vcl_upper_bound(++middle, first, value);
             return vcl_pair<ForwardIterator, ForwardIterator>(left, right);
         }
@@ -1782,16 +1782,16 @@ __equal_range(ForwardIterator first, ForwardIterator last, const T& value,
 template <class ForwardIterator, class T, class Distance>
 inline vcl_pair<ForwardIterator, ForwardIterator>
 __equal_range(ForwardIterator first, ForwardIterator last, const T& value,
-              Distance*, bidirectional_iterator_tag) {
+              Distance*, vcl_bidirectional_iterator_tag) {
     return __equal_range(first, last, value, (Distance*)0,
-                         forward_iterator_tag());
+                         vcl_forward_iterator_tag());
 }
 
 template <class RandomAccessIterator, class T, class Distance>
 IUEi_STL_INLINE
 vcl_pair<RandomAccessIterator, RandomAccessIterator>
 __equal_range(RandomAccessIterator first, RandomAccessIterator last,
-              const T& value, Distance*, random_access_iterator_tag) {
+              const T& value, Distance*, vcl_random_access_iterator_tag) {
     Distance len = last - first;
     Distance half;
     RandomAccessIterator middle, left, right;
@@ -1825,16 +1825,16 @@ template <class ForwardIterator, class T, class Compare, class Distance>
 IUEi_STL_INLINE
 vcl_pair<ForwardIterator, ForwardIterator>
 __equal_range(ForwardIterator first, ForwardIterator last, const T& value,
-              Compare comp, Distance*, forward_iterator_tag) {
+              Compare comp, Distance*, vcl_forward_iterator_tag) {
     Distance len = 0;
-    distance(first, last, len);
+    vcl_distance(first, last, len);
     Distance half;
     ForwardIterator middle, left, right;
 
     while (len > 0) {
         half = len / 2;
         middle = first;
-        advance(middle, half);
+        vcl_advance(middle, half);
         if (comp(*middle, value)) {
             first = middle;
             ++first;
@@ -1843,7 +1843,7 @@ __equal_range(ForwardIterator first, ForwardIterator last, const T& value,
             len = half;
         else {
             left = vcl_lower_bound(first, middle, value, comp);
-            advance(first, len);
+            vcl_advance(first, len);
             right = vcl_upper_bound(++middle, first, value, comp);
             return vcl_pair<ForwardIterator, ForwardIterator>(left, right);
         }
@@ -1854,9 +1854,9 @@ __equal_range(ForwardIterator first, ForwardIterator last, const T& value,
 template <class ForwardIterator, class T, class Compare, class Distance>
 inline vcl_pair<ForwardIterator, ForwardIterator>
 __equal_range(ForwardIterator first, ForwardIterator last, const T& value,
-              Compare comp, Distance*, bidirectional_iterator_tag) {
+              Compare comp, Distance*, vcl_bidirectional_iterator_tag) {
     return __equal_range(first, last, value, comp, (Distance*)0,
-                         forward_iterator_tag());
+                         vcl_forward_iterator_tag());
 }
 
 template <class RandomAccessIterator, class T, class Compare, class Distance>
@@ -1864,7 +1864,7 @@ IUEi_STL_INLINE
 vcl_pair<RandomAccessIterator, RandomAccessIterator>
 __equal_range(RandomAccessIterator first, RandomAccessIterator last,
               const T& value, Compare comp, Distance*,
-              random_access_iterator_tag) {
+              vcl_random_access_iterator_tag) {
     Distance len = last - first;
     Distance half;
     RandomAccessIterator middle, left, right;
@@ -1963,7 +1963,7 @@ void __merge_without_buffer(BidirectionalIterator first,
         vcl_distance(middle, second_cut, len22);
     } else {
         len22 = len2 / 2;
-        advance(second_cut, len22);
+        vcl_advance(second_cut, len22);
         first_cut = vcl_upper_bound(first, middle, *second_cut);
         vcl_distance(first, first_cut, len11);
     }
@@ -2102,14 +2102,14 @@ void __merge_adaptive(BidirectionalIterator first,
         Distance len22 = 0;
         if (len1 > len2) {
             len11 = len1 / 2;
-            advance(first_cut, len11);
+            vcl_advance(first_cut, len11);
             second_cut = vcl_lower_bound(middle, last, *first_cut);
-            distance(middle, second_cut, len22);
+            vcl_distance(middle, second_cut, len22);
         } else {
             len22 = len2 / 2;
-            advance(second_cut, len22);
+            vcl_advance(second_cut, len22);
             first_cut = vcl_upper_bound(first, middle, *second_cut);
-            distance(first, first_cut, len11);
+            vcl_distance(first, first_cut, len11);
         }
         BidirectionalIterator new_middle =
             __rotate_adaptive(first_cut, middle, second_cut, len1 - len11,
@@ -2140,14 +2140,14 @@ void __merge_adaptive(BidirectionalIterator first,
         Distance len22 = 0;
         if (len1 > len2) {
             len11 = len1 / 2;
-            advance(first_cut, len11);
+            vcl_advance(first_cut, len11);
             second_cut = vcl_lower_bound(middle, last, *first_cut, comp);
-            distance(middle, second_cut, len22);
+            vcl_distance(middle, second_cut, len22);
         } else {
             len22 = len2 / 2;
-            advance(second_cut, len22);
+            vcl_advance(second_cut, len22);
             first_cut = vcl_upper_bound(first, middle, *second_cut, comp);
-            distance(first, first_cut, len11);
+            vcl_distance(first, first_cut, len11);
         }
         BidirectionalIterator new_middle =
             __rotate_adaptive(first_cut, middle, second_cut, len1 - len11,
@@ -2201,9 +2201,9 @@ inline void __inplace_merge_aux(BidirectionalIterator first,
                                 BidirectionalIterator middle,
                                 BidirectionalIterator last, T*, Distance*) {
     Distance len1 = 0;
-    distance(first, middle, len1);
+    vcl_distance(first, middle, len1);
     Distance len2 = 0;
-    distance(middle, last, len2);
+    vcl_distance(middle, last, len2);
     __stl_tempbuf<T,Distance> buf(len1 + len2);
     __inplace_merge(first, middle, last, len1, len2, buf);
 }
@@ -2214,9 +2214,9 @@ inline void __inplace_merge_aux(BidirectionalIterator first,
                                 BidirectionalIterator last, T*, Distance*,
                                 Compare comp) {
     Distance len1 = 0;
-    distance(first, middle, len1);
+    vcl_distance(first, middle, len1);
     Distance len2 = 0;
-    distance(middle, last, len2);
+    vcl_distance(middle, last, len2);
     __stl_tempbuf<T,Distance> buf(len1 + len2);
     __inplace_merge(first, middle, last, len1, len2, buf, comp);
 }

@@ -175,9 +175,9 @@ struct __list_const_iterator {
 };
 
 template <class T>
-inline bidirectional_iterator_tag
+inline vcl_bidirectional_iterator_tag
 iterator_category(const __list_iterator<T>&) {
-  return bidirectional_iterator_tag();
+  return vcl_bidirectional_iterator_tag();
 }
 
 template <class T>
@@ -193,9 +193,9 @@ distance_type(const  __list_iterator<T>&) {
 }
 
 template <class T>
-inline bidirectional_iterator_tag
+inline vcl_bidirectional_iterator_tag
 iterator_category(const  __list_const_iterator<T>&) {
-  return bidirectional_iterator_tag();
+  return vcl_bidirectional_iterator_tag();
 }
 
 template <class T>

@@ -2,6 +2,7 @@
 #define vcl_gcc_295_algorithm_txx_
 
 #include <vcl_algorithm.h>
+#include <vcl_iterator.h>
 
 #define VCL_SWAP_INSTANTIATE(T) \
 VCL_INSTANTIATE_INLINE(void swap(T&, T&))
@@ -39,18 +40,18 @@ template <typename _BdIter, typename _Tp>
 inline _BdIter find(_BdIter __first,
                     _BdIter __last,
                     _Tp const & __val,
-                    bidirectional_iterator_tag)
+                    vcl_bidirectional_iterator_tag)
 {
-  return ::find(__first, __last, __val, input_iterator_tag());
+  return ::find(__first, __last, __val, vcl_input_iterator_tag());
 }
 
 template <typename _BdIter, typename _Pred>
 inline _BdIter find_if(_BdIter __first,
                        _BdIter __last,
                        _Pred   __pred,
-                       bidirectional_iterator_tag)
+                       vcl_bidirectional_iterator_tag)
 {
-  return ::find_if(__first, __last, __pred, input_iterator_tag());
+  return ::find_if(__first, __last, __pred, vcl_input_iterator_tag());
 }
 
 #define VCL_FIND_INSTANTIATE(I, T) \
@@ -58,11 +59,11 @@ template < int N > struct fsm_find_tickler; /* empty template */ \
 template <> struct fsm_find_tickler< __LINE__ > { void method(I, I, T const &); }; \
 void fsm_find_tickler< __LINE__ >::method(I b, I e, T const &v) { find(b, e, v); } \
 template I find<I, T >(I, I, T const&); \
-template I find<I, T >(I, I, T const&, iterator_traits<I >::iterator_category)
+template I find<I, T >(I, I, T const&, vcl_iterator_traits<I >::iterator_category)
 
 #define VCL_FIND_IF_INSTANTIATE(I, P) \
 template I find_if<I, P >(I, I, P); \
-template I find_if<I, P >(I, I, P, iterator_traits<I >::iterator_category)
+template I find_if<I, P >(I, I, P, vcl_iterator_traits<I >::iterator_category)
 
 #define VCL_REMOVE_INSTANTIATE(I, T) \
 template I remove(I, I, T const &)

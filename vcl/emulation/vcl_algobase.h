@@ -96,15 +96,15 @@ inline const T& vcl_max(const T& a, const T& b, Compare comp) { return comp(a, b
 
 template <class InputIterator, class Distance>
 INLINE_LOOP void __distance(InputIterator first, const InputIterator& last,
-                            Distance& n, input_iterator_tag)
+                            Distance& n, vcl_input_iterator_tag)
 {
   while (first != last) { ++first; ++n; }
 }
 
 template <class ForwardIterator, class Distance>
 INLINE_LOOP void __distance(ForwardIterator first, const ForwardIterator& last,
-                       Distance& n,
-                       forward_iterator_tag)
+                            Distance& n,
+                            vcl_forward_iterator_tag)
 {
   while (first != last) { ++first; ++n; }
 }
@@ -112,7 +112,7 @@ INLINE_LOOP void __distance(ForwardIterator first, const ForwardIterator& last,
 template <class BidirectionalIterator, class Distance>
 INLINE_LOOP void __distance(BidirectionalIterator first,
                             const BidirectionalIterator& last,
-                            Distance& n, bidirectional_iterator_tag)
+                            Distance& n, vcl_bidirectional_iterator_tag)
 {
   while (first != last) { ++first; ++n; }
 }
@@ -120,7 +120,7 @@ INLINE_LOOP void __distance(BidirectionalIterator first,
 template <class RandomAccessIterator, class Distance>
 inline void __distance(const RandomAccessIterator& first,
                        const RandomAccessIterator& last,
-                       Distance& n, random_access_iterator_tag)
+                       Distance& n, vcl_random_access_iterator_tag)
 {
   n += last - first;
 }
@@ -132,19 +132,19 @@ inline void vcl_distance(InputIterator first, InputIterator last, Distance& n)
 }
 
 template <class InputIterator, class Distance>
-INLINE_LOOP void __advance(InputIterator& i, Distance n, input_iterator_tag)
+INLINE_LOOP void __advance(InputIterator& i, Distance n, vcl_input_iterator_tag)
 {
   while (n--) ++i;
 }
 
 template <class ForwardIterator, class Distance>
-INLINE_LOOP void __advance(ForwardIterator& i, Distance n, forward_iterator_tag)
+INLINE_LOOP void __advance(ForwardIterator& i, Distance n, vcl_forward_iterator_tag)
 {
   while (n--) ++i;
 }
 
 template <class BidirectionalIterator, class Distance>
-INLINE_LOOP void __advance(BidirectionalIterator& i, Distance n, bidirectional_iterator_tag)
+INLINE_LOOP void __advance(BidirectionalIterator& i, Distance n, vcl_bidirectional_iterator_tag)
 {
   if (n > 0) while (n--) ++i;
   else       while (n++) --i;
@@ -152,7 +152,7 @@ INLINE_LOOP void __advance(BidirectionalIterator& i, Distance n, bidirectional_i
 
 template <class RandomAccessIterator, class Distance>
 inline void __advance(RandomAccessIterator& i, Distance n,
-                      random_access_iterator_tag)
+                      vcl_random_access_iterator_tag)
 {
   i += n;
 }
@@ -321,7 +321,7 @@ INLINE_LOOP ForwardIterator __default_initialize_n(ForwardIterator first, Size n
 
 template <class InputIterator, class OutputIterator>
 INLINE_LOOP OutputIterator __copy(InputIterator first, InputIterator last,
-                             OutputIterator result, input_iterator_tag)
+                                  OutputIterator result, vcl_input_iterator_tag)
 {
   for ( ; first != last; ++result, ++first)
     *result = *first;
@@ -330,16 +330,16 @@ INLINE_LOOP OutputIterator __copy(InputIterator first, InputIterator last,
 
 template <class InputIterator, class OutputIterator>
 inline OutputIterator __copy(InputIterator first, InputIterator last,
-                             OutputIterator result, forward_iterator_tag)
+                             OutputIterator result, vcl_forward_iterator_tag)
 {
-  return __copy(first, last, result, input_iterator_tag());
+  return __copy(first, last, result, vcl_input_iterator_tag());
 }
 
 template <class InputIterator, class OutputIterator>
 inline OutputIterator __copy(InputIterator first, InputIterator last,
-                             OutputIterator result, bidirectional_iterator_tag)
+                             OutputIterator result, vcl_bidirectional_iterator_tag)
 {
-  return __copy(first, last, result, input_iterator_tag());
+  return __copy(first, last, result, vcl_input_iterator_tag());
 }
 
 template <class RandomAccessIterator, class OutputIterator, class Distance>
@@ -355,7 +355,7 @@ __copy_d(RandomAccessIterator first, RandomAccessIterator last,
 template <class RandomAccessIterator, class OutputIterator>
 inline OutputIterator
 __copy(RandomAccessIterator first, RandomAccessIterator last,
-       OutputIterator result, random_access_iterator_tag)
+       OutputIterator result, vcl_random_access_iterator_tag)
 {
   return __copy_d(first, last, result, distance_type(first));
 }

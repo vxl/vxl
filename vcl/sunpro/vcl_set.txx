@@ -2,6 +2,7 @@
 #define vcl_sunpro_set_txx_
 
 #include <vcl_set.h>
+#include <vcl_iterator.h>
 
 #if 0 // has member templates
 #define VCL_SET_INSTANTIATE_MT_InputIterator(settype, T, Comp, InputIterator) \
@@ -14,7 +15,7 @@ template void settype<T, Comp >::insert(InputIterator first, InputIterator last)
 #endif
 
 #define VCL_SET_INSTANTIATE_ITERATOR(InputIterator, Distance) \
-template void std :: __distance (InputIterator , InputIterator , Distance& , std::bidirectional_iterator_tag )
+template void std :: __distance (InputIterator , InputIterator , Distance& , vcl_bidirectional_iterator_tag )
 
 
 #undef VCL_SET_INSTANTIATE
