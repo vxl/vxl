@@ -15,7 +15,6 @@
 
 #include <vcl_vector.h>
 #include <vcl_string.h>
-#include <vcl_vector.h>
 #include <vil1/vil1_image.h>
 #include <vsol/vsol_point_2d_sptr.h>
 #include <vsrl/vsrl_image_correlation.h>
@@ -28,7 +27,7 @@ class brct_dense_reconstructor : public vsrl_dense_matcher
   vsrl_raster_dp_setup **raster_array_;
   int num_raster_;
   int correlation_range_; // the correlation range of the data
-  
+
  public:
 
   // constructor
@@ -55,7 +54,7 @@ class brct_dense_reconstructor : public vsrl_dense_matcher
   void initial_calculations();
 
   //: performs the dynamic program on the specified raster
-  void evaluate_raster(const int i); 
+  void evaluate_raster(const int i);
 
   //: do all rasters
   void execute();
@@ -83,7 +82,6 @@ class brct_dense_reconstructor : public vsrl_dense_matcher
 
   //: print out the correlation costs for point x,y
   void print_correlation_cost(const int x, const int y);
-
 };
 
 #endif // brct_dense_reconstructor_h_
