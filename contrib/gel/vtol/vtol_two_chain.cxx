@@ -137,9 +137,9 @@ vtol_two_chain::vtol_two_chain(vtol_two_chain const &other)
       f=(*tti)->cast_to_face();
 
       vtol_face_sptr new_f = f->copy_with_arrays(newverts,newedges);
-      cout << "f" << endl;
+      vcl_cout << "f" << vcl_endl;
       f->describe();
-      cout << "new f" << endl;
+      vcl_cout << "new f" << vcl_endl;
       new_f->describe();
 
 
