@@ -4,26 +4,33 @@ Method2: for (unsigned i=0;i<ni;++i) image(i,j,p) = vxl_byte(i+j+3*p);
 Method3: for (unsigned i=0;i<image.ni();++i,pixel+=image.istep()) *pixel = vxl_byte(i+j+3*p);
 Method4: for (unsigned i=0;i<ni;++i,pixel+=istep) *pixel = vxl_byte(i+j+3*p);
 
+
+Times to fill a 256 x 256 image of 3 planes (in microsecs) [Range= 0.5(max-min)]
+
 550MHz Linux Box, using gcc-2.95.2
 ----------------------------------
 No optimisation:
-Method 1 Mean: 21.2267ms   sd:0.471829ms
-Method 2 Mean: 17.8633ms   sd:0.217792ms
-Method 3 Mean: 0.0366667ms   sd:0.01ms
-Method 4 Mean: 0.02ms   sd:0.0163299ms
+Method 1) Mean: 21188us  +/-20us
+Method 2) Mean: 18108us  +/-400us
+Method 3) Mean: 24us  +/-10us
+Method 4) Mean: 10us  +/-10us
+Method 5) Mean: 12us  +/-10us
 
 Using -O2:
-Method 1 Mean: 5.91333ms   sd:0.0163299ms
-Method 2 Mean: 6.42ms   sd:0.0163299ms
-Method 3 Mean: 0.00666667ms   sd:0.0133333ms
-Method 4 Mean: 0.01ms   sd:0.0152753ms
+Method 1) Mean: 5966us +/-120us
+Method 2) Mean: 6416us +/-10us
+Method 3) Mean:    4us +/-10us
+Method 4) Mean:    4us +/-10us
+Method 5) Mean:    4us +/-10us
 
 Using -O3:
-Method 1 Mean: 5.95333ms   sd:0.06ms
-Method 2 Mean: 6.42ms   sd:0.0163299ms
-Method 3 Mean: 0.00666667ms   sd:0.0133333ms
-Method 4 Mean: 0.00666667ms   sd:0.0133333ms
+Method 1) Mean: 5950us  +/-100us
+Method 2) Mean: 6438us  +/-180us
+Method 3) Mean:    8us  +/-10us
+Method 4) Mean:    4us  +/-10us
+Method 5) Mean:    2us  +/-10us
 
+Conclusion: Methods 3&4 (using pointer incrementing) about 1000x faster than im(i,j,p)
 
 850Mhz P3 Windows 2000, using MSVC 6.0 SP5
 ------------------------------------------
