@@ -21,6 +21,7 @@
 #include "test_thin_plate_spline_2d.cxx"
 #include "test_clamped_plate_spline_2d.cxx"
 #include "test_thin_plate_spline_3d.cxx"
+#include "test_thin_plate_spline_weights_3d.cxx"
 #include "test_data_wrapper_mixer.cxx"
 #include "test_file_data_wrapper.cxx"
 #include "test_combination.cxx"
@@ -59,6 +60,7 @@ void run_test_mbl()
   test_select_n_from_m();
   test_thin_plate_spline_2d();
   test_thin_plate_spline_3d();
+  test_thin_plate_spline_weights_3d();
 }
 
 TESTLIB_DEFINE_MAIN(run_test_mbl);
