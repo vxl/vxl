@@ -26,6 +26,7 @@
 
 #include <vsl/vsl_binary_io.h>
 #include <vgl/vgl_point_3d.h>
+#include <vgl/vgl_vector_3d.h>
 #include <vnl/io/vnl_io_matrix.h>
 #include <vcl_string.h>
 
@@ -171,11 +172,11 @@ public:
     // \return inverse of current transform.
     mil3d_transform_3d inverse() const;
 
-    //: Returns change in tranformed point when original point moved by dp
+    //: Returns change in transformed point when original point moved by dp
     // \param p  point
     // \param dp  movement from point
     // \return T(p+dp)-T(p)
-   vgl_point_3d<double>  delta(vgl_point_3d<double>  p, vgl_point_3d<double>  dp) const;
+   vgl_vector_3d<double>  delta(vgl_point_3d<double>  p, vgl_vector_3d<double>  dp) const;
 
     //: Calculates the product LR
     // \param L  Transform

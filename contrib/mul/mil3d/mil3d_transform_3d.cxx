@@ -424,7 +424,7 @@ vgl_point_3d<double> mil3d_transform_3d::operator()(double x, double y, double z
 // Method: delta
 //=======================================================================
 
-vgl_point_3d<double> mil3d_transform_3d::delta(vgl_point_3d<double> p, vgl_point_3d<double> dp) const
+vgl_vector_3d<double> mil3d_transform_3d::delta(vgl_point_3d<double> p, vgl_vector_3d<double> dp) const
 {
   switch (form_)
   {
@@ -433,15 +433,15 @@ vgl_point_3d<double> mil3d_transform_3d::delta(vgl_point_3d<double> p, vgl_point
       return dp;
     case ZoomOnly :
     {
-      return vgl_point_3d<double> (dp.x()*xx_,
-                                   dp.y()*yy_,
-                                   dp.z()*zz_);
+      return vgl_vector_3d<double> (dp.x()*xx_,
+                                    dp.y()*yy_,
+                                    dp.z()*zz_);
     }
     case RigidBody :
     case Similarity :
-    case Affine :
+    case Affine : // FIXME - returned value is independent of p ?!
     {
-      return vgl_point_3d<double> (
+      return vgl_vector_3d<double> (
         xx_*(dp.x()*xx_+dp.y()*xy_+dp.z()*xz_),
         yy_*(dp.x()*yx_+dp.y()*yy_+dp.z()*yz_),
         zz_*(dp.x()*zx_+dp.y()*zy_+dp.z()*zz_)
@@ -453,7 +453,7 @@ vgl_point_3d<double> mil3d_transform_3d::delta(vgl_point_3d<double> p, vgl_point
       vcl_abort();
   }
 
-  return vgl_point_3d<double> (); // To keep over-zealous compilers happy
+  return vgl_vector_3d<double> (); // To keep over-zealous compilers happy
 }
 
 
