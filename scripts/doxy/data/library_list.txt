@@ -44,7 +44,6 @@ gel gkll gkll_ build
 gel gmvl gmvl_ build
 gel gst gst_ build
 gel gtrl gtrl_ build
-gel vace vace_ build
 gel vdgl vdgl_ build
 gel vgel vgel_ build
 gel vmal vmal_ build
