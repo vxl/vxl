@@ -45,7 +45,7 @@ int main( int argc, char* argv[] )
   float sum = 0;
   for ( int i = -halfSupport ; i <= halfSupport ; ++i )
   {
-    kernel[i+halfSupport] = exp( -i * i * scaleFactor );
+    kernel[i+halfSupport] = vcl_exp( -i * i * scaleFactor );
     sum += kernel[i+halfSupport];
   }
 
