@@ -90,9 +90,10 @@ class vgui_text_tableau : public vgui_tableau
  private:
   vcl_vector<float> xs;
   vcl_vector<float> ys;
+  vcl_vector<float> r_, g_, b_;
   vcl_vector<vcl_string> ts;
 
-  float r_, g_, b_;
+  float cur_r_, cur_g_, cur_b_;
 
   //: Position of the first empty space in the vectors
   unsigned first_empty;

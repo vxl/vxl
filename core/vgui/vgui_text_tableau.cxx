@@ -21,7 +21,7 @@
 
 vgui_text_tableau::vgui_text_tableau() : first_empty(0) {
   // Default text colour is red:
-  r_ = 1; g_ = 0; b_ = 0;
+  cur_r_ = 1; cur_g_ = 0; cur_b_ = 0;
 }
 
 vcl_string vgui_text_tableau::type_name() const { return "vgui_text_tableau"; }
@@ -49,14 +49,20 @@ int vgui_text_tableau::add(float x, float y, char const *text) {
     xs[first_empty] = x;
     ys[first_empty] = y;
     ts[first_empty] = text;
+    r_[first_empty] = cur_r_;
+    g_[first_empty] = cur_g_;
+    b_[first_empty] = cur_b_;
     // Find next empty slot:
-    while (first_empty < size()  &&  xs[first_empty] != -1)
+    while (first_empty < size()  &&  r_[first_empty] != -1)
       first_empty++;
   }
   else {
     xs.push_back(x);
     ys.push_back(y);
     ts.push_back(text);
+    r_.push_back(cur_r_);
+    g_.push_back(cur_g_);
+    b_.push_back(cur_b_);
     first_empty++;
   }
   post_redraw();
@@ -74,9 +80,9 @@ void vgui_text_tableau::move(int handle, float nx, float ny) {
 void vgui_text_tableau::set_colour(float r, float g, float b) {
   if (0 <= r && r <= 1 && 0 <= g && g <= 1 && 0 <= b && b <= 1)
   {
-    r_ = r;
-    g_ = g;
-    b_ = b;
+    cur_r_ = r;
+    cur_g_ = g;
+    cur_b_ = b;
   }
 }
 
@@ -101,7 +107,8 @@ vcl_string const &vgui_text_tableau::get_text(int handle) const {
 void vgui_text_tableau::remove(int handle) {
   assert(handle >= 0);
   assert((unsigned int)handle < size());
-  xs[handle] = -1;
+  // Using r_ to indicate empty is okay because valid values for r are in [0,1].
+  r_[handle] = -1;
 
   // kym - don't do this because it changes handles of values remaining in list:
   //xs.erase(xs.begin() + handle);
@@ -131,10 +138,9 @@ bool vgui_text_tableau::handle(vgui_event const &e) {
   glDisable(GL_LIGHTING);
   glShadeModel(GL_FLAT);
 
-  glColor3f(r_,g_,b_); // FIXME
-
   for (unsigned i=0; i<size(); ++i) {
-    if (xs[i] != -1) {
+    if (r_[i] != -1) {
+      glColor3f(r_[i],g_[i],b_[i]);
       glRasterPos2f(xs[i], ys[i]);
       ::vgui_text_put(ts[i].c_str());
     }
