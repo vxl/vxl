@@ -1,3 +1,3 @@
-IULIBS += -lvil-io
-include ${IUEROOT}/core/vil/config.mk
+IULIBS += -lvil1-io
+include ${IUEROOT}/core/vil1/config.mk
 include ${IUEROOT}/core/vsl/config.mk
