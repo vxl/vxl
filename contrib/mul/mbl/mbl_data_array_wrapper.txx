@@ -40,6 +40,7 @@ mbl_data_array_wrapper<T>::mbl_data_array_wrapper(const vcl_vector<T > &data)
 //: Copy Constructor
 // The copy will point to the same data as the original.
 // The data must be kept in scope, this does not take a copy.
+template <class T>
 mbl_data_array_wrapper(const mbl_data_array_wrapper<T > &orig)
 {
   set(orig.data_, orig.size());
