@@ -10,12 +10,12 @@
 // \author Don HAMILTON Peter TU
 //
 // \verbatim
-// Modifications
-// Peter Vanroose  6 July 2001: Now using vgl_vector_3d for normal direction
-// Peter Vanroose  6 July 2001: Added normal(); replaced data_[4] by a_ b_ c_ d_
-// Peter Vanroose  6 July 2001: Added constructor from 3 points
-// CJB (Manchester) 16/03/2001: Tidied up the documentation
-// Peter Vanroose 15 July 2002: Added constructor from two concurrent lines
+//  Modifications
+//   Peter Vanroose  6 July 2001: Now using vgl_vector_3d for normal direction
+//   Peter Vanroose  6 July 2001: Added normal(); replaced data_[4] by a_ b_ c_ d_
+//   Peter Vanroose  6 July 2001: Added constructor from 3 points
+//   CJB (Manchester) 16/03/2001: Tidied up the documentation
+//   Peter Vanroose 15 July 2002: Added constructor from two concurrent lines
 // \endverbatim
 
 #include <vcl_iosfwd.h>
@@ -82,7 +82,8 @@ class vgl_homg_plane_3d
   //: Return true iff the plane is the plane at infinity.
   // The method checks that max(|a|,|b|,|c|) <= tol * |d|
   // If called without an argument, tol=0, i.e., a, b and c must be 0.
-  inline bool ideal(Type tol = Type(0)) const {
+  inline bool ideal(Type tol = (Type)0) const
+  {
 #define vgl_Abs(x) (x<0?-x:x) // avoid #include of vcl_cmath.h AND vcl_cstdlib.h
     return vgl_Abs(a()) <= tol * vgl_Abs(d()) &&
            vgl_Abs(b()) <= tol * vgl_Abs(d()) &&
@@ -97,7 +98,7 @@ class vgl_homg_plane_3d
 // The method checks that max(|a|,|b|,|c|) <= tol * |d|
 // \relates vgl_homg_plane_3d
 template <class Type>
-inline bool is_ideal(vgl_homg_plane_3d<Type> const& p, Type tol=Type(0)){return p.ideal(tol);}
+inline bool is_ideal(vgl_homg_plane_3d<Type> const& p, Type tol=(Type)0){return p.ideal(tol);}
 
 // stream operators
 

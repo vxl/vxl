@@ -62,15 +62,16 @@ class vgl_line_2d
   inline ~vgl_line_2d () {}
 
   // Default assignment operator
-  inline vgl_line_2d<Type>& operator=(const vgl_line_2d<Type>& l) {
-    set(l.a(),l.b(),l.c()); return *this;
-  }
+  inline vgl_line_2d<Type>& operator=(const vgl_line_2d<Type>& l)
+  { set(l.a(),l.b(),l.c()); return *this; }
 #endif
 
   //: the comparison operator
-  inline bool operator==(vgl_line_2d<Type> const& l) const {
+  inline bool operator==(vgl_line_2d<Type> const& l) const
+  {
     return (this==&l) ||
-      (a()*l.c()==c()*l.a() && b()*l.c()==c()*l.b() && b()*l.a()==a()*l.b()); }
+           (a()*l.c()==c()*l.a() && b()*l.c()==c()*l.b() && b()*l.a()==a()*l.b());
+  }
 
   inline bool operator!=(vgl_line_2d<Type>const& other)const{return !operator==(other);}
 
@@ -113,7 +114,7 @@ class vgl_line_2d
 
   //: Return true iff this line is the line at infinity
   //  This always returns "false"
-  inline bool ideal(Type = Type(0)) const { return false; }
+  inline bool ideal(Type = (Type)0) const { return false; }
 
   //: Get two points on the line; normally the intersection with X and Y axes.
   // When the line is parallel to one of these,
@@ -127,12 +128,13 @@ class vgl_line_2d
 //: Return true iff line is the line at infinity
 // \relates vgl_line_2d
 template <class Type> inline
-bool is_ideal(l const&, Type = Type(0)) { return false; }
+bool is_ideal(l const&, Type = (Type)0) { return false; }
 
 //: Are three lines concurrent, i.e., do they pass through a common point?
 // \relates vgl_line_2d
 template <class Type> inline
-bool concurrent(l const& l1, l const& l2, l const& l3) {
+bool concurrent(l const& l1, l const& l2, l const& l3)
+{
   return l1.a()*(l2.b()*l3.c()-l3.b()*l2.c())
         +l2.a()*(l3.b()*l1.c()-l1.b()*l3.c())
         +l3.a()*(l1.b()*l2.c()-l2.b()*l1.c())==0;

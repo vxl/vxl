@@ -11,12 +11,12 @@
 //  \date   Feb 15 2000
 //
 // \verbatim
-// Modifications
-// Peter Vanroose  6 July 2001: Added assertion in constructors
-// Peter Vanroose  6 July 2001: Now using vgl_vector_3d for normal direction
-// Peter Vanroose  6 July 2001: Implemented constructor from 3 points
-// Peter Vanroose  6 July 2001: Added normal(); replaced data_[4] by a_ b_ c_ d_
-// Peter Vanroose  6 July 2001: Added operator== and operator!=
+//  Modifications
+//   Peter Vanroose  6 July 2001: Added assertion in constructors
+//   Peter Vanroose  6 July 2001: Now using vgl_vector_3d for normal direction
+//   Peter Vanroose  6 July 2001: Implemented constructor from 3 points
+//   Peter Vanroose  6 July 2001: Added normal(); replaced data_[4] by a_ b_ c_ d_
+//   Peter Vanroose  6 July 2001: Added operator== and operator!=
 // \endverbatim
 
 #include <vcl_iosfwd.h>
@@ -73,8 +73,8 @@ class vgl_plane_3d
   inline ~vgl_plane_3d () {}
 
   // Default assignment operator
-  inline vgl_plane_3d<Type>& operator=(vgl_plane_3d<Type> const& pl) {
-    a_ = pl.a(); b_ = pl.b(); c_ = pl.c(); d_ = pl.d(); return *this; }
+  inline vgl_plane_3d<Type>& operator=(vgl_plane_3d<Type> const& pl)
+  { a_ = pl.a(); b_ = pl.b(); c_ = pl.c(); d_ = pl.d(); return *this; }
 #endif
 
   // Data Access-------------------------------------------------------------
@@ -100,17 +100,17 @@ class vgl_plane_3d
 
   //: Return true iff the plane is the plane at infinity.
   //  Always returns false
-  inline bool ideal(Type = Type(0)) const { return false; }
+  inline bool ideal(Type = (Type)0) const { return false; }
 
-  inline vgl_vector_3d<Type> normal() const {
-    return normalized(vgl_vector_3d<Type>(a(),b(),c())); }
+  inline vgl_vector_3d<Type> normal() const
+  { return normalized(vgl_vector_3d<Type>(a(),b(),c())); }
 };
 
 
 //: Return true iff p is the plane at infinity
 //  Always returns false
 template <class Type> inline
-bool is_ideal(vgl_plane_3d<Type> const&, Type=Type(0)) {return false;}
+bool is_ideal(vgl_plane_3d<Type> const&, Type=(Type)0) {return false;}
 
 //: Write to stream
 // \relates vgl_plane_3d

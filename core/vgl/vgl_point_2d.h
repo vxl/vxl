@@ -55,16 +55,15 @@ class vgl_point_2d
   //: Destructor
   inline ~vgl_point_2d () {}
   //: Assignment
-  inline vgl_point_2d<Type>& operator=(const vgl_point_2d<Type>& p) {
-    x_ = p.x(); y_ = p.y(); return *this;
-  }
+  inline vgl_point_2d<Type>& operator=(const vgl_point_2d<Type>& p)
+  { x_ = p.x(); y_ = p.y(); return *this; }
 #endif
 
   //: Test for equality
-  inline bool operator==(vgl_point_2d<Type>const& p) const {
-    return this==&p || (x_==p.x() && y_==p.y());
-  }
-  inline bool operator!=(vgl_point_2d<Type>const& p)const{return !operator==(p);}
+  inline bool operator==(vgl_point_2d<Type>const& p) const
+  { return this==&p || (x_==p.x() && y_==p.y()); }
+  inline bool operator!=(vgl_point_2d<Type>const& p)const
+  { return !operator==(p); }
 
   // Data Access-------------------------------------------------------------
 
@@ -83,7 +82,7 @@ class vgl_point_2d
 
   //: Return true iff the point is at infinity (an ideal point).
   //  Always returns false.
-  inline bool ideal(Type = Type(0)) const { return false; }
+  inline bool ideal(Type = (Type)0) const { return false; }
 };
 
 //  +-+-+ point_2d simple I/O +-+-+
@@ -109,42 +108,37 @@ bool is_ideal(vgl_point_2d<Type> const&, Type = 0) { return false; }
 // \relates vgl_point_2d
 template <class Type> inline
 vgl_vector_2d<Type> operator-(vgl_point_2d<Type> const& p1,
-                              vgl_point_2d<Type> const& p2) {
-  return vgl_vector_2d<Type>(p1.x()-p2.x(), p1.y()-p2.y());
-}
+                              vgl_point_2d<Type> const& p2)
+{ return vgl_vector_2d<Type>(p1.x()-p2.x(), p1.y()-p2.y()); }
 
 //: Adding a vector to a point gives a new point at the end of that vector
 // Note that vector + point is not defined!  It's always point + vector.
 // \relates vgl_point_2d
 template <class Type> inline
 vgl_point_2d<Type> operator+(vgl_point_2d<Type> const& p,
-                             vgl_vector_2d<Type> const& v) {
-  return vgl_point_2d<Type>(p.x()+v.x(), p.y()+v.y());
-}
+                             vgl_vector_2d<Type> const& v)
+{ return vgl_point_2d<Type>(p.x()+v.x(), p.y()+v.y()); }
 
 //: Adding a vector to a point gives the point at the end of that vector
 // \relates vgl_point_2d
 template <class Type> inline
 vgl_point_2d<Type>& operator+=(vgl_point_2d<Type>& p,
-                               vgl_vector_2d<Type> const& v) {
-  p.set(p.x()+v.x(), p.y()+v.y()); return p;
-}
+                               vgl_vector_2d<Type> const& v)
+{ p.set(p.x()+v.x(), p.y()+v.y()); return p; }
 
 //: Subtracting a vector from a point is the same as adding the inverse vector
 // \relates vgl_point_2d
 template <class Type> inline
 vgl_point_2d<Type> operator-(vgl_point_2d<Type> const& p,
-                             vgl_vector_2d<Type> const& v) {
-  return p + (-v);
-}
+                             vgl_vector_2d<Type> const& v)
+{ return p + (-v); }
 
 //: Subtracting a vector from a point is the same as adding the inverse vector
 // \relates vgl_point_2d
 template <class Type> inline
 vgl_point_2d<Type>& operator-=(vgl_point_2d<Type>& p,
-                               vgl_vector_2d<Type> const& v) {
-  return p += (-v);
-}
+                               vgl_vector_2d<Type> const& v)
+{ return p += (-v); }
 
 //  +-+-+ point_2d geometry +-+-+
 
@@ -175,9 +169,8 @@ double cross_ratio(vgl_point_2d<T>const& p1, vgl_point_2d<T>const& p2,
 template <class Type> inline
 bool collinear(vgl_point_2d<Type> const& p1,
                vgl_point_2d<Type> const& p2,
-               vgl_point_2d<Type> const& p3) {
-  return parallel(p1-p2, p1-p3);
-}
+               vgl_point_2d<Type> const& p3)
+{ return parallel(p1-p2, p1-p3); }
 
 //: Return the relative distance to p1 wrt p1-p2 of p3.
 //  The three points should be collinear and p2 should not equal p1.
@@ -190,9 +183,8 @@ bool collinear(vgl_point_2d<Type> const& p1,
 template <class Type> inline
 double ratio(vgl_point_2d<Type> const& p1,
              vgl_point_2d<Type> const& p2,
-             vgl_point_2d<Type> const& p3) {
-  return (p3-p1)/(p2-p1);
-}
+             vgl_point_2d<Type> const& p3)
+{ return (p3-p1)/(p2-p1); }
 
 //: Return the point at a given ratio wrt two other points.
 //  By default, the mid point (ratio=0.5) is returned.
@@ -203,9 +195,10 @@ double ratio(vgl_point_2d<Type> const& p1,
 template <class Type> inline
 vgl_point_2d<Type> midpoint(vgl_point_2d<Type> const& p1,
                             vgl_point_2d<Type> const& p2,
-                            Type f = 0.5) {
-  return vgl_point_2d<Type>(Type((1.0-f)*p1.x() + f*p2.x()),
-                            Type((1.0-f)*p1.y() + f*p2.y()));
+                            Type f = (Type)0.5)
+{
+  return vgl_point_2d<Type>((Type)((1-f)*p1.x() + f*p2.x()),
+                            (Type)((1-f)*p1.y() + f*p2.y()));
 }
 
 
@@ -214,7 +207,8 @@ vgl_point_2d<Type> midpoint(vgl_point_2d<Type> const& p1,
 // \relates vgl_point_2d
 template <class Type> inline
 vgl_point_2d<Type> centre(vgl_point_2d<Type> const& p1,
-                          vgl_point_2d<Type> const& p2) {
+                          vgl_point_2d<Type> const& p2)
+{
   return vgl_point_2d<Type>((p1.x() + p2.x())/2 ,
                             (p1.y() + p2.y())/2 );
 }
@@ -224,7 +218,8 @@ vgl_point_2d<Type> centre(vgl_point_2d<Type> const& p1,
 template <class Type> inline
 vgl_point_2d<Type> centre(vgl_point_2d<Type> const& p1,
                           vgl_point_2d<Type> const& p2,
-                          vgl_point_2d<Type> const& p3) {
+                          vgl_point_2d<Type> const& p3)
+{
   return vgl_point_2d<Type>((p1.x() + p2.x() + p3.x())/3 ,
                             (p1.y() + p2.y() + p3.y())/3 );
 }
@@ -235,7 +230,8 @@ template <class Type> inline
 vgl_point_2d<Type> centre(vgl_point_2d<Type> const& p1,
                           vgl_point_2d<Type> const& p2,
                           vgl_point_2d<Type> const& p3,
-                          vgl_point_2d<Type> const& p4) {
+                          vgl_point_2d<Type> const& p4)
+{
   return vgl_point_2d<Type>((p1.x() + p2.x() + p3.x() + p4.x())/4 ,
                             (p1.y() + p2.y() + p3.y() + p4.y())/4 );
 }
@@ -244,7 +240,8 @@ vgl_point_2d<Type> centre(vgl_point_2d<Type> const& p1,
 // Beware of possible rounding errors when Type is e.g. int.
 // \relates vgl_point_2d
 template <class Type> inline
-vgl_point_2d<Type> centre(vcl_vector<vgl_point_2d<Type> > const& v) {
+vgl_point_2d<Type> centre(vcl_vector<vgl_point_2d<Type> > const& v)
+{
   int n=v.size();
   assert(n>0); // it is *not* correct to return the point (0,0) when n==0.
   Type x = 0, y = 0;

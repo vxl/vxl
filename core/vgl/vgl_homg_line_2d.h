@@ -10,10 +10,10 @@
 // \author Don Hamilton, Peter Tu
 //
 // \verbatim
-// Modifications
-// Peter Vanroose -  6 July 2001 - Added normal(), direction() and concurrent()
-// Peter Vanroose -  4 July 2001 - Added assertions and cstr from non-homg line
-// Peter Vanroose - 27 June 2001 - Added operator==
+//  Modifications
+//   Peter Vanroose -  6 July 2001 - Added normal(), direction() and concurrent()
+//   Peter Vanroose -  4 July 2001 - Added assertions and cstr from non-homg line
+//   Peter Vanroose - 27 June 2001 - Added operator==
 // \endverbatim
 
 #include <vcl_iosfwd.h>
@@ -66,9 +66,11 @@ class vgl_homg_line_2d
 #endif
 
   //: the comparison operator
-  inline bool operator==(vgl_homg_line_2d<Type> const& l) const {
+  inline bool operator==(vgl_homg_line_2d<Type> const& l) const
+  {
     return (this==&l) ||
-      (a()*l.c()==c()*l.a() && b()*l.c()==c()*l.b() && b()*l.a()==a()*l.b()); }
+           (a()*l.c()==c()*l.a() && b()*l.c()==c()*l.b() && b()*l.a()==a()*l.b());
+  }
 
   inline bool operator!=(vgl_homg_line_2d<Type> const& other)const{return !operator==(other);}
 
@@ -97,7 +99,8 @@ class vgl_homg_line_2d
 
   //: Return true iff this line is the line at infinity
   //  This version checks (max(|a|,|b|) <= tol * |c|
-  inline bool ideal(Type tol = Type(0)) const {
+  inline bool ideal(Type tol = (Type)0) const
+  {
 #define vgl_Abs(x) (x<0?-x:x) // avoid #include of vcl_cmath.h AND vcl_cstdlib.h
     return vgl_Abs(a()) <= tol*vgl_Abs(c()) && vgl_Abs(b()) <= tol*vgl_Abs(c());
 #undef vgl_Abs
@@ -119,12 +122,13 @@ class vgl_homg_line_2d
 //  This version checks (max(|a|,|b|) <= tol * |c|
 // \relates vgl_homg_line_2d
 template <class Type>
-inline bool is_ideal(l const& line, Type tol = Type(0)) { return line.ideal(tol); }
+inline bool is_ideal(l const& line, Type tol = (Type)0) { return line.ideal(tol); }
 
 //: Are three lines concurrent, i.e., do they pass through a common point?
 // \relates vgl_homg_line_2d
 template <class Type>
-inline bool concurrent(l const& l1, l const& l2, l const& l3) {
+inline bool concurrent(l const& l1, l const& l2, l const& l3)
+{
   return l1.a()*(l2.b()*l3.c()-l3.b()*l2.c())
         +l2.a()*(l3.b()*l1.c()-l1.b()*l3.c())
         +l3.a()*(l1.b()*l2.c()-l2.b()*l1.c())==0;

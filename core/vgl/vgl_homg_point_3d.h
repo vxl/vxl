@@ -7,12 +7,12 @@
 // \author Don HAMILTON, Peter TU
 //
 // \verbatim
-// Modifications
-// Peter Vanroose -  4 July 2001 - Added geometric interface like vgl_point_3d
-// Peter Vanroose -  2 July 2001 - Added constructor from 3 planes
-// Peter Vanroose -  1 July 2001 - Renamed data to x_ y_ z_ w_ and inlined constructors
-// Peter Vanroose - 27 June 2001 - Implemented operator==
-// Peter Vanroose - 15 July 2002 - Added coplanar()
+//  Modifications
+//   Peter Vanroose -  4 July 2001 - Added geometric interface like vgl_point_3d
+//   Peter Vanroose -  2 July 2001 - Added constructor from 3 planes
+//   Peter Vanroose -  1 July 2001 - Renamed data to x_ y_ z_ w_ and inlined constructors
+//   Peter Vanroose - 27 June 2001 - Implemented operator==
+//   Peter Vanroose - 15 July 2002 - Added coplanar()
 // \endverbatim
 
 #include <vgl/vgl_point_3d.h>
@@ -35,10 +35,10 @@ class vgl_homg_point_3d
   // Constructors/Initializers/Destructor------------------------------------
 
   //: Default constructor with (0,0,0,1)
-  inline vgl_homg_point_3d() : x_(0), y_(0), z_(0), w_(Type(1)) {}
+  inline vgl_homg_point_3d() : x_(0), y_(0), z_(0), w_((Type)1) {}
 
   //: Construct from three (nonhomogeneous) or four (homogeneous) Types.
-  inline vgl_homg_point_3d(Type px, Type py, Type pz, Type pw = Type(1))
+  inline vgl_homg_point_3d(Type px, Type py, Type pz, Type pw = (Type)1)
     : x_(px), y_(py), z_(pz), w_(pw) {}
 
   //: Construct from homogeneous 4-array.
@@ -49,7 +49,7 @@ class vgl_homg_point_3d
 
   //: Construct from (non-homogeneous) vgl_point_3d<Type>
   inline explicit vgl_homg_point_3d(vgl_point_3d<Type> const& p)
-    : x_(p.x()), y_(p.y()), z_(p.z()), w_(Type(1)) {}
+    : x_(p.x()), y_(p.y()), z_(p.z()), w_((Type)1) {}
 
   //: Construct from 3 planes (intersection).
   vgl_homg_point_3d(vgl_homg_plane_3d<Type> const& l1,
@@ -65,7 +65,8 @@ class vgl_homg_point_3d
   inline ~vgl_homg_point_3d() {}
 
   // Default assignment operator
-  inline vgl_homg_point_3d<Type>& operator=(const vgl_homg_point_3d<Type>& that) {
+  inline vgl_homg_point_3d<Type>& operator=(const vgl_homg_point_3d<Type>& that)
+  {
     set(that.x(),that.y(),that.z(),that.w());
     return *this;
   }
@@ -84,14 +85,15 @@ class vgl_homg_point_3d
 
   //: Set \a x,y,z,w
   // Note that it does not make sense to set \a x, \a y, \a z or \a w individually.
-  inline void set(Type px, Type py, Type pz, Type pw = Type(1))
+  inline void set(Type px, Type py, Type pz, Type pw = (Type)1)
   { x_=px; y_=py; z_=pz; w_=pw; }
 
   inline void set(Type const p[4]) { x_=p[0]; y_=p[1]; z_=p[2]; w_=p[3]; }
 
   //: Return true iff the point is at infinity (an ideal point).
   // The method checks whether |w| <= tol * max(|x|,|y|,|z|)
-  inline bool ideal(Type tol = Type(0)) const {
+  inline bool ideal(Type tol = (Type)0) const
+  {
 #define vgl_Abs(x) (x<0?-x:x) // avoid #include of vcl_cmath.h AND vcl_cstdlib.h
     return vgl_Abs(w()) <= tol * vgl_Abs(x()) ||
            vgl_Abs(w()) <= tol * vgl_Abs(y()) ||
@@ -118,7 +120,7 @@ vcl_istream& operator>>(vcl_istream& s, vgl_homg_point_3d<Type>& p);
 // The method checks whether |w| <= tol * max(|x|,|y|,|z|)
 // \relates vgl_homg_point_3d
 template <class Type> inline
-bool is_ideal(vgl_homg_point_3d<Type> const& p, Type tol = Type(0)) { return p.ideal(tol); }
+bool is_ideal(vgl_homg_point_3d<Type> const& p, Type tol = (Type)0) { return p.ideal(tol); }
 
 //: Return true iff the 4 points are coplanar, i.e., they belong to a common plane
 // \relates vgl_homg_point_3d
@@ -126,7 +128,8 @@ template <class Type> inline
 bool coplanar(vgl_homg_point_3d<Type> const& p1,
               vgl_homg_point_3d<Type> const& p2,
               vgl_homg_point_3d<Type> const& p3,
-              vgl_homg_point_3d<Type> const& p4) {
+              vgl_homg_point_3d<Type> const& p4)
+{
   return ((p1.x()*p2.y()-p1.y()*p2.x())*p3.z()
          +(p3.x()*p1.y()-p3.y()*p1.x())*p2.z()
          +(p2.x()*p3.y()-p2.y()*p3.x())*p1.z())*p4.w()
@@ -146,7 +149,8 @@ bool coplanar(vgl_homg_point_3d<Type> const& p1,
 // \relates vgl_homg_point_3d
 template <class Type> inline
 vgl_vector_3d<Type> operator-(vgl_homg_point_3d<Type> const& p1,
-                              vgl_homg_point_3d<Type> const& p2) {
+                              vgl_homg_point_3d<Type> const& p2)
+{
   assert(p1.w() && p2.w());
   return vgl_vector_3d<Type>(p1.x()/p1.w()-p2.x()/p2.w(),
                              p1.y()/p1.w()-p2.y()/p2.w(),
@@ -159,7 +163,8 @@ vgl_vector_3d<Type> operator-(vgl_homg_point_3d<Type> const& p1,
 // \relates vgl_homg_point_3d
 template <class Type> inline
 vgl_homg_point_3d<Type> operator+(vgl_homg_point_3d<Type> const& p,
-                                  vgl_vector_3d<Type> const& v) {
+                                  vgl_vector_3d<Type> const& v)
+{
   return vgl_homg_point_3d<Type>(p.x()+v.x()*p.w(),
                                  p.y()+v.y()*p.w(),
                                  p.z()+v.z()*p.w(), p.w());
@@ -170,7 +175,8 @@ vgl_homg_point_3d<Type> operator+(vgl_homg_point_3d<Type> const& p,
 // \relates vgl_homg_point_3d
 template <class Type> inline
 vgl_homg_point_3d<Type>& operator+=(vgl_homg_point_3d<Type>& p,
-                                    vgl_vector_3d<Type> const& v) {
+                                    vgl_vector_3d<Type> const& v)
+{
   p.set(p.x()+v.x()*p.w(),p.y()+v.y()*p.w(),p.z()+v.z()*p.w(),p.w()); return p;
 }
 
@@ -178,17 +184,15 @@ vgl_homg_point_3d<Type>& operator+=(vgl_homg_point_3d<Type>& p,
 // \relates vgl_homg_point_3d
 template <class Type> inline
 vgl_homg_point_3d<Type> operator-(vgl_homg_point_3d<Type> const& p,
-                                  vgl_vector_3d<Type> const& v) {
-  return p + (-v);
-}
+                                  vgl_vector_3d<Type> const& v)
+{ return p + (-v); }
 
 //: Subtracting a vector from a point is the same as adding the inverse vector
 // \relates vgl_homg_point_3d
 template <class Type> inline
 vgl_homg_point_3d<Type>& operator-=(vgl_homg_point_3d<Type>& p,
-                                    vgl_vector_3d<Type> const& v) {
-  return p += (-v);
-}
+                                    vgl_vector_3d<Type> const& v)
+{ return p += (-v); }
 
 //  +-+-+ homg_point_3d geometry +-+-+
 
@@ -232,9 +236,8 @@ bool collinear(vgl_homg_point_3d<Type> const& p1,
 template <class Type> inline
 double ratio(vgl_homg_point_3d<Type> const& p1,
              vgl_homg_point_3d<Type> const& p2,
-             vgl_homg_point_3d<Type> const& p3) {
-  return (p3-p1)/(p2-p1);
-}
+             vgl_homg_point_3d<Type> const& p3)
+{ return (p3-p1)/(p2-p1); }
 
 //: Return the point at a given ratio wrt two other points.
 //  By default, the mid point (ratio=0.5) is returned.
@@ -245,9 +248,8 @@ double ratio(vgl_homg_point_3d<Type> const& p1,
 template <class Type> inline
 vgl_homg_point_3d<Type> midpoint(vgl_homg_point_3d<Type> const& p1,
                                  vgl_homg_point_3d<Type> const& p2,
-                                 Type f = 0.5) {
-  return p1 + f*(p2-p1);
-}
+                                 Type f = (Type)0.5)
+{ return p1 + f*(p2-p1); }
 
 
 //: Return the point at the centre of gravity of two given points.
@@ -257,7 +259,8 @@ vgl_homg_point_3d<Type> midpoint(vgl_homg_point_3d<Type> const& p1,
 // \relates vgl_homg_point_3d
 template <class Type> inline
 vgl_homg_point_3d<Type> centre(vgl_homg_point_3d<Type> const& p1,
-                               vgl_homg_point_3d<Type> const& p2) {
+                               vgl_homg_point_3d<Type> const& p2)
+{
   return vgl_homg_point_3d<Type>(p1.x()*p2.w() + p2.x()*p1.w() ,
                                  p1.y()*p2.w() + p2.y()*p1.w() ,
                                  p1.z()*p2.w() + p2.z()*p1.w() ,
@@ -268,13 +271,14 @@ vgl_homg_point_3d<Type> centre(vgl_homg_point_3d<Type> const& p1,
 // There are no rounding errors when Type is e.g. int, if all w() are 1.
 // \relates vgl_homg_point_3d
 template <class Type> inline
-vgl_homg_point_3d<Type> centre(vcl_vector<vgl_homg_point_3d<Type> > const& v) {
+vgl_homg_point_3d<Type> centre(vcl_vector<vgl_homg_point_3d<Type> > const& v)
+{
   int n=v.size();
   assert(n>0); // it is *not* correct to return the point (0,0) when n==0.
   Type x = 0, y = 0, z = 0;
   for (int i=0; i<n; ++i)
     x+=v[i].x()/v[i].w(), y+=v[i].y()/v[i].w(), z+=v[i].z()/v[i].w();
-  return vgl_homg_point_3d<Type>(x,y,z,Type(n));
+  return vgl_homg_point_3d<Type>(x,y,z,(Type)n);
 }
 
 #define VGL_HOMG_POINT_3D_INSTANTIATE(T) extern "please include vgl/vgl_homg_point_3d.txx first"

@@ -9,10 +9,10 @@
 // \author Don HAMILTON Peter TU François BERTEL
 //
 // \verbatim
-// Modifications
-// Peter Vanroose -  4 July 2001 - constructors now use force_point2_infinite()
-// Peter Vanroose - 27 June 2001 - Added operator==
-// Peter Vanroose - 15 July 2002 - Added concurrent(), coplanar() and intersection()
+//  Modifications
+//   Peter Vanroose -  4 July 2001 - constructors now use force_point2_infinite()
+//   Peter Vanroose - 27 June 2001 - Added operator==
+//   Peter Vanroose - 15 July 2002 - Added concurrent(), coplanar() and intersection()
 // \endverbatim
 
 #include <vcl_iosfwd.h>
@@ -72,7 +72,7 @@ class vgl_homg_line_3d_2_points
   // Utility methods
 
   //: Return true iff line is at infinity
-  inline bool ideal(Type tol = Type(0)) const { return point_finite_.ideal(tol); }
+  inline bool ideal(Type tol = (Type)0) const { return point_finite_.ideal(tol); }
 
  protected:
   //: force the point point_infinite_ to infinity, without changing the line
@@ -85,23 +85,21 @@ class vgl_homg_line_3d_2_points
 //: Return true iff line is at infinity
 // \relates vgl_homg_line_3d_2_points
 template <class Type>
-inline bool is_ideal(l const& line, Type tol=Type(0))
+inline bool is_ideal(l const& line, Type tol=(Type)0)
 { return line.ideal(tol); }
 
 //: Does a line pass through a point, i.e., are the point and the line collinear?
 // \relates vgl_homg_line_3d_2_points
 // \relates vgl_homg_point_3d
 template <class Type>
-inline bool collinear(l const& l1, vgl_homg_point_3d<Type> const& p) {
-  return collinear(l1.point_finite(),l1.point_infinite(),p);
-}
+inline bool collinear(l const& l1, vgl_homg_point_3d<Type> const& p)
+{ return collinear(l1.point_finite(),l1.point_infinite(),p); }
 
 //: Are two lines coplanar, i.e., do they intersect?
 // \relates vgl_homg_line_3d_2_points
 template <class Type>
-inline bool coplanar(l const& l1, l const& l2) {
-  return coplanar(l1.point_finite(),l1.point_infinite(),l2.point_finite(),l2.point_infinite());
-}
+inline bool coplanar(l const& l1, l const& l2)
+{ return coplanar(l1.point_finite(),l1.point_infinite(),l2.point_finite(),l2.point_infinite()); }
 
 //: Are two lines concurrent, i.e., do they intersect?
 // \relates vgl_homg_line_3d_2_points
@@ -112,14 +110,14 @@ inline bool concurrent(l const& l1, l const& l2) { return coplanar(l1,l2); }
 // \relates vgl_homg_line_3d_2_points
 // \relates vgl_homg_point_3d
 template <class Type>
-inline bool coplanar(l const& l1, vgl_homg_point_3d<Type> const& p1, vgl_homg_point_3d<Type> const& p2) {
-  return coplanar(l1.point_finite(),l1.point_infinite(),p1,p2);
-}
+inline bool coplanar(l const& l1, vgl_homg_point_3d<Type> const& p1, vgl_homg_point_3d<Type> const& p2)
+{ return coplanar(l1.point_finite(),l1.point_infinite(),p1,p2); }
 
 //: Are three lines coplanar, i.e., are they in a common plane?
 // \relates vgl_homg_line_3d_2_points
 template <class Type>
-inline bool coplanar(l const& l1, l const& l2, l const& l3) {
+inline bool coplanar(l const& l1, l const& l2, l const& l3)
+{
   vgl_homg_point_3d<Type> p = l2.point_finite();
   if (collinear(l1,p)) p = l2.point_infinite();
   return coplanar(l1,l2) && coplanar(l1,l3) &&
@@ -135,7 +133,8 @@ vgl_homg_point_3d<Type> intersection(l const& l1, l const& l2);
 //: Are three lines concurrent, i.e., do they pass through a common point?
 // \relates vgl_homg_line_3d_2_points
 template <class Type>
-inline bool concurrent(l const& l1, l const& l2, l const& l3) {
+inline bool concurrent(l const& l1, l const& l2, l const& l3)
+{
   if (!concurrent(l1,l2) || !concurrent(l1,l3) || !concurrent(l2,l3)) return false;
   return intersection(l1,l2) == intersection(l1,l3);
 }
