@@ -148,7 +148,7 @@ sub run_all_tests
 
   foreach (readdir(TESTDIR))
   {
-    if (-x && !-d)
+    if (-x && !-d  && !/\.so/)
     {
       run_test($base_dir, $rel_dir,$output_dir, $exe_dir,$_);
     }
