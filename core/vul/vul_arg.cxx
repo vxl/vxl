@@ -11,9 +11,11 @@
 // If you need to define your own vul_arg<T>, you should #include vul_arg.h
 // ONLY, in your source file (myarg.cxx, say), define these three global
 // functions (which can by static if you like) in myarg.cxx
-// -  void settype(vul_arg<T> &);
-// -  void print_value(vul_arg<T> const &, vcl_ostream &);
-// -  int  parse(vul_arg<T>*, char**);
+// \code
+//   void settype(vul_arg<T> &);
+//   void print_value(vul_arg<T> const &, vcl_ostream &);
+//   int  parse(vul_arg<T>*, char**);
+// \endcode
 // and then instantiate the class vul_arg<T> as usual (in myarg.cxx).
 
 #include "vul_arg.h"
@@ -187,20 +189,20 @@ void vul_arg_info_list::include(vul_arg_info_list& l)
 void vul_arg_info_list::display_help( char const*progname)
 {
   if (progname)
-    vcl_cerr << "Usage: " << progname << " ";
+    vcl_cerr << "Usage: " << progname << ' ';
   else
     vcl_cerr << "Usage: aprog ";
 
   // Print "prog [-a int] string string"
   for (unsigned int i=0; i< args.size(); i++) {
     if (args[i]->option()) {
-      vcl_cerr << "[" << args[i]->option();
+      vcl_cerr << '[' << args[i]->option();
       if (vcl_strlen(args[i]->type_)> 0)
-        vcl_cerr << " " << args[i]->type_;
+        vcl_cerr << ' ' << args[i]->type_;
       vcl_cerr << "] ";
     } else {
       // options without switches are required.
-      vcl_cerr << args[i]->type_ << " ";
+      vcl_cerr << args[i]->type_ << ' ';
     }
   }
 
@@ -301,7 +303,7 @@ void vul_arg_info_list::parse(int& argc, char **& argv, bool warn_about_unrecogn
   if (verbose_) {
     vcl_cerr << "args remaining:";
     for (char ** av = argv; *av; ++av)
-      vcl_cerr << " [" << *av << "]";
+      vcl_cerr << " [" << *av << ']';
     vcl_cerr << vcl_endl;
   }
 
@@ -338,7 +340,7 @@ void vul_arg_info_list::parse(int& argc, char **& argv, bool warn_about_unrecogn
   if (autonomy_ == all) {
     vcl_cerr << "vul_arg_info_list: Some arguments were unused: ";
     for (char ** av = argv; *av; ++av)
-      vcl_cerr << " " << *av;
+      vcl_cerr << ' ' << *av;
     vcl_cerr << vcl_endl;
     display_help(argv[0]);
   }
@@ -372,7 +374,7 @@ void vul_arg_info_list::parse(int& argc, char **& argv, bool warn_about_unrecogn
 
     vcl_cerr << "args remaining [argc = " << argc << "]:";
     for (char ** av = argv; *av; ++av)
-      vcl_cerr << " " << *av;
+      vcl_cerr << ' ' << *av;
     vcl_cerr << "\n--------------\n";
   }
 #endif
@@ -456,7 +458,7 @@ static int list_parse(vcl_list<int> &out, char ** argv)
       e = s;
     }
 
-    // vcl_cerr << "  " << s << ":" << d << ":" << e << vcl_endl;
+    // vcl_cerr << "  " << s << ':' << d << ':' << e << vcl_endl;
     if (e >= s) {
       if (d < 0) {
         vcl_cerr << "WARNING: d < 0\n";
