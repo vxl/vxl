@@ -12,7 +12,7 @@ SET (DROP_LOCATION "/private/vision/incoming" CACHE STRING "Directory of drop si
 SET (DROP_SITE_USER "ftp" CACHE STRING "Username for remote access to drop site.")
 SET (DROP_SITE_PASSWORD "vxl-tester@somewhere.com" CACHE STRING "Password for remote access to drop site.")
 
-SET (TRIGGER_SITE "http://cgi.cs.rpi.edu/~perera/vxl/submit-testing-results.cgi" CACHE STRING "URL for drop notification.")
+SET (TRIGGER_SITE "http://cgi2.cs.rpi.edu/~perera/vxl/submit-testing-results.cgi" CACHE STRING "URL for drop notification.")
 
 MARK_AS_ADVANCED(DROP_SITE DROP_LOCATION DROP_SITE_USER DROP_SITE_PASSWORD TRIGGER_SITE NIGHTLY_START_TIME DROP_METHOD)
 
