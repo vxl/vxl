@@ -12,7 +12,7 @@
 //  Modifications
 // \endverbatim
 
-#include <mvl2/mvl2_image_format_plugin.h>
+#include "mvl2_image_format_plugin.h"
 #include <vcl_iostream.h>
 #include <vcl_string.h>
 #include <vcl_cstdlib.h> // for vcl_atoi()
@@ -20,6 +20,7 @@
 #include <mvl2/mvl2_video_from_avi.h>
 #include <mvl2/mvl2_video_from_sequence.h>
 #include <vil2/vil2_copy.h>
+#include <vil2/vil2_image_view.h>
 
 //=======================================================================
 
@@ -121,7 +122,7 @@ bool mvl2_image_format_plugin::load_the_image (
         video_reader=new mvl2_video_from_sequence();
     if (video_reader==0)
     {
-      vcl_cout <<"WARNING : cannot allocate memory for video class."<< vcl_endl;
+      vcl_cout <<"WARNING : cannot allocate memory for video class.\n";
       return false;
     }
     if (!image)
@@ -138,7 +139,7 @@ bool mvl2_image_format_plugin::load_the_image (
     }
     if (!video_reader->initialize(width_,height_,colour,filename))
     {
-      vcl_cout << "WARNING : unable to initialize avi file." << vcl_endl;
+      vcl_cout << "WARNING : unable to initialize avi file.\n";
       return false;
     }
     mvl2_list_[filename]=video_reader;
