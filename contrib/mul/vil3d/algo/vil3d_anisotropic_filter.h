@@ -34,10 +34,10 @@
 // In this case, simply supply sd=(s,s,s).
 template <class T>
 inline 
-void anisotropic_gaussian_filter(const vil3d_image_view<T>& src,
-                                 vil3d_image_view<T>& dest,
-                                 const vgl_vector_3d<double>& vox,
-                                 const vgl_vector_3d<double>& sd)
+void vil3d_anisotropic_gaussian_filter(const vil3d_image_view<T>& src,
+                                       vil3d_image_view<T>& dest,
+                                       const vgl_vector_3d<double>& vox,
+                                       const vgl_vector_3d<double>& sd)
 {
   // Get the image dimensions
   unsigned ni = src.ni();
