@@ -24,7 +24,7 @@ void mil_algo_exp_filter_2d<srcT,destT>::filter_x(mil_image_2d_of<destT>& dest,
   for (int i=0;i<n_planes;++i)
   {
     filter_x(dest.plane(i),src.plane(i),nx,ny,dest.xstep(),dest.ystep(),
-           src.xstep(),src.ystep(),k);
+             src.xstep(),src.ystep(),k);
   }
 }
 
@@ -44,7 +44,7 @@ void mil_algo_exp_filter_2d<srcT,destT>::filter_y(mil_image_2d_of<destT>& dest,
   {
      // Apply filter in x to transpose (nx<->ny, xstep<->ystep)
     filter_x(dest.plane(i),src.plane(i),ny,nx,dest.ystep(),dest.xstep(),
-           src.ystep(),src.xstep(),k);
+             src.ystep(),src.xstep(),k);
   }
 }
 
@@ -64,12 +64,12 @@ void mil_algo_exp_filter_2d<srcT,destT>::filter_xy(mil_image_2d_of<destT>& dest,
   for (int i=0;i<n_planes;++i)
   {
     destT* dest_data = dest.plane(i);
-	destT* fx_data   = x_filtered_.plane(i);
+    destT* fx_data   = x_filtered_.plane(i);
     for (int x=0;x<nx;++x)
     {
       mil_algo_exp_filter_1d(dest_data,dest.ystep(), fx_data,x_filtered_.ystep(),ny,k);
       dest_data += dest.xstep();
-      fx_data  += x_filtered_.xstep();
+      fx_data   += x_filtered_.xstep();
     }
   }
 }
@@ -77,9 +77,9 @@ void mil_algo_exp_filter_2d<srcT,destT>::filter_xy(mil_image_2d_of<destT>& dest,
 //: Apply exponential filter along x to single plane
 template<class srcT, class destT>
 void mil_algo_exp_filter_2d<srcT,destT>::filter_x(destT* dest, const srcT* src,
-                int nx, int ny,
-        int d_x_step, int d_y_step,
-        int s_x_step, int s_y_step, double k)
+                                                  int nx, int ny,
+                                                  int d_x_step, int d_y_step,
+                                                  int s_x_step, int s_y_step, double k)
 {
   for (int y=0;y<ny;++y)
   {
