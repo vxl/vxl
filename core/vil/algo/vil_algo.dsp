@@ -368,6 +368,9 @@ SOURCE=.\vil_cartesian_differential_invariants.h
 # Begin Source File
 SOURCE=.\vil_cartesian_differential_invariants.txx
 # End Source File
+# Begin Source File
+SOURCE=.\vil_dog_filter_5tap.h
+# End Source File
 # End Group
 # PROP Default_Filter "ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe"
 # End Group
