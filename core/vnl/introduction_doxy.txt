@@ -1,0 +1,15 @@
+// The following text is included in the main documentation page by doxygen
+/*! \mainpage vnl : Numeric Library
+* The numerics library, vnl is intended to provide an environment for numerical
+* programming which combines the ease of use of packages like Mathematica and
+* Matlab with the speed of C and the elegance of C++.
+* It provides a C++ interface to the high-quality Fortran routines made available
+* in the public domain by numerical analysis researchers.
+*
+* This release includes classes for
+* - Matrices and Vectors (including specialised classes for particular forms)
+* - Matrix decompositions
+* - Polynomials
+* - Optimization
+* - Common functions (in vnl_math)
+*/
