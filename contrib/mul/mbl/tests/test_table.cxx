@@ -113,6 +113,61 @@ void test_table2()
 
 
 //========================================================================
+// Test the get/set of existing elements of a table 
+//========================================================================
+void test_table3()
+{
+  vcl_cout << "------------------------------- \n"
+           << " Testing get/set methods \n"
+           << "------------------------------- \n";
+  
+  char delim = '\t';
+  vcl_vector<vcl_string> headers(3);
+  headers[0] = "x coord";
+  headers[1] = "y coord";
+  headers[2] = "z coord";
+  
+  mbl_table table(delim, headers);
+  vcl_vector<double> row0(3);
+  row0[0] = 1.23;
+  row0[1] = 3.45;
+  row0[2] = 6.78;
+  table.append_row(row0);
+  vcl_vector<double> row1(3);
+  row1[0] = -1.23;
+  row1[1] = -3.45;
+  row1[2] = -6.78;
+  table.append_row(row1);
+  
+  bool success=false;
+  double val = table.get_element("y coord", 0, &success);
+  TEST("Get existing element 1", (val==3.45 && success==true), true);
+
+  val = table.get_element("z coord", 1, &success);
+  TEST("Get existing element 2", (val==-6.78 && success==true), true);
+
+  table.get_element("my column", 0, &success);
+  TEST("Get element from non-existing column", success==false, true);
+
+  table.get_element("x coord", 2, &success);
+  TEST("Get element from non-existing row", success==false, true);
+
+
+  success = table.set_element("y coord", 0, 9.99);
+  TEST("Set existing element returns true", success==true, true);
+  val = table.get_element("y coord", 0, &success);
+  TEST("Set existing element", (val==9.99 && success==true), true);
+  
+  success = table.set_element("my column", 0, 1234);
+  TEST("Set element in non-existing column returns false", success==false, true);
+
+  success = table.set_element("x coord", 2, 1234);
+  TEST("Set element in non-existing row returns false", success==false, true);
+}
+
+
+
+//========================================================================
 // Run a series of tests
 //========================================================================
 void test_table()
@@ -125,6 +180,8 @@ void test_table()
   test_table1();
 
   test_table2();
+
+  test_table3();
 }
 
 
