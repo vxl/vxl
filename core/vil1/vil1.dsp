@@ -702,6 +702,9 @@ SOURCE=.\vil1_warp.h
 SOURCE=.\vil1_warp.txx
 # End Source File
 # Begin Source File
+SOURCE=.\file_formats/vil1_viff_support.h
+# End Source File
+# Begin Source File
 SOURCE=.\file_formats/vil1_viffheader.h
 # End Source File
 # Begin Source File
