@@ -10,9 +10,9 @@
 // \brief Pixel type for 24 bit images
 //
 //  Currently also includes the following `utilities':
-//   -# conversion to ubyte (luminance of vil_rgb: weights (0.299,0.587,0.114)).
-//   -# min and max of vil_rgbcell values, useful for morphological operations.
-//   -# arithmetic operations
+//   - conversion to ubyte (luminance of vil_rgb: weights (0.299,0.587,0.114)).
+//   - min and max of vil_rgbcell values, useful for morphological operations.
+//   - arithmetic operations
 //
 // \author Peter Vanroose, K.U.Leuven, ESAT/VISICS
 // \date   15 nov. 1997
@@ -42,9 +42,9 @@
 //: This is the appropriate pixel type for 24-bit colour images.
 //
 //    Currently also includes the following `utilities':
-//    -#  conversion to ubyte (luminance of vil_rgb: weights (0.299,0.587,0.114)).
-//    -#  min and max of vil_rgbcell values, useful for morphological operations.
-//    -#  arithmetic operations
+//    -  conversion to ubyte (luminance of vil_rgb: weights (0.299,0.587,0.114)).
+//    -  min and max of vil_rgbcell values, useful for morphological operations.
+//    -  arithmetic operations
 template <class T>
 struct vil_rgb
 {
@@ -176,7 +176,7 @@ bool vil_rgb<T>::operator== (vil_rgb<T> const& o) const
 
 // the following cause compilation errors under Microsoft Visual C++
 // is there some conflict with min and max from the std library ? 
-#ifndef VCL_VC
+#if 0
 template <class T>
 inline
 vil_rgb<T> max(vil_rgb<T> const& a, vil_rgb<T> const& b)
