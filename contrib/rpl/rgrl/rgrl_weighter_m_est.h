@@ -1,7 +1,5 @@
-
 #ifndef rgrl_weighter_m_est_h_
 #define rgrl_weighter_m_est_h_
-
 //:
 // \file
 // \brief  Compute weights in the manner described in the IMCF algorithm
@@ -20,7 +18,7 @@
 // signature weight from the signature error vector of a match (\a
 // use_signature_error ), or neither. \a use_precomputed_signature_wgt
 // has precedence over \a use_signature_error.
-// 
+//
 
 #include <vcl_memory.h>
 class rrel_m_est_obj;
@@ -30,11 +28,11 @@ class rrel_m_est_obj;
 class rgrl_weighter_m_est
   : public rgrl_weighter
 {
-public:
+ public:
   //:  constructor takes a pointer to M estimator objective function
   rgrl_weighter_m_est( vcl_auto_ptr<rrel_m_est_obj>  m_est,
                        bool                          use_signature_error,
-		       bool                          use_precomputed_signature_wgt = false );
+                       bool                          use_precomputed_signature_wgt = false );
 
   ~rgrl_weighter_m_est();
 
@@ -45,7 +43,7 @@ public:
   // Defines type-related functions
   rgrl_type_macro( rgrl_weighter_m_est, rgrl_weighter );
 
-protected:
+ protected:
   vcl_auto_ptr<rrel_m_est_obj> m_est_;
   bool use_signature_error_;
   bool signature_precomputed_;

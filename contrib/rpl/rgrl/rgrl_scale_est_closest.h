@@ -1,6 +1,5 @@
 #ifndef rgrl_scale_est_closest_h_
 #define rgrl_scale_est_closest_h_
-
 //:
 // \file
 // \brief  Implementation of unweighted scale estimator using the closest of the match points.
@@ -29,14 +28,14 @@ class rrel_objective;
 class rgrl_scale_est_closest
   : public rgrl_scale_estimator
 {
-public:
-  //: 
+ public:
+  //:
   //\a obj is the objective function that will be used to estimate a
-  //robust scale.  The one that is commonly used is the MUSE objective 
-  //function. The flag \a do_signature_scale determines whether a signature 
+  //robust scale.  The one that is commonly used is the MUSE objective
+  //function. The flag \a do_signature_scale determines whether a signature
   //covariance will be estimated.
   rgrl_scale_est_closest( vcl_auto_ptr<rrel_objective>  obj,
-			  bool                          do_signature_scale = false );
+                          bool                          do_signature_scale = false );
 
   ~rgrl_scale_est_closest();
 
@@ -54,7 +53,7 @@ public:
   // Defines type-related functions
   rgrl_type_macro( rgrl_scale_est_closest, rgrl_scale_estimator );
 
-private:
+ private:
   //disabled
   rgrl_scale_est_closest( rgrl_scale_est_closest const& );
   rgrl_scale_est_closest& operator=( rgrl_scale_est_closest const& );
@@ -62,11 +61,11 @@ private:
   double
   compute_geometric_scale( rgrl_match_set const& match_set,
                            bool penalize_scaling ) const;
-								
+
   vnl_matrix<double>
   compute_signature_covar( rgrl_match_set const& match_set ) const;
 
-protected:
+ protected:
   bool do_signature_scale_;
   vcl_auto_ptr<rrel_objective> obj_;
 };

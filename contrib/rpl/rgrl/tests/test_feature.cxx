@@ -13,7 +13,6 @@
 
 namespace {
 
-
 void
 test_feature_caster()
 {
@@ -67,7 +66,7 @@ test_feature_point()
 
   {
     testlib_test_begin( "Transform 2D point feature" );
-    
+
     vnl_matrix<double> A( 2, 2 );
     vnl_vector<double> t( 2 );
     vnl_matrix<double> covar( 6, 6 );
@@ -131,8 +130,8 @@ test_feature_trace_pt()
   testlib_test_perform( pf2d->is_type( rgrl_feature_trace_pt::type_id() ) &&
                         pf2d->location() == loc2d &&
                         !pf2d->error_projector().is_identity() &&
-			((rgrl_feature_trace_pt*) trace_ptr) -> length() == 0 &&
-			((rgrl_feature_trace_pt*) trace_ptr) -> radius() == 0 );
+                        ((rgrl_feature_trace_pt*) trace_ptr) -> length() == 0 &&
+                        ((rgrl_feature_trace_pt*) trace_ptr) -> radius() == 0 );
 
   testlib_test_begin( "4D trace point feature" );
   rgrl_feature_sptr pf4d = new rgrl_feature_trace_pt( loc4d, dir4d );
@@ -145,7 +144,7 @@ test_feature_trace_pt()
 
   {
     testlib_test_begin( "Transform 2D trace point, location" );
-    
+
     vnl_matrix<double> A( 2, 2 );
     vnl_vector<double> t( 2 );
     vnl_matrix<double> covar( 6, 6 );
@@ -177,8 +176,6 @@ test_feature_trace_pt()
     TEST_NEAR( "                        , error projector",
                ( result->error_projector() - outer_product( x_nor, x_nor ) ).absolute_value_max(), 0, 1e-6 );
   }
-
-  
 }
 
 
@@ -207,7 +204,7 @@ test_feature_face()
                         !pf2d->error_projector().is_identity() );
 
   TEST_NEAR( "2d face point normal",
-	     (face_ptr->normal() - nor2d).inf_norm(), 0.0, 1e-6 );   // need the downcast here
+             (face_ptr->normal() - nor2d).inf_norm(), 0.0, 1e-6 );   // need the downcast here
 
  //  Test error projector in 2d
 
@@ -218,17 +215,17 @@ test_feature_face()
   double dist = 3.0;
   vnl_vector<double> test_pt2d( loc2d + 10.0 * dir2d + dist * nor2d );
   vnl_vector<double> error_vect2d( test_pt2d - loc2d );
-  
+
   TEST_NEAR( "2d face point error projector",
-	     vnl_math_abs( dot_product( pf2d->error_projector() * error_vect2d, error_vect2d ) ),
-	     dist*dist, 1e-6 );
+             vnl_math_abs( dot_product( pf2d->error_projector() * error_vect2d, error_vect2d ) ),
+             dist*dist, 1e-6 );
 
 
   //  Onto testing the transformation
 
   {
     testlib_test_begin( "Transform 2D face point, location" );
-    
+
     vnl_matrix<double> A( 2, 2 );
     vnl_vector<double> t( 2 );
     vnl_matrix<double> covar( 6, 6, vnl_matrix_identity );
@@ -245,7 +242,7 @@ test_feature_face()
                           result->is_type( rgrl_feature_face_pt::type_id() ) &&
                           result->location() == xform.map_location( loc2d ) &&
                           !result->error_projector().is_identity() );
-    
+
     // affine transforms do not preseve angles, calculate the
     // transformed normal by transforming the tangent and re-computing
     // the normal.
@@ -256,9 +253,7 @@ test_feature_face()
     TEST_NEAR( "                        , error projector",
                ( result->error_projector() - outer_product( x_nor, x_nor ) ).absolute_value_max(), 0, 1e-6 );
   }
-
 }
-
 
 } // end anonymous namespace
 

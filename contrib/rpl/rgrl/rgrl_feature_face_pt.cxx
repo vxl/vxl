@@ -1,15 +1,13 @@
-
 #include "rgrl_feature_face_pt.h"
 #include "rgrl_transformation.h"
 #include <vnl/algo/vnl_svd.h>
-#include <vcl_iostream.h>
 #include <vcl_cassert.h>
 #include "rgrl_util.h"
 
 rgrl_feature_face_pt ::
-rgrl_feature_face_pt( vnl_vector< double > const& location, 
-		      vnl_vector< double > const& normal )
-  : location_( location ), normal_( normal ), 
+rgrl_feature_face_pt( vnl_vector< double > const& location,
+                      vnl_vector< double > const& normal )
+  : location_( location ), normal_( normal ),
     error_proj_( normal.size(), normal.size() ),
     subspace_cached_( false )
 {
@@ -25,15 +23,15 @@ rgrl_feature_face_pt()
 }
 
 
-vnl_vector<double> const& 
-rgrl_feature_face_pt :: 
+vnl_vector<double> const&
+rgrl_feature_face_pt ::
 location() const
 {
   return location_;
 }
 
-vnl_matrix<double> const& 
-rgrl_feature_face_pt :: 
+vnl_matrix<double> const&
+rgrl_feature_face_pt ::
 error_projector() const
 {
   return error_proj_;
@@ -46,7 +44,7 @@ num_constraints() const
   return 1;
 }
 
-vnl_vector<double> const& 
+vnl_vector<double> const&
 rgrl_feature_face_pt :: normal() const
 {
   return normal_;
@@ -68,8 +66,8 @@ tangent_subspace()
   return tangent_subspace_;
 }
 
-rgrl_feature_sptr 
-rgrl_feature_face_pt :: 
+rgrl_feature_sptr
+rgrl_feature_face_pt ::
 transform( rgrl_transformation const& xform ) const
 {
   rgrl_feature_face_pt* face_ptr = new rgrl_feature_face_pt();

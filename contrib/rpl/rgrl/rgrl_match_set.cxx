@@ -1,14 +1,13 @@
+#include "rgrl_match_set.h"
 //:
 // \file
 // \brief  Represents a set of matches.
 // \author Amitha Perera
 // \date 14 Nov 2002
 
-#include "rgrl_match_set.h"
 #include "rgrl_feature_sptr.h"
 
 #include <vcl_vector.h>
-#include <vcl_algorithm.h>
 #include <vcl_cassert.h>
 
 rgrl_match_set::
@@ -27,7 +26,6 @@ rgrl_match_set( const vcl_type_info& from_type,
     num_constraints_per_match_( 0 )
 {
 }
-
 
 
 rgrl_match_set::size_type
@@ -80,19 +78,19 @@ clear()
 }
 
 
-void 
+void
 rgrl_match_set ::
 add_feature_and_matches( rgrl_feature_sptr                      from_feature,
                          rgrl_feature_sptr                      mapped_feature,
-			 vcl_vector< rgrl_feature_sptr > const& matching_to )
+                         vcl_vector< rgrl_feature_sptr > const& matching_to )
 {
   vcl_vector< rgrl_feature_sptr >::const_iterator to_itr;
-  
+
   //  Check to make sure all features involve the same feature types
 
-  assert( from_feature->is_type( *(this->from_type_) ) );
-  for( to_itr = matching_to.begin(); to_itr != matching_to.end(); ++to_itr ) {
-    assert( (*to_itr)->is_type( *(this->to_type_ ) ) );
+  assert ( from_feature->is_type( *(this->from_type_) ) );
+  for ( to_itr = matching_to.begin(); to_itr != matching_to.end(); ++to_itr ) {
+    assert ( (*to_itr)->is_type( *(this->to_type_ ) ) );
   }
 
   // Add from and xformed from
@@ -105,32 +103,32 @@ add_feature_and_matches( rgrl_feature_sptr                      from_feature,
   vcl_vector<match_info> blank;
   matches_and_weights_.push_back( blank );
   for ( to_itr = matching_to.begin(); to_itr != matching_to.end(); ++to_itr )
-    {
-      double sig_wgt = from_feature->absolute_signature_weight( *to_itr );
-      matches_and_weights_.back().push_back( match_info( *to_itr, sig_wgt ));
-    }
+  {
+    double sig_wgt = from_feature->absolute_signature_weight( *to_itr );
+    matches_and_weights_.back().push_back( match_info( *to_itr, sig_wgt ));
+  }
 }
 
 
-void 
+void
 rgrl_match_set ::
 add_feature_matches_and_weights( rgrl_feature_sptr                      from_feature,
-				 rgrl_feature_sptr                      mapped_feature,
-				 vcl_vector< rgrl_feature_sptr > const& matching_to,
-				 vcl_vector< double > const&            signature_weights )
+                                 rgrl_feature_sptr                      mapped_feature,
+                                 vcl_vector< rgrl_feature_sptr > const& matching_to,
+                                 vcl_vector< double > const&            signature_weights )
 {
   vcl_vector< rgrl_feature_sptr >::const_iterator to_itr;
-  
+
   //  Check to make sure all features involve the same feature types
 
-  assert( from_feature->is_type( *(this->from_type_ ) ) );
-  for( to_itr = matching_to.begin(); to_itr != matching_to.end(); ++to_itr ) {
-    assert( (*to_itr)->is_type( *(this->to_type_ ) ) );
+  assert ( from_feature->is_type( *(this->from_type_ ) ) );
+  for ( to_itr = matching_to.begin(); to_itr != matching_to.end(); ++to_itr ) {
+    assert ( (*to_itr)->is_type( *(this->to_type_ ) ) );
   }
 
-  // Make sure the 
+  // Make sure the
 
-  assert( matching_to.size() == signature_weights.size() );
+  assert ( matching_to.size() == signature_weights.size() );
 
   // Add from and xformed from
 
@@ -144,12 +142,12 @@ add_feature_matches_and_weights( rgrl_feature_sptr                      from_fea
   matches_and_weights_.push_back( blank );
   for ( to_itr = matching_to.begin(), s_itr = signature_weights.begin();
         to_itr != matching_to.end(); ++to_itr,  ++s_itr )
-    {
-      matches_and_weights_.back().push_back( match_info( *to_itr, *s_itr ));
-    }
+  {
+    matches_and_weights_.back().push_back( match_info( *to_itr, *s_itr ));
+  }
 }
 
-void 
+void
 rgrl_match_set ::
 add_feature_and_match( rgrl_feature_sptr from_feature,
                        rgrl_feature_sptr mapped_feature,
@@ -158,8 +156,8 @@ add_feature_and_match( rgrl_feature_sptr from_feature,
 {
   //  Check to make sure all features involve the same feature types
 
-  assert( from_feature->is_type( *(this->from_type_ ) ) );
-  assert( matching_to->is_type( *(this->to_type_ ) ) );
+  assert ( from_feature->is_type( *(this->from_type_ ) ) );
+  assert ( matching_to->is_type( *(this->to_type_ ) ) );
 
   // Add from and xformed from
 
@@ -176,19 +174,19 @@ void
 rgrl_match_set::
 remap_from_features( rgrl_transformation const& trans )
 {
-  assert( from_features_.size() == xformed_from_features_.size() );
+  assert ( from_features_.size() == xformed_from_features_.size() );
 
   vcl_vector<rgrl_feature_sptr>::size_type i = 0;
-  for( ; i < from_features_.size(); ++i ) {
+  for ( ; i < from_features_.size(); ++i ) {
     xformed_from_features_[i] = from_features_[i]->transform( trans );
   }
 }
 
-unsigned int 
+unsigned int
 rgrl_match_set::
 num_constraints_per_match() const
 {
-  if ( !num_constraints_per_match_ ) 
+  if ( !num_constraints_per_match_ )
     set_num_constraints_per_match();
 
   return num_constraints_per_match_;
@@ -202,8 +200,8 @@ set_num_constraints_per_match() const
   typedef FIter::to_iterator TIter;
 
   bool has_to_features = false;
-  for( FIter fi = this->from_begin(); fi != this->from_end(); ++fi ) {
-    for( TIter ti = fi.begin(); ti != fi.end(); ++ti ) {
+  for ( FIter fi = this->from_begin(); fi != this->from_end(); ++fi ) {
+    for ( TIter ti = fi.begin(); ti != fi.end(); ++ti ) {
       num_constraints_per_match_ = ti.to_feature()->num_constraints();
       has_to_features = true;
       break;
@@ -219,36 +217,35 @@ set_num_constraints_per_match() const
 rgrl_match_set::match_info::
 match_info( rgrl_feature_sptr to_feat )
   : to_feature( to_feat ),
-    geometric_weight( -1.0 ), 
+    geometric_weight( -1.0 ),
     signature_weight( 1.0 ),
-    cumulative_weight( -1.0 ) 
+    cumulative_weight( -1.0 )
 {
 }
 
 
 rgrl_match_set::match_info::
 match_info( rgrl_feature_sptr to_feat,
-            double geometric_wgt, 
+            double geometric_wgt,
             double signature_wgt,
             double cumulative_wgt )
   : to_feature( to_feat ),
-    geometric_weight( geometric_wgt ), 
+    geometric_weight( geometric_wgt ),
     signature_weight( signature_wgt ),
-    cumulative_weight( cumulative_wgt ) 
+    cumulative_weight( cumulative_wgt )
 {
-} 
+}
 
 
 rgrl_match_set::match_info::
 match_info( rgrl_feature_sptr to_feat,
-	    double signature_wgt )
+            double signature_wgt )
   : to_feature( to_feat ),
     geometric_weight( -1.0 ),
     signature_weight( signature_wgt ),
-    cumulative_weight( -1.0 ) 
+    cumulative_weight( -1.0 )
 {
-} 
-
+}
 
 
 // ---------------------------------------------------------------------------
@@ -405,7 +402,7 @@ to_feature() const
 double
 rgrl_match_set_from_to_iterator::
 geometric_weight() const
-{ 
+{
   return itr_->geometric_weight;
 }
 
@@ -453,7 +450,7 @@ set_cumulative_weight( double cum_wgt )
 rgrl_match_set_from_to_iterator::
 rgrl_match_set_from_to_iterator( MatchInfoIter const& itr )
   : itr_( itr )
-{ 
+{
 }
 
 
@@ -556,7 +553,6 @@ rgrl_match_set_const_from_iterator( rgrl_match_set const* ms,
 }
 
 
-
 // ---------------------------------------------------------------------------
 //                                                      const from to iterator
 //
@@ -610,7 +606,7 @@ to_feature() const
 double
 rgrl_match_set_const_from_to_iterator::
 geometric_weight() const
-{ 
+{
   return itr_->geometric_weight;
 }
 
@@ -634,5 +630,5 @@ cumulative_weight( ) const
 rgrl_match_set_const_from_to_iterator::
 rgrl_match_set_const_from_to_iterator( MatchInfoIter const& itr )
   : itr_( itr )
-{ 
+{
 }
