@@ -211,10 +211,10 @@ bool vgui_viewer3D_tableau::handle(const vgui_event& e)
       vcl_cerr << "-";
       if (debug) {
         vcl_cerr << vul_sprintf("spin_data->delta_r %f %f %f %f",
-                            spin_data->delta_r[0],
-                            spin_data->delta_r[1],
-                            spin_data->delta_r[2],
-                            spin_data->delta_r[3]) << vcl_endl;
+                                spin_data->delta_r[0],
+                                spin_data->delta_r[1],
+                                spin_data->delta_r[2],
+                                spin_data->delta_r[3]) << vcl_endl;
       }
 
       add_quats(spin_data->delta_r, lastpos.quat, this->token.quat);

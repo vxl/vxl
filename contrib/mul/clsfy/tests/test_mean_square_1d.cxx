@@ -5,10 +5,7 @@
 // Test construction, IO etc
 
 #include <vcl_iostream.h>
-#include <vcl_iomanip.h>
-#include <vcl_ios.h>
 #include <vcl_string.h>
-#include <vcl_cmath.h>
 #include <clsfy/clsfy_mean_square_1d.h>
 #include <clsfy/clsfy_mean_square_1d_builder.h>
 #include <vsl/vsl_binary_loader.h>
@@ -21,15 +18,15 @@
 //: Tests the clsfy_mean_square_1d class
 void test_adaboost()
 {
-  vcl_cout << "*************************************\n"
+  vcl_cout << "**************************************\n"
            << " Testing clsfy_mean_square_1d_builder\n"
-           << "*************************************\n";
+           << "**************************************\n";
 
 
   // Create +ve and -ve sets of data
   pdf1d_gaussian pos_model(1,3);
   pdf1d_gaussian neg_model(6,3);
-  
+
   pdf1d_gaussian_sampler pos_sampler;
   pdf1d_gaussian_sampler neg_sampler;
 
@@ -63,9 +60,8 @@ void test_adaboost()
   clsfy_mean_square_1d_builder mean_square_builder;
   clsfy_classifier_1d* mean_square_clsfr=mean_square_builder.new_classifier();
   double error1= mean_square_builder.build(*mean_square_clsfr,
-                                        neg_samples, neg_wts,
-                                        pos_samples, pos_wts
-                                        );
+                                           neg_samples, neg_wts,
+                                           pos_samples, pos_wts);
 
 
   // build second classifier by combining pos and neg samples
@@ -88,12 +84,12 @@ void test_adaboost()
 
   clsfy_classifier_1d* mean_square_clsfr2=mean_square_builder.new_classifier();
   double error2=mean_square_builder.build(*mean_square_clsfr2,
-                                            egs,
-                                            wts,
-                                            outputs);
+                                          egs,
+                                          wts,
+                                          outputs);
 
-  TEST( "Clsfrs the same",*mean_square_clsfr2 == *mean_square_clsfr, true );
-  
+  TEST( "Clsfrs the same", *mean_square_clsfr2, *mean_square_clsfr);
+
   vcl_cout<<*mean_square_clsfr2<<vcl_endl;
 
   vcl_cout<<*mean_square_clsfr<<vcl_endl;
@@ -136,7 +132,6 @@ void test_adaboost()
   // simple test for binary threshold
   TEST( "tpr>0.7", tpr>0.7, true );
   TEST( "fpr<0.3", fpr<0.3, true );
-
 
 
   vcl_cout << "******************************\n"
