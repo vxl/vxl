@@ -19,6 +19,7 @@
 #include <bseg/strk/strk_feature_capture_process.h>
 #include <bseg/strk/strk_info_model_tracker_process.h>
 #include <bseg/strk/strk_info_tracker_process.h>
+#include <bseg/strk/strk_snippet_extractor_process.h>
 #include <bseg/strk/strk_track_display_process.h>
 
 int main() { return 0; }
