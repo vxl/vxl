@@ -5,15 +5,10 @@
 
 PROJECT(allvxl)
 
-SET(BUILD_TESTS "NO" CACHE BOOL "Should the tests be build?")
+OPTION(BUILD_TESTS "Should the tests be built?" NO)
+OPTION(BUILD_SHARED_LIBS "Should shared libraries be the default?" NO)
 
 SUBDIRS(vcl v3p vxl oxl gel mul)
-
-# This will cause "deep" dependencies to be generated, but that is
-# good. Generate dependencies only for vxl stuff.
-#
-INCLUDE_REGULAR_EXPRESSION( "^([vrogm](.|..|...|....)l/.+)|vcl_.+$" )
-
 
 # For out of place builds, the configure generated headers are in the
 # binary directory
