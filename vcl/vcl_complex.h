@@ -33,14 +33,21 @@
 #elif defined(VCL_SUNPRO_CC)
 # include "sunpro/vcl_complex.h"
 
-// ---------- SGI 730
-#elif defined(VCL_SGI_CC_730)
+// ---------- SGI 7*0
+#elif defined(VCL_SGI_CC_7)
 #include  "sgi/vcl_complex.h"
 
 // ---------- ISO
 #else
 # include "iso/vcl_complex.h"
 #endif
+
+inline vcl_complex<double> operator*(float c, vcl_complex<double> const &z) { return z * (double)c; }
+inline vcl_complex<double> operator*(vcl_complex<double> const &z, float c) { return z * (double)c; }
+inline vcl_complex<float > operator*(double c, vcl_complex<float> const &z) { return z * (float)c; }
+inline vcl_complex<float > operator*(vcl_complex<float> const &z, double c) { return z * (float)c; }
+inline vcl_complex<double> operator/(vcl_complex<double> const &z, float c) { return z / (double)c; }
+inline vcl_complex<float > operator/(vcl_complex<float> const &z, double c) { return z / (float)c; }
 
 //--------------------------------------------------------------------------------
 
