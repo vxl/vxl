@@ -117,6 +117,9 @@ SOURCE=.\bsol_point_index_3d.cxx
 SOURCE=.\bsol_intrinsic_curve_2d.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\bsol_intrinsic_curve_3d.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\Templates/vbl_smart_ptr+bsol_hough_line_index-.cxx
 # End Source File
 # Begin Source File
@@ -124,6 +127,9 @@ SOURCE=.\Templates/vbl_smart_ptr+bsol_intrinsic_curve_2d-.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\Templates/vbl_array_2d+vcl_vector+vcl_vector+vsol_point_3d_sptr--~-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vbl_smart_ptr+bsol_intrinsic_curve_3d-.cxx
 # End Source File
 # End Group
 # Begin Group "Header Files"
@@ -151,6 +157,12 @@ SOURCE=.\bsol_intrinsic_curve_2d.h
 # End Source File
 # Begin Source File
 SOURCE=.\bsol_intrinsic_curve_2d_sptr.h
+# End Source File
+# Begin Source File
+SOURCE=.\bsol_intrinsic_curve_3d.h
+# End Source File
+# Begin Source File
+SOURCE=.\bsol_intrinsic_curve_3d_sptr.h
 # End Source File
 # End Group
 # End Target
