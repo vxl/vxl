@@ -16,7 +16,7 @@ SUBDIRS += strk
 # markov random fields
 SUBDIRS += bmrf
 
-# misc 
+# misc
 #SUBDIRS += bcons
 
 # segmentation view library
@@ -25,15 +25,6 @@ SUBDIRS += segv
 # segmentation application executables
 SUBDIRS += sbin
 
-#######################################
-include ${IUEROOT}/config/top-params.mk
-#######################################
-
-# segmentation tests
-ifndef NOTEST
- SUBDIRS += tests
-endif
-
-######################################
-include ${IUEROOT}/config/top-rules.mk
-######################################
+################################
+include ${IUEROOT}/config/top.mk
+################################
