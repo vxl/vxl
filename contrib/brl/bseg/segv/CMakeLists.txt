@@ -21,4 +21,8 @@ IF(HAS_VGUI)
 
  TARGET_LINK_LIBRARIES(segv bgui vgui strk sdet bsol brip vtol vdgl vsol vil1 vbl)
 
+ IF (BUILD_TESTING)
+  SUBDIRS(tests)
+ ENDIF (BUILD_TESTING)
+
 ENDIF(HAS_VGUI)
