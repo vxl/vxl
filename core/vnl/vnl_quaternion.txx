@@ -200,7 +200,7 @@ vnl_quaternion<T> vnl_quaternion<T>::conjugate () const {
 template <class T>
 vnl_quaternion<T> vnl_quaternion<T>::inverse () const {
   vnl_quaternion<T> inv = this->conjugate();
-  inv /= ::dot_product(*this, *this);
+  inv /= vnl_c_vector<T>::dot_product(data, data, 4);
   return inv;
 }
 

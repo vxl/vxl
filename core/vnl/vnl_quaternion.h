@@ -210,7 +210,7 @@ inline vnl_vector<T> vnl_quaternion<T>::imaginary () const {
 //: Copies and returns the real part.
 template <class T>
 inline T vnl_quaternion<T>::real () const {
-  return this->get(3);
+  return (*this)[3];
 }
 
 //: operator=
