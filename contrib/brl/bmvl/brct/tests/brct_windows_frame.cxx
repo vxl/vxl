@@ -581,7 +581,7 @@ void brct_windows_frame::load_status()
   }
 }
 
-static write_vrml_header(vcl_ofstream& str)
+static void write_vrml_header(vcl_ofstream& str)
 {
   str << "#VRML V2.0 utf8 \n";
   str << "Background {  \n";
@@ -606,7 +606,7 @@ static write_vrml_header(vcl_ofstream& str)
   str << "  coord Coordinate{\n";
   str << "   point[\n";
 }
-static write_vrml_trailer(vcl_ofstream& str)
+static void write_vrml_trailer(vcl_ofstream& str)
 {
 str << "  ] \n";
 str << "  }\n";

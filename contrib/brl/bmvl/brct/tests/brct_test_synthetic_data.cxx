@@ -11,7 +11,7 @@
 #include <vdgl/vdgl_digital_curve.h>
 #include <vdgl/vdgl_digital_curve_sptr.h>
 #include <vsol/vsol_point_2d.h>
-#include "../kalman_filter.h"
+#include "../brct_epi_reconstructor.h"
 
 #define Assert(x) { vcl_cout << #x "\t\t\t test "; \
   if (x) { ++success; vcl_cout << "PASSED\n"; } else { ++failures; vcl_cout << "FAILED\n"; } }
@@ -150,7 +150,7 @@ int main(int argc, char * argv[])
 //  vcl_string file = "c:/videos/PoliceCar2/track_data/par.txt";
   vcl_string path = "c:/vxl/vxl/contrib/brl/bmvl/brct/tests/";
   int success=0, failures=0;
-  kalman_filter kf;
+  brct_epi_reconstructor kf;
   vnl_double_3x4 P = generate_P(generate_K());
   vcl_vector<vcl_vector<vdgl_digital_curve_sptr> > tracks;
   generate_tracks(P, tracks);
