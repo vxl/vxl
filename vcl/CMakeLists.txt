@@ -8,6 +8,7 @@ SOURCE_FILES( vcl_sources
 vcl_cmath
 vcl_cassert
 vcl_cstdlib
+vcl_deprecated
 )
 
 IF(WIN32)

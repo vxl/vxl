@@ -3,7 +3,7 @@
 
 // This is vxl/vul/vul_canonical_path.h
 
-#include <vcl_deprecated.h>
+#include <vcl_deprecated_header.h>
 
 #include <vul/vul_expand_path.h>
 

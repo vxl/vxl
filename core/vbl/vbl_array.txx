@@ -3,7 +3,7 @@
 //This is vbl/vbl_array.txx
 
 // deprecated
-#include <vcl_deprecated.h>
+#include <vcl_deprecated_header.h>
 #include <vbl/vbl_array_1d.txx>
 
 

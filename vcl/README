@@ -31,9 +31,9 @@ vcl_rtti.h
 vcl_stlfwd.h
   Forward declare the most commonly used parts of the STL, if possible.
 
-vcl_deprecated.h
+vcl_deprecated_header.h
   Including this causes a preprocessor or compiler warning to be emitted. So
-  include <vcl_deprecated.h> in header files that are to be deprecated.
+  include <vcl_deprecated_header.h> in header files that are to be deprecated.
 
 
 tests directory

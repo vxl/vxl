@@ -19,7 +19,7 @@
 
 #include <vcl_iosfwd.h>
 #include <vcl_vector.h>
-#include <vcl_deprecated.h>
+#include <vcl_deprecated_header.h>
 
 template </*typename*/class T> void vbl_binary_save(vcl_ostream &,
                                                     vcl_vector<T> const &);

@@ -18,7 +18,7 @@
 // \endverbatim
 //---------------------------------------------------------------------------
 
-#include <vcl_deprecated.h>
+#include <vcl_deprecated_header.h>
 
 #include <vbl/vbl_sparse_array_1d.h>
 #define vbl_sparse_array vbl_sparse_array_1d

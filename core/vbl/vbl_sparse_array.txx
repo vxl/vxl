@@ -3,7 +3,7 @@
 #define vbl_sparse_array_txx_
 
 // deprecated
-#include <vcl_deprecated.h>
+#include <vcl_deprecated_header.h>
 #include "vbl_sparse_array_1d.txx"
 
 #undef VBL_SPARSE_ARRAY_INSTANTIATE

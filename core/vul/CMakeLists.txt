@@ -26,7 +26,6 @@ vul_psfile
 vul_trace
 vul_user_info
 vul_redirector
-vul_deprecated
 )
 
 AUX_SOURCE_DIRECTORY(Templates vul_sources)
