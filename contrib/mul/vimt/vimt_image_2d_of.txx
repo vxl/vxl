@@ -1,14 +1,11 @@
 #ifndef vimt_image_2d_of_txx_
 #define vimt_image_2d_of_txx_
-
 //:
 //  \file
 //  \brief Container for vil2_image_view<T> + transform
 //  \author Tim Cootes
 
-#include <vcl_cstdlib.h>
 #include <vcl_string.h>
-
 #include <vcl_cassert.h>
 #include <vsl/vsl_indent.h>
 #include <vimt/vimt_image_2d_of.h>
@@ -52,8 +49,6 @@ void vimt_image_2d_of<T>::set_valid_region(int x0, unsigned nx, int y0, unsigned
 }
 
 
-
-
 //: Arrange that this is window on given image.
 //  I.e. plane(i) points to im.plane(i) + offset
 //  The world2im transform is set to match
@@ -61,7 +56,7 @@ void vimt_image_2d_of<T>::set_valid_region(int x0, unsigned nx, int y0, unsigned
 //  in world co-ords.
 template<class T>
 void vimt_image_2d_of<T>::set_to_window(const vimt_image_2d_of& im,
-                                     unsigned x0, unsigned nx, unsigned y0, unsigned ny)
+                                        unsigned x0, unsigned nx, unsigned y0, unsigned ny)
 {
   assert(this!=&im);
   image_.set_to_window(im.image(),x0,nx,y0,ny);
@@ -82,7 +77,7 @@ vimt_image_2d_of<T> vimt_image_2d_of<T>::window(unsigned x0, unsigned nx,
 {
   vimt_transform_2d trans;
   trans.set_translation(-double(x0),-double(y0));
-  return vimt_image_2d_of<T>(image_.window(x0,ny,y0,ny),trans*world2im_);
+  return vimt_image_2d_of<T>(vil2_window(image_,x0,ny,y0,ny),trans*world2im_);
 }
 
 
