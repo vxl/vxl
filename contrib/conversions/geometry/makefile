@@ -1,11 +1,13 @@
 # This is the geometry conversions directory makefile
-ifneq (,$(wildcard $(IUEROOT)/SpatialObjects))
 
-USES := vxl gel COOL GeneralUtility SpatialObjects Numerics
-IMMEDIATE_LIBS := -lvdgl -vbl -lDigitalGeometry -lSpatialBasics -lBasics
+USES := vxl gel
+IMMEDIATE_LIBS := -lvdgl -vbl
 
 SUBDIRS := tests
 
+ifneq (,$(wildcard $(IUEROOT)/SpatialObjects))
+USES += COOL GeneralUtility SpatialObjects Numerics
+IMMEDIATE_LIBS += -lDigitalGeometry -lSpatialBasics -lBasics
 MANPAGE_SOURCES += DigitalCurve_to_vdgl.h
 endif
 
