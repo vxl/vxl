@@ -92,85 +92,70 @@ LINK32=link.exe
 
 # PROP Default_Filter "cpp;c;cxx;rc;def;r;odl;idl;hpj;bat"
 # Begin Source File
-
 SOURCE=.\awfmfc.cpp
 # End Source File
 # Begin Source File
-
 SOURCE=.\awfmfc.rc
 # End Source File
 # Begin Source File
-
 SOURCE=.\awfmfcDoc.cpp
 # End Source File
 # Begin Source File
-
 SOURCE=.\awfmfcView.cpp
 # End Source File
 # Begin Source File
-
 SOURCE=.\MainFrm.cpp
 # End Source File
 # Begin Source File
-
 SOURCE=.\StdAfx.cpp
 # End Source File
 # End Group
 # Begin Group "Header Files"
-
 # PROP Default_Filter "h;hpp;hxx;hm;inl"
 # Begin Source File
-
 SOURCE=.\awfmfc.h
 # End Source File
 # Begin Source File
-
 SOURCE=.\awfmfcDoc.h
 # End Source File
 # Begin Source File
-
 SOURCE=.\awfmfcView.h
 # End Source File
 # Begin Source File
-
 SOURCE=.\MainFrm.h
 # End Source File
 # Begin Source File
-
 SOURCE=.\resource.h
 # End Source File
 # End Group
 # Begin Group "Resource Files"
-
 # PROP Default_Filter "ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe"
 # Begin Source File
-
 SOURCE=.\res\awfmfc.ico
 # End Source File
 # Begin Source File
-
 SOURCE=.\res\awfmfc.rc2
 # End Source File
 # Begin Source File
-
 SOURCE=.\res\awfmfcDoc.ico
 # End Source File
 # Begin Source File
-
 SOURCE=.\res\Toolbar.bmp
 # End Source File
-# End Group
 # Begin Source File
-
 SOURCE=.\ReadMe.txt
 # End Source File
 # Begin Source File
-
 SOURCE=.\awfmfc.rc
 # End Source File
 # Begin Source File
-
 SOURCE=.\StdAfx.h
+# End Source File
+# Begin Source File
+SOURCE=.\awfmfc.rc
+# End Source File
+# Begin Source File
+SOURCE=.\resource.h
 # End Source File
 # End Target
 # End Project
