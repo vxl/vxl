@@ -14,10 +14,8 @@ Using operator():        Mean: 2505us  +/-25us
 Using explicit pointers: Mean: 1900us  +/-250us
 
 
-
 550MHz Linux box, gcc-2.95.2
 -----------------------------
-
 Using -O2:
 Using operator():        Mean: 3350us  +/-250us
 Using explicit pointers: Mean: 2550us  +/-250us
