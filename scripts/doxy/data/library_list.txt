@@ -19,65 +19,65 @@ book: contrib/mul : Manchester University Library overview documentation
 book: contrib/tbl : The Image Processing Library
 
 package: :pserver:anonymous@cvs.vxl.sourceforge.net:/cvsroot/vxl core Core Vision Libraries
-core vsl vsl_ build
-core vnl vnl_ build vxl/vsl
-core vbl vbl_ build vxl/vsl
-core vgl vgl_ build vxl/vsl vxl/vnl
-core vil vil_ build vxl/vnl
-core vul vul_ build vxl/vsl
-core vpl vpl_ build
+core vsl     vsl_     build
+core vnl     vnl_     build core/vsl
+core vbl     vbl_     build core/vsl
+core vgl     vgl_     build core/vsl core/vnl
+core vil     vil_     build core/vnl
+core vul     vul_     build core/vsl
+core vpl     vpl_     build
 
 package: :pserver:anonymous@cvs.vxl.sourceforge.net:/cvsroot/vxl core Level-2 Vision Libraries
-core vil1 vil1_ build vxl/vil
-core vidl vidl_ build vxl/vbl vxl/vul vxl/vil1
-core vcsl vcsl_ build vxl/vnl vxl/vbl
-core vgui vgui_ build vxl/vgl vxl/vpl vxl/vbl vxl/vul vxl/vnl vxl/vil1
+core vil1    vil1_    build core/vil
+core vidl    vidl_    build core/vbl core/vul core/vil1
+core vcsl    vcsl_    build core/vnl core/vbl
+core vgui    vgui_    build core/vgl core/vpl core/vbl core/vul core/vnl core/vil1
 
 package: :pserver:anonymous@cvs.vxl.sourceforge.net:/cvsroot/vxl core Test Framework
 core testlib testlib_ build
 
 package: :pserver:anonymous@cvs.vxl.sourceforge.net:/cvsroot/vxl contrib/mul Manchester University Libraries
-contrib/mul mbl    mbl_    build vxl/vnl vxl/vgl
-contrib/mul mil    mil_    build mul/mbl vxl/vbl vxl/vil1
-contrib/mul mil3d  mil3d_  build mul/mil
-contrib/mul pdf1d  pdf1d_  build mul/mbl vxl/vbl
-contrib/mul vpdfl  vpdfl_  build mul/mbl
-contrib/mul clsfy  clsfy_  build mul/vpdfl mul/vpdf1d
-contrib/mul vimt   vimt_   build vxl/vil
-contrib/mul vil3d  vil3d_  build vxl/vil
-contrib/mul vimt3d vimt3d_ build mul/vil3d mul/vimt
-contrib/mul mvl2   mvl2_   build mul/vimt mul/ vxl/vul
+contrib/mul mbl    mbl_    build core/vnl core/vgl
+contrib/mul mil    mil_    build contrib/mul/mbl core/vbl core/vil1
+contrib/mul mil3d  mil3d_  build contrib/mul/mil
+contrib/mul pdf1d  pdf1d_  build contrib/mul/mbl core/vbl
+contrib/mul vpdfl  vpdfl_  build contrib/mul/mbl
+contrib/mul clsfy  clsfy_  build contrib/mul/vpdfl contrib/mul/vpdf1d
+contrib/mul vimt   vimt_   build core/vil
+contrib/mul vil3d  vil3d_  build core/vil
+contrib/mul vimt3d vimt3d_ build contrib/mul/vil3d contrib/mul/vimt
+contrib/mul mvl2   mvl2_   build contrib/mul/vimt contrib/mul/ core/vul
 
 package: :pserver:anonymous@cvs.vxl.sourceforge.net:/cvsroot/vxl contrib/tbl Various Image Processing Libraries
-contrib/tbl vipl vipl_ build vxl/vil1
-contrib/tbl vepl vepl_ build tbl/vipl
-contrib/tbl vepl2 vepl2_ build tbl/vipl
+contrib/tbl vipl   vipl_   build core/vil1
+contrib/tbl vepl   vepl_   build contrib/tbl/vipl
+contrib/tbl vepl2  vepl2_  build contrib/tbl/vipl
 
 package: :pserver:anonymous@cvs.vxl.sourceforge.net:/cvsroot/vxl contrib/oxl Oxford University Libraries
 # Need to check dependency order
-contrib/oxl mvl mvl_ build vxl/vnl vxl/vil1 vxl/vbl vxl/vgl vxl/vul
-contrib/oxl osl osl_ build vxl/vnl vxl/vil1 vxl/vgl vxl/vbl
+contrib/oxl mvl    mvl_    build core/vnl core/vil1 core/vbl core/vgl core/vul
+contrib/oxl osl    osl_    build core/vnl core/vil1 core/vgl core/vbl
 
 package: :pserver:anonymous@cvs.vxl.sourceforge.net:/cvsroot/vxl contrib/gel GE Libraries
-contrib/gel geml geml_ build vxl/vil1 vxl/vnl
-contrib/gel vsrl vsrl_ build vxl/vil1 vxl/vnl
-contrib/gel gtrl gtrl_ build vxl/vbl
-contrib/gel vsol vsol_ build vxl/vgl vxl/vnl vxl/vbl vxl/vul
-contrib/gel gst gst_ build vxl/vbl
-contrib/gel vdgl vdgl_ build gel/vsol vxl/vgl
-contrib/gel vtol vtol_ build gel/vdgl
-contrib/gel gmvl gmvl_ build gel/vtol vxl/vil1
-contrib/gel vgel vgel_ build gel/vtol vxl/vil1 vxl/vidl oxl/mvl
-contrib/gel gkll gkll_ build gel/vgel
-contrib/gel vmal vmal_ build gel/vgel oxl/osl
-contrib/gel gevd gevd_ build gel/vtol vxl/vil1
+contrib/gel geml   geml_   build core/vil1 core/vnl
+contrib/gel vsrl   vsrl_   build core/vil1 core/vnl
+contrib/gel gtrl   gtrl_   build core/vbl
+contrib/gel vsol   vsol_   build core/vgl core/vnl core/vbl core/vul
+contrib/gel gst    gst_    build core/vbl
+contrib/gel vdgl   vdgl_   build contrib/gel/vsol core/vgl
+contrib/gel vtol   vtol_   build contrib/gel/vdgl
+contrib/gel gmvl   gmvl_   build contrib/gel/vtol core/vil1
+contrib/gel vgel   vgel_   build contrib/gel/vtol core/vil1 core/vidl contrib/oxl/mvl
+contrib/gel gkll   gkll_   build contrib/gel/vgel
+contrib/gel vmal   vmal_   build contrib/gel/vgel contrib/oxl/osl
+contrib/gel gevd   gevd_   build contrib/gel/vtol core/vil1
 
 package: :pserver:anonymous@cvs.vxl.sourceforge.net:/cvsroot/vxl contrib/rpl RPI libraries
-contrib/rpl rrel rrel_ build mul/mbl vxl/vbl
-contrib/rpl rsdl rsdl_ build vxl/vnl vxl/vbl vxl/vil1
+contrib/rpl rrel   rrel_   build contrib/mul/mbl core/vbl
+contrib/rpl rsdl   rsdl_   build core/vnl core/vbl core/vil1
 
 package: :pserver:anonymous@cvs.vxl.sourceforge.net:/cvsroot/vxl contrib/brl Brown University libraries
-contrib/brl vvid vvid_ build gel/gevd oxl/vgui vxl/vidl vxl/vul
+contrib/brl vvid   vvid_   build contrib/gel/gevd contrib/oxl/vgui core/vidl core/vul
 
 
 
