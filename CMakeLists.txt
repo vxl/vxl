@@ -3,6 +3,12 @@
 #
 #   geoff.cross@crd.ge.com
 
+# VXL can handle this statement, which introduces warnings about deprecations.
+# However, it is commented out for the benefit of those building other projects
+# within the VXL tree, but not fully conforming to CMake 1.4 standards.
+# After a waiting period, this line should be uncommented.
+# CMAKE_MINIMUM_REQUIRED(VERSION 1.4)
+
 PROJECT(allvxl)
 
 SET( LIBRARY_OUTPUT_PATH ${allvxl_BINARY_DIR}/lib CACHE PATH
