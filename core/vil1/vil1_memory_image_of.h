@@ -82,7 +82,7 @@ public:
   vil_memory_image_of& operator=(const vil_memory_image_of& that);
 private:
   // deprecated -- This was used to copy the ROI, which is no longer on image
-  vil_memory_image_of(vil_image const& image, bool) {}
+  vil_memory_image_of(vil_image const&, bool) {}
 };
 
 //: This is a templated declaration of save_jpeg.  No body is provided.
