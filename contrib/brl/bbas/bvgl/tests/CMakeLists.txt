@@ -1,6 +1,6 @@
 # brl/bbas/bvgl/tests/CMakeLists.txt
 
-LINK_LIBRARIES(bvgl vgl vnl )
+LINK_LIBRARIES(bvgl vgl vnl testlib)
 
 ADD_EXECUTABLE(bvgl_test_h_matrix_1d  bvgl_test_h_matrix_1d.cxx)
 ADD_TEST(bvgl_test_h_matrix_1d bvgl_test_h_matrix_1d)
