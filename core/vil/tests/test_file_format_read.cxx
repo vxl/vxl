@@ -183,7 +183,7 @@ test_file_format_read_main( int argc, char* argv[] )
 
   vcl_cout << "Portable aNy Map [pnm]: pbm, pgm, ppm)\n";
   testlib_test_begin( "  1-bit pbm ascii" );
-  testlib_test_perform( test( "ff_grey1bit_true.txt", CheckGrey<bool>( "ff_grey1bit_raw.pbm" ) ) );
+  testlib_test_perform( test( "ff_grey1bit_true.txt", CheckGrey<bool>( "ff_grey1bit_ascii.pbm" ) ) );
   testlib_test_begin( "  1-bit pbm raw" );
   testlib_test_perform( test( "ff_grey1bit_true.txt", CheckGrey<bool>( "ff_grey1bit_raw.pbm" ) ) );
   testlib_test_begin( "  8-bit pgm ascii" );
