@@ -3,7 +3,7 @@
         -lf2c -lm   (in that order)
 */
 
-#include "f2c.h"
+#include "../f2c.h"
 
 /* Common Block Declarations */
 
