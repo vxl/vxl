@@ -25,7 +25,7 @@ CFG=vgl_algo - Win32 Debug
 # PROP AllowPerConfigDependencies 0
 # PROP Scc_ProjName ""
 # PROP Scc_LocalPath ""
-CPP=cl.exe
+CPP=xicl6.exe
 RSC=rc.exe
 
 !IF  "$(CFG)" == "vgl_algo - Win32 Release"
@@ -48,7 +48,7 @@ MTL=midl.exe
 BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
-LIB32=link.exe -lib
+LIB32=xilink6.exe -lib
 # ADD BASE LIB32 /nologo
 # ADD LIB32 /nologo /out:"..\..\Release\vgl_algo.lib"
 
@@ -66,14 +66,13 @@ LIB32=link.exe -lib
 # PROP Target_Dir ""
 MTL=midl.exe
 # ADD BASE CPP /nologo /W3 /Gm /GX /ZI /Od /D "WIN32" /D "_DEBUG" /D "_LIB" /YX /FD /GZ /c
-# ADD CPP /nologo /MDd /W3 /Gm /GX /Zi /Od /Ob2 /I "$(IUEROOT)\vcl\config.win32-vc60" /I "$(IUEROOT)\vcl" /I "$(IUEROOT)\vxl" /D "WIN32" /D "_DEBUG" /D "_LIB" /FR /FD /GZ /c /Zl
-# SUBTRACT CPP /YX
+# ADD CPP /nologo /MDd /W3 /Gm /GX /Zi /Od /Ob2 /I "$(IUEROOT)\vcl\config.win32-vc60" /I "$(IUEROOT)\vcl" /I "$(IUEROOT)\vxl" /D "WIN32" /D "_DEBUG" /D "_LIB" /FD /GZ /c /Zl
 # ADD BASE RSC /l 0x409 /d "_DEBUG"
 # ADD RSC /l 0x409 /d "_DEBUG" /d "_AFXDLL"
 BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
-LIB32=link.exe -lib
+LIB32=xilink6.exe -lib
 # ADD BASE LIB32 /nologo
 # ADD LIB32 /nologo /out:"..\..\Debug\vgl_algo.lib"
 
@@ -85,22 +84,22 @@ LIB32=link.exe -lib
 # Name "vgl_algo - Win32 Debug"
 # Begin Group "Source Files"
 
-# PROP Default_Filter "cpp;c;cxx;rc;def;r;odl;idl;hpj;bat"
+# PROP Default_Filter "cpp;c;cxx"
 # Begin Source File
 
-SOURCE=.\Templates\vgl_homg_operators_2d+double-.cxx
+SOURCE=".\Templates\vgl_homg_operators_2d+double-.cxx"
 # End Source File
 # Begin Source File
 
-SOURCE=.\Templates\vgl_homg_operators_2d+float-.cxx
+SOURCE=".\Templates\vgl_homg_operators_2d+float-.cxx"
 # End Source File
 # Begin Source File
 
-SOURCE=.\Templates\vgl_homg_operators_3d+double-.cxx
+SOURCE=".\Templates\vgl_homg_operators_3d+double-.cxx"
 # End Source File
 # Begin Source File
 
-SOURCE=.\Templates\vgl_homg_operators_3d+float-.cxx
+SOURCE=".\Templates\vgl_homg_operators_3d+float-.cxx"
 # End Source File
 # Begin Source File
 
@@ -109,30 +108,31 @@ SOURCE=.\vgl_algo.cxx
 # End Group
 # Begin Group "Header Files"
 
-# PROP Default_Filter "h;hpp;hxx;hm;inl"
+# PROP Default_Filter "h;hpp;hxx;txx"
 # Begin Source File
 
-SOURCE=.\algo\vgl_homg_operators_2d.h
+SOURCE=.\vgl_homg_operators_2d.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\algo\vgl_homg_operators_2d.txx
+SOURCE=.\vgl_homg_operators_2d.txx
 # End Source File
 # Begin Source File
 
-SOURCE=.\algo\vgl_homg_operators_3d.h
+SOURCE=.\vgl_homg_operators_3d.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\algo\vgl_homg_operators_3d.txx
+SOURCE=.\vgl_homg_operators_3d.txx
 # End Source File
 # Begin Source File
 
-SOURCE=.\algo\vgl_rtree.h
+SOURCE=.\vgl_rtree.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\algo\vgl_rtree.txx
+SOURCE=.\vgl_rtree.txx
 # End Source File
+# End Group
 # End Target
 # End Project
