@@ -45,14 +45,16 @@ void kalman_filter::init()
 
   // initialize the transit matrix
   dt_ = 1.0;
-
+  
+  // initialize the default queue size
+  queue_size_ = 10;
+  
   init_transit_matrix();
 
   init_cam_intrinsic();
   // initialize the observe matrix
   //init_observes();
   init_state_vector();
-
   // init covariant matrix P_
   init_covariant_matrix();
 
@@ -67,6 +69,7 @@ kalman_filter::~kalman_filter()
 
 void kalman_filter::init_transit_matrix()
 {
+  
   for (int i=0; i<6; i++)
     for (int j=0; j<6; j++)
       A_[i][j] = 0.0;
@@ -76,12 +79,15 @@ void kalman_filter::init_transit_matrix()
 
   for (int i=0; i<3; i++)
     A_[i][i+3] = dt_;
-
+  
+#if 0
   for (int i=0; i<6; i++) {
     for (int j=0; j<6; j++)
       vcl_cout<<A_[i][j]<<' ';
     vcl_cout<<'\n';
   }
+#endif //if 0
+  
 }
 
 
@@ -561,7 +567,7 @@ vcl_vector<vgl_point_2d<double> > kalman_filter::get_cur_observes()
 
   vdgl_digital_curve_sptr dc = curves_[cur_pos_-1];
   for(int i=0; i<num_points_; i++){
-    double s = double (i) / num_points_;
+    double s = double (i) / double(num_points_);
     pts[i].set(dc->get_x(s), dc->get_y(s));
   }
   return pts;
@@ -576,7 +582,7 @@ vcl_vector<vgl_point_2d<double> > kalman_filter::get_pre_observes()
 
   vdgl_digital_curve_sptr dc = curves_[cur_pos_];
   for(int i=0; i<num_points_; i++){
-    double s = double (i) / num_points_;
+    double s = double (i) / double(num_points_);
     pts[i].set(dc->get_x(s), dc->get_y(s));
   }
   return pts;
