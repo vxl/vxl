@@ -234,7 +234,7 @@ class A {
   static const bool y = false;
 };
 
-int main() { return 0; }
+int main() { return A::x == 27 && !y ? 0 : 1; }
 #endif // VCL_STATIC_CONST_INIT_INT
 
 //-------------------------------------

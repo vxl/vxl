@@ -3559,7 +3559,7 @@ class A {
   static const int x = 27;
   static const bool y = false;
 };
-int main() { return 0; }
+int main() { return A::x == 27 && !y ? 0 : 1; }
 _ACEOF
 rm -f conftest.$ac_objext
 if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5

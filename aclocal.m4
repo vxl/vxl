@@ -465,12 +465,13 @@ AC_MSG_CHECKING(whether the C++ compiler allows initialization of static const i
 AC_LANG_SAVE
 AC_LANG_CPLUSPLUS
 VCL_COMPILE_CXX
-AC_TRY_COMPILE([
+AC_TRY_RUN([
 class A {
  public:
   static const int x = 27;
   static const bool y = false;
 };
+int main() { return A::x == 27 && !y ? 0 : 1; }
 ],,[VCL_STATIC_CONST_INIT_INT=1;AC_MSG_RESULT(yes)],[VCL_STATIC_CONST_INIT_INT=0;AC_MSG_RESULT(no)])
 export VCL_STATIC_CONST_INIT_INT
 AC_LANG_RESTORE])
