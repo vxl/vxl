@@ -186,6 +186,7 @@ void test_polymorphic_io()
   // Tidy up
   delete b1_in;
   delete b2_in;
+  vsl_delete_all_loaders();
 }
 
 TESTMAIN(test_polymorphic_io);

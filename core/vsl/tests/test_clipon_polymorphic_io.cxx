@@ -220,6 +220,8 @@ void test_clipon_polymorphic_io()
   delete b2_in;
 
   vpl_unlink ("vsl_clipon_polymorphic_io_test.bvl.tmp");
+  vsl_delete_all_loaders();
+
 }
 
 TESTMAIN(test_clipon_polymorphic_io);
