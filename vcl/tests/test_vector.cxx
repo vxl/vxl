@@ -47,9 +47,9 @@ int test_vector_main(int /*argc*/,char* /*argv*/[])
     vcl_vector<T > v; \
     for (int i=0; i<5; ++i) v.push_back(T(i)); \
     bool ok = true; \
-    for (int i=1; i<v.size(); ++i) { T *p = &v[i-1]; T *q = &v[i]; if (p + 1 != q) ok = false; } \
-    if (ok) vcl_cout << "PASSED: vector<" << #T << "> has contiguous storage" << vcl_endl; \
-    else { vcl_cout << "FAIL: vector<" << #T << "> has non-contiguous storage" << vcl_endl; fail = true; } \
+    for (unsigned int i=1; i<v.size(); ++i) { T *p = &v[i-1]; T *q = &v[i]; if (p + 1 != q) ok = false; } \
+    if (ok) vcl_cout << "PASS: vector<" << #T << "> has contiguous storage\n"; \
+    else  { vcl_cout << "FAIL: vector<" << #T << "> has non-contiguous storage\n"; fail = true; } \
 } while (false)
     macro(char);
     macro(int);
