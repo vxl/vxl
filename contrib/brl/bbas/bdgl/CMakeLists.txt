@@ -8,7 +8,6 @@ SET(bdgl_sources
     bdgl_region_algs.cxx   bdgl_region_algs.h
     bdgl_curve_region.cxx bdgl_curve_region.h
 )
-AUX_SOURCE_DIRECTORY(Templates bdgl_sources)
 
 ADD_LIBRARY(bdgl ${bdgl_sources})
 

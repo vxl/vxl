@@ -8,7 +8,6 @@ SET(btol_sources
     btol_vertex_algs.cxx   btol_vertex_algs.h
     btol_face_algs.cxx     btol_face_algs.h
 )
-AUX_SOURCE_DIRECTORY(Templates btol_sources)
 
 ADD_LIBRARY(btol ${btol_sources})
 

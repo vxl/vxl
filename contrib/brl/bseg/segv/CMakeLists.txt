@@ -15,7 +15,6 @@ IF(HAS_VGUI)
   segv_vtol2D_tableau.cxx       segv_vtol2D_tableau.h segv_vtol2D_tableau_sptr.h
   segv_vtol_soview2D.cxx        segv_vtol_soview2D.h
  )
- AUX_SOURCE_DIRECTORY(Templates segv_sources)
 
  ADD_LIBRARY(segv ${segv_sources})
 

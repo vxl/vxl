@@ -5,7 +5,6 @@ SET(vil3d_io_sources
     # force building of a library
     vil3d_io_dummy.cxx
 )
-AUX_SOURCE_DIRECTORY(Templates vil3d_io_sources)
 
 ADD_LIBRARY(vil3d_io ${vil3d_io_sources})
 TARGET_LINK_LIBRARIES( vil3d_io vil3d vil_io vil vsl )

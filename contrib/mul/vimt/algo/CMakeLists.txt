@@ -10,7 +10,6 @@ SET( vimt_algo_sources
   vimt_dummy.cxx
 )
 
-AUX_SOURCE_DIRECTORY(Templates vimt_algo_sources)
 
 ADD_LIBRARY(vimt_algo ${vimt_algo_sources})
 

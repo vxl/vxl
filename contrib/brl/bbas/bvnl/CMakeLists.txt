@@ -6,7 +6,6 @@ SET(bvnl_sources
     bvnl_parabolic_interpolator.cxx  bvnl_parabolic_interpolator.h
     bvnl_quadratic_interpolator.cxx  bvnl_quadratic_interpolator.h
 )
-AUX_SOURCE_DIRECTORY(Templates bvnl_sources)
 
 ADD_LIBRARY(bvnl ${bvnl_sources})
 

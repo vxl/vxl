@@ -18,7 +18,6 @@ IF(HAS_VGUI)
     #bmvv_tomg_menus.cxx            bmvv_tomg_menus.h
      bmvv_recon_menus.cxx           bmvv_recon_menus.h
  )
- AUX_SOURCE_DIRECTORY(Templates bmvv_sources)
 
  ADD_LIBRARY(bmvv ${bmvv_sources})
 

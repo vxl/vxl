@@ -24,8 +24,6 @@ SET(vul_sources
   vul_user_info.h             vul_user_info.cxx
 )
 
-AUX_SOURCE_DIRECTORY(Templates vul_sources)
-
 # Some versions of Solaris (at least 5.8) has a brain-dead mechanism
 # for implementing DNS services, where the user of a library that uses
 # gethostbyname should link to -lnsl *before* linking to the
@@ -39,7 +37,7 @@ AUX_SOURCE_DIRECTORY(Templates vul_sources)
 #
 SET( vul_network_sources
   vul_url.h                   vul_url.cxx
-)  
+)
 
 
 IF(CMAKE_COMPILER_IS_GNUCXX)
@@ -50,7 +48,7 @@ IF(APPLE)
   ADD_LIBRARY(vul ${vul_sources})
 ELSE(APPLE)
 
-IF(NOT SOLARIS) 
+IF(NOT SOLARIS)
   ADD_LIBRARY(vul ${vul_sources} ${vul_network_sources})
 ELSE(NOT SOLARIS)
   ADD_LIBRARY(vul ${vul_sources})

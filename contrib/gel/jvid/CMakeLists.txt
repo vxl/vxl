@@ -14,8 +14,6 @@ IF(HAS_VGUI)
     jvx_manager.cxx jvx_manager.h
   )
 
-  AUX_SOURCE_DIRECTORY(Templates jvid_sources)
-
   ADD_LIBRARY(jvid ${jvid_sources})
   TARGET_LINK_LIBRARIES( jvid vgui vidl_vil1 vul vil1 )
   IF(MPEG2_FOUND)

@@ -22,7 +22,6 @@ SET(pop_sources
     pop_transform.cxx               pop_transform.h
     pop_vertex.cxx                  pop_vertex.h
 )
-AUX_SOURCE_DIRECTORY(Templates pop_sources)
 
 ADD_LIBRARY(pop ${pop_sources})
 TARGET_LINK_LIBRARIES( pop vcl vnl vgl vnl_algo vgl_algo)
