@@ -10,6 +10,7 @@ MANPAGE_SOURCES += image_ops.txx
 MANPAGE_SOURCES += io.txx
 MANPAGE_SOURCES += inlines.h
 MANPAGE_SOURCES += image_convert.txx
+SOURCES += CardinalSpline.cxx
 
 ################################
 include ${IUEROOT}/config/top.mk
