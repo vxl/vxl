@@ -62,7 +62,7 @@ public:
   // Data Access---------------------------------------------------------------
 
   //: Return the degree (highest power of x) of the polynomial.
-  int     degree() const { return coeffs_.size() - 1; }
+  int     degree() const { return ((int)coeffs_.size()) - 1; }
 
   //: Access to the polynomial coefficients
   double& operator [] (int i)       { return coeffs_[i]; }

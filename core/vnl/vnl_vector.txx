@@ -757,9 +757,9 @@ bool vnl_vector<T>::operator_eq (vnl_vector<T> const& rhs) const {
 
 template<class T>
 vcl_ostream& operator<< (vcl_ostream& s, vnl_vector<T> const& v) {
-  for (unsigned i = 0; i < v.size()-1; ++i)   // For each index in vector
+  for (unsigned i = 0; i+1 < v.size(); ++i)   // For each index in vector
     s << v[i] << " ";                              // Output data element
-  s << v[v.size()-1];
+  if (v.size() > 0)  s << v[v.size()-1];
   return s;
 }
 
