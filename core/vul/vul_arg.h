@@ -78,14 +78,14 @@ void vul_arg_display_usage_and_exit(char const* msg = 0);
 // the variables with the option specifications.  To get a variable, you
 // simply name it along with its flag, a help string, and an optional
 // default value:
-// <verb>
+// \verbatim
 //      vul_arg<double> threshold("-t", "Intensity threshold", 1.25);
-// </verb>
+// \endverbatim
 // Repeat this for any other arguments and then ask the base class to parse
 // the lot:
-// <verb>
+// \verbatim
 //      vul_arg_parse(argc,argv);
-// </verb>
+// \endverbatim
 //
 // Now parameters such as threshold above can be referred to and will have
 // either the default value or the one supplied on the command line.
@@ -94,12 +94,12 @@ void vul_arg_display_usage_and_exit(char const* msg = 0);
 // themselves into a global pool, so that the static vul_arg_base::parse can
 // find them, or whether there should be a local argPool which is passed to
 // each arg in order that it may add itself.  That would give a syntax like
-// <verb>
+// \verbatim
 //      argList args;
 //      vul_arg<double> threshold(args, "-t", 1.25);
 //                                ^^^^^ passing args in
 //      args.parse(argc, argv);
-// </verb>
+// \endverbatim
 // The latter is "better" but the former is easier to use so I chose it.
 //
 // Added by Geoff: call to vul_arg_base::set_help_option("-?") means that a
@@ -115,12 +115,12 @@ public:
   T value_;// public so we don't have to worry about templated friends.
 
   //: Construct an vul_arg<T> with command-line switch and default value.
-  // Command line switch \arg{option_string}, and default value
-  // \arg{default_value}.  Add this argument to the global
+  // Command line switch \a option_string, and default value
+  // \a default_value.  Add this argument to the global
   // list of arguments that vul_arg_base::parse() uses when it eventually
   // gets the command line.
   //
-  // If \arg{option_string} is null, then the argument is assigned to the
+  // If \a option_string is null, then the argument is assigned to the
   // first plain word in the command line (warning: this causes problems for
   // T=char *, but that just means that you have to have a help string if you
   // want a default... good)
@@ -130,8 +130,8 @@ public:
     : vul_arg_base(option_string,helpstring),
       value_(default_value) { settype(); }
 
-  //: As above, but add the arg to the list \arg{l}, on which
-  // l.parse can be called later.
+  //: As above, but add the arg to the list \a l, on which
+  // \c parse() can be called later.
   vul_arg(vul_arg_info_list & l,
           char const * option_string = 0,
           char const * helpstring = 0,
