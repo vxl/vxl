@@ -15,7 +15,6 @@
 // \endverbatim
 //--------------------------------------------------------------------------------
 #include <vcl_vector.h>
-#include <vil/vil_image.h>
 #include <vil/vil_memory_image_of.h>
 #include <vgui/vgui_grid_tableau.h>
 #include <vgui/vgui_shell_tableau.h>
@@ -28,8 +27,9 @@
 #include <vvid/cmu_1394_camera.h>
 #include <vvid/vvid_video_process_sptr.h>
 #include <vvid/vvid_live_video_frame.h>
-//: A manager for displaying live video frames and processing on the
-//  frames.  The cameras are assumed to be wrapped in the live_video_frame 
+
+//: A manager for displaying live video frames and processing on the frames.
+//  The cameras are assumed to be wrapped in the live_video_frame
 //  class. At startup the number of cameras is determined. A reduced resolution
 //  image of each camera is shown in an array at the right of the display. The
 //  top is camera 0 the bottom is camera N-1. The left pane is used to display
@@ -55,12 +55,12 @@ class vvid_live_video_manager : public vgui_grid_tableau
   void stop_live_video();
   void quit();
   //: access to the current frames
-  bool get_current_rgb_image(int view_no, int pix_sample_interval, 
+  bool get_current_rgb_image(int view_no, int pix_sample_interval,
                              vil_memory_image_of<vil_rgb<unsigned char> >& im);
 
   bool get_current_mono_image(int view_no, int pix_sample_interval,
                               vil_memory_image_of<unsigned char>& im);
-  
+
   //: control of the process result window
   void set_process_rgb_image(vil_memory_image_of< vil_rgb<unsigned char> >& im);
   void set_process_mono_image(vil_memory_image_of<unsigned char>& im);
@@ -83,7 +83,7 @@ class vvid_live_video_manager : public vgui_grid_tableau
   unsigned width_;
   unsigned height_;
   vgui_window* _win;
-  
+
   vgui_image_tableau_sptr _it;
   vgui_viewer2D_tableau_sptr _v2D;
   vcl_vector<vvid_live_video_frame_sptr> _vframes;
@@ -93,4 +93,5 @@ class vvid_live_video_manager : public vgui_grid_tableau
   vvid_video_process_sptr _video_process;
   static vvid_live_video_manager *_instance;
 };
+
 #endif // vvid_live_video_manager_h_

@@ -9,12 +9,10 @@
 //
 // \verbatim
 //  Modifications:
-//   J.L. Mundy Octover 05, 2002 Ported from jvid 
+//   J.L. Mundy Octover 05, 2002 Ported from jvid
 // \endverbatim
 //----------------------------------------------------------------------------
 #include <vcl_vector.h>
-#include <vil/vil_image.h>
-//#include <vil/vil_memory_image_of.h>
 #include <vgui/vgui_grid_tableau.h>
 #include <vgui/vgui_shell_tableau.h>
 #include <vgui/vgui_image_tableau_sptr.h>
@@ -24,23 +22,24 @@
 #include <vgui/vgui_window.h>
 #include <vidl/vidl_movie.h>
 
-//:A singleton manager class for playing videos. A vector of images with
+//:A singleton manager class for playing videos.
+// A vector of images with
 // enclosing image and easy2D tableaux is cached so that computed overlays
 // such as Harris corners can be played back quickly. The cache option can be
 // turned off if one is going to just play the video and not apply image
-// segmentation processing to the frames. 
-// 
+// segmentation processing to the frames.
+//
 // A demo of overlaying points on the video is provide by ::easy2D_demo
 // to get rid of the points, reload the video
 //
 // It is planned to extend the class to handle multiple panes (grid locations)
-// so that different (or the same) videos can be playing simulataneously 
+// so that different (or the same) videos can be playing simulataneously
 // in different zoom states as well as pause states. This extension will
 // the state variables to be changed to vectors as well as having multiple
 // caches.. etc.
 //
 // Known problems:
-//  1) quiting while the video is paused can cause a seg fault since 
+//  1) quiting while the video is paused can cause a seg fault since
 //     the movie gets deleted before the loop quits
 //  2) There is a continous gl error stream from vgui_adaptor. Something to
 //     do with "setting draw buffer to back"
@@ -53,20 +52,19 @@ class vvid_file_manager : public vgui_grid_tableau
   //: returns the unique instance of vvid_file_manger
   static vvid_file_manager *instance();
 
-  //: height (in pixels) of the video frame 
+  //: height (in pixels) of the video frame
   unsigned get_height(){return height_;}
 
-  //: width (in pixels) of the video frame 
+  //: width (in pixels) of the video frame
   unsigned get_width(){return width_;}
 
-  //: load each frame of the video into a cached vector of overlays
-  //  if chaching is enabled
+  //: load each frame of the video into a cached vector of overlays if chaching is enabled
   void load_video_file();
 
   //: loop through the frames and display
   void play_video();
 
-  //: stop at the current frame 
+  //: stop at the current frame
   void pause_video();
 
   //: stop playing and return to the first frame
@@ -87,7 +85,7 @@ class vvid_file_manager : public vgui_grid_tableau
   //: a demo of spatial overlays on the video (scrolling points)
   void easy2D_tableau_demo();
 
-  //: get the window of this player 
+  //: get the window of this player
   vgui_window* get_window(){return _win;}
 
   //: set the window
