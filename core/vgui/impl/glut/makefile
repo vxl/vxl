@@ -20,6 +20,7 @@ SOURCES += vgui_glut_slab.cxx
 include ${IUEROOT}/config/top-params.mk
 #######################################
 
+MANPAGE_SOURCES += menu_hack.h
 ifeq ($(HAS_X11),1)
 SOURCES += menu_hack_X11.cxx
 else

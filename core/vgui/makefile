@@ -127,6 +127,44 @@ SOURCES += internals/vgui_draw_line.cxx
 SOURCES += vgui_slab.cxx
 SOURCES += vgui_event_loop.cxx
 
+# extra header files
+MANPAGE_SOURCES += vgui_fwd.h
+MANPAGE_SOURCES += vgui_gl.h
+MANPAGE_SOURCES += vgui_glu.h
+MANPAGE_SOURCES += vgui_glx.h
+MANPAGE_SOURCES += vgui_text.h
+MANPAGE_SOURCES += vgui_linker_hack.h
+MANPAGE_SOURCES += vgui_deck.h
+
+MANPAGE_SOURCES += vgui_active_visible_sptr.h
+MANPAGE_SOURCES += vgui_blackbox_sptr.h
+MANPAGE_SOURCES += vgui_clear_tableau_sptr.h
+MANPAGE_SOURCES += vgui_composite_sptr.h
+MANPAGE_SOURCES += vgui_debug_tableau_sptr.h
+MANPAGE_SOURCES += vgui_deck_tableau_sptr.h
+MANPAGE_SOURCES += vgui_displaybase_sptr.h
+MANPAGE_SOURCES += vgui_displaylist2D_sptr.h
+MANPAGE_SOURCES += vgui_easy2D_sptr.h
+MANPAGE_SOURCES += vgui_easy3D_sptr.h
+MANPAGE_SOURCES += vgui_enhance_sptr.h
+MANPAGE_SOURCES += vgui_grid_tableau_sptr.h
+MANPAGE_SOURCES += vgui_image_tableau_sptr.h
+MANPAGE_SOURCES += vgui_listmanager2D_sptr.h
+MANPAGE_SOURCES += vgui_load_sptr.h
+MANPAGE_SOURCES += vgui_polytab_sptr.h
+MANPAGE_SOURCES += vgui_quit_tableau_sptr.h
+MANPAGE_SOURCES += vgui_roi_tableau_sptr.h
+MANPAGE_SOURCES += vgui_rubberbander_sptr.h
+MANPAGE_SOURCES += vgui_shell_tableau_sptr.h
+MANPAGE_SOURCES += vgui_tableau_sptr.h
+MANPAGE_SOURCES += vgui_test_sptr.h
+MANPAGE_SOURCES += vgui_text_tableau_sptr.h
+MANPAGE_SOURCES += vgui_tview_launcher_sptr.h
+MANPAGE_SOURCES += vgui_tview_sptr.h
+MANPAGE_SOURCES += vgui_viewer2D_sptr.h
+MANPAGE_SOURCES += vgui_viewer3D_sptr.h
+MANPAGE_SOURCES += vgui_wrapper_tableau_sptr.h
+
 #######################################
 include ${IUEROOT}/config/top-params.mk
 #######################################

@@ -48,6 +48,33 @@ SOURCES += vsol_volume_3d.cxx
 SOURCES += vsol_polyhedron.cxx
 SOURCES += vsol_tetrahedron.cxx
 
+# smart pointer header files
+MANPAGE_SOURCES += vsol_box_2d_sptr.h
+MANPAGE_SOURCES += vsol_box_3d_sptr.h
+MANPAGE_SOURCES += vsol_conic_2d_sptr.h
+MANPAGE_SOURCES += vsol_curve_2d_sptr.h
+MANPAGE_SOURCES += vsol_curve_3d_sptr.h
+MANPAGE_SOURCES += vsol_group_2d_sptr.h
+MANPAGE_SOURCES += vsol_group_3d_sptr.h
+MANPAGE_SOURCES += vsol_line_2d_sptr.h
+MANPAGE_SOURCES += vsol_line_3d_sptr.h
+MANPAGE_SOURCES += vsol_point_2d_sptr.h
+MANPAGE_SOURCES += vsol_point_3d_sptr.h
+MANPAGE_SOURCES += vsol_polygon_2d_sptr.h
+MANPAGE_SOURCES += vsol_polygon_3d_sptr.h
+MANPAGE_SOURCES += vsol_polyhedron_sptr.h
+MANPAGE_SOURCES += vsol_rectangle_2d_sptr.h
+MANPAGE_SOURCES += vsol_rectangle_3d_sptr.h
+MANPAGE_SOURCES += vsol_region_2d_sptr.h
+MANPAGE_SOURCES += vsol_region_3d_sptr.h
+MANPAGE_SOURCES += vsol_spatial_object_2d_sptr.h
+MANPAGE_SOURCES += vsol_spatial_object_3d_sptr.h
+MANPAGE_SOURCES += vsol_surface_3d_sptr.h
+MANPAGE_SOURCES += vsol_tetrahedron_sptr.h
+MANPAGE_SOURCES += vsol_triangle_2d_sptr.h
+MANPAGE_SOURCES += vsol_triangle_3d_sptr.h
+MANPAGE_SOURCES += vsol_volume_3d_sptr.h
+
 IMMEDIATE_LIBS += -lvgl-algo -lvgl -lvnl-algo -lvnl -lvbl -lvul
 
 #######################################

@@ -26,6 +26,10 @@ SOURCES += vdgl_fit_line.cxx
 SOURCES += vdgl_ortho_regress.cxx
 SOURCES += vdgl_OrthogRegress.cxx
 
+MANPAGE_SOURCES += vdgl_digital_curve_sptr.h
+MANPAGE_SOURCES += vdgl_edgel_chain_sptr.h
+MANPAGE_SOURCES += vdgl_interpolator_sptr.h
+
 ifndef NOTEST
 SUBDIRS += tests examples
 endif

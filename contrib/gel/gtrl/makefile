@@ -1,9 +1,6 @@
-#
-# crossge@crd.ge.com
-#
-##########################################
+###########################################
 #include $(IUEROOT)/vxl/vgui/easy-client.mk
-##########################################
+###########################################
 
 USES += v3p vxl gel
 
@@ -20,6 +17,7 @@ SOURCES += gtrl_polygon.cxx
 # from netlib
 #DEFINES += -DANSI_DECLARATORS
 #DEFINES += -DTRILIBRARY
+MANPAGE_SOURCES += gtrl_netlib_triangle.h
 #SOURCES += gtrl_netlib_triangle.c
 
 ################################

@@ -29,6 +29,22 @@ SOURCES += vtol_vertex_2d.cxx
 
 SOURCES += vtol_topology_io.cxx
 
+MANPAGE_SOURCES += vtol_block_sptr.h
+MANPAGE_SOURCES += vtol_chain_sptr.h
+MANPAGE_SOURCES += vtol_dtd.h
+MANPAGE_SOURCES += vtol_edge_2d_sptr.h
+MANPAGE_SOURCES += vtol_edge_sptr.h
+MANPAGE_SOURCES += vtol_face_2d_sptr.h
+MANPAGE_SOURCES += vtol_face_sptr.h
+MANPAGE_SOURCES += vtol_macros.h
+MANPAGE_SOURCES += vtol_one_chain_sptr.h
+MANPAGE_SOURCES += vtol_topology_cache_sptr.h
+MANPAGE_SOURCES += vtol_topology_object_sptr.h
+MANPAGE_SOURCES += vtol_two_chain_sptr.h
+MANPAGE_SOURCES += vtol_vertex_2d_sptr.h
+MANPAGE_SOURCES += vtol_vertex_sptr.h
+MANPAGE_SOURCES += vtol_zero_chain_sptr.h
+
 #######################################
 include ${IUEROOT}/config/top-params.mk
 #######################################

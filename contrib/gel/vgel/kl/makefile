@@ -12,6 +12,7 @@ SOURCES += klt_util.c
 SOURCES += pyramid.c
 SOURCES += storeFeatures.c
 SOURCES += writeFeatures.c
+MANPAGE_SOURCES += base.h
 
 ################################
 include ${IUEROOT}/config/top.mk

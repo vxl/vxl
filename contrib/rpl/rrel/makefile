@@ -24,6 +24,9 @@ SOURCES += rrel_ran_sam_search.cxx
 SOURCES += rrel_ransac_obj.cxx
 SOURCES += rrel_trunc_quad_obj.cxx
 SOURCES += rrel_tukey_obj.cxx
+MANPAGE_SOURCES += rrel_objective.h
+MANPAGE_SOURCES += rrel_util.txx
+MANPAGE_SOURCES += rrel_wls_obj.h
 
 ifndef NOTEST
 SUBDIRS += tests

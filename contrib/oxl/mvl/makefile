@@ -129,6 +129,18 @@ SOURCES += FileNameGeneratorBase.cxx
 SOURCES += FileNameGenerator.cxx
 SOURCES += RawPMatrixStore.cxx
 
+MANPAGE_SOURCES += FMSkewComputeLinear.h
+MANPAGE_SOURCES += FMatrixCompute8Point.h
+MANPAGE_SOURCES += HomgMap2D.h
+MANPAGE_SOURCES += HomgMatchPoint3D2D.h
+MANPAGE_SOURCES += LineSeg.h
+MANPAGE_SOURCES += ModifyHandle.h
+MANPAGE_SOURCES += PMatrixCompute6Point.h
+MANPAGE_SOURCES += PairMatchMultiStrength.h
+MANPAGE_SOURCES += PairMatchSetMulti.h
+MANPAGE_SOURCES += TriTensorCompute.h
+MANPAGE_SOURCES += mvl_modify_handle.h
+
 #######################################
 include ${IUEROOT}/config/top-params.mk
 #######################################

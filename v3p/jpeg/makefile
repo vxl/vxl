@@ -51,6 +51,15 @@ SOURCES += jutils.c
 SOURCES += jmemmgr.c 
 SOURCES += jmemansi.c
 
+MANPAGE_SOURCES += jdct.h
+MANPAGE_SOURCES += jconfig.h
+MANPAGE_SOURCES += jinclude.h
+MANPAGE_SOURCES += jmemsys.h
+MANPAGE_SOURCES += jmorecfg.h
+MANPAGE_SOURCES += jpegint.h
+MANPAGE_SOURCES += jpeglib.h
+MANPAGE_SOURCES += jversion.h
+
 ################################
 include ${IUEROOT}/config/top.mk
 ################################

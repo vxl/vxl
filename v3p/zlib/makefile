@@ -22,6 +22,9 @@ SOURCES += inftrees.c
 SOURCES += infcodes.c
 SOURCES += infutil.c
 SOURCES += inffast.c
+MANPAGE_SOURCES += inffixed.h
+MANPAGE_SOURCES += zconf.h
+MANPAGE_SOURCES += zlib.h
 
 # With -O2 or -O3, this file segfaults at line 514 on HP:
 FLAGS_deflate.c += -O1

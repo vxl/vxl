@@ -65,6 +65,8 @@ SOURCES += osl_fit_lines_params.cxx
 SOURCES += osl_fit_circle.cxx
 SOURCES += osl_break_edge.cxx
 
+MANPAGE_SOURCES += osl_hacks.h
+
 #######################################
 include ${IUEROOT}/config/top-params.mk
 include client.mk

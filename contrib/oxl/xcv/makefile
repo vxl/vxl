@@ -39,6 +39,12 @@ FLAGS_xcv_geometry.cxx += -O0
 FLAGS_xcv_multiview.cxx += -O0 # otherwise gcc 3.0 needs too much virtual memory
 endif
 
+MANPAGE_SOURCES += xcv_mview_manager.h
+
+MANPAGE_SOURCES += xcv_axes_tableau_sptr.h
+MANPAGE_SOURCES += xcv_image_tableau_sptr.h
+MANPAGE_SOURCES += xcv_picker_tableau_sptr.h
+
 ######################################
 include ${IUEROOT}/config/top-rules.mk
 ######################################

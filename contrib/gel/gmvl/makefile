@@ -23,6 +23,9 @@ SOURCES += gmvl_tag_node.cxx
 # helpers
 SOURCES += gmvl_helpers.cxx
 
+MANPAGE_SOURCES += gmvl_connection_sptr.h
+MANPAGE_SOURCES += gmvl_node_sptr.h
+
 ifndef NOTEST
 SUBDIRS := examples # tests
 endif

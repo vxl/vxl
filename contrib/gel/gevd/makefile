@@ -22,6 +22,8 @@ SOURCES += gevd_float_operators.cxx
 SOURCES += gevd_noise.cxx
 SOURCES += gevd_step.cxx
 SOURCES += gevd_contour.cxx
+MANPAGE_SOURCES += gevd_pixel.h
+MANPAGE_SOURCES += gevd_xpixel.h
 
 ######################################
 include ${IUEROOT}/config/top-rules.mk

@@ -19,6 +19,9 @@ SOURCES += vmal_rectifier.cxx
 SOURCES += vmal_refine_lines.cxx
 SOURCES += vmal_track_lines.cxx
 
+MANPAGE_SOURCES += vmal_multi_view_data_edge_sptr.h
+MANPAGE_SOURCES += vmal_multi_view_data_vertex_sptr.h
+
 ################################
 include ${IUEROOT}/config/top.mk
 ################################

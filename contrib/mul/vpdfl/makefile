@@ -8,6 +8,8 @@ USES += mul
 LIBRARY := vpdfl
 VERSION := 1.0
 
+MANPAGE_SOURCES += vpdfl_all.h
+
 SOURCES += vpdfl_prob_chi2.cxx
 SOURCES += vpdfl_pdf_base.cxx
 SOURCES += vpdfl_builder_base.cxx
