@@ -49,7 +49,7 @@ bool bxml_vsol_point_2d_input_converter::extract_from_dom(DOM_Node& node) {
 //:
 // Construct the object if it is not already in the object table
 // It will be in the object table if it has already been constructed
-// and the current occurence is just a ref in the xml file.
+// and the current occurrence is just a ref in the xml file.
 // WARNING!!
 // There is an issue with the use of the generic pointer, since we
 // have no way to reference count the pointer. We might be able to
