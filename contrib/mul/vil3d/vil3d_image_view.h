@@ -284,6 +284,33 @@ vcl_ostream& operator<<(vcl_ostream& s, vil3d_image_view<T> const& im)
   im.print(s); return s;
 }
 
+// Work-around for Borland and safe_bool.
+#ifdef VCL_BORLAND
+template <class T>
+inline
+bool operator&&(const vil3d_image_view<T>& view, bool b)
+{
+  return b && (view?true:false);
+}
+template <class T>
+inline
+bool operator&&(bool b, const vil3d_image_view<T>& view)
+{
+  return b && (view?true:false);
+}
+template <class T>
+inline
+bool operator||(const vil3d_image_view<T>& view, bool b)
+{
+  return b || (view?true:false);
+}
+template <class T>
+inline
+bool operator||(bool b, const vil3d_image_view<T>& view)
+{
+  return b || (view?true:false);
+}
+#endif
 
 //: True if the actual images are identical.
 // $\bigwedge_{i,j,k,p} {\textstyle src}(i,j,k,p) == {\textstyle dest}(i,j,k,p)$

@@ -22,7 +22,7 @@ static void test_convert_diff_types(const char * golden_data_dir)
 
   vil3d_image_view<vxl_uint_16> image1 = vil3d_load((datadir + "ff_grey_cross.gipl").c_str());
   vil3d_image_view_base_sptr image_base1 = vil3d_load((datadir + "ff_grey_cross.gipl").c_str());
-  testlib_test_perform( image1 && image_base1 );
+  testlib_test_perform( bool(image1) && image_base1 );
 
   testlib_test_begin( "Converting explicitly 16bit to 32bit" );
   vil3d_image_view<vxl_uint_32> image_32_1;
