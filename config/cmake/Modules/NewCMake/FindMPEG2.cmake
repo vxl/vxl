@@ -37,7 +37,7 @@ IF(MPEG2_INCLUDE_DIR)
 
     #some native mpeg2 installations will depend
     #on libSDL, if found, add it in.
-    INCLUDE( ${MODULE_PATH}/NewCMake/FindSDL.cmake )
+    INCLUDE( ${CMAKE_ROOT}/Modules/FindSDL.cmake )
     IF(SDL_FOUND)
       SET( MPEG2_LIBRARIES ${MPEG2_LIBRARIES} ${SDL_LIBRARY})
     ENDIF(SDL_FOUND)
