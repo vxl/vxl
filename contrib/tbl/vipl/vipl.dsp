@@ -100,6 +100,36 @@ LIB32=link.exe -lib
 # PROP Default_Filter ""
 # Begin Source File
 
+SOURCE=.\Templates/vipl_accessors_vcl_vector+uint-.cxx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates/vipl_filter_2d+vil_image.vcl_vector+uint-.uchar.uint.cxx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates/vipl_histogram+vil_image.vcl_vector+uint-.uchar.uint-.cxx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vipl_with_vnl_matrix/Templates/vipl_accessors_vnl_vector+uint-.cxx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vipl_with_vnl_matrix/Templates/vipl_filter_2d+vil_image.vnl_vector+uint-.uchar.uint.cxx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vipl_with_vnl_matrix/Templates/vipl_histogram+vil_image.vnl_vector+uint-.uchar.uint-.cxx
+
+# End Source File
+# Begin Source File
+
 SOURCE=.\Templates/vipl_accessors_vil_image+double-.cxx
 
 # End Source File
@@ -834,6 +864,36 @@ SOURCE=.\vipl_with_vbl_array_2d/vipl_filterable_section_container_generator_vbl_
 # Begin Source File
 
 SOURCE=.\vipl_with_vnl_matrix/vipl_filterable_section_container_generator_vnl_matrix.txx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\accessors/vipl_accessors_vcl_vector.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\accessors/vipl_accessors_vcl_vector.txx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\section/vipl_filterable_section_container_generator_vcl_vector.txx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vipl_with_vnl_matrix/accessors/vipl_accessors_vnl_vector.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vipl_with_vnl_matrix/accessors/vipl_accessors_vnl_vector.txx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vipl_with_vnl_matrix/vipl_filterable_section_container_generator_vnl_vector.txx
 
 # End Source File
 # End Group
