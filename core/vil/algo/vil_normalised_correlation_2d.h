@@ -2,9 +2,9 @@
 #ifndef vil2_normalised_correlation_2d_h_
 #define vil2_normalised_correlation_2d_h_
 //:
-//  \file
-//  \brief 2D normalised correlation
-//  \author Tim Cootes
+// \file
+// \brief 2D normalised correlation
+// \author Tim Cootes
 
 #include <vil2/algo/vil2_convolve_1d.h>
 #include <vcl_compiler.h>
@@ -70,8 +70,8 @@ inline void vil2_normalised_correlation_2d(const vil2_image_view<srcT>& src_im,
                                            const vil2_image_view<kernelT>& kernel,
                                            accumT ac)
 {
-  unsigned ni = 1+src_im.ni()-kernel.ni(); assert(1+src_im.ni()-kernel.ni() >= 0);
-  unsigned nj = 1+src_im.nj()-kernel.nj(); assert(1+src_im.nj()-kernel.nj() >= 0);
+  unsigned ni = 1+src_im.ni()-kernel.ni(); assert(1+src_im.ni() >= kernel.ni());
+  unsigned nj = 1+src_im.nj()-kernel.nj(); assert(1+src_im.nj() >= kernel.nj());
   vcl_ptrdiff_t s_istep = src_im.istep(), s_jstep = src_im.jstep();
   vcl_ptrdiff_t s_pstep = src_im.planestep();
 
