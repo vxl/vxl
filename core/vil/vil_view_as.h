@@ -23,7 +23,7 @@
 // \relates vil2_image_view
 // class T must be a compound pixel type.
 template<class T>
-inline vil2_image_view<T::value_type> vil2_view_as_planes(const vil2_image_view<T >& v)
+inline vil2_image_view<typename T::value_type> vil2_view_as_planes(const vil2_image_view<T >& v)
 {
   if (v.nplanes()!=1) return vil2_image_view<T>();
 
@@ -64,7 +64,6 @@ inline vil2_image_view<vil_rgba<T> > vil2_view_as_rgba(const vil2_image_view<T>&
                                        v.ni(),v.nj(),1,
                                        v.istep()/3,v.jstep()/3,1);
 }
-
 
 
 #endif // vil2_view_as_h_
