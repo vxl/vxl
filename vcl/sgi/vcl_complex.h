@@ -20,7 +20,13 @@ inline std::complex<T> vcl_exp(std::complex<T> const &z) { return vcl_polar(T(ex
 # undef vcl_sqrt
 # define vcl_sqrt vcl_sqrt
 template <typename T>
-inline std::complex<T> vcl_sqrt(std::complex<T> const &z) { return vcl_exp(vcl_log(z)/T(2)); }
+inline std::complex<T> vcl_sqrt(std::complex<T> const &z) {
+  // was: return vcl_exp(vcl_log(z)/T(2));
+  // NOW implemented without using log() or exp() which are
+  // not necessarily available with type T - PVr, May 2002.
+  T c = vcl_abs(z);
+  return std::complex<T>(vcl_sqrt((c+z.real())/T(2)), vcl_sqrt((c-z.real())/T(2)));
+}
 
 # undef vcl_cos
 # define vcl_cos vcl_cos
