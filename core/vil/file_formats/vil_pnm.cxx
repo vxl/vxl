@@ -14,7 +14,7 @@
 #include <vcl_iostream.h>
 #include <vcl_cstring.h>
 
-#include <vxl_config.h> // for VXL_BIG_ENDIAN
+#include <vxl_config.h> // for VXL_BIG_ENDIAN and vxl_byte
 
 #include <vil/vil_stream.h>
 #include <vil2/vil2_property.h>
@@ -53,10 +53,10 @@ vil2_image_resource_sptr vil2_pnm_file_format::make_input_image(vil_stream* vs)
 }
 
 vil2_image_resource_sptr vil2_pnm_file_format::make_output_image(vil_stream* vs,
-                                                             unsigned nx,
-                                                             unsigned ny,
-                                                             unsigned nplanes,
-                                                             vil2_pixel_format format)
+                                                                 unsigned nx,
+                                                                 unsigned ny,
+                                                                 unsigned nplanes,
+                                                                 vil2_pixel_format format)
 {
   return new vil2_pnm_image(vs, nx, ny, nplanes, format);
 }
