@@ -2,6 +2,7 @@
 // written by Peter Vanroose, ESAT, K.U.Leuven, Belgium, 30 August 2001.
 #include <vgl/vgl_test.h>
 #include <vgl/vgl_conic.h>
+#include <vgl/vgl_box_2d.h>
 #include <vgl/vgl_homg_point_2d.h>
 #include <vgl/algo/vgl_homg_operators_2d.h>
 #include <vcl_cmath.h>
@@ -22,6 +23,12 @@ inline double sq_dist(vgl_homg_line_2d<double> const& A,
 inline double sq_dist(vgl_conic<double> const& A,
                       vgl_homg_point_2d<double> const& B)
 { return vgl_homg_operators_2d<double>::distance_squared(A,B); }
+inline double sq_dist(vgl_box_2d<double> const& A,
+                      vgl_box_2d<double> const& B)
+{ return sqr(A.min_x()-B.min_x())
+        +sqr(A.min_y()-B.min_y())
+        +sqr(A.max_x()-B.max_x())
+        +sqr(A.max_y()-B.max_y()); }
 inline double sq_dist(vnl_vector<double> const& A,
                       vnl_vector<double> const& B)
 { return (B-A).squared_magnitude(); }
@@ -60,7 +67,7 @@ void test_conic()
 
   // 1. Test constructors
   vcl_cout << "\n\t=== test constructors ===\n";
-  // ellipse, centre (1,2), axes lengths 2,1, rotated by pi/2.
+  // ellipse, centre (1,2), axes lengths 2,1, rotated by 0, pi/2, pi, -pi/2.
   vgl_conic<double> cc(centre, 2,1, 0.0);
   vgl_conic<double> c (centre, 1,2, halfpi);
   vgl_conic<double> c2(centre, 2,1, 2*halfpi);
@@ -106,6 +113,9 @@ void test_conic()
   lines = vgl_homg_operators_2d<double>::tangent_from(c, npt);
   TEST("tangent lines count = 0", lines.size(), 0);
 
+  TEST("bounding box", vgl_homg_operators_2d<double>::compute_bounding_box(c),
+                       vgl_box_2d<double>(0,2,1,3));
+
   npt = vgl_homg_operators_2d<double>::closest_point(c, vgl_homg_point_2d<double>(1.0,20.0,1.0));
   TEST("closest point (outside)", npt, vgl_homg_point_2d<double>(1.0,3.0,1.0));
   npt = vgl_homg_operators_2d<double>::closest_point(c, vgl_homg_point_2d<double>(0.5,2.0,1.0));
@@ -118,6 +128,7 @@ void test_conic()
   // ellipse, centre (1,2), axes lengths 10,5, orientation(3,4).
   cc = vgl_conic<double>(centre, 10,5, pythagoras);
   c = vgl_conic<double>(73, -72, 52, -2, -136, -2363);
+  vcl_cout << cc << '\n';
   vcl_cout << c << '\n';
   TEST("conic is ellipse", c.real_type(), "real ellipse");
   TEST("centre", c.centre(), centre);
@@ -143,6 +154,10 @@ void test_conic()
   lines = vgl_homg_operators_2d<double>::tangent_from(c, npt);
   TEST("tangent lines count = 0", lines.size(), 0);
 
+  vcl_cout << vgl_homg_operators_2d<double>::compute_bounding_box(c) << vcl_endl;
+  APPROX("bounding box", vgl_homg_operators_2d<double>::compute_bounding_box(c),
+                         vgl_box_2d<double>(-6.2111,8.2111,-6.544,10.544));
+
   npt = vgl_homg_operators_2d<double>::closest_point(c,startp);
   TEST("closest_point to top", npt, startp);
   npt = vgl_homg_operators_2d<double>::closest_point(c,centre);
@@ -163,6 +178,7 @@ void test_conic()
   APPROX("second point", pts.back(), vgl_homg_point_2d<double>(x2,x2,1));
 
   cc = vgl_conic<double>(centre, 10,5, 0); // centre (1,2), radii 10,5, orientation (1,0).
+  vcl_cout << cc << '\n';
   pts = vgl_homg_operators_2d<double>::intersection(c,cc);
   TEST("intersection count = 4", pts.size(), 4);
   vcl_list<vgl_homg_point_2d<double> >::iterator it = pts.begin();
@@ -404,6 +420,9 @@ void test_conic()
   TEST("!contains (0,1)", c.contains(npt), false);
   lines = vgl_homg_operators_2d<double>::tangent_from(c, c.centre());
   TEST("tangent lines count from centre = 0", lines.size(), 0); // tangents are imaginary
+  vcl_cout << vgl_homg_operators_2d<double>::compute_bounding_box(c) << vcl_endl;
+  TEST("bounding box", vgl_homg_operators_2d<double>::compute_bounding_box(c),
+                       vgl_box_2d<double>(-1.5,-1.5,0,0));
 
   // g. one finite and one infinite intersecting line:
   vcl_cout << "\n\t=== test intersecting lines, 1 infinite ===\n";

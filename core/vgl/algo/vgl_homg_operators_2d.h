@@ -14,6 +14,7 @@
 //   31-Oct-00 Peter Vanroose - signatures fixed, and vcl_list iterator used
 //   16-Mar-01 Tim Cootes - added documentation
 //   29-Aug-01 Peter Vanroose - added vgl_conic functions (ported from TargetJr)
+//    5-Oct-01 Peter Vanroose - added compute_bounding_box functions
 // \endverbatim
 
 #include <vnl/vnl_fwd.h>
@@ -179,6 +180,9 @@ public:
                                         vgl_homg_point_2d<T> const& p) {
     return distance_squared (closest_point(c,p), p);
   }
+
+  //: Compute the bounding box of an ellipse
+  static vgl_box_2d<T> compute_bounding_box(vgl_conic<T> const& c);
 
 private:
   // Helper functions for conic intersection

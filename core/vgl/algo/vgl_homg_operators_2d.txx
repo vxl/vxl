@@ -11,6 +11,7 @@
 #include <vgl/vgl_homg_point_2d.h>
 #include <vgl/vgl_point_2d.h>
 #include <vgl/vgl_conic.h>
+#include <vgl/vgl_box_2d.h>
 
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_matrix.h>
@@ -829,6 +830,46 @@ vgl_homg_operators_2d<T>::closest_point(vgl_conic<T> const& c,
                                         vgl_point_2d<T> const& pt)
 {
   return closest_point(c,vgl_homg_point_2d<T>(pt));
+}
+
+//: Compute the bounding box of an ellipse
+// This is done by finding the tangent lines to the ellipse from the two points
+// at infinity (1,0,0) and (0,1,0).
+template <class T>
+vgl_box_2d<T>
+vgl_homg_operators_2d<T>::compute_bounding_box(vgl_conic<T> const& c)
+{
+  // Only ellipses have a finite bounding box:
+
+  if (c.real_type() == "complex intersecting lines") { // a single point:
+    vgl_homg_point_2d<T> pt = c.centre();
+    return vgl_box_2d<T>(vgl_point_2d<T>(pt), vgl_point_2d<T>(pt));
+  }
+
+  if (c.real_type() == "imaginary ellipse"
+   || c.real_type() == "imaginary circle"
+   || c.real_type() == "complex parallel lines")
+    return vgl_box_2d<T>((T)1, (T)0, (T)1, (T)0); // empty box
+
+  if (c.real_type() != "real ellipse" && c.real_type() != "real circle")
+    return vgl_box_2d<T>(T(-1e33), T(1e33), T(-1e33), T(1e33)); // everything
+
+  // Now for the ellipses:
+
+  vgl_homg_point_2d<T> px (1,0,0); // point at infinity of the X axis
+  vgl_homg_point_2d<T> py (0,1,0); // point at infinity of the Y axis
+
+  vcl_list<vgl_homg_line_2d<T> > lx = vgl_homg_operators_2d<T>::tangent_from(c, px);
+  vcl_list<vgl_homg_line_2d<T> > ly = vgl_homg_operators_2d<T>::tangent_from(c, py);
+
+  T y1 = - lx.front().c() / lx.front().b(); // lx are two horizontal lines
+  T y2 = - lx.back().c() / lx.back().b();
+  if (y1 > y2) { T t = y1; y1 = y2; y2 = t; }
+  T x1 = - ly.front().c() / ly.front().a(); // ly are two vertical lines
+  T x2 = - ly.back().c() / ly.back().a();
+  if (x1 > x2) { T t = x1; x1 = x2; x2 = t; }
+
+  return vgl_box_2d<T>(x1, x2, y1, y2);
 }
 
 #endif // vgl_homg_operators_2d_txx_
