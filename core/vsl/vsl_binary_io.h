@@ -78,6 +78,11 @@ public:
   // If there is no record of the object, this function will abort.
   virtual int set_serialisation_other_data(void *pointer, int other_data);
 
+  //: The length of the b_stream header.
+  // You can move to this offset from the start of the file to get to
+  // the first real data item.
+  static const vcl_streamoff header_length;
+
 protected:
   //: The member stream
   vcl_ostream *os_;
@@ -104,6 +109,7 @@ protected:
 
   //: The version number of the IO scheme.
   static const unsigned short version_no_;
+
 };
 
 

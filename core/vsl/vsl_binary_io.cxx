@@ -305,6 +305,7 @@ void vsl_b_read(vsl_b_istream &is,double& n )
 
 
 const unsigned short vsl_b_ostream::version_no_ = 1;
+const vcl_streamoff vsl_b_ostream::header_length = 6;
 static const unsigned short vsl_magic_number_part_1=0x2c4e;
 static const unsigned short vsl_magic_number_part_2=0x472b;
 
