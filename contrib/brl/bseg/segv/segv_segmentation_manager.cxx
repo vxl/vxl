@@ -221,6 +221,88 @@ void segv_segmentation_manager::convolution()
   t2D_->get_image_tableau()->set_image(char_conv);
   t2D_->post_redraw();
 }
+
+void segv_segmentation_manager::downsample()
+{
+  if(!img_)
+    {
+      vcl_cout << "In segv_segmentation_manager::downsample) - no image\n";
+      return;
+    }
+  static float filter_factor = 0.36f;
+  vgui_dialog downsample_dialog("Downsample");
+  downsample_dialog.field("Bert-Adelson Factor", filter_factor);
+  if (!downsample_dialog.ask())
+    return;
+  vil_memory_image_of<unsigned char> input(img_);
+  vil_memory_image_of<float> inputf = brip_float_ops::convert_to_float(input);
+   vil_memory_image_of<float> half_res = 
+     brip_float_ops::half_resolution(inputf, filter_factor);
+  vil_memory_image_of<unsigned char> char_half_res =
+    brip_float_ops::convert_to_byte(half_res);
+  t2D_->get_image_tableau()->set_image(char_half_res);
+  t2D_->post_redraw();
+}
+void segv_segmentation_manager::harris_measure()
+{
+  if(!img_)
+    {
+      vcl_cout << "In segv_segmentation_manager::harris_measure) - no image\n";
+      return;
+    }
+  static float sigma = 1.0f;
+  static float scale_factor = 0.04f;
+  static int n = 2;
+  static float cmax=100;
+  vgui_dialog harris_dialog("harris");
+  harris_dialog.field("sigma", sigma);
+  harris_dialog.field("N = 2n+1, (n)", n);
+  harris_dialog.field("scale_factor", scale_factor);
+  harris_dialog.field("range", cmax);
+  if (!harris_dialog.ask())
+    return;
+  int w = img_.width(), h = img_.height();
+  vil_memory_image_of<unsigned char> input(img_);
+  vil_memory_image_of<float> inputf = brip_float_ops::convert_to_float(input);
+  vil_memory_image_of<float> smooth = brip_float_ops::gaussian(inputf, sigma);
+  vil_memory_image_of<float> IxIx, IxIy, IyIy, c;
+  IxIx.resize(w,h);  IxIy.resize(w,h);   IyIy.resize(w,h);
+  brip_float_ops::grad_matrix_NxN(smooth, n, IxIx, IxIy, IyIy);
+  c = brip_float_ops::harris(IxIx, IxIy, IyIy, scale_factor);
+  vil_memory_image_of<unsigned char> uchar_c =
+    brip_float_ops::convert_to_byte(c,0.0f, cmax);
+  t2D_->get_image_tableau()->set_image(uchar_c);
+  t2D_->post_redraw();
+}
+void segv_segmentation_manager::beaudet_measure()
+{
+  if(!img_)
+    {
+      vcl_cout <<"In segv_segmentation_manager::beaudet_measure) - no image\n";
+      return;
+    }
+  static float sigma = 1.0f;
+  static float scale_factor = 0.04f;
+  static int n = 2;
+  static float cmax=100;
+  vgui_dialog harris_dialog("beaudet");
+  harris_dialog.field("sigma", sigma);
+  harris_dialog.field("range", cmax);
+  if (!harris_dialog.ask())
+    return;
+  int w = img_.width(), h = img_.height();
+  vil_memory_image_of<unsigned char> input(img_);
+  vil_memory_image_of<float> inputf = brip_float_ops::convert_to_float(input);
+  vil_memory_image_of<float> smooth = brip_float_ops::gaussian(inputf, sigma);
+  vil_memory_image_of<float> Ixx, Ixy, Iyy, b;
+  Ixx.resize(w,h);  Ixy.resize(w,h);   Iyy.resize(w,h);
+  brip_float_ops::hessian_3x3(smooth, Ixx, Ixy, Iyy);
+  b = brip_float_ops::beaudet(Ixx, Ixy, Iyy);
+  vil_memory_image_of<unsigned char> uchar_b =
+    brip_float_ops::convert_to_byte(b,0.0f, cmax);
+  t2D_->get_image_tableau()->set_image(uchar_b);
+  t2D_->post_redraw();
+}
 void segv_segmentation_manager::vd_edges()
 {
   this->clear_display();

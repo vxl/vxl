@@ -32,9 +32,25 @@ void segv_menus::gaussian_callback()
 {
   segv_segmentation_manager::instance()->gaussian();
 }
+
+void segv_menus::downsample_callback()
+{
+  segv_segmentation_manager::instance()->downsample();
+}
+
 void segv_menus::convolution_callback()
 {
   segv_segmentation_manager::instance()->convolution();
+}
+
+void segv_menus::harris_measure_callback()
+{
+  segv_segmentation_manager::instance()->harris_measure();
+}
+
+void segv_menus::beaudet_measure_callback()
+{
+  segv_segmentation_manager::instance()->beaudet_measure();
 }
 
 void segv_menus::vd_edges_callback()
@@ -82,7 +98,10 @@ vgui_menu segv_menus::get_menu()
   menuview.add("Clear Display", clear_display_callback);
   //edit menu entries
   menuedit.add("Gaussian", gaussian_callback);
+  menuedit.add("Downsample", downsample_callback);
   menuedit.add("Convolution", convolution_callback);
+  menuedit.add("Harris", harris_measure_callback);
+  menuedit.add("Beaudet", beaudet_measure_callback);
   menuedit.add("VD Edges", vd_edges_callback);
   menuedit.add("Regions", regions_callback);
   menuedit.add("TestFace", test_face_callback);
