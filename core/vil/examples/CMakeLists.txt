@@ -3,3 +3,4 @@
 LINK_LIBRARIES( vil2 )
 
 ADD_EXECUTABLE( example1 example1.cxx )
+ADD_EXECUTABLE( example2 example2.cxx )

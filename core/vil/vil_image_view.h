@@ -134,11 +134,17 @@ public:
   void set_to_window(const vil2_image_view& im,
                      unsigned x0, unsigned nx, unsigned y0, unsigned ny);
 
+  //: Return an nx x ny window of this data with offset (x0,y0)
+  vil2_image_view<T> window(unsigned x0, unsigned nx, unsigned y0, unsigned ny) const;
+
   //: Fill view with given value
   void fill(T value);
 
   //: Print a 1-line summary of contents
   virtual void print(vcl_ostream&) const;
+
+    //: print all image data to os in a grid (rounds output to int)
+  virtual void print_all(vcl_ostream& os) const;
 
     //: Return class name
   virtual vcl_string is_a() const;

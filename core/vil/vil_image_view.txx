@@ -11,6 +11,7 @@
 #include <vcl_string.h>
 #include <vcl_cassert.h>
 #include <vil2/vil2_smart_ptr.h>
+#include <vcl_ostream.h>
 
 //=======================================================================
 
@@ -194,6 +195,15 @@ void vil2_image_view<T>::set_to_window(const vil2_image_view& im,
   set_to_window(im,x0,ny,y0,ny,0,im.nplanes());
 }
 
+//: Return an nx x ny window of this data with offset (x0,y0)
+template<class T>
+vil2_image_view<T> vil2_image_view<T>::window(unsigned x0, unsigned nx, unsigned y0, unsigned ny) const
+{
+  vil2_image_view<T> win;
+  win.set_to_window(*this,x0,nx,y0,ny);
+  return win;
+}
+
 
 //: Fill view with given value
 template<class T>
@@ -227,6 +237,30 @@ void vil2_image_view<T>::print(vcl_ostream& os) const
   os<<nplanes_<<" planes, each "<<nx_<<" x "<<ny_;
 }
 
+//: print all data to os
+template<class T>
+void vil2_image_view<T>::print_all(vcl_ostream& os) const
+{
+  print(os);
+  os<<"  xstep: "<<xstep_<<" ystep: "<<ystep_<<" planestep: "<<planestep_<<vcl_endl;
+
+  for (int i=0;i<nplanes();++i)
+  {
+    if (nplanes()>1) os<<"Plane "<<i<<":"<<vcl_endl;
+    const T* im_data = top_left_ + i*planestep_;
+    for (int y=0;y<ny_;++y)
+    {
+      for (int x=0;x<nx_;++x)
+      {
+        int v = int(im_data[ystep_*y+x*xstep_]);
+        if (v<10)  os<<" ";
+        if (v<100) os<<" ";
+        os<<v<<" ";
+      }
+      os<<vcl_endl;
+    }
+  }
+}
 
 
 //=======================================================================

@@ -1,23 +1,27 @@
 //:
 // \file
-// \brief Example of manipulating vil2_image_view<T>.
+// \brief Example of creating and filling a vil2_image_view<T>.
 // \author Tim Cootes - Manchester
 
 #include <vil2/vil2_image_view.h>
 #include <vil/vil_byte.h>
+#include <vcl_iostream.h>
 
 int main(int argc, char** argv)
 {
-  int nx=256;
-  int ny=256;
-  int nplanes=3;
+  int nx=10;
+  int ny=10;
+  int nplanes=2;
   vil2_image_view<vil_byte> image(nx,ny,nplanes);
 
   // Slow fill
   for (int i=0;i<nplanes;++i)
     for (int y=0;y<ny;++y)
       for (int x=0;x<nx;++x)
-        image(x,y,i) = vil_byte(x+y+i);
+        image(x,y,i) = vil_byte(x+10*y+100*i);
+
+  vcl_cout<<"Slow fill image"<<vcl_endl;
+  image.print_all(vcl_cout);
 
   // Fast fill
   vil_byte* plane = image.top_left_ptr();
@@ -28,9 +32,12 @@ int main(int argc, char** argv)
     {
       vil_byte* p = row;
       for (int x=0;x<nx;++x,p+=image.xstep())
-	    *p = vil_byte(x+y+i);
+	    *p = vil_byte(x+10*y+100*i);
     }
   }
+
+  vcl_cout<<"Fast fill image"<<vcl_endl;
+  image.print_all(vcl_cout);
 
   return 0;
 }
