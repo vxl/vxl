@@ -705,6 +705,10 @@ sub process_lines {
       # macros
       s/IUE_USED_COMPLEX/VNL_USED_COMPLEX/g;
       s/IUE_COMPLEX_AVAILABLE/VNL_COMPLEX_AVAILABLE/g;
+
+      # enums
+      s/\bvnl_matlab_Format/vnl_matlab_print_format/g;
+      s/\bvnl_matlab_fmt_/vnl_matlab_print_format_/g;
       
       # classes and functions
       s/\bCPolyRoots\b/vnl_cpoly_roots/g;
