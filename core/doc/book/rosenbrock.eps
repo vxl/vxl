@@ -7,18 +7,14 @@
 %%Pages: 1
 %%BoundingBox:   134   265   524   460
 %%EndComments
-
 %%BeginProlog
-
 % MathWorks dictionary
 /MathWorks 150 dict begin
-
 % definition operators
 /bdef {bind def} bind def
 /ldef {load def} bind def
 /xdef {exch def} bdef
 /xstore {exch store} bdef
-
 % operator abbreviations
 /c  /clip ldef
 /cc /concat ldef
@@ -39,21 +35,17 @@
 /w /setlinewidth ldef
 /j /setlinejoin ldef
 /cap /setlinecap ldef
-
 % page state control
 /pgsv () def
 /bpage {/pgsv save def} bdef
 /epage {pgsv restore} bdef
 /bplot /gsave ldef
 /eplot {stroke grestore} bdef
-
 % orientation switch
 /portraitMode 	0 def
 /landscapeMode 	1 def
-
 % coordinate system mappings
 /dpi2point 0 def
-
 % font control
 /FontSize 0 def
 /FMS {
@@ -63,7 +55,6 @@
 	makefont
 	setfont
 	}bdef
-
 /reencode {
 exch dup where
 {pop load} {pop StandardEncoding} ifelse
@@ -76,31 +67,26 @@ findfont dup length dict begin
 end
 definefont pop
 } bdef
-
 /isroman {
 findfont /CharStrings get
 /Agrave known
 } bdef
-
 /FMSR {
 3 1 roll 1 index
 dup isroman
 {reencode} {pop pop} ifelse
 exch FMS
 } bdef
-
 /csm {
 	1 dpi2point div -1 dpi2point div scale
 	neg translate
 	landscapeMode eq {90 rotate} if
 	} bdef
-
 % line types: solid, dotted, dashed, dotdash
 /SO { [] 0 setdash } bdef
 /DO { [.5 dpi2point mul 4 dpi2point mul] 0 setdash } bdef
 /DA { [6 dpi2point mul] 0 setdash } bdef
 /DD { [.5 dpi2point mul 4 dpi2point mul 6 dpi2point mul 4 dpi2point mul] 0 setdash } bdef
-
 % macros for lines and objects
 /L {
 	lineto
@@ -135,7 +121,6 @@ exch FMS
 /L1i {
 	{ currentfile picstr readhexstring pop } image
 	} bdef
-
 /tMatrix matrix def
 /MakeOval {
 	newpath
@@ -152,36 +137,26 @@ exch FMS
 	MakeOval
 	fill
 	} bdef
-
 /PD {
 	2 copy moveto lineto stroke
 	} bdef
-
-
 currentdict end def
 %%EndProlog
-
 %%BeginSetup
 MathWorks begin
-
 0 cap
-
 end
 %%EndSetup
-
 %%Page: 1 1
 %%BeginPageSetup
 %%PageBoundingBox:   134   265   524   460
 MathWorks begin
 bpage
 %%EndPageSetup
-
 %%BeginObject: graph1 1
 bplot
-
 /dpi2point 12 def
 portraitMode 0216 7344 csm
-
  1392  1818  4682  2340 MR c np
 76 dict begin %Colortable dictionary
 /c0 { 0 0 0 sr} bdef
@@ -194,7 +169,6 @@ portraitMode 0216 7344 csm
 /c7 { 0 1 1 sr} bdef
 %%IncludeResource: font Times-Roman
 /Times-Roman /ISOLatin1Encoding 144 FMSR
-
 1 j
 c1
    0    0 6914 5184 PR
@@ -7367,19 +7341,13 @@ PP
 gr
 c0
 DP
-
-gr 
+gr
 c0
-
 end
-
 eplot
 %%EndObject graph 1
-
 epage
 end
-
 showpage
-
 %%Trailer
 %%EOF

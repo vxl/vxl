@@ -1,4 +1,4 @@
-%!PS-Adobe-3.0
+%!PS-Adobe-2.0 EPSF-2.0
 %%Creator: (ImageMagick)
 %%Title: (popupmenu-example.ps)
 %%CreationDate: (Fri Dec 27 12:49:10 2002)
@@ -6,13 +6,10 @@
 %%DocumentData: Clean7Bit
 %%LanguageLevel: 1
 %%Orientation: Portrait
-%%PageOrder: Ascend
 %%Pages: 1
 %%EndComments
-
 %%BeginDefaults
 %%EndDefaults
-
 %%BeginProlog
 %
 % Display a color image.  The image is displayed in color on
@@ -45,7 +42,6 @@
   } for
   pixels 0 number_pixels getinterval
 } bind def
-
 /DirectClassImage
 {
   %
@@ -72,7 +68,6 @@
     { GrayDirectClassPacket } image
   } ifelse
 } bind def
-
 /GrayDirectClassPacket
 {
   %
@@ -104,7 +99,6 @@
   } for
   pixels 0 number_pixels getinterval
 } bind def
-
 /GrayPseudoClassPacket
 {
   %
@@ -136,7 +130,6 @@
   } for
   pixels 0 number_pixels getinterval
 } bind def
-
 /PseudoClassPacket
 {
   %
@@ -163,7 +156,6 @@
   } for
   pixels 0 number_pixels getinterval
 } bind def
-
 /PseudoClassImage
 {
   %
@@ -219,7 +211,6 @@
     } ifelse
   } ifelse
 } bind def
-
 /DisplayImage
 {
   %
@@ -240,7 +231,6 @@
   /byte 1 string def
   /color_packet 3 string def
   /pixels 768 string def
-
   currentfile buffer readline pop
   token pop /x exch def
   token pop /y exch def pop
