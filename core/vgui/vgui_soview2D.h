@@ -15,6 +15,7 @@
 //                     vgui_soview2D_infinite_line  vgui_soview2D_circle
 //                     vgui_soview2D_ellipse  vgui_soview2D_linestrip
 //                     vgui_soview2D_polygon
+//
 // Notes:  We use floats instead of doubles as size is a speed issue (sic.)
 //
 // \verbatim
@@ -356,7 +357,7 @@ class vgui_soview2D_image : public vgui_soview2D
  public:
   //: Constructor - create a 2D image
   vgui_soview2D_image() {};
-	 
+
   void set_image(float x, float y, float w, float h, char *data);
 
   //: Destructor - delete this image.
@@ -373,8 +374,8 @@ class vgui_soview2D_image : public vgui_soview2D
 
   //: Sets the openGL format and type of the stored image
   void set_format_type(unsigned int format, unsigned int type) {
-	  img_format_ = format;
-	  img_type_ = type;
+    img_format_ = format;
+    img_type_ = type;
   }
 
   //: Returns the type of this class ('vgui_soview2D_image').
@@ -396,10 +397,10 @@ class vgui_soview2D_image : public vgui_soview2D
   char *img_;
 
   //: OpenGL format for the image ex.  GL_RGB, GL_COLOR_INDEX, GL_ALPHA,...
-  unsigned int img_format_;  
+  unsigned int img_format_;
 
   //: OpenGL type for the image.  ex. GL_UNSIGNED_BYTE, GL_UNSIGNED_SHORT_5_5_5_1,...
-  unsigned int img_type_;    
+  unsigned int img_type_;
 };
 
 #endif // vgui_soview2D_h_
