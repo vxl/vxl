@@ -6,6 +6,7 @@
 
 #include <vcl_cstdio.h>
 
+//: Return the file descriptor (int) of an open file stream (FILE *).
 int vpl_fileno(vcl_FILE *fp);
 
 #endif

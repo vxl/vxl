@@ -3,11 +3,23 @@
 #define vpl_h_
 //:
 // \file
+// \brief Access to certain POSIX functions.
+//
+// The vpl library provides platform-independent access to a few
+// functions defined by the IEEE POSIX Standards.
 
 #include <vcl_cstddef.h>
 
-//: Get the working directory
-//  See the getcwd(3) manpage for details.
+//: Get the pathname of the current working directory.
+//
+//  If \a buf is not NULL, then \a size must be at least 1 greater
+//  than the length of the pathname to be returned and the pathname
+//  will be stored in \a buf.  If \a buf is NULL then the pathname
+//  will be returned and the returned pointer may be passed to free()
+//  by the caller.
+//
+//  See also: getcwd(3) manpage.
+
 char           *vpl_getcwd( char *buf, vcl_size_t buf_size );
 
 //: Create a new directory \a dir with permissions \a mode.
@@ -22,10 +34,10 @@ int             vpl_chdir( const char *dir );
 //: Remove the file \a file.
 int             vpl_unlink( const char *file );
 
-//: Sleep for t seconds.
+//: Sleep for \a t seconds.
 unsigned int    vpl_sleep( unsigned int t );
 
-//: Sleep for t microseconds.
+//: Sleep for \a t microseconds.
 int             vpl_usleep( unsigned int t );
 
 //: Set environment variable
