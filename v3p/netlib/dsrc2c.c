@@ -49,6 +49,31 @@ doublereal etime_(float *tarray)
   tarray[1]=0.0;
   return 0.0;
 }
+
+extern doublereal timer_(real *);
+extern doublereal pbeta_(integer *, integer *, integer *, doublereal *, 
+  doublereal *, doublereal *, doublereal *);
+extern doublereal itpackddot_(integer *, doublereal *, integer *, doublereal *, 
+  integer *);
+extern doublereal pvtbv_(integer *, integer *, integer *, doublereal *, 
+  doublereal *);
+extern logical chgsme_(doublereal *, integer *);
+extern logical tstchg_(integer *);
+extern logical omgchg_(integer *);
+extern logical omgstr_(integer *);
+extern doublereal tau_(integer *);
+extern integer ipstr_(doublereal *);
+extern doublereal eigvns_(integer *, doublereal *, doublereal *, 
+  doublereal *, integer *), eigvss_(integer *, doublereal *, 
+  doublereal *, doublereal *, integer *, integer *);
+extern doublereal cheby_(doublereal *, doublereal *, doublereal *, 
+  integer *, doublereal *, doublereal *);
+extern integer bisrch_(integer *, integer *, integer *);
+extern doublereal etime_(real *);
+extern doublereal determ_(integer *, doublereal *, doublereal *);
+
+
+
 /***** END VXL ADDITIONS ****/
 
 /* dsrc2c.f -- translated by f2c (version 20020621).
@@ -160,7 +185,6 @@ OES THE RED-BLACK PERMUTATION   \002/\002 \002,\002    IER = \002,i5)";
     static doublereal time1, time2;
     static real timi1, timj1, timi2, timj2;
     static integer idgts;
-    extern doublereal timer_(real *);
     static real dummy;
     static doublereal digit1, digit2;
     static integer itmax1;
@@ -747,7 +771,6 @@ OES THE RED-BLACK PERMUTATION   \002/\002 \002,\002    IER = \002,i5)";
     static doublereal time1, time2;
     static real timi1, timj1, timi2, timj2;
     static integer idgts;
-    extern doublereal timer_(real *);
     static real dummy;
     static doublereal digit1, digit2;
     static integer itmax1;
@@ -1310,7 +1333,6 @@ OES THE RED-BLACK PERMUTATION   \002/\002 \002,\002    IER = \002,i5)";
     static doublereal time1, time2;
     static real timi1, timj1, timi2, timj2;
     static integer idgts;
-    extern doublereal timer_(real *);
     static real dummy;
     static doublereal digit1, digit2;
     static integer itmax1;
@@ -1854,10 +1876,7 @@ CH UNDOES THE RED-BLACK PERMUTATION   \002/\002 \002,\002    IER = \002,i5)";
     static integer loop;
     static doublereal time1, time2;
     static real timi1, timj1, timi2, timj2;
-    extern doublereal pbeta_(integer *, integer *, integer *, doublereal *, 
-      doublereal *, doublereal *, doublereal *);
     static integer idgts;
-    extern doublereal timer_(real *);
     static real dummy;
     static doublereal digit1, digit2;
     static integer itmax1;
@@ -2474,10 +2493,7 @@ CH UNDOES THE RED-BLACK PERMUTATION   \002/\002 \002,\002    IER = \002,i5)";
     static integer loop;
     static doublereal time1, time2;
     static real timi1, timj1, timi2, timj2;
-    extern doublereal pbeta_(integer *, integer *, integer *, doublereal *, 
-      doublereal *, doublereal *, doublereal *);
     static integer idgts;
-    extern doublereal timer_(real *);
     static real dummy;
     static doublereal digit1, digit2;
     static integer itmax1;
@@ -3074,7 +3090,6 @@ H UNDOES THE RED-BLACK PERMUTATION   \002/\002 \002,\002    IER = \002,i5)";
     static doublereal time1, time2;
     static real timi1, timj1, timi2, timj2;
     static integer idgts;
-    extern doublereal timer_(real *);
     static real dummy;
     static doublereal digit1, digit2;
     static integer itmax1;
@@ -3716,7 +3731,6 @@ H UNDOES THE RED-BLACK PERMUTATION   \002/\002 \002,\002    IER = \002,i5)";
     static doublereal time1, time2;
     static real timi1, timj1, timi2, timj2;
     static integer idgts;
-    extern doublereal timer_(real *);
     static real dummy;
     static doublereal digit1, digit2;
     static integer itmax1;
@@ -4271,8 +4285,6 @@ L420:
     static doublereal c1, c2, c3, c4;
     static logical q1;
     static doublereal con;
-    extern doublereal itpackddot_(integer *, doublereal *, integer *, doublereal *, 
-      integer *);
     static doublereal dnrm;
     static doublereal dtnrm;
     static doublereal gamold;
@@ -4394,15 +4406,9 @@ L30:
     static doublereal c1, c2, c3;
     static logical q1;
     static doublereal con;
-    extern doublereal itpackddot_(integer *, doublereal *, integer *, doublereal *, 
-      integer *);
     static doublereal dnrm;
     static doublereal dtnrm;
-    extern doublereal pvtbv_(integer *, integer *, integer *, doublereal *, 
-      doublereal *);
-    extern logical chgsme_(doublereal *, integer *);
     static doublereal oldnrm;
-    extern logical tstchg_(integer *);
 
 
 /* ... FUNCTION: */
@@ -4538,11 +4544,9 @@ L40:
     static integer n;
     static logical q1;
     static integer ip;
-    extern doublereal tau_(integer *);
     static integer iss;
     static doublereal dnrm;
     static integer iphat;
-    extern integer ipstr_(doublereal *);
     static doublereal spcrm1;
     static logical change;
     static doublereal omegap;
@@ -4739,17 +4743,9 @@ L70:
     static integer n;
     static logical q1;
     static doublereal t1, t2, t3, t4, con;
-    extern doublereal itpackddot_(integer *, doublereal *, integer *, doublereal *, 
-      integer *);
     static doublereal dnrm;
-    extern doublereal pbeta_(integer *, integer *, integer *, doublereal *, 
-      doublereal *, doublereal *, doublereal *);
-    extern doublereal pvtbv_(integer *, integer *, integer *, doublereal *, 
-      doublereal *);
-    static doublereal gamold;
-    extern logical omgchg_(integer *);
     static doublereal betnew, rhoold, rhotmp;
-    extern logical omgstr_(integer *);
+    static doublereal gamold;
 
 
 /* ... FUNCTION: */
@@ -4952,15 +4948,8 @@ L100:
     static doublereal c1, c2, c3;
     static logical q1;
     static doublereal con;
-    extern doublereal itpackddot_(integer *, doublereal *, integer *, doublereal *, 
-      integer *);
     static doublereal dnrm;
-    extern doublereal pbeta_(integer *, integer *, integer *, doublereal *, 
-      doublereal *, doublereal *, doublereal *);
-    extern doublereal pvtbv_(integer *, integer *, integer *, doublereal *, 
-      doublereal *);
     static doublereal betnew;
-    extern logical tstchg_(integer *), omgstr_(integer *);
 
 
 /* ... FUNCTION: */
@@ -5117,8 +5106,6 @@ L40:
     static integer nb, nr;
     static doublereal con;
     static integer nrp1;
-    extern doublereal itpackddot_(integer *, doublereal *, integer *, doublereal *, 
-      integer *);
     static doublereal dnrm;
     static doublereal gamold;
     static doublereal rhoold;
@@ -5243,11 +5230,8 @@ L30:
     static doublereal c1, c2, c3;
     static logical q1;
     static integer nb, nr, nrp1;
-    extern doublereal itpackddot_(integer *, doublereal *, integer *, doublereal *, 
-      integer *);
     static doublereal dnrm;
     static doublereal const__;
-    extern logical tstchg_(integer *);
 
 
 /* ... FUNCTION: */
@@ -5502,9 +5486,6 @@ TURNED OFF AT ITERATION \002,i5/10x,\002FINAL ESTIMATE OF MAXIMUM EIGENVALUE\
     static doublereal end;
     static integer ier;
     static doublereal cmold, start;
-    extern doublereal eigvns_(integer *, doublereal *, doublereal *, 
-      doublereal *, integer *), eigvss_(integer *, doublereal *, 
-      doublereal *, doublereal *, integer *, integer *);
 
     /* Fortran I/O blocks */
     static cilist io___357 = { 0, 0, 0, fmt_70, 0 };
@@ -5717,8 +5698,6 @@ TION TO RAYLEIGH QUOTIENT    =\002,d15.7/35x,\002NEW ESTIMATE FOR CME       \
 
     /* Local variables */
     static doublereal zm1, zm2;
-    extern doublereal cheby_(doublereal *, doublereal *, doublereal *, 
-      integer *, doublereal *, doublereal *);
     static doublereal cmold;
 
     /* Fortran I/O blocks */
@@ -8631,7 +8610,6 @@ ACK ROUTINE PRBNDX   \002)";
     static integer nels;
     static doublereal temp;
     static integer next;
-    extern integer bisrch_(integer *, integer *, integer *);
 
     /* Fortran I/O blocks */
     static cilist io___536 = { 0, 0, 0, fmt_100, 0 };
@@ -8896,8 +8874,6 @@ DUAL) =\002,f5.1,2x,\002(DIGIT2)\002)";
 
     /* Local variables */
     static integer n;
-    extern doublereal itpackddot_(integer *, doublereal *, integer *, doublereal *, 
-      integer *);
     static doublereal bnrm, temp, rnrm;
     static integer idgts;
     static doublereal digit1, digit2;
@@ -10179,8 +10155,6 @@ L110:
 
     /* Local variables */
     static doublereal tl, tr, con;
-    extern doublereal itpackddot_(integer *, doublereal *, integer *, doublereal *, 
-      integer *);
     static doublereal uold;
 
 
@@ -11964,7 +11938,6 @@ doublereal timer_(real *timdmy)
     real ret_val;
 
     /* Local variables */
-    extern doublereal etime_(real *);
     static real total, tarray[2];
 
 
@@ -12530,7 +12503,6 @@ ORITHM FAILED TO CONVERGE   \002/\002 \002,\002    IN\002,i6,\002 ITERATIONS \
     static integer ic;
     static doublereal rm, tol, rone, temp;
     static integer maxfn;
-    extern doublereal determ_(integer *, doublereal *, doublereal *);
 
     /* Fortran I/O blocks */
     static cilist io___791 = { 0, 0, 0, fmt_100, 0 };
