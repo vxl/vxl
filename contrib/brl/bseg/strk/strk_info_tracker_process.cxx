@@ -42,8 +42,8 @@ bool strk_info_tracker_process::execute()
     return false;
   }
   output_topo_objs_.clear();
-  //assume the input images are grey scale (should really check)
-  vil1_memory_image_of<unsigned char> img(vpro_video_process::get_input_image(0));
+
+  vil1_image img = vpro_video_process::get_input_image(0);
   input_images_.clear();
   if (first_frame_)
   {

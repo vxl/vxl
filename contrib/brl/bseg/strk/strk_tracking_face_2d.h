@@ -107,12 +107,11 @@ class strk_tracking_face_2d : public vbl_ref_count
 {
  public:
   strk_tracking_face_2d(vtol_face_2d_sptr const& face,
-                        vil1_memory_image_of<float> const& image);
-
-  strk_tracking_face_2d(vtol_face_2d_sptr const& face,
                         vil1_memory_image_of<float> const& image,
                         vil1_memory_image_of<float> const& Ix,
-                        vil1_memory_image_of<float> const& Iy);
+                        vil1_memory_image_of<float> const& Iy,
+                        vil1_memory_image_of<float> const& hue,
+                        vil1_memory_image_of<float> const& sat);
 
   strk_tracking_face_2d(vtol_intensity_face_sptr const& intf);
   strk_tracking_face_2d(strk_tracking_face_2d_sptr const& tf);
@@ -120,21 +119,32 @@ class strk_tracking_face_2d : public vbl_ref_count
   //:accessors
   vtol_intensity_face_sptr face() const { return intf_; }
   bool gradient_needed() const { return gradient_info_; }
+  bool color_needed() const { return color_info_; }
   unsigned int intensity_hist_bins() const { return intensity_hist_bins_; }
   unsigned int gradient_dir_hist_bins() const { return gradient_dir_hist_bins_; }
+  unsigned int color_hist_bins() const { return color_hist_bins_; }
   void set_int_mutual_info(float mi);
   void set_grad_mutual_info(float mi);
+  void set_color_mutual_info(float mi);
   float Ix(int i) const { return Ix_[i]; }
   float Iy(int i) const { return Iy_[i]; }
   void set_Ix(int i, float Ix) { Ix_[i] = Ix; }
   void set_Iy(int i, float Iy) { Iy_[i] = Iy; }
+  float hue(int i) const { return hue_[i]; }
+  float sat(int i) const { return sat_[i]; }
+  void set_hue(int i, float Ix) { hue_[i] = Ix; }
+  void set_sat(int i, float Iy) { sat_[i] = Iy; }
   float int_mutual_info() const { return intensity_mi_; }
   float grad_mutual_info() const { return gradient_dir_mi_; }
+  float color_mutual_info() const { return color_mi_; }
   float total_info() const { return total_info_; }
   //: utilities
   bool compute_mutual_information(vil1_memory_image_of<float> const& image,
                                   vil1_memory_image_of<float> const& Ix,
-                                  vil1_memory_image_of<float> const& Iy);
+                                  vil1_memory_image_of<float> const& Iy,
+                                  vil1_memory_image_of<float> const& hue,
+                                  vil1_memory_image_of<float> const& sat
+                                  );
   //: from the face vertices
   void centroid(double& x, double& y) const;
 
@@ -156,16 +166,37 @@ class strk_tracking_face_2d : public vbl_ref_count
 
  private:
   // local functions
+#if 0
   void init_face_info(vil1_memory_image_of<float> const& image,
                       vil1_memory_image_of<float> const& Ix,
                       vil1_memory_image_of<float> const& Iy);
 
-  void set_gradient(vil1_memory_image_of<float> const& Ix,
-                    vil1_memory_image_of<float> const& Iy);
 
   void init(vtol_face_2d_sptr const& face, vil1_memory_image_of<float> const& image,
             vil1_memory_image_of<float> const& Ix,
             vil1_memory_image_of<float> const& Iy);
+#endif
+  void set_gradient(vil1_memory_image_of<float> const& Ix,
+                    vil1_memory_image_of<float> const& Iy);
+  void set_color(vil1_memory_image_of<float> const& hue,
+                 vil1_memory_image_of<float> const& sat);
+#if 0
+  void init(vtol_face_2d_sptr const& face,
+            vil1_memory_image_of<float> const& image,
+            vil1_memory_image_of<float> const& Ix = 0,
+            vil1_memory_image_of<float> const& Iy = 0,
+            vil1_memory_image_of<float> const& hue = 0,
+            vil1_memory_image_of<float> const& sat = 0);
+#endif
+  void init_intensity_info(vtol_face_2d_sptr const& face,
+                           vil1_memory_image_of<float> const& image);
+
+  void init_gradient_info(vil1_memory_image_of<float> const& Ix,
+                          vil1_memory_image_of<float> const& Iy);
+  
+  void init_color_info(vil1_memory_image_of<float> const& hue,
+                       vil1_memory_image_of<float> const& sat);
+  
   float
     compute_intensity_mutual_information(vil1_memory_image_of<float> const& image);
 
@@ -173,18 +204,29 @@ class strk_tracking_face_2d : public vbl_ref_count
     compute_gradient_mutual_information(vil1_memory_image_of<float> const& Ix,
                                         vil1_memory_image_of<float> const& Iy);
 
+
+  float
+    compute_color_mutual_information(vil1_memory_image_of<float> const& hue,
+                                     vil1_memory_image_of<float> const& sat);
+
   // members
   vtol_intensity_face_sptr intf_;
   bool gradient_info_;
+  bool color_info_;
   float intensity_mi_;
   float gradient_dir_mi_;
+  float color_mi_;
   float total_info_;
   float* Ix_;
   float* Iy_;
+  float* hue_;
+  float* sat_;
   unsigned int intensity_hist_bins_;
   unsigned int gradient_dir_hist_bins_;
+  unsigned int color_hist_bins_;
   double model_intensity_entropy_;
   double model_gradient_dir_entropy_;
+  double model_color_entropy_;
 };
 
 #endif // strk_tracking_face_2d_h_

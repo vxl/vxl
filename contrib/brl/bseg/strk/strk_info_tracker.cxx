@@ -33,6 +33,7 @@ strk_info_tracker::strk_info_tracker(strk_info_tracker_params& tp)
   model_intensity_entropy_=0;
  // model_gradient_dir_hist_=0;
   model_gradient_dir_entropy_=0;
+  model_color_entropy_=0;
 }
 
 //:Default Destructor
@@ -55,14 +56,28 @@ void strk_info_tracker::set_image_0(vil1_image& image)
       return;
     }
 
-  vil1_memory_image_of<float> flt=brip_float_ops::convert_to_float(image);
+  vil1_memory_image_of<float> in, hue, sat;
+  int w = image.width(), h = image.height();
 
-  image_0_= brip_float_ops::gaussian(flt, sigma_);
+  if(!color_info_||image.components()==1)
+    {
+      vil1_memory_image_of<float> in=brip_float_ops::convert_to_float(image);
+      image_0_= brip_float_ops::gaussian(in, sigma_);
+    }
 
-  int w = image_0_.width(), h = image_0_.height();
+  if(color_info_&&image.components()==3)
+    {
+      vil1_memory_image_of<vil1_rgb<unsigned char> > temp(image);
+      brip_float_ops::convert_to_IHS(temp, in, hue, sat);
+      image_0_= brip_float_ops::gaussian(in, sigma_);
+      hue_0_ = brip_float_ops::gaussian(hue, sigma_);
+      sat_0_ = brip_float_ops::gaussian(sat, sigma_);
+    }
+
+  if(gradient_info_){
   Ix_0_.resize(w,h);
   Iy_0_.resize(w,h);
-  brip_float_ops::gradient_3x3(image_0_, Ix_0_, Iy_0_);
+  brip_float_ops::gradient_3x3(image_0_, Ix_0_, Iy_0_);}
 }
 
 //-------------------------------------------------------------------------
@@ -76,13 +91,28 @@ void strk_info_tracker::set_image_i(vil1_image& image)
       return;
     }
 
-  vil1_memory_image_of<float> flt=brip_float_ops::convert_to_float(image);
+  vil1_memory_image_of<float> in, hue, sat;
+  int w = image.width(), h = image.height();
 
-  image_i_ = brip_float_ops::gaussian(flt, sigma_);
-  int w = image_i_.width(), h = image_i_.height();
+  if(!color_info_||image.components()==1)
+    {
+      vil1_memory_image_of<float> in=brip_float_ops::convert_to_float(image);
+      image_i_= brip_float_ops::gaussian(in, sigma_);
+    }
+
+  if(color_info_&&image.components()==3)
+    {
+      vil1_memory_image_of<vil1_rgb<unsigned char> > temp(image);
+      brip_float_ops::convert_to_IHS(temp, in, hue, sat);
+      image_i_= brip_float_ops::gaussian(in, sigma_);
+      hue_i_ = brip_float_ops::gaussian(hue, sigma_);
+      sat_i_ = brip_float_ops::gaussian(sat, sigma_);
+    }
+
+  if(gradient_info_){
   Ix_i_.resize(w,h);
   Iy_i_.resize(w,h);
-  brip_float_ops::gradient_3x3(image_i_, Ix_i_, Iy_i_);
+  brip_float_ops::gradient_3x3(image_i_, Ix_i_, Iy_i_);}
 }
 
 //--------------------------------------------------------------------------
@@ -101,13 +131,10 @@ void strk_info_tracker::init()
   if (!initial_model_)
     return;
   strk_tracking_face_2d_sptr tf;
-  if (gradient_info_)
-    tf = new strk_tracking_face_2d(initial_model_, image_0_,
-                                   Ix_0_, Iy_0_);
-  else
-    tf = new strk_tracking_face_2d(initial_model_, image_0_);
+  tf = new strk_tracking_face_2d(initial_model_, image_0_,
+                                 Ix_0_, Iy_0_, hue_0_, sat_0_);
   current_samples_.push_back(tf);
-}
+ }
 
 //--------------------------------------------------------------------------
 //: generate a randomly positioned augmented face
@@ -140,7 +167,7 @@ void strk_info_tracker::generate_samples()
         tf = this->generate_randomly_positioned_sample(*fit);
         if (!tf)
           continue;
-        tf->compute_mutual_information(image_i_, Ix_i_, Iy_i_);
+        tf->compute_mutual_information(image_i_, Ix_i_, Iy_i_, hue_i_, sat_i_);
         hypothesized_samples_.push_back(tf);
       }
 
@@ -163,11 +190,7 @@ clone_and_refresh_data(strk_tracking_face_2d_sptr const& sample)
   vtol_face_2d_sptr f =
     sample->face()->cast_to_face_2d();
   strk_tracking_face_2d_sptr tf;
-  if (gradient_info_)
-    tf = new strk_tracking_face_2d(f, image_0_,
-                                   Ix_0_, Iy_0_);
-  else
-    tf = new strk_tracking_face_2d(f, image_0_);
+  tf = new strk_tracking_face_2d(f, image_i_, Ix_i_, Iy_i_, hue_i_, sat_i_);
   return tf;
 }
 
@@ -185,6 +208,7 @@ void strk_info_tracker::cull_samples()
     vcl_cout << "Total Inf = " << hypothesized_samples_[0]->total_info()
              << " = IntInfo(" <<  hypothesized_samples_[0]->int_mutual_info()
              << ") + GradInfo(" <<  hypothesized_samples_[0]->grad_mutual_info()
+             << ") + ColorInfo(" <<  hypothesized_samples_[0]->color_mutual_info()
              << ")\n";
 
   hypothesized_samples_.clear();

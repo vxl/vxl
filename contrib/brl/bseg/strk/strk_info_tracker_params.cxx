@@ -21,6 +21,7 @@ strk_info_tracker_params(const strk_info_tracker_params& tp)
              tp.scale_range_,
              tp.sigma_,
              tp.gradient_info_,
+             tp.color_info_,
              tp.frac_time_samples_,
              tp.verbose_
              );
@@ -33,6 +34,7 @@ strk_info_tracker_params(const int n_samples,
                          const float scale_range,
                          const float sigma,
                          const bool gradient_info,
+                         const bool color_info,
                          const float frac_time_samples,
                          const bool verbose)
 {
@@ -42,6 +44,7 @@ strk_info_tracker_params(const int n_samples,
              scale_range,
              sigma,
              gradient_info,
+             color_info,
              frac_time_samples,
              verbose);
 }
@@ -52,6 +55,7 @@ void strk_info_tracker_params::InitParams(int n_samples,
                                           float scale_range,
                                           float sigma,
                                           bool gradient_info,
+                                          bool color_info,
                                           float frac_time_samples,
                                           bool verbose)
 {
@@ -61,6 +65,7 @@ void strk_info_tracker_params::InitParams(int n_samples,
   scale_range_ = scale_range;
   sigma_ = sigma;
   gradient_info_ = gradient_info;
+  color_info_ = color_info;
   frac_time_samples_ = frac_time_samples;
   verbose_ = verbose;
 }
@@ -91,6 +96,7 @@ vcl_ostream& operator << (vcl_ostream& os, const strk_info_tracker_params& tp)
   os << "scale_range " << tp.scale_range_ << vcl_endl;
   os << "sigma " << tp.sigma_ << vcl_endl;
   os << "gradient_info " << tp.gradient_info_ << vcl_endl;
+  os << "color_info " << tp.color_info_ << vcl_endl;
   os << "frac_time_samples " << tp.frac_time_samples_ << vcl_endl;
   os << "verbose " << tp.verbose_ << vcl_endl;
   os << "---]" << vcl_endl;

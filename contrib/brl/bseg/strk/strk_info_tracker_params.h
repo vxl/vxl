@@ -22,6 +22,7 @@ class strk_info_tracker_params : public gevd_param_mixin
                            const float scale_range = 0.0,
                            const float sigma = 1.0,
                            const bool gradient_info = true,
+                           const bool color_info = false,
                            const float frac_time_samples = 0,
                            const bool verbose = false
                           );
@@ -39,6 +40,7 @@ class strk_info_tracker_params : public gevd_param_mixin
                  float scale_range,
                  float sigma,
                  bool gradient_info,
+                 bool color_info,
                  float frac_time_samples,
                  bool verbose
                 );
@@ -52,6 +54,7 @@ class strk_info_tracker_params : public gevd_param_mixin
   float scale_range_;      //!< scale range for generating samples
   float sigma_;            //!< smoothing kernel radius for estimating gradient
   bool gradient_info_;     //!< Combine gradient and intensity info
+  bool color_info_;        //!< Combine color and intensity info
   float frac_time_samples_;//!< fraction of new base samples
   bool verbose_;           //!< informative messages to cout
 };

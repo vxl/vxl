@@ -41,9 +41,11 @@ strk_art_info_model(vcl_vector<vtol_face_2d_sptr> const& faces,
                     vsol_point_2d_sptr const stem_pivot,
                     vil1_memory_image_of<float> & image)
 {
-  for (vcl_vector<vtol_face_2d_sptr>::const_iterator fit = faces.begin();
+
+  vil1_memory_image_of<float> null;
+	for (vcl_vector<vtol_face_2d_sptr>::const_iterator fit = faces.begin();
        fit != faces.end(); fit++)
-    faces_.push_back(new strk_tracking_face_2d(*fit, image));
+    faces_.push_back(new strk_tracking_face_2d(*fit, image, null, null,null, null));
   stem_pivot_ = stem_pivot;
   //compute the arm radii
   long_arm_radius_ = arm_radius(faces_[LONG_TIP]);
@@ -57,9 +59,10 @@ strk_art_info_model(vcl_vector<vtol_face_2d_sptr> const& faces,
                     vil1_memory_image_of<float>& Ix,
                     vil1_memory_image_of<float>& Iy)
 {
-  for (vcl_vector<vtol_face_2d_sptr>::const_iterator fit = faces.begin();
+  vil1_memory_image_of<float> null;
+	for (vcl_vector<vtol_face_2d_sptr>::const_iterator fit = faces.begin();
        fit != faces.end(); fit++)
-    faces_.push_back(new strk_tracking_face_2d(*fit, image, Ix, Iy));
+    faces_.push_back(new strk_tracking_face_2d(*fit, image, Ix, Iy, null, null));
   stem_pivot_ = stem_pivot;
   //compute the arm radii
   long_arm_radius_ = arm_radius(faces_[LONG_TIP]);
@@ -189,12 +192,12 @@ compute_mutual_information(vil1_memory_image_of<float> const& image)
 {
   if (!image)
     return false;
-  vil1_memory_image_of<float> null_x, null_y;//dummy args (replace with deflts)
+  vil1_memory_image_of<float> null;//dummy args (replace with deflts)
   double model_info = 0.0;
   for (vcl_vector<strk_tracking_face_2d_sptr>::iterator fit =  faces_.begin();
        fit != faces_.end(); fit++)
   {
-    if (!(*fit)->compute_mutual_information(image, null_x, null_y))
+    if (!(*fit)->compute_mutual_information(image, null, null, null, null))
       continue;
     model_info += (*fit)->total_info();
   }
@@ -210,11 +213,12 @@ compute_mutual_information(vil1_memory_image_of<float> const& image,
 {
   if (!image||!Ix||!Iy)
     return false;
+  vil1_memory_image_of<float> null;
   double model_info = 0.0;
   for (vcl_vector<strk_tracking_face_2d_sptr>::iterator fit =  faces_.begin();
        fit != faces_.end(); fit++)
   {
-    if (!(*fit)->compute_mutual_information(image, Ix, Iy))
+    if (!(*fit)->compute_mutual_information(image, Ix, Iy, null, null))
       continue;
     model_info += (*fit)->total_info();
   }

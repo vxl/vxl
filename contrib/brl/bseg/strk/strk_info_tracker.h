@@ -64,18 +64,23 @@ class strk_info_tracker : public strk_info_tracker_params
 
   //  void refine_best_sample();
   //members
-  vil1_memory_image_of<float> image_0_;  //frame 0
-  vil1_memory_image_of<float> image_i_;  //frame i
-  vil1_memory_image_of<float> Ix_0_;  //x derivative of image_0
-  vil1_memory_image_of<float> Iy_0_;  //y derivative of image_0
-  vil1_memory_image_of<float> Ix_i_;  //x derivative of image_i
-  vil1_memory_image_of<float> Iy_i_;  //y derivative of image_i
+  vil1_memory_image_of<float> image_0_;  //frame 0 intensity
+  vil1_memory_image_of<float> image_i_;  //frame i intensity
+  vil1_memory_image_of<float> hue_0_;  //hue of image_0
+  vil1_memory_image_of<float> sat_0_;  //saturation of image_0
+  vil1_memory_image_of<float> hue_i_;  //hue of image i
+  vil1_memory_image_of<float> sat_i_;  //saturation of image_i
+  vil1_memory_image_of<float> Ix_0_;  //x derivative of image_0 intensity
+  vil1_memory_image_of<float> Iy_0_;  //y derivative of image_0 intensity
+  vil1_memory_image_of<float> Ix_i_;  //x derivative of image_i intensity
+  vil1_memory_image_of<float> Iy_i_;  //y derivative of image_i intensity
   vtol_face_2d_sptr initial_model_;//initial model position
   vcl_vector<strk_tracking_face_2d_sptr> current_samples_;
   vcl_vector<strk_tracking_face_2d_sptr> hypothesized_samples_;
   vcl_vector<strk_tracking_face_2d_sptr> track_history_;
   double model_intensity_entropy_;
   double model_gradient_dir_entropy_;
+  double model_color_entropy_;
 };
 
 #endif // strk_info_tracker_h_
