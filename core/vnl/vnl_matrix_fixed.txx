@@ -703,9 +703,9 @@ outer_product_fixed_calc_helper<VecA,VecB,RM>::calc( VecA const& a, VecB const& 
 };
 
 #define VNL_OUTER_PRODUCT_FIXED_INSTANTIATE( T, M, N ) \
-  template struct outer_product_fixed_calc_helper< vnl_vector_fixed<T,M>, \
-                                                   vnl_vector_fixed<T,N>, \
-                                                   vnl_matrix_fixed<T,M,N> >
+ template struct outer_product_fixed_calc_helper< vnl_vector_fixed<T,M >, \
+                                                  vnl_vector_fixed<T,N >, \
+                                                  vnl_matrix_fixed<T,M,N > >
 
 #else // no need for workaround; declare the function sanely.
 
@@ -721,9 +721,8 @@ outer_product(vnl_vector_fixed<T,m> const& a, vnl_vector_fixed<T,n> const& b)
 }
 
 #define VNL_OUTER_PRODUCT_FIXED_INSTANTIATE( T, M, N ) \
-  template vnl_matrix_fixed<T,M,N> outer_product( vnl_vector_fixed<T,M> const&, \
-                                                  vnl_vector_fixed<T,N> const& )
-                                                   
+ template vnl_matrix_fixed<T,M,N > outer_product(vnl_vector_fixed<T,M > const&,\
+                                                 vnl_vector_fixed<T,N > const& )
 
 #endif // VC60 outer_product workaround
 
@@ -731,6 +730,6 @@ outer_product(vnl_vector_fixed<T,m> const& a, vnl_vector_fixed<T,n> const& b)
 #undef VNL_MATRIX_FIXED_INSTANTIATE
 #define VNL_MATRIX_FIXED_INSTANTIATE(T, M, N) \
   template class vnl_matrix_fixed<T,M,N >; \
-  VNL_OUTER_PRODUCT_FIXED_INSTANTIATE( T, M, N );
+  VNL_OUTER_PRODUCT_FIXED_INSTANTIATE( T, M, N )
 
 #endif // vnl_matrix_fixed_txx_

@@ -708,7 +708,7 @@ vnl_matrix<T> vnl_matrix<T>::transpose() const
 // adjoint/hermitian transpose
 
 template<class T>
-vnl_matrix<T> vnl_matrix<T>::conjugate_transpose() const 
+vnl_matrix<T> vnl_matrix<T>::conjugate_transpose() const
 {
   vnl_matrix<T> result(transpose());
   vnl_c_vector<T>::conjugate(result.begin(),  // src
@@ -1426,7 +1426,7 @@ typename vnl_matrix<T>::abs_t vnl_matrix<T>::operator_inf_norm() const
   return max;
 }
 
-template <class doublereal>                        // ideally, char* should be bool* - PVr
+template <class doublereal>              // ideally, char* should be bool* - PVr
 int vnl_inplace_transpose(doublereal *a, unsigned m, unsigned n, char* move, unsigned iwrk)
 {
   static doublereal b, c;
@@ -1571,7 +1571,7 @@ void vnl_matrix<T>::inplace_transpose()
   }
 }
 
-//--------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 
 #define VNL_MATRIX_INSTANTIATE(T) \
 template class vnl_matrix<T >; \
@@ -1585,6 +1585,6 @@ template vnl_matrix<T > element_product(vnl_matrix<T > const &, vnl_matrix<T > c
 template vnl_matrix<T > element_quotient(vnl_matrix<T > const &, vnl_matrix<T > const &); \
 template int vnl_inplace_transpose(T*, unsigned, unsigned, char*, unsigned); \
 template vcl_ostream & operator<<(vcl_ostream &, vnl_matrix<T > const &); \
-template vcl_istream & operator>>(vcl_istream &, vnl_matrix<T >       &);
+template vcl_istream & operator>>(vcl_istream &, vnl_matrix<T >       &)
 
 #endif // vnl_matrix_txx_
