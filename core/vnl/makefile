@@ -99,6 +99,8 @@ MANPAGE_SOURCES += vnl_complex_ops.txx
 SOURCES += vnl_numeric_limits.cxx
 SOURCES += vnl_numeric_traits.cxx
 SOURCES += vnl_complex_traits.cxx
+SOURCES += vnl_bignum_traits.cxx
+SOURCES += vnl_rational_traits.cxx
 
 # matrix and vector specialisations
 SOURCES += vnl_int_matrix.cxx     # ?
