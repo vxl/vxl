@@ -51,7 +51,6 @@ class vil2_image_view : public vil2_image_view_base
   //: Disconnect this view from the underlying data,
   void release_memory() { ptr_ = 0; }
 
-
  public:
 
   //: Dflt ctor
@@ -65,7 +64,7 @@ class vil2_image_view : public vil2_image_view_base
   //  If the data goes out of scope then this view could be invalid, and
   //  there's no way of knowing until its too late - so take care!
   vil2_image_view(const T* top_left, unsigned ni, unsigned nj, unsigned nplanes,
-                  int istep, int jstep, int planestep);
+                  int i_step, int j_step, int plane_step);
 
   //: Set this view to look at another view's data
   //  Typically used by functions which generate a manipulated view of
@@ -73,7 +72,7 @@ class vil2_image_view : public vil2_image_view_base
   //  Need to pass the memory chunk to set up the internal smart ptr appropriately
   vil2_image_view(const vil2_smart_ptr<vil2_memory_chunk>& mem_chunk,
                   const T* top_left, unsigned ni, unsigned nj, unsigned nplanes,
-                  int istep, int jstep, int planestep);
+                  int i_step, int j_step, int plane_step);
 
   //: Construct from various vil2_image_view types.
   // The new object will point to the same underlying image as the rhs
@@ -106,7 +105,7 @@ class vil2_image_view : public vil2_image_view_base
   //: The pixel type of this image
   typedef T pixel_type;
 
-  //: True if data all in one unbroken block
+  //: True if data all in one unbroken block and top_left_ptr() is lowest data address
   bool is_contiguous() const;
 
   // iterators
@@ -120,16 +119,21 @@ class vil2_image_view : public vil2_image_view_base
 
   // arithmetic indexing stuff
 
-  //: Pointer to the first (top left in plane 0) pixel;
+  //: Pointer to the first (top left in plane 0) pixel.
+  //  Note that this is not necessarily the lowest data memory address.
   T * top_left_ptr() { return top_left_; }  // Make origin explicit
-  //: Pointer to the first (top left in plane 0) pixel;
+  //: Pointer to the first (top left in plane 0) pixel.
+  //  Note that this is not necessarily the lowest data memory address.
   const T * top_left_ptr() const { return top_left_; }
 
-  //: Add this to your pixel pointer to get next i pixel
+  //: Add this to your pixel pointer to get next i pixel.
+  //  Note that istep() may well be negative; see e.g. vil2_flip_lr
   int istep() const { return istep_; }
-  //: Add this to your pixel pointer to get next j pixel
+  //: Add this to your pixel pointer to get next j pixel.
+  //  Note that jstep() may well be negative; see e.g. vil2_flip_ud
   int jstep() const { return jstep_; }
-  //: Add this to your pixel pointer to get pixel on next plane
+  //: Add this to your pixel pointer to get pixel on next plane.
+  //  Note that planestep() may well be negative, e.g. with BMP file images
   int planestep() const { return planestep_; }
 
   //: Cast to bool is true if pointing at some data.
@@ -204,7 +208,7 @@ class vil2_image_view : public vil2_image_view_base
   //  Note that though top_left is passed in as const, the data may be manipulated
   //  through the view.
   void set_to_memory(const T* top_left, unsigned ni, unsigned nj, unsigned nplanes,
-                     int istep, int jstep, int planestep);
+                     int i_step, int j_step, int plane_step);
 
   //: Arrange that this is window on some planes of given image.
   //  i.e. plane(i) points to im.plane(i+p0) + offset
