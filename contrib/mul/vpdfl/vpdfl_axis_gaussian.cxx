@@ -12,6 +12,7 @@
 #include <vnl/vnl_math.h>
 #include <vcl_cstdlib.h>
 #include <vcl_string.h>
+#include <vcl_cassert.h>
 #include <vsl/vsl_indent.h>
 #include <vpdfl/vpdfl_axis_gaussian.h>
 #include <vpdfl/vpdfl_axis_gaussian_sampler.h>
@@ -43,16 +44,16 @@ void vpdfl_axis_gaussian::calcLogK()
   int n = n_dims();
   double log_v_sum = 0.0;
   for (int i=0;i<n;i++)
-    log_v_sum+=log(v_data[i]);
+    log_v_sum+=vcl_log(v_data[i]);
 
-  log_k_ = -0.5 * (n*log(2 * vnl_math::pi) + log_v_sum);
+  log_k_ = -0.5 * (n*vcl_log(2 * vnl_math::pi) + log_v_sum);
 }
 
 void vpdfl_axis_gaussian::calcSD()
 {
   sd_ = variance();
   int n = sd_.size();
-  for (int i=0;i<n;i++) sd_[i] = sqrt(sd_[i]);
+  for (int i=0;i<n;i++) sd_[i] = vcl_sqrt(sd_[i]);
 }
 
 
@@ -76,7 +77,7 @@ double vpdfl_axis_gaussian::log_p(const vnl_vector<double>& x) const
   if (n!=n_dims())
   {
     vcl_cerr<<"ERROR: vpdfl_axis_gaussian::log_p: Target vector has "
-      <<n<<" dimensions, not the required "<<n_dims()<<vcl_endl;
+            <<n<<" dimensions, not the required "<<n_dims()<<vcl_endl;
     vcl_abort();
   }
 #endif
@@ -118,7 +119,7 @@ void vpdfl_axis_gaussian::gradient(vnl_vector<double>& g,
     g_data[i]= -dx/v_data[i];
   }
 
-  p = exp(log_k() - 0.5*sum);
+  p = vcl_exp(log_k() - 0.5*sum);
 
   g*=p;
 }
@@ -127,11 +128,10 @@ void vpdfl_axis_gaussian::gradient(vnl_vector<double>& g,
 
 vpdfl_sampler_base* vpdfl_axis_gaussian::new_sampler() const
 {
-	vpdfl_axis_gaussian_sampler *i = new vpdfl_axis_gaussian_sampler;
-	i->set_model(*this);
-	return i;
+  vpdfl_axis_gaussian_sampler *i = new vpdfl_axis_gaussian_sampler;
+  i->set_model(*this);
+  return i;
 }
-
 
 
 double vpdfl_axis_gaussian::log_prob_thresh(double pass_proportion) const
@@ -142,7 +142,6 @@ double vpdfl_axis_gaussian::log_prob_thresh(double pass_proportion) const
 }
 
 
-
 void vpdfl_axis_gaussian::nearest_plausible(vnl_vector<double>& x, double log_p_min) const
 {
   const double *s = sd_.data_block();
@@ -151,7 +150,6 @@ void vpdfl_axis_gaussian::nearest_plausible(vnl_vector<double>& x, double log_p_
 
   double *x_data = x.data_block();
 
-  
   // calculate radius of plausible region in standard deviations.
   log_p_min -= log_k();
   assert(log_p_min <0); // Check sd_limit is positive and real.
@@ -166,9 +164,8 @@ void vpdfl_axis_gaussian::nearest_plausible(vnl_vector<double>& x, double log_p_
 
     if (x_data[i]<lo) x_data[i] = lo;
     else
-        if (x_data[i]>hi) x_data[i] = hi;
+      if (x_data[i]>hi) x_data[i] = hi;
   }
-
 }
 //=======================================================================
 // Method: is_a
@@ -177,6 +174,11 @@ void vpdfl_axis_gaussian::nearest_plausible(vnl_vector<double>& x, double log_p_
 vcl_string  vpdfl_axis_gaussian::is_a() const
 {
   return vcl_string("vpdfl_axis_gaussian");
+}
+
+bool vpdfl_axis_gaussian::is_a(vcl_string const& s) const
+{
+  return vpdfl_pdf_base::is_a(s) || s==vcl_string("vpdfl_axis_gaussian");
 }
 
 //=======================================================================
