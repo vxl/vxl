@@ -114,6 +114,9 @@ SOURCE=.\test_sparse_array_io.cxx
 # Begin Source File
 SOURCE=.\vbl_io_test_classes.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\test_triple_io.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;hpp;hxx;hm;inl"
