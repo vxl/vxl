@@ -12,8 +12,8 @@
 
 
 //Gives a sort on correlation score (currently increasing values JLM)
-static bool corr_compare(const sdet_correlated_face* & f1,
-                         const sdet_correlated_face* & f2)
+static bool corr_compare(sdet_correlated_face* & f1,
+                         sdet_correlated_face* & f2)
 {
   return f1->correlation() < f2->correlation();//JLM Switched
 }
