@@ -290,36 +290,6 @@ void strk_tracking_face_2d::centroid(double& x, double& y) const
   x = p->x();
   y = p->y();
 }
-#if 0
-strk_tracking_face_2d::
-strk_tracking_face_2d(vtol_face_2d_sptr const& face,
-                      vil1_memory_image_of<float> const& image)
-{
-  intf_ = 0;
-  Ix_ = 0;
-  Iy_ = 0;
-  gradient_info_ = false;
-  intensity_mi_=0;
-  gradient_dir_mi_=0;
-  vil1_memory_image_of<float> t1, t2;
-  this->init(face, image, t1, t2);
-}
-
-strk_tracking_face_2d::
-strk_tracking_face_2d(vtol_face_2d_sptr const& face,
-                      vil1_memory_image_of<float> const& image,
-                      vil1_memory_image_of<float> const& Ix,
-                      vil1_memory_image_of<float> const& Iy)
-{
-  intf_ = 0;
-  Ix_ = 0;
-  Iy_ = 0;
-  gradient_info_ = true;
-  intensity_mi_=0;
-  gradient_dir_mi_=0;
-  this->init(face, image, Ix, Iy);
-}
-#endif
 
 strk_tracking_face_2d::
 strk_tracking_face_2d(vtol_face_2d_sptr const& face,
@@ -420,95 +390,6 @@ strk_tracking_face_2d::~strk_tracking_face_2d()
   delete [] hue_;
   delete [] sat_;
 }
-#if 0
-void
-strk_tracking_face_2d::init_face_info(vil1_memory_image_of<float> const& image,
-                                      vil1_memory_image_of<float> const& Ix,
-                                      vil1_memory_image_of<float> const& Iy)
-{
-  if (!intf_||!image)
-    return;
-  bool use_grad = (Ix && Iy);//this is ugly - fix me !!
-  int width = image.width(), height = image.height();
-  intf_->ResetPixelData();
-  vgl_polygon<float> p;
-  p.new_sheet();
-  vcl_vector<vtol_vertex_sptr> verts;
-  intf_->vertices(verts);
-  for (vcl_vector<vtol_vertex_sptr>::iterator vit = verts.begin();
-       vit != verts.end(); vit++)
-    p.push_back(float((*vit)->cast_to_vertex_2d()->x()),
-                float((*vit)->cast_to_vertex_2d()->y()));
-  vgl_polygon_scan_iterator<float> psi(p, true);
-
-  //go throught the pixels once to gather statistics for the face Npix etc.
-  for (psi.reset(); psi.next();)
-    for (int x = psi.startx(); x<=psi.endx(); x++)
-    {
-      int y = psi.scany();
-      if (x<0||x>=width||y<0||y>=height)
-        continue;
-
-      unsigned short v = (unsigned short)image(x, y);
-      intf_->IncrementMeans(float(x), float(y), v);
-    }
-  intf_->InitPixelArrays();
-
-  strk_histf<float> model_intensity_hist;
-  intensity_hist_bins_ = model_intensity_hist.nbins();
-
-  strk_double_histf<float> model_gradient_dir_hist;
-  gradient_dir_hist_bins_ = model_gradient_dir_hist.nbins();
-
-  double deg_rad = 180.0/vnl_math::pi;
-  //Got through the pixels again to actually set the face arrays X(), Y() etc
-  for (psi.reset(); psi.next();)
-    for (int x = psi.startx(); x<=psi.endx(); x++)
-    {
-      int y = psi.scany();
-      if (x<0||x>=width||y<0||y>=height)
-        continue;
-      unsigned short v = (unsigned short)image(x, y);
-      model_intensity_hist.upcount(v);
-      intf_->InsertInPixelArrays(float(x), float(y), v);
-      if (use_grad)
-      {
-        float Ixi = Ix(x,y), Iyi = Iy(x,y);
-        float ang = float(deg_rad*vcl_atan2(Iyi, Ixi))+180.f;
-        float mag = vcl_abs(Ixi)+vcl_abs(Iyi);
-        model_gradient_dir_hist.upcount(ang, mag);
-      }
-    }
-#ifdef DEBUG
-  vcl_cout << "Model Hist\n";
-  model_intensity_hist.print();
-  vcl_cout << "Model Dir Hist\n";
-  model_gradient_dir_hist.print();
-#endif
-  //compute the model entropy
-  double ent = 0;
-  for (unsigned int m = 0; m<intensity_hist_bins_; m++)
-  {
-    float pm = model_intensity_hist.p(m);
-    if (!pm)
-      continue;
-    ent -= pm*vcl_log(pm);
-  }
-  model_intensity_entropy_ = ent/vcl_log(2.0);
-
-  //compute the gradient direction entropy
-  ent = 0;
-  if (use_grad)
-    for (unsigned int m = 0; m<gradient_dir_hist_bins_; m++)
-    {
-      float pm = model_gradient_dir_hist.p(m);
-      if (!pm)
-        continue;
-      ent -= pm*vcl_log(pm);
-    }
-  model_gradient_dir_entropy_= ent/vcl_log(2.0);
-}
-#endif
 
 void strk_tracking_face_2d::set_gradient(vil1_memory_image_of<float> const& Ix,
                                          vil1_memory_image_of<float> const& Iy)
@@ -537,27 +418,6 @@ void strk_tracking_face_2d::set_color(vil1_memory_image_of<float> const& hue,
       this->set_sat(i, sat(x,y));
     }
 }
-#if 0
-void strk_tracking_face_2d::
-init(vtol_face_2d_sptr const& face, vil1_memory_image_of<float> const& image,
-     vil1_memory_image_of<float> const& Ix,
-     vil1_memory_image_of<float> const& Iy)
-{
-  if (!face)
-    return;
-  intf_ = new vtol_intensity_face(face);
-
-  if (!image)
-    return;
-  this->init_face_info(image, Ix, Iy);//also sets model entropies
-  if (!gradient_info_)
-    return;
-  int n = intf_->Npix();
-  Ix_ = new float[n];
-  Iy_ = new float[n];
-  this->set_gradient(Ix, Iy);
-}
-#endif
 
 void strk_tracking_face_2d::
 init_intensity_info(vtol_face_2d_sptr const& face,
