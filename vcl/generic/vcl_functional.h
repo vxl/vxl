@@ -119,41 +119,65 @@
 #ifndef vcl_mem_fun_t
 #define vcl_mem_fun_t vcl_generic_functional_STD :: mem_fun_t
 #endif
+// mem_fun
+#ifndef vcl_mem_fun
+#define vcl_mem_fun vcl_generic_functional_STD :: mem_fun
+#endif
 // mem_fun1_t
 #ifndef vcl_mem_fun1_t
 #define vcl_mem_fun1_t vcl_generic_functional_STD :: mem_fun1_t
 #endif
-// mem_fun
-#ifndef vcl_mem_fun
-#define vcl_mem_fun vcl_generic_functional_STD :: mem_fun
+// mem_fun1
+#ifndef vcl_mem_fun1
+#define vcl_mem_fun1 vcl_generic_functional_STD :: mem_fun1
 #endif
 // mem_fun_ref_t
 #ifndef vcl_mem_fun_ref_t
 #define vcl_mem_fun_ref_t vcl_generic_functional_STD :: mem_fun_ref_t
 #endif
+// mem_fun_ref
+#ifndef vcl_mem_fun_ref
+#define vcl_mem_fun_ref vcl_generic_functional_STD :: mem_fun_ref
+#endif
 // mem_fun1_ref_t
 #ifndef vcl_mem_fun1_ref_t
 #define vcl_mem_fun1_ref_t vcl_generic_functional_STD :: mem_fun1_ref_t
 #endif
-// mem_fun_ref
-#ifndef vcl_mem_fun_ref
-#define vcl_mem_fun_ref vcl_generic_functional_STD :: mem_fun_ref
+// mem_fun1_ref
+#ifndef vcl_mem_fun1_ref
+#define vcl_mem_fun1_ref vcl_generic_functional_STD :: mem_fun1_ref
 #endif
 // const_mem_fun_t
 #ifndef vcl_const_mem_fun_t
 #define vcl_const_mem_fun_t vcl_generic_functional_STD :: const_mem_fun_t
 #endif
+// const_mem_fun
+#ifndef vcl_const_mem_fun
+#define vcl_const_mem_fun vcl_generic_functional_STD :: const_mem_fun
+#endif
 // const_mem_fun1_t
 #ifndef vcl_const_mem_fun1_t
 #define vcl_const_mem_fun1_t vcl_generic_functional_STD :: const_mem_fun1_t
+#endif
+// const_mem_fun1
+#ifndef vcl_const_mem_fun1
+#define vcl_const_mem_fun1 vcl_generic_functional_STD :: const_mem_fun1
 #endif
 // const_mem_fun_ref_t
 #ifndef vcl_const_mem_fun_ref_t
 #define vcl_const_mem_fun_ref_t vcl_generic_functional_STD :: const_mem_fun_ref_t
 #endif
+// const_mem_fun_ref
+#ifndef vcl_const_mem_fun_ref
+#define vcl_const_mem_fun_ref vcl_generic_functional_STD :: const_mem_fun_ref
+#endif
 // const_mem_fun1_ref_t
 #ifndef vcl_const_mem_fun1_ref_t
 #define vcl_const_mem_fun1_ref_t vcl_generic_functional_STD :: const_mem_fun1_ref_t
+#endif
+// const_mem_fun1_ref
+#ifndef vcl_const_mem_fun1_ref
+#define vcl_const_mem_fun1_ref vcl_generic_functional_STD :: const_mem_fun1_ref
 #endif
 // transform
 #ifndef vcl_transform
