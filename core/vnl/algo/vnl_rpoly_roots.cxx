@@ -13,7 +13,8 @@
 
 #include "vnl_rpoly_roots.h"
 
-#include <vcl_cstdlib.h>
+//#include <vcl_cstdlib.h>
+#include <vcl_cmath.h> // for fabs()
 #include <vcl_iostream.h>
 #include <vcl_complex.h>
 #include <vnl/algo/vnl_netlib.h> // rpoly_()
@@ -59,13 +60,13 @@ vnl_vector<double> vnl_rpoly_roots::realroots(double tol) const
 {
   int c = 0;
   for(int i = 0; i < num_roots_found_; ++i)
-    if (vcl_abs(i_[i]) < tol)
+    if (vcl_fabs(i_[i]) < tol)
       ++c;
 
   vnl_vector<double> ret(c);
   c = 0;
   {for(int i = 0; i < num_roots_found_; ++i)
-    if (vcl_abs(i_[i]) < tol)
+    if (vcl_fabs(i_[i]) < tol)
       ret[c++] = r_[i];}
 
   return ret;
