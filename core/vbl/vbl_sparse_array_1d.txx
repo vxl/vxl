@@ -6,6 +6,7 @@
 #include "vbl_sparse_array_base.txx"
 #include <vcl_iostream.h>
 
+#if 0 // capes@robots - moved print implementation to header file
 //: Print the Array to a stream in "(i): value" format.
 template <class T>
 vcl_ostream& vbl_sparse_array_1d<T>::print(vcl_ostream& out) const
@@ -14,6 +15,7 @@ vcl_ostream& vbl_sparse_array_1d<T>::print(vcl_ostream& out) const
     out << "(" << (*p).first << "): " << (*p).second << vcl_endl;
   return out;
 }
+#endif
 
 #undef VBL_SPARSE_ARRAY_1D_INSTANTIATE
 #define VBL_SPARSE_ARRAY_1D_INSTANTIATE(T) \
