@@ -34,8 +34,8 @@ HomgOperator3D::sort_points(HomgPoint3D* points, int n)
     vcl_cerr << "WARNING HomgOperator3D::sort_points -- " << (n - num_finite) << " at infinity\n";
   }
 
-  if (!num_finite) {
-    vcl_cerr << "HomgOperator3D::sort_points: all points at infinity - no action";
+  if (num_finite == 0) {
+    vcl_cerr << "HomgOperator3D::sort_points: all points at infinity - no action\n";
     return;
   }
 
