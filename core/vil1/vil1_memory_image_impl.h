@@ -22,9 +22,9 @@ class vil_memory_image_impl : public vil_image_impl {
 public:
   vil_memory_image_impl(int planes, int w, int h, vil_memory_image_format const& format);
   vil_memory_image_impl(int planes, int w, int h, int components, int bits_per_component, vil_component_format component_format);
-  vil_memory_image_impl(int planes, int w, int h, vil_pixel_format pixel_format);
+  vil_memory_image_impl(int planes, int w, int h, vil_pixel_format_t pixel_format);
   vil_memory_image_impl(int w, int h, int components, int bits_per_component, vil_component_format component_format);
-  vil_memory_image_impl(int w, int h, vil_pixel_format pixel_format);
+  vil_memory_image_impl(int w, int h, vil_pixel_format_t pixel_format);
   vil_memory_image_impl(vil_memory_image_impl const&);
   ~vil_memory_image_impl();
 
@@ -46,14 +46,14 @@ public:
   // added by Brendan McCane
   vil_memory_image_impl(void *buf, int planes, int w, int h, vil_memory_image_format const& format);
   vil_memory_image_impl(void *buf, int planes, int w, int h, int components, int bits_per_component, vil_component_format component_format);
-  vil_memory_image_impl(void *buf, int planes, int w, int h, vil_pixel_format pixel_format);
+  vil_memory_image_impl(void *buf, int planes, int w, int h, vil_pixel_format_t pixel_format);
   vil_memory_image_impl(void *buf, int w, int h, int components, int bits_per_component, vil_component_format component_format);
-  vil_memory_image_impl(void *buf, int w, int h, vil_pixel_format pixel_format);
+  vil_memory_image_impl(void *buf, int w, int h, vil_pixel_format_t pixel_format);
 
 protected:
   friend class vil_memory_image;
 
-  void init(void *buf, int planes, int w, int h, vil_pixel_format pixel_format);
+  void init(void *buf, int planes, int w, int h, vil_pixel_format_t pixel_format);
   void init(void *buf, int planes, int w, int h, int components, int bits_per_component, vil_component_format);
 
   int planes_;

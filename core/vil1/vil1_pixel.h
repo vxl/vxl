@@ -9,7 +9,7 @@
 // \author awf@robots.ox.ac.uk
 
 // Common combinations of component format, bits, planes and components.
-enum vil_pixel_format {
+enum vil_pixel_format_t {
   VIL_PIXEL_FORMAT_UNKNOWN,
   VIL_BYTE,       /*!< 1 x W x H x 1 of UINT x 8*/
   VIL_RGB_BYTE,   /*!< 1 x W x H x 3 of UINT x 8*/
@@ -27,6 +27,6 @@ class vil_image;
 
 //: Returns one of the `vil_pixel_format's. 
 // A standard RGB RGB RGB image has pixel_type() == VIL_RGB_BYTE
-vil_pixel_format vil_pixel_type(vil_image const &);
+vil_pixel_format_t vil_pixel_format(vil_image const &);
 
 #endif // vil_pixel_h_

@@ -24,7 +24,7 @@ vil_memory_image_impl::vil_memory_image_impl(int planes, int w, int h, int compo
   init((void*)0, planes, w, h, components, bits_per_component, component_format);
 }
 
-vil_memory_image_impl::vil_memory_image_impl(int planes, int w, int h, vil_pixel_format pixel_format)
+vil_memory_image_impl::vil_memory_image_impl(int planes, int w, int h, vil_pixel_format_t pixel_format)
 {
   init((void*)0, planes, w, h, pixel_format);
 }
@@ -34,7 +34,7 @@ vil_memory_image_impl::vil_memory_image_impl(int w, int h, int components, int b
   init((void*)0, 1, w, h, components, bits_per_component, component_format);
 }
 
-vil_memory_image_impl::vil_memory_image_impl(int w, int h, vil_pixel_format pixel_format)
+vil_memory_image_impl::vil_memory_image_impl(int w, int h, vil_pixel_format_t pixel_format)
 {
   init((void*)0, 1, w, h, pixel_format);
 }
@@ -86,7 +86,7 @@ void vil_memory_image_impl::init(void *buf,
   }
 }
 
-void vil_memory_image_impl::init(void *buf, int planes, int w, int h, vil_pixel_format pixel_format)
+void vil_memory_image_impl::init(void *buf, int planes, int w, int h, vil_pixel_format_t pixel_format)
 {
   switch (pixel_format) {
   case VIL_BYTE:     init(buf, planes, w, h, 1,  8, VIL_COMPONENT_FORMAT_UNSIGNED_INT); break;
@@ -195,7 +195,7 @@ vil_memory_image_impl::vil_memory_image_impl(void *buf, int planes, int w, int h
   init(buf, planes, w, h, components, bits_per_component, component_format);
 }
 
-vil_memory_image_impl::vil_memory_image_impl(void *buf, int planes, int w, int h, vil_pixel_format pixel_format)
+vil_memory_image_impl::vil_memory_image_impl(void *buf, int planes, int w, int h, vil_pixel_format_t pixel_format)
 {
   init(buf, planes, w, h, pixel_format);
 }
@@ -205,7 +205,7 @@ vil_memory_image_impl::vil_memory_image_impl(void *buf, int w, int h, int compon
   init(buf, 1, w, h, components, bits_per_component, component_format);
 }
 
-vil_memory_image_impl::vil_memory_image_impl(void *buf, int w, int h, vil_pixel_format pixel_format)
+vil_memory_image_impl::vil_memory_image_impl(void *buf, int w, int h, vil_pixel_format_t pixel_format)
 {
   init(buf, 1, w, h, pixel_format);
 }

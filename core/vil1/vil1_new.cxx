@@ -23,7 +23,7 @@
 
 vil_image vil_new(int width, int height, vil_image const& prototype)
 {
-  switch (vil_pixel_type(prototype)) {
+  switch (vil_pixel_format(prototype)) {
   case VIL_BYTE: return vil_memory_image_of<unsigned char>(width, height);
   default:
     assert(!"vil_new");

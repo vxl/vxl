@@ -29,9 +29,9 @@ public:
   vil_memory_image();
   vil_memory_image(int planes, int w, int h, vil_memory_image_format const&);
   vil_memory_image(int planes, int w, int h, int components, int bits_per_component, vil_component_format);
-  vil_memory_image(int planes, int w, int h, vil_pixel_format);
+  vil_memory_image(int planes, int w, int h, vil_pixel_format_t);
   vil_memory_image(int w, int h, int components, int bits_per_component, vil_component_format);
-  vil_memory_image(int w, int h, vil_pixel_format );
+  vil_memory_image(int w, int h, vil_pixel_format_t );
   // this constructor *should* be 'explicit'
   vil_memory_image(vil_image const &);
   vil_memory_image(vil_memory_image const&);
@@ -44,9 +44,9 @@ public:
 
   vil_memory_image(void *buf, int planes, int w, int h, vil_memory_image_format const&);
   vil_memory_image(void *buf, int planes, int w, int h, int components, int bits_per_component, vil_component_format);
-  vil_memory_image(void *buf, int planes, int w, int h, vil_pixel_format);
+  vil_memory_image(void *buf, int planes, int w, int h, vil_pixel_format_t);
   vil_memory_image(void *buf, int w, int h, int components, int bits_per_component, vil_component_format);
-  vil_memory_image(void *buf, int w, int h, vil_pixel_format );
+  vil_memory_image(void *buf, int w, int h, vil_pixel_format_t );
 
   void assert_size(int width, int height) const;
 
