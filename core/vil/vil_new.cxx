@@ -22,10 +22,22 @@
 #include <vil2/vil2_image_data.h>
 #include <vil2/vil2_memory_image.h>
 
+
+// The first two functions really should be upgraded to create an image in
+// a temporary file on disk if the sizes are large.
+
+//: Make a new image of given format.
+vil2_image_data_sptr vil2_new_image_data(unsigned ni, unsigned nj, unsigned nplanes,
+                    vil2_pixel_format format)
+{
+  return new vil2_memory_image(ni, nj, nplanes, format);
+}
+
+//: Make a new image, similar format to the prototype.
 vil2_image_data_sptr vil2_new_image_data(unsigned ni, unsigned nj, vil2_image_data_sptr const& prototype)
 {
-  return new vil2_memory_image(ni, nj, prototype->nplanes(),
-    prototype->pixel_format());
+  return vil2_new_image_data(ni, nj, prototype->nplanes(),
+    prototype->pixel_format()); 
 }
 
 

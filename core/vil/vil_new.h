@@ -25,26 +25,31 @@
 #include <vil/vil_fwd.h>
 #include <vil2/vil2_image_data.h>
 
-//: Make a new image.
-vil2_image_data_sptr vil2_new_image_data(unsigned nx, unsigned ny, unsigned nplanes,
+//: Make a new image of given format.
+vil2_image_data_sptr vil2_new_image_data(unsigned ni, unsigned nj, unsigned nplanes,
+                    vil2_pixel_format format);
+
+//: Make a new image, similar format to the prototype.
+vil2_image_data_sptr vil2_new_image_data(unsigned ni, unsigned nj,
                     vil2_image_data_sptr const& prototype);
 
 //: Make a new image.
 vil2_image_data_sptr vil2_new_image_data(vil_stream* os,
-                  unsigned nx, unsigned ny,
+                  unsigned ni, unsigned nj,
                   unsigned nplanes,
                   vil2_pixel_format format,
                   char const* file_format = 0);
 
-//: Make a new image.
+//: Make a new image on disk
 vil2_image_data_sptr vil2_new_image_data(char const* filename,
-                  unsigned nx, unsigned ny,
+                  unsigned ni, unsigned nj,
                   unsigned nplanes,
                   vil2_image_data_sptr const &prototype,
                   char const* format = 0);
 
+
 vil2_image_data_sptr vil2_new_image_data(vil_stream* os,
-                  unsigned nx, unsigned ny,
+                  unsigned ni, unsigned nj,
                   unsigned nplanes,
                   vil2_image_data_sptr const& prototype,
                   char const* file_format = 0);
