@@ -1,6 +1,10 @@
 #include <vipl/filter/vipl_filter.h>
 #include <vcl/vcl_iostream.h>
 
+//#if 1def _WIN32
+#pragma warning( disable: 4390 )
+//#endif
+
 template <class ImgIn,class ImgOut,class DataIn,class DataOut,int Arity,class PixelItr>
 const VIPL_FILTER_STATE vipl_filter<ImgIn,ImgOut,DataIn,DataOut,Arity,PixelItr>::Not_Ready = 0;
 template <class ImgIn,class ImgOut,class DataIn,class DataOut,int Arity,class PixelItr>

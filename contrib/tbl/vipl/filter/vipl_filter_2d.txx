@@ -1,3 +1,4 @@
+#include <vcl/vcl_compiler.h>
 #include <vipl/filter/vipl_filter_2d.h>
 
 // Main constructor for this abstract class. If dst_image
@@ -111,7 +112,7 @@ template < class ImgIn,class ImgOut,class DataIn,class DataOut, class PixelItr >
         cerr << "Warning: In vipl_filter_2d, output iter ran out of items before input.  resetting to beginning\n";
         dstitr = (*ref_dst_section()).begin();
       }
-#ifdef VC60
+#ifdef VCL_VC60
       // this awkward construction is to get around a VC60 compiler bug
       vipl_section_descriptor<DataOut>& secDesc = *dstitr;
       put_secp( new vipl_section_descriptor<DataOut> (secDesc) );
@@ -121,7 +122,7 @@ template < class ImgIn,class ImgOut,class DataIn,class DataOut, class PixelItr >
       ref_dst_section()->ref_overlap()[0] = image_border_size();
       ref_dst_section()->ref_overlap()[1] = image_border_size();
       if (ref_src_section()) {
-#ifdef VC60
+#ifdef VCL_VC60
         // this awkward construction is to get around a VC60 compiler bug
         vipl_section_descriptor<DataIn>& inSecDesc = *it;
         put_insecp( new vipl_section_descriptor<DataIn> (inSecDesc));
@@ -152,7 +153,7 @@ template < class ImgIn,class ImgOut,class DataIn,class DataOut, class PixelItr >
         cerr << "Warning: In vipl_filter_2d, input iter ran out of items before output.  resetting to beginning\n";
         srcitr = (*ref_src_section()).begin();
       }
-#ifdef VC60
+#ifdef VCL_VC60
       // this awkward construction is to get around a VC60 compiler bug
       vipl_section_descriptor<DataOut>& secDesc2 = *it;
       put_secp( new vipl_section_descriptor<DataOut> (secDesc2));
@@ -162,7 +163,7 @@ template < class ImgIn,class ImgOut,class DataIn,class DataOut, class PixelItr >
       ref_dst_section()->ref_overlap()[0] = image_border_size();
       ref_dst_section()->ref_overlap()[1] = image_border_size();
       if (ref_src_section()) {
-#ifdef VC60
+#ifdef VCL_VC60
         // this awkward construction is to get around a VC60 compiler bug
         vipl_section_descriptor<DataIn>& inSecDesc2 = *srcitr;
         put_insecp( new vipl_section_descriptor<DataIn> (inSecDesc2));
