@@ -61,7 +61,7 @@ class rgrl_matcher_pseudo_3d
                    rgrl_feature_set const&     to_features,
                    rgrl_view const&            current_view,
                    rgrl_transformation const&  current_xform,
-                   rgrl_scale const&           current_scale ) const;
+                   rgrl_scale const&           current_scale );
 
   // Defines type-related functions
   rgrl_type_macro( rgrl_matcher_pseudo_3d, rgrl_matcher);

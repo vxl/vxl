@@ -70,7 +70,7 @@ compute_matches( rgrl_feature_set const&    from_set,
      rgrl_feature_set const&    to_set,
      rgrl_view const&           current_view,
      rgrl_transformation const& current_xform,
-     rgrl_scale const&          current_scale ) const
+     rgrl_scale const&          current_scale )
 {
   typedef vcl_vector<rgrl_feature_sptr> f_vector_type;
   typedef f_vector_type::iterator f_iterator_type;

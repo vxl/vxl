@@ -36,14 +36,7 @@ class rgrl_matcher_k_nearest
                    rgrl_feature_set const&       to_features,
                    rgrl_view const&              current_view,
                    rgrl_transformation const&    current_xform,
-                   rgrl_scale const&             /* current_scale */ ) const;
-
-  rgrl_match_set_sptr
-  compute_matches( rgrl_feature_set const&       from_features,
-                   rgrl_feature_set const&       to_features,
-                   rgrl_transformation const&    current_xform,
-                   rgrl_mask_box const&          region,
-                   rgrl_scale const&             /* current_scale */ ) const;
+                   rgrl_scale const&             /* current_scale */ );
 
   // Defines type-related functions
   rgrl_type_macro( rgrl_matcher_k_nearest, rgrl_matcher);

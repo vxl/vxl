@@ -33,7 +33,7 @@ compute_matches( rgrl_feature_set const&       from_set,
                  rgrl_feature_set const&       to_set,
                  rgrl_view const&              current_view,
                  rgrl_transformation const&    current_xform,
-                 rgrl_scale const&             /* current_scale */ ) const
+                 rgrl_scale const&             /* current_scale */ )
 {
   typedef vcl_vector<rgrl_feature_sptr> feat_vector;
   typedef feat_vector::iterator feat_iter;
@@ -43,6 +43,9 @@ compute_matches( rgrl_feature_set const&       from_set,
   //  get the features in the current view
   feat_vector from =
     from_set.features_in_region( current_view.region() );
+
+  // reserve size
+  matches_sptr->reserve( from.size() );
 
   //  generate the matches for each feature of this feature type in the current region
   for ( feat_iter fitr = from.begin(); fitr != from.end(); ++fitr ) {
@@ -71,19 +74,3 @@ compute_matches( rgrl_feature_set const&       from_set,
   return matches_sptr;
 }
 
-rgrl_match_set_sptr
-rgrl_matcher_k_nearest::
-compute_matches( rgrl_feature_set const&       from_set,
-                 rgrl_feature_set const&       to_set,
-                 rgrl_transformation const&    current_xform,
-                 rgrl_mask_box const&          region,
-                 rgrl_scale const&             current_scale ) const
-{
-  rgrl_view view( region, region, region, region, 0, 0, 0);
-
-  return this->compute_matches(from_set,
-                               to_set,
-                               view,
-                               current_xform,
-                               current_scale);
-}
