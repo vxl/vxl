@@ -125,7 +125,8 @@ foreach $dir (@DIRS)
   while ($cmakefile =~ s/\bSOURCE_FILES\s*\(\s*\S+sources\s*([^()]+)\)//) {
     @tmpl_list = split /\s+/, "$1";
     foreach $x (@tmpl_list) {
-      if (-f "$dir/$x") { push @source_files, "$x"; }
+      if ( $x =~ m/\.h$/) { ; }
+      elsif (-f "$dir/$x") { push @source_files, "$x"; }
       elsif (-f "$dir/$x.cxx") { push @source_files, "$x.cxx"; }
       elsif (-f "$dir/$x.c") { push @source_files, "$x.c"; }
       elsif (-f "$dir/$x.C") { push @source_files, "$x.C"; }
@@ -181,7 +182,8 @@ foreach $dir (@DIRS)
     unless ($source eq "~END") {
       $s = shift(@source);
       while ($s eq $source) {
-        print STDOUT "multiple occurrence of $s in $f\n";
+        print STDOUT "multiple occurrence of $s in $f\n"
+          unless ("$s" =~ m/^Templates\//);
         $s = shift(@source);
       }
       $source = $s;
