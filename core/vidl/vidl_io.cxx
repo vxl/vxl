@@ -17,6 +17,7 @@
 #include <vbl/vbl_file.h>
 #include <vbl/vbl_sequence_filename_map.h>
 
+#include <vcl/vcl_iostream.h>
 #include <vcl/vcl_list.h>
 #include <vcl/vcl_vector.h>
 
@@ -177,6 +178,9 @@ vidl_clip_ref  vidl_io::load_clip(
   // Let us try all the known video formats,
   // hoping to find the good one
   vcl_list<vidl_codec_ref>::iterator i = supported_types_.begin(); 
+  if (i == supported_types_.end())
+    vcl_cerr << "vidl_io: warning: no codecs installed\n";
+
   while (i != supported_types_.end()) 
   {
     if ((*i)->probe(fname))

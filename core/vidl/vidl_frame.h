@@ -51,6 +51,9 @@ class vidl_frame : public vbl_ref_count
      	inline int  get_bits_pixel() const { return(coder_->get_bits_pixel()); }
      	inline int  get_bytes_pixel()const { return(coder_->get_bytes_pixel()); }
 
+        //: Return the index of this frame in the movie.
+        int get_real_frame_index() const { return position_; }
+
    protected:
 
      	// Data Members
