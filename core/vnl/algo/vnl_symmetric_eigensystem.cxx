@@ -13,7 +13,20 @@
 #include <vnl/vnl_copy.h>
 #include <vnl/algo/vnl_netlib.h> // rs_()
 
-VCL_DEFINE_SPECIALIZATION
+bool vnl_symmetric_eigensystem_compute(vnl_matrix<float> const & A, 
+                                       vnl_matrix<float>       & V, 
+                                       vnl_vector<float>       & D)
+{
+  vnl_matrix<double> Ad(A.rows(), A.cols());
+  vnl_matrix<double> Vd(V.rows(), V.cols());
+  vnl_vector<double> Dd(D.size());
+  vnl_copy(A, Ad);
+  bool f = vnl_symmetric_eigensystem_compute(Ad, Vd, Dd);
+  vnl_copy(Vd, V);
+  vnl_copy(Dd, D);
+  return f;
+}
+
 bool vnl_symmetric_eigensystem_compute(vnl_matrix<double> const & A, 
                                        vnl_matrix<double>       & V, 
                                        vnl_vector<double>       & D)
@@ -43,21 +56,6 @@ bool vnl_symmetric_eigensystem_compute(vnl_matrix<double> const & A,
       V(r,c) = *vptr++;
   
   return true;
-}
-
-VCL_DEFINE_SPECIALIZATION
-bool vnl_symmetric_eigensystem_compute(vnl_matrix<float> const & A, 
-                                       vnl_matrix<float>       & V, 
-                                       vnl_vector<float>       & D)
-{
-  vnl_matrix<double> Ad(A.rows(), A.cols());
-  vnl_matrix<double> Vd(V.rows(), V.cols());
-  vnl_vector<double> Dd(D.size());
-  vnl_copy(A, Ad);
-  bool f = vnl_symmetric_eigensystem_compute(Ad, Vd, Dd);
-  vnl_copy(Vd, V);
-  vnl_copy(Dd, D);
-  return f;
 }
 
 //----------------------------------------------------------------------
