@@ -33,7 +33,7 @@ class projection_lsqf : public vnl_least_squares_function
  public:
   projection_lsqf(vcl_vector<vgl_homg_point_2d<double> > const& from_points,
                   vcl_vector<vgl_homg_point_2d<double> > const& to_points)
-  : vnl_least_squares_function(9, 2*from_points.size(), no_gradient)
+  : vnl_least_squares_function(9, 2*from_points.size() + 1, no_gradient)
   {
     n_ = from_points.size();
     assert(n_==to_points.size());
@@ -53,7 +53,7 @@ class projection_lsqf : public vnl_least_squares_function
   void f(const vnl_vector<double>& hv, vnl_vector<double>& proj_err)
   {
     assert(hv.size()==9);
-    assert(proj_err.size()==2*n_);
+    assert(proj_err.size()==2*n_+1);
     // project and compute residual
     vgl_h_matrix_2d<double> h(hv.data_block());
     unsigned k = 0;
@@ -64,6 +64,7 @@ class projection_lsqf : public vnl_least_squares_function
       double xp = to_points_[i].x(), yp = to_points_[i].y();
       double xproj = p_proj.x(), yproj = p_proj.y();
       proj_err[k]=(xp-xproj);  proj_err[k+1]=(yp-yproj);
+      proj_err[2*n_]=1.0-hv.magnitude();
     }
   }
 };
