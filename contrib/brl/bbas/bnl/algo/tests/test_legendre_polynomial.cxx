@@ -14,8 +14,7 @@ int test_legendre_polynomial(int argc, char *argv[])
   for(int i = 0; i< 8; i++){
     vcl_cout << " p"<< i <<" = ";
     vnl_real_polynomial p = bnl_legendre_polynomial(i);
-    for(int j=0; j<i+1; j++)
-      vcl_cout<<p[j]<<'\t';
+    p.print(vcl_cout);
     vcl_cout << '\n';
   }
   return 0;
