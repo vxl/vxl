@@ -686,6 +686,8 @@ void mil_transform_2d::b_write(vsl_b_ostream& bfs) const
 
 void mil_transform_2d::b_read(vsl_b_istream& bfs)
 {
+    if (!bfs) return;
+
     short version;
     vsl_b_read(bfs,version);
     int f;
@@ -697,9 +699,10 @@ void mil_transform_2d::b_read(vsl_b_istream& bfs)
         vsl_b_read(bfs,tx_); vsl_b_read(bfs,ty_); vsl_b_read(bfs,tt_);
         break;
     default:
-        vcl_cerr<<"mil_transform_2d::load : ";
-        vcl_cerr<<"Illegal version number : "<< version << vcl_endl;
-        vcl_abort();
+        vcl_cerr << "I/O ERROR: mil_transform_2d::b_read(vsl_b_istream&) \n";
+        vcl_cerr << "           Unknown version number "<< version << "\n";
+        bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+        return;
    }
 
     inv_uptodate_ = false;

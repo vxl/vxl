@@ -463,7 +463,6 @@ void mil_gaussian_pyramid_builder_2d_general<T>::print_summary(vcl_ostream& os) 
 template <class T>
 void mil_gaussian_pyramid_builder_2d_general<T>::b_write(vsl_b_ostream& bfs) const
 {
-  vsl_b_write(bfs,is_a());
   vsl_b_write(bfs,version_no());
   mil_gaussian_pyramid_builder_2d<T>::b_write(bfs);
   vsl_b_write(bfs,scale_step());
@@ -474,32 +473,25 @@ void mil_gaussian_pyramid_builder_2d_general<T>::b_write(vsl_b_ostream& bfs) con
 template <class T>
 void mil_gaussian_pyramid_builder_2d_general<T>::b_read(vsl_b_istream& bfs)
 {
-  vcl_string name;
-  vsl_b_read(bfs,name);
-  if (name != is_a())
-  {
-    vcl_cerr << "mil_gaussian_pyramid_builder_2d_general::b_read() : ";
-    vcl_cerr << "Attempted to load object of type ";
-    vcl_cerr << name <<" into object of type " << is_a() << vcl_endl;
-    vcl_abort();
-  }
-  
+  if (!bfs) return;
+
   short version;
   vsl_b_read(bfs,version);
   double scale;
 
   switch (version)
   {
-    case (1):
-      mil_gaussian_pyramid_builder_2d<T>::b_read(bfs);
-      
-      vsl_b_read(bfs,scale);
-      set_scale_step(scale);
-      break;
-    default:
-      vcl_cerr << "mil_gaussian_pyramid_builder_2d_general<T>::b_read() ";
-      vcl_cerr << "Unexpected version number " << version << vcl_endl;
-      vcl_abort();
+  case (1):
+    mil_gaussian_pyramid_builder_2d<T>::b_read(bfs);
+    
+    vsl_b_read(bfs,scale);
+    set_scale_step(scale);
+    break;
+  default:
+    vcl_cerr << "I/O ERROR: mil_gaussian_pyramid_builder_2d_general<T>::b_read(vsl_b_istream&) \n";
+    vcl_cerr << "           Unknown version number "<< version << "\n";
+    bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+    return;
   }
 }
 

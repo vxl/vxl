@@ -282,15 +282,18 @@ void mil_byte_image_2d_io::b_write(vsl_b_ostream& bfs) const
 
 void mil_byte_image_2d_io::b_read(vsl_b_istream& bfs)
 {
+  if (!bfs) return;
+
   short version;
   vsl_b_read(bfs,version);
   switch (version)
   {
-    case (1):
-      break;
-    default:
-      vcl_cerr << "mil_byte_image_2d_io::b_read() ";
-      vcl_cerr << "Unexpected version number " << version << vcl_endl;
-      vcl_abort();
+  case (1):
+    break;
+  default:
+    vcl_cerr << "I/O ERROR: mil_byte_image_2d_io::b_read(vsl_b_istream&) \n";
+    vcl_cerr << "           Unknown version number "<< version << "\n";
+    bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+    return;
   }
 }

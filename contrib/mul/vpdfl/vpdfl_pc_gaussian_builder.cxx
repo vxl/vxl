@@ -455,12 +455,9 @@ void vpdfl_pc_gaussian_builder::b_read(vsl_b_istream& bfs)
       vsl_b_read(bfs, fixed_partition_);
       break;
     default:
-  if (!bfs) return;
-
       vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vpdfl_pc_gaussian_builder &) \n";
       vcl_cerr << "           Unknown version number "<< version << vcl_endl;
       bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
       return;
   }
 }
-

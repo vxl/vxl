@@ -134,26 +134,29 @@ void mbl_stats_1d::b_write(vsl_b_ostream& bfs) const
 
 void mbl_stats_1d::b_read(vsl_b_istream& bfs)
 {
+  if (!bfs) return;
+
   short file_version_no;
   vsl_b_read(bfs,file_version_no);
 
   switch (file_version_no)
   {
-    case 1:
-      vsl_b_read(bfs,n_obs_);
-      if (n_obs_<=0) clear();
-      else
-      {
-        vsl_b_read(bfs,min_v_);
-        vsl_b_read(bfs,max_v_);
-        vsl_b_read(bfs,sum_);
-        vsl_b_read(bfs,sum_sq_);
-      }
-      break;
-    default :
-      vcl_cerr<<"mbl_stats_1d::b_read(vsl_b_istream&) : "
-        <<"Illegal mbl_stats_1d version number : "<<file_version_no<<vcl_endl;
-      vcl_abort();
+  case 1:
+    vsl_b_read(bfs,n_obs_);
+    if (n_obs_<=0) clear();
+    else
+    {
+      vsl_b_read(bfs,min_v_);
+      vsl_b_read(bfs,max_v_);
+      vsl_b_read(bfs,sum_);
+      vsl_b_read(bfs,sum_sq_);
+    }
+    break;
+  default :
+    vcl_cerr << "I/O ERROR: mbl_stats_1d::b_read(vsl_b_istream&) \n";
+    vcl_cerr << "           Unknown version number "<< file_version_no << "\n";
+    bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+    return;
   }
 }
 

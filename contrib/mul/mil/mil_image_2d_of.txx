@@ -15,102 +15,97 @@
 #include <vbl/io/vbl_io_smart_ptr.h>
 
 //=======================================================================
-// Dflt ctor
-//=======================================================================
+
 
 template<class T>
 mil_image_2d_of<T>::mil_image_2d_of()
-    : data_(0),nx_(0),ny_(0),xstep_(1),ystep_(0)
+: data_(0),nx_(0),ny_(0),xstep_(1),ystep_(0)
 {
-    planes_.resize(1);
-    planes_[0] = 0;
-
-    format_ = vcl_string("GreyByte");
+  planes_.resize(1);
+  planes_[0] = 0;
+  
+  format_ = vcl_string("GreyByte");
 }
 
 template<class T>
 mil_image_2d_of<T>::mil_image_2d_of(int nx, int ny, int n_planes)
-    : data_(0),nx_(0),ny_(0),xstep_(1),ystep_(0)
+: data_(0),nx_(0),ny_(0),xstep_(1),ystep_(0)
 {
-    set_n_planes(n_planes);
-    resize(nx,ny);
+  set_n_planes(n_planes);
+  resize(nx,ny);
 }
 
 //: Perform deep copy of this into image
 template<class T>
 void mil_image_2d_of<T>::deepCopy(const mil_image_2d_of& src)
 {
-    set_n_planes(src.n_planes());
-    resize(src.nx(),src.ny());
-    world2im_     = src.world2im_;
-
-    int s_xstep = src.xstep();
-    int s_ystep = src.ystep();
-
-    // Do a deep copy
-    // This is potentially inefficient
-    for (int i=0;i<planes_.size();++i)
+  set_n_planes(src.n_planes());
+  resize(src.nx(),src.ny());
+  world2im_     = src.world2im_;
+  
+  int s_xstep = src.xstep();
+  int s_ystep = src.ystep();
+  
+  // Do a deep copy
+  // This is potentially inefficient
+  for (int i=0;i<planes_.size();++i)
+  {
+    T* row = planes_[i];
+    const T* i_row = src.plane(i);
+    for (int y=0;y<ny_;++y)
     {
-      T* row = planes_[i];
-      const T* i_row = src.plane(i);
-      for (int y=0;y<ny_;++y)
+      const T* ip = i_row;
+      for (int x=0;x<nx_;++x)
       {
-        const T* ip = i_row;
-        for (int x=0;x<nx_;++x)
-        {
-          row[x] = *ip;
-          ip+=s_xstep;
-        }
-        i_row += s_ystep;
-        row += ystep_;
+        row[x] = *ip;
+        ip+=s_xstep;
       }
+      i_row += s_ystep;
+      row += ystep_;
     }
+  }
 }
 
-//=======================================================================
-// Destructor
 //=======================================================================
 
 template<class T>
 void mil_image_2d_of<T>::release_data()
 {
-    data_=0;
+  data_=0;
 }
 
 template<class T> mil_image_2d_of<T>::~mil_image_2d_of()
 {
-// release_data();
+  // release_data();
 }
 
 
 //=======================================================================
-//: Resize all planes
-//=======================================================================
+
 template<class T>
 void mil_image_2d_of<T>::resize2(int nx, int ny)
 {
-    if (nx==nx_ && ny==ny_  || n_planes()==0) return;
-
-    release_data();
-
-    data_ = new mil_image_data<T>;
-    data_->resize(n_planes()*nx*ny);
-
-    planes_[0]= (T*) data_->data();
-    for (int i=1;i<planes_.size();++i)
-    {
-        planes_[i] = planes_[i-1] + (nx*ny);
-    }
-
-    nx_ = nx;
-    ny_ = ny;
-    xstep_ = 1;
-    ystep_ = nx;
+  if (nx==nx_ && ny==ny_  || n_planes()==0) return;
+  
+  release_data();
+  
+  data_ = new mil_image_data<T>;
+  data_->resize(n_planes()*nx*ny);
+  
+  planes_[0]= (T*) data_->data();
+  for (int i=1;i<planes_.size();++i)
+  {
+    planes_[i] = planes_[i-1] + (nx*ny);
+  }
+  
+  nx_ = nx;
+  ny_ = ny;
+  xstep_ = 1;
+  ystep_ = nx;
 }
 
 //=======================================================================
-//: Resize to n_planes of [0..nx-1][0..ny-1]
-//=======================================================================
+
 template<class T>
 void mil_image_2d_of<T>::resize3(int nx, int ny, int n_planes)
 {
@@ -122,21 +117,20 @@ void mil_image_2d_of<T>::resize3(int nx, int ny, int n_planes)
 //: Define number of planes
 //  Each plane will be resized to (0,0)
 //  Default number of planes is 1
-//=======================================================================
 template<class T>
 void mil_image_2d_of<T>::set_n_planes(int n)
 {
-    if (planes_.size()!=n)
-    {
-        release_data();
-        planes_.resize(n);
-        for (int i=0;i<n;++i) planes_[i]=0;
-    }
-
-    nx_ = 0;
-    ny_ = 0;
-    xstep_ = 0;
-    ystep_ = 0;
+  if (planes_.size()!=n)
+  {
+    release_data();
+    planes_.resize(n);
+    for (int i=0;i<n;++i) planes_[i]=0;
+  }
+  
+  nx_ = 0;
+  ny_ = 0;
+  xstep_ = 0;
+  ystep_ = 0;
 }
 
 //=======================================================================
@@ -145,51 +139,48 @@ void mil_image_2d_of<T>::set_n_planes(int n)
 //  worldToIm(x,y) is valid for all points in range
 //  Specifically, resize(1+xhi-xlo,1+yhi-ylo);
 //  worldToIm() translates by (-xlo,-ylo)
-//=======================================================================
 template<class T>
 void mil_image_2d_of<T>::setValidRegion(int xlo, int xhi, int ylo, int yhi)
 {
-    resize(xhi-xlo,yhi-ylo);
-    world2im_.set_translation(-xlo,-ylo);
+  resize(xhi-xlo,yhi-ylo);
+  world2im_.set_translation(-xlo,-ylo);
 }
 
 
 //=======================================================================
 //: Fills all planes with b
-//=======================================================================
 template<class T>
 void mil_image_2d_of<T>::fill(T b)
 {
-    for (int i=0;i<planes_.size();++i)
+  for (int i=0;i<planes_.size();++i)
+  {
+    T* row = planes_[i];
+    for (int y=0;y<ny_;++y)
     {
-        T* row = planes_[i];
-        for (int y=0;y<ny_;++y)
+      if (xstep_==1)
+        for (int x=0;x<nx_;++x) row[x]=b;
+        else
         {
-            if (xstep_==1)
-                for (int x=0;x<nx_;++x) row[x]=b;
-            else
-            {
-                int x2 = 0;
-                for (int x=0;x<nx_;++x)
-                {
-                    row[x2]=b;
-                    x2+=xstep_;
-                }
-            }
-
-            row += ystep_;
+          int x2 = 0;
+          for (int x=0;x<nx_;++x)
+          {
+            row[x2]=b;
+            x2+=xstep_;
+          }
         }
+        
+        row += ystep_;
     }
+  }
 }
 
 
 //=======================================================================
 //: Set vcl_string defining format
-//=======================================================================
 template<class T>
 void mil_image_2d_of<T>::setFormat(const char* f)
 {
-    format_ = f;
+  format_ = f;
 }
 
 //=======================================================================
@@ -197,58 +188,55 @@ void mil_image_2d_of<T>::setFormat(const char* f)
 //  planes[i] is pointer to i'th plane of nx x ny image data
 //  i should be valid in range [0,n_planes-1]
 //  Copies of pointers recorded (ie a shallow copy)
-//=======================================================================
 template<class T>
 void mil_image_2d_of<T>::set(vcl_vector<T*>& planes,
-                        int nx, int ny, int xstep, int ystep,
-                        const char* format)
+                             int nx, int ny, int xstep, int ystep,
+                             const char* format)
 {
-    release_data();
-    planes_ = planes;
-
-    nx_ = nx;
-    ny_ = ny;
-    xstep_ = xstep;
-    ystep_ = ystep;
-
-    format_ = format;
+  release_data();
+  planes_ = planes;
+  
+  nx_ = nx;
+  ny_ = ny;
+  xstep_ = xstep;
+  ystep_ = ystep;
+  
+  format_ = format;
 }
 
 //=======================================================================
 //: Define parameters for grey scale images (single plane)
-//=======================================================================
 template<class T>
 void mil_image_2d_of<T>::setGrey(T* grey_data, int nx, int ny, int ystep)
 {
-    release_data();
-    planes_.resize(1);
-    planes_[0] = grey_data;
-
-    nx_ = nx;
-    ny_ = ny;
-    ystep_ = ystep;
-
-    format_ = vcl_string("GreyByte");
+  release_data();
+  planes_.resize(1);
+  planes_[0] = grey_data;
+  
+  nx_ = nx;
+  ny_ = ny;
+  ystep_ = ystep;
+  
+  format_ = vcl_string("GreyByte");
 }
 
 //=======================================================================
 //: Define parameters for 3 plane (RGB) T images
 //  Sets up a 3 plane image with plane(0) = r, plane(1) = g etc
-//=======================================================================
 template<class T>
 void mil_image_2d_of<T>::setRGB(T* r, T* g, T* b,
-                         int nx, int ny, int ystep)
+                                int nx, int ny, int ystep)
 {
-    release_data();
-    planes_.resize(3);
-    planes_[0] = r;
-    planes_[1] = g;
-    planes_[2] = b;
-    nx_ = nx;
-    ny_ = ny;
-    ystep_ = ystep;
-
-    format_ = vcl_string("RGBPlaneByte");
+  release_data();
+  planes_.resize(3);
+  planes_[0] = r;
+  planes_[1] = g;
+  planes_[2] = b;
+  nx_ = nx;
+  ny_ = ny;
+  ystep_ = ystep;
+  
+  format_ = vcl_string("RGBPlaneByte");
 }
 
 //=======================================================================
@@ -257,21 +245,20 @@ void mil_image_2d_of<T>::setRGB(T* r, T* g, T* b,
 //  of xstep T pixels, ie  red(x,y) = data[x*xstep+y*step],
 //  green(x,y) = data[1+x*xstep+y*step],
 //  blue(x,y) = data[2+x*xstep+y*step]
-//=======================================================================
 template<class T>
 void mil_image_2d_of<T>::setRGB(T* data, int nx, int ny, int xstep, int ystep)
 {
-    release_data();
-    planes_.resize(3);
-    planes_[0] = data;
-    planes_[1] = data+1;
-    planes_[2] = data+2;
-    nx_ = nx;
-    ny_ = ny;
-    xstep_ = xstep;
-    ystep_ = ystep;
-
-    format_ = vcl_string("RGBPackedByte");
+  release_data();
+  planes_.resize(3);
+  planes_[0] = data;
+  planes_[1] = data+1;
+  planes_[2] = data+2;
+  nx_ = nx;
+  ny_ = ny;
+  xstep_ = xstep;
+  ystep_ = ystep;
+  
+  format_ = vcl_string("RGBPackedByte");
 }
 
 //=======================================================================
@@ -280,88 +267,83 @@ void mil_image_2d_of<T>::setRGB(T* data, int nx, int ny, int xstep, int ystep)
 //  The world2im transform is set to match
 //  so this appears identical to im when addressed
 //  in world co-ords.
-//=======================================================================
 template<class T>
 void mil_image_2d_of<T>::setToWindow(const mil_image_2d_of& im,
-                     int xlo, int xhi, int ylo, int yhi)
+                                     int xlo, int xhi, int ylo, int yhi)
 {
-    assert(this!=&im);
-
-    int n_planes = im.n_planes();
-    set_n_planes(n_planes);
-    release_data();
-
-    // Take smart pointer to im's data to keep it in scope
-    data_ = im.data_;
-
-    nx_ = 1+xhi-xlo;
-    ny_ = 1+yhi-ylo;
-    xstep_ = im.xstep();
-    ystep_ = im.ystep();
-    int offset = xlo * im.xstep() + ylo * im.ystep();
-
-        // const problem: planes_ isn't const but im.plane(i) is.
-        // without having separate pointers for const/non-const
-        // we can't get over this easily
-    for (int i=0;i<n_planes;++i)
-        planes_[i] = (T*) im.plane(i)+offset;
-
-    mil_transform_2d trans;
-    trans.set_translation(-xlo,-ylo);
-    world2im_ = trans * im.world2im();
-    format_ = im.format();
+  assert(this!=&im);
+  
+  int n_planes = im.n_planes();
+  set_n_planes(n_planes);
+  release_data();
+  
+  // Take smart pointer to im's data to keep it in scope
+  data_ = im.data_;
+  
+  nx_ = 1+xhi-xlo;
+  ny_ = 1+yhi-ylo;
+  xstep_ = im.xstep();
+  ystep_ = im.ystep();
+  int offset = xlo * im.xstep() + ylo * im.ystep();
+  
+  // const problem: planes_ isn't const but im.plane(i) is.
+  // without having separate pointers for const/non-const
+  // we can't get over this easily
+  for (int i=0;i<n_planes;++i)
+    planes_[i] = (T*) im.plane(i)+offset;
+  
+  mil_transform_2d trans;
+  trans.set_translation(-xlo,-ylo);
+  world2im_ = trans * im.world2im();
+  format_ = im.format();
 }
 
 //=======================================================================
 //: Get range of values in plane p
-//=======================================================================
 template<class T>
 void mil_image_2d_of<T>::getRange(T& min_f, T& max_f, int p) const
 {
-    const T* row = planes_[p];
-    min_f = row[0];
-    max_f = min_f;
-    for (int y=0;y<ny_;++y)
+  const T* row = planes_[p];
+  min_f = row[0];
+  max_f = min_f;
+  for (int y=0;y<ny_;++y)
+  {
+    int x=0;
+    for (int j=0;j<nx_;++j)
     {
-        int x=0;
-        for (int j=0;j<nx_;++j)
-        {
-            if (row[x]<min_f) min_f=row[x];
-            else
-            if (row[x]>max_f) max_f=row[x];
-            x+=xstep_;
-        }
-        row+=ystep_;
+      if (row[x]<min_f) min_f=row[x];
+      else
+        if (row[x]>max_f) max_f=row[x];
+        x+=xstep_;
     }
+    row+=ystep_;
+  }
 }
 
 //=======================================================================
 //: Get range of values over all planes
-//=======================================================================
 template<class T>
 void mil_image_2d_of<T>::getRange(T& min_f, T& max_f) const
 {
-    if (planes_.size()==0)
-    {
-        min_f = 0;
-        max_f = 0;
-        return;
-    }
-
-    getRange(min_f,max_f,0);
-
-    for (int i=1;i<planes_.size();++i)
-    {
-        T min_fi,max_fi;
-        getRange(min_fi,max_fi,i);
-        if (min_fi<min_f) min_f=min_fi;
-        if (max_fi>max_f) max_f=max_fi;
-    }
+  if (planes_.size()==0)
+  {
+    min_f = 0;
+    max_f = 0;
+    return;
+  }
+  
+  getRange(min_f,max_f,0);
+  
+  for (int i=1;i<planes_.size();++i)
+  {
+    T min_fi,max_fi;
+    getRange(min_fi,max_fi,i);
+    if (min_fi<min_f) min_f=min_fi;
+    if (max_fi>max_f) max_f=max_fi;
+  }
 }
 
 #if 0
-//=======================================================================
-// Method: is_a
 //=======================================================================
 template<class T>
 vcl_string mil_image_2d_of<T>::is_a() const
@@ -370,8 +352,6 @@ vcl_string mil_image_2d_of<T>::is_a() const
 }
 #endif
 
-//=======================================================================
-// Method: is_class
 //=======================================================================
 
 template<class T>
@@ -382,132 +362,124 @@ bool mil_image_2d_of<T>::is_class(vcl_string const& s) const
 }
 
 //=======================================================================
-// Method: version_no
-//=======================================================================
 
 template<class T>
 short mil_image_2d_of<T>::version_no() const
 {
-    return 1;
+  return 1;
 }
 
-//=======================================================================
-// Method: clone
 //=======================================================================
 template<class T>
 mil_image* mil_image_2d_of<T>::clone() const
 {
-    return new mil_image_2d_of(*this);
+  return new mil_image_2d_of(*this);
 }
 
-//=======================================================================
-// Method: print
 //=======================================================================
 
 template<class T>
 void mil_image_2d_of<T>::print_summary(vcl_ostream& os) const
 {
-    os<<"Format: "<<format_<<"  "
-      <<planes_.size()<<" planes, each "<<nx_<<" x "<<ny_
-      <<vcl_endl
-      <<vsl_indent() << "Transform: "<<world2im_;
+  os<<"Format: "<<format_<<"  "
+    <<planes_.size()<<" planes, each "<<nx_<<" x "<<ny_
+    <<vcl_endl
+    <<vsl_indent() << "Transform: "<<world2im_;
 }
 
 //=======================================================================
 //: print all data to os
-//=======================================================================
 template<class T>
 void mil_image_2d_of<T>::print_all(vcl_ostream& os) const
 {
-    os<<vsl_indent();
-    print_summary(os);
-    os<<vcl_endl;
-
-    for (int i=0;i<n_planes();++i)
+  os<<vsl_indent();
+  print_summary(os);
+  os<<vcl_endl;
+  
+  for (int i=0;i<n_planes();++i)
+  {
+    if (n_planes()>1) os<<vsl_indent()<<"Plane "<<i<<":"<<vcl_endl;
+    const T* im_data = plane(i);
+    for (int y=ny_-1;y>=0;--y)
     {
-        if (n_planes()>1) os<<vsl_indent()<<"Plane "<<i<<":"<<vcl_endl;
-        const T* im_data = plane(i);
-        for (int y=ny_-1;y>=0;--y)
-        {
-            os<<vsl_indent();
-            for (int x=0;x<nx_;++x)
-            {
-                int v = int(im_data[ystep_*y+x*xstep_]);
-                if (v<10)  os<<" ";
-                if (v<100) os<<" ";
-                os<<v<<" ";
-            }
-            os<<vcl_endl;
-        }
+      os<<vsl_indent();
+      for (int x=0;x<nx_;++x)
+      {
+        int v = int(im_data[ystep_*y+x*xstep_]);
+        if (v<10)  os<<" ";
+        if (v<100) os<<" ";
+        os<<v<<" ";
+      }
+      os<<vcl_endl;
     }
+  }
 }
 
-//=======================================================================
-// Method: save
 //=======================================================================
 
 template<class T>
 void mil_image_2d_of<T>::b_write(vsl_b_ostream& bfs) const
 {
-    vsl_b_write(bfs,version_no());
-    if (!data_)
-    {
-      vcl_cerr << "template<class T> mil_image_2d_of<T>::b_write() ";
-      vcl_cerr << "This image refers to external data and ";
-      vcl_cerr << "cannot be restored correctly if saved like this." << vcl_endl;
-      vcl_abort();
-    }
-    vsl_b_write(bfs,data_);
-
-    vsl_b_write(bfs,nx_);
-    vsl_b_write(bfs,ny_);
-    vsl_b_write(bfs,xstep_);
-    vsl_b_write(bfs,ystep_);
-    vsl_b_write(bfs,format_);
-    vsl_b_write(bfs,world2im_);
-
-    int n = planes_.size();
-    vcl_vector<int> plane_offsets(n);
-    for (int i=0;i<n;++i)
-        plane_offsets[i]=int(planes_[i]-(T*)data_->data());
-    vsl_b_write(bfs,plane_offsets);
+  vsl_b_write(bfs,version_no());
+  if (!data_)
+  {
+    vcl_cerr << "template<class T> mil_image_2d_of<T>::b_write() ";
+    vcl_cerr << "This image refers to external data and ";
+    vcl_cerr << "cannot be restored correctly if saved like this." << vcl_endl;
+    vcl_abort();
+  }
+  vsl_b_write(bfs,data_);
+  
+  vsl_b_write(bfs,nx_);
+  vsl_b_write(bfs,ny_);
+  vsl_b_write(bfs,xstep_);
+  vsl_b_write(bfs,ystep_);
+  vsl_b_write(bfs,format_);
+  vsl_b_write(bfs,world2im_);
+  
+  int n = planes_.size();
+  vcl_vector<int> plane_offsets(n);
+  for (int i=0;i<n;++i)
+    plane_offsets[i]=int(planes_[i]-(T*)data_->data());
+  vsl_b_write(bfs,plane_offsets);
 }
 
-//=======================================================================
-// Method: load
 //=======================================================================
 
 template<class T>
 void mil_image_2d_of<T>::b_read(vsl_b_istream& bfs)
 {
-    release_data();
+  if (!bfs) return;
 
-    vcl_vector<int> plane_offsets;;
-
-    short version;
-    vsl_b_read(bfs,version);
-    switch (version)
-    {
-        case (1):
-            vsl_b_read(bfs,data_);
-            vsl_b_read(bfs,nx_);
-            vsl_b_read(bfs,ny_);
-            vsl_b_read(bfs,xstep_);
-            vsl_b_read(bfs,ystep_);
-            vsl_b_read(bfs,format_);
-            vsl_b_read(bfs,world2im_);
-            vsl_b_read(bfs,plane_offsets);
-            break;
-        default:
-            vcl_cerr << "template<class T> mil_image_2d_of<T>::b_read() ";
-            vcl_cerr << "Unexpected version number " << version << vcl_endl;
-            vcl_abort();
-    }
-
-    int n = plane_offsets.size();
-    planes_.resize(n);
-    for (int i=0;i<n;++i)
-        planes_[i]=(T*)data_->data() + plane_offsets[i];
+  release_data();
+  
+  vcl_vector<int> plane_offsets;;
+  
+  short version;
+  vsl_b_read(bfs,version);
+  switch (version)
+  {
+  case (1):
+    vsl_b_read(bfs,data_);
+    vsl_b_read(bfs,nx_);
+    vsl_b_read(bfs,ny_);
+    vsl_b_read(bfs,xstep_);
+    vsl_b_read(bfs,ystep_);
+    vsl_b_read(bfs,format_);
+    vsl_b_read(bfs,world2im_);
+    vsl_b_read(bfs,plane_offsets);
+    break;
+  default:
+    vcl_cerr << "I/O ERROR: mil_image_2d_of<T>::b_read(vsl_b_istream&) \n";
+    vcl_cerr << "           Unknown version number "<< version << "\n";
+    bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+    return;
+  }
+  
+  int n = plane_offsets.size();
+  planes_.resize(n);
+  for (int i=0;i<n;++i)
+    planes_[i]=(T*)data_->data() + plane_offsets[i];
 }
 
 //=======================================================================
@@ -515,7 +487,6 @@ void mil_image_2d_of<T>::b_read(vsl_b_istream& bfs)
 //  This does not do a deep equality on image data. If the images point
 //  to different image data objects that contain identical images, then
 //  the result will still be false.
-//=======================================================================
 template<class T>
 bool mil_image_2d_of<T>::operator==(const mil_image_2d_of<T> &other) const
 {

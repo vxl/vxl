@@ -196,6 +196,8 @@ void mbl_stochastic_data_collector<T>::b_write(vsl_b_ostream& bfs) const
 template <class T>
 void mbl_stochastic_data_collector<T>::b_read(vsl_b_istream& bfs)
 {
+  if (!bfs) return;
+
   short version;
   vsl_b_read(bfs,version);
   switch (version)
@@ -205,9 +207,10 @@ void mbl_stochastic_data_collector<T>::b_read(vsl_b_istream& bfs)
     vsl_b_read(bfs, nPresented_);
     break;
   default:
-    vcl_cerr << "mbl_stochastic_data_collector<T>::b_read() ";
-    vcl_cerr << "Unexpected version number " << version << vcl_endl;
-    vcl_abort();
+    vcl_cerr << "I/O ERROR: mbl_stochastic_data_collector<T::b_read(vsl_b_istream&) \n";
+    vcl_cerr << "           Unknown version number "<< version << "\n";
+    bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+    return;
   }
 }
 

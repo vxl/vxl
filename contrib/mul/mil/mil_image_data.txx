@@ -13,7 +13,7 @@
 //: Dflt ctor
 template<class T>
 mil_image_data<T>::mil_image_data()
-  : data_(0), size_(0), ref_count_(0)
+: data_(0), size_(0), ref_count_(0)
 {
 }
 
@@ -27,7 +27,7 @@ mil_image_data<T>::~mil_image_data()
 //: Copy ctor
 template<class T>
 mil_image_data<T>::mil_image_data(const mil_image_data& d)
-  : data_(0), size_(0), ref_count_(0)
+: data_(0), size_(0), ref_count_(0)
 {
   *this=d;
 }
@@ -37,7 +37,7 @@ template<class T>
 mil_image_data<T>& mil_image_data<T>::operator=(const mil_image_data& d)
 {
   if (this==&d) return *this;
-
+  
   resize(d.size());
   vcl_memcpy(data_,d.data_,size_*sizeof(T));
   return *this;
@@ -46,19 +46,19 @@ mil_image_data<T>& mil_image_data<T>::operator=(const mil_image_data& d)
 template<class T>
 void mil_image_data<T>::ref()
 {
-    ref_count_++;
+  ref_count_++;
 }
 
 //: Decrement reference count
 template<class T>
 void mil_image_data<T>::unref()
 {
-    ref_count_--;
-    if (ref_count_==0)
-    {
-      delete [] data_; data_=0;
-      delete this;
-    }
+  ref_count_--;
+  if (ref_count_==0)
+  {
+    delete [] data_; data_=0;
+    delete this;
+  }
 }
 
 
@@ -66,19 +66,19 @@ void mil_image_data<T>::unref()
 template<class T>
 void mil_image_data<T>::resize(int n)
 {
-    if (size_==n) return;
-    delete [] data_;
-    data_ = 0;
-    if (n>0)
-      data_ = new T[n];
-    size_ = n;
+  if (size_==n) return;
+  delete [] data_;
+  data_ = 0;
+  if (n>0)
+    data_ = new T[n];
+  size_ = n;
 }
 
 //: Version number for I/O
 template<class T>
 short mil_image_data<T>::version_no() const
 {
-    return 1;
+  return 1;
 }
 
 #if 0
@@ -86,7 +86,7 @@ short mil_image_data<T>::version_no() const
 template<class T>
 vcl_string mil_image_data<T>::is_a() const
 {
-    return vcl_string("mil_image_data<T>");
+  return vcl_string("mil_image_data<T>");
 }
 #endif
 
@@ -102,39 +102,42 @@ bool mil_image_data<T>::is_class(vcl_string const& s) const
 template<class T>
 void mil_image_data<T>::print_summary(vcl_ostream& os) const
 {
-    os<<size_<<" elements.";
+  os<<size_<<" elements.";
 }
 
 //: Save class to binary file stream
 template<class T>
 void mil_image_data<T>::b_write(vsl_b_ostream& bfs) const
 {
-    vsl_b_write(bfs,version_no());
-    vsl_b_write(bfs,size_);
-    if (size_);
-      vsl_b_write_block(bfs,data_,size_);
+  vsl_b_write(bfs,version_no());
+  vsl_b_write(bfs,size_);
+  if (size_);
+  vsl_b_write_block(bfs,data_,size_);
 }
 
 //: Load class from binary stream
 template<class T>
 void mil_image_data<T>::b_read(vsl_b_istream& bfs)
 {
-    unsigned int n;
-    short v;
-    vsl_b_read(bfs,v);
-    switch (v)
-    {
-    case (1):
-        vsl_b_read(bfs,n);
-        resize(n);
-        if (n);
-          vsl_b_read_block(bfs,data_,size_);
-        break;
-    default:
-        vcl_cerr<<"mil_image_data<T>::b_read()"
-            <<" Unexpected version number "<<v<<vcl_endl;
-        vcl_abort();
-    }
+  if (!bfs) return;
+
+  unsigned int n;
+  short v;
+  vsl_b_read(bfs,v);
+  switch (v)
+  {
+  case (1):
+    vsl_b_read(bfs,n);
+    resize(n);
+    if (n);
+    vsl_b_read_block(bfs,data_,size_);
+    break;
+  default:
+    vcl_cerr << "I/O ERROR: mil_image_data<T>::b_read(vsl_b_istream&) \n";
+    vcl_cerr << "           Unknown version number "<< v << "\n";
+    bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+    return;
+  }
 }
 
 
@@ -146,14 +149,14 @@ void mil_image_data<T>::b_read(vsl_b_istream& bfs)
 template<class T>
 void vsl_b_write(vsl_b_ostream& s, const mil_image_data<T>& v)
 {
-    v.b_write(s);
+  v.b_write(s);
 }
 
 //: Read from binary stream
 template<class T>
 void vsl_b_read(vsl_b_istream& s, mil_image_data<T>& v)
 {
-    v.b_read(s);
+  v.b_read(s);
 }
 #endif
 
@@ -202,11 +205,11 @@ void vsl_print_summary(vcl_ostream& os, const mil_image_data<T>* p)
 
 #undef MIL_IMAGE_DATA_INSTANTIATE
 #define MIL_IMAGE_DATA_INSTANTIATE(T) \
-template class mil_image_data<T >; \
-/* template void vsl_b_write(vsl_b_ostream&s, const mil_image_data<T >&v); */ \
-   template void vsl_b_write(vsl_b_ostream&s, const mil_image_data<T >*v); \
-/* template void vsl_b_read(vsl_b_istream& s, mil_image_data<T >  & v); */ \
-   template void vsl_b_read(vsl_b_istream& s, mil_image_data<T >* & v); \
+  template class mil_image_data<T >; \
+  /* template void vsl_b_write(vsl_b_ostream&s, const mil_image_data<T >&v); */ \
+  template void vsl_b_write(vsl_b_ostream&s, const mil_image_data<T >*v); \
+  /* template void vsl_b_read(vsl_b_istream& s, mil_image_data<T >  & v); */ \
+  template void vsl_b_read(vsl_b_istream& s, mil_image_data<T >* & v); \
 template void vsl_print_summary(vcl_ostream& s, const mil_image_data<T >* p)
 
 
