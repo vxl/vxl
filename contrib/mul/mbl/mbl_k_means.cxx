@@ -9,7 +9,7 @@
 // If you provide parameter partition, it will return the
 // cluster index for each data sample. The number of iterations
 // performed is returned.
-// 
+//
 // \par Initial Cluster Centres
 // If centres contain the correct number of centres, they will
 // be used as the initial centres, If not, and if partition is
@@ -29,7 +29,7 @@ unsigned mbl_k_means(mbl_data_wrapper<vnl_vector<double> > &data, unsigned k,
                  )
 {
   vcl_vector<vnl_vector<double> > & centres = *cluster_centres;
-  
+
   vcl_vector<unsigned> * p_partition;
   data.reset();
   unsigned  dims = data.current().size();
@@ -55,9 +55,7 @@ unsigned mbl_k_means(mbl_data_wrapper<vnl_vector<double> > &data, unsigned k,
   }
   else
     p_partition = new vcl_vector<unsigned>(data.size(), 0);
-  
 
-  
 
 // Calculate initial centres
 
@@ -73,8 +71,7 @@ unsigned mbl_k_means(mbl_data_wrapper<vnl_vector<double> > &data, unsigned k,
     }
   }
   else if (initialise_from_clusters)
-  {                         // calculate centres fro existing 
-  
+  {                         // calculate centres fro existing
     do
     {
       sums[(*p_partition)[data.index()] ] += data.current();
@@ -88,10 +85,8 @@ unsigned mbl_k_means(mbl_data_wrapper<vnl_vector<double> > &data, unsigned k,
     vcl_fill(nNearest.begin(), nNearest.end(), 0);
   }
 
-  bool changed;
-
-
-  do
+  bool changed = true;
+  while (changed)
   {
     changed = false;
     do
@@ -126,7 +121,7 @@ unsigned mbl_k_means(mbl_data_wrapper<vnl_vector<double> > &data, unsigned k,
         centres.erase(centres.begin()+i);
         sums.erase(sums.begin()+i);
         nNearest.erase(nNearest.begin()+i);
-        
+
         for (unsigned j=0; j<p_partition->size(); ++j)
         {
           assert ((*p_partition)[j] = i);
@@ -134,22 +129,21 @@ unsigned mbl_k_means(mbl_data_wrapper<vnl_vector<double> > &data, unsigned k,
         }
       }
     }
-      
-  
-  // Calculate new centres
-  for (i=0; i<k; ++i)
-    centres[i] = sums[i]/nNearest[i];
 
-  // and repeat
-  data.reset();
-  vcl_fill(sums.begin(), sums.end(), vnl_vector<double>(dims, 0.0));
-  vcl_fill(nNearest.begin(), nNearest.end(), 0);
-  iterations ++;
-  } while(changed);
+    // Calculate new centres
+    for (i=0; i<k; ++i)
+      centres[i] = sums[i]/nNearest[i];
 
+    // and repeat
+    data.reset();
+    vcl_fill(sums.begin(), sums.end(), vnl_vector<double>(dims, 0.0));
+    vcl_fill(nNearest.begin(), nNearest.end(), 0);
+    iterations ++;
+  }
 
   if (!partition)
     delete p_partition;
+
   return iterations;
 }
 
@@ -171,7 +165,7 @@ static inline void incXbyYv(vnl_vector<double> *X, const vnl_vector<double> &Y, 
 // If you provide parameter partition, it will return the
 // cluster index for each data sample. The number of iterations
 // performed is returned.
-// 
+//
 // \par Initial Cluster Centres
 // If centres contain the correct number of centres, they will
 // be used as the initial centres, If not, and if partition is
@@ -187,16 +181,15 @@ static inline void incXbyYv(vnl_vector<double> *X, const vnl_vector<double> &Y, 
 // occur if any of the first k data samples are identical.
 //
 // \par
-// The algorithm has been optimised 
+// The algorithm has been optimised
 unsigned mbl_k_means_weighted(mbl_data_wrapper<vnl_vector<double> > &data, unsigned k,
-							  const vcl_vector<double>& wts,
-                 vcl_vector<vnl_vector<double> >* cluster_centres,
-                 vcl_vector<unsigned> * partition //=0
-                 )
-
+                              const vcl_vector<double>& wts,
+                              vcl_vector<vnl_vector<double> >* cluster_centres,
+                              vcl_vector<unsigned> * partition //=0
+                             )
 {
   vcl_vector<vnl_vector<double> > & centres = *cluster_centres;
-  
+
   vcl_vector<unsigned> * p_partition;
   data.reset();
   unsigned  dims = data.current().size();
@@ -223,9 +216,9 @@ unsigned mbl_k_means_weighted(mbl_data_wrapper<vnl_vector<double> > &data, unsig
   }
   else
     p_partition = new vcl_vector<unsigned>(data.size(), 0);
-  
+
   const vnl_vector<double>  vcl_vector_double_dims_0(dims, 0.0);
-  
+
 
 // Calculate initial centres
 
@@ -234,7 +227,7 @@ unsigned mbl_k_means_weighted(mbl_data_wrapper<vnl_vector<double> > &data, unsig
     centres.resize(k);
     for (i=0; i<k; ++i)
     {
-      while(wts[data.index()] == 0.0) // skip zero weighted data 
+      while(wts[data.index()] == 0.0) // skip zero weighted data
       {
 #ifdef NDEBUG
         data.next();
@@ -243,7 +236,7 @@ unsigned mbl_k_means_weighted(mbl_data_wrapper<vnl_vector<double> > &data, unsig
         {
           vcl_cerr << "ERROR: mbl_k_means_weighted, while initialising centres from data\n"
                    << "Not enough non-zero-weighted data" << vcl_endl;
-          abort();
+          vcl_abort();
         }
 #endif //NDEBUG
       }
@@ -255,8 +248,8 @@ unsigned mbl_k_means_weighted(mbl_data_wrapper<vnl_vector<double> > &data, unsig
     }
   }
   else if (initialise_from_clusters)
-  {                         // calculate centres fro existing 
-  
+  {                         // calculate centres fro existing
+
     do
     {
       incXbyYv(&sums[(*p_partition)[data.index()] ], data.current(), wts[data.index()]);
@@ -270,9 +263,8 @@ unsigned mbl_k_means_weighted(mbl_data_wrapper<vnl_vector<double> > &data, unsig
     vcl_fill(nNearest.begin(), nNearest.end(), 0.0);
   }
 
-  bool changed;
-
-  do
+  bool changed = true;
+  while (changed)
   {
     changed = false;
     do
@@ -321,19 +313,17 @@ unsigned mbl_k_means_weighted(mbl_data_wrapper<vnl_vector<double> > &data, unsig
         }
       }
     }
-      
-  
-  // Calculate new centres
-  for (i=0; i<k; ++i)
-    centres[i] = sums[i]/nNearest[i];
 
-  // and repeat
-  data.reset();
-  vcl_fill(sums.begin(), sums.end(), vcl_vector_double_dims_0);
-  vcl_fill(nNearest.begin(), nNearest.end(), 0.0);
-  iterations ++;
-  } while(changed);
+    // Calculate new centres
+    for (i=0; i<k; ++i)
+      centres[i] = sums[i]/nNearest[i];
 
+    // and repeat
+    data.reset();
+    vcl_fill(sums.begin(), sums.end(), vcl_vector_double_dims_0);
+    vcl_fill(nNearest.begin(), nNearest.end(), 0.0);
+    iterations ++;
+  }
 
   if (!partition)
     delete p_partition;
@@ -359,8 +349,7 @@ unsigned mbl_k_means_weighted(mbl_data_wrapper<vnl_vector<double> > &data, unsig
       }
     } while (data.next());
   }
+
   return iterations;
 }
-
-
 
