@@ -2,7 +2,7 @@
 #define _QV_STRING_
 
 #include "QvBasic.h"
-#include <string.h>
+#include <vcl/vcl_cstring.h>
 
 class QvString {
   public:

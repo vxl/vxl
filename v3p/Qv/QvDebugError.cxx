@@ -4,7 +4,7 @@
 # ifdef SUN4_GNU
 #  include <varargs.h>
 # else
-#  include <stdarg.h>
+#  include <vcl/vcl_cstdarg.h>
 # endif
 #endif
 

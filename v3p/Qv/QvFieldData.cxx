@@ -82,7 +82,7 @@ QvFieldData::getField(const QvNode *object, int index) const
 			((QvFieldEntry *) fields[index])->offset);
 }
 
-#include <ctype.h>
+#include <vcl/vcl_cctype.h>
 static QvName
 stripWhite(const char *name)
 {

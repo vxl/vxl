@@ -1,7 +1,7 @@
 #include <QvPerspectiveCamera.h>
 #include <QvSwitch.h>
 
-#include <math.h>  /* mpichler, 19950616 */
+#include <vcl/vcl_cmath.h>  /* mpichler, 19950616 */
 
 QV_NODE_SOURCE(QvPerspectiveCamera);
 

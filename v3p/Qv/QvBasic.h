@@ -3,7 +3,7 @@
 
 //#include <sys/types.h>
 /* #include <libc.h> */
-#include <stdio.h>
+#include <vcl/vcl_cstdio.h>
 #include <vcl/vcl_cmath.h>
 #include <vcl/vcl_cstdio.h>
 

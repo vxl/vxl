@@ -4,6 +4,12 @@ enum Part { goofyPart };        // confused about QvCone::Part and QvCylinder::P
 enum Binding { goofyBinding };  // confused about QvMaterialBinding/QvNormalBinding::Binding
 #endif
 
+#ifdef __SUNPRO_CC
+# include <sys/types.h>
+#endif
+
+#include <vcl/vcl_cstdlib.h>
+
 // RWMC: Had to define _strdup for linux since __PC__ set.  Hope this
 // doesn't break other systems.
 #include <vcl/vcl_cmath.h>

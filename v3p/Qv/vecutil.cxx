@@ -37,7 +37,7 @@
 //</file>
 
 
-#include <math.h>
+#include <vcl/vcl_cmath.h>
 
 #include "vecutil.h"
 

@@ -2,17 +2,21 @@
 include ${IUEROOT}/config/top-params.mk
 #######################################
 
-ifneq (1,$(strip $(HAS_NATIVE_NETLIB)))
+#ifneq (1,$(strip $(HAS_NATIVE_NETLIB)))
 SUBDIRS += netlib
-endif
+#endif
 
-ifneq (1,$(strip $(HAS_NATIVE_JPEG)))
+#ifneq (1,$(strip $(HAS_NATIVE_JPEG)))
+ifneq (,$(strip $(wildcard $(JPEG_INC_DIR)/v3p_tag)))
 SUBDIRS += jpeg
 endif
 
-ifneq (1,$(strip $(HAS_NATIVE_TIFF)))
+#ifneq (1,$(strip $(HAS_NATIVE_TIFF)))
+ifneq (,$(strip $(wildcard $(TIFF_INC_DIR)/v3p_tag)))
 SUBDIRS += tiff
 endif
+
+SUBDIRS += Qv
 
 ######################################
 include ${IUEROOT}/config/top-rules.mk

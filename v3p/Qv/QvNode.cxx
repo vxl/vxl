@@ -1,4 +1,4 @@
-#include <ctype.h>
+#include <vcl/vcl_cctype.h>
 #include <QvDB.h>
 #include <QvInput.h>
 #include <QvDebugError.h>

@@ -49,7 +49,7 @@
 #include <vcl/vcl_iostream.h>
 
 #ifdef __PC__
-#  include <float.h>
+#  include <vcl/vcl_cfloat.h>
 #  ifndef MAXFLOAT
 #    define MAXFLOAT FLT_MAX
 #  endif
@@ -62,7 +62,7 @@
 #    include <values.h>
 #  endif
 #  ifndef MAXFLOAT
-#    include <math.h>
+#    include <vcl/vcl_cmath.h>
 #  endif
 #  ifdef SUN5
 #    define ARRAYconst  /**/

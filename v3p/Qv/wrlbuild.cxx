@@ -42,7 +42,7 @@ enum Part { goofyPart };        // cfront confused about QvCone::Part and QvCyli
 enum Binding { goofyBinding };  // cfront confused about QvMaterialBinding/QvNormalBinding::Binding
 #endif
 
-#include <stdio.h>
+#include <vcl/vcl_cstdio.h>
 #include <vcl/vcl_iostream.h>
 #include <vcl/vcl_cmath.h>
 

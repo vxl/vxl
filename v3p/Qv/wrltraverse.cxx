@@ -48,6 +48,9 @@ enum Part { goofyPart };        // cfront confused about QvCone::Part and QvCyli
 enum Binding { goofyBinding };  // cfront confused about QvMaterialBinding/QvNormalBinding::Binding
 #endif
 
+#ifdef __SUNPRO_CC
+# include <sys/types.h>
+#endif
 
 #include <Qv/QvElement.h>
 #include <Qv/QvNodes.h>
