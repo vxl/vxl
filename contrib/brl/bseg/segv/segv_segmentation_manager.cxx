@@ -6,6 +6,7 @@
 
 #include <vcl_cstdlib.h> // for vcl_exit()
 #include <vcl_iostream.h>
+#include <vbl/vbl_array_2d.h>
 #include <vil/vil_load.h>
 #include <vil/vil_memory_image_of.h>
 #include <vdgl/vdgl_digital_curve.h>
@@ -46,6 +47,7 @@
 #include <bgui/bgui_vtol2D_tableau.h>
 #include <gevd/gevd_float_operators.h>
 #include <brip/brip_float_ops.h>
+#include <bsol/bsol_hough_line_index.h>
 #include <sdet/sdet_region_proc_params.h>
 #include <sdet/sdet_region_proc.h>
 
@@ -426,6 +428,7 @@ void segv_segmentation_manager::fit_lines()
   static sdet_detector_params dp;
   static sdet_fit_lines_params flp;
   static float nm = 2.0;
+  static bool hough_index=false;;
   vgui_dialog vd_dialog("Fit Lines");
   vd_dialog.field("Gaussian sigma", dp.smooth);
   vd_dialog.field("Noise Threshold", nm);
@@ -434,6 +437,7 @@ void segv_segmentation_manager::fit_lines()
   vd_dialog.checkbox("Automatic Threshold", dp.automatic_threshold);
   vd_dialog.checkbox("Agressive Closure", agr);
   vd_dialog.checkbox("Compute Junctions", dp.junctionp);
+  vd_dialog.checkbox("Display Hough Index", hough_index);
   if (!vd_dialog.ask())
     return;
   dp.noise_multiplier=nm;
@@ -455,6 +459,24 @@ void segv_segmentation_manager::fit_lines()
   sdet_fit_lines fl(flp);
   fl.set_edges(*edges);
   fl.fit_lines();
+  if(hough_index)
+    {
+      vcl_vector<vsol_line_2d_sptr> lines = fl.get_line_segs();
+      bsol_hough_line_index hind(0.0, 0.0, img_.width(), img_.height(), 180.0, 5.0);
+      for(vcl_vector<vsol_line_2d_sptr>::iterator lit = lines.begin();
+          lit != lines.end(); lit++)
+        hind.index(*lit);
+      int rdim = hind.get_r_dimension(), tdim = hind.get_theta_dimension();
+      vbl_array_2d<unsigned char> hough_image = hind.get_hough_image();
+      vil_memory_image_of<unsigned char> img(tdim, rdim);
+      for(int y = 0; y<rdim; y++)
+        for(int x = 0; x<tdim; x++)
+		   img(x,y) = 30*hough_image[y][x];
+      vgui_image_tableau_sptr itab =  t2D_->get_image_tableau();      
+      if(itab)
+        itab->set_image(img);
+      return;
+    }
   this->draw_lines(fl.get_line_segs());
 }
 
