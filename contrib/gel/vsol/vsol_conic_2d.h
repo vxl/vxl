@@ -22,6 +22,7 @@
 // François BERTEL
 //
 // .SECTION Modifications
+// 2002/04/05 Peter Vanroose  axis() added
 // 2001/08/31 Peter Vanroose  constructor added from centre, size, orientation
 // 2001/08/30 Peter Vanroose  now inheriting from vgl_conic
 // 2001/08/29 Peter Vanroose  closest_point and distance to point added
@@ -309,6 +310,11 @@ public:
   virtual vsol_point_2d_sptr midpoint() const;
 
   //---------------------------------------------------------------------------
+  //: Return the main symmetry axis, if not degenerate.
+  //---------------------------------------------------------------------------
+  virtual vsol_line_2d_sptr axis() const;
+
+  //---------------------------------------------------------------------------
   //: Is `p' in `this' ? (ie `p' verifies the equation, within some margin)
   //---------------------------------------------------------------------------
   virtual bool in(const vsol_point_2d_sptr &p) const;
@@ -372,6 +378,7 @@ private:
   //---------------------------------------------------------------------------
   static bool is_zero(double x) { return vcl_abs(x)<=1e-6; }
 
+#if 0 // These functions were removed from vsol_spatial_object_2d
   //---------------------------------------------------------------------------
   // virtuals of vsol_spatial_object_2d
   //---------------------------------------------------------------------------
@@ -384,6 +391,7 @@ private:
   virtual vcl_vector<double> *GetSize();
   //: move location() to (0,0).
   virtual bool Translate();
+#endif
 
 private:
   //***************************************************************************

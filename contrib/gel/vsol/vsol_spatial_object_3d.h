@@ -180,6 +180,7 @@ public:
 
   virtual void protected_destroy(void);
 
+#if 0 // these functions are deprecated, and are nowhere used
 //: Geometry Accessors
   virtual vcl_vector<double> *GetLocation(void) { return 0; }
   virtual vcl_vector<double> *GetOrientation(void) { return 0; }
@@ -256,7 +257,6 @@ public:
     not_applicable("UpdateGeometry");
   }
 
-#if 0 // commented out
   virtual  vcl_vector<double>  *GetCog()  { return NULL; }
   const vcl_vector<double> *GetCog() const  { return ((vsol_spatial_object_3d*)this)->GetCog(); }
 

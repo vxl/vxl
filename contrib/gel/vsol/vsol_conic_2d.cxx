@@ -570,70 +570,25 @@ double vsol_conic_2d::distance(vsol_point_2d_sptr const& pt) const
 }
 
 //---------------------------------------------------------------------------
-// virtuals of vsol_spatial_object_2d
+//: Return the main symmetry axis, if not degenerate.
 //---------------------------------------------------------------------------
-
-//: return reference point.  This is the midpoint for central conics.
-vcl_vector<double> * vsol_conic_2d::GetLocation()
-{
-  if (this->is_central()) {
-    vgl_homg_point_2d<double> c = this->centre();
-    vcl_vector<double>* v = new vcl_vector<double>(2);
-    v->front() = c.x()/c.w(); v->back() = c.y()/c.w();
-    return v;
-  }
-  else return 0;
-}
-
-//: return orientation of the main symmetry axis, if not degenerate.
-vcl_vector<double> * vsol_conic_2d::GetOrientation()
+vsol_line_2d_sptr vsol_conic_2d::axis() const
 {
   double cx, cy, phi, wd, ht;
   if (this->is_real_ellipse()) {
     this->ellipse_parameters(cx, cy, phi, wd, ht);
-    vcl_vector<double>* v = new vcl_vector<double>(2);
-    v->front() = vcl_cos(phi); v->back() = vcl_sin(phi);
-    return v;
+    vgl_vector_2d<double> v(vcl_cos(phi),vcl_sin(phi));
+    return new vsol_line_2d(v,midpoint());
   }
   else if (this->is_hyperbola()) {
     this->hyperbola_parameters(cx, cy, phi, wd, ht);
-    vcl_vector<double>* v = new vcl_vector<double>(2);
-    v->front() = vcl_cos(phi); v->back() = vcl_sin(phi);
-    return v;
+    vgl_vector_2d<double> v(vcl_cos(phi),vcl_sin(phi));
+    return new vsol_line_2d(v,midpoint());
   }
   else if (this->is_parabola()) {
     this->parabola_parameters(cx, cy, wd, ht);
-    vcl_vector<double>* v = new vcl_vector<double>(2);
-    v->front() = wd; v->back() = ht;
-    return v;
+    vgl_vector_2d<double> v(wd,ht);
+    return new vsol_line_2d(v,new vsol_point_2d(cx,cy));
   }
   else return 0;
-}
-
-//: return 2-dimensional size vector
-vcl_vector<double> * vsol_conic_2d::GetSize()
-{
-  double cx, cy, phi, wd, ht;
-  if (this->is_real_ellipse()) {
-    this->ellipse_parameters(cx, cy, phi, wd, ht);
-    vcl_vector<double>* v = new vcl_vector<double>(2);
-    v->front() = wd; v->back() = ht;
-    return v;
-  }
-  else if (this->is_hyperbola()) {
-    this->hyperbola_parameters(cx, cy, phi, wd, ht);
-    vcl_vector<double>* v = new vcl_vector<double>(2);
-    v->front() = wd; v->back() = ht;
-    return v;
-  }
-  else return 0;
-}
-
-//: move location() to (0,0).
-bool vsol_conic_2d::Translate()
-{
-  vgl_homg_point_2d<double> c = this->centre();
-  if (c.w() == 0) return false;
-  this->translate_by(-c.x()/c.w(),-c.y()/c.w());
-  return true;
 }

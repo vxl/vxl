@@ -166,6 +166,7 @@ public:
   //: protected destroy
   virtual void protected_destroy(void);
 
+#if 0 // these functions are deprecated, and are nowhere used
   //: Geometry Accessors
   virtual vcl_vector<double> *GetLocation(void) { return 0; }
   virtual vcl_vector<double> *GetOrientation(void) { return 0; }
@@ -232,6 +233,7 @@ public:
   {
     not_applicable("SetScalar");
   }
+#endif
 
   virtual void UpdateGeometry(void)
   {
