@@ -1,7 +1,6 @@
+vidl - The VXL video library.
 
-vvidl - The VXL video library.
-
-To get started, register your codecs and use vvidl_io to
+To get started, register your codecs and use vidl_io to
 load a movie.  Here's a program which prints info about 
 a movie:
 
