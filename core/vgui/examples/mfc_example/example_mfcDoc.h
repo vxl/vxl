@@ -1,5 +1,3 @@
-#ifndef DOXYGEN_SHOULD_SKIP_THIS
-
 // example_mfcDoc.h : interface of the example_CExample_mfcDoc class
 //
 /////////////////////////////////////////////////////////////////////////////
@@ -62,4 +60,3 @@ protected:
 // Microsoft Visual C++ will insert additional declarations immediately before the previous line.
 
 #endif // AFX_EXAMPLE_MFCDOC_H__957CF9E8_8EF9_4244_A5B7_DAB9A3EF96A9__INCLUDED_
-#endif // DOXYGEN_SHOULD_SKIP_THIS

@@ -1,5 +1,3 @@
-#ifndef DOXYGEN_SHOULD_SKIP_THIS
-
 // \author K.Y.McGaul
 //
 // This example shows saving the OpenGL area to a PostScript file and to 
@@ -66,5 +64,3 @@ int main(int argc, char **argv)
 
   return vgui::run(shell, image->width(), image->height(), create_menu());
 }
-
-#endif // DOXYGEN_SHOULD_SKIP_THIS

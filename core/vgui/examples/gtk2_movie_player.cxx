@@ -1,5 +1,3 @@
-#ifndef DOXYGEN_SHOULD_SKIP_THIS
-
 // This is a more complicated example using GTK to make our GUI instead
 // of VGUI (apart from the OpenGL area).
 //
@@ -89,5 +87,3 @@ int main(int argc, char ** argv)
 
   return vgui::run();
 }
-
-#endif

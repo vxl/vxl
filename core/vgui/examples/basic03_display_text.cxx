@@ -1,5 +1,3 @@
-#ifndef DOXYGEN_SHOULD_SKIP_THIS
-
 // \author K.Y.McGaul
 // 
 // This example displays text in a window.
@@ -26,5 +24,3 @@ int main(int argc, char **argv)
   vgui_shell_tableau_new shell(viewer);
   return vgui::run(shell, 512, 512);
 }
-
-#endif // DOXYGEN_SHOULD_SKIP_THIS

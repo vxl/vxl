@@ -1,5 +1,3 @@
-#ifndef DOXYGEN_SHOULD_SKIP_THIS
-
 // \author K.Y.McGaul
 //
 // In this example a line is drawn by clicking on the end points.
@@ -91,5 +89,3 @@ int main(int argc,char **argv)
 
   return vgui::run(shell, 512, 512);
 }
-
-#endif // DOXYGEN_SHOULD_SKIP_THIS

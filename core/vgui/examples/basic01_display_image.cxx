@@ -1,5 +1,3 @@
-#ifndef DOXYGEN_SHOULD_SKIP_THIS
-
 // \author K.Y.McGaul
 //
 // This example displays an image in a window.  The image is loaded from
@@ -32,5 +30,3 @@ int main(int argc, char **argv)
   // Create a window, add the tableau and show it on screen.
   return vgui::run(shell, image->width(), image->height());
 }
-
-#endif // DOXYGEN_SHOULD_SKIP_THIS

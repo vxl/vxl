@@ -1,5 +1,3 @@
-#ifndef DOXYGEN_SHOULD_SKIP_THIS
-
 // example_mfcView.h : interface of the example_CExample_mfcView class
 //
 /////////////////////////////////////////////////////////////////////////////
@@ -64,4 +62,3 @@ inline example_CExample_mfcDoc* example_CExample_mfcView::GetDocument()
 // Microsoft Visual C++ will insert additional declarations immediately before the previous line.
 
 #endif // AFX_EXAMPLE_MFCVIEW_H__18E6E4B2_3489_47C5_ABEA_A07DF852DBEC__INCLUDED_
-#endif // DOXYGEN_SHOULD_SKIP_THIS

@@ -1,5 +1,3 @@
-#ifndef DOXYGEN_SHOULD_SKIP_THIS
-
 //:
 // \file
 // \brief Defines the class behaviours for the application.
@@ -154,5 +152,3 @@ void example_CExample_mfcApp::OnAppAbout()
 /////////////////////////////////////////////////////////////////////////////
 // example_CExample_mfcApp message handlers
 
-
-#endif // DOXYGEN_SHOULD_SKIP_THIS

@@ -1,5 +1,3 @@
-#ifndef DOXYGEN_SHOULD_SKIP_THIS 
-
 // example_mfc.h : main header file for the EXAMPLE_MFC application
 //
 
@@ -49,4 +47,3 @@ public:
 // Microsoft Visual C++ will insert additional declarations immediately before the previous line.
 
 #endif // AFX_EXAMPLE_MFC_H__D215F64C_C1C9_41E2_B0F8_05ACF6313455__INCLUDED_
-#endif // DOXYGEN_SHOULD_SKIP_THIS

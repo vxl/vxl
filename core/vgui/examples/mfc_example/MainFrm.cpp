@@ -1,5 +1,3 @@
-#ifndef DOXYGEN_SHOULD_SKIP_THIS
-
 // MainFrm.cpp : implementation of the example_CMainFrame class
 //
 
@@ -106,5 +104,3 @@ void example_CMainFrame::Dump(CDumpContext& dc) const
 
 /////////////////////////////////////////////////////////////////////////////
 // example_CMainFrame message handlers
-
-#endif  // DOXYGEN_SHOULD_SKIP_THIS

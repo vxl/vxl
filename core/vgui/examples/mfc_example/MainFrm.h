@@ -1,4 +1,3 @@
-#ifndef DOXYGEN_SHOULD_SKIP_THIS
 // MainFrm.h : interface of the example_CMainFrame class
 //
 /////////////////////////////////////////////////////////////////////////////
@@ -57,4 +56,3 @@ protected:
 // Microsoft Visual C++ will insert additional declarations immediately before the previous line.
 
 #endif // AFX_MAINFRM_H__8164CEA5_8BF1_4CCA_B0C9_B25BBF6219AD__INCLUDED_
-#endif // DOXYGEN_SHOULD_SKIP_THIS

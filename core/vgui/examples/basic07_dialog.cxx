@@ -1,5 +1,3 @@
-#ifndef DOXYGEN_SHOULD_SKIP_THIS
-
 // This example makes a dialog box and attaches it to a menu item.
 // When the user has added values to the dialog box and clicked on OK
 // their list of choices will be printed to cerr.
@@ -98,5 +96,3 @@ int main(int argc, char ** argv)
   // Create a window with a menu, add the tableau and show it on screen:
   return vgui::run(shell, image->width(), image->height(), create_menus());
 }
-
-#endif // DOXYGEN_SHOULD_SKIP_THIS

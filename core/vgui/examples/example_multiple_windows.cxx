@@ -1,5 +1,3 @@
-#ifndef DOXYGEN_SHOULD_SKIP_THIS
-
 // Example of creation/deletion of multiple windows in an application.
 // The reference counted tableaux take care of memory deallocation for you.
 // Which is nice.
@@ -129,5 +127,3 @@ int main (int argc, char** argv) {
 
   return vgui::run();
 }
-
-#endif

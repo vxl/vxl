@@ -1,5 +1,3 @@
-#ifndef DOXYGEN_SHOULD_SKIP_THIS
-
 // \author K.Y.McGaul
 // 
 // This example displays an image with a popup-menu.
@@ -63,5 +61,3 @@ int main(int argc, char ** argv)
   win->show(); 
   return vgui::run(); 
 }
-
-#endif // DOXYGEN_SHOULD_SKIP_THIS

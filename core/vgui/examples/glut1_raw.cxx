@@ -1,5 +1,3 @@
-#ifndef DOXYGEN_SHOULD_SKIP_THIS
-
 // \author  fsm@robots.ox.ac.uk
 //
 // GLUT example.
@@ -64,5 +62,3 @@ int main(int argc, char **argv)
 
   return 0;
 }
-
-#endif

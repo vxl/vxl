@@ -1,5 +1,3 @@
-#ifndef DOXYGEN_SHOULD_SKIP_THIS
-
 // Example using GTK to make a user-interface and vidl to load a movie.
 
 #include <vul/vul_sprintf.h>
@@ -116,5 +114,3 @@ int main(int argc, char ** argv)
 
   vgui::run();
 }
-
-#endif

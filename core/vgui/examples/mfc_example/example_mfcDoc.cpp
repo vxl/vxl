@@ -1,5 +1,3 @@
-#ifndef DOXYGEN_SHOULD_SKIP_THIS
-
 // example_mfcDoc.cpp : implementation of the example_CExample_mfcDoc class
 //
 
@@ -112,5 +110,3 @@ vgui_tableau_sptr example_CExample_mfcDoc::get_tableau()
 {
   return tableau;
 }
-
-#endif // DOXYGEN_SHOULD_SKIP_THIS

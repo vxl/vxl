@@ -1,5 +1,3 @@
-#ifndef DOXYGEN_SHOULD_SKIP_THIS
-
 // \author K.Y.McGaul
 // 
 // This example displays an image with a menu bar.
@@ -53,5 +51,3 @@ int main(int argc, char ** argv)
   // Create a window, but this time we also pass in a vgui_menu.
   return vgui::run(shell, 512, 512, create_menus());
 }
- 
-#endif // DOXYGEN_SHOULD_SKIP_THIS

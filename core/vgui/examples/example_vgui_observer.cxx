@@ -1,4 +1,3 @@
-#ifndef DOXYGEN_SHOULD_SKIP_THIS
 // This is oxl/vgui/examples/advanced_observer.cxx
 
 //:
@@ -99,4 +98,3 @@ int main(int argc, char **argv)
 
   return vgui::run(shell, w, h);
 }
-#endif

@@ -1,5 +1,3 @@
-#ifndef DOXYGEN_SHOULD_SKIP_THIS	
-
 // \author  fsm@robots.ox.ac.uk
 //
 // This example is given an image filename on the command line and displays
@@ -88,5 +86,3 @@ int main(int argc, char **argv)
   vgui_viewer2D_tableau_new zoom(tab);
   return vgui::run(zoom, image.width(), image.height());
 }
-
-#endif

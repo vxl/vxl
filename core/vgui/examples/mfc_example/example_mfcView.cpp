@@ -1,5 +1,3 @@
-#ifndef DOXYGEN_SHOULD_SKIP_THIS
-
 // example_mfcView.cpp : implementation of the example_CExample_mfcView class
 //
 
@@ -96,5 +94,3 @@ int example_CExample_mfcView::OnCreate(LPCREATESTRUCT lpCreateStruct)
         set_tableau(GetDocument()->get_tableau());
         return 0;
 }
-
-#endif // DOXYGEN_SHOULD_SKIP_THIS

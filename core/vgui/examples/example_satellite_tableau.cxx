@@ -1,5 +1,3 @@
-#ifndef	DOXYGEN_SHOULD_SKIP_THIS 
-
 // \author  fsm@robots.ox.ac.uk
 // \brief   Example using vgui_satellite_tableau.
 
@@ -44,5 +42,3 @@ int main(int argc, char **argv)
   vgui_deck_tableau_new deck(sp.a, sp.b1, sp.b2);
   return vgui::run(deck, 512, 512);
 }
-
-#endif

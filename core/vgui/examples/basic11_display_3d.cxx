@@ -1,5 +1,3 @@
-#ifndef	DOXYGEN_SHOULD_SKIP_THIS
-
 // \author K.Y.McGaul
 //
 // This example displays a point with 3 lines radiating from it in different
@@ -44,5 +42,3 @@ int main(int argc, char **argv)
 
   return vgui::run(shell, 512, 512, "3d-example");
 }
-
-#endif // DOXYGEN_SHOULD_SKIP_THIS

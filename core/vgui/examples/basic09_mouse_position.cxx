@@ -1,5 +1,3 @@
-#ifndef DOXYGEN_SHOULD_SKIP_THIS
-
 // \author K.Y.McGaul
 //
 // This displays the mouse position when the left mouse button is pressed.
@@ -59,5 +57,3 @@ int main(int argc,char **argv)
   // Start event loop, using easy method.
   return vgui::run(shell, 512, 512);
 }
-
-#endif // DOXYGEN_SHOULD_SKIP_THIS
