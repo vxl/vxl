@@ -46,8 +46,9 @@ static bool debug=false;
 
 const void * const vgui_viewer2D::CENTER_EVENT="x";
 
-// vgui_event_condition c_pan(vgui_MIDDLE, vgui_CTRL);
-vgui_event_condition c_pan(vgui_LEFT, vgui_modifier(vgui_CTRL + vgui_SHIFT));
+// this is what it always was. please leave it. -- fsm.
+vgui_event_condition c_pan(vgui_MIDDLE, vgui_CTRL);
+//vgui_event_condition c_pan(vgui_LEFT, vgui_modifier(vgui_CTRL + vgui_SHIFT));
 
 vgui_viewer2D::vgui_viewer2D(vgui_tableau_ref const& s) : 
   vgui_wrapper_tableau(s),
@@ -279,8 +280,8 @@ bool vgui_viewer2D::mouse_down(int x, int y, vgui_button button, vgui_modifier m
 }
 
 bool vgui_viewer2D::mouse_drag(int x, int y,  vgui_button /*button*/, vgui_modifier /*modifier*/) {
-  if (debug) vcl_cerr << "vgui_viewer2D_handler::mouse_drag" << vcl_endl;
-
+  if (debug) vcl_cerr << __FILE__ ": vgui_viewer2D_handler::mouse_drag" << vcl_endl;
+  
   if (!panning && !smooth_zooming && !sweep_zooming)
     return false;
         
@@ -291,7 +292,7 @@ bool vgui_viewer2D::mouse_drag(int x, int y,  vgui_button /*button*/, vgui_modif
     this->token.offsetY -= (y-prev_y);
     this->post_redraw();
   }
-
+  
   if (smooth_zooming) {
     GLdouble vp[4];
     glGetDoublev(GL_VIEWPORT, vp);
@@ -301,7 +302,6 @@ bool vgui_viewer2D::mouse_drag(int x, int y,  vgui_button /*button*/, vgui_modif
 
     this->zoomin(newscale, int(zoom_x), int(zoom_y));
     this->post_redraw();
-      
   }
 
   if (sweep_zooming) {
@@ -363,13 +363,11 @@ bool vgui_viewer2D::mouse_drag(int x, int y,  vgui_button /*button*/, vgui_modif
    
     vgui_utils::end_sw_overlay();
   }
-
-
+  
   // Update last seen mouse position.
   prev_x = x;
   prev_y = y;
   return true;
-    
 }
   
 bool vgui_viewer2D::mouse_up(int /*x*/, int /*y*/,  vgui_button button, vgui_modifier /*modifier*/) {
