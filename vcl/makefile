@@ -273,9 +273,6 @@ MANPAGE_SOURCES += mwerks/vcl_cstdlib.h
 include ${IUEROOT}/config/top-params.mk
 #######################################
 
-# Do not compile any template instantiations:
-AUX_SOURCE_DIRECTORY := 
-
 # It is OK to compile these sources with native
 # STLs because they won't generate any code.
 ifndef USE_NATIVE_STL
