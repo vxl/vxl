@@ -49,8 +49,9 @@ enum rrel_muse_type { RREL_MUSE_TRIMMED, RREL_MUSE_TRIMMED_SQUARE, RREL_MUSE_QUA
 //  scale structures.  In general it is safe to use this, and the
 //  constructor defaults to having it set.
 
-class rrel_muset_obj : public rrel_objective {
-public:
+class rrel_muset_obj : public rrel_objective
+{
+ public:
   //: Constructor.
   //  \a max_n is the size of the look-up table.
   rrel_muset_obj( int max_n, bool use_sk_refine=true);
@@ -99,7 +100,7 @@ public:
   void set_min_inlier_fraction( double min_frac=0.25 )
     {  min_frac_ = min_frac; }
 
-  //: Set the maximum fractino of the data that could be inliers.
+  //: Set the maximum fraction of the data that could be inliers.
   void set_max_inlier_fraction( double max_frac=0.95 )
     {  max_frac_ = max_frac; }
 
@@ -123,7 +124,7 @@ public:
   //: Access the type of MUSE objective function
   rrel_muse_type muse_type() const { return muse_type_; }
 
-protected:
+ protected:
   bool use_sk_refine_;
   rrel_muse_type muse_type_;
 
