@@ -1,5 +1,5 @@
 # Brown digital geometry library
-# brl/bdgl/CMakeLists.txt
+# brl/bbas/bdgl/CMakeLists.txt
 
 SUBDIRS(tests)
 
