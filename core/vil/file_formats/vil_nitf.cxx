@@ -1,27 +1,21 @@
 // This is core/vil/file_formats/vil_nitf.cxx
-//
-// \date: 2003/12/26
-// \author: mlaymon
-
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
-
 //:
 // \file
 // \brief Implementation of methods for class vil_nitf.
 // See vil_nitf.h for a description of this file.
 //
 // \author    laymon@crd.ge.com
+// \date: 2003/12/26
 //
 // \verbatim
 //  Modifications:
 // \endverbatim
 
 #include <vcl_ctime.h>  // for CLOCKS_PER_SEC
-
-#include <vxl_config.h>   // for VXL_BIG_ENDIAN and vxl_byte
-
+#include <vxl_config.h> // for VXL_BIG_ENDIAN and vxl_byte
 #include <vcl_cassert.h>
 
 #include <vcl_cstring.h>
@@ -662,11 +656,11 @@ vil_memory_chunk_sptr vil_nitf_image::read_single_band_data(
     // BLOCK_SIZE_X IS NUMBER OF PIXELS IN EACH ROW OF THE BLOCK.
     // WE WANT TO READ ONE ROW OF A BLOCK AT A TIME.
     unsigned long bytes_per_read = get_block_size_x() * bytes_per_pixel;
-    unsigned char block_buffer[bytes_per_block];  // BUFFER TO HOLD BYTES FOR ONE BLOCK
+    unsigned char * block_buffer = new unsigned char[bytes_per_block];  // BUFFER TO HOLD BYTES FOR ONE BLOCK
 
     // BUFFERS TO SAVE BYTES FOR DEBUGGING
-    unsigned char save_buf_1[bytes_per_read];
-    unsigned char save_buf_2[bytes_per_read];
+    unsigned char * save_buf_1 = new unsigned char[bytes_per_read];
+    unsigned char * save_buf_2 = new unsigned char[bytes_per_read];
 
     unsigned long total_bytes = 0;
     // ONLY CALCULATE NUMBER OF BYTES IF NOT READING TOTAL IMAGE.
