@@ -24,7 +24,6 @@
 #include <vsl/vsl_binary_io.h>
 #include <vsol/vsol_spatial_object_2d.h>
 #include <vcl_vector.h>
-#include <vcl_list.h>
 #include <vcl_iostream.h>
 
 class vsol_group_2d : public vsol_spatial_object_2d
