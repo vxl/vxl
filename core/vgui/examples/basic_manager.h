@@ -13,13 +13,15 @@
 //   J.L. Mundy December 26, 2002    Initial version.
 // \endverbatim
 //-----------------------------------------------------------------------------
-#include <vcl_vector.h>
 #include <vil/vil_image.h>
 #include <vgui/vgui_image_tableau_sptr.h>
 #include <vgui/vgui_wrapper_tableau.h>
 
 class basic_manager : public vgui_wrapper_tableau
 {
+  vil_image img_;
+  vgui_image_tableau_sptr itab_; 
+  static basic_manager *instance_;
  public:
   basic_manager();
   ~basic_manager();
@@ -28,10 +30,6 @@ class basic_manager : public vgui_wrapper_tableau
   void load_image();
   void init();
   virtual bool handle(vgui_event const &);
- private:
-
-  vil_image img_;
-  vgui_image_tableau_sptr itab_; 
-  static basic_manager *instance_;
 };
+
 #endif // basic_manager_h_
