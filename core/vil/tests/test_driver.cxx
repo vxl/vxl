@@ -17,6 +17,7 @@ DECLARE( test_algo_exp_filter_1d );
 DECLARE( test_image_view_maths );
 DECLARE( test_memory_chunk );
 DECLARE( test_resample_bilin );
+DECLARE( test_binary_dilate );
 
 void
 register_tests()
@@ -38,6 +39,7 @@ register_tests()
   REGISTER( test_image_view_maths );
   REGISTER( test_memory_chunk );
   REGISTER( test_resample_bilin );
+  REGISTER( test_binary_dilate );
 }
 
 DEFINE_MAIN;

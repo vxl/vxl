@@ -20,6 +20,7 @@ ADD_EXECUTABLE( vil2_test_driver
   test_algo_exp_filter_1d.cxx
   test_image_view_maths.cxx
   test_memory_chunk.cxx
+  test_binary_dilate.cxx
 )
 TARGET_LINK_LIBRARIES( vil2_test_driver vil2_algo vil2 vpl vul testlib vcl )
 
@@ -41,3 +42,4 @@ ADD_TEST( vil2_test_algo_exp_filter_1d     vil2_test_driver test_algo_exp_filter
 ADD_TEST( vil2_test_image_view_maths       vil2_test_driver test_image_view_maths )
 ADD_TEST( vil2_memory_chunk                vil2_test_driver test_memory_chunk )
 ADD_TEST( vil2_resample_bilin              vil2_test_driver test_resample_bilin )
+ADD_TEST( test_binary_dilate               vil2_test_driver test_binary_dilate )
