@@ -3,11 +3,11 @@
 // \brief Example of setting up view of external data.
 // \author Tim Cootes - Manchester
 
-#include <vcl_iostream.h>
-#include <vcl_vector.h>
-#include <vxl_config.h>
 #include <vil2/vil2_image_view.h>
 #include <vil2/vil2_image_view_functions.h>
+#include <vxl_config.h> // for vxl_byte
+#include <vcl_iostream.h>
+#include <vcl_vector.h>
 
 int main(int argc, char** argv)
 {
@@ -15,18 +15,17 @@ int main(int argc, char** argv)
   vcl_vector<vxl_byte> vec_data(64);
   for (unsigned i=0;i<vec_data.size();++i) vec_data[i] = i;
 
-  vcl_cout<<"Creating a view of some data in memory"<<vcl_endl;
+  vcl_cout<<"Creating a view of some data in memory\n";
   vil2_image_view<vxl_byte> image(&vec_data[0],8,8,1,1,8,1);
 
   // equivalent to image.set_to_memory(&vec_data[0],8,8,1,1,8,1);
 
-  vcl_cout<<"View as image:"<<vcl_endl;
+  vcl_cout<<"View as image:\n";
   vil2_print_all(vcl_cout,image);
 
-  vcl_cout<<vcl_endl;
-  vcl_cout<<"Note that if the raw data gets destroyed "<<vcl_endl;
-  vcl_cout<<"then the view could be left pointing at nothing!"<<vcl_endl;
-  vcl_cout<<"You have been warned."<<vcl_endl;
+  vcl_cout<<"\nNote that if the raw data gets destroyed\n"
+            "then the view could be left pointing at nothing!\n"
+            "You have been warned.\n";
 
   return 0;
 }

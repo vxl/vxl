@@ -3,13 +3,14 @@
 // \brief Example of using rgb views and automatic conversion.
 // \author Ian Scott
 
-#include <vcl_iostream.h>
-#include <vcl_cassert.h>
 #include <testlib/testlib_root_dir.h>
 #include <vil2/vil2_load.h>
 #include <vil2/vil2_save.h>
 #include <vil2/vil2_image_view.h>
 #include <vil2/vil2_image_view_functions.h>
+#include <vcl_iostream.h>
+#include <vcl_cassert.h>
+#include <vxl_config.h> // for vxl_byte
 
 int main(int argc, char** argv)
 {

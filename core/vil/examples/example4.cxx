@@ -3,18 +3,18 @@
 // \brief Example of generating functions to manipulate views.
 // \author Tim Cootes - Manchester
 
-#include <vcl_iostream.h>
-#include <vxl_config.h>
 #include <vil2/vil2_image_view.h>
 #include <vil2/vil2_image_view_functions.h>
+#include <vxl_config.h> // for vxl_byte
+#include <vcl_iostream.h>
 
 //: Example function to return a transpose of the view
 vil2_image_view<vxl_byte> transpose_view(const vil2_image_view<vxl_byte>& v)
 {
   // Create view with i and j switched
   return vil2_image_view<vxl_byte>(v.memory_chunk(),v.top_left_ptr(),
-                                    v.nj(),v.ni(),v.nplanes(),
-                                    v.jstep(),v.istep(),v.planestep());
+                                   v.nj(),v.ni(),v.nplanes(),
+                                   v.jstep(),v.istep(),v.planestep());
 }
 
 int main(int argc, char** argv)
