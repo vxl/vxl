@@ -16,36 +16,37 @@
 // --- Unary templates ---
 // Templates with one type mentioned, no requirements on type
 
-#define VCL_OPERATOR_NE_INSTANTIATE(T)\
+#define VCL_OPERATOR_NE_INSTANTIATE(T) \
 VCL_INSTANTIATE_INLINE(bool operator!=(T const&, T const &))
 
-#define VCL_COMPARISONS_INSTANTIATE(T)\
+#define VCL_COMPARISONS_INSTANTIATE(T) \
 VCL_OPERATOR_NE_INSTANTIATE(T) \
-VCL_INSTANTIATE_INLINE(bool operator>(T const &, T const &)); \
-VCL_INSTANTIATE_INLINE(bool operator<=(T const &, T const &)); \
-VCL_INSTANTIATE_INLINE(bool operator>=(T const &, T const &))
+VCL_INSTANTIATE_INLINE(bool operator >  (T const &, T const &)); \
+VCL_INSTANTIATE_INLINE(bool operator <= (T const &, T const &)); \
+VCL_INSTANTIATE_INLINE(bool operator >= (T const &, T const &))
 
 // --- Iterators ---
 
-#define VCL_TAGS_INSTANTIATE(I, TAG)\
+#define VCL_TAGS_INSTANTIATE(I, TAG) \
 VCL_INSTANTIATE_INLINE(TAG iterator_category(I const &))
 
-#define VCL_ITER_FWD_INSTANTIATE(ForwardIterator)\
+#define VCL_ITER_FWD_INSTANTIATE(ForwardIterator) \
 VCL_OPERATOR_NE_INSTANTIATE(ForwardIterator)\
 VCL_TAGS_INSTANTIATE(ForwardIterator, forward_iterator_tag)
 
 #if 0
-#define VCL_ITER_BD_Distance_INSTANTIATE(BidirectionalIterator, Distance)\
+#define VCL_ITER_BD_Distance_INSTANTIATE(BidirectionalIterator, Distance) \
 VCL_INSTANTIATE_INLINE(void advance(BidirectionalIterator&,Distance));\
 VCL_INSTANTIATE_INLINE(void __advance(BidirectionalIterator&,Distance,bidirectional_iterator_tag));\
 VCL_INSTANTIATE_INLINE(void distance(BidirectionalIterator,BidirectionalIterator,Distance&));\
 VCL_INSTANTIATE_INLINE(void __distance(BidirectionalIterator,BidirectionalIterator const&,Distance&,bidirectional_iterator_tag))
 
-#define VCL_ITER_RA_Distance_INSTANTIATE(RandomAccessIterator, Distance)\
+#define VCL_ITER_RA_Distance_INSTANTIATE(RandomAccessIterator, Distance) \
 VCL_INSTANTIATE_INLINE(void advance(RandomAccessIterator&,Distance));\
 VCL_INSTANTIATE_INLINE(void __advance(RandomAccessIterator&,Distance,random_access_iterator_tag));\
 VCL_INSTANTIATE_INLINE(void distance(RandomAccessIterator,RandomAccessIterator,Distance&));\
-VCL_INSTANTIATE_INLINE(void __distance(RandomAccessIterator const&,RandomAccessIterator const&,Distance&,random_access_iterator_tag))
+VCL_INSTANTIATE_INLINE(void __distance(RandomAccessIterator const&,RandomAccessIterator const&,\
+                                       Distance&,random_access_iterator_tag))
 #endif
 
 // --- Vcl_List ---
@@ -59,9 +60,9 @@ VCL_INSTANTIATE_INLINE_LOOP(F uninitialized_copy(I, I, F))
 
 // --- RB TREE ---
 #define VCL_RBTREE_INSTANTIATE(Key, Value, GetKey, Compare) \
-template class rb_tree<Key, Value, GetKey, Compare, vcl_alloc >;
+template class rb_tree<Key, Value, GetKey, Compare, vcl_alloc >
 
-#define VCL_RBTREE_VALUE_INSTANTIATE(Value)\
+#define VCL_RBTREE_VALUE_INSTANTIATE(Value) \
 template class __rb_tree_base<Value, vcl_alloc >;\
 template struct __rb_tree_iterator<Value >;\
 template struct __rb_tree_const_iterator<Value >;\

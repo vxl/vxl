@@ -57,7 +57,8 @@ template < class ImgIn,class ImgOut,class DataIn,class DataOut, class PixelItr >
 {}
 
 template < class ImgIn,class ImgOut,class DataIn,class DataOut, class PixelItr >
-  vipl_filter_2d< ImgIn,ImgOut,DataIn,DataOut,PixelItr > ::vipl_filter_2d(const vipl_filter_2d< ImgIn,ImgOut,DataIn,DataOut,PixelItr > &t)
+  vipl_filter_2d< ImgIn,ImgOut,DataIn,DataOut,PixelItr >
+  ::vipl_filter_2d(const vipl_filter_2d< ImgIn,ImgOut,DataIn,DataOut,PixelItr > &t)
   :
   vipl_filter< ImgIn, ImgOut, DataIn, DataOut, 2 VCL_DFL_TMPL_ARG(vipl_trivial_pixeliter)> (t)
 // C++ special low-level copy constructor

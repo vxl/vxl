@@ -17,7 +17,10 @@ template < class DataType >
 {
   if(desc) FILTER_IMPTR_INC_REFCOUNT(desc);
   if(containr) FILTER_IMPTR_INC_REFCOUNT(containr);
-  // cerr << "Warning: called unimplemented constructor with sig vipl_section_descriptor< DataType >* desc, vipl_section_container< DataType >* containr\n";
+#if 0
+  vcl_cerr << "Warning: called unimplemented constructor with signature "
+           << "vipl_section_descriptor< DataType >* desc, vipl_section_container< DataType >* containr\n";
+#endif
 }
 
 // Deep copies the pointers.
