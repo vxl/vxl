@@ -27,7 +27,8 @@ A simple example will be useful to illustrate some of the basics of vgui.
 The appearance of an image displayer is shown in Figure 1.
 @figure
 @image{image-tableau-with-status,,3in}
-@caption{1} A @code{vgui} image display application. 
+@caption{1} 
+A @code{vgui} image display application. 
 @endcaption
 @endfigure
 
@@ -174,7 +175,8 @@ the graph, information about the tableau will be streamed to cout.
 
 @figure
 @image{tableau-hierarchy-annotated,,3in}
-@caption{2} The nested tableaux form a tree structure.  This structure can be displayed by the @code{vgui_tview_launcher_tableau} which is part of the composite @code{vgui_shell_tableau}. The edges in the graph are represented by instances of the class @code{vgui_parent_child_link}.
+@caption{2}
+The nested tableaux form a tree structure.  This structure can be displayed by the @code{vgui_tview_launcher_tableau} which is part of the composite @code{vgui_shell_tableau}. The edges in the graph are represented by instances of the class @code{vgui_parent_child_link}.
 @endcaption
 @endfigure
 
@@ -252,7 +254,8 @@ int main(int argc, char **argv)
 @end example
 @figure
 @image{multiple-panes,,2.5in}
-@caption{3} The @code{vgui_grid_tableau} supports the display of multiple panes.
+@caption{3} 
+The @code{vgui_grid_tableau} supports the display of multiple panes.
 @endcaption
 @endfigure
 The use of tableaux is very similar to the first example, except that two
@@ -276,7 +279,8 @@ For example, if a user wants to load and image from a file into a particular pan
 @subsection The Deck 
 @figure
 @image{deck-tableau,,3in}
-@caption{4}The @code{vgui_deck_tableau} supports the display of a stack of child tableaux. A typical application is to be able to page through a sequence of images. Only the tableau root on the top of the stack responds to events, such as pan and zoom.
+@caption{4} 
+The @code{vgui_deck_tableau} supports the display of a stack of child tableaux. A typical application is to be able to page through a sequence of images. Only the tableau root on the top of the stack responds to events, such as pan and zoom.
 @endcaption
 @endfigure
 Another useful capability is to stack displays in a pane.  Then the application can ``page'' through the displays.  Only the tableau hierarchy on the ``top'' of the deck responds to events, such as zooming and panning controls.  The creation of a deck is illustrated by the example, @code{vgui/examples/basic01b_deck.cxx}.  The concept of a deck is shown in Figure 4.
@@ -330,7 +334,8 @@ events, which advance or backup the deck sequence.
 @subsection Displaying 2-d Features
 @figure
 @image{display-2d-annotated,,3in}
-@caption{5} Geometry overlayed an the image is shown on the right.  The tableau graph for this example is shown on the left.
+@caption{5} 
+Geometry overlayed an the image is shown on the right.  The tableau graph for this example is shown on the left.
 @endcaption
 @endfigure
 @anchor{easy2D}
@@ -432,7 +437,8 @@ commands is assigned according to their specification until a new style command 
 
 @figure
 @image{soview-hierarchy,,3in}
-@caption{6} The hierarchy for 2-d soviews. @code{vgui} also has some support for 3-d rendering.
+@caption{6} 
+The hierarchy for 2-d soviews. @code{vgui} also has some support for 3-d rendering.
 @endcaption
 @endfigure
 
@@ -536,7 +542,8 @@ geometry. An example of the @code{vgui} 3-d display is shown in Figure
 7.
 @figure
 @image{threeD-example,,3in}
-@caption{7} vgui's 3-d display.
+@caption{7} 
+vgui's 3-d display.
 @endcaption
 @endfigure
 @section Menus
@@ -745,7 +752,8 @@ order to read data such as image. These functions are satisfied by the
 corresponds to @code{vgui/examples/basic07_dialog.cxx}.
 @figure
 @image{dialog-example,,4in}
-@caption{10} The dialog menu appears when a menu item is pressed that calls a function containing a dialog.  The dialog displays names and values as well as boolean check boxes. The state of the boxes and values can be changed and when the dialog is dispatched, the altered values are bound to the variables in the dialog specification. In this simple example, the latest values are output to @code{cerr}.
+@caption{10} 
+The dialog menu appears when a menu item is pressed that calls a function containing a dialog.  The dialog displays names and values as well as boolean check boxes. The state of the boxes and values can be changed and when the dialog is dispatched, the altered values are bound to the variables in the dialog specification. In this simple example, the latest values are output to @code{cerr}.
 @endcaption
 @endfigure
 The following example illustrates these points.
@@ -876,13 +884,15 @@ display geometric objects.
 @end itemize
 @figure
 @image{choice-color,,4in}
-@caption{11} a) The choice option enables a selection from a set of alternative values.  b) The color option enables a selection from a pallet of colors.
+@caption{11}
+ a) The choice option enables a selection from a set of alternative values.  b) The color option enables a selection from a pallet of colors.
 @endcaption
 @endfigure
 @figure
 @image{dialog2-example,,2in}
-@caption{12} Dialogs can also contain embedded images or geometric figures.
-@endcaptino
+@caption{12} 
+Dialogs can also contain embedded images or geometric figures.
+@endcaption
 @endfigure
 @section Event Processing
 @anchor{events}
