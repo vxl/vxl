@@ -57,7 +57,7 @@ void test_do_vul_arg()
            << ", bool1 = " << bool1()
            << ", bool2 = " << bool2()
            << ", bool3 = " << bool3()
-           << ", list1 = " << list1().front()
+           << ", list1 size = " << list1().size()
            << vcl_endl;
   char **my_argv = (char**) my_argv_1;
 
