@@ -158,6 +158,9 @@ SOURCE=.\vsrl_point_picker.cxx
 # Begin Source File
 SOURCE=.\vsrl_manager.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\vsrl_menus.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter ""
