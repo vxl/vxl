@@ -81,7 +81,11 @@ vul_temp_filename( )
   // yet another file that will lie around if the caller doesn't use the generated
   // filename. And I don't trust the implementation enough to just unlink the file
   // before returning.
+# if defined(VCL_BORLAND_56)
+  file = std::_tempnam( path, "" );
+# else
   file = _tempnam( path, "" );
+# endif
   if ( file == 0 )
     return "";
   return file;
