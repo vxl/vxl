@@ -80,7 +80,7 @@ class bdgl_curve_algs
                                  bool debug = false);
 
   static void
-    smooth_curve(vcl_vector<vgl_point_2d<double> >& curve,double sigma);
+    smooth_curve(vcl_vector<vgl_point_2d<double> >& curve,double sigma=1.0);
 
   static vdgl_digital_curve_sptr
     create_digital_curves(vcl_vector<vgl_point_2d<double> > & curve);
