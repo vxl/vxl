@@ -145,7 +145,6 @@ SET(vgui_sources
   vgui_linker_hack.h
 
   # internals
-  vgui_glut.cxx                      vgui_glut.h
   internals/vgui_invert_homg4x4.cxx  internals/vgui_invert_homg4x4.h
   internals/vgui_back_project.cxx    internals/vgui_back_project.h
   internals/vgui_un_project.cxx      internals/vgui_un_project.h
@@ -160,6 +159,12 @@ SET(vgui_sources
   internals/vgui_accelerate.cxx      internals/vgui_accelerate.h
   internals/vgui_accelerate_tag.cxx
 )
+
+IF( GLUT_FOUND )
+  SET(vgui_sources ${vgui_sources}
+    vgui_glut.cxx                      vgui_glut.h
+  )
+ENDIF( GLUT_FOUND )
 
 AUX_SOURCE_DIRECTORY(Templates vgui_sources)
 
