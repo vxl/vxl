@@ -106,7 +106,7 @@ int main()
                    vcl_ios_trunc |
                    vcl_ios_binary);
 
-    f.write((char*)"hello, file", 11);
+    f.write("hello, file", 11);
     f.seekp(10);
     f.seekp(-2, vcl_ios_cur);
     f.seekp(1, vcl_ios_beg);
