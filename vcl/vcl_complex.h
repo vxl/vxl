@@ -26,12 +26,16 @@
 # include "emulation/vcl_complex.h"
 
 // ---------- native WIN32
-#elif defined(VCL_WIN32)
+#elif defined(VCL_VC)
 # include "win32/vcl_complex.h"
 
 // ---------- SunPro compiler
 #elif defined(VCL_SUNPRO_CC)
 # include "sunpro/vcl_complex.h"
+
+// ---------- SGI 730
+#elif defined(VCL_SGI_CC_730)
+#include  "sgi/vcl_complex.h"
 
 // ---------- ISO
 #else
