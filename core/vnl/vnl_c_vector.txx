@@ -291,7 +291,6 @@ inline void vnl_c_vector_dealloc(void* v, int n, int size)
 template<class T>
 T** vnl_c_vector<T>::allocate_Tptr(int n)
 {
-  // "T *" is POD.
   return (T**)vnl_c_vector_alloc(n, sizeof (T*));
 }
 
