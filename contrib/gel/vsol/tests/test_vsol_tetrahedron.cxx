@@ -32,7 +32,7 @@ void test_vsol_tetrahedron()
   TEST("vsol_tetrahedron::p2()", *(t->p2()), *r);
   TEST("vsol_tetrahedron::p3()", *(t->p3()), *s);
 
-  TEST("vsol_tetrahedron::volume()", t->volume(), 390625);
+  TEST_NEAR("vsol_tetrahedron::volume()", t->volume(), 390625.0, 1e-10);
 }
 
 TESTMAIN(test_vsol_tetrahedron);
