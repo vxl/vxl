@@ -46,7 +46,7 @@ class vtol_zero_chain
 
   //---------------------------------------------------------------------------
   //: Constructor from two vertices (to make an edge creation easier)
-  //  REQUIRE: v1.ptr()!=0 and v2.ptr()!=0 and v1.ptr()!=v2.ptr()
+  //  REQUIRE: v1!=v2
   //---------------------------------------------------------------------------
   explicit vtol_zero_chain(vtol_vertex &v1,
                            vtol_vertex &v2);

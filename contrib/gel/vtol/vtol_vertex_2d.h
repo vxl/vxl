@@ -79,10 +79,9 @@ public:
 
   //---------------------------------------------------------------------------
   //: Set the point (the point is not copied)
-  //  REQUIRE: new_point.ptr()!=0
+  //  REQUIRE: new_point!=0
   //---------------------------------------------------------------------------
   virtual void set_point(vsol_point_2d_sptr const& new_point);
-
 
   // Methods called on Vertex
   // for vsol_point_2d.   These are here
@@ -140,11 +139,9 @@ public:
   //---------------------------------------------------------------------------
   //: Create a line edge from `this' and `other' only if this edge does not exist.
   //  Otherwise it just returns the existing edge
-  //  REQUIRE: other.ptr()!=0 and other.ptr()!=this
+  //  REQUIRE: other!=*this
   //---------------------------------------------------------------------------
-
   virtual vtol_edge_sptr new_edge(vtol_vertex &other);
-
 
   double distance_from(const vnl_double_2 &);
 
@@ -153,7 +150,7 @@ public:
   void print(vcl_ostream &strm=vcl_cout) const;
   void describe(vcl_ostream &strm=vcl_cout, int blanking=0) const;
   virtual void compute_bounding_box(void);//A local implementation
-protected:
+ protected:
   //---------------------------------------------------------------------------
   // Description: point associated to the vertex
   //---------------------------------------------------------------------------
