@@ -96,8 +96,6 @@ void test_gaussian_pyramid_builder_2d_general_a()
   TEST("No drift upwards in a float pyramid", all_less_than_256, true);
   TEST("No drift downwards in a float pyramid", all_more_than_254, false);
 
-
-
   vimt_image_2d_of<vxl_byte> col_im(10, 10, 3);
   vil2_plane(col_im.image(),0).fill(10);
   vil2_plane(col_im.image(),1).fill(20);
@@ -105,10 +103,10 @@ void test_gaussian_pyramid_builder_2d_general_a()
   builder.build(image_pyr, col_im);
   vil2_image_view<vxl_byte > view_l1 = static_cast<vimt_image_2d_of<vxl_byte>&>(image_pyr(1)).image();
   TEST("Check a colour image pyramid doesn't distort colour",
-    all_pixels_equal_to<vxl_byte>(vil2_plane(view_l1,0), 10) &&
-    all_pixels_equal_to<vxl_byte>(vil2_plane(view_l1,1), 20) &&
-    all_pixels_equal_to<vxl_byte>(vil2_plane(view_l1,2), 200), true);
-  
+       all_pixels_equal_to(vil2_plane(view_l1,0), 10) &&
+       all_pixels_equal_to(vil2_plane(view_l1,1), 20) &&
+       all_pixels_equal_to(vil2_plane(view_l1,2), 200), true);
+
   image_pyr.print_all(vcl_cout);
 
   vcl_cout<<"\n\n======== TESTING I/O ===========\n";
