@@ -173,6 +173,7 @@ int oxp_bunch_of_files::read(void* buf, unsigned int len)
 
   // First read was OK.  Advance to next file.
   ++current_file_index;
+  vcl_fseek(fps[current_file_index], 0, SEEK_SET); // need to seek(0) since we may have read from this file before.
   int n2 = vcl_fread((unsigned char*)buf + n1, 1, bytes_from_next, fps[current_file_index]);
   return n1 + n2;
 }
