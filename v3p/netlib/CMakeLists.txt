@@ -154,7 +154,7 @@ SET( netlib_sources
   snlaso.c
 
   # from OPT
-  lbfgs.c
+  lbfgs.c lbfgs.h
   lbfgs-lb1.c
 
   # from LAPACK
