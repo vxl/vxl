@@ -125,27 +125,30 @@ SET( vil_sources ${vil_sources}
 
 AUX_SOURCE_DIRECTORY(Templates vil_sources)
 
+# This fix is no longer needed for the dashboard because the MSVC 6.0
+# build is now done on a P4 machine.
+#
 # On a Pentium 3 using MSVC, vil_bicub_interp.txx gets miscompiled
 # with optimization, so it is turned off here.  The MSVC compiler
 # seems to work on this file with other CPUs, so it is unfortunate
 # that we have to turn off optimization on those platforms.
 #
-# Be cause of the way CMake orders the compile flags, this currently
+# Because of the way CMake orders the compile flags, this currently
 # has no effect.
 #
 # This may not be a smart approach.  In Windows it can be harmful to
 # mix objects built in release and debug modes because then different
 # libraries are required.
 #
-IF(CMAKE_SYSTEM_AND_CXX_COMPILER_INFO_FILE MATCHES "Windows-cl")
-  FOREACH( f ${vil_sources} )
-    # matches the vil_bicub_interp files in Templates/
-    # also matches the .txx and .h file, but no harm there
-    IF(${f} MATCHES vil_bicub_interp)
-      SET_SOURCE_FILES_PROPERTIES(${f} PROPERTIES COMPILE_FLAGS -Od)
-    ENDIF(${f} MATCHES vil_bicub_interp)
-  ENDFOREACH(f)
-ENDIF(CMAKE_SYSTEM_AND_CXX_COMPILER_INFO_FILE MATCHES "Windows-cl")
+# IF(CMAKE_SYSTEM_AND_CXX_COMPILER_INFO_FILE MATCHES "Windows-cl")
+#   FOREACH( f ${vil_sources} )
+#     # matches the vil_bicub_interp files in Templates/
+#     # also matches the .txx and .h file, but no harm there
+#     IF(${f} MATCHES vil_bicub_interp)
+#       SET_SOURCE_FILES_PROPERTIES(${f} PROPERTIES COMPILE_FLAGS -Od)
+#     ENDIF(${f} MATCHES vil_bicub_interp)
+#   ENDFOREACH(f)
+# ENDIF(CMAKE_SYSTEM_AND_CXX_COMPILER_INFO_FILE MATCHES "Windows-cl")
 
 # Some versions of Solaris (at least 5.8) has a brain-dead mechanism
 # for implementing DNS services, where the user of a library that uses
