@@ -75,8 +75,6 @@ void mbl_matxvec_add_prod_vm(const vnl_vector<double>& V,
 
 #if 0 // commented out
 
-void TC_Product(vnl_matrix<double>& AB, const vnl_matrix<double>& A,
-                const vnl_matrix<double>& B);
 
 //: Computes MD where D is diagonal with elememts d(i)
 void TC_ProductMD(vnl_matrix<double>& MD, const vnl_matrix<double>& M, const vnl_vector<double>& d);

@@ -411,56 +411,6 @@ void TC_ProductAtB(vnl_matrix<double>& AtB,
 //=======================================================================
 
 
-void TC_Product(vnl_matrix<double>& AB,
-                const vnl_matrix<double>& A,
-                const vnl_matrix<double>& B)
-// Returns AB = A * B.
-{
-   int nr1 = A.nrows();
-   int nc1 = A.ncols();
-   int nr2 = B.nrows();
-   int nc2 = B.ncols();
-
-   if( nr2 != nc1 )
-   {
-      vcl_cerr<<"Product : B.nrows != A.ncols"<<vcl_endl;
-      vcl_abort() ;
-   }
-
-   if ( (AB.nrows()!=nr1) || (AB.ncols()!= nc2) )
-    AB.resize( nr1, nc2 ) ;
-
-  const double ** AData = A.dataPtr();
-  const double ** BData = B.dataPtr();
-  double ** RData = AB.dataPtr();
-
-  // Zero the elements of R
-  for (int r=1;r<=nr1;r++)
-  {
-    double *R_row = RData[r];
-    int c=nc2;
-    while (c) { R_row[c] = 0.0; --c; }
-  }
-
-  for(int r=1; r <= nr1; ++r)
-  {
-    const double* A_row = AData[r];
-    double* R_row = RData[r];
-    for(int c=1; c <= nc1 ; ++c )
-    {
-      double a = A_row[c];
-      if (a==0.0) continue;
-
-      const double* B_row = BData[c];
-      int i = nc2;
-      while (i)
-      {
-        R_row[i] += a * B_row[i];
-        --i;
-      }
-    }
-  }
-}
 
 //: Computes MD where D is diagonal with elememts d(i)
 void TC_ProductMD(vnl_matrix<double>& MD,

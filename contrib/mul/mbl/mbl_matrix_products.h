@@ -13,6 +13,10 @@
 
 #include <vnl/vnl_fwd.h>
 
+//: Compute product AB = A * B
+void mbl_matrix_product(vnl_matrix<double>& AB, const vnl_matrix<double>& A,
+                        const vnl_matrix<double>& B);
+
 //: Compute product ABt = A * B.transpose()
 void mbl_matrix_product_a_bt(vnl_matrix<double>& ABt, const vnl_matrix<double>& A,
                    const vnl_matrix<double>& B);

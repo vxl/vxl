@@ -12,6 +12,52 @@
 #include <vcl_iostream.h>
 
 //=======================================================================
+//: Compute product AB = A * B
+//=======================================================================
+void mbl_matrix_product(vnl_matrix<double>& AB, const vnl_matrix<double>& A,
+                        const vnl_matrix<double>& B)
+{
+   int nr1 = A.rows();
+   int nc1 = A.cols();
+   int nr2 = B.rows();
+   int nc2 = B.cols();
+
+   if( nr2 != nc1 )
+   {
+      vcl_cerr<<"Product : B.rows != A.cols"<<vcl_endl;
+      vcl_abort() ;
+   }
+
+   if ( (AB.rows()!=nr1) || (AB.cols()!= nc2) )
+    AB.resize( nr1, nc2 ) ;
+
+  const double *const * AData = A.data_array();
+  const double *const * BData = B.data_array();
+  double ** RData = AB.data_array();
+
+  // Zero the elements of AB
+  AB.fill(0);
+
+  for(int r=0; r < nr1; ++r)
+  {
+    const double* A_row = AData[r];
+    double* R_row = RData[r]-1;
+    for(int c=0; c < nc1 ; ++c )
+    {
+      double a = A_row[c];
+      if (a==0.0) continue;
+
+      const double* B_row = BData[c]-1;
+      int i = nc2+1;
+      while (--i)
+      {
+        R_row[i] += a * B_row[i];
+      }
+    }
+  }
+}
+
+//=======================================================================
 //: Compute product ABt = A * B.transpose()
 //=======================================================================
 void mbl_matrix_product_a_bt(vnl_matrix<double>& ABt,

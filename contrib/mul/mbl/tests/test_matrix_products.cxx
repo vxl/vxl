@@ -29,6 +29,10 @@ void test_matrix_products()
   vnl_matrix<double> dAtB = AtB - A.transpose() * B;
   TEST("mbl_matrix_product_at_b",dAtB.absolute_value_max()<1e-6,true);
 
+  mbl_matrix_product(AtB,A.transpose(),B);
+  dAtB = AtB - A.transpose() * B;
+  TEST("mbl_matrix_productb",dAtB.absolute_value_max()<1e-6,true);
+
 
   vnl_matrix<double> C = A.transpose();
   vnl_matrix<double> D = B.transpose();
