@@ -32,9 +32,6 @@
 export template <class T> class vnl_vector;
 export template <class T> class vnl_matrix;
 
-
-typedef vnl_vector<double> vnl_vecd;
-typedef vnl_vector<float> vnl_vecf;
 //----------------------------------------------------------------------
 
 #define v vnl_vector<T>
