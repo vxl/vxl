@@ -778,6 +778,39 @@ class written.
 @c
 @c
 @c %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+@section Frequently Asked Questions
+@cindex Frequently Asked Questions
+@cindex FAQ
+
+@table @asis
+@item Question 1
+
+@quotation
+I would like to do constrained optimisation.
+Can I add constraints to the existing optimisers
+in @file{vnl/algo}?
+@end quotation
+
+Unfortunately, this approach is not likely to solve your problem,
+since constrained optimisation is not in general solved by adding
+constraints to an unconstrained optimiser.
+
+The usual approaches to doing constained optimisation are:
+@enumerate
+@item
+Work the constraints into your cost function, heavily penalising any
+breach in the constraints.
+@item
+Find a mapping T :[your constrained space]->R^n
+ and use f(T^-1(x)) as your const function instead of f.
+@item
+If problem has linear constrains and a simple cost function
+(linear or quadratic) then there is code out there for your problem,
+but unfortunately not yet in VXL.
+@end enumerate
+@end table
+
 @section Future work
 Many of the existing methods are unimplemented, or could benefit from
 optimization.  Users can contribute code to address these deficiencies

@@ -535,3 +535,45 @@ such as make or Developer Studio. Copies of these control files
 (e.g. makefiles or .dsp files) do exist in the repository, although
 they may not be quite as up to date. They are tucked away in the
 @code{build-makefiles} and @code{build-dsps} branches of the repository.
+
+@section Frequently Asked Questions
+@cindex Frequently Asked Questions
+@cindex FAQ
+
+
+@table @asis
+@item Question 1
+
+@quotation
+I have successfully built VXL under MS Visual Studio, and am now trying to build a simple
+program that uses the libraries. The Linker complains that there are multiple definitions
+(error @code{LNK2005}) of several things from the C++ Standard Library. What is going wrong?
+@end quotation
+
+These kinds of errors often indicate that you are linking against
+different C++ run-time libraries that you compiled VXL with (release
+vs debug, static vs DLL, etc). The flags like @code{/MP} and @code{/MD}
+much match exactly, in VXL's build and your program's build. These
+flags are set in Visual Studio under
+Settings->C/C++->Code Generation->Use run-time library.
+
+The easiest way to link against these projects, we've found, is to use
+CMake for your project too. CMake will then make sure the flags
+match, or else will give you an error or warning.
+
+
+@item Question 2
+
+@quotation
+I followed the VXL installation documentation, but found that some of the
+entries in the @file{CMakeCache.txt} file say that CMake could not find programs,
+paths, etc. Is this a problem?
+@end quotation
+
+No. VXL needs very little to build correctly (only a C/C++ compiler at worst), however
+it can make use of various system provided libraries, rather than build its own
+versions. CMake also looks for lots of system tools so that it can understand
+the environment it is in. So having lots of @code{NOTFOUND} entries is quite normal.
+There is no need to worry unless CMake displays a warning or error message while
+it runs.
+@end table
