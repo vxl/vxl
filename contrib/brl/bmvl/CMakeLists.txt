@@ -8,5 +8,8 @@ INCLUDE(${BRL_INCLUDE_DIR}/bmods/find_xerces.cmake)
 # 3-d reconstruction 
 #SUBDIRS(brct)
 
+# 3-d tomography
+SUBDIRS(btom)
+
 # multi-view gui stuff , xerces is required to read stuff in from Tjr
 SUBDIRS(bmvv)
