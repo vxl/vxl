@@ -171,7 +171,7 @@ bool vil_gen_generic_image::get_property(char const *tag, void *prop) const
 bool vil_gen_generic_image::get_section(void* buf, int x0, int y0, int xs, int ys) const
 {
   if (type_ == vil_gen_gray) {
-    vcl_memset(buf, int(params_[0]), xs*ys);
+    vcl_memset(buf, params_[0], xs*ys);
     return true;
   }
   if (type_ == vil_gen_rgb) {

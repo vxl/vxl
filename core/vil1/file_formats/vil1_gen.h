@@ -1,9 +1,6 @@
 // This is vxl/vil/file_formats/vil_gen.h
 #ifndef vil_gen_file_format_h_
 #define vil_gen_file_format_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \author awf@robots.ox.ac.uk 16 Feb 00
@@ -12,7 +9,12 @@
 // Modifications
 // 10/4/2001 Ian Scott (Manchester) Converted perceps header to doxygen
 //  3 October 2001 Peter Vanroose - Implemented get_property("top_row_first")
+//  12 Sept. 2002 Peter Vanroose - Changed type of params_ from float to int
 //\endverbatim
+
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
+#pragma interface
+#endif
 
 #include <vcl_string.h>
 #include <vil/vil_file_format.h>
@@ -49,7 +51,7 @@ class vil_gen_generic_image : public vil_image_impl
   int components_;
   int bits_per_component_;
   int type_;
-  float params_[4];
+  int params_[4];
 
   friend class vil_gen_file_format;
   void init(vcl_string const & s);
