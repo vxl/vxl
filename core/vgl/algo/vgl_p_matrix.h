@@ -137,6 +137,6 @@ class vgl_p_matrix
 template <class T> vcl_ostream& operator<<(vcl_ostream& s, const vgl_p_matrix<T>& p);
 template <class T> vcl_istream& operator>>(vcl_istream& i, vgl_p_matrix<T>& p);
 
-#define MVGL_P_MATRIX_INSTANTIATE(T) extern "please include vgl/algo/vgl_p_matrix.txx first"
+#define VGL_P_MATRIX_INSTANTIATE(T) extern "please include vgl/algo/vgl_p_matrix.txx first"
 
 #endif // vgl_p_matrix_h_
