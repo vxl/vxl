@@ -27,6 +27,9 @@ IF(NOT DART_ROOT)
   ENDIF(BUILD_TESTING)
 ENDIF(NOT DART_ROOT)
 
+# By default, build examples when building tests.
+OPTION(BUILD_EXAMPLES "Should the examples be built?" ${BUILD_TESTING})
+
 OPTION(WARN_DEPRECATED "Enable runtime warnings for deprecated functions?" YES)
 OPTION(WARN_DEPRECATED_ONCE "Only warn once per function (if runtime warnings are enabled)?" YES)
 OPTION(WARN_DEPRECATED_ABORT "Abort on executing a deprecated function (if runtime warnings are enabled)?" NO)

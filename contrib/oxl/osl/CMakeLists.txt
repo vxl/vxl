@@ -27,4 +27,9 @@ SOURCE_FILES(osl_sources
 
 AUX_SOURCE_DIRECTORY(Templates osl_sources)
 
-SUBDIRS(tests examples)
+IF( BUILD_EXAMPLES )
+  SUBDIRS( examples )
+ENDIF( BUILD_EXAMPLES )
+IF( BUILD_TESTING )
+  SUBDIRS(tests)
+ENDIF( BUILD_TESTING )

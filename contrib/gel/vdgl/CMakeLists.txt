@@ -13,4 +13,9 @@ SOURCE_FILES(vdgl_sources
 
 AUX_SOURCE_DIRECTORY(Templates vdgl_sources)
 
-SUBDIRS(tests examples)
+IF( BUILD_EXAMPLES )
+  SUBDIRS( examples )
+ENDIF( BUILD_EXAMPLES )
+IF( BUILD_TESTING )
+  SUBDIRS(tests)
+ENDIF( BUILD_TESTING )
