@@ -101,10 +101,11 @@ use of binary I/O (see below).
 Or for simplicity we provide the utility functions which would allow you to write:
 
 @example
+#include <vsl/vsl_quick_file.h>
 vxl_myclass my_object,my_new_object;
 
-vsl_binary_save_to_file("my_object.bvl",my_object);
-vsl_binary_load_from_file("my_object.bvl",my_new_object);
+vsl_quick_file_save("my_object.bvl",my_object);
+vsl_quick_file_load("my_object.bvl",my_new_object);
 @end example
 
 
