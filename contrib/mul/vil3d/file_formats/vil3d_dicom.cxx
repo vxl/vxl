@@ -29,8 +29,10 @@ vil3d_image_resource_sptr vil3d_dicom_format::make_input_image(const char * file
   is->ref();
   dhi = dhf.readHeader(*is);
   is->unref();
+#if 0 // TODO
   if (dhf.headerValid())
-    ; // return new vil3d_dicom_image(filename);
+    return new vil3d_dicom_image(filename);
+#endif // 0
 
   return 0;
 }
