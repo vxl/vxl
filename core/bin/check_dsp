@@ -189,26 +189,22 @@ foreach $dir (@DIRS)
         @sources = ($1);
         $testmain = "$1";
       }
-      while (m/^\s*(SOURCES|MINI_PROG_SOURCES|TESTS|TESTMAIN)\s*\:?\=\s*(\S+)/) {
+      while (s/^\s*(SOURCES|MINI_PROG_SOURCES|TESTS|TESTMAIN)\s*\:?\=\s*(\S+)/$1=/) {
         @tests = ($2) if ($1 eq "TESTS");
-        $file = "$2"; s/^(\s*[A-Z_]+\s*\:?\=\s*)\S+/$1/;
+        $file = "$2";
         print "$file\tspecified in $makef does not exist\n" unless (-f "$dir/$file");
         @sources = ($file);
-        $file =~ s/\.(c|cxx|cc|cpp|C)$/.h/;
-        push @hsources, $file if (-f "$dir/$file" && $file =~ m/\.h$/);
+        if ($file =~ s/\.(c|cxx|cc|cpp|C)$/.h/) { push @hsources, $file if (-f "$dir/$file"); }
       }
-      while (m/^\s*(MANPAGE_SOURCES)\s*\:?\=\s*(\S+)/) {
-        $file = "$2"; s/^(\s*[A-Z_]+\s*\:?\=\s*)\S+/$1/;
+      while (s/^\s*(MANPAGE_SOURCES)\s*\:?\=\s*(\S+)/$1=/) {
+        $file = "$2";
         print "$file\tspecified in $makef does not exist\n" unless (-f "$dir/$file");
         push @hsources, $file;
-        if ($file =~ m/\.txx$/) {
-          $file =~ s/\.txx$/.h/;
-          push @hsources, $file if (-f "$dir/$file");
-        }
+        if ($file =~ s/\.txx$/.h/) { push @hsources, $file if (-f "$dir/$file"); }
       }
-      while (m/^\s*(SOURCES|MINI_PROG_SOURCES|TESTS)\s*\+\=\s*(\S+)/) {
+      while (s/^\s*(SOURCES|MINI_PROG_SOURCES|TESTS)\s*\+\=\s*(\S+)/$1+=/) {
         push @tests, $2 if ($1 eq "TESTS");
-        $file = "$2"; s/^(\s*[A-Z_]+\s*\+\=\s*)\S+/$1/;
+        $file = "$2";
         if ($file eq "\$\{MOCSOURCES\}") {
           @tmp_list = @sources;
           foreach $x (@tmp_list) {
@@ -218,37 +214,23 @@ foreach $dir (@DIRS)
         else {
           print "$file\tspecified in $makef does not exist\n" unless (-f "$dir/$file");
           push @sources, $file;
-          $file =~ s/\.(c|cxx|cc|cpp|C)$/.h/;
-          push @hsources, $file if (-f "$dir/$file" && $file =~ m/\.h$/ && grep(/^$file$/, @hsources) == 0);
-          # I.e.: .h files which are not explicitly present in makefile are added only once.
+          if ($file =~ s/\.(c|cxx|cc|cpp|C)$/.h/) {
+            push @hsources, $file if (-f "$dir/$file" && grep(/^$file$/, @hsources) == 0);
+          } # I.e.: .h files which are not explicitly present in makefile are added only once.
         }
       }
-      while (m/^\s*(MANPAGE_SOURCES)\s*\+\=\s*(\S+)/) {
-        $file = "$2"; s/^(\s*[A-Z_]+\s*\+\=\s*)\S+/$1/;
+      while (s/^\s*(MANPAGE_SOURCES)\s*\+\=\s*(\S+)/$1+=/) {
+        $file = "$2";
         print "$file\tspecified in $makef does not exist\n" unless (-f "$dir/$file");
         push @hsources, $file;
-        if ($file =~ m/\.txx$/) {
-          $file =~ s/\.txx$/.h/;
+        if ($file =~ s/\.txx$/.h/) {
           push @hsources, $file if (-f "$dir/$file" && grep(/^$file$/, @hsources) == 0);
-          # I.e.: .h files which are not explicitly present in makefile are added only once.
-        }
+        } # I.e.: .h files which are not explicitly present in makefile are added only once.
       }
-      if (m/^\s*SUBDIRS\s*\:?\=\s*(.+)/) {
-        $file = "$1";
-        @subdirs = split(/\s+/,"$file");
-      }
-      if (m/^\s*SUBDIRS\s*\+\=\s*(.+)/) {
-        $file = "$1";
-        push @subdirs, split(/\s+/,"$file");
-      }
-      if (m/^\s*AUX_SOURCE_DIRECTORY\s*\+\=\s*(.+)/) {
-        $file = "$1";
-        push @aux_sources, split(/\s+/,"$file");
-      }
-      if (m/^\s*AUX_SOURCE_DIRECTORY\s*\:?\=\s*(.+)/) {
-        $file = "$1";
-        @aux_sources = split(/\s+/,"$file");
-      }
+      @subdirs = split(/\s+/,"$1") if (m/^\s*SUBDIRS\s*\:?\=\s*(.+)/);
+      push @subdirs, split(/\s+/,"$1") if (m/^\s*SUBDIRS\s*\+\=\s*(.+)/);
+      @aux_sources = split(/\s+/,"$1") if (m/^\s*AUX_SOURCE_DIRECTORY\s*\:?\=\s*(.+)/);
+      push @aux_sources, split(/\s+/,"$1") if (m/^\s*AUX_SOURCE_DIRECTORY\s*\+\=\s*(.+)/);
     }
     close MAKEFILE;
     # add Templates to sources, if asked
