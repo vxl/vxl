@@ -12,6 +12,8 @@ VERSION := 1.0
 
 SOURCES += vrml_out.cxx
 
+IULIBS += -lvbl -lvcl
+
 ##########################################
 include ${IUEROOT}/config/top.mk
 ##########################################
