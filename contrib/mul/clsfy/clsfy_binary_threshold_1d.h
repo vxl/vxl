@@ -13,10 +13,11 @@
 
 //: Simplest possible 1D classifier: A single thresholding function
 //  Returns class zero if s_*x<threshold_
-class clsfy_binary_threshold_1d : public clsfy_classifier_1d {
+class clsfy_binary_threshold_1d : public clsfy_classifier_1d
+{
 protected:
   double s_;
-	double threshold_;
+  double threshold_;
 public:
 
   //: Find the posterior probability of the input being in the positive class
@@ -26,7 +27,7 @@ public:
   //: Classify the input vector
   // returns a number between 0 and nClasses-1 inclusive to represent the most likely class
   unsigned virtual classify(double input) const
-	  { if (s_*input<threshold_) return 0; else return 1; }
+    { if (s_*input<threshold_) return 0; else return 1; }
 
   //: Log likelyhood of being in the positive class
   // class probability = 1 / (1+exp(-log_l))
@@ -40,11 +41,11 @@ public:
   // 1 indicates a binary classifier
   unsigned virtual n_classes() const { return 1;}
 
-	//: Return parameters defining classifier in a vector (format depends on classifier)
-	virtual vnl_vector<double> params() const;
+  //: Return parameters defining classifier in a vector (format depends on classifier)
+  virtual vnl_vector<double> params() const;
 
-	//: Set parameters defining classifier with a vector (format depends on classifier)
-	virtual void set_params(const vnl_vector<double>& p);
+  //: Set parameters defining classifier with a vector (format depends on classifier)
+  virtual void set_params(const vnl_vector<double>& p);
 
   //: Version number for I/O
   short version_no() const;

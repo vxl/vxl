@@ -37,15 +37,15 @@ clsfy_simple_adaboost& clsfy_simple_adaboost::operator=(const clsfy_simple_adabo
 {
   delete_stuff();
 
-	int n = c.classifier_1d_.size();
-	classifier_1d_.resize(n);
-	for (int i=0;i<n;++i)
-	  classifier_1d_[i] = c.classifier_1d_[i]->clone();
+  int n = c.classifier_1d_.size();
+  classifier_1d_.resize(n);
+  for (int i=0;i<n;++i)
+    classifier_1d_[i] = c.classifier_1d_[i]->clone();
 
   wts_ = c.wts_;
-	bias_ = c.bias_;
-	index_ = c.index_;
-	n_dims_ = c.n_dims_;
+  bias_ = c.bias_;
+  index_ = c.index_;
+  n_dims_ = c.n_dims_;
 
   return *this;
 }
@@ -54,7 +54,7 @@ clsfy_simple_adaboost& clsfy_simple_adaboost::operator=(const clsfy_simple_adabo
 void clsfy_simple_adaboost::delete_stuff()
 {
   for (int i=0;i<classifier_1d_.size();++i)
-	  delete classifier_1d_[i];
+    delete classifier_1d_[i];
 
   classifier_1d_.resize(0);
 }
@@ -74,15 +74,15 @@ void clsfy_simple_adaboost::set_parameters(
 {
   delete_stuff();
 
-	int n = classifier.size();
-	classifier_1d_.resize(n);
-	for (int i=0;i<n;++i)
-	  classifier_1d_[i] = classifier[i]->clone();
+  int n = classifier.size();
+  classifier_1d_.resize(n);
+  for (int i=0;i<n;++i)
+    classifier_1d_[i] = classifier[i]->clone();
 
   wts_ = wts;
-	bias_ = 0.5*wts.mean()*wts.size();
-	index_ = index;
-	n_dims_ = n_dims;
+  bias_ = 0.5*wts.mean()*wts.size();
+  index_ = index;
+  n_dims_ = n_dims;
 }
 
 
@@ -141,11 +141,11 @@ vcl_string clsfy_simple_adaboost::is_a() const
 void clsfy_simple_adaboost::print_summary(vcl_ostream& os) const
 {
   int n = index_.size();
-	for (int i=0;i<n;++i)
-	{
-	  os<<"Element "<<index_[i]<<" weight: "<<wts_[i]
-		  <<" Classifier: "<<classifier_1d_[i]<<vcl_endl;
-	}
+  for (int i=0;i<n;++i)
+  {
+    os<<"Element "<<index_[i]<<" weight: "<<wts_[i]
+      <<" Classifier: "<<classifier_1d_[i]<<vcl_endl;
+  }
 }
 
 //=======================================================================
@@ -164,7 +164,7 @@ void clsfy_simple_adaboost::b_write(vsl_b_ostream& bfs) const
   vsl_b_write(bfs,wts_);
   vsl_b_write(bfs,index_);
   vsl_b_write(bfs,bias_);
-	vsl_b_write(bfs,n_dims_);
+  vsl_b_write(bfs,n_dims_);
 }
 
 //=======================================================================
@@ -173,7 +173,7 @@ void clsfy_simple_adaboost::b_read(vsl_b_istream& bfs)
 {
   if (!bfs) return;
 
-	delete_stuff();
+  delete_stuff();
 
   short version;
   vsl_b_read(bfs,version);

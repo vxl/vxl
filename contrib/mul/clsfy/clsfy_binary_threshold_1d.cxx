@@ -43,17 +43,17 @@ double clsfy_binary_threshold_1d::log_l(double input) const
 vnl_vector<double> clsfy_binary_threshold_1d::params() const
 {
   vnl_vector<double> p(2);
-	p[0] = s_;
-	p[1] = threshold_;
-	return p;
+  p[0] = s_;
+  p[1] = threshold_;
+  return p;
 }
 
 //: Set parameters defining classifier with a vector (format depends on classifier)
 void clsfy_binary_threshold_1d::set_params(const vnl_vector<double>& p)
 {
   assert(p.size()==2);
-	s_=p[0];
-	threshold_=p[1];
+  s_=p[0];
+  threshold_=p[1];
 }
 
 //=======================================================================

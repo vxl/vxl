@@ -18,8 +18,8 @@
 //
 // Derived classes with binary in the name indicates that
 // the classifier works with only two classes, 0 and 1.
-class clsfy_classifier_1d {
-
+class clsfy_classifier_1d
+{
 public:
 
   // Dflt constructor
@@ -33,11 +33,11 @@ public:
   // returns a number between 0 and nClasses-1 inclusive to represent the most likely class
   unsigned virtual classify(double input) const;
 
-	//: Return parameters defining classifier in a vector (format depends on classifier)
-	virtual vnl_vector<double> params() const = 0;
+  //: Return parameters defining classifier in a vector (format depends on classifier)
+  virtual vnl_vector<double> params() const = 0;
 
-	//: Set parameters defining classifier with a vector (format depends on classifier)
-	virtual void set_params(const vnl_vector<double>& p)=0;
+  //: Set parameters defining classifier with a vector (format depends on classifier)
+  virtual void set_params(const vnl_vector<double>& p)=0;
 
   //: Return the probability the input being in each class.
   // output(i) 0<=i<n_classes, contains the probability that the input is in class i

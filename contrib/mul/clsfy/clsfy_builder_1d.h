@@ -19,8 +19,8 @@ class clsfy_classifier_1d;
 
 
 //: Base for classes to build clsfy_classifier_1d objects
-class clsfy_builder_1d {
-
+class clsfy_builder_1d
+{
 public:
 
   // Dflt ctor
@@ -34,16 +34,16 @@ public:
 
   //: Train classifier, returning weighted error
   //  Selects parameters of classifier which best separate n examples into
-	//  classes indicated by class_index[i],
+  //  classes indicated by class_index[i],
   //  weighting examples appropriately when estimating the missclassification rate.
   // Return the weighted error over the training set.
   // For many classifiers, you may use nClasses==1 to
   // indicate a binary classifier
   virtual double build(clsfy_classifier_1d& model,
                        const double* value,
-											 const int* class_index,
-											 const double* wts,
-											 int n,
+                       const int* class_index,
+                       const double* wts,
+                       int n,
                        unsigned nClasses) const = 0;
 
   //: Name of the class

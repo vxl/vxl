@@ -14,36 +14,37 @@
 
 
 //: Classifier using adaboost on combinations of simple 1D classifiers
-class clsfy_simple_adaboost : public clsfy_classifier_base {
+class clsfy_simple_adaboost : public clsfy_classifier_base
+{
 protected:
   vcl_vector<clsfy_classifier_1d*> classifier_1d_;
 
-    //: Weights on each classifier
+  //: Weights on each classifier
   vnl_vector<double> wts_;
 
-    //: Threshold for classification (half sum of weights)
+  //: Threshold for classification (half sum of weights)
   double bias_;
 
-    //: Element of vector to use with each classifier
+  //: Element of vector to use with each classifier
   vcl_vector<int> index_;
 
-	  //: Number of dimensions of input vectors
+  //: Number of dimensions of input vectors
   unsigned n_dims_;
 
-	  //: Delete objects on heap
-	void delete_stuff();
+  //: Delete objects on heap
+  void delete_stuff();
 public:
-    //: Default constructor
+  //: Default constructor
   clsfy_simple_adaboost();
 
-	  //: Copy constructor
-	clsfy_simple_adaboost(const clsfy_simple_adaboost&);
+  //: Copy constructor
+  clsfy_simple_adaboost(const clsfy_simple_adaboost&);
 
-	  //: Copy operator
-	clsfy_simple_adaboost& operator=(const clsfy_simple_adaboost&);
+  //: Copy operator
+  clsfy_simple_adaboost& operator=(const clsfy_simple_adaboost&);
 
-	  //: Destructor
-	~clsfy_simple_adaboost();
+  //: Destructor
+  ~clsfy_simple_adaboost();
 
   //: Find the posterior probability of the input being in the positive class
   // The result is outputs(0)
@@ -64,7 +65,7 @@ public:
   // 1 indicates a binary classifier
   unsigned virtual n_classes() const { return 1;}
 
-    //: Set parameters.  Clones taken of *classifier[i]
+  //: Set parameters.  Clones taken of *classifier[i]
   void set_parameters(const vcl_vector<clsfy_classifier_1d*>& classifier,
                       const vcl_vector<vnl_vector<double> >& params,
                       const vnl_vector<double>& wts,
