@@ -158,7 +158,6 @@ vil2_image_view<vxl_byte> filtered_image = vil2_transpose(tmp_image2);
 * - vil2_crop          : View a window into an image
 * - vil2_decimate      : View a trivially subsampled image
 * - vil2_plane         : View a single plane of an image
-* - vil2_clamp         : View a image whose pixels are clamped to given range
 *
 * \subsection view_ops Operations on Views
 * Useful simple operations on views include
@@ -166,6 +165,7 @@ vil2_image_view<vxl_byte> filtered_image = vil2_transpose(tmp_image2);
 * - vil2_fill(view,value)       : Fills view with value
 * - vil2_fill_row(view,j,value) : Fills row j with value
 * - vil2_fill_col(view,i,value) : Fills col i with value
+* - vil2_clamp         		: Clamp image pixels to given range
 *
 * \section image_src Image resources
 * The vil2_image_resource class is an abstract base class for image data, views

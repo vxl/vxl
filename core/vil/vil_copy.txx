@@ -14,6 +14,13 @@
 
 //: Create a copy of the data viewed by this, and return a view of copy.
 template<class T>
+void vil2_copy_deep(const vil2_image_view<T> &src, vil2_image_view<T> &dest)
+{
+  dest.deep_copy(src);
+}
+
+//: Create a copy of the data viewed by this, and return a view of copy.
+template<class T>
 vil2_image_view<T> vil2_copy_deep(const vil2_image_view<T> &src)
 {
   vil2_image_view<T> cpy;

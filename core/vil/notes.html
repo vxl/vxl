@@ -13,9 +13,6 @@
   <li>PNG loader</li>
   <li>TIFF loader</li>
   <li>BMP loader</li>
-  <li>Add binary IO</li>
-  <li>Convert general Gaussian reduction</li>
-  <li>Add a vil2 wrapper for vil1 image loaders.</li>
   <li>Convert all Manchester Code</li>
   <li>Trial conversion of some code that uses vil1</li>
 </ul>
@@ -121,6 +118,11 @@ sizes.</h4>
 Cartesian co-ord system. It is good to link index name and size name to avoid 
 for loop mistakes. Alternative was row, col, plane, and rows, cols, and planes. 
 Inner loops should have short variable names. Decision at Providence meeting.</p>
+<h4>vil2_image_view&lt;T&gt; should have a sparse interface.</h4>
+<p>Methods like <code>set_to_window(..)</code>, <code>flip_ud()</code>, <code>transpose(),</code>
+can all be provided as standalone functions with out much addition overhead.
+Class API's should be be small rather than large. Use Doxygen's <code>\relates </code>option
+to help users find related functions. Decision IMS.</p>
 <h4>Using arithmetic indexing scheme</h4>
 <p><code>i.e.<br>
 vil2_image_view&lt;T&gt;::operator(i,j,p) {return *(top_left_ptr + i * istep + j* 
@@ -194,6 +196,19 @@ vil2_image_view&lt;vxl_byte&gt; im_planes = im_rgb;<br>
 names. So this should not include doing conversions such as byte to float 
 conversion. These conversions should be done by separately named functions. 
 Decision at Providence meeting.</p>
+<h4>vil2_image_view&lt;T&gt;::operator=() should take base class and base class
+sptr.</h4>
+<p>Equals is defined as <code>vil2_image_view&lt;T&gt;::operator=(const 
+vil2_image_view_base &amp;</code>. This is an operator= from its own base class.
+This doesn't appear to cause any problems, and allows the above fast view
+transformations between pixel types. Additionally <code>vil2_image_view&lt;T&gt;::operator=(const vil2_image_view_base_sptr &amp;)
+</code>allows for the simple conversion from the the return value of many functions
+such as vil2_load. These need to return base class sptrs to reduce memory leaks
+and because their interface cannot know the pixel type. Decision IMS</p>
+<h4>Should <code>vil_load</code>  should return a base class sptr.</h4>
+<p>(Similarly <code>vil2_image_resource::get_view(..)</code>) They could return <code>vil2_image_view_base *</code> or <code>vil2_image_view_sptr</code> 
+Both appear to work. The smart pointer version has the advantage of not needing
+users to be careful about deletion. Decision by consensus on the reflector.</p>
 <h4>All pixel types should be explicit about type length (e.g. <code>vxl_uint_16</code>)</h4>
 <p>Alternative is to have <code>vil2_image_resource::get_view()</code> automatically 
 pick the best standard type for that platform (e.g. short) The problem with this 
@@ -236,33 +251,8 @@ on vxl-maintainers.</p>
 <p>Don't do early optimisation? A good compiler will optimise sequential pixel 
 access using vil2_image_view&lt;T&gt;::operator(i,j,p) to efficient pointer stepping. 
 There was concern at the meeting about confusing the optimiser.</p>
-<p>Should resize allow definition of assumed format? (eg RGBRGB or RRR BBB GGG etc)</p>
-<p>Should <code>vil2_image_view::deep_copy(..)</code> allow similar definition and thus possible re-ordering?</p>
-<p>Should we have void <code>vil2_image_view::set_to_window(im,...)</code> functions, or just the
-<code>vil2_image_view::window(..)</code> function.</p>
-<p>Which of the following should really be member functions: <code>print_all</code>, 
-<code>window</code>, <code>deep_copy</code>, <code>set_to_window </code>The following are currently external functions:
-  <code>vil2_transpose</code>, <code>vil2_flipud</code>, <code>vil2_fliplr</code>, 
-<code>vil2_print_all</code></p>
-<p>Pointers to data are often passed in as const, but may have the const removed.
-This is because it is rather complicated to keep track of whether the data is going to be
-changed or not.  Just try to be sensible, OK?</p>
-<p>Equals is defined as <code>vil2_image_view&lt;T&gt;::operator=(const 
-vil2_image_view_base &amp;)</code> has an operator= from its own base class. Is this sensible?
-It allows for the simple conversion from the abstract base class which many functions will return
-to a concrete class with a useful interface. Should there also be a <code>
-vil2_image_view&lt;T&gt;::operator=(const vil2_image_view_base_sptr &amp;)</code></p>
-<p>Should <code>vil_load</code> and <code>vil2_image_resource::get_view(..)</code> 
-return <code>vil2_image_view_base *</code> or <code>vil2_image_view_sptr</code>? 
-Both appear to work.</p>
 <p>There is now no way to get a bit-compressed pbm file into memory efficiently. Is this a problem?
 We could solve it by deriving a <code>vil2_image_view_of_compressed_bits</code>, or similar.</p>
-<p>We still need to agree on functionality of <code>vimt_transform</code>. There 
-was partial agreement at the Providence meeting to make <code>
-vimt_transform_2d </code>be <i><b>R</b></i><sup>2</sup>&#8594;<i><b>R</b></i><sup>2</sup> 
-rather than <i><b>R</b></i><sup>3</sup>&#8594;<strong><em>R</em></strong><sup>2</sup>. 
-However it was recognised that there is a slippery slope problem here - once you 
-introduce transforms, how do you stop people expanding their functionality?</p>
 <h2>Proposal Adoption</h2>
 <p>The Providence meeting unanimously agreed to adopt a fleshed out, tested and 
 documented version 
@@ -289,22 +279,6 @@ and a TIFF file loader.</p>
   <li>vil2 will be renamed vil, and all code will be converted (using a simple 
   perl script.) </li>
 </ol>
-<h2>ToDo</h2>
-<p>In order of priority</p>
-<ol>
-  <li>Go through existing examples and VXL book and see if there are any idioms we have missed. - Done TFC 
-  </li>
-  <li>Add <code>vil_crop </code>style filter example for <code>vil2_image_resource</code>. - Done IMS</li>
-  <li>Decide where to put world to image transforms and write it - done TFC</li>
-  <li>Write <code>vil2_save </code>- done IMS </li>
-  <li>Write <code>vil2_memory_image</code> - done IMS </li>
-  <li>Write some example standard image processing code - Done TFC, and IMS</li>
-  <li>Write a guide/example for the VXL book explaining how to write code for 
-  existing vil, but that will convert well into vil2.</li>
-  <li>Convert rest of file loaders</li>
-  <li>Convert rest of <code>vil2_image_resource</code> filters - Done IMS</li>
-  <li>Add a vil3d library. - Done TFC</li>
-</ol>
 <h2>Possible improvements</h2>
 <h4>Add a <code>get_pixel(void&nbsp;*buf,i,j)</code> and <code>put_pixel(void&nbsp;*buf,i,j)</code>
 to <code>vil2_image_resource.</code></h4>
@@ -323,5 +297,9 @@ view and doesn't allocate any memory.</p>
 <p>#includes to vxl/vil are simply to use old vil stuff that doesn't need to be converted. e.g. 
 <code>vil_stream</code></p>
 <p><code>VIL2_TO_BE_FIXED </code>is a code exclusion macro which encloses code that has to be converted soon.</p>
+<p>Pointers to data are often passed in as const, but may have the const removed.
+This is because it is rather complicated to keep track of whether the data is going to be
+changed or not.  Just try to be sensible, OK?</p>
+<p>&nbsp;</p>
 </body>
 </html>

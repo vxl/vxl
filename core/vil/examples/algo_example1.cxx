@@ -16,7 +16,6 @@ int main(int argc, char** argv)
   unsigned nplanes=1;
   vil2_image_view<vxl_byte> image(ni,nj,nplanes);
 
-  // Slow fill
   for (unsigned p=0;p<nplanes;++p)
     for (unsigned j=0;j<nj;++j)
       for (unsigned i=0;i<ni;++i)
