@@ -81,7 +81,7 @@ vil_image vil_load_raw(char const* filename)
       // Make an in-core stream...
       vil_stream_core *cis = new vil_stream_core();
       cis->ref();
-      cis->m_transfer((char*)filename, 0, l+1, false/*write*/);
+      cis->m_transfer((char*)filename, 0, l+1, false/*write*/); /* const violation */
       is = cis;
     }
 

@@ -227,7 +227,7 @@ bool vil_mit_generic_image::put_section(void const* buf, int x0, int y0, int xs,
   int offset = 8;
   is_->seek(offset + (width_*y0*bytes_per_pixel()) + (x0*bytes_per_pixel()));
 
-  unsigned char* point = (unsigned char*)buf;
+  const unsigned char* point = (const unsigned char*)buf;
 
   // FIXME: store as BGR
   for (int tely = 0; tely < ys; tely++)

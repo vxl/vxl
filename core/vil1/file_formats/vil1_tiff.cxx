@@ -734,7 +734,7 @@ bool vil_tiff_generic_image::put_section(void const* buf, int x0, int y0, int xs
     // printf("writing strip %d, y  = %d .. %d\n", strip_id, ymin, ymax);
     for(int y = ymin; y <= ymax; ++y) {
       unsigned char* file_row = p->buf + (y - strip_min_row) * p->scanlinesize;
-      unsigned char* mem_row = (unsigned char*)buf + (y - y0) * xs * pixel_byte_size;
+      const unsigned char* mem_row = (const unsigned char*)buf + (y - y0) * xs * pixel_byte_size;
       vcl_memcpy(file_row + x0 * pixel_byte_size, mem_row, xs * pixel_byte_size);
     }
 

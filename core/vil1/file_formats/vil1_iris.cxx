@@ -373,13 +373,13 @@ bool vil_iris_generic_image::put_section(void const* buf, int x0, int y0, int wi
 {
   int ynul = height_ - y0 - height;
 
-  unsigned char* cbi;
+  const unsigned char* cbi;
   int row_len = width * bytes_per_pixel();
 
   // for each channel
   for (int channel=0; channel<planes_; ++channel) {
 
-    cbi = (unsigned char*) buf;
+    cbi = (const unsigned char*) buf;
     cbi += channel;
 
     // skip cbi to point at last row of section

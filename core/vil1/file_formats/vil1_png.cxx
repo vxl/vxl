@@ -425,7 +425,7 @@ bool vil_png_generic_image::put_section(void const* buf, int x0, int y0, int xs,
     vcl_memcpy(rows[y0], buf, ys * bytes_per_row_dst);
   }
   else {
-    png_byte* dst = (png_byte*)buf;
+    const png_byte* dst = (const png_byte*)buf;
     for(int y = 0; y < ys; ++y, dst += bytes_per_row_dst)
       vcl_memcpy(&rows[y0+y][x0*bytes_per_pixel], dst, xs*bytes_per_pixel);
   }
