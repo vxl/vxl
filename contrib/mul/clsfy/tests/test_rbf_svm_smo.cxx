@@ -243,9 +243,10 @@ void test_rbf_svm()
     svmo.support_vectors() == svmi.support_vectors(),
     true);
 
+  double ll_o = svmo.log_l(vnl_vector<double>(nDims, 0.3));
+  double ll_i = svmi.log_l(vnl_vector<double>(nDims, 0.3));
   TEST("Saved Classifier.log_l() = Loaded Classifier.log_l()",
-    svmo.log_l(vnl_vector<double>(nDims, 0.3)),
-    svmi.log_l(vnl_vector<double>(nDims, 0.3)));
+    vcl_fabs(ll_o-ll_i) < 1e-11, true);
 
   TEST("Saved Classifier = Classifier Loaded by Base Class Ptr",
     svmo.is_a(), pClassifier2->is_a());
