@@ -34,6 +34,8 @@
 #include <vgui/vgui_modifier.h>
 #include <vtol/vtol_face_2d_sptr.h>
 #include <vtol/vtol_intensity_face.h>
+#include <gevd/gevd_float_operators.h>
+#include <brip/brip_float_ops.h>
 #include <sdet/sdet_region_proc_params.h>
 #include <sdet/sdet_region_proc.h>
 
@@ -186,7 +188,7 @@ void bmvv_multiview_manager::load_image_file(vcl_string image_filename, bool gre
 //=========================================================================
 void bmvv_multiview_manager::load_image()
 {
-  bool greyscale = false;
+  static bool greyscale = false;
   vgui_dialog load_image_dlg("Load Image");
   static vcl_string image_filename = "";
   static vcl_string ext = "*.*";
@@ -194,12 +196,22 @@ void bmvv_multiview_manager::load_image()
   load_image_dlg.checkbox("greyscale ", greyscale);
   if (!load_image_dlg.ask())
     return;
-  img_ = vil1_load(image_filename.c_str());
+  vil1_image temp = vil1_load(image_filename.c_str());
+  if(greyscale)
+    {
+      vil1_memory_image_of<unsigned char> temp1 = 
+      brip_float_ops::convert_to_grey(temp);
+      img_ = temp1;
+    }
+  else
+    img_ = temp;
+  
   bgui_vtol2D_tableau_sptr btab = this->get_selected_vtol2D_tableau();
   if (btab)
     {
       vgui_image_tableau_sptr itab = btab->get_image_tableau();
       itab->set_image(img_);
+      itab->post_redraw();
       return;
     }
   vcl_cout << "In bmvv_multiview_manager::load_image() - null tableau\n";
@@ -212,7 +224,7 @@ void bmvv_multiview_manager::clear_display()
 {
   bgui_vtol2D_tableau_sptr btab = this->get_selected_vtol2D_tableau();
   if (btab)
-    btab->clear();
+    btab->clear_all();
   else
     vcl_cout << "In bmvv_multiview_manager::clear_display() - null tableau\n";
 }
@@ -253,14 +265,16 @@ void bmvv_multiview_manager::draw_regions(vcl_vector<vtol_intensity_face_sptr>& 
 void bmvv_multiview_manager::vd_edges()
 {
   static bool agr = true;
+  static bool clear = true;
   static sdet_detector_params dp;
-  vgui_dialog* vd_dialog = new vgui_dialog("VD Edges");
-  vd_dialog->field("Gaussian sigma", dp.smooth);
-  vd_dialog->field("Noise Threshold", dp.noise_multiplier);
-  vd_dialog->checkbox("Automatic Threshold", dp.automatic_threshold);
-  vd_dialog->checkbox("Agressive Closure", agr);
-   vd_dialog->checkbox("Compute Junctions", dp.junctionp);
-  if (!vd_dialog->ask())
+  vgui_dialog vd_dialog("VD Edges");
+  vd_dialog.field("Gaussian sigma", dp.smooth);
+  vd_dialog.field("Noise Threshold", dp.noise_multiplier);
+  vd_dialog.checkbox("Automatic Threshold", dp.automatic_threshold);
+  vd_dialog.checkbox("Agressive Closure", agr);
+  vd_dialog.checkbox("Compute Junctions", dp.junctionp);
+  vd_dialog.checkbox("Clear", clear);
+  if (!vd_dialog.ask())
     return;
   if (agr)
     dp.aggressive_junction_closure=1;
@@ -285,7 +299,12 @@ void bmvv_multiview_manager::vd_edges()
 
   //display the edges
   if (btab&&edges)
-    btab->add_edges(*edges, true);
+    {
+      if(clear)
+        btab->clear_all();
+      btab->add_edges(*edges, true);
+      btab->post_redraw();
+    }
   else
     {
       vcl_cout << "In bmvv_multiview_manager::vd_edges() - null edges or null tableau\n";
@@ -298,12 +317,12 @@ void bmvv_multiview_manager::regions()
   this->clear_display();
   static bool agr = true;
   static sdet_detector_params dp;
-  vgui_dialog* vd_dialog = new vgui_dialog("VD Edges");
-  vd_dialog->field("Gaussian sigma", dp.smooth);
-  vd_dialog->field("Noise Threshold", dp.noise_multiplier);
-  vd_dialog->checkbox("Automatic Threshold", dp.automatic_threshold);
-  vd_dialog->checkbox("Agressive Closure", agr);
-  if (!vd_dialog->ask())
+  vgui_dialog vd_dialog("VD Edges");
+  vd_dialog.field("Gaussian sigma", dp.smooth);
+  vd_dialog.field("Noise Threshold", dp.noise_multiplier);
+  vd_dialog.checkbox("Automatic Threshold", dp.automatic_threshold);
+  vd_dialog.checkbox("Agressive Closure", agr);
+  if (!vd_dialog.ask())
     return;
   if (agr)
     dp.aggressive_junction_closure=1;
@@ -445,12 +464,12 @@ void bmvv_multiview_manager::track_edges()
   static bdgl_curve_matcher_params mp(1.0, 10.0, 0.31416);
   static bdgl_curve_tracker_params tp(1e6);
 
-  vgui_dialog* tr_dialog = new vgui_dialog("Edge Tracking");
-  tr_dialog->field("Matching threshold", tp.match_thres_);
-  tr_dialog->field("Pixel scale", mp.image_scale_);
-  tr_dialog->field("Gradient scale", mp.grad_scale_);
-  tr_dialog->field("Angle scale", mp.angle_scale_);
-  if (!tr_dialog->ask())
+  vgui_dialog tr_dialog("Edge Tracking");
+  tr_dialog.field("Matching threshold", tp.match_thres_);
+  tr_dialog.field("Pixel scale", mp.image_scale_);
+  tr_dialog.field("Gradient scale", mp.grad_scale_);
+  tr_dialog.field("Angle scale", mp.angle_scale_);
+  if (!tr_dialog.ask())
     return;
   tp.match_params_ = mp;
   bdgl_curve_tracker tracker(tp);
@@ -459,12 +478,12 @@ void bmvv_multiview_manager::track_edges()
   // VD parameters
   static bool agr = true;
   static sdet_detector_params dp;
-  vgui_dialog* vd_dialog = new vgui_dialog("VD Edges");
-  vd_dialog->field("Gaussian sigma", dp.smooth);
-  vd_dialog->field("Noise Threshold", dp.noise_multiplier);
-  vd_dialog->checkbox("Automatic Threshold", dp.automatic_threshold);
-  vd_dialog->checkbox("Agressive Closure", agr);
-  if (!vd_dialog->ask())
+  vgui_dialog vd_dialog("VD Edges");
+  vd_dialog.field("Gaussian sigma", dp.smooth);
+  vd_dialog.field("Noise Threshold", dp.noise_multiplier);
+  vd_dialog.checkbox("Automatic Threshold", dp.automatic_threshold);
+  vd_dialog.checkbox("Agressive Closure", agr);
+  if (!vd_dialog.ask())
     return;
   if (agr)
     dp.aggressive_junction_closure=1;
