@@ -139,6 +139,9 @@ PASSTHRU(unsigned int, alarm, (unsigned int  a0), (a0));
 #if defined(__FreeBSD__)
 extern "C" char* brk( const char *) VPL_THROW(());
 PASSTHRU(char *, brk, (const char* a0), (a0));
+#elif defined(VCL_GCC_30)
+extern "C" int brk (char*) VPL_THROW(());
+PASSTHRU(int, brk, (void *  a0), ((char*)a0));
 #else
 extern "C" int brk (void*) VPL_THROW(());
 PASSTHRU(int, brk, (void *  a0), (a0));
@@ -258,7 +261,7 @@ PASSTHRU(int, rmdir, (const char * s), (s));
 PASSTHRU(void           *, sbrk, (vpl_intptr_t  a0), (a0));
 PASSTHRU(int, setgid, (vpl_gid_t  a0), (a0));
 PASSTHRU(int, setpgid, (vpl_pid_t  a0,vpl_pid_t  a1), (a0, a1));
-#if defined(__FreeBSD__)
+#if defined(__FreeBSD__) || defined(VCL_GCC_30)
 PASSTHRU(vpl_pid_t, setpgrp, (vpl_pid_t a0, vpl_pid_t a1), (a0, a1));
 #else
 PASSTHRU(vpl_pid_t, setpgrp, (void), ());
