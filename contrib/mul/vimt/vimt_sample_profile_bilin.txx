@@ -1,28 +1,28 @@
+// This is mul/vimt/vimt_sample_profile_bilin.txx
 #ifndef vimt_sample_profile_bilin_txx_
 #define vimt_sample_profile_bilin_txx_
-
 //: \file
 //  \brief Profile sampling functions for 2D images
 //  \author Tim Cootes
 
-#include <vimt/vimt_sample_profile_bilin.h>
+#include "vimt_sample_profile_bilin.h"
 #include <vil2/vil2_sample_profile_bilin.h>
 #include <vil2/vil2_bilin_interp.h>
 #include <vnl/vnl_vector.h>
 #include <vgl/vgl_vector_2d.h>
 
 inline bool vimt_profile_in_image(const vgl_point_2d<double>& p0,
-                                 const vgl_point_2d<double>& p1,
-                                 const vil2_image_view_base& image)
+                                  const vgl_point_2d<double>& p1,
+                                  const vil2_image_view_base& image)
 {
   if (p0.x()<1) return false;
   if (p0.y()<1) return false;
-  if (p0.x()+2>image.nx()) return false;
-  if (p0.y()+2>image.ny()) return false;
+  if (p0.x()+2>image.ni()) return false;
+  if (p0.y()+2>image.nj()) return false;
   if (p1.x()<1) return false;
   if (p1.y()<1) return false;
-  if (p1.x()+2>image.nx()) return false;
-  if (p1.y()+2>image.ny()) return false;
+  if (p1.x()+2>image.ni()) return false;
+  if (p1.y()+2>image.nj()) return false;
 
   return true;
 }
@@ -33,10 +33,10 @@ inline bool vimt_profile_in_image(const vgl_point_2d<double>& p0,
 //  v[0]..v[np-1] are the values from point p
 template <class imType, class vecType>
 void vimt_sample_profile_bilin(vnl_vector<vecType>& vec,
-                           const vimt_image_2d_of<imType>& image,
-                           const vgl_point_2d<double>& p0,
-                           const vgl_vector_2d<double>& u,
-                           int n)
+                               const vimt_image_2d_of<imType>& image,
+                               const vgl_point_2d<double>& p0,
+                               const vgl_vector_2d<double>& u,
+                               int n)
 {
   // Check that all the profile points are within the image.
   vgl_point_2d<double> im_p0 = image.world2im()(p0);
@@ -48,8 +48,8 @@ void vimt_sample_profile_bilin(vnl_vector<vecType>& vec,
   if (image.world2im().form()!=vimt_transform_2d::Projective)
   {
     // Can do all work in image co-ordinates under an affine transformation
-	double dx = (im_p1.x()-im_p0.x())/(n-1);
-	double dy = (im_p1.y()-im_p0.y())/(n-1);
+    double dx = (im_p1.x()-im_p0.x())/(n-1);
+    double dy = (im_p1.y()-im_p0.y())/(n-1);
 
     // Sample along profile between im_p0 and im_p1
     vil2_sample_profile_bilin(v,image.image(),im_p0.x(),im_p0.y(),dx,dy,n);
@@ -70,8 +70,8 @@ void vimt_sample_profile_bilin(vnl_vector<vecType>& vec,
     if (np==1)
     {
       for (int i=0;i<n;++i,p+=u)
-	  {
-	    im_p = w2i(p);
+      {
+        im_p = w2i(p);
         v[i] = vil2_bilin_interp(im_p.x(),im_p.y(),plane0,xstep,ystep);
       }
     }
@@ -79,7 +79,7 @@ void vimt_sample_profile_bilin(vnl_vector<vecType>& vec,
     {
       for (int i=0;i<n;++i,p+=u)
       {
-	    im_p = w2i(p);
+        im_p = w2i(p);
         for (int j=0;j<np;++j,++v)
           *v = vil2_bilin_interp(im_p.x(),im_p.y(),plane0+j*pstep,xstep,ystep);
       }
@@ -88,33 +88,33 @@ void vimt_sample_profile_bilin(vnl_vector<vecType>& vec,
   else
   {
     // Use safe interpolation
-	int nx = image.image().nx();
-	int ny = image.image().ny();
+    int ni = image.image().ni();
+    int nj = image.image().nj();
     if (np==1)
     {
       for (int i=0;i<n;++i,p+=u)
-	  {
-	    im_p = w2i(p);
-        v[i] = vil2_safe_bilin_interp(im_p.x(),im_p.y(),plane0,nx,ny,xstep,ystep);
+      {
+        im_p = w2i(p);
+        v[i] = vil2_safe_bilin_interp(im_p.x(),im_p.y(),plane0,ni,nj,xstep,ystep);
       }
     }
     else
     {
       for (int i=0;i<n;++i,p+=u)
       {
-	    im_p = w2i(p);
+        im_p = w2i(p);
         for (int j=0;j<np;++j,++v)
-          *v = vil2_safe_bilin_interp(im_p.x(),im_p.y(),plane0+j*pstep,nx,ny,xstep,ystep);
+          *v = vil2_safe_bilin_interp(im_p.x(),im_p.y(),plane0+j*pstep,ni,nj,xstep,ystep);
       }
     }
   }
 }
 
 #define VIMT_SAMPLE_PROFILE_BILIN_INSTANTIATE( imType, vecType ) \
-template void vimt_sample_profile_bilin(vnl_vector<vecType>& v, \
-                           const vimt_image_2d_of<imType>& image, \
-                           const vgl_point_2d<double>& p, \
-                           const vgl_vector_2d<double>& u, \
-                           int n)
+template void vimt_sample_profile_bilin(vnl_vector<vecType >& v, \
+                                        const vimt_image_2d_of<imType >& image, \
+                                        const vgl_point_2d<double >& p, \
+                                        const vgl_vector_2d<double >& u, \
+                                        int n)
 
 #endif // vimt_sample_profile_bilin_txx_
