@@ -27,9 +27,7 @@
 
 void run_test_mil()
 {
-  
   test_gaussian_pyramid_builder_2d_general();
-
 }
 
 
