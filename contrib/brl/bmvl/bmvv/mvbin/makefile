@@ -1,4 +1,4 @@
-USES := contrib/brl contrib/brl/bbas contrib/brl/bmvl contrib/gel contrib/oxl core
+USES := contrib/brl contrib/brl/bbas contrib/brl/bmvl contrib/gel core
 include ../config.mk
 
 PROGRAM := mviewer
