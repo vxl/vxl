@@ -15,10 +15,6 @@ USE_JPEG := 1
 LIBRARY := tiff
 VERSION := 1.0
 
-##########################################
-include ${IUEROOT}/config/top-params.mk
-##########################################
-
 SOURCES += tif_aux.c
 SOURCES += tif_close.c
 SOURCES += tif_codec.c
@@ -52,6 +48,10 @@ SOURCES += tif_warning.c
 SOURCES += tif_write.c
 SOURCES += tif_zip.c
 
+#######################################
+include ${IUEROOT}/config/top-params.mk
+#######################################
+
 ifeq ($(OS),win32)
 SOURCES += tif_win32.c
 USE_WINAPI := 1
@@ -59,11 +59,9 @@ else
 SOURCES += tif_unix.c
 endif
 
-
 DOCFILES = tiff
 
 APP_CFLAGS += -DHAVE_IEEEFP=1
-
 
 ifeq ($(OS),win32)
 APP_CFLAGS += -D_tiff_mak
@@ -80,7 +78,6 @@ ifeq ($(OS),irix6)
 APP_CFLAGS += -DJPEG_SUPPORT \
 #    -DMMAP_SUPPORT -DUSE_VARARGS=0 -DUSE_PROTOTYPES=1 -DUSE_CONST=1 -ansi
 endif
-
 
 ifeq ($(OS),sunos4)
 APP_CFLAGS += -DUSE_VARARGS=0 -DUSE_PROTOTYPES=1
@@ -109,7 +106,6 @@ endif
 ifeq ($(OS),hp)
 APP_CFLAGS += -DUSE_VARARGS=1 -DUSE_PROTOTYPES=0
 endif
-
 
 ifeq ($(OS),ultrix)
 APP_CFLAGS += -DUSE_VARARGS=1 -DUSE_PROTOTYPES=0
@@ -152,6 +148,6 @@ endif
 
 IULIBS += -ljpeg
 
-##########################################
+######################################
 include ${IUEROOT}/config/top-rules.mk
-##########################################
+######################################
