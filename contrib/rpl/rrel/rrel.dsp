@@ -200,7 +200,7 @@ SOURCE=.\Templates/rrel_util_vector+double-.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=.\Templates/rrel_util_vector+int-.cxx
+SOURCE=.\rrel_kernel_density_obj.cxx
 
 # End Source File
 # End Group
@@ -309,6 +309,11 @@ SOURCE=.\rrel_util.txx
 # Begin Source File
 
 SOURCE=.\rrel_wls_obj.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\rrel_kernel_density_obj.h
 
 # End Source File
 # End Group
