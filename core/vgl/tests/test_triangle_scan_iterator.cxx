@@ -16,15 +16,23 @@ int main(int, char **)
   vgl_polygon p(x, y, 3);
   vgl_polygon_scan_iterator pi(p, false);
 
-  vcl_cout << "triangle:" << vcl_endl;
-  for (ti.reset(); ti.next(); )
-    vcl_cout << ti.scany() << ' ' << ti.startx() << ' ' << ti.endx() << vcl_endl;
-  vcl_cout << vcl_endl;
+  bool failed = false;
+  ti.reset();
+  pi.reset();
+  bool ti_more = ti.next();
+  bool pi_more = pi.next();
+  while( ti_more && pi_more && !failed ) {
+    failed = failed || ti.scany() != pi.scany() || ti.startx() != pi.startx() || ti.endx() != pi.endx();
+    ti_more = ti.next();
+    pi_more = pi.next();
+  }
+  if( ti_more != pi.next() ) failed = true;
 
-  vcl_cout << "polygon:" << vcl_endl;
-  for (pi.reset(); pi.next(); )
-    vcl_cout << pi.scany() << ' ' << pi.startx() << ' ' << pi.endx() << vcl_endl;
-  vcl_cout << vcl_endl;
+  if( failed ) {
+    vcl_cout << "Triangle scan iterator != polygon scan iterator -> FAILED\n";
+  } else {
+    vcl_cout << "Triangle scan iterator = polygon scan iterator  -> PASSED\n";
+  }
 
-  return 0;
+  return failed;
 }
