@@ -38,7 +38,7 @@ sub xec
 #-----------------------------------------------------------
 
 my %options;
-getopts('v:s:o:fu', \%options);
+getopts('v:s:l:o:fu', \%options);
 
 my $vxlsrc = $options{v} || "";
 my $script_dir = $options{s} || "$vxlsrc/scripts/doxy";
