@@ -102,7 +102,7 @@ bool vgui_poly_tableau::item::inside(GLint const vp[4],int vx, int vy) const
   bool ans = (x<=rx && rx<x+w) && (y<=ry && ry<y+h);
 
   if (ans)
-    debug << "Point " << vx << " " << vy << " inside sub-window: " << id << vcl_endl;
+    debug << "Point " << vx << ' ' << vy << " inside sub-window: " << id << vcl_endl;
 
   return ans;
 }
@@ -123,7 +123,7 @@ vgui_poly_tableau::~vgui_poly_tableau()
 }
 
 //-----------------------------------------------------------------------------
-//: Erase the item at the given postion from the list of items. 
+//: Erase the item at the given position from the list of items. 
 void vgui_poly_tableau::erase(iterator i)
 {
   assert(sub.begin()<=i && i<sub.end()); // wrong iterator for this container.
