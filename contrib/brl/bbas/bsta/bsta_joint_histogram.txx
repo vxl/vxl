@@ -1,4 +1,7 @@
-#include <vcl_cmath.h> // for log(), exp() ..
+#ifndef bsta_joint_histogram_txx_
+#define bsta_joint_histogram_txx_
+
+#include <vcl_cmath.h> // for log()
 #include <vcl_iostream.h>
 #include <bsta/bsta_gauss.h>
 #include <bsta/bsta_joint_histogram.h>
@@ -27,13 +30,13 @@ void bsta_joint_histogram<T>::upcount(T a, T mag_a,
   if (b<0||b>range_)
     return;
   int bin_a =0, bin_b = 0;
-  for (unsigned int i = 0; i<nbins_;i++)
+  for (unsigned int i = 0; i<nbins_; i++)
     if ((i+1)*delta_>a)
     {
       bin_a = i;
       break;
     }
-  for (unsigned int i = 0; i<nbins_;i++)
+  for (unsigned int i = 0; i<nbins_; i++)
     if ((i+1)*delta_>b)
     {
       bin_b = i;
@@ -81,11 +84,11 @@ template <class T>
 T bsta_joint_histogram<T>::entropy() const
 {
   T ent = 0;
-  for(int i = 0; i<nbins_; i++)
-    for(int j = 0; j<nbins_; j++)
+  for (unsigned int i = 0; i<nbins_; ++i)
+    for (unsigned int j = 0; j<nbins_; ++j)
     {
       T pij = this->p(i,j);
-      if(pij>min_prob_)
+      if (pij>min_prob_)
         ent -= pij*vcl_log(pij);
     }
   ent/= vcl_log(2.0);
@@ -96,13 +99,13 @@ template <class T>
 T bsta_joint_histogram<T>::renyi_entropy() const
 {
   T ent = 0, sum = 0;
-  for(int i = 0; i<nbins_; i++)
-    for(int j = 0; j<nbins_; j++)
+  for (unsigned int i = 0; i<nbins_; ++i)
+    for (unsigned int j = 0; j<nbins_; ++j)
     {
       T pij = this->p(i,j);
       sum += pij*pij;
     }
-  if(sum>min_prob_)
+  if (sum>min_prob_)
     ent = -vcl_log(sum)/vcl_log(2.0);
   return ent;
 }
@@ -136,5 +139,6 @@ void bsta_joint_histogram<T>::print() const
 
 #undef BSTA_JOINT_HISTOGRAM_INSTANTIATE
 #define BSTA_JOINT_HISTOGRAM_INSTANTIATE(T) \
-template class bsta_joint_histogram<T>
+template class bsta_joint_histogram<T >
 
+#endif // bsta_joint_histogram_txx_

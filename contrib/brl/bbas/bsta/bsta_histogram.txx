@@ -1,5 +1,7 @@
+#ifndef bsta_histogram_txx_
+#define bsta_histogram_txx_
 
-#include <vcl_cmath.h> // for log(), exp() ..
+#include <vcl_cmath.h> // for log()
 #include <vcl_iostream.h>
 #include <bsta/bsta_gauss.h>
 #include <bsta/bsta_histogram.h>
@@ -22,7 +24,7 @@ void bsta_histogram<T>::upcount(T x, T mag)
 {
   if (x<0||x>range_)
     return;
-  for (unsigned int i = 0; i<nbins_;i++)
+  for (unsigned int i = 0; i<nbins_; i++)
     if ((i+1)*delta_>x)
     {
       counts_[i] += mag;
@@ -65,12 +67,12 @@ template <class T>
 T bsta_histogram<T>::entropy() const
 {
   T ent = 0;
-  for(int i = 0; i<nbins_; i++)
-    {
-      T pi = this->p(i);
-      if(pi>min_prob_)
-        ent -= pi*vcl_log(pi);
-    }
+  for (unsigned int i = 0; i<nbins_; ++i)
+  {
+    T pi = this->p(i);
+    if (pi>min_prob_)
+      ent -= pi*vcl_log(pi);
+  }
   ent/= vcl_log(2.0);
   return ent;
 }
@@ -79,12 +81,12 @@ template <class T>
 T bsta_histogram<T>::renyi_entropy() const
 {
   T sum = 0, ent = 0;
-  for(int i = 0; i<nbins_; i++)
-    {
-      T pi = this->p(i);
-      sum += pi*pi;
-    }
-  if(sum>min_prob_)
+  for (unsigned int i = 0; i<nbins_; ++i)
+  {
+    T pi = this->p(i);
+    sum += pi*pi;
+  }
+  if (sum>min_prob_)
     ent = -vcl_log(sum)/vcl_log(2.0);
   return ent;
 }
@@ -113,5 +115,6 @@ void bsta_histogram<T>::print() const
 
 #undef BSTA_HISTOGRAM_INSTANTIATE
 #define BSTA_HISTOGRAM_INSTANTIATE(T) \
-template class bsta_histogram<T>
+template class bsta_histogram<T >
 
+#endif // bsta_histogram_txx_
