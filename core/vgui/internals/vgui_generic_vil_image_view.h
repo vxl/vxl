@@ -35,7 +35,7 @@
 //
 class vgui_generic_vil_image_view
 {
- protected:
+protected:
   //: Number of columns.
   unsigned ni_;
   //: Number of rasters.
@@ -58,7 +58,7 @@ class vgui_generic_vil_image_view
   //: Pixel type of this data
   vil_pixel_format pixel_format_;
 
- public:
+public:
   vgui_generic_vil_image_view( );
 
   vgui_generic_vil_image_view( vil_image_view_base const& other );
@@ -107,7 +107,7 @@ class vgui_generic_vil_image_view
   // cast or assign the result if make_view() to a
   // vil_image_view<vxl_byte>.
   //
-  virtual enum vil_pixel_format pixel_format() const;
+  enum vil_pixel_format pixel_format() const;
 
 };
 
