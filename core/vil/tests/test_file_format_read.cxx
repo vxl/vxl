@@ -145,7 +145,15 @@ class CheckGrey : public CheckPixel
       {
         img_ = im;
 #ifdef DEBUG
-        vcl_cout << '\n' << vcl_flush; vil_print_all(vcl_cout, img_);
+	// FOR NOW, DIFFICULT TO GENERATE 5 COLUMN X 3 ROW NITF FILES FOR TESTING.
+        // USING TRUNCATED EXISTING NITF FILES, SO ADD CHECK ON FILE SIZE.  MAL 2004jan13
+	if (img_.size() < 100) {
+          vcl_cout << '\n' << vcl_flush; vil_print_all(vcl_cout, img_);
+	}
+	else {
+	  vcl_cout << "Image size = " << img_.size() << ".  Too large to display all pixels."
+		   << vcl_endl ;
+	}
 #endif
       }
     }
@@ -395,6 +403,7 @@ test_file_format_read_main( int argc, char* argv[] )
   testlib_test_perform( test( "ff_grey8bit_true_for_nitf.txt", CheckGrey<vxl_uint_8>( "ff_grey8bit_uncompressed.nitf" ) ) );
   testlib_test_begin( "  16-bit grey (actually 11-bit)" );
   testlib_test_perform( test( "ff_grey16bit_true_for_nitf.txt", CheckGrey<vxl_uint_16>( "ff_grey16bit_uncompressed.nitf" ) ) );
+  // ONLY 8 BIT AND 16 BIT GREY ARE VALID TESTS FOR NITF NOW.
 #if 0
   testlib_test_begin( "  8-bit RGB" );
   testlib_test_perform( test( "ff_planar8bit_true.txt", CheckColourPlanes<vxl_uint_8>( "ff_rgb8bit_uncompressed.nitf" ) ) );
