@@ -12,7 +12,7 @@
 #include <vil/vil_open.h>
 #include <vil2/vil2_file_format.h>
 #include <vil/vil_stream.h>
-#include <vil/vil_property.h>
+#include <vil2/vil2_property.h>
 #ifdef VIL2_TO_BE_FIXED
 #include <vil/vil_flipud.h>
 #include <vil/vil_flip_components.h>
@@ -60,9 +60,9 @@ vil2_image_data_sptr vil2_load_image_data(char const* filename)
   if (!im) return im; // leave early if it hasn't loaded.
 
   bool top_first=true, bgr=false;
-  im->get_property(vil_property_top_row_first, &top_first);
+  im->get_property(vil2_property_top_row_first, &top_first);
   if (im->nplanes() == 3)
-    im->get_property(vil_property_component_order_is_BGR,&bgr);
+    im->get_property(vil2_property_component_order_is_BGR,&bgr);
 #ifdef VIL2_TO_BE_FIXED
   if (!top_first)
     im = vil_flipud(im);

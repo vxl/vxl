@@ -48,4 +48,4 @@
 //: Indicate that you can't call put_view on this image.
 #define vil2_property_read_only "read-only"
 
-#endif // vil_property_h_
+#endif // vil2_property_h_

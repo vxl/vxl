@@ -17,7 +17,7 @@
 #include <vxl_config.h> // for VXL_BIG_ENDIAN
 
 #include <vil/vil_stream.h>
-#include <vil/vil_property.h>
+#include <vil2/vil2_property.h>
 #include <vil2/vil2_image_data.h>
 #include <vil2/vil2_image_view.h>
 #include <vil2/vil2_memory_chunk.h>
@@ -77,10 +77,10 @@ vil2_pnm_image::vil2_pnm_image(vil_stream* vs):
 
 bool vil2_pnm_image::get_property(char const *tag, void *prop) const
 {
-  if (0==vcl_strcmp(tag, vil_property_top_row_first))
+  if (0==vcl_strcmp(tag, vil2_property_top_row_first))
     return prop ? (*(bool*)prop) = true : true;
 
-  if (0==vcl_strcmp(tag, vil_property_left_first))
+  if (0==vcl_strcmp(tag, vil2_property_left_first))
     return prop ? (*(bool*)prop) = true : true;
 
   return false;
