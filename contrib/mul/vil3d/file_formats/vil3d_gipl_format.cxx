@@ -300,9 +300,9 @@ bool vil3d_gipl_image::get_property(char const *key, void * value) const
   if (vcl_strcmp(vil3d_property_origin_offset, key)==0)
   {
     float* array =  static_cast<float*>(value);
-    array[0] = (float)dim1_ * 0.5;
-    array[1] = (float)dim2_ * 0.5;
-    array[2] = (float)dim3_ * 0.5;
+    array[0] = (float)(dim1_ * 0.5);
+    array[1] = (float)(dim2_ * 0.5);
+    array[2] = (float)(dim3_ * 0.5);
     return true;
   }
 
