@@ -6,7 +6,7 @@
 #include <vnl/vnl_math.h>
 #include <vnl/vnl_sample.h>
 
-void testvnl_sample()
+void test_sample()
 {
   unsigned const N = 100000;
   double mu = 1.552;
@@ -35,4 +35,4 @@ void testvnl_sample()
   TEST("sample stddev", sigma_bar-sigma < 0.1 && sigma-sigma_bar < 0.1, true);
 }
 
-TESTMAIN(testvnl_sample);
+TESTMAIN(test_sample);

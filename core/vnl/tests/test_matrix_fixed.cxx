@@ -12,7 +12,7 @@
 bool verbose_malloc = false;
 int malloc_count = 0;
 
-void testvnl_matrix_fixed()
+void test_matrix_fixed()
 {
   verbose_malloc = true;
   double datablock[9] = {
@@ -75,4 +75,4 @@ void operator delete(void* s)
   free(s);
 }
 
-TESTMAIN(testvnl_matrix_fixed);
+TESTMAIN(test_matrix_fixed);

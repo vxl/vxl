@@ -4,7 +4,7 @@
 #include <vnl/vnl_real_polynomial.h>
 #include <vnl/algo/vnl_cpoly_roots.h>
 
-void testvnl_cpoly_roots()
+void test_cpoly_roots()
 {
   const double coeffs[] = {6, 5, 4, 3, 2, 1};
   vnl_vector<double> a(coeffs, 6);
@@ -20,4 +20,4 @@ void testvnl_cpoly_roots()
     vnl_test_assert("Root residual", vcl_abs(f.evaluate(roots.solns[i])) < 1e-12);
 }
 
-TESTMAIN(testvnl_cpoly_roots);
+TESTMAIN(test_cpoly_roots);

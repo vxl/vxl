@@ -53,10 +53,10 @@ void do_test(bool with_grad)
 }
 
 static
-void do_test()
+void test_levenberg_marquardt()
 {
   do_test(true);
   do_test(false);
 }
 
-TESTMAIN(do_test);
+TESTMAIN(test_levenberg_marquardt);
