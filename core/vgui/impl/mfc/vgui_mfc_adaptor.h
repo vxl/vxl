@@ -110,6 +110,9 @@ public:
     b = mixin::popup_button;
   }
 
+  virtual vgui_window* get_window() const { return win_; }
+  void set_window( vgui_window* win ) { win_ = win; }
+
   // kym stuff
   //----------
   //:
@@ -165,6 +168,8 @@ protected:
   HBITMAP m_oldbitmap;
 
   vgui_overlay_helper *ovl_helper;
+
+  vgui_window* win_;
 
   static vgui_menu last_popup;
 

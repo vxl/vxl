@@ -141,8 +141,6 @@ vgui_window* vgui_mfc::produce_window(int width, int height, const vgui_menu& me
 {
   vgui_window* a_window = new vgui_mfc_window(width, height, menubar, title);
   windows_to_delete.push_back(a_window);
-  vgui_adaptor* adapt = a_window->get_adaptor();
-  adapt->set_window(a_window);
   return a_window;
   //return new vgui_mfc_window(width, height, menubar, title);
 }
@@ -155,8 +153,6 @@ vgui_window* vgui_mfc::produce_window(int width, int height,
 {
   vgui_window* a_window = new vgui_mfc_window(title, width, height);
   windows_to_delete.push_back(a_window);
-  vgui_adaptor* adapt = a_window->get_adaptor();
-  adapt->set_window(a_window);
   return a_window;
   //return new vgui_mfc_window(title,width, height);
 }

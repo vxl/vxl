@@ -43,6 +43,7 @@ void vgui_mfc_window::init_window(char const *title,
     CDocument *pdoc = tmpl->GetNextDoc(pos2);
     pos3 = pdoc->GetFirstViewPosition();
     mfcwin = (vgui_mfc_adaptor *)pdoc->GetNextView(pos3);
+    mfcwin->set_window( this );
     if (has_menu)
       vgui_mfc::instance()->utils->set_menu(menubar);
     statusbar = new vgui_mfc_statusbar();

@@ -35,7 +35,7 @@ IMPLEMENT_DYNCREATE(vgui_mfc_adaptor, CView)
 
 
 //: Constructor.
-vgui_mfc_adaptor::vgui_mfc_adaptor():ovl_helper(0), /*come_out_now(false),*/ redraw_posted(true)
+vgui_mfc_adaptor::vgui_mfc_adaptor( ):ovl_helper(0), win_(0), /*come_out_now(false),*/ redraw_posted(true)
 {
   if (vgui_accelerate::vgui_mfc_acceleration)
     // kym - double buffering is not available with 
