@@ -174,7 +174,6 @@ void test_arbitrary_length_int_conversion_ushort()
 
 }
 
-
 void test_explicit_int_io()
 {
   vcl_cout << "**********************************" << vcl_endl;
@@ -190,8 +189,6 @@ void test_explicit_int_io()
   for (i = 0; i < 65536; ++i)
     vsl_b_write_uint_16(bfs_out, i);
   bfs_out.close();
-  
-  
 
   vsl_b_ifstream bfs_in("vsl_explicit_int_io_test.bvl.tmp",
     vcl_ios::in | vcl_ios::binary);
@@ -216,7 +213,7 @@ void test_explicit_int_io()
   }
 
   vcl_stringstream ss2(ss.str());
-  {  
+  {
     vsl_b_istream bss(&ss2);
     TEST ("Opened stringstream for reading", (!bss), false);
     for (i = 0; i < 65536; ++i)
@@ -232,6 +229,52 @@ void test_explicit_int_io()
   if (i != 65536)
     vcl_cout << "Failed at number " << i <<vcl_endl;
 
+
+
+
+
+
+}
+void test_extreme_int_io()
+{
+  vcl_cout << "*************************************" << vcl_endl;
+  vcl_cout<<  "Testing largest/smallest integer I/O"<<vcl_endl;
+  vcl_cout << "************************************" << vcl_endl;
+
+  // Some fudges to get the max values
+  // vcl_numeric_limits doesn't seem to work yet
+  long min_long = 1<<(8*sizeof(long)-1);
+  long max_long = ~min_long;
+  unsigned long max_ulong = ~0;
+
+  vsl_b_ofstream bfs_out("vsl_extreme_int_io_test.bvl.tmp",
+    vcl_ios::out | vcl_ios::binary);
+  TEST ("Created vsl_extreme_int_io_test.bvl.tmp for writing",
+    (!bfs_out), false);
+
+  vsl_b_write(bfs_out,min_long);
+  vsl_b_write(bfs_out,max_long);
+  vsl_b_write(bfs_out,max_ulong);
+  bfs_out.close();
+
+  long min_long_in = 77;
+  long max_long_in = 77;
+  unsigned long max_ulong_in = 77;
+
+
+  vsl_b_ifstream bfs_in("vsl_extreme_int_io_test.bvl.tmp",
+    vcl_ios::in | vcl_ios::binary);
+  TEST ("Opened vsl_extreme_int_io_test.bvl.tmp for reading",
+    (!bfs_in), false);
+  vsl_b_read(bfs_in,min_long_in);
+  vsl_b_read(bfs_in,max_long_in);
+  vsl_b_read(bfs_in,max_ulong_in);
+  bfs_in.close();
+
+  TEST ("min_long == min_long_in", min_long == min_long_in, true);
+  TEST ("max_long == max_long_in", max_long == max_long_in, true);
+  TEST ("max_ulong == max_ulong_in", max_ulong == max_ulong_in, true);
+
 }
 
 
@@ -241,6 +284,7 @@ void test_arbitrary_length_int_conversion()
   test_arbitrary_length_int_conversion_ushort();
   test_arbitrary_length_int_conversion_short();
   test_explicit_int_io();
+  test_extreme_int_io();
 //  test_arbitrary_length_int_conversion_int();
 }
 
