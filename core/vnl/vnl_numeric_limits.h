@@ -5,18 +5,18 @@
 #pragma interface
 #endif
 //:
-//  \file
-//  \brief Standard limits for numeric datatypes
+// \file
+// \brief Standard limits for numeric datatypes
 //
-//    Implementation of the May 96 ANSI Draft Working Paper (DWP)
-//    numeric_limits class.  Numbering in
-//    the documentation below refers to section 18.2 of the DWP.
+//  Implementation of the May 96 ANSI Draft Working Paper (DWP)
+//  numeric_limits class.  Numbering in
+//  the documentation below refers to section 18.2 of the DWP.
 //
-//  \author Andrew W. Fitzgibbon, Oxford RRG
-//  \date   28 Aug 96
+// \author Andrew W. Fitzgibbon, Oxford RRG
+// \date   28 Aug 96
 //
 // \verbatim
-//  Modifications:
+//  Modifications
 //   LSB (Manchester) 23/3/01 Documentation tidied
 //   Feb.2002 - Peter Vanroose - brief doxygen comment placed on single line
 //   Jan.2003 - Peter Vanroose - bug fix in infinity() and NaN(): LITTLE_ENDIAN
@@ -54,7 +54,7 @@ class vnl_numeric_limits
 {
  public:
 
-  //: Distingishes between scalar types, which have specialisations, and non-scalar types, which don't.
+  //: Distinguishes between scalar types, which have specialisations, and non-scalar types, which don't.
   static const bool is_specialized;
 
   //: Minimum finite value.
