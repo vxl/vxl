@@ -61,7 +61,7 @@ static bool tmp_fun(vcl_vector<vgl_homg_point_2d<double> > const& pts1,
 
   vnl_double_3x3 T;
   T.set_identity();
-  T.update(Aff);
+  T.update(Aff.as_ref());
   T(0,2) = t[0];
   T(1,2) = t[1];
   H.set(T);
@@ -103,7 +103,7 @@ static bool tmp_fun(vcl_vector<HomgPoint2D> const& pts1,
 
   vnl_double_3x3 T;
   T.set_identity();
-  T.update(Aff);
+  T.update(Aff.as_ref());
   T(0,2) = t[0];
   T(1,2) = t[1];
   H.set(T);

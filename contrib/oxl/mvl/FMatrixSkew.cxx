@@ -101,7 +101,7 @@ void
 FMatrixSkew::decompose_to_skew_rank3(vnl_matrix<double> *skew_matrix_ptr,
                                      vnl_matrix<double> *rank3_matrix_ptr) const
 {
-     *skew_matrix_ptr = this->get_matrix();
+     *skew_matrix_ptr = this->get_matrix().as_ref();
      rank3_matrix_ptr->fill(0.0);
      rank3_matrix_ptr->fill_diagonal(1.0);
 }
