@@ -45,9 +45,10 @@ bsol_point_index_3d::bsol_point_index_3d(int nrows, int ncols, int nslabs,
   for (int r = 0; r<nrows; r++)
     for (int c = 0; c<ncols; c++)
       {
-        point_array_[r][c]= 
-          new vcl_vector<vcl_vector<vsol_point_3d_sptr> >;
-        point_array_[r][c]->resize(nslabs);
+        vcl_vector<vcl_vector<vsol_point_3d_sptr> >* v = 
+          new vcl_vector<vcl_vector<vsol_point_3d_sptr> >(nslabs);
+        point_array_[r][c] = v;
+        v->clear();
       }
   b_box_ = bb;
   double w = b_box_->width(), h = b_box_->height(), d = b_box_->depth();
@@ -74,9 +75,10 @@ bsol_point_index_3d(int nrows, int ncols, int nslabs,
   for (int r = 0; r<nrows; r++)
     for (int c = 0; c<ncols; c++)
       {
-        point_array_[r][c]= 
-          new vcl_vector<vcl_vector<vsol_point_3d_sptr> >;
-        point_array_[r][c]->resize(nslabs);
+        vcl_vector<vcl_vector<vsol_point_3d_sptr> >* v = 
+          new vcl_vector<vcl_vector<vsol_point_3d_sptr> >(nslabs);
+        point_array_[r][c] = v;
+        v->clear();
       }
   vbl_bounding_box<double,3> box = bsol_algs::bounding_box(points);
   b_box_ = new vsol_box_3d(box);
@@ -100,6 +102,7 @@ bsol_point_index_3d::~bsol_point_index_3d()
   for (int r = 0; r<nrows_; r++)
     for (int c = 0; c<ncols_; c++)
       delete point_array_[r][c];
+   
 }
 
 void bsol_point_index_3d::origin(double& x0, double& y0, double& z0)
@@ -174,7 +177,8 @@ bool bsol_point_index_3d::add_point(vsol_point_3d_sptr const& p)
     return false;
   if (row<0||row>=nrows_||col<0||col>=ncols_||slab<0||slab>=nslabs_)
     return false;
-  (*(point_array_[row][col]))[slab].push_back(p);
+   vcl_vector<vcl_vector<vsol_point_3d_sptr> >* v = point_array_[row][col];
+   (*v)[slab].push_back(p);
   return true;
 }
 
