@@ -311,7 +311,7 @@ bool vgui_viewer2D::mouse_drag(int x, int y,  vgui_button /*button*/, vgui_modif
     // this is called during the sweep zoom operation. we have
     // to (a) repair the front buffer, (b) draw the new rectangle
     // and (c) remember where the mouse pointer was (in new_x, new_y).
-    vgui_matrix_state gl_state;
+    vgui_matrix_state gl_state; gl_state.save();  // save the projection matrix
 
     //vcl_cerr << "begin_sw_overlay..." << flush;
     vgui_utils::begin_sw_overlay();
@@ -367,6 +367,7 @@ bool vgui_viewer2D::mouse_drag(int x, int y,  vgui_button /*button*/, vgui_modif
     draw_rect(zoom_x - vp[0], zoom_y - vp[1], new_x - vp[0], new_y - vp[1]);
 
     vgui_utils::end_sw_overlay();
+    // at this point, the projection matrix is restored
   }
 
   // Update last seen mouse position.

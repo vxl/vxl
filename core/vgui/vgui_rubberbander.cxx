@@ -209,7 +209,7 @@ void vgui_rubberbander::draw_polygon(float px, float py)
   if (n==0)
     return;
 
-  vgui_matrix_state M;
+  vgui_matrix_state M; M.save();  // save the projection matrix
 
   glLineWidth(1);
   glColor3f(1,1,1);
@@ -222,6 +222,7 @@ void vgui_rubberbander::draw_polygon(float px, float py)
     glVertex2f(x_coords[i], y_coords[i]);
   glVertex2f(px, py);
   glEnd();
+  // at this point, the projection matrix is restored
 }
 
 //: Render rubber box
@@ -251,7 +252,7 @@ void vgui_rubberbander::draw_linestrip(float px,float py)
   if (n==0)
     return;
 
-  vgui_matrix_state M;
+  vgui_matrix_state M; M.save();  // save the projection matrix
 
   glLineWidth(1);
   glColor3f(1,1,1);
@@ -260,6 +261,7 @@ void vgui_rubberbander::draw_linestrip(float px,float py)
     glVertex2f(x_coords[i], y_coords[i]);
   glVertex2f(px,py);
   glEnd();
+  // at this point, the projection matrix is restored
 }
 
 
