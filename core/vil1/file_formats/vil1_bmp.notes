@@ -49,10 +49,10 @@ a random one from the World Wide Web. Hexdumps follow:
 
 colour version of pig:
 
-00000000: 42 4D DA E9 09 00 00 00 00 00 36 00 00 00 28 00 BM........6...(.
-00000010: 00 00 19 02 00 00 93 01 00 00 01 00 18 00 00 00 ................
-00000020: 00 00 A4 E9 09 00 6D 0B 00 00 6D 0B 00 00 00 00 ......m...m.....
-00000030: 00 00 00 00 00 00 6F 8C 93 72 8F 96 73 90 97 72 ......o..r..s..r
+00000000: 42 4D|DA E9 09 00|00 00|00 00|36 00 00 00|28 00 BM........6...(.
+00000010: 00 00|19 02 00 00|93 01 00 00|01 00|18 00|00 00 ................
+00000020: 00 00|A4 E9 09 00|6D 0B 00 00|6D 0B 00 00|00 00 ......m...m.....
+00000030: 00 00|00 00 00 00|6F 8C 93 72 8F 96 73 90 97 72 ......o..r..s..r
 00000040: 8F 96 74 91 98 77 94 9B 75 91 98 70 8C 93 75 8F ..t..w..u..p..u.
 00000050: 96 77 91 98 77 91 98 73 8D 94 75 8C 94 79 90 98 .w..w..s..u..y..
 00000060: 79 90 98 77 8E 96 79 8F 95 7A 90 96 7B 8F 94 79 y..w..y..z..{..y
@@ -95,26 +95,30 @@ the info header can be determined from the 'size' field in the core
 header, so the info header is in a sense an extension of the core header.
 
 
-file header:
- 2   42 4D         magic numbers
- 4   DA E9 09 00   size of file 0x0009E9DA
- 2   00 00         reserved1
- 2   00 00         reserved2
- 4   36 00 00 00   offset to bitmap
-core header:
- 4   28 00 00 00   size of header
- 4   19 02 00 00   width   0x219 = 537
- 4   93 01 00 00   height  0x193 = 403
- 2   01 00         planes
- 2   18 00         bits per pixel
-info header:
- 4   00 00 00 00   compression flag
- 4   A4 E9 09 00   no. bytes of bitmap data
- 4   6D 0B 00 00   horizontal pixels per meter
- 4   6D 0B 00 00   vertical pixels per meter
- 4   00 00 00 00   size of colour table
- 4   00 00 00 00   important colour count
-colormap:
- ...... appears to be r,g,b,a
-bitmap:
+file header: (size 14 bytes)
+ 2   42 4D         42 4D         magic numbers ("BM")
+ 4   DA E9 09 00   4A 56 03 00   file size (little endian) 0x9E9DA resp. 3564A
+ 2   00 00         00 00         reserved1
+ 2   00 00         00 00         reserved2
+ 4   36 00 00 00   36 04 00 00   offset to bitmap (= file+core+info header sizes + colormap size)
+                   
+core header: (size 16 bytes (for Windows-bmp) or 12 bytes (for (old) OS2-bmp))
+ 4   28 00 00 00   28 00 00 00   size of core header + info header
+ 4/2 19 02 00 00   19 02 00 00   width   0x219 = 537
+ 4/2 93 01 00 00   93 01 00 00   height  0x193 = 403
+ 2   01 00         01 00         planes
+ 2   18 00         08 00         bits per pixel (bpp)
+                   
+info header: (only for Windows-bmp; size: 24 bytes)
+ 4   00 00 00 00   00 00 00 00   compression flag (0 ==> no compression)
+ 4   A4 E9 09 00   14 52 03 00   no. bytes of bitmap data (= file_size - offset_to_bitmap)
+ 4   6D 0B 00 00   6D 0B 00 00   horizontal pixels per meter (0xB6D = 2925 = 74.3 pixels/inch)
+ 4   6D 0B 00 00   6D 0B 00 00   vertical pixels per meter
+ 4   00 00 00 00   00 01 00 00   size of colourmap table
+ 4   00 00 00 00   00 01 00 00   important colour count
+
+colormap table: (size: up to 2**bpp * 4 (or * 3 for OS2-bmp), often 256*4=1024)
+ ...... appears to be b,g,r,a for Windows-bmp and b,g,r for OS2-bmp
+
+bitmap: (bottom row first, top row last; rows are padded to have multiple of 4 bytes per row)
  ......

@@ -87,19 +87,11 @@ vil_bmp_generic_image::vil_bmp_generic_image(vil_stream* is,
   // core_hdr.header_size is set up for us.
   core_hdr.width = width;
   core_hdr.height = height;
-  core_hdr.planes = 1;
-  if (bits_per_component == 8 && components == 1) {
-    core_hdr.bitsperpixel = 8;
-  }
-  else if (bits_per_component == 8 && components == 3) {
-    core_hdr.bitsperpixel = 24;
-  }
-  else {
-    // can't handle that.
-    assert(false);
-  }
+  core_hdr.planes = planes;
+  assert(bits_per_component == 8 && (components == 1 || components == 3));
+  core_hdr.bitsperpixel = bits_per_component * components;
 
-  // don't worry about the info header for now.
+  write_header();
 }
 
 vil_bmp_generic_image::~vil_bmp_generic_image()
@@ -249,110 +241,33 @@ bool vil_bmp_generic_image::read_header()
 
 bool vil_bmp_generic_image::write_header()
 {
-  assert(false); // FIXIT
 #if 0
-  int rgb_length=0;
+  assert(false); // FIXIT
+#else
 
-  int used_color=0;
+#ifdef DEBUG
+  cerr << "Writing BMP header" << endl;
+  cerr << width() << 'x' << height() << '@'
+       << components() << 'x' << bits_per_component() << endl;
+#endif
 
-  if (header.biClrUsed != 0)
-      used_color = header.biClrUsed;
-  else
-      if (header.biBitCount != 24)
-          used_color = 1 << header.biBitCount;
+  int rowlen = width() * components() * bits_per_component() / 8;
+  rowlen += (3-(rowlen-1)%4); // round up to multiple of 4
+  int data_size = height() * rowlen;
 
-  if (false) {
-    cerr << "Writing BMP header" << endl;
-    cerr << header.biWidth << ' ' << header.biHeight << ' '
-	 << header.biBitCount << endl;
-  }
+  file_hdr.bitmap_offset = bit_map_start = 54;
+  file_hdr.file_size = 54+data_size;
+  core_hdr.header_size = 40;
+  core_hdr.width = width();
+  core_hdr.height = height();
+  core_hdr.bitsperpixel = components()*bits_per_component();
+  info_hdr.bitmap_size = data_size;
 
-  if (header.biSize == sizeof(xBITMAPINFOHEADER))
-      rgb_length = 4;
-   else if (header.biSize == sizeof(xBITMAPCOREHEADER))
-            rgb_length = 3;
-        else
-           {
-             cerr << "Invalid header size"<<endl;
-             return false;
-           }
+  is_->seek(0);
+  file_hdr.write(is_);
+  core_hdr.write(is_);
+  info_hdr.write(is_);
 
-  fbmp.bfOffBits = 14+header.biSize+used_color*rgb_length;
-  fbmp.bfSize    = fbmp.bfOffBits + get_area()*pixsize;
-  
-
-  // SetSizeX(header.biWidth);
-  // SetSizeY(header.biHeight);
-  // SetBitsPixel(header.biBitCount);
-
-  if (is_->write(&fbmp.bfType, sizeof(fbmp.bfType)) != sizeof(fbmp.bfType))
-  {
-    cerr << "Error while writing BMP file header"<< endl;
-    return false;
-  }
-
-  //if (is_->write(&fbmp.bfSize, sizeof(fbmp.bfSize)) != sizeof(fbmp.bfSize))
-  //{
-  //    cerr << "Error while writing BMP file header"<< endl;
-  //    return false;
-  //}
-  write_int_macro(is_, fbmp.bfSize);
-
-  //if (is_->write(&fbmp.bfReserved1, sizeof(fbmp.bfReserved1)) != sizeof(fbmp.bfReserved1))
-  //{
-  //    cerr << "Error while writing BMP file header"<< endl;
-  //    return false;
-  //}
-  write_int_macro(is_, fbmp.bfReserved1);
-
-  //if (is_->write(&fbmp.bfReserved2, sizeof(fbmp.bfReserved2)) != sizeof(fbmp.bfReserved2))
-  //{
-  //    cerr << "Error while writing BMP file header"<< endl;
-  //    return false;
-  //}
-  write_int_macro(is_, fbmp.bfReserved2);
-
-  //if (is_->write(&fbmp.bfOffBits, sizeof(fbmp.bfOffBits)) != sizeof(fbmp.bfOffBits))
-  //{
-  //    cerr << "Error while writing BMP file header"<< endl;
-  //    return false;
-  //}
-  write_int_macro(is_, fbmp.bfOffBits);
-  
-  if (header.biSize == sizeof(xBITMAPINFOHEADER))
-  {
-     rgb_length = 4;
-     if (is_->write(&header, sizeof(xBITMAPINFOHEADER)) != sizeof(xBITMAPINFOHEADER))
-     {
-         cerr << "Error while writing header"<< endl;
-         return false;
-     }
-
-  }
-  else if (header.biSize == sizeof(xBITMAPCOREHEADER))
-       {
-          rgb_length = 3;
-          if (is_->write(&header, sizeof(xBITMAPINFOHEADER)) != sizeof(xBITMAPINFOHEADER))
-          {
-             cerr << "Error while writing header"<< endl;
-             return false;
-          }
-       }
-
-  if (used_color != 0 && local_color_map_)
-  {
-    // int** cm = get_color_map();
-    int** cm = local_color_map_;
-    
-    for(int j=0; j<used_color; j++)
-    {
-      for(int i=0; i<3; i++)
-        is_->write(&cm[2-i][j], 1);
-      is_->write(0, 1);
-    }
-  }
-
-  //  SetOffset(file->Tell());
 #endif
 
   return true;
@@ -396,7 +311,25 @@ bool vil_bmp_generic_image::get_section(void* ib, int x0, int y0, int w, int h) 
 bool vil_bmp_generic_image::put_section(void const *ib, int x0, int y0, int xs, int ys)
 {
   assert(ib);
-  
-  where << "put_section() does not work yet/any more" << endl;
-  return false;
+  int bypp = (components() * bits_per_component() +7) / 8;
+  int rowlen = width() * bypp;
+  rowlen += (3-(rowlen-1)%4); // round up to a multiple of 4
+
+  int skip_rows = height()-y0-ys;
+
+  for (int y=y0+ys-1; y>=y0; --y,++skip_rows)
+  {
+    is_->seek(bit_map_start+skip_rows*rowlen+x0*bypp);
+    if (components() == 1)
+      is_->write(((char const*)ib)+(y-y0)*xs*bypp, xs*bypp);
+    else // component order must be switched: RGB -> BGR
+    {
+      int bypc = bypp/components();
+      for (int x=0; x<xs; ++x)
+        for (int b=0; b<components(); ++b)
+          is_->write(((char const*)ib)+(y-y0)*xs*bypp+x*bypp+(components()-b-1)*bypc, bypc);
+    }
+  }
+
+  return true;
 }
