@@ -274,3 +274,7 @@ endif
 ifeq ($(OS),solaris)
   pic := $(PIC)
 endif
+
+ifeq ($(OS),SunOS5)
+  pic := $(PIC)
+endif
