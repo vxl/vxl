@@ -221,7 +221,7 @@ class bsol_intrinsic_curve_2d : public vsol_curve_2d
     if (blanking < 0) blanking = 0; while (blanking--) strm << ' ';
     strm << "<bsol_intrinsic_curve_2d "
       // << static_cast<vsol_curve_2d>(*this) << ' '
-         << "p0 = " << p0_ << ", p1 = " << p1_ << " >\n";
+         << "p0 = " << *p0_ << ", p1 = " << *p1_ << " >\n";
   }
 };
 
