@@ -32,6 +32,32 @@ vnl_amoeba::vnl_amoeba(vnl_cost_function& f):
   relative_diameter = 0.05;
 }
 
+//: Define maximum number of iterations to use
+void vnl_amoeba::set_max_iterations(int n)
+{
+  maxiter = n;
+}
+
+//: Define tolerance on elements of x
+void vnl_amoeba::set_x_tolerance(double tol)
+{
+  X_tolerance = tol;
+}
+
+//: Define tolerance on function evaluation
+void vnl_amoeba::set_f_tolerance(double tol)
+{
+  F_tolerance = tol;
+}
+
+//: Define scaling used to select starting verticies relative to intial x0
+//  ie the i'th vertex has x[i] = x0[i]*(1+relative_diameter)
+void vnl_amoeba::set_relative_diameter(double r)
+{
+  relative_diameter = r;
+}
+
+
 struct vnl_amoebaFit : public vnl_amoeba {
   int cnt;
 
@@ -39,11 +65,23 @@ struct vnl_amoebaFit : public vnl_amoeba {
     cnt = 0;
   }
 
-	  //: Initialise the simplex given one corner, x
-	void set_up_simplex(vcl_vector<vnl_amoeba_SimplexCorner>& simplex,
-	                    const vnl_vector<double>& x);
+	  //: Initialise the simplex given one corner, x (scale each element to get other corners)
+  void set_up_simplex_relative(vcl_vector<vnl_amoeba_SimplexCorner>& simplex,
+	                  const vnl_vector<double>& x);
 
+	  //: Initialise the simplex given one corner, x and displacements of others
+  void set_up_simplex_absolute(vcl_vector<vnl_amoeba_SimplexCorner>& simplex,
+	                  const vnl_vector<double>& x,
+										const vnl_vector<double>& dx);
+
+    //: Perform optimisation.  Start simplex defined by scaling elements of x
   void amoeba(vnl_vector<double>& x);
+
+    //: Perform optimisation.  Start simplex defined by adding dx[i] to each x[i]
+  void amoeba(vnl_vector<double>& x, const vnl_vector<double>& dx);
+
+    //: Perform optimisation, given simplex to start
+  void amoeba(vnl_vector<double>& x, vcl_vector<vnl_amoeba_SimplexCorner>& simplex);
 
   double f(const vnl_vector<double>& x) {
     return fptr->f(x);
@@ -182,7 +220,7 @@ bool operator==(const vnl_amoeba_SimplexCorner& a, const vnl_amoeba_SimplexCorne
 //  edited by A. Wouk, SIAM, 1987, pp. 116-122.
 
 //: Initialise the simplex given one corner, x
-void vnl_amoebaFit::set_up_simplex(vcl_vector<vnl_amoeba_SimplexCorner>& simplex,
+void vnl_amoebaFit::set_up_simplex_relative(vcl_vector<vnl_amoeba_SimplexCorner>& simplex,
 	                    const vnl_vector<double>& x)
 {
   int n = x.size();
@@ -190,12 +228,10 @@ void vnl_amoebaFit::set_up_simplex(vcl_vector<vnl_amoeba_SimplexCorner>& simplex
   simplex[0].v = x;
   simplex[0].fv = f(x);
 
-  cnt = 0;
-
   // Following improvement suggested by L.Pfeffer at Stanford
   const double usual_delta = relative_diameter;             // 5 percent deltas for non-zero terms
   const double zero_term_delta = 0.00025;      // Even smaller delta for zero elements of x
-  vnl_vector<double> y(n);
+//  vnl_vector<double> y(n);
   for(int j = 0; j < n; ++j) {
     vnl_amoeba_SimplexCorner *s = &simplex[j+1];
     s->v = x;
@@ -206,7 +242,27 @@ void vnl_amoebaFit::set_up_simplex(vcl_vector<vnl_amoeba_SimplexCorner>& simplex
     else
       s->v[j] = zero_term_delta;
 
-    ++cnt;
+    s->fv = f(s->v);
+  }
+}
+
+//: Initialise the simplex given one corner, x and displacements of others
+void vnl_amoebaFit::set_up_simplex_absolute(vcl_vector<vnl_amoeba_SimplexCorner>& simplex,
+	                  const vnl_vector<double>& x,
+										const vnl_vector<double>& dx)
+{
+  int n = x.size();
+
+  simplex[0].v = x;
+  simplex[0].fv = f(x);
+
+  for(int j = 0; j < n; ++j) {
+    vnl_amoeba_SimplexCorner *s = &simplex[j+1];
+    s->v = x;
+
+    // perturb s->v(j)
+    s->v[j] = s->v[j] + dx[j];
+
     s->fv = f(s->v);
   }
 }
@@ -217,7 +273,25 @@ void vnl_amoebaFit::amoeba(vnl_vector<double>& x)
   int n = x.size();
   vcl_vector<vnl_amoeba_SimplexCorner> simplex(n+1, vnl_amoeba_SimplexCorner(n));
 
-	set_up_simplex(simplex,x);
+	set_up_simplex_relative(simplex,x);
+  amoeba(x,simplex);
+}
+
+void vnl_amoebaFit::amoeba(vnl_vector<double>& x, const vnl_vector<double>& dx)
+{
+// Set up a simplex near the initial guess.
+  int n = x.size();
+  vcl_vector<vnl_amoeba_SimplexCorner> simplex(n+1, vnl_amoeba_SimplexCorner(n));
+
+	set_up_simplex_absolute(simplex,x,dx);
+  amoeba(x,simplex);
+}
+
+    //: Perform optimisation, given simplex to start
+void vnl_amoebaFit::amoeba(vnl_vector<double>& x,
+                           vcl_vector<vnl_amoeba_SimplexCorner>& simplex)
+{
+  int n = x.size();
   sort_simplex(simplex);
 
   if (verbose > 1) {
@@ -307,13 +381,23 @@ void vnl_amoebaFit::amoeba(vnl_vector<double>& x)
   x = simplex[0].v;
 }
 
-//: Method
+//: Modify x to minimise function supplied in constructor
+//  Start simplex defined by scaling elements of x
 void vnl_amoeba::minimize(vnl_vector<double>& x)
 {
   vnl_amoebaFit af(*this);
   af.amoeba(x);
   num_evaluations_ = af.num_evaluations_;
 }
+
+//: Perform optimisation.  Start simplex defined by adding dx[i] to each x[i]
+void vnl_amoeba::minimize(vnl_vector<double>& x, const vnl_vector<double>& dx)
+{
+  vnl_amoebaFit af(*this);
+  af.amoeba(x,dx);
+  num_evaluations_ = af.num_evaluations_;
+}
+
 
 //: Static method
 void vnl_amoeba::minimize(vnl_cost_function& f, vnl_vector<double>& x)
@@ -330,6 +414,16 @@ void vnl_amoeba::minimize(vnl_cost_function& f, vnl_vector<double>& x, double de
     a.relative_diameter = delta;
   vnl_amoebaFit amoeba(a);
   amoeba.amoeba(x);
+}
+
+//: Static method
+void vnl_amoeba::minimize(vnl_cost_function& f, vnl_vector<double>& x,
+                          const vnl_vector<double>& dx)
+{
+  vnl_amoeba a(f);
+  a.verbose = vnl_amoeba::default_verbose;
+  vnl_amoebaFit amoeba(a);
+  amoeba.amoeba(x,dx);
 }
 
 
