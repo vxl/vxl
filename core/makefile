@@ -1,5 +1,6 @@
-# standard C/C++ is now in $IUEROOT/vcl
-#SUBDIRS += vcl
+#######################################
+include ${IUEROOT}/config/top-params.mk
+#######################################
 
 # POSIX layer
 SUBDIRS += vpl
@@ -39,31 +40,6 @@ SUBDIRS += vsl
 
 # coordinate systems
 SUBDIRS += vcsl
-
-# digital geometry --- moved to gel (geoff)
-#SUBDIRS += vdgl
-
-#######################################
-include ${IUEROOT}/config/top-params.mk
-#######################################
-
-ifeq (1,$(strip $(HAS_OPENGL)))
-# OpenGL ui library
-SUBDIRS += vgui
-
-# New xcv. This must be compiled *after* mvl because
-# it depends on mvl. The alternative is that when
-# building from scratch (e.g. releases) the build
-# of xcv fails due to missing libraries.
-#
-# Ultimately, xcv should be moved to oxl.
-#
-# -- fsm@robots.ox.ac.uk
-#
-#ifeq (,$(strip $(wildcard $(IUELOCALROOT)/oxl/mvl)))
-#SUBDIRS += xcv
-#endif
-endif
 
 # examples
 SUBDIRS += examples
