@@ -75,8 +75,8 @@ void vvid_live_video_manager::init()
   cmu_1394_camera cam;
   num_cameras_ = cam.GetNumberCameras();
   vcl_cout << "Number of Cameras Detected: " << num_cameras_ << vcl_endl;
-  if(num_cameras_ <= 0){
-    vcl_cerr << "Exiting - no cameras detected" << vcl_endl;
+  if (num_cameras_ <= 0) {
+    vcl_cerr << "Exiting - no cameras detected\n";
     vcl_exit(0);
   }
 
@@ -195,8 +195,8 @@ void vvid_live_video_manager::set_detection_params()
 {
   if (vtabs_.size() != num_cameras_)
   {
-    vcl_cout << "in vvid_live_video_manager::set_camera_params()"
-             << " - no live video tableau\n";
+    vcl_cout << "in vvid_live_video_manager::set_camera_params() -"
+             << " no live video tableau\n";
     return;
   }
   //cache the live video state to restore
@@ -262,7 +262,7 @@ void vvid_live_video_manager::init_capture()
   save_video_dlg.field("Directory Prefix", dir_prefix);
   save_video_dlg.field("Current Directory Index", dir_index);
   vcl_stringstream complete_path;
-  complete_path << "Complete Path: " << video_directory << "/" << dir_prefix << dir_index;
+  complete_path << "Complete Path: " << video_directory << '/' << dir_prefix << dir_index;
   save_video_dlg.message(complete_path.str().c_str());
 
   if (!save_video_dlg.ask())
@@ -298,7 +298,7 @@ void vvid_live_video_manager::stop_capture()
 
 void vvid_live_video_manager::toggle_histogram()
 {
-  if(histogram_){
+  if (histogram_) {
     histogram_ = false;
     for (unsigned i=0; i<num_cameras_; ++i)
       htabs_[i]->clear();
@@ -348,7 +348,7 @@ void vvid_live_video_manager::run_frames()
     {
       vtabs_[i]->update_frame();
 
-      if(histogram_)
+      if (histogram_)
         htabs_[i]->update(vtabs_[i]->get_rgb_frame());
 
       if (!cp_.rgb_&&video_process_)//i.e. grey scale
@@ -371,10 +371,9 @@ void vvid_live_video_manager::run_frames()
     }
     vgui::run_till_idle();
     // delay until the minimum time has passed for this frame
-    while(t.real()<min_msec_per_frame_);
-    float ft = float(t.real())/1000.0, rate=0;
-    if (ft)
-      rate = 1.0/ft;
+    while (t.real()<min_msec_per_frame_) ;
+    float ft = float(t.real())/1000.f, rate=1e33f;
+    if (ft!=0.f) rate = 1.0f/ft;
     vgui::out << "Tf = " << ft << " sec/frame  = " << rate << " frs/sec\n";
   }
 }
@@ -387,8 +386,8 @@ void vvid_live_video_manager::start_live_video()
   for (unsigned i=0; i<num_cameras_; ++i)
     if (!vtabs_[i]->start_live_video())
     {
-      vcl_cout << "In vvid_live_video_manager::start_live_video()"
-               << "- start failed - camera #" << i << vcl_endl;
+      vcl_cout << "In vvid_live_video_manager::start_live_video() -"
+               << " start failed - camera #" << i << vcl_endl;
       return;
     }
   this->run_frames();
