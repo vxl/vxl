@@ -1,10 +1,10 @@
-#ifndef _gevd_region_edge_h_
-#define _gevd_region_edge_h_
+#ifndef gevd_region_edge_h_
+#define gevd_region_edge_h_
 //:
 // \file
 // \brief An edge with extract information to support constructing regions from an edgel segmentation.
 //
-//  This class supports tracing of region boundaries in conjuction with
+//  This class supports tracing of region boundaries in conjunction with
 //  the class EdgelIntensity. The gevd_region_edge maintains a list of region
 //  labels which the edge is adjacent to. Ideally, the edge is adjacent to
 //  only two regions, left and right, as shown below.
@@ -31,12 +31,12 @@
 //
 // \author J. L. Mundy - January 24, 1999
 // \verbatim
-// Modifications
-//       Feb 10, 1999  - JLM Extended the concept of a
-//       gevd_region_edge to represet a vertex, where the edge is NULL.
-//       This extension permits the propagation of region labels
-//       across junctions.
-//       March 7, 1999 - JLM Allowed more than two regions per edge.
+//  Modifications
+//   Feb 10, 1999  - JLM Extended the concept of a gevd_region_edge
+//                       to represent a vertex, where the edge is NULL.
+//                       This extension permits the propagation of region labels
+//                       across junctions.
+//   March 7, 1999 - JLM Allowed more than two regions per edge.
 // \endverbatim
 //-----------------------------------------------------------------------------
 
@@ -76,4 +76,4 @@ class gevd_region_edge : public vbl_ref_count
   vcl_vector<unsigned int> labels_;
 };
 
-#endif // _gevd_region_edge_h_
+#endif // gevd_region_edge_h_
