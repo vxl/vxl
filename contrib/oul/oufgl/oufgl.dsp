@@ -12,6 +12,9 @@ SOURCE=.\asyncio.cxx
 # Begin Source File
 SOURCE=.\frame_grabber_pxc200.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\frame_grabber_v4l.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"
@@ -29,6 +32,9 @@ SOURCE=.\frame_grabber.h
 # End Source File
 # Begin Source File
 SOURCE=.\frame_grabber_pxc200.h
+# End Source File
+# Begin Source File
+SOURCE=.\frame_grabber_v4l.h
 # End Source File
 # Begin Source File
 SOURCE=.\pxc200.h
