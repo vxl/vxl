@@ -36,14 +36,14 @@ void vnl_test_assert_near(const vcl_string& msg, double expr, double target = 0,
 #define TEST(s,p,v) \
  {  \
   vnl_test_begin(s);  \
-  vnl_test_perform(p==v); \
+  vnl_test_perform((p)==(v)); \
  }
 
 #define TEST_RUN(s,x,p,v) \
  {  \
   x;  \
   vnl_test_begin(s);  \
-  vnl_test_perform(p==v); \
+  vnl_test_perform((p)==(v)); \
  }
 
 #define SUMMARY() vnl_test_summary();
