@@ -180,6 +180,23 @@ inline void vil2_convert_planes_to_grey(const vil2_image_view<inP>&src,
         src(i,j,0)*rw + src(i,j,1)*gw + src(i,j,2)*bw);
 }
 
+//: Convert src to byte image dest by stretching to range [0,255]
+// \relates vil2_image_view
+template <class T>
+inline void vil2_convert_stretch_range(const vil2_image_view<T>& src,
+                                       vil2_image_view<vxl_byte>& dest)
+{
+  T min_b,max_b;
+  vil2_math_value_range(src,min_b,max_b);
+  double a = -1.0*double(min_b);
+  double b = 0.0;
+  if (max_b-min_b >0) b = 255.0/(max_b-min_b);
+  dest.set_size(src.ni(), src.nj(), src.nplanes());
+  for (unsigned p = 0; p < src.nplanes(); ++p)
+    for (unsigned j = 0; j < src.nj(); ++j)
+      for (unsigned i = 0; i < src.ni(); ++i)
+        dest(i,j,p) = vil2_convert_cast_pixel<double,vxl_byte>()(a+b*src(i,j,p));
+}
 
 //: Create a greyscale image of specified pixel type from any image src.
 // The output may be a reconfigured view of the input.

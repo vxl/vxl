@@ -30,11 +30,30 @@ void test_convert1(const char * golden_data_dir)
   vil2_print_all(vcl_cout, image2);
 }
 
+void test_convert_stretch_range()
+{
+  vcl_cout<<"testing vil2_convert_stretch_range(src,dest):"<<vcl_endl;
+  vil2_image_view<float> f_image(10,10);
+  for (int j=0;j<f_image.nj();++j)
+    for (int i=0;i<f_image.ni();++i)  f_image(i,j)=0.1f*i+0.01f*j;
+  
+  vil2_image_view<vxl_byte> b_image;
+  vil2_convert_stretch_range(f_image,b_image);
+  TEST("Width",b_image.ni(),f_image.ni());
+  TEST("Height",b_image.nj(),f_image.nj());
+  vxl_byte min_b,max_b;
+  vil2_math_value_range(b_image,min_b,max_b);
+  TEST("Min. value",min_b,0);
+  TEST("Max. value",max_b,255);
+  TEST("b_image(5,5)",b_image(5,5),vxl_byte(0.55*255/0.99+0.5));
+}
+
 MAIN( test_convert )
 {
   START( "vil2_convert" );
 
   test_convert1(argc>1 ? argv[1] : "file_read_data");
+  test_convert_stretch_range();
 
   SUMMARY();
 }
