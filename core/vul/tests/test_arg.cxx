@@ -6,11 +6,6 @@
 //
 //-----------------------------------------------------------------------------
 
-//  #ifdef __GNUC__
-//  // this is a bit of a hack...
-//  #pragma implementation "vul_arg.h"
-//  #endif
-
 #include <vul/vul_arg.h>
 #include <vcl_cstring.h> // needed for strcmp()
 #include <vcl_list.h>
@@ -26,7 +21,7 @@ char const * my_argv_1[] = {
   "-bool1",
   "-bool2",
   "-list",
-  "1:2,10,21:2:25,-1:-2:-7",
+  "1:2,10,21:3:25,-1:-2:-7",
   "h",
   "i",
   "j",
@@ -34,7 +29,7 @@ char const * my_argv_1[] = {
 };
 
 int list_contents[] = {
-  1,2,10,21,23,25,-1,-3,-5,-7,
+  1,2,10,21,24,-1,-3,-5,-7
 };
 
 int count_my_args(char const * const * my_argv)
@@ -57,15 +52,18 @@ void test_do_vul_arg()
 
   int my_argc = count_my_args(my_argv_1);
   vcl_cout << "vul_argc = " << my_argc
-       << ", bool1 = " << bool1()
-       << ", bool2 = " << bool2()
-       << ", bool3 = " << bool3() << vcl_endl;
+           << ", int1 = " << int1()
+           << ", int2 = " << int2()
+           << ", bool1 = " << bool1()
+           << ", bool2 = " << bool2()
+           << ", bool3 = " << bool3()
+           << ", list1 = " << list1().front()
+           << vcl_endl;
   char **my_argv = (char**) my_argv_1;
 
   vul_arg_parse(my_argc, my_argv);
 
-  bool b = int1() == 3;
-  TEST("int1", b, true);
+  TEST("int1", int1(), 3);
   TEST("int2", int2(), 2);
   TEST("filename == f", vcl_strcmp(filename1(), "f"), 0);
 
