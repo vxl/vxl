@@ -9,6 +9,7 @@
 // \author Tim Cootes
 // \brief Base class for sets of points in arbitrary dimension
 
+#include <vgl/vgl_vector_2d.h>
 #include <vgl/vgl_point_2d.h>
 #include <vnl/vnl_fwd.h>
 #include <vsl/vsl_binary_io.h>
