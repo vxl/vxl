@@ -156,7 +156,7 @@ public:
 
   bool operator< (mbl_arb_length_int const& rhs) const;
   bool operator< (  signed long rhs) const;
-  bool operator> (  signed long rhs) const ;
+  bool operator> (  signed long rhs) const;
   bool operator< (unsigned long rhs) const;
   bool operator> (unsigned long rhs) const;
 
@@ -169,6 +169,10 @@ public:
   bool operator<= (unsigned long r) const { return !operator>(r); }
   bool operator>= (unsigned long r) const { return !operator<(r); }
 
+  bool operator<= (signed int r) const { return !operator>((signed long)r); }
+  bool operator>= (signed int r) const { return !operator<((signed long)r); }
+  bool operator<= (unsigned int r) const { return !operator>((unsigned long)r); }
+  bool operator>= (unsigned int r) const { return !operator<((unsigned long)r); }
 
 
   bool fits_in_long() const { return (val_.size()==4 && val_.back()&0x80==0) || val_.size() < 3;}
@@ -214,7 +218,7 @@ private:
     if (val_.empty()) sign_ = true;
   }
   friend void vsl_b_read(vsl_b_istream &, mbl_arb_length_int &);
-  friend void vsl_b_write(vsl_b_ostream &bfs, mbl_arb_length_int &x);
+  friend void vsl_b_write(vsl_b_ostream &bfs, const mbl_arb_length_int &x);
   friend bool abs_less(const mbl_arb_length_int &lhs, const mbl_arb_length_int &rhs);
 
 };
@@ -248,6 +252,13 @@ inline bool operator>= (unsigned int  r1, mbl_arb_length_int const& r2) { return
 inline bool operator>= (unsigned long r1, mbl_arb_length_int const& r2) { return r2<=r1; }
 
 
+inline mbl_arb_length_int operator+ (mbl_arb_length_int r1, mbl_arb_length_int const& r2) {
+  mbl_arb_length_int res(r1); res += r2; return res; }
+inline mbl_arb_length_int operator- (mbl_arb_length_int r1, mbl_arb_length_int const& r2) {
+  mbl_arb_length_int res(r1); res -= r2; return res; }
+
+
+
 #if defined(VCL_SUNPRO_CC)
 inline mbl_arb_length_int vcl_abs (mbl_arb_length_int const& x) { return x.abs(); }
 #else
@@ -261,6 +272,6 @@ inline bool vnl_math_isnan(mbl_arb_length_int const& x){return false;}
 inline bool vnl_math_isfinite(mbl_arb_length_int const& x){return true;}
 
 void vsl_b_read(vsl_b_istream &, mbl_arb_length_int &);
-void vsl_b_write(vsl_b_istream &, mbl_arb_length_int &);
+void vsl_b_write(vsl_b_istream &, const mbl_arb_length_int &);
 
 #endif // mbl_arb_length_int_h_

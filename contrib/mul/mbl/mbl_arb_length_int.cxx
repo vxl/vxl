@@ -388,7 +388,7 @@ void vsl_b_read(vsl_b_istream &bfs, mbl_arb_length_int &x)
   }
 }
 
-void vsl_b_write(vsl_b_ostream &bfs, mbl_arb_length_int &x)
+void vsl_b_write(vsl_b_ostream &bfs, const mbl_arb_length_int &x)
 {
   vsl_b_write(bfs, version_no);
   vsl_b_write(bfs, x.val_);
