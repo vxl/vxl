@@ -48,7 +48,7 @@ public:
   //: Create a copy on the heap and return base class pointer
   virtual pdf1d_sampler* clone() const;
 
-  //: Transform a unit uniform distribution x into a epanech distribution y
+  //: Transform a unit uniform distribution x into an Epanech distribution y
   // $0 <= x <= 1  =>  -sqrt(5) <= y <= sqrt(5)$
   // Matlab found 6 solutions to
   // ${\frac {3}{20}}\,\left |{\it Dy}\right |\sqrt {5}\left (1-1/5\,{y}^{2}\right )=1$

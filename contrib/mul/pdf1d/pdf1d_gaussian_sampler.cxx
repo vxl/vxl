@@ -5,7 +5,7 @@
 //:
 // \file
 // \author Tim Cootes
-// \brief Sampler class for univariat Gaussian classes.
+// \brief Sampler class for univariate Gaussian classes.
 
 #include "pdf1d_gaussian_sampler.h"
 

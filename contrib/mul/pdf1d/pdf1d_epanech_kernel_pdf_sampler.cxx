@@ -36,7 +36,7 @@ const pdf1d_epanech_kernel_pdf& pdf1d_epanech_kernel_pdf_sampler::epanech_kernel
 static const double root5 = 2.23606797749978969641;
 static const double root3 = 1.73205080756887729353;
 
-//: Transform a unit uniform distribution x into a epanech distribution y
+//: Transform a unit uniform distribution x into an Epanech distribution y
 // $0 <= x <= 1  =>  -sqrt(5) <= y <= sqrt(5)$
 // Matlab found 6 solutions to
 // ${\frac {3}{20}}\,\left |{\it Dy}\right |\sqrt {5}\left (1-1/5\,{y}^{2}\right )=1$
@@ -48,7 +48,7 @@ static const double root3 = 1.73205080756887729353;
 // {x}^{2}}}}}\right )$
 double pdf1d_epanech_kernel_pdf_sampler::epan_transform(double x)
 {
-  // The Matlab code for the differential eqtn is
+  // The Matlab code for the differential equation is
   // d = dsolve('1=vcl_abs(Dy) * (3 * vcl_sqrt(5) / 20) *(1-0.2*y*y)')
   x -= 0.5;
   const vcl_complex<double> z(10.0 * root5 * x, 5 * vcl_sqrt(5-20*x*x));

@@ -56,17 +56,17 @@ class vil3d_image_view : public vil3d_image_view_base
  public:
 
   //: Dflt ctor
-  //  Creates an empty one plane image.
+  //  Creates an empty one-plane image.
   vil3d_image_view();
 
-  //: Create a n_plane plane image of ni x nj x nk pixels
+  //: Create an n_plane plane image of ni x nj x nk pixels
   vil3d_image_view(unsigned ni, unsigned nj, unsigned nk, unsigned n_planes=1);
 
   //: Set this view to look at someone else's memory data.
   //  If the data goes out of scope then this view could be invalid, and
   //  there's no way of knowing until its too late - so take care!
   vil3d_image_view(const T* top_left,
-	                 unsigned ni, unsigned nj, unsigned nk, unsigned nplanes,
+                   unsigned ni, unsigned nj, unsigned nk, unsigned nplanes,
                    int i_step, int j_step, int k_step, int plane_step);
 
   //: Set this view to look at another view's data
@@ -75,7 +75,7 @@ class vil3d_image_view : public vil3d_image_view_base
   //  Need to pass the memory chunk to set up the internal smart ptr appropriately
   vil3d_image_view(const vil2_memory_chunk_sptr& mem_chunk,
                    const T* top_left,
-									 unsigned ni, unsigned nj, unsigned nk, unsigned nplanes,
+                   unsigned ni, unsigned nj, unsigned nk, unsigned nplanes,
                    int i_step, int j_step, int k_step, int plane_step);
 
   //: Construct from various vil3d_image_view types.
@@ -151,14 +151,14 @@ class vil3d_image_view : public vil3d_image_view_base
 
   //: Smart pointer to the object holding the data for this view
   // Will be a null pointer if this view looks at `third-party' data,
-  // eg using set_to_memory.
+  // e.g. using set_to_memory.
   //
   // Typically used when creating new views of the data
   inline const vil2_memory_chunk_sptr& memory_chunk() const { return ptr_; }
 
   //: Smart pointer to the object holding the data for this view
   // Will be a null pointer if this view looks at `third-party' data,
-  // eg using set_to_memory
+  // e.g. using set_to_memory
   //
   // Typically used when creating new views of the data
   inline vil2_memory_chunk_sptr& memory_chunk() { return ptr_; }
@@ -210,7 +210,7 @@ class vil3d_image_view : public vil3d_image_view_base
   //  Note that though top_left is passed in as const, the data may be manipulated
   //  through the view.
   void set_to_memory(const T* top_left,
-	                   unsigned ni, unsigned nj, unsigned nk, unsigned nplanes,
+                     unsigned ni, unsigned nj, unsigned nk, unsigned nplanes,
                      int i_step, int j_step, int k_step, int plane_step);
 
   //: Fill view with given value

@@ -125,7 +125,7 @@ void mbl_rbf_network::setSumToOne(bool flag)
 
 //: Compute weights for given new_x.
 //  If new_x = x()(i) then w(i+1)==1, w(j!=i+1)==0
-//  Otherwise w varyies smoothly repending on distance
+//  Otherwise w varies smoothly repending on distance
 //  of new_x from x()'s
 //  If sumToOne() then elements of w will sum to 1.0
 //  otherwise they will sum to <=1.0, decreasing as new_x

@@ -57,7 +57,7 @@ class mil_image_pyramid
   // underlying data
   const mil_image_pyramid& operator=(const mil_image_pyramid& that);
 
-  //: Mean width (in world coords) of pixels at level zero
+  //: Mean width (in world coordinates) of pixels at level zero
   double basePixelWidth() const;
 
   //: Scaling per level

@@ -1,7 +1,8 @@
 // This is mul/vil2/vil2_bilin_interp.h
 #ifndef vil2_bilin_interp_h_
 #define vil2_bilin_interp_h_
-//: \file
+//:
+//  \file
 //  \brief Bilinear interpolation functions for 2D images
 //  \author Tim Cootes
 
@@ -20,7 +21,7 @@ inline double vil2_bilin_interp_raw(double x, double y, const T* data, int xstep
 
     const T* pix1 = data + p1y*ystep + p1x*xstep;
 
-    // special boundary cases can be handeled more quickly first;
+    // special boundary cases can be handled more quickly first;
     // also avoids accessing an invalid pix1[t] which is going to have weight 0.
     if (normx == 0 && normy == 0) return pix1[0];
     if (normx == 0) return pix1[0]+(pix1[ystep]-pix1[0])*normy;

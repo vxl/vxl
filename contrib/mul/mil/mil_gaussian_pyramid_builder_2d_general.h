@@ -1,8 +1,8 @@
 #ifndef mil_gaussian_pyramid_builder_2d_general_h_
 #define mil_gaussian_pyramid_builder_2d_general_h_
-
-//: \file
-//  \brief Build gaussian image pyramids at any scale separation
+//:
+//  \file
+//  \brief Build Gaussian image pyramids at any scale separation
 //  \author Ian Scott
 
 
@@ -27,13 +27,13 @@ private:
     mutable mil_image_2d_of<T> workb_;
 
     //: Filter tap value
-    // The value of the two outside elements of the 5 tap 1D FIR filter
+    // The value of the two outside elements of the 5-tap 1D FIR filter
     double filt2_;
     //: Filter tap value
-    // The value of elements 2 and 4 of the 5 tap 1D FIR filter
+    // The value of elements 2 and 4 of the 5-tap 1D FIR filter
     double filt1_;
     //: Filter tap value
-    // The value of the central element of the 5 tap 1D FIR filter
+    // The value of the central element of the 5-tap 1D FIR filter
     double filt0_;
 
     //: Filter tap value
@@ -73,7 +73,7 @@ public:
     //: Dflt ctor
     mil_gaussian_pyramid_builder_2d_general();
 
-    //: Consturct with given scale_step
+    //: Construct with given scale_step
     mil_gaussian_pyramid_builder_2d_general(double scale_step);
 
     //: Destructor
@@ -87,7 +87,7 @@ public:
 
     //: Smooth and subsample src_im to produce dest_im
     //  Applies an appropriate filter in x and y, then sub-samples
-    //  at the choosen scaleStep;
+    //  at the chosen scaleStep;
     void gauss_reduce(mil_image_2d_of<T>& dest_im,
                       const mil_image_2d_of<T>& src_im) const;
 
@@ -97,7 +97,7 @@ public:
 
     //: Smooth and subsample src_im to produce dest_im
     //  Applies 5 element FIR filter in x and y, then samples
-    //  Assumes dest_im has suffient data allocated
+    //  Assumes dest_im has sufficient data allocated
     void gauss_reduce(T* dest_im, int dest_ystep,
                       const T* src_im,
                       int src_nx, int src_ny,

@@ -4,7 +4,7 @@
 #endif
 //:
 // \file
-// \author IAn Scott
+// \author Ian Scott
 // \date 12-Apr-2001
 // \brief Sampler class for Multi-Variate Gaussian classes.
 
@@ -78,7 +78,7 @@ void vpdfl_gaussian_sampler::sample(vnl_vector<double>& x)
 
   int n = gauss.n_dims();
 
-  // Generate random sample in co-ord frame of PCA
+  // Generate random sample in coordinate frame of PCA
   b_.resize(n);
 
   double* b_data = b_.data_block();

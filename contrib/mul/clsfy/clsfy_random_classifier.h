@@ -1,7 +1,7 @@
 // This is mul/clsfy/clsfy_random_classifier.h
 #ifndef clsfy_random_classifier_h_
 #define clsfy_random_classifier_h_
-// Copyright: (C) 2001 Britsh Telecommunications plc
+// Copyright: (C) 2001 British Telecommunications plc
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
@@ -41,7 +41,7 @@ class clsfy_random_classifier : public clsfy_classifier_base
   // output(i) i<nClasses, contains the probability that the input is in class i
   void virtual class_probabilities(vcl_vector<double> &outputs, const vnl_vector<double> &input) const;
 
-  //: Log likelyhood of being in class (binary classifiers only)
+  //: Log likelihood of being in class (binary classifiers only)
   // class probability = 1 / (1+exp(-log_l))
   // Operation of this method is undefined for multiclass classifiers
   virtual double log_l(const vnl_vector<double> &input) const;

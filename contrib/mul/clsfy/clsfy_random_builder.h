@@ -2,7 +2,7 @@
 #ifndef clsfy_random_builder_h_
 #define clsfy_random_builder_h_
 
-// Copyright: (C) 2001 Britsh Telecommunications plc
+// Copyright: (C) 2001 British Telecommunications plc
 
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
@@ -24,7 +24,7 @@
 
 //: Builds clsfy_random_classifier classifiers.
 // This class doesn't do any calculation, it is easy to create a
-// random classfier directly - but it allows for consistent swappable
+// random classifier directly - but it allows for consistent swappable
 // classifiers.
 class clsfy_random_builder : public clsfy_builder_base
 {

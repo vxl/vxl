@@ -23,8 +23,8 @@ mbl_file_data_collector<T>::mbl_file_data_collector(vcl_string& path)
   short vn= 1;
   if (!bfs_)
   {
-    vcl_cerr<<"ERROR: mbl_file_data_collector::constructor"<<vcl_endl;
-    vcl_cerr<<"file stream failed"<<vcl_endl;
+    vcl_cerr<<"ERROR: mbl_file_data_collector::constructor\n"
+            <<"file stream failed\n";
     vcl_abort();
   }
 
@@ -33,7 +33,7 @@ mbl_file_data_collector<T>::mbl_file_data_collector(vcl_string& path)
 
 #if 0 // commented out
 
-//CAN'T make copy constructor because have to intialize binary file stream
+//Can't make copy constructor because have to initialize binary file stream
 //some how. DON'T know how to do that!
 
 //: Copy constructor
@@ -90,8 +90,8 @@ template<class T>
 void mbl_file_data_collector<T>::clear()
 {
   // can't clear (need to wipe data file to do a proper clear ???)
-  vcl_cout<<"mbl_file_data_collector<T>::clear - no action taken "<<vcl_endl;
-  vcl_cout<<"can't delete data file "<<vcl_endl;
+  vcl_cout<<"mbl_file_data_collector<T>::clear - no action taken\n"
+          <<"can't delete data file\n";
 }
 
 //: Hint about how many examples to expect
@@ -107,8 +107,8 @@ void mbl_file_data_collector<T>::record(const T& d)
 {
   if (!bfs_)
   {
-    vcl_cerr<<"ERROR: mbl_file_data_collector::record() "<<vcl_endl;
-    vcl_cerr<<"file stream failed"<<vcl_endl;
+    vcl_cerr<<"ERROR: mbl_file_data_collector::record()\n"
+            <<"file stream failed\n";
     vcl_abort();
   }
   else
@@ -125,7 +125,7 @@ mbl_data_wrapper<T >& mbl_file_data_collector<T>::data_wrapper()
   // have to say (like Jim Morrison) "this is the end"
   vsl_b_write(bfs_, true);
 
-  // flush the file (to make sure it exists on disk - ie overide buffering)
+  // flush the file (to make sure it exists on disk - i.e. override buffering)
   bfs_.os().flush();
 
   if (!wrapper_)
@@ -161,8 +161,8 @@ short mbl_file_data_collector<T>::version_no() const
 template <class T>
 mbl_data_collector_base* mbl_file_data_collector<T>::clone() const
 {
-  vcl_cout<<"ERROR: mbl_file_data_collector<T>::clone() "<<vcl_endl;
-  vcl_cout<<"Can't clone this class "<<vcl_endl;
+  vcl_cout<<"ERROR: mbl_file_data_collector<T>::clone()\n"
+          <<"Can't clone this class\n";
   vcl_abort();
 
   // can't find a way of writing copy constructor! so don't allow clone
@@ -179,13 +179,13 @@ void mbl_file_data_collector<T>::print_summary(vcl_ostream& os) const
 template <class T>
 void mbl_file_data_collector<T>::b_write(vsl_b_ostream& bfs) const
 {
-  vcl_cout<<"mbl_file_data_collector<T>::b_write - Can't save collector! "<<vcl_endl;
+  vcl_cout<<"mbl_file_data_collector<T>::b_write - Can't save collector!\n";
 }
 
 template <class T>
 void mbl_file_data_collector<T>::b_read(vsl_b_istream& bfs)
 {
-  vcl_cout<<"mbl_file_data_collector<T>::b_read - Can't load collector! "<<vcl_endl;
+  vcl_cout<<"mbl_file_data_collector<T>::b_read - Can't load collector!\n";
 }
 
 

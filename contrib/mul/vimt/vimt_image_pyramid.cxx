@@ -96,7 +96,7 @@ const vimt_image& vimt_image_pyramid::operator()(int L) const
     return *image_[L];
 }
 
-//: Mean width (in world coords) of pixels at level zero
+//: Mean width (in world coordinates) of pixels at level zero
 double vimt_image_pyramid::base_pixel_width() const
 {
     return base_pixel_width_;

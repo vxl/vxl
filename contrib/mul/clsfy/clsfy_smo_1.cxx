@@ -45,7 +45,7 @@ double clsfy_smo_1_rbf::kernel(int i1, int i2)
 // ----------------------------------------------------------------
 
 //: Takes a copy of the data wrapper, but not the data.
-// Be careful not to destry the underlying data while using this object.
+// Be careful not to destroy the underlying data while using this object.
 void clsfy_smo_1_lin::set_data(const mbl_data_wrapper<vnl_vecd> &data, const vcl_vector<int> & targets)
 {
   const unsigned N = data.size();
@@ -76,7 +76,7 @@ void clsfy_smo_1_lin::set_C(double C)
 
 // ----------------------------------------------------------------
 
-//: 0.5 sigma^-2, where sigma is the width of the gaussian kernel
+//: 0.5 sigma^-2, where sigma is the width of the Gaussian kernel
 double clsfy_smo_1_rbf::gamma() const
 {
   return -gamma_;
@@ -84,7 +84,7 @@ double clsfy_smo_1_rbf::gamma() const
 
 // ----------------------------------------------------------------
 
-//: Control sigma, the width of the gaussian kernel.
+//: Control sigma, the width of the Gaussian kernel.
 // gamma = 0.5 sigma^-2
 void clsfy_smo_1_rbf::set_gamma(double gamma)
 {

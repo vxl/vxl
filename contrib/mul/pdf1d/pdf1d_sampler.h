@@ -17,7 +17,7 @@ class pdf1d_pdf;
 
 //: Base class for Univariate Random Sampler classes.
 // This is really a random number generator whose
-// outputs have the PDF of the relevent pdf1d_pdf.
+// outputs have the PDF of the relevant pdf1d_pdf.
 // Sampler objects should only exist as long as their pdf object,
 // and are not meant to be persistent.
 
@@ -49,7 +49,7 @@ class pdf1d_sampler
   //  Generate a set of pseudo-random samples, chosen so as to be suitable
   //  to represent the distribution.  This is meant to be used for estimating
   //  continuous integrals with sampled approximations.  Where there are
-  //  multiple peaks (eg kernel or mixture models), it is preferred that
+  //  multiple peaks (e.g. kernel or mixture models), it is preferred that
   //  the number of samples from each component is roughly proportional
   //  to the weight for the component.  When small numbers are requested,
   //  this can be done explicitly.

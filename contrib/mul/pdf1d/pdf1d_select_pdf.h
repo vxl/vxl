@@ -9,33 +9,33 @@
 #include <pdf1d/pdf1d_compare_to_pdf_bhat.h>
 
 
-//: Use the comparitor to decide which pdf the data is most like
+//: Use the comparator to decide which pdf the data is most like
 //  Returns index of the chosen pdf.
 int pdf1d_select_pdf(const double* data, int n,
                      vcl_vector<const pdf1d_pdf*>& pdf,
-                     pdf1d_compare_to_pdf& comparitor);
+                     pdf1d_compare_to_pdf& comparator);
 
-//: Use the comparitor to decide which pdf the data is most like
+//: Use the comparator to decide which pdf the data is most like
 //  Typically matches data with pdf_builder[i] and computes difference
 //  between result and pdf[i]
 //  Returns index of the chosen pdf.
 int pdf1d_select_pdf(const double* data, int n,
                      vcl_vector<const pdf1d_pdf*>& pdf,
                      vcl_vector<pdf1d_builder*>& pdf_builder,
-                     pdf1d_compare_to_pdf_bhat& comparitor);
+                     pdf1d_compare_to_pdf_bhat& comparator);
 
-//: Use the comparitor to decide which pdf the data is most like
+//: Use the comparator to decide which pdf the data is most like
 //  Returns index of the chosen pdf.
 //  Uses bootstrap estimation of overlap
 int pdf1d_select_pdf_using_bootstrap(const double* data, int n,
                      vcl_vector<const pdf1d_pdf*>& pdf,
-                     pdf1d_compare_to_pdf& comparitor);
+                     pdf1d_compare_to_pdf& comparator);
 
-//: Use the comparitor to decide which pdf form the data is most like
+//: Use the comparator to decide which pdf form the data is most like
 //  Returns index of the chosen pdf.
 int pdf1d_select_pdf_form(const double* data, int n,
                      vcl_vector<pdf1d_builder*>& pdf_builder,
-                     pdf1d_compare_to_pdf& comparitor);
+                     pdf1d_compare_to_pdf& comparator);
 
 
 #endif // pdf1d_select_pdf_h

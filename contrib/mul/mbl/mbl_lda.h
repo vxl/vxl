@@ -39,7 +39,7 @@ class mbl_lda
   // \param n      Size of label and of v
   // \param v  Set of vectors [0..n-1]
   // \param wS  Within class covariance to use if compute_wS false
-  // \param compute_wS  This boolean parameter determines wether to use wS
+  // \param compute_wS  This boolean parameter determines whether to use wS
   void build(const vnl_vector<double>* v, const int* label, int n,
              const vnl_matrix<double>& wS, bool compute_wS);
 
@@ -154,7 +154,7 @@ class mbl_lda
   //: Project x into discriminant space
   void x_to_d(vnl_vector<double>& d, const vnl_vector<double>& x) const;
 
-  //: Project d fron discriminant space into original space
+  //: Project d from discriminant space into original space
   void d_to_x(vnl_vector<double>& x, const vnl_vector<double>& d) const;
 
   //: find out how many id in the label vector

@@ -23,7 +23,7 @@
 enum vil2_convolve_boundary_option
 {
   // Do not fill destination edges at all
-  // ie leave them unchanged.
+  // i.e. leave them unchanged.
   vil2_convolve_ignore_edge, /**< Do not fill destination edges at all. */
   // Do not to extend the signal, but pad with zeros.
   //     |                               |
@@ -62,10 +62,10 @@ enum vil2_convolve_boundary_option
 
   // This one is slightly different. The input signal is not
   // extended in any way, but the kernel is trimmed to allow
-  // convolution to proceed up to the boundary and reweighted
+  // convolution to proceed up to the boundary and reweighed
   // to keep the total area the same.
   // *** may not work with kernels which take negative values.
-  vil2_convolve_trim /**< Kernel is trimmed and reweighted, to allow convolution up to boundary. */
+  vil2_convolve_trim /**< Kernel is trimmed and reweighed, to allow convolution up to boundary. */
 };
 
 //: Convolve edge with kernel[x*kstep] x in [k_lo,k_hi] (k_lo<=0)
@@ -140,7 +140,7 @@ inline void vil2_convolve_edge_1d(const srcT* src, unsigned n, int s_step,
   }
   else if (option==vil2_convolve_trim)
   {
-    // Truncate and reweight kernel
+    // Truncate and reweigh kernel
     accumT k_sum_all=0;
     for (int j=k_lo;j<=k_hi;++j) k_sum_all+=(accumT)(kernel[j*kstep]);
 

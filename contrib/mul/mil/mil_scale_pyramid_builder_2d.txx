@@ -1,8 +1,9 @@
 // This is mul/mil/mil_scale_pyramid_builder_2d.txx
 #ifndef mil_scale_pyramid_builder_2d_txx_
 #define mil_scale_pyramid_builder_2d_txx_
-//: \file
-//  \brief Build gaussian image pyramids at any scale separation
+//:
+//  \file
+//  \brief Build Gaussian image pyramids at any scale separation
 //  \author Ian Scott
 
 #include "mil_scale_pyramid_builder_2d.h"
@@ -26,7 +27,7 @@ mil_scale_pyramid_builder_2d<T>::mil_scale_pyramid_builder_2d()
   set_min_size(5, 5);
 }
 
-//: Consturct with given scale_step
+//: Construct with given scale_step
 template <class T>
 mil_scale_pyramid_builder_2d<T>::mil_scale_pyramid_builder_2d(double scale_step)
 {
@@ -112,7 +113,7 @@ inline float l_round (double x, float )
 //: Smooth and subsample src_im to produce dest_im
 //  Applies 5 pin filter in x and y, then samples
 //  every other pixel.
-//  Assumes dest_im has suffient data allocated
+//  Assumes dest_im has sufficient data allocated
 
 template <class T>
 void mil_scale_pyramid_builder_2d<T>::scale_reduce(

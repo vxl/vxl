@@ -43,7 +43,7 @@ vil2_image_resource_sptr vil2_load_image_resource(char const* filename);
 vil2_image_resource_sptr vil2_load_image_resource_raw(vil_stream *);
 
 //: Load raw from a filename.
-// A convience function.
+// A convenience function.
 vil2_image_resource_sptr vil2_load_image_resource_raw(char const*);
 
 //: Convenience function for loading an image into an image view.

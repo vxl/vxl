@@ -33,7 +33,7 @@ class clsfy_rbf_parzen : public clsfy_classifier_base
   // Default value is 1.0.
   double width_;
 
-  //: The power, p, in the window funtion. Default value is 2.0.
+  //: The power, p, in the window function. Default value is 2.0.
   double power_; 
 
   //: The set of training input values.  Size should equal number of outputs.
@@ -56,7 +56,7 @@ public:
   //: Return the number of proximate training vectors, weighted by the windowing function.
   double weightings(const vnl_vector<double> &input) const;
 
-  //: This value has properties of a Log likelyhood of being in class (binary classifiers only)
+  //: This value has properties of a Log likelihood of being in class (binary classifiers only)
   // class probability = exp(logL) / (1+exp(logL))
   virtual double log_l(const vnl_vector<double> &input) const;
 
@@ -71,13 +71,13 @@ public:
   // The default value in the constructor is 1.
   void set_rbf_width(double sigma);
 
-  //: The value p in the window function exp(-1/(2*sigma^p) * |x-y|^p).
+  //: The value p in the window function $exp(-1/(2*sigma^p) * |x-y|^p)$.
   // The value p affects the kurtosis, or peakyness of the window. Towards 0 gives a more peaked central spike, and longer tail.
   // Toward +inf gives a broader peak, and shorter tail.
   // The default value is 2, giving a Gaussian distribution.
   double power() const { return power_;}
 
-  //: The value p in the window function exp(-1/(2*sigma^p) * |x-y|^p).
+  //: The value p in the window function $exp(-1/(2*sigma^p) * |x-y|^p)$.
   // The value p affects the kurtosis, or peakyness of the window.
   // Towards 0 gives a more peaked central spike, and longer tail.
   // Toward +inf gives a broader peak, and shorter tail.

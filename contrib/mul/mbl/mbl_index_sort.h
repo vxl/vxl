@@ -2,7 +2,7 @@
 #define mbl_index_sort_h_
 //:
 // \file
-// \brief Algorithm to produced list of sorted data indicies
+// \brief Algorithm to produce list of sorted data indices
 // \author Ian Scott
 
 #include <vcl_vector.h>

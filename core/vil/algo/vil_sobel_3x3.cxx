@@ -1,4 +1,5 @@
-//: \file
+//:
+//  \file
 //  \brief Apply gradient operator to 2D planes of data
 //  \author Tim Cootes
 
@@ -7,10 +8,10 @@
 //: Compute gradients of single plane of 2D data using 3x3 Sobel filters
 //  Computes both i and j gradients of an ni x nj plane of data
 void vil2_sobel_3x3_1plane(const unsigned char* src,
-                                int s_istep, int s_jstep,
-                                float* gi, int gi_istep, int gi_jstep,
-                                float* gj, int gj_istep, int gj_jstep,
-                                unsigned ni, unsigned nj)
+                           int s_istep, int s_jstep,
+                           float* gi, int gi_istep, int gi_jstep,
+                           float* gj, int gj_istep, int gj_jstep,
+                           unsigned ni, unsigned nj)
 {
   const unsigned char* s_data = src;
   float *gi_data = gi;
@@ -111,10 +112,10 @@ void vil2_sobel_3x3_1plane(const unsigned char* src,
 //: Compute gradients of single plane of 2D data using 3x3 Sobel filters
 //  Computes both x and j gradients of an nx x nj plane of data
 void vil2_sobel_3x3_1plane(const float* src,
-                       int s_istep, int s_jstep,
-                       float* gi, int gi_istep, int gi_jstep,
-                       float* gj, int gj_istep, int gj_jstep,
-                       unsigned ni, unsigned nj)
+                           int s_istep, int s_jstep,
+                           float* gi, int gi_istep, int gi_jstep,
+                           float* gj, int gj_istep, int gj_jstep,
+                           unsigned ni, unsigned nj)
 {
   const float* s_data = src;
   float *gi_data = gi;
@@ -149,7 +150,7 @@ void vil2_sobel_3x3_1plane(const float* src,
   // Compute relative grid positions
   //  o1 o2 o3
   //  o4    o5
-  //  o6 07 o8
+  //  o6 o7 o8
   const int o1 = s_jstep - s_istep;
   const int o2 = s_jstep;
   const int o3 = s_istep + s_jstep;

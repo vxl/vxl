@@ -8,7 +8,7 @@
 //
 // In order to use IO for smart pointers you will need to have
 // the IO functions defined for pointers to MY_CLASS (class T.)
-// If you have written io for polymorphic classes, some of these
+// If you have written I/O for polymorphic classes, some of these
 // functions may already be defined.
 
 #include <vsl/vsl_binary_io.h>

@@ -46,7 +46,7 @@ clsfy_classifier_1d* clsfy_binary_threshold_1d_builder::new_classifier() const
 
 
 //: Build a binary_threshold classifier
-// nb here egs0 are -ve examples
+// N.B. here egs0 are -ve examples
 // and egs1 are +ve examples
 double clsfy_binary_threshold_1d_builder::build(clsfy_classifier_1d& classifier,
                                                 vnl_vector<double>& egs0,
@@ -129,7 +129,7 @@ double clsfy_binary_threshold_1d_builder::build_from_sorted_data(
 
     if ( etot0< min_err)
     {
-      // ie class1 is maximally separated from class0 at this point
+      // i.e. class1 is maximally separated from class0 at this point
       // also members of class1 are generally greater than members of class0
       polarity=+1;                    //indicates direction of > sign
       index=i;            //the threshold
@@ -139,7 +139,7 @@ double clsfy_binary_threshold_1d_builder::build_from_sorted_data(
 
     if ( etot1< min_err)
     {
-      // ie class1 is maximally separated from class0 at this point
+      // i.e. class1 is maximally separated from class0 at this point
       // also members of class1 are generally less than members of class0
       polarity=-1;                    //indicates direction of > sign
       index=i;            //the threshold

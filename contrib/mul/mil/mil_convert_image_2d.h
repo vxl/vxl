@@ -1,32 +1,33 @@
 // This is mul/mil/mil_convert_image_2d.h
 #ifndef mil_convert_image_2d_h_
 #define mil_convert_image_2d_h_
-//: \file
+//:
+//  \file
 //  \brief Functions to convert images from one type to another
 //  \author Tim Cootes
 
 #include <mil/mil_image_2d_of.h>
 #include <vil/vil_byte.h>
 
-//: Copys src_im (of bytes) into dest_im (of float)
+//: Copies src_im (of bytes) into dest_im (of float)
 void mil_convert_image_2d(mil_image_2d_of<float>& dest_im,
                           mil_image_2d_of<vil_byte>const& src_im);
 
 
-//: Copys src_im (of bytes) into dest_im (of float) and flips actual data
+//: Copies src_im (of bytes) into dest_im (of float) and flips actual data
 void mil_convert_image_2d_flip(mil_image_2d_of<float>& dest_im,
                                mil_image_2d_of<vil_byte>const& src_im);
 
 
-//: Copys src_im (of float) into dest_im (of byte)
+//: Copies src_im (of float) into dest_im (of byte)
 void mil_convert_image_2d(mil_image_2d_of<vil_byte>& dest_im,
                           mil_image_2d_of<float>const& src_im);
 
-//: Copys src_im (of float) into dest_im (of byte) and stretches to 0-255 range
+//: Copies src_im (of float) into dest_im (of byte) and stretches to 0-255 range
 void mil_convert_image_2d_stretch(mil_image_2d_of<vil_byte>& dest,
                                   mil_image_2d_of<float>const& src);
 
-//: Copys src_im (of float) into dest_im (of byte) after linear transform
+//: Copies src_im (of float) into dest_im (of byte) after linear transform
 //  Applies scale and offset to pixels of src_im and puts results in dest_im
 //  Useful to compress range of data for display
 void mil_convert_image_2d(mil_image_2d_of<vil_byte>& dest_im,

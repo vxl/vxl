@@ -217,7 +217,7 @@ void mil_transform_2d::set_reflection( const vgl_point_2d<double> & m1, const vg
     const double dx2dy2 = dx*dx + dy*dy;
 
 // after plugging all the equations for mirroring into matlab symbolic calculator,
-// I had to rearrange the equations to avoid divide-bvy-zero. See notebook for details. IMS
+// I had to rearrange the equations to avoid divide-by-zero. See notebook for details. IMS
 
     xx_ = (dx*dx - dy*dy) / dx2dy2;
 
@@ -271,7 +271,7 @@ void mil_transform_2d::set_similarity(double s, double theta, double t_x, double
     inv_uptodate_=false;
 }
 
-//: Sets euclidean transformation.
+//: Sets Euclidean transformation.
 void mil_transform_2d::set_similarity(const vgl_point_2d<double> & dx, const vgl_point_2d<double> & t)
 {
     form_=Similarity;
@@ -546,7 +546,7 @@ mil_transform_2d operator*(const mil_transform_2d& L, const mil_transform_2d& R)
             T.yt_ = L.yx_*R.xt_ + L.yy_*R.yt_ + L.yt_;
         }
 
-                            // now set the ty_pe using the ty_pe of L and R
+                            // now set the type using the type of L and R
         if (R.form() == L.form())
             T.form_ = R.form();
         else

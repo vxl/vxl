@@ -4,7 +4,7 @@
 #endif
 //:
 // \file
-// \brief Implementation of Multi-variate principal Component gaussian PDF.
+// \brief Implementation of Multi-variate principal Component Gaussian PDF.
 // \author Tim Cootes
 // \date 21-Jul-2000
 //
@@ -81,7 +81,7 @@ void vpdfl_pc_gaussian::get_distances(double &mahalDIFS, double &euclidDFFS, con
   if (b_.size()!=m) b_.resize(m);
 
 
-  // Rotate dx_ into co-ordinate frame of axes of gaussian
+  // Rotate dx_ into co-ordinate frame of axes of Gaussian
   // b_ = dx_' * P
   // This function will only use the first b_.size() columns of eigenvecs();
   mbl_matxvec_prod_vm(dx_, eigenvecs(), b_);
@@ -112,7 +112,7 @@ void vpdfl_pc_gaussian::get_distances(double &mahalDIFS, double &euclidDFFS, con
       sumDxSq+=(ddx*ddx);
     }
 
-    //By pythagoras sum(squares(b_i)) + sum(squares(c_i)) = sum(squares(d_i)),
+    //By Pythagoras sum(squares(b_i)) + sum(squares(c_i)) = sum(squares(d_i)),
     // where b_ is d_ projected into the principal component space
     // and c_ is d_ projected into the complementary component space
     // because b_ and c_ are perpendicular.
@@ -124,7 +124,7 @@ void vpdfl_pc_gaussian::get_distances(double &mahalDIFS, double &euclidDFFS, con
 }
 
 
-//: Precalculate the constant needed when evaluating Mahalanobis Distance
+//: Pre-calculate the constant needed when evaluating Mahalanobis Distance
 void vpdfl_pc_gaussian::calcPartLogK()
 {
   const double *v_data = eigenvals().data_block();
@@ -151,7 +151,7 @@ void vpdfl_pc_gaussian::set(const vnl_vector<double>& mean,
   partition_ = evals.size();
   // The partition from full covariance to spherical must be between 0 and the total number of dimensions
   assert (partition_ <= evecs.cols());
-  // The Eigenvector matrix should be square (and full rank but we don;t test for that)
+  // The Eigenvector matrix should be square (and full rank but we don't test for that)
   assert (evecs.cols() == evecs.rows());
 
   unsigned int n = evecs.cols();

@@ -1,7 +1,7 @@
 #ifndef clsfy_adaboost_sorted_builder_h_
 #define clsfy_adaboost_sorted_builder_h_
 
-// Copyright: (C) 2000 Britsh Telecommunications plc
+// Copyright: (C) 2000 British Telecommunications plc
 
 
 //:
@@ -37,7 +37,7 @@ class clsfy_adaboost_sorted_builder : public clsfy_builder_base
   bool save_data_to_disk_;
 
   //: batch size
-  // ie number of training examples held in RAM whilst sorting takes place
+  // i.e. number of training examples held in RAM whilst sorting takes place
   int bs_;
 
   //: maximum number of classifiers found by Adaboost algorithm

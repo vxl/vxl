@@ -50,7 +50,7 @@ class vil2_memory_chunk
     //: Decrement reference count
     void unref();
 
-    //: Number of objects refering to this data
+    //: Number of objects referring to this data
     int ref_count() const { return ref_count_; }
 
     //: Pointer to first element of data

@@ -57,7 +57,7 @@ class vimt_image_pyramid
   // underlying data
   const vimt_image_pyramid& operator=(const vimt_image_pyramid& that);
 
-  //: Mean width (in world coords) of pixels at level zero
+  //: Mean width (in world coordinates) of pixels at level zero
   double base_pixel_width() const;
 
   //: Scaling per level

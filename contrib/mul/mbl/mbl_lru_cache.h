@@ -47,7 +47,7 @@ public:
   mbl_lru_cache(unsigned n):  n_(n) {}
 
   //: Lookup index in the cache
-  // \return A pointer ot the value if it is in the cache, or 0 if not .
+  // \return A pointer to the value if it is in the cache, or 0 if not .
   const V* lookup(const I& index)
   {
     assert (m_.size() == l_.size());

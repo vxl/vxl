@@ -102,7 +102,7 @@ void pdf1d_kernel_pdf_builder::build_from_array(pdf1d_pdf& model,
 
   // Initially just use Silverman's estimate
   // Later allow switching of alternative algorithms
-  // eg width proportional to dist. to nearest point,
+  // e.g. width proportional to dist. to nearest point,
   //    adaptive kernel estimates etc.
 
   switch (build_type_)

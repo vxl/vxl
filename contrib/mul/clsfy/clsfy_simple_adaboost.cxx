@@ -142,7 +142,7 @@ unsigned clsfy_simple_adaboost::classify(const vnl_vector<double> &v) const
 //=======================================================================
 
 //: Find the posterior probability of the input being in the positive class.
-// The result is is outputs(0)
+// The result is outputs(0)
 void clsfy_simple_adaboost::class_probabilities(vcl_vector<double> &outputs,
   const vnl_vector<double> &input) const
 {
@@ -152,7 +152,7 @@ void clsfy_simple_adaboost::class_probabilities(vcl_vector<double> &outputs,
 
 //=======================================================================
 
-//: Log likelyhood of being in the positive class.
+//: Log likelihood of being in the positive class.
 // Class probability = 1 / (1+exp(-log_l))
 double clsfy_simple_adaboost::log_l(const vnl_vector<double> &v) const
 {
@@ -234,7 +234,7 @@ void clsfy_simple_adaboost::b_read(vsl_b_istream& bfs)
       vsl_b_read(bfs,alphas_);
       vsl_b_read(bfs,index_);
 
-      // set default number of classifiers used to be the maximimum number
+      // set default number of classifiers used to be the maximum number
       n_clfrs_used_= index_.size();
 
       break;

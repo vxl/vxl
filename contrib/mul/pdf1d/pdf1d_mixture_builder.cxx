@@ -283,7 +283,7 @@ void pdf1d_mixture_builder::e_step(pdf1d_mixture& model,
   if (probs.size()!=n_comp) probs.resize(n_comp);
 
   // Compute log probs
-  // probs(i)(j+1) is logProb that eg j was drawn from component i
+  // probs(i)(j+1) is logProb that e.g. j was drawn from component i
   for (unsigned int i=0;i<n_comp;++i)
   {
     if (probs[i].size()!=n_egs) probs[i].resize(n_egs);
@@ -351,7 +351,7 @@ double pdf1d_mixture_builder::m_step(pdf1d_mixture& model,
     {
       model.weights()[i]=probs[i].mean();
 
-      // Elliminate tiny components
+      // Eliminate tiny components
       if (model.weights()[i]<min_wt) model.weights()[i]=0.0;
 
       w_sum += model.weights()[i];

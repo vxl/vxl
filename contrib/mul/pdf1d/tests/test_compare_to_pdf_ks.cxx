@@ -24,7 +24,7 @@ void test_compare_to_pdf_ks()
   vcl_cout << "*********************************\n";
 
 
-  pdf1d_compare_to_pdf_ks comparitor;
+  pdf1d_compare_to_pdf_ks comparator;
   pdf1d_gaussian gauss(0,1);
   pdf1d_sampler* p_sampler = gauss.new_sampler();
   p_sampler->reseed(147478);
@@ -38,8 +38,8 @@ void test_compare_to_pdf_ks()
     vnl_vector<double> data(n_samples);
     p_sampler->get_samples(data);
 
-    double P = comparitor.compare(data.data_block(),n_samples,gauss);
-    vcl_cout<<"Testing "<<n_samples<<" samples drawn from gaussian with unit gaussian\n";
+    double P = comparator.compare(data.data_block(),n_samples,gauss);
+    vcl_cout<<"Testing "<<n_samples<<" samples drawn from Gaussian with unit Gaussian\n";
     vcl_cout<<"Prob = "<<P<<vcl_endl;
 
     double mean,var;

@@ -83,7 +83,7 @@ class mbl_cloneable_ptr
     vsl_b_write(bfs,ptr_);
   }
 
-  //: Load fron binary stream
+  //: Load from binary stream
   void b_read(vsl_b_istream& bfs)
   {
     deleteObject();

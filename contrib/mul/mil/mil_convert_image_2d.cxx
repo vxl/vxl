@@ -1,6 +1,7 @@
 // This is mul/mil/mil_convert_image_2d.cxx
 #include "mil_convert_image_2d.h"
-//: \file
+//:
+//  \file
 //  \brief Functions to convert images from one type to another
 //  \author Tim Cootes
 
@@ -90,14 +91,14 @@ void mil_convert_image_2d_stretch(mil_image_2d_of<vil_byte>& dest,
   mil_convert_image_2d(dest,src,255/(max-min),-min);
 }
 
-//: Copys src_im (of float) into dest_im (of byte)
+//: Copies src_im (of float) into dest_im (of byte)
 void mil_convert_image_2d(mil_image_2d_of<vil_byte>& dest,
                           const mil_image_2d_of<float>& src)
 {
   mil_convert_image_2d(dest,src,1.0,0);
 }
 
-//: Copys src_im (of float) into dest_im (of byte) after linear transform
+//: Copies src_im (of float) into dest_im (of byte) after linear transform
 //  Applies scale and offset to pixels of src_im and puts results in dest_im
 void mil_convert_image_2d(mil_image_2d_of<vil_byte>& dest,
                           const mil_image_2d_of<float>& src,

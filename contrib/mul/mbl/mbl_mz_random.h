@@ -87,7 +87,7 @@ class mbl_mz_random
     //: This restarts the sequence of random numbers.
     //  Restarts so that it repeats
     //  from the point at which you declared the generator, last
-    //  intialized it, or last called a 'reseed'.
+    //  initialized it, or last called a 'reseed'.
     void restart();
 
     //: Generates a random unsigned 32-bit number.

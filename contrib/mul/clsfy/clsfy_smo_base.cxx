@@ -56,8 +56,8 @@ const vnl_vector<double>& clsfy_smo_base::lagrange_mults() const
 // ----------------------------------------------------------------
 
 //: Set the initial values of the parameters to be optimised.
-// The caller is responsible for ensuring that the inital values
-// fulfil the constraints;
+// The caller is responsible for ensuring that the initial values
+// fulfill the constraints;
 void clsfy_smo_base::set_lagrange_mults(const vnl_vector<double>& lagrange_mults)
 {
   alph_ = lagrange_mults;

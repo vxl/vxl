@@ -2,14 +2,14 @@
 #ifndef clsfy_parzen_builder_h_
 #define clsfy_parzen_builder_h_
 
-// Copyright: (C) 2001 Britsh Telecommunications plc
+// Copyright: (C) 2001 British Telecommunications plc
 
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
 //:
 // \file
-// \brief Describe a parzen window classifier builder
+// \brief Describe a Parzen window classifier builder
 // \author Ian Scott
 // \date 2001/10/07
 
@@ -23,7 +23,7 @@
 
 //: Builds clsfy_rbf_parzen classifiers.
 // This class doesn't do any calculation, it is easy to create a
-// parzen window classfier directly - but it allows for consistent swappable
+// Parzen window classifier directly - but it allows for consistent swappable
 // classifiers.
 class clsfy_parzen_builder : public clsfy_builder_base
 {
@@ -77,13 +77,13 @@ class clsfy_parzen_builder : public clsfy_builder_base
   // The default value is 1.
   void set_rbf_width(double sigma);
 
-  //: The value p in the window function exp(-1/(2*sigma^p) * |x-y|^p).
+  //: The value p in the window function $exp(-1/(2*sigma^p) * |x-y|^p)$.
   // The value p affects the kurtosis, or peakyness of the window. Towards 0 gives a more peaked central spike, and longer tail.
   // Toward +inf gives a broader peak, and shorter tail.
   // The default value is 2, giving a Gaussian distribution.
   double power() const { return power_;}
 
-  //: The value p in the window function exp(-1/(2*sigma^p) * |x-y|^p).
+  //: The value p in the window function $exp(-1/(2*sigma^p) * |x-y|^p)$.
   // The value p affects the kurtosis, or peakyness of the window. Towards 0 gives a more peaked central spike, and longer tail.
   // Toward +inf gives a broader peak, and shorter tail.
   // The default value is 2, giving a Gaussian distribution.

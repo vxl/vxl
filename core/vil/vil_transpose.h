@@ -13,7 +13,7 @@
 
 
 //: Create a view which appears as the transpose of this view.
-//  i.e transpose(i,j,p) = view(j,i,p). O(1).
+//  i.e. transpose(i,j,p) = view(j,i,p). O(1).
 // \relates vil2_image_view
 template<class T>
 inline vil2_image_view<T> vil2_transpose(const vil2_image_view<T>& v)

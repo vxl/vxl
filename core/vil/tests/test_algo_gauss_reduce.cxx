@@ -25,8 +25,8 @@ void test_algo_gauss_reduce_byte(unsigned nx)
                      image0.istep(),image0.jstep(),
                      reduced_x.top_left_ptr(),reduced_x.istep(),reduced_x.jstep());
 
-  vcl_cout<<"Original: "; vil2_print_all(vcl_cout,image0); vcl_cout<<vcl_endl;
-  vcl_cout<<"reduced_x : "; vil2_print_all(vcl_cout,reduced_x); vcl_cout<<vcl_endl;
+  vcl_cout<<"Original: "; vil2_print_all(vcl_cout,image0); vcl_cout<<'\n';
+  vcl_cout<<"reduced_x : "; vil2_print_all(vcl_cout,reduced_x); vcl_cout<<'\n';
 
   TEST("First element",reduced_x(0,1),image0(0,1));
   TEST("Next element", reduced_x(1,1),image0(2,1));
@@ -55,8 +55,8 @@ void test_algo_gauss_reduce_byte(unsigned nx)
                      image1.jstep(),image1.istep(),
                      reduced_y.top_left_ptr(),reduced_y.jstep(),reduced_y.istep());
 
-  vcl_cout<<"Original: "; vil2_print_all(vcl_cout,image1); vcl_cout<<vcl_endl;
-  vcl_cout<<"reduced_y : "; vil2_print_all(vcl_cout,reduced_y); vcl_cout<<vcl_endl;
+  vcl_cout<<"Original: "; vil2_print_all(vcl_cout,image1); vcl_cout<<'\n';
+  vcl_cout<<"reduced_y : "; vil2_print_all(vcl_cout,reduced_y); vcl_cout<<'\n';
 
   TEST("First element",reduced_y(1,0),image1(1,0));
   TEST("Next element", reduced_y(1,1),image1(1,2));
@@ -82,8 +82,8 @@ void test_algo_gauss_reduce_int_32(unsigned nx)
                      image0.istep(),image0.jstep(),
                      reduced_x.top_left_ptr(),reduced_x.istep(),reduced_x.jstep());
 
-  vcl_cout<<"Original: "; vil2_print_all(vcl_cout,image0); vcl_cout<<vcl_endl;
-  vcl_cout<<"reduced_x : "; vil2_print_all(vcl_cout,reduced_x); vcl_cout<<vcl_endl;
+  vcl_cout<<"Original: "; vil2_print_all(vcl_cout,image0); vcl_cout<<'\n';
+  vcl_cout<<"reduced_x : "; vil2_print_all(vcl_cout,reduced_x); vcl_cout<<'\n';
 
   TEST("First element",reduced_x(0,1),image0(0,1));
   TEST("Next element", reduced_x(1,1),image0(2,1));
@@ -112,8 +112,8 @@ void test_algo_gauss_reduce_int_32(unsigned nx)
                      image1.jstep(),image1.istep(),
                      reduced_y.top_left_ptr(),reduced_y.jstep(),reduced_y.istep());
 
-  vcl_cout<<"Original: "; vil2_print_all(vcl_cout,image1); vcl_cout<<vcl_endl;
-  vcl_cout<<"reduced_y : "; vil2_print_all(vcl_cout,reduced_y); vcl_cout<<vcl_endl;
+  vcl_cout<<"Original: "; vil2_print_all(vcl_cout,image1); vcl_cout<<'\n';
+  vcl_cout<<"reduced_y : "; vil2_print_all(vcl_cout,reduced_y); vcl_cout<<'\n';
 
   TEST("First element",reduced_y(1,0),image1(1,0));
   TEST("Next element", reduced_y(1,1),image1(1,2));
@@ -139,8 +139,8 @@ void test_algo_gauss_reduce_float(int nx)
                      image0.istep(),image0.jstep(),
                      reduced_x.top_left_ptr(),reduced_x.istep(),reduced_x.jstep());
 
-  vcl_cout<<"Original: "; vil2_print_all(vcl_cout,image0); vcl_cout<<vcl_endl;
-  vcl_cout<<"reduced_x : "; vil2_print_all(vcl_cout,reduced_x); vcl_cout<<vcl_endl;
+  vcl_cout<<"Original: "; vil2_print_all(vcl_cout,image0); vcl_cout<<'\n';
+  vcl_cout<<"reduced_x : "; vil2_print_all(vcl_cout,reduced_x); vcl_cout<<'\n';
 
   TEST_NEAR("First element",reduced_x(0,1),image0(0,1),1e-6);
   TEST_NEAR("Next element",reduced_x(1,1),image0(2,1),1e-6);
@@ -176,8 +176,8 @@ void test_algo_gauss_reduce_121_byte(unsigned nx, unsigned ny)
                          image0.istep(),image0.jstep(),
                          reduced_x.top_left_ptr(),reduced_x.istep(),reduced_x.jstep());
 
-  vcl_cout<<"Original: "; vil2_print_all(vcl_cout,image0); vcl_cout<<vcl_endl;
-  vcl_cout<<"reduced_x : "; vil2_print_all(vcl_cout,reduced_x); vcl_cout<<vcl_endl;
+  vcl_cout<<"Original: "; vil2_print_all(vcl_cout,image0); vcl_cout<<'\n';
+  vcl_cout<<"reduced_x : "; vil2_print_all(vcl_cout,reduced_x); vcl_cout<<'\n';
 
   TEST("First element",reduced_x(0,1),image0(0,2));
   TEST("Next element",reduced_x(1,1),image0(2,2));
@@ -200,7 +200,7 @@ void test_algo_gauss_reduce_121_byte(unsigned nx, unsigned ny)
                         image0.istep(),image0.jstep(),
                         test2.top_left_ptr(),test2.istep(),test2.jstep());
   TEST("Smoothing correct",test2(1,1), 17);
-  vcl_cout<<"Value at (1,1):"<<int(test2(1,1))<<vcl_endl;
+  vcl_cout<<"Value at (1,1):"<<int(test2(1,1))<<'\n';
 }
 
 
@@ -223,8 +223,8 @@ void test_algo_gauss_reduce_121_int_32(unsigned nx, unsigned ny)
                          image0.istep(),image0.jstep(),
                          reduced_x.top_left_ptr(),reduced_x.istep(),reduced_x.jstep());
 
-  vcl_cout<<"Original: "; vil2_print_all(vcl_cout,image0); vcl_cout<<vcl_endl;
-  vcl_cout<<"reduced_x : "; vil2_print_all(vcl_cout,reduced_x); vcl_cout<<vcl_endl;
+  vcl_cout<<"Original: "; vil2_print_all(vcl_cout,image0); vcl_cout<<'\n';
+  vcl_cout<<"reduced_x : "; vil2_print_all(vcl_cout,reduced_x); vcl_cout<<'\n';
 
   TEST("First element",reduced_x(0,1),image0(0,2));
   TEST("Next element",reduced_x(1,1),image0(2,2));
@@ -247,7 +247,7 @@ void test_algo_gauss_reduce_121_int_32(unsigned nx, unsigned ny)
                         image0.istep(),image0.jstep(),
                         test2.top_left_ptr(),test2.istep(),test2.jstep());
   TEST("Smoothing correct",test2(1,1), 17);
-  vcl_cout<<"Value at (1,1):"<<int(test2(1,1))<<vcl_endl;
+  vcl_cout<<"Value at (1,1):"<<int(test2(1,1))<<'\n';
 }
 
 
@@ -270,8 +270,8 @@ void test_algo_gauss_reduce_121_float(unsigned nx, unsigned ny)
                              image0.istep(),image0.jstep(),
                              reduced_x.top_left_ptr(),reduced_x.istep(),reduced_x.jstep());
 
-  vcl_cout<<"Original: "; vil2_print_all(vcl_cout,image0); vcl_cout<<vcl_endl;
-  vcl_cout<<"reduced_x : "; vil2_print_all(vcl_cout,reduced_x); vcl_cout<<vcl_endl;
+  vcl_cout<<"Original: "; vil2_print_all(vcl_cout,image0); vcl_cout<<'\n';
+  vcl_cout<<"reduced_x : "; vil2_print_all(vcl_cout,reduced_x); vcl_cout<<'\n';
 
   TEST_NEAR("First element",reduced_x(0,1),image0(0,2),1e-6);
   TEST_NEAR("Next element",reduced_x(1,1),image0(2,2),1e-6);
@@ -294,12 +294,12 @@ void test_algo_gauss_reduce_121_float(unsigned nx, unsigned ny)
                              image0.istep(),image0.jstep(),
                              test2.top_left_ptr(),test2.istep(),test2.jstep());
   TEST_NEAR("Smoothing correct",test2(1,1),1.7f,1e-6);
-  vcl_cout<<"Value at (1,1):"<<float(test2(1,1))<<vcl_endl;
+  vcl_cout<<"Value at (1,1):"<<float(test2(1,1))<<'\n';
 }
 
 void test_algo_gauss_reduce_byte_2d()
 {
-  vcl_cout<<"Testing reduction in 2D"<<vcl_endl;
+  vcl_cout<<"Testing reduction in 2D\n";
   unsigned ni = 20, nj = 20;
 
   vil2_image_view<vxl_byte> image0(ni,nj),image1,work_im;
@@ -311,12 +311,11 @@ void test_algo_gauss_reduce_byte_2d()
   vil2_gauss_reduce(image0,image1,work_im);
   unsigned ni2 = (ni+1)/2;
   unsigned nj2 = (nj+1)/2;
-	TEST("Level 1 size x",image1.ni(),(ni+1)/2);
+  TEST("Level 1 size x",image1.ni(),(ni+1)/2);
   TEST("Level 1 size y",image1.nj(),(nj+1)/2);
   TEST("Pixel (0,0)",image0(0,0),image1(0,0));
   TEST("Pixel (1,1)",image0(2,2),image1(1,1));
   TEST("Corner pixel",image0(ni2*2-2,nj2*2-2),image1(ni2-1,nj2-1));
-
 }
 
 MAIN( test_algo_gauss_reduce )
@@ -337,7 +336,7 @@ MAIN( test_algo_gauss_reduce )
   test_algo_gauss_reduce_121_float(6,6);
   test_algo_gauss_reduce_121_float(7,7);
 
-	test_algo_gauss_reduce_byte_2d();
+  test_algo_gauss_reduce_byte_2d();
 
   SUMMARY();
 }

@@ -1,20 +1,22 @@
 // This is mul/vil2/algo/vil2_gauss_reduce.txx
 #ifndef vil2_gauss_reduce_txx_
 #define vil2_gauss_reduce_txx_
-//: \file
+//:
+//  \file
 //  \brief Functions to smooth and sub-sample image in one direction
 //  \author Tim Cootes
 
 #include "vil2_gauss_reduce.h"
 #include <vcl_cassert.h>
 #include <vil2/vil2_bilin_interp.h>
+
 //: Smooth and subsample src_im to produce dest_im
 //  Applies filter in x and y, then samples every other pixel.
 //  work_im provides workspace
 template<class T>
 void vil2_gauss_reduce(const vil2_image_view<T>& src_im,
-                            vil2_image_view<T>& dest_im,
-                            vil2_image_view<T>& work_im)
+                       vil2_image_view<T>& dest_im,
+                       vil2_image_view<T>& work_im)
 {
   unsigned ni = src_im.ni();
   unsigned nj = src_im.nj();
@@ -45,11 +47,12 @@ void vil2_gauss_reduce(const vil2_image_view<T>& src_im,
                            dest_im.jstep(),dest_im.istep());
   }
 }
+
 //: Smooth and subsample src_im to produce dest_im
 //  Applies filter in x and y, then samples every other pixel.
 template<class T>
 void vil2_gauss_reduce_121(const vil2_image_view<T>& src_im,
-                                vil2_image_view<T>& dest_im)
+                           vil2_image_view<T>& dest_im)
 {
   unsigned int ni = src_im.ni();
   unsigned int nj = src_im.nj();
@@ -70,10 +73,6 @@ void vil2_gauss_reduce_121(const vil2_image_view<T>& src_im,
                                dest_im.istep(),dest_im.jstep());
   }
 }
-
-
-
-
 
 
 //: An optimisable rounding function
@@ -111,14 +110,14 @@ inline float l_round (double x, float )
 //: Smooth and subsample src_im to produce dest_im
 //  Applies 5 pin filter in x and y, then samples
 //  every other pixel.
-//  Assumes dest_im has suffient data allocated
+//  Assumes dest_im has sufficient data allocated
 
 template <class T>
 void gauss_reduce_general_plane(const vil2_image_view<T>& src,
-                          vil2_image_view<T>& dest,
-                          vil2_image_view<T>& worka,
-                          vil2_image_view<T>& workb,
-                          const vil2_gauss_reduce_params &params)
+                                vil2_image_view<T>& dest,
+                                vil2_image_view<T>& worka,
+                                vil2_image_view<T>& workb,
+                                const vil2_gauss_reduce_params &params)
 {
   assert(src.ni() >= 5 && src.nj() >= 5);
   // Convolve src with a 5 x 1 gaussian filter,
@@ -217,11 +216,7 @@ void gauss_reduce_general(const vil2_image_view<T>& src_im,
                           vil2_image_view<T>& workb,
                           const vil2_gauss_reduce_params &params)
 {
-
-
   // Reduce plane-by-plane
-
-
 
   for (unsigned p=0;p<src_im.nplanes();++p)
     gauss_reduce_general_plane(src_im, dest_im, worka, workb, params);
@@ -231,21 +226,20 @@ void gauss_reduce_general(const vil2_image_view<T>& src_im,
   workb_.print_all(vcl_cout);
   vsl_indent_dec(vcl_cout);
 #endif
-
 }
 
 
 #undef VIL2_GAUSS_REDUCE_INSTANTIATE
 #define VIL2_GAUSS_REDUCE_INSTANTIATE(T) \
 template void vil2_gauss_reduce(const vil2_image_view<T >& src, \
-                                     vil2_image_view<T >& dest, \
-                                     vil2_image_view<T >& work_im); \
+                                vil2_image_view<T >& dest, \
+                                vil2_image_view<T >& work_im); \
 template void vil2_gauss_reduce_121(const vil2_image_view<T >& src, \
-                                         vil2_image_view<T >& dest); \
+                                    vil2_image_view<T >& dest); \
 template void gauss_reduce_general(const vil2_image_view<T >& src_im, \
                                    vil2_image_view<T >& dest_im, \
                                    vil2_image_view<T >& worka, \
                                    vil2_image_view<T >& workb, \
-                                   const vil2_gauss_reduce_params& params);
+                                   const vil2_gauss_reduce_params& params)
 
 #endif // vil2_gauss_reduce_txx_

@@ -175,7 +175,7 @@ void mbl_clamped_plate_spline_2d::build(const vcl_vector<vgl_point_2d<double> >&
 }
 
 //: Define source point positions
-//  Performs precomputations so that build(dest_points) can be
+//  Performs pre-computations so that build(dest_points) can be
 //  called multiple times efficiently
 void mbl_clamped_plate_spline_2d::set_source_pts(const vcl_vector<vgl_point_2d<double> >& source_pts)
 {

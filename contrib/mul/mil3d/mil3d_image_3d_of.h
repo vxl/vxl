@@ -16,7 +16,7 @@
 
 //: Represent images of one or more planes of type T.
 //  Each plane is nx() x ny() x nz() Ts, with the (x,y) element
-//  of the i'th plane accessable using im.plane(i)[x*im.xstep() + y*im.ystep() +z*im.zstep()]
+//  of the i'th plane accessible using im.plane(i)[x*im.xstep() + y*im.ystep() +z*im.zstep()]
 //  The actual image data is either allocated by the class
 //  (using resize), in which case it is deleted by the
 //  destructor, or is allocated outside (and is not deleted on
@@ -60,10 +60,10 @@ class mil3d_image_3d_of : public mil3d_image_3d
  public:
 
   //: Dflt ctor
-  //  Creates an empty one plane image.
+  //  Creates an empty one-plane image.
   mil3d_image_3d_of();
 
-  //: Create a n_plane plane image of nx x ny x nz pixels
+  //: Create an n_plane plane image of nx x ny x nz pixels
   mil3d_image_3d_of(int nx, int ny, int nz, int n_planes=1);
 
   //: Destructor
@@ -86,7 +86,7 @@ class mil3d_image_3d_of : public mil3d_image_3d
   //  xstep is step in memory between im(x,y,z) and im(x+1,y,z)
   //  ystep is step in memory between im(x,y,z) and im(x,y+1,z)
   //  zstep is step in memory between im(x,y,z) and im(x,y,z+1)
-  //  Copies of pointers recorded (ie a shallow copy)
+  //  Copies of pointers recorded (i.e. a shallow copy)
   //  (x,y,z) point in plane i given by planes[i][x*xstep + y*ystep+ z*zstep]
   void set(vcl_vector<T*>& planes, int nx, int ny, int nz,
            int xstep, int ystep, int zstep,
@@ -96,7 +96,7 @@ class mil3d_image_3d_of : public mil3d_image_3d
   //  I.e. plane(i) points to im.plane(i) + offset
   //  The world2im transform is set to match
   //  so this appears identical to im when addressed
-  //  in world co-ords.
+  //  in world coordinates.
   void setToWindow(const mil3d_image_3d_of& im,
                    int xlo, int xhi, int ylo, int yhi, int zlo, int zhi);
 
@@ -201,7 +201,7 @@ class mil3d_image_3d_of : public mil3d_image_3d
   bool operator==(const mil3d_image_3d_of<T> &) const;
 
   //: Define valid data region (including transform).
-  //  Resizes and sets the tranformation so that
+  //  Resizes and sets the transformation so that
   //  worldToIm(x,y,z) is valid for all points in range
   //  Specifically, resize(1+xhi-xlo,1+yhi-ylo,1+zhi-zlo);
   //  worldToIm() translates by (-xlo,-ylo,-zlo)

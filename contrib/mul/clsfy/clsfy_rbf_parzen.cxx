@@ -118,7 +118,7 @@ unsigned clsfy_rbf_parzen::n_dims() const
 }
 
 //=======================================================================
-//: This value has properties of a Log likelyhood of being in class (binary classifiers only)
+//: This value has properties of a Log likelihood of being in class (binary classifiers only)
 // class probability = exp(logL) / (1+exp(logL))
 double clsfy_rbf_parzen::log_l(const vnl_vector<double> &input) const
 {
@@ -140,7 +140,7 @@ void clsfy_rbf_parzen::set_rbf_width(double sigma)
 
 
 //=======================================================================
-//: The value p in the window function exp(-1/(2*sigma^p) * |x-y|^p).
+//: The value p in the window function $exp(-1/(2*sigma^p) * |x-y|^p)$.
 // The value p affects the kurtosis, or peakyness of the window.
 // Towards 0 gives a more peaked central spike, and longer tail.
 // Toward +inf gives a broader peak, and shorter tail.

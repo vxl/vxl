@@ -22,7 +22,7 @@
 //  Mixture models are more general.
 //
 //  Use a normal kernel pdf builder to build this, and then
-//  set the weights seperately.
+//  set the weights separately.
 class pdf1d_weighted_kernel_pdf : public pdf1d_kernel_pdf
 {
  protected:

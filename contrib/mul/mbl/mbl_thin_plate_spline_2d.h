@@ -14,7 +14,7 @@
 
 //=======================================================================
 //: Construct thin plate spline to map 2D to 2D.
-// I.e. does some mapping (x',y') = f(x,y). (See Booksteins work, eg IPMI 1993)
+// I.e. does some mapping (x',y') = f(x,y). (See Booksteins work, e.g. IPMI 1993)
 // The warp is `guided' by a set of
 // landmarks p(0) .. p(n-1) in the source plane which are to be
 // mapped to a (possibly deformed) set q(0)..q(n-1) in the destination.
@@ -47,7 +47,7 @@ class mbl_thin_plate_spline_2d
                   vnl_vector<double>& By,
                   const vcl_vector<vgl_point_2d<double> >& dest_pts);
 
-   //: Compute spline bending energy
+   //: Compute spline-bending energy
   void compute_energy(vnl_vector<double>& W1,
                   vnl_vector<double>& W2,
                   const vnl_matrix<double>& L);
@@ -66,7 +66,7 @@ class mbl_thin_plate_spline_2d
                    bool compute_the_energy=false);
 
     //: Define source point positions
-    //  Performs precomputations so that build(dest_points) can be
+    //  Performs pre-computations so that build(dest_points) can be
     //  called multiple times efficiently
   void set_source_pts(const vcl_vector<vgl_point_2d<double> >& source_pts);
 

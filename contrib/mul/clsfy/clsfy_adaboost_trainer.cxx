@@ -136,7 +136,7 @@ void clsfy_adaboost_trainer::build_strong_classifier(
       alpha  = vcl_log(2.0*(n0+n1));   //is this appropriate???
       strong_classifier.add_classifier( best_c1d, alpha, best_j);
 
-      // delete classifiers on heap, cos clones taken by strong_classifier
+      // delete classifiers on heap, because clones taken by strong_classifier
       delete c1d;
       delete best_c1d;
       return;
@@ -148,7 +148,7 @@ void clsfy_adaboost_trainer::build_strong_classifier(
       vcl_cout<<"min_error => 0.5 !!!\n";
       beta=1.0;
 
-      // delete classifiers on heap, cos clones taken by strong_classifier
+      // delete classifiers on heap, because clones taken by strong_classifier
       delete c1d;
       delete best_c1d;
       return;
@@ -160,7 +160,7 @@ void clsfy_adaboost_trainer::build_strong_classifier(
 
     if (i<(n-1))
     {
-      // apply the best weak classfier
+      // apply the best weak classifier
       clsfy_get_elements(egs0_1d,egs0,best_j);
       clsfy_get_elements(egs1_1d,egs1,best_j);
 

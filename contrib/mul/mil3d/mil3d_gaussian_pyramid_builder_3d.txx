@@ -1,8 +1,9 @@
 // This is mul/mil3d/mil3d_gaussian_pyramid_builder_3d.txx
 #ifndef mil3d_gaussian_pyramid_builder_3d_txx_
 #define mil3d_gaussian_pyramid_builder_3d_txx_
-//: \file
-//  \brief Class to build gaussian pyramids of mil3d_image_3d_of<T>
+//:
+//  \file
+//  \brief Class to build Gaussian pyramids of mil3d_image_3d_of<T>
 //  \author Tim Cootes
 
 #include "mil3d_gaussian_pyramid_builder_3d.h"

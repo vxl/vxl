@@ -18,10 +18,10 @@ class vimt_image_2d_of : public vimt_image_2d
   vil2_image_view<T> image_;
  public:
   //: Dflt ctor
-  //  Creates an empty one plane image.
+  //  Creates an empty one-plane image.
   vimt_image_2d_of();
 
-  //: Create a n_plane plane image of nx x ny pixels
+  //: Create an n_plane plane image of nx x ny pixels
   vimt_image_2d_of(unsigned nx, unsigned ny, unsigned n_planes=1);
 
   //: Construct from a view and a world-to-image transform (takes copies of both)
@@ -47,7 +47,7 @@ class vimt_image_2d_of : public vimt_image_2d
   bool operator==(const vimt_image_2d_of<T> &) const;
 
   //: Define valid data region (including transform).
-  //  Resizes and sets the tranformation so that
+  //  Resizes and sets the transformation so that
   //  world2im(x,y) is valid for all points in range
   //  Specifically, resize(nx,ny);
   //  world2im() translates by (-xlo,-ylo)

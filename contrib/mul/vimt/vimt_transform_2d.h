@@ -111,7 +111,7 @@ class vimt_transform_2d
     // t_y: Translation in y
     void set_similarity(double s, double theta, double t_x, double t_y);
 
-    //: Sets euclidean transformation.
+    //: Sets Euclidean transformation.
     // \param dx  Rotation and scaling of x axis
     // \param t  Translation
     void set_similarity(const vgl_point_2d<double> & dx, const vgl_point_2d<double> & t);
@@ -124,13 +124,13 @@ class vimt_transform_2d
 
     //: Sets to be 2D affine transformation T(x,y)=p+x.u+y.v
     void set_affine(const vgl_point_2d<double> & p,
-		                const vgl_vector_2d<double> & u,
-		                const vgl_vector_2d<double> & v);
+                    const vgl_vector_2d<double> & u,
+                    const vgl_vector_2d<double> & v);
 
     //: Sets to be 2D projective transformation
     void set_projective(const vnl_matrix<double>&);   // 3x3 matrix
 
-    //: Returns the coords of the origin.
+    //: Returns the coordinates of the origin.
     // I.e. operator()(vgl_point_2d<double> (0,0))
     vgl_point_2d<double>  origin() const
         { return vgl_point_2d<double> (tt_==1?xt_:xt_/tt_,tt_==1?yt_:yt_/tt_); }
@@ -140,14 +140,14 @@ class vimt_transform_2d
     // it becomes a translation.
     void origin( const vgl_point_2d<double> & );
 
-    //: Applies tranformation to (x,y)
+    //: Applies transformation to (x,y)
     vgl_point_2d<double>  operator()(double x, double y) const;
-    //: Returns tranformation applied to point p
+    //: Returns transformation applied to point p
     vgl_point_2d<double>  operator()(const vgl_point_2d<double> & p) const { return operator()(p.x(),p.y()); }
 
     //: Calculates inverse of this transformation
     vimt_transform_2d inverse() const;
-    //: Returns change in tranformed point when original point moved by dp.
+    //: Returns change in transformed point when original point moved by dp.
     // Point dp: Movement from point
     // Returns: T(p+dp)-T(p)
     vgl_vector_2d<double>  delta(const vgl_point_2d<double> & p, const vgl_vector_2d<double> & dp) const;

@@ -3,7 +3,7 @@
 #define mil3d_gaussian_pyramid_builder_3d_h_
 //:
 //  \file
-//  \brief Build gaussian pyramids of mil3d_image_3d_of<T>
+//  \brief Build Gaussian pyramids of mil3d_image_3d_of<T>
 //  \author Tim Cootes
 
 #include <vsl/vsl_binary_io.h>
@@ -11,8 +11,8 @@
 #include <mil3d/mil3d_image_3d_of.h>
 #include <mil/mil_image_pyramid_builder.h>
 
-//: Build gaussian pyramids of mil3d_image_3d_of<T>
-//  Smooth with a gaussian filter (1-5-8-5-1 by default)
+//: Build Gaussian pyramids of mil3d_image_3d_of<T>
+//  Smooth with a Gaussian filter (1-5-8-5-1 by default)
 //  and subsample so that image at level i-1 is half the
 //  size of that at level i
 //

@@ -6,7 +6,7 @@
 #endif
 //:
 // \file
-// \brief Interface for Multi-variate Principle Component gaussian PDF.
+// \brief Interface for Multi-variate Principle Component Gaussian PDF.
 // \author Ian Scott
 // \date 21-Jul-2000
 //
@@ -23,9 +23,9 @@
 
 class vpdfl_pc_gaussian_builder;
 
-//: Multi-variate principal Component gaussian PDF.
+//: Multi-variate principal Component Gaussian PDF.
 // The principal components can have general covariance.
-// The complemenary compenents (least significant eigenvalues) have a
+// The complementary components (least significant eigenvalues) have a
 // spherical distribution.
 class vpdfl_pc_gaussian : public vpdfl_gaussian 
 {
@@ -33,10 +33,10 @@ class vpdfl_pc_gaussian : public vpdfl_gaussian
   // The rest are assumed spherical
   unsigned partition_;
 
-  //: The constant when calculaing the Mahal dist in the principal space.
+  //: The constant when calculating the Mahalanobis dist in the principal space.
   double log_k_principal_;
 
-  //: Precalculate log_k_principal_.
+  //: Pre-calculate log_k_principal_.
   // Should only be called after setting all other data values.
   void calcPartLogK();
 
@@ -90,7 +90,7 @@ class vpdfl_pc_gaussian : public vpdfl_gaussian
                    const vnl_matrix<double>& evecs,
                    const vnl_vector<double>& evals);
 
-  //: log of normalisation constant for gaussian
+  //: log of normalisation constant for Gaussian
   double log_k_principal() const { return log_k_principal_; }
 
   //: Return Mahalanobis and Euclidean distances from centroid to input.

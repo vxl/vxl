@@ -1,7 +1,7 @@
 #ifndef clsfy_builder_base_h_
 #define clsfy_builder_base_h_
 
-// Copyright: (C) 2000 Britsh Telecommunications plc
+// Copyright: (C) 2000 British Telecommunications plc
 
 
 //:

@@ -1,4 +1,5 @@
-//: \file
+//:
+//  \file
 //  \brief Apply gradient operator to 2D planes of data
 //  \author Tim Cootes
 
@@ -147,7 +148,7 @@ void mil_algo_grad_3x3(float* gx, int gx_xstep, int gx_ystep,
   // Compute relative grid positions
   //  o1 o2 o3
   //  o4    o5
-  //  o6 07 o8
+  //  o6 o7 o8
   const int o1 = s_ystep - s_xstep;
   const int o2 = s_ystep;
   const int o3 = s_xstep + s_ystep;

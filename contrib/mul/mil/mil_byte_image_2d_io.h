@@ -33,7 +33,7 @@ class mil_byte_image_2d_io : public mil_image_io
 
 #if 0
   //: Define whether to load images as colour or grey-scale
-  //  Options are '' (ie rely on image), 'Grey' or 'RGB'
+  //  Options are '' (i.e. rely on image), 'Grey' or 'RGB'
   vcl_string colour_;
 #endif
 
@@ -51,11 +51,11 @@ class mil_byte_image_2d_io : public mil_image_io
   virtual ~mil_byte_image_2d_io();
 
   //: Define whether to load images as colour or grey-scale
-  //  Options are '' (ie rely on image), 'Grey' or 'RGB'
+  //  Options are '' (i.e. rely on image), 'Grey' or 'RGB'
   void setColour(const vcl_string&);
   //: Set the colour by the depth or using the standard code in the header
   //  Only colour (3-plane) and greyscale (1-plane) currently supported
-  //  Returns false if the depth is not suipported
+  //  Returns false if the depth is not supported
   bool set_colour_depth( int );
 
   //: Whether to load images as RGB, Grey-scale or leave to image format

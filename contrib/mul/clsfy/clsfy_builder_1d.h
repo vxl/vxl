@@ -29,7 +29,7 @@ class clsfy_builder_1d
   //: Build a binary_threshold classifier
   // Train classifier, returning weighted error
   //  Selects parameters of classifier which best separate examples from two classes,
-  //  weighting examples appropriately when estimating the missclassification rate.
+  //  weighting examples appropriately when estimating the misclassification rate.
   //  Returns weighted sum of error, e.wts, where e_i =0 for correct classifications,
   //  e_i=1 for incorrect.
   virtual double build(clsfy_classifier_1d& classifier,
@@ -40,7 +40,7 @@ class clsfy_builder_1d
 
    //: Train classifier, returning weighted error
   //  Selects parameters of classifier which best separate examples,
-  //  weighting examples appropriately when estimating the missclassification rate.
+  //  weighting examples appropriately when estimating the misclassification rate.
   //  data[i] is a triple, {value,class_number,weight}
   //  Returns weighted sum of error.
   //  Note that input "data" must be sorted to use this routine

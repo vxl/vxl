@@ -15,7 +15,7 @@
 
 //: Represent images of one or more planes of type T.
 //  Each plane is nx() x ny() Ts, with the (x,y) element
-//  of the i'th plane accessable using im.plane(i)[x*im.xstep() + y*im.ystep()]
+//  of the i'th plane accessible using im.plane(i)[x*im.xstep() + y*im.ystep()]
 //  The actual image data is either allocated by the class
 //  (using resize), in which case it is deleted by the
 //  destructor, or is allocated outside (and is not deleted on
@@ -61,10 +61,10 @@ class mil_image_2d_of : public mil_image_2d
     typedef T pixel_type;
 
     //: Dflt ctor
-    //  Creates an empty one plane image.
+    //  Creates an empty one-plane image.
     mil_image_2d_of();
 
-    //: Create a n_plane plane image of nx x ny pixels
+    //: Create an n_plane plane image of nx x ny pixels
     mil_image_2d_of(int nx, int ny, int n_planes=1);
 
     //: Destructor
@@ -85,7 +85,7 @@ class mil_image_2d_of : public mil_image_2d
     //  planes[i] is pointer to i'th plane of nx x ny image data
     //  i should be valid in range [0,n_planes-1]
     //  ystep gives data row length
-    //  Copies of pointers recorded (ie a shallow copy)
+    //  Copies of pointers recorded (i.e. a shallow copy)
     //  (x,y) point in plane i given by planes[i][x*xstep + y*ystep]
     void set(vcl_vector<T*>& planes, int nx, int ny,
              int xstep, int ystep,
@@ -94,7 +94,7 @@ class mil_image_2d_of : public mil_image_2d
     //: Define parameters.
     //  planes[i] is pointer to i'th plane of nx x ny image data
     //  i should be valid in range [0,n_planes-1]
-    //  Copies of pointers recorded (ie a shallow copy)
+    //  Copies of pointers recorded (i.e. a shallow copy)
     void set(T** planes, int n_planes,
              int nx, int ny, int xstep, int ystep,
              const char* format);
@@ -118,17 +118,17 @@ class mil_image_2d_of : public mil_image_2d
 
     //: Define parameters for packed RGB T images.
     //  Sets up a 3 plane image, assuming nx x ny image
-    //  of xstep T pixels, ie  red(x,y) = data[x*xstep+y*step],
+    //  of xstep T pixels, i.e. red(x,y) = data[x*xstep+y*step],
     //  green(x,y) = data[1+x*xstep+y*step],
     //  blue(x,y) = data[2+x*xstep+y*step]
     void setRGB(T* data, int nx, int ny, int xstep, int ystep);
 
     //: Arrange that this is window on given image.
     //  I.e. plane(i) points to im.plane(i) + offset.
-    //  The parameters should be in image co-ords.
+    //  The parameters should be in image coordinates.
     //  The world2im transform is set to match
     //  so this appears identical to im when addressed
-    //  in world co-ords.
+    //  in world coordinates.
     void setToWindow(const mil_image_2d_of& im,
                      int xlo, int xhi, int ylo, int yhi);
 
@@ -201,7 +201,7 @@ class mil_image_2d_of : public mil_image_2d
     bool operator==(const mil_image_2d_of<T> &) const;
 
     //: Define valid data region (including transform).
-    //  Resizes and sets the tranformation so that
+    //  Resizes and sets the transformation so that
     //  worldToIm(x,y) is valid for all points in range
     //  Specifically, resize(1+xhi-xlo,1+yhi-ylo);
     //  worldToIm() translates by (-xlo,-ylo)

@@ -34,7 +34,7 @@ mil_byte_image_2d_io::~mil_byte_image_2d_io()
 }
 
 //: Define whether to load images as colour or grey-scale
-//  Options are '' (ie rely on image), 'Grey' or 'RGB'
+//  Options are '' (i.e. rely on image), 'Grey' or 'RGB'
 void mil_byte_image_2d_io::setColour(const vcl_string& c)
 {
 //  colour_ = c;
@@ -58,8 +58,8 @@ void mil_byte_image_2d_io::setColour(const vcl_string& c)
 }
 
 //: Set the colour by the depth or using the standard code in the header
-//  Only colour (3-plane) and greyscale (1-plane) curretnly supported
-//  Returns false if the depth is not suipported
+//  Only colour (3-plane) and greyscale (1-plane) currently supported
+//  Returns false if the depth is not supported
 bool mil_byte_image_2d_io::set_colour_depth( int new_depth )
 {
   if ( new_depth == mil_byte_image_2d_io_depth_image ||
@@ -98,7 +98,7 @@ vcl_string mil_byte_image_2d_io::colour() const
 }
 
 //: Return the colour depth using the standard code in the header
-//  Only colour (3-plane) and greyscale (1-plane) curretnly supported
+//  Only colour (3-plane) and greyscale (1-plane) currently supported
 int mil_byte_image_2d_io::colour_depth()
 {
   return colour_code_;
@@ -216,14 +216,14 @@ bool mil_byte_image_2d_io::loadTheImage(mil_image_2d_of<vil_byte>& image,
     }
     else
     {
-      //ie copy colour image as colour
+      //i.e. copy colour image as colour
       vil_memory_image_of<vil_rgb_byte> buf(img);
       mil_convert_vil_cv2cm(image_,buf);
     }
   }
-  else if ( colour_depth() == mil_byte_image_2d_io_depth_image ) // ie colour_="" => rely on image
+  else if ( colour_depth() == mil_byte_image_2d_io_depth_image ) // i.e. colour_="" => rely on image
   {
-    // ie colour_="" => rely on image
+    // i.e. colour_="" => rely on image
     if (img_is_grey)
     {
       //copy grey image as grey
@@ -232,7 +232,7 @@ bool mil_byte_image_2d_io::loadTheImage(mil_image_2d_of<vil_byte>& image,
     }
     else
     {
-      //ie copy colour image as colour
+      //i.e. copy colour image as colour
       vil_memory_image_of<vil_rgb_byte> buf(img);
       mil_convert_vil_cv2cm(image_,buf);
     }

@@ -41,7 +41,7 @@ public:
   // output(i) i<nClasses, contains the probability that the input is in class i
   void virtual class_probabilities(vcl_vector<double> &outputs, const vnl_vector<double> &input) const;
 
-  //: This value has properties of a Log likelyhood of being in class (binary classifiers only)
+  //: This value has properties of a Log likelihood of being in class (binary classifiers only)
   // class probability = exp(logL) / (1+exp(logL))
   virtual double log_l(const vnl_vector<double> &input) const;
 

@@ -54,10 +54,10 @@ class vil2_image_view : public vil2_image_view_base
  public:
 
   //: Dflt ctor
-  //  Creates an empty one plane image.
+  //  Creates an empty one-plane image.
   vil2_image_view();
 
-  //: Create a n_plane plane image of ni x nj pixels
+  //: Create an n_plane plane image of ni x nj pixels
   vil2_image_view(unsigned ni, unsigned nj, unsigned n_planes=1);
 
   //: Set this view to look at someone else's memory data.
@@ -144,14 +144,14 @@ class vil2_image_view : public vil2_image_view_base
 
   //: Smart pointer to the object holding the data for this view
   // Will be a null pointer if this view looks at `third-party' data,
-  // eg using set_to_memory.
+  // e.g. using set_to_memory.
   //
   // Typically used when creating new views of the data
   inline const vil2_memory_chunk_sptr& memory_chunk() const { return ptr_; }
 
   //: Smart pointer to the object holding the data for this view
   // Will be a null pointer if this view looks at `third-party' data,
-  // eg using set_to_memory
+  // e.g. using set_to_memory
   //
   // Typically used when creating new views of the data
   inline vil2_memory_chunk_sptr& memory_chunk() { return ptr_; }
@@ -185,7 +185,7 @@ class vil2_image_view : public vil2_image_view_base
   // If already correct size, this function returns quickly
   virtual void resize(unsigned ni, unsigned nj);
 
-  //: resize to ni x ni x nplanes
+  //: resize to ni x nj x nplanes
   // If already correct size, this function returns quickly
   virtual void resize(unsigned ni, unsigned nj, unsigned nplanes);
 

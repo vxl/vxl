@@ -110,7 +110,7 @@ class pdf1d_kernel_pdf_builder : public pdf1d_builder
   //: Build adaptive kernel estimate.
   //  Use equal widths to create a pilot estimate, then use the prob at each
   //  data point to modify the widths.
-  // Uses Silverman's eqtn 5.8 with alpha = 0.5 as suggested, and
+  // Uses Silverman's equation 5.8 with alpha = 0.5 as suggested, and
   // based on a pilot estimate as calculated by build_select_equal_width().
   // The kernel centres in the pdf will have same value and order as
   // the training data.

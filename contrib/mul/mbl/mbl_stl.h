@@ -11,7 +11,7 @@
 // this approach is faster in general - which I don't really believe.
 
 //: Fill an output sequence with incrementing values.
-// A bit like vcl_fill, but after each assigment, the value is incremented.
+// A bit like vcl_fill, but after each assignment, the value is incremented.
 // \return the next value in the sequence.
 template<class Out, class T>
 inline T mbl_stl_increments(Out first, Out last, T init)
@@ -21,7 +21,7 @@ inline T mbl_stl_increments(Out first, Out last, T init)
 }
 
 //: Fill the first n values of an output sequence with incrementing values.
-// A bit like vcl_fill_n, but after each assigment,
+// A bit like vcl_fill_n, but after each assignment,
 // the value is incremented.
 // \return the next value in the sequence.
 template<class Out, class Size, class T>

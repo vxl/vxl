@@ -7,7 +7,7 @@
 
 //:
 // \file
-// \brief Implement a parzen window classifier builder
+// \brief Implement a Parzen window classifier builder
 // \author Ian Scott
 // \date 2001/10/07
 
@@ -144,7 +144,7 @@ void clsfy_parzen_builder::set_rbf_width(double sigma)
 
 //=======================================================================
 
-//: The value p in the window function exp(-1/(2*sigma^p) * |x-y|^p).
+//: The value p in the window function $exp(-1/(2*sigma^p) * |x-y|^p)$.
 // The value p affects the kurtosis, or peakyness of the window.
 // Towards 0 gives a more peaked central spike, and longer tail.
 // Toward +inf gives a broader peak, and shorter tail.

@@ -323,7 +323,7 @@ void mbl_lda::x_to_d(vnl_vector<double>& d, const vnl_vector<double>& x) const
 }
 
 //=======================================================================
-//: Project d fron discriminant space into original space
+//: Project d from discriminant space into original space
 void mbl_lda::d_to_x(vnl_vector<double>& x, const vnl_vector<double>& d) const
 {
   mbl_matxvec_prod_mv(basis_,d,x);

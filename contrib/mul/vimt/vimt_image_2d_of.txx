@@ -40,7 +40,7 @@ template<class T> vimt_image_2d_of<T>::~vimt_image_2d_of()
 
 
 //: Define valid data region (including transform).
-//  Resizes and sets the tranformation so that
+//  Resizes and sets the transformation so that
 //  worldToIm(x,y) is valid for all points in range
 template<class T>
 void vimt_image_2d_of<T>::set_valid_region(int x0, unsigned nx, int y0, unsigned ny)

@@ -28,7 +28,7 @@ template<class T>
 void vil2_copy_to_window(const vil2_image_view<T> &src, vil2_image_view<T> &dest,
                          unsigned i0, unsigned j0);
 
-//: Create a copy of an image, with completly new underlying memory.
+//: Create a copy of an image, with completely new underlying memory.
 //  O(size).
 // \relates vil2_image_view
 template<class T>

@@ -35,13 +35,13 @@ double pdf1d_bhat_overlap(const pdf1d_pdf& pdf1, const pdf1d_pdf& pdf2,
 
 // Bhat. overlap between a pdf and a sampled distribution.
 // Second distribution is known to have pdf of p[i] when evaluated at x[i]
-// x[i] must be representative samples from the pdf (ie randomly sampled
+// x[i] must be representative samples from the pdf (i.e. randomly sampled
 // from it, or selected so as to be equally spread in cum.prob. space).
 double pdf1d_bhat_overlap(const pdf1d_pdf& pdf,
                           const double* x,
                           const double* p, int n)
 {
-  // Use more efficient calculation for gaussian case
+  // Use more efficient calculation for Gaussian case
   if (pdf.is_a()=="pdf1d_gaussian")
     return pdf1d_bhat_overlap_gaussian(pdf.mean(),pdf.variance(),x,p,n);
 
@@ -55,7 +55,7 @@ double pdf1d_bhat_overlap(const pdf1d_pdf& pdf,
   return sum/n;
 }
 
-// Bhat. overlap between 1D gaussian and sampled distribution.
+// Bhat. overlap between 1D Gaussian and sampled distribution.
 double pdf1d_bhat_overlap_gaussian(double m, double v,
                                 const double* x,
                                 const double* p, int n)
@@ -72,7 +72,7 @@ double pdf1d_bhat_overlap_gaussian(double m, double v,
   return sum/n;
 }
 
-//: Bhat. overlap between two 1D gaussians
+//: Bhat. overlap between two 1D Gaussians
 double pdf1d_bhat_overlap_gaussians(double m1, double v1,
                                      double m2, double v2)
 {
@@ -81,13 +81,13 @@ double pdf1d_bhat_overlap_gaussians(double m1, double v1,
   return k * vcl_exp(-0.25*dm*dm/(v1+v2));
 }
 
-//: Bhat. overlap between two 1D gaussians
+//: Bhat. overlap between two 1D Gaussians
 double pdf1d_bhat_overlap_gaussians(const pdf1d_pdf& g1, const pdf1d_pdf& g2)
 {
   return pdf1d_bhat_overlap_gaussians(g1.mean(),g1.variance(),g2.mean(),g2.variance());
 }
 
-//: Bhat. overlap between gaussian and arbitrary pdf (estimate by sampling at n points)
+//: Bhat. overlap between Gaussian and arbitrary pdf (estimate by sampling at n points)
 double pdf1d_bhat_overlap_gaussian_with_pdf(double m, double v, const pdf1d_pdf& pdf, int n)
 {
   if (pdf.is_a()=="pdf1d_gaussian")
@@ -112,7 +112,7 @@ double pdf1d_bhat_overlap_gaussian_with_pdf(double m, double v, const pdf1d_pdf&
   return sum*dx*sd;
 }
 
-//: Bhat. overlap between gaussian and arbitrary pdf (estimate by sampling at n points)
+//: Bhat. overlap between Gaussian and arbitrary pdf (estimate by sampling at n points)
 double pdf1d_bhat_overlap_gaussian_with_pdf(const pdf1d_pdf& g, const pdf1d_pdf& pdf, int n)
 {
   return pdf1d_bhat_overlap_gaussian_with_pdf(g.mean(),g.variance(),pdf,n);

@@ -32,7 +32,7 @@ protected:
   vcl_vector<vnl_vector<double> > supports_;
 
   //: The Lagrangian multipliers
-  // The values have been premultiplied by the +/-1.0 depending on the support target.
+  // The values have been pre-multiplied by the +/-1.0 depending on the support target.
   vcl_vector<double> lagrangians_;
 
   //: The offset bias.
@@ -61,7 +61,7 @@ public:
   void virtual class_probabilities(vcl_vector<double> &outputs,
                                    const vnl_vector<double> &input) const;
 
-  //: Log likelyhood of being in class (binary classifiers only)
+  //: Log likelihood of being in class (binary classifiers only)
   // class probability = vcl_exp(logL) / (1+vcl_exp(logL)
   virtual double log_l(const vnl_vector<double> &input) const;
 
@@ -90,8 +90,8 @@ public:
   //: The SVM function bias.
   double bias() const {return bias_;}
 
-  //: The lagrange multipliers.
-  // The values corresponding to negative training vectors are premultiplied by -1.
+  //: The Lagrange multipliers.
+  // The values corresponding to negative training vectors are pre-multiplied by -1.
   // The array ordering corresponds to supportVectors()
   const vcl_vector<double> & lagrangians() const {return lagrangians_;}
 

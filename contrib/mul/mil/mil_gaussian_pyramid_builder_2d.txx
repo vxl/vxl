@@ -1,8 +1,9 @@
 // This is mul/mil/mil_gaussian_pyramid_builder_2d.txx
 #ifndef mil_gaussian_pyramid_builder_2d_txx_
 #define mil_gaussian_pyramid_builder_2d_txx_
-//: \file
-//  \brief Class to build gaussian pyramids of mil_image_2d_of<T>
+//:
+//  \file
+//  \brief Class to build Gaussian pyramids of mil_image_2d_of<T>
 //  \author Tim Cootes
 
 #include "mil_gaussian_pyramid_builder_2d.h"

@@ -4,7 +4,7 @@
 #endif
 //:
 //  \file
-// \brief Implementation of vil2_image_base (needed to create virtual tables in gcc)
+// \brief Implementation of vil2_image_base (necessary in order to create virtual tables in gcc)
 // \author Tim Cootes - Manchester
 
 #include <vil2/vil2_image_view_base.h>

@@ -1,5 +1,5 @@
 // This is mul/clsfy/clsfy_classifier_base.h
-// Copyright: (C) 2000 Britsh Telecommunications plc
+// Copyright: (C) 2000 British Telecommunications plc
 #ifndef clsfy_classifier_base_h_
 #define clsfy_classifier_base_h_
 //:
@@ -47,7 +47,7 @@ class clsfy_classifier_base
   //: Classify many input vectors
   void virtual classify_many(vcl_vector<unsigned> &outputs, mbl_data_wrapper<vnl_vector<double> > &inputs) const;
 
-  //: Log likelyhood of being in class (binary classifiers only)
+  //: Log likelihood of being in class (binary classifiers only)
   // class probability = 1 / (1+exp(-log_l))
   // Operation of this method is undefined for multiclass classifiers
   virtual double log_l(const vnl_vector<double> &input) const = 0;

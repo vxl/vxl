@@ -1,13 +1,13 @@
 #ifndef vil2_resample_bilin_h_
 #define vil2_resample_bilin_h_
-
-//: \file
+//:
+//  \file
 //  \brief Sample grid of points in one image and place in another
 //  \author Tim Cootes
 
 #include <vil2/vil2_image_view.h>
 
-//: Sample grid of points in one image and place in another, using bilinear interpolation
+//: Sample grid of points in one image and place in another, using bilinear interpolation.
 //  dest_image(i,j,p) is sampled from the src_image at
 //  (x0+i.dx1+j.dx2,y0+i.dy1+j.dy2), where i=[0..n1-1], j=[0..n2-1]
 //  dest_image resized to (n1,n2,src_image.nplanes())

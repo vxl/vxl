@@ -53,7 +53,7 @@ void test_gaussian_pyramid_builder_3d_build(mil3d_gaussian_pyramid_builder_3d<fl
   TEST("Found correct number of levels", image_pyr.n_levels(), 3);
 }
 
-// Check in-homogeneous smoothing option (ie only smooth in x,y but not z on some levels)
+// Check in-homogeneous smoothing option (i.e. only smooth in x,y but not z on some levels)
 void test_gaussian_pyramid_builder_3d_build_xy(mil3d_gaussian_pyramid_builder_3d<float>& builder)
 {
   int nx = 20, ny = 20, nz = 10;
@@ -101,7 +101,7 @@ void test_gaussian_pyramid_builder_3d_build_xy(mil3d_gaussian_pyramid_builder_3d
   TEST_NEAR("Corner pixel",image0(nx2*2-2,ny2*2-2,nz2-1),image1(nx2-1,ny2-1,nz2-1),1e-6);
 }
 
-// Check in-homogeneous smoothing option (ie only smooth in x,z but not y on some levels)
+// Check in-homogeneous smoothing option (i.e. only smooth in x,z but not y on some levels)
 void test_gaussian_pyramid_builder_3d_build_xz(mil3d_gaussian_pyramid_builder_3d<float>& builder)
 {
   int nx = 20, ny = 10, nz = 20;
@@ -149,7 +149,7 @@ void test_gaussian_pyramid_builder_3d_build_xz(mil3d_gaussian_pyramid_builder_3d
   TEST_NEAR("Corner pixel",image0(nx2*2-2,ny2-1,nz2*2-2),image1(nx2-1,ny2-1,nz2-1),1e-6);
 }
 
-// Check in-homogeneous smoothing option (ie only smooth in y,z but not x on some levels)
+// Check in-homogeneous smoothing option (i.e. only smooth in y,z but not x on some levels)
 void test_gaussian_pyramid_builder_3d_build_yz(mil3d_gaussian_pyramid_builder_3d<float>& builder)
 {
   int nx = 10, ny = 20, nz = 20;

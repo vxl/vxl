@@ -136,7 +136,7 @@ void mil_image_2d_of<T>::set_n_planes(int n)
 
 //=======================================================================
 //: Define valid data region (including transform).
-//  Resizes and sets the tranformation so that
+//  Resizes and sets the transformation so that
 //  worldToIm(x,y) is valid for all points in range
 //  Specifically, resize(1+xhi-xlo,1+yhi-ylo);
 //  worldToIm() translates by (-xlo,-ylo)
@@ -188,7 +188,7 @@ void mil_image_2d_of<T>::setFormat(const char* f)
 //: Define parameters.
 //  planes[i] is pointer to i'th plane of nx x ny image data
 //  i should be valid in range [0,n_planes-1]
-//  Copies of pointers recorded (ie a shallow copy)
+//  Copies of pointers recorded (i.e. a shallow copy)
 template<class T>
 void mil_image_2d_of<T>::set(vcl_vector<T*>& planes,
                              int nx, int ny, int xstep, int ystep,
@@ -209,7 +209,7 @@ void mil_image_2d_of<T>::set(vcl_vector<T*>& planes,
 //: Define parameters.
 //  planes[i] is pointer to i'th plane of nx x ny image data
 //  i should be valid in range [0,n_planes-1]
-//  Copies of pointers recorded (ie a shallow copy)
+//  Copies of pointers recorded (i.e. a shallow copy)
 template<class T>
 void mil_image_2d_of<T>::set(T** planes, int n_planes,
                              int nx, int ny, int xstep, int ystep,
@@ -287,7 +287,7 @@ void mil_image_2d_of<T>::setRGB(T* r, T* g, T* b,
 //=======================================================================
 //: Define parameters for packed RGB T images.
 //  Sets up a 3 plane image, assuming nx x ny image
-//  of xstep T pixels, ie  red(x,y) = data[x*xstep+y*step],
+//  of xstep T pixels, i.e. red(x,y) = data[x*xstep+y*step],
 //  green(x,y) = data[1+x*xstep+y*step],
 //  blue(x,y) = data[2+x*xstep+y*step]
 template<class T>
@@ -311,7 +311,7 @@ void mil_image_2d_of<T>::setRGB(T* data, int nx, int ny, int xstep, int ystep)
 //  I.e. plane(i) points to im.plane(i) + offset
 //  The world2im transform is set to match
 //  so this appears identical to im when addressed
-//  in world co-ords.
+//  in world coordinates.
 template<class T>
 void mil_image_2d_of<T>::setToWindow(const mil_image_2d_of& im,
                                      int xlo, int xhi, int ylo, int yhi)

@@ -68,9 +68,9 @@ class mbl_data_wrapper
   virtual void set_index(unsigned long n);
 
   //: Create copy on heap and return base pointer
-  // This will create an idependent iterator on the underlying data.
+  // This will create an independent iterator on the underlying data.
   // The original data is not copied.
-  // Be careful of destriction of underlying data.
+  // Be careful of destruction of underlying data.
   virtual mbl_data_wrapper< T >* clone() const = 0;
 
   //: Name of the class

@@ -31,7 +31,7 @@ protected:
   vil2_image_view_base(unsigned ni, unsigned nj, unsigned nplanes):
   ni_(ni), nj_(nj), nplanes_(nplanes), reference_count_(0) {}
 
-  //: Default is an empty one plane image
+  //: Default is an empty one-plane image
   //  Don't set nplanes_ to zero as it confuses resize(nx,ny) later
   vil2_image_view_base(): ni_(0), nj_(0), nplanes_(1), reference_count_(0) {}
 

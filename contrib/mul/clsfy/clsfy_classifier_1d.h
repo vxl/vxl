@@ -46,7 +46,7 @@ class clsfy_classifier_1d
   //: Classify many input vectors
   virtual void classify_many(vcl_vector<unsigned> &outputs, mbl_data_wrapper<double> &inputs) const;
 
-  //: Log likelyhood of being in class (binary classifiers only)
+  //: Log likelihood of being in class (binary classifiers only)
   // class probability = 1 / (1+exp(-log_l))
   // Operation of this method is undefined for multiclass classifiers
   virtual double log_l(double input) const = 0;

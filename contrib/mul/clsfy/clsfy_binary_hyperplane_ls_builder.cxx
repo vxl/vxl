@@ -3,7 +3,7 @@
 #include "clsfy_binary_hyperplane_ls_builder.h"
 //:
 // \file
-// \brief Implement a two class output linear classifier builder
+// \brief Implement a two-class output linear classifier builder
 // \author Ian Scott
 // \date 4 June 2001
 

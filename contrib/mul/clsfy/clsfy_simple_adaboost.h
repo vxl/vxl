@@ -21,17 +21,17 @@ protected:
   //: The classifiers in order
   vcl_vector<clsfy_classifier_1d*> classifier_1d_;
 
-  //: Co-efficents applied to each classifier
+  //: Coefficients applied to each classifier
   vcl_vector<double> alphas_;
 
   //: Index of input vector appropriate for each classifier
   vcl_vector<int> index_;
 
-  //: number of classfiers used
+  //: number of classifiers used
   int n_clfrs_used_;
 
   //: dimensionality of data
-  // (ie size of input vectors v, ie the total number of different features)
+  // (i.e. size of input vectors v, ie the total number of different features)
   int n_dims_;
 
 //================protected methods =================================
@@ -76,7 +76,7 @@ public:
   // Returns a number between 0 and nClasses-1 inclusive to represent the most likely class
   unsigned virtual classify(const vnl_vector<double> &input) const;
 
-  //: Log likelyhood of being in the positive class.
+  //: Log likelihood of being in the positive class.
   // Class probability = 1 / (1+exp(-log_l))
   virtual double log_l(const vnl_vector<double> &input) const;
 

@@ -149,7 +149,7 @@ void mil3d_image_3d_of<T>::set_n_planes(int n)
 
 //=======================================================================
 //: Define valid data region (including transform).
-//  Resizes and sets the tranformation so that
+//  Resizes and sets the transformation so that
 //  worldToIm(x,y,z) is valid for all points in range
 //  Specifically, resize(1+xhi-xlo,1+yhi-ylo,1+zhi-zlo);
 //  worldToIm() translates by (-xlo,-ylo,-zlo)
@@ -200,7 +200,7 @@ void mil3d_image_3d_of<T>::setFormat(const char* f)
 //: Define parameters
 //  planes[i] is pointer to i'th plane of nx x ny image data
 //  i should be valid in range [0,n_planes-1]
-//  Copies of pointers recorded (ie a shallow copy)
+//  Copies of pointers recorded (i.e. a shallow copy)
 //=======================================================================
 template<class T>
 void mil3d_image_3d_of<T>::set(vcl_vector<T*>& planes,
@@ -226,7 +226,7 @@ void mil3d_image_3d_of<T>::set(vcl_vector<T*>& planes,
 //  I.e. plane(i) points to im.plane(i) + offset
 //  The world2im transform is set to match
 //  so this appears identical to im when addressed
-//  in world co-ords.
+//  in world coordinates.
 //=======================================================================
 template<class T>
 void mil3d_image_3d_of<T>::setToWindow(const mil3d_image_3d_of& im,

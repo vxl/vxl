@@ -21,9 +21,9 @@ protected:
 //: upper bound on Lagrange multipliers
   double C_;
 
-//: Attempt to jointly optimise lagrange multipliers i1, and i2.
-// \param i1 first lagrange multiplier.
-// \param i2 second lagrange multiplier.
+//: Attempt to jointly optimise Lagrange multipliers i1, and i2.
+// \param i1 first Lagrange multiplier.
+// \param i2 second Lagrange multiplier.
 // \param E1 The amount by which i1 violates KKT conditions.
   virtual int take_step(int i1, int i2, double E1);
 
@@ -44,7 +44,7 @@ public:
 // Upper bounds on each parameter.
   double C() const;
 
-//: Set the upper bound on the lagrange multipliers
+//: Set the upper bound on the Lagrange multipliers
   void set_C( double C);
 
   clsfy_smo_1_lin();
@@ -62,7 +62,7 @@ class clsfy_smo_1_rbf: public clsfy_smo_1_lin
 {
 protected:
 
-//: -0.5 sigma^-2, where sigma is the width of the gaussian kernel
+//: -0.5 sigma^-2, where sigma is the width of the Gaussian kernel
   double gamma_;
 
 //: Calculate the kernel for data items i1 and i2
@@ -70,10 +70,10 @@ protected:
 
 public:
 
-//: -0.5 sigma^-2, where sigma is the width of the gaussian kernel
+//: -0.5 sigma^-2, where sigma is the width of the Gaussian kernel
   double gamma() const;
 
-//: Control sigma, the width of the gaussian kernel.
+//: Control sigma, the width of the Gaussian kernel.
 // gamma = -0.5 sigma^-2
   void set_gamma(double gamma);
 

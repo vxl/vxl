@@ -6,7 +6,7 @@
 // \file
 // \author Tim Cootes
 // \date 12-Apr-2001
-// \brief Multi-variate gaussian PDF, with a diagonal covariance matrix
+// \brief Multi-variate Gaussian PDF, with a diagonal covariance matrix
 
 #include "vpdfl_axis_gaussian.h"
 #include <vcl_cmath.h>
@@ -136,8 +136,8 @@ vpdfl_sampler_base* vpdfl_axis_gaussian::new_sampler() const
 
 double vpdfl_axis_gaussian::log_prob_thresh(double pass_proportion) const
 {
-  // The mahalanobis distance of n-D gaussian is distributed as Chi^2(n),
-  // by definition, Chi^2 is the sum of independedent Normal RVs.
+  // The Mahalanobis distance of n-D Gaussian is distributed as Chi^2(n),
+  // by definition, Chi^2 is the sum of independent Normal RVs.
   return log_k() - 0.5 * vpdfl_chi2_for_cum_prob (pass_proportion, n_dims());
 }
 

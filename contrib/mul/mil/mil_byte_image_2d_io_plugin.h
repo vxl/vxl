@@ -35,7 +35,7 @@ class mil_byte_image_2d_io_plugin
   //: Attempt to load image from named file. 
   // \param filetype  String hinting at what image format is
   // \param colour    define whether to load images as colour or grey-scale.
-  //        Options are '' (ie rely on image), 'Grey' or 'RGB'
+  //        Options are '' (i.e. rely on image), 'Grey' or 'RGB'
   // \ret   true if successful
   virtual bool loadTheImage (mil_image_2d_of<vil_byte>& image, 
                              const vcl_string & path,
@@ -48,7 +48,7 @@ class mil_byte_image_2d_io_plugin
   //: Delete all registered plugins
   static void delete_all_plugins();
 
-  //: Check wether a filename is a potential candidate for loading and if it is available.
+  //: Check whether a filename is a potential candidate for loading and if it is available.
   virtual bool can_be_loaded(const vcl_string& filename);
 };
 

@@ -1,7 +1,8 @@
 // This is mul/vimt/vimt_gaussian_pyramid_builder_2d_general.txx
 #ifndef vimt_gaussian_pyramid_builder_2d_general_txx_
 #define vimt_gaussian_pyramid_builder_2d_general_txx_
-//: \file
+//:
+//  \file
 //  \brief Build gaussian image pyramids at any scale separation
 //  \author Ian Scott
 
@@ -12,9 +13,8 @@
 #include <vcl_iostream.h>
 #include <vil2/algo/vil2_gauss_reduce.h>
 #include <vimt/vimt_image_pyramid.h>
-#include <mbl/mbl_gamma.h>
-#include <vsl/vsl_indent.h>
 #include <vimt/vimt_crop.h>
+
 //=======================================================================
 
 template <class T>
@@ -23,7 +23,7 @@ vimt_gaussian_pyramid_builder_2d_general<T>::vimt_gaussian_pyramid_builder_2d_ge
 {}
 
 
-//: Consturct with given scale_step
+//: Construct with given scale_step
 template <class T>
 vimt_gaussian_pyramid_builder_2d_general<T>::vimt_gaussian_pyramid_builder_2d_general(double scale_step):
   scale_params_(scale_step)
@@ -35,7 +35,6 @@ template <class T>
 vimt_gaussian_pyramid_builder_2d_general<T>::~vimt_gaussian_pyramid_builder_2d_general()
 {
 }
-
 
 
 //: Set the Scale step

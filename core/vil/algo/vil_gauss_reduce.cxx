@@ -121,7 +121,7 @@ void vil2_gauss_reduce(const int* src_im,
 
 
 //: Smooth and subsample single plane src_im in x to produce dest_im using 121 filter in x and y
-//  Smooths with a 3x3 filter and subsamples
+//  Smoothes with a 3x3 filter and subsamples
 void vil2_gauss_reduce_121(const vxl_byte* src_im,
                                 int src_ni, int src_nj,
                                 int s_x_step, int s_y_step,
@@ -146,7 +146,7 @@ void vil2_gauss_reduce_121(const vxl_byte* src_im,
       for (int x=0;x<ni2;++x)
       {
           // The following is a little inefficient - could group terms to reduce arithmetic
-          // Add 0.5 so that truncating effetively rounds
+          // Add 0.5 so that truncating effectively rounds
           *d = vxl_byte( 0.0625f * s1[-s_x_step] + 0.125f * s1[0] + 0.0625f * s1[s_x_step]
                        + 0.1250f * s2[-s_x_step] + 0.250f * s2[0] + 0.1250f * s2[s_x_step]
                        + 0.0625f * s3[-s_x_step] + 0.125f * s3[0] + 0.0625f * s3[s_x_step] +0.5);
@@ -191,7 +191,7 @@ void vil2_gauss_reduce_121(const vxl_byte* src_im,
 }
 
 //: Smooth and subsample single plane src_im in x to produce dest_im using 121 filter in x and y
-//  Smooths with a 3x3 filter and subsamples
+//  Smoothes with a 3x3 filter and subsamples
 void vil2_gauss_reduce_121(const float* src_im,
                                 int src_ni, int src_nj,
                                 int s_x_step, int s_y_step,
@@ -262,7 +262,7 @@ void vil2_gauss_reduce_121(const float* src_im,
 
 
 //: Smooth and subsample single plane src_im in x to produce dest_im using 121 filter in x and y
-//  Smooths with a 3x3 filter and subsamples
+//  Smoothes with a 3x3 filter and subsamples
 void vil2_gauss_reduce_121(const int* src_im,
                                 int src_ni, int src_nj,
                                 int s_x_step, int s_y_step,
@@ -288,7 +288,7 @@ void vil2_gauss_reduce_121(const int* src_im,
       for (int x=0;x<ni2;++x)
       {
           // The following is a little inefficient - could group terms to reduce arithmetic
-          // Add 0.5 so that truncating effetively rounds
+          // Add 0.5 so that truncating effectively rounds
           *d = int( 0.0625f * s1[-s_x_step] + 0.125f * s1[0] + 0.0625f * s1[s_x_step]
                   + 0.1250f * s2[-s_x_step] + 0.250f * s2[0] + 0.1250f * s2[s_x_step]
                   + 0.0625f * s3[-s_x_step] + 0.125f * s3[0] + 0.0625f * s3[s_x_step] +0.5);
@@ -338,7 +338,7 @@ vil2_gauss_reduce_params::vil2_gauss_reduce_params(double scaleStep)
 {
   assert(scaleStep> 1.0  && scaleStep<=2.0);
   scale_step_ = scaleStep;
-// This arrangement gives close to a 1-5-8-5-1 filter for scalestep of2.0;
+// This arrangement gives close to a 1-5-8-5-1 filter for scalestep of 2.0;
 // and 0-0-1-0-0 for a scale step close to 1.0;
   double z = 1/vcl_sqrt(2.0*(scaleStep-1.0));
   filt0_ = vnl_erf(0.5 * z) - vnl_erf(-0.5 * z);

@@ -53,7 +53,7 @@ public:
   mbl_stochastic_data_collector();
 
   //: Set number of samples to be stored.
-  // This is the nuber of vectors that can be actually retrieved.
+  // This is the number of vectors that can be actually retrieved.
   explicit mbl_stochastic_data_collector(unsigned n);
 
   //: Destructor
@@ -64,7 +64,7 @@ public:
 
   //: Set number of samples to be stored
   // If not set, the value defaults to 1000.
-  // Calling this function implicity calls clean().
+  // Calling this function implicitly calls clean().
   virtual void set_n_samples(int n);
 
   //: Record given value

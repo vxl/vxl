@@ -47,7 +47,7 @@ void mbl_stochastic_data_collector<T>::clear()
 
 //: Set number of samples to be stored
 // If not set, the value defaults to 1000.
-// Calling this function implicity calls clean().
+// Calling this function implicitly calls clean().
 template <class T>
 void mbl_stochastic_data_collector<T>::set_n_samples(int n)
 {
@@ -58,7 +58,7 @@ void mbl_stochastic_data_collector<T>::set_n_samples(int n)
 //=======================================================================
 
 //: Stochastically record given vector.
-// The vector will be recorded, and saved with a probabililty equal to that of
+// The vector will be recorded, and saved with a probability equal to that of
 // every other vector presented to this function.
 // returns true if it actually stored the value.
 template <class T>

@@ -2,7 +2,7 @@
 #define pdf1d_gaussian_kernel_pdf_sampler_h_
 //:
 // \file
-// \brief Implements sampling for a gaussian kerne_pdf model
+// \brief Implements sampling for a gaussian kernel_pdf model
 // \author Tim Cootes and Ian Scott
 
 #include <mbl/mbl_mz_random.h>

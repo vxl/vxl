@@ -3,7 +3,7 @@
 #define vil3d_trilin_interp_3d_h_
 //:
 //  \file
-//  \brief Trililinear interpolation functions for 3D images
+//  \brief Trilinear interpolation functions for 3D images
 //  \author Tim Cootes
 
 #include <vcl_cassert.h>

@@ -35,7 +35,7 @@ public:
   // Returns a number between 0 and nClasses-1 inclusive to represent the most likely class
   unsigned virtual classify(const vnl_vector<double> &input) const;
 
-  //: Log likelyhood of being in the positive class.
+  //: Log likelihood of being in the positive class.
   // Class probability = 1 / (1+exp(-log_l))
   virtual double log_l(const vnl_vector<double> &input) const;
 
@@ -48,7 +48,7 @@ public:
   //: Get the classifier weight vector (= hyperplane normal)
   const vnl_vector<double> &weights() const { return weights_; }
 
-  //: Get the classfier bias.
+  //: Get the classifier bias.
   double bias() const { return bias_; }
 
   //: The dimensionality of input vectors.

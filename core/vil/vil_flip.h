@@ -13,7 +13,7 @@
 
 
 //: Create a reflected view in which i -> ni-1-i.
-//  i.e vil2_flip_lr(view)(i,j,p) = view(ni-1-i,j,p)
+//  i.e. vil2_flip_lr(view)(i,j,p) = view(ni-1-i,j,p)
 //  O(1).
 // \relates vil2_image_view
 template<class T>
@@ -26,7 +26,7 @@ inline vil2_image_view<T> vil2_flip_lr(const vil2_image_view<T>& v)
 }
 
 //: Create a reflected view in which y -> nj-1-j.
-//  i.e vil2_flip_ud(view)(i,j,p) = view(i,nj-1-j,p)
+//  i.e. vil2_flip_ud(view)(i,j,p) = view(i,nj-1-j,p)
 //  O(1).
 // \relates vil2_image_view
 template<class T>

@@ -531,7 +531,7 @@ void mil3d_transform_3d::calcInverse() const
     case Similarity :
     case Affine :
     {
-      // affine inverse (plugged in from from symbolic matlab)
+      // affine inverse (plugged in from symbolic matlab)
 
       double det=-xx_*yy_*zz_+xx_*zy_*yz_+yx_*xy_*zz_-yx_*zy_*xz_-zx_*xy_*yz_+zx_*yy_*xz_;
       if (det==0)
@@ -605,8 +605,8 @@ mil3d_transform_3d operator*(const mil3d_transform_3d& L, const mil3d_transform_
     return L;
   else
   {
-  /// full multipication - inefficient but works for
-  // arbitraty 4*4 transformation matrix
+  /// full multiplication - inefficient but works for
+  // arbitrary 4*4 transformation matrix
     T.xx_ = L.xx_*R.xx_ + L.xy_*R.yx_+ L.xz_*R.zx_ + L.xt_*R.tx_;
     T.xy_ = L.xx_*R.xy_ + L.xy_*R.yy_+ L.xz_*R.zy_ + L.xt_*R.ty_;
     T.xz_ = L.xx_*R.xz_ + L.xy_*R.yz_+ L.xz_*R.zz_ + L.xt_*R.tz_;

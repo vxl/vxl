@@ -1,7 +1,7 @@
 #ifndef vimt_gaussian_pyramid_builder_2d_general_h_
 #define vimt_gaussian_pyramid_builder_2d_general_h_
-
-//: \file
+//:
+//  \file
 //  \brief Build gaussian image pyramids at any scale separation
 //  \author Ian Scott
 
@@ -24,7 +24,7 @@ private:
     mutable vil2_image_view<T> worka_;
     //: image workspace
     mutable vil2_image_view<T> workb_;
-    
+
     //: Pre-calculated scale parametesr and filter taps.
     vil2_gauss_reduce_params scale_params_;
 
@@ -36,7 +36,7 @@ public:
     //: Dflt ctor
     vimt_gaussian_pyramid_builder_2d_general();
 
-    //: Consturct with given scale_step
+    //: Construct with given scale_step
     vimt_gaussian_pyramid_builder_2d_general(double scale_step);
 
     //: Destructor
@@ -54,7 +54,7 @@ public:
 
     //: Smooth and subsample src_im to produce dest_im
     //  Applies 5 element FIR filter in x and y, then samples
-    //  Assumes dest_im has suffient data allocated
+    //  Assumes dest_im has sufficient data allocated
     void gauss_reduce(T* dest_im, int dest_ystep,
                       const T* src_im,
                       int src_nx, int src_ny,

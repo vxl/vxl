@@ -64,7 +64,7 @@ public:
              const vcl_vector<vgl_point_2d<double> >& dest_pts);
 
     //: Define source point positions
-    //  Performs precomputations so that build(dest_points) can be
+    //  Performs pre-computations so that build(dest_points) can be
     //  called multiple times efficiently
   void set_source_pts(const vcl_vector<vgl_point_2d<double> >& source_pts);
 

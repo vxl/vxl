@@ -6,7 +6,7 @@
 #endif
 //:
 // \file
-// \brief Multi-variate gaussian PDF, with a diagonal covariance matrix
+// \brief Multi-variate Gaussian PDF, with a diagonal covariance matrix
 // \author Tim Cootes
 // \date 12-Apr-2001
 // \verbatim
@@ -18,7 +18,7 @@
 
 #include <vpdfl/vpdfl_pdf_base.h>
 
-//: Multi-variate gaussian PDF, with a diagonal covariance matrix
+//: Multi-variate Gaussian PDF, with a diagonal covariance matrix
 class vpdfl_axis_gaussian : public vpdfl_pdf_base
 {
   double log_k_;

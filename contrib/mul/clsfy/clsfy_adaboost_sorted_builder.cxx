@@ -70,7 +70,7 @@ double clsfy_adaboost_sorted_builder::build(clsfy_classifier_base& model,
                                             unsigned nClasses,
                                             const vcl_vector<unsigned> &outputs) const
 {
-  // nb  ignore nClasses=1, ie always binary classifier
+  // N.B. ignore nClasses=1, i.e. always binary classifier
 
   assert( model.is_class("clsfy_simple_adaboost") );
   clsfy_simple_adaboost &strong_classifier = (clsfy_simple_adaboost&) model;
@@ -167,7 +167,7 @@ double clsfy_adaboost_sorted_builder::build(clsfy_classifier_base& model,
   // perhaps change this so load and sort several vectors at once!!
   // far too slow at present
   // say load in and sort 100 at once?????
-  // ie 100 features at once!
+  // i.e. 100 features at once!
 
   //int bs= 100; //batch size
   vcl_vector< vcl_vector< vbl_triple<double,int,int> > >vec(bs_);
@@ -223,7 +223,7 @@ double clsfy_adaboost_sorted_builder::build(clsfy_classifier_base& model,
               wrapper=collector->data_wrapper();
 
 
-  // now actually apply ADABoost algorithm
+  // now actually apply AdaBoost algorithm
   wrapper.reset();
   assert ( wrapper.current().size() == n );
   assert ( d == (int)wrapper.size() );
@@ -267,12 +267,12 @@ double clsfy_adaboost_sorted_builder::build(clsfy_classifier_base& model,
 
 
   // clear classifier
-  // nb maybe shouldn't do this if going to build incrementally
-  // ie by rebuilding the training set from false positives of the
+  // N.B. maybe shouldn't do this if going to build incrementally
+  // i.e. by rebuilding the training set from false positives of the
   // current classifier
   strong_classifier.clear();
   strong_classifier.set_n_dims(d);
-  // nb have to set builder as a member variable elsewhere
+  // N.B. have to set builder as a member variable elsewhere
   clsfy_classifier_1d* c1d = weak_builder_->new_classifier();
   clsfy_classifier_1d* best_c1d= weak_builder_->new_classifier();
 
@@ -329,7 +329,7 @@ double clsfy_adaboost_sorted_builder::build(clsfy_classifier_base& model,
       alpha  = vcl_log(2.0*n);   //is this appropriate???
       strong_classifier.add_classifier( best_c1d, alpha, best_i);
 
-      // delete classifiers on heap, cos clones taken by strong_classifier
+      // delete classifiers on heap, because clones taken by strong_classifier
       delete c1d;
       delete best_c1d;
       return clsfy_test_error(strong_classifier, inputs, outputs);
@@ -341,7 +341,7 @@ double clsfy_adaboost_sorted_builder::build(clsfy_classifier_base& model,
       vcl_cout<<"min_error => 0.5 !!!\n";
       beta=1.0;
 
-      // delete classifiers on heap, cos clones taken by strong_classifier
+      // delete classifiers on heap, because clones taken by strong_classifier
       delete c1d;
       delete best_c1d;
       return clsfy_test_error(strong_classifier, inputs, outputs);

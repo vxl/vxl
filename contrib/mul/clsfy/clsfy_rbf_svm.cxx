@@ -65,7 +65,7 @@ unsigned clsfy_rbf_svm::classify(const vnl_vector<double> &input) const
 
 //=======================================================================
 
-//: Log likelyhood of being in class (binary classifiers only).
+//: Log likelihood of being in class (binary classifiers only).
 // class probability = vcl_exp(logL) / (1+vcl_exp(logL))
 // This is not a strict log likelihood value, since SVMs do not give Bayesian
 // outputs. However its properties fit the requirements of a log likelihood value.
@@ -127,7 +127,7 @@ void clsfy_rbf_svm::set( const vcl_vector<vnl_vector<double> > &supportVectors,
   assert(n == labels.size());
   supports_ = supportVectors;
 
-  // premultiply lagrangians with output labels.
+  // pre-multiply Lagrangians with output labels.
   lagrangians_ = lagrangianAlphas;
   for (unsigned int i=0; i<n; i++)
     lagrangians_[i] *= (labels[i]?1:-1);

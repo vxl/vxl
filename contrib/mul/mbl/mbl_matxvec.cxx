@@ -26,7 +26,7 @@
 
 // Some of the code in this file has been converted to use VXL,
 // the rest has been #if-ed out. Only convert the other functions
-// as they are needed, and after chacking that a suitable function doesn't
+// as they are needed, and after checking that a suitable function doesn't
 // already exist in VXL.
 
 
@@ -408,7 +408,7 @@ void TC_ProductAtB(vnl_matrix<double>& AtB,
 //=======================================================================
 
 
-//: Computes MD where D is diagonal with elememts d(i)
+//: Computes MD where D is diagonal with elements d(i)
 void TC_ProductMD(vnl_matrix<double>& MD,
                   const vnl_matrix<double>& M,
                   const vnl_vector<double>& d)
@@ -440,7 +440,7 @@ void TC_ProductMD(vnl_matrix<double>& MD,
 
 //=======================================================================
 
-//: Computes DM where D is diagonal with elememts d(i)
+//: Computes DM where D is diagonal with elements d(i)
 void TC_ProductDM(vnl_matrix<double>& DM,
                   const vnl_matrix<double>& M,
                   const vnl_vector<double>& d)

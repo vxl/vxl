@@ -4,7 +4,7 @@
 #endif
 //:
 // \file
-// \brief Multi-variate gaussian PDF with arbitrary axes.
+// \brief Multi-variate Gaussian PDF with arbitrary axes.
 // \author Tim Cootes
 // \date 16-Oct-98
 //
@@ -212,7 +212,7 @@ double vpdfl_gaussian::log_p(const vnl_vector<double>& x) const
 
   if (b_.size()!=n) b_.resize(n);
 
-  // Rotate dx_ into co-ordinate frame of axes of gaussian
+  // Rotate dx_ into co-ordinate frame of axes of Gaussian
   // b_ = P'dx_
   mbl_matxvec_prod_vm(dx_, eigenvecs(),b_);
 
@@ -243,7 +243,7 @@ void vpdfl_gaussian::gradient(vnl_vector<double>& g,
 
   if (b_.size()!=n) b_.resize(n);
 
-  // Rotate dx_ into co-ordinate frame of axes of gaussian
+  // Rotate dx_ into co-ordinate frame of axes of Gaussian
   // b_ = P'dx_
   mbl_matxvec_prod_vm(dx_, eigenvecs(),b_);
 
@@ -274,8 +274,8 @@ void vpdfl_gaussian::gradient(vnl_vector<double>& g,
 
 double vpdfl_gaussian::log_prob_thresh(double pass_proportion) const
 {
-  // The mahalanobis distance of n-D gaussian is distributed as Chi^2(n),
-  // by definition, Chi^2 is the sum of independedent Normal RVs.
+  // The Mahalanobis distance of n-D Gaussian is distributed as Chi^2(n),
+  // by definition, Chi^2 is the sum of independent Normal RVs.
   return log_k() - 0.5 * vpdfl_chi2_for_cum_prob (pass_proportion, n_dims());
 }
 
@@ -295,7 +295,7 @@ void vpdfl_gaussian::nearest_plausible(vnl_vector<double>& x, double log_p_min) 
   unsigned int n = n_dims();
   if (b_.size()!=n) b_.resize(n);
 
-  // Rotate dx_ into co-ordinate frame of axes of gaussian
+  // Rotate dx_ into co-ordinate frame of axes of Gaussian
   // b_ = P'dx_
   mbl_matxvec_prod_vm(dx_, eigenvecs(),b_);
 

@@ -13,7 +13,7 @@
 // Modifications
 // 7 June 2001 - Peter Vanroose - made pbm (magic P4) working
 // 3 October 2001 Peter Vanroose - Implemented get_property("top_row_first")
-// 20 Sep 2002  Ian Scott  - Coverted to vil2.
+// 20 Sep 2002  Ian Scott  - Converted to vil2.
 //\endverbatim
 
 #include <vil2/vil2_image_resource.h>

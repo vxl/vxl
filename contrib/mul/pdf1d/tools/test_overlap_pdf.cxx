@@ -33,15 +33,15 @@ void run_experiment(const pdf1d_pdf& pdf,
   int n_trials = 20;
 
   // Strictly should use kernel builder, when one is available
-  pdf1d_compare_to_pdf_bhat bhat_comparitor;
-  //  bhat_comparitor.set_builder(pdf1d_gaussian_builder());
+  pdf1d_compare_to_pdf_bhat bhat_comparator;
+  //  bhat_comparator.set_builder(pdf1d_gaussian_builder());
   pdf1d_epanech_kernel_pdf_builder ek_builder;
   ek_builder.set_use_width_from_separation();
-  bhat_comparitor.set_builder(ek_builder);
+  bhat_comparator.set_builder(ek_builder);
 
-  pdf1d_compare_to_pdf_ks ks_comparitor;
+  pdf1d_compare_to_pdf_ks ks_comparator;
 
-  bhat_comparitor.bootstrap_compare_form(b,d.data_block(),n,test_builder,n_trials);
+  bhat_comparator.bootstrap_compare_form(b,d.data_block(),n,test_builder,n_trials);
 
   pdf1d_calc_mean_var(B_mean,B_var,b);
 #if 0

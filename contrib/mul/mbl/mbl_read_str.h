@@ -4,7 +4,7 @@
 //:
 // \file
 // \brief  Asks question and waits for an answer.
-//         If the answer is a non-empty strint, returns it.
+//         If the answer is a non-empty string, returns it.
 //         If the answer is an empty vcl_string (return)
 //         then returns default.
 //
@@ -22,7 +22,7 @@
 //   Outputs:  reply: The answer or a default
 //   Returns:   reply.
 //   Description:  Asks question and waits for an answer.
-//       If the answer is a non-empty strint, returns it.
+//       If the answer is a non-empty string, returns it.
 //       If the answer is an empty vcl_string (return)
 //       then returns default.
 //   References: -

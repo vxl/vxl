@@ -203,7 +203,7 @@ void test_adaboost()
 
 
   // test positive examples from training set
-  // nb egs0 are the positive training examples
+  // N.B. egs0 are the positive training examples
   int tp=0, fp=0;
   double tpr=0.0, fpr=1.0, adab_te=0.0, te; // initialise to make compiler happy
 
@@ -234,7 +234,7 @@ void test_adaboost()
   TEST( "fpr<0.2", fpr<0.2, true );
 
 
-  //Train individual classifiers on each of the 4 gaussian data sets
+  //Train individual classifiers on each of the 4 Gaussian data sets
   for (int i=0; i<n_clfrs; ++i)
   {
     vnl_vector<double> pos_egs, neg_egs;

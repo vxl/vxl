@@ -99,7 +99,7 @@ void test_adaboost()
   vcl_cout<<"error1= "<<error1<<vcl_endl;
 
 
-  //calc te (ie total error) on train set
+  //calc te (i.e. total error) on train set
   int tp=0, fp=0;
   for (int i=0; i<n_pos; ++i)
     if ( b_thresh_clsfr->classify( pos_samples[i] ) == 1 ) tp++;
@@ -113,7 +113,7 @@ void test_adaboost()
   vcl_cout<<"te on training set= "<<te<<vcl_endl;
 
 
-  // calc te (ie total error) on test set
+  // calc te (i.e. total error) on test set
   tp=0; fp=0;
   for (int i=0; i<n_pos; ++i)
     if ( b_thresh_clsfr->classify( pos_samples_test[i] ) == 1 ) tp++;
@@ -179,7 +179,7 @@ void test_adaboost()
 
   // Test various parameter settings
   vnl_vector<double> p(2);
-  // ie x=>5
+  // i.e. x=>5
   p[0]=1;
   p[1]=5;
   b_thresh_clsfr->set_params(p);
@@ -187,7 +187,7 @@ void test_adaboost()
   TEST( "2 < 5", b_thresh_clsfr->classify(2), 0 );
 
 
-  // ie x=<5
+  // i.e. x=<5
   p[0]=-1;
   p[1]=-5;
   b_thresh_clsfr->set_params(p);

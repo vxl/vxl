@@ -1,7 +1,8 @@
 // This is mul/mil/mil_scale_pyramid_builder_2d.h
 #ifndef mil_scale_pyramid_builder_2d_h_
 #define mil_scale_pyramid_builder_2d_h_
-//: \file
+//:
+//  \file
 //  \brief Build scale image pyramids at any scale separation
 //  \author Ian Scott
 
@@ -74,7 +75,7 @@ class mil_scale_pyramid_builder_2d : public mil_image_pyramid_builder
 
   //: Smooth and subsample src_im to produce dest_im
   //  Applies an appropriate filter in x and y, then sub-samples
-  //  at the choosen scaleStep;
+  //  at the chosen scaleStep;
   void scale_reduce(mil_image_2d_of<T>& dest_im,
                     mil_image_2d_of<T>const& src_im) const;
 
@@ -84,7 +85,7 @@ class mil_scale_pyramid_builder_2d : public mil_image_pyramid_builder
 
   //: Smooth and subsample src_im to produce dest_im
   //  Applies 5 element FIR filter in x and y, then samples
-  //  Assumes dest_im has suffient data allocated
+  //  Assumes dest_im has sufficient data allocated
   void scale_reduce(T* dest_im, int dest_ystep,
                     const T* src_im,
                     int src_nx, int src_ny,

@@ -1,8 +1,9 @@
 // This is mul/mil/mil_gaussian_pyramid_builder_2d_general.txx
 #ifndef mil_gaussian_pyramid_builder_2d_general_txx_
 #define mil_gaussian_pyramid_builder_2d_general_txx_
-//: \file
-//  \brief Build gaussian image pyramids at any scale separation
+//:
+//  \file
+//  \brief Build Gaussian image pyramids at any scale separation
 //  \author Ian Scott
 
 #include "mil_gaussian_pyramid_builder_2d_general.h"
@@ -25,7 +26,7 @@ mil_gaussian_pyramid_builder_2d_general<T>::mil_gaussian_pyramid_builder_2d_gene
 }
 
 
-//: Consturct with given scale_step
+//: Construct with given scale_step
 template <class T>
 mil_gaussian_pyramid_builder_2d_general<T>::mil_gaussian_pyramid_builder_2d_general(double scale_step)
 {
@@ -112,7 +113,7 @@ inline float l_round (double x, float )
 //: Smooth and subsample src_im to produce dest_im
 //  Applies 5 pin filter in x and y, then samples
 //  every other pixel.
-//  Assumes dest_im has suffient data allocated
+//  Assumes dest_im has sufficient data allocated
 
 template <class T>
 void mil_gaussian_pyramid_builder_2d_general<T>::gauss_reduce(
@@ -120,7 +121,7 @@ void mil_gaussian_pyramid_builder_2d_general<T>::gauss_reduce(
            const T* src_im,
            int src_nx, int src_ny, int dest_nx, int dest_ny, int src_ystep) const
 {
-  // Convolve src with a 5 x 1 gaussian filter,
+  // Convolve src with a 5 x 1 Gaussian filter,
   // placing result in work_
 
   T* worka_im = worka_.plane(0);
@@ -149,23 +150,23 @@ void mil_gaussian_pyramid_builder_2d_general<T>::gauss_reduce(
 
     // Now deal with edge effects :
     worka_row[0] = l_round( filt_edge0_ * src_col3[0]
-              + filt_edge1_ * src_col4[0]
-              + filt_edge2_ * src_col5[0], (T)0);
+                          + filt_edge1_ * src_col4[0]
+                          + filt_edge2_ * src_col5[0], (T)0);
 
     worka_row[1] = l_round( filt_pen_edge_n1_ * src_col2[1]
-              + filt_pen_edge0_ * src_col3[1]
-              + filt_pen_edge1_ * src_col4[1]
-              + filt_pen_edge2_ * src_col5[1], (T)0);
+                          + filt_pen_edge0_ * src_col3[1]
+                          + filt_pen_edge1_ * src_col4[1]
+                          + filt_pen_edge2_ * src_col5[1], (T)0);
 
     worka_row[src_nx-2] = l_round( filt_pen_edge2_ * src_col1[x]
-                 + filt_pen_edge1_ * src_col2[x]
-                 + filt_pen_edge0_ * src_col3[x]
-                 + filt_pen_edge_n1_ * src_col4[x], (T)0);
+                                 + filt_pen_edge1_ * src_col2[x]
+                                 + filt_pen_edge0_ * src_col3[x]
+                                 + filt_pen_edge_n1_ * src_col4[x], (T)0);
 
     x++;
     worka_row[src_nx-1] = l_round( filt_edge2_ * src_col1[x]
-                 + filt_edge1_ * src_col2[x]
-                 + filt_edge0_ * src_col3[x], (T)0);
+                                 + filt_edge1_ * src_col2[x]
+                                 + filt_edge0_ * src_col3[x], (T)0);
   }
 
 //  worka_.print_all(vcl_cout);
@@ -182,10 +183,10 @@ void mil_gaussian_pyramid_builder_2d_general<T>::gauss_reduce(
 
     for (int x=0; x<src_nx; x++)
       workb_row[x] = l_round(  filt2_ * worka_row1[x]
-                       + filt1_ * worka_row2[x]
-                       + filt0_ * worka_row3[x]
-                       + filt1_ * worka_row4[x]
-                       + filt2_ * worka_row5[x], (T)0);
+                             + filt1_ * worka_row2[x]
+                             + filt0_ * worka_row3[x]
+                             + filt1_ * worka_row4[x]
+                             + filt2_ * worka_row5[x], (T)0);
   }
 
   // Now deal with edge effects :
@@ -208,22 +209,22 @@ void mil_gaussian_pyramid_builder_2d_general<T>::gauss_reduce(
   for (int x=0;x<src_nx;x++)
   {
     workb_row_top[x] = l_round(  filt_edge0_ * worka_row_top_5[x]
-                + filt_edge1_ * worka_row_top_4[x]
-                + filt_edge2_ * worka_row_top_3[x], (T)0);
+                               + filt_edge1_ * worka_row_top_4[x]
+                               + filt_edge2_ * worka_row_top_3[x], (T)0);
 
     workb_row_next_top[x] = l_round( filt_pen_edge2_ * worka_row_top_2[x]
-                  + filt_pen_edge1_ * worka_row_top_3[x]
-                  + filt_pen_edge0_ * worka_row_top_4[x]
-                  + filt_pen_edge_n1_ * worka_row_top_5[x], (T)0);
+                                   + filt_pen_edge1_ * worka_row_top_3[x]
+                                   + filt_pen_edge0_ * worka_row_top_4[x]
+                                   + filt_pen_edge_n1_ * worka_row_top_5[x], (T)0);
 
     workb_row_next_bottom[x] = l_round(  filt_pen_edge2_ * worka_row_bottom_4[x]
-                    + filt_pen_edge1_ * worka_row_bottom_3[x]
-                    + filt_pen_edge0_ * worka_row_bottom_2[x]
-                    + filt_pen_edge_n1_ * worka_row_bottom_1[x], (T)0); 
+                                       + filt_pen_edge1_ * worka_row_bottom_3[x]
+                                       + filt_pen_edge0_ * worka_row_bottom_2[x]
+                                       + filt_pen_edge_n1_ * worka_row_bottom_1[x], (T)0); 
 
     workb_row_bottom[x] = l_round(   filt_edge2_ * worka_row_bottom_3[x]
-                  + filt_edge1_ * worka_row_bottom_2[x]
-                  + filt_edge0_ * worka_row_bottom_1[x], (T)0);
+                                   + filt_edge1_ * worka_row_bottom_2[x]
+                                   + filt_edge0_ * worka_row_bottom_1[x], (T)0);
   }
 
 //  workb_.print_all(vcl_cout);
@@ -240,7 +241,7 @@ void mil_gaussian_pyramid_builder_2d_general<T>::gauss_reduce(
     for (int xi=0; xi<dest_nx; xi++)
     {
       dest_row[xi] = l_round (mil_safe_extend_bilin_interp_2d(x, y,
-          workb_im,  src_nx, src_ny, work_ystep), (T)0);
+                                workb_im,  src_nx, src_ny, work_ystep), (T)0);
       x += scale_step_;
     }
     y+= scale_step_;
@@ -255,7 +256,7 @@ void mil_gaussian_pyramid_builder_2d_general<T>::set_scale_step(double scaleStep
 {
   assert(scaleStep> 1.0  && scaleStep<=2.0);
   scale_step_ = scaleStep;
-// This arrangement gives close to a 1-5-8-5-1 filter for scalestep of2.0;
+// This arrangement gives close to a 1-5-8-5-1 filter for scalestep of 2.0;
 // and 0-0-1-0-0 for a scale step close to 1.0;
   double z = 1/vcl_sqrt(2.0*(scaleStep-1.0));
   filt0_ = mbl_erf(0.5 * z) - mbl_erf(-0.5 * z);

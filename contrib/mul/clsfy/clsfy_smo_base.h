@@ -57,9 +57,9 @@ protected:
 
   mbl_mz_random rng_;
 
-  //: Attempt to jointly optimise lagrange multipliers i1, and i2.
-  // \param i1 first lagrange multiplier.
-  // \param i2 second lagrange multiplier.
+  //: Attempt to jointly optimise Lagrange multipliers i1, and i2.
+  // \param i1 first Lagrange multiplier.
+  // \param i2 second Lagrange multiplier.
   // \param E1 The amount by which i1 violates KKT conditions.
   virtual int take_step(int i1, int i2, double E1) =0;
 
@@ -83,8 +83,8 @@ public:
   const vnl_vector<double>& lagrange_mults() const;
 
   //: Set the initial values of the parameters to be optimised.
-  // The caller is responsible for ensuring that the inital values
-  // fulfil the constraints;
+  // The caller is responsible for ensuring that the initial values
+  // fulfill the constraints;
   void set_lagrange_mults(const vnl_vector<double>& lagrange_mults);
 
   //: Bias term in function evaluation.

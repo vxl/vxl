@@ -93,7 +93,7 @@ void pdf1d_weighted_epanech_kernel_sampler::regular_samples(vnl_vector<double>& 
   {
     // n_this_k is approximately the number of samples for this kernel.
     // the exact number depends on the non-integer part of dist.
-    // If we didn;t do this, we would have a problem with accumulation of rounding errors,
+    // If we didn't do this, we would have a problem with accumulation of rounding errors,
     // causing us to find too many or too few samples when we reach the end of dist.
     double n_this_k = n * s[kernel] /  kpdf.sum_weights_;
 

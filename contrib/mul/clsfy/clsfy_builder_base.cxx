@@ -1,5 +1,5 @@
 // This is mul/clsfy/clsfy_builder_base.cxx
-// Copyright: (C) 2000 Britsh Telecommunications plc
+// Copyright: (C) 2000 British Telecommunications plc
 #include "clsfy_builder_base.h"
 //:
 // \file

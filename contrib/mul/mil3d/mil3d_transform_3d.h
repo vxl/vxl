@@ -144,7 +144,7 @@ public:
                     double r_x, double r_y, double r_z,
                     double t_x, double t_y, double t_z);
 
-    //: Returns the coords of the origin
+    //: Returns the coordinates of the origin
     vgl_point_3d<double>  origin() const
       { return vgl_point_3d<double> (tt_==1?xt_:xt_/tt_,tt_==1?yt_:yt_/tt_,tt_==1?zt_:zt_/tt_); }
 
@@ -156,14 +156,14 @@ public:
     // it becomes a translation.
     void origin( const vgl_point_3d<double> & );
 
-    //: Applies tranformation to (x,y,z)
-    // \param x  x co-ord
+    //: Applies transformation to (x,y,z)
+    // \param x  x coordinate
     // \param y  y co-ord
     // \param z  z co-ord
     //ret: Point = T(x,y,z)
     vgl_point_3d<double>  operator()(double x, double y, double z) const;
 
-    //: Applies tranformation to point p
+    //: Applies transformation to point p
     // \param p  Point
     // \return Point = T(p)
     vgl_point_3d<double>  operator()(vgl_point_3d<double>  p) const

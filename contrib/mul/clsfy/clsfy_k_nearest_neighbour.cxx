@@ -87,7 +87,7 @@ unsigned clsfy_k_nearest_neighbour::n_dims() const
 
 //=======================================================================
 
-//: This value has properties of a Log likelyhood of being in class (binary classifiers only)
+//: This value has properties of a Log likelihood of being in class (binary classifiers only)
 // class probability = exp(logL) / (1+exp(logL))
 double clsfy_k_nearest_neighbour::log_l(const vnl_vector<double> &input) const
 {

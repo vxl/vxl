@@ -17,7 +17,7 @@
 
 //: A class to perform some of the functions of a Radial Basis Function Network.
 //  This is a special case of a mixture model pdf, where the same
-//  (radialy symmetric) pdf kernel is used at each node.
+//  (radially symmetric) pdf kernel is used at each node.
 //  The nodes are supplied by build().
 //  calcWts(w,x) calculates the probabilities that x belongs to each
 //  node.
@@ -80,7 +80,7 @@ public:
 
   //: Compute weights for given new_x.
   //  If new_x = x()(i) then w(i+1)==1, w(j!=i+1)==0
-  //  Otherwise w varyies smoothly repending on distance
+  //  Otherwise w varies smoothly repending on distance
   //  of new_x from x()'s
   //  If sumToOne() then elements of w will sum to 1.0
   //  otherwise they will sum to <=1.0, decreasing as new_x

@@ -198,7 +198,7 @@ void clsfy_random_classifier::class_probabilities(vcl_vector<double> &outputs, c
     cvd::scale(p, p, n, 1.0/cvd::sum(p, n));
   }
 
-// Convert a two class output into a binary output
+// Convert a two-class output into a binary output
   if (last_outputs_.size() == 2)
   {
     outputs.resize(1);
@@ -210,7 +210,7 @@ void clsfy_random_classifier::class_probabilities(vcl_vector<double> &outputs, c
 
 //=======================================================================
 
-//: Log likelyhood of being in class (binary classifiers only)
+//: Log likelihood of being in class (binary classifiers only)
 // class probability = 1 / (1+exp(-log_l))
 // Operation of this method is undefined for multiclass classifiers.
 double clsfy_random_classifier::log_l(const vnl_vector<double> &input) const

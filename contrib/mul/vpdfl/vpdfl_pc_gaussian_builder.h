@@ -6,7 +6,7 @@
 #endif
 //:
 // \file
-// \brief Interface for Multi-variate Principle Component gaussian PDF Builder.
+// \brief Interface for Multi-variate Principle Component Gaussian PDF Builder.
 // \author Ian Scott
 // \date 21-Jul-2000
 //
@@ -44,7 +44,7 @@ class vpdfl_pc_gaussian_builder : public vpdfl_gaussian_builder
   // Isn't used by default..
   double proportionOfVariance_;
 
-  //: The number of components to represent in the prinicple space.
+  //: The number of components to represent in the principle space.
   unsigned fixed_partition_;
 
  public:
@@ -76,7 +76,7 @@ class vpdfl_pc_gaussian_builder : public vpdfl_gaussian_builder
 
   //: Decide where to partition an Eigenvector space
   // Returns the number of principle components to be used.
-  // Pass in the Eigenvlaues (eVals), the number of samples
+  // Pass in the eigenvalues (eVals), the number of samples
   // that went to make up this Gaussian (nSamples), and the noise floor
   // for the dataset. The method may use simplified algorithms if
   // you indicate that the number of samples or noise floor is unknown

@@ -2,7 +2,7 @@
 #ifndef clsfy_knn_builder_h_
 #define clsfy_knn_builder_h_
 
-// Copyright: (C) 2001 Britsh Telecommunications plc
+// Copyright: (C) 2001 British Telecommunications plc
 
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
@@ -23,7 +23,7 @@
 
 //: Builds clsfy_k_nearest_neighbour classifiers.
 // This class doesn't do any calculation, it is easy to create a
-// knn classfier directly - but it allows for consistent swappable
+// knn classifier directly - but it allows for consistent swappable
 // classifiers.
 class clsfy_knn_builder : public clsfy_builder_base
 {
@@ -69,7 +69,7 @@ class clsfy_knn_builder : public clsfy_builder_base
   //: The number of nearest neighbours to look for.
   unsigned k() const;
 
-  //: Set the The number of nearest neighbours to look for.
+  //: Set the number of nearest neighbours to look for.
   void set_k(unsigned);
 };
 

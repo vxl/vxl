@@ -29,7 +29,7 @@ public:
   virtual unsigned classify(double input) const
     { if (s_*input<threshold_) return 0; else return 1; }
 
-  //: Log likelyhood of being in the positive class/
+  //: Log likelihood of being in the positive class/
   // Class probability = 1 / (1+exp(-log_l))
   virtual double log_l(double input) const;
 

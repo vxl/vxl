@@ -20,7 +20,7 @@
 //=======================================================================
 
 //: Find the posterior probability of the input being in the positive class.
-// The result is is outputs(0)
+// The result is outputs(0)
 void clsfy_binary_threshold_1d::class_probabilities(vcl_vector<double> &outputs,
                                                     double input) const
 {
@@ -31,7 +31,7 @@ void clsfy_binary_threshold_1d::class_probabilities(vcl_vector<double> &outputs,
 
 //=======================================================================
 
-//: Log likelyhood of being in the positive class.
+//: Log likelihood of being in the positive class.
 // Class probability = 1 / (1+exp(-log_l))
 double clsfy_binary_threshold_1d::log_l(double input) const
 {

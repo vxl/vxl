@@ -3,13 +3,13 @@
 
 //:
 // \file
-// \brief Computes running sum of 1D variable, so mean accessable.
+// \brief Computes running sum of 1D variable, so mean accessible.
 // \author Tim Cootes
 
 #include <vcl_iostream.h>
 #include <vsl/vsl_binary_io.h>
 
-//: Computes running sum of 1D variable, so mean accessable.
+//: Computes running sum of 1D variable, so mean accessible.
 // \code
 // // A rather trivial example
 // mbl_sum_1d stats,stats2;
