@@ -129,13 +129,21 @@ void mil_gaussian_pyramid_builder_2d<T>::emptyPyr(mil_image_pyramid& im_pyr) con
 template<class T>
 void mil_gaussian_pyramid_builder_2d<T>::checkPyr(mil_image_pyramid& im_pyr,  int n_levels) const
 {
-  if (im_pyr.n_levels()>=n_levels)
+  const unsigned got_levels = im_pyr.n_levels();
+  if (got_levels >= n_levels && im_pyr(0).is_a()==work_im_.is_a())
   {
-    if (im_pyr(0).is_a()==work_im_.is_a()) return;
+    if (im_pyr.n_levels()==n_levels) return;
+    else
+    {
+      for (int i=n_levels;i<got_levels;++i)
+        delete im_pyr.data()[i];
+    }
+    im_pyr.data().resize(n_levels);
+    return;
   }
   
-  emptyPyr(im_pyr);
   im_pyr.data().resize(n_levels);
+  emptyPyr(im_pyr);
   
   for (int i=0;i<n_levels;++i)
     im_pyr.data()[i] = new mil_image_2d_of<T>;

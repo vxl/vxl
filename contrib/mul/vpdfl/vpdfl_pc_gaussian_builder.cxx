@@ -265,6 +265,7 @@ void vpdfl_pc_gaussian_builder::weighted_build(vpdfl_pdf_base& model,
     {
       actual_samples ++;
       w_sum += w;
+      data.current().assert_finite();
       sum += w*data.current();
       updateCovar(S,data.current(),w);
     }
