@@ -39,8 +39,8 @@ class projection_lsqf : public vnl_least_squares_function
       assert(n_==to_points.size());
       for(unsigned i = 0; i<n_; ++i)
         {
-          from_points_[i]=from_points[i];
-          to_points_[i] = to_points[i];
+          from_points_.push_back(from_points[i]);
+          to_points_.push_back(to_points[i]);
         }
     }
   ~projection_lsqf() { }
