@@ -1,8 +1,8 @@
 // fsm@robots: It is implementation dependent whether a 'char' is
-// signed or unsigned. Compilers also differ over whether the 
+// signed or unsigned. Compilers also differ over whether the
 // unqualified form of char is the same type as the qualified one.
-
-// e.g. 
+//
+// e.g.
 // gcc thinks that 'char', 'signed char' and 'unsigned char' are
 // three different types.
 //

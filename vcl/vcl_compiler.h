@@ -121,7 +121,7 @@
 # define VCL_SUNPRO_ALLOCATOR_HACK(T) T // FIXME
 #endif
 
-// -------------------- template instantiation
+//-------------------- template instantiation
 
 // if the compiler doesn't understand "export", we just leave it out.
 // gcc and SunPro 5.0 understand it, but they ignore it noisily.
@@ -130,7 +130,7 @@
 #endif
 
 #if VCL_NEEDS_INLINE_INSTANTIATION
-# define VCL_INSTANTIATE_INLINE(symbol) template symbol;
+# define VCL_INSTANTIATE_INLINE(symbol) template symbol
 #else
 # define VCL_INSTANTIATE_INLINE(symbol) /* */
 #endif
@@ -153,13 +153,13 @@ typedef int saw_VCL_FOR_SCOPE_HACK;
 #endif
 
 // fix to instantiate template functions
-#define VCL_INSTANTIATE_NONINLINE(fn_decl) template fn_decl ;
+#define VCL_INSTANTIATE_NONINLINE(fn_decl) template fn_decl
 
 // -------------------- handy macros
 
 //: VCL_COMMA
 //
-// Handy for passing things with commas in them to CPP macros.  e.g. 
+// Handy for passing things with commas in them to CPP macros.  e.g.
 // DO_MACRO(pair<A,B>) can be replaced by DO_MACRO(pair<A VCL_COMMA B>).
 #define VCL_COMMA ,
 

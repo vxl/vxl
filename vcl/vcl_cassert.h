@@ -1,11 +1,11 @@
-// The <cassert> header does not
-// have inclusion guards. The
-// C and C++ standards say so.
-
 // This is vcl_cassert.h
 
+//- The <cassert> header does not
+//- have inclusion guards. The
+//- C and C++ standards say so.
+
 //:
-// \file 
+// \file
 // \author fsm@robots.ox.ac.uk
 
 #include "vcl_compiler.h"
