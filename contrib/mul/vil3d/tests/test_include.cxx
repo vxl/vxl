@@ -19,7 +19,7 @@
 #include <vil3d/vil3d_sample_profile_trilin.h>
 #include <vil3d/vil3d_slice.h>
 #include <vil3d/vil3d_switch_axes.h>
-
 #include <vil3d/vil3d_trilin_interp.h>
+#include <vil3d/vil3d_transform.h>
 
 int main() { return 0; }
