@@ -31,8 +31,8 @@ class vvid_live_video_tableau : public vgui_image_tableau
   vcl_string type_name() const;
   //camera manipulation
   void set_camera_params(const cmu_1394_camera_params& cp);
-  cmu_1394_camera_params get_camera_params(){return (cmu_1394_camera_params)cam_;}
-  bool video_capabilities(const int format, const int mode, const int frame_rate){return cam_.m_videoFlags[format][mode][frame_rate];}
+  cmu_1394_camera_params get_camera_params() { return (cmu_1394_camera_params)cam_; }
+  bool video_capabilities(int format, int mode, int frame_rate) { return cam_.m_videoFlags[format][mode][frame_rate]; }
 
   bool attach_live_video();
   bool start_live_video();
