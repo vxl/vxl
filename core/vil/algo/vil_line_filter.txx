@@ -2,9 +2,9 @@
 #ifndef vil2_line_filter_txx_
 #define vil2_line_filter_txx_
 //:
-//  \file
-//  \brief Find line-like structures in a 2D image
-//  \author Tim Cootes
+// \file
+// \brief Find line-like structures in a 2D image
+// \author Tim Cootes
 
 #include "vil2_line_filter.h"
 #include <vil2/vil2_fill.h>
@@ -17,9 +17,9 @@
 //  This version looks for light lines on a dark background only.
 template <class Type>
 void vil2_line_filter<Type>::light_lines_3x3(vil2_image_view<vxl_byte>& line_dir,
-                                                 vil2_image_view<float>& line_str,
-                                                 vil2_image_view<Type>const& image,
-                                                 float edge_thresh)
+                                             vil2_image_view<float>& line_str,
+                                             vil2_image_view<Type>const& image,
+                                             float edge_thresh)
 {
   assert(image.nplanes()==1);
   unsigned ni = image.ni();
@@ -47,8 +47,8 @@ void vil2_line_filter<Type>::light_lines_3x3(vil2_image_view<vxl_byte>& line_dir
   s_data += s_jstep;
   const Type* im_data = image.top_left_ptr()+jstep+istep;
 
-  unsigned ni1 = ni-1;
-  unsigned nj1 = nj-1;
+  int ni1 = ni-1;
+  int nj1 = nj-1;
 
   // Relative positions of points to be sampled
   int nistep = -istep;
@@ -110,9 +110,9 @@ void vil2_line_filter<Type>::light_lines_3x3(vil2_image_view<vxl_byte>& line_dir
 //  0 = Undefined, 1 = horizontal, 2 = 45 degrees etc
 template <class Type>
 void vil2_line_filter<Type>::dark_lines_3x3(vil2_image_view<vxl_byte>& line_dir,
-                                                vil2_image_view<float>& line_str,
-                                                vil2_image_view<Type>const& image,
-                                                float edge_thresh)
+                                            vil2_image_view<float>& line_str,
+                                            vil2_image_view<Type>const& image,
+                                            float edge_thresh)
 {
   assert(image.nplanes()==1);
   unsigned ni = image.ni();
@@ -140,8 +140,8 @@ void vil2_line_filter<Type>::dark_lines_3x3(vil2_image_view<vxl_byte>& line_dir,
   s_data += s_jstep;
   const Type* im_data = image.top_left_ptr()+jstep+istep;
 
-  unsigned ni1 = ni-1;
-  unsigned nj1 = nj-1;
+  int ni1 = ni-1;
+  int nj1 = nj-1;
 
   // Relative positions of points to be sampled
   int nistep = -istep;
@@ -204,9 +204,9 @@ void vil2_line_filter<Type>::dark_lines_3x3(vil2_image_view<vxl_byte>& line_dir,
 //  This version looks for light lines on a dark background only.
 template <class Type>
 void vil2_line_filter<Type>::light_lines_5x5(vil2_image_view<vxl_byte>& line_dir,
-                                                 vil2_image_view<float>& line_str,
-                                                 vil2_image_view<Type>const& image,
-                                                 float edge_thresh)
+                                             vil2_image_view<float>& line_str,
+                                             vil2_image_view<Type>const& image,
+                                             float edge_thresh)
 {
   assert(image.nplanes()==1);
   unsigned ni = image.ni();
@@ -312,9 +312,9 @@ void vil2_line_filter<Type>::light_lines_5x5(vil2_image_view<vxl_byte>& line_dir
 //: Find line like structures in image (dark lines on light backgrounds)
 template <class Type>
 void vil2_line_filter<Type>::dark_lines_5x5(vil2_image_view<vxl_byte>& line_dir,
-                                                vil2_image_view<float>& line_str,
-                                                vil2_image_view<Type>const& image,
-                                                float edge_thresh)
+                                            vil2_image_view<float>& line_str,
+                                            vil2_image_view<Type>const& image,
+                                            float edge_thresh)
 {
   assert(image.nplanes()==1);
   unsigned ni = image.ni();
