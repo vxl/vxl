@@ -216,9 +216,6 @@ LINK32=link.exe
 # Begin Group "Source Files"
 # PROP Default_Filter ""
 # Begin Source File
-SOURCE=.\Templates/vcl_vector+image_point_match-.cxx
-# End Source File
-# Begin Source File
 SOURCE=.\similarity_from_matches.cxx
 # End Source File
 # Begin Source File
