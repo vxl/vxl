@@ -55,6 +55,12 @@ class vil2_image_data
   // it should work efficiently. This function will always return a
   // multi-plane scalar-pixel view of the data.
   // \return 0 if unable to get view of correct size.
+  //
+  // If you want to fill an existing view (e.g. a window onto some other image,
+  // then use
+  // \verbatim
+  // vil2_reformat(data->get_view(..), window);
+  //\endverbatim
   virtual vil2_image_view_base_sptr get_view(unsigned i0, unsigned ni,
                                              unsigned j0, unsigned nj) const
   { return get_copy_view (i0, ni, j0, nj); }
