@@ -167,6 +167,9 @@ SOURCE=.\rrel_shift2d_est.cxx
 # Begin Source File
 SOURCE=.\rrel_homography2d_est_aff.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\rrel_ransac_obj_smooth_cost.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter ""
@@ -241,6 +244,9 @@ SOURCE=.\rrel_shift2d_est.h
 # End Source File
 # Begin Source File
 SOURCE=.\rrel_homography2d_est_aff.h
+# End Source File
+# Begin Source File
+SOURCE=.\rrel_ransac_obj_smooth_cost.h
 # End Source File
 # End Group
 # End Target
