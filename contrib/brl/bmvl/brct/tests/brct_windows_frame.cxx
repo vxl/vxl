@@ -171,7 +171,6 @@ void brct_windows_frame::remove_curve2d()
 void brct_windows_frame::add_curve3d(vcl_vector<vgl_point_3d<double> >& pts)
 {
   int size = pts.size();
-  assert(size > 1);
   curves_3d_.resize(size-1);
   instance_->tab_3d_->set_foreground(1, 1, 1);
   for (int i=0; i<size-1; i++)

@@ -123,7 +123,7 @@ class kalman_filter
   vnl_double_3x3 K_;
 
   //: used for denote outlier point in image
-  static const double large_num_ /* =1e15 */;
+  static const double large_num_ ;
 };
 
 #endif // brct_kalman_filter_h_

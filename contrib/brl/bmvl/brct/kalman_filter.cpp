@@ -366,6 +366,10 @@ void kalman_filter::update_confidence()
 
   vcl_cout<<"normalization_factor = "<<normalization_factor;
   // normalize the probability weight across all the points
+
+  if(normalization_factor == 0)
+    return ;
+  
   for (int i=0; i<num_points_; i++)
     prob_[i] /= normalization_factor;
 }
@@ -409,15 +413,16 @@ void kalman_filter::inc()
     vnl_double_2 z(cur_measures[i].x(), cur_measures[i].y());
 
     vnl_double_2 z_pred = projection(P,X);
+    if(matched_point_prob(z, z_pred) > 0){ // if not a outlir
+      //
+      // go to the correction step
+      //
+      Xpred = Xpred +  G_*(z - z_pred)*prob_[i];
 
-    //
-    // go to the correction step
-    //
-    Xpred = Xpred +  G_*(z - z_pred)*prob_[i];
-
-    vnl_matrix_fixed<double, 6, 6> I;
-    I.set_identity();
-    Q_ = (I - G_*H)*Qpred;
+      vnl_matrix_fixed<double, 6, 6> I;
+      I.set_identity();
+      Q_ = (I - G_*H)*Qpred;
+    }
   }
 
   double dt = time_tick_[cur_pos_] - time_tick_[cur_pos_-1];
