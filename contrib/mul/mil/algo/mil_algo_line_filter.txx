@@ -391,7 +391,7 @@ void mil_algo_line_filter<Type>::dark_lines_5x5(mil_image_2d_of<unsigned char>& 
       if (f4<min_f) { best_d=4; min_f=f4;}
 
         // Average on line - average off line
-      float edge_s = (f1+f2+f3+f4)/12 - (17.0f/60) * min_f - 0.2*(*i_row);
+      float edge_s = (f1+f2+f3+f4)/12 - (17.0f/60) * min_f - float(*i_row)/5;
       if (edge_s>edge_thresh)
       {
         *d_row = best_d;
@@ -416,9 +416,8 @@ void mil_algo_line_filter<Type>::dark_lines_5x5(mil_image_2d_of<unsigned char>& 
   }
 }
 
-
 #undef MIL_ALGO_LINE_FILTER_INSTANTIATE
 #define MIL_ALGO_LINE_FILTER_INSTANTIATE(T) \
  template class mil_algo_line_filter<T >
 
-#endif
+#endif // mil_algo_line_filter_txx_
