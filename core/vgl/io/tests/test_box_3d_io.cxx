@@ -8,9 +8,9 @@
 
 void test_box_3d_double_io()
 {
-  vcl_cout << "***********************\n"
+  vcl_cout << "*****************************\n"
            << "Testing vgl_box_3d<double> io\n"
-           << "***********************\n";
+           << "*****************************\n";
 
   //// test constructors, accessors
   vgl_box_3d<double> p_out(1.2,3.4,5.6,2.3,4.5,6.7), p_in;
@@ -28,12 +28,7 @@ void test_box_3d_double_io()
   TEST ("Finished reading file successfully", (!bfs_in), false);
   bfs_in.close();
 
-  TEST ("p_out==p_in",p_out.min_x() == p_in.min_x()
-                   && p_out.min_y() == p_in.min_y()
-                   && p_out.min_z() == p_in.min_z()
-                   && p_out.max_x() == p_in.max_x()
-                   && p_out.max_y() == p_in.max_y()
-                   && p_out.max_z() == p_in.max_z(), true);
+  TEST ("p_out==p_in",p_out, p_in);
 
   vsl_print_summary(vcl_cout, p_out);
   vcl_cout << vcl_endl;
