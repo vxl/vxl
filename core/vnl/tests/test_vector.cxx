@@ -3,8 +3,9 @@
 #include <vnl/vnl_math.h>
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_float_3.h>
-#include <vnl/vnl_float_3x3.h>
+#include <vnl/vnl_float_4.h>
 #include <vnl/vnl_matrix.h>
+#include <vnl/vnl_matrix_fixed.h>
 #include <vnl/vnl_cross.h>
 #include <testlib/testlib_test.h>
 
@@ -276,11 +277,12 @@ void vnl_vector_test_float()
 
   {
     vnl_float_3 v(1.f,2.f,3.f);
-    vnl_float_3x3 m = outer_product(v, v);
-    TEST("outer_product",
-         (m(0,0)==1 && m(0,1)==2 && m(0,2)==3 &&
-          m(1,0)==2 && m(1,1)==4 && m(1,2)==6 &&
-          m(2,0)==3 && m(2,1)==6 && m(2,2)==9), true);
+    vnl_float_4 v2(1.f,2.f,3.f,4.f);
+    vnl_matrix_fixed<float,3,4> m = outer_product(v, v2);
+    TEST("outer_product -> fixed 3 x fixed 4",
+         (m(0,0)==1 && m(0,1)==2 && m(0,2)==3 && m(0,3) == 4 &&
+          m(1,0)==2 && m(1,1)==4 && m(1,2)==6 && m(1,3) == 8 &&
+          m(2,0)==3 && m(2,1)==6 && m(2,2)==9 && m(2,3) == 12), true);
   }
   {
     vnl_float_3 v(1.f,2.f,3.f);
