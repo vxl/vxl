@@ -1,18 +1,12 @@
-# ./vxl/vbl/tests/CMakeLists.txt
+# vxl/vbl/tests/CMakeLists.txt
 
 ADD_LIBRARY(vbl_test vbl_test_sources)
 
 SOURCE_FILES( vbl_test_sources
-  vbl_test_classes.cxx
+  vbl_test_classes.cxx vbl_test_classes.h
 )
 
 AUX_SOURCE_DIRECTORY(Templates vbl_test_sources)
-
-IF (WIN32)
-  IF (NOT CYGWIN)
-    INCLUDE(${allvxl_SOURCE_DIR}/vxl/vbl/tests/CMakeListsHeaders.txt)
-  ENDIF (NOT CYGWIN)
-ENDIF(WIN32)
 
 LINK_LIBRARIES( vbl_test )
 

@@ -1,22 +1,20 @@
-# ./vxl/vil/io/CMakeLists.txt
+# vxl/vil/io/CMakeLists.txt
 
-ADD_LIBRARY(vil_io vil_io_sources )
+ADD_LIBRARY(vil_io vil_io_sources)
 
 SOURCE_FILES(vil_io_sources
-  vil_io_image.cxx
-  vil_io_image_impl.cxx
-  vil_io_memory_image.cxx
-  vil_io_memory_image_format.cxx
-  vil_io_memory_image_impl.cxx
+  vil_io_image.cxx vil_io_image.h
+  vil_io_image_impl.cxx vil_io_image_impl.h
+  vil_io_memory_image.cxx vil_io_memory_image.h
+  vil_io_memory_image_format.cxx vil_io_memory_image_format.h
+  vil_io_memory_image_impl.cxx vil_io_memory_image_impl.h
+
+  vil_io_memory_image_of.txx vil_io_memory_image_of.h
+  vil_io_rgb.txx vil_io_rgb.h
+  vil_io_rgba.txx vil_io_rgba.h
 )
 
-AUX_SOURCE_DIRECTORY(Templates vil_io_sources )
-
-IF (WIN32)
-  IF (NOT CYGWIN)
-    INCLUDE(${allvxl_SOURCE_DIR}/vxl/vil/io/CMakeListsHeaders.txt)
-  ENDIF (NOT CYGWIN)
-ENDIF(WIN32)
+AUX_SOURCE_DIRECTORY(Templates vil_io_sources)
 
 IF( BUILD_TESTING)
   SUBDIRS(tests)

@@ -1,4 +1,0 @@
-SOURCE_FILES(global_sources
- vxl_copyright.h
- vxl_config.h.in
-)

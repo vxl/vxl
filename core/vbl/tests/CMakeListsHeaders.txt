@@ -1,3 +1,0 @@
-SOURCE_FILES( vbl_test_sources
-  vbl_test_classes.h
-)

@@ -1,19 +1,43 @@
-# ./vxl/CMakeLists.txt
+# vxl/CMakeLists.txt
 
 INCLUDE_DIRECTORIES(${allvxl_SOURCE_DIR}/vcl)
 INCLUDE_DIRECTORIES(${allvxl_SOURCE_DIR}/vxl)
 
-IF (WIN32)
-  IF (NOT CYGWIN)
-    INCLUDE(${allvxl_SOURCE_DIR}/vxl/CMakeListsHeaders.txt)
-  ENDIF (NOT CYGWIN)
-ENDIF(WIN32)
+SOURCE_FILES(global_sources
+ vxl_copyright.h
+ vxl_config.h.in
+)
 
-SUBDIRS( testlib )
-SUBDIRS( vpl vsl vul vbl vil vnl vgl vidl )
-SUBDIRS( vcsl )
+# common test executable
+SUBDIRS(testlib)
 
-IF( BUILD_EXAMPLES )
-  SUBDIRS( examples )
-ENDIF( BUILD_EXAMPLES )
+# POSIX layer
+SUBDIRS(vpl)
 
+# stream I/O
+SUBDIRS(vsl)
+
+# utilities
+SUBDIRS(vul)
+
+# "basics" (templates)
+SUBDIRS(vbl)
+
+# numerics
+SUBDIRS(vnl)
+
+# geometry (including computational geometry)
+SUBDIRS(vgl)
+
+# image
+SUBDIRS(vil)
+
+# video
+SUBDIRS(vidl)
+
+# coordinate systems
+SUBDIRS(vcsl)
+
+IF(BUILD_EXAMPLES)
+  SUBDIRS(examples)
+ENDIF(BUILD_EXAMPLES)
