@@ -12,6 +12,7 @@ DECLARE( test_algo_gauss_reduce );
 DECLARE( test_algo_convolve_1d );
 DECLARE( test_algo_convolve_2d );
 DECLARE( test_algo_exp_filter_1d );
+DECLARE( test_image_view_maths );
 
 void
 register_tests()
@@ -28,6 +29,7 @@ register_tests()
   REGISTER( test_algo_convolve_1d );
   REGISTER( test_algo_convolve_2d );
   REGISTER( test_algo_exp_filter_1d );
+  REGISTER( test_image_view_maths );
 }
 
 DEFINE_MAIN;

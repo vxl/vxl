@@ -15,6 +15,7 @@ ADD_EXECUTABLE( vil2_test_driver
   test_algo_convolve_1d.cxx
   test_algo_convolve_2d.cxx
   test_algo_exp_filter_1d.cxx
+  test_image_view_maths.cxx
 )
 TARGET_LINK_LIBRARIES( vil2_test_driver vil2_algo vil2 vpl vul testlib vcl )
 
@@ -31,3 +32,4 @@ ADD_TEST( test_algo_gauss_reduce      vil2_test_driver test_algo_gauss_reduce )
 ADD_TEST( test_algo_convolve_1d       vil2_test_driver test_algo_convolve_1d )
 ADD_TEST( test_algo_convolve_2d       vil2_test_driver test_algo_convolve_2d )
 ADD_TEST( test_algo_exp_filter_1d     vil2_test_driver test_algo_exp_filter_1d )
+ADD_TEST( test_image_view_maths       vil2_test_driver test_image_view_maths )

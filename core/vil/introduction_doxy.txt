@@ -175,6 +175,18 @@ vil2_image_view<vil2_byte> filtered_image = vil2_flip_transpose(tmp_image2);
 * - vil2_algo_sobel_3x3 - to generate X/Y gradient images using 3x3 Sobel operators
 * - vil2_algo_gauss_reduce - smooth and sub-sample to produce half sized image
 *
+* \subsection maths Mathematics on images
+* Useful functions include
+* - vil2_value_range - Get range of values in view
+* - vil2_sum(sum,im,p) - Sum of elements in plane of view
+* - vil2_mean - Mean of elements
+* - vil2_mean_and_variance - Mean and variance over view
+* - vil2_scale_values(im,s) - Scale elements of image by s
+* - vil2_scale_and_offset_values(im,s,o) - im(x,y,p) = s*im(x,y,p)+o
+* - vil2_image_sum(imA,imB,im_sum) : im_sum = imA+imB
+* - vil2_image_difference(imA,imB,im_diff) : im_diff = imA-imB
+* - vil2_image_abs_difference(imA,imB,im_diff) : im_diff = |imA-imB|
+*
 * \subsection interp Interpolating images
 * Bilinear interpolation (of single planes of scalar types) can be obtained using
 * - vil2_bilin_interp : Interpolate, assuming point in valid region (seg fault otherwise)
