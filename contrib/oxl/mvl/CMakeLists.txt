@@ -90,6 +90,7 @@ SET(mvl_sources
     FileNameGeneratorBase.cxx              FileNameGeneratorBase.h
                                            FileNameGenerator.h
     RawPMatrixStore.cxx                    RawPMatrixStore.h
+    mvl_linear_backproject.cxx             mvl_linear_backproject.h
 
     HomgMap2D.h
     HomgMatchPoint3D2D.h
