@@ -751,7 +751,10 @@ vil1_memory_image_of<double>
 vsrl_manager::make_3d()
 {
   // set up the dense matcher
-  if (!disp_img_ || !imgL_ || !imgR_) return NULL; // Sanity check.
+  if (!disp_img_ || !imgL_ || !imgR_) {
+    vil1_memory_image_of<double> null_image;
+    return null_image; // Sanity check.
+  }
   vsrl_results_dense_matcher matcher(imgL_,disp_img_);
   matcher.set_correlation_range(params_->correlation_range);
   vsrl_3d_output output(imgL_,imgR_);
