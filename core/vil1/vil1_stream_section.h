@@ -1,48 +1,44 @@
 #ifndef vil_stream_section_h_
 #define vil_stream_section_h_
 #ifdef __GNUC__
-#pragma interface
+#pragma interface "vil_stream_section"
 #endif
 /*
   fsm@robots.ox.ac.uk
 */
 
-// Adapt a given vil_stream by presenting a section
-// of it to the client. Objects of this class WILL
-// NOT delete the given vil_stream on destruction.
+// Purpose: make a section of a vil_stream behave like a vil_stream.
 //
-// To allow several sections to access the same
-// underlying stream simultaneously, this stream
-// will seek a lot on the underlying stream, so 
-// make sure that it's not expensive to do that.
-// For example, if the underlying stream is an
-// in-core vil_stream, seeking is probably quite
-// cheap.
+// It is possible to have multiple vil_stream_sections using the same
+// underlying stream simultaneously. This is accomplished by keeping
+// a note of the current position and seeking a lot.
 //
-// A length of -1 means that there is no upper limit
-// on the length of the section presented, at least
-// not one imposed by this class.
+// Note however that this is *not* threadsafe.
 
 #include <vil/vil_stream.h>
 
-class vil_stream_section : public vil_stream {
-public:
-  vil_stream_section(vil_stream *underlying, int pos, int n = -1);
+struct vil_stream_section : vil_stream
+{
+  // skip to position 'begin' in underlying stream and translate seeks,
+  // reads and writes relative to that position into seeks, reads and 
+  // writes in the underlying stream.
+  vil_stream_section(vil_stream *underlying, int begin);
+
+  // as above, but will not allow seeks, reads or writes past 'end'.
+  vil_stream_section(vil_stream *underlying, int begin, int end);
+  
   ~vil_stream_section();
 
-  //: implement virtual interface
-  int read (void       *buf, int n);
-  int write(void const *buf, int n);
-  int tell();
+  int write(void const* buf, int n);
+  int read(void* buf, int n);
+  int  tell();
   void seek(int position);
 
 private:
-  int transfer(void *buf, int n, bool read);
-
-  vil_stream *base;
-  int start;
-  int length;
-  int curpos; // 0 <= curpos <= length if length>=0
+  vil_stream *underlying;
+  int begin;
+  int end;
+  int current;
 };
 
 #endif
