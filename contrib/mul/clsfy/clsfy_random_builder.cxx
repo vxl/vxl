@@ -78,10 +78,9 @@ void clsfy_random_builder::b_read(vsl_b_istream& bfs)
     vsl_b_read(bfs, confidence_);
     break;
   default:
-    vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, clsfy_random_builder&) \n";
-    vcl_cerr << "           Unknown version number "<< version << "\n";
+    vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, clsfy_random_builder&)\n"
+             << "           Unknown version number "<< version << "\n";
     bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
-    return;
   }
 }
 
@@ -92,16 +91,18 @@ void clsfy_random_builder::b_read(vsl_b_istream& bfs)
 // For many classifiers, you may use nClasses==1 to
 // indicate a binary classifier
 double clsfy_random_builder::build(clsfy_classifier_base& model,
-	mbl_data_wrapper<vnl_vector<double> >& inputs,
-	unsigned nClasses,
-	const vcl_vector<unsigned> &outputs) const
+                                   mbl_data_wrapper<vnl_vector<double> >& inputs,
+                                   unsigned nClasses,
+                                   const vcl_vector<unsigned> &outputs) const
 {
   const unsigned n = outputs.size();
-  assert(dynamic_cast<clsfy_random_classifier *> (&model));
+#if 0
+  assert(dynamic_cast<clsfy_random_classifier *> (&model) != 0);
+#endif
   clsfy_random_classifier &randclass = (clsfy_random_classifier&) model;
-  
+
   if (nClasses==1) nClasses=2;
-  
+
   assert (n>0);
 
   vcl_vector<unsigned> freqs(nClasses);
@@ -111,9 +112,9 @@ double clsfy_random_builder::build(clsfy_classifier_base& model,
     freqs[outputs[i]] ++;
   }
 
-  double sum = (double)(vnl_c_vector<unsigned>::sum(&freqs.front(), nClasses)) ;
+  double sum = (double)(vnl_c_vector<unsigned>::sum(&freqs.front(), nClasses));
   vcl_vector<double> probs(nClasses);
-  for (unsigned i=0; i < nClasses ; ++i) probs[i] = freqs[i] / sum;
+  for (unsigned i=0; i < nClasses; ++i) probs[i] = freqs[i] / sum;
   randclass.set_probs(probs);
 
   assert (inputs.size() > 0);

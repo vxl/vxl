@@ -71,7 +71,7 @@ void clsfy_parzen_builder::b_write(vsl_b_ostream& bfs) const
 void clsfy_parzen_builder::b_read(vsl_b_istream& bfs)
 {
   if (!bfs) return;
-  
+
   short version;
   vsl_b_read(bfs,version);
   switch (version)
@@ -81,10 +81,9 @@ void clsfy_parzen_builder::b_read(vsl_b_istream& bfs)
     vsl_b_read(bfs, power_);
     break;
   default:
-    vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, clsfy_parzen_builder&) \n";
-    vcl_cerr << "           Unknown version number "<< version << "\n";
+    vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, clsfy_parzen_builder&)\n"
+             << "           Unknown version number "<< version << "\n";
     bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
-    return;
   }
 }
 
@@ -95,27 +94,27 @@ void clsfy_parzen_builder::b_read(vsl_b_istream& bfs)
 // For many classifiers, you may use nClasses==1 to
 // indicate a binary classifier
 double clsfy_parzen_builder::build(clsfy_classifier_base& model,
-  mbl_data_wrapper<vnl_vector<double> >& inputs,
-  unsigned nClasses,
-  const vcl_vector<unsigned> &outputs) const
+                                   mbl_data_wrapper<vnl_vector<double> >& inputs,
+                                   unsigned nClasses,
+                                   const vcl_vector<unsigned> &outputs) const
 {
   const unsigned n = inputs.size();
-  assert(dynamic_cast<clsfy_rbf_parzen *> (&model));
+  assert(dynamic_cast<clsfy_rbf_parzen *> (&model) != 0);
   assert(n==outputs.size());
-  
+
   clsfy_rbf_parzen &parzen = (clsfy_rbf_parzen&) model;
-  
+
   vcl_vector<vnl_vector<double> > vin(inputs.size());
-  
+
   inputs.reset();
   unsigned i=0;
   do
   {
     vin[i++] = inputs.current();
   } while (inputs.next());
-  
+
   assert(i==n);
-  
+
   parzen.set(vin, outputs);
   parzen.set_power(power_);
   parzen.set_rbf_width(sigma_);
@@ -136,7 +135,8 @@ void clsfy_parzen_builder::set_rbf_width(double sigma)
 //=======================================================================
 
 //: The value p in the window function exp(-1/(2*sigma^p) * |x-y|^p).
-// The value p affects the kurtosis, or peakyness of the window. Towards 0 gives a more peaked central spike, and longer tail.
+// The value p affects the kurtosis, or peakyness of the window.
+// Towards 0 gives a more peaked central spike, and longer tail.
 // Toward +inf gives a broader peak, and shorter tail.
 // The default value is 2, giving a Gaussian distribution.
 void clsfy_parzen_builder::set_power(double p)
