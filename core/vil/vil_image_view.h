@@ -18,8 +18,7 @@
 #include <vil/vil_byte.h>
 #include <vil/vil_rgb.h>
 
-//: An abstract base class of smart pointers to actual image data in memory.
-
+//: Concrete view of image data held in memory
 template <class T>
 class vil2_image_view : public vil2_image_view_base
 {
@@ -43,7 +42,7 @@ public:
     //  If the data goes out of scope then this view could be invalid, and
     //  there's no way of knowing until its too late - so take care!
   vil2_image_view(const T* top_left, unsigned nx, unsigned ny, unsigned nplanes,
-                  unsigned xstep, unsigned ystep, unsigned planestep);
+                  int xstep, int ystep, int planestep);
 
     //: Set this view to look at another view's data
     //  Typically used by functions which generate a manipulated view of
@@ -51,7 +50,7 @@ public:
     //  Need to pass the memory chunk to set up the internal smart ptr appropriately
   vil2_image_view(const vil2_smart_ptr<vil2_memory_chunk>& mem_chunk,
                   const T* top_left, unsigned nx, unsigned ny, unsigned nplanes,
-                  unsigned xstep, unsigned ystep, unsigned planestep);
+                  int xstep, int ystep, int planestep);
 
     //: Copy constructor
     // If this view cannot set itself to view the other data (e.g. because the
@@ -171,7 +170,7 @@ public:
   //  Note that though top_left is passed in as const, the data may be manipulated
   //  through the view.
   void set_to_memory(const T* top_left, unsigned nx, unsigned ny, unsigned nplanes,
-              unsigned xstep, unsigned ystep, unsigned planestep);
+              int xstep, int ystep, int planestep);
 
   //: Arrange that this is window on some planes of given image.
   //  i.e. plane(i) points to im.plane(i+p0) + offset

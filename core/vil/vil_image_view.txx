@@ -28,7 +28,7 @@ vil2_image_view<T>::vil2_image_view(unsigned nx, unsigned ny, unsigned nplanes)
 //: Set this view to look at someone else's memory data.
 template<class T>
 vil2_image_view<T>::vil2_image_view(const T* top_left, unsigned nx, unsigned ny, unsigned nplanes,
-                  unsigned xstep, unsigned ystep, unsigned planestep)
+                  int xstep, int ystep, int planestep)
 {
   set_to_memory(top_left,nx,ny,nplanes,xstep,ystep,planestep);
 }
@@ -38,7 +38,7 @@ vil2_image_view<T>::vil2_image_view(const T* top_left, unsigned nx, unsigned ny,
 template<class T>
 vil2_image_view<T>::vil2_image_view(const vil2_smart_ptr<vil2_memory_chunk>& mem_chunk,
                   const T* top_left, unsigned nx, unsigned ny, unsigned nplanes,
-                  unsigned xstep, unsigned ystep, unsigned planestep):
+                  int xstep, int ystep, int planestep):
   vil2_image_view_base(nx, ny, nplanes), top_left_(const_cast<T*>( top_left))
   ,xstep_(xstep), ystep_(ystep), planestep_(planestep), ptr_(mem_chunk)
 
@@ -201,7 +201,7 @@ void vil2_image_view<T>::resize(unsigned nx, unsigned ny, unsigned nplanes)
 template<class T>
 void vil2_image_view<T>::set_to_memory(const T* top_left,
                              unsigned nx, unsigned ny, unsigned nplanes,
-                             unsigned xstep, unsigned ystep, unsigned planestep)
+                             int xstep, int ystep, int planestep)
 {
   release_data();
   top_left_ = (T*) top_left;  // Remove const, as view may end up manipulating data
