@@ -126,6 +126,7 @@ class vvid_file_manager : public vgui_wrapper_tableau
   bool pause_video_;
   bool next_frame_;
   bool prev_frame_;
+  bool track_;
   float time_interval_;
   unsigned width_;
   unsigned height_;

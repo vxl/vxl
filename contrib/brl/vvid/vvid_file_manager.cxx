@@ -71,6 +71,7 @@ vvid_file_manager::vvid_file_manager(): vgui_wrapper_tableau()
 {
   width_ = 512;
   height_ = 512;
+  track_ = false;
   my_movie_=(vidl_movie*)0;
   win_ = 0;
   cache_frames_ = false;
@@ -114,7 +115,8 @@ void vvid_file_manager::display_spatial_objects()
     video_process_->get_spatial_objects();
   if (easy0_)
   {
-    easy0_->clear_all();
+    if(!track_)
+      easy0_->clear_all();
     easy0_->add_spatial_objects(sos);
   }
 }
@@ -257,6 +259,7 @@ void vvid_file_manager::play_video()
   play_video_ = true;
   pause_video_ = false;
   time_interval_ = 10.0;
+  easy0_->clear_all();
   //return the display to the first frame after the play is finished
   if (cache_frames_)
     {
@@ -359,12 +362,14 @@ void vvid_file_manager::compute_lucas_kanade()
 
 void vvid_file_manager::compute_harris_corners()
 {
-  static sdet_harris_detector_params hdp(1.0f, 100.0f, 2);
+  static sdet_harris_detector_params hdp;
   vgui_dialog harris_dialog("harris");
   harris_dialog.field("sigma", hdp.sigma_);
   harris_dialog.field("thresh", hdp.thresh_);
   harris_dialog.field("N = 2n+1, (n)", hdp.n_);
+  harris_dialog.field("Max No.Corners", hdp.n_corners_);
   harris_dialog.field("scale_factor", hdp.scale_factor_);
+  harris_dialog.checkbox("Tracks", track_);
   if (!harris_dialog.ask())
     return;
 
