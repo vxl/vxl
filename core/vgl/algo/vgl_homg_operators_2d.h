@@ -10,6 +10,8 @@
 // .SECTION Author
 //   Don Hamilton, Peter Tu
 // Created: Feb 16 2000
+// .SECTION Modifications
+//   31-oct-00 Peter Vanroose - signatures fixed, and vcl_vector iterator used
 
 #include <vnl/vnl_vector.h>
 template <class Type> class vgl_homg_point_2d;
@@ -22,12 +24,16 @@ template <class Type>
 class vgl_homg_operators_2d {
 public:
   // method to get a vnl_vector rep of a homogeneous object
-  static vnl_vector<Type> get_vector(vgl_homg_point_2d<Type> &p);
-  static vnl_vector<Type> get_vector(vgl_homg_line_2d<Type> &p);
+  static vnl_vector<Type> get_vector(vgl_homg_point_2d<Type> const& p);
+  static vnl_vector<Type> get_vector(vgl_homg_line_2d<Type> const& l);
 
   static double dot(const vgl_homg_point_2d<Type>& a, const vgl_homg_point_2d<Type>& b);
+  static double dot(const vgl_homg_line_2d<Type>& a, const vgl_homg_point_2d<Type>& b);
   static void cross(const vgl_homg_point_2d<Type>& a, 
 		    const vgl_homg_point_2d<Type>& b, 
+		    vgl_homg_line_2d<Type>& a_cross_b);
+  static void cross(const vgl_homg_line_2d<Type>& a, 
+		    const vgl_homg_line_2d<Type>& b, 
 		    vgl_homg_point_2d<Type>& a_cross_b);
   static void unitize(vgl_homg_point_2d<Type>& a);
   
@@ -62,16 +68,6 @@ public:
   static vgl_homg_point_2d<Type> midpoint (const vgl_homg_point_2d<Type>& p1, 
 					   const vgl_homg_point_2d<Type>& p2);
 
-#if 0
-  //fsm: return type is not defined anywhere
-
-  // Clip to lineseg. The infinite line is clipped against the viewport with
-  // lower left corner (x0,y0) and upper right corner (x1,y1)
-  static vgl_homg_line_seg_2d clip_line_to_lineseg (const vgl_homg_line_2d<Type>& line,
-						    double x0, double y0,
-						    double x1, double y1);
-#endif
-
   // -- Intersect a set of 2D lines to find the least-square point of intersection.
   static vgl_homg_point_2d<Type> lines_to_point(const vcl_vector<vgl_homg_line_2d<Type> >& lines);
 
@@ -83,10 +79,10 @@ public:
 					   const vgl_homg_point_2d<Type>& c,
                           double cr);
 
-  // compute most orthogonal vector
-  static vnl_vector<double> most_orthogonal_vector(const vcl_vector<vgl_homg_line_2d<Type> >& inpoints);
+  // compute most orthogonal vector with vnl_symmetric_eigensystem
+  static vnl_vector<Type> most_orthogonal_vector(const vcl_vector<vgl_homg_line_2d<Type> >& inpoints);
   // compute most orthogonal vector with SVD
-  static vnl_vector<double> most_orthogonal_vector_svd(const vcl_vector<vgl_homg_line_2d<Type> >& lines);
+  static vnl_vector<Type> most_orthogonal_vector_svd(const vcl_vector<vgl_homg_line_2d<Type> >& lines);
 };
 
 #endif // vgl_homg_operations_2d_h

@@ -9,7 +9,7 @@
 #include <vcl/vcl_vector.h>
 #include <vnl/vnl_matrix.h>
 #include <vnl/vnl_math.h>
-#include <vnl/algo/vnl_scatter_3x3.h>
+#include <vnl/algo/vnl_scatter_3x3.h> // used in most_orthogonal_vector()
 
 
 #include <vgl/vgl_homg_line_2d.h>
@@ -17,12 +17,11 @@
 
 #include <vgl/algo/vgl_homg_operators_2d.h>
 #include <vnl/vnl_numeric_limits.h> // for infinity
-#include <vnl/algo/vnl_symmetric_eigensystem.h>
 
 //-----------------------------------------------------------------------------
 
 template <class Type>
-vnl_vector<Type> vgl_homg_operators_2d<Type>::get_vector(vgl_homg_point_2d<Type> &p)
+vnl_vector<Type> vgl_homg_operators_2d<Type>::get_vector(vgl_homg_point_2d<Type> const& p)
 {
   // make a vnl_vector for the point p
 
@@ -35,7 +34,7 @@ vnl_vector<Type> vgl_homg_operators_2d<Type>::get_vector(vgl_homg_point_2d<Type>
 }
 
 template <class Type>
-vnl_vector<Type> vgl_homg_operators_2d<Type>::get_vector(vgl_homg_line_2d<Type> &l)
+vnl_vector<Type> vgl_homg_operators_2d<Type>::get_vector(vgl_homg_line_2d<Type> const& l)
 {
   // make a vnl_vector for the line l
 
@@ -353,10 +352,11 @@ vnl_vector<Type> vgl_homg_operators_2d<Type>::most_orthogonal_vector(const vcl_v
 {
   vnl_scatter_3x3<Type> scatter_matrix;
   
-  for (unsigned i = 0; i < inpoints.size(); i++)
-    scatter_matrix.add_outer_product(get_vector(inpoints[i]));
+  for (vcl_vector<vgl_homg_line_2d<Type> >::const_iterator i = inpoints.begin();
+       i != inpoints.end(); ++i)
+    scatter_matrix.add_outer_product(get_vector(*i));
   
-  return vnl_symmetric_eigensystem<Type>(scatter_matrix).nullvector();
+  return scatter_matrix.minimum_eigenvector();
 }
 
 #include <vnl/algo/vnl_svd.h>
@@ -366,18 +366,15 @@ vnl_vector<Type> vgl_homg_operators_2d<Type>::most_orthogonal_vector_svd(const v
 {
   vnl_matrix<Type> D(lines.size(), 3);
   
-  for (unsigned i = 0; i < lines.size(); i++){
-  
-    D.set_row(i, get_vector(lines[i]));
-  }
+  vcl_vector<vgl_homg_line_2d<Type> >::const_iterator i = lines.begin();
+  for (unsigned j = 0; i != lines.end(); ++i,++j)
+    D.set_row(j, get_vector(*i));
 
   vnl_svd<Type> svd(D);
   cout << "[movrank " << svd.W() << "]";
   
   return svd.nullvector();
 }
-
-bool lines_to_point_use_svd = false;
 
 // -- Intersect a set of 2D lines to find the least-square point of intersection.
 // @{ This finds the point $\bf x$ that minimizes $\|\tt L \bf x\|$, where $\tt L$ is the matrix whose
@@ -389,17 +386,12 @@ vgl_homg_point_2d<Type> vgl_homg_operators_2d<Type>::lines_to_point(const vcl_ve
   // ho_triveccam_aspect_lines_to_point
   assert(lines.size() >= 2);
 
-  
-  if (lines_to_point_use_svd)
-  {
-    vnl_vector<double> mov = most_orthogonal_vector_svd(lines);
-    return vgl_homg_point_2d<Type>(mov[0], mov[1], mov[2]);
-  }
-  else
-  {
-    vnl_vector<double> mov = most_orthogonal_vector(lines);
-    return vgl_homg_point_2d<Type>(mov[0], mov[1], mov[2]);
-  }
+#ifdef VGL_HOMG_OPERATORS_2D_LINES_TO_POINT_USE_SVD
+  vnl_vector<Type> mov = most_orthogonal_vector_svd(lines);
+#else
+  vnl_vector<Type> mov = most_orthogonal_vector(lines);
+#endif
+  return vgl_homg_point_2d<Type>(mov[0], mov[1], mov[2]);
 }
 
 // @{ MISCELLANEOUS @}

@@ -17,10 +17,9 @@
 //
 // -- Return the angle between the (oriented) lines (in radians)
 //
-#if 0 // Why??
 template <class Type>
-Type vgl_homg_operators_3d<Type>::angle_between_oriented_lines (const vgl_homg_line_3d<Type>& l1,
-                                                                const vgl_homg_line_3d<Type>& l2)
+double vgl_homg_operators_3d<Type>::angle_between_oriented_lines (const vgl_homg_line_3d& l1,
+                                                                  const vgl_homg_line_3d& l2)
 {
   vgl_homg_point_3d<Type> const& dir1 = l1.get_point_infinite();
   vgl_homg_point_3d<Type> const& dir2 = l2.get_point_infinite();
@@ -30,7 +29,6 @@ Type vgl_homg_operators_3d<Type>::angle_between_oriented_lines (const vgl_homg_l
   n = (dir1.x()*dir2.x()+dir1.y()*dir2.y()+dir1.z()*dir2.z())/sqrt(n);
   return acos(n);
 }
-#endif
 
 
 //-----------------------------------------------------------------------------
@@ -65,7 +63,7 @@ template <class Type>
 Type vgl_homg_operators_3d<Type>::distance (const vgl_homg_point_3d<Type>& point1, 
 					    const vgl_homg_point_3d<Type>& point2)
 {
-  return sqrt(vgl_homg_operators_3d<Type>::squared_distance(point1,point2);
+  return sqrt(vgl_homg_operators_3d<Type>::distance_squared(point1,point2));
 }
 
 //-----------------------------------------------------------------------------
@@ -73,7 +71,7 @@ Type vgl_homg_operators_3d<Type>::distance (const vgl_homg_point_3d<Type>& point
 // -- Return the intersection point of the line and plane
 // 
 template <class Type>
-vgl_homg_point_3d<Type> vgl_homg_operators_3d<Type>::intersect_line_and_plane (const vgl_homg_line_3d<Type> &line, const vgl_homg_plane_3d<Type>& plane)
+vgl_homg_point_3d<Type> vgl_homg_operators_3d<Type>::intersect_line_and_plane (const vgl_homg_line_3d &line, const vgl_homg_plane_3d<Type>& plane)
 {
   // 
   /* use P.(S + lambda D) = 0 to find lambda, and hence a point on the plane. */
@@ -94,7 +92,8 @@ vgl_homg_point_3d<Type> vgl_homg_operators_3d<Type>::intersect_line_and_plane (c
   numerator *= scale;
   denominator *= scale;
   
-  return denominator * x1 + numerator * x2;
+  vnl_vector<Type> r = x1 * denominator + x2 * numerator;
+  return vgl_homg_point_3d<Type>(r[0], r[1], r[2], r[3]);
 }
 
 //-----------------------------------------------------------------------------
@@ -103,7 +102,7 @@ vgl_homg_point_3d<Type> vgl_homg_operators_3d<Type>::intersect_line_and_plane (c
 // of the common perpendicular if the lines are skew
 // 
 template <class Type>
-vgl_homg_point_3d<Type> vgl_homg_operators_3d<Type>::lines_to_point (const vgl_homg_line_3d<Type>& , const vgl_homg_line_3d<Type>& )
+vgl_homg_point_3d<Type> vgl_homg_operators_3d<Type>::lines_to_point (const vgl_homg_line_3d& , const vgl_homg_line_3d& )
 {
   cerr << "Warning: vgl_homg_operators_3d<Type>::lines_to_point() not yet implemented\n";
   return vgl_homg_point_3d<Type>();
@@ -115,7 +114,7 @@ vgl_homg_point_3d<Type> vgl_homg_operators_3d<Type>::lines_to_point (const vgl_h
 // - Compute the best fit intersection point of the lines
 // 
 template <class Type>
-vgl_homg_point_3d<Type> vgl_homg_operators_3d<Type>::lines_to_point (const vcl_vector<vgl_homg_line_3d<Type> >& )
+vgl_homg_point_3d<Type> vgl_homg_operators_3d<Type>::lines_to_point (const vcl_vector<vgl_homg_line_3d >& )
 {
   cerr << "Warning: vgl_homg_operators_3d<Type>::lines_to_point() not yet implemented\n";
   return vgl_homg_point_3d<Type>();
@@ -127,7 +126,7 @@ vgl_homg_point_3d<Type> vgl_homg_operators_3d<Type>::lines_to_point (const vcl_v
 // 
 template <class Type>
 double
-vgl_homg_operators_3d<Type>::perp_distance_squared (const vgl_homg_line_3d<Type>& , const vgl_homg_point_3d<Type>& )
+vgl_homg_operators_3d<Type>::perp_distance_squared (const vgl_homg_line_3d& l, const vgl_homg_point_3d<Type>& p)
 {
   vgl_homg_point_3d<Type> q = vgl_homg_operators_3d<Type>::perp_projection(l, p); // foot point
   return vgl_homg_operators_3d<Type>::distance_squared(p,q);
@@ -138,14 +137,12 @@ vgl_homg_operators_3d<Type>::perp_distance_squared (const vgl_homg_line_3d<Type>
 // -- Return the line which is perpendicular to l and passes through p.
 // 
 template <class Type>
-vgl_homg_line_3d<Type> vgl_homg_operators_3d<Type>::perp_line_through_point (const vgl_homg_line_3d<Type>& l, const vgl_homg_point_3d<Type>& p) 
+vgl_homg_operators_3d<Type>::vgl_homg_line_3d vgl_homg_operators_3d<Type>::perp_line_through_point (const vgl_homg_line_3d& l, const vgl_homg_point_3d<Type>& p) 
 {
   vgl_homg_point_3d<Type> q = vgl_homg_operators_3d<Type>::perp_projection(l,p);
-  if (p==q) {
+  if (get_vector(p)==get_vector(q))
     cerr << "Warning: cannot return vgl_homg_operators_3d<>::perp_line_through_point() for point on line\n";
-    return vgl_homg_line_3d<Type>();
-  }
-  return vgl_homg_line_3d<Type>(p,q);
+  return vgl_homg_line_3d(p,q);
 }
 
 
@@ -154,7 +151,7 @@ vgl_homg_line_3d<Type> vgl_homg_operators_3d<Type>::perp_line_through_point (con
 // -- Compute the perpendicular projection point of p onto l.
 // 
 template <class Type>
-vgl_homg_point_3d<Type>  vgl_homg_operators_3d<Type>::perp_projection (const vgl_homg_line_3d<Type>& l, const vgl_homg_point_3d<Type>& p)
+vgl_homg_point_3d<Type>  vgl_homg_operators_3d<Type>::perp_projection (const vgl_homg_line_3d& l, const vgl_homg_point_3d<Type>& p)
 {
   vgl_homg_point_3d<Type> const& q = l.get_point_finite();
   Type a[3]  = { q.x()/q.w(), q.y()/q.w(), q.z()/q.w() };
@@ -173,7 +170,7 @@ vgl_homg_point_3d<Type>  vgl_homg_operators_3d<Type>::perp_projection (const vgl
 // -- Return the intersection line of the planes
 // 
 template <class Type>
-vgl_homg_line_3d<Type> vgl_homg_operators_3d<Type>::planes_to_line (const vgl_homg_plane_3d<Type>& plane1, const vgl_homg_plane_3d<Type>& plane2)
+vgl_homg_operators_3d<Type>::vgl_homg_line_3d vgl_homg_operators_3d<Type>::planes_to_line (const vgl_homg_plane_3d<Type>& plane1, const vgl_homg_plane_3d<Type>& plane2)
 {
   // TODO need equivilent of get_vector
   vnl_matrix<Type> M(2,4);
@@ -181,9 +178,11 @@ vgl_homg_line_3d<Type> vgl_homg_operators_3d<Type>::planes_to_line (const vgl_ho
   M.set_row(1, get_vector(plane2));
   vnl_svd<Type> svd(M);
   M = svd.nullspace(2);
-  vgl_homg_point_3d<Type> p1(M.get_column(0));
-  vgl_homg_point_3d<Type> p2(M.get_column(1));
-  return vgl_homg_line_3d<Type>(p1, p2);
+  vnl_vector<Type> r = M.get_column(0);
+  vgl_homg_point_3d<Type> p1(r[0], r[1], r[2], r[3]);
+  r = M.get_column(1);
+  vgl_homg_point_3d<Type> p2(r[0], r[1], r[2], r[3]);
+  return vgl_homg_line_3d(p1, p2);
 }
 
 
@@ -192,10 +191,10 @@ vgl_homg_line_3d<Type> vgl_homg_operators_3d<Type>::planes_to_line (const vgl_ho
 // - Compute the best-fit intersection line of the planes
 // 
 template <class Type>
-vgl_homg_line_3d<Type> vgl_homg_operators_3d<Type>::planes_to_line (const vcl_vector<vgl_homg_plane_3d<Type> >&)
+vgl_homg_operators_3d<Type>::vgl_homg_line_3d vgl_homg_operators_3d<Type>::planes_to_line (const vcl_vector<vgl_homg_plane_3d<Type> >&)
 {
   cerr << "Warning: vgl_homg_operators_3d<Type>::planes_to_line() not yet implemented\n";
-  return vgl_homg_line_3d<Type>();
+  return vgl_homg_line_3d();
 }
 
 
@@ -204,10 +203,10 @@ vgl_homg_line_3d<Type> vgl_homg_operators_3d<Type>::planes_to_line (const vcl_ve
 // - Return the line through the points
 // 
 template <class Type>
-vgl_homg_line_3d<Type> vgl_homg_operators_3d<Type>::points_to_line (const vgl_homg_point_3d<Type>&, const vgl_homg_point_3d<Type>&)
+vgl_homg_operators_3d<Type>::vgl_homg_line_3d vgl_homg_operators_3d<Type>::points_to_line (const vgl_homg_point_3d<Type>&, const vgl_homg_point_3d<Type>&)
 {
   cerr << "Warning: vgl_homg_operators_3d<Type>::points_to_line() not yet implemented\n";
-  return vgl_homg_line_3d<Type>();
+  return vgl_homg_line_3d();
 }
 
 //-----------------------------------------------------------------------------
@@ -215,10 +214,10 @@ vgl_homg_line_3d<Type> vgl_homg_operators_3d<Type>::points_to_line (const vgl_ho
 // - Compute the best-fit line through the points
 //
 template <class Type>
-vgl_homg_line_3d<Type> vgl_homg_operators_3d<Type>::points_to_line (const vcl_vector<vgl_homg_point_3d<Type> >&)
+vgl_homg_operators_3d<Type>::vgl_homg_line_3d vgl_homg_operators_3d<Type>::points_to_line (const vcl_vector<vgl_homg_point_3d<Type> >&)
 {
   cerr << "Warning: vgl_homg_operators_3d<Type>::points_to_line() not yet implemented\n";
-  return vgl_homg_line_3d<Type>();
+  return vgl_homg_line_3d();
 }
 
 //-----------------------------------------------------------------------------
@@ -230,7 +229,7 @@ vgl_homg_plane_3d<Type>
 vgl_homg_operators_3d<Type>::points_to_plane (const vgl_homg_point_3d<Type>&, const vgl_homg_point_3d<Type>&, const vgl_homg_point_3d<Type>&)
 {
   cerr << "Warning: vgl_homg_operators_3d<Type>::points_to_plane() not yet implemented\n";
-  return vgl_homg_plane_3d<Type>();
+  return vgl_homg_plane_3d<Type>(0,0,0,0);
 }
 
 
@@ -243,7 +242,7 @@ vgl_homg_plane_3d<Type>
 vgl_homg_operators_3d<Type>::points_to_plane (const vcl_vector<vgl_homg_point_3d<Type> >&)
 {
   cerr << "Warning: vgl_homg_operators_3d<Type>::points_to_plane() not yet implemented\n";
-  return vgl_homg_plane_3d<Type>();
+  return vgl_homg_plane_3d<Type>(0,0,0,0);
 }
 
 // -- Compute best-fit intersection of planes in a point.
@@ -269,8 +268,6 @@ vgl_homg_operators_3d<Type>::intersection_point (const vgl_homg_plane_3d<Type>& 
   A(2,3) = plane3.d();
   
   vnl_svd<Type> svd(A);
-  // TODO find out how to get data out of svd.nullvector 
-  // fsm: call vnl_vector<Type>::begin().
   return vgl_homg_point_3d<Type>(svd.nullvector().begin());
 }
 
@@ -289,7 +286,7 @@ vgl_homg_operators_3d<Type>::intersection_point (const vcl_vector<vgl_homg_plane
   }
 
   vnl_svd<Type> svd(A);
-  return vgl_homg_point_3d<Type>(svd.nullvector());
+  return vgl_homg_point_3d<Type>(svd.nullvector().begin());
 }
 
 //-----------------------------------------------------------------------------
@@ -312,7 +309,7 @@ vgl_homg_operators_3d<Type>::intersection_point (const vcl_vector<vgl_homg_plane
 
 
 template <class Type>
-vnl_vector<Type> vgl_homg_operators_3d<Type>::get_vector(vgl_homg_point_3d<Type> &p)
+vnl_vector<Type> vgl_homg_operators_3d<Type>::get_vector(vgl_homg_point_3d<Type> const& p)
 {
   // make a vnl_vector for the point p
 
@@ -326,7 +323,7 @@ vnl_vector<Type> vgl_homg_operators_3d<Type>::get_vector(vgl_homg_point_3d<Type>
 }
 
 template <class Type>
-vnl_vector<Type> vgl_homg_operators_3d<Type>::get_vector(vgl_homg_plane_3d<Type> &p)
+vnl_vector<Type> vgl_homg_operators_3d<Type>::get_vector(vgl_homg_plane_3d<Type> const& p)
 {
   // make a vnl_vector for the point p
 
