@@ -13,15 +13,6 @@ void vdtop_set_structure_from_digital_graph(TMap & res,
   unsigned ni = mask.ni(), nj = mask.nj();
   // Precompute steps
   vcl_ptrdiff_t istepM=mask.istep(),jstepM=mask.jstep(),pstepM = mask.planestep();
-  vcl_ptrdiff_t movesM[8] ;
-  movesM[0]=istepM ;
-  movesM[1]=-jstepM+istepM ;
-  movesM[2]=-jstepM ;
-  movesM[3]=-jstepM-istepM ;
-  movesM[4]=-istepM ;
-  movesM[5]=jstepM-istepM ;
-  movesM[6]=jstepM ;
-  movesM[7]=jstepM+istepM ;
 
   // build res
   res.initialise_darts(nb_edges*2) ;
@@ -115,15 +106,6 @@ void vdtop_set_structure_from_digital_graph(TMap & res,
   unsigned ni = mask.ni(), nj = mask.nj();
   // Precompute steps
   vcl_ptrdiff_t istepM=mask.istep(),jstepM=mask.jstep(),pstepM = mask.planestep();
-  vcl_ptrdiff_t movesM[8] ;
-  movesM[0]=istepM ;
-  movesM[1]=-jstepM+istepM ;
-  movesM[2]=-jstepM ;
-  movesM[3]=-jstepM-istepM ;
-  movesM[4]=-istepM ;
-  movesM[5]=jstepM-istepM ;
-  movesM[6]=jstepM ;
-  movesM[7]=jstepM+istepM ;
 
   // build res
 
