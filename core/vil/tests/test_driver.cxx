@@ -45,6 +45,7 @@ DECLARE( test_algo_distance_transform );
 DECLARE( test_algo_blob_finder );
 DECLARE( test_algo_find_peaks );
 DECLARE( test_algo_region_finder );
+DECLARE( test_algo_cartesian_differential_invariants );
 
 void
 register_tests()
@@ -94,6 +95,7 @@ register_tests()
   REGISTER( test_algo_blob_finder );
   REGISTER( test_algo_find_peaks );
   REGISTER( test_algo_region_finder );
+  REGISTER( test_algo_cartesian_differential_invariants );
 }
 
 DEFINE_MAIN;

@@ -57,6 +57,7 @@ ADD_EXECUTABLE( vil_test_all
   test_algo_blob_finder.cxx
   test_algo_find_peaks.cxx
   test_algo_region_finder.cxx
+  test_algo_cartesian_differential_invariants.cxx
 )
 
 IF(CMAKE_COMPILER_IS_GNUCXX)
@@ -119,6 +120,7 @@ ADD_TEST( vil_test_algo_distance_transform vil_test_all test_algo_distance_trans
 ADD_TEST( vil_test_algo_blob_finder        vil_test_all test_algo_blob_finder )
 ADD_TEST( vil_test_algo_find_peaks         vil_test_all test_algo_find_peaks )
 ADD_TEST( vil_test_algo_region_finder      vil_test_all test_algo_region_finder )
+ADD_TEST( vil_test_algo_cartesian_differential_invariants vil_test_all test_algo_cartesian_differential_invariants )
 
 # To run timing tests
 #ADD_EXECUTABLE( vil_test_access_timings vil_test_access_timings.cxx)

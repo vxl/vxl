@@ -187,7 +187,7 @@ inline void vil_convolve_edge_1d(const srcT* src, unsigned n, vcl_ptrdiff_t s_st
       return;
     }
   default:
-    vcl_cout<<"vil_convolve_edge_1d: "
+    vcl_cout<<"ERROR: vil_convolve_edge_1d: "
             <<"Sorry, can't deal with supplied edge option.\n";
     vcl_abort();
   }

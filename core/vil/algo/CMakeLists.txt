@@ -38,7 +38,8 @@ SET( vil_algo_sources
   vil_distance_transform.cxx  vil_distance_transform.h
   vil_corners.cxx             vil_corners.h
   vil_region_finder.txx       vil_region_finder.h
-)
+  vil_cartesian_differential_invariants.cxx   vil_cartesian_differential_invariants.h 
+) 
 
 AUX_SOURCE_DIRECTORY(Templates vil_algo_sources)
 
