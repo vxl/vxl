@@ -219,6 +219,7 @@ vil2_image_view<vxl_byte> filtered_image = vil2_transpose(tmp_image2);
 * - vil2_gauss_reduce  - smooth and sub-sample to produce half sized image
 * - vil2_median        - Compute median over area described by vil2_structuring_element
 * - vil2_fft_2d_fwd,bwd - Perform in-place 2D FFT on an image of a complex type
+* - vil2_suppress_non_max_3x3 - Zero all pixels which are not local maxima
 *
 * See also the vipl library for a more generic image processing interface and
 * more image processing algorithms.

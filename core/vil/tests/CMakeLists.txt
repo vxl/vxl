@@ -50,6 +50,7 @@ ADD_EXECUTABLE( vil2_test_all
   test_algo_grid_merge.cxx
   test_algo_find_4con_boundary.cxx
   test_algo_fft.cxx
+  test_suppress_non_max.cxx
 )
 
 IF(CMAKE_COMPILER_IS_GNUCXX)
@@ -105,6 +106,7 @@ ADD_TEST( vil2_test_algo_threshold          vil2_test_all test_algo_threshold)
 ADD_TEST( vil2_test_algo_grid_merge         vil2_test_all test_algo_grid_merge )
 ADD_TEST( vil2_test_algo_find_4con_boundary vil2_test_all test_algo_find_4con_boundary )
 ADD_TEST( vil2_test_algo_fft vil2_test_all test_algo_fft )
+ADD_TEST( vil2_test_suppress_non_max vil2_test_all test_suppress_non_max )
 
 # To run timing tests
 #ADD_EXECUTABLE( vil2_test_access_timings vil2_test_access_timings.cxx)
