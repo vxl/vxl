@@ -22,12 +22,10 @@ void vil2_gauss_reduce(const vil2_image_view<T>& src,
 
 //: Smooth and subsample src_im to produce dest_im
 //  Applies 1-2-1 smoothing filter in x and y, then samples every other pixel.
-//  work_im provides workspace
 // \relates vil2_image_view
 template<class T>
 void vil2_gauss_reduce_121(const vil2_image_view<T>& src,
-                                vil2_image_view<T>& dest,
-                                vil2_image_view<T>& work_im);
+                                vil2_image_view<T>& dest);
 
 //: Smooth and subsample single plane src_im in x to produce dest_im
 //  Applies 1-5-8-5-1 filter in x, then samples

@@ -192,6 +192,28 @@ void test_algo_gauss_reduce_121_float(int nx, int ny)
   vcl_cout<<"Value at (1,1):"<<float(test2(1,1))<<vcl_endl;
 }
 
+void test_algo_gauss_reduce_byte_2d()
+{
+  vcl_cout<<"Testing reduction in 2D"<<vcl_endl;
+  int ni = 20, nj = 20;
+
+  vil2_image_view<vxl_byte> image0(ni,nj),image1,work_im;
+
+  for (int y=0;y<image0.nj();++y)
+    for (int x=0;x<image0.ni();++x)
+      image0(x,y) = x+y*10;
+
+  vil2_gauss_reduce(image0,image1,work_im);
+  int ni2 = (ni+1)/2;
+  int nj2 = (nj+1)/2;
+	TEST("Level 1 size x",image1.ni(),(ni+1)/2);
+  TEST("Level 1 size y",image1.nj(),(nj+1)/2);
+  TEST("Pixel (0,0)",image0(0,0),image1(0,0));
+  TEST("Pixel (1,1)",image0(2,2),image1(1,1));
+  TEST("Corner pixel",image0(ni2*2-2,nj2*2-2),image1(ni2-1,nj2-1));
+
+}
+
 MAIN( test_algo_gauss_reduce )
 {
   START( "vil2_algo_gauss_reduce" );
@@ -205,6 +227,8 @@ MAIN( test_algo_gauss_reduce )
   test_algo_gauss_reduce_121_byte(7,7);
   test_algo_gauss_reduce_121_float(6,6);
   test_algo_gauss_reduce_121_float(7,7);
+
+	test_algo_gauss_reduce_byte_2d();
 
   SUMMARY();
 }
