@@ -13,7 +13,8 @@ VCL_INSTANTIATE_INLINE(void swap(T&, T&))
 // I is a random access iterator
 #define VCL_SORT_INSTANTIATE(I, T) \
 template void __final_insertion_sort(I, I); \
-template void __introsort_loop(I, I, I, int)
+template void __introsort_loop(I, I, I, int); \
+template void __introsort_loop(I, I, I, long)
 
 #define VCL_SORT_INSTANTIATE_CMP(I, T, C) \
 /* fix as needed */
