@@ -20,6 +20,7 @@
 #include "test_lru_cache.cxx"
 #include "test_thin_plate_spline_2d.cxx"
 #include "test_clamped_plate_spline_2d.cxx"
+#include "test_thin_plate_spline_3d.cxx"
 #include "test_data_wrapper_mixer.cxx"
 #include "test_file_data_wrapper.cxx"
 #include "test_combination.cxx"
@@ -49,7 +50,6 @@ void run_test_mbl()
   test_gamma();
   test_index_sort();
   test_lru_cache();
-  test_thin_plate_spline_2d();
   test_clamped_plate_spline_2d();
   test_histogram();
   test_data_wrapper_mixer();
@@ -57,7 +57,8 @@ void run_test_mbl()
   test_ar_process();
   test_random_n_from_m();
   test_select_n_from_m();
-
+  test_thin_plate_spline_2d();
+  test_thin_plate_spline_3d();
 }
 
 TESTLIB_DEFINE_MAIN(run_test_mbl);
