@@ -35,8 +35,8 @@ HMatrix1DCompute3Point::HMatrix1DCompute3Point(void) : HMatrix1DCompute() { }
 HMatrix1DCompute3Point::~HMatrix1DCompute3Point() { }
 
 bool
-HMatrix1DCompute3Point::compute_cool_homg(const vcl_vector<HomgPoint1D>& points1,
-                                          const vcl_vector<HomgPoint1D>& points2,
+HMatrix1DCompute3Point::compute_cool_homg(const vcl_vector<vgl_homg_point_1d<double> >& points1,
+                                          const vcl_vector<vgl_homg_point_1d<double> >& points2,
                                           HMatrix1D *H)
 {
   assert(points1.size() == 3);
@@ -51,4 +51,3 @@ HMatrix1DCompute3Point::compute_cool_homg(const vcl_vector<HomgPoint1D>& points1
   H->set(&T[0][0]);
   return true;
 }
-

@@ -11,13 +11,13 @@
 // and to perform common operations using it e.g. transfer point.
 //
 // \verbatim
-// Modifications
-//    22 Oct 2002 - Peter Vanroose - added vgl_homg_point_2d interface
-//    23 Oct 2002 - Peter Vanroose - using fixed 3x3 matrices throughout
+//  Modifications
+//   22 Oct 2002 - Peter Vanroose - added vgl_homg_point_2d interface
+//   23 Oct 2002 - Peter Vanroose - using fixed 3x3 matrices throughout
 // \endverbatim
 
 #include <vnl/vnl_double_2x2.h>
-#include <mvl/HomgPoint1D.h>
+#include <vgl/vgl_homg_point_1d.h>
 #include <vcl_iosfwd.h>
 
 class HMatrix1D
@@ -42,11 +42,11 @@ class HMatrix1D
   // Operations----------------------------------------------------------------
 
   // deprecated. also misnomers :
-  HomgPoint1D transform_to_plane2(const HomgPoint1D& x1) const;
-  HomgPoint1D transform_to_plane1(const HomgPoint1D& x2) const;
+  vgl_homg_point_1d<double> transform_to_plane2(const vgl_homg_point_1d<double>& x1) const;
+  vgl_homg_point_1d<double> transform_to_plane1(const vgl_homg_point_1d<double>& x2) const;
 
-  HomgPoint1D operator()(const HomgPoint1D& x1) const;
-  HomgPoint1D preimage(const HomgPoint1D& x2) const;
+  vgl_homg_point_1d<double> operator()(const vgl_homg_point_1d<double>& x1) const;
+  vgl_homg_point_1d<double> preimage(const vgl_homg_point_1d<double>& x2) const;
 
   // Data Access---------------------------------------------------------------
 

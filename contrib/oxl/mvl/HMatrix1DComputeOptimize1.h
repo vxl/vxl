@@ -1,17 +1,13 @@
 #ifndef _HMatrix1DComputeOptimize1_h_
 #define _HMatrix1DComputeOptimize1_h_
 
-// .NAME HMatrix1DComputeOptimize1
-// .INCLUDE mvl/HMatrix1DComputeOptimize1.h
-// .FILE HMatrix1DComputeOptimize1.cxx
-
 #include "HMatrix1DCompute.h"
 
 class HMatrix1DComputeOptimize1 : public HMatrix1DCompute
 {
  protected:
-  bool compute_cool_homg(const vcl_vector<HomgPoint1D> &,
-                         const vcl_vector<HomgPoint1D> &,
+  bool compute_cool_homg(const vcl_vector<vgl_homg_point_1d<double> >&,
+                         const vcl_vector<vgl_homg_point_1d<double> >&,
                          HMatrix1D *);
  public:
   HMatrix1DComputeOptimize1(void);

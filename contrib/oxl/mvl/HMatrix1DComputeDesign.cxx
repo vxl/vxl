@@ -16,8 +16,8 @@ HMatrix1DComputeDesign::HMatrix1DComputeDesign(void) : HMatrix1DCompute() { }
 HMatrix1DComputeDesign::~HMatrix1DComputeDesign() { }
 
 bool
-HMatrix1DComputeDesign::compute_cool_homg(const vcl_vector<HomgPoint1D>&P,
-                                          const vcl_vector<HomgPoint1D>&Q,
+HMatrix1DComputeDesign::compute_cool_homg(const vcl_vector<vgl_homg_point_1d<double> >&P,
+                                          const vcl_vector<vgl_homg_point_1d<double> >&Q,
                                           HMatrix1D *M)
 {
   unsigned N=P.size(); assert(N==Q.size());

@@ -10,7 +10,7 @@
 //
 
 class HMatrix1D;
-#include <mvl/HomgPoint1D.h>
+#include <vgl/vgl_homg_point_1d.h>
 #include <vcl_vector.h>
 
 class HMatrix1DCompute
@@ -26,8 +26,8 @@ class HMatrix1DCompute
   //
   // Compute methods :
   //
-  bool compute(const vcl_vector<HomgPoint1D>&,
-               const vcl_vector<HomgPoint1D>&,
+  bool compute(const vcl_vector<vgl_homg_point_1d<double> >&,
+               const vcl_vector<vgl_homg_point_1d<double> >&,
                HMatrix1D *);
   bool compute(const double [],
                const double [],
@@ -36,8 +36,8 @@ class HMatrix1DCompute
  protected:
   bool verbose_;
 
-  virtual bool compute_cool_homg(const vcl_vector<HomgPoint1D> &,
-                                 const vcl_vector<HomgPoint1D> &,
+  virtual bool compute_cool_homg(const vcl_vector<vgl_homg_point_1d<double> >&,
+                                 const vcl_vector<vgl_homg_point_1d<double> >&,
                                  HMatrix1D *);
   virtual bool compute_array_dbl(const double [],
                                  const double [],

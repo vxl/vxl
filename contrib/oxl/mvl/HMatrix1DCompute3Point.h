@@ -17,8 +17,8 @@ class HMatrix1DCompute3Point : public HMatrix1DCompute
   HMatrix1DCompute3Point(void);
   ~HMatrix1DCompute3Point();
  protected:
-  bool compute_cool_homg(const vcl_vector<HomgPoint1D> &,
-                         const vcl_vector<HomgPoint1D> &,
+  bool compute_cool_homg(const vcl_vector<vgl_homg_point_1d<double> >&,
+                         const vcl_vector<vgl_homg_point_1d<double> >&,
                          HMatrix1D *);
 };
 

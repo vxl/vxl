@@ -4,9 +4,9 @@
 #endif
 //:
 // \file
-
 #include "HMatrix1D.h"
-#include <mvl/HomgPoint1D.h>
+
+#include <vgl/vgl_homg_point_1d.h>
 #include <vcl_fstream.h>
 #include <vnl/vnl_double_2.h>
 #include <vnl/vnl_inverse.h>
@@ -67,33 +67,30 @@ HMatrix1D::~HMatrix1D()
 //-----------------------------------------------------------------------------
 //
 //: Return the transformed point given by $x_2 = {\tt H} x_1$
-
-HomgPoint1D HMatrix1D::transform_to_plane2(const HomgPoint1D& x1) const
+vgl_homg_point_1d<double> HMatrix1D::transform_to_plane2(const vgl_homg_point_1d<double>& x1) const
 {
   return (*this)(x1);
 }
 
 //
 //: Return the transformed point given by $x_1 = {\tt H}^{-1} x_2$
-
-HomgPoint1D HMatrix1D::transform_to_plane1(const HomgPoint1D& x2) const
+vgl_homg_point_1d<double> HMatrix1D::transform_to_plane1(const vgl_homg_point_1d<double>& x2) const
 {
   return this->preimage(x2);
 }
 
-HomgPoint1D HMatrix1D::operator()(const HomgPoint1D& x1) const
+vgl_homg_point_1d<double> HMatrix1D::operator()(const vgl_homg_point_1d<double>& x1) const
 {
   vnl_double_2 v = t12_matrix_ * vnl_double_2(x1.x(),x1.w());
-  return HomgPoint1D(v[0], v[1]);
+  return vgl_homg_point_1d<double>(v[0], v[1]);
 }
 
 //
 //: Return the transformed point given by $x_1 = {\tt H}^{-1} x_2$
-
-HomgPoint1D HMatrix1D::preimage(const HomgPoint1D& x2) const
+vgl_homg_point_1d<double> HMatrix1D::preimage(const vgl_homg_point_1d<double>& x2) const
 {
   vnl_double_2 v = t21_matrix_ * vnl_double_2(x2.x(),x2.w());
-  return HomgPoint1D(v[0], v[1]);
+  return vgl_homg_point_1d<double>(v[0], v[1]);
 }
 
 //-----------------------------------------------------------------------------

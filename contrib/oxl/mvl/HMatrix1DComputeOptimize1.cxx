@@ -18,10 +18,9 @@
 
 class XXX : public vnl_least_squares_function
 {
-private:
   unsigned N;
   const vcl_vector<double> &z1,z2;
-public:
+ public:
   XXX(const vcl_vector<double> &z1_,const vcl_vector<double> &z2_)
     : vnl_least_squares_function(3, z1_.size(), no_gradient)
     , N(z1_.size())
@@ -92,8 +91,8 @@ HMatrix1DComputeOptimize1::HMatrix1DComputeOptimize1(void) : HMatrix1DCompute() 
 HMatrix1DComputeOptimize1::~HMatrix1DComputeOptimize1() { }
 
 bool
-HMatrix1DComputeOptimize1::compute_cool_homg(const vcl_vector<HomgPoint1D>&p1,
-                                             const vcl_vector<HomgPoint1D>&p2,
+HMatrix1DComputeOptimize1::compute_cool_homg(const vcl_vector<vgl_homg_point_1d<double> >&p1,
+                                             const vcl_vector<vgl_homg_point_1d<double> >&p2,
                                              HMatrix1D *M)
 {
   unsigned N=p1.size();
@@ -106,7 +105,7 @@ HMatrix1DComputeOptimize1::compute_cool_homg(const vcl_vector<HomgPoint1D>&p1,
 
   // map the points in p1 under M so that we are looking for a correction near the identity :
   for (unsigned i=0;i<N;i++) {
-    HomgPoint1D v = M->transform_to_plane2(p1[i]);
+    vgl_homg_point_1d<double> v = M->transform_to_plane2(p1[i]);
     if (v.w() == 0.0) return false;
     z1[i] = v.x()/v.w(); // make nonhomogeneous
     if (p2[i].w()) return false;

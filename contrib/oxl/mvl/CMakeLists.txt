@@ -28,7 +28,6 @@ SET(mvl_sources
  HMatrix2DSimilarityCompute.cxx         HMatrix2DSimilarityCompute.h
  HMatrix3D.cxx                          HMatrix3D.h
  Homg.cxx                               Homg.h
- Homg1D.cxx                             Homg1D.h
  Homg2D.cxx                             Homg2D.h
  Homg3D.cxx                             Homg3D.h
  HomgPoint2D.cxx                        HomgPoint2D.h
