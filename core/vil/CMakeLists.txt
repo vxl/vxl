@@ -17,6 +17,7 @@ SET( vil2_sources
 
   # image operations
   vil2_crop.cxx  vil2_crop.h
+  vil2_clamp.cxx vil2_clamp.h
   vil2_math.h
   vil2_load.cxx  vil2_load.h
   vil2_save.cxx  vil2_save.h
