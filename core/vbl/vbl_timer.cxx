@@ -86,7 +86,7 @@ void vbl_timer::mark()
   gettimeofday(&data->real0, &tz);  // wall clock time
 #else
 #if VXL_TWO_ARG_GETTIME
-  gettimeofday(&data->real0, (void*)0);
+  gettimeofday(&data->real0, (struct timezone*)0);
 #else
   gettimeofday(&data->real0);
 #endif
@@ -111,7 +111,7 @@ long vbl_timer::real()
  gettimeofday(&real, &tz);  // wall clock time
 #else
 #if VXL_TWO_ARG_GETTIME
-  gettimeofday(&real, (void*)0);
+  gettimeofday(&real, (struct timezone*)0);
 #else
   gettimeofday(&real);
 #endif
