@@ -30,7 +30,7 @@ vxl_myclass my_object;
 viol_b_ostream bfs("my_object.bvl");
 if (!bfs)
 @{
-    cerr<<"Failed to open my_object.bvl for output."<<endl;
+    vcl_cerr<<"Failed to open my_object.bvl for output."<<vcl_endl;
 @}
 else
 @{
@@ -47,7 +47,7 @@ vxl_myclass my_new_object;
 viol_b_istream bfs("my_object.bvl");
 if (!bfs)
 @{
-    cerr<<"Failed to open my_object.bvl for input."<<endl;
+    vcl_cerr<<"Failed to open my_object.bvl for input."<<vcl_endl;
 @}
 else
 @{
@@ -95,7 +95,7 @@ vxl_my_other_class my_other_object;
 viol_b_ofstream bfs("my_object.bvl");
 if (!bfs)
 @{
-    cerr<<"Failed to open my_object.bvl for output."<<endl;
+    vcl_cerr<<"Failed to open my_object.bvl for output."<<vcl_endl;
 @}
 else
 @{
@@ -499,7 +499,7 @@ void vanyl_my_class::b_read(viol_b_istream &is)
 
   default:
     vcl_cerr << "vanyl_my_class::b_read() Unknown version number "<< ver << vcl_endl;
-    abort();
+    vcl_abort();
   @}
 @}
 @end example
@@ -519,7 +519,7 @@ The standard form for the method is
 //: Output a human readable summary to the stream
 void vanyl_my_class::print_summary(vcl_ostream &os) const
 @{
-    os<<"Important Value: "<<this->my_value<<" .. "<<endl;
+    os<<"Important Value: "<<this->my_value<<" .. "<<vcl_endl;
     ...
 @}
 @end example
@@ -630,7 +630,7 @@ void viol_b_write(viol_b_ostream &os, const vanyl_my_base_class* b)
     b->b_write(os);
   @}
   else
-    viol_b_write(os,string("VIOL_NULL_PTR"));
+    viol_b_write(os,vcl_string("VIOL_NULL_PTR"));
 @}
 
 //==============================================
@@ -800,7 +800,7 @@ void viol_b_read(viol_b_istream &is, vbl_smart_ptr<T> &p)
   default:
     vcl_cerr << "vbl_smart_ptr::b_read() Unknown version number "
              << ver << vcl_endl;
-    abort();
+    vcl_abort();
   }
 }
 @end example
@@ -948,7 +948,7 @@ void viol_b_read(viol_b_istream &is, vgl_point_2d<T>& p)
   default:
     vcl_cerr << "b_read(viol_b_istream &, const vgl_point_2d<T>&)"
 		         << " Unknown version number "<< v << vcl_endl;
-    abort();
+    vcl_abort();
   }
 
 }
@@ -1142,7 +1142,7 @@ void viol_b_read(viol_b_istream &is, BaseClass & p)
 
   default:
     vcl_cerr << "viol_b_read(is,BaseClass) Unknown version number "<< v << vcl_endl;
-    abort();
+    vcl_abort();
   }
 
 }
@@ -1339,7 +1339,7 @@ void viol_b_read(viol_b_istream &is, DerivedClass & p)
 
   default:
     vcl_cerr << "viol_b_read(is,DerivedClass) Unknown version number "<< v << vcl_endl;
-    abort();
+    vcl_abort();
   }
 
 }
