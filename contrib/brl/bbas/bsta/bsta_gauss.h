@@ -7,7 +7,7 @@
 // \author Joseph Mundy
 // \date 5/19/04
 //
-// A very simple Gaussian smoothing process to be used by gausss
+// A very simple Gaussian smoothing process to be used by gauss
 // Keeps the link dependence very light
 //
 // \verbatim
