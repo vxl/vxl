@@ -180,20 +180,22 @@ TARGET_LINK_LIBRARIES( foobar vnl_algo vul vil vcl )
 
 INCLUDE( ${MODULE_PATH}/FindZLIB.cmake )
 
-# For this library the list of source files will be built up with
-# SOURCE_FILES commands.  The SOURCE_FILES command can be used with
-# both ADD_EXECUTABLE and ADD_LIBRARY.  This is necessary when certain
-# sources are conditionally included, as we see here, and preferred
-# for long source file lists.
+# For this library the list of source files will be built up with SET
+# commands.  Before CMake 1.4 the SOURCE_FILES command was used for
+# this purpose, but the SET command is now preferred.  The SET command
+# can be used to create source file lists for use with both the
+# ADD_EXECUTABLE and ADD_LIBRARY commands.  This is necessary when
+# certain sources are conditionally included, as we see here, and
+# preferred for long source file lists.
 
-# The SOURCE_FILES commands for a source list variable must come
-# before the ADD_LIBRARY or ADD_EXECUTABLE command that uses them if
-# the source list variable will be referenced like "${vfbl_sources}"
-# as opposed to simply "vfbl_sources".  The ability to use
-# ${vfbl_sources} to reference source lists is new in CMake 1.4, and
-# is now preferred.
+# The SET commands for a source list variable must come before the
+# ADD_LIBRARY or ADD_EXECUTABLE command that uses them.  Because we
+# are using SET and not SOURCE_FILES, the source list variable will be
+# referenced with "${vfbl_sources}" as opposed to simply
+# "vfbl_sources".  The ability to use ${vfbl_sources} to reference
+# source lists is new in CMake 1.4, and is now preferred.
 
-SOURCE_FILES( vfbl_sources
+SET( vfbl_sources
   vfbl_defines.h
   vfbl_foo.cxx vfbl_foo.h
   vfbl_bar.cxx vfbl_bar.h
@@ -201,10 +203,11 @@ SOURCE_FILES( vfbl_sources
 )
 
 # Include the source file vfbl_zip.cxx when building the library only
-# if ZLIB is available.
+# if ZLIB is available.  Notice how vfbl_sources is set to its current
+# value, plus the new source file "vfbl_zip.cxx".
 
 IF( HAS_ZLIB )
-  SOURCE_FILES( foobar_sources vfbl_zip.cxx )
+  SET( vfbl_sources ${vfbl_sources} vfbl_zip.cxx )
 ENDIF( HAS_ZLIB )
 
 # The ADD_LIBRARY command configures a new library.  The first
@@ -213,7 +216,7 @@ ENDIF( HAS_ZLIB )
 # ".a" or ".so" and without the possible prefix "lib" (used in Unix).
 # The other arguments are either file names, or (as here) a variable
 # holding a list of files, specified before the ADD_LIBRARY command
-# with one or more SOURCE_FILES commands.
+# with one or more SET commands.
 
 ADD_LIBRARY( vfbl ${vfbl_sources} )
 
