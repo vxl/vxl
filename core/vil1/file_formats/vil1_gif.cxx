@@ -286,7 +286,7 @@ bool vil_gif_loader_saver::get_section(int image, void* buf, int x0, int y0, int
 {
 #if 1
   // Damn! Have to implement LZW decompression here. Maybe some other day.
-  vcl_cerr << "vil_gif_loader_saver::get_section(): LZW decompression now yet implemented\n";
+  vcl_cerr << "vil_gif_loader_saver::get_section(): LZW decompression not yet implemented\n";
 #else
   assert(0<=image && image<images.size());
   char *char_buf = (char*) buf;
