@@ -7,6 +7,8 @@
   fsm@robots.ox.ac.uk
 */
 
+#include <vcl/vcl_compiler.h>
+
 typedef unsigned char vil_byte;
 
 #endif

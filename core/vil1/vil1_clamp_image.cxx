@@ -3,11 +3,9 @@
 #endif
 
 #include "vil_clamp_image.h"
-#include "vil_image.h"
-#include "vil_rgb.h"
-#include "vil_byte.h"
-
-#include <vcl/vcl_compiler.h>
+#include <vil/vil_image.h>
+#include <vil/vil_rgb.h>
+#include <vil/vil_byte.h>
 
 #undef VIL_CLAMP_IMAGE_THRESHOLD
 #define VIL_CLAMP_IMAGE_THRESHOLD(V, L, H) \

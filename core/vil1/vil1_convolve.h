@@ -3,6 +3,7 @@
 /*
   fsm@robots.ox.ac.uk
 */
+#include <vcl/vcl_compiler.h>
 
 // When convolving a finite signal the boundaries may be
 // treated in various ways which can often be expressed in terms

@@ -10,7 +10,6 @@
 //
 //-----------------------------------------------------------------------------
 
-#include <vcl/vcl_compiler.h>
 #include <vcl/vcl_climits.h>  // for CHAR_BIT, number of bits in a char.
 #include <vcl/vcl_complex_fwd.h>
 

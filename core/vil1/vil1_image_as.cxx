@@ -62,10 +62,13 @@ bool vil_image_as_impl<int>::get_section(void *buf, int x0, int y0, int width, i
     for (unsigned j=0; j<height; ++j) {
       if (!image.get_section(scan.data(), x0, y0+j, width, 1))
 	return false;
-      for (unsigned i=0; i<width; ++i)
+      for (unsigned i=0; i<width; ++i) {
 	// use different weights?
-	static_cast<int*>(buf)[i + width*j] = 
-	  (unsigned(scan[3*i+0]) + unsigned(scan[3*i+1]) + unsigned(scan[3*i+2]))/3;
+        unsigned char r(scan[3*i+0]);
+        unsigned char g(scan[3*i+1]);
+        unsigned char b(scan[3*i+2]);
+	static_cast<int*>(buf)[i + width*j] = int(0.5+r*0.299+0.587*g+0.114*b);
+      }
     }
     return true;
   }
@@ -123,10 +126,13 @@ bool vil_image_as_impl<vil_byte>::get_section(void *buf, int x0, int y0, int wid
     for (unsigned j=0; j<height; ++j) {
       if (!image.get_section(scan.data(), x0, y0+j, width, 1))
 	return false;
-      for (unsigned i=0; i<width; ++i)
+      for (unsigned i=0; i<width; ++i) {
 	// use different weights?
-	static_cast<vil_byte*>(buf)[i + width*j] = 
-	  (unsigned(scan[3*i+0]) + unsigned(scan[3*i+1]) + unsigned(scan[3*i+2]))/3;
+        unsigned char r(scan[3*i+0]);
+        unsigned char g(scan[3*i+1]);
+        unsigned char b(scan[3*i+2]);
+	static_cast<vil_byte*>(buf)[i + width*j] = unsigned(0.5+r*0.299+0.587*g+0.114*b);
+      }
     }
     return true;
   }

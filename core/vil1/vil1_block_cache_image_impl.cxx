@@ -5,7 +5,6 @@
 #pragma implementation
 #endif
 #include "vil_block_cache_image_impl.h"
-#include <vcl/vcl_compiler.h>
 #include <vcl/vcl_cstring.h>  // strcmp()
 
 vil_block_cache_image_impl::vil_block_cache_image_impl(vil_image i_, unsigned bx, unsigned by)

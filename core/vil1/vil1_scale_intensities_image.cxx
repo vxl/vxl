@@ -3,11 +3,9 @@
 #endif
 
 #include "vil_scale_intensities_image.h"
-#include "vil_image.h"
-#include "vil_rgb.h"
-#include "vil_byte.h"
-
-#include <vcl/vcl_compiler.h>
+#include <vil/vil_image.h>
+#include <vil/vil_rgb.h>
+#include <vil/vil_byte.h>
 
 template <class T>
 bool vil_scale_intensities_image(vil_image const& base, double scale, double shift,

@@ -1,5 +1,4 @@
 #if 0 // this file is no longer needed?
-#include <vcl/vcl_compiler.h>
 #include <vil/vil_rgb.h>
 
 // the following cpp logic mirrors that in vil_rgb.h :

@@ -5,7 +5,6 @@
 #pragma implementation
 #endif
 #include "vil_stream_section.h"
-#include <vcl/vcl_compiler.h>
 #include <vcl/vcl_cassert.h>
 #include <vcl/vcl_iostream.h>
 

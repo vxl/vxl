@@ -87,14 +87,6 @@ LIB32=link.exe -lib
 # PROP Default_Filter "cpp;c;cxx;rc;def;r;odl;idl;hpj;bat"
 # Begin Source File
 
-SOURCE=".\Templates\vcl_vector+vbl_rgb+uchar--.cxx"
-# End Source File
-# Begin Source File
-
-SOURCE=".\Templates\vcl_vector+vbl_rgba+uchar--.cxx"
-# End Source File
-# Begin Source File
-
 SOURCE=.\vil_16bit.cxx
 # End Source File
 # Begin Source File
@@ -285,10 +277,6 @@ SOURCE=".\Templates\vil_rgb+long-.cxx"
 # Begin Source File
 
 SOURCE=".\Templates\vil_rgb+unsignedchar-.cxx"
-# End Source File
-# Begin Source File
-
-SOURCE=.\Templates\vil_rgb.cxx
 # End Source File
 # Begin Source File
 

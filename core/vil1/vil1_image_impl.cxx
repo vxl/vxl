@@ -13,7 +13,6 @@
 
 #include "vil_image_impl.h"
 
-#include <vcl/vcl_compiler.h>
 #include <vcl/vcl_climits.h> // CHAR_BIT
 #include <vcl/vcl_iostream.h>
 #include <vil/vil_image.h>
