@@ -30,6 +30,9 @@ SOURCE=.\vvid_live_video_tableau.cxx
 # Begin Source File
 SOURCE=.\vvid_frame_trail.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\vvid_command_line_player.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"
@@ -56,6 +59,9 @@ SOURCE=.\vvid_live_video_tableau_sptr.h
 # End Source File
 # Begin Source File
 SOURCE=.\vvid_frame_trail.h
+# End Source File
+# Begin Source File
+SOURCE=.\vvid_command_line_player.h
 # End Source File
 # End Group
 # End Target
