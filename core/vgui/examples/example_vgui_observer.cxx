@@ -59,6 +59,8 @@ struct example_window_title_setter : public vgui_observer
       w->set_title(last_title);
     }
   }
+  void update(vgui_message const&) { update(); } // just ignore the message
+  void update(vgui_observable const*) { update(); } // ignore the observable
 };
 
 int main(int argc, char **argv)
