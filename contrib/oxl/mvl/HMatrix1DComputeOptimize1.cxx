@@ -3,6 +3,7 @@
 
 #include <vcl_cassert.h>
 #include <vcl_iostream.h>
+#include <vcl_ios.h>
 
 #include <vnl/vnl_least_squares_function.h>
 #include <vnl/algo/vnl_levenberg_marquardt.h>
