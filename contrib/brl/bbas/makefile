@@ -28,6 +28,9 @@ SUBDIRS += bvgl
 # uncertainty geometry library
 SUBDIRS += bugl
 
+# Brown Graph Library
+SUBDIRS += bgrl
+
 ################################
 include ${IUEROOT}/config/top.mk
 ################################
