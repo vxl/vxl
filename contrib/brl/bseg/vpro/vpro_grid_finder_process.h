@@ -1,4 +1,4 @@
-// This is brl/vpro/vpro_grid_finder_process.h
+// This is brl/bseg/vpro/vpro_grid_finder_process.h
 #ifndef vpro_grid_finder_process_h_
 #define vpro_grid_finder_process_h_
 //--------------------------------------------------------------------------------
@@ -20,7 +20,10 @@
 #include <sdet/sdet_grid_finder_params.h>
 #include <vpro/vpro_video_process.h>
 
-class vpro_grid_finder_process : public vpro_video_process, public sdet_detector_params, public sdet_fit_lines_params, public sdet_grid_finder_params
+class vpro_grid_finder_process : public vpro_video_process,
+                                 public sdet_detector_params,
+                                 public sdet_fit_lines_params,
+                                 public sdet_grid_finder_params
 {
  public:
   vpro_grid_finder_process(sdet_detector_params & dp, sdet_fit_lines_params& flp, sdet_grid_finder_params& gfp);
@@ -31,11 +34,6 @@ class vpro_grid_finder_process : public vpro_video_process, public sdet_detector
   //: compute van duc edges, line segments, and then match the grid
   virtual bool execute();
   virtual bool finish(){return true;}
-
- private:
-  //members
-
 };
-
 
 #endif // vpro_grid_finder_process_h_
