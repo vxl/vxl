@@ -272,7 +272,7 @@ bool vtol_edge_2d::operator==(const vtol_edge_2d &other) const
   if (_curve && (*_curve)!=(*other._curve))
     return false;
 
-  if ((*_v1!=*(other._v1)) || (*_v2!=*(other._v2)))
+  if (!(*_v1==*(other._v1)) || !(*_v2==*(other._v2))) // ((*_v1!=*(other._v1)) || (*_v2!=*(other._v2)))
     return false;
 
   vtol_zero_chain_ref zc1=zero_chain();

@@ -820,7 +820,7 @@ bool vtol_one_chain::operator==(vtol_one_chain const &other) const
             chain_list::const_iterator l;
             
             for(r=righth.begin(), l=lefth.begin(); r!=righth.end(); ++r, ++l)
-              if( *(*r) != *(*l))
+              if( !(*(*r) == *(*l)) ) // ( *(*r) != *(*l))
                 return false;
           }
 	  return true;

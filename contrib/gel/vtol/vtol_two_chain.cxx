@@ -765,7 +765,7 @@ bool vtol_two_chain::operator==(const vtol_two_chain &other) const
   for(hi1=righth.begin(),hi2=lefth.begin();
       hi1!=righth.end()&&hi2!=lefth.end();
       ++hi1,++hi2)
-    if(*(*hi1)!=*(*hi2))
+    if( !(*(*hi1) == *(*hi2)) ) //(*(*hi1)!=*(*hi2))
       return false;
   return true;
 }
