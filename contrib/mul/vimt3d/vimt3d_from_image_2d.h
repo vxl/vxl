@@ -11,7 +11,7 @@
 // \author Kevin de Souza
 
 #include <vcl_cassert.h>
-
+#include <vnl/vnl_vector.h>
 #include <vil/vil_image_view.h>
 #include <vil3d/vil3d_image_view.h>
 #include <vil3d/vil3d_from_image_2d.h>
