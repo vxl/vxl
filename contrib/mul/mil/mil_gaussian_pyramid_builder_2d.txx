@@ -216,7 +216,7 @@ void mil_gaussian_pyramid_builder_2d<T>::extend(mil_image_pyramid& image_pyr) co
 
     // Compute number of levels to pyramid so that top is no less
     // than 5 x 5
-    int s = 1;
+    double s = 1;
     int max_levels = 1;
     while ((nx/(scale_step()*s)>=minXSize_) && (ny/(scale_step()*s)>=minXSize_))
     {
