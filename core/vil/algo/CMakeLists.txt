@@ -6,6 +6,8 @@ SET( vil2_algo_sources
   vil2_structuring_element.cxx vil2_structuring_element.h
   vil2_binary_dilate.cxx vil2_binary_dilate.h
   vil2_binary_erode.cxx vil2_binary_erode.h
+                        vil2_greyscale_dilate.h vil2_greyscale_dilate.txx
+                        vil2_greyscale_erode.h  vil2_greyscale_erode.txx
                         vil2_binary_opening.h
                         vil2_binary_closing.h
                         vil2_convolve_1d.h

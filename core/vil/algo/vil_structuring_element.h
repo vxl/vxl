@@ -39,6 +39,12 @@ public:
 	//  Select pixels in disk s.t. x^x+y^y<=r^r
   void set_to_disk(double r);
 
+	  //: Set to line along i (ilo,0)..(ihi,0)
+  void set_to_line_i(int ilo, int ihi);
+
+	  //: Set to line along j (jlo,0)..(jhi,0)
+  void set_to_line_j(int jlo, int jhi);
+
   //: i position of elements (i,j)
   const vcl_vector<int>& p_i() const { return p_i_; }
   //: j position of elements (i,j)

@@ -210,6 +210,7 @@ vil2_image_view<vxl_byte> filtered_image = vil2_transpose(tmp_image2);
 * - vil2_exp_filter_1d - Apply exponential filter along one axis (fast recursive method)
 * - vil2_sobel_3x3     - to generate X/Y gradient images using 3x3 Sobel operators
 * - vil2_gauss_reduce  - smooth and sub-sample to produce half sized image
+* - vil2_median        - Compute median over area described by vil2_structuring_element
 * See also the vipl library for a more generic image processing interface and
 * more image processing algorithms.
 *
@@ -228,11 +229,16 @@ vil2_image_view<vxl_byte> filtered_image = vil2_transpose(tmp_image2);
 * - vil2_math_image_abs_difference(imA,imB,im_diff) : im_diff = |imA-imB|
 * - vil2_math_add_image_fraction(imA,fa,imB,fb)     : imA = fa*imA + fb*imB  (Useful for moving averages!)
 *
-* Morphological functions
+* Morphological functions  (using vil2_structuring_element)
 * - vil2_binary_erode
 * - vil2_binary_dilate
 * - vil2_binary_opening
 * - vil2_binary_closing
+* - vil2_greyscale_erode
+* - vil2_greyscale_dilate
+* - vil2_greyscale_opening
+* - vil2_greyscale_closing
+* - vil2_median
 *
 * Other related maths functions
 * - vil2_math_integral_image(imA,im_sum)               : Images integrating values

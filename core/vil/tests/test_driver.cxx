@@ -19,6 +19,9 @@ DECLARE( test_memory_chunk );
 DECLARE( test_resample_bilin );
 DECLARE( test_binary_dilate );
 DECLARE( test_binary_erode );
+DECLARE( test_greyscale_dilate );
+DECLARE( test_greyscale_erode );
+DECLARE( test_median );
 
 void
 register_tests()
@@ -42,6 +45,9 @@ register_tests()
   REGISTER( test_resample_bilin );
   REGISTER( test_binary_dilate );
   REGISTER( test_binary_erode );
+  REGISTER( test_greyscale_dilate );
+  REGISTER( test_greyscale_erode );
+  REGISTER( test_median );
 }
 
 DEFINE_MAIN;

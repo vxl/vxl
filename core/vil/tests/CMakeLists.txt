@@ -22,6 +22,9 @@ ADD_EXECUTABLE( vil2_test_driver
   test_memory_chunk.cxx
   test_binary_dilate.cxx
   test_binary_erode.cxx
+  test_greyscale_dilate.cxx
+  test_greyscale_erode.cxx
+  test_median.cxx
 )
 TARGET_LINK_LIBRARIES( vil2_test_driver vil2_algo vil2 vpl vul testlib vcl )
 
@@ -45,3 +48,6 @@ ADD_TEST( vil2_memory_chunk                vil2_test_driver test_memory_chunk )
 ADD_TEST( vil2_resample_bilin              vil2_test_driver test_resample_bilin )
 ADD_TEST( test_binary_dilate               vil2_test_driver test_binary_dilate )
 ADD_TEST( test_binary_erode                vil2_test_driver test_binary_erode )
+ADD_TEST( test_greyscale_dilate            vil2_test_driver test_greyscale_dilate )
+ADD_TEST( test_greyscale_erode             vil2_test_driver test_greyscale_erode )
+ADD_TEST( test_median                      vil2_test_driver test_median )

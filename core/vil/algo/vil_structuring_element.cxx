@@ -44,6 +44,33 @@ void vil2_structuring_element::set_to_disk(double r)
   set(px,py);
 }
 
+//: Set to line along i (ilo,0)..(ihi,0)
+void vil2_structuring_element::set_to_line_i(int ilo, int ihi)
+{
+  p_i_.resize(1+ihi-ilo);
+  p_j_.resize(1+ihi-ilo);
+	for (int i = ilo;i<=ihi;++i)
+	{
+	  p_i_[i-ilo]=i; p_j_[i-ilo]=0;
+  }
+
+	min_i_ = ilo; max_i_ = ihi;
+	min_j_ = 0;   max_j_ = 0;
+}
+
+//: Set to line along j (jlo,0)..(jhi,0)
+void vil2_structuring_element::set_to_line_j(int jlo, int jhi)
+{
+  p_i_.resize(1+jhi-jlo);
+  p_j_.resize(1+jhi-jlo);
+	for (int j = jlo;j<=jhi;++j)
+	{
+	  p_i_[j-jlo]=0; p_j_[j-jlo]=j;
+  }
+
+	min_i_ = 0;   max_i_ = 0;
+	min_j_ = jlo; max_j_ = jhi;
+}
 
 //: Write details to stream
 vcl_ostream& operator<<(vcl_ostream& os, const vil2_structuring_element& element)

@@ -10,8 +10,8 @@ void print_binary_image(const vil2_image_view<bool>& im)
   for (int j=0;j<im.nj();++j)
   {
     for (int i=0;i<im.ni();++i)
-	  if (im(i,j)) vcl_cout<<".";
-	  else         vcl_cout<<"X";
+	  if (im(i,j)) vcl_cout<<"X";
+	  else         vcl_cout<<".";
     vcl_cout<<vcl_endl;
   }
 }
@@ -31,11 +31,9 @@ void test_binary_dilate_byte()
   vcl_cout<<"Original image"<<vcl_endl;
   print_binary_image(image0);
 
-  vcl_vector<int> px(3),py(3);
-  px[0]=-1;py[0]=0;
-  px[1]= 0;py[1]=0;
-  px[2]= 1;py[2]=0;
-  vil2_structuring_element element_i(px,py),element_j(py,px);
+  vil2_structuring_element element_i,element_j;
+	element_i.set_to_line_i(-1,1);
+	element_j.set_to_line_j(-1,1);
   vcl_cout<<"Structuring element: "<<element_i<<vcl_endl;
 
   vil2_image_view<bool> image1;
