@@ -6,7 +6,7 @@
 //-----------------------------------------------------------------------------
 #include <vul/vul_psfile.h>
 
-int main(int argc, char* argv[])
+int main()
 {
   vul_psfile f("vul_psfile_example.ps",true);
   f.set_paper_layout(vul_psfile::CENTER);
