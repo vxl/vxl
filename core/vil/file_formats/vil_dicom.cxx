@@ -101,7 +101,6 @@ read_pixels_into_buffer( DcmElement* pixels,
                          vil_pixel_format& out_format );
 
 
-
 vil_dicom_image::vil_dicom_image(vil_stream* vs)
   : pixels_( 0 )
 {
@@ -114,7 +113,7 @@ vil_dicom_image::vil_dicom_image(vil_stream* vs)
   OFCondition cond = ffmt.read( dcis );
   ffmt.transferEnd();
 
-  if( cond != EC_Normal ) {
+  if ( cond != EC_Normal ) {
     vcl_cerr << "vil_dicom ERROR: could not read file (" << cond.text() << ")\n";
     return;
   }
@@ -126,7 +125,7 @@ vil_dicom_image::vil_dicom_image(vil_stream* vs)
   // I don't know (yet) how to deal with look up tables. (Without the
   // tables, the pixel values represent actual measurements.)
   //
-  if( dset.tagExists( DCM_ModalityLUTSequence ) ) {
+  if ( dset.tagExists( DCM_ModalityLUTSequence ) ) {
     vcl_cerr << "vil_dicom ERROR: don't know (yet) how to handle modality LUTs\n";
     return;
   }
@@ -136,9 +135,9 @@ vil_dicom_image::vil_dicom_image(vil_stream* vs)
   // assume the identity relationship.
   //
   Float64 slope, intercept;
-  if( dset.findAndGetFloat64( DCM_RescaleSlope, slope ) != EC_Normal )
+  if ( dset.findAndGetFloat64( DCM_RescaleSlope, slope ) != EC_Normal )
     slope = 1;
-  if( dset.findAndGetFloat64( DCM_RescaleIntercept, intercept ) != EC_Normal )
+  if ( dset.findAndGetFloat64( DCM_RescaleIntercept, intercept ) != EC_Normal )
     intercept = 0;
 
 
@@ -147,10 +146,10 @@ vil_dicom_image::vil_dicom_image(vil_stream* vs)
 #define Stringify( v ) #v
 #define MustRead( func, key, var )                                                      \
     do{                                                                                 \
-    if( dset. func( key, var ) != EC_Normal ) {                                         \
+    if ( dset. func( key, var ) != EC_Normal ) {                                         \
       vcl_cerr << "vil_dicom ERROR: couldn't read " Stringify(key) "; can't handle\n";  \
       return;                                                                           \
-    }}while(0)
+    }} while (false)
 
   Uint16 bits_alloc, bits_stored, high_bit, pixel_rep;
 
@@ -173,7 +172,8 @@ vil_dicom_image::vil_dicom_image(vil_stream* vs)
   {
     DcmElement* pixels = 0;
     DcmStack stack;
-    if ( dset.search( DCM_PixelData, stack, ESM_fromHere, true ) == EC_Normal ) {
+    if ( dset.search( DCM_PixelData, stack, ESM_fromHere, true ) == EC_Normal )
+    {
       if ( stack.card() == 0 ) {
         vcl_cerr << "vil_dicom ERROR: no pixel data found\n";
         return;
@@ -196,8 +196,8 @@ vil_dicom_image::vil_dicom_image(vil_stream* vs)
   //
   Uint16 planar_config;
   vcl_ptrdiff_t plane_step, i_step, j_step;
-  if( dset.findAndGetUint16( DCM_PlanarConfiguration, planar_config ) == EC_Normal &&
-      planar_config == 1 ) {
+  if ( dset.findAndGetUint16( DCM_PlanarConfiguration, planar_config ) == EC_Normal &&
+       planar_config == 1 ) {
     i_step = 1;
     j_step = ni();
     plane_step = ni() * nj();
@@ -259,7 +259,7 @@ char const* vil_dicom_image::file_format() const
 }
 
 vil_dicom_image::vil_dicom_image(vil_stream* vs, unsigned ni, unsigned nj,
-                                   unsigned nplanes, vil_pixel_format format)
+                                 unsigned nplanes, vil_pixel_format format)
 {
   assert(!"vil_dicom_image doesn't yet support output");
 
@@ -311,7 +311,7 @@ vil_image_view_base_sptr vil_dicom_image::get_view(
 
 
 bool vil_dicom_image::put_view(const vil_image_view_base& view,
-                                unsigned x0, unsigned y0)
+                               unsigned x0, unsigned y0)
 {
   assert(!"vil_dicom_image doesn't yet support output yet");
 
@@ -336,7 +336,8 @@ find_element( DcmObject* dset, vxl_uint_16 group, vxl_uint_16 element )
   DcmElement* result = 0;
   DcmTagKey key( group, element );
   DcmStack stack;
-  if ( dset->search( key, stack, ESM_fromHere, true ) == EC_Normal ) {
+  if ( dset->search( key, stack, ESM_fromHere, true ) == EC_Normal )
+  {
     if ( stack.card() == 0 ) {
       vcl_cerr << "vil_dicom ERROR: no results on stack\n";
     } else {
@@ -352,304 +353,307 @@ find_element( DcmObject* dset, vxl_uint_16 group, vxl_uint_16 element )
 }
 
 // anonymous namespace for helper routines
-namespace {
-
-
-// Specializations of this template contains code to convert from the
-// given VR type (template parameter) to the given C++ type (4th
-// parameter of the function "proc").
-//
-template <int T /*vil_dicom_header_vr_type*/>
-struct try_set;
-
-// A general proc implementation that returns a string representation
-// of any VR.
-//
-struct try_set_to_string
+namespace
 {
-  static void proc( DcmObject* dset, vxl_uint_16 group, vxl_uint_16 element, vcl_string& value ) {
-    DcmElement* e = find_element( dset, group, element );
-    if ( e ) {
-      OFString str;
-      if ( e->getOFString( str, 0 ) != EC_Normal ) {
-        vcl_cerr << "vil_dicom ERROR: value of ("<<group<<','<<element<<") is not string\n";
-      } else {
-        value = str.c_str();
-      }
-    }
-  }
-};
+  // Specializations of this template contains code to convert from the
+  // given VR type (template parameter) to the given C++ type (4th
+  // parameter of the function "proc").
+  //
+  template <int T /*vil_dicom_header_vr_type*/>
+  struct try_set;
 
-
-VCL_DEFINE_SPECIALIZATION
-struct try_set< vil_dicom_header_AE >
-  : public try_set_to_string
-{
-};
-
-
-VCL_DEFINE_SPECIALIZATION
-struct try_set< vil_dicom_header_AS >
-  : public try_set_to_string
-{
-};
-
-
-VCL_DEFINE_SPECIALIZATION
-struct try_set< vil_dicom_header_AT >
-  : public try_set_to_string
-{
-};
-
-
-VCL_DEFINE_SPECIALIZATION
-struct try_set< vil_dicom_header_CS >
-  : public try_set_to_string
-{
-};
-
-
-VCL_DEFINE_SPECIALIZATION
-struct try_set< vil_dicom_header_DA >
-{
-  static void proc( DcmObject* dset, vxl_uint_16 group, vxl_uint_16 element, long& value ) {
-    DcmElement* e = find_element( dset, group, element );
-    if ( e ) {
-      OFString str;
-      if ( e->getOFString( str, 0 ) != EC_Normal ) {
-        vcl_cerr << "ERROR: value of ("<<group<<','<<element<<") is not string\n";
-      } else {
-        value = vcl_atol( str.c_str() );
-      }
-    }
-  }
-};
-
-
-VCL_DEFINE_SPECIALIZATION
-struct try_set< vil_dicom_header_DS >
-{
-  static void proc( DcmObject* dset, vxl_uint_16 group, vxl_uint_16 element, float& value ) {
-    DcmElement* e = find_element( dset, group, element );
-    if ( e ) {
-      OFString str;
-      if ( e->getOFString( str, 0 ) != EC_Normal ) {
-        vcl_cerr << "vil_dicom ERROR: value of ("<<group<<','<<element<<") is not string\n";
-      } else {
-        value = static_cast<float>( vcl_atof( str.c_str() ) );
-      }
-    }
-  }
-
-  static void proc( DcmObject* dset, vxl_uint_16 group, vxl_uint_16 element, vcl_vector<float>& value ) {
-    DcmElement* e = find_element( dset, group, element );
-    if ( e ) {
-      for ( unsigned pos = 0; pos < e->getVM(); ++pos ) {
+  // A general proc implementation that returns a string representation
+  // of any VR.
+  //
+  struct try_set_to_string
+  {
+    static void proc( DcmObject* dset, vxl_uint_16 group, vxl_uint_16 element, vcl_string& value ) {
+      DcmElement* e = find_element( dset, group, element );
+      if ( e )
+      {
         OFString str;
-        if ( e->getOFString( str, pos ) != EC_Normal ) {
-          vcl_cerr << "ERROR: value of ("<<group<<','<<element<<") at " << pos << " is not string\n";
+        if ( e->getOFString( str, 0 ) != EC_Normal ) {
+          vcl_cerr << "vil_dicom ERROR: value of ("<<group<<','<<element<<") is not string\n";
         } else {
-          value.push_back( static_cast<float>( vcl_atof( str.c_str() ) ) );
+          value = str.c_str();
         }
       }
     }
-  }
-};
+  };
 
 
-VCL_DEFINE_SPECIALIZATION
-struct try_set< vil_dicom_header_FD >
-{
-  static void proc( DcmObject* dset, vxl_uint_16 group, vxl_uint_16 element, vxl_ieee_64& value ) {
-    DcmElement* e = find_element( dset, group, element );
-    if ( e ) {
-      if ( e->getFloat64( value ) != EC_Normal ) {
-        vcl_cerr << "ERROR: value of ("<<group<<','<<element<<") is not Float64\n";
+  VCL_DEFINE_SPECIALIZATION
+  struct try_set< vil_dicom_header_AE >
+    : public try_set_to_string
+  {
+  };
+
+
+  VCL_DEFINE_SPECIALIZATION
+  struct try_set< vil_dicom_header_AS >
+    : public try_set_to_string
+  {
+  };
+
+
+  VCL_DEFINE_SPECIALIZATION
+  struct try_set< vil_dicom_header_AT >
+    : public try_set_to_string
+  {
+  };
+
+
+  VCL_DEFINE_SPECIALIZATION
+  struct try_set< vil_dicom_header_CS >
+    : public try_set_to_string
+  {
+  };
+
+
+  VCL_DEFINE_SPECIALIZATION
+  struct try_set< vil_dicom_header_DA >
+  {
+    static void proc( DcmObject* dset, vxl_uint_16 group, vxl_uint_16 element, long& value ) {
+      DcmElement* e = find_element( dset, group, element );
+      if ( e )
+      {
+        OFString str;
+        if ( e->getOFString( str, 0 ) != EC_Normal ) {
+          vcl_cerr << "ERROR: value of ("<<group<<','<<element<<") is not string\n";
+        } else {
+          value = vcl_atol( str.c_str() );
+        }
       }
     }
-  }
-};
+  };
 
-VCL_DEFINE_SPECIALIZATION
-struct try_set< vil_dicom_header_FL >
-{
-  static void proc( DcmObject* dset, vxl_uint_16 group, vxl_uint_16 element, vxl_ieee_32& value ) {
-    DcmElement* e = find_element( dset, group, element );
-    if ( e ) {
-      if ( e->getFloat32( value ) != EC_Normal ) {
-        vcl_cerr << "ERROR: value of ("<<group<<','<<element<<") is not Float32\n";
+
+  VCL_DEFINE_SPECIALIZATION
+  struct try_set< vil_dicom_header_DS >
+  {
+    static void proc( DcmObject* dset, vxl_uint_16 group, vxl_uint_16 element, float& value ) {
+      DcmElement* e = find_element( dset, group, element );
+      if ( e )
+      {
+        OFString str;
+        if ( e->getOFString( str, 0 ) != EC_Normal ) {
+          vcl_cerr << "vil_dicom ERROR: value of ("<<group<<','<<element<<") is not string\n";
+        } else {
+          value = static_cast<float>( vcl_atof( str.c_str() ) );
+        }
       }
     }
-  }
-};
 
-
-VCL_DEFINE_SPECIALIZATION
-struct try_set< vil_dicom_header_IS >
-{
-  static void proc( DcmObject* dset, vxl_uint_16 group, vxl_uint_16 element, long& value ) {
-    DcmElement* e = find_element( dset, group, element );
-    if ( e ) {
-      OFString str;
-      if ( e->getOFString( str, 0 ) != EC_Normal ) {
-        vcl_cerr << "vil_dicom ERROR: value of ("<<group<<','<<element<<") is not string\n";
-      } else {
-        value = vcl_atol( str.c_str() );
+    static void proc( DcmObject* dset, vxl_uint_16 group, vxl_uint_16 element, vcl_vector<float>& value ) {
+      DcmElement* e = find_element( dset, group, element );
+      if ( e ) {
+        for ( unsigned pos = 0; pos < e->getVM(); ++pos )
+        {
+          OFString str;
+          if ( e->getOFString( str, pos ) != EC_Normal ) {
+            vcl_cerr << "ERROR: value of ("<<group<<','<<element<<") at " << pos << " is not string\n";
+          } else {
+            value.push_back( static_cast<float>( vcl_atof( str.c_str() ) ) );
+          }
+        }
       }
     }
-  }
-};
+  };
 
 
-VCL_DEFINE_SPECIALIZATION
-struct try_set< vil_dicom_header_LO >
-  : public try_set_to_string
-{
-};
-
-
-VCL_DEFINE_SPECIALIZATION
-struct try_set< vil_dicom_header_LT >
-  : public try_set_to_string
-{
-};
-
-
-VCL_DEFINE_SPECIALIZATION
-struct try_set< vil_dicom_header_OB >
-  : public try_set_to_string
-{
-};
-
-
-VCL_DEFINE_SPECIALIZATION
-struct try_set< vil_dicom_header_OW >
-  : public try_set_to_string
-{
-};
-
-
-VCL_DEFINE_SPECIALIZATION
-struct try_set< vil_dicom_header_PN >
-  : public try_set_to_string
-{
-};
-
-
-VCL_DEFINE_SPECIALIZATION
-struct try_set< vil_dicom_header_SH >
-  : public try_set_to_string
-{
-};
-
-
-VCL_DEFINE_SPECIALIZATION
-struct try_set< vil_dicom_header_SL >
-{
-  static void proc( DcmObject* dset, vxl_uint_16 group, vxl_uint_16 element, vxl_sint_32& value ) {
-    DcmElement* e = find_element( dset, group, element );
-    if ( e ) {
-      if ( e->getSint32( reinterpret_cast<Sint32&>(value) ) != EC_Normal ) {
-        vcl_cerr << "vil_dicom ERROR: value of ("<<group<<','<<element<<") is not Sint32\n";
+  VCL_DEFINE_SPECIALIZATION
+  struct try_set< vil_dicom_header_FD >
+  {
+    static void proc( DcmObject* dset, vxl_uint_16 group, vxl_uint_16 element, vxl_ieee_64& value ) {
+      DcmElement* e = find_element( dset, group, element );
+      if ( e ) {
+        if ( e->getFloat64( value ) != EC_Normal ) {
+          vcl_cerr << "ERROR: value of ("<<group<<','<<element<<") is not Float64\n";
+        }
       }
     }
-  }
-};
+  };
 
-
-VCL_DEFINE_SPECIALIZATION
-struct try_set< vil_dicom_header_SQ >
-  : public try_set_to_string
-{
-};
-
-
-VCL_DEFINE_SPECIALIZATION
-struct try_set< vil_dicom_header_SS >
-{
-  static void proc( DcmObject* dset, vxl_uint_16 group, vxl_uint_16 element, vxl_sint_16& value ) {
-    DcmElement* e = find_element( dset, group, element );
-    if ( e ) {
-      if ( e->getSint16( reinterpret_cast<Sint16&>(value) ) != EC_Normal ) {
-        vcl_cerr << "vil_dicom ERROR: value of ("<<group<<','<<element<<") is not Sint16\n";
+  VCL_DEFINE_SPECIALIZATION
+  struct try_set< vil_dicom_header_FL >
+  {
+    static void proc( DcmObject* dset, vxl_uint_16 group, vxl_uint_16 element, vxl_ieee_32& value ) {
+      DcmElement* e = find_element( dset, group, element );
+      if ( e ) {
+        if ( e->getFloat32( value ) != EC_Normal ) {
+          vcl_cerr << "ERROR: value of ("<<group<<','<<element<<") is not Float32\n";
+        }
       }
     }
-  }
-};
+  };
 
 
-VCL_DEFINE_SPECIALIZATION
-struct try_set< vil_dicom_header_ST >
-  : public try_set_to_string
-{
-};
-
-
-VCL_DEFINE_SPECIALIZATION
-struct try_set< vil_dicom_header_TM >
-{
-  static void proc( DcmObject* dset, vxl_uint_16 group, vxl_uint_16 element, float& value ) {
-    DcmElement* e = find_element( dset, group, element );
-    if ( e ) {
-      OFString str;
-      if ( e->getOFString( str, 0 ) != EC_Normal ) {
-        vcl_cerr << "vil_dicom ERROR: value of ("<<group<<','<<element<<") is not string\n";
-      } else {
-        value = static_cast<float>( vcl_atof( str.c_str() ) );
+  VCL_DEFINE_SPECIALIZATION
+  struct try_set< vil_dicom_header_IS >
+  {
+    static void proc( DcmObject* dset, vxl_uint_16 group, vxl_uint_16 element, long& value ) {
+      DcmElement* e = find_element( dset, group, element );
+      if ( e )
+      {
+        OFString str;
+        if ( e->getOFString( str, 0 ) != EC_Normal ) {
+          vcl_cerr << "vil_dicom ERROR: value of ("<<group<<','<<element<<") is not string\n";
+        } else {
+          value = vcl_atol( str.c_str() );
+        }
       }
     }
-  }
-};
+  };
 
 
-VCL_DEFINE_SPECIALIZATION
-struct try_set< vil_dicom_header_UI >
-  : public try_set_to_string
-{
-};
+  VCL_DEFINE_SPECIALIZATION
+  struct try_set< vil_dicom_header_LO >
+    : public try_set_to_string
+  {
+  };
 
 
-VCL_DEFINE_SPECIALIZATION
-struct try_set< vil_dicom_header_UL >
-{
-  static void proc( DcmObject* dset, vxl_uint_16 group, vxl_uint_16 element, vxl_uint_32& value ) {
-    DcmElement* e = find_element( dset, group, element );
-    if ( e ) {
-      if ( e->getUint32( reinterpret_cast<Uint32&>(value) ) != EC_Normal ) {
-        vcl_cerr << "vil_dicom ERROR: value of ("<<group<<','<<element<<") is not Uint32\n";
+  VCL_DEFINE_SPECIALIZATION
+  struct try_set< vil_dicom_header_LT >
+    : public try_set_to_string
+  {
+  };
+
+
+  VCL_DEFINE_SPECIALIZATION
+  struct try_set< vil_dicom_header_OB >
+    : public try_set_to_string
+  {
+  };
+
+
+  VCL_DEFINE_SPECIALIZATION
+  struct try_set< vil_dicom_header_OW >
+    : public try_set_to_string
+  {
+  };
+
+
+  VCL_DEFINE_SPECIALIZATION
+  struct try_set< vil_dicom_header_PN >
+    : public try_set_to_string
+  {
+  };
+
+
+  VCL_DEFINE_SPECIALIZATION
+  struct try_set< vil_dicom_header_SH >
+    : public try_set_to_string
+  {
+  };
+
+
+  VCL_DEFINE_SPECIALIZATION
+  struct try_set< vil_dicom_header_SL >
+  {
+    static void proc( DcmObject* dset, vxl_uint_16 group, vxl_uint_16 element, vxl_sint_32& value ) {
+      DcmElement* e = find_element( dset, group, element );
+      if ( e ) {
+        if ( e->getSint32( reinterpret_cast<Sint32&>(value) ) != EC_Normal ) {
+          vcl_cerr << "vil_dicom ERROR: value of ("<<group<<','<<element<<") is not Sint32\n";
+        }
       }
     }
-  }
-};
+  };
 
 
-VCL_DEFINE_SPECIALIZATION
-struct try_set< vil_dicom_header_UN >
-  : public try_set_to_string
-{
-};
+  VCL_DEFINE_SPECIALIZATION
+  struct try_set< vil_dicom_header_SQ >
+    : public try_set_to_string
+  {
+  };
 
 
-VCL_DEFINE_SPECIALIZATION
-struct try_set< vil_dicom_header_US >
-{
-  static void proc( DcmObject* dset, vxl_uint_16 group, vxl_uint_16 element, vxl_uint_16& value ) {
-    DcmElement* e = find_element( dset, group, element );
-    if ( e ) {
-      if ( e->getUint16( value ) != EC_Normal ) {
-        vcl_cerr << "vil_dicom ERROR: value of ("<<group<<','<<element<<") is not Uint16\n";
+  VCL_DEFINE_SPECIALIZATION
+  struct try_set< vil_dicom_header_SS >
+  {
+    static void proc( DcmObject* dset, vxl_uint_16 group, vxl_uint_16 element, vxl_sint_16& value ) {
+      DcmElement* e = find_element( dset, group, element );
+      if ( e ) {
+        if ( e->getSint16( reinterpret_cast<Sint16&>(value) ) != EC_Normal ) {
+          vcl_cerr << "vil_dicom ERROR: value of ("<<group<<','<<element<<") is not Sint16\n";
+        }
       }
     }
-  }
-};
+  };
 
 
-VCL_DEFINE_SPECIALIZATION
-struct try_set< vil_dicom_header_UT >
-  : public try_set_to_string
-{
-};
+  VCL_DEFINE_SPECIALIZATION
+  struct try_set< vil_dicom_header_ST >
+    : public try_set_to_string
+  {
+  };
 
+
+  VCL_DEFINE_SPECIALIZATION
+  struct try_set< vil_dicom_header_TM >
+  {
+    static void proc( DcmObject* dset, vxl_uint_16 group, vxl_uint_16 element, float& value ) {
+      DcmElement* e = find_element( dset, group, element );
+      if ( e )
+      {
+        OFString str;
+        if ( e->getOFString( str, 0 ) != EC_Normal ) {
+          vcl_cerr << "vil_dicom ERROR: value of ("<<group<<','<<element<<") is not string\n";
+        } else {
+          value = static_cast<float>( vcl_atof( str.c_str() ) );
+        }
+      }
+    }
+  };
+
+
+  VCL_DEFINE_SPECIALIZATION
+  struct try_set< vil_dicom_header_UI >
+    : public try_set_to_string
+  {
+  };
+
+
+  VCL_DEFINE_SPECIALIZATION
+  struct try_set< vil_dicom_header_UL >
+  {
+    static void proc( DcmObject* dset, vxl_uint_16 group, vxl_uint_16 element, vxl_uint_32& value ) {
+      DcmElement* e = find_element( dset, group, element );
+      if ( e ) {
+        if ( e->getUint32( reinterpret_cast<Uint32&>(value) ) != EC_Normal ) {
+          vcl_cerr << "vil_dicom ERROR: value of ("<<group<<','<<element<<") is not Uint32\n";
+        }
+      }
+    }
+  };
+
+
+  VCL_DEFINE_SPECIALIZATION
+  struct try_set< vil_dicom_header_UN >
+    : public try_set_to_string
+  {
+  };
+
+
+  VCL_DEFINE_SPECIALIZATION
+  struct try_set< vil_dicom_header_US >
+  {
+    static void proc( DcmObject* dset, vxl_uint_16 group, vxl_uint_16 element, vxl_uint_16& value ) {
+      DcmElement* e = find_element( dset, group, element );
+      if ( e ) {
+        if ( e->getUint16( value ) != EC_Normal ) {
+          vcl_cerr << "vil_dicom ERROR: value of ("<<group<<','<<element<<") is not Uint16\n";
+        }
+      }
+    }
+  };
+
+  VCL_DEFINE_SPECIALIZATION
+  struct try_set< vil_dicom_header_UT >
+    : public try_set_to_string
+  {
+  };
 } // end anonymous namespace
 
 static
@@ -778,124 +782,119 @@ read_header( DcmObject* f, vil_dicom_header_info& i )
 
 
 // start anonymous namespace for helpers
-namespace {
-
-template<class InType, class OutType>
-void
-convert_unsigned_int(
-      InType const* in_buf_begin,
-      InType const* in_buf_end,
-      OutType* out_buf,
-      Uint16 alloc, Uint16 stored, Uint16 high,
-      Uint16 rep )
+namespace
 {
-  assert( stored <= sizeof(OutType)*8 );
-  assert( alloc <= sizeof(InType)*8 );
-  assert( rep == 0 );
-  
-  Uint16 right_shift = high + 1 - stored;
-  InType mask = 0xFFFF >> ( alloc - stored );
+  template<class InType, class OutType>
+  void
+  convert_unsigned_int(
+        InType const* in_buf_begin,
+        InType const* in_buf_end,
+        OutType* out_buf,
+        Uint16 alloc, Uint16 stored, Uint16 high,
+        Uint16 rep )
+  {
+    assert( stored <= sizeof(OutType)*8 );
+    assert( alloc <= sizeof(InType)*8 );
+    assert( rep == 0 );
 
-  InType const* inp = in_buf_begin;
-  OutType* outp = out_buf;
-  for( ; inp != in_buf_end; ++inp, ++outp ) {
-      *outp = ( *inp >> right_shift ) & mask;
+    Uint16 right_shift = high + 1 - stored;
+    InType mask = 0xFFFF >> ( alloc - stored );
+
+    InType const* inp = in_buf_begin;
+    OutType* outp = out_buf;
+    for ( ; inp != in_buf_end; ++inp, ++outp ) {
+        *outp = ( *inp >> right_shift ) & mask;
+    }
   }
-}
 
+  template<class InType, class OutType>
+  void
+  convert_signed_int(
+        InType const* in_buf_begin,
+        InType const* in_buf_end,
+        OutType* out_buf,
+        Uint16 alloc, Uint16 stored, Uint16 high,
+        Uint16 rep )
+  {
+    assert( stored <= sizeof(OutType)*8 );
+    assert( alloc <= sizeof(InType)*8 );
+    assert( rep == 1 );
 
-template<class InType, class OutType>
-void
-convert_signed_int(
-      InType const* in_buf_begin,
-      InType const* in_buf_end,
-      OutType* out_buf,
-      Uint16 alloc, Uint16 stored, Uint16 high,
-      Uint16 rep )
-{
-  assert( stored <= sizeof(OutType)*8 );
-  assert( alloc <= sizeof(InType)*8 );
-  assert( rep == 1 );
-  
-  Uint16 right_shift = high + 1 - stored;
-  InType mask = 0xFFFF >> ( alloc - stored );
-  InType sign_bit = 1 << (stored-1);
-  InType value_mask = mask >> 1; // 
+    Uint16 right_shift = high + 1 - stored;
+    InType mask = 0xFFFF >> ( alloc - stored );
+    InType sign_bit = 1 << (stored-1);
 
-  InType const* inp = in_buf_begin;
-  OutType* outp = out_buf;
-  for( ; inp != in_buf_end; ++inp, ++outp ) {
-    InType v = *inp >> right_shift;
-    if( (v & sign_bit) == 0 )
-      *outp = v & mask;
-    else
-      // DICOM signed values are stored as 2s complement
-      *outp = - ( ( ~v & mask ) + 1 );
+    InType const* inp = in_buf_begin;
+    OutType* outp = out_buf;
+    for ( ; inp != in_buf_end; ++inp, ++outp ) {
+      InType v = *inp >> right_shift;
+      if ( (v & sign_bit) == 0 )
+        *outp = v & mask;
+      else
+        // DICOM signed values are stored as 2s complement
+        *outp = - ( ( ~v & mask ) + 1 );
+    }
   }
-}
 
+  template<class SrcType>
+  void
+  convert_src_type( SrcType const* src_buf_begin,
+                    unsigned num_samples,
+                    Uint16 alloc,
+                    Uint16 stored,
+                    Uint16 high,
+                    Uint16 rep,
+                    vil_memory_chunk_sptr& act_buf,
+                    vil_pixel_format& act_format )
+  {
+    SrcType const* src_buf_end   = src_buf_begin + num_samples;
 
-template<class SrcType>
-void
-convert_src_type( SrcType const* src_buf_begin,
+    unsigned act_bytes_per_samp = ( stored+7 ) / 8;
+    act_buf = new vil_memory_chunk( num_samples * act_bytes_per_samp, VIL_PIXEL_FORMAT_BYTE );
+
+    if ( rep == 0 )
+    {
+      if ( act_bytes_per_samp == 1 ) {
+        convert_unsigned_int( src_buf_begin, src_buf_end,
+                              static_cast<vxl_byte*>( act_buf->data() ),
+                              alloc, stored, high, rep );
+        act_format = VIL_PIXEL_FORMAT_BYTE;
+      } else {
+        assert( act_bytes_per_samp == 2 );
+        convert_unsigned_int( src_buf_begin, src_buf_end,
+                              static_cast<vxl_uint_16*>( act_buf->data() ),
+                              alloc, stored, high, rep );
+        act_format = VIL_PIXEL_FORMAT_UINT_16;
+      }
+    } else {
+      if ( act_bytes_per_samp == 1 ) {
+        convert_signed_int( src_buf_begin, src_buf_end,
+                            static_cast<vxl_sbyte*>( act_buf->data() ),
+                            alloc, stored, high, rep );
+        act_format = VIL_PIXEL_FORMAT_SBYTE;
+      } else {
+        assert( act_bytes_per_samp == 2 );
+        convert_signed_int( src_buf_begin, src_buf_end,
+                            static_cast<vxl_sint_16*>( act_buf->data() ),
+                            alloc, stored, high, rep );
+        act_format = VIL_PIXEL_FORMAT_INT_16;
+      }
+    }
+  }
+
+  template<class IntType, class OutType>
+  void
+  rescale_values( IntType const* int_begin,
                   unsigned num_samples,
-                  Uint16 alloc,
-                  Uint16 stored,
-                  Uint16 high,
-                  Uint16 rep,
-                  vil_memory_chunk_sptr& act_buf,
-                  vil_pixel_format& act_format )
-{
-  SrcType const* src_buf_end   = src_buf_begin + num_samples;
-
-  unsigned act_bytes_per_samp = ( stored+7 ) / 8;
-  act_buf = new vil_memory_chunk( num_samples * act_bytes_per_samp, VIL_PIXEL_FORMAT_BYTE );
-
-  if( rep == 0 ) {
-    if( act_bytes_per_samp == 1 ) {
-      convert_unsigned_int( src_buf_begin, src_buf_end,
-                            static_cast<vxl_byte*>( act_buf->data() ),
-                            alloc, stored, high, rep );
-      act_format = VIL_PIXEL_FORMAT_BYTE;
-    } else {
-      assert( act_bytes_per_samp == 2 );
-      convert_unsigned_int( src_buf_begin, src_buf_end,
-                            static_cast<vxl_uint_16*>( act_buf->data() ),
-                            alloc, stored, high, rep );
-      act_format = VIL_PIXEL_FORMAT_UINT_16;
-    }
-  } else {
-    if( act_bytes_per_samp == 1 ) {
-      convert_signed_int( src_buf_begin, src_buf_end,
-                          static_cast<vxl_sbyte*>( act_buf->data() ),
-                          alloc, stored, high, rep );
-      act_format = VIL_PIXEL_FORMAT_SBYTE;
-    } else {
-      assert( act_bytes_per_samp == 2 );
-      convert_signed_int( src_buf_begin, src_buf_end,
-                          static_cast<vxl_sint_16*>( act_buf->data() ),
-                          alloc, stored, high, rep );
-      act_format = VIL_PIXEL_FORMAT_INT_16;
+                  OutType* float_begin,
+                  Float64 slope, Float64 intercept )
+  {
+    IntType const* const int_end = int_begin + num_samples;
+    for ( ; int_begin != int_end; ++int_begin, ++float_begin ) {
+      *float_begin = static_cast<OutType>( *int_begin * slope + intercept );
     }
   }
-}
-
-
-template<class IntType, class OutType>
-void
-rescale_values( IntType const* int_begin,
-                unsigned num_samples,
-                OutType* float_begin,
-                Float64 slope, Float64 intercept )
-{
-  IntType const* const int_end = int_begin + num_samples;
-  for( ; int_begin != int_end; ++int_begin, ++float_begin ) {
-    *float_begin = static_cast<OutType>( *int_begin * slope + intercept );
-  } 
-}
-
 } // anonymous namespace
-
 
 
 static
@@ -921,15 +920,15 @@ read_pixels_into_buffer( DcmElement* pixels,
   // First convert from the stored src pixels to the actual
   // pixels. This is an integral type to integral type conversion.
   //
-  if( pixels->getVR() == EVR_OW ) {
+  if ( pixels->getVR() == EVR_OW ) {
     Uint16* src_buf;
-    if( pixels->getUint16Array( src_buf ) != EC_Normal )
+    if ( pixels->getUint16Array( src_buf ) != EC_Normal )
       return;
     convert_src_type( src_buf, num_samples, alloc, stored, high, rep, act_buf, act_format );
   } else {
     // assume OB
     Uint8* src_buf;
-    if( pixels->getUint8Array( src_buf ) != EC_Normal )
+    if ( pixels->getUint8Array( src_buf ) != EC_Normal )
       return;
     convert_src_type( src_buf, num_samples, alloc, stored, high, rep, act_buf, act_format );
   }
@@ -939,11 +938,11 @@ read_pixels_into_buffer( DcmElement* pixels,
 
   // Now, the actual buffer is good, or else we need to rescale
   //
-  if( slope == 1 && intercept == 0 ) {
+  if ( slope == 1 && intercept == 0 ) {
     out_format = act_format;
     out_buf = act_buf;
   } else {
-    if( act_buf->size() == sizeof(float) * num_samples )
+    if ( act_buf->size() == sizeof(float) * num_samples )
       out_buf = act_buf;
     else
       out_buf = new vil_memory_chunk( num_samples * sizeof(float), VIL_PIXEL_FORMAT_FLOAT );
