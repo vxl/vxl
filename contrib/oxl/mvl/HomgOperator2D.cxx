@@ -15,7 +15,7 @@
 
 #include <vnl/vnl_math.h>
 #include <vnl/vnl_matrix.h>
-#include <vnl/vnl_scatter_3x3.h>
+#include <vnl/algo/vnl_scatter_3x3.h>
 
 #include <mvl/HomgLine2D.h>
 #include <mvl/HomgPoint2D.h>
