@@ -1,8 +1,9 @@
+// This is gel/vmal/vmal_convert.h
 #ifndef vmal_convert_h_
 #define vmal_convert_h_
 //:
 // \file
-//   Toolbox to make conversion from osl to vtol, vil_image to vil_memory_image,
+// \brief Toolbox to make conversion from osl to vtol, vil_image to vil_memory_image
 // \author L. Guichard
 //------------------------------------------------------------------------------
 
@@ -21,6 +22,8 @@
 #include <vil/vil_image.h>
 #include <vil/vil_byte.h>
 #include <vil/vil_memory_image_of.h>
+
+#include <vcl_vector.h>
 
 vtol_vertex_2d_sptr convert_vertex_2d(osl_vertex & in);
 
