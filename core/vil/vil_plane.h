@@ -10,7 +10,7 @@
 
 #include <vil2/vil2_image_resource.h>
 #include <vil2/vil2_image_view.h>
-
+#include <vcl_cassert.h>
 
 
 //: Return a view of im's plane p.
@@ -43,7 +43,6 @@ class vil2_plane_image_resource : public vil2_image_resource
   virtual unsigned nj() const { return src_->nj(); }
 
   virtual enum vil2_pixel_format pixel_format() const { return src_->pixel_format(); }
-
 
   virtual vil2_image_view_base_sptr get_copy_view(unsigned i0, unsigned ni, 
                                                   unsigned j0, unsigned nj) const;

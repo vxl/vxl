@@ -9,6 +9,7 @@
 //-----------------------------------------------------------------------------
 
 #include "vil2_plane.h"
+#include <vcl_cassert.h>
 
 
 vil2_image_resource_sptr vil2_plane(const vil2_image_resource_sptr &src, unsigned p)
@@ -91,7 +92,6 @@ vil2_image_view_base_sptr vil2_plane_image_resource::get_view(unsigned i0, unsig
     return 0;
   }
 }
-
 
 
 //: Put the data in this view back into the image source.

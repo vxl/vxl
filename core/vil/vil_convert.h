@@ -11,6 +11,7 @@
 // \author Ian Scott.
 
 #include <vil2/vil2_transform.h>
+#include <vcl_cassert.h>
 
 //: Performs conversion between different pixel types.
 // For floating point types to integers it performs rounding.
@@ -20,7 +21,6 @@ class vil2_convert_cast_pixel
   public:
   Out operator () (In v) const { return (Out)v; }
 };
-
 
 
 VCL_DEFINE_SPECIALIZATION
@@ -72,7 +72,6 @@ inline vxl_int_32 vil2_convert_cast_pixel<double, vxl_int_32>::operator () (doub
 { return (vxl_int_32)(v+0.5); }
 
 
-
 //: Cast one pixel type to another (with rounding).
 // There must be a cast operator from inP to outP
 // \relates vil2_image_view
@@ -81,7 +80,6 @@ inline void vil2_convert_cast(const vil2_image_view<inP >&src, vil2_image_view<o
 {
   vil2_transform(src, dest, vil2_convert_cast_pixel<inP, outP>());
 }
-
 
 
 //: Convert various rgb types to greyscale, using given weights
@@ -94,14 +92,14 @@ public:
     rw_(rw), gw_(gw), bw_(bw) {}
 
   outP operator() (vil_rgb<inP > v) const {
-    return vil2_convert_cast_pixel<double,outP>()(rw_*v.r+gw_*v.g+bw_*v.b); } 
+    return vil2_convert_cast_pixel<double,outP>()(rw_*v.r+gw_*v.g+bw_*v.b); }
   outP operator() (vil_rgba<inP > v) const {
-    return vil2_convert_cast_pixel<double,outP>()(rw_*v.r+gw_*v.g+bw_*v.b); } 
+    return vil2_convert_cast_pixel<double,outP>()(rw_*v.r+gw_*v.g+bw_*v.b); }
 };
 
 //: Convert single plane rgb (or rgba) images to greyscale.
 // Component types can be different. Rounding will take place if appropriate.
-// 
+//
 // Default weights convert from linear RGB to CIE luminance assuming a
 // modern monitor.  See Charles Pontyon's Colour FAQ
 // http://www.inforamp.net/~poynton/notes/colour_and_gamma/ColorFAQ.html
@@ -116,20 +114,20 @@ inline void vil2_convert_rgb_to_grey(const vil2_image_view<rgbP >&src, vil2_imag
 #endif
   assert(src.nplanes() == 1);
   vil2_transform(src, dest, func);
-}  
+}
 
 template <class inP, class outP>
 struct vil2_convert_grey_to_rgb_pixel
 {
   vil_rgb<outP> operator() (inP v) const {
-    return vil_rgb<outP>(vil2_convert_cast_pixel<double,outP>()(v)); } 
+    return vil_rgb<outP>(vil2_convert_cast_pixel<double,outP>()(v)); }
 };
 
 template <class inP, class outP>
 struct vil2_convert_grey_to_rgba_pixel
 {
   vil_rgba<outP> operator() (inP v) const {
-    return vil_rgba<outP>(vil2_convert_cast_pixel<double,outP>()(v)); } 
+    return vil_rgba<outP>(vil2_convert_cast_pixel<double,outP>()(v)); }
 };
 
 //: Convert grey images to rgb.

@@ -9,7 +9,7 @@
 // \brief STL algorithm like methods.
 // \author Ian Scott.
 
-#include <vcl_algorithm.h>
+#include <vcl_cassert.h>
 #include <vil2/vil2_image_view.h>
 
 
@@ -22,20 +22,6 @@ inline void vil2_transform(const vil2_image_view<inP >&src, vil2_image_view<outP
     for (unsigned j = 0; j < src.nj(); ++j)
       for (unsigned i = 0; i < src.ni(); ++i)
         dest(i,j,p) = functor(src(i,j,p));
-}
-
-//: Apply a unary operation to each pixel in src to get dest.
-// non-const dest version, assumes dest is already correct size.
-template <class inP, class outP, class Op >
-inline void vil2_transform(const vil2_image_view<inP >&src, const vil2_image_view<outP >&dest, Op functor)
-{
-  assert(dest.ni() == src.ni() && src.nj() == dest.nj()
-    && src.nplanes() == dest.nplanes());
-  vil2_image_view<outP >& nc_dest = const_cast<vil2_image_view<outP >&>(dest);
-  for (unsigned p = 0; p < src.nplanes(); ++p)
-    for (unsigned j = 0; j < src.nj(); ++j)
-      for (unsigned i = 0; i < src.ni(); ++i)
-        nc_dest(i,j,p) = functor(src(i,j,p));
 }
 
 //: Apply a binary operation to each pixel in srcA and srcB to get dest.
