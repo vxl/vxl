@@ -11,6 +11,9 @@ SET(vdgl_sources
  vdgl_interpolator_cubic.cxx  vdgl_interpolator_cubic.h
  vdgl_interpolator_linear.cxx vdgl_interpolator_linear.h
  vdgl_ortho_regress.cxx       vdgl_ortho_regress.h
+# These two are compiled in vtol:
+ vdgl_intensity_face.h
+ vdgl_intensity_face_sptr.h
 )
 
 AUX_SOURCE_DIRECTORY(Templates vdgl_sources)
