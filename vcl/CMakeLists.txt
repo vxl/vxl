@@ -20,3 +20,6 @@ AUX_SOURCE_DIRECTORY(Templates vcl_sources)
 ADD_LIBRARY(vcl vcl_sources)
 
 
+IF( BUILD_TESTS)
+  SUBDIRS(tests)
+ENDIF( BUILD_TESTS)
