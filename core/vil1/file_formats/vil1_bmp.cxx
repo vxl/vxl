@@ -55,7 +55,7 @@ char const* vil_bmp_generic_image::file_format() const
 
 vil_bmp_generic_image::vil_bmp_generic_image(vil_stream* is)
   : is_(is)
-  , bit_map_start(vil_streampos(-1L))
+  , bit_map_start(-1L)
   //, freds_colormap(0)
   //, local_color_map_(0)
 {
@@ -85,7 +85,7 @@ vil_bmp_generic_image::vil_bmp_generic_image(vil_stream* is,
                                              int bits_per_component,
                                              vil_component_format /*format*/)
   : is_(is)
-  , bit_map_start(vil_streampos(-1L))
+  , bit_map_start(-1L)
 {
   is_->ref();
   assert(planes == 1); // FIXME

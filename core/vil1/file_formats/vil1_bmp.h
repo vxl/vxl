@@ -90,7 +90,7 @@ private:
   vil_bmp_file_header file_hdr;
   vil_bmp_core_header core_hdr;
   vil_bmp_info_header info_hdr;
-  unsigned long bit_map_start; // position in file of bitmap raw data.
+  long bit_map_start; // position in file of bitmap raw data.
   //uchar **freds_colormap;
 
   //xBITMAPINFOHEADER header;
