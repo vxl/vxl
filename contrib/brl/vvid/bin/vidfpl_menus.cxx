@@ -110,6 +110,12 @@ void vidfpl_menus::compute_harris_corners_callback()
 {
   vvid_file_manager::instance()->compute_harris_corners();
 }
+
+void vidfpl_menus::compute_vd_edges_callback()
+{
+  vvid_file_manager::instance()->compute_vd_edges();
+}
+
 void vidfpl_menus::quit_callback()
 {
   vcl_exit(1);
@@ -140,6 +146,8 @@ vgui_menu vidfpl_menus::get_menu()
   menuedit.add( "Compute Motion", compute_motion_callback);
   menuedit.add( "Compute Lucas-Kanade Flow", compute_lucas_kanade_callback);
   menuedit.add( "Compute Harris Corners", compute_harris_corners_callback);
+  menuedit.add( "Compute VD Edges", compute_vd_edges_callback);
+
   //Top level menu layout
   menubar.add( "File", menufile);
   menubar.add( "View", menuview);

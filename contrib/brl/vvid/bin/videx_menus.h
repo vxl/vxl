@@ -19,6 +19,7 @@ class videx_menus
   static void quit_callback();
   static void set_camera_params_callback();
   static void set_detection_params_callback();
+  static void no_op_callback();
   static void start_live_video_callback();
   static void stop_live_video_callback();
   static void capture_sequence_callback();

@@ -66,8 +66,7 @@ bool vvid_lucas_kanade_process::execute()
       return false;
     }
   vil_image img = vvid_video_process::get_input_image(0);
-  vil_memory_image_of<unsigned char> temp(img);
-  vil_memory_image_of<float> fimg = brip_float_ops::convert_to_float(temp);
+  vil_memory_image_of<float> fimg = brip_float_ops::convert_to_float(img);
   vil_memory_image_of<float> temp2;
   if(downsample_)
     temp2 = brip_float_ops::half_resolution(fimg);

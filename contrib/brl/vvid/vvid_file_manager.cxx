@@ -21,6 +21,7 @@
 #include <vgui/vgui_grid_tableau.h>
 #include <vgui/vgui_image_tableau.h>
 #include <sdet/sdet_harris_detector_params.h>
+#include <sdet/sdet_detector_params.h>
 
 #include <vidl/vidl_io.h>
 #include <vidl/vidl_frame.h>
@@ -28,6 +29,7 @@
 #include <vvid/vvid_motion_process.h>
 #include <vvid/vvid_lucas_kanade_process.h>
 #include <vvid/vvid_harris_corner_process.h>
+#include <vvid/vvid_edge_process.h>
 
 //static manager instance
 vvid_file_manager *vvid_file_manager::instance_ = 0;
@@ -53,11 +55,13 @@ void vvid_file_manager::init()
 
   itab0_ = vgui_image_tableau_new();
   easy0_ = bgui_vtol2D_tableau_new(itab0_);
+  easy0_->disable_highlight();
   v2D0_ = vgui_viewer2D_tableau_new(easy0_);
   grid_->add_at(v2D0_, 0,0);
 
   itab1_ = vgui_image_tableau_new();
   easy1_ = bgui_vtol2D_tableau_new(itab1_);
+  easy1_->disable_highlight();
   v2D1_ = vgui_viewer2D_tableau_new(easy1_);
   grid_->add_at(v2D1_, 1,0);
   vgui_shell_tableau_sptr shell = vgui_shell_tableau_new(grid_);
@@ -119,6 +123,16 @@ void vvid_file_manager::display_spatial_objects()
       easy0_->clear_all();
     easy0_->add_spatial_objects(sos);
   }
+}
+//-------------------------------------------------------------
+//: Display topology objects
+//
+void vvid_file_manager::display_topology()
+{
+  easy0_->clear_all();
+  vcl_vector<vtol_topology_object_sptr> const & topos = 
+    video_process_->get_segmentation();
+  easy0_->add_topology_objects(topos);
 }
 
 //-----------------------------------------------------------------------------
@@ -244,11 +258,16 @@ void vvid_file_manager::un_cached_play()
           vil_memory_image_of<unsigned char> image(img);
           video_process_->add_input_image(image);
           if (video_process_->execute())
-            if (video_process_->get_output_type()==vvid_video_process::IMAGE)
-              display_image();
-            else if (video_process_->get_output_type()==
-                     vvid_video_process::SPATIAL_OBJECT)
-              display_spatial_objects();
+            {
+              if (video_process_->get_output_type()==vvid_video_process::IMAGE)
+                display_image();
+              if (video_process_->get_output_type()==
+                  vvid_video_process::SPATIAL_OBJECT)
+                display_spatial_objects();
+              if (video_process_->get_output_type()==
+                  vvid_video_process::TOPOLOGY)
+                display_topology();
+            }
         }
       grid_->post_redraw();
       vgui::run_till_idle();
@@ -367,11 +386,32 @@ void vvid_file_manager::compute_harris_corners()
   harris_dialog.field("sigma", hdp.sigma_);
   harris_dialog.field("thresh", hdp.thresh_);
   harris_dialog.field("N = 2n+1, (n)", hdp.n_);
-  harris_dialog.field("Max No.Corners", hdp.n_corners_);
+  harris_dialog.field("Max No.Corners(percent)", hdp.percent_corners_);
   harris_dialog.field("scale_factor", hdp.scale_factor_);
   harris_dialog.checkbox("Tracks", track_);
   if (!harris_dialog.ask())
     return;
 
   video_process_ = new vvid_harris_corner_process(hdp);
+}
+
+void vvid_file_manager::compute_vd_edges()
+{
+  static bool agr = false;
+  static sdet_detector_params dp;
+  vgui_dialog det_dialog("Video Edges");
+  det_dialog.field("Gaussian sigma", dp.smooth);
+  det_dialog.field("Noise Threshold", dp.noise_multiplier);
+  det_dialog.checkbox("Automatic Threshold", dp.automatic_threshold);
+  det_dialog.checkbox("Agressive Closure", agr);
+  det_dialog.checkbox("Compute Junctions", dp.junctionp);
+  if (!det_dialog.ask())
+    return;
+
+  if (agr)
+    dp.aggressive_junction_closure=0;
+  else
+    dp.aggressive_junction_closure=-1;
+
+  video_process_  = new vvid_edge_process(dp);
 }

@@ -159,6 +159,11 @@ void vvid_live_video_manager::set_detection_params()
     this->start_live_video();
 }
 
+void vvid_live_video_manager::no_op()
+{
+  video_process_ = 0;
+}
+
 void vvid_live_video_manager::capture_sequence()
 {
   this->stop_live_video();

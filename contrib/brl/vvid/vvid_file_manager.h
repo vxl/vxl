@@ -102,6 +102,9 @@ class vvid_file_manager : public vgui_wrapper_tableau
   //: show the Harris corners
   void compute_harris_corners();
 
+  //: show VanDuc edges
+  void compute_vd_edges();
+
   //: get the window of this player
   vgui_window* get_window(){return win_;}
 
@@ -117,6 +120,7 @@ class vvid_file_manager : public vgui_wrapper_tableau
   void un_cached_play();
   void display_image();
   void display_spatial_objects();
+  void display_topology();
  private:
   //utility functions
 

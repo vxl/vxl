@@ -23,6 +23,11 @@ void videx_menus::set_detection_params_callback()
   vvid_live_video_manager::instance()->set_detection_params();
 }
 
+void videx_menus::no_op_callback()
+{
+  vvid_live_video_manager::instance()->no_op();
+}
+
 void videx_menus::start_live_video_callback()
 {
   vvid_live_video_manager::instance()->start_live_video();
@@ -56,6 +61,7 @@ vgui_menu videx_menus::get_menu()
   //edit menu entries
   menuedit.add("Camera Settings", set_camera_params_callback);
   menuedit.add("Edge Detection Settings", set_detection_params_callback);
+  menuedit.add("No Live Operation", no_op_callback);
 
   //Top level menu layout
   menubar.add( "File", menufile);

@@ -49,6 +49,9 @@ class vvid_live_video_manager : public vgui_wrapper_tableau
   //: change edge detection parameters
   void set_detection_params();
 
+  //: no process
+  void no_op();
+
   //: control video collection
   void start_live_video();
   void stop_live_video();
