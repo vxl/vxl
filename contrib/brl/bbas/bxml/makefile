@@ -1,4 +1,8 @@
 USES += contrib/brl contrib/gel contrib/brl/bbas core
+ifneq (,$(wildcard ${IUEROOT}/v3p/xerces-c-src1_4_0/include/dom/DOM.hpp))
+ HAS_XERCES:=1
+ INCDIRS += ${IUEROOT}/v3p/xerces-c-src1_4_0/include
+endif
 
 ifdef HAS_XERCES
 
