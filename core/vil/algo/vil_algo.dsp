@@ -132,6 +132,9 @@ SOURCE=.\vil2_algo_gauss_reduce.txx
 SOURCE=.\vil2_algo_convolve_1d.h
 # End Source File
 # Begin Source File
+SOURCE=.\vil2_algo_convolve_2d.h
+# End Source File
+# Begin Source File
 SOURCE=.\vil2_algo_exp_filter_1d.h
 # End Source File
 # End Group
