@@ -20,6 +20,9 @@
 #include <vbl/vbl_ref_count.h>
 #include <vil/vil_image_view_base.h>
 
+#include <vil/vil_new.h>
+#include <vil/vil_image_resource_sptr.h>
+
 class vidl_movie;
 class vidl_image_list_codec;
 class vidl_mpegcodec;
@@ -69,6 +72,9 @@ class vidl_codec :  public vbl_ref_count
   inline int  get_bits_pixel() const { return B; }
   inline int  get_bytes_pixel()const { return (B+7)/8; }
 
+  //: Return the resource to the image
+  virtual vil_image_resource_sptr get_resource(int position) const;
+
   virtual vil_image_view_base_sptr get_view(
         int position,
         int x0,
@@ -76,7 +82,7 @@ class vidl_codec :  public vbl_ref_count
         int y0,
         int height) const = 0;
 
-  inline vil_image_view_base_sptr get_view(int position)
+  inline vil_image_view_base_sptr get_view(int position) const
   { return get_view(position, 0, X, 0, Y); }
 
   virtual bool put_view(

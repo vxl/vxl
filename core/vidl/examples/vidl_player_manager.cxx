@@ -123,8 +123,7 @@ void vidl_player_manager::load_video_file()
 void vidl_player_manager::redraw()
 {
   vgui::out << "frame["<< pframe_->get_real_frame_index()<<"]\n";
-  //vil_image_view_base_sptr img_view = pframe_->get_view();
-  itab_->set_image_view(*(pframe_->get_view()));
+  itab_->set_image_resource(pframe_->get_resource());
   itab_->post_redraw();
   vgui::run_till_idle();
 }

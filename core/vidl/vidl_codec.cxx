@@ -47,3 +47,13 @@ vidl_codec_sptr* vidl_codec::all_codecs()
   static vidl_codec_storage storage;
   return storage.l;
 }
+
+
+//: Return the resource to the image
+vil_image_resource_sptr 
+vidl_codec::get_resource(int position) const
+{ 
+  // Create a new resource of a view by default
+  // since a resource is not always available 
+  return vil_new_image_resource_of_view(*(this->get_view(position))); 
+}

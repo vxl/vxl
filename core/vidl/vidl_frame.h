@@ -16,6 +16,7 @@
 #include <vil/vil_image_view_base.h>
 #include <vidl/vidl_frame_sptr.h>
 #include <vidl/vidl_codec.h>
+#include <vil/vil_image_resource_sptr.h>
 
 //: A single frame of a Video Sequence.
 class vidl_frame : public vbl_ref_count
@@ -27,11 +28,13 @@ class vidl_frame : public vbl_ref_count
   vidl_frame(int position, vidl_codec_sptr coder);
   ~vidl_frame();
 
-  vil_image_view_base_sptr get_view();
+  //: Return an image resource
+  vil_image_resource_sptr get_resource() const;
+  vil_image_view_base_sptr get_view() const;
   virtual vil_image_view_base_sptr get_view(
                          int x0, int width, int y0, int heigth) const;
 
-  vidl_codec_sptr get_codec() {return coder_;}
+  vidl_codec_sptr get_codec() const {return coder_;}
 
   inline char get_image_class()const { return coder_->get_image_class(); }
   inline char get_format() const     { return coder_->get_format(); }
@@ -48,7 +51,6 @@ class vidl_frame : public vbl_ref_count
   // Data Members
   const int position_;
   vidl_codec_sptr coder_;
-  vil_image_view_base_sptr image_;
 };
 
 #endif // vidl_frame_h

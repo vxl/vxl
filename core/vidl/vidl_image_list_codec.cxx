@@ -90,6 +90,13 @@ bool vidl_image_list_codec::init()
 }
 
 
+//: Return the resource to the image
+vil_image_resource_sptr 
+vidl_image_list_codec::get_resource(int position) const
+{
+  return images_[position];
+}
+
 //: Get a section of pixels in function of the frame number, position and size.
 vil_image_view_base_sptr vidl_image_list_codec::get_view(int position, int x0, int w, int y0, int h) const
 {

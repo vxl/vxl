@@ -38,6 +38,8 @@ class vidl_image_list_codec :  public vidl_codec
   // Safe cast to a parent from Image
   virtual vidl_image_list_codec* casttovidl_image_list_codec() { return this; }
 
+  //: Return the resource to the image
+  virtual vil_image_resource_sptr get_resource(int position) const;
   virtual vil_image_view_base_sptr get_view(int position, int x0, int w, int y0, int h) const;
   virtual bool put_view(int position, const vil_image_view_base &im, int x0, int y0);
   // IO

@@ -25,16 +25,22 @@ vidl_frame::~vidl_frame()
 }
 
 //: Return the image.
-vil_image_view_base_sptr vidl_frame::get_view()
+vil_image_view_base_sptr vidl_frame::get_view() const
 {
-  if (! image_) {
-    image_ = coder_->get_view(position_);
-  }
-  return image_;
+  return coder_->get_view(position_);
 }
+
+
+//: Return an image resource
+vil_image_resource_sptr vidl_frame::get_resource() const
+{
+  return coder_->get_resource(position_);
+}
+
 
 //: Get the pixels for the rectangular window starting at x0, y0 and width and height wide.
 vil_image_view_base_sptr vidl_frame::get_view(int x0, int width, int y0, int height) const
 {
   return coder_->get_view(position_, x0, width, y0, height);
 }
+
