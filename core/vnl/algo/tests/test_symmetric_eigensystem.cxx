@@ -12,11 +12,9 @@
 #include <vcl_iostream.h>
 #include <vcl_algorithm.h>
 #include <vnl/vnl_double_3x3.h>
-#include <vnl/vnl_double_3.h>
 #include <vnl/vnl_random.h>
 #include <vul/vul_timer.h>
 #include <vnl/vnl_c_vector.h>
-#include <vnl/vnl_vector_fixed_ref.h>
 #include <vnl/algo/vnl_symmetric_eigensystem.h>
 
 //extern "C"
@@ -94,8 +92,8 @@ void test_symmetric_eigensystem()
   {  // test I with specialised 3x3 version
     double l1, l2, l3;
     vnl_symmetric_eigensystem_compute_eigenvals(1.0, 0.0, 0.0, 1.0, 0.0, 1.0,
-      l1, l2, l3);
-    vcl_cout << "Eigenvals: " << l1 << " " << l2 << " " << l3 << vcl_endl;
+                                                l1, l2, l3);
+    vcl_cout << "Eigenvals: " << l1 << ' ' << l2 << ' ' << l3 << vcl_endl;
     TEST("Correct eigenvalues for I", l1==1.0 && l2==1.0 && l3 ==1.0, true);
   }
 
@@ -118,7 +116,7 @@ void test_symmetric_eigensystem()
                                       M22 = rng.drand64()*10.0-5.0; M23 = rng.drand64()*10.0-5.0;
                                                                     M33 = rng.drand64()*10.0-5.0;
         vnl_symmetric_eigensystem_compute_eigenvals(M11, M12, M13, M22, M23, M33,
-                                  fixed_data[c][0], fixed_data[c][1], fixed_data[c][2]);
+                                                    fixed_data[c][0], fixed_data[c][1], fixed_data[c][2]);
       }
       fixed_time = timer.user();
     }
@@ -126,19 +124,21 @@ void test_symmetric_eigensystem()
     {
       // Generate same random system
       vnl_random rng(5);
-      vnl_double_3x3 M, evec;
+      vnl_double_3x3 M;
 
       timer.mark();
       for (unsigned c = 0; c < n; ++c)
       {
-        M(0,0)=rng.drand64()*10.0-5.0; M(1,0)=M(0,1)=rng.drand64()*10.0-5.0; 
-                                                       M(2,0)=M(0,2)= rng.drand64()*10.0-5.0;
-                                       M(1,1)=rng.drand64()*10.0-5.0;
-                                                       M(2,1)=M(1,2)=rng.drand64()*10.0-5.0;
-                                                         M(2,2) = rng.drand64()*10.0-5.0;
+        M(0,0)=rng.drand64()*10.0-5.0; M(1,0)=M(0,1)=rng.drand64()*10.0-5.0; M(2,0)=M(0,2)= rng.drand64()*10.0-5.0;
+                                       M(1,1)=rng.drand64()*10.0-5.0;        M(2,1)=M(1,2)=rng.drand64()*10.0-5.0;
+                                                                             M(2,2) = rng.drand64()*10.0-5.0;
 
-        vnl_vector_fixed_ref<double, 3> evals(netlib_data[c]);
-        vnl_symmetric_eigensystem_compute(M.as_ref(), evec.as_ref(), evals.as_ref());
+        vnl_vector<double> evals;
+        vnl_matrix<double> evec;
+        vnl_symmetric_eigensystem_compute(M.as_matrix(), evec, evals);
+        netlib_data[c][0] = evals[0];
+        netlib_data[c][1] = evals[1];
+        netlib_data[c][2] = evals[2];
       }
       netlib_time = timer.user();
     }
@@ -156,10 +156,7 @@ void test_symmetric_eigensystem()
     }
     vcl_cout << "max_dsq: " <<max_dsq<<"  mean_dsq: "<<sum_dsq/static_cast<double>(n)<<vcl_endl;
     TEST("Specialised version gives similar results", max_dsq < 1e-8, true);
-
   }
-
-
 }
 
 TESTMAIN(test_symmetric_eigensystem);
