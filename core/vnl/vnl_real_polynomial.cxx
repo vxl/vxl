@@ -1,10 +1,10 @@
-// This is vxl/vnl/vnl_real_polynomial.cxx
+// This is core/vnl/vnl_real_polynomial.cxx
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
 //:
 // \file
-// \brief Evaluation of real polynomials - the implemenation
+// \brief Evaluation of real polynomials - the implementation
 // \author Andrew W. Fitzgibbon, Oxford RRG 23 Aug 96
 //
 // Modifications

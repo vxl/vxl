@@ -237,7 +237,7 @@ interpolate_center(vbl_array_2d<float> const & neighborhood,
 // neighborhood above the given threshold. At each local maximum,
 // compute the sub-pixel location, (x_pos, y_pos).
 void brip_float_ops::
-non_maximum_supression(vil_memory_image_of<float> const & input,
+non_maximum_suppression(vil_memory_image_of<float> const & input,
                         const int n,
                         const float thresh,
                         vcl_vector<float>& x_pos,
@@ -271,7 +271,7 @@ non_maximum_supression(vil_memory_image_of<float> const & input,
             value.push_back(max_v);
           }
       }
-  vcl_cout << "\nCompute non-maximum supression on a "<< w <<" x " << h << " image in "<< t.real() << " msecs.\n";
+  vcl_cout << "\nCompute non-maximum suppression on a "<< w <<" x " << h << " image in "<< t.real() << " msecs.\n";
 }
 // -----------------------------------------------------------------
 // Subtract image_1 from image_2.

@@ -109,7 +109,7 @@ bool  gevd_detector::DoContour()
   }
 
   vcl_vector<vtol_edge_2d_sptr>::iterator edge;
-  vcl_cout << "IN DoContour before SubPixelAccuracy" << vcl_endl;
+  vcl_cout << "IN DoContour before SubPixelAccuracy\n";
   this->print(vcl_cout);
   for ( edge = edges->begin() ; edge != edges->end(); ++edge)
     {
@@ -124,7 +124,7 @@ bool  gevd_detector::DoContour()
   if (this->borderp)            // insert a virtual contour to enforce
     contour.InsertBorder(*edges, *vertices); // closure at border
   if (grad_mag&&angle)
-    gevd_contour::SetEdgelData(*grad_mag, *angle, *edges); //Continous edgel orientation.
+    gevd_contour::SetEdgelData(*grad_mag, *angle, *edges); //Continuous edgel orientation.
 
 //   const RectROI* roi = image->GetROI();
 //   gevd_contour::Translate(*edges, *vertices, // display location at center
@@ -165,7 +165,7 @@ bool  gevd_detector::DoFoldContour()
   if (this->borderp)            // insert a virtual contour to enforce
     contour.InsertBorder(*edges, *vertices); // closure at border
   if (grad_mag&&angle)
-    gevd_contour::SetEdgelData(*grad_mag, *angle, *edges); //Continous edgel orientation.
+    gevd_contour::SetEdgelData(*grad_mag, *angle, *edges); //Continuous edgel orientation.
 
 //   const RectROI* roi = image->GetROI();
 //   gevd_contour::Translate(*edges, *vertices, // display location at center
@@ -185,7 +185,7 @@ bool gevd_detector::DoStep()
 
   const gevd_bufferxy* source = GetBufferFromImage();
   if (!source) {
-    vcl_cout << " cannot get image buffer" << vcl_endl;
+    vcl_cout << " cannot get image buffer\n";
     return false;
   }
 
@@ -258,7 +258,7 @@ gevd_bufferxy* gevd_detector::GetBufferFromImage()
 
   if (!image)
     {
-      vcl_cout << "No image" << vcl_endl;
+      vcl_cout << "No image\n";
       return 0;
     }
 
@@ -327,6 +327,6 @@ void gevd_detector::print(vcl_ostream &strm) const
        << "    separation " <<   separation << vcl_endl // |mean1-mean2|/sigma
        << "    min_corner_length " <<   min_corner_length << vcl_endl // min length to find corners
        << "    cycle " <<   cycle << vcl_endl // number of corners in a cycle
-       << "    ndimension " <<   ndimension // spatial dimension of edgel chains.
+       << "    ndimension " <<   ndimension << vcl_endl // spatial dimension of edgel chains.
        << vcl_endl;
 }

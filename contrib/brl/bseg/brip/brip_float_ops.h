@@ -38,8 +38,8 @@ class brip_float_ops
   static vil_memory_image_of<float>
     gaussian(vil_memory_image_of<float> const & input, float sigma);
 
-  //:non-maximum supression on a NxN neighborhood, with sub-pixel location
-  static void non_maximum_supression(vil_memory_image_of<float> const & input,
+  //:non-maximum suppression on a NxN neighborhood, with sub-pixel location
+  static void non_maximum_suppression(vil_memory_image_of<float> const & input,
                                       const int n,
                                       const float thresh,
                                       vcl_vector<float>& x_pos,

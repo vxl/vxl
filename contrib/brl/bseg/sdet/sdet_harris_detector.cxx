@@ -7,8 +7,8 @@
 #include <brip/brip_float_ops.h>
 #include <vsol/vsol_point_2d.h>
 
-//A container to support sorting of corners
-//Will result in decending order according to strength
+//: A container to support sorting of corners
+//  Will result in descending order according to strength
 struct sdet_harris_point
 {
   sdet_harris_point () {};
@@ -89,7 +89,7 @@ void sdet_harris_detector::extract_corners()
   brip_float_ops::grad_matrix_NxN(smooth, n_, IxIx, IxIy, IyIy);
   c = brip_float_ops::harris(IxIx, IxIy, IyIy, scale_factor_);
   vcl_vector<float> x_pos, y_pos, val;
-  brip_float_ops::non_maximum_supression(c, n_, thresh_, x_pos, y_pos, val);
+  brip_float_ops::non_maximum_suppression(c, n_, thresh_, x_pos, y_pos, val);
   int n_corners = x_pos.size();
   vcl_cout << "Found " << n_corners << " above the threshold\n";
   if (!n_corners)
@@ -108,7 +108,7 @@ void sdet_harris_detector::extract_corners()
     }
   vcl_qsort(point_array, n_corners, sizeof(sdet_harris_point),
             (int (*)(const void *, const void *))&compare);
-  //ouput the corners (limit by maximum number of corners)
+  //output the corners (limit by maximum number of corners)
   int num = (int)(percent_corners_*n_corners/100.0);
   if (num>n_corners)
     num = n_corners;

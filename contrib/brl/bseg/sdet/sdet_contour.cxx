@@ -73,8 +73,8 @@ const float RGS[] = { 1.f, 1.414213f, 2.f, 2.236067f, 2.828427f, // values of ga
 const int MINLENGTH = 3;        // minimum number of pixels for a chain
 const int FRAME = 4;            // border of image
 
-//A container to support sorting of edge lengths
-//Will result in decending order according to length
+//: A container to support sorting of edge lengths
+// Will result in descending order according to length
 struct sdet_contour_edge
 {
   sdet_contour_edge () {};
@@ -271,7 +271,7 @@ RecordPixel(int i, int j, gevd_bufferxy& edgels,
   floatPixel(edgels, i, j) = -floatPixel(edgels, i, j); // flip sign
   iloc.push_back(i), jloc.push_back(j);
 //   if (sdet_contour::debug_)
-//     vcl_cout << "Recording (" << i << " " << j << ")\n";
+//     vcl_cout << "Recording (" << i << ' ' << j << ")\n";
 }
 
 
@@ -613,7 +613,7 @@ bool sdet_contour:: DetectJunction(vtol_vertex_2d_sptr const& endv, int& index,
       stronger->v1()&&stronger->v2())
     return false;
   if (sdet_contour::debug_)
-    vcl_cout << "Closest index to (" << endv->x() << " "
+    vcl_cout << "Closest index to (" << endv->x() << ' '
              << endv->y() << ") is " << index
              << " corresponding to " << ec->edgel(index)
              << "size = " << ec->size() << vcl_endl;
@@ -821,7 +821,7 @@ void sdet_contour::BreakCycle(vtol_vertex_2d_sptr const& junction,
     int x = int((*old_ec)[k].x()), y = int((*old_ec)[k].y());
     edgeMap->put(x, y, split);
     if (sdet_contour::debug_)
-      vcl_cout << "BreakCycle: edge1 edgel at (" << x << " " << y << ")\n";
+      vcl_cout << "BreakCycle: edge1 edgel at (" << x << ' ' << y << ")\n";
   }
   //insert edgels from 0 to and including index
   for (int k = 0; k <= index; k++)
@@ -830,7 +830,7 @@ void sdet_contour::BreakCycle(vtol_vertex_2d_sptr const& junction,
     int x = int((*old_ec)[k].x()), y = int((*old_ec)[k].y());
     edgeMap->put(x, y, split);
     if (sdet_contour::debug_)
-      vcl_cout << "BreakCycle: edge1 edgel at (" << x << " " << y << ")\n";
+      vcl_cout << "BreakCycle: edge1 edgel at (" << x << ' ' << y << ")\n";
   }
 
 
@@ -927,7 +927,7 @@ void print_edge_lookup_table(vcl_vector<vtol_edge_2d_sptr>& edges)
     }
     vcl_cout<< "edge["<< ei << "]= " << **eit
             << *((*eit)->v1()->cast_to_vertex_2d())
-            << " " << *((*eit)->v2()->cast_to_vertex_2d()) << "\n";
+            << ' ' << *((*eit)->v2()->cast_to_vertex_2d()) << '\n';
   }
 }
 //: Break the edge at given index, and create two subchains from it.
@@ -969,7 +969,7 @@ void sdet_contour::BreakChain(vtol_vertex_2d_sptr const& junction,
     int x = int((*cxy1)[k].x()), y = int((*cxy1)[k].y());
     edgeMap->put(x , y,  edge1);
     if (sdet_contour::debug_)
-      vcl_cout << "BreakChain: edge1 edgel at (" << x << " " << y << ")\n";
+      vcl_cout << "BreakChain: edge1 edgel at (" << x << ' ' << y << ")\n";
   }
 
   //set the vertices of edge 1
@@ -1005,7 +1005,7 @@ void sdet_contour::BreakChain(vtol_vertex_2d_sptr const& junction,
     int x = int((*cxy)[k].x()), y = int((*cxy)[k].y());
     edgeMap->put( x, y, edge2);
     if (sdet_contour::debug_)
-      vcl_cout << "BreakChain: edge2 edgel at (" << x << " " << y << ")\n";
+      vcl_cout << "BreakChain: edge2 edgel at (" << x << ' ' << y << ")\n";
   }
 
   // have to remove stronger from superiors of v2
@@ -1285,8 +1285,8 @@ sdet_contour::MergeEndPtsOfChain(vtol_vertex_2d_sptr const& endpt,
                                  vtol_vertex_2d_sptr& removed_vert)
 {
   if (sdet_contour::debug_)
-    vcl_cout << " Merging end points of same edge " << *endpt << " "
-             << *other << "\n";
+    vcl_cout << " Merging end points of same edge " << *endpt << ' '
+             << *other << '\n';
 
   vcl_vector<vtol_edge_sptr>* edges = endpt->edges();
   // dangling edge terminating at endpt
@@ -1405,17 +1405,17 @@ sdet_contour::MergeEndPtTouchingEndPt(vtol_vertex_2d_sptr const& end1,
 
   if (sdet_contour::debug_)
   {
-    vcl_cout << "end1 " << *end1 << "\n"
-             << "end2 " << *end2 << "\n"
+    vcl_cout << "end1 " << *end1 << '\n'
+             << "end2 " << *end2 << '\n'
              << "edge1-v1 " << *(edge1->v1())
-             << "  edge1-v2 " << *(edge1->v2()) << "\n"
+             << "  edge1-v2 " << *(edge1->v2()) << '\n'
              << "edge2-v1 " << *(edge2->v1())
-             << "  edge2-v2 " << *(edge2->v2()) << "\n"
-             << " (*cxy1)[0] ="<< (*cxy1)[0] << "\n"
-             << " (*cxy1)[l1-1] =" <<(*cxy1)[l1-1] << "\n"
+             << "  edge2-v2 " << *(edge2->v2()) << '\n'
+             << " (*cxy1)[0] ="<< (*cxy1)[0] << '\n'
+             << " (*cxy1)[l1-1] =" <<(*cxy1)[l1-1] << '\n'
 
-             << " (*cxy2)[0] = "<<(*cxy2)[0] << "\n"
-             << " (*cxy1)[l2-1] =" << (*cxy2)[l2-1] << "\n";
+             << " (*cxy2)[0] = "<<(*cxy2)[0] << '\n'
+             << " (*cxy1)[l2-1] =" << (*cxy2)[l2-1] << '\n';
   }
 
   vdgl_edgel_chain *cxy= ec;    // new edgel chain
@@ -1432,7 +1432,7 @@ sdet_contour::MergeEndPtTouchingEndPt(vtol_vertex_2d_sptr const& end1,
       {
         cxy->add_edgel ( (*cxy1)[i] );
         if (sdet_contour::debug_)
-          vcl_cout << "merge edgel " << (*cxy1)[i] << "\n";
+          vcl_cout << "merge edgel " << (*cxy1)[i] << '\n';
       }
       merge->set_v1(edge1->v1());
       break;
@@ -1446,7 +1446,7 @@ sdet_contour::MergeEndPtTouchingEndPt(vtol_vertex_2d_sptr const& end1,
       {
         cxy->add_edgel((*cxy1)[i]);
         if (sdet_contour::debug_)
-          vcl_cout << "merge edgel " << (*cxy1)[i] << "\n";
+          vcl_cout << "merge edgel " << (*cxy1)[i] << '\n';
       }
       merge->set_v1(edge1->v2());
       break;
@@ -1471,7 +1471,7 @@ sdet_contour::MergeEndPtTouchingEndPt(vtol_vertex_2d_sptr const& end1,
       {
         cxy->add_edgel ( (*cxy2)[i] );
         if (sdet_contour::debug_)
-          vcl_cout << "merge edgel " << (*cxy2)[i] << "\n";
+          vcl_cout << "merge edgel " << (*cxy2)[i] << '\n';
       }
       merge->set_v2(edge2->v2());
       break;
@@ -1485,7 +1485,7 @@ sdet_contour::MergeEndPtTouchingEndPt(vtol_vertex_2d_sptr const& end1,
       {
         cxy->add_edgel ( (*cxy2)[i] );
         if (sdet_contour::debug_)
-          vcl_cout << "merge edgel " << (*cxy2)[i] << "\n";
+          vcl_cout << "merge edgel " << (*cxy2)[i] << '\n';
       }
       merge->set_v2(edge2->v1());
       break;
@@ -1510,9 +1510,9 @@ sdet_contour::MergeEndPtTouchingEndPt(vtol_vertex_2d_sptr const& end1,
   if (sdet_contour::debug_)
   {
     vcl_cout << "longer " << *(longer->v1()->cast_to_vertex_2d())
-             << " " << *(longer->v2()->cast_to_vertex_2d()) << "\n"
+             << ' ' << *(longer->v2()->cast_to_vertex_2d()) << '\n'
              << "shorter " << *(shorter->v1()->cast_to_vertex_2d())
-             << " " << *(shorter->v2()->cast_to_vertex_2d()) << "\n";
+             << ' ' << *(shorter->v2()->cast_to_vertex_2d()) << '\n';
   }
 }
 
@@ -1533,7 +1533,7 @@ MergeEndPtTouchingJunction(vtol_vertex_2d_sptr const& endpt,
                            vtol_edge_2d_sptr& new_edge)
 {
   if (sdet_contour::debug_)
-    vcl_cout << "Merge at Junction e" << *endpt<< " j"  << *junction << "\n";
+    vcl_cout << "Merge at Junction e" << *endpt<< " j"  << *junction << '\n';
   vcl_vector<vtol_edge_sptr>* edges = endpt->edges();
   // dangling edge terminating at end pt
   old_edge = (*edges)[0]->cast_to_edge_2d();
@@ -1562,7 +1562,7 @@ MergeEndPtTouchingJunction(vtol_vertex_2d_sptr const& endpt,
       {
         cxy->add_edgel ( (*old_cxy)[i] );
         if (sdet_contour::debug_)
-          vcl_cout << "junction edgel " << (*old_cxy)[i] << "\n";
+          vcl_cout << "junction edgel " << (*old_cxy)[i] << '\n';
         edgeMap->put( int((*old_cxy)[i].x()),
                      int((*old_cxy)[i].y()), new_edge);
       }
@@ -1584,7 +1584,7 @@ MergeEndPtTouchingJunction(vtol_vertex_2d_sptr const& endpt,
       {
         cxy->add_edgel((*old_cxy)[i]);
         if (sdet_contour::debug_)
-          vcl_cout << "junction edgel " << (*old_cxy)[i] << "\n";
+          vcl_cout << "junction edgel " << (*old_cxy)[i] << '\n';
         edgeMap->put( int((*old_cxy)[i].x()),
                      int((*old_cxy)[i].y()), new_edge);
       }
@@ -1617,7 +1617,7 @@ MergeEndPtTouchingJunction(vtol_vertex_2d_sptr const& endpt,
     int x = int((*cxy)[i].x()), y = int((*cxy)[i].y());
 #define WARN(x,y) vcl_cerr << "Warning: edgel "<<i<<" is at ("<<x<<','<<y\
                            <<") which is outside of edge map of size "\
-                           <<edgeMap->rows()<<'x'<<edgeMap->cols()<<"\n"
+                           <<edgeMap->rows()<<'x'<<edgeMap->cols()<<'\n'
     if (x < 0) { WARN(x,y); x = 0; }
     if (y < 0) { WARN(x,y); y = 0; }
     if (x >= edgeMap->rows()) { WARN(x,y); x = edgeMap->rows()-1; }
@@ -1626,7 +1626,7 @@ MergeEndPtTouchingJunction(vtol_vertex_2d_sptr const& endpt,
 
     if (sdet_contour::debug_)
       vcl_cout << " intersecting (" << i << ")(" << vnl_math_abs(x-xe)
-               << " " << vnl_math_abs(y-ye) << ")\n";
+               << ' ' << vnl_math_abs(y-ye) << ")\n";
 
     self_intersects = self_intersects ||
                       ((edgeMap->get(x, y)==new_edge)&&
@@ -1709,7 +1709,7 @@ sdet_contour::FindJunctions(gevd_bufferxy& edgels,
 
         edge->set_v1(v1->cast_to_vertex());         // link both directions v-e
         if (sdet_contour::debug_)
-          vcl_cout << "adding vertex (" << x << " " << y
+          vcl_cout << "adding vertex (" << x << ' ' << y
                    << ")(" << v1->numsup() << ")\n";
         x = int((*cxy)[last].x()), y = int((*cxy)[last].y());
 
@@ -1730,7 +1730,7 @@ sdet_contour::FindJunctions(gevd_bufferxy& edgels,
 
         edge->set_v2(v2->cast_to_vertex());  // link both directions v-e
         if (sdet_contour::debug_)
-          vcl_cout << "adding vertex (" << x << " " << y
+          vcl_cout << "adding vertex (" << x << ' ' << y
                    << ")(" << v2->numsup() << ")\n";
       }
     else // is a closed cycle but with a potential gap of connect_fuzz
@@ -1775,7 +1775,7 @@ sdet_contour::FindJunctions(gevd_bufferxy& edgels,
         update_edgel_chain(weaker, old_x, old_y, endv);
 
         if (sdet_contour::debug_) {
-          vcl_cout << "new position on cycle (" << endv->x() << " "
+          vcl_cout << "new position on cycle (" << endv->x() << ' '
                    << endv->y() << ")\n";
         }
         jcycle++;             // remove original edge
@@ -1792,7 +1792,7 @@ sdet_contour::FindJunctions(gevd_bufferxy& edgels,
 
         if (sdet_contour::debug_)
           vcl_cout << "new position on loop chain (" << endv->x()
-                   << " " << endv->y()<< ")\n";
+                   << ' ' << endv->y()<< ")\n";
         jchain++;
       }
       else
@@ -1807,9 +1807,9 @@ sdet_contour::FindJunctions(gevd_bufferxy& edgels,
         update_edgel_chain(weaker, old_x, old_y, endv);
         if (sdet_contour::debug_)
           vcl_cout << "old position on chain (" << old_x
-                   << " " << old_y
+                   << ' ' << old_y
                    << ")  new position on chain (" << endv->x()
-                   << " " << endv->y()<< ")(" << endv->numsup() <<")\n";
+                   << ' ' << endv->y()<< ")(" << endv->numsup() <<")\n";
 
         jchain++;
       }
@@ -1836,7 +1836,7 @@ sdet_contour::FindJunctions(gevd_bufferxy& edgels,
     if (end1 && end1->numsup() == 1 && !near_border(end1))
     {
       if (sdet_contour::debug_)
-        vcl_cout << "merge target end1(" << end1->x() << " "
+        vcl_cout << "merge target end1(" << end1->x() << ' '
                  << end1->y() << ")\n";
       // find another vertex nearby
       vtol_vertex_2d_sptr  end2 = DetectTouch(end1, maxSpiral);
@@ -2469,7 +2469,7 @@ sdet_contour::ClearNetwork(vcl_vector<vtol_edge_2d_sptr>*& edges,
 
 
 //:
-// Set the orientation at each edgel on all digital curves to a continous
+// Set the orientation at each edgel on all digital curves to a continuous
 // orientation value, which is consistent with C. Rothwell's EdgeDetector.
 // That is theta = (180/M_PI)*atan2(dI/dy, dI/dx)
 //

@@ -8,7 +8,7 @@
 // \file
 // \author Philip C. Pritchett, Robotics Research Group, University of Oxford
 // \date   25 Oct 99
-// \brief  The FLTK implemenation of vgui_dialog_impl.
+// \brief  The FLTK implementation of vgui_dialog_impl.
 //
 // \verbatim
 //  Modifications
@@ -19,7 +19,7 @@
 
 #include <vgui/internals/vgui_dialog_impl.h>
 
-//: The FLTK implemenation of vgui_dialog_impl.
+//: The FLTK implementation of vgui_dialog_impl.
 class vgui_Fl_dialog_impl : public vgui_dialog_impl
 {
  public:

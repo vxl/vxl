@@ -1,4 +1,4 @@
-// This is oxl/vgui/impl/gtk/vgui_gtk_adaptor.h
+// This is core/vgui/impl/gtk/vgui_gtk_adaptor.h
 #ifndef vgui_gtk_adaptor_h_
 #define vgui_gtk_adaptor_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
@@ -53,7 +53,7 @@ class vgui_gtk_adaptor : public vgui_adaptor, public vgui_adaptor_mixin
   void draw();
   void reshape();
 
-  // Returns NULL if the empty constuctor was used
+  // Returns NULL if the empty constructor was used
   vgui_window* get_window() const;
 
   // gtk stuff

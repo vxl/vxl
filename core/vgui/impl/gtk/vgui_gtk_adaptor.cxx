@@ -1,4 +1,4 @@
-// This is oxl/vgui/impl/gtk/vgui_gtk_adaptor.cxx
+// This is core/vgui/impl/gtk/vgui_gtk_adaptor.cxx
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
@@ -327,7 +327,7 @@ gint vgui_gtk_adaptor::idle_callback_for_destroy(gpointer data) {
 
   vgui_window* win = adaptor->get_window();
 
-  // The adaptor destuctor unrefs its tableau and disconnects/destroys
+  // The adaptor destructor unrefs its tableau and disconnects/destroys
   // its glarea widget.
   delete adaptor;
 
@@ -341,7 +341,8 @@ gint vgui_gtk_adaptor::idle_callback_for_destroy(gpointer data) {
   return FALSE;
 }
 
-gint timeout_callback(gpointer data) {
+gint timeout_callback(gpointer data)
+{
   vgui_gtk_adaptor_callback_data* cd = static_cast<vgui_gtk_adaptor_callback_data*> (data);
   vgui_event e(vgui_TIMER);
   e.timer_id = cd->name;

@@ -1,4 +1,3 @@
-
 /* pngwrite.c - general routines to write a PNG file
  *
  * libpng 1.0.8 - July 24, 2000
@@ -30,10 +29,10 @@ png_write_info_before_PLTE(png_structp png_ptr, png_infop info_ptr)
    png_write_sig(png_ptr); /* write PNG signature */
    /* write IHDR information. */
    png_write_IHDR(png_ptr, info_ptr->width, info_ptr->height,
-      info_ptr->bit_depth, info_ptr->color_type, info_ptr->compression_type,
-      info_ptr->filter_type,
+                  info_ptr->bit_depth, info_ptr->color_type,
+                  info_ptr->compression_type, info_ptr->filter_type,
 #if defined(PNG_WRITE_INTERLACING_SUPPORTED)
-      info_ptr->interlace_type);
+                  info_ptr->interlace_type);
 #else
       0);
 #endif
@@ -437,7 +436,7 @@ png_create_write_struct_2(png_const_charp user_png_ver, png_voidp error_ptr,
    if ((png_ptr = (png_structp)png_create_struct(PNG_STRUCT_PNG)) == NULL)
 #endif /* PNG_USER_MEM_SUPPORTED */
    {
-      return ((png_structp)NULL);
+      return (png_structp)NULL;
    }
 
 #ifdef PNG_SETJMP_SUPPORTED
@@ -450,7 +449,7 @@ png_create_write_struct_2(png_const_charp user_png_ver, png_voidp error_ptr,
       png_free(png_ptr, png_ptr->zbuf);
       png_ptr->zbuf=NULL;
       png_destroy_struct(png_ptr);
-      return ((png_structp)NULL);
+      return (png_structp)NULL;
    }
 #ifdef USE_FAR_KEYWORD
    png_memcpy(png_ptr->jmpbuf,jmpbuf,sizeof(jmp_buf));
@@ -465,7 +464,7 @@ png_create_write_struct_2(png_const_charp user_png_ver, png_voidp error_ptr,
    i=0;
    do
    {
-     if(user_png_ver[i] != png_libpng_ver[i])
+     if (user_png_ver[i] != png_libpng_ver[i])
         png_ptr->flags |= PNG_FLAG_LIBRARY_MISMATCH;
    } while (png_libpng_ver[i++]);
 
@@ -508,7 +507,7 @@ png_create_write_struct_2(png_const_charp user_png_ver, png_voidp error_ptr,
       1, NULL, NULL);
 #endif
 
-   return ((png_structp)png_ptr);
+   return (png_structp)png_ptr;
 }
 
 /* Initialize png_ptr structure, and allocate any memory needed */
@@ -609,7 +608,7 @@ png_write_image(png_structp png_ptr, png_bytepp image)
 
    png_debug(1, "in png_write_image\n");
 #if defined(PNG_WRITE_INTERLACING_SUPPORTED)
-   /* intialize interlace handling.  If image is not interlaced,
+   /* initialize interlace handling.  If image is not interlaced,
       this will set pass to 1 */
    num_pass = png_set_interlace_handling(png_ptr);
 #else
@@ -822,7 +821,7 @@ png_write_flush(png_structp png_ptr)
          png_ptr->zstream.avail_out = (uInt)png_ptr->zbuf_size;
          wrote_IDAT = 1;
       }
-   } while(wrote_IDAT == 1);
+   } while (wrote_IDAT == 1);
 
    /* If there is any data left to be output, write it into a new IDAT */
    if (png_ptr->zbuf_size != png_ptr->zstream.avail_out)
@@ -1326,7 +1325,7 @@ png_write_png(png_structp png_ptr, png_infop info_ptr,
    /* It is REQUIRED to call this to finish writing the rest of the file */
    png_write_end(png_ptr, info_ptr);
 
-   if(transforms == 0 || params == (voidp)NULL)
+   if (transforms == 0 || params == (voidp)NULL)
       /* quiet compiler warnings */ return;
 }
 #endif

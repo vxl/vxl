@@ -1,4 +1,4 @@
-// This is oxl/vgui/impl/gtk/vgui_gtk_statusbar.h
+// This is core/vgui/impl/gtk/vgui_gtk_statusbar.h
 #ifndef vgui_gtk_statusbar_h_
 #define vgui_gtk_statusbar_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
@@ -8,7 +8,7 @@
 // \file
 // \author Robotics Research Group, University of Oxford
 // \date   21 Nov 99
-// \brief  The GTK implemenation of vgui_statusbar.
+// \brief  The GTK implementation of vgui_statusbar.
 //
 //  Contains  classes:  vgui_gtk_statusbar
 // 
@@ -23,7 +23,7 @@
 #include <vgui/vgui_statusbuf.h>
 #include <vgui/vgui_statusbar.h>
 
-//: The GTK implemenation of vgui_statusbar.
+//: The GTK implementation of vgui_statusbar.
 //  The GTK status bar for the main window of the application.
 class vgui_gtk_statusbar : public vgui_statusbar
 {

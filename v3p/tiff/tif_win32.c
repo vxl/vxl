@@ -29,7 +29,7 @@
 #include <windows.h>
 #include "tiffiop.h"
 
-/* Supress 64-bit warnings for VC7:
+/* Suppress 64-bit warnings for VC7:
 tif_win32.c(205): warning C4311: 'type cast' : pointer truncation from 'thandle_t' to 'int'
 tif_win32.c(155): warning C4312: 'type cast' : conversion from 'int' to 'thandle_t' of greater size
 */
@@ -42,8 +42,8 @@ _tiffReadProc(thandle_t fd, tdata_t buf, tsize_t size)
 {
     DWORD dwSizeRead;
     if (!ReadFile(fd, buf, size, &dwSizeRead, NULL))
-        return(0);
-    return ((tsize_t) dwSizeRead);
+        return 0;
+    return (tsize_t) dwSizeRead;
 }
 
 static tsize_t
@@ -51,8 +51,8 @@ _tiffWriteProc(thandle_t fd, tdata_t buf, tsize_t size)
 {
     DWORD dwSizeWritten;
     if (!WriteFile(fd, buf, size, &dwSizeWritten, NULL))
-        return(0);
-    return ((tsize_t) dwSizeWritten);
+        return 0;
+    return (tsize_t) dwSizeWritten;
 }
 
 static toff_t
@@ -61,7 +61,7 @@ _tiffSeekProc(thandle_t fd, toff_t off, int whence)
     DWORD dwMoveMethod, dwMoveHigh;
 
     /* we use this as a special code, so avoid accepting it */
-    if( off == 0xFFFFFFFF )
+    if ( off == 0xFFFFFFFF )
         return 0xFFFFFFFF;
 
     switch(whence)
@@ -80,19 +80,19 @@ _tiffSeekProc(thandle_t fd, toff_t off, int whence)
         break;
     }
     dwMoveHigh = 0;
-    return ((toff_t)SetFilePointer(fd, (LONG) off, (PLONG)&dwMoveHigh, dwMoveMethod));
+    return (toff_t)SetFilePointer(fd, (LONG) off, (PLONG)&dwMoveHigh, dwMoveMethod);
 }
 
 static int
 _tiffCloseProc(thandle_t fd)
 {
-    return (CloseHandle(fd) ? 0 : -1);
+    return CloseHandle(fd) ? 0 : -1;
 }
 
 static toff_t
 _tiffSizeProc(thandle_t fd)
 {
-    return ((toff_t)GetFileSize(fd, NULL));
+    return (toff_t)GetFileSize(fd, NULL);
 }
 
 #ifdef __BORLANDC__
@@ -101,7 +101,7 @@ _tiffSizeProc(thandle_t fd)
 static int
 _tiffDummyMapProc(thandle_t fd, tdata_t* pbase, toff_t* psize)
 {
-    return (0);
+    return 0;
 }
 
 /*
@@ -122,16 +122,16 @@ _tiffMapProc(thandle_t fd, tdata_t* pbase, toff_t* psize)
     HANDLE hMapFile;
 
     if ((size = _tiffSizeProc(fd)) == 0xFFFFFFFF)
-        return (0);
+        return 0;
     hMapFile = CreateFileMapping(fd, NULL, PAGE_READONLY, 0, size, NULL);
     if (hMapFile == NULL)
-        return (0);
+        return 0;
     *pbase = MapViewOfFile(hMapFile, FILE_MAP_READ, 0, 0, 0);
     CloseHandle(hMapFile);
     if (*pbase == NULL)
-        return (0);
+        return 0;
     *psize = size;
-    return(1);
+    return 1;
 }
 
 #ifdef __BORLANDC__
@@ -167,7 +167,7 @@ TIFFFdOpen(int ifd, const char* name, const char* mode)
                          fSuppressMap ? _tiffDummyUnmapProc : _tiffUnmapProc);
     if (tif)
         tif->tif_fd = ifd;
-    return (tif);
+    return tif;
 }
 
 /*
@@ -201,22 +201,22 @@ TIFFOpen(const char* name, const char* mode)
         dwMode = CREATE_ALWAYS;
         break;
     default:
-        return ((TIFF*)0);
+        return (TIFF*)0;
     }
     fd = (thandle_t)CreateFile(name, (m == O_RDONLY) ? GENERIC_READ :
             (GENERIC_READ | GENERIC_WRITE), FILE_SHARE_READ, NULL, dwMode,
             (m == O_RDONLY) ? FILE_ATTRIBUTE_READONLY : FILE_ATTRIBUTE_NORMAL, NULL);
     if (fd == INVALID_HANDLE_VALUE) {
         TIFFError(module, "%s: Cannot open", name);
-        return ((TIFF *)0);
+        return (TIFF *)0;
     }
-    return (TIFFFdOpen((int)fd, name, mode));
+    return TIFFFdOpen((int)fd, name, mode);
 }
 
 tdata_t
 _TIFFmalloc(tsize_t s)
 {
-    return ((tdata_t)GlobalAlloc(GMEM_FIXED, s));
+    return (tdata_t)GlobalAlloc(GMEM_FIXED, s);
 }
 
 void
@@ -236,7 +236,7 @@ _TIFFrealloc(tdata_t p, tsize_t s)
             GlobalFree(p);
         }
     }
-    return ((tdata_t)pvTmp);
+    return (tdata_t)pvTmp;
 }
 
 void
@@ -260,7 +260,7 @@ _TIFFmemcmp(const tdata_t p1, const tdata_t p2, tsize_t c)
     register int iTmp;
     for (iTmp = 0; dwTmp-- && !iTmp; iTmp = (int)*pb1++ - (int)*pb2++)
         ;
-    return (iTmp);
+    return iTmp;
 }
 
 static void

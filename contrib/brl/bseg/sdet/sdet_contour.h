@@ -63,7 +63,7 @@
 //  Van-Duc Nguyen  (1989) Eliminate short & weak contours \and
 //  Arron Heller    (1992) Translate from CLOS to C++ \and
 //  Van-Duc Nguyen  (1995) Trace/search breadth-first instead of thinning \and
-//  Joe Mundy       (1997) Added continous edgel orientation output \and
+//  Joe Mundy       (1997) Added continuous edgel orientation output \and
 //  Van-Duc Nguyen  (1998) Merge from end points of dangling chains only \and
 //  Joe Mundy       (1999) Modified ::InsertBorder to use ROI bounds
 //  Joe Mundy       (2002) Extensive repairs and consolidation after
@@ -80,7 +80,7 @@
 
 class sdet_contour
 {
-public:
+ public:
   sdet_contour(float min_strength, int min_length, // hysteresis
                float min_jump,         // jump in strength at junctions
                float max_gap=2.236068f); // bridge small gaps (sqrt(5))
@@ -131,7 +131,7 @@ public:
   static  bool debug_;
 
   //: internal routines
-protected:
+ protected:
   //: link detected edgels and junctions into chains
   int FindChains(gevd_bufferxy& edgels,
                  const int njunction,

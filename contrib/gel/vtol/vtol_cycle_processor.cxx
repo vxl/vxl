@@ -825,7 +825,7 @@ void vtol_cycle_processor::compute_cycles()
 //    sorted so that they form a proper containment relation.  That
 //    is, there is one outer cycle, with traversal in the ccw direction
 //    and zero or more interior hole boundaries with traversal in
-//    the cw direction. All other cycles are removed.  The ouput is
+//    the cw direction. All other cycles are removed.  The output is
 //    nested_one_cycles_.
 void vtol_cycle_processor::sort_one_cycles()
 {
@@ -968,7 +968,7 @@ bool vtol_cycle_processor::intersect_edges(vcl_vector<vtol_edge_sptr>& s1,
   set_flags(s1, flag1);
 
   //Scan s2 again and push edges also in s1  onto the set intersection
-  //mark the edge as in the ouput list with flag2.
+  //mark the edge as in the output list with flag2.
   for (vcl_vector<vtol_edge_sptr>::iterator eit = s2.begin();
        eit != s2.end(); eit++)
     {
@@ -1014,7 +1014,7 @@ bool vtol_cycle_processor::difference_edges(vcl_vector<vtol_edge_sptr>& s1,
   set_flags(s2, flag1);
 
   //Scan s1 again and push edges exclusively in s1 onto the output
-  //mark the edge as in the ouput list with flag2.
+  //mark the edge as in the output list with flag2.
   for (vcl_vector<vtol_edge_sptr>::iterator eit = s1.begin();
        eit != s1.end(); eit++)
     {
@@ -1040,7 +1040,7 @@ bool vtol_cycle_processor::corrupt_boundary(vcl_vector<vtol_edge_2d_sptr>& edges
                                             vcl_vector<vtol_vertex_sptr>& bad_verts)
 {
   bool bad = false;
-  //Intialize Markers
+  //Initialize Markers
   vcl_vector<vtol_edge_2d_sptr>::iterator eit = edges.begin();
   vtol_edge_2d_sptr first_e = (*eit);
   if (!first_e)

@@ -1824,7 +1824,7 @@ gevd_contour::MaskEdgels(const gevd_bufferxy& mask,
 
 
 //:
-// Set the orientation at each edgel on all digital curves to a continous
+// Set the orientation at each edgel on all digital curves to a continuous
 // orientation value, which is consistent with C. Rothwell's EdgeDetector.
 // That is theta = (180/M_PI)*atan2(dI/dy, dI/dx)
 //

@@ -13,8 +13,8 @@
 //
 // The basic implementatation is based on that described in Canny's thesis
 // in that we compute the norm of the gradient, but then we use
-// non-maximal supression dynamically to set the edge strength
-// thresholds. Non-maximal supression is actually done using a
+// non-maximal suppression dynamically to set the edge strength
+// thresholds. Non-maximal suppression is actually done using a
 // varient of Tsai-Fu thinning, and not as described in Canny's
 // thesis.
 //
@@ -72,7 +72,7 @@ struct osl_edge_detector : public osl_edge_detector_params
                     vcl_list<osl_edge*> *edges,
                     bool maintain_topology = true);
 
-private:
+ private:
   void Sub_pixel_interpolation();
   void Thicken_threshold(int,int);
   void Set_thresholds();
@@ -86,7 +86,7 @@ private:
   void Follow_junctions(int,int,vcl_list<int>*,vcl_list<int>*);
   void Cluster_centre(vcl_list<int>&,vcl_list<int>&,int&,int&);
 
-private:
+ private:
   unsigned int width_;  // The smoothing kernel width
   unsigned int k_size_; // The kernel is 2*width_+1s
   float *kernel_;       // 1-Dimensional convolution kernel of size k_size

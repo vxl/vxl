@@ -88,8 +88,8 @@ void osl_edge_detector::detect_edges(vil_image const &image,
   xstart_ = 0;
   ystart_ = 0;
 
-  //vcl_cerr << "xstart_ = " << xstart_ << " ystart_ = " << ystart_ << vcl_endl;
-  //vcl_cerr << "xsize_ = " << xsize_ << " ysize_ = " << ysize_ << vcl_endl;
+  //vcl_cerr << "xstart_ = " << xstart_ << " ystart_ = " << ystart_ << vcl_endl
+  //         << "xsize_ = " << xsize_ << " ysize_ = " << ysize_ << vcl_endl;
 
   dx_ = Make_float_image(xsize_,ysize_);
   dy_ = Make_float_image(xsize_,ysize_);
@@ -125,7 +125,7 @@ void osl_edge_detector::detect_edges(vil_image const &image,
   // distance of a point to the nearest edgel
   osl_canny_base_fill_raw_image(dist_, xsize_, ysize_, FAR);
 
-  // Do the traditional Canny parts, and use non-maximal supression to
+  // Do the traditional Canny parts, and use non-maximal suppression to
   // set the thresholds.
   if (verbose_) vcl_cerr << "smoothing the image\n";
   osl_canny_smooth_rothwell(image, kernel_, width_, k_size_, smooth_);
@@ -494,7 +494,7 @@ static int compare(osl_edge_detector_xyfloat* xyf1, osl_edge_detector_xyfloat* x
 // by Van-Duc Nguyen in Geo-Calc. This relies on computing the genus of
 // an edge location, and removing it if it is not a dangling chain as has
 // genus zero. We also order the edges by strength and try to remove the weaker
-// ones first. This accounts for non-maximal supression, and does it in a
+// ones first. This accounts for non-maximal suppression, and does it in a
 // topology preserving way. Note that we are creating a vcl_list with a large
 // number of elements, and then sorting it - this is likely to be quite slow.
 // An alternative implementation would be better.
@@ -536,8 +536,8 @@ void osl_edge_detector::Thin_edges() {
     if (  do_output && (edgel_array_len > 0) ) {
 
       vcl_cerr << "edgel strengths range from "
-           << edgel_array[0].thin << " to "
-           << edgel_array[edgel_array_len-1].thin << vcl_endl;
+               << edgel_array[0].thin << " to "
+               << edgel_array[edgel_array_len-1].thin << vcl_endl;
       do_output = false;
     }
 

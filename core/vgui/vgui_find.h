@@ -1,4 +1,4 @@
-// This is oxl/vgui/vgui_find.h
+// This is core/vgui/vgui_find.h
 #ifndef vgui_find_h_
 #define vgui_find_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
@@ -7,7 +7,7 @@
 //:
 // \file
 // \author  fsm
-// \brief   Functions to search for tableaux in the tableau hierachy.
+// \brief   Functions to search for tableaux in the tableau hierarchy.
 
 #include <vcl_string.h>
 #include <vgui/vgui_tableau_sptr.h>

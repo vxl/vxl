@@ -245,7 +245,7 @@ L130:
         x -= dx;
     }
     bnd = x;
-/* COMPUTE THE DERIVATIVE AS THE INTIAL K POLYNOMIAL */
+/* COMPUTE THE DERIVATIVE AS THE INITIAL K POLYNOMIAL */
 /* AND DO 5 STEPS WITH NO SHIFT */
     nm1 = global_1.n - 1;
     for (i = 1; i < global_1.n; ++i) {

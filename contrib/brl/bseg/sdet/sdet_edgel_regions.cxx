@@ -85,8 +85,8 @@ void sdet_edgel_regions::print_region_array()
 //Print the contents of the forward eqivalence index
 void sdet_edgel_regions::print_region_equivalence()
 {
-  vcl_cout << vcl_endl << "Label Equivalence:\n"
-           << "----------------\n";
+  vcl_cout << "\nLabel Equivalence:\n"
+           << "------------------\n";
   vcl_map<unsigned int, vcl_vector<unsigned int>*>::iterator rpf_iterator;
   for (rpf_iterator= region_pairs_forward_.begin();
        rpf_iterator!=region_pairs_forward_.end(); rpf_iterator++)
@@ -97,7 +97,7 @@ void sdet_edgel_regions::print_region_equivalence()
         {
           for (vcl_vector<unsigned int>::iterator lit = labels->begin();
                lit != labels->end(); lit++)
-            vcl_cout << *lit << " " ;
+            vcl_cout << *lit << " ";
           vcl_cout << vcl_endl;
         }
     }
@@ -109,7 +109,7 @@ void sdet_edgel_regions::print_region_equivalence()
 void sdet_edgel_regions::print_reverse_region_equivalence()
 {
   vcl_cout << "\nReverse Label Equivalence:\n"
-           << "----------------\n";
+           << "--------------------------\n";
   vcl_map<unsigned int, vcl_vector<unsigned int>*>::iterator rpf_iterator;
   for (rpf_iterator= region_pairs_reverse_.begin();
        rpf_iterator!=region_pairs_reverse_.end(); rpf_iterator++)
@@ -132,7 +132,7 @@ void sdet_edgel_regions::print_reverse_region_equivalence()
 void sdet_edgel_regions::print_base_equivalence()
 {
   vcl_cout << "\nBase Label Equivalence:\n"
-           << "----------------\n";
+           << "-----------------------\n";
 
   for (unsigned int i = min_region_label_; i<max_region_label_; i++)
     vcl_cout << i << " == "
@@ -231,29 +231,28 @@ sdet_edgel_regions::~sdet_edgel_regions()
   delete faces_;
   delete [] intensity_face_index_;
 
-  for(vcl_map<unsigned int, vcl_vector<vtol_edge_2d_sptr>* >::iterator 
-        mit = region_edge_adjacency_.begin(); 
-      mit != region_edge_adjacency_.end(); mit++)
+  for (vcl_map<unsigned int, vcl_vector<vtol_edge_2d_sptr>* >::iterator
+       mit = region_edge_adjacency_.begin();
+       mit != region_edge_adjacency_.end(); mit++)
     {
-      if((*mit).second)
+      if ((*mit).second)
         (*mit).second->clear();
       delete (*mit).second;
     }
 
-  for(vcl_map<unsigned int, vcl_vector<unsigned int>* >::iterator
-        mit = equivalence_set_.begin(); mit != equivalence_set_.end(); mit++)
+  for (vcl_map<unsigned int, vcl_vector<unsigned int>* >::iterator
+       mit = equivalence_set_.begin(); mit != equivalence_set_.end(); mit++)
     delete (*mit).second;
 
-  for(vcl_map<unsigned int, vcl_vector<unsigned int>* >::iterator
-        mit = region_pairs_reverse_.begin(); 
-      mit != region_pairs_reverse_.end(); mit++)
+  for (vcl_map<unsigned int, vcl_vector<unsigned int>* >::iterator
+       mit = region_pairs_reverse_.begin();
+       mit != region_pairs_reverse_.end(); mit++)
     delete (*mit).second;
 
-  for(vcl_map<unsigned int, vcl_vector<unsigned int>* >::iterator
-        mit = region_pairs_forward_.begin(); 
-      mit != region_pairs_forward_.end(); mit++)
+  for (vcl_map<unsigned int, vcl_vector<unsigned int>* >::iterator
+       mit = region_pairs_forward_.begin();
+       mit != region_pairs_forward_.end(); mit++)
     delete (*mit).second;
-
 }
 
 bool sdet_edgel_regions::compute_edgel_regions(gevd_bufferxy* buf,
@@ -351,7 +350,7 @@ compute_edgel_regions(vcl_vector<vtol_edge_2d_sptr>& sgrp,
 
   //Collect intensity data for each region
   this->InsertFaceData();
-      
+
   if (debug_)
     this->print_intensity_data();
   //Output the result
@@ -717,7 +716,7 @@ bool sdet_edgel_regions::InitRegionArray(vcl_vector< vtol_edge_2d_sptr>& sg)
 
   xend_ = (unsigned int)b.get_max_x();
   yend_ = (unsigned int)b.get_max_y();
- 
+
   xs_ = (this->GetXSize()-1)*s_+1;
   ys_ = (this->GetYSize()-1)*s_+1;
 
@@ -749,7 +748,7 @@ bool sdet_edgel_regions::InitRegionArray(vcl_vector< vtol_edge_2d_sptr>& sg)
               << "bytes/pixel not 1 or 2\n";
     }
 
-  //Intialize the buffers
+  //Initialize the buffers
   if (ubuf_)
     for (int x = 0; x<this->GetXSize(); ++x)
       ubuf_[x] = 0;
@@ -1187,14 +1186,10 @@ void sdet_edgel_regions::UpdateConnectedNeighborhood(unsigned int x, unsigned in
       //ee ee
       return;
     default:
-      {
       vcl_cout << "In sdet_edgel_regions::UpdateNeigborhood(..)"
-               << "impossible pattern(" << x << " " << y << ") = " << (int)nhood << vcl_endl;
-        vcl_cout << int(label_code(ul)) << " " << int(label_code(ur))
-                 <<  "\n";
-        vcl_cout << int(label_code(ll)) << " " << int(label_code(lr))
-                 <<  "\n\n";
-      }
+               << "impossible pattern(" << x << " " << y << ") = " << (int)nhood << '\n'
+               << int(label_code(ul)) << " " << int(label_code(ur)) << "\n"
+               << int(label_code(ll)) << " " << int(label_code(lr)) << "\n\n";
     }
 }
 
@@ -1272,7 +1267,7 @@ bool sdet_edgel_regions::remove_hairs(vcl_vector<vtol_edge_2d_sptr>& edges)
 {
   vcl_vector<vtol_edge_2d_sptr> hairs;
   vcl_vector<vtol_edge_2d_sptr> temp;
-  //Intialize Markers
+  //Initialize Markers
   vcl_vector<vtol_edge_2d_sptr>::iterator eit = edges.begin();
   for (;eit != edges.end(); eit++)
     {
@@ -1478,12 +1473,10 @@ void sdet_edgel_regions::AssignEdgeLabels(unsigned int x, unsigned int y)
         }
       return;
     default:
-      {
-        vcl_cout << "In sdet_edgel_regions::UpdateNeigborhood(..)"
-                 << " impossible pattern = " << (int)nhood << '\n'
-                 << int(label_code(rul)) <<' '<< int(label_code(rur)) << '\n'
-                 << int(label_code(rll)) <<' '<< int(label_code(rlr)) << "\n\n";
-      }
+      vcl_cout << "In sdet_edgel_regions::UpdateNeigborhood(..)"
+               << " impossible pattern = " << (int)nhood << '\n'
+               << int(label_code(rul)) <<' '<< int(label_code(rur)) << '\n'
+               << int(label_code(rll)) <<' '<< int(label_code(rlr)) << "\n\n";
     }
 }
 
@@ -1608,8 +1601,8 @@ void sdet_edgel_regions::CollectFaceEdges()
           {
               if (debug_)
                 {
-                  vcl_cout << "Region [" << i << "] is corrupt\n";
-                  vcl_cout << "Bad Vertices\n";
+                  vcl_cout << "Region [" << i << "] is corrupt\n"
+                           << "Bad Vertices\n";
                   for (vcl_vector<vtol_vertex_sptr>::iterator vit =
                          bad_verts.begin(); vit != bad_verts.end(); vit++)
                     vcl_cout << *(*vit);

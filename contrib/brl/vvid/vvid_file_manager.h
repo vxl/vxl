@@ -1,4 +1,4 @@
-//this-sets-emacs-to-*-c++-*-mode
+// This is brl/vvid/vvid_file_manager.h
 #ifndef vvid_file_manager_h_
 #define vvid_file_manager_h_
 //-----------------------------------------------------------------------------
@@ -9,7 +9,7 @@
 //
 // \verbatim
 //  Modifications:
-//   J.L. Mundy Octover 05, 2002 Ported from jvid
+//   J.L. Mundy October 05, 2002 Ported from jvid
 // \endverbatim
 //----------------------------------------------------------------------------
 #include <vcl_vector.h>
@@ -24,7 +24,7 @@
 #include <vgui/vgui_window.h>
 #include <vidl/vidl_movie.h>
 
-//:A singleton manager class for playing videos.
+//: A singleton manager class for playing videos.
 // A vector of images with
 // enclosing image and easy2D tableaux is cached so that computed overlays
 // such as Harris corners can be played back quickly. The cache option can be
@@ -43,7 +43,7 @@
 // Known problems:
 //  1) quiting while the video is paused can cause a seg fault since
 //     the movie gets deleted before the loop quits
-//  2) There is a continous gl error stream from vgui_adaptor. Something to
+//  2) There is a continuous gl error stream from vgui_adaptor. Something to
 //     do with "setting draw buffer to back"
 //.
 class vvid_file_manager : public vgui_wrapper_tableau
@@ -147,4 +147,5 @@ class vvid_file_manager : public vgui_wrapper_tableau
   vgui_grid_tableau_sptr grid_;
   static vvid_file_manager *instance_;
 };
+
 #endif // vvid_file_manager_h_

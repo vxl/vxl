@@ -22,7 +22,7 @@
 //   JSL Computed Area()
 //   JLM Sep 1996: Fixed the face copy constructor which
 //       did not handle the construction of new vtol_edge_2d(s) properly.
-//       The old implementation always constucted ImplicitLine(s)
+//       The old implementation always constructed ImplicitLine(s)
 //       for the curve of each new edge.  See vtol_edge_2d.h for the required
 //       alterations of the vtol_edge_2d constructors.  There is still an
 //       issue with proper copying of the vtol_face_2d's Surface.  It isn't

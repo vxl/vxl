@@ -63,7 +63,7 @@
 //  Van-Duc Nguyen  (1989) Eliminate short & weak contours \and
 //  Arron Heller    (1992) Translate from CLOS to C++ \and
 //  Van-Duc Nguyen  (1995) Trace/search breadth-first instead of thinning \and
-//  Joe Mundy       (1997) Added continous edgel orientation output \and
+//  Joe Mundy       (1997) Added continuous edgel orientation output \and
 //  Van-Duc Nguyen  (1998) Merge from end points of dangling chains only \and
 //  Joe Mundy       (1999) Modified ::InsertBorder to use ROI bounds
 //-----------------------------------------------------------------------------
@@ -76,7 +76,7 @@
 
 class gevd_contour
 {
-public:
+ public:
   gevd_contour(float min_strength, int min_length, // hysteresis
                float min_jump,         // jump in strength at junctions
                float max_gap=2.236068f); // bridge small gaps (sqrt(5))
@@ -135,7 +135,7 @@ public:
 
   static void BeSilent() {talkative = false;}
   static void BeTalkative() {talkative = true;}
-protected:
+ protected:
   float minStrength;  // hysteresis or noise threshold
   int minLength;      // number of pixels in shortest chain
   float minJump;      // change in strength at junction
@@ -143,7 +143,7 @@ protected:
   vbl_array_2d<vtol_edge_2d_sptr> *edgeMap;
   vbl_array_2d<vtol_vertex_2d_sptr> *vertexMap; // map pixel to junction/chain
 
-protected:
+ protected:
   int FindChains(gevd_bufferxy& edgels, // link pixels into chains
                  const int njunction, // junctions detected
                  const int* junctionx, const int* junctiony,

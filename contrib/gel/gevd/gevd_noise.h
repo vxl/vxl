@@ -16,9 +16,9 @@
 // been already artificially removed from the image, and so can not
 // be estimated.
 
-// - Input: edgels in a typical ROI.
-// - Ouput: histogram of low response edgels, and
-//          estimate of sensor/texture responses.
+// - Input:      edgels in a typical ROI.
+// - Output:     histogram of low response edgels, and
+//               estimate of sensor/texture responses.
 // - Complexity: O(|data|) time and space.
 //
 // \verbatim

@@ -1,4 +1,4 @@
-// This is vxl/vnl/algo/vnl_amoeba.h
+// This is core/vnl/algo/vnl_amoeba.h
 #ifndef vnl_amoeba_h_
 #define vnl_amoeba_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
@@ -59,7 +59,7 @@ class vnl_amoeba
   //: Define tolerance on function evaluation
   void set_f_tolerance(double tol);
 
-  //: Define scaling used to select starting vertices relative to intial x0.
+  //: Define scaling used to select starting vertices relative to initial x0.
   //  I.e. the i'th vertex has x[i] = x0[i]*(1+relative_diameter)
   void set_relative_diameter(double r);
 

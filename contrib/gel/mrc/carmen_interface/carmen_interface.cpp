@@ -35,7 +35,7 @@ carmen_interface::~carmen_interface()
 }
 
 //-----------------------------------------------------------------------
-//: intialize carmen
+//: initialize carmen
 void carmen_interface::set_carmen_camera(int view_no)
 {
   if (!_carmen)
@@ -100,7 +100,7 @@ bool carmen_interface::load_correspondence_file(const string& file_path)
   if (!instr)
     {
       vcl_cout <<"In carmen_interface::load_correspondence_file()"
-               <<" - can't open file  " << file_path.c_str() << vcl_endl;
+               <<" - can't open file " << file_path.c_str() << vcl_endl;
       return false;
     }
   char buf[100];
@@ -112,7 +112,7 @@ bool carmen_interface::load_correspondence_file(const string& file_path)
     instr >> npts;
   else
     {
-      vcl_cout << "bad file " << vcl_endl;
+      vcl_cout << "bad file\n";
       return false;
     }
   int view_no=0, point_id=0;
@@ -124,7 +124,7 @@ bool carmen_interface::load_correspondence_file(const string& file_path)
       keyword = buf;
       if (keyword!="CORRESP:")
         {
-          vcl_cout << "wrong number of correspondences " << vcl_endl;
+          vcl_cout << "wrong number of correspondences\n";
           return false;
         }
       instr >> view_no >> point_id >> x >> y >> z >> u >> v;

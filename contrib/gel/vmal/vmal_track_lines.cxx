@@ -568,8 +568,9 @@ void vmal_track_lines::cost_function(vtol_edge_2d_sptr line0,
   convert_grey_memory_image(image0,i0);
   convert_grey_memory_image(image1,i1);
   result=lines_correlation(line0, line1, homo, i0, i1);
-
-  //result=dist(t_line0, line1);
-  //double alpha=0.5;
-  //result=result*alpha+(1-alpha);
+#if 0 // TODO ?
+  result=dist(t_line0, line1);
+  double alpha=0.5;
+  result=result*alpha+(1-alpha);
+#endif
 }

@@ -265,7 +265,7 @@ class vnl_vector
   //: Returns a subvector specified by the start index and length. O(n).
   vnl_vector<T> extract (unsigned int len, unsigned int start=0) const;
 
-  //: Replaces elements with index begining at start, by values of v. O(n).
+  //: Replaces elements with index beginning at start, by values of v. O(n).
   vnl_vector<T>& update (vnl_vector<T> const&, unsigned int start=0);
 
   // norms etc

@@ -126,7 +126,7 @@ int AsyncIO::write(volatile void *buf, vcl_size_t n, off_t pos)
 
 //: Wait for I/O to complete, then return status.
 // If suspend is true (the default), block the calling process while waiting,
-// otherwise continously poll for completion
+// otherwise continuously poll for completion
 // (not recommended, but may be more reliable).
 
 int AsyncIO::wait_for_completion(bool suspend)

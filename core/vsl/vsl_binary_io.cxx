@@ -1,4 +1,4 @@
-// This is vxl/vsl/vsl_binary_io.cxx
+// This is core/vsl/vsl_binary_io.cxx
 #include "vsl_binary_io.h"
 //:
 // \file
@@ -405,9 +405,8 @@ bool vsl_b_ostream::operator!() const
 
 
 //: Clear the stream's record of any serialisation operations
-// Calling this function while outputing serialisable things to stream,
-// will mean
-// that a second copy of an object may get stored to the stream.
+// Calling this function while outputting serialisable things to stream,
+// will mean that a second copy of an object may get stored to the stream.
 void vsl_b_ostream::clear_serialisation_records()
 {
   serialisation_records_.clear();

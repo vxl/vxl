@@ -1,4 +1,4 @@
-// This is oxl/vgui/vgui_tview_launcher_tableau.cxx
+// This is core/vgui/vgui_tview_launcher_tableau.cxx
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
@@ -62,7 +62,7 @@ void vgui_tview_launcher_tableau::go(vgui_adaptor* a) {
   vgui_tview_tableau_new tview(a->get_tableau());
   vgui_viewer2D_tableau_new viewer(tview);
 
-  vgui_dialog tview_dialog("Tableau hierachy");
+  vgui_dialog tview_dialog("Tableau hierarchy");
   tview_dialog.inline_tableau(viewer, 300,300);
   tview_dialog.set_ok_button("close");
   tview_dialog.set_cancel_button(0);

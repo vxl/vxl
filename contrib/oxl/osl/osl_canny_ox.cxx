@@ -132,7 +132,7 @@ void osl_canny_ox::detect_edges(vil_image const &image_in, vcl_list<osl_edge*> *
     vcl_cerr << "computing x derivatives, y derivatives and norm of gradient\n";
   osl_canny_gradient(xsize_, ysize_, smooth_, dx_, dy_, grad_);
 
-  if (verbose) vcl_cerr << "doing non-maximal supression\n";
+  if (verbose) vcl_cerr << "doing non-maximal suppression\n";
   unsigned int n_edgels_NMS = osl_canny_nms(xsize_, ysize_, dx_, dy_, grad_, thick_, theta_);
   if (verbose) vcl_cerr << "Number of edgels after NMS = " << n_edgels_NMS << vcl_endl;
 
@@ -160,7 +160,7 @@ void osl_canny_ox::detect_edges(vil_image const &image_in, vcl_list<osl_edge*> *
   osl_edgel_chain *edgels_Hysteresis = new osl_edgel_chain(n_edgels_Hysteresis);
   Get_hysteresis_edgelsOX(edgels_NMS,status,edgels_Hysteresis, x_, y_);
 
-  // delete the edgels that are output of Non_maximal_supression
+  // delete the edgels that are output of Non_maximal_suppression
   fsm_delete_array status;
   fsm_delete edgels_NMS; edgels_NMS = 0;
 

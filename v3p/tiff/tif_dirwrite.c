@@ -29,7 +29,7 @@
  */
 #include "tiffiop.h"
 
-/* Supress 64-bit warnings for VC7:
+/* Suppress 64-bit warnings for VC7:
 tif_dirwrite.c(959): warning C4311: 'type cast' : pointer truncation from 'uint32 *__w64 ' to 'toff_t'
 */
 #if defined(_MSC_VER) && (_MSC_VER >= 1300)
@@ -101,7 +101,7 @@ TIFFWriteDirectory(TIFF* tif)
     int fi, nfi;
 
     if (tif->tif_mode == O_RDONLY)
-        return (1);
+        return 1;
     /*
      * Clear write state so that subsequent images with
      * different characteristics get the right buffers
@@ -112,7 +112,7 @@ TIFFWriteDirectory(TIFF* tif)
         if (!(*tif->tif_postencode)(tif)) {
             TIFFError(tif->tif_name,
                       "Error post-encoding before directory write");
-            return (0);
+            return 0;
         }
     }
     (*tif->tif_close)(tif);         /* shutdown encoder */
@@ -123,7 +123,7 @@ TIFFWriteDirectory(TIFF* tif)
     if (tif->tif_rawcc > 0 && !TIFFFlushData1(tif)) {
         TIFFError(tif->tif_name,
                   "Error flushing data before directory write");
-        return (0);
+        return 0;
     }
     if ((tif->tif_flags & TIFF_MYBUFFER) && tif->tif_rawdata) {
         _TIFFfree(tif->tif_rawdata);
@@ -148,7 +148,7 @@ TIFFWriteDirectory(TIFF* tif)
     if (data == NULL) {
         TIFFError(tif->tif_name,
                   "Cannot write directory, out of space");
-        return (0);
+        return 0;
     }
     /*
      * Directory hasn't been placed yet, put
@@ -354,10 +354,10 @@ TIFFWriteDirectory(TIFF* tif)
      * directories.
      */
     TIFFCreateDirectory(tif);
-    return (1);
+    return 1;
 bad:
     _TIFFfree(data);
-    return (0);
+    return 0;
 }
 #undef WriteRationalPair
 
@@ -384,7 +384,7 @@ TIFFWriteNormalTag(TIFF* tif, TIFFDirEntry* dir, const TIFFFieldInfo* fip)
             else
                 TIFFGetField(tif, fip->field_tag, &wp);
             if (!WRITEF(TIFFWriteShortArray, wp))
-                return (0);
+                return 0;
         } else {
             uint16 sv;
             TIFFGetField(tif, fip->field_tag, &sv);
@@ -401,7 +401,7 @@ TIFFWriteNormalTag(TIFF* tif, TIFFDirEntry* dir, const TIFFFieldInfo* fip)
             else
                 TIFFGetField(tif, fip->field_tag, &lp);
             if (!WRITEF(TIFFWriteLongArray, lp))
-                return (0);
+                return 0;
         } else {
             /* XXX handle LONG->SHORT conversion */
             TIFFGetField(tif, fip->field_tag, &dir->tdir_offset);
@@ -416,12 +416,12 @@ TIFFWriteNormalTag(TIFF* tif, TIFFDirEntry* dir, const TIFFFieldInfo* fip)
             else
                 TIFFGetField(tif, fip->field_tag, &fp);
             if (!WRITEF(TIFFWriteRationalArray, fp))
-                return (0);
+                return 0;
         } else {
             float fv;
             TIFFGetField(tif, fip->field_tag, &fv);
             if (!WRITEF(TIFFWriteRationalArray, &fv))
-                return (0);
+                return 0;
         }
         break;
     case TIFF_FLOAT:
@@ -432,12 +432,12 @@ TIFFWriteNormalTag(TIFF* tif, TIFFDirEntry* dir, const TIFFFieldInfo* fip)
             else
                 TIFFGetField(tif, fip->field_tag, &fp);
             if (!WRITEF(TIFFWriteFloatArray, fp))
-                return (0);
+                return 0;
         } else {
             float fv;
             TIFFGetField(tif, fip->field_tag, &fv);
             if (!WRITEF(TIFFWriteFloatArray, &fv))
-                return (0);
+                return 0;
         }
         break;
     case TIFF_DOUBLE:
@@ -448,12 +448,12 @@ TIFFWriteNormalTag(TIFF* tif, TIFFDirEntry* dir, const TIFFFieldInfo* fip)
             else
                 TIFFGetField(tif, fip->field_tag, &dp);
             if (!WRITEF(TIFFWriteDoubleArray, dp))
-                return (0);
+                return 0;
         } else {
             double dv;
             TIFFGetField(tif, fip->field_tag, &dv);
             if (!WRITEF(TIFFWriteDoubleArray, &dv))
-                return (0);
+                return 0;
         }
         break;
     case TIFF_ASCII:
@@ -461,7 +461,7 @@ TIFFWriteNormalTag(TIFF* tif, TIFFDirEntry* dir, const TIFFFieldInfo* fip)
           TIFFGetField(tif, fip->field_tag, &cp);
           dir->tdir_count = (uint32) (strlen(cp) + 1);
           if (!TIFFWriteByteArray(tif, dir, cp))
-            return (0);
+            return 0;
         }
         break;
 
@@ -477,12 +477,12 @@ TIFFWriteNormalTag(TIFF* tif, TIFFDirEntry* dir, const TIFFFieldInfo* fip)
             } else
             TIFFGetField(tif, fip->field_tag, &cp);
             if (!TIFFWriteByteArray(tif, dir, cp))
-            return (0);
+            return 0;
         } else {
             char cv;
             TIFFGetField(tif, fip->field_tag, &cv);
             if (!TIFFWriteByteArray(tif, dir, &cv))
-            return (0);
+            return 0;
         }
         break;
 
@@ -497,14 +497,14 @@ TIFFWriteNormalTag(TIFF* tif, TIFFDirEntry* dir, const TIFFFieldInfo* fip)
           } else
             TIFFGetField(tif, fip->field_tag, &cp);
           if (!TIFFWriteByteArray(tif, dir, cp))
-            return (0);
+            return 0;
         }
         break;
 
     case TIFF_NOTYPE:
         break;
     }
-    return (1);
+    return 1;
 }
 #undef WRITEF
 
@@ -535,7 +535,7 @@ TIFFSetupShortLong(TIFF* tif, ttag_t tag, TIFFDirEntry* dir, uint32 v)
 static int
 TIFFWriteRational(TIFF* tif, TIFFDataType type, ttag_t tag, TIFFDirEntry* dir, float v)
 {
-    return (TIFFWriteRationalArray(tif, type, tag, dir, 1, &v));
+    return TIFFWriteRationalArray(tif, type, tag, dir, 1, &v);
 }
 #endif
 
@@ -561,7 +561,7 @@ TIFFWritePerSampleShorts(TIFF* tif, ttag_t tag, TIFFDirEntry* dir)
     status = TIFFWriteShortArray(tif, TIFF_SHORT, tag, dir, samples, w);
     if (w != buf)
         _TIFFfree((char*) w);
-    return (status);
+    return status;
 }
 
 /*
@@ -585,7 +585,7 @@ TIFFWritePerSampleAnys(TIFF* tif, TIFFDataType type, ttag_t tag, TIFFDirEntry* d
     status = TIFFWriteAnyArray(tif, type, tag, dir, samples, w);
     if (w != buf)
         _TIFFfree(w);
-    return (status);
+    return status;
 }
 #undef NITEMS
 
@@ -599,7 +599,7 @@ TIFFSetupShortPair(TIFF* tif, ttag_t tag, TIFFDirEntry* dir)
     uint16 v[2];
 
     TIFFGetField(tif, tag, &v[0], &v[1]);
-    return (TIFFWriteShortArray(tif, TIFF_SHORT, tag, dir, 2, v));
+    return TIFFWriteShortArray(tif, TIFF_SHORT, tag, dir, 2, v);
 }
 
 /*
@@ -619,10 +619,10 @@ TIFFWriteShortTable(TIFF* tif, ttag_t tag, TIFFDirEntry* dir, uint32 n, uint16**
     off = tif->tif_dataoff;
     for (i = 0; i < n; i++)
         if (!TIFFWriteData(tif, dir, (char *)table[i]))
-            return (0);
+            return 0;
     dir->tdir_count *= n;
     dir->tdir_offset = off;
-    return (1);
+    return 1;
 }
 
 /*
@@ -633,10 +633,10 @@ TIFFWriteByteArray(TIFF* tif, TIFFDirEntry* dir, char* cp)
 {
     if (dir->tdir_count > 4) {
         if (!TIFFWriteData(tif, dir, cp))
-            return (0);
+            return 0;
     } else
         _TIFFmemcpy(&dir->tdir_offset, cp, dir->tdir_count);
-    return (1);
+    return 1;
 }
 
 /*
@@ -659,9 +659,9 @@ TIFFWriteShortArray(TIFF* tif, TIFFDataType type, ttag_t tag, TIFFDirEntry* dir,
             if (n == 2)
                 dir->tdir_offset |= (long) v[1] << 16;
         }
-        return (1);
+        return 1;
     } else
-        return (TIFFWriteData(tif, dir, (char*) v));
+        return TIFFWriteData(tif, dir, (char*) v);
 }
 
 /*
@@ -676,9 +676,9 @@ TIFFWriteLongArray(TIFF* tif, TIFFDataType type, ttag_t tag, TIFFDirEntry* dir, 
     dir->tdir_count = n;
     if (n == 1) {
         dir->tdir_offset = v[0];
-        return (1);
+        return 1;
     } else
-        return (TIFFWriteData(tif, dir, (char*) v));
+        return TIFFWriteData(tif, dir, (char*) v);
 }
 
 /*
@@ -720,7 +720,7 @@ TIFFWriteRationalArray(TIFF* tif, TIFFDataType type, ttag_t tag, TIFFDirEntry* d
     }
     status = TIFFWriteData(tif, dir, (char *)t);
     _TIFFfree((char*) t);
-    return (status);
+    return status;
 }
 
 static int
@@ -732,9 +732,9 @@ TIFFWriteFloatArray(TIFF* tif, TIFFDataType type, ttag_t tag, TIFFDirEntry* dir,
     TIFFCvtNativeToIEEEFloat(tif, n, v);
     if (n == 1) {
         dir->tdir_offset = *(uint32*) &v[0];
-        return (1);
+        return 1;
     } else
-        return (TIFFWriteData(tif, dir, (char*) v));
+        return TIFFWriteData(tif, dir, (char*) v);
 }
 
 static int
@@ -744,7 +744,7 @@ TIFFWriteDoubleArray(TIFF* tif, TIFFDataType type, ttag_t tag, TIFFDirEntry* dir
     dir->tdir_type = (short) type;
     dir->tdir_count = n;
     TIFFCvtNativeToIEEEDouble(tif, n, v);
-    return (TIFFWriteData(tif, dir, (char*) v));
+    return TIFFWriteData(tif, dir, (char*) v);
 }
 
 /*
@@ -829,7 +829,7 @@ TIFFWriteAnyArray(TIFF* tif, TIFFDataType type, ttag_t tag, TIFFDirEntry* dir, u
         }
         break;
     case TIFF_DOUBLE:
-        return (TIFFWriteDoubleArray(tif, type, tag, dir, n, v));
+        return TIFFWriteDoubleArray(tif, type, tag, dir, n, v);
     default:
         /* TIFF_NOTYPE */
         /* TIFF_ASCII */
@@ -842,7 +842,7 @@ TIFFWriteAnyArray(TIFF* tif, TIFFDataType type, ttag_t tag, TIFFDirEntry* dir, u
  out:
     if (w != buf)
         _TIFFfree(w);
-    return (status);
+    return status;
 }
 
 #ifdef COLORIMETRY_SUPPORT
@@ -865,7 +865,7 @@ TIFFWriteTransferFunction(TIFF* tif, TIFFDirEntry* dir)
     case 2:     if (_TIFFmemcmp(tf[0], tf[1], n)) { ncols = 3; break; }
     case 1: case 0: ncols = 1;
     }
-    return (TIFFWriteShortTable(tif, TIFFTAG_TRANSFERFUNCTION, dir, ncols, tf));
+    return TIFFWriteShortTable(tif, TIFFTAG_TRANSFERFUNCTION, dir, ncols, tf);
 }
 #endif
 
@@ -878,7 +878,7 @@ TIFFWriteInkNames(TIFF* tif, TIFFDirEntry* dir)
     dir->tdir_tag = TIFFTAG_INKNAMES;
     dir->tdir_type = (short) TIFF_ASCII;
     dir->tdir_count = td->td_inknameslen;
-    return (TIFFWriteByteArray(tif, dir, td->td_inknames));
+    return TIFFWriteByteArray(tif, dir, td->td_inknames);
 }
 #endif
 
@@ -915,11 +915,11 @@ TIFFWriteData(TIFF* tif, TIFFDirEntry* dir, char* cp)
     if (SeekOK(tif, dir->tdir_offset) &&
         WriteOK(tif, cp, cc)) {
         tif->tif_dataoff += (cc + 1) & ~1;
-        return (1);
+        return 1;
     }
     TIFFError(tif->tif_name, "Error writing data for field \"%s\"",
               _TIFFFieldWithTag(tif, dir->tdir_tag)->field_name);
-    return (0);
+    return 0;
 }
 
 /*
@@ -944,7 +944,7 @@ TIFFLinkDirectory(TIFF* tif)
             TIFFError(module,
                       "%s: Error writing SubIFD directory link",
                       tif->tif_name);
-            return (0);
+            return 0;
         }
         /*
          * Advance to the next SubIFD or, if this is
@@ -955,7 +955,7 @@ TIFFLinkDirectory(TIFF* tif)
             tif->tif_subifdoff += sizeof (diroff);
         else
             tif->tif_flags &= ~TIFF_INSUBIFD;
-        return (1);
+        return 1;
     }
 #endif
     if (tif->tif_header.tiff_diroff == 0) {
@@ -967,9 +967,9 @@ TIFFLinkDirectory(TIFF* tif)
         (void) TIFFSeekFile(tif, HDROFF(tiff_diroff), SEEK_SET);
         if (!WriteOK(tif, &diroff, sizeof (diroff))) {
             TIFFError(tif->tif_name, "Error writing TIFF header");
-            return (0);
+            return 0;
         }
-        return (1);
+        return 1;
     }
     /*
      * Not the first directory, search to the last and append.
@@ -981,14 +981,14 @@ TIFFLinkDirectory(TIFF* tif)
         if (!SeekOK(tif, nextdir) ||
             !ReadOK(tif, &dircount, sizeof (dircount))) {
             TIFFError(module, "Error fetching directory count");
-            return (0);
+            return 0;
         }
         if (tif->tif_flags & TIFF_SWAB)
             TIFFSwabShort(&dircount);
         (void) TIFFSeekFile(tif, dircount * sizeof (TIFFDirEntry), SEEK_CUR);
         if (!ReadOK(tif, &nextdir, sizeof (nextdir))) {
             TIFFError(module, "Error fetching directory link");
-            return (0);
+            return 0;
         }
         if (tif->tif_flags & TIFF_SWAB)
             TIFFSwabLong(&nextdir);
@@ -997,7 +997,7 @@ TIFFLinkDirectory(TIFF* tif)
     (void) TIFFSeekFile(tif, off - (toff_t)sizeof(nextdir), SEEK_SET);
     if (!WriteOK(tif, &diroff, sizeof (diroff))) {
         TIFFError(module, "Error writing directory link");
-        return (0);
+        return 0;
     }
-    return (1);
+    return 1;
 }

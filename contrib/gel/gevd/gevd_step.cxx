@@ -140,7 +140,7 @@ gevd_step::DetectEdgels(const gevd_bufferxy& image,
                                slope, dirx, diry); // mult factor returned
   delete smooth;
 
-  // 2.5 JLM - Fill the theta array for use in outputing continuous digital curve
+  // 2.5 JLM - Fill the theta array for use in outputting continuous digital curve
   //           directions later.  The angle definition here is consistent with
   //           EdgeDetector, i.e. angle = (180/M_PI)*vcl_atan2(dI/dy, dI/dx);
 

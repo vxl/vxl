@@ -10,7 +10,7 @@
 // \verbatim
 // The current clear operation explicitly uses vsol_spatial_object_2d
 // class methods.  These clear operations should be lower in the
-// class hierachies.  When more class roots are needed the clear should
+// class hierarchies.  When more class roots are needed the clear should
 // be abstracted.
 //
 // Initial version December 07, 2002

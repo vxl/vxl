@@ -1,11 +1,7 @@
 #ifndef osl_canny_rothwell_h
 #define osl_canny_rothwell_h
-
-// .NAME osl_canny_rothwell
-// .INCLUDE osl/osl_canny_rothwell.h
-// .FILE osl_canny_rothwell.cxx
-//
-// .SECTION Description
+//:
+// \file
 //
 // A class for performing traditional Canny edge detection. The basic
 // implementatation is as close to that described in Canny's thesis
@@ -25,30 +21,33 @@
 // we have simply ignored a border of size width_ all the way round. Perhaps
 // this should be changed to provide consistency with the rest of TargetJr.
 //
-// .SECTION Author
+// \author
 //       Charlie Rothwell - 25/1/92
 //       GE Corporate Research and Development
 //
-// .SECTION Modifications
-//       Samer Abdallah - 5/10/95
-//       Robotics Research Group, Oxford University
-//         Most members and methods placed in new base class osl_canny_rothwellBase.
-//         Fixed bugs in Final_hysteresis() and Jump_single_pixels().
+// \verbatim
+//  Modifications
+//   Samer Abdallah - 5/10/95
+//   Robotics Research Group, Oxford University
+//    Most members and methods placed in new base class osl_canny_rothwellBase.
+//    Fixed bugs in Final_hysteresis() and Jump_single_pixels().
+// \endverbatim
 
 #include <osl/osl_canny_base.h>
 #include <vil/vil_image.h>
 
 class osl_canny_rothwell_params;
 
-class osl_canny_rothwell : public osl_canny_base {
-public:
+class osl_canny_rothwell : public osl_canny_base
+{
+ public:
   osl_canny_rothwell(osl_canny_rothwell_params const &);
   ~osl_canny_rothwell();
 
   void detect_edges(vil_image const &image, vcl_list<osl_edge*>*, bool adaptive = false);
 
-protected:
-  void Non_maximal_supression();
+ protected:
+  void Non_maximal_suppression();
   void Initial_hysteresis();
   void Final_hysteresis(vcl_list<osl_edge*>*);
   void Jump_gap(int,int,int,int,int*,int*);

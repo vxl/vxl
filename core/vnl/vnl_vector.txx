@@ -1,4 +1,4 @@
-// This is vxl/vnl/vnl_vector.txx
+// This is core/vnl/vnl_vector.txx
 #ifndef vnl_vector_txx_
 #define vnl_vector_txx_
 //:
@@ -538,7 +538,7 @@ vnl_vector<T> vnl_vector<T>::operator* (vnl_matrix<T> const&m) const {
 #endif
 
 
-//: Replaces elements with index begining at start, by values of v. O(n).
+//: Replaces elements with index beginning at start, by values of v. O(n).
 
 template<class T>
 vnl_vector<T>& vnl_vector<T>::update (vnl_vector<T> const& v, unsigned start) {

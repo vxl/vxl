@@ -103,7 +103,7 @@ bool  sdet_detector::DoContour()
   }
 
   //Insert a virtual border to enforce closure to support region topology.
-  if (this->borderp)  
+  if (this->borderp)
     contour.InsertBorder(*edges, *vertices);
 
   //Move the edgel locations to interpolated positions using zero crossings
@@ -111,12 +111,12 @@ bool  sdet_detector::DoContour()
                            *locationx, *locationy);
 
   // Reduce zig-zags and space out pixels in chains
-  if (this->spacingp)           
-    sdet_contour::EqualizeSpacing(*edges); 
+  if (this->spacingp)
+    sdet_contour::EqualizeSpacing(*edges);
 
   //Set gradient magnitude and angle values on each edgel
   if (grad_mag&&angle)
-    sdet_contour::SetEdgelData(*grad_mag, *angle, *edges); 
+    sdet_contour::SetEdgelData(*grad_mag, *angle, *edges);
 
   //Keep this code which will be needed when we have ROI's
 #if 0 // TargetJr
@@ -163,7 +163,7 @@ bool  sdet_detector::DoFoldContour()
   if (this->borderp)            // insert a virtual contour to enforce
     contour.InsertBorder(*edges, *vertices); // closure at border
   if (grad_mag&&angle)
-    sdet_contour::SetEdgelData(*grad_mag, *angle, *edges); //Continous edgel orientation.
+    sdet_contour::SetEdgelData(*grad_mag, *angle, *edges); //Continuous edgel orientation.
 #if 0 // TargetJr
   sdet_contour::add_vertex_edgels(*edges);
   const RectROI* roi = image->GetROI();
@@ -261,13 +261,13 @@ gevd_bufferxy* sdet_detector::GetBufferFromImage()
       vcl_cout << "In sdet_detector::GetBufferFromImage() - no image\n";
       return 0;
     }
-  if(image.components()!=1)
+  if (image.components()!=1)
     {
       vcl_cout << "In sdet_detector::GetBufferFromImage()"
                << " - not exactly one component \n";
       return 0;
     }
-    
+
 #if 0 // TargetJr
   RectROI* roi = image->GetROI(); // find user-selected region of interest
   int sizex = roi->GetSizeX();

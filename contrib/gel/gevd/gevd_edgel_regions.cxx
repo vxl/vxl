@@ -773,7 +773,7 @@ bool gevd_edgel_regions::InitRegionArray(vcl_vector< vtol_edge_2d_sptr>& sg)
       vcl_cout<<"In vdgl_intensity_face::get_intensity(): bytes/pixel not 1 or 2\n";
     }
 
-  //Intialize the arrays
+  //Initialize the arrays
   unsigned int x;
   if (ubuf_)
     for (x = xo_; x<=xend_; x++)
@@ -1248,7 +1248,7 @@ corrupt_boundary(vcl_vector<vtol_edge_2d_sptr>& edges,
                  vcl_vector<vtol_vertex_sptr>& bad_vertices)
 {
   bool bad = false;
-  //Intialize Markers
+  //Initialize Markers
   vcl_vector<vtol_edge_2d_sptr>::iterator eit = edges.begin();
   for (;eit != edges.end(); eit++)
     {
@@ -1346,7 +1346,7 @@ bool gevd_edgel_regions::remove_hairs(vcl_vector<vtol_edge_2d_sptr>& edges)
 {
   vcl_vector<vtol_edge_2d_sptr> hairs;
   vcl_vector<vtol_edge_2d_sptr> temp;
-  //Intialize Markers
+  //Initialize Markers
   vcl_vector<vtol_edge_2d_sptr>::iterator eit = edges.begin();
   for (;eit != edges.end(); eit++)
     {

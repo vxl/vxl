@@ -1,4 +1,4 @@
-// This is vxl/vnl/vnl_operators.h
+// This is core/vnl/vnl_operators.h
 #ifndef vnl_operators_h_
 #define vnl_operators_h_
 //:
@@ -10,7 +10,7 @@
 //: Define a complete ordering on vnl_vector
 // This is useful to create a set, or map of vectors.
 //
-// The ordering itself is implemenation defined - so don't rely
+// The ordering itself is implementation defined - so don't rely
 // on the meaning of less here.
 //
 // \relates vnl_vector
@@ -34,7 +34,7 @@ bool operator<(vnl_vector<T> const& lhs, vnl_vector<T> const& rhs)
 //: Define a complete ordering on vnl_matrix
 // This is useful to create a set, or map of matrices.
 //
-// The ordering itself is implemenation defined - so don't rely
+// The ordering itself is implementation defined - so don't rely
 // on the meaning of less here.
 //
 // \relates vnl_matrix

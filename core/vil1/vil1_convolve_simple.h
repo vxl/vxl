@@ -1,4 +1,4 @@
-// This is vxl/vil/vil_convolve_simple.h
+// This is core/vil/vil_convolve_simple.h
 #ifndef vil_convolve_simple_h_
 #define vil_convolve_simple_h_
 //:
@@ -29,7 +29,7 @@ template <class I1, class I2, class AC, class O>
 void vil_convolve_simple(I1 const* const*  in1, unsigned w1, unsigned h1, // input 1
                          I2 const* const*  in2, unsigned w2, unsigned h2, // input 2
                          AC *, // dummy
-                         O       * const*  out);                          // ouput
+                         O       * const*  out);                          // output
 
 //: Convolution
 // This function performs some bounds checks on the given memory images

@@ -26,19 +26,19 @@ bool vvid_edge_process::execute()
       return false;
     }
   topo_objs_.clear();
-  
+
   vil_image img = vvid_video_process::get_input_image(0);
   vil_memory_image_of<unsigned char> cimg;
-  if(img.components()==3)
+  if (img.components()==3)
     {
       vil_memory_image_of<float> fimg = brip_float_ops::convert_to_float(img);
-      vvid_video_process::clear_input();//remove image from input 
+      vvid_video_process::clear_input();//remove image from input
       //convert a color image to grey
       cimg = brip_float_ops::convert_to_byte(fimg);
     }
   else
     cimg = vil_memory_image_of<unsigned char>(img);
-  //intialize the detector
+  //initialize the detector
   sdet_detector detector(*((sdet_detector_params*)this));
   detector.SetImage(cimg);
   //process edges

@@ -8,7 +8,7 @@ typedef vcl_map<vcl_string,bxml_generic_ptr,vcl_less<vcl_string> > OTAB;
 OTAB bxml_input_converter::obj_table_;
 
 
-//: Constuctor
+//: Constructor
 bxml_input_converter::bxml_input_converter()
 {
   debug_=false;

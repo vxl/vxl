@@ -6,7 +6,7 @@
 #endif
 //:
 // \file
-// \brief FLTK implemenation of vgui_adaptor.
+// \brief FLTK implementation of vgui_adaptor.
 //
 // \author
 //              Philip C. Pritchett, 11 Sep 99
@@ -19,7 +19,7 @@
 
 class Fl_Menu_Button;
 
-//: FLTK implemenation of vgui_adaptor.
+//: FLTK implementation of vgui_adaptor.
 class vgui_Fl_adaptor : public Fl_Gl_Window, public vgui_adaptor, public vgui_adaptor_mixin
 {
  public:

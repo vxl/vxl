@@ -1,18 +1,18 @@
 // The following text is included in the main documentation page by doxygen
 /*! \mainpage vgui : Multi-platform user-interface using OpenGL.
-* 
-* VGUI has two main purposes: firstly, to provide an easy way to display 
+*
+* VGUI has two main purposes: firstly, to provide an easy way to display
 * OpenGL in a user-interface, and secondly, to allow users to write code
-* once that will produce a simple user-interface on many platforms (UNIX, 
+* once that will produce a simple user-interface on many platforms (UNIX,
 * Linux and Windows)
-* 
+*
 * For every supported GUI toolkit (eg. MFC, Qt, GTK), VGUI provides a
 * vgui_adaptor (eg. vgui_mfc_adaptor, vgui_qt_adaptor, vgui_gtk_adaptor)
 * that provides an interface to an OpenGL rendering area.  This adaptor
 * is plugged into a GUI and produces a rectangular area on which OpenGL
-* can be displayed. The adaptor contains a tableau which is used to draw 
+* can be displayed. The adaptor contains a tableau which is used to draw
 * the OpenGL and to receive events from the user (see vgui_tableau).
-* 
+*
 * Some of the most useful tableaux are:
 * - vgui_image_tableau : loads and displays an image.
 * - vgui_easy2D_tableau : displays two-dimensional geometric objects.
@@ -30,17 +30,17 @@
 * - vgui_vrml_tableau : displays VRML.
 * - vgui_blackbox_tableau : records and plays back events.
 * - vgui_debug_tableau : prints events then forwards them to a child tableau.
-* - vgui_shell_tableau : to go at the top of one's tableau hierachy (contains vgui_clear_tableau, vgui_quit_tableau and vgui_tview_launcher_tableau).
+* - vgui_shell_tableau : to go at the top of one's tableau hierarchy (contains vgui_clear_tableau, vgui_quit_tableau and vgui_tview_launcher_tableau).
 *
-* You can write your GUI in, for example, MFC and use 
-* vgui_adaptor/vgui_tableau to produce an OpenGL area.  In fact, this is 
-* what you will have to do if you want to produce a complicated or very 
+* You can write your GUI in, for example, MFC and use
+* vgui_adaptor/vgui_tableau to produce an OpenGL area.  In fact, this is
+* what you will have to do if you want to produce a complicated or very
 * professional looking user-interface.
 *
-* Alternatively, you may also use VGUI to write a simple user-interface 
-* that will use native GUI toolkits on each platform. The same code written 
-* using VGUI can be used to generate user-interfaces in MFC on Windows or 
-* Qt on Linux, for example.  
+* Alternatively, you may also use VGUI to write a simple user-interface
+* that will use native GUI toolkits on each platform. The same code written
+* using VGUI can be used to generate user-interfaces in MFC on Windows or
+* Qt on Linux, for example.
 *
 * Here is an example using VGUI to display an image in a window:
 * \verbatim

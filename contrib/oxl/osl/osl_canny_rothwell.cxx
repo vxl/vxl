@@ -119,8 +119,8 @@ void osl_canny_rothwell::detect_edges(vil_image const &image, vcl_list<osl_edge*
   if (verbose) vcl_cerr << "computing derivatives\n";
   osl_canny_gradient_central(xsize_, ysize_, smooth_, dx_, dy_, grad_);
 
-  if (verbose) vcl_cerr << "doing non-maximal supression\n";
-  Non_maximal_supression();
+  if (verbose) vcl_cerr << "doing non-maximal suppression\n";
+  Non_maximal_suppression();
 
   // Thin the edge image, though keep the original thick one
   if (verbose) vcl_cerr << "thinning edges\n";
@@ -187,13 +187,13 @@ void osl_canny_rothwell::detect_edges(vil_image const &image, vcl_list<osl_edge*
 //-----------------------------------------------------------------------------
 //
 //:
-// Non-maximally supresses the output image by searching along the edge
+// Non-maximally suppresses the output image by searching along the edge
 // normal and checking that the test edge has a greater that the interpolated
 // neighbours in the direction. We have also included sub-pixel interpolation
 // of the peak position by parabolic fitting.  Writes edges into the thick_
 // image.
 //
-void osl_canny_rothwell::Non_maximal_supression() {
+void osl_canny_rothwell::Non_maximal_suppression() {
   float h1=0,h2=0;
   float k = 180.0f/float(vnl_math::pi);
 

@@ -37,10 +37,10 @@
 //       Result is a simple detection of all strong junctions.
 //
 // Input: Intensity image, smoothing sigma, sensor/texture noise sigma
-//       and threshold factors for detecting contour/junction edge elements.
+//        and threshold factors for detecting contour/junction edge elements.
 //
-// Ouput: Magnitude, direction, location of step pixels, forming
-//        a connected network of contours.
+// Output: Magnitude, direction, location of step pixels, forming
+//         a connected network of contours.
 //
 // Complexity: O(|pixels|) time and space for convolutions.
 //             O(|edgels|) time for iterative extension to recover junctions.

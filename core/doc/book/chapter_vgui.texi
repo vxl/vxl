@@ -16,8 +16,9 @@ create a complex gui application. At the same time, each tableau is
 relatively simple and can often be used independently in a small
 application such a popup image displayer.
 
-This chapter is concerned with basic vgui programming and does not 
-consider the issues associated with adapting vgui to a new window system and gui toolkit. The examples are demonstrated using the mfc implementation of 
+This chapter is concerned with basic vgui programming and does not
+consider the issues associated with adapting vgui to a new window system
+and gui toolkit. The examples are demonstrated using the mfc implementation of
 @code{vgui}.
 
 @endchapsummary
@@ -27,8 +28,8 @@ A simple example will be useful to illustrate some of the basics of vgui.
 The appearance of an image displayer is shown in Figure 1.
 @figure
 @image{image-tableau-with-status,,3in}
-@caption{1} 
-A @code{vgui} image display application. 
+@caption{1}
+A @code{vgui} image display application.
 @endcaption
 @endfigure
 
@@ -38,49 +39,48 @@ library, @code{vgui/examples/}. The code is reproduced below.
 @example
 @cartouche
 #include <vcl_iostream.h>
-#include <vgui/vgui.h> 
-#include <vgui/vgui_image_tableau.h> 
+#include <vgui/vgui.h>
+#include <vgui/vgui_image_tableau.h>
 #include <vgui/vgui_viewer2D_tableau.h>
-#include <vgui/vgui_shell_tableau.h> 
+#include <vgui/vgui_shell_tableau.h>
 int main(int argc, char **argv)
 @{
   vgui::init(argc, argv);
   if (argc <= 1)
   @{
-    vcl_cerr << "Please give an image filename on the command line" 
-             << vcl_endl;
+    vcl_cerr << "Please give an image filename on the command line\n";
     return 0;
   @}
 
-  // Load image (given in the first command line param) 
+  // Load image (given in the first command line param)
   // into an image tableau.
   vgui_image_tableau_new image(argv[1]);
 
   // Put the image tableau inside a 2D viewer tableau (for zoom, etc).
   vgui_viewer2D_tableau_new viewer(image);
- 
+
   // Put a shell tableau at the top of our tableau tree.
   vgui_shell_tableau_new shell(viewer);
-  
+
   // Create a window, add the tableau and show it on screen.
   return vgui::run(shell, image->width(), image->height());
 @}
 @end cartouche
 @end example
 
-It will be useful to go through this example carefully since it brings 
+It will be useful to go through this example carefully since it brings
 out some of the important characteristics of programming with tableaux.
 @itemize
 @item @code{vgui::init(argc, argv)}:
-The class @code{vgui} is the base management class for the gui toolkits 
-and handles overall operations. In this example, the desired toolkit is 
+The class @code{vgui} is the base management class for the gui toolkits
+and handles overall operations. In this example, the desired toolkit is
 being potentially selected by arguments on the command line.  Normally,
-the kit is not specified by the user but is the first element in a 
-registry of toolkits. For example, on windows, the mfc toolkit is 
+the kit is not specified by the user but is the first element in a
+registry of toolkits. For example, on windows, the mfc toolkit is
 used by default. Currently @code{vgui} supports the following toolkits:
 @itemize
 @item OpenGL Utility Toolkit (GLUT) - http://www.xmission.com/~nate/opengl.html
-@item Qt Toolkit - http://doc.trolltech.com 
+@item Qt Toolkit - http://doc.trolltech.com
 @item Gnu Toolkit (Gtk) - http://www.gtk.org
 @item Microsoft Foundation Classes (MFC) - http://msdn.microsoft.com/library
 @end itemize
@@ -93,18 +93,18 @@ being displayed.  We see a somewhat strange construction in the term
 support smart pointers (see vbl/vbl_smart_ptr.h). However it is
 desirable to be able to cast up and down the tableaux class
 hierarchies. The machinery needed to do this is maintained by the
-@code{xxx_new} form of construction, rather than calling the tableau 
-constructor directly. This mechanism will be discussed later in the 
+@code{xxx_new} form of construction, rather than calling the tableau
+constructor directly. This mechanism will be discussed later in the
 context of building a new sub-tableau.
 
 An equivalent, and perhaps clearer, form is:
 @example
 vgui_image_tableau_sptr image = vgui_image_tableau_new(argv[1]);
 @end example
-The constructor reads the image file specified by 
-@code{argv[1]} and then inserts it into the image tableau, image. 
+The constructor reads the image file specified by
+@code{argv[1]} and then inserts it into the image tableau, image.
 
-If an image is already available, then the  construction can be 
+If an image is already available, then the  construction can be
 carried out as follows:
 @example
 vil_image img;
@@ -123,8 +123,8 @@ vgui_image_tableau_sptr image = vgui_image_tableau_new(img1);
 image->set_image(img2);
 @end example
 
-@item @code{vgui_viewer2D_tableau_new viewer(image)}:  
-Next, the @code{vgui_image_tableau}, @code{image}, is added to a 
+@item @code{vgui_viewer2D_tableau_new viewer(image)}:
+Next, the @code{vgui_image_tableau}, @code{image}, is added to a
 @code{vgui_viewer2D_tableau}.  The viewer is responsible for
 manipulating the pan and zoom states of the tableaux being viewed,
 i.e, those @emph{below} the viewer in the tableaux hierarchy.  In our
@@ -133,15 +133,15 @@ viewer.  Again, an alternative form for the construction is:
 @example
 vgui_viewer2D_tableau_sptr viewer = vgui_viewer2D_tableau_new(image);
 @end example
-The viewer responds to a variety of events such as key presses, mouse 
-motion and mouse clicks. See @ref{events}. The current implementation has the following 
+The viewer responds to a variety of events such as key presses, mouse
+motion and mouse clicks. See @ref{events}. The current implementation has the following
 menu of event processing:
 @multitable @columnfractions 0.5 0.5
 @item (CTRL + left mouse) @tab @code{zoom in}
 @item (CTRL + middle mouse)@tab @code{pan}
 @item (CTRL + right mouse) @tab  @code{zoom out}
 @item (CTRL + 'c') @tab @code{center}
-@item (CTRL + 'x') @tab @code{resize} 
+@item (CTRL + 'x') @tab @code{resize}
 @item (CTRL + '-') @tab @code{lower zoom factor}
 @item (CTRL + '=') @tab @code{raise zoom factor}
 @item ('n') @tab @code{toggle aliasing}
@@ -152,10 +152,10 @@ menu of event processing:
 Run the @code{basic01_display_image} example and try the various event
 actions. Note that, on windows, a middle mouse is often hard to come
 by since the middle mouse button does not produce a middle mouse button
-event by default on Windows.  If you are not getting middle mouse button 
-events then look at Start->Settings->Control Panel->Mouse.  Check on 
-the "Button Actions" tab that your middle mouse button is set to "Middle" 
-Alternatively, the use of scroll bars can substitute for panning by 
+event by default on Windows.  If you are not getting middle mouse button
+events then look at Start->Settings->Control Panel->Mouse.  Check on
+the "Button Actions" tab that your middle mouse button is set to "Middle"
+Alternatively, the use of scroll bars can substitute for panning by
 middle botton mouse movement.
 
 @item @code{vgui_shell_tableau_new shell(viewer)}:
@@ -183,22 +183,22 @@ The nested tableaux form a tree structure.  This structure can be displayed by t
 @item @code{vgui::run(shell, image->width(), image->height())}:
 This last expression causes the shell tableau hierarchy to be
 displayed on the screen and to continuously process events.  The
-window size is determined by the last two arguments.  Note that 
-the borders of the window are included in these values so, for 
-small images, the margin widths can be significant and the entire image 
+window size is determined by the last two arguments.  Note that
+the borders of the window are included in these values so, for
+small images, the margin widths can be significant and the entire image
 is not visible when the window is displayed.
 @end itemize
 
-In programming with tableaux, it is often necessary to retrieve a 
+In programming with tableaux, it is often necessary to retrieve a
 particular tableau in a hierarchy such as the shell @expansion{} viewer @expansion{} image stack in the example. This access is provided by the method,
 @code{vgui_tableau_sptr::vertical_cast(vgui_tableau_sptr const& tab)}.  The following code fragment will illustrate its use:
 @example
 vgui_image_tableau_sptr get_image_tab(vgui_tableau_sptr const& tab)
 @{
-  vgui_image_tableau_sptr i_tab;      
-  if(tab)
-    itab.vertical_cast(vgui_find_below_by_type_name(tab, 
-                       vcl_string("vgui_image_tableau")));             
+  vgui_image_tableau_sptr i_tab;
+  if (tab)
+    itab.vertical_cast(vgui_find_below_by_type_name(tab,
+                       vcl_string("vgui_image_tableau")));
   return i_tab;
 @}
 @end example
@@ -210,23 +210,22 @@ as members in an application class, which provides convenient access.
 
 @section Tableaux des Tableaux
 @subsection The Grid
-In many computer vision applications, it is useful to be able to display multiple images in the same window.  The @code{vgui_grid_tableau} is designed for this purpose.  The each element of the grid holds a sub-hierarchy of tableaux. 
+In many computer vision applications, it is useful to be able to display multiple images in the same window.  The @code{vgui_grid_tableau} is designed for this purpose.  The each element of the grid holds a sub-hierarchy of tableaux.
 A simple example of multiple panes is provided by @code{vgui/examples/basic01a_multiple_panes.cxx}, reproduced below. The result of executing this program with two image paths supplied on the command line is shown in Figure 3.
 @example
 @cartouche
 #include <vcl_iostream.h>
-#include <vgui/vgui.h> 
-#include <vgui/vgui_image_tableau.h> 
+#include <vgui/vgui.h>
+#include <vgui/vgui_image_tableau.h>
 #include <vgui/vgui_viewer2D_tableau.h>
-#include <vgui/vgui_shell_tableau.h> 
+#include <vgui/vgui_shell_tableau.h>
 #include <vgui/vgui_grid_tableau.h>
 int main(int argc, char **argv)
 @{
   vgui::init(argc, argv);
   if (argc <= 2)
   @{
-    vcl_cerr << "Please give two image filenames on the command line" 
-    << vcl_endl;
+    vcl_cerr << "Please give two image filenames on the command line\n";
     return 0;
   @}
   // Load two images(given in the first two command line args)
@@ -238,13 +237,13 @@ int main(int argc, char **argv)
   vgui_viewer2D_tableau_new viewer1(image_tab1);
   vgui_viewer2D_tableau_new viewer2(image_tab2);
 
-  //Put the viewers into a grid 
+  //Put the viewers into a grid
   vgui_grid_tableau_sptr grid = new vgui_grid_tableau(2,1);
   grid->add_at(viewer1, 0,0);
   grid->add_at(viewer2, 1,0);
   // Put the grid into a shell tableau at the top the hierarchy
   vgui_shell_tableau_new shell(grid);
-  
+
   // Create a window, add the tableau and show it on screen.
   int width = image_tab1->width() + image_tab2->width();
   int height = image_tab1->height() + image_tab2->height();
@@ -254,32 +253,32 @@ int main(int argc, char **argv)
 @end example
 @figure
 @image{multiple-panes,,2.5in}
-@caption{3} 
+@caption{3}
 The @code{vgui_grid_tableau} supports the display of multiple panes.
 @endcaption
 @endfigure
 The use of tableaux is very similar to the first example, except that two
-image tableaux and two viewer2D tableaux are constructed. A 2x1 
-@code{vgui_vgrid_tableau} is constructed and the viewers are inserted in the 
+image tableaux and two viewer2D tableaux are constructed. A 2x1
+@code{vgui_vgrid_tableau} is constructed and the viewers are inserted in the
 left and right panes. Note that the order of the indices in the method,
 @code{vgui_grid_tableau::add_at(unsigned col, unsigned row)} is transposed from
 the order normally used for matrices, i.e. rows then columns.
-constructed.  
+constructed.
 
-In the case of multiple panes, it becomes an issue as to which pane is 
-considered active.  That is, suppose we wanted to replace the image in a pane selected by the user. How does the user indicate what pane is to be updated? A simple approach would be to have the user input the column and row of the grid cell to be updated using a menu (we will discuss menus in a later section). There are several additional grid methods that help define the grid cell that is to be operated on. 
+In the case of multiple panes, it becomes an issue as to which pane is
+considered active.  That is, suppose we wanted to replace the image in a pane selected by the user. How does the user indicate what pane is to be updated? A simple approach would be to have the user input the column and row of the grid cell to be updated using a menu (we will discuss menus in a later section). There are several additional grid methods that help define the grid cell that is to be operated on.
 @itemize
 @item @code{void get_active_position(unsigned* col_pos,unsigned* row_pos)}:
 This method returns the column and row of the cell which is under the mouse cursor.
-@item @code{void get_last_selected_position(unsigned* col_pos,unsigned* row_pos)}: This method returns the column and row of the last cell where 
+@item @code{void get_last_selected_position(unsigned* col_pos,unsigned* row_pos)}: This method returns the column and row of the last cell where
 the left mouse key was clicked.
 @end itemize
 An application can then use these selections to operate on the desired pane.
 For example, if a user wants to load and image from a file into a particular pane, they would click on the desired pane and then push the load-image menu. The menu callback routine would use the last_selected_position method to identify the appropriate @code{vgui_image_tableau}.
-@subsection The Deck 
+@subsection The Deck
 @figure
 @image{deck-tableau,,3in}
-@caption{4} 
+@caption{4}
 The @code{vgui_deck_tableau} supports the display of a stack of child tableaux. A typical application is to be able to page through a sequence of images. Only the tableau root on the top of the stack responds to events, such as pan and zoom.
 @endcaption
 @endfigure
@@ -289,10 +288,10 @@ The example code is:
 @cartouche
 #include <vcl_iostream.h>
 #include <vnl/vnl_math.h>
-#include <vgui/vgui.h> 
-#include <vgui/vgui_image_tableau.h> 
+#include <vgui/vgui.h>
+#include <vgui/vgui_image_tableau.h>
 #include <vgui/vgui_viewer2D_tableau.h>
-#include <vgui/vgui_shell_tableau.h> 
+#include <vgui/vgui_shell_tableau.h>
 #include <vgui/vgui_deck_tableau.h>
 
 int main(int argc, char **argv)
@@ -300,8 +299,7 @@ int main(int argc, char **argv)
   vgui::init(argc, argv);
   if (argc <= 2)
   @{
-    vcl_cerr << "Please give two image filenames on the command line" 
-    << vcl_endl;
+    vcl_cerr << "Please give two image filenames on the command line\n";
     return 0;
   @}
   // Load two images(given in the first two command line args)
@@ -315,10 +313,10 @@ int main(int argc, char **argv)
   deck->add(image_tab2);
 
   vgui_viewer2D_tableau_new viewer(deck);
- 
+
   // Put the deck into a shell tableau at the top the hierarchy
   vgui_shell_tableau_new shell(viewer);
-  
+
   // Create a window, add the tableau and show it on screen.
   int width = vnl_math_max(image_tab1->width(), image_tab2->width());
   int height = vnl_math_max(image_tab1->height(), image_tab2->height());
@@ -334,7 +332,7 @@ events, which advance or backup the deck sequence.
 @subsection Displaying 2-d Features
 @figure
 @image{display-2d-annotated,,3in}
-@caption{5} 
+@caption{5}
 Geometry overlayed an the image is shown on the right.  The tableau graph for this example is shown on the left.
 @endcaption
 @endfigure
@@ -346,49 +344,48 @@ rendered on the screen. Indeed, one can have many different views for
 a given object. The same line can be displayed with
 different line widths or colors, or even in an entirely different form
 such as a point in an image of Hough space, (rho, theta).
-Note, this subject-view approach is perversely called document-view in MFC. 
+Note, this subject-view approach is perversely called document-view in MFC.
 
 The following example illustrates the ability of vgui to display
 geometric figures, and its result is shown in Figure 5.
 @example
-@cartouche                                   
+@cartouche
 #include <vcl_iostream.h>
-#include <vgui/vgui.h> 
-#include <vgui/vgui_image_tableau.h> 
-#include <vgui/vgui_easy2D_tableau.h> 
+#include <vgui/vgui.h>
+#include <vgui/vgui_image_tableau.h>
+#include <vgui/vgui_easy2D_tableau.h>
 #include <vgui/vgui_viewer2D_tableau.h>
 #include <vgui/vgui_shell_tableau.h>
 
 int main(int argc, char **argv)
-@{ 
+@{
   vgui::init(argc, argv);
   if (argc <= 1)
   @{
-    vcl_cerr << "Please give an image filename on the command line" 
-             << vcl_endl;
+    vcl_cerr << "Please give an image filename on the command line\n";
     return 0;
   @}
 
-  // Load an image into an image.tableau 
+  // Load an image into an image.tableau
   vgui_image_tableau_new image(argv[1]);
 
-  // Put the image.tableau into a easy2D tableau 
+  // Put the image.tableau into a easy2D tableau
   vgui_easy2D_tableau_new easy2D(image);
 
-  // Add a point, line, and infinite line 
-  easy2D->set_foreground(0,1,0); 
-  easy2D->set_point_radius(5); 
+  // Add a point, line, and infinite line
+  easy2D->set_foreground(0,1,0);
+  easy2D->set_point_radius(5);
   easy2D->add_point(10, 20);
 
-  easy2D->set_foreground(0,0,1); 
-  easy2D->set_line_width(2); 
+  easy2D->set_foreground(0,0,1);
+  easy2D->set_line_width(2);
   easy2D->add_line(100,100,200,400);
 
-  easy2D->set_foreground(0,1,0); 
-  easy2D->set_line_width(2); 
+  easy2D->set_foreground(0,1,0);
+  easy2D->set_line_width(2);
   easy2D->add_infinite_line(1,1,-100);
 
-  // Put the easy2D tableau into a viewer2D tableau: 
+  // Put the easy2D tableau into a viewer2D tableau:
   vgui_viewer2D_tableau_new viewer(easy2D);
   vgui_shell_tableau_new shell(viewer);
 
@@ -400,14 +397,14 @@ int main(int argc, char **argv)
 The first new code we encounter in the example is:
 @example
   vgui_easy2D_tableau_new easy2D(image);
-@end example 
-or equivalently, 
+@end example
+or equivalently,
 @example
   vgui_easy2D_tableau_sptr easy2D  = vgui_easy2D_tableau_new(image);
-@end example 
+@end example
 
 The @code{vgui_easy2D_tableau} is responsible for rendering 2-d
-geometric shapes on top of its child, a @code{vgui_image_tableau}. 
+geometric shapes on top of its child, a @code{vgui_image_tableau}.
 The commands for inserting various geometric elements are of the form
 @code{add_xxx(...)}.  @code{vgui_easy2D_tableau} assumes an
 elemental form of geometric specification, where the points and lines
@@ -420,7 +417,7 @@ vgui_soview2D_lineseg* add_line(float x0, float y0, float x1, float y1)
 vgui_soview2D_infinite_line* add_infinite_line(float a, float b, float c)
 @end example
 
-The point is defined by its location.  The line segment is specified by the endpoints. The infinite line is specified by its line coefficients: 
+The point is defined by its location.  The line segment is specified by the endpoints. The infinite line is specified by its line coefficients:
 @ @ @ @ @ @ ax + by +c = 0.
 
 The appearance (or @emph{style}) of the display is controlled by the following style specifiers:
@@ -437,7 +434,7 @@ commands is assigned according to their specification until a new style command 
 
 @figure
 @image{soview-hierarchy,,3in}
-@caption{6} 
+@caption{6}
 The hierarchy for 2-d soviews. @code{vgui} also has some support for 3-d rendering.
 @endcaption
 @endfigure
@@ -446,11 +443,11 @@ A particular view of a geometric entity is specified by the class,
 @code{vgui_soview} which has the hierarchy shown in Figure 6. The
 constructor for a @code{vgui_soview} extracts the necessary
 information from the object to specify OpenGL redering commands.  The
-commands then add to the OpenGL display list to be rendered. While the 
-current set is adequate for a wide range of computer vision programming, 
-more advanced users will want to create their own @code{vgui_soview} 
-subclass to provide convenient display interfaces for their objects, or to 
-achieve special viewing capabilities. 
+commands then add to the OpenGL display list to be rendered. While the
+current set is adequate for a wide range of computer vision programming,
+more advanced users will want to create their own @code{vgui_soview}
+subclass to provide convenient display interfaces for their objects, or to
+achieve special viewing capabilities.
 @subsection Interactive Drawing of 2-d Features
 It is often necessary to create geometric features such as a box to
 define a region of interest for image processing or a line for sampling
@@ -468,9 +465,9 @@ feature into the @code{vgui_easy2D_tableau}.
 @example
 @cartouche
 #include <vcl_iostream.h>
-#include <vgui/vgui.h> 
-#include <vgui/vgui_menu.h> 
-#include <vgui/vgui_image_tableau.h> 
+#include <vgui/vgui.h>
+#include <vgui/vgui_menu.h>
+#include <vgui/vgui_image_tableau.h>
 #include <vgui/vgui_easy2D_tableau.h>
 #include <vgui/vgui_rubberband_tableau.h>
 #include <vgui/vgui_viewer2D_tableau.h>
@@ -480,45 +477,44 @@ feature into the @code{vgui_easy2D_tableau}.
 static vgui_rubberband_tableau_sptr rubber = 0;
 
 //the meunu callback functions
-static void create_line() 
+static void create_line()
 @{
   rubber->rubberband_line();
 @}
-static void create_circle() 
+static void create_circle()
 @{
   rubber->rubberband_circle();
 @}
 
 // Create the edit menu
-vgui_menu create_menus() 
+vgui_menu create_menus()
 @{
-  vgui_menu edit; 
-  edit.add("CreateLine",create_line,(vgui_key)'l',vgui_CTRL); 
-  edit.add("CreateCircle",create_circle,(vgui_key)'k',vgui_CTRL); 
-  vgui_menu bar; 
-  bar.add("Edit",edit); 
+  vgui_menu edit;
+  edit.add("CreateLine",create_line,(vgui_key)'l',vgui_CTRL);
+  edit.add("CreateCircle",create_circle,(vgui_key)'k',vgui_CTRL);
+  vgui_menu bar;
+  bar.add("Edit",edit);
   return bar;
 @}
 
 int main(int argc, char ** argv)
-@{ 
+@{
   vgui::init(argc,argv);
   if (argc <= 1)
   @{
-    vcl_cerr << "Please give an image filename on the command line" 
-             << vcl_endl;
+    vcl_cerr << "Please give an image filename on the command line\n";
     return 0;
   @}
-  // Make the tableau hierachy.
-  vgui_image_tableau_new image(argv[1]); 
+  // Make the tableau hierarchy.
+  vgui_image_tableau_new image(argv[1]);
   vgui_easy2D_tableau_new easy(image);
-  vgui_rubberband_easy2D_client* r_client =         
+  vgui_rubberband_easy2D_client* r_client =
     new vgui_rubberband_easy2D_client(easy);
   rubber = vgui_rubberband_tableau_new(r_client);
   vgui_composite_tableau_new comp(easy, rubber);
   vgui_viewer2D_tableau_new viewer(comp);
   vgui_shell_tableau_new shell(viewer);
-  
+
   // Create and run the window
   return vgui::run(shell, 512, 512, create_menus());
 @}
@@ -542,7 +538,7 @@ geometry. An example of the @code{vgui} 3-d display is shown in Figure
 7.
 @figure
 @image{threeD-example,,3in}
-@caption{7} 
+@caption{7}
 vgui's 3-d display.
 @endcaption
 @endfigure
@@ -552,52 +548,51 @@ vgui's 3-d display.
 @example
 @cartouche
 #include <vcl_iostream.h>
-#include <vgui/vgui.h> 
-#include <vgui/vgui_menu.h> 
-#include <vgui/vgui_image_tableau.h> 
+#include <vgui/vgui.h>
+#include <vgui/vgui_menu.h>
+#include <vgui/vgui_image_tableau.h>
 #include <vgui/vgui_viewer2D_tableau.h>
 #include <vgui/vgui_shell_tableau.h>
 
-// Set up a dummy callback function for the menu to call (for 
-// simplicity all menu items will call this function): 
-static void dummy() 
+// Set up a dummy callback function for the menu to call (for
+// simplicity all menu items will call this function):
+static void dummy()
 @{
-  vcl_cerr << "Dummy function called" << vcl_endl;
+  vcl_cerr << "Dummy function called\n";
 @}
 
-// Create a vgui menu: 
-vgui_menu create_menus() 
+// Create a vgui menu:
+vgui_menu create_menus()
 @{
-  vgui_menu file; 
-  file.add("Open",dummy,(vgui_key)'O',vgui_CTRL); 
+  vgui_menu file;
+  file.add("Open",dummy,(vgui_key)'O',vgui_CTRL);
   file.add("Quit",dummy,(vgui_key)'R',vgui_SHIFT);
 
-  vgui_menu image; 
-  image.add("Center image",dummy); 
+  vgui_menu image;
+  image.add("Center image",dummy);
   image.add("Show histogram",dummy);
 
-  vgui_menu bar; 
-  bar.add("File",file); 
+  vgui_menu bar;
+  bar.add("File",file);
   bar.add("Image",image);
 
   return bar;
 @}
 
 int main(int argc, char ** argv)
-@{ 
+@{
   vgui::init(argc,argv);
   if (argc <= 1)
  @{
-    vcl_cerr << "Please give an image filename on the command line" 
-    << vcl_endl;
+    vcl_cerr << "Please give an image filename on the command line\n";
     return 0;
  @}
 
-  // Make our tableau hierachy.
-  vgui_image_tableau_new image(argv[1]); 
+  // Make our tableau hierarchy.
+  vgui_image_tableau_new image(argv[1]);
   vgui_viewer2D_tableau_new viewer(image);
   vgui_shell_tableau_new shell(viewer);
-  
+
   // Create a window, but this time we also pass in a vgui_menu.
   return vgui::run(shell, 512, 512, create_menus());
 @}
@@ -614,10 +609,10 @@ A @code{vgui} example involving menus.  The menu bar on the top has sub-menus as
 By now, most of this code should follow a familiar pattern. The new
 element is the function @code{vgui_menu create_menus()}. The menu
 structure is assembled hierarchically where the top-level menus have
-sub-menus which can have, sub-menus etc. The basic menu construction pattern 
+sub-menus which can have, sub-menus etc. The basic menu construction pattern
 is illustrated by the line:
 @example
-  file.add("Open",dummy,(vgui_key)'O',vgui_CTRL); 
+  file.add("Open",dummy,(vgui_key)'O',vgui_CTRL);
 @end example
 
 The first argument @code{"Open"} is a string representing the
@@ -628,7 +623,7 @@ menu item without clicking on it with the mouse. In this case, the
 function @code{dummy()} is called by pressing the key combination,
 @code{CTRL + 'o'}.
 @subsection Pop-up Menus
-The appearance of a @code{vgui} pop-up menu is shown in Figure 9.  A pop-up 
+The appearance of a @code{vgui} pop-up menu is shown in Figure 9.  A pop-up
 menu is launched by pressing the right mouse button over the active application,window. Typically the role of the pop-up menu is to present operations that are relevant to the context present when the right button is pressed.  For example, if we are displaying an image, there would be image display or image processing operations presented in the menu.  Another mode might dominate when the tableau contains only geometric features. In that case, the menu items might present geometric operations such as translation or rotation.
 @figure
 @image{popupmenu-example,,3in}
@@ -640,29 +635,29 @@ This display was created by the example @code{vgui/examples/basic06_popup.cxx}:
 @example
 @cartouche
 #include <vcl_iostream.h>
-#include <vgui/vgui.h> 
-#include <vgui/vgui_window.h> 
-#include <vgui/vgui_adaptor.h> 
-#include <vgui/vgui_menu.h> 
-#include <vgui/vgui_image_tableau.h> 
+#include <vgui/vgui.h>
+#include <vgui/vgui_window.h>
+#include <vgui/vgui_adaptor.h>
+#include <vgui/vgui_menu.h>
+#include <vgui/vgui_image_tableau.h>
 #include <vgui/vgui_viewer2D_tableau.h>
 #include <vgui/vgui_shell_tableau.h>
-// Set up a dummy callback function for the menu to call (for 
-// simplicity all menu items will call this function): 
-static void dummy() 
+// Set up a dummy callback function for the menu to call (for
+// simplicity all menu items will call this function):
+static void dummy()
 @{
-  vcl_cerr << "Dummy function called" << vcl_endl;
+  vcl_cerr << "Dummy function called\n";
 @}
 
-// Create a vgui_menu: 
-vgui_menu create_menus() 
+// Create a vgui_menu:
+vgui_menu create_menus()
 @{
-  vgui_menu file; 
-  file.add("Open", dummy); 
+  vgui_menu file;
+  file.add("Open", dummy);
   file.add("Quit", dummy);
 
-  vgui_menu image; 
-  image.add("Center image", dummy); 
+  vgui_menu image;
+  image.add("Center image", dummy);
   image.add("Show histogram", dummy);
 
   vgui_menu bar;
@@ -677,30 +672,29 @@ vgui_menu create_menus()
 @example
 @cartouche
 int main(int argc, char ** argv)
-@{ 
+@{
   vgui::init(argc,argv);
   if (argc <= 1)
   @{
-    vcl_cerr << "Please give an image filename on the command line" 
-             << vcl_endl;
+    vcl_cerr << "Please give an image filename on the command line\n";
     return 0;
   @}
-  // Load an image into an image tableau: 
-  vgui_image_tableau_new image(argv[1]); 
-  vgui_viewer2D_tableau_new viewer(image); 
+  // Load an image into an image tableau:
+  vgui_image_tableau_new image(argv[1]);
+  vgui_viewer2D_tableau_new viewer(image);
   vgui_shell_tableau_new shell(viewer);
 
   // Create a window and add the tableau:
-  vgui_window *win = vgui::produce_window(512, 512); 
-  win->get_adaptor()->set_tableau(shell); 
+  vgui_window *win = vgui::produce_window(512, 512);
+  win->get_adaptor()->set_tableau(shell);
 
-  // Add our menu items to the base pop-up 
+  // Add our menu items to the base pop-up
   // (this menu appears when the user clicks
   //  the right mouse button on the tableau)
   win->get_adaptor()->include_in_popup(create_menus());
   win->get_adaptor()->bind_popups();
-  win->show(); 
-  return vgui::run(); 
+  win->show();
+  return vgui::run();
 @}
 @end cartouche
 @end example
@@ -709,7 +703,7 @@ This example contains a few new elements that should be discussed.
 @item @code{vgui_window *win = vgui::produce_window(512, 512)}:
 In this case the widow is created before the display is launched. In
 the previous examples, the window was created at the time of launch
-using the @code{vgui::run(..)} command.  Here the window is initialized 
+using the @code{vgui::run(..)} command.  Here the window is initialized
 to size 512x512 display resolution elements.
 
 @item @code{win->get_adaptor()->include_in_popup(create_menus())}:
@@ -724,7 +718,7 @@ of the tableau hierarchy, and the adaptor is attached to the shell.
 
 Each tableau in the hierarchy can add to the pop-up menu. In this
 example the specified menu is being included at the top-most level,
-i.e. the adaptor. It is also possible to define pop-up menu entries in each 
+i.e. the adaptor. It is also possible to define pop-up menu entries in each
 tableau in the hierarchy. To see an example of adding items to the pop-up
 menu by a tableau lower in the hierarchy, take a look at
 @code{vgui_clear_tableau::add_popup(..)}.
@@ -740,8 +734,8 @@ This code causes the window to be exposed on the screen.
 
 @item @code{vgui::run()}:
 This command tells the window to process all events until it is terminated.
-Unlike the previous examples, the window has been constructed in 
-advance of the run command. 
+Unlike the previous examples, the window has been constructed in
+advance of the run command.
 @end itemize
 @section Dialog Menus
 It is often necessary to obtain values for parameters, such as edge
@@ -752,7 +746,7 @@ order to read data such as image. These functions are satisfied by the
 corresponds to @code{vgui/examples/basic07_dialog.cxx}.
 @figure
 @image{dialog-example,,4in}
-@caption{10} 
+@caption{10}
 The dialog menu appears when a menu item is pressed that calls a function containing a dialog.  The dialog displays names and values as well as boolean check boxes. The state of the boxes and values can be changed and when the dialog is dispatched, the altered values are bound to the variables in the dialog specification. In this simple example, the latest values are output to @code{cerr}.
 @endcaption
 @endfigure
@@ -801,18 +795,17 @@ static void test_dialog()
 
   if (mydialog.ask())
   @{
-    vcl_cerr << "int_value : " << int_value << vcl_endl;
-    vcl_cerr << "long_value : " << long_value << vcl_endl;
-    vcl_cerr << "float_value : " << float_value << vcl_endl;
-    vcl_cerr << "double_value : " << double_value << vcl_endl;
-    vcl_cerr << "string_value : " << string_value << vcl_endl;
-    vcl_cerr << "bool_value : " 
-             << vbl_bool_ostream::true_false(bool_value) 
-             << vcl_endl;
-    vcl_cerr << "choice_value : " << choice_value << " " 
-             << labels[choice_value] << vcl_endl;
-    vcl_cerr << "file_value: " << file_value << vcl_endl;
-    vcl_cerr << "color_value: " << color_value << vcl_endl;
+    vcl_cerr << "int_value : " << int_value << vcl_endl
+             << "long_value : " << long_value << vcl_endl
+             << "float_value : " << float_value << vcl_endl
+             << "double_value : " << double_value << vcl_endl
+             << "string_value : " << string_value << vcl_endl
+             << "bool_value : "
+             << vbl_bool_ostream::true_false(bool_value) << vcl_endl
+             << "choice_value : " << choice_value << ' '
+             << labels[choice_value] << vcl_endl
+             << "file_value: " << file_value << vcl_endl
+             << "color_value: " << color_value << vcl_endl;
   @}
 @}
 @end cartouche
@@ -848,8 +841,8 @@ vgui_menu create_menus()
 @}
 @end cartouche
 @end example
-A dialog pops up when the associated menu item is selected. The dialog interface is reasonably self-explanitory, but it will be useful to discuss some of the main elements. 
-@itemize 
+A dialog pops up when the associated menu item is selected. The dialog interface is reasonably self-explanitory, but it will be useful to discuss some of the main elements.
+@itemize
 @item @code{static int choice_value = 1}:
 It is desirable to have the values in the dialog persist from one
 invocation to the next. This persistence is enabled through the use of
@@ -867,7 +860,7 @@ filter on the file extensions so that only a class of files will
 appear in the browser. For example, if only jpeg images are to
 be selected the argument assignment would be, @code{static vcl_string
 regexp = "*.jpg"}.  The third argument is the result and returns
-the path to the selected file. 
+the path to the selected file.
 
 @item @code{if (mydialog.ask())}:
 This function pops up the dialog and waits for the @code{ok} or
@@ -890,7 +883,7 @@ display geometric objects.
 @endfigure
 @figure
 @image{dialog2-example,,2in}
-@caption{12} 
+@caption{12}
 Dialogs can also contain embedded images or geometric figures.
 @endcaption
 @endfigure
@@ -905,7 +898,7 @@ As applications become more sophisticated, the programmer will need to be able t
 #include <vgui/vgui_viewer2D_tableau.h>
 #include <vgui/vgui_shell_tableau.h>
 //------------------------------------------------------------
-// A tableau that displays the mouse position 
+// A tableau that displays the mouse position
 // when left mouse button is pressed.
 struct example_tableau : public vgui_image_tableau
 @{
@@ -915,11 +908,10 @@ struct example_tableau : public vgui_image_tableau
 
   bool handle(const vgui_event &e)
   @{
-    if (e.type == vgui_BUTTON_DOWN && 
+    if (e.type == vgui_BUTTON_DOWN &&
         e.button == vgui_LEFT && e.modifier == 0)
     @{
-      vcl_cout << "selecting at " << e.wx << " " << e.wy 
-               << vcl_endl;
+      vcl_cout << "selecting at " << e.wx << ' ' << e.wy << vcl_endl;
       return true; // event has been used
     @}
 
@@ -947,8 +939,7 @@ int main(int argc,char **argv)
   vgui::init(argc, argv);
   if (argc <= 1)
   @{
-    vcl_cerr << "Please give an image filename"
-             << vcl_endl;
+    vcl_cerr << "Please give an image filename\n";
     return 0;
   @}
 
@@ -964,21 +955,21 @@ int main(int argc,char **argv)
 @}
 @end cartouche
 @end example
-This example contains a number of new concepts that are important to 
+This example contains a number of new concepts that are important to
 building custom applications. The example illustrates how to go about
-creating a new tableau, which is a subclass of an existing tableau. 
+creating a new tableau, which is a subclass of an existing tableau.
 @itemize
 @item @code{struct example_tableau : public vgui_image_tableau}:
-The new tableau is a child of the @code{vgui_imge_tableau}. The tableau is 
-being defined as a @code{struct}, however it could also be a class.  
+The new tableau is a child of the @code{vgui_imge_tableau}. The tableau is
+being defined as a @code{struct}, however it could also be a class.
 
 @item @code{struct example_tableau_new : public vgui_image_tableau_sptr}:
 VXL makes use of smart pointers extensively to prevent memory leaks.
 The smart pointer maintains a reference count so that an object (or
 struct) can be deleted when the reference count goes to zero, i.e., no
 one is referencing a pointer to the object. A drawback to the smart pointer approach is that inheritance is not maintained, that is, the smart pointer of a
-child of a class is not a sub-class of the smart pointer of the class. 
-@code{vgui} has implemented a solution to this problem by creating a 
+child of a class is not a sub-class of the smart pointer of the class.
+@code{vgui} has implemented a solution to this problem by creating a
 hierarchy of smart pointers that match the tableau heirarchy.
 
 @item @code{bool handle(const vgui_event &e)}:
@@ -997,7 +988,7 @@ to any other tableau.  If the event is unused, then it is further dispatched
 to child tableaux or returned to the parent.
 
 @item @code{if (e.type == vgui_BUTTON_DOWN..)}:
-@code{vgui} represents a spectrum of event types, which are summarized at this point for convenient reference. 
+@code{vgui} represents a spectrum of event types, which are summarized at this point for convenient reference.
 @end itemize
 
 It is often required to include the definition of a tableau smart
@@ -1011,7 +1002,6 @@ it is convenient to define the smart pointer in a
 class xxx_tableau;
 typedef vgui_tableau_sptr_t<xxx_tableau> xxx_tableau_sptr;
 @end example
-
 
 
 @subsection @code{vgui} Events
@@ -1029,7 +1019,7 @@ The following is a partial list of the event enum symbols defined in
 @code{vgui_event} are described here. Some of them seem to be
 vestigial and not exploited in code. A few comments will be added where
 the event function is not obvious.
-@itemize 
+@itemize
 @item @code{vgui_BUTTON_DOWN=vgui_MOUSE_DOWN=vgui_MOUSE_PRESS}
 @item @code{vgui_BUTTON_UP=vgui_MOUSE_UP=vgui_MOUSE_RELEASE}
 @item @code{vgui_DRAW},  @code{vgui_DRAW_OVERLAY} and  @code{vgui_RESHAPE}
@@ -1046,7 +1036,7 @@ by redrawing the display list.
 @item @code{vgui_ENTER} and  @code{vgui_LEAVE}
 These events are triggered when the mouse enters/leaves the window.
 @item @code{vgui_HSCROLL} and @code{vgui_VSCROLL}
-When a window has specified the addition of scroll bars, 
+When a window has specified the addition of scroll bars,
 these events are emitted when the scroll bars are moved.
 @item @code{vgui_KEY_PRESS=vgui_KEY_DOWN}
 @item @code{vgui_KEY_RELEASE=vgui_KEY_UP}
@@ -1066,11 +1056,11 @@ The following table defines the @code{vgui} enum symbols for buttons, keys
 and modifers:
 
 @multitable @columnfractions 0.5 0.5
-@item ===== Buttons ===== @tab @ 
+@item ===== Buttons ===== @tab @
 @item @code{vgui_LEFT} @tab left mouse button
 @item @code{vgui_MIDDLE} @tab middle mouse button
 @item @code{vgui_RIGHT} @tab right mouse button
-@item ===== Keys ===== @tab @ 
+@item ===== Keys ===== @tab @
 @item @code{vgui_ESC  } @tab ascii 27
 @item @code{vgui_TAB} @tab @samp{\t}
 @item @code{vgui_RETURN} @tab @samp{\r}
@@ -1096,11 +1086,11 @@ and modifers:
 @item @code{vgui_END } @tab 0x100 + 19
 @item @code{vgui_DELETE } @tab 0x100 + 20
 @item @code{vgui_INSERT } @tab 0x100 + 21
-@item ===== Modifiers ===== @tab @ 
+@item ===== Modifiers ===== @tab @
 @item @code{vgui_NULL} @tab  0x0
-@item @code{vgui_CTRL} @tab  0x1 
+@item @code{vgui_CTRL} @tab  0x1
 @item @code{vgui_SHIFT} @tab 0x2
-@item @code{vgui_META} @tab  0x4 
+@item @code{vgui_META} @tab  0x4
 @item @code{vgui_ALT} @tab 0x8
 @end multitable
 
@@ -1112,8 +1102,8 @@ bool handle(vgui_event const & e)
 @{
   vgui_key k = e.key;
   vgui_modifier m = e.modifier;
-  if(m & vgui_CTRL)
-    if(k == 's')
+  if (m & vgui_CTRL)
+    if (k == 's')
      @{
       // Do something appropriate for CTRL + 's'
       ...
@@ -1130,7 +1120,7 @@ effect of various modifier combinations.
 
 @multitable @columnfractions 0.25 0.25 0.25 0.25
 @item key press @tab modifier @tab key @tab ascii character
-@item =======  @tab ======= @tab ======= @tab ======= 
+@item =======  @tab ======= @tab ======= @tab =======
 @item @code{a}  @tab @code{vgui_NULL} @tab @samp{a} @tab @samp{a}
 @item @code{CTRL+a}  @tab @code{vgui_CTRL} @tab @samp{a} @tab @samp{^a}
 @item @code{SHIFT+a} @tab @code{vgui_SHIFT} @tab @samp{a} @tab @samp{A}
@@ -1138,7 +1128,7 @@ effect of various modifier combinations.
 @item @code{?} @tab @code{vgui_SHIFT} @tab @samp{/} @tab @samp{?}
 @end multitable
 
-If one wants to work directly with the actual ascii character pressed, then 
+If one wants to work directly with the actual ascii character pressed, then
 use @code{e.ascii_char}.
 @subsection Event Condition
 A convenient class, @code{vgui_event_condition} is defined to
@@ -1157,7 +1147,7 @@ bool my_tableau::handle(const vgui_event &e)
 @end example
 In this case a test for the indicated event condition is constructed
 and can be used to filter events passing into a tableau's handle
-method. The event condition class 
+method. The event condition class
 provides a compact and tidy way of expressing complex logic on
 modifiers, keys and buttons.
 @subsection Mouse Position
@@ -1182,7 +1172,7 @@ bool my_image_tableau::handle(const vgui_event &e)
     vgui_projection_inspector p_insp;
     p_insp.window_to_image_coordinates(e.wx, e.wy, pointx, pointy);
     int intx = (int)vcl_floor(pointx), inty = (int)vcl_floor(pointy);
-    vgui::out << "(" << intx << " " << inty << ")\n";
+    vgui::out << '(' << intx << ' ' << inty << ")\n";
    @}
   return vgui_image_tableau::handle(e);
 @}
@@ -1224,18 +1214,18 @@ class basic_manager : public vgui_wrapper_tableau
   void load_image();
   void init();
   virtual bool handle(vgui_event const &);
- 
-private:
+
+ private:
   basic_manager();
   vil_image img_;
-  vgui_image_tableau_sptr itab_; 
+  vgui_image_tableau_sptr itab_;
   static basic_manager *instance_;
 @};
 @end cartouche
 @end example
 Some elements of the class design require explaination:
 @itemize
-@item @code{static basic_manager *instance()}: 
+@item @code{static basic_manager *instance()}:
 This method returns a
 unique single instance of the @code{basic_manager} class. This design
 is called a @emph{singleton} pattern and is used when the class must
@@ -1244,11 +1234,11 @@ class. This requirement frequently arises in event handling where
 global access to the same event process is required. In our example,
 All events are funneled through the same @code{basic_manager} instance.
 
-@item @code{basic_manager()}: 
+@item @code{basic_manager()}:
 The constructor for this class is made private because the only way
 the class should be invoked is through the @code{::instance} method.
 
-@item @code{virtual bool handle(vgui_event const &)}: 
+@item @code{virtual bool handle(vgui_event const &)}:
 Since the manager is a sub-class of a @code{vgui_wrapper_tableau} it
 inherits the @code{::handle} method.  This inheritance enables the
 manager to implement its own event processing and then pass unused
@@ -1257,7 +1247,7 @@ events onto the manager's tableau children.
 @item @code{vgui_image_tableau_sptr itab_ }:
 To provide convenient access, one can cache pointers to intermediate tableaux.
 
-@item @code{void load_image()}: 
+@item @code{void load_image()}:
 A typical menu callback method. This manager can be accessed by many
 different applications that need to load an image. Thus, the image gui
 management code doesn't have to be continually rewritten.
@@ -1283,7 +1273,7 @@ basic_manager* basic_manager::instance_ = 0;
 basic_manager *basic_manager::instance()
 @{
   if (!instance_)
-  @{ 
+  @{
     instance_ = new basic_manager();
     instance_->init();
    @}
@@ -1298,7 +1288,7 @@ basic_manager::~basic_manager()@{@}
 void basic_manager::init()
 @{
   itab_ = vgui_image_tableau_new();//keep the image tableau handy
-  vgui_viewer2D_tableau_sptr viewer = 
+  vgui_viewer2D_tableau_sptr viewer =
                              vgui_viewer2D_tableau_new(itab_);
   vgui_shell_tableau_sptr shell = vgui_shell_tableau_new(viewer);
   this->add_child(shell);
@@ -1315,7 +1305,7 @@ When the instance of @code{basic_manager} is created, the parent class,
 //the event handler
 bool basic_manager::handle(vgui_event const & e)
 @{
-  if(e.key == 'b')
+  if (e.key == 'b')
     vgui::out << "I saw a 'b'\n";
   //pass the event to the shell
   return this->child.handle(e);
@@ -1348,7 +1338,7 @@ the child tableaux react.
 
 The methods to support menu callbacks are implemented in the manager.  For example, @code{basic_manager::load_image()} illustrates the use of a dialog which pops up when the ``Load Image'' menu is selected.
 @subsection The Menus
-A menu class is defined to package up the static callback functions required 
+A menu class is defined to package up the static callback functions required
 in the @code{vgui_menu} assembly.  The @code{basic_menu} class is:
 @example
 @cartouche
@@ -1376,7 +1366,6 @@ void basic_menus::quit_callback()
 @{
   basic_manager::instance()->quit();
 @}
-
 
 void basic_menus::load_image_callback()
 @{
@@ -1441,12 +1430,12 @@ Several new features have been included in the construction of this window:
 @itemize @bullet
 @item a title which appears at the top left of the window
 @item a status bar, which displays messages at the bottom of the application
- window. 
+ window.
 @item horizontal and vertical scroll bars for panning the tableaux below a
 @code{vgui_viewer2D_tableau}.
 @end itemize
 @section Summary of @code{vgui} Tableaux
-The following is a summary of the tableau defined in @code{vgui}. 
+The following is a summary of the tableau defined in @code{vgui}.
 @multitable @columnfractions 0.33 0.67
 
 @item @code{active_tableau} @tab This tableau (or rather a tableau derived from it) can appear visible or invisible, and active or inactive by calling @code{toggle_active} and @code{toggle_visible}.
@@ -1466,7 +1455,6 @@ The following is a summary of the tableau defined in @code{vgui}.
 @item @code{displaylist3D_tableau} @tab Display of three-dimensional geometric objects -  a builder tableau usually sub-classed.
 
 @item @code{drag_tableau} @tab A drag event occurs when the user moves the mouse with one of the mouse buttons pressed down.  In @code{vgui} there is no @code{vgui_DRAG} event (there is only @code{vgui_MOTION} for when the mouse is moving).  So if you want to capture drag events you may find this tableau handy.
-  
 
 @item @code{easy2D_tableau} @tab Easy interface for displaying two-dimensional geometric objects (see @code{vgui_soview2D}) such as lines, points, circles, etc can be added using add, or @code{add_point}, @code{add_line}, @code{add_circle}, etc.
 

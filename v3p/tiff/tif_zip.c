@@ -34,7 +34,7 @@
  * of the library: this code assumes the 1.0 API and also depends on
  * the ability to write the zlib header multiple times (one per strip)
  * which was not possible with versions prior to 0.95.  Note also that
- * older versions of this codec avoided this bug by supressing the header
+ * older versions of this codec avoided this bug by suppressing the header
  * entirely.  This means that files written with the old library cannot
  * be read; they should be converted to a different compression scheme
  * and then reconverted.
@@ -91,10 +91,10 @@ ZIPSetupDecode(TIFF* tif)
     assert(sp != NULL);
     if (inflateInit(&sp->stream) != Z_OK) {
         TIFFError(module, "%s: %s", tif->tif_name, sp->stream.msg);
-        return (0);
+        return 0;
     } else {
         sp->state |= ZSTATE_INIT;
-        return (1);
+        return 1;
     }
 }
 
@@ -132,22 +132,22 @@ ZIPDecode(TIFF* tif, tidata_t op, tsize_t occ, tsample_t s)
                       "%s: Decoding error at scanline %d, %s",
                       tif->tif_name, tif->tif_row, sp->stream.msg);
             if (inflateSync(&sp->stream) != Z_OK)
-                return (0);
+                return 0;
             continue;
         }
         if (state != Z_OK) {
             TIFFError(module, "%s: zlib error: %s",
                       tif->tif_name, sp->stream.msg);
-            return (0);
+            return 0;
         }
     } while (sp->stream.avail_out > 0);
     if (sp->stream.avail_out != 0) {
         TIFFError(module,
                   "%s: Not enough data at scanline %d (short %d bytes)",
                   tif->tif_name, tif->tif_row, sp->stream.avail_out);
-        return (0);
+        return 0;
     }
-    return (1);
+    return 1;
 }
 
 static int
@@ -159,10 +159,10 @@ ZIPSetupEncode(TIFF* tif)
     assert(sp != NULL);
     if (deflateInit(&sp->stream, sp->zipquality) != Z_OK) {
         TIFFError(module, "%s: %s", tif->tif_name, sp->stream.msg);
-        return (0);
+        return 0;
     } else {
         sp->state |= ZSTATE_INIT;
-        return (1);
+        return 1;
     }
 }
 
@@ -197,7 +197,7 @@ ZIPEncode(TIFF* tif, tidata_t bp, tsize_t cc, tsample_t s)
         if (deflate(&sp->stream, Z_NO_FLUSH) != Z_OK) {
             TIFFError(module, "%s: Encoder error: %s",
                       tif->tif_name, sp->stream.msg);
-            return (0);
+            return 0;
         }
         if (sp->stream.avail_out == 0) {
             tif->tif_rawcc = tif->tif_rawdatasize;
@@ -206,7 +206,7 @@ ZIPEncode(TIFF* tif, tidata_t bp, tsize_t cc, tsample_t s)
             sp->stream.avail_out = tif->tif_rawdatasize;
         }
     } while (sp->stream.avail_in > 0);
-    return (1);
+    return 1;
 }
 
 /*
@@ -237,10 +237,10 @@ ZIPPostEncode(TIFF* tif)
         default:
             TIFFError(module, "%s: zlib error: %s",
                       tif->tif_name, sp->stream.msg);
-            return (0);
+            return 0;
         }
     } while (state != Z_STREAM_END);
-    return (1);
+    return 1;
 }
 
 static void
@@ -274,10 +274,10 @@ ZIPVSetField(TIFF* tif, ttag_t tag, va_list ap)
                               sp->zipquality, Z_DEFAULT_STRATEGY) != Z_OK) {
                 TIFFError(module, "%s: zlib error: %s",
                           tif->tif_name, sp->stream.msg);
-                return (0);
+                return 0;
             }
         }
-        return (1);
+        return 1;
     default:
         return (*sp->vsetparent)(tif, tag, ap);
     }
@@ -296,7 +296,7 @@ ZIPVGetField(TIFF* tif, ttag_t tag, va_list ap)
     default:
         return (*sp->vgetparent)(tif, tag, ap);
     }
-    return (1);
+    return 1;
 }
 
 static const TIFFFieldInfo zipFieldInfo[] = {
@@ -357,9 +357,9 @@ TIFFInitZIP(TIFF* tif, int scheme)
      * Setup predictor setup.
      */
     (void) TIFFPredictorInit(tif);
-    return (1);
+    return 1;
 bad:
     TIFFError("TIFFInitZIP", "No space for ZIP state block");
-    return (0);
+    return 0;
 }
 #endif /* ZIP_SUPORT */

@@ -20,7 +20,7 @@
 // read the opening brace. If set to false and the first non-whitespace character is
 // not an opening brace then that chacter will be left in the stream and "{} will be returned.
 // \return the text including the opening and closing braces.
-// \param comment Lines begining with white space followed by this string will be ignored.
+// \param comment Lines beginning with white space followed by this string will be ignored.
 // Set to empty for no comment stripping.
 
 vcl_string mbl_parse_block(vcl_istream &afs, bool open_already /*= false*/, const char * comment /*= "//"*/)
