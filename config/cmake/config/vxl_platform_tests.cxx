@@ -802,7 +802,7 @@ struct A
 {
   A(): mark(0) {}
   A(const A&): mark(0) {}
-  ~A() { if(mark) { exit(1); } }
+  ~A() { if (mark) { exit(1); } }
   int mark;
 };
 
@@ -843,9 +843,14 @@ int main()
 #include "config.h"
 
 #if INTEGRAL_TYPE
-double cast( unsigned THE_TYPE a, signed THE_TYPE b )
+double cast( THE_TYPE a, unsigned THE_TYPE b, signed THE_TYPE c )
 {
-  return double( a ) + double( b );
+  return double( a ) + double( b ) + double( c );
+}
+#else // INTEGRAL_TYPE
+double cast( THE_TYPE a )
+{
+  return double( a );
 }
 #endif // INTEGRAL_TYPE
 
