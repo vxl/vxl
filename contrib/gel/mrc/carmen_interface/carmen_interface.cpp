@@ -8,7 +8,7 @@
 //                            Niskayuna, NY 12309
 //                            All Rights Reserved
 //              Reproduction rights limited as described below.
-//                               
+//
 //      Permission to use, copy, modify, distribute, and sell this software
 //      and its documentation for any purpose is hereby granted without fee,
 //      provided that (i) the above copyright notice and this permission
@@ -18,7 +18,7 @@
 //      the specific, prior written permission of GE CRD, and (iii) any
 //      modifications are clearly marked and summarized in a change history
 //      log.
-//       
+//
 //      THE SOFTWARE IS PROVIDED "AS IS" AND WITHOUT WARRANTY OF ANY KIND,
 //      EXPRESS, IMPLIED OR OTHERWISE, INCLUDING WITHOUT LIMITATION, ANY
 //      WARRANTY OF MERCHANTABILITY OR FITNESS FOR A PARTICULAR PURPOSE.
@@ -119,7 +119,7 @@ bool carmen_interface::add_full_correspondence(int view_no, int point_id,
       return stat;
     }
   //define the corresponding 2d secondary
-  stat = _carmen->define_control_point(view_no, point_id, u, v, 
+  stat = _carmen->define_control_point(view_no, point_id, u, v,
                                        default_2d_point_sdev);
   if(!stat)
     {
@@ -133,7 +133,7 @@ bool carmen_interface::add_full_correspondence(int view_no, int point_id,
 //
 bool carmen_interface::load_correspondence_file(const string& file_path)
 {
-	vcl_ifstream instr(file_path.c_str());
+  vcl_ifstream instr(file_path.c_str());
   if(!instr)
     {
       vcl_cout <<"In carmen_interface::load_correspondence_file()"
@@ -165,7 +165,7 @@ bool carmen_interface::load_correspondence_file(const string& file_path)
           return false;
         }
       instr >> view_no >> point_id >> x >> y >> z >> u >> v;
-      vcl_cout << "Corr: " <<  view_no << " " << point_id << " " << x << " " <<  y 
+      vcl_cout << "Corr: " <<  view_no << " " << point_id << " " << x << " " <<  y
                << " " << z << " " <<  u << " " << v << vcl_endl;
       bool stat = add_full_correspondence(view_no, point_id, x, y, z, u, v);
       if(!stat)
@@ -188,7 +188,7 @@ void carmen_interface::solve()
       return;
     }
   stat = (bool)_carmen->solve_for_everything();
-  if (!stat) 
+  if (!stat)
     vcl_cerr << _carmen->geterror() << vcl_endl;
 }
 
@@ -197,7 +197,6 @@ void carmen_interface::solve()
 //
 void carmen_interface::save_camera(const string& file_path)
 {
-
 }
 
 //--------------------------------------------------------------------
