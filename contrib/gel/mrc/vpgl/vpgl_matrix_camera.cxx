@@ -3,7 +3,6 @@
 //:
 // \file
 
-#include <vnl/algo/vnl_svd.h>
 #include <vnl/vnl_math.h> // for vnl_huge_val()
 
 vpgl_matrix_camera::vpgl_matrix_camera():
@@ -21,8 +20,8 @@ vpgl_matrix_camera::vpgl_matrix_camera(const vnl_matrix<double>& mat):
 {
   if ((mat.rows() != 3) || (mat.columns() != 3))
     {
-    vcl_cerr << "vpgl_matrix_camera: 3x3 camera matrix not provided. "
-             << "Creating identity camera.\n" ;
+    vcl_cerr << "vpgl_matrix_camera: 3x3 camera matrix not provided.\n"
+             << " Creating identity camera.\n";
     int r, c;
     for (r=0; r<3; r++)
       for (c=0; c<3; c++)
