@@ -1414,7 +1414,8 @@ int main(int, char **) {
   macro(VXL_INT_64, 8, long long);
   macro(VXL_IEEE_32, 4, float);
   macro(VXL_IEEE_64, 8, double);
-//  macro(VXL_IEEE_96, 12, long double);
+//  macro(VXL_IEEE_96, 12, long double);  // x86
+//  macro(VXL_IEEE_128, 16, long double); // sparc, mips
   return 0;
 }
 EOF
@@ -1428,7 +1429,7 @@ rm -f ./check_vxl_words.*
 
 
 echo $ac_n "checking whether we have a working qsort""... $ac_c" 1>&6
-echo "configure:1432: checking whether we have a working qsort" >&5
+echo "configure:1433: checking whether we have a working qsort" >&5
 if eval "test \"`echo '$''{'ac_vxl_has_qsort'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
 else
@@ -1442,7 +1443,7 @@ ac_link='${CC-cc} -o conftest $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS 
 cross_compiling=$ac_cv_prog_cc_cross
  #PLUSPLUS
 cat > conftest.$ac_ext <<EOF
-#line 1446 "configure"
+#line 1447 "configure"
 #include "confdefs.h"
 
 /* This is not a C++ header, strictly speaking. */
@@ -1457,7 +1458,7 @@ int main() {
 
 ; return 0; }
 EOF
-if { (eval echo configure:1461: \"$ac_compile\") 1>&5; (eval $ac_compile) 2>&5; }; then
+if { (eval echo configure:1462: \"$ac_compile\") 1>&5; (eval $ac_compile) 2>&5; }; then
   rm -rf conftest*
   ac_vxl_has_qsort=yes
 else
@@ -1480,7 +1481,7 @@ fi;
 export VXL_STDLIB_HAS_QSORT
 
 echo $ac_n "checking how to run the C preprocessor""... $ac_c" 1>&6
-echo "configure:1484: checking how to run the C preprocessor" >&5
+echo "configure:1485: checking how to run the C preprocessor" >&5
 # On Suns, sometimes $CPP names a directory.
 if test -n "$CPP" && test -d "$CPP"; then
   CPP=
@@ -1495,13 +1496,13 @@ else
   # On the NeXT, cc -E runs the code through the compiler's parser,
   # not just through cpp.
   cat > conftest.$ac_ext <<EOF
-#line 1499 "configure"
+#line 1500 "configure"
 #include "confdefs.h"
 #include <assert.h>
 Syntax Error
 EOF
 ac_try="$ac_cpp conftest.$ac_ext >/dev/null 2>conftest.out"
-{ (eval echo configure:1505: \"$ac_try\") 1>&5; (eval $ac_try) 2>&5; }
+{ (eval echo configure:1506: \"$ac_try\") 1>&5; (eval $ac_try) 2>&5; }
 ac_err=`grep -v '^ *+' conftest.out`
 if test -z "$ac_err"; then
   :
@@ -1512,13 +1513,13 @@ else
   rm -rf conftest*
   CPP="${CC-cc} -E -traditional-cpp"
   cat > conftest.$ac_ext <<EOF
-#line 1516 "configure"
+#line 1517 "configure"
 #include "confdefs.h"
 #include <assert.h>
 Syntax Error
 EOF
 ac_try="$ac_cpp conftest.$ac_ext >/dev/null 2>conftest.out"
-{ (eval echo configure:1522: \"$ac_try\") 1>&5; (eval $ac_try) 2>&5; }
+{ (eval echo configure:1523: \"$ac_try\") 1>&5; (eval $ac_try) 2>&5; }
 ac_err=`grep -v '^ *+' conftest.out`
 if test -z "$ac_err"; then
   :
@@ -1542,17 +1543,17 @@ echo "$ac_t""$CPP" 1>&6
 
 ac_safe=`echo "ieeefp.h" | sed 'y%./+-%__p_%'`
 echo $ac_n "checking for ieeefp.h""... $ac_c" 1>&6
-echo "configure:1546: checking for ieeefp.h" >&5
+echo "configure:1547: checking for ieeefp.h" >&5
 if eval "test \"`echo '$''{'ac_cv_header_$ac_safe'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
 else
   cat > conftest.$ac_ext <<EOF
-#line 1551 "configure"
+#line 1552 "configure"
 #include "confdefs.h"
 #include <ieeefp.h>
 EOF
 ac_try="$ac_cpp conftest.$ac_ext >/dev/null 2>conftest.out"
-{ (eval echo configure:1556: \"$ac_try\") 1>&5; (eval $ac_try) 2>&5; }
+{ (eval echo configure:1557: \"$ac_try\") 1>&5; (eval $ac_try) 2>&5; }
 ac_err=`grep -v '^ *+' conftest.out`
 if test -z "$ac_err"; then
   rm -rf conftest*
@@ -1576,7 +1577,7 @@ fi
 
 
 echo $ac_n "checking whether <math.h> provides finite()""... $ac_c" 1>&6
-echo "configure:1580: checking whether <math.h> provides finite()" >&5
+echo "configure:1581: checking whether <math.h> provides finite()" >&5
 ac_ext=C
 # CXXFLAGS is not in ac_cpp because -g, -O, etc. are not valid cpp options.
 ac_cpp='$CXXCPP $CPPFLAGS'
@@ -1585,7 +1586,7 @@ ac_link='${CXX-g++} -o conftest $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $L
 cross_compiling=$ac_cv_prog_cxx_cross
 
 cat > conftest.$ac_ext <<EOF
-#line 1589 "configure"
+#line 1590 "configure"
 #include "confdefs.h"
 
 #include <math.h>
@@ -1595,7 +1596,7 @@ int main() {
 
 ; return 0; }
 EOF
-if { (eval echo configure:1599: \"$ac_compile\") 1>&5; (eval $ac_compile) 2>&5; }; then
+if { (eval echo configure:1600: \"$ac_compile\") 1>&5; (eval $ac_compile) 2>&5; }; then
   rm -rf conftest*
   
 VXL_MATH_HAS_FINITE=1
@@ -1616,7 +1617,7 @@ export VXL_MATH_HAS_FINITE
 
 
 echo $ac_n "checking whether <ieeefp.h> provides finite()""... $ac_c" 1>&6
-echo "configure:1620: checking whether <ieeefp.h> provides finite()" >&5
+echo "configure:1621: checking whether <ieeefp.h> provides finite()" >&5
 ac_ext=C
 # CXXFLAGS is not in ac_cpp because -g, -O, etc. are not valid cpp options.
 ac_cpp='$CXXCPP $CPPFLAGS'
@@ -1625,7 +1626,7 @@ ac_link='${CXX-g++} -o conftest $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $L
 cross_compiling=$ac_cv_prog_cxx_cross
 
 cat > conftest.$ac_ext <<EOF
-#line 1629 "configure"
+#line 1630 "configure"
 #include "confdefs.h"
 
 #include <ieeefp.h>
@@ -1635,7 +1636,7 @@ int main() {
 
 ; return 0; }
 EOF
-if { (eval echo configure:1639: \"$ac_compile\") 1>&5; (eval $ac_compile) 2>&5; }; then
+if { (eval echo configure:1640: \"$ac_compile\") 1>&5; (eval $ac_compile) 2>&5; }; then
   rm -rf conftest*
   
 VXL_IEEEFP_HAS_FINITE=1
@@ -1664,9 +1665,9 @@ cross_compiling=$ac_cv_prog_cxx_cross
 
 
 echo $ac_n "checking whether <stdlib.h> provides lrand48()""... $ac_c" 1>&6
-echo "configure:1668: checking whether <stdlib.h> provides lrand48()" >&5
+echo "configure:1669: checking whether <stdlib.h> provides lrand48()" >&5
 cat > conftest.$ac_ext <<EOF
-#line 1670 "configure"
+#line 1671 "configure"
 #include "confdefs.h"
 
 #include <stdlib.h>
@@ -1676,7 +1677,7 @@ int main() {
 
 ; return 0; }
 EOF
-if { (eval echo configure:1680: \"$ac_compile\") 1>&5; (eval $ac_compile) 2>&5; }; then
+if { (eval echo configure:1681: \"$ac_compile\") 1>&5; (eval $ac_compile) 2>&5; }; then
   rm -rf conftest*
   
 VXL_STDLIB_HAS_LRAND48=1
@@ -1695,9 +1696,9 @@ rm -f conftest*
 export VXL_STDLIB_HAS_LRAND48
 
 echo $ac_n "checking whether <stdlib.h> provides drand48()""... $ac_c" 1>&6
-echo "configure:1699: checking whether <stdlib.h> provides drand48()" >&5
+echo "configure:1700: checking whether <stdlib.h> provides drand48()" >&5
 cat > conftest.$ac_ext <<EOF
-#line 1701 "configure"
+#line 1702 "configure"
 #include "confdefs.h"
 
 #include <stdlib.h>
@@ -1707,7 +1708,7 @@ int main() {
 
 ; return 0; }
 EOF
-if { (eval echo configure:1711: \"$ac_compile\") 1>&5; (eval $ac_compile) 2>&5; }; then
+if { (eval echo configure:1712: \"$ac_compile\") 1>&5; (eval $ac_compile) 2>&5; }; then
   rm -rf conftest*
   
 VXL_STDLIB_HAS_DRAND48=1
@@ -1731,14 +1732,14 @@ export VXL_STDLIB_HAS_DRAND48
 
 # check for bigendian
 echo $ac_n "checking whether byte ordering is bigendian""... $ac_c" 1>&6
-echo "configure:1735: checking whether byte ordering is bigendian" >&5
+echo "configure:1736: checking whether byte ordering is bigendian" >&5
 if eval "test \"`echo '$''{'ac_cv_c_bigendian'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
 else
   ac_cv_c_bigendian=unknown
 # See if sys/param.h defines the BYTE_ORDER macro.
 cat > conftest.$ac_ext <<EOF
-#line 1742 "configure"
+#line 1743 "configure"
 #include "confdefs.h"
 #include <sys/types.h>
 #include <sys/param.h>
@@ -1749,11 +1750,11 @@ int main() {
 #endif
 ; return 0; }
 EOF
-if { (eval echo configure:1753: \"$ac_compile\") 1>&5; (eval $ac_compile) 2>&5; }; then
+if { (eval echo configure:1754: \"$ac_compile\") 1>&5; (eval $ac_compile) 2>&5; }; then
   rm -rf conftest*
   # It does; now see whether it defined to BIG_ENDIAN or not.
 cat > conftest.$ac_ext <<EOF
-#line 1757 "configure"
+#line 1758 "configure"
 #include "confdefs.h"
 #include <sys/types.h>
 #include <sys/param.h>
@@ -1764,7 +1765,7 @@ int main() {
 #endif
 ; return 0; }
 EOF
-if { (eval echo configure:1768: \"$ac_compile\") 1>&5; (eval $ac_compile) 2>&5; }; then
+if { (eval echo configure:1769: \"$ac_compile\") 1>&5; (eval $ac_compile) 2>&5; }; then
   rm -rf conftest*
   ac_cv_c_bigendian=yes
 else
@@ -1784,7 +1785,7 @@ if test "$cross_compiling" = yes; then
     { echo "configure: error: can not run test program while cross compiling" 1>&2; exit 1; }
 else
   cat > conftest.$ac_ext <<EOF
-#line 1788 "configure"
+#line 1789 "configure"
 #include "confdefs.h"
 #ifdef __cplusplus
 extern "C" void exit(int);
@@ -1800,7 +1801,7 @@ main () {
   exit (u.c[sizeof (long) - 1] == 1);
 }
 EOF
-if { (eval echo configure:1804: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest && (./conftest; exit) 2>/dev/null
+if { (eval echo configure:1805: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest && (./conftest; exit) 2>/dev/null
 then
   ac_cv_c_bigendian=no
 else
@@ -1861,7 +1862,8 @@ fi
 
 
 
-#AC_SUBST(VXL_INT_96)
+#AC_SUBST(VXL_IEEE_96)
+#AC_SUBST(VXL_IEEE_128)
 
 #--------------------------------------------------------------------------------
 # output section:
