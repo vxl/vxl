@@ -151,7 +151,7 @@ inline bool convert_components_from_planes(vil2_image_view<T> &lhs,
   {
     const vil2_image_view<comp_type> &rhs = static_cast<const vil2_image_view<comp_type>&>(rhs_base);
     // Check that the steps are suitable for viewing as components
-    if (rhs.planestep() != 1 || rhs.istep()%ncomp !=0 || rhs.jstep()%ncomp !=0 ) return false;
+    if (rhs.planestep() != 1 || rhs.istep()<ncomp || rhs.jstep()<ncomp ) return false;
     lhs = vil2_image_view<T >(rhs.memory_chunk(),
                               (T const*) rhs.top_left_ptr(),
                               rhs.ni(),rhs.nj(),1,
