@@ -7,6 +7,7 @@
 // \author Tim Cootes, VP (Sept03)
 
 #include <vimt/vimt_image_2d_of.h>
+#include <vil/vil_print.h>
 
 //: True if pixel at *im is strictly above 8 neighbours
 template <class T>
@@ -26,12 +27,13 @@ inline bool vimt_is_peak_3x3(const T* im, vcl_ptrdiff_t i_step, vcl_ptrdiff_t j_
 
 //: True if pixel at *im is strictly above its neighbours in a 2*radius+1 neighbourhood
 template <class T>
-inline bool vimt_is_peak(const T* im, unsigned radius, vcl_ptrdiff_t i_step, vcl_ptrdiff_t j_step)
+inline bool vimt_is_peak(const T* im, int radius, vcl_ptrdiff_t i_step, vcl_ptrdiff_t j_step)
 {
   T v = *im;
-  for (unsigned i=-radius; i<radius+1; i++)
-    for (unsigned j=-radius; j<radius+1; j++)
-      if (v<im[i_step*i+j_step*j]) return false;      // One of the 
+  for(int i=-radius; i<radius+1; i++)
+    for(int j=-radius; j<radius+1; j++)
+      if (i!=0 || j!=0)
+        if (v<=im[i_step*i+j_step*j]) return false;      // One of the 
   return true;
 }
 
@@ -94,7 +96,7 @@ inline void vimt_find_image_peaks(vcl_vector<vgl_point_2d<unsigned> >& peaks,
   if (clear_list) { peaks.resize(0); peak_value.resize(0); }
   unsigned ni=image.ni(),nj=image.nj();
   vcl_ptrdiff_t istep = image.istep(),jstep=image.jstep();
-  const T* row = image.top_left_ptr()+plane*image.planestep()+istep+jstep;
+  const T* row = image.top_left_ptr()+plane*image.planestep()+radius*istep+radius*jstep;
   for (unsigned j=radius;j<nj-radius;++j,row+=jstep)
   {
     const T* pixel = row;
@@ -122,11 +124,13 @@ inline void vimt_find_image_peaks(vcl_vector<vgl_point_2d<unsigned> >& peaks,
   if (clear_list) { peaks.resize(0); peak_value.resize(0); }
   unsigned ni=image.ni(),nj=image.nj();
   vcl_ptrdiff_t istep = image.istep(),jstep=image.jstep();
-  const T* row = image.top_left_ptr()+plane*image.planestep()+istep+jstep;
+  // Getting to the location of the starting point in the image (radius,radius)
+  const T* row = image.top_left_ptr()+plane*image.planestep()+radius*istep+radius*jstep;
   for (unsigned j=radius;j<nj-radius;++j,row+=jstep)
   {
     const T* pixel = row;
     for (unsigned i=radius;i<ni-radius;++i,pixel+=istep)
+    {
       if (*pixel>thresh)
       {
         if (vimt_is_peak(pixel,radius,istep,jstep))
@@ -135,6 +139,7 @@ inline void vimt_find_image_peaks(vcl_vector<vgl_point_2d<unsigned> >& peaks,
           peak_value.push_back(*pixel);
         }
       }
+    }
   }
 }
 
