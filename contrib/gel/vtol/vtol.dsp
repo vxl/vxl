@@ -358,6 +358,11 @@ SOURCE=.\vtol_vertex_2d.cxx
 SOURCE=.\vtol_zero_chain.cxx
 
 # End Source File
+# Begin Source File
+
+SOURCE=.\vtol_cycle_processor.cxx
+
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter ""
@@ -509,6 +514,11 @@ SOURCE=.\vtol_vertex_sptr.h
 # Begin Source File
 
 SOURCE=.\vtol_zero_chain_sptr.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vtol_cycle_processor.h
 
 # End Source File
 # End Group
