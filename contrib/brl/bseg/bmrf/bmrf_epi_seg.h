@@ -58,6 +58,10 @@ class bmrf_epi_seg :  public vbl_ref_count
   int n_pts() const {return seg_.size();}
   bmrf_epi_point_sptr p(int i) const {return seg_[i];}
 
+  //: Returns the const iterator to the
+  vcl_vector<bmrf_epi_point_sptr>::const_iterator begin() const { return seg_.begin(); }
+  vcl_vector<bmrf_epi_point_sptr>::const_iterator end() const { return seg_.end(); }
+
   //: extremal geometry values
   double min_alpha();
   double max_alpha();
