@@ -34,6 +34,7 @@ SOURCE_FILES( vcsl_sources
   vcsl_displacement
   vcsl_cylindrical_to_cartesian_3d
   vcsl_perspective
+  vcsl_matrix
 )
 
 AUX_SOURCE_DIRECTORY( Templates vcsl_sources )

@@ -58,8 +58,9 @@ SOURCES += vcsl_displacement.cxx
 SOURCES += vcsl_cylindrical_to_cartesian_3d.cxx
 
 SOURCES += vcsl_perspective.cxx
+SOURCES += vcsl_matrix.cxx
 
-IMMEDIATE_LIBS += -lvbl
+IMMEDIATE_LIBS += -lvbl -lvnl
 
 ###############################################################################
 include ${IUEROOT}/config/top-params.mk

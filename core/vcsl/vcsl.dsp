@@ -156,7 +156,7 @@ LIB32=link.exe -lib
 
 # Begin Source File
 
-SOURCE=.\"$(IUEROOT)/vxl/vcsl/CMakeLists.txt"
+SOURCE=.\CMakeLists.txt
 
 !IF  "$(CFG)" == "vcsl - Win32 Release"
 USERDEP__HACK=\
@@ -496,6 +496,10 @@ SOURCE=.\vcsl_length.cxx
 SOURCE=.\vcsl_length_unit.cxx
 
 # End Source File
+# Begin Source File
+
+SOURCE=.\vcsl_matrix.cxx
+
 # Begin Source File
 
 SOURCE=.\vcsl_meter.cxx
