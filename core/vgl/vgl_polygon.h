@@ -43,7 +43,7 @@ public:
   vgl_polygon();
 
   //: Construct setting number of sheets or regions
-  vgl_polygon(int num_sheets);
+  explicit vgl_polygon(int num_sheets);
 
   //: Construct setting the points in the first sheet.
   // n is the number of points
@@ -58,10 +58,10 @@ public:
   vgl_polygon(vcl_pair<double, double> const p[], int n);
 
   //: Construct setting single sheet of points
-  vgl_polygon(sheet_t const& points);
+  explicit vgl_polygon(sheet_t const& points);
 
   //: Construct setting a number of sheets
-  vgl_polygon(vcl_vector<sheet_t> const& sheets);
+  explicit vgl_polygon(vcl_vector<sheet_t> const& sheets);
 
   //: Copy constructor
   vgl_polygon(vgl_polygon const&);
