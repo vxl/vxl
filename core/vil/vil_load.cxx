@@ -8,11 +8,12 @@
 #include "vil2_load.h"
 #include <vcl_iostream.h>
 #include <vil2/vil2_open.h>
+#include <vil2/vil2_new.h>
 #include <vil2/vil2_file_format.h>
 #include <vil2/vil2_stream.h>
 #include <vil2/vil2_image_resource.h>
 #include <vil2/vil2_image_resource_plugin.h>
-#include <vil2/vil2_memory_image.h>
+//#include <vil2/vil2_memory_image.h>
 #include <vil2/vil2_image_view.h>
 
 vil2_image_resource_sptr vil2_load_image_resource_raw(vil2_stream *is)
