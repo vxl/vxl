@@ -34,7 +34,7 @@ public:
     v = vnl_math_abs(v);
     unsigned i = sizeof(signed long);
     while (i-->0)
-      val_[i] = v>>(i*8);
+      val_[i] = (unsigned char)(v>>(i*8));
     normalise();
   }
   explicit mbl_arb_length_int (unsigned long v)
@@ -42,7 +42,7 @@ public:
   {
     unsigned i = sizeof(unsigned long);
     while (i-->0)
-      val_[i] = v>>(i*8);
+      val_[i] = (unsigned char)(v>>(i*8));
     normalise();
   }
   //: Default constructor gives 0.
@@ -81,7 +81,7 @@ public:
     sign_ = true;
     unsigned i = sizeof(unsigned long);
     while (i-->0)
-      val_[i] = rhs>>(i*8);
+      val_[i] = (unsigned char)(rhs>>(i*8));
     normalise();
     return *this;
   }
@@ -93,7 +93,7 @@ public:
     rhs = vnl_math_abs(rhs);
     unsigned i = sizeof(signed long);
     while (i-->0)
-      val_[i] = rhs>>(i*8);
+      val_[i] = (unsigned char)(rhs>>(i*8));
     normalise();
     return *this;
   }
@@ -268,8 +268,8 @@ namespace std {
 #endif
 
 inline mbl_arb_length_int vnl_math_abs(mbl_arb_length_int const& x) { return x<0L ? -x : x; }
-inline bool vnl_math_isnan(mbl_arb_length_int const& x){return false;}
-inline bool vnl_math_isfinite(mbl_arb_length_int const& x){return true;}
+inline bool vnl_math_isnan(mbl_arb_length_int const& /*x*/){return false;}
+inline bool vnl_math_isfinite(mbl_arb_length_int const& /*x*/){return true;}
 
 void vsl_b_read(vsl_b_istream &, mbl_arb_length_int &);
 void vsl_b_write(vsl_b_istream &, const mbl_arb_length_int &);
