@@ -278,7 +278,7 @@ struct triangulateio {
   int numberofedges;                                             /* Out only */
 };
 
-#ifdef ANSI_DECLARATORS
+#ifndef NO_ANSI_DECLARATORS /* which compiler is not ANSI? */
 void triangulate(char *, struct triangulateio *, struct triangulateio *,
                  struct triangulateio *);
 #else /* not ANSI_DECLARATORS */
