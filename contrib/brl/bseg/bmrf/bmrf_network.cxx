@@ -19,26 +19,28 @@ bmrf_network::add_node(const bmrf_node_sptr& node)
 {
   if (!node.ptr()) return false;
   if (!node->epi_seg().ptr()) return false;
-  if (node_from_seg_.find(node->epi_seg().ptr()) != node_from_seg_.end()) return false;
+  if (node_from_seg_.find(node->epi_seg()) != node_from_seg_.end()) return false;
 
-  node_from_seg_[node->epi_seg().ptr()] = node;
-  nodes_from_frame_[node->frame_num()][node->epi_seg().ptr()] = node;
+  node_from_seg_[node->epi_seg()] = node;
+  nodes_from_frame_[node->frame_num()][node->epi_seg()] = node;
   return true;
 }
 
 
 //: Deletes a node in the network
 bool
-bmrf_network::remove_node(const bmrf_node_sptr& node)
+bmrf_network::remove_node(bmrf_node_sptr node)
 {
   if (!node.ptr()) return false;
   if (!node->epi_seg().ptr()) return false;
-  seg_node_map::iterator itr = node_from_seg_.find(node->epi_seg().ptr());
+  seg_node_map::iterator itr = node_from_seg_.find(node->epi_seg());
   if (itr == node_from_seg_.end()) return false;
+
+  vcl_cout << itr->second->epi_seg() << vcl_endl;
 
   node->strip();
   node_from_seg_.erase(itr);
-  itr = nodes_from_frame_[node->frame_num()].find(node->epi_seg().ptr());
+  itr = nodes_from_frame_[node->frame_num()].find(node->epi_seg());
   nodes_from_frame_[node->frame_num()].erase(itr);
   return true;
 }
@@ -51,16 +53,16 @@ bmrf_network::add_arc( const bmrf_node_sptr& n1, const bmrf_node_sptr& n2, neigh
   if (!n1.ptr() || !n2.ptr()) return false;
   if (!n1->epi_seg().ptr() || !n2->epi_seg().ptr()) return false;
 
-  seg_node_map::iterator itr = node_from_seg_.find(n1->epi_seg().ptr());
+  seg_node_map::iterator itr = node_from_seg_.find(n1->epi_seg());
   if (itr == node_from_seg_.end())
     if ( !this->add_node(n1) )
       return false;
-  itr = node_from_seg_.find(n2->epi_seg().ptr());
+  itr = node_from_seg_.find(n2->epi_seg());
   if (itr == node_from_seg_.end())
     if ( !this->add_node(n2) )
       return false;
 
-  return n1->add_neighbor(n2.ptr(), type);
+  return n1->add_neighbor(n2, type);
 }
 
 
@@ -70,7 +72,7 @@ bmrf_network::remove_arc( const bmrf_node_sptr& n1, const bmrf_node_sptr& n2, ne
 {
   if (!n1.ptr() || !n2.ptr()) return false;
 
-  return n1->remove_neighbor(n2.ptr(), type);
+  return n1->remove_neighbor(n2, type);
 }
 
 //: Remove all arcs to NULL nodes and node not found in this network
@@ -84,8 +86,8 @@ bmrf_network::purge()
     retval = curr_node->purge() || retval; // remove the NULL arcs
     bmrf_node::arc_iterator a_itr = curr_node->begin();
     for (; a_itr != curr_node->end(); ++a_itr) {
-      if (node_from_seg_.find((*a_itr)->to()->epi_seg().ptr()) == node_from_seg_.end()) {
-        curr_node->remove_neighbor((*a_itr)->to().ptr());
+      if (node_from_seg_.find((*a_itr)->to()->epi_seg()) == node_from_seg_.end()) {
+        curr_node->remove_neighbor((*a_itr)->to());
         retval = true;
       }
     }
@@ -100,7 +102,7 @@ bmrf_network::seg_to_node(const bmrf_epi_seg_sptr& seg, int frame) const
 {
   seg_node_map::const_iterator itr;
   if (frame < 0) {
-    itr = node_from_seg_.find(seg.ptr());
+    itr = node_from_seg_.find(seg);
     if (itr == node_from_seg_.end())
       return bmrf_node_sptr(NULL);
   }
@@ -108,7 +110,7 @@ bmrf_network::seg_to_node(const bmrf_epi_seg_sptr& seg, int frame) const
     frame_node_map::const_iterator map_itr = nodes_from_frame_.find(frame);
     if ( map_itr == nodes_from_frame_.end())
       return bmrf_node_sptr(NULL);
-    itr = map_itr->second.find(seg.ptr());
+    itr = map_itr->second.find(seg);
     if (itr == map_itr->second.end())
       return bmrf_node_sptr(NULL);
   }
@@ -155,7 +157,7 @@ bmrf_network::prune_by_probability(double threshold, bool relative)
     itr->second->prune_by_probability(threshold, relative);
     if( itr->second->out_arcs_.empty() && 
         itr->second->in_arcs_.empty() )
-      this->remove_node(itr->second);
+      this->remove_node((itr--)->second);
   }
 }
 
@@ -256,8 +258,8 @@ bmrf_network::b_read( vsl_b_istream& is )
       for (unsigned int n=0; n<num_nodes; ++n) {
         bmrf_node_sptr node;
         vsl_b_read(is, node);
-        node_from_seg_[node->epi_seg().ptr()] = node;
-        nodes_from_frame_[node->frame_num()][node->epi_seg().ptr()] = node;
+        node_from_seg_[node->epi_seg()] = node;
+        nodes_from_frame_[node->frame_num()][node->epi_seg()] = node;
       }
 
       epipoles_.clear();
@@ -308,8 +310,8 @@ bmrf_network::depth_iterator::next_node()
   if (curr_node_.ptr() == NULL) return;
   bmrf_node::arc_iterator itr = curr_node_->end();
   for (--itr; itr != curr_node_->end(); --itr) {
-    if ( visited_.find((*itr)->to().ptr()) == visited_.end() )
-      eval_queue_.push_front((*itr)->to().ptr());
+    if ( visited_.find((*itr)->to()) == visited_.end() )
+      eval_queue_.push_front((*itr)->to());
   }
   while ( !eval_queue_.empty() && visited_.find(eval_queue_.front()) != visited_.end() )
     eval_queue_.pop_front();
@@ -330,8 +332,8 @@ bmrf_network::breadth_iterator::next_node()
   if (curr_node_.ptr() == NULL) return;
   bmrf_node::arc_iterator itr = curr_node_->begin();
   for (; itr != curr_node_->end(); ++itr) {
-    if ( visited_.find((*itr)->to().ptr()) == visited_.end() )
-      eval_queue_.push_back((*itr)->to().ptr());
+    if ( visited_.find((*itr)->to()) == visited_.end() )
+      eval_queue_.push_back((*itr)->to());
   }
   while ( !eval_queue_.empty() && visited_.find(eval_queue_.front()) != visited_.end() )
     eval_queue_.pop_front();

@@ -32,7 +32,7 @@
 class bmrf_network : public vbl_ref_count
 {
  public:
-  typedef vcl_map<bmrf_epi_seg*, bmrf_node_sptr> seg_node_map;
+  typedef vcl_map<bmrf_epi_seg_sptr, bmrf_node_sptr> seg_node_map;
   typedef vcl_map<int, seg_node_map > frame_node_map;
 
   typedef bmrf_node::neighbor_type neighbor_type;
@@ -52,7 +52,7 @@ class bmrf_network : public vbl_ref_count
   //: Deletes a node in the network
   // \retval true if the node was deleted
   // \retval false if the node was not found in the network
-  bool remove_node(const bmrf_node_sptr& node);
+  bool remove_node(bmrf_node_sptr node);
 
   //: Add an arc between \p n1 and \p n2 of type \p type
   bool add_arc( const bmrf_node_sptr& n1, const bmrf_node_sptr& n2, neighbor_type type );
