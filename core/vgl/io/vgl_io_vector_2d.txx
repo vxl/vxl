@@ -20,9 +20,9 @@ void vsl_b_write(vsl_b_ostream &os, const vgl_vector_2d<T> & v)
 template<class T>
 void vsl_b_read(vsl_b_istream &is, vgl_vector_2d<T> & v)
 {
-  short v;
-  vsl_b_read(is, v);
-  switch(v)
+  short ver;
+  vsl_b_read(is, ver);
+  switch(ver)
   {
   case 1:
     T x, y;
@@ -46,7 +46,7 @@ void vsl_print_summary(vcl_ostream& os,const vgl_vector_2d<T> & v)
     os<<"("<<v.x()<<","<<v.y()<<")";
 }
 
-#define VGL_IO_POINT_2D_INSTANTIATE(T) \
+#define VGL_IO_VECTOR_2D_INSTANTIATE(T) \
 template void vsl_print_summary(vcl_ostream &, const vgl_vector_2d<T > &); \
 template void vsl_b_read(vsl_b_istream &, vgl_vector_2d<T > &); \
 template void vsl_b_write(vsl_b_ostream &, const vgl_vector_2d<T > &)
