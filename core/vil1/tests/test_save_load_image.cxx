@@ -41,10 +41,6 @@
 #define LEAVE_IMAGES_BEHIND 0
 #endif
 
-#if 0
-#define ww vcl_cout << "reached " __FILE__ ":" << __LINE__ << vcl_endl << vcl_flush
-#endif
-
 //: Test to see if all the pixels in two images are equal
 bool test_image_equal(char const* type_name,
                       vil_image const & image,
@@ -287,7 +283,6 @@ static bool create_grey_gif(const char* filename)
   return true;
 }
 
-
 void vil_test_image_type(char const* type_name, // type for image to read and write
                          vil_image const & image, // test image to save and restore
                          bool exact = true) // require read back image identical
@@ -346,7 +341,6 @@ void vil_test_image_type(char const* type_name, // type for image to read and wr
 #endif
 }
 
-
 // create a 1 bit test image
 vil_image CreateTest1bitImage(int wd, int ht)
 {
@@ -363,7 +357,6 @@ vil_image CreateTest1bitImage(int wd, int ht)
   }
   return image;
 }
-
 
 // create an 8 bit test image
 vil_image CreateTest8bitImage(int wd, int ht)
@@ -389,7 +382,6 @@ vil_image CreateTest16bitImage(int wd, int ht)
   return image;
 }
 
-
 // create a 32 bit test image
 vil_image CreateTest32bitImage(int wd, int ht)
 {
@@ -399,7 +391,6 @@ vil_image CreateTest32bitImage(int wd, int ht)
       image(x, y) = x + wd*y;
   return image;
 }
-
 
 // create a 24 bit color test image
 vil_image CreateTest24bitImage(int wd, int ht)
@@ -413,7 +404,6 @@ vil_image CreateTest24bitImage(int wd, int ht)
   return image;
 }
 
-
 // create a 24 bit color test image, with 3 planes
 vil_image CreateTest3planeImage(int wd, int ht)
 {
@@ -426,7 +416,6 @@ vil_image CreateTest3planeImage(int wd, int ht)
   return image;
 }
 
-
 // create a float-pixel test image
 vil_image CreateTestfloatImage(int wd, int ht)
 {
@@ -434,6 +423,18 @@ vil_image CreateTestfloatImage(int wd, int ht)
   for (int x = 0; x < wd; x++)
     for (int y = 0; y < ht; y++) {
       float data = 0.01f * ((x-wd/2)*(y-ht/2)/16);
+      image.put_section(&data, x, y, 1, 1);
+    }
+  return image;
+}
+
+// create a float-pixel test image
+vil_image CreateTestdoubleImage(int wd, int ht)
+{
+  vil_memory_image_of<double> image(wd, ht);
+  for (int x = 0; x < wd; x++)
+    for (int y = 0; y < ht; y++) {
+      double data = 0.01 * ((x-wd/2)*(y-ht/2)/16);
       image.put_section(&data, x, y, 1, 1);
     }
   return image;
@@ -452,6 +453,7 @@ MAIN( test_save_load_image )
   vil_image image32 = CreateTest32bitImage(sizex, sizey);
   vil_image image3p = CreateTest3planeImage(sizex, sizey);
   vil_image imagefloat = CreateTestfloatImage(sizex, sizey);
+  vil_image imagedouble = CreateTestdoubleImage(sizex, sizey);
 
   // pnm ( = PGM / PPM )
 #if 1
@@ -473,7 +475,7 @@ MAIN( test_save_load_image )
   vil_test_image_type_raw("ras", image24);
 #endif
 
-  // VIFF image (Khoros)
+  // VIFF image (Khoros) "Visualization Image File Format"
 #if 1
 //vil_test_image_type("viff", image1);
   vil_test_image_type("viff", image8);
@@ -482,6 +484,7 @@ MAIN( test_save_load_image )
   vil_test_image_type("viff", image3p); // which one of these two? - PVr
 //vil_test_image_type("viff", image24); // seems to depend on OS which one fails...
   vil_test_image_type("viff", imagefloat);
+  vil_test_image_type("viff", imagedouble);
 #endif
 
   // TIFF
