@@ -32,15 +32,6 @@ static vnl_double_3x4 generate_P(vnl_double_3x3 const & K)
   return K*P;
 }
 
-static vnl_double_3x4 theortical_P()
-{
-  vnl_double_3x4 P;
-  P[0][0] = 10.58;   P[0][1] = 2048.8;  P[0][2] = -69.36;    P[0][3] = -197.48;
-  P[1][0] = -168.64; P[1][1] = 25;      P[1][2] = -2018.4;   P[1][3] = 21891.;
-  P[2][0] = -0.96;   P[2][1] = 0.25;    P[2][2] = -0.1;      P[2][3] = 56.28;
-  return P;
-}
-
 
 
 static void brct_test_compute_P()
