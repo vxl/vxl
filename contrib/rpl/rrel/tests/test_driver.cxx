@@ -31,17 +31,16 @@ register_tests()
 
 DEFINE_MAIN;
 
-
-#include <mbl/mbl_mz_random.h>
+#include <vnl/vnl_random.h>
 #include <vcl_cmath.h>
 
 double noise( double sigma )
 {
-  static mbl_mz_random rand;
+  static vnl_random rand;
   return rand.normal() * sigma;
 }
 
 bool close( double a, double b )
 {
-  return vcl_fabs( a - b ) < 1e-5;
+  return vcl_fabs(a-b) < 1e-5;
 }

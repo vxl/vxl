@@ -6,8 +6,8 @@
 //
 
 #include <vcl_iostream.h>
-#include <mbl/mbl_mz_random.h>
 #include <vnl/vnl_matrix.h>
+#include <vnl/vnl_random.h>
 
 int
 main()
@@ -37,7 +37,7 @@ main()
   vnl_matrix<double> B(3, 1);
 
   int seed = 40;
-  mbl_mz_random mz_random( seed );
+  vnl_random mz_random(seed);
   int inliers=0, outliers=0;
 
   //  generate and output data for left side

@@ -11,7 +11,7 @@
 
 class rrel_objective;
 class rrel_estimation_problem;
-class mbl_mz_random;
+class vnl_random;
 
 //: Random sampling search for minimization of a robust objective function.
 //  The code organization follows the design of the rrel
@@ -118,7 +118,7 @@ class rrel_ran_sam_search
   //: Random number generator.
   // Normally, this will point to the "global" generator, but a could
   // point to a local one if the user wants to specify a seed.
-  mbl_mz_random* generator_;
+  vnl_random* generator_;
   bool own_generator_;
 
   //

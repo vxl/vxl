@@ -4,9 +4,8 @@
 #include <rrel/rrel_estimation_problem.h>
 #include <rrel/rrel_util.h>
 
-#include <mbl/mbl_mz_random.h>
-
 #include <vnl/vnl_vector.h>
+#include <vnl/vnl_random.h>
 
 #include <vcl_iostream.h>
 #include <vcl_cmath.h>
@@ -15,7 +14,7 @@
 #include <vcl_cassert.h>
 
 // Random number generator. This will be shared by all ran_sam instances.
-static mbl_mz_random global_generator_;
+static vnl_random global_generator_;
 
 
 rrel_ran_sam_search::rrel_ran_sam_search( )
@@ -31,7 +30,7 @@ rrel_ran_sam_search::rrel_ran_sam_search( )
 
 rrel_ran_sam_search::rrel_ran_sam_search( int seed )
   : generate_all_(false),
-    generator_( new mbl_mz_random( seed ) ),
+    generator_( new vnl_random(seed) ),
     own_generator_( true ),
     params_(0), scale_(0),
     samples_to_take_(0),

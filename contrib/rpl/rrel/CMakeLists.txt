@@ -34,7 +34,7 @@ SET(rrel_sources
 AUX_SOURCE_DIRECTORY(Templates rrel_sources)
 
 ADD_LIBRARY(rrel ${rrel_sources})
-TARGET_LINK_LIBRARIES(rrel vnl_algo vnl vgl mbl vbl)
+TARGET_LINK_LIBRARIES(rrel vnl_algo vnl vgl vbl)
 
 INCLUDE_DIRECTORIES(${VXLCORE_INCLUDE_DIR})
 INCLUDE_DIRECTORIES(${MUL_INCLUDE_DIR})

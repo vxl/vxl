@@ -1,13 +1,13 @@
 #include <vcl_iostream.h>
 #include <vcl_vector.h>
 #include <vcl_algorithm.h>
-#include <vnl/vnl_math.h>
-#include <testlib/testlib_test.h>
 #include <vcl_utility.h>
+#include <vnl/vnl_math.h>
+#include <vnl/vnl_random.h>
+#include <testlib/testlib_test.h>
 
 #include <rsdl/rsdl_kd_tree.h>
 #include <rsdl/rsdl_dist.h>
-#include <mbl/mbl_mz_random.h>
 
 static inline bool close( double x, double y ) { return vnl_math_abs(x-y) < 1.0e-6; }
 static inline bool less_first( const vcl_pair<double,int>& left,
@@ -98,7 +98,7 @@ static void test_kd_tree()
   vcl_vector< vcl_pair< double, int > > dist_pairs( M );
   int num_tests = 20;
   const int n=5;
-  mbl_mz_random mz_rand;
+  vnl_random mz_rand;
 
   // generate points
   for ( int i=0; i<M; ++i ) {

@@ -11,7 +11,7 @@ ADD_EXECUTABLE( rsdl_test_all
   test_point.cxx
   test_bins.cxx
 )
-TARGET_LINK_LIBRARIES( rsdl_test_all rsdl testlib mbl )
+TARGET_LINK_LIBRARIES( rsdl_test_all rsdl testlib vnl )
 
 ADD_TEST( rsdl_test_bins_2d       rsdl_test_all test_bins_2d )
 ADD_TEST( rsdl_test_borgefors     rsdl_test_all test_borgefors )

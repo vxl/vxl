@@ -6,9 +6,9 @@
 #include <vnl/vnl_double_2.h>
 #include <vnl/vnl_double_3.h>
 #include <vnl/vnl_math.h>
-#include <testlib/testlib_test.h>
+#include <vnl/vnl_random.h>
 
-#include <mbl/mbl_mz_random.h>
+#include <testlib/testlib_test.h>
 
 #include <rsdl/rsdl_bins.h>
 
@@ -51,7 +51,7 @@ static void test_bins_2D()
     const int M=60;
     vcl_vector< vnl_vector_fixed< double, 2 > > points( M );
     vcl_vector< int > indices( M );
-    mbl_mz_random mz_rand;
+    vnl_random mz_rand;
     bin_type bins( min_pt, max_pt, bin_sizes );
 
     for ( int i=0; i<M; ++i ) {
@@ -197,7 +197,7 @@ static void test_bins_3D()
     const int M=60;
     vcl_vector< vnl_vector_fixed< double, 3 > > points( M );
     vcl_vector< int > indices( M );
-    mbl_mz_random mz_rand;
+    vnl_random mz_rand;
     bin_type bins( min_pt, max_pt, bin_sizes );
 
     for ( int i=0; i<M; ++i ) {
