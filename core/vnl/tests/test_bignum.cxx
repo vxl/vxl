@@ -68,7 +68,7 @@ static void run_constructor_tests() {
   {vcl_stringstream is(vcl_ios_in | vcl_ios_out); vnl_bignum b;
    is << "123e5"; is >> b; TEST("\"123e5\" >> b;", b, 12300000L);}
   {vcl_stringstream is(vcl_ios_in | vcl_ios_out); vnl_bignum b;
-   is << "123e+4"; is >> b; TEST("\"123e+4\ >> b";", b, 1230000L);}
+   is << "123e+4"; is >> b; TEST("\"123e+4\" >> b;", b, 1230000L);}
   {vcl_stringstream is(vcl_ios_in | vcl_ios_out); vnl_bignum b;
    is << "0x0"; is >> b; TEST("\"0x0\" >> b;", b, 0x0);}
   {vcl_stringstream is(vcl_ios_in | vcl_ios_out); vnl_bignum b;
