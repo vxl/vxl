@@ -12,7 +12,7 @@
 // \endverbatim
 //
 //-----------------------------------------------------------------------------
-#include <btol/dll.h>
+#include "dll.h"
 #include <vgl/vgl_line_2d.h>
 #include <vgl/vgl_point_2d.h>
 #include <vdgl/vdgl_edgel_chain_sptr.h>
@@ -21,9 +21,9 @@
 class bdgl_curve_algs
 {
  public:
-  static BTOL_DLL_DATA const double tol;
-  static BTOL_DLL_DATA const double max_edgel_sep;
-  static BTOL_DLL_DATA const double synthetic;
+  static BDGL_DLL_DATA const double tol;
+  static BDGL_DLL_DATA const double max_edgel_sep;
+  static BDGL_DLL_DATA const double synthetic;
   ~bdgl_curve_algs();
 
   //:Finds the index on a digital curve closest to the given point
