@@ -1,6 +1,5 @@
 #include <vnl/vnl_fwd.h>
 #include <vnl/algo/vnl_algo_fwd.h>
-#include <vnl/vnl_config.h>
 #include <vnl/dll.h>
 #include <vnl/algo/dll.h>
 

@@ -73,6 +73,51 @@ VCL_USE_IMPLICIT_TEMPLATES=1
 export VCL_USE_IMPLICIT_TEMPLATES
 ])
 
+# enable vnl bounds checking? default is yes.
+AC_ARG_ENABLE(vnl_bounds_checking,[
+  --enable-vnl-bounds-checking   enable bound checks in the vnl [] and () operators (default)
+  --disable-vnl-bounds-checking  disable bound checks in the vnl [] and () operators],
+[if test "$enable_vnl_bounds_checking" = yes; then
+  VNL_CONFIG_CHECK_BOUNDS=1
+else
+  VNL_CONFIG_CHECK_BOUNDS=0
+fi
+export VNL_CONFIG_CHECK_BOUNDS
+],[
+VNL_CONFIG_CHECK_BOUNDS=1
+export VNL_CONFIG_CHECK_BOUNDS
+])
+
+# enable certain old methods in vnl? default is no.
+AC_ARG_ENABLE(vnl_legacy_methods,[
+  --enable-vnl-legacy-methods   enable bound checks in the vnl [] and () operators (default)
+  --disable-vnl-legacy-methods  disable bound checks in the vnl [] and () operators],
+[if test "$enable_vnl_legacy_methods" = yes; then
+  VNL_CONFIG_LEGACY_METHODS=1
+else
+  VNL_CONFIG_LEGACY_METHODS=0
+fi
+export VNL_CONFIG_LEGACY_METHODS
+],[
+VNL_CONFIG_LEGACY_METHODS=0
+export VNL_CONFIG_LEGACY_METHODS
+])
+
+# enable thread safe code in vnl? default is yes.
+AC_ARG_ENABLE(vnl_thread_safe,[
+  --enable-vnl-thread-safe   enable bound checks in the vnl [] and () operators (default)
+  --disable-vnl-thread-safe  disable bound checks in the vnl [] and () operators],
+[if test "$enable_vnl_thread_safe" = yes; then
+  VNL_CONFIG_THREAD_SAFE=1
+else
+  VNL_CONFIG_THREAD_SAFE=0
+fi
+export VNL_CONFIG_THREAD_SAFE
+],[
+VNL_CONFIG_THREAD_SAFE=1
+export VNL_CONFIG_THREAD_SAFE
+])
+
 #--------------------------------------------------------------------------------
 # COMPILER CHARACTERISTICS
 
@@ -232,6 +277,9 @@ VCL_CXX_HAS_HEADER(strstream,VCL_CXX_HAS_HEADER_STRSTREAM)
 AC_SUBST(VCL_USE_NATIVE_STL)
 AC_SUBST(VCL_USE_NATIVE_COMPLEX)
 AC_SUBST(VCL_USE_IMPLICIT_TEMPLATES)
+AC_SUBST(VNL_CONFIG_CHECK_BOUNDS)
+AC_SUBST(VNL_CONFIG_LEGACY_METHODS)
+AC_SUBST(VNL_CONFIG_THREAD_SAFE)
 
 # compiler
 AC_SUBST(VCL_HAS_BOOL)
@@ -432,21 +480,11 @@ vcl/vcl_config_manual.h~:vcl/vcl_config_manual.h.in
 vcl/vcl_config_compiler.h~:vcl/vcl_config_compiler.h.in
 vcl/vcl_config_headers.h~:vcl/vcl_config_headers.h.in
 core/vxl_config.h~:core/vxl_config.h.in
+core/vnl/vnl_config.h~:core/vnl/vnl_config.h.in
 )
 
 # only touch files that actually change.
-for f in "vcl/vcl_config_manual.h" "vcl/vcl_config_compiler.h" "vcl/vcl_config_headers.h" "core/vxl_config.h"; do
-# This hangs on my machine (fsm).
-# In any case, the inclusion guard should not be derived
-# from the pwd. This configure script is for vcl only; it
-# is not subordinate to the peculiarities of the current
-# or future IUE/TargetJr/VXL build system.
-# In addition, we can't assume that everyone has perl in
-# his or her path.
-  #inclgrd=`echo $f | sed -e 's/\.h$/_h_/'`
-  #os=`pwd|sed -e 's/.*\///' -e 's/[.+-]/_/g'`
-  #perl -pi -e s/$inclgrd/${inclgrd}${os}_/; ${f}~
-
+for f in "vcl/vcl_config_manual.h" "vcl/vcl_config_compiler.h" "vcl/vcl_config_headers.h" "core/vxl_config.h" "core/vnl/vnl_config.h"; do
   if test -f $f; then
     if diff ${f} ${f}~ 2>&1 >/dev/null ; then
       echo "no change to ${f}"
