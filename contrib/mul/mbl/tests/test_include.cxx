@@ -41,5 +41,6 @@
 #include <mbl/mbl_thin_plate_spline_2d.h>
 #include <mbl/mbl_thin_plate_spline_3d.h>
 #include <mbl/mbl_thin_plate_spline_weights_3d.h>
+#include <mbl/mbl_add_all_loaders.h>
 
 int main() { return 0; }
