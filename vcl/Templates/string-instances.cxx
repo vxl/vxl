@@ -33,7 +33,9 @@ void vcl_string_instance_tickler(ostream &os, char *a, char const *b)
 }
 
 #if !VCL_HAS_TEMPLATE_SYMBOLS // not needed except with -fguiding-decls (fsm)
-template class __default_alloc_template<true, 0>;
+// this is defined in libstdc++ for egcs. it causes multiply
+// defined symbols on static builds. -- fsm
+//template class __default_alloc_template<true, 0>;
 # define bs basic_string<char, string_char_traits<char>, __default_alloc_template<true, 0> >
 template bs &bs::replace(char *, char *, char *, char *);
 template bs &bs::replace(char *, char *, char const *, char const *);
