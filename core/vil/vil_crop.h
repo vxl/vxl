@@ -21,7 +21,6 @@ class vil2_crop_image_data : public vil2_image_data
  public:
   vil2_crop_image_data(vil2_image_data_sptr const&, unsigned i0, unsigned ni,
                        unsigned j0, unsigned nj);
-  ~vil2_crop_image_data();
 
   virtual unsigned nplanes() const { return gi_->nplanes(); }
   virtual unsigned ni() const { return ni_; }

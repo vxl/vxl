@@ -29,10 +29,6 @@ vil2_crop_image_data::vil2_crop_image_data(vil2_image_data_sptr const& gi,
 {
 }
 
-vil2_crop_image_data::~vil2_crop_image_data()
-{
-}
-
 
 //: Return the name of the class;
 vcl_string vil2_crop_image_data::is_a() const
