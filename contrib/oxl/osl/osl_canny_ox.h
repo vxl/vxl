@@ -56,7 +56,7 @@ protected:
   
   // Functions used in performing the hysteresis part of canny
   int HysteresisOX(osl_edgel_chain *&, int *&);
-  void Initial_followOX(int,int,osl_edgel_chain *&,osl_LINK **,int *&,float);
+  void Initial_followOX(int,int,osl_edgel_chain *&,osl_LINK *[],int *&,float);
   void Add_linkOX(int,int,osl_LINK **);
   void Link_edgelsOX(vcl_vector<unsigned> const &, vcl_vector<unsigned> const &,osl_LINK **);
   int Get_n_edgels_hysteresisOX(osl_edgel_chain *&,int *&);
