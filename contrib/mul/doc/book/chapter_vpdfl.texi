@@ -10,25 +10,17 @@ Each @acronym{PDF} comes as a builder-model-sampler triplet of objects.
 
 @multitable @columnfractions 0.1 .3 .3 .3
 @item Base Class:
-@tab vpdfl_builder_base</td>
-
-@tab vpdfl_pdf_base</td>
-
-@tab vpdfl_pdf_sampler</td>
-
+@tab vpdfl_builder_base
+@tab vpdfl_pdf_base
+@tab vpdfl_pdf_sampler
 @item Derived Classes:
-
-@tab vpdfl_axis_gaussian_builder</td>
-
-@tab vpdfl_axis_gaussian</td>
-
-@tab vpdfl_axis_gaussian_sampler</td>
-
-
+@tab vpdfl_axis_gaussian_builder
+@tab vpdfl_axis_gaussian
+@tab vpdfl_axis_gaussian_sampler
 @item
-@tab vpdfl_gaussian_builder</td>
-@tab vpdfl_gaussian</td>
-@tab vpdfl_gaussian_sampler</td>
+@tab vpdfl_gaussian_builder
+@tab vpdfl_gaussian
+@tab vpdfl_gaussian_sampler
 @end multitable
 
 The builders are used to compute the model data (eg the means, variances
@@ -39,7 +31,7 @@ from a given model. The samples are produced with a @acronym{PDF} given by its m
 
 @section Strategy Pattern
 This code is an example of the strategy pattern
-@cite{Gamma, et al. Design Patterns, Addison Wesley, 1995)}. It is possible to
+(@cite{Gamma, et al. Design Patterns, Addison Wesley, 1995}.) It is possible to
 write code that builds and uses a @acronym{PDF}, where your code does not itself
 know what sort of @acronym{PDF} is being used.
 
@@ -51,7 +43,7 @@ For cases where the distributions of parameters are multi-modal,
 the number and centres of each peak can be recorded. This is particularly
 useful for non-linear and mixture model representations of the parameter
 distributions.
-@subsection Main functions
+@heading Main functions
 @table @code
 
 @item vpdfl_pdf_sampler* sampler()
@@ -78,7 +70,7 @@ Log of probability density at x
 @item double operator(x)
 Probability density at x.
 
-@item void gradient(g,  x, p)</td>
+@item void gradient(g,  x, p)
 Gradient of @acronym{PDF} at x
 
 @item double log_prob_thresh(pass_proportion)
@@ -91,16 +83,16 @@ Compute nearest point to x which has a log density above a threshold
 @section vpdfl_builder_base
 A base class for objects which build Multivariate @acronym{PDF} models from sets
 of vectors supplied in a mbl_data_wrapper<vnl_vector<double> > derived iterator.
-They have three main functions:
 
+@heading Main functions
 @table @code
 @item vpdfl_pdf_base* new_model()
 Create a new model of appropriate type on heap and return pointer
 
-@item void build(vpdfl_pdf_base& model, mbl_data_wrapper<vnl_vector<double> >&a data)
+@item void build(model, data)
 Build the model from the vectors supplied in data
 
-@item void weighted_build(vpdfl_pdf_base& model, mbl_data_wrapper<vnl_vector<double> >& data, const vcl_vector<double>& wts)
+@item void weighted_build(model, data, weights)
 Build the model from the supplied vectors, allowing for given weights
 @end table
 
@@ -109,8 +101,7 @@ This generates samples drawn from the distribution described by a vpdfl_pdf_base
 Note that unlike other types in the library, the samplers don't contain useful
 state, and cannot be saved.
 
-The main functions are:
-
+@heading Main functions
 @table @code
 @item const vpdfl_pdf_base& model() const
 The vpdfl_pdf_base for which this is a sampler
@@ -121,9 +112,9 @@ Set model for which this is an instance
 @item void sample(x)
 Draw random sample from distribution
 @end table
-</table>
 
-@Section Derived Classes
+
+@section Derived Classes
 
 @table @code
 @item vpdfl_axis_gaussian

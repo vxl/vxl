@@ -2,7 +2,7 @@
 \input atexinfo   @c -*-texinfo-*-
 @c %**start of header
 @setfilename vxl.info
-@settitle VXL
+@settitle MUL
 @setchapternewpage odd
 @paragraphindent 0
 @c Set up printed page layout.
@@ -11,7 +11,7 @@
 @end iftex
 
 
-@ifset makeinfo 
+@ifset makeinfo
 @macro anchor{label}
 @end macro
 @macro ejectallfigures
@@ -188,7 +188,7 @@ The mul libraries are build on VXL.
 The mul documentation comes in two main forms: this book, and structured
 comments in the source code, which are automatically extracted.  The book
 is intended to be a single reference, where all the high-level
-documentation resides.   
+documentation resides.
 
 @subsection The mul Book
 
@@ -246,13 +246,13 @@ Someone should put some examples in here!
 @comment ------------------------------------------------------------------
 @node    mbl, vpdfl, eg, Top
 @comment node-name, next, previous,     up
-@chapter mbl: Machester basics library.
+@chapter mbl: Manchester basics library.
 @cindex mbl
 
 
 @include chapter_mbl.texi
 
-@ejectallfigures
+
 
 @comment ------------------------------------------------------------------
 @node    vpdfl, Conclusion, mbl, Top
@@ -267,7 +267,6 @@ Someone should put some examples in here!
 @include chapter_vpdfl.texi
 
 
-@ejectallfigures
 
 
 @comment ------------------------------------------------------------------
