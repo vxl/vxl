@@ -2,11 +2,9 @@
 #define rrel_kernel_density_obj_h_
 //:
 //  \file
+//  \brief Kernel Density objective function
 //  \author Ying-Lin Bess Lee (leey@cs.rpi.edu)
 //  \date Aug 2002
-//
-//  Kernel Density objective function.
-//
 
 #include <rrel/rrel_objective.h>
 
@@ -15,7 +13,7 @@
 //  paper "Robust Computer Vision through Kernel Density" by Chen
 //  and Meer, 2002.
 //  Given residuals ri, i = 1,...,n, the cost function is the estimated
-//  density f(x) based on a kernel function K(u) and a bandwith h as
+//  density f(x) based on a kernel function K(u) and a bandwidth h as
 //  f(x) = -1 / (nh) * sum( K(u) )
 //  where
 //  u = (ri-x)/h
@@ -25,8 +23,9 @@
 
 enum rrel_kernel_scale_type { RREL_KERNEL_MAD, RREL_KERNEL_PRIOR, RREL_KERNEL_MUSE };
 
-class rrel_kernel_density_obj : public rrel_objective {
-public:
+class rrel_kernel_density_obj : public rrel_objective
+{
+ public:
   //: Constructor.
   rrel_kernel_density_obj(rrel_kernel_scale_type scale_type=RREL_KERNEL_MAD);
 
@@ -48,7 +47,7 @@ public:
                       vnl_vector<double>* = 0) const;
 
   //: Set the type of the scale.
-  //  RREL_KERNEL_MAD uses median absolute deviations to estiamte the scale.
+  //  RREL_KERNEL_MAD uses median absolute deviations to estimate the scale.
   //  RREL_KERNEL_PRIOR uses the prior scale provided.
   //  RREL_KERNEL_MUSE uses MUSE to estimate the scale.
   virtual void set_scale_type( rrel_kernel_scale_type t = RREL_KERNEL_MAD )
@@ -66,7 +65,7 @@ public:
   //  The value can be used to shift the estimated parameters.
   double best_x( vect_const_iter res_begin, vect_const_iter res_end,
                  double scale = 0 ) const;
-private:
+ private:
 
   //: Calculate the bandwidth.
   double bandwidth(vect_const_iter res_begin, vect_const_iter res_end,
