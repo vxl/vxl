@@ -105,6 +105,11 @@ SOURCE=.\Templates/vbl_smart_ptr+vdgl_digital_curve-.cxx
 # End Source File
 # Begin Source File
 
+SOURCE=.\Templates/vbl_smart_ptr+vdgl_intensity_face-.cxx
+
+# End Source File
+# Begin Source File
+
 SOURCE=.\Templates/vbl_smart_ptr+vdgl_edgel_chain-.cxx
 
 # End Source File
@@ -146,6 +151,11 @@ SOURCE=.\vdgl_edgel_chain.cxx
 # Begin Source File
 
 SOURCE=.\vdgl_fit_line.cxx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vdgl_intensity_face.cxx
 
 # End Source File
 # Begin Source File
@@ -234,6 +244,21 @@ SOURCE=.\vdgl_edgel_chain_sptr.h
 # Begin Source File
 
 SOURCE=.\vdgl_interpolator_sptr.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vdgl_digital_region_sptr.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vdgl_intensity_face.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vdgl_intensity_face_sptr.h
 
 # End Source File
 # End Group

@@ -160,12 +160,17 @@ SOURCE=.\gevd_edgel_regions.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=.\gevd_intensity_face.cxx
+SOURCE=.\gevd_region_edge.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=.\gevd_region_edge.cxx
+SOURCE=.\gevd_region_proc.cxx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\gevd_region_proc_params.cxx
 
 # End Source File
 # End Group
@@ -243,12 +248,17 @@ SOURCE=.\gevd_edgel_regions.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\gevd_intensity_face.h
+SOURCE=.\gevd_region_edge.h
 
 # End Source File
 # Begin Source File
 
-SOURCE=.\gevd_region_edge.h
+SOURCE=.\gevd_region_proc.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\gevd_region_proc_params.h
 
 # End Source File
 # End Group
