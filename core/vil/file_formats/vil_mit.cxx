@@ -304,7 +304,7 @@ bool vil_mit_image::put_view(vil_image_view_base const& buf, unsigned int x0, un
           <<ni<<'x'<<nj<<'x'<< buf.nplanes()<<'p'
           <<" at ("<<x0<<','<<y0<<")\n";
 #endif
-  vil_image_view<vxl_byte> ibuf = static_cast<vil_image_view<vxl_byte> const&>(buf);
+  vil_image_view<vxl_byte> const& ibuf = reinterpret_cast<vil_image_view<vxl_byte> const&>(buf);
   bool buf_is_planar = false;
   if (ibuf.istep() == int(components_) && ibuf.jstep() == int(components_*ni) &&
       (ibuf.planestep() == 1 || components_ == 1))

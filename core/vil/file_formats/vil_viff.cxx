@@ -300,7 +300,9 @@ bool vil_viff_image::put_view(vil_image_view_base const& buf, unsigned int x0, u
            << ni<<'x'<<nj<<'x'<< buf.nplanes()<<'p'
            << " at ("<<x0<<','<<y0<<")\n";
 #endif
-  vil_image_view<vxl_byte> ibuf = static_cast<vil_image_view<vxl_byte> const&>(buf);
+  vcl_cout << "buf="<<buf<<"\n";
+  vil_image_view<vxl_byte> const& ibuf = reinterpret_cast<vil_image_view<vxl_byte> const&>(buf);
+  vcl_cout << "ibuf="<<ibuf<<"\n";;
   if (ibuf.istep() != 1 || ibuf.jstep() != int(ni) ||
       (ibuf.planestep() != int(ni*nj) && nplanes() != 1))
   {
