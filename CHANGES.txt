@@ -6,6 +6,8 @@ effect. If you change something in VXL, please document it here.
 
 ---------------------------------------------------------------------------
 
+      - Added vil_warp and vil_nearest_neighbour_interp functions
+
       - Remove vcl_complex hackery on MSVC 6. vcl_complex is now the
         standard <complex>, since it seems to work with VC6sp5.
 
