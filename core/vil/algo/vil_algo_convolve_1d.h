@@ -10,6 +10,7 @@
 #include <vcl_algorithm.h>
 #include <vcl_cstdlib.h> // for vcl_abort()
 #include <vcl_cstring.h>
+#include <vcl_cassert.h>
 #include <vil2/vil2_image_view.h>
 #include <vil2/vil2_image_view_functions.h>
 #include <vil2/vil2_image_resource.h>
@@ -19,10 +20,11 @@
 // When convolving a finite signal the boundaries may be
 // treated in various ways which can often be expressed in terms
 // of ways to extend the signal outside its original range.
-enum vil2_convolve_boundary_option {
+enum vil2_convolve_boundary_option
+{
   // Do not fill destination edges at all
   // ie leave them unchanged.
-  vil2_convolve_ignore_edge, /**< Do not fill destination edges at all. */  
+  vil2_convolve_ignore_edge, /**< Do not fill destination edges at all. */
   // Do not to extend the signal, but pad with zeros.
   //     |                               |
   // K                       ----*-------
@@ -82,8 +84,7 @@ inline void vil2_algo_convolve_edge_1d(const srcT* src, unsigned n, int s_step,
     for (int i=k_lo;i<0;++i,dest+=d_step)
       *dest = 0;
   }
-  else
-  if (option==vil2_convolve_zero_extend)
+  else if (option==vil2_convolve_zero_extend)
   {
     // Assume src[i]==0 for i<0
     for (int i=k_lo+1;i<=0;++i,dest+=d_step,src+=s_step)
@@ -95,8 +96,7 @@ inline void vil2_algo_convolve_edge_1d(const srcT* src, unsigned n, int s_step,
       *dest=sum;
     }
   }
-  else
-  if (option==vil2_convolve_constant_extend)
+  else if (option==vil2_convolve_constant_extend)
   {
     // Assume src[i]=src[0] for i<0
     int i_max = 1-k_lo;
@@ -111,8 +111,7 @@ inline void vil2_algo_convolve_edge_1d(const srcT* src, unsigned n, int s_step,
       dest[i*d_step]=sum;
     }
   }
-  else
-  if (option==vil2_convolve_periodic_extend)
+  else if (option==vil2_convolve_periodic_extend)
   {
     // Assume src[i]=src[0] for i<0
     int i_max = -1-k_lo;
@@ -127,8 +126,7 @@ inline void vil2_algo_convolve_edge_1d(const srcT* src, unsigned n, int s_step,
       dest[i*d_step]=sum;
     }
   }
-  else
-  if (option==vil2_convolve_reflect_extend)
+  else if (option==vil2_convolve_reflect_extend)
   {
     // Assume src[i]=src[n+i] for i<0
     int i_max = -1-k_lo;
@@ -140,8 +138,7 @@ inline void vil2_algo_convolve_edge_1d(const srcT* src, unsigned n, int s_step,
       dest[i*d_step]=sum;
     }
   }
-  else
-  if (option==vil2_convolve_trim)
+  else if (option==vil2_convolve_trim)
   {
     // Truncate and reweight kernel
     accumT k_sum_all=0;
@@ -255,10 +252,12 @@ class vil2_algo_convolve_1d_resource : public vil2_image_resource
                                   vil2_convolve_boundary_option start_option,
                                   vil2_convolve_boundary_option end_option):
     src_(src), kernel_(kernel), klo_(k_lo), khi_(k_hi),
-    start_option_(start_option), end_option_(end_option) {
+    start_option_(start_option), end_option_(end_option)
+    {
       // Can't do period extension yet.
       assert (start_option != vil2_convolve_periodic_extend ||
-        end_option != vil2_convolve_periodic_extend);}
+              end_option != vil2_convolve_periodic_extend);
+    }
 
   friend vil2_image_resource_sptr vil2_algo_convolve_1d VCL_NULL_TMPL_ARGS (
     const vil2_image_resource_sptr& src_im, const destT dt, const kernelT* kernel,
@@ -267,7 +266,7 @@ class vil2_algo_convolve_1d_resource : public vil2_image_resource
     vil2_convolve_boundary_option end_option);
 
  public:
-  virtual vil2_image_view_base_sptr get_copy_view(unsigned i0, unsigned ni, 
+  virtual vil2_image_view_base_sptr get_copy_view(unsigned i0, unsigned ni,
                                                   unsigned j0, unsigned nj) const
   {
     if (i0 + ni > src_->ni() || j0 + nj > src_->nj())  return 0;
@@ -294,7 +293,6 @@ class vil2_algo_convolve_1d_resource : public vil2_image_resource
 
   virtual enum vil2_pixel_format pixel_format() const
   { return vil2_pixel_format_of(accumT()); }
-
 
 
   //: Put the data in this view back into the image source.
@@ -347,7 +345,5 @@ inline vil2_image_resource_sptr vil2_algo_convolve_1d(
   return new vil2_algo_convolve_1d_resource<kernelT, accumT, destT>(src_im,
     kernel, k_lo, k_hi, start_option, end_option);
 }
-
-
 
 #endif // vil2_algo_convolve_1d_h_
