@@ -9,6 +9,8 @@ SET(vimt_sources
   vimt_image_pyramid_builder.cxx vimt_image_pyramid_builder.h
   vimt_gaussian_pyramid_builder_2d.cxx vimt_gaussian_pyramid_builder_2d.h
   vimt_gaussian_pyramid_builder_2d.txx
+  vimt_gaussian_pyramid_builder_2d_general.cxx vimt_gaussian_pyramid_builder_2d_general.h
+  vimt_gaussian_pyramid_builder_2d_general.txx
   vimt_sample_profile_bilin.txx vimt_sample_profile_bilin.h
 )
 
@@ -17,6 +19,7 @@ AUX_SOURCE_DIRECTORY(Templates vimt_sources)
 ADD_LIBRARY(vimt ${vimt_sources})
 TARGET_LINK_LIBRARIES(vimt vil2 vil2_algo vil2_io vnl_algo vbl_io vgl vil)
 
+SUBDIRS(algo)
 SUBDIRS(examples)
 
 IF (BUILD_TESTING)

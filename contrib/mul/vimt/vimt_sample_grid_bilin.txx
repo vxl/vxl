@@ -131,11 +131,11 @@ void vimt_sample_grid_bilin(vnl_vector<vecType>& vec,
 }
 
 #define VIMT_SAMPLE_GRID_BILIN_INSTANTIATE( imType, vecType ) \
-template void vimt_sample_grid_bilin(vnl_vector<vecType >& v, \
-                                      const vimt_image_2d_of<imType >& image, \
-                                      const vgl_point_2d<double >& p, \
-                                      const vgl_vector_2d<double>& u, \
-                                      const vgl_vector_2d<double>& v, \
-                                      int n1, int n2)
+template void vimt_sample_grid_bilin(vnl_vector<vecType >&, \
+                                      const vimt_image_2d_of<imType >&, \
+                                      const vgl_point_2d<double >&, \
+                                      const vgl_vector_2d<double>&, \
+                                      const vgl_vector_2d<double>&, \
+                                      int, int)
 
 #endif // vimt_sample_grid_bilin_txx_

@@ -107,7 +107,7 @@ void vimt_gaussian_pyramid_builder_2d<T>::gauss_reduce(const vimt_image_2d_of<T>
 //=======================================================================
 //: Deletes all data in im_pyr
 template<class T>
-void vimt_gaussian_pyramid_builder_2d<T>::emptyPyr(vimt_image_pyramid& im_pyr) const
+void vimt_gaussian_pyramid_builder_2d<T>::empty_pyr(vimt_image_pyramid& im_pyr) const
 {
   for (int i=0; i<im_pyr.n_levels();++i)
     delete im_pyr.data()[i];
@@ -116,7 +116,7 @@ void vimt_gaussian_pyramid_builder_2d<T>::emptyPyr(vimt_image_pyramid& im_pyr) c
 //=======================================================================
 //: Checks pyramid has at least n levels
 template<class T>
-void vimt_gaussian_pyramid_builder_2d<T>::checkPyr(vimt_image_pyramid& im_pyr,  int n_levels) const
+void vimt_gaussian_pyramid_builder_2d<T>::check_pyr(vimt_image_pyramid& im_pyr,  int n_levels) const
 {
   const int got_levels = im_pyr.n_levels();
   if (got_levels >= n_levels && im_pyr(0).is_a()==work_im_.is_a())
@@ -132,7 +132,7 @@ void vimt_gaussian_pyramid_builder_2d<T>::checkPyr(vimt_image_pyramid& im_pyr,  
   }
 
   im_pyr.data().resize(n_levels);
-  emptyPyr(im_pyr);
+  empty_pyr(im_pyr);
 
   for (int i=0;i<n_levels;++i)
     im_pyr.data()[i] = new vimt_image_2d_of<T>;
@@ -166,7 +166,7 @@ void vimt_gaussian_pyramid_builder_2d<T>::build(vimt_image_pyramid& image_pyr,
     max_levels=max_levels_;
 
   // Set up image pyramid
-  checkPyr(image_pyr,max_levels);
+  check_pyr(image_pyr,max_levels);
 
   vimt_image_2d_of<T>& im0 = (vimt_image_2d_of<T>&) image_pyr(0);
 

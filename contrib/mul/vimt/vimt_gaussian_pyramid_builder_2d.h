@@ -33,10 +33,10 @@ class vimt_gaussian_pyramid_builder_2d : public vimt_image_pyramid_builder
 
  protected:
   //: Checks pyramid has at least n levels of correct type
-  void checkPyr(vimt_image_pyramid& im_pyr,  int n_levels) const;
+  void check_pyr(vimt_image_pyramid& im_pyr,  int n_levels) const;
 
   //: Deletes all data in im_pyr
-  void emptyPyr(vimt_image_pyramid& im_pyr) const;
+  void empty_pyr(vimt_image_pyramid& im_pyr) const;
 
  public:
   //: Dflt ctor
