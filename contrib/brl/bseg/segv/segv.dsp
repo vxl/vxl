@@ -110,6 +110,12 @@ SOURCE=.\segv_vtol2D_tableau.cxx
 # Begin Source File
 SOURCE=.\segv_vtol_soview2D.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\segv_vil_menus.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\segv_vil_segmentation_manager.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"
@@ -127,6 +133,15 @@ SOURCE=.\segv_vtol_soview2D.h
 # End Source File
 # Begin Source File
 SOURCE=.\segv_menus.h
+# End Source File
+# Begin Source File
+SOURCE=.\segv_vil_menus.h
+# End Source File
+# Begin Source File
+SOURCE=.\segv_vil_segmentation_manager.h
+# End Source File
+# Begin Source File
+SOURCE=.\vil_dll.h
 # End Source File
 # End Group
 # End Target
