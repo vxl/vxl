@@ -24,7 +24,7 @@
 //: vsol_spatial_object_2d view
 //-------------------------------------------------------------------------
 bgui_vsol_soview2D::bgui_vsol_soview2D( vsol_spatial_object_2d_sptr const & pt)
-   :sptr_(pt)
+  : sptr_(pt)
 {
 }
 
@@ -46,7 +46,7 @@ bgui_vsol_soview2D_point::bgui_vsol_soview2D_point( vsol_point_2d_sptr const & p
 
 vsol_point_2d_sptr bgui_vsol_soview2D_point::sptr() const
 {
-  return  (vsol_point_2d*)(sptr_.ptr());
+  return sptr_->cast_to_point();
 }
 
 void bgui_vsol_soview2D_point::draw() const
@@ -75,19 +75,18 @@ void bgui_vsol_soview2D_point::translate(float tx, float ty)
   sptr()->set_y( sptr()->y() + ty );
 }
 
-
 //--------------------------------------------------------------------------
 //: vsol_line_2d view
 //--------------------------------------------------------------------------
 
 bgui_vsol_soview2D_line_seg::bgui_vsol_soview2D_line_seg( vsol_line_2d_sptr const & pt)
-: bgui_vsol_soview2D(pt.ptr())
+  : bgui_vsol_soview2D(pt.ptr())
 {
 }
 
 vsol_line_2d_sptr bgui_vsol_soview2D_line_seg::sptr() const
 {
-  return  (vsol_line_2d*)(sptr_.ptr());
+  return sptr_->cast_to_curve()->cast_to_line();
 }
 
 void bgui_vsol_soview2D_line_seg::draw() const
@@ -119,19 +118,18 @@ void bgui_vsol_soview2D_line_seg::translate(float tx, float ty)
   sptr()->p1()->set_y( sptr()->p1()->y() + ty );
 }
 
-
 //--------------------------------------------------------------------------
 //: vsol_polyline_2d view
 //--------------------------------------------------------------------------
 
 bgui_vsol_soview2D_polyline::bgui_vsol_soview2D_polyline(vsol_polyline_2d_sptr const& pline)
-: bgui_vsol_soview2D(pline.ptr())
+  : bgui_vsol_soview2D(pline.ptr())
 {
 }
 
 vsol_polyline_2d_sptr bgui_vsol_soview2D_polyline::sptr() const
 {
-  return ( vsol_polyline_2d*)(sptr_.ptr());
+  return sptr_->cast_to_curve()->cast_to_polyline();
 }
 
 void bgui_vsol_soview2D_polyline::draw() const
@@ -194,20 +192,19 @@ void bgui_vsol_soview2D_polyline::translate(float tx, float ty)
   }
 }
 
-
 //--------------------------------------------------------------------------
 //: vsol_digital_curve_2d view
 //--------------------------------------------------------------------------
 
 bgui_vsol_soview2D_digital_curve::bgui_vsol_soview2D_digital_curve(vsol_digital_curve_2d_sptr const& dc,
                                                                    bool dotted)
-: bgui_vsol_soview2D(dc.ptr()), draw_dotted_(dotted)
+  : bgui_vsol_soview2D(dc.ptr()), draw_dotted_(dotted)
 {
 }
 
 vsol_digital_curve_2d_sptr bgui_vsol_soview2D_digital_curve::sptr() const
 {
-  return ( vsol_digital_curve_2d*)(sptr_.ptr());
+  return sptr_->cast_to_curve()->cast_to_digital_curve();
 }
 
 void bgui_vsol_soview2D_digital_curve::draw() const
@@ -281,14 +278,13 @@ void bgui_vsol_soview2D_digital_curve::translate(float tx, float ty)
   }
 }
 
-
 //--------------------------------------------------------------------------
 //: vdgl_digital_curve regular view
 //--------------------------------------------------------------------------
 
 bgui_vsol_soview2D_edgel_curve::bgui_vsol_soview2D_edgel_curve(vdgl_digital_curve_sptr const& e,
                                                                bool dotted)
-: bgui_vsol_soview2D(e.ptr()), draw_dotted_(dotted)
+  : bgui_vsol_soview2D(e.ptr()), draw_dotted_(dotted)
 {
 }
 
@@ -388,20 +384,18 @@ void bgui_vsol_soview2D_edgel_curve::translate( float x , float y )
   }
 }
 
-
 //--------------------------------------------------------------------------
 //: vsol_polygon_2d view
 //--------------------------------------------------------------------------
 
-
 bgui_vsol_soview2D_polygon::bgui_vsol_soview2D_polygon(vsol_polygon_2d_sptr const& e)
-: bgui_vsol_soview2D(e.ptr())
+  : bgui_vsol_soview2D(e.ptr())
 {
 }
 
 vsol_polygon_2d_sptr bgui_vsol_soview2D_polygon::sptr() const
 {
-  return (vsol_polygon_2d*)(sptr_.ptr());
+  return sptr_->cast_to_region()->cast_to_polygon();
 }
 
 void bgui_vsol_soview2D_polygon::draw() const

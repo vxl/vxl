@@ -319,13 +319,14 @@ bool gevd_clean_edgels::split_edge(vtol_edge_2d_sptr e, vtol_vertex_2d_sptr new_
     e1 = NULL; e2 = NULL;
     return false;
   }
-  vtol_vertex_2d *v1 = (vtol_vertex_2d*)e->v1().ptr(), *v2 = (vtol_vertex_2d*)e->v2().ptr();
+  vtol_vertex_2d_sptr v1 = e->v1()->cast_to_vertex_2d(),
+                      v2 = e->v2()->cast_to_vertex_2d();
   e1 = new vtol_edge_2d(v1, new_v); e2 = new vtol_edge_2d(new_v, v2);
-  e1->SetCurve(dc1) ; e2->SetCurve(dc2);
-#endif
+  e1->set_curve(dc1) ; e2->set_curve(dc2);
+#else
   e1 = edge1;
   e2 = edge2;
-  //e->unlink_all_inferiors(); // -tpk-
+#endif
   return true;
 }
 
@@ -446,8 +447,8 @@ void gevd_clean_edgels::DeleteShortEdges()
       vcl_cout << "Edgels: " << edgelcount << '/' << out_edgels_->size() << vcl_endl;
     edgelcount++;
     vtol_edge_2d_sptr e = (vtol_edge_2d_sptr )(*egit);
-    vtol_vertex_2d* v1 = (vtol_vertex_2d*)e->v1().ptr();
-    vtol_vertex_2d* v2 = (vtol_vertex_2d*)e->v2().ptr();
+    vtol_vertex_2d* v1 = e->v1()->cast_to_vertex_2d();
+    vtol_vertex_2d* v2 = e->v2()->cast_to_vertex_2d();
     double fx1 = v1->x(), fy1 = v1->y();
     double fx2 = v2->x(), fy2 = v2->y();
     int x1 = int(fx1), y1 = int(fy1);
@@ -607,8 +608,8 @@ void gevd_clean_edgels::FixDefficientEdgels()
     fix_it = fix_it || n_edgels<=2;
     if (fix_it)
     {
-      vtol_vertex_2d* v1 = (vtol_vertex_2d*)e->v1().ptr();
-      vtol_vertex_2d* v2 = (vtol_vertex_2d*)e->v2().ptr();
+      vtol_vertex_2d_sptr v1 = e->v1()->cast_to_vertex_2d();
+      vtol_vertex_2d_sptr v2 = e->v2()->cast_to_vertex_2d();
       vsol_point_2d_sptr p1 = v1->point();
       vsol_point_2d_sptr p2 = v2->point();
       // vdgl_digital_curve_sptr dc = new vdgl_digital_curve(p1, p2);
@@ -636,8 +637,8 @@ void gevd_clean_edgels::RemoveJaggies()
        egit!=out_edgels_->end(); ++egit)
   {
     vtol_edge_2d_sptr e = (vtol_edge_2d_sptr )(*egit);
-    vtol_vertex_2d* v1 = (vtol_vertex_2d*)e->v1().ptr();
-    vtol_vertex_2d* v2 = (vtol_vertex_2d*)e->v2().ptr();
+    vtol_vertex_2d_sptr v1 = e->v1()->cast_to_vertex_2d();
+    vtol_vertex_2d_sptr v2 = e->v2()->cast_to_vertex_2d();
     double x1 = v1->x(), y1 = v1->y();
     double x2 = v2->x(), y2 = v2->y();
     vdgl_digital_curve_sptr dc = e->curve()->cast_to_vdgl_digital_curve();
@@ -683,8 +684,8 @@ void gevd_clean_edgels::RemoveLoops()
        egit!=out_edgels_->end(); ++egit)
   {
     vtol_edge_2d_sptr e = (vtol_edge_2d_sptr )(*egit);
-    vtol_vertex_2d* v1 = (vtol_vertex_2d*)e->v1().ptr();
-    vtol_vertex_2d* v2 = (vtol_vertex_2d*)e->v2().ptr();
+    vtol_vertex_2d_sptr v1 = e->v1()->cast_to_vertex_2d();
+    vtol_vertex_2d_sptr v2 = e->v2()->cast_to_vertex_2d();
     if (*v1==*v2)//We have a loop
     {
       vdgl_digital_curve_sptr c = e->curve()->cast_to_vdgl_digital_curve();

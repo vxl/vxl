@@ -293,56 +293,56 @@ void vsol_group_2d::b_read(vsl_b_istream &is)
         vsol_point_2d_sptr p;
         vsl_b_read(is, p);
         if (p)
-          storage_->push_back((vsol_point_2d*)p.ptr());
+          storage_->push_back(p);
       }
       if (type=="vsol_line_2d")
       {
         vsol_line_2d_sptr l;
         vsl_b_read(is, l);
         if (l)
-          storage_->push_back((vsol_line_2d*)l.ptr());
+          storage_->push_back(l);
       }
       if (type=="vsol_conic_2d")
       {
         vsol_conic_2d_sptr cn;
         vsl_b_read(is, cn);
         if (cn)
-          storage_->push_back((vsol_conic_2d*)cn.ptr());
+          storage_->push_back(cn);
       }
       if (type=="vsol_polyline_2d")
       {
         vsol_polyline_2d_sptr pl;
         vsl_b_read(is, pl);
         if (pl)
-          storage_->push_back((vsol_polyline_2d*)pl.ptr());
+          storage_->push_back(pl);
       }
       if (type=="vsol_polygon_2d")
       {
         vsol_polygon_2d_sptr pg;
         vsl_b_read(is, pg);
         if (pg)
-          storage_->push_back((vsol_polygon_2d*)pg.ptr());
+          storage_->push_back(pg);
       }
       if (type=="vsol_triangle_2d")
       {
         vsol_triangle_2d_sptr t;
         vsl_b_read(is, t);
         if (t)
-          storage_->push_back((vsol_triangle_2d*)t.ptr());
+          storage_->push_back(t);
       }
       if (type=="vsol_rectangle_2d")
       {
         vsol_rectangle_2d_sptr r;
         vsl_b_read(is, r);
         if (r)
-          storage_->push_back((vsol_rectangle_2d*)r.ptr());
+          storage_->push_back(r);
       }
       if (type=="vsol_group_2d")
       {
         vsol_group_2d_sptr g;
         vsl_b_read(is, g);
         if (g)
-          storage_->push_back((vsol_group_2d*)g.ptr());
+          storage_->push_back(g);
       }
       if (type=="vsol_group_2d_end")
         return;
