@@ -25,11 +25,10 @@ SET(vifa_sources
  vifa_int_faces_attr.cxx              vifa_int_faces_attr.h
  vifa_int_faces_adj_attr.cxx          vifa_int_faces_adj_attr.h
 )
-
 AUX_SOURCE_DIRECTORY(Templates vifa_sources)
 
 ADD_LIBRARY(vifa ${vifa_sources})
-TARGET_LINK_LIBRARIES(vifa vdgl vsol vnl vgl vbl vul vil vcl)
+TARGET_LINK_LIBRARIES(vifa sdet vdgl vsol vnl vgl vbl vul vil vcl)
 
 IF (BUILD_TESTING)
   SUBDIRS(tests)
