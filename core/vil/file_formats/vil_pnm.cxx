@@ -47,14 +47,14 @@ vil2_image_data* vil2_pnm_file_format::make_input_image(vil_stream* vs)
   return new vil2_pnm_generic_image(vs);
 }
 
-vil2_image_data* vil2_pnm_file_format::make_output_image(vil_stream* vs, unsigned planes,
-                                                       unsigned width,
-                                                       unsigned height,
-                                                       unsigned components,
+vil2_image_data* vil2_pnm_file_format::make_output_image(vil_stream* vs, 
+                                                       unsigned nx,
+                                                       unsigned ny,
+                                                       unsigned nplanes,
                                                        unsigned bits_per_component,
                                                        vil_component_format format)
 {
-  return new vil2_pnm_generic_image(vs, planes, width, height, components, bits_per_component, format);
+  return new vil2_pnm_generic_image(vs, nx, ny, nplanes, bits_per_component, format);
 }
 
 char const* vil2_pnm_file_format::tag() const
@@ -87,24 +87,23 @@ char const* vil2_pnm_generic_image::file_format() const
   return vil2_pnm_format_tag;
 }
 
-vil2_pnm_generic_image::vil2_pnm_generic_image(vil_stream* vs, unsigned planes,
-                                             unsigned width,
-                                             unsigned height,
-                                             unsigned components,
+vil2_pnm_generic_image::vil2_pnm_generic_image(vil_stream* vs, unsigned nplanes,
+                                             unsigned nx,
+                                             unsigned ny,
                                              unsigned bits_per_component,
                                              vil_component_format format):
   vs_(vs)
 {
   vs_->ref();
-  width_ = width;
-  height_ = height;
+  nx_ = nx;
+  ny_ = ny;
 
-  components_ = components * planes;
+  ncomponents_ = nplanes;
   bits_per_component_ = bits_per_component;
 
-  if (components_ == 3) {
+  if (ncomponents_ == 3) {
     magic_ = 6;
-  } else if (components_ == 1) {
+  } else if (ncomponents_ == 1) {
     if (bits_per_component_ == 1)
       magic_ = 4;
     else
@@ -203,13 +202,13 @@ bool vil2_pnm_generic_image::read_header()
   SkipSpaces(vs_,temp);
 
   //Read in Width
-  width_ = ReadInteger(vs_,temp);
+  nx_ = ReadInteger(vs_,temp);
 
   //Skip over spaces and comments
   SkipSpaces(vs_,temp);
 
   //Read in Height
-  height_ = ReadInteger(vs_,temp);
+  ny_ = ReadInteger(vs_,temp);
 
   // a pbm (bitmap) image does not have a maxval field
   if (magic_ == 1 || magic_ == 4)
@@ -229,7 +228,7 @@ bool vil2_pnm_generic_image::read_header()
   if (isws(temp))
     ++start_of_data_;
 
-  components_ = ((magic_ == 3 || magic_ == 6) ? 3 : 1);
+  ncomponents_ = ((magic_ == 3 || magic_ == 6) ? 3 : 1);
 
   if (magic_ == 1 || magic_ == 4)
     bits_per_component_ = 1;
@@ -251,7 +250,7 @@ bool vil2_pnm_generic_image::write_header()
 
   char buf[1024];
   vcl_sprintf(buf, "P%d\n#vil2 pnm image, #c=%u, bpc=%u\n%u %u\n",
-              magic_, components_, bits_per_component_, width_, height_);
+              magic_, ncomponents_, bits_per_component_, nx_, ny_);
   vs_->write(buf, vcl_strlen(buf));
   if (magic_ != 1 && magic_ != 4)
   {
@@ -281,17 +280,17 @@ vil2_image_view_base* vil2_pnm_generic_image::get_view(unsigned x0, unsigned y0,
 
   if (bits_per_component_ <= 8)
   {
-    view = new vil2_image_view<unsigned char>(width_, height_, components_);
+    view = new vil2_image_view<unsigned char>(nx_, ny_, ncomponents_);
     ib = static_cast<vil2_image_view<unsigned char>* >(view)->top_left_ptr();
   }
   else if (bits_per_component_ <= 16)
   {
-    view = new vil2_image_view<unsigned short>(width_, height_, components_);
+    view = new vil2_image_view<unsigned short>(nx_, ny_, ncomponents_);
     jb = static_cast<vil2_image_view<unsigned short>* >(view)->top_left_ptr();
   }
   else
   {
-    view = new vil2_image_view<unsigned int>(width_, height_, components_);
+    view = new vil2_image_view<unsigned int>(nx_, ny_, ncomponents_);
     kb = static_cast<vil2_image_view<unsigned int>* >(view)->top_left_ptr();
   }
 
@@ -306,9 +305,9 @@ vil2_image_view_base* vil2_pnm_generic_image::get_view(unsigned x0, unsigned y0,
   } else if (magic_ > 4) // pgm or ppm raw image
   {
     unsigned bytes_per_sample = (bits_per_component_+7)/8;
-    unsigned bytes_per_pixel = components_ * bytes_per_sample;
-    unsigned byte_start = start_of_data_ + (y0 * width_ + x0) * bytes_per_pixel;
-    unsigned byte_width = width_ * bytes_per_pixel;
+    unsigned bytes_per_pixel = ncomponents_ * bytes_per_sample;
+    unsigned byte_start = start_of_data_ + (y0 * nx_ + x0) * bytes_per_pixel;
+    unsigned byte_width = nx_ * bytes_per_pixel;
     unsigned byte_out_width = nx * bytes_per_pixel;
 
     for (unsigned y = 0; y < ny; ++y) {
@@ -316,7 +315,7 @@ vil2_image_view_base* vil2_pnm_generic_image::get_view(unsigned x0, unsigned y0,
       vs_->read(ib + y * byte_out_width, byte_out_width);
     }
     if ( bytes_per_sample==2 && VXL_LITTLE_ENDIAN ) {
-      ConvertMSBToHost( ib, nx*ny*components_ );
+      ConvertMSBToHost( ib, nx*ny*ncomponents_ );
     } else if ( bytes_per_sample > 2 ) {
       vcl_cerr << "ERROR: pnm: reading rawbits format with > 16bit samples\n";
       delete view;
@@ -324,7 +323,7 @@ vil2_image_view_base* vil2_pnm_generic_image::get_view(unsigned x0, unsigned y0,
     } 
   } else if (magic_ == 4) // pbm (bitmap) raw image
   {
-    unsigned byte_width = (width_+7)/8;
+    unsigned byte_width = (nx_+7)/8;
     unsigned byte_out_width = (nx+7)/8;
 
     for (unsigned y = 0; y < ny; ++y) {
@@ -349,22 +348,22 @@ vil2_image_view_base* vil2_pnm_generic_image::get_view(unsigned x0, unsigned y0,
     vs_->seek(start_of_data_);
     //0. Skip to the starting line
     //
-    for (unsigned t = 0; t < y0*width_*components_; ++t) { int a; (*vs_) >> a; }
+    for (unsigned t = 0; t < y0*nx_*ncomponents_; ++t) { int a; (*vs_) >> a; }
     for (unsigned y = 0; y < ny; ++y) {
       // 1. Skip to column x0
       //
-      for (unsigned t = 0; t < x0*components_; ++t) { int a; (*vs_) >> a; }
+      for (unsigned t = 0; t < x0*ncomponents_; ++t) { int a; (*vs_) >> a; }
       // 2. Read the data
       //
       if (bits_per_component_ <= 8)
-        for (unsigned x = 0; x < nx*components_; ++x) { int a; (*vs_) >> a; *(ib++)=a; }
+        for (unsigned x = 0; x < nx*ncomponents_; ++x) { int a; (*vs_) >> a; *(ib++)=a; }
       else if (bits_per_component_ <= 16)
-        for (unsigned x = 0; x < nx*components_; ++x) { int a; (*vs_) >> a; *(jb++)=a; }
+        for (unsigned x = 0; x < nx*ncomponents_; ++x) { int a; (*vs_) >> a; *(jb++)=a; }
       else
-        for (unsigned x = 0; x < nx*components_; ++x) { int a; (*vs_) >> a; *(kb++)=a; }
+        for (unsigned x = 0; x < nx*ncomponents_; ++x) { int a; (*vs_) >> a; *(kb++)=a; }
       // 3. Skip to the next line
       //
-      for (unsigned t = 0; t < (width_-x0-nx)*components_; ++t) { int a; (*vs_) >> a; }
+      for (unsigned t = 0; t < (nx_-x0-nx)*ncomponents_; ++t) { int a; (*vs_) >> a; }
     }
   }
 
@@ -374,6 +373,8 @@ vil2_image_view_base* vil2_pnm_generic_image::get_view(unsigned x0, unsigned y0,
 
 vil2_image_view_base* vil2_pnm_generic_image::get_copy_view(unsigned x0, unsigned y0, unsigned plane0, unsigned nx, unsigned ny, unsigned nplanes) const
 {
+  // The data is on disk, so all views are copy views.
+  return get_view(x0, y0, plane0, nx, ny, nplanes);
 }
 
 
@@ -390,21 +391,27 @@ bool vil2_pnm_generic_image::put_view(const vil2_image_view_base& view, unsigned
       view.is_a() == "vil2_image_view<short>" && bits_per_component_ < 16 ||
       view.is_a() == "vil2_image_view<uchar>" && bits_per_component_ < 8)
   {
-      vcl_cerr << "ERROR: " << __FILE__ << ":\n can't fit view into pnm component size\n" << vcl_endl;
+      vcl_cerr << "ERROR: " << __FILE__ << ":\n Can't fit view into pnm component size\n" << vcl_endl;
       return false;
   }
   
+  unsigned char const*  ob = 0;
+  unsigned short const* pb = 0;
+  unsigned int const*   qb = 0;
 
   if (view.is_a() == "vil2_image_view<uchar>")
-    unsigned char const* ob = (unsigned char const*) buf;
+    ob = static_cast<const vil2_image_view<unsigned char>& >(view).top_left_ptr();
+  else if (view.is_a() == "vil2_image_view<short>")
+    pb = static_cast<const vil2_image_view<unsigned short>& >(view).top_left_ptr();
+  else if (view.is_a() == "vil2_image_view<int>")
+    qb = static_cast<const vil2_image_view<unsigned int>& >(view).top_left_ptr();
+  else
+  {
+      vcl_cerr << "ERROR: " << __FILE__ << ":\n Do not support putting "
+        << view.is_a() << " views into pnm image_data objects " << vcl_endl;
+      return false;
+  }
 
-      view.is_a() == "vil2_image_view<short>" && bits_per_component_ < 16 ||
-      view.is_a() == "vil2_image_view<uchar>" && bits_per_component_ < 8)
-
-  unsigned short const* pb = (unsigned short const*) buf;
-  unsigned int const* qb = (unsigned int const*) buf;
-
-  view_fits(view, x0, y0, plane0);
 
   if (magic_ == 1) // ascii pbm
   {
@@ -412,14 +419,14 @@ bool vil2_pnm_generic_image::put_view(const vil2_image_view_base& view, unsigned
     return false;
   } else if (magic_ > 4) // pgm or ppm raw image
   {
-    int bytes_per_sample = (bits_per_component_+7)/8;
-    int bytes_per_pixel = components_ * bytes_per_sample;
-    vil2_streampos byte_start = start_of_data_ + (y0 * width_ + x0) * bytes_per_pixel;
-    int byte_width = width_ * bytes_per_pixel;
-    int byte_out_width = xs * bytes_per_pixel;
+    unsigned bytes_per_sample = (bits_per_component_+7)/8;
+    unsigned bytes_per_pixel = ncomponents_ * bytes_per_sample;
+    vil_streampos byte_start = start_of_data_ + (y0 * nx_ + x0) * bytes_per_pixel;
+    unsigned byte_width = nx_ * bytes_per_pixel;
+    unsigned byte_out_width = view.nx() * bytes_per_pixel;
 
     if ( bytes_per_sample==1 || ( bytes_per_sample==2 && VXL_BIG_ENDIAN ) ) {
-      for (int y = 0; y < ys; ++y) {
+      for (unsigned y = 0; y < view.ny(); ++y) {
         vs_->seek(byte_start + y * byte_width);
         vs_->write(ob + y * byte_out_width, byte_out_width);
       }
@@ -428,10 +435,10 @@ bool vil2_pnm_generic_image::put_view(const vil2_image_view_base& view, unsigned
       // Can't convert the input buffer, because it's not ours.
       // Convert line by line to avoid duplicating a potentially large image.
       vcl_vector<unsigned char> tempbuf( byte_out_width );
-      for (int y = 0; y < ys; ++y) {
+      for (int y = 0; y < view.ny(); ++y) {
         vs_->seek(byte_start + y * byte_width);
         vcl_memcpy( &tempbuf[0], ob + y * byte_out_width, byte_out_width );
-        ConvertHostToMSB( &tempbuf[0], xs*components_ );
+        ConvertHostToMSB( &tempbuf[0], view.ny()*ncomponents_ );
         vs_->write(&tempbuf[0], byte_out_width);
       }
     } else {
@@ -441,11 +448,11 @@ bool vil2_pnm_generic_image::put_view(const vil2_image_view_base& view, unsigned
   }
   else if (magic_ == 4) // pbm (bitmap) raw image
   {
-    int byte_width = (width_+7)/8;
-    int byte_out_width = (xs+7)/8;
+    int byte_width = (nx_+7)/8;
+    int byte_out_width = (view.nx()+7)/8;
 
-    for (int y = 0; y < ys; ++y) {
-      vil2_streampos byte_start = start_of_data_ + (y0+y) * byte_width + x0/8;
+    for (int y = 0; y < view.ny(); ++y) {
+      vil_streampos byte_start = start_of_data_ + (y0+y) * byte_width + x0/8;
       vs_->seek(byte_start);
       int s = x0&7; // = x0%8;
       int t = 0;
@@ -455,7 +462,7 @@ bool vil2_pnm_generic_image::put_view(const vil2_image_view_base& view, unsigned
         vs_->seek(byte_start);
         a &= ((1<<s)-1)<<(8-s); // clear the last 8-s bits of a
       }
-      for (int x = 0; x < xs; ++x) {
+      for (int x = 0; x < view.nx(); ++x) {
         if (b&(1<<(7-t))) a |= 1<<(7-s); // single bit; high bit = first
         if (t >= 7) { b = ob[y * byte_out_width + (x+1)/8]; t = 0; }
         else ++t;
@@ -463,7 +470,7 @@ bool vil2_pnm_generic_image::put_view(const vil2_image_view_base& view, unsigned
         else ++s;
       }
       if (s) {
-        if (x0+xs < width_) {
+        if (x0+view.nx() < nx_) {
           vs_->seek(byte_start);
           unsigned char c; vs_->read(&c, 1L);
           vs_->seek(byte_start);
@@ -476,25 +483,20 @@ bool vil2_pnm_generic_image::put_view(const vil2_image_view_base& view, unsigned
   }
   else // ascii (non-raw) image data
   {
-    if (x0 > 0 || y0 > 0 || xs < width_)
+    if (x0 > 0 || y0 > 0 || view.nx() < nx_)
       return false; // can only write the full image in this mode
     vs_->seek(start_of_data_);
-    for (int y = 0; y < ys; ++y) {
+    for (int y = 0; y < view.ny(); ++y) {
       if (bits_per_component_ <= 8)
-        for (int x = 0; x < xs*components_; ++x) { (*vs_) << ob[x]; }
+        for (int x = 0; x < view.nx()*ncomponents_; ++x) { (*vs_) << ob[x]; }
       else if (bits_per_component_ <= 16)
-        for (int x = 0; x < xs*components_; ++x) { (*vs_) << pb[x]; }
+        for (int x = 0; x < view.nx()*ncomponents_; ++x) { (*vs_) << pb[x]; }
       else
-        for (int x = 0; x < xs*components_; ++x) { (*vs_) << qb[x]; }
-      ob += xs; pb += xs; qb += xs;
+        for (int x = 0; x < view.nx()*ncomponents_; ++x) { (*vs_) << qb[x]; }
+      ob += view.nx(); pb += view.nx(); qb += view.nx();
     }
   }
 
   return true;
 }
 
-vil2_image vil2_pnm_generic_image::get_plane(int plane) const
-{
-  assert(plane == 0);
-  return const_cast<vil2_pnm_generic_image*>(this);
-}

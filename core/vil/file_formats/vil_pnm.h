@@ -31,10 +31,10 @@ class vil2_pnm_file_format : public vil2_file_format
  public:
   virtual char const* tag() const;
   virtual vil2_image_data* make_input_image(vil_stream* vs);
-  virtual vil2_image_data* make_output_image(vil_stream* vs, unsigned planes,
-                                            unsigned width,
-                                            unsigned height,
-                                            unsigned components,
+  virtual vil2_image_data* make_output_image(vil_stream* vs,
+                                            unsigned nx,
+                                            unsigned ny,
+                                            unsigned nplanes,
                                             unsigned bits_per_component,
                                             vil_component_format format);
 };
@@ -46,12 +46,12 @@ class vil2_pnm_generic_image : public vil2_image_data
 {
   vil_stream* vs_;
   int magic_;
-  unsigned width_;
-  unsigned height_;
+  unsigned nx_;
+  unsigned ny_;
   unsigned long int maxval_;
 
   int start_of_data_;
-  unsigned components_;
+  unsigned ncomponents_;
   unsigned bits_per_component_;
 
   bool read_header();
@@ -61,19 +61,18 @@ class vil2_pnm_generic_image : public vil2_image_data
  public:
 
   vil2_pnm_generic_image(vil_stream* is);
-  vil2_pnm_generic_image(vil_stream* is, unsigned planes,
-                        unsigned width,
-                        unsigned height,
-                        unsigned components,
+  vil2_pnm_generic_image(vil_stream* is, unsigned nplanes,
+                        unsigned nx,
+                        unsigned ny,
                         unsigned bits_per_component,
                         vil_component_format format);
   ~vil2_pnm_generic_image();
 
   //: Dimensions:  planes x width x height x components
-  virtual unsigned planes() const { return 1; }
-  virtual unsigned width() const { return width_; }
-  virtual unsigned height() const { return height_; }
-  virtual unsigned components() const { return components_; }
+  virtual unsigned nplanes() const { return ncomponents_; }
+  virtual unsigned ncomponents() const { return 1; }
+  virtual unsigned nx() const { return nx_; }
+  virtual unsigned ny() const { return ny_; }
 
   virtual unsigned bits_per_component() const { return bits_per_component_; }
   virtual enum vil_component_format component_format() const { return VIL_COMPONENT_FORMAT_UNSIGNED_INT; }

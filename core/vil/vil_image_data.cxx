@@ -27,11 +27,6 @@ bool vil2_image_data::get_property(char const *, void *) const
   return false;
 }
 
-vil2_image_view_base* vil2_image_data::new_view(bool planewise)
-{
-  // TODO - to be implemented
-  return 0;
-}
 
 
 //: Return the name of the class;
@@ -47,3 +42,13 @@ bool vil2_image_data::is_class(vcl_string const& s) const
   return s==vil2_image_data::is_a();
 }
 
+
+//: Check that a view will fit into the data at the given offset.
+bool vil2_image_data::view_fits(const vil2_image_view_base& im, unsigned x0, unsigned y0,
+               unsigned plane0)
+{
+  if (x0 + im.nx() > nx() || y0 + im. ny() > ny() ||
+    plane0 + im.nplanes() > nplanes())
+    return false;
+  return true;
+}

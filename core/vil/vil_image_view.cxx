@@ -8,7 +8,7 @@
 
 // Specialise the is_a() for vil_byte
 template<> vcl_string vil2_image_view<vil_byte>::is_a() const
-{  return vcl_string("vil2_image_view<vil_byte>"); }
+{  return vcl_string("vil2_image_view<uchar>"); }
 
 // Specialise the is_a() for int
 template<> vcl_string vil2_image_view<int>::is_a() const
@@ -19,8 +19,8 @@ template<> vcl_string vil2_image_view<float>::is_a() const
 {  return vcl_string("vil2_image_view<float>"); }
 
 // Specialise the is_a() for char
-template<> vcl_string vil2_image_view<char>::is_a() const
-{  return vcl_string("vil2_image_view<char>"); }
+template<> vcl_string vil2_image_view<signed char>::is_a() const
+{  return vcl_string("vil2_image_view<schar>"); }
 
 // Specialise the is_a() for short
 template<> vcl_string vil2_image_view<short>::is_a() const

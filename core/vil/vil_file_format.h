@@ -36,10 +36,9 @@ class vil2_file_format
   // The width/height etc are explicitly specified, so that file_format implementors
   // know what they need to do...
   virtual vil2_image_data* make_output_image(vil_stream* vs,
-                                               unsigned planes,
-                                               unsigned width,
-                                               unsigned height,
-                                               unsigned components,
+                                               unsigned nx,
+                                               unsigned ny,
+                                               unsigned nplanes,
                                                unsigned bits_per_component,
                                                enum vil_component_format) = 0;
 

@@ -60,18 +60,18 @@ class vil2_image_data
   vil2_image_data();
   virtual ~vil2_image_data();
 
-  //: Dimensions:  Planes x W x H x Components
-  virtual int planes() const = 0;
-  //: Dimensions:  Planes x W x H x Components
-  virtual int width() const = 0;
-  //: Dimensions:  Planes x W x H x Components
-  virtual int height() const = 0;
-  //: Dimensions:  Planes x W x H x Components
-  virtual int components() const = 0;
+  //: Dimensions:  Planes x W x H
+  // This concept is treated as a synonym to components.
+  virtual unsigned nplanes() const = 0;
+  //: Dimensions:  Planes x W x H
+  virtual unsigned nx() const = 0;
+  //: Dimensions:  Planes x W x H
+  virtual unsigned ny() const = 0;
+
 
   //: Number of bits per component.
   // Size (in bits) for the smallest entity of the image.
-  virtual int bits_per_component() const = 0;
+  virtual unsigned bits_per_component() const = 0;
 
   //: Format.
   //  A standard RGB RGB RGB image has
@@ -81,32 +81,25 @@ class vil2_image_data
   // Use vil_print(fmt) to return a string description of the format fmt.
   virtual enum vil_component_format component_format() const = 0;
 
-  //: Create a new view which is compatible with the underlying image type.
-  // \param planewise, Do you want the data provided in planes (or components)?
-  virtual vil2_image_view_base* new_view(bool planewise=true);
 
   //: Create a read/write view of the data.
   // Modifying this view might modify the actual data.
   // If you want to modify this data in place, call put_view after you done, and 
   // it should work efficiently.
-  virtual bool get_view(vil2_image_view_base* im, unsigned x0, unsigned y0, unsigned width, unsigned height) const = 0;
-
-  //: Create a read/write view of the data.
-  // Modifying this view might modify the actual data.
-  // If you want to modify this data in place, call put_view after you done, and 
-  // it should work efficiently.
-  virtual bool get_view(vil2_image_view_base* im, unsigned x0, unsigned y0,
+  // \return 0 if unable to get view of correct size.
+  virtual vil2_image_view_base* get_view(unsigned x0, unsigned y0,
                         unsigned plane0, unsigned width, unsigned height, unsigned nplanes) const = 0;
 
   //: Create a read/write view of a copy of this data.
-  virtual bool get_copy_view(vil2_image_view_base* im, unsigned x0, unsigned y0, unsigned width, unsigned height) const = 0;
-
-  //: Create a read/write view of a copy of this data.
-  virtual bool get_copy_view(vil2_image_view_base* im, unsigned x0, unsigned y0,
+  // \return 0 if unable to get view of correct size.
+  virtual vil2_image_view_base* get_copy_view(unsigned x0, unsigned y0,
                              unsigned plane0, unsigned width, unsigned height, unsigned nplanes) const = 0;
 
   //: Put the data in this view back into the image source.
-  virtual bool put_view(vil2_image_view_base* im, unsigned x0, unsigned y0, unsigned plane0 = 0) = 0;
+  virtual bool put_view(const vil2_image_view_base& im, unsigned x0, unsigned y0, unsigned plane0 = 0) = 0;
+
+  //: Check that a view will fit into the data at the given offset.
+  virtual bool view_fits(const vil2_image_view_base& im, unsigned x0, unsigned y0, unsigned plane0 = 0);
 
   //: Return a string describing the file format.
   // Only file images have a format, others return 0
