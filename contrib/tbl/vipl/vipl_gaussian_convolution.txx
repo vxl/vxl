@@ -65,7 +65,7 @@ bool vipl_gaussian_convolution <ImgIn,ImgOut,DataIn,DataOut,PixelItr> :: preop()
   else { delete[] ref_mask(); ref_mask() = new double[size]; }
   double halfnorm = 0.5;
   ref_mask()[0] = 1.0;
-  for (int x=1; x<=size; ++x)
+  for (int x=1; x<size; ++x)
     { ref_mask()[x] = vcl_exp(-0.5*x*x/sigma()/sigma()); halfnorm += mask()[x]; }
   for (int x=0; x<=size; ++x) ref_mask()[x] /= 2*halfnorm; // normalise mask
   return true;
