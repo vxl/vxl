@@ -6,6 +6,7 @@
 #include <vgui/vgui.h>
 #include <vgui/vgui_style.h>
 #include <bgui/bgui_style.h>
+#include <vsol/vsol_point_2d.h>
 #include <vtol/vtol_face_2d.h>
 #include <vdgl/vdgl_edgel_chain.h>
 #include <vdgl/vdgl_interpolator.h>
@@ -46,19 +47,24 @@ void bgui_vtol2D_tableau::init()
   old_id_ = 0;
   highlight_ = true;
   //set highlight display style parameters
-  highlight_style_ = new bgui_style(0.0, 0.0, 1.0, 5.0, 5.0);
+  highlight_style_ = new bgui_style(0.0f, 0.0f, 1.0f, 5.0f, 5.0f);
   //define default soview styles
   //these could be overridden by later tablau drawing commands
   //such as set_foreground.  Probably though we shouldn't use those
   //since normal users wouldn't want to change the color of standard
   //topology items.
+  bgui_style_sptr vsol_point_style = 
+    new bgui_style(0.0f, 1.0f, 0.0f, 5.0f, 0.0f);
   bgui_style_sptr digital_curve_style = 
-    new bgui_style(0.8, 0.0, 0.8, 3.0, 0.0);
-  bgui_style_sptr vertex_style = new bgui_style(1.0, 0.0, 0.0, 3.0, 0.0);
-  bgui_style_sptr edge_style = new bgui_style(0.8, 0.25, 0.8, 0.0, 3.0);
-  bgui_style_sptr edge_group_style = new bgui_style(0.0, 1.0, 0.0, 0.0, 3.0);
-  bgui_style_sptr face_style = new bgui_style(0.0, 1.0, 0.0, 0.0, 3.0);
+    new bgui_style(0.8f, 0.0f, 0.8f, 3.0f, 0.0f);
+  bgui_style_sptr vertex_style = new bgui_style(1.0f, 0.0f, 0.0f, 3.0f, 0.0f);
+  bgui_style_sptr edge_style = new bgui_style(0.8f, 0.25f, 0.8f, 0.0f, 3.0f);
+  bgui_style_sptr edge_group_style = new bgui_style(0.0f, 1.0f, 0.0f, 0.0f, 3.0f);
+  bgui_style_sptr face_style = new bgui_style(0.0f, 1.0f, 0.0f, 0.0f, 3.0f);
   //put them into the map
+  bgui_vtol_soview2D_point p;
+  style_map_[p.type_name()]=vsol_point_style;
+
   bgui_vtol_soview2D_digital_curve dc;
   style_map_[dc.type_name()]=digital_curve_style;
 
@@ -111,6 +117,19 @@ bool bgui_vtol2D_tableau::handle(vgui_event const &e)
     }
   // We aren't interested in other events so pass them to the base class.
   return vgui_easy2D_tableau::handle(e);
+}
+
+bgui_vtol_soview2D_point* 
+bgui_vtol2D_tableau::add_vsol_point_2d(vsol_point_2d_sptr const& p)
+{
+  bgui_vtol_soview2D_point* obj =
+    new bgui_vtol_soview2D_point();
+  obj->x = p->x();
+  obj->y = p->y();
+  add(obj);
+   bgui_style_sptr s = style_map_[obj->type_name()];
+   obj->set_style(s.ptr());
+  return obj;
 }
 
 
@@ -191,11 +210,34 @@ bgui_vtol2D_tableau::add_face(vtol_face_2d_sptr const& f)
     }
   return obj;
 }
+//--------------------------------------------------------------
+// only add vsol objects, treat topology separately
+//
+void bgui_vtol2D_tableau::
+add_spatial_objects(vcl_vector<vsol_spatial_object_2d_sptr> const& sos)
+{
+  for (vcl_vector<vsol_spatial_object_2d_sptr>::const_iterator sit = sos.begin();
+       sit != sos.end(); sit++)
+    {
+      if((*sit)->cast_to_point())
+        {
+          vsol_point_2d_sptr p = (*sit)->cast_to_point();
+          this->add_vsol_point_2d(p);
+        }
+      if((*sit)->cast_to_curve())
+        if((*sit)->cast_to_curve()->cast_to_digital_curve())
+          {
+            vdgl_digital_curve_sptr dc = 
+              (*sit)->cast_to_curve()->cast_to_digital_curve();
+            this->add_digital_curve(dc);
+          }
+    }
+}
 
-void bgui_vtol2D_tableau::add_edges(vcl_vector<vtol_edge_2d_sptr>& edges,
+void bgui_vtol2D_tableau::add_edges(vcl_vector<vtol_edge_2d_sptr> const& edges,
                                     bool verts)
 {
-  for (vcl_vector<vtol_edge_2d_sptr>::iterator eit = edges.begin();
+  for (vcl_vector<vtol_edge_2d_sptr>::const_iterator eit = edges.begin();
        eit != edges.end(); eit++)
     {
       this->add_edge(*eit);
@@ -215,10 +257,10 @@ void bgui_vtol2D_tableau::add_edges(vcl_vector<vtol_edge_2d_sptr>& edges,
 }
 
 void
-bgui_vtol2D_tableau::add_faces(vcl_vector<vtol_face_2d_sptr>& faces,
+bgui_vtol2D_tableau::add_faces(vcl_vector<vtol_face_2d_sptr> const& faces,
                                bool verts)
 {
-  for (vcl_vector<vtol_face_2d_sptr>::iterator fit = faces.begin();
+  for (vcl_vector<vtol_face_2d_sptr>::const_iterator fit = faces.begin();
        fit != faces.end(); fit++)
     {
       vtol_face_2d_sptr f = (*fit);

@@ -14,6 +14,16 @@
 
 
 //--------------------------------------------------------------------------
+//: vsol_point_2d view
+//--------------------------------------------------------------------------
+vcl_ostream& bgui_vtol_soview2D_point::print(vcl_ostream& s) const
+{
+s << "[bgui_vtol_soview2D_point " << x << "," << y << " ";
+s << " "; return vgui_soview2D::print(s) << "]";
+}
+
+
+//--------------------------------------------------------------------------
 //: vdgl_digital_curve view
 //--------------------------------------------------------------------------
 vcl_ostream& bgui_vtol_soview2D_digital_curve::print(vcl_ostream& s) const
@@ -58,9 +68,6 @@ s << "[bgui_vtol_soview2D_vertex " << x << "," << y << " ";
 s << " "; return vgui_soview2D::print(s) << "]";
 }
 
-bgui_vtol_soview2D_vertex::bgui_vtol_soview2D_vertex()
-{
-}
 
 //--------------------------------------------------------------------------
 //: vtol_edge_2d view

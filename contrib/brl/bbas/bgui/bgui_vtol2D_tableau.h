@@ -17,6 +17,8 @@
 #include <vcl_vector.h>
 #include <vcl_map.h>
 #include <vgui/vgui_style.h>
+#include <vsol/vsol_spatial_object_2d_sptr.h>
+#include <vsol/vsol_point_2d_sptr.h>
 #include <vdgl/vdgl_digital_curve_sptr.h>
 #include <vtol/vtol_vertex_2d.h>
 #include <vtol/vtol_edge_2d.h>
@@ -30,7 +32,7 @@
 #include <vgui/vgui_easy2D_tableau.h>
 #include <bgui/bgui_vtol2D_tableau_sptr.h>
 
-
+class bgui_vtol_soview2D_point;
 class bgui_vtol_soview2D_digital_curve;
 class bgui_vtol_soview2D_vertex;
 class bgui_vtol_soview2D_edge;
@@ -53,6 +55,10 @@ class bgui_vtol2D_tableau : public vgui_easy2D_tableau
   //:virtual handle method for events
   virtual bool handle(vgui_event const &);
 
+  //: display for vsol_point_2d  (not vtol but often useful)
+  bgui_vtol_soview2D_point* 
+    add_vsol_point_2d(vsol_point_2d_sptr const& p);
+
   //: display for digital_curve (not vtol but often useful)
   bgui_vtol_soview2D_digital_curve* 
     add_digital_curve(vdgl_digital_curve_sptr const& dc);
@@ -67,9 +73,12 @@ class bgui_vtol2D_tableau : public vgui_easy2D_tableau
 
   //: display methods for vectors of topology classes (not grouped)
 
-  void add_edges(vcl_vector<vtol_edge_2d_sptr>& edges, bool verts=false);
+  void add_spatial_objects(vcl_vector<vsol_spatial_object_2d_sptr> const& sos);
 
-  void add_faces(vcl_vector<vtol_face_2d_sptr>& faces, bool verts=false);
+  void add_edges(vcl_vector<vtol_edge_2d_sptr> const & edges,
+                 bool verts=false);
+
+  void add_faces(vcl_vector<vtol_face_2d_sptr> const & faces, bool verts=false);
 
   //: clear the tableau including the highlight map
   void clear_all();

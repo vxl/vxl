@@ -21,6 +21,23 @@
 #include <vgui/vgui_soview2D.h>
 #include <vgui/vgui_style.h>
 
+//: vsol_point_2d
+// This view is essentially the same as a point the only difference
+// is style. Probably move to a geometry tableau later
+class bgui_vtol_soview2D_point : public vgui_soview2D_point 
+{
+ public:
+  //: Constructor - creates a default vsol_point_2d view
+  bgui_vtol_soview2D_point(){}
+
+  //: Print details about this vtol_point to the given stream.
+  virtual vcl_ostream& print(vcl_ostream&) const;
+
+  //: Returns the type of this class ('bgui_vtol_soview2D_point').
+  vcl_string type_name() const { return "bgui_vtol_soview2D_point"; }
+
+};
+
 //: vdgl_digital_curve (maybe later move to a geometry tableau)
 class bgui_vtol_soview2D_digital_curve : public vgui_soview2D_group 
 {
@@ -45,7 +62,7 @@ class bgui_vtol_soview2D_vertex : public vgui_soview2D_point
 {
  public:
   //: Constructor - creates a default vertex_2d view
-  bgui_vtol_soview2D_vertex();
+  bgui_vtol_soview2D_vertex(){}
 
   //: Print details about this vtol_vertex_2d to the given stream.
   virtual vcl_ostream& print(vcl_ostream&) const;
