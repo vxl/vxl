@@ -22,7 +22,7 @@
 //  This class provides an interator-style interface to polygon scan
 //  conversion.  There are convenient constructors from vgl_polygon, and_
 //  lists of floats.  An auxillary clipping window can be specified by the
-//  constructor argument, IUBox* win.
+//  constructor argument, vgl_box_2d<float> win.
 //
 // Concave Polygon Scan Conversion
 // by Paul Heckbert
@@ -68,7 +68,7 @@ public:
     //: Construct with a ploygon, bool indicating whether bondary included
     // and window (area visble)
   vgl_polygon_scan_iterator(vgl_polygon const& face, bool boundaryp,
-    vgl_box_2d<float> const& window);
+                            vgl_box_2d<float> const& window);
 
   //: Destructor
   ~vgl_polygon_scan_iterator();
@@ -91,13 +91,13 @@ public:
   inline int endx() const { return xr; }
 
     //: Returns start of current span (float)
-  inline float fstartx() { return fxl; }
+  inline float fstartx() const { return fxl; }
 
     //: Returns end of current span (float)
-  inline float fendx() { return fxr; }
+  inline float fendx() const { return fxr; }
 
     //: Returns current scan line (float)
-  inline float fscany() { return fy; }
+  inline float fscany() const { return fy; }
 
     //: Vertex index - uniquely identifies a vertex in the array chains
 
