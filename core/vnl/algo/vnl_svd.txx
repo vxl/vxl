@@ -310,7 +310,7 @@ vnl_matrix<T> vnl_svd<T>::solve(vnl_matrix<T> const& B)  const
   unsigned long i, j;
   for (i = 0; i < x.rows(); i++) {                      // multiply with diagonal 1/W
     T weight = W_(i, i);
-    if (weight != T(0)); //vnl_numeric_traits<T>::zero)
+    if (weight != T(0)) //vnl_numeric_traits<T>::zero)
       weight = T(1) / weight;
     for (j = 0; j < x.columns(); j++)
       x(i, j) *= weight;
