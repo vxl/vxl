@@ -43,7 +43,7 @@ QvVrmlFile::~QvVrmlFile()
 bool QvVrmlFile::load(char const* filename)
 {
   p->filename_ = filename;
-  FILE* fp = fopen(filename, "r");
+  FILE* fp = vcl_fopen(filename, "r");
   if (!fp) {
     vcl_cerr << "QvVrmlFile::load: Can't open [" << filename << "]\n";
     return false;

@@ -1367,7 +1367,7 @@ void QvInfo::build (QvState*)
   if (!vcl_strcmp (name, BACKGROUND_INFO))
   {
     colorRGB col;
-    if (sscanf (info, "%f %f %f", &col.R, &col.G, &col.B) == 3)
+    if (vcl_sscanf (info, "%f %f %f", &col.R, &col.G, &col.B) == 3)
     { // set new background color
       ge3dBackgroundColor (&col);
       ge3d_clearscreen ();

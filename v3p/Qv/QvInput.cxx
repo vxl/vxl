@@ -291,7 +291,7 @@ void
 QvInput::getLocationString(QvString &string) const
 {
     char buf[128];
-    sprintf(buf, "        Occurred at line %3d", lineNum);
+    vcl_sprintf(buf, "        Occurred at line %3d", lineNum);
     string = buf;
 }
 
