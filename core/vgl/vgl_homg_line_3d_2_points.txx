@@ -6,6 +6,7 @@
 // \file
 
 #include <vcl_iostream.h>
+#include <vcl_cassert.h>
 #include "vgl_homg_line_3d_2_points.h"
 
 //***************************************************************************
@@ -54,6 +55,29 @@ void vgl_homg_line_3d_2_points<Type>::force_point2_infinite(void) const
   point_infinite_.set(a*d1-a1*d, b*d1-b1*d, c*d1-c1*d, 0);
 }
 
+//: Return the intersection point of two concurrent lines
+template <class Type>
+vgl_homg_point_3d<Type> intersection(vgl_homg_line_3d_2_points<Type> const& l1, vgl_homg_line_3d_2_points<Type> const& l2)
+{
+  assert(concurrent(l1,l2));
+  Type a0=l1.point_finite().x(), a1=l1.point_infinite().x(), a2=l2.point_finite().x(), a3=l2.point_infinite().x(),
+       b0=l1.point_finite().y(), b1=l1.point_infinite().y(), b2=l2.point_finite().y(), b3=l2.point_infinite().y(),
+       c0=l1.point_finite().z(), c1=l1.point_infinite().z(), c2=l2.point_finite().z(), c3=l2.point_infinite().z(),
+       d0=l1.point_finite().w(), d1=l1.point_infinite().w(), d2=l2.point_finite().w(), d3=l2.point_infinite().w();
+  Type t1 = b3*a1-a3*b1, t2 = (a2-a0)*b3-(b2-b0)*a3;
+  if (t1==0 && t2==0)
+    t1 = c3*a1-a3*c1, t2 = (a2-a0)*c3-(c2-c0)*a3;
+  if (t1==0 && t2==0)
+    t1 = d3*a1-a3*d1, t2 = (a2-a0)*d3-(d2-d0)*a3;
+  if (t1==0 && t2==0)
+    t1 = c3*b1-b3*c1, t2 = (b2-b0)*c3-(c2-c0)*b3;
+  if (t1==0 && t2==0)
+    t1 = d3*b1-b3*d1, t2 = (b2-b0)*d3-(d2-d0)*b3;
+  if (t1==0 && t2==0)
+    t1 = d3*c1-c3*d1, t2 = (c2-c0)*d3-(d2-d0)*c3;
+  return vgl_homg_point_3d<Type>(t1*a0+t2*a1,t1*b0+t2*b1,t1*c0+t2*c1,t1*d0+t2*d1);
+}
+
 //*****************************************************************************
 // stream operators
 //*****************************************************************************
@@ -69,5 +93,7 @@ vcl_ostream& operator<<(vcl_ostream &s,
 #undef VGL_HOMG_LINE_3D_2_POINTS_INSTANTIATE
 #define VGL_HOMG_LINE_3D_2_POINTS_INSTANTIATE(T) \
 template class vgl_homg_line_3d_2_points<T >;\
-template vcl_ostream& operator<<(vcl_ostream&, vgl_homg_line_3d_2_points<T > const&)
+template vcl_ostream& operator<<(vcl_ostream&, vgl_homg_line_3d_2_points<T > const&);\
+template vgl_homg_point_3d<T > intersection(vgl_homg_line_3d_2_points<T > const&, vgl_homg_line_3d_2_points<T > const&)
+
 #endif // vgl_homg_line_3d_2_points_txx_

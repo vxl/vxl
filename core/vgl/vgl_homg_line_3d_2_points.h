@@ -1,7 +1,9 @@
-// This is ./vxl/vgl/vgl_homg_line_3d_2_points.h
+// This is vxl/vgl/vgl_homg_line_3d_2_points.h
 #ifndef vgl_homg_line_3d_2_points_h_
 #define vgl_homg_line_3d_2_points_h_
-
+#ifdef __GNUC__
+#pragma interface
+#endif
 //:
 // \file
 // \author Don HAMILTON Peter TU François BERTEL
@@ -10,12 +12,8 @@
 // Modifications
 // Peter Vanroose -  4 July 2001 - constructors now use force_point2_infinite()
 // Peter Vanroose - 27 June 2001 - Added operator==
+// Peter Vanroose - 15 July 2002 - Added concurrent(), coplanar() and intersection()
 // \endverbatim
-//
-
-#ifdef __GNUC__
-#pragma interface
-#endif
 
 #include <vcl_iosfwd.h>
 #include <vgl/vgl_homg_point_3d.h> // data member of this class
@@ -26,10 +24,18 @@
 template <class Type>
 class vgl_homg_line_3d_2_points
 {
+  // Data Members------------------------------------------------------------
+
+  //: Any finite point on the line
+  mutable vgl_homg_point_3d<Type> point_finite_;
+  //: the (unique) point at infinity
+  mutable vgl_homg_point_3d<Type> point_infinite_;
+
+ public:
   //+**************************************************************************
   // Initialization
   //+**************************************************************************
-public:
+
   //: Default constructor with (0,0,0,1) and (1,0,0,0), which is the line \a y=z=0
   inline vgl_homg_line_3d_2_points(void)
   : point_finite_(0,0,0,1), point_infinite_(1,0,0,0) {}
@@ -72,21 +78,57 @@ protected:
   //: force the point point_infinite_ to infinity, without changing the line
   // This is called by the constructors
   void force_point2_infinite(void) const; // mutable const
-
-  // Internals
-private:
-  // Data Members------------------------------------------------------------
-
-  //: Any finite point on the line
-  mutable vgl_homg_point_3d<Type> point_finite_;
-  //: the (unique) point at infinity
-  mutable vgl_homg_point_3d<Type> point_infinite_;
 };
+
+#define l vgl_homg_line_3d_2_points<Type>
 
 //: Return true iff line is at infinity
 template <class Type>
-inline bool is_ideal(vgl_homg_line_3d_2_points<Type> const& line, Type tol=Type(0))
+inline bool is_ideal(l const& line, Type tol=Type(0))
 { return line.ideal(tol); }
+
+//: Does a line pass through a point, i.e., are the point and the line collinear?
+template <class Type>
+inline bool collinear(l const& l1, vgl_homg_point_3d<Type> const& p) {
+  return collinear(l1.point_finite(),l1.point_infinite(),p);
+} 
+
+//: Are two lines coplanar, i.e., do they intersect?
+template <class Type>
+inline bool coplanar(l const& l1, l const& l2) {
+  return coplanar(l1.point_finite(),l1.point_infinite(),l2.point_finite(),l2.point_infinite());
+} 
+
+//: Are two lines concurrent, i.e., do they intersect?
+template <class Type>
+inline bool concurrent(l const& l1, l const& l2) { return coplanar(l1,l2); }
+
+//: Are two points coplanar with a line?
+template <class Type>
+inline bool coplanar(l const& l1, vgl_homg_point_3d<Type> const& p1, vgl_homg_point_3d<Type> const& p2) {
+  return coplanar(l1.point_finite(),l1.point_infinite(),p1,p2);
+} 
+
+//: Are three lines coplanar, i.e., are they in a common plane?
+template <class Type>
+inline bool coplanar(l const& l1, l const& l2, l const& l3) {
+  vgl_homg_point_3d<Type> p = l2.point_finite();
+  if (collinear(l1,p)) p = l2.point_infinite();
+  return coplanar(l1,l2) && coplanar(l1,l3) &&
+         coplanar(l1,p,l3.point_finite()) &&
+         coplanar(l1,p,l3.point_infinite());
+}
+
+//: Return the intersection point of two concurrent lines
+template <class Type>
+vgl_homg_point_3d<Type> intersection(l const& l1, l const& l2);
+
+//: Are three lines concurrent, i.e., do they pass through a common point?
+template <class Type>
+inline bool concurrent(l const& l1, l const& l2, l const& l3) {
+  if (!concurrent(l1,l2) || !concurrent(l1,l3) || !concurrent(l2,l3)) return false;
+  return intersection(l1,l2) == intersection(l1,l3);
+}
 
 //+****************************************************************************
 // stream operators
@@ -94,11 +136,13 @@ inline bool is_ideal(vgl_homg_line_3d_2_points<Type> const& line, Type tol=Type(
 
 //: Write to stream (verbose)
 template <class Type>
-vcl_ostream &operator<<(vcl_ostream&s, vgl_homg_line_3d_2_points<Type>const&p);
+vcl_ostream &operator<<(vcl_ostream&s, l const& p);
 
 //: Read parameters from stream
 template <class Type>
-vcl_istream &operator>>(vcl_istream &is, vgl_homg_line_3d_2_points<Type> &p);
+vcl_istream &operator>>(vcl_istream &is, l &p);
+
+#undef l
 
 #define VGL_HOMG_LINE_3D_2_POINTS_INSTANTIATE(T) extern "please include vgl/vgl_homg_line_3d_2_points.txx first"
 
