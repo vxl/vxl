@@ -1,10 +1,10 @@
-#include "bvnl_quadratic_interpolator.h"
+#include "bnl_quadratic_interpolator.h"
 #include <vnl/vnl_vector.h>
 #include <vnl/algo/vnl_svd.h>
 #include <vcl_iostream.h>
 #include <vcl_cmath.h> // for fabs()
 
-void bvnl_quadratic_interpolator::add_data_point(const double px,
+void bnl_quadratic_interpolator::add_data_point(const double px,
                                                  const double py,
                                                  const double v)
 {
@@ -13,19 +13,19 @@ void bvnl_quadratic_interpolator::add_data_point(const double px,
   v_.push_back(v);
 }
 
-void bvnl_quadratic_interpolator::clear()
+void bnl_quadratic_interpolator::clear()
 {
   px_.clear();
   py_.clear();
   v_.clear();
 }
 
-int bvnl_quadratic_interpolator::n_points()
+int bnl_quadratic_interpolator::n_points()
 {
   return px_.size();
 }
 
-void bvnl_quadratic_interpolator::fill_scatter_matrix()
+void bnl_quadratic_interpolator::fill_scatter_matrix()
 {
   int n = this->n_points();
   double x4 = 0, x3y = 0, x2y2 = 0, x3=0, x2y=0, vx2=0, x2 =0;
@@ -69,7 +69,7 @@ void bvnl_quadratic_interpolator::fill_scatter_matrix()
   s_.put(6,0,x2);  s_.put(6,1,xy);  s_.put(6,2,y2);  s_.put(6,3,x);  s_.put(6,4,y);  s_.put(6,5,-v);  s_.put(6,6,n);
 }
 
-bool bvnl_quadratic_interpolator::solve()
+bool bnl_quadratic_interpolator::solve()
 {
   if (this->n_points() < 6)
     return false;
@@ -111,13 +111,13 @@ bool bvnl_quadratic_interpolator::solve()
   return true;
 }
 
-void bvnl_quadratic_interpolator::extremum(double& px, double& py)
+void bnl_quadratic_interpolator::extremum(double& px, double& py)
 {
   px = px_ext_;
   py = py_ext_;
 }
 
-void bvnl_quadratic_interpolator::print()
+void bnl_quadratic_interpolator::print()
 {
   vcl_cout << "P / V\n";
   for (int i = 0; i<this->n_points(); i++)

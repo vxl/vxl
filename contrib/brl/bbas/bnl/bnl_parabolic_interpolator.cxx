@@ -1,27 +1,27 @@
 #include <vnl/vnl_vector.h>
 #include <vnl/algo/vnl_svd.h>
 #include <vcl_iostream.h>
-#include <bvnl/bvnl_parabolic_interpolator.h>
+#include <bnl/bnl_parabolic_interpolator.h>
 
 void 
-bvnl_parabolic_interpolator::add_data_point(const double p, const double v)
+bnl_parabolic_interpolator::add_data_point(const double p, const double v)
 {
   p_.push_back(p);
   v_.push_back(v);
 }
 
-void bvnl_parabolic_interpolator::clear()
+void bnl_parabolic_interpolator::clear()
 {
   p_.clear();
   v_.clear();
 }
 
-int bvnl_parabolic_interpolator::n_points()
+int bnl_parabolic_interpolator::n_points()
 {
   return p_.size();
 }
 
-void bvnl_parabolic_interpolator::fill_scatter_matrix()
+void bnl_parabolic_interpolator::fill_scatter_matrix()
 {
   int n = this->n_points();
   double p4 = 0, p3 =0, p2 = 0, p2v=0, pv=0, v2=0, p =0, v=0;
@@ -52,7 +52,7 @@ void bvnl_parabolic_interpolator::fill_scatter_matrix()
   s_.put(3,0,p2);s_.put(3,1,p);s_.put(3,2,-v);s_.put(3,3,n);
 }
 
-bool bvnl_parabolic_interpolator::solve()
+bool bnl_parabolic_interpolator::solve()
 {
   if (this->n_points() < 3)
     return false;
@@ -66,7 +66,7 @@ bool bvnl_parabolic_interpolator::solve()
   return true;
 }
 
-void bvnl_parabolic_interpolator::print()
+void bnl_parabolic_interpolator::print()
 {
   vcl_cout << "P / V\n";
   for (int i = 0; i<this->n_points(); i++)

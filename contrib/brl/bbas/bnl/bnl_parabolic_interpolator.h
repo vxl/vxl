@@ -1,5 +1,5 @@
-#ifndef bvnl_parabolic_interpolator_h_
-#define bvnl_parabolic_interpolator_h_
+#ifndef bnl_parabolic_interpolator_h_
+#define bnl_parabolic_interpolator_h_
 //-----------------------------------------------------------------------------
 //:
 // \file
@@ -13,11 +13,11 @@
 #include <vnl/vnl_matrix.h>
 
 //-----------------------------------------------------------------------------
-class bvnl_parabolic_interpolator
+class bnl_parabolic_interpolator
 {
  public:
-  bvnl_parabolic_interpolator(){};
-  ~bvnl_parabolic_interpolator(){};
+  bnl_parabolic_interpolator(){};
+  ~bnl_parabolic_interpolator(){};
   //:p is the parameter to be interpolated, v is the data value
   void add_data_point(const double p, const double v);
   //: reset data array
@@ -40,4 +40,4 @@ class bvnl_parabolic_interpolator
   double p_ext_;//extremum values
 };
 
-#endif // bvnl_parabolic_interpolator_h_
+#endif // bnl_parabolic_interpolator_h_

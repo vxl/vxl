@@ -1,5 +1,5 @@
-#ifndef bvnl_quadratic_interpolator_h_
-#define bvnl_quadratic_interpolator_h_
+#ifndef bnl_quadratic_interpolator_h_
+#define bnl_quadratic_interpolator_h_
 
 //-----------------------------------------------------------------------------
 //:
@@ -14,11 +14,11 @@
 #include <vnl/vnl_matrix.h>
 
 //-----------------------------------------------------------------------------
-class bvnl_quadratic_interpolator
+class bnl_quadratic_interpolator
 {
 public:
-  bvnl_quadratic_interpolator(){};
-  ~bvnl_quadratic_interpolator(){};
+  bnl_quadratic_interpolator(){};
+  ~bnl_quadratic_interpolator(){};
   //: px and py are the 2-d parameters, v is the data value
   void add_data_point(const double px, const double py, const double v);
   //: reset data array
@@ -45,4 +45,4 @@ private:
 
 
 
-#endif // bvnl_quadratic_interpolator_h_
+#endif // bnl_quadratic_interpolator_h_
