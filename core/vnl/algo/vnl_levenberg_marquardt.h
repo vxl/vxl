@@ -22,6 +22,7 @@
 
 #include <vcl_iosfwd.h>
 #include <vnl/vnl_vector.h>
+#include <vnl/vnl_vector_fixed.h>
 #include <vnl/vnl_matrix.h>
 #include <vnl/vnl_nonlinear_minimizer.h>
 
@@ -44,6 +45,7 @@ class vnl_levenberg_marquardt : public vnl_nonlinear_minimizer
   //: Initialize with the function object that is to be minimized.
   vnl_levenberg_marquardt(vnl_least_squares_function& f) { init(&f); }
 
+#if 0
   //: Initialize as above, and then run minimization.
   //
   // obsolete, as virtuals in base class vnl_nonlinear_minimizer not valid...
@@ -51,14 +53,19 @@ class vnl_levenberg_marquardt : public vnl_nonlinear_minimizer
   // base version rather than any overridden here or in classes derived
   // from this.  This is an argument against computation in constructors.
   // You should replace code like
+  // \code
   //    vnl_levenberg_marquardt lm(f, x);
+  // \endcode
   // with
+  // \code
   //    vnl_levenberg_marquardt lm(f);
   //    lm.minimize(x);
+  // \endcode
   // Or
+  // \code
   //    x = vnl_levenberg_marquardt_minimize(f, x);
+  // \endcode
 
-#if 0
   vnl_levenberg_marquardt(vnl_least_squares_function& f,
                           vnl_vector<double>& x)
   {
@@ -84,6 +91,9 @@ class vnl_levenberg_marquardt : public vnl_nonlinear_minimizer
   //: Calls minimize_using_gradient() or minimize_without_gradient()
   // , depending on whether the cost function provides a gradient.
   bool minimize(vnl_vector<double>& x);
+  bool minimize(vnl_vector_fixed<double,2>& x) { vnl_vector<double> y=x.extract(2); bool b=minimize(y); x=y; return b; }
+  bool minimize(vnl_vector_fixed<double,3>& x) { vnl_vector<double> y=x.extract(3); bool b=minimize(y); x=y; return b; }
+  bool minimize(vnl_vector_fixed<double,4>& x) { vnl_vector<double> y=x.extract(4); bool b=minimize(y); x=y; return b; }
 
   // Coping with failure-------------------------------------------------------
 
