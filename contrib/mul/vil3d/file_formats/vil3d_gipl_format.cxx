@@ -92,12 +92,11 @@ vil3d_gipl_format::~vil3d_gipl_format()
 }
 
 
-
-
 vil3d_image_resource_sptr vil3d_gipl_format::make_input_image(const char *) const
 {
-  vcl_cerr <<"vil3d_gipl_format::make_input_image() NYI" << vcl_endl;
+  vcl_cerr <<"vil3d_gipl_format::make_input_image() NYI\n";
   vcl_abort();
+  return 0;
 }
 
 
@@ -109,8 +108,9 @@ vil3d_image_resource_sptr vil3d_gipl_format::make_output_image
                    (const char* filename, unsigned ni, unsigned nj,
                     unsigned nk, unsigned nplanes, enum vil2_pixel_format) const
 {
-  vcl_cerr <<"vil3d_gipl_format::make_output_image() NYI" << vcl_endl;
+  vcl_cerr <<"vil3d_gipl_format::make_output_image() NYI\n";
   vcl_abort();
+  return 0;
 }
 
 
@@ -189,8 +189,8 @@ bool vil3d_gipl_format::read_stream(vil3d_header_data_sptr& header,
     case (192): // C.Float
     case (193): // C.Double
     default:
-      vcl_cout<<"vil3d_gipl_format::read_stream()";
-      vcl_cout<<" Unknown pixel type\n";
+      vcl_cout<<"vil3d_gipl_format::read_stream()"
+              <<" Unknown pixel type\n";
       return false;
   }
 
