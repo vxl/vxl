@@ -11,7 +11,8 @@
 
 #include "vnl_fastops.h"
 
-#include <vcl_cstdlib.h> // vcl_abort()
+#include <vcl_cstdlib.h> // abort()
+#include <vcl_cstring.h> // memset()
 #include <vcl_iostream.h>
 
 // -- Compute $A^\top A$.
@@ -29,13 +30,30 @@ void vnl_fastops::AtA(const vnl_matrix<double>& A, vnl_matrix<double>* AtA)
   double const* const* a = A.data_array();
   double** ata = AtA->data_array();
   
-  for(unsigned i = 0; i < n; ++i)
-    for(unsigned j = i; j < n; ++j) {
-      double accum = 0;
-      for(int k = 0; k < m; ++k)
-	accum += a[k][i] * a[k][j];
-      ata[i][j] = ata[j][i] = accum;
-    }
+  if (0) {
+    for(unsigned i = 0; i < n; ++i)
+      for(unsigned j = i; j < n; ++j) {
+	double accum = 0;
+	for(int k = 0; k < m; ++k)
+	  accum += a[k][i] * a[k][j];
+	ata[i][j] = ata[j][i] = accum;
+      }
+  } else {
+    // 5 times faster on 600 Mhz Pentium III for m = 10000, n = 50
+    vcl_memset(ata[0], 0, n * n * sizeof ata[0][0]);
+    for(int k = 0; k < m; ++k)
+      for(unsigned i = 0; i < n; ++i) {
+	double aki = a[k][i];
+	double const* arow = a[k] + i;
+	double* atarow = ata[i] + i;
+	double const* arowend = a[k] + n;
+	while (arow != arowend)
+	  *atarow++ += aki * *arow++;
+      }
+    for(unsigned i = 0; i < n; ++i)
+      for(unsigned j = i+1; j < n; ++j)
+	ata[j][i] = ata[i][j];
+  }
 }
 
 // -- Compute $A B$.

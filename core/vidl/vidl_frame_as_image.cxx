@@ -11,9 +11,8 @@
 
 // -- Constructor.
 // Take the characteristics of the first image of the movie
-vidl_frame_as_image::vidl_frame_as_image(vidl_frame_ref frame) : 
-  frame_(frame) //wrong initializer order. , vil_image()
-
+vidl_frame_as_image::vidl_frame_as_image(vidl_frame* frame) : 
+  frame_(frame)
 {
 
 }

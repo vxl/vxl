@@ -87,8 +87,9 @@ public:
   
   // Data Access-------------------------------------------------------------
 
-  inline Type const& x() const {return data_[0];}
-  inline Type const& y() const {return data_[1];}
+  inline Type x() const {return data_[0];}
+  inline Type y() const {return data_[1];}
+
   inline Type& x() {return data_[0];}
   inline Type& y() {return data_[1];}
 
@@ -108,12 +109,12 @@ protected:
 // stream operators
 
 template <class Type>
-ostream&  operator<<(ostream& s, const vgl_point_2d<Type>& p) {
+vcl_ostream&  operator<<(vcl_ostream& s, const vgl_point_2d<Type>& p) {
   return s << "<vgl_point_2d " << p.x() << "," << p.y() << ">";
 }
 
 template <class Type>
-istream&  operator>>(istream& is,  vgl_point_2d<Type>& p) {
+vcl_istream&  operator>>(vcl_istream& is,  vgl_point_2d<Type>& p) {
   return is >> p.x() >> p.y();
 }
 
