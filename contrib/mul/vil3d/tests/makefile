@@ -3,6 +3,9 @@ include ../algo/config.mk
 include ${IUEROOT}/core/testlib/config.mk
 include ${IUEROOT}/core/vpl/config.mk
 
+# This is where vil/vil_config.h resides
+INCDIRS += ${IUEROOT}/core/vil/$(RELOBJDIR)/include
+
 TESTMAIN = test_driver.cxx
 
 TESTS += test_gauss_reduce.cxx
