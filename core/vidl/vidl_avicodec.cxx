@@ -223,7 +223,7 @@ vidl_codec_sptr vidl_avicodec::load(const char* fname, char mode)
 
 bool vidl_avicodec::load_avi(const char* fname, char mode)
 {
-  int modenum;
+  int modenum = OF_READ;
   DWORD videostreamcode = 0x73646976; // corresponds to char string "vids"
 
   switch(mode) {

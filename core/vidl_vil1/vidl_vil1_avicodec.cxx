@@ -116,11 +116,11 @@ bool vidl_vil1_avicodec::get_section(
 
   //For the moment
   if ((BitsPerPixel!=16) && (BitsPerPixel!=24))
-    {
-      vcl_cerr << "vidl_vil1_avicodec : Don't know how to process a "
-               << BitsPerPixel<< " bits per pixel AVI File.\n";
-      return false;
-    }
+  {
+    vcl_cerr << "vidl_vil1_avicodec : Don't know how to process a "
+             << BitsPerPixel<< " bits per pixel AVI File.\n";
+    return false;
+  }
 
   DIB += *(LPDWORD)DIB;
   byte* StartDIB = (byte*)DIB;
@@ -128,7 +128,8 @@ bool vidl_vil1_avicodec::get_section(
   // (a row contains a multiple of 4 bytes)
   int line_length = (width()*BitsPerPixel+31)/32*4;
 
-  if (!ib) {
+  if (!ib)
+  {
     ib = new byte[xs*ys*get_bytes_pixel()];
     if (!ib) {
       //SetStatusBad();
@@ -201,20 +202,20 @@ bool vidl_vil1_avicodec::probe(const char* fname)
   int modenum = OF_READ | OF_SHARE_DENY_WRITE;
   AVIFileInit();
   if (AVIFileOpen(&avi_file_, fname, modenum, 0L)==0)
-    {
-      // The file was opened with success
-      // So, release it
-      AVIFileRelease(avi_file_);
-      // and return sucess
-      return true;
-    }
+  {
+    // The file was opened with success
+    // So, release it
+    AVIFileRelease(avi_file_);
+    // and return sucess
+    return true;
+  }
 
   return false;
 }
 
 vidl_vil1_codec_sptr vidl_vil1_avicodec::load(const char* fname, char mode)
 {
-  int modenum;
+  int modenum = OF_READ;
   DWORD videostreamcode = 0x73646976; // corresponds to char string "vids"
 
   switch(mode) {
@@ -235,9 +236,9 @@ vidl_vil1_codec_sptr vidl_vil1_avicodec::load(const char* fname, char mode)
   }
 
   if (!avi_file_ || !avi_stream_)
-    {
-      return NULL;
-    }
+  {
+    return NULL;
+  }
 
   avi_get_frame_ = AVIStreamGetFrameOpen(avi_stream_, NULL);
 
@@ -284,11 +285,11 @@ vidl_vil1_codec_sptr vidl_vil1_avicodec::load(const char* fname, char mode)
 
   //For the moment, we'll process 8 bits later
   if ((BitsPerPixel!=16) && (BitsPerPixel!=24))
-    {
-      vcl_cerr << "vidl_vil1_avicodec : Don't know how to process a "
-               << BitsPerPixel << " bits per pixel AVI File.\n";
-      return NULL;
-    }
+  {
+    vcl_cerr << "vidl_vil1_avicodec : Don't know how to process a "
+             << BitsPerPixel << " bits per pixel AVI File.\n";
+    return NULL;
+  }
 
   return this;
 }
@@ -493,7 +494,7 @@ void vidl_vil1_avicodec::choose_encoder(AVIEncoderType encoder)
 {
   encoder_type=encoder;
 
-  if (encoder_type==ASKUSER || 
+  if (encoder_type==ASKUSER ||
       (encoder_type==USEPREVIOUS && encoder_options_valid))
     return;
 
@@ -503,43 +504,37 @@ void vidl_vil1_avicodec::choose_encoder(AVIEncoderType encoder)
   {
    case USEPREVIOUS:
    case UNCOMPRESSED:
-    {
-      opts.fccType=streamtypeVIDEO;
-      opts.fccHandler=mmioFOURCC('D','I','B',' ');
-      opts.dwKeyFrameEvery=0;
-      opts.dwQuality=0;
-      opts.dwFlags=AVICOMPRESSF_VALID;
-      opts.lpFormat=0;
-      opts.cbFormat=0;
-      opts.lpParms=0;
-      opts.cbParms=0;
-      opts.dwInterleaveEvery=0;
-      break;
-    }
+    opts.fccType=streamtypeVIDEO;
+    opts.fccHandler=mmioFOURCC('D','I','B',' ');
+    opts.dwKeyFrameEvery=0;
+    opts.dwQuality=0;
+    opts.dwFlags=AVICOMPRESSF_VALID;
+    opts.lpFormat=0;
+    opts.cbFormat=0;
+    opts.lpParms=0;
+    opts.cbParms=0;
+    opts.dwInterleaveEvery=0;
+    break;
    case CINEPACK:
-    {
-      opts.fccType=streamtypeVIDEO;
-      opts.fccHandler=mmioFOURCC('c','v','i','d');
-      opts.dwKeyFrameEvery=0;
-      opts.dwQuality=10000;
-      opts.dwFlags=AVICOMPRESSF_VALID;
-      opts.lpFormat=0;
-      opts.cbFormat=0;
-      //The pointer to lpParms should actually point to four bytes of
-      //memory containing the data 0x726c6f63, however, it seems to
-      //work with all zeros also.
-      //opts.lpParms = (LPVOID *)GlobalAlloc(NULL, 4);
-      //opts.cbParms = 4;
-      // *((long*)opts.lpParms) = 0x726c6f63;
-      opts.lpParms=0;
-      opts.cbParms=0;
-      opts.dwInterleaveEvery=0;
-      break;
-    }
+    opts.fccType=streamtypeVIDEO;
+    opts.fccHandler=mmioFOURCC('c','v','i','d');
+    opts.dwKeyFrameEvery=0;
+    opts.dwQuality=10000;
+    opts.dwFlags=AVICOMPRESSF_VALID;
+    opts.lpFormat=0;
+    opts.cbFormat=0;
+    //The pointer to lpParms should actually point to four bytes of
+    //memory containing the data 0x726c6f63, however, it seems to
+    //work with all zeros also.
+    //opts.lpParms = (LPVOID *)GlobalAlloc(NULL, 4);
+    //opts.cbParms = 4;
+    // *((long*)opts.lpParms) = 0x726c6f63;
+    opts.lpParms=0;
+    opts.cbParms=0;
+    opts.dwInterleaveEvery=0;
+    break;
    default:
-    {
-      encoder_options_valid=false;
-    }
+    encoder_options_valid=false;
   }
 }
 
@@ -574,36 +569,36 @@ HANDLE  vidl_vil1_avicodec::make_dib(vidl_vil1_frame_sptr frame, UINT bits)
 
   // Store the TargetJr data in a Bitmap way, DIB is a flipped upside down
   switch (frame->get_bytes_pixel())
+  {
+   case 3:
+    for (j=frame->height()-1; j>=0;j--)
     {
-    case 3:
-      for (j=frame->height()-1; j>=0;j--)
-      {
-        db = TjSection+ (j*frame->width())*frame->get_bytes_pixel();
-        byte* DIB = newbits + (frame->height()-j-1)*line_length;
-        for (i=0; i<frame->width(); ++i, DIB+=3, db+=3) {
-          *DIB = *(db+2);
-          *(DIB+1) = *(db+1);
-          *(DIB+2) = *(db);
-        }
+      db = TjSection+ (j*frame->width())*frame->get_bytes_pixel();
+      byte* DIB = newbits + (frame->height()-j-1)*line_length;
+      for (i=0; i<frame->width(); ++i, DIB+=3, db+=3) {
+        *DIB = *(db+2);
+        *(DIB+1) = *(db+1);
+        *(DIB+2) = *(db);
       }
-      break;
-    case 1:
-      for (j=frame->height()-1; j>=0;j--)
-      {
-        db = TjSection+ (j*frame->width())*frame->get_bytes_pixel();
-        byte* DIB = newbits + (frame->height()-j-1)*line_length;
-        for (i=0; i<frame->width(); ++i, DIB+=3, db+=1) {
-          *DIB = *(db);
-          *(DIB+1) = *(db);
-          *(DIB+2) = *(db);
-        }
+    }
+    break;
+   case 1:
+    for (j=frame->height()-1; j>=0;j--)
+    {
+      db = TjSection+ (j*frame->width())*frame->get_bytes_pixel();
+      byte* DIB = newbits + (frame->height()-j-1)*line_length;
+      for (i=0; i<frame->width(); ++i, DIB+=3, db+=1) {
+        *DIB = *(db);
+        *(DIB+1) = *(db);
+        *(DIB+2) = *(db);
       }
-      break;
-    default:
-      vcl_cerr << "vidl_vil1_avicodec : Don't know how to deal with "
-               << frame->get_bytes_pixel() << " bytes per pixel.\n";
+    }
+    break;
+   default:
+    vcl_cerr << "vidl_vil1_avicodec : Don't know how to deal with "
+             << frame->get_bytes_pixel() << " bytes per pixel.\n";
 
-    } // end switch byte per pixel
+  } // end switch byte per pixel
 
   // Get rid of the original datas
   delete[] TjSection;
