@@ -11,3 +11,8 @@ ADD_TEST(bvgl_test_h_matrix_2d bvgl_test_h_matrix_2d)
 ADD_EXECUTABLE(bvgl_test_h_matrix_3d  bvgl_test_h_matrix_3d.cxx)
 ADD_TEST(bvgl_test_h_matrix_3d bvgl_test_h_matrix_3d)
 
+ADD_EXECUTABLE(bvgl_test_norm_trans_2d  bvgl_test_norm_trans_2d.cxx)
+ADD_TEST(bvgl_test_norm_trans_2d bvgl_test_norm_trans_2d)
+
+ADD_EXECUTABLE(bvgl_test_h_matrix_2d_compute_linear  bvgl_test_h_matrix_2d_compute_linear.cxx)
+ADD_TEST(bvgl_test_h_matrix_2d_compute_linear bvgl_test_h_matrix_2d_compute_linear)
