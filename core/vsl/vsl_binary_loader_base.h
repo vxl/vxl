@@ -27,6 +27,10 @@ class vsl_binary_loader_base
 
 //: Deletes all the loaders derived from this class
 //  Deletes every loader for which register_this() has been called
+//  This is mainly called when tidying up the heap to ensure memory
+//  leak detectors don't throw up false positives.  In that spirit,
+//  this also calls vsl_indent_clear_all_data() to remove another
+//  potential leak.
 void vsl_delete_all_loaders();
 
 #endif // vsl_binary_loader_base_h_

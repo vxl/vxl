@@ -8,6 +8,7 @@
 #include "vsl_binary_loader_base.h"
 #include <vcl_vector.h>
 #include <vcl_vector.txx>
+#include <vsl/vsl_indent.h>
 
 // List of all loaders register_this()'ed
 // Create on heap so that it can be cleaned up itself
@@ -47,4 +48,7 @@ void vsl_delete_all_loaders()
   // Clean up the list itself
   delete loader_list_;
   loader_list_=0;
+
+  // Clear all indent data
+  vsl_indent_clear_all_data();
 }

@@ -106,4 +106,12 @@ void vsl_indent_clear(vcl_ostream& os);
 //: Outputs current indent to os
 vcl_ostream& operator<<(vcl_ostream& os, const vsl_indent& indent);
 
+//: Tidy up the internal indent map to remove potential memory leaks
+//  The details of indents for each stream are stored in a static
+//  map.  When testing for memory leaks, this is flagged, creating
+//  lots of noise in the output of memory leak checkers.
+//  This call empties the map, removing the potential leak.
+//  Pragmatically it is called in the vsl_delete_all_loaders()
+void vsl_indent_clear_all_data();
+
 #endif // vsl_indent_h_
