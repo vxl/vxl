@@ -158,6 +158,7 @@ inline bool operator!= (T const* p, vil_smart_ptr<T> const& a)
 }
 
 // Work-around for Borland and safe_bool.
+#ifdef VCL_BORLAND
 template <class T>
 inline
 bool operator&&(const vil_smart_ptr<T>& ptr, bool b)
@@ -182,6 +183,7 @@ bool operator||(bool b, const vil_smart_ptr<T>& ptr)
 {
   return b || (ptr?true:false);
 }
+#endif
 
 // Sunpro and GCC need a vcl_ostream operator. It need not be inline
 // because if you're about to make a system call you can afford the

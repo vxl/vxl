@@ -306,6 +306,7 @@ vcl_ostream& operator<<(vcl_ostream& s, vil_image_view<T> const& im)
 }
 
 // Work-around for Borland and safe_bool.
+#ifdef VCL_BORLAND
 template <class T>
 inline
 bool operator&&(const vil_image_view<T>& view, bool b)
@@ -330,6 +331,7 @@ bool operator||(bool b, const vil_image_view<T>& view)
 {
   return b || (view?true:false);
 }
+#endif
 
 //: True if the actual images are identical.
 // $\bigwedge_{i,j,p} {\textstyle src}(i,j,p) == {\textstyle dest}(i,j,p)$

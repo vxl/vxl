@@ -145,8 +145,8 @@ class vil1_image
     { return (ptr != 0)? &safe_bool_dummy::dummy : 0; }
 
   //: inverse conversion to bool
-  safe_bool operator!() const
-    { return (ptr != 0)? 0 : &safe_bool_dummy::dummy; }
+  bool operator!() const
+    { return (ptr != 0)? false : true; }
 
   //: use "sptr.impl()" to get a pointer to the impl object.
   vil1_image_impl *impl() const {
@@ -156,6 +156,30 @@ class vil1_image
  protected:
   vil1_image_impl *ptr;
 };
+
+// Work-around for Borland and safe_bool.
+#ifdef VCL_BORLAND
+inline
+bool operator&&(const vil1_image& img, bool b)
+{
+  return b && (img?true:false);
+}
+inline
+bool operator&&(bool b, const vil1_image& img)
+{
+  return b && (img?true:false);
+}
+inline
+bool operator||(const vil1_image& img, bool b)
+{
+  return b || (img?true:false);
+}
+inline
+bool operator||(bool b, const vil1_image& img)
+{
+  return b || (img?true:false);
+}
+#endif
 
 //: Print a 1-line summary of contents
 inline vcl_ostream& operator<<(vcl_ostream& s, vil1_image const& i)

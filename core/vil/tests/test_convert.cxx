@@ -45,7 +45,7 @@ static void test_convert_diff_types(const char * golden_data_dir)
   vil_image_view_base_sptr image2 = vil_load((datadir + "ff_grey16bit_raw.pgm").c_str());
   vil_image_view_base_sptr image3 = vil_load((datadir + "ff_rgb8bit_raw.ppm").c_str());
   vil_image_view_base_sptr image4 = vil_load((datadir + "ff_rgb16bit_raw.ppm").c_str());
-  testlib_test_perform( image1 && image_base1 );
+  testlib_test_perform( bool(image1) && image_base1 );
 
   testlib_test_begin( "Converting explicitly 8bit grey to 16bit grey" );
   vil_image_view<vxl_uint_16> image_16_1;
