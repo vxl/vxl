@@ -194,6 +194,7 @@ void vmal_dense_matching::refine_lines_using_H(vmal_multi_view_data_edge_sptr mv
             pt1p=inter1p;
             pt1q=inter1q;
           }
+        }
 
         res->new_track();
         vtol_edge_2d_sptr out0=new vtol_edge_2d(pt0p[0],pt0p[1],pt0q[0],pt0q[1]);
