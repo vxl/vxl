@@ -10,12 +10,12 @@
 // Test the anisotropic_gaussian_filter
 static void test_anisotropic_gaussian_filter()
 {
-  vcl_cout << "***********************************************\n"
+  vcl_cout << "************************************************\n"
            << " Testing vil3d_algo_anisotropic_gaussian_filter\n"
-           << "***********************************************\n";
+           << "************************************************\n";
 
   // Image dimensions
-  unsigned ni=9, nj=9, nk=9;
+  const unsigned ni=9, nj=9, nk=9;
 
   // Create the source image
   vil3d_image_view<int> src_im(ni, nj, nk, 1);
@@ -24,7 +24,7 @@ static void test_anisotropic_gaussian_filter()
 
   // Create the destination image
   vil3d_image_view<int> dst_im(ni, nj, nk, 1);
-  dst_im.fill(0);  
+  dst_im.fill(0);
 
   // Create some workspace images
   vil3d_image_view<float> work1(ni, nj, nk);
@@ -33,21 +33,21 @@ static void test_anisotropic_gaussian_filter()
 
   // Specify the smoothing widths
   vgl_vector_3d<double> sd(1.0, 1.0, 1.0);
-  
+
   // Generate and apply the filters
   vil3d_anisotropic_gaussian_filter(src_im, dst_im, sd, work1, work2, work3);
 
-  /*
-  vcl_cout << "Source image: \n";
+#if 0
+  vcl_cout << "Source image:\n";
   vil3d_print_all(vcl_cout, src_im);
 
-  vcl_cout << "\n\nDestination image: \n";
+  vcl_cout << "\n\nDestination image:\n";
   vil3d_print_all(vcl_cout, dst_im);
-  */
+#endif // 0
 
   double src_sum = 0;
   vil3d_math_sum(src_sum, src_im, 0);
-  
+
   double dst_sum = 0;
   vil3d_math_sum(dst_sum, dst_im, 0);
 
