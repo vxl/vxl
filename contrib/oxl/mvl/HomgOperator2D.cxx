@@ -444,12 +444,6 @@ HomgLineSeg2D HomgOperator2D::clip_line_to_lineseg(const HomgLine2D& line,
   }
 }
 
-double HomgOperator2D::perp_distance_squared (const HomgLine2D& line, const HomgPoint2D& point)
-{
-  vcl_cerr << "HomgOperator2D::perp_distance_squared should be replaced by perp_dist_squared\n";
-  return perp_dist_squared(point, line);
-}
-
 //-----------------------------------------------------------------------------
 //: Calculates the crossratio of four collinear points p1, p2, p3 and p4.
 // This number is projectively invariant, and it is the coordinate of p4

@@ -169,9 +169,9 @@ HomgOperator3D::lines_to_point (const vcl_vector<HomgLine3D>& )
 // - Return the squared perpendicular distance between the line and point
 //
 double
-HomgOperator3D::perp_distance_squared (const HomgLine3D& , const HomgPoint3D& )
+HomgOperator3D::perp_dist_squared (const HomgPoint3D& , const HomgLine3D& )
 {
-  vcl_cerr << "Warning: HomgOperator3D::perp_distance_squared() not yet implemented\n";
+  vcl_cerr << "Warning: HomgOperator3D::perp_dist_squared() not yet implemented\n";
   return 0;
 }
 

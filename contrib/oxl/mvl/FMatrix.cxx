@@ -157,7 +157,7 @@ FMatrix::image1_epipolar_distance_squared(HomgPoint2D *point1_ptr,
                                           HomgPoint2D *point2_ptr) const
 {
   HomgLine2D epipolar_line = image1_epipolar_line (*point2_ptr);
-  return HomgOperator2D::perp_distance_squared (epipolar_line, *point1_ptr);
+  return HomgOperator2D::perp_dist_squared (*point1_ptr, epipolar_line);
 }
 
 //-------------------------------------------------------------------
@@ -170,7 +170,7 @@ FMatrix::image2_epipolar_distance_squared(HomgPoint2D *point1_ptr,
                                           HomgPoint2D *point2_ptr) const
 {
   HomgLine2D epipolar_line = image2_epipolar_line (*point1_ptr);
-  return HomgOperator2D::perp_distance_squared (epipolar_line, *point2_ptr);
+  return HomgOperator2D::perp_dist_squared (*point2_ptr, epipolar_line);
 }
 
 //---------------------------------------------------------------

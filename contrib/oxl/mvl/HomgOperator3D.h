@@ -30,7 +30,7 @@ public:
   static HomgPoint3D intersect_line_and_plane (const HomgLine3D&, const HomgPlane3D&);
   static HomgPoint3D lines_to_point (const HomgLine3D& line1, const HomgLine3D& line2);
   static HomgPoint3D lines_to_point (const vcl_vector<HomgLine3D>& line_list);
-  static double perp_distance_squared (const HomgLine3D& line, const HomgPoint3D& point);
+  static double perp_dist_squared (const HomgPoint3D& point, const HomgLine3D& line);
   static HomgLine3D perp_line_through_point (const HomgLine3D& line, const HomgPoint3D& point);
   static HomgPoint3D perp_projection (const HomgLine3D& line, const HomgPoint3D& point);
   static HomgLine3D planes_to_line (const HomgPlane3D& plane1, const HomgPlane3D& plane2);

@@ -41,7 +41,6 @@ public:
   static double distance_squared (const HomgLineSeg2D& lineseg, const HomgPoint2D& line);
   static double distance (const HomgLineSeg2D& lineseg1, const HomgLineSeg2D& lineseg2, double OVERLAP_THRESH);
 
-  static double perp_distance_squared (const HomgLine2D& line, const HomgPoint2D& point);
   static double perp_dist_squared (const HomgPoint2D& point, const HomgLine2D& line);
   static bool is_within_distance(const HomgPoint2D& p1, const HomgPoint2D& p2, double d) {
     return distance_squared(p1, p2) < d*d;
