@@ -305,6 +305,10 @@ SET( vcl_sources
   mwerks/vcl_cmath.h
   mwerks/vcl_complex.h
   mwerks/vcl_cstdlib.h
+
+  stlport/vcl_cmath.h
+  stlport/vcl_complex.h
+  stlport/vcl_cstdlib.h
 )
 
 AUX_SOURCE_DIRECTORY(Templates vcl_sources)
