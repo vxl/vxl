@@ -1,19 +1,8 @@
 // This is core/vcsl/vcsl_cylindrical_to_cartesian_3d.cxx
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma implementation
-#endif
-//:
-// \file
-
 #include "vcsl_cylindrical_to_cartesian_3d.h"
 #include <vcl_cassert.h>
 #include <vcl_cmath.h> // for sqrt(), cos(), sin()
-
 #include <vcsl/vcsl_spatial.h>
-
-//***************************************************************************
-// Status report
-//***************************************************************************
 
 //---------------------------------------------------------------------------
 // Is `this' invertible at time `time'?
@@ -26,10 +15,6 @@ bool vcsl_cylindrical_to_cartesian_3d::is_invertible(double time) const
 
   return true;
 }
-
-//***************************************************************************
-// Basic operations
-//***************************************************************************
 
 //---------------------------------------------------------------------------
 // Image of `v' by `this'
@@ -91,21 +76,11 @@ vcsl_cylindrical_to_cartesian_3d::inverse(const vnl_vector<double> &v,
   return result;
 }
 
-//***************************************************************************
-// Singleton pattern
-//***************************************************************************
-
-//: Return the reference to the unique vcsl_length object
+// Return the reference to the unique vcsl_length object
 vcsl_cylindrical_to_cartesian_3d_sptr
-vcsl_cylindrical_to_cartesian_3d::instance(void)
+vcsl_cylindrical_to_cartesian_3d::instance()
 {
-  if (instance_.ptr()==0)
-    instance_=new vcsl_cylindrical_to_cartesian_3d;
+  static vcsl_cylindrical_to_cartesian_3d_sptr instance_
+         = new vcsl_cylindrical_to_cartesian_3d;
   return instance_;
 }
-
-//---------------------------------------------------------------------------
-// Reference to the unique vcsl_cylindrical_to_cartesian_3d object
-//---------------------------------------------------------------------------
-vcsl_cylindrical_to_cartesian_3d_sptr
-vcsl_cylindrical_to_cartesian_3d::instance_=0;
