@@ -18,7 +18,7 @@
 #include <vcl_vector.h>
 #include <vbl/vbl_smart_ptr.h>
 #include <vdgl/vdgl_fit_lines_params.h>
-#include <vtol/vtol_intensity_face_sptr.h>
+#include <vtol/vtol_intensity_face.h>
 #include <vifa/vifa_histogram.h>
 #include <vifa/vifa_int_face_attr_common.h>
 #include <vifa/vifa_parallel.h>
