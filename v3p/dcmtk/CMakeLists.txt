@@ -26,7 +26,7 @@ IF( VXL_BUILD_DCMTK )
 # change. The format follows a DNS-style numbering: the current date
 # followed by a modification time within the day.
 #
-SET( DCMTK_CONFIG_SERIAL_CURRENT "2004-01-16-000" )
+SET( DCMTK_CONFIG_SERIAL_CURRENT "2004-01-19-000" )
 
 IF( ${DCMTK_CONFIG_SERIAL_CURRENT} MATCHES "^${DCMTK_CONFIG_SERIAL_LAST}$" )
   # The configuration is current
@@ -43,6 +43,7 @@ ELSE( ${DCMTK_CONFIG_SERIAL_CURRENT} MATCHES "^${DCMTK_CONFIG_SERIAL_LAST}$" )
         DCMTK_HAVE_BCMP
         DCMTK_HAVE_BCOPY
         DCMTK_HAVE_BZERO
+        DCMTK_HAVE_CASSERT
         DCMTK_HAVE_CTYPE_H
         DCMTK_HAVE_CUSERID
         DCMTK_HAVE_DIRENT_H
@@ -279,6 +280,7 @@ CHECK_INCLUDE_FILE( stddef.h      DCMTK_HAVE_STDDEF_H )
 CHECK_INCLUDE_FILE( stdio.h       DCMTK_HAVE_STDIO_H )
 CHECK_INCLUDE_FILE( stdlib.h      DCMTK_HAVE_STDLIB_H )
 
+CHECK_INCLUDE_FILE_CXX( cassert       DCMTK_HAVE_CASSERT )
 CHECK_INCLUDE_FILE_CXX( sstream       DCMTK_HAVE_SSTREAM )
 CHECK_INCLUDE_FILE_CXX( sstream.h     DCMTK_HAVE_SSTREAM_H )
 CHECK_INCLUDE_FILE_CXX( string.h      DCMTK_HAVE_STRING_H )
@@ -320,6 +322,16 @@ CHECK_PROTOTYPE_EXISTS(
   mktemp
   "libc.h;unistd.h;stdlib.h"
   DCMTK_HAVE_PROTOTYPE_MKTEMP )
+
+# Some platforms (e.g. MipsPRO with IRIX 6.5) don't have the standard
+# include files (cassert, iostream, etc), but instead have the older
+# iostream.h, etc.
+IF( DCMTK_HAVE_CASSERT )
+  SET( DCMTK_HAVE_STD_CXX_INCLUDES 1 )
+ELSE( DCMTK_HAVE_CASSERT )
+  SET( DCMTK_HAVE_STD_CXX_INCLUDES )
+ENDIF( DCMTK_HAVE_CASSERT )
+
 
 IF( VXL_ZLIB_FOUND )
   SET( DCMTK_HAVE_ZLIB 1 )
