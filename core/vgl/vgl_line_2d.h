@@ -7,16 +7,22 @@
 // Author: Don Hamilton, Peter Tu
 // Copyright:
 // Created: Feb 16 2000
-//: Represents a euclidian 2D line.
-//   An interface for the line coefficients, [a,b,c], is provided
-//   in terms of the standard implicit line equation:
-//   a*x + b*y + c = 0
+// Modifications:
+//  Peter Vanroose, 29 Feb 2000: several minor fixes
 
 #include <vcl/vcl_iostream.h>
+#include <vcl/vcl_cmath.h> // for sqrt()
 
 template <class Type>
 class vgl_point_2d;
 
+template <class Type>
+class vgl_homg_line_2d;
+
+//: Represents a euclidian 2D line.
+//   An interface for the line coefficients, [a,b,c], is provided
+//   in terms of the standard implicit line equation:
+//   a*x + b*y + c = 0
 template <class Type>
 class vgl_line_2d {
 
@@ -26,66 +32,68 @@ public:
  
   // Constructors/Initializers/Destructors-----------------------------------
 
-  //: -- Default constructor  
-  vgl_line_2d () {}
+  // Default constructor  
+  // vgl_line_2d () {}
   
-  //: -- Copy constructor  
-  vgl_line_2d (const vgl_line_2d<Type>& that) { *this = that; }
+  // Default copy constructor  
+  // vgl_line_2d (const vgl_line_2d<Type>& that) {
+  //   _data[0]=that._data[0];
+  //   _data[1]=that._data[1];
+  //   _data[2]=that._data[2];
+  // }
 
-  //: -- Construct a vgl_line_2d from three Types.
-  vgl_line_2d (Type a, Type b, Type c) { set(a,b,c); }
+  vgl_line_2d<Type> (vgl_homg_line_2d<Type> const& p);
+
+  //: -- Construct a vgl_line_2d from its equation, three Types.
+  vgl_line_2d (Type a, Type b, Type c) { _data[0]=a; _data[1]=b; _data[2]=c; }
   
-  //: -- Construct from 3-vector.
-  vgl_line_2d (const Type v[3]) { set(v[0],v[1],v[2]); }
+  // -- Construct from two distinct points
+  vgl_line_2d (vgl_point_2d<Type> const& p1,
+               vgl_point_2d<Type> const& p2);
+    
+  //: -- Construct from its equation, a 3-vector.
+  vgl_line_2d (const Type v[3]) { _data[0]=v[0];_data[1]=v[1];_data[2]=v[2]; }
   
-  //: -- Destructor
-  ~vgl_line_2d () {}
+  // Default destructor:
+  // ~vgl_line_2d () {}
   
-  //: -- Assignment  
-  vgl_line_2d<Type>& operator=(const vgl_line_2d<Type>& that){
-    this->_data = that->_data;
-    return *this;
-  }
+  // Default assignment operator:
+  // vgl_line_2d<Type>& operator=(const vgl_line_2d<Type>& that){
+  //   _data[0]=that._data[0];
+  //   _data[1]=that._data[1];
+  //   _data[2]=that._data[2];
+  //   return *this;
+  // }
 
-  //: Data Access-------------------------------------------------------------
-  // TODO need replacement for vcl_vector 
+  // Data Access-------------------------------------------------------------
 
-  // vcl_vector<Type> get_direction() const;
-  // vcl_vector<Type> get_normal() const;
+  inline void get_direction(Type& dx, Type& dy) const { dx=dir_x(); dy=dir_y(); }
+  inline void get_normal(Type& nx, Type& ny) const { ny=normal_x(); ny=normal_y(); }
 
-  // get the x direction
-  inline Type dirx() { return -b()/(sqrt(a()*a() + b()*b())); }
+  inline Type dir_x() const { return -b()/(sqrt(a()*a() + b()*b())); }
+  inline Type dir_y() const { return a()/(sqrt(a()*a() + b()*b())); }
 
-  // get the y direction 
-  inline Type diry() { return a()/(sqrt(a()*a() + b()*b())); }
-
-  inline Type nx() { return -diry(); }
-  inline Type ny() { return dirx(); }
+  inline Type normal_x() const { return -dir_y(); }
+  inline Type normal_y() const { return dir_x(); }
 
   inline Type a() const {return _data[0];}
   inline Type b() const {return _data[1];}
   inline Type c() const {return _data[2];}
 
   //: -- Set a b c.
-  void set (Type a, Type b, Type c){
-    _data[0] = a;
-    _data[1] = b;
-    _data[2] = c;
-  }
+  void set (Type a, Type b, Type c){ _data[0] = a; _data[1] = b; _data[2] = c; }
 
   //: find the distance of the line to the origin
-  Type dist_orign() const;
+  Type distance_to_origin() const;
 
-  //: get two points on the line 
-  
+  //: Get two points on the line; normally the intersection with X and Y axes.
   void get_two_points(vgl_point_2d<Type> &p1, vgl_point_2d<Type> &p2);
     
   
   // INTERNALS---------------------------------------------------------------
 
-public:
+protected:
   // the data associated with this point 
-
   Type _data[3];
 };
 
@@ -93,8 +101,8 @@ public:
   
 template <class Type>
 ostream&  operator<<(ostream& s, const vgl_line_2d<Type>& p) {
-  return s << "<vgl_line_2d " << p->_data[0] << " " << p->_data[1]
-           << p->_data[2] << ">";
+  return s << " <vgl_line_2d " << p->_data[0] << " x + " << p->_data[1]
+           << " y + " << p->_data[2] << " = 0>";
 }
 
 template <class Type>

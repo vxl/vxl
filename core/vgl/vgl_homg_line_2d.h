@@ -7,13 +7,20 @@
 // Author: Don Hamilton, Peter Tu
 // Copyright:
 // Created: Feb 15 2000
-//: Represents a homogeneous 2D line.
+// Modifications:
+//  Peter Vanroose, Feb 28 2000: lots of minor corrections
 
 #include <vcl/vcl_iostream.h>
+#include <vcl/vcl_function.h> // for vcl_min
+#include <vcl/vcl_cmath.h> // for fabs
 
 template <class Type>
 class vgl_homg_point_2d;
 
+template <class Type>
+class vgl_line_2d;
+
+//: Represents a homogeneous 2D line.
 template <class Type>
 class vgl_homg_line_2d {
 
@@ -23,11 +30,13 @@ public:
  
   // Constructors/Initializers/Destructors-----------------------------------
 
-  // -- Default constructor  
-  vgl_homg_line_2d () {}
+  // Default constructor  
+  // vgl_homg_line_2d () {}
   
-  // -- Copy constructor  
-  vgl_homg_line_2d (const vgl_homg_line_2d<Type>& that) { *this = that; }
+  // Default copy constructor  
+  // vgl_homg_line_2d (const vgl_homg_line_2d<Type>& that) { *this = that; }
+
+  vgl_homg_line_2d<Type> (vgl_line_2d<Type> const& p);
 
   // -- Construct from three Types.
   vgl_homg_line_2d (Type a, Type b, Type c) { set(a,b,c); }
@@ -35,24 +44,24 @@ public:
   // -- Construct from 3-vector.
   vgl_homg_line_2d (const Type v[3]) { set(v[0],v[1],v[2]); }
 
-  // -- Destructor
-  ~vgl_homg_line_2d () {}
+  // Default destructor
+  // ~vgl_homg_line_2d () {}
 
-  // -- Assignment  
-  vgl_homg_line_2d<Type>& operator=(const vgl_homg_line_2d<Type>& that){
-    this->_pos = that->_pos;
-    return *this;
-  }
+  // Default assignment operator
+  // vgl_homg_line_2d<Type>& operator=(const vgl_homg_line_2d<Type>& that){
+  //   set(that.a(),that.b(),that.c());
+  //   return *this;
+  // }
 
   // Data Access-------------------------------------------------------------
 
   //vcl_vector<Type> get_direction() const;
   //vcl_vector<Type> get_normal() const;
 
-  inline Type dirx() const { return a(); }  // todo
-  inline Type diry() const {return b(); }  // todo
-  inline Type nx() const {return -b() ;} // todo
-  inline Type ny() const {return a(); } // todo
+  inline Type dirx() const { return a(); }  // TODO
+  inline Type diry() const {return b(); }  // TODO
+  inline Type nx() const {return -b() ;} // TODO
+  inline Type ny() const {return a(); } // TODO
   
   inline Type a() const {return _pos[0];}
   inline Type b() const {return _pos[1];}
@@ -67,7 +76,7 @@ public:
 
   // -- Return true iff the point is the point at infinity
   //    This version checks (min(|a|,|b|) < tol * c
-  inline bool ideal(Type tol) { return min(abs(a(),b())) < tol * abs(c()); }   
+  inline bool ideal(Type tol) { return vcl_min(fabs(a()),fabs(b())) < tol * fabs(c()); }   
   
   // find the distance of the line to the origin
   Type dist_orign() const;
@@ -80,7 +89,6 @@ public:
 
 protected:
   // the data associated with this line 
-
   Type _pos[3];
 };
 
@@ -88,8 +96,9 @@ protected:
   
 template <class Type>
 ostream&  operator<<(ostream& s, const vgl_homg_line_2d<Type>& p) {
-  return s << "<vgl_homg_line_2d "
-           << p->_pos[0] << " " << p->_pos[1] << p->_pos[2] << ">";
+  return s << " <vgl_homg_line_2d "
+           << p->_pos[0] << " x + " << p->_pos[1] << " y + "
+           << p->_pos[2] << " z = 0>";
 }
 
 template <class Type>
@@ -98,7 +107,3 @@ istream&  operator>>(istream& is,  vgl_homg_line_2d<Type>& p) {
 }
 
 #endif
-
-
-
-

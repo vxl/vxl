@@ -11,12 +11,11 @@
 
 #include <vcl/vcl_vector.h>
 #include <vnl/vnl_vector.h>
-//#include <vgl/vgl_homg_point_3d.h>
-//#include <vgl/vgl_homg_plane_3d.h>
 #include <vgl/vgl_homg_line_3d_2_points.h>
 
 template <class Type> class vgl_homg_point_3d;
 template <class Type> class vgl_homg_line_3d;
+template <class Type> class vgl_homg_plane_3d;
 
 template <class Type>
 class vgl_homg_operators_3d {

@@ -7,10 +7,17 @@
 // Author: Don Hamilton, Peter Tu
 // Copyright:
 // Created: Feb 15 2000
-//: Represents a homogeneous 3D point.
+// Modifications:
+//  Peter Vanroose, 29 Feb 2000: several minor fixes
 
 #include <vcl/vcl_iostream.h>
+#include <vcl/vcl_function.h> // for vcl_min()
+#include <vcl/vcl_cmath.h> // for fabs()
 
+template <class Type>
+class vgl_point_3d;
+
+//: Represents a homogeneous 3D point.
 template <class Type>
 class vgl_homg_point_3d {
 
@@ -19,26 +26,33 @@ public:
  
   // Constructors/Initializers/Destructors-----------------------------------
 
-  // -- Default constructor  
-  vgl_homg_point_3d () {}
+  // Default constructor  
+  // vgl_homg_point_3d () {}
   
-  // -- Copy constructor  
-  vgl_homg_point_3d (const vgl_homg_point_3d<Type>& that) { *this = that; }
+  // Default copy constructor  
+  // vgl_homg_point_3d (const vgl_homg_point_3d<Type>& that) {
+  //   set(that.x(),that.y(),that.z(),that.w());
+  // }
+
+  vgl_homg_point_3d<Type> (vgl_point_3d<Type> const& p);
+
+  // -- Construct from four Types.
+  vgl_homg_point_3d (Type px, Type py, Type pz, Type pw) { set(px,py,pz,pw); }
 
   // -- Construct from three Types.
-  vgl_homg_point_3d (Type px, Type py, Type pz, Type pw) { set(px,py,pw,pz); }
+  vgl_homg_point_3d (Type px, Type py, Type pz) { set(px,py,pz,1.0); }
 
   // -- Construct from 4-vector.
   vgl_homg_point_3d (const Type v[4]) { set(v[0],v[1],v[2],v[3]); }
 
-  // -- Destructor
-  ~vgl_homg_point_3d () {}
+  // Default destructor
+  // ~vgl_homg_point_3d () {}
 
-  // -- Assignment  
-  vgl_homg_point_3d<Type>& operator=(const vgl_homg_point_3d<Type>& that) {
-    this->_data = that->_data;
-    return *this;
-  }
+  // Default assignment operator
+  // vgl_homg_point_3d<Type>& operator=(const vgl_homg_point_3d<Type>& that) {
+  //   set(that.x(),that.y(),that.z(),that.w());
+  //   return *this;
+  // }
 
   // Data Access-------------------------------------------------------------
 
@@ -48,33 +62,32 @@ public:
   inline Type w() const {return _data[3];}
 
   // -- Set x,y,z,w
-  inline void set (Type px, Type py, Type pw){
-    _data[0] = px;
-    _data[1] = py;
-    _data[2] = pz;
+  inline void set (Type px, Type py, Type pz, Type pw) {
+    _data[0] = px,
+    _data[1] = py,
+    _data[2] = pz,
     _data[3] = pw;
   }
 
   // test for point at infinity  
-  // Return true when max(|x|, |y|, |z|) < tol * |w|  
+  // Return true when |w| < tol * min(|x|, |y|, |z|)
   bool ideal(Type tol) {
-    return max(max(abs(x()),abs(y())),abs(z())) < (tol * abs(w()));
+    return fabs(w()) < tol * vcl_min(vcl_min(fabs(x()),fabs(y())),fabs(z()));
   }
 
   // INTERNALS---------------------------------------------------------------
 
 protected:
   // the data associated with this point 
-
   Type _data[4];
 };
 
   // stream operators 
 template <class Type>
 ostream&  operator<<(ostream& s, const vgl_homg_point_3d<Type>& p) {
-  return s << "<vgl_homg_point_3d "
-           << p->_data[0] << " " << p->_data[1] << " " 
-           << p->_data[2] << " " << p->_data[3] << ">";  
+  return s << " <vgl_homg_point_3d ("
+           << p->_data[0] << "," << p->_data[1] << "," 
+           << p->_data[2] << "," << p->_data[3] << ") >";  
 }
 
 template <class Type>

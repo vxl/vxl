@@ -5,6 +5,7 @@
 #include <vcl/vcl_vector.h>
 
 #include <vnl/vnl_matops.h>
+#include <vnl/vnl_matrix.h>
 #include <vnl/vnl_matrix_fixed.h>
 #include <vnl/algo/vnl_svd.h>
 
@@ -19,7 +20,7 @@
 //
 // -- Return the angle between the (oriented) lines (in radians)
 //
-#if 0
+#if 0 // Why??
 template <class Type>
 Type vgl_homg_operators_3d<Type>::angle_between_oriented_lines (const vgl_homg_line_3d<Type>& l1,
                                                                 const vgl_homg_line_3d<Type>& l2)

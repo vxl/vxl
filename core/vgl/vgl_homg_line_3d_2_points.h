@@ -8,14 +8,13 @@
 // Author: Don Hamilton, Peter Tu
 // Copyright:
 // Created: Feb 15 2000
+
+#include <vcl/vcl_iostream.h>
+#include <vgl/vgl_homg_point_3d.h>
+
 //: Represents a homogeneous 3D line using two points.
 // A class to hold a homogeneous representation of a 3D Line.  The
 // line is stored as a pair of homogeneous 3d points.
-
-#include <vcl/vcl_iostream.h>
-
-template <class Type>
-class vgl_homg_point_3d;
 
 template <class Type>
 class vgl_homg_line_3d_2_points {
@@ -55,9 +54,8 @@ public:
   void force_point2_infinite();
   
   // INTERNALS---------------------------------------------------------------
+protected:
   // Data Members------------------------------------------------------------
-
-private:
   // any finite point on the line
   vgl_homg_point_3d<Type> point_finite_;
   vgl_homg_point_3d<Type> point_infinite_;
@@ -71,7 +69,3 @@ template <class Type>
 istream&  operator>>(istream& is,  vgl_homg_line_3d_2_points<Type>& p);
 
 #endif 
-
-
-
-
