@@ -39,9 +39,9 @@ class bgui_image_tableau : public vgui_image_tableau
   bgui_image_tableau(vil1_image const & img,
                      vgui_range_map_params_sptr const & rmp = 0);
 
-	bgui_image_tableau(char const* filename,
+  bgui_image_tableau(char const* filename,
                      vgui_range_map_params_sptr const & rmp = 0);
-                   
+
 
   vcl_string type_name() const { return "vgui_image_tableau"; }
 
@@ -67,7 +67,7 @@ class bgui_image_tableau : public vgui_image_tableau
 
 //: Creates a smart-pointer to a bgui_image_tableau.
 struct bgui_image_tableau_new : public bgui_image_tableau_sptr {
- 
+
   //: Constructor - creates an empty image tableau.
   bgui_image_tableau_new()
     : bgui_image_tableau_sptr( new bgui_image_tableau() )
@@ -89,7 +89,7 @@ struct bgui_image_tableau_new : public bgui_image_tableau_sptr {
                          vgui_range_map_params_sptr const & rmp = 0)
     : bgui_image_tableau_sptr( new bgui_image_tableau(img, rmp) )
   { }
-  
+
   bgui_image_tableau_new(char const* filename,
                          vgui_range_map_params_sptr const & rmp = 0)
     : bgui_image_tableau_sptr( new bgui_image_tableau(filename, rmp) )
