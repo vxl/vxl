@@ -58,8 +58,8 @@ void ClosestImagePointFinder::get_all_within_search_region(double cx, double cy,
 void ClosestImagePointFinder::get_all_within_search_region(vgl_box_2d<double> const& disparity_bounds, vcl_vector<int>* out)
 {
   // Look at `point2's between y0 and y1
-  vcl_multimap_double_int::iterator potential = y2i_->lower_bound(disparity_bounds.get_min_y());
-  vcl_multimap_double_int::iterator end =       y2i_->upper_bound(disparity_bounds.get_max_y() + 1);
+  vcl_multimap_double_int::iterator potential = y2i_->lower_bound(disparity_bounds.min_y());
+  vcl_multimap_double_int::iterator end =       y2i_->upper_bound(disparity_bounds.max_y() + 1);
 
   //vcl_cerr << "map:";
   //for (vcl_multimap_double_int::iterator p = y2i_->begin(); p != y2i_->end(); ++p)
@@ -81,8 +81,8 @@ int ClosestImagePointFinder::get_closest_within_region(double cx, double cy, dou
   vgl_box_2d<double> disparity_bounds(cx - w, cx + w, cy - h, cy + h);
 
   // Look at `point2's between y0 and y1
-  vcl_multimap_double_int::iterator potential = y2i_->lower_bound(disparity_bounds.get_min_y());
-  vcl_multimap_double_int::iterator end =       y2i_->upper_bound(disparity_bounds.get_max_y() + 1);
+  vcl_multimap_double_int::iterator potential = y2i_->lower_bound(disparity_bounds.min_y());
+  vcl_multimap_double_int::iterator end =       y2i_->upper_bound(disparity_bounds.max_y() + 1);
 
   double orig_mindist_sq = mindist_sq;
 
