@@ -1,7 +1,6 @@
 @FILE
 @fpos_t
 // NB: size_t is declared in <cstddef>, not <cstdio>
-@clearerr
 @fopen
 @fclose
 @feof
@@ -10,15 +9,25 @@
 @fgetc
 @fgetpos
 @fgets
+@fwrite
+@fread
+@fseek
+@ftell
+@perror
+@clearerr
+
+// printf() family
 @printf
 @sprintf
 @fprintf
 @vprintf
 @vsprintf
 @vfprintf
-@perror
+
+// scanf() family
+@scanf
 @sscanf
-@fwrite
-@fread
-@fseek
-@ftell
+@fscanf
+@vscanf
+@vsscanf
+@vfscanf

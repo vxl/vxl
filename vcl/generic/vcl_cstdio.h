@@ -12,10 +12,6 @@
 #define vcl_fpos_t vcl_generic_cstdio_STD :: fpos_t
 #endif
 // NB: size_t is declared in <cstddef>, not <cstdio>
-// clearerr
-#ifndef vcl_clearerr
-#define vcl_clearerr vcl_generic_cstdio_STD :: clearerr
-#endif
 // fopen
 #ifndef vcl_fopen
 #define vcl_fopen vcl_generic_cstdio_STD :: fopen
@@ -48,6 +44,32 @@
 #ifndef vcl_fgets
 #define vcl_fgets vcl_generic_cstdio_STD :: fgets
 #endif
+// fwrite
+#ifndef vcl_fwrite
+#define vcl_fwrite vcl_generic_cstdio_STD :: fwrite
+#endif
+// fread
+#ifndef vcl_fread
+#define vcl_fread vcl_generic_cstdio_STD :: fread
+#endif
+// fseek
+#ifndef vcl_fseek
+#define vcl_fseek vcl_generic_cstdio_STD :: fseek
+#endif
+// ftell
+#ifndef vcl_ftell
+#define vcl_ftell vcl_generic_cstdio_STD :: ftell
+#endif
+// perror
+#ifndef vcl_perror
+#define vcl_perror vcl_generic_cstdio_STD :: perror
+#endif
+// clearerr
+#ifndef vcl_clearerr
+#define vcl_clearerr vcl_generic_cstdio_STD :: clearerr
+#endif
+
+// printf() family
 // printf
 #ifndef vcl_printf
 #define vcl_printf vcl_generic_cstdio_STD :: printf
@@ -72,29 +94,31 @@
 #ifndef vcl_vfprintf
 #define vcl_vfprintf vcl_generic_cstdio_STD :: vfprintf
 #endif
-// perror
-#ifndef vcl_perror
-#define vcl_perror vcl_generic_cstdio_STD :: perror
+
+// scanf() family
+// scanf
+#ifndef vcl_scanf
+#define vcl_scanf vcl_generic_cstdio_STD :: scanf
 #endif
 // sscanf
 #ifndef vcl_sscanf
 #define vcl_sscanf vcl_generic_cstdio_STD :: sscanf
 #endif
-// fwrite
-#ifndef vcl_fwrite
-#define vcl_fwrite vcl_generic_cstdio_STD :: fwrite
+// fscanf
+#ifndef vcl_fscanf
+#define vcl_fscanf vcl_generic_cstdio_STD :: fscanf
 #endif
-// fread
-#ifndef vcl_fread
-#define vcl_fread vcl_generic_cstdio_STD :: fread
+// vscanf
+#ifndef vcl_vscanf
+#define vcl_vscanf vcl_generic_cstdio_STD :: vscanf
 #endif
-// fseek
-#ifndef vcl_fseek
-#define vcl_fseek vcl_generic_cstdio_STD :: fseek
+// vsscanf
+#ifndef vcl_vsscanf
+#define vcl_vsscanf vcl_generic_cstdio_STD :: vsscanf
 #endif
-// ftell
-#ifndef vcl_ftell
-#define vcl_ftell vcl_generic_cstdio_STD :: ftell
+// vfscanf
+#ifndef vcl_vfscanf
+#define vcl_vfscanf vcl_generic_cstdio_STD :: vfscanf
 #endif
 
 #endif // vcl_generic_cstdio_h_
