@@ -190,25 +190,38 @@ bool vgui_viewer2D_tableau::handle(const vgui_event& e)
         vgui_adaptor* adap = e.origin;
         vgui_window* win = adap->get_window();
         //current scroll pos range is [0,100]
+        //eventually we would want to get the range
+        //from the window to insure consistency
         int cpos = 50;
         win->set_hscrollbar(cpos);
         win->set_vscrollbar(cpos);
         npos_x = cpos;
         npos_y = cpos;
       }
+  //We really want to be able to scroll the entire 
+  //image through the viewport.  The token offset should be
+  //adjusted proportionally to the size of the image
+  //added routine to get image size JLM
   // This deals with horizontal scroll message
   if (e.type == vgui_HSCROLL)
   {
-        this->token.offsetX -= this->token.scaleX*(*((const int *)e.data)-npos_x);
-    this->post_redraw();
+    int w, h;
+    this->image_size(w,h);
+    float xs = w/100.0;
+        this->token.offsetX -= 
+          this->token.scaleX*xs*(*((const int *)e.data)-npos_x);
+        this->post_redraw();
         npos_x = *((const int *)e.data);
   }
   // This deals with vertical scroll message
   if (e.type == vgui_VSCROLL)
   {
-        this->token.offsetY -= this->token.scaleY*(*((const int *)e.data)-npos_y);
-        this->post_redraw();
-        npos_y = *((const int *)e.data);
+    int w, h;
+    this->image_size(w, h);
+    float ys = h/100.0;
+    this->token.offsetY -= this->token.scaleY*ys*(*((const int *)e.data)-npos_y);
+    this->post_redraw();
+    npos_y = *((const int *)e.data);
   }
   setup_gl_matrices();
 
@@ -457,8 +470,7 @@ bool vgui_viewer2D_tableau::help()
   vcl_cerr << "--------------------------\n\n";
   return false;
 }
-
-void vgui_viewer2D_tableau::center_event()
+bool vgui_viewer2D_tableau::image_size(int& width, int& height)
 {
   vgui_tableau_sptr t = vgui_find_below_by_type_name(this, 
     "vgui_image_tableau");
@@ -467,10 +479,22 @@ void vgui_viewer2D_tableau::center_event()
   if (t)
   {
     vgui_image_tableau_sptr im; im.vertical_cast(t);
-    this->center_image(im->width(), im->height());
+    width = im->width();
+    height = im->height();
+    return true;
   }
   else
-    vcl_cerr << __FILE__ " : no image found\n";
+    {
+      width = 0; height = 0;
+      vcl_cerr << __FILE__ " : no image found\n";
+    }
+  return false;
+}
+void vgui_viewer2D_tableau::center_event()
+{
+  int width=0, height=0;
+  this->image_size(width, height);
+  this->center_image(width, height);
 }
 
 bool vgui_viewer2D_tableau::key_press(int /*x*/, int /*y*/, vgui_key key, vgui_modifier modifier)

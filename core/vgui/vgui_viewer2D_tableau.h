@@ -105,6 +105,9 @@ class vgui_viewer2D_tableau : public vgui_wrapper_tableau, public vgui_drag_mixi
   int npos_x;
   int npos_y;
  protected:
+  //:get the image size
+  bool image_size(int& width, int& height);
+
   //: Destructor - called by vgui_viewer2D_tableau_sptr.
  ~vgui_viewer2D_tableau();
 };
