@@ -16,7 +16,8 @@
 #include <vsol/vsol_rectangle_2d.h>
 #include <vsol/vsol_point_2d.h>
 
-#define Assert(x) { vcl_cout << #x "\t\t\t test "; if (x) { ++success; vcl_cout << "PASSED\n"; } else { ++failures; vcl_cout << "FAILED\n"; } }
+#define Assert(x) { vcl_cout << #x "\t\t\t test "; \
+  if (x) { ++success; vcl_cout << "PASSED\n"; } else { ++failures; vcl_cout << "FAILED\n"; } }
 
 //-----------------------------------------------------------------------------
 //: Entry point of the test program

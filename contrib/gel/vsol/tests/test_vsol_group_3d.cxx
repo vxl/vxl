@@ -16,7 +16,8 @@
 #include <vsol/vsol_group_3d.h>
 #include <vsol/vsol_point_3d.h>
 
-#define Assert(x) { vcl_cout << #x "\t\t\t test "; if (x) { ++success; vcl_cout << "PASSED\n"; } else { ++failures; vcl_cout << "FAILED\n"; } }
+#define Assert(x) { vcl_cout << #x "\t\t\t test "; \
+  if (x) { ++success; vcl_cout << "PASSED\n"; } else { ++failures; vcl_cout << "FAILED\n"; } }
 
 //-----------------------------------------------------------------------------
 //: Entry point of the test program

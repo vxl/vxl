@@ -16,7 +16,8 @@
 #include <vsol/vsol_conic_2d.h>
 #include <vsol/vsol_point_2d.h>
 
-#define Assert(x) { vcl_cout << #x "\t\t\t test "; if (x) { ++success; vcl_cout << "PASSED\n"; } else { ++failures; vcl_cout << "FAILED\n"; } }
+#define Assert(x) { vcl_cout << #x "\t\t\t test "; \
+  if (x) { ++success; vcl_cout << "PASSED\n"; } else { ++failures; vcl_cout << "FAILED\n"; } }
 
 void f(const vsol_conic_2d::vsol_conic_type &t)
 {
