@@ -200,6 +200,10 @@ v3p  - "owner" of corresponding core library
 This information will be added to developers.html and
 introduction_doxy.txt by Ian.
 
+The comfort of existing developers when seeing new names on the commit
+list was raised by Ian. In particular he encouraged anyone who wanted to
+edit the core to put their names and details in developers.html. 
+
 ----------------------------------------------------------------------------
 
 10. vidl upgrade to vil2
