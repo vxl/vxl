@@ -301,7 +301,7 @@ void vgui_qt_colorchooser_impl::get_a_color()
    QColor c = QColorDialog::getColor(QColor(value_.c_str()));
    if (c.isValid())
    {
-      value_ = c.name();
+      value_ = c.name().ascii();
       frame_->setBackgroundColor(c);
    }
 }
