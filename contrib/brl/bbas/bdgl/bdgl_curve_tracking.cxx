@@ -210,15 +210,10 @@ void bdgl_curve_tracking ::track_frame(unsigned int frame)
 
 vcl_vector< bdgl_tracker_curve_sptr> *bdgl_curve_tracking::get_output_curves(int frame_no)
 {
-  if (frame_no > output_curves_.size())
-    {
-      return NULL ;
-    }
-  else
-    {
-      return &output_curves_[frame_no];
-    }
+  if (frame_no >= output_curves_.size() || frame_no < 0)
     return NULL;
+  else
+    return &output_curves_[frame_no];
 }
 
 void bdgl_curve_tracking :: write_tracks(bdgl_tracker_curve_sptr curve,
