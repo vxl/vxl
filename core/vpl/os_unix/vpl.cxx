@@ -59,8 +59,12 @@ vpl_usleep( unsigned int t )
 }
 
 #include <stdlib.h>
+#include <string.h>
+#include <vcl_cassert.h>
 
 int vpl_putenv ( const char * envvar )
 {
-  return putenv(envvar);
+  char * storage_space = strdup(envvar); // This causes a memory leak
+                                         // but this can't be helped
+  return putenv(storage_space);
 }

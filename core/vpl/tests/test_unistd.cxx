@@ -4,6 +4,7 @@
 #include <sys/types.h>
 #include <vcl_cstdlib.h>
 #include <vcl_cstring.h>
+#include <vcl_string.h>
 
 #define Assert(x) do { if (x) vcl_cout << "test PASSED\n"; else vcl_cout << "test FAILED [" #x "]\n"; } while (0)
 
@@ -37,9 +38,12 @@ int main(int, char **)
   vpl_chdir(ROOT_PATH);
   vpl_rmdir(ROOT_PATH "/vpltest");
 
-  vpl_usleep(5000000); // 5 seconds
+  vpl_usleep(2000000); // 2 seconds
 
-  vpl_putenv("VPL_PUTENV_TEST=GOOD");
+  vcl_string var("VPL_PUTENV_TEST");
+  vcl_string value("GOOD");
+
+  vpl_putenv((var + "=" + value).c_str());
   Assert(vcl_strcmp(vcl_getenv("VPL_PUTENV_TEST"), "GOOD") == 0);
 
   return 0;
