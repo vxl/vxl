@@ -1,6 +1,7 @@
 #include <vcl_fstream.h>
 
 #include <vpl/vpl_unistd.h>
+#include <vcl_cstdio.h> /* for tempnam() */
 
 #include <vil/vil_load.h>
 #include <vil/vil_image_impl.h>
@@ -10,7 +11,8 @@ vcl_cout << "TEST [" << fred << "] == [" << x << "] : "; bool b = (fred) == (x);
 
 void test(char const* magic, int comps, int bits)
 {
-  char const* FNAME = "/tmp/t.pgm";
+  char const* TMPNAM = tempnam(0,0);
+  char const* FNAME = TMPNAM ? TMPNAM : "/tmp/t.pgm";
   {
     vcl_ofstream f(FNAME);
     // reference to rvalue not allowed.
@@ -18,19 +20,18 @@ void test(char const* magic, int comps, int bits)
   }
 
   vil_image i = vil_load(FNAME);
-  
+
   vcl_cout <<
     "vil_image_impl: size " << i.width() << "x" << i.height() <<
     ", " << i.components() << " component" <<
-    ", " << i.bits_per_component() << " bit" << 
+    ", " << i.bits_per_component() << " bit" <<
     vcl_endl;
 
   AssertEq(i.components(), comps);
   AssertEq(i.bits_per_component(), bits);
 
   vpl_unlink(FNAME);
-  
-}  
+}
 
 int main(int , char **)
 {
@@ -40,6 +41,6 @@ int main(int , char **)
   test("P4", 1, 1);
   test("P5", 1, 8);
   test("P6", 3, 8);
-    
+
   return 0;
 }

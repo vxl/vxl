@@ -2,19 +2,21 @@
   fsm@robots.ox.ac.uk
 */
 #include <vpl/vpl_unistd.h>
+#include <vcl_cstdio.h> /* for tempnam() */
 
 #include <vil/vil_16bit.h>
 #include <vil/vil_stream_fstream.h>
 
 int main(int, char **)
 {
-  char const *file = "/tmp/smoo";
+  char const *TMPNAM = tempnam(0,0);
+  char const *file = TMPNAM ? TMPNAM : "/tmp/smoo";
   vil_stream *s = 0;
 
   // write bytes
   s = new vil_stream_fstream(file, "w");
   s->ref();
-  
+
   // the bytes written should be 0x02 0x01 0x03 0x04, in that
   // order, on all architectures.
   s->seek(0);
@@ -26,7 +28,7 @@ int main(int, char **)
   // read them again.
   s = new vil_stream_fstream(file, "r");
   s->ref();
-  
+
   s->seek(0);
   unsigned char bytes[4];
   s->read(bytes, 4);
