@@ -16,6 +16,10 @@
 #ifndef vcl_clearerr
 #define vcl_clearerr vcl_generic_cstdio_STD :: clearerr
 #endif
+// fopen
+#ifndef vcl_fopen
+#define vcl_fopen vcl_generic_cstdio_STD :: fopen
+#endif
 // fclose
 #ifndef vcl_fclose
 #define vcl_fclose vcl_generic_cstdio_STD :: fclose
@@ -75,6 +79,22 @@
 // sscanf
 #ifndef vcl_sscanf
 #define vcl_sscanf vcl_generic_cstdio_STD :: sscanf
+#endif
+// fwrite
+#ifndef vcl_fwrite
+#define vcl_fwrite vcl_generic_cstdio_STD :: fwrite
+#endif
+// fread
+#ifndef vcl_fread
+#define vcl_fread vcl_generic_cstdio_STD :: fread
+#endif
+// fseek
+#ifndef vcl_fseek
+#define vcl_fseek vcl_generic_cstdio_STD :: fseek
+#endif
+// ftell
+#ifndef vcl_ftell
+#define vcl_ftell vcl_generic_cstdio_STD :: ftell
 #endif
 
 #endif // vcl_generic_cstdio_h_

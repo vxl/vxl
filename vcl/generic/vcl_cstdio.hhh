@@ -2,6 +2,7 @@
 @fpos_t
 // NB: size_t is declared in <cstddef>, not <cstdio>
 @clearerr
+@fopen
 @fclose
 @feof
 @ferror
@@ -17,3 +18,7 @@
 @vfprintf
 @perror
 @sscanf
+@fwrite
+@fread
+@fseek
+@ftell
