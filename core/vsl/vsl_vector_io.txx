@@ -56,7 +56,9 @@ void vsl_b_read(vsl_b_istream& is, vcl_vector<T>& v)
 
     if (v.size())
     {
-      vsl_block_binary_read(is, &v[0], n);
+      T* ptr = &v[0];
+      while (n--)
+        vsl_b_read(is, *(ptr++));
     }
     break;
   case 2:
