@@ -259,8 +259,8 @@ bool sdet_grid_finder::
 get_vanishing_point(vcl_vector<vsol_line_2d_sptr> const & para_lines, 
                     vgl_homg_point_2d<double>& vp)
 {
-  vcl_vector<vgl_homg_line_2d<double> > vlines, tvlines;
-  vcl_list<vgl_homg_line_2d<double> > stvlines;
+  vcl_vector<vgl_homg_line_2d<double> > vlines, tvlines, stvlines;
+
   int nlines =0;
   double tx = 0, ty =0;
   //
