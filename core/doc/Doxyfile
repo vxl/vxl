@@ -105,7 +105,7 @@ FULL_PATH_NAMES      = YES
 # only done if one of the specified strings matches the left-hand part of
 # the path.
 
-STRIP_FROM_PATH      = "/data/target2/vgguest3/target/vxl/"
+STRIP_FROM_PATH      = "/awf/src/target/vxl/"
 
 # The INTERNAL_DOCS tag determines if documentation
 # that is typed after a \internal command is included. If the tag is set 
@@ -176,14 +176,14 @@ TAB_SIZE             = 8
 # directories like "/usr/src/myproject". Separate the files or directories 
 # with spaces.
 
-INPUT                = "/data/target2/vgguest3/target/vxl"
+INPUT                = "/awf/src/target/vxl"
 
 # If the value of the INPUT tag contains directories, you can use the 
 # FILE_PATTERNS tag to specify one or more wildcard pattern (like *.cpp 
 # and *.h) to filter out the source-files in the directories. If left 
 # blank all files are included.
 
-FILE_PATTERNS        = "*.h" "*.cxx"
+FILE_PATTERNS        = "*.h" "*.cxx" "*.txx"
 
 # The RECURSIVE tag can be used to turn specify whether or not subdirectories
 # should be searched for input files as well. Possible values are YES and NO.
@@ -195,7 +195,7 @@ RECURSIVE            = YES
 # excluded from the INPUT source files. This way you can easily exclude a 
 # subdirectory from a directory tree whose root is specified with the INPUT tag.
 
-EXCLUDE              = "/data/target2/vgguest3/target/vxl/vcl/emulation" "/data/target2/vgguest3/target/vxl/vcl/tmp"
+EXCLUDE              = "/awf/src/target/vxl/vcl/emulation" "/awf/src/target/vxl/vcl/tmp"
 
 # If the value of the INPUT tag contains directories, you can use the
 # EXCLUDE_PATTERNS tag to specify one or more wildcard patterns to exclude
@@ -297,7 +297,7 @@ COLS_IN_ALPHA_INDEX  = 3
 # If the GENERATE_LATEX tag is set to YES (the default) Doxygen will
 # generate Latex output.
 
-GENERATE_LATEX       = NO
+GENERATE_LATEX       = YES
 
 # The LATEX_OUTPUT tag is used to specify where the LaTeX docs will be put.
 # If a relative path is entered the value of OUTPUT_DIRECTORY will be
@@ -419,7 +419,7 @@ ALLEXTERNALS         = NO
 # The PERL_PATH should be the absolute path and name of the perl script
 # interpreter (i.e. the result of `which perl').
 
-PERL_PATH            = /usr/bin/perl
+PERL_PATH            = perl
 
 #---------------------------------------------------------------------------
 # Configuration options related to the search engine 

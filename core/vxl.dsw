@@ -39,6 +39,30 @@ Package=<4>
 
 ###############################################################################
 
+Project: "awfmfc"=.\vgui\examples\awf\awfmfc\awfmfc.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name allvxl
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name vgui
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name vgui_mfc
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name vgui_vrml
+    End Project Dependency
+}}}
+
+###############################################################################
+
 Project: "example_mfc"=.\vgui\examples\vgui_example_mfc\example_mfc.dsp - Package Owner=<4>
 
 Package=<5>
@@ -168,6 +192,18 @@ Package=<4>
 
 ###############################################################################
 
+Project: "vgui_example_mfc2"=.\VGUI\EXAMPLES\vgui_example_mfc2\vgui_example_mfc2.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
 Project: "vgui_glut"=.\vgui\impl\glut\vgui_glut.dsp - Package Owner=<4>
 
 Package=<5>
@@ -181,6 +217,18 @@ Package=<4>
 ###############################################################################
 
 Project: "vgui_mfc"=.\vgui\impl\mfc\vgui_mfc.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "vgui_vrml"=.\vgui\vrml\vgui_vrml.dsp - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -250,6 +298,18 @@ Package=<4>
 ###############################################################################
 
 Project: "vsl"=.\vsl\vsl.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "vsl_harris"=.\VSL\EXAMPLES\vsl_harris.dsp - Package Owner=<4>
 
 Package=<5>
 {{{
