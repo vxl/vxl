@@ -81,12 +81,12 @@ class vsol_digital_curve_2d : public vsol_curve_2d
   //---------------------------------------------------------------------------
   //: Return the first point of `this'
   //---------------------------------------------------------------------------
-  virtual vsol_point_2d_sptr p0(void) const; // virtual of vsol_digital_curve_2d
+  virtual vsol_point_2d_sptr p0() const; // pure virtual of vsol_curve_2d
 
   //---------------------------------------------------------------------------
   //: Return the last point of `this'
   //---------------------------------------------------------------------------
-  virtual vsol_point_2d_sptr p1(void) const; // virtual of vsol_digital_curve_2d
+  virtual vsol_point_2d_sptr p1() const; // pure virtual of vsol_curve_2d
 
   //---------------------------------------------------------------------------
   //: Return point `i'
@@ -159,7 +159,7 @@ class vsol_digital_curve_2d : public vsol_curve_2d
   //---------------------------------------------------------------------------
   //: Return the length of `this'
   //---------------------------------------------------------------------------
-  virtual double length(void) const; // virtual of vsol_curve_2d
+  virtual double length() const; // pure virtual of vsol_curve_2d
 
   //---------------------------------------------------------------------------
   //: Compute the bounding box of `this'
