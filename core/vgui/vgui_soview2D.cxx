@@ -1,4 +1,4 @@
-// This is oxl/vgui/vgui_soview2D.cxx
+
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
@@ -14,7 +14,6 @@
 #include <vcl_cmath.h>
 #include <vcl_iostream.h>
 
-#include <vgl/vgl_clip.h>
 #include <vgl/vgl_distance.h>
 #include <vnl/vnl_math.h>
 
