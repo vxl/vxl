@@ -69,7 +69,7 @@ class vmap_non_oriented_kernel : public TKernel
 
   bool add(typename map_type::edge_type & arg)
   {
-    add(arg.begin()) ;
+    return add(arg.begin()) ;
   }
 
   //:
