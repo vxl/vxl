@@ -1,4 +1,4 @@
-// This is vxl/vsl/vsl_binary_explicit_io.h
+// This is core/vsl/vsl_binary_explicit_io.h
 #ifndef vsl_binary_explicit_io_h_
 #define vsl_binary_explicit_io_h_
 //:
@@ -157,6 +157,7 @@ macro(vcl_size_t);
 
 //: Implement arbitrary length conversion for unsigned integers.
 // This function should only be used by this header file.
+// Returns the number of bytes written
 template <class T>
 inline unsigned long vsl_convert_to_arbitrary_length_unsigned_impl(
   const T* ints, unsigned char *buffer, unsigned long count)
@@ -179,6 +180,7 @@ inline unsigned long vsl_convert_to_arbitrary_length_unsigned_impl(
 
 //: Implement arbitrary length conversion for signed integers.
 // This function should only be used by this header file.
+// Returns the number of bytes written
 template <class T>
 inline unsigned long vsl_convert_to_arbitrary_length_signed_impl(
   const T* ints, unsigned char *buffer, unsigned long count)
@@ -190,10 +192,10 @@ inline unsigned long vsl_convert_to_arbitrary_length_signed_impl(
     T v = *(ints++);
     while (v > 63 || v < -64)
     {
-      *(ptr++) = v & 127;
+      *(ptr++) = (unsigned char)(v & 127);
       v >>= 7;
     }
-    *(ptr++) = (v & 127) | 128;
+    *(ptr++) = (unsigned char)((v & 127) | 128);
   }
   return (unsigned long)(ptr - buffer);
 }
