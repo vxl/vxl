@@ -145,12 +145,12 @@ static void use_minus(vtol_edge_2d_sptr& e)
 // predicates
 static bool ccw(vtol_one_chain_sptr& ch)
 {
-  return ch->get_user_flag(VSOL_FLAG1) != 0;
+  return ch && ch->get_user_flag(VSOL_FLAG1) != 0;
 }
 
 static bool cw(vtol_one_chain_sptr& ch)
 {
-  return ch->get_user_flag(VSOL_FLAG2) != 0;
+  return ch && ch->get_user_flag(VSOL_FLAG2) != 0;
 }
 
 // assignment
@@ -825,7 +825,7 @@ void vtol_cycle_processor::sort_one_cycles()
 {
   if (!chains_.size())
   {
-    vcl_cout << "In vtol_cycle_processor:: sort_one_cycles(..) no cycles\n";
+    vcl_cout << "In vtol_cycle_processor::sort_one_cycles(..) no cycles\n";
     return;
   }
   nested_one_cycles_.clear();
@@ -850,14 +850,14 @@ void vtol_cycle_processor::sort_one_cycles()
 
   if (!outer_chain||!ccw(outer_chain))
   {
-    vcl_cout << " In vtol_cycle_processor::sort_one_cycles(..)"
+    vcl_cout << "In vtol_cycle_processor::sort_one_cycles(..)"
              << " Shouldn't happen that there is no outer chain\n"
              << "N cycles = " << chains_.size() << vcl_endl;
     for (one_chain_list::iterator cit = chains_.begin();
          cit != chains_.end(); ++cit)
     {
-      vcl_cout << " is chain ccw?  " << ccw(*cit) << vcl_endl
-               << " is chain cw?  " << cw(*cit) << vcl_endl;
+      vcl_cout << " chain is " << (ccw(*cit) ? "" : "not ") << "ccw, "
+               << "chain is " << (cw(*cit) ? "" : "not ") << "cw\n";
     }
     vcl_cout << "Outer Chain " << outer_chain << vcl_endl;
     return;
