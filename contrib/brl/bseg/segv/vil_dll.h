@@ -1,6 +1,6 @@
 // This is brl/bseg/segv/dll.h
-#ifndef segv_dll_h_
-#define segv_dll_h_
+#ifndef segv_vil_dll_h_
+#define segv_vil_dll_h_
 
 #include <vcl_compiler.h>
 
@@ -16,4 +16,4 @@
 # endif // BUILD_DLL
 #endif // VCL_WIN32 and !Building_*_dll
 
-#endif // segv_dll_h_
+#endif // segv_vil_dll_h_
