@@ -37,4 +37,13 @@ void mb_glDrawBufferWrapper(GLuint); // -- Defined in vgui_accelerate_mfc.cxx
 #ifndef GL_UNSIGNED_SHORT_5_6_5
 #  define GL_UNSIGNED_SHORT_5_6_5 0x8363
 #endif
+
+// awf: more (similar) defines for win32...
+#ifndef GL_UNSIGNED_SHORT_5_5_5_1
+#  define GL_UNSIGNED_SHORT_5_5_5_1  0x8034
+#endif
+#ifndef GL_UNSIGNED_SHORT_1_5_5_5_REV
+#  define GL_UNSIGNED_SHORT_1_5_5_5_REV  0x8066
+#endif
+   
 #endif // vgui_gl_h
