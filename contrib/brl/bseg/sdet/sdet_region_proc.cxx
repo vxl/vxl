@@ -75,7 +75,7 @@ void sdet_region_proc::extract_regions()
       return;
     }
 
-  sdet_edgel_regions er(debug_, verbose_);
+  sdet_edgel_regions er(array_scale_, verbose_, debug_);
   er.compute_edgel_regions(image_, *edges, regions_);
   if (debug_)
     edge_image_ = er.GetEdgeImage(*edges);

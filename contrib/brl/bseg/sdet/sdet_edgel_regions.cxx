@@ -183,11 +183,12 @@ float sdet_edgel_regions::Yf(float y)
 
 //----------------------------------------------------------
 //: Default constructor
-sdet_edgel_regions::sdet_edgel_regions(bool debug, bool verbose)
+sdet_edgel_regions::sdet_edgel_regions(int array_scale,bool verbose,
+                                       bool debug)
 {
   debug_ = debug;
   verbose_ = verbose;
-  s_ = 4;//Some boundaries can approach less than 1/2 pixel proximity
+  s_ = array_scale;//Some boundaries can approach less than 1/2 pixel proximity
 #if 0
   if (debug_)
     debug_data_ = new topo_debug_data;

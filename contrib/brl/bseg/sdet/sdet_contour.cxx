@@ -1744,10 +1744,8 @@ sdet_contour::FindJunctions(gevd_bufferxy& edgels,
         int old_x = int(endv->x()), old_y = int(endv->y());//before end moves
 
         //If v1 is NULL then the edge is a cycle
-        if (!stronger->v1())
-        {
-          if (ConfirmJunctionOnCycle(index, minJump, *stronger, edgels))
-          {
+
+        if (!stronger->v1()) { 
             // cycle is now split at junction
             vtol_edge_2d_sptr split = NULL;
             BreakCycle(endv, index, stronger, split);
@@ -1757,19 +1755,16 @@ sdet_contour::FindJunctions(gevd_bufferxy& edgels,
             //since the endpoint may have moved
             update_edgel_chain(weaker, old_x, old_y, endv);
 
-            if (sdet_contour::debug_)
+            if (sdet_contour::debug_){
               vcl_cout << "new position on cycle (" << endv->x() << " "
                        << endv->y() << ")\n";
-
+            }
             jcycle++;             // remove original edge
-          }
-        }
-        else                      // touch itself or another 1-chain
-        {
-          if (ConfirmJunctionOnChain(index, minJump, *stronger, edgels))
-          {
-            if (weaker == stronger)
-            {
+
+
+        } else {                  // touch itself or another 1-chain
+            if (weaker == stronger) {
+              
               vtol_edge_2d_sptr straight = NULL, curled = NULL;
               // break own chain and make a loop
               // edgel chain gaps are updated internally
@@ -1801,7 +1796,6 @@ sdet_contour::FindJunctions(gevd_bufferxy& edgels,
 
               jchain++;
             }
-          }
         }
       }
     }

@@ -16,24 +16,29 @@
 sdet_region_proc_params::
 sdet_region_proc_params(const sdet_region_proc_params& rpp)
 {
-  InitParams(rpp.debug_,
+  InitParams((sdet_detector_params)rpp.dp_,
              rpp.verbose_,
-             (sdet_detector_params)rpp.dp_
+             rpp.debug_,
+             rpp.array_scale_
             );
 }
 
-sdet_region_proc_params::sdet_region_proc_params(bool debug,
-                                       bool verbose,
-                                       const sdet_detector_params& dp
-                                       )
+sdet_region_proc_params::
+sdet_region_proc_params(const sdet_detector_params& dp,
+                        bool verbose,
+                        bool debug,
+                        int array_scale
+                        )
 {
-  InitParams(debug, verbose, dp);
+  InitParams(dp, verbose, debug, array_scale);
 }
 
-void sdet_region_proc_params::InitParams(bool debug,
+void sdet_region_proc_params::InitParams(const sdet_detector_params& dp,
                                          bool verbose,
-                                         const sdet_detector_params& dp)
+                                         bool debug,
+                                         int array_scale)
 {
+  array_scale_ = array_scale;
   debug_ = debug;
   verbose_ = verbose;
   dp_ = dp;
@@ -50,6 +55,11 @@ bool sdet_region_proc_params::SanityCheck()
   vcl_stringstream msg;
   bool valid = true;
 
+  if(array_scale_<2)
+    {
+      msg << "ERROR: don't use a label array resolution factor less than 2x";
+      valid = false;
+    }
 
   valid = valid && dp_.SanityCheck();
   msg << dp_.GetErrorMsg() << vcl_ends;
@@ -65,6 +75,7 @@ vcl_ostream& operator << (vcl_ostream& os, const sdet_region_proc_params& rpp)
      << "  ---" << vcl_endl;
   os << "debug " << rpp.debug_ << vcl_endl;
   os << "verbose " << rpp.verbose_ << vcl_endl;
+  os << "label array scale " << rpp.array_scale_ << vcl_endl;
   os << "---]" << vcl_endl;
   return os;
 }

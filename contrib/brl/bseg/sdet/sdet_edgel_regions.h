@@ -43,6 +43,8 @@
 //                  by GetLabel, in accordance with sdet_region_edge change
 //
 // 19 November 2002 - J.L. Mundy moved to brl for further evolution
+// 09 January 2003  - J.L. Mundy implemented expanded array resolution
+//                    for more accurate connection neigborhoods
 // \endverbatim
 //
 //-----------------------------------------------------------------------------
@@ -60,7 +62,8 @@ class sdet_edgel_regions
 public:
   enum RegionLabel {UNLABELED=0, EDGE, LABEL};
   //Constructors/Destructors
-  sdet_edgel_regions(bool debug = false, bool verbose = false);
+  sdet_edgel_regions(int array_scale=2, bool verbose = false,
+                     bool debug = false);
   ~sdet_edgel_regions();
   //Main process method
   bool compute_edgel_regions(vil_image& image,
