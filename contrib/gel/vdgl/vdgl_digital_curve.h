@@ -17,6 +17,7 @@
 //   18-May-2004 J.L. Mundy added binary I/O methods and equality tests
 // \endverbatim
 
+#include <vcl_iosfwd.h>
 #include <vdgl/vdgl_digital_curve_sptr.h>
 #include <vsol/vsol_curve_2d.h>
 #include <vsol/vsol_point_2d_sptr.h>
@@ -30,7 +31,7 @@ class vdgl_digital_curve : public vsol_curve_2d
   vdgl_interpolator_sptr interpolator_;
 
  public:
-  // Constructors/Destructors-------------------------------------------------- 
+  // Constructors/Destructors--------------------------------------------------
   vdgl_digital_curve(); // for use by binary I/O only
   vdgl_digital_curve( vdgl_interpolator_sptr interpolator);
   vdgl_digital_curve(vsol_point_2d_sptr const& p0,
@@ -110,7 +111,6 @@ class vdgl_digital_curve : public vsol_curve_2d
 
   //: Return true if the argument matches the string identifying the class or any parent class
   bool is_class(const vcl_string& cls) const;
-
 };
 
 //: Stream operator
