@@ -1,9 +1,9 @@
+// This is vxl/vnl/vnl_transpose.h
 #ifndef vnl_transpose_h_
 #define vnl_transpose_h_
 #ifdef __GNUC__
 #pragma interface
 #endif
-// This is vxl/vnl/vnl_transpose.h
 
 //:
 //  \file
@@ -17,9 +17,7 @@
 // \endverbatim
 
 #include <vcl_iostream.h>
-#include <vnl/vnl_matops.h>
 #include <vnl/vnl_fastops.h>
-
 
 //: Efficient matrix transpose
 //    vnl_transpose is an efficient way to write C = vnl_transpose(A) * B.

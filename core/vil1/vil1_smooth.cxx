@@ -1,23 +1,21 @@
 // This is vxl/vil/vil_smooth.cxx
-
-/*
-  fsm@robots.ox.ac.uk
-*/
 #ifdef __GNUC__
 #pragma implementation
 #endif
+
+//:
+// \file
+// \author fsm@robots.ox.ac.uk
+
 #include "vil_smooth.h"
 
 #include <vcl_iostream.h>
 #include <vcl_cmath.h>
 #include <vcl_vector.h>
 
-#include <vil/vil_memory_image_of.h>
-#include <vil/vil_image_as.h>
-#include <vil/vil_convolve.h>
 #include <vil/vil_rgb.h>
-#include <vil/vil_new.h>
-
+#include <vil/vil_memory_image_of.h>
+#include <vil/vil_convolve.h>
 #include <vil/vil_convolve.txx>
 
 vil_image vil_smooth_gaussian(vil_image const & in, double sigma)

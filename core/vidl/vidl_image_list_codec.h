@@ -12,15 +12,14 @@
 // 10/4/2001 Ian Scott (Manchester) Converted perceps header to doxygen
 // \endverbatim
 
-
 #include <vcl_string.h>
 #include <vcl_cstring.h>
-#include <vbl/vbl_ref_count.h>
 #include <vidl/vidl_image_list_codec_sptr.h>
 #include <vidl/vidl_codec.h>
 #include <vil/vil_image.h>
 #include <vcl_list.h>
 #include <vcl_vector.h>
+
 //: Coder/decoder for a list of images
 //   A vidl_image_list_codec is the video I/O access for list of images.
 class vidl_image_list_codec :  public vidl_codec
@@ -38,7 +37,6 @@ public:
   // Operators-----------------------------------------------------------------
   // Safe cast to a parent from Image
   virtual vidl_image_list_codec* casttovidl_image_list_codec() { return this; }
-
 
   virtual bool get_section(int position, void* ib, int x0, int y0, int w, int h) const;
   virtual int put_section(int position, void* ib, int x0, int y0, int w, int h);

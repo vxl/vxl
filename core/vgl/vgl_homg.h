@@ -1,3 +1,4 @@
+// This is vxl/vgl/vgl_homg.h
 #ifndef _vgl_homg_h
 #define _vgl_homg_h
 #ifdef __GNUC__
@@ -24,9 +25,6 @@
 //-------------------------------------------------------------------------------
 
 #include <vcl_cassert.h>
-#if defined(VCL_GCC_295)
-# include <vnl/vnl_vector_fixed.h>
-#endif
 
 template <class T>
 class vgl_homg {

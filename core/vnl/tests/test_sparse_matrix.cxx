@@ -5,11 +5,10 @@
 #include <vcl_cmath.h>
 
 #include <vnl/vnl_sparse_matrix.h>
-#include <vnl/vnl_test.h>
-#include <vnl/vnl_vector.h>
-#include <vnl/vnl_matops.h>
 #include <vnl/algo/vnl_sparse_symmetric_eigensystem.h>
 #include <vnl/algo/vnl_symmetric_eigensystem.h>
+
+#include <vnl/vnl_test.h>
 
 // Test the sparse matrix operations.
 int doTest1()

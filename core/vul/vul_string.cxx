@@ -6,8 +6,6 @@
 #include <vcl_cstring.h>
 #include <vcl_cctype.h>
 
-#include <vul/vul_reg_exp.h>
-
 #define TO_LOWER tolower                        // use ANSI functions
 #define TO_UPPER toupper
 

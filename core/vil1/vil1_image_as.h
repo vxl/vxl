@@ -1,10 +1,9 @@
+// This is vxl/vil/vil_image_as.h
 #ifndef vil_image_as_h_
 #define vil_image_as_h_
 #ifdef __GNUC__
 #pragma interface
 #endif
-// This is vxl/vil/vil_image_as.h
-
 
 //:
 // \file
@@ -13,7 +12,6 @@
 
 #include <vil/vil_image.h>
 #include <vil/vil_byte.h>
-#include <vil/vil_rgb.h>
 
 //: \brief Converts to a different pixel type.
 //
@@ -55,6 +53,5 @@ vil_image vil_image_as_rgb_uint16(vil_image const & i);
 
 //: \brief Converts to a rgb image with float components. \sa{vil_image_as}
 vil_image vil_image_as_rgb_float(vil_image const & i);
-
 
 #endif // vil_image_as_h_

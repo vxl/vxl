@@ -4,7 +4,6 @@
 #include <vcl_cmath.h>    // vcl_sqrt()
 #include <vcl_cstdlib.h>  // atoi()
 
-#include <vil/vil_save.h>
 #include <vil/vil_new.h>
 #include <vil/vil_load.h>
 #include <vil/vil_rgb.h>

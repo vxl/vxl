@@ -1,16 +1,12 @@
 // This is vxl/vil/vil_new.cxx
-
-//:
-// \file
-
-//-*- c++ -*-------------------------------------------------------------------
 #ifdef __GNUC__
 #pragma implementation
 #endif
-//
-// vil_new
-// Author: Andrew W. Fitzgibbon, Oxford RRG
-// Created: 16 Feb 00
+
+//:
+// \file
+// \author Andrew W. Fitzgibbon, Oxford RRG
+// \date   16 Feb 00
 //
 //-----------------------------------------------------------------------------
 
@@ -24,7 +20,6 @@
 #include <vil/vil_image_impl.h>
 #include <vil/vil_image.h>
 #include <vil/vil_memory_image_of.h>
-#include <vil/vil_copy.h>
 
 vil_image vil_new(int width, int height, vil_image const& prototype)
 {

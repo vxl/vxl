@@ -2,7 +2,6 @@
 #include <vcl_fstream.h>
 #include <vcl_utility.h>
 #include <vcl_string.h>
-#include <vcl_iostream.h>
 
 #include <vsl/vsl_test.h>
 #include <vsl/vsl_binary_io.h>

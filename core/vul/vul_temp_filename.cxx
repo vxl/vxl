@@ -6,11 +6,13 @@
 #include <vcl_string.h>
 #include <vcl_ctime.h>
 #include <vcl_cstdlib.h> // for rand/srand
+#include <stdio.h>  // for P_tmpdir
 
-#ifndef _MSC_VER
+#ifdef _MSC_VER
+  #include <Windows.h>
+#else
   // Helper functions for Unix
 
-  #include <stdio.h>  // for P_tmpdir
   #include <unistd.h> // for unlink
   #include <fcntl.h>  // for O_CREATE,...
 
@@ -55,9 +57,6 @@
       return (r<26) ? char('A'+r) : (r<52) ? char('a'+r-26) : char('0'+r-52);
     }
   }
-#else
-  #include <Windows.h>
-  #include <stdio.h>
 #endif
 
 vcl_string

@@ -5,20 +5,13 @@
 
 //:
 // \file
-
-/*
-  fsm@robots.ox.ac.uk
-*/
-
+// \author fsm@robots.ox.ac.uk
+//
 // Adapted from awf's MatOps class.
 
 #include "vnl_matlab_print.h"
-
 #include <vcl_iostream.h>
-
-#include <vnl/vnl_vector.h>
 #include <vnl/vnl_matrix.h>
-#include <vnl/vnl_diag_matrix.h>
 
 //: Can be used within debugger to print matrix
 extern "C"

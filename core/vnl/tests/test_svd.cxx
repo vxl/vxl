@@ -3,11 +3,11 @@
 #include <vcl_complex.h>
 #include <vcl_cmath.h> // for vcl_sqrt(double)
 
-#include <vnl/vnl_test.h>
 #include <vnl/vnl_matrix.h>
 #include <vnl/vnl_double_3.h>
-#include <vnl/vnl_matops.h>
 #include <vnl/algo/vnl_svd.h>
+
+#include <vnl/vnl_test.h>
 
 vnl_matrix<double> solve_with_warning(const vnl_matrix<double>& M,
                                       const vnl_matrix<double>& B)

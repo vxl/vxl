@@ -3,11 +3,10 @@
 #include <vcl_cstdlib.h>
 #include <vcl_cstddef.h> // for vcl_size_t
 
-#include <vnl/vnl_test.h>
-
 #include <vnl/vnl_double_3x3.h>
 #include <vnl/vnl_double_3.h>
-#include <vnl/vnl_linear_operators_3.h>
+
+#include <vnl/vnl_test.h>
 
 bool verbose_malloc = false;
 int malloc_count = 0;
@@ -17,7 +16,7 @@ int malloc_count = 0;
 // The test also fails for gcc 3.0 - PVr
 # define reset_count malloc_count = 0
 #if !defined(VCL_WIN32) && !defined(GNU_LIBSTDCXX_V3)
-# define check_count TEST("mallocs",malloc_count<=1,true) 
+# define check_count TEST("mallocs",malloc_count<=1,true)
 #else
 # define check_count /* */
 #endif
@@ -43,12 +42,12 @@ void test_matrix_fixed()
   vnl_double_3 v(10,11,12);
   check_count;
   vcl_printf("v = [ %g %g %g ]\n", v(0), v(1), v(2));
-  
+
   reset_count;
   vnl_double_3 splork = X * (v + v);
   check_count;
   vcl_printf("splork = [ %g %g %g ]\n", splork(0), splork(1), splork(2));
-  
+
   // This shouldn't compile...
 #if 0
   vnl_matrix<double>* base = new vnl_double_3x3(datablock);

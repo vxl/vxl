@@ -9,7 +9,6 @@
 
 #include <vul/vul_arg.h>
 
-#include <vil/vil_image_impl.h>
 #include <vil/vil_image.h>
 #include <vil/vil_memory_image_of.h>
 #include <vil/vil_save.h>

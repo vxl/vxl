@@ -22,7 +22,6 @@
 #include <vcl_iostream.h>
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_matrix.h>
-#include <vnl/vnl_math.h>
 
 class vcsl_matrix
   :public vcsl_spatial_transformation

@@ -1,15 +1,17 @@
-// test_real_eigensystem
-// Author: Andrew W. Fitzgibbon, Oxford RRG
-// Created: 23 Jan 96
+// This is vxl/vnl/tests/test_real_eigensystem
+
+//:
+// \file
+// \author Andrew W. Fitzgibbon, Oxford RRG
+// \date   23 Jan 96
 //
 //-----------------------------------------------------------------------------
 #include <vcl_iostream.h>
-
 #include <vcl_complex.h>
-#include <vnl/vnl_test.h>
 #include <vnl/vnl_complex_ops.h>
-#include <vnl/vnl_matops.h>
 #include <vnl/algo/vnl_real_eigensystem.h>
+
+#include <vnl/vnl_test.h>
 
 void test_real_eigensystem()
 {
@@ -40,7 +42,6 @@ void test_real_eigensystem()
       vcl_cout << "residual = " << diff.fro_norm() << vcl_endl;
       vnl_test_assert("recompose residual",  diff.fro_norm() < 1e-12);
     }
-
   }
 
   {

@@ -1,9 +1,9 @@
+// This is vxl/vnl/vnl_cost_function.h
 #ifndef vnl_cost_function_h_
 #define vnl_cost_function_h_
 #ifdef __GNUC__
 #pragma interface
 #endif
-// This is vxl/vnl/vnl_cost_function.h
 
 //:
 //  \file
@@ -20,9 +20,8 @@
 //
 //-----------------------------------------------------------------------------
 
-#include <vnl/vnl_matops.h>
 #include <vnl/vnl_unary_function.h>
-#include <vnl/vnl_vector_ref.h>
+#include <vnl/vnl_vector.h>
 
 //:   An object that represents a function from R^n -> R.
 //    It is commonly used to express the

@@ -12,11 +12,9 @@
 //   Feb.2002 - Peter Vanroose - brief doxygen comment placed on single line
 // \endverbatim
 
+#include <vgl/vgl_region_scan_iterator.h>
 #include <vgl/vgl_polygon.h>
 #include <vgl/vgl_box_2d.h>
-#include <vgl/vgl_point_2d.h>
-
-#include <vgl/vgl_region_scan_iterator.h>
 
 //: Fill a polygonal face with interior scan lines
 //  This class provides an interator-style interface to polygon scan
@@ -81,7 +79,7 @@ public:
   bool next();
 
   //: Returns current scan line
-  inline int scany() const { return (y-1); }
+  inline int scany() const { return y-1; }
 
   //: Returns start of current span
   inline int startx() const { return xl; }

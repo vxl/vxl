@@ -51,9 +51,7 @@ struct vul_timer_data
 #include <vxl_config.h> // VXL_TWO_ARG_GETTIME
 
 #include <vcl_climits.h>   // for CLK_TCK
-#include <vcl_ctime.h>
 #include <vcl_iostream.h>
-#include <vcl_sys/time.h>
 
 
 //#define CLK_TCK _sysconf(3) in <limits.h> has error

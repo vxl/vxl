@@ -10,11 +10,17 @@
 // \brief An ordinary mathematical matrix
 
 #include <vcl_iosfwd.h>
-#include <vcl_cassert.h>
 #include <vnl/vnl_tag.h>
-#include <vnl/vnl_error.h>
-#include <vnl/vnl_config.h>
 #include <vnl/vnl_c_vector.h>
+#ifndef NDEBUG
+# include "vnl_config.h"
+# if VNL_CONFIG_CHECK_BOUNDS
+#  include <vnl/vnl_error.h>
+#  include <vcl_cassert.h>
+# endif
+#else
+# define VNL_CONFIG_CHECK_BOUNDS 0
+#endif
 
 export template <class T> class vnl_vector;
 export template <class T> class vnl_matrix;

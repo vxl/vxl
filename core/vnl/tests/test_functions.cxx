@@ -5,9 +5,11 @@
 #include <vcl_ctime.h>
 
 #include <vnl/vnl_test.h>
-#include <vnl/vnl_matops.h>
 #include <vnl/algo/vnl_chi_squared.h>
 
+//:
+// \file
+//
 // Test function results for chi-squared cumulative density function.
 // The values are those calculated from this function on solaris, and
 // agree (to 3sf) with those from a mathematical table.

@@ -7,13 +7,9 @@
 #include <vul/vul_temp_filename.h>
 #include <vcl_map.h>
 
-
-
-
 // file iter
 #include <vul/vul_file_iterator.h>
 #include <vcl_fstream.h>
-#include <vpl/vpl.h>
 
 static void touch(char const* fn)
 {
@@ -270,7 +266,6 @@ void test_file_iterator_dos()
 }
 
 
-
 void test_vul_file()
 {
   // vul_file::basename
@@ -295,11 +290,10 @@ void test_vul_sleep_timer()
   vul_timer tic;
   vpl_sleep(1);
   double t = tic.real() / 1000.0;
-  
+
   vcl_cout << "vul_timer: sleep lasted " << t << " seconds, expected 1.0\n";
 
   TEST("Sleep for between 0.5 and 3 seconds", t> 0.5 && t < 3.0, true);
-
 }
 
 
@@ -316,4 +310,4 @@ void vul_test_all()
 }
 
 
-TESTMAIN(vul_test_all)
+TESTMAIN(vul_test_all);

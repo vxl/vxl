@@ -16,13 +16,12 @@
 // 10/4/2001 Ian Scott (Manchester) Converted perceps header to doxygen
 // \endverbatim
 
-
+#include <vcl_compiler.h>
 #include <vidl/vidl_avicodec_sptr.h>
-#include <vbl/vbl_ref_count.h>
-
+#ifdef VCL_VC
 #include <windows.h>
 #include <vfw.h>
-
+#endif
 #include <vidl/vidl_codec.h>
 #include <vidl/vidl_frame_sptr.h>
 

@@ -4,7 +4,6 @@
 
 //:
 // \file
-
 //
 // Copyright (C) 1991 Texas Instruments Incorporated.
 // Copyright (C) 1992 General Electric Company.
@@ -89,10 +88,8 @@
 #include <vcl_iostream.h>
 #include <vcl_vector.h>
 #include <vcl_algorithm.h>
-#include <vcl_cassert.h>
 
 #include <vnl/vnl_math.h>
-#include <vnl/vnl_complex.h>
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_c_vector.h>
 #include <vnl/vnl_numeric_traits.h>

@@ -1,8 +1,9 @@
-// Author: F. Schaffalitzky, Oxford RRG
-// Created: 7 September 1999
+//:
+// \file
+// \author F. Schaffalitzky, Oxford RRG
+// \date    7 September 1999
 #include <vcl_complex.h>
 #include <vnl/vnl_test.h>
-#include <vnl/vnl_matops.h>
 #include <vnl/algo/vnl_complex_eigensystem.h>
 
 void test_complex_eigensystem1()

@@ -1,9 +1,9 @@
+// This is vxl/vnl/vnl_linear_system.h
 #ifndef vnl_linear_system_h_
 #define vnl_linear_system_h_
 #ifdef __GNUC__
 #pragma interface
 #endif
-// This is vxl/vnl/vnl_linear_system.h
 
 //: \file
 //  \brief Abstraction for a linear system of equations.
@@ -17,7 +17,6 @@
 
 #include <vcl_string.h>
 #include <vnl/vnl_vector.h>
-#include <vnl/vnl_matrix.h>
 
 //: Abstraction for a linear system of equations.
 //    vnl_linear_system provides an abstraction for a linear system

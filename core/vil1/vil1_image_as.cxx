@@ -5,10 +5,8 @@
 
 //:
 // \file
+// \author fsm@robots.ox.ac.uk
 
-/*
-  fsm@robots.ox.ac.uk
-*/
 #include "vil_image_as.h"
 
 #include <vcl_cassert.h>
@@ -18,7 +16,6 @@
 
 #include <vil/vil_byte.h>
 #include <vil/vil_pixel.h>
-#include <vil/vil_memory_image.h>
 #include <vil/vil_memory_image_of_format.txx>
 
 #include <vxl_config.h>
@@ -50,15 +47,11 @@ struct vil_image_as_impl : public vil_image_impl, public vil_memory_image_of_for
   // This always fails, even if the underlying image is an image-of-T
   bool put_section(void const *, int, int, int, int) { return false; }
 
-/* START_MANCHESTER_BINARY_IO_CODE */
-
   //: Return the name of the class;
   virtual vcl_string is_a() const;
 
   //: Return true if the name of the class matches the argument
   virtual bool is_class(vcl_string const&) const;
-
-/* END_MANCHESTER_BINARY_IO_CODE */
 };
 
 //--------------------------------------------------------------------------------
@@ -739,8 +732,6 @@ bool vil_image_as_impl<vil_rgb<vxl_uint_16> >::get_section(void *buf,
 }
 
 
-/* START_MANCHESTER_BINARY_IO_CODE */
-
 VCL_DEFINE_SPECIALIZATION
 vcl_string vil_image_as_impl<vil_rgb<vxl_uint_16> >::is_a() const
 {
@@ -754,7 +745,6 @@ bool vil_image_as_impl<vil_rgb<vxl_uint_16> >::is_class(vcl_string const& s) con
   return s==vil_image_as_impl<vil_rgb<vxl_uint_16> >::is_a() || vil_image_impl::is_class(s);
 }
 
-/* END_MANCHESTER_BINARY_IO_CODE */
 
 // instantiate for vil_rgb_uint16 .
 template struct vil_image_as_impl<vil_rgb<vxl_uint_16> >;

@@ -23,7 +23,6 @@
 
 #include <vnl/vnl_test.h>
 #include <vnl/vnl_vector.h>
-#include <vnl/vnl_complex_ops.h>
 #include <vnl/algo/vnl_fft_1d.h>
 
 const double maxRealErrorPrecision = 1e-5;

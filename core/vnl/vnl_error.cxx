@@ -23,15 +23,11 @@
 #include <vcl_cstdlib.h>
 #include <vcl_cassert.h>
 
-#include <vnl/vnl_matrix.h>
-#include <vnl/vnl_vector.h>
-#include <vnl/vnl_numeric_traits.h>
-
 //: Raise exception for invalid index
 void vnl_error_vector_index (char const* fcn, int index) {
   //RAISE Error, SYM(vnl_error_vector), SYM(Invalid_Index),
   vcl_printf ("vnl_error_vector_index:%s: Invalid value %d specified for index.\n", 
-        fcn, index);
+              fcn, index);
   vcl_abort();
 }
 
@@ -39,7 +35,7 @@ void vnl_error_vector_index (char const* fcn, int index) {
 void vnl_error_vector_dimension (char const* fcn, int l1, int l2) {
   //RAISE Error, SYM(vnl_error_vector), SYM(Invalid_Dim),
   vcl_printf ("vnl_error_vector_dimension:%s: Dimensions [%d] and [%d] do not match.\n", 
-        fcn, l1, l2);
+              fcn, l1, l2);
   vcl_abort();
 }
 
@@ -48,7 +44,7 @@ void vnl_error_vector_dimension (char const* fcn, int l1, int l2) {
 void vnl_error_vector_va_arg (int n) {
   //RAISE Error, SYM(vnl_error_vector), SYM(Invalid_Va_Arg),
   vcl_printf ("vnl_error_vector_va_arg: Invalid type in ... or wrong alignment with %d bytes.\n",
-        n);
+              n);
   vcl_abort();
 }
 
@@ -66,7 +62,7 @@ void vnl_error_matrix_row_index (char const* fcn, int r)  {
 void vnl_error_matrix_col_index (char const* fcn, int c) {
   //RAISE Error, SYM(vnl_error_matrix), SYM(Invalid_Col),
   vcl_printf ("vnl_error_matrix_col_index:%s: Invalid value %d specified for column.\n",
-        fcn, c);
+              fcn, c);
   vcl_abort();
 }
 

@@ -1,11 +1,11 @@
 #include <vcl_iostream.h>
 
-#include <vnl/vnl_test.h>
 #include <vnl/vnl_matrix.h>
-#include <vnl/vnl_matlab_print.h>
 #include <vnl/algo/vnl_qr.h>
 #include <vnl/algo/vnl_determinant.h>
 #include <vnl/vnl_det.h>
+
+#include <vnl/vnl_test.h>
 
 double qr_det(vnl_matrix<double> const &M) {
   return vnl_qr<double>(M).determinant();
@@ -27,7 +27,7 @@ void test_determinant() {
     vnl_matrix_fixed<double,1,1> m_1 = m1;
     vnl_test_assert_near("vnl_det(vnl_matrix_fixed<double,1,1>)", vnl_det(m_1), d1, eps);
   }
-  
+
   {
     double N1[1][1] = {
       { -0.95012928514718 }

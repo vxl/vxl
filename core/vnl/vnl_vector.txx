@@ -42,7 +42,6 @@
 #include <vcl_algorithm.h>
 
 #include <vnl/vnl_math.h>
-#include <vnl/vnl_complex.h>
 #include <vnl/vnl_matrix.h>
 #include <vnl/vnl_c_vector.h>
 #include <vnl/vnl_numeric_traits.h>

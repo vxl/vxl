@@ -1,6 +1,4 @@
 // This is vxl/vul/vul_sequence_filename_map.cxx
-
-//-*- c++ -*-------------------------------------------------------------------
 #ifdef __GNUC__
 #pragma implementation
 #endif
@@ -12,15 +10,11 @@
 
 #include "vul_sequence_filename_map.h"
 #include <vcl_cstddef.h> // for vcl_size_t
-
-#define xxx 0
-
 #include <vcl_cstdlib.h>
 #include <vcl_iostream.h>
 #include <vcl_string.h>
 
 #include <vul/vul_sprintf.h>
-#include <vul/vul_file.h>
 #include <vul/vul_reg_exp.h>
 #include <vul/vul_file_iterator.h>
 

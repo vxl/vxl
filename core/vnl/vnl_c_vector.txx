@@ -12,7 +12,6 @@
 #include "vnl_c_vector.h"
 #include <vcl_cmath.h>     // vcl_sqrt()
 #include <vnl/vnl_math.h>
-#include <vnl/vnl_complex.h>
 #include <vnl/vnl_complex_traits.h>
 #include <vnl/vnl_numeric_traits.h>
 
@@ -328,7 +327,7 @@ void vnl_c_vector_inf_norm(T const *p, unsigned n, S *out)
 // if set in build environment, go with that.
 #else
 // else, see what vnl_config.h has to say about it.
-# include <vnl/vnl_config.h>
+# include "vnl_config.h"
 # if VNL_CONFIG_THREAD_SAFE
 #  define VNL_C_VECTOR_USE_VNL_ALLOC 0
 # else

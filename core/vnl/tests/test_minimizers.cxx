@@ -1,14 +1,10 @@
-
-
 #include <vcl_iostream.h>
 #include <vcl_cassert.h>
+#include <vcl_cmath.h>
+#include <vnl/vnl_vector.h>
+#include <vnl/algo/vnl_brent.h>
 
 #include <vnl/vnl_test.h>
-#include <vnl/vnl_math.h>
-#include <vnl/vnl_vector.h>
-#include <vnl/vnl_matops.h>
-
-#include <vnl/algo/vnl_brent.h>
 
 struct cubic : public vnl_cost_function {
   cubic() : vnl_cost_function(1) {}

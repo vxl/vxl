@@ -19,7 +19,6 @@
 #include <vcsl/vcsl_displacement_sptr.h>
 #include <vcsl/vcsl_rotation.h>
 
-#include <vnl/vnl_quaternion.h>
 //: Affine rotation
 // A displacement rotates a point with a given angle around an axis defined by
 // a point and a unit vector

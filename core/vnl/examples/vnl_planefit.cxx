@@ -6,7 +6,6 @@
 //-----------------------------------------------------------------------------
 
 #include <vcl_iostream.h>
-#include <vnl/vnl_matops.h>
 #include <vnl/algo/vnl_svd.h>
 #include <vnl/algo/vnl_symmetric_eigensystem.h>
 

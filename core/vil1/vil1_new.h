@@ -23,29 +23,29 @@
 //\endverbatim
 
 #include <vil/vil_fwd.h>
-#include <vil/vil_image_impl.h>
+#include <vil/vil_image.h>
 
 //: Make a new image.
 vil_image vil_new(int width, int height, vil_image const& prototype);
 
 //: Make a new image.
 vil_image vil_new(vil_stream* os,
-                      int planes,
-                      int width, int height,
-                      int components,
-                      int bits_per_component,
-                      vil_component_format format,
-                      char const* file_format = 0);
+                  int planes,
+                  int width, int height,
+                  int components,
+                  int bits_per_component,
+                  vil_component_format format,
+                  char const* file_format = 0);
 
 //: Make a new image.
 vil_image vil_new(char const* filename,
-                      int width, int height,
-                      vil_image const &prototype,
-                      char const* format = 0);
+                  int width, int height,
+                  vil_image const &prototype,
+                  char const* format = 0);
 
 vil_image vil_new(vil_stream* os,
-                      int width, int height,
-                      vil_image const& prototype,
-                      char const* file_format = 0);
+                  int width, int height,
+                  vil_image const& prototype,
+                  char const* file_format = 0);
 
 #endif // vil_new_h_

@@ -1,7 +1,6 @@
 #include <vcl_iostream.h>
-#include <vil/vil_colour_space.h>
-#include <vil/vil_byte.h>
 #include <vcl_cmath.h>
+#include <vil/vil_colour_space.h>
 
 #include <testlib/testlib_test.h>
 

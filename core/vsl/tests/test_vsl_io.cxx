@@ -1,7 +1,4 @@
-
 // First define testmain
-
-
 #include <vsl/vsl_test.h>
 
 // Test forward declarations.
@@ -9,9 +6,9 @@
 
 #undef TESTMAIN
 #define TESTMAIN(x)
+#include <vsl/tests/test_polymorphic_io.cxx> // should come first
 #include <vsl/tests/test_arbitrary_length_int_conversion.cxx>
 #include <vsl/tests/test_binary_io.cxx>
-#include <vsl/tests/test_polymorphic_io.cxx>
 #include <vsl/tests/test_clipon_polymorphic_io.cxx>
 #include <vsl/tests/test_vector_io.cxx>
 #include <vsl/tests/test_list_io.cxx>

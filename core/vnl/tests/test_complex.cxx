@@ -7,10 +7,10 @@
 #include <vcl_cmath.h>
 #include <vcl_complex.h>
 
-#include <vnl/vnl_test.h>
 #include <vnl/vnl_vector.h>
-#include <vnl/vnl_matops.h>
 #include <vnl/vnl_sample.h>
+
+#include <vnl/vnl_test.h>
 
 //: inverse cosine for complex numbers, implemented by Peter.Vanroose@esat.kuleuven.ac.be
 inline vcl_complex<double> acos(vcl_complex<double> x)

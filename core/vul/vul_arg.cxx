@@ -32,7 +32,6 @@
 #include <vul/vul_string.h>
 #include <vul/vul_reg_exp.h>
 #include <vul/vul_printf.h>
-#include <vul/vul_sprintf.h>
 
 //------------------------------------------------------------------------------
 
