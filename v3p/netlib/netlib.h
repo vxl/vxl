@@ -21,8 +21,7 @@ extern "C" {
 #endif
 
 #include <vxl_config.h>
-#if VXL_MATH_HAS_SQRTF
-/* It would be more appropriate to #include <math.h> to get this declaration */
+#if VXL_C_MATH_HAS_SQRTF
 float sqrtf(float);
 #else
 # define sqrtf(f) ((float)sqrt((double)(f)))

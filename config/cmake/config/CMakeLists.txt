@@ -108,7 +108,7 @@ MACRO(PERFORM_CHECK_HEADER FILE VARIABLE)
   IF("${VARIABLE}" MATCHES "^$")
     SET(${VARIABLE} 0)
   ENDIF("${VARIABLE}" MATCHES "^$")
-ENDMACRO(PERFORM_CHECK_HEADER HEADER VAR)
+ENDMACRO(PERFORM_CHECK_HEADER FILE VARIABLE)
 
 #
 # Check value of variable and if true, set to VALUE_TRUE, otherwise to
@@ -131,9 +131,9 @@ ENDMACRO(SET_BOOL VAR VALUE_TRUE VALUE_FALSE)
 MACRO(SET_INVERT VAR VALUE)
   SET(SET_INVERT_VAR "${VALUE}")
   IF(SET_INVERT_VAR)
-    SET(${VAR} 0)
+    SET(${VAR} "0")
   ELSE(SET_INVERT_VAR)
-    SET(${VAR} 1)
+    SET(${VAR} "1")
   ENDIF(SET_INVERT_VAR)
 ENDMACRO(SET_INVERT VAR VALUE)
 
@@ -185,7 +185,7 @@ MACRO(CHECK_TYPE_EXISTS TYPE FILES VARIABLE)
            "${CHECK_TYPE_EXISTS_CONTENT}\n")
     ENDIF(${VARIABLE})
   ENDIF("${VARIABLE}" MATCHES "^${VARIABLE}$")
-ENDMACRO(CHECK_TYPE_EXISTS)
+ENDMACRO(CHECK_TYPE_EXISTS TYPE FILES VARIABLE)
 
 #
 # Check if the type exists and if not make result 0
@@ -232,61 +232,70 @@ MACRO(DETERMINE_TYPE VAR SIZE
       ENDIF(${TYPE3_SIZE} MATCHES "^${SIZE}$")
     ENDIF(${TYPE2_SIZE} MATCHES "^${SIZE}$")
   ENDIF(${TYPE1_SIZE} MATCHES "^${SIZE}$")
-ENDMACRO(DETERMINE_TYPE VAR)
+ENDMACRO(DETERMINE_TYPE VAR SIZE
+         TYPE1_SIZE TYPE1_NAME TYPE2_SIZE TYPE2_NAME TYPE3_SIZE TYPE3_NAME)
 
 #
 # Perform all the specific tests
 #
 
-PERFORM_CMAKE_TEST(vxl_platform_tests.cxx vcl_cv_cxx_has_bool)
-PERFORM_CMAKE_TEST(vxl_platform_tests.cxx vcl_cv_cxx_has_typename)
-PERFORM_CMAKE_TEST(vxl_platform_tests.cxx vcl_cv_cxx_has_export)
-PERFORM_CMAKE_TEST(vxl_platform_tests.cxx vcl_cv_cxx_has_mutable)
-PERFORM_CMAKE_TEST(vxl_platform_tests.cxx vcl_cv_cxx_has_explicit)
-PERFORM_CMAKE_TEST(vxl_platform_tests.cxx vcl_cv_cxx_has_dynamic_cast)
-PERFORM_CMAKE_TEST(vxl_platform_tests.cxx vcl_cv_cxx_check_for_scope)
-PERFORM_CMAKE_TEST(vxl_platform_tests.cxx vcl_cv_cxx_default_value)
-PERFORM_CMAKE_TEST(vxl_platform_tests.cxx vcl_cv_cxx_has_member_templates)
-PERFORM_CMAKE_TEST(vxl_platform_tests.cxx vcl_cv_cxx_can_do_partial_specialization)
+PERFORM_CMAKE_TEST(vxl_platform_tests.cxx VCL_HAS_BOOL)
+PERFORM_CMAKE_TEST(vxl_platform_tests.cxx VCL_HAS_TYPENAME)
+PERFORM_CMAKE_TEST(vxl_platform_tests.cxx VCL_HAS_EXPORT)
+PERFORM_CMAKE_TEST(vxl_platform_tests.cxx VCL_HAS_MUTABLE)
+PERFORM_CMAKE_TEST(vxl_platform_tests.cxx VCL_HAS_EXPLICIT)
+PERFORM_CMAKE_TEST(vxl_platform_tests.cxx VCL_HAS_DYNAMIC_CAST)
+PERFORM_CMAKE_TEST(vxl_platform_tests.cxx VCL_FOR_SCOPE_HACK)
+  SET_INVERT(VCL_FOR_SCOPE_HACK "${VCL_FOR_SCOPE_HACK}")
+PERFORM_CMAKE_TEST(vxl_platform_tests.cxx VCL_DEFAULT_VALUE)
+  SET_BOOL(VCL_DEFAULT_VALUE "/* no need */" " = x")
+PERFORM_CMAKE_TEST(vxl_platform_tests.cxx VCL_HAS_MEMBER_TEMPLATES)
+PERFORM_CMAKE_TEST(vxl_platform_tests.cxx VCL_CAN_DO_PARTIAL_SPECIALIZATION)
 PERFORM_CMAKE_TEST(vxl_platform_tests.cxx VCL_ALLOWS_INLINE_INSTANTIATION)
 PERFORM_CMAKE_TEST(vxl_platform_tests.cxx VCL_NEEDS_INLINE_INSTANTIATION)
-PERFORM_CMAKE_TEST(vxl_platform_tests.cxx vcl_cv_cxx_static_const_init_int)
+  SET_INVERT(VCL_NEEDS_INLINE_INSTANTIATION "${VCL_NEEDS_INLINE_INSTANTIATION}")
+PERFORM_CMAKE_TEST(vxl_platform_tests.cxx VCL_STATIC_CONST_INIT_INT)
 PERFORM_CMAKE_TEST(vxl_platform_tests.cxx VCL_STATIC_CONST_INIT_NO_DEFN)
 PERFORM_CMAKE_TEST(vxl_platform_tests.cxx VCL_STATIC_CONST_INIT_FLOAT)
 PERFORM_CMAKE_TEST(vxl_platform_tests.cxx VCL_CAN_DO_STATIC_TEMPLATE_MEMBER)
 PERFORM_CMAKE_TEST(vxl_platform_tests.cxx VCL_CAN_DO_NON_TYPE_FUNCTION_TEMPLATE_PARAMETER)
 PERFORM_CMAKE_TEST(vxl_platform_tests.cxx VCL_NEED_FRIEND_FOR_TEMPLATE_OVERLOAD)
+  SET_INVERT(VCL_NEED_FRIEND_FOR_TEMPLATE_OVERLOAD "${VCL_NEED_FRIEND_FOR_TEMPLATE_OVERLOAD}")
 PERFORM_CMAKE_TEST(vxl_platform_tests.cxx VCL_OVERLOAD_CAST)
+  SET_BOOL(VCL_OVERLOAD_CAST "(x)" "((T)(x))")
 PERFORM_CMAKE_TEST(vxl_platform_tests.cxx VCL_NULL_TMPL_ARGS)
+  SET_BOOL(VCL_NULL_TMPL_ARGS "/* <> */" "<>")
 PERFORM_CMAKE_TEST(vxl_platform_tests.cxx VCL_NO_STATIC_DATA_MEMBERS)
-PERFORM_CMAKE_TEST(vxl_platform_tests.cxx VCL_HAS_TEMPLATE_SYMBOLS)
+  SET_INVERT(VCL_NO_STATIC_DATA_MEMBERS "${VCL_NO_STATIC_DATA_MEMBERS}")
+PERFORM_CMAKE_TEST_RUN(vxl_platform_tests.cxx VCL_HAS_TEMPLATE_SYMBOLS)
+  SET_INVERT(VCL_HAS_TEMPLATE_SYMBOLS "${VCL_HAS_TEMPLATE_SYMBOLS}")
 PERFORM_CMAKE_TEST(vxl_platform_tests.cxx VCL_CAN_DO_IMPLICIT_TEMPLATES)
 PERFORM_CMAKE_TEST(vxl_platform_tests.cxx VCL_CAN_DO_COMPLETE_DEFAULT_TYPE_PARAMETER)
 PERFORM_CMAKE_TEST(vxl_platform_tests.cxx VCL_CAN_DO_TEMPLATE_DEFAULT_TYPE_PARAMETER)
-PERFORM_CMAKE_TEST(vxl_platform_tests.cxx VCL_TEMPLATE_DOES_NOT_MATCH_TOO_OFTEN)
+PERFORM_CMAKE_TEST(vxl_platform_tests.cxx VCL_TEMPLATE_MATCHES_TOO_OFTEN)
+  SET_INVERT(VCL_TEMPLATE_MATCHES_TOO_OFTEN "${VCL_TEMPLATE_MATCHES_TOO_OFTEN}")
 PERFORM_CMAKE_TEST(vxl_platform_tests.cxx VCL_SUNPRO_CLASS_SCOPE_HACK)
-PERFORM_CMAKE_TEST(vxl_platform_tests.cxx vcl_cv_cxx_has_exceptions)
-PERFORM_CMAKE_TEST(vxl_platform_tests.cxx vcl_cv_cxx_has_namespaces)
-PERFORM_CMAKE_TEST(vxl_platform_tests.cxx vcl_cv_cxx_allows_namespace_std)
-PERFORM_CMAKE_TEST(vxl_platform_tests.cxx vcl_cv_cxx_needs_namespace_std)
-PERFORM_CMAKE_TEST(vxl_platform_tests.cxx VXL_UNISTD_USLEEP_IS_VOID)
-PERFORM_CMAKE_TEST(vxl_platform_tests.cxx ac_vxl_has_qsort)
-PERFORM_CMAKE_TEST(vxl_platform_tests.cxx VXL_MATH_HAS_FINITE)
-# sqrtf() is checked for with the C compiler elsewhere in this file
-# PERFORM_CMAKE_TEST(vxl_platform_tests.cxx VXL_MATH_HAS_SQRTF)
-PERFORM_CMAKE_TEST(vxl_platform_tests.cxx VXL_IEEEFP_HAS_FINITE)
-PERFORM_CMAKE_TEST(vxl_platform_tests.cxx VXL_STDLIB_HAS_LRAND48)
-PERFORM_CMAKE_TEST(vxl_platform_tests.cxx VXL_STDLIB_HAS_DRAND48)
+  SET_BOOL(VCL_SUNPRO_CLASS_SCOPE_HACK "/* , A */" ", A")
+PERFORM_CMAKE_TEST(vxl_platform_tests.cxx VCL_HAS_EXCEPTIONS)
+PERFORM_CMAKE_TEST(vxl_platform_tests.cxx VCL_HAS_NAMESPACES)
+PERFORM_CMAKE_TEST(vxl_platform_tests.cxx VCL_ALLOWS_NAMESPACE_STD)
+PERFORM_CMAKE_TEST(vxl_platform_tests.cxx VCL_NEEDS_NAMESPACE_STD)
+  SET_INVERT(VCL_NEEDS_NAMESPACE_STD "${VCL_NEEDS_NAMESPACE_STD}")
 PERFORM_CMAKE_TEST_RUN(vxl_platform_tests.cxx VCL_HAS_SLICED_DESTRUCTOR_BUG)
+PERFORM_CMAKE_TEST(vxl_platform_tests.cxx VXL_UNISTD_USLEEP_IS_VOID)
+  SET_INVERT(VXL_UNISTD_USLEEP_IS_VOID "${VXL_UNISTD_USLEEP_IS_VOID}")
+PERFORM_CMAKE_TEST(vxl_platform_tests.cxx VXL_STDLIB_HAS_QSORT)
 
 # Test how to define a template specialization, and whether
 # specializations can be properly distinguished by top-level
 # cv-qualifiers.
-PERFORM_CMAKE_TEST(vxl_platform_tests.cxx vcl_cv_cxx_define_specialization)
-IF(NOT vcl_cv_cxx_define_specialization)
+PERFORM_CMAKE_TEST(vxl_platform_tests.cxx VCL_DEFINE_SPECIALIZATION)
+IF(NOT VCL_DEFINE_SPECIALIZATION)
   SET(CMAKE_REQUIRED_FLAGS "-DNOT_CONFORMING_SPECIALIZATION")
-ENDIF(NOT vcl_cv_cxx_define_specialization)
-PERFORM_CMAKE_TEST(vxl_platform_tests.cxx VCL_CAN_SPECIALIZE_CV)
+ENDIF(NOT VCL_DEFINE_SPECIALIZATION)
+  SET_BOOL(VCL_DEFINE_SPECIALIZATION "template <>" "/* template <> */")
+PERFORM_CMAKE_TEST(vxl_platform_tests.cxx VCL_CANNOT_SPECIALIZE_CV)
+  SET_INVERT(VCL_CANNOT_SPECIALIZE_CV "${VCL_CANNOT_SPECIALIZE_CV}")
 SET(CMAKE_REQUIRED_FLAGS)
 
 #
@@ -348,59 +357,38 @@ PERFORM_CHECK_HEADER(pthread.h VXL_HAS_PTHREAD_H)
 PERFORM_CHECK_HEADER(semaphore.h VXL_HAS_SEMAPHORE_H)
 PERFORM_CHECK_HEADER(ieeefp.h VXL_HAS_IEEEFP_H)
 
-# Test for sqrtf may need math library on UNIX.
+# Tests of math.h may need math library on UNIX.
 IF(UNIX)
   SET(CMAKE_REQUIRED_LIBRARIES "${CMAKE_REQUIRED_LIBRARIES};m")
 ENDIF(UNIX)
-CHECK_SYMBOL_EXISTS(sqrtf "math.h" VXL_MATH_HAS_SQRTF)
-# VXL_MATH_HAS_SQRTF needs to be "0" or "1"
-IF(VXL_MATH_HAS_SQRTF)
-  SET(VXL_MATH_HAS_SQRTF "1")
-ELSE(VXL_MATH_HAS_SQRTF)
-  SET(VXL_MATH_HAS_SQRTF "0")
-ENDIF(VXL_MATH_HAS_SQRTF)
 
+MACRO(PERFORM_C_CHECK_FUNCTION SYMBOL FILE VARIABLE)
+  CHECK_SYMBOL_EXISTS(${SYMBOL} ${FILE} ${VARIABLE})
+  IF(${VARIABLE})
+    SET(${VARIABLE} "1")
+  ELSE(${VARIABLE})
+    SET(${VARIABLE} "0")
+  ENDIF(${VARIABLE})
+ENDMACRO(PERFORM_C_CHECK_FUNCTION SYMBOL FILE VARIABLE)
+
+PERFORM_C_CHECK_FUNCTION(sqrtf "math.h" VXL_C_MATH_HAS_SQRTF)
+PERFORM_C_CHECK_FUNCTION(finite "math.h" VXL_C_MATH_HAS_FINITE)
+PERFORM_C_CHECK_FUNCTION(finite "ieeefp.h" VXL_IEEEFP_HAS_FINITE)
+#PERFORM_C_CHECK_FUNCTION(qsort "stdlib.h" VXL_STDLIB_HAS_QSORT)
+PERFORM_C_CHECK_FUNCTION(lrand48 "stdlib.h" VXL_STDLIB_HAS_LRAND48)
+PERFORM_C_CHECK_FUNCTION(drand48 "stdlib.h" VXL_STDLIB_HAS_DRAND48)
+PERFORM_C_CHECK_FUNCTION(srand48 "stdlib.h" VXL_STDLIB_HAS_SRAND48)
 
 TEST_BIG_ENDIAN(VXL_BIG_ENDIAN)
+SET_INVERT(VXL_LITTLE_ENDIAN "${VXL_BIG_ENDIAN}")
 
 #
-# Map test results to configured header names and appropriate values
+# Values which are to be manually set
 #
-
-SET(VCL_HAS_EXCEPTIONS ${vcl_cv_cxx_has_exceptions})
-SET(VCL_HAS_BOOL ${vcl_cv_cxx_has_bool})
-SET(VCL_HAS_TYPENAME ${vcl_cv_cxx_has_typename})
-SET(VCL_HAS_DYNAMIC_CAST ${vcl_cv_cxx_has_dynamic_cast})
-SET(VCL_HAS_MUTABLE ${vcl_cv_cxx_has_mutable})
-SET(VCL_HAS_EXPLICIT ${vcl_cv_cxx_has_explicit})
-SET(VCL_HAS_EXPORT ${vcl_cv_cxx_has_export})
-SET_INVERT(VCL_FOR_SCOPE_HACK ${vcl_cv_cxx_check_for_scope})
-SET_INVERT(VCL_NEEDS_NAMESPACE_STD ${vcl_cv_cxx_needs_namespace_std})
-SET(VCL_HAS_MEMBER_TEMPLATES ${vcl_cv_cxx_has_member_templates})
-SET(VCL_CAN_DO_PARTIAL_SPECIALIZATION ${vcl_cv_cxx_can_do_partial_specialization})
-SET(VCL_ALLOWS_NAMESPACE_STD ${vcl_cv_cxx_allows_namespace_std})
-SET(VCL_HAS_NAMESPACES ${vcl_cv_cxx_has_namespaces})
-SET(VCL_STATIC_CONST_INIT_INT ${vcl_cv_cxx_static_const_init_int})
-SET_INVERT(VXL_LITTLE_ENDIAN ${VXL_BIG_ENDIAN})
-SET(VXL_STDLIB_HAS_QSORT ${ac_vxl_has_qsort})
-SET(VCL_DEFINE_SPECIALIZATION ${vcl_cv_cxx_define_specialization})
-SET_INVERT(VCL_CANNOT_SPECIALIZE_CV ${VCL_CAN_SPECIALIZE_CV})
-SET_INVERT(VCL_TEMPLATE_MATCHES_TOO_OFTEN ${VCL_TEMPLATE_DOES_NOT_MATCH_TOO_OFTEN})
-SET_INVERT(VCL_HAS_TEMPLATE_SYMBOLS ${VCL_HAS_TEMPLATE_SYMBOLS})
-
-SET_BOOL(VCL_NULL_TMPL_ARGS "/* <> */" "<>")
-SET_BOOL(VCL_OVERLOAD_CAST "(x)" "((T)(x))")
-SET_BOOL(VCL_NO_STATIC_DATA_MEMBERS "0" "1")
-SET_BOOL(VCL_SUNPRO_CLASS_SCOPE_HACK "/* , A */" ", A")
-SET_BOOL(VCL_DEFINE_SPECIALIZATION "template <>" "/* template <> */")
-SET(VCL_DEFAULT_VALUE ${vcl_cv_cxx_default_value})
-SET_BOOL(VCL_DEFAULT_VALUE "/* no need */" " = x")
-SET_BOOL(VCL_NEEDS_INLINE_INSTANTIATION "0" "1")
-SET_BOOL(VCL_NEED_FRIEND_FOR_TEMPLATE_OVERLOAD "0" "1")
 
 SET(VCL_USE_NATIVE_STL 1) # change if no
-SET(VCL_USE_IMPLICIT_TEMPLATES 1) # change if no
 SET(VCL_USE_NATIVE_COMPLEX 1)
+SET(VCL_USE_IMPLICIT_TEMPLATES 1) # change if no
 SET(VXL_TWO_ARG_GETTIME 0) # not used
 
 IF(NOT VCL_CAN_DO_IMPLICIT_TEMPLATES)
@@ -444,7 +432,6 @@ DETERMINE_TYPE(IEEE_128 16 "${SIZEOF_LONG_DOUBLE}" "long double" "${SIZEOF_DOUBL
 
 CHECK_INCLUDE_FILE_CXX("unistd.h" HAVE_UNISTD_H)
 IF(HAVE_UNISTD_H)
-  SET_BOOL(VXL_UNISTD_USLEEP_IS_VOID "0" "1")
   CHECK_TYPE_EXISTS_ZERO(useconds_t "unistd.h" VXL_UNISTD_HAS_USECONDS_T)
   CHECK_TYPE_EXISTS_ZERO(intptr_t "unistd.h" VXL_UNISTD_HAS_INTPTR_T)
   CHECK_FUNCTION_EXISTS_ZERO(ualarm VXL_UNISTD_HAS_UALARM)

@@ -1063,17 +1063,17 @@ MAIN( test_config )
 #endif
   vcl_cout << vcl_endl;
 
-  vcl_cout << "VXL_MATH_HAS_FINITE ";
-#ifdef VXL_MATH_HAS_FINITE
-  vcl_cout << "is set to " << quote(VXL_MATH_HAS_FINITE);
+  vcl_cout << "VXL_C_MATH_HAS_FINITE ";
+#ifdef VXL_C_MATH_HAS_FINITE
+  vcl_cout << "is set to " << quote(VXL_C_MATH_HAS_FINITE);
 #else
   vcl_cout << "is not set";
 #endif
   vcl_cout << vcl_endl;
 
-  vcl_cout << "VXL_MATH_HAS_SQRTF ";
-#ifdef VXL_MATH_HAS_SQRTF
-  vcl_cout << "is set to " << quote(VXL_MATH_HAS_SQRTF);
+  vcl_cout << "VXL_C_MATH_HAS_SQRTF ";
+#ifdef VXL_C_MATH_HAS_SQRTF
+  vcl_cout << "is set to " << quote(VXL_C_MATH_HAS_SQRTF);
 #else
   vcl_cout << "is not set";
 #endif

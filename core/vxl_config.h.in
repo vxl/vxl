@@ -133,14 +133,17 @@
 /* true if <stdlib.h> declares drand48() */
 #define VXL_STDLIB_HAS_DRAND48    @VXL_STDLIB_HAS_DRAND48@
 
+/* true if <stdlib.h> declares srand48() */
+#define VXL_STDLIB_HAS_SRAND48    @VXL_STDLIB_HAS_SRAND48@
+
 /* true if <ieeefp.h> declares finite() */
 #define VXL_IEEEFP_HAS_FINITE     @VXL_IEEEFP_HAS_FINITE@
 
 /* true if <math.h> declares finite() */
-#define VXL_MATH_HAS_FINITE       @VXL_MATH_HAS_FINITE@
+#define VXL_C_MATH_HAS_FINITE     @VXL_C_MATH_HAS_FINITE@
 
 /* true if <math.h> declares sqrtf() for the C compiler */
-#define VXL_MATH_HAS_SQRTF        @VXL_MATH_HAS_SQRTF@
+#define VXL_C_MATH_HAS_SQRTF      @VXL_C_MATH_HAS_SQRTF@
 
 /* true if usleep() returns void */
 #define VXL_UNISTD_USLEEP_IS_VOID @VXL_UNISTD_USLEEP_IS_VOID@
