@@ -14,13 +14,14 @@
 #include <brip/brip_float_ops.h>
 #include <strk/strk_tracking_face_2d.h>
 
-//Gives a sort on mutual information
+//Gives a sort on mutual information decreasing order
 static bool info_compare(strk_tracking_face_2d_sptr const f1,
-                         strk_tracking_face_2d_sptr const f2,
-                         vcl_vector<strk_tracking_face_2d_sptr>* trk=0)
+                         strk_tracking_face_2d_sptr const f2)
+                         
 
 {
   return f1->total_info() > f2->total_info();//JLM Switched
+  
 }
 
 
