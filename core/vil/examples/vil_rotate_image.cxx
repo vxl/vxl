@@ -1,7 +1,7 @@
 //:
 // \file
 // \brief Example of loading an image, rotating + saving
-// \author Tim Cootes
+// \author dac
 
 #include <vcl_iostream.h>
 #include <vcl_cstdlib.h>

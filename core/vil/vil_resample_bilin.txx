@@ -121,10 +121,32 @@ void vil_resample_bilin(const vil_image_view<sType>& src_image,
   }
 }
 
+
+//: Resample image to a specified width (n1) and height (n2)
+template <class sType, class dType>
+void vil_resample_bilin(const vil_image_view<sType>& src_image,
+                         vil_image_view<dType>& dest_image,
+                         int n1, int n2)
+{
+  double x0=0;
+  double y0=0;
+  double dx1=src_image.ni()/n1;
+  double dy1=0;
+  double dx2=0;
+  double dy2=src_image.nj()/n2;
+  vil_resample_bilin( src_image, dest_image, x0, y0, dx1, dy1, dx2, dy2, n1, n2 );
+}
+
+
+
 #define VIL_RESAMPLE_BILIN_INSTANTIATE( sType, dType ) \
 template void vil_resample_bilin(const vil_image_view<sType >& src_image, \
-                                 vil_image_view<dType >& dest_image, \
-                                 double x0, double y0, double dx1, double dy1, \
-                                 double dx2, double dy2, int n1, int n2)
+                         vil_image_view<dType >& dest_image, \
+                         double x0, double y0, double dx1, double dy1, \
+                         double dx2, double dy2, int n1, int n2); \
+template void vil_resample_bilin(const vil_image_view<sType >& src_image, \
+                         vil_image_view<dType >& dest_image, \
+                         int n1, int n2) 
+
 
 #endif // vil_resample_bilin_txx_
