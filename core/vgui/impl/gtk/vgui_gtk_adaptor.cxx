@@ -28,7 +28,7 @@ static gint timeout_callback(gpointer);
 
 //--------------------------------------------------------------------------------
 //: Constructors
-vgui_gtk_adaptor::vgui_gtk_adaptor(vgui_gtk_window* win) : win_(win), ovl_helper(0) {
+vgui_gtk_adaptor::vgui_gtk_adaptor(vgui_gtk_window* win) : win_(win), ovl_helper(0), last_mouse_x(0), last_mouse_y(0) {
 
   widget = gtk_gl_area_new_vargs(0/*NULL*/,         // no sharing
                                  GDK_GL_RGBA,
@@ -162,6 +162,8 @@ gint vgui_gtk_adaptor::handle(GtkWidget *widget,
       vgui_gtk_utils::set_modifiers(event,e->state);
       vgui_gtk_utils::set_coordinates(event,e->x, e->y);
     }
+    adaptor->last_mouse_x = event.wx;
+    adaptor->last_mouse_y = event.wy;
   }
   else if (type==GDK_BUTTON_PRESS) {
     event.type = vgui_BUTTON_DOWN;
@@ -169,6 +171,8 @@ gint vgui_gtk_adaptor::handle(GtkWidget *widget,
     event.button = vgui_gtk_utils::translate_button(e->button);
     vgui_gtk_utils::set_modifiers(event,e->state);
     vgui_gtk_utils::set_coordinates(event,e->x, e->y);
+    adaptor->last_mouse_x = event.wx;
+    adaptor->last_mouse_y = event.wy;
   }
   else if (type==GDK_BUTTON_RELEASE) {
     event.type = vgui_BUTTON_UP;
@@ -176,18 +180,24 @@ gint vgui_gtk_adaptor::handle(GtkWidget *widget,
     event.button = vgui_gtk_utils::translate_button(e->button);
     vgui_gtk_utils::set_modifiers(event,e->state);
     vgui_gtk_utils::set_coordinates(event,e->x, e->y);
+    adaptor->last_mouse_x = event.wx;
+    adaptor->last_mouse_y = event.wy;
   }
   else if (type==GDK_KEY_PRESS) {
     event.type = vgui_KEY_PRESS;
     GdkEventKey *e = (GdkEventKey*)gev;
     event.key = vgui_gtk_utils::translate_key(e);
     vgui_gtk_utils::set_modifiers(event,e->state);
+    event.wx = adaptor->last_mouse_x;
+    event.wy = adaptor->last_mouse_y;
   }
   else if (type==GDK_KEY_RELEASE) {
     event.type = vgui_KEY_RELEASE;
     GdkEventKey *e = (GdkEventKey*)gev;
     event.key = vgui_gtk_utils::translate_key(e);
     vgui_gtk_utils::set_modifiers(event,e->state);
+    event.wx = adaptor->last_mouse_x;
+    event.wy = adaptor->last_mouse_y;
   }
   else if (type==GDK_ENTER_NOTIFY) {
     event.type = vgui_ENTER;
