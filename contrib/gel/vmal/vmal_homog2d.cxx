@@ -12,15 +12,13 @@ vmal_homog2d::~vmal_homog2d()
 }
 
 void vmal_homog2d::compute_homo(const vcl_vector<vnl_double_3 > &pima1,
-                      const vcl_vector<vnl_double_3 > &pima2,
-                vnl_double_3x3 &hmatrix)
+                                const vcl_vector<vnl_double_3 > &pima2,
+                                vnl_double_3x3 &hmatrix)
 {
   int numpoints=pima1.size();
   vnl_matrix<double> A(2*numpoints,9);
   A.fill(0.0);
-  int row=0;
-  vnl_vector<double> y(2*numpoints);
-  for (int i=0;i<numpoints;i++)
+  for (int row=0,i=0; i<numpoints; ++i)
   {
     A(row, 0) = pima1[i][0] * pima2[i][2];
     A(row, 1) = pima1[i][1] * pima2[i][2];
