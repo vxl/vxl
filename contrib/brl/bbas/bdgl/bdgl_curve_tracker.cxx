@@ -43,7 +43,7 @@ void bdgl_curve_tracker::track()
 
   // init : copy the first curves
   output_curve_.clear();
-	primitive_list.clear();
+  primitive_list.clear();
 
   for (unsigned int i=0;i<input_curve_[0].size();i++){
     primitive.init(i, input_curve_[0][i]);
@@ -55,8 +55,8 @@ void bdgl_curve_tracker::track()
   // for all images:
   for (unsigned int t=1;t<input_curve_.size();t++)
   {
-		// init : duplicate empty primitive lists
-		primitive_list.clear();
+    // init : duplicate empty primitive lists
+    primitive_list.clear();
 
     // init the used flag
     is_used.clear();
@@ -107,8 +107,8 @@ void bdgl_curve_tracker::track()
           }
         }
       }
-			//vcl_cout<<"("<<i<<"->"<<best_id<<")";
-			//vcl_cout<<"->"<<best_val<<"\n";
+      //vcl_cout<<"("<<i<<"->"<<best_id<<")";
+      //vcl_cout<<"->"<<best_val<<"\n";
 
       // if none, suppress the primitive
       if (best_id == -1){
@@ -122,14 +122,14 @@ void bdgl_curve_tracker::track()
         } else {
           // if good, refine the primitive from it
           primitive.init(output_curve_[t-1][i].get_id(), input_curve_[t][best_id]);
-					// update the ids
+          // update the ids
           output_curve_[t-1][i].next_num_ = primitive_list.size();
           primitive.prev_num_ = i;
           primitive.next_num_ = -1;
 
           primitive_list.insert(primitive_list.end(), primitive);
           is_used[best_id]=1;
-					vcl_cout<<".";
+          vcl_cout<<".";
         }
       }
     }
@@ -141,7 +141,7 @@ void bdgl_curve_tracker::track()
         primitive_list.insert(primitive_list.end(), primitive);
       }
     }
-		output_curve_.insert(output_curve_.end(), primitive_list);
+    output_curve_.insert(output_curve_.end(), primitive_list);
   }
 
   return;
@@ -165,15 +165,15 @@ void bdgl_curve_tracker::track_frame(int frame)
   vcl_cout<<input_curve_[frame].size()<<" curves on image "<<frame<<"\n";
 
   // init : copy the first curves
-	if (frame==0){
-		for (unsigned int i=0;i<input_curve_[0].size();i++){
-			primitive.init(i, input_curve_[0][i]);
-			primitive_list.insert(primitive_list.end(), primitive);
-		}
-		output_curve_.insert(output_curve_.end(), primitive_list);
-	}else{
-		// init : duplicate empty primitive lists
-		primitive_list.clear();
+  if (frame==0){
+    for (unsigned int i=0;i<input_curve_[0].size();i++){
+      primitive.init(i, input_curve_[0][i]);
+      primitive_list.insert(primitive_list.end(), primitive);
+    }
+    output_curve_.insert(output_curve_.end(), primitive_list);
+  }else{
+    // init : duplicate empty primitive lists
+    primitive_list.clear();
 
     // init the used flag
     is_used.clear();
@@ -223,8 +223,8 @@ void bdgl_curve_tracker::track_frame(int frame)
           }
         }
       }
-			//vcl_cout<<"("<<i<<"->"<<best_id<<")";
-			//vcl_cout<<"->"<<best_val<<"\n";
+      //vcl_cout<<"("<<i<<"->"<<best_id<<")";
+      //vcl_cout<<"->"<<best_val<<"\n";
 
       // if none, suppress the primitive
       if (best_id == -1){
@@ -238,14 +238,14 @@ void bdgl_curve_tracker::track_frame(int frame)
         } else {
           // if good, refine the primitive from it
           primitive.init(output_curve_[frame-1][i].get_id(), input_curve_[frame][best_id]);
-					// update the ids
+          // update the ids
           output_curve_[frame-1][i].next_num_ = primitive_list.size();
           primitive.prev_num_ = i;
           primitive.next_num_ = -1;
 
           primitive_list.insert(primitive_list.end(), primitive);
           is_used[best_id]=1;
-					vcl_cout<<".";
+          vcl_cout<<".";
         }
       }
     }
@@ -254,11 +254,11 @@ void bdgl_curve_tracker::track_frame(int frame)
     for (unsigned int j=0;j<input_curve_[frame].size();j++){
       if (!is_used[j]){
         primitive.init(primitive_list[primitive_list.size()-1].get_id(),
-												input_curve_[frame][j]);
+                        input_curve_[frame][j]);
         primitive_list.insert(primitive_list.end(), primitive);
       }
     }
-		output_curve_.insert(output_curve_.end(), primitive_list);
+    output_curve_.insert(output_curve_.end(), primitive_list);
   }
 
   return;
@@ -267,46 +267,44 @@ void bdgl_curve_tracker::track_frame(int frame)
 //-----------------------------------------------------------------------------
 void bdgl_curve_tracker::draw_lines(int frame, bgui_vtol2D_tableau_sptr const& tab)
 {
-	float r,g,b;
+  float r,g,b;
 
-	vcl_cout<<"display tracked curves\n";
-	tab->disable_highlight();
-	
-	if ( (frame >= 0) && (frame < output_curve_.size()) ){
+  vcl_cout<<"display tracked curves\n";
+  tab->disable_highlight();
+  
+  if ( (frame >= 0) && (frame < output_curve_.size()) ){
     for (unsigned int i=0;i<output_curve_[frame].size();i++){
-			//vcl_cout<<".";
-			set_colors( output_curve_[frame][i].get_id(), &r, &g, &b );
-			tab->set_edgel_chain_style(r, g, b, 3.0);
-			tab->add_edgel_chain( output_curve_[frame][i].get_curve() );
-		}
-	}
+      //vcl_cout<<".";
+      set_colors( output_curve_[frame][i].get_id(), &r, &g, &b );
+      tab->set_edgel_chain_style(r, g, b, 3.0);
+      tab->add_edgel_chain( output_curve_[frame][i].get_curve() );
+    }
+  }
   tab->post_redraw();
 
-	return;
+  return;
 }
 
 //-----------------------------------------------------------------------------
 void bdgl_curve_tracker::set_colors(int num, float *r, float *g, float *b)
 {
-	int strenght = (int)floor(num/6);
-	int pattern = num - 6*strenght;
-	strenght = strenght - 20*(int)floor(strenght/20);
+  int strength = num/6;
+  int pattern  = num%6;
+  strength %= 20;
+  float s = 1.0f - strength * 0.05f;
 
-	switch(pattern){
-		case 0 : (*r) = 256-strenght*256/20; (*g) = 0; (*b) = 0; break;
-		case 1 : (*r) = 0; (*g) = 256-strenght*256/20; (*b) = 0; break;
-		case 2 : (*r) = 0; (*g) = 0; (*b) = 256-strenght*256/20; break;
-		case 3 : (*r) = 256-strenght*256/20; (*g) = 256-strenght*256/20; (*b) = 0; break;
-		case 4 : (*r) = 0; (*g) = 256-strenght*256/20; (*b) = 256-strenght*256/20; break;
-		case 5 : (*r) = 256-strenght*256/20; (*g) = 0; (*b) = 256-strenght*256/20; break;
-		default : (*r) = 0; (*g) = 0; (*b) = 0; break;
-	}
-	//vcl_cout<<"color : "<<(*r)<<" : "<<(*g)<<" : "<<(*b)<<"\n";
+  switch(pattern)
+  {
+    case 0 : (*r) = s; (*g) = 0; (*b) = 0; break;
+    case 1 : (*r) = 0; (*g) = s; (*b) = 0; break;
+    case 2 : (*r) = 0; (*g) = 0; (*b) = s; break;
+    case 3 : (*r) = s; (*g) = s; (*b) = 0; break;
+    case 4 : (*r) = 0; (*g) = s; (*b) = s; break;
+    case 5 : (*r) = s; (*g) = 0; (*b) = s; break;
+    default: (*r) = 0; (*g) = 0; (*b) = 0; break; // this will never happen
+  }
+  //vcl_cout<<"color : "<<(*r)<<" : "<<(*g)<<" : "<<(*b)<<"\n";
 
-	(*r) = (*r)/(float)256;
-	(*g) = (*g)/(float)256;
-	(*b) = (*b)/(float)256;
-
-	return;
+  return;
 }
 
