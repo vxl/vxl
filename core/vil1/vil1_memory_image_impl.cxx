@@ -7,18 +7,14 @@
 #include "vil_memory_image_impl.h"
 
 #include <vcl_cassert.h>
-#include <vcl_cstring.h>   // strcmp()
+#include <vcl_cstring.h>   // strcmp() and memcpy()
 #include <vcl_iostream.h>
-// <memory> provides names like std::allocator and std::auto_ptr.
-// it does *not* declare the memcpy() or strcmp() functions. they
-// live in <cstring>
-//#include <vcl_memory.h>
 
 #include <vil/vil_image.h>
 
 vil_memory_image_impl::vil_memory_image_impl(int planes, int w, int h,
                                              vil_memory_image_format
-                                               const& format)
+                                             const& format)
 {
   init((void*)0, planes, w, h, format.components, format.bits_per_component,
             format.component_format);
@@ -27,11 +23,9 @@ vil_memory_image_impl::vil_memory_image_impl(int planes, int w, int h,
 vil_memory_image_impl::vil_memory_image_impl(int planes, int w, int h,
                                              int components,
                                              int bits_per_component,
-                                             vil_component_format
-                                                  component_format)
+                                             vil_component_format component_format)
 {
-  init((void*)0, planes, w, h, components, bits_per_component,
-            component_format);
+  init((void*)0, planes, w, h, components, bits_per_component, component_format);
 }
 
 vil_memory_image_impl::vil_memory_image_impl(int planes, int w, int h,
@@ -42,8 +36,7 @@ vil_memory_image_impl::vil_memory_image_impl(int planes, int w, int h,
 
 vil_memory_image_impl::vil_memory_image_impl(int w, int h, int components,
                                              int bits_per_component,
-                                             vil_component_format
-                                               component_format)
+                                             vil_component_format component_format)
 {
   init((void*)0, 1, w, h, components, bits_per_component, component_format);
 }
@@ -58,7 +51,7 @@ vil_memory_image_impl::vil_memory_image_impl
         (vil_memory_image_impl const& that)
 {
   init((void*)0, that.planes_, that.width_, that.height_, that.components_,
-          that.bits_per_component_, that.component_format_);
+       that.bits_per_component_, that.component_format_);
 }
 
 void vil_memory_image_impl::init(void *buf,
@@ -107,11 +100,11 @@ void vil_memory_image_impl::init(void *buf, int planes, int w, int h,
 {
   switch (pixel_format) {
   case VIL_BYTE:     init(buf, planes, w, h, 1,  8,
-                            VIL_COMPONENT_FORMAT_UNSIGNED_INT); break;
+                          VIL_COMPONENT_FORMAT_UNSIGNED_INT); break;
   case VIL_RGB_BYTE: init(buf, planes, w, h, 3,  8,
-                            VIL_COMPONENT_FORMAT_UNSIGNED_INT); break;
+                          VIL_COMPONENT_FORMAT_UNSIGNED_INT); break;
   case VIL_FLOAT:    init(buf, planes, w, h, 1, 32,
-                            VIL_COMPONENT_FORMAT_UNSIGNED_INT); break;
+                          VIL_COMPONENT_FORMAT_UNSIGNED_INT); break;
   default:
     vcl_cerr << "vil_memory_image_impl: crazy format!\n";
   }
@@ -133,10 +126,10 @@ void vil_memory_image_impl::resize(int planes, int width, int height,
                                    int bits_per_component,
                                    vil_component_format format)
 {
-        components_ = components;
-        bits_per_component_ = bits_per_component;
-        component_format_ = format;
-        resize(planes, width, height);
+  components_ = components;
+  bits_per_component_ = bits_per_component;
+  component_format_ = format;
+  resize(planes, width, height);
 }
 
 
@@ -202,10 +195,10 @@ bool vil_memory_image_impl::put_section(void const* ibuf, int x0,
   return true;
 }
 
-vil_image vil_memory_image_impl::get_plane(int /*plane*/) const
+vil_image vil_memory_image_impl::get_plane(int plane) const
 {
-  assert(false);
-  return 0;
+  assert(plane==0);
+  return const_cast<vil_memory_image_impl*>(this);
 }
 
 bool vil_memory_image_impl::get_property(char const *tag,
@@ -226,29 +219,29 @@ bool vil_memory_image_impl::get_property(char const *tag,
 // created prior to calling these functions.
 // Added by: Brendan McCane
 
-vil_memory_image_impl::vil_memory_image_impl(void *buf, int planes,
-                      int w, int h, vil_memory_image_format const& format)
+vil_memory_image_impl::vil_memory_image_impl(void *buf, int planes, int w, int h,
+                                             vil_memory_image_format const& format)
 {
   init(buf, planes, w, h, format.components, format.bits_per_component,
-        format.component_format);
+       format.component_format);
 }
 
-vil_memory_image_impl::vil_memory_image_impl(void *buf, int planes, int w,
-                      int h, int components, int bits_per_component,
-                      vil_component_format component_format)
+vil_memory_image_impl::vil_memory_image_impl(void *buf, int planes, int w, int h,
+                                             int components, int bits_per_component,
+                                             vil_component_format component_format)
 {
   init(buf, planes, w, h, components, bits_per_component, component_format);
 }
 
-vil_memory_image_impl::vil_memory_image_impl(void *buf, int planes, int w,
-                      int h, vil_pixel_format_t pixel_format)
+vil_memory_image_impl::vil_memory_image_impl(void *buf, int planes, int w, int h,
+                                             vil_pixel_format_t pixel_format)
 {
   init(buf, planes, w, h, pixel_format);
 }
 
 vil_memory_image_impl::vil_memory_image_impl(void *buf, int w, int h,
-                      int components, int bits_per_component,
-                      vil_component_format component_format)
+                                             int components, int bits_per_component,
+                                             vil_component_format component_format)
 {
   init(buf, 1, w, h, components, bits_per_component, component_format);
 }
