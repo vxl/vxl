@@ -11,10 +11,65 @@
 
 #include "vnl_symmetric_eigensystem.h"
 #include <vcl_cassert.h>
-#include <vcl_cmath.h> // for sqrt(double)
+#include <vcl_algorithm.h> // for swap
+#include <vcl_cmath.h> // for sqrt(double), acos, etc.
 #include <vcl_iostream.h>
 #include <vnl/vnl_copy.h>
 #include <vnl/algo/vnl_netlib.h> // rs_()
+
+
+
+//: Find eigenvalues of a symmetric 3x3 matrix
+// \verbatim
+// Matrix is   M11  M12  M13
+//             M12  M22  M23
+//             M13  M23  M33
+// \endverbatim
+void vnl_symmetric_eigensystem_compute_eigenvals(
+  double M11, double M12, double M13,
+              double M22, double M23,
+                          double M33,
+  double &l1, double &l2, double &l3)
+{
+  const double third = 0.333333333333333333333;
+  const double sqrt_three = 1.73205080756887729352;
+// Caharacteristic eqtn |M - xI| = 0
+// x^3 + b x^2 + c x + d = 0 
+  const double b = -M11-M22-M33;
+  const double c =  M11*M22 +M11*M33 +M22*M33  -M12*M12 -M13*M13 -M23*M23;
+  const double d = M11*M23*M23 +M12*M12*M33 +M13*M13*M22 -2.0*M12*M13*M23 -M11*M22*M33;
+
+// Using the real cubic sover on http://www.1728.com/cubic2.htm
+  const double f = c - b*b*third;
+  const double g = 0.07407407407407407407407*b*b*b - third*b*c + d;
+  const double h = 0.25*g*g + 0.03703703703703703703*f*f*f;
+  assert (h <= 0.0);
+
+  if (h==0)
+  {
+    l1 = l2 = l3 = vcl_pow(-d,third);
+    return;
+  }
+
+  const double i = vcl_sqrt((0.25*g*g) - h);
+  const double j = vcl_pow(i, third);
+  const double k = vcl_acos (- (g / (2.0*i)));
+  const double m = vcl_cos (third * k);
+  const double n = sqrt_three * vcl_sin(third * k);
+  const double p = -(third * b);
+  l1 = 2.0*j*m + p;
+  l2 = -j * (m + n) + p;
+  l3 = -j * (m - n) + p;
+
+  if (l2 < l1) vcl_swap(l2, l1);
+  if (l3 < l2)
+  {
+    vcl_swap(l2, l3);
+    if (l2 < l1) vcl_swap(l2, l1);
+  }
+}
+
+
 
 bool vnl_symmetric_eigensystem_compute(vnl_matrix<float> const & A,
                                        vnl_matrix<float>       & V,
