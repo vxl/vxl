@@ -43,6 +43,12 @@ bool vil_nitf_version_v20::operator== (vil_nitf_version& otherVersion)
  *  Method to return a vil_nitf_version_v20 object as a vil_nitf_version
  *  object.  This always returns the same object.  It can be used to
  *  prevent a proliferation of  vil_nitf_version objects in the system.
+ * 
+ *  NOTE: deprecated.  It seems the only reason for this method was to return
+ *  an instance of vil_nitf_version_v20 so vil_nitf_image_subheader and 
+ *  could invoke method vil_nitf_version_20::newImageHeaderBand.  It seemed
+ *  to make more sense to make newImageHeaderBand a virtual method of
+ *  vil_nitf_image_subheader and implement in its subclasses.  
  */
 /*====================================================================*/
 vil_nitf_version_v20 * vil_nitf_version_v20::GetVersion()
@@ -61,6 +67,29 @@ vil_nitf_version_v20 * vil_nitf_version_v20::GetVersion()
     return nitfvXX ;
 }
 
+/*====================================================================*/
+/**
+ *  Method to return a string for this version.  Just return vcl_string
+ *  so we don't have to worry about memory allocation.
+ *
+ *  \param return vcl_string containing version.
+ */
+/*====================================================================*/
+vcl_string vil_nitf_version_v20::get_version_str()
+{
+    static vcl_string method_name = "vil_nitf_version_v20::get_version_str: ";
+    vcl_string version_str = V20_VERSION_STR ;
+
+    return version_str ;
+}
+
+//:
+// NOTE: This method is deprecated.  It has been renamed new_image_header_band
+//    and made a virtual method of vil_nitf_image_image_subheader.  This
+//    implementation has been moved to vil_nitf_image_image_subheader_v20.
+//
+//  M.Laymon  2004jan21
+//
 vil_nitf_image_subheader_band * vil_nitf_version_v20::newImageHeaderBand (
     vil_nitf_image_subheader_band * ish_band)
 {
