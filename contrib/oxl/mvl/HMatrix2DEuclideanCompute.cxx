@@ -69,7 +69,7 @@ HMatrix2DEuclideanCompute::tmp_fun(PointArray const& pts1,
   sub_rows(p1,mn1);
   sub_rows(p2,mn2);
 
-  vnl_double_2x2 scatter = vnl_transpose(p2).operator*(p1);
+  vnl_double_2x2 scatter = vnl_transpose(p2)*p1;
   vnl_svd<double> svd(scatter);
 
   vnl_double_2x2 R = svd.U() * vnl_transpose(svd.V());
