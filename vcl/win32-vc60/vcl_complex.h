@@ -7,22 +7,29 @@
 // (else the compiler will emit an error). Whether or not it is depends on
 // the value of _CRTIMP being set, e.g. in <math.h>
 
-// These stream includes may not appear necessary, but lots of link
-// errors may appear if they aren't here. IMS
-// It seems that these includes must appear for the first time before
-// _CRTIMP is modified below.  Otherwise, basic_filebuf (and others?)
-// member functions get defined more than once. FWW
-# include <vcl_fstream.h>       // don't remove
-# include <vcl_sstream.h>       // don't remove
+// However, modifying _CRTIMP is bad because it leads to inconsistent
+// dll linkage issues for other functions. <complex> includes other
+// things, like the streams. If _CRTIMP is changes, then the
+// declaration of the streams effectively change. This causes all
+// kinds of problems.
+//
+// The compiler issues a warning about the inconsistency in <complex>,
+// but it seems that the warning can be safely ignored provided the
+// implementors wrote the code correcting. Since this is part of the
+// compiler system, we can assume that the implementators have
+// addressed the issue, and that we can safely ignore the warning. A
+// couple of articles on the web seem to support this position:
+// http://support.microsoft.com/default.aspx?scid=http://support.microsoft.com:80/support/kb/articles/Q134/9/80.asp&NoWebContent=1
+// http://www.osl.iu.edu/MailArchives/mtl-devel/msg00395.php
 
-# include <vcl_cmath.h>
-# pragma warning (push)
-# pragma warning (disable: 4273)
-# undef _CRTIMP
-# define _CRTIMP
-# include <ctype.h>
-# include <complex>
-# pragma warning (pop)
+// Disable "warning C4275: non dll-interface class
+// 'std::_Complex_base<float>' used as base for dll-interface class
+// 'std::complex<float>'" for <complex>
+//
+#pragma warning (push)
+#pragma warning (disable: 4275)
+#include <complex>
+#pragma warning (pop)
 
 // It used to necessary to bring the complex math functions
 // from the std namespace into the global namespace to avoid
