@@ -6,6 +6,15 @@
 // the default is 'false'. don't check in 'true'.
 static bool debug = false;
 
+bool operator==(vgui_grid_tableau_data const &a,
+		vgui_grid_tableau_data const &b)
+{
+  return
+    a.handle == b.handle &&
+    a.tab_pos == b.tab_pos &&
+    a.is_default == b.is_default &&
+    a.time_selected == b.time_selected;
+}
 
 //------------------------------------------------------------------------------
 // Initialisation, constructors and destructor.
