@@ -8,7 +8,7 @@
 // \file
 // \author Ian Scott
 
-
+#include <vcl_memory.h>
 #include <vil2/vil2_image_data.h>
 #include <vil2/vil2_image_view_base.h>
 
@@ -16,15 +16,20 @@
 class vil2_memory_image : public vil2_image_data
 {
   //: Management of the memory image is devolved to an internal image_view.
-  vil2_image_view_base_sptr view_;
+  vil2_image_view_base* view_;
  public:
 
+  //: Create an empty memory image.
   vil2_memory_image();
 
+  //: Create an in-memory image of given size and pixel type.
+  // The pixel type must be scalar.
   vil2_memory_image(unsigned ni,
                  unsigned nj,
                  unsigned nplanes,
                  vil2_pixel_format format);
+
+  ~vil2_memory_image() {delete view_;}
 
   //: Dimensions:  planes x width x height x components
   virtual unsigned nplanes() const { return view_->nplanes(); }

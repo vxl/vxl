@@ -31,9 +31,9 @@ protected:
 	//  Don't set nplanes_ to zero as it confuses resize(nx,ny) later
   vil2_image_view_base(): ni_(0), nj_(0), nplanes_(1) {}
 
+public:
   // The destructor must be virtual so that the memory chunk is destroyed.
   virtual ~vil2_image_view_base() {};
-public:
 
   //: Width
   unsigned ni()  const {return ni_;}
