@@ -24,6 +24,8 @@ class videx_menus
   static void start_live_video_callback();
   static void stop_live_video_callback();
   static void capture_sequence_callback();
+  static void init_capture_callback();
+  static void stop_capture_callback();
   static vgui_menu get_menu();
  private:
   videx_menus() {}

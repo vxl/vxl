@@ -18,19 +18,21 @@
 // \endverbatim
 //--------------------------------------------------------------------------------
 #include <vcl_iostream.h>
-
+#include <vcl_string.h>
 class cmu_1394_camera_params
 {
  public:
-  cmu_1394_camera_params(int video_format=0, int video_mode=4,
-                         int frame_rate=2, int brightness=350,
-                         int sharpness=50, int exposure=1, int gain = 0,
+  cmu_1394_camera_params(int video_format=1, int video_mode=3,
+                         int frame_rate=3, int shutter = 2450,
+                         int brightness=96, int sharpness=3, 
+                         int exposure=128, int gain = 2048,
                          bool capture=true, bool rgb=true);
   cmu_1394_camera_params(const cmu_1394_camera_params& cp);
   ~cmu_1394_camera_params();
   void set_params(const cmu_1394_camera_params& cp);
   void constrain();//make sure the parameters are consistent
-
+  vcl_string video_configuration(const int video_format, const int video_mode) const;
+  vcl_string frame_rate(const int rate_code) const;
   friend 
   vcl_ostream& operator << (vcl_ostream& os, const cmu_1394_camera_params& cpp);
 
@@ -38,6 +40,7 @@ class cmu_1394_camera_params
   int video_format_;
   int video_mode_;
   int frame_rate_;
+  int shutter_;
   int brightness_;
   int sharpness_;
   int exposure_;

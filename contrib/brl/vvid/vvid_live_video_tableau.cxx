@@ -71,18 +71,27 @@ bool vvid_live_video_tableau::attach_live_video()
       return false;
     }
   cam_.init(node_);
+  vcl_cout << "The Camera Attributes: \n" << cam_ << " \n";
   return true;
 }
 
-void vvid_live_video_tableau::start_live_video()
+bool vvid_live_video_tableau::start_live_video()
 {
   if (!cam_.get_camera_present())
     {
       vcl_cout << "In vvid_live_video_tableau::startlive_video() - "
                << "no camera present\n";
-      return;
+      live_ = false;
+      return false;
     }
-  cam_.start();
+  if(!cam_.start())
+    {
+      vcl_cout << "In vvid_live_video_tableau::startlive_video() - "
+               << "failed to start camera\n";
+      live_ = false;
+      return false;
+    }
+    
   live_ = true;
 
   if (cam_.rgb_)
@@ -97,10 +106,13 @@ void vvid_live_video_tableau::start_live_video()
       vcl_cout << "got image\n";
       this->set_image(mono_frame_);
     }
+  return true;
 }
 
 void vvid_live_video_tableau::update_frame()
 {
+  if(!live_)
+    return;
   if (cam_.rgb_)
     cam_.get_rgb_image(rgb_frame_, pixel_sample_interval_, true);
   else

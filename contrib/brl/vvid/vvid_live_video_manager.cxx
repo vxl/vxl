@@ -25,10 +25,10 @@
 #include <vtol/vtol_face_2d.h>
 #include <sdet/sdet_detector_params.h>
 #include <vvid/cmu_1394_camera_params.h>
-#include <vvid/vvid_video_process.h>
-#include <vvid/vvid_edge_process.h>
-#include <vvid/vvid_region_process.h>
-#include <vvid/vvid_capture_process.h>
+#include <vpro/vpro_video_process.h>
+#include <vpro/vpro_edge_process.h>
+#include <vpro/vpro_region_process.h>
+#include <vpro/vpro_capture_process.h>
 
 //static live_video_manager instance
 vvid_live_video_manager *vvid_live_video_manager::instance_ = 0;
@@ -54,7 +54,6 @@ vvid_live_video_manager() :
   width_ = 960;
   height_ = 480;
   win_ = 0;
-  live_capture_ = false;
   video_process_ = 0;
   init_successful_ = false;
 }
@@ -85,7 +84,7 @@ void vvid_live_video_manager::init()
   vgui_viewer2D_tableau_sptr v2d = vgui_viewer2D_tableau_new(vt2D_);
   vgui_shell_tableau_sptr shell = vgui_shell_tableau_new(v2d);
   this->add_child(shell);
-  video_process_  = (vvid_video_process*)0;
+  video_process_  = (vpro_video_process*)0;
 }
 
 //: make an event handler
@@ -104,19 +103,59 @@ void vvid_live_video_manager::set_camera_params()
                << " video tableau \n";
       return;
     }
+  static int pix_sample_interval = 1;
+  vcl_vector<int> format, mode, rate;
+  vcl_vector<vcl_string> choices;
+  vcl_string no_choice="CurrentConfiguration";
+  choices.push_back(no_choice);
+  static int old_choice=0, choice = 0;
+  format.push_back(cp_.video_format_);
+  mode.push_back(cp_.video_mode_);
+  rate.push_back(cp_.frame_rate_);
+  static vcl_string current_config=" ";
+  for(int i = 0; i<3; i++)
+    for(int j = 0; j<6; j++)
+      for(int k = 0; k<6; k++)
+        if(vtab_->video_capabilities(i,j,k))
+          {
+            vcl_string temp = cp_.video_configuration(i,j);
+            temp += " Fr/Sec(";
+            temp += cp_.frame_rate(k);
+            temp += ")";
+            choices.push_back(temp);
+            format.push_back(i);
+            mode.push_back(j);
+            rate.push_back(k);
+            if(i==cp_.video_format_&&j==cp_.video_mode_&&k==cp_.frame_rate_)
+              current_config = temp;
+            else
+              current_config = " ";
+          }
+
+  //Set up the dialog.
+  vcl_string current = "Video Configuration ";
+  current += current_config;
   vgui_dialog cam_dlg("Camera Parameters");
-  cam_dlg.field("video_format",cp_.video_format_);
-  cam_dlg.field("video_mode",cp_.video_mode_);
-  cam_dlg.field("frame_rate",cp_.frame_rate_);
+  cam_dlg.message(current.c_str());
+  cam_dlg.choice("Choose Configuration", choices, choice); 
+  cam_dlg.field("Shutter Speed", cp_.shutter_);
   cam_dlg.field("brightness",cp_.brightness_);
   cam_dlg.field("sharpness",cp_.sharpness_);
   cam_dlg.field("exposure",cp_.exposure_);
   cam_dlg.field("gain",cp_.gain_);
+  cam_dlg.field("Display Sample Interval", pix_sample_interval);
   cam_dlg.checkbox("image capture(acquisition) ", cp_.capture_);
   cam_dlg.checkbox("RGB(monochrome) ", cp_.rgb_);
   if (!cam_dlg.ask())
     return;
+  if(choice)
+    old_choice = choice;
+  cp_.video_format_ = format[old_choice];
+  cp_.video_mode_ = mode[old_choice];
+  cp_.frame_rate_ = rate[old_choice];
+  current_config = choices[old_choice];
   cp_.constrain();//constrain the parameters to be consistent
+  vtab_->set_pixel_sample_interval(pix_sample_interval);
   vtab_->set_camera_params(cp_);
   vcl_cout << "Current Camera Parameters \n" << cp_ << "\n";
 }
@@ -151,9 +190,9 @@ void vvid_live_video_manager::set_detection_params()
   dp.maxGap = max_gap;
 
   if (edges_)
-    video_process_  = new vvid_edge_process(dp);
+    video_process_  = new vpro_edge_process(dp);
   else
-    video_process_  = new vvid_region_process(dp);
+    video_process_  = new vpro_region_process(dp);
   sample_ = 2;
   if (live)
     this->start_live_video();
@@ -174,8 +213,27 @@ void vvid_live_video_manager::capture_sequence()
   if (!save_video_dlg.ask())
     return;
   sample_ = 1;
-  video_process_ = new vvid_capture_process(video_filename);
+  video_process_ = new vpro_capture_process(video_filename);
 }
+
+void vvid_live_video_manager::init_capture()
+{
+  this->stop_live_video();
+  vgui_dialog save_video_dlg("Init Capture");
+  static vcl_string video_filename = "";
+  static vcl_string ext = "*.*";
+  save_video_dlg.file("Video Filename:", ext, video_filename);
+  if (!save_video_dlg.ask())
+    return;
+  vtab_->start_capture(video_filename);
+}
+
+void vvid_live_video_manager::stop_capture()
+{
+  this->stop_live_video();
+  vtab_->stop_capture();
+}
+
 void vvid_live_video_manager::display_topology()
 {
   vt2D_->clear_all();
@@ -207,7 +265,7 @@ void vvid_live_video_manager::run_frames()
 {
   if (!init_successful_)
     return;
-  while (live_capture_) {
+  while (vtab_->get_video_live()) {
     vul_timer t;
     vtab_->update_frame();
     if (!cp_.rgb_&&video_process_)//i.e. grey scale
@@ -220,9 +278,9 @@ void vvid_live_video_manager::run_frames()
         else return;
         if (video_process_->execute())
           {
-            if(video_process_->get_output_type()==vvid_video_process::IMAGE)
+            if(video_process_->get_output_type()==vpro_video_process::IMAGE)
               display_image();
-            if(video_process_->get_output_type()==vvid_video_process::TOPOLOGY)
+            if(video_process_->get_output_type()==vpro_video_process::TOPOLOGY)
               display_topology();
           }
       }
@@ -239,15 +297,17 @@ void vvid_live_video_manager::start_live_video()
 {
   if (!init_successful_||!vtab_)
     return;
-  vtab_->start_live_video();
-
-  live_capture_=true;
+  if(!vtab_->start_live_video())
+    {
+      vcl_cout << "In vvid_live_video_manager::start_live_video() -"
+               <<" start failed\n";
+      return;
+    }
   this->run_frames();
 }
 
 void vvid_live_video_manager::stop_live_video()
 {
-  live_capture_=false;
   if (!init_successful_)
     return;
   if(vtab_)

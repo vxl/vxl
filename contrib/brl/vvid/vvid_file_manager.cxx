@@ -29,14 +29,14 @@
 
 #include <vidl/vidl_io.h>
 #include <vidl/vidl_frame.h>
-#include <vvid/vvid_frame_diff_process.h>
-#include <vvid/vvid_motion_process.h>
-#include <vvid/vvid_lucas_kanade_process.h>
-#include <vvid/vvid_harris_corner_process.h>
-#include <vvid/vvid_edge_process.h>
-#include <vvid/vvid_edge_line_process.h>
-#include <vvid/vvid_grid_finder_process.h>
-#include <vvid/vvid_curve_tracking_process.h>
+#include <vpro/vpro_frame_diff_process.h>
+#include <vpro/vpro_motion_process.h>
+#include <vpro/vpro_lucas_kanade_process.h>
+#include <vpro/vpro_harris_corner_process.h>
+#include <vpro/vpro_edge_process.h>
+#include <vpro/vpro_edge_line_process.h>
+#include <vpro/vpro_grid_finder_process.h>
+#include <vpro/vpro_curve_tracking_process.h>
 
 //static manager instance
 vvid_file_manager *vvid_file_manager::instance_ = 0;
@@ -317,6 +317,11 @@ void vvid_file_manager::cached_play()
 //----------------------------------------------
 void vvid_file_manager::un_cached_play()
 {
+  if(!my_movie_)
+  {
+	  vcl_cout << "No movie has been loaded\n";
+	  return;
+  }
   vidl_movie::frame_iterator pframe(my_movie_);
   for (pframe=my_movie_->first(); pframe!=my_movie_->last()&&play_video_;
        ++pframe)
@@ -344,13 +349,13 @@ void vvid_file_manager::un_cached_play()
           video_process_->add_input_image(image);
           if (video_process_->execute())
             {
-              if (video_process_->get_output_type()==vvid_video_process::IMAGE)
+              if (video_process_->get_output_type()==vpro_video_process::IMAGE)
                 display_image();
               if (video_process_->get_output_type()==
-                  vvid_video_process::SPATIAL_OBJECT)
+                  vpro_video_process::SPATIAL_OBJECT)
                 display_spatial_objects();
               if (video_process_->get_output_type()==
-                  vvid_video_process::TOPOLOGY)
+                  vpro_video_process::TOPOLOGY)
                 display_topology();
             }
         }
@@ -444,12 +449,12 @@ void vvid_file_manager::no_op()
 
 void vvid_file_manager::difference_frames()
 {
-  video_process_ = new vvid_frame_diff_process();
+  video_process_ = new vpro_frame_diff_process();
 }
 
 void vvid_file_manager::compute_motion()
 {
-  video_process_ = new vvid_motion_process();
+  video_process_ = new vpro_motion_process();
 }
 
 void vvid_file_manager::compute_lucas_kanade()
@@ -464,7 +469,7 @@ void vvid_file_manager::compute_lucas_kanade()
 
   if (!downsample_dialog.ask())
     return;
-  video_process_ = new vvid_lucas_kanade_process(downsample,windowsize,thresh);
+  video_process_ = new vpro_lucas_kanade_process(downsample,windowsize,thresh);
 }
 
 void vvid_file_manager::compute_harris_corners()
@@ -483,7 +488,7 @@ void vvid_file_manager::compute_harris_corners()
   if (!harris_dialog.ask())
     return;
 
-  video_process_ = new vvid_harris_corner_process(hdp);
+  video_process_ = new vpro_harris_corner_process(hdp);
   if (track_)
     {
       frame_trail_.clear();
@@ -513,7 +518,7 @@ void vvid_file_manager::compute_vd_edges()
   else
     dp.aggressive_junction_closure=0;
 
-  video_process_  = new vvid_edge_process(dp);
+  video_process_  = new vpro_edge_process(dp);
   if (track_)
     {
       frame_trail_.clear();
@@ -543,7 +548,7 @@ void vvid_file_manager::compute_line_fit()
   else
     dp.aggressive_junction_closure=0;
 
-  video_process_  = new vvid_edge_line_process(dp, flp);
+  video_process_  = new vpro_edge_line_process(dp, flp);
 }
 
 void vvid_file_manager::compute_grid_match()
@@ -553,6 +558,10 @@ void vvid_file_manager::compute_grid_match()
   dp.borderp = false;
   static sdet_fit_lines_params flp;
   static sdet_grid_finder_params gfp;
+  dp.automatic_threshold=true;
+  dp.noise_multiplier=20;
+  flp.min_fit_length_=7;
+  flp.rms_distance_=0.05;
   vgui_dialog grid_dialog("Grid Match");
   grid_dialog.field("Gaussian sigma", dp.smooth);
   grid_dialog.field("Noise Threshold", dp.noise_multiplier);
@@ -572,7 +581,7 @@ void vvid_file_manager::compute_grid_match()
   else
     dp.aggressive_junction_closure=0;
 
-  video_process_  = new vvid_grid_finder_process(dp, flp, gfp);
+  video_process_  = new vpro_grid_finder_process(dp, flp, gfp);
 }
 
 void vvid_file_manager::compute_curve_tracking()
@@ -611,7 +620,7 @@ void vvid_file_manager::compute_curve_tracking()
 
   color_label_ = true;
 
-  video_process_  = new vvid_curve_tracking_process(tp,dp);
+  video_process_  = new vpro_curve_tracking_process(tp,dp);
   if (track_)
     {
       frame_trail_.clear();

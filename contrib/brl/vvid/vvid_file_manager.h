@@ -19,7 +19,7 @@
 #include <vgui/vgui_image_tableau_sptr.h>
 #include <bgui/bgui_vtol2D_tableau_sptr.h>
 #include <vgui/vgui_viewer2D_tableau_sptr.h>
-#include <vvid/vvid_video_process_sptr.h>
+#include <vpro/vpro_video_process_sptr.h>
 #include <vgui/vgui_dialog.h>
 #include <vgui/vgui_window.h>
 #include <vidl/vidl_movie.h>
@@ -156,7 +156,7 @@ class vvid_file_manager : public vgui_wrapper_tableau
   bgui_vtol2D_tableau_sptr easy1_;
   vgui_image_tableau_sptr itab0_;
   vgui_image_tableau_sptr itab1_;
-  vvid_video_process_sptr video_process_;
+  vpro_video_process_sptr video_process_;
   vgui_grid_tableau_sptr grid_;
   vvid_frame_trail frame_trail_;
   static vvid_file_manager *instance_;

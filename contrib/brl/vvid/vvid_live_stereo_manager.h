@@ -24,7 +24,7 @@
 #include <vgui/vgui_window.h>
 #include <vidl/vidl_movie.h>
 #include <vvid/cmu_1394_camera.h>
-#include <vvid/vvid_video_process_sptr.h>
+#include <vpro/vpro_video_process_sptr.h>
 #include <vvid/vvid_live_video_tableau.h>
 
 //: A manager for displaying live video frames and processing on the frames.
@@ -88,7 +88,7 @@ class vvid_live_stereo_manager : public vgui_grid_tableau
   cmu_1394_camera_params cp_;
   vil1_memory_image_of< vil1_rgb<unsigned char> > process_rgb_;
   vil1_memory_image_of<unsigned char> process_mono_;
-  vvid_video_process_sptr video_process_;
+  vpro_video_process_sptr video_process_;
   static vvid_live_stereo_manager *instance_;
 };
 

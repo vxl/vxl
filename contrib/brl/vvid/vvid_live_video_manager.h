@@ -24,7 +24,7 @@
 #include <vgui/vgui_wrapper_tableau.h>
 #include <bgui/bgui_vtol2D_tableau_sptr.h>
 #include <vvid/cmu_1394_camera.h>
-#include <vvid/vvid_video_process_sptr.h>
+#include <vpro/vpro_video_process_sptr.h>
 #include <vvid/vvid_live_video_tableau.h>
 
 class vgui_window;
@@ -59,6 +59,10 @@ class vvid_live_video_manager : public vgui_wrapper_tableau
   //: capture and save a video sequence
   void capture_sequence();
 
+  //: new capture approach
+  void init_capture();
+  void stop_capture();
+
   //: quit the application
   void quit();
 
@@ -87,7 +91,6 @@ class vvid_live_video_manager : public vgui_wrapper_tableau
   void run_frames();
   //flags
   bool init_successful_;
-  bool live_capture_;
   bool edges_;
   int sample_;
   unsigned width_;
@@ -98,7 +101,7 @@ class vvid_live_video_manager : public vgui_wrapper_tableau
   cmu_1394_camera_params cp_;
   vil1_memory_image_of< vil1_rgb<unsigned char> > process_rgb_;
   vil1_memory_image_of<unsigned char> process_mono_;
-  vvid_video_process_sptr video_process_;
+  vpro_video_process_sptr video_process_;
   static vvid_live_video_manager *instance_;
 };
 

@@ -30,17 +30,25 @@ class vvid_live_video_tableau : public vgui_image_tableau
   ~vvid_live_video_tableau();
   vcl_string type_name() const;
   //camera manipulation
-
   void set_camera_params(const cmu_1394_camera_params& cp);
-  cmu_1394_camera_params get_camera_params() const { return (const cmu_1394_camera_params)cam_; }
+  cmu_1394_camera_params get_camera_params(){return (cmu_1394_camera_params)cam_;}
+  bool video_capabilities(const int format, const int mode, const int frame_rate){return cam_.m_videoFlags[format][mode][frame_rate];}
+
   bool attach_live_video();
-  void start_live_video();
+  bool start_live_video();
   void update_frame();
   void stop_live_video();
 
+  //:live capture methods
+  void start_capture(vcl_string const & video_file_name)
+    {cam_.start_capture(video_file_name);}
+  bool stop_capture(){return cam_.stop_capture();}
   //: collection state, i.e. is live and capturing frames
   bool get_video_live() const { return live_; }
 
+  //: pixel sample interval for display
+  void set_pixel_sample_interval(int pix_sample_itvl)
+    {pixel_sample_interval_=pix_sample_itvl;}
   //: Access to next live camera frames. Causes the camera to take a new frame
   void get_camera_rgb_image(vil1_memory_image_of< vil1_rgb<unsigned char> >& im,
                             int pix_sample_interval = 1);

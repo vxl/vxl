@@ -27,8 +27,8 @@
 #include <vidl/vidl_frame.h>
 #include <gevd/gevd_float_operators.h>
 #include <vvid/cmu_1394_camera_params.h>
-#include <vvid/vvid_video_process.h>
-#include <vvid/vvid_epipolar_space_process.h>
+#include <vpro/vpro_video_process.h>
+#include <vpro/vpro_epipolar_space_process.h>
 
 //static live_video_manager instance
 vvid_live_stereo_manager *vvid_live_stereo_manager::instance_ = 0;
@@ -53,7 +53,7 @@ vvid_live_stereo_manager() : vgui_grid_tableau(2,2),
   win_ = 0;
   live_capture_ = false;
   N_views_ = 2;
-  video_process_ = (vvid_video_process*)new vvid_epipolar_space_process();
+  video_process_ = (vpro_video_process*)new vpro_epipolar_space_process();
   init_successful_ = false;
   this->set_grid_size_changeable(true);
 }
