@@ -11,6 +11,7 @@
 #include <vil/io/vil_io_memory_image_of.h>
 #include <vil/io/vil_io_rgb.h>
 #include <vil/io/vil_io_rgba.h>
+#include <vcl_root_dir.h>
 
 //:
 // \file
@@ -122,8 +123,8 @@ void golden_test_vil_io(bool save_file)
     }
 
     // Read in file to each class in turn
-
-    vsl_b_ifstream bfs_in("golden_test_vil_io.bvl");
+    vcl_string gold_path=vcl_root_dir()+"/vxl/vil/io/tests/golden_test_vil_io.bvl";
+    vsl_b_ifstream bfs_in(gold_path.c_str());
     vsl_b_read(bfs_in, p_in_memory_image_of);
     vsl_b_read(bfs_in, p_in_memory_image_impl);
     vsl_b_read(bfs_in, p_in_memory_image_format);
