@@ -5,6 +5,9 @@ aren't documented here, unless the bug-fix has a major observable
 effect. If you change something in VXL, please document it here.
 
 ---------------------------------------------------------------------------
+      - Brought mbl_mz_random into core/vnl/vnl_random. This random
+        random number generator provides the same sequence on many platforms.
+
       - Added better DICOM support to vil by wrapping DCMTK. Added
         DCMTK to v3p. Clean up DICOM header struct.
 
