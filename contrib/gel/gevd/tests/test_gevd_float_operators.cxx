@@ -10,6 +10,7 @@
 
 #include <gevd/gevd_float_operators.h>
 #include <gevd/gevd_bufferxy.h>
+#include <vcl_cmath.h> // for sqrt(float)
 #include <testlib/testlib_test.h>
 
 void
