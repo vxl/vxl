@@ -1,13 +1,10 @@
 #ifndef vepl_monadic_h_
 #define vepl_monadic_h_
 
-// .NAME vepl_monadic - apply any (fixed) function to all pixels
-// .LIBRARY vepl
-// .HEADER vxl package
-// .INCLUDE vepl/vepl_monadic.h
-// .FILE vepl_monadic.txx
+//:
+// \file
+// \brief apply any (fixed) function to all pixels
 //
-// .SECTION Description
 //   The only parameter to be passed to the constructor must be a (monadic)
 //   function that takes a pixel value from the input image and produces
 //   a pixel value of the output image, i.e., its signature must be
@@ -18,14 +15,18 @@
 //
 //   Note that the input and output images are allowed to be identical.
 //
-// .SECTION Author
-//   Peter Vanroose, K.U.Leuven (ESAT/PSI), 28 April 2001
+// \author Peter Vanroose, K.U.Leuven (ESAT/PSI)
+// \date   28 April 2001
 
 #include <vil/vil_image.h>
 
+//: replace pixels by their absolute value
 vil_image vepl_monadic_abs(vil_image const& );
+//: replace pixels by their square root
 vil_image vepl_monadic_sqrt(vil_image const& );
+//: replace pixels by their square
 vil_image vepl_monadic_sqr(vil_image const& );
+//: replace pixels by a linear distortion
 vil_image vepl_monadic_shear(vil_image const& , double shift, double scale);
 
 #endif // vepl_monadic_h_

@@ -1,14 +1,11 @@
 #ifndef vipl_monadic_h_
 #define vipl_monadic_h_
 
-// .NAME vipl_monadic - apply any (fixed) function to all pixels
-// .LIBRARY vipl
-// .HEADER vxl package
-// .INCLUDE vipl/vipl_monadic.h
-// .FILE vipl_monadic.txx
+//:
+// \file
+// \brief apply any (fixed) function to all pixels
 //
-// .SECTION Description
-//   This Image Processing class is implemented using the vipl filters,
+//   This image processing class is implemented using the vipl filters,
 //   which means that it can be used with any image class (IUE or not,
 //   TargetJr or not, vil or not) of any pixel data type.
 //
@@ -22,18 +19,19 @@
 //
 //   Note that the input and output images are allowed to be identical.
 //
-// .SECTION Author
-//   Peter Vanroose, K.U.Leuven (ESAT/PSI), 15 September 1999.
+// \author Peter Vanroose, K.U.Leuven (ESAT/PSI)
+// \date   15 September 1999.
 //
-// .SECTION Modifications
+// \verbatim
+// Modifications:
 //   Peter Vanroose, Aug.2000 - adapted to vxl
+// \endverbatim
 //
-// .EXAMPLE examples/example_std_dev.cxx
+// \example examples/example_std_dev.cxx
 
 #include <vipl/filter/vipl_filter_2d.h> // parent class
 
-
-// must be on single line for perceps:
+//: apply any (fixed) function to all pixels
 template <class ImgIn,class ImgOut,class DataIn,class DataOut, VCL_DFL_TYPE_PARAM_STLDECL(PixelItr, vipl_trivial_pixeliter) >
 class vipl_monadic : public vipl_filter_2d<ImgIn,ImgOut,DataIn,DataOut,PixelItr>
 {

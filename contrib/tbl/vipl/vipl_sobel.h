@@ -1,28 +1,27 @@
 #ifndef vipl_sobel_h_
 #define vipl_sobel_h_
 
-// .NAME vipl_sobel - vipl_sobel convolution filter
-// .LIBRARY vipl
-// .HEADER vxl package
-// .INCLUDE vipl/vipl_sobel.h
-// .FILE vipl_sobel.txx
+//:
+// \file
+// \brief vipl_sobel convolution filter
 //
-// .SECTION Description
-//   This Image Processing class is implemented using the vipl filters,
+//   This image processing class is implemented using the vipl filters,
 //   which means that it can be used with any image class (IUE or not,
 //   TargetJr or not, vil or not) of any pixel data type.
 //
-// .SECTION Author
-//   Peter Vanroose, K.U.Leuven (ESAT/PSI), 29 may 1998.
+// \author Peter Vanroose, K.U.Leuven (ESAT/PSI)
+// \date   29 may 1998.
 //
-// .SECTION Modifications
+// \verbatim
+// Modifications:
 //   Peter Vanroose, Aug.2000 - adapted to vxl
+// \endverbatim
 //
-// .EXAMPLE examples/example_sobel.cxx
+// \example examples/example_sobel.cxx
 
 #include <vipl/filter/vipl_filter_2d.h> // parent class
 
-// must be on single line for perceps:
+//: vipl_sobel convolution filter
 template <class ImgIn,class ImgOut,class DataIn,class DataOut, VCL_DFL_TYPE_PARAM_STLDECL(PixelItr, vipl_trivial_pixeliter) >
 class vipl_sobel : public vipl_filter_2d<ImgIn,ImgOut,DataIn,DataOut,PixelItr> {
 // -+-+- no data members: -+-+-

@@ -1,31 +1,27 @@
 #ifndef vepl_dyadic_h_
 #define vepl_dyadic_h_
 
-// .NAME vepl_dyadic - apply any (fixed) function to all (out,in) pixel pairs
-// .LIBRARY vepl
-// .HEADER vxl package
-// .INCLUDE vepl/vepl_dyadic.h
-// .FILE vepl_dyadic.txx
+//:
+// \file
+// \brief apply a (fixed) function to all (out,in) pixel pairs
 //
-// .SECTION Description
-//   The only parameter to be passed to the constructor must be a (dyadic)
-//   function that takes two pixel values, one from the output image and
-//   one from the input image, and changes its first argument is some way.
-//   The function should not return a value, i.e., its signature must be
-//   void f(DataOut&, DataIn const&).
 //   Typical examples are adding or subtracting images pixel-wise.
 //
-//   Note that the output image has to be initialized in advance, as its
-//   pixel values are actually both read and written.
+//   Note that the output image (first argument) has to be initialized
+//   in advance, as its pixel values are actually both read and written.
 //
-// .SECTION Author
-//   Peter Vanroose, K.U.Leuven (ESAT/PSI), 28 April 2001
+// \author Peter Vanroose, K.U.Leuven (ESAT/PSI)
+// \date   28 April 2001
 
 #include <vil/vil_image.h>
 
+//: add the second image to the first one pixelwise
 void vepl_dyadic_sum(vil_image , vil_image const& );
+//: subtract the second image from the first one pixelwise
 void vepl_dyadic_dif(vil_image , vil_image const& );
+//: replace pixels of the first image by minimum pixel value of both
 void vepl_dyadic_min(vil_image , vil_image const& );
+//: replace pixels of the first image by maximum pixel value of both
 void vepl_dyadic_max(vil_image , vil_image const& );
 
 #endif // vepl_dyadic_h_

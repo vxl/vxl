@@ -1,14 +1,11 @@
 #ifndef vipl_moment_h_
 #define vipl_moment_h_
 
-// .NAME vipl_moment - computation of n-th order moment
-// .LIBRARY vipl
-// .HEADER vxl package
-// .INCLUDE vipl/vipl_moment.h
-// .FILE vipl_moment.txx
+//:
+// \file
+// \brief computation of n-th order moment
 //
-// .SECTION Description
-//   This Image Processing class is implemented using the vipl filters,
+//   This image processing class is implemented using the vipl filters,
 //   which means that it can be used with any image class (IUE or not,
 //   TargetJr or not, vil or not) of any pixel data type.
 //
@@ -21,17 +18,19 @@
 //   pixel (except for initialization of first row and column) because it uses
 //   computed values of previous pixels
 //
-// .SECTION Author
-//   Maarten Vergauwen, K.U.Leuven (ESAT/PSI), 21 September 1999.
+// \author Maarten Vergauwen, K.U.Leuven (ESAT/PSI)
+// \date   21 September 1999.
 //
-// .SECTION Modifications
+// \verbatim
+// Modifications:
 //   Peter Vanroose, Aug.2000 - adapted to vxl
+// \endverbatim
 //
-// .EXAMPLE examples/example_std_dev.cxx
+// \example examples/example_std_dev.cxx
 
 #include <vipl/filter/vipl_filter_2d.h> // parent class
 
-// must be on single line for perceps:
+//: computation of n-th order moment
 template <class ImgIn,class ImgOut,class DataIn,class DataOut,VCL_DFL_TYPE_PARAM_STLDECL(PixelItr, vipl_trivial_pixeliter) >
 class vipl_moment : public vipl_filter_2d<ImgIn,ImgOut,DataIn,DataOut,PixelItr> {
 

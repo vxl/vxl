@@ -1,14 +1,11 @@
 #ifndef vepl_histogram_h_
 #define vepl_histogram_h_
 
-// .NAME vepl_histogram - pixel value histogram of 2D image
-// .LIBRARY vepl
-// .HEADER vxl package
-// .INCLUDE vepl/vepl_histogram.h
-// .FILE vepl_histogram.txx
+//:
+// \file
+// \brief pixel value histogram of 2D image
 //
-// .SECTION Description
-//   This Image Processing class creates a pixel value histogram of a 2D image
+//   The vipl_histogram class creates a pixel value histogram of a 2D image
 //   and writes it into a "1D" image (actually a row of a 2D image).
 //
 //   The constructor takes three (defaulted) arguments:
@@ -34,7 +31,7 @@
 //   can be set to make sure that the histogram values fall within the
 //   pixel value range of the output data type.
 //
-//   The there are two other attributes, not specified in the constructor, which default to 0.
+//   There are two other attributes, not specified in the constructor, which default to 0.
 //   The first, indexout defines what row of the output image will be used
 //   for the actual storage of the histogram values.  By making the output
 //   image multi-row and changing this the same filter can do multiple
@@ -57,11 +54,12 @@
 //   consistency and allow one to chose which "column" in the 2D output image
 //   was used to store the histogram.
 //
-// .SECTION Author
-//   Peter Vanroose, K.U.Leuven (ESAT/PSI), 28 April 2001
+// \author Peter Vanroose, K.U.Leuven (ESAT/PSI)
+// \date   28 April 2001
 
 #include <vil/vil_image.h>
 
+//: pixel value histogram of 2D image, stored in a 256x1 output image
 vil_image vepl_histogram(vil_image const& );
 
 #endif // vepl_histogram_h_

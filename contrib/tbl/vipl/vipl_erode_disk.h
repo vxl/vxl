@@ -1,14 +1,11 @@
 #ifndef vipl_erode_disk_h_
 #define vipl_erode_disk_h_
 
-// .NAME vipl_erode_disk - morphological erosion with circular element
-// .LIBRARY vipl
-// .HEADER vxl package
-// .INCLUDE vipl/vipl_erode_disk.h
-// .FILE vipl_erode_disk.txx
+//:
+// \file
+// \brief morphological erosion with circular element
 //
-// .SECTION Description
-//   This Image Processing class is implemented using the vipl filters,
+//   This image processing class is implemented using the vipl filters,
 //   which means that it can be used with any image class (IUE or not,
 //   TargetJr or not, vil or not) of any pixel data type.
 //
@@ -26,17 +23,19 @@
 //   are not the same type.  It could even be argued that these types should
 //   always be the same!
 //
-// .SECTION Author
-//   Peter Vanroose, K.U.Leuven (ESAT/PSI), 15 November 1997.
+// \author Peter Vanroose, K.U.Leuven (ESAT/PSI)
+// \date   15 November 1997.
 //
-// .SECTION Modifications
+// \verbatim
+// Modifications:
 //   Peter Vanroose, Aug.2000 - adapted to vxl
+// \endverbatim
 //
-// .EXAMPLE examples/example_erode_disk.cxx
+// \example examples/example_erode_disk.cxx
 
 #include <vipl/filter/vipl_filter_2d.h> // parent class
 
-// must be on single line for perceps:
+//: morphological erosion with circular element
 template <class ImgIn,class ImgOut,class DataIn,class DataOut,VCL_DFL_TYPE_PARAM_STLDECL(PixelItr, vipl_trivial_pixeliter) >
 class vipl_erode_disk : public vipl_filter_2d<ImgIn,ImgOut,DataIn,DataOut,PixelItr> {
 

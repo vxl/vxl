@@ -1,14 +1,11 @@
 #ifndef vipl_threshold_h_
 #define vipl_threshold_h_
 
-// .NAME vipl_threshold - set pixel to given value if above/below certain threshold
-// .LIBRARY vipl
-// .HEADER vxl package
-// .INCLUDE vipl/vipl_threshold.h
-// .FILE vipl_threshold.txx
+//:
+// \file
+// \brief set pixel to given value if above/below certain threshold
 //
-// .SECTION Description
-//   This Image Processing class is implemented using the vipl filters,
+//   This image processing class is implemented using the vipl filters,
 //   which means that it can be used with any image class (IUE or not,
 //   TargetJr or not, vil or not) of any pixel data type.
 //
@@ -28,22 +25,23 @@
 //   thresholding of colour images makes no sense (unless you define a
 //   sensible "<=" for RGB triples).
 //
-// .SECTION Author
-//   Peter Vanroose, K.U.Leuven (ESAT/PSI), 15 November 1997.
+// \author Peter Vanroose, K.U.Leuven (ESAT/PSI)
+// \date   15 November 1997.
 //
-// .SECTION Modifications
+// \verbatim
+// Modifications:
 //   Terry Boult - Dec. 1997 - made various mods for newgen and IUE consistency
 //   Peter Vanroose, Aug.2000 - adapted to vxl
+// \endverbatim
 //
-// .EXAMPLE examples/example1_threshold.cxx
-// .EXAMPLE examples/example2_threshold.cxx
-// .EXAMPLE examples/example3_threshold.cxx
-// .EXAMPLE examples/example4_threshold.cxx
+// \example examples/example1_threshold.cxx
+// \example examples/example2_threshold.cxx
+// \example examples/example3_threshold.cxx
+// \example examples/example4_threshold.cxx
 
 #include <vipl/filter/vipl_filter_2d.h> // parent class
 
-
-// must be on single line for perceps:
+//: set pixel to given value if above/below certain threshold
 template <class ImgIn,class ImgOut,class DataIn,class DataOut, VCL_DFL_TYPE_PARAM_STLDECL(PixelItr, vipl_trivial_pixeliter) >
 class vipl_threshold : public vipl_filter_2d<ImgIn,ImgOut,DataIn,DataOut,PixelItr>
 {

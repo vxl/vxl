@@ -1,14 +1,11 @@
 #ifndef vipl_histogram_h_
 #define vipl_histogram_h_
 
-// .NAME vipl_histogram - pixel value histogram of 2D image
-// .LIBRARY vipl
-// .HEADER vxl package
-// .INCLUDE vipl/vipl_histogram.h
-// .FILE vipl_histogram.txx
+//:
+// \file
+// \brief pixel value histogram of 2D image
 //
-// .SECTION Description
-//   This Image Processing class creates a pixel value histogram of a 2D image
+//   This image processing class creates a pixel value histogram of a 2D image
 //   and writes it into a "1D" image (actually a row of a 2D image).
 //   It is implemented using the vipl filters,
 //   which means that it can be used with any image class (IUE or not,
@@ -60,18 +57,20 @@
 //   consistency and allow one to chose which "column" in the 2D output image
 //   was used to store the histogram.
 //
-// .SECTION Author
-//   Peter Vanroose, K.U.Leuven (ESAT/PSI), 15 November 1997.
+// \author Peter Vanroose, K.U.Leuven (ESAT/PSI)
+// \date   15 November 1997.
 //
-// .SECTION Modifications
+// \verbatim
+// Modifications:
 //   Terry Boult - December 1997 - remark added to documentation
 //   Peter Vanroose, Aug.2000 - adapted to vxl
+// \endverbatim
 //
-// .EXAMPLE examples/example_histogram.cxx
+// \example examples/example_histogram.cxx
 
 #include <vipl/filter/vipl_filter_2d.h> // parent class
 
-// must be on single line for perceps:
+//: pixel value histogram of 2D image
 template <class ImgIn,class ImgOut,class DataIn,class DataOut, VCL_DFL_TYPE_PARAM_STLDECL(PixelItr, vipl_trivial_pixeliter) >
 class vipl_histogram : public vipl_filter_2d<ImgIn,ImgOut,DataIn,DataOut,PixelItr>
 {

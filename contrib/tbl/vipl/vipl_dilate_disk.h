@@ -1,14 +1,11 @@
 #ifndef vipl_dilate_disk_h_
 #define vipl_dilate_disk_h_
 
-// .NAME vipl_dilate_disk - morphological dilation with circular element
-// .LIBRARY vipl
-// .HEADER vxl package
-// .INCLUDE vipl/vipl_dilate_disk.h
-// .FILE vipl_dilate_disk.txx
+//:
+// \file
+// \brief morphological dilation with circular element
 //
-// .SECTION Description
-//   This Image Processing class is implemented using the vipl filters,
+//   This image processing class is implemented using the vipl filters,
 //   which means that it can be used with any image class (IUE or not,
 //   TargetJr or not, vil or not) of any pixel data type.
 //
@@ -29,17 +26,19 @@
 //  updated by Tboult to use new codegen form and have valid (public argree) ctor
 //  and to use preop and postop to define/destroy the mask. 12/97
 //
-// .SECTION Author
-//   Peter Vanroose, K.U.Leuven (ESAT/PSI), 15 November 1997.
+// \author Peter Vanroose, K.U.Leuven (ESAT/PSI)
+// \date   15 November 1997.
 //
-// .SECTION Modifications
+// \verbatim
+// Modifications:
 //   Peter Vanroose, Aug.2000 - adapted to vxl
+// \endverbatim
 //
-// .EXAMPLE examples/example_dilate_disk.cxx
+// \example examples/example_dilate_disk.cxx
 
 #include <vipl/filter/vipl_filter_2d.h> // parent class
 
-// must be on single line for perceps:
+//: morphological dilation with circular element
 template <class ImgIn,class ImgOut,class DataIn,class DataOut,VCL_DFL_TYPE_PARAM_STLDECL(PixelItr, vipl_trivial_pixeliter) >
 class vipl_dilate_disk : public vipl_filter_2d<ImgIn,ImgOut,DataIn,DataOut,PixelItr> {
 // -+-+- data members: -+-+-

@@ -1,13 +1,10 @@
 #ifndef vepl_dilate_disk_h_
 #define vepl_dilate_disk_h_
 
-// .NAME vepl_dilate_disk - morphological dilation with circular element
-// .LIBRARY vepl
-// .HEADER vxl package
-// .INCLUDE vepl/vepl_dilate_disk.h
-// .FILE vepl_dilate_disk.txx
+//:
+// \file
+// \brief morphological dilation with circular element
 //
-// .SECTION Description
 //   Dilation is a morphological operation that replaces a pixel with the
 //   maximum value of its surrounding pixels, in a certain neighbourhood.
 //   Here, the neighbourhood is circular, with an arbitrary (float) radius,
@@ -25,11 +22,12 @@
 //  updated by Tboult to use new codegen form and have valid (public argree) ctor
 //  and to use preop and postop to define/destroy the mask. 12/97
 //
-// .SECTION Author
-//   Peter Vanroose, K.U.Leuven (ESAT/PSI), 28 April 2001
+// \author Peter Vanroose, K.U.Leuven (ESAT/PSI)
+// \date   28 April 2001
 
 #include <vil/vil_image.h>
 
+//: morphological dilation with circular element
 vil_image vepl_dilate_disk(vil_image const& , float radius);
 
 #endif // vepl_dilate_disk_h_

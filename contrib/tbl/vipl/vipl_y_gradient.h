@@ -1,14 +1,11 @@
 #ifndef vipl_y_gradient_h_
 #define vipl_y_gradient_h_
 
-// .NAME vipl_y_gradient - Convolve image with vertical [-1 1] filter
-// .LIBRARY vipl
-// .HEADER vxl package
-// .INCLUDE vipl/vipl_y_gradient.h
-// .FILE vipl_y_gradient.txx
+//:
+// \file
+// \brief Convolve image with vertical [-1 1] filter
 //
-// .SECTION Description
-//   This Image Processing class is implemented using the vipl filters,
+//   This image processing class is implemented using the vipl filters,
 //   which means that it can be used with any image class (IUE or not,
 //   TargetJr or not, vil or not) of any pixel data type.
 //
@@ -20,15 +17,18 @@
 //   which you probably will have to provide when DataIn and DataOut
 //   are not the same type.
 //
-// .SECTION Author
-//   Peter Vanroose, K.U.Leuven (ESAT/PSI), 1 June 1998.
+// \author Peter Vanroose, K.U.Leuven (ESAT/PSI)
+// \date   1 June 1998.
 //
-// .SECTION Modifications
+// \verbatim
+// Modifications:
 //   Peter Vanroose, Aug.2000 - adapted to vxl
+// \endverbatim
 //
 
 #include <vipl/filter/vipl_filter_2d.h> // parent class
 
+//: Convolve image with vertical [-1 1] filter
 template <class ImgIn,class ImgOut,class DataIn,class DataOut, VCL_DFL_TYPE_PARAM_STLDECL(PixelItr, vipl_trivial_pixeliter) >
 class vipl_y_gradient : public vipl_filter_2d<ImgIn,ImgOut,DataIn,DataOut,PixelItr> {
 // -+-+- data members: -+-+-

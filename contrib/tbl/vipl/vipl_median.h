@@ -1,14 +1,11 @@
 #ifndef vipl_median_h_
 #define vipl_median_h_
 
-// .NAME vipl_median - median filter with circular element
-// .LIBRARY vipl
-// .HEADER vxl package
-// .INCLUDE vipl/vipl_median.h
-// .FILE vipl_median.txx
+//:
+// \file
+// \brief median filter with circular element
 //
-// .SECTION Description
-//   This Image Processing class is implemented using the vipl filters,
+//   This image processing class is implemented using the vipl filters,
 //   which means that it can be used with any image class (IUE or not,
 //   TargetJr or not, vil or not) of any pixel data type.
 //
@@ -26,17 +23,19 @@
 //   are not the same type.  It could even be argued that these types should
 //   always be the same!
 //
-// .SECTION Author
-//   Peter Vanroose, K.U.Leuven (ESAT/PSI), 18 December 1998.
+// \author Peter Vanroose, K.U.Leuven (ESAT/PSI)
+// \date   18 December 1998.
 //
-// .SECTION Modifications
+// \verbatim
+// Modifications:
 //   Peter Vanroose, Aug.2000 - adapted to vxl
+// \endverbatim
 //
-// .EXAMPLE examples/example_median.cxx
+// \example examples/example_median.cxx
 
 #include <vipl/filter/vipl_filter_2d.h> // parent class
 
-// must be on single line for perceps:
+//: median filter with circular element
 template <class ImgIn,class ImgOut,class DataIn,class DataOut, VCL_DFL_TYPE_PARAM_STLDECL(PixelItr, vipl_trivial_pixeliter) >
 class vipl_median : public vipl_filter_2d<ImgIn,ImgOut,DataIn,DataOut,PixelItr> {
 

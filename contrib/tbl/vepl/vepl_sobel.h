@@ -1,17 +1,16 @@
 #ifndef vepl_sobel_h_
 #define vepl_sobel_h_
 
-// .NAME vepl_sobel - vepl_sobel convolution filter
-// .LIBRARY vepl
-// .HEADER vxl package
-// .INCLUDE vepl/vepl_sobel.h
-// .FILE vepl_sobel.txx
+//:
+// \file
+// \brief sobel convolution filter
 //
-// .SECTION Author
-//   Peter Vanroose, K.U.Leuven (ESAT/PSI), 28 April 2001
+// \author Peter Vanroose, K.U.Leuven (ESAT/PSI)
+// \date   28 April 2001
 
 #include <vil/vil_image.h>
 
+//: sobel convolution filter
 vil_image vepl_sobel(vil_image const& );
 
 #endif // vepl_sobel_h_

@@ -1,13 +1,10 @@
 #ifndef vepl_median_h_
 #define vepl_median_h_
 
-// .NAME vepl_median - median filter with circular element
-// .LIBRARY vepl
-// .HEADER vxl package
-// .INCLUDE vepl/vepl_median.h
-// .FILE vepl_median.txx
+//:
+// \file
+// \brief median filter with circular element
 //
-// .SECTION Description
 //   vepl_median filtering is an operation that replaces a pixel with the
 //   median value of its surrounding pixels, in a certain neighbourhood.
 //   Here, the neighbourhood is circular, with an arbitrary (float) radius,
@@ -22,11 +19,12 @@
 //   are not the same type.  It could even be argued that these types should
 //   always be the same!
 //
-// .SECTION Author
-//   Peter Vanroose, K.U.Leuven (ESAT/PSI), 28 April 2001
+// \author Peter Vanroose, K.U.Leuven (ESAT/PSI)
+// \date   28 April 2001
 
 #include <vil/vil_image.h>
 
+//: median filter with circular element of supplied radius
 vil_image vepl_median(vil_image const& , float radius=1.0);
 
 #endif // vepl_median_h_

@@ -1,13 +1,10 @@
 #ifndef vepl_threshold_h_
 #define vepl_threshold_h_
 
-// .NAME vepl_threshold - set pixel to given value if above/below certain threshold
-// .LIBRARY vepl
-// .HEADER vxl package
-// .INCLUDE vepl/vepl_threshold.h
-// .FILE vepl_threshold.txx
+//:
+// \file
+// \brief set pixel to given value if above/below certain threshold
 //
-// .SECTION Description
 //   This class actually implements two threshold operations, namely the
 //   `classical' single threshold mapping where pixel values not larger than
 //   T are mapped to L, values larger than T to H; and the `clipping'
@@ -24,11 +21,12 @@
 //   thresholding of colour images makes no sense (unless you define a
 //   sensible "<=" for RGB triples).
 //
-// .SECTION Author
-//   Peter Vanroose, K.U.Leuven (ESAT/PSI), 28 April 2001
+// \author Peter Vanroose, K.U.Leuven (ESAT/PSI)
+// \date   28 April 2001
 
 #include <vil/vil_image.h>
 
+//: set pixel to given value if above/below certain threshold
 vil_image vepl_threshold(vil_image const& , double threshold=128.0, double below=1.0, double above=0.0);
 
 #endif // vepl_threshold_h_

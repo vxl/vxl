@@ -1,14 +1,11 @@
 #ifndef vipl_add_random_noise_h_
 #define vipl_add_random_noise_h_
 
-// .NAME vipl_add_random_noise - add random noise to all pixels
-// .LIBRARY vipl
-// .HEADER vxl package
-// .INCLUDE vipl/vipl_add_random_noise.h
-// .FILE vipl_add_random_noise.txx
+//:
+// \file
+// \brief add random noise to all pixels
 //
-// .SECTION Description
-//   This Image Processing class is implemented using the vipl filters,
+//   This image processing class is implemented using the vipl filters,
 //   which means that it can be used with any image class (IUE or not,
 //   TargetJr or not, vil or not) of any pixel data type.
 //
@@ -24,13 +21,15 @@
 //   operator `vil_rgb<ubyte>+double' must be defined.
 //   This should be changed in the future.
 //
-// .SECTION Author
-//   Peter Vanroose, K.U.Leuven (ESAT/PSI), 28 may 1998.
+// \author Peter Vanroose, K.U.Leuven (ESAT/PSI)
+// \date   28 may 1998.
 //
-// .SECTION Modifications
+// \verbatim
+// Modifications:
 //   Peter Vanroose, Aug.2000 - adapted to vxl
+// \endverbatim
 //
-// .EXAMPLE examples/example_add_random_noise.cxx
+// \example examples/example_add_random_noise.cxx
 
 #include <vipl/filter/vipl_filter_2d.h> // parent class
 #ifdef STAT_LIB
@@ -41,6 +40,7 @@
 
 enum RandomNoiseType { UNIFORM_NOISE, GAUSSIAN_NOISE, EXPONENTIAL_NOISE };
 
+//: add random noise to all pixels
 template <class ImgIn,class ImgOut,class DataIn,class DataOut, VCL_DFL_TYPE_PARAM_STLDECL(PixelItr, vipl_trivial_pixeliter) >
 class vipl_add_random_noise : public vipl_filter_2d<ImgIn,ImgOut,DataIn,DataOut,PixelItr>
 {

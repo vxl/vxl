@@ -1,14 +1,11 @@
 #ifndef vipl_gaussian_convolution_h_
 #define vipl_gaussian_convolution_h_
 
-// .NAME vipl_gaussian_convolution - gaussian smoothing
-// .LIBRARY vipl
-// .HEADER vxl package
-// .INCLUDE vipl/vipl_gaussian_convolution.h
-// .FILE vipl_gaussian_convolution.txx
+//:
+// \file
+// \brief gaussian smoothing
 //
-// .SECTION Description
-//   This Image Processing class is implemented using the vipl filters,
+//   This image processing class is implemented using the vipl filters,
 //   which means that it can be used with any image class (IUE or not,
 //   TargetJr or not, vil or not) of any pixel data type.
 //
@@ -25,16 +22,18 @@
 //   As this is a separable filter, it is implemented as a row-based 1-D filter
 //   followed by a column-based 1-D step.
 //
-// .SECTION Author
-//   Peter Vanroose, K.U.Leuven (ESAT/PSI), 14 March 1999.
+// \author Peter Vanroose, K.U.Leuven (ESAT/PSI)
+// \date   14 March 1999.
 //
-// .SECTION Modifications
+// \verbatim
+// Modifications:
 //   Peter Vanroose, Aug.2000 - adapted to vxl
+// \endverbatim
 //
 
 #include <vipl/filter/vipl_filter_2d.h> // parent class
 
-// must be on single line for perceps:
+//: gaussian smoothing
 template <class ImgIn,class ImgOut,class DataIn,class DataOut, VCL_DFL_TYPE_PARAM_STLDECL(PixelItr, vipl_trivial_pixeliter) >
 class vipl_gaussian_convolution : public vipl_filter_2d<ImgIn,ImgOut,DataIn,DataOut,PixelItr> {
 
