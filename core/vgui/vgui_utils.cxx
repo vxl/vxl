@@ -1,4 +1,4 @@
-// This is oxl/vgui/vgui_utils.cxx
+// This is core/vgui/vgui_utils.cxx
 #include "vgui_utils.h"
 //:
 // \file
@@ -9,8 +9,6 @@
 #include <vcl_cstdlib.h>
 #include <vcl_cassert.h>
 #include <vcl_iostream.h>
-
-#include <vul/vul_sprintf.h>
 
 #include <vil/vil_rgb.h>
 #include <vil/vil_rgba.h>
@@ -223,15 +221,15 @@ void vgui_utils::process_hits(int num_hits, GLuint* ptr, vcl_vector<vcl_vector<u
    for (int i = 0; i < num_hits; i++) {
      GLuint num_names = *ptr;
 #ifdef DEBUG
-       vcl_cerr << vul_sprintf("number of names for hit[%d] = %d", i, num_names) << vcl_endl;
+       vcl_cerr << "number of names for hit["<< i <<"] = " << num_names << vcl_endl;
 #endif
      ptr++;
 #ifdef DEBUG
-       vcl_cerr << vul_sprintf(" z1 is %u;", *ptr);
+       vcl_cerr << " z1 is " << *ptr;
 #endif
      ptr++;
 #ifdef DEBUG
-       vcl_cerr << vul_sprintf(" z2 is %u", *ptr) << vcl_endl;
+       vcl_cerr << "; z2 is " << *ptr << vcl_endl;
 #endif
      ptr++;
 

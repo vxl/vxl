@@ -1,4 +1,4 @@
-// This is oxl/vgui/vrml/vgui_vrml_draw_visitor.cxx
+// This is core/vgui/vrml/vgui_vrml_draw_visitor.cxx
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
@@ -23,8 +23,6 @@
 #include <vnl/vnl_float_3.h>
 #include <vnl/vnl_cross.h>
 #include <vnl/vnl_math.h>
-
-#include <vul/vul_printf.h>
 
 #include <Qv/QvString.h>
 #include <Qv/QvInput.h>
@@ -357,7 +355,7 @@ bool vgui_vrml_draw_visitor::Visit(QvIndexedFaceSet* node)
     }
     unsigned n = polyverts.size();
     if (n < 3) {
-      vul_printf(vcl_cerr, "Bad poly, n = %d\n", n);
+      vcl_cerr << "Bad poly, n = " << n << '\n';
       continue;
     }
 
@@ -472,7 +470,7 @@ bool vgui_vrml_draw_visitor::Visit(QvMaterial* node)
   glMaterialfv(GL_FRONT_AND_BACK, GL_EMISSION, node->emissiveColor.values);
   glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, node->shininess.values[0]);
   float* c = node->emissiveColor.values;
-  // vul_printf(cerr, "vbl_rgba %g %g %g %g\n", c[0], c[1], c[2], node->transparency.values[0]);
+  // vcl_cerr << "rgba " << c[0] <<' '<< c[1] <<' '<< c[2] <<' '<< node->transparency.values[0] << '\n';
   glColor4f(c[0], c[1], c[2], node->transparency.values[0]);
   return true;
 }

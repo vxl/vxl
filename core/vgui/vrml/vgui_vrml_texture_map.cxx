@@ -1,4 +1,4 @@
-// This is oxl/vgui/vrml/vgui_vrml_texture_map.cxx
+// This is core/vgui/vrml/vgui_vrml_texture_map.cxx
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
@@ -14,7 +14,6 @@
 #include <vil/vil_byte.h>
 #include <vil/vil_file_image.h>
 #include <vil/vil_memory_image_of.h>
-#include <vul/vul_printf.h>
 #include <vcl_iostream.h>
 
 int VrmlDraw_TEX_MAX = 256;
@@ -47,13 +46,13 @@ vgui_vrml_texture_map* vgui_vrml_texture_map::create(char const* filename)
   else if (vrml_dirname.size() > 0) {
     fn = vrml_dirname; fn += "/"; fn += filename;
     if (!vul_file::exists(fn.c_str())) {
-      vul_printf(vcl_cerr, "Can't find texture [tried %s and %s]\n", filename, fn.c_str());
+      vcl_cerr << "Can't find texture [tried "<< filename <<" and "<< fn.c_str() <<"]\n";
       return 0;
     }
   }
   filename = fn.c_str();
 
-  vul_printf(vcl_cerr, "Loading texture from [%s]... ", filename);
+  vcl_cerr << "Loading texture from ["<< filename <<"]... ";
   vil_file_image fileimage(filename, vil_file_image::laconic);
   if (!fileimage) {
     vcl_cerr << "Failed!";
@@ -68,7 +67,7 @@ vgui_vrml_texture_map* vgui_vrml_texture_map::create(char const* filename)
 
   bool need_rescale = (tex_w != w) || (tex_h != h);
   if (need_rescale)
-    vul_printf(vcl_cerr, "Rescale from %dx%d to %dx%d, ", w, h, tex_w, tex_h);
+    vcl_cerr << "Rescale from "<<w<<"x"<<h<<" to "<<tex_w<<"x"<<tex_h<<", ";
 
   // Rescale and flip Y
   if (vil_pixel_format(fileimage) == VIL_RGB_BYTE) {
@@ -100,7 +99,6 @@ vgui_vrml_texture_map* vgui_vrml_texture_map::create(char const* filename)
     return newmap;
   }
 
-  vul_printf(vcl_cerr, " ignoring %d b x %d comp image\n", fileimage.bits_per_component(), fileimage.components() );
+  vcl_cerr << " ignoring "<< fileimage.bits_per_component() <<" b x "<< fileimage.components() <<" comp image\n";
   return 0;
 }
-

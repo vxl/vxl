@@ -1,9 +1,8 @@
-// This is oxl/vgui/tests/test_acceleration.cxx
+// This is core/vgui/tests/test_acceleration.cxx
 #include <vcl_iostream.h>
 
 #include <vpl/vpl.h>
 
-#include <vul/vul_printf.h>
 #include <vul/vul_timer.h>
 
 #include <vgui/vgui_gl.h>
@@ -86,8 +85,7 @@ int main (int /*argc*/, char** /*argv*/)
   GLenum format;
   GLenum type;
   vgui_accelerate::instance()->vgui_choose_cache_format (&format, &type);
-  vul_printf(vcl_cerr, "chosen format %0x\n", format);
-  vul_printf(vcl_cerr, "chosen type   %0x\n", type);
+  vcl_cerr << "chosen format " << vcl_hex << format << "\nchosen type   " << type << '\n';
 
   // GLX window code straight out of
   // http://www.eecs.tulane.edu/www/graphics/doc/OpenGL-Man-Pages/glXIntro.html
@@ -111,35 +109,31 @@ int main (int /*argc*/, char** /*argv*/)
 
   bool little_endian = (ImageByteOrder(display) == LSBFirst);
 
-  vcl_cerr << "GL_VERSION : " <<  (const char *) glGetString(GL_VERSION) << vcl_endl;
-  vcl_cerr << "GL_RENDERER : " << (const char *) glGetString(GL_RENDERER) << vcl_endl;
-  vcl_cerr << vcl_endl;
-  vcl_cerr << "X Display - " << vcl_endl;
-  vcl_cerr << "      byte-order : " << (little_endian ? "little-endian" : "big-endian") << vcl_endl;
-  vcl_cerr << vcl_endl;
-  vcl_cerr << "XVisualInfo - " << vcl_endl;
-  vcl_cerr << "           depth : " << visualinfo->depth << vcl_endl;
-  vul_printf(vcl_cerr,"        red-mask : %08x\n", visualinfo->red_mask);
-  vul_printf(vcl_cerr,"      green-mask : %08x\n", visualinfo->green_mask);
-  vul_printf(vcl_cerr,"       blue-mask : %08x\n", visualinfo->blue_mask);
-  vcl_cerr << vcl_endl;
-  vcl_cerr << "GL Gets - " << vcl_endl;
+  vcl_cerr << "GL_VERSION : " <<  (const char *) glGetString(GL_VERSION) << '\n'
+           << "GL_RENDERER : " << (const char *) glGetString(GL_RENDERER) << "\n\n"
+           << "X Display -\n"
+           << "      byte-order : " << (little_endian ? "little" : "big") << "-endian\n\n"
+           << "XVisualInfo -\n"
+           << "           depth : " << visualinfo->depth << '\n'
+           << "        red-mask : " << vcl_hex << visualinfo->red_mask << '\n'
+           << "      green-mask : " << vcl_hex << visualinfo->green_mask << '\n'
+           << "       blue-mask : " << vcl_hex << visualinfo->blue_mask << "\n\n"
+           << "GL Gets -\n";
   GLint data_int;
   glGetIntegerv(GL_RED_BITS, &data_int);
-  vcl_cerr << "        red-bits : " << data_int << vcl_endl;
+  vcl_cerr << "        red-bits : " << data_int << '\n';
   glGetIntegerv(GL_GREEN_BITS, &data_int);
-  vcl_cerr << "      green-bits : " << data_int << vcl_endl;
+  vcl_cerr << "      green-bits : " << data_int << '\n';
   glGetIntegerv(GL_BLUE_BITS, &data_int);
-  vcl_cerr << "       blue-bits : " << data_int << vcl_endl;
+  vcl_cerr << "       blue-bits : " << data_int << '\n';
   glGetIntegerv(GL_ALPHA_BITS, &data_int);
-  vcl_cerr << "      alpha-bits : " << data_int << vcl_endl;
-  vcl_cerr << vcl_endl;
+  vcl_cerr << "      alpha-bits : " << data_int << "\n\n";
 
 #if !VGUI_MESA
-  vcl_cerr << "   You are not using Mesa !!" << vcl_endl;
+  vcl_cerr << "   You are not using Mesa !!\n";
 #endif
 #ifndef HAS_HERMES
-  vcl_cerr << "   You do not have Hermes installed !!" << vcl_endl;
+  vcl_cerr << "   You do not have Hermes installed !!\n";
 #endif
 
   glViewport( 0, 0, 512, 512 );
@@ -174,7 +168,7 @@ int main (int /*argc*/, char** /*argv*/)
       elapsed = timer.real();
       ++draws;
     } while (elapsed < 3000);
-    vcl_cerr << 512*512*draws / (elapsed / 1000.0) << " pixels per second" << vcl_endl;
+    vcl_cerr << 512*512*draws / (elapsed / 1000.0) << " pixels per second\n";
   }
   {
     vcl_cerr << "\nglClear - ";
@@ -186,7 +180,7 @@ int main (int /*argc*/, char** /*argv*/)
       elapsed = timer.real();
       ++draws;
     } while (elapsed < 3000);
-    vcl_cerr << 512*512*draws / (elapsed / 1000.0) << " pixels per second" << vcl_endl;
+    vcl_cerr << 512*512*draws / (elapsed / 1000.0) << " pixels per second\n";
   }
 #endif
 
@@ -200,7 +194,7 @@ int main (int /*argc*/, char** /*argv*/)
       elapsed = timer.real();
       ++draws;
     } while (elapsed < 3000);
-    vcl_cerr << 512*512*draws / (elapsed / 1000.0) << " pixels per second" << vcl_endl;
+    vcl_cerr << 512*512*draws / (elapsed / 1000.0) << " pixels per second\n";
   }
   {
     vcl_cerr << "\nUsing recommended format with glDrawPixels - ";
@@ -212,7 +206,7 @@ int main (int /*argc*/, char** /*argv*/)
       elapsed = timer.real();
       ++draws;
     } while (elapsed < 3000);
-    vcl_cerr << 512*512*draws / (elapsed / 1000.0) << " pixels per second" << vcl_endl;
+    vcl_cerr << 512*512*draws / (elapsed / 1000.0) << " pixels per second\n";
   }
   {
     vcl_cerr << "\nUsing recommended format with vgui_accelerate::instance()->vgui_glDrawPixels - ";
@@ -224,62 +218,62 @@ int main (int /*argc*/, char** /*argv*/)
       elapsed = timer.real();
       ++draws;
     } while (elapsed < 3000);
-    vcl_cerr << 512*512*draws / (elapsed / 1000.0) << " pixels per second" << vcl_endl;
+    vcl_cerr << 512*512*draws / (elapsed / 1000.0) << " pixels per second\n";
   }
 
   XMapWindow(display, window);
   XEvent event;
   XIfEvent(display, &event, WaitForNotify, (char*)window);
 
-  vcl_cerr << "Rendering 16-bit RGB pattern - " << vcl_endl;
+  vcl_cerr << "Rendering 16-bit RGB pattern -\n";
   pattern_RGB16(data);
-  vcl_cerr << "  glDrawPixels..." << vcl_endl;
+  vcl_cerr << "  glDrawPixels...\n";
   glDrawPixels(512,512,GL_RGB,GLenum(GL_UNSIGNED_SHORT_5_6_5),data);
   glXSwapBuffers(display, window);
   vpl_sleep(2);
-  vcl_cerr << "  vgui_accelerate::instance()->vgui_glDrawPixels..." << vcl_endl;
+  vcl_cerr << "  vgui_accelerate::instance()->vgui_glDrawPixels...\n";
   vgui_accelerate::instance()->vgui_glClear(GL_COLOR_BUFFER_BIT);
   vgui_accelerate::instance()->vgui_glDrawPixels(512,512,GL_RGB,GLenum(GL_UNSIGNED_SHORT_5_6_5),(void *)data);
   glXSwapBuffers(display, window);
   vpl_sleep(2);
   glRasterPos2i(45,67);
-  vcl_cerr << "  vgui_accelerate::instance()->vgui_glDrawPixels..." << vcl_endl;
+  vcl_cerr << "  vgui_accelerate::instance()->vgui_glDrawPixels...\n";
   vgui_accelerate::instance()->vgui_glClear(GL_COLOR_BUFFER_BIT);
   vgui_accelerate::instance()->vgui_glDrawPixels(512,512,GL_RGB,GLenum(GL_UNSIGNED_SHORT_5_6_5),data);
   glXSwapBuffers(display, window);
   vpl_sleep(1);
   glPixelZoom(0.4, 0.6);
-  vcl_cerr << "  vgui_accelerate::instance()->vgui_glDrawPixels..." << vcl_endl;
+  vcl_cerr << "  vgui_accelerate::instance()->vgui_glDrawPixels...\n";
   vgui_accelerate::instance()->vgui_glClear(GL_COLOR_BUFFER_BIT);
   vgui_accelerate::instance()->vgui_glDrawPixels(512,512,GL_RGB,GLenum(GL_UNSIGNED_SHORT_5_6_5),data);
   glXSwapBuffers(display, window);
   vpl_sleep(1);
   glPixelZoom(1.8, 0.3);
-  vcl_cerr << "  vgui_accelerate::instance()->vgui_glDrawPixels..." << vcl_endl;
+  vcl_cerr << "  vgui_accelerate::instance()->vgui_glDrawPixels...\n";
   vgui_accelerate::instance()->vgui_glClear(GL_COLOR_BUFFER_BIT);
   vgui_accelerate::instance()->vgui_glDrawPixels(512,512,GL_RGB,GLenum(GL_UNSIGNED_SHORT_5_6_5),data);
   glXSwapBuffers(display, window);
   vpl_sleep(1);
 
 #if 0
-  vcl_cerr << "Rendering 24-bit RGB pattern - " << vcl_endl;
+  vcl_cerr << "Rendering 24-bit RGB pattern -\n";
   pattern_RGB24(data);
-  vcl_cerr << "  glDrawPixels..." << vcl_endl;
+  vcl_cerr << "  glDrawPixels...\n";
   glDrawPixels(512,512,GL_RGB,GL_UNSIGNED_BYTE,data);
   glXSwapBuffers(display, window);
   vpl_sleep(1);
-  vcl_cerr << "  vgui_accelerate::instance()->vgui_glDrawPixels..." << vcl_endl;
+  vcl_cerr << "  vgui_accelerate::instance()->vgui_glDrawPixels...\n";
   vgui_accelerate::instance()->vgui_glDrawPixels(512,512,GL_RGB,GL_UNSIGNED_BYTE,data);
   glXSwapBuffers(display, window);
   vpl_sleep(1);
 
-  vcl_cerr << "Rendering 32-bit RGB pattern - " << vcl_endl;
+  vcl_cerr << "Rendering 32-bit RGB pattern -\n";
   pattern_RGB16(data);
-  vcl_cerr << "  glDrawPixels..." << vcl_endl;
+  vcl_cerr << "  glDrawPixels...\n";
   glDrawPixels(512,512,GL_RGBA,GL_UNSIGNED_BYTE,data);
   glXSwapBuffers(display, window);
   vpl_sleep(1);
-  vcl_cerr << "  vgui_accelerate::instance()->vgui_glDrawPixels..." << vcl_endl;
+  vcl_cerr << "  vgui_accelerate::instance()->vgui_glDrawPixels...\n";
   vgui_accelerate::instance()->vgui_glDrawPixels(512,512,GL_RGBA,GL_UNSIGNED_BYTE,data);
   glXSwapBuffers(display, window);
   vpl_sleep(1);

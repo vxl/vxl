@@ -10,7 +10,7 @@
 
 #include <vcl_cstdlib.h>
 #include <vcl_iostream.h>
-#include <vul/vul_sprintf.h>
+#include <vcl_sstream.h>
 #include <vil/vil_load.h>
 #include <vgui/vgui.h>
 #include <vgui/vgui_text_tableau.h>
@@ -68,7 +68,8 @@ static void hedphelym(const void* const_data)
 static void ptolemy()
 {
   vgui_text_tableau_new text_tab;
-  text_tab->add(256,256,vul_sprintf("This is view %i",window_count));
+  vcl_stringstream s; s << "This is view " << window_count;
+  text_tab->add(256,256,s.str());
 
   example_flim_tableau_new flim_tab;
 
@@ -85,8 +86,8 @@ static void ptolemy()
   sub_window->set_menubar(menu);
 
   sub_window->show();
-
-  sub_window->get_statusbar()->write(vul_sprintf("Window %i",window_count++));
+  s.clear(); s << "Window " << window_count++;
+  sub_window->get_statusbar()->write(s.str().c_str());
 }
 
 // -----------------------------------------------------------------------------
@@ -108,7 +109,8 @@ int main (int argc, char** argv) {
 
   int wd=img.width(), ht=img.height();
   vgui_text_tableau_new text_tab;
-  text_tab->add(wd*.5f-100,ht*.5f,vul_sprintf("This is view %i",window_count));
+  vcl_stringstream s; s << "This is view " << window_count;
+  text_tab->add(wd*.5f-100,ht*.5f,s.str());
 
   example_flim_tableau_new flim_tab;
 
@@ -122,7 +124,8 @@ int main (int argc, char** argv) {
   main_window->get_adaptor()->set_tableau(shell_tab);
   main_window->show();
 
-  main_window->get_statusbar()->write(vul_sprintf("Window %i",window_count++));
+  s.clear(); s << "Window " << window_count++;
+  main_window->get_statusbar()->write(s.str().c_str());
 
   vgui_text_graph(vcl_cerr);
 

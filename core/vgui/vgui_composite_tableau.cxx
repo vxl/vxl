@@ -1,4 +1,4 @@
-// This is oxl/vgui/vgui_composite_tableau.cxx
+// This is core/vgui/vgui_composite_tableau.cxx
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
@@ -12,9 +12,8 @@
 #include "vgui_composite_tableau.h"
 
 #include <vcl_iostream.h>
+#include <vcl_sstream.h>
 #include <vcl_vector.h>
-
-#include <vul/vul_sprintf.h>
 
 #include <vgui/vgui.h>
 #include <vgui/vgui_gl.h>
@@ -28,12 +27,10 @@ static vgui_event_condition default_c_enable_key_bindings(vgui_key_CTRL('c'));
 //: Prints info about this talbeau - called when '?' is pressed.
 bool vgui_composite_tableau::help() 
 {
-  vcl_cerr << vcl_endl;
-  vcl_cerr << "-- vgui_composite_tableau --------------\n";
-  vcl_cerr << "|     keys                     |\n";
-  vcl_cerr << "| `1' to `9'  toggle child `n' |\n";
-  vcl_cerr << "--------------------------------\n";
-  vcl_cerr << vcl_endl;
+  vcl_cerr << "\n+- vgui_composite_tableau -----+\n"
+           << "|     keys                     |\n"
+           << "| `1' to `9'  toggle child `n' |\n"
+           << "+------------------------------+\n\n";
   return false;
 }
 
@@ -106,7 +103,8 @@ vcl_string vgui_composite_tableau::file_name() const
 //: Returns a nice version of the name, including info on the children.
 vcl_string vgui_composite_tableau::pretty_name() const
 {
-  return vul_sprintf("%s[#kids=%d]", type_name().c_str(), children.size());
+  vcl_stringstream s; s << type_name() << "[#kids=" << children.size() << ']';
+  return s.str();
 }
 
 //----------------------------------------------------------------------------

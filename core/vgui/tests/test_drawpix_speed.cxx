@@ -1,9 +1,8 @@
-// This is oxl/vgui/tests/test_drawpix_speed.cxx
+// This is core/vgui/tests/test_drawpix_speed.cxx
 #include <vcl_iostream.h>
 
 #include <vpl/vpl.h>
 
-#include <vul/vul_printf.h>
 #include <vul/vul_timer.h>
 
 #include <vgui/vgui_gl.h>
@@ -219,15 +218,13 @@ int main (int argc, char** argv)
   vcl_cerr << "GL_VERSION : " <<  (const char*) glGetString(GL_VERSION) << '\n'
            << "GL_RENDERER : " << (const char*) glGetString(GL_RENDERER)<< "\n\n"
            << "X Display - \n"
-           << "      byte-order : "
-           << (little_endian ? "little-endian\n\n" : "big-endian\n\n")
+           << "      byte-order : " << (little_endian ? "little" : "big") << "-endian\n\n"
            << "XVisualInfo - \n"
-           << "           depth : " << visualinfo->depth << vcl_endl;
-  vul_printf(vcl_cerr,"        red-mask : %08x\n", visualinfo->red_mask);
-  vul_printf(vcl_cerr,"      green-mask : %08x\n", visualinfo->green_mask);
-  vul_printf(vcl_cerr,"       blue-mask : %08x\n", visualinfo->blue_mask);
-  vcl_cerr << vcl_endl;
-  vcl_cerr << "GL Gets - \n";
+           << "           depth : " << visualinfo->depth << vcl_endl
+           << "        red-mask : " << vcl_hex << visualinfo->red_mask << '\n'
+           << "      green-mask : " << vcl_hex << visualinfo->green_mask << '\n'
+           << "       blue-mask : " << vcl_hex << visualinfo->blue_mask << "\n\n"
+           << "GL Gets - \n";
   GLint data_int;
   glGetIntegerv(GL_RED_BITS, &data_int);
   vcl_cerr << "        red-bits : " << data_int << vcl_endl;
@@ -246,15 +243,15 @@ int main (int argc, char** argv)
     XImage* backbuffer;
     XMesaGetBackBuffer(mesabuf, &p, &backbuffer);
 
+    bool little_endian = (backbuffer->byte_order == LSBFirst);
     vcl_cerr << "Mesa backbuffer XImage - \n"
              << "           depth : " << backbuffer->depth << vcl_endl
              << "  bits-per-pixel : " << backbuffer->bits_per_pixel << vcl_endl
-             << "      byte_order : "
-             << ((backbuffer->byte_order == LSBFirst) ? "little-endian\n" : "big-endian\n");
-    vcl_cerr << "  bytes-per-line : " << backbuffer->bytes_per_line << vcl_endl;
-    vul_printf(vcl_cerr,"        red-mask : %08x\n", backbuffer->red_mask);
-    vul_printf(vcl_cerr,"      green-mask : %08x\n", backbuffer->green_mask);
-    vul_printf(vcl_cerr,"       blue-mask : %08x\n", backbuffer->blue_mask);
+             << "      byte_order : " << (little_endian ? "little" : "big") << "-endian\n"
+             << "  bytes-per-line : " << backbuffer->bytes_per_line << vcl_endl
+             << "        red-mask : " << vcl_hex << backbuffer->red_mask << '\n'
+             << "      green-mask : " << vcl_hex << backbuffer->green_mask << '\n'
+             << "       blue-mask : " << vcl_hex << backbuffer->blue_mask << '\n';
   }
 #endif
 
@@ -325,24 +322,24 @@ int main (int argc, char** argv)
     double fps;
     vcl_cerr << "source -";
     for (int i=0; i<ft_size; ++i) vcl_cerr << "    " << ft_tab[i].nfixed;
-    vcl_cerr << vcl_endl;
-    vul_printf(vcl_cerr,"source -    LUM       RGB565    RGB       BGR       RGBA      BGRA      ABGR\n");
-    vcl_cerr << "zoom 1.00x  ";
+    vcl_cerr << vcl_endl
+             << "source -    LUM       RGB565    RGB       BGR       RGBA      BGRA      ABGR\n"
+             << "zoom 1.00x  ";
     for (int i=0; i<ft_size; ++i) {
       fps = fps_gl(ft_tab[i].format, ft_tab[i].type);
-      vul_printf(vcl_cerr,"%1.1e   ",512*512*fps);
+      vcl_cerr << 512*512*fps << "   ";
     }
     vcl_cerr << "\nzoom 1.90x  ";
     glPixelZoom(1.9,1.9);
     for (int i=0; i<ft_size; ++i) {
       fps = fps_gl(ft_tab[i].format, ft_tab[i].type);
-      vul_printf(vcl_cerr,"%1.1e   ",512*512*fps);
+      vcl_cerr << 512*512*fps << "   ";
     }
     vcl_cerr << "\nzoom 0.51x  ";
     glPixelZoom(0.51,0.51);
     for (int i=0; i<ft_size; ++i) {
       fps = fps_gl(ft_tab[i].format, ft_tab[i].type);
-      vul_printf(vcl_cerr,"%1.1e   ",0.51*0.51*512*512*fps);
+      vcl_cerr << 0.51*0.51*512*512*fps << "   ";
     }
     vcl_cerr << vcl_endl;
   }
@@ -376,70 +373,67 @@ int main (int argc, char** argv)
     vcl_cerr << "\nHermesConverter - \n";
     HermesFormat* src_format;
     double fps;
-    vul_printf(vcl_cerr,"source -    LUM      OxRGB565 OxRGB    OxBGR    Ox_RGB   0x_BGR\n");
+    vcl_cerr <<"source -    LUM      OxRGB565 OxRGB    OxBGR    Ox_RGB   0x_BGR\n";
 
     vcl_cerr << "zoom 1.00x  ";
     fps = fps_hermes_grey(1.0, 1.0, backbuffer);
-    vul_printf(vcl_cerr,"%1.1e  ",512*512*fps);
+    vcl_cerr << 12*512*fps << "  ";
 
     src_format = Hermes_FormatNew(16, 0xf800, 0x07e0, 0x001f, 0, 0);
     fps = fps_hermes(1.0, 1.0, src_format, backbuffer);
-    vul_printf(vcl_cerr,"%1.1e  ",512*512*fps);
+    vcl_cerr << 12*512*fps << "  ";
     src_format = Hermes_FormatNew(24, 0xff0000, 0xff00, 0xff, 0, 0);
     fps = fps_hermes(1.0, 1.0, src_format, backbuffer);
-    vul_printf(vcl_cerr,"%1.1e  ",512*512*fps);
+    vcl_cerr << 12*512*fps << "  ";
     src_format = Hermes_FormatNew(24, 0xff, 0xff00, 0xff0000, 0, 0);
     fps = fps_hermes(1.0, 1.0, src_format, backbuffer);
-    vul_printf(vcl_cerr,"%1.1e  ",512*512*fps);
+    vcl_cerr << 12*512*fps << "  ";
     src_format = Hermes_FormatNew(32, 0xff0000, 0xff00, 0xff, 0, 0);
     fps = fps_hermes(1.0, 1.0, src_format, backbuffer);
-    vul_printf(vcl_cerr,"%1.1e  ",512*512*fps);
+    vcl_cerr << 12*512*fps << "  ";
     src_format = Hermes_FormatNew(32, 0xff, 0xff00, 0xff0000, 0, 0);
     fps = fps_hermes(1.0, 1.0, src_format, backbuffer);
-    vul_printf(vcl_cerr,"%1.1e  ",512*512*fps);
-    vcl_cerr << vcl_endl;
+    vcl_cerr << 12*512*fps << "\n";
 
     vcl_cerr << "zoom 1.90x  ";
     fps = fps_hermes_grey(0.526, 1.0, backbuffer);
-    vul_printf(vcl_cerr,"%1.1e  ",512*512*fps);
+    vcl_cerr << 12*512*fps << "  ";
 
     src_format = Hermes_FormatNew(16, 0xf800, 0x07e0, 0x001f, 0, 0);
     fps = fps_hermes(0.526, 1.0, src_format, backbuffer);
-    vul_printf(vcl_cerr,"%1.1e  ",512*512*fps);
+    vcl_cerr << 12*512*fps << "  ";
     src_format = Hermes_FormatNew(24, 0xff0000, 0xff00, 0xff, 0, 0);
     fps = fps_hermes(0.526, 1.0, src_format, backbuffer);
-    vul_printf(vcl_cerr,"%1.1e  ",512*512*fps);
+    vcl_cerr << 12*512*fps << "  ";
     src_format = Hermes_FormatNew(24, 0xff, 0xff00, 0xff0000, 0, 0);
     fps = fps_hermes(0.526, 1.0, src_format, backbuffer);
-    vul_printf(vcl_cerr,"%1.1e  ",512*512*fps);
+    vcl_cerr << 12*512*fps << "  ";
     src_format = Hermes_FormatNew(32, 0xff0000, 0xff00, 0xff, 0, 0);
     fps = fps_hermes(0.526, 1.0, src_format, backbuffer);
-    vul_printf(vcl_cerr,"%1.1e  ",512*512*fps);
+    vcl_cerr << 12*512*fps << "  ";
     src_format = Hermes_FormatNew(32, 0xff, 0xff00, 0xff0000, 0, 0);
     fps = fps_hermes(0.526, 1.0, src_format, backbuffer);
-    vul_printf(vcl_cerr,"%1.1e  ",512*512*fps);
-    vcl_cerr << vcl_endl;
+    vcl_cerr << 12*512*fps << "\n";
 
     vcl_cerr << "zoom 0.51x  ";
     fps = fps_hermes_grey(1.0, 0.51, backbuffer);
-    vul_printf(vcl_cerr,"%1.1e  ",0.51*0.51*512*512*fps);
+    vcl_cerr << .51*0.51*512*512*fps << "  ";
 
     src_format = Hermes_FormatNew(16, 0xf800, 0x07e0, 0x001f, 0, 0);
     fps = fps_hermes(1.0, 0.51, src_format, backbuffer);
-    vul_printf(vcl_cerr,"%1.1e  ",0.51*0.51*512*512*fps);
+    vcl_cerr << .51*0.51*512*512*fps << "  ";
     src_format = Hermes_FormatNew(24, 0xff0000, 0xff00, 0xff, 0, 0);
     fps = fps_hermes(1.0, 0.51, src_format, backbuffer);
-    vul_printf(vcl_cerr,"%1.1e  ",0.51*0.51*512*512*fps);
+    vcl_cerr << .51*0.51*512*512*fps << "  ";
     src_format = Hermes_FormatNew(24, 0xff, 0xff00, 0xff0000, 0, 0);
     fps = fps_hermes(1.0, 0.51, src_format, backbuffer);
-    vul_printf(vcl_cerr,"%1.1e  ",0.51*0.51*512*512*fps);
+    vcl_cerr << .51*0.51*512*512*fps << "  ";
     src_format = Hermes_FormatNew(32, 0xff0000, 0xff00, 0xff, 0, 0);
     fps = fps_hermes(1.0, 0.51, src_format, backbuffer);
-    vul_printf(vcl_cerr,"%1.1e  ",0.51*0.51*512*512*fps);
+    vcl_cerr << .51*0.51*512*512*fps << "  ";
     src_format = Hermes_FormatNew(32, 0xff, 0xff00, 0xff0000, 0, 0);
     fps = fps_hermes(1.0, 0.51, src_format, backbuffer);
-    vul_printf(vcl_cerr,"%1.1e  ",0.51*0.51*512*512*fps);
-    vcl_cerr << vcl_endl;
+    vcl_cerr << .51*0.51*512*512*fps << "\n";
   }
   Hermes_Done();
   }

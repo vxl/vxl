@@ -1,4 +1,4 @@
-// This is oxl/vgui/vgui_displaylist2D_tableau.cxx
+// This is core/vgui/vgui_displaylist2D_tableau.cxx
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
@@ -8,13 +8,10 @@
 // \date   14 Sep 99
 // \brief  See vgui_displaylist2D_tableau.h for a description of this file.
 
-
 #include "vgui_displaylist2D_tableau.h"
 
 #include <vcl_iostream.h>
 #include <vcl_vector.h>
-
-#include <vul/vul_sprintf.h>
 
 #include <vgui/vgui_gl.h>
 #include <vgui/vgui_glu.h>
@@ -194,7 +191,7 @@ bool vgui_displaylist2D_tableau::mouse_down(int x, int y, vgui_button button, vg
   // selecting
   if (button == vgui_LEFT && modifier == 0) {
 #ifdef DEBUG
-    vcl_cerr << vul_sprintf("selecting at %f %f", x, y) << vcl_endl;
+    vcl_cerr << "selecting at " << x << ' ' << y << vcl_endl;
 #endif
 
     vcl_vector<unsigned> hits;
@@ -224,7 +221,7 @@ bool vgui_displaylist2D_tableau::mouse_down(int x, int y, vgui_button button, vg
     }
 
 #ifdef DEBUG
-    vcl_cerr << vul_sprintf("deselecting at %f %f", x, y) << vcl_endl;
+    vcl_cerr << "deselecting at " << x << ' ' << y << vcl_endl;
 #endif
 
     vcl_vector<unsigned> hits;

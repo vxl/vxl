@@ -1,4 +1,4 @@
-// This is oxl/vgui/impl/gtk/vgui_gtk_dialog_impl.cxx
+// This is core/vgui/impl/gtk/vgui_gtk_dialog_impl.cxx
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
@@ -15,7 +15,6 @@
 #include <vcl_string.h>
 #include <vcl_vector.h>
 #include <vcl_iostream.h>
-#include <vul/vul_sprintf.h>
 
 #include <vgui/vgui_gl.h>
 #include <vgui/impl/gtk/vgui_gtk_adaptor.h>

@@ -1,4 +1,4 @@
-// This is oxl/vgui/vgui_viewer3D_tableau.cxx
+// This is core/vgui/vgui_viewer3D_tableau.cxx
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
@@ -18,7 +18,6 @@
 #include <vcl_cmath.h>
 
 #include <vbl/vbl_bool_ostream.h>
-#include <vul/vul_sprintf.h>
 
 #include <vgui/vgui_gl.h>
 #include <vgui/vgui_glu.h>
@@ -194,28 +193,23 @@ void vgui_viewer3D_tableau::draw_before_child()
 
 bool vgui_viewer3D_tableau::handle(const vgui_event& e)
 {
-  if (this->spinning) {
-    if (c_mouse_rotate(e) ||
-        c_mouse_translate(e) ||
-        c_mouse_zoom(e))
-      this->spinning = false;
-  }
+  if (this->spinning && (c_mouse_rotate(e) || c_mouse_translate(e) || c_mouse_zoom(e)))
+    this->spinning = false;
 
-  if (this->allow_spinning && this->spinning && event.user == &vgui_viewer3D_tableau::SPIN_EVENT) {
-
+  if (this->allow_spinning && this->spinning && event.user == &vgui_viewer3D_tableau::SPIN_EVENT)
+  {
     vgui_viewer3D_tableau_spin const* spin_data = (vgui_viewer3D_tableau_spin const*)event.data;
 
-    if (spin_data->viewer == this) {
-
+    if (spin_data->viewer == this)
+    {
       //vcl_cerr << "spinning\n";
       vcl_cerr << "-";
-      if (debug) {
-        vcl_cerr << vul_sprintf("spin_data->delta_r %f %f %f %f",
-                                spin_data->delta_r[0],
-                                spin_data->delta_r[1],
-                                spin_data->delta_r[2],
-                                spin_data->delta_r[3]) << vcl_endl;
-      }
+      if (debug)
+        vcl_cerr << "spin_data->delta_r "
+                 << spin_data->delta_r[0] << ' '
+                 << spin_data->delta_r[1] << ' '
+                 << spin_data->delta_r[2] << ' '
+                 << spin_data->delta_r[3] << vcl_endl;
 
       add_quats(spin_data->delta_r, lastpos.quat, this->token.quat);
 
