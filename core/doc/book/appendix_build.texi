@@ -551,13 +551,15 @@ program that uses the libraries. The Linker complains that there are multiple de
 @end quotation
 
 These kinds of errors often indicate that you are linking against
-different C++ run-time libraries that you compiled VXL with (release
+different C++ run-time libraries with which you compiled VXL (release
 vs debug, static vs DLL stdlib, etc). The flags like @code{/MP} and @code{/MD}
 much match exactly, in VXL's build and your program's build. These
 flags are set in Visual Studio under
-Settings->C/C++->Code Generation->Use run-time library.
+Project->Properties (or Settings under MSVC6.0)->C/C++->Code Generation->Use
+run-time library. You should set your project to (Debug) Multithreaded DLL to match
+the default settings for VXL.
 
-The easiest way to link against these projects, we've found, is to use
+The easiest way to link against VXL, we've found, is to use
 CMake for your project too. CMake will then make sure the flags
 match, or else will give you an error or warning.
 

@@ -31,45 +31,19 @@ the image is greyscale, and does no error checking.
 
 @example
 #include <vcl_iostream.h>
+#include <vxl_config.h>
+#include <vil/vil_rgb.h>
 #include <vil/vil_load.h>
-#include <vil/vil_memory_image_of.h>
+#include <vil/vil_image_view.h>
 
 int main()
-@{
-  // Load image information from disk, don't load image yet.
-  vil_image img = vil_load("foo.ppm");
-
-  // Load image into 2D array of bytes in memory.
-  vil_memory_image_of<unsigned char> buf(img);
+{
+  // Load image into memory.
+  vil_image_view<vil_rgb<vxl_byte> > img = vil_load("foo.ppm");
 
   // Access pixel (100,100) and print its value as an int.
-  vcl_cerr << "Pixel 100,100 = " << (int) buf(100,100) << vcl_endl;
-@}
-@end example
+  vcl_cerr << "Pixel 100,100 = " << img(100,100) << vcl_endl;
 
-@section Debugging
-
-@subsection What kind of class is @code{*p}?
-
-If printing p shows it has a vptr, then you can figure out its type
-using
-
-@comment What versions of gdb and gcc does the following work with?
-@example
-(gdb) p p
-$16 = (vil_file_format *) 0x80ea460
-(gdb) p *p
-$17 = @{_vptr. = 0x80e9100@}
-(gdb) p (int (*)())(*p).'_vptr.'[1].__pfn
-$15 = (int (*)(void)) 0x80c5578 <vil_tiff_file_format::~vil_tiff_file_format(void)>
-@end example
-
-or, with later versions of gdb and g++ (this example with gdb 4.18 and
-gcc 2.95.2),
-
-@example
-(gdb) p in.ptr
-$7 = (vil_image_impl *) 0x8050000
-(gdb) p (int (*)())(in.ptr._vptr$)
-$8 = (int (*)(void)) 0x28172ec0 <vil_pnm_generic_image virtual table>
+  return 0;
+}
 @end example
