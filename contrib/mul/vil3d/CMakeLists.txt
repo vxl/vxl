@@ -22,6 +22,8 @@ SET(vil3d_sources
     vil3d_new.h                      vil3d_new.cxx
     vil3d_convert.h
     vil3d_fwd.h
+    vil3d_from_image_2d.h
+
 
     file_formats/vil3d_gipl_format.h file_formats/vil3d_gipl_format.cxx
     file_formats/vil3d_dicom.h       file_formats/vil3d_dicom.cxx
