@@ -15,9 +15,9 @@
 // vsl_b_write functions defined for them
 
 #include <vcl_string.h>
-#include <vsl/vsl_binary_io.h>
 #include <vcl_iostream.h>
-
+#include <vcl_cerrno.h>
+#include <vsl/vsl_binary_io.h>
 
 
 //: Load something from a file 
