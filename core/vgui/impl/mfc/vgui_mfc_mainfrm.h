@@ -44,18 +44,21 @@ public:
 protected:
   vgui_mfc_statusbar *statusbar;
 
-  // /*manually added by awf*/
+  // Manually added by awf
   afx_msg void OnClose();
+  // Manually added by kym
+  BOOL PreTranslateMessage(MSG* pMsg);
 
-  // -- Called when the window is created
+
+  //: Called when the window is created
   afx_msg int OnCreate(LPCREATESTRUCT lpCreateStruct);
-  // -- Called when a vertical scroll bar sends a signal
+  //: Called when a vertical scroll bar sends a signal
   afx_msg void OnVScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar );
-  // -- Called when a horizontal scroll bar sends a signal
+  //: Called when a horizontal scroll bar sends a signal
   afx_msg void OnHScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar );
-  // -- Updates status bar
+  //: Updates status bar
   afx_msg void OnUpdateStatusBar(CCmdUI *sbar);
-  // -- Called when specified timer has expired
+  //: Called when specified timer has expired
   afx_msg void OnTimer(UINT);
 
   DECLARE_MESSAGE_MAP()
