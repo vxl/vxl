@@ -5,7 +5,6 @@
 //:
 //  \file
 
-#include <vcl_cstdlib.h>
 #include <vimt/vimt_image.h>
 #include <vsl/vsl_indent.h>
 #include <vsl/vsl_binary_loader.h>

@@ -3,11 +3,10 @@
 #pragma implementation
 #endif
 //:
-//  \file
-//  \brief Class to load and save images from named files
-//  \author Tim Cootes
+// \file
+// \brief Class to load and save images from named files
+// \author Tim Cootes
 
-#include <vcl_cstdlib.h>
 #include <vimt/vimt_image_pyramid_builder.h>
 #include <vsl/vsl_indent.h>
 #include <vsl/vsl_binary_loader.h>
