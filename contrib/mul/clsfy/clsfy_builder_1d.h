@@ -9,6 +9,8 @@
 #include <vsl/vsl_binary_io.h>
 #include <vcl_string.h>
 #include <vnl/vnl_vector.h>
+#include <vcl_vector.h>
+
 class clsfy_classifier_1d;
 #include <vbl/vbl_triple.h>
 
@@ -25,6 +27,19 @@ class clsfy_builder_1d
 
   //: Create empty model
   virtual clsfy_classifier_1d* new_classifier() const = 0;
+
+
+   //: Build a binary_threshold classifier
+  //  Train classifier, returning weighted error
+  //  Selects parameters of classifier which best separate examples from two classes,
+  //  weighting examples appropriately when estimating the missclassification rate.
+  //  Returns weighted sum of error, e.wts, where e_i =0 for correct classifications,
+  //  e_i=1 for incorrect.
+  virtual double build(clsfy_classifier_1d& classifier,
+                                  const vnl_vector<double>& egs,
+                                  const vnl_vector<double>& wts,
+                                  const vcl_vector<unsigned> &outputs) const = 0;
+
 
   //: Build a binary_threshold classifier
   // Train classifier, returning weighted error

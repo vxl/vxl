@@ -46,7 +46,49 @@ clsfy_classifier_1d* clsfy_binary_threshold_1d_builder::new_classifier() const
 
 
 //: Build a binary_threshold classifier
-// N.B. here egs0 are -ve examples
+//  Train classifier, returning weighted error
+//  Selects parameters of classifier which best separate examples from two classes,
+//  weighting examples appropriately when estimating the missclassification rate.
+//  Returns weighted sum of error, e.wts, where e_i =0 for correct classifications,
+//  e_i=1 for incorrect.
+double clsfy_binary_threshold_1d_builder::build(clsfy_classifier_1d& classifier,
+                                  const vnl_vector<double>& egs,
+                                  const vnl_vector<double>& wts,
+                                  const vcl_vector<unsigned> &outputs) const
+{
+
+  // this method sorts the data and passes it to the method below
+  assert(classifier.is_a()=="clsfy_mean_square_1d");
+
+  int n= egs.size();
+  assert ( wts.size() == n );
+  assert ( outputs.size() == n );
+
+  // create triples data, so can sort
+  vcl_vector<vbl_triple<double,int,int> > data;
+  
+  vbl_triple<double,int,int> t;
+  // add data to triples
+  for (int i=0;i<n;++i)
+  {
+    
+    t.first=egs(i);
+    t.second= outputs[i];
+    t.third = i;
+    data.push_back(t);
+  }
+
+  vbl_triple<double,int,int> *data_ptr=&data[0];
+  vcl_sort(data_ptr,data_ptr+n);
+  return build_from_sorted_data(classifier,&data[0], wts);
+
+}
+
+
+
+//: Build a binary_threshold classifier
+// nb here egs0 are -ve examples
+
 // and egs1 are +ve examples
 double clsfy_binary_threshold_1d_builder::build(clsfy_classifier_1d& classifier,
                                                 vnl_vector<double>& egs0,

@@ -27,6 +27,18 @@ public:
   //: Create empty model
   virtual clsfy_classifier_1d* new_classifier() const;
 
+
+   //: Build a binary_threshold classifier
+  //  Train classifier, returning weighted error
+  //  Selects parameters of classifier which best separate examples from two classes,
+  //  weighting examples appropriately when estimating the missclassification rate.
+  //  Returns weighted sum of error, e.wts, where e_i =0 for correct classifications,
+  //  e_i=1 for incorrect.
+  virtual double build(clsfy_classifier_1d& classifier,
+                                  const vnl_vector<double>& egs,
+                                  const vnl_vector<double>& wts,
+                                  const vcl_vector<unsigned> &outputs) const;
+
   //: Build a binary_threshold classifier
   // Train classifier, returning weighted error
   //  Selects parameters of classifier which best separate examples from two classes,
