@@ -79,27 +79,6 @@ SOURCE=.\test_algo_exp_grad_filter_1d.cxx
 SOURCE=.\test_algo_gauss_filter.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\vil2_mil_gauss_general_timings.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\vil2_test_access_timings.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\vil2_test_random_access_timings.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\vil2_test_access_timings_noplanes.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\vil2_test_pair_access_timings.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\vil2_vil_compare_access_timings.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\vil2_vil_compare_function_timings.cxx
-# End Source File
-# Begin Source File
 SOURCE=.\test_algo_line_filter.cxx
 # End Source File
 # Begin Source File
@@ -113,6 +92,9 @@ SOURCE=.\test_algo_threshold.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\test_deep_copy_3_plane.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\test_algo_grid_merge.cxx
 # End Source File
 # End Group
 # End Target
