@@ -7,4 +7,5 @@ include ${IUEROOT}/core/vil/algo/config.mk
 include ${IUEROOT}/core/vnl/algo/config.mk
 include ${IUEROOT}/core/vgl/algo/config.mk
 include ${IUEROOT}/contrib/gel/vsol/config.mk
+include ${IUEROOT}/contrib/gel/gevd/config.mk
 include ${IUEROOT}/contrib/brl/bbas/bsol/config.mk
