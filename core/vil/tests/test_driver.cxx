@@ -13,6 +13,7 @@ DECLARE( test_algo_convolve_1d );
 DECLARE( test_algo_convolve_2d );
 DECLARE( test_algo_exp_filter_1d );
 DECLARE( test_image_view_maths );
+DECLARE( test_memory_chunk );
 
 void
 register_tests()
@@ -30,6 +31,7 @@ register_tests()
   REGISTER( test_algo_convolve_2d );
   REGISTER( test_algo_exp_filter_1d );
   REGISTER( test_image_view_maths );
+  REGISTER( test_memory_chunk );
 }
 
 DEFINE_MAIN;
