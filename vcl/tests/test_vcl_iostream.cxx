@@ -3,6 +3,7 @@
 #include <vcl_string.h>
 #include <vcl_iostream.h>
 #include <vcl_fstream.h>
+#include <vcl_sstream.h>
 #include <vcl_strstream.h>
 
 int main()
@@ -43,6 +44,8 @@ int main()
     bool bb;
     vcl_cin >> bb;
   }
-
+  
+  vcl_stringstream s(vcl_ios_in | vcl_ios_out | vcl_ios_binary);
+  
   return 0;
 }
