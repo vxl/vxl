@@ -18,6 +18,10 @@ SET( vil2_sources
   # file format readers/writers (see below for conditional ones)
   file_formats/vil2_pnm.cxx file_formats/vil2_pnm.h
 
+  # image_data operations
+
+  vil2_crop.cxx  vil2_crop.h
+
   # Operations
 
   # Stuff
