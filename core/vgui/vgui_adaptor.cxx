@@ -51,6 +51,7 @@ vgui_adaptor::~vgui_adaptor()
 
   if (adaptor_count == 0) {
     vcl_cerr << "All adaptors have been deleted -- calling vgui::quit()" << vcl_endl;
+    vgui::quit();
     // vgui::cleanup_after_adaptor_delete();
   }
 }
