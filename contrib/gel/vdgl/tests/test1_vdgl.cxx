@@ -27,5 +27,26 @@ int main(void)
   //Here check for the length of the line
 
   vcl_cout<<"Length: "<< myline->length();
+  //--------------------------------------------------
+  //: test the generation of a straight edgel_chain defined by two points
+  //
+  double x0=0, y0=0, x1=10, y1=10;
+  vdgl_edgel_chain_sptr ec = new vdgl_edgel_chain(x0, y0, x1, y1);
+  int N = ec->size();
+  vcl_cout << "Chain has " << N << " edgels " << vcl_endl;
+  for(int i = 0; i<N; i++)
+    vcl_cout << "edgel[" << i<<"] = (" << (*ec)[i] << ") " << vcl_endl;
+
+  //--------------------------------------------------
+  //: test the angle computation for the linear interpolator
+  //
+  vsol_point_2d_sptr p0 = new vsol_point_2d(0,0);
+  vsol_point_2d_sptr p1 = new vsol_point_2d(5,5);
+  vdgl_digital_curve_sptr dc = new vdgl_digital_curve(*p0, *p1);
+  vdgl_interpolator_sptr intrp = dc->get_interpolator();
+  int Nc = intrp->get_edgel_chain()->size();
+  for(double t = 0.1; t<Nc; t++)
+    vcl_cout << "angle( " << t << ") = " << intrp->get_tangent_angle(t) << vcl_endl;
+
   return 0;
 }
