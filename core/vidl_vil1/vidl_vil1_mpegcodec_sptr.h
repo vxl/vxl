@@ -8,8 +8,8 @@
 // --------+----------+--------------------------+-----------------------------
 // 1.0     |2002/07/17| l.e.galup                |Creation
 //*****************************************************************************
-#ifndef VIDL_MPEGCODEC_REF_H
-#define VIDL_MPEGCODEC_REF_H
+#ifndef VIDL_VIL1_MPEGCODEC_REF_H
+#define VIDL_VIL1_MPEGCODEC_REF_H
 
 //
 // typedef for class vbl_smart_ptr<vidl_vil1_mpegcodec>
@@ -22,4 +22,4 @@ class vidl_vil1_mpegcodec;
 
 typedef vbl_smart_ptr<vidl_vil1_mpegcodec> vidl_vil1_mpegcodec_sptr;
 
-#endif // ifndef VIDL_MPEGCODEC_REF_H
+#endif // ifndef VIDL_VIL1_MPEGCODEC_REF_H

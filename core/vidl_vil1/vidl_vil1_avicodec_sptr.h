@@ -8,8 +8,8 @@
 // --------+----------+--------------------------+-----------------------------
 // 1.0     |2000/09/06| Julien ESTEVE            |Creation
 //*****************************************************************************
-#ifndef VIDL_AVICODEC_REF_H
-#define VIDL_AVICODEC_REF_H
+#ifndef VIDL_VIL1_AVICODEC_REF_H
+#define VIDL_VIL1_AVICODEC_REF_H
 
 //
 // typedef for class vbl_smart_ptr<vidl_vil1_avicodec>
@@ -22,4 +22,4 @@ class vidl_vil1_avicodec;
 
 typedef vbl_smart_ptr<vidl_vil1_avicodec> vidl_vil1_avicodec_sptr;
 
-#endif // ifndef VIDL_AVICODEC_REF_H
+#endif // ifndef VIDL_VIL1_AVICODEC_REF_H
