@@ -256,6 +256,9 @@ SOURCE=.\test_kd_tree.cxx
 # Begin Source File
 SOURCE=.\test_point.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\test_bins.cxx
+# End Source File
 # End Group
 # End Target
 # End Project
