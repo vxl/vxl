@@ -13,10 +13,12 @@ ELSE(WIN32)
   OPTION(BUILD_SHARED_LIBS "Should shared libraries be the default?" YES)
 ENDIF(WIN32)
 
-SET(SOLARIS 0)
-IF(CMAKE_SYSTEM MATCHES "SunOS.*")
-  SET(SOLARIS 1)
-ENDIF(CMAKE_SYSTEM MATCHES "SunOS.*")
+# # CMAKE_SYSTEM is not set in "LatestRelease" tag version of CMake
+# # Add this back in after CMake 1.4 is released
+# SET(SOLARIS 0)
+# IF(CMAKE_SYSTEM MATCHES "SunOS.*")
+#   SET(SOLARIS 1)
+# ENDIF(CMAKE_SYSTEM MATCHES "SunOS.*")
 
 # Assume no MFC support
 SET(HAS_MFC 0)
