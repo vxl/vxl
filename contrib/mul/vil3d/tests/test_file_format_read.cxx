@@ -8,6 +8,7 @@
 
 #include <testlib/testlib_test.h>
 #include <vpl/vpl.h>
+#include <vil/vil_config.h>
 
 #include <vil3d/vil3d_load.h>
 #include <vil3d/vil3d_image_view.h>
@@ -181,8 +182,10 @@ void test_file_format_read( int argc, char* argv[] )
   TEST("Implied List of ppm slices", test("ff_3planes8bit_true.txt",
                                           CheckColourPlanes<vxl_byte>( "ff_rgb8bit_ascii.#.ppm" ) ), true);
 
+#if HAS_DCMTK
   TEST("Implied list of dicom slices", test("ff_grey16bit_true.txt",
                                             CheckGrey<vxl_uint_16>( "ff_grey16bit_uncompressed_####.dcm" ) ), true);
+#endif // HAS_DCMTK
 
   vcl_cout << "GIPL images)\n";
   TEST("GIPL image", test("ff_grey_cross16bit_true.txt",
