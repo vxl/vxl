@@ -618,8 +618,8 @@ void segv_segmentation_manager::test_camera_parms()
       points_instream >> n_points;
       // read grid points, discard
       double dummy;
-      double points_x[n_points];
-      double points_y[n_points];
+      double* points_x = new double[n_points];
+      double* points_y = new double[n_points];
       for (int i = 0; i < n_points; i++)
       {
         points_instream >> dummy; //x
@@ -650,7 +650,10 @@ void segv_segmentation_manager::test_camera_parms()
         input_points.push_back(point);
       }
       this->draw_points(input_points,0.0f,1.0f,0.0f,4);
+      delete[] points_x;
+      delete[] points_y;
     }
+
   return;
 }
 
