@@ -1,3 +1,5 @@
+#ifndef gtrl_netlib_triangle_h_
+#define gtrl_netlib_triangle_h_
 /*****************************************************************************/
 /*                                                                           */
 /*  (triangle.h)                                                             */
@@ -254,7 +256,7 @@ struct triangulateio {
 
   int *trianglelist;                                             /* In / out */
   REAL *triangleattributelist;                                   /* In / out */
-  REAL *trianglearealist;                                         /* In only */
+  REAL *trianglearealist;                                        /* In  only */
   int *neighborlist;                                             /* Out only */
   int numberoftriangles;                                         /* In / out */
   int numberofcorners;                                           /* In / out */
@@ -282,3 +284,5 @@ void triangulate(char *, struct triangulateio *, struct triangulateio *,
 #else /* not ANSI_DECLARATORS */
 void triangulate();
 #endif /* not ANSI_DECLARATORS */
+
+#endif /* gtrl_netlib_triangle_h_ */
