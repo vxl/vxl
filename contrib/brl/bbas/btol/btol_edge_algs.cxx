@@ -33,10 +33,10 @@ bool btol_edge_algs::unlink_all_inferiors_twoway(vtol_edge_2d_sptr& e)
 {
   if (!e->v1()||!e->v2())
     return false;
-  vtol_topology_object_sptr tv1 = e->v1()->cast_to_topology_object();
-  vtol_topology_object_sptr tv2 = e->v2()->cast_to_topology_object();
+  vtol_vertex_sptr tv1 = e->v1()->cast_to_vertex();
+  vtol_vertex_sptr tv2 = e->v2()->cast_to_vertex();
 
-  vtol_topology_object_sptr toe = e->cast_to_topology_object();
+  vtol_edge_sptr toe = e->cast_to_edge();
   vcl_vector<vtol_topology_object_sptr>* infs = toe->inferiors();
   //this will be the zero_chain for the edge
   if (infs->size()!=1)
@@ -45,17 +45,17 @@ bool btol_edge_algs::unlink_all_inferiors_twoway(vtol_edge_2d_sptr& e)
                << " inferiors inconsistent size\n";
       return false;
     }
-  vtol_topology_object_sptr inf_two_chain = (*infs)[0];
-  if (!inf_two_chain)
+  vtol_zero_chain_sptr inf_zero_chain = infs->front()->cast_to_zero_chain();
+  if (!inf_zero_chain)
     {
       vcl_cout << " In btol_edge_algs::unlink_all_inferiors_twoway(..) "
-               << " null two chain\n";
+               << " null zero chain\n";
       return false;
     }
-  toe->unlink_inferior(*inf_two_chain);
-  inf_two_chain->unlink_inferior(*tv1);
-  if (!(tv1==tv2))
-    inf_two_chain->unlink_inferior(*tv2);
+  inf_zero_chain->unlink_inferior(tv1);
+  if (tv1!=tv2)
+    inf_zero_chain->unlink_inferior(tv2);
+  toe->unlink_inferior(inf_zero_chain);
   return true;
 }
 
