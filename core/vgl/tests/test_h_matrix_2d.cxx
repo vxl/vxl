@@ -81,7 +81,7 @@ static void test_projective_basis()
   TEST("collinear degeneracy",
        collinear_basis.projective_basis(collinear_points), false);
 }
-static void test_compute_linear()
+static void test_compute_linear_points()
 {
   vcl_cout << "Test the recovery of a 2x scale transform using the "
            << "linear algorithm\n";
@@ -111,6 +111,51 @@ static void test_compute_linear()
                              (diag.y()-2.0)*(diag.y()-2.0));
   TEST_NEAR("recover 2x scale matrix",
             distance, 0.0, 1e-06);
+}
+static void test_compute_linear_lines()
+{
+  vcl_cout << "Test the recovery of a 2x scale transform using the "
+           << "linear algorithm using lines\n";
+  vcl_vector<vgl_homg_line_2d<double> > lines1, lines2;
+  //setup lines in frame 1
+  vgl_homg_line_2d<double> l10(0.0, 1.0, 100.0), l11(1.0, 0.0, 100.0);
+  vgl_homg_line_2d<double> l12(0.7071, 0.7071, 100.0), l13(0.7071, -0.7071, 100.0);
+  vgl_homg_line_2d<double> l14(0.5, 0.8667, 100.0), l15(-0.5, 0.8667, 100.0);
+  lines1.push_back(l10); lines1.push_back(l11); lines1.push_back(l12);
+  lines1.push_back(l13); lines1.push_back(l14); lines1.push_back(l15);
+
+  //setup lines in frame 2
+  vgl_homg_line_2d<double> l20(0.0, 1.0, 200.0), l21(1.0, 0.0, 200.0);
+  vgl_homg_line_2d<double> l22(0.7071, 0.7071, 200.0), l23(0.7071, -0.7071, 200.0);
+  vgl_homg_line_2d<double> l24(0.5, 0.8667, 200.0), l25(-0.5, 0.8667, 200.0);
+  lines2.push_back(l20); lines2.push_back(l21); lines2.push_back(l22);
+  lines2.push_back(l23); lines2.push_back(l24); lines2.push_back(l25);
+
+  //Solve as a least squares problem
+  vgl_h_matrix_2d_compute_linear hmcl;
+  vgl_h_matrix_2d<double> H = hmcl.compute(lines1, lines2);
+  vcl_cout << "The resulting transform \n" << H << "\n";
+  vnl_matrix_fixed<double, 3, 3> M=H.get_matrix();
+  vgl_homg_point_2d<double> hdiag(M[0][0], M[1][1], M[2][2]);
+  vgl_point_2d<double> diag(hdiag);
+  vcl_cout << "The normalized upper diagonal "<<diag << "\n";
+  double distance = vcl_sqrt((diag.x()-2.0)*(diag.x()-2.0) +
+                             (diag.y()-2.0)*(diag.y()-2.0));
+  TEST_NEAR("recover 2x scale matrix",
+            distance, 0.0, 1e-06);
+  //solve the same problem with weighted least squares
+  vcl_vector<double> w(6,1.0);
+  vgl_h_matrix_2d<double> Hwls = hmcl.compute(lines1, lines2, w);
+  vcl_cout << "The resulting transform from weighted least squares\n" 
+           << Hwls << "\n";
+  vnl_matrix_fixed<double, 3, 3> Mwls=H.get_matrix();
+  vgl_homg_point_2d<double> hdiag_wls(Mwls[0][0], Mwls[1][1], Mwls[2][2]);
+  vgl_point_2d<double> diag_wls(hdiag_wls);
+  vcl_cout << "The normalized upper diagonal (least squares) "<<diag << "\n";
+  double distance_wls = vcl_sqrt((diag_wls.x()-2.0)*(diag_wls.x()-2.0) +
+                             (diag_wls.y()-2.0)*(diag_wls.y()-2.0));
+  TEST_NEAR("recover 2x scale matrix from weighted least squares",
+            distance_wls, 0.0, 1e-06);
 }
 
 static void test_compute_4point()
@@ -149,7 +194,8 @@ MAIN( test_h_matrix_2d )
   test_identity_transform();
   test_perspective_transform();
   test_projective_basis();
-  test_compute_linear();
+  test_compute_linear_points();
+  test_compute_linear_lines();
   test_compute_4point();
   SUMMARY();
 }
