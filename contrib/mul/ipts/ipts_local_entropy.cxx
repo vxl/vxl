@@ -1,10 +1,12 @@
+// This is mul/ipts/ipts_local_entropy.cxx
+#include "ipts_local_entropy.h"
 //:
 // \file
 // \brief Compute entropy in region around each image pixel
 // \author Tim Cootes
 
-#include "ipts_local_entropy.h"
 #include <vcl_vector.h>
+#include <vcl_cmath.h>
 #include <vcl_cassert.h>
 
 inline double histo_entropy_sum(const vcl_vector<int>& histo,
@@ -50,7 +52,7 @@ void ipts_local_entropy(const vil_image_view<vxl_byte>& image,
     for (unsigned j1=0;j1<h2;++j1, im+=jstep)
     {
       const vxl_byte* p = im;
-      for (unsigned i1=0;i1<h2;++i1,p+=istep) histo[*p]+=1;
+      for (unsigned i1=0;i1<h2;++i1,p+=istep) histo[*p]++;
     }
       // Compute (negative) entropy of histogram (sum plog(p))
     entropy(i,0) = float(logn-histo_entropy_sum(histo,min_v,max_v)/n);
@@ -60,10 +62,10 @@ void ipts_local_entropy(const vil_image_view<vxl_byte>& image,
       // Update the histogram
       // Remove previous line
       const vxl_byte* p = &image(i,j-1);
-      for (unsigned i1=0;i1<h2;++i1,p+=istep) histo[*p]-=1;
+      for (unsigned i1=0;i1<h2;++i1,p+=istep) histo[*p]--;
       // Add line at end
       p = &image(i,j+h2-1);
-      for (unsigned i1=0;i1<h2;++i1,p+=istep) histo[*p]+=1;
+      for (unsigned i1=0;i1<h2;++i1,p+=istep) histo[*p]++;
 
        // Compute entropy of histogram (sum plog(p))
       entropy(i,j) = float(logn-histo_entropy_sum(histo,min_v,max_v)/n);  // Negative entropy
