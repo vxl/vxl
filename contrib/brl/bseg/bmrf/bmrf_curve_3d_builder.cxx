@@ -12,8 +12,9 @@
 
 #include <vcl_algorithm.h>
 #include <vgl/vgl_point_2d.h>
-#include <vnl/vnl_double_3.h>
+#include <vnl/vnl_double_2.h>
 #include <vnl/vnl_double_4.h>
+#include <vnl/vnl_double_3x4.h>
 #include <vnl/algo/vnl_svd.h>
 #include <vnl/algo/vnl_qr.h>
 
@@ -200,14 +201,15 @@ bmrf_curve_3d_builder::build_curvels(double alpha)
 
     // Sort by probability
     vcl_sort(time_matches.begin(), time_matches.end(), bmrf_time_match_cmp );
-    
-    while( !time_matches.empty() ) {
+
+    while ( !time_matches.empty() )
+    {
       bmrf_arc_sptr arc = time_matches.back().first;
       bmrf_curvel_3d_sptr curvel = time_matches.back().second;
       time_matches.pop_back();
 
-      if( (matches.find(arc->to()) != matches.end()) &&
-          !curvel->node_at_frame(frame) ){
+      if ( (matches.find(arc->to()) != matches.end()) &&
+           !curvel->node_at_frame(frame) ) {
         curvel->set_proj_in_frame(frame, alpha, arc->to());
         curr_curvels.push_back(curvel);
         matches.erase(arc->to());
@@ -368,7 +370,7 @@ bmrf_curve_3d_builder::reconstruct_curve(vcl_list<bmrf_curvel_3d_sptr>& curve, f
   kernel[0] = 0.0f;
   kernel[1] = 1.0f;
   if (sigma > 0.0f) {
-    kernel[0] = float(vcl_exp(-1.0/(2.0*sigma*sigma)));
+    kernel[0] = float(vcl_exp(-1.0/(2*sigma*sigma)));
     float kernel_sum = 2.0f*kernel[0] + kernel[1];
     kernel[0] /= kernel_sum;
     kernel[1] /= kernel_sum;
@@ -486,18 +488,22 @@ bmrf_curve_3d_builder::fill_gaps(vcl_list<bmrf_curvel_3d_sptr>& curve)
 
 
 //: Trim the ends of the curve with few correspondences
-void 
+void
 bmrf_curve_3d_builder::trim_curve(vcl_list<bmrf_curvel_3d_sptr>& curve, int min_prj)
 {
-  //vcl_cout << "cleaning curve of length " << curve.size() << vcl_endl;
+#ifdef DEBUG
+  vcl_cout << "cleaning curve of length " << curve.size() << vcl_endl;
+#endif
   int count = 1;
   for (vcl_list<bmrf_curvel_3d_sptr>::iterator itr = curve.begin();
        itr != curve.end(); ++count)
   {
     vcl_list<bmrf_curvel_3d_sptr>::iterator next_itr = itr;
     ++next_itr;
-    if( (*itr)->num_projections(true) < min_prj ){
-      //vcl_cout << "  removing point #" << count << vcl_endl;
+    if ( (*itr)->num_projections(true) < min_prj ) {
+#ifdef DEBUG
+      vcl_cout << "  removing point #" << count << vcl_endl;
+#endif
       curve.erase(itr);
     }
     itr = next_itr;
@@ -565,6 +571,7 @@ bmrf_curve_3d_builder::append_curvels(vcl_list<bmrf_curvel_3d_sptr> curvels,
 
     if (unmerged_matches.size() > 1 ) {
       for ( unsigned int i=0; i<unmerged_matches.size(); ++i ) {
+        // NOTHING ?! - FIXME
       }
     }
   }
@@ -603,7 +610,7 @@ bmrf_curve_3d_builder::append_correct( const bmrf_curvel_3d_sptr& new_c,
         ++total_equal;
     }
   }
-  float ratio = 0.0;
+  float ratio = 0.0f;
   if ( total_overlap > 0 )
     ratio = float(total_equal)/float(total_overlap);
   return  ratio > 0.5f;
