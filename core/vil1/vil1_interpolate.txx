@@ -30,13 +30,13 @@ bool vil_interpolate_bilinear(vil_memory_image_of<T> const& img,
 {
   int src_x_int = (int)src_x;
   int src_y_int = (int)src_y;
-
+#if 1
+  // bounds check
   int width = (int)img.width();
   int height = (int)img.height();
-
   if (src_x < 0 || src_y < 0 || src_x >= (width-1) || src_y >= (height-1))
     return false;
-
+#endif
   T pix00 = img(src_x_int  , src_y_int  );
   T pix10 = img(src_x_int+1, src_y_int  );
   T pix01 = img(src_x_int  , src_y_int+1);
@@ -64,7 +64,13 @@ bool vil_interpolate_bilinear_grad(vil_memory_image_of<T> const& img,
 {
   int src_x_int = (int)src_x;
   int src_y_int = (int)src_y;
-
+#if 1
+  // bounds check
+  int width = (int)img.width();
+  int height = (int)img.height();
+  if (src_x < 0 || src_y < 0 || src_x >= (width-1) || src_y >= (height-1))
+    return false;
+#endif
   T pix00 = img(src_x_int  , src_y_int  );
   T pix10 = img(src_x_int+1, src_y_int  );
   T pix01 = img(src_x_int  , src_y_int+1);
@@ -76,15 +82,10 @@ bool vil_interpolate_bilinear_grad(vil_memory_image_of<T> const& img,
 
   // the derivatives are obtained by differentating the interpolating expression.
   // capes@robots: vil_rgb does not have the left operator- defined.
-#if 0 || defined(code_must_look_nice)
-  *out_i  = U(  pix00 * u0*v0 + pix10 * u1*v0 + pix01 * u0*v1 + pix11 * u1*v1);
-  *out_dx = U(- pix00 * v0    + pix10 * v0    - pix01 * v1    + pix11 * v1   );
-  *out_dy = U(- pix00 * u0    - pix10 * u1    + pix01 * u0    + pix11 * u1   );
-#else
   *out_i  = U(  (pix00 * v0 + pix01 * v1)*u0 + (pix10 * v0 + pix11 * v1)*u1 );
   *out_dx = U(  (pix10 - pix00) * v0 + (pix11 - pix01) * v1  );
   *out_dy = U(  (pix01 - pix00) * u0 + (pix11 - pix10) * u1  );
-#endif
+
   return true;
 }
 
