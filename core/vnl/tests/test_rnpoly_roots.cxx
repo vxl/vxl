@@ -2,7 +2,7 @@
 #include <vcl_iostream.h>
 #include <vnl/vnl_real_npolynomial.h>
 #include <vnl/algo/vnl_rnpoly_solve.h>
-#include <vnl/vnl_test.h>
+#include <testlib/testlib_test.h>
 
 int test_rnpoly_roots() {
   // Intersection of two unit circles, centered in (0,0) and in (1,0):
@@ -30,16 +30,16 @@ int test_rnpoly_roots() {
   vnl_rnpoly_solve solver(l);
 
   vcl_vector<vnl_vector<double>*> r = solver.realroots();
-  vnl_test_assert("There should be two real roots: ", r.size() == 2);
+  testlib_test_assert("There should be two real roots: ", r.size() == 2);
   for (rp = r.begin(); rp != r.end(); ++rp) {
     vcl_cout << *(*rp) << vcl_endl;
-    vnl_test_assert("x==0.5", vcl_fabs((*rp)->x()-0.5) < 1e-9);
+    testlib_test_assert("x==0.5", vcl_fabs((*rp)->x()-0.5) < 1e-9);
     double ryy = (*rp)->y(); ryy *= ryy;
-    vnl_test_assert("y==sqrt(0.75)", vcl_fabs(ryy-0.75) < 1e-9);
+    testlib_test_assert("y==sqrt(0.75)", vcl_fabs(ryy-0.75) < 1e-9);
   }
   vcl_vector<vnl_vector<double>*> roots_r = solver.real();
   vcl_vector<vnl_vector<double>*> roots_i = solver.imag();
-  vnl_test_assert("and no more finite imaginary roots: ", roots_r.size() == 2 && roots_i.size() == 2);
+  testlib_test_assert("and no more finite imaginary roots: ", roots_r.size() == 2 && roots_i.size() == 2);
   for (rp=roots_r.begin(),ip=roots_i.begin(); rp!=roots_r.end(); ++rp,++ip)
     vcl_cout << "  REAL " << *((*rp)) << " IMAG " << *((*ip)) << vcl_endl;
 
@@ -55,16 +55,16 @@ int test_rnpoly_roots() {
   vnl_rnpoly_solve solver2(l);
 
   r = solver2.realroots();
-  vnl_test_assert("There should be four real roots: ", r.size() == 4);
+  testlib_test_assert("There should be four real roots: ", r.size() == 4);
   for (rp = r.begin(); rp != r.end(); ++rp) {
     vcl_cout << *(*rp) << vcl_endl;
     double rxx = (*rp)->x(); rxx *= rxx;
-    vnl_test_assert("x==sqrt(1/3)", vcl_fabs(3*rxx-1) < 1e-9);
+    testlib_test_assert("x==sqrt(1/3)", vcl_fabs(3*rxx-1) < 1e-9);
     double ryy = (*rp)->y(); ryy *= ryy;
-    vnl_test_assert("y==sqrt(1/3)", vcl_fabs(3*ryy-1) < 1e-9);
+    testlib_test_assert("y==sqrt(1/3)", vcl_fabs(3*ryy-1) < 1e-9);
   }
   roots_r = solver2.real(); roots_i = solver2.imag();
-  vnl_test_assert("and no more imaginary roots: ", roots_r.size() == 4 && roots_i.size() == 4);
+  testlib_test_assert("and no more imaginary roots: ", roots_r.size() == 4 && roots_i.size() == 4);
   for (rp=roots_r.begin(),ip=roots_i.begin(); rp!=roots_r.end(); ++rp,++ip)
     vcl_cout << "  REAL " << *((*rp)) << " IMAG " << *((*ip)) << vcl_endl;
 
@@ -77,8 +77,8 @@ int test_rnpoly_roots() {
   vnl_rnpoly_solve solver3(l);
 
   r = solver3.realroots();
-  vnl_test_assert("There should be no real roots", r.size() == 0);
-  vnl_test_assert("and four imaginary roots", solver3.real().size() == 4);
+  testlib_test_assert("There should be no real roots", r.size() == 0);
+  testlib_test_assert("and four imaginary roots", solver3.real().size() == 4);
   roots_r = solver3.real(); roots_i = solver3.imag();
   for (rp=roots_r.begin(),ip=roots_i.begin(); rp!=roots_r.end(); ++rp,++ip)
     vcl_cout << "  REAL " << *((*rp)) << " IMAG " << *((*ip)) << vcl_endl;

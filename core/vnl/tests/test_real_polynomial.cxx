@@ -1,6 +1,6 @@
 #include <vcl_iostream.h>
 
-#include <vnl/vnl_test.h>
+#include <testlib/testlib_test.h>
 #include <vnl/vnl_real_polynomial.h>
 #include <vcl_cmath.h>
 

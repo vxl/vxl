@@ -1,6 +1,6 @@
 #include <vcl_cstdio.h>
 #include <vnl/vnl_math.h> // vnl_math_abs()
-#include <vnl/vnl_test.h>
+#include <testlib/testlib_test.h>
 
 extern "C"
 int sggsvd_(char const *jobu, char const *jobv, char const *jobq, int *m, int *n, int *p,
@@ -21,8 +21,8 @@ void test_qsvd() {
           U, &n, V, &n, Q, &n, Work, Iwork, &info);
 
   vcl_printf("k = %d, l = %d, return = %d\n", k, l, info);
-  vnl_test_assert("(k,l) must be (0,3)", k==0 && l==3);
-  vnl_test_assert("sggsvd should return 0", info==0);
+  testlib_test_assert("(k,l) must be (0,3)", k==0 && l==3);
+  testlib_test_assert("sggsvd should return 0", info==0);
 
   vcl_printf("U = %12.7f %12.7f %12.7f\n    %12.7f %12.7f %12.7f\n    %12.7f %12.7f %12.7f\n",
              U[0], U[3], U[6], U[1], U[4], U[7], U[2], U[5], U[8]);
@@ -35,12 +35,12 @@ void test_qsvd() {
   vcl_printf("R = %12.7f %12.7f %12.7f\n    %12.7f %12.7f %12.7f\n    %12.7f %12.7f %12.7f\n",
              AA[0], AA[3], AA[6], AA[1], AA[4], AA[7], AA[2], AA[5], AA[8]);
 
-  vnl_test_assert("D1 must be (0.6,0.8,0.6)",
+  testlib_test_assert("D1 must be (0.6,0.8,0.6)",
                   vnl_math_abs(Alpha[0]-0.6)<1e-6 &&
                   vnl_math_abs(Alpha[1]-0.8)<1e-6 &&
                   vnl_math_abs(Alpha[2]-0.6)<1e-6);
 
-  vnl_test_assert("D2 must be (0.8,0.6,0.8)",
+  testlib_test_assert("D2 must be (0.8,0.6,0.8)",
                   vnl_math_abs(Beta[0]-0.8)<1e-6 &&
                   vnl_math_abs(Beta[1]-0.6)<1e-6 &&
                   vnl_math_abs(Beta[2]-0.8)<1e-6);

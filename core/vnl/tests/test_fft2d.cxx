@@ -22,7 +22,7 @@
 #include <vcl_complex.h>
 
 #include <vnl/vnl_complexify.h>
-#include <vnl/vnl_test.h>
+#include <testlib/testlib_test.h>
 #include <vnl/vnl_matrix.h>
 #include <vnl/algo/vnl_fft_2d.h>
 
@@ -35,9 +35,9 @@ void test_cplx(vnl_fft_prime_factors<double> const &/*prx*/,
 {
   vnl_matrix<vcl_complex<double> > fft_matrix = M;
   vnl_fft_2d<double> fft(M.rows(), M.cols()); fft.transform(fft_matrix, dir);
-  vnl_test_assert ("test rows", fft.rows() == M.rows());
-  vnl_test_assert ("test cols", fft.cols() == M.cols());
-  vnl_test_assert ("test transform", fft_matrix != M);
+  testlib_test_assert ("test rows", fft.rows() == M.rows());
+  testlib_test_assert ("test cols", fft.cols() == M.cols());
+  testlib_test_assert ("test transform", fft_matrix != M);
 }
 
 void test_fft2d () {
@@ -94,7 +94,7 @@ void test_fft2d () {
 
   double error = (fft_matrix - vcl_complex<double>(cplx_matrix.size())*cplx_matrix).fro_norm();
   vcl_cout << "error = " << error << vcl_endl;
-  vnl_test_assert ("fwd-bwd error", error < 1e-7); // increase for float
+  testlib_test_assert ("fwd-bwd error", error < 1e-7); // increase for float
 }
 
 TESTMAIN (test_fft2d);

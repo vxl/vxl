@@ -1,5 +1,5 @@
 #include <vnl/vnl_numeric_traits.h>
-#include <vnl/vnl_test.h>
+#include <testlib/testlib_test.h>
 #include <vcl_complex.h>
 
 void test_numeric_traits()

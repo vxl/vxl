@@ -6,7 +6,7 @@
 #include <vnl/vnl_double_3x3.h>
 #include <vnl/vnl_double_3.h>
 
-#include <vnl/vnl_test.h>
+#include <testlib/testlib_test.h>
 
 bool verbose_malloc = false;
 int malloc_count = 0;

@@ -6,18 +6,18 @@
 #include <vnl/algo/vnl_amoeba.h>
 #include <vnl/vnl_cost_function.h>
 
-#include <vnl/vnl_test.h>
+#include <testlib/testlib_test.h>
 
-struct vnl_test_amoeba_cubic : public vnl_cost_function {
-  vnl_test_amoeba_cubic() : vnl_cost_function(1) {}
+struct testlib_test_amoeba_cubic : public vnl_cost_function {
+  testlib_test_amoeba_cubic() : vnl_cost_function(1) {}
 
   double f(const vnl_vector<double>& x) {
     return (2 - x[0]) * (2 - x[0]) + 10;
   }
 };
 
-struct vnl_test_amoeba_cost1 : public vnl_cost_function {
-  vnl_test_amoeba_cost1(int n) : vnl_cost_function(n) {}
+struct testlib_test_amoeba_cost1 : public vnl_cost_function {
+  testlib_test_amoeba_cost1(int n) : vnl_cost_function(n) {}
 
   double f(const vnl_vector<double>& x) {
     assert((int)x.size()==dim);
@@ -32,7 +32,7 @@ void test_amoeba()
   vcl_cout<<" ================== test_amoeba =============== "<<vcl_endl;
 
   vcl_cout<<"Testing on 1D cubic"<<vcl_endl;
-  vnl_test_amoeba_cubic c;
+  testlib_test_amoeba_cubic c;
   vnl_amoeba amoeba1(c);
   vnl_vector<double> x(1);
   x[0]=77;
@@ -44,7 +44,7 @@ void test_amoeba()
   vcl_cout<<"Testing on "<<n<<"-D quadratic"<<vcl_endl;
   x.resize(n);
   x.fill(1);
-  vnl_test_amoeba_cost1 cost1(n);
+  testlib_test_amoeba_cost1 cost1(n);
   vnl_amoeba amoeba2(cost1);
   amoeba2.minimize(x);
 

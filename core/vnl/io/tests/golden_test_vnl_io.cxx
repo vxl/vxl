@@ -14,42 +14,18 @@
 #include <vnl/io/vnl_io_sparse_matrix.h>
 
 
-void golden_test_vnl_io(bool save_file=false);
-
-
 //:
 // \file
 // \brief Read in a golden data file, and check the values are correct.
 //
-// If you need to recreate the golden data file build this as a
-// standalone program, and run it with the single parameter create:
+// If you need to recreate the golden data file, run this test with
+// the single parameter "create":
 // \verbatim
-// golden_test_vnl_io create
+//    golden_test_vnl_io create
 // \verbatim
 
 
-//:
-// This nasty macro stuff is to allow the program to be compiled as a stand
-// alone program or as part of a larger test program.
-#ifndef TESTMAIN
-  #include <vnl/vnl_test.h>
-  int main( int argc, char* argv[] )
-  {
-    bool save_file=false;
-
-    if (argc==2)
-    {
-      vcl_string conf = argv[1];
-      vcl_string ref="create";
-      if (conf==ref)
-        save_file =true;
-    }
-    golden_test_vnl_io(save_file);
-    return vnl_test_summary();
-  }
-#else
-  #include <vnl/vnl_test.h>
-#endif
+#include <testlib/testlib_test.h>
 
 
 void golden_test_vnl_io(bool save_file)
@@ -217,4 +193,22 @@ void golden_test_vnl_io(bool save_file)
 
   TEST ("m_sparse_out == m_sparse_in",test_result , true);
   TEST ("v_fixed_out == v_fixed_in", v_fixed_out == v_fixed_in, true);
+}
+
+
+MAIN( golden_test_vnl_io )
+{
+  START( "golden test" );
+
+  bool save_file=false;
+
+  if (argc==2) {
+    vcl_string conf = argv[1];
+    vcl_string ref="create";
+    if (conf==ref)
+      save_file =true;
+  }
+  golden_test_vnl_io(save_file);
+
+  SUMMARY();
 }

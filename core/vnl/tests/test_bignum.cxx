@@ -6,8 +6,9 @@
 #include <vcl_sstream.h>
 #include <vcl_iomanip.h>
 #include <vnl/vnl_bignum.h>
-#include <vnl/vnl_test.h>
 #include <vnl/vnl_math.h> // for vnl_math::maxdouble and vnl_math::maxfloat
+
+#include <testlib/testlib_test.h>
 
 static void run_constructor_tests() {
   vcl_cout << "\nbignum constructor tests:\n";

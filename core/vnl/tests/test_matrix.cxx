@@ -1,17 +1,10 @@
 #include <vcl_cmath.h>
 #include <vcl_iostream.h>
 
-#include <vnl/vnl_test.h>
+#include <testlib/testlib_test.h>
 #include <vnl/vnl_matrix.h>
 
-bool float_fuzz_equal (const float& d1, const float& d2) {
-  return vcl_fabs(d1 - d2) < 1.0e-5;
-}
-
-bool double_fuzz_equal (const double& d1, const double& d2) {
-  return vcl_fabs(d1 - d2) < 1.0e-6;
-}
-
+static
 void test_int () {
   vcl_cout << "***********************" << vcl_endl;
   vcl_cout << "Testing Matrix<int>" << vcl_endl;
@@ -353,11 +346,6 @@ void test_float () {
 #endif
 }
 
-bool float_fuzz_equal2 (const float& d1, const float& d2) {
-  return vcl_fabs(d1 - d2) < 1.0e-4;
-}
-
-
 void test_double () {
   vcl_cout << "***********************" << vcl_endl;
   vcl_cout << "Testing Matrix<double>" << vcl_endl;
@@ -420,7 +408,8 @@ void test_double () {
                    (d6.get(0,0)==19.0 && d6.get(0,1)==22.0 && d6.get(1,0)==43.0 && d6.get(1,1)==50.0)), true);
 }
 
-
+#if LEAK
+static
 void test_leak () {   // use top4.1 to watch memory usage.
   for (;;) {          // remember to kill process.
     test_int();
@@ -428,8 +417,9 @@ void test_leak () {   // use top4.1 to watch memory usage.
     test_double();
   }
 }
+#endif
 
-
+static
 void test_matrix() {
   test_int ();
   test_float ();

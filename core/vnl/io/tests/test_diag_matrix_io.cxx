@@ -2,7 +2,7 @@
 #include <vcl_fstream.h>
 #include <vcl_utility.h>
 
-#include <vnl/vnl_test.h>
+#include <testlib/testlib_test.h>
 #include <vnl/vnl_vector.h>
 #include <vsl/vsl_binary_io.h>
 #include <vnl/vnl_diag_matrix.h>
@@ -50,11 +50,9 @@ void test_diag_matrix_double_io()
   vcl_cout << vcl_endl;
 }
 
-#if 0
-void test_vector()
+void test_diag_matrix_io()
 {
-  vnl_vector_test_double_io();
+  test_diag_matrix_double_io();
 }
 
-TESTMAIN(test_vector);
-#endif
+TESTMAIN( test_diag_matrix_io );

@@ -1,10 +1,12 @@
 #include <vcl_iostream.h>
 #include <vcl_cstdlib.h>
 #include <vcl_complex.h>
-#include <vnl/vnl_test.h>
+#include <testlib/testlib_test.h>
 #include <vnl/vnl_matrix.h>
 #include <vnl/vnl_matlab_print.h>
 #include <vnl/algo/vnl_qr.h>
+
+#include "test_util.h"
 
 //--------------------------------------------------------------------------------
 
@@ -13,11 +15,11 @@ void test_matrix(char const* name, const vnl_matrix<double>& A, double det = 0)
   vnl_qr<double> qr(A);
 
   vcl_string n(name); n+= ": ";
-  vnl_test_assert_near(n+"Q * R residual", (qr.Q() * qr.R() - A).fro_norm());
-  vnl_test_assert(n+"Q * Q = I", (qr.Q().transpose() * qr.Q()).is_identity(1e-12));
+  testlib_test_assert_near(n+"Q * R residual", (qr.Q() * qr.R() - A).fro_norm());
+  testlib_test_assert(n+"Q * Q = I", (qr.Q().transpose() * qr.Q()).is_identity(1e-12));
 
   if (det)
-    vnl_test_assert_near(n+ "Determinant", qr.determinant(), det, 1e-10);
+    testlib_test_assert_near(n+ "Determinant", qr.determinant(), det, 1e-10);
 } 
 
 void double_test()
@@ -52,7 +54,7 @@ void double_test()
 
   double res = (A * x - b).magnitude();
 
-  vnl_test_assert_near("Solve residual", res, 37.8841, 1e-3);
+  testlib_test_assert_near("Solve residual", res, 37.8841, 1e-3);
 
   {
     double S_data[] = {
@@ -81,11 +83,11 @@ void new_test(T *)
   unsigned n = 5; // but n >= m for a random A and b to have exact solution.
 
   vnl_matrix<T> A(m, n);
-  vnl_test_fill_random(A.begin(), A.end());
+  test_util_fill_random(A.begin(), A.end());
   vnl_matlab_print(vcl_cout, A, "A");
 
   vnl_vector<T> b(m);
-  vnl_test_fill_random(b.begin(), b.end());
+  test_util_fill_random(b.begin(), b.end());
   vnl_matlab_print(vcl_cout, b, "b");
 
   vnl_qr<T> qr(A);
@@ -101,9 +103,9 @@ void new_test(T *)
   vnl_matlab_print(vcl_cout, QR, "QR");
 
   vnl_matrix<T> I(m, m); I.set_identity();
-  vnl_test_assert_near("||Q'Q - 1||", (Q.conjugate_transpose()*Q - I).fro_norm(), 0, rounding_epsilon(T));
-  vnl_test_assert_near("||A - QR||", (A - QR).fro_norm(), 0, rounding_epsilon(T));
-  vnl_test_assert_near("||Ax - b||", (A*x - b).two_norm(), 0, rounding_epsilon(T));
+  testlib_test_assert_near("||Q'Q - 1||", (Q.conjugate_transpose()*Q - I).fro_norm(), 0, rounding_epsilon(T));
+  testlib_test_assert_near("||A - QR||", (A - QR).fro_norm(), 0, rounding_epsilon(T));
+  testlib_test_assert_near("||Ax - b||", (A*x - b).two_norm(), 0, rounding_epsilon(T));
 }
 
 #define inst(T) \
@@ -153,7 +155,7 @@ void complex_test()
   const vnl_matrix<ct>& Q = qr.Q(); vnl_matlab_print(vcl_cout, Q, "Q");
   const vnl_matrix<ct>& R = qr.R(); vnl_matlab_print(vcl_cout, R, "R");
   vnl_vector<ct> x = qr.solve(b);   vnl_matlab_print(vcl_cout, x, "solve");
-  vnl_test_assert_near("||Ax - b||", (A*x - b).two_norm(), 0, 1e-5);
+  testlib_test_assert_near("||Ax - b||", (A*x - b).two_norm(), 0, 1e-5);
 }
 
 //--------------------------------------------------------------------------------

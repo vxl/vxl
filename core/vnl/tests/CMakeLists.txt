@@ -6,88 +6,92 @@ IF(HAS_NETLIB)
 
 INCLUDE_DIRECTORIES( ${NETLIB_INCLUDE_PATH} )
 
-LINK_LIBRARIES( vnl_algo vnl vpl vul testlib )
+ADD_EXECUTABLE( vnl_test_driver
+  # Driver source and utilities
+  test_driver.cxx
+  test_util.cxx       test_util.h
 
-ADD_EXECUTABLE(vnl_test_all                      vnl_test_all.cxx                )
-ADD_EXECUTABLE(vnl_test_fft                      test_fft.cxx                    )
-ADD_EXECUTABLE(vnl_test_fft1d                    test_fft1d.cxx                  )
-ADD_EXECUTABLE(vnl_test_fft2d                    test_fft2d.cxx                  )
-ADD_EXECUTABLE(vnl_test_matlab                   test_matlab.cxx                 )
-ADD_EXECUTABLE(vnl_test_math                     test_math.cxx                   )
-ADD_EXECUTABLE(vnl_test_vector                   test_vector.cxx                 )
-ADD_EXECUTABLE(vnl_test_resize                   test_resize.cxx                 )
-ADD_EXECUTABLE(vnl_test_matrix                   test_matrix.cxx                 )
-ADD_EXECUTABLE(vnl_test_sym_matrix               test_sym_matrix.cxx             )
-ADD_EXECUTABLE(vnl_test_matrix_fixed             test_matrix_fixed.cxx           )
-ADD_EXECUTABLE(vnl_test_file_matrix              test_file_matrix.cxx            )
-ADD_EXECUTABLE(vnl_test_rnpoly_roots             test_rnpoly_roots.cxx           )
-ADD_EXECUTABLE(vnl_test_sparse_matrix            test_sparse_matrix.cxx          )
-ADD_EXECUTABLE(vnl_test_qsvd                     test_qsvd.cxx                   )
-ADD_EXECUTABLE(vnl_test_sample                   test_sample.cxx                 )
-ADD_EXECUTABLE(vnl_test_functions                test_functions.cxx              )
-ADD_EXECUTABLE(vnl_test_numeric_limits           test_numeric_limits.cxx         )
-ADD_EXECUTABLE(vnl_test_numeric_traits           test_numeric_traits.cxx         )
-ADD_EXECUTABLE(vnl_test_rpoly_roots              test_rpoly_roots.cxx            )
-ADD_EXECUTABLE(vnl_test_cpoly_roots              test_cpoly_roots.cxx            )
-ADD_EXECUTABLE(vnl_test_complex                  test_complex.cxx                )
-ADD_EXECUTABLE(vnl_test_determinant              test_determinant.cxx            )
-ADD_EXECUTABLE(vnl_test_qr                       test_qr.cxx                     )
-ADD_EXECUTABLE(vnl_test_svd                      test_svd.cxx                    )
-ADD_EXECUTABLE(vnl_test_real_eigensystem         test_real_eigensystem.cxx       )
-ADD_EXECUTABLE(vnl_test_complex_eigensystem      test_complex_eigensystem.cxx    )
-ADD_EXECUTABLE(vnl_test_symmetric_eigensystem    test_symmetric_eigensystem.cxx  )
-ADD_EXECUTABLE(vnl_test_generalized_eigensystem  test_generalized_eigensystem.cxx)
-ADD_EXECUTABLE(vnl_test_matrix_exp               test_matrix_exp.cxx             )
-ADD_EXECUTABLE(vnl_test_transpose                test_transpose.cxx              )
-ADD_EXECUTABLE(vnl_test_levenberg_marquardt      test_levenberg_marquardt.cxx    )
-#ADD_EXECUTABLE(vnl_test_tensor                   test_tensor.cxx                 )
-ADD_EXECUTABLE(vnl_test_minimizers               test_minimizers.cxx             )
-ADD_EXECUTABLE(vnl_test_amoeba                   test_amoeba.cxx                 )
-ADD_EXECUTABLE(vnl_test_rational                 test_rational.cxx               )
-ADD_EXECUTABLE(vnl_test_bignum                   test_bignum.cxx                 )
-ADD_EXECUTABLE(vnl_test_finite                   test_finite.cxx                 )
-ADD_EXECUTABLE(vnl_test_convolve                 test_convolve.cxx               )
-ADD_EXECUTABLE(vnl_test_real_polynomial          test_real_polynomial.cxx        )
+  # The tests
+  test_amoeba.cxx
+  test_bignum.cxx
+  test_complex.cxx
+  test_complex_eigensystem.cxx
+  test_convolve.cxx
+  test_cpoly_roots.cxx
+  test_determinant.cxx
+  test_fft.cxx
+  test_fft1d.cxx
+  test_fft2d.cxx
+  test_file_matrix.cxx
+  test_finite.cxx
+  test_functions.cxx
+  test_generalized_eigensystem.cxx
+  test_include.cxx
+  test_levenberg_marquardt.cxx
+  test_math.cxx
+  test_matlab.cxx
+  test_matrix.cxx
+  test_matrix_exp.cxx
+  test_matrix_fixed.cxx
+  test_minimizers.cxx
+  test_numeric_limits.cxx
+  test_numeric_traits.cxx
+  test_qr.cxx
+  test_qsvd.cxx
+  test_rational.cxx
+  test_real_eigensystem.cxx
+  test_real_polynomial.cxx
+  test_resize.cxx
+  test_rnpoly_roots.cxx
+  test_rpoly_roots.cxx
+  test_sample.cxx
+  test_sparse_matrix.cxx
+  test_svd.cxx
+  test_sym_matrix.cxx
+  test_symmetric_eigensystem.cxx
+  test_transpose.cxx
+  test_vector.cxx
+)
+TARGET_LINK_LIBRARIES( vnl_test_driver vnl_algo vnl vpl vul testlib )
 
-ADD_TEST( vnl_test_all vnl_test_all )
-ADD_TEST( vnl_test_fft vnl_test_fft )
-ADD_TEST( vnl_test_fft1d vnl_test_fft1d )
-ADD_TEST( vnl_test_fft2d vnl_test_fft2d )
-ADD_TEST( vnl_test_matlab vnl_test_matlab )
-ADD_TEST( vnl_test_math vnl_test_math )
-ADD_TEST( vnl_test_vector vnl_test_vector )
-ADD_TEST( vnl_test_resize vnl_test_resize )
-ADD_TEST( vnl_test_matrix vnl_test_matrix )
-ADD_TEST( vnl_test_sym_matrix vnl_test_sym_matrix )
-ADD_TEST( vnl_test_matrix_fixed vnl_test_matrix_fixed )
-ADD_TEST( vnl_test_file_matrix vnl_test_file_matrix )
-ADD_TEST( vnl_test_rnpoly_roots vnl_test_rnpoly_roots )
-ADD_TEST( vnl_test_sparse_matrix vnl_test_sparse_matrix )
-ADD_TEST( vnl_test_qsvd vnl_test_qsvd )
-ADD_TEST( vnl_test_sample vnl_test_sample )
-ADD_TEST( vnl_test_functions vnl_test_functions )
-ADD_TEST( vnl_test_numeric_limits vnl_test_numeric_limits )
-ADD_TEST( vnl_test_numeric_traits vnl_test_numeric_traits )
-ADD_TEST( vnl_test_rpoly_roots vnl_test_rpoly_roots )
-ADD_TEST( vnl_test_cpoly_roots vnl_test_cpoly_roots )
-ADD_TEST( vnl_test_complex vnl_test_complex )
-ADD_TEST( vnl_test_determinant vnl_test_determinant )
-ADD_TEST( vnl_test_qr vnl_test_qr )
-ADD_TEST( vnl_test_svd vnl_test_svd )
-ADD_TEST( vnl_test_real_eigensystem vnl_test_real_eigensystem )
-ADD_TEST( vnl_test_complex_eigensystem vnl_test_complex_eigensystem )
-ADD_TEST( vnl_test_symmetric_eigensystem vnl_test_symmetric_eigensystem )
-ADD_TEST( vnl_test_generalized_eigensystem vnl_test_generalized_eigensystem )
-ADD_TEST( vnl_test_matrix_exp vnl_test_matrix_exp )
-ADD_TEST( vnl_test_transpose vnl_test_transpose )
-ADD_TEST( vnl_test_levenberg_marquardt vnl_test_levenberg_marquardt )
-#ADD_TEST( vnl_test_tensor vnl_test_tensor )
-ADD_TEST( vnl_test_minimizers vnl_test_minimizers )
-ADD_TEST( vnl_test_amoeba vnl_test_amoeba )
-ADD_TEST( vnl_test_rational vnl_test_rational )
-ADD_TEST( vnl_test_bignum vnl_test_bignum )
-ADD_TEST( vnl_test_finite vnl_test_finite )
-ADD_TEST( vnl_test_convolve vnl_test_convolve )
-ADD_TEST( vnl_test_real_polynomial vnl_test_real_polynomial )
+ADD_TEST( vnl_test_include                  vnl_test_driver test_include                 )
+ADD_TEST( vnl_test_amoeba                   vnl_test_driver test_amoeba                  )
+ADD_TEST( vnl_test_bignum                   vnl_test_driver test_bignum                  )
+ADD_TEST( vnl_test_complex                  vnl_test_driver test_complex                 )
+ADD_TEST( vnl_test_complex_eigensystem      vnl_test_driver test_complex_eigensystem     )
+ADD_TEST( vnl_test_convolve                 vnl_test_driver test_convolve                )
+ADD_TEST( vnl_test_cpoly_roots              vnl_test_driver test_cpoly_roots             )
+ADD_TEST( vnl_test_determinant              vnl_test_driver test_determinant             )
+ADD_TEST( vnl_test_fft                      vnl_test_driver test_fft                     )
+ADD_TEST( vnl_test_fft1d                    vnl_test_driver test_fft1d                   )
+ADD_TEST( vnl_test_fft2d                    vnl_test_driver test_fft2d                   )
+ADD_TEST( vnl_test_file_matrix              vnl_test_driver test_file_matrix             )
+ADD_TEST( vnl_test_finite                   vnl_test_driver test_finite                  )
+ADD_TEST( vnl_test_functions                vnl_test_driver test_functions               )
+ADD_TEST( vnl_test_generalized_eigensystem  vnl_test_driver test_generalized_eigensystem )
+ADD_TEST( vnl_test_levenberg_marquardt      vnl_test_driver test_levenberg_marquardt     )
+ADD_TEST( vnl_test_math                     vnl_test_driver test_math                    )
+ADD_TEST( vnl_test_matlab                   vnl_test_driver test_matlab                  )
+ADD_TEST( vnl_test_matrix                   vnl_test_driver test_matrix                  )
+ADD_TEST( vnl_test_matrix_exp               vnl_test_driver test_matrix_exp              )
+ADD_TEST( vnl_test_matrix_fixed             vnl_test_driver test_matrix_fixed            )
+ADD_TEST( vnl_test_minimizers               vnl_test_driver test_minimizers              )
+ADD_TEST( vnl_test_numeric_limits           vnl_test_driver test_numeric_limits          )
+ADD_TEST( vnl_test_numeric_traits           vnl_test_driver test_numeric_traits          )
+ADD_TEST( vnl_test_qr                       vnl_test_driver test_qr                      )
+ADD_TEST( vnl_test_qsvd                     vnl_test_driver test_qsvd                    )
+ADD_TEST( vnl_test_rational                 vnl_test_driver test_rational                )
+ADD_TEST( vnl_test_real_eigensystem         vnl_test_driver test_real_eigensystem        )
+ADD_TEST( vnl_test_real_polynomial          vnl_test_driver test_real_polynomial         )
+ADD_TEST( vnl_test_resize                   vnl_test_driver test_resize                  )
+ADD_TEST( vnl_test_rnpoly_roots             vnl_test_driver test_rnpoly_roots            )
+ADD_TEST( vnl_test_rpoly_roots              vnl_test_driver test_rpoly_roots             )
+ADD_TEST( vnl_test_sample                   vnl_test_driver test_sample                  )
+ADD_TEST( vnl_test_sparse_matrix            vnl_test_driver test_sparse_matrix           )
+ADD_TEST( vnl_test_svd                      vnl_test_driver test_svd                     )
+ADD_TEST( vnl_test_sym_matrix               vnl_test_driver test_sym_matrix              )
+ADD_TEST( vnl_test_symmetric_eigensystem    vnl_test_driver test_symmetric_eigensystem   )
+ADD_TEST( vnl_test_transpose                vnl_test_driver test_transpose               )
+ADD_TEST( vnl_test_vector                   vnl_test_driver test_vector                  )
 
 ENDIF(HAS_NETLIB)

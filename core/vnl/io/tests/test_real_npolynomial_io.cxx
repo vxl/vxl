@@ -2,7 +2,7 @@
 #include <vcl_fstream.h>
 #include <vcl_utility.h>
 
-#include <vnl/vnl_test.h>
+#include <testlib/testlib_test.h>
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_matrix.h>
 #include <vnl/vnl_real_npolynomial.h>
@@ -63,11 +63,4 @@ void test_real_npolynomial_io()
   vcl_cout << vcl_endl;
 }
 
-#if 0
-void test_vector()
-{
-  vnl_vector_test_double_io();
-}
-
-TESTMAIN(test_vector);
-#endif
+TESTMAIN(test_real_npolynomial_io);

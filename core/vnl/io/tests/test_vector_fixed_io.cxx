@@ -2,10 +2,11 @@
 #include <vcl_fstream.h>
 #include <vcl_utility.h>
 
-#include <vnl/vnl_test.h>
+#include <testlib/testlib_test.h>
 #include <vnl/vnl_vector_fixed.h>
 #include <vnl/io/vnl_io_vector.h>
 
+#include <vsl/vsl_binary_io.h>
 
 void test_vector_fixed_double_3_io()
 {
@@ -33,10 +34,10 @@ void test_vector_fixed_double_3_io()
 }
 
 
-void test_vector_fixed_prime()
+void test_vector_fixed_io()
 {
   test_vector_fixed_double_3_io();
 }
 
 
-TESTMAIN(test_vector_fixed_prime);
+TESTMAIN(test_vector_fixed_io);

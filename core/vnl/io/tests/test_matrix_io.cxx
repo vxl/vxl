@@ -2,7 +2,7 @@
 #include <vcl_fstream.h>
 #include <vcl_utility.h>
 
-#include <vnl/vnl_test.h>
+#include <testlib/testlib_test.h>
 #include <vnl/vnl_matrix.h>
 
 #include <vnl/io/vnl_io_matrix.h>
@@ -51,10 +51,10 @@ void test_matrix_double_io()
 }
 
 
-void test_matrix_prime()
+void test_matrix_io()
 {
   test_matrix_double_io();
 }
 
 
-TESTMAIN(test_matrix_prime);
+TESTMAIN(test_matrix_io);

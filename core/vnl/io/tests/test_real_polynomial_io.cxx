@@ -2,7 +2,7 @@
 #include <vcl_fstream.h>
 #include <vcl_utility.h>
 
-#include <vnl/vnl_test.h>
+#include <testlib/testlib_test.h>
 #include <vnl/vnl_real_polynomial.h>
 #include <vnl/io/vnl_io_real_polynomial.h>
 
@@ -50,9 +50,4 @@ void test_real_polynomial_io()
 }
 
 
-void test_real_polynomial_prime()
-{
-  test_real_polynomial_io();
-}
-
-TESTMAIN(test_real_polynomial_prime);
+TESTMAIN(test_real_polynomial_io);

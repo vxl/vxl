@@ -1,7 +1,7 @@
 #include <vcl_iostream.h>
 #include <vcl_fstream.h>
 #include <vcl_utility.h>
-#include <vnl/vnl_test.h>
+#include <testlib/testlib_test.h>
 #include <vsl/vsl_binary_io.h>
 #include <vnl/vnl_sparse_matrix.h>
 #include <vnl/io/vnl_io_sparse_matrix.h>
@@ -94,10 +94,10 @@ void test_sparse_matrix_double_io()
 }
 
 
-void test_sparse_matrix_prime()
+void test_sparse_matrix_io()
 {
   test_sparse_matrix_double_io();
 }
 
 
-TESTMAIN(test_sparse_matrix_prime);
+TESTMAIN(test_sparse_matrix_io);

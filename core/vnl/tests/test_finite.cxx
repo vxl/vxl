@@ -4,7 +4,7 @@
 
 #include <vcl_iostream.h>
 #include <vcl_cstdlib.h> // for atoi()
-#include <vnl/vnl_test.h>
+#include <testlib/testlib_test.h>
 #include <vnl/vnl_finite.h>
 
 template <int N>

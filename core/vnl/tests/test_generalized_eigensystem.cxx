@@ -10,7 +10,7 @@
 #include <vcl_iostream.h>
 #include <vcl_cmath.h>
 
-#include <vnl/vnl_test.h>
+#include <testlib/testlib_test.h>
 #include <vnl/algo/vnl_generalized_eigensystem.h>
 
 void test_generalized_eigensystem()
@@ -43,7 +43,7 @@ void test_generalized_eigensystem()
   double err = (C * gev.V - S * gev.V * gev.D).fro_norm();
   vcl_cout << "Recomposition residual = " << err << vcl_endl;
 
-  vnl_test_assert("Recomposition residual < 1e-12", err < 1e-12);
+  testlib_test_assert("Recomposition residual < 1e-12", err < 1e-12);
 }
 
 TESTMAIN(test_generalized_eigensystem);

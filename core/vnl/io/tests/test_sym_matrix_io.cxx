@@ -2,7 +2,7 @@
 #include <vcl_fstream.h>
 #include <vcl_utility.h>
 
-#include <vnl/vnl_test.h>
+#include <testlib/testlib_test.h>
 #include <vnl/vnl_sym_matrix.h>
 
 #include <vnl/io/vnl_io_sym_matrix.h>

@@ -77,7 +77,6 @@
 #include <vnl/vnl_tag.h>
 //#include <vnl/vnl_tensor.h>
 //#include <vnl/vnl_tensor_traits.h>
-#include <vnl/vnl_test.h>
 #include <vnl/vnl_trace.h>
 #include <vnl/vnl_transpose.h>
 #include <vnl/vnl_unary_function.h>
@@ -124,9 +123,4 @@
 
 #include <vcl_iostream.h>
 
-int main() {
-  vcl_cout << "-----------------------------------------------------------------------------\n"
-           << "vnl_test_all Test Summary: All tests succeeded\n"
-           << "-----------------------------------------------------------------------------\n";
-  return 0;
-}
+int test_include_main(int, char*[]) { return 0; }

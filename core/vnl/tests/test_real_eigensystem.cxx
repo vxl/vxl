@@ -11,7 +11,7 @@
 #include <vnl/vnl_complexify.h>
 #include <vnl/algo/vnl_real_eigensystem.h>
 
-#include <vnl/vnl_test.h>
+#include <testlib/testlib_test.h>
 
 void test_real_eigensystem()
 {
@@ -30,7 +30,7 @@ void test_real_eigensystem()
       vnl_real_eigensystem eig(S);
       vnl_diag_matrix<vcl_complex<double> > D(eig.D.n());
       for(unsigned i = 0; i < eig.D.n(); ++i) {
-        vnl_test_assert("All real", vcl_imag(eig.D(i,i)) < 1e-15);
+        testlib_test_assert("All real", vcl_imag(eig.D(i,i)) < 1e-15);
         D(i,i) = vcl_real(eig.D(i,i));
       }
 
@@ -40,7 +40,7 @@ void test_real_eigensystem()
       vnl_matrix<vcl_complex<double> > diff = vnl_complexify(S*eig.Vreal) - vnl_complexify(eig.Vreal)*D;
       vcl_cout << "X*V - V*D = " << diff << vcl_endl;
       vcl_cout << "residual = " << diff.fro_norm() << vcl_endl;
-      vnl_test_assert("recompose residual",  diff.fro_norm() < 1e-12);
+      testlib_test_assert("recompose residual",  diff.fro_norm() < 1e-12);
     }
   }
 
@@ -64,7 +64,7 @@ void test_real_eigensystem()
     vnl_matrix<vcl_complex<double> > diff = XC*eig.V - eig.V*eig.D;
     vcl_cout << "X*V - V*D = " << diff << vcl_endl;
     vcl_cout << "residual = " << diff.fro_norm() << vcl_endl;
-    vnl_test_assert("recompose residual",  diff.fro_norm() < 1e-11);
+    testlib_test_assert("recompose residual",  diff.fro_norm() < 1e-11);
   }
 }
 

@@ -21,7 +21,7 @@
 #include <vcl_iostream.h>
 #include <vcl_complex.h>
 
-#include <vnl/vnl_test.h>
+#include <testlib/testlib_test.h>
 #include <vnl/vnl_vector.h>
 #include <vnl/algo/vnl_fft_1d.h>
 
@@ -57,14 +57,14 @@ void test_fft1d () {
   oFFTSimple.fwd_transform(fTestArrayFwd);
 
   // now compare the results
-  vnl_test_assert ("test forward", fTestArrayConvert == fTestArrayFwd);
+  testlib_test_assert ("test forward", fTestArrayConvert == fTestArrayFwd);
 
   // the whole thing backwards
   //==========================
   oFFTSimple.transform(fTestArrayConvert, -1);
   oFFTSimple.bwd_transform(fTestArrayFwd);
 
-  vnl_test_assert ("test backward", fTestArrayConvert == fTestArrayFwd);
+  testlib_test_assert ("test backward", fTestArrayConvert == fTestArrayFwd);
 
   double fRealError = 0.0;
   double fImagError = 0.0;
@@ -77,8 +77,8 @@ void test_fft1d () {
 
   vcl_cout << "total real absolute error = " << fRealError << " (== " << fRealError/ciArraySizeX << " per element)\n";
   vcl_cout << "total imag absolute error = " << fImagError << " (== " << fImagError/ciArraySizeX << " per element)\n";
-  vnl_test_assert ("real error", fRealError/ciArraySizeX < maxRealErrorPrecision);
-  vnl_test_assert ("imag error", fImagError/ciArraySizeX < maxImagErrorPrecision);
+  testlib_test_assert ("real error", fRealError/ciArraySizeX < maxRealErrorPrecision);
+  testlib_test_assert ("imag error", fImagError/ciArraySizeX < maxImagErrorPrecision);
 }
 
 TESTMAIN (test_fft1d);

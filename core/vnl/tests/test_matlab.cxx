@@ -9,7 +9,7 @@
 
 #include <vul/vul_temp_filename.h>
 
-#include <vnl/vnl_test.h>
+#include <testlib/testlib_test.h>
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_matrix.h>
 #include <vnl/vnl_matlab_print.h>
@@ -18,7 +18,7 @@
 
 static void fsm_assert_(int lineno, bool pass, char const *expr) {
   vcl_cout << __FILE__ ":" << lineno << vcl_endl;
-  vnl_test_assert(expr, pass);
+  testlib_test_assert(expr, pass);
 }
 #define fsm_assert(c) fsm_assert_(__LINE__, c, #c);
 

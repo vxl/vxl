@@ -1,7 +1,7 @@
 #include <vcl_iostream.h>
 #include <vcl_iomanip.h>
 #include <vnl/vnl_rational.h>
-#include <vnl/vnl_test.h>
+#include <testlib/testlib_test.h>
 #include <vnl/vnl_math.h>
 #include <vnl/vnl_matrix_fixed.h>
 #include <vnl/vnl_det.h>

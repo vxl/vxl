@@ -3,8 +3,9 @@
 // \author F. Schaffalitzky, Oxford RRG
 // \date    7 September 1999
 #include <vcl_complex.h>
-#include <vnl/vnl_test.h>
 #include <vnl/algo/vnl_complex_eigensystem.h>
+
+#include <testlib/testlib_test.h>
 
 void test_complex_eigensystem1()
 {
@@ -53,12 +54,12 @@ void test_complex_eigensystem1()
     vnl_vector<vcl_complex<double> > l(eig.left_eigen_vector(i));
     err = (l*A - l*w);
     //vcl_cout << "  " << err << vcl_endl;
-    vnl_test_assert("  Left  eigenvalue", err.magnitude() < 1e-10);
+    testlib_test_assert("  Left  eigenvalue", err.magnitude() < 1e-10);
     //
     vnl_vector<vcl_complex<double> > r(eig.right_eigen_vector(i));
     err = (A*r - w*r);
     //vcl_cout << "  " << err << vcl_endl;
-    vnl_test_assert("  Right eigenvalue", err.magnitude() < 1e-10);
+    testlib_test_assert("  Right eigenvalue", err.magnitude() < 1e-10);
   }
 }
 
@@ -80,7 +81,7 @@ void test_complex_eigensystem2()
     for (int j=0; j<6; ++j)
       A[i][j] = Adata[i][j]; //(0.77+i) + (0.1+j)*(0.33+j);
   vnl_complex_eigensystem eig(A);
-  vnl_test_assert("  Funny eigensystem", true);
+  testlib_test_assert("  Funny eigensystem", true);
 }
 
 void test_complex_eigensystem()

@@ -4,7 +4,6 @@
 #include <vcl_cmath.h>
 #include <vcl_iostream.h>
 
-#include <vnl/vnl_test.h>
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_matrix.h>
 #include <vnl/vnl_matlab_print.h>
@@ -12,10 +11,14 @@
 #include <vnl/algo/vnl_fft_1d.h>
 #include <vnl/algo/vnl_fft_2d.h>
 
+#include <testlib/testlib_test.h>
+
+#include "test_util.h"
+
 void test_fft_1d(int N)
 {
   vnl_vector<vcl_complex<double> > signal(N);
-  vnl_test_fill_random(signal.begin(), signal.end());
+  test_util_fill_random(signal.begin(), signal.end());
   
   vnl_fft_1d<double> fft(N);
 
@@ -30,13 +33,13 @@ void test_fft_1d(int N)
 
   double err = (tmp - signal).two_norm();
   vcl_cout << "err = " << err << vcl_endl;
-  vnl_test_assert("test fwd-bwd", err <= 1e-10);
+  testlib_test_assert("test fwd-bwd", err <= 1e-10);
 }
 
 void test_fft_2d(int M, int N)
 {
   vnl_matrix<vcl_complex<double> > signal(M, N);
-  vnl_test_fill_random(signal.begin(), signal.end());
+  test_util_fill_random(signal.begin(), signal.end());
   
   vnl_fft_2d<double> fft(M, N);
 
@@ -51,7 +54,7 @@ void test_fft_2d(int M, int N)
 
   double err = (tmp - signal).fro_norm();
   vcl_cout << "err = " << err << vcl_endl;
-  vnl_test_assert("test fwd-bwd", err <= 1e-10);
+  testlib_test_assert("test fwd-bwd", err <= 1e-10);
 }
 
 void test_fft()

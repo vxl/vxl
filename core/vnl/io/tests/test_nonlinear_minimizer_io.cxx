@@ -2,7 +2,7 @@
 #include <vcl_fstream.h>
 #include <vcl_utility.h>
 
-#include <vnl/vnl_test.h>
+#include <testlib/testlib_test.h>
 #include <vnl/vnl_nonlinear_minimizer.h>
 #include <vnl/io/vnl_io_nonlinear_minimizer.h>
 
@@ -72,11 +72,4 @@ void test_nonlinear_minimizer_io()
   vcl_cout << vcl_endl;
 }
 
-#if 0
-void test_real_polynomial_prime()
-{
-  test_real_polynomial_io();
-}
-
-TESTMAIN(test_real_polynomial_prime);
-#endif
+TESTMAIN(test_nonlinear_minimizer_io);

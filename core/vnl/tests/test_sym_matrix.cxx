@@ -1,9 +1,10 @@
 #include <vcl_cmath.h>
 #include <vcl_iostream.h>
 
-#include <vnl/vnl_test.h>
+#include <testlib/testlib_test.h>
 #include <vnl/vnl_sym_matrix.h>
 
+static
 void test_int ()
 {
   vcl_cout << "*****************************" << vcl_endl;
@@ -68,9 +69,10 @@ void test_int ()
 
 
 
-void test_matrix()
+static
+void test_sym_matrix()
 {
   test_int ();
 }
 
-TESTMAIN(test_matrix);
+TESTMAIN(test_sym_matrix);

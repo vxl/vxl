@@ -3,7 +3,6 @@
 SET( vnl_sources
   vnl_fwd.h
   vnl_config.h
-  vnl_test.cxx                 vnl_test.h
 
   # template sources
   vnl_c_vector.txx             vnl_c_vector.h

@@ -8,7 +8,7 @@
 #include <vnl/algo/vnl_sparse_symmetric_eigensystem.h>
 #include <vnl/algo/vnl_symmetric_eigensystem.h>
 
-#include <vnl/vnl_test.h>
+#include <testlib/testlib_test.h>
 
 // Test the sparse matrix operations.
 int doTest1()
@@ -168,7 +168,7 @@ int doTest4()
     vcl_cout << "Sparse[" << i << "]: " << sparse << vcl_endl;
     double err = vcl_fabs(dense - sparse);
     vcl_cout << "Error: " << err << vcl_endl;
-    vnl_test_assert("vnl_sparse_symmetric_eigensystem eigenvalue error", err < 1e-10);
+    testlib_test_assert("vnl_sparse_symmetric_eigensystem eigenvalue error", err < 1e-10);
   }
   return 0;
 }

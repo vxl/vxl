@@ -1,7 +1,7 @@
 #include <vcl_iostream.h>
 #include <vnl/vnl_math.h>
 #include <vnl/vnl_complex.h>
-#include <vnl/vnl_test.h>
+#include <testlib/testlib_test.h>
 #ifdef VCL_VC
 // This only seems to work if placed right near the top
 # pragma warning ( disable : 4756)
@@ -31,15 +31,15 @@ void test_math() {
            <<"norm(z)=" << vnl_math_squared_magnitude(z) << vcl_endl
            << vcl_endl;
 
-  vnl_test_assert("abs(n) == 11", vnl_math_abs(n) == 11);
-  vnl_test_assert("abs(f) == 7.5", vnl_math_abs(f) == 7.5);
-  vnl_test_assert("abs(d) == pi", vnl_math_abs(d) == vnl_math::pi);
-  vnl_test_assert("abs(i) == 1", vnl_math_abs(i) == 1.0);
-  vnl_test_assert("abs(-1+2i) == sqrt(5)",
+  testlib_test_assert("abs(n) == 11", vnl_math_abs(n) == 11);
+  testlib_test_assert("abs(f) == 7.5", vnl_math_abs(f) == 7.5);
+  testlib_test_assert("abs(d) == pi", vnl_math_abs(d) == vnl_math::pi);
+  testlib_test_assert("abs(i) == 1", vnl_math_abs(i) == 1.0);
+  testlib_test_assert("abs(-1+2i) == sqrt(5)",
                   vnl_math_abs(vnl_math_abs(z)-vcl_sqrt(5.0)) < 1e-10);
-  vnl_test_assert("norm(-1+2i) == 5",
+  testlib_test_assert("norm(-1+2i) == 5",
                   vnl_math_abs(vnl_math_squared_magnitude(z)-5) < 1e-10);
-  vnl_test_assert("exp(d*i) == -1", vnl_math_abs(e_ipi+1.0) < 1e-10);
+  testlib_test_assert("exp(d*i) == -1", vnl_math_abs(e_ipi+1.0) < 1e-10);
   vcl_cout << vcl_endl;
 
 #ifdef VCL_VC
@@ -76,39 +76,39 @@ void test_math() {
 # endif
 #endif
 
-  vnl_test_assert(" isfinite(f)    ",  vnl_math_isfinite(f));
-  vnl_test_assert(" isfinite(d)    ",  vnl_math_isfinite(d));
-  vnl_test_assert(" isfinite(i)    ",  vnl_math_isfinite(i));
-  vnl_test_assert(" isfinite(z)    ",  vnl_math_isfinite(z));
-  vnl_test_assert("!isfinite(1/0f) ", !vnl_math_isfinite(a1));
-  vnl_test_assert(" isinf(1/0f)    ",  vnl_math_isinf(a1));
-  vnl_test_assert("!isnan(1/0f)    ", !vnl_math_isnan(a1));
-  vnl_test_assert("!isfinite(-1/0f)", !vnl_math_isfinite(a2));
-  vnl_test_assert(" isinf(-1/0f)   ",  vnl_math_isinf(a2));
-  vnl_test_assert("!isnan(-1/0f)   ", !vnl_math_isnan(a2));
-  vnl_test_assert("!isfinite(0/0f) ", !vnl_math_isfinite(b1));
-  vnl_test_assert("!isinf(0/0f)    ", !vnl_math_isinf(b1));
-  vnl_test_assert(" isnan(0/0f)    ",  vnl_math_isnan(b1));
+  testlib_test_assert(" isfinite(f)    ",  vnl_math_isfinite(f));
+  testlib_test_assert(" isfinite(d)    ",  vnl_math_isfinite(d));
+  testlib_test_assert(" isfinite(i)    ",  vnl_math_isfinite(i));
+  testlib_test_assert(" isfinite(z)    ",  vnl_math_isfinite(z));
+  testlib_test_assert("!isfinite(1/0f) ", !vnl_math_isfinite(a1));
+  testlib_test_assert(" isinf(1/0f)    ",  vnl_math_isinf(a1));
+  testlib_test_assert("!isnan(1/0f)    ", !vnl_math_isnan(a1));
+  testlib_test_assert("!isfinite(-1/0f)", !vnl_math_isfinite(a2));
+  testlib_test_assert(" isinf(-1/0f)   ",  vnl_math_isinf(a2));
+  testlib_test_assert("!isnan(-1/0f)   ", !vnl_math_isnan(a2));
+  testlib_test_assert("!isfinite(0/0f) ", !vnl_math_isfinite(b1));
+  testlib_test_assert("!isinf(0/0f)    ", !vnl_math_isinf(b1));
+  testlib_test_assert(" isnan(0/0f)    ",  vnl_math_isnan(b1));
 
-  vnl_test_assert("!isfinite(1/0d) ", !vnl_math_isfinite(a3));
-  vnl_test_assert(" isinf(1/0d)    ",  vnl_math_isinf(a3));
-  vnl_test_assert("!isnan(1/0d)    ", !vnl_math_isnan(a3));
-  vnl_test_assert("!isfinite(-1/0d)", !vnl_math_isfinite(a4));
-  vnl_test_assert(" isinf(-1/0d)   ",  vnl_math_isinf(a4));
-  vnl_test_assert("!isnan(-1/0d)   ", !vnl_math_isnan(a4));
-  vnl_test_assert("!isfinite(0/0d) ", !vnl_math_isfinite(b2));
-  vnl_test_assert("!isinf(0/0d)    ", !vnl_math_isinf(b2));
-  vnl_test_assert(" isnan(0/0d)    ",  vnl_math_isnan(b2));
+  testlib_test_assert("!isfinite(1/0d) ", !vnl_math_isfinite(a3));
+  testlib_test_assert(" isinf(1/0d)    ",  vnl_math_isinf(a3));
+  testlib_test_assert("!isnan(1/0d)    ", !vnl_math_isnan(a3));
+  testlib_test_assert("!isfinite(-1/0d)", !vnl_math_isfinite(a4));
+  testlib_test_assert(" isinf(-1/0d)   ",  vnl_math_isinf(a4));
+  testlib_test_assert("!isnan(-1/0d)   ", !vnl_math_isnan(a4));
+  testlib_test_assert("!isfinite(0/0d) ", !vnl_math_isfinite(b2));
+  testlib_test_assert("!isinf(0/0d)    ", !vnl_math_isinf(b2));
+  testlib_test_assert(" isnan(0/0d)    ",  vnl_math_isnan(b2));
 #if VCL_USE_LONG_DOUBLE
-  vnl_test_assert("!isfinite(1/0l) ", !vnl_math_isfinite(a5));
-  vnl_test_assert(" isinf(1/0l)    ",  vnl_math_isinf(a5));
-  vnl_test_assert("!isnan(1/0l)    ", !vnl_math_isnan(a5));
-  vnl_test_assert("!isfinite(-1/0l)", !vnl_math_isfinite(a6));
-  vnl_test_assert(" isinf(-1/0l)   ",  vnl_math_isinf(a6));
-  vnl_test_assert("!isnan(-1/0l)   ", !vnl_math_isnan(a6));
-  vnl_test_assert("!isfinite(0/0l) ", !vnl_math_isfinite(b3));
-  vnl_test_assert("!isinf(0/0l)    ", !vnl_math_isinf(b3));
-  vnl_test_assert(" isnan(0/0l)    ",  vnl_math_isnan(b3));
+  testlib_test_assert("!isfinite(1/0l) ", !vnl_math_isfinite(a5));
+  testlib_test_assert(" isinf(1/0l)    ",  vnl_math_isinf(a5));
+  testlib_test_assert("!isnan(1/0l)    ", !vnl_math_isnan(a5));
+  testlib_test_assert("!isfinite(-1/0l)", !vnl_math_isfinite(a6));
+  testlib_test_assert(" isinf(-1/0l)   ",  vnl_math_isinf(a6));
+  testlib_test_assert("!isnan(-1/0l)   ", !vnl_math_isnan(a6));
+  testlib_test_assert("!isfinite(0/0l) ", !vnl_math_isfinite(b3));
+  testlib_test_assert("!isinf(0/0l)    ", !vnl_math_isinf(b3));
+  testlib_test_assert(" isnan(0/0l)    ",  vnl_math_isnan(b3));
 #endif
 }
 

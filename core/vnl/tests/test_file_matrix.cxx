@@ -4,7 +4,7 @@
 #include <vcl_iostream.h>
 #include <testlib/testlib_root_dir.h>
 
-#include <vnl/vnl_test.h>
+#include <testlib/testlib_test.h>
 #include <vnl/vnl_file_matrix.h>
 #include <vnl/vnl_matlab_print.h>
 
@@ -21,7 +21,7 @@ void test_file_matrix()
   H /= H[0][0];
 
   vnl_matlab_print(vcl_cout, H, "H");
-  vnl_test_assert_near("file_matrix 3x3", H(0,0), 1.0);
+  testlib_test_assert_near("file_matrix 3x3", H(0,0), 1.0);
 }
 
 TESTMAIN(test_file_matrix);

@@ -2,7 +2,7 @@
 #include <vcl_fstream.h>
 #include <vcl_utility.h>
 
-#include <vnl/vnl_test.h>
+#include <testlib/testlib_test.h>
 #include <vnl/io/vnl_io_vector.h>
 
 #include <vsl/vsl_binary_io.h>
@@ -48,10 +48,10 @@ void test_vector_double_io()
 }
 
 
-void test_vector_prime()
+void test_vector_io()
 {
   test_vector_double_io();
 }
 
 
-TESTMAIN(test_vector_prime);
+TESTMAIN(test_vector_io);

@@ -2,9 +2,10 @@
 #include <vcl_fstream.h>
 #include <vcl_utility.h>
 
-#include <vnl/vnl_test.h>
+#include <testlib/testlib_test.h>
 #include <vnl/vnl_matrix_fixed.h>
 
+#include <vnl/io/vnl_io_matrix.h>
 
 void test_matrix_fixed_double_2_2_io()
 {
@@ -46,10 +47,10 @@ void test_matrix_fixed_double_2_2_io()
 }
 
 
-void test_matrix_fixed_prime()
+void test_matrix_fixed_io()
 {
   test_matrix_fixed_double_2_2_io();
 }
 
 
-TESTMAIN(test_matrix_fixed_prime);
+TESTMAIN(test_matrix_fixed_io);

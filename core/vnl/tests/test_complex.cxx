@@ -10,7 +10,7 @@
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_sample.h>
 
-#include <vnl/vnl_test.h>
+#include <testlib/testlib_test.h>
 
 //: inverse cosine for complex numbers, implemented by Peter.Vanroose@esat.kuleuven.ac.be
 inline vcl_complex<double> acos(vcl_complex<double> x)
@@ -65,11 +65,11 @@ void test_complex() {
     vcl_complex<double> i(0,1);
 
     vcl_cout << dot_product(a,b) << vcl_endl;
-    vnl_test_assert("inner_product() conjugates correctly",
+    testlib_test_assert("inner_product() conjugates correctly",
                     vcl_abs(inner_product(i*a,b)-i*inner_product(a,b))<1e-12 &&
                     vcl_abs(inner_product(a,i*b)+i*inner_product(a,b))<1e-12 );
 
-    vnl_test_assert("dot_product() does not conjugate",
+    testlib_test_assert("dot_product() does not conjugate",
                     vcl_abs( dot_product(i*a,b)-i*dot_product(a,b) ) < 1e-12 &&
                     vcl_abs( dot_product(a,i*b)-i*dot_product(a,b) ) < 1e-12 );
 
@@ -77,7 +77,7 @@ void test_complex() {
     for (unsigned n=0; n<a.size(); ++n)
       norma += vcl_real(a[n])*vcl_real(a[n]) + vcl_imag(a[n])*vcl_imag(a[n]);
     norma = vcl_sqrt(norma);
-    vnl_test_assert("correct magnitude", vcl_abs(norma-a.magnitude())<1e-12 );
+    testlib_test_assert("correct magnitude", vcl_abs(norma-a.magnitude())<1e-12 );
   }
 
   int seed = 12345;
@@ -92,7 +92,7 @@ void test_complex() {
     vcl_complex<double> d = vcl_cos(c);
     vcl_complex<double> e = acos(d);
     vcl_cout << c << ' ' << d << ' ' << e << '\n';
-    vnl_test_assert("acos", vcl_abs(c-e) < 1e-12);
+    testlib_test_assert("acos", vcl_abs(c-e) < 1e-12);
   }
 }
 

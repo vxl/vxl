@@ -2,7 +2,7 @@
   fsm@robots.ox.ac.uk
 */
 #include <vcl_iostream.h>
-#include <vnl/vnl_test.h>
+#include <testlib/testlib_test.h>
 #include <vnl/vnl_math.h>
 #include <vnl/vnl_sample.h>
 
