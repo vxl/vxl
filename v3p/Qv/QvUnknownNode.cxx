@@ -1,6 +1,5 @@
 #include "QvUnknownNode.h"
 #include <vcl_cstdlib.h>
-#include <vcl_cstring.h>
 
 QV_NODE_SOURCE(QvUnknownNode);
 
