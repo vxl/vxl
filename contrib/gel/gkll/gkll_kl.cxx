@@ -12,7 +12,7 @@
 #include <vcl_iostream.h>
 
 
-gkll_kl::gkll_kl(const gkll_kl_params & params):_params(params)
+gkll_kl::gkll_kl(const gkll_kl_params & params) : params_(params)
 {
 }
 
@@ -23,7 +23,7 @@ gkll_kl::~gkll_kl()
 void gkll_kl::match_sequence(vcl_vector<vil1_image> &image_list,gkll_multi_view_data_vertex_sptr matches)
 {
   // Uses the KL tracker to track points through an image
-  int nFeatures = _params.numpoints;
+  int nFeatures = params_.numpoints;
   int nFrames = image_list.size();
   // If there are no frames in this movie, then skip
   if (nFrames < 1) return;
@@ -55,7 +55,7 @@ void gkll_kl::match_sequence(vcl_vector<vil1_image> &image_list,gkll_multi_view_
     KLTTrackFeatures(tc, img1, img2, width, height, fl);
 
     // Restore lost features
-    if (_params.replaceLostPoints)
+    if (params_.replaceLostPoints)
       KLTReplaceLostFeatures(tc, img2, width, height, fl);
 
     // Store the values
@@ -124,14 +124,14 @@ vcl_vector<vtol_vertex_2d_sptr>* gkll_kl::extract_points(vil1_image & image)
 {
   int width=image.width();
   int height=image.height();
-  vcl_cerr << "Beginning points extraction" << vcl_endl;
+  vcl_cerr << "Beginning points extraction\n";
 
   KLT_PixelType* img1=convert_to_gs_image(image);
 
   // Now, run the extractor
-  int nFeatures = _params.numpoints;
+  int nFeatures = params_.numpoints;
 
-  vcl_cerr << "Setting up the context..." << vcl_endl;
+  vcl_cerr << "Setting up the context...\n";
   // Set up the context
   KLT_TrackingContext tc = KLTCreateTrackingContext();
 
@@ -141,11 +141,11 @@ vcl_vector<vtol_vertex_2d_sptr>* gkll_kl::extract_points(vil1_image & image)
   // KLTPrintTrackingContext(tc);
 
   // Set up structure to hold the features.
-  vcl_cerr << "Setting up structure to hold the features..." << vcl_endl;
+  vcl_cerr << "Setting up structure to hold the features...\n";
   KLT_FeatureList fl = KLTCreateFeatureList(nFeatures);
 
   // Extract the features
-  vcl_cerr << "Extracting the features..." << vcl_endl;
+  vcl_cerr << "Extracting the features...\n";
   KLTSelectGoodFeatures(tc, img1, width, height, fl);
 
   // Make an IUPointGroup to hold the values
@@ -172,7 +172,7 @@ vcl_vector<vtol_vertex_2d_sptr>* gkll_kl::extract_points(vil1_image & image)
 //Convert a vil1_image to an array of grey scale
 KLT_PixelType* gkll_kl::convert_to_gs_image(vil1_image &image)
 {
-  vcl_cerr << "Converting image to grey scale..." << vcl_endl;
+  vcl_cerr << "Converting image to grey scale...\n";
   if (vil1_pixel_format(image)==VIL1_RGB_BYTE)
   {
     int w=image.width();
@@ -198,23 +198,23 @@ KLT_PixelType* gkll_kl::convert_to_gs_image(vil1_image &image)
 void gkll_kl::set_tracking_context( KLT_TrackingContext tc)
 {
   /* Set values to values derived from the parameters */
-  tc->mindist               = _params.mindist;
-  tc->window_width          = _params.window_width;
-  tc->window_height         = _params.window_height;
-  tc->sequentialMode        = _params.sequentialMode;
-  tc->smoothBeforeSelecting = _params.smoothBeforeSelecting;
-  tc->writeInternalImages   = _params.writeInternalImages;
-  tc->min_eigenvalue        = _params.min_eigenvalue;
-  tc->min_determinant       = _params.min_determinant;
-  tc->max_iterations        = _params.max_iterations;
-  tc->min_displacement      = _params.min_displacement;
-  tc->max_residue           = _params.max_residue;
-  tc->grad_sigma            = _params.grad_sigma;
-  tc->smooth_sigma_fact     = _params.smooth_sigma_fact;
-  tc->pyramid_sigma_fact    = _params.pyramid_sigma_fact;
-  tc->nSkippedPixels        = _params.nSkippedPixels;
+  tc->mindist               = params_.mindist;
+  tc->window_width          = params_.window_width;
+  tc->window_height         = params_.window_height;
+  tc->sequentialMode        = params_.sequentialMode;
+  tc->smoothBeforeSelecting = params_.smoothBeforeSelecting;
+  tc->writeInternalImages   = params_.writeInternalImages;
+  tc->min_eigenvalue        = params_.min_eigenvalue;
+  tc->min_determinant       = params_.min_determinant;
+  tc->max_iterations        = params_.max_iterations;
+  tc->min_displacement      = params_.min_displacement;
+  tc->max_residue           = params_.max_residue;
+  tc->grad_sigma            = params_.grad_sigma;
+  tc->smooth_sigma_fact     = params_.smooth_sigma_fact;
+  tc->pyramid_sigma_fact    = params_.pyramid_sigma_fact;
+  tc->nSkippedPixels        = params_.nSkippedPixels;
 
   // klt functions to complete the setup
-  KLTChangeTCPyramid (tc, _params.search_range); //set nPyramidLevels and subsampling
+  KLTChangeTCPyramid (tc, params_.search_range); //set nPyramidLevels and subsampling
   KLTUpdateTCBorder  (tc); //set borderx and bordery
 }

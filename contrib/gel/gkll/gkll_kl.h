@@ -18,22 +18,22 @@ extern "C" {
 #include <vidl/vidl_movie_sptr.h>
 
 
-class gkll_kl {
+class gkll_kl
+{
+ public:
 
-public:
+  //***************************************************************************
+  // Initialization
+  //***************************************************************************
 
-//***************************************************************************
-// Initialization
-//***************************************************************************
-
-//---------------------------------------------------------------------------
-//: Default constructor. Parameters set to defaults
-//---------------------------------------------------------------------------
+  //---------------------------------------------------------------------------
+  //: Default constructor. Parameters set to defaults
+  //---------------------------------------------------------------------------
   explicit gkll_kl(const gkll_kl_params & params);
 
-//---------------------------------------------------------------------------
-//: Destructor.
-//---------------------------------------------------------------------------
+  //---------------------------------------------------------------------------
+  //: Destructor.
+  //---------------------------------------------------------------------------
   virtual ~gkll_kl();
 
   virtual void match_sequence(vcl_vector<vil1_image> &,gkll_multi_view_data_vertex_sptr);
@@ -42,12 +42,12 @@ public:
 
   virtual vcl_vector<vtol_vertex_2d_sptr> * extract_points(vil1_image &);
 
-private:
-  gkll_kl_params _params;
+ private:
+  gkll_kl_params params_;
 
   virtual KLT_PixelType* convert_to_gs_image(vil1_image &);
 
   virtual void set_tracking_context( KLT_TrackingContext tc);
 };
 
-#endif // gkll_kl_
+#endif // gkll_kl_h_
