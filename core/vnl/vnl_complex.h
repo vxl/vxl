@@ -20,6 +20,7 @@
 
 #include <vcl_cmath.h>
 #include <vcl_complex.h>
+#include "vnl_math.h"
 
 // fsm: these three lines will disappear in the future.
 #define vnl_complex vcl_complex

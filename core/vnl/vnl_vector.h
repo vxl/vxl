@@ -55,7 +55,9 @@ class vnl_vector {
 public:
   friend class vnl_matrix<T>;
 
-  vnl_vector ();                                               // empty vector.
+  //: Creates an empty vector. O(1).
+  vnl_vector () : num_elmts(0) , data(0) {}
+
   vnl_vector (unsigned len);                                   // n-vector.
   vnl_vector (unsigned len, T const& v0);                      // n-vector of vals.
   //vnl_vector (unsigned int len, int n, T v00, ...);          // Opt. values
@@ -79,7 +81,7 @@ public:
   vnl_vector (vnl_vector<T> const &, vnl_matrix<T> const &, vnl_tag_mul); // v * M
   vnl_vector (vnl_vector<T> const &, vnl_tag_grab); // magic
   // </internal>
-  ~vnl_vector();
+  ~vnl_vector() { if (data) destroy(); }
   
   // -- Return the length, number of elements, dimension of this vector.
   unsigned size() const { return num_elmts; }
@@ -191,12 +193,14 @@ public:
   bool resize (unsigned n); // returns true if size changed.
   
   // I/O
-  bool read_ascii(istream& s);
-  static vnl_vector<T> read(istream& s);
+  bool read_ascii(vcl_istream& s);
+  static vnl_vector<T> read(vcl_istream& s);
 
 protected:
   unsigned num_elmts;           // Number of elements
   T* data;                      // Pointer to the vnl_vector
+
+  void destroy();
 
 #if VCL_NEED_FRIEND_FOR_TEMPLATE_OVERLOAD
 # define v vnl_vector<T>

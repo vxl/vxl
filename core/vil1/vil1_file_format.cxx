@@ -14,6 +14,7 @@ vil_file_format::~vil_file_format()
 #define HAS_MIT  1
 #define HAS_BMP  1
 #define HAS_GIF  0
+#define HAS_JPEG 1
 
 #if HAS_PNM
 #include <vil/file_formats/vil_pnm.h>
