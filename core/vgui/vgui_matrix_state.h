@@ -23,11 +23,7 @@
 
 #include <vcl_iosfwd.h>
 #include <vgui/vgui_gl.h>
-#if defined(VCL_GCC_27)
-# include <vnl/vnl_matrix.h>
-#else
 template <class T> class vnl_matrix;
-#endif
 
 class vgui_matrix_state {
 public:
