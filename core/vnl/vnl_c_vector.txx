@@ -252,21 +252,20 @@ T vnl_c_vector<T>::euclid_dist_sq(T const *a, T const *b, unsigned n)
 {
 //IMS: Unable to optimise this any further for MSVC compiler
   T sum(0);
-  T diff;
 #ifdef VCL_VC60
   for (unsigned i=0; i<n; ++i)
   {
-    diff = a[i] - b[i];
+    const T diff = a[i] - b[i];
     sum += diff*diff;
   }
 #else
-  a--;
-  b--;
+  --a;
+  --b;
   while (n!=0)
   {
-    diff = a[n] - b[n];
+    const T diff = a[n] - b[n];
     sum += diff*diff;
-    n--;
+    --n;
   }
 #endif
   return sum;
