@@ -9,6 +9,11 @@
 #include <vcl_iostream.h>
 #include <vsl/vsl_binary_io.h>
 
+// windows thinks min and max are macros in this file, but they
+// are not, don't know where they are defined (somewhere in vxl!)
+#undef min
+#undef max
+
 //: Simple statistics on a 1D variable
 // \code
 // // A rather trivial example
