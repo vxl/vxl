@@ -1,7 +1,7 @@
 /*
   fsm@robots.ox.ac.uk
 */
-#include <vbl/vbl_test.h>
+#include <testlib/testlib_test.h>
 
 #include <vbl/vbl_bounding_box.h>
 #include <vbl/vbl_fwd.h>
@@ -33,9 +33,8 @@
 #include <vbl/vbl_basic_relation_type.h>
 
 
-
 void test_bounding_box()
-{ 
+{
   vcl_cout << "\n\n\n*******************\n"
                  << " Test Bounding Box \n"
                  << "*******************" << vcl_endl;
@@ -64,7 +63,7 @@ void test_bounding_box()
 }
 
 void test_qsort()
-{ 
+{
   vcl_cout << "\n\n\n************\n"
                  << " Test qsort \n"
                  << "************" << vcl_endl;
@@ -79,7 +78,7 @@ void test_qsort()
 }
 
 void test_triple()
-{ 
+{
   vcl_cout << "\n\n\n*************\n"
                  << " Test Triple \n"
                  << "*************" << vcl_endl;
@@ -96,7 +95,7 @@ void test_triple()
 }
 
 void test_quadruple()
-{ 
+{
   vcl_cout << "\n\n\n****************\n"
                  << " Test Quadruple \n"
                  << "****************" << vcl_endl;
@@ -112,8 +111,6 @@ void test_quadruple()
   TEST("vbl_quadruple compare", t < t2, true);
 }
 
-
-
 void vbl_test_all()
 {
   test_bounding_box();
@@ -121,6 +118,5 @@ void vbl_test_all()
   test_triple();
   test_qsort();
 }
-    
 
-TESTMAIN(vbl_test_all);
+TESTLIB_DEFINE_MAIN(vbl_test_all);

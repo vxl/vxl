@@ -2,7 +2,7 @@
 #include <vcl_fstream.h>
 #include <vcl_utility.h>
 
-#include <vbl/vbl_test.h>
+#include <testlib/testlib_test.h>
 #include <vbl/io/vbl_io_sparse_array_2d.h>
 #include <vbl/vbl_sparse_array_2d.h>
 
@@ -66,4 +66,4 @@ void test_sparse_array_prime()
 }
 
 
-TESTMAIN(test_sparse_array_prime);
+TESTLIB_DEFINE_MAIN(test_sparse_array_prime);

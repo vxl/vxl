@@ -2,7 +2,7 @@
 #include <vcl_fstream.h>
 #include <vcl_utility.h>
 
-#include <vbl/vbl_test.h>
+#include <testlib/testlib_test.h>
 #include "vbl_io_test_classes.h"
 #include "vbl_io_test_classes.cxx"
 
@@ -45,4 +45,4 @@ void test_smart_ptr_prime()
 }
 
 
-TESTMAIN(test_smart_ptr_prime);
+TESTLIB_DEFINE_MAIN(test_smart_ptr_prime);

@@ -2,7 +2,7 @@
 #include <vcl_fstream.h>
 #include <vcl_utility.h>
 
-#include <vbl/vbl_test.h>
+#include <testlib/testlib_test.h>
 #include <vbl/io/vbl_io_array_1d.h>
 
 void test_array_1d_io()
@@ -61,4 +61,4 @@ void test_array_1d_prime()
 }
 
 
-TESTMAIN(test_array_1d_prime);
+TESTLIB_DEFINE_MAIN(test_array_1d_prime);

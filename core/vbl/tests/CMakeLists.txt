@@ -7,7 +7,7 @@ SET( vbl_test_sources
 AUX_SOURCE_DIRECTORY(Templates vbl_test_sources)
 
 ADD_LIBRARY(vbl_test ${vbl_test_sources})
-TARGET_LINK_LIBRARIES( vbl_test vbl )
+TARGET_LINK_LIBRARIES( vbl_test vbl testlib )
 
 LINK_LIBRARIES( vbl_test )
 

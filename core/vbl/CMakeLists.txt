@@ -2,7 +2,6 @@
 
 SET( vbl_sources
   vbl_fwd.h
-  vbl_test.cxx vbl_test.h
 
   vbl_bool_ostream.cxx vbl_bool_ostream.h
   vbl_ref_count.cxx vbl_ref_count.h

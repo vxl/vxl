@@ -1,9 +1,9 @@
  
 // First define testmain
 
-#include <vbl/vbl_test.h>
-#undef TESTMAIN
-#define TESTMAIN(x)
+#include <testlib/testlib_test.h>
+#undef TESTLIB_DEFINE_MAIN
+#define TESTLIB_DEFINE_MAIN(x)
 #include "test_smart_ptr_io.cxx"
 #include "test_bounding_box_io.cxx"
 #include "test_array_1d_io.cxx"
@@ -13,9 +13,9 @@
 #include "golden_test_vbl_io.cxx"
 
 
-#undef TESTMAIN
-#define TESTMAIN(x) int main() { \
-vbl_test_start(#x); x(); return vbl_test_summary(); }
+#undef TESTLIB_DEFINE_MAIN
+#define TESTLIB_DEFINE_MAIN(x) int main() { \
+testlib_test_start(#x); x(); return testlib_test_summary(); }
 
 void run_test_vbl_io()
 {
@@ -29,4 +29,4 @@ void run_test_vbl_io()
 }
 
 
-TESTMAIN(run_test_vbl_io);
+TESTLIB_DEFINE_MAIN(run_test_vbl_io);

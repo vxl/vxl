@@ -32,11 +32,11 @@ void golden_test_vbl_io(bool save_file=false);
 
 // This nasty macro stuff is to allow the program to be compiled as a stand
 // alone program or as part of a larger test program.
-#ifndef TESTMAIN
-  #include <vbl/vbl_test.h>
+#ifndef TESTLIB_DEFINE_MAIN
+  #include <testlib/testlib_test.h>
   int main( int argc, char* argv[] )
   {
-    vbl_test_start("golden_test_all_vbl_io");
+    testlib_test_start("golden_test_all_vbl_io");
     bool save_file=false;
 
     if (argc==2)
@@ -49,10 +49,10 @@ void golden_test_vbl_io(bool save_file=false);
       }
     }
     golden_test_vbl_io(save_file);
-    return vbl_test_summary();
+    return testlib_test_summary();
   }
 #else
-  #include <vbl/vbl_test.h>
+  #include <testlib/testlib_test.h>
 #endif
 
 
