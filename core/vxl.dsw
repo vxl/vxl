@@ -138,9 +138,6 @@ Package=<4>
     Project_Dep_Name test_vnl_io
     End Project Dependency
     Begin Project Dependency
-    Project_Dep_Name test_allvxl
-    End Project Dependency
-    Begin Project Dependency
     Project_Dep_Name test_mbl
     End Project Dependency
     Begin Project Dependency
@@ -517,27 +514,6 @@ Package=<4>
     End Project Dependency
     Begin Project Dependency
     Project_Dep_Name vnl_algo
-    End Project Dependency
-}}}
-
-###############################################################################
-
-Project: "test_allvxl"=.\test_allvxl\test_allvxl.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-    Begin Project Dependency
-    Project_Dep_Name vbl
-    End Project Dependency
-    Begin Project Dependency
-    Project_Dep_Name vnl_algo
-    End Project Dependency
-    Begin Project Dependency
-    Project_Dep_Name vpl
     End Project Dependency
 }}}
 
@@ -1552,9 +1528,6 @@ Package=<4>
     End Project Dependency
     Begin Project Dependency
     Project_Dep_Name vcsl
-    End Project Dependency
-    Begin Project Dependency
-    Project_Dep_Name test_allvxl
     End Project Dependency
 }}}
 

@@ -843,18 +843,6 @@ Package=<4>
 
 ###############################################################################
 
-Project: "test_allvxl"=.\vxl\test_allvxl\test_allvxl.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-}}}
-
-###############################################################################
-
 Project: "test_arbitrary_length_int_conversion"=.\vxl\vsl\tests\test_arbitrary_length_int_conversion.dsp - Package Owner=<4>
 
 Package=<5>
