@@ -1,0 +1,226 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<html>
+  <head>
+    <title>Install VXL 1.0.0 release</title>
+  </head>
+
+  <body bgcolor=white>
+  <a href="http://vxl.sourceforge.net/" border="0"><img ALT="VXL" src="../logo1-quant.gif" align=right border=0 width="128" height="48"></a>
+  <h1>Installing the VXL 1.0.0 release</h1>
+  <br clear=all>
+
+<hr>
+
+<a name = "unix-build">
+
+<h2>
+Configuration
+</h2></a>
+
+<p>
+The most common build system used for VXL is  <a
+href="http://www.cmake.org/">CMake</a>. You should first download and
+install CMake. VXL requires CMake version 1.6.7 or higher.
+</p>
+
+  <p>
+Extract the VXL source into the directory <b>vxl-1.0.0</b>. Create a
+separate output directory <b>bin</b> parallel to the source directory:
+<pre>
+   .../.../... ---+--- vxl-1.0.0 ---+--- vxl
+                  |                     |
+                  |                     +--- vcl
+                  |                     ...
+                  |
+                  +--- bin
+</pre>
+Let us call the former <code>$VXLSRC</code> and the latter <code>$VXLBIN</code>.
+
+<p>
+Change current directory to <code>$VXLBIN</code> and run CMake, specifying <code>$VXLSRC</code>
+as the source directory.
+<dl>
+<dt><b>Unix and Cygwin:</b>
+  <dd>Run the Curses based front-end
+    <pre>
+      ccmake $VXLSRC
+    </pre>
+   or the command line front-end
+    <pre>
+      cmake -i $VXLSRC
+    </pre>
+<dt><b>Windows:</b>
+  <dd>Run CMakeSetup and specify the source and binary directories as <code>$VXLSRC</code> and
+    <code>$VXLBIN</code>, respectively.
+</dl>
+Repeatedly select "Configure" ("C" on Unix) until the entries stop
+changing and you get the chance to generate the makefiles ("OK" on
+Windows, and "G" on Unix).
+
+<p>
+In the CMake interface, you can choose which parts of the VXL tree to
+build. The default is to build everything except vgui and its
+dependents. Building vgui requires the presence of OpenGL and
+GLU. Often, these are in a platform specific area of the machine, and
+hence cannot be detected by CMake. If you have these on your system,
+and wish to build vgui, set BUILD_VGUI to "ON" and make sure the
+appropriate entries in the CMake cache are valid.
+</p>
+
+
+
+<h2>Build</h2>
+
+
+
+<p>
+Now you can build the libraries.
+</p>
+
+<dl>
+<dt><b>Unix or Cygwin:</b>
+</dl>
+  <blockquote>
+
+<p>
+Run make
+</p>
+
+    <blockquote>
+
+<p>
+<code>make</code>
+</p>
+
+    </blockquote>
+  </blockquote>
+<dl>
+<dt><b>Windows and MSVC:</b>
+</dl>
+  <blockquote>
+
+<p>
+Build VXL by loading the <code>$VXLBIN\vxl.dsw</code> into Developer Studio and
+building the ALL_BUILD target. This project is a little larger than Developer
+Studio can sometimes cope with, so you can do a full build from the command line:
+</p>
+
+    <blockquote>
+
+<p>
+<code>vcvars32.bat<br>
+msdev vxl.dsw /MAKE "ALL_BUILD - Win32 Debug"</code>
+</p>
+
+    </blockquote>
+
+<p>
+Or the speedier release version
+</p>
+
+    <blockquote>
+
+<p>
+<code>msdev vxl.dsw /MAKE &quot;ALL_BUILD - Win32 Release&quot;</code>
+</p>
+
+    </blockquote>
+  </blockquote>
+
+  <h2>Test
+</h2>
+
+  <p>You can run the test suite using the <code>ctest</code> program that came
+  with CMake
+</p>
+
+<hr>
+
+<h2><a name="docs">Documentation</a></h2>
+
+<h3>Documentation on the whole of VXL</h3>
+
+There are two main references for information on the whole of VXL:
+<ul>
+<li><a href="http://paine.wiau.man.ac.uk/pub/doc_vxl/index.html">VXL package documentation</a>
+- this documents the latest snapshot of VXL.
+It includes auto-generated descriptions of every
+class and function in VXL.&nbsp; There is an <a href="http://www.esat.kuleuven.ac.be/~targetjr/vxl/">alternative</a> lay-out with essentially identical content.
+
+<li><a href="http://paine.wiau.man.ac.uk/pub/doc_vxl/books/core/book.html">VXL book</a>
+- this is a single reference for all high-level documentation on VXL. It currently documents
+the CVS snapshot of VXL.
+</ul>
+
+The <a href="http://www.isbe.man.ac.uk/search_vxl.html">documentation search</a>
+page is useful for quickly finding documentation. You can also <a href="http://paine.wiau.man.ac.uk/pub/doc_vxl/doc_vxl.tar.gz"> download</a> the
+entire snapshot documentation.
+
+<h3>VXL guides</h3>
+
+These are short guides to specific areas in VXL:
+<ul>
+<li><b>xcv</b> is an application built to demonstrate the functionality of the VXL libraries.
+  <ul>
+  <li>There is a <a href="../manuals/xcv/newxcv.html">guide to using xcv</A>
+      (also available <a href="../manuals/xcv.ps.gz">in postscript format</a>).
+  <li>Download <a href="../manuals/xcv.zip">xcv for Windows</a>,
+      <a href="../manuals/xcv-SunOS5.bin.gz">xcv for solaris</a>.
+      and <a href="../manuals/xcv-linux.bin.gz">xcv for linux</a>
+  <li>Here is some <a href ="../manuals/xcvdata.tar.gz">example data</a>
+      suitable for use with xcv.
+  </ul>
+<br>
+
+<li><b>vgui</b> is the VXL graphical user interface library.
+  <ul>
+  <li>For a simple introduction to using VGUI there is the
+      <a href="../manuals/vgui_users_guide/index.html">VGUI users guide</a>
+      (also <a href="../manuals/vgui_users_guide.ps.gz">in postscript format</a>).
+       Here is the <a href ="../manuals/examples-tutorial.tar.gz">
+       example code</a> used in the guide.
+  <li>The <a href="../manuals/vgui_ref_manual/index.html">VGUI
+      reference manual</a> (also <a href="../manuals/vgui_ref_manual.ps.gz">in
+      postscript format</a>) is designed for developers of VGUI.
+  </ul>
+</ul>
+
+xcv and vgui have not changed a lot since the last release of VXL so these guides should be useful for both
+the release and development versions of VXL.
+<ul>
+  <li>The <a href="http://paine.wiau.man.ac.uk/pub/doc_vxl/books/contrib/mul/book.html">MUL
+      book</a> is an overview of libraries concerned with probability modelling,
+      classification, and 3d and registered images.</li>
+</ul>
+<hr>
+
+<h2>Problems and where to get help</h2>
+
+If you think you have found a bug, or if you have an installation or build problem, please submit a bug
+report on the <a href="http://lists.sourceforge.net/lists/listinfo/vxl-users">vxl-users
+mailing list</a>. Also supply the following information unless you know for certain it is not relevant:
+<ul>
+<li> Exactly what you did and exactly what goes wrong. Be verbose. We need to know this in order to help.
+     If you have problems configuring VXL, include the options you gave to configure and the output it
+     produced. If you have problems compiling VXL, include the command the makefiles issued, as well as
+     the entire error message.
+<li> Compiler and <i>compiler version number</i>. For gcc, this means we want the output of the
+     two shell commands "gcc -v" and "g++ -v" (yes, both, please - they have been known to differ). For other
+     compilers try -V, -ver, -version or read the manual.&nbsp;
+<li> Operating system (e.g. linux/solaris/irix) and architecture (e.g. i386/sparc/mips). If this
+     means nothing to you, give some indication of the sort of machine (e.g. does it have "Indy"
+     or "AEGIS" or "Ultra" or "Cray" or "HAL" etc written on it?).
+</ul>
+
+  <p>&nbsp;
+</p>
+
+<hr>
+    <address>
+<font color="#0000ff">vxl-maintainers at
+    lists dot sourceforge dot net</font>
+</address>
+
+
+  </body>
+</html>
