@@ -777,6 +777,24 @@ SOURCE=.\Templates/vnl_matrix_fixed+float.4.3-.cxx
 SOURCE=.\Templates/vnl_matrix_fixed+float.4.4-.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\Templates/vnl_matrix_fixed+double.6.6-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vnl_matrix_fixed+float.10.10-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vnl_matrix_fixed+float.9.9-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vnl_vector_fixed+float.10-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vnl_vector_fixed+float.12-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vnl_vector_fixed+float.6-.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\vnl_gamma.cxx
 # End Source File
 # End Group
