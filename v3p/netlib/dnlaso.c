@@ -9,7 +9,6 @@
 
 static integer c__0 = 0;
 static integer c__1 = 1;
-static doublereal c_b15 = 10.;
 static doublereal c_b88 = 0.;
 
 /*   VERSION 2    DOES NOT USE EISPACK */
@@ -27,11 +26,8 @@ integer *nblock, *maxop, *maxj;
 doublereal *work;
 integer *ind, *ierr;
 {
-    /* System generated locals */
-    integer vec_dim1, vec_offset, val_dim1, val_offset, i__1, i__2;
-
     /* Local variables */
-    static doublereal temp, tarr[1];
+    static doublereal temp, tarr;
     extern doublereal dnrm2_();
     static integer i, m, nband;
     static doublereal delta;
@@ -45,196 +41,182 @@ integer *ind, *ierr;
     static doublereal eps;
     static integer nop;
 
-
-
-/* AUTHOR/IMPLEMENTER D.S.SCOTT-B.N.PARLETT/D.S.SCOTT */
-
-/* COMPUTER SCIENCES DEPARTMENT */
-/* UNIVERSITY OF TEXAS AT AUSTIN */
-/* AUSTIN, TX 78712 */
-
-/* VERSION 2 ORIGINATED APRIL 1982 */
-
-/* CURRENT VERSION  JUNE 1983 */
-
-/* DNLASO FINDS A FEW EIGENVALUES AND EIGENVECTORS AT EITHER END OF */
-/* THE SPECTRUM OF A LARGE SPARSE SYMMETRIC MATRIX.  THE SUBROUTINE */
-/* DNLASO IS PRIMARILY A DRIVER FOR SUBROUTINE DNWLA WHICH IMPLEMENTS */
-/* THE LANCZOS ALGORITHM WITH SELECTIVE ORTHOGONALIZATION AND */
-/* SUBROUTINE DNPPLA WHICH POST PROCESSES THE OUTPUT OF DNWLA. */
-/* HOWEVER DNLASO DOES CHECK FOR INCONSISTENCIES IN THE CALLING */
-/* PARAMETERS AND DOES PREPROCESS ANY USER SUPPLIED EIGENPAIRS. */
-/* DNLASO ALWAYS LOOKS FOR THE SMALLEST (LEFTMOST) EIGENVALUES.  IF */
-/* THE LARGEST EIGENVALUES ARE DESIRED DNLASO IMPLICITLY USES THE */
-/* NEGATIVE OF THE MATRIX. */
-
-
-/* ON INPUT */
-
-
-/*   OP   A USER SUPPLIED SUBROUTINE WITH CALLING SEQUENCE */
-/*     OP(N,M,P,Q).  P AND Q ARE N X M MATRICES AND Q IS */
-/*     RETURNED AS THE MATRIX TIMES P. */
-
-/*   IOVECT   A USER SUPPLIED SUBROUTINE WITH CALLING SEQUENCE */
-/*     IOVECT(N,M,Q,J,K).  Q IS AN N X M MATRIX.  IF K = 0 */
-/*     THE COLUMNS OF Q ARE STORED AS THE (J-M+1)TH THROUGH */
-/*     THE JTH LANCZOS VECTORS.  IF K = 1 THEN Q IS RETURNED */
-/*     AS THE (J-M+1)TH THROUGH THE JTH LANCZOS VECTORS.  SEE */
-/*     DOCUMENTATION FOR FURTHER DETAILS AND EXAMPLES. */
-
-/*   N   THE ORDER OF THE MATRIX. */
-
-/*   NVAL   NVAL SPECIFIES THE EIGENVALUES TO BE FOUND. */
-/*     DABS(NVAL)  IS THE NUMBER OF EIGENVALUES DESIRED. */
-/*     IF NVAL < 0 THE ALGEBRAICALLY SMALLEST (LEFTMOST) */
-/*     EIGENVALUES ARE FOUND.  IF NVAL > 0 THE ALGEBRAICALLY */
-/*     LARGEST (RIGHTMOST) EIGENVALUES ARE FOUND.  NVAL MUST NOT */
-/*     BE ZERO.  DABS(NVAL) MUST BE LESS THAN  MAXJ/2. */
-
-/*   NFIG   THE NUMBER OF DECIMAL DIGITS OF ACCURACY DESIRED IN THE */
-/*     EIGENVALUES.  NFIG MUST BE GREATER THAN OR EQUAL TO 1. */
-
-/*   NPERM   AN INTEGER VARIABLE WHICH SPECIFIES THE NUMBER OF USER */
-/*     SUPPLIED EIGENPAIRS.  IN MOST CASES NPERM WILL BE ZERO.  SEE */
-/*     DOCUMENTAION FOR FURTHER DETAILS OF USING NPERM GREATER */
-/*     THAN ZERO.  NPERM MUST NOT BE LESS THAN ZERO. */
-
-/*   NMVAL   THE ROW DIMENSION OF THE ARRAY VAL.  NMVAL MUST BE GREATER */
-/*     THAN OR EQUAL TO DABS(NVAL). */
-
-/*   VAL   A TWO DIMENSIONAL DOUBLE PRECISION ARRAY OF ROW */
-/*     DIMENSION NMVAL AND COLUMN DIMENSION AT LEAST 4.  IF NPERM */
-/*     IS GREATER THAN ZERO THEN CERTAIN INFORMATION MUST BE STORED */
-/*     IN VAL.  SEE DOCUMENTATION FOR DETAILS. */
-
-/*   NMVEC   THE ROW DIMENSION OF THE ARRAY VEC.  NMVEC MUST BE GREATER */
-/*     THAN OR EQUAL TO N. */
-
-/*   VEC   A TWO DIMENSIONAL DOUBLE PRECISION ARRAY OF ROW */
-/*     DIMENSION NMVEC AND COLUMN DIMENSION AT LEAST DABS(NVAL).  IF */
-/*     NPERM > 0 THEN THE FIRST NPERM COLUMNS OF VEC MUST */
-/*     CONTAIN THE USER SUPPLIED EIGENVECTORS. */
-
-/*   NBLOCK   THE BLOCK SIZE.  SEE DOCUMENTATION FOR CHOOSING */
-/*     AN APPROPRIATE VALUE FOR NBLOCK.  NBLOCK MUST BE GREATER */
-/*     THAN ZERO AND LESS THAN  MAXJ/6. */
-
-/*   MAXOP   AN UPPER BOUND ON THE NUMBER OF CALLS TO THE SUBROUTINE */
-/*     OP.  DNLASO TERMINATES WHEN MAXOP IS EXCEEDED.  SEE */
-/*     DOCUMENTATION FOR GUIDELINES IN CHOOSING A VALUE FOR MAXOP. */
-
-/*   MAXJ   AN INDICATION OF THE AVAILABLE STORAGE (SEE WORK AND */
-/*     DOCUMENTATION ON IOVECT).  FOR THE FASTEST CONVERGENCE MAXJ */
-/*     SHOULD BE AS LARGE AS POSSIBLE, ALTHOUGH IT IS USELESS TO HAVE */
-/*     MAXJ LARGER THAN MAXOP*NBLOCK. */
-
-/*   WORK   A DOUBLE PRECISION ARRAY OF DIMENSION AT LEAST AS */
-/*     LARGE AS */
-
-/*         2*N*NBLOCK + MAXJ*(NBLOCK+NV+2) + 2*NBLOCK*NBLOCK + 3*NV */
-
-/*            + THE MAXIMUM OF */
-/*                 N*NBLOCK */
-/*                   AND */
-/*         MAXJ*(2*NBLOCK+3) + 2*NV + 6 + (2*NBLOCK+2)*(NBLOCK+1) */
-
-/*     WHERE NV = DABS(NVAL) */
-
-/*     THE FIRST N*NBLOCK ELEMENTS OF WORK MUST CONTAIN THE DESIRED */
-/*     STARTING VECTORS.  SEE DOCUMENTATION FOR GUIDELINES IN */
-/*     CHOOSING STARTING VECTORS. */
-
-/*   IND   AN INTEGER ARRAY OF DIMENSION AT LEAST DABS(NVAL). */
-
-/*   IERR   AN INTEGER VARIABLE. */
-
-
-/* ON OUTPUT */
-
-
-/*   NPERM   THE NUMBER OF EIGENPAIRS NOW KNOWN. */
-
-/*   VEC   THE FIRST NPERM COLUMNS OF VEC CONTAIN THE EIGENVECTORS. */
-
-/*   VAL   THE FIRST COLUMN OF VAL CONTAINS THE CORRESPONDING */
-/*     EIGENVALUES.  THE SECOND COLUMN CONTAINS THE RESIDUAL NORMS OF */
-/*     THE EIGENPAIRS WHICH ARE BOUNDS ON THE ACCURACY OF THE EIGEN- */
-/*    VALUES.  THE THIRD COLUMN CONTAINS MORE DOUBLE PRECISIONISTIC ESTIMA
-TES*/
-/*     OF THE ACCURACY OF THE EIGENVALUES.  THE FOURTH COLUMN CONTAINS */
-/*     ESTIMATES OF THE ACCURACY OF THE EIGENVECTORS.  SEE */
-/*     DOCUMENTATION FOR FURTHER INFORMATION ON THESE QUANTITIES. */
-
-/*   WORK   IF WORK IS TERMINATED BEFORE COMPLETION (IERR = -2) */
-/*     THE FIRST N*NBLOCK ELEMENTS OF WORK CONTAIN THE BEST VECTORS */
-/*     FOR RESTARTING THE ALGORITHM AND DNLASO CAN BE IMMEDIATELY */
-/*     RECALLED TO CONTINUE WORKING ON THE PROBLEM. */
-
-/*   IND   IND(1)  CONTAINS THE ACTUAL NUMBER OF CALLS TO OP.  ON SOME */
-/*     OCCASIONS THE NUMBER OF CALLS TO OP MAY BE SLIGHTLY LARGER */
-/*     THAN MAXOP. */
-
-/*   IERR   AN ERROR COMPLETION CODE.  THE NORMAL COMPLETION CODE IS */
-/*     ZERO.  SEE THE DOCUMENTATION FOR INTERPRETATIONS OF NON-ZERO */
-/*     COMPLETION CODES. */
-
-
-/* INTERNAL VARIABLES. */
-
-
-
-/* NOP   RETURNED FROM DNWLA AS THE NUMBER OF CALLS TO THE */
-/*   SUBROUTINE OP. */
-
-/* NV   SET EQUAL TO DABS(NVAL), THE NUMBER OF EIGENVALUES DESIRED, */
-/*   AND PASSED TO DNWLA. */
-
-/* SMALL   SET TO .TRUE. IF THE SMALLEST EIGENVALUES ARE DESIRED. */
-
-/* RARITZ   RETURNED FROM DNWLA AND PASSED TO DNPPLA.  RARITZ IS .TRUE. */
-/*   IF A FINAL RAYLEIGH-RITZ PROCEDURE IS NEEDED. */
-
-/* DELTA   RETURNED FROM DNWLA AS THE EIGENVALUE OF THE MATRIX */
-/*   WHICH IS CLOSEST TO THE DESIRED EIGENVALUES. */
-
-/* DNPPLA   A SUBROUTINE FOR POST-PROCESSING THE EIGENVECTORS COMPUTED */
-/*   BY DNWLA. */
-
-/* DNWLA   A SUBROUTINE FOR IMPLEMENTING THE LANCZOS ALGORITHM */
-/*   WITH SELECTIVE ORTHOGONALIZATION. */
-
-/* DMVPC   A SUBROUTINE FOR COMPUTING THE RESIDUAL NORM AND */
-/*   ORTHOGONALITY COEFFICIENT OF GIVEN RITZ VECTORS. */
-
-/* DORTQR   A SUBROUTINE FOR ORTHONORMALIZING A BLOCK OF VECTORS */
-/*   USING HOUSEHOLDER REFLECTIONS. */
-
-/* DAXPY,DCOPY,DDOT,DNRM2,DSCAL,DSWAP   A SUBSET OF THE BASIC LINEAR */
-/*   ALGEBRA SUBPROGRAMS USED FOR VECTOR MANIPULATION. */
-
-/* DLARAN   A SUBROUTINE TO GENERATE RANDOM VECTORS */
-
-/* DLAEIG, DLAGER, DLABCM, DLABFC   SUBROUTINES FOR BAND EIGENVALUE */
-/*   CALCULATIONS. */
-
-/* ------------------------------------------------------------------ */
+/* AUTHOR/IMPLEMENTER D.S.SCOTT-B.N.PARLETT/D.S.SCOTT			*/
+/*									*/
+/* COMPUTER SCIENCES DEPARTMENT						*/
+/* UNIVERSITY OF TEXAS AT AUSTIN					*/
+/* AUSTIN, TX 78712							*/
+/*									*/
+/* VERSION 2 ORIGINATED APRIL 1982					*/
+/*									*/
+/* CURRENT VERSION  JUNE 1983						*/
+/*									*/
+/* DNLASO FINDS A FEW EIGENVALUES AND EIGENVECTORS AT EITHER END OF	*/
+/* THE SPECTRUM OF A LARGE SPARSE SYMMETRIC MATRIX.  THE SUBROUTINE	*/
+/* DNLASO IS PRIMARILY A DRIVER FOR SUBROUTINE DNWLA WHICH IMPLEMENTS	*/
+/* THE LANCZOS ALGORITHM WITH SELECTIVE ORTHOGONALIZATION AND		*/
+/* SUBROUTINE DNPPLA WHICH POST PROCESSES THE OUTPUT OF DNWLA.		*/
+/* HOWEVER DNLASO DOES CHECK FOR INCONSISTENCIES IN THE CALLING		*/
+/* PARAMETERS AND DOES PREPROCESS ANY USER SUPPLIED EIGENPAIRS.		*/
+/* DNLASO ALWAYS LOOKS FOR THE SMALLEST (LEFTMOST) EIGENVALUES.  IF	*/
+/* THE LARGEST EIGENVALUES ARE DESIRED DNLASO IMPLICITLY USES THE	*/
+/* NEGATIVE OF THE MATRIX.						*/
+/*									*/
+/*									*/
+/* ON INPUT								*/
+/*									*/
+/*									*/
+/*   OP   A USER SUPPLIED SUBROUTINE WITH CALLING SEQUENCE		*/
+/*     OP(N,M,P,Q).  P AND Q ARE N X M MATRICES AND Q IS		*/
+/*     RETURNED AS THE MATRIX TIMES P.					*/
+/*									*/
+/*   IOVECT   A USER SUPPLIED SUBROUTINE WITH CALLING SEQUENCE		*/
+/*     IOVECT(N,M,Q,J,K).  Q IS AN N X M MATRIX.  IF K = 0		*/
+/*     THE COLUMNS OF Q ARE STORED AS THE (J-M+1)TH THROUGH		*/
+/*     THE JTH LANCZOS VECTORS.  IF K = 1 THEN Q IS RETURNED		*/
+/*     AS THE (J-M+1)TH THROUGH THE JTH LANCZOS VECTORS.  SEE		*/
+/*     DOCUMENTATION FOR FURTHER DETAILS AND EXAMPLES.			*/
+/*									*/
+/*   N   THE ORDER OF THE MATRIX.					*/
+/*									*/
+/*   NVAL   NVAL SPECIFIES THE EIGENVALUES TO BE FOUND.			*/
+/*     DABS(NVAL)  IS THE NUMBER OF EIGENVALUES DESIRED.		*/
+/*     IF NVAL < 0 THE ALGEBRAICALLY SMALLEST (LEFTMOST)		*/
+/*     EIGENVALUES ARE FOUND.  IF NVAL > 0 THE ALGEBRAICALLY		*/
+/*     LARGEST (RIGHTMOST) EIGENVALUES ARE FOUND.  NVAL MUST NOT	*/
+/*     BE ZERO.  DABS(NVAL) MUST BE LESS THAN  MAXJ/2.			*/
+/*									*/
+/*   NFIG   THE NUMBER OF DECIMAL DIGITS OF ACCURACY DESIRED IN THE	*/
+/*     EIGENVALUES.  NFIG MUST BE GREATER THAN OR EQUAL TO 1.		*/
+/*									*/
+/*   NPERM   AN INTEGER VARIABLE WHICH SPECIFIES THE NUMBER OF USER	*/
+/*     SUPPLIED EIGENPAIRS.  IN MOST CASES NPERM WILL BE ZERO.  SEE	*/
+/*     DOCUMENTAION FOR FURTHER DETAILS OF USING NPERM GREATER		*/
+/*     THAN ZERO.  NPERM MUST NOT BE LESS THAN ZERO.			*/
+/*									*/
+/*   NMVAL   THE ROW DIMENSION OF THE ARRAY VAL.  NMVAL MUST BE GREATER	*/
+/*     THAN OR EQUAL TO DABS(NVAL).					*/
+/*									*/
+/*   VAL   A TWO DIMENSIONAL DOUBLE PRECISION ARRAY OF ROW		*/
+/*     DIMENSION NMVAL AND COLUMN DIMENSION AT LEAST 4.  IF NPERM	*/
+/*     IS GREATER THAN ZERO THEN CERTAIN INFORMATION MUST BE STORED	*/
+/*     IN VAL.  SEE DOCUMENTATION FOR DETAILS.				*/
+/*									*/
+/*   NMVEC   THE ROW DIMENSION OF THE ARRAY VEC.  NMVEC MUST BE GREATER	*/
+/*     THAN OR EQUAL TO N.						*/
+/*									*/
+/*   VEC   A TWO DIMENSIONAL DOUBLE PRECISION ARRAY OF ROW		*/
+/*     DIMENSION NMVEC AND COLUMN DIMENSION AT LEAST DABS(NVAL).  IF	*/
+/*     NPERM > 0 THEN THE FIRST NPERM COLUMNS OF VEC MUST		*/
+/*     CONTAIN THE USER SUPPLIED EIGENVECTORS.				*/
+/*									*/
+/*   NBLOCK   THE BLOCK SIZE.  SEE DOCUMENTATION FOR CHOOSING		*/
+/*     AN APPROPRIATE VALUE FOR NBLOCK.  NBLOCK MUST BE GREATER		*/
+/*     THAN ZERO AND LESS THAN  MAXJ/6.					*/
+/*									*/
+/*   MAXOP   AN UPPER BOUND ON THE NUMBER OF CALLS TO THE SUBROUTINE	*/
+/*     OP.  DNLASO TERMINATES WHEN MAXOP IS EXCEEDED.  SEE		*/
+/*     DOCUMENTATION FOR GUIDELINES IN CHOOSING A VALUE FOR MAXOP.	*/
+/*									*/
+/*   MAXJ   AN INDICATION OF THE AVAILABLE STORAGE (SEE WORK AND	*/
+/*     DOCUMENTATION ON IOVECT).  FOR THE FASTEST CONVERGENCE MAXJ	*/
+/*     SHOULD BE AS LARGE AS POSSIBLE, ALTHOUGH IT IS USELESS TO HAVE	*/
+/*     MAXJ LARGER THAN MAXOP*NBLOCK.					*/
+/*									*/
+/*   WORK   A DOUBLE PRECISION ARRAY OF DIMENSION AT LEAST AS		*/
+/*     LARGE AS								*/
+/*									*/
+/*         2*N*NBLOCK + MAXJ*(NBLOCK+NV+2) + 2*NBLOCK*NBLOCK + 3*NV	*/
+/*									*/
+/*            + THE MAXIMUM OF						*/
+/*                 N*NBLOCK						*/
+/*                   AND						*/
+/*         MAXJ*(2*NBLOCK+3) + 2*NV + 6 + (2*NBLOCK+2)*(NBLOCK+1)	*/
+/*									*/
+/*     WHERE NV = DABS(NVAL)						*/
+/*									*/
+/*     THE FIRST N*NBLOCK ELEMENTS OF WORK MUST CONTAIN THE DESIRED	*/
+/*     STARTING VECTORS.  SEE DOCUMENTATION FOR GUIDELINES IN		*/
+/*     CHOOSING STARTING VECTORS.					*/
+/*									*/
+/*   IND   AN INTEGER ARRAY OF DIMENSION AT LEAST DABS(NVAL).		*/
+/*									*/
+/*   IERR   AN INTEGER VARIABLE.					*/
+/*									*/
+/*									*/
+/* ON OUTPUT								*/
+/*									*/
+/*									*/
+/*   NPERM   THE NUMBER OF EIGENPAIRS NOW KNOWN.			*/
+/*									*/
+/*   VEC   THE FIRST NPERM COLUMNS OF VEC CONTAIN THE EIGENVECTORS.	*/
+/*									*/
+/*   VAL   THE FIRST COLUMN OF VAL CONTAINS THE CORRESPONDING		*/
+/*     EIGENVALUES.  THE SECOND COLUMN CONTAINS THE RESIDUAL NORMS OF	*/
+/*     THE EIGENPAIRS WHICH ARE BOUNDS ON THE ACCURACY OF THE EIGEN-	*/
+/*    VALUES.  THE THIRD COLUMN CONTAINS MORE DOUBLE PRECISIONISTIC ESTIMATES	*/
+/*     OF THE ACCURACY OF THE EIGENVALUES.  THE FOURTH COLUMN CONTAINS	*/
+/*     ESTIMATES OF THE ACCURACY OF THE EIGENVECTORS.  SEE		*/
+/*     DOCUMENTATION FOR FURTHER INFORMATION ON THESE QUANTITIES.	*/
+/*									*/
+/*   WORK   IF WORK IS TERMINATED BEFORE COMPLETION (IERR = -2)		*/
+/*     THE FIRST N*NBLOCK ELEMENTS OF WORK CONTAIN THE BEST VECTORS	*/
+/*     FOR RESTARTING THE ALGORITHM AND DNLASO CAN BE IMMEDIATELY	*/
+/*     RECALLED TO CONTINUE WORKING ON THE PROBLEM.			*/
+/*									*/
+/*   IND   IND(1)  CONTAINS THE ACTUAL NUMBER OF CALLS TO OP.  ON SOME	*/
+/*     OCCASIONS THE NUMBER OF CALLS TO OP MAY BE SLIGHTLY LARGER	*/
+/*     THAN MAXOP.							*/
+/*									*/
+/*   IERR   AN ERROR COMPLETION CODE.  THE NORMAL COMPLETION CODE IS	*/
+/*     ZERO.  SEE THE DOCUMENTATION FOR INTERPRETATIONS OF NON-ZERO	*/
+/*     COMPLETION CODES.						*/
+/*									*/
+/*									*/
+/* INTERNAL VARIABLES.							*/
+/*									*/
+/*									*/
+/*									*/
+/* NOP   RETURNED FROM DNWLA AS THE NUMBER OF CALLS TO THE		*/
+/*   SUBROUTINE OP.							*/
+/*									*/
+/* NV   SET EQUAL TO DABS(NVAL), THE NUMBER OF EIGENVALUES DESIRED,	*/
+/*   AND PASSED TO DNWLA.						*/
+/*									*/
+/* SMALL   SET TO .TRUE. IF THE SMALLEST EIGENVALUES ARE DESIRED.	*/
+/*									*/
+/* RARITZ   RETURNED FROM DNWLA AND PASSED TO DNPPLA.  RARITZ IS .TRUE.	*/
+/*   IF A FINAL RAYLEIGH-RITZ PROCEDURE IS NEEDED.			*/
+/*									*/
+/* DELTA   RETURNED FROM DNWLA AS THE EIGENVALUE OF THE MATRIX		*/
+/*   WHICH IS CLOSEST TO THE DESIRED EIGENVALUES.			*/
+/*									*/
+/* DNPPLA   A SUBROUTINE FOR POST-PROCESSING THE EIGENVECTORS COMPUTED	*/
+/*   BY DNWLA.								*/
+/*									*/
+/* DNWLA   A SUBROUTINE FOR IMPLEMENTING THE LANCZOS ALGORITHM		*/
+/*   WITH SELECTIVE ORTHOGONALIZATION.					*/
+/*									*/
+/* DMVPC   A SUBROUTINE FOR COMPUTING THE RESIDUAL NORM AND		*/
+/*   ORTHOGONALITY COEFFICIENT OF GIVEN RITZ VECTORS.			*/
+/*									*/
+/* DORTQR   A SUBROUTINE FOR ORTHONORMALIZING A BLOCK OF VECTORS	*/
+/*   USING HOUSEHOLDER REFLECTIONS.					*/
+/*									*/
+/* DAXPY,DCOPY,DDOT,DNRM2,DSCAL,DSWAP   A SUBSET OF THE BASIC LINEAR	*/
+/*   ALGEBRA SUBPROGRAMS USED FOR VECTOR MANIPULATION.			*/
+/*									*/
+/* DLARAN   A SUBROUTINE TO GENERATE RANDOM VECTORS			*/
+/*									*/
+/* DLAEIG, DLAGER, DLABCM, DLABFC   SUBROUTINES FOR BAND EIGENVALUE	*/
+/*   CALCULATIONS.							*/
+/*									*/
+/* ------------------------------------------------------------------	*/
 
 /* THIS SECTION CHECKS FOR INCONSISTENCY IN THE INPUT PARAMETERS. */
 
-    /* Parameter adjustments */
-    val_dim1 = *nmval;
-    val_offset = val_dim1 + 1;
-    val -= val_offset;
-    vec_dim1 = *nmvec;
-    vec_offset = vec_dim1 + 1;
-    vec -= vec_offset;
-    --work;
-    --ind;
-
-    /* Function Body */
     nv = abs(*nval);
-    ind[1] = 0;
+    ind[0] = 0;
     *ierr = 0;
     if (*n < *nblock * 6) {
         *ierr = 1;
@@ -290,49 +272,39 @@ TES*/
     if (small) {
         goto L20;
     }
-    i__1 = *nperm;
-    for (i = 1; i <= i__1; ++i) {
-        val[i + val_dim1] = -val[i + val_dim1];
+    for (i = 0; i < *nperm; ++i) {
+        val[i] = -val[i];
     }
 
 /* THIS SORTS THE USER SUPPLIED VALUES AND VECTORS. */
 
 L20:
-    dvsort_(nperm, &val[val_offset], &val[(val_dim1 << 1) + 1], &c__0, tarr,
-            nmvec, n, &vec[vec_offset]);
+    dvsort_(nperm, val, &val[*nmval], &c__0, &tarr, nmvec, n, vec);
 
 /* THIS STORES THE NORMS OF THE VECTORS FOR LATER COMPARISON. */
 /* IT ALSO INSURES THAT THE RESIDUAL NORMS ARE POSITIVE. */
 
-    i__1 = *nperm;
-    for (i = 1; i <= i__1; ++i) {
-        val[i + (val_dim1 << 1)] = abs(val[i + (val_dim1 << 1)]);
-        val[i + val_dim1 * 3] = dnrm2_(n, &vec[i * vec_dim1 + 1], &c__1);
+    for (i = 0; i < *nperm; ++i) {
+        val[i + *nmval] = abs(val[i + *nmval]);
+        val[i + *nmval * 2] = dnrm2_(n, &vec[i * *nmvec], &c__1);
     }
 
 /* THIS PERFORMS THE ORTHONORMALIZATION. */
 
-    m = *n * *nblock + 1;
-    dortqr_(nmvec, n, nperm, &vec[vec_offset], &work[m]);
-    m = *n * *nblock - *nperm;
-    i__1 = *nperm;
-    for (i = 1; i <= i__1; ++i) {
-        m = m + *nperm + 1;
-        if (abs(work[m]) > val[i + val_dim1 * 3] * .9f) {
-            goto L70;
+    m = *n * *nblock;
+    dortqr_(nmvec, n, nperm, vec, &work[m]);
+    for (i = 0; i < *nperm; ++i, m += *nperm + 1) {
+        if (abs(work[m]) <= val[i + *nmval * 2] * .9f) {
+            *ierr = -1;
+            return;
         }
-        *ierr = -1;
-        return;
-
-L70:
-        ;
     }
 
 /* THIS COPIES THE RESIDUAL NORMS INTO THE CORRECT LOCATIONS IN */
 /* THE ARRAY WORK FOR LATER REFERENCE IN DNWLA. */
 
-    m = (*n << 1) * *nblock + 1;
-    dcopy_(nperm, &val[(val_dim1 << 1) + 1], &c__1, &work[m], &c__1);
+    m = (*n << 1) * *nblock;
+    dcopy_(nperm, &val[*nmval], &c__1, &work[m], &c__1);
 
 /* THIS SETS EPS TO AN APPROXIMATION OF THE RELATIVE MACHINE */
 /* PRECISION */
@@ -357,7 +329,7 @@ L110:
 
 L130:
     nband = *nblock + 1;
-    i1 = *n * *nblock + 1;
+    i1 = *n * *nblock;
     i2 = i1 + *n * *nblock;
     i3 = i2 + nv;
     i4 = i3 + nv;
@@ -370,33 +342,28 @@ L130:
     i11 = i10 + (nv << 1) + 6;
     i12 = i11 + *maxj * ((*nblock << 1) + 1);
     i13 = i12 + *maxj;
-    dnwla_(op, iovect, n, &nband, &nv, nfig, nperm, &val[val_offset], nmvec, &
-            vec[vec_offset], nblock, maxop, maxj, &nop, &work[1], &work[i1], &
-            work[i2], &work[i3], &work[i4], &work[i5], &work[i6], &work[i7], &
-            work[i8], &work[i9], &work[i10], &work[i11], &work[i12], &work[
-            i13], &ind[1], &small, &raritz, &delta, &eps, ierr);
+    dnwla_(op, iovect, n, &nband, &nv, nfig, nperm, val, nmvec, vec, nblock,
+           maxop, maxj, &nop, work, &work[i1], &work[i2], &work[i3], &work[i4],
+           &work[i5], &work[i6], &work[i7], &work[i8], &work[i9], &work[i10],
+           &work[i11], &work[i12], &work[i13], ind, &small, &raritz, &delta, &eps, ierr);
 
 /* ------------------------------------------------------------------ */
 
 /* THIS SECTION CALLS DNPPLA (THE POST PROCESSOR). */
 
     if (*nperm == 0) {
-        goto L140;
+        ind[0] = nop;
+        return;
     }
-    i1 = *n * *nblock + 1;
+    i1 = *n * *nblock;
     i2 = i1 + *nperm * *nperm;
     i3 = i2 + *nperm * *nperm;
-/* Computing MAX */
-    i__1 = *n * *nblock, i__2 = (*nperm << 1) * *nperm;
-    i4 = i3 + max(i__1,i__2);
+    i4 = i3 + max(*n * *nblock, (*nperm << 1) * *nperm);
     i5 = i4 + *n * *nblock;
     i6 = i5 + (*nperm << 1) + 4;
-    dnppla_(op, iovect, n, nperm, &nop, nmval, &val[val_offset], nmvec, &vec[
-            vec_offset], nblock, &work[i1], &work[i2], &work[i3], &work[i4], &
-            work[i5], &work[i6], &delta, &small, &raritz, &eps);
-
-L140:
-    ind[1] = nop;
+    dnppla_(op, iovect, n, nperm, &nop, nmval, val, nmvec, vec, nblock,
+            &work[i1], &work[i2], &work[i3], &work[i4], &work[i5], &work[i6],
+            &delta, &small, &raritz, &eps);
 } /* dnlaso_ */
 
 
@@ -422,7 +389,7 @@ integer *ierr;
     /* System generated locals */
     integer vec_dim1, vec_offset, p0_dim1, p0_offset, p1_dim1, p1_offset,
             p2_dim1, p2_offset, t_dim1, t_offset, alp_dim1, alp_offset,
-            bet_dim1, bet_offset, s_dim1, s_offset, i__1, i__2, i__3, i__4;
+            bet_dim1, bet_offset, s_dim1, s_offset, i__1;
     doublereal d__1;
 
     /* Builtin functions */
@@ -430,7 +397,7 @@ integer *ierr;
 
     /* Local variables */
     extern doublereal ddot_();
-    static doublereal tola, temp, tolg, tmin, tmax, tarr[1];
+    static doublereal tola, temp, tolg, tmin, tmax, tarr;
     static logical test;
     static doublereal utol;
     extern doublereal dnrm2_();
@@ -440,7 +407,7 @@ integer *ierr;
     static doublereal anorm;
     extern /* Subroutine */ void dmvpc_(), dcopy_();
     static integer mtemp;
-    static doublereal dzero[1];
+    static doublereal dzero;
     extern /* Subroutine */ void daxpy_();
     static integer i1;
     static doublereal pnorm, epsrt, rnorm;
@@ -452,73 +419,46 @@ integer *ierr;
     static integer number, nstart;
     extern /* Subroutine */ void dortqr_(), dvsort_();
 
-
-
 /* DNWLA IMPLEMENTS THE LANCZOS ALGORITHM WITH SELECTIVE */
 /* ORTHOGONALIZATION. */
-
+/*	*/
 /*   NBAND  NBLOCK + 1  THE BAND WIDTH OF T. */
-
 /*   NVAL   THE NUMBER OF DESIRED EIGENVALUES. */
-
 /*   NPERM   THE NUMBER OF PERMANENT VECTORS (THOSE EIGENVECTORS */
 /*     INPUT BY THE USER OR THOSE EIGENVECTORS SAVED WHEN THE */
 /*     ALGORITHM IS ITERATED).  PERMANENT VECTORS ARE ORTHOGONAL */
 /*     TO THE CURRENT KRYLOV SUBSPACE. */
-
 /*   NOP   THE NUMBER OF CALLS TO OP. */
-
 /*   P0, P1, AND P2   THE CURRENT BLOCKS OF LANCZOS VECTORS. */
-
 /*   RES   THE (APPROXIMATE) RESIDUAL NORMS OF THE PERMANENT VECTORS. */
-
 /*   TAU AND OTAU   USED TO MONITOR THE NEED FOR ORTHOGONALIZATION. */
-
 /*   T   THE BAND MATRIX. */
-
 /*   ALP   THE CURRENT DIAGONAL BLOCK. */
-
 /*   BET   THE CURRENT OFF DIAGONAL BLOCK. */
-
 /*   BOUND, ATEMP, VTEMP, D  TEMPORARY STORAGE USED BY THE BAND */
 /*      EIGENVALUE SOLVER DLAEIG. */
-
 /*   S   EIGENVECTORS OF T. */
-
 /*   SMALL   .TRUE.  IF THE SMALL EIGENVALUES ARE DESIRED. */
-
 /*   RARITZ  RETURNED AS  .TRUE.  IF A FINAL RAYLEIGH-RITZ PROCEDURE */
 /*     IS TO BE DONE. */
-
 /*   DELTA   RETURNED AS THE VALUE OF THE (NVAL+1)TH EIGENVALUE */
 /*     OF THE MATRIX.  USED IN ESTIMATING THE ACCURACY OF THE */
 /*     COMPUTED EIGENVALUES. */
-
-
+/*	*/
 /* INTERNAL VARIABLES USED */
-
-
+/*	*/
 /* J   THE CURRENT DIMENSION OF T.  (THE DIMENSION OF THE CURRENT */
 /*    KRYLOV SUBSPACE. */
-
 /* NGOOD   THE NUMBER OF GOOD RITZ VECTORS (GOOD VECTORS */
 /*    LIE IN THE CURRENT KRYLOV SUBSPACE). */
-
 /* NLEFT   THE NUMBER OF VALUES WHICH REMAIN TO BE DETERMINED, */
 /*    I.E.  NLEFT = NVAL - NPERM. */
-
 /* NUMBER = NPERM + NGOOD. */
-
 /* ANORM   AN ESTIMATE OF THE NORM OF THE MATRIX. */
-
 /* EPS   THE RELATIVE MACHINE PRECISION. */
-
 /* UTOL   THE USER TOLERANCE. */
-
-/*TARR  AN ARRAY OF LENGTH ONE USED TO INSURE TYPE CONSISTENCY IN CALLS TO
-*/
+/* TARR  AN ARRAY OF LENGTH ONE USED TO INSURE TYPE CONSISTENCY IN CALLS TO */
 /*       DLAEIG */
-
 /* DZERO AN ARRAY OF LENGTH ONE CONTAINING DZERO, USED TO INSURE TYPE */
 /*       CONSISTENCY IN CALLS TO DCOPY */
 
@@ -557,7 +497,7 @@ integer *ierr;
     --d;
     --ind;
 
-    dzero[0] = 0.;
+    dzero = 0.;
     rnorm = 0.;
     if (*nperm != 0) {
         rnorm = max(-val[1],val[*nperm]);
@@ -569,7 +509,7 @@ integer *ierr;
     *nop = 0;
     number = *nperm;
     *raritz = FALSE_;
-    utol = max((*n) * *eps, pow(c_b15, -(*nfig)));
+    utol = max((*n) * *eps, pow(10., -(doublereal)(*nfig)));
     j = *maxj;
 
 /* ------------------------------------------------------------------ */
@@ -577,8 +517,7 @@ integer *ierr;
 /* ANY ITERATION OF THE ALGORITHM BEGINS HERE. */
 
 L30:
-    i__1 = *nblock;
-    for (i = 1; i <= i__1; ++i) {
+    for (i = 1; i <= *nblock; ++i) {
         temp = dnrm2_(n, &p1[i * p1_dim1 + 1], &c__1);
         if (temp == 0.) {
             dlaran_(n, &p1[i * p1_dim1 + 1]);
@@ -587,22 +526,20 @@ L30:
     if (*nperm == 0) {
         goto L70;
     }
-    i__1 = *nperm;
-    for (i = 1; i <= i__1; ++i) {
+    for (i = 1; i <= *nperm; ++i) {
         tau[i] = 1.;
         otau[i] = 0.;
     }
 L70:
     i__1 = *n * *nblock;
-    dcopy_(&i__1, dzero, &c__0, &p0[p0_offset], &c__1);
+    dcopy_(&i__1, &dzero, &c__0, &p0[p0_offset], &c__1);
     i__1 = *nblock * *nblock;
-    dcopy_(&i__1, dzero, &c__0, &bet[bet_offset], &c__1);
+    dcopy_(&i__1, &dzero, &c__0, &bet[bet_offset], &c__1);
     i__1 = j * *nband;
-    dcopy_(&i__1, dzero, &c__0, &t[t_offset], &c__1);
+    dcopy_(&i__1, &dzero, &c__0, &t[t_offset], &c__1);
     mtemp = *nval + 1;
-    i__1 = mtemp;
-    for (i = 1; i <= i__1; ++i) {
-        dcopy_(&j, dzero, &c__0, &s[i * s_dim1 + 1], &c__1);
+    for (i = 1; i <= mtemp; ++i) {
+        dcopy_(&j, &dzero, &c__0, &s[i * s_dim1 + 1], &c__1);
     }
     ngood = 0;
     tmin = 1e30;
@@ -624,8 +561,7 @@ L80:
     if (number == 0) {
         goto L110;
     }
-    i__1 = number;
-    for (i = 1; i <= i__1; ++i) {
+    for (i = 1; i <= number; ++i) {
         if (tau[i] < epsrt) {
             goto L100;
         }
@@ -634,12 +570,9 @@ L80:
         if (otau[i] != 0.) {
             otau[i] = 1.;
         }
-        i__2 = *nblock;
-        for (k = 1; k <= i__2; ++k) {
-            temp = -ddot_(n, &vec[i * vec_dim1 + 1], &c__1, &p1[k * p1_dim1 +
-                    1], &c__1);
-            daxpy_(n, &temp, &vec[i * vec_dim1 + 1], &c__1, &p1[k * p1_dim1 +
-                    1], &c__1);
+        for (k = 1; k <= *nblock; ++k) {
+            temp = -ddot_(n, &vec[i * vec_dim1 + 1], &c__1, &p1[k * p1_dim1 + 1], &c__1);
+            daxpy_(n, &temp, &vec[i * vec_dim1 + 1], &c__1, &p1[k * p1_dim1 + 1], &c__1);
 
 /* THIS CHECKS FOR TOO GREAT A LOSS OF ORTHOGONALITY BETWEEN A */
 /* NEW LANCZOS VECTOR AND A GOOD RITZ VECTOR.  THE ALGORITHM IS */
@@ -664,15 +597,13 @@ L110:
     if (j == *nblock) {
         goto L160;
     }
-    i__1 = *nblock;
-    for (i = 1; i <= i__1; ++i) {
+    for (i = 1; i <= *nblock; ++i) {
         if (alp[i + i * alp_dim1] > 0.) {
             goto L130;
         }
         m = j - (*nblock << 1) + i;
         l = *nblock + 1;
-        i__2 = *nblock;
-        for (k = i; k <= i__2; ++k) {
+        for (k = i; k <= *nblock; ++k) {
             bet[i + k * bet_dim1] = -bet[i + k * bet_dim1];
             t[l + m * t_dim1] = -t[l + m * t_dim1];
             --l;
@@ -691,10 +622,8 @@ L160:
 
 /* THIS COMPUTES P2=P2-P0*BET(TRANSPOSE) */
 
-    i__1 = *nblock;
-    for (i = 1; i <= i__1; ++i) {
-        i__2 = *nblock;
-        for (k = i; k <= i__2; ++k) {
+    for (i = 1; i <= *nblock; ++i) {
+        for (k = i; k <= *nblock; ++k) {
             d__1 = -bet[i + k * bet_dim1];
             daxpy_(n, &d__1, &p0[k * p0_dim1 + 1], &c__1, &p2[i * p2_dim1 + 1], &c__1);
         }
@@ -702,10 +631,8 @@ L160:
 
 /* THIS COMPUTES ALP AND P2=P2-P1*ALP. */
 
-    i__1 = *nblock;
-    for (i = 1; i <= i__1; ++i) {
-        i__2 = i;
-        for (k = 1; k <= i__2; ++k) {
+    for (i = 1; i <= *nblock; ++i) {
+        for (k = 1; k <= i; ++k) {
             ii = i - k + 1;
             alp[ii + k * alp_dim1] = ddot_(n, &p1[i * p1_dim1 + 1], &c__1, &
                     p2[k * p2_dim1 + 1], &c__1);
@@ -723,12 +650,9 @@ L160:
     if (j != *nblock) {
         goto L220;
     }
-    i__1 = *nblock;
-    for (i = 1; i <= i__1; ++i) {
-        i__2 = i;
-        for (k = 1; k <= i__2; ++k) {
-            temp = ddot_(n, &p1[i * p1_dim1 + 1], &c__1, &p2[k * p2_dim1 + 1],
-                     &c__1);
+    for (i = 1; i <= *nblock; ++i) {
+        for (k = 1; k <= i; ++k) {
+            temp = ddot_(n, &p1[i * p1_dim1 + 1], &c__1, &p2[k * p2_dim1 + 1], &c__1);
             d__1 = -temp;
             daxpy_(n, &d__1, &p1[i * p1_dim1 + 1], &c__1, &p2[k * p2_dim1 + 1] , &c__1);
             if (k != i) {
@@ -747,16 +671,13 @@ L220:
 
 /* THIS STORES ALP AND BET IN T. */
 
-    i__1 = *nblock;
-    for (i = 1; i <= i__1; ++i) {
+    for (i = 1; i <= *nblock; ++i) {
         m = j - *nblock + i;
-        i__2 = *nblock;
-        for (k = i; k <= i__2; ++k) {
+        for (k = i; k <= *nblock; ++k) {
             l = k - i + 1;
             t[l + m * t_dim1] = alp[l + i * alp_dim1];
         }
-        i__2 = i;
-        for (k = 1; k <= i__2; ++k) {
+        for (k = 1; k <= i; ++k) {
             l = *nblock - i + k + 1;
             t[l + m * t_dim1] = bet[k + i * bet_dim1];
         }
@@ -768,10 +689,8 @@ L220:
         goto L280;
     }
     m = j - *nblock + 1;
-    i__1 = j;
-    for (i = m; i <= i__1; ++i) {
-        i__2 = l;
-        for (k = 1; k <= i__2; ++k) {
+    for (i = m; i <= j; ++i) {
+        for (k = 1; k <= l; ++k) {
             t[k + i * t_dim1] = -t[k + i * t_dim1];
         }
     }
@@ -781,7 +700,6 @@ L220:
 L280:
     i__1 = *nblock * *n;
     dcopy_(&i__1, &p1[p1_offset], &c__1, &p0[p0_offset], &c__1);
-    i__1 = *nblock * *n;
     dcopy_(&i__1, &p2[p2_offset], &c__1, &p1[p1_offset], &c__1);
     i__1 = j - *nblock + 1;
     dlager_(&j, nband, &i__1, &t[t_offset], &tmin, &tmax);
@@ -792,28 +710,24 @@ L280:
 
 /* THIS COMPUTES THE EXTREME EIGENVALUES OF ALP. */
 
-    dcopy_(nblock, dzero, &c__0, &p2[p2_offset], &c__1);
-    dlaeig_(nblock, nblock, &c__1, &c__1, &alp[alp_offset], tarr, nblock, &p2[
-            p2_offset], &bound[1], &atemp[1], &d[1], &vtemp[1], eps, &tmin, &
-            tmax);
-    alpmin = tarr[0];
-    dcopy_(nblock, dzero, &c__0, &p2[p2_offset], &c__1);
-    dlaeig_(nblock, nblock, nblock, nblock, &alp[alp_offset], tarr, nblock, &
-            p2[p2_offset], &bound[1], &atemp[1], &d[1], &vtemp[1], eps, &tmin,
-             &tmax);
-    alpmax = tarr[0];
+    dcopy_(nblock, &dzero, &c__0, &p2[p2_offset], &c__1);
+    dlaeig_(nblock, nblock, &c__1, &c__1, &alp[alp_offset], &tarr, nblock, &p2[
+            p2_offset], &bound[1], &atemp[1], &d[1], &vtemp[1], eps, &tmin, &tmax);
+    alpmin = tarr;
+    dcopy_(nblock, &dzero, &c__0, &p2[p2_offset], &c__1);
+    dlaeig_(nblock, nblock, nblock, nblock, &alp[alp_offset], &tarr, nblock, &
+            p2[p2_offset], &bound[1], &atemp[1], &d[1], &vtemp[1], eps, &tmin, &tmax);
+    alpmax = tarr;
 
 /* THIS COMPUTES ALP = BET(TRANSPOSE)*BET. */
 
 L305:
-    i__1 = *nblock;
-    for (i = 1; i <= i__1; ++i) {
-        i__2 = i;
-        for (k = 1; k <= i__2; ++k) {
+    for (i = 1; i <= *nblock; ++i) {
+        for (k = 1; k <= i; ++k) {
             l = i - k + 1;
-            i__3 = *nblock - i + 1;
-            alp[l + k * alp_dim1] = ddot_(&i__3, &bet[i + i * bet_dim1],
-                    nblock, &bet[k + i * bet_dim1], nblock);
+            i__1 = *nblock - i + 1;
+            alp[l + k * alp_dim1] = ddot_(&i__1, &bet[i + i * bet_dim1], nblock,
+                                          &bet[k + i * bet_dim1], nblock);
         }
     }
     if (number == 0) {
@@ -822,16 +736,15 @@ L305:
 
 /* THIS COMPUTES THE SMALLEST SINGULAR VALUE OF BET. */
 
-    dcopy_(nblock, dzero, &c__0, &p2[p2_offset], &c__1);
+    dcopy_(nblock, &dzero, &c__0, &p2[p2_offset], &c__1);
     d__1 = anorm * anorm;
-    dlaeig_(nblock, nblock, &c__1, &c__1, &alp[alp_offset], tarr, nblock, &p2[p2_offset],
+    dlaeig_(nblock, nblock, &c__1, &c__1, &alp[alp_offset], &tarr, nblock, &p2[p2_offset],
             &bound[1], &atemp[1], &d[1], &vtemp[1], eps, &c_b88, &d__1);
-    betmin = sqrt(tarr[0]);
+    betmin = sqrt(tarr);
 
 /* THIS UPDATES TAU AND OTAU. */
 
-    i__1 = number;
-    for (i = 1; i <= i__1; ++i) {
+    for (i = 1; i <= number; ++i) {
         temp = (tau[i] * max(alpmax - val[i],val[i] - alpmin) + otau[i] * betmax + *eps * anorm) / betmin;
         if (i <= *nperm) {
             temp += res[i] / betmin;
@@ -843,11 +756,11 @@ L305:
 /* THIS COMPUTES THE LARGEST SINGULAR VALUE OF BET. */
 
 L330:
-    dcopy_(nblock, dzero, &c__0, &p2[p2_offset], &c__1);
+    dcopy_(nblock, &dzero, &c__0, &p2[p2_offset], &c__1);
     d__1 = anorm * anorm;
-    dlaeig_(nblock, nblock, nblock, nblock, &alp[alp_offset], tarr, nblock, &p2[p2_offset],
+    dlaeig_(nblock, nblock, nblock, nblock, &alp[alp_offset], &tarr, nblock, &p2[p2_offset],
             &bound[1], &atemp[1], &d[1], &vtemp[1], eps, &c_b88, &d__1);
-    betmax = sqrt(tarr[0]);
+    betmax = sqrt(tarr);
     if (j <= *nblock << 1) {
         goto L80;
     }
@@ -881,14 +794,10 @@ L390:
     }
     test = TRUE_;
 L400:
-/* Computing MIN */
-    i__1 = j / 2, i__2 = nleft + 1;
-    ntheta = min(i__1,i__2);
+    ntheta = min(j/2, nleft+1);
     dlaeig_(&j, nband, &c__1, &ntheta, &t[t_offset], &val[number + 1], maxj, &
-            s[s_offset], &bound[1], &atemp[1], &d[1], &vtemp[1], eps, &tmin, &
-            tmax);
-    dmvpc_(nblock, &bet[bet_offset], maxj, &j, &s[s_offset], &ntheta, &atemp[
-            1], &vtemp[1], &d[1]);
+            s[s_offset], &bound[1], &atemp[1], &d[1], &vtemp[1], eps, &tmin, &tmax);
+    dmvpc_(nblock, &bet[bet_offset], maxj, &j, &s[s_offset], &ntheta, &atemp[1], &vtemp[1], &d[1]);
 
 /* THIS CHECKS FOR TERMINATION OF A CHECK RUN */
 
@@ -944,8 +853,7 @@ L430:
     pnorm = max(rnorm,max(-val[number + 1],*delta));
     tola = utol * pnorm;
     nstart = 0;
-    i__1 = ntheta;
-    for (i = 1; i <= i__1; ++i) {
+    for (i = 1; i <= ntheta; ++i) {
         m = number + i;
         if (min(atemp[i] * atemp[i] / (*delta - val[m]),atemp[i]) > tola) {
             goto L450;
@@ -966,8 +874,7 @@ L460:
 
 /*  COPY VALUES OF IND INTO VTEMP */
 
-    i__1 = ntheta;
-    for (i = 1; i <= i__1; ++i) {
+    for (i = 1; i <= ntheta; ++i) {
         vtemp[i] = (doublereal) ((real) ind[i]);
     }
     goto L500;
@@ -976,8 +883,7 @@ L460:
 
 L470:
     ng = 0;
-    i__1 = ntheta;
-    for (i = 1; i <= i__1; ++i) {
+    for (i = 1; i <= ntheta; ++i) {
         if (vtemp[i] > tolg) {
             goto L480;
         }
@@ -1036,14 +942,12 @@ L530:
 /*  FIND MINIMUM ATEMP VALUE TO AVOID POSSIBLE OVERFLOW */
 
     temp = atemp[1];
-    i__1 = nstart;
-    for (i = 1; i <= i__1; ++i) {
+    for (i = 1; i <= nstart; ++i) {
         temp = min(temp,atemp[i]);
     }
     m = ngood + 1;
     l = ngood + min(nstart,*nblock);
-    i__1 = l;
-    for (i = m; i <= i__1; ++i) {
+    for (i = m; i <= l; ++i) {
         d__1 = temp / atemp[i];
         dscal_(&j, &d__1, &s[i * s_dim1 + 1], &c__1);
     }
@@ -1052,10 +956,8 @@ L530:
         goto L570;
     }
     l = ngood + *nblock;
-    i__1 = m;
-    for (i = 1; i <= i__1; ++i) {
-        i__2 = *nblock;
-        for (k = 1; k <= i__2; ++k) {
+    for (i = 1; i <= m; ++i) {
+        for (k = 1; k <= *nblock; ++k) {
             ++l;
             if (l > ntheta) {
                 goto L570;
@@ -1074,8 +976,7 @@ L580:
     if (ngood == 0 || ! (test || enough)) {
         goto L600;
     }
-    i__1 = ngood;
-    for (i = 1; i <= i__1; ++i) {
+    for (i = 1; i <= ngood; ++i) {
         m = *nperm + i;
         res[m] = atemp[i];
     }
@@ -1087,29 +988,24 @@ L600:
     number = *nperm + ngood;
     if (test || enough) {
         i__1 = *n * *nblock;
-        dcopy_(&i__1, dzero, &c__0, &p1[p1_offset], &c__1);
+        dcopy_(&i__1, &dzero, &c__0, &p1[p1_offset], &c__1);
     }
     if (ngood == 0) {
         goto L620;
     }
     m = *nperm + 1;
-    i__1 = number;
-    for (i = m; i <= i__1; ++i) {
-        dcopy_(n, dzero, &c__0, &vec[i * vec_dim1 + 1], &c__1);
+    for (i = m; i <= number; ++i) {
+        dcopy_(n, &dzero, &c__0, &vec[i * vec_dim1 + 1], &c__1);
     }
 L620:
-    i__1 = j;
-    i__2 = *nblock;
-    for (i = *nblock; i__2 < 0 ? i >= i__1 : i <= i__1; i += i__2) {
+    for (i = *nblock; *nblock < 0 ? i >= j : i <= j; i += *nblock) {
         (*iovect)(n, nblock, &p2[p2_offset], &i, &c__1);
-        i__3 = *nblock;
-        for (k = 1; k <= i__3; ++k) {
+        for (k = 1; k <= *nblock; ++k) {
             m = i - *nblock + k;
             if (nstart == 0) {
                 goto L640;
             }
-            i__4 = nstart;
-            for (l = 1; l <= i__4; ++l) {
+            for (l = 1; l <= nstart; ++l) {
                 i1 = ngood + l;
                 daxpy_(n, &s[m + i1 * s_dim1], &p2[k * p2_dim1 + 1], &c__1, &
                         p1[l * p1_dim1 + 1], &c__1);
@@ -1118,8 +1014,7 @@ L640:
             if (ngood == 0) {
                 goto L660;
             }
-            i__4 = ngood;
-            for (l = 1; l <= i__4; ++l) {
+            for (l = 1; l <= ngood; ++l) {
                 i1 = l + *nperm;
                 daxpy_(n, &s[m + l * s_dim1], &p2[k * p2_dim1 + 1], &c__1, &
                         vec[i1 * vec_dim1 + 1], &c__1);
@@ -1136,8 +1031,7 @@ L660:
 /* TAU RECURRENCE. */
 
     m = *nperm + 1;
-    i__2 = number;
-    for (i = m; i <= i__2; ++i) {
+    for (i = m; i <= number; ++i) {
         temp = 1. / dnrm2_(n, &vec[i * vec_dim1 + 1], &c__1);
         dscal_(n, &temp, &vec[i * vec_dim1 + 1], &c__1);
         tau[i] = 1.;
@@ -1147,8 +1041,7 @@ L660:
 /*  SHIFT S VECTORS TO ALIGN FOR LATER CALL TO DLAEIG */
 
     dcopy_(&ntheta, &val[*nperm + 1], &c__1, &vtemp[1], &c__1);
-    dvsort_(&ntheta, &vtemp[1], &atemp[1], &c__0, tarr, maxj, &j, &s[s_offset]
-            );
+    dvsort_(&ntheta, &vtemp[1], &atemp[1], &c__0, &tarr, maxj, &j, &s[s_offset]);
     goto L80;
 
 /* ------------------------------------------------------------------ */
@@ -1167,15 +1060,14 @@ L690:
 
 /* THIS ORTHONORMALIZES THE VECTORS */
 
-    i__2 = *nperm + ngood;
-    dortqr_(nmvec, n, &i__2, &vec[vec_offset], &s[s_offset]);
+    i__1 = *nperm + ngood;
+    dortqr_(nmvec, n, &i__1, &vec[vec_offset], &s[s_offset]);
 
 /* THIS SORTS THE VALUES AND VECTORS. */
 
     if (*nperm != 0) {
-        i__2 = *nperm + ngood;
-        dvsort_(&i__2, &val[1], &res[1], &c__0, &temp, nmvec, n, &vec[
-                vec_offset]);
+        i__1 = *nperm + ngood;
+        dvsort_(&i__1, &val[1], &res[1], &c__0, &temp, nmvec, n, &vec[vec_offset]);
     }
     *nperm += ngood;
     nleft -= ngood;
@@ -1200,8 +1092,7 @@ L690:
     if (m <= 0) {
         return;
     }
-    i__2 = m;
-    for (i = 1; i <= i__2; ++i) {
+    for (i = 1; i <= m; ++i) {
         l = i + *nblock - 1;
         if (val[l] - val[i] < tola) {
             goto L30;
@@ -1216,16 +1107,12 @@ L790:
     if (m <= 0) {
         return;
     }
-    i__2 = m;
-    for (i = 1; i <= i__2; ++i) {
+    for (i = 1; i <= m; ++i) {
         l = i + *nblock;
-        if (val[l] - val[i] >= tola) {
-            goto L800;
+        if (val[l] - val[i] < tola) {
+            *raritz = TRUE_;
+            return;
         }
-        *raritz = TRUE_;
-        return;
-L800:
-        ;
     }
 
     return;
@@ -1247,56 +1134,22 @@ L810:
 integer *n, *nband;
 doublereal *a, *x, *y;
 {
-    /* System generated locals */
-    integer a_dim1, a_offset, i__1, i__2;
-
     /* Local variables */
-    static doublereal zero[1];
-    static integer i, k, l, m;
+    static doublereal zero = 0.;
+    static integer i, k, m;
     extern /* Subroutine */ void dcopy_();
-
 
 /*  THIS SUBROUTINE SETS Y = A*X */
 /*  WHERE X AND Y ARE VECTORS OF LENGTH N */
 /*  AND A IS AN  N X NBAND  SYMMETRIC BAND MATRIX */
 
-/*  FORMAL PARAMETERS */
-
-
-/*  LOCAL VARIABLES */
-
-
-/*  FUNCTIONS CALLED */
-
-
-/*  SUBROUTINES CALLED */
-
-/*     DCOPY */
-
-    /* Parameter adjustments */
-    a_dim1 = *nband;
-    a_offset = a_dim1 + 1;
-    a -= a_offset;
-    --x;
-    --y;
-
-    /* Function Body */
-    zero[0] = 0.;
-    dcopy_(n, zero, &c__0, &y[1], &c__1);
-    i__1 = *n;
-    for (k = 1; k <= i__1; ++k) {
-        y[k] += a[k * a_dim1 + 1] * x[k];
-/* Computing MIN */
-        i__2 = *n - k + 1;
-        m = min(i__2,*nband);
-        if (m < 2) {
-            continue;
-        }
-        i__2 = m;
-        for (i = 2; i <= i__2; ++i) {
-            l = k + i - 1;
-            y[l] += a[i + k * a_dim1] * x[k];
-            y[k] += a[i + k * a_dim1] * x[l];
+    dcopy_(n, &zero, &c__0, y, &c__1);
+    for (k = 0; k < *n; ++k) {
+        y[k] += a[k * *nband] * x[k];
+        m = min(*n - k,*nband);
+        for (i = 1; i < m; ++i) {
+            y[k+i] += a[i + k * *nband] * x[k];
+            y[k]   += a[i + k * *nband] * x[k+i];
         }
     }
 } /* dlabax_ */
@@ -1311,7 +1164,7 @@ integer *lde;
 doublereal *eigvec, *atol, *artol, *bound, *atemp, *d, *vtemp;
 {
     /* System generated locals */
-    integer a_dim1, a_offset, eigvec_dim1, eigvec_offset, i__1, i__2, i__3;
+    integer a_dim1, a_offset, eigvec_dim1, eigvec_offset, i__1;
     doublereal d__1;
 
     /* Local variables */
@@ -1371,8 +1224,7 @@ doublereal *eigvec, *atol, *artol, *bound, *atemp, *d, *vtemp;
     /* Function Body */
     nval = *nr - *nl + 1;
     flag__ = FALSE_;
-    i__1 = nval;
-    for (i = 1; i <= i__1; ++i) {
+    for (i = 1; i <= nval; ++i) {
         if (ddot_(n, &eigvec[i * eigvec_dim1 + 1], &c__1, &eigvec[i *
                 eigvec_dim1 + 1], &c__1) == 0.) {
             dlaran_(n, &eigvec[i * eigvec_dim1 + 1]);
@@ -1382,8 +1234,7 @@ doublereal *eigvec, *atol, *artol, *bound, *atemp, *d, *vtemp;
 /*  LOOP OVER EIGENVALUES */
 
     sigma = bound[(nval << 1) + 4];
-    i__1 = nval;
-    for (j = 1; j <= i__1; ++j) {
+    for (j = 1; j <= nval; ++j) {
         numl = j;
 
 /*  PREPARE TO COMPUTE FIRST RAYLEIGH QUOTIENT */
@@ -1478,8 +1329,7 @@ L50:
         if (rq - errb <= bound[(j << 1) + 4]) {
             goto L200;
         }
-        i__2 = nval;
-        for (i = j; i <= i__2; ++i) {
+        for (i = j; i <= nval; ++i) {
             if (bound[(i << 1) + 4] > rq) {
                 goto L70;
             }
@@ -1507,8 +1357,7 @@ L100:
 /*  FACTOR AND SOLVE */
 
 L200:
-        i__2 = nval;
-        for (i = j; i <= i__2; ++i) {
+        for (i = j; i <= nval; ++i) {
             if (sigma < bound[(i << 1) + 3]) {
                 goto L220;
             }
@@ -1516,16 +1365,14 @@ L200:
         i = nval + 1;
 L220:
         numvec = i - j;
-/* Computing MIN */
-        i__2 = numvec, i__3 = *nband + 2;
-        numvec = min(i__2,i__3);
+        numvec = min(numvec,*nband + 2);
         if (resid < *artol) {
             numvec = min(1,numvec);
         }
         dcopy_(n, &eigvec[j * eigvec_dim1 + 1], &c__1, &vtemp[1], &c__1);
-        i__2 = (*nband << 1) - 1;
+        i__1 = (*nband << 1) - 1;
         dlabfc_(n, nband, &a[a_offset], &sigma, &numvec, lde, &eigvec[j *
-                eigvec_dim1 + 1], &numl, &i__2, &atemp[1], &d[1], atol);
+                eigvec_dim1 + 1], &numl, &i__1, &atemp[1], &d[1], atol);
 
 /*  PARTIALLY SCALE EXTRA VECTORS TO PREVENT UNDERFLOW OR OVERFLOW */
 
@@ -1533,8 +1380,7 @@ L220:
             goto L227;
         }
         l = numvec - 1;
-        i__2 = l;
-        for (i = 1; i <= i__2; ++i) {
+        for (i = 1; i <= l; ++i) {
             m = j + i;
             d__1 = 1. / vnorm;
             dscal_(n, &d__1, &eigvec[m * eigvec_dim1 + 1], &c__1);
@@ -1547,8 +1393,7 @@ L227:
         if (numl >= 0) {
             bound[4] = min(bound[4],sigma);
         }
-        i__2 = nval;
-        for (i = j; i <= i__2; ++i) {
+        for (i = j; i <= nval; ++i) {
             if (sigma < bound[(i << 1) + 3]) {
                 goto L20;
             }
@@ -1575,9 +1420,9 @@ L300:
 L305:
         flag__ = FALSE_;
         rq = (bound[(j << 1) + 3] + bound[(j << 1) + 4]) * .5;
-        i__2 = (*nband << 1) - 1;
+        i__1 = (*nband << 1) - 1;
         dlabfc_(n, nband, &a[a_offset], &rq, &numvec, lde, &eigvec[j *
-                eigvec_dim1 + 1], &numl, &i__2, &atemp[1], &d[1], atol);
+                eigvec_dim1 + 1], &numl, &i__1, &atemp[1], &d[1], atol);
         vnorm = dnrm2_(n, &eigvec[j * eigvec_dim1 + 1], &c__1);
         if (vnorm != 0.f) {
             d__1 = 1. / vnorm;
@@ -1592,8 +1437,7 @@ L310:
             goto L330;
         }
         m = j - 1;
-        i__2 = m;
-        for (i = 1; i <= i__2; ++i) {
+        for (i = 1; i <= m; ++i) {
             d__1 = -ddot_(n, &eigvec[i * eigvec_dim1 + 1], &c__1, &eigvec[j * eigvec_dim1 + 1], &c__1);
             daxpy_(n, &d__1, &eigvec[i * eigvec_dim1 + 1], &c__1, &eigvec[j * eigvec_dim1 + 1], &c__1);
         }
@@ -1614,8 +1458,7 @@ L330:
             return;
         }
         m = j + 1;
-        i__2 = nval;
-        for (i = m; i <= i__2; ++i) {
+        for (i = m; i <= nval; ++i) {
             d__1 = -ddot_(n, &eigvec[j * eigvec_dim1 + 1], &c__1, &eigvec[i * eigvec_dim1 + 1], &c__1);
             daxpy_(n, &d__1, &eigvec[j * eigvec_dim1 + 1], &c__1, &eigvec[i * eigvec_dim1 + 1], &c__1);
         }
@@ -1635,14 +1478,14 @@ doublereal *atemp, *d, *atol;
 {
     /* System generated locals */
     integer a_dim1, a_offset, eigvec_dim1, eigvec_offset, atemp_dim1,
-            atemp_offset, d_dim1, d_offset, i__1, i__2, i__3;
+            atemp_offset, d_dim1, d_offset, i__1;
     doublereal d__1;
 
     /* Builtin functions */
     double d_sign();
 
     /* Local variables */
-    static doublereal zero[1];
+    static doublereal zero;
     static integer i, j, k, l, m;
     extern /* Subroutine */ void dcopy_(), dswap_(), daxpy_();
     static integer la, ld, kk, nb1, lpm;
@@ -1688,16 +1531,15 @@ doublereal *atemp, *d, *atol;
     atemp -= atemp_offset;
 
     /* Function Body */
-    zero[0] = 0.;
+    zero = 0.;
     nb1 = *nband - 1;
     *numl = 0;
     i__1 = *ldad * *nband;
-    dcopy_(&i__1, zero, &c__0, &d[d_offset], &c__1);
+    dcopy_(&i__1, &zero, &c__0, &d[d_offset], &c__1);
 
 /*   LOOP OVER COLUMNS OF A */
 
-    i__1 = *n;
-    for (k = 1; k <= i__1; ++k) {
+    for (k = 1; k <= *n; ++k) {
 
 /*   ADD A COLUMN OF A TO D */
 
@@ -1706,22 +1548,17 @@ doublereal *atemp, *d, *atol;
         if (m == 0) {
             goto L20;
         }
-        i__2 = m;
-        for (i = 1; i <= i__2; ++i) {
+        for (i = 1; i <= m; ++i) {
             la = k - i;
             ld = *nband - i;
             d[ld + *nband * d_dim1] = a[i + 1 + la * a_dim1];
         }
-
 L20:
-/* Computing MIN */
-        i__2 = *n - k;
-        m = min(i__2,nb1);
+        m = min(*n - k,nb1);
         if (m == 0) {
             goto L40;
         }
-        i__2 = m;
-        for (i = 1; i <= i__2; ++i) {
+        for (i = 1; i <= m; ++i) {
             ld = *nband + i;
             d[ld + *nband * d_dim1] = a[i + 1 + k * a_dim1];
         }
@@ -1733,11 +1570,10 @@ L40:
         if (nb1 == 0) {
             goto L70;
         }
-        i__2 = nb1;
-        for (i = 1; i <= i__2; ++i) {
+        for (i = 1; i <= nb1; ++i) {
             l = k - *nband + i;
             if (d[i + *nband * d_dim1] == 0.) {
-                goto L60;
+                continue;
             }
             if (abs(d[i + i * d_dim1]) >= abs(d[i + *nband * d_dim1])) {
                 goto L50;
@@ -1746,18 +1582,16 @@ L40:
                     + *nband * d_dim1] > 0. && d[i + i * d_dim1] >= 0.) {
                 lpm = -lpm;
             }
-            i__3 = *ldad - i + 1;
-            dswap_(&i__3, &d[i + i * d_dim1], &c__1, &d[i + *nband * d_dim1], &c__1);
+            i__1 = *ldad - i + 1;
+            dswap_(&i__1, &d[i + i * d_dim1], &c__1, &d[i + *nband * d_dim1], &c__1);
             dswap_(number, &eigvec[l + eigvec_dim1], lde, &eigvec[k +
                     eigvec_dim1], lde);
 L50:
-            i__3 = *ldad - i;
+            i__1 = *ldad - i;
             d__1 = -d[i + *nband * d_dim1] / d[i + i * d_dim1];
-            daxpy_(&i__3, &d__1, &d[i + 1 + i * d_dim1], &c__1, &d[i + 1 + *nband * d_dim1], &c__1);
+            daxpy_(&i__1, &d__1, &d[i + 1 + i * d_dim1], &c__1, &d[i + 1 + *nband * d_dim1], &c__1);
             d__1 = -d[i + *nband * d_dim1] / d[i + i * d_dim1];
             daxpy_(number, &d__1, &eigvec[l + eigvec_dim1], lde, &eigvec[k + eigvec_dim1], lde);
-L60:
-            ;
         }
 
 /*  UPDATE STURM SEQUENCE COUNT */
@@ -1786,11 +1620,9 @@ L70:
             goto L100;
         }
 L80:
-        i__2 = nb1;
-        for (i = 1; i <= i__2; ++i) {
-            i__3 = *ldad - i;
-            dcopy_(&i__3, &d[i + 1 + (i + 1) * d_dim1], &c__1, &d[i + i *
-                    d_dim1], &c__1);
+        for (i = 1; i <= nb1; ++i) {
+            i__1 = *ldad - i;
+            dcopy_(&i__1, &d[i + 1 + (i + 1) * d_dim1], &c__1, &d[i + i * d_dim1], &c__1);
             d[*ldad + i * d_dim1] = 0.;
         }
 L100:
@@ -1800,12 +1632,10 @@ L100:
 /*  TRANSFER D TO ATEMP */
 
 L110:
-    i__1 = *nband;
-    for (i = 1; i <= i__1; ++i) {
+    for (i = 1; i <= *nband; ++i) {
         l = *n - *nband + i;
-        i__2 = *nband - i + 1;
-        dcopy_(&i__2, &d[i + i * d_dim1], &c__1, &atemp[l * atemp_dim1 + 1], &
-                c__1);
+        i__1 = *nband - i + 1;
+        dcopy_(&i__1, &d[i + i * d_dim1], &c__1, &atemp[l * atemp_dim1 + 1], &c__1);
     }
 
 /*   BACK SUBSTITUTION */
@@ -1813,8 +1643,7 @@ L110:
     if (*number == 0) {
         return;
     }
-    i__1 = *n;
-    for (kk = 1; kk <= i__1; ++kk) {
+    for (kk = 1; kk <= *n; ++kk) {
         k = *n - kk + 1;
         if (abs(atemp[k * atemp_dim1 + 1]) <= *atol) {
             atemp[k * atemp_dim1 + 1] = d_sign(atol, &atemp[k * atemp_dim1 + 1]);
@@ -1826,8 +1655,7 @@ L110:
             if (m == 0) {
                 goto L150;
             }
-            i__3 = m;
-            for (j = 1; j <= i__3; ++j) {
+            for (j = 1; j <= m; ++j) {
                 l = k - j;
                 eigvec[l + i * eigvec_dim1] -= atemp[j + 1 + l * atemp_dim1] *
                          eigvec[k + i * eigvec_dim1];
@@ -1848,7 +1676,7 @@ integer *lde;
 doublereal *eigvec, *bound, *atemp, *d, *vtemp, *eps, *tmin, *tmax;
 {
     /* System generated locals */
-    integer a_dim1, a_offset, eigvec_dim1, eigvec_offset, i__1;
+    integer a_dim1, a_offset, eigvec_dim1, eigvec_offset;
 
     /* Builtin functions */
     double sqrt();
@@ -1906,8 +1734,7 @@ doublereal *eigvec, *bound, *atemp, *d, *vtemp, *eps, *tmin, *tmax;
 
 L30:
     m = nval + 1;
-    i__1 = m;
-    for (i = 2; i <= i__1; ++i) {
+    for (i = 2; i <= m; ++i) {
         bound[(i << 1) + 1] = *tmin;
         bound[(i << 1) + 2] = *tmax;
     }
@@ -1933,7 +1760,7 @@ integer *n, *nband, *nstart;
 doublereal *a, *tmin, *tmax;
 {
     /* System generated locals */
-    integer a_dim1, a_offset, i__1, i__2;
+    integer a_dim1, a_offset;
 
     /* Local variables */
     static doublereal temp;
@@ -1958,20 +1785,16 @@ doublereal *a, *tmin, *tmax;
     a_offset = a_dim1 + 1;
     a -= a_offset;
 
-    /* Function Body */
-    i__1 = *n;
-    for (k = *nstart; k <= i__1; ++k) {
+    for (k = *nstart; k <= *n; ++k) {
         temp = 0.;
-        i__2 = *nband;
-        for (i = 2; i <= i__2; ++i) {
+        for (i = 2; i <= *nband; ++i) {
             temp += abs(a[i + k * a_dim1]);
         }
         l = min(k,*nband);
         if (l == 1) {
             goto L40;
         }
-        i__2 = l;
-        for (i = 2; i <= i__2; ++i) {
+        for (i = 2; i <= l; ++i) {
             m = k - i + 1;
             temp += abs(a[i + m * a_dim1]);
         }
@@ -1990,41 +1813,16 @@ integer *n;
 doublereal *x;
 {
     /* Initialized data */
-
     static integer iurand = 0;
-
-    /* System generated locals */
-    integer i__1;
-
     /* Local variables */
     static integer i;
     extern doublereal urand_();
 
-
 /*  THIS SUBROUTINE SETS THE VECTOR X TO RANDOM NUMBERS */
-
-/*  FORMAL PARAMETERS */
-
-
-/*  LOCAL VARIABLES */
-
-
-/*  FUNCTIONS CALLED */
-
-
-/*  SUBROUTINES CALLED */
-
-/*     NONE */
 
 /*  INITIALIZE SEED */
 
-    /* Parameter adjustments */
-    --x;
-
-    /* Function Body */
-
-    i__1 = *n;
-    for (i = 1; i <= i__1; ++i) {
+    for (i = 0; i < *n; ++i) {
         x[i] = (doublereal) urand_(&iurand) - .5;
     }
 } /* dlaran_ */
@@ -2041,7 +1839,7 @@ integer *number;
 doublereal *resnrm, *orthcf, *rv;
 {
     /* System generated locals */
-    integer bet_dim1, bet_offset, s_dim1, s_offset, i__1, i__2;
+    integer bet_dim1, bet_offset, s_dim1, s_offset;
 
     /* Local variables */
     extern doublereal ddot_(), dnrm2_();
@@ -2071,10 +1869,8 @@ doublereal *resnrm, *orthcf, *rv;
 
     /* Function Body */
     m = *j - *nblock + 1;
-    i__1 = *number;
-    for (i = 1; i <= i__1; ++i) {
-        i__2 = *nblock;
-        for (k = 1; k <= i__2; ++k) {
+    for (i = 1; i <= *number; ++i) {
+        for (k = 1; k <= *nblock; ++k) {
             rv[k] = ddot_(nblock, &s[m + i * s_dim1], &c__1, &bet[k +
                     bet_dim1], nblock);
             if (k == 1) {
@@ -2103,7 +1899,7 @@ doublereal *eps;
 {
     /* System generated locals */
     integer val_dim1, val_offset, vec_dim1, vec_offset, h_dim1, h_offset,
-            hv_dim1, hv_offset, p_dim1, p_offset, q_dim1, q_offset, i__1, i__2, i__3, i__4;
+            hv_dim1, hv_offset, p_dim1, p_offset, q_dim1, q_offset, i__1;
     doublereal d__1;
 
     /* Local variables */
@@ -2112,7 +1908,7 @@ doublereal *eps;
     extern doublereal dnrm2_();
     static integer i, j, k, l, m;
     extern /* Subroutine */ void dcopy_();
-    static doublereal dzero[1];
+    static doublereal dzero;
     extern /* Subroutine */ void daxpy_();
     static integer jj;
     extern /* Subroutine */ void dlaeig_();
@@ -2151,7 +1947,7 @@ doublereal *eps;
     --d;
 
     /* Function Body */
-    dzero[0] = 0.;
+    dzero = 0.;
     if (! (*raritz)) {
         goto L190;
     }
@@ -2164,7 +1960,7 @@ doublereal *eps;
 /* COMPUTED BY DLAEIG. */
 
     i__1 = *nperm * *nperm;
-    dcopy_(&i__1, dzero, &c__0, &h[h_offset], &c__1);
+    dcopy_(&i__1, &dzero, &c__0, &h[h_offset], &c__1);
     temp = -1.;
     if (*small) {
         temp = 1.;
@@ -2173,17 +1969,14 @@ doublereal *eps;
     if (m == 0) {
         goto L40;
     }
-    i__1 = m;
-    for (i = 1; i <= i__1; ++i) {
+    for (i = 1; i <= m; ++i) {
         dcopy_(n, &vec[i * vec_dim1 + 1], &c__1, &p[i * p_dim1 + 1], &c__1);
     }
     (*iovect)(n, &m, &p[p_offset], &m, &c__0);
     (*op)(n, &m, &p[p_offset], &q[q_offset]);
     ++(*nop);
-    i__1 = m;
-    for (i = 1; i <= i__1; ++i) {
-        i__2 = *nperm;
-        for (j = i; j <= i__2; ++j) {
+    for (i = 1; i <= m; ++i) {
+        for (j = i; j <= *nperm; ++j) {
             jj = j - i + 1;
             h[jj + i * h_dim1] = temp * ddot_(n, &vec[j * vec_dim1 + 1], &
                     c__1, &q[i * q_dim1 + 1], &c__1);
@@ -2194,11 +1987,8 @@ doublereal *eps;
     }
 L40:
     m += *nblock;
-    i__1 = *nperm;
-    i__2 = *nblock;
-    for (i = m; i__2 < 0 ? i >= i__1 : i <= i__1; i += i__2) {
-        i__3 = *nblock;
-        for (j = 1; j <= i__3; ++j) {
+    for (i = m; *nblock < 0 ? i >= *nperm : i <= *nperm; i += *nblock) {
+        for (j = 1; j <= *nblock; ++j) {
             l = i - *nblock + j;
             dcopy_(n, &vec[l * vec_dim1 + 1], &c__1, &p[j * p_dim1 + 1], &
                     c__1);
@@ -2206,11 +1996,9 @@ L40:
         (*iovect)(n, nblock, &p[p_offset], &i, &c__0);
         (*op)(n, nblock, &p[p_offset], &q[q_offset]);
         ++(*nop);
-        i__3 = *nblock;
-        for (j = 1; j <= i__3; ++j) {
+        for (j = 1; j <= *nblock; ++j) {
             l = i - *nblock + j;
-            i__4 = *nperm;
-            for (k = l; k <= i__4; ++k) {
+            for (k = l; k <= *nperm; ++k) {
                 kk = k - l + 1;
                 h[kk + l * h_dim1] = temp * ddot_(n, &vec[k * vec_dim1 + 1], &
                         c__1, &q[j * q_dim1 + 1], &c__1);
@@ -2230,19 +2018,16 @@ L90:
 /* THIS COMPUTES THE RITZ VECTORS--THE COLUMNS OF */
 /* Y = QS WHERE S IS THE MATRIX OF EIGENVECTORS OF H. */
 
-    i__2 = *nperm;
-    for (i = 1; i <= i__2; ++i) {
-        dcopy_(n, dzero, &c__0, &vec[i * vec_dim1 + 1], &c__1);
+    for (i = 1; i <= *nperm; ++i) {
+        dcopy_(n, &dzero, &c__0, &vec[i * vec_dim1 + 1], &c__1);
     }
     m = *nperm % *nblock;
     if (m == 0) {
         goto L150;
     }
     (*iovect)(n, &m, &p[p_offset], &m, &c__1);
-    i__2 = m;
-    for (i = 1; i <= i__2; ++i) {
-        i__1 = *nperm;
-        for (j = 1; j <= i__1; ++j) {
+    for (i = 1; i <= m; ++i) {
+        for (j = 1; j <= *nperm; ++j) {
             daxpy_(n, &hv[i + j * hv_dim1], &p[i * p_dim1 + 1], &c__1, &vec[j
                     * vec_dim1 + 1], &c__1);
         }
@@ -2252,15 +2037,11 @@ L90:
     }
 L150:
     m += *nblock;
-    i__2 = *nperm;
-    i__1 = *nblock;
-    for (i = m; i__1 < 0 ? i >= i__2 : i <= i__2; i += i__1) {
+    for (i = m; *nblock < 0 ? i >= *nperm : i <= *nperm; i += *nblock) {
         (*iovect)(n, nblock, &p[p_offset], &i, &c__1);
-        i__3 = *nblock;
-        for (j = 1; j <= i__3; ++j) {
+        for (j = 1; j <= *nblock; ++j) {
             l = i - *nblock + j;
-            i__4 = *nperm;
-            for (k = 1; k <= i__4; ++k) {
+            for (k = 1; k <= *nperm; ++k) {
                 daxpy_(n, &hv[l + k * hv_dim1], &p[j * p_dim1 + 1], &c__1, &
                         vec[k * vec_dim1 + 1], &c__1);
             }
@@ -2280,16 +2061,13 @@ L190:
     if (m == 0) {
         goto L220;
     }
-    i__1 = m;
-    for (i = 1; i <= i__1; ++i) {
+    for (i = 1; i <= m; ++i) {
         dcopy_(n, &vec[i * vec_dim1 + 1], &c__1, &p[i * p_dim1 + 1], &c__1);
     }
     (*op)(n, &m, &p[p_offset], &q[q_offset]);
     ++(*nop);
-    i__1 = m;
-    for (i = 1; i <= i__1; ++i) {
-        val[i + val_dim1] = ddot_(n, &p[i * p_dim1 + 1], &c__1, &q[i * q_dim1
-                + 1], &c__1);
+    for (i = 1; i <= m; ++i) {
+        val[i + val_dim1] = ddot_(n, &p[i * p_dim1 + 1], &c__1, &q[i * q_dim1 + 1], &c__1);
         d__1 = -val[i + val_dim1];
         daxpy_(n, &d__1, &p[i * p_dim1 + 1], &c__1, &q[i * q_dim1 + 1], &c__1);
         val[i + (val_dim1 << 1)] = dnrm2_(n, &q[i * q_dim1 + 1], &c__1);
@@ -2299,19 +2077,15 @@ L190:
     }
 L220:
     ++m;
-    i__1 = *nperm;
-    i__2 = *nblock;
-    for (i = m; i__2 < 0 ? i >= i__1 : i <= i__1; i += i__2) {
-        i__3 = *nblock;
-        for (j = 1; j <= i__3; ++j) {
+    for (i = m; *nblock < 0 ? i >= *nperm : i <= *nperm; i += *nblock) {
+        for (j = 1; j <= *nblock; ++j) {
             l = i - 1 + j;
             dcopy_(n, &vec[l * vec_dim1 + 1], &c__1, &p[j * p_dim1 + 1], &
                     c__1);
         }
         (*op)(n, nblock, &p[p_offset], &q[q_offset]);
         ++(*nop);
-        i__3 = *nblock;
-        for (j = 1; j <= i__3; ++j) {
+        for (j = 1; j <= *nblock; ++j) {
             l = i - 1 + j;
             val[l + val_dim1] = ddot_(n, &p[j * p_dim1 + 1], &c__1, &q[j *
                     q_dim1 + 1], &c__1);
@@ -2352,7 +2126,7 @@ integer *nz, *n, *nblock;
 doublereal *z, *b;
 {
     /* System generated locals */
-    integer z_dim1, z_offset, b_dim1, b_offset, i__1, i__2;
+    integer z_dim1, z_offset, b_dim1, b_offset;
     doublereal d__1;
 
     /* Builtin functions */
@@ -2387,8 +2161,7 @@ doublereal *z, *b;
     b -= b_offset;
 
     /* Function Body */
-    i__1 = *nblock;
-    for (i = 1; i <= i__1; ++i) {
+    for (i = 1; i <= *nblock; ++i) {
 
 /* THIS FORMS THE ITH REFLECTION. */
 
@@ -2405,8 +2178,7 @@ doublereal *z, *b;
 
 /* THIS APPLIES THE ROTATION TO THE REST OF THE COLUMNS. */
 
-        i__2 = *nblock;
-        for (k = j; k <= i__2; ++k) {
+        for (k = j; k <= *nblock; ++k) {
             if (tau == 0.) {
                 goto L10;
             }
@@ -2424,8 +2196,7 @@ L30:
 
 /* THIS ACCUMULATES THE REFLECTIONS IN REVERSE ORDER. */
 
-    i__1 = *nblock;
-    for (m = 1; m <= i__1; ++m) {
+    for (m = 1; m <= *nblock; ++m) {
 
 /* THIS RECREATES THE ITH = NBLOCK-M+1)TH REFLECTION. */
 
@@ -2443,12 +2214,9 @@ L30:
 
 /* THIS APPLIES IT TO THE LATER COLUMNS. */
 
-        i__2 = *nblock;
-        for (k = j; k <= i__2; ++k) {
-            temp = -ddot_(&length, &z[i + i * z_dim1], &c__1, &z[i + k *
-                    z_dim1], &c__1) / tau;
-            daxpy_(&length, &temp, &z[i + i * z_dim1], &c__1, &z[i + k *
-                    z_dim1], &c__1);
+        for (k = j; k <= *nblock; ++k) {
+            temp = -ddot_(&length, &z[i + i * z_dim1], &c__1, &z[i + k * z_dim1], &c__1) / tau;
+            daxpy_(&length, &temp, &z[i + i * z_dim1], &c__1, &z[i + k * z_dim1], &c__1);
         }
 L50:
         d__1 = -1. / sigma;
@@ -2469,53 +2237,24 @@ doublereal *v;
 integer *nmvec, *n;
 doublereal *vec;
 {
-    /* System generated locals */
-    integer vec_dim1, vec_offset, i__1, i__2;
-
     /* Local variables */
     static doublereal temp;
     static integer i, k, m;
     extern /* Subroutine */ void dswap_();
 
-
 /*  THIS SUBROUTINE SORTS THE EIGENVALUES (VAL) IN ASCENDING ORDER */
 /*  WHILE CONCURRENTLY SWAPPING THE RESIDUALS AND VECTORS. */
-    /* Parameter adjustments */
-    --val;
-    --res;
-    --v;
-    vec_dim1 = *nmvec;
-    vec_offset = vec_dim1 + 1;
-    vec -= vec_offset;
 
-    /* Function Body */
-    if (*num <= 1) {
-        return;
-    }
-    i__1 = *num;
-    for (i = 2; i <= i__1; ++i) {
-        m = *num - i + 1;
-        i__2 = m;
-        for (k = 1; k <= i__2; ++k) {
-            if (val[k] <= val[k + 1]) {
-                goto L10;
+    for (m = *num - 1; m > 0; --m) {
+        for (k = 0; k < m; ++k) {
+            if (val[k] <= val[k+1])
+                continue;
+            temp = val[k]; val[k] = val[k+1]; val[k+1] = temp;
+            temp = res[k]; res[k] = res[k+1]; res[k+1] = temp;
+            dswap_(n, &vec[k * *nmvec], &c__1, &vec[(k+1) * *nmvec], &c__1);
+            if (*iflag != 0) {
+                temp = v[k]; v[k] = v[k+1]; v[k+1] = temp;
             }
-            temp = val[k];
-            val[k] = val[k + 1];
-            val[k + 1] = temp;
-            temp = res[k];
-            res[k] = res[k + 1];
-            res[k + 1] = temp;
-            dswap_(n, &vec[k * vec_dim1 + 1], &c__1, &vec[(k + 1) * vec_dim1
-                    + 1], &c__1);
-            if (*iflag == 0) {
-                goto L10;
-            }
-            temp = v[k];
-            v[k] = v[k + 1];
-            v[k + 1] = temp;
-L10:
-            ;
         }
     }
 } /* dvsort_ */
@@ -2538,16 +2277,11 @@ integer *iy;
     static integer ia, ic, mic;
 
 
-/*      URAND IS A UNIFORM RANDOM NUMBER GENERATOR BASED  ON  THEORY  AND
-*/
-/*  SUGGESTIONS  GIVEN  IN  D.E. KNUTH (1969),  VOL  2.   THE INTEGER  IY
-*/
-/*  SHOULD BE INITIALIZED TO AN ARBITRARY INTEGER PRIOR TO THE FIRST CALL
-*/
-/*  TO URAND.  THE CALLING PROGRAM SHOULD  NOT  ALTER  THE  VALUE  OF  IY
-*/
-/*  BETWEEN  SUBSEQUENT CALLS TO URAND.  VALUES OF URAND WILL BE RETURNED
-*/
+/*      URAND IS A UNIFORM RANDOM NUMBER GENERATOR BASED  ON  THEORY  AND */
+/*  SUGGESTIONS  GIVEN  IN  D.E. KNUTH (1969),  VOL  2.   THE INTEGER  IY */
+/*  SHOULD BE INITIALIZED TO AN ARBITRARY INTEGER PRIOR TO THE FIRST CALL */
+/*  TO URAND.  THE CALLING PROGRAM SHOULD  NOT  ALTER  THE  VALUE  OF  IY */
+/*  BETWEEN  SUBSEQUENT CALLS TO URAND.  VALUES OF URAND WILL BE RETURNED */
 /*  IN THE INTERVAL (0,1). */
 
     if (m2 != 0) {
@@ -2604,4 +2338,3 @@ L20:
     }
     return (real) (*iy) * s;
 } /* urand_ */
-
