@@ -21,13 +21,13 @@
 //=======================================================================
 void test_url()
 {
-  vcl_cout << "\n\n\n";
-  vcl_cout << "*****************" << vcl_endl;
-  vcl_cout << " Testing vul_url " << vcl_endl;
-  vcl_cout << "*****************" << vcl_endl;
+  vcl_cout << "\n"
+           << "*****************\n"
+           << " Testing vul_url\n"
+           << "*****************\n\n";
 
 
-  vcl_cout<<"======== base64 stuff ==========="<<vcl_endl;
+  vcl_cout<<"======== base64 stuff ===========\n";
 
   unsigned const nTests = 300;
   vcl_string data;
@@ -59,38 +59,35 @@ void test_url()
       correct_decode = false;
     }
   }
-  TEST("All encoded strings are roughly correct size",
-    correct_size, true);
-
-
+  TEST("All encoded strings are roughly correct size", correct_size, true);
   TEST("All decoded strings == original", correct_decode, true);
 
-
-  vcl_cout<<"======== url determination ==========="<<vcl_endl;
+  vcl_cout<<"======== url determination ===========\n";
 
   TEST("http://vxl.sourceforge.net/ is a URL",
-    vul_url::is_url("http://vxl.sourceforge.net/"), true);
+       vul_url::is_url("http://vxl.sourceforge.net/"), true);
 
   TEST("/tmp/file is not URL",
-    vul_url::is_url("/tmp/file"), false);
+       vul_url::is_url("/tmp/file"), false);
 
-  vcl_cout<<"======== http downloading ==========="<<vcl_endl;
+  vcl_cout<<"======== http downloading ===========\n";
 
 #ifndef DOWNLOAD
   vcl_cout<<"Tests disabled, because too " <<
-    "many users are behind mandatory caches" << vcl_endl;
-  vcl_cout<<"vul_url does not support HTTP via a cache" << vcl_endl;
+    "many users are behind mandatory caches\n";
+  vcl_cout<<"vul_url does not support HTTP via a cache\n";
 #else
   TEST("vul_url::exists(http://vxl.sourceforge.net/index.html)",
-    vul_url::exists("http://vxl.sourceforge.net/index.html"), true);
+       vul_url::exists("http://vxl.sourceforge.net/index.html"), true);
 
   TEST("! vul_url::exists(http://vxl.sourceforge.net/foobarwobble.html)",
-    vul_url::exists("http://vxl.sourceforge.net/foobarwobble.html"), false);
+       vul_url::exists("http://vxl.sourceforge.net/foobarwobble.html"), false);
 
   vcl_istream* i = vul_url::open("http://vxl.sourceforge.net/");
   TEST("vul_url::open(http://vxl.sourceforge.net/)", bool(i), true);
 
-  if (i) {
+  if (i)
+  {
     char a[1024];
     i->read(a,1024);
     vcl_cout << a;
