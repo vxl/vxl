@@ -92,7 +92,7 @@ vil_jpeg_term_destination (j_compress_ptr cinfo) {
 
   // Write any data remaining in the buffer
   if (datacount > 0) {
-    if (dest->stream->write(dest->buffer, datacount) != (int)datacount)
+    if (dest->stream->write(dest->buffer, datacount) != datacount)
       ERREXIT(cinfo, JERR_FILE_WRITE);
   }
 }
@@ -137,5 +137,5 @@ vil_jpeg_stream_dst_rewind(j_compress_ptr cinfo, vil_stream *vs) {
   cinfo->dest->next_output_byte = dst->buffer;
   cinfo->dest->free_in_buffer = vil_jpeg_OUTPUT_BUF_SIZE;
 
-  vs->seek(0);
+  vs->seek(0L);
 }

@@ -168,7 +168,7 @@ static tsize_t vil_tiff_readproc(thandle_t h, tdata_t buf, tsize_t n)
 {
   vil_tiff_structures* p = (vil_tiff_structures*)h;
   if (n > p->filesize) p->filesize= n;
-  int ret = p->vs->read(buf, n);
+  tsize_t ret = p->vs->read(buf, n);
   trace << "readproc, n = " << n << ", ret = " << ret << "\n";
   return ret;
 }
@@ -176,8 +176,8 @@ static tsize_t vil_tiff_readproc(thandle_t h, tdata_t buf, tsize_t n)
 static tsize_t vil_tiff_writeproc(thandle_t h, tdata_t buf, tsize_t n)
 {
   vil_tiff_structures* p = (vil_tiff_structures*)h;
-  int ret = p->vs->write(buf, n);
-  int s = p->vs->tell();
+  tsize_t ret = p->vs->write(buf, n);
+  vil_streampos s = p->vs->tell();
   if (s > p->filesize)
     p->filesize = s;
   trace << "writeproc: ret=" << ret << "/" << n << " , filesize = " << p->filesize << "   " << s << vcl_endl;
@@ -186,7 +186,7 @@ static tsize_t vil_tiff_writeproc(thandle_t h, tdata_t buf, tsize_t n)
 
 static toff_t vil_tiff_seekproc(thandle_t h, toff_t offset, int whence)
 {
-    trace << "seek " << offset << " w = " << whence << vcl_endl;
+  trace << "seek " << offset << " w = " << whence << vcl_endl;
   vil_tiff_structures* p = (vil_tiff_structures*)h;
   if (whence == SEEK_SET) {
     p->vs->seek(offset);
@@ -195,7 +195,7 @@ static toff_t vil_tiff_seekproc(thandle_t h, toff_t offset, int whence)
   } else if (whence == SEEK_END) {
     p->vs->seek(p->filesize + offset);
   }
-  int s = p->vs->tell();
+  vil_streampos s = p->vs->tell();
   if (s > p->filesize)
     p->filesize = s;
   return s;
@@ -303,12 +303,12 @@ bool vil_tiff_generic_image::set_property(char const *tag, const void *prop) con
     return false;
 }
 
-vil_tiff_generic_image::vil_tiff_generic_image(vil_stream* is, int planes,
+vil_tiff_generic_image::vil_tiff_generic_image(vil_stream* is, int /*planes*/,
                                                int width,
                                                int height,
                                                int components,
                                                int bits_per_component,
-                                               vil_component_format format):
+                                               vil_component_format /*format*/):
   p(new vil_tiff_structures(is))
 {
   width_ = width;
@@ -334,7 +334,7 @@ char const* vil_tiff_generic_image::file_format() const
 
 bool vil_tiff_generic_image::read_header()
 {
-  p->vs->seek(0);
+  p->vs->seek(0L);
   p->tif = TIFFClientOpen("unknown filename",
                           "rC", // read, enable strip chopping
                           (thandle_t)p,
@@ -356,7 +356,7 @@ bool vil_tiff_generic_image::read_header()
 
   unsigned short samplesperpixel;
   // assume one sample per pixel if not in tiff file
-  if(!TIFFGetField(p->tif, TIFFTAG_SAMPLESPERPIXEL, &samplesperpixel))
+  if (!TIFFGetField(p->tif, TIFFTAG_SAMPLESPERPIXEL, &samplesperpixel))
     samplesperpixel = 1;
 
   switch (samplesperpixel) {
@@ -383,7 +383,7 @@ bool vil_tiff_generic_image::read_header()
   TIFFGetField(p->tif, TIFFTAG_IMAGELENGTH, &height);
   this->height_ = height;
 
-  if(TIFFIsTiled(p->tif)){
+  if (TIFFIsTiled(p->tif)){
     p->tiled = true;
     TIFFGetField(p->tif, TIFFTAG_TILEWIDTH, &p->tilewidth);
     TIFFGetField(p->tif, TIFFTAG_TILELENGTH, &p->tileheight);
@@ -400,7 +400,7 @@ bool vil_tiff_generic_image::read_header()
   switch (p->photometric) {
   case PHOTOMETRIC_RGB:
     {
-      if(!TIFFIsTiled(p->tif)) {
+      if (!TIFFIsTiled(p->tif)) {
         // section_tiff_image = new ForeignImage(GetDescription(), 'r', GetSizeX(), GetSizeY(), GetBitsPixel(), 8);
 #ifdef RIH_DEBUG
         vcl_cerr << "vil_tiff: Treating Tiff image as uncompressed ForeignImage" << vcl_endl;
@@ -410,7 +410,7 @@ bool vil_tiff_generic_image::read_header()
     break;
   case PHOTOMETRIC_MINISBLACK:
     {
-      if(!TIFFIsTiled(p->tif))
+      if (!TIFFIsTiled(p->tif))
         {
           // section_tiff_image = new ForeignImage(GetDescription(), 'r', GetSizeX(), GetSizeY(), GetBitsPixel(), 8);
 #ifdef RIH_DEBUG
@@ -530,18 +530,18 @@ bool vil_tiff_generic_image::read_header()
 
 bool vil_tiff_generic_image::write_header()
 {
-  p->vs->seek(0);
+  p->vs->seek(0L);
   p->filesize = 0;
 
   // TIFF does not support > 8-bit grayscale
-  if(bits_per_component_>8 && components_ == 1){
+  if (bits_per_component_>8 && components_ == 1){
     TIFFError("TIFFImageWH: ", "TIFF6.0 does not support greater than 8-bit grayscale");
     return false;
   }
 
 #if 0 // commented out
         // Strips or Tiles?
-        if(GetArea()*GetBytesPixel() > MIN_AREA_FOR_TILING &&
+        if (GetArea()*GetBytesPixel() > MIN_AREA_FOR_TILING &&
            !(GetBlockSizeX() % 8) && !(GetBlockSizeY() % 8)){
                 // Tiles
                 TIFFSetField(p->tif, TIFFTAG_TILEWIDTH, GetBlockSizeX());
@@ -585,17 +585,17 @@ bool vil_tiff_generic_image::write_header()
 
 #if 0 // commented out
   int ncolors = GetColorNum();
-  if(ncolors && samplesperpixel==1)
+  if (ncolors && samplesperpixel==1)
   {
      int mapsize = 1<<bitspersample;
 
      unsigned short *cmap = new unsigned short[mapsize*3];
      int** cm = GetColorMap();
-     for(int i=0; i<3; i++)
+     for (int i=0; i<3; i++)
      {
        register int j = 0;
-       for(; j<ncolors; j++) *cmap++ = (unsigned short)SCALE(cm[i][j]);
-       for(; j<mapsize; j++) *cmap++ = 0;
+       for (; j<ncolors; j++) *cmap++ = (unsigned short)SCALE(cm[i][j]);
+       for (; j<mapsize; j++) *cmap++ = 0;
      }
      cmap -= mapsize*3;
      TIFFSetField(p->tif, TIFFTAG_COLORMAP, cmap, cmap+mapsize, cmap+2*mapsize);
@@ -685,19 +685,19 @@ bool vil_tiff_generic_image::get_section(void* buf, int x0, int y0, int xs, int 
     int pixel_byte_size = components_ * bits_per_component_ / 8;
     // memset(buf, 100, xs * ys * pixel_byte_size);
     {
-      for(unsigned strip_id = strip_min; strip_id <= strip_max; ++strip_id) {
+      for (unsigned long strip_id = strip_min; strip_id <= strip_max; ++strip_id) {
         TIFFReadEncodedStrip(p->tif, strip_id, p->buf, (tsize_t) -1);
         // Strip contains some rows...
-        int strip_min_row = strip_id * p->rows_per_strip;
-        int strip_max_row = strip_min_row + p->rows_per_strip - 1;
+        unsigned long strip_min_row = strip_id * p->rows_per_strip;
+        unsigned long strip_max_row = strip_min_row + p->rows_per_strip - 1;
 
-        int ymin = strip_min_row;
+        long ymin = (long)strip_min_row;
         if (ymin < y0) ymin = y0;
-        int ymax = strip_max_row;
+        long ymax = (long)strip_max_row;
         if (ymax > y1) ymax = y1;
 
         // printf("reading strip %d, y  = %d .. %d\n", strip_id, ymin, ymax);
-        for(int y = ymin; y <= ymax; ++y) {
+        for (long y = ymin; y <= ymax; ++y) {
           unsigned char* in_row = p->buf + (y - strip_min_row) * p->scanlinesize;
           unsigned char* out_row = (unsigned char*)buf + (y - y0) * xs * pixel_byte_size;
           vcl_memcpy(out_row, in_row + x0 * pixel_byte_size, xs * pixel_byte_size);
@@ -721,24 +721,24 @@ bool vil_tiff_generic_image::put_section(void const* buf, int x0, int y0, int xs
   assert(strip_max <= p->numberofstrips);
   // Put each strip
   int pixel_byte_size = components_ * bits_per_component_ / 8;
-  for(unsigned strip_id = strip_min; strip_id <= strip_max; ++strip_id) {
+  for (unsigned long strip_id = strip_min; strip_id <= strip_max; ++strip_id) {
     // Strip contains some rows...
-    int strip_min_row = strip_id * p->rows_per_strip;
-    int strip_max_row = strip_min_row + p->rows_per_strip - 1;
+    unsigned long strip_min_row = strip_id * p->rows_per_strip;
+    unsigned long strip_max_row = strip_min_row + p->rows_per_strip - 1;
 
-    int ymin = strip_min_row;
+    long ymin = (long)strip_min_row;
     if (ymin < y0) ymin = y0;
-    int ymax = strip_max_row;
+    long ymax = (long)strip_max_row;
     if (ymax > y1) ymax = y1;
 
     // printf("writing strip %d, y  = %d .. %d\n", strip_id, ymin, ymax);
-    for(int y = ymin; y <= ymax; ++y) {
+    for (long y = ymin; y <= ymax; ++y) {
       unsigned char* file_row = p->buf + (y - strip_min_row) * p->scanlinesize;
       const unsigned char* mem_row = (const unsigned char*)buf + (y - y0) * xs * pixel_byte_size;
       vcl_memcpy(file_row + x0 * pixel_byte_size, mem_row, xs * pixel_byte_size);
     }
 
-    TIFFWriteEncodedStrip(p->tif, strip_id, p->buf, (ymax - ymin + 1) * p->scanlinesize);
+    TIFFWriteEncodedStrip(p->tif, strip_id, p->buf, (long)(ymax - ymin + 1) * p->scanlinesize);
   }
   return true;
 }

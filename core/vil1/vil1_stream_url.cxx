@@ -263,11 +263,11 @@ vil_stream_url::vil_stream_url(char const *url)
   u_->ref();
   {
     unsigned entity_marker = 0; // count end of header CR and LFs
-    int n;
+    vil_streampos n;
 #ifdef VCL_WIN32
-    while ((n = recv(tcp_socket, buffer, sizeof buffer,0 )) > 0)
+    while ((n = recv(tcp_socket, buffer, sizeof buffer,0 )) > 0L)
 #else
-    while ((n = ::read(tcp_socket, buffer, sizeof buffer)) > 0)
+    while ((n = ::read(tcp_socket, buffer, sizeof buffer)) > 0L)
 #endif
     {
       // search for the CRLFCRLF sequence that marks the end
@@ -280,7 +280,7 @@ vil_stream_url::vil_stream_url(char const *url)
       }
       else
       {
-        for (int i=0; i<n; ++i)
+        for (vil_streampos i=0; i<n; ++i)
         {
           if ((entity_marker==2||entity_marker==0) && buffer[i]=='\r') entity_marker++;
           else if (entity_marker==1 && buffer[i]=='\n') entity_marker++;
@@ -300,8 +300,8 @@ vil_stream_url::vil_stream_url(char const *url)
 #if (0) // useful for figuring out where the error is
   char btest[4096];
   vcl_ofstream test("/test.jpg", vcl_ios_binary);
-  u_->seek(0);
-  while(int bn = u_->read(btest, 4096))
+  u_->seek(0L);
+  while(vil_streampos bn = u_->read(btest, 4096L))
     test.write(btest, bn);
   test.close();
 #endif 

@@ -60,7 +60,7 @@ vil_stream_fstream::~vil_stream_fstream()
   xerr << "vil_stream_fstream# " << id_ << " being deleted\n";
 }
 
-int vil_stream_fstream::write(void const* buf, int n)
+vil_streampos vil_stream_fstream::write(void const* buf, vil_streampos n)
 {
   assert(id > 0);
   if (!(flags_ & vcl_ios_out)) {
@@ -68,25 +68,25 @@ int vil_stream_fstream::write(void const* buf, int n)
     return 0;
   }
 
-  vcl_streampos a = tell();
+  vil_streampos a = tell();
   xerr << "write " << n << vcl_endl;
   f_.write((char const*)buf, n);
   if (!f_.good())
     vcl_cerr << ("vil_stream_fstream: ERROR: write failed!\n");
-  vcl_streampos b = tell();
+  vil_streampos b = tell();
   f_.flush();
   return b-a;
 }
 
 
-int vil_stream_fstream::read(void* buf, int n)
+vil_streampos vil_stream_fstream::read(void* buf, vil_streampos n)
 {
   assert(id > 0);
 
   if (!(flags_ & vcl_ios_in))
     return 0;
 
-  vcl_streampos a = tell();
+  vil_streampos a = tell();
   xerr << "read " << n << vcl_endl;
   f_.read((char *)buf, n);
 
@@ -101,15 +101,15 @@ int vil_stream_fstream::read(void* buf, int n)
   if (!f_.good() && !f_.bad() && f_.eof())
     f_.clear(); // allows subsequent operations
 
-  vcl_streampos b = tell();
+  vil_streampos b = tell();
 
-  int numread = b-a;
-  if (numread < 0) { xerr << "urgh!" << vcl_endl; return -1; }
+  vil_streampos numread = b-a;
+  if (b < a) { xerr << "urgh!" << vcl_endl; return numread; }
   if (numread != n) xerr << "only read " << numread << vcl_endl;
   return numread;
 }
 
-int vil_stream_fstream::tell()
+vil_streampos vil_stream_fstream::tell()
 {
   assert(id > 0);
   if (flags_ & vcl_ios_in) {
@@ -123,10 +123,10 @@ int vil_stream_fstream::tell()
   }
 
   assert(false); // did you get here? use at least one of vcl_ios_in, vcl_ios_out.
-  return -1;
+  return (vil_streampos)(-1L);
 }
 
-void vil_stream_fstream::seek(int position)
+void vil_stream_fstream::seek(vil_streampos position)
 {
   assert(id > 0);
   bool fi = (flags_ & vcl_ios_in)  != 0;
@@ -159,5 +159,5 @@ void vil_stream_fstream::seek(int position)
     }
   }
   else
-    assert(false); // see above assert
+    assert(false); // did you get here? use at least one of vcl_ios_in, vcl_ios_out.
 }

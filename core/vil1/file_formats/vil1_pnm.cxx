@@ -37,7 +37,7 @@ vil_image_impl* vil_pnm_file_format::make_input_image(vil_stream* vs)
 {
   // Attempt to read header
   unsigned char buf[3];
-  vs->read(buf, 3);
+  vs->read(buf, 3L);
   bool ok = ((buf[0] == 'P') &&
              iseol(buf[2]) &&
              (buf[1] >= '1' && buf[2] <= '6'));
@@ -151,9 +151,9 @@ static void SkipSpaces(vil_stream* vs, char& temp)
   {
     if (temp == '#') // skip this line:
       while (!iseol(temp))
-        if (1 > vs->read(&temp,1)) return; // at end-of-file?
+        if (1L > vs->read(&temp,1L)) return; // at end-of-file?
     // skip this `whitespace' byte by reading the next byte:
-    if (1 > vs->read(&temp,1)) return;
+    if (1L > vs->read(&temp,1L)) return;
   }
 }
 
@@ -164,7 +164,7 @@ static int ReadInteger(vil_stream* vs, char& temp)
   while ((temp >= '0') && (temp <= '9'))
   {
     n *= 10; n += (temp - '0');
-    if (1 > vs->read(&temp,1)) return n; // at end-of-file?
+    if (1L > vs->read(&temp,1L)) return n; // at end-of-file?
   }
   return n;
 }
@@ -204,17 +204,17 @@ bool vil_pnm_generic_image::read_header()
   char temp;
 
   // Go to start of file
-  vs_->seek(0);
+  vs_->seek(0L);
 
   char buf[3];
-  if (3 > vs_->read(buf, 3)) return false; // at end-of-file?
+  if (3L > vs_->read(buf, 3L)) return false; // at end-of-file?
   if (buf[0] != 'P') return false;
   if (!iseol(buf[2])) return false;
   magic_ = buf[1] - '0';
   if (magic_ < 1 || magic_ > 6) return false;
 
   // read 1 byte
-  vs_->read(&temp, 1);
+  vs_->read(&temp, 1L);
 
   //Skip over spaces and comments
   SkipSpaces(vs_,temp);
@@ -240,7 +240,7 @@ bool vil_pnm_generic_image::read_header()
     maxval_ = ReadInteger(vs_,temp);
   }
 
-  start_of_data_ = vs_->tell() - 1;
+  start_of_data_ = vs_->tell() - 1L;
 
   //Final end-of-line or other white space (1 byte) before the data section begins
   if (isws(temp))
@@ -264,7 +264,7 @@ bool vil_pnm_generic_image::read_header()
 
 bool vil_pnm_generic_image::write_header()
 {
-  vs_->seek(0);
+  vs_->seek(0L);
 
   char buf[1024];
   vcl_sprintf(buf, "P%d\n#vil pnm image, #c=%u, bpc=%u\n%u %u\n",
@@ -281,7 +281,7 @@ bool vil_pnm_generic_image::write_header()
 
 bool operator>>(vil_stream& vs, int& a)
 {
-  char c; vs.read(&c,1);
+  char c; vs.read(&c,1L);
   SkipSpaces(&vs,c);
   if (c < '0' || c > '9') return false; // non-digit found
   a = ReadInteger(&vs,c);
@@ -319,15 +319,15 @@ bool vil_pnm_generic_image::get_section(void* buf, int x0, int y0, int xs, int y
     int byte_out_width = (xs+7)/8;
 
     for (int y = 0; y < ys; ++y) {
-      int byte_start = start_of_data_ + (y0+y) * byte_width + x0/8;
+      vil_streampos byte_start = start_of_data_ + (y0+y) * byte_width + x0/8;
       vs_->seek(byte_start);
-      unsigned char a; vs_->read(&a, 1);
+      unsigned char a; vs_->read(&a, 1L);
       int s = x0&7; // = x0%8;
       unsigned char b = 0; // output
       int t = 0;
       for (int x = 0; x < xs; ++x) {
         b |= ((a>>(7-s))&1)<<(7-t); // single bit; high bit = first
-        if (s >= 7) { vs_->read(&a, 1); s = 0; }
+        if (s >= 7) { vs_->read(&a, 1L); s = 0; }
         else ++s;
         if (t >= 7) { ib[y * byte_out_width + x/8] = b; b = 0; t = 0; }
         else ++t;
@@ -377,7 +377,7 @@ bool vil_pnm_generic_image::put_section(void const* buf, int x0, int y0, int xs,
   {
     int bytes_per_sample = (bits_per_component_+7)/8;
     int bytes_per_pixel = components_ * bytes_per_sample;
-    int byte_start = start_of_data_ + (y0 * width_ + x0) * bytes_per_pixel;
+    vil_streampos byte_start = start_of_data_ + (y0 * width_ + x0) * bytes_per_pixel;
     int byte_width = width_ * bytes_per_pixel;
     int byte_out_width = xs * bytes_per_pixel;
 
@@ -408,13 +408,13 @@ bool vil_pnm_generic_image::put_section(void const* buf, int x0, int y0, int xs,
     int byte_out_width = (xs+7)/8;
 
     for(int y = 0; y < ys; ++y) {
-      int byte_start = start_of_data_ + (y0+y) * byte_width + x0/8;
+      vil_streampos byte_start = start_of_data_ + (y0+y) * byte_width + x0/8;
       vs_->seek(byte_start);
       int s = x0&7; // = x0%8;
       int t = 0;
       unsigned char a = 0, b = ob[y * byte_out_width];
       if (s) {
-        vs_->read(&a, 1);
+        vs_->read(&a, 1L);
         vs_->seek(byte_start);
         a &= ((1<<s)-1)<<(8-s); // clear the last 8-s bits of a
       }
@@ -422,18 +422,18 @@ bool vil_pnm_generic_image::put_section(void const* buf, int x0, int y0, int xs,
         if (b&(1<<(7-t))) a |= 1<<(7-s); // single bit; high bit = first
         if (t >= 7) { b = ob[y * byte_out_width + (x+1)/8]; t = 0; }
         else ++t;
-        if (s >= 7) { vs_->write(&a, 1); ++byte_start; s = 0; a = 0; }
+        if (s >= 7) { vs_->write(&a, 1L); ++byte_start; s = 0; a = 0; }
         else ++s;
       }
       if (s) {
         if (x0+xs < width_) {
           vs_->seek(byte_start);
-          unsigned char c; vs_->read(&c, 1);
+          unsigned char c; vs_->read(&c, 1L);
           vs_->seek(byte_start);
           c &= ((1<<(8-s))-1); // clear the first s bits of c
           a |= c;
         }
-        vs_->write(&a, 1);
+        vs_->write(&a, 1L);
       }
     }
   }

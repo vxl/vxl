@@ -20,7 +20,7 @@
 bool vil_gif_probe(vil_stream *s)
 {
   // 47 49 46 38 37 61  "GIF87a"
-  s->seek(0);
+  s->seek(0L);
   char magic[6];
   s->read(magic, sizeof magic);
 
@@ -71,7 +71,7 @@ vil_gif_loader_saver::vil_gif_loader_saver(vil_stream *s_) : s(s_), is_grey(fals
   s->ref();
   assert(vil_gif_probe(s));
 
-  s->seek(6);
+  s->seek(6L);
 
   // read screen descriptor
   screen_width_  = vil_16bit_read_little_endian(s);
@@ -83,7 +83,7 @@ vil_gif_loader_saver::vil_gif_loader_saver(vil_stream *s_) : s(s_), is_grey(fals
   // ---------- read screen descriptor
 
   {
-    s->read(&b, 1);
+    s->read(&b, 1L);
     vcl_cerr << "b = 0x" << vcl_hex << int(b) << vcl_dec << vcl_endl;
 
     int bits_of_colour_res;
@@ -115,12 +115,12 @@ vil_gif_loader_saver::vil_gif_loader_saver(vil_stream *s_) : s(s_), is_grey(fals
     }
 
     // colour index of background.
-    s->read(&b, 1);
+    s->read(&b, 1L);
     background_index = b;
     vcl_cerr << "background has colour index " << background_index << vcl_endl;
 
     // should be zero
-    s->read(&b, 1);
+    s->read(&b, 1L);
     if (b) {
       vcl_cerr << "not zero" << vcl_endl;
       assert(false);
@@ -152,11 +152,11 @@ vil_gif_loader_saver::vil_gif_loader_saver(vil_stream *s_) : s(s_), is_grey(fals
   // ---------- read image descriptors
 
   while (true) {
-    int offset = s->tell();
+    vil_streampos offset = s->tell();
     vcl_cerr << "position is 0x" << vcl_hex << offset << vcl_dec << vcl_endl;
 
     // read image separator or GIF terminator
-    s->read(&b, 1);
+    s->read(&b, 1L);
     if (b == ';')   // terminator
       break;
     if (b != ',') { // separator
@@ -181,7 +181,7 @@ vil_gif_loader_saver::vil_gif_loader_saver(vil_stream *s_) : s(s_), is_grey(fals
 
     vcl_cerr << "position is 0x" << vcl_hex << s->tell() << vcl_dec << vcl_endl;
 
-    s->read(&b, 1);
+    s->read(&b, 1L);
     vcl_cerr << "b = 0x" << vcl_hex << int(b) << vcl_dec << vcl_endl;
 
     vcl_cerr << "position is 0x" << vcl_hex << s->tell() << vcl_dec << vcl_endl;
@@ -286,6 +286,7 @@ bool vil_gif_loader_saver::get_section(int image, void* buf, int x0, int y0, int
 {
 #if 1
   // Damn! Have to implement LZW decompression here. Maybe some other day.
+  vcl_cerr << "vil_gif_loader_saver::get_section(): LZW decompression now yet implemented\n";
 #else
   assert(0<=image && image<images.size());
   char *char_buf = (char*) buf;

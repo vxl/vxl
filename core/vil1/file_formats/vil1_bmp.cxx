@@ -22,7 +22,7 @@ vil_image_impl* vil_bmp_file_format::make_input_image(vil_stream* is)
 {
   // Attempt to read header
   vil_bmp_file_header hdr;
-  is->seek(0);
+  is->seek(0L);
   hdr.read(is);
 
   if ( hdr.signature_valid() )
@@ -55,7 +55,7 @@ char const* vil_bmp_generic_image::file_format() const
 
 vil_bmp_generic_image::vil_bmp_generic_image(vil_stream* is)
   : is_(is)
-  , bit_map_start(-1L)
+  , bit_map_start(vil_streampos(-1L))
   //, freds_colormap(0)
   //, local_color_map_(0)
 {
@@ -83,9 +83,9 @@ vil_bmp_generic_image::vil_bmp_generic_image(vil_stream* is,
                                              int height,
                                              int components,
                                              int bits_per_component,
-                                             vil_component_format format)
+                                             vil_component_format /*format*/)
   : is_(is)
-  , bit_map_start(-1L)
+  , bit_map_start(vil_streampos(-1L))
 {
   is_->ref();
   assert(planes == 1); // FIXME
@@ -128,7 +128,7 @@ vil_bmp_generic_image::~vil_bmp_generic_image()
 bool vil_bmp_generic_image::read_header()
 {
   // seek to beginning and read file header.
-  is_->seek(0);
+  is_->seek(0L);
   file_hdr.read(is_);
   if( ! file_hdr.signature_valid() ) {
     where <<  "File is not a valid BMP file" << vcl_endl;
@@ -224,7 +224,7 @@ bool vil_bmp_generic_image::read_header()
       cmap_size = ccount*4;
 
     vcl_vector<uchar> cmap(cmap_size, 0); // use vector<> to avoid coreleak
-    if (is_->read(/* xxx */&cmap[0], 1024) != 1024) {
+    if (is_->read(/* xxx */&cmap[0], 1024L) != 1024L) {
       vcl_cerr << "Error reading image palette" << vcl_endl;
       return false;
     }
@@ -253,7 +253,7 @@ bool vil_bmp_generic_image::read_header()
 #ifdef DEBUG
   where << "bit_map_start = " << bit_map_start << vcl_endl; // blather
 #endif
-  assert(bit_map_start == (int)file_hdr.bitmap_offset); // I think they're supposed to be the same -- fsm.
+  assert(bit_map_start == file_hdr.bitmap_offset); // I think they're supposed to be the same -- fsm.
 
   return true;
 }
@@ -271,7 +271,7 @@ bool vil_bmp_generic_image::write_header()
   int data_size = height() * rowlen;
 
   if (components() == 1) info_hdr.colorcount = info_hdr.colormapsize = 1<<bits_per_component();
-  file_hdr.bitmap_offset = bit_map_start = 54 + 4 * info_hdr.colormapsize;
+  file_hdr.bitmap_offset = bit_map_start = 54L + 4 * info_hdr.colormapsize;
   file_hdr.file_size = bit_map_start+data_size;
   core_hdr.header_size = 40;
   core_hdr.width = width();
@@ -279,7 +279,7 @@ bool vil_bmp_generic_image::write_header()
   core_hdr.bitsperpixel = components()*bits_per_component();
   info_hdr.bitmap_size = data_size;
 
-  is_->seek(0);
+  is_->seek(0L);
   file_hdr.write(is_);
   core_hdr.write(is_);
   info_hdr.write(is_);
@@ -288,7 +288,7 @@ bool vil_bmp_generic_image::write_header()
       for (int j=0; j<4; ++j)
       {
         unsigned char c = i;
-        is_->write(&c,1);
+        is_->write(&c,1L);
       }
 
   return true;
@@ -314,7 +314,7 @@ bool vil_bmp_generic_image::get_section(void* ib, int x0, int y0, int w, int h) 
   unsigned have_bytes_per_raster = ((bytes_per_pixel * core_hdr.width + 3)>>2)<<2;
 
   // number of bytes we want per raster.
-  unsigned want_bytes_per_raster = w*bytes_per_pixel;
+  unsigned long want_bytes_per_raster = w*bytes_per_pixel;
 
   // read each raster in turn. if the client wants the whole image, it may
   // be faster to read() it all in one chunk, so long as the number of bytes

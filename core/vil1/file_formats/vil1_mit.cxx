@@ -59,7 +59,7 @@ static char const* vil_mit_format_tag = "mit";
 
 vil_image_impl* vil_mit_file_format::make_input_image(vil_stream* is)
 {
-  is->seek(0);
+  is->seek(0L);
   int type = vil_16bit_read_little_endian(is);
 
   if (!(type == MIT_UNSIGNED ||
@@ -167,7 +167,7 @@ vil_mit_generic_image::~vil_mit_generic_image()
 
 bool vil_mit_generic_image::read_header()
 {
-  is_->seek(0);
+  is_->seek(0L);
 
   type_ = vil_16bit_read_little_endian(is_);
   bits_per_pixel_ = vil_16bit_read_little_endian(is_);
@@ -186,7 +186,7 @@ bool vil_mit_generic_image::read_header()
 
 bool vil_mit_generic_image::write_header()
 {
-  is_->seek(0);
+  is_->seek(0L);
   vil_16bit_write_little_endian(is_, type_);
   vil_16bit_write_little_endian(is_, bits_per_pixel_);
   vil_16bit_write_little_endian(is_, width_);
@@ -198,7 +198,7 @@ bool vil_mit_generic_image::get_section(void* buf, int x0, int y0, int xs, int y
 {
   assert(buf != 0);
 
-  int offset = 8; // fsm: was 4
+  vil_streampos offset = 8; // fsm: was 4
 
   int skip = bytes_per_pixel() * (width_ - xs);
 
@@ -224,7 +224,7 @@ bool vil_mit_generic_image::put_section(void const* buf, int x0, int y0, int xs,
 
   int skip = bytes_per_pixel() * (width_ - xs);
 
-  int offset = 8;
+  vil_streampos offset = 8;
   is_->seek(offset + (width_*y0*bytes_per_pixel()) + (x0*bytes_per_pixel()));
 
   const unsigned char* point = (const unsigned char*)buf;

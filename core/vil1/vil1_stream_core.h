@@ -18,10 +18,10 @@
 // written will succeed but will return garbage data.
 class vil_stream_core : public vil_stream
 {
-  int curpos_;       // current file pointer.
+  vil_streampos curpos_;       // current file pointer.
   unsigned blocksize_;
   vcl_vector<char*> block_;
-  unsigned tailpos_; // size of file so far
+  vil_streampos tailpos_; // size of file so far
 
 public:
   vil_stream_core(unsigned block_size = 16384)
@@ -31,14 +31,14 @@ public:
   unsigned size() const { return tailpos_; }
 
   // this does not change the current position
-  int m_transfer(char *buf, int pos, int n, bool read);
+  vil_streampos m_transfer(char *buf, vil_streampos pos, vil_streampos n, bool read);
 
   // implement virtual vil_stream interface:
   bool ok() const { return true; }
-  int  read (void       *buf, int n);
-  int  write(void const *buf, int n);
-  int  tell()             { return curpos_; }
-  void seek(int position) { curpos_ = position; }
+  vil_streampos read (void       *buf, vil_streampos n);
+  vil_streampos write(void const *buf, vil_streampos n);
+  vil_streampos tell()              { return curpos_; }
+  void seek(vil_streampos position) { curpos_ = position; }
 
 protected:
   ~vil_stream_core();

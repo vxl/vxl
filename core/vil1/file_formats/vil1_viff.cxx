@@ -37,7 +37,7 @@ vil_image_impl* vil_viff_file_format::make_input_image(vil_stream* is)
 {
   // Attempt to read header
   char magic[2];
-  is->read(magic, 2);
+  is->read(magic, 2L);
   bool ok = (magic[0] == (char)XV_FILE_MAGIC_NUM &&
              magic[1] == (char)XV_FILE_TYPE_XVIFF );
   if (!ok) return 0;
@@ -87,7 +87,7 @@ char const* vil_viff_generic_image::file_format() const
 vil_viff_generic_image::vil_viff_generic_image(vil_stream* is, int planes,
                                                int width,
                                                int height,
-                                               int components,
+                                               int /*components*/,
                                                int bits_per_component,
                                                vil_component_format format)
   : is_(is), width_(width), height_(height),
@@ -107,7 +107,7 @@ vil_viff_generic_image::~vil_viff_generic_image()
 bool vil_viff_generic_image::read_header()
 {
   // Go to start
-  is_->seek(0);
+  is_->seek(0L);
   start_of_data_ = VIFF_HEADERSIZE;
 
   // Read header
@@ -191,14 +191,14 @@ bool vil_viff_generic_image::read_header()
   }
 
   // number of colour bands
-  planes_ = ndb;
+  planes_ = (int)ndb;
 
   return true;
 }
 
 bool vil_viff_generic_image::write_header()
 {
-  is_->seek(0);
+  is_->seek(0L);
   int type = 0;
   if (bits_per_component_ > 1)
     bits_per_component_ = 8*((bits_per_component_+7)/8); // round to next 8-tuple
@@ -317,7 +317,7 @@ bool vil_viff_generic_image::check_endian()
   // If it is between 1 and 255, the "Endian" is consistent with the system
   // if not, we swap and check again
 
-  long dst = header_.data_storage_type;
+  unsigned long dst = header_.data_storage_type;
 
   endian_consistent_ = ((dst & 0xff) != 0);
   if (endian_consistent_)
@@ -333,7 +333,7 @@ vil_image vil_viff_generic_image::get_plane(int plane) const
   return const_cast<vil_viff_generic_image*>(this);
 }
 
-bool vil_viff_generic_image::get_section_rgb_byte(void* buf, int x0, int y0, int width, int height) const
+bool vil_viff_generic_image::get_section_rgb_byte(void* /*buf*/, int /*x0*/, int /*y0*/, int /*width*/, int /*height*/) const
 {
   vcl_cerr << "FIXME: vil_viff_generic_image::get_section_rgb_byte() not yet implemented\n";
   return false;

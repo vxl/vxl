@@ -26,7 +26,7 @@
 //: the file probe, as a C function.
 bool vil_jpeg_file_probe(vil_stream *vs) {
   char magic[2];
-  vs->seek(0);
+  vs->seek(0L);
   int n = vs->read(magic, sizeof(magic));
 
   if (n != sizeof(magic)) {

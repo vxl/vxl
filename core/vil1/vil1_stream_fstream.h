@@ -21,10 +21,10 @@ public:
 
   // implement virtual vil_stream interface:
   bool ok() const { return f_.good(); }
-  int write(void const* buf, int n);
-  int read(void* buf, int n);
-  int tell();
-  void seek(int position);
+  vil_streampos write(void const* buf, vil_streampos n);
+  vil_streampos read(void* buf, vil_streampos n);
+  vil_streampos tell();
+  void seek(vil_streampos position);
 
 protected:
   ~vil_stream_fstream();

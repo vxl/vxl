@@ -35,7 +35,7 @@ char const* vil_iris_format_tag = "iris";
 
 vil_image_impl* vil_iris_file_format::make_input_image(vil_stream* is)
 {
-  is->seek(0);
+  is->seek(0L);
 
   int colormap_;
 
@@ -49,9 +49,9 @@ vil_image_impl* vil_iris_file_format::make_input_image(vil_stream* is)
   /*int pixmin_    =*/ get_long(is);
   /*int pixmax_    =*/ get_long(is);
 
-  is->seek(24);
+  is->seek(24L);
   char imagename[81];
-  is->read(imagename, 80);
+  is->read(imagename, 80L);
 
   colormap_ = get_long(is);
 
@@ -111,7 +111,7 @@ vil_iris_generic_image::vil_iris_generic_image(vil_stream* is, int planes,
                                                int height,
                                                int components,
                                                int bits_per_component,
-                                               vil_component_format format):
+                                               vil_component_format /*format*/):
   is_(is)
 {
   is_->ref();
@@ -160,7 +160,7 @@ vil_iris_generic_image::~vil_iris_generic_image()
 
 bool vil_iris_generic_image::read_header()
 {
-  is_->seek(0);
+  is_->seek(0L);
 
   magic_     = get_short(is_, 0);
   storage_   = get_char(is_);
@@ -176,8 +176,8 @@ bool vil_iris_generic_image::read_header()
   // DUMMY1 starts at 20
   //  starts at 24
 
-  is_->seek(24);
-  is_->read(imagename_, 80);
+  is_->seek(24L);
+  is_->read(imagename_, 80L);
 
   // COLORMAP starts at 104
   colormap_ = get_long(is_);
@@ -247,14 +247,14 @@ bool vil_iris_generic_image::write_header()
   send_ushort(is_, planes_);    // nr of colour bands; typically 3 (RGB) or 4 (RGBA)
   send_long(is_, pixmin_);   // minimum pixel value; typically 0
   send_long(is_, pixmax_); // maximum pixel value; typically 255 if _PBC is 1
-  is_->write(dummy, 4);
-  is_->write(imagename_, 80); // null-terminated string
+  is_->write(dummy, 4L);
+  is_->write(imagename_, 80L); // null-terminated string
   send_long(is_, colormap_); // either NORMAL (0) (RGB), DITHERED (1) (R=3,G=3,B=2 bits),
                   // SCREEN (2) (obsolete) or COLORMAP (3) (hardware-specific).
 
   start_of_data_ = is_->tell();
 
-  return is_->write(dummy, 404) == 404;
+  return is_->write(dummy, 404L) == 404L;
 }
 
 
@@ -299,7 +299,7 @@ bool vil_iris_generic_image::get_section_verbatim(void* ib, int x0, int y0, int 
     cbi+=(row_len*(ys-1));
     cbi+=channel;
 
-    is_->seek(512 + channel * width_ * height_ + (y0 * width_) + x0);
+    is_->seek(512L + channel * width_ * height_ + (y0 * width_) + x0);
                                         // actually: times cell size
     int nbytes = xs;
 
@@ -343,8 +343,8 @@ bool vil_iris_generic_image::get_section_rle(void* ib, int x0, int y0, int xs, i
     for (int rowno=y0; rowno<(y0+ys); ++rowno) {
       // find length and start position
       int ysize = height_;
-      unsigned long rleoffset =  starttab_[rowno+channo*ysize];
-      unsigned long rlelength = lengthtab_[rowno+channo*ysize];
+      vil_streampos rleoffset =  starttab_[rowno+channo*ysize];
+      vil_streampos rlelength = lengthtab_[rowno+channo*ysize];
 
       // read rle row into array
       unsigned char* rlerow = new unsigned char[rlelength];
@@ -416,8 +416,8 @@ bool vil_iris_generic_image::read_offset_tables() {
   int tablen;
   tablen = height_ * planes_;
 
-  starttab_  = new unsigned long[tablen];
-  lengthtab_ = new unsigned long[tablen];
+  starttab_  = new vil_streampos[tablen];
+  lengthtab_ = new vil_streampos[tablen];
 
   int i;
   for (i=0; i<tablen; ++i) {
@@ -438,7 +438,7 @@ short get_short(vil_stream* file, int location){
   if (location >= 0) file->seek(location);
 
   unsigned char buff[2];
-  file->read(buff, 2);
+  file->read(buff, 2L);
   return (buff[0]<<8)+(buff[1]<<0);
 }
 
@@ -447,7 +447,7 @@ char get_char(vil_stream* file, int location){
   if (location >= 0) file->seek(location);
 
   unsigned char buff[1];
-  file->read((void*)buff, 1);
+  file->read((void*)buff, 1L);
   return (buff[0]);
 }
 
@@ -455,7 +455,7 @@ unsigned short get_ushort(vil_stream* file, int location){
   if (location >= 0) file->seek(location);
 
   unsigned char buff[2];
-  file->read((void*)buff, 2);
+  file->read((void*)buff, 2L);
   return (buff[0]<<8)+(buff[1]<<0);
 }
 
@@ -463,7 +463,7 @@ long get_long(vil_stream* file, int location){
   if (location >= 0) file->seek(location);
 
   unsigned char buff[4];
-  file->read((void*)buff, 4);
+  file->read((void*)buff, 4L);
   return (buff[0]<<24)+(buff[1]<<16)+(buff[2]<<8)+(buff[3]<<0);
 }
 
@@ -471,7 +471,7 @@ long get_long(vil_stream* file, int location){
 void send_char(vil_stream* data, int s)
 {
   char c = s;
-  data->write(&c ,1);
+  data->write(&c ,1L);
 }
 
 void send_short(vil_stream* data, int s)
@@ -479,7 +479,7 @@ void send_short(vil_stream* data, int s)
   unsigned char buff[2];
   buff[0] = (s >> 8) & 0xff;
   buff[1] = (s >> 0) & 0xff;
-  data->write(buff, 2);
+  data->write(buff, 2L);
 }
 
 void send_ushort(vil_stream* data, unsigned int s)
@@ -487,17 +487,17 @@ void send_ushort(vil_stream* data, unsigned int s)
   unsigned char buff[2];
   buff[0] = (s >> 8) & 0xff;
   buff[1] = (s >> 0) & 0xff;
-  data->write(buff, 2);
+  data->write(buff, 2L);
 }
 
 void send_long(vil_stream* data, long s)
 {
   unsigned char buff[4];
-  buff[0] = (s >> 24) & 0xff;
-  buff[1] = (s >> 16) & 0xff;
-  buff[2] = (s >>  8) & 0xff;
-  buff[3] = (s >>  0) & 0xff;
-  data->write(buff, 4);
+  buff[0] = (unsigned char)((s >> 24) & 0xff);
+  buff[1] = (unsigned char)((s >> 16) & 0xff);
+  buff[2] = (unsigned char)((s >>  8) & 0xff);
+  buff[3] = (unsigned char)((s >>  0) & 0xff);
+  data->write(buff, 4L);
 }
 
 void expandrow(unsigned char *optr, unsigned char *iptr, int z)

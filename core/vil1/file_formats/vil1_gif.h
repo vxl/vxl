@@ -25,7 +25,7 @@ class vil_stream;
 
 bool vil_gif_probe(vil_stream *s);
 
-struct vil_gif_file_format : /*public*/ vil_file_format
+struct vil_gif_file_format : public vil_file_format
 {
   char const* tag() const;
   vil_image_impl *make_input_image(vil_stream* vs);
@@ -93,7 +93,7 @@ private:
   vcl_vector<void*> images;
 };
 
-struct vil_gif_loader_saver_proxy : /*public*/ vil_image_impl
+struct vil_gif_loader_saver_proxy : public vil_image_impl
 {
   int image;
   vil_gif_loader_saver *other;

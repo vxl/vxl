@@ -18,63 +18,63 @@ vil_stream_core::~vil_stream_core()
 
 //--------------------------------------------------------------------------------
 
-int vil_stream_core::read (void       *buf, int n)
+vil_streampos vil_stream_core::read (void *buf, vil_streampos n)
 {
   assert(n>=0);
 
-  int rv = m_transfer((char*)buf, curpos_, n, true );
+  vil_streampos rv = m_transfer((char*)buf, curpos_, n, true );
   curpos_ += rv;
   return rv;
 }
 
-int vil_stream_core::write(void const *buf, int n)
+vil_streampos vil_stream_core::write(void const *buf, vil_streampos n)
 {
   assert(n>=0);
-  int rv = m_transfer((char*)buf, curpos_, n, false); // const violation!
+  vil_streampos rv = m_transfer((char*)buf, curpos_, n, false); // const violation!
   curpos_ += rv;
   return rv;
 }
 
 //--------------------------------------------------------------------------------
 
-int vil_stream_core::m_transfer(char *buf, int pos, int n, bool read)
+vil_streampos vil_stream_core::m_transfer(char *buf, vil_streampos pos, vil_streampos n, bool read)
 {
   assert(n>=0);
   assert(pos>=0);
 
   if (read)
   {
-    if (n+pos > int(tailpos_))
+    if (pos+n > tailpos_)
     {
-      if (pos > int(tailpos_))
+      if (pos > tailpos_)
         n = 0;
       else
         n = tailpos_ - pos;
     }
-    if (n==0) return 0;
+    if (n==0L) return 0;
   }
   else
     // chunk up to the required size :
-    while (int(blocksize_)*int(block_.size()) < pos+n)
+    while (blocksize_*block_.size() < pos+n)
       block_.push_back(new char [blocksize_]);
 
   // transfer data
   {
-    char     *tbuf = buf;
-    unsigned  tpos = pos;
-    unsigned  tn   = n;
+    char         *tbuf = buf;
+    vil_streampos tpos = pos;
+    vil_streampos tn   = n;
     while (tn>0) {
-      unsigned bl = tpos/blocksize_;     // which block
-      unsigned s = tpos - blocksize_*bl; // start index in block_
-      unsigned z = ((tn > blocksize_-s) ? blocksize_-s : tn); // number of bytes to write
+      vil_streampos bl = tpos/blocksize_;     // which block
+      vil_streampos s = tpos - blocksize_*bl; // start index in block_
+      vil_streampos z = ((tn > blocksize_-s) ? blocksize_-s : tn); // number of bytes to write
       char *tmp = block_[bl];
       if (read)
-        for (unsigned k=0; k<z; ++k)
+        for (vil_streampos k=0; k<z; ++k)
           tbuf[k] = tmp[s+k]; // prefer memcpy ?
       else
       {
         assert (s+z <= blocksize_);
-        for (unsigned k=0; k<z; ++k)
+        for (vil_streampos k=0; k<z; ++k)
           tmp[s+k] = tbuf[k]; // prefer memcpy ?
       }
       tbuf += z;
@@ -84,7 +84,7 @@ int vil_stream_core::m_transfer(char *buf, int pos, int n, bool read)
   }
 
   // update tailpos_
-  if (int(tailpos_) < pos+n)
+  if (tailpos_ < pos+n)
     tailpos_ = pos+n;
 
   // always succeed.

@@ -18,7 +18,7 @@
 vil_stream_section::vil_stream_section(vil_stream *underlying, int begin)
   : underlying_(underlying)
   , begin_(begin)
-  , end_(-1)
+  , end_((vil_streampos)(-1L))
   , current_(begin)
 {
   assert(underlying != 0);
@@ -47,18 +47,18 @@ vil_stream_section::~vil_stream_section()
   u->unref();
 }
 
-int vil_stream_section::write(void const* buf, int n)
+vil_streampos vil_stream_section::write(void const* buf, vil_streampos n)
 {
   assert(n >= 0); // wouldn't you want to be told?
 
   // huh? this should never happen, even if someone else is
   // manipulating the underlying stream too.
   assert(begin_<=current_);
-  if (end_ != -1)
+  if (end_ != -1L)
     assert(current_<=end_);
 
   // shrink given buffer so it fits into our section.
-  if (end_ != -1  &&  current_ + n > end_)
+  if (end_ != -1L  &&  current_ + n > end_)
     n = end_ - current_;
 
   // seek to where we have been telling the clients we are.
@@ -68,24 +68,24 @@ int vil_stream_section::write(void const* buf, int n)
   // failure to seek on underlying stream.
   assert(underlying_->tell() == current_);
 
-  int nb = underlying_->write(buf, n);
-  if (nb >= 0)
+  vil_streampos nb = underlying_->write(buf, n);
+  if (nb != -1L)
     current_ += nb;
   return nb;
 }
 
-int vil_stream_section::read(void* buf, int n)
+vil_streampos vil_stream_section::read(void* buf, vil_streampos n)
 {
   assert(n >= 0); // wouldn't you want to be told?
 
   // huh? this should never happen, even if someone else is
   // manipulating the underlying stream too.
   assert(begin_<=current_);
-  if (end_ != -1)
+  if (end_ != -1L)
     assert(current_<=end_);
 
   // shrink given buffer so it fits into our section.
-  if (end_ != -1  &&  current_ + n > end_)
+  if (end_ != -1L  &&  current_ + n > end_)
     n = end_ - current_;
 
   // seek to where we have been telling the clients we are.
@@ -95,17 +95,17 @@ int vil_stream_section::read(void* buf, int n)
   // failure to seek on underlying stream.
   assert(underlying_->tell() == current_);
 
-  int nb = underlying_->read(buf, n);
-  if (nb >= 0)
+  vil_streampos nb = underlying_->read(buf, n);
+  if (nb != -1L)
     current_ += nb;
   return nb;
 }
 
-void vil_stream_section::seek(int position)
+void vil_stream_section::seek(vil_streampos position)
 {
   assert(position >= 0); // I would want to be told about this.
 
-  if (end_ != -1  &&  begin_ + position > end_) {
+  if (end_ != -1L  &&  begin_ + position > end_) {
     vcl_cerr << __FILE__ << ": attempt to seek past given section (failed)." << vcl_endl;
     return;
   }

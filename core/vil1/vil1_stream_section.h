@@ -19,7 +19,7 @@
 // a note of the current position and seeking a lot.
 //
 // Note however that this is *not* threadsafe.
-struct vil_stream_section : vil_stream
+struct vil_stream_section : public vil_stream
 {
   //:
   // skip to position 'begin' in underlying stream and translate seeks,
@@ -33,19 +33,19 @@ struct vil_stream_section : vil_stream
 
   // implement virtual vil_stream interface:
   bool ok() const { return underlying_->ok(); }
-  int write(void const* buf, int n);
-  int read(void* buf, int n);
-  int  tell() { return current_; } // regardless of what the underlying stream is doing.
-  void seek(int position);
+  vil_streampos write(void const* buf, vil_streampos n);
+  vil_streampos read(void* buf, vil_streampos n);
+  vil_streampos  tell() { return current_; } // regardless of what the underlying stream is doing.
+  void seek(vil_streampos position);
 
 protected:
   ~vil_stream_section();
 
 private:
   vil_stream *underlying_;
-  int begin_;
-  int end_;
-  int current_;
+  vil_streampos begin_;
+  vil_streampos end_;
+  vil_streampos current_;
 };
 
 #endif // vil_stream_section_h_
