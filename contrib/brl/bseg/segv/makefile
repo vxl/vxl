@@ -9,6 +9,14 @@ MANPAGE_SOURCES += segv_vtol2D_tableau_sptr.h
 SOURCES += segv_vtol_soview2D.cxx
 SOURCES += segv_menus.cxx
 
-################################
-include ${IUEROOT}/config/top.mk
-################################
+#######################################
+include ${IUEROOT}/config/top-params.mk
+#######################################
+
+ifndef NOTEST
+ SUBDIRS += tests
+endif
+
+######################################
+include ${IUEROOT}/config/top-rules.mk
+######################################
