@@ -2,6 +2,7 @@
 
 #include <vnl/vnl_T_n.h>
 #include <vnl/vnl_alloc.h>
+#include <vnl/vnl_bignum.h>
 #include <vnl/vnl_block.h>
 #include <vnl/vnl_c_vector.h>
 #include <vnl/vnl_complex.h>
@@ -22,10 +23,12 @@
 #include <vnl/vnl_double_4.h>
 #include <vnl/vnl_double_4x3.h>
 #include <vnl/vnl_double_4x4.h>
+#include <vnl/vnl_double_5.h>
 #include <vnl/vnl_error.h>
 #include <vnl/vnl_fastops.h>
 #include <vnl/vnl_file_matrix.h>
 #include <vnl/vnl_file_vector.h>
+#include <vnl/vnl_finite_field_number.h>
 #include <vnl/vnl_float_2.h>
 #include <vnl/vnl_float_3.h>
 #include <vnl/vnl_float_4.h>
@@ -41,8 +44,6 @@
 #include <vnl/vnl_linear_operators_3.h>
 #include <vnl/vnl_linear_system.h>
 #include <vnl/vnl_math.h>
-//#include <vnl/vnl_matlab_file_read.h>
-//#include <vnl/vnl_matlab_file_write.h>
 #include <vnl/vnl_matlab_filewrite.h>
 #include <vnl/vnl_matlab_header.h>
 #include <vnl/vnl_matlab_print.h>
@@ -60,6 +61,7 @@
 #include <vnl/vnl_nonlinear_minimizer.h>
 #include <vnl/vnl_numeric_limits.h>
 #include <vnl/vnl_numeric_traits.h>
+#include <vnl/vnl_operators.h>
 #include <vnl/vnl_quaternion.h>
 #include <vnl/vnl_rational.h>
 #include <vnl/vnl_real_npolynomial.h>
@@ -69,6 +71,7 @@
 #include <vnl/vnl_scalar_join_iterator.h>
 #include <vnl/vnl_sparse_matrix.h>
 #include <vnl/vnl_sparse_matrix_linear_system.h>
+#include <vnl/vnl_sym_matrix.h>
 #include <vnl/vnl_tag.h>
 //#include <vnl/vnl_tensor.h>
 //#include <vnl/vnl_tensor_traits.h>
@@ -97,6 +100,7 @@
 #include <vnl/algo/vnl_discrete_diff.h>
 #include <vnl/algo/vnl_fft_1d.h>
 #include <vnl/algo/vnl_fft_2d.h>
+#include <vnl/algo/vnl_fft.h>
 #include <vnl/algo/vnl_gaussian_kernel_1d.h>
 #include <vnl/algo/vnl_generalized_eigensystem.h>
 #include <vnl/algo/vnl_generalized_schur.h>
@@ -116,4 +120,11 @@
 #include <vnl/algo/vnl_svd.h>
 #include <vnl/algo/vnl_symmetric_eigensystem.h>
 
-int main() { return 0; }
+#include <vcl_iostream.h>
+
+int main() {
+  vcl_cout << "-----------------------------------------------------------------------------\n"
+           << "vnl_test_all Test Summary: All tests succeeded\n"
+           << "-----------------------------------------------------------------------------\n";
+  return 0;
+}
