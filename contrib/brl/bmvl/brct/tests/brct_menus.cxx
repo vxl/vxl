@@ -2,7 +2,6 @@
 
 #include <vgui/vgui.h>
 #include <vgui/vgui_key.h>
-#include <vgui/vgui_modifier.h>
 #include <vgui/vgui_menu.h>
 #include "brct_windows_frame.h"
 
@@ -27,7 +26,7 @@ vgui_menu brct_menus::get_menu()
   vgui_menu debug_menu;
 
   file_menu.add( "Quit", quit_callback,(vgui_key)'q', vgui_CTRL);
-  
+
   action_menu.add("init", init_kalman_callback, (vgui_key)'i', vgui_CTRL);
   action_menu.add("go", kalman_go_callback, (vgui_key)'g', vgui_CTRL);
 
