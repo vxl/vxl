@@ -3,7 +3,7 @@ USE_OPENGL:=1
 TRY_GLUT := 1 # vgui_text needs glut. fsm.
 TRY_X11 := 1
 LIBRARY := vgui
-IMMEDIATE_LIBS += -lvil -lvbl -lvnl-algo -lvnl
+IMMEDIATE_LIBS += -lvil -lvbl -lvnl-algo -lvnl -lvul
 
 # basic classes
 SOURCES += vgui.cxx
