@@ -23,10 +23,10 @@ class mil_image {
 public:
 
     //: Dflt ctor
-    mil_image();
+    mil_image() {}
 
     //: Destructor
-    virtual ~mil_image();
+    virtual ~mil_image() {}
 
     //: Number of dimensions of image
     virtual int n_dims() const = 0;
