@@ -5,7 +5,9 @@
 #include "brct_windows_frame.h"
 #include <vcl_cstdlib.h> // for vcl_exit()
 #include <vcl_iostream.h>
+#include <vcl_sstream.h>
 #include <vcl_cassert.h>
+#include <vul/vul_file.h>
 #include <vgui/vgui.h>
 #include <vgui/vgui_dialog.h>
 #include <vgui/vgui_adaptor.h>
@@ -109,7 +111,7 @@ void brct_windows_frame::init()
   this->add_child(shell);
 
   // set a kalman filter
-  kalman_ = new kalman_filter("data/curves.txt");
+  kalman_ = new kalman_filter("data/curve28.txt");
   e_ = 0;
 }
 
@@ -337,6 +339,8 @@ void brct_windows_frame::load_image()
   {
     img_2d_->set_image(img_);
     instance_->post_redraw();
+    status_info_ = image_filename;
+    status_info_ += "\n";
     return;
   }
 
@@ -366,6 +370,10 @@ void brct_windows_frame::init_epipole()
 
 
   kalman_->init_epipole(pt.x(), pt.y());
+
+  vcl_stringstream ss;
+  ss<<pt.x()<<" "<<pt.y();
+  status_info_ += ss.str();
 }
 
 void brct_windows_frame::creat_line()
@@ -378,4 +386,61 @@ void brct_windows_frame::creat_line()
   lines_.push_back(l);
   easy_2d_->add_infinite_line( y1-y2, x2-x1, x1*y2 - x2*y1 );
   instance_->post_redraw();
+}
+
+void brct_windows_frame::save_status()
+{
+  vgui_dialog save_file_dlg("save status");
+  static vcl_string filename = "";
+  static vcl_string ext = "*.*";
+  save_file_dlg.file("file name", ext, filename);
+  if (!save_file_dlg.ask())
+    return;
+
+  if (filename != "")
+  {
+    vcl_ofstream of(filename.c_str());
+    of << status_info_;
+    return ;
+  }
+}
+
+void brct_windows_frame::load_status()
+{
+ 
+  vgui_dialog load_file_dlg("load status");
+  static vcl_string filename = "";
+  static vcl_string ext = "*.*";
+  load_file_dlg.file("file name", ext, filename);
+  if (!load_file_dlg.ask())
+    return;
+
+  if (filename != "")
+  {
+    vcl_ifstream in(filename.c_str());
+
+    vcl_string str;
+    in >> str;
+    img_ = vil1_load(str.c_str());
+    status_info_ = str;
+    status_info_ += "\n";
+
+    if (img_2d_)
+    {
+      img_2d_->set_image(img_);
+      instance_->post_redraw();
+    }
+    
+    double x, y;
+    in >> x >> y;
+    e_ -> set(x, y);
+
+    kalman_->init_epipole(x, y);    
+    vcl_stringstream ss;
+    ss << x <<' '<<y;
+    status_info_ += ss.str();
+    
+    return;
+  }
+
 }

@@ -5,6 +5,7 @@
 // \brief Manager for multiview 3d reconstruction gui applications
 // \author Kongbin Kang
 
+#include <vcl_string.h>
 #include <vgui/vgui_wrapper_tableau.h>
 #include <vgui/vgui_easy3D_tableau.h>
 #include <vgui/vgui_easy3D_tableau_sptr.h>
@@ -27,6 +28,10 @@
 class brct_windows_frame : public vgui_wrapper_tableau
 {
  public:
+   //: method for file menu callback
+  void save_status();
+  void load_status();
+
   // methods for debug menu callbacks
   void show_epipole();
   void load_image();
@@ -95,6 +100,7 @@ class brct_windows_frame : public vgui_wrapper_tableau
   //: inital epipole
   vcl_vector<vgl_homg_line_2d<double> > lines_;
   vgl_point_2d<double> *e_;
+  vcl_string status_info_;
   static brct_windows_frame *instance_;
 };
 

@@ -160,7 +160,7 @@ void kalman_filter::init_state_vector()
     double nx = lr.a(), ny = lr.b();
     nx = nx / vcl_sqrt(nx*nx + ny*ny);
     ny = ny / vcl_sqrt(nx*nx + ny*ny);
-    if (vcl_fabs( nx*vcl_cos(angle0*vnl_math::pi/180) + ny*vcl_sin(angle0*vnl_math::pi/180) )< 0.95)
+    //if (vcl_fabs( nx*vcl_cos(angle0*vnl_math::pi/180) + ny*vcl_sin(angle0*vnl_math::pi/180) )< 0.95)
     {
       // getting the intersection point
       vgl_point_2d<double> p2;
@@ -418,24 +418,7 @@ void kalman_filter::inc()
 
     vnl_matrix_fixed<double, 6, 6> Qpred = A_*Q_*A_.transpose() + Q0_;
 
-#ifdef DEBUG
-    vcl_cout<<"P is\n";
-    for (int l=0; l<6; l++) {
-      for (int j=0; j<6; j++)
-        vcl_cout<<' '<<Qpred[l][j];
-      vcl_cout<<'\n';
-    }
-#endif
-
     G_ = Qpred*H.transpose()*vnl_inverse(H*Qpred*H.transpose()+R_);
-#ifdef DEBUG
-    vcl_cout<<"K is\n";
-    for (int l=0; l<6; l++) {
-      for (int j=0; j<2; j++)
-        vcl_cout<<' '<<G[l][j];
-      vcl_cout<<'\n';
-    }
-#endif
 
     vnl_double_2 z(cur_measures[i].x(), cur_measures[i].y());
 
