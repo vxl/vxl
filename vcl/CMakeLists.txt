@@ -9,6 +9,11 @@ vcl_cmath
 vcl_cassert
 vcl_cstdlib
 vcl_deprecated
+emulation/vcl_string_instances
+emulation/vcl_straits
+emulation/vcl_rbtree_instances
+emulation/vcl_hashtable
+emulation/vcl_alloc
 )
 
 IF(WIN32)
