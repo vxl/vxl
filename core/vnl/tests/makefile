@@ -28,6 +28,7 @@ TESTS += test_cpoly_roots.cxx
 TESTS += test_complex.cxx
 TESTS += test_determinant.cxx
 TESTS += test_inverse.cxx
+TESTS += test_rank.cxx
 TESTS += test_qr.cxx
 TESTS += test_svd.cxx
 TESTS += test_real_eigensystem.cxx
