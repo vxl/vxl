@@ -420,6 +420,9 @@ SOURCE=.\file_formats/vil_dicom_header.cxx
 SOURCE=.\file_formats/vil_iris.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\file_formats/vil_mit.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\file_formats/vil_viff.cxx
 # End Source File
 # Begin Source File
@@ -667,6 +670,9 @@ SOURCE=.\vil_rotate.txx
 # End Source File
 # Begin Source File
 SOURCE=.\file_formats/vil_iris.h
+# End Source File
+# Begin Source File
+SOURCE=.\file_formats/vil_mit.h
 # End Source File
 # Begin Source File
 SOURCE=.\file_formats/vil_viff.h
