@@ -100,10 +100,12 @@ add_multiple_data( vcl_vector<rgrl_invariant_sptr> fixed_set,
       // Find all points (and their indices) within nn_radius of the query_pt
       vcl_vector<rsdl_point> near_neighbor_pts;
       vcl_vector<int> near_neighbor_indices;
-      kd_tree.points_in_radius( query_pt, nn_radius, near_neighbor_pts, near_neighbor_indices );
+      if( nn_radius > 0.0 )
+        kd_tree.points_in_radius( query_pt, nn_radius, near_neighbor_pts, 
+                                  near_neighbor_indices );
 
       // If no points were found in nn_radius, find the nearest point
-      if (near_neighbor_indices.size() == 0) {
+      if (near_neighbor_indices.empty() ) {
         kd_tree.n_nearest( query_pt, k_nn, near_neighbor_pts, near_neighbor_indices );
       }
 
