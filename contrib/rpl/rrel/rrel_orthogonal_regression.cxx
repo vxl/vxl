@@ -128,6 +128,7 @@ rrel_orthogonal_regression::weighted_least_squares_fit( vnl_vector<double>& para
   }
   else {
     params = svd.nullvector();
+    params /= vcl_sqrt( 1 - vnl_math_sqr( params[ params.size()-1 ] ) );
     return true;
   }
 }
