@@ -128,6 +128,21 @@ SOURCE=.\vcl_cstdlib.cxx
 # Begin Source File
 SOURCE=.\vcl_deprecated.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\Templates/alloc-instances.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/complex-instances.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/fstream-instances.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/stream-instances.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/string-instances.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter ""
