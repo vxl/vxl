@@ -34,7 +34,6 @@
 //:
 // \file
 
-#include <vcl_compiler.h>
 #include <vcl_iostream.h>
 #include <vcl_fstream.h>
 #include <vcl_algorithm.h>

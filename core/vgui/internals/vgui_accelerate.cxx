@@ -8,7 +8,8 @@
 //
 //-----------------------------------------------------------------------------
 
-#include <vcl_compiler.h>
+#include <vcl_iostream.h>
+#include <vcl_cassert.h>
 
 #ifdef VCL_WIN32
 #include <vgui/impl/mfc/stdafx.h>
@@ -16,9 +17,6 @@ extern CDC *vgui_mfc_adaptor_global_dc;
 #endif
 
 #include "vgui_accelerate.h"
-
-#include <vcl_iostream.h>
-#include <vcl_cassert.h>
 
 #include <vgui/vgui_gl.h>
 #include <vgui/vgui_utils.h>

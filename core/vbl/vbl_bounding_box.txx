@@ -12,7 +12,6 @@
 
 #include "vbl_bounding_box.h"
 
-#include <vcl_compiler.h>
 #include <vcl_iostream.h>
 
 template <class T, class DIM_>

@@ -2,7 +2,6 @@
 // Load a vrml file, overlay 3d and view
 // awf@robots.ox.ac.uk, Nov 2000
 
-#include <vcl_compiler.h>
 #include <vcl_cmath.h>
 #include <vcl_fstream.h>
 

@@ -1,7 +1,6 @@
 //:
 //  \file
 
-#include <vcl_compiler.h>
 #include <vcl_vector.h>
 
 #include <vil/vil_image.h>

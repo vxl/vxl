@@ -120,7 +120,6 @@
 //
 
 #include "vul_reg_exp.h"
-#include <vcl_compiler.h>
 #include <vcl_iostream.h>
 #include <vcl_cstring.h>
 

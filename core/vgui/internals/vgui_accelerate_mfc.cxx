@@ -1,13 +1,11 @@
-#include <vcl_compiler.h>
-
-#ifdef VCL_WIN32
-
 //:
 //  \file
 
 #include <vcl_cassert.h>
 #include <vcl_iostream.h>
 #include <vcl_cstdlib.h>
+
+#ifdef VCL_WIN32
 
 #include <vul/vul_printf.h>
 

@@ -55,7 +55,6 @@
 // vcl_hash_set, vcl_hash_map, vcl_hash_multiset, and vcl_hash_multimap.
 
 
-#include <vcl_compiler.h>
 #include <vcl_cstdlib.h>
 
 #include <vcl_iostream.h>

@@ -13,7 +13,6 @@
 // IMS (Manchester) 14/03/2001: Added Manchester IO scheme
 
 #include "vnl_real_polynomial.h"
-#include <vcl_compiler.h>
 #include <vcl_iostream.h>
 #include <vcl_complex.h>
 #include <vcl_cmath.h>

@@ -45,7 +45,6 @@
 // \author
 //   Peter Vanroose, ESAT/KULeuven, december 1996.
 
-#include <vcl_compiler.h>
 #include <vcl_cstddef.h>  // for size_t
 #include <vcl_cassert.h>
 
