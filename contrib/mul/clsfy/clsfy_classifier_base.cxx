@@ -160,7 +160,7 @@ double clsfy_test_error(const clsfy_classifier_base &classifier,
                         unsigned test_class)
 {
   assert(test_inputs.size() == test_outputs.size());
-  
+  if (test_inputs.size()==0) return -1;
   test_inputs.reset();
   unsigned n_class=0, n_bad=0, i=0;
   do
