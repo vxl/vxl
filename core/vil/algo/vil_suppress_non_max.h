@@ -7,24 +7,9 @@
 // \author Tim Cootes
 
 #include <vil/vil_image_view.h>
+#include <vil/algo/vil_find_peaks.h>
 #include <vil/vil_fill.h>
 #include <vcl_cassert.h>
-
-//: True if pixel at *im is strictly above 8 neighbours
-template <class T>
-inline bool vil_is_peak_3x3(const T* im, vcl_ptrdiff_t i_step, vcl_ptrdiff_t j_step)
-{
-  T v = *im;
-  if (v<=im[i_step]) return false;
-  if (v<=im[-i_step]) return false;
-  if (v<=im[j_step]) return false;
-  if (v<=im[-j_step]) return false;
-  if (v<=im[i_step+j_step]) return false;
-  if (v<=im[i_step-j_step]) return false;
-  if (v<=im[j_step-i_step]) return false;
-  if (v<=im[-i_step-j_step]) return false;
-  return true;
-}
 
 //: Suppress all non-maximal (non peaks) pixels in the image
 //  If image(i,j) is strictly larger than all neighbouring pixels,
