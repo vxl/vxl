@@ -24,9 +24,12 @@
 
 #include <vcl_vector.h>
 #include <vnl/vnl_math.h>
-#include "gevd_noise.h"
-#include "gevd_float_operators.h"
-#include "gevd_pixel.h"
+#include <gevd/gevd_noise.h>
+#include <gevd/gevd_float_operators.h>
+#include <gevd/gevd_pixel.h>
+#ifdef DEBUG
+# include <vul/vul_timer.h>
+#endif
 
 const byte TWOPI = 8, FULLPI = 4, HALFPI = 2;
 const int DIS[] = { 1, 1, 0,-1,-1,-1, 0, 1, // 8-connected neighbors
