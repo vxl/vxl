@@ -30,3 +30,7 @@ AUX_SOURCE_DIRECTORY(Templates sdet_sources)
 ADD_LIBRARY(sdet ${sdet_sources})
 
 TARGET_LINK_LIBRARIES(sdet brip bsol btol bdgl gevd vdgl vtol vsol vil1 vgl_algo vnl_algo vnl vul vbl)
+
+IF(BUILD_TESTING)
+  SUBDIRS(tests)
+ENDIF(BUILD_TESTING)
