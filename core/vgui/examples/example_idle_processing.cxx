@@ -64,5 +64,5 @@ main( int argc, char* argv[] )
   vgui_viewer2D_tableau_new view_tab( comp_tab );
   vgui_shell_tableau_new shell_tab( view_tab );
 
-  vgui::run( shell_tab, 100, 100 );
+  return vgui::run( shell_tab, 100, 100 );
 }
