@@ -80,3 +80,9 @@ testlib_main( int argc, char* argv[] )
 
   return 1;
 }
+
+void testlib_cleanup()
+{
+  testlib_test_func_.clear();
+  testlib_test_name_.clear();
+}

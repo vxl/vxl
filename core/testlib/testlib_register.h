@@ -58,9 +58,12 @@ extern vcl_vector<vcl_string>       testlib_test_name_;
 // used to create a test driver.
 #define DEFINE_MAIN \
    int testlib_main(int,char*[]); \
+   void testlib_cleanup(); \
    int main( int argc, char* argv[] ) { \
      register_tests(); \
-     return testlib_main( argc, argv ); \
+     int retval = testlib_main( argc, argv ); \
+     testlib_cleanup(); \
+     return retval; \
    }
 
 #endif
