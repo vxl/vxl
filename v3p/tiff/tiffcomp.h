@@ -24,8 +24,8 @@
  * OF THIS SOFTWARE.
  */
 
-#ifndef _COMPAT_
-#define _COMPAT_
+#ifndef TIFF_COMP_
+#define TIFF_COMP_
 /*
  * This file contains a hodgepodge of definitions and
  * declarations that are needed to provide compatibility
@@ -211,4 +211,4 @@ extern int creat(const char *path, int mode);
 #endif
 
 
-#endif /* _COMPAT_ */
+#endif /* TIFF_COMP_ */

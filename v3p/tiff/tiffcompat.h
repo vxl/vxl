@@ -22,8 +22,8 @@
  * OF THIS SOFTWARE.
  */
 
-#ifndef _COMPAT_
-#define _COMPAT_
+#ifndef TIFF_COMPAT_
+#define TIFF_COMPAT_
 /*
  * This file contains a hodgepodge of definitions and
  * declarations that are needed to provide compatibility
@@ -216,4 +216,4 @@ typedef double dblparam_t;
 #define VA_START(ap, parmN)     va_start(ap, parmN)
 #endif
 #endif /* defined(USE_VARARGS) */
-#endif /* _COMPAT_ */
+#endif /* TIFF_COMPAT_ */
