@@ -86,4 +86,27 @@ for (unsigned p=0;p<nplanes;++p)
 * There are a variety of ways one can view the same data, allowing one to appear
 * to change the data simply by changing ones view of it.
 *
+* For instance,
+* - vil3d_crop : Create sub-image
+* - vil3d_plane : Get plane of image
+* - vil3d_slice_ij : Get 2D image which is a slice in i-j of a 3D image
+* - vil3d_slice_jk : Get 2D image which is a slice in j-k of a 3D image
+* - vil3d_slice_ki : Get 2D image which is a slice in k-i of a 3D image
+* - (see also vil3d_slice_ji,vil3d_slice_kj,vil3d_slice_ik)
+*
+* \subsection utility_fns Utility Functions
+* A variety of useful functions are provided:
+* - vil3d_threshold_above(src_im,dest_im,t)
+* - vil3d_threshold_below(src_im,dest_im,t)
+* - vil3d_threshold_inside(src_im,dest_im,tlo,thi)
+* - vil3d_threshold_outside(src_im,dest_im,tlo,thi)
+* - vil3d_grad_1x3(...)  : Compute gradients in 3D
+*
+* Morphological functions  (using vil3d_structuring_element)
+* - vil3d_binary_erode
+* - vil3d_binary_dilate
+* - vil3d_binary_opening
+* - vil3d_binary_closing
+*
+*
 */
