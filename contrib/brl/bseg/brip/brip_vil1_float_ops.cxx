@@ -31,17 +31,17 @@ brip_vil1_float_ops::convolve(vil1_memory_image_of<float> const & input,
   output.resize(w,h);
   for (int y = n; y<(h-n); y++)
     for (int x = n; x<(w-n); x++)
-      {
-        float accum = 0;
-        for (int j = -n; j<=n; j++)
-          for (int i = -n; i<=n; i++)
-            {
-              float x1 = input(x+i,y+j);
-              float x2 = kernel[i+n][j+n];
-              accum += x1*x2;
-            }
-        output(x,y)=accum;
-      }
+    {
+      float accum = 0;
+      for (int j = -n; j<=n; j++)
+        for (int i = -n; i<=n; i++)
+        {
+          float x1 = input(x+i,y+j);
+          float x2 = kernel[i+n][j+n];
+          accum += x1*x2;
+        }
+      output(x,y)=accum;
+    }
   brip_vil1_float_ops::fill_x_border(output, n, 0.0f);
   brip_vil1_float_ops::fill_y_border(output, n, 0.0f);
   return output;
@@ -66,16 +66,16 @@ void brip_vil1_float_ops::half_resolution_1d(const float* input, int width,
     w[n]=input[n];
   output[0]=k0*w[0]+ 2.0f*(k1*w[1] + k2*w[2]);//reflect at boundary
   for (int x = 1; x<width; x++)
-    {
-      output[x]=k0*w[2]+ k1*(w[1]+w[3]) + k2*(w[0]+w[4]);
-      //shift the window, w, over by two pixels
-      w[0] = w[2];       w[1] = w[3];     w[2] = w[4];
-      //handle the boundary conditions
-      if (x<width-2)
-        {w[3] = input[n++]; w[4]= input[n++];}
-      else
-        {w[3] =w[1]; w[4]= w[0];}
-    }
+  {
+    output[x]=k0*w[2]+ k1*(w[1]+w[3]) + k2*(w[0]+w[4]);
+    //shift the window, w, over by two pixels
+    w[0] = w[2];       w[1] = w[3];     w[2] = w[4];
+    //handle the boundary conditions
+    if (x+2<width)
+      w[3] = input[n++], w[4] = input[n++];
+    else
+      w[3] = w[1], w[4] = w[0];
+  }
 }
 
 //: Downsamples the image by 2 using the Burt-Adelson reduction algorithm.
@@ -121,24 +121,24 @@ brip_vil1_float_ops::half_resolution(vil1_memory_image_of<float> const & input,
     output(x,0)= k0*out0[x]+ 2.0f*(k1*out1[x]+k2*out2[x]);
   //normal lines
   for (y=1; y<half_h; y++)
+  {
+    for (x=0; x<half_w; x++)
+      output(x,y) = k0*out2[x]+ k1*(out1[x]+out3[x]) + k2*(out0[x]+out4[x]);
+    //shift the neighborhood down two lines
+    float* temp0 = out0;
+    float* temp1 = out1;
+    out0 = out2;  out1 = out3;  out2 = out4;
+    out3 = temp0; out4 = temp1;//reflect values
+    //test border condition
+    if (y<half_h-2)
     {
-      for (x=0; x<half_w; x++)
-        output(x,y) = k0*out2[x]+ k1*(out1[x]+out3[x]) + k2*(out0[x]+out4[x]);
-      //shift the neighborhood down two lines
-      float* temp0 = out0;
-      float* temp1 = out1;
-      out0 = out2;  out1 = out3;  out2 = out4;
-      out3 = temp0; out4 = temp1;//reflect values
-      //test border condition
-      if (y<half_h-2)
-        {
-          //normal processing, so don't reflect
-          fill_1d_array(input, n++, in3);
-          fill_1d_array(input, n++, in4);
-          brip_vil1_float_ops::half_resolution_1d(in3, half_w, k0, k1, k2, out3);
-          brip_vil1_float_ops::half_resolution_1d(in4, half_w, k0, k1, k2, out4);
-        }
+      //normal processing, so don't reflect
+      fill_1d_array(input, n++, in3);
+      fill_1d_array(input, n++, in4);
+      brip_vil1_float_ops::half_resolution_1d(in3, half_w, k0, k1, k2, out3);
+      brip_vil1_float_ops::half_resolution_1d(in4, half_w, k0, k1, k2, out4);
     }
+  }
   delete [] in0;  delete [] in1; delete [] in2;
   delete [] in3;  delete [] in4;
   delete [] out0;  delete [] out1; delete [] out2;
@@ -232,13 +232,13 @@ interpolate_center(vbl_array_2d<float> const & neighborhood,
   float det = Ixx*Iyy - Ixy*Ixy;
   // det>0 corresponds to a true local extremum otherwise a saddle point
   if (det>0)
-    {
-      dx = (Iy*Ixy - Ix*Iyy) / det;
-      dy = (Ix*Ixy - Iy*Ixx) / det;
-      // more than one pixel away
-      if (vcl_fabs(dx) > 1.0 || vcl_fabs(dy) > 1.0)
-        dx = 0; dy = 0;
-    }
+  {
+    dx = (Iy*Ixy - Ix*Iyy) / det;
+    dy = (Ix*Ixy - Iy*Ixx) / det;
+    // more than one pixel away
+    if (vcl_fabs(dx) > 1.0 || vcl_fabs(dy) > 1.0)
+      dx = 0; dy = 0;
+  }
 }
 
 //---------------------------------------------------------------
@@ -260,26 +260,26 @@ non_maximum_suppression(vil1_memory_image_of<float> const & input,
   vbl_array_2d<float> neighborhood(N,N);
   for (int y =n; y<h-n; y++)
     for (int x = n; x<w-n; x++)
+    {
+      //If the center is not above threshold then there is
+      //no hope
+      if (input(x,y)<thresh)
+        continue;
+      //Fill the neighborhood
+      for (int i = -n; i<=n; i++)
+        for (int j = -n; j<=n; j++)
+          neighborhood.put(j+n,i+n,input(x+i, y+j));
+      //Check if the center is a local maximum
+      float dx, dy, max_v;
+      if (brip_vil1_float_ops::local_maximum(neighborhood, n, max_v))
       {
-        //If the center is not above threshold then there is
-        //no hope
-        if (input(x,y)<thresh)
-          continue;
-        //Fill the neighborhood
-        for (int i = -n; i<=n; i++)
-          for (int j = -n; j<=n; j++)
-            neighborhood.put(j+n,i+n,input(x+i, y+j));
-        //Check if the center is a local maximum
-        float dx, dy, max_v;
-        if (brip_vil1_float_ops::local_maximum(neighborhood, n, max_v))
-          {
-            //if so sub-pixel interpolate (3x3) and output results
-            brip_vil1_float_ops::interpolate_center(neighborhood, dx, dy);
-            x_pos.push_back(x+dx);
-            y_pos.push_back(y+dy);
-            value.push_back(max_v);
-          }
+        //if so sub-pixel interpolate (3x3) and output results
+        brip_vil1_float_ops::interpolate_center(neighborhood, dx, dy);
+        x_pos.push_back(x+dx);
+        y_pos.push_back(y+dy);
+        value.push_back(max_v);
       }
+    }
   vcl_cout << "\nCompute non-maximum suppression on a "<< w <<" x " << h << " image in "<< t.real() << " msecs.\n";
 }
 
@@ -295,10 +295,10 @@ brip_vil1_float_ops::difference(vil1_memory_image_of<float> const & image_1,
   int w2 = image_2.width(), h2 = image_2.height();
   vil1_memory_image_of<float> temp(w1, h1);
   if (w1!=w2||h1!=h2)
-    {
-      vcl_cout << "In brip_vil1_float_ops::difference(..) - images are not the same dimensions\n";
-      return temp;
-    }
+  {
+    vcl_cout << "In brip_vil1_float_ops::difference(..) - images are not the same dimensions\n";
+    return temp;
+  }
   vil1_memory_image_of<float> out;
   out.resize(w1, h1);
   for (int y = 0; y<h1; y++)
@@ -316,12 +316,12 @@ brip_vil1_float_ops::abs_clip_to_level(vil1_memory_image_of<float> const & image
   out.resize(w, h);
   for (int y = 0; y<h; y++)
     for (int x = 0; x<w; x++)
-      {
-        if (vcl_fabs(image(x,y))>thresh)
-          out(x,y) = level;
-        else
-          out(x,y) = image(x,y);
-      }
+    {
+      if (vcl_fabs(image(x,y))>thresh)
+        out(x,y) = level;
+      else
+        out(x,y) = image(x,y);
+    }
   return out;
 }
 
@@ -343,19 +343,21 @@ void brip_vil1_float_ops::gradient_3x3(vil1_memory_image_of<float> const & input
   float scale = 1.0f/6.0f;
   for (int y = 1; y<h-1; y++)
     for (int x = 1; x<w-1; x++)
-      {
-        float gx = input(x+1,y-1)+input(x+1,y)+ input(x+1,y-1)
-          -input(x-1,y-1) -input(x-1,y) -input(x-1,y-1);
-        float gy = input(x+1,y+1)+input(x,y+1)+ input(x-1,y+1)
-          -input(x+1,y-1) -input(x,y-1) -input(x-1,y-1);
-        grad_x(x,y) = scale*gx;
-        grad_y(x,y) = scale*gy;
-      }
+    {
+      float gx = input(x+1,y-1)+input(x+1,y)+ input(x+1,y-1)
+        -input(x-1,y-1) -input(x-1,y) -input(x-1,y-1);
+      float gy = input(x+1,y+1)+input(x,y+1)+ input(x-1,y+1)
+        -input(x+1,y-1) -input(x,y-1) -input(x-1,y-1);
+      grad_x(x,y) = scale*gx;
+      grad_y(x,y) = scale*gy;
+    }
   brip_vil1_float_ops::fill_x_border(grad_x, 1, 0.0f);
   brip_vil1_float_ops::fill_y_border(grad_x, 1, 0.0f);
   brip_vil1_float_ops::fill_x_border(grad_y, 1, 0.0f);
   brip_vil1_float_ops::fill_y_border(grad_y, 1, 0.0f);
-  //  vcl_cout << "\nCompute Gradient in " << t.real() << " msecs.\n";
+#ifdef DEBUG
+  vcl_cout << "\nCompute Gradient in " << t.real() << " msecs.\n";
+#endif
 }
 
 //----------------------------------------------------------------
@@ -376,22 +378,22 @@ void brip_vil1_float_ops::hessian_3x3(vil1_memory_image_of<float> const & input,
   int w = input.width(), h = input.height();
   for (int y = 1; y<h-1; y++)
     for (int x = 1; x<w-1; x++)
-      {
-        float xx = input(x-1,y-1)+input(x-1,y)+input(x+1,y)+
-          input(x+1,y-1)+input(x+1,y)+input(x+1,y+1)-
-          2.0f*(input(x,y-1)+input(x,y)+input(x,y+1));
+    {
+      float xx = input(x-1,y-1)+input(x-1,y)+input(x+1,y)+
+        input(x+1,y-1)+input(x+1,y)+input(x+1,y+1)-
+        2.0f*(input(x,y-1)+input(x,y)+input(x,y+1));
 
-        float xy = (input(x-1,y-1)+input(x+1,y+1))-
-          (input(x-1,y+1)+input(x+1,y-1));
+      float xy = (input(x-1,y-1)+input(x+1,y+1))-
+        (input(x-1,y+1)+input(x+1,y-1));
 
-        float yy = input(x-1,y-1)+input(x,y-1)+input(x+1,y-1)+
-          input(x-1,y+1)+input(x,y+1)+input(x+1,y+1)-
-          2.0f*(input(x-1,y)+input(x,y)+input(x+1,y));
+      float yy = input(x-1,y-1)+input(x,y-1)+input(x+1,y-1)+
+        input(x-1,y+1)+input(x,y+1)+input(x+1,y+1)-
+        2.0f*(input(x-1,y)+input(x,y)+input(x+1,y));
 
-        Ixx(x,y) = xx/3.0f;
-        Ixy(x,y) = xy/4.0f;
-        Iyy(x,y) = yy/3.0f;
-      }
+      Ixx(x,y) = xx/3.0f;
+      Ixy(x,y) = xy/4.0f;
+      Iyy(x,y) = yy/3.0f;
+    }
   brip_vil1_float_ops::fill_x_border(Ixx, 1, 0.0f);
   brip_vil1_float_ops::fill_y_border(Ixx, 1, 0.0f);
   brip_vil1_float_ops::fill_x_border(Ixy, 1, 0.0f);
@@ -411,20 +413,20 @@ brip_vil1_float_ops::beaudet(vil1_memory_image_of<float> const & Ixx,
   output.resize(w, h);
   for (int y = 0; y<h; y++)
     for (int x = 0; x<w; x++)
-      {
-        float xx = Ixx(x,y), xy = Ixy(x,y), yy = Iyy(x,y);
+    {
+      float xx = Ixx(x,y), xy = Ixy(x,y), yy = Iyy(x,y);
 
-        //compute eigenvalues for experimentation
-        float det = xx*yy-xy*xy;
-        float tr = xx+yy;
-        float arg = tr*tr-4.f*det, lambda0 = 0, lambda1=0;
-        if (arg>0)
-          {
-            lambda0 = tr+vcl_sqrt(arg);
-            lambda1 = tr-vcl_sqrt(arg);
-          }
-        output(x,y) = lambda0*lambda1; //just det for now
+      //compute eigenvalues for experimentation
+      float det = xx*yy-xy*xy;
+      float tr = xx+yy;
+      float arg = tr*tr-4.f*det, lambda0 = 0, lambda1=0;
+      if (arg>0)
+      {
+        lambda0 = tr+vcl_sqrt(arg);
+        lambda1 = tr-vcl_sqrt(arg);
       }
+      output(x,y) = lambda0*lambda1; //just det for now
+    }
   return output;
 }
 
@@ -458,20 +460,20 @@ brip_vil1_float_ops::grad_matrix_NxN(vil1_memory_image_of<float> const & input,
   vul_timer t;
   for (int y = n; y<h-n;y++)
     for (int x = n; x<w-n;x++)
-      {
-        float xx=0, xy=0, yy=0;
-        for (int i = -n; i<=n; i++)
-          for (int j = -n; j<=n; j++)
-            {
-              float gx = grad_x(x+i, y+j), gy = grad_y(x+i, y+j);
-              xx += gx*gx;
-              xy += gx*gy;
-              yy += gy*gy;
-            }
-        IxIx(x,y) = xx/N;
-        IxIy(x,y) = xy/N;
-        IyIy(x,y) = yy/N;
-      }
+    {
+      float xx=0, xy=0, yy=0;
+      for (int i = -n; i<=n; i++)
+        for (int j = -n; j<=n; j++)
+        {
+          float gx = grad_x(x+i, y+j), gy = grad_y(x+i, y+j);
+          xx += gx*gx;
+          xy += gx*gy;
+          yy += gy*gy;
+        }
+      IxIx(x,y) = xx/N;
+      IxIy(x,y) = xy/N;
+      IyIy(x,y) = yy/N;
+    }
   brip_vil1_float_ops::fill_x_border(IxIx, n, 0.0f);
   brip_vil1_float_ops::fill_y_border(IxIx, n, 0.0f);
   brip_vil1_float_ops::fill_x_border(IxIy, n, 0.0f);
@@ -486,7 +488,6 @@ brip_vil1_float_ops::harris(vil1_memory_image_of<float> const & IxIx,
                             vil1_memory_image_of<float> const & IxIy,
                             vil1_memory_image_of<float> const & IyIy,
                             const double scale)
-
 {
   int w = IxIx.width(), h = IxIx.height();
   float norm = 1e-3f; // Scale the output to values in the 10->1000 range
@@ -494,11 +495,11 @@ brip_vil1_float_ops::harris(vil1_memory_image_of<float> const & IxIx,
   output.resize(w, h);
   for (int y = 0; y<h; y++)
     for (int x = 0; x<w; x++)
-      {
-        float xx = IxIx(x,y), xy = IxIy(x,y), yy = IyIy(x,y);
-        float det = xx*yy-xy*xy, trace = xx+yy;
-        output(x,y) = float(det - scale*trace*trace)*norm;
-      }
+    {
+      float xx = IxIx(x,y), xy = IxIy(x,y), yy = IyIy(x,y);
+      float det = xx*yy-xy*xy, trace = xx+yy;
+      output(x,y) = float(det - scale*trace*trace)*norm;
+    }
   return output;
 }
 
@@ -530,19 +531,19 @@ brip_vil1_float_ops::sqrt_grad_singular_values(vil1_memory_image_of<float> & inp
   vul_timer t;
   for (int y = n; y<h-n;y++)
     for (int x = n; x<w-n;x++)
-      {
-        float IxIx=0, IxIy=0, IyIy=0;
-        for (int i = -n; i<=n; i++)
-          for (int j = -n; j<=n; j++)
-            {
-              float gx = grad_x(x+i, y+j), gy = grad_y(x+i, y+j);
-              IxIx += gx*gx;
-              IxIy += gx*gy;
-              IyIy += gy*gy;
-            }
-        float det = (IxIx*IyIy-IxIy*IxIy)/N;
-        output(x,y)=vcl_sqrt(vcl_fabs(det));
-      }
+    {
+      float IxIx=0, IxIy=0, IyIy=0;
+      for (int i = -n; i<=n; i++)
+        for (int j = -n; j<=n; j++)
+        {
+          float gx = grad_x(x+i, y+j), gy = grad_y(x+i, y+j);
+          IxIx += gx*gx;
+          IxIy += gx*gy;
+          IyIy += gy*gy;
+        }
+      float det = (IxIx*IyIy-IxIy*IxIy)/N;
+      output(x,y)=vcl_sqrt(vcl_fabs(det));
+    }
   brip_vil1_float_ops::fill_x_border(output, n, 0.0f);
   brip_vil1_float_ops::fill_y_border(output, n, 0.0f);
   vcl_cout << "\nCompute sqrt(sigma0*sigma1) in" << t.real() << " msecs.\n";
@@ -576,35 +577,35 @@ brip_vil1_float_ops::Lucas_KanadeMotion(vil1_memory_image_of<float> & current_fr
   //sum the motion terms over the (2n+1)x(2n+1) neighborhood.
   for (int y = n; y<h-n;y++)
     for (int x = n; x<w-n;x++)
+    {
+      float IxIx=0, IxIy=0, IyIy=0, IxIt=0, IyIt=0;
+      for (int i = -n; i<=n; i++)
+        for (int j = -n; j<=n; j++)
+        {
+          float gx = grad_x(x+i, y+j), gy = grad_y(x+i, y+j);
+          float dt = diff(x+i, y+j);
+          IxIx += gx*gx;
+          IxIy += gx*gy;
+          IyIy += gy*gy;
+          IxIt += gx*dt;
+          IyIt += gy*dt;
+        }
+      //Divide by the number of pixels in the neighborhood
+      IxIx/=N;  IxIy/=N; IyIy/=N; IxIt/=N; IyIt/=N;
+      float det = float(IxIx*IyIy-IxIy*IxIy);
+      //Eliminate small motion factors
+      float dif = diff(x,y);
+      float motion_factor = vcl_fabs(det*dif);
+      if (motion_factor<thresh)
       {
-        float IxIx=0, IxIy=0, IyIy=0, IxIt=0, IyIt=0;
-        for (int i = -n; i<=n; i++)
-          for (int j = -n; j<=n; j++)
-            {
-              float gx = grad_x(x+i, y+j), gy = grad_y(x+i, y+j);
-              float dt = diff(x+i, y+j);
-              IxIx += gx*gx;
-              IxIy += gx*gy;
-              IyIy += gy*gy;
-              IxIt += gx*dt;
-              IyIt += gy*dt;
-            }
-        //Divide by the number of pixels in the neighborhood
-        IxIx/=N;  IxIy/=N; IyIy/=N; IxIt/=N; IyIt/=N;
-        float det = float(IxIx*IyIy-IxIy*IxIy);
-        //Eliminate small motion factors
-        float dif = diff(x,y);
-        float motion_factor = vcl_fabs(det*dif);
-        if (motion_factor<thresh)
-          {
-            vx(x,y) = 0.0f;
-            vy(x,y) = 0.0f;
-            continue;
-          }
-        //solve for the motion vector
-        vx(x,y) = (IyIy*IxIt-IxIy*IyIt)/det;
-        vy(x,y) = (-IxIy*IxIt + IxIx*IyIt)/det;
+        vx(x,y) = 0.0f;
+        vy(x,y) = 0.0f;
+        continue;
       }
+      //solve for the motion vector
+      vx(x,y) = (IyIy*IxIt-IxIy*IyIt)/det;
+      vy(x,y) = (-IxIy*IxIt + IxIx*IyIt)/det;
+    }
   brip_vil1_float_ops::fill_x_border(vx, n, 0.0f);
   brip_vil1_float_ops::fill_y_border(vx, n, 0.0f);
   brip_vil1_float_ops::fill_x_border(vy, n, 0.0f);
@@ -617,10 +618,10 @@ void brip_vil1_float_ops::fill_x_border(vil1_memory_image_of<float> & image,
 {
   int width = image.width(), height = image.height();
   if (2*w>width)
-    {
-      vcl_cout << "In brip_vil1_float_ops::fill_x_border(..) - 2xborder exceeds image width\n";
-      return;
-    }
+  {
+    vcl_cout << "In brip_vil1_float_ops::fill_x_border(..) - 2xborder exceeds image width\n";
+    return;
+  }
   for (int y = 0; y<height; y++)
     for (int x = 0; x<w; x++)
       image(x, y) = value;
@@ -635,10 +636,10 @@ void brip_vil1_float_ops::fill_y_border(vil1_memory_image_of<float> & image,
 {
   int width = image.width(), height = image.height();
   if (2*h>height)
-    {
-      vcl_cout << "In brip_vil1_float_ops::fill_y_border(..) - 2xborder exceeds image height\n";
-      return;
-    }
+  {
+    vcl_cout << "In brip_vil1_float_ops::fill_y_border(..) - 2xborder exceeds image height\n";
+    return;
+  }
   for (int y = 0; y<h; y++)
     for (int x = 0; x<width; x++)
       image(x, y) = value;
@@ -659,10 +660,10 @@ brip_vil1_float_ops::convert_to_byte(vil1_memory_image_of<float> const & image)
   output.resize(w,h);
   for (int y = 0; y<h; y++)
     for (int x = 0; x<w; x++)
-      {
-        min_val = vnl_math_min(min_val, image(x,y));
-        max_val = vnl_math_max(max_val, image(x,y));
-      }
+    {
+      min_val = vnl_math_min(min_val, image(x,y));
+      max_val = vnl_math_max(max_val, image(x,y));
+    }
   float range = max_val-min_val;
   if (range == 0.f)
     range = 1.f;
@@ -670,10 +671,10 @@ brip_vil1_float_ops::convert_to_byte(vil1_memory_image_of<float> const & image)
     range = 255.f/range;
   for (int y = 0; y<h; y++)
     for (int x = 0; x<w; x++)
-      {
-        float v = (image(x,y)-min_val)*range;
-        output(x,y) = (unsigned char)v;
-      }
+    {
+      float v = (image(x,y)-min_val)*range;
+      output(x,y) = (unsigned char)v;
+    }
   return output;
 }
 
@@ -693,14 +694,14 @@ brip_vil1_float_ops::convert_to_byte(vil1_memory_image_of<float> const & image,
     range = 255.f/range;
   for (int y = 0; y<h; y++)
     for (int x = 0; x<w; x++)
-      {
-        float v = (image(x,y)-min_val)*range;
-        if (v>255)
-          v=255;
-        if (v<0)
-          v=0;
-        output(x,y) = (unsigned char)v;
-      }
+    {
+      float v = (image(x,y)-min_val)*range;
+      if (v>255)
+        v=255;
+      if (v<0)
+        v=0;
+      output(x,y) = (unsigned char)v;
+    }
   return output;
 }
 
@@ -719,14 +720,14 @@ brip_vil1_float_ops::convert_to_short(vil1_memory_image_of<float> const & image,
     range = max_short/range;
   for (int y = 0; y<h; y++)
     for (int x = 0; x<w; x++)
-      {
-        float v = (image(x,y)-min_val)*range;
-        if (v>max_short)
-          v=max_short;
-        if (v<0)
-          v=0;
-        output(x,y) = (unsigned short)v;
-      }
+    {
+      float v = (image(x,y)-min_val)*range;
+      if (v>max_short)
+        v=max_short;
+      if (v<0)
+        v=0;
+      output(x,y) = (unsigned short)v;
+    }
   return output;
 }
 
@@ -750,10 +751,10 @@ brip_vil1_float_ops::convert_to_float(vil1_memory_image_of<vil1_rgb<unsigned cha
   output.resize(w,h);
   for (int y = 0; y<h; y++)
     for (int x = 0; x<w; x++)
-      {
-        vil1_rgb<unsigned char> rgb = image(x,y);
-        output(x,y) = (float)rgb.grey();
-      }
+    {
+      vil1_rgb<unsigned char> rgb = image(x,y);
+      output(x,y) = (float)rgb.grey();
+    }
   return output;
 }
 
@@ -774,49 +775,49 @@ static void rgb_to_ihs(vil1_rgb<unsigned char> const & rgb,
   float la = (maxval + minval) / 2.0;
   // Achromatic case, intensity is grey or near black or white
   if (maxval == minval||i<20||i>235)
-    {
-      s = -1.0;
-      h = 0.0;
-    }
+  {
+    s = -1.0;
+    h = 0.0;
+  }
   else//the chromatic case
+  {
+    // Calculate the saturation.
+    if (la <= 127)
     {
-      // Calculate the saturation.
-      if (la <= 127)
-        {
-          s = (255.0*(maxval - minval))/(maxval + minval);
-        }
-      else
-        {
-          s = (255.0*(maxval - minval)) / (512 - maxval - minval);
-          if (s<0)
-            s=0;
-          if (s>255)
-            s=255;
-        }
-
-      // Calculate the hue.
-      delta = maxval - minval;
-      if (r == maxval)
-        {
-          // The resulting color is between yellow and magenta.
-          h = (60*(g - b))/ delta;
-        }
-      else if (g == maxval)
-        {
-          // The resulting color is between cyan and yellow.
-          h = 120.0 + (60*(b - r))/delta;
-        }
-      else
-        {
-          // The resulting color is between magenta and cyan.
-          h = 240.0 + (60*(r - g))/delta;
-        }
-      // Be sure 0.0 <= hue <= 360.0
-      if (h < 0.0)
-        h += 360;
-      if (h > 360.0)
-        h -= 360.0;
+      s = (255.0*(maxval - minval))/(maxval + minval);
     }
+    else
+    {
+      s = (255.0*(maxval - minval)) / (512 - maxval - minval);
+      if (s<0)
+        s=0;
+      if (s>255)
+        s=255;
+    }
+
+    // Calculate the hue.
+    delta = maxval - minval;
+    if (r == maxval)
+    {
+      // The resulting color is between yellow and magenta.
+      h = (60*(g - b))/ delta;
+    }
+    else if (g == maxval)
+    {
+      // The resulting color is between cyan and yellow.
+      h = 120.0 + (60*(b - r))/delta;
+    }
+    else
+    {
+      // The resulting color is between magenta and cyan.
+      h = 240.0 + (60*(r - g))/delta;
+    }
+    // Be sure 0.0 <= hue <= 360.0
+    if (h < 0.0)
+      h += 360;
+    if (h > 360.0)
+      h -= 360.0;
+  }
 }
 
 
@@ -832,13 +833,13 @@ convert_to_IHS(vil1_memory_image_of<vil1_rgb<unsigned char> >const& image,
   S.resize(w,h);
   for (int r = 0; r < h; r++)
     for (int c = 0; c < w; c++)
-      {
-        float in, hue, sat;
-        rgb_to_ihs(image(c,r), in, hue, sat);
-        I(c,r) = in;
-        H(c,r) = hue;
-        S(c,r) = sat;
-      }
+    {
+      float in, hue, sat;
+      rgb_to_ihs(image(c,r), in, hue, sat);
+      I(c,r) = in;
+      H(c,r) = hue;
+      S(c,r) = sat;
+    }
 }
 
 #if 0 // this method commented out
@@ -853,29 +854,29 @@ display_IHS_as_RGB(vil1_memory_image_of<float> const& I,
   float s = 255.0f/360.0f;
   for (int r = 0; r < h; r++)
     for (int c = 0; c < w; c++)
-      {
-        float in, hue, sat;
-        in = I(c,r);
-        hue = H(c,r);
-        sat = S(c,r);
-        if (in<0)
-          in = 0;
-        if (sat<0)
-          sat = 0;
-        if (hue<0)
-          hue = 0;
-        if (in>255)
-          in = 255;
-        hue *=s;
-        if (hue>255)
-          hue = 255;
-        if (sat>255)
-          sat = 255;
-        unsigned char vi = (unsigned char)in, vh = (unsigned char)hue,
-          vs = (unsigned char)sat;
-        vil1_rgb<unsigned char> v(vi, vh, vs);
-        image(c,r)=v;
-      }
+    {
+      float in, hue, sat;
+      in = I(c,r);
+      hue = H(c,r);
+      sat = S(c,r);
+      if (in<0)
+        in = 0;
+      if (sat<0)
+        sat = 0;
+      if (hue<0)
+        hue = 0;
+      if (in>255)
+        in = 255;
+      hue *=s;
+      if (hue>255)
+        hue = 255;
+      if (sat>255)
+        sat = 255;
+      unsigned char vi = (unsigned char)in, vh = (unsigned char)hue,
+        vs = (unsigned char)sat;
+      vil1_rgb<unsigned char> v(vi, vh, vs);
+      image(c,r)=v;
+    }
 }
 #endif // 0
 
@@ -892,32 +893,32 @@ display_IHS_as_RGB(vil1_memory_image_of<float> const& I,
   float deg_to_rad = vnl_math::pi/180.0f;
   for (int r = 0; r < h; r++)
     for (int c = 0; c < w; c++)
+    {
+      float hue, sat;
+      hue = H(c,r);
+      sat = 2.0*S(c,r);
+      if (sat<0)
+        sat = 0;
+      if (sat>255)
+        sat = 255;
+      float ang = deg_to_rad*hue;
+      float cs = vcl_cos(ang), si = vcl_fabs(vcl_sin(ang));
+      float red,green,blue;
+      green = si*sat;
+      if (cs>=0)
       {
-        float hue, sat;
-        hue = H(c,r);
-        sat = 2.0*S(c,r);
-        if (sat<0)
-          sat = 0;
-        if (sat>255)
-          sat = 255;
-        float ang = deg_to_rad*hue;
-        float cs = vcl_cos(ang), si = vcl_fabs(vcl_sin(ang));
-        float red,green,blue;
-        green = si*sat;
-        if (cs>=0)
-          {
-            red = cs*sat;
-            blue = 0;
-          }
-        else
-          {
-            red = 0;
-            blue = sat*(-cs);
-          }
-        unsigned char rc = (unsigned char)red,
-          gc = (unsigned char)green, bc = (unsigned char)blue;
-        image(c,r)= vil1_rgb<unsigned char>(rc, gc, bc);
+        red = cs*sat;
+        blue = 0;
       }
+      else
+      {
+        red = 0;
+        blue = sat*(-cs);
+      }
+      unsigned char rc = (unsigned char)red,
+        gc = (unsigned char)green, bc = (unsigned char)blue;
+      image(c,r)= vil1_rgb<unsigned char>(rc, gc, bc);
+    }
 }
 
 vil1_memory_image_of<float>
@@ -925,20 +926,20 @@ brip_vil1_float_ops::convert_to_float(vil1_image const & image)
 {
   vil1_memory_image_of<float> fimg;
   if (image.components()==1)
-    {
-      vil1_memory_image_of<unsigned char> temp(image);
-      fimg = brip_vil1_float_ops::convert_to_float(temp);
-    }
+  {
+    vil1_memory_image_of<unsigned char> temp(image);
+    fimg = brip_vil1_float_ops::convert_to_float(temp);
+  }
   else if (image.components()==3)
-    {
-      vil1_memory_image_of<vil1_rgb<unsigned char> > temp(image);
-      fimg = brip_vil1_float_ops::convert_to_float(temp);
-    }
+  {
+    vil1_memory_image_of<vil1_rgb<unsigned char> > temp(image);
+    fimg = brip_vil1_float_ops::convert_to_float(temp);
+  }
   else
-    {
-      vcl_cout << "In brip_vil1_float_ops::convert_to_float - input not color or grey\n";
-      return vil1_memory_image_of<float>();
-    }
+  {
+    vcl_cout << "In brip_vil1_float_ops::convert_to_float - input not color or grey\n";
+    return vil1_memory_image_of<float>();
+  }
   return fimg;
 }
 
@@ -987,10 +988,10 @@ vbl_array_2d<float> brip_vil1_float_ops::load_kernel(vcl_string const & file)
 {
   vcl_ifstream instr(file.c_str(), vcl_ios::in);
   if (!instr)
-    {
-      vcl_cout << "In brip_vil1_float_ops::load_kernel - failed to load kernel\n";
-      return vbl_array_2d<float>(0,0);
-    }
+  {
+    vcl_cout << "In brip_vil1_float_ops::load_kernel - failed to load kernel\n";
+    return vbl_array_2d<float>(0,0);
+  }
   int n;
   float scale;
   float v =0;
@@ -1000,17 +1001,17 @@ vbl_array_2d<float> brip_vil1_float_ops::load_kernel(vcl_string const & file)
   vbl_array_2d<float> output(N, N);
   for (int y = 0; y<N; y++)
     for (int x = 0; x<N; x++)
-      {
-        instr >> v;
-        output.put(x, y, v/scale);
-      }
+    {
+      instr >> v;
+      output.put(x, y, v/scale);
+    }
   vcl_cout << "The Kernel\n";
   for (int y = 0; y<N; y++)
-    {
-      for (int x = 0; x<N; x++)
-        vcl_cout << ' ' <<  output[x][y];
-      vcl_cout << '\n';
-    }
+  {
+    for (int x = 0; x<N; x++)
+      vcl_cout << ' ' <<  output[x][y];
+    vcl_cout << '\n';
+  }
   return output;
 }
 
@@ -1030,10 +1031,10 @@ basis_images(vcl_vector<vil1_memory_image_of<float> > const & input_images,
   basis.clear();
   int n_images = input_images.size();
   if (!n_images)
-    {
-      vcl_cout << "In brip_vil1_float_ops::basis_images(.) - no input images\n";
-      return;
-    }
+  {
+    vcl_cout << "In brip_vil1_float_ops::basis_images(.) - no input images\n";
+    return;
+  }
   int width = input_images[0].width(), height = input_images[0].height();
   int npix = width*height;
 
@@ -1055,34 +1056,34 @@ basis_images(vcl_vector<vil1_memory_image_of<float> > const & input_images,
   //Extract the Basis images
   int rank = svd.rank();
   if (!rank)
-    {
-      vcl_cout << "In brip_vil1_float_ops::basis_images(.) - I has zero rank\n";
-      return;
-    }
+  {
+    vcl_cout << "In brip_vil1_float_ops::basis_images(.) - I has zero rank\n";
+    return;
+  }
   vnl_matrix<float> U = svd.U();
   //Output the basis images
   int rows = U.rows();
   for (int k = 0; k<rank; k++)
+  {
+    vil1_memory_image_of<float> out(width, height);
+    int x =0, y = 0;
+    for (int r = 0; r<rows; r++)
     {
-      vil1_memory_image_of<float> out(width, height);
-      int x =0, y = 0;
-      for (int r = 0; r<rows; r++)
-        {
-          out(x, y) = U(r,k);
-          x++;
-          if (x>=width)
-            {
-              y++;
-              x=0;
-            }
-          if (y>=width)
-            {
-              vcl_cout << "In brip_vil1_float_ops::basis_images(.) - shouldn't happen\n";
-              return;
-            }
-        }
-      basis.push_back(out);
+      out(x, y) = U(r,k);
+      x++;
+      if (x>=width)
+      {
+        y++;
+        x=0;
+      }
+      if (y>=width)
+      {
+        vcl_cout << "In brip_vil1_float_ops::basis_images(.) - shouldn't happen\n";
+        return;
+      }
     }
+    basis.push_back(out);
+  }
 }
 
 //: 1d fourier transform
@@ -1245,20 +1246,20 @@ ftt_fourier_2d_reorder(vnl_matrix<vcl_complex<double> > const& F1,
   int half_rows = rows/2, half_cols = cols/2;
   int ri, ci;
   for (int r = 0; r<rows; r++)
+  {
+    if (r<half_rows)
+      ri = half_rows+r;
+    else
+      ri = r-half_rows;
+    for (int c = 0; c<cols; c++)
     {
-      if (r<half_rows)
-        ri = half_rows+r;
+      if (c<half_cols)
+        ci = half_cols+c;
       else
-        ri = r-half_rows;
-      for (int c = 0; c<cols; c++)
-        {
-          if (c<half_cols)
-            ci = half_cols+c;
-          else
-            ci = c-half_cols;
-          F2[ri][ci]=F1[r][c];
-        }
+        ci = c-half_cols;
+      F2[ri][ci]=F1[r][c];
     }
+  }
 }
 
 //:  Compute the fourier transform.
@@ -1277,17 +1278,17 @@ fourier_transform(vil1_memory_image_of<float> const & input,
   vnl_matrix<vcl_complex<double> > fft_matrix(h, w), fourier_matrix(h,w);
   for (int y = 0; y<h; y++)
     for (int x =0; x<w; x++)
-      {
-        vcl_complex<double> cv(input(x,y), 0.0);
-        fft_matrix.put(y, x, cv);
-      }
+    {
+      vcl_complex<double> cv(input(x,y), 0.0);
+      fft_matrix.put(y, x, cv);
+    }
 #ifdef DEBUG
   for (int r = 0; r<h; r++)
     for (int c =0; c<w; c++)
-      {
-        vcl_complex<double> res = fft_matrix[r][c];
-        vcl_cout << res << '\n';
-      }
+    {
+      vcl_complex<double> res = fft_matrix[r][c];
+      vcl_cout << res << '\n';
+    }
 #endif
 
   brip_vil1_float_ops::fft_2d(fft_matrix, w, h, 1);
@@ -1298,11 +1299,11 @@ fourier_transform(vil1_memory_image_of<float> const & input,
   //extract magnitude and phase
   for (int r = 0; r<h; r++)
     for (int c = 0; c<w; c++)
-      {
-        float re = (float)fourier_matrix[r][c].real(), im = (float)fourier_matrix[r][c].imag();
-        mag(c,r) = vcl_sqrt(re*re + im*im);
-        phase(c,r) = vcl_atan2(im, re);
-      }
+    {
+      float re = (float)fourier_matrix[r][c].real(), im = (float)fourier_matrix[r][c].imag();
+      mag(c,r) = vcl_sqrt(re*re + im*im);
+      phase(c,r) = vcl_atan2(im, re);
+    }
 
   return true;
 }
@@ -1316,12 +1317,12 @@ inverse_fourier_transform(vil1_memory_image_of<float> const& mag,
   vnl_matrix<vcl_complex<double> > fft_matrix(h, w), fourier_matrix(h, w);
   for (int y = 0; y<h; y++)
     for (int x =0; x<w; x++)
-      {
-        float m = mag(x,y);
-        float p = phase(x,y);
-        vcl_complex<double> cv(m*vcl_cos(p), m*vcl_sin(p));
-        fourier_matrix.put(y, x, cv);
-      }
+    {
+      float m = mag(x,y);
+      float p = phase(x,y);
+      vcl_complex<double> cv(m*vcl_cos(p), m*vcl_sin(p));
+      fourier_matrix.put(y, x, cv);
+    }
 
   brip_vil1_float_ops::ftt_fourier_2d_reorder(fourier_matrix, fft_matrix);
   brip_vil1_float_ops::fft_2d(fft_matrix, w, h, -1);
@@ -1433,17 +1434,17 @@ spatial_frequency_filter(vil1_memory_image_of<float> const & input,
   float Ofx = Nfx*0.5f, Ofy = Nfy*0.5f;
   for (int fy =0; fy<Nfy; fy++)
     for (int fx =0; fx<Nfx; fx++)
-      {
-        float gb = gaussian_blocking_filter(dir_fx, dir_fy, f0,
-                                            radius,
-                                            fx-Ofx, fy-Ofy);
-        bmag(fx,fy) = mag(fx,fy)*gb;
-      }
-  if (output_fourier_mag)
     {
-      output = bmag;
-      return true;
+      float gb = gaussian_blocking_filter(dir_fx, dir_fy, f0,
+                                          radius,
+                                          fx-Ofx, fy-Ofy);
+      bmag(fx,fy) = mag(fx,fy)*gb;
     }
+  if (output_fourier_mag)
+  {
+    output = bmag;
+    return true;
+  }
   //Transform back
   pow_two_filt.resize(Nfx, Nfy);
   brip_vil1_float_ops::inverse_fourier_transform(bmag, phase, pow_two_filt);
@@ -1479,6 +1480,7 @@ bilinear_interpolation(vil1_memory_image_of<float> const & input,
   float val = (float) (int0 + fx * (int1 - int0));
   return val;
 }
+
 //: Transform the input to the output by a homography.
 //  if the output size is fixed then only the corresponding
 //  region of input image space is transformed.
@@ -1518,7 +1520,7 @@ bool brip_vil1_float_ops::homography(vil1_memory_image_of<float> const & input,
     if (!bsol_algs::homography(input_poly, H, output_poly))
       return false;
     vsol_box_2d_sptr temp = output_poly->get_bounding_box();
-    output.resize(temp->width(), temp->height());
+    output.resize((int)temp->width(), (int)temp->height());
     output.fill(output_fill_value);
     //offset the transform and transformed roi so that lower left is (0,0)
     output_roi = new vsol_box_2d();
@@ -1655,49 +1657,51 @@ brip_vil1_float_ops::rotate(vil1_memory_image_of<float> const & input,
     return out;
   return temp;
 }
+
 bool brip_vil1_float_ops::chip(vil1_memory_image_of<float> const & input,
                                vsol_box_2d_sptr const& roi,
                                vil1_memory_image_of<float> chip)
 {
-  if(!input||!roi)
+  if (!input||!roi)
     return false;
   int w = input.width(), h = input.height();
-  int x_min = (int)roi->get_min_x(), y_min = (int)roi->get_min_y(); 
-  int x_max = (int)roi->get_max_x(), y_max = (int)roi->get_max_y(); 
-  if(x_min<0)
+  int x_min = (int)roi->get_min_x(), y_min = (int)roi->get_min_y();
+  int x_max = (int)roi->get_max_x(), y_max = (int)roi->get_max_y();
+  if (x_min<0)
     x_min = 0;
-  if(y_min<0)
+  if (y_min<0)
     y_min = 0;
-  if(x_max>w-1)
+  if (x_max>w-1)
     x_max=w-1;
-  if(y_max>h-1)
+  if (y_max>h-1)
     y_max=w-1;
   int rw = x_max-x_min, rh = y_max-y_min;
-  if(rw<=0||rh<=0)
+  if (rw<=0||rh<=0)
     return false;
-  for(int y = y_min; y<y_max; y++)
-    for(int x =x_min; x<x_max; x++)
+  for (int y = y_min; y<y_max; y++)
+    for (int x =x_min; x<x_max; x++)
       chip(x-x_min, y-y_min) = input(x, y);
   return true;
 }
+
 //:compute normalized cross correlation from the intensity moment sums.
 static float cross_corr(const double area, const double si1, const double si2,
-                        const double si1i1, 
+                        const double si1i1,
                         const double si2i2, const double si1i2,
                         const float intensity_thresh)
 {
-  if(!area)
+  if (!area)
     return 0;
   //the mean values
   double u1 = si1/area, u2 = si2/area;
-  if(u1<intensity_thresh||u2<intensity_thresh)
+  if (u1<intensity_thresh||u2<intensity_thresh)
     return -1;
   double neu = si1i2 - area*u1*u2;
   double sd1 = vcl_sqrt(si1i1-area*u1*u1), sd2 = vcl_sqrt(si2i2-area*u2*u2);
-  if(!neu)
+  if (!neu)
     return 0;
-  if(!sd1||!sd2)
-    if(neu>0)
+  if (!sd1||!sd2)
+    if (neu>0)
       return 1;
     else
       return -1;
@@ -1711,15 +1715,15 @@ float brip_vil1_float_ops::
 cross_correlate(vil1_memory_image_of<float> const & image1,
                 vil1_memory_image_of<float> const & image2,
                 const float x, const float y,
-                const int radius, 
+                const int radius,
                 const float intensity_thresh)
 {
   int w1 = image1.width(), h1 = image1.height();
   int w2 = image1.width(), h2 = image1.height();
   //bounds checks
-  if(w1!=w2||h1!=h2)
+  if (w1!=w2||h1!=h2)
     return -1;
-  if(x<radius||x>w1-radius-1||y<radius||y>h1-radius-1)
+  if (x<radius||x>w1-radius-1||y<radius||y>h1-radius-1)
     return -1;
 
   //accumulate correlation sums,
@@ -1727,20 +1731,20 @@ cross_correlate(vil1_memory_image_of<float> const & image1,
   int s = 2*radius+1;
   double area = s*s;
   double sI1=0, sI2=0, sI1I1=0, sI2I2=0, sI1I2=0;
-  for(float y0 = -radius; y0<=radius; y0+=1.0)
-    for(float x0 = -radius; x0<=radius; x0+=1.0)
-      {
-        float xp = x+x0, yp = y+y0;
-        double v1 = 
-          brip_vil1_float_ops::bilinear_interpolation(image1, xp, yp);
-        double v2 = 
-          brip_vil1_float_ops::bilinear_interpolation(image2, xp, yp);
-        sI1 += v1;
-        sI2 += v2;
-        sI1I1 += v1*v1;
-        sI2I2 += v2*v2;
-        sI1I2 += v1*v2;
-      }
+  for (float y0 = -radius; y0<=radius; y0+=1.0)
+    for (float x0 = -radius; x0<=radius; x0+=1.0)
+    {
+      float xp = x+x0, yp = y+y0;
+      double v1 =
+        brip_vil1_float_ops::bilinear_interpolation(image1, xp, yp);
+      double v2 =
+        brip_vil1_float_ops::bilinear_interpolation(image2, xp, yp);
+      sI1 += v1;
+      sI2 += v2;
+      sI1I1 += v1*v1;
+      sI2I2 += v2*v2;
+      sI1I2 += v1*v2;
+    }
   //:compute correlation.
   float cc = cross_corr(area, sI1, sI2, sI1I1, sI2I2, sI1I2, intensity_thresh);
   return cc;
@@ -1750,8 +1754,8 @@ cross_correlate(vil1_memory_image_of<float> const & image1,
 //  r is the summing array row in which the values are to be accumulated
 static bool update_row(vil1_memory_image_of<float> const& image1,
                        vil1_memory_image_of<float> const& image2,
-                       const int r0, 
-                       const int r, 
+                       const int r0,
+                       const int r,
                        vbl_array_2d<double>& SI1,
                        vbl_array_2d<double>& SI2,
                        vbl_array_2d<double>& SI1I1,
@@ -1762,38 +1766,39 @@ static bool update_row(vil1_memory_image_of<float> const& image1,
   int w2 = image2.width();
   int h1 = image1.height();
   int h2 = image2.height();
-  if(w1!=w2||h1!=h2||r<0||r>=h1)
+  if (w1!=w2||h1!=h2||r<0||r>=h1)
     return false;
   double i10 = image1(0,r0), i20 = image2(0,r0);
   SI1[r][0] = i10; SI2[r][0] = i20; SI1I1[r][0]=i10*i10;
   SI2I2[r][0]=i20*i20; SI1I2[r][0]=i10*i20;
-  for(int c = 1; c<w1; c++)
-    {
-      double i1c = image1(c,r0);
-      double i2c = image2(c,r0);
-      SI1[r][c]    = SI1[r][c-1]+i1c; 
-      SI2[r][c]    = SI2[r][c-1]+i2c;
-      SI1I1[r][c]  = SI1I1[r][c-1]+ i1c*i1c;
-      SI2I2[r][c]  = SI2I2[r][c-1]+ i2c*i2c;
-      SI1I2[r][c]  = SI1I2[r][c-1]+ i1c*i2c;
-    }
- return true;
+  for (int c = 1; c<w1; c++)
+  {
+    double i1c = image1(c,r0);
+    double i2c = image2(c,r0);
+    SI1[r][c]    = SI1[r][c-1]+i1c;
+    SI2[r][c]    = SI2[r][c-1]+i2c;
+    SI1I1[r][c]  = SI1I1[r][c-1]+ i1c*i1c;
+    SI2I2[r][c]  = SI2I2[r][c-1]+ i2c*i2c;
+    SI1I2[r][c]  = SI1I2[r][c-1]+ i1c*i2c;
+  }
+  return true;
 }
 
 static bool initialize_slice(vil1_memory_image_of<float> const& image1,
-                            vil1_memory_image_of<float> const& image2,
-                            const int radius, 
-                            vbl_array_2d<double>& SI1,
-                            vbl_array_2d<double>& SI2,
-                            vbl_array_2d<double>& SI1I1,
-                            vbl_array_2d<double>& SI2I2,
-                            vbl_array_2d<double>& SI1I2)
+                             vil1_memory_image_of<float> const& image2,
+                             const int radius,
+                             vbl_array_2d<double>& SI1,
+                             vbl_array_2d<double>& SI2,
+                             vbl_array_2d<double>& SI1I1,
+                             vbl_array_2d<double>& SI2I2,
+                             vbl_array_2d<double>& SI1I2)
 {
-  for(int r = 0; r<=2*radius; r++)
-    if(!update_row(image1, image2, r, r, SI1, SI2, SI1I1, SI2I2, SI1I2))
+  for (int r = 0; r<=2*radius; r++)
+    if (!update_row(image1, image2, r, r, SI1, SI2, SI1I1, SI2I2, SI1I2))
       return false;
   return true;
 }
+
 static bool collapse_slice( vbl_array_2d<double> const& SI1,
                             vbl_array_2d<double> const& SI2,
                             vbl_array_2d<double> const& SI1I1,
@@ -1808,26 +1813,26 @@ static bool collapse_slice( vbl_array_2d<double> const& SI1,
   //sanity check
   int w = SI1.cols(), h = SI1.rows();
   int dw = SI1.cols();
-  if(dw!=w)
+  if (dw!=w)
     return false;
 
-  for(int c = 0; c<w; c++)
+  for (int c = 0; c<w; c++)
+  {
+    dSI1[c]=0; dSI2[c]=0; dSI1I1[c]=0;
+    dSI2I2[c]=0; dSI1I2[c]=0;
+    for (int r = 0; r<h; r++)
     {
-      dSI1[c]=0; dSI2[c]=0; dSI1I1[c]=0;
-      dSI2I2[c]=0; dSI1I2[c]=0;
-      for(int r = 0; r<h; r++)
-        {
-          dSI1[c] += SI1[r][c];
-          dSI2[c] += SI2[r][c];
-          dSI1I1[c] += SI1I1[r][c];
-          dSI2I2[c] += SI2I2[r][c];
-          dSI1I2[c] += SI1I2[r][c];
-        }
+      dSI1[c] += SI1[r][c];
+      dSI2[c] += SI2[r][c];
+      dSI1I1[c] += SI1I1[r][c];
+      dSI2I2[c] += SI2I2[r][c];
+      dSI1I2[c] += SI1I2[r][c];
     }
+  }
   return true;
 }
 
-static bool cross_correlate_row(int radius, 
+static bool cross_correlate_row(int radius,
                                 vbl_array_1d<double>& dSI1,
                                 vbl_array_1d<double>& dSI2,
                                 vbl_array_1d<double>& dSI1I1,
@@ -1839,113 +1844,119 @@ static bool cross_correlate_row(int radius,
 {
   //sanity check
   int w = dSI1.size(), wc = cc.size();
-  if(!w||!wc||w!=wc)
+  if (!w||!wc||w!=wc)
     return false;
   int s = 2*radius+1;
   double area = s*s;
   //the general case
-  double si1=dSI1[s-1], si2=dSI2[s-1], si1i1=dSI1I1[s-1], 
-    si2i2=dSI2I2[s-1], si1i2=dSI1I2[s-1]; 
+  double si1=dSI1[s-1], si2=dSI2[s-1], si1i1=dSI1I1[s-1],
+    si2i2=dSI2I2[s-1], si1i2=dSI1I2[s-1];
   float cor = cross_corr(area, si1, si2, si1i1, si2i2, si1i2, intensity_thresh);
   cc[radius]= cor;
   //the remaining columns
-  for(int c = radius+1; c+radius<w; c++)
-    {
-      si1=dSI1[c+radius]-dSI1[c-radius-1];
-      si2=dSI2[c+radius]-dSI2[c-radius-1];
-      si1i1=dSI1I1[c+radius]-dSI1I1[c-radius-1];
-      si2i2=dSI2I2[c+radius]-dSI2I2[c-radius-1];
-      si1i2=dSI1I2[c+radius]-dSI1I2[c-radius-1]; 
-      float cor = cross_corr(area, si1, si2, si1i1, si2i2, si1i2, intensity_thresh);
-      cc[c] =cor;
-    }
+  for (int c = radius+1; c+radius<w; c++)
+  {
+    si1=dSI1[c+radius]-dSI1[c-radius-1];
+    si2=dSI2[c+radius]-dSI2[c-radius-1];
+    si1i1=dSI1I1[c+radius]-dSI1I1[c-radius-1];
+    si2i2=dSI2I2[c+radius]-dSI2I2[c-radius-1];
+    si1i2=dSI1I2[c+radius]-dSI1I2[c-radius-1];
+    float cor = cross_corr(area, si1, si2, si1i1, si2i2, si1i2, intensity_thresh);
+    cc[c] =cor;
+  }
 
- return true;
-}  
+  return true;
+}
 
 static void advance_rows(vbl_array_2d<double>& S)
-
 {
   int nr = S.rows(), nc = S.cols();
-  for(int r = 0; r<nr-1; r++)
-    for(int c =0; c<nc; c++)
+  for (int r = 0; r<nr-1; r++)
+    for (int c =0; c<nc; c++)
       S[r][c]=S[r+1][c];
 }
 
 
 static bool output_cc_row(const int r0,  vbl_array_1d<float> const& cc,
-                   vil1_memory_image_of<float>& out)
+                          vil1_memory_image_of<float>& out)
 {
   int n = cc.size(), w = out.width();
-  if(n!=w)
+  if (n!=w)
     return false;
-  for(int c = 0; c<w; c++)
+  for (int c = 0; c<w; c++)
     out(c, r0) = cc[c];
   return true;
 }
 
-  
+
 bool brip_vil1_float_ops::
 cross_correlate(vil1_memory_image_of<float> const & image1,
                 vil1_memory_image_of<float> const & image2,
                 vil1_memory_image_of<float>& out,
-                const int radius, 
+                const int radius,
                 const float intensity_thresh)
 {
   vul_timer t;
   int w = image1.width(), h = image1.height();
   int w2 = image2.width(), h2 = image2.height();
   //sizes must match
-  if(w!=w2||h!=h2)
-    {
-      vcl_cout << "In brip_vil1_float_ops::fast_cross_correlate(..) -"
-               << " image sizes don't match\n";
-      return false;
-    }
+  if (w!=w2||h!=h2)
+  {
+    vcl_cout << "In brip_vil1_float_ops::fast_cross_correlate(..) -"
+             << " image sizes don't match\n";
+    return false;
+  }
   out.resize(w, h);
   out.fill(0.0);
   int s = 2*radius+1;
   //Create the running sum slices
-  vbl_array_2d<double> SI1(s,w), SI2(s,w), 
+  vbl_array_2d<double> SI1(s,w), SI2(s,w),
     SI1I1(s,w), SI2I2(s,w), SI1I2(s,w);
   vbl_array_1d<float> cc(w, 0.0);
-  vbl_array_1d<double> dSI1(w, 0.0), dSI2(w, 0.0), 
+  vbl_array_1d<double> dSI1(w, 0.0), dSI2(w, 0.0),
     dSI1I1(w, 0.0), dSI2I2(w, 0.0), dSI1I2(w, 0.0);
   initialize_slice(image1, image2, radius, SI1, SI2, SI1I1, SI2I2, SI1I2);
-  if(!collapse_slice(SI1, SI2, SI1I1, SI2I2, SI1I2,
-                 dSI1, dSI2, dSI1I1, dSI2I2, dSI1I2))
+  if (!collapse_slice(SI1,  SI2,  SI1I1,  SI2I2,  SI1I2,
+                      dSI1, dSI2, dSI1I1, dSI2I2, dSI1I2))
     return false;
-  int r0 = radius; 
-  for(; r0+radius+1<h; r0++)
-    {
-      if(r0==5)
-        r0=r0;
-      //      vcl_cout << "r0 " << r0 << "\n";
-      if(!cross_correlate_row(radius, dSI1, dSI2, dSI1I1, dSI2I2, dSI1I2, 
-                              intensity_thresh, cc))
-        return false;
-      //      vcl_cout << "\n";
-      advance_rows(SI1); advance_rows(SI2);  advance_rows(SI1I1);
-      advance_rows(SI2I2); advance_rows(SI1I2);
-      if(!update_row(image1, image2, r0+radius+1, 2*radius,
-                     SI1, SI2, SI1I1, SI2I2, SI1I2))
-        return out;
-      if(!collapse_slice(SI1, SI2, SI1I1, SI2I2, SI1I2,
-                         dSI1, dSI2, dSI1I1, dSI2I2, dSI1I2))
-        return false;
-      if(!output_cc_row(r0, cc, out))
-		return false;
-    }
+  int r0 = radius;
+  for (; r0+radius+1<h; r0++)
+  {
+    if (r0==5)
+      r0=r0;
+#ifdef DEBUG
+    vcl_cout << "r0 " << r0 << '\n';
+#endif
+    if (!cross_correlate_row(radius, dSI1, dSI2, dSI1I1, dSI2I2, dSI1I2,
+                             intensity_thresh, cc))
+      return false;
+#ifdef DEBUG
+    vcl_cout << '\n';
+#endif
+    advance_rows(SI1); advance_rows(SI2);  advance_rows(SI1I1);
+    advance_rows(SI2I2); advance_rows(SI1I2);
+    if (!update_row(image1, image2, r0+radius+1, 2*radius,
+                    SI1, SI2, SI1I1, SI2I2, SI1I2))
+      return out;
+    if (!collapse_slice(SI1,  SI2,  SI1I1,  SI2I2,  SI1I2,
+                        dSI1, dSI2, dSI1I1, dSI2I2, dSI1I2))
+      return false;
+    if (!output_cc_row(r0, cc, out))
+      return false;
+  }
   //handle the last row
-  //  vcl_cout << "r0 " << r0 << "\n";
-  if(!cross_correlate_row(radius, dSI1, dSI2, dSI1I1, dSI2I2, dSI1I2, 
+#ifdef DEBUG
+  vcl_cout << "r0 " << r0 << '\n';
+#endif
+  if (!cross_correlate_row(radius, dSI1, dSI2, dSI1I1, dSI2I2, dSI1I2,
                           intensity_thresh, cc))
     return false;
-  //  vcl_cout << "\n";
-  if(!output_cc_row(r0, cc, out))
-		return false;
-  vcl_cout << "RunningSumCrossCorrelation for " << w*h/1000.0f << " k pixels in " 
+#ifdef DEBUG
+  vcl_cout << '\n';
+#endif
+  if (!output_cc_row(r0, cc, out))
+    return false;
+  vcl_cout << "RunningSumCrossCorrelation for " << w*h/1000.0f << " k pixels in "
            << t.real() << " msecs\n"<< vcl_flush;
   return true;
 }
-  

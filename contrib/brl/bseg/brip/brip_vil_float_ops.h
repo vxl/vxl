@@ -1,4 +1,3 @@
-//--*-c++-*--
 // This is brl/bseg/brip/brip_vil_float_ops.h
 #ifndef brip_vil_float_ops_h_
 #define brip_vil_float_ops_h_
@@ -152,7 +151,7 @@ class brip_vil_float_ops
     convert_to_float(vil_image_view<vil_rgb<vxl_byte> > const& image);
   //: convert a color image to float IHS images
   static void
-    convert_to_IHS(vil_image_view<vil_rgb<vxl_byte> >const& image, 
+    convert_to_IHS(vil_image_view<vil_rgb<vxl_byte> >const& image,
                    vil_image_view<float>& I,
                    vil_image_view<float>& H,
                    vil_image_view<float>& S);
@@ -172,46 +171,46 @@ class brip_vil_float_ops
   static vbl_array_2d<float> load_kernel(vcl_string const & file);
 
   //:compute basis images for a set of input images
-  static 
+  static
     void basis_images(vcl_vector<vil_image_view<float> > const & input_images,
                       vcl_vector<vil_image_view<float> > & basis);
 
   //:compute the Fourier transform using the vnl FFT algorithm
-  static bool fourier_transform(vil_image_view<float> const & input, 
+  static bool fourier_transform(vil_image_view<float> const & input,
                                 vil_image_view<float>& mag,
                                 vil_image_view<float>& phase);
 
   //:compute the inverse Fourier transform using the vnl FFT algorithm
-  static 
+  static
     bool inverse_fourier_transform(vil_image_view<float> const& mag,
                                    vil_image_view<float> const& phase,
                                    vil_image_view<float>& output);
 
   //:resize to specified dimensions, fill with zeros if output is larger
-  static 
-    void resize(vil_image_view<float> const & input, 
+  static
+    void resize(vil_image_view<float> const & input,
                 const int width, const int height,
                 vil_image_view<float>& output);
 
 
-  //:resize to closest power of two larger dimensions than the input 
-  static 
-    bool resize_to_power_of_two(vil_image_view<float> const & input, 
+  //:resize to closest power of two larger dimensions than the input
+  static
+    bool resize_to_power_of_two(vil_image_view<float> const & input,
                                 vil_image_view<float>& output);
 
   //:filter the input image with a Gaussian blocking filter
-  static bool 
+  static bool
     spatial_frequency_filter(vil_image_view<float> const & input,
-                             const float dir_fx, const float dir_fy, 
+                             const float dir_fx, const float dir_fy,
                              const float f0, const float radius,
                              const bool output_fourier_mag,
                              vil_image_view<float> & output);
   //: 2x2 bilinear interpolation of image at specified location
-  static double 
+  static double
     bilinear_interpolation(vil_image_view<float> const & input,
-                            const double x, const double y);
+                           const double x, const double y);
   //:map the input to the output by a homography.
-  // \note if the output size is fixed then only the corresponding 
+  // \note if the output size is fixed then only the corresponding
   // input image space is transformed.
   static bool homography(vil_image_view<float> const & input,
                          vgl_h_matrix_2d<double>const& H,
@@ -219,29 +218,29 @@ class brip_vil_float_ops
                          bool output_size_fixed = false,
                          float output_fill_value = 0.0);
 
-  //:rotate the input image counter-clockwise about the image origin        
-  static 
+  //:rotate the input image counter-clockwise about the image origin
+  static
   vil_image_view<float> rotate(vil_image_view<float> const & input,
-                                     const double theta_deg);
+                               const double theta_deg);
 
   //:extract a region of interest. If roi does not overlap input, return false
-static bool chip(vil_image_view<float> const & input,
-                 vsol_box_2d_sptr const& roi, vil_image_view<float> chip);
+  static bool chip(vil_image_view<float> const & input,
+                   vsol_box_2d_sptr const& roi, vil_image_view<float> chip);
 
   //:cross-correlate two images at a given sub-pixel location
   static float
   cross_correlate(vil_image_view<float> const & image1,
                   vil_image_view<float> const & image2,
                   const float x, const float y,
-                  const int radius = 5, 
+                  const int radius = 5,
                   const float intensity_thresh=25.0);
 
   //:cross_correlate two images using running sums
   static bool
   cross_correlate(vil_image_view<float> const & image1,
                   vil_image_view<float> const & image2,
-				  vil_image_view<float>& out, 
-                  const int radius = 5, 
+                  vil_image_view<float>& out,
+                  const int radius = 5,
                   const float intensity_thresh=25.0);
 
  private:
@@ -259,18 +258,18 @@ static bool chip(vil_image_view<float> const & input,
                                  const float k0, const float k1,
                                  const float k2, float* output);
 
-  //:One dimensional fft 
+  //:One dimensional fft
   static bool fft_1d(int dir, int m, double* x, double* y);
 
   //:Two dimensonal fft
   static bool fft_2d(vnl_matrix<vcl_complex<double> >& c, int nx,int ny,int dir);
   //: Transform the fft coefficients from/to fft/frequency order(self inverse).
-  static 
+  static
     void ftt_fourier_2d_reorder(vnl_matrix<vcl_complex<double> > const& F1,
                                 vnl_matrix<vcl_complex<double> > & F2);
   //: Blocking filter function
   static float gaussian_blocking_filter(const float dir_fx,
-                                        const float dir_fy, 
+                                        const float dir_fy,
                                         const float f0, const float radius,
                                         const float fx, const float fy);
   //: Default constructor is private
