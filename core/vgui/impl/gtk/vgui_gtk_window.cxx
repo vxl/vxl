@@ -134,7 +134,7 @@ void vgui_gtk_window::set_menubar(const vgui_menu &menu) {
 
   use_menubar = true;
 
-  // fsm -- assign menu to 'last_menubar' to ensure the commands
+  // fsm - assign menu to 'last_menubar' to ensure the commands
   // stay in scope for the lifetime of the menubar :
   *last_menubar = menu;
 

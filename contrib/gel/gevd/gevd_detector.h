@@ -100,17 +100,17 @@
 //                              constant depth value.  Nominally 0.0.
 //
 // .SECTION Author:
-//             Jane S. Liu -- 3/27/95
+//             Jane S. Liu - 3/27/95
 //             GE Corporate Research and Development
 //
 // .SECTION Modifications :
-//             JLM -- May 1997
+//             JLM - May 1997
 //             Added extra interface for parameters not intitially
 //             provided by Jane.These parameters are needed to get
 //             satisfactory boundary closure. Also expanded comments.
-//             JLM -- November 1997
-//                    Moved most parameters up to gevd_detectorParams in
-//                    order to unify the use of parameters.
+//             JLM - November 1997
+//             Moved most parameters up to gevd_detectorParams in
+//             order to unify the use of parameters.
 //-----------------------------------------------------------------------------
 
 class gevd_bufferxy;
@@ -131,7 +131,7 @@ class gevd_detector : public gevd_detector_params
 {
 public:
   // So far, not all parameters are included in the constructor.  These seem to
-  // be the most important in controlling performance -- JLM
+  // be the most important in controlling performance - JLM
   //
   gevd_detector(gevd_detector_params& params);
   gevd_detector(vil_image, float smoothSigma = 1.0, float noiseSigma = -0.5,
@@ -196,4 +196,4 @@ protected:
   float noiseThreshold;
 };
 
-#endif
+#endif // _gevd_detector_h_

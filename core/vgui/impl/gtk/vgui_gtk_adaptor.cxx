@@ -86,7 +86,7 @@ void vgui_gtk_adaptor::post_redraw() {
     redraw_requested = true;
     gtk_idle_add(idle_callback_for_redraw, this);
   }
- }
+}
 
 void vgui_gtk_adaptor::post_overlay_redraw() {
   if (!ovl_helper)
@@ -192,7 +192,6 @@ gint vgui_gtk_adaptor::handle(GtkWidget *widget,
   else if (type==GDK_ENTER_NOTIFY) {
     event.type = vgui_ENTER;
     gtk_widget_grab_focus(GTK_WIDGET(widget));
-
   }
   else if (type==GDK_LEAVE_NOTIFY) {
     event.type = vgui_LEAVE;
@@ -200,7 +199,6 @@ gint vgui_gtk_adaptor::handle(GtkWidget *widget,
   else {
     event.type = vgui_OTHER;
   }
-
 
   if (event.type == vgui_BUTTON_DOWN &&
       event.button == adaptor->popup_button &&
@@ -214,7 +212,7 @@ gint vgui_gtk_adaptor::handle(GtkWidget *widget,
     params.x = event.wx;
     params.y = event.wy;
 
-    // fsm -- assign the popup menu to 'last_popup' to ensure the
+    // fsm - assign the popup menu to 'last_popup' to ensure the
     // commands stay in scope for the lifetime of the gtk popup.
     adaptor->last_popup = adaptor->get_total_popup(params);
 

@@ -20,7 +20,7 @@ void vil_colour_space_RGB_to_YIQ(T const in[3], T out[3])
 
 //     green --- yellow     ;
 //    /    \     /     \    ;
-//  cyan -- white ---- red  ;
+// cyan --- white ---- red  ;
 //    \    /     \     /    ;
 //     blue  --- magenta    ;
 //
@@ -29,16 +29,16 @@ void vil_colour_space_RGB_to_HSV(T r, T g, T b, T *h, T *s, T *v)
 {
   T max = vcl_max(r, vcl_max(g, b));
   T min = vcl_min(r, vcl_min(g, b));
-  
+
   // The value v is just the maximum.
   *v = max;
-  
+
   // Next, saturation.
   if (max > 0)
     *s = (max - min)/max;
   else
     *s = 0;
-  
+
   // Lastly, the hue:
   if (*s == 0)
     *h = T(); // The hue is undefined in the achromatic case.
@@ -52,7 +52,7 @@ void vil_colour_space_RGB_to_HSV(T r, T g, T b, T *h, T *s, T *v)
       *h = 4 + (r - g)/delta;
     else
       vcl_abort();
-    
+
     *h *= 60;
     if (*h < 0)
       *h += 360;

@@ -69,7 +69,6 @@ static vgui_vrml_texture_mapMap texturemaps; // Images
 
 static vgui_vrml_texture_map* gettexture(char const* filename)
 {
-
   vgui_vrml_texture_mapMap::iterator p = texturemaps.find(filename);
   if (p != texturemaps.end())
     return (*p).second;
@@ -79,6 +78,7 @@ static vgui_vrml_texture_map* gettexture(char const* filename)
   return texturemaps[filename] = newmap;
 }
 #else
+
 #include <vcl_cstdlib.h>
 static vgui_vrml_texture_map *current_texmap = 0;
 static vgui_vrml_texture_map* gettexture(char const* filename)
@@ -116,7 +116,7 @@ vgui_vrml_draw_visitor::~vgui_vrml_draw_visitor() {
 bool vgui_vrml_draw_visitor::Visit(QvSeparator* node) {
   // Mask Bit                 Attribute Group
   // GL_ACCUM_BUFFER_BIT      accum-buffer
-  // GL_ALL_ATTRIB_BITS       --
+  // GL_ALL_ATTRIB_BITS       ---
   // GL_COLOR_BUFFER_BIT      color-buffer
   // GL_CURRENT_BIT           current
   // GL_DEPTH_BUFFER_BIT      depth-buffer
@@ -326,8 +326,8 @@ bool vgui_vrml_draw_visitor::Visit(QvIndexedLineSet* node) {
   return true;
 }
 
-bool vgui_vrml_draw_visitor::Visit(QvIndexedFaceSet* node) {
-
+bool vgui_vrml_draw_visitor::Visit(QvIndexedFaceSet* node)
+{
   // members of QvIndexedFaceSet
   //const point3D* vertexlist_;         // vertex data
   //int numvertinds_;                   // no. of vertex indices
@@ -384,10 +384,8 @@ bool vgui_vrml_draw_visitor::Visit(QvIndexedFaceSet* node) {
     }
 
     for(unsigned v = 0; v < n; ++v) {
-
       if (gl_mode == textured && v < polytexcoords.size())
         glTexCoord2f(polytexcoords[v]->x, polytexcoords[v]->y);
-
 
       GlVertex(*polyverts[v]);
     }
@@ -405,7 +403,6 @@ bool vgui_vrml_draw_visitor::Visit(QvIndexedFaceSet* node) {
       }
       glEnd();
     }
-
   }
   return true;
 }
@@ -463,8 +460,8 @@ bool vgui_vrml_draw_visitor::Visit(QvTranslation* node) {
 
 // APPEARANCE
 
-bool vgui_vrml_draw_visitor::Visit(QvMaterial* node) {
-
+bool vgui_vrml_draw_visitor::Visit(QvMaterial* node)
+{
   //// Fields
   //QvMFColor           ambientColor;   // Ambient color
   //QvMFColor           diffuseColor;   // Diffuse color
@@ -503,7 +500,7 @@ bool vgui_vrml_draw_visitor::Visit(QvTexture2* node)
   //    QvBool          readImage();
   //
   //    void setHandle (int handle, int alpha);  // mpichler, 19960506
-
+  //
   if (gl_mode == textured) {
     char const* filename = node->filename.value.getString();
 

@@ -52,8 +52,7 @@ vnl_generalized_eigensystem::vnl_generalized_eigensystem(const vnl_matrix<double
       vcl_cerr << "**** eigenvalues(B) = " << eig.D << vcl_endl;
       return;
     }
-    // hmmmmm -- all this crap below is worse than
-    // whatever the default is...
+    // hmmmmm - all this crap below is worse than whatever the default is...
     return;
 #if 0 // so don't compile it then...
     int rank_deficiency = 0;

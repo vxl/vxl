@@ -15,13 +15,13 @@
 #include <vnl/vnl_matrix.h>
 class vnl_least_squares_function;
 
-//: Functions to compute jacobians of vnl_least_squares_functions 
-//  by discrete differences.  They return false on failure and 
+//: Functions to compute jacobians of vnl_least_squares_functions
+//  by discrete differences.  They return false on failure and
 //  true on success.
 //
 // name size    description
 //
-// lsf  --      the function.
+// lsf  ---     the function.
 // h    1 or n  step size (scalar or a vector).
 // x    n       point at which to evaluate the derivative of the function.
 // y    m       value of the function at x.

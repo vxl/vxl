@@ -31,7 +31,7 @@ const float ALPHA = 0.9f;
 osl_edge_detector::osl_edge_detector(osl_edge_detector_params const &params)
   : osl_edge_detector_params(params)
 {
-  //Set up histogram stuff --  old style maintained for compatability
+  //Set up histogram stuff -  old style maintained for compatability
   _gradient_histogram = false; //Do we need to compute a histogram?
   _histogram_resolution = 15; // The number of buckets
 
@@ -269,7 +269,7 @@ void osl_edge_detector::Sub_pixel_interpolation() {
         // non-maximal suppression to bootstrap the image
         // thresholds. The >= is used rather than > for reasons
         // involving non-generic images. Should this be interpolated
-        // height -- = g1[y] + frac*(h2-h1)/4 ?
+        // height  = g1[y] + frac*(h2-h1)/4 ?
         if ( (g1[y]>=h1) && (g1[y]>=h2) && (vcl_fabs(dnewx)<=0.5) && (vcl_fabs(dnewy)<=0.5) ) {
 
           if ( g1[y]*ALPHA > _low )
@@ -489,7 +489,7 @@ static int compare(osl_edge_detector_xyfloat* xyf1, osl_edge_detector_xyfloat* x
 // genus zero. We also order the edges by strength and try to remove the weaker
 // ones first. This accounts for non-maximal supression, and does it in a
 // topology preserving way. Note that we are creating a vcl_list with a large
-// number of elements, and then sorting it -- this is likely to be quite slow.
+// number of elements, and then sorting it - this is likely to be quite slow.
 // An alternative implementation would be better.
 //
 void osl_edge_detector::Thin_edges() {

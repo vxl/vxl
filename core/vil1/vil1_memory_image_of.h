@@ -31,7 +31,7 @@
 //    vil_memory_image_of<Type> provides a templated interface to a
 //    vil_memory_image.  It is assumed that the user has queried the pixel size
 //    of the image and is instantiating an ImageBuffer of the appropriate type.
-//    
+//
 //    This allows C-efficiency access with C++ notational convenience after the
 //    type has been ascertained.  Note that this should not be used for images
 //    too large to fit in memory.
@@ -65,12 +65,11 @@ public:
   vil_memory_image_of(vil_memory_image_of<T> const &);
 
   //: Copy given image into a memory buffer.
-  // If it's already a memory image, do as the 
-  // copy constructor (above) does.
+  // If it's already a memory image, do as the copy constructor (above) does.
   explicit
   vil_memory_image_of(vil_image const& image);
 
-  // Deprecated -- This was used to copy the ROI, which is no longer on image
+  // Deprecated - This was used to copy the ROI, which is no longer on image
   //vil_memory_image_of(vil_image const&, bool) {}
 
   //: Construct a w x h image, pixel format is determined from T

@@ -279,11 +279,11 @@ struct Hack_VertexToTexture : public vrml_out_vertex_to_texture
         const Vertex* vertex,
         double* u, double* v) const
     {
-      // Ugh -- assume P matrix is [I 0];
+      // Ugh - assume P matrix is [I 0];
       double tu = vertex->GetX() / vertex->GetZ();
       double tv = vertex->GetY() / vertex->GetZ();
 
-      // Ugh ugh -- assume C = [f 0 u; 0 f v; 0 0 1];
+      // Ugh ugh - assume C = [f 0 u; 0 f v; 0 0 1];
       double fhak = (image_xsize + image_ysize) * 0.5; // FIXME
       *u = tu * fhak + 0.5 * image_xsize; // 0..xsize
       *v = tv * fhak + 0.5 * image_ysize; // 0..ysize

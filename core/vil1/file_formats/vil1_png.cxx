@@ -85,7 +85,7 @@ struct vil_jmpbuf_wrapper {
 static vil_jmpbuf_wrapper pngtopnm_jmpbuf_struct;
 static bool jmpbuf_ok = false;
 
-// Must be  a macro -- setjmp needs its stack frame to live
+// Must be  a macro - setjmp needs its stack frame to live
 #define png_setjmp_on(ACTION) do {\
  jmpbuf_ok = true;\
  if (setjmp (pngtopnm_jmpbuf_struct.jmpbuf) != 0) {\
@@ -219,11 +219,11 @@ struct vil_png_structures {
   ~vil_png_structures() {
     png_setjmp_on(goto del);
     if (reading_) {
-      // Reading -- just delete
+      // Reading - just delete
       png_destroy_read_struct (&png_ptr, &info_ptr, (png_infopp)NULL);
 
     } else {
-      // Writing -- save the rows
+      // Writing - save the rows
       png_write_image(png_ptr, rows);
       png_write_end(png_ptr, info_ptr);
 
@@ -361,7 +361,7 @@ bool vil_png_generic_image::get_section(void* buf, int x0, int y0, int xs, int y
   if (!p->ok)
     return false;
 
-  // PNG lib wants everything in memory -- the first get_rows reads the whole image.
+  // PNG lib wants everything in memory - the first get_rows reads the whole image.
   png_byte** rows = p->get_rows();
   if (!rows) return 0;
 
@@ -385,7 +385,7 @@ bool vil_png_generic_image::put_section(void const* buf, int x0, int y0, int xs,
   if (!p->ok)
     return false;
 
-  // PNG lib wants everything in memory -- the writing isn't done till this image is deleted.
+  // PNG lib wants everything in memory - the writing isn't done till this image is deleted.
 
   png_byte** rows = p->get_rows();
   if (!rows) return false;

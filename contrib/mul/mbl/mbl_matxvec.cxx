@@ -45,10 +45,7 @@ static bool HasNaN(const char* s,
   }
   return false;
 }
-#endif // long part commented out
 //=======================================================================
-
-#if 0 // long part commented out
 
   //: Compute R = V*M
   //  R is resized to the number of rows of V * cols of M
@@ -67,7 +64,6 @@ void NC_VecXMat(const vnl_vector<double>& V,
 
   R.resize(nrows,ncols);
 
-#if 0
   const double* v_data = V.dataPtr();
   const double** M_data = M.dataPtr();
   double** R_data = R.dataPtr();
@@ -82,14 +78,13 @@ void NC_VecXMat(const vnl_vector<double>& V,
       r_data[j] = vval * m_data[j];
     }
   }
-#endif
 
   for (int i=1;i<=nrows;i++)
     for (int j=1;j<=ncols;j++)
       R(i,j) = V(i) * M(1,j);
 }
+#endif  //0 - long part commented out
 
-#endif  //0 -- long part commented out
 //=======================================================================
 
   //: Compute R = M*V
@@ -239,7 +234,7 @@ void TC_MatXVec(const vnl_matrix<double>& M,
     Rdata[i] = T;
   }
 }
-#endif  //0 -- long part commented out
+#endif  //0 - long part commented out
 
 
 //=======================================================================
@@ -411,7 +406,6 @@ void TC_ProductAtB(vnl_matrix<double>& AtB,
 //=======================================================================
 
 
-
 //: Computes MD where D is diagonal with elememts d(i)
 void TC_ProductMD(vnl_matrix<double>& MD,
                   const vnl_matrix<double>& M,
@@ -474,4 +468,4 @@ void TC_ProductDM(vnl_matrix<double>& DM,
     while (c) { DM_row[c] = di * M_row[c]; --c; }
   }
 }
-#endif  //0 -- long part commented out
+#endif  //0 - long part commented out
