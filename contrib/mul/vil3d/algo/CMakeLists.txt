@@ -10,6 +10,7 @@ SET(vil3d_algo_sources
   vil3d_binary_opening.h
   vil3d_binary_closing.h
   vil3d_exp_filter.h
+  vil3d_normalised_correlation_3d.h
 )
 
 AUX_SOURCE_DIRECTORY(Templates vil3d_algo_sources)
