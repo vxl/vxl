@@ -6,19 +6,19 @@
 
 #undef TESTMAIN
 #define TESTMAIN(x)
-#include <vsl/tests/test_polymorphic_io.cxx> // should come first
-#include <vsl/tests/test_arbitrary_length_int_conversion.cxx>
-#include <vsl/tests/test_binary_io.cxx>
-#include <vsl/tests/test_clipon_polymorphic_io.cxx>
-#include <vsl/tests/test_vector_io.cxx>
-#include <vsl/tests/test_list_io.cxx>
-#include <vsl/tests/test_deque_io.cxx>
-#include <vsl/tests/test_complex_io.cxx>
-#include <vsl/tests/test_string_io.cxx>
-#include <vsl/tests/test_map_io.cxx>
-#include <vsl/tests/test_set_io.cxx>
-#include <vsl/tests/test_stack_io.cxx>
-#include <vsl/tests/test_indent.cxx>
+#include "test_polymorphic_io.cxx" // should come first
+#include "test_arbitrary_length_int_conversion.cxx"
+#include "test_binary_io.cxx"
+#include "test_clipon_polymorphic_io.cxx"
+#include "test_vector_io.cxx"
+#include "test_list_io.cxx"
+#include "test_deque_io.cxx"
+#include "test_complex_io.cxx"
+#include "test_string_io.cxx"
+#include "test_map_io.cxx"
+#include "test_set_io.cxx"
+#include "test_stack_io.cxx"
+#include "test_indent.cxx"
 
 #undef TESTMAIN
 #define TESTMAIN(x) int main()\
