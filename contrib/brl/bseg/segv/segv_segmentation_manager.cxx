@@ -103,7 +103,7 @@ void segv_segmentation_manager::clear_display()
 {
   if (!t2D_)
     return;
-  t2D_->clear();
+  t2D_->clear_all();
 }
 
 //-----------------------------------------------------------------------------
@@ -179,18 +179,22 @@ void segv_segmentation_manager::vd_edges()
   vd_dialog->field("Noise Threshold", dp.noise_multiplier);
   vd_dialog->checkbox("Automatic Threshold", dp.automatic_threshold);
   vd_dialog->checkbox("Agressive Closure", agr);
+  vd_dialog->checkbox("Compute Junctions", dp.junctionp);
   if (!vd_dialog->ask())
     return;
+
   if (agr)
-    dp.aggressive_junction_closure=1;
+	dp.aggressive_junction_closure=1;
   else
     dp.aggressive_junction_closure=0;
+
   sdet_detector det(dp);
   det.SetImage(img_);
 
   det.DoContour();
   vcl_vector<vtol_edge_2d_sptr>* edges = det.GetEdges();
-  this->draw_edges(*edges, true);
+  if(edges)
+    this->draw_edges(*edges, true);
 }
 
 void segv_segmentation_manager::regions()
@@ -201,11 +205,12 @@ void segv_segmentation_manager::regions()
   static bool residual = false;
   static sdet_detector_params dp;
   dp.noise_multiplier=1.0;
-  vgui_dialog* vd_dialog = new vgui_dialog("VD Edges");
+  vgui_dialog* vd_dialog = new vgui_dialog("Edgel Regions");
   vd_dialog->field("Gaussian sigma", dp.smooth);
   vd_dialog->field("Noise Threshold", dp.noise_multiplier);
   vd_dialog->checkbox("Automatic Threshold", dp.automatic_threshold);
   vd_dialog->checkbox("Agressive Closure", agr);
+  vd_dialog->checkbox("Compute Junctions", dp.junctionp);
   vd_dialog->checkbox("Debug", debug);
   vd_dialog->checkbox("Residual Image", residual);
   if (!vd_dialog->ask())
@@ -214,7 +219,8 @@ void segv_segmentation_manager::regions()
     dp.aggressive_junction_closure=1;
   else
     dp.aggressive_junction_closure=0;
-  sdet_region_proc_params rpp(dp);
+
+  sdet_region_proc_params rpp(dp, true, debug, 2);
   sdet_region_proc rp(rpp);
   rp.set_image(img_);
   rp.extract_regions();
