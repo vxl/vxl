@@ -217,7 +217,7 @@ void osl_canny_rothwell::Non_maximal_suppression()
         int orient = int(theta/45.0+8) % 4;
 
         // And now compute the interpolated heights
-        float grad=0.f;
+        float grad;
         switch ( orient ) {
          case 0:
           grad = dy[y+1]/dx[y+1];
@@ -518,17 +518,15 @@ void osl_canny_rothwell::Final_hysteresis(vcl_list<osl_edge*> *edges)
 //
 void osl_canny_rothwell::Thin_edges()
 {
-  int i,count;
-  float threshold;
-
   // Now do the thinning. Do it twice: the first time to try to remove
   // dummy_ edges, and then other edges -- 0.001 turns <= to <
+  float threshold=dummy_-0.001f;
 
-  for (threshold=dummy_-0.001f,i=0; i<2; threshold=low_,++i)
+  for (int i=0; i<2; threshold=low_,++i)
   {
-    count = 1;     // count set to dummy value
-    while ( count )  { //  Thin until no Pixels are removed
-
+    int count = 1;     // count set to nonzero value
+    while (count) //  Thin until no Pixels are removed
+    {
       count = 0;
       for (unsigned int x=w0_; x+w0_<xsize_; ++x)
         for (unsigned int y=w0_; y+w0_<ysize_; ++y)
@@ -552,11 +550,11 @@ void osl_canny_rothwell::Thin_edges()
             continue;
 
           genus += h*a*b+b*c*d+d*e*f+f*g*h-a*b-b*c-c*d-d*e-e*f-f*g
-            - g*h-h*a-h*b-b*d-d*f-f*h-1;
+                 - g*h-h*a-h*b-b*d-d*f-f*h-1;
 
           // If the genus is zero delete the edge
           if ( genus == 0 ) {
-            count++;
+            ++count;
             thin_[x][y] = 0.0;
           }
         }
