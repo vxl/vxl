@@ -15,19 +15,19 @@ extern "C" int dgges_(char const *JOBVSL,
                       char const *JOBVSR,
                       char const *SORT,
                       bool (*DELCTG)(double, double, double),
-                      int const *N,
+                      unsigned int const *N,
                       double *A,
-                      int const *LDA,
+                      unsigned int const *LDA,
                       double *B,
-                      int const *LDB,
+                      unsigned int const *LDB,
                       int const *SDIM,
                       double *ALPHAR,
                       double *ALPHAI,
                       double *BETA,
                       double *VSL,
-                      int const *LDVSL,
+                      unsigned int const *LDVSL,
                       double *VSR,
-                      int const *LDVSR,
+                      unsigned int const *LDVSR,
                       double *WORK,
                       int const *LWORK,
                       bool *BWORK,
@@ -42,17 +42,17 @@ bool vnl_generalized_schur/*<double>*/(vnl_matrix<double> *A,
                                        vnl_matrix<double> *L,
                                        vnl_matrix<double> *R)
 {
-  int n = A->rows();
+  unsigned int n = A->rows();
   
   assert(n == A->rows());
   assert(n == A->cols());
   assert(n == B->rows());
   assert(n == B->cols());
-  assert(alphar); alphar->resize(n);    alphar->fill(0);
-  assert(alphai); alphai->resize(n);    alphai->fill(0);
-  assert(beta);   beta  ->resize(n);    beta  ->fill(0);
-  assert(L);      L     ->resize(n, n); L     ->fill(0);
-  assert(R);      R     ->resize(n, n); R     ->fill(0);
+  assert(alphar!=0); alphar->resize(n);    alphar->fill(0);
+  assert(alphai!=0); alphai->resize(n);    alphai->fill(0);
+  assert(beta!=0);   beta  ->resize(n);    beta  ->fill(0);
+  assert(L!=0);      L     ->resize(n, n); L     ->fill(0);
+  assert(R!=0);      R     ->resize(n, n); R     ->fill(0);
   
   int sdim = 0;
   int lwork = 1000 + (8*n + 16);
