@@ -100,12 +100,12 @@ class vgui_range_map : public vgui_range_map_params
   vcl_vector<vxl_byte> Bmap(){return this->compute_byte_table(min_B_, max_B_, gamma_B_, ratio_B_);}
   //: Alpha Channel map
   vcl_vector<vxl_byte> Amap(){return this->compute_byte_table(min_A_, max_A_, gamma_A_, ratio_A_);}
-   
-  //: get the OpenGL hardware range maps (float [0, 1] range)
+
+  // get the OpenGL hardware range maps (float [0, 1] range)
+
   //: Luminance hardware map
   vcl_vector<float> fLmap(){return this->compute_float_table(min_L_, max_L_, gamma_L_, ratio_L_);}
   //: Red channel hardware map
-
   vcl_vector<float> fRmap(){return this->compute_float_table(min_R_, max_R_, gamma_R_, ratio_R_);}
   //: Green channel hardware map
   vcl_vector<float> fGmap(){return this->compute_float_table(min_G_, max_G_, gamma_G_, ratio_G_);}
@@ -146,21 +146,20 @@ class vgui_range_map : public vgui_range_map_params
 
   //: Initialize the byte mapping table
   vcl_vector<vxl_byte> compute_byte_table(const Type min, const Type max,
-                               const Type gamma,  const long double ratio);
+                                          const Type gamma,  const long double ratio);
 
   //: Initialize the float mapping table
   vcl_vector<float> compute_float_table(const Type min, const Type max,
-                             const Type gamma, const long double ratio);
+                                        const Type gamma, const long double ratio);
 
-
-  bool mapable_;    //!< input pixel type can be mapped 
-  bool table_mapable_;    //!< input pixel type can be mapped by a table. 
-  unsigned size_;//!< number of elements in the map
-  long double ratio_L_;    //!< scale for computed Luminance mapping 
-  long double ratio_R_;    //!< scale for computed red channel mapping 
-  long double ratio_G_;    //!< scale for computed green channel mapping 
-  long double ratio_B_;    //!< scale for computed blue channel mapping 
-  long double ratio_A_;    //!< scale for computed alpha channel mapping 
+  bool mapable_;           //!< input pixel type can be mapped
+  bool table_mapable_;     //!< input pixel type can be mapped by a table.
+  unsigned size_;          //!< number of elements in the map
+  long double ratio_L_;    //!< scale for computed Luminance mapping
+  long double ratio_R_;    //!< scale for computed red channel mapping
+  long double ratio_G_;    //!< scale for computed green channel mapping
+  long double ratio_B_;    //!< scale for computed blue channel mapping
+  long double ratio_A_;    //!< scale for computed alpha channel mapping
 };
 
 #define VGUI_RANGE_MAP_INSTANTIATE(T) extern "please include vgui/vgui_range_map.txx first"
