@@ -211,7 +211,7 @@ void osl_canny_smooth(T const * const * image_in, int _xsize, int _ysize,
 
 //--------------------------------------------------------------------------------
 
-#define VSL_CANNY_SMOOTH_INSTANTIATE(T) \
+#define OSL_CANNY_SMOOTH_INSTANTIATE(T) \
 VCL_INSTANTIATE_INLINE(float as_float(T const &)); \
 template void osl_canny_smooth_rothwell(T const * const *image_in, int _xsize, int _ysize, \
                                         float const *_kernel, int _width, int _k_size, \

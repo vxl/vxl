@@ -82,5 +82,5 @@ void osl_edge::SetEndY(float v) { v2->y = v; }
 
 #include <vcl_list.h>
 #include <vcl_vector.h>
-VSL_TOPOLOGY_REF_UNREF_INSTANTIATE(vcl_list<osl_edge*>);
-VSL_TOPOLOGY_REF_UNREF_INSTANTIATE(vcl_vector<osl_edge*>);
+OSL_TOPOLOGY_REF_UNREF_INSTANTIATE(vcl_list<osl_edge*>);
+OSL_TOPOLOGY_REF_UNREF_INSTANTIATE(vcl_vector<osl_edge*>);

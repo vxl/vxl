@@ -67,7 +67,7 @@ void osl_topology_unref(Container &C)
       (*i)->unref();
 }
 
-#define VSL_TOPOLOGY_REF_UNREF_INSTANTIATE(C) \
+#define OSL_TOPOLOGY_REF_UNREF_INSTANTIATE(C) \
 VCL_INSTANTIATE_INLINE(void osl_topology_ref(C &)); \
 VCL_INSTANTIATE_INLINE(void osl_topology_unref(C &))
 

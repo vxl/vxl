@@ -25,5 +25,5 @@ bool operator==(osl_vertex const &a, osl_vertex const &b) {
 
 #include <vcl_list.h>
 #include <vcl_vector.h>
-VSL_TOPOLOGY_REF_UNREF_INSTANTIATE(vcl_list<osl_vertex*>);
-VSL_TOPOLOGY_REF_UNREF_INSTANTIATE(vcl_vector<osl_vertex*>);
+OSL_TOPOLOGY_REF_UNREF_INSTANTIATE(vcl_list<osl_vertex*>);
+OSL_TOPOLOGY_REF_UNREF_INSTANTIATE(vcl_vector<osl_vertex*>);

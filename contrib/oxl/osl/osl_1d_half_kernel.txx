@@ -60,7 +60,7 @@ void osl_create_gaussian (T gauss_sigma, osl_1d_half_kernel<T> *mask_ptr) {
 
 //----------------------------------------------------------------------------
 
-#define VSL_1D_HALF_KERNEL_INSTANTIATE(T) \
+#define OSL_1D_HALF_KERNEL_INSTANTIATE(T) \
 template struct osl_1d_half_kernel<T >; \
 template void osl_create_gaussian(T , osl_1d_half_kernel<T > *)
 
