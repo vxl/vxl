@@ -5,6 +5,7 @@
 
 int main()
 {
+  bool okay = true;
   typedef vcl_map<int, double, vcl_less<int> > mymap;
   mymap m;
 
@@ -14,7 +15,13 @@ int main()
   for (mymap::iterator p = m.begin(); p != m.end(); ++p)
     vcl_cout << (*p).first << " " << (*p).second << vcl_endl;
 
-  mymap::iterator i = m.find(3); // compiler warning about unused i
+  mymap::iterator i = m.find(3);
+  okay = okay && (i == m.end());
+  i = m.find(2);
+  okay = okay && (i != m.end()) && (i->second == 3141);
 
-  return 0;
+  if( okay )
+    return 0;
+  else
+    return 1;
 }
