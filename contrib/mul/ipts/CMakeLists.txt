@@ -2,6 +2,7 @@
 
 SET(ipts_sources
     ipts_scale_space_peaks.h
+    ipts_local_entropy.cxx ipts_local_entropy.h 
 )
 AUX_SOURCE_DIRECTORY(Templates ipts_sources)
 
