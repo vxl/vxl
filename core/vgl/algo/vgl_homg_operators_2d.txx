@@ -6,8 +6,7 @@
 // \file
 // \brief 2D homogeneous operations
 // \author Don Hamilton, Peter Tu
-// Copyright:
-// Created: Feb 16 2000
+// \date   Feb 16 2000
 
 #include <vcl_cassert.h>
 #include <vcl_iostream.h>
@@ -92,8 +91,8 @@ void vgl_homg_operators_2d<Type>::cross(const vgl_homg_line_2d<Type>& a,
 //: Dot product of two vgl_homg_point_2d<Type>s
 template <class Type>
 double
-vgl_homg_operators_2d<Type>::dot(const vgl_homg_point_2d<Type>& a,
-                                 const vgl_homg_point_2d<Type>& b)
+vgl_homg_operators_2d<Type>::dot(vgl_homg_point_2d<Type> const& a,
+                                 vgl_homg_point_2d<Type> const& b)
 {
   double x1 = a.x();
   double y1 = a.y();
