@@ -118,23 +118,6 @@ vil_pnm_generic_image::vil_pnm_generic_image(vil_stream* vs, int planes,
   else
     maxval_ = 0x7FFFFFFF; // not 0xFFFFFFFF as the pnm format does not allow values > MAX_INT
 
-#if 0
-  if (bits_per_component_ <= 8) {
-    maxval_ = 0xFF;
-    bits_per_component_ = 8;
-  } else if (bits_per_component_ <= 16) {
-    maxval_ = 0xFFFF;
-    bits_per_component_ = 16;
-  } else if (bits_per_component_ <= 24) {
-    maxval_ = 0xFFFFFF;
-    bits_per_component_ = 24;
-  } else if (bits_per_component_ <= 32) {
-    maxval_ = 0x7FFFFFFF; // not 0xFFFFFFFF as the pnm format does not allow values > MAX_INT
-  } else {
-    vcl_cerr << "vil_pnm_generic_image: cannot make  " << bits_per_component_ << " bit x " << components_ << " image\n";
-  }
-#endif
-
   write_header();
 }
 
@@ -294,7 +277,11 @@ bool vil_pnm_generic_image::get_section(void* buf, int x0, int y0, int xs, int y
   unsigned short* jb = (unsigned short*) buf;
   unsigned int* kb = (unsigned int*) buf;
   //
-  if (magic_ > 4) // pgm or ppm raw image
+  if (magic_ == 1) // ascii pbm
+  {
+    vcl_cerr << __FILE__ << ": ascii bitmap not implemented" << vcl_endl;
+    return false;
+  } if (magic_ > 4) // pgm or ppm raw image
   {
     int bytes_per_sample = (bits_per_component_+7)/8;
     int bytes_per_pixel = components_ * bytes_per_sample;
@@ -348,15 +335,14 @@ bool vil_pnm_generic_image::get_section(void* buf, int x0, int y0, int xs, int y
       // 2. Read the data
       //
       if (bits_per_component_ <= 8)
-        for(int x = 0; x < xs*components_; ++x) { int a; (*vs_) >> a; ib[x]=a; }
+        for(int x = 0; x < xs*components_; ++x) { int a; (*vs_) >> a; *(ib++)=a; }
       else if (bits_per_component_ <= 16)
-        for(int x = 0; x < xs*components_; ++x) { int a; (*vs_) >> a; jb[x]=a; }
+        for(int x = 0; x < xs*components_; ++x) { int a; (*vs_) >> a; *(jb++)=a; }
       else
-        for(int x = 0; x < xs*components_; ++x) { int a; (*vs_) >> a; kb[x]=a; }
+        for(int x = 0; x < xs*components_; ++x) { int a; (*vs_) >> a; *(kb++)=a; }
       // 3. Skip to the next line
       //
       for(int t = 0; t < (width_-x0-xs)*components_; ++t) { int a; (*vs_) >> a; }
-      ib += xs; jb += xs; kb += xs;
     }
   }
 
@@ -373,7 +359,11 @@ bool vil_pnm_generic_image::put_section(void const* buf, int x0, int y0, int xs,
   unsigned short const* pb = (unsigned short const*) buf;
   unsigned int const* qb = (unsigned int const*) buf;
 
-  if (magic_ > 4) // pgm or ppm raw image
+  if (magic_ == 1) // ascii pbm
+  {
+    vcl_cerr << __FILE__ << ": ascii bitmap not implemented" << vcl_endl;
+    return false;
+  } else if (magic_ > 4) // pgm or ppm raw image
   {
     int bytes_per_sample = (bits_per_component_+7)/8;
     int bytes_per_pixel = components_ * bytes_per_sample;
