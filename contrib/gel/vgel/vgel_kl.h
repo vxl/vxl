@@ -18,9 +18,9 @@ extern "C" {
 #include <vidl/vidl_movie_sptr.h>
 
 
-class vgel_kl {
-
-public:
+class vgel_kl
+{
+ public:
 
 //***************************************************************************
 // Initialization
@@ -42,12 +42,12 @@ public:
 
   virtual vcl_vector<vtol_vertex_2d_sptr> * extract_points(vil1_image &);
 
-private:
-  vgel_kl_params _params;
+ private:
+  vgel_kl_params params_;
 
   virtual KLT_PixelType* convert_to_gs_image(vil1_image &);
 
   virtual void set_tracking_context( KLT_TrackingContext tc);
 };
 
-#endif // vgel_kl_
+#endif // vgel_kl_h_
