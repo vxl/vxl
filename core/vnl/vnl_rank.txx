@@ -184,9 +184,9 @@ vnl_matrix<T> vnl_rank_row_column_reduce(vnl_matrix<T> const& mat, vnl_rank_pivo
 template <class T>
 unsigned int vnl_rank(vnl_matrix<T> const& mat, vnl_rank_type t)
 {
-  vnl_matrix<T> a = (t == vnl_rank_row)    ? vnl_rank_row_reduce(mat) :
-                    (t == vnl_rank_column) ? vnl_rank_column_reduce(mat) :
-                                             vnl_rank_row_column_reduce(mat);
+  vnl_matrix<T> a = (t == vnl_rank_row)    ? vnl_rank_row_reduce(mat,vnl_rank_pivot_all) :
+                    (t == vnl_rank_column) ? vnl_rank_column_reduce(mat,vnl_rank_pivot_all) :
+                                             vnl_rank_row_column_reduce(mat,vnl_rank_pivot_all);
   unsigned int rank = 0;
   if (t == vnl_rank_row)
     for (unsigned int r=0; r<a.rows(); ++r)
