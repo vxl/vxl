@@ -5,6 +5,8 @@
 
 #include <vil2/vil2_image_view.h>
 #include <vil2/vil2_image_view_functions.h>
+#include <vil2/vil2_transpose.h>
+#include <vil2/vil2_flip.h>
 #include <vxl_config.h> // for vxl_byte
 #include <vcl_iostream.h>
 
