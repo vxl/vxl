@@ -194,7 +194,7 @@ rsdl_kd_tree::greatest_variation( const vcl_vector<int>& indices,
 {
   use_cartesian = true;
   bool initialized = false;
-  double interval_size;
+  double interval_size = 0.0;
 
   // 1. Check the Cartesian dimensions, if they exist
 

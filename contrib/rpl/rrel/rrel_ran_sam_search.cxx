@@ -122,8 +122,8 @@ rrel_ran_sam_search::estimate( const rrel_estimation_problem * problem,
       problem->compute_residuals( new_params, residuals );
       if ( trace_level_ >= 2)
         this->trace_residuals( residuals );
-      double new_obj;
 
+      double new_obj = 0.0;
       switch( problem->scale_type() ) {
       case rrel_estimation_problem::NONE:
         new_obj = obj_fcn->fcn( residuals.begin(), residuals.end(), scale_, &new_params );
@@ -135,7 +135,6 @@ rrel_ran_sam_search::estimate( const rrel_estimation_problem * problem,
         new_obj = obj_fcn->fcn( residuals.begin(), residuals.end(), problem->prior_multiple_scales().begin(), &new_params );
         break;
       default:
-
         vcl_cerr << __FILE__ << ": unknown scale type\n";
         vcl_abort();
       }
