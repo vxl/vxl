@@ -32,9 +32,9 @@ class vgl_line_3d_2_points
   // Initialization
   //+**************************************************************************
 
-  //: Default constructor with (0,0,0,1) and (1,0,0,0), which is the line \a y=z=0
+  //: Default constructor with (0,0,0) and (1,0,0), which is the line \a y=z=0
   inline vgl_line_3d_2_points(void)
-  : point1_(0,0,0,1), point2_(1,0,0,0) {}
+  : point1_(0,0,0), point2_(1,0,0) {}
 
   //: Copy constructor
   inline vgl_line_3d_2_points(const vgl_line_3d_2_points<Type> &that)
@@ -66,7 +66,7 @@ class vgl_line_3d_2_points
   inline bool ideal(Type tol = Type(0)) const { return false; }
 
   //: Return the direction vector of this line (not normalised)
-  inline vgl_vector_3d direction() { return point2()-point1(); }
+  inline vgl_vector_3d<Type> direction() const { return point2()-point1(); }
 };
 
 #define l vgl_line_3d_2_points<Type>
@@ -96,7 +96,7 @@ inline bool coplanar(l const& l1, l const& l2) {
 template <class Type>
 inline bool concurrent(l const& l1, l const& l2)
 {
-  vgl_vector_3d v1=l1.direction(),v2=l2.direction();
+  vgl_vector_3d<Type> v1=l1.direction(),v2=l2.direction();
   return coplanar(l1,l2) && v1*v2.length() != v2*v1.length();
 }
 
