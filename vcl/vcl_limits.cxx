@@ -6,6 +6,6 @@
 
 #include "vcl_compiler.h"
 
-#if !VCL_CXX_HAS_HEADER_LIMITS || defined(VCL_GCC_295)
-# include  "gcc-295/vcl_limits.cxx"
+#if !VCL_CXX_HAS_HEADER_LIMITS || !VCL_USE_NATIVE_STL
+# include  "emulation/vcl_limits.cxx"
 #endif
