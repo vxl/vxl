@@ -447,7 +447,7 @@ void vimt_transform_2d::calcInverse()  const
             double det = xx_*yy_-xy_*yx_;
             if (det==0)
             {
-              vcl_cerr<<"SM_Transform2D::inverse() : No inverse exists for this affine transform (det==0)\n";
+              vcl_cerr<<"vimt_transform_2d::calcInverse() : No inverse exists for this affine transform (det==0)\n";
               vcl_abort();
             }
             xx2_=yy_/det;   xy2_=-xy_/det;
