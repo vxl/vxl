@@ -123,8 +123,8 @@ template < class ImgIn, class ImgOut, class DataIn, class DataOut, int Arity, cl
     if(src_img == 0)
       vcl_cerr << "filter ctor passed vector will null src_img pointers, ignored them watch out." << vcl_endl;
     else
-     ref_inf()[i] = *src_img;
-//   if(ref_inf()[i]) FILTER_IMPTR_INC_REFCOUNT(((ImgIn*)ref_inf()[i]));
+      ref_inf()[i] = *src_img;
+//  if(ref_inf()[i]) FILTER_IMPTR_INC_REFCOUNT(((ImgIn*)ref_inf()[i]));
   }
 }
 
@@ -132,32 +132,36 @@ template < class ImgIn, class ImgOut, class DataIn, class DataOut, int Arity, cl
   vipl_filter< ImgIn, ImgOut, DataIn, DataOut, Arity, PixelItr >
   ::~vipl_filter()
 {
-  // vcl_cout << "destructor for abstract class filter called " << this << vcl_endl;
-//if(ref_src_section()) FILTER_IMPTR_DEC_REFCOUNT(ref_src_section()); // dec_refcount or kill it
-//if(ref_dst_section()) FILTER_IMPTR_DEC_REFCOUNT(ref_dst_section()); // dec_refcount or kill it
-//if(ref_secp())        FILTER_IMPTR_DEC_REFCOUNT(ref_secp()); // dec_refcount or kill it
-//if(ref_insecp())      FILTER_IMPTR_DEC_REFCOUNT(ref_insecp()); // dec_refcount or kill it
-//if(ref_ROA())         FILTER_IMPTR_DEC_REFCOUNT(ref_ROA()); // dec_refcount or kill it
-//if(ref_inROA())       FILTER_IMPTR_DEC_REFCOUNT(ref_inROA()); // dec_refcount or kill it
+#ifdef DEBUG
+  vcl_cout << "destructor for abstract class filter called " << this << vcl_endl;
+#endif
+#ifdef NOSMARTPTR
+  if(ref_src_section()) FILTER_IMPTR_DEC_REFCOUNT(ref_src_section()); // dec_refcount or kill it
+  if(ref_dst_section()) FILTER_IMPTR_DEC_REFCOUNT(ref_dst_section()); // dec_refcount or kill it
+  if(ref_secp())        FILTER_IMPTR_DEC_REFCOUNT(ref_secp()); // dec_refcount or kill it
+  if(ref_insecp())      FILTER_IMPTR_DEC_REFCOUNT(ref_insecp()); // dec_refcount or kill it
+  if(ref_ROA())         FILTER_IMPTR_DEC_REFCOUNT(ref_ROA()); // dec_refcount or kill it
+  if(ref_inROA())       FILTER_IMPTR_DEC_REFCOUNT(ref_inROA()); // dec_refcount or kill it
 
   for(int i=0; i< numinputs(); i++) {
-//  if(ref_inf()[i]) { // no longer needed with smart pointers
-//    FILTER_IMPTR_DEC_REFCOUNT(
+    if(ref_inf()[i]) { // no longer needed with smart pointers
+      FILTER_IMPTR_DEC_REFCOUNT(
 //    ((ImgIn*) (ref_inf()[i]))); //SGI CC doesn't like this...
-//    *((ImgIn**)(ref_inf())+i)); //FIXME, cast cause inf is const Im**
-//  }
+      *((ImgIn**)(ref_inf())+i)); //FIXME, cast cause inf is const Im**
+    }
   }
-////???  we did new (poor man's array) so we use delete????
-//if(ref_inf()) {
-//  delete [] ref_inf();
-//// free up new'd space
-//  ref_inf() = 0;
-//}
+  //???  we did new (poor man's array) so we use delete????
+  if(ref_inf()) {
+    delete [] ref_inf();
+    // free up new'd space
+    ref_inf() = 0;
+  }
   // delete the output and intermediate functions if they are filter-owned
   // if (FILTER_OWNED(hsoutput_state) && hsoutf)
-//  if(ref_outf()) {
-//    FILTER_IMPTR_DEC_REFCOUNT(ref_outf());
-//  }
+    if(ref_outf()) {
+      FILTER_IMPTR_DEC_REFCOUNT(ref_outf());
+    }
+#endif
 }
 
 template < class ImgIn, class ImgOut, class DataIn, class DataOut, int Arity, class PixelItr>
@@ -213,13 +217,15 @@ template < class ImgIn, class ImgOut, class DataIn, class DataOut, int Arity, cl
     ref_inf()[i] = t.inf()[i];
 //  if(ref_inf()[i]) FILTER_IMPTR_INC_REFCOUNT(((ImgIn*)ref_inf()[i]));
   }
-//if(ref_outf()) FILTER_IMPTR_INC_REFCOUNT(ref_outf());
-//if(ref_src_section()) FILTER_IMPTR_INC_REFCOUNT(ref_src_section()); // share so inc_refcount
-//if(ref_dst_section()) FILTER_IMPTR_INC_REFCOUNT(ref_dst_section()); // share so inc_refcount
-//if(ref_secp()) FILTER_IMPTR_INC_REFCOUNT(ref_secp()); // share so inc_refcount
-//if(ref_insecp()) FILTER_IMPTR_INC_REFCOUNT(ref_insecp()); // share so inc_refcount
-//if(ref_ROA()) FILTER_IMPTR_INC_REFCOUNT(ref_ROA()); // share so inc_refcount
-//if(ref_inROA()) FILTER_IMPTR_INC_REFCOUNT(ref_inROA()); // share so inc_refcount
+#ifdef NOSMARTPTR
+  if (ref_outf()) FILTER_IMPTR_INC_REFCOUNT(ref_outf());
+  if (ref_src_section()) FILTER_IMPTR_INC_REFCOUNT(ref_src_section()); // share so inc_refcount
+  if (ref_dst_section()) FILTER_IMPTR_INC_REFCOUNT(ref_dst_section()); // share so inc_refcount
+  if (ref_secp()) FILTER_IMPTR_INC_REFCOUNT(ref_secp()); // share so inc_refcount
+  if (ref_insecp()) FILTER_IMPTR_INC_REFCOUNT(ref_insecp()); // share so inc_refcount
+  if (ref_ROA()) FILTER_IMPTR_INC_REFCOUNT(ref_ROA()); // share so inc_refcount
+  if (ref_inROA()) FILTER_IMPTR_INC_REFCOUNT(ref_inROA()); // share so inc_refcount
+#endif
   // FIXME should we do deep copy of filter-ownable parameters.???
   if (FILTER_OWNED(hsoutput_state))
     hsoutput_state ^= Filter_Owned;
@@ -261,7 +267,7 @@ template < class ImgIn, class ImgOut, class DataIn, class DataOut, int Arity, cl
   // if we make it this far, must be in
     }
   }
-  //else
+  // error if reaching this point:
   vcl_cerr << "Warning: called is_section_within_ROA but no valid sections defined. Returning 0\n";
   return 0;
 }
@@ -281,19 +287,15 @@ template < class ImgIn, class ImgOut, class DataIn, class DataOut, int Arity, cl
       int end = insecp()->curr_sec_end(axis);
       int st = insecp()->curr_sec_start(axis);
       if(st > end){ // swap hack in case people get it wrong....
-        int temp = end;
-        end = st;
-        st = temp;
+        int temp = end; end = st; st = temp;
       }
       st += ibs;
       end -= ibs;
-#ifdef DEBUG
-      vcl_cerr << "i_ st end ibs" << st << " " << end << " " << ibs << vcl_endl;
-#endif
-      if(inROA()) {
-        int t = inROA()->curr_sec_start(axis)+ibs;
-        st =vcl_min(end,vcl_max(st,t));
-      }
+//#ifdef DEBUG
+      vcl_cerr << "i_ [" << axis << "] st ibs " << st << " " << ibs << vcl_endl;
+//#endif
+      if(inROA())
+        st =vcl_min(end,vcl_max(st,inROA()->curr_sec_start(axis)+ibs));
       return st;
     }
   } else {
@@ -302,20 +304,16 @@ template < class ImgIn, class ImgOut, class DataIn, class DataOut, int Arity, cl
       int ibs = image_border_size();
       int end = secp()->curr_sec_end(axis);
       int st = secp()->curr_sec_start(axis);
-#ifdef DEBUG
-      vcl_cerr << "o_ st end ibs" << st << " " << end << " " << ibs << vcl_endl;
-#endif
       if(st > end){ // swap hack in case people get it wrong....
-        int temp = end;
-        end = st;
-        st = temp;
+        int temp = end; end = st; st = temp;
       }
       st += ibs;
       end -= ibs;
-#ifdef DEBUG
-      vcl_cerr << "o_ st end ibs" << st << " " << end << " " << ibs << vcl_endl;
-#endif
-      if(ROA()) st = vcl_min(end,vcl_max(st,ROA()->curr_sec_start(axis)+ibs));
+//#ifdef DEBUG
+      vcl_cerr << "o_ [" << axis << "] st ibs " << st << " " << ibs << vcl_endl;
+//#endif
+      if(ROA())
+        st = vcl_min(end,vcl_max(st,ROA()->curr_sec_start(axis)+ibs));
       return st;
     }
   }
@@ -344,17 +342,12 @@ template < class ImgIn, class ImgOut, class DataIn, class DataOut, int Arity, cl
       int end = insecp()->curr_sec_end(axis);
       int st = insecp()->curr_sec_start(axis);
       if(st > end){ // swap hack in case people get it wrong....
-        int temp = end;
-        end = st;
-        st = temp;
+        int temp = end; end = st; st = temp;
       }
-      st += ibs;
       end -= ibs;
-#ifdef DEBUG
-      vcl_cerr << "_i st end ibs" << st << " " << end << " " << ibs << vcl_endl;
-#endif
-      if(inROA())
-        if(inROA()) st = vcl_min(end,vcl_max(st,inROA()->curr_sec_start(axis)+ibs));
+//#ifdef DEBUG
+      vcl_cerr << "_i [" << axis << "] end ibs " << end << " " << ibs << vcl_endl;
+//#endif
       return end;
     }
   } else {
@@ -363,16 +356,12 @@ template < class ImgIn, class ImgOut, class DataIn, class DataOut, int Arity, cl
       int end = secp()->curr_sec_end(axis);
       int st = secp()->curr_sec_start(axis);
       if(st > end){ // swap hack in case people get it wrong....
-        int temp = end;
-        end = st;
-        st = temp;
+        int temp = end; end = st; st = temp;
       }
-      st += ibs;
       end -= ibs;
-#ifdef DEBUG
-      vcl_cerr << "_o st end ibs" << st << " " << end << " " << ibs << vcl_endl;
-#endif
-      if(ROA()) st = vcl_min(end,vcl_max(st,ROA()->curr_sec_start(axis)+ibs));
+//#ifdef DEBUG
+      vcl_cerr << "_o [" << axis << "] end ibs " << end << " " << ibs << vcl_endl;
+//#endif
       return end;
     }
   }
@@ -404,7 +393,7 @@ template < class ImgIn, class ImgOut, class DataIn, class DataOut, int Arity, cl
 //  if(fpointer) FILTER_IMPTR_INC_REFCOUNT(((ImgIn*)fpointer)); // mark new
     return true;
   }
-  //else
+  // error if reaching this point:
   vcl_cerr << "Warning: index out of range in put_in_data_ptr, ignored\n";
   return false;
 }
@@ -415,9 +404,11 @@ template < class ImgIn, class ImgOut, class DataIn, class DataOut, int Arity, cl
   vbl_smart_ptr<ImgIn const> vipl_filter< ImgIn, ImgOut, DataIn, DataOut, Arity, PixelItr >
                           ::in_data_ptr(int index)
 {
-  if(0 <= index && index < numinputs()) return inf()[index];
-  else vcl_cerr << "Warning: index out of range, returning data at 0 instead\n";
-  return inf()[0];
+  if (index < 0 || index >= numinputs()) {
+    vcl_cerr << "Warning: index " << index << " out of range, returning data at 0 instead\n";
+    index = 0;
+  }
+  return inf()[index];
 }
 
 // Return a ref to the input ``data object'' at the provided index
