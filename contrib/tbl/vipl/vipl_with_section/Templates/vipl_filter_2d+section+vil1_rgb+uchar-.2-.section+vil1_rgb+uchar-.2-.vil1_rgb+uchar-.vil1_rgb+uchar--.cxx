@@ -1,4 +1,4 @@
-#include <../Image/ImageProcessingBasics/section.h>
+#include <section/section.h>
 typedef unsigned char ubyte;
 #include <vil/vil_rgb.h>
 typedef vil_rgb<ubyte> rgbcell;

@@ -68,14 +68,13 @@ ifeq ($(USE_IMPLICIT_TEMPLATES),1)
   TEMPLATE_SOURCES :=
 endif
 
-# These three libraries are only needed for template instantiation:
-ifneq (,$(wildcard $(IUEROOT)/Image/ImageProcessingBasics/section.h))
+ifndef NOTEST
+# These three libraries are only needed for template instantiation,
+# used in the examples; leave them out if you don't need those examples:
 SUBDIRS += vipl_with_section
-endif
 SUBDIRS += vipl_with_vnl_matrix
 SUBDIRS += vipl_with_vbl_array_2d
 
-ifndef NOTEST
 SUBDIRS += examples
 SUBDIRS += tests
 endif

@@ -1,6 +1,6 @@
 #ifndef vipl_accessors_section_h_
 #define vipl_accessors_section_h_
-#include <../Image/ImageProcessingBasics/section.h>
+#include <section/section.h>
 
 #define FILTER_IMPTR_DEC_REFCOUNT(v) ((v)=0)
 #define FILTER_IMPTR_INC_REFCOUNT(v)

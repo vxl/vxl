@@ -1,4 +1,4 @@
-#include <../Image/ImageProcessingBasics/section.h>
+#include <section/section.h>
 typedef unsigned char ubyte;
 
 // this must be here for filter-2d to work

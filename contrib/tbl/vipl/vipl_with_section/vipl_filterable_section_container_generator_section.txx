@@ -1,7 +1,7 @@
 #ifndef vipl_filterable_section_container_generator_section_txx_
 #define vipl_filterable_section_container_generator_section_txx_
 
-#include <../Image/ImageProcessingBasics/section.h>
+#include <section/section.h>
 
 #define FILTER_IMPTR_DEC_REFCOUNT(v) ((v)=0)
 #define FILTER_IMPTR_INC_REFCOUNT(v)
