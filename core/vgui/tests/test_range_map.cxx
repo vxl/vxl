@@ -66,7 +66,10 @@ static void test_range_map()
   vxl_byte val8 = Lrmuc.map_L_pixel(127);
   vcl_vector<vxl_byte> map8 = Lrmuc.Lmap();
   vcl_vector<float> fmap8 = Lrmuc.fLmap();
-  vxl_byte val8f = (vxl_byte)(fmap8[127]*255 + 0.5);
+  vcl_vector<float>::iterator test = fmap8.begin();
+  vxl_byte val8f = (vxl_byte)(test[127]*255 + 0.5);
+
+  //  vxl_byte val8f = (vxl_byte)(fmap8[127]*255 + 0.5);
   unsigned size8 = Lrmuc.map_size();
   bool map_good = false;
   if (Lrmuc.mapable())
