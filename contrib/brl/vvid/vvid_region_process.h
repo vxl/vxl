@@ -24,10 +24,10 @@ class vvid_region_process : public vvid_video_process, public sdet_detector_para
 public:
   vvid_region_process(sdet_detector_params & dp);
   ~vvid_region_process();
-
+  virtual output_type get_output_type(){return TOPOLOGY;}
   //: compute edges on the input image
   virtual bool execute();
-
+  virtual bool finish(){return true;}  
 private:
   //members
 

@@ -7,6 +7,8 @@
 #include "vidfpl_menus.h"
 #include <vvid/vvid_file_manager.h>
 
+#include <vidl/vidl_image_list_codec.h>
+
 #ifdef HAS_MPEG2
 # include <vidl/vidl_mpegcodec.h>
 #endif
@@ -18,6 +20,7 @@
 int main(int argc, char** argv)
 {
   // Register video codecs
+  vidl_io::register_codec(new vidl_image_list_codec);
 #ifdef VCL_WIN32
   vidl_io::register_codec(new vidl_avicodec);
 #endif

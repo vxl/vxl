@@ -53,6 +53,9 @@ class vvid_live_video_manager : public vgui_wrapper_tableau
   void start_live_video();
   void stop_live_video();
 
+  //: capture and save a video sequence
+  void capture_sequence();
+
   //: quit the application
   void quit();
 
@@ -74,7 +77,8 @@ class vvid_live_video_manager : public vgui_wrapper_tableau
   //: the virtual handle function
   virtual bool handle(const vgui_event&);
  protected:
-
+  void display_topology();
+  void display_image();
  private:
   //utility functions
   void run_frames();
@@ -82,6 +86,7 @@ class vvid_live_video_manager : public vgui_wrapper_tableau
   bool init_successful_;
   bool live_capture_;
   bool edges_;
+  int sample_;
   unsigned width_;
   unsigned height_;
   vgui_window* win_;

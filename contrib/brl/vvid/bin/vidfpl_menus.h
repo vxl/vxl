@@ -27,6 +27,9 @@ class vidfpl_menus
   static void prev_frame_callback();
   static void stop_video_callback();
   static void easy2D_tableau_demo_callback();
+  static void no_op_callback();
+  static void difference_frames_callback();
+  static void compute_motion_callback();
   static void quit_callback();
   static vgui_menu get_menu();
  private:

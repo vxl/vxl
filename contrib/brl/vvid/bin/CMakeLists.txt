@@ -4,7 +4,7 @@ INCLUDE_DIRECTORIES( ${VXLCORE_INCLUDE_DIR} )
 
 SET(vidfpl_sources vidfpl.cxx vidfpl_menus.cxx vidfpl_menus.h)
 ADD_EXECUTABLE (vidfpl ${vidfpl_sources})
-TARGET_LINK_LIBRARIES(vidfpl osl mvl oxp vvid vidl vgui )
+TARGET_LINK_LIBRARIES(vidfpl brip  vvid vidl vgui )
 
 IF(HAS_CMU1394CAMERA)
  SET(vidster_sources vidster.cxx vidster_menus.cxx vidster_menus.h)

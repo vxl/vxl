@@ -25,6 +25,7 @@
 class vvid_video_process : public vbl_ref_count
 {
 public:
+  enum output_type {NOTYPE=0, IMAGE, TOPOLOGY};
   vvid_video_process();
   ~vvid_video_process();
   void clear_input(){input_images_.clear();}
@@ -33,7 +34,9 @@ public:
   vil_image get_input_image(int i);
   vil_image get_output_image(){return output_image_;}
   vcl_vector<vtol_topology_object_sptr> const & get_segmentation();
+  virtual output_type get_output_type(){return NOTYPE;}
   virtual bool execute()=0;  
+  virtual bool finish()=0;  
 protected: 
   //members
   vcl_vector<vil_image> input_images_;

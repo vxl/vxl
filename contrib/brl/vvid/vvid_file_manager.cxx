@@ -8,12 +8,14 @@
 #include <vcl_iostream.h>
 #include <vul/vul_timer.h>
 #include <vil/vil_image.h>
+#include <vil/vil_memory_image_of.h>
 #include <vgui/vgui.h>
 #include <vgui/vgui_find.h>
 #include <vgui/vgui_error_dialog.h>
 #include <vgui/vgui_adaptor.h>
 #include <vgui/vgui_tableau.h>
 #include <vgui/vgui_dialog.h>
+#include <bgui/bgui_vtol2D_tableau.h>
 #include <vgui/vgui_easy2D_tableau.h>
 #include <vgui/vgui_viewer2D_tableau.h>
 #include <vgui/vgui_grid_tableau.h>
@@ -21,6 +23,8 @@
 
 #include <vidl/vidl_io.h>
 #include <vidl/vidl_frame.h>
+#include <vvid/vvid_frame_diff_process.h>
+#include <vvid/vvid_motion_process.h>
 #include <vvid/vvid_file_manager.h>
 
 //static manager instance
@@ -30,14 +34,38 @@ vvid_file_manager *vvid_file_manager::instance_ = 0;
 vvid_file_manager *vvid_file_manager::instance()
 {
   if (!instance_)
-    instance_ = new vvid_file_manager();
+    {
+      instance_ = new vvid_file_manager();
+      instance_->init();
+    }
   return vvid_file_manager::instance_;
+}
+
+//======================================================================
+//: set up the tableaux at each grid cell
+//======================================================================
+void vvid_file_manager::init()
+{
+  grid_ = vgui_grid_tableau_new(2,1);
+  grid_->set_grid_size_changeable(true);
+
+  itab0_ = vgui_image_tableau_new();
+  easy0_ = vgui_easy2D_tableau_new(itab0_);
+  v2D0_ = vgui_viewer2D_tableau_new(easy0_);
+  grid_->add_at(v2D0_, 0,0);
+
+  itab1_ = vgui_image_tableau_new();
+  vgui_easy2D_tableau_sptr e1 = vgui_easy2D_tableau_new(itab1_);
+  v2D1_ = vgui_viewer2D_tableau_new(e1);
+  grid_->add_at(v2D1_, 1,0);
+  vgui_shell_tableau_sptr shell = vgui_shell_tableau_new(grid_);
+  this->add_child(shell);
 }
 
 //-----------------------------------------------------------
 // constructors/destructor
 // start with a single pane
-vvid_file_manager::vvid_file_manager() : vgui_grid_tableau(1,1)
+vvid_file_manager::vvid_file_manager(): vgui_wrapper_tableau()
 {
   width_ = 512;
   height_ = 512;
@@ -49,19 +77,28 @@ vvid_file_manager::vvid_file_manager() : vgui_grid_tableau(1,1)
   next_frame_ = false;
   prev_frame_ = false;
   time_interval_ = 10.0;
-  //we can add more grid locations interactively later
-  this->set_grid_size_changeable(true);
+  video_process_ = 0;
 }
 vvid_file_manager::~vvid_file_manager()
 {
 }
 
+
 // make an event handler
 // note that we have to get an adaptor and set the tableau to receive events
 bool vvid_file_manager::handle(const vgui_event &e)
 {
-  // just pass it back to the base class
-  return vgui_grid_tableau::handle(e);
+  return this->child.handle(e); 
+}
+//-------------------------------------------------------------
+//: Display a processed image
+//
+void vvid_file_manager::display_image()
+{
+  if(!video_process_)
+    return;
+  if(itab1_)
+    itab1_->set_image(video_process_->get_output_image());
 }
 
 //-----------------------------------------------------------------------------
@@ -71,7 +108,7 @@ void vvid_file_manager::load_video_file()
 {
   vgui_dialog load_video_dlg("Load video file");
   static vcl_string image_filename = "";
-  static vcl_string ext = "*.avi";
+  static vcl_string ext = "";
   load_video_dlg.file("Filename:", ext, image_filename);
   load_video_dlg.checkbox("Cache Frames ", cache_frames_);
   if (!load_video_dlg.ask())
@@ -110,17 +147,16 @@ void vvid_file_manager::load_video_file()
           ++inc;
           ++i;
         }
-      v2D_ = vgui_viewer2D_tableau_new(tabs_[0]);
+      v2D0_->child.assign(tabs_[0]);
+      itab1_->set_image(tabs_[0]->get_image_tableau()->get_image());
     }
   else
     {
-      vgui_image_tableau_sptr imt = vgui_image_tableau_new(img);
-      vgui_easy2D_tableau_new  e(imt);
-      v2D_ = vgui_viewer2D_tableau_new(e);
+      itab0_->set_image(img);
+      v2D0_->child.assign(easy0_);
+      itab1_->set_image(img);
     }
-  this->remove_at(0,0);
-  this->add_at(v2D_, 0, 0);
-  this->post_redraw();
+  grid_->post_redraw();
   vgui::run_till_idle();
 }
 void vvid_file_manager::cached_play()
@@ -144,22 +180,24 @@ void vvid_file_manager::cached_play()
             }
           vit--;
         }
-      v2D_->child.assign(*vit);
-      //Here we can put some stuff to control the frame rate. Hard coded to
-      //a delay of 10 for now
-      while (t.all()<time_interval_) ;
+
+      v2D0_->child.assign(*vit);
+        //Here we can put some stuff to control the frame rate. Hard coded to
+        //a delay of 10 for now
+      while(t.all()<time_interval_) ;
       //force the new frame to be displayed
-      this->post_redraw();
+      grid_->post_redraw();
       vgui::run_till_idle();
       t.mark();
     }
 }
+
 void vvid_file_manager::un_cached_play()
 {
   vul_timer t;
   vidl_movie::frame_iterator pframe(my_movie_);
   for (pframe=my_movie_->first(); pframe!=my_movie_->last()&&play_video_;
-      ++pframe)
+       ++pframe)
     {
       //pause by repeating the same frame
       if (pause_video_&&play_video_)
@@ -171,21 +209,22 @@ void vvid_file_manager::un_cached_play()
             }
           if (prev_frame_&&pframe!=my_movie_->first()+2)
             {
-              --pframe;
               prev_frame_ = false;
             }
           --pframe;
         }
       vil_image img = pframe->get_image();
-      vgui_easy2D_tableau_sptr e;
-      e.vertical_cast(vgui_find_below_by_type_name(v2D_->child,
-                                                   vcl_string("vgui_easy2D_tableau")));
-      e->get_image_tableau()->set_image(img);
-      while (t.all()<time_interval_) ;
-      //force the new frame to be displayed
-      this->post_redraw();
+      itab0_->set_image(img);
+      if(video_process_&&!pause_video_)
+        {
+          vil_memory_image_of<unsigned char> image(img);
+          video_process_->add_input_image(image);
+          if(video_process_->execute())
+            if(video_process_->get_output_type()==vvid_video_process::IMAGE)
+              display_image();
+        }
+      grid_->post_redraw();
       vgui::run_till_idle();
-      t.mark();
     }
 }
 void vvid_file_manager::play_video()
@@ -197,16 +236,13 @@ void vvid_file_manager::play_video()
   if (cache_frames_)
     {
       this->cached_play();
-    v2D_->child.assign(tabs_[0]);
+      v2D0_->child.assign(tabs_[0]);
     }
   else
     {
       this->un_cached_play();
       vil_image img =my_movie_->get_image(0);
-      vgui_easy2D_tableau_sptr e;
-      e.vertical_cast(vgui_find_below_by_type_name(v2D_->child,
-                                                   vcl_string("vgui_easy2D_tableau")));
-      e->get_image_tableau()->set_image(img);
+      itab1_->set_image(img);
     }
   this->post_redraw();
 }
@@ -215,7 +251,9 @@ void vvid_file_manager::play_video()
 
 //Stop the video and return to the first frame
 void vvid_file_manager::stop_video()
-{ play_video_ = false; }
+{ 
+  play_video_ = false; 
+}
 
 //Cycle the play at the current frame
 void vvid_file_manager::pause_video()
@@ -246,7 +284,7 @@ void vvid_file_manager::set_speed()
 {
   //not implemented yet
 }
-
+  
 void vvid_file_manager::easy2D_tableau_demo()
 {
   int inc = 40;
@@ -262,4 +300,19 @@ void vvid_file_manager::easy2D_tableau_demo()
         for (unsigned int k=0; k<=width_; k+=inc)
           (*eit)->add_point(k,j);
     }
+}
+
+void vvid_file_manager::no_op()
+{
+  video_process_ = 0;
+}
+
+void vvid_file_manager::difference_frames()
+{
+  video_process_ = new vvid_frame_diff_process();
+}
+
+void vvid_file_manager::compute_motion()
+{
+  video_process_ = new vvid_motion_process();
 }

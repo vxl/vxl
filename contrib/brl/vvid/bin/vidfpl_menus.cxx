@@ -86,6 +86,21 @@ void vidfpl_menus::easy2D_tableau_demo_callback()
   vvid_file_manager::instance()->easy2D_tableau_demo();
 }
 
+void vidfpl_menus::no_op_callback()
+{
+  vvid_file_manager::instance()->no_op();
+}
+
+void vidfpl_menus::difference_frames_callback()
+{
+  vvid_file_manager::instance()->difference_frames();
+}
+
+void vidfpl_menus::compute_motion_callback()
+{
+  vvid_file_manager::instance()->compute_motion();
+}
+
 void vidfpl_menus::quit_callback()
 {
   vcl_exit(1);
@@ -111,8 +126,9 @@ vgui_menu vidfpl_menus::get_menu()
   menuview.add( "Stop", stop_video_callback,(vgui_key)'s', vgui_CTRL);
   menuview.add( "easy2D Demo", easy2D_tableau_demo_callback);
   //edit menu entries
-
-
+  menuedit.add( "No Op", no_op_callback);
+  menuedit.add( "Frame Difference", difference_frames_callback);
+  menuedit.add( "Compute Motion", compute_motion_callback);
   //Top level menu layout
   menubar.add( "File", menufile);
   menubar.add( "View", menuview);

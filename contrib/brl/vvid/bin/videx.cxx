@@ -8,6 +8,15 @@
 #include "videx_menus.h"
 #include <vvid/vvid_live_video_manager.h>
 
+#include <vidl/vidl_image_list_codec.h>
+
+#ifdef HAS_MPEG2
+# include <vidl/vidl_mpegcodec.h>
+#endif
+
+#ifdef VCL_WIN32
+#include <vidl/vidl_avicodec.h>
+#endif
 
 #ifdef HAS_X11
 # include <vgui/internals/vgui_accelerate_x11.h>
@@ -15,6 +24,17 @@
 
 int main(int argc, char** argv)
 {
+  // Register video codecs
+  vidl_io::register_codec(new vidl_image_list_codec);
+
+#ifdef VCL_WIN32
+  vidl_io::register_codec(new vidl_avicodec);
+#endif
+
+#ifdef HAS_MPEG2
+  vidl_io::register_codec(new vidl_mpegcodec);
+#endif
+
    // Initialize the toolkit.
   vgui::init(argc, argv);
   vgui_menu menubar = videx_menus::get_menu();

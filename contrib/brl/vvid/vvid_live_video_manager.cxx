@@ -28,6 +28,7 @@
 #include <vvid/vvid_video_process.h>
 #include <vvid/vvid_edge_process.h>
 #include <vvid/vvid_region_process.h>
+#include <vvid/vvid_capture_process.h>
 
 //static live_video_manager instance
 vvid_live_video_manager *vvid_live_video_manager::instance_ = 0;
@@ -68,6 +69,7 @@ void vvid_live_video_manager::init()
 {
   //Determine the number of active cameras
   // for now we assume use a pre-defined _N_views
+  sample_ = 2;
   init_successful_ = true;
   edges_ = true;
   vtab_ = vvid_live_video_tableau_new(0, 2, cmu_1394_camera_params());
@@ -131,6 +133,7 @@ void vvid_live_video_manager::set_detection_params()
   bool live = vtab_->get_video_live();
   if (live)
     this->stop_live_video();
+  sample_ = 2;
   static bool agr = false;
   static sdet_detector_params dp;
   static float max_gap = 0;
@@ -157,6 +160,45 @@ void vvid_live_video_manager::set_detection_params()
     this->start_live_video();
 }
 
+void vvid_live_video_manager::capture_sequence()
+{
+  this->stop_live_video();
+  vgui_dialog save_video_dlg("Save Video Sequence");
+  static vcl_string video_filename = "";
+  static vcl_string ext = "*.*";
+  save_video_dlg.file("Video Filename:", ext, video_filename);
+  if (!save_video_dlg.ask())
+    return;
+  sample_ = 1;
+  video_process_ = new vvid_capture_process(video_filename);
+}
+void vvid_live_video_manager::display_topology()
+{
+  vt2D_->clear_all();
+  vcl_vector<vtol_topology_object_sptr> const & seg = 
+    video_process_->get_segmentation();
+
+  for(vcl_vector<vtol_topology_object_sptr>::const_iterator ti=seg.begin();
+      ti != seg.end(); ti++)
+    if(edges_)
+      {
+        vtol_edge_2d_sptr e=(*ti)->cast_to_edge()->cast_to_edge_2d();
+        if(e)
+          vt2D_->add_edge(e);
+      }
+    else
+      {
+        vtol_face_2d_sptr f=(*ti)->cast_to_face()->cast_to_face_2d();
+        if(f)
+          vt2D_->add_face(f);
+      }
+}
+
+void vvid_live_video_manager::display_image()
+{
+  //do nothing for now
+}
+
 void vvid_live_video_manager::run_frames()
 {
   if (!init_successful_)
@@ -169,29 +211,15 @@ void vvid_live_video_manager::run_frames()
         vil_memory_image_of<unsigned char> image;
         video_process_->clear_input();
 
-        if (vtab_->get_current_mono_image(2,image))
+        if (vtab_->get_current_mono_image(sample_,image))
           video_process_->add_input_image(image);
         else return;
         if (video_process_->execute())
           {
-            vt2D_->clear_all();
-            vcl_vector<vtol_topology_object_sptr> const & seg =
-                                             video_process_->get_segmentation();
-
-            for (vcl_vector<vtol_topology_object_sptr>::const_iterator ti=seg.begin();
-                 ti != seg.end(); ti++)
-              if (edges_)
-                {
-                  vtol_edge_2d_sptr e=(*ti)->cast_to_edge()->cast_to_edge_2d();
-                  if (e)
-                    vt2D_->add_edge(e);
-                }
-              else
-                {
-                  vtol_face_2d_sptr f=(*ti)->cast_to_face()->cast_to_face_2d();
-                  if (f)
-                    vt2D_->add_face(f);
-                }
+            if(video_process_->get_output_type()==vvid_video_process::IMAGE)
+              display_image();
+            if(video_process_->get_output_type()==vvid_video_process::TOPOLOGY)
+              display_topology();
           }
       }
     vt2D_->post_redraw();
@@ -218,7 +246,10 @@ void vvid_live_video_manager::stop_live_video()
   live_capture_=false;
   if (!init_successful_)
     return;
-  vtab_->stop_live_video();
+  if(vtab_)
+    vtab_->stop_live_video();
+  if(video_process_)
+    video_process_->finish();
 }
 
 void vvid_live_video_manager::quit()

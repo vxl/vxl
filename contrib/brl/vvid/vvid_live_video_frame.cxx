@@ -65,7 +65,7 @@ void vvid_live_video_frame::start_live_video()
   _cam.start();
   _live = true;
 
-  if (_cam._rgb)
+  if (_cam.rgb_)
     {
     _cam.get_rgb_image(_rgb_frame, _pixel_sample_interval, true);
     _itab->set_image(_rgb_frame);
@@ -79,7 +79,7 @@ void vvid_live_video_frame::start_live_video()
 
 void vvid_live_video_frame::update_frame()
 {
-  if (_cam._rgb)
+  if (_cam.rgb_)
     _cam.get_rgb_image(_rgb_frame, _pixel_sample_interval, true);
   else
     _cam.get_monochrome_image(_mono_frame, _pixel_sample_interval, true);

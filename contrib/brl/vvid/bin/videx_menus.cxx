@@ -33,6 +33,11 @@ void videx_menus::stop_live_video_callback()
   vvid_live_video_manager::instance()->stop_live_video();
 }
 
+void videx_menus::capture_sequence_callback()
+{
+  vvid_live_video_manager::instance()->capture_sequence();
+}
+
 //videx_menus definition
 vgui_menu videx_menus::get_menu()
 {
@@ -42,6 +47,7 @@ vgui_menu videx_menus::get_menu()
   vgui_menu menuedit;
   //file menu entries
   menufile.add( "Quit", quit_callback,(vgui_key)'q', vgui_CTRL);
+  menufile.add( "Capture", capture_sequence_callback);
 
   //view menu entries
   menuview.add( "Start Live Video", start_live_video_callback);

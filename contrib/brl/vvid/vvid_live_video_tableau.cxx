@@ -85,7 +85,7 @@ void vvid_live_video_tableau::start_live_video()
   cam_.start();
   live_ = true;
 
-  if (cam_._rgb)
+  if (cam_.rgb_)
     {
     cam_.get_rgb_image(rgb_frame_, pixel_sample_interval_, true);
     this->set_image(rgb_frame_);
@@ -101,7 +101,7 @@ void vvid_live_video_tableau::start_live_video()
 
 void vvid_live_video_tableau::update_frame()
 {
-  if (cam_._rgb)
+  if (cam_.rgb_)
     cam_.get_rgb_image(rgb_frame_, pixel_sample_interval_, true);
   else
     cam_.get_monochrome_image(mono_frame_, pixel_sample_interval_, true);

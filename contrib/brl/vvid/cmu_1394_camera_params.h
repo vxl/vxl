@@ -21,8 +21,8 @@
 class cmu_1394_camera_params{
 public:
   cmu_1394_camera_params(int video_format=0, int video_mode=4,
-                         int frame_rate=3, int brightness=350,
-                         int sharpness=128, int exposure=350, int gain = 350,
+                         int frame_rate=1, int brightness=350,
+                         int sharpness=0, int exposure=0, int gain = 0,
                          bool capture=true, bool rgb=false);
   cmu_1394_camera_params(const cmu_1394_camera_params& cp);
   ~cmu_1394_camera_params();
