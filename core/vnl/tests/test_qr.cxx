@@ -116,7 +116,7 @@ inst(vcl_complex<float>);
 inst(vcl_complex<double>);
 #undef inst
 
-#include <stdio.h>
+#include <vcl_cstdio.h>
 void complex_test()
 {
   typedef vcl_complex<double> ct;

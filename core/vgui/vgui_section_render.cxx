@@ -1,4 +1,4 @@
-// This is oxl/vgui/vgui_section_render.cxx
+// This is core/vgui/vgui_section_render.cxx
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
@@ -19,8 +19,8 @@ static inline float fsm_min(float x, float y) { return x<y ? x : y; }
 
 // Set to 1 for verbose debugging.
 #if 0
-# include <stdio.h>
-# define fsm_debug printf
+# include <vcl_cstdio.h>
+# define fsm_debug vcl_printf
 #else
 static inline void fsm_debug(char const *, ...) { }
 #endif
@@ -145,7 +145,6 @@ bool vgui_section_render(void const *pixels,
   glGetIntegerv(GL_UNPACK_ROW_LENGTH,  &row_length);
   glGetIntegerv(GL_UNPACK_SKIP_PIXELS, &skip_pixels);
   glGetIntegerv(GL_UNPACK_SKIP_ROWS,   &skip_rows);
-  
 
   // Set pixel transfer characteristics.
   glPixelStorei(GL_UNPACK_ALIGNMENT,   1);         // use byte alignment for now.
