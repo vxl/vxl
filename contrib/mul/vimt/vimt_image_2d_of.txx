@@ -74,8 +74,8 @@ vimt_image* vimt_image_2d_of<T>::clone() const
 template<class T>
 void vimt_image_2d_of<T>::print_summary(vcl_ostream& os) const
 {
-  os<<vsl_indent() << "Transform: "<<world2im_;
-  os<<vsl_indent() << image_<<vcl_endl;
+  os<<vsl_indent() << "Transform: "<<world2im_
+    <<vsl_indent() << image_<<vcl_endl;
 }
 
 //=======================================================================
@@ -85,8 +85,7 @@ void vimt_image_2d_of<T>::print_all(vcl_ostream& os) const
 {
   os<<vsl_indent();
   vil2_print_all(os,image_);
-  os<<vcl_endl;
-  os<<vsl_indent() << "Transform: "<<world2im_<<vcl_endl;
+  os<<'\n'<<vsl_indent() << "Transform: "<<world2im_<<'\n';
 }
 
 
@@ -116,8 +115,8 @@ void vimt_image_2d_of<T>::b_read(vsl_b_istream& bfs)
     vsl_b_read(bfs,world2im_);
     break;
   default:
-    vcl_cerr << "I/O ERROR: vimt_image_2d_of<T>::b_read(vsl_b_istream&) \n";
-    vcl_cerr << "           Unknown version number "<< version << "\n";
+    vcl_cerr << "I/O ERROR: vimt_image_2d_of<T>::b_read(vsl_b_istream&) \n"
+             << "           Unknown version number "<< version << "\n";
     bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
     return;
   }
@@ -131,12 +130,12 @@ template<class T>
 bool vimt_image_2d_of<T>::operator==(const vimt_image_2d_of<T> &other) const
 {
   return image_ == other.image_ &&
-    world2im_ == other.world2im_;
+      world2im_ == other.world2im_;
 }
 
 #define VIMT_IMAGE_2D_OF_INSTANTIATE(T) \
 VCL_DEFINE_SPECIALIZATION vcl_string vimt_image_2d_of<T >::is_a() const \
-{  return vcl_string("vimt_image_2d_of<" #T ">"); }\
-template class vimt_image_2d_of<T >;
+{ return vcl_string("vimt_image_2d_of<" #T ">"); }\
+template class vimt_image_2d_of<T >
 
 #endif // mil_image_2d_of_txx_
