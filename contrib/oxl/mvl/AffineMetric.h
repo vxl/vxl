@@ -27,8 +27,9 @@ public:
   AffineMetric(const vnl_matrix<double>& A);
 
   // Operations----------------------------------------------------------------
-  virtual HomgPoint2D image_to_homg(double x, double y);
   virtual vnl_double_2 homg_to_image(const HomgPoint2D& p);
+  virtual HomgPoint2D image_to_homg(const vnl_double_2&);
+  virtual HomgPoint2D image_to_homg(double x, double y);
 
   virtual HomgPoint2D homg_to_imagehomg(const HomgPoint2D& p);
   virtual HomgPoint2D imagehomg_to_homg(const HomgPoint2D& p);

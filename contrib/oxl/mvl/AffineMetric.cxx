@@ -82,6 +82,11 @@ HomgPoint2D AffineMetric::image_to_homg(double x, double y)
   return HomgPoint2D(h1, h2, h3);
 }
 
+HomgPoint2D AffineMetric::image_to_homg(const vnl_double_2& p)
+{
+  return image_to_homg(p.x(), p.y());
+}
+
 //: Convert conditioned point p to image coordinates
 vnl_double_2 AffineMetric::homg_to_image(const HomgPoint2D& p)
 {
