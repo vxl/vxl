@@ -1067,7 +1067,7 @@ void gpc_write_polygon(FILE *fp, int write_hole_flags, gpc_polygon *p)
       fprintf(fp, "%d\n", p->hole[c]);
 
     for (v= 0; v < p->contour[c].num_vertices; v++)
-      fprintf(fp, "% .*lf % .*lf\n",
+      fprintf(fp, "% .*f % .*f\n",
               DBL_DIG, p->contour[c].vertex[v].x,
               DBL_DIG, p->contour[c].vertex[v].y);
   }
