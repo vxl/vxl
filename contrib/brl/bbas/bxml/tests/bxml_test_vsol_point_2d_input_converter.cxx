@@ -3,14 +3,11 @@
 #include <bxml/bxml_io.h>
 #include <vsol/vsol_point_2d.h>
 
-int main(int argc, char * argv[])
+void bxml_test_vsol_point_2d_input_converter(int argc, char * argv[])
 {
-  // we want to test the methods on bxml_vsol_point_2d_input_converter
-  testlib_test_start("bxml_test_vsol_point_2d_input_converter"); 
-
   bxml_io::register_input_converters();
-  vcl_string test_path = (argc < 2) ? "" : argv[1];
-  vcl_string test_file = "vsol_point_2d.xml";
+  vcl_string test_path = (argc < 2) ? "." : argv[1];
+  vcl_string test_file = "/vsol_point_2d.xml";
   vcl_string full_test_file_path = test_path + test_file;
   vcl_vector<bxml_generic_ptr> pts;
   TEST("bxml_io::parse_xml(full_test_file_path, pts)", bxml_io::parse_xml(full_test_file_path, pts), true);
@@ -22,5 +19,6 @@ int main(int argc, char * argv[])
     vcl_cout << "Spatial Type " << so->spatial_type() << vcl_endl;
     TEST("so->spatial_type()==2", so->spatial_type(), 2);
   }
-  return testlib_test_summary();
 }
+
+TESTMAIN_ARGS(bxml_test_vsol_point_2d_input_converter);

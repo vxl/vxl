@@ -1,3 +1,4 @@
+// This is brl/bmvl/bcal/tests/bcal_test.cxx
 #include <bmvl/bcal/bcal_zhang_camera_node.h>
 #include <bmvl/bcal/bcal_zhang_linear_calibrate.h>
 #include <bmvl/bcal/bcal_calibrate_plane.h>
@@ -7,8 +8,9 @@
 #include <vcl_string.h>
 #include <vcl_cassert.h>
 #include <vcl_fstream.h>
+#include <testlib/testlib_test.h>
 
-void testing_graph()
+static void testing_graph()
 {
   vcl_cout<<"\n--------------testing graph -------------\n";
   bcal_camera_graph<bcal_calibrate_plane, bcal_zhang_camera_node, bcal_euclidean_transformation> cg;
@@ -22,7 +24,7 @@ void testing_graph()
   cg.print(vcl_cout);
 }
 
-void testing_linear_calibration(vcl_string const& directory)
+static void testing_linear_calibration(vcl_string const& directory)
 {
   vcl_cout<<"\n--------------testing calibration -------------\n";
 
@@ -69,7 +71,7 @@ void testing_linear_calibration(vcl_string const& directory)
   cg.print(vcl_cout);
 }
 
-void testing_brown_stereor_grid_camera(vcl_string const& fname)
+static void testing_brown_stereo_grid_camera(vcl_string const& fname)
 {
   vcl_cout<<"\n--------------testing brown camera -------------\n";
 
@@ -143,25 +145,23 @@ void testing_brown_stereor_grid_camera(vcl_string const& fname)
   }
 
   // do the calibration
-  vcl_cout<<"\n\nlinear calibration..............\n\n ";
+  vcl_cout<<"\n\nlinear calibration..............\n\n";
   bcal_zhang_linear_calibrate lc;
   lc.setCameraGraph(&cg);
   lc.calibrate();
 
   cg.print(vcl_cout);
-
 }
 
-int main(int argc, char* argv[])
+static void bcal_test(int argc, char* argv[])
 {
   vcl_string directory = argc>1 ? argv[1] : ".";
   testing_graph();
 
   testing_linear_calibration(directory);
 
-  testing_brown_stereor_grid_camera(directory+"/data/point_correspondences.left");
-  testing_brown_stereor_grid_camera(directory+"/data/point_correspondences.right");
-
-  return 0;
+  testing_brown_stereo_grid_camera(directory+"/data/point_correspondences.left");
+  testing_brown_stereo_grid_camera(directory+"/data/point_correspondences.right");
 }
 
+TESTLIB_DEFINE_MAIN_ARGS(bcal_test);

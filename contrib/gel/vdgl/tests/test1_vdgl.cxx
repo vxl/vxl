@@ -5,8 +5,9 @@
 #include <vsol/vsol_point_2d.h>
 #include <vsol/vsol_line_2d.h>
 #include <vdgl/vdgl_edgel.h>
+#include <testlib/testlib_test.h>
 
-int main(void)
+static void test1_vdgl()
 {
   // Create an edgel chain...
   vdgl_edgel_chain e;
@@ -27,15 +28,15 @@ int main(void)
 
   //Here check for the length of the line
 
-  vcl_cout<<"Length: "<< myline->length();
+  TEST_NEAR("Length", myline->length(), 3.482142857142857, 1e-12);
   //--------------------------------------------------
   // test the generation of a straight edgel_chain defined by two points
   //
   double x0=0, y0=0, x1=10, y1=10;
   vdgl_edgel_chain_sptr ec = new vdgl_edgel_chain(x0, y0, x1, y1);
-  int N = ec->size();
-  vcl_cout << "Chain has " << N << " edgels\n";
-  for (int i = 0; i<N; i++)
+  unsigned int N = ec->size();
+  TEST("Chain should have 11 edgels", N, 11);
+  for (unsigned int i = 0; i<N; i++)
     vcl_cout << "edgel[" << i<<"] = (" << (*ec)[i] << ")\n";
 
   //--------------------------------------------------
@@ -46,8 +47,8 @@ int main(void)
   vdgl_digital_curve_sptr dc = new vdgl_digital_curve(p0, p1);
   vdgl_interpolator_sptr intrp = dc->get_interpolator();
   int Nc = intrp->get_edgel_chain()->size();
-  for (double t = 0.1; t<(Nc-1); t++)
-    vcl_cout << "angle( " << t << ") = " << intrp->get_tangent_angle(t) << '\n';
-
-  return 0;
+  for (double t = 0.1; t+1<Nc; t+=1.0)
+    { TEST_NEAR("Slope in intermediate point", intrp->get_tangent_angle(t), 45.0, 1e-8); }
 }
+
+TESTMAIN(test1_vdgl);

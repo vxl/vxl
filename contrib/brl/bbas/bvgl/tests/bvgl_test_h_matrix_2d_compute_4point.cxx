@@ -1,15 +1,14 @@
 // This is brl/bbas/bvgl/tests/bvgl_test_h_matrix_2d_compute_4point.cxx
 #include <vcl_iostream.h>
-#include <vcl_cmath.h>
 #include <vgl/vgl_homg_point_2d.h>
 #include <vgl/vgl_point_2d.h>
 #include <vnl/vnl_matrix_fixed.h>
 #include <bvgl/bvgl_h_matrix_2d.h>
 #include <bvgl/bvgl_h_matrix_2d_compute_4point.h>
+#include <testlib/testlib_test.h>
 
-int main()
+void bvgl_test_h_matrix_2d_compute_4point()
 {
-  int success=0, failures=0;
   vcl_cout << "Test the recovery of an 2x scale transform using 4 points\n";
   vcl_vector<vgl_homg_point_2d<double> > points1, points2;
 
@@ -30,13 +29,10 @@ int main()
   vnl_matrix_fixed<double, 3, 3> M = H.get_matrix();
   vgl_homg_point_2d<double> hdiag(M[0][0], M[1][1], M[2][2]);
   vgl_point_2d<double> diag(hdiag);
-  vcl_cout << "The normalized upper diagonal "<<diag << '\n';
-  double distance = vcl_sqrt((diag.x()-2.0)*(diag.x()-2.0) +
-                             (diag.y()-2.0)*(diag.y()-2.0));
-  if (distance > 1e-6) ++failures;
-  else                 ++success;
-  vcl_cout << "recover 2x scale matrix\n"
-           << "Test Summary: " << success << " tests succeeded, "
-           << failures << " tests failed" << (failures?"\t***\n":"\n");
-  return failures;
+  double distance = (diag.x()-2.0)*(diag.x()-2.0) +
+                    (diag.y()-2.0)*(diag.y()-2.0);
+  TEST_NEAR("The normalized upper diagonal = (2,2)", distance, 0.0, 1e-12);
+  vcl_cout << "recover 2x scale matrix\n";
 }
+
+TESTMAIN(bvgl_test_h_matrix_2d_compute_4point);

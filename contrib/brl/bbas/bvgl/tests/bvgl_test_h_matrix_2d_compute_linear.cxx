@@ -1,20 +1,14 @@
 // This is brl/bbas/bvgl/tests/bvgl_test_h_matrix_2d_compute_linear.cxx
 #include <vcl_iostream.h>
-#include <vcl_cmath.h>
 #include <vcl_vector.h>
 #include <vgl/vgl_homg_point_2d.h>
 #include <bvgl/bvgl_h_matrix_2d.h>
 #include <bvgl/bvgl_norm_trans_2d.h>
 #include <bvgl/bvgl_h_matrix_2d_compute_linear.h>
-bool near_eq(double a, double b){return vcl_fabs(a-b)<1e-4;}
+#include <testlib/testlib_test.h>
 
-#define Assert(x) { vcl_cout << #x "\t\t\t test "; \
-  if (x) { ++success; vcl_cout << "PASSED\n"; } else { ++failures; vcl_cout << "FAILED\n"; } }
-
-
-int main(int, char **)
+void bvgl_test_h_matrix_2d_compute_linear()
 {
-  int success=0, failures=0;
   vcl_cout << "Test the recovery of an identity transform\n";
   vcl_vector<vgl_homg_point_2d<double> > points1, points2;
 
@@ -34,8 +28,7 @@ int main(int, char **)
 
   bvgl_h_matrix_2d_compute_linear hmcl;
   bvgl_h_matrix_2d<double> H = hmcl.compute(points1, points2);
-  vcl_cout << "The resulting transform \n" << H << '\n'
-           << "Test Summary: " << success << " tests succeeded, "
-           << failures << " tests failed" << (failures?"\t***\n":"\n");
-  return failures;
+  vcl_cout << "The resulting transform\n" << H << '\n';
 }
+
+TESTMAIN(bvgl_test_h_matrix_2d_compute_linear);

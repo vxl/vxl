@@ -5,14 +5,11 @@
 #include <vdgl/vdgl_interpolator.h>
 #include <vdgl/vdgl_edgel_chain.h>
 
-int main(int argc, char * argv[])
+void bxml_test_vdgl_digital_curve_input_converter(int argc, char * argv[])
 {
-  // we want to test the methods on bxml_vdgl_digital_curve_input_converter
-  testlib_test_start("bxml_vdgl_digital_curve_input_converter"); 
-
   bxml_io::register_input_converters();
-  vcl_string test_path = (argc < 2) ? "" : argv[1];
-  vcl_string test_file = "vdgl_digital_curve.xml";
+  vcl_string test_path = (argc < 2) ? "." : argv[1];
+  vcl_string test_file = "/vdgl_digital_curve.xml";
   vcl_string full_test_file_path = test_path + test_file;
   vcl_vector<bxml_generic_ptr> dcs;
   TEST("bxml_io::parse_xml(full_test_file_path, dcs)", bxml_io::parse_xml(full_test_file_path, dcs), true);
@@ -32,7 +29,6 @@ int main(int argc, char * argv[])
   vcl_cout << "Edgels:\n";
   for (int i = 0; i<ec->size(); i++)
     vcl_cout << (*ec)[i] << vcl_endl;
-
-  vcl_cout << "finished testing vxml_vdgl_digital_curve_input_converter\n";
-  return testlib_test_summary();
 }
+
+TESTMAIN_ARGS(bxml_test_vdgl_digital_curve_input_converter);

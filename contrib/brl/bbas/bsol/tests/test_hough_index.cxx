@@ -5,15 +5,13 @@
 #include <vsol/vsol_line_2d.h>
 #include <vsol/vsol_line_2d_sptr.h>
 #include <bsol/bsol_hough_line_index.h>
+#include <testlib/testlib_test.h>
+
 #define popen _popen
 #define pclose _pclose
-#define Assert(x) { vcl_cout << #x "\t\t\t test "; \
-  if (x) { ++success; vcl_cout << "PASSED\n"; } else { ++failures; vcl_cout << "FAILED\n"; } }
 
-int main(int, char **)
+void test_hough_index()
 {
-  int success=0, failures=0;
-
   // we want to test the methods bsol_hough_index
   vcl_cout << "Testing bsol_hough_line_index\n"
            << "Testing basic insertion and removal\n";
@@ -32,18 +30,19 @@ int main(int, char **)
   bool found_l1 = hl.find(l1);
   vcl_cout << "indexed =" << indexed << '\n'
            << "found_l = " << found_l << "found_l1 " << found_l1 << '\n';
-  Assert(indexed&&found_l&&!found_l1);
+  TEST("...", indexed&&found_l&&!found_l1, true);
   bool remove_l = hl.remove(l);
   found_l = hl.find(l);
   vcl_cout << "remove_l=" << remove_l << '\n'
            << "found_l = " << found_l << '\n';
-  Assert(remove_l&&!found_l);
+  TEST("...", remove_l&&!found_l, true);
   vcl_cout << "Testing collinearity\n";
   hl.index(l);
   vcl_vector<vsol_line_2d_sptr> collinear = hl.lines_in_interval(l4, 1, 2.0);
-  vcl_cout << "collinear lines size " << collinear.size() << '\n'
-           << "the collinear line x00" << collinear[0]->p0()->x() << '\n';
-  Assert(collinear.size()==1&&collinear[0]->p0()->x()==0);
+  vcl_cout << "" << collinear.size() << '\n'
+           << "" << collinear[0]->p0()->x() << '\n';
+  TEST("collinear lines size = 1", collinear.size(), 1);
+  TEST("the collinear line x00...", collinear[0]->p0()->x(), 0);
 
   vcl_cout << "Testing parallel\n";
   hl.index(l3);
@@ -51,9 +50,8 @@ int main(int, char **)
   vcl_vector<vsol_line_2d_sptr> non_parallel = hl.parallel_lines(40, 0.5);
   vcl_cout << "parallel lines size " << parallel.size() << '\n'
            << "non_parallel lines size " << non_parallel.size() << '\n';
-  Assert(parallel.size()==2&&non_parallel.size()==0)
-  vcl_cout << "finished testing bsol_hough_line_index\n"
-           << "Test Summary: " << success << " tests succeeded, "
-           << failures << " tests failed" << (failures?"\t***\n":"\n");
-    return failures;
+  TEST("...", parallel.size(), 2);
+  TEST("...", non_parallel.size(), 0);
 }
+
+TESTLIB_DEFINE_MAIN(test_hough_index);

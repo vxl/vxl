@@ -9,12 +9,10 @@
 #include <vtol/vtol_face_2d.h>
 #include <sdet/sdet_info_tracker_params.h>
 #include <sdet/sdet_info_tracker.h>
-#define Assert(x) { vcl_cout << #x "\t\t\t test "; \
-  if (x) { ++success; vcl_cout << "PASSED\n"; } else { ++failures; vcl_cout << "FAILED\n"; } }
+#include <testlib/testlib_test.h>
 
-int main(int argc, char * argv[])
+static void sdet_test_tracker(int argc, char * argv[])
 {
-  int success=0, failures=0;
   int width = 200, height = 200;
   vil1_memory_image_of<unsigned char> I0, I1;
   I0.resize(width, height);
@@ -80,13 +78,11 @@ int main(int argc, char * argv[])
     }
 #endif // 0
 
-  double a = 3.141591, b = 2.731324;
+  double a = 3.456789, b = 2.345678;
   for (int i = 0; i<(n*n); i++)
     a = a*b;
   vcl_cout << "double multiply " << n*n << " times, (area = "
-           << npix << "), in " << t.real() << " msecs.\n"
-           << "finished testing sdet_detector\n"
-           << "Test Summary: " << success << " tests succeeded, "
-           << failures << " tests failed" << (failures?"\t***\n":"\n");
-  return failures;
+           << npix << "), in " << t.real() << " msecs.\n";
 }
+
+TESTMAIN_ARGS(sdet_test_tracker);

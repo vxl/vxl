@@ -1,17 +1,13 @@
 // This is brl/bseg/tests/brip_test_lucas_kanade.cxx
 #include <vcl_iostream.h>
+#include <vcl_iomanip.h>
 #include <vnl/vnl_math.h>
 #include <vil1/vil1_memory_image_of.h>
 #include <brip/brip_float_ops.h>
+#include <testlib/testlib_test.h>
 
-#define Assert(x) { vcl_cout << #x "\t\t\t test "; \
-  if (x) { ++success; vcl_cout << "PASSED\n"; } else { ++failures; vcl_cout << "FAILED\n"; } }
-
-bool near_eq(double x, double y){return vcl_fabs(x-y)<0.1;}
-
-int main(int argc, char * argv[])
+static void brip_test_lucas_kanade(int argc, char * argv[])
 {
-  int success=0, failures=0;
   vil1_memory_image_of<float> cur, prev, vx, vy, ang;
   int w = 32, h =32;
   double D_R = 180*vnl_math::one_over_pi;
@@ -36,37 +32,29 @@ int main(int argc, char * argv[])
   brip_float_ops::Lucas_KanadeMotion(gauss_cur, gauss_prev, 1, 500.0, vx, vy);
   for (int y =0; y<h; y++)
     for (int x = 0; x<w; x++)
-      ang(x,y) = (float)D_R*vcl_atan2(vy(x,y), vx(x,y));
-  vcl_cout << vx(11,10) << ' '<< vx(12,16) << ' ' <<vx(10,21) <<' '<< vx(9,26)<<'\n';
-  vcl_cout << vy(11,10)<< ' '<< vy(12,16)<< ' ' <<vy(10,21) <<' '<< vy(9,26)<<'\n';
-  vcl_cout << vx(9,10)<< ' '<< vx(9,14)<< ' ' <<vx(10,19) <<' '<< vx(11,24)<<'\n';
-  vcl_cout << vy(9,10)<< ' '<< vy(9,14)<< ' ' <<vy(10,19) <<' '<< vy(11,24)<<'\n';
+      ang(x,y) = float(D_R*vcl_atan2(vy(x,y), vx(x,y)));
+  vcl_cout << vx(11,10)<<' '<< vx(12,16)<<' '<< vx(10,21)<<' '<< vx(9,26)<< '\n'
+           << vy(11,10)<<' '<< vy(12,16)<<' '<< vy(10,21)<<' '<< vy(9,26)<< '\n'
+           << vx(9,10)<< ' '<< vx(9,14)<< ' '<< vx(10,19)<<' '<< vx(11,24)<<'\n'
+           << vy(9,10)<< ' '<< vy(9,14)<< ' '<< vy(10,19)<<' '<< vy(11,24)<<'\n'
+           << ang(11,10)<<' '<< ang(12,16)<<' '<< ang(10,21)<<' '<< ang(9,26) << '\n'
+           << ang(9,10) <<' '<< ang(9,14) <<' '<< ang(10,19)<<' '<< ang(11,24)<< '\n';
 
-  vcl_cout << ang(11,10) << ' ' << ang(12,16) << ' '  << ang(10,21)
-           << ' ' << ang(9,26) << '\n';
-
-  vcl_cout << ang(9,10) << ' ' << ang(9,14) << ' '  << ang(10,19)
-           << ' ' << ang(11,24) << '\n';
-  vcl_cout << "Angle Image \n";
+  vcl_cout << "Angle Image:\n";
   for (int y =0; y<h; y++)
-    {
-      for (int x = 0; x<w; x++)
-          if ((int)ang(x,y))
-             vcl_cout << (int)ang(x,y) << ' ';
-          else
-             vcl_cout << "0  ";
-      vcl_cout << '\n';
-    }
-  if (near_eq(ang(11,10), 170.9)&&near_eq(ang(12,16), -158.6)&&
-      near_eq(ang(10,21), -94.0)&&near_eq(ang(9,26), -54.3)&&
-      near_eq(ang(9,10), 8.7)&&     near_eq(ang(9,14), 44.0)&&
-      near_eq(ang(10,19), 91.9)&&     near_eq(ang(11,24), 130.5))
-    {success = 1; failures = 0;}
-  else
-    {success = 0; failures = 1;}
-
-  vcl_cout << "finished Lucas_Kanade motion test\n";
-  vcl_cout << "Test Summary: " << success << " tests succeeded, "
-           << failures << " tests failed" << (failures?"\t***\n":"\n");
-  return failures;
+  {
+    for (int x = 0; x<w; x++)
+      vcl_cout << ' ' << vcl_setw(3) << int(ang(x,y));
+    vcl_cout << '\n';
+  }
+  TEST_NEAR("ang(11,10)", ang(11,10), 170.91, 0.005);
+  TEST_NEAR("ang(12,16)", ang(12,16),-158.65, 0.005);
+  TEST_NEAR("ang(10,21)", ang(10,21), -94.01, 0.005);
+  TEST_NEAR("ang(9,26)",  ang(9,26),  -54.39, 0.005);
+  TEST_NEAR("ang(9,10)",  ang(9,10),    8.74, 0.005);
+  TEST_NEAR("ang(9,14)",  ang(9,14),   44.09, 0.005);
+  TEST_NEAR("ang(10,19)", ang(10,19),  91.87, 0.005);
+  TEST_NEAR("ang(11,24)", ang(11,24), 130.53, 0.005);
 }
+
+TESTMAIN_ARGS(brip_test_lucas_kanade);

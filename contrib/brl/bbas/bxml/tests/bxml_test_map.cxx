@@ -10,15 +10,15 @@ void print_gp_point(bxml_generic_ptr& gp)
 {
   vsol_spatial_object_2d* so = gp.get_vsol_spatial_object();
   if (!so)
-    {
-      vcl_cout << " null so in gp\n";
-      return;
-    }
+  {
+    vcl_cout << " null so in gp\n";
+    return;
+  }
   if (so->spatial_type()!=2)
-    {
-      vcl_cout << " so is not a point\n";
-      return;
-    }
+  {
+    vcl_cout << " so is not a point\n";
+    return;
+  }
   vsol_point_2d* p = (vsol_point_2d*)so;
   vcl_cout << "point = (" << p->x() << ' ' << p->y() << ")\n";
 }
@@ -26,7 +26,7 @@ void print_gp_point(bxml_generic_ptr& gp)
 class test
 {
  public:
-  static void init(){
+  static void init() {
     vcl_string s0 = "0", s1 = "1", s2 = "2" , s3 = "3";
     vsol_spatial_object_2d* p0 = new vsol_point_2d(0,0);
     vsol_spatial_object_2d* p1 = new vsol_point_2d(1,1);
@@ -37,25 +37,22 @@ class test
     tab_[s0]=p0;   tab_[s1]=p1;   tab_[s2]=p2; tab_[s3]=p3;
   }
   static vcl_map<vcl_string,bxml_generic_ptr,vcl_less<vcl_string> >& get_map()
-  {return tab_;}
+  { return tab_; }
   static vcl_map<vcl_string,bxml_generic_ptr,vcl_less<vcl_string> > tab_;
 };
 
-typedef vcl_map<vcl_string,bxml_generic_ptr,vcl_less<vcl_string> > OTAB;
-OTAB test::tab_;
+vcl_map<vcl_string,bxml_generic_ptr,vcl_less<vcl_string> > test::tab_;
 
-int main()
+void bxml_test_map()
 {
   test::init();
-  // we want to test the methods on bxml_vtol_vertex_2d_input_converter
-  testlib_test_start("stl map<string.bxml_generic_ptr>"); 
 
   vcl_string s0 = "0", s1 = "1", s2 = "2" , s3 = "3";
-  //program scope
 
-  print_gp_point(test::get_map()[s0]);   print_gp_point(test::get_map()[s1]);
-  print_gp_point(test::get_map()[s2]);   print_gp_point(test::get_map()[s3]);
-
-  vcl_cout << "finished testing stl map<string.bxml_generic_ptr>\n";
-  return testlib_test_summary();
+  print_gp_point(test::get_map()[s0]);
+  print_gp_point(test::get_map()[s1]);
+  print_gp_point(test::get_map()[s2]);
+  print_gp_point(test::get_map()[s3]);
 }
+
+TESTMAIN(bxml_test_map);
