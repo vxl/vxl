@@ -1,4 +1,4 @@
-USES += contrib/brl contrib/gel core
+USES += contrib/brl contrib/brl/bbas contrib/gel core
 include ../config.mk
 
 LIBRARY := vvid_bin
