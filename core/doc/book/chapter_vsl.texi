@@ -1685,7 +1685,7 @@ There were several options.
 @item Fix the size of the various types.
 @item Record the size of the various types in a header at the start of the file, and then
 save values in native type.
-@item Use an encoding scheme works for any size.
+@item Use an encoding scheme which works for any size.
 @end enumerate
 
 The first option has the advantage of being the simplest (on the platform which matches
@@ -1698,7 +1698,7 @@ saved on the same platform. This is especially true if the endian-ness was also 
 in the header and values saved in native format. The disadvantage is that the code for
 reading files on each platform must know about every other possibility. So if there are
 @math{n} platforms supported, the numbers of options that need to be programmed is
-@math{x^2}.
+@math{n^2}.
 
 The third option, suggested by Peter Vanroose, has the advantage that it does the correct
 thing on all platforms. Also, there is only one format,
@@ -1729,10 +1729,11 @@ for integer overflow.
 
 We consider these speeds to be fast enough. and so option 3 was chosen.
 
-The arbitrary length format used stores then number in a series of bytes. Of each byte, 7 bits
-are used to represent the number and the most significant bit is a flag which is 0 if there
-are more byte left for this integer, and 1 if this is the last byte. The bytes are stored
-in little endian format, and the signed numbers are stored using 2s complement notation.
+The arbitrary length format stores the number in a series of bytes. Of each byte, 7 bits
+are used to represent the number and the most significant bit is used to flag the end of the number.
+The flag bit is 0 if there
+are more bytes left for this integer, and 1 if this is the last byte. The bytes are stored
+in little endian order, and the signed numbers are stored using 2s complement notation.
 
 A consequence of this choice is that for example a number can be written from a short, and read
 into a long. We strongly advise against doing this, as it relies on the implementation details.
@@ -1744,7 +1745,7 @@ and doubles, we have used this format (in little endian order) to save them to d
 
 A downside of this decision is that it is unclear how to store long doubles. The 80bit format
 that is native to Intel platforms would not appear to be sufficiently general.
-The dest alternative would be to switch to variable length encoded floating point values.
+The best alternative would be to switch to variable length encoded floating point values.
 It might be easier just to design a 128 bit format. Until then I/O of long doubles is not
 supported. Please contact the designers if you need to add it.
 
@@ -1752,8 +1753,8 @@ supported. Please contact the designers if you need to add it.
 @subsection Changing the IO format
 
 The @code{vsl} system stores a IO schema version number at the start of the stream. This will enable
-a clean backwards compatible upgrade of the IO schema. It will not however make the code rewrite
-trivial. Contact the designers if you wish to change the schema.
+a clean backwards compatible upgrade of the IO schema. It will not however make the rewrite of
+@code{vsl} trivial. Contact the designers if you wish to change the schema.
 
 
 @subsection Serialisation
