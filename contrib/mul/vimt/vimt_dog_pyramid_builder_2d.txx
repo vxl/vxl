@@ -187,6 +187,7 @@ void vimt_dog_pyramid_builder_2d<T>::build_dog(vimt_image_pyramid& dog_pyr,
     ni = 2*ni/3;
     nj = 2*nj/3;
     sub_sampled_image.set_size(ni,nj,n_planes);
+
     vil_resample_bilin(smooth0.image(),sub_sampled_image,
                        0.0,0.0, 1.5,0.0,  0.0,1.5, ni,nj);
 
