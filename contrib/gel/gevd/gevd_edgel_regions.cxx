@@ -70,20 +70,19 @@ static int increasing_compare(unsigned int const&a, unsigned int const&b)
 //Print the region label array
 void gevd_edgel_regions::print_region_array()
 {
-  vcl_cout << vcl_endl << vcl_endl;
+  vcl_cout << vcl_endl;
   for (unsigned int y = yo_; y<=yend_; y++)
     {
-    //      vcl_cout << setw(2);
+      vcl_cout << vcl_endl; // << setw(2);
       for (unsigned int x = xo_; x<=xend_; x++)
         if (region_label_array_[Y(y)][X(x)]==EDGE
            //&&edge_boundary_array_[Y(y)][X(x)]->IsVertex()
            )
-          vcl_cout << "* " ;
+          vcl_cout << "* ";
         else
-          vcl_cout << region_label_array_[Y(y)][X(x)] << " " ;
-      vcl_cout << vcl_endl;
+          vcl_cout << region_label_array_[Y(y)][X(x)] << " ";
     }
-  vcl_cout << vcl_endl << vcl_endl;
+  vcl_cout << "\n\n\n";
 }
 //Print the contents of the forward eqivalence index
 void gevd_edgel_regions::print_region_equivalence()
@@ -120,8 +119,7 @@ void gevd_edgel_regions::print_base_equivalence()
            << "----------------\n";
 
   for (unsigned int i = min_region_label_; i<max_region_label_; i++)
-    vcl_cout << i << " == "
-             << this->BaseLabel(i) << vcl_endl;
+    vcl_cout << i << " == " << this->BaseLabel(i) << vcl_endl;
 }
 
 //Print the fitted intensity data for all faces
@@ -592,6 +590,7 @@ void gevd_edgel_regions::GrowEquivalenceClasses()
 //
 bool gevd_edgel_regions::GroupContainsEdges(vcl_vector<vtol_edge_2d_sptr>& sg)
 {
+  vcl_cerr << "gevd_edgel_regions::GroupContainsEdges() not yet implemented\n";
 #if 0
   CoolString type(sg.GetSpatialGroupName());
   return type == CoolString("EdgelGroup") ||
@@ -1214,8 +1213,7 @@ void gevd_edgel_regions::UpdateConnectedNeighborhood(unsigned int x, unsigned in
         return;
     default:
       vcl_cout << "In gevd_edgel_regions::UpdateNeigborhood(..)"
-               << "impossible pattern = " << (int)nhood
-               << vcl_endl;
+               << "impossible pattern = " << (int)nhood << vcl_endl;
     }
 }
 static bool reg_edges_neq(gevd_region_edge* r1, gevd_region_edge* r2)
@@ -1694,8 +1692,7 @@ void gevd_edgel_regions::AssignEdgeLabels(unsigned int x, unsigned int y)
       return;
     default:
       vcl_cout << "In gevd_edgel_regions::UpdateNeigborhood(..)"
-               << "impossible pattern = " << (int)nhood
-               << vcl_endl;
+               << "impossible pattern = " << (int)nhood << vcl_endl;
     }
 }
 //---------------------------------------------------------------------
@@ -1814,8 +1811,8 @@ void gevd_edgel_regions::CollectFaceEdges()
             {
               if (verbose_)
                 {
-                  vcl_cout << "Region [" << i << "] is corrupt\n";
-                  vcl_cout << "Bad Vertices\n";
+                  vcl_cout << "Region [" << i << "] is corrupt\n"
+                           << "Bad Vertices\n";
                   for (vcl_vector<vtol_vertex_sptr>::iterator vit = bad_verts.begin();
                        vit != bad_verts.end(); vit++)
                     if (!(*vit)->get_user_flag(VSOL_FLAG1))
@@ -1852,8 +1849,7 @@ void gevd_edgel_regions::CollectFaceEdges()
       face_edge_index_[i] = edge_list;
     }
 
-  vcl_cout << vcl_endl;
-  vcl_cout << "Constructed Face-Edges(" << max_region_label_ - min_region_label_
+  vcl_cout << "\nConstructed Face-Edges(" << max_region_label_ - min_region_label_
            << ") in " << t.real() << " msecs.\n";
 }
 //----------------------------------------------------------------
@@ -1904,8 +1900,7 @@ void gevd_edgel_regions::ConstructFaces()
       //        face->UnProtect();
       delete face_edges;
     }
-  vcl_cout << vcl_endl;
-  vcl_cout << "Constructed Faces(" << max_region_label_ - min_region_label_
+  vcl_cout << "\nConstructed Faces(" << max_region_label_ - min_region_label_
            << ") in " << t.real() << " msecs.\n";
 }
 //--------------------------------------------------------------
@@ -2007,8 +2002,8 @@ void gevd_edgel_regions::AccumulateMeans()
     }
   int Nregions = max_region_label_ - min_region_label_;
   vcl_cout << "Accumulate Region Means(" << Nregions << ") in "
-           << t.real() << " msecs.\n";
-  vcl_cout << "Normalized Time = " << (10000.0*t.real())/Npixels << vcl_endl;
+           << t.real() << " msecs.\n"
+           << "Normalized Time = " << (10000.0*t.real())/Npixels << vcl_endl;
 }
 
 //---------------------------------------------------------------------

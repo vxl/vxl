@@ -1,4 +1,4 @@
-// This is vxl/vil/io/vil_io_image_impl.cxx
+// This is core/vil/io/vil_io_image_impl.cxx
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
@@ -59,7 +59,7 @@ void vsl_b_write(vsl_b_ostream & os, const vil_image_impl & p)
 {
   const short io_version_no = 1;
   vsl_b_write(os, io_version_no);
-    // Nothing to save.
+  // Nothing to save.
 }
 
 //=========================================================================
@@ -76,8 +76,8 @@ void vsl_b_read(vsl_b_istream &is, vil_image_impl & p)
   case 1:
     // Nothing to load.
   default:
-    vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vil_image_impl&) \n";
-    vcl_cerr << "           Unknown version number "<< ver << "\n";
+    vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vil_image_impl&) \n"
+             << "           Unknown version number "<< ver << '\n';
     is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
     return;
   }
@@ -85,8 +85,9 @@ void vsl_b_read(vsl_b_istream &is, vil_image_impl & p)
 
 //=========================================================================
 //: Output a human readable summary to the stream
-void vsl_print_summary(vcl_ostream & os,const vil_image_impl & p)
+void vsl_print_summary(vcl_ostream & /*os*/,const vil_image_impl & /*p*/)
 {
+  vcl_cerr << "vsl_print_summary() NYI\n";
 }
 
 //: Add example object to list of those that can be loaded

@@ -405,6 +405,7 @@ void vsol_conic_2d::parabola_parameters(double &cx,
   // Finally, the top can be found as the point with tangent direction
   // orthogonal to the direction of the axis:
   // TODO
+  vcl_cerr << "vsol_conic_2d::parabola_parameters() not yet fully implemented\n";
 }
 
 //---------------------------------------------------------------------------

@@ -18,9 +18,9 @@ vmal_rectifier::vmal_rectifier()
 }
 
 vmal_rectifier::vmal_rectifier(vmal_multi_view_data_vertex_sptr mvd_vertex,
-                 vmal_multi_view_data_edge_sptr mvd_edge,
-                 int ima_height, int ima_width):
-_is_f_compute(false)
+                               vmal_multi_view_data_edge_sptr mvd_edge,
+                               int ima_height, int ima_width) :
+  _is_f_compute(false)
 {
   if ((mvd_vertex->get_nb_views()>1) && (mvd_edge->get_nb_views()>1))
   {
@@ -174,6 +174,7 @@ void vmal_rectifier::compute_joint_epipolar_transform_new (
    // Also, rotate a further 180 degrees if necessary
    conditional_rectify_rotate180 (output_roi, H0, H1);
 #endif
+   vcl_cerr << "vmal_rectifier::compute_joint_epipolar_transform_new() not yet fully implemented\n";
 }
 
 void vmal_rectifier::compute_initial_joint_epipolar_transforms (
@@ -195,11 +196,12 @@ void vmal_rectifier::compute_initial_joint_epipolar_transforms (
     if ( !compute_initial_joint_epipolar_transforms (_F12,sweeti, sweetj, H0, H1))
     {
       // Error message and exit
-      vcl_cerr<<"Computation of epipolar transform failed"<<vcl_endl;
+      vcl_cerr<<"Computation of epipolar transform failed\n";
     }
   }
   else // TODO
   {
+    vcl_cerr << "vmal_rectifier::compute_initial_joint_epipolar_transforms() not yet fully implemented\n";
 #if 0
     // First of all compute the Q matrix
     rhMatrix Q(3, 3);
@@ -258,7 +260,7 @@ int vmal_rectifier::compute_initial_joint_epipolar_transforms (
   // Make sure that the epipole is not at the origin
   if (p1[0] == 0.0 && p1[1] == 0.0)
   {
-    vcl_cerr<<"Error : Epipole is at image center"<<vcl_endl;
+    vcl_cerr<<"Error : Epipole is at image center\n";
     return 0;
   }
 

@@ -2,6 +2,7 @@
 // \file
 #include "gevd_detector_params.h"
 #include <vcl_sstream.h>
+#include <vcl_iostream.h>
 
 //------------------------------------------------------------------------
 // Constructors
@@ -233,21 +234,24 @@ bool gevd_detector_params::SanityCheck()
 //: Describe the parameters to a parameter modifier.
 void gevd_detector_params::Describe(ParamModifier& mod)
 {
-//   static UIChoice JunctionClosure[] =
-//   {
-//     UIChoicePair("Default",-1),
-//     UIChoicePair("Weak",0),
-//     UIChoicePair("Aggressive",1),
-//     UIChoice_finish
-//   };
+  vcl_cerr << "gevd_detector_params::Describe() not yet implemented\n";
+#if 0
+  static UIChoice JunctionClosure[] =
+  {
+    UIChoicePair("Default",-1),
+    UIChoicePair("Weak",0),
+    UIChoicePair("Aggressive",1),
+    UIChoice_finish
+  };
 
-//   // These are the parameters which the user is likely to want to set.
-//   mod.Name("EdgeDetector Parameters(VanDuc)");
-//   mod.AddParam("Sigma", smooth);
-//   mod.AddParam("Noise Weight", noise_weight);
-//   mod.AddParam("Noise Multiplier", noise_multiplier);
-//   mod.AddParam("Automatic Threshold", automatic_threshold,
-//             ParamModifier::OnOff);
-//   mod.AddParam("Junction Closure", aggressive_junction_closure,
-//             JunctionClosure);
+  // These are the parameters which the user is likely to want to set.
+  mod.Name("EdgeDetector Parameters(VanDuc)");
+  mod.AddParam("Sigma", smooth);
+  mod.AddParam("Noise Weight", noise_weight);
+  mod.AddParam("Noise Multiplier", noise_multiplier);
+  mod.AddParam("Automatic Threshold", automatic_threshold,
+               ParamModifier::OnOff);
+  mod.AddParam("Junction Closure", aggressive_junction_closure,
+               JunctionClosure);
+#endif
 }

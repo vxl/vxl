@@ -25,6 +25,7 @@ static bool verbose = false;
 
 static bool near_equal(vdgl_digital_curve_sptr dc1, vdgl_digital_curve_sptr dc2, float tolerance)
 {
+  vcl_cerr << __FILE__ << ": near_equal() not yet implemented\n";
   return false; // TODO
 #if 0
   if (!(dc1&&dc2))
@@ -61,7 +62,7 @@ void gevd_clean_edgels::print_protection()
 #if 0
   vcl_cout << "Protection Values: ";
   for (EdgelGroup::iterator egit = out_edgels_->begin(); egit != out_edgels_->end(); egit++)
-    vcl_cout << (*egit)->GetProtection() << " ";
+  { vcl_cout << (*egit)->GetProtection() << ' '; }
   vcl_cout << vcl_endl << vcl_endl;
 #endif
 }
@@ -434,9 +435,7 @@ void gevd_clean_edgels::DeleteShortEdges()
   for (vcl_vector<vtol_edge_2d_sptr >::iterator egit = out_edgels_->begin(); egit != out_edgels_->end(); egit++, N_total++)
     {
     if ( ( edgelcount % 100 ) == 0 )
-      {
-      vcl_cout << "Edgels: " << edgelcount << "/" << out_edgels_->size() << vcl_endl;
-      }
+      vcl_cout << "Edgels: " << edgelcount << '/' << out_edgels_->size() << vcl_endl;
     edgelcount++;
       vtol_edge_2d_sptr e = (vtol_edge_2d_sptr )(*egit);
       vtol_vertex_2d* v1 = (vtol_vertex_2d*)e->v1().ptr();
