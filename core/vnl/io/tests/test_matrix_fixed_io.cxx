@@ -25,14 +25,14 @@ void test_matrix_fixed_double_2_2_io()
 	m_in1 = m_out * 2.0;
     
     vsl_b_ofstream bfs_out("vnl_matrix__fixed_io.tmp", 
-            vcl_ios::out | vcl_ios::binary);
+            vcl_ios::out | vcl_ios_binary);
     TEST ("vnl_matrix__fixed_io.tmp for writing", (!bfs_out), false);
     vsl_b_write(bfs_out, m_out);
     vsl_b_write(bfs_out, m_out);
     bfs_out.close();
         
     vsl_b_ifstream bfs_in("vnl_matrix__fixed_io.tmp", 
-            vcl_ios::in | vcl_ios::binary);
+            vcl_ios::in | vcl_ios_binary);
     TEST ("vnl_matrix__fixed_io.tmp for reading", (!bfs_in), false);
     vsl_b_read(bfs_in, m_in0);
     vsl_b_read(bfs_in, m_in1);

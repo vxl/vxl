@@ -120,13 +120,13 @@ public:
   vsl_b_ofstream(vcl_string &filename,
     vcl_ios::openmode mode = vcl_ios::out | vcl_ios::trunc):
     vsl_b_ostream(new vcl_ofstream(filename.c_str(),
-      mode | vcl_ios::binary)) {}
+      mode | vcl_ios_binary)) {}
 
   //: Create this adaptor from a file.
   // The adapter will delete the internal stream automatically on destruction.
   vsl_b_ofstream(char *filename,
     vcl_ios::openmode mode = vcl_ios::out | vcl_ios::trunc):
-    vsl_b_ostream(new vcl_ofstream(filename, mode | vcl_ios::binary)) {}
+    vsl_b_ostream(new vcl_ofstream(filename, mode | vcl_ios_binary)) {}
 
   //: Virtual destructor.
   virtual ~vsl_b_ofstream();
@@ -221,12 +221,12 @@ public:
   // The adapter will delete the stream automatically on destruction.
   vsl_b_ifstream(vcl_string &filename, vcl_ios::openmode mode = vcl_ios::in):
     vsl_b_istream(new vcl_ifstream(filename.c_str(),
-    mode | vcl_ios::binary)) {}
+    mode | vcl_ios_binary)) {}
 
   //: Create this adaptor from a file.
   // The adapter will delete the stream automatically on destruction.
   vsl_b_ifstream(char *filename, vcl_ios::openmode mode = vcl_ios::in):
-    vsl_b_istream(new vcl_ifstream(filename, mode | vcl_ios::binary)) {}
+    vsl_b_istream(new vcl_ifstream(filename, mode | vcl_ios_binary)) {}
 
   //: Virtual destructor.so that it can be overloaded
   virtual ~vsl_b_ifstream();
