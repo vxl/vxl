@@ -21,6 +21,7 @@ DECLARE( test_real_eigensystem );
 DECLARE( test_rnpoly_roots );
 DECLARE( test_rpoly_roots );
 DECLARE( test_sparse_matrix );
+DECLARE( test_integral );
 DECLARE( test_svd );
 DECLARE( test_symmetric_eigensystem );
 DECLARE( test_algo );
@@ -45,6 +46,7 @@ register_tests()
   REGISTER( test_qr );
   REGISTER( test_qsvd );
   REGISTER( test_real_eigensystem );
+  REGISTER( test_integral );
   REGISTER( test_rnpoly_roots );
   REGISTER( test_rpoly_roots );
   REGISTER( test_sparse_matrix );

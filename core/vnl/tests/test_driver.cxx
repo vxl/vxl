@@ -26,7 +26,8 @@ DECLARE( test_gamma );
 DECLARE( test_random );
 DECLARE( test_arithmetic );
 DECLARE( test_hungarian_algorithm );
-
+DECLARE( test_integrant );
+  
 void
 register_tests()
 {
@@ -56,6 +57,7 @@ register_tests()
   REGISTER( test_random );
   REGISTER( test_arithmetic );
   REGISTER( test_hungarian_algorithm );
+  REGISTER( test_integrant );
 }
 
 DEFINE_MAIN;

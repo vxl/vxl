@@ -166,6 +166,11 @@ SET( vnl_sources
   vnl_unary_function.txx       vnl_unary_function.h
   vnl_identity.h
   vnl_random.cxx               vnl_random.h
+
+  # numerical integration
+                               vnl_integrant_fnct.h
+                               vnl_analytic_integrant.h
+  vnl_definite_integral.cxx    vnl_definite_integral.h
 )
 
 AUX_SOURCE_DIRECTORY(Templates vnl_sources)

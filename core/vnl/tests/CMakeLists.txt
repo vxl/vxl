@@ -31,6 +31,7 @@ ADD_EXECUTABLE( vnl_test_all
   test_random.cxx
   test_arithmetic.cxx  test_arithmetic_body.h
   test_hungarian_algorithm.cxx
+  test_integrant.cxx
 )
 
 IF(CMAKE_COMPILER_IS_GNUCXX)

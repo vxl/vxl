@@ -16,6 +16,7 @@
 // 27/03/2001 Ian Scott and Tim Cootes - Added Binary IO
 // 27/03/2001 Ian Scott - Comments tidied up
 // 25/11/2001 Peter Vanroose - added operator==(), derivative(), primitive(), print()
+// 12/22/2004 Kongbin Kang - add operator = ()
 // \endverbatim
 
 #include <vnl/vnl_vector.h>
@@ -52,7 +53,8 @@ class vnl_real_polynomial
 
   //: Initialize polynomial of a given degree.
   vnl_real_polynomial(int d): coeffs_(d+1) { assert (d>=0); }
-
+  
+  //: comparision operator
   bool operator==(vnl_real_polynomial const& p) const { return p.coefficients() == coeffs_; }
 
   //: Evaluate polynomial at value x
