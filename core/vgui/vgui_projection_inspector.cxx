@@ -9,8 +9,8 @@
 #include <vcl_cstdlib.h> // vcl_abort()
 #include <vcl_iostream.h>
 
-#include <vnl/vnl_vector_fixed.h>
-#include <vnl/vnl_matrix_fixed.h>
+#include <vnl/vnl_double_2.h>
+#include <vnl/vnl_double_3.h>
 #include <vnl/vnl_matlab_print.h>
 
 #include <vgui/vgui_gl.h>
@@ -42,12 +42,12 @@ bool vgui_projection_inspector::back_project(double const x[3],
                                              double X[4]) const
 {
   // get total 4x4 projection matrix :
-  vnl_matrix_fixed<double,4,4> T = P*M;
+  vnl_double_4x4 T = P*M;
 
   // get rows of corresponding 3x4 projection matrix :
-  vnl_vector_fixed<double,4> a(T.get_row(0));
-  vnl_vector_fixed<double,4> b(T.get_row(1));
-  vnl_vector_fixed<double,4> c(T.get_row(3));
+  vnl_double_4 a = T.get_row(0);
+  vnl_double_4 b = T.get_row(1);
+  vnl_double_4 c = T.get_row(3);
 
   // convert viewport coordinates to device coordinates :
   double devx = 2*(x[0]-vp[0]*x[2])/vp[2] - x[2];
@@ -55,7 +55,7 @@ bool vgui_projection_inspector::back_project(double const x[3],
   double devw = x[2];
 
   // compute (dual) pl\"ucker coordinates of backprojected line :
-  vnl_matrix_fixed<double,4,4> omega = devx*outer_product(b,c) + devy*outer_product(c,a) + devw*outer_product(a,b);
+  vnl_double_4x4 omega = devx*outer_product(b,c) + devy*outer_product(c,a) + devw*outer_product(a,b);
   omega -= omega.transpose();
 
   // (un)dualize them :
@@ -65,10 +65,10 @@ bool vgui_projection_inspector::back_project(double const x[3],
     +omega(1,3), -omega(0,3), 0          , +omega(0,1),
     -omega(1,2), +omega(0,2), -omega(0,1), 0
   };
-  vnl_matrix_fixed<double,4,4> omegad(omegad_);
+  vnl_double_4x4 omegad(omegad_);
 
   // backproject :
-  vnl_vector_fixed<double,4> X_ = omegad * vnl_vector_fixed<double,4>(p);
+  vnl_double_4 X_ = omegad * vnl_double_4(p[0],p[1],p[2],p[3]);
 
   // normalize :
   double mag = X_.two_norm();
@@ -92,36 +92,33 @@ bool vgui_projection_inspector::back_project(double const x[3],
 }
 
 vnl_vector<double> vgui_projection_inspector::back_project(vnl_vector<double> const &x,
-                                                           vnl_vector_fixed<double,4> const &p) const
+                                                           vnl_double_4 const &p) const
 {
   if (x.size() == 2)
   {
-    vnl_vector_fixed<double,3> x_;
-    x_[0]=x[0];
-    x_[1]=x[1];
-    x_[2]=1;
-    vnl_vector_fixed<double,4> X_ = back_project(x_,p);
+    vnl_double_3 x_(x[0],x[1],1.0);
+    vnl_double_4 X_ = back_project(x_,p);
     return (X_/X_[3]).extract(3,0);
   }
   x.assert_size(3);
 
-  vnl_vector_fixed<double,4> X;
+  vnl_double_4 X;
   if (!back_project(x.data_block(), p.data_block(), X.data_block()))
     X.fill(0);
   return X.as_ref();
 }
 
 vnl_vector<double> vgui_projection_inspector::back_project(double x,double y,
-                                                           vnl_vector_fixed<double,4> const &p) const
+                                                           vnl_double_4 const &p) const
 {
-  vnl_vector_fixed<double,2> xy(x,y);
+  vnl_double_2 xy(x,y);
   return back_project(xy,p);
 }
 
 vnl_vector<double> vgui_projection_inspector::back_project(double x,double y,double z,
-                                                           vnl_vector_fixed<double,4> const &p) const
+                                                           vnl_double_4 const &p) const
 {
-  vnl_vector_fixed<double,3> xyz(x,y,z);
+  vnl_double_3 xyz(x,y,z);
   return back_project(xyz,p);
 }
 
@@ -134,7 +131,7 @@ vnl_vector<double> vgui_projection_inspector::back_project(double x,double y,dou
 //  * * * *
 //  0 0 0 *
 // \endverbatim
-static bool is_affine(const vnl_matrix_fixed<double,4,4> &M)
+static bool is_affine(const vnl_double_4x4 &M)
 {
   return M(3,0)==0 && M(3,1)==0 && M(3,2)==0 && M(3,3)!=0;
 }
@@ -154,7 +151,7 @@ void vgui_projection_inspector::inspect()
   }
 
   // compute total transformation T from world to clip coordinates :
-  vnl_matrix_fixed<double,4,4> T = P*M;
+  vnl_double_4x4 T = P*M;
 
   // if projection is scaling parallel to axes :
   // \verbatim
@@ -230,17 +227,13 @@ void vgui_projection_inspector::image_to_window_coordinates(float ix,float iy,fl
   assert(diagonal_scale_3d);
 
   // compute total transformation T from world to clip coordinates :
-  vnl_matrix_fixed<double,4,4> T = P*M;
+  vnl_double_4x4 T = P*M;
 
   // world point :
-  vnl_vector_fixed<double,4> img;
-  img[0] = ix;
-  img[1] = iy;
-  img[2] = 0;
-  img[3] = 1;
+  vnl_double_4 img(ix,iy,0.0,1.0);
 
   // project :
-  vnl_vector_fixed<double,4> win = T*img;
+  vnl_double_4 win = T*img;
 
   // normalized coordinates :
   float nx = win[0]/win[3];
