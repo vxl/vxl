@@ -102,6 +102,18 @@ LIB32=link.exe -lib
 SOURCE=.\Templates/vcl_vector+bgui_vtol2D_tableau_sptr-.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\Templates/vbl_smart_ptr+bgui_style-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vcl_map+vcl_string.vbl_smart_ptr+bgui_style--.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\bgui_image_tableau.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\bgui_style.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\bgui_picker_tableau.cxx
 # End Source File
 # Begin Source File
@@ -127,6 +139,18 @@ SOURCE=.\bgui_vtol2D_tableau_sptr.h
 # End Source File
 # Begin Source File
 SOURCE=.\bgui_vtol_soview2D.h
+# End Source File
+# Begin Source File
+SOURCE=.\bgui_image_tableau.h
+# End Source File
+# Begin Source File
+SOURCE=.\bgui_image_tableau_sptr.h
+# End Source File
+# Begin Source File
+SOURCE=.\bgui_style.h
+# End Source File
+# Begin Source File
+SOURCE=.\bgui_style_sptr.h
 # End Source File
 # End Group
 # End Target
