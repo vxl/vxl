@@ -107,7 +107,9 @@ public:
   bool operator() ( int p, int x, int y, const vcl_vector<TruePixelType>& pixel ) const
   {
     assert( p == 0 );
-    return img_ && pixel.size() == 1 && pixel[0] == img_(x,y);
+    return img_
+      && pixel.size() == 1 &&
+      pixel[0] == (TruePixelType)img_(x,y);
   }
 private:
   vil2_image_view< T > img_;
