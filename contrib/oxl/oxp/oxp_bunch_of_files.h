@@ -29,7 +29,7 @@ struct oxp_bunch_of_files
   void close();
 
   bool seek(offset_t to);
-  int tell() const;
+  offset_t tell() const;
   int read(void*, unsigned int);
   bool ok() { return current_file_index != -1; }
 

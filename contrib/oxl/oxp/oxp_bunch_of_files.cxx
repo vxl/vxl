@@ -162,7 +162,7 @@ bool oxp_bunch_of_files::seek(offset_t to)
   return true;
 }
 
-int oxp_bunch_of_files::tell() const
+oxp_bunch_of_files::offset_t oxp_bunch_of_files::tell() const
 {
   return start_byte[current_file_index] + ftell(fps[current_file_index]);
 }
