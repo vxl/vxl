@@ -20,6 +20,17 @@ typedef void (*clear_func_ptr) ();
 // Create on heap so that it can be cleaned up itself
 static vcl_vector<clear_func_ptr> *extra_loader_clear_list_ = 0;
 
+
+struct vsl_binary_loader_base_auto_clearup
+{
+  ~vsl_binary_loader_base_auto_clearup()
+  {
+    vsl_delete_all_loaders();
+  }
+};
+
+static vsl_binary_loader_base_auto_clearup clearup_object;
+
 //=======================================================================
 
 vsl_binary_loader_base::vsl_binary_loader_base()
