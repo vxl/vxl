@@ -4,6 +4,7 @@ ADD_LIBRARY(vnl vnl_sources)
 
 SOURCE_FILES( vnl_sources
   vnl_alloc.cxx
+  vnl_bignum.cxx
   vnl_block.cxx
   vnl_math.cxx
   vnl_copy.cxx

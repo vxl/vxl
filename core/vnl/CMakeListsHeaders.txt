@@ -1,6 +1,7 @@
 SOURCE_FILES( vnl_sources
   vnl_T_n.h
   vnl_alloc.h
+  vnl_bignum.h
   vnl_binary.h
   vnl_block.h
   vnl_c_vector.h
