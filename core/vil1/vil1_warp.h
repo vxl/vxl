@@ -30,13 +30,17 @@ enum vil_warp_interpolation_type {
 };
 
 //: Warp an image under a 2D map.
-// The output image is set to the same size as the input image.
+// The output image is set to the same size as the input image if the
+// output width and height arguments are omitted or set to negative
+// values.
 // The mapping is such that out(mapper.forward_map(x,y)) = in(x,y);
-vil_image vil_warp(vil_image const& in, vil_warp_mapping const& mapper);
+vil_image vil_warp(vil_image const& in, vil_warp_mapping const& mapper,
+                   int out_width = -1, int out_height = -1);
 
 //: Warp, specifying interpolation
 vil_image vil_warp(vil_image const& in, vil_warp_mapping const& mapper,
-                   vil_warp_interpolation_type i);
+                   vil_warp_interpolation_type i,
+                   int out_width = -1, int out_height = -1);
 
 
 //: Templated warper
