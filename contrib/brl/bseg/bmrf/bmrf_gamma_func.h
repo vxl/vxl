@@ -1,4 +1,4 @@
-// This is contrib/brl/bseg/bmrf/bmrf_gamma_func.h
+// This is brl/bseg/bmrf/bmrf_gamma_func.h
 #ifndef bmrf_gamma_func_h_
 #define bmrf_gamma_func_h_
 //:
@@ -9,33 +9,30 @@
 //
 // This file contains a base class for the gamma function object
 // and several specific functions derived from it.  These functions are used
-// in bmrf_epi_transform.h to compute tranformations of curves along epipolar
+// in bmrf_epi_transform.h to compute transformations of curves along epipolar
 // lines.  The function returns a gamma value give alpha and time.
 //
 // \verbatim
 //  Modifications
 // \endverbatim
 
-
 #include <vbl/vbl_ref_count.h>
-
 
 //: Gamma function base class
 class bmrf_gamma_func : public vbl_ref_count
 {
  public:
-  //: Return the gamma value for any alpha \palpha and time \pt
-  // calls a pure virtual function  
-  double operator () (double alpha, double t=1.0) const 
+  //: Return the gamma value for any \p alpha and time \p t.
+  // Calls a pure virtual function
+  double operator () (double alpha, double t=1.0) const
   { return this->value(alpha, t); }
 
-  //: Returns the average gamma value at time \pt
+  //: Returns the average gamma value at time \p t
   virtual double mean(double t=1.0) const = 0;
 
  protected:
-  //: Return the gamma value for any alpha \pa and time \pt
+  //: Return the gamma value for any \p alpha and time \p t
   virtual double value(double alpha, double t) const = 0;
-
 };
 
 
@@ -49,13 +46,13 @@ class bmrf_const_gamma_func : public bmrf_gamma_func
   //: Set the constant gamma value
   void set_gamma(double gamma);
 
-  //: Returns the average gamma value at time \pt
+  //: Returns the average gamma value at time \p t
   virtual double mean(double t=1.0) const;
 
  protected:
-  //: Return the gamma value for any alpha \pa and time \pt
+  //: Return the gamma value for any \p alpha and time \p t
   virtual double value(double alpha, double t) const;
-  
+
  private:
   //: The constant gamma value
   double gamma_;
@@ -76,7 +73,7 @@ class bmrf_linear_gamma_func : public bmrf_gamma_func
   virtual double mean(double t=1.0) const;
 
  protected:
-  //: Return the gamma value for any alpha \pa and time \pt
+  //: Return the gamma value for any \p alpha and time \p t
   virtual double value(double alpha, double t) const;
 
  private:
