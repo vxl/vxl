@@ -113,5 +113,10 @@ INCLUDE_DIRECTORIES(${vxl_SOURCE_DIR}/vcl)
 IF(WIN32)
   IF(NOT CYGWIN)
     INCLUDE_DIRECTORIES(${vxl_SOURCE_DIR}/vcl/config.win32)
+    
+    # if it is dashboard build
+    IF( DART_ROOT )
+      ADD_DEFINITIONS( -DDART_BUILD )
+    ENDIF( DART_ROOT)
   ENDIF(NOT CYGWIN)
 ENDIF(WIN32)
