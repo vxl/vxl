@@ -8,6 +8,8 @@
 #include <vul/vul_awk.h>
 #include <vul/vul_file.h>
 
+#define debug 0
+
 oxp_bunch_of_files::oxp_bunch_of_files(char const* fmt)
 {
   open(fmt);
@@ -17,10 +19,14 @@ oxp_bunch_of_files::oxp_bunch_of_files()
 {
 }
 
+bool oxp_bunch_of_files::open_1(char const* fmt)
+{
+  filenames.push_back(fmt);
+  return fix_sizes();
+}
+
 bool oxp_bunch_of_files::open(char const* fmt)
 {
-  current_file_index = -1;
-
   // fmt could be a "lst" file, or a single vob or mpg or a %d list
   int l = vcl_strlen(fmt);
   if (l > 4 && vcl_strcmp(fmt + l - 4, ".lst") == 0) {
@@ -28,7 +34,8 @@ bool oxp_bunch_of_files::open(char const* fmt)
     assert(f.good());
     for (vul_awk awk(f); awk; ++awk) {
       if (awk.NF() > 0) {
-        vcl_cerr << awk[0] << vcl_endl;
+        if (debug)
+          vcl_cerr << awk[0] << vcl_endl;
         filenames.push_back(awk[0]);
       }
     }
@@ -66,9 +73,18 @@ bool oxp_bunch_of_files::open(char const* fmt)
   unsigned int n = filenames.size();
 
   if (n == 0) {
-    vcl_fprintf(stderr, "ERROR: Could not turn [%s] into a list of files\n", fmt);
+    vcl_fprintf(stderr, "oxp_bunch_of_files: ERROR: Could not turn [%s] into a list of files\n", fmt);
     return false;
   }
+
+  return fix_sizes();
+}
+
+bool oxp_bunch_of_files::fix_sizes()
+{
+  current_file_index = -1;
+
+  int n = filenames.size();
 
   // Fill in sizes if not done already
   if (filesizes.size() < n) {
@@ -88,6 +104,7 @@ bool oxp_bunch_of_files::open(char const* fmt)
   // Fill start_bytes
   start_byte.resize(n);
   start_byte[0] = 0;
+  for(int i = 1; i < filenames.size(); ++i)
   for (unsigned int i = 1; i < filenames.size(); ++i)
     start_byte[i] = (offset_t)start_byte[i-1] + (offset_t)filesizes[i-1];
 
@@ -97,22 +114,24 @@ bool oxp_bunch_of_files::open(char const* fmt)
     char const* fn = filenames[i].c_str();
     fps[i] = vcl_fopen(fn, "rb");
     if (!fps[i]) {
-      vcl_fprintf(stderr, "ERROR: Could not open [%s]\n", fn);
+      vcl_fprintf(stderr, "oxp_bunch_of_files::fix_sizes() ERROR: Could not open [%s]\n", fn);
       current_file_index = -1;
       return false;
     }
   }
 
-  // Summarize:
-  vcl_fprintf(stderr, "files: sizeof offset_t = %d\n", (int)sizeof(offset_t));
-  for (unsigned int i = 0; i < n; ++i)
-    vcl_fprintf(stderr, "   %s  %ld\n", filenames[i].c_str(), (long)start_byte[i]);
-  vcl_fprintf(stderr, "\n");
+  if (debug) {
+    // Summarize:
+    vcl_fprintf(stderr, "files: sizeof offset_t = %d\n", (int)sizeof(offset_t));
+    for (unsigned int i = 0; i < n; ++i)
+      vcl_fprintf(stderr, "   %s  %.0f\n", filenames[i].c_str(), (double)start_byte[i]);
+    vcl_fprintf(stderr, "\n");
+  }
 
   return true;
 }
 
-void oxp_bunch_of_files::seek(offset_t to)
+bool oxp_bunch_of_files::seek(offset_t to)
 {
   int newindex = -1;
   for (unsigned int i = 1; i < filesizes.size(); ++i)
@@ -129,18 +148,19 @@ void oxp_bunch_of_files::seek(offset_t to)
   }
 
   if (newindex == -1) {
-    vcl_fprintf(stderr, "ERROR: Could not seek to [%lu]\n", (unsigned long)to);
-    return;
+    vcl_fprintf(stderr, "oxp_bunch_of_files::seek(): ERROR: Could not seek to [%lu]\n",(unsigned long)to);
+    return false;
   }
 
   current_file_index = newindex;
 
   offset_t file_ptr = to - start_byte[current_file_index];
-  vcl_fprintf(stderr, " si = %20g to = %20g\n", (double)start_byte[current_file_index], (double) to);
+  // vcl_fprintf(stderr, " si = %20g to = %20g\n", (double)start_byte[current_file_index], (double) to);
   assert(file_ptr >= 0);
   assert(file_ptr < (offset_t)filesizes[current_file_index]);
 
   vcl_fseek(fps[current_file_index], file_ptr, SEEK_SET);
+  return true;
 }
 
 int oxp_bunch_of_files::tell() const

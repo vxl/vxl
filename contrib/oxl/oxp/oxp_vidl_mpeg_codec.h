@@ -35,6 +35,9 @@ public:
   virtual bool save(vidl_movie* movie, const char* fname);
   virtual const char* type();
 
+  // Call before destruction to a void segv on exit
+  void close() { p.close(); }
+
 private:
   oxp_mpeg_codec p;
 };

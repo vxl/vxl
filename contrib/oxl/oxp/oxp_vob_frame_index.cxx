@@ -14,11 +14,30 @@ bool oxp_vob_frame_index::load(char const* filename)
     vcl_cerr << "oxp_vob_frame_index: Cannot read IDX file ["<< filename <<"]\n";
     return false;
   }
-  for (vul_awk awk(f); awk; ++awk) {
+  vul_awk awk(f);
+  vcl_string tag(awk[0]);
+  const int MPEG_IDX = 1;
+  const int LBA = 2;
+  int idx_type = 0;
+  if (tag == "MPEG_IDX") 
+    idx_type = MPEG_IDX;
+  else if (tag == "LBA")
+    idx_type = LBA;
+  else {
+    vcl_cerr << "oxp_vob_frame_index: WARNING: unknown type [" << awk[0] << "]\n";
+  }
+
+  int frame = 0;
+  int dummy;
+  for(; awk; ++awk, ++frame) {
     // Skip comment and ----- lines
     oxp_vob_frame_index_entry e;
-    if (vcl_sscanf(awk.line(), " %x | %d", &e.lba, &e.frame) == 2)
+    if (idx_type == LBA && sscanf(awk.line(), " %x | %d", &e.lba, &e.frame) == 2)
       tmp.push_back(e);
+    if (idx_type == MPEG_IDX && sscanf(awk.line(), " %x %x", &e.lba, &dummy) == 2) {
+      e.frame = frame;
+      tmp.push_back(e);
+    }
   }
   l = tmp;
 
@@ -36,7 +55,7 @@ int oxp_vob_frame_index::frame_to_lba_of_prev_I_frame(int f, int* f_actual)
 {
   int lo = 0;
   int hi = l.size()-1;
-  if (f < l[lo].frame || f > l[hi].frame) {
+  if (hi < 0 || f < l[lo].frame || f > l[hi].frame) {
     vcl_cerr << "urk: frame " << f << " out of IDX range\n";
     return -1;
   }

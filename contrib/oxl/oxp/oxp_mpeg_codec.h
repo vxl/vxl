@@ -25,6 +25,8 @@ public:
   bool load(const char* fname, char mode = 'r' );
   // bool save(movie* movie, const char* fname);
 
+  void close();
+
   int get_width() const;
   int get_height() const;
 

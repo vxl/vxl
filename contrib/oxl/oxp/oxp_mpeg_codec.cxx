@@ -24,7 +24,6 @@ extern "C" {
 
 #include <oxp/oxp_yuv_to_rgb.h>
 #include <oxp/oxp_bunch_of_files.h>
-
 #include <oxp/oxp_vob_frame_index.h>
 
 static bool verbose = false;
@@ -70,7 +69,7 @@ struct oxp_mpeg_codec_data : vo_instance_t {
 
   // oxp_mpeg_codec_data();
 
-  void seek_to_iframe_before(int desired);
+  bool seek_to_iframe_before(int desired);
   frame_plus_index *make_frame();
   void convert_frame(frame_plus_index* frame, decode_request* p);
   int decode_mpeg2(unsigned char const *start, unsigned char const *end);
@@ -113,22 +112,28 @@ oxp_mpeg_codec::oxp_mpeg_codec()
   impl_->output_format = oxp_mpeg_codec_data::rgb;
 }
 
-void oxp_mpeg_codec_data::seek_to_iframe_before(int frame)
+bool oxp_mpeg_codec_data::seek_to_iframe_before(int frame)
 {
   int start_frame_index;
   int lba = idx.frame_to_lba_of_prev_I_frame(frame, &start_frame_index);
   // --lba; // lba's start from 1?
   typedef oxp_bunch_of_files::offset_t index_t;
   index_t byte = index_t(lba) * 2048;
+  
   if (verbose)
     vcl_fprintf(stderr, __FILE__ ": seek_to_iframe_before: Frame %d -> Start at closest frame %d, LBA 0x%x, byte %lu\n",
                 frame, start_frame_index, lba, (unsigned long) byte);
   if (lba < 0) {
+    vcl_fprintf(stderr, "oxp_mpeg_codec: ERROR!\n");
     vcl_fprintf(stderr, __FILE__ ": ERROR!\n");
-    return;
+    return false;
   }
-  fp.seek(byte);
+  if (!fp.seek(byte)) {
+    vcl_cerr << "oxp_mpeg_codec_data::seek_to_iframe_before: ERROR!\n";
+    return false;
+  }
   frame_number = start_frame_index-1; // This is the frame we have "just finished decoding"...
+  return true;
 }
 
 //: Decode at least one frame.
@@ -405,6 +410,27 @@ void oxp_mpeg_codec_data::destroy_frame(vo_frame_t *frame)
 oxp_mpeg_codec::~oxp_mpeg_codec()
 {
   if (impl_) {
+    // close();
+    vcl_cerr << "oxp_mpeg_codec: WARNING: deleting before close() was called\n";
+    // You can't call close from within here because it may be being destroyed
+    // statically, and the mpeg2_close call will segv.
+    // So the options are segv or unflushed input.  segv is
+    // incontrovertibly wrong, so we make sure that doesn't happen.
+    for (int i=0; i<8; ++i)
+      if (impl_->ring_buffer[i]) {
+        impl_->destroy_frame(impl_->ring_buffer[i]);
+        impl_->ring_buffer[i] = 0;
+      }
+      
+    delete impl_;
+    impl_ = 0;
+  }
+}
+
+//-----------------------------------------------------------------------------
+void oxp_mpeg_codec::close()
+{
+  if (impl_) {
     // destroy decoder.
     mpeg2_close(&impl_->decoder);
 
@@ -431,6 +457,8 @@ bool oxp_mpeg_codec::get_section(int position, // position of the frame in the s
                                       int xs, // row size
                                       int ys) const // col size
 {
+  position += 2; //awf not sure if this is where the offset happens.
+
   const int FRAMES_TO_FFWD_RATHER_THAN_SEEK = 20;
   if (impl_->frame_number < position + 8 &&
       impl_->frame_number > position - FRAMES_TO_FFWD_RATHER_THAN_SEEK)
@@ -438,10 +466,10 @@ bool oxp_mpeg_codec::get_section(int position, // position of the frame in the s
       return true;
 
   // Didn't find the frame, seek and find.
-  impl_->seek_to_iframe_before(position);
-  impl_->decode_until_desired(position, ib, x0, y0, xs, ys);
+  if (!impl_->seek_to_iframe_before(position))
+    return false;
 
-  return true;
+  return impl_->decode_until_desired(position, ib, x0, y0, xs, ys);
 }
 
 
@@ -459,29 +487,105 @@ int oxp_mpeg_codec::put_section(int position,
 }
 
 //-----------------------------------------------------------------------------
-//: probe the file fname, open it as an AVI file. If it works, return true, false otherwise.
+//: probe the file fname, open it as an MPEG file, if it works, close it and
+// return true. False otherwise.
 
 bool oxp_mpeg_codec::probe(const char* fname)
 {
+  if (verbose)
+    vcl_cerr << "oxp_mpeg_codec::probe[" << fname << "]\n";
+
+  // 1st try to open
+  if (vcl_FILE* fp = fopen(fname, "rb")) {
+    unsigned int buf = 0xffffffffu;
+    fread(&buf, 1, 4, fp);
+    fclose(fp);
+
+    bool ok = false;
+    if (buf == 0x000001b3 || buf == 0xb3010000) {
+      // mpeg
+      ok=true;
+    }
+    if (buf == 0x000001ba || buf == 0xba010000) {
+      // vob
+      ok=true;
+    }
+
+    if (ok) {
+      // Try to find an idx
+      return true;
+    }
+  }
+
   vcl_string fn(fname);
 
   bool p = (vul_file::size((fn + ".lst").c_str()) > 0);
-  vcl_cerr << "oxp_mpeg_codec::probe[" << fname << "] -> " << (p ? "true" : "false") << "\n";
+  if (verbose)
+    vcl_cerr << "oxp_mpeg_codec::probe[" << fname << "] -> " << (p ? "true" : "false") << "\n";
   return p;
 }
 
 bool oxp_mpeg_codec::load(const char* fname, char mode)
 {
-  // Open fname, if a vob, set_demux
-  vcl_string fn = fname;
+  // 1st try to open
+  bool is_mpeg = false;
+  bool is_vob = false;
+  {
+    vcl_FILE* fp = fopen(fname, "rb");
+    if (fp) {
+      unsigned int buf = 0xffffffffu;
+      fread(&buf, 1, 4, fp);
+      fclose(fp);
+      
+      if (buf == 0x000001b3 || buf == 0xb3010000) {
+        // mpeg
+        is_mpeg = true;
+      }
+      if (buf == 0x000001ba || buf == 0xba010000) {
+        // vob
+        is_vob = true;
+      }
+    }
+  }
 
-  impl_->fp.open((fn + ".lst").c_str());
+  if (is_mpeg || is_vob) {
+    impl_->fp.open_1(fname);
+    impl_->decode_at_least_one();
 
-  impl_->decode_at_least_one();
+    // Try to find an idx  
+    char buf[1024];
+    vcl_strcpy(buf, fname);
+    char* p = vcl_strrchr(buf, '.');
+    if (!p) {
+      // No . in filename
+      p = buf + vcl_strlen(buf)-1;
+    }
+    vcl_strcpy(p, ".idx");
+    vcl_fprintf(stderr, "Trying index file [%s] ... ", buf);
+    if (vul_file::size(buf) > 0) {
+      vcl_cerr << " loading ...";
+      impl_->idx.load(buf);
 
-  impl_->idx.load((fn + ".idx").c_str());
+    } else {
+      vcl_cerr << " not present, will not be able to seek\n";
+      impl_->idx.add(0, 0);  
+    }
 
-  impl_->demux_track = 0xe0;
+    // Set demux if vob
+    impl_->demux_track = is_vob ? 0xe0 : 0;
+
+  } else {
+    // Open fname, if a vob, set_demux
+    vcl_string fn = fname;
+    
+    impl_->fp.open((fn + ".lst").c_str());
+    
+    impl_->decode_at_least_one();
+    
+    impl_->idx.load((fn + ".idx").c_str());
+    
+    impl_->demux_track = 0xe0;
+  }
 
   return true;
 }

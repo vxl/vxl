@@ -10,6 +10,9 @@
 #include <vidl/vidl_movie_sptr.h>
 #include <vidl/vidl_movie.h>
 #include <vidl/vidl_io.h>
+#ifdef VCL_WIN32
+#include <vidl/vidl_avicodec.h>
+#endif
 
 #if defined(VCL_WIN32) && !defined(__CYGWIN__)
 #include <vidl/vidl_avicodec.h>
@@ -48,7 +51,8 @@ oxp_vidl_moviefile::oxp_vidl_moviefile(char const* f)
   ensure_initialized();
 
   p = new oxp_vidl_moviefile_privates;
-  p->m = vidl_io::load_movie(f, 0, 9999, 1);
+  p->m = vidl_io::load_movie(f);
+
 }
 
 oxp_vidl_moviefile::~oxp_vidl_moviefile()
