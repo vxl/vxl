@@ -97,9 +97,9 @@ bool mvl2_video_from_avi::get_frame(vimt_image_2d_of<vxl_byte>& image)
    unsigned char* data=(unsigned char*)(img_data)+img->bmiHeader.biSize+img->bmiHeader.biClrUsed*sizeof(RGBQUAD);
    vimt_image_2d_of<vxl_byte> temp_img;
    if (use_colour)
-     temp_img.set_to_memory(data,nx,ny,bplanes,xstep,ystep,1);
+     temp_img.image().set_to_memory(data,nx,ny,bplanes,xstep,ystep,1);
    else
-     temp_img.set_to_memory(data,nx,ny,bplanes,xstep,ystep,1);
+     temp_img.image().set_to_memory(data,nx,ny,bplanes,xstep,ystep,1);
    
    image.deep_copy(temp_img);
    

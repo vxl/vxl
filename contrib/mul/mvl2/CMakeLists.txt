@@ -32,13 +32,13 @@ IF (AVIFILE_FOUND)
      )
   IF (WIN32)
     SET(mvl2_sources ${mvl2_sources}
-        mvl2_video_from_avi_linux.h mvl2_video_from_avi_linux.cxx
-        mvl2_video_to_avi_linux.h	  mvl2_video_to_avi_linux.cxx
+        mvl2_video_from_avi_windows.h mvl2_video_from_avi_windows.cxx
+        mvl2_video_to_avi_windows.h mvl2_video_to_avi_windows.cxx
        )
   ELSE (WIN32)
     SET(mvl2_sources ${mvl2_sources}
-        mvl2_video_from_avi_windows.h mvl2_video_from_avi_windows.cxx
-        mvl2_video_to_avi_windows.h mvl2_video_to_avi_windows.cxx
+        mvl2_video_from_avi_linux.h mvl2_video_from_avi_linux.cxx
+        mvl2_video_to_avi_linux.h	  mvl2_video_to_avi_linux.cxx
        )
   ENDIF (WIN32)
 ELSE (AVIFILE_FOUND)
