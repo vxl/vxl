@@ -37,12 +37,14 @@ SOURCES += mbl_progress_null.cxx
 SOURCES += mbl_progress_text.cxx
 
 # Additional files to document:
+MANPAGE_SOURCES += mbl_cloneables_factory.h
 MANPAGE_SOURCES += mbl_data_array_ptr_wrapper.txx
 MANPAGE_SOURCES += mbl_data_array_wrapper.txx
 MANPAGE_SOURCES += mbl_data_collector.txx
 MANPAGE_SOURCES += mbl_data_collector_list.txx
 MANPAGE_SOURCES += mbl_data_wrapper.txx
 MANPAGE_SOURCES += mbl_data_wrapper_mixer.txx
+MANPAGE_SOURCES += mbl_exception.h
 MANPAGE_SOURCES += mbl_stochastic_data_collector.txx
 MANPAGE_SOURCES += mbl_selected_data_wrapper.txx
 MANPAGE_SOURCES += mbl_chord.h
