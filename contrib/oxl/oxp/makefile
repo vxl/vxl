@@ -48,9 +48,9 @@ SOURCES += oxp_mpeg_codec.cxx
 SOURCES += oxp_vidl_mpeg_codec.cxx
 endif
 
+SOURCES += oxp_yuv_to_rgb.cxx
 MANPAGE_SOURCES += MapInverter.h
 MANPAGE_SOURCES += POX.h
-MANPAGE_SOURCES += oxp_yuv_to_rgb.h
 
 ######################################
 include $(IUEROOT)/config/top-rules.mk
