@@ -19,10 +19,11 @@ SOURCE_FILES(oxp_sources
   SGIMovieFileWrite.cxx
   SequenceFileName.cxx
   oxp_parse_seqname.cxx
-  oxp_bunch_of_files.cxx   
+  oxp_bunch_of_files.cxx
   vsl_conic_as_matrix.cxx
   vsl_conic_as_params.cxx
   vsl_conic_points.cxx
+  oxp_yuv_to_rgb.cxx
 )
 
 AUX_SOURCE_DIRECTORY(Templates oxp_sources)
