@@ -9,7 +9,7 @@
 //
 //-----------------------------------------------------------------------------
 #include <vcl_compiler.h>
-#if !VCL_CXX_HAS_HEADER_LIMITS || !VCL_USE_NATIVE_STL  || (!VCL_NUMERIC_LIMITS_HAS_INFINITY && VCL_PLATFORM_HAS_INFINITY)
+#if !VCL_CXX_HAS_HEADER_LIMITS || !VCL_USE_NATIVE_STL  || (!VCL_NUMERIC_LIMITS_HAS_INFINITY && VCL_PROCESSOR_HAS_INFINITY)
 
 #include "vcl_limits.h"
 #include <vxl_config.h> // for VXL_BIG_ENDIAN
@@ -433,4 +433,4 @@ const bool vcl_numeric_limits<float>::tinyness_before VCL_STATIC_CONST_INIT_INT_
 const vcl_float_round_style vcl_numeric_limits<float>::round_style VCL_STATIC_CONST_INIT_INT_DEFN(vcl_round_to_nearest);
 #endif
 
-#endif // !VCL_CXX_HAS_HEADER_LIMITS || !VCL_USE_NATIVE_STL || (!VCL_NUMERIC_LIMITS_HAS_INFINITY && VCL_PLATFORM_HAS_INFINITY)
+#endif // !VCL_CXX_HAS_HEADER_LIMITS || !VCL_USE_NATIVE_STL || (!VCL_NUMERIC_LIMITS_HAS_INFINITY && VCL_PROCESSOR_HAS_INFINITY)
