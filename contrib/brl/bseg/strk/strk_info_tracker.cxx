@@ -4,9 +4,12 @@
 // \file
 #include <vcl_algorithm.h>
 #include <vcl_cstdlib.h> // for rand()
+#include <vnl/vnl_math.h>
+#include <vnl/vnl_numeric_traits.h>
 #include <vul/vul_timer.h>
 #include <vil1/vil1_memory_image_of.h>
 #include <vgl/vgl_polygon.h>
+#include <vsol/vsol_box_2d.h>
 #include <vtol/vtol_edge.h>
 #include <vtol/vtol_vertex_2d.h>
 #include <btol/btol_face_algs.h>
@@ -24,7 +27,8 @@ static bool info_compare(strk_tracking_face_2d_sptr const f1,
 static bool info_diff_compare(strk_tracking_face_2d_sptr const f1,
                               strk_tracking_face_2d_sptr const f2)
 {
-  return f1->total_info_diff() > f2->total_info_diff();//JLM Switched
+  double d1 = f1->total_info_diff(), d2 = f2->total_info_diff();
+  return d1 > d2;//JLM Switched
 }
 
 
@@ -38,7 +42,7 @@ static bool info_diff_compare(strk_tracking_face_2d_sptr const f1,
 strk_info_tracker::strk_info_tracker(strk_info_tracker_params& tp)
   : strk_info_tracker_params(tp)
 {
-  background_model_ = (strk_tracking_face_2d*)0;
+//  background_model_ = (strk_tracking_face_2d*)0;
 }
 
 //:Default Destructor
@@ -126,51 +130,6 @@ void strk_info_tracker::set_initial_model(vtol_face_2d_sptr const& face)
 {
   initial_model_ = face;
 }
-
-//--------------------------------------------------------------------------
-//: Set the original background face.
-//  In most cases this face surrounds the tracking face (model) so we need to
-//  construct a new face that is multiple connected in order to exclude the
-//  model pixels.
-void strk_info_tracker::set_background(vtol_face_2d_sptr const& face)
-{
-  orig_background_face_ = face;
-}
-
-//: construct the potentially multiply connected face
-bool strk_info_tracker::construct_background_face(vtol_face_2d_sptr& face)
-{
-//convert to vgl_polygons
-  vgl_polygon<double> orig_background_poly, model_poly, new_poly;
-  if (!btol_face_algs::vtol_to_vgl(orig_background_face_, orig_background_poly))
-    return false;
-  if (!btol_face_algs::vtol_to_vgl(initial_model_, model_poly))
-    return false;
-  //need to check for proper containment but later for now just see if the
-  //vertices are all inside or all outside
-  bool all_in = true, all_out = true;
-  vcl_vector<vgl_point_2d<double> > const & model_verts = model_poly[0];
-  for (vcl_vector<vgl_point_2d<double> >::const_iterator vit = model_verts.begin();
-       vit != model_verts.end(); ++vit)
-    if (orig_background_poly.contains(*vit))
-      all_out=false;
-    else
-      all_in = false;
-  if (!all_in && !all_out)
-    return false;//can't handle intersecting model and background faces
-  if (all_in)
-  {
-    new_poly.push_back(orig_background_poly[0]);//outside sheet
-    new_poly.push_back(model_poly[0]);//inside sheet
-  }
-  if (all_out)
-    new_poly.push_back(orig_background_poly[0]);
-
-  if (!btol_face_algs::vgl_to_vtol(new_poly, face))
-    return false;
-  return true;
-}
-
 //--------------------------------------------------------------------------
 //: Initialize the info_tracker
 bool strk_info_tracker::init()
@@ -180,7 +139,8 @@ bool strk_info_tracker::init()
     vcl_cout << "In strk_info_tracker::init() - no initial video frame\n";
     return false;
   }
-  if (!initial_model_||use_background_&&!orig_background_face_)
+
+  if (!initial_model_)
   {
     vcl_cout << "In strk_info_tracker::init() - not all faces set\n";
     return false;
@@ -194,68 +154,7 @@ bool strk_info_tracker::init()
   if (renyi_joint_entropy_)
     tf->set_renyi_joint_entropy();
 
-  //  tf->print_pixels(image_0_);
   current_samples_.push_back(tf);
-  if (!use_background_)
-    return true;
-  //construct the background tracking face
-  if (!construct_background_face(background_face_))
-  {
-    vcl_cout << "In strk_info_tracker::init() -"
-             << " background face construction failed\n";
-    return false;
-  }
-  //debug JLM
-#if 0
-  vcl_vector<vtol_one_chain_sptr> chains;
-  vcl_vector<vtol_edge_sptr> outer_edges, hole_edges, all_edges;
-  background_face_->one_chains(chains);
-  int n = chains.size();
-  vcl_cout << "Number of one chains " << n << '\n';
-  if (n==2)
-  {
-    background_face_->edges(all_edges);
-    vtol_one_chain_sptr outer_chain = chains[0];
-    vtol_one_chain_sptr hole_chain = chains[1];
-    outer_chain->edges(outer_edges);
-    hole_chain->edges(hole_edges);
-    vcl_cout << "Outer Edges\n";
-    for (vcl_vector<vtol_edge_sptr>::iterator eit = outer_edges.begin();
-         eit != outer_edges.end(); ++eit)
-      vcl_cout << "[(" << (*eit)->v1()->cast_to_vertex_2d()->x()
-               << ' ' <<  (*eit)->v1()->cast_to_vertex_2d()->y()
-               << ")(" << (*eit)->v2()->cast_to_vertex_2d()->x()
-               << ' ' <<  (*eit)->v2()->cast_to_vertex_2d()->y() << ")]\n";
-    vcl_cout << "Chain Hole Edges\n";
-    for (vcl_vector<vtol_edge_sptr>::iterator eit = hole_edges.begin();
-         eit != hole_edges.end(); ++eit)
-      vcl_cout << "[(" << (*eit)->v1()->cast_to_vertex_2d()->x()
-               << ' ' <<  (*eit)->v1()->cast_to_vertex_2d()->y()
-               << ")(" << (*eit)->v2()->cast_to_vertex_2d()->x()
-               << ' ' <<  (*eit)->v2()->cast_to_vertex_2d()->y() << ")]\n";
-
-    vcl_vector<vtol_one_chain_sptr>* hole_cycles = background_face_->get_hole_cycles();
-    vcl_vector<vtol_edge_sptr> h_edges;
-    if (hole_cycles->size()>=1)
-      (*hole_cycles)[0]->edges(h_edges);
-    vcl_cout << "Get Hole Cycles Edges\n";
-    for (vcl_vector<vtol_edge_sptr>::iterator eit = h_edges.begin();
-         eit != h_edges.end(); ++eit)
-      vcl_cout << '[' << (int)((*hole_cycles)[0]->direction(*(*eit)))
-               << "]:[(" << (*eit)->v1()->cast_to_vertex_2d()->x()
-               << ' ' <<  (*eit)->v1()->cast_to_vertex_2d()->y()
-               << ")(" << (*eit)->v2()->cast_to_vertex_2d()->x()
-               << ' ' <<  (*eit)->v2()->cast_to_vertex_2d()->y() << ")]\n";
-
-    vcl_cout << "All Edges\n";
-    for (vcl_vector<vtol_edge_sptr>::iterator eit = all_edges.begin();
-         eit != all_edges.end(); ++eit)
-      vcl_cout << "[(" << (*eit)->v1()->cast_to_vertex_2d()->x()
-               << ' ' <<  (*eit)->v1()->cast_to_vertex_2d()->y()
-               << ")(" << (*eit)->v2()->cast_to_vertex_2d()->x()
-               << ' ' <<  (*eit)->v2()->cast_to_vertex_2d()->y() << ")]\n";
-  }
-#endif
   return true;
 }
 
@@ -276,7 +175,30 @@ generate_randomly_positioned_sample(strk_tracking_face_2d_sptr const& seed)
   tf->transform(tx, ty, theta, scale);
   return tf;
 }
+static void 
+print_tracking_bounds(vcl_vector<strk_tracking_face_2d_sptr> const& faces)
+{
+  if(!faces.size())
+	return;
+  float xmin = vnl_numeric_traits<float>::maxval, xmax =0;
+  float ymin = xmin, ymax = 0;
+  for (vcl_vector<strk_tracking_face_2d_sptr>::const_iterator fit =
+       faces.begin(); fit != faces.end(); fit++)
+    {
+      float x = (*fit)->face()->Xo(), y = (*fit)->face()->Yo();
+      xmin = vnl_math_min(xmin, x);
+      xmax = vnl_math_max(xmax, x);
+      ymin = vnl_math_min(ymin, y);
+      ymax = vnl_math_max(ymax, y);
+    }
+  strk_tracking_face_2d_sptr f = faces[0];
+  float farea  = f->Npix();
+  float search_area = (xmax-xmin)*(ymax-ymin);
+  //  float R = farea/search_area;
 
+  vcl_cout << "S[(" << xmin << " " << xmax << ")(" << ymin << " " << ymax
+          << ")]= " << search_area << "\n";
+}
 //--------------------------------------------------------------------------
 //: generate a random set of new faces from the existing samples
 void strk_info_tracker::generate_samples()
@@ -292,19 +214,11 @@ void strk_info_tracker::generate_samples()
         continue;
       if (use_background_)
       {
-        vnl_matrix_fixed<double, 3, 3>& T = tf->trans();
-        vtol_face_2d_sptr  temp = btol_face_algs::transform(background_face_, T);
-        back= new strk_tracking_face_2d(temp, image_i_,
-                                        Ix_i_, Iy_i_,
-                                        hue_i_, sat_i_,
-                                        min_gradient_,
-                                        parzen_sigma_);
-        if (renyi_joint_entropy_)
-          back->set_renyi_joint_entropy();
-
-        tf->intensity_mutual_info_diff(back, image_i_);
+        tf->intensity_mutual_info_diff(background_faces_, image_i_);
         if (color_info_)
-          tf->color_mutual_info_diff(back, hue_i_, sat_i_);
+          tf->color_mutual_info_diff(background_faces_, hue_i_, sat_i_);
+        if (gradient_info_)
+          tf->compute_only_gradient_mi(Ix_i_, Iy_i_);
       }
       else
         tf->compute_mutual_information(image_i_, Ix_i_, Iy_i_, hue_i_, sat_i_);
@@ -318,6 +232,7 @@ void strk_info_tracker::generate_samples()
   else
     vcl_sort(hypothesized_samples_.begin(),
              hypothesized_samples_.end(), info_compare);
+  print_tracking_bounds(hypothesized_samples_);//jlm
 }
 
 bool strk_info_tracker::refresh_sample()
@@ -359,13 +274,13 @@ void strk_info_tracker::cull_samples()
   }
 
   strk_tracking_face_2d_sptr tf = hypothesized_samples_[0];
-  if (verbose_)
+  if (verbose_&&!use_background_)
     vcl_cout << "Total Inf = " << tf->total_info()
              << " = IntInfo(" <<  tf->int_mutual_info()
              << ") + GradInfo(" <<  tf->grad_mutual_info()
              << ") + ColorInfo(" <<  tf->color_mutual_info()
              << ')' << vcl_endl;
-  bool hist_print = true;
+  bool hist_print = false;
   if (verbose_&&hist_print)
   {
     tf->print_intensity_histograms(image_i_);
@@ -398,124 +313,27 @@ void strk_info_tracker::cull_samples()
 
 
   //print background characteristics
-  if (use_background_)//JLM
+  if (use_background_)
   {
-    //transform background face
-    vnl_matrix_fixed<double, 3, 3>& T = tf->trans();
-    vtol_face_2d_sptr  temp = btol_face_algs::transform(background_face_, T);
-    background_model_ = new strk_tracking_face_2d(temp, image_i_,
-                                                  Ix_i_, Iy_i_,
-                                                  hue_i_, sat_i_,
-                                                  min_gradient_,
-                                                  parzen_sigma_);
-    if (renyi_joint_entropy_)
-      background_model_->set_renyi_joint_entropy();
-
-    vcl_cout << "Printing Background Information\n";
+   vcl_cout << "\n====Background Information Diffs====\n";
     float MIdiff =
-      tf->intensity_mutual_info_diff(background_model_, image_i_, true);
+      tf->intensity_info_diff();
     vcl_cout << "Intensity Inf Diff = " << MIdiff << vcl_endl;
     if (color_info_)
     {
-      float color_MIdiff =
-        tf->color_mutual_info_diff(background_model_, hue_i_, sat_i_, true);
+      float color_MIdiff = tf->color_info_diff();
       vcl_cout << "Color Inf Diff = " << color_MIdiff << vcl_endl;
     }
-    vcl_cout << "Total Inf Diff = " << tf->total_info_diff() << vcl_endl;
-  }
-}
-
-#if 0
-//--------------------------------------------------------------------------
-//: Use parabolic interpolation to refine the transform for the best sample
-//
-void strk_info_tracker::refine_best_sample()
-{
-  strk_tracking_face_2d_sptr btf = current_samples_[0];
-  //translation first
-  double idtx = 0, idty = 0, idth = 0, ids = 0;
-  double idtx_max=0, idty_max=0, inf_max= btf->total_info();
-  double inf = 0;
-  double xrange = 0, yrange = 0;
-  vcl_cout << "Initial Info " << inf_max << vcl_endl;
-  double range_fraction = 0.1;
-  if (false) //  if (initial_model_)
-  {
-    vtol_face* f = initial_model_->cast_to_face();
-    vsol_box_2d_sptr bb = f->get_bounding_box();
-    if (bb)
-    {
-      xrange = range_fraction*bb->width();
-      yrange = range_fraction*bb->height();
-    }
-  }
-  double dx = (2*xrange)/n_samples_, dy = (2*yrange)/n_samples_;
-  vcl_cout << "X,Y range(" << xrange << ' ' << yrange << ")\n";
-  strk_tracking_face_2d_sptr tf = new strk_tracking_face_2d(btf);
-  for (double ty = -yrange; ty<=yrange; ty+=dy)
-    for (double tx = -xrange; tx<=xrange;tx+=dx)
-    {
-      if (tx||ty)
+    if (gradient_info_)
       {
-        tf->transform(tx, ty, 0, 1.0);
-        this->mutual_info_face(tf);
-        inf = tf->total_info();
-        if (debug_)
-          vcl_cout << '(' << tx << ' ' << ty  << ")=" << inf << vcl_endl;
-        tf->transform(-tx, -ty, 0, 1.0);
-        if (inf>inf_max)
-        {
-          inf_max = inf;
-          idtx_max = tx;
-          idty_max = ty;
-        }
+        float grad_MI = tf->grad_mutual_info();
+        vcl_cout << "Grad Mutual Info = " << grad_MI << vcl_endl;
       }
-    }
-  idtx = idtx_max;
-  idty = idty_max;
-#if 0 // 34 lines commented out
-  float dtx = 0, dty = 0, dth = 0, ds = 0;
-  double bgtx=0, bgty=0, bgth=0, bgsc=1.0;
-  double gtx=0, gty=0, gth=0, gsc=1.0;
-  baf->global_transform(bgtx, bgty, bgth, bgsc);
-  strk_quadratic_interpolator qtrans;face_points(points);
-  strk_parabolic_interpolator pith;
-  strk_parabolic_interpolator pisc;
-  for (int i = 0; i<search_pattern.size(); i++)
-  {
-    strk_tracking_face_2d_sptr af = search_pattern[i];
-    if (!af)
-      continue;
-    af->global_transform(gtx, gty, gth, gsc);
-    dtx = gtx-bgtx; dty = gty-bgty;
-    dth = gth-bgth;
-    ds = gsc/bgsc-1.0;
-    double inf = af->total_info();
-    qtrans.add_data_point(dtx,dty,inf);
-    pith.add_data_point(dth, inf);
-    pisc.add_data_point(ds, inf);
-  }
+    vcl_cout << "Total Inf Diff = " << tf->total_info_diff() << vcl_endl;
 
-  if (search_radius_&&qtrans.solve())
-    qtrans.extremum(idtx, idty);
-  // limit the interpolated value
-  if (vcl_fabs(idtx)>search_radius_)
-    idtx = 0;
-  if (vcl_fabs(idty)>search_radius_)
-    idty = 0;
-  if (vcl_fabs(idth)>angle_range_)
-    idth = 0;
-  if (vcl_fabs(ids)>scale_range_)
-    ids = 0;
-#endif // 0
-  btf->transform(idtx, idty, idth, 1.0+ids);
-  this->mutual_info_face(btf);
-  double info = btf->total_info();
-  vcl_cout << "Final dtrans (" << idtx << ' ' << idty
-           << ' ' << idth << ' ' << ids << ") = " << info
-           << vcl_endl;
+    this->construct_background_faces(tf->face()->cast_to_face_2d());
+  }
 }
-#endif // 0
 
 //--------------------------------------------------------------------------
 //: because of sorting, the best sample will be the first current sample
@@ -525,11 +343,6 @@ vtol_face_2d_sptr strk_info_tracker::get_best_sample()
     return 0;
   //  this->refine_best_sample();
   return current_samples_[0]->face()->cast_to_face_2d();
-}
-
-vtol_face_2d_sptr strk_info_tracker::current_background()
-{
-  return background_model_->face()->cast_to_face_2d();
 }
 
 //--------------------------------------------------------------------------
@@ -606,5 +419,85 @@ get_best_face_points(vcl_vector<vtol_topology_object_sptr>& points)
   if (!use_background_)
     current_samples_[0]->face_points(points);
   else
-    background_model_->face_points(points);
+    ;
+}
+
+//--------------------------------------------------------------------------
+//: Construct tracking faces which are clones of the current tracking face
+//  but arrayed on each edge of the bounding box of the current tracking face
+bool strk_info_tracker::
+construct_background_faces(vtol_face_2d_sptr const& current_model,
+                           bool first_frame)
+{
+  if(!current_model)
+    return false;
+  background_faces_.clear();
+  vsol_box_2d_sptr bb = current_model->get_bounding_box();
+  if(!bb)
+    return false;
+  double min_x = bb->get_min_x();
+  double max_x = bb->get_max_x();
+  double min_y = bb->get_min_y();
+  double max_y = bb->get_max_y();
+  double cx = (min_x + max_x)/2;
+  double cy = (min_y + max_y)/2;
+  double width = max_x-min_x;
+  double height = max_y-min_y;
+  vcl_vector<vtol_vertex_sptr> verts;
+  vcl_vector<vtol_vertex_2d_sptr> model_verts_2d;
+  current_model->vertices(verts);
+  for(vcl_vector<vtol_vertex_sptr>::iterator vit = verts.begin();
+      vit != verts.end();vit++)
+    model_verts_2d.push_back((*vit)->cast_to_vertex_2d());
+  double tx[4], ty[4];
+  tx[0]=width; ty[0]=0;
+  tx[1]=-width; ty[1]=0;
+  tx[2]=0; ty[2]=height;
+  tx[3]=0; ty[3]=-height;
+  for(int i = 0; i<4; i++)
+    {
+      vcl_vector<vtol_vertex_sptr> face_verts;
+      for(vcl_vector<vtol_vertex_2d_sptr>::iterator vit =model_verts_2d.begin();
+            vit != model_verts_2d.end(); vit++)
+        {
+          vtol_vertex_2d_sptr mv = (*vit);
+          double x = mv->x()+tx[i], y = mv->y()+ty[i];
+          vtol_vertex_2d_sptr tmv = new vtol_vertex_2d(x, y);
+          face_verts.push_back(tmv->cast_to_vertex());
+        }
+      vtol_face_2d_sptr f = new vtol_face_2d(face_verts);
+      strk_tracking_face_2d_sptr tf;
+      if(first_frame)
+        tf = new strk_tracking_face_2d(f, image_0_,
+                                       Ix_0_, Iy_0_,
+                                       hue_0_, sat_0_,
+                                       min_gradient_,
+                                       parzen_sigma_);
+      else
+        tf = new strk_tracking_face_2d(f, image_i_,
+                                       Ix_i_, Iy_i_,
+                                       hue_i_, sat_i_,
+                                       min_gradient_,
+                                       parzen_sigma_);
+      if(!tf->Npix())
+        continue;
+      if (renyi_joint_entropy_)
+        tf->set_renyi_joint_entropy();
+      tf->compute_mutual_information(image_i_,
+                                     Ix_i_, Iy_i_,
+                                     hue_i_, sat_i_);
+      background_faces_.push_back(tf);
+    }
+  return true;
+}
+
+bool 
+strk_info_tracker::get_background_faces(vcl_vector<vtol_face_2d_sptr>& faces)
+{
+  if(!background_faces_.size())
+    return false;
+  faces.clear();
+  for(vcl_vector<strk_tracking_face_2d_sptr>::iterator fit = background_faces_.begin(); fit != background_faces_.end(); fit++)
+    faces.push_back((*fit)->face()->cast_to_face_2d());
+  return true;
 }

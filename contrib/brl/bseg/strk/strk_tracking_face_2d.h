@@ -95,13 +95,17 @@ class strk_tracking_face_2d : public vbl_ref_count
 
   float intensity_info_diff(){return intensity_info_diff_;}
   float color_info_diff(){return color_info_diff_;}
-  float total_info_diff(){return intensity_info_diff_+color_info_diff_;}
+  float total_info_diff();
   //: utilities
   bool compute_mutual_information(vil1_memory_image_of<float> const& image,
                                   vil1_memory_image_of<float> const& Ix,
                                   vil1_memory_image_of<float> const& Iy,
                                   vil1_memory_image_of<float> const& hue,
                                   vil1_memory_image_of<float> const& sat);
+
+  bool compute_only_gradient_mi(vil1_memory_image_of<float> const& Ix,
+                                vil1_memory_image_of<float> const& Iy);
+                                
   //: from the face vertices
   void centroid(double& x, double& y) const;
 
@@ -136,10 +140,22 @@ class strk_tracking_face_2d : public vbl_ref_count
                                    vil1_memory_image_of<float> const& image,
                                    bool verbose = false);
 
+
   float color_mutual_info_diff(strk_tracking_face_2d_sptr const& other,
                                vil1_memory_image_of<float> const& hue,
                                vil1_memory_image_of<float> const& sat,
                                bool verbose = false);
+
+  //: a background model consisting of cloned faces surrounding *this face.
+  float intensity_mutual_info_diff(vcl_vector<strk_tracking_face_2d_sptr> const& others,
+                                   vil1_memory_image_of<float> const& image,
+                                   bool verbose = false);
+
+  float color_mutual_info_diff(vcl_vector<strk_tracking_face_2d_sptr> const& others,
+                               vil1_memory_image_of<float> const& hue,
+                               vil1_memory_image_of<float> const& sat,
+                               bool verbose = false);
+
 
   //: for debugging
   void print_pixels(vil1_memory_image_of<float> const& image);
@@ -186,7 +202,7 @@ class strk_tracking_face_2d : public vbl_ref_count
 float
   compute_model_intensity_joint_entropy(strk_tracking_face_2d_sptr const& other);
 
-  float compute_color_joint_entropy(strk_tracking_face_2d_sptr const& other,
+ float compute_color_joint_entropy(strk_tracking_face_2d_sptr const& other,
                                     vil1_memory_image_of<float> const& hue,
                                     vil1_memory_image_of<float> const& sat);
 
