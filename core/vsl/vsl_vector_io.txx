@@ -23,8 +23,7 @@ void vsl_b_write(vsl_b_ostream& s, const vcl_vector<T>& v)
   // to store its data in a contiguous memory block. However, most
   // implementations do store data this way.
   // Check this assumption holds.
-  assert(v.size() == 0|| &v[v.size() - 1] - &v[0] + 1 == v.size());
-
+  assert(v.size() == 0 || &v[v.size() - 1] + 1 == &v[0] + v.size());
 
   const short version_no = 1;
   vsl_b_write(s, version_no);
@@ -54,7 +53,7 @@ void vsl_b_read(vsl_b_istream& is, vcl_vector<T>& v)
     // to store its data in a contiguous memory block. However, most
     // implementations do store data this way.
     // Check this assumption holds.
-    assert(v.size() == 0|| &v[v.size() - 1] - &v[0] + 1 == v.size());
+    assert(v.size() == 0 || &v[v.size() - 1] + 1 == &v[0] + v.size());
 
     if (v.size())
     {
@@ -67,7 +66,6 @@ void vsl_b_read(vsl_b_istream& is, vcl_vector<T>& v)
     is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
     return;
   }
-
 }
 
 //====================================================================================
@@ -76,7 +74,7 @@ template <class T>
 void vsl_print_summary(vcl_ostream& os, const vcl_vector<T> &v)
 {
   os << "Vector length: " << v.size() << vcl_endl;
-  for (int i=0; i<v.size() && i<5; i++)
+  for (unsigned int i=0; i<v.size() && i<5; i++)
   {
     os << " " << i << ": ";
     vsl_print_summary(os, v[i]);

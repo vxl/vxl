@@ -56,7 +56,7 @@ template <class T>
 void vsl_print_summary(vcl_ostream& os, const vcl_deque<T> &v)
 {
   os << "Deque length: " << v.size() << vcl_endl;
-  for (int i=0; i<v.size() && i<5; i++)
+  for (unsigned int i=0; i<v.size() && i<5; i++)
   {
     os << " " << i << ": ";
     vsl_print_summary(os,v[i]);

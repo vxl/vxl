@@ -113,7 +113,7 @@ void vsl_b_read(vsl_b_istream &is,int& n )
   do
   {
     vsl_b_read(is, *ptr);
-    if (ptr-buf >= VSL_MAX_ARBITRARY_INT_BUFFER_LENGTH(sizeof(int)))
+    if (ptr-buf >= (int)VSL_MAX_ARBITRARY_INT_BUFFER_LENGTH(sizeof(int)))
     {
       vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream &, int& )"
         << "\n           Integer too big. Likely cause either file "
@@ -144,7 +144,7 @@ void vsl_b_read(vsl_b_istream &is,unsigned int& n )
   do
   {
     vsl_b_read(is, *ptr);
-    if (ptr-buf >= VSL_MAX_ARBITRARY_INT_BUFFER_LENGTH(sizeof(unsigned int)))
+    if (ptr-buf >= (int)VSL_MAX_ARBITRARY_INT_BUFFER_LENGTH(sizeof(unsigned int)))
     {
       vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream &, unsigned int& )"
         << "\n           Integer too big. Likely cause either file "
@@ -174,7 +174,7 @@ void vsl_b_read(vsl_b_istream &is,short& n )
   {
     vsl_b_read(is, *ptr);
 
-    if (ptr-buf >= VSL_MAX_ARBITRARY_INT_BUFFER_LENGTH(sizeof(short)))
+    if (ptr-buf >= (int)VSL_MAX_ARBITRARY_INT_BUFFER_LENGTH(sizeof(short)))
     {
       vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream &, short& )"
         << "\n           Integer too big. Likely cause either file "
@@ -204,8 +204,7 @@ void vsl_b_read(vsl_b_istream &is, unsigned short& n )
   do
   {
     vsl_b_read(is, *ptr);
-    if (ptr-buf >= VSL_MAX_ARBITRARY_INT_BUFFER_LENGTH(sizeof(unsigned
-                                                                   short)))
+    if (ptr-buf >= (int)VSL_MAX_ARBITRARY_INT_BUFFER_LENGTH(sizeof(unsigned short)))
     {
       vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream &, unsigned short& )"
         << "\n           Integer too big. Likely cause either file "
@@ -234,7 +233,7 @@ void vsl_b_read(vsl_b_istream &is,long& n )
   do
   {
     vsl_b_read(is, *ptr);
-    if (ptr-buf >= VSL_MAX_ARBITRARY_INT_BUFFER_LENGTH(sizeof(long)))
+    if (ptr-buf >= (int)VSL_MAX_ARBITRARY_INT_BUFFER_LENGTH(sizeof(long)))
     {
       vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream &, long& )"
         << "\n           Integer too big. Likely cause either file "
@@ -264,8 +263,7 @@ void vsl_b_read(vsl_b_istream &is,unsigned long& n )
   do
   {
     vsl_b_read(is, *ptr);
-    if (ptr-buf >= VSL_MAX_ARBITRARY_INT_BUFFER_LENGTH(sizeof(unsigned
-                                                                   long)))
+    if (ptr-buf >= (int)VSL_MAX_ARBITRARY_INT_BUFFER_LENGTH(sizeof(unsigned long)))
     {
       vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream &, unsigned long& )"
         << "\n           Integer too big. Likely cause either file "
@@ -316,7 +314,7 @@ static const unsigned short vsl_magic_number_part_2=0x472b;
 // User is responsible for deleting os after deleting the adaptor
 vsl_b_ostream::vsl_b_ostream(vcl_ostream *os): os_(os)
 {
-  assert(os_);
+  assert(os_ != 0);
   vsl_b_write_uint_16(*this, version_no_);
   vsl_b_write_uint_16(*this, vsl_magic_number_part_1);
   vsl_b_write_uint_16(*this, vsl_magic_number_part_2);
@@ -325,7 +323,7 @@ vsl_b_ostream::vsl_b_ostream(vcl_ostream *os): os_(os)
 //: A reference to the adaptor's stream
 vcl_ostream& vsl_b_ostream::os() const
 {
-  assert(os_);
+  assert(os_ != 0);
   return *os_;
 }
 
@@ -354,8 +352,7 @@ void vsl_b_ostream::clear_serialisation_records()
 unsigned long vsl_b_ostream::add_serialisation_record
                     (void *pointer, int other_data /*= 0*/)
 {
-  assert(serialisation_records_.find(pointer) ==
-    serialisation_records_.end());
+  assert(serialisation_records_.find(pointer) == serialisation_records_.end());
   unsigned long id = serialisation_records_.size() + 1;
   serialisation_records_[pointer] = vcl_make_pair(id, other_data);
   return id;
@@ -423,7 +420,7 @@ vsl_b_ofstream::~vsl_b_ofstream()
 //: Close the stream
 void vsl_b_ofstream::close()
 {
-  assert(os_);
+  assert(os_ != 0);
   ((vcl_ofstream *)os_)->close();
   clear_serialisation_records();
 }
@@ -434,7 +431,7 @@ void vsl_b_ofstream::close()
 // User is responsible for deleting is after deleting the adaptor
 vsl_b_istream::vsl_b_istream(vcl_istream *is): is_(is)
 {
-  assert(is_);
+  assert(is_ != 0);
   if (!(*is_)) return;
   unsigned long v, m1, m2;
   vsl_b_read_uint_16(*this, v);
@@ -465,7 +462,7 @@ vsl_b_istream::vsl_b_istream(vcl_istream *is): is_(is)
 //: A reference to the adaptor's stream
 vcl_istream & vsl_b_istream::is() const
 {
-  assert(is_);
+  assert(is_ != 0);
   return *is_;
 }
 
@@ -495,8 +492,7 @@ void vsl_b_istream::clear_serialisation_records()
 void vsl_b_istream::add_serialisation_record(unsigned long serial_number,
     void *pointer, int other_data /*= 0*/)
 {
-  assert(serialisation_records_.find(serial_number) ==
-    serialisation_records_.end());
+  assert(serialisation_records_.find(serial_number) == serialisation_records_.end());
   serialisation_records_[serial_number] = vcl_make_pair(pointer, other_data);
 }
 
@@ -561,7 +557,7 @@ vsl_b_ifstream::~vsl_b_ifstream()
 //: Close the stream
 void vsl_b_ifstream::close()
 {
-  assert(is_);
+  assert(is_ != 0);
   ((vcl_ifstream *)is_)->close();
   clear_serialisation_records();
 }
