@@ -325,6 +325,206 @@ SOURCE=.\file_formats\vil_viff.cxx
 
 SOURCE=.\file_formats\vil_viff_support.c
 # End Source File
+# Begin Source File
+
+SOURCE=.\Templates\vcl_vector+vil_image-.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates\vcl_vector+vil_memory_image_of+uchar--.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates\vil_buffer+char-.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates\vil_buffer+double-.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates\vil_buffer+float-.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates\vil_buffer+uchar-.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates\vil_buffer+uint-.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates\vil_buffer+vil_rgb+uchar--.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates\vil_buffer+vil_rgba+uchar--.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates\vil_buffer_2d+float-.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates\vil_buffer_2d+vil_rgb+uchar--.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates\vil_buffer_2d+vil_rgba+uchar--.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates\vil_clamp+vil_rgb+double-.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates\vil_convolve_signal.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates\vil_convolve_simple+byte.double.double.float-.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates\vil_convolve_simple+byte.float.byte.float-.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates\vil_interpolate+double.double-.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates\vil_interpolate+float.float-.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates\vil_interpolate+vil_rgb+uchar-.vil_rgb+double-.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates\vil_interpolate+vil_rgb+uchar-.vil_rgb+float-.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates\vil_interpolate+vil_rgb+uchar-.vil_rgb+uchar-.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates\vil_memory_image_of+vil_rgb+double--.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates\vil_memory_image_of+vil_rgb+float--.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates\vil_ncc.byte.byte.double.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates\vil_ncc.float.float.double.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates\vil_resample_image.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates\vil_rgb+uint-.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates\vil_rgba+unsignedchar-.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates\vil_ssd+float.float.double-.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\file_formats\vil_jpeg.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\file_formats\vil_jpeg_compressor.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\file_formats\vil_jpeg_decompressor.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\file_formats\vil_jpeg_destination_mgr.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\file_formats\vil_jpeg_source_mgr.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\file_formats\vil_png.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\file_formats\vil_tiff.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\vil_clamp.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\vil_clamp_image.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\vil_clamp_image_impl.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\vil_flipud.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\vil_flipud_impl.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\vil_image_proxy.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\vil_pyramid.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\vil_resample.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\vil_resample_image_impl.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\vil_scale_intensities.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\vil_scale_intensities_image.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\vil_scale_intensities_image_impl.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\vil_skip.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\vil_warp.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 
@@ -512,6 +712,90 @@ SOURCE=.\file_formats\vil_viff.h
 # Begin Source File
 
 SOURCE=.\file_formats\vil_viffheader.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\file_formats/vil_jpeg.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\file_formats/vil_jpeg_compressor.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\file_formats/vil_jpeg_decompressor.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\file_formats/vil_jpeg_destination_mgr.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\file_formats/vil_jpeg_source_mgr.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\file_formats/vil_png.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\file_formats/vil_tiff.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\vil_clamp.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\vil_clamp_image.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\vil_clamp_image_impl.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\vil_flipud.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\vil_flipud_impl.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\vil_image_proxy.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\vil_pyramid.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\vil_resample.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\vil_resample_image_impl.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\vil_scale_intensities.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\vil_scale_intensities_image.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\vil_scale_intensities_image_impl.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\vil_skip.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\vil_warp.h
 # End Source File
 # End Group
 # End Target

@@ -82,6 +82,7 @@ SOURCES += vil_copy.cxx
 SOURCES += vil_crop.cxx
 SOURCES += vil_skip.cxx
 SOURCES += vil_resample.cxx
+SOURCES += vil_warp.cxx
 SOURCES += vil_flipud.cxx
 MANPAGE_SOURCES += vil_convolve.txx
 MANPAGE_SOURCES += vil_convolve_simple.txx
@@ -126,7 +127,7 @@ FLAGS_Templates/vil_interpolate+vil_rgb+uchar-.vil_rgb+uchar-.cxx := $(optimize)
 # subdirectories
 #SUBDIRS += algo
 ifndef NOTEST
-SUBDIRS += tests 
+SUBDIRS += tests
 SUBDIRS += examples
 endif
 
