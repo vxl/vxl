@@ -5,6 +5,7 @@
 
 #include "vil_resample_image.h"
 #include <vcl_vector.h>
+#include <vcl_iostream.h>
 #include <vil/vil_image.h>
 
 template <class T, class A>
