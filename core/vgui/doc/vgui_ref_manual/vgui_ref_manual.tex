@@ -1,0 +1,566 @@
+\documentclass[12pt]{report} \usepackage{epsfig}
+\usepackage{epsfig}
+% <fsm>
+%\usepackage{../tools/verbawf2e}
+%\usepackage{../tools/cxx}
+\usepackage{/users/kym/target/target/vxl/vgui/doc/tools/verbawf2e}
+\usepackage{/users/kym/target/target/vxl/vgui/doc/tools/cxx}
+% </fsm>
+\usepackage{alltt}
+\topmargin=-0.5in
+\oddsidemargin=-0.2in
+\evensidemargin=0.1in
+\textwidth=6.6in
+\textheight=8.9in
+\newcommand{\tr}{{\em TargetJr }}
+\parskip =.16in
+\parindent=0in
+
+
+\begin{document}
+\title {\ VGUI Reference Manual }
+
+\author{Karen McGaul \\ Robotics Research Group \\ Department of
+  Engineering Science\\ University of Oxford}
+
+\maketitle
+\pagenumbering{roman}
+
+{\sf\large Copyright} \\
+All rights reserved. No part of this work may be reproduced, stored in
+a retrieval system, or transmitted, in a form or by any means,
+electronic, mechanical, photocopying, recording or otherwise,without
+the prior written permission of the author.
+
+\bigskip
+
+{\sf\large Warranties} \\
+Robotics Research Group makes no warranties,either express or implied,
+regarding the enclosed computer software package, its merchantability,
+or its fitness for any particular purpose. This publication may be
+revised from time to time, without notice. 
+While all care has been taken to ensure this document's accuracy,
+Robotics Research Group assumes no responsibility for any errors which
+may appear.
+
+\pagenumbering{arabic}
+\newpage
+\tableofcontents
+\newpage
+
+\chapter{Introduction}
+
+This document describes VGUI, a library that provides 2D and 3D drawing in a way
+that is both simple and powerful.  The basic design goals are:
+\begin{itemize}
+\item   Provide drawing of images and geometric primitives using OpenGL,
+        in a platform independent manner.
+\item   Define the handling of user events such as keypresses and mouse
+        movements.
+\item   Do *not* deal with widgets (buttons, sliders, menus etc), but
+        instead provide a single simple interface to whatever widget
+        toolkit the user chooses.  Current interfaces include ones to GTK, FLTK,
+        glut, and glX.
+\item   OpenGL should be usable ``raw'', without any special wrapping by the
+        library, so that existing documentation is used to best advantage.
+\end{itemize}
+The basic concept in the new GUI is that the user has access to a rectangular area
+(or areas) of the screen, on which OpenGL may be used to draw and from
+which events are received.  Such an area is called a {\it tableau}.
+Once-off adaptor code is provided that plugs a tableau into any supported GUI toolkit.
+
+\chapter{Tableaux}
+
+Currently VGUI provides several example tableaux, sufficient to
+construct complex user interfaces combining 2D and 3D with manipulators and zoom.
+So for example a ``zoomer'' tableau could provide a function to zoom an image in and out.
+We could also make a ``deck'' tableau to hold a deck of images and display one image at 
+a time (this would be useful for playing a series of images as a movie).
+
+\begin{figure}[htb]
+  \epsfig{figure=zoomer-deck-example.eps}
+  \caption{Two layouts for zoomer and deck tableaux}
+  \label{fig1}
+\end{figure}
+ 
+One tableau can be included as a child of another tableau.  This creates a new 
+tableau with the functionality of both tableaux making it up.
+So the new tableau could, for example, display a deck of images {\it and} provide zooming.  
+
+The order in which the inclusion is done will affect the functionality, so if the
+``zoomer'' tableau contains the ``deck'' tableau then all images will change
+size together.  If however the inclusion is done the other way around and each
+child tableau of the ``deck'' contains its own ``zoomer'' tableau
+then each image will change size independantly.
+
+\section{Example}
+
+As an example of a concrete task that will illustrate the use and power of
+the system, consider the simple case of displaying a 2D image.  A tableau
+that displays an image looks something like:
+ 
+{\scriptsize \begin{verbawf}
+  class image\_tableau 
+  \{
+    // image data
+    char* image\_data;
+    int width, height;
+ 
+    // draw method
+    void draw() 
+    \{
+      glRasterPos(0,0);
+      glDrawPixels(..., image\_data, ...);
+     \}
+
+    // handle event
+    bool handle_imple(vgui_event const &e)
+    \{
+      if (e is a draw event)
+        draw();
+      return true;
+    \}
+  \};
+\end{verbawf}}
+ 
+In fact, the draw method will probably be significantly more complex, in
+order to get maximum efficiency, overcome certain GL weirdnesses, and so
+on, but the basic code is there.
+
+This interface is abstracted in the obvious manner:
+
+{\scriptsize \begin{verbawf}
+  class tableau 
+  \{
+  public:
+    virtual bool handle_event(vgui_event const&) = 0;
+  \};
+\end{verbawf}}
+
+The key observation is that the tableau assumes that when its draw method
+is called, the OpenGL system is set up so that the tableau's window is
+current, the camera is in a sensible position and so on.  It is the job of
+the parent window, in which the tableau is placed, to ensure that this
+applies, but as we shall see, with this responsibility also comes power...
+ 
+ 
+\section{Adding zoom}
+ 
+To add zooming and panning to the image, we do not need to modify the
+{\tt image\_tableau}.  We create a new tableau which has the
+{\tt image\_tableau} as a child, and modifies the GL state before
+passing the draw request event down to the image.
+ 
+{\scriptsize \begin{verbawf}
+  class zoomer\_tableau : public tableau 
+  \{
+    vgui_slot child_tableau;
+    float zoom\_factor;
+ 
+    void draw() 
+    \{
+      // Change state
+      glScale3f(zoom\_factor, zoom\_factor, zoom\_factor);
+      // Ask child tableau to draw in new zoomed coordinates
+      child->draw();
+      // Undo the coordinate change
+      glScale3f(1/zoom\_factor, 1/zoom\_factor, 1/zoom\_factor);
+    \}
+
+    // handle event
+    bool handle_imple(vgui_event const &e)
+    \{
+      if (e is a draw event)
+        draw();
+      return true;
+    \}
+  \};
+\end{verbawf}}
+
+Now we have a zooming image, but the image tableau never needed to know...
+The maintainer of the image tableau can concentrate on the thorny issues of
+making {\tt glDrawPixels} fast on Windows machines, overcoming
+compiler bugs, and generally writing a high-quality image display routine.
+ 
+\section{Multiple panes}
+ 
+We might then like to have two zoomed images side by side.  Again, we can
+simply achieve this by having a tableau with two children
+ 
+{\scriptsize \begin{verbawf}
+  class composite\_tableau : public tableau {
+    vgui_slot left_tableau;
+    vgui_slot right_tableau;
+
+    void draw() {
+      //  move origin, clip, viewport etc, so all drawing is
+      //  in left pane
+      glScale(...);
+      ...
+      glViewport(...);
+ 
+      //  Draw the left child in the new coordinates 
+      left->draw();
+
+      //  Reset for right pane
+      glScale(...);
+      ...
+      glViewport(...);
+ 
+      //  Draw the right child
+      right->draw();
+ 
+      //  Restore GL state
+      ...
+    }
+
+    // handle event
+    bool handle_imple(vgui_event const &e)
+    \{
+      if (e is a draw event)
+        draw();
+      return true;
+    \}
+  };
+\end{verbawf}}
+ 
+\section{Event handling}
+ 
+Draw is an event rather than a virtual function so that
+all the work of the tableau is done in the handle\_impl function.
+The reasoning here is that a tableau should generally be in the same
+state when drawing as when handling other events.  For example, a scribble
+program which plots points under the mouse should draw the points in
+the same coordinate system as it recieved them.   If draw and handle
+were different functions, the implementer would have to ensure that
+the state-handling code was identical in both cases.
+
+The zoomer tableau must likely wishes to capture some mouse events in order
+to easily change the image pan and zoom.  Each tableau implements an event
+handler which takes a {\tt vgui\_event} structure, and either uses
+the event that it defines, or passes it to its children.  In the zoomer
+example, this might be written
+
+{\scriptsize \begin{verbawf} 
+  class zoomer\_tableau : public tableau 
+  \{
+    vgui_slot child_tableau;
+    float zoom\_factor;
+ 
+    // Event handling method.
+    bool handle\_impl(event e) 
+    \{
+      if ({\em e is control-mouse-drag}) 
+      \{
+        //  This event interests us, use it to set the zoom factor 
+        zoom\_factor = exp(e.x);
+        //  Tell our parent we've used this event
+        return true;
+      \} 
+      else 
+      \{
+        //  This event is uninteresting to us, pass it to the child.
+        bool eaten = child->handle(e);
+
+        //  Restore GL state 
+        ...
+
+        //  Tell our parent whether the child used the event 
+        return eaten;
+      \}
+  \};
+\end{verbawf}}
+ 
+
+\section{Types of tableaux provided in VGUI}
+ 
+\subsection{Graphics tableaux}
+\begin{itemize}
+\item {\bf viewer2D}:  Manipulate a 2D tableau. Includes smooth zooming and zooming by
+            sweeping out an area with same aspect ratio as viewport,
+            toggling of anti-aliased points and lines.
+\item {\bf viewer3D}: Manipulate a 3D tableau. includes dollyzoom (tm awf) toggles
+            many params including headlight, lighting, shading, level of
+            quality. you can also save/restore a position.
+\item {\bf displaylist2D} and {\bf displaylist3D}: Basic display lists that allow selection 
+      and highlighting of spatial object views (soviews). can use style factory to avoid
+      repeated setting of glColor glPointSize etc.
+\item {\bf easy2D} and {\bf easy3D}: Display list interfaces with stateful colour and style
+      parameters.
+\end{itemize}
+
+\subsection{Grouping tableaux}
+\begin{itemize}
+\item {\bf polytab}: Draw several tableaus in order and toggle them on/off.  This is
+      a ``stack of acetates'' model, like the Parmesan StackManager.
+\end{itemize}
+
+\subsection{Coordinate system changes}
+\begin{itemize}
+\item {\bf manipulator}: Combined 2D/3D zooming and panning.
+\item {\bf blackbox}: Event record and playback.
+\end{itemize}
+
+\subsection{Debugging}
+\begin{itemize}
+\item {\bf tview}: Tableau graph viewer. Click on tableau icon to get its type/name.
+\item {\bf event\_echo}:  Display all events as they pass through the tableau.
+\end{itemize}
+
+\chapter{Adaptors}
+
+An adaptor can be written for any GUI toolkit which has the ability to display an
+OpenGL area, for example, Gimp Tool Kit (GTK), Qt, Microsoft Foundation Classes (MFC).
+
+\section{Adaptors provided with VGUI}
+
+For some of the more commonly used GUI toolkits VGUI provides an easy way to create menus,
+dialogue boxes and add tableaux.  Using this VGUI pattern to create your
+applications also means that they are easily ported from one GUI toolkit to
+another. Thus it is possible to compile the same application to run with a different GUI on
+different platforms.
+
+GUI toolkits that are supported or are intended to be supported in the near future are:
+\begin{itemize}
+\item {\bf GTK} (GIMP Toolkit): 
+
+  Information at {\bf http://www.gtk.org/}
+
+\item {\bf FLTK}  (Fast Light Toolkit)
+  
+  Information at {\bf http://fltk.easysw.com/}
+
+\item {\bf Motif}
+
+\item {\bf Qt} 
+
+  Information at {\bf http://www.troll.no/developer/}
+
+\item {\bf GLUT} (OpenGL Utility Toolkit)
+
+  Information at {\bf http://www.opengl.org/Documentation/GLUT.html} 
+
+\item {\bf glX}
+
+\item {\bf MFC} (Microsoft Foundation Classes)
+\end{itemize}
+
+\section{Using a particular GUI toolkit}
+If you write your code using the pattern provided in VGUI then it will run on any
+supported GUI toolkit.
+ 
+If you wish to run your application using a particular GUI toolkit, Foo say, then
+you will need to satisfy these conditions:
+\begin{itemize}
+\item There will need to exist a specialisation of vgui for Foo (usually called {\tt vgui\_Foo}).
+\item You will have to have Foo installed on your machine.
+\item You will have to configure Target to know where Foo is installed. 
+\end{itemize}
+If Foo satisfies these conditions then when {\tt vgui\_Foo} is compiled, Foo will be registered
+as available for use by your applications.
+ 
+If no preference given on the command line for a GUI toolkit then application will look for
+a suitable GUI toolkit that is registered.  If more than one GUI toolkit is registered then one 
+will be selected at random.  
+
+If you wish to specify a GUI toolkit (for example Foo) then you will need to add
+{\tt --factory=Foo} to the end of the command line when you run your application.
+
+\section{Adding a new GUI toolkit}
+
+One of the key ideas of VGUI is that it can be used with any widget set or
+user interface that can embed a GL drawing area.  If the GUI toolkit you wish to
+use is not supported by VGUI then you can either: just go ahead and write your 
+application in that that toolkit, or provide a new class derived from vgui that interfaces your toolkit
+to VGUI.  The advantage of this second option is that the code you write will
+be portable to any other supported toolkit and you will be able to compile other people's
+VGUI applications on your favourite GUI toolkit.
+ 
+In order to port VGUI to a new interface there are several areas where the underlying interface
+must implement VGUI functionality. These are:
+\begin{enumerate}
+\item Events for the OpenGL drawing area must be
+translated into {\tt vgui\_event}'s that will be used by the tableaux for that drawing area.
+This will be done by a subclass of {\tt vgui\_adaptor} e.g. {\tt vgui\_Xm\_adaptor}.
+ 
+\item Functions for manipulating a window should be provided. This will normally be done 
+by a subclass of {\tt vgui\_window} e.g.  {\tt vgui\_Xm\_window}.
+ 
+\item VGUI functions for controlling the event loop should be implemented. These functions
+include running the event loop, running one event at a time, flushing the event loop and adding
+user produced events.
+This will be provided in a class derived from {\tt vgui} e.g. {\tt vgui\_Xm}.
+The vgui class also has factory methods for producing {\tt vgui\_window}s and 
+{\tt vgui\_dialog\_impl}s that will need to be overriden
+ 
+\item If the interface supports menus then it should be able to build a menu bar or popup 
+menu from the {\tt vgui\_menu} description. Popup menus are handled in the 
+{\tt vgui\_adaptor} subclass while a menubar is handled in the {\tt vgui\_window} subclass.
+ 
+\item If the interface has text entry fields, option menus and checkboxes  then it should be
+able to build a popup dialog from a {\tt vgui\_dialog} description. The class that provides 
+the base for dialog implementations is {\tt vgui\_dialog\_impl}.
+\end{enumerate}
+
+Lets suppose that the GUI toolkit you want to use is the (fictitious) ``Foo'' toolkit.  
+The following is a step-by-step guide to all the classes and functions you will need to 
+make in order to implement VGUI in the new interface system.
+ 
+\subsection{vgui\_Foo\_adaptor}
+
+Note that this is the only class that you have to implement in order to use VGUI tableaux.
+The other classes are needed if you want to use the VGUI pattern to create menus and dialog 
+boxes.
+
+This class is derived from {\tt vgui\_adaptor}.  It translates events for the OpenGL drawing 
+area into {\tt vgui\_event}s. The most important functions to provide are :
+
+\begin{itemize}
+\item  a function or functions dealing with mapping events from Foo's event system into {\tt vgui\_event}s
+e.g.  in FLTK an {\tt Fl\_Gl\_Window} has a single handle method that can be overriden
+while in Motif several callback functions must be provided for the drawing widget
+including  exposure, resize and input.
+
+NOTE.  If ``Foo'' is some interface derived from X  such as Motif or the Athena widget set
+then the functions in {\tt vgui\_X/vgui\_X\_utils} may be useful for converting between XEvents and 
+{\tt vgui\_event}s.
+
+Once a {\tt vgui\_event} has been constructed it should be sent to the non-virtual {\tt vgui\_adaptor}
+function {\tt ::dispatch}.
+ 
+\item {\tt ::make\_current}: Override the {\tt vgui\_adaptor} function {\tt ::make\_current}.
+
+\item {\tt ::swap\_buffers}: Override the {\tt vgui\_adaptor} function {\tt ::swap\_buffers}.
+
+\item {\tt ::update}: Override the {\tt vgui\_adaptor::update} method so that it looks like:
+
+{\scriptsize 
+\begin{verbawf}
+  void vgui\_Foo\_adaptor::update(vgui\_message const &e)
+  \{
+    if (e.user == vgui\_tableau::msg\_redraw)
+      foo\_draw();
+    else
+      vgui\_adaptor::update(e);
+  \}
+\end{verbawf}
+}
+ 
+foo\_draw could either be a member function of Foo's OpenGL widget that needs 
+overriding like  FLTK's {\tt Fl\_Gl\_Window::draw} method or just a convenient function like 
+{\tt vgui\_Xm\_adaptor::draw}.
+
+{\scriptsize
+\begin{verbawf} 
+  void vgui\_Xm\_adaptor::draw() 
+  \{
+    make\_current();
+ 
+    vgui\_tableau *tableau = get\_tableau();
+ 
+    glDrawBuffer(GL\_BACK);
+ 
+    vgui\_matrix\_state::clear\_gl\_matrices();
+    if (tableau) 
+    \{
+      do\_clear();
+ 
+      vgui\_event e;
+      e.type = vgui\_DRAW;
+      dispatch(e);
+ 
+      swap\_buffers();
+    \}
+  \}
+\end{verbawf}
+} 
+\end{itemize}
+ 
+\subsection{vgui\_Foo\_window}
+ 
+This is the next class to implement and the amount of work is very dependant on the interface
+system you are using.  Later a menubar widget can be added to this class but to start with 
+the only features that need to be implemented are embedding the  vgui\_Foo\_adaptor widget 
+and getting the window to display.
+
+\subsection{vgui\_Foo}
+ 
+There may be some setup for the widget system that should take place in this class in
+the  vgui::init\_impl function.  The only other features to worry about are
+providing the singleton methods/data
+
+from {\tt vgui\_Xm.h}
+
+{\scriptsize
+\begin{verbawf} 
+  class vgui\_Xm : public vgui 
+  \{
+  public:
+    static vgui\_Xm* instance();
+ 
+  protected:
+    vgui\_Xm();
+    static vgui\_Xm* instance\_;
+  \};
+\end{verbawf}
+} 
+
+from {\tt vgui\_Xm.C}
+
+{\scriptsize
+\begin{verbawf} 
+  vgui\_Xm* vgui\_Xm::instance\_ = 0;
+ 
+  static vgui\_Xm* vgui\_Xm\_instantiation = vgui\_Xm::instance();
+ 
+  vgui\_Xm* vgui\_Xm::instance() 
+  \{
+    if (instance\_ == 0)
+      instance\_ = new vgui\_Xm;
+ 
+    return instance\_;
+  \}
+\end{verbawf}
+} 
+
+The line containing vgui\_Xm\_instantiation causes the (sole) instance of vgui\_Xm to be
+created and due to the ctor  vgui::vgui being called, vgui\_Xm is then registered with
+VGUI  under the name given in the virtual function {\tt ::name}
+e.g.  {\tt string vgui\_Fl::name() const \{ return "fltk"; \} }
+
+The other important function to override is {\tt vgui::run\_impl}
+which basically calls the main event loop for the interface e.g.
+
+{\scriptsize
+\begin{verbawf} 
+  void vgui\_Xm::run\_impl() 
+  \{
+    XtAppMainLoop(app\_context);
+  \}
+ 
+  void vgui\_Fl::run=\_impl() 
+  \{
+    Fl::run();
+  \}
+\end{verbawf}
+}
+ 
+The other functions to override are the factory methods returning vgui\_window subclasses
+of the correct type. e.g.
+
+{\scriptsize
+\begin{verbawf} 
+  vgui\_window* vgui\_Fl::produce\_window\_impl(int width, int height, char const* title) 
+  \{
+    return new vgui\_Fl\_window(width, height, title);
+  \}
+\end{verbawf}
+}
+
+\subsection{Supporting menu bars}
+
+\subsection{Supporting pop-up menus}
+
+\subsection{Supporting dialog boxes}
+
+\end{document}

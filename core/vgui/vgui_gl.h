@@ -1,0 +1,40 @@
+#ifndef vgui_gl_h
+#define vgui_gl_h
+
+#include <vcl_compiler.h>
+
+#ifdef VCL_WIN32
+// fix windows gl.h :
+# include <windows.h>
+# pragma warning (disable:4244)		/* disable bogus conversion warnings */
+# include <GL/gl.h>
+# undef min
+# undef max
+#define glDrawBuffer mb_glDrawBufferWrapper
+void mb_glDrawBufferWrapper(GLuint); // -- Defined in vgui_accelerate_mfc.cxx
+#else
+// no need to fix :
+# include <GL/gl.h>
+#endif
+
+#if (defined(MESA) || defined(GL_MESA_window_pos) || defined(GL_MESA_resize_buffers))
+#  define VGUI_MESA 1
+#endif
+
+// capes - Some defines for OpenGL < v1.2 implementations
+// The numbers are those in the GL 1.2 spec.
+// These are only used in mapping between GL formats and
+// accelerated renderers, so no harm done... 
+#ifndef GL_ABGR_EXT
+#  define GL_ABGR_EXT 0x8000
+#endif
+#ifndef GL_BGR
+#  define GL_BGR 0x80E0
+#endif
+#ifndef GL_BGRA
+#  define GL_BGRA 0x80E1 
+#endif
+#ifndef GL_UNSIGNED_SHORT_5_6_5
+#  define GL_UNSIGNED_SHORT_5_6_5 0x8363
+#endif
+#endif // vgui_gl_h

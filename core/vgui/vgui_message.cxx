@@ -1,0 +1,50 @@
+/*
+  fsm@robots.ox.ac.uk
+*/
+#include "vgui_message.h"
+
+vgui_message::vgui_message()
+  : from(0)
+  , user(0)
+  , data(0)
+{
+}
+
+// example :
+//
+// class sender : public vgui_observable { 
+//   static const char begin[];
+//   static const char end[];
+//   void f() { 
+//     vcl_string moo="moo moo moo";
+//     vgui_mesage m;
+//     m.from = this;
+//     m.user = sender::begin;
+//     m.data = &moo;
+//     notify(m);
+//   }
+//   void g() {
+//     vgui_message m;
+//     m.from = this;
+//     m.user = sender::end;
+//     m.data = 0;
+//     notify(m);
+//   }
+// };
+//
+// class receiver : public vgui_observer {
+//   void update(const vgui_message &m) {
+//     if (m.user == sender::begin) {
+//       vcl_string *s = static_cast<vcl_string*>(m.data);
+//       cerr << "begin : " << *s << endl;
+//     }
+//     else if (m.user == sender::end) {
+//       sender *s = static_cast<sender*>(m.from);
+//       cerr << "end" << endl;
+//     }
+//     else {
+//       // dunno
+//     }
+//   }
+// };
+//
