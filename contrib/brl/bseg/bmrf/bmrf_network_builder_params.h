@@ -20,10 +20,10 @@ class bmrf_network_builder_params : public gevd_param_mixin
   bmrf_network_builder_params(const float eu = -610.071,
                               const float ev = 237.358,
                               const int  elu = 1000,
-                              const int elv_min =390,
-                              const int elv_max =450,
-                              const int Ns = 10,
-                              const float max_delta_recip_s = 3.0e-5
+                              const int elv_min =200,
+                              const int elv_max =600,
+                              const int Ns = 100,
+                              const float max_delta_recip_s = 5.0e-5
                               );
 
  bmrf_network_builder_params(const bmrf_network_builder_params& old_params);
