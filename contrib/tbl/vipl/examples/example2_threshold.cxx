@@ -34,7 +34,7 @@ main(int argc, char** argv) {
 
   // The input image:
   vil_image in = vil_load(argv[1]);
-  if (vil_pixel_type(in) != VIL_BYTE) { vcl_cerr << "Please use a ubyte image as input\n"; return 2; }
+  if (vil_pixel_format(in) != VIL_BYTE) { vcl_cerr << "Please use a ubyte image as input\n"; return 2; }
 
   // The output image:
   vil_memory_image_of<ubyte> out(in);
