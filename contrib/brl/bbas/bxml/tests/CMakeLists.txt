@@ -1,6 +1,6 @@
 # brl/bbas/bxml/tests/CMakeLists.txt
 
-LINK_LIBRARIES( bxml vtol vsol vnl )
+LINK_LIBRARIES( bxml vtol vsol vnl testlib )
 
 ADD_EXECUTABLE(bxml_test_vsol_point_2d_input_converter
                bxml_test_vsol_point_2d_input_converter.cxx)

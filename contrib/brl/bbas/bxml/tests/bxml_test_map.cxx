@@ -1,20 +1,10 @@
 // This is brl/bbas/bxml/tests/bxml_test_map.cxx
-#include <vcl_cmath.h>
+#include <testlib/testlib_test.h>
 #include <vcl_string.h>
 #include <vcl_map.h>
 #include <bxml/bxml_io.h>
 #include <vsol/vsol_spatial_object_2d.h>
 #include <vsol/vsol_point_2d.h>
-
-bool near_eq(double x, double y)
-{
-  double d = x-y;
-  double er = vcl_abs(d);
-  return er<1e-03;
-}
-
-#define Assert(x) { vcl_cout << #x "\t\t\t test "; \
-  if (x) { ++success; vcl_cout << "PASSED\n"; } else { ++failures; vcl_cout << "FAILED\n"; } }
 
 void print_gp_point(bxml_generic_ptr& gp)
 {
@@ -30,7 +20,7 @@ void print_gp_point(bxml_generic_ptr& gp)
       return;
     }
   vsol_point_2d* p = (vsol_point_2d*)so;
-  vcl_cout << "point = (" << p->x() << " " << p->y() << ")\n";
+  vcl_cout << "point = (" << p->x() << ' ' << p->y() << ")\n";
 }
 
 class test
@@ -54,12 +44,11 @@ class test
 typedef vcl_map<vcl_string,bxml_generic_ptr,vcl_less<vcl_string> > OTAB;
 OTAB test::tab_;
 
-int main(int, char **)
+int main()
 {
-  int success=0, failures=0;
   test::init();
   // we want to test the methods on bxml_vtol_vertex_2d_input_converter
-  vcl_cout << "Testing stl map<string.bxml_generic_ptr>\n";
+  testlib_test_start("stl map<string.bxml_generic_ptr>"); 
 
   vcl_string s0 = "0", s1 = "1", s2 = "2" , s3 = "3";
   //program scope
@@ -68,7 +57,5 @@ int main(int, char **)
   print_gp_point(test::get_map()[s2]);   print_gp_point(test::get_map()[s3]);
 
   vcl_cout << "finished testing stl map<string.bxml_generic_ptr>\n";
-  vcl_cout << "Test Summary: " << success << " tests succeeded, "
-           << failures << " tests failed" << (failures?"\t***\n":"\n");
-  return failures;
+  return testlib_test_summary();
 }
