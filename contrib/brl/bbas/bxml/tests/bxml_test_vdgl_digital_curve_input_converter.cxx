@@ -18,8 +18,8 @@ void bxml_test_vdgl_digital_curve_input_converter(int argc, char * argv[])
        cit != dcs.end(); cit++)
   {
     vsol_spatial_object_2d_sptr so  = (*cit).get_vsol_spatial_object();
-    vcl_cout << "Spatial Type " << so->spatial_type() << vcl_endl;
-    TEST("so->spatial_type()==3", so->spatial_type(), 3);
+    vcl_cout << "Spatial Type " << so->get_name() << vcl_endl;
+    TEST("so->spatial_type()==CURVE", so->spatial_type(), vsol_spatial_object_2d::CURVE);
     vdgl_digital_curve_sptr dc = so->cast_to_curve()->cast_to_vdgl_digital_curve();
     vdgl_interpolator_sptr intrp = dc->get_interpolator();
     ec = intrp->get_edgel_chain();

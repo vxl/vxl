@@ -20,11 +20,10 @@ static void bxml_test_vtol_vertex_2d_input_converter(int argc, char * argv[])
        pit != pts.end(); pit++)
   {
     vsol_spatial_object_2d* so  = (*pit).get_vsol_spatial_object();
-    vcl_cout << "Spatial Type " << so->spatial_type() << vcl_endl;
-    if (so->spatial_type()==1){
-      vtol_topology_object* to = so->cast_to_topology_object();
-      vtol_vertex* v = to->cast_to_vertex();
-      vtol_vertex_2d_sptr v2d = v->cast_to_vertex_2d();
+    vcl_cout << "Spatial Type " << so->get_name() << vcl_endl;
+    vtol_topology_object* to = so->cast_to_topology_object();
+    if (to) {
+      vtol_vertex_2d_sptr v2d = to->cast_to_vertex()->cast_to_vertex_2d();
       vcl_cout << "vertex" << *v2d << vcl_endl;
       TEST_NEAR("v2d->x() == 177.034", v2d->x(), 177.034, 1e-3);
     }

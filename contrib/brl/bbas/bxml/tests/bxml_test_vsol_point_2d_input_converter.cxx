@@ -16,8 +16,8 @@ void bxml_test_vsol_point_2d_input_converter(int argc, char * argv[])
        pit != pts.end(); pit++)
   {
     vsol_spatial_object_2d_sptr so  = (*pit).get_vsol_spatial_object();
-    vcl_cout << "Spatial Type " << so->spatial_type() << vcl_endl;
-    TEST("so->spatial_type()==2", so->spatial_type(), 2);
+    vcl_cout << "Spatial Type " << so->get_name() << vcl_endl;
+    TEST("so->spatial_type()==POINT", so->spatial_type(), vsol_spatial_object_2d::POINT);
   }
 }
 

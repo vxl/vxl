@@ -23,12 +23,11 @@ void bxml_test_vtol_edge_2d_input_converter(int argc, char * argv[])
        pit != pts.end(); pit++)
   {
     vsol_spatial_object_2d* so  = (*pit).get_vsol_spatial_object();
-    vcl_cout << "Spatial Type " << so->spatial_type() << vcl_endl;
-    if (so->spatial_type()==1)
+    vcl_cout << "Spatial Type " << so->get_name() << vcl_endl;
+    vtol_topology_object* to = so->cast_to_topology_object();
+    if (to)
     {
-      vtol_topology_object* to = so->cast_to_topology_object();
-      vtol_edge* e = to->cast_to_edge();
-      vtol_edge_2d_sptr e2d = e->cast_to_edge_2d();
+      vtol_edge_2d_sptr e2d = to->cast_to_edge()->cast_to_edge_2d();
       vcl_cout << "edge:" << *(e2d->v1()) << *(e2d->v2()) << vcl_endl;
       vsol_curve_2d_sptr c = e2d->curve();
       vdgl_digital_curve_sptr dc = c->cast_to_vdgl_digital_curve();

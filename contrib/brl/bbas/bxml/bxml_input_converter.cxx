@@ -7,7 +7,6 @@
 typedef vcl_map<vcl_string,bxml_generic_ptr,vcl_less<vcl_string> > OTAB;
 OTAB bxml_input_converter::obj_table_;
 
-
 //: Constructor
 bxml_input_converter::bxml_input_converter()
 {
@@ -138,35 +137,31 @@ void bxml_input_converter::clear()
 {
   for (vcl_map<vcl_string,bxml_generic_ptr,vcl_less<vcl_string> >::iterator
        pit =obj_table_.begin(); pit != obj_table_.end(); pit++)
+  {
+    bxml_generic_ptr gp = (*pit).second;
+    vsol_spatial_object_2d* so = gp.get_vsol_spatial_object();
+    if (so)
     {
-      bxml_generic_ptr gp = (*pit).second;
-      vsol_spatial_object_2d* so = gp.get_vsol_spatial_object();
-      if (so)
-        {
+      vcl_cout << "so(" << so->get_name()<<") refcnt "<< so->get_references();
 #if 0
-          vcl_cout << "so(" << so->spatial_type()<<") refcnt "
-                   << so->get_references();
-
-          if (so->spatial_type()==1)
-            {
-              if (so->cast_to_topology_object()->cast_to_vertex())
-                vcl_cout << "vertex\n";
-              if (so->cast_to_topology_object()->cast_to_zero_chain())
-                vcl_cout << " zero chain\n";
-              if (so->cast_to_topology_object()->cast_to_edge())
-                vcl_cout << " edge\n";
-           }
-          if (so->spatial_type()==2)
-            vcl_cout << " curve\n";
-#endif // 0
-          if (so->spatial_type()==3)
-            {
-#if 0
-              vcl_cout << " point\n";
+      if (so->cast_to_topology_object())
+      {
+        if (so->cast_to_topology_object()->cast_to_vertex())
+          vcl_cout << " vertex\n";
+        if (so->cast_to_topology_object()->cast_to_zero_chain())
+          vcl_cout << " zero chain\n";
+        if (so->cast_to_topology_object()->cast_to_edge())
+          vcl_cout << " edge\n";
+      }
+      if (so->cast_to_curve())
+        vcl_cout << " curve\n";
 #endif
-              so->unref();
-            }
-        }
+      if (so->cast_to_point())
+      {
+        vcl_cout << " point\n";
+        so->unref();
+      }
     }
+  }
   obj_table_.clear();
 }

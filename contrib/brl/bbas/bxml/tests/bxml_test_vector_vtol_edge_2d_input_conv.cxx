@@ -25,12 +25,11 @@ void bxml_test_vector_vtol_edge_2d_input_conv(int argc, char* argv[])
        eit != edgs.end(); eit++)
   {
     vsol_spatial_object_2d* so  = (*eit).get_vsol_spatial_object();
-    vcl_cout << "Spatial Type " << so->spatial_type() << vcl_endl;
-    if (so->spatial_type()==1)
+    vcl_cout << "Spatial Type " << so->get_name() << vcl_endl;
+    vtol_topology_object* to = so->cast_to_topology_object();
+    if (to)
     {
-      vtol_topology_object* to = so->cast_to_topology_object();
-      vtol_edge* e = to->cast_to_edge();
-      vtol_edge_2d_sptr e2d = e->cast_to_edge_2d();
+      vtol_edge_2d_sptr e2d = to->cast_to_edge()->cast_to_edge_2d();
       edges_2d.push_back(e2d);
       vcl_cout << "edge:" << *(e2d->v1()) << *(e2d->v2()) << vcl_endl;
       vsol_curve_2d_sptr c = e2d->curve();
