@@ -76,11 +76,13 @@ int compare_aux(const void * s1, const void * s2)
   return SimplexCorner::compare(*(const SimplexCorner*)s1, *(const SimplexCorner*)s2);
 }
 
+static
 void sort_simplex(vcl_vector<SimplexCorner>& simplex)
 {
   qsort(&simplex[0], simplex.size(), sizeof simplex[0], compare_aux);
 }
 
+static
 double maxabsdiff(const vnl_vector<double>& a, const vnl_vector<double>& b)
 {
   double v = 0;
@@ -92,11 +94,14 @@ double maxabsdiff(const vnl_vector<double>& a, const vnl_vector<double>& b)
   return v;
 }
 
+static
 double sorted_simplex_fdiameter(const vcl_vector<SimplexCorner>& simplex)
 {
   return simplex[simplex.size()-1].fv - simplex[0].fv;
 }
 
+#if 0
+static
 double simplex_fdiameter(const vcl_vector<SimplexCorner>& simplex)
 {
   // simplex assumed sorted, so fdiam is n - 0
@@ -108,7 +113,9 @@ double simplex_fdiameter(const vcl_vector<SimplexCorner>& simplex)
   }
   return max;
 }
+#endif
 
+static
 double simplex_diameter(const vcl_vector<SimplexCorner>& simplex)
 {
   double max = 0;
