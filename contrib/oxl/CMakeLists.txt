@@ -4,7 +4,7 @@ INCLUDE_DIRECTORIES(${allvxl_SOURCE_DIR}/vcl)
 INCLUDE_DIRECTORIES(${allvxl_SOURCE_DIR}/vxl)
 INCLUDE_DIRECTORIES(${allvxl_SOURCE_DIR}/oxl)
 
-OPTION(BUILD_VGUI "Should the VGUI user interface be built?" NO)
+OPTION(BUILD_VGUI "Should the VGUI user interface be built?" YES)
 
 SUBDIRS(mvl oxp vrml osl)
 
