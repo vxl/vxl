@@ -4,6 +4,8 @@
 //:
 // \file
 // \author Ian Scott.
+// Note that a vcl_complex<float> is thought of as a scalar
+// pixel type for vil's purposes.
 
 #include <vil/vil_rgb.h>
 #include <vil/vil_rgba.h>
@@ -52,7 +54,9 @@ enum vil_pixel_format {
   VIL_PIXEL_FORMAT_RGBA_DOUBLE = 33,
 //  VIL_PIXEL_FORMAT_RGBA_LONG_DOUBLE = 34,
 
+//: vcl_complex<float> is a scalar for vil's purposes.
   VIL_PIXEL_FORMAT_COMPLEX_FLOAT = 35,
+//: vcl_complex<double> is a scalar for vil's purposes.
   VIL_PIXEL_FORMAT_COMPLEX_DOUBLE = 36,
 
 // Add values here and be careful to keep values in vil_pixel_format.cxx in sync

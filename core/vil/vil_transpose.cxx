@@ -40,6 +40,8 @@ vil_image_view_base_sptr vil_transpose_image_resource::get_copy_view(unsigned i0
       macro(VIL_PIXEL_FORMAT_INT_16, vxl_int_16)
       macro(VIL_PIXEL_FORMAT_FLOAT, float)
       macro(VIL_PIXEL_FORMAT_DOUBLE, double)
+      macro(VIL_PIXEL_FORMAT_COMPLEX_FLOAT ,  vcl_complex<float>)
+      macro(VIL_PIXEL_FORMAT_COMPLEX_DOUBLE , vcl_complex<double>)
 #undef macro
   default:
     return 0;
@@ -66,6 +68,8 @@ vil_image_view_base_sptr vil_transpose_image_resource::get_view(unsigned i0, uns
       macro(VIL_PIXEL_FORMAT_INT_16, vxl_int_16)
       macro(VIL_PIXEL_FORMAT_FLOAT, float)
       macro(VIL_PIXEL_FORMAT_DOUBLE, double)
+      macro(VIL_PIXEL_FORMAT_COMPLEX_FLOAT ,  vcl_complex<float>)
+      macro(VIL_PIXEL_FORMAT_COMPLEX_DOUBLE , vcl_complex<double>)
 #undef macro
   default:
     return 0;
@@ -90,6 +94,8 @@ bool vil_transpose_image_resource::put_view(const vil_image_view_base& im, unsig
       macro(VIL_PIXEL_FORMAT_INT_16, vxl_int_16)
       macro(VIL_PIXEL_FORMAT_FLOAT, float)
       macro(VIL_PIXEL_FORMAT_DOUBLE, double)
+      macro(VIL_PIXEL_FORMAT_COMPLEX_FLOAT ,  vcl_complex<float>)
+      macro(VIL_PIXEL_FORMAT_COMPLEX_DOUBLE , vcl_complex<double>)
 #undef macro
   default:
     return false;

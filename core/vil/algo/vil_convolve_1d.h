@@ -328,6 +328,8 @@ class vil_convolve_1d_resource : public vil_image_resource
       macro(VIL_PIXEL_FORMAT_BOOL , bool )
       macro(VIL_PIXEL_FORMAT_FLOAT , float )
       macro(VIL_PIXEL_FORMAT_DOUBLE , double )
+// complex<float> should work - but causes all manner of compiler template errors.
+// maybe need a better compiler, maybe there is a code fix - IMS
 #undef macro
       default:
         return 0;

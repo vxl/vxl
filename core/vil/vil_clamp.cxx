@@ -59,6 +59,7 @@ vil_image_view_base_sptr vil_clamp_image_resource::get_copy_view(unsigned i0, un
       macro(VIL_PIXEL_FORMAT_INT_16 , vxl_int_16 )
       macro(VIL_PIXEL_FORMAT_FLOAT , float )
       macro(VIL_PIXEL_FORMAT_DOUBLE , double )
+// How might you clamp a vcl_complex image ?
 #undef macro
   default:
     return 0;
