@@ -1,45 +1,43 @@
-#	Header
-#
 # Tag Image File Format Library
 #
 # Copyright (c) 1988-1997 Sam Leffler
 # Copyright (c) 1991-1997 Silicon Graphics, Inc.
-# 
-# Permission to use, copy, modify, distribute, and sell this software and 
+#
+# Permission to use, copy, modify, distribute, and sell this software and
 # its documentation for any purpose is hereby granted without fee, provided
 # that (i) the above copyright notices and this permission notice appear in
 # all copies of the software and related documentation, and (ii) the names of
 # Sam Leffler and Silicon Graphics may not be used in any advertising or
 # publicity relating to the software without the specific, prior written
 # permission of Sam Leffler and Silicon Graphics.
-# 
-# THE SOFTWARE IS PROVIDED "AS-IS" AND WITHOUT WARRANTY OF ANY KIND, 
-# EXPRESS, IMPLIED OR OTHERWISE, INCLUDING WITHOUT LIMITATION, ANY 
-# WARRANTY OF MERCHANTABILITY OR FITNESS FOR A PARTICULAR PURPOSE.  
-# 
+#
+# THE SOFTWARE IS PROVIDED "AS-IS" AND WITHOUT WARRANTY OF ANY KIND,
+# EXPRESS, IMPLIED OR OTHERWISE, INCLUDING WITHOUT LIMITATION, ANY
+# WARRANTY OF MERCHANTABILITY OR FITNESS FOR A PARTICULAR PURPOSE.
+#
 # IN NO EVENT SHALL SAM LEFFLER OR SILICON GRAPHICS BE LIABLE FOR
 # ANY SPECIAL, INCIDENTAL, INDIRECT OR CONSEQUENTIAL DAMAGES OF ANY KIND,
 # OR ANY DAMAGES WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS,
-# WHETHER OR NOT ADVISED OF THE POSSIBILITY OF DAMAGE, AND ON ANY THEORY OF 
-# LIABILITY, ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE 
+# WHETHER OR NOT ADVISED OF THE POSSIBILITY OF DAMAGE, AND ON ANY THEORY OF
+# LIABILITY, ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE
 # OF THIS SOFTWARE.
 #
 
-SRCDIR	= @LIBSRCDIR@
+SRCDIR = @LIBSRCDIR@
 
 #
-# VERSION:	@VERSION@
-# DATE:		@DATE@
-# TARGET:	@TARGET@
-# CCOMPILER:	@CCOMPILER@
+# VERSION:      @VERSION@
+# DATE:         @DATE@
+# TARGET:       @TARGET@
+# CCOMPILER:    @CCOMPILER@
 #
-SHELL	= @SCRIPT_SH@
-NULL	=
-CC	= @CCOMPILER@
-AR	= @AR@
-AROPTS	= @AROPTS@
-RANLIB	= @RANLIB@
-INSTALL	= @INSTALL@
+SHELL   = @SCRIPT_SH@
+NULL    =
+CC      = @CCOMPILER@
+AR      = @AR@
+AROPTS  = @AROPTS@
+RANLIB  = @RANLIB@
+INSTALL = @INSTALL@
 
 #
 # If JPEG support is to be included and the Independent JPEG
@@ -48,9 +46,9 @@ INSTALL	= @INSTALL@
 #
 # Similarly, if the libgz distribution is not installed, then
 # DIR_LIBGZ must refer to the directory where the include files
-# are located.  Note that recent versions 
+# are located.  Note that recent versions
 #
-IPATH	= -I. -I${SRCDIR} @COPT_LIBINC@
+IPATH = -I. -I${SRCDIR} @COPT_LIBINC@
 #
 # To enable JPEG support include -DJPEG_SUPPORT here.
 # To enable Deflate support add a -DZIP_SUPPORT here.
@@ -61,87 +59,87 @@ IPATH	= -I. -I${SRCDIR} @COPT_LIBINC@
 # the configuration of optional library support.
 #
 CONF_LIBRARY=@CONF_JPEG@ @CONF_ZIP@
-COPTS	= @GCOPTS@
+COPTS = @GCOPTS@
 OPTIMIZER=-O
-CFLAGS	= @ENVOPTS@ @LIBCOPTS@ ${COPTS} ${OPTIMIZER} ${IPATH} ${CONF_LIBRARY}
+CFLAGS = @ENVOPTS@ @LIBCOPTS@ ${COPTS} ${OPTIMIZER} ${IPATH} ${CONF_LIBRARY}
 #
-SRCS	= \
-	tif_aux.c \
-	tif_close.c \
-	tif_codec.c \
-	tif_compress.c \
-	tif_dir.c \
-	tif_dirinfo.c \
-	tif_dirread.c \
-	tif_dirwrite.c \
-	tif_dumpmode.c \
-	tif_error.c \
-	tif_fax3.c \
-	tif_fax3sm.c \
-	tif_getimage.c \
-	tif_jpeg.c \
-	tif_flush.c \
-	tif_luv.c \
-	tif_lzw.c \
-	tif_next.c \
-	tif_open.c \
-	tif_packbits.c \
-	tif_pixarlog.c \
-	tif_predict.c \
-	tif_print.c \
-	tif_read.c \
-	tif_swab.c \
-	tif_strip.c \
-	tif_thunder.c \
-	tif_tile.c \
-	tif_unix.c \
-	tif_version.c \
-	tif_warning.c \
-	tif_write.c \
-	tif_zip.c \
-	${NULL}
-OBJS	= \
-	tif_aux.o \
-	tif_close.o \
-	tif_codec.o \
-	tif_compress.o \
-	tif_dir.o \
-	tif_dirinfo.o \
-	tif_dirread.o \
-	tif_dirwrite.o \
-	tif_dumpmode.o \
-	tif_error.o \
-	tif_fax3.o \
-	tif_fax3sm.o \
-	tif_getimage.o \
-	tif_jpeg.o \
-	tif_flush.o \
-	tif_luv.o \
-	tif_lzw.o \
-	tif_next.o \
-	tif_open.o \
-	tif_packbits.o \
-	tif_pixarlog.o \
-	tif_predict.o \
-	tif_print.o \
-	tif_read.o \
-	tif_swab.o \
-	tif_strip.o \
-	tif_thunder.o \
-	tif_tile.o \
-	tif_unix.o \
-	tif_version.o \
-	tif_warning.o \
-	tif_write.o \
-	tif_zip.o \
-	${NULL}
-TARGETS	= libtiff.a
+SRCS = \
+ tif_aux.c \
+ tif_close.c \
+ tif_codec.c \
+ tif_compress.c \
+ tif_dir.c \
+ tif_dirinfo.c \
+ tif_dirread.c \
+ tif_dirwrite.c \
+ tif_dumpmode.c \
+ tif_error.c \
+ tif_fax3.c \
+ tif_fax3sm.c \
+ tif_getimage.c \
+ tif_jpeg.c \
+ tif_flush.c \
+ tif_luv.c \
+ tif_lzw.c \
+ tif_next.c \
+ tif_open.c \
+ tif_packbits.c \
+ tif_pixarlog.c \
+ tif_predict.c \
+ tif_print.c \
+ tif_read.c \
+ tif_swab.c \
+ tif_strip.c \
+ tif_thunder.c \
+ tif_tile.c \
+ tif_unix.c \
+ tif_version.c \
+ tif_warning.c \
+ tif_write.c \
+ tif_zip.c \
+ ${NULL}
+OBJS = \
+ tif_aux.o \
+ tif_close.o \
+ tif_codec.o \
+ tif_compress.o \
+ tif_dir.o \
+ tif_dirinfo.o \
+ tif_dirread.o \
+ tif_dirwrite.o \
+ tif_dumpmode.o \
+ tif_error.o \
+ tif_fax3.o \
+ tif_fax3sm.o \
+ tif_getimage.o \
+ tif_jpeg.o \
+ tif_flush.o \
+ tif_luv.o \
+ tif_lzw.o \
+ tif_next.o \
+ tif_open.o \
+ tif_packbits.o \
+ tif_pixarlog.o \
+ tif_predict.o \
+ tif_print.o \
+ tif_read.o \
+ tif_swab.o \
+ tif_strip.o \
+ tif_thunder.o \
+ tif_tile.o \
+ tif_unix.o \
+ tif_version.o \
+ tif_warning.o \
+ tif_write.o \
+ tif_zip.o \
+ ${NULL}
+TARGETS = libtiff.a
 
-all:	${TARGETS}
+all: ${TARGETS}
 	if [ @DSO@dso != nodso ]; then \
-	    ${MAKE} @DSO@dso; \
+	  ${MAKE} @DSO@dso; \
 	else \
-	    true; \
+	  true; \
 	fi
 
 libtiff.a: ${OBJS}
@@ -162,13 +160,13 @@ libtiff.a: ${OBJS}
 # default IRIX DSO building rule
 IRIXdso: ${OBJS}
 	@if [ "`basename ${CC}`" = "gcc" ]; then \
-	   ${LD} -n32 @ENVOPTS@ -o libtiff.@DSOSUF@ -shared -rdata_shared \
-	   ${OBJS}; \
+	  ${LD} -n32 @ENVOPTS@ -o libtiff.@DSOSUF@ -shared -rdata_shared \
+	  ${OBJS}; \
 	else \
-	    ${CC} @ENVOPTS@ -o libtiff.@DSOSUF@ -shared -rdata_shared \
-	        -check_registry ${SRCDIR}/../port/irix/so_locations \
-	        -quickstart_info \
-	        ${OBJS} @LIBJPEG@ @LIBGZ@; \
+	  ${CC} @ENVOPTS@ -o libtiff.@DSOSUF@ -shared -rdata_shared \
+	    -check_registry ${SRCDIR}/../port/irix/so_locations \
+	    -quickstart_info \
+	    ${OBJS} @LIBJPEG@ @LIBGZ@; \
 	fi
 	touch $@
 # special rule for IRIX 5.2
@@ -189,10 +187,10 @@ AIXdso: ${OBJS}
 	rm -f libtiff.syms shr.o
 	echo "#!" > libtiff.syms
 	/bin/dump -g libtiff.a | sed -n -e \
-	      's/^[ 	]*[0-9][0-9]*[	 ]*\([^	 .][^ 	]*\)$$/\1/p' \
-	      >> libtiff.syms
+	  's/^[ 	]*[0-9][0-9]*[	 ]*\([^	 .][^ 	]*\)$$/\1/p' \
+	  >> libtiff.syms
 	${LD} -o shr.o libtiff.a -H512 -T512 -bM\:SRE \
-	    -bE\:libtiff.syms @LIBJPEG@ @LIBGZ@ -lc -lm -L@DIR_LIB@
+	  -bE\:libtiff.syms @LIBJPEG@ @LIBGZ@ -lc -lm -L@DIR_LIB@
 	rm -f libtiff.syms libtiff.@DSOSUF@
 	${AR} ${AROPTS} libtiff.@DSOSUF@ shr.o
 	rm -f shr.o
@@ -208,7 +206,7 @@ NETBSDdso FREEBSDdso: ${OBJS}
 # linux ELF shared lib rule
 LINUXdso:  ${OBJS}
 	${CC} -shared -Wl,-soname,libtiff.@DSOSUF@ \
-	    -o libtiff.@DSOSUF_VERSION@  ${OBJS} @LIBJPEG@ @LIBGZ@ 
+	  -o libtiff.@DSOSUF_VERSION@  ${OBJS} @LIBJPEG@ @LIBGZ@
 	rm -f libtiff.@DSOSUF@
 	@LN@ @LN_S@ libtiff.@DSOSUF_VERSION@ libtiff.@DSOSUF@
 	touch $@
@@ -220,8 +218,8 @@ OSFdso: ${OBJS}
 ${OBJS}: ${SRCDIR}/tiffio.h ${SRCDIR}/tiff.h ${SRCDIR}/tif_dir.h
 ${OBJS}: ${SRCDIR}/tiffcomp.h ${SRCDIR}/tiffiop.h ${SRCDIR}/tiffconf.h
 
-ALPHA	= @ALPHAFILE@
-VERSION	= @VERSIONFILE@
+ALPHA   = @ALPHAFILE@
+VERSION = @VERSIONFILE@
 
 version.h: ${VERSION} ${ALPHA} ${SRCDIR}/mkversion.c
 	${CC} -o mkversion ${CFLAGS} ${SRCDIR}/mkversion.c
@@ -313,36 +311,36 @@ tif_vms.o: ${SRCDIR}/tif_vms.c
 tif_win3.o: ${SRCDIR}/tif_win3.c
 	${CC} -c ${CFLAGS} ${SRCDIR}/tif_win3.c
 
-INCS	= ${SRCDIR}/tiff.h ${SRCDIR}/tiffio.h ${SRCDIR}/tiffconf.h
+INCS = ${SRCDIR}/tiff.h ${SRCDIR}/tiffio.h ${SRCDIR}/tiffconf.h
 
 installHdrs: ${INCS}
 	${INSTALL} -idb tiff.sw.dev -m 755 -dir @DIR_INC@
-	for i in ${INCS}; do						\
-	    f=`basename $$i`;						\
-	    ${INSTALL} -idb tiff.sw.dev -m 444 -F @DIR_INC@		\
-		-src $$i -O $$f;					\
+	for i in ${INCS}; do                                            \
+	  f=`basename $$i`;                                             \
+	  ${INSTALL} -idb tiff.sw.dev -m 444 -F @DIR_INC@               \
+	    -src $$i -O $$f;                                            \
 	done
 installDSO: @DSO@dso
-	if [ @DSOSUF_VERSION@ != @DSOSUF@ ]; then			\
-	    ${INSTALL} -idb tiff.sw.tools -m 555 -F @DIR_LIB@		\
-		-O libtiff.@DSOSUF_VERSION@;				\
-	    ${INSTALL} -idb tiff.sw.tools -F @DIR_LIB@			\
-		-ln libtiff.@DSOSUF_VERSION@ -O libtiff.@DSOSUF@;	\
-	else								\
-	    ${INSTALL} -idb tiff.sw.tools -m 555 -F @DIR_LIB@		\
-		-O libtiff.@DSOSUF@;					\
+	if [ @DSOSUF_VERSION@ != @DSOSUF@ ]; then                       \
+	  ${INSTALL} -idb tiff.sw.tools -m 555 -F @DIR_LIB@             \
+	    -O libtiff.@DSOSUF_VERSION@;                                \
+	  ${INSTALL} -idb tiff.sw.tools -F @DIR_LIB@                    \
+	    -ln libtiff.@DSOSUF_VERSION@ -O libtiff.@DSOSUF@;           \
+	else                                                            \
+	  ${INSTALL} -idb tiff.sw.tools -m 555 -F @DIR_LIB@             \
+	    -O libtiff.@DSOSUF@;                                        \
 	fi
 install: all installHdrs
 	${INSTALL} -idb tiff.sw.dev -m 755 -dir @DIR_LIB@
 	${INSTALL} -idb tiff.sw.dev -m 444 -F @DIR_LIB@ -O libtiff.a
-	if [ @DSO@dso != nodso ]; then					\
-	    ${MAKE} installDSO;						\
-	else								\
-	    true;							\
+	if [ @DSO@dso != nodso ]; then                                  \
+	  ${MAKE} installDSO;                                           \
+	else                                                            \
+	  true;                                                         \
 	fi
 
 clean:
 	rm -f ${TARGETS} ${OBJS} core a.out \
-	    mkg3states tif_fax3sm.c \
-	    mkversion version.h \
-	    libtiff.a libtiff.@DSOSUF@ libtiff.@DSOSUF_VERSION@ *dso
+	  mkg3states tif_fax3sm.c \
+	  mkversion version.h \
+	  libtiff.a libtiff.@DSOSUF@ libtiff.@DSOSUF_VERSION@ *dso

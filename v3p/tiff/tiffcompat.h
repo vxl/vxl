@@ -124,9 +124,9 @@ typedef unsigned long u_long;
  * associated with the supplied file descriptor.
  */
 #if USE_PROTOTYPES
-extern  long TIFFGetFileSize(int fd);
+extern long TIFFGetFileSize(int fd);
 #else
-extern  long TIFFGetFileSize();
+extern long TIFFGetFileSize();
 #endif
 
 #ifdef MMAP_SUPPORT
@@ -139,11 +139,11 @@ extern  long TIFFGetFileSize();
  * TIFFUnmapFileContents does the inverse operation.
  */
 #if USE_PROTOTYPES
-extern  int TIFFMapFileContents(int fd, char **paddr, long *psize);
-extern  void TIFFUnmapFileContents(char *addr, long size);
+extern int TIFFMapFileContents(int fd, char **paddr, long *psize);
+extern void TIFFUnmapFileContents(char *addr, long size);
 #else
-extern  int TIFFMapFileContents();
-extern  void TIFFUnmapFileContents();
+extern int TIFFMapFileContents();
+extern void TIFFUnmapFileContents();
 #endif
 #endif
 
@@ -156,7 +156,7 @@ extern  void TIFFUnmapFileContents();
 extern long mpw_lseek(int, long, int);
 #else
 #if !defined(__hpux__) && !defined(__sgi) && !defined(__FreeBSD__)
-extern  long lseek();
+extern long lseek();
 #endif
 #endif
 
@@ -174,8 +174,8 @@ extern  long lseek();
 #endif
 
 #if defined(__MACH__) || defined(THINK_C)
-extern  void *malloc(size_t size);
-extern  void *realloc(void *ptr, size_t size);
+extern void *malloc(size_t size);
+extern void *realloc(void *ptr, size_t size);
 #else /* !__MACH__ && !THINK_C */
 #if defined(MSDOS)
 #include <malloc.h>
@@ -183,8 +183,8 @@ extern  void *realloc(void *ptr, size_t size);
 #if defined(_IBMR2)
 #include <stdlib.h>
 #else /* !_IBMR2 */
-extern  char *malloc();
-extern  char *realloc();
+extern char *malloc();
+extern char *realloc();
 #endif /* _IBMR2 */
 #endif /* !MSDOS */
 #endif /* !__MACH__ */

@@ -1,26 +1,24 @@
-/* Header */
-
 /*
  * Copyright (c) 1991-1997 Sam Leffler
  * Copyright (c) 1991-1997 Silicon Graphics, Inc.
  *
- * Permission to use, copy, modify, distribute, and sell this software and 
+ * Permission to use, copy, modify, distribute, and sell this software and
  * its documentation for any purpose is hereby granted without fee, provided
  * that (i) the above copyright notices and this permission notice appear in
  * all copies of the software and related documentation, and (ii) the names of
  * Sam Leffler and Silicon Graphics may not be used in any advertising or
  * publicity relating to the software without the specific, prior written
  * permission of Sam Leffler and Silicon Graphics.
- * 
- * THE SOFTWARE IS PROVIDED "AS-IS" AND WITHOUT WARRANTY OF ANY KIND, 
- * EXPRESS, IMPLIED OR OTHERWISE, INCLUDING WITHOUT LIMITATION, ANY 
- * WARRANTY OF MERCHANTABILITY OR FITNESS FOR A PARTICULAR PURPOSE.  
- * 
+ *
+ * THE SOFTWARE IS PROVIDED "AS-IS" AND WITHOUT WARRANTY OF ANY KIND,
+ * EXPRESS, IMPLIED OR OTHERWISE, INCLUDING WITHOUT LIMITATION, ANY
+ * WARRANTY OF MERCHANTABILITY OR FITNESS FOR A PARTICULAR PURPOSE.
+ *
  * IN NO EVENT SHALL SAM LEFFLER OR SILICON GRAPHICS BE LIABLE FOR
  * ANY SPECIAL, INCIDENTAL, INDIRECT OR CONSEQUENTIAL DAMAGES OF ANY KIND,
  * OR ANY DAMAGES WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS,
- * WHETHER OR NOT ADVISED OF THE POSSIBILITY OF DAMAGE, AND ON ANY THEORY OF 
- * LIABILITY, ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE 
+ * WHETHER OR NOT ADVISED OF THE POSSIBILITY OF DAMAGE, AND ON ANY THEORY OF
+ * LIABILITY, ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE
  * OF THIS SOFTWARE.
  */
 
@@ -33,14 +31,14 @@
 #include <assert.h>
 #include <stdio.h>
 
-static	int gtTileContig(TIFFRGBAImage*, uint32*, uint32, uint32);
-static	int gtTileSeparate(TIFFRGBAImage*, uint32*, uint32, uint32);
-static	int gtStripContig(TIFFRGBAImage*, uint32*, uint32, uint32);
-static	int gtStripSeparate(TIFFRGBAImage*, uint32*, uint32, uint32);
-static	int pickTileContigCase(TIFFRGBAImage*);
-static	int pickTileSeparateCase(TIFFRGBAImage*);
+static int gtTileContig(TIFFRGBAImage*, uint32*, uint32, uint32);
+static int gtTileSeparate(TIFFRGBAImage*, uint32*, uint32, uint32);
+static int gtStripContig(TIFFRGBAImage*, uint32*, uint32, uint32);
+static int gtStripSeparate(TIFFRGBAImage*, uint32*, uint32, uint32);
+static int pickTileContigCase(TIFFRGBAImage*);
+static int pickTileSeparateCase(TIFFRGBAImage*);
 
-static	const char photoTag[] = "PhotometricInterpretation";
+static const char photoTag[] = "PhotometricInterpretation";
 
 /*
  * Check the image to see if TIFFReadRGBAImage can deal with it.
@@ -58,90 +56,90 @@ TIFFRGBAImageOK(TIFF* tif, char emsg[1024])
     switch (td->td_bitspersample) {
     case 1: case 2: case 4:
     case 8: case 16:
-	break;
+        break;
     default:
-	sprintf(emsg, "Sorry, can not handle images with %d-bit samples",
-	    td->td_bitspersample);
-	return (0);
+        sprintf(emsg, "Sorry, can not handle images with %d-bit samples",
+            td->td_bitspersample);
+        return (0);
     }
     colorchannels = td->td_samplesperpixel - td->td_extrasamples;
     if (!TIFFGetField(tif, TIFFTAG_PHOTOMETRIC, &photometric)) {
-	switch (colorchannels) {
-	case 1:
-	    photometric = PHOTOMETRIC_MINISBLACK;
-	    break;
-	case 3:
-	    photometric = PHOTOMETRIC_RGB;
-	    break;
-	default:
-	    sprintf(emsg, "Missing needed %s tag", photoTag);
-	    return (0);
-	}
+        switch (colorchannels) {
+        case 1:
+            photometric = PHOTOMETRIC_MINISBLACK;
+            break;
+        case 3:
+            photometric = PHOTOMETRIC_RGB;
+            break;
+        default:
+            sprintf(emsg, "Missing needed %s tag", photoTag);
+            return (0);
+        }
     }
     switch (photometric) {
     case PHOTOMETRIC_MINISWHITE:
     case PHOTOMETRIC_MINISBLACK:
     case PHOTOMETRIC_PALETTE:
-	if (td->td_planarconfig == PLANARCONFIG_CONTIG && td->td_samplesperpixel != 1) {
-	    sprintf(emsg,
-		"Sorry, can not handle contiguous data with %s=%d, and %s=%d",
-		photoTag, photometric,
-		"Samples/pixel", td->td_samplesperpixel);
-	    return (0);
-	}
-	break;
+        if (td->td_planarconfig == PLANARCONFIG_CONTIG && td->td_samplesperpixel != 1) {
+            sprintf(emsg,
+                "Sorry, can not handle contiguous data with %s=%d, and %s=%d",
+                photoTag, photometric,
+                "Samples/pixel", td->td_samplesperpixel);
+            return (0);
+        }
+        break;
     case PHOTOMETRIC_YCBCR:
-	if (td->td_planarconfig != PLANARCONFIG_CONTIG) {
-	    sprintf(emsg, "Sorry, can not handle YCbCr images with %s=%d",
-		"Planarconfiguration", td->td_planarconfig);
-	    return (0);
-	}
-	break;
-    case PHOTOMETRIC_RGB: 
-	if (colorchannels < 3) {
-	    sprintf(emsg, "Sorry, can not handle RGB image with %s=%d",
-		"Color channels", colorchannels);
-	    return (0);
-	}
-	break;
+        if (td->td_planarconfig != PLANARCONFIG_CONTIG) {
+            sprintf(emsg, "Sorry, can not handle YCbCr images with %s=%d",
+                "Planarconfiguration", td->td_planarconfig);
+            return (0);
+        }
+        break;
+    case PHOTOMETRIC_RGB:
+        if (colorchannels < 3) {
+            sprintf(emsg, "Sorry, can not handle RGB image with %s=%d",
+                "Color channels", colorchannels);
+            return (0);
+        }
+        break;
 #ifdef CMYK_SUPPORT
     case PHOTOMETRIC_SEPARATED:
-	if (td->td_inkset != INKSET_CMYK) {
-	    sprintf(emsg, "Sorry, can not handle separated image with %s=%d",
-		"InkSet", td->td_inkset);
-	    return (0);
-	}
-	if (td->td_samplesperpixel != 4) {
-	    sprintf(emsg, "Sorry, can not handle separated image with %s=%d",
-		"Samples/pixel", td->td_samplesperpixel);
-	    return (0);
-	}
-	break;
+        if (td->td_inkset != INKSET_CMYK) {
+            sprintf(emsg, "Sorry, can not handle separated image with %s=%d",
+                "InkSet", td->td_inkset);
+            return (0);
+        }
+        if (td->td_samplesperpixel != 4) {
+            sprintf(emsg, "Sorry, can not handle separated image with %s=%d",
+                "Samples/pixel", td->td_samplesperpixel);
+            return (0);
+        }
+        break;
 #endif
     case PHOTOMETRIC_LOGL:
-	if (td->td_compression != COMPRESSION_SGILOG) {
-	    sprintf(emsg, "Sorry, LogL data must have %s=%d",
-		"Compression", COMPRESSION_SGILOG);
-	    return (0);
-	}
-	break;
+        if (td->td_compression != COMPRESSION_SGILOG) {
+            sprintf(emsg, "Sorry, LogL data must have %s=%d",
+                "Compression", COMPRESSION_SGILOG);
+            return (0);
+        }
+        break;
     case PHOTOMETRIC_LOGLUV:
-	if (td->td_compression != COMPRESSION_SGILOG &&
-		td->td_compression != COMPRESSION_SGILOG24) {
-	    sprintf(emsg, "Sorry, LogLuv data must have %s=%d or %d",
-		"Compression", COMPRESSION_SGILOG, COMPRESSION_SGILOG24);
-	    return (0);
-	}
-	if (td->td_planarconfig != PLANARCONFIG_CONTIG) {
-	    sprintf(emsg, "Sorry, can not handle LogLuv images with %s=%d",
-		"Planarconfiguration", td->td_planarconfig);
-	    return (0);
-	}
-	break;
+        if (td->td_compression != COMPRESSION_SGILOG &&
+                td->td_compression != COMPRESSION_SGILOG24) {
+            sprintf(emsg, "Sorry, LogLuv data must have %s=%d or %d",
+                "Compression", COMPRESSION_SGILOG, COMPRESSION_SGILOG24);
+            return (0);
+        }
+        if (td->td_planarconfig != PLANARCONFIG_CONTIG) {
+            sprintf(emsg, "Sorry, can not handle LogLuv images with %s=%d",
+                "Planarconfiguration", td->td_planarconfig);
+            return (0);
+        }
+        break;
     default:
-	sprintf(emsg, "Sorry, can not handle image with %s=%d",
-	    photoTag, photometric);
-	return (0);
+        sprintf(emsg, "Sorry, can not handle image with %s=%d",
+            photoTag, photometric);
+        return (0);
     }
     return (1);
 }
@@ -150,13 +148,13 @@ void
 TIFFRGBAImageEnd(TIFFRGBAImage* img)
 {
     if (img->Map)
-	_TIFFfree(img->Map), img->Map = NULL;
+        _TIFFfree(img->Map), img->Map = NULL;
     if (img->BWmap)
-	_TIFFfree(img->BWmap), img->BWmap = NULL;
+        _TIFFfree(img->BWmap), img->BWmap = NULL;
     if (img->PALmap)
-	_TIFFfree(img->PALmap), img->PALmap = NULL;
+        _TIFFfree(img->PALmap), img->PALmap = NULL;
     if (img->ycbcr)
-	_TIFFfree(img->ycbcr), img->ycbcr = NULL;
+        _TIFFfree(img->ycbcr), img->ycbcr = NULL;
 
     if( img->redcmap ) {
         _TIFFfree( img->redcmap );
@@ -171,21 +169,21 @@ isCCITTCompression(TIFF* tif)
     uint16 compress;
     TIFFGetField(tif, TIFFTAG_COMPRESSION, &compress);
     return (compress == COMPRESSION_CCITTFAX3 ||
-	    compress == COMPRESSION_CCITTFAX4 ||
-	    compress == COMPRESSION_CCITTRLE ||
-	    compress == COMPRESSION_CCITTRLEW);
+            compress == COMPRESSION_CCITTFAX4 ||
+            compress == COMPRESSION_CCITTRLE ||
+            compress == COMPRESSION_CCITTRLEW);
 }
 
 int
 TIFFRGBAImageBegin(TIFFRGBAImage* img, TIFF* tif, int stop, char emsg[1024])
 {
-    uint16* sampleinfo;
+    uint16 *sampleinfo;
     uint16 extrasamples;
     uint16 planarconfig;
     uint16 compress;
-    int colorchannels;
-    uint16	*red_orig, *green_orig, *blue_orig;
-    int		n_color;
+    int    colorchannels;
+    uint16 *red_orig, *green_orig, *blue_orig;
+    int    n_color;
 
     /* Initialize to normal values */
     img->row_offset = 0;
@@ -193,56 +191,56 @@ TIFFRGBAImageBegin(TIFFRGBAImage* img, TIFF* tif, int stop, char emsg[1024])
     img->redcmap = NULL;
     img->greencmap = NULL;
     img->bluecmap = NULL;
-    
+
     img->tif = tif;
     img->stoponerr = stop;
     TIFFGetFieldDefaulted(tif, TIFFTAG_BITSPERSAMPLE, &img->bitspersample);
     switch (img->bitspersample) {
     case 1: case 2: case 4:
     case 8: case 16:
-	break;
+        break;
     default:
-	sprintf(emsg, "Sorry, can not image with %d-bit samples",
-	    img->bitspersample);
-	return (0);
+        sprintf(emsg, "Sorry, can not image with %d-bit samples",
+            img->bitspersample);
+        return (0);
     }
     img->alpha = 0;
     TIFFGetFieldDefaulted(tif, TIFFTAG_SAMPLESPERPIXEL, &img->samplesperpixel);
     TIFFGetFieldDefaulted(tif, TIFFTAG_EXTRASAMPLES,
-	&extrasamples, &sampleinfo);
+        &extrasamples, &sampleinfo);
     if (extrasamples == 1)
-	switch (sampleinfo[0]) {
-	case EXTRASAMPLE_ASSOCALPHA:	/* data is pre-multiplied */
-	case EXTRASAMPLE_UNASSALPHA:	/* data is not pre-multiplied */
-	    img->alpha = sampleinfo[0];
-	    break;
-	}
+        switch (sampleinfo[0]) {
+        case EXTRASAMPLE_ASSOCALPHA:    /* data is pre-multiplied */
+        case EXTRASAMPLE_UNASSALPHA:    /* data is not pre-multiplied */
+            img->alpha = sampleinfo[0];
+            break;
+        }
     colorchannels = img->samplesperpixel - extrasamples;
     TIFFGetFieldDefaulted(tif, TIFFTAG_COMPRESSION, &compress);
     TIFFGetFieldDefaulted(tif, TIFFTAG_PLANARCONFIG, &planarconfig);
     if (!TIFFGetField(tif, TIFFTAG_PHOTOMETRIC, &img->photometric)) {
-	switch (colorchannels) {
-	case 1:
-	    if (isCCITTCompression(tif))
-		img->photometric = PHOTOMETRIC_MINISWHITE;
-	    else
-		img->photometric = PHOTOMETRIC_MINISBLACK;
-	    break;
-	case 3:
-	    img->photometric = PHOTOMETRIC_RGB;
-	    break;
-	default:
-	    sprintf(emsg, "Missing needed %s tag", photoTag);
-	    return (0);
-	}
+        switch (colorchannels) {
+        case 1:
+            if (isCCITTCompression(tif))
+                img->photometric = PHOTOMETRIC_MINISWHITE;
+            else
+                img->photometric = PHOTOMETRIC_MINISBLACK;
+            break;
+        case 3:
+            img->photometric = PHOTOMETRIC_RGB;
+            break;
+        default:
+            sprintf(emsg, "Missing needed %s tag", photoTag);
+            return (0);
+        }
     }
     switch (img->photometric) {
     case PHOTOMETRIC_PALETTE:
-	if (!TIFFGetField(tif, TIFFTAG_COLORMAP,
-	    &red_orig, &green_orig, &blue_orig)) {
-	    TIFFError(TIFFFileName(tif), "Missing required \"Colormap\" tag");
-	    return (0);
-	}
+        if (!TIFFGetField(tif, TIFFTAG_COLORMAP,
+            &red_orig, &green_orig, &blue_orig)) {
+            TIFFError(TIFFFileName(tif), "Missing required \"Colormap\" tag");
+            return (0);
+        }
 
         /* copy the colormaps so we can modify them */
         n_color = (1L << img->bitspersample);
@@ -250,90 +248,90 @@ TIFFRGBAImageBegin(TIFFRGBAImage* img, TIFF* tif, int stop, char emsg[1024])
         img->greencmap = (uint16 *) _TIFFmalloc(sizeof(uint16)*n_color);
         img->bluecmap = (uint16 *) _TIFFmalloc(sizeof(uint16)*n_color);
         if( !img->redcmap || !img->greencmap || !img->bluecmap ) {
-	    TIFFError(TIFFFileName(tif), "Out of memory for colormap copy");
-	    return (0);
+            TIFFError(TIFFFileName(tif), "Out of memory for colormap copy");
+            return (0);
         }
 
         memcpy( img->redcmap, red_orig, n_color * 2 );
         memcpy( img->greencmap, green_orig, n_color * 2 );
         memcpy( img->bluecmap, blue_orig, n_color * 2 );
-        
-	/* fall thru... */
+
+        /* fall thru... */
     case PHOTOMETRIC_MINISWHITE:
     case PHOTOMETRIC_MINISBLACK:
-	if (planarconfig == PLANARCONFIG_CONTIG && img->samplesperpixel != 1) {
-	    sprintf(emsg,
-		"Sorry, can not handle contiguous data with %s=%d, and %s=%d",
-		photoTag, img->photometric,
-		"Samples/pixel", img->samplesperpixel);
-	    return (0);
-	}
-	break;
+        if (planarconfig == PLANARCONFIG_CONTIG && img->samplesperpixel != 1) {
+            sprintf(emsg,
+                "Sorry, can not handle contiguous data with %s=%d, and %s=%d",
+                photoTag, img->photometric,
+                "Samples/pixel", img->samplesperpixel);
+            return (0);
+        }
+        break;
     case PHOTOMETRIC_YCBCR:
-	if (planarconfig != PLANARCONFIG_CONTIG) {
-	    sprintf(emsg, "Sorry, can not handle YCbCr images with %s=%d",
-		"Planarconfiguration", planarconfig);
-	    return (0);
-	}
-	/* It would probably be nice to have a reality check here. */
-	if (compress == COMPRESSION_JPEG && planarconfig == PLANARCONFIG_CONTIG) {
-	    /* can rely on libjpeg to convert to RGB */
-	    /* XXX should restore current state on exit */
-	    TIFFSetField(tif, TIFFTAG_JPEGCOLORMODE, JPEGCOLORMODE_RGB);
-	    img->photometric = PHOTOMETRIC_RGB;
-	}
-	break;
-    case PHOTOMETRIC_RGB: 
-	if (colorchannels < 3) {
-	    sprintf(emsg, "Sorry, can not handle RGB image with %s=%d",
-		"Color channels", colorchannels);
-	    return (0);
-	}
-	break;
+        if (planarconfig != PLANARCONFIG_CONTIG) {
+            sprintf(emsg, "Sorry, can not handle YCbCr images with %s=%d",
+                "Planarconfiguration", planarconfig);
+            return (0);
+        }
+        /* It would probably be nice to have a reality check here. */
+        if (compress == COMPRESSION_JPEG && planarconfig == PLANARCONFIG_CONTIG) {
+            /* can rely on libjpeg to convert to RGB */
+            /* XXX should restore current state on exit */
+            TIFFSetField(tif, TIFFTAG_JPEGCOLORMODE, JPEGCOLORMODE_RGB);
+            img->photometric = PHOTOMETRIC_RGB;
+        }
+        break;
+    case PHOTOMETRIC_RGB:
+        if (colorchannels < 3) {
+            sprintf(emsg, "Sorry, can not handle RGB image with %s=%d",
+                "Color channels", colorchannels);
+            return (0);
+        }
+        break;
     case PHOTOMETRIC_SEPARATED: {
-	uint16 inkset;
-	TIFFGetFieldDefaulted(tif, TIFFTAG_INKSET, &inkset);
-	if (inkset != INKSET_CMYK) {
-	    sprintf(emsg, "Sorry, can not handle separated image with %s=%d",
-		"InkSet", inkset);
-	    return (0);
-	}
-	if (img->samplesperpixel != 4) {
-	    sprintf(emsg, "Sorry, can not handle separated image with %s=%d",
-		"Samples/pixel", img->samplesperpixel);
-	    return (0);
-	}
-	break;
+        uint16 inkset;
+        TIFFGetFieldDefaulted(tif, TIFFTAG_INKSET, &inkset);
+        if (inkset != INKSET_CMYK) {
+            sprintf(emsg, "Sorry, can not handle separated image with %s=%d",
+                "InkSet", inkset);
+            return (0);
+        }
+        if (img->samplesperpixel != 4) {
+            sprintf(emsg, "Sorry, can not handle separated image with %s=%d",
+                "Samples/pixel", img->samplesperpixel);
+            return (0);
+        }
+        break;
     }
     case PHOTOMETRIC_LOGL:
-	if (compress != COMPRESSION_SGILOG) {
-	    sprintf(emsg, "Sorry, LogL data must have %s=%d",
-		"Compression", COMPRESSION_SGILOG);
-	    return (0);
-	}
-	TIFFSetField(tif, TIFFTAG_SGILOGDATAFMT, SGILOGDATAFMT_8BIT);
-	img->photometric = PHOTOMETRIC_MINISBLACK;	/* little white lie */
-	img->bitspersample = 8;
-	break;
+        if (compress != COMPRESSION_SGILOG) {
+            sprintf(emsg, "Sorry, LogL data must have %s=%d",
+                "Compression", COMPRESSION_SGILOG);
+            return (0);
+        }
+        TIFFSetField(tif, TIFFTAG_SGILOGDATAFMT, SGILOGDATAFMT_8BIT);
+        img->photometric = PHOTOMETRIC_MINISBLACK;      /* little white lie */
+        img->bitspersample = 8;
+        break;
     case PHOTOMETRIC_LOGLUV:
-	if (compress != COMPRESSION_SGILOG && compress != COMPRESSION_SGILOG24) {
-	    sprintf(emsg, "Sorry, LogLuv data must have %s=%d or %d",
-		"Compression", COMPRESSION_SGILOG, COMPRESSION_SGILOG24);
-	    return (0);
-	}
-	if (planarconfig != PLANARCONFIG_CONTIG) {
-	    sprintf(emsg, "Sorry, can not handle LogLuv images with %s=%d",
-		"Planarconfiguration", planarconfig);
-	    return (0);
-	}
-	TIFFSetField(tif, TIFFTAG_SGILOGDATAFMT, SGILOGDATAFMT_8BIT);
-	img->photometric = PHOTOMETRIC_RGB;		/* little white lie */
-	img->bitspersample = 8;
-	break;
+        if (compress != COMPRESSION_SGILOG && compress != COMPRESSION_SGILOG24) {
+            sprintf(emsg, "Sorry, LogLuv data must have %s=%d or %d",
+                "Compression", COMPRESSION_SGILOG, COMPRESSION_SGILOG24);
+            return (0);
+        }
+        if (planarconfig != PLANARCONFIG_CONTIG) {
+            sprintf(emsg, "Sorry, can not handle LogLuv images with %s=%d",
+                "Planarconfiguration", planarconfig);
+            return (0);
+        }
+        TIFFSetField(tif, TIFFTAG_SGILOGDATAFMT, SGILOGDATAFMT_8BIT);
+        img->photometric = PHOTOMETRIC_RGB;             /* little white lie */
+        img->bitspersample = 8;
+        break;
     default:
-	sprintf(emsg, "Sorry, can not handle image with %s=%d",
-	    photoTag, img->photometric);
-	return (0);
+        sprintf(emsg, "Sorry, can not handle image with %s=%d",
+            photoTag, img->photometric);
+        return (0);
     }
     img->Map = NULL;
     img->BWmap = NULL;
@@ -343,13 +341,13 @@ TIFFRGBAImageBegin(TIFFRGBAImage* img, TIFF* tif, int stop, char emsg[1024])
     TIFFGetField(tif, TIFFTAG_IMAGELENGTH, &img->height);
     TIFFGetFieldDefaulted(tif, TIFFTAG_ORIENTATION, &img->orientation);
     img->isContig =
-	!(planarconfig == PLANARCONFIG_SEPARATE && colorchannels > 1);
+        !(planarconfig == PLANARCONFIG_SEPARATE && colorchannels > 1);
     if (img->isContig) {
-	img->get = TIFFIsTiled(tif) ? gtTileContig : gtStripContig;
-	(void) pickTileContigCase(img);
+        img->get = TIFFIsTiled(tif) ? gtTileContig : gtStripContig;
+        (void) pickTileContigCase(img);
     } else {
-	img->get = TIFFIsTiled(tif) ? gtTileSeparate : gtStripSeparate;
-	(void) pickTileSeparateCase(img);
+        img->get = TIFFIsTiled(tif) ? gtTileSeparate : gtStripSeparate;
+        (void) pickTileSeparateCase(img);
     }
     return (1);
 }
@@ -358,13 +356,13 @@ int
 TIFFRGBAImageGet(TIFFRGBAImage* img, uint32* raster, uint32 w, uint32 h)
 {
     if (img->get == NULL) {
-	TIFFError(TIFFFileName(img->tif), "No \"get\" routine setup");
-	return (0);
+        TIFFError(TIFFFileName(img->tif), "No \"get\" routine setup");
+        return (0);
     }
     if (img->put.any == NULL) {
-	TIFFError(TIFFFileName(img->tif),
-	    "No \"put\" routine setupl; probably can not handle image format");
-	return (0);
+        TIFFError(TIFFFileName(img->tif),
+            "No \"put\" routine setupl; probably can not handle image format");
+        return (0);
     }
     return (*img->get)(img, raster, w, h);
 }
@@ -381,13 +379,13 @@ TIFFReadRGBAImage(TIFF* tif,
     int ok;
 
     if (TIFFRGBAImageBegin(&img, tif, stop, emsg)) {
-	/* XXX verify rwidth and rheight against width and height */
-	ok = TIFFRGBAImageGet(&img, raster+(rheight-img.height)*rwidth,
-	    rwidth, img.height);
-	TIFFRGBAImageEnd(&img);
+        /* XXX verify rwidth and rheight against width and height */
+        ok = TIFFRGBAImageGet(&img, raster+(rheight-img.height)*rwidth,
+            rwidth, img.height);
+        TIFFRGBAImageEnd(&img);
     } else {
-	TIFFError(TIFFFileName(tif), emsg);
-	ok = 0;
+        TIFFError(TIFFFileName(tif), emsg);
+        ok = 0;
     }
     return (ok);
 }
@@ -400,34 +398,34 @@ setorientation(TIFFRGBAImage* img, uint32 h)
 
     switch (img->orientation) {
     case ORIENTATION_BOTRIGHT:
-    case ORIENTATION_RIGHTBOT:	/* XXX */
-    case ORIENTATION_LEFTBOT:	/* XXX */
-	TIFFWarning(TIFFFileName(tif), "using bottom-left orientation");
-	img->orientation = ORIENTATION_BOTLEFT;
-	/* fall thru... */
+    case ORIENTATION_RIGHTBOT:  /* XXX */
+    case ORIENTATION_LEFTBOT:   /* XXX */
+        TIFFWarning(TIFFFileName(tif), "using bottom-left orientation");
+        img->orientation = ORIENTATION_BOTLEFT;
+        /* fall thru... */
     case ORIENTATION_BOTLEFT:
-	y = 0;
-	break;
+        y = 0;
+        break;
     case ORIENTATION_TOPRIGHT:
-    case ORIENTATION_RIGHTTOP:	/* XXX */
-    case ORIENTATION_LEFTTOP:	/* XXX */
+    case ORIENTATION_RIGHTTOP:  /* XXX */
+    case ORIENTATION_LEFTTOP:   /* XXX */
     default:
-	TIFFWarning(TIFFFileName(tif), "using top-left orientation");
-	img->orientation = ORIENTATION_TOPLEFT;
-	/* fall thru... */
+        TIFFWarning(TIFFFileName(tif), "using top-left orientation");
+        img->orientation = ORIENTATION_TOPLEFT;
+        /* fall thru... */
     case ORIENTATION_TOPLEFT:
-	y = h-1;
-	break;
+        y = h-1;
+        break;
     }
     return (y);
 }
 
 /*
  * Get an tile-organized image that has
- *	PlanarConfiguration contiguous if SamplesPerPixel > 1
+ *      PlanarConfiguration contiguous if SamplesPerPixel > 1
  * or
- *	SamplesPerPixel == 1
- */	
+ *      SamplesPerPixel == 1
+ */
 static int
 gtTileContig(TIFFRGBAImage* img, uint32* raster, uint32 w, uint32 h)
 {
@@ -442,8 +440,8 @@ gtTileContig(TIFFRGBAImage* img, uint32* raster, uint32 w, uint32 h)
 
     buf = (u_char*) _TIFFmalloc(TIFFTileSize(tif));
     if (buf == 0) {
-	TIFFError(TIFFFileName(tif), "No space for tile buffer");
-	return (0);
+        TIFFError(TIFFFileName(tif), "No space for tile buffer");
+        return (0);
     }
     TIFFGetField(tif, TIFFTAG_TILEWIDTH, &tw);
     TIFFGetField(tif, TIFFTAG_TILELENGTH, &th);
@@ -451,26 +449,26 @@ gtTileContig(TIFFRGBAImage* img, uint32* raster, uint32 w, uint32 h)
     orientation = img->orientation;
     toskew = -(int32) (orientation == ORIENTATION_TOPLEFT ? tw+w : tw-w);
     for (row = 0; row < h; row += th) {
-	nrow = (row + th > h ? h - row : th);
-	for (col = 0; col < w; col += tw) {
-	    if (TIFFReadTile(tif, buf, col+img->col_offset,
+        nrow = (row + th > h ? h - row : th);
+        for (col = 0; col < w; col += tw) {
+            if (TIFFReadTile(tif, buf, col+img->col_offset,
                              row+img->row_offset, 0, 0) < 0 && img->stoponerr)
-		break;
-	    if (col + tw > w) {
-		/*
-		 * Tile is clipped horizontally.  Calculate
-		 * visible portion and skewing factors.
-		 */
-		uint32 npix = w - col;
-		fromskew = tw - npix;
-		(*put)(img, raster+y*w+col, col, y,
-		    npix, nrow, fromskew, toskew + fromskew, buf);
-	    } else {
-		(*put)(img, raster+y*w+col, col, y, tw, nrow, 0, toskew, buf);
-	    }
-	}
-	y += (orientation == ORIENTATION_TOPLEFT ?
-	    -(int32) nrow : (int32) nrow);
+                break;
+            if (col + tw > w) {
+                /*
+                 * Tile is clipped horizontally.  Calculate
+                 * visible portion and skewing factors.
+                 */
+                uint32 npix = w - col;
+                fromskew = tw - npix;
+                (*put)(img, raster+y*w+col, col, y,
+                    npix, nrow, fromskew, toskew + fromskew, buf);
+            } else {
+                (*put)(img, raster+y*w+col, col, y, tw, nrow, 0, toskew, buf);
+            }
+        }
+        y += (orientation == ORIENTATION_TOPLEFT ?
+            -(int32) nrow : (int32) nrow);
     }
     _TIFFfree(buf);
     return (1);
@@ -478,10 +476,10 @@ gtTileContig(TIFFRGBAImage* img, uint32* raster, uint32 w, uint32 h)
 
 /*
  * Get an tile-organized image that has
- *	 SamplesPerPixel > 1
- *	 PlanarConfiguration separated
+ *       SamplesPerPixel > 1
+ *       PlanarConfiguration separated
  * We assume that all such images are RGB.
- */	
+ */
 static int
 gtTileSeparate(TIFFRGBAImage* img, uint32* raster, uint32 w, uint32 h)
 {
@@ -503,51 +501,51 @@ gtTileSeparate(TIFFRGBAImage* img, uint32* raster, uint32 w, uint32 h)
     tilesize = TIFFTileSize(tif);
     buf = (u_char*) _TIFFmalloc(4*tilesize);
     if (buf == 0) {
-	TIFFError(TIFFFileName(tif), "No space for tile buffer");
-	return (0);
+        TIFFError(TIFFFileName(tif), "No space for tile buffer");
+        return (0);
     }
     r = buf;
     g = r + tilesize;
     b = g + tilesize;
     a = b + tilesize;
     if (!alpha)
-	memset(a, 0xff, tilesize);
+        memset(a, 0xff, tilesize);
     TIFFGetField(tif, TIFFTAG_TILEWIDTH, &tw);
     TIFFGetField(tif, TIFFTAG_TILELENGTH, &th);
     y = setorientation(img, h);
     orientation = img->orientation;
     toskew = -(int32) (orientation == ORIENTATION_TOPLEFT ? tw+w : tw-w);
     for (row = 0; row < h; row += th) {
-	nrow = (row + th > h ? h - row : th);
-	for (col = 0; col < w; col += tw) {
-	    if (TIFFReadTile(tif, r, col+img->col_offset,
+        nrow = (row + th > h ? h - row : th);
+        for (col = 0; col < w; col += tw) {
+            if (TIFFReadTile(tif, r, col+img->col_offset,
                              row+img->row_offset,0,0) < 0 && img->stoponerr)
-		break;
-	    if (TIFFReadTile(tif, g, col+img->col_offset,
+                break;
+            if (TIFFReadTile(tif, g, col+img->col_offset,
                              row+img->row_offset,0,1) < 0 && img->stoponerr)
-		break;
-	    if (TIFFReadTile(tif, b, col+img->col_offset,
+                break;
+            if (TIFFReadTile(tif, b, col+img->col_offset,
                              row+img->row_offset,0,2) < 0 && img->stoponerr)
-		break;
-	    if (alpha && TIFFReadTile(tif,a,col+img->col_offset,
+                break;
+            if (alpha && TIFFReadTile(tif,a,col+img->col_offset,
                                row+img->row_offset,0,3) < 0 && img->stoponerr)
-		break;
-	    if (col + tw > w) {
-		/*
-		 * Tile is clipped horizontally.  Calculate
-		 * visible portion and skewing factors.
-		 */
-		uint32 npix = w - col;
-		fromskew = tw - npix;
-		(*put)(img, raster+y*w+col, col, y,
-		    npix, nrow, fromskew, toskew + fromskew, r, g, b, a);
-	    } else {
-		(*put)(img, raster+y*w+col, col, y,
-		    tw, nrow, 0, toskew, r, g, b, a);
-	    }
-	}
-	y += (orientation == ORIENTATION_TOPLEFT ?
-	    -(int32) nrow : (int32) nrow);
+                break;
+            if (col + tw > w) {
+                /*
+                 * Tile is clipped horizontally.  Calculate
+                 * visible portion and skewing factors.
+                 */
+                uint32 npix = w - col;
+                fromskew = tw - npix;
+                (*put)(img, raster+y*w+col, col, y,
+                    npix, nrow, fromskew, toskew + fromskew, r, g, b, a);
+            } else {
+                (*put)(img, raster+y*w+col, col, y,
+                    tw, nrow, 0, toskew, r, g, b, a);
+            }
+        }
+        y += (orientation == ORIENTATION_TOPLEFT ?
+            -(int32) nrow : (int32) nrow);
     }
     _TIFFfree(buf);
     return (1);
@@ -555,10 +553,10 @@ gtTileSeparate(TIFFRGBAImage* img, uint32* raster, uint32 w, uint32 h)
 
 /*
  * Get a strip-organized image that has
- *	PlanarConfiguration contiguous if SamplesPerPixel > 1
+ *      PlanarConfiguration contiguous if SamplesPerPixel > 1
  * or
- *	SamplesPerPixel == 1
- */	
+ *      SamplesPerPixel == 1
+ */
 static int
 gtStripContig(TIFFRGBAImage* img, uint32* raster, uint32 w, uint32 h)
 {
@@ -574,8 +572,8 @@ gtStripContig(TIFFRGBAImage* img, uint32* raster, uint32 w, uint32 h)
 
     buf = (u_char*) _TIFFmalloc(TIFFStripSize(tif));
     if (buf == 0) {
-	TIFFError(TIFFFileName(tif), "No space for strip buffer");
-	return (0);
+        TIFFError(TIFFFileName(tif), "No space for strip buffer");
+        return (0);
     }
     y = setorientation(img, h);
     orientation = img->orientation;
@@ -584,15 +582,15 @@ gtStripContig(TIFFRGBAImage* img, uint32* raster, uint32 w, uint32 h)
     scanline = TIFFScanlineSize(tif);
     fromskew = (w < imagewidth ? imagewidth - w : 0);
     for (row = 0; row < h; row += rowsperstrip) {
-	nrow = (row + rowsperstrip > h ? h - row : rowsperstrip);
-	if (TIFFReadEncodedStrip(tif,
+        nrow = (row + rowsperstrip > h ? h - row : rowsperstrip);
+        if (TIFFReadEncodedStrip(tif,
                                  TIFFComputeStrip(tif,row+img->row_offset, 0),
                                  buf, nrow*scanline) < 0
             && img->stoponerr)
-		break;
-	(*put)(img, raster+y*w, 0, y, w, nrow, fromskew, toskew, buf);
-	y += (orientation == ORIENTATION_TOPLEFT ?
-	    -(int32) nrow : (int32) nrow);
+                break;
+        (*put)(img, raster+y*w, 0, y, w, nrow, fromskew, toskew, buf);
+        y += (orientation == ORIENTATION_TOPLEFT ?
+            -(int32) nrow : (int32) nrow);
     }
     _TIFFfree(buf);
     return (1);
@@ -600,8 +598,8 @@ gtStripContig(TIFFRGBAImage* img, uint32* raster, uint32 w, uint32 h)
 
 /*
  * Get a strip-organized image with
- *	 SamplesPerPixel > 1
- *	 PlanarConfiguration separated
+ *       SamplesPerPixel > 1
+ *       PlanarConfiguration separated
  * We assume that all such images are RGB.
  */
 static int
@@ -623,14 +621,14 @@ gtStripSeparate(TIFFRGBAImage* img, uint32* raster, uint32 w, uint32 h)
     stripsize = TIFFStripSize(tif);
     r = buf = (u_char *)_TIFFmalloc(4*stripsize);
     if (buf == 0) {
-	TIFFError(TIFFFileName(tif), "No space for tile buffer");
-	return (0);
+        TIFFError(TIFFFileName(tif), "No space for tile buffer");
+        return (0);
     }
     g = r + stripsize;
     b = g + stripsize;
     a = b + stripsize;
     if (!alpha)
-	memset(a, 0xff, stripsize);
+        memset(a, 0xff, stripsize);
     y = setorientation(img, h);
     orientation = img->orientation;
     toskew = -(int32) (orientation == ORIENTATION_TOPLEFT ? w+w : w-w);
@@ -638,24 +636,24 @@ gtStripSeparate(TIFFRGBAImage* img, uint32* raster, uint32 w, uint32 h)
     scanline = TIFFScanlineSize(tif);
     fromskew = (w < imagewidth ? imagewidth - w : 0);
     for (row = 0; row < h; row += rowsperstrip) {
-	nrow = (row + rowsperstrip > h ? h - row : rowsperstrip);
+        nrow = (row + rowsperstrip > h ? h - row : rowsperstrip);
         offset_row = row + img->row_offset;
-	if (TIFFReadEncodedStrip(tif, TIFFComputeStrip(tif, offset_row, 0),
-	    r, nrow*scanline) < 0 && img->stoponerr)
-	    break;
-	if (TIFFReadEncodedStrip(tif, TIFFComputeStrip(tif, offset_row, 1),
-	    g, nrow*scanline) < 0 && img->stoponerr)
-	    break;
-	if (TIFFReadEncodedStrip(tif, TIFFComputeStrip(tif, offset_row, 2),
-	    b, nrow*scanline) < 0 && img->stoponerr)
-	    break;
-	if (alpha &&
-	    (TIFFReadEncodedStrip(tif, TIFFComputeStrip(tif, offset_row, 3),
-	    a, nrow*scanline) < 0 && img->stoponerr))
-	    break;
-	(*put)(img, raster+y*w, 0, y, w, nrow, fromskew, toskew, r, g, b, a);
-	y += (orientation == ORIENTATION_TOPLEFT ?
-	    -(int32) nrow : (int32) nrow);
+        if (TIFFReadEncodedStrip(tif, TIFFComputeStrip(tif, offset_row, 0),
+            r, nrow*scanline) < 0 && img->stoponerr)
+            break;
+        if (TIFFReadEncodedStrip(tif, TIFFComputeStrip(tif, offset_row, 1),
+            g, nrow*scanline) < 0 && img->stoponerr)
+            break;
+        if (TIFFReadEncodedStrip(tif, TIFFComputeStrip(tif, offset_row, 2),
+            b, nrow*scanline) < 0 && img->stoponerr)
+            break;
+        if (alpha &&
+            (TIFFReadEncodedStrip(tif, TIFFComputeStrip(tif, offset_row, 3),
+            a, nrow*scanline) < 0 && img->stoponerr))
+            break;
+        (*put)(img, raster+y*w, 0, y, w, nrow, fromskew, toskew, r, g, b, a);
+        y += (orientation == ORIENTATION_TOPLEFT ?
+            -(int32) nrow : (int32) nrow);
     }
     _TIFFfree(buf);
     return (1);
@@ -671,67 +669,67 @@ gtStripSeparate(TIFFRGBAImage* img, uint32* raster, uint32 w, uint32 h)
  * pickTileSeparateCase analyze the parameters and select
  * the appropriate "put" routine to use.
  */
-#define	REPEAT8(op)	REPEAT4(op); REPEAT4(op)
-#define	REPEAT4(op)	REPEAT2(op); REPEAT2(op)
-#define	REPEAT2(op)	op; op
-#define	CASE8(x,op)			\
-    switch (x) {			\
-    case 7: op; case 6: op; case 5: op;	\
-    case 4: op; case 3: op; case 2: op;	\
-    case 1: op;				\
+#define REPEAT8(op)     REPEAT4(op); REPEAT4(op)
+#define REPEAT4(op)     REPEAT2(op); REPEAT2(op)
+#define REPEAT2(op)     op; op
+#define CASE8(x,op)                     \
+    switch (x) {                        \
+    case 7: op; case 6: op; case 5: op; \
+    case 4: op; case 3: op; case 2: op; \
+    case 1: op;                         \
     }
-#define	CASE4(x,op)	switch (x) { case 3: op; case 2: op; case 1: op; }
-#define	NOP
+#define CASE4(x,op)     switch (x) { case 3: op; case 2: op; case 1: op; }
+#define NOP
 
-#define	UNROLL8(w, op1, op2) {		\
-    uint32 _x;				\
-    for (_x = w; _x >= 8; _x -= 8) {	\
-	op1;				\
-	REPEAT8(op2);			\
-    }					\
-    if (_x > 0) {			\
-	op1;				\
-	CASE8(_x,op2);			\
-    }					\
+#define UNROLL8(w, op1, op2) {          \
+    uint32 _x;                          \
+    for (_x = w; _x >= 8; _x -= 8) {    \
+        op1;                            \
+        REPEAT8(op2);                   \
+    }                                   \
+    if (_x > 0) {                       \
+        op1;                            \
+        CASE8(_x,op2);                  \
+    }                                   \
 }
-#define	UNROLL4(w, op1, op2) {		\
-    uint32 _x;				\
-    for (_x = w; _x >= 4; _x -= 4) {	\
-	op1;				\
-	REPEAT4(op2);			\
-    }					\
-    if (_x > 0) {			\
-	op1;				\
-	CASE4(_x,op2);			\
-    }					\
+#define UNROLL4(w, op1, op2) {          \
+    uint32 _x;                          \
+    for (_x = w; _x >= 4; _x -= 4) {    \
+        op1;                            \
+        REPEAT4(op2);                   \
+    }                                   \
+    if (_x > 0) {                       \
+        op1;                            \
+        CASE4(_x,op2);                  \
+    }                                   \
 }
-#define	UNROLL2(w, op1, op2) {		\
-    uint32 _x;				\
-    for (_x = w; _x >= 2; _x -= 2) {	\
-	op1;				\
-	REPEAT2(op2);			\
-    }					\
-    if (_x) {				\
-	op1;				\
-	op2;				\
-    }					\
+#define UNROLL2(w, op1, op2) {          \
+    uint32 _x;                          \
+    for (_x = w; _x >= 2; _x -= 2) {    \
+        op1;                            \
+        REPEAT2(op2);                   \
+    }                                   \
+    if (_x) {                           \
+        op1;                            \
+        op2;                            \
+    }                                   \
 }
-    
-#define	SKEW(r,g,b,skew)	{ r += skew; g += skew; b += skew; }
-#define	SKEW4(r,g,b,a,skew)	{ r += skew; g += skew; b += skew; a+= skew; }
+
+#define SKEW(r,g,b,skew)        { r += skew; g += skew; b += skew; }
+#define SKEW4(r,g,b,a,skew)     { r += skew; g += skew; b += skew; a+= skew; }
 
 #define A1 ((uint32)(0xffL<<24))
-#define	PACK(r,g,b)	\
-	((uint32)(r)|((uint32)(g)<<8)|((uint32)(b)<<16)|A1)
-#define	PACK4(r,g,b,a)	\
-	((uint32)(r)|((uint32)(g)<<8)|((uint32)(b)<<16)|((uint32)(a)<<24))
+#define PACK(r,g,b)     \
+        ((uint32)(r)|((uint32)(g)<<8)|((uint32)(b)<<16)|A1)
+#define PACK4(r,g,b,a)  \
+        ((uint32)(r)|((uint32)(g)<<8)|((uint32)(b)<<16)|((uint32)(a)<<24))
 #define W2B(v) (((v)>>8)&0xff)
-#define	PACKW(r,g,b)	\
-	((uint32)W2B(r)|((uint32)W2B(g)<<8)|((uint32)W2B(b)<<16)|A1)
-#define	PACKW4(r,g,b,a)	\
-	((uint32)W2B(r)|((uint32)W2B(g)<<8)|((uint32)W2B(b)<<16)|((uint32)W2B(a)<<24))
+#define PACKW(r,g,b)    \
+        ((uint32)W2B(r)|((uint32)W2B(g)<<8)|((uint32)W2B(b)<<16)|A1)
+#define PACKW4(r,g,b,a) \
+        ((uint32)W2B(r)|((uint32)W2B(g)<<8)|((uint32)W2B(b)<<16)|((uint32)W2B(a)<<24))
 
-#define	DECLAREContigPutFunc(name) \
+#define DECLAREContigPutFunc(name) \
 static void name(\
     TIFFRGBAImage* img, \
     uint32* cp, \
@@ -750,9 +748,9 @@ DECLAREContigPutFunc(put8bitcmaptile)
 
     (void) x; (void) y;
     while (h-- > 0) {
-	UNROLL8(w, NOP, *cp++ = PALmap[*pp++][0]);
-	cp += toskew;
-	pp += fromskew;
+        UNROLL8(w, NOP, *cp++ = PALmap[*pp++][0]);
+        cp += toskew;
+        pp += fromskew;
     }
 }
 
@@ -766,10 +764,10 @@ DECLAREContigPutFunc(put4bitcmaptile)
     (void) x; (void) y;
     fromskew /= 2;
     while (h-- > 0) {
-	uint32* bw;
-	UNROLL2(w, bw = PALmap[*pp++], *cp++ = *bw++);
-	cp += toskew;
-	pp += fromskew;
+        uint32* bw;
+        UNROLL2(w, bw = PALmap[*pp++], *cp++ = *bw++);
+        cp += toskew;
+        pp += fromskew;
     }
 }
 
@@ -783,10 +781,10 @@ DECLAREContigPutFunc(put2bitcmaptile)
     (void) x; (void) y;
     fromskew /= 4;
     while (h-- > 0) {
-	uint32* bw;
-	UNROLL4(w, bw = PALmap[*pp++], *cp++ = *bw++);
-	cp += toskew;
-	pp += fromskew;
+        uint32* bw;
+        UNROLL4(w, bw = PALmap[*pp++], *cp++ = *bw++);
+        cp += toskew;
+        pp += fromskew;
     }
 }
 
@@ -800,10 +798,10 @@ DECLAREContigPutFunc(put1bitcmaptile)
     (void) x; (void) y;
     fromskew /= 8;
     while (h-- > 0) {
-	uint32* bw;
-	UNROLL8(w, bw = PALmap[*pp++], *cp++ = *bw++);
-	cp += toskew;
-	pp += fromskew;
+        uint32* bw;
+        UNROLL8(w, bw = PALmap[*pp++], *cp++ = *bw++);
+        cp += toskew;
+        pp += fromskew;
     }
 }
 
@@ -816,10 +814,10 @@ DECLAREContigPutFunc(putgreytile)
 
     (void) y;
     while (h-- > 0) {
-	for (x = w; x-- > 0;)
-	    *cp++ = BWmap[*pp++][0];
-	cp += toskew;
-	pp += fromskew;
+        for (x = w; x-- > 0;)
+            *cp++ = BWmap[*pp++][0];
+        cp += toskew;
+        pp += fromskew;
     }
 }
 
@@ -833,10 +831,10 @@ DECLAREContigPutFunc(put1bitbwtile)
     (void) x; (void) y;
     fromskew /= 8;
     while (h-- > 0) {
-	uint32* bw;
-	UNROLL8(w, bw = BWmap[*pp++], *cp++ = *bw++);
-	cp += toskew;
-	pp += fromskew;
+        uint32* bw;
+        UNROLL8(w, bw = BWmap[*pp++], *cp++ = *bw++);
+        cp += toskew;
+        pp += fromskew;
     }
 }
 
@@ -850,10 +848,10 @@ DECLAREContigPutFunc(put2bitbwtile)
     (void) x; (void) y;
     fromskew /= 4;
     while (h-- > 0) {
-	uint32* bw;
-	UNROLL4(w, bw = BWmap[*pp++], *cp++ = *bw++);
-	cp += toskew;
-	pp += fromskew;
+        uint32* bw;
+        UNROLL4(w, bw = BWmap[*pp++], *cp++ = *bw++);
+        cp += toskew;
+        pp += fromskew;
     }
 }
 
@@ -867,10 +865,10 @@ DECLAREContigPutFunc(put4bitbwtile)
     (void) x; (void) y;
     fromskew /= 2;
     while (h-- > 0) {
-	uint32* bw;
-	UNROLL2(w, bw = BWmap[*pp++], *cp++ = *bw++);
-	cp += toskew;
-	pp += fromskew;
+        uint32* bw;
+        UNROLL2(w, bw = BWmap[*pp++], *cp++ = *bw++);
+        cp += toskew;
+        pp += fromskew;
     }
 }
 
@@ -884,11 +882,11 @@ DECLAREContigPutFunc(putRGBcontig8bittile)
     (void) x; (void) y;
     fromskew *= samplesperpixel;
     while (h-- > 0) {
-	UNROLL8(w, NOP,
-	    *cp++ = PACK(pp[0], pp[1], pp[2]);
-	    pp += samplesperpixel);
-	cp += toskew;
-	pp += fromskew;
+        UNROLL8(w, NOP,
+            *cp++ = PACK(pp[0], pp[1], pp[2]);
+            pp += samplesperpixel);
+        cp += toskew;
+        pp += fromskew;
     }
 }
 
@@ -903,12 +901,12 @@ DECLAREContigPutFunc(putRGBcontig8bitMaptile)
     (void) y;
     fromskew *= samplesperpixel;
     while (h-- > 0) {
-	for (x = w; x-- > 0;) {
-	    *cp++ = PACK(Map[pp[0]], Map[pp[1]], Map[pp[2]]);
-	    pp += samplesperpixel;
-	}
-	pp += fromskew;
-	cp += toskew;
+        for (x = w; x-- > 0;) {
+            *cp++ = PACK(Map[pp[0]], Map[pp[1]], Map[pp[2]]);
+            pp += samplesperpixel;
+        }
+        pp += fromskew;
+        cp += toskew;
     }
 }
 
@@ -923,11 +921,11 @@ DECLAREContigPutFunc(putRGBAAcontig8bittile)
     (void) x; (void) y;
     fromskew *= samplesperpixel;
     while (h-- > 0) {
-	UNROLL8(w, NOP,
-	    *cp++ = PACK4(pp[0], pp[1], pp[2], pp[3]);
-	    pp += samplesperpixel);
-	cp += toskew;
-	pp += fromskew;
+        UNROLL8(w, NOP,
+            *cp++ = PACK4(pp[0], pp[1], pp[2], pp[3]);
+            pp += samplesperpixel);
+        cp += toskew;
+        pp += fromskew;
     }
 }
 
@@ -942,17 +940,17 @@ DECLAREContigPutFunc(putRGBUAcontig8bittile)
     (void) y;
     fromskew *= samplesperpixel;
     while (h-- > 0) {
-	uint32 r, g, b, a;
-	for (x = w; x-- > 0;) {
-	    a = pp[3];
-	    r = (pp[0] * a) / 255;
-	    g = (pp[1] * a) / 255;
-	    b = (pp[2] * a) / 255;
-	    *cp++ = PACK4(r,g,b,a);
-	    pp += samplesperpixel;
-	}
-	cp += toskew;
-	pp += fromskew;
+        uint32 r, g, b, a;
+        for (x = w; x-- > 0;) {
+            a = pp[3];
+            r = (pp[0] * a) / 255;
+            g = (pp[1] * a) / 255;
+            b = (pp[2] * a) / 255;
+            *cp++ = PACK4(r,g,b,a);
+            pp += samplesperpixel;
+        }
+        cp += toskew;
+        pp += fromskew;
     }
 }
 
@@ -967,12 +965,12 @@ DECLAREContigPutFunc(putRGBcontig16bittile)
     (void) y;
     fromskew *= samplesperpixel;
     while (h-- > 0) {
-	for (x = w; x-- > 0;) {
-	    *cp++ = PACKW(wp[0], wp[1], wp[2]);
-	    wp += samplesperpixel;
-	}
-	cp += toskew;
-	wp += fromskew;
+        for (x = w; x-- > 0;) {
+            *cp++ = PACKW(wp[0], wp[1], wp[2]);
+            wp += samplesperpixel;
+        }
+        cp += toskew;
+        wp += fromskew;
     }
 }
 
@@ -988,12 +986,12 @@ DECLAREContigPutFunc(putRGBAAcontig16bittile)
     (void) y;
     fromskew *= samplesperpixel;
     while (h-- > 0) {
-	for (x = w; x-- > 0;) {
-	    *cp++ = PACKW4(wp[0], wp[1], wp[2], wp[3]);
-	    wp += samplesperpixel;
-	}
-	cp += toskew;
-	wp += fromskew;
+        for (x = w; x-- > 0;) {
+            *cp++ = PACKW4(wp[0], wp[1], wp[2], wp[3]);
+            wp += samplesperpixel;
+        }
+        cp += toskew;
+        wp += fromskew;
     }
 }
 
@@ -1009,25 +1007,25 @@ DECLAREContigPutFunc(putRGBUAcontig16bittile)
     (void) y;
     fromskew *= samplesperpixel;
     while (h-- > 0) {
-	uint32 r,g,b,a;
-	/*
-	 * We shift alpha down four bits just in case unsigned
-	 * arithmetic doesn't handle the full range.
-	 * We still have plenty of accuracy, since the output is 8 bits.
-	 * So we have (r * 0xffff) * (a * 0xfff)) = r*a * (0xffff*0xfff)
-	 * Since we want r*a * 0xff for eight bit output,
-	 * we divide by (0xffff * 0xfff) / 0xff == 0x10eff.
-	 */
-	for (x = w; x-- > 0;) {
-	    a = wp[3] >> 4; 
-	    r = (wp[0] * a) / 0x10eff;
-	    g = (wp[1] * a) / 0x10eff;
-	    b = (wp[2] * a) / 0x10eff;
-	    *cp++ = PACK4(r,g,b,a);
-	    wp += samplesperpixel;
-	}
-	cp += toskew;
-	wp += fromskew;
+        uint32 r,g,b,a;
+        /*
+         * We shift alpha down four bits just in case unsigned
+         * arithmetic doesn't handle the full range.
+         * We still have plenty of accuracy, since the output is 8 bits.
+         * So we have (r * 0xffff) * (a * 0xfff)) = r*a * (0xffff*0xfff)
+         * Since we want r*a * 0xff for eight bit output,
+         * we divide by (0xffff * 0xfff) / 0xff == 0x10eff.
+         */
+        for (x = w; x-- > 0;) {
+            a = wp[3] >> 4;
+            r = (wp[0] * a) / 0x10eff;
+            g = (wp[1] * a) / 0x10eff;
+            b = (wp[2] * a) / 0x10eff;
+            *cp++ = PACK4(r,g,b,a);
+            wp += samplesperpixel;
+        }
+        cp += toskew;
+        wp += fromskew;
     }
 }
 
@@ -1044,15 +1042,15 @@ DECLAREContigPutFunc(putRGBcontig8bitCMYKtile)
     (void) x; (void) y;
     fromskew *= samplesperpixel;
     while (h-- > 0) {
-	UNROLL8(w, NOP,
-	    k = 255 - pp[3];
-	    r = (k*(255-pp[0]))/255;
-	    g = (k*(255-pp[1]))/255;
-	    b = (k*(255-pp[2]))/255;
-	    *cp++ = PACK(r, g, b);
-	    pp += samplesperpixel);
-	cp += toskew;
-	pp += fromskew;
+        UNROLL8(w, NOP,
+            k = 255 - pp[3];
+            r = (k*(255-pp[0]))/255;
+            g = (k*(255-pp[1]))/255;
+            b = (k*(255-pp[2]))/255;
+            *cp++ = PACK(r, g, b);
+            pp += samplesperpixel);
+        cp += toskew;
+        pp += fromskew;
     }
 }
 
@@ -1070,20 +1068,20 @@ DECLAREContigPutFunc(putRGBcontig8bitCMYKMaptile)
     (void) y;
     fromskew *= samplesperpixel;
     while (h-- > 0) {
-	for (x = w; x-- > 0;) {
-	    k = 255 - pp[3];
-	    r = (k*(255-pp[0]))/255;
-	    g = (k*(255-pp[1]))/255;
-	    b = (k*(255-pp[2]))/255;
-	    *cp++ = PACK(Map[r], Map[g], Map[b]);
-	    pp += samplesperpixel;
-	}
-	pp += fromskew;
-	cp += toskew;
+        for (x = w; x-- > 0;) {
+            k = 255 - pp[3];
+            r = (k*(255-pp[0]))/255;
+            g = (k*(255-pp[1]))/255;
+            b = (k*(255-pp[2]))/255;
+            *cp++ = PACK(Map[r], Map[g], Map[b]);
+            pp += samplesperpixel;
+        }
+        pp += fromskew;
+        cp += toskew;
     }
 }
 
-#define	DECLARESepPutFunc(name) \
+#define DECLARESepPutFunc(name) \
 static void name(\
     TIFFRGBAImage* img,\
     uint32* cp,\
@@ -1100,9 +1098,9 @@ DECLARESepPutFunc(putRGBseparate8bittile)
 {
     (void) img; (void) x; (void) y; (void) a;
     while (h-- > 0) {
-	UNROLL8(w, NOP, *cp++ = PACK(*r++, *g++, *b++));
-	SKEW(r, g, b, fromskew);
-	cp += toskew;
+        UNROLL8(w, NOP, *cp++ = PACK(*r++, *g++, *b++));
+        SKEW(r, g, b, fromskew);
+        cp += toskew;
     }
 }
 
@@ -1115,10 +1113,10 @@ DECLARESepPutFunc(putRGBseparate8bitMaptile)
 
     (void) y; (void) a;
     while (h-- > 0) {
-	for (x = w; x > 0; x--)
-	    *cp++ = PACK(Map[*r++], Map[*g++], Map[*b++]);
-	SKEW(r, g, b, fromskew);
-	cp += toskew;
+        for (x = w; x > 0; x--)
+            *cp++ = PACK(Map[*r++], Map[*g++], Map[*b++]);
+        SKEW(r, g, b, fromskew);
+        cp += toskew;
     }
 }
 
@@ -1129,9 +1127,9 @@ DECLARESepPutFunc(putRGBAAseparate8bittile)
 {
     (void) img; (void) x; (void) y;
     while (h-- > 0) {
-	UNROLL8(w, NOP, *cp++ = PACK4(*r++, *g++, *b++, *a++));
-	SKEW4(r, g, b, a, fromskew);
-	cp += toskew;
+        UNROLL8(w, NOP, *cp++ = PACK4(*r++, *g++, *b++, *a++));
+        SKEW4(r, g, b, a, fromskew);
+        cp += toskew;
     }
 }
 
@@ -1142,16 +1140,16 @@ DECLARESepPutFunc(putRGBUAseparate8bittile)
 {
     (void) img; (void) y;
     while (h-- > 0) {
-	uint32 rv, gv, bv, av;
-	for (x = w; x-- > 0;) {
-	    av = *a++;
-	    rv = (*r++ * av) / 255;
-	    gv = (*g++ * av) / 255;
-	    bv = (*b++ * av) / 255;
-	    *cp++ = PACK4(rv,gv,bv,av);
-	}
-	SKEW4(r, g, b, a, fromskew);
-	cp += toskew;
+        uint32 rv, gv, bv, av;
+        for (x = w; x-- > 0;) {
+            av = *a++;
+            rv = (*r++ * av) / 255;
+            gv = (*g++ * av) / 255;
+            bv = (*b++ * av) / 255;
+            *cp++ = PACK4(rv,gv,bv,av);
+        }
+        SKEW4(r, g, b, a, fromskew);
+        cp += toskew;
     }
 }
 
@@ -1166,10 +1164,10 @@ DECLARESepPutFunc(putRGBseparate16bittile)
 
     (void) img; (void) y; (void) a;
     while (h-- > 0) {
-	for (x = 0; x < w; x++)
-	    *cp++ = PACKW(*wr++, *wg++, *wb++);
-	SKEW(wr, wg, wb, fromskew);
-	cp += toskew;
+        for (x = 0; x < w; x++)
+            *cp++ = PACKW(*wr++, *wg++, *wb++);
+        SKEW(wr, wg, wb, fromskew);
+        cp += toskew;
     }
 }
 
@@ -1185,10 +1183,10 @@ DECLARESepPutFunc(putRGBAAseparate16bittile)
 
     (void) img; (void) y;
     while (h-- > 0) {
-	for (x = 0; x < w; x++)
-	    *cp++ = PACKW4(*wr++, *wg++, *wb++, *wa++);
-	SKEW4(wr, wg, wb, wa, fromskew);
-	cp += toskew;
+        for (x = 0; x < w; x++)
+            *cp++ = PACKW4(*wr++, *wg++, *wb++, *wa++);
+        SKEW4(wr, wg, wb, wa, fromskew);
+        cp += toskew;
     }
 }
 
@@ -1204,24 +1202,24 @@ DECLARESepPutFunc(putRGBUAseparate16bittile)
 
     (void) img; (void) y;
     while (h-- > 0) {
-	uint32 r,g,b,a;
-	/*
-	 * We shift alpha down four bits just in case unsigned
-	 * arithmetic doesn't handle the full range.
-	 * We still have plenty of accuracy, since the output is 8 bits.
-	 * So we have (r * 0xffff) * (a * 0xfff)) = r*a * (0xffff*0xfff)
-	 * Since we want r*a * 0xff for eight bit output,
-	 * we divide by (0xffff * 0xfff) / 0xff == 0x10eff.
-	 */
-	for (x = w; x-- > 0;) {
-	    a = *wa++ >> 4; 
-	    r = (*wr++ * a) / 0x10eff;
-	    g = (*wg++ * a) / 0x10eff;
-	    b = (*wb++ * a) / 0x10eff;
-	    *cp++ = PACK4(r,g,b,a);
-	}
-	SKEW4(wr, wg, wb, wa, fromskew);
-	cp += toskew;
+        uint32 r,g,b,a;
+        /*
+         * We shift alpha down four bits just in case unsigned
+         * arithmetic doesn't handle the full range.
+         * We still have plenty of accuracy, since the output is 8 bits.
+         * So we have (r * 0xffff) * (a * 0xfff)) = r*a * (0xffff*0xfff)
+         * Since we want r*a * 0xff for eight bit output,
+         * we divide by (0xffff * 0xfff) / 0xff == 0x10eff.
+         */
+        for (x = w; x-- > 0;) {
+            a = *wa++ >> 4;
+            r = (*wr++ * a) / 0x10eff;
+            g = (*wg++ * a) / 0x10eff;
+            b = (*wb++ * a) / 0x10eff;
+            *cp++ = PACK4(r,g,b,a);
+        }
+        SKEW4(wr, wg, wb, wa, fromskew);
+        cp += toskew;
     }
 }
 
@@ -1231,19 +1229,19 @@ DECLARESepPutFunc(putRGBUAseparate16bittile)
  * for more information on how it works.
  */
 
-#define	YCbCrtoRGB(dst, yc) {						\
-    int Y = (yc);							\
-    dst = PACK(								\
-	clamptab[Y+Crrtab[Cr]],						\
-	clamptab[Y + (int)((Cbgtab[Cb]+Crgtab[Cr])>>16)],		\
-	clamptab[Y+Cbbtab[Cb]]);					\
+#define YCbCrtoRGB(dst, yc) {                                           \
+    int Y = (yc);                                                       \
+    dst = PACK(                                                         \
+        clamptab[Y+Crrtab[Cr]],                                         \
+        clamptab[Y + (int)((Cbgtab[Cb]+Crgtab[Cr])>>16)],               \
+        clamptab[Y+Cbbtab[Cb]]);                                        \
 }
-#define	YCbCrSetup							\
-    TIFFYCbCrToRGB* ycbcr = img->ycbcr;					\
-    int* Crrtab = ycbcr->Cr_r_tab;					\
-    int* Cbbtab = ycbcr->Cb_b_tab;					\
-    int32* Crgtab = ycbcr->Cr_g_tab;					\
-    int32* Cbgtab = ycbcr->Cb_g_tab;					\
+#define YCbCrSetup                                                      \
+    TIFFYCbCrToRGB* ycbcr = img->ycbcr;                                 \
+    int* Crrtab = ycbcr->Cr_r_tab;                                      \
+    int* Cbbtab = ycbcr->Cb_b_tab;                                      \
+    int32* Crgtab = ycbcr->Cr_g_tab;                                    \
+    int32* Cbgtab = ycbcr->Cb_g_tab;                                    \
     TIFFRGBValue* clamptab = ycbcr->clamptab
 
 /*
@@ -1260,33 +1258,33 @@ DECLAREContigPutFunc(putcontig8bitYCbCr44tile)
     (void) y;
     /* XXX adjust fromskew */
     for (; h >= 4; h -= 4) {
-	x = w>>2;
-	do {
-	    int Cb = pp[16];
-	    int Cr = pp[17];
+        x = w>>2;
+        do {
+            int Cb = pp[16];
+            int Cr = pp[17];
 
-	    YCbCrtoRGB(cp [0], pp[ 0]);
-	    YCbCrtoRGB(cp [1], pp[ 1]);
-	    YCbCrtoRGB(cp [2], pp[ 2]);
-	    YCbCrtoRGB(cp [3], pp[ 3]);
-	    YCbCrtoRGB(cp1[0], pp[ 4]);
-	    YCbCrtoRGB(cp1[1], pp[ 5]);
-	    YCbCrtoRGB(cp1[2], pp[ 6]);
-	    YCbCrtoRGB(cp1[3], pp[ 7]);
-	    YCbCrtoRGB(cp2[0], pp[ 8]);
-	    YCbCrtoRGB(cp2[1], pp[ 9]);
-	    YCbCrtoRGB(cp2[2], pp[10]);
-	    YCbCrtoRGB(cp2[3], pp[11]);
-	    YCbCrtoRGB(cp3[0], pp[12]);
-	    YCbCrtoRGB(cp3[1], pp[13]);
-	    YCbCrtoRGB(cp3[2], pp[14]);
-	    YCbCrtoRGB(cp3[3], pp[15]);
+            YCbCrtoRGB(cp [0], pp[ 0]);
+            YCbCrtoRGB(cp [1], pp[ 1]);
+            YCbCrtoRGB(cp [2], pp[ 2]);
+            YCbCrtoRGB(cp [3], pp[ 3]);
+            YCbCrtoRGB(cp1[0], pp[ 4]);
+            YCbCrtoRGB(cp1[1], pp[ 5]);
+            YCbCrtoRGB(cp1[2], pp[ 6]);
+            YCbCrtoRGB(cp1[3], pp[ 7]);
+            YCbCrtoRGB(cp2[0], pp[ 8]);
+            YCbCrtoRGB(cp2[1], pp[ 9]);
+            YCbCrtoRGB(cp2[2], pp[10]);
+            YCbCrtoRGB(cp2[3], pp[11]);
+            YCbCrtoRGB(cp3[0], pp[12]);
+            YCbCrtoRGB(cp3[1], pp[13]);
+            YCbCrtoRGB(cp3[2], pp[14]);
+            YCbCrtoRGB(cp3[3], pp[15]);
 
-	    cp += 4, cp1 += 4, cp2 += 4, cp3 += 4;
-	    pp += 18;
-	} while (--x);
-	cp += incr, cp1 += incr, cp2 += incr, cp3 += incr;
-	pp += fromskew;
+            cp += 4, cp1 += 4, cp2 += 4, cp3 += 4;
+            pp += 18;
+        } while (--x);
+        cp += incr, cp1 += incr, cp2 += incr, cp3 += incr;
+        pp += fromskew;
     }
 }
 
@@ -1302,25 +1300,25 @@ DECLAREContigPutFunc(putcontig8bitYCbCr42tile)
     (void) y;
     /* XXX adjust fromskew */
     for (; h >= 2; h -= 2) {
-	x = w>>2;
-	do {
-	    int Cb = pp[8];
-	    int Cr = pp[9];
+        x = w>>2;
+        do {
+            int Cb = pp[8];
+            int Cr = pp[9];
 
-	    YCbCrtoRGB(cp [0], pp[0]);
-	    YCbCrtoRGB(cp [1], pp[1]);
-	    YCbCrtoRGB(cp [2], pp[2]);
-	    YCbCrtoRGB(cp [3], pp[3]);
-	    YCbCrtoRGB(cp1[0], pp[4]);
-	    YCbCrtoRGB(cp1[1], pp[5]);
-	    YCbCrtoRGB(cp1[2], pp[6]);
-	    YCbCrtoRGB(cp1[3], pp[7]);
+            YCbCrtoRGB(cp [0], pp[0]);
+            YCbCrtoRGB(cp [1], pp[1]);
+            YCbCrtoRGB(cp [2], pp[2]);
+            YCbCrtoRGB(cp [3], pp[3]);
+            YCbCrtoRGB(cp1[0], pp[4]);
+            YCbCrtoRGB(cp1[1], pp[5]);
+            YCbCrtoRGB(cp1[2], pp[6]);
+            YCbCrtoRGB(cp1[3], pp[7]);
 
-	    cp += 4, cp1 += 4;
-	    pp += 10;
-	} while (--x);
-	cp += incr, cp1 += incr;
-	pp += fromskew;
+            cp += 4, cp1 += 4;
+            pp += 10;
+        } while (--x);
+        cp += incr, cp1 += incr;
+        pp += fromskew;
     }
 }
 
@@ -1334,21 +1332,21 @@ DECLAREContigPutFunc(putcontig8bitYCbCr41tile)
     (void) y;
     /* XXX adjust fromskew */
     do {
-	x = w>>2;
-	do {
-	    int Cb = pp[4];
-	    int Cr = pp[5];
+        x = w>>2;
+        do {
+            int Cb = pp[4];
+            int Cr = pp[5];
 
-	    YCbCrtoRGB(cp [0], pp[0]);
-	    YCbCrtoRGB(cp [1], pp[1]);
-	    YCbCrtoRGB(cp [2], pp[2]);
-	    YCbCrtoRGB(cp [3], pp[3]);
+            YCbCrtoRGB(cp [0], pp[0]);
+            YCbCrtoRGB(cp [1], pp[1]);
+            YCbCrtoRGB(cp [2], pp[2]);
+            YCbCrtoRGB(cp [3], pp[3]);
 
-	    cp += 4;
-	    pp += 6;
-	} while (--x);
-	cp += toskew;
-	pp += fromskew;
+            cp += 4;
+            pp += 6;
+        } while (--x);
+        cp += toskew;
+        pp += fromskew;
     } while (--h);
 }
 
@@ -1364,21 +1362,21 @@ DECLAREContigPutFunc(putcontig8bitYCbCr22tile)
     (void) y;
     /* XXX adjust fromskew */
     for (; h >= 2; h -= 2) {
-	x = w>>1;
-	do {
-	    int Cb = pp[4];
-	    int Cr = pp[5];
+        x = w>>1;
+        do {
+            int Cb = pp[4];
+            int Cr = pp[5];
 
-	    YCbCrtoRGB(cp [0], pp[0]);
-	    YCbCrtoRGB(cp [1], pp[1]);
-	    YCbCrtoRGB(cp1[0], pp[2]);
-	    YCbCrtoRGB(cp1[1], pp[3]);
+            YCbCrtoRGB(cp [0], pp[0]);
+            YCbCrtoRGB(cp [1], pp[1]);
+            YCbCrtoRGB(cp1[0], pp[2]);
+            YCbCrtoRGB(cp1[1], pp[3]);
 
-	    cp += 2, cp1 += 2;
-	    pp += 6;
-	} while (--x);
-	cp += incr, cp1 += incr;
-	pp += fromskew;
+            cp += 2, cp1 += 2;
+            pp += 6;
+        } while (--x);
+        cp += incr, cp1 += incr;
+        pp += fromskew;
     }
 }
 
@@ -1392,19 +1390,19 @@ DECLAREContigPutFunc(putcontig8bitYCbCr21tile)
     (void) y;
     /* XXX adjust fromskew */
     do {
-	x = w>>1;
-	do {
-	    int Cb = pp[2];
-	    int Cr = pp[3];
+        x = w>>1;
+        do {
+            int Cb = pp[2];
+            int Cr = pp[3];
 
-	    YCbCrtoRGB(cp[0], pp[0]);
-	    YCbCrtoRGB(cp[1], pp[1]);
+            YCbCrtoRGB(cp[0], pp[0]);
+            YCbCrtoRGB(cp[1], pp[1]);
 
-	    cp += 2;
-	    pp += 4;
-	} while (--x);
-	cp += toskew;
-	pp += fromskew;
+            cp += 2;
+            pp += 4;
+        } while (--x);
+        cp += toskew;
+        pp += fromskew;
     } while (--h);
 }
 
@@ -1418,28 +1416,28 @@ DECLAREContigPutFunc(putcontig8bitYCbCr11tile)
     (void) y;
     /* XXX adjust fromskew */
     do {
-	x = w>>1;
-	do {
-	    int Cb = pp[1];
-	    int Cr = pp[2];
+        x = w>>1;
+        do {
+            int Cb = pp[1];
+            int Cr = pp[2];
 
-	    YCbCrtoRGB(*cp++, pp[0]);
+            YCbCrtoRGB(*cp++, pp[0]);
 
-	    pp += 3;
-	} while (--x);
-	cp += toskew;
-	pp += fromskew;
+            pp += 3;
+        } while (--x);
+        cp += toskew;
+        pp += fromskew;
     } while (--h);
 }
-#undef	YCbCrSetup
-#undef	YCbCrtoRGB
+#undef  YCbCrSetup
+#undef  YCbCrtoRGB
 
-#define	LumaRed			coeffs[0]
-#define	LumaGreen		coeffs[1]
-#define	LumaBlue		coeffs[2]
-#define	SHIFT			16
-#define	FIX(x)			((int32)((x) * (1L<<SHIFT) + 0.5))
-#define	ONE_HALF		((int32)(1<<(SHIFT-1)))
+#define LumaRed                 coeffs[0]
+#define LumaGreen               coeffs[1]
+#define LumaBlue                coeffs[2]
+#define SHIFT                   16
+#define FIX(x)                  ((int32)((x) * (1L<<SHIFT) + 0.5))
+#define ONE_HALF                ((int32)(1<<(SHIFT-1)))
 
 /*
  * Initialize the YCbCr->RGB conversion tables.  The conversion
@@ -1465,18 +1463,18 @@ TIFFYCbCrToRGBInit(TIFFYCbCrToRGB* ycbcr, TIFF* tif)
     int i;
 
     clamptab = (TIFFRGBValue*)(
-	(tidata_t) ycbcr+TIFFroundup(sizeof (TIFFYCbCrToRGB), sizeof (long)));
-    _TIFFmemset(clamptab, 0, 256);		/* v < 0 => 0 */
+        (tidata_t) ycbcr+TIFFroundup(sizeof (TIFFYCbCrToRGB), sizeof (long)));
+    _TIFFmemset(clamptab, 0, 256);              /* v < 0 => 0 */
     ycbcr->clamptab = (clamptab += 256);
     for (i = 0; i < 256; i++)
-	clamptab[i] = i;
-    _TIFFmemset(clamptab+256, 255, 2*256);	/* v > 255 => 255 */
+        clamptab[i] = i;
+    _TIFFmemset(clamptab+256, 255, 2*256);      /* v > 255 => 255 */
     TIFFGetFieldDefaulted(tif, TIFFTAG_YCBCRCOEFFICIENTS, &coeffs);
     _TIFFmemcpy(ycbcr->coeffs, coeffs, 3*sizeof (float));
-    { float f1 = 2-2*LumaRed;		int32 D1 = FIX(f1);
-      float f2 = LumaRed*f1/LumaGreen;	int32 D2 = -FIX(f2);
-      float f3 = 2-2*LumaBlue;		int32 D3 = FIX(f3);
-      float f4 = LumaBlue*f3/LumaGreen;	int32 D4 = -FIX(f4);
+    { float f1 = 2-2*LumaRed;           int32 D1 = FIX(f1);
+      float f2 = LumaRed*f1/LumaGreen;  int32 D2 = -FIX(f2);
+      float f3 = 2-2*LumaBlue;          int32 D3 = FIX(f3);
+      float f4 = LumaBlue*f3/LumaGreen; int32 D4 = -FIX(f4);
       int x;
 
       ycbcr->Cr_r_tab = (int*) (clamptab + 3*256);
@@ -1494,19 +1492,19 @@ TIFFYCbCrToRGBInit(TIFFYCbCrToRGB* ycbcr, TIFF* tif)
        *     Cb/Cr values to use in constructing the tables.
        */
       for (i = 0, x = -128; i < 256; i++, x++) {
-	  ycbcr->Cr_r_tab[i] = (int)((D1*x + ONE_HALF)>>SHIFT);
-	  ycbcr->Cb_b_tab[i] = (int)((D3*x + ONE_HALF)>>SHIFT);
-	  ycbcr->Cr_g_tab[i] = D2*x;
-	  ycbcr->Cb_g_tab[i] = D4*x + ONE_HALF;
+          ycbcr->Cr_r_tab[i] = (int)((D1*x + ONE_HALF)>>SHIFT);
+          ycbcr->Cb_b_tab[i] = (int)((D3*x + ONE_HALF)>>SHIFT);
+          ycbcr->Cr_g_tab[i] = D2*x;
+          ycbcr->Cb_g_tab[i] = D4*x + ONE_HALF;
       }
     }
 }
-#undef	SHIFT
-#undef	ONE_HALF
-#undef	FIX
-#undef	LumaBlue
-#undef	LumaGreen
-#undef	LumaRed
+#undef  SHIFT
+#undef  ONE_HALF
+#undef  FIX
+#undef  LumaBlue
+#undef  LumaGreen
+#undef  LumaRed
 
 static tileContigRoutine
 initYCbCrConversion(TIFFRGBAImage* img)
@@ -1514,24 +1512,24 @@ initYCbCrConversion(TIFFRGBAImage* img)
     uint16 hs, vs;
 
     if (img->ycbcr == NULL) {
-	img->ycbcr = (TIFFYCbCrToRGB*) _TIFFmalloc(
-	      TIFFroundup(sizeof (TIFFYCbCrToRGB), sizeof (long))
-	    + 4*256*sizeof (TIFFRGBValue)
-	    + 2*256*sizeof (int)
-	    + 2*256*sizeof (int32)
-	);
-	if (img->ycbcr == NULL) {
-	    TIFFError(TIFFFileName(img->tif),
-		"No space for YCbCr->RGB conversion state");
-	    return (NULL);
-	}
-	TIFFYCbCrToRGBInit(img->ycbcr, img->tif);
+        img->ycbcr = (TIFFYCbCrToRGB*) _TIFFmalloc(
+              TIFFroundup(sizeof (TIFFYCbCrToRGB), sizeof (long))
+            + 4*256*sizeof (TIFFRGBValue)
+            + 2*256*sizeof (int)
+            + 2*256*sizeof (int32)
+        );
+        if (img->ycbcr == NULL) {
+            TIFFError(TIFFFileName(img->tif),
+                "No space for YCbCr->RGB conversion state");
+            return (NULL);
+        }
+        TIFFYCbCrToRGBInit(img->ycbcr, img->tif);
     } else {
-	float* coeffs;
+        float* coeffs;
 
-	TIFFGetFieldDefaulted(img->tif, TIFFTAG_YCBCRCOEFFICIENTS, &coeffs);
-	if (_TIFFmemcmp(coeffs, img->ycbcr->coeffs, 3*sizeof (float)) != 0)
-	    TIFFYCbCrToRGBInit(img->ycbcr, img->tif);
+        TIFFGetFieldDefaulted(img->tif, TIFFTAG_YCBCRCOEFFICIENTS, &coeffs);
+        if (_TIFFmemcmp(coeffs, img->ycbcr->coeffs, 3*sizeof (float)) != 0)
+            TIFFYCbCrToRGBInit(img->ycbcr, img->tif);
     }
     /*
      * The 6.0 spec says that subsampling must be
@@ -1569,42 +1567,42 @@ makebwmap(TIFFRGBAImage* img)
     uint32* p;
 
     img->BWmap = (uint32**) _TIFFmalloc(
-	256*sizeof (uint32 *)+(256*nsamples*sizeof(uint32)));
+        256*sizeof (uint32 *)+(256*nsamples*sizeof(uint32)));
     if (img->BWmap == NULL) {
-	TIFFError(TIFFFileName(img->tif), "No space for B&W mapping table");
-	return (0);
+        TIFFError(TIFFFileName(img->tif), "No space for B&W mapping table");
+        return (0);
     }
     p = (uint32*)(img->BWmap + 256);
     for (i = 0; i < 256; i++) {
-	TIFFRGBValue c;
-	img->BWmap[i] = p;
-	switch (bitspersample) {
-#define	GREY(x)	c = Map[x]; *p++ = PACK(c,c,c);
-	case 1:
-	    GREY(i>>7);
-	    GREY((i>>6)&1);
-	    GREY((i>>5)&1);
-	    GREY((i>>4)&1);
-	    GREY((i>>3)&1);
-	    GREY((i>>2)&1);
-	    GREY((i>>1)&1);
-	    GREY(i&1);
-	    break;
-	case 2:
-	    GREY(i>>6);
-	    GREY((i>>4)&3);
-	    GREY((i>>2)&3);
-	    GREY(i&3);
-	    break;
-	case 4:
-	    GREY(i>>4);
-	    GREY(i&0xf);
-	    break;
-	case 8:
-	    GREY(i);
-	    break;
-	}
-#undef	GREY
+        TIFFRGBValue c;
+        img->BWmap[i] = p;
+        switch (bitspersample) {
+#define GREY(x) c = Map[x]; *p++ = PACK(c,c,c);
+        case 1:
+            GREY(i>>7);
+            GREY((i>>6)&1);
+            GREY((i>>5)&1);
+            GREY((i>>4)&1);
+            GREY((i>>3)&1);
+            GREY((i>>2)&1);
+            GREY((i>>1)&1);
+            GREY(i&1);
+            break;
+        case 2:
+            GREY(i>>6);
+            GREY((i>>4)&3);
+            GREY((i>>2)&3);
+            GREY(i&3);
+            break;
+        case 4:
+            GREY(i>>4);
+            GREY(i&0xf);
+            break;
+        case 8:
+            GREY(i);
+            break;
+        }
+#undef  GREY
     }
     return (1);
 }
@@ -1613,7 +1611,7 @@ makebwmap(TIFFRGBAImage* img)
  * Construct a mapping table to convert from the range
  * of the data samples to [0,255] --for display.  This
  * process also handles inverting B&W images when needed.
- */ 
+ */
 static int
 setupMap(TIFFRGBAImage* img)
 {
@@ -1622,28 +1620,28 @@ setupMap(TIFFRGBAImage* img)
     range = (int32)((1L<<img->bitspersample)-1);
     img->Map = (TIFFRGBValue*) _TIFFmalloc((range+1) * sizeof (TIFFRGBValue));
     if (img->Map == NULL) {
-	TIFFError(TIFFFileName(img->tif),
-	    "No space for photometric conversion table");
-	return (0);
+        TIFFError(TIFFFileName(img->tif),
+            "No space for photometric conversion table");
+        return (0);
     }
     if (img->photometric == PHOTOMETRIC_MINISWHITE) {
-	for (x = 0; x <= range; x++)
-	    img->Map[x] = (TIFFRGBValue) (((range - x) * 255) / range);
+        for (x = 0; x <= range; x++)
+            img->Map[x] = (TIFFRGBValue) (((range - x) * 255) / range);
     } else {
-	for (x = 0; x <= range; x++)
-	    img->Map[x] = (TIFFRGBValue) ((x * 255) / range);
+        for (x = 0; x <= range; x++)
+            img->Map[x] = (TIFFRGBValue) ((x * 255) / range);
     }
     if (img->bitspersample <= 8 &&
-	(img->photometric == PHOTOMETRIC_MINISBLACK ||
-	 img->photometric == PHOTOMETRIC_MINISWHITE)) {
-	/*
-	 * Use photometric mapping table to construct
-	 * unpacking tables for samples <= 8 bits.
-	 */
-	if (!makebwmap(img))
-	    return (0);
-	/* no longer need Map, free it */
-	_TIFFfree(img->Map), img->Map = NULL;
+        (img->photometric == PHOTOMETRIC_MINISBLACK ||
+         img->photometric == PHOTOMETRIC_MINISWHITE)) {
+        /*
+         * Use photometric mapping table to construct
+         * unpacking tables for samples <= 8 bits.
+         */
+        if (!makebwmap(img))
+            return (0);
+        /* no longer need Map, free it */
+        _TIFFfree(img->Map), img->Map = NULL;
     }
     return (1);
 }
@@ -1657,8 +1655,8 @@ checkcmap(TIFFRGBAImage* img)
     long n = 1L<<img->bitspersample;
 
     while (n-- > 0)
-	if (*r++ >= 256 || *g++ >= 256 || *b++ >= 256)
-	    return (16);
+        if (*r++ >= 256 || *g++ >= 256 || *b++ >= 256)
+            return (16);
     return (8);
 }
 
@@ -1671,11 +1669,11 @@ cvtcmap(TIFFRGBAImage* img)
     long i;
 
     for (i = (1L<<img->bitspersample)-1; i >= 0; i--) {
-#define	CVT(x)		((uint16)((x)>>8))
-	r[i] = CVT(r[i]);
-	g[i] = CVT(g[i]);
-	b[i] = CVT(b[i]);
-#undef	CVT
+#define CVT(x)          ((uint16)((x)>>8))
+        r[i] = CVT(r[i]);
+        g[i] = CVT(g[i]);
+        b[i] = CVT(b[i]);
+#undef  CVT
     }
 }
 
@@ -1698,47 +1696,47 @@ makecmap(TIFFRGBAImage* img)
     int i;
 
     img->PALmap = (uint32**) _TIFFmalloc(
-	256*sizeof (uint32 *)+(256*nsamples*sizeof(uint32)));
+        256*sizeof (uint32 *)+(256*nsamples*sizeof(uint32)));
     if (img->PALmap == NULL) {
-	TIFFError(TIFFFileName(img->tif), "No space for Palette mapping table");
-	return (0);
+        TIFFError(TIFFFileName(img->tif), "No space for Palette mapping table");
+        return (0);
     }
     p = (uint32*)(img->PALmap + 256);
     for (i = 0; i < 256; i++) {
-	TIFFRGBValue c;
-	img->PALmap[i] = p;
-#define	CMAP(x)	c = x; *p++ = PACK(r[c]&0xff, g[c]&0xff, b[c]&0xff);
-	switch (bitspersample) {
-	case 1:
-	    CMAP(i>>7);
-	    CMAP((i>>6)&1);
-	    CMAP((i>>5)&1);
-	    CMAP((i>>4)&1);
-	    CMAP((i>>3)&1);
-	    CMAP((i>>2)&1);
-	    CMAP((i>>1)&1);
-	    CMAP(i&1);
-	    break;
-	case 2:
-	    CMAP(i>>6);
-	    CMAP((i>>4)&3);
-	    CMAP((i>>2)&3);
-	    CMAP(i&3);
-	    break;
-	case 4:
-	    CMAP(i>>4);
-	    CMAP(i&0xf);
-	    break;
-	case 8:
-	    CMAP(i);
-	    break;
-	}
+        TIFFRGBValue c;
+        img->PALmap[i] = p;
+#define CMAP(x) c = x; *p++ = PACK(r[c]&0xff, g[c]&0xff, b[c]&0xff);
+        switch (bitspersample) {
+        case 1:
+            CMAP(i>>7);
+            CMAP((i>>6)&1);
+            CMAP((i>>5)&1);
+            CMAP((i>>4)&1);
+            CMAP((i>>3)&1);
+            CMAP((i>>2)&1);
+            CMAP((i>>1)&1);
+            CMAP(i&1);
+            break;
+        case 2:
+            CMAP(i>>6);
+            CMAP((i>>4)&3);
+            CMAP((i>>2)&3);
+            CMAP(i&3);
+            break;
+        case 4:
+            CMAP(i>>4);
+            CMAP(i&0xf);
+            break;
+        case 8:
+            CMAP(i);
+            break;
+        }
 #undef CMAP
     }
     return (1);
 }
 
-/* 
+/*
  * Construct any mapping table used
  * by the associated put routine.
  */
@@ -1749,30 +1747,30 @@ buildMap(TIFFRGBAImage* img)
     case PHOTOMETRIC_RGB:
     case PHOTOMETRIC_YCBCR:
     case PHOTOMETRIC_SEPARATED:
-	if (img->bitspersample == 8)
-	    break;
-	/* fall thru... */
+        if (img->bitspersample == 8)
+            break;
+        /* fall thru... */
     case PHOTOMETRIC_MINISBLACK:
     case PHOTOMETRIC_MINISWHITE:
-	if (!setupMap(img))
-	    return (0);
-	break;
+        if (!setupMap(img))
+            return (0);
+        break;
     case PHOTOMETRIC_PALETTE:
-	/*
-	 * Convert 16-bit colormap to 8-bit (unless it looks
-	 * like an old-style 8-bit colormap).
-	 */
-	if (checkcmap(img) == 16)
-	    cvtcmap(img);
-	else
-	    TIFFWarning(TIFFFileName(img->tif), "Assuming 8-bit colormap");
-	/*
-	 * Use mapping table and colormap to construct
-	 * unpacking tables for samples < 8 bits.
-	 */
-	if (img->bitspersample <= 8 && !makecmap(img))
-	    return (0);
-	break;
+        /*
+         * Convert 16-bit colormap to 8-bit (unless it looks
+         * like an old-style 8-bit colormap).
+         */
+        if (checkcmap(img) == 16)
+            cvtcmap(img);
+        else
+            TIFFWarning(TIFFFileName(img->tif), "Assuming 8-bit colormap");
+        /*
+         * Use mapping table and colormap to construct
+         * unpacking tables for samples < 8 bits.
+         */
+        if (img->bitspersample <= 8 && !makecmap(img))
+            return (0);
+        break;
     }
     return (1);
 }
@@ -1786,61 +1784,61 @@ pickTileContigCase(TIFFRGBAImage* img)
     tileContigRoutine put = 0;
 
     if (buildMap(img)) {
-	switch (img->photometric) {
-	case PHOTOMETRIC_RGB:
-	    switch (img->bitspersample) {
-	    case 8:
-		if (!img->Map) {
-		    if (img->alpha == EXTRASAMPLE_ASSOCALPHA)
-			put = putRGBAAcontig8bittile;
-		    else if (img->alpha == EXTRASAMPLE_UNASSALPHA)
-			put = putRGBUAcontig8bittile;
-		    else
-			put = putRGBcontig8bittile;
-		} else
-		    put = putRGBcontig8bitMaptile;
-		break;
-	    case 16:
-		put = putRGBcontig16bittile;
-		if (!img->Map) {
-		    if (img->alpha == EXTRASAMPLE_ASSOCALPHA)
-			put = putRGBAAcontig16bittile;
-		    else if (img->alpha == EXTRASAMPLE_UNASSALPHA)
-			put = putRGBUAcontig16bittile;
-		}
-		break;
-	    }
-	    break;
-	case PHOTOMETRIC_SEPARATED:
-	    if (img->bitspersample == 8) {
-		if (!img->Map)
-		    put = putRGBcontig8bitCMYKtile;
-		else
-		    put = putRGBcontig8bitCMYKMaptile;
-	    }
-	    break;
-	case PHOTOMETRIC_PALETTE:
-	    switch (img->bitspersample) {
-	    case 8:	put = put8bitcmaptile; break;
-	    case 4: put = put4bitcmaptile; break;
-	    case 2: put = put2bitcmaptile; break;
-	    case 1: put = put1bitcmaptile; break;
-	    }
-	    break;
-	case PHOTOMETRIC_MINISWHITE:
-	case PHOTOMETRIC_MINISBLACK:
-	    switch (img->bitspersample) {
-	    case 8:	put = putgreytile; break;
-	    case 4: put = put4bitbwtile; break;
-	    case 2: put = put2bitbwtile; break;
-	    case 1: put = put1bitbwtile; break;
-	    }
-	    break;
-	case PHOTOMETRIC_YCBCR:
-	    if (img->bitspersample == 8)
-		put = initYCbCrConversion(img);
-	    break;
-	}
+        switch (img->photometric) {
+        case PHOTOMETRIC_RGB:
+            switch (img->bitspersample) {
+            case 8:
+                if (!img->Map) {
+                    if (img->alpha == EXTRASAMPLE_ASSOCALPHA)
+                        put = putRGBAAcontig8bittile;
+                    else if (img->alpha == EXTRASAMPLE_UNASSALPHA)
+                        put = putRGBUAcontig8bittile;
+                    else
+                        put = putRGBcontig8bittile;
+                } else
+                    put = putRGBcontig8bitMaptile;
+                break;
+            case 16:
+                put = putRGBcontig16bittile;
+                if (!img->Map) {
+                    if (img->alpha == EXTRASAMPLE_ASSOCALPHA)
+                        put = putRGBAAcontig16bittile;
+                    else if (img->alpha == EXTRASAMPLE_UNASSALPHA)
+                        put = putRGBUAcontig16bittile;
+                }
+                break;
+            }
+            break;
+        case PHOTOMETRIC_SEPARATED:
+            if (img->bitspersample == 8) {
+                if (!img->Map)
+                    put = putRGBcontig8bitCMYKtile;
+                else
+                    put = putRGBcontig8bitCMYKMaptile;
+            }
+            break;
+        case PHOTOMETRIC_PALETTE:
+            switch (img->bitspersample) {
+            case 8:     put = put8bitcmaptile; break;
+            case 4: put = put4bitcmaptile; break;
+            case 2: put = put2bitcmaptile; break;
+            case 1: put = put1bitcmaptile; break;
+            }
+            break;
+        case PHOTOMETRIC_MINISWHITE:
+        case PHOTOMETRIC_MINISBLACK:
+            switch (img->bitspersample) {
+            case 8:     put = putgreytile; break;
+            case 4: put = put4bitbwtile; break;
+            case 2: put = put2bitbwtile; break;
+            case 1: put = put1bitbwtile; break;
+            }
+            break;
+        case PHOTOMETRIC_YCBCR:
+            if (img->bitspersample == 8)
+                put = initYCbCrConversion(img);
+            break;
+        }
     }
     return ((img->put.contig = put) != 0);
 }
@@ -1849,7 +1847,7 @@ pickTileContigCase(TIFFRGBAImage* img)
  * Select the appropriate conversion routine for unpacked data.
  *
  * NB: we assume that unpacked single channel data is directed
- *	 to the "packed routines.
+ *       to the "packed routines.
  */
 static int
 pickTileSeparateCase(TIFFRGBAImage* img)
@@ -1857,32 +1855,32 @@ pickTileSeparateCase(TIFFRGBAImage* img)
     tileSeparateRoutine put = 0;
 
     if (buildMap(img)) {
-	switch (img->photometric) {
-	case PHOTOMETRIC_RGB:
-	    switch (img->bitspersample) {
-	    case 8:
-		if (!img->Map) {
-		    if (img->alpha == EXTRASAMPLE_ASSOCALPHA)
-			put = putRGBAAseparate8bittile;
-		    else if (img->alpha == EXTRASAMPLE_UNASSALPHA)
-			put = putRGBUAseparate8bittile;
-		    else
-			put = putRGBseparate8bittile;
-		} else
-		    put = putRGBseparate8bitMaptile;
-		break;
-	    case 16:
-		put = putRGBseparate16bittile;
-		if (!img->Map) {
-		    if (img->alpha == EXTRASAMPLE_ASSOCALPHA)
-			put = putRGBAAseparate16bittile;
-		    else if (img->alpha == EXTRASAMPLE_UNASSALPHA)
-			put = putRGBUAseparate16bittile;
-		}
-		break;
-	    }
-	    break;
-	}
+        switch (img->photometric) {
+        case PHOTOMETRIC_RGB:
+            switch (img->bitspersample) {
+            case 8:
+                if (!img->Map) {
+                    if (img->alpha == EXTRASAMPLE_ASSOCALPHA)
+                        put = putRGBAAseparate8bittile;
+                    else if (img->alpha == EXTRASAMPLE_UNASSALPHA)
+                        put = putRGBUAseparate8bittile;
+                    else
+                        put = putRGBseparate8bittile;
+                } else
+                    put = putRGBseparate8bitMaptile;
+                break;
+            case 16:
+                put = putRGBseparate16bittile;
+                if (!img->Map) {
+                    if (img->alpha == EXTRASAMPLE_ASSOCALPHA)
+                        put = putRGBAAseparate16bittile;
+                    else if (img->alpha == EXTRASAMPLE_UNASSALPHA)
+                        put = putRGBUAseparate16bittile;
+                }
+                break;
+            }
+            break;
+        }
     }
     return ((img->put.separate = put) != 0);
 }
@@ -1899,24 +1897,24 @@ int
 TIFFReadRGBAStrip(TIFF* tif, uint32 row, uint32 * raster )
 
 {
-    char 	emsg[1024];
+    char        emsg[1024];
     TIFFRGBAImage img;
-    int 	ok;
-    uint32	rowsperstrip, rows_to_read;
+    int         ok;
+    uint32      rowsperstrip, rows_to_read;
 
     if( TIFFIsTiled( tif ) )
     {
         TIFFError(TIFFFileName(tif),
                   "Can't use TIFFReadRGBAStrip() with tiled file.");
-	return (0);
+        return (0);
     }
-    
+
     TIFFGetFieldDefaulted(tif, TIFFTAG_ROWSPERSTRIP, &rowsperstrip);
     if( (row % rowsperstrip) != 0 )
     {
         TIFFError(TIFFFileName(tif),
                 "Row passed to TIFFReadRGBAStrip() must be first in a strip.");
-	return (0);
+        return (0);
     }
 
     if (TIFFRGBAImageBegin(&img, tif, 0, emsg)) {
@@ -1928,15 +1926,15 @@ TIFFReadRGBAStrip(TIFF* tif, uint32 row, uint32 * raster )
             rows_to_read = img.height - row;
         else
             rows_to_read = rowsperstrip;
-        
-	ok = TIFFRGBAImageGet(&img, raster, img.width, rows_to_read );
-        
-	TIFFRGBAImageEnd(&img);
+
+        ok = TIFFRGBAImageGet(&img, raster, img.width, rows_to_read );
+
+        TIFFRGBAImageEnd(&img);
     } else {
-	TIFFError(TIFFFileName(tif), emsg);
-	ok = 0;
+        TIFFError(TIFFFileName(tif), emsg);
+        ok = 0;
     }
-    
+
     return (ok);
 }
 
@@ -1950,25 +1948,25 @@ int
 TIFFReadRGBATile(TIFF* tif, uint32 col, uint32 row, uint32 * raster)
 
 {
-    char 	emsg[1024];
+    char        emsg[1024];
     TIFFRGBAImage img;
-    int 	ok;
-    uint32	tile_xsize, tile_ysize;
-    uint32	read_xsize, read_ysize;
-    uint32	i_row;
+    int         ok;
+    uint32      tile_xsize, tile_ysize;
+    uint32      read_xsize, read_ysize;
+    uint32      i_row;
 
     /*
      * Verify that our request is legal - on a tile file, and on a
      * tile boundary.
      */
-    
+
     if( !TIFFIsTiled( tif ) )
     {
         TIFFError(TIFFFileName(tif),
                   "Can't use TIFFReadRGBATile() with stripped file.");
-	return (0);
+        return (0);
     }
-    
+
     TIFFGetFieldDefaulted(tif, TIFFTAG_TILEWIDTH, &tile_xsize);
     TIFFGetFieldDefaulted(tif, TIFFTAG_TILELENGTH, &tile_ysize);
     if( (col % tile_xsize) != 0 || (row % tile_ysize) != 0 )
@@ -1976,15 +1974,15 @@ TIFFReadRGBATile(TIFF* tif, uint32 col, uint32 row, uint32 * raster)
         TIFFError(TIFFFileName(tif),
                   "Row/col passed to TIFFReadRGBATile() must be top"
                   "left corner of a tile.");
-	return (0);
+        return (0);
     }
 
     /*
      * Setup the RGBA reader.
      */
-    
+
     if ( !TIFFRGBAImageBegin(&img, tif, 0, emsg)) {
-	TIFFError(TIFFFileName(tif), emsg);
+        TIFFError(TIFFFileName(tif), emsg);
         return( 0 );
     }
 
@@ -1999,7 +1997,7 @@ TIFFReadRGBATile(TIFF* tif, uint32 col, uint32 row, uint32 * raster)
         read_ysize = img.height - row;
     else
         read_ysize = tile_ysize;
-    
+
     if( col + tile_xsize > img.width )
         read_xsize = img.width - col;
     else
@@ -2008,12 +2006,12 @@ TIFFReadRGBATile(TIFF* tif, uint32 col, uint32 row, uint32 * raster)
     /*
      * Read the chunk of imagery.
      */
-    
+
     img.row_offset = row;
     img.col_offset = col;
 
     ok = TIFFRGBAImageGet(&img, raster, read_xsize, read_ysize );
-        
+
     TIFFRGBAImageEnd(&img);
 
     /*
@@ -2021,7 +2019,7 @@ TIFFReadRGBATile(TIFF* tif, uint32 col, uint32 row, uint32 * raster)
      * shifting the data around as if a full tile of data is being returned.
      *
      * This is all the more complicated because the image is organized in
-     * bottom to top format. 
+     * bottom to top format.
      */
 
     if( read_xsize == tile_xsize && read_ysize == tile_ysize )
@@ -2041,6 +2039,6 @@ TIFFReadRGBATile(TIFF* tif, uint32 col, uint32 row, uint32 * raster)
         _TIFFmemset( raster + (tile_ysize - i_row - 1) * tile_xsize,
                      0, sizeof(uint32) * tile_xsize );
     }
-    
+
     return (ok);
 }
