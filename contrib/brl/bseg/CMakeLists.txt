@@ -4,6 +4,9 @@
 # segmentation feature detection library
 SUBDIRS(sdet)
 
+# video processors
+SUBDIRS(vpro)
+
 # segmentation view library
 SUBDIRS(segv)
 
