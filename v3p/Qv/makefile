@@ -4,10 +4,10 @@ USES = vxl
 
 INCDIRS = . $(IUEROOT)/v3p
 
-SOURCES = QvLib.cpp
-SOURCES += wrltraverse.cpp
-SOURCES += wrlbuild.cpp
-SOURCES += vecutil.cpp
+SOURCES = QvLib.cxx
+SOURCES += wrltraverse.cxx
+SOURCES += wrlbuild.cxx
+SOURCES += vecutil.cxx
 
 # DEFINES += -D__PC__
 
