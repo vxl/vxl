@@ -1,13 +1,12 @@
-# isnaked from Imakefile
-# 
 # Imakefile for netlib library
 # This library contains public domain routines from netlib.att.com
-#
 
-APP_CFLAGS = -O2
+USES = 
 
 LIB := netlib
 VERSION := 1.0
+
+APP_CFLAGS = -O2
 
 #*********************
 # Std Fortran Library 
