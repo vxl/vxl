@@ -87,6 +87,7 @@ class CheckGrey : public CheckPixelT<T>
   {
     assert( p == 0 );
     return img_ && pixel.size() == 1 &&
+      i < img_.ni() && j < img_.nj() && k < img_.nk() &&
       pixel[0] == (TruePixelType)img_(i,j,k) &&
       ( !(i > img_.ni()/2 && j > img_.nj()/2 && k > img_.nk()/2)
         || pixel[0] == (TruePixelType)far_oct_img_(i-img_.ni()/2,
@@ -186,9 +187,9 @@ int test_file_format_read_main( int argc, char* argv[] )
   testlib_test_perform( test( "ff_3planes8bit_true.txt",
                               CheckColourPlanes<vxl_byte>( "ff_rgb8bit_ascii.#.ppm" ) ) );
 
-//  testlib_test_begin( "  Implied list of dicom slices" );
-//  testlib_test_perform( test( "ff_grey16bit_true.txt",
-//                              CheckGrey<vxl_uint_16>( "ff_grey16bit_uncompressed_####.dcm" ) ) );
+  testlib_test_begin( "  Implied list of dicom slices" );
+  testlib_test_perform( test( "ff_grey16bit_true.txt",
+                              CheckGrey<vxl_uint_16>( "ff_grey16bit_uncompressed_####.dcm" ) ) );
 
 
 
