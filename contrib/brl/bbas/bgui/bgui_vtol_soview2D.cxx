@@ -60,6 +60,38 @@ bgui_vtol_soview2D_digital_curve(vdgl_digital_curve_sptr const& dc)
 }
 
 //--------------------------------------------------------------------------
+//: vdgl_digital_curve view
+//--------------------------------------------------------------------------
+vcl_ostream& bgui_vtol_soview2D_edgel_chain::print(vcl_ostream& s) const
+{
+  return s;
+}
+
+bgui_vtol_soview2D_edgel_chain::
+bgui_vtol_soview2D_edgel_chain(vdgl_edgel_chain_sptr const& ec)
+{
+  if (!ec)
+    {
+      vcl_cout << "In bgui_vtol_soview2D_edgel_chain(..) - null input ec\n";
+      return;
+    }
+
+  //n, x, and y are in the parent class vgui_soview2D_linestrip
+  unsigned int n = ec->size();
+
+  float x = 0, y=0;
+  for (unsigned int i=0; i<n;i++)
+    {
+      vdgl_edgel ed = (*ec)[i];
+      x=ed.get_x();
+      y=ed.get_y();
+      vgui_soview2D* p = new vgui_soview2D_point(x, y);
+      ls.push_back(p);
+    }
+  return;
+}
+
+//--------------------------------------------------------------------------
 //: vtol_vertex_2d view
 //--------------------------------------------------------------------------
 vcl_ostream& bgui_vtol_soview2D_vertex::print(vcl_ostream& s) const

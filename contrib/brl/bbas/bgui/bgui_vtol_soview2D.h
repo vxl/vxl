@@ -16,6 +16,7 @@
 #include <vcl_vector.h>
 #include <vcl_iosfwd.h>
 #include <vdgl/vdgl_digital_curve_sptr.h>
+#include <vdgl/vdgl_edgel_chain_sptr.h>
 #include <vtol/vtol_edge_2d.h>
 #include <vtol/vtol_edge_2d_sptr.h>
 #include <vtol/vtol_face_2d_sptr.h>
@@ -54,6 +55,23 @@ class bgui_vtol_soview2D_digital_curve : public vgui_soview2D_group
 
   //: Returns the type of this class ('bgui_vtol_soview2D_digital_curve').
   vcl_string type_name() const { return "bgui_vtol_soview2D_digital_curve"; }
+};
+
+//: vdgl_edgel_chain (maybe later move to a geometry tableau)
+class bgui_vtol_soview2D_edgel_chain : public vgui_soview2D_group 
+{
+ public:
+  //: Constructor - creates a default vdgl_edgel_chain view
+  bgui_vtol_soview2D_edgel_chain() {;}
+
+  //: Constructor - creates a view of a vdgl_edgel_chain
+  bgui_vtol_soview2D_edgel_chain(vdgl_edgel_chain_sptr const& ec);
+
+  //: Print details about this vdgl_edgel_chain to the given stream.
+  virtual vcl_ostream& print(vcl_ostream&) const;
+
+  //: Returns the type of this class ('bgui_vtol_soview2D_edgel_chain').
+  vcl_string type_name() const { return "bgui_vtol_soview2D_edgel_chain"; }
 };
 
 //: vtol_vertex_2d
