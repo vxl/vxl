@@ -94,7 +94,7 @@ vcl_string vgui_soview::type_name() const  {
   return "vgui_soview";
 }
 
-void vgui_soview::load_name() {
+void vgui_soview::load_name() const {
   glLoadName(id);
 }
 
@@ -139,7 +139,7 @@ void vgui_soview::set_line_width(float w) {
 }
 
 
-vgui_style* vgui_soview::get_style() {
+vgui_style* vgui_soview::get_style() const {
   return style;
 }
 

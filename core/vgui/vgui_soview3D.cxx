@@ -16,12 +16,13 @@ vgui_soview3D::vgui_soview3D() {}
 
 //--------------------------------------------------------------------------//
 
-vcl_ostream& vgui_point3D::print(vcl_ostream& s) const {
+vcl_ostream& vgui_point3D::print(vcl_ostream& s) const
+{
   s << "[vgui_point3D " << x << "," << y << "," << z << " ";
   s << " "; return vgui_soview3D::print(s) << "]";
 }
 
-void vgui_point3D::draw()
+void vgui_point3D::draw() const
 {
   bool lighting = false;
   if (glIsEnabled(GL_LIGHTING)) {
@@ -41,12 +42,22 @@ void vgui_point3D::draw()
 
 //--------------------------------------------------------------------------//
 
-vcl_ostream& vgui_lineseg3D::print(vcl_ostream& s) const {
-  s << "[vgui_lineseg3D " << x0 << "," << y0 << " -- " << x1 << "," << y1;
-  s << " "; return vgui_soview3D::print(s) << "]";
+vgui_lineseg3D::vgui_lineseg3D( float x0_, float y0_, float z0_,
+                                float x1_, float y1_, float z1_ )
+  : x0(x0_), y0(y0_), z0(z0_),
+    x1(x1_), y1(y1_), z1(z1_)
+{
 }
 
-void vgui_lineseg3D::draw() {
+vcl_ostream& vgui_lineseg3D::print(vcl_ostream& s) const
+{
+  s << "[vgui_lineseg3D " << x0 << "," << y0 << "," << z0
+    << " - " << x1 << "," << y1 << "," << z1 << " ";
+  return vgui_soview3D::print(s) << "]";
+}
+
+void vgui_lineseg3D::draw() const
+{
   //vcl_cerr << "line id : " << id << vcl_endl;
 
   bool lighting = false;
@@ -65,3 +76,39 @@ void vgui_lineseg3D::draw() {
     glEnable(GL_LIGHTING);
 }
 
+//--------------------------------------------------------------------------//
+
+vgui_triangle3D::vgui_triangle3D( float x0_, float y0_, float z0_,
+                                  float x1_, float y1_, float z1_,
+                                  float x2_, float y2_, float z2_ )
+  : x0(x0_), y0(y0_), z0(z0_),
+    x1(x1_), y1(y1_), z1(z1_),
+    x2(x2_), y2(y2_), z2(z2_)
+{
+}
+
+vcl_ostream& vgui_triangle3D::print(vcl_ostream& s) const
+{
+  s << "[vgui_triangle3D " << x0 << "," << y0 << "," << z0
+    << " - " << x1 << "," << y1 << "," << z1
+    << " - " << x2 << "," << y2 << "," << z2 << " ";
+  return vgui_soview3D::print(s) << "]";
+}
+
+void vgui_triangle3D::draw() const
+{
+  bool lighting = false;
+  if (glIsEnabled(GL_LIGHTING)) {
+    lighting = true;
+    glDisable(GL_LIGHTING);
+  }
+
+  glBegin(GL_TRIANGLES);
+  glVertex3f(x0,y0,z0);
+  glVertex3f(x1,y1,z1);
+  glVertex3f(x2,y2,z2);
+  glEnd();
+
+  if (lighting)
+    glEnable(GL_LIGHTING);
+}

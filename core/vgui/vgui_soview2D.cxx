@@ -31,7 +31,7 @@ vcl_ostream& vgui_soview2D_point::print(vcl_ostream& s) const
   s << " "; return vgui_soview2D::print(s) << "]";
 }
 
-void vgui_soview2D_point::draw()
+void vgui_soview2D_point::draw() const
 {
   glPointSize(style->point_size);
   glBegin(GL_POINTS);
@@ -39,14 +39,14 @@ void vgui_soview2D_point::draw()
   glEnd();
 }
 
-float vgui_soview2D_point::distance_squared(float x, float y)
+float vgui_soview2D_point::distance_squared(float x, float y) const
 {
   float dx = this->x - x;
   float dy = this->y - y;
   return dx*dx + dy*dy;
 }
 
-void vgui_soview2D_point::get_centroid(float* x, float* y)
+void vgui_soview2D_point::get_centroid(float* x, float* y) const
 {
   *x = this->x;
   *y = this->y;
@@ -66,7 +66,7 @@ vcl_ostream& vgui_soview2D_lineseg::print(vcl_ostream& s) const
   s << " "; return vgui_soview2D::print(s) << "]";
 }
 
-void vgui_soview2D_lineseg::draw()
+void vgui_soview2D_lineseg::draw() const
 {
   //vcl_cerr << "line id : " << id << vcl_endl;
 
@@ -77,12 +77,12 @@ void vgui_soview2D_lineseg::draw()
   glEnd();
 }
 
-float vgui_soview2D_lineseg::distance_squared(float x, float y)
+float vgui_soview2D_lineseg::distance_squared(float x, float y) const
 {
   return vgl_distance2_to_linesegment(x0, y0, x1, y1, x, y);
 }
 
-void vgui_soview2D_lineseg::get_centroid(float* x, float* y)
+void vgui_soview2D_lineseg::get_centroid(float* x, float* y) const
 {
   *x = (x0 + x1) / 2;
   *y = (y0 + y1) / 2;
@@ -117,13 +117,13 @@ vcl_ostream& vgui_soview2D_group::print(vcl_ostream& s) const
   return vgui_soview2D::print(s) << "]";
 }
 
-void vgui_soview2D_group::draw()
+void vgui_soview2D_group::draw() const
 {
   for (unsigned int i=0; i< ls.size(); i++)
     ls[i]->draw();
 }
 
-float vgui_soview2D_group::distance_squared(float x, float y)
+float vgui_soview2D_group::distance_squared(float x, float y) const
 {
   if (ls.size() == 0)
     return -1e30f;
@@ -139,7 +139,7 @@ float vgui_soview2D_group::distance_squared(float x, float y)
   return min;
 }
 
-void vgui_soview2D_group::get_centroid(float* x, float* y)
+void vgui_soview2D_group::get_centroid(float* x, float* y) const
 {
   *x = 0;
   *y = 0;
@@ -172,19 +172,19 @@ vcl_ostream& vgui_soview2D_infinite_line::print(vcl_ostream& s) const
   s << " "; return vgui_soview2D::print(s) << "]";
 }
 
-void vgui_soview2D_infinite_line::draw()
+void vgui_soview2D_infinite_line::draw() const
 {
   vgui_draw_line(a, b, c);
 }
 
 
-float vgui_soview2D_infinite_line::distance_squared(float x, float y)
+float vgui_soview2D_infinite_line::distance_squared(float x, float y) const
 {
   float tmp = a*x + b*y + c;
   return tmp*tmp/(a*a + b*b);
 }
 
-void vgui_soview2D_infinite_line::get_centroid(float* x, float* y)
+void vgui_soview2D_infinite_line::get_centroid(float* x, float* y) const
 {
   *x = 0;
   *y = 0;
@@ -219,7 +219,7 @@ vcl_ostream& vgui_soview2D_circle::print(vcl_ostream& s) const
   s << " "; return vgui_soview2D::print(s) << "]";
 }
 
-void vgui_soview2D_circle::draw()
+void vgui_soview2D_circle::draw() const
 {
   glBegin(GL_LINE_LOOP);
   for (unsigned int i=0;i<100;i++)
@@ -230,7 +230,7 @@ void vgui_soview2D_circle::draw()
   glEnd();
 }
 
-float vgui_soview2D_circle::distance_squared(float x, float y)
+float vgui_soview2D_circle::distance_squared(float x, float y) const
 {
   float dx = this->x - x;
   float dy = this->y - y;
@@ -244,7 +244,7 @@ float vgui_soview2D_circle::distance_squared(float x, float y)
   return dcircum * dcircum;
 }
 
-void vgui_soview2D_circle::get_centroid(float* x, float* y)
+void vgui_soview2D_circle::get_centroid(float* x, float* y) const
 {
   *x = this->x;
   *y = this->y;
@@ -265,7 +265,7 @@ vcl_ostream& vgui_soview2D_ellipse::print(vcl_ostream& s) const
   s << "  "; return vgui_soview2D::print(s) << "]";
 }
 
-void vgui_soview2D_ellipse::draw()
+void vgui_soview2D_ellipse::draw() const
 {
   double px, py;
 
@@ -280,13 +280,13 @@ void vgui_soview2D_ellipse::draw()
   glEnd();
 }
 
-float vgui_soview2D_ellipse::distance_squared(float x, float y)
+float vgui_soview2D_ellipse::distance_squared(float x, float y) const
 {
   return (x - this->x)*(x - this->x) + (y - this->y)*(y - this->y);
   // not implemented - TODO
 }
 
-void vgui_soview2D_ellipse::get_centroid(float* x, float* y)
+void vgui_soview2D_ellipse::get_centroid(float* x, float* y) const
 {
   *x = this->x;
   *y = this->y;
@@ -318,7 +318,7 @@ vgui_soview2D_linestrip::~vgui_soview2D_linestrip()
   delete [] y; y=0;
 }
 
-void vgui_soview2D_linestrip::draw()
+void vgui_soview2D_linestrip::draw() const
 {
   glBegin(GL_LINE_STRIP);
   for (unsigned i=0; i<n; ++i)
@@ -328,13 +328,13 @@ void vgui_soview2D_linestrip::draw()
 
 vcl_ostream& vgui_soview2D_linestrip::print(vcl_ostream&s) const { return s << "[a linestrip. FIXME]"; }
 
-float vgui_soview2D_linestrip::distance_squared(float x, float y)
+float vgui_soview2D_linestrip::distance_squared(float x, float y) const
 {
   double tmp = vgl_distance_to_non_closed_polygon(this->x, this->y, this->n, x, y);
   return tmp*tmp;
 }
 
-void vgui_soview2D_linestrip::get_centroid(float* x, float* y)
+void vgui_soview2D_linestrip::get_centroid(float* x, float* y) const
 {
   *x = 0;
   *y = 0;
@@ -394,7 +394,7 @@ vgui_soview2D_polygon::~vgui_soview2D_polygon()
   delete [] y; y=0;
 }
 
-void vgui_soview2D_polygon::draw()
+void vgui_soview2D_polygon::draw() const
 {
   glBegin(GL_LINE_LOOP);
   for (unsigned i=0; i<n; ++i)
@@ -404,13 +404,13 @@ void vgui_soview2D_polygon::draw()
 
 vcl_ostream& vgui_soview2D_polygon::print(vcl_ostream&s) const { return s << "[a polygon. FIXME]"; }
 
-float vgui_soview2D_polygon::distance_squared(float x, float y)
+float vgui_soview2D_polygon::distance_squared(float x, float y) const
 {
   double tmp = vgl_distance_to_closed_polygon(this->x, this->y, this->n, x, y);
   return tmp*tmp;
 }
 
-void vgui_soview2D_polygon::get_centroid(float* x, float* y)
+void vgui_soview2D_polygon::get_centroid(float* x, float* y) const
 {
   *x = 0;
   *y = 0;

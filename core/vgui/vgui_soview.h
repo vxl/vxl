@@ -38,10 +38,10 @@ class vgui_soview /*: public vgui_observable*/
   virtual ~vgui_soview();
 
   //: Render this soview on the display.
-  virtual void draw() = 0;
+  virtual void draw() const = 0;
  
   //: Calls OpenGL function glLoadName.
-  virtual void load_name();
+  virtual void load_name() const;
 
   //: Prints the ID of this soview.
   virtual vcl_ostream& print(vcl_ostream&) const;
@@ -53,7 +53,7 @@ class vgui_soview /*: public vgui_observable*/
   virtual void set_style(vgui_style*);
 
   //: Return the style (colour, line width) of the soview.
-  virtual vgui_style* get_style();
+  virtual vgui_style* get_style() const;
 
   //: Set the colour of the soview. 
   void set_colour(float r, float g, float b);
@@ -84,7 +84,7 @@ class vgui_soview /*: public vgui_observable*/
   static vgui_DLLDATA const void * const msg_deselect;
 
   //: Returns the ID of this soview.
-  virtual unsigned get_id() {return id;}
+  virtual unsigned get_id() const {return id;}
 
   //: Returns a pointer to the vgui_soview, given the ID.
   static vgui_soview* id_to_object(unsigned id);

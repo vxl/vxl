@@ -33,6 +33,10 @@ int main(int argc, char **argv)
   list3D->add_line(0,0,1, 0,0,4);
   list3D->add_point(0,0,5);
 
+  // Add a small triangle
+  list3D->set_foreground(1,0,0);
+  list3D->add_triangle( 2,0,0, 0,2,0, 0,0,2 );
+
   // Add the easy3D tableau to a viewer3D tableau (this
   // gives us functionality to zoom and move the 3D object):
   vgui_viewer3D_tableau_new viewer(list3D);

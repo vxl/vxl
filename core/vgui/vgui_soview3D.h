@@ -32,7 +32,7 @@ class vgui_point3D : public vgui_soview3D
   vgui_point3D() {};
   vgui_point3D(float x_, float y_, float z_) : x(x_), y(y_), z(z_) {};
 
-  virtual void draw();
+  virtual void draw() const;
   virtual vcl_ostream& print(vcl_ostream&) const;
   vcl_string type_name() const { return "vgui_point3D"; }
 
@@ -45,12 +45,32 @@ class vgui_lineseg3D : public vgui_soview3D
 {
  public:
   vgui_lineseg3D() {};
+  vgui_lineseg3D( float x0_, float y0_, float z0_,
+                  float x1_, float y1_, float z1_ );
 
-  virtual void draw();
+  virtual void draw() const;
   virtual vcl_ostream& print(vcl_ostream&) const;
   vcl_string type_name() const { return "vgui_lineseg3D"; }
 
   float x0, y0, z0, x1, y1, z1;
 };
+
+
+//: 3-dimensional line segment.
+class vgui_triangle3D : public vgui_soview3D
+{
+ public:
+  vgui_triangle3D() {};
+  vgui_triangle3D( float x0_, float y0_, float z0_,
+                   float x1_, float y1_, float z1_,
+                   float x2_, float y2_, float z2_ );
+
+  virtual void draw() const;
+  virtual vcl_ostream& print(vcl_ostream&) const;
+  vcl_string type_name() const { return "vgui_triangle3D"; }
+
+  float x0, y0, z0, x1, y1, z1, x2, y2, z2;
+};
+
 
 #endif // vgui_soview3D_h_
