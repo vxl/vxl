@@ -81,7 +81,7 @@ void vsl_b_write(vsl_b_ostream &os, const vil_memory_image_impl & p)
   p.get_section(buf,0,0,p.width(),p.height());
   vsl_swap_bytes((char*) buf,p.bits_per_component() / CHAR_BIT,nelems);
   os.os().write((const char*) buf,size);
-  delete buf;
+  delete[] buf;
 }
 
 //========================================================================

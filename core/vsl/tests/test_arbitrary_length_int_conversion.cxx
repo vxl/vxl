@@ -105,7 +105,7 @@ void test_arbitrary_length_int_conversion_short()
 
   TEST("Checking the end conditions", c[65536] == 0 && c[65537] == 1, true);
 
-  delete buf;
+  delete[] buf;
 }
 
 
@@ -151,7 +151,7 @@ void test_arbitrary_length_int_conversion_ushort()
     vcl_cout << "Failed at number " << i <<vcl_endl;
 
   TEST("Checking the end conditions", c[65536] == 0 && c[65537] == 1, true);
-  delete buf;
+  delete[] buf;
 }
 
 
