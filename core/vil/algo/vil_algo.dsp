@@ -207,6 +207,15 @@ SOURCE=.\Templates/vil_sobel_1x3+byte.double-.cxx
 SOURCE=.\Templates/vil_sobel_3x3+byte.double-.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\Templates/vil_greyscale_dilate+double-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vil_greyscale_erode+double-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vil_median+double-.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\vil_histogram.cxx
 # End Source File
 # Begin Source File
