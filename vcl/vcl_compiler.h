@@ -104,6 +104,11 @@
 # define VCL_KAI
 #endif
 
+#if defined(__ICC)
+# define VCL_ICC
+#endif
+
+
 #if defined(__MWERKS__)
 // [sic]
 # define VCL_METRO_WERKS
