@@ -22,5 +22,5 @@ int main(int argc,
 {
   vcsl_radian_sptr r=vcsl_radian::instance();
 
-  return 0;
+  return r?0:1;
 }

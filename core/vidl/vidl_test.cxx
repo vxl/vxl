@@ -1,5 +1,6 @@
 #include <vidl/vidl_movie.h>
 #include <vidl/vidl_frame.h>
+#include <vcl_iostream.h>
 
 void tryit ()
   {
@@ -9,6 +10,7 @@ void tryit ()
        ++pframe)
     {
     vidl_frame_sptr frame = pframe;
+    if (!frame) return;
     }
 
   // A better way to do it
@@ -17,6 +19,7 @@ void tryit ()
         ++pframe)
     {
     vil_image im = pframe->get_image();
+    vcl_cout << "Got frame: " << im.width() << 'x' << im.height() << '\n';
     }
 
   // Running through the frames 2 images at a time
@@ -25,6 +28,7 @@ void tryit ()
         pframe = pframe + 2)
     {
     vil_image im = pframe->get_image();
+    vcl_cout << "Got frame: " << im.width() << 'x' << im.height() << '\n';
     }
 
   // Running backwards throught the image
@@ -33,6 +37,7 @@ void tryit ()
         --pframe)
     {
     vil_image im = pframe->get_image();
+    vcl_cout << "Got frame: " << im.width() << 'x' << im.height() << '\n';
     }
 
   // Backwards two at a time
@@ -41,6 +46,7 @@ void tryit ()
         pframe = pframe - 2)
     {
     vil_image im = pframe->get_image();
+    vcl_cout << "Got frame: " << im.width() << 'x' << im.height() << '\n';
     }
 
   // Run over all pairs of images

@@ -22,5 +22,5 @@ int main(int argc,
 {
   vcsl_spherical_sptr p=new vcsl_spherical;
 
-  return 0;
+  return p?0:1;
 }

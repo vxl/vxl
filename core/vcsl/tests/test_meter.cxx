@@ -22,5 +22,5 @@ int main(int argc,
 {
   vcsl_meter_sptr m=vcsl_meter::instance();
 
-  return 0;
+  return m?0:1;
 }

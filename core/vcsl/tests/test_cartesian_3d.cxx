@@ -22,5 +22,5 @@ int main(int argc,
 {
   vcsl_cartesian_3d_sptr c=new vcsl_cartesian_3d;
 
-  return 0;
+  return c?0:1;
 }

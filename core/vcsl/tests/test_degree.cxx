@@ -22,5 +22,5 @@ int main(int argc,
 {
   vcsl_degree_sptr r=vcsl_degree::instance();
 
-  return 0;
+  return r?0:1;
 }

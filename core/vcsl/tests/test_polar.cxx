@@ -22,5 +22,5 @@ int main(int argc,
 {
   vcsl_polar_sptr p=new vcsl_polar;
 
-  return 0;
+  return p?0:1;
 }

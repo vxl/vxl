@@ -22,5 +22,5 @@ int main(int argc,
 {
   vcsl_cylindrical_sptr p=new vcsl_cylindrical;
 
-  return 0;
+  return p?0:1;
 }
