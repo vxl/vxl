@@ -83,4 +83,68 @@ inline void vil2_convert_cast(vil2_image_view<inP >&src, vil2_image_view<outP >&
 }
 
 
+
+//: Convert various rgb types to greyscale, using given weights
+template <class inP, class outP>
+class vil2_convert_rgb_to_grey_pixel
+{
+  double rw_, gw_, bw_;
+public:
+  vil2_convert_rgb_to_grey_pixel(double rw, double gw, double bw):
+    rw_(rw), gw_(gw), bw_(bw) {}
+
+  outP operator() (vil_rgb<inP > v) const {
+    return vil2_convert_cast_pixel<double,outP>()(rw_*v.r+gw_*v.g+bw_*v.b); } 
+  outP operator() (vil_rgba<inP > v) const {
+    return vil2_convert_cast_pixel<double,outP>()(rw_*v.r+gw_*v.g+bw_*v.b); } 
+};
+
+//: Convert single plane rgb (or rgba) images to greyscale.
+// Component types can be different. Rounding will take place if appropriate.
+// 
+// Default weights convert from linear RGB to CIE luminance assuming a
+// modern monitor.  See Charles Pontyon's Colour FAQ
+// http://www.inforamp.net/~poynton/notes/colour_and_gamma/ColorFAQ.html
+template <class rgbP, class outP>
+inline void vil2_convert_rgb_to_grey(vil2_image_view<rgbP >&src, vil2_image_view<outP >&dest,
+                                     double rw=0.2125, double gw=0.7154, double bw = 0.0721)
+{
+  vil2_convert_rgb_to_grey_pixel<rgbP::value_type, outP> func(rw, gw, bw);
+  assert(src.nplanes() == 1);
+  vil2_transform(src, dest, func);
+}
+
+template <class inP, class outP>
+struct vil2_convert_grey_to_rgb_pixel
+{
+  vil_rgb<outP> operator() (inP v) const {
+    return vil_rgb<outP>(vil2_convert_cast_pixel<double,outP>()(v)); } 
+};
+
+template <class inP, class outP>
+struct vil2_convert_grey_to_rgba_pixel
+{
+  vil_rgba<outP> operator() (inP v) const {
+    return vil_rgba<outP>(vil2_convert_cast_pixel<double,outP>()(v)); } 
+};
+
+//: Convert grey images to rgb.
+// Component types can be different. Rounding will take place if appropriate.
+template <class inP, class outP >
+inline void vil2_convert_grey_to_rgb(vil2_image_view<inP >&src, vil2_image_view<vil_rgb<outP> >&dest)
+{
+  assert(src.nplanes() == 1);
+  vil2_transform(src, dest, vil2_convert_grey_to_rgb_pixel<inP, outP>());
+}
+
+//: Convert grey images to rgba.
+// Component types can be different. Rounding will take place if appropriate.
+template <class inP, class outP>
+inline void vil2_convert_grey_to_rgba(vil2_image_view<inP >&src, vil2_image_view<vil_rgba<outP> >&dest)
+{
+  assert(src.nplanes() == 1);
+  vil2_transform(src, dest, vil2_convert_grey_to_rgba_pixel<inP, outP>());
+}
+
+
 #endif // vil2_convert_h_

@@ -7,7 +7,9 @@
 #include <vil2/vil2_crop.h>
 #include <vil2/vil2_copy.h>
 #include <vil2/vil2_print.h>
+#include <vil2/vil2_plane.h>
 #include <vil2/vil2_convert.h>
+#include <vil2/vil2_view_as.h>
 
 bool Equal(const vil2_image_view<vxl_byte>& im0,
            const vil2_image_view<vxl_byte>& im1)
@@ -145,6 +147,31 @@ void test_image_view_byte()
   vil2_convert_cast(image7, image2);
   vil2_print_all(vcl_cout, image2);
   TEST("Rounding up", image2(0,0,0) == 1 && image2(2,2,1) == 36, true);
+
+  image7.clear();
+  vil2_convert_rgb_to_grey(vil2_view_as_rgb(image2), image7);
+  vil2_print_all(vcl_cout, image7);
+  TEST("vil2_convert_rgb_to_grey(vil2_rgba)", image7, true);
+  TEST_NEAR("Conversion rgb to grey", image7(0,0), 1.0, 1e-5);
+  TEST_NEAR("Conversion rgb to grey", image7(2,1), 34.5960, 1e-5);
+  vil2_convert_grey_to_rgb(image7, image5);
+  TEST("vil2_convert_grey_to_rgb", image5, true);
+  vil2_print_all(vcl_cout, image5);
+
+  vil2_convert_grey_to_rgba(image7, image6);
+  TEST("vil2_convert_grey_to_rgba", image6, true);
+
+  vil2_transform(vil2_plane(vil2_view_as_planes(image6),1),
+    vil2_plane(vil2_view_as_planes(image6),1),
+    vcl_bind2nd(vcl_plus<vxl_byte>(),1));
+
+  vil2_print_all(vcl_cout, image6);
+  image7.clear();
+  vil2_convert_rgb_to_grey(image6, image7);
+  TEST("vil2_convert_rgb_to_grey(vil2_rgba)", image7, true);
+  TEST_NEAR("Conversion rgba to grey", image7(0,0),  1.71540, 1e-5);
+  TEST_NEAR("Conversion rgba to grey", image7(2,1), 35.71540, 1e-5);
+  vil2_print_all(vcl_cout, image7);
 
 }
 
