@@ -10,12 +10,12 @@
 #include <vil/vil_image.h>
 #include <vil/vil_smooth.h>
 
-#include <vsl/vsl_harris_params.h>
-#include <vsl/vsl_harris.h>
-#include <vsl/vsl_canny_ox_params.h>
-#include <vsl/vsl_canny_ox.h>
-#include <vsl/vsl_break_edge.h>
-#include <vsl/vsl_ortho_regress.h>
+#include <osl/osl_harris_params.h>
+#include <osl/osl_harris.h>
+#include <osl/osl_canny_ox_params.h>
+#include <osl/osl_canny_ox.h>
+#include <osl/osl_break_edge.h>
+#include <osl/osl_ortho_regress.h>
 
 #include <vgui/vgui.h>
 #include <vgui/vgui_menu.h>
@@ -26,7 +26,7 @@
 
 #include <xcv/xcv_image_tableau.h>
 
-vcl_list<vsl_edge*> xcv_segmentation::detected_edges = vcl_list<vsl_edge*>();
+vcl_list<osl_edge*> xcv_segmentation::detected_edges = vcl_list<osl_edge*>();
 
 extern void get_current(unsigned*, unsigned*);
 extern bool get_image_at(vil_image*, unsigned, unsigned);
@@ -37,7 +37,7 @@ extern void add_image(vil_image& img);
 //-----------------------------------------------------------------------------
 //-- Make and display a dialog box to get Harris parameters.
 //-----------------------------------------------------------------------------
-bool xcv_segmentation::get_harris_params(vsl_harris_params* params)
+bool xcv_segmentation::get_harris_params(osl_harris_params* params)
 {
   vgui_dialog* harris_dialog = new vgui_dialog("Harris");
 
@@ -54,7 +54,7 @@ bool xcv_segmentation::get_harris_params(vsl_harris_params* params)
 //-----------------------------------------------------------------------------
 //-- Perform Harris corner detection.
 //-----------------------------------------------------------------------------
-void xcv_segmentation::perform_harris(vsl_harris_params& params,
+void xcv_segmentation::perform_harris(osl_harris_params& params,
   unsigned col, unsigned row)
 {
   vil_image img;
@@ -64,7 +64,7 @@ void xcv_segmentation::perform_harris(vsl_harris_params& params,
   vgui_easy2D_sptr easy_tab = get_easy2D_at(col, row);
   if (!easy_tab)
     return;
-  vsl_harris harris(params);
+  osl_harris harris(params);
   harris.compute(img);
 
   vcl_vector<vcl_pair<float, float> > cor;
@@ -92,7 +92,7 @@ void xcv_segmentation::harris()
   unsigned col, row;
   get_current(&col, &row);
 
-  vsl_harris_params params;
+  osl_harris_params params;
   if (!get_harris_params(&params))
     return;
 
@@ -102,7 +102,7 @@ void xcv_segmentation::harris()
 //-----------------------------------------------------------------------------
 //-- Draw the given edges onto the given location.
 //-----------------------------------------------------------------------------
-void xcv_segmentation::draw_edges(vcl_list<vsl_edge*> lines, unsigned col,
+void xcv_segmentation::draw_edges(vcl_list<osl_edge*> lines, unsigned col,
   unsigned row)
 {
   vgui_easy2D_sptr easy_tab = get_easy2D_at(col, row);
@@ -121,9 +121,9 @@ void xcv_segmentation::draw_edges(vcl_list<vsl_edge*> lines, unsigned col,
   xcv_image_tableau_sptr tableau = get_image_tableau_at(col,row);
   float low[3],high[3];
   tableau->get_bounding_box(low,high);
-  for (vcl_list<vsl_edge*>::const_iterator i = lines.begin(); i != lines.end(); ++i)
+  for (vcl_list<osl_edge*>::const_iterator i = lines.begin(); i != lines.end(); ++i)
   {
-    vsl_edge const* e = *i;
+    osl_edge const* e = *i;
     float *x = e->GetY(),*y = e->GetX(); // note x-y confusion.
     // - Offset the edges
     for(int j = 0;j<e->size();j++)
@@ -179,7 +179,7 @@ void xcv_segmentation::draw_straight_lines(vcl_vector<float> x1, vcl_vector<floa
 //-----------------------------------------------------------------------------
 //-- Display a dialog box to get the parameters needed for Oxford Canny.
 //-----------------------------------------------------------------------------
-bool xcv_segmentation::get_canny_ox_params(vsl_canny_ox_params* params)
+bool xcv_segmentation::get_canny_ox_params(osl_canny_ox_params* params)
 {
   vgui_dialog canny_ox_dialog("Canny - Oxford");
 
@@ -213,10 +213,10 @@ void xcv_segmentation::canny_ox()
   if (image_ok == false)
     return;
 
-  vsl_canny_ox_params params;
+  osl_canny_ox_params params;
   if (!get_canny_ox_params(&params))
     return;
-  vsl_canny_ox cox(params);
+  osl_canny_ox cox(params);
   cox.detect_edges(img, &detected_edges);
 
   draw_edges(detected_edges, col, row);
@@ -235,7 +235,7 @@ bool xcv_segmentation::get_break_lines_ox_params(double* bk_thresh)
 //-----------------------------------------------------------------------------
 //-- Get a list of broken edges from the current image.
 //-----------------------------------------------------------------------------
-void xcv_segmentation::get_broken_edges(double bk_thresh, vcl_list<vsl_edge*>* broken_edges)
+void xcv_segmentation::get_broken_edges(double bk_thresh, vcl_list<osl_edge*>* broken_edges)
 {
   unsigned col, row;
   get_current(&col, &row);
@@ -247,7 +247,7 @@ void xcv_segmentation::get_broken_edges(double bk_thresh, vcl_list<vsl_edge*>* b
   if (detected_edges.size() == 0)
   {
     // Canny OX finding edges ------
-    vsl_canny_ox_params params;
+    osl_canny_ox_params params;
 
     params.sigma = 1.0;
     params.max_width = 50;
@@ -263,14 +263,14 @@ void xcv_segmentation::get_broken_edges(double bk_thresh, vcl_list<vsl_edge*>* b
     params.edge_min = 60;
     params.min_length = 60;
 
-    vsl_canny_ox cox(params);
+    osl_canny_ox cox(params);
     cox.detect_edges(img, &detected_edges);
   }
 
   // breaking edges -----
-  for (vcl_list<vsl_edge*>::iterator iter = detected_edges.begin();
+  for (vcl_list<osl_edge*>::iterator iter = detected_edges.begin();
     iter!= detected_edges.end(); iter++)
-    vsl_break_edge(*iter, broken_edges, bk_thresh);
+    osl_break_edge(*iter, broken_edges, bk_thresh);
 }
 
 //-----------------------------------------------------------------------------
@@ -284,7 +284,7 @@ void xcv_segmentation::break_lines_ox()
   unsigned col, row;
   get_current(&col, &row);
 
-  vcl_list<vsl_edge*> broken_edges;
+  vcl_list<osl_edge*> broken_edges;
   get_broken_edges(bk_thresh, &broken_edges);
   draw_edges(broken_edges, col, row);
 }
@@ -318,20 +318,20 @@ void xcv_segmentation::detect_lines_ox()
   get_current(&col, &row);
 
   double bk_thresh = 0.3;
-  vcl_list<vsl_edge*> broken_edges;
+  vcl_list<osl_edge*> broken_edges;
   get_broken_edges(bk_thresh, &broken_edges);
 
   // Select straight edges only:
   vcl_vector<float> x1, y1, x2, y2;
-  for (vcl_list<vsl_edge*>::iterator iter = broken_edges.begin();
+  for (vcl_list<osl_edge*>::iterator iter = broken_edges.begin();
     iter!= broken_edges.end(); iter++)
   {
-    vsl_edge* e = *iter;
+    osl_edge* e = *iter;
     if (e->size() < min_fit_length)  // Reject edges which are too short
       continue;
 
     // Fit a straight line to the edgel:
-    vsl_ortho_regress fitter;
+    osl_ortho_regress fitter;
     fitter.reset();
     fitter.add_points(e->GetX(), e->GetY(), e->size());
     double a,b,c;

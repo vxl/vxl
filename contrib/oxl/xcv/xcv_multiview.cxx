@@ -13,7 +13,7 @@
 #include <vcl_fstream.h>
 #include <vcl_iostream.h>
 #include <vil/vil_image.h>
-#include <vsl/vsl_harris_params.h>
+#include <osl/osl_harris_params.h>
 
 #include <mvl/HomgInterestPointSet.h>
 #include <mvl/TripleMatchSetCorner.h>

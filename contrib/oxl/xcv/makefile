@@ -5,7 +5,7 @@ include $(IUEROOT)/oxl/vgui/easy-client.mk
 USES += vxl oxl
 
 PROGRAM = xcv
-ald_libs += mvl vsl vcgl
+ald_libs += mvl osl vcgl
 
 SOURCES += xcv_image_tableau.cxx
 
