@@ -91,7 +91,7 @@ void brip_gauss_filter( const vil_image_view<srcT>& src_im,
   assert (k_size>1 && k_size<ni && k_size<nj);
 
   // compute the kernel
-  double kernel[k_size];
+  double *kernel = new double[k_size];
   for(int i=0; i<k_size; ++i){
     double val = ((double(i)+0.5)-double(k_size)/2.0);
     kernel[i] = vcl_exp(-(val*val)/(2.0*sigma*sigma));
@@ -114,6 +114,7 @@ void brip_gauss_filter( const vil_image_view<srcT>& src_im,
                   -int(k_size)/2, int(k_size-1)/2, 
                   destT(0), option, option);    
 
+  delete kernel;
 }
 
 #endif // brip_vil_ops_h_
