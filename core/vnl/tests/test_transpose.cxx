@@ -19,17 +19,13 @@ void test_transpose()
   
   vnl_matlab_print(vcl_cout, X, "X");
 
-  if (X != old_X.transpose()) {
-    vcl_cerr << "inplace_transpose **FAILED**" << vcl_endl;
-  }
-  
+  TEST ("X == old_X.transpose()", X == old_X.transpose(), true);
+
   X.inplace_transpose();
 
   vnl_matlab_print(vcl_cout, X, "X");
 
-  if (X != old_X) {
-    vcl_cerr << "inplace_transpose **FAILED**" << vcl_endl;
-  }
+  TEST ("X == old_X", X == old_X, true);
 }
 
 TESTMAIN(test_transpose);

@@ -8,7 +8,7 @@
 
 void testvnl_sample()
 {
-  unsigned const N = 10000;
+  unsigned const N = 100000;
   double mu = 1.552;
   double sigma = 3.729;
   
@@ -23,6 +23,7 @@ void testvnl_sample()
   X_bar /= N;
   vcl_cout << "actual mean : " << mu << vcl_endl;
   vcl_cout << "sample mean : " << X_bar << vcl_endl;
+  TEST("sample mean", X_bar-mu < 0.1 && mu-X_bar < 0.1, true);
 
   // sample standard deviation
   double sigma_bar = 0;
@@ -31,6 +32,7 @@ void testvnl_sample()
   sigma_bar = sqrt(sigma_bar / (N-1));
   vcl_cout << "actual standard deviation : " << sigma << vcl_endl;
   vcl_cout << "sample standard deviation : " << sigma_bar << vcl_endl;
+  TEST("sample stddev", sigma_bar-sigma < 0.1 && sigma-sigma_bar < 0.1, true);
 }
 
 TESTMAIN(testvnl_sample);
