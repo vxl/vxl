@@ -64,9 +64,17 @@ static void run_constructor_tests() {
 #ifndef __alpha__ // On Alpha, compiler runs out of memory
   {vnl_bignum b("-1e120"); vcl_stringstream s; s << b;
    // verify that b outputs as  "-1000...00" (120 zeros)
-   bool t = s.str()[0] == '-' && s.str()[1] == '1' && s.str()[122] == '\0'; 
+   bool t = s.str()[0] == '-' && s.str()[1] == '1'; 
    for (int i=0; i<120; ++i) t = t && s.str()[i+2] == '0';
-   TEST("vnl_bignum b(\"-1e120\") outputs as \"-10000...00\"", t, true);}
+   TEST("vnl_bignum b(\"-1e120\") outputs first 122 digits as \"-10000...00\"", t, true);
+   // This isolates a problem that used to be part of the previous test.
+   // I don't think this test failure is a bug in vnl.
+   // vnl_bignum seems to populate the stringstream with 122 chars,
+   // but the stringstream then reports its size as something else
+   // on some systems. - FWW
+   TEST("vnl_bignum b(\"-1e120\") outputs a length 122 string", s.str().length(), 122);
+   vcl_cout << "length of string: " << s.str().length() << vcl_endl;
+  }
 #endif
   {vnl_bignum b("0x0"); TEST("vnl_bignum b(\"0x0\");", b, 0x0);}
   {vnl_bignum b("0x9"); TEST("vnl_bignum b(\"0x9\");", b, 0x9);}
