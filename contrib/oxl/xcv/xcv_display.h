@@ -6,7 +6,7 @@
 //: Creates a menu for, and provides an interface to operations that change
 //  the display.
 //
-// \file	
+// \file
 // \author   K.Y.McGaul
 // \verbatim
 //  Modifications:

@@ -14,6 +14,10 @@
 # The examples subdirectory contains example programs showing how to use the
 # filter classes with any 2D storage class of your choice.
 #
+#######################################
+include ${IUEROOT}/config/top-params.mk
+#######################################
+
 ifneq (,$(wildcard $(IUEROOT)/Image/ImageProcessingBasics/section.h))
 SUBDIRS += vipl_with_section
 endif
@@ -63,9 +67,9 @@ MANPAGE_SOURCES += section/vipl_section_iterator.txx
 
 MANPAGE_SOURCES += accessors/vipl_accessors_vil_image.txx
 
-################################
-include ${IUEROOT}/config/top.mk
-################################
+######################################
+include ${IUEROOT}/config/top-rules.mk
+######################################
 
 # compile with -O2 for efficiency:
 #debug = $(optimize)
