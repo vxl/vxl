@@ -1,13 +1,13 @@
 #ifndef vpl_unistd_h_
 #define vpl_unistd_h_
 // .NAME vpl_unistd.h
-// .INCLUDE vcl/vpl_unistd.h
+// .INCLUDE vpl/vpl_unistd.h
 // .FILE vpl_unistd.cxx
 // @author fsm@robots.ox.ac.uk
 //
 // .SECTION Description
 //
-// What vcl_unistd.h is meant to do is to include <unistd.h> properly
+// What vpl_unistd.h is meant to do is to include <unistd.h> properly
 // on systems that have it. Eg. :
 // 1. On some UNIX systems, usleep() is not declared in
 //    unistd although the man pages say it is. So we declare it
@@ -16,7 +16,7 @@
 //    as pread() and pwrite(). So we provide alternative definitions
 //    for those platforms where we can't get a system version.
 // 3. On windows, unlink() is called _unlink(), buth with
-//    vcl_unistd.h it's called vcl_unlink() on both UNIX and 
+//    vpl_unistd.h it's called vpl_unlink() on both UNIX and 
 //    windows.
 
 // This list is from 
