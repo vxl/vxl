@@ -113,64 +113,55 @@ vcl_vector<unsigned> vnl_hungarian_algorithm( vnl_matrix<double> const& cost_in 
     // otherwise, on to step 4.
   }
 
+ step_four:
   // Step 4: Find a noncovered zero and prime it.  If there is no
   // starred zero in the row containing this primed zero, Go to Step
   // 5.  Otherwise, cover this row and uncover the column containing
   // the starred zero. Continue in this manner until there are no
   // uncovered zeros left. Save the smallest uncovered value and Go to
   // Step 6.
-  step_four:
+  Z0_r = -1u;
+  Z0_c = -1u;
+  // Find an uncovered zero
+  // This loop will exit with a goto step_five or step_six.
+  while ( true )
   {
-    Z0_r = -1u;
-    Z0_c = -1u;
-    // Find an uncovered zero
-    // This loop will exit with a goto step_five or step_six.
-    while ( true )
-    {
-      unsigned i; // row and column of the uncovered zero, if any.
-      bool uncovered_zero_found = false;
-      for ( i = 0; i < N; ++i ) {
-        if ( ! R_cov[i] ) {
-          for ( unsigned j = 0; j < N; ++j ) {
-            if ( cost(i,j) == 0.0 && ! C_cov[j] ) {
-              M(i,j) = 2; // prime it
-              uncovered_zero_found = true;
-              goto exit_loop;
-            }
+    unsigned i=0, j=0; // row and column of the uncovered zero, if any.
+    for ( ; i < N; ++i ) {
+      if ( ! R_cov[i] ) {
+        for ( j = 0; j < N; ++j ) {
+          if ( cost(i,j) == 0.0 && ! C_cov[j] ) {
+            M(i,j) = 2; // prime it
+            goto exit_loop;
           }
         }
       }
-      exit_loop:
-      // We should find the smallest uncovered value, but it's more
-      // convenient to find it when we get to step six. We only need
-      // it there anyway.
-      if ( ! uncovered_zero_found )
-        goto step_six;
+    }
+    // We should find the smallest uncovered value, but it's more
+    // convenient to find it when we get to step six. We only need
+    // it there anyway.
+    goto step_six;
 
-      // Check if there is a starred zero in the row.
-      bool star_in_row = false;
-      unsigned j2; // column containing the starred zero, if any.
-      for ( j2 = 0; j2 < N; ++j2 ) {
-        if ( M(i,j2) == 1 ) {
-          star_in_row = true;
-          break; // out of searching for stars
-        }
+ exit_loop:
+    // Check if there is a starred zero in the row.
+    bool star_in_row = false;
+    for ( unsigned j2 = 0; j2 < N; ++j2 ) {
+      if ( M(i,j2) == 1 ) {
+        star_in_row = true;
+        // cover the row, uncover the star column
+        R_cov[i] = true;
+        C_cov[j2] = false;
+        break; // out of searching for stars
       }
+    }
 
-      // If there isn't go to step 5
-      if ( ! star_in_row ) {
-        Z0_r = i;
-        Z0_c = j;
-        break; // out to go to step 5
-      }
-
-      // Otherwise, cover the row, uncover the star column
-      R_cov[i] = true;
-      C_cov[j2] = false;
-    } // go back to find more uncovered zeros
-
-    // And on to step five
-  }
+    // If there isn't go to step 5
+    if ( ! star_in_row ) {
+      Z0_r = i;
+      Z0_c = j;
+      break; // out of while loop and go to step 5
+    }
+  } // go back to find more uncovered zeros
 
   // Step 5: Construct a series of alternating primed and starred
   // zeros as follows.  Let Z0 represent the uncovered primed zero
