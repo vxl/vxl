@@ -5,10 +5,12 @@
 
 #include "f2c.h"
 
+/* Modified by Peter Vanroose, June 2001, to allow p/q being equal to a,b,c or d */
+
 /* Subroutine */ int dladiv_(a, b, c, d, p, q)
 doublereal *a, *b, *c, *d, *p, *q;
 {
-    static doublereal e, f;
+    static doublereal e, f, t;
 
 
 /*  -- LAPACK auxiliary routine (version 2.0) -- */
@@ -56,13 +58,15 @@ doublereal *a, *b, *c, *d, *p, *q;
     if (abs(*d) < abs(*c)) {
         e = *d / *c;
         f = *c + *d * e;
-        *p = (*a + *b * e) / f;
+        t  = (*a + *b * e) / f;
         *q = (*b - *a * e) / f;
+        *p = t;
     } else {
         e = *c / *d;
         f = *d + *c * e;
-        *p = (*b + *a * e) / f;
-        *q = (-(*a) + *b * e) / f;
+        t  = (*a * e + *b) / f;
+        *q = (*b * e - *a) / f;
+        *p = t;
     }
 
     return 0;
