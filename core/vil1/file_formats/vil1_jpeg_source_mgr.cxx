@@ -77,7 +77,7 @@ jpeg_boolean
 vil_jpeg_fill_input_buffer (j_decompress_ptr cinfo) {
   vil_jpeg_srcptr src = ( vil_jpeg_srcptr )( cinfo->src );
 
-  vcl_size_t nbytes = src->stream->read(src->buffer, vil_jpeg_INPUT_BUF_SIZE);
+  int nbytes = src->stream->read(src->buffer, vil_jpeg_INPUT_BUF_SIZE);
 
   if (nbytes <= 0) {
     if (src->start_of_file) // Treat empty input file as fatal error

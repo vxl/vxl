@@ -85,15 +85,19 @@ int vil_stream_fstream::read(void* buf, int n)
   vcl_streampos a = tell();
   xerr << "read " << n << vcl_endl;
   f_.read((char *)buf, n);
-  vcl_streampos b = tell();
 
   // fsm@robots  This is for gcc 2.95 :
   // If we try to read more data than is in the file, the good()
   // function will return false even though bad() returns false
   // too. The stream is actually fine but we need to clear the
   // eof flag to use it again.
+  // iscott@man It does something similar under Windows, but has the added
+  // advantage, of making tell() return a sensible value (instead
+  // of -1)
   if (!f_.good() && !f_.bad() && f_.eof())
     f_.clear(); // allows subsequent operations
+
+  vcl_streampos b = tell();
 
   int numread = b-a;
   if (numread < 0) { xerr << "urgh!" << vcl_endl; return -1; }
