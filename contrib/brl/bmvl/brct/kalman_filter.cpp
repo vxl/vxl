@@ -50,7 +50,7 @@ void kalman_filter::init()
   memory_size_ = 0;
 
   // initialize the default queue size
-  queue_size_ = 10;
+  queue_size_ = 200;
   observes_.resize(queue_size_);
   motions_.resize(queue_size_);
 
@@ -373,21 +373,23 @@ void kalman_filter::update_observes(const vnl_double_3x4 &P, int iframe)
     t[1][i] = u.y();
   }
 
-  observes_[iframe] = t;
+  observes_[iframe%queue_size_] = t;
 }
 
 void kalman_filter::inc()
 {
+    cur_pos_ ++;
+
   //
   // prediction step:
   //
   vnl_vector_fixed<double, 6> Xpred = A_*X_;
   vnl_double_3 camCenter(Xpred[0],Xpred[1],Xpred[2]);
   vnl_double_3x4 P = get_projective_matrix(camCenter);
-  update_observes(P, cur_pos_+1);
+  update_observes(P, cur_pos_);
 
   // adjustion
-  vnl_matrix<double> & cur_measures = observes_[cur_pos_+1];
+  vnl_matrix<double> & cur_measures = observes_[cur_pos_%queue_size_];
 
   for (int i=0; i<num_points_; i++)
   {
@@ -399,6 +401,7 @@ void kalman_filter::inc()
     vnl_matrix_fixed<double, 2, 6> H = get_H_matrix(P, X);
 
     vnl_matrix_fixed<double, 6, 6> Qpred = A_*Q_*A_.transpose() + Q0_;
+
 #ifdef DEBUG
     vcl_cout<<"P is\n";
     for (int l=0; l<6; l++) {
@@ -439,11 +442,10 @@ void kalman_filter::inc()
   Xpred[4] = Xpred[1] - X_[1];
   Xpred[5] = Xpred[2] - X_[2];
 
-  cur_pos_ = (cur_pos_+1) % queue_size_;
   vnl_double_3 xNew(Xpred[0], Xpred[1], Xpred[2]);
 
-  motions_[cur_pos_] = xNew;
-  P = get_projective_matrix(motions_[cur_pos_] );
+  motions_[cur_pos_%queue_size_] = xNew;
+  P = get_projective_matrix(motions_[cur_pos_%queue_size_] );
   update_observes(P, cur_pos_);
 
   // store the history
@@ -611,7 +613,7 @@ vcl_vector<vgl_point_2d<double> > kalman_filter::get_next_observes()
 {
   vcl_vector<vgl_point_2d<double> > pts(num_points_);
 
-  vdgl_digital_curve_sptr dc = curves_[cur_pos_+1];
+  vdgl_digital_curve_sptr dc = curves_[(cur_pos_+1)%queue_size_];
   for (int i=0; i<num_points_; i++)
   {
     double s = double(i) / double(num_points_);
@@ -638,7 +640,7 @@ vcl_vector<vgl_point_2d<double> > kalman_filter::get_pre_observes()
   assert(cur_pos_ > 0);
   vcl_vector<vgl_point_2d<double> > pts(num_points_);
 
-  vdgl_digital_curve_sptr dc = curves_[cur_pos_-1];
+  vdgl_digital_curve_sptr dc = curves_[(cur_pos_-1)%queue_size_];
   for (int i=0; i<num_points_; i++)
   {
     double s = double(i) / double(num_points_);
