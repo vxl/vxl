@@ -15,23 +15,22 @@ SOURCES += vil2_image_view_base.cxx
 SOURCES += vil2_load.cxx
 SOURCES += vil2_image_view_functions.cxx
 MANPAGE_SOURCES += vil2_image_view_functions.txx
-MANPAGE_SOURCES += vil2_reg_image.h
-MANPAGE_SOURCES += vil2_reg_image_2d.h
 SOURCES += vil2_crop.cxx
 SOURCES += vil2_memory_image.cxx
 SOURCES += vil2_new.cxx
 SOURCES += vil2_save.cxx
 MANPAGE_SOURCES += vil2_bilin_interp.h
 MANPAGE_SOURCES += vil2_sample_profile_bilin.txx
-MANPAGE_SOURCES += vil2_byte.h
 MANPAGE_SOURCES += vil2_pixel_traits.h
 MANPAGE_SOURCES += vil2_sample_grid_bilin.txx
-MANPAGE_SOURCES += vil2_image_view_maths.h
+MANPAGE_SOURCES += vil2_copy.txx
+MANPAGE_SOURCES += vil2_math.h
+MANPAGE_SOURCES += vil2_property.h
 
 SUBDIRS += algo
 
 ifndef NOTEST
- SUBDIRS += examples tests
+ SUBDIRS += tests examples
 endif
 
 ################################
