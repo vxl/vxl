@@ -27,6 +27,7 @@ SOURCES += vpro_frame_diff_params.cxx
 SOURCES += vpro_spatial_filter_params.cxx
 SOURCES += vpro_spatial_filter_process.cxx
 SOURCES += vpro_ihs_process.cxx
+SOURCES += vpro_half_res_process.cxx
 
 #######################################
 include ${IUEROOT}/config/top-params.mk
