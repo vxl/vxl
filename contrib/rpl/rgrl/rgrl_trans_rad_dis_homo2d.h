@@ -75,13 +75,6 @@ class rgrl_trans_rad_dis_homo2d
   void inv_map( const vnl_vector<double>& to,
                 vnl_vector<double>& from ) const;
 
-  //:  Inverse map with an initial guess
-  void inv_map( const vnl_vector<double>& to,
-                bool initialize_next,
-                const vnl_vector<double>& to_delta,
-                vnl_vector<double>& from,
-                vnl_vector<double>& from_next_est) const;
-
   //: is this an invertible transformation?
   bool is_invertible() const { return false; }
 
