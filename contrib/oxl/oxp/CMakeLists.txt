@@ -31,7 +31,6 @@ AUX_SOURCE_DIRECTORY(Templates oxp_sources)
 INCLUDE(${CMAKE_SOURCE_DIR}/config.cmake/Modules/FindJPEG.cmake)
 
 IF (HAS_JPEG)
-  INCLUDE_DIRECTORIES(${JPEG_INCLUDE_PATH})
   SOURCE_FILES(oxp_sources
    JPEG_Decompressor.cxx    JPEG_Decompressor.h
    SGIMovieFile.cxx         SGIMovieFile.h
@@ -43,7 +42,6 @@ ENDIF (HAS_JPEG)
 INCLUDE(${CMAKE_SOURCE_DIR}/config.cmake/Modules/FindMPEG.cmake)
 
 IF (HAS_MPEG)
-  INCLUDE_DIRECTORIES(${MPEG_INCLUDE_PATH})
   SOURCE_FILES(oxp_sources
    oxp_mpeg_codec.cxx      oxp_mpeg_codec.h
    oxp_vidl_mpeg_codec.cxx oxp_vidl_mpeg_codec.h
