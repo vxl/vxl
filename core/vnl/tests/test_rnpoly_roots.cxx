@@ -1,6 +1,7 @@
 #include <vcl_iostream.h>
 #include <vnl/vnl_real_npolynomial.h>
-#include <vnl/vnl_vector_fixed.h>
+#include <vnl/vnl_double_2.h>
+#include <vnl/vnl_double_3.h>
 #include <vnl/algo/vnl_rnpoly_solve.h>
 #include <testlib/testlib_test.h>
 
@@ -8,11 +9,11 @@ static void test_rnpoly_roots()
 {
   // Intersection of two unit circles, centered in (0,0) and in (1,0):
 
-  vnl_vector_fixed<double,3> f1(1.0,1.0,-1.0);
+  vnl_double_3 f1(1.0,1.0,-1.0);
   vnl_matrix<unsigned int> p1(3,2, 0); p1(0,0) = 2; p1(1,1) = 2;
   vnl_real_npolynomial poly1(f1,p1); vcl_cout << poly1; // X^2 +Y^2 -1
 
-  vnl_vector_fixed<double,2> f2(1.0,-1.0);
+  vnl_double_2 f2(1.0,-1.0);
   vnl_matrix<unsigned int> p2(2,2, 0); p2(0,0) = 1;
   vnl_real_npolynomial monom1(f2,p2); vcl_cout << monom1; // X-1
 
@@ -33,10 +34,10 @@ static void test_rnpoly_roots()
   vcl_vector<vnl_vector<double>*> r = solver.realroots();
   TEST("There should be two real roots", r.size(), 2);
   for (rp = r.begin(); rp != r.end(); ++rp) {
-    vcl_cout << *(*rp) << vcl_endl;
-    TEST_NEAR("x==0.5", (*rp)->x(), 0.5, 1e-9);
-    double ryy = (*rp)->y(); ryy *= ryy;
-    TEST_NEAR("y==sqrt(0.75)", ryy, 0.75, 1e-9);
+    vnl_vector<double>& root = *(*rp);
+    vcl_cout << root << vcl_endl;
+    TEST_NEAR("x==0.5", root[0], 0.5, 1e-9);
+    TEST_NEAR("y==sqrt(0.75)", root[1]*root[1], 0.75, 1e-9);
   }
   vcl_vector<vnl_vector<double>*> roots_r = solver.real();
   vcl_vector<vnl_vector<double>*> roots_i = solver.imag();
@@ -60,11 +61,10 @@ static void test_rnpoly_roots()
   TEST("There should be four real roots", r.size(), 4);
   for (rp = r.begin(); rp != r.end(); ++rp)
   {
-    vcl_cout << *(*rp) << vcl_endl;
-    double rxx = (*rp)->x(); rxx *= rxx;
-    TEST_NEAR("x==sqrt(1/3)", rxx, 1.0/3, 1e-9);
-    double ryy = (*rp)->y(); ryy *= ryy;
-    TEST_NEAR("y==sqrt(1/3)", ryy, 1.0/3, 1e-9);
+    vnl_vector<double>& root = *(*rp);
+    vcl_cout << root << vcl_endl;
+    TEST_NEAR("x==sqrt(1/3)", 3*root[0]*root[0], 1.0, 1e-9);
+    TEST_NEAR("y==sqrt(1/3)", 3*root[1]*root[1], 1.0, 1e-9);
   }
   roots_r = solver2.real(); roots_i = solver2.imag();
   TEST("and no more imaginary roots", roots_r.size(), 4);

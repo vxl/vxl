@@ -2,7 +2,7 @@
 #include <vcl_iostream.h>
 #include <vnl/vnl_math.h>
 #include <vnl/vnl_vector.h>
-#include <vnl/vnl_vector_fixed.h>
+#include <vnl/vnl_float_3.h>
 #include <vnl/vnl_matrix.h>
 #include <vnl/vnl_cross.h>
 #include <testlib/testlib_test.h>
@@ -175,7 +175,7 @@ void vnl_vector_test_float()
   TEST("(v0 == v2)", (v0 == v2), false);
   TEST("v1.fill(3)", (v1.fill(3), (v1.get(0)==3 && v1.get(1)==3)), true);
   TEST("v2.fill(2)", (v2.fill(2), (v2.get(0)==2 && v2.get(1)==2)), true);
-  vnl_vector<float> v3 = vnl_vector_fixed<float,3>(1.f,2.f,3.f).as_vector();
+  vnl_vector<float> v3 = vnl_float_3(1.f,2.f,3.f).as_vector();
   TEST("v3(3)",(v3.get(0)==1 && v3.get(1)==2 && v3.get(2)==3), true);
   vnl_vector<float> v4(v3);
   TEST("vnl_vector<float> v4(v3)", v3, v4);
@@ -274,7 +274,7 @@ void vnl_vector_test_float()
   }
 
   {
-    vnl_vector_fixed<float,3> v(1.f,2.f,3.f);
+    vnl_float_3 v(1.f,2.f,3.f);
     vnl_matrix<float> m = outer_product(v, v);
     TEST("outer_product",
          (m(0,0)==1 && m(0,1)==2 && m(0,2)==3 &&
@@ -282,12 +282,12 @@ void vnl_vector_test_float()
           m(2,0)==3 && m(2,1)==6 && m(2,2)==9), true);
   }
   {
-    vnl_vector_fixed<float,3> v(1.f,2.f,3.f);
-    TEST("vnl_vector_fixed<float> v(1.f,2.f,3.f)", v.size(), 3);
+    vnl_float_3 v(1.f,2.f,3.f);
+    TEST("vnl_float_3 v(1.f,2.f,3.f)", v.size(), 3);
     v[0] = 1.f; v[1] = 2.f; v[2] = 3.f;
-    TEST("v.set_x(1) and v[0]", v[0], 1);
-    TEST("v.set_y(2) and v[1]", v[1], 2);
-    TEST("v.set_z(3) and v[2]", v[2], 3);
+    TEST("v[0]=1 and v[0]", v[0], 1);
+    TEST("v[1]=2 and v[1]", v[1], 2);
+    TEST("v[2]=3 and v[2]", v[2], 3);
     vnl_vector<float> v1(3, 0.f); v1[0]=1.f;
     vcl_cout << "v1 = " << v1 << vcl_endl;
     vnl_vector<float> v2(3, 0.f); v2[1]=1.f;

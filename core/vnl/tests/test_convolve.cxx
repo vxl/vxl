@@ -1,6 +1,7 @@
 #include <vcl_iostream.h>
 #include <vnl/algo/vnl_convolve.h>
-#include <vnl/vnl_vector_fixed.h>
+#include <vnl/vnl_double_2.h>
+#include <vnl/vnl_int_2.h>
 #include <vul/vul_timer.h>
 
 #include <testlib/testlib_test.h>
@@ -11,7 +12,7 @@ void test_convolve()
 {
   int b_data[] = { -2, 0, 4, 6, 2, 0 };
   vnl_vector<int> b(6, 6, b_data);
-  vnl_vector<double> k1 = vnl_vector_fixed<double,2>(0.5,-0.5).as_vector();
+  vnl_vector<double> k1 = vnl_double_2(0.5,-0.5).as_vector();
 
   vnl_vector<double> r1 = vnl_convolve(b, k1, (double*)0);
   TEST("vnl_convolve() simple length", r1.size(), 7);
@@ -19,7 +20,7 @@ void test_convolve()
   TEST("vnl_convolve() simple values", true,
        r1[0]==-1 && r1[1]==1 && r1[2]==2 && r1[3]==1 && r1[4]==-2 && r1[5]==-1 && r1[6]==0);
 
-  vnl_vector<int> k2 = vnl_vector_fixed<int,2>(1,-1).as_vector();
+  vnl_vector<int> k2 = vnl_int_2(1,-1).as_vector();
   vnl_vector<int> r2 = vnl_convolve(b, k2);
   TEST("vnl_convolve() simple length", r2.size(), 7);
   vcl_cout << r2 << vcl_endl;
