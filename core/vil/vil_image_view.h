@@ -209,8 +209,4 @@ vcl_ostream& operator<<(vcl_ostream& s, vil2_image_view<T> const& i) {
   return i.print(s);
 }
 
-//: Explicit overload of print_all for rgb
-void vil2_image_view< vil_rgb<vil_byte> >::print_all(vcl_ostream& os) const;
-
-
 #endif // vil_image_view_h_
