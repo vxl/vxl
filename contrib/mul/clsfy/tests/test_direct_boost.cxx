@@ -5,11 +5,7 @@
 // Test construction, IO etc.
 
 #include <vcl_iostream.h>
-#include <vcl_iomanip.h>
-#include <vcl_ios.h>
 #include <vcl_string.h>
-#include <vcl_cmath.h>
-#include <vcl_algorithm.h>
 #include <clsfy/clsfy_direct_boost.h>
 #include <clsfy/clsfy_direct_boost_builder.h>
 #include <clsfy/clsfy_mean_square_1d_builder.h>
@@ -41,9 +37,9 @@ void get_1d_inputs(vnl_vector<double>& v,
 //: Tests the clsfy_direct_boost and clsfy_direct_boost_builder classes
 void test_direct_boost()
 {
-  vcl_cout << "**********************************\n"
+  vcl_cout << "****************************\n"
            << " Testing clsfy_direct_boost\n"
-           << "**********************************\n";
+           << "****************************\n";
 
   // Generate lots of examples for adaboost algorithm
   // Each vector represents a +ve or -ve example
@@ -111,13 +107,13 @@ void test_direct_boost()
   vcl_vector< vnl_vector<double> > inputs_vec(0);
   vcl_vector< unsigned > outputs(0);
   for (int j=0; j<n_pos; ++j)
-  { 
+  {
     inputs_vec.push_back( pos_samples[j] );
     outputs.push_back( 1 );
   }
 
   for (int j=0; j<n_neg; ++j)
-  { 
+  {
     inputs_vec.push_back( neg_samples[j] );
     outputs.push_back( 0 );
   }
@@ -139,11 +135,10 @@ void test_direct_boost()
   vcl_cout<<"t_error= "<<t_error<<vcl_endl;
 
 
-
   // test positive examples from training set
   // nb egs0 are the positive training examples
   int tp=0, fp=0;
-  double tpr=0.0, fpr=1.0, adab_te=0.0; 
+  double tpr=0.0, fpr=1.0, adab_te=0.0;
 
   for (unsigned int k=1; k<=pClassifier->wts().size(); ++k)
   {
@@ -172,8 +167,6 @@ void test_direct_boost()
   TEST( "fpr<0.2", fpr<0.2, true );
 
 
-  
-
   vcl_cout<<"======== TESTING I/O ===========\n";
 
    // add binary loaders
@@ -201,14 +194,9 @@ void test_direct_boost()
   vcl_cout<< classifier_in << vcl_endl;
 
 
-
-  TEST("saved classifier == loaded classifier",
-       *pClassifier==classifier_in, true);
+  TEST("saved classifier == loaded classifier", *pClassifier, classifier_in);
 
   delete pClassifier;
-
-
-
 }
 
 TESTLIB_DEFINE_MAIN(test_direct_boost);

@@ -52,11 +52,10 @@ clsfy_classifier_1d* clsfy_binary_threshold_1d_builder::new_classifier() const
 //  Returns weighted sum of error, e.wts, where e_i =0 for correct classifications,
 //  e_i=1 for incorrect.
 double clsfy_binary_threshold_1d_builder::build(clsfy_classifier_1d& classifier,
-                                  const vnl_vector<double>& egs,
-                                  const vnl_vector<double>& wts,
-                                  const vcl_vector<unsigned> &outputs) const
+                                                const vnl_vector<double>& egs,
+                                                const vnl_vector<double>& wts,
+                                                const vcl_vector<unsigned> &outputs) const
 {
-
   // this method sorts the data and passes it to the method below
   assert(classifier.is_a()=="clsfy_mean_square_1d");
 
@@ -66,12 +65,11 @@ double clsfy_binary_threshold_1d_builder::build(clsfy_classifier_1d& classifier,
 
   // create triples data, so can sort
   vcl_vector<vbl_triple<double,int,int> > data;
-  
+
   vbl_triple<double,int,int> t;
   // add data to triples
   for (int i=0;i<n;++i)
   {
-    
     t.first=egs(i);
     t.second= outputs[i];
     t.third = i;
@@ -81,14 +79,11 @@ double clsfy_binary_threshold_1d_builder::build(clsfy_classifier_1d& classifier,
   vbl_triple<double,int,int> *data_ptr=&data[0];
   vcl_sort(data_ptr,data_ptr+n);
   return build_from_sorted_data(classifier,&data[0], wts);
-
 }
-
 
 
 //: Build a binary_threshold classifier
 // nb here egs0 are -ve examples
-
 // and egs1 are +ve examples
 double clsfy_binary_threshold_1d_builder::build(clsfy_classifier_1d& classifier,
                                                 vnl_vector<double>& egs0,
@@ -244,7 +239,7 @@ clsfy_binary_threshold_1d_builder::operator=(const clsfy_binary_threshold_1d_bui
 
   return *this;
 }
-#endif
+#endif // 0
 
 //=======================================================================
 
@@ -298,5 +293,5 @@ void clsfy_binary_threshold_1d_builder::b_read(vsl_b_istream& /*bfs*/)
     bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
     return;
   }
-#endif
+#endif // 0
 }
