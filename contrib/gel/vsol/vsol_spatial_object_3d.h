@@ -78,11 +78,11 @@ const unsigned int VSOL_FLAG_BITS      = 0xFF000000;
 
 class vsol_spatial_object_3d : public vul_timestamp, public vbl_ref_count
 {
-// Data Members--------------------------------------------------------------
+  // Data Members--------------------------------------------------------------
 
  protected:
   mutable vsol_box_3d_sptr bounding_box_; // rectangular bounding volume
-  unsigned int  tag_;         // for the COOL containers.
+  unsigned int  tag_;
   int           id_;
   static int    tagcount_;    // global count of all spatial objects.
 
@@ -104,7 +104,7 @@ class vsol_spatial_object_3d : public vul_timestamp, public vbl_ref_count
 
  protected:
 
-// Constructors/Destructors
+  // Constructors/Destructors
 
   virtual ~vsol_spatial_object_3d();
   inline vsol_spatial_object_3d(void);
@@ -115,22 +115,21 @@ class vsol_spatial_object_3d : public vul_timestamp, public vbl_ref_count
     }
  public:
 
-// Data Access---------------------------------------------------------------
+  // Data Access---------------------------------------------------------------
 
   //: data description
   virtual vsol_spatial_object_3d_type spatial_type(void) const=0;
   const char *get_name(void) const;
 
   //: bounding box stuff
-
   inline virtual void compute_bounding_box(void) const
   { if (!bounding_box_) bounding_box_=new vsol_box_3d();bounding_box_->touch();}
 
   vsol_box_3d_sptr get_bounding_box(void) const { check_update_bounding_box(); return bounding_box_; }
 
-  //: get set id of objects
-
+  //: get id of objects
   inline int get_id(void) const { return id_; }
+  //: set id of objects
   inline void set_id(int i) { id_ = i; }
 
   //: unprotect the object
@@ -154,7 +153,7 @@ class vsol_spatial_object_3d : public vul_timestamp, public vbl_ref_count
   inline int get_tag_id();
   inline void set_tag_id(int id);
 
-// Data Control--------------------------------------------------------------
+  // Data Control--------------------------------------------------------------
 
  public:
 
@@ -185,17 +184,7 @@ class vsol_spatial_object_3d : public vul_timestamp, public vbl_ref_count
   inline void add_to_bounding_box(double x, double y, double z) const
   { if (!bounding_box_) bounding_box_=new vsol_box_3d; bounding_box_->add_point(x,y,z); }
 
-  // deprecated interface:
- private:
-  void set_min_x(double xmin) const { add_to_bounding_box(xmin,0,0); }
-  void set_max_x(double xmax) const { add_to_bounding_box(xmax,0,0); }
-  void set_min_y(double ymin) const { add_to_bounding_box(0,ymin,0); }
-  void set_max_y(double ymax) const { add_to_bounding_box(0,ymax,0); }
-  void set_min_z(double zmin) const { add_to_bounding_box(0,0,zmin); }
-  void set_max_z(double zmax) const { add_to_bounding_box(0,0,zmax); }
-
- public:
-  //: Operators
+  // Operators
 
   virtual bool operator==(vsol_spatial_object_3d const& obj) const
   {
@@ -206,7 +195,7 @@ class vsol_spatial_object_3d : public vul_timestamp, public vbl_ref_count
 
   //---------------------------------------------------------------------------
   //: The same behavior than dynamic_cast<>.
-  // Needed because VXL is not compiled with -frtti :-(
+  // Needed because VXL is not always compiled with -frtti :-(
   //---------------------------------------------------------------------------
   vsol_spatial_object_3d* cast_to_spatial_object() { return this; }
   const vsol_spatial_object_3d* cast_to_spatial_object() const { return this; }
@@ -241,18 +230,16 @@ inline void vsol_spatial_object_3d::set_tag_id(int id)
 //: constructor initialize basic vsol_spatial_object_3d attributes.
 //   bounding_box is set to NULL.
 inline vsol_spatial_object_3d::vsol_spatial_object_3d(void)
-  : vul_timestamp(), vbl_ref_count(), bounding_box_(0), id_(0), tag_(0)
+  : vul_timestamp(), vbl_ref_count(), bounding_box_(0), tag_(0), id_(0)
 {
   set_tag_id(++tagcount_);
 }
-
 
 inline vsol_spatial_object_3d::vsol_spatial_object_3d(vsol_spatial_object_3d const &s)
-  : vul_timestamp(), vbl_ref_count(), bounding_box_(0), id_(s.get_id()), tag_(0)
+  : vul_timestamp(), vbl_ref_count(), bounding_box_(0), tag_(0), id_(s.get_id())
 {
   set_tag_id(++tagcount_);
 }
-
 
 //: Bounds Accessors:  min_ and max_ are provided as methods on vsol_spatial_object_3d
 //                    to be consistent with the previous interface
@@ -262,17 +249,17 @@ inline vsol_spatial_object_3d::vsol_spatial_object_3d(vsol_spatial_object_3d con
 inline void vsol_spatial_object_3d::check_update_bounding_box(void) const
 {
   if (!bounding_box_)
-    {
-      bounding_box_=new vsol_box_3d;
-      this->compute_bounding_box();
-      bounding_box_->touch();
-      return;
-    }
+  {
+    bounding_box_=new vsol_box_3d;
+    this->compute_bounding_box();
+    bounding_box_->touch();
+    return;
+  }
   if (bounding_box_->older(this))
-    { // NOTE: first touch then compute, to avoid infinite loop!! - PVr
-      bounding_box_->touch();
-      this->compute_bounding_box();
-    }
+  { // NOTE: first touch then compute, to avoid infinite loop!! - PVr
+    bounding_box_->touch();
+    this->compute_bounding_box();
+  }
 }
 
 //: set a flag for a spatial object; flag can be VSOL_FLAG[1-6]
