@@ -207,9 +207,9 @@
 # define HAVE_IO_H
 #endif
 
-#cmakedefine DCMTK_HAVE_ISO
-#ifdef DCMTK_HAVE_ISO
-# define HAVE_ISO
+#cmakedefine DCMTK_HAVE_ISO646_H
+#ifdef DCMTK_HAVE_ISO646_H
+# define HAVE_ISO646_H
 #endif
 
 #cmakedefine DCMTK_HAVE_LIBC_H
