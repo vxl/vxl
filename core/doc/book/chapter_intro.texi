@@ -54,8 +54,6 @@ vcl would not be necessary, as all compiler vendors would ship perfectly
 compliant systems.  But then, in a perfect world, C++ wouldn't be the only
 choice for high efficiency high-level programming.
 
-Note that vcl is not (any longer) a subdirectory of vxl, but sits next to it.
-
 @subsection vbl: Basic Templates.
 The basic templates library contains a small set of generally useful templated
 containers and algorithms, e.g. smart pointers, triples, and sparse_arrays. Many of these
@@ -170,7 +168,9 @@ class my_class @{
 @end smallexample
 
 
+@anchor{VXL_Philosophy}
 @section The Design and Evolution of @vxl{x}
+@cindex Philosophy, The VXL
 
 Design goals:
 

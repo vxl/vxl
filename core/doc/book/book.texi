@@ -56,7 +56,7 @@ Copyright @copyright{} 2000 Andrew Fitzgibbon
 * vcsl::
 * structure::
 * build::
-* templates::
+* coding standards::
 * Adding to vnl::
 * vsl for developers::
 * Concept Index::
@@ -193,11 +193,12 @@ Copyright @copyright{} 2000 Andrew Fitzgibbon
 @include appendix_build.texi
 
 @comment ------------------------------------------------------------------
-@node    templates
-@comment node-name, next,          previous, up
-@appendix  On The Use of Templates
+@node    coding standards
+@appendix  Coding Standards
+@cindex Coding Standards
 
-@include appendix_templates.texi
+
+@include appendix_coding_standards.texi
 
 @comment ------------------------------------------------------------------
 @node    Adding to vnl

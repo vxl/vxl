@@ -38,6 +38,7 @@ contains the configuration files used by the CMake build system
 
 @end table
 
+@anchor{struct_other_packages}
 @section Other packages
 
 On the repository and some @vxl{x} distributions, you will find several other

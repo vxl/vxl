@@ -2,7 +2,7 @@ The strategy adopted for converting and wrapping the fortran files is a
 little involved.  Some routines are simple to do, others very tricky.  The
 general procedure is as follows.  These steps are elaborated upon in the
 example below.
-@subsection Overview
+@section Overview
 @enumerate
 @item Use GAMS to find the module name, in SLATEC if possible, although
 CMLIB and TOMS routines are also public domain and good.
@@ -23,7 +23,7 @@ convert the results into the classes that VXL expects.
 @item After the call, interpret the error code, and handle accordingly.
 @end enumerate
 
-@subsection Problems
+@section Problems
 There are a few potential sources of difficulty, mostly in item 5, but in
 general I find that gritting one's teeth and guessing is a surprisingly good
 strategy.  The main points to remember are:
@@ -66,7 +66,7 @@ row/column @code{i} has been moved. These permutations which must be
 applied to the results in order to complete the process.
 @end itemize
 
-@subsection Example conversion -- QR decomposition
+@section Example conversion -- QR decomposition
 Given the need for an algorithm that is not yet included in the vnl
 package, say a routine to compute the QR decomposition, your first stop is
 the GAMS decision tree.  Class ``D'' is Linear Algebra, and class ``D5'' is

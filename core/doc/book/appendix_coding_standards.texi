@@ -1,10 +1,37 @@
+@section Coding Standards
+
+As has been mentioned before, it is VXL's philosophy that any rules should
+be pragmatic. The following is a list of standards that have either been
+explicitly agreed, or implicitly observed, and are here to make our lives
+easier. If they are making life harder, then we will change them.
+
+@itemize @bullet
+  @item @xref{VXL_Philosophy, ,VXL Philosophy}.
+  @item @xref{VCL_Requirements, ,VCL Requirements}.
+  @item @xref{CMake, ,CMake Build System}.
+@end itemize
+
+@itemize @bullet
+  @item All code should build, preferably warning-free, on the platforms
+  on our dashboard. This is probably the single most important coding
+  standard. If your commit breaks an existing build, you are responsible for
+  fixing it as quickly as possible. If you don't understand the error,
+  contact the relevant platform's maintainer for help.
+  @item The code should have good coverage with regression testing, and no
+  reported memory leaks, etc.
+  @item Anyone who is modifying code should keep a watch on the
+  @code{vxl-maintainers} email list.
+@end itemize
+
+
+@section Style Guide
+
+
 The following @vxl{x} coding standards were originally agreed at the Zurich
-meeting in March
-2001. They are mandatory for libraries in the @vxl{x} module. Even if you are
-not writing code which
-you expect to enter @vxl{x} proper, then it is still worth reading
-these coding standards, as they have been designed to minimise confusing
-and help avoid potential problems.
+meeting in March 2001. They are mandatory for libraries in the core module.
+Even if you are not writing code which you expect to enter core proper, then
+it is still worth following these coding standards, as they have been
+designed to minimise confusing and help avoid potential problems.
 
 @itemize @bullet
 @item All global scope identifiers are lowercase with underscores separating
@@ -12,7 +39,7 @@ and help avoid potential problems.
 
 @item Each class, file, function and member variable should have a one
   line Doxygen description (brief line) in addition to the optional long
-  description. See @code{VXL_ROOT/vxl/doc/vxl_doc_rules.*} for further information.
+  description. See @code{core/doc/vxl_doc_rules.*} for further information.
 
 @item Private member variables should have a underscore as a suffix,
     e.g. @code{value_}. (An underscore as a prefix @code{_value} is not
@@ -57,7 +84,7 @@ and help avoid potential problems.
     the developer to set tab=n. Most people have done this to their
     own taste. These environments convert TAB to n spaces, instead of 8.)
   @item When editing other people's sources, you must use the same
-    indentation as they.
+    indentation as they have.
   @end itemize
 
 @item Maximum number of characters per line: 132. (Number extracted
@@ -66,11 +93,140 @@ and help avoid potential problems.
 
 @item Source file endings:
   @itemize @bullet
-  C source files should end @code{.c}
-  C++ ordinary source files should end in @code{.cxx}
-  Header files should end in @code{.h}
-  C++ Template implementation code should end in @code{.txx}
+  @item C source files should end @code{.c}
+  @item C++ ordinary source files should end in @code{.cxx}
+  @item Header files should end in @code{.h}
+  @item C++ Template implementation code should end in @code{.txx}
   @end itemize
   (These choices minimise problems and maximise sensible default behaviour over
   many compilers. Agreed by consensus on vxl-maintainers May 2002.)
 @end itemize
+
+
+@section How to contribute a new class or library
+@cindex Contributing to VXL
+
+If you have computer vision code that fits neatly into VXL platform, or a
+VXL-friendly interface to an external library, the VXL community would
+welcome your contribution.
+
+For a single class, or few functions, it is worth seeing which existing VXL
+library your code might neatly fit into. Whole libraries should be added to
+a subdirectory of the contrib directory. @xref{struct_other_packages,
+,@code{vxl/contrib}}. Get yourself an account on SourceForge, and we'll give
+you commit rights.
+
+It isn't expected that your code meet the Style Guide or Coding Standards on
+its first commit to the repository. But you will have to put some effort
+into making your code build cleanly on the dashboard as soon as possible.
+You should aim for your code to meet the coding standards and style guide
+over time.
+
+@section How to elevate a library to the core.
+
+@itemize @bullet
+
+  @item All the "should"s in the above standards, will need to be treated
+  as "must"s,  unless there is a good reason.
+
+  @item A second institution or company, must be happily using your library.
+  (It is unclear whether that second institution needs to be a well known
+  member of the VXL community.) The second institution may well be
+  the one pushing for the library's elevation to the core.
+
+  @item There must be a texinfo chapter for the VXL book, that provides a
+  beginners introduction and tutorial to the library.
+
+  @item There must be a designated owner for the library, who is responsible
+  for co-ordinating changes to that library.
+
+@end itemize
+
+@section On the Use of Templates
+@cindex Templates
+
+VXL makes heavy use of the C++ template mechanism. In order to ensure
+efficient compilation and linking a scheme has been adopted in which the
+declaration of each templated class is placed in a @code{.h} file, and its
+definition (implementation) is separated into a @code{.txx} file. The latter
+is only read a small number of times, when a particular instantiation of a
+template is created.
+
+Each specialisation of the templated class must be compiled explicitly. This
+is usually done by creating an explicit instantiation in a file in the
+Templates subdirectory.
+
+For example, @code{vgl_point_2d<T>} has a header file,
+@code{vgl/vgl_point_2d.h}, and an implementation in
+@code{vgl/vgl_point_2d.txx}.  At the end of the latter is a macro which can
+be used to explicitly instantiation a particular specialisation of
+@code{vgl_point_2d}, together with all the associated templated functions:
+
+@example
+File: vgl/vgl_point_2d.txx:
+...
+#define VGL_POINT_2D_INSTANTIATE(T) \ template class vgl_point_2d<T >; \
+template vcl_ostream& operator<<(vcl_ostream&, const vgl_point_2d<T >&); \
+template vcl_istream& operator>>(vcl_istream&, vgl_point_2d<T >&); \
+@end example
+
+To instantiate a a @code{vgl_point_2d<double>} there is a file in the a
+@code{vgl/Templates} directory:
+
+@example
+File: vgl/Templates/vgl_point_2d+double-.cxx:
+
+// Instantiation of vgl_point_2d<double>
+#include <vgl/vgl_point_2d.txx>
+VGL_POINT_2D_INSTANTIATE(double);
+@end example
+
+If you decided to use an unusual specialization, eg
+@code{vgl_point_2d<my_sponge>}, your code should compile cleanly, but would
+not link unless somewhere you explicitly instantiate the class and compile
+it somewhere suitable using a call:
+
+@example
+  VGL_POINT_2D_INSTANTIATE(my_sponge);
+@end example
+
+When you write a new templated class (or function), you should put the
+implementation in a suitable @code{.txx}, together with an appropriate
+@code{INSTANTIATE} macro.  Study examples in existing classes for more
+details.
+
+
+
+
+@section Frequently Asked Questions
+@cindex Frequently Asked Questions
+@cindex FAQ
+
+
+@table @asis
+
+@item Question 1
+
+@quotation
+  Can I import a useful third-party library into @code{vxl/v3p}?
+@end quotation
+
+The general rule is that v3p is for third-party libraries that are need by
+VXL core libraries. Getting libraries in v3p working on all platforms is a
+difficult and tedious task, so we want to have no more than necessary.
+
+@item Question 2
+
+@quotation
+  I have a FindFoo.cmake module that is imports the very useful Foo library.
+  Where can I put it?
+@end quotation
+
+You should submit it to the CMake project, where it will see wider use than
+just the VXL community. For very special cases, such as a new library needed
+by something in core, you can temporarily put it in
+@code{config\cmake\Modules\NewCMake}. However you should also submit it to
+CMake, and remove it from the VXL repository as soon as it becomes available
+in a CMake distribution.
+
+@end table

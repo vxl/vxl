@@ -138,7 +138,9 @@ you would still have to use @code{std::fprintf} and you couldn't use @code{std::
 
 
 @comment fsm
+@anchor{VCL_Requirements}
 @section Which parts of standard C++ may be used in VXL?
+
 
 Eventually the answer to this will be "all parts" but until compilers
 catch up with the language standard, the answer is "all but the following":
