@@ -28,6 +28,8 @@ MANPAGE_SOURCES += mil_gaussian_pyramid_builder_2d.txx
 SOURCES += mil_normalise_image_2d.cxx
 SOURCES += mil_invert_image_2d.cxx
 SOURCES += mil_byte_image_2d_io_plugin.cxx
+SOURCES += mil_scale_pyramid_builder_2d.cxx
+MANPAGE_SOURCES += mil_scale_pyramid_builder_2d.txx
 
 # Additional files to document:
 MANPAGE_SOURCES += mil_all.h
