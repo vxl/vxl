@@ -108,7 +108,7 @@ class vgui
 
   //: Display this tableau and run till dead (with menubar)
   static int run(vgui_tableau_sptr const&, int w, int h, 
-    vgui_menu const &menubar, vcl_string const &title ="");
+                 vgui_menu const &menubar, vcl_string const &title ="");
 
   //: Create the vgui_window but don't run it (no menubar).
   static vgui_window *adapt(vgui_tableau_sptr const&, int w, int h,
@@ -116,7 +116,7 @@ class vgui
 
   //: Create the vgui_window but don't run it (with menubar).
   static vgui_window *adapt(vgui_tableau_sptr const&, int w, int h, 
-    vgui_menu const &, vcl_string const &title ="");
+                            vgui_menu const &, vcl_string const &title ="");
 
   // Functions for event-loop management
   //------------------------------------
@@ -153,5 +153,8 @@ class vgui
 // the toolkits to be registered.
 int vgui_register_all_implementations();
 static int trigger = vgui_register_all_implementations();
+
+// This function is here just to avoid "unused variable" compiler warnings
+static int dummy_use_of_trigger() { return trigger? 0: dummy_use_of_trigger(); }
 
 #endif // vgui_h_
