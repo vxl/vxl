@@ -62,7 +62,7 @@ void vsrl_manager::init()
   dimg_tab_ = vgui_image_tableau_new();  // disparity image tableau
   disparity_bias_=0;
 
-  // Put the image tableax into an easy2D tableau
+  // Put the image tableaux into an easy2D tableau
   e2d0_ = vgui_easy2D_tableau_new(itabL_);
   e2d1_ = vgui_easy2D_tableau_new(itabR_);
   e2d2_ = vgui_easy2D_tableau_new(dimg_tab_);
@@ -83,7 +83,7 @@ void vsrl_manager::init()
   vgui_viewer2D_tableau_sptr viewer1 = vgui_viewer2D_tableau_new(e2d1_);
   vgui_viewer2D_tableau_sptr viewer2 = vgui_viewer2D_tableau_new(e2d2_);
 
-  // Put the viewers into tableaus for picking points
+  // Put the viewers into tableaux for picking points
   vpicker0_=new vsrl_point_picker(viewer0);
   vpicker1_=new vsrl_point_picker(viewer1);
   vpicker2_=new vsrl_point_picker(viewer2);
