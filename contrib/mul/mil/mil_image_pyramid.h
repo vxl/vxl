@@ -17,57 +17,57 @@ class mil_image;
 //: Pyramid of images of arbitrary type
 class mil_image_pyramid {
 private:
-	vcl_vector<mil_image*> image_;
-	double base_pixel_width_;
-	double scale_step_;
-	
-	void deleteImages();
+    vcl_vector<mil_image*> image_;
+    double base_pixel_width_;
+    double scale_step_;
+
+    void deleteImages();
 public:
 
-		//: Dflt ctor
-	mil_image_pyramid();
+        //: Dflt ctor
+    mil_image_pyramid();
 
-		//: Destructor
-	virtual ~mil_image_pyramid();
-	
-		//: Resize to n_levels pyramid
-	    //  Each level of which is a clone of im_type
-	void resize(int n_levels, const mil_image& im_type);
-	
-		//: Lowest level (highest resolution image) of pyramid 
-	int lo() const;
+        //: Destructor
+    virtual ~mil_image_pyramid();
 
-		//: Highest level (lowest resolution image) of pyramid
-	int hi() const;
+        //: Resize to n_levels pyramid
+        //  Each level of which is a clone of im_type
+    void resize(int n_levels, const mil_image& im_type);
 
-	    //: Number of levels
-	int nLevels() const;
+        //: Lowest level (highest resolution image) of pyramid
+    int lo() const;
 
-		//: Image at level L
-	mil_image& operator()(int L);
-	
-		//: Image at level L
-	const mil_image& operator()(int L) const;
-	
-		//: Mean width (in world coords) of pixels at level zero
-	double basePixelWidth() const;
+        //: Highest level (lowest resolution image) of pyramid
+    int hi() const;
 
-		//: Scaling per level
-		//  Pixels at level L have width 
-		//  basePixelWidth() * scaleStep()^L
-	double scaleStep() const;
-	
-		//: Access to image data
-		//  Should only be used by pyramid builders
-	vcl_vector<mil_image*>& data();
-	
-		//: Define pixel widths
-	void setWidths(double base_pixel_width, double scale_step);
-	
-	void print_summary(vcl_ostream& os) const;
+        //: Number of levels
+    int nLevels() const;
 
-		//: Print whole of each image to os
-	void print_all(vcl_ostream& os) const;
+        //: Image at level L
+    mil_image& operator()(int L);
+
+        //: Image at level L
+    const mil_image& operator()(int L) const;
+
+        //: Mean width (in world coords) of pixels at level zero
+    double basePixelWidth() const;
+
+        //: Scaling per level
+        //  Pixels at level L have width
+        //  basePixelWidth() * scaleStep()^L
+    double scaleStep() const;
+
+        //: Access to image data
+        //  Should only be used by pyramid builders
+    vcl_vector<mil_image*>& data();
+
+        //: Define pixel widths
+    void setWidths(double base_pixel_width, double scale_step);
+
+    void print_summary(vcl_ostream& os) const;
+
+        //: Print whole of each image to os
+    void print_all(vcl_ostream& os) const;
 };
 
 vcl_ostream& operator<<(vcl_ostream& os, const mil_image_pyramid& im_pyr);

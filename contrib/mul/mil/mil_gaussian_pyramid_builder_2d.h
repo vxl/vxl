@@ -32,61 +32,58 @@ private:
 
 public:
 
-		//: Dflt ctor
-	mil_gaussian_pyramid_builder_2d();
+        //: Dflt ctor
+    mil_gaussian_pyramid_builder_2d();
 
-		//: Destructor
-	virtual ~mil_gaussian_pyramid_builder_2d();
-	
-		//: Create new (empty) pyramid on heap
-		//  Caller responsible for its deletion
-	virtual mil_image_pyramid* newImagePyramid() const;
+        //: Destructor
+    virtual ~mil_gaussian_pyramid_builder_2d();
 
-		//: Define maximum number of levels to build
-		//  Limits levels built in subsequent calls to build()
-		//  Useful efficiency measure.  As build() only takes
-		//  a shallow copy of the original image, using
-		//  max_l=1 avoids any copying or smoothing.
-	virtual void setMaxLevels(int max_l);
+        //: Create new (empty) pyramid on heap
+        //  Caller responsible for its deletion
+    virtual mil_image_pyramid* newImagePyramid() const;
 
-		//: Get the current maximum number levels allowed
-	virtual int maxLevels();
+        //: Define maximum number of levels to build
+        //  Limits levels built in subsequent calls to build()
+        //  Useful efficiency measure.  As build() only takes
+        //  a shallow copy of the original image, using
+        //  max_l=1 avoids any copying or smoothing.
+    virtual void setMaxLevels(int max_l);
 
-	
-		//: Build pyramid
-	virtual void build(mil_image_pyramid&, const mil_image&);
+        //: Get the current maximum number levels allowed
+    virtual int maxLevels();
 
-		//: Smooth and subsample src_im to produce dest_im
-		//  Applies 1-5-8-5-1 filter in x and y, then samples
-		//  every other pixel.
-	void gaussReduce(mil_image_2d_of<T>& dest_im,
-					 const mil_image_2d_of<T>& src_im);
 
-		//: Scale step between levels
-	virtual double scaleStep() const;
-	
-		//: Version number for I/O 
-	short version_no() const;
+        //: Build pyramid
+    virtual void build(mil_image_pyramid&, const mil_image&);
 
-		//: Name of the class
-	virtual vcl_string is_a() const;
+        //: Smooth and subsample src_im to produce dest_im
+        //  Applies 1-5-8-5-1 filter in x and y, then samples
+        //  every other pixel.
+    void gaussReduce(mil_image_2d_of<T>& dest_im,
+                     const mil_image_2d_of<T>& src_im);
 
-		//: Create a copy on the heap and return base class pointer
-	virtual mil_image_pyramid_builder* clone() const;
+        //: Scale step between levels
+    virtual double scaleStep() const;
 
-		//: Print class to os
-	virtual void print_summary(vcl_ostream& os) const;
-		
-		//: Save class to binary file stream
-		//!in: bfs: Target binary file stream
-	virtual void b_write(vsl_b_ostream& bfs) const;
+        //: Version number for I/O
+    short version_no() const;
 
-		//: Load class from binary file stream
-		//!out: bfs: Target binary file stream
-	virtual void b_read(vsl_b_istream& bfs);
+        //: Name of the class
+    virtual vcl_string is_a() const;
+
+        //: Create a copy on the heap and return base class pointer
+    virtual mil_image_pyramid_builder* clone() const;
+
+        //: Print class to os
+    virtual void print_summary(vcl_ostream& os) const;
+
+        //: Save class to binary file stream
+        //!in: bfs: Target binary file stream
+    virtual void b_write(vsl_b_ostream& bfs) const;
+
+        //: Load class from binary file stream
+        //!out: bfs: Target binary file stream
+    virtual void b_read(vsl_b_istream& bfs);
 };
 
 #endif
-
-
-

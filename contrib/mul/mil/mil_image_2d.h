@@ -15,11 +15,11 @@ class mil_transform_2d;
 class mil_image_2d : public mil_image {
 private:
     //: Resize current planes to [0..nx-1][0..ny-1]
-	//  Provided because we can't overload virtual functions
+    //  Provided because we can't overload virtual functions
     virtual void resize2(int nx, int ny) = 0;
 
     //: Resize to n_planes of [0..nx-1][0..ny-1]
-	//  Provided because we can't overload virtual functions
+    //  Provided because we can't overload virtual functions
     virtual void resize3(int nx, int ny, int n_planes) = 0;
 
 public:
@@ -40,14 +40,14 @@ public:
     virtual void setWorld2im(const mil_transform_2d& w2i) =0;
 
     //: Resize current planes to [0..nx-1][0..ny-1]
-	//  Implemented using resize2()
+    //  Implemented using resize2()
     void resize(int nx, int ny)
-	{ resize2(nx,ny); }
+    { resize2(nx,ny); }
 
     //: Resize to n_planes of [0..nx-1][0..ny-1]
-	//  Implemented using resize2()
+    //  Implemented using resize2()
     void resize(int nx, int ny, int n_planes)
-	{ resize3(nx,ny,n_planes); }
+    { resize3(nx,ny,n_planes); }
 
     //: Depth of image (set to 1 for 2D images)
     virtual int nz() const { return 1; }
