@@ -14,15 +14,13 @@
 #include <vil2/vil2_math.h>
 
 
-
-
 //: Performs conversion between different pixel types.
 // When the input type is compound\<integer type> a
 template <class In, class Out>
 class vil2_convert_cast_pixel
 {
-  public:
-    void operator () (In v, Out &d) const;
+ public:
+  void operator () (In v, Out &d) const;
 };
 
 // deal with conversions from floating point types to some compounds
@@ -30,13 +28,6 @@ class vil2_convert_cast_pixel
 VCL_DEFINE_SPECIALIZATION \
 inline void vil2_convert_cast_pixel<in, out >::operator () (in v, out& d) const \
 { d.r = d.g = d.b = (out::value_type)v; }
-
-//VCL_DEFINE_SPECIALIZATION \
-//inline void vil2_convert_cast_pixel<vxl_byte , vil_rgb<vxl_byte> >::operator () (in v, out& d) const \
-//{ d.r = d.g = d.b = (out::value_type)v; }
-
-
-
 macro( vxl_byte , vil_rgb<vxl_byte> )
 macro( float , vil_rgb<vxl_byte> )
 macro( double , vil_rgb<vxl_byte> )
@@ -79,11 +70,24 @@ macro( vxl_uint_32 , vil_rgba<vxl_uint_32> )
 macro( float , vil_rgba<vxl_uint_32> )
 macro( double , vil_rgba<vxl_uint_32> )
 #undef macro
+#define macro( inout )\
+VCL_DEFINE_SPECIALIZATION \
+inline void vil2_convert_cast_pixel<inout, inout >::operator () (inout v, inout& d) const { d=v; }
+macro( vxl_byte )
+macro( vxl_sbyte )
+macro( vxl_uint_16 )
+macro( vxl_int_16 )
+macro( vxl_uint_32 )
+macro( vxl_int_32 )
+macro( float )
+macro( double )
+macro( vil_rgb<vxl_byte> )
+macro( vil_rgba<vxl_byte> )
+#undef macro
 
 // declare general case in case anyone needs something weird.
 template <class In, class Out>
-inline  void vil2_convert_cast_pixel<In, Out>::operator () (In v, Out &d) const { 
-  d = static_cast<Out>(v); }
+inline void vil2_convert_cast_pixel<In, Out>::operator () (In v, Out &d) const { d = static_cast<Out>(v); }
 
 
 //: Cast one pixel type to another (with rounding).
