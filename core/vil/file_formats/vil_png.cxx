@@ -72,19 +72,19 @@ char const* vil2_png_file_format::tag() const
 
 /////////////////////////////////////////////////////////////////////////////
 
-void user_read_data(png_structp png_ptr, png_bytep data, png_size_t length)
+void vil2_png_user_read_data(png_structp png_ptr, png_bytep data, png_size_t length)
 {
   vil_stream* f = (vil_stream*)png_get_io_ptr(png_ptr);
   f->read(data, length);
 }
 
-void user_write_data(png_structp png_ptr, png_bytep data, png_size_t length)
+void vil2_png_user_write_data(png_structp png_ptr, png_bytep data, png_size_t length)
 {
   vil_stream* f = (vil_stream*)png_get_io_ptr(png_ptr);
   f->write(data, length);
 }
 
-void user_flush_data(png_structp png_ptr)
+void vil2_png_user_flush_data(png_structp png_ptr)
 {
   // IOFile* f = (IOFile*)png_get_io_ptr(png_ptr);
   // urk.  how to flush?
@@ -317,7 +317,7 @@ bool vil2_png_image::read_header()
     return problem("png_sig_cmp");
   }
 
-  png_set_read_fn(p_->png_ptr, vs_, user_read_data);
+  png_set_read_fn(p_->png_ptr, vs_, vil2_png_user_read_data);
   png_set_sig_bytes (p_->png_ptr, SIG_CHECK_SIZE);
   png_read_info (p_->png_ptr, p_->info_ptr);
 
@@ -363,7 +363,7 @@ bool vil2_png_image::write_header()
 
   vs_->seek(0L);
 
-  png_set_write_fn(p_->png_ptr, vs_, user_write_data, user_flush_data);
+  png_set_write_fn(p_->png_ptr, vs_, vil2_png_user_write_data, vil2_png_user_flush_data);
 
   int color_type;
   if (components_ == 3)
