@@ -5,8 +5,8 @@
 
 template <class ImgIn,class ImgOut,class DataIn,class DataOut,class PixelItr>
 bool vipl_dyadic <ImgIn,ImgOut,DataIn,DataOut,PixelItr> :: section_applyop(){
-  DataIn dummy1 = DataIn(); // dummy initialization to avoid compiler warning
-  DataOut dummy2 = DataOut(); // dummy initialization to avoid compiler warning
+  DataIn dummy1 = DataIn(0); // dummy initialization to avoid compiler warning
+  DataOut dummy2 = DataOut(0); // dummy initialization to avoid compiler warning
   const ImgIn &in = in_data();
   ImgOut &out = out_data();
 

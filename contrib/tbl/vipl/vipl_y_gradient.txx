@@ -8,7 +8,7 @@ bool vipl_y_gradient <ImgIn,ImgOut,DataIn,DataOut,PixelItr> :: section_applyop()
   const ImgIn &in = in_data(0);
   ImgOut &out = *out_data_ptr();
 
-  register DataIn v = DataIn(); register DataOut w;
+  register DataIn v = DataIn(0); register DataOut w;
   int startx = start(X_Axis());
   int starty = start(Y_Axis());
   int stopx = stop(X_Axis());

@@ -1,6 +1,9 @@
 #include <vil/vil_image.h>
 #include <vcl_vector.h>
 
+
+
+
 // this must be here for filter-2d to work
 #include <vipl/section/vipl_filterable_section_container_generator_vil_image.txx>
 #include <vipl/section/vipl_filterable_section_container_generator_vcl_vector.txx>
@@ -11,7 +14,7 @@ template class vipl_filter<vil_image, vcl_vector<unsigned>, unsigned char, unsig
 #include <vipl/filter/vipl_filter_2d.txx>
 template class vipl_filter_2d<vil_image, vcl_vector<unsigned>, unsigned char, unsigned, vipl_trivial_pixeliter>;
 
-#if !defined VCL_VC || defined NDEBUG // Weird hack
+#if !defined VCL_VC || !defined _DEBUG // Weird hack
 #include <vbl/vbl_smart_ptr.h>
 template class vbl_smart_ptr<vcl_vector<unsigned> >;
 void vbl_smart_ptr<vcl_vector<unsigned> >::ref(vcl_vector<unsigned> *) {}

@@ -8,7 +8,7 @@ bool vipl_x_gradient <ImgIn,ImgOut,DataIn,DataOut,PixelItr> :: section_applyop()
   const ImgIn &in = in_data(0);
   ImgOut &out = *out_data_ptr();
 
-  DataIn dummy = DataIn(); // dummy initialization to avoid compiler warning
+  DataIn dummy = DataIn(0); // dummy initialization to avoid compiler warning
   register DataOut w;
   int startx = start(X_Axis());
   int starty = start(Y_Axis());
