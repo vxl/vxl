@@ -67,15 +67,19 @@ bool vpro_corr_tracker_process::execute()
   
   tracker_.set_image_i(img);
   tracker_.track();
-  vcl_vector<vtol_face_2d_sptr> samples;
-  tracker_.get_samples(samples);
-  for(vcl_vector<vtol_face_2d_sptr>::iterator fit = samples.begin();
-      fit != samples.end(); fit++)
-    {
-      vtol_topology_object_sptr to = 
-        (vtol_topology_object*)((*fit)->cast_to_face());
-      output_topo_objs_.push_back(to);
-    }
+  //  vcl_vector<vtol_face_2d_sptr> samples;
+  //  tracker_.get_samples(samples);
+  //   for(vcl_vector<vtol_face_2d_sptr>::iterator fit = samples.begin();
+  //       fit != samples.end(); fit++)
+  //     {
+  //       vtol_topology_object_sptr to = 
+  //         (vtol_topology_object*)((*fit)->cast_to_face());
+  //       output_topo_objs_.push_back(to);
+  //     }
+  vtol_face_2d_sptr f = tracker_.get_best_sample();
+  vtol_topology_object_sptr to = 
+    (vtol_topology_object*)(f->cast_to_face());
+  output_topo_objs_.push_back(to);
   return true;
 }
 
