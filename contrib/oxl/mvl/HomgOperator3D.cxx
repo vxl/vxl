@@ -113,7 +113,6 @@ HomgOperator3D::sort_points(HomgPoint3D* points, int n)
 #else
   vbl_qsort(sort_table, &pair_float_int_compare_ascend);
 #endif
-  vbl_qsort/*<pair_float_int>*/(sort_table, &pair_float_int_compare_ascend);
 
   for (int sort_index = 0; sort_index < n; sort_index++) {
     pair_float_int* sort = &sort_table[sort_index];
