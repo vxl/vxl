@@ -22,7 +22,7 @@ template<class T>
 mil_gaussian_pyramid_builder_2d<T>::mil_gaussian_pyramid_builder_2d()
     : max_levels_(99)
 {
-	set_min_size(5, 5);
+    set_min_size(5, 5);
 }
 
 //=======================================================================
@@ -205,7 +205,6 @@ void mil_gaussian_pyramid_builder_2d<T>::build(mil_image_pyramid& image_pyr,
 template<class T>
 void mil_gaussian_pyramid_builder_2d<T>::extend(mil_image_pyramid& image_pyr) const
 {
-    
     //  Require image mil_image_2d_of<T>
     assert(image_pyr(0).is_a() == work_im_.is_a());
 

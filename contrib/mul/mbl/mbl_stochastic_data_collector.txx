@@ -94,7 +94,7 @@ void mbl_stochastic_data_collector<T>::force_record(const T& v)
 //=======================================================================
 
 //: Will decide whether to store the next value
-// This will increment n_presented()  
+// This will increment n_presented()
 // \return true if you should call record_definite() with the next value.
 template <class T>
 bool mbl_stochastic_data_collector<T>::store_next()
@@ -178,7 +178,7 @@ void mbl_stochastic_data_collector<T>::b_write(vsl_b_ostream& bfs) const
 {
   vsl_b_write(bfs, is_a());
   vsl_b_write(bfs, version_no());
-  
+
   vsl_b_write(bfs, samples_);
   vsl_b_write(bfs, nPresented_);
 }
@@ -195,9 +195,9 @@ void mbl_stochastic_data_collector<T>::b_read(vsl_b_istream& bfs)
     vcl_cerr << "mbl_stochastic_data_collector<T>::load : ";
     vcl_cerr << "Attempted to load object of type ";
     vcl_cerr << name <<" into object of type " << is_a() << vcl_endl;
-    abort();
+    vcl_abort();
   }
-  
+
   short version;
   vsl_b_read(bfs,version);
   switch (version)
@@ -209,7 +209,7 @@ void mbl_stochastic_data_collector<T>::b_read(vsl_b_istream& bfs)
   default:
     vcl_cerr << "mbl_stochastic_data_collector<T>::b_read() ";
     vcl_cerr << "Unexpected version number " << version << vcl_endl;
-    abort();
+    vcl_abort();
   }
 }
 

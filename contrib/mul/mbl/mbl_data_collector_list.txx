@@ -55,5 +55,5 @@ mbl_data_wrapper<T >& mbl_data_collector_list<T>::data_wrapper()
 }
 
 #define MBL_DATA_COLLECTOR_LIST_INSTANTIATE(T) \
-template class mbl_data_collector_list< T >;
+template class mbl_data_collector_list< T >
 #endif // mbl_data_collector_list_txx_

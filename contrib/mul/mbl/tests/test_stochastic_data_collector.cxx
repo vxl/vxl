@@ -15,13 +15,10 @@
 
 //=======================================================================
 
-
 void configure()
 {
-	vsl_add_to_binary_loader(mbl_stochastic_data_collector<vnl_vector<double> >());
+ vsl_add_to_binary_loader(mbl_stochastic_data_collector<vnl_vector<double> >());
 }
-
-
 
 //=======================================================================
 
@@ -29,15 +26,14 @@ void configure()
     //: The main control program
 void test_stochastic_data_collector()
 {
-  
   configure();
-  
+
   vnl_vector<double> v(1);
   int i;
-  
+
   mbl_stochastic_data_collector<vnl_vector<double> > collector(100);
   collector.reseed(14545);
-  
+
   vcl_cout << "===========Generate data " <<vcl_endl;
   vcl_vector<unsigned> hist(10, 0u);
   const int n_expts = 50;
@@ -49,8 +45,7 @@ void test_stochastic_data_collector()
       if (collector.store_next()) collector.force_record(v);
     }
 //    collector.record(v);
-  
-  
+
   mbl_data_wrapper<vnl_vector<double> > &data = collector.data_wrapper();
   data.reset();
   do
@@ -65,17 +60,16 @@ void test_stochastic_data_collector()
   for (i = 0; i < 10; i++)
     vul_printf(vcl_cout, "From %4d to %4d there were on average %4f items stored.\n",
       i * 500, i*500 + 499, ((double)hist[i])/((double)n_expts))  ;
-  
+
   unsigned correct_hist[] = {501, 543, 499, 495, 461, 539, 490, 515, 460, 497};
 
   TEST ("Found correct values", vnl_c_vector<unsigned>::euclid_dist_sq(&hist[0], correct_hist, 10), 0);
 
-
   vcl_cout << "=========Testing IO"<<vcl_endl;
-  
+
   mbl_stochastic_data_collector<vnl_vector<double> > collector2;
   mbl_data_collector_base *collector3=0;
-  
+
   vcl_string path = "test_stochastic_data_collector.bvl.tmp";
   vcl_cout<<"Saving : "<<collector<<vcl_endl;
   vsl_b_ofstream bfs_out(path);
@@ -83,18 +77,18 @@ void test_stochastic_data_collector()
   vsl_b_write(bfs_out,collector);
   vsl_b_write(bfs_out,(mbl_data_collector_base*)&collector);
   bfs_out.close();
-  
+
   vsl_b_ifstream bfs_in(path);
   TEST (("Opened " + path + " for reading").c_str(), (!bfs_in ), false);
   vsl_b_read(bfs_in,collector2);
   vsl_b_read(bfs_in,collector3);
   bfs_in.close();
-  
+
   vcl_cout << "Loaded : " << collector2 << vcl_endl;
 
   TEST( "Loaded collector size = saved collector size",
     collector.data_wrapper().size(), collector2.data_wrapper().size());
-  
+
   mbl_data_wrapper<vnl_vector<double> > &w1 = collector.data_wrapper();
   mbl_data_wrapper<vnl_vector<double> > &w2 = collector2.data_wrapper();
   w1.reset();
@@ -107,12 +101,11 @@ void test_stochastic_data_collector()
     w1.next();
   } while (w2.next() );
   TEST( "Loaded collector = saved collector", test_res, true);
-  
+
   vcl_cout << "Loaded by pointer: "<<collector3<<vcl_endl;
   delete collector3;
 
   vsl_delete_all_loaders();
-  
 }
 
 
