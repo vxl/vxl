@@ -5,4 +5,6 @@ SOURCE_FILES(mil_sources
   mil_algo_line_filter.h
   mil_algo_line_filter.txx
   mil_algo_grad_3x3.h
+  mil_algo_grad_filter_2d.h
+  mil_algo_grad_filter_2d.txx
 )
