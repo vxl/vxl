@@ -65,7 +65,7 @@ ifeq "$(TJ_GCC30)$(optimize)" "1-O2"
 FLAGS_vepl2_gaussian_convolution.cxx := -O3 # or -O0 would also work, but not -O1 or -O2
 FLAGS_vepl2_threshold.cxx := -O1
 FLAGS_vepl2_add_random_noise.cxx := -O1
-FLAGS_vepl2_dyadic.cxx := -O1
+FLAGS_vepl2_dyadic.cxx := -O0
 FLAGS_vepl2_dilate_disk.cxx := -O1
 FLAGS_vepl2_erode_disk.cxx := -O1
 FLAGS_vepl2_median.cxx := -O1
