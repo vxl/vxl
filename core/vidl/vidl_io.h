@@ -14,7 +14,6 @@
 
 
 #include <vcl_string.h>
-#include <vbl/vbl_ref_count.h>
 #include <vidl/vidl_clip_sptr.h>
 #include <vidl/vidl_movie_sptr.h>
 #include <vidl/vidl_codec_sptr.h>
@@ -29,7 +28,7 @@ class vidl_codec;
 //   It reads video in from filenames and creates
 //   movies or clips. It saves videos into specific
 //   codecs
-class vidl_io //: public vbl_ref_count
+class vidl_io
 {
   // PUBLIC INTERFACE----------------------------------------------------------
 
