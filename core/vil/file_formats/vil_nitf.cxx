@@ -37,6 +37,7 @@
 
 // Constants
 char const* const vil_nitf_format_tag = "NITF v2.0";
+static int debug_level = 0;
 
 static const unsigned long TOTAL_BYTE_LIMIT = 100000000;  // 100MB - glutMainLoop seems to choke with images larger than this.
 
@@ -130,7 +131,12 @@ vil_image_resource_sptr vil_nitf_file_format::make_input_image(vil_stream* is)
   //  FOR NOW, JUST RETURN FIRST IMAGE FROM FILE.
   if (message_header_->NUMI > 0)
   {
-    vil_nitf_image_subheader_sptr image_subheader = image_subheader_vector_[0];
+    if (image_subheader_vector_.size() > 1) {
+      vcl_cerr << method_name << "WARNING: size of vector image_subheader_vector_ = "
+	      << image_subheader_vector_.size() << ".  Should be 1.  Taking last element."
+	      << vcl_endl ;
+    }
+    vil_nitf_image_subheader_sptr image_subheader = image_subheader_vector_.back();
 
     // Smart pointers do not provide inheritance like corresponding classes.
     // Use regular pointer to access non-inherited methods in vil_nitf_image.
@@ -195,10 +201,22 @@ bool vil_nitf_file_format::read_header_data()
   message_header_ = new vil_nitf_message_header_v20();
   StatusCode status = message_header_->Read(io_stream_);
 
+  image_subheader_vector_.clear() ;
+
   if (status == STATUS_GOOD)
   {
     message_header_->display_header_info(method_name);
+
     vil_streampos save_pos = io_stream_->tell();
+
+    // CAST BELOW IS OK.  CURRENT POSITION IF FILE WILL ALWAYS BE > 0.
+    if (message_header_->GetHeaderLength() != static_cast<unsigned long> (save_pos)) {
+      vcl_cerr << method_name << "WARNING: "
+	       << "after reading message header, file position = "
+	       << save_pos << " is not equal to message header length = "
+	       << message_header_->GetHeaderLength()
+	       << vcl_endl ;
+    }
 
     // FOR NOW, JUST READ FIRST IMAGE SUBHEADER.  MAL 20oct2003
     vil_nitf_image_subheader_sptr image_subheader = new vil_nitf_image_subheader_v20();
@@ -208,12 +226,14 @@ bool vil_nitf_file_format::read_header_data()
     {
       image_subheader->display_attributes(method_name);
 
-      vcl_cout << method_name
-               << "after read message header, file position = "
-               << save_pos << vcl_endl
-               << method_name
-               << "after first image header, file position = "
-               << io_stream_->tell() << vcl_endl;
+      if (debug_level > 0) {
+	  vcl_cout << method_name
+		   << "after read message header, file position = "
+		   << save_pos << vcl_endl
+		   << method_name
+		   << "after first image header, file position = "
+		   << io_stream_->tell() << vcl_endl;
+      }
 
       image_subheader->set_data_length(message_header_->get_image_data_length(0));
       image_subheader_vector_.push_back(image_subheader);
@@ -254,6 +274,7 @@ vil_nitf_image::vil_nitf_image(vil_stream* is,
            << ni_ << ", " << nj_ << ")\n";
 
   check_image_data_offset();
+
 }  // end constructor
 
 vil_nitf_image::vil_nitf_image(
@@ -652,8 +673,6 @@ vil_memory_chunk_sptr vil_nitf_image::read_single_band_data(
 
   unsigned long last_image_offset = 0;
 
-  const unsigned int DEFAULT_PIXELS_TO_DISPLAY = 8;
-
   // vil_pixel_format_sizeof_components should give # of bytes per pixel.
   unsigned long bytes_per_pixel = vil_pixel_format_sizeof_components(this->pixel_format());
   unsigned long bytes_per_block = get_block_size_x() * get_block_size_y() * bytes_per_pixel;
@@ -669,10 +688,6 @@ vil_memory_chunk_sptr vil_nitf_image::read_single_band_data(
   unsigned long bytes_per_read = get_block_size_x() * bytes_per_pixel;
   unsigned char * block_buffer = new unsigned char[bytes_per_block];  // BUFFER TO HOLD BYTES FOR ONE BLOCK
 
-  // BUFFERS TO SAVE BYTES FOR DEBUGGING
-  unsigned char * save_buf_1 = new unsigned char[bytes_per_read];
-  unsigned char * save_buf_2 = new unsigned char[bytes_per_read];
-
   unsigned long total_bytes = this->get_image_length();
   // ONLY CALCULATE NUMBER OF BYTES IF NOT READING TOTAL IMAGE.
   if (ni < this->ni_ || nj < this->nj_) {
@@ -684,23 +699,25 @@ vil_memory_chunk_sptr vil_nitf_image::read_single_band_data(
 
   buffer = new vil_memory_chunk(total_bytes, pixel_format());
 
-  vcl_cout << method_name
-           << "i0 = " << i0
-           << "  j0 = " << j0
-           << "  ni = " << ni
-           << "  nj = " << nj
-           << "  bytes_per_pixel = " << bytes_per_pixel
-           << "  total_bytes for image = " << total_bytes
-           << vcl_endl
+  if (debug_level > 0) {
+      vcl_cout << method_name
+               << "i0 = " << i0
+               << "  j0 = " << j0
+               << "  ni = " << ni
+               << "  nj = " << nj
+               << "  bytes_per_pixel = " << bytes_per_pixel
+               << "  total_bytes for image = " << total_bytes
+               << vcl_endl
 
-           << method_name
-           << "num_blocks_x = " << get_num_blocks_x()
-           << "  bytes_per_block = " << bytes_per_block
-           << "  bytes_per_block_row = " << bytes_per_block_row
-           << "  bytes_per_image_row = " << bytes_per_image_row
-           << "  bytes_per_read = " << bytes_per_read
-           << "  reverse_bytes = " << reverse_bytes() << vcl_endl
-           << "  block_buffer = " << &block_buffer << vcl_endl;
+               << method_name
+               << "num_blocks_x = " << get_num_blocks_x()
+               << "  bytes_per_block = " << bytes_per_block
+               << "  bytes_per_block_row = " << bytes_per_block_row
+               << "  bytes_per_image_row = " << bytes_per_image_row
+               << "  bytes_per_read = " << bytes_per_read
+               << "  reverse_bytes = " << reverse_bytes() << vcl_endl
+               << "  block_buffer = " << &block_buffer << vcl_endl;
+  }
 
   unsigned int within_row_offset = 0;  // offset with uniform image row
 
@@ -723,22 +740,24 @@ vil_memory_chunk_sptr vil_nitf_image::read_single_band_data(
 
   calculated_pixels = get_num_blocks_y() * get_block_size_y();
   diff = calculated_pixels - nj;  // NEED TO CHECK THIS.
-
-  vcl_cout << method_name << "start_block_x = " << start_block_x
-           << "  start_block_x_offset = " << start_block_x_offset << vcl_endl;
   unsigned long last_image_col_num = (max_block_x * get_block_size_x()) - 1;
-  vcl_cout << method_name << "max_block_x = " << max_block_x
-           << "  expected last X pixel = " << last_image_col_num << vcl_endl
-           << method_name << "start_block_y = " << start_block_y
-           << "  max_block_y = " << max_block_y << vcl_endl;
   unsigned long last_image_row_num = (max_block_y * get_block_size_x()) - 1;
-  vcl_cout << "expected last Y pixel = " << last_image_row_num << vcl_endl;
-
   unsigned long display_pixels = (max_block_x - start_block_x) * get_block_size_x();
-  vcl_cout << method_name << "display pixels = " << display_pixels << " rows";
-
   display_pixels = (max_block_y - start_block_y) * get_block_size_y();
-  vcl_cout << " by " << display_pixels << " columns\n";
+
+  if (debug_level > 1) {
+      vcl_cout << method_name << "start_block_x = " << start_block_x
+               << "  start_block_x_offset = " << start_block_x_offset << vcl_endl;
+      vcl_cout << method_name << "max_block_x = " << max_block_x
+               << "  expected last X pixel = " << last_image_col_num << vcl_endl
+               << method_name << "start_block_y = " << start_block_y
+               << "  max_block_y = " << max_block_y << vcl_endl;
+      vcl_cout << "expected last Y pixel = " << last_image_row_num << vcl_endl;
+
+      vcl_cout << method_name << "display pixels = " << display_pixels << " rows";
+
+      vcl_cout << " by " << display_pixels << " columns\n";
+  }
 
   // ITERATE OVER BLOCKS LEFT TO RIGHT, TOP TO BOTTOM, READING IMAGE BYTES.
   // INSERT BYTES INTO ONE UNIFORM GRID
@@ -751,9 +770,7 @@ vil_memory_chunk_sptr vil_nitf_image::read_single_band_data(
                               // DO NOT INITIALIZE BECAUSE VALUE IS REASSIGNED BEFORE
                               // INITIAL VALUE IS EVER USED.  SOME COMPILERS COMPLAIN ABOUT THIS.
 
-#ifdef DEBUG
     unsigned long bytes_copied = 0;  // bytes copied for this row
-#endif
 
     for (block_col = start_block_x; block_col < max_block_x; ++block_col)
     {
@@ -849,10 +866,10 @@ vil_memory_chunk_sptr vil_nitf_image::read_single_band_data(
         assert(copy_count != 0);
         vcl_memcpy(image_offset, first_byte, copy_count);
 
-#ifdef DEBUG
         if (row == 0) {
           bytes_copied += copy_count;
         }
+#ifdef DEBUG
 
         // display_copied_bytes IS SET ABOVE IF BYTES IN BUFFER ARE DISPLAYED.
         if (display_copied_bytes)
@@ -885,22 +902,24 @@ vil_memory_chunk_sptr vil_nitf_image::read_single_band_data(
       }  // end for row < get_block_size_y()
     }  // end for block_col < max_block_y
 
-#ifdef DEBUG
-    last_image_col_num = (block_col * get_block_size_x()) - 1;
-    vcl_cout << "end for loop - block_row = " << block_row
-             << "  block_col = " << block_col
-             << "  start_block_y = " << start_block_y << vcl_endl
+    if (debug_level > 1) {
+        last_image_col_num = (block_col * get_block_size_x()) - 1;
+        vcl_cout << "end for loop - block_row = " << block_row
+                 << "  block_col = " << block_col
+                 << "  start_block_y = " << start_block_y << "\n"
+                 << "last_image_row_num = " << last_image_row_num
+                 << "  last_image_col_num = " << last_image_col_num << "\n"
+                 << "blocks_read = " << blocks_read << vcl_endl;
+    }
 
-             << "last_image_row_num = " << last_image_row_num
-             << "  last_image_col_num = " << last_image_col_num << vcl_endl
-
-             << "blocks_read = " << blocks_read << vcl_endl;
     if (bytes_copied != bytes_per_image_row) {
-      vcl_cout << "ERROR: bytes_copied = " << bytes_copied
+      vcl_cout << method_name << "ERROR: "
+               << "block_row = " << block_row
+               << "  block_col = " << block_col
+               << "  bytes_copied = " << bytes_copied
                << " != bytes_per_image_row = " << bytes_per_image_row
                << vcl_endl;
     }
-#endif
   }  // end for block_row < max_block_x
 
   vcl_cout << "##### " << method_name << "finish read loops\n";
@@ -932,11 +951,9 @@ vil_memory_chunk_sptr vil_nitf_image::read_single_band_data(
              << " bytes read = " << total_read_count << vcl_endl;
   }
 
-#if 1
-  display_as_hex(save_buf_1, DEFAULT_PIXELS_TO_DISPLAY, bytes_per_pixel,
-                 "first 8 bytes from last block");
-  display_as_hex(save_buf_2, DEFAULT_PIXELS_TO_DISPLAY, bytes_per_pixel,
-                 "first 8 bytes from last row of last block");
+#if DEBUG
+  const unsigned int DEFAULT_PIXELS_TO_DISPLAY = 8;
+
   unsigned char * offset = (unsigned char *) buffer->data()
                            + last_image_offset;
 //                         + buffer->size() - DEFAULT_PIXELS_TO_DISPLAY;
@@ -953,6 +970,7 @@ vil_memory_chunk_sptr vil_nitf_image::read_single_band_data(
   vcl_cout << "##### exit " << method_name << vcl_endl;
 
   return buffer;
+
 }  // end method read_single_band_data
 
 ///////////////////////////////////////////////////////////////////////
