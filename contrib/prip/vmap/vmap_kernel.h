@@ -13,7 +13,7 @@
 // \endverbatim
 
 #include <vcl_vector.h>
-#include "vmap_types.h"
+#include "vmap_types.h" // for vmap_face_index etc.
 #include "vbl_controlled_partition.h"
 
 //: For manipulating.
@@ -563,6 +563,7 @@ class vmap_permutation_kernel : public vmap_kernel<typename TPermutation::map_ty
   void union_of(element_pointer root, element_pointer j)
   {
     this->father_index()[representative(j)->sequence_index()]= this->father_index()[representative(root)->sequence_index()] ;
+    // TODO - check correctness of above line
   }
 
   //:
