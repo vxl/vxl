@@ -220,12 +220,14 @@ double vsrl_dynamic_program::execute()
   for (int i=0;i<num_row_;i++)
     for (int j=lower_search_range_[i];j<upper_search_range_[i];j++)
       compute_cost(i,j);
- /*for (int i=0;i<num_row_;i++)
- {
-    vcl_cout<<"\n";  
-     for (int j=lower_search_range_[i];j<upper_search_range_[i];j++)
-        vcl_cout<<cost_matrix_[i][j].cost<<" ";
- }*/
+#ifdef DEBUG
+  for (int i=0;i<num_row_;i++)
+  {
+    vcl_cout<<'\n';
+    for (int j=lower_search_range_[i];j<upper_search_range_[i];j++)
+      vcl_cout<<cost_matrix_[i][j].cost<<' ';
+  }
+#endif
   // we can now set the optimum assignment
 
   double cost= optimum_assignment();
@@ -486,7 +488,7 @@ void vsrl_dynamic_program::print_direct_cost(int i, int j)
 
     double direct_cost = tok1->cost(tok2);
 
-    vcl_cout << "Direct cost " << i << " -> " << j << " " << direct_cost <<'\n';
+    vcl_cout << "Direct cost " << i << " -> " << j << ' ' << direct_cost <<'\n';
   }
 }
 
@@ -498,7 +500,7 @@ void vsrl_dynamic_program::print_cost(int i, int j)
   assert(i>=0);
   assert(j>=0);
   if ((unsigned int)i < list1_.size() && (unsigned int)j< list2_.size())
-    vcl_cout << "cost "<< i <<" -> "<< j <<" "<<cost_matrix_[i][j].cost <<'\n';
+    vcl_cout << "cost "<< i <<" -> "<< j <<' '<<cost_matrix_[i][j].cost <<'\n';
 }
 
 void vsrl_dynamic_program::print_direct_costs(int i)
