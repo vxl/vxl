@@ -31,8 +31,6 @@ SOURCES += vidl_mpegcodec_helper.cxx
 SOURCES += vidl_yuv_2_rgb.cxx
 endif
 
-SOURCES += vidl_test.cxx
-
 MANPAGE_SOURCES += vidl_avicodec_sptr.h
 MANPAGE_SOURCES += vidl_clip_sptr.h
 MANPAGE_SOURCES += vidl_codec_sptr.h
@@ -53,7 +51,7 @@ SOURCES += vidl_avicodec.cxx
 endif # win32
 
 ifndef NOTEST
-SUBDIRS += examples
+SUBDIRS += tests examples
 endif
 
 ######################################
