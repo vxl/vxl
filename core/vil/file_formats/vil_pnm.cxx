@@ -18,6 +18,7 @@
 #include <vil/vil_property.h>
 #include <vil2/vil2_image_data.h>
 #include <vil2/vil2_image_view.h>
+#include <vil2/vil2_memory_chunk.h>
 
 #include <vxl_config.h>
 
@@ -274,26 +275,32 @@ vil2_image_view_base* vil2_pnm_image::get_view(
   unsigned x0, unsigned y0, unsigned plane0,
   unsigned nx, unsigned ny, unsigned nplanes) const
 {
+  bool* bb = 0;
   unsigned char* ib = 0;
   unsigned short* jb = 0;
   unsigned int* kb = 0;
-  
-  vil2_image_view_base * view =0;
 
-  if (bits_per_component_ <= 8)
+  vil2_memory_chunk_sptr buf;
+  
+  if (bits_per_component_ == 1)
   {
-    view = new vil2_image_view<unsigned char>(nx_, ny_, ncomponents_);
-    ib = static_cast<vil2_image_view<unsigned char>* >(view)->top_left_ptr();
+    buf = new vil2_memory_chunk(nx_ * ny_* ncomponents_ * sizeof(bool));
+    bb = (bool *) buf->data();
+  }
+  else if (bits_per_component_ <= 8)
+  {
+    buf = new vil2_memory_chunk(nx_ * ny_* ncomponents_ * sizeof(unsigned char));
+    ib = (unsigned char *) buf->data();
   }
   else if (bits_per_component_ <= 16)
   {
-    view = new vil2_image_view<unsigned short>(nx_, ny_, ncomponents_);
-    jb = static_cast<vil2_image_view<unsigned short>* >(view)->top_left_ptr();
+    buf = new vil2_memory_chunk(nx_ * ny_* ncomponents_ * sizeof(unsigned short));
+    jb = (unsigned short *) buf->data();
   }
   else
   {
-    view = new vil2_image_view<unsigned int>(nx_, ny_, ncomponents_);
-    kb = static_cast<vil2_image_view<unsigned int>* >(view)->top_left_ptr();
+    buf = new vil2_memory_chunk(nx_ * ny_* ncomponents_ * sizeof(unsigned int));
+    kb = (unsigned int *) buf->data();
   }
 
 
@@ -302,7 +309,6 @@ vil2_image_view_base* vil2_pnm_image::get_view(
   if (magic_ == 1) // ascii pbm
   {
     vcl_cerr << __FILE__ << ": ascii bitmap not implemented\n";
-    delete view;
     return 0;
   } else if (magic_ > 4) // pgm or ppm raw image
   {
@@ -314,17 +320,25 @@ vil2_image_view_base* vil2_pnm_image::get_view(
 
     for (unsigned y = 0; y < ny; ++y) {
       vs_->seek(byte_start + y * byte_width);
-      vs_->read(ib + y * byte_out_width, byte_out_width);
+      vs_->read((unsigned char *)buf->data() + y * byte_out_width, byte_out_width);
     }
     if ( bytes_per_sample==2 && VXL_LITTLE_ENDIAN ) {
-      ConvertMSBToHost( ib, nx*ny*ncomponents_ );
+      ConvertMSBToHost( (unsigned char *)buf->data(), nx*ny*ncomponents_ );
     } else if ( bytes_per_sample > 2 ) {
       vcl_cerr << "ERROR: pnm: reading rawbits format with > 16bit samples\n";
-      delete view;
       return 0;
     } 
+    if (bits_per_component_ <= 8)
+      return new vil2_image_view<unsigned char>(buf, ib, nx, ny, nplanes, nplanes, nx*nplanes, 1);
+    else if (bits_per_component_ <= 16)
+      return new vil2_image_view<unsigned short>(buf, jb, nx, ny, nplanes, nplanes, nx*nplanes, 1);
+    else
+      return new vil2_image_view<unsigned int>(buf, kb, nx, ny, nplanes, nplanes, nx*nplanes, 1);
+
   } else if (magic_ == 4) // pbm (bitmap) raw image
   {
+    if (nplanes != 1) return 0;
+
     unsigned byte_width = (nx_+7)/8;
     unsigned byte_out_width = (nx+7)/8;
 
@@ -332,18 +346,16 @@ vil2_image_view_base* vil2_pnm_image::get_view(
       vil_streampos byte_start = start_of_data_ + (y0+y) * byte_width + x0/8;
       vs_->seek(byte_start);
       unsigned char a; vs_->read(&a, 1L);
-      int s = x0&7; // = x0%8;
-      unsigned char b = 0; // output
-      int t = 0;
-      for (unsigned x = 0; x < nx; ++x) {
-        b |= ((a>>(7-s))&1)<<(7-t); // single bit; high bit = first
-        if (s >= 7) { vs_->read(&a, 1L); s = 0; }
-        else ++s;
-        if (t >= 7) { ib[y * byte_out_width + x/8] = b; b = 0; t = 0; }
-        else ++t;
+      for (unsigned x = 0; x < nx; ++x)
+      {
+        bb[y * nx + x] = (a & 0x80) != 0;
+        a <<= 1;
+        if (x%8 == 7)
+          vs_->read(&a, 1L);
       }
-      if (t) ib[y * byte_out_width + (nx-1)/8] = b;
     }
+    assert (buf->size() == nx*ny*sizeof(bool));
+    return new vil2_image_view<bool>(buf, bb, nx, ny, 1, 1, nx, nx*ny);
   }
   else // ascii (non-raw) image data
   {
@@ -353,23 +365,32 @@ vil2_image_view_base* vil2_pnm_image::get_view(
     for (unsigned t = 0; t < y0*nx_*ncomponents_; ++t) { int a; (*vs_) >> a; }
     for (unsigned y = 0; y < ny; ++y) {
       // 1. Skip to column x0
-      //
       for (unsigned t = 0; t < x0*ncomponents_; ++t) { int a; (*vs_) >> a; }
-      // 2. Read the data
-      //
-      if (bits_per_component_ <= 8)
-        for (unsigned x = 0; x < nx*ncomponents_; ++x) { int a; (*vs_) >> a; *(ib++)=a; }
-      else if (bits_per_component_ <= 16)
-        for (unsigned x = 0; x < nx*ncomponents_; ++x) { int a; (*vs_) >> a; *(jb++)=a; }
-      else
-        for (unsigned x = 0; x < nx*ncomponents_; ++x) { int a; (*vs_) >> a; *(kb++)=a; }
-      // 3. Skip to the next line
-      //
+      for (unsigned x = 0; x < nx; ++x) {
+      // 2. Skip to the starting component
+        for (unsigned t = 0; t < plane0; ++t) { int a; (*vs_) >> a; }
+        // 3. Read the data
+        if (bits_per_component_ <= 8)
+          for (unsigned p = 0; p < nplanes; ++p) { int a; (*vs_) >> a; *(ib++)=a; }
+        else if (bits_per_component_ <= 16)
+          for (unsigned p = 0; p < nplanes; ++p) { int a; (*vs_) >> a; *(jb++)=a; }
+        else
+          for (unsigned p = 0; p < nplanes; ++p) { int a; (*vs_) >> a; *(kb++)=a; }
+      // 4. Skip to the next column
+        for (unsigned t = 0; t < (ncomponents_-plane0-nplanes); ++t) { int a; (*vs_) >> a; }
+      }
+      // 5. Skip to the next line
       for (unsigned t = 0; t < (nx_-x0-nx)*ncomponents_; ++t) { int a; (*vs_) >> a; }
     }
+    if (bits_per_component_ <= 8)
+      return new vil2_image_view<unsigned char>(buf, (unsigned char*)buf->data(), nx, ny, nplanes, nplanes, nx*nplanes, 1);
+    else if (bits_per_component_ <= 16)
+      return new vil2_image_view<unsigned short>(buf, (unsigned short*)buf->data(), nx, ny, nplanes, nplanes, nx*nplanes, 1);
+    else
+      return new vil2_image_view<unsigned int>(buf, (unsigned int*)buf->data(), nx, ny, nplanes, nplanes, nx*nplanes, 1);
   }
 
-  return view;
+
 }
 
 
