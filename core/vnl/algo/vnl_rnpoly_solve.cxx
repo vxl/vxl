@@ -4,7 +4,7 @@
 #include <vcl_cmath.h>
 #ifdef DEBUG
 #include <vcl_cstdio.h> // for tempnam(), fopen()
-#include <vpl/vpl_cunistd.h>
+#include <vpl/vpl_unistd.h>
 #include <vcl_iostream.h>
 #endif
 
