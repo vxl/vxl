@@ -19,7 +19,7 @@ vnl_vector<U> vnl_convolve_cyclic_using_fft(vnl_vector<T1> const& v1, vnl_vector
   vnl_vector<C> w2(n, C(0)); for (unsigned i=0; i<n; ++i) w2[i]=v2[i];
 
   vnl_fft_1d<double> fft(n); fft.fwd_transform(w1); fft.fwd_transform(w2);
-  for (int i=0; i<n; ++i) w1[i] *= w2[i];
+  for (unsigned int i=0; i<n; ++i) w1[i] *= w2[i];
   fft.bwd_transform(w1);
 #ifdef DEBUG
   vcl_cout << w1 << vcl_endl;
@@ -73,7 +73,7 @@ template <class T1, class T2, class U>
 inline
 vnl_vector<U> vnl_convolve_using_fft(vnl_vector<T1> const& v1, vnl_vector<T2> const& v2, U*, int n)
 {
-  if (n < v1.size() + v2.size() - 1) n = v1.size() + v2.size() - 1;
+  if (n+1 < int(v1.size() + v2.size())) n = v1.size() + v2.size() - 1;
 
   // Make sure n has only prime factors 2, 3 and 5; if necessary, increase n.
   while (!has_only_primefactors_2_3_5(n)) ++n;

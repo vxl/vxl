@@ -34,7 +34,7 @@ bool vnl_symmetric_eigensystem_compute(vnl_matrix<double> const & A,
 {
   A.assert_finite();
 
-  int n = A.rows();
+  unsigned int n = A.rows();
 
 // The fortran code does not like it if V or D are
 // undersized. I expect they probably should not be
@@ -60,8 +60,8 @@ bool vnl_symmetric_eigensystem_compute(vnl_matrix<double> const & A,
 
   // Transpose-copy into V
   double *vptr = &Vvec[0];
-  for(int c = 0; c < n; ++c)
-    for(int r = 0; r < n; ++r)
+  for(unsigned int c = 0; c < n; ++c)
+    for(unsigned int r = 0; r < n; ++r)
       V(r,c) = *vptr++;
 
   return true;

@@ -78,8 +78,8 @@ T vnl_determinant(vnl_matrix<T> const &M, bool balance)
       for (int t=0; t<5; ++t) {
 #if 1
         // normalize rows.
-        for (int i=0; i<n; ++i) {
-          abs_t rn = tmp.get_row   (i).rms();
+        for (unsigned int i=0; i<n; ++i) {
+          abs_t rn = tmp.get_row(i).rms();
           if (rn > 0) {
             scalings *= rn;
             tmp.scale_row(i, abs_t(1)/rn);
@@ -88,7 +88,7 @@ T vnl_determinant(vnl_matrix<T> const &M, bool balance)
 #endif
 #if 1
         // normalize columns.
-        for (int i=0; i<n; ++i) {
+        for (unsigned int i=0; i<n; ++i) {
           abs_t rn = tmp.get_column(i).rms();
           if (rn > 0) {
             scalings *= rn;

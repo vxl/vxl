@@ -107,8 +107,8 @@ bool vnl_discrete_diff_sym(vnl_least_squares_function *lsf,
 
 void vnl_discrete_diff_test_lsf(vnl_least_squares_function *lsf, vnl_vector<double> const &x)
 {
-  int m = lsf->get_number_of_residuals();
-  int n = lsf->get_number_of_unknowns ();
+  unsigned int m = lsf->get_number_of_residuals();
+  unsigned int n = lsf->get_number_of_unknowns ();
   assert(x.size() == n);
   
   vnl_matrix<double> J1(m, n);
