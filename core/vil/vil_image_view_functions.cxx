@@ -9,6 +9,13 @@
 #include <vil2/vil2_image_data.h>
 #include <vil2/vil2_load.h>
 
+//: Explicit overload for unsigned char
+void vil2_print_value(vcl_ostream& os, const unsigned char& value)
+{
+  os.width(3);
+  os<<int(value);
+}
+
 //: Explicit overload of print for rgb
 void vil2_print_value(vcl_ostream& os, const vil_rgb<unsigned char>& value)
 {

@@ -22,6 +22,9 @@ vil2_image_view<vil_rgb<T> > vil2_view_as_rgb(const vil2_image_view<T>& plane_vi
 template<class T>
 void vil2_print_value(vcl_ostream& s, const T& value);
 
+//: Explicit overload for unsigned char
+void vil2_print_value(vcl_ostream& s, const unsigned char& value);
+
 //: Explicit overload of print for rgb
 void vil2_print_value(vcl_ostream& s, const vil_rgb<unsigned char>& value);
 

@@ -16,24 +16,24 @@ int main(int argc, char** argv)
   vil2_image_view<vil_byte> image(nx,ny,nplanes);
 
   // Slow fill
-  for (int i=0;i<nplanes;++i)
+  for (int p=0;p<nplanes;++p)
     for (int y=0;y<ny;++y)
       for (int x=0;x<nx;++x)
-        image(x,y,i) = vil_byte(x+10*y+100*i);
+        image(x,y,p) = vil_byte(x+10*y+100*p);
 
   vcl_cout<<"Slow fill image"<<vcl_endl;
   vil2_print_all(vcl_cout,image);
 
   // Fast fill
   vil_byte* plane = image.top_left_ptr();
-  for (unsigned int i=0;i<nplanes;++i,plane += image.planestep())
+  for (unsigned int p=0;p<nplanes;++p,plane += image.planestep())
   {
     vil_byte* row = plane;
     for (int y=0;y<ny;++y,row += image.ystep())
     {
-      vil_byte* p = row;
-      for (int x=0;x<nx;++x,p+=image.xstep())
-        *p = vil_byte(x+10*y+100*i);
+      vil_byte* pixel = row;
+      for (int x=0;x<nx;++x,pixel+=image.xstep())
+        *pixel = vil_byte(x+10*y+100*p);
     }
   }
 
