@@ -15,7 +15,8 @@
 
 #include "vil_nitf_extended_header.h"
 
-static char* CRLF = "\n";
+static int debug_level = 0 ;
+static const char* const CRLF = "\n";
 
 //====================================================================
 //: Copy constructor for vil_nitf_extended_header.
@@ -34,10 +35,11 @@ int vil_nitf_extended_header::Read(vil_stream* file)
 {
     static vcl_string method_name = "vil_nitf_extended_header::Read: ";
 
-    vcl_cout << "##### enter " << method_name << "XHDL = " << XHDL
-             << "  file position = " << file->tell()
-             << vcl_endl;
-
+    if (debug_level > 0) {
+        vcl_cout << "##### enter " << method_name << "XHDL = " << XHDL
+                 << "  file position = " << file->tell()
+                 << vcl_endl;
+    }
     if (!file || !file->ok()) {
       return STATUS_BAD;
     }
