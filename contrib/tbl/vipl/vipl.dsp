@@ -10,7 +10,7 @@
 
 # variables to REPLACE
 # 
-# /I "$(VXLROOT)/vcl" /I "$(VXLROOT)/vxl" /I "$(VXLROOT)/vcl" /I "$(VXLROOT)/vcl/config.win32-VC60" /I "$(VXLROOT)/vxl" /I "$(VXLROOT)/tbl"  == include path
+# /I "$(VXLROOT)/vcl" /I "$(VXLROOT)/vxl" /I "$(VXLROOT)/vcl" /I "$(VXLROOT)/vcl/config.win32-VC60" /I "$(VXLROOT)/mul" /I "$(VXLROOT)/tbl"  == include path
 #   -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE == compiler defines
 #  == override in output directory
 # vipl  == name of output library
@@ -53,7 +53,7 @@ RSC=rc.exe
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /D "WIN32" /D "NDEBUG" /D "_MBCS" /D "_LIB"  /FD /c
 # ADD CPP /nologo /D "NDEBUG" /D "WIN32" /D "_MBCS" /D "_LIB"  /FD /c
-# ADD CPP /I "$(VXLROOT)/vcl" /I "$(VXLROOT)/vxl" /I "$(VXLROOT)/vcl" /I "$(VXLROOT)/vcl/config.win32-VC60" /I "$(VXLROOT)/vxl" /I "$(VXLROOT)/tbl"    -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE /D "vipl_EXPORTS"
+# ADD CPP /I "$(VXLROOT)/vcl" /I "$(VXLROOT)/vxl" /I "$(VXLROOT)/vcl" /I "$(VXLROOT)/vcl/config.win32-VC60" /I "$(VXLROOT)/mul" /I "$(VXLROOT)/tbl"    -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE /D "vipl_EXPORTS"
 # ADD CPP /W3 /Zm1000 /GX /GR
 # ADD CPP /MD /O2
 # ADD BASE RSC /l 0x409 /d "NDEBUG"
@@ -79,7 +79,7 @@ LIB32=link.exe -lib
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /D "WIN32" /D "_DEBUG" /D "_MBCS" /D "_LIB"  /FD /c
 # ADD CPP /nologo /D "_DEBUG" /D "WIN32" /D "_MBCS" /D "_LIB"  /FD /GZ /c
-# ADD CPP /I "$(VXLROOT)/vcl" /I "$(VXLROOT)/vxl" /I "$(VXLROOT)/vcl" /I "$(VXLROOT)/vcl/config.win32-VC60" /I "$(VXLROOT)/vxl" /I "$(VXLROOT)/tbl"    -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE /D "vipl_EXPORTS"
+# ADD CPP /I "$(VXLROOT)/vcl" /I "$(VXLROOT)/vxl" /I "$(VXLROOT)/vcl" /I "$(VXLROOT)/vcl/config.win32-VC60" /I "$(VXLROOT)/mul" /I "$(VXLROOT)/tbl"    -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE /D "vipl_EXPORTS"
 # ADD CPP /W3 /Zm1000 /GX /GR
 # ADD CPP /MDd /Zi /Od /GZ
 # ADD BASE RSC /l 0x409 /d "_DEBUG"
@@ -486,6 +486,51 @@ SOURCE=.\vipl_with_vnl_matrix/Templates/vipl_median+vnl_matrix+uchar-.vnl_matrix
 # Begin Source File
 
 SOURCE=.\vipl_with_vnl_matrix/Templates/vipl_threshold+vnl_matrix+uchar-.vnl_matrix+uchar-.uchar.uchar-.cxx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vipl_with_mil/Templates/vipl_accessors_mil_image+float-.cxx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vipl_with_mil/Templates/vipl_accessors_mil_image+short-.cxx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vipl_with_mil/Templates/vipl_accessors_mil_image+uchar-.cxx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vipl_with_mil/Templates/vipl_filter_2d+mil_image_2d_of+float-.mil_image_2d_of+float-.float.float-.cxx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vipl_with_mil/Templates/vipl_filter_2d+mil_image_2d_of+short-.mil_image_2d_of+short-.short.short-.cxx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vipl_with_mil/Templates/vipl_filter_2d+mil_image_2d_of+uchar-.mil_image_2d_of+uchar-.uchar.uchar-.cxx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vipl_with_mil/Templates/vipl_gaussian_convolution+mil_image_2d_of+float-.mil_image_2d_of+float-.float.float-.cxx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vipl_with_mil/Templates/vipl_gaussian_convolution+mil_image_2d_of+short-.mil_image_2d_of+short-.short.short-.cxx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vipl_with_mil/Templates/vipl_gaussian_convolution+mil_image_2d_of+uchar-.mil_image_2d_of+uchar-.uchar.uchar-.cxx
 
 # End Source File
 # End Group
