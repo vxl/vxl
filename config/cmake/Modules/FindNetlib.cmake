@@ -7,7 +7,7 @@
 # via a module.
 
 SET( NETLIB_FOUND "YES" )
-SET( NETLIB_INCLUDE_DIR ${allvxl_SOURCE_DIR}/v3p/netlib )
+SET( NETLIB_INCLUDE_DIR ${vxl_SOURCE_DIR}/v3p/netlib )
 SET( NETLIB_LIBRARIES netlib )
 
 

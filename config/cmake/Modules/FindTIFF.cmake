@@ -32,12 +32,12 @@ ELSE(TIFF_FOUND)
   # exist.
   #
   
-  IF(EXISTS ${allvxl_SOURCE_DIR}/v3p/tiff/tiff.h)
+  IF(EXISTS ${vxl_SOURCE_DIR}/v3p/tiff/tiff.h)
 
     SET( TIFF_FOUND "YES" )
-    SET( TIFF_INCLUDE_DIR ${allvxl_SOURCE_DIR}/v3p/tiff)  
+    SET( TIFF_INCLUDE_DIR ${vxl_SOURCE_DIR}/v3p/tiff)  
     SET( TIFF_LIBRARIES tiff )
   
-  ENDIF(EXISTS ${allvxl_SOURCE_DIR}/v3p/tiff/tiff.h)
+  ENDIF(EXISTS ${vxl_SOURCE_DIR}/v3p/tiff/tiff.h)
   
 ENDIF(TIFF_FOUND)

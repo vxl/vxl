@@ -37,11 +37,11 @@ ELSE(PNG_FOUND)
   #
   
 
-    IF(EXISTS ${allvxl_SOURCE_DIR}/v3p/png/png.h)
+    IF(EXISTS ${vxl_SOURCE_DIR}/v3p/png/png.h)
 
       SET( PNG_FOUND "YES" )
       SET( PNG_LIBRARIES png)
-      SET( PNG_INCLUDE_DIR ${allvxl_SOURCE_DIR}/v3p/png ${ZLIB_INCLUDE_DIR} )
+      SET( PNG_INCLUDE_DIR ${vxl_SOURCE_DIR}/v3p/png ${ZLIB_INCLUDE_DIR} )
 
       IF (CYGWIN)
         IF(BUILD_SHARED_LIBS)
@@ -51,7 +51,7 @@ ELSE(PNG_FOUND)
         ENDIF(BUILD_SHARED_LIBS)
       ENDIF (CYGWIN)
 
-    ENDIF(EXISTS ${allvxl_SOURCE_DIR}/v3p/png/png.h)
+    ENDIF(EXISTS ${vxl_SOURCE_DIR}/v3p/png/png.h)
 
   ENDIF(ZLIB_FOUND)
 ENDIF(PNG_FOUND)

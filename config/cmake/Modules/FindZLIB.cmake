@@ -32,11 +32,11 @@ ELSE(ZLIB_FOUND)
   # exist.
   #
   
-  IF(EXISTS ${allvxl_SOURCE_DIR}/v3p/zlib/zlib.h)
+  IF(EXISTS ${vxl_SOURCE_DIR}/v3p/zlib/zlib.h)
 
     SET( ZLIB_FOUND "YES" )
-    SET( ZLIB_INCLUDE_DIR ${allvxl_SOURCE_DIR}/v3p/zlib)  
+    SET( ZLIB_INCLUDE_DIR ${vxl_SOURCE_DIR}/v3p/zlib)  
     SET( ZLIB_LIBRARIES zlib )
   
-  ENDIF(EXISTS ${allvxl_SOURCE_DIR}/v3p/zlib/zlib.h)
+  ENDIF(EXISTS ${vxl_SOURCE_DIR}/v3p/zlib/zlib.h)
 ENDIF(ZLIB_FOUND)

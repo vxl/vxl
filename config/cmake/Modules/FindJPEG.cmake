@@ -30,12 +30,12 @@ ELSE(JPEG_FOUND)
   # will not have the v3p jpeg library
   #
 
-  IF(EXISTS ${allvxl_SOURCE_DIR}/v3p/jpeg/jpeglib.h)
+  IF(EXISTS ${vxl_SOURCE_DIR}/v3p/jpeg/jpeglib.h)
 
     SET( JPEG_FOUND "YES" )
     SET( JPEG_LIBRARIES jpeg )  
-    SET( JPEG_INCLUDE_DIR ${allvxl_SOURCE_DIR}/v3p/jpeg)  
+    SET( JPEG_INCLUDE_DIR ${vxl_SOURCE_DIR}/v3p/jpeg)  
 	
-  ENDIF(EXISTS ${allvxl_SOURCE_DIR}/v3p/jpeg/jpeglib.h)
+  ENDIF(EXISTS ${vxl_SOURCE_DIR}/v3p/jpeg/jpeglib.h)
 
 ENDIF(JPEG_FOUND)
