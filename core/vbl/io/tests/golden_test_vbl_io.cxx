@@ -268,7 +268,7 @@ void golden_test_vbl_io(bool save_file)
 
   // Test Smart Pointer
   TEST ("vbl_smart_ptr: sp1_in == sp2_in", sp1_in == sp2_in, true);
-  TEST ("vbl_smart_ptr: sp1_in->get_references() == 2", sp1_in->get_references() ==2, true);
+  TEST ("vbl_smart_ptr: sp1_in->get_references() == 2", ((sp1_in) && (sp1_in->get_references() ==2)), true);
 
   return;
 }
