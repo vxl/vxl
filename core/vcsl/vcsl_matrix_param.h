@@ -1,10 +1,15 @@
-#ifndef vcsl_matrix_param_h
-#define vcsl_matrix_param_h
+#ifndef vcsl_matrix_param_h_
+#define vcsl_matrix_param_h_
+//:
+// \file
+// \brief Auxiliary class for vcsl_matrix
+// \author François BERTEL
 
 #include <vcsl/vcsl_matrix_param_sptr.h>
 #include <vbl/vbl_ref_count.h>
 #include <vcl_vector.h>
 
+//: Auxiliary class for vcsl_matrix
 class vcsl_matrix_param : public vbl_ref_count
 {
  public:
@@ -18,4 +23,4 @@ class vcsl_matrix_param : public vbl_ref_count
 
 typedef vcl_vector<vcsl_matrix_param_sptr> list_of_vcsl_matrix_param_sptr;
 
-#endif // vcsl_matrix_param_h
+#endif // vcsl_matrix_param_h_
