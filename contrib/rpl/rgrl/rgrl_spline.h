@@ -1,24 +1,24 @@
 #ifndef rgrl_spline_h_
 #define rgrl_spline_h_
 
-//: \file 
+//: \file
 //  \author Lee, Ying-Lin (Bess)
 //  \date   Sep 2003
-//  A class for dealing a uniform cubic B-spline up to 4D (a hypersurface in 4D).
+//  \brief A class for dealing a uniform cubic B-spline up to 4D (a hypersurface in 4D).
 
 #include "rgrl_spline_sptr.h"
 #include "rgrl_object.h"
 
+#include <vcl_iosfwd.h>
 #include <vnl/vnl_matrix.h>
 #include <vnl/vnl_vector.h>
 
-
-//: A tensor-product B-spline in 4D can be written in 
+//: A tensor-product B-spline in 4D can be written in
 //  \f[
 //      \mathbf{Q}_{ijk}(u,v,w) = \sum_{r=0}^{3} \sum_{s=0}^{3} \sum_{t=0}^{3}V_{i+r,j+s,k+t} b_r(u) b_s(v) b_t(w)
 //  \f]
-//  where \f$i=\ceil{x}-1\f$,\f$i=\ceil{y}-1\f$,\f$i=\ceil{z}-1\f$, 
-//  and \f$u=x-i\f$,\f$v=y-j\f$\f$w=z-k\f$ are local parameters ranging in $[0,1)$ 
+//  where \f$i=\ceil{x}-1\f$,\f$i=\ceil{y}-1\f$,\f$i=\ceil{z}-1\f$,
+//  and \f$u=x-i\f$,\f$v=y-j\f$\f$w=z-k\f$ are local parameters ranging in $[0,1)$
 //  and
 //  \f[
 //    b_{3}(u) = \frac{1}{6}u^3
@@ -34,33 +34,33 @@
 //  \f]
 //  or can be expressed in
 //  \f[
-//      \mathbf{Q}_(x,y,z)= \
+//      \mathbf{Q}_(x,y,z)=
 //      \sum_{i=-1}^{m+1} \sum_{j=-1}^{n+1}  \sum_{k=-1}^{l+1}V_{ijk} B_i(x) B_j(y) B_k(z)
 //  \f]
-// The control vertice \f$V_{0,0,0}\f$ locates at \f$(0,0,0)\f$.
-          
+// The control vertex \f$V_{0,0,0}\f$ is located at \f$(0,0,0)\f$.
+
 class rgrl_spline
   : public rgrl_object
 {
-public:
+ public:
   //: Constructor
   rgrl_spline( ) : rgrl_object() { }
   rgrl_spline( vnl_vector< unsigned > const& m );
   rgrl_spline( vnl_vector< unsigned > const& m, vnl_vector< double > const& c );
 
-//    rgrl_spline( vnl_vector<double> const& delta, 
+//    rgrl_spline( vnl_vector<double> const& delta,
 //                 vnl_vector<double> const& x0,
 //                 vnl_vector<double> const& x1 );
 //    rgrl_spline( vnl_vector<int> const& m,
-//                    vnl_vector<double> const& delta, 
+//                    vnl_vector<double> const& delta,
 //                    vnl_vector<double> const& p0);
-//    rgrl_spline( vnl_vector<double> const& c, 
-//                 vnl_vector<double> const& delta, 
+//    rgrl_spline( vnl_vector<double> const& c,
+//                 vnl_vector<double> const& delta,
 //                 vnl_vector<double> const& x0,
 //                 vnl_vector<double> const& x1 );
-//    rgrl_spline( vnl_vector<double> const& c, 
+//    rgrl_spline( vnl_vector<double> const& c,
 //                    vnl_vector<int> const& m,
-//                    vnl_vector<double> const& delta, 
+//                    vnl_vector<double> const& delta,
 //                    vnl_vector<double> const& p0 );
 
   //: Destructor.
@@ -71,7 +71,7 @@ public:
   vnl_vector< double > const& get_control_points() const { return c_; }
   vnl_vector< double > & get_control_points() { return c_; }
 
-  //: The spline value 
+  //: The spline value
   //
   //  \f[ f(\overlin{u},y,z) = \sum_{i=-1}^{m[0]_+1}
   //  \sum_{j=-1}^{m[1]_+1} \sum_{k=-1}^{m_[2]+1} V_{ijk} * B_i(x) *
@@ -79,11 +79,11 @@ public:
   double f_x( vnl_vector<double> const& x ) const;
   vnl_vector< double > jacobian( vnl_vector< double > const& x ) const;
 
-  //: The basis responses at \f$(x,y,z)\f$. 
+  //: The basis responses at \f$(x,y,z)\f$.
   //
   //  It returns a 1 by \f$(m_[0]+3)*(m_[1]+3)*(m_[2]+3)\f$ vector which contains
   //  [$B_{-1}(x)*B_{-1}(y)*B_{-1}(z)$,...,
-  //  $B_{m_[0]+1}(x)B_{m_[1]+1}(y)B_{m_[2]+1}(z)$], 
+  //  $B_{m_[0]+1}(x)B_{m_[1]+1}(y)B_{m_[2]+1}(z)$],
   //  in the same order as in c_
   void basis_response( vnl_vector<double> const& point, vnl_vector<double>& br ) const;
 
@@ -96,7 +96,7 @@ public:
 
   // for output
   friend vcl_ostream& operator<< (vcl_ostream& os, rgrl_spline const& spline );
-   
+
   // for input
   friend vcl_istream& operator>> (vcl_istream& is, rgrl_spline& spline );
 
@@ -110,7 +110,7 @@ public:
   // Defines type-related functions
   rgrl_type_macro( rgrl_spline, rgrl_object );
 
-private:
+ private:
 
   double element_1d_thin_plate( unsigned i, unsigned j ) const;
   double element_2d_thin_plate( unsigned i, unsigned j ) const;
@@ -121,16 +121,16 @@ private:
 
   // The control vertices indices are from -1 to \f$m_[i]+1\f$.
   // The total number of control vertices in each dimension is \f$m_[i]+3\f$
-  vnl_vector< unsigned > m_; 
+  vnl_vector< unsigned > m_;
 
   // The control points in the order of
   // $c_{-1,-1,-1}$,..., $c_{m_[0]+1,-1,-1}$
   // $c_{-1,0, -1}$,..., $c_{m_[0]+1,0,-1}$,..., $c_{m_[0]+1,m_[1]+1,-1}$
   // ... $c_{m_[0]+1, m_[1]+1, m_[2]+1}$
   // Gehua:
-  // In general The control point (i, j, k) is converted to 
+  // In general The control point (i, j, k) is converted to
   // (i+1) + (m_[0]+3)(j+1) + (m_[0]+3)(m_[1]+3)(k+1)
-  // i+1 is to shift the starting point from -1 to 0 
+  // i+1 is to shift the starting point from -1 to 0
   vnl_vector<double> c_;
 
 
@@ -140,9 +140,3 @@ private:
 };
 
 #endif
-
-
-
-
-
-
