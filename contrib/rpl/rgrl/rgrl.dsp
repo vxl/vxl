@@ -276,9 +276,6 @@ SOURCE=.\Templates/rgrl_feature_set_location+3-.cxx
 SOURCE=.\Templates/rgrl_feature_set_location_masked+2-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/rgrl_image_convert+byte-.cxx
-# End Source File
-# Begin Source File
 SOURCE=.\Templates/rgrl_set_of+rgrl_match_set_sptr-.cxx
 # End Source File
 # Begin Source File
@@ -616,12 +613,6 @@ SOURCE=.\rgrl_copyright.h
 # End Source File
 # Begin Source File
 SOURCE=.\rgrl_feature_set_sptr.h
-# End Source File
-# Begin Source File
-SOURCE=.\rgrl_image_convert.h
-# End Source File
-# Begin Source File
-SOURCE=.\rgrl_image_convert.txx
 # End Source File
 # Begin Source File
 SOURCE=.\rgrl_scale_estimator_sptr.h
