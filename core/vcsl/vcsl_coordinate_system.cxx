@@ -25,7 +25,7 @@ int vcsl_coordinate_system::dimensionnality(void) const
 //---------------------------------------------------------------------------
 bool vcsl_coordinate_system::valid_axis(int i) const
 {
-  return (i>=0)&&(i<axes_.size());
+  return (i>=0)&&(i<int(axes_.size()));
 }
 
 //---------------------------------------------------------------------------
