@@ -102,7 +102,7 @@ mbl_read_props_type mbl_read_props(vcl_istream &afs)
         {
           vcl_getline(afs, str1);
           vcl_cerr << "ERROR: mbl_read_props. Could not find colon ':'"
-                   <<"separator while reading line"
+                   << " separator while reading line "
                    << label << " " << str1 << '\n';
           return props;
         }
@@ -119,10 +119,11 @@ mbl_read_props_type mbl_read_props(vcl_istream &afs)
 
 
 //: merge two property sets.
-// \param first_overrides properties in "a" will override indentically
-// named properties in "b"
+// \param first_overrides
+// properties in "a" will override identically named properties in "b"
 mbl_read_props_type mbl_read_props_merge(const mbl_read_props_type& a,
-  const mbl_read_props_type& b, bool first_overrides/*=true*/)
+                                         const mbl_read_props_type& b,
+                                         bool first_overrides/*=true*/)
 {
   mbl_read_props_type output;
 

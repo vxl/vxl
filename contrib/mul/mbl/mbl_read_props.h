@@ -1,6 +1,5 @@
 #ifndef mbl_read_props_h
 #define mbl_read_props_h
-
 //:
 // \file
 // \author Ian Scott
@@ -30,9 +29,10 @@ mbl_read_props_type mbl_read_props(vcl_istream &afs);
 void mbl_read_props_print(vcl_ostream &afs, mbl_read_props_type props);
 
 //: merge two property sets.
-// \param first_overrides properties in "first" will override indentically
-// named properties in "second"
+// \param first_overrides
+// properties in "first" will override identically named properties in "second"
 mbl_read_props_type mbl_read_props_merge(const mbl_read_props_type& first,
-  const mbl_read_props_type& second, bool first_overrides=true);
+                                         const mbl_read_props_type& second,
+                                         bool first_overrides=true);
 
 #endif // mbl_read_props_h
