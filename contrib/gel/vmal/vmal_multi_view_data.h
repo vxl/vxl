@@ -31,8 +31,8 @@ public:
   void new_track();
   void close_track();
 
-  bool get_first_track(vcl_map<int,T> & track);
-  bool get_next_track(vcl_map<int,T> & track);
+  bool get_first_track(vcl_map<int,T,vcl_less<int> > & track);
+  bool get_next_track(vcl_map<int,T,vcl_less<int> > & track);
 
   void set_params(int nbviews);
   void set(int view_num,int matchnum,T);

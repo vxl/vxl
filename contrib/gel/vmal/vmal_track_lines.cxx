@@ -471,13 +471,13 @@ void vmal_track_lines::sort_lines(vmal_multi_view_data_edge_sptr matches,
                   vmal_multi_view_data_edge_sptr sorted_matches)
 {
   bool still_track;
-  vcl_map<int,vtol_edge_2d_sptr> track;
+  vcl_map<int,vtol_edge_2d_sptr,vcl_less<int> > track;
   still_track=matches->get_first_track(track);
   while(still_track)
   {
     sorted_matches->new_track();
-    vcl_map<int,vtol_edge_2d_sptr>::iterator iter1;
-    vcl_map<int,vtol_edge_2d_sptr>::iterator iter2=track.begin();
+    vcl_map<int,vtol_edge_2d_sptr,vcl_less<int> >::iterator iter1;
+    vcl_map<int,vtol_edge_2d_sptr,vcl_less<int> >::iterator iter2=track.begin();
     iter2++;
     for(iter1=track.begin();iter2!=track.end();iter1++)
     {

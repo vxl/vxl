@@ -74,14 +74,14 @@ void vmal_multi_view_data<T>::close_track()
 
 
 template <class T>
-bool vmal_multi_view_data<T>::get_first_track(vcl_map<int,T> & track)
+bool vmal_multi_view_data<T>::get_first_track(vcl_map<int,T,vcl_less<int> > & track)
 {
   _matchnum=0;
   return get_next_track(track);
 }
 
 template <class T>
-bool vmal_multi_view_data<T>::get_next_track(vcl_map<int,T> & track)
+bool vmal_multi_view_data<T>::get_next_track(vcl_map<int,T,vcl_less<int> > & track)
 {
   if(MVM.size()>_matchnum)
   {
@@ -92,7 +92,7 @@ bool vmal_multi_view_data<T>::get_next_track(vcl_map<int,T> & track)
       if (value !=NViewMatch::nomatch)
       {
         T tmp_edge=all_pts[value];
-        track.insert(vcl_map<int,T>::value_type(i,tmp_edge));
+        track.insert(vcl_map<int,T,vcl_less<int> >::value_type(i,tmp_edge));
       }
     }
     _matchnum++;
