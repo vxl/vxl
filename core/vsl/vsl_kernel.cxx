@@ -12,10 +12,10 @@
 //   _kernel[i] = exp( (i-_width)^2/sigma^2 )/det
 void vsl_kernel_DOG(float _sigma, float *_kernel, int _k_size, int _width) {
   float s2 = 2.0*_sigma*_sigma;
-  float det = _sigma*sqrt(2.0 * 3.1415926);
+  float det = _sigma*vcl_sqrt(2.0 * 3.1415926);
   
   for (int i=0,x=-_width; i<_k_size; ++i,++x) 
-    _kernel[i] = exp(-x*x/s2)/det;
+    _kernel[i] = vcl_exp(-x*x/s2)/det;
 }
 
 // Construct one half of a Gaussian convolution kernel.
@@ -33,7 +33,7 @@ void vsl_kernel_DOG(float *_kernel, float *_sub_area, int &_k_size,
     // 11 points evenly spaced on the interval [i-0.5, i+0.5].
     _kernel[i] = 0.0;
     for (float x=i-0.5; x<=i+0.5; x+=0.1) 
-      _kernel[i] += exp(-x*x/s2);
+      _kernel[i] += vcl_exp(-x*x/s2);
     _kernel[i] /= 11.0;
 
     if (i>0 && _kernel[i] < _gauss_tail)

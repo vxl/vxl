@@ -20,7 +20,7 @@ void vsl_ortho_regress::add_points(float const *x, float const *y, unsigned n) {
 }
 
 double vsl_ortho_regress::rms_cost(double a, double b, double c) const {
-  return sqrt( cost(a, b, c) / S1 );
+  return vcl_sqrt( cost(a, b, c) / S1 );
 }
 
 //--------------------------------------------------------------------------------

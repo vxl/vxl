@@ -18,7 +18,7 @@ int vsl_canny_nms(int _xsize, int _ysize,
   for (int y=_ysize-2; y>0; --y) {
     for (int x=_xsize-2; x>0; --x) {
       float del;
-      if (fabs(_dx[x][y])>fabs(_dy[x][y])) {
+      if (vcl_fabs(_dx[x][y])>vcl_fabs(_dy[x][y])) {
 	if    (_grad[x][y]<=_grad[x+1][y  ] || _grad[x][y]<_grad[x-1][y  ])
 	  continue;
       }
@@ -27,7 +27,7 @@ int vsl_canny_nms(int _xsize, int _ysize,
       
       // we have an edge
       float thick = _grad[x][y];
-      float theta = k*atan2(_dx[x][y],_dy[x][y]);
+      float theta = k*vcl_atan2(_dx[x][y],_dy[x][y]);
       // theta not to be used to define _theta[x][y]. Only to define orient.
       int orient = ( (int) (theta+202.5) ) / 45;
 
@@ -88,7 +88,7 @@ int vsl_canny_nms(int _xsize, int _ysize,
       //  _theta[x][y] now stores the normal to the edge tangent. 
       //  Before it stored the tangent to the edge.
       //  _theta[x][y] = theta;  // This how it was defined previously
-      _theta[x][y] = k*atan2(-_dy[x][y],_dx[x][y]);
+      _theta[x][y] = k*vcl_atan2(-_dy[x][y],_dx[x][y]);
 
       _thick[x][y] = thick;
       _dx[x][y] = newx;

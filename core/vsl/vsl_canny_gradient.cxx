@@ -59,7 +59,7 @@ void vsl_canny_gradient(int _xsize, int _ysize,
   //  Magnitude for entire image
   for (int y=0; y<_ysize; ++y) 
     for (int x=0; x<_xsize; ++x) 
-      _grad[x][y] = (float)sqrt(_dx[x][y]*_dx[x][y] + _dy[x][y]*_dy[x][y]);
+      _grad[x][y] = (float)vcl_sqrt(_dx[x][y]*_dx[x][y] + _dy[x][y]*_dy[x][y]);
 }
 
 // taken from vsl_canny_rothwell.cxx
@@ -73,7 +73,7 @@ void vsl_canny_gradient_central(int _xsize, int _ysize,
     for (int y=1; y<_ysize-1; ++y) {
       _dx[x][y] = _smooth[x+1][y] - _smooth[x-1][y];
       _dy[x][y] = _smooth[x][y+1] - _smooth[x][y-1];
-      _grad[x][y] = (float)sqrt(_dx[x][y]*_dx[x][y] + _dy[x][y]*_dy[x][y]);
+      _grad[x][y] = (float)vcl_sqrt(_dx[x][y]*_dx[x][y] + _dy[x][y]*_dy[x][y]);
     }
   }
 }

@@ -224,7 +224,9 @@ void vsl_canny_base::Cluster_centre_of_gravity(int * const *jx, int * const *jy,
   float dist = -1; // an invalid number
   for (it i=xc.begin(),j=yc.begin(); i!=xc.end() && j!=yc.end(); ++i, ++j) {
     //xc.reset(),yc.reset();xc.next(),yc.next();)
-    float newdist=hypot(x- *i/*xc.value()*/,y- *j/*yc.value()*/);
+    //float newdist = hypot(x- *i/*xc.value()*/,y- *j/*yc.value()*/);
+    float newdist; 
+    { float dx = x- *i/*xc.value()*/, dy = y- *j/*yc.value()*/; newdist = vcl_sqrt(dx*dx + dy*dy); }
     if ( dist<0 || newdist < dist ) {
       x0 = *i;//xc.value();
       y0 = *j;//yc.value();
