@@ -169,7 +169,8 @@ vil2_image_view<vil2_byte> filtered_image = vil2_flip_transpose(tmp_image2);
 * Some simple algorithms for manipulation images are included in the algo sub-directory.
 * Note that the argument order is typically of the form vil2_algo_f(src_im,dest_im,params)
 * Examples include
-* - vil2_algo_convolve_1d - Convolve in 1D - all manner of edge effects catered for
+* - vil2_algo_convolve_1d - Convolve with 1D filter - all manner of edge effects catered for
+* - vil2_algo_convolve_2d - Convolve with 2D filter (no edge effects catered for yet!)
 * - vil2_algo_exp_filter_1d - Apply exponential filter along one axis (fast recursive method)
 * - vil2_algo_sobel_3x3 - to generate X/Y gradient images using 3x3 Sobel operators
 * - vil2_algo_gauss_reduce - smooth and sub-sample to produce half sized image
