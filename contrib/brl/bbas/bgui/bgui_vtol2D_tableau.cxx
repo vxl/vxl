@@ -50,37 +50,16 @@ void bgui_vtol2D_tableau::init()
   highlight_ = true;
   //set highlight display style parameters
   highlight_style_ = new bgui_style(0.0f, 0.0f, 1.0f, 5.0f, 5.0f);
+
   //define default soview styles
-  //these could be overridden by later tablau drawing commands
-  //such as set_foreground.  Probably though we shouldn't use those
-  //since normal users wouldn't want to change the color of standard
-  //topology items.
-  bgui_style_sptr vsol_point_style =
-    new bgui_style(0.0f, 1.0f, 0.0f, 5.0f, 0.0f);
-  bgui_style_sptr digital_curve_style =
-    new bgui_style(0.8f, 0.0f, 0.8f, 3.0f, 0.0f);
-  bgui_style_sptr vertex_style = new bgui_style(1.0f, 0.0f, 0.0f, 3.0f, 0.0f);
-  bgui_style_sptr edge_style = new bgui_style(0.0f, 1.0f, 0.0f, 0.0f, 3.0f);
-  bgui_style_sptr edge_group_style = new bgui_style(0.0f, 1.0f, 0.0f, 0.0f, 3.0f);
-  bgui_style_sptr face_style = new bgui_style(0.0f, 1.0f, 0.0f, 0.0f, 3.0f);
-  //put them into the map
-  bgui_vtol_soview2D_point p;
-  style_map_[p.type_name()]=vsol_point_style;
-
-  bgui_vtol_soview2D_digital_curve dc;
-  style_map_[dc.type_name()]=digital_curve_style;
-
-  bgui_vtol_soview2D_vertex sv;
-  style_map_[sv.type_name()]=vertex_style;
-
-  bgui_vtol_soview2D_edge se;
-  style_map_[se.type_name()]=edge_style;
-
-  bgui_vtol_soview2D_edge_group sg;
-  style_map_[sg.type_name()]=edge_group_style;
-
-  bgui_vtol_soview2D_face sf;
-  style_map_[sf.type_name()]=face_style;
+  //these can be overridden by later set_*_syle commands prior to drawing.
+  //
+   this->set_vsol_point_2d_style(0.0f, 1.0f, 0.0f, 5.0f);
+   this->set_digital_curve_style(0.8f, 0.0f, 0.8f, 3.0f);
+   this->set_vertex_style(1.0f, 0.0f, 0.0f, 3.0f);
+   this->set_edge_style(0.0f, 1.0f, 0.0f, 3.0f);
+   this->set_edge_group_style(0.0f, 1.0f, 0.0f, 3.0f);
+   this->set_face_style(0.0f, 1.0f, 0.0f, 3.0f);
 }
 //:
 // Provide roaming highlighting for soviews in the tableau.
@@ -105,7 +84,7 @@ bool bgui_vtol2D_tableau::handle(vgui_event const &e)
         }
       //get the soview that is closest to the mouse
       vgui_soview2D* high_so = (vgui_soview2D*)get_highlighted_soview();
-      if (high_so)
+      if (high_so&&high_so->get_style())
         {
           //replace the old soview with the currently closest view
           int id = high_so->get_id();
@@ -334,7 +313,7 @@ void bgui_vtol2D_tableau::clear_all()
   highlight_ = false;//in case of event interrupts during the clear
   obj_map_.clear();
   vgui_easy2D_tableau::clear();
-  //  this->init();
+  old_id_ = 0;
   highlight_ = temp;
   this->post_redraw();
 }
@@ -371,6 +350,15 @@ void bgui_vtol2D_tableau::set_edge_style(const float r, const float g,
   bgui_style_sptr sty = new bgui_style(r, g, b, 0.0f, line_width);
   bgui_vtol_soview2D_edge se;
   style_map_[se.type_name()]=sty;
+}
+
+void bgui_vtol2D_tableau::set_edge_group_style(const float r, const float g,
+                                               const float b, 
+                                               const float line_width)
+{
+  bgui_style_sptr sty = new bgui_style(r, g, b, 0.0f, line_width);
+  bgui_vtol_soview2D_edge_group sg;
+  style_map_[sg.type_name()]=sty;
 }
 
 void bgui_vtol2D_tableau::set_face_style(const float r, const float g, 

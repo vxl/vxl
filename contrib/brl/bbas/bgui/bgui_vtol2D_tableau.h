@@ -1,19 +1,26 @@
 // This is brl/bbas/bgui/bgui_vtol2D_tableau.h
 #ifndef bgui_vtol2D_tableau_h_
 #define bgui_vtol2D_tableau_h_
-//--------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------
 //:
 // \file
 // \brief A child tableau of vgui_easy2D_tableau that knows how to display vtol objects.
 // \author
 //   J.L. Mundy
+//   
+//   Default styles are defined for each geometry and topology object soview.
+//   Users can change the default style by using the set_*_style commands, 
+//   e.g. set_edge_style(0.0, 0.5, 0.5, 3) will define the style for each
+//   new edge added to the display.  This default is the style that the 
+//   edge appearance will resume after being highlighted.
 //
 // \verbatim
 //  Modifications:
 //   J.L. Mundy November 28, 2002    Initial version.
-//   J.L.Mundy December 16, 2002    Added map between soviews and vtol objects
+//   J.L. Mundy December 16, 2002    Added map between soviews and vtol objects
+//   J.L. Mundy March 22, 2003  Added set style commands
 // \endverbatim
-//--------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------
 #include <vcl_vector.h>
 #include <vcl_map.h>
 #include <vgui/vgui_style.h>
@@ -99,6 +106,8 @@ class bgui_vtol2D_tableau : public vgui_easy2D_tableau
                                const float point_radius);
   void set_edge_style(const float r, const float g, const float b,
                       const float line_width);
+  void set_edge_group_style(const float r, const float g, const float b,
+                            const float line_width);
   void set_face_style(const float r, const float g, const float b,
                       const float line_width);
  protected:
