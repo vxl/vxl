@@ -91,4 +91,7 @@ vcl_ostream& operator<<(vcl_ostream& os,const mil_image& b);
  //: Stream output operator for class pointer
 vcl_ostream& operator<<(vcl_ostream& os,const mil_image* b);
 
+//: Print class to os
+void vsl_print_summary(vcl_ostream& os, const mil_image& im);
+
 #endif

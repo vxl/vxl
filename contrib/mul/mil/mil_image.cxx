@@ -79,6 +79,12 @@ vcl_ostream& operator<<(vcl_ostream& os,const mil_image* b)
         return os << "No mil_image defined.";
 }
 
+//: Print class to os
+void vsl_print_summary(vcl_ostream& os, const mil_image& im)
+{
+  im.print_summary(os);
+}
+
 //=======================================================================
 
 void vsl_add_to_binary_loader(const mil_image& b)
