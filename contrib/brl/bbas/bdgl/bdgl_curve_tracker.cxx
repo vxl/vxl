@@ -8,25 +8,19 @@
 #include <vcl_vector.h>
 #include <vcl_map.h>
 #include <vcl_utility.h>
+#include <vcl_cmath.h>
+#include <vcl_iostream.h>
+#include <vnl/vnl_math.h>
 #include <bdgl/bdgl_curve_tracker.h>
-
 #include <bdgl/bdgl_curve_matcher.h>
 #include <bdgl/bdgl_curve_tracker_primitive.h>
 #include <bdgl/bdgl_curve_region.h>
-#include <vcl_cmath.h>
-#include <vnl/vnl_math.h>
-#include <vcl_iostream.h>
 #include <vdgl/vdgl_digital_curve.h>
 #include <vdgl/vdgl_interpolator.h>
-
-#include <vdgl/vdgl_interpolator_linear.h>
 #include <vdgl/vdgl_edgel_chain.h>
 
+#if 0 // This whole file is commented out !!
 
-#include <vsol/vsol_curve_2d.h>
-#include <vsol/vsol_line_2d.h>
-
-/*
 //-----------------------------------------------------------------------------
 void bdgl_curve_tracker::track()
 {
@@ -49,7 +43,6 @@ void bdgl_curve_tracker::track_frame(unsigned int frame)
 
   //declaring two arrays
 //int * first_id, * second_id;
-
 
 #ifdef DEBUG
   vcl_cout<<"-- tracking frame "<<frame<<" --\n";
@@ -88,10 +81,6 @@ void bdgl_curve_tracker::track_frame(unsigned int frame)
 #endif // 0
 
     // compute regions
-<<<<<<< bdgl_curve_tracker.cxx
-
-=======
->>>>>>> 1.19
 #ifdef DEBUG
     vcl_cout<<"-> compute regions\n";
 #endif
@@ -105,106 +94,24 @@ void bdgl_curve_tracker::track_frame(unsigned int frame)
 //    second_id[j]=0;
     }
 
+#ifdef DEBUG
     // take every primitive and find the best related curve
     for (unsigned int i=0;i<output_curve_[frame-1].size();i++)
     {
-<<<<<<< bdgl_curve_tracker.cxx
-      best_id = -1;
-      best_val = 1e6;
-     
-	  cost_map.clear();
-	  first_id[i]=0;
-	  //no_of_candidates=0;
-      // look for curves in the neighborhood
-      for (unsigned int j=0;j<input_curve_[frame].size();j++){
-        // test for neighborhood
-        dist = vcl_sqrt( (regions[j].x()- output_curve_[frame-1][i].region_.x())
-                        *(regions[j].x()- output_curve_[frame-1][i].region_.x())
-                       + (regions[j].y()- output_curve_[frame-1][i].region_.y())
-                        *(regions[j].y()- output_curve_[frame-1][i].region_.y()) );
-		
-        if (dist < regions[j].r() + output_curve_[frame-1][i].region_.r() ){
-	  
-          matcher.init(output_curve_[frame-1][i], input_curve_[frame][j]);
-		  matcher.match();    
-		  cost_map[j]=matcher.score();
-          // no handling of multiple curve matching : to do
-          if (matcher.score() < best_val){
-            best_id = j;
-            best_val = matcher.score();
-          }
-        }
-      }
-	 cost_table.push_back(cost_map);
-	}
-  filtered_cost_table.clear();
-  filtered_cost_table=filter_top_ranks(cost_table);
-  
-  cost_table.clear();
-
- //running dp match on filtered results
-
- map_of_T.clear();
- store_matches.clear();
- 
-
- for (unsigned int i=0;i<filtered_cost_table.size();i++)
-    {
-	  first_id[i]=0;
-	  cost_map.clear();
-      for (iter=filtered_cost_table[i].begin();iter!=filtered_cost_table[i].end();iter++){
- 	
-          matcher.init(output_curve_[frame-1][i], input_curve_[frame][(*iter).first]);
-	      matcher.match_DP();
-		  temp.first=i;
-		  temp.second=(*iter).first;
-//		  map_of_T[temp].push_back(matcher.Tx_);
-//		  map_of_T[temp].push_back(matcher.Ty_);
-//		  map_of_T[temp].push_back(matcher.Rtheta_);
-          cost_map[(*iter).first]=matcher.score();
-	  }
-	  
-	 cost_table.push_back(cost_map);
-	}
-
- // to output top 5 ranks
- filtered_cost_table.clear();
- filtered_cost_table=filter_top_ranks(cost_table);
-
- for (unsigned int i=3;i<4;i++)
-    {
-	  first_id[i]=0;
-	  cost_map.clear();
-      for (iter=filtered_cost_table[i].begin();iter!=filtered_cost_table[i].end();iter++){
- 	
-		  primitive.init(output_curve_[frame-1][i].get_id(), input_curve_[frame][(*iter).first]);
-		  primitive.prev_num_ = i;
-          primitive.next_num_ = -1;
-	      temp_output_curve_.insert(temp_output_curve_.end(), primitive); 
-	  }
-	}
-=======
 //    int best_id = -1;
 //    double best_val = 1e6;
-#ifdef DEBUG
       vcl_cout<<'.';
-#endif
     }
+#endif
   }
 }
->>>>>>> 1.19
 
 
-<<<<<<< bdgl_curve_tracker.cxx
- 
-  
-=======
 vcl_vector<vcl_map<int,double> > bdgl_curve_tracker::filter_top_ranks(vcl_vector<vcl_map<int,double> > &cost_table)
 {
   vcl_vector<vcl_map<int,double> > top_ordered_curves;
   vcl_map<int,double> temp_list;
   vcl_map<int,double>::iterator iter;
->>>>>>> 1.19
 
   int min_cost_second_id=0;
   for (unsigned int i=0; i<cost_table.size(); ++i)
@@ -224,213 +131,8 @@ vcl_vector<vcl_map<int,double> > bdgl_curve_tracker::filter_top_ranks(vcl_vector
       cost_table[i].erase(min_cost_second_id);
     }
 
-<<<<<<< bdgl_curve_tracker.cxx
-    output_curve_.insert(output_curve_.end(), primitive_list);
-
-	delete(first_id);
-	delete(second_id);
-
-	segment_curves(frame);
-		
- }
-  
-  return;
-}
-
-void bdgl_curve_tracker::segment_curves(int frame)
-{
-	vcl_map<int,int>::iterator iter1;
-	vcl_map<int,int>::iterator iter2;
-	vcl_vector<vcl_vector<int> >::iterator it_aspects1;
-    vcl_vector<vcl_vector<int> >::iterator it_aspects2;
-	int no_of_iterations=0;
-	
-	double tx1;
-	double tx2;
-	double ty1;
-	double ty2;
-	double Rtheta1;
-	double Rtheta2;
-
-	double dist;
-	double lambda=10;
-
-	vcl_map<vcl_pair<int,int>,double > segment;// pair of curve numbers in frame n-1;
-	vcl_pair<int,int > temp;
-	vcl_map<vcl_pair<int,int>,double >::iterator it;
-	segment.clear();
-	vcl_ostringstream o;
-	o<<frame;
-	
-	vcl_string temp_str=o.str();
-	temp_str="file"+temp_str+".txt";
-    //vcl_ofstream of(temp_str.c_str());
-		for(iter1=store_matches.begin();iter1!=store_matches.end();iter1++)
-		{
-		 vcl_pair<int,int> temp1((*iter1).first,(*iter1).second);
-		 tx1=map_of_T[temp1][0];
-		 ty1=map_of_T[temp1][1];
-		 Rtheta1=map_of_T[temp1][2];
-		
-		 for (iter2=store_matches.begin();iter2!=store_matches.end();iter2++)
-			{
-			vcl_pair<int,int> temp2((*iter2).first,(*iter2).second);
-			tx2=map_of_T[temp2][0];
-			ty2=map_of_T[temp2][1];
-			Rtheta2=map_of_T[temp2][2];
-	
-			dist=vcl_sqrt((tx1-tx2)*(tx1-tx2)+(ty1-ty2)*(ty1-ty2));//+lambda*(Rtheta1-Rtheta2)*(Rtheta1-Rtheta2));
-			temp.first=temp1.first;
-			temp.second=temp2.first;
-			segment[temp]=dist;
-			
-			vcl_cout<<dist<<"\t";
-			}
-		}
-
-
-		vcl_map<vcl_pair<int,int>,double > top5ranks;
-	
-		for(iter1=store_matches.begin();iter1!=store_matches.end();iter1++)
-		{
-		 vcl_pair<int,int> temp1((*iter1).first,(*iter1).second);
-		 
-			for (iter2=store_matches.begin();iter2!=store_matches.end();iter2++)
-			{
-			 vcl_pair<int,int> temp2((*iter2).first,(*iter2).second);
-			  
-			 temp.first=temp1.first;
-			 temp.second=temp2.first;
-			 
-			 segment[temp]=dist;
-			 vcl_cout<<dist<<"\t";
-			}
-
-		}
-
-	
-		vcl_pair<int,int> min_pair_pair;
-		int first,second;
-
-		vcl_cout<<"\n the size of aspects is "<<aspects.size();
-
-		// initialize the clusters
-		vcl_vector<vcl_pair<vcl_vector<int>,vcl_pair<double,double > > > clusters;
-		vcl_vector<vcl_pair<vcl_vector<int>,vcl_pair<double,double > > >::iterator ite;
-		for(iter1=store_matches.begin();iter1!=store_matches.end();iter1++)
-		{
-			vcl_pair<int,int> match_pair((*iter1).first,(*iter1).second);
-			vcl_pair<double,double> tr_pair(map_of_T[match_pair][0],map_of_T[match_pair][1]);
-			vcl_pair<vcl_vector<int>,vcl_pair<double,double> >temp;
-
-			temp.first.push_back((*iter1).second);
-			temp.second=tr_pair;
-
-			clusters.push_back(temp);
-		}
-		vcl_cout<<"\n the initial size is "<<clusters.size();
-		while (no_of_iterations<6)
-		{
-		double min=1e6;
-		for(int i=0;i<clusters.size();i++)
-		{
-			for(int j=i+1;j<clusters.size();j++)
-			{
-				//compute the cost
-				tx1=clusters[i].second.first;
-				ty1=clusters[i].second.second;
-
-				tx2=clusters[j].second.first;
-				ty2=clusters[j].second.second;
-
-				//choose the minimum
-				dist=vcl_sqrt((tx1-tx2)*(tx1-tx2)+(ty1-ty2)*(ty1-ty2));
-				
-				if(min>dist)
-				{
-					min=dist;
-					temp.first=i;
-					temp.second=j;
-				}
-			}
-		}
-
-		int i=temp.first;
-		int j=temp.second;
-		//merge_clusters
-
-		if(clusters[i].first.size()>clusters[j].first.size())
-		{
-			
-			
-			clusters[i].second.first= (clusters[i].second.first*clusters[i].first.size()+ clusters[j].second.first*clusters[j].first.size())/clusters[i].first.size();
-			clusters[i].second.second=(clusters[i].second.second*clusters[i].first.size()+ clusters[j].second.second*clusters[j].first.size())/clusters[i].first.size();
-			for(int k=0;k<clusters[j].first.size();k++)
-			{
-				clusters[i].first.push_back(clusters[j].first[k]);
-			}
-			clusters[i].second.first=clusters[i].second.first/clusters[i].first.size();
-			clusters[i].second.second=clusters[i].second.second/clusters[i].first.size();
-			ite=clusters.begin();
-			ite+=j;
-			//(*ite)=clusters[j];
-			clusters.erase(ite);
-		}
-		else
-		{
-			
-			//vcl_cout<<"\n the tx is "<<clusters[j].second.first<<"\t";
-			clusters[j].second.first= (clusters[j].second.first*clusters[j].first.size()+ clusters[i].second.first*clusters[i].first.size());
-			clusters[j].second.second=(clusters[j].second.second*clusters[j].first.size()+ clusters[i].second.second*clusters[i].first.size());
-			for(int k=0;k<clusters[i].first.size();k++)
-			{
-				clusters[j].first.push_back(clusters[i].first[k]);
-			}
-			clusters[j].second.first=clusters[j].second.first/clusters[j].first.size();
-			clusters[j].second.second=clusters[j].second.second/clusters[j].first.size();
-			//vcl_cout<<"\t"<<clusters[j].second.first;
-			ite=clusters.begin();
-			ite+=i;
-		    clusters.erase(ite);
-		}
-		//update the cluster list
-
-		no_of_iterations++;
-		}
-
-		for(int i=0;i<clusters.size();i++)
-		{
-			for(int j=0;j<clusters[i].first.size();j++)
-			{
-				vcl_cout<<clusters[i].first[j]<<"\t";
-			}
-			vcl_cout<<"\n";
-		}
-		vcl_cout<<"\n the size is  "<<clusters.size();
-
-
-	for (unsigned int i=0;i<get_output_size_at(frame);i++){
-    //vcl_cout<<".";
-    
-//	if(output_curve_[frame][i].tx_prev_>2 && output_curve_[frame][i].tx_prev_ <13)
-	{
-	vdgl_interpolator_sptr  intp = new vdgl_interpolator_linear( get_output_curve_at(frame,i) );
-    vdgl_digital_curve_sptr dc = new vdgl_digital_curve(intp);
-    group_spat_objs_.push_back( dc->cast_to_spatial_object_2d() );
-    group_spat_objs_[group_spat_objs_.size()-1]->set_tag_id(1);
-	}
-=======
     top_ordered_curves.push_back(temp_list);
->>>>>>> 1.19
   }
-<<<<<<< bdgl_curve_tracker.cxx
-
-	//	group_curves
-}
-
-
-=======
->>>>>>> 1.19
 
   return top_ordered_curves;
 }
@@ -449,10 +151,10 @@ bdgl_tracking_feature::bdgl_tracking_feature(vdgl_digital_curve_sptr & edge)
 
 int bdgl_tracking_feature::add_child(vdgl_digital_curve_sptr  c)
 {
-  //for (int i=0;i<child_.size
   child_.push_back(c);
   return 1;
 }
+
 int bdgl_tracking_feature::add_parent(vdgl_digital_curve_sptr p)
 {
   parent_.push_back(p);
@@ -498,7 +200,6 @@ void bdgl_curve_match_tracker::track_match_frame(unsigned int frame)
   vcl_vector<vdgl_digital_curve_sptr> * prev_curves;
   vcl_vector<bdgl_tracking_feature> init_features;
 
-
   //vcl_cout<<"-- tracking frame "<<frame<<" --\n";
 
   if (untracked_curve_.size()<frame) return;
@@ -541,7 +242,7 @@ void bdgl_curve_match_tracker::track_match_frame(unsigned int frame)
           bdgl_curve_description desc2(tracked_curve_[frame-1][j].get_member_edge()->get_interpolator()->get_edgel_chain());
 
           double coarse_cost=coarse_match(desc1,desc2);
-          //tracked_curve_[frame][j].add_child(vdgl_digital_curve_sptr candidate_curve,coarse_cost)
+          //tracked_curve_[frame][j].add_child(vdgl_digital_curve_sptr candidate_curve,coarse_cost);
           vcl_cout<<"\n the lengths are "<< desc1.curvature_<<'\t'<<desc2.curvature_<<'\t'<<dist;
         }
       }
@@ -616,7 +317,7 @@ void bdgl_curve_match_tracker::track_match_frame(unsigned int frame)
       min_cost_first_id=-1;
       min_cost_second_id=-1;
 
-      for (int i=0;i<cost_table.size();i++)
+      for (unsigned int i=0; i<cost_table.size(); ++i)
         if (first_id[i]==0)
           for (iter=cost_table[i].begin();iter!=cost_table[i].end();iter++)
             if (second_id[(*iter).first]==0)
@@ -705,4 +406,4 @@ double bdgl_curve_match_tracker::coarse_match(bdgl_curve_description desc1,bdgl_
 }
 
 #endif // 0
-*/
+#endif // 0
