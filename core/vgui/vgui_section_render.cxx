@@ -48,6 +48,7 @@ bool vgui_section_render(void const *pixels,
   // 0 0 * *
   // 0 0 0 *
   // with the diagonal entries non-zero. If not of this form, return false.
+  //
   double T[4][4];
   for (unsigned i=0; i<4; ++i) {
     for (unsigned j=0; j<4; ++j) {

@@ -19,834 +19,368 @@
 //  the_same_day fsm
 //               Imposed my rigid ways on Marko's changes.
 //               Fixes for SolarisGL.
+//  05-AUG-2003  Amitha Perera
+//               Added support for rendering vil_image_views, and cleaned up
+//               the macros for selecting the pixel types and doing the data
+//               conversion.
 // \endverbatim
 
 #include "vgui_section_buffer.h"
 
 #include <vcl_cassert.h>
-#include <vcl_cstring.h> // memmove()
 #include <vcl_iostream.h>
-#include <vcl_vector.h>
 
 #include <vil1/vil1_image.h>
-#include <vil1/vil1_image_as.h>
 #include <vil1/vil1_pixel.h>
 
-#include <vgui/vgui_macro.h>
-#include <vgui/vgui_pixel.h>
-#include <vgui/vgui_cache_wizard.h>
-#include <vgui/vgui_section_render.h>
-#include <vgui/internals/vgui_accelerate.h>
+#include <vil/vil_image_view.h>
+#include <vil/vil_pixel_format.h>
+
+#include "vgui_macro.h"
+#include "vgui_pixel.h"
+#include "vgui_section_render.h"
+
+#include "internals/vgui_gl_selection_macros.h"
+#include "internals/vgui_accelerate.h"
 
 static bool debug = false;
 
-//: return the smallest power of two, 2^k, such that n <= 2^k
-static unsigned next_power_of_two(unsigned n) {
-  unsigned k=1;
-  while (k < n)
-    k *= 2;
-  return k;
-}
-
-//------------------------------------------------------------------------------
-
-//: constructor. determine size of memory block to allocate. initialize the_rasters.
-vgui_section_buffer::vgui_section_buffer(int x_, int y_,
-                                         unsigned w_, unsigned h_,
-                                         GLenum format_,
-                                         GLenum type_,
-                                         bool alloc_as_texture)
-  : format(format_), type(type_)
-  , x(x_), y(y_)
-  , w(w_), h(h_)
-  //
-  , the_pixels(0)
-  , is_texture(alloc_as_texture)
-  , the_rasters(0)
-  , section_ok(true) // 'false' breaks vgui_section_buffer_of<T>
-  //
-  , tList(0)
+namespace
 {
-  assert(x_>=0 && y_>=0);
-  assert(w>0 && h>0);
+  // These two helper functions are used in the apply() methods. See
+  // the comments in apply(vil_image_view_base).
 
-  texture_size = 256;
-  if (alloc_as_texture) {
-    allocw = next_power_of_two(w);
-    alloch = next_power_of_two(h);
+  // Converts the section of \a in marked by (x,y)-(x+w-1,y+h-1) into
+  // the output GL buffer \a out.
+  //
+  // This handles multi-plane images with scalar-valued pixels.
+  //
+  // This is a helper routine for vgui_section_buffer::apply()
+  //
+  template<typename InT, typename OutT>
+  bool
+  convert_buffer( vil_image_view<InT> const& in,
+                  unsigned x, unsigned y, unsigned w, unsigned h,
+                  OutT* out, vcl_ptrdiff_t hstep )
+  {
+    const unsigned ni = in.ni();
+    const unsigned nj = in.nj();
+
+    assert( x+w <= ni && y+h <= nj );
+
+    switch( in.nplanes() ) {
+      case 1:
+      {
+        for ( unsigned j=0; j < h; ++j )
+          for ( unsigned i=0; i < w; ++i )
+            vgui_pixel_convert( in(i+x,j+y), *(out+i+j*hstep) );
+        return true;
+      }
+      case 3:
+      {
+        for ( unsigned j=0; j < h; ++j )
+          for ( unsigned i=0; i < w; ++i )
+            vgui_pixel_convert( in(i+x,j+y,0), in(i+x,j+y,1), in(i+x,j+y,2), *(out+i+j*hstep) );
+        return true;
+      }
+      case 4:
+      {
+        for ( unsigned j=0; j < h; ++j )
+          for ( unsigned i=0; i < w; ++i )
+            vgui_pixel_convert( in(i+x,j+y,0), in(i+x,j+y,1), in(i+x,j+y,2), in(i+x,j+y,3), *(out+i+j*hstep) );
+        return true;
+      }
+      default:
+        return false;
+    } // end case
   }
-  else {
-    allocw = w;
-    alloch = h;
+
+  // Given the input image type, determine the output image type (GL
+  // pixel type) and call convert_buffer() to do the actual conversion
+  //
+  // Used in the vgui_section_buffer::apply().
+  //
+  template<typename InT>
+  bool
+  convert_image( vil_image_view<InT> const& in,
+                 unsigned x, unsigned y, unsigned w, unsigned h,
+                 void* out, vcl_ptrdiff_t hstep,
+                 GLenum format, GLenum type )
+  {
+    bool result = false;
+
+#define Code( BufferType ) \
+      result = convert_buffer( in, x, y, w, h, (BufferType*)out, hstep );
+    ConditionListBegin;
+    ConditionListBody( format, type );
+    ConditionListFail {
+      // shouldn't fail here. If we don't know this format and type, the
+      // constructor would've failed.
+      assert( false );
+    }
+#undef Code
+
+    return result;
   }
+} // end anonymous namespace
+
+
+
+// ==============================================================================
+//                                                            VGUI SECTION BUFFER
+// ==============================================================================
+
+
+// ---------------------------------------------------------------------------
+//                                                                 constructor
+
+vgui_section_buffer::
+vgui_section_buffer( unsigned in_x, unsigned in_y,
+                     unsigned in_w, unsigned in_h,
+                     GLenum in_format,
+                     GLenum in_type )
+  : format_( in_format ),
+    type_( in_type ),
+    x_( in_x ),
+    y_( in_y ),
+    w_( in_w ),
+    h_( in_h ),
+    allocw_( w_ ),
+    alloch_( h_ ),
+    buffer_( 0 )
+{
+  assert( w_ > 0 && h_ > 0 );
 
   // It doesn't seem to make any sense to specify only one of the 'format' and
   // 'type' parameters. Until we decide if it makes sense, it's not allowed.
-  if      (format == GL_NONE && type == GL_NONE)
-    vgui_accelerate::instance()->vgui_choose_cache_format(&format, &type);
-  else if (format != GL_NONE && type != GL_NONE)
+  if      ( format_ == GL_NONE && type_ == GL_NONE ) 
+    vgui_accelerate::instance()->vgui_choose_cache_format( &format_, &type_ );
+  else if ( format_ != GL_NONE && type_ != GL_NONE )
     { } // ok
   else
-    assert(false);
+    assert( false );
 
-  // NB: GLbyte, GLshort and GLint are *guaranteed* to be 1,2 and 4 bytes (8 bits
-  // each), even if the native short, int are not 2 and 4 bytes.
-  unsigned components = num_components();
-  the_rasters = new void * [alloch];
-  switch (type) {
-#define fsm_alloc_buffer(GLtype) \
-{ GLtype *ptr = new GLtype[components * allocw * alloch]; the_pixels = ptr; \
-  for (unsigned int i=0; i<h; ++i) \
-    the_rasters[i] = ptr + i*allocw*components; /* alignment ? */ \
+  // make sure allocw_ and alloch_ have been initialized.
+  assert( allocw_*alloch_ >= w_*h_ );
+
+  // To add a new format, you need to:
+  // - create a new pixel type in vgui_pixel.h. Make sure the size of
+  //   that pixel type is the same as that of the corresponding GL type.
+  // - add the format type to
+  //   internals/vgui_gl_selection_macros.h. Make sure to only
+  //   conditionally include your type unless you are certain that all
+  //   OpenGL implementations will support that type.
+
+  // This will generate code for every GL pixel type we know about.
+#define Code( BufferType ) \
+      buffer_ = new BufferType [ allocw_*alloch_ ];
+
+  ConditionListBegin;
+  ConditionListBody( format_, type_ );
+  ConditionListFail {
+    vcl_cerr << __FILE__ << ": " << __LINE__ << ": unknown GL format ("
+             << format_ << ") and type (" << type_ << ").\n"
+             << "You can probably easily add support here.\n";
+    assert( false );
+  }
+
+#undef Code
 }
 
-  case GL_UNSIGNED_BYTE:
-  case GL_BYTE:
-    fsm_alloc_buffer(GLbyte);
-    break;
 
-#ifdef GL_UNSIGNED_SHORT_5_6_5
-  case GL_UNSIGNED_SHORT_5_6_5:
-#endif
-#ifdef GL_UNSIGNED_SHORT_5_5_5_1
-  case GL_UNSIGNED_SHORT_5_5_5_1:
-#endif
-  case GL_UNSIGNED_SHORT:
-  case GL_SHORT:
-    fsm_alloc_buffer(GLshort);
-    break;
+// ---------------------------------------------------------------------------
+//                                                                  destructor
 
-  case GL_UNSIGNED_INT:
-  case GL_INT:
-    fsm_alloc_buffer(GLint);
-    break;
+vgui_section_buffer::
+~vgui_section_buffer()
+{
+  // We need to cast back to the correct type before we delete to make
+  // sure the correct things happen. Since the data types are POD, it
+  // doesn't really matter, because no desctructors need to be
+  // called. However, it's always good to do it correctly.
+  //
+#define Code( BufferType ) \
+      delete[] static_cast<BufferType*>( buffer_ );
 
-  case GL_FLOAT:
-    fsm_alloc_buffer(GLfloat);
-    break;
-
-  case GL_BITMAP: // what to do here?
-  default:
-    assert(0); // :(
-    break;
+  ConditionListBegin;
+  ConditionListBody( format_, type_ );
+  ConditionListFail {
+    assert( false );
   }
-#undef fsm_alloc_buffer
+
+#undef Code
 }
 
-//: destructor. casts pixel pointer and calls operator delete [] on it
-vgui_section_buffer::~vgui_section_buffer() {
-  assert(the_rasters!=0);
-  delete [] the_rasters; the_rasters=0;
 
-  assert(the_pixels!=0);
-  switch (type) {
-#define fsm_dealloc_buffer(GLtype) { delete [] static_cast<GLtype*>(the_pixels); }
-  case GL_UNSIGNED_BYTE:
-  case GL_BYTE:
-    fsm_dealloc_buffer(GLbyte);
-    break;
+// ---------------------------------------------------------------------------
+//                                                      apply (vil image view)
 
-#ifdef GL_UNSIGNED_SHORT_5_6_5
-  case GL_UNSIGNED_SHORT_5_6_5:
-#endif
-#ifdef GL_UNSIGNED_SHORT_5_5_5_1
-  case GL_UNSIGNED_SHORT_5_5_5_1:
-#endif
-  case GL_UNSIGNED_SHORT:
-  case GL_SHORT:
-    fsm_dealloc_buffer(GLshort);
-    break;
+void
+vgui_section_buffer::
+apply( vil_image_view_base const& image_in )
+{
+  // In order to display the image, we need to convert the pixels from
+  // the input image format to the OpenGL buffer format (given by
+  // format_ and type_). So, there are two "run-time types" that we
+  // need to handle: the input image pixel type, and the OpenGL buffer
+  // pixel type. This function determines the first, and based on
+  // that, calls the appropriate convert_image template instance. That
+  // function will figure out the current OpenGL pixel type and call
+  // convert_buffer to actually convert the pixels.
 
-  case GL_UNSIGNED_INT:
-  case GL_INT:
-    fsm_dealloc_buffer(GLint);
-    break;
+#define DoCase( T )                                                          \
+      case T:                                                                \
+      {                                                                      \
+        typedef vil_pixel_format_type_of<T>::type Type;                      \
+        vil_image_view<Type> img( image_in );                                \
+        assert( img );                                                       \
+        conversion_okay = convert_image( img, x_, y_, w_, h_,                \
+                                         buffer_, allocw_, format_, type_ ); \
+        break;                                                               \
+      }
 
-  case GL_FLOAT:
-    fsm_dealloc_buffer(GLfloat);
-    break;
+  bool conversion_okay = false;
+  vil_pixel_format component_format =
+          vil_pixel_format_component_format( image_in.pixel_format() );
 
-  case GL_BITMAP:
-  default:
-    assert(0); // :(
-    break;
-  }
-#undef fsm_dealloc_buffer
-  the_pixels = 0;
-
-  if (tList) {
-    glDeleteTextures(countw*counth, tList);
-    delete [] tList;
-    tList = 0;
-  }
-}
-
-unsigned vgui_section_buffer::num_components() const {
-  switch (format) {
-    // not sure about these three yet :
-    //case GL_COLOR_INDEX:
-    //case GL_STENCIL_INDEX:
-    //case GL_DEPTH_COMPONENT:
-  case GL_RED:
-  case GL_GREEN:
-  case GL_BLUE:
-  case GL_ALPHA:
-  case GL_LUMINANCE:
-  case GL_LUMINANCE_ALPHA:
-#ifdef GL_UNSIGNED_SHORT_5_6_5
-  case GL_UNSIGNED_SHORT_5_6_5: // urgh!
-#endif
-#ifdef GL_UNSIGNED_SHORT_5_5_5_1
-  case GL_UNSIGNED_SHORT_5_5_5_1: // urgh!
-#endif
-    return 1;
-
-  case GL_RGB:
-  case GL_BGR:
-    return 3;
-
-  case GL_RGBA:
-#ifdef GL_BGRA
-  case GL_BGRA:
-#endif
-#if defined(GL_EXT_abgr) || defined(GL_ABGR_EXT)
-  case GL_ABGR_EXT:
-#endif
-    return 4;
-  default:
-    assert(false); //  :(
-    return 0;
-  }
-}
-//------------------------------------------------------------------------------
-//
-// pixel format conversions
-// [The funky do-while construct is used to allow a semicolon after each macro call.]
-
-// 'pix' is the pixel type supplied by the image.
-// 'wh'  is a string describing the pixel type.
-// uses: 'section_ok', 'image', 'data', 'x', 'y', 'w', 'h', 'allocw', 'alloch'
-#define fsm_macro_begin(pix, wh) \
-pix *data = new pix[ w*h ]; /* note: this buffer is w-by-h, not allocw-by-alloch */ \
-section_ok = image.get_section( data, x,y, w,h ); \
-char const *what = wh; \
-if (false) do { } while (false)
-
-// 'fmt' is the GLenum format passed to glDrawPixels()
-// 'typ' is the GLenum type passed to glDrawPixels()
-// 'sto' is the pixel type to store the section as. it must agree with 'fmt' and 'typ'.
-// uses: 'what', 'data', 'the_pixels', 'w', 'h'
-#define fsm_macro_magic(fmt, typ, sto) \
-else if (format==(fmt) && type==(typ)) do { \
-  if (debug) \
-    vcl_cerr << __FILE__ ": converting " << what << " image to " #fmt "," #typ " format\n"; \
-  if (!the_pixels) \
-    the_pixels = new sto[allocw*alloch]; \
-  if (w != allocw) /* have to convert each raster separately in this case */ \
-    for (unsigned i=0; i<h; ++i) \
-      vgui_pixel_convert_span(data + w*i, static_cast<sto *>(the_rasters[i]), w); \
-  else /* otherwise, it's more efficient to do it all in one go */ \
-    vgui_pixel_convert_span(data, static_cast<sto*>(the_pixels), w*h); \
-} while (false)
-
-// you *must* call this -- to deallocate the temp buffer.
-#define fsm_macro_end \
-else { /* not really necessary */ } \
-delete [] data; \
-assert(section_ok)
-
-void vgui_section_buffer::apply(vil1_image const& image_in) {
-  // FIXME: the calls to fsm_macro_magic() are identical for each image pixel type.
-  // They could be coalesced to reduce code maintenance.
-  vil1_image image = image_in;
-  vil1_pixel_format_t pixel_format = vil1_pixel_format(image);
-
-  // Convert non-handled formats to ones we can handle.
-  // e.g. uint32 -> float
-  if (pixel_format == VIL1_UINT32 || pixel_format == VIL1_UINT16) {
-    image  = vil1_image_as_float(image_in);
-    pixel_format = vil1_pixel_format(image);
-  }
-  if (pixel_format == VIL1_RGB_UINT16) {
-    image  = vil1_image_as_rgb_float(image_in);
-    pixel_format = vil1_pixel_format(image);
-  }
-
-  // 8bit greyscale
-  if (pixel_format == VIL1_BYTE) {
-    fsm_macro_begin(GLubyte, "8 bit greyscale");
-    fsm_macro_magic(GL_RGB,      GL_UNSIGNED_BYTE,        vgui_pixel_rgb888);
-    fsm_macro_magic(GL_BGR,      GL_UNSIGNED_BYTE,        vgui_pixel_bgr888);
-    fsm_macro_magic(GL_RGBA,     GL_UNSIGNED_BYTE,        vgui_pixel_rgba8888);
-#if defined(GL_UNSIGNED_SHORT_5_6_5)
-    fsm_macro_magic(GL_RGB,      GL_UNSIGNED_SHORT_5_6_5, vgui_pixel_rgb565);
-#endif
-#if defined(GL_UNSIGNED_SHORT_5_5_5_1)
-    fsm_macro_magic(GL_RGB,      GL_UNSIGNED_SHORT_5_5_5_1, vgui_pixel_bgra5551);
-#endif
-#if defined(GL_BGRA)
-    fsm_macro_magic(GL_BGRA,     GL_UNSIGNED_BYTE,        vgui_pixel_bgra8888);
-#endif
-#if defined(GL_EXT_abgr) || defined(GL_ABGR_EXT)
-    fsm_macro_magic(GL_ABGR_EXT, GL_UNSIGNED_BYTE,        vgui_pixel_abgr8888);
-#endif
-    fsm_macro_end;
-  }
-
-  // 24bit rgb
-  else if (pixel_format == VIL1_RGB_BYTE) {
-    fsm_macro_begin(vgui_pixel_rgb888, "24 bit RGB");
-    fsm_macro_magic(GL_RGB,      GL_UNSIGNED_BYTE,        vgui_pixel_rgb888);
-    fsm_macro_magic(GL_BGR,      GL_UNSIGNED_BYTE,        vgui_pixel_bgr888);
-    fsm_macro_magic(GL_RGBA,     GL_UNSIGNED_BYTE,        vgui_pixel_rgba8888);
-#if defined(GL_UNSIGNED_SHORT_5_6_5)
-    fsm_macro_magic(GL_RGB,      GL_UNSIGNED_SHORT_5_6_5, vgui_pixel_rgb565);
-#endif
-#if defined(GL_UNSIGNED_SHORT_5_5_5_1)
-    fsm_macro_magic(GL_RGB,      GL_UNSIGNED_SHORT_5_5_5_1, vgui_pixel_bgra5551);
-#endif
-#if defined(GL_BGRA)
-    fsm_macro_magic(GL_BGRA,     GL_UNSIGNED_BYTE,        vgui_pixel_bgra8888);
-#endif
-#if defined(GL_EXT_abgr) || defined(GL_ABGR_EXT)
-    fsm_macro_magic(GL_ABGR_EXT, GL_UNSIGNED_BYTE,        vgui_pixel_abgr8888);
-#endif
-    fsm_macro_end;
-  }
-
-  // float rgb
-  else if (pixel_format == VIL1_RGB_FLOAT) {
-    fsm_macro_begin(vgui_pixel_rgbfloat, "float RGB");
-    fsm_macro_magic(GL_RGB,      GL_UNSIGNED_BYTE,        vgui_pixel_rgb888);
-    fsm_macro_magic(GL_BGR,      GL_UNSIGNED_BYTE,        vgui_pixel_bgr888);
-    fsm_macro_magic(GL_RGBA,     GL_UNSIGNED_BYTE,        vgui_pixel_rgba8888);
-#if defined(GL_UNSIGNED_SHORT_5_6_5)
-    fsm_macro_magic(GL_RGB,      GL_UNSIGNED_SHORT_5_6_5, vgui_pixel_rgb565);
-#endif
-#if defined(GL_UNSIGNED_SHORT_5_5_5_1)
-    fsm_macro_magic(GL_RGB,      GL_UNSIGNED_SHORT_5_5_5_1, vgui_pixel_bgra5551);
-#endif
-#if defined(GL_BGRA)
-    fsm_macro_magic(GL_BGRA,     GL_UNSIGNED_BYTE,        vgui_pixel_bgra8888);
-#endif
-#if defined(GL_EXT_abgr) || defined(GL_ABGR_EXT)
-    fsm_macro_magic(GL_ABGR_EXT, GL_UNSIGNED_BYTE,        vgui_pixel_abgr8888);
-#endif
-    fsm_macro_end;
-  }
-
-  // 32bit rgba
-  else if (pixel_format == VIL1_RGBA_BYTE) {
-    fsm_macro_begin(vgui_pixel_rgba8888, "32 bit RGBA");
-    fsm_macro_magic(GL_RGB,      GL_UNSIGNED_BYTE,        vgui_pixel_rgb888);
-    fsm_macro_magic(GL_BGR,      GL_UNSIGNED_BYTE,        vgui_pixel_bgr888);
-    fsm_macro_magic(GL_RGBA,     GL_UNSIGNED_BYTE,        vgui_pixel_rgba8888);
-#if defined(GL_UNSIGNED_SHORT_5_6_5)
-    fsm_macro_magic(GL_RGB,      GL_UNSIGNED_SHORT_5_6_5, vgui_pixel_rgb565);
-#endif
-#if defined(GL_UNSIGNED_SHORT_5_5_5_1)
-    fsm_macro_magic(GL_RGB,      GL_UNSIGNED_SHORT_5_5_5_1, vgui_pixel_bgra5551);
-#endif
-#if defined(GL_BGRA)
-    fsm_macro_magic(GL_BGRA,     GL_UNSIGNED_BYTE,        vgui_pixel_bgra8888);
-#endif
-#if defined(GL_EXT_abgr) || defined(GL_ABGR_EXT)
-    fsm_macro_magic(GL_ABGR_EXT, GL_UNSIGNED_BYTE,        vgui_pixel_abgr8888);
-#endif
-    fsm_macro_end;
-  }
-
-  // 32bit float
-  else if (pixel_format == VIL1_FLOAT) {
-    fsm_macro_begin(float, "32 bit float");
-    fsm_macro_magic(GL_RGB,      GL_UNSIGNED_BYTE,        vgui_pixel_rgb888);
-    fsm_macro_magic(GL_BGR,      GL_UNSIGNED_BYTE,        vgui_pixel_bgr888);
-    fsm_macro_magic(GL_RGBA,     GL_UNSIGNED_BYTE,        vgui_pixel_rgba8888);
-#if defined(GL_UNSIGNED_SHORT_5_6_5)
-    fsm_macro_magic(GL_RGB,      GL_UNSIGNED_SHORT_5_6_5, vgui_pixel_rgb565);
-#endif
-#if defined(GL_UNSIGNED_SHORT_5_5_5_1)
-    fsm_macro_magic(GL_RGB,      GL_UNSIGNED_SHORT_5_5_5_1, vgui_pixel_bgra5551);
-#endif
-#if defined(GL_BGRA)
-    fsm_macro_magic(GL_BGRA,     GL_UNSIGNED_BYTE,        vgui_pixel_bgra8888);
-#endif
-#if defined(GL_EXT_abgr) || defined(GL_ABGR_EXT)
-    fsm_macro_magic(GL_ABGR_EXT, GL_UNSIGNED_BYTE,        vgui_pixel_abgr8888);
-#endif
-    fsm_macro_end;
-  }
-
-  // IEEE double
-  else if (pixel_format == VIL1_DOUBLE) {
-    fsm_macro_begin(double, "64 bit double");
-    fsm_macro_magic(GL_RGB,      GL_UNSIGNED_BYTE,        vgui_pixel_rgb888);
-    fsm_macro_magic(GL_BGR,      GL_UNSIGNED_BYTE,        vgui_pixel_bgr888);
-    fsm_macro_magic(GL_RGBA,     GL_UNSIGNED_BYTE,        vgui_pixel_rgba8888);
-#if defined(GL_UNSIGNED_SHORT_5_6_5)
-    fsm_macro_magic(GL_RGB,      GL_UNSIGNED_SHORT_5_6_5, vgui_pixel_rgb565);
-#endif
-#if defined(GL_UNSIGNED_SHORT_5_5_5_1)
-    fsm_macro_magic(GL_RGB,      GL_UNSIGNED_SHORT_5_5_5_1, vgui_pixel_bgra5551);
-#endif
-#if defined(GL_BGRA)
-    fsm_macro_magic(GL_BGRA,     GL_UNSIGNED_BYTE,        vgui_pixel_bgra8888);
-#endif
-#if defined(GL_EXT_abgr) || defined(GL_ABGR_EXT)
-    fsm_macro_magic(GL_ABGR_EXT, GL_UNSIGNED_BYTE,        vgui_pixel_abgr8888);
-#endif
-    fsm_macro_end;
-  }
-
-  // dunno.
-  else
+  switch( component_format ) {
+    DoCase( VIL_PIXEL_FORMAT_UINT_32 )
+    DoCase( VIL_PIXEL_FORMAT_INT_32 )
+    DoCase( VIL_PIXEL_FORMAT_UINT_16 )
+    DoCase( VIL_PIXEL_FORMAT_INT_16 )
+    DoCase( VIL_PIXEL_FORMAT_BYTE )
+    DoCase( VIL_PIXEL_FORMAT_SBYTE )
+    DoCase( VIL_PIXEL_FORMAT_FLOAT )
+    DoCase( VIL_PIXEL_FORMAT_DOUBLE )
+    default:
     {
-      vcl_cerr << "pixel_format == " << vil1_print(pixel_format) << " which is unknown...\n";
-      assert(false);
+      vcl_cerr << __FILE__ << ":" << __LINE__
+               << ": can't handle image pixel format "
+               << component_format << "\n";
     }
+  }
+
+#undef DoCase
+
+  if( !conversion_okay ) {
+    vcl_cerr << __FILE__ << ":" << __LINE__ << ": conversion failed\n";
+    buffer_ok_ = false;
+  }
+}
+
+
+// ---------------------------------------------------------------------------
+//                                                          apply (vil1 image)
+
+void
+vgui_section_buffer::
+apply( vil1_image const& image )
+{
+  // See comment in the other apply().
+
+  assert( image.planes() == 1 );
+  const int num_comp = image.components();
+  vil1_pixel_format_t pixel_format = vil1_pixel_format( image );
+
+  bool conversion_ok = false;
+  bool section_ok = false;
+
+#define DoCase( PixelFormat, DataType, NComp )                               \
+      case PixelFormat:                                                      \
+      {                                                                      \
+        DataType* temp_buffer = new DataType[ w_ * h_ * NComp ];             \
+        section_ok = image.get_section( temp_buffer, x_, y_, w_, h_ );       \
+        if( section_ok ) {                                                   \
+          vil_image_view<DataType> view( temp_buffer, w_, h_, NComp,         \
+                                         NComp, NComp*w_, 1 );               \
+          conversion_ok = convert_image( view, 0, 0, w_, h_,                 \
+                                         buffer_, allocw_, format_, type_ ); \
+        }                                                                    \
+        break;                                                               \
+      }
+
+  switch( pixel_format ) {
+    DoCase( VIL1_BYTE,       vxl_byte,    1 )
+    DoCase( VIL1_UINT16,     vxl_uint_16, 1 )
+    DoCase( VIL1_UINT32,     vxl_uint_32, 1 )
+    DoCase( VIL1_FLOAT,      float,       1 )
+    DoCase( VIL1_DOUBLE,     double,      1 )
+    DoCase( VIL1_RGB_BYTE,   vxl_byte,    3 )
+    DoCase( VIL1_RGB_UINT16, vxl_uint_16, 3 )
+    DoCase( VIL1_RGB_FLOAT,  float,       3 )
+    DoCase( VIL1_RGB_DOUBLE, double,      3 )
+    DoCase( VIL1_RGBA_BYTE,  vxl_byte,    4 )
+    default:
+    {
+      vcl_cerr << __FILE__ << ":" << __LINE__
+               << ": can't handle image pixel format "
+               << vil1_print( pixel_format ) << "\n";
+    }
+  }
+
+#undef DoCase
+
+  if( !conversion_ok ) {
+    vcl_cerr << __FILE__ << ":" << __LINE__ << ": conversion failed\n";
+  }
 
   if (debug || !section_ok)
     vcl_cerr << (section_ok ? "section ok" : "section bad") << vcl_endl;
 
-  if (is_texture)
-    image_id_ = vgui_cache_wizard::Instance()->load_image(image);
+  buffer_ok_ = section_ok && conversion_ok;
 }
 
-//------------------------------------------------------------------------------
+// ---------------------------------------------------------------------------
+//                                                           draw as rectangle
 
-//: just draw the outline of the given region.
-bool vgui_section_buffer::draw_as_rectangle(float x0, float y0,  float x1, float y1) const
+bool
+vgui_section_buffer::
+draw_as_rectangle( float x0, float y0,  float x1, float y1 ) const
 {
-  glColor3i(0, 1, 0); // is green good for everyone?
-  glLineWidth(1);
-  glBegin(GL_LINE_LOOP);
-  glVertex2f(x0, y0);
-  glVertex2f(x1, y0);
-  glVertex2f(x1, y1);
-  glVertex2f(x0, y1);
+  glColor3i( 0, 1, 0 ); // is green good for everyone?
+  glLineWidth( 1 );
+  glBegin( GL_LINE_LOOP );
+    glVertex2f( x0, y0 );
+    glVertex2f( x1, y0 );
+    glVertex2f( x1, y1 );
+    glVertex2f( x0, y1 );
   glEnd();
   return true;
 }
 
-//: draw the given region using glDrawPixels(), possibly accelerated.
-bool vgui_section_buffer::draw_as_image(float x0, float y0,  float x1, float y1) const
-{
-  if (!section_ok) {
-    vgui_macro_warning << "bad section in draw_as_image()\n";
-    return draw_as_rectangle(x0, y0, x1, y1);
-  }
 
-  // this doesn't actually work yet if x0 or y0 are non-zero.
-  return vgui_section_render(the_pixels,
-                             allocw, alloch,
-                             x0,y0, x1, y1,
-                             format, type /*, true*/);
+bool
+vgui_section_buffer::
+draw_as_rectangle() const
+{
+  return draw_as_rectangle( x_, y_, x_+w_, y_+h_ );
 }
 
-// to make sure we reload the texture image each time a different vgui_section_buffer
-// is called upon to render, we store in this variable a pointer to the last
-// vgui_section_buffer which loaded its texture image.
-static vgui_section_buffer const *last = 0;
 
-bool vgui_section_buffer::texture_begin(bool force_load) const
+// ---------------------------------------------------------------------------
+//                                                               draw as image
+
+bool
+vgui_section_buffer::
+draw_as_image( float x0, float y0,  float x1, float y1 ) const
 {
-  vgui_macro_report_errors;
-
-  glEnable(GL_TEXTURE_2D);
-  vgui_macro_report_errors;
-
-  glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-  vgui_macro_report_errors;
-
-  glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-  vgui_macro_report_errors;
-
-  glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-  vgui_macro_report_errors;
-
-  glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-  vgui_macro_report_errors;
-
-  // decal
-  glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_DECAL);
-  vgui_macro_report_errors;
-
-  if (force_load || ::last != this) {
-    // time to reload the textures
-    vcl_cerr << "loading textures\n";
-
-    // byte alignment :
-    glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-    //vgui_macro_report_errors;
-
-    // the loaded texture image must be a power of two.
-    if (allocw != next_power_of_two(allocw))
-      vgui_macro_warning << "allocw, " << allocw << ", is not a power of two\n";
-    if (alloch != next_power_of_two(alloch))
-      vgui_macro_warning << "alloch, " << alloch << ", is not a power of two\n";
-
-    // specify the texture image.
-    glTexImage2D(GL_TEXTURE_2D, // target
-                 0,             // level
-                 3,             // internalformat (use only RGB. ignore alpha channel)
-                 allocw,        // NB: must be power of 2
-                 alloch,        // NB: must be power of 2
-                 0,             // border FIXME
-                 format,
-                 type,
-                 the_pixels);
-    vgui_macro_report_errors;
-
-    // remember that it was this vgui_section_buffer which last loaded its texture.
-    last = this;
+  if( !buffer_ok_ ) {
+    vgui_macro_warning << "bad buffer in draw_as_image()\n";
+    return draw_as_rectangle( x0, y0, x1, y1 );
   }
 
-  // set coordinate s to clamp :
-  glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
-  vgui_macro_report_errors;
-
-  // set coordinate t to clamp :
-  glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
-  vgui_macro_report_errors;
-
-  // faster than linear ?
-  glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-  vgui_macro_report_errors;
-
-  // fastest option ?
-  glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-  vgui_macro_report_errors;
-
-  // decal
-  glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_DECAL);
-  vgui_macro_report_errors;
-
-  //
-  glEnable(GL_TEXTURE_2D);
-  glShadeModel(GL_FLAT);
-  vgui_macro_report_errors;
-
-  //glEnable(GL_DEPTH_TEST);
-  //glDepthFunc(GL_LEQUAL);
-
-  return true;
+  return vgui_section_render( buffer_,
+                              allocw_, alloch_,
+                              x0,y0, x1, y1,
+                              format_, type_ /*, true*/ );
 }
 
-bool vgui_section_buffer::texture_end() const
+
+bool
+vgui_section_buffer::
+draw_as_image() const
 {
-  glDisable(GL_TEXTURE_2D);
-  vgui_macro_report_errors;
-
-  return true;
+  return draw_as_image( x_, y_, x_+w_, y_+h_ );
 }
 
-//: the section by texture mapping it onto a plane.
-bool vgui_section_buffer::draw_as_texture(float x0, float y0,  float x1, float y1) const
-{
-  if (!section_ok) {
-    vgui_macro_warning << "bad section in draw_as_texture()\n";
-    return draw_as_rectangle(x0, y0, x1, y1);
-  }
 
-  if (!texture_begin())
-    return false;
-
-  float egx = float(w)/allocw;
-  float egy = float(h)/alloch;
-  glBegin(GL_QUADS);             // x    y    z
-  glTexCoord2f(  0,  0); glVertex3f(x  , y  , 0);
-  glTexCoord2f(egx,  0); glVertex3f(x+w, y  , 0);
-  glTexCoord2f(egx,egy); glVertex3f(x+w, y+h, 0);
-  glTexCoord2f(  0,egy); glVertex3f(x  , y+h, 0);
-  glEnd();
-  vgui_macro_report_errors;
-
-  if (!texture_end())
-    return false;
-
-  return true;
-}
-
-// Loads all of the images as a series of textures. This means
-// associating a texture name to each tile of the image to be
-// rendered.
-bool vgui_section_buffer::load_image_as_textures()
-{
-  vgui_macro_report_errors;
-
-  glEnable(GL_TEXTURE_2D);
-  vgui_macro_report_errors;
-
-  glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-  vgui_macro_report_errors;
-
-  glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-  vgui_macro_report_errors;
-
-  glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-  vgui_macro_report_errors;
-
-  glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-  vgui_macro_report_errors;
-
-  // decal
-  glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_DECAL);
-  vgui_macro_report_errors;
-
-  vcl_cerr << "loading image as textures\n";
-
-  // byte alignment :
-  glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-  //vgui_macro_report_errors;
-
-  // the loaded texture image must be a power of two.
-  if (allocw != next_power_of_two(allocw))
-    vgui_macro_warning << "allocw, " << allocw << ", is not a power of two\n";
-  if (alloch != next_power_of_two(alloch))
-    vgui_macro_warning << "alloch, " << alloch << ", is not a power of two\n";
-
-  // Inquire about maximum texture size
-  glGetIntegerv(GL_MAX_TEXTURE_SIZE, &texture_size);
-  vcl_cerr << "Max texture size: " << texture_size << vcl_endl;
-  if (texture_size>(int)allocw)
-    texture_size = allocw;
-
-  // release old texture names.
-  if (tList) {
-    glDeleteTextures(countw*counth, tList);
-    delete [] tList;
-    tList = 0;
-  }
-
-  // See how many texture_size X texture_size blocks is needed to cover
-  // the whole image
-  countw = (w + texture_size-1)/texture_size;
-  counth = (h + texture_size-1)/texture_size;
-
-  // Generate texture numbers. See OpenGL for details
-  tList = new GLuint[countw*counth];
-  glGenTextures(counth*countw, tList);
-
-  // allocate a buffer for working with in this routine.
-  vcl_vector<char> sub_image(texture_size*texture_size*4 + 1);
-  char *orig_image = (char*)the_pixels;
-  char *op_image = orig_image;
-
-  // now do each tile in turn.
-  for (int i = 0;i<counth;i++) {
-    int resty; // number of rows to include in this tile.
-    if ((i+1)*texture_size>(int)h)
-      resty = h%texture_size;
-    else
-      resty = texture_size;
-
-    op_image = orig_image;
-    for (int j = 0;j<countw;j++) {
-      if (debug)
-        vcl_cerr << "Copying quadrant (" << i << "," << j << ")\n";
-
-      int restx; // number of cols to include in this tile.
-      if ((j+1)*texture_size>(int)w)
-        restx = w%texture_size;
-      else
-        restx = texture_size;
-
-      // copy into the sub_image buffer:
-      for (int y = 0; y<resty; y++)
-        vcl_memmove(/* xxx */&sub_image[0] + 4*y*texture_size,
-                op_image         + 4*y*allocw, //4*texture_size*(countw-1)*y+4*restx*y,
-                4*restx);
-      op_image += 4*restx;
-
-      // Load texture
-      glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-      vgui_macro_report_errors;
-
-      glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-      vgui_macro_report_errors;
-
-      glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-      vgui_macro_report_errors;
-
-      glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-      vgui_macro_report_errors;
-
-      glBindTexture(GL_TEXTURE_2D, tList[i*countw+j]);
-      vgui_macro_report_errors;
-
-      glTexImage2D(GL_TEXTURE_2D, // target
-                   0,             // level
-                   3,             // internalformat (use only RGB. ignore alpha channel)
-                   texture_size,  // NB: must be power of 2
-                   texture_size,  // NB: must be power of 2
-                   0,             // border FIXME
-                   format,
-                   type,
-                   /* xxx */&sub_image[0]);
-      vgui_macro_report_errors;
-    }
-    orig_image += allocw*texture_size*4;
-  }
-  return true;
-}
-
-bool vgui_section_buffer::draw_image_as_textures() const
-{
-  static int last = -1;
-  glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-  vgui_macro_report_errors;
-
-  glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-  vgui_macro_report_errors;
-
-  glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-  vgui_macro_report_errors;
-
-  glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-  vgui_macro_report_errors;
-
-  // set coordinate s to clamp :
-  glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
-  vgui_macro_report_errors;
-
-  // set coordinate t to clamp :
-  glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
-  vgui_macro_report_errors;
-
-  // faster than linear ?
-  glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-  vgui_macro_report_errors;
-
-  // fastest option ?
-  glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-  vgui_macro_report_errors;
-
-  // decal
-  glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_DECAL);
-  vgui_macro_report_errors;
-
-  //
-  glEnable(GL_TEXTURE_2D);
-  glShadeModel(GL_FLAT);
-
-  for (int i = 0;i<counth;i++) {
-    for (int j = 0;j<countw;j++) {
-      // Activate the texture provided its not already in memory
-      if (last != (int)tList[i*countw+j]) {
-        glBindTexture(GL_TEXTURE_2D, tList[i*countw+j]);
-        last = tList[i*countw+j];
-      }
-
-      int x = j*texture_size;
-      int y = i*texture_size;
-
-      int tw,th;
-      if ((j+1)*texture_size<(int)w)
-        tw = texture_size;
-      else
-        tw = w-j*texture_size;
-      if ((i+1)*texture_size<(int)h)
-        th = texture_size;
-      else
-        th = h-i*texture_size;
-
-      float egx = float(tw)/texture_size;
-      float egy = float(th)/texture_size;
-
-      glBegin(GL_QUADS);             // x     y     z
-      glTexCoord2f(  0,  0); glVertex3f(x   , y   , 0);
-      glTexCoord2f(egx,  0); glVertex3f(x+tw, y   , 0);
-      glTexCoord2f(egx,egy); glVertex3f(x+tw, y+th, 0);
-      glTexCoord2f(  0,egy); glVertex3f(x   , y+th, 0);
-      glEnd();
-      vgui_macro_report_errors;
-    }
-  }
-  if (!texture_end())
-    return false;
-
-  return true;
-}
-
-bool vgui_section_buffer::draw_image_as_cached_textures(float x0, float y0,  float w, float h)
-{
-  glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-  vgui_macro_report_errors;
-
-  glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-  vgui_macro_report_errors;
-
-  glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-  vgui_macro_report_errors;
-
-  glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-  vgui_macro_report_errors;
-
-  // set coordinate s to clamp :
-  glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
-  vgui_macro_report_errors;
-
-  // set coordinate t to clamp :
-  glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
-  vgui_macro_report_errors;
-
-  // faster than linear ?
-  glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-  vgui_macro_report_errors;
-
-  // fastest option ?
-  glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-  vgui_macro_report_errors;
-
-  // decal
-  glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_DECAL);
-  vgui_macro_report_errors;
-
-  //
-  glEnable(GL_TEXTURE_2D);
-  glShadeModel(GL_FLAT);
-  texture_size = 256;
-  vgui_cache_wizard::image_cache_quadrants quadrants;
-  vgui_cache_wizard::dimension d,pos;
-  vgui_cache_wizard::Instance()->get_section(image_id_,int(x0),int(y0),int(w),int(h),&quadrants,&pos,&d);
-  vgui_cache_wizard::image_cache_quadrants::iterator el = quadrants.begin();
-  for (int i = pos.second;i<=pos.second+d.second;i++) {
-    for (int j = pos.first;j<=pos.first+d.first;j++) {
-      // Activate the texture provided its not already in memory
-      glBindTexture(GL_TEXTURE_2D, *el);
-
-      int x = j*texture_size;
-      int y = i*texture_size;
-
-      int tw;
-      if ((j+1)*texture_size<x0+w)
-        tw = texture_size;
-      else
-        tw = int(x0+w-j*texture_size);
-
-      int th;
-      if ((i+1)*texture_size<y0+h)
-        th = texture_size;
-      else
-        th = int(y0+h-i*texture_size);
-
-      float egx = float(tw)/texture_size;
-      float egy = float(th)/texture_size;
-
-      glBegin(GL_QUADS);             // x     y     z
-      glTexCoord2f(  0,  0); glVertex3f(x   , y   , 0);
-      glTexCoord2f(egx,  0); glVertex3f(x+tw, y   , 0);
-      glTexCoord2f(egx,egy); glVertex3f(x+tw, y+th, 0);
-      glTexCoord2f(  0,egy); glVertex3f(x   , y+th, 0);
-      glEnd();
-      vgui_macro_report_errors;
-      el++;
-    }
-  }
-  if (!texture_end())
-    return false;
-
-  return true;
-}
-
-//------------------------------------------------------------------------------

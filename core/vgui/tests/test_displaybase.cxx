@@ -31,4 +31,4 @@ void test_displaybase()
   TEST_NEAR("Try to retrieve style for line 3", line3->get_style()->rgba[0], 0.0f, 1e-7f);
 }
 
-TESTLIB_DEFINE_MAIN(test_displaybase);
+TESTMAIN(test_displaybase);

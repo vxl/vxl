@@ -8,8 +8,10 @@
 //
 // Cut-n-paste and modify from vil1_image_renderer.
 
-#include <vil/vil_image_view.h>
-class vgui_vil_section_buffer;
+#include <vil/vil_image_view_base.h>
+class vgui_section_buffer;
+
+#include "internals/vgui_generic_vil_image_view.h"
 
 //: OpenGL utility to render a vil_image_view.
 //
@@ -32,11 +34,13 @@ class vgui_vil_section_buffer;
 //  this class, inconsistent rendering may result. Call need_resection()
 //  to mark all previous sections as invalid.
 //
-template<typename T>
 class vgui_vil_image_renderer
 {
-  vil_image_view<T> the_image_;
-  vgui_vil_section_buffer* buffer_;
+  //: Stores the image data (pixels, dimensions, etc).
+  vgui_generic_vil_image_view the_image_;
+
+  //: Stored the GL pixels corresponding to the image data
+  vgui_section_buffer* buffer_;
 
  public:
   //: Constructor - create an empty image renderer.
@@ -45,13 +49,14 @@ class vgui_vil_image_renderer
   //: Destructor - delete image buffer.
   ~vgui_vil_image_renderer();
 
-  //: Attach the renderer to a new vil_image_view.
-  void set_image(vil_image_view<T> const &);
+  //: Attach the renderer to a new view.
+  //
+  void set_image_view( vil_image_view_base const& );
 
-  //: Return the vil_image_view that this renderer draws
-  vil_image_view<T> get_image() const { return the_image_; }
+  //: Return the image view that this renderer draws.
+  vil_image_view_base_sptr get_image_view() const;
 
-  //: Tell the renderer that the underlying image has been changed.
+  //: Tell the renderer that the underlying image data has been changed.
   void reread_image();
 
   //: Renders the image pixels.

@@ -35,14 +35,14 @@ const char* to_string<T>::name = "<(no name)>";
 template<typename T>
 vgui_vil_image_tableau<T>::vgui_vil_image_tableau()
   : pixels_centered_( true ),
-    renderer_( new vgui_vil_image_renderer<T> )
+    renderer_( new vgui_vil_image_renderer )
 { }
 
 //-----------------------------------------------------------------------------
 template<typename T>
 vgui_vil_image_tableau<T>::vgui_vil_image_tableau(vil_image_view<T> const &I)
   : pixels_centered_( true ),
-    renderer_( new vgui_vil_image_renderer<T> )
+    renderer_( new vgui_vil_image_renderer )
 { 
   set_image( I ); 
 }
@@ -72,7 +72,7 @@ vcl_string
 vgui_vil_image_tableau<T>::pretty_name() const
 {
   vcl_ostringstream s;
-  s << type_name() << "<" << to_string<T>::name << ">" << "[" << renderer_->get_image() << "]";
+  s << type_name() << "<" << to_string<T>::name << ">" << "[" << *renderer_->get_image_view() << "]";
   return s.str();
 }
 
@@ -82,7 +82,7 @@ template<typename T>
 vil_image_view<T>
 vgui_vil_image_tableau<T>::get_image() const
 {
-  return renderer_->get_image();
+  return *renderer_->get_image_view();
 }
 
 //-----------------------------------------------------------------------------
@@ -91,7 +91,7 @@ template<typename T>
 void
 vgui_vil_image_tableau<T>::set_image( vil_image_view<T> const &I )
 {
-  renderer_->set_image( I );
+  renderer_->set_image_view( I );
 }
 
 //-----------------------------------------------------------------------------
@@ -100,7 +100,7 @@ template<typename T>
 unsigned
 vgui_vil_image_tableau<T>::width() const
 {
-  return renderer_->get_image().ni();
+  return renderer_->get_image_view()->ni();
 }
 
 //-----------------------------------------------------------------------------
@@ -109,7 +109,7 @@ template<typename T>
 unsigned
 vgui_vil_image_tableau<T>::height() const
 {
-  return renderer_->get_image().nj();
+  return renderer_->get_image_view()->nj();
 }
 
 //-----------------------------------------------------------------------------
@@ -163,7 +163,7 @@ vgui_vil_image_tableau<T>::handle( vgui_event const &e )
 
 #undef VGUI_VIL_IMAGE_TABLEAU_INSTANTIATE
 #define VGUI_VIL_IMAGE_TABLEAU_INSTANTIATE(T) \
-namespace { const char* to_string<T >::name = "<##T##>"; } \
+namespace { const char* to_string<T >::name = "<" #T ">"; } \
 template class vgui_vil_image_tableau<T >
 
 #endif // vgui_vil_image_tableau_txx_

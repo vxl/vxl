@@ -13,8 +13,7 @@
 
 #include <vgui/vgui_gl.h>
 class vil1_image;
-
-class vgui_accelerate_cached_image;
+class vil_image_view_base;
 
 //: Holds a section of a GL image with given OpenGL buffer format and types.
 //
@@ -22,8 +21,8 @@ class vgui_accelerate_cached_image;
 // with given OpenGL buffer format and types. The constructor is
 // responsible for allocating a suitably sized (and aligned) buffer.
 //
-// The apply() method infers the format supplied by the vgui_image
-// and performs the necessary pixel conversion.
+// The apply() method infers the format supplied by the vgui_image or
+// vgui_image_view and performs the necessary pixel conversion.
 //
 // Note that if the format and type are left unspecified, defaults
 // will be chosen based on the current GL state. Thus, in this case,
@@ -41,78 +40,84 @@ class vgui_accelerate_cached_image;
 //    GL_SHORT, GL_UNSIGNED_INT, GL_INT, and GL_FLOAT
 //
 // Usually 'format'=GL_RGBA, 'type'=GL_UNSIGNED_BYTE works well.
-struct vgui_section_buffer
+//
+class vgui_section_buffer
 {
-  vgui_section_buffer(int x_, int y_,
-                      unsigned w_, unsigned h_,
-                      GLenum format_ = GL_NONE,
-                      GLenum type_ = GL_NONE,
-                      bool alloc_as_texture = false);
+public:
+  //: Create a \a w by \a h buffer
+  //
+  // The buffer will be used to hold the GL pixels from (x,y) to
+  // (x+w-1, y+w-1) from the input image. (The input image is given
+  // via the apply() function).
+  //
+  vgui_section_buffer( unsigned x, unsigned y,
+                       unsigned w, unsigned h,
+                       GLenum format_ = GL_NONE,
+                       GLenum type_ = GL_NONE );
+
   ~vgui_section_buffer();
 
   //: These methods take arguments in original image coordinates and return false on failure.
   // See .cxx file for more details.
-  bool draw_as_image(float xlo, float ylo, float xhi, float yhi) const;
-  bool draw_as_texture(float xlo, float ylo, float xhi, float yhi) const;
-  bool draw_as_rectangle(float xlo, float ylo, float xhi, float yhi) const;
 
-  //: Convenience methods to draw the whole image.
-  bool draw_as_image() const { return draw_as_image(x, y, x+w, y+h); }
-  bool draw_as_texture() const { return draw_as_texture(x, y, x+w, y+h); }
-  bool draw_as_rectangle() const { return draw_as_rectangle(x, y, x+w, y+h); }
-  bool draw_image_as_textures() const;
-  bool draw_image_as_cached_textures(float xlo, float ylo, float xhi, float yhi);
-  bool load_image_as_textures();
+  //: Draw a section of the image
+  //
+  // The parameters are in the original image coordinates.
+  //
+  // It will return false on failure.
+  //
+  bool draw_as_image( float xlo, float ylo, float xhi, float yhi ) const;
+
+  //: Draw a the border of a section of the image.
+  //
+  // The parameters are in the original image coordinates.
+  //
+  // It will return false on failure.
+  //
+  bool draw_as_rectangle( float xlo, float ylo, float xhi, float yhi ) const;
+
+  //: Convenience method to draw the whole image.
+  bool draw_as_image() const;
+
+  //: Convenience method to draw the whole image.
+  bool draw_as_rectangle() const;
+
   //: Grab a section from the given image.
-  void apply(vil1_image const &);
+  void apply( vil1_image const & );
 
-  //: Return true if the last get_section() succeeded.
-  operator bool () const { return section_ok; }
+  void apply( vil_image_view_base const& );
 
-  //: Return pointer to raster i.
-  void *operator[](int i) { return the_rasters[i]; }
+//   //: Return true if the last get_section() succeeded.
+//   operator bool () const { return section_ok; }
 
-  //: semi-internal
-  bool texture_begin(bool force_load = false) const;
-  bool texture_end() const;
+//   //: Return pointer to raster i.
+//   void *operator[](int i) { return the_rasters[i]; }
 
-  int width () const { return w; }
-  int height() const { return h; }
+  unsigned width () const { return w_; }
+  unsigned height() const { return h_; }
 
- public:
-  vgui_accelerate_cached_image* cache_;
-
+private:
   // fsm: I want these to be GLenums as gcc 2.95 will not implicitly
   // cast ints to enums. Please don't make them ints.
-  GLenum format;
-  GLenum type;
+  GLenum format_;
+  GLenum type_;
 
   // These fields describe where in the image the section comes from,
   // how big it is and its resolution.
-  unsigned int x, y;          // starting position in original image.
-  unsigned int w, h;          // no of columns and rows (in the section).
-  unsigned int allocw, alloch;// actual width and height allocated
-  int image_id_;
+  unsigned x_, y_;          // starting position in original image.
+  unsigned w_, h_;          // no of columns and rows (in the section).
+
+  // actual width and height allocated.
+  // The actual buffer was bigger than the requested one in the old
+  // code when images could be rendered as a texture. It's here in
+  // case someone wants to bring that code back. -- Amitha Perera
+  unsigned allocw_, alloch_;
 
   //: Pointer to pixel buffer, as given to glDrawPixels() or glTexImage2D().
-  void *the_pixels;
-  bool is_texture;
+  void* buffer_;
 
- private:
-  //: Pointer to array of pointers to beginning of rasters.
-  //  Thus, the_rasters[0] equals the_pixels.
-  void **the_rasters;
-  bool section_ok; // return value of vgui_image::get_section()
-  unsigned num_components() const;
-
-  //: This is the value of GL_MAX_TEXTURE_SIZE as returned by the GL.
-  //  It might be something like 256, in which case the image will
-  //  probably have to be rendered as several tiles.
-  GLint texture_size;
-  //: The number of tiles needed is countw*counth.
-  int countw, counth;
-  //: List of texture names used for the tiles.
-  GLuint *tList;
+  //: Did the last apply() work?
+  bool buffer_ok_;
 };
 
 #endif // vgui_section_buffer_h_

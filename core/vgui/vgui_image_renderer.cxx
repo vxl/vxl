@@ -11,6 +11,7 @@
 //                                          rendering via textures
 //   23-AUG-2000 Marko Bacic, Oxford RRG -- Now uses vgui_cache_wizard
 //   08-AUG-2000 Marko Bacic, Oxford RRG -- Minor changes
+//   06-AUG-2003 Amitha Perera -- Remove texture mapping.
 // \endverbatim
 
 #include <vcl_cmath.h>
@@ -23,16 +24,12 @@
 
 // Only check-in false:
 static bool debug = false;
-#define trace if (true) { } else vcl_cerr
-
-// defined in vgui.cxx
-extern bool vgui_images_are_textures;
 
 //-----------------------------------------------------------------------------
 //: Constructor - create an empty image renderer.
 vgui_image_renderer::vgui_image_renderer()
   : buffer(0)
-  , use_texture_mapping(vgui_images_are_textures)
+  , use_texture_mapping(false)
 {
 }
 
@@ -69,10 +66,7 @@ void vgui_image_renderer::set_image(vil1_image const &image_)
     delete buffer;
   buffer = 0;
 
-  //
   the_image = image_;
-  if (the_image)
-    trace << "image : " << the_image << vcl_flush;
 }
 
 //-----------------------------------------------------------------------------
@@ -96,47 +90,8 @@ void vgui_image_renderer::render()
   if (!buffer) {
     buffer = new vgui_section_buffer(0, 0,
                                      the_image.width(), the_image.height(),
-                                     GL_NONE, GL_NONE,
-                                     use_texture_mapping);
+                                     GL_NONE, GL_NONE);
     buffer->apply(the_image);
-    if (use_texture_mapping)
-      buffer->load_image_as_textures(); // --u97mb
-  }
-
-  // Use texture mapping if requested (only). If the image fails to
-  // render, render its outline.
-  if (use_texture_mapping)
-  {
-    GLint vp[4];
-    glGetIntegerv(GL_VIEWPORT, vp);
-    if (debug)
-      vcl_cerr << vp[0] << ", " << vp[1] << ", " << vp[0]+vp[2] << ", "
-               << vp[1]+vp[3] << vcl_endl;
-
-    vgui_projection_inspector pi;
-
-    float x0,y0,x1,y1;
-    pi.window_to_image_coordinates(vp[0],vp[1],x0,y1);
-
-    pi.window_to_image_coordinates(vp[0]+vp[2],vp[1]+vp[3],x1,y0);
-    if (debug) vcl_cerr << "x0 y0:" << x0 << ", " << y0 << vcl_endl;
-    if (debug) vcl_cerr << "x1 y1:" << x1 << ", " << y1 << vcl_endl;
-    if (x0<0)
-      x0 = 0;
-    if (y0<0)
-      y0 = 0;
-    if (x1>the_image.width())
-      x1 = the_image.width();
-    if (y1>the_image.height())
-      y1= the_image.height();
-    if (debug) vcl_cerr << "New x1 y1:" << x1 << ", " << y1 << vcl_endl;
-    if (debug) vcl_cerr << "New x0 y0:" << x0 << ", " << y0 << vcl_endl;
-
-    buffer->draw_image_as_cached_textures(x0, y0, vcl_fabs(x1-x0),
-      vcl_fabs(y1-y0)) || buffer->draw_as_rectangle();
-    vgui_macro_report_errors;
-  }
-  else { // not texturing.
     buffer->draw_as_image() || buffer->draw_as_rectangle();
   }
 }

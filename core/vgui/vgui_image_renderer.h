@@ -7,7 +7,7 @@
 // \author fsm
 
 #include <vil1/vil1_image.h>
-struct vgui_section_buffer;
+class vgui_section_buffer;
 
 //: OpenGL utility to render a vil1_image.
 //
@@ -32,6 +32,7 @@ struct vgui_section_buffer;
 class vgui_image_renderer
 {
   vil1_image the_image;
+  
   vgui_section_buffer *buffer;
 
  public:

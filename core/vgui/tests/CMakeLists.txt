@@ -17,9 +17,6 @@ IF( HAS_VGUI )
   #ADD_TEST( vgui_test_events vgui_test_events )
   ADD_EXECUTABLE( vgui_test_front_back test_front_back.cxx )
   #ADD_TEST( vgui_test_front_back vgui_test_front_back )
-  ADD_EXECUTABLE( vgui_test_pixels test_pixels.cxx )
-  TARGET_LINK_LIBRARIES( vgui_test_pixels testlib )
-  ADD_TEST( vgui_test_pixels vgui_test_pixels )
 
   IF(X11_FOUND)
     ADD_EXECUTABLE( vgui_test_drawpix_speed test_drawpix_speed.cxx )
@@ -28,11 +25,20 @@ IF( HAS_VGUI )
     #ADD_TEST( vgui_test_acceleration vgui_test_acceleration )
   ENDIF(X11_FOUND)
 
+  ADD_EXECUTABLE( vgui_test_all
+    test_driver.cxx
+
+    test_displaybase.cxx
+    test_generic_image_view.cxx
+    test_pixels.cxx
+  )
+  TARGET_LINK_LIBRARIES( vgui_test_all vgui testlib )
+
+  ADD_TEST( vgui_test_displaybase         vgui_test_all test_displaybase )
+  ADD_TEST( vgui_test_generic_image_view  vgui_test_all test_generic_image_view )
+  ADD_TEST( vgui_test_pixels              vgui_test_all test_pixels )
+
   ADD_EXECUTABLE( vgui_test_include test_include.cxx )
   TARGET_LINK_LIBRARIES( vgui_test_include vgui )
-
-  ADD_EXECUTABLE( vgui_test_displaybase test_displaybase.cxx )
-  TARGET_LINK_LIBRARIES( vgui_test_displaybase vgui testlib )
-  ADD_TEST( vgui_test_displaybase vgui_test_displaybase )
 
 ENDIF( HAS_VGUI )

@@ -7,7 +7,7 @@
 #include <vil/vil_load.h>
 
 #include <vgui/vgui.h>
-#include <vgui/vgui_vil_image_tableau.h>
+#include <vgui/vgui_image_tableau.h>
 #include <vgui/vgui_viewer2D_tableau.h>
 #include <vgui/vgui_shell_tableau.h>
 
@@ -31,7 +31,7 @@ int main(int argc, char **argv)
   vil_image_view< vxl_byte > b_im = vil_load(argv[1]);
 
   // Load image (given in the first command line param) into an image tableau.
-  vgui_vil_image_tableau_new< vxl_byte > image(b_im);
+  vgui_image_tableau_new image(b_im);
 
   // Put the image tableau inside a 2D viewer tableau (for zoom, etc).
   vgui_viewer2D_tableau_new viewer(image);

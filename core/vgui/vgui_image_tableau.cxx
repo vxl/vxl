@@ -13,123 +13,203 @@
 
 #include <vcl_string.h>
 
-#include <vil1/vil1_load.h>
+#include <vil/vil_image_view_base.h>
+#include <vil/vil_load.h>
 
 #include <vgui/vgui_image_renderer.h>
+#include <vgui/vgui_vil_image_renderer.h>
 #include <vgui/vgui_event.h>
 #include <vgui/vgui_matrix_state.h>
 #include <vgui/vgui_gl.h>
 #include <vgui/vgui_glu.h>
 
 //-----------------------------------------------------------------------------
-//: Constructor - don't use this, use vgui_image_tableau_new.
-//  Creates an empty image tableau.
-vgui_image_tableau::vgui_image_tableau()
-  : vgui_tableau()
-  , pixels_centered(true)
-  , renderer(new vgui_image_renderer)
-{ }
 
-//-----------------------------------------------------------------------------
-//: Constructor - don't use this, use vgui_image_tableau_new.
-//  Creates a tableau displaying the given image.
-vgui_image_tableau::vgui_image_tableau(vil1_image const &I)
-  : vgui_tableau()
-  , pixels_centered(true)
-  , renderer(new vgui_image_renderer)
+vgui_image_tableau::
+vgui_image_tableau()
+  : vgui_tableau(),
+    pixels_centered_( true ),
+    renderer_( 0 ),
+    vil_renderer_( 0 )
 {
-  set_image(I);
 }
 
 //-----------------------------------------------------------------------------
-//: Constructor - don't use this, use vgui_image_tableau_new.
-//  Creates a tableau which loads and displays an image from
-//  the given file.
-vgui_image_tableau::vgui_image_tableau(char const *f)
-  : vgui_tableau()
-  , name_(f)
-  , pixels_centered(true)
-  , renderer(new vgui_image_renderer)
+
+vgui_image_tableau::
+vgui_image_tableau( vil1_image const &I )
+  : vgui_tableau(),
+    pixels_centered_( true ),
+    renderer_( 0 ),
+    vil_renderer_( 0 )
 {
-  set_image(f);
+  set_image( I );
 }
 
 //-----------------------------------------------------------------------------
-//: Destructor - called by vgui_image_tableau_sptr.
-vgui_image_tableau::~vgui_image_tableau()
+
+vgui_image_tableau::
+vgui_image_tableau( vil_image_view_base const& I )
+  : vgui_tableau(),
+    pixels_centered_( true ),
+    renderer_( 0 ),
+    vil_renderer_( 0 )
 {
-  delete renderer;
-  renderer = 0;
+  set_image_view( I );
 }
 
 //-----------------------------------------------------------------------------
-//: Returns the type of this tableau ('vgui_image_tableau').
-vcl_string vgui_image_tableau::type_name() const
+
+vgui_image_tableau::
+vgui_image_tableau(char const *f)
+  : vgui_tableau(),
+    name_( f ),
+    pixels_centered_( true ),
+    renderer_( 0 ),
+    vil_renderer_( 0 )
+{
+  set_image( f );
+}
+
+//-----------------------------------------------------------------------------
+
+vgui_image_tableau::
+~vgui_image_tableau()
+{
+  delete renderer_;
+  delete vil_renderer_;
+  renderer_ = 0;
+  vil_renderer_ = 0;
+}
+
+//-----------------------------------------------------------------------------
+
+vcl_string
+vgui_image_tableau::
+type_name() const
 {
   return "vgui_image_tableau";
 }
 
 
 //-----------------------------------------------------------------------------
-//: Returns the filename of the loaded image (if loaded from file).
-vcl_string vgui_image_tableau::file_name() const
+
+vcl_string
+vgui_image_tableau::
+file_name() const
 {
   return name_;
 }
 
 //-----------------------------------------------------------------------------
-//: Returns a nice version of the name, including details of the image file.
-vcl_string vgui_image_tableau::pretty_name() const
+
+vcl_string
+vgui_image_tableau::
+pretty_name() const
 {
   return type_name() + "[" + name_ + "]";
 }
 
 //-----------------------------------------------------------------------------
-//: Return the image being rendered by this tableau.
-vil1_image vgui_image_tableau::get_image() const
+
+vil1_image
+vgui_image_tableau::
+get_image() const
 {
-  return renderer->get_image();
+  return renderer_->get_image();
 }
 
 //-----------------------------------------------------------------------------
-//: Make the given image, the image rendered by this tableau.
-void vgui_image_tableau::set_image(vil1_image const &I)
+
+vil_image_view_base_sptr
+vgui_image_tableau::
+get_image_view() const
 {
+  return vil_renderer_->get_image_view();
+}
+
+//-----------------------------------------------------------------------------
+
+void
+vgui_image_tableau::
+set_image_view( vil_image_view_base const& I )
+{
+  if( !vil_renderer_ )
+    vil_renderer_ = new vgui_vil_image_renderer;
+
   // use the name of the image as the name of the tableau :
-  renderer->set_image( I );
+  vil_renderer_->set_image_view( I );
 }
 
 //-----------------------------------------------------------------------------
-//: Make image loaded from the given file, the image rendered by this tableau.
-void vgui_image_tableau::set_image(char const *f)
+
+void
+vgui_image_tableau::
+set_image( vil1_image const& I )
 {
-  set_image( vil1_load(f ? f : "az32_10.tif") );
+  if( !renderer_ )
+    renderer_ = new vgui_image_renderer;
+
+  // use the name of the image as the name of the tableau :
+  renderer_->set_image( I );
 }
 
 //-----------------------------------------------------------------------------
-//: Reread the image from file.
-void vgui_image_tableau::reread_image()
+
+void
+vgui_image_tableau::
+set_image(char const *f)
 {
-  renderer->reread_image();
+  vil_image_view_base_sptr img = vil_load( f );
+  if( img )
+    set_image_view( *img );
 }
 
 //-----------------------------------------------------------------------------
-//: Width of the image (0 if none).
-unsigned vgui_image_tableau::width() const
+
+void
+vgui_image_tableau::
+reread_image()
 {
-  return renderer->get_image().width();
+  if( renderer_ )      renderer_->reread_image();
+  if( vil_renderer_ )  vil_renderer_->reread_image();
 }
 
 //-----------------------------------------------------------------------------
-//: Height of the image (0 if none).
-unsigned vgui_image_tableau::height() const
+
+unsigned
+vgui_image_tableau::
+width() const
 {
-  return renderer->get_image().height();
+  if( renderer_ ) {
+    return renderer_->get_image().width();
+  } else if( vil_renderer_ ) {
+    return vil_renderer_->get_image_view()->ni();
+  } else {
+    return 0;
+  }
 }
 
 //-----------------------------------------------------------------------------
-//: Returns the bounding box of the rendered image.
-bool vgui_image_tableau::get_bounding_box(float low[3], float high[3]) const
+
+unsigned
+vgui_image_tableau::
+height() const
+{
+  if( renderer_ ) {
+    return renderer_->get_image().height();
+  } else if( vil_renderer_ ) {
+    return vil_renderer_->get_image_view()->nj();
+  } else {
+    return 0;
+  }
+}
+
+//-----------------------------------------------------------------------------
+
+bool
+vgui_image_tableau::
+get_bounding_box(float low[3], float high[3]) const
 {
   low[0] = 0; high[0] = width();
   low[1] = 0; high[1] = height();
@@ -138,10 +218,10 @@ bool vgui_image_tableau::get_bounding_box(float low[3], float high[3]) const
 }
 
 //-----------------------------------------------------------------------------
-//: Handle all events sent to this tableau.
-//  In particular, use draw events to render the image contained in
-//  this tableau.
-bool vgui_image_tableau::handle(vgui_event const &e)
+
+bool
+vgui_image_tableau::
+handle(vgui_event const &e)
 {
   if (e.type == vgui_DRAW)
   {
@@ -155,12 +235,13 @@ bool vgui_image_tableau::handle(vgui_event const &e)
     if (blend_on)
       glDisable(GL_BLEND);
 
-    if (pixels_centered)
+    if (pixels_centered_)
       glTranslated(-0.5, -0.5, 0);
 
-    renderer->render();
+    if( renderer_ )     renderer_->render();
+    if( vil_renderer_ ) vil_renderer_->render();
 
-    if (pixels_centered)
+    if (pixels_centered_)
       glTranslated(+0.5, +0.5, 0);
 
     if (blend_on)

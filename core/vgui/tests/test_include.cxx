@@ -84,7 +84,6 @@
 #include <vgui/vgui_rubberband_tableau_sptr.h>
 #include <vgui/vgui_satellite_tableau.h>
 #include <vgui/vgui_section_buffer.h>
-#include <vgui/vgui_section_buffer_of.h>
 #include <vgui/vgui_section_render.h>
 #include <vgui/vgui_shell_tableau.h>
 #include <vgui/vgui_shell_tableau_sptr.h>
@@ -114,12 +113,12 @@
 #include <vgui/vgui_viewer3D_tableau.h>
 #include <vgui/vgui_viewer3D_tableau_sptr.h>
 #include <vgui/vgui_vil_image_renderer.h>
-#include <vgui/vgui_vil_image_tableau.h>
-#include <vgui/vgui_vil_image_tableau_sptr.h>
-#include <vgui/vgui_vil_section_buffer.h>
-#include <vgui/vgui_vil_section_buffer_apply.h>
 #include <vgui/vgui_window.h>
 #include <vgui/vgui_wrapper_tableau.h>
 #include <vgui/vgui_wrapper_tableau_sptr.h>
+
+// deprecated
+// #include <vgui/vgui_vil_image_tableau.h>
+// #include <vgui/vgui_vil_image_tableau_sptr.h>
 
 int main() { return 0; }

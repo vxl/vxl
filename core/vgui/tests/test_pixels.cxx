@@ -7,6 +7,7 @@
 
 #include <testlib/testlib_test.h>
 
+static
 void print_byte(GLubyte w)
 {
   for (int i=7; i>=0; --i)
@@ -17,6 +18,7 @@ void print_byte(GLubyte w)
 }
 
 #if 0
+static
 void print_word(GLuint w)
 {
   for (int i=31; i>=0; --i)
@@ -27,6 +29,7 @@ void print_word(GLuint w)
 }
 #endif
 
+static
 void print_binary(char const *fmt, void const *addr, unsigned bytes)
 {
   if (fmt)
@@ -66,10 +69,9 @@ void print_binary(char const *fmt, void const *addr, unsigned bytes)
   vcl_cerr << vcl_endl;
 }
 
-int main(int, char **)
+void
+test_pixels()
 {
-  START( "vgui test pixels" );
-
 #if VXL_LITTLE_ENDIAN
   vcl_cerr << "this machine is little-endian\n";
 #endif
@@ -108,6 +110,6 @@ int main(int, char **)
   TEST( "size of rgba8888", sizeof(vgui_pixel_rgba<8,8,8,8>), 4 );
   TEST( "size of abgr8888", sizeof(vgui_pixel_abgr<8,8,8,8>), 4 );
   TEST( "size of bgra8888", sizeof(vgui_pixel_bgra<8,8,8,8>), 4 );
-
-  SUMMARY();
 }
+
+TESTMAIN( test_pixels );

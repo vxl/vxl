@@ -13,12 +13,15 @@
 #include <vgui/vgui_tableau.h>
 #include <vgui/vgui_vil_image_tableau_sptr.h>
 
-template<class T>
 class vgui_vil_image_renderer;
 
 #include <vil/vil_fwd.h>
+#include <vil/vil_image_view.h>
 
 //: Captures the non-templated functionality of vgui_vil_image_tableau.
+//
+// \deprecated Use vgui_image_tableau instead. It now supports
+// vil_image_view objects.
 //
 // This is useful to deal with the tableau without worrying about the
 // type of image displayed by the tableau. Typically, you will search
@@ -61,6 +64,9 @@ template<typename T>
 struct vgui_vil_image_tableau_new;
 
 //: Tableau which renders the given image view using an image_renderer.
+//
+// \deprecated Use vgui_image_tableau instead. It now supports
+// vil_image_view objects.
 //
 // Use vgui_vil_image_tableau_new to construct objects of this class.
 template<typename T>
@@ -116,10 +122,13 @@ private:
 
 private:
   bool pixels_centered_;
-  vgui_vil_image_renderer<T>* renderer_;
+  vgui_vil_image_renderer* renderer_;
 };
 
 //: Creates a smart-pointer to a vgui_vil_image_tableau.
+//
+// \deprecated Use vgui_image_tableau_new instead. It now supports
+// vil_image_view objects.
 template<typename T>
 struct vgui_vil_image_tableau_new : public vgui_vil_image_tableau_sptr<T> {
 

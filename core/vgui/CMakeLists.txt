@@ -85,18 +85,12 @@ SET(vgui_sources
   vgui_pixel.cxx                vgui_pixel.h
   vgui_section_render.cxx       vgui_section_render.h
   vgui_section_buffer.cxx       vgui_section_buffer.h
-  vgui_section_buffer_of.cxx    vgui_section_buffer_of.h
   vgui_texture_hacks.cxx        vgui_texture_hacks.h
   vgui_cache_wizard.cxx         vgui_cache_wizard.h
   vgui_image_renderer.cxx       vgui_image_renderer.h
+  vgui_vil_image_renderer.cxx   vgui_vil_image_renderer.h
   vgui_image_tableau.cxx        vgui_image_tableau.h      vgui_image_tableau_sptr.h
   vgui_blender_tableau.cxx      vgui_blender_tableau.h    vgui_blender_tableau_sptr.h
-
-  # vil support
-  vgui_vil_image_tableau.txx         vgui_vil_image_tableau.h         vgui_vil_image_tableau_sptr.h
-  vgui_vil_image_renderer.txx        vgui_vil_image_renderer.h
-  vgui_vil_section_buffer.cxx        vgui_vil_section_buffer.h
-  vgui_vil_section_buffer_apply.txx  vgui_vil_section_buffer_apply.h
 
   # tableau mixins and miscellaneous
   vgui_wrapper_tableau.cxx      vgui_wrapper_tableau.h    vgui_wrapper_tableau_sptr.h
@@ -168,10 +162,16 @@ SET(vgui_sources
   internals/vgui_multiply_4x4.cxx    internals/vgui_multiply_4x4.h
   internals/vgui_transpose_4x4.cxx   internals/vgui_transpose_4x4.h
   internals/vgui_draw_line.cxx       internals/vgui_draw_line.h
+  internals/vgui_generic_vil_image_view.cxx       internals/vgui_generic_vil_image_view.h
   # Mesa-X11-mfc accelerated functions using Hermes
   internals/vgui_accelerate.cxx      internals/vgui_accelerate.h
   internals/vgui_accelerate_tag.cxx
   internals/vgui_gl_selection_macros.h
+
+
+
+  # deprecated
+  vgui_vil_image_tableau.txx         vgui_vil_image_tableau.h         vgui_vil_image_tableau_sptr.h
 )
 
 IF( GLUT_FOUND )
