@@ -90,10 +90,10 @@ static void user_flush_data(png_structp png_ptr)
   // urk.  how to flush?
 }
 
-struct vil_jmpbuf_wrapper {
+struct vil2_jmpbuf_wrapper {
   jmp_buf jmpbuf;
 } jmpbuf_wrapper;
-static vil_jmpbuf_wrapper pngtopnm_jmpbuf_struct;
+static vil2_jmpbuf_wrapper pngtopnm_jmpbuf_struct;
 static bool jmpbuf_ok = false;
 
 // Must be  a macro - setjmp needs its stack frame to live
@@ -126,7 +126,7 @@ static void pngtopnm_error_handler (png_structp png_ptr, png_const_charp msg)
     return;
   }
 
-  vil_jmpbuf_wrapper  *jmpbuf_ptr = (vil_jmpbuf_wrapper*) png_get_error_ptr(png_ptr);
+  vil2_jmpbuf_wrapper  *jmpbuf_ptr = (vil2_jmpbuf_wrapper*) png_get_error_ptr(png_ptr);
   if (jmpbuf_ptr == NULL) {         // we are completely hosed now
     vcl_cerr << "pnmtopng:  EXTREMELY fatal error: jmpbuf unrecoverable; terminating.\n";
     vcl_exit(99);
