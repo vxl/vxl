@@ -150,6 +150,7 @@ vtol_face_2d::vtol_face_2d(vertex_list const& verts)
 
   set_surface(new vsol_rectangle_2d(new vsol_point_2d(xmin,ymin),
                                     new vsol_point_2d(xmax,ymin),
+                                    new vsol_point_2d(xmax,ymax),
                                     new vsol_point_2d(xmin,ymax)));
 
   //generate a list of edges for edge loop
@@ -214,6 +215,7 @@ vtol_face_2d::vtol_face_2d(one_chain_list const& onechs)
 
   set_surface(new vsol_rectangle_2d(new vsol_point_2d(xmin,ymin),
                                     new vsol_point_2d(xmax,ymin),
+                                    new vsol_point_2d(xmax,ymax),
                                     new vsol_point_2d(xmin,ymax)));
 
   if (onech)
@@ -232,8 +234,10 @@ vtol_face_2d::vtol_face_2d(vtol_one_chain_sptr const& edgeloop)
   // TODO - surface is set to bounding box rectangle, which is often too large
   set_surface(new vsol_rectangle_2d(new vsol_point_2d(get_min_x(),get_min_y()),
                                     new vsol_point_2d(get_max_x(),get_min_y()),
+                                    new vsol_point_2d(get_max_x(),get_max_y()),
                                     new vsol_point_2d(get_min_x(),get_max_y())));
 }
+
 
 #if 0 // deprecated
 vtol_face_2d::vtol_face_2d(vtol_one_chain &edgeloop)
