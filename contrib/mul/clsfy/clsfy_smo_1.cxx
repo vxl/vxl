@@ -1,4 +1,3 @@
-
 //:
 // \file
 // \author Ian Scott
@@ -12,10 +11,6 @@
 // Platt, J. C. (1998). Fast Training of Support Vector Machines Using Sequential
 // Minimal Optimisation. In Advances in Kernel Methods - Support Vector Learning.
 // B. Scholkopf, C. Burges and A. Smola, MIT Press: 185-208. and other papers.
-
-
-
-
 
 #include "clsfy_smo_1.h"
 #include <vcl_cmath.h>
@@ -50,6 +45,7 @@ double clsfy_smo_1_rbf::kernel(int i1, int i2)
 }
 
 // ----------------------------------------------------------------
+
 //: Takes a copy of the data wrapper, but not the data.
 // Be careful not to destry the underlying data while using this object.
 void clsfy_smo_1_lin::set_data(const mbl_data_wrapper<vnl_vecd> &data, const vcl_vector<int> & targets)
@@ -80,6 +76,7 @@ void clsfy_smo_1_lin::set_C(double C)
 }
 
 // ----------------------------------------------------------------
+
 //: 0.5 sigma^-2, where sigma is the width of the gaussian kernel
 double clsfy_smo_1_rbf::gamma() const
 {
@@ -88,6 +85,7 @@ double clsfy_smo_1_rbf::gamma() const
 
 
 // ----------------------------------------------------------------
+
 //: Control sigma, the width of the gaussian kernel
 // gamma = 0.5 sigma^-2
 void clsfy_smo_1_rbf::set_gamma(double gamma)
@@ -114,26 +112,26 @@ clsfy_smo_1_lin::clsfy_smo_1_lin():
 // ----------------------------------------------------------------
 
 int clsfy_smo_1_lin::take_step(int i1, int i2, double E1)
-{ 
+{
   int  s;
-  double a1, a2;       /// new values of alpha_1, alpha_2 
+  double a1, a2;       /// new values of alpha_1, alpha_2
   double E2, L, H, k11, k22, k12, eta, Lobj, Hobj;
-  
+
   if (i1 == i2) return 0;
-  
-  
+
+
   const double alph1 = alph_[i1]; // old_values of alpha_1
   const int y1 = target_[i1];
-  
+
   const double alph2 = alph_[i2]; // old_values of alpha_2
   const int y2 = target_[i2];
   if (alph2 > 0 && alph2 < C_)
     E2 = error_cache_[i2];
-  else 
+  else
     E2 = learned_func(i2) - y2;
 
   s = y1 * y2;
-  
+
   if (y1 == y2) {
     const double g = alph1 + alph2;
     if (g > C_) {
@@ -165,9 +163,8 @@ int clsfy_smo_1_lin::take_step(int i1, int i2, double E1)
   k12 = kernel(i1, i2);
   k22 = kernel(i2, i2);
   eta = 2.0 * k12 - k11 - k22;
-  
-  
-  
+
+
   if (eta < 0) {
     a2 = alph2 + y2 * (E2 - E1) / eta;
     if (a2 < L)
@@ -176,16 +173,13 @@ int clsfy_smo_1_lin::take_step(int i1, int i2, double E1)
       a2 = H;
   }
   else {
-    
-    
     {
       double c1 = eta/2;
       double c2 = y2 * (E1-E2)- eta * alph2;
       Lobj = c1 * L * L + c2 * L;
       Hobj = c1 * H * H + c2 * H;
     }
-    
-    
+
     if (Lobj > Hobj+eps_)
       a2 = L;
     else if (Lobj < Hobj-eps_)
@@ -193,10 +187,10 @@ int clsfy_smo_1_lin::take_step(int i1, int i2, double E1)
     else
       a2 = alph2;
   }
-  
+
   if (vnl_math_abs(a2-alph2) < eps_*(a2+alph2+eps_) )
     return 0;
-  
+
   a1 = alph1 - s * (a2 - alph2);
   if (a1 < 0.0) {
     a2 += s * a1;
@@ -212,9 +206,9 @@ int clsfy_smo_1_lin::take_step(int i1, int i2, double E1)
   double delta_b;
   {
     double b1, b2, bnew;
-    
+
     const double eps_2 = eps_*eps_;
-    
+
     if (a1 > eps_2 && a1 < (C_*(1-eps_2)))
       bnew = b_ + E1 + y1 * (a1 - alph1) * k11 + y2 * (a2 - alph2) * k12;
     else {
@@ -226,16 +220,14 @@ int clsfy_smo_1_lin::take_step(int i1, int i2, double E1)
         bnew = (b1 + b2) / 2;
       }
     }
-    
     delta_b = bnew - b_;
     b_ = bnew;
   }
-  
-  
+
   {
     const double t1 = y1 * (a1-alph1);
     const double t2 = y2 * (a2-alph2);
-    
+
     for (int i=0; i<data_->size(); i++)
       if (0 < alph_[i] && alph_[i] < C_)
         error_cache_[i] +=  t1 * kernel(i1,i) + t2 * kernel(i2,i)
@@ -243,9 +235,7 @@ int clsfy_smo_1_lin::take_step(int i1, int i2, double E1)
     error_cache_[i1] = 0.0;
     error_cache_[i2] = 0.0;
   }
-  
-  
-  
+
   alph_[i1] = a1;  // Store a1 in the alpha array.
   alph_[i2] = a2;  // Store a2 in the alpha array.
 
@@ -264,28 +254,26 @@ int clsfy_smo_1_lin::examine_example(int i1)
 
   if (alph1 > 0 && alph1 < C_)
     E1 = error_cache_[i1];
-  else 
+  else
     E1 = learned_func(i1) - y1;
 
   r1 = y1 * E1;
   if ((r1 < -tolerance_ && alph1 < C_)
     || (r1 > tolerance_ && alph1 > 0)) // is the KKT condition for alph1 broken?
-  { 
-    // Try i2 by three ways; if successful, then immediately return 1; 
-
-
+  {
+    // Try i2 by three ways; if successful, then immediately return 1;
     {
       int k, i2;
       double tmax;
-      
-      // Second choice heuristic A - Find the example i2 which maximises 
+
+      // Second choice heuristic A - Find the example i2 which maximises
       // |E1 - E2| where E1
 
       for (i2 = (-1), tmax = 0, k = 0; k < N; k++)
         if (alph_(k) > 0 && alph_(k) < C_)
         {
           double E2, temp;
-          
+
           E2 = error_cache_[k];
           temp = vnl_math_abs(E1 - E2);
           if (temp > tmax)
@@ -294,7 +282,7 @@ int clsfy_smo_1_lin::examine_example(int i1)
             i2 = k;
           }
         }
-        
+
       if (i2 >= 0) {
         if (take_step (i1, i2, E1))
           return 1;
@@ -307,7 +295,7 @@ int clsfy_smo_1_lin::examine_example(int i1)
     {
       int k, k0;
       int i2;
-      
+
       for (k0 = rng_.lrand32(N-1), k = k0; k < N + k0; k++)
       {
         i2 = k % N;
@@ -323,7 +311,7 @@ int clsfy_smo_1_lin::examine_example(int i1)
     // second choice Heuristic C - Find any example that give positive progress.
     {
       int k0, k, i2;
-      
+
       // start from random location
       for (k0 = rng_.lrand32(N-1), k = k0; k < N + k0; k++)
       {
@@ -357,8 +345,7 @@ int clsfy_smo_1_lin::calc()
 
   const unsigned long N = data_->size();
   assert(N != 0);     // Check that there is some data.
-  
-  
+
   if (alph_.empty()) // only initialise alph if it hasn;t been externally set.
   {
     alph_.resize(N);
@@ -366,9 +353,9 @@ int clsfy_smo_1_lin::calc()
   }
 
 
-  // E_i = u_i - y_i = 0 - y_i = -y_i 
+  // E_i = u_i - y_i = 0 - y_i = -y_i
   error_cache_.resize(N);
-  
+
   unsigned long numChanged = 0;
   bool examineAll = true;
   while (numChanged > 0 || examineAll)
@@ -385,10 +372,7 @@ int clsfy_smo_1_lin::calc()
       examineAll = false;
     else if (numChanged == 0)
       examineAll = true;
-    
-    
-    
-    
+
 #if 0
     {
       double s = 0.;
@@ -404,19 +388,19 @@ int clsfy_smo_1_lin::calc()
             t += alph_[i]*alph_[j]*target_[i]*target_[j]*kernel(i,j);
         }
       }
-      cerr << "Objective function=" << (s - t/2.) << endl;
+      vcl_cerr << "Objective function=" << (s - t/2.) << vcl_endl;
       for (int i=0; i<N; i++)
         if (alph_[i] < 0)
-          cerr << "alph_[" << i << "]=" << alph_[i] << " < 0" << endl;
+          vcl_cerr << "alph_[" << i << "]=" << alph_[i] << " < 0" << vcl_endl;
       s = 0.;
       for (int i=0; i<N; i++)
         s += alph_[i] * target_[i];
-      cerr << "s=" << s << endl;
-      cerr << "error_rate=" << error_rate() << '\t';
+      vcl_cerr << "s=" << s << vcl_endl;
+      vcl_cerr << "error_rate=" << error_rate() << '\t';
     }
 #endif
 
-#if !defined NDEBUG && CLSFY_SMO_BASE_PRINT_PROGRESS 
+#if !defined NDEBUG && CLSFY_SMO_BASE_PRINT_PROGRESS
     {
       int non_bound_support =0;
       int bound_support =0;
@@ -434,17 +418,12 @@ int clsfy_smo_1_lin::calc()
 #endif
   }
 
-
   error_ = error_rate();
 
-#if !defined NDEBUG && CLSFY_SMO_BASE_PRINT_PROGRESS 
+#if !defined NDEBUG && CLSFY_SMO_BASE_PRINT_PROGRESS
   vcl_cerr << "Threshold=" << b_ << vcl_endl;
   vcl_cout << "Error rate=" << error_ << vcl_endl;
 #endif
 
-  
-
-
-  return 0;  
+  return 0;
 }
-
