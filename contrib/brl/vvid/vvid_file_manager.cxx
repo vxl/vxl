@@ -558,10 +558,11 @@ void vvid_file_manager::compute_grid_match()
   dp.borderp = false;
   static sdet_fit_lines_params flp;
   static sdet_grid_finder_params gfp;
-  dp.automatic_threshold=true;
-  dp.noise_multiplier=20;
-  flp.min_fit_length_=7;
+ //  dp.automatic_threshold=true;
+  dp.noise_multiplier=4;
+  flp.min_fit_length_=10;
   flp.rms_distance_=0.05;
+  gfp.angle_tol_ = 3.0;
   vgui_dialog grid_dialog("Grid Match");
   grid_dialog.field("Gaussian sigma", dp.smooth);
   grid_dialog.field("Noise Threshold", dp.noise_multiplier);
@@ -572,9 +573,11 @@ void vvid_file_manager::compute_grid_match()
   grid_dialog.field("RMS Distance", flp.rms_distance_);
   grid_dialog.field("Angle Tolerance", gfp.angle_tol_);
   grid_dialog.field("Line Count Threshold", gfp.thresh_);
+  grid_dialog.checkbox("Debug Output", gfp.verbose_);
 
   if (!grid_dialog.ask())
     return;
+
 
   if (agr)
     dp.aggressive_junction_closure=1;
