@@ -135,30 +135,24 @@ static void test_tracking_face_2d(int argc, char* argv[])
   for (int x = 0; x<w; ++x)
     for (int y = 0; y<w; ++y)
     {
-      float v = 255.0f*(vcl_rand()/(RAND_MAX+1.0));
-      model_image_uni(x,y) = v;
+      model_image_uni(x,y) = 255.0f*float(vcl_rand()/(RAND_MAX+1.0));
     }
   for (int x = 0; x<w; ++x)
     for (int y = 0; y<w; ++y)
     {
-      float v = 255.0f*(vcl_rand()/(RAND_MAX+1.0));
-      obs_image_uni(x,y) = v;
+      obs_image_uni(x,y) = 255.0f*float(vcl_rand()/(RAND_MAX+1.0));
     }
   vil1_memory_image_of<float> model_image_comb(w, h), obs_image_comb(w, h);
   //fill images random even pixel values (comb). This will test Parzen
   for (int x = 0; x<w; ++x)
     for (int y = 0; y<w; ++y)
     {
-      float v = 15*(vcl_rand()/(RAND_MAX+1.0));
-      int iv = (int)v;
-      model_image_comb(x,y) = 16*iv;
+      model_image_comb(x,y) = 16*int(15*(vcl_rand()/(RAND_MAX+1.0)));
     }
   for (int x = 0; x<w; ++x)
     for (int y = 0; y<w; ++y)
     {
-      float v = 15.0f*(vcl_rand()/(RAND_MAX+1.0));
-      int iv = (int)v;
-      obs_image_comb(x,y) = 16*iv;
+      obs_image_comb(x,y) = 16*int(15*(vcl_rand()/(RAND_MAX+1.0)));
     }
 
   //Testing ...
@@ -263,7 +257,7 @@ static void test_tracking_face_2d(int argc, char* argv[])
            << "\n\nmodel_color_entropy = " << tf->model_color_entropy()
            << "\ncolor_entropy = " << tf->color_entropy()
            << "\ncolor_joint_entropy = " << tf->color_joint_entropy()
-           << "\n\n" << vcl_endl;
+           << vcl_endl << vcl_endl;
   TEST("model intensity entropy ",
        near_eq(tf->model_intensity_entropy(), 4.0, 0.05), true);
   TEST("obs intensity entropy ",

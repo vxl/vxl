@@ -476,8 +476,8 @@ void strk_tracking_face_2d::transform(vnl_matrix_fixed<double,3,3> const& T)
     double x = this->X(), y = this->Y();
     vnl_vector_fixed<double, 3> X(x, y, 1.0), Xp;
     Xp = T*X;
-    this->set_X(Xp[0]);
-    this->set_Y(Xp[1]);
+    this->set_X(float(Xp[0]));
+    this->set_Y(float(Xp[1]));
   }
   trans_ = T*trans_;
 }
@@ -775,7 +775,7 @@ compute_intensity_joint_entropy(strk_tracking_face_2d_sptr const& other,
   joint_hist.parzen(parzen_sigma_);
 
   //compute the joint entropy
-  double jent=0;
+  float jent=0;
   if (renyi_joint_entropy_)
     jent = joint_hist.renyi_entropy();//JLM
   else
@@ -816,7 +816,7 @@ compute_model_intensity_joint_entropy(strk_tracking_face_2d_sptr const& other)
   joint_hist.parzen(parzen_sigma_);
 
   //compute the joint entropy
-  double jent=0;
+  float jent=0;
   if (renyi_joint_entropy_)
     jent = joint_hist.renyi_entropy();//JLM
   else
@@ -887,7 +887,7 @@ compute_color_joint_entropy(strk_tracking_face_2d_sptr const& other,
   //apply parzen windows
   joint_color_hist.parzen(parzen_sigma_);
 
-  double jent=0;
+  float jent=0;
   if (renyi_joint_entropy_)
     jent = joint_color_hist.renyi_entropy();
   else
