@@ -37,13 +37,11 @@ void test_bounding_box_double_io()
   bfs_in.close();
 
 
-
-  TEST ("p_out.initialized_ == p_in.initialized_",
-    p_out.initialized_ == p_in.initialized_, true);
-  TEST ("p_out.min_[0] == p_in.min_[0]", p_out.min_[0] == p_in.min_[0], true);
-  TEST ("p_out.min_[1] == p_in.min_[1]", p_out.min_[1] == p_in.min_[1], true);
-  TEST ("p_out.max_[0] == p_in.max_[0]", p_out.max_[0] == p_in.max_[0], true);
-  TEST ("p_out.max_[1] == p_in.max_[1]", p_out.max_[1] == p_in.max_[1], true);
+  TEST ("p_out.empty() == p_in.empty()", p_out.empty(), p_in.empty());
+  TEST ("p_out.min()[0] == p_in.min()[0]", p_out.min()[0], p_in.min()[0]);
+  TEST ("p_out.min()[1] == p_in.min()[1]", p_out.min()[1], p_in.min()[1]);
+  TEST ("p_out.max()[0] == p_in.max()[0]", p_out.max()[0], p_in.max()[0]);
+  TEST ("p_out.max()[1] == p_in.max()[1]", p_out.max()[1], p_in.max()[1]);
 
   vsl_print_summary(vcl_cout, p_out);
   vcl_cout << vcl_endl;

@@ -178,11 +178,11 @@ void golden_test_vbl_io(bool save_file)
   // Test that each object created is the same as read in from the file.
 
   // Test bounding box
-  TEST ("vbl_bounding_box: b_box_out.initialized_ == b_box_in.initialized_", b_box_out.initialized_ == b_box_in.initialized_, true);
-  TEST ("vbl_bounding_box: b_box_out.min_[0] == b_box_in.min_[0]", b_box_out.min_[0] == b_box_in.min_[0], true);
-  TEST ("vbl_bounding_box: b_box_out.min_[1] == b_box_in.min_[1]", b_box_out.min_[1] == b_box_in.min_[1], true);
-  TEST ("vbl_bounding_box: b_box_out.max_[0] == b_box_in.max_[0]", b_box_out.max_[0] == b_box_in.max_[0], true);
-  TEST ("vbl_bounding_box: b_box_out.max_[1] == b_box_in.max_[1]", b_box_out.max_[1] == b_box_in.max_[1], true);
+  TEST ("vbl_bounding_box: b_box_out.empty() == b_box_in.empty()", b_box_out.empty(), b_box_in.empty());
+  TEST ("vbl_bounding_box: b_box_out.min()[0] == b_box_in.min()[0]", b_box_out.min()[0], b_box_in.min()[0]);
+  TEST ("vbl_bounding_box: b_box_out.min()[1] == b_box_in.min()[1]", b_box_out.min()[1], b_box_in.min()[1]);
+  TEST ("vbl_bounding_box: b_box_out.max()[0] == b_box_in.max()[0]", b_box_out.max()[0], b_box_in.max()[0]);
+  TEST ("vbl_bounding_box: b_box_out.max()[1] == b_box_in.max()[1]", b_box_out.max()[1], b_box_in.max()[1]);
 
 
   //Test 1d array

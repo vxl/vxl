@@ -12,11 +12,11 @@ void vsl_b_write(vsl_b_ostream &os, const vbl_bounding_box_base<T, DIM_> & p)
 {
   const short io_version_no = 1;
   vsl_b_write(os, io_version_no);
-  vsl_b_write(os, p.initialized_);
+  vsl_b_write(os, !p.empty());
   for (int i = 0; i< p.dimension(); i++)
   {
-    vsl_b_write(os, p.min_[i]);
-    vsl_b_write(os, p.max_[i]);
+    vsl_b_write(os, p.min()[i]);
+    vsl_b_write(os, p.max()[i]);
   }
 }
 
@@ -30,11 +30,16 @@ void vsl_b_read(vsl_b_istream &is, vbl_bounding_box_base<T, DIM_> & p)
   switch(v)
   {
   case 1:
-    vsl_b_read(is, p.initialized_);
-    for (int i = 0; i< p.dimension(); i++)
-    {
-      vsl_b_read(is, p.min_[i]);
-      vsl_b_read(is, p.max_[i]);
+    p.reset(); // empty the bounding box
+    bool b; vsl_b_read(is, b);
+    if (b) {
+      T min_point[DIM_::value], max_point[DIM_::value];
+      for (int i = 0; i< p.dimension(); i++)
+      {
+        vsl_b_read(is, min_point[i]);
+        vsl_b_read(is, max_point[i]);
+      }
+      p.update(min_point); p.update(max_point);
     }
     break;
 
@@ -51,15 +56,18 @@ template<class T, class DIM_>
 void vsl_print_summary(vcl_ostream& os,const vbl_bounding_box_base<T, DIM_> & p)
 {
     os << vcl_endl;
-    os << "initialized_ : " << p.initialized_ << vcl_endl << vcl_endl;
-    for(int i=0;i<p.dimension();i++)
-    {
-      os << "min[" << i << "] = " << p.min_[i] << vcl_endl;
-    }
-    os << vcl_endl;
-    for(int i=0;i<p.dimension();i++)
-    {
-      os << "max_[" << i << "] = " << p.max_[i] << vcl_endl;
+    if (p.empty())
+      os << "empty" << vcl_endl;
+    else {
+      for(int i=0;i<p.dimension();i++)
+      {
+        os << "min[" << i << "] = " << p.min()[i] << vcl_endl;
+      }
+      os << vcl_endl;
+      for(int i=0;i<p.dimension();i++)
+      {
+        os << "max[" << i << "] = " << p.max()[i] << vcl_endl;
+      }
     }
     os << vcl_endl;
 }
