@@ -128,7 +128,7 @@ struct vcl_char_traits <char> {
   static bool lt (const char_type& c1, const char_type& c2)
     { return (c1 < c2); }
   static char_type eos () { return 0; }
-  static bool is_del(char_type a) { return isspace(a) != 0; } // awf cast for VC5
+  static bool is_del(char_type a) { return vcl_isspace(a) != 0; } // awf cast for VC5
 
   static int compare (const char_type* s1, const char_type* s2, vcl_size_t n)
     { return vcl_memcmp (s1, s2, n); }
