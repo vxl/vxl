@@ -31,9 +31,9 @@ bmrf_curvel_3d::bmrf_curvel_3d(double x, double y, double z, vnl_double_3x3 & s)
 bool 
 bmrf_curvel_3d::merge(const bmrf_curvel_3d_sptr& other)
 {
-  int num_frames = vcl_max(this->projs_2d_.size(), other->projs_2d_.size());
+  unsigned int num_frames = vcl_max(this->projs_2d_.size(), other->projs_2d_.size());
   vcl_vector<vcl_pair<double,bmrf_node_sptr> > merged_projs_2d_(num_frames);
-  for ( int f=0; f<num_frames; ++f ){
+  for ( unsigned int f=0; f<num_frames; ++f ){
     
     bmrf_node_sptr n1 = NULL, n2 = NULL;
     if( f<this->projs_2d_.size() )
