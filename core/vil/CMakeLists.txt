@@ -72,6 +72,7 @@ SET( vil_sources ${vil_sources}
   vil_plane.cxx                         vil_plane.h
   vil_math.h
   vil_view_as.h
+  vil_convert.h
   vil_fill.h
   vil_transform.h
   vil_decimate.cxx                      vil_decimate.h
@@ -103,7 +104,7 @@ SET( vil_sources ${vil_sources}
   vil_rgb.txx                           vil_rgb.h
   vil_rgba.txx                          vil_rgba.h
   vil_fwd.h
-
+  
   # Streams
   vil_stream.cxx                        vil_stream.h
   vil_stream_fstream.cxx                vil_stream_fstream.h
