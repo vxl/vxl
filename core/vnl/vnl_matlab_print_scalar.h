@@ -7,6 +7,7 @@
   fsm@robots.ox.ac.uk
 */
 
+#include <vcl_iosfwd.h>
 #include <vcl_complex_fwd.h>
 #include <vnl/vnl_matlab_print_format.h>
 
@@ -25,5 +26,11 @@ vnl_matlab_print_scalar_declare(long double);
 vnl_matlab_print_scalar_declare(vcl_complex<float>);
 vnl_matlab_print_scalar_declare(vcl_complex<double>);
 vnl_matlab_print_scalar_declare(vcl_complex<long double>);
+
+//: print scalar to ostream.
+export template <class T>
+vcl_ostream &vnl_matlab_print_scalar(vcl_ostream &,
+                                     T value,
+                                     vnl_matlab_print_format =vnl_matlab_print_format_default);
 
 #endif

@@ -223,3 +223,25 @@ void vnl_matlab_print_scalar(vcl_complex<long double> v,
 {
   vnl_matlab_print_scalar(vcl_complex<double>(vcl_real(v), vcl_imag(v)), buf, format); // FIXME
 }
+
+
+#include <vcl_iostream.h>
+template <class T>
+vcl_ostream &vnl_matlab_print_scalar(vcl_ostream &s,
+                                     T value,
+                                     vnl_matlab_print_format format)
+{
+  char buf[1024];
+  vnl_matlab_print_scalar(value, buf, format);
+  return s << buf;
+}
+
+#define inst(T) template vcl_ostream &vnl_matlab_print_scalar(vcl_ostream &, T, vnl_matlab_print_format)
+inst(int);
+inst(float);
+inst(double);
+inst(long double);
+inst(vcl_complex<float>);
+inst(vcl_complex<double>);
+inst(vcl_complex<long double>);
+

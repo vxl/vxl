@@ -24,40 +24,44 @@ template <class T> class vnl_diag_matrix;
 // and followed by "])\n", "]\n" and "]\n" respectively. If the variable name
 // is a null pointer, the data is printed as is.
 
+// -------------------- "unnamed" forms.
+
 //: print a 1D array.
 template <class T>
 vcl_ostream &vnl_matlab_print(vcl_ostream &,
-                          T const *array,
-                          unsigned length,
-                          vnl_matlab_print_format =vnl_matlab_print_format_default);
+                              T const *array,
+                              unsigned length,
+                              vnl_matlab_print_format =vnl_matlab_print_format_default);
 
 //: print a 2D array.
 template <class T>
 vcl_ostream &vnl_matlab_print(vcl_ostream &,
-                          T const * const *array,
-                          unsigned rows, unsigned cols,
-                          vnl_matlab_print_format =vnl_matlab_print_format_default);
+                              T const * const *array,
+                              unsigned rows, unsigned cols,
+                              vnl_matlab_print_format =vnl_matlab_print_format_default);
+
+// -------------------- "named" forms.
 
 //: print a vnl_diagonal_matrix<>.
 template <class T>
 vcl_ostream &vnl_matlab_print(vcl_ostream &,
-                          vnl_diag_matrix<T> const &,
-                          char const *variable_name =0,
-                          vnl_matlab_print_format =vnl_matlab_print_format_default);
+                              vnl_diag_matrix<T> const &,
+                              char const *variable_name =0,
+                              vnl_matlab_print_format =vnl_matlab_print_format_default);
 
 //: print a vnl_matrix<>.
 template <class T>
 vcl_ostream &vnl_matlab_print(vcl_ostream &,
-                          vnl_matrix<T> const &,
-                          char const *variable_name =0,
-                          vnl_matlab_print_format =vnl_matlab_print_format_default);
+                              vnl_matrix<T> const &,
+                              char const *variable_name =0,
+                              vnl_matlab_print_format =vnl_matlab_print_format_default);
 
 //: print a vnl_vector<>.
 template <class T>
 vcl_ostream &vnl_matlab_print(vcl_ostream &,
-                          vnl_vector<T> const &,
-                          char const *variable_name =0,
-                          vnl_matlab_print_format =vnl_matlab_print_format_default);
+                              vnl_vector<T> const &,
+                              char const *variable_name =0,
+                              vnl_matlab_print_format =vnl_matlab_print_format_default);
 
 
 //: naughty naming-convention-defying-but-handy macro.
