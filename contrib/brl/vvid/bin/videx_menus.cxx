@@ -53,10 +53,6 @@ void videx_menus::stop_capture_callback()
   vvid_live_video_manager::instance()->stop_capture();
 }
 
-void videx_menus::reset_camera_link_callback()
-{
-  vvid_live_video_manager::instance()->reset_camera_link();
-}
 
 //videx_menus definition
 vgui_menu videx_menus::get_menu()
@@ -79,7 +75,6 @@ vgui_menu videx_menus::get_menu()
   menuedit.add("Camera Settings", set_camera_params_callback);
   menuedit.add("Edge Detection Settings", set_detection_params_callback);
   menuedit.add("No Live Operation", no_op_callback);
-  menuedit.add("Reset Camera Hardware Link", reset_camera_link_callback);
 
   //Top level menu layout
   menubar.add( "File", menufile);
