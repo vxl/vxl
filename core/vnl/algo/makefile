@@ -44,7 +44,7 @@ MANPAGE_SOURCES += vnl_fft1d.txx
 MANPAGE_SOURCES += vnl_fft2d.txx
 
 # stuff
-SOURCES += vnl_determinant.cxx
+MANPAGE_SOURCES += vnl_determinant.txx
 SOURCES += vnl_chi_squared.cxx
 SOURCES += vnl_gaussian_kernel_1d.cxx
 MANPAGE_SOURCES += vnl_adjugate.txx
