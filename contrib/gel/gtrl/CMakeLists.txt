@@ -13,7 +13,7 @@ INCLUDE( ${MODULE_PATH}/FindNetlib.cmake )
 IF(NETLIB_FOUND)
   INCLUDE_DIRECTORIES(${NETLIB_INCLUDE_DIR})
 
-  SET(gtrl_sources
+  SET(gtrl_sources ${gtrl_sources}
     gtrl_triangulation.cxx gtrl_triangulation.h
   )
 ENDIF(NETLIB_FOUND)
