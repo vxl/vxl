@@ -124,6 +124,12 @@ APP_CFLAGS += -DJPEG_SUPPORT \
 SOURCES += tif_unix.c
 endif
 
+ifeq ($(OS), freebsd)
+APP_CFLAGS += -DJPEG_SUPPORT \
+    -DUSE_VARARGS=0 -DUSE_PROTOTYPES=1 -DUSE_CONST=1
+SOURCES += tif_unix.c
+endif
+
 IULIBS += -lJPEG
 
 ##########################################
