@@ -1,4 +1,20 @@
 #include "mbl/mbl_read_props.h"
+#include <vsl/vsl_indent.h>
+
+
+void mbl_read_props_print(vcl_ostream &afs, mbl_read_props_type props)
+{
+  typedef vcl_map<vcl_string, vcl_string>::iterator ITER;
+  afs << vsl_indent() << "{\n";
+  vsl_indent_inc(afs);
+  for (ITER i = props.begin(); i != props.end(); ++i)
+    afs << vsl_indent() << i->first << ": " << i->second << vcl_endl;
+  vsl_indent_dec(afs);
+  afs << vsl_indent() << "}\n";
+
+}
+
+
 
 //: Read properties from a text stream.
 // The function will terminate on an eof. If one of

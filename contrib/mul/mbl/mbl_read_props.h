@@ -25,4 +25,9 @@ typedef vcl_map<vcl_string, vcl_string > mbl_read_props_type;
 // any whitespace.
 mbl_read_props_type mbl_read_props(vcl_istream &afs);
 
+
+//: Print a list of properties for debugging purposes.
+void mbl_read_props_print(vcl_ostream &afs, mbl_read_props_type props);
+
+
 #endif // mbl_read_props_h
