@@ -16,8 +16,12 @@
 #include <vgl/vgl_plane_3d.h>
 #include <vgl/vgl_homg_plane_3d.h>
 #include <vgl/vgl_homg_line_3d_2_points.h>
+#include <vgl/vgl_line_3d_2_points.h>
 #include <vgl/vgl_polygon.h>
 #include <vcl_cassert.h>
+
+template <class T>
+static inline T square(T x) { return x*x; }
 
 template <class T>
 void vgl_closest_point_to_linesegment(T& ret_x, T& ret_y,
@@ -26,27 +30,54 @@ void vgl_closest_point_to_linesegment(T& ret_x, T& ret_y,
                                       T x0, T y0)
 {
   // squared distance between endpoints:
-  T ddh = (x2-x1)*(x2-x1) + (y2-y1)*(y2-y1);
+  T ddh = square(x2-x1) + square(y2-y1);
 
   // squared distance to endpoints:
-  T dd0 = (x0-x1)*(x0-x1) + (y0-y1)*(y0-y1);
-  T dd1 = (x0-x2)*(x0-x2) + (y0-y2)*(y0-y2);
+  T dd1 = square(x0-x1) + square(y0-y1);
+  T dd2 = square(x0-x2) + square(y0-y2);
 
   // if closest to the start point:
-  if (dd1 > ddh + dd0) { ret_x=x1; ret_y=y1; return; }
+  if (dd2 > ddh + dd1) { ret_x=x1; ret_y=y1; return; }
 
   // if closest to the end point :
-  if (dd0 > ddh + dd1) { ret_x=x2; ret_y=y2; return; }
+  if (dd1 > ddh + dd2) { ret_x=x2; ret_y=y2; return; }
 
   // line through (x0,y0) and perpendicular to the given line is
   // the line with equation (x-x0)(x2-x1)+(y-y0)(y2-y1)=0.
   // Then it just remains to intersect these two lines:
   T dx = x2-x1;
   T dy = y2-y1;
-  T c = dx*dx+dy+dy;
-  ret_x = (dx*dx*x0+dy*dy*x1-dx*dy*(y0-y1))/c;
-  ret_y = (dx*dx*y1+dy*dy*y0-dx*dy*(x1-x0))/c;
-  return;
+  double c = dx*dx+dy+dy;
+  ret_x = T((dx*dx*x0+dy*dy*x1-dx*dy*(y0-y1))/c); // possible rounding error!
+  ret_y = T((dx*dx*y1+dy*dy*y0-dx*dy*(x1-x0))/c);
+}
+
+template <class T>
+void vgl_closest_point_to_linesegment(T& ret_x, T& ret_y, T& ret_z,
+                                      T x1, T y1, T z1,
+                                      T x2, T y2, T z2,
+                                      T x, T y, T z)
+{
+  // squared distance between endpoints:
+  T ddh = square(x2-x1) + square(y2-y1) + square(z2-z1);
+
+  // squared distance to endpoints :
+  T dd1 = square(x-x1) + square(y-y1) + square(z-z1);
+  T dd2 = square(x-x2) + square(y-y2) + square(z-z2);
+
+  // if closest to the start point:
+  if (dd2 > ddh + dd1) { ret_x=x1; ret_y=y1; ret_z=z1; return; }
+
+  // if closest to the end point :
+  if (dd1 > ddh + dd2) { ret_x=x2; ret_y=y2; ret_z=z2; return; }
+
+  // plane through (x,y,z) and orthogonal to the line is a(X-x)+b(Y-y)+c(Z-z)=0
+  // where (a,b,c) is the direction of the line.
+  T a = x2-x1, b = y2-y1, c = z2-z1;
+  // The closest point is then the intersection of this plane with the line.
+  // This point equals (x1,y1,z1) + lambda * (a,b,c), with this lambda:
+  double lambda = (a*(x-x1)+b*(y-y1)+c*(z-z1))/double(a*a+b*b+c*c);
+  ret_x = x1+T(lambda*a); ret_y = y1+T(lambda*b); ret_z = z1+T(lambda*c);
 }
 
 template <class T>
@@ -57,12 +88,29 @@ void vgl_closest_point_to_non_closed_polygon(T& ret_x, T& ret_y,
   assert(n>1);
   double dd = vgl_distance_to_linesegment(px[0],py[0], px[1],py[1], x,y);
   int di = 0;
-  for (unsigned i=1; i<n-1; ++i)
+  for (unsigned i=1; i+1<n; ++i)
   {
     double nd = vgl_distance_to_linesegment(px[i],py[i], px[i+1],py[i+1], x,y);
     if (nd<dd) { dd=nd; di=i; }
   }
   vgl_closest_point_to_linesegment(ret_x,ret_y, px[di],py[di], px[di+1],py[di+1], x,y);
+}
+
+template <class T>
+void vgl_closest_point_to_non_closed_polygon(T& ret_x, T& ret_y, T& ret_z,
+                                             T const px[], T const py[], T const pz[], unsigned int n,
+                                             T x, T y, T z)
+{
+  assert(n>1);
+  double dd = vgl_distance_to_linesegment(px[0],py[0],pz[0], px[1],py[1],pz[1], x,y,z);
+  int di = 0;
+  for (unsigned i=1; i+1<n; ++i)
+  {
+    double nd = vgl_distance_to_linesegment(px[i],py[i],pz[i], px[i+1],py[i+1],pz[i+1], x,y,z);
+    if (nd<dd) { dd=nd; di=i; }
+  }
+  vgl_closest_point_to_linesegment(ret_x,ret_y,ret_z, px[di],py[di],pz[di],
+                                   px[di+1],py[di+1],pz[di+1], x,y,z);
 }
 
 template <class T>
@@ -73,7 +121,7 @@ void vgl_closest_point_to_closed_polygon(T& ret_x, T& ret_y,
   assert(n>1);
   double dd = vgl_distance_to_linesegment(px[0],py[0], px[n-1],py[n-1], x,y);
   int di = -1;
-  for (unsigned i=0; i<n-1; ++i)
+  for (unsigned i=0; i+1<n; ++i)
   {
     double nd = vgl_distance_to_linesegment(px[i],py[i], px[i+1],py[i+1], x,y);
     if (nd<dd) { dd=nd; di=i; }
@@ -82,6 +130,27 @@ void vgl_closest_point_to_closed_polygon(T& ret_x, T& ret_y,
     vgl_closest_point_to_linesegment(ret_x,ret_y, px[0],py[0], px[n-1],py[n-1], x,y);
   else
     vgl_closest_point_to_linesegment(ret_x,ret_y, px[di],py[di], px[di+1],py[di+1], x,y);
+}
+
+template <class T>
+void vgl_closest_point_to_closed_polygon(T& ret_x, T& ret_y, T& ret_z,
+                                         T const px[], T const py[], T const pz[], unsigned int n,
+                                         T x, T y, T z)
+{
+  assert(n>1);
+  double dd = vgl_distance_to_linesegment(px[0],py[0],pz[0], px[n-1],py[n-1],pz[n-1], x,y,z);
+  int di = -1;
+  for (unsigned i=0; i+1<n; ++i)
+  {
+    double nd = vgl_distance_to_linesegment(px[i],py[i],pz[i], px[i+1],py[i+1],pz[i+1], x,y,z);
+    if (nd<dd) { dd=nd; di=i; }
+  }
+  if (di == -1)
+    vgl_closest_point_to_linesegment(ret_x,ret_y,ret_z, px[0],py[0],pz[0],
+                                     px[n-1],py[n-1],pz[n-1], x,y,z);
+  else
+    vgl_closest_point_to_linesegment(ret_x,ret_y,ret_z, px[di],py[di],pz[di],
+                                     px[di+1],py[di+1],pz[di+1], x,y,z);
 }
 
 template <class T>
@@ -96,6 +165,48 @@ vgl_homg_point_2d<T> vgl_closest_point_origin(vgl_homg_line_2d<T> const& l)
 {
   return vgl_homg_point_2d<T>(l.a()*l.c(), l.b()*l.c(),
                               -l.a()*l.a()-l.b()*l.b());
+}
+
+template <class T>
+vgl_point_3d<T> vgl_closest_point_origin(vgl_plane_3d<T> const& pl)
+{
+  T d = pl.a()*pl.a()+pl.b()*pl.b()+pl.c()*pl.c();
+  return vgl_point_3d<T>(-pl.a()*pl.d()/d, -pl.b()*pl.d()/d, -pl.c()*pl.d()/d);
+}
+
+template <class T>
+vgl_homg_point_3d<T> vgl_closest_point_origin(vgl_homg_plane_3d<T> const& pl)
+{
+  return vgl_homg_point_3d<T>(pl.a()*pl.d(), pl.b()*pl.d(), pl.c()*pl.d(),
+                              -pl.a()*pl.a()-pl.b()*pl.b()-pl.c()*pl.c());
+}
+
+template <class T>
+vgl_homg_point_3d<T> vgl_closest_point_origin(vgl_homg_line_3d_2_points<T> const& l)
+{
+  vgl_homg_point_3d<T> const& q = l.point_finite();
+  // The plane through the origin and orthogonal to l is ax+by+cz=0
+  // where (a,b,c,0) is the point at infinity of l.
+  T a = l.point_infinite().x(), b = l.point_infinite().y(), c = l.point_infinite().z(),
+    d = a*a+b*b+c*c;
+  // The closest point is then the intersection of this plane with the line l.
+  // This point equals d * l.point_finite - lambda * l.direction, with lambda:
+  T lambda = a*q.x()+b*q.y()+c*q.z();
+  return vgl_homg_point_3d<T>(d*q.x()-lambda*a*q.w(), d*q.y()-lambda*b*q.w(), d*q.z()-lambda*c*q.w(), d*q.w());
+}
+
+template <class T>
+vgl_point_3d<T> vgl_closest_point_origin(vgl_line_3d_2_points<T> const& l)
+{
+  vgl_point_3d<T> const& q = l.point1();
+  // The plane through the origin and orthogonal to l is ax+by+cz=0
+  // where (a,b,c) is the direction of l.
+  T a = l.point2().x()-q.x(), b = l.point2().y()-q.y(), c = l.point2().z()-q.z(),
+    d = a*a+b*b+c*c;
+  // The closest point is then the intersection of this plane with the line l.
+  // This point equals l.point1 - lambda * l.direction, with lambda:
+  T lambda = (a*q.x()+b*q.y()+c*q.z())/d; // possible rounding error!
+  return vgl_point_3d<T>(q.x()-lambda*a, q.y()-lambda*b, q.z()-lambda*c);
 }
 
 template <class T>
@@ -154,7 +265,7 @@ vgl_point_2d<T> vgl_closest_point(vgl_polygon<T> const& poly,
   {
     unsigned int n = poly[s].size();
     assert( n > 1 );
-    for (unsigned i=0; i<n-1; ++i)
+    for (unsigned i=0; i+1<n; ++i)
     {
       double nd = vgl_distance_to_linesegment(poly[s][i].x(),poly[s][i].y(), poly[s][i+1].x(),poly[s][i+1].y(), x,y);
       if (nd<dd) { dd=nd; di=i; si=s; }
@@ -232,26 +343,52 @@ vgl_homg_point_3d<T> vgl_closest_point(vgl_homg_line_3d_2_points<T> const& l,
 {
   // Invalid case: the given point is at infinity:
   if (p.w() == 0) return l.point_infinite();
-  // The plane through p and orthogonal to l is a(x-px)+b(y-py)+c(z-pz)=0
-  // where (a,b,c,0) is the point at infinity of l.
-  T a = l.point_infinite().x(), b = l.point_infinite().y(), c = l.point_infinite().z();
-  // The closest point is then the intersection of this plane with the line l.
-  // This point equals l.point_finite + lambda * l.direction, with lambda:
   vgl_homg_point_3d<T> const& q = l.point_finite();
   vgl_vector_3d<T> v = p-q;
-  T lambda = (a*v.x()+b*v.y()+c*v.z())/(a*a+b*b+c*c);
-  return vgl_homg_point_3d<T>(q.x()+lambda*a*q.w(), q.y()+lambda*b*q.w(), q.z()+lambda*c*q.w(), q.w());
+  // The plane through p and orthogonal to l is a(x-px)+b(y-py)+c(z-pz)=0
+  // where (a,b,c,0) is the point at infinity of l.
+  T a = l.point_infinite().x(), b = l.point_infinite().y(), c = l.point_infinite().z(),
+    d = a*a+b*b+c*c;
+  // The closest point is then the intersection of this plane with the line l.
+  // This point equals d * l.point_finite + lambda * l.direction, with lambda:
+  T lambda = a*v.x()+b*v.y()+c*v.z();
+  return vgl_homg_point_3d<T>(d*q.x()+lambda*a*q.w(), d*q.y()+lambda*b*q.w(), d*q.z()+lambda*c*q.w(), d*q.w());
 }
+
+template <class T>
+vgl_point_3d<T> vgl_closest_point(vgl_line_3d_2_points<T> const& l,
+                                  vgl_point_3d<T> const& p)
+{
+  vgl_point_3d<T> const& q = l.point1();
+  vgl_vector_3d<T> v = p-q;
+  // The plane through p and orthogonal to l is a(x-px)+b(y-py)+c(z-pz)=0
+  // where (a,b,c,0) is the direction of l.
+  T a = l.point2().x()-q.x(), b = l.point2().y()-q.y(), c = l.point2().z()-q.z(),
+    d = a*a+b*b+c*c;
+  // The closest point is then the intersection of this plane with the line l.
+  // This point equals l.point1 + lambda * l.direction, with lambda:
+  T lambda = (a*v.x()+b*v.y()+c*v.z())/d; // possible rounding error!
+  return vgl_point_3d<T>(q.x()+lambda*a, q.y()+lambda*b, q.z()+lambda*c);
+}
+
 
 #undef VGL_CLOSEST_POINT_INSTANTIATE
 #define VGL_CLOSEST_POINT_INSTANTIATE(T) \
 template void vgl_closest_point_to_linesegment(T&,T&,T,T,T,T,T,T); \
+template void vgl_closest_point_to_linesegment(T&,T&,T&,T,T,T,T,T,T,T,T,T); \
 template void vgl_closest_point_to_non_closed_polygon(T&,T&,T const[],T const[],unsigned int,T,T); \
+template void vgl_closest_point_to_non_closed_polygon(T&,T&,T&,T const[],T const[],T const[],unsigned int,T,T,T); \
 template void vgl_closest_point_to_closed_polygon(T&,T&,T const[],T const[],unsigned int,T,T); \
-template vgl_point_2d<T > vgl_closest_point_origin(vgl_line_2d<T >const&); \
+template void vgl_closest_point_to_closed_polygon(T&,T&,T&,T const[],T const[],T const[],unsigned int,T,T,T); \
+template vgl_point_2d<T > vgl_closest_point_origin(vgl_line_2d<T >const& l); \
+template vgl_point_3d<T > vgl_closest_point_origin(vgl_plane_3d<T > const& pl); \
+template vgl_point_3d<T > vgl_closest_point_origin(vgl_line_3d_2_points<T > const& l); \
 template vgl_homg_point_2d<T > vgl_closest_point_origin(vgl_homg_line_2d<T >const& l); \
+template vgl_homg_point_3d<T > vgl_closest_point_origin(vgl_homg_plane_3d<T > const& pl); \
+template vgl_homg_point_3d<T > vgl_closest_point_origin(vgl_homg_line_3d_2_points<T > const& l); \
 template vgl_point_2d<T > vgl_closest_point(vgl_line_2d<T >const&,vgl_point_2d<T >const&); \
 template vgl_point_2d<T > vgl_closest_point(vgl_point_2d<T >const&,vgl_line_2d<T >const&); \
+template vgl_point_3d<T > vgl_closest_point(vgl_line_3d_2_points<T >const&,vgl_point_3d<T >const&); \
 template vgl_homg_point_2d<T > vgl_closest_point(vgl_homg_line_2d<T >const&,vgl_homg_point_2d<T >const&); \
 template vgl_homg_point_2d<T > vgl_closest_point(vgl_homg_point_2d<T >const&,vgl_homg_line_2d<T >const&); \
 template vgl_point_3d<T > vgl_closest_point(vgl_plane_3d<T >const&,vgl_point_3d<T >const&); \

@@ -36,9 +36,30 @@ static void test_point_to_polygon()
                         vgl_distance( vgl_point_2d<float>( 3.0f, 4.0f ), p ) );
 }
 
+static void test_point_to_3D_line_segment()
+{
+  // line segment (3,4,0)--(3,4,9), point (0,0,0) ==> distance is 5
+  double d = vgl_distance_to_linesegment(3,4,0, 3,4,9, 0,0,0);
+  TEST_NEAR("vgl_distance_to_linesegment", d, 5, 1e-9);
+  // line segment (0,1,4)--(4,4,4), point (8,7,4) ==> distance is 5
+  d = vgl_distance_to_linesegment(0,1,4, 4,4,4, 8,7,4);
+  TEST_NEAR("vgl_distance_to_linesegment", d, 5, 1e-9);
+  // line segment (0,3,4)--(6,3,4), point (2,0,0) ==> distance is 5
+  d = vgl_distance_to_linesegment(0,3,4, 6,3,4, 2,0,0);
+  TEST_NEAR("vgl_distance_to_linesegment", d, 5, 1e-9);
+  // Idem, with end points interchanged:
+  d = vgl_distance_to_linesegment(3,4,9, 3,4,0, 0,0,0);
+  TEST_NEAR("vgl_distance_to_linesegment", d, 5, 1e-9);
+  d = vgl_distance_to_linesegment(4,4,4, 0,1,4, 8,7,4);
+  TEST_NEAR("vgl_distance_to_linesegment", d, 5, 1e-9);
+  d = vgl_distance_to_linesegment(6,3,4, 0,3,4, 2,0,0);
+  TEST_NEAR("vgl_distance_to_linesegment", d, 5, 1e-9);
+}
+
 static void test_distance()
 {
   test_point_to_polygon();
+  test_point_to_3D_line_segment();
 }
 
 TESTMAIN(test_distance);

@@ -7,7 +7,8 @@
 // \author fsm
 //
 // Note that these functions return double, not the template parameter Type,
-// since e.g. the distance between two vgl_point_2d<int> is not always an int.
+// since e.g. the distance between two vgl_point_2d<int> is not always an int,
+// but even the squared distance between such a point and a line is not integer.
 //
 // \verbatim
 //  Modifications
@@ -17,15 +18,17 @@
 //    5 June 2003 Peter Vanroose added vgl_distance(line_3d,line_3d)
 //   11 June 2003 Peter Vanroose added vgl_distance(line_3d,point_3d)
 //   14 Nov. 2003 Peter Vanroose made all functions templated
+//   25 Sept 2004 Peter Vanroose added 3D vgl_distance_to_linesegment()
+//   25 Sept 2004 Peter Vanroose added 3D vgl_distance_to_*_polygon()
 // \endverbatim
 
 #include <vgl/vgl_fwd.h> // forward declare various vgl classes
 
 //: Squared distance between point \a (x,y) and closest point on line segment \a (x1,y1)-(x2,y2)
 template <class T>
-T vgl_distance2_to_linesegment(T x1, T y1,
-                               T x2, T y2,
-                               T x, T y);
+double vgl_distance2_to_linesegment(T x1, T y1,
+                                    T x2, T y2,
+                                    T x, T y);
 
 //: Distance between point \a (x,y) and closest point on line segment \a (x1,y1)-(x2,y2)
 template <class T>
@@ -33,25 +36,67 @@ double vgl_distance_to_linesegment(T x1, T y1,
                                    T x2, T y2,
                                    T x, T y);
 
+//: Squared distance between point \a (x,y,z) and closest point on line segment \a (x1,y1,z1)-(x2,y2,z2)
+template <class T>
+double vgl_distance2_to_linesegment(T x1, T y1, T z1,
+                                    T x2, T y2, T z2,
+                                    T x,  T y,  T z);
+
+//: Distance between point \a (x,y,z) and closest point on line segment \a (x1,y1,z1)-(x2,y2,z2)
+template <class T>
+double vgl_distance_to_linesegment(T x1, T y1, T z1,
+                                   T x2, T y2, T z2,
+                                   T x,  T y,  T z);
+
 //: Distance between point \a (x,y) and closest point on open polygon \a (px[i],py[i])
 template <class T>
 double vgl_distance_to_non_closed_polygon(T const px[], T const py[], unsigned int n,
                                           T x, T y);
+
+//: Distance between point \a (x,y,z) and closest point on open polygon \a (px[i],py[i],pz[i])
+template <class T>
+double vgl_distance_to_non_closed_polygon(T const px[], T const py[], T const pz[], unsigned int n,
+                                          T x, T y, T z);
 
 //: Distance between point \a (x,y) and closest point on closed polygon \a (px[i],py[i])
 template <class T>
 double vgl_distance_to_closed_polygon(T const px[], T const py[], unsigned int n,
                                       T x, T y);
 
+//: Distance between point \a (x,y,z) and closest point on closed polygon \a (px[i],py[i]),pz[i]
+template <class T>
+double vgl_distance_to_closed_polygon(T const px[], T const py[], T const pz[], unsigned int n,
+                                      T x, T y, T z);
+
 //: find the shortest distance of the line to the origin
 // \relates vgl_line_2d
 template <class T>
 double vgl_distance_origin(vgl_line_2d<T> const& l);
 
+//: find the shortest distance of the plane to the origin
+// \relates vgl_plane_3d
+template <class T>
+double vgl_distance_origin(vgl_plane_3d<T> const& pl);
+
+//: find the shortest distance of the line to the origin
+// \relates vgl_line_3d_2_points
+template <class T>
+double vgl_distance_origin(vgl_line_3d_2_points<T> const& l);
+
 //: find the shortest distance of the line to the origin
 // \relates vgl_homg_line_2d
 template <class T>
 double vgl_distance_origin(vgl_homg_line_2d<T> const& l);
+
+//: find the shortest distance of the plane to the origin
+// \relates vgl_homg_plane_3d
+template <class T>
+double vgl_distance_origin(vgl_homg_plane_3d<T> const& pl);
+
+//: find the shortest distance of the line to the origin
+// \relates vgl_homg_line_3d_2_points
+template <class T>
+double vgl_distance_origin(vgl_homg_line_3d_2_points<T> const& l);
 
 //: return the distance between two points
 // \relates vgl_point_2d
@@ -152,5 +197,13 @@ double vgl_distance(vgl_homg_line_3d_2_points<T> const& l,
 template <class T> inline
 double vgl_distance(vgl_homg_point_3d<T> const& p,
                     vgl_homg_line_3d_2_points<T> const& l) { return vgl_distance(l,p); }
+
+template <class T>
+double vgl_distance(vgl_line_3d_2_points<T> const& l,
+                    vgl_point_3d<T> const& p);
+
+template <class T> inline
+double vgl_distance(vgl_point_3d<T> const& p,
+                    vgl_line_3d_2_points<T> const& l) { return vgl_distance(l,p); }
 
 #endif // vgl_distance_h_
