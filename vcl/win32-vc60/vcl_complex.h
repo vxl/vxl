@@ -122,8 +122,8 @@ template <class T> vcl_complex<T> vcl_tanh(const vcl_complex<T>& x) { return std
 template <class T> vcl_complex<T> vcl_pow(const vcl_complex<T>& x, const T& y)
 {
   if (std::imag(x) == 0 && 0 <= std::real(x))
-		return (std::complex<T>(::pow(std::real(x), y),T(0)));
-	else
+    return (std::complex<T>(::pow(std::real(x), y),T(0)));
+  else
     return (std::exp(y * std::log(x)));
 }
 
