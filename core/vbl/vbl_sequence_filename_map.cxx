@@ -311,6 +311,18 @@ void vbl_sequence_filename_map::parse()
   }
 }
 
+int vbl_sequence_filename_map::get_mapped_index(int real) const 
+{
+  int idx = -1;
+  for (int i=0; i < indices_.size(); ++i)
+    if (indices_[i] == real) {
+      idx = i;
+      break;
+    }
+  return idx;
+}
+
+
 vcl_ostream& vbl_sequence_filename_map::print (vcl_ostream& s) const
 {
   s << "vbl_sequence_filename_map : " << image_dir_ << basename_ << index_format_ << image_extension_ << " ";

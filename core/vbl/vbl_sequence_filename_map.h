@@ -61,8 +61,15 @@ public:
   //: returns the image extension e.g. ".pgm"
   vcl_string get_image_extension() const { return image_extension_; }
 
+  //: returns the base name e.h. "img."
+  vcl_string get_base_name() const { return basename_; }
+
+  //: returns the actually on-disk index corresponding to frame N
   int get_real_index(int frame) const { return indices_[frame]; }
   vcl_vector<int> const& get_real_indices() const { return indices_; }
+
+  //: returns the frame number corresp. to on-disk index N, or -1 if out-of-range
+  int get_mapped_index(int real) const;
 
   int get_nviews() const { return indices_.size(); }
 
