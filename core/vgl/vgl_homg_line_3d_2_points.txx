@@ -10,35 +10,6 @@
 //***************************************************************************
 
 
-//: Construct from two points. Initialise using the specified distinct
-//       points on the line.
-template <class Type>
-vgl_homg_line_3d_2_points<Type>::vgl_homg_line_3d_2_points(vgl_homg_point_3d<Type> const& start,
-                                                           vgl_homg_point_3d<Type> const& end)
-{
-  bool start_finite = start.w() != 0;
-  bool end_finite = end.w() != 0;
-
-  if (start_finite && end_finite) {
-    point_finite_ = start;
-
-    Type dx = end.x() - start.x();
-    Type dy = end.y() - start.y();
-    Type dz = end.z() - start.z();
-
-    point_infinite_.set(dx,dy,dz, 0.0);
-  }
-  else if (end_finite) {
-    // Start infinite
-    point_finite_ = end;
-    point_infinite_ = start;
-  }
-  else { // End infinite
-    point_finite_ = start; // possibly also infinite
-    point_infinite_ = end;
-  }
-}
-
 //***************************************************************************
 // Utility methods
 //***************************************************************************
@@ -48,20 +19,17 @@ bool vgl_homg_line_3d_2_points<Type>::operator==(vgl_homg_line_3d_2_points<Type>
 {
   if (this==&other)
     return true;
-  force_point2_infinite(); other.force_point2_infinite();
-  if (get_point_infinite() != other.get_point_infinite())
-    return false;
-  // Now it suffices to check that the three points are collinear:
-  vgl_homg_point_3d<Type> const& p1 = get_point_infinite();
-  vgl_homg_point_3d<Type> const& p2 = get_point_finite();
-  vgl_homg_point_3d<Type> const& p3 = other.get_point_finite();
-  Type d1x = p1.x()*p2.w()*p3.w()-p1.w()*p2.x()*p3.w();
-  Type d2x = p1.x()*p2.w()*p3.w()-p1.w()*p2.w()*p3.x();
-  Type d1y = p1.y()*p2.w()*p3.w()-p1.w()*p2.y()*p3.w();
-  Type d2y = p1.y()*p2.w()*p3.w()-p1.w()*p2.w()*p3.y();
-  Type d1z = p1.z()*p2.w()*p3.w()-p1.w()*p2.z()*p3.w();
-  Type d2z = p1.z()*p2.w()*p3.w()-p1.w()*p2.w()*p3.z();
-  return d1x*d2y == d1y*d2x && d1x*d2z == d1z*d2x;
+  if (!point_finite().ideal()) {
+    if (point_infinite() != other.point_infinite())
+      return false;
+    if (point_finite() == other.point_finite())
+      return true;
+    // Now it suffices to check that the points are collinear:
+    return collinear(point_infinite(), point_finite(), other.point_finite());
+  }
+  // and in the case of the line being at infinity:
+  return collinear(point_infinite(), point_finite(), other.point_finite())
+     &&  collinear(other.point_infinite(), point_finite(), other.point_finite());
 }
 
 //: force the point point_infinite_ to infinity, without changing the line
@@ -89,11 +57,14 @@ void vgl_homg_line_3d_2_points<Type>::force_point2_infinite(void) const
 
 template <class Type>
 vcl_ostream& operator<<(vcl_ostream &s,
-                    const vgl_homg_line_3d_2_points<Type> &p)
+                        const vgl_homg_line_3d_2_points<Type> &p)
 {
-  return s << "<vgl_homg_line_3d_2_points  finite_point: "
-           << p.get_point_finite()
-           << " infinite_point: " << p.get_point_infinite_() << ">";
+  return s << "<vgl_homg_line_3d_2_points "
+           << p.point_finite() << p.point_infinite() << " >";
 }
 
+#undef VGL_HOMG_LINE_3D_2_POINTS_INSTANTIATE
+#define VGL_HOMG_LINE_3D_2_POINTS_INSTANTIATE(T) \
+template class vgl_homg_line_3d_2_points<T >;\
+template vcl_ostream& operator<<(vcl_ostream&, vgl_homg_line_3d_2_points<T > const&)
 #endif // vgl_homg_line_3d_2_points_txx_

@@ -26,9 +26,37 @@ template <class Type>
 bool vgl_homg_point_3d<Type>::operator==(vgl_homg_point_3d<Type> const& other) const
 {
   return (this==&other) ||
-         (   this->x()*other.w() == this->w()*other.x()
-          && this->y()*other.w() == this->w()*other.y()
-          && this->z()*other.w() == this->w()*other.z());
+         (   x()*other.y() == y()*other.x()
+          && x()*other.z() == z()*other.x()
+          && x()*other.w() == w()*other.x()
+          && y()*other.z() == z()*other.y()
+          && y()*other.w() == w()*other.y()
+          && z()*other.w() == w()*other.z());
+}
+
+template <class Type>
+bool collinear(vgl_homg_point_3d<Type> const& p1,
+               vgl_homg_point_3d<Type> const& p2,
+               vgl_homg_point_3d<Type> const& p3)
+{
+  if (!p1.ideal() && !p2.ideal() && !p3.ideal())
+    return parallel(p1-p2, p1-p3);
+  if (!p1.ideal() && !p2.ideal() && p3.ideal())
+    return parallel(p1-p2, vgl_vector_3d<Type>(p3.x(),p3.y(),p3.z()));
+  if (!p1.ideal() && p2.ideal() && !p3.ideal())
+    return parallel(p1-p3, vgl_vector_3d<Type>(p2.x(),p2.y(),p2.z()));
+  if (p1.ideal() && !p2.ideal() && !p3.ideal())
+    return parallel(p2-p3, vgl_vector_3d<Type>(p1.x(),p1.y(),p1.z()));
+  if (p1.ideal() && p2.ideal() && !p3.ideal())
+    return false;
+  if (p1.ideal() && !p2.ideal() && p3.ideal())
+    return false;
+  if (!p1.ideal() && p2.ideal() && p3.ideal())
+    return false;
+  // all three are ideal:
+  return (p1.x()*p2.y()-p1.y()*p2.x())*p3.z()
+        +(p3.x()*p1.y()-p3.y()*p1.x())*p2.z()
+        +(p2.x()*p3.y()-p2.y()*p3.x())*p1.z()==0;
 }
 
 template <class Type>
@@ -48,8 +76,10 @@ vcl_istream& operator>>(vcl_istream& s, vgl_homg_point_3d<Type>& p)
   return s;
 }
 
+#undef VGL_HOMG_POINT_3D_INSTANTIATE
 #define VGL_HOMG_POINT_3D_INSTANTIATE(T) \
 template class vgl_homg_point_3d<T >; \
+template bool collinear(vgl_homg_point_3d<T >const&,vgl_homg_point_3d<T >const&,vgl_homg_point_3d<T >const&); \
 template vcl_ostream& operator<<(vcl_ostream&, vgl_homg_point_3d<T >const&); \
 template vcl_istream& operator>>(vcl_istream&, vgl_homg_point_3d<T >&)
 

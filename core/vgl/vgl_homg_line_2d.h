@@ -13,13 +13,14 @@
 //
 // \verbatim
 // Modifications
+// Peter Vanroose -  6 July 2001 - Added normal(), direction() and concurrent()
+// Peter Vanroose -  4 July 2001 - Added assertions and cstr from non-homg line
 // Peter Vanroose - 27 June 2001 - Added operator==
 // \endverbatim
 
 #include <vcl_iosfwd.h>
-#include <vcl_cmath.h> // for vcl_abs(double) etc
-#include <vcl_cstdlib.h> // for vcl_abs(int) etc
 #include <vgl/vgl_fwd.h> // forward declare vgl_homg_point_2d and vgl_line_2d
+#include <vcl_cassert.h>
 
 //: Represents a homogeneous 2D line.
 template <class Type>
@@ -31,23 +32,25 @@ public:
 
   // Constructors/Initializers/Destructor------------------------------------
 
-  //: Default constructor (leaves line undefined)
-  vgl_homg_line_2d () {}
+  //: Default constructor (Line 1.y==0, the X axis)
+  vgl_homg_line_2d () : a_(0), b_(1), c_(0) {}
 
   // Default copy constructor
-  // vgl_homg_line_2d (const vgl_homg_line_2d<Type>& that) { *this = that; }
-
-#if 0 // unimp
-  vgl_homg_line_2d<Type> (vgl_line_2d<Type> const& p);
-#endif
+  vgl_homg_line_2d (const vgl_homg_line_2d<Type>& l) : a_(l.a()), b_(l.c()), c_(l.c()) {}
 
   //: Construct from three Types.
-  vgl_homg_line_2d (Type const& a_, Type const& b_, Type const& c_) { set(a_,b_,c_); }
+  //  The three given numbers should not be all 0
+  vgl_homg_line_2d (Type a, Type b, Type c) : a_(a), b_(b), c_(c) {assert(a||b||c);}
 
   //: Construct from 3-vector.
-  vgl_homg_line_2d (const Type v[3]) { set(v[0],v[1],v[2]); }
+  //  The three given numbers should not be all 0
+  vgl_homg_line_2d (const Type v[3]) : a_(v[0]), b_(v[1]), c_(v[2]) {assert(a_||b_||c_);}
 
-  //: Construct from two points (join)
+  //: Construct from non-homogeneous line
+  vgl_homg_line_2d<Type> (vgl_line_2d<Type> const& p);
+
+  //: Construct from two distinct points (join)
+  //  The two points must be distinct!
   vgl_homg_line_2d (vgl_homg_point_2d<Type> const& p1, vgl_homg_point_2d<Type> const& p2);
 
 #if 0
@@ -56,8 +59,7 @@ public:
 
   // Default assignment operator
   vgl_homg_line_2d<Type>& operator=(const vgl_homg_line_2d<Type>& that){
-    set(that.a(),that.b(),that.c());
-    return *this;
+    set(that.a(),that.b(),that.c()); return *this;
   }
 #endif
 
@@ -67,32 +69,43 @@ public:
 
   // Data Access-------------------------------------------------------------
 
-#if 0 // TODO
-  vcl_vector<Type> get_direction() const;
-  vcl_vector<Type> get_normal() const;
-#endif
+  //: Parameter a of line a*x + b*y + c*w = 0
+  inline Type a() const {return a_;}
+  //: Parameter b of line a*x + b*y + c*w = 0
+  inline Type b() const {return b_;}
+  //: Parameter c of line a*x + b*y + c*w = 0
+  inline Type c() const {return c_;}
 
-  Type dirx() const { return a(); }  // TODO
-  Type diry() const { return b(); }  // TODO
-  Type nx() const { return -b(); } // TODO
-  Type ny() const { return a(); } // TODO
+  //: unit vector describing line direction, or (0,0) if line at infinity
+  inline vgl_vector_2d<double> direction() const { return normalized(vgl_vector_2d<double>(b_,-a_)); }
 
-  Type a() const {return pos_[0];}
-  Type b() const {return pos_[1];}
-  Type c() const {return pos_[2];}
+  //: unit vector orthogonal to line, or (0,0) if line at infinity
+  inline vgl_vector_2d<double> normal() const { return normalized(vgl_vector_2d<double>(a_,b_)); }
 
+protected: // \deprecated
+  //: x component of unit vector describing direction of line
+  inline double dir_x() const { return direction().x(); }
+
+  //: y component of unit vector describing direction of line
+  inline double dir_y() const { return direction().y(); }
+
+  //: x component of unit vector orthogonal to line
+  inline double normal_x() const { return normal().x(); }
+
+  //: y component of unit vector orthogonal to line
+  inline double normal_y() const { return normal().y(); }
+
+public:
   //: Set a b c.
-  void set (Type const& a_, Type const& b_, Type const& c_){
-    pos_[0] = a_;
-    pos_[1] = b_;
-    pos_[2] = c_;
-  }
+  //  The three given numbers should not be all 0
+  //  Note that it does not make sense to set a, b or c separately
+  inline void set (Type a, Type b, Type c) {assert(a||b||c); a_=a; b_=b; c_=c;}
 
   //: Return true iff this line is the line at infinity
-  //  This version checks (max(|a|,|b|) < tol * c
+  //  This version checks (max(|a|,|b|) <= tol * |c|
   bool ideal(Type tol = Type(0)) const {
-    return vcl_abs(a()) <= tol*vcl_abs(c()) &&
-           vcl_abs(b()) <= tol*vcl_abs(c());
+#define vgl_Abs(x) (x<0?-x:x) // avoid #include of vcl_cmath.h AND vcl_cstdlib.h
+    return vgl_Abs(a()) <= tol*vgl_Abs(c()) && vgl_Abs(b()) <= tol*vgl_Abs(c());
   }
 
   //:get two points on the line
@@ -106,17 +119,33 @@ public:
 
   // INTERNALS---------------------------------------------------------------
 
-protected:
+private:
   //: the data associated with this line
-  Type pos_[3];
+  Type a_;
+  Type b_;
+  Type c_;
 };
+
+#define l vgl_homg_line_2d<Type>
+
+//: Are three lines concurrent, i.e., do they pass through a common point?
+template <class Type>
+inline bool concurrent(l const& l1, l const& l2, l const& l3) {
+  return l1.a()*(l2.b()*l3.c()-l3.b()*l2.c())
+        +l2.a()*(l3.b()*l1.c()-l1.b()*l3.c())
+        +l3.a()*(l1.b()*l2.c()-l2.b()*l1.c())==0;
+}
 
 //: Print line equation to stream
 template <class Type>
-vcl_ostream&  operator<<(vcl_ostream& s, const vgl_homg_line_2d<Type>& p);
+vcl_ostream& operator<<(vcl_ostream& s, l const& line);
 
 //: Load in line parameters from stream
 template <class Type>
-vcl_istream&  operator>>(vcl_istream& is,  vgl_homg_line_2d<Type>& p);
+vcl_istream& operator>>(vcl_istream& s, l& line);
+
+#undef l
+
+#define VGL_HOMG_LINE_2D_INSTANTIATE(T) extern "please include vgl/vgl_homg_line_2d.txx first"
 
 #endif //  vgl_homg_line_2d_h

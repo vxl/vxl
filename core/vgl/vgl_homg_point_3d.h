@@ -10,6 +10,7 @@
 //
 // \verbatim
 // Modifications
+// Peter Vanroose -  4 July 2001 - Added geometric interface like vgl_point_3d
 // Peter Vanroose -  2 July 2001 - Added constructor from 3 planes
 // Peter Vanroose -  1 July 2001 - Renamed data to x_ y_ z_ w_ and inlined constructors
 // Peter Vanroose - 27 June 2001 - Implemented operator==
@@ -20,6 +21,7 @@
 #include <vgl/vgl_point_3d.h>
 #include <vgl/vgl_fwd.h> // forward declare vgl_homg_plane_3d
 #include <vcl_iosfwd.h>
+#include <vcl_cassert.h>
 
 //: Represents a homogenious 3D point
 template <class Type>
@@ -85,7 +87,7 @@ public:
 
   //: Return true iff the point is at infinity (an ideal point).
   // The method checks whether |w| < tol * max(|x|,|y|,|z|)
-  inline bool ideal(Type tol = Type(0)) {
+  inline bool ideal(Type tol = Type(0)) const {
     return vcl_abs(w()) <= tol * vcl_abs(x()) ||
            vcl_abs(w()) <= tol * vcl_abs(y()) ||
            vcl_abs(w()) <= tol * vcl_abs(z());
@@ -112,6 +114,12 @@ template <class Type>
 vcl_istream& operator>>(vcl_istream& s, vgl_homg_point_3d<Type>& p);
 
 //  +-+-+ homg_point_3d arithmetic +-+-+
+
+//: Return true iff the point is at infinity (an ideal point).
+// The method checks whether |w| < tol * max(|x|,|y|)
+template <class Type>
+inline bool is_ideal(vgl_homg_point_3d<Type> const& p, Type tol = Type(0)) {
+  return p.ideal(); }
 
 //: The difference of two points is the vector from second to first point
 // This function is only valid if the points are not at infinity.
@@ -161,11 +169,9 @@ inline vgl_homg_point_3d<Type>& operator-=(vgl_homg_point_3d<Type>& p,
 
 //: Are three points collinear, i.e., do they lie on a common line?
 template <class Type>
-inline bool collinear(vgl_homg_point_3d<Type> const& p1,
-                      vgl_homg_point_3d<Type> const& p2,
-                      vgl_homg_point_3d<Type> const& p3) {
-  return parallel(p1-p2, p1-p3);
-}
+bool collinear(vgl_homg_point_3d<Type> const& p1,
+               vgl_homg_point_3d<Type> const& p2,
+               vgl_homg_point_3d<Type> const& p3);
 
 //: Return the relative distance to p1 wrt p1-p2 of p3.
 //  The three points should be collinear and p2 should not equal p1.
@@ -218,5 +224,7 @@ inline vgl_homg_point_3d<Type> centre(vcl_vector<vgl_homg_point_3d<Type> > const
     x+=v[i].x()/v[i].w(), y+=v[i].y()/v[i].w(), z+=v[i].z()/v[i].w();
   return vgl_homg_point_3d<Type>(x,y,z,Type(n));
 }
+
+#define VGL_HOMG_POINT_3D_INSTANTIATE(T) extern "please include vgl/vgl_homg_point_3d.txx first"
 
 #endif // vgl_homg_point_3d_h_

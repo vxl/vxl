@@ -11,10 +11,20 @@
 //  \brief a plane in 3D nonhomogeneous space
 //  \author Don Hamilton, Peter Tu
 //  \date   Feb 15 2000
+//
+// \verbatim
+// Modifications
+// Peter Vanroose  6 July 2001: Added assertion in constructors
+// Peter Vanroose  6 July 2001: Now using vgl_vector_3d for normal direction
+// Peter Vanroose  6 July 2001: Implemented constructor from 3 points
+// Peter Vanroose  6 July 2001: Added normal(); replaced data_[4] by a_ b_ c_ d_
+// Peter Vanroose  6 July 2001: Added operator== and operator!=
+// \endverbatim
 
 #include <vcl_iosfwd.h>
-#include <vgl/vgl_fwd.h> // forward declare vgl_homg_plane_3d
-#include <vgl/vgl_point_3d.h> // necessary for inline functions x(), y() and z()
+#include <vcl_cassert.h>
+#include <vgl/vgl_fwd.h> // forward declare vgl_homg_plane_3d, vgl_point_3d
+#include <vgl/vgl_vector_3d.h>
 
 //: Represents a Euclidian 3D plane
 //  the equation of the plane is (nx * x) + (ny * y) + (nz * z) + d = 0
@@ -27,37 +37,27 @@ public:
 
   // Constructors/Initializers/Destructor------------------------------------
 
-#if 0
-  // Default constructor
-  vgl_plane_3d () {}
+  // Default constructor: XY-plane (1.z = 0)
+  vgl_plane_3d () : a_(0), b_(0), c_(1), d_(0) {}
 
+#if 0
   // Default copy constructor
-  vgl_plane_3d (const vgl_plane_3d<Type>& that) {
-    data_[0]=that.data_[0];
-    data_[1]=that.data_[1];
-    data_[2]=that.data_[2];
-    data_[3]=that.data_[3];
-  }
+  vgl_plane_3d (vgl_plane_3d<Type> const& that)
+    : a_(that.a()), b_(that.b()), c_(that.c()), d_(that.d()) {}
 #endif
 
-  vgl_plane_3d<Type> (vgl_homg_plane_3d<Type> const& p);
-
   //: Construct a vgl_plane_3d from its equation, four Types.
-  vgl_plane_3d (Type nx, Type ny, Type nz, Type d) { set(nx,ny,nz,d); }
+  vgl_plane_3d (Type a,Type b,Type c,Type d):a_(a),b_(b),c_(c),d_(d){assert(a||b||c||d);}
 
   //: Construct from its equation, a 4-vector.
-  vgl_plane_3d (const Type v[4]) { set(v[0],v[1],v[2],v[3]); }
+  vgl_plane_3d (const Type v[4]):a_(v[0]),b_(v[1]),c_(v[2]),d_(v[3]){assert(a_||b_||c_||d_);}
 
-  //: Construct from Normal and d
-  vgl_plane_3d (const Type normal[3], Type d) {
-    set(normal[0],normal[1],normal[2],d);
-  }
+  //: Construct from a homogeneous plane
+  vgl_plane_3d (vgl_homg_plane_3d<Type> const& p);
 
   //: Construct from Normal and a point
-  vgl_plane_3d (const Type normal[3], const vgl_point_3d<Type>& p) {
-    set(normal[0],normal[1],normal[2],
-        -(normal[0]*p.x() + normal[1]*p.y() + normal[2]*p.z()));
-  }
+  vgl_plane_3d (vgl_vector_3d<Type> const& normal,
+                vgl_point_3d<Type> const& p);
 
   //: Construct from three non-collinear points
   vgl_plane_3d (vgl_point_3d<Type> const& p1,
@@ -70,34 +70,44 @@ public:
 
   // Default assignment operator
   vgl_plane_3d<Type>& operator=(vgl_plane_3d<Type> const& that) {
-    this->data_[0] = that.data_[0];
-    this->data_[1] = that.data_[1];
-    this->data_[2] = that.data_[2];
-    this->data_[3] = that.data_[3];
-    return *this;
-  }
+    a_ = that.a(); b_ = that.b(); c_ = that.c(); d_ = that.d(); return *this; }
 #endif
 
   // Data Access-------------------------------------------------------------
 
-  inline Type nx() const {return data_[0];}
-  inline Type ny() const {return data_[1];}
-  inline Type nz() const {return data_[2];}
-  inline Type d()  const {return data_[3];}
+  //: Return x coefficient
+  inline Type a()  const {return a_;}
+  inline Type nx() const {return a_;}
+  //: Return y coefficient
+  inline Type b()  const {return b_;}
+  inline Type ny() const {return b_;}
+  //: Return z coefficient
+  inline Type c()  const {return c_;}
+  inline Type nz() const {return c_;}
+  //: Return constant coefficient
+  inline Type d()  const {return d_;}
 
-  //: -- Set nx ny nz d
-  inline void set (Type nx, Type ny, Type nz, Type d){
-    data_[0] = nx;
-    data_[1] = ny;
-    data_[2] = nz;
-    data_[3] = d;
-  }
+  //: Set equation a*x+b*y+c*z+d=0
+  inline void set(Type a,Type b,Type c,Type d){assert(a||b||c);a_=a;b_=b;c_=c;d_=d;}
+
+  //: the equality operator
+  bool operator==( vgl_plane_3d<Type> const& p) const;
+  bool operator!=( vgl_plane_3d<Type> const& p) const { return !operator==(p); }
+
+  //: Return true iff the plane is the plane at infinity.
+  //  Always returns false
+  bool ideal(Type = Type(0)) const { return false; }
+
+  inline vgl_vector_3d<Type> normal() const { return normalized(vgl_vector_3d<Type>(a(),b(),c())); }
 
   // INTERNALS---------------------------------------------------------------
 
-protected:
+private:
   // the data associated with this plane
-  Type data_[4];
+  Type a_;
+  Type b_;
+  Type c_;
+  Type d_;
 };
 
 
@@ -108,5 +118,7 @@ vcl_ostream&  operator<<(vcl_ostream& s, const vgl_plane_3d<Type>& p);
 
 template <class Type>
 vcl_istream&  operator>>(vcl_istream& is, vgl_plane_3d<Type>& p);
+
+#define VGL_PLANE_3D_INSTANTIATE(T) extern "please include vgl/vgl_plane_3d.txx first"
 
 #endif // vgl_plane_3d_h

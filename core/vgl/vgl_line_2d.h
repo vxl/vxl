@@ -12,6 +12,8 @@
 //
 // \verbatim
 // Modifications :
+// 2001/07/06 Peter Vanroose         Added concurrent(), added assertions
+// 2001/07/05 Peter Vanroose         direction, normal in terms of vgl_vector_2d
 // 2001/06/27 Peter Vanroose         Added operator==
 // 2001/03/19 Franck Bettinger       added Manchester binary IO code
 // 2000/12/01 Peter Vanroose         moved dist_origin() to vgl_distance.h
@@ -22,9 +24,9 @@
 // \endverbatim
 
 #include <vcl_iosfwd.h>
-#include <vcl_cmath.h> // for vcl_sqrt()
-#include <vcl_string.h>
+#include <vcl_cassert.h>
 #include <vgl/vgl_fwd.h> // forward declare vgl_point_2d and vgl_homg_line_2d
+#include <vgl/vgl_vector_2d.h>
 
 //: Represents a Euclidian 2D line
 // An interface for the line coefficients, [a,b,c], is provided in terms of the
@@ -35,35 +37,32 @@ class vgl_line_2d {
 // PUBLIC INTERFACE--------------------------------------------------------
 
 public:
-  //: Default constructor (Line 1.x==0)
-  vgl_line_2d() { data_[0]=1; data_[1]=0; data_[2]=0; }
-
-  //: Construct from homogeneous description of line
-  vgl_line_2d<Type> (vgl_homg_line_2d<Type> const& p);
+  //: Default constructor (Line 1.y==0, the X axis)
+  vgl_line_2d() : a_(0), b_(1), c_(0) {}
 
   //: Construct a vgl_line_2d from its equation, three Types.
-  vgl_line_2d (Type a, Type b, Type c) { data_[0]=a; data_[1]=b; data_[2]=c; }
-
-  //:  Construct from two distinct points
-  vgl_line_2d (vgl_point_2d<Type> const& p1, vgl_point_2d<Type> const& p2) {
-    data_[0] = p1.y() - p2.y();
-    data_[1] = p2.x() - p1.x();
-    data_[2] = p1.x() * p2.y() - p1.y() * p2.x();
-  }
+  //  The values of a and b should not be both zero.
+  vgl_line_2d (Type a, Type b, Type c) : a_(a), b_(b), c_(c) {assert(a||b);}
 
   //: Construct from its equation, a 3-vector.
-  vgl_line_2d (const Type v[3]) { data_[0]=v[0];data_[1]=v[1];data_[2]=v[2]; }
+  //  The values v[0] and v[1] should not be both zero.
+  vgl_line_2d (const Type v[3]) : a_(v[0]), b_(v[1]), c_(v[2]) {assert(a_||b_);}
+
+  //: Construct from homogeneous description of line
+  //  The line l should not be the line at infinity.
+  vgl_line_2d (vgl_homg_line_2d<Type> const& l);
+
+  //: Construct from two distinct points (join)
+  //  The two points must be distinct!
+  vgl_line_2d (vgl_point_2d<Type> const& p1, vgl_point_2d<Type> const& p2);
 
 #if 0
-  // Default destructor:
+  // Default destructor
   ~vgl_line_2d () {}
 
-  // Default assignment operator:
+  // Default assignment operator
   vgl_line_2d<Type>& operator=(const vgl_line_2d<Type>& that){
-    data_[0]=that.data_[0];
-    data_[1]=that.data_[1];
-    data_[2]=that.data_[2];
-    return *this;
+    set(that.a(),that.b(),that.c()); return *this;
   }
 #endif
 
@@ -73,53 +72,77 @@ public:
 
   // Data Access-------------------------------------------------------------
 
-  //: Get elements of unit vector describing line direction
-  inline void get_direction(Type& dx, Type& dy) const { dx=dir_x(); dy=dir_y(); }
+  //: Parameter a of line a*x + b*y + c = 0
+  inline Type a() const {return a_;}
+  //: Parameter b of line a*x + b*y + c = 0
+  inline Type b() const {return b_;}
+  //: Parameter c of line a*x + b*y + c = 0
+  inline Type c() const {return c_;}
 
-  //: Get elements of unit vector orthogonal to line
-  inline void get_normal(Type& nx, Type& ny) const { nx=normal_x(); ny=normal_y(); }
+  //: unit vector describing line direction
+  inline vgl_vector_2d<double> direction() const { return normalized(vgl_vector_2d<double>(b_,-a_)); }
 
+  //: unit vector orthogonal to line
+  inline vgl_vector_2d<double> normal() const { return normalized(vgl_vector_2d<double>(a_,b_)); }
+
+protected: // \deprecated
   //: x component of unit vector describing direction of line
-  inline Type dir_x() const { return -b()/(vcl_sqrt(a()*a() + b()*b())); }
+  inline double dir_x() const { return direction().x(); }
 
   //: y component of unit vector describing direction of line
-  inline Type dir_y() const { return a()/(vcl_sqrt(a()*a() + b()*b())); }
+  inline double dir_y() const { return direction().y(); }
 
   //: x component of unit vector orthogonal to line
-  inline Type normal_x() const { return -dir_y(); }
+  inline double normal_x() const { return normal().x(); }
 
   //: y component of unit vector orthogonal to line
-  inline Type normal_y() const { return dir_x(); }
+  inline double normal_y() const { return normal().y(); }
 
-  //: Parameter of line a()*x + b()*y + c() = 0
-  inline Type a() const {return data_[0];}
-  //: Parameter of line a()*x + b()*y + c() = 0
-  inline Type b() const {return data_[1];}
-  //: Parameter of line a()*x + b()*y + c() = 0
-  inline Type c() const {return data_[2];}
-
+public:
   //: Set a b c.
-  void set (Type a, Type b, Type c){ data_[0] = a; data_[1] = b; data_[2] = c; }
+  //  The values of a and b should not be both zero.
+  //  Note that it does not make sense to set a, b or c separately
+  void set (Type a, Type b, Type c){ assert(a||b); a_ = a; b_ = b; c_ = c; }
+
+  //: Return true iff this line is the line at infinity
+  //  This always returns "false"
+  bool ideal(Type = Type(0)) const { return false; }
 
   //: Get two points on the line; normally the intersection with X and Y axes.
-  // When the line is parallel to one
-  // of these, the point with y=1 or x=1, resp. are taken.  When the line goes
+  // When the line is parallel to one of these,
+  // the point with y=1 or x=1, resp. are taken.  When the line goes
   // through the origin, the second point is (b, -a).
   void get_two_points(vgl_point_2d<Type> &p1, vgl_point_2d<Type> &p2);
 
   // INTERNALS---------------------------------------------------------------
 
-protected:
+private:
   // the data associated with this point
-  Type data_[3];
+  Type a_;
+  Type b_;
+  Type c_;
 };
+
+#define l vgl_line_2d<Type>
+
+//: Are three lines concurrent, i.e., do they pass through a common point?
+template <class Type>
+inline bool concurrent(l const& l1, l const& l2, l const& l3) {
+  return l1.a()*(l2.b()*l3.c()-l3.b()*l2.c())
+        +l2.a()*(l3.b()*l1.c()-l1.b()*l3.c())
+        +l3.a()*(l1.b()*l2.c()-l2.b()*l1.c())==0;
+}
 
 //: Write line description to stream: "<vgl_line_2d ax+by+c>"
 template <class Type>
-vcl_ostream&  operator<<(vcl_ostream& s, const vgl_line_2d<Type>& p);
+vcl_ostream&  operator<<(vcl_ostream& s, l const& line);
 
 //: Read in three line parameters from stream
 template <class Type>
-vcl_istream&  operator>>(vcl_istream& is,  vgl_line_2d<Type>& p);
+vcl_istream&  operator>>(vcl_istream& s, l& line);
+
+#undef l
+
+#define VGL_LINE_2D_INSTANTIATE(T) extern "please include vgl/vgl_line_2d.txx first"
 
 #endif // vgl_line_2d_h_

@@ -23,6 +23,7 @@
 #include <vgl/vgl_point_2d.h>
 #include <vgl/vgl_fwd.h> // forward declare vgl_homg_line_2d
 #include <vcl_iosfwd.h>
+#include <vcl_cassert.h>
 
 //: Represents a homogeneous 2D point
 template <class Type>
@@ -86,7 +87,7 @@ public:
 
   //: Return true iff the point is at infinity (an ideal point).
   // The method checks whether |w| < tol * max(|x|,|y|)
-  inline bool ideal(Type tol = Type(0)) {
+  inline bool ideal(Type tol = Type(0)) const {
     return vcl_abs(w()) <= tol * vcl_abs(x()) ||
            vcl_abs(w()) <= tol * vcl_abs(y());
   }
@@ -111,6 +112,12 @@ template <class Type>
 vcl_istream& operator>>(vcl_istream& s, vgl_homg_point_2d<Type>& p);
 
 //  +-+-+ homg_point_2d arithmetic +-+-+
+
+//: Return true iff the point is at infinity (an ideal point).
+// The method checks whether |w| < tol * max(|x|,|y|)
+template <class Type>
+inline bool is_ideal(vgl_homg_point_2d<Type> const& p, Type tol = Type(0)) {
+  return p.ideal(); }
 
 //: The difference of two points is the vector from second to first point
 // This function is only valid if the points are not at infinity.
@@ -215,5 +222,6 @@ inline vgl_homg_point_2d<Type> centre(vcl_vector<vgl_homg_point_2d<Type> > const
   return vgl_homg_point_2d<Type>(x,y,Type(n));
 }
 
+#define VGL_HOMG_POINT_2D_INSTANTIATE(T) extern "please include vgl/vgl_homg_point_2d.txx first"
 
 #endif // vgl_homg_point_2d_h_

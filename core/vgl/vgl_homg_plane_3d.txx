@@ -4,49 +4,73 @@
 
 #include <vcl_iostream.h>
 #include "vgl_homg_plane_3d.h"
+#include <vgl/vgl_plane_3d.h>
 #include <vgl/vgl_homg_point_3d.h>
 
-//: Construct from Normal and a point
+//: Construct from non-homogeneous plane
 template <class Type>
-vgl_homg_plane_3d<Type>::vgl_homg_plane_3d(const Type normal[3],
-                                           const vgl_homg_point_3d<Type> &p)
+vgl_homg_plane_3d<Type>::vgl_homg_plane_3d(vgl_plane_3d<Type> const& pl)
+  : a_(pl.a()), b_(pl.b()), c_(pl.c()), d_(pl.d()) {}
+
+//: Construct from three points
+template <class Type>
+vgl_homg_plane_3d<Type>::vgl_homg_plane_3d (vgl_homg_point_3d<Type> const& p1,
+                                            vgl_homg_point_3d<Type> const& p2,
+                                            vgl_homg_point_3d<Type> const& p3)
+: a_(p1.w()*(p2.y()*p3.z()-p2.z()*p3.y())
+    +p2.w()*(p3.y()*p1.z()-p3.z()*p1.y())
+    +p3.w()*(p1.y()*p2.z()-p1.z()*p2.y()))
+, b_(p1.w()*(p2.z()*p3.x()-p2.x()*p3.z())
+    +p2.w()*(p3.z()*p1.x()-p3.x()*p1.z())
+    +p3.w()*(p1.z()*p2.x()-p1.x()*p2.z()))
+, c_(p1.w()*(p2.x()*p3.y()-p2.y()*p3.x())
+    +p2.w()*(p3.x()*p1.y()-p3.y()*p1.x())
+    +p3.w()*(p1.x()*p2.y()-p1.y()*p2.x()))
+, d_(p1.x()*(p2.z()*p3.y()-p2.y()*p3.z())
+    +p2.x()*(p2.z()*p3.y()-p2.y()*p3.z())
+    +p3.x()*(p2.z()*p3.y()-p2.y()*p3.z()))
 {
-  // find d given then x*nx + y*ny + z*nz + d*w = 0
+  assert(a_||b_||c_||d_); // points should not be collinear or coinciding
+}
 
-  Type w=p.w();
+//: Construct from normal and a point
+// This will fail when the given point is at infinity!
+template <class Type>
+vgl_homg_plane_3d<Type>::vgl_homg_plane_3d(vgl_vector_3d<Type> const& n,
+                                           vgl_homg_point_3d<Type> const&p)
+ : a_(n.x()*p.w()), b_(n.y()*p.w()), c_(n.z()*p.w()),
+   d_(n.x()*p.x()+n.y()*p.y()+n.z()*p.z()) {}
 
-  // TODO - use tolerance
-  if(w != 0.0)
-    {
-      Type val=normal[0]*p.x()+normal[1]*p.y()+normal[2]*p.z();
-      Type d=val/w;
-      set(normal[0],normal[1],normal[2],d);
-    }
-  else
-    // the point is at infinity so set the plane to infinity TODO
-    set(0,0,0,1);
+template <class Type>
+bool vgl_homg_plane_3d<Type>::operator==(vgl_homg_plane_3d<Type> const& p) const
+{
+  return (this==&p) ||
+         (   (a()*p.d()==p.a()*d())
+          && (b()*p.d()==p.b()*d())
+          && (c()*p.d()==p.c()*d()) );
 }
 
 template <class Type>
-bool vgl_homg_plane_3d<Type>::operator==(vgl_homg_plane_3d<Type> const & other) const
-{
-  return (this==&other) ||
-         (   (this->nx()==other.nx()) && (this->ny()==other.ny())
-          && (this->nz()==other.nz()) && (this->d() ==other.d()));
-}
-
-template <class Type>
-inline vcl_ostream&  operator<<(vcl_ostream& s, const vgl_homg_plane_3d<Type>& p) {
+vcl_ostream& operator<<(vcl_ostream& s, const vgl_homg_plane_3d<Type>& p) {
   return s << " <vgl_homg_plane_3d "
-           << p.data_[0] << " x + "
-           << p.data_[1] << " y + "
-           << p.data_[2] << " z + "
-           << p.data_[3] << " = 0 >";
+           << p.a() << " x + "
+           << p.b() << " y + "
+           << p.c() << " z + "
+           << p.d() << " w = 0 >";
 }
 
 template <class Type>
-vcl_istream&  operator>>(vcl_istream& is, vgl_homg_plane_3d<Type>& p) {
-  return is >> p.data_[0] >> p.data_[1] >> p.data_[2] >> p.data_[3];
+vcl_istream& operator>>(vcl_istream& s, vgl_homg_plane_3d<Type>& p) {
+  Type a, b, c, d;
+  s >> a >> b >> c >> d;
+  p.set(a,b,c,d);
+  return s;
 }
+
+#undef VGL_HOMG_PLANE_3D_INSTANTIATE
+#define VGL_HOMG_PLANE_3D_INSTANTIATE(T) \
+template class vgl_homg_plane_3d<T >; \
+template vcl_ostream& operator<<(vcl_ostream&, vgl_homg_plane_3d<T >const&); \
+template vcl_istream& operator>>(vcl_istream&, vgl_homg_plane_3d<T >&)
 
 #endif // vgl_homg_plane_3d_txx_

@@ -97,6 +97,11 @@ vcl_istream&  operator>>(vcl_istream& s, vgl_point_2d<Type>& p);
 
 //  +-+-+ point_2d arithmetic +-+-+
 
+//: Return true iff the point is at infinity (an ideal point).
+// Always false.
+template <class Type>
+inline bool is_ideal(vgl_point_2d<Type> const&, Type) { return false; }
+
 //: The difference of two points is the vector from second to first point
 template <class Type>
 inline vgl_vector_2d<Type> operator-(vgl_point_2d<Type> const& p1,
@@ -209,5 +214,6 @@ inline vgl_point_2d<Type> centre(vcl_vector<vgl_point_2d<Type> > const& v) {
   return vgl_point_2d<Type>(x/n,y/n);
 }
 
+#define VGL_POINT_2D_INSTANTIATE(T) extern "please include vgl/vgl_point_2d.txx first"
 
 #endif // vgl_point_2d_h

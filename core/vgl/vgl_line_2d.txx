@@ -5,6 +5,24 @@
 #include <vcl_iostream.h>
 #include "vgl_line_2d.h"
 #include <vgl/vgl_point_2d.h>
+#include <vgl/vgl_homg_line_2d.h>
+
+//: line through two given points
+template <class Type>
+vgl_line_2d<Type>::vgl_line_2d (vgl_point_2d<Type> const& p1, vgl_point_2d<Type> const& p2)
+: a_ ( p1.y() - p2.y() )
+, b_ ( p2.x() - p1.x() )
+, c_ ( p1.x() * p2.y() - p1.y() * p2.x() )
+{
+  assert(a_||b_); // two points were distinct
+}
+
+template <class Type>
+vgl_line_2d<Type>::vgl_line_2d (vgl_homg_line_2d<Type> const& l)
+ : a_(l.a()) , b_(l.b()) , c_(l.c())
+{
+  assert(c_);
+}
 
 //: get two points on the line.  These two points are normally the intersections
 // with the Y axis and X axis, respectively.  When the line is parallel to one
@@ -24,30 +42,31 @@ template <class Type>
 bool vgl_line_2d<Type>::operator==(vgl_line_2d<Type> const& other) const
 {
   return (this==&other) ||
-         (   this->a()*other.c() == this->c()*other.a()
-          && this->b()*other.c() == this->c()*other.b());
+         (   a()*other.b() == b()*other.a()
+          && a()*other.c() == c()*other.a()
+          && b()*other.c() == c()*other.b());
 }
 
 //: Write line description to stream: "<vgl_line_2d ax+by+c>"
 template <class Type>
-vcl_ostream&  operator<<(vcl_ostream& s, const vgl_line_2d<Type>& p) {
-  return s << " <vgl_line_2d " << p.a() << " x + " << p.b()
-           << " y + " << p.c() << " = 0>";
+vcl_ostream&  operator<<(vcl_ostream& s, vgl_line_2d<Type> const& line) {
+  return s << " <vgl_line_2d " << line.a() << " x + " << line.b()
+           << " y + " << line.c() << " = 0>";
 }
 
 //: Read in three line parameters from stream
 template <class Type>
-vcl_istream&  operator>>(vcl_istream& is,  vgl_line_2d<Type>& p) {
+vcl_istream&  operator>>(vcl_istream& s, vgl_line_2d<Type>& line) {
   Type a,b,c;
-  is >> a >> b >> c;
-  p.set(a,b,c);
-  return is;
+  s >> a >> b >> c;
+  line.set(a,b,c);
+  return s;
 }
 
-
+#undef VGL_LINE_2D_INSTANTIATE
 #define VGL_LINE_2D_INSTANTIATE(T) \
 template class vgl_line_2d<T >; \
-template vcl_ostream& operator<<(vcl_ostream&, const vgl_line_2d<T >&); \
+template vcl_ostream& operator<<(vcl_ostream&, vgl_line_2d<T >const&); \
 template vcl_istream& operator>>(vcl_istream&, vgl_line_2d<T >&)
 
 #endif // vgl_line_2d_txx_

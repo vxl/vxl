@@ -44,9 +44,9 @@ public:
   vgl_point_3d (vgl_homg_point_3d<Type> const& p);
 
   //: Construct from 3 planes (intersection).
-  vgl_point_3d (const vgl_plane_3d<Type>& pl1,
-                const vgl_plane_3d<Type>& pl2,
-                const vgl_plane_3d<Type>& pl3);
+  vgl_point_3d (vgl_plane_3d<Type> const& pl1,
+                vgl_plane_3d<Type> const& pl2,
+                vgl_plane_3d<Type> const& pl3);
 
 #if 0 // The compiler defaults for these are doing what they should do:
   //: Copy constructor
@@ -100,6 +100,11 @@ template <class Type>
 vcl_istream&  operator>>(vcl_istream& s, vgl_point_3d<Type>& p);
 
 //  +-+-+ point_3d arithmetic +-+-+
+
+//: Return true iff the point is at infinity (an ideal point).
+// Always false.
+template <class Type>
+inline bool is_ideal(vgl_point_3d<Type> const&, Type) { return false; }
 
 //: The difference of two points is the vector from second to first point
 template <class Type>
@@ -216,5 +221,6 @@ inline vgl_point_3d<Type> centre(vcl_vector<vgl_point_3d<Type> > const& v) {
   return vgl_point_3d<Type>(x/n,y/n,z/n);
 }
 
+#define VGL_POINT_3D_INSTANTIATE(T) extern "please include vgl/vgl_point_3d.txx first"
 
 #endif // vgl_point_3d_h

@@ -13,14 +13,16 @@
 //
 // \verbatim
 // Modifications
+// Peter Vanroose  6 July 2001: Now using vgl_vector_3d for normal direction
+// Peter Vanroose  6 July 2001: Added normal(); replaced data_[4] by a_ b_ c_ d_
+// Peter Vanroose  6 July 2001: Added constructor from 3 points
 // CJB (Manchester) 16/03/2001: Tidied up the documentation
 // \endverbatim
 
 #include <vcl_iosfwd.h>
-#include <vcl_cmath.h> // for vcl_abs(double) etc
-#include <vcl_cstdlib.h> // for vcl_abs(int) etc
-#include <vcl_string.h>
 #include <vgl/vgl_fwd.h> // forward declare vgl_plane_3d and vgl_homg_point_3d
+#include <vgl/vgl_vector_3d.h>
+#include <vcl_cassert.h>
 
 //: Represents a homogeneous 3D plane
 template <class Type>
@@ -29,69 +31,71 @@ public:
   vgl_homg_plane_3d () {}
 
   //: Construct from four Types.
-  vgl_homg_plane_3d (Type nx, Type ny, Type nz, Type d) { set(nx,ny,nz,d); }
+  vgl_homg_plane_3d (Type nx, Type ny, Type nz, Type d) : a_(nx), b_(ny), c_(nz), d_(d) {}
 
   //: Construct from 4-vector.
-  vgl_homg_plane_3d (const Type v[4]) { set(v[0],v[1],v[2],v[3]); }
+  vgl_homg_plane_3d (const Type v[4]) : a_(v[0]), b_(v[1]), c_(v[2]), d_(v[3]) {}
 
-  //: Construct from Normal and d
-  vgl_homg_plane_3d (const Type normal[3], Type d) {
-    set(normal[0],normal[1],normal[2],d);
-  }
+  //: Construct from non-homogeneous plane.
+  vgl_homg_plane_3d (vgl_plane_3d<Type> const& pl);
 
-  //: Construct from Normal and a point
-  vgl_homg_plane_3d (const Type normal[3], const vgl_homg_point_3d<Type>& p);
+  //: Construct from normal and a point
+  //  The given point must not be at infinity.
+  vgl_homg_plane_3d (vgl_vector_3d<Type> const& n, vgl_homg_point_3d<Type> const& p);
+
+  //: Construct from three non-collinear points
+  vgl_homg_plane_3d (vgl_homg_point_3d<Type> const& p1,
+                     vgl_homg_point_3d<Type> const& p2,
+                     vgl_homg_point_3d<Type> const& p3);
 
   // Data Access-------------------------------------------------------------
 
-  //: Return x component
-  inline Type nx() const {return data_[0];}
-  //: Return y component
-  inline Type ny() const {return data_[1];}
-  //: Return z component
-  inline Type nz() const {return data_[2];}
+  //: Return x coefficient
+  inline Type a() const {return a_;}
+  inline Type nx() const {return a_;}
+  //: Return y coefficient
+  inline Type b() const {return b_;}
+  inline Type ny() const {return b_;}
+  //: Return z coefficient
+  inline Type c() const {return c_;}
+  inline Type nz() const {return c_;}
+  //: Return homogenous scaling coefficient
+  inline Type d() const {return d_;}
 
-  //: Return homogenous scaling component
-  inline Type d() const {return data_[3];}
-
-  // iterators.
-  typedef Type*       iterator;
-  typedef Type const* const_iterator;
-  iterator begin() { return (Type*)data_; }
-  iterator end() { return (Type*)(data_+4); }
-  const_iterator begin() const { return (Type const*)data_; }
-  const_iterator end() const { return (Type const*)(data_+4); }
-
-  //: Set nx ny nz d
-  inline void set (Type nx, Type ny, Type nz, Type d){
-    data_[0] = nx;
-    data_[1] = ny;
-    data_[2] = nz;
-    data_[3] = d;
-  }
+  //: Set equation a*x+b*y+c*z+d*w=0
+  inline void set(Type a,Type b,Type c,Type d){assert(a||b||c||d);a_=a;b_=b;c_=c;d_=d;}
 
   //: the equality operator
-  bool operator==( vgl_homg_plane_3d<Type> const & other) const;
+  bool operator==( vgl_homg_plane_3d<Type> const & pl) const;
+  bool operator!=( vgl_homg_plane_3d<Type> const & pl) const { return !operator==(pl); }
 
   //: Return true iff the plane is the plane at infinity.
-  // The method checks that max(|nx|,|ny|,|nz|) < tol * |d|
+  // The method checks that max(|nx|,|ny|,|nz|) <= tol * |d|
   bool ideal(Type tol = Type(0)) const {
-    return vcl_abs(nx()) <= tol * vcl_abs(d()) &&
-           vcl_abs(ny()) <= tol * vcl_abs(d()) &&
-           vcl_abs(nz()) <= tol * vcl_abs(d());
+#define vgl_Abs(x) (x<0?-x:x) // avoid #include of vcl_cmath.h AND vcl_cstdlib.h
+    return vgl_Abs(nx()) <= tol * vgl_Abs(d()) &&
+           vgl_Abs(ny()) <= tol * vgl_Abs(d()) &&
+           vgl_Abs(nz()) <= tol * vgl_Abs(d());
   }
 
-protected:
+  inline vgl_vector_3d<double> normal() const { return normalized(vgl_vector_3d<double>(a(),b(),c())); }
+
+private:
   // the four homogenenous coordinates of the point.
-  Type data_[4];
+  Type a_;
+  Type b_;
+  Type c_;
+  Type d_;
 };
 
 // stream operators
 
 template <class Type>
-inline vcl_ostream&  operator<<(vcl_ostream& s, const vgl_homg_plane_3d<Type>& p);
+vcl_ostream&  operator<<(vcl_ostream& s, const vgl_homg_plane_3d<Type>& p);
 
 template <class Type>
 vcl_istream&  operator>>(vcl_istream& is, vgl_homg_plane_3d<Type>& p);
+
+#define VGL_HOMG_PLANE_3D_INSTANTIATE(T) extern "please include vgl/vgl_homg_plane_3d.txx first"
 
 #endif // vgl_homg_plane_3d_h
