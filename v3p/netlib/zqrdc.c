@@ -108,8 +108,7 @@ integer *job;
 /*                with its columns permuted as described by jpvt. */
 
 /*        qraux   complex*16(p). */
-/*                qraux contains further information required to recover 
-*/
+/*                qraux contains further information required to recover */
 /*                the unitary part of the decomposition. */
 
 /*        jpvt    jpvt(k) contains the index of the column of the */
