@@ -161,6 +161,12 @@ void vsrl_3d_output::write_output(char *filename)
           Y=output(1,0)/W;
           Z=output(2,0)/W;
 
+          // regardless of the calculations,
+          // -correlation_range <= Z <= +correlation_range_
+          // make sure of it.
+          int c_range = matcher_->get_correlation_range();
+          if (Z <= -c_range) Z = -c_range;
+          if (Z >= c_range) Z = c_range;
 
           // the texture coordinates
           tx=x/width;
@@ -193,16 +199,28 @@ void vsrl_3d_output::write_output(char *filename)
   int length = X_out.size();
   file << length << vcl_endl;
 
+  // Create a range image to dump the data into for further use.
+  // Set initial image to zero.
+  range_image_.resize(width,height+1);
+  for (x=0;x<width;x++) {
+    for (y=0;y<height+1;y++) {
+      range_image_(x,y) = 0.0;
+    }
+  }
 
   iY=Y_out.begin();
   iZ=Z_out.begin();
   itx =tx_out.begin();
   ity = ty_out.begin();
+  int ix,iy; // integers to hold range image indexes
 
   for (iX=X_out.begin();iX!=X_out.end();iX++, iY++, iZ++,itx++, ity++)
     {
       file << (*iX) << " " << (*iY) << " " << (*iZ) << " " << *itx << " " << *ity <<
         vcl_endl;
+      // populate the range image
+      ix = *iX; iy = *iY;
+      range_image_(ix,height-iy) = *iZ;
     }
 
   // OK we can now compute the conectivity between points

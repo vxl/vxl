@@ -61,11 +61,14 @@ class vsrl_3d_output
 
   void write_output(char *filename);
 
+  vil_memory_image_of<double> range_image_;
+
  private:
 
   bool non_valid_point(int x, int y); // identifies non valid points
 
   void  write_disparity_image(char *filename,vsrl_diffusion *diff);
+
 };
 
 #endif // vsrl_3d_output_h
