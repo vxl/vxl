@@ -18,7 +18,7 @@
 // all the inline's while instantiation is taking place.
 
 #if defined(__SUNPRO_CC) && defined(INSTANTIATE_TEMPLATES)
-xx# define inline
+# define inline
 #endif
 
 // implementation of class vcl_complex<FLOAT>, copied from g++ 2.7.2 - PVR
