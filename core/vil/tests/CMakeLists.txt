@@ -18,6 +18,7 @@ ADD_EXECUTABLE( vil2_test_driver
   test_algo_convolve_1d.cxx
   test_algo_convolve_2d.cxx
   test_algo_exp_filter_1d.cxx
+  test_algo_gauss_filter.cxx
   test_algo_exp_grad_filter_1d.cxx
   test_image_view_maths.cxx
   test_memory_chunk.cxx
