@@ -222,7 +222,7 @@ bool gevd_detector::DoCorner( float corner_angle, // smallest angle at corner
 )
 {
   if (!DoStep() || !DoContour()) {
-    cout << "***Fail on DoCorner." << endl;
+    vcl_cout << "***Fail on DoCorner.\n";
     return false;
   }
 
@@ -231,7 +231,7 @@ bool gevd_detector::DoCorner( float corner_angle, // smallest angle at corner
                 separation, length,
                 cycle, ndimension);
   int ncorner = corner.DetectCorners(*edges, *vertices);
-  cout << "Found " << ncorner << " corners." << endl;
+  vcl_cout << "Found " << ncorner << " corners.\n";
   return true;
 }
 
@@ -261,7 +261,7 @@ bool  gevd_detector::DoContour()
   if (edges && vertices) return true;
 
   if (!DoStep()) {
-    cout << "***Fail on DoContour." << endl;
+    vcl_cout << "***Fail on DoContour.\n";
     return false;
   }
   Contour::ClearNetwork(edges, vertices);       // delete vertices/edges
@@ -271,7 +271,7 @@ bool  gevd_detector::DoContour()
                                 junctionx, junctiony,   // chains/cycles
                                 edges, vertices);
   if (!t) {
-    cout << "***Fail on FindNetwork." << endl;
+    vcl_cout << "***Fail on FindNetwork.\n";
     return false;
   }
   contour.SubPixelAccuracy(*edges, *vertices, // insert subpixel
@@ -299,11 +299,10 @@ bool  gevd_detector::DoContour()
 //
 bool  gevd_detector::DoFoldContour()
 {
-
   if (edges && vertices) return true;
 
   if (!DoFold()) {
-    cout << "***Fail on DoFoldContour." << endl;
+    vcl_cout << "***Fail on DoFoldContour.\n";
     return false;
   }
   Contour::ClearNetwork(edges, vertices);       // delete vertices/edges
@@ -315,7 +314,7 @@ bool  gevd_detector::DoFoldContour()
                                 junctionx, junctiony,   // chains/cycles
                                 edges, vertices);
   if (!t) {
-    cout << "***Fail on FindNetwork." << endl;
+    vcl_cout << "***Fail on FindNetwork.\n";
     return false;
   }
   contour.SubPixelAccuracy(*edges, *vertices, // insert subpixel
@@ -382,7 +381,7 @@ bool gevd_detector::DoFold()
 
   const BufferXY* source = GetBufferFromImage();
   if (!source) {
-    cout << " cannot get image buffer" << endl;
+    vcl_cout << " cannot get image buffer\n";
     return false;
   }
 

@@ -74,27 +74,22 @@ double vdgl_interpolator_cubic::get_y( const double index)
   vdgl_edgel ce( chain_->edgel( c));
   vdgl_edgel de( chain_->edgel( d));
 
+  vnl_matrix<double> A(4,1);
+  vnl_matrix<double> M(4,4);
 
+  A(0,0) = ae.get_y(); A(1,0) = be.get_y();
+  A(2,0) = ce.get_y(); A(3,0) = de.get_y();
 
+  M(0,0)=  a*a*a; M(0,1)= b*b; M(0,2)= a; M(0,3)= 1;
+  M(1,0)=  b*b*b; M(1,1)= b*b; M(1,2)= b; M(1,3)= 1;
+  M(2,0)=  c*c*c; M(2,1)= c*c; M(2,2)= c; M(2,3)= 1;
+  M(3,0)=  d*d*d; M(3,1)= d*d; M(3,2)= d; M(3,3)= 1;
 
-        vnl_matrix<double> A(4,1);
-        vnl_matrix<double> M(4,4);
+  vnl_svd<double> svd(M);
 
+  vnl_matrix<double> P = svd.solve(A);
 
-        A(0,0) = ae.get_y(); A(1,0) = be.get_y();
-        A(2,0) = ce.get_y(); A(3,0) = de.get_y();
-
-        M(0,0)=  a*a*a; M(0,1)= b*b; M(0,2)= a; M(0,3)= 1;
-        M(1,0)=  b*b*b; M(1,1)= b*b; M(1,2)= b; M(1,3)= 1;
-        M(2,0)=  c*c*c; M(2,1)= c*c; M(2,2)= c; M(2,3)= 1;
-        M(3,0)=  d*d*d; M(3,1)= d*d; M(3,2)= d; M(3,3)= 1;
-
-
-        vnl_svd<double> svd(M);
-
-        vnl_matrix<double> P = svd.solve(A);
-
-        double y_new= P(0,0) * index * index * index  + P(1,0) *  index * index + P(2,0) * index  + P(3,0);
+  double y_new= P(0,0) * index * index * index  + P(1,0) *  index * index + P(2,0) * index  + P(3,0);
 
   return (y_new);
 }
@@ -112,26 +107,21 @@ double vdgl_interpolator_cubic::get_theta( const double index)
   vdgl_edgel ce( chain_->edgel( c));
   vdgl_edgel de( chain_->edgel( d));
 
+  vnl_matrix<double> A(4,1);
+  vnl_matrix<double> M(4,4);
 
+  A(0,0) = ae.get_theta(); A(1,0) = be.get_theta();
+  A(2,0) = ce.get_theta(); A(3,0) = de.get_theta();
 
-   vnl_matrix<double> A(4,1);
-   vnl_matrix<double> M(4,4);
+  M(0,0)=  a*a*a; M(0,1)= a*a; M(0,2)= a; M(0,3)= 1;
+  M(1,0)=  b*b*b; M(1,1)= b*b; M(1,2)= b; M(1,3)= 1;
+  M(2,0)=  c*c*c; M(2,1)= c*c; M(2,2)= c; M(2,3)= 1;
+  M(3,0)=  d*d*d; M(3,1)= d*d; M(3,2)= d; M(3,3)= 1;
 
+  vnl_svd<double> svd(M);
+  vnl_matrix<double> P = svd.solve(A);
 
-        A(0,0) = ae.get_theta(); A(1,0) = be.get_theta();
-        A(2,0) = ce.get_theta(); A(3,0) = de.get_theta();
-
-        M(0,0)=  a*a*a; M(0,1)= a*a; M(0,2)= a; M(0,3)= 1;
-        M(1,0)=  b*b*b; M(1,1)= b*b; M(1,2)= b; M(1,3)= 1;
-        M(2,0)=  c*c*c; M(2,1)= c*c; M(2,2)= c; M(2,3)= 1;
-        M(3,0)=  d*d*d; M(3,1)= d*d; M(3,2)= d; M(3,3)= 1;
-
-        vnl_svd<double> svd(M);
-        vnl_matrix<double> P = svd.solve(A);
-
-
-        double theta_new= P(0,0) * index * index * index  + P(1,0) *  index * index + P(2,0) * index  + P(3,0);
-
+  double theta_new= P(0,0) * index * index * index  + P(1,0) *  index * index + P(2,0) * index  + P(3,0);
 
   return (theta_new);
 }
@@ -149,30 +139,26 @@ double vdgl_interpolator_cubic::get_curvature( const double index)
   vdgl_edgel ce( chain_->edgel( c));
   vdgl_edgel de( chain_->edgel( d));
 
-
   vnl_matrix<double> A(4,1);
   vnl_matrix<double> M(4,4);
 
-        A(0,0) = ae.get_x(); A(1,0) = be.get_x();
-        A(2,0) = ce.get_x(); A(3,0) = de.get_x();
+  A(0,0) = ae.get_x(); A(1,0) = be.get_x();
+  A(2,0) = ce.get_x(); A(3,0) = de.get_x();
 
-        M(0,0)=  a*a*a; M(0,1)= a*a; M(0,2)= a; M(0,3)= 1;
-        M(1,0)=  b*b*b; M(1,1)= b*b; M(1,2)= b; M(1,3)= 1;
-        M(2,0)=  c*c*c; M(2,1)= c*c; M(2,2)= c; M(2,3)= 1;
-        M(3,0)=  d*d*d; M(3,1)= d*d; M(3,2)= d; M(3,3)= 1;
-
+  M(0,0)=  a*a*a; M(0,1)= a*a; M(0,2)= a; M(0,3)= 1;
+  M(1,0)=  b*b*b; M(1,1)= b*b; M(1,2)= b; M(1,3)= 1;
+  M(2,0)=  c*c*c; M(2,1)= c*c; M(2,2)= c; M(2,3)= 1;
+  M(3,0)=  d*d*d; M(3,1)= d*d; M(3,2)= d; M(3,3)= 1;
 
   vnl_svd<double> svd_of_M(M);
 
-
   vnl_matrix<double> P = svd_of_M.solve(A);
 
-        double x_new= P(0,0) * index * index * index  + P(1,0) *  index * index + P(2,0) * index  + P(3,0);
+  double x_new= P(0,0) * index * index * index  + P(1,0) *  index * index + P(2,0) * index  + P(3,0);
 
-        double t1 = 6 * P(0,0) * x_new + 2 * P(0,1);
-        double t2 = 3 * P(0,0) * x_new * x_new + 2 * P(0,1) * x_new + P(0,2);
-        double t3 = 1 + t2 * t2;
-        double curvature = t1/pow(t3,1.5) ;
+  double t2 = 3 * P(0,0) * x_new * x_new + 2 * P(0,1) * x_new + P(0,2);
+  double t3 = 1 + t2 * t2;
+  double curvature = t1/vcl_pow(t3,1.5) ;
 
  return(curvature);
 }
@@ -239,18 +225,17 @@ void vdgl_interpolator_cubic::recompute_length()
 
   for( int i=0; i< (chain_->size()-1); i++)
   {
-          vgl_point_2d<double> p1= chain_->edgel( i).get_pt();
-          vgl_point_2d<double> p2= chain_->edgel( i+1).get_pt();
+     vgl_point_2d<double> p1= chain_->edgel( i).get_pt();
+     vgl_point_2d<double> p2= chain_->edgel( i+1).get_pt();
 
-          // NOTE THERE IS A PROBLEM HERE UNDER WINDOWS
-          //   WHICH I WILL HAVE TO FIX AT SOME POINT
-          lengthcache_ += 1;
+     // NOTE THERE IS A PROBLEM HERE UNDER WINDOWS
+     //   WHICH I WILL HAVE TO FIX AT SOME POINT - FIXME
+     lengthcache_ += 1;
 
-          //vgl_point_2d<double> diff= p2-p1;
-
-          //lengthcache_ += (p1- p2;//.distance( p2);
+     //vgl_point_2d<double> diff= p2-p1;
+     //lengthcache_ += (p1- p2;//.distance( p2);
   }
-//    lengthcache_+= chain_->edgel( i).get_pt().distance( chain_->edgel( i+1).get_pt());
+  //lengthcache_+= chain_->edgel( i).get_pt().distance( chain_->edgel( i+1).get_pt());
 }
 
 void vdgl_interpolator_cubic::recompute_bbox()

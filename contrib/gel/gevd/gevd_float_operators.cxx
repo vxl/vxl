@@ -36,7 +36,7 @@
 #include <vcl_algorithm.h>
 #include <vnl/vnl_vector.h>
 
-#include <math.h>
+#include <vcl_cmath.h>
 
 #include "gevd_pixel.h"
 #include "gevd_xpixel.h"
@@ -55,7 +55,7 @@
 #ifdef WIN32
 inline static double rint(double v)
 {
-  return (((v - floor(v)) < 0.5) ? floor(v) : ceil(v));
+  return (((v - vcl_floor(v)) < 0.5) ? vcl_floor(v) : vcl_ceil(v));
 }
 #endif
 
@@ -78,7 +78,7 @@ gevd_float_operators::Convolve(const gevd_bufferxy& from,
                                gevd_bufferxy*& to)
 {
 //   CoolTimer t;
-//   cout << "Convolve image";
+//   vcl_cout << "Convolve image";
   to = gevd_float_operators::Allocate(to, from);
   const int wx = kernel.GetSizeX(), wy = kernel.GetSizeY();
   const int rx = wx/2, ry = wy/2;
@@ -94,7 +94,7 @@ gevd_float_operators::Convolve(const gevd_bufferxy& from,
     }
   FillFrameX(*to, 0, rx);       // pad border with 0
   FillFrameY(*to, 0, ry);
-//   cout << " in " << t.real() << " msecs." << endl;
+//   vcl_cout << " in " << t.real() << " msecs.\n";
   return 1;                     // extra scaling factor
 }
 
@@ -109,7 +109,7 @@ gevd_float_operators::Correlation(const gevd_bufferxy& from,
                                   gevd_bufferxy*& to)
 {
 //   CoolTimer t;
-//   cout << "Correlate image";
+//   vcl_cout << "Correlate image";
   to = gevd_float_operators::Allocate(to, from);
   const int wx = kernel.GetSizeX(), wy = kernel.GetSizeY();
   const int rx = wx/2, ry = wy/2;
@@ -133,11 +133,11 @@ gevd_float_operators::Correlation(const gevd_bufferxy& from,
       double varx = sum1 * sumxx - sumx * sumx; // all multiplied with sum1
       double vary = sum1 * sumyy - sumy * sumy;
       double cvar = sum1 * sumxy - sumx * sumy; // linear correlation coeft
-      floatPixel(*to, x+rx, y+ry) = cvar / sqrt(varx * vary);
+      floatPixel(*to, x+rx, y+ry) = cvar / vcl_sqrt(varx * vary);
     }
   FillFrameX(*to, 0, rx);       // pad border with 0
   FillFrameY(*to, 0, ry);
-//   cout << " in " << t.real() << " msecs." << endl;
+//   vcl_cout << " in " << t.real() << " msecs.\n";
   return 1;                     // extra scaling factor
 }
 
@@ -148,7 +148,7 @@ gevd_float_operators::CorrelationAlongAxis(const gevd_bufferxy& from,
                                            gevd_bufferxy*& to)
 {
 //   CoolTimer t;
-//   cout << "Correlate image";
+//   vcl_cout << "Correlate image";
   to = gevd_float_operators::Allocate(to, from);
   to->Clear();
   const int wx = kernel.GetSizeX(), wy = kernel.GetSizeY();
@@ -173,7 +173,7 @@ gevd_float_operators::CorrelationAlongAxis(const gevd_bufferxy& from,
     double varx = sum1 * sumxx - sumx * sumx; // all multiplied with sum1
     double vary = sum1 * sumyy - sumy * sumy;
     double cvar = sum1 * sumxy - sumx * sumy;   // linear correlation coeft
-    floatPixel(*to, x+rx, y+ry) = cvar / sqrt(varx * vary);
+    floatPixel(*to, x+rx, y+ry) = cvar / vcl_sqrt(varx * vary);
   }
   for (x = xhi/2, y = 0; y < yhi; y++) {
     register double sumx = 0, sumy = 0, sumxx = 0, sumyy = 0, sumxy = 0,
@@ -191,9 +191,9 @@ gevd_float_operators::CorrelationAlongAxis(const gevd_bufferxy& from,
     double varx = sum1 * sumxx - sumx * sumx; // all multiplied with sum1
     double vary = sum1 * sumyy - sumy * sumy;
     double cvar = sum1 * sumxy - sumx * sumy;   // linear correlation coeft
-    floatPixel(*to, x+rx, y+ry) = cvar / sqrt(varx * vary);
+    floatPixel(*to, x+rx, y+ry) = cvar / vcl_sqrt(varx * vary);
   }
-//   cout << " in " << t.real() << " msecs." << endl;
+//   vcl_cout << " in " << t.real() << " msecs.\n";
   return 1;                     // extra scaling factor
 }
 
@@ -231,7 +231,7 @@ gevd_float_operators::Convolve(gevd_bufferxy& from, gevd_bufferxy*& to,
                                const bool xwrap, const bool ywrap)
 {
 //   CoolTimer t;
-//   cout << "Convolve image";
+//   vcl_cout << "Convolve image";
   to = gevd_float_operators::Allocate(to, from);
   const int sizeX = to->GetSizeX(), sizeY = to->GetSizeY();
   const int ylo = yradius, yhi = sizeY - yradius;
@@ -351,7 +351,7 @@ gevd_float_operators::Convolve(gevd_bufferxy& from, gevd_bufferxy*& to,
   for (p = 0; p <= 4*yradius; p++)
     delete [] cache[p];         // Free lines in pipeline cache
   delete [] cache;
-//   cout << " in " << t.real() << " msecs." << endl;
+//   vcl_cout << " in " << t.real() << " msecs.\n";
   return 1;                     // assume normalized kernel
 }
 
@@ -381,7 +381,7 @@ gevd_float_operators::Convolve(gevd_bufferxy& from, gevd_bufferxy*& to,
 #if 0 // commented out
 {
   CoolTimer t;
-  cout << "Convolve image";
+  vcl_cout << "Convolve image";
   to = gevd_float_operators::Allocate(to, from);
   const int sizeX = to->GetSizeX(), sizeY = to->GetSizeY();
   const int ylo = yradius, yhi = sizeY - yradius;
@@ -460,7 +460,7 @@ gevd_float_operators::Convolve(gevd_bufferxy& from, gevd_bufferxy*& to,
     delete [] cache[p];         // Free lines in pipeline cache
   delete [] cache;
   delete [] rsum;
-  cout << " in " << t.real() << " msecs." << endl;
+  vcl_cout << " in " << t.real() << " msecs.\n";
   return 2*yradius+1;           // return multiplication factor
 }
 #endif
@@ -668,10 +668,10 @@ gevd_float_operators::Find1dGaussianKernel(const float sigma,
     kernel[i] /= sum;                           // normalize by integral
   }
 #if 0
-  cout << "Gaussian kernel = ";
+  vcl_cout << "Gaussian kernel = ";
   for (i= 0; i <= 2*radius; ++i)
-    cout << kernel[i] << ' ';
-  cout << endl;
+    vcl_cout << kernel[i] << ' ';
+  vcl_cout << vcl_endl;
 #endif
   return true;
 }
@@ -681,7 +681,7 @@ float
 gevd_float_operators::Gaussian(const float x, const float sigma)
 {
   double x_on_sigma = x / sigma;
-  return exp(x_on_sigma * x_on_sigma / -2.0);
+  return vcl_exp(x_on_sigma * x_on_sigma / -2.0);
 }
 
 
@@ -749,7 +749,7 @@ LocalGradient(const gevd_bufferxy& smooth, const int i, const int j,
 {
   gx = floatPixel(smooth, i+1, j) - floatPixel(smooth, i-1, j);
   gy = floatPixel(smooth, i, j+1) - floatPixel(smooth, i, j-1);
-  mag = sqrt(gx*gx + gy*gy);
+  mag = vcl_sqrt(gx*gx + gy*gy);
 }
 
 //: Compute the gradient of the intensity surface. O(m*n).
@@ -772,7 +772,7 @@ gevd_float_operators::Gradient(const gevd_bufferxy& smooth,
                                const bool xwrap, const bool ywrap)
 {
 //   CoolTimer t;
-//   cout << "Compute local gradient magnitude/direction";
+//   vcl_cout << "Compute local gradient magnitude/direction";
   magnitude = gevd_float_operators::Allocate(magnitude, smooth);
   gradx = gevd_float_operators::Allocate(gradx, smooth);
   grady = gevd_float_operators::Allocate(grady, smooth);
@@ -828,7 +828,7 @@ gevd_float_operators::Gradient(const gevd_bufferxy& smooth,
     gevd_float_operators::FillFrameY(*gradx, 0, frame);
     gevd_float_operators::FillFrameY(*grady, 0, frame);
   }
-//   cout << ", in " << t.real() << " msecs." << endl;
+//   vcl_cout << ", in " << t.real() << " msecs.\n";
   return 2;                     // return multiplication factor
 }
 
@@ -877,19 +877,19 @@ LocalHessian(const gevd_bufferxy& smooth, const int i, const int j,
   float ddx_plus_ddy = ddx + ddy;
   float ddx_minus_ddy = ddx - ddy;
   float theta = (two_dxdy==0 && ddx_minus_ddy==0) ? 0 : // DOMAIN cond. on atan2
-                atan2(two_dxdy, ddx_minus_ddy) / 2; // modulo PI
+                vcl_atan2(two_dxdy, ddx_minus_ddy) / 2; // modulo PI
   if (ddx_plus_ddy < 0) {
     mag = - ddx_plus_ddy +      // most negative eigenvalue
-      sqrt((ddx_minus_ddy * ddx_minus_ddy) + (two_dxdy * two_dxdy));
+      vcl_sqrt((ddx_minus_ddy * ddx_minus_ddy) + (two_dxdy * two_dxdy));
     theta += M_PI/2;            // angle in range [0 pi]
   } else {
     mag = ddx_plus_ddy +        // most positive eigenvalue
-          sqrt((ddx_minus_ddy * ddx_minus_ddy) + (two_dxdy * two_dxdy));
+          vcl_sqrt((ddx_minus_ddy * ddx_minus_ddy) + (two_dxdy * two_dxdy));
     if (theta > 0)
       theta -= M_PI;            // angle in range [-pi 0]
   }
-  dirx = cos(theta); // eigenvector corresponding to
-  diry = sin(theta); // largest eigenvalue/curvature
+  dirx = vcl_cos(theta); // eigenvector corresponding to
+  diry = vcl_sin(theta); // largest eigenvalue/curvature
 }
 
 //: Compute the Hessian of the intensity surface. O(m*n).
@@ -908,7 +908,7 @@ gevd_float_operators::Hessian(const gevd_bufferxy& smooth,
                               const bool xwrap, const bool ywrap)
 {
 //   CoolTimer t;
-//   cout << "Compute local Hessian magnitude/direction";
+//   vcl_cout << "Compute local Hessian magnitude/direction";
   magnitude = gevd_float_operators::Allocate(magnitude, smooth);
   dirx = gevd_float_operators::Allocate(dirx, smooth);
   diry = gevd_float_operators::Allocate(diry, smooth);
@@ -964,7 +964,7 @@ gevd_float_operators::Hessian(const gevd_bufferxy& smooth,
     gevd_float_operators::FillFrameY(*dirx, 0, frame);
     gevd_float_operators::FillFrameY(*diry, 0, frame);
   }
-//   cout << ", in " << t.real() << " msecs." << endl;
+//   vcl_cout << ", in " << t.real() << " msecs.\n";
   return 2;                     // multiplication factor for magnitude
 }
 
@@ -991,13 +991,13 @@ LocalLaplacian(const gevd_bufferxy& smooth, const int i, const int j,
              -20 * floatPixel(smooth, i, j)) / 6;
 #endif
   float theta = (diag1==diag2 && ddx==ddy) ? 0 : // DOMAIN condition on atan2
-                atan2((diag1 - diag2) / 2, ddx - ddy) / 2; // modulo PI
+                vcl_atan2((diag1 - diag2) / 2, ddx - ddy) / 2; // modulo PI
   if (mag < 0) {
     mag = - mag;                // absolute magnitude
     theta += M_PI/2;            // other eigenvector
   }
-  dirx = cos(theta);            // eigenvector corresponding to
-  diry = sin(theta);            // largest eigenvalue/curvature
+  dirx = vcl_cos(theta);            // eigenvector corresponding to
+  diry = vcl_sin(theta);            // largest eigenvalue/curvature
 }
 
 //: Compute the Laplacian of the intensity surface. O(m*n).
@@ -1017,7 +1017,7 @@ gevd_float_operators::Laplacian(const gevd_bufferxy& smooth,
                                 const bool xwrap, const bool ywrap)
 {
 //   CoolTimer t;
-//   cout << "Compute local Laplacian magnitude/direction";
+//   vcl_cout << "Compute local Laplacian magnitude/direction";
   magnitude = gevd_float_operators::Allocate(magnitude, smooth);
   dirx = gevd_float_operators::Allocate(dirx, smooth);
   diry = gevd_float_operators::Allocate(diry, smooth);
@@ -1073,7 +1073,7 @@ gevd_float_operators::Laplacian(const gevd_bufferxy& smooth,
     gevd_float_operators::FillFrameY(*dirx, 0, frame);
     gevd_float_operators::FillFrameY(*diry, 0, frame);
   }
-//   cout << ", in " << t.real() << " msecs." << endl;
+//   vcl_cout << ", in " << t.real() << " msecs.\n";
   return 6;                     // multiplication factor for magnitude
 }
 
@@ -1128,7 +1128,7 @@ gevd_float_operators::Orientation(const gevd_bufferxy& smooth,
       dy = floatPixel(smooth, i, j+1) - p_ij;   // onto x and y axes
       ox = (dy * dy) - (dx * dx);
       oy = 2 * dx * dy;
-      floatPixel(thetaI, i, j) = atan2(oy, ox);
+      floatPixel(thetaI, i, j) = vcl_atan2(oy, ox);
       floatPixel(coherenceI, i, j) = ((ox * ox + oy * oy) /
                                       (dx + dy) * (dx + dy));
     }
@@ -1229,7 +1229,7 @@ gevd_float_operators::NonMaximumSuppression(const gevd_bufferxy& magnitude,
                                             const bool ywrap)
 {
 //   CoolTimer t;
-//   cout << "Non maximum suppression to find edge elements > "
+//   vcl_cout << "Non maximum suppression to find edge elements > "
 //        << threshold;
   contour = gevd_float_operators::Allocate(contour, magnitude);
   direction = gevd_float_operators::Allocate(direction, magnitude, bits_per_byte);
@@ -1306,7 +1306,7 @@ gevd_float_operators::NonMaximumSuppression(const gevd_bufferxy& magnitude,
       bytePixel(*direction, i, highy) = 0;
     }
   }
-//   cout << ", in " << t.real() << " msecs." << endl;
+//   vcl_cout << ", in " << t.real() << " msecs.\n";
 }
 
 //: Detect local maxima in linear/circular array.
@@ -1408,7 +1408,7 @@ gevd_float_operators::SupportAngle(const gevd_bufferxy& dirx, const gevd_bufferx
   for (j = 0; j < highy; ++j)
     for (i = 0; i < highx; ++i)
       if (floatPixel(magnitude, i, j) > 0) {
-        theta = atan2(floatPixel(diry, i, j), floatPixel(dirx, i, j));
+        theta = vcl_atan2(floatPixel(diry, i, j), floatPixel(dirx, i, j));
         if (theta < 0) theta += M_PI;
         floatPixel(*angLe, i, j) = theta * 180/M_PI;
       }
@@ -1477,7 +1477,7 @@ gevd_float_operators::SurfaceCurvature(const gevd_bufferxy& normal, gevd_bufferx
         cross_3d(*fvectorPixel(normal, i+1, j-1),
                  *fvectorPixel(normal, i-1, j+1)).squared_magnitude()/2.0;
       if (max_curv2 < curv2) max_curv2 = curv2;
-      floatPixel(*curvature, i, j) = sqrt(max_curv2);
+      floatPixel(*curvature, i, j) = vcl_sqrt(max_curv2);
     }
   gevd_float_operators::FillFrameX(*curvature, 0, frame); // zero curvature around frame.
   gevd_float_operators::FillFrameY(*curvature, 0, frame);
@@ -1514,20 +1514,20 @@ _TangentComponents( const gevd_bufferxy& range,
   if ( low_z == no_value ) {
     distance = 1.0;
     delta_z = high_z - z;
-    // cout << "TC  low missing:  distance = " << distance << ", delta_z = "
-        //  << delta_z << endl;
+    // vcl_cout << "TC  low missing:  distance = " << distance << ", delta_z = "
+        //  << delta_z << vcl_endl;
   }
   else if ( high_z == no_value ) {
     distance = 1.0;
     delta_z = z - low_z;
-    // cout << "TC  high missing:  distance = " << distance << ", delta_z = "
-        //  << delta_z << endl;
+    // vcl_cout << "TC  high missing:  distance = " << distance << ", delta_z = "
+        //  << delta_z << vcl_endl;
   }
   else {
     distance = 2.0;
     delta_z = high_z - low_z;
-    // cout << "TC  neither missing:  distance = " << distance << ", delta_z = "
-        //  << delta_z << endl;
+    // vcl_cout << "TC  neither missing:  distance = " << distance << ", delta_z = "
+        //  << delta_z << vcl_endl;
   }
   return true;
 }
@@ -1576,11 +1576,11 @@ gevd_float_operators::SurfaceNormalD(const gevd_bufferxy& range,
           vnl_vector<float>* nz = new vnl_vector<float>(cross_3d(tx, ty));
 
           //      CoolVector<float>* nz = new CoolVector<float>(cross_3d(tx, ty));
-          // cout << "Tx = " << tx << ",  Ty = " << ty << endl;
+          // vcl_cout << "Tx = " << tx << ",  Ty = " << ty << vcl_endl;
           float mag = nz->magnitude();
           if (mag != 0) {
             *nz /= mag;   // make unit vector
-            // cout << "Normal = " << *nz << endl;
+            // vcl_cout << "Normal = " << *nz << vcl_endl;
             fvectorPixel(*normal, i, j) = nz;
           }
           else {
@@ -1642,10 +1642,10 @@ _CurvatureInDir( const gevd_bufferxy& normal,
     dy = high_y - y;
     sq_dist = (dx*dx) + (dy*dy) + (dz*dz);
     sq_curve = cross_3d( *high_norm, *norm ).squared_magnitude();
-    // cout << "CinDir  low missing:  sq_dist = " << sq_dist
+    // vcl_cout << "CinDir  low missing:  sq_dist = " << sq_dist
         //  << ",  high = " << *high_norm
         //  << ",  norm = " << *norm
-        //  << ",  sq_curve = " << sq_curve << endl;
+        //  << ",  sq_curve = " << sq_curve << vcl_endl;
   }
   else if ( high_norm == NULL ) {
     // -rgc-   sq_dist = 1.0;
@@ -1656,10 +1656,10 @@ _CurvatureInDir( const gevd_bufferxy& normal,
     dy = y - low_y;
     sq_dist = (dx*dx) + (dy*dy) + (dz*dz);
     sq_curve = cross_3d( *norm, *low_norm ).squared_magnitude();
-    // cout << "CinDir  high missing:  sq_dist = " << sq_dist
+    // vcl_cout << "CinDir  high missing:  sq_dist = " << sq_dist
         //  << ",  norm = " << *norm
         //  << ",  low = " << *low_norm
-        //  << ",  sq_curve = " << sq_curve << endl;
+        //  << ",  sq_curve = " << sq_curve << vcl_endl;
   }
   else {
     // -rgc-   sq_dist = 4.0;
@@ -1670,10 +1670,10 @@ _CurvatureInDir( const gevd_bufferxy& normal,
     dy = high_y - low_y;
     sq_dist = (dx*dx) + (dy*dy) + (dz*dz);
     sq_curve = cross_3d( *high_norm, *low_norm ).squared_magnitude();
-    // cout << "CinDir  neither missing:  sq_dist = " << sq_dist
+    // vcl_cout << "CinDir  neither missing:  sq_dist = " << sq_dist
         //  << ",  high = " << *high_norm
         //  << ",  low = " << *low_norm
-        //  << ",  sq_curve = " << sq_curve << endl;
+        //  << ",  sq_curve = " << sq_curve << vcl_endl;
   }
   return true;
 }
@@ -1705,39 +1705,39 @@ gevd_float_operators::SurfaceCurvatureD(const gevd_bufferxy& normal,
         floatPixel(*curvature, i, j) = dflt;
         continue;
       }
-      // cout << "i,j:" << i << " " << j << endl;
+      // vcl_cout << "i,j:" << i << " " << j << vcl_endl;
       float max_sq_curve = -1;
       float sq_dist, sq_curve;
       if ( _CurvatureInDir( normal, surface, i-1, j, i, j, i+1, j,  // horizontal
                             sq_dist, sq_curve ) ) {
         sq_curve *= sq_unit_normalize / sq_dist;
-        // cout << "  sq_curve(h) = " << sq_curve << endl;
+        // vcl_cout << "  sq_curve(h) = " << sq_curve << vcl_endl;
         if ( sq_curve > max_sq_curve ) max_sq_curve = sq_curve;
       }
       if ( _CurvatureInDir( normal, surface,i, j-1, i, j, i, j+1,  // vertical
                             sq_dist, sq_curve ) ) {
         sq_curve *= sq_unit_normalize / sq_dist;
-        // cout << "  sq_curve(v) = " << sq_curve << endl;
+        // vcl_cout << "  sq_curve(v) = " << sq_curve << vcl_endl;
        if ( sq_curve > max_sq_curve ) max_sq_curve = sq_curve;
       }
       if ( _CurvatureInDir( normal, surface, i-1, j-1, i, j, i+1, j+1, //  45 degrees
                             sq_dist, sq_curve ) ) {
         sq_curve *= sq_unit_normalize / sq_dist;
-        // cout << "  sq_curve(45) = " << sq_curve << endl;
+        // vcl_cout << "  sq_curve(45) = " << sq_curve << vcl_endl;
         if ( sq_curve > max_sq_curve ) max_sq_curve = sq_curve;
       }
       if ( _CurvatureInDir( normal, surface, i-1, j+1, i, j, i+1, j-1, // 135 degrees
                             sq_dist, sq_curve ) ) {
         sq_curve *= sq_unit_normalize / sq_dist;
-        // cout << "  sq_curve(135) = " << sq_curve << endl;
+        // vcl_cout << "  sq_curve(135) = " << sq_curve << vcl_endl;
         if ( sq_curve > max_sq_curve ) max_sq_curve = sq_curve;
       }
-      // cout << "  max_sq_curve = " << max_sq_curve << endl;
+      // vcl_cout << "  max_sq_curve = " << max_sq_curve << vcl_endl;
       if ( max_sq_curve < 0 )
         floatPixel(*curvature, i, j) = dflt;
       else
-        floatPixel(*curvature, i, j) = sqrt(max_sq_curve);
-      // cout << "curvature in 1/inches: " << i << " " << j << " " << floatPixel(*curvature, i, j) << endl;
+        floatPixel(*curvature, i, j) = vcl_sqrt(max_sq_curve);
+      // vcl_cout << "curvature in 1/inches: " << i << " " << j << " " << floatPixel(*curvature, i, j) << vcl_endl;
     }
   gevd_float_operators::FillFrameX(*curvature, dflt, frame);    // default curvature
   gevd_float_operators::FillFrameY(*curvature, dflt, frame);    // around frame.
@@ -1932,7 +1932,7 @@ gevd_float_operators::ShrinkBy2_D (const gevd_bufferxy& from,
   //  subsampled values are created in a row, shift the pipeline down.
   //
   for ( y=0; y<sizeY; y++ ) {
-    // cout << "\nNew row:  y= " << y << "\nHere are the pipes.\n";
+    // vcl_cout << "\nNew row:  y= " << y << "\nHere are the pipes.\n";
     // PrintAllPipes( yline, wline, sizeX );
     for (x=0; x<sizeX; x++) {
       float sum_w = 0, sum_z = 0;
@@ -1940,10 +1940,10 @@ gevd_float_operators::ShrinkBy2_D (const gevd_bufferxy& from,
         sum_w += kernel[i] * wline[i][x];
         sum_z += kernel[i] * yline[i][x];
       }
-      // cout << "Assigning:  x,y = " << x << ", " << y << "  ";
+      // vcl_cout << "Assigning:  x,y = " << x << ", " << y << "  ";
       floatPixel(*to, x, y) = sum_w < 0.5 ? no_value : sum_z / sum_w;
-      // cout << ",  sum_w = " << sum_w << ",  value = " << floatPixel(*to, x, y)
-      //  << endl;
+      // vcl_cout << ",  sum_w = " << sum_w << ",  value = " << floatPixel(*to, x, y)
+      //  << vcl_endl;
     }
 
     //  Shift the pipeline down by two rows.  Where it overlaps the
@@ -2007,11 +2007,11 @@ gevd_float_operators::ShrinkBy2AlongX_D( const gevd_bufferxy& from,
                                          float* yline,
                                          float* wline )
 {
-  // cout << "\nIn gevd_float_operators::ShrinkBy2AlongX_D:\n";
+  // vcl_cout << "\nIn gevd_float_operators::ShrinkBy2AlongX_D:\n";
 
-  // cout << "Here is the original data:\n";
+  // vcl_cout << "Here is the original data:\n";
   // for ( int xx=0; xx<from.GetSizeX(); xx++ )
-  //  cout << xx << ":  " << floatPixel( from, xx, y ) << endl;
+  //  vcl_cout << xx << ":  " << floatPixel( from, xx, y ) << vcl_endl;
 
   // setup pipeline of 5 x values
   float xs[5];
@@ -2023,7 +2023,7 @@ gevd_float_operators::ShrinkBy2AlongX_D( const gevd_bufferxy& from,
   int p = 3;
 
   for ( int x = 0; x < sizeX; x++ ) {
-    // cout << "Data pipe:  ";  PrintPipe( xs ); cout << endl;
+    // vcl_cout << "Data pipe:  ";  PrintPipe( xs ); vcl_cout << vcl_endl;
     wline[x] = yline[x] = 0.0;
     int i;
     for ( i = 0; i<5; i++ ) {
@@ -2032,8 +2032,8 @@ gevd_float_operators::ShrinkBy2AlongX_D( const gevd_bufferxy& from,
         yline[x] += kernel[i] * xs[i];
       }
     }
-    // cout << "x = " << x << ",  yline[x] = " << yline[x]
-    // << ", wline[x] = " << wline[x] << endl;
+    // vcl_cout << "x = " << x << ",  yline[x] = " << yline[x]
+    // << ", wline[x] = " << wline[x] << vcl_endl;
     for ( i=0; i<3; i++ ) xs[i] = xs[i+2];
     xs[3] = (p < from_sizeX) ? floatPixel(from, p++, y) : no_value;
     xs[4] = (p < from_sizeX) ? floatPixel(from, p++, y) : no_value;
@@ -2415,14 +2415,14 @@ gevd_float_operators::FindWavelet (const int waveletno,
     lo_filter[ncof] = lo_area;
     hi_filter[ncof] = hi_area;
   }
-//   cout << "lo-filter wavelet " << waveletno << ": ";         // print wavelets
+//   vcl_cout << "lo-filter wavelet " << waveletno << ": ";         // print wavelets
 //   for (int i = 0; i < ncof; i++)
-//       cout << lo_filter[i] << " ";
-//   cout << endl;
-//   cout << "hi-filter wavelet " << waveletno << ": ";
+//       vcl_cout << lo_filter[i] << " ";
+//   vcl_cout << vcl_endl;
+//   vcl_cout << "hi-filter wavelet " << waveletno << ": ";
 //     for (i = 0; i < ncof; i++)
-//       cout << hi_filter[i] << " ";
-//   cout << endl;
+//       vcl_cout << hi_filter[i] << " ";
+//   vcl_cout << vcl_endl;
 
   return true;
 }
@@ -2497,10 +2497,10 @@ gevd_float_operators::WaveletTransform(float* array, const int n,
     float* hi_filter = NULL;
     int ncof = 0;
     FindWavelet(waveletno, lo_filter, hi_filter, ncof);
-//     cout << "Input: ";
+//     vcl_cout << "Input: ";
 //     for (int i = 0; i < n; i++)
-//       cout << array[i] << " ";
-//     cout << endl;
+//       vcl_cout << array[i] << " ";
+//     vcl_cout << vcl_endl;
 
     float* wksp = new float[n];
     if (forwardp) {                             // forward transform
@@ -2509,7 +2509,8 @@ gevd_float_operators::WaveletTransform(float* array, const int n,
                              lo_filter, hi_filter, ncof,
                              wksp);
     } else {                                    // inverse transform
-      int* sizes = new int[int(log(n)/log(2))];
+      const int sz = int(vcl_log(double(n))/vcl_log(2.0));
+      int* sizes = new int[sz];
       int s = 0;
       for (int nn = n; nn >= 4 && nlevels > 0; nn /= 2, nlevels--, s++)
         sizes[s] = nn;                          // reverse sequence of sizes nn
@@ -2520,10 +2521,10 @@ gevd_float_operators::WaveletTransform(float* array, const int n,
       delete [] sizes;
     }
     delete [] wksp;
-//     cout << "Output: ";
+//     vcl_cout << "Output: ";
 //     for (i = 0; i < n; i++)
-//       cout << array[i] << " ";
-//     cout << endl;
+//       vcl_cout << array[i] << " ";
+//     vcl_cout << vcl_endl;
   }
   return true;
 }
@@ -2591,12 +2592,13 @@ gevd_float_operators::WaveletTransformByIndex (float* array,
     return false;
   float* buffer = new float[maxn];              // working buffers for
   float* wksp = new float[maxn];                // 1d wavelet transformation
-  int* sizes = new int[int(log(maxn)/log(2))]; // cache sizes in pyramid
+  const int sz = int(vcl_log(double(maxn))/vcl_log(2.0));
+  int* sizes = new int[sz];                     // cache sizes in pyramid
 
-//   cout << "Input: ";
+//   vcl_cout << "Input: ";
 //   for (int i = 0; i < ntot; i++)
-//     cout << array[i] << " ";
-//   cout << endl;
+//     vcl_cout << array[i] << " ";
+//   vcl_cout << vcl_endl;
 
   int nprev = 1;
   for (int d = ndim-1; d >= 0; d--) {           // dimension varies most, first
@@ -2640,10 +2642,10 @@ gevd_float_operators::WaveletTransformByIndex (float* array,
   delete [] buffer;                             // free working arrays
   delete [] wksp;
   delete [] sizes;
-//   cout << "Output: ";
+//   vcl_cout << "Output: ";
 //   for (i = 0; i < ntot; i++)
-//     cout << array[i] << " ";
-//   cout << endl;
+//     vcl_cout << array[i] << " ";
+//   vcl_cout << vcl_endl;
   return true;
 }
 
@@ -2839,7 +2841,7 @@ gevd_float_operators::TestWavelets ()
 {
 #if 0 // testing commented out
   {
-    cout << "Testing wavelet transforms on 1d buffers" << endl;
+    vcl_cout << "Testing wavelet transforms on 1d buffers\n";
     for (int n = 2; n <= 16; n++) {
       float* data = new float[n];
       for (int k = 2; k <= 12; k+=2) {
@@ -2849,13 +2851,13 @@ gevd_float_operators::TestWavelets ()
         wavelet_transform (data, n, false, k, 2);
         float max_err = 0;
         for (i = 0; i < n; i++) {
-          float err = fabs(data[i] - i-1);
+          float err = vcl_fabs(data[i] - i-1);
           if (err > max_err)
             max_err = err;
         }
-        cout << "  |data| = " << n
+        vcl_cout << "  |data| = " << n
              << "  |wavelet| = " << k
-             << "  |error| = " << max_err << endl;
+             << "  |error| = " << max_err << vcl_endl;
       }
       delete [] data;
     }
@@ -2882,7 +2884,7 @@ gevd_float_operators::TestWavelets ()
             WaveletTransformByBlock (data, dims, ndim, false, nlevels, k);
             float max_err = 0;
             for (int i = 0; i < ntot; i++) {
-              float err = fabs(data[i] - i);
+              float err = vcl_fabs(data[i] - i);
               if (err > max_err)
                 max_err = err;
             }
@@ -3198,7 +3200,7 @@ gevd_float_operators::Correlation(const float* data, const int length,
     double varx = sum1 * sumxx - sumx * sumx; // all multiplied with sum1
     double vary = sum1 * sumyy - sumy * sumy;
     double cvar = sum1 * sumxy - sumx * sumy;
-    return cvar / sqrt(varx * vary); // linear correlation coefficient
+    return cvar / vcl_sqrt(varx * vary); // linear correlation coefficient
   }
 }
 
@@ -3227,10 +3229,10 @@ gevd_float_operators::Correlations (const float* data, const int length,
                                          pattern, radius, // negative direction
                                          index-s);
   }
-//   cout << "correlations = ";
+//   vcl_cout << "correlations = ";
 //   for (s = 0; s < ns; s++)
-//     cout << result[s] << " ";
-//   cout << endl;
+//     vcl_cout << result[s] << " ";
+//   vcl_cout << vcl_endl;
   return result;
 }
 
@@ -3281,7 +3283,7 @@ gevd_float_operators::CoarseFineCorrelation(const float* dataPyr, const int dlen
   // 1. Complete search of the best correlation at coarsest level
   // given required minimum overlap.
 #ifdef DEBUG
-  cout << "shift0 = " << shift << endl;
+  vcl_cout << "shift0 = " << shift << vcl_endl;
 #endif
   if (shift != 0)               // search from apriori shift
     shift /= (1 << coarse);
@@ -3309,10 +3311,10 @@ gevd_float_operators::CoarseFineCorrelation(const float* dataPyr, const int dlen
     float left = cors[mi-1], mid = cors[mi], right = cors[mi+1];
     shift += (mi - rmax) + InterpolateParabola(left, mid, right, match);
 #ifdef DEBUG
-  cout << left << " " << mid << " " << right << endl
+  vcl_cout << left << " " << mid << " " << right << vcl_endl
        << "level = " << coarse
        << "  shift = " << shift * (1 << coarse)
-       << "  match = " << match << endl;
+       << "  match = " << match << vcl_endl;
 #endif
   }
   delete [] cors;
@@ -3331,7 +3333,7 @@ gevd_float_operators::CoarseFineCorrelation(const float* dataPyr, const int dlen
     for (; r < RMAX; r++) {
       float left = cors[0], mid = cors[1], right = cors[2];
 #ifdef DEBUG
-      cout << left << " " << mid << " " << right << endl;
+      vcl_cout << left << " " << mid << " " << right << vcl_endl;
 #endif
       if (left <= mid && mid >= right
           && mid > NOISE) {
@@ -3440,7 +3442,6 @@ gevd_float_operators::IsSimilarBuffer(const gevd_bufferxy& buf1,
           (buf1.GetSizeY() == buf2.GetSizeY()) &&
           (buf1.GetBitsPixel() == buf2.GetBitsPixel()));
 }
-
 
 
 //: Extract from buf, a float sub-buffer with dimensions (sizeX, sizeY),
@@ -3882,8 +3883,9 @@ gevd_float_operators::PadToPowerOf2(gevd_bufferxy& buf)
   int sizeY = buf.GetSizeY();
   int newSizeX = sizeX, newSizeY = sizeY;
   {
-    double exptX = log(sizeX)/log(2), exptY = log(sizeY)/log(2);
-    double ceilX = ceil(exptX), ceilY = ceil(exptY);
+    double exptX = vcl_log(double(sizeX))/vcl_log(2.0),
+           exptY = vcl_log(double(sizeY))/vcl_log(2.0);
+    double ceilX = vcl_ceil(exptX), ceilY = vcl_ceil(exptY);
     if (exptX < ceilX)          // round up to nearest power of 2
       newSizeX = 1 << int(ceilX);
     if (exptY < ceilY)

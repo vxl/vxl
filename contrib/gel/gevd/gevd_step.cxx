@@ -177,7 +177,7 @@ gevd_step::DetectEdgels(const gevd_bufferxy& image,
 
   // 2.5 JLM - Fill the theta array for use in outputing continuous digital curve
   //           directions later.  The angle definition here is consistent with
-  //           EdgeDetector, i.e. angle = (180/M_PI)*atan2(dI/dy, dI/dx);
+  //           EdgeDetector, i.e. angle = (180/M_PI)*vcl_atan2(dI/dy, dI/dx);
 
   grad_mag = gevd_float_operators::SimilarBuffer(image);
   angle = gevd_float_operators::SimilarBuffer(image);
@@ -185,8 +185,8 @@ gevd_step::DetectEdgels(const gevd_bufferxy& image,
   for (int j = 0; j < image.GetSizeY(); j++)
       for (int i = 0; i < image.GetSizeX(); i++)
           if ((floatPixel(*grad_mag, i, j) = floatPixel(*slope, i, j)))
-            floatPixel(*angle, i, j) = kdeg*atan2(floatPixel(*diry, i, j),
-                                                  floatPixel(*dirx, i, j));
+            floatPixel(*angle, i, j) = kdeg*vcl_atan2(floatPixel(*diry, i, j),
+                                                      floatPixel(*dirx, i, j));
           else
             floatPixel(*angle, i, j) = 0;
 
@@ -335,16 +335,16 @@ BestStepExtension(const gevd_bufferxy& smooth,
       int dj = DJS[dir];
       float _pix = floatPixel(smooth, ni-di, nj-dj);
       float  pix_ = floatPixel(smooth, ni+di, nj+dj);
-      float slope = fabs(pix_ - _pix);
-      float max_s = (dir%HALFPI)? best_s*sqrt(2): best_s;
+      float slope = vcl_fabs(pix_ - _pix);
+      float max_s = (dir%HALFPI)? best_s*vcl_sqrt(2.0): best_s;
       if (slope > max_s) {      // find best strength
         int di2 = 2*di;
         int dj2 = 2*dj;
-        if (slope > fabs(pix - floatPixel(smooth, ni-di2, nj-dj2)) &&
-            slope > fabs(pix - floatPixel(smooth, ni+di2, nj+dj2))) {
+        if (slope > vcl_fabs(pix - floatPixel(smooth, ni-di2, nj-dj2)) &&
+            slope > vcl_fabs(pix - floatPixel(smooth, ni+di2, nj+dj2))) {
           best_i = ni;
           best_j = nj;
-          best_s = (dir%HALFPI)? slope/sqrt(2) : slope;
+          best_s = (dir%HALFPI)? slope/vcl_sqrt(2.0) : slope;
           best_d = dir%FULLPI + TWOPI; // in range [0 FULLPI) + TWOPI
         }
       }
@@ -353,11 +353,11 @@ BestStepExtension(const gevd_bufferxy& smooth,
   if (best_s > threshold) {     // interpolate with parabola
     float pix = floatPixel(smooth, best_i, best_j);
     int di2 = 2 * DIS[best_d], dj2 = 2 * DJS[best_d];
-    float _s = fabs(pix - floatPixel(smooth, best_i-di2, best_j-dj2));
-    float s_ = fabs(pix - floatPixel(smooth, best_i+di2, best_j+dj2));
+    float _s = vcl_fabs(pix - floatPixel(smooth, best_i-di2, best_j-dj2));
+    float s_ = vcl_fabs(pix - floatPixel(smooth, best_i+di2, best_j+dj2));
     if (best_d%HALFPI) {
-      _s /= sqrt(2);
-      s_ /= sqrt(2);
+      _s /= vcl_sqrt(2.0);
+      s_ /= vcl_sqrt(2.0);
     }
     best_l = gevd_float_operators::InterpolateParabola(_s, best_s, s_,
                                      best_s);
@@ -541,7 +541,7 @@ gevd_step::NoiseResponseToFilter(const float noiseSigma,
                             const float filterFactor)
 {
   return (noiseSigma /          // white noise
-          pow(smoothSigma, 1.5) * // size of filter dG
-          (0.5 / pow(M_PI, 0.25)) *
+          vcl_pow(smoothSigma, 1.5f) * // size of filter dG
+          (0.5 / vcl_pow(vnl_math::pi, 0.25)) *
           filterFactor);        // multiplication factor
 }

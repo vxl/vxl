@@ -22,7 +22,7 @@
 class vdgl_digital_region {
    // PUBLIC INTERFACE----------------------------------------------------------
 public:
-  
+
   // Constructors/Destructors--------------------------------------------------
   vdgl_digital_region();
   ~vdgl_digital_region();
@@ -30,23 +30,13 @@ public:
   // Operators----------------------------------------------------------------
 
   bool add_point( const vgl_point_2d<double> &p);
-  friend ostream& operator<<(ostream& s, const vdgl_digital_region& d);
+  friend vcl_ostream& operator<<(vcl_ostream& s, const vdgl_digital_region& d);
 
-  // Data Access---------------------------------------------------------------
-      
-  // Data Control--------------------------------------------------------------
-
-  // Computations--------------------------------------------------------------
-  
   // INTERNALS-----------------------------------------------------------------
 protected:
   // Data Members--------------------------------------------------------------
 
   vcl_vector< vgl_point_2d<double> > ps_;
-
-private:
-  // Helpers-------------------------------------------------------------------
 };
-
 
 #endif // _vdgl_digital_region_h

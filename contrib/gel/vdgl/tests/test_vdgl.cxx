@@ -28,7 +28,7 @@ int main()
 
   //Here check for the length of the line
 
-  cerr<<"Length: "<< myline->length();
+  vcl_cerr<<"Length: "<< myline->length();
 
   return 0;
 }

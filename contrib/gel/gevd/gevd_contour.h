@@ -126,7 +126,7 @@ class gevd_contour
 public:
   gevd_contour(float min_strength, int min_length, // hysteresis
                float min_jump,         // jump in strength at junctions
-               float max_gap=sqrt(5)); // bridge small gaps
+               float max_gap=vcl_sqrt(5.0)); // bridge small gaps
   ~gevd_contour();
 
   bool FindNetwork(gevd_bufferxy& edgels, // link pixels into network

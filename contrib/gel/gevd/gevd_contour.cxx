@@ -42,7 +42,7 @@
 // #include <cool/ArrayP.h>
 // #include <cool/ListP.h>
 // #include <iostream.h>
-#include <vcl_cmath.h> // for fabs()
+#include <vcl_cmath.h> // for vcl_fabs()
 #include <vcl_cassert.h>
 #include <vcl_vector.h>
 #include <vcl_algorithm.h> // for vcl_max()
@@ -364,8 +364,8 @@ gevd_contour::FindChains(gevd_bufferxy& edgels, const int njunction,
         // 2.4. Collect both directions & extension points if 1-chain
         while (NextPixel(x, y, edgels)) // trace along first dir, 4-connected
           RecordPixel(x, y, edgels, xloc, yloc); // and stronger first
-        if (fabs(xloc[0]-x) > 1 || // disjoint first/last pixel
-            fabs(yloc[0]-y) > 1) { // so must be a 1-chain with end points
+        if (vcl_fabs(xloc[0]-x) > 1 || // disjoint first/last pixel
+            vcl_fabs(yloc[0]-y) > 1) { // so must be a 1-chain with end points
           if (NextPixel(x, y, *vertexMap)) // search for extra links to
             xloc.push_back(x), yloc.push_back(y); // detected junctions
           x = xloc[0], y = yloc[0]; // start again from first pixel
@@ -585,8 +585,8 @@ ConfirmJunctionOnCycle(int index, float threshold,
     vdgl_edgel _edgel= dc->get_interpolator()->get_edgel_chain()->edgel( _n);
     vdgl_edgel edgel_= dc->get_interpolator()->get_edgel_chain()->edgel( n_);
 
-    if (fabs(floatPixel(edgels, int( edgel_.x()), int( edgel_.y())) -
-             floatPixel(edgels, int( _edgel.x()), int( _edgel.y())))
+    if (vcl_fabs(floatPixel(edgels, int( edgel_.x()), int( edgel_.y())) -
+                 floatPixel(edgels, int( _edgel.x()), int( _edgel.y())))
         > threshold)
       return true;
   }
@@ -665,8 +665,8 @@ ConfirmJunctionOnChain(int index, float threshold,
     vdgl_edgel cp1= dc->get_interpolator()->get_edgel_chain()->edgel(n+1);
     vdgl_edgel cm1= dc->get_interpolator()->get_edgel_chain()->edgel(n-1);
 
-    if (fabs(floatPixel(edgels, int(cp1.x()), int(cp1.y())) -
-             floatPixel(edgels, int(cp1.x()), int(cm1.y())))
+    if (vcl_fabs(floatPixel(edgels, int(cp1.x()), int(cp1.y())) -
+                 floatPixel(edgels, int(cp1.x()), int(cm1.y())))
         > threshold)
     {
       return true;
@@ -1090,8 +1090,8 @@ gevd_contour::FindJunctions(gevd_bufferxy& edgels,
     vdgl_edgel_chain *cxy= dc->get_interpolator()->get_edgel_chain().ptr();
 //  const float *cx = dc->GetX(), *cy = dc->GetY();
     const int last = cxy->size()-1;
-    if (fabs((*cxy)[0].x()-(*cxy)[last].x()) > connect_fuzz || // disjoint first/last pixel
-        fabs((*cxy)[0].y()-(*cxy)[last].y()) > connect_fuzz)
+    if (vcl_fabs((*cxy)[0].x()-(*cxy)[last].x()) > connect_fuzz || // disjoint first/last pixel
+        vcl_fabs((*cxy)[0].y()-(*cxy)[last].y()) > connect_fuzz)
     { // so must be a 1-chain
       int x = int((*cxy)[0].x()), y = int((*cxy)[0].y());
 
