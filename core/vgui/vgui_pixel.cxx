@@ -88,70 +88,7 @@ VCL_DEFINE_SPECIALIZATION inline void copy_g(vgui_pixel_rgba8888 const* s, vgui_
 VCL_DEFINE_SPECIALIZATION inline void copy_b(vgui_pixel_rgba8888 const* s, vgui_pixel_rgb565* d) { d->B = (s->B) >> 3; }
 VCL_DEFINE_SPECIALIZATION inline void copy_a(vgui_pixel_rgba8888 const* s, vgui_pixel_rgb565* d) {  }
 
-
-//fsm: this is why the old macros were better. you can't put these instantiations
-//the above macro because of the specializations. basically, I got a zillion
-//undefined symbols and just did a manual closure :
-// nm vgui_pixel.o | grep " U " | awk '{print $2}' | blah-blah >> vgui_pixel.cxx
-#if defined(VCL_GCC_27)
-VCL_INSTANTIATE_INLINE(void copy_g(vgui_pixel_rgb<8, 8, 8> const *, vgui_pixel_rgb<5, 6, 5> *));
-VCL_INSTANTIATE_INLINE(void copy_g(vgui_pixel_rgba<8, 8, 8, 8> const *, vgui_pixel_abgr<8, 8, 8, 8> *));
-VCL_INSTANTIATE_INLINE(void copy_a(vgui_pixel_rgba<8, 8, 8, 8> const *, vgui_pixel_rgba<8, 8, 8, 8> *));
-VCL_INSTANTIATE_INLINE(void copy_g(vgui_pixel_rgba<8, 8, 8, 8> const *, vgui_pixel_rgb<5, 6, 5> *));
-VCL_INSTANTIATE_INLINE(void copy_r(vgui_pixel_rgb<8, 8, 8> const *, vgui_pixel_bgra<8, 8, 8, 8> *));
-VCL_INSTANTIATE_INLINE(void copy_b(vgui_pixel_rgba<8, 8, 8, 8> const *, vgui_pixel_rgba<8, 8, 8, 8> *));
-VCL_INSTANTIATE_INLINE(void copy_r(vgui_pixel_rgb<8, 8, 8> const *, vgui_pixel_rgb<5, 6, 5> *));
-VCL_INSTANTIATE_INLINE(void copy_r(unsigned char const *, vgui_pixel_bgra<8, 8, 8, 8> *));
-VCL_INSTANTIATE_INLINE(void copy_r(vgui_pixel_rgba<8, 8, 8, 8> const *, vgui_pixel_abgr<8, 8, 8, 8> *));
-VCL_INSTANTIATE_INLINE(void copy_g(unsigned char const *, vgui_pixel_rgb<5, 6, 5> *));
-VCL_INSTANTIATE_INLINE(void copy_a(vgui_pixel_rgb<8, 8, 8> const *, vgui_pixel_bgra<8, 8, 8, 8> *));
-VCL_INSTANTIATE_INLINE(void copy_r(unsigned char const *, vgui_pixel_rgb<8, 8, 8> *));
-VCL_INSTANTIATE_INLINE(void copy_b(unsigned char const *, vgui_pixel_abgr<8, 8, 8, 8> *));
-VCL_INSTANTIATE_INLINE(void copy_g(vgui_pixel_rgb<8, 8, 8> const *, vgui_pixel_rgb<8, 8, 8> *));
-VCL_INSTANTIATE_INLINE(void copy_a(vgui_pixel_rgba<8, 8, 8, 8> const *, vgui_pixel_bgra<8, 8, 8, 8> *));
-VCL_INSTANTIATE_INLINE(void copy_b(vgui_pixel_rgba<8, 8, 8, 8> const *, vgui_pixel_bgra<8, 8, 8, 8> *));
-VCL_INSTANTIATE_INLINE(void copy_b(unsigned char const *, vgui_pixel_bgra<8, 8, 8, 8> *));
-VCL_INSTANTIATE_INLINE(void copy_r(vgui_pixel_rgb<8, 8, 8> const *, vgui_pixel_rgb<8, 8, 8> *));
-VCL_INSTANTIATE_INLINE(void copy_a(unsigned char const *, vgui_pixel_rgba<8, 8, 8, 8> *));
-VCL_INSTANTIATE_INLINE(void copy_a(vgui_pixel_rgb<8, 8, 8> const *, vgui_pixel_abgr<8, 8, 8, 8> *));
-VCL_INSTANTIATE_INLINE(void copy_b(vgui_pixel_rgb<8, 8, 8> const *, vgui_pixel_bgra<8, 8, 8, 8> *));
-VCL_INSTANTIATE_INLINE(void copy_r(vgui_pixel_rgba<8, 8, 8, 8> const *, vgui_pixel_rgb<5, 6, 5> *));
-VCL_INSTANTIATE_INLINE(void copy_r(unsigned char const *, vgui_pixel_rgba<8, 8, 8, 8> *));
-VCL_INSTANTIATE_INLINE(void copy_a(unsigned char const *, vgui_pixel_abgr<8, 8, 8, 8> *));
-VCL_INSTANTIATE_INLINE(void copy_r(unsigned char const *, vgui_pixel_abgr<8, 8, 8, 8> *));
-VCL_INSTANTIATE_INLINE(void copy_b(vgui_pixel_rgb<8, 8, 8> const *, vgui_pixel_rgb<5, 6, 5> *));
-VCL_INSTANTIATE_INLINE(void copy_b(unsigned char const *, vgui_pixel_rgb<8, 8, 8> *));
-VCL_INSTANTIATE_INLINE(void copy_a(vgui_pixel_rgb<8, 8, 8> const *, vgui_pixel_rgba<8, 8, 8, 8> *));
-VCL_INSTANTIATE_INLINE(void copy_b(vgui_pixel_rgba<8, 8, 8, 8> const *, vgui_pixel_abgr<8, 8, 8, 8> *));
-VCL_INSTANTIATE_INLINE(void copy_b(vgui_pixel_rgba<8, 8, 8, 8> const *, vgui_pixel_rgb<8, 8, 8> *));
-VCL_INSTANTIATE_INLINE(void copy_r(unsigned char const *, vgui_pixel_rgb<5, 6, 5> *));
-VCL_INSTANTIATE_INLINE(void copy_a(vgui_pixel_rgba<8, 8, 8, 8> const *, vgui_pixel_abgr<8, 8, 8, 8> *));
-VCL_INSTANTIATE_INLINE(void copy_g(vgui_pixel_rgba<8, 8, 8, 8> const *, vgui_pixel_rgba<8, 8, 8, 8> *));
-VCL_INSTANTIATE_INLINE(void copy_r(vgui_pixel_rgba<8, 8, 8, 8> const *, vgui_pixel_rgba<8, 8, 8, 8> *));
-VCL_INSTANTIATE_INLINE(void copy_g(vgui_pixel_rgb<8, 8, 8> const *, vgui_pixel_bgra<8, 8, 8, 8> *));
-VCL_INSTANTIATE_INLINE(void copy_a(unsigned char const *, vgui_pixel_bgra<8, 8, 8, 8> *));
-VCL_INSTANTIATE_INLINE(void copy_r(vgui_pixel_rgb<8, 8, 8> const *, vgui_pixel_rgba<8, 8, 8, 8> *));
-VCL_INSTANTIATE_INLINE(void copy_b(unsigned char const *, vgui_pixel_rgba<8, 8, 8, 8> *));
-VCL_INSTANTIATE_INLINE(void copy_g(unsigned char const *, vgui_pixel_rgba<8, 8, 8, 8> *));
-VCL_INSTANTIATE_INLINE(void copy_b(vgui_pixel_rgb<8, 8, 8> const *, vgui_pixel_abgr<8, 8, 8, 8> *));
-VCL_INSTANTIATE_INLINE(void copy_r(vgui_pixel_rgba<8, 8, 8, 8> const *, vgui_pixel_rgb<8, 8, 8> *));
-VCL_INSTANTIATE_INLINE(void copy_b(vgui_pixel_rgb<8, 8, 8> const *, vgui_pixel_rgba<8, 8, 8, 8> *));
-VCL_INSTANTIATE_INLINE(void copy_g(vgui_pixel_rgba<8, 8, 8, 8> const *, vgui_pixel_rgb<8, 8, 8> *));
-VCL_INSTANTIATE_INLINE(void copy_b(vgui_pixel_rgb<8, 8, 8> const *, vgui_pixel_rgb<8, 8, 8> *));
-VCL_INSTANTIATE_INLINE(void copy_r(vgui_pixel_rgb<8, 8, 8> const *, vgui_pixel_abgr<8, 8, 8, 8> *));
-VCL_INSTANTIATE_INLINE(void copy_g(unsigned char const *, vgui_pixel_abgr<8, 8, 8, 8> *));
-VCL_INSTANTIATE_INLINE(void copy_g(unsigned char const *, vgui_pixel_rgb<8, 8, 8> *));
-VCL_INSTANTIATE_INLINE(void copy_g(vgui_pixel_rgb<8, 8, 8> const *, vgui_pixel_abgr<8, 8, 8, 8> *));
-VCL_INSTANTIATE_INLINE(void copy_b(vgui_pixel_rgba<8, 8, 8, 8> const *, vgui_pixel_rgb<5, 6, 5> *));
-VCL_INSTANTIATE_INLINE(void copy_r(vgui_pixel_rgba<8, 8, 8, 8> const *, vgui_pixel_bgra<8, 8, 8, 8> *));
-VCL_INSTANTIATE_INLINE(void copy_g(vgui_pixel_rgba<8, 8, 8, 8> const *, vgui_pixel_bgra<8, 8, 8, 8> *));
-VCL_INSTANTIATE_INLINE(void copy_b(unsigned char const *, vgui_pixel_rgb<5, 6, 5> *));
-VCL_INSTANTIATE_INLINE(void copy_g(unsigned char const *, vgui_pixel_bgra<8, 8, 8, 8> *));
-VCL_INSTANTIATE_INLINE(void copy_g(vgui_pixel_rgb<8, 8, 8> const *, vgui_pixel_rgba<8, 8, 8, 8> *));
-#endif
-
 //--------------------------------------------------------------------------------
-
 
 template <class S, class D>
 void vgui_pixel_convert_span(S const *src, D *dst, unsigned size) {
