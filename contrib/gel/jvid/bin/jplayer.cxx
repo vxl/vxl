@@ -8,13 +8,16 @@
 #include <vgui/vgui_command.h>
 #include <vgui/vgui_image_tableau.h>
 #include <vgui/internals/vgui_accelerate.h>
-
-#ifdef HAS_X11
-#include <vgui/internals/vgui_accelerate_x11.h>
-#endif
-
 #include <vidl/vidl_io.h>
 #include <jvid/jvx_manager.h>
+
+#ifdef HAS_MPEG
+# include <vidl/vidl_mpegcodec.h>
+#endif
+
+#ifdef HAS_X11
+# include <vgui/internals/vgui_accelerate_x11.h>
+#endif
 
 #ifdef VCL_WIN32
 #include <vidl/vidl_avicodec.h>
@@ -66,6 +69,10 @@ int main(int argc, char** argv)
   vidl_io::register_codec(new vidl_avicodec);
 #endif
 
+#ifdef HAS_MPEG
+  vidl_io::register_codec(new vidl_mpegcodec);
+#endif
+
 #ifdef HAS_GTK
   vgui_gtk_tag_function();
 #endif
@@ -82,8 +89,9 @@ int main(int argc, char** argv)
    // turn off the mfc acceleration since this seems to stop
    // us from doing the double buffering. It also seems to add
    // a certain amount of overhead
-
+#ifdef HAS_MFC
   vgui_accelerate::vgui_mfc_acceleration = false;
+#endif
 
   vcl_cout << "Joe Video\n";
 
