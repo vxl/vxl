@@ -1,6 +1,5 @@
 #ifndef mil3d_transform_3d_h_
 #define mil3d_transform_3d_h_
-
 //:
 // \file
 // \brief A 3d transform class
@@ -16,10 +15,12 @@
 // Euclidean    (Translation + rotation + scale)
 // The transformation can be represented by a 4x4 matrix of
 // homogeneous co-ordinates.
+// \verbatim
 // ( xx xy xz xt )
 // ( yx yy yz yt )
 // ( zx zy zz zt )
 // ( tx ty tz tt )
+// \endverbatim
 // For efficiency the elements are stored explicitly, rather than in a
 // vnl_matrix<double>, to avoid lots of copying of matrices with all the
 // attendant memory allocation.
@@ -60,10 +61,10 @@ public:
     virtual ~mil3d_transform_3d() {}
 
     //: True if identity.
-    bool isIdentity() const { return (form_==Identity); };
+    bool isIdentity() const { return form_==Identity; }
 
     //: Form of transformation.
-    Form form() const { return form_; };
+    Form form() const { return form_; }
 
     //: Gets 4x4 Matrix representing transformation
     vnl_matrix<double> matrix() const;
@@ -99,7 +100,7 @@ public:
     // \param t_y  Translation in y
     // \param t_z  Translation in z
     void set_zoom_only(double s, double t_x, double t_y, double t_z)
-      { set_zoom_only(s,s,s,t_x,t_y,t_z);};
+      { set_zoom_only(s,s,s,t_x,t_y,t_z); }
 
     //: Sets the transformation to be a translation.
     // \param t_x  Translation in x
@@ -153,7 +154,7 @@ public:
     // The rest of the transformation is unaffected.
     // If the transformation was previously the identity,
     // it becomes a translation.
-   void origin( const vgl_point_3d<double> & );
+    void origin( const vgl_point_3d<double> & );
 
     //: Applies tranformation to (x,y,z)
     // \param x  x co-ord
@@ -166,7 +167,7 @@ public:
     // \param p  Point
     // \return Point = T(p)
     vgl_point_3d<double>  operator()(vgl_point_3d<double>  p) const
-      { return operator()(p.x(),p.y(),p.z()); };
+      { return operator()(p.x(),p.y(),p.z()); }
 
     //: Returns the inverse of the current transform
     // \return inverse of current transform.
@@ -176,15 +177,14 @@ public:
     // \param p  point
     // \param dp  movement from point
     // \return T(p+dp)-T(p)
-   vgl_vector_3d<double>  delta(vgl_point_3d<double>  p, vgl_vector_3d<double>  dp) const;
+    vgl_vector_3d<double>  delta(vgl_point_3d<double>  p, vgl_vector_3d<double>  dp) const;
 
     //: Calculates the product LR
     // \param L  Transform
     // \param R  Transform
     // \return Transform LR = R followed by L
-    friend mil3d_transform_3d operator*(const mil3d_transform_3d&,
-                                        const mil3d_transform_3d&);
-
+    friend mil3d_transform_3d operator*(const mil3d_transform_3d& L,
+                                        const mil3d_transform_3d& R);
 
    //: Version number for I/O
    short version_no() const;
