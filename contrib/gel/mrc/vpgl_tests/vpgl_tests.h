@@ -1,3 +1,6 @@
+#ifndef vpgl_tests_h_
+#define vpgl_tests_h_
+
 #include <vcl/vcl_string.h>
 #include <vcl_cassert.h>
 #include <vbl/vbl_arg.h>
@@ -13,3 +16,4 @@
 #include <vpgl/vpgl_matrix_camera.h>
 #include <vpgl/vpgl_perspective_camera.h>
 
+#endif // vpgl_tests_h_
