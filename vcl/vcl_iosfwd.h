@@ -2,30 +2,20 @@
 #ifndef vcl_iosfwd_h_
 #define vcl_iosfwd_h_
 
-/* breaks 2.7
-#include <iosfwd>
- using std::istream;
- using std::ostream;
- using std::ifstream;
- using std::ofstream;
-*/
-
 // ANSI standard iostream forward decls.
 // You can't write "class ostream" and expect it to work
 
 #include <vcl/vcl_compiler.h>
 
 #if !VCL_USE_NATIVE_STL
-# if defined(VCL_WIN32)
-//#  include <iostream.h>
-# else
+#if !defined(VCL_WIN32)
 class istream;
 class ostream;
 class ifstream;
 class ofstream;
 # endif
 
-#elif defined(VCL_GCC_EGCS) || defined(VCL_SGI_CC)
+#elif defined(VCL_GCC_EGCS)
 # include <iosfwd>
 
 #elif defined(VCL_SUNPRO_CC_50)
@@ -41,6 +31,10 @@ using std::ofstream;
  using std::ostream;
  using std::ifstream;
  using std::ofstream;
+
+#else // all other cases, including VCL_SGI_CC
+      // as SGI does not have a file /usr/include/CC/iosfwd
+#include <iostream.h>
 #endif
 
 // This works for all cases, since we have "using std::xx" 
