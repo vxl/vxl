@@ -7,7 +7,6 @@
 // \brief A distance index for 3-d vsol points
 //
 //  Indexes points in a 3-d array to support proximity queries.
-//  
 //
 // \verbatim
 //  Modifications
@@ -16,7 +15,6 @@
 //
 //-----------------------------------------------------------------------------
 
-#include <vcl_iostream.h>
 #include <vcl_vector.h>
 #include <vsol/vsol_box_3d_sptr.h>
 #include <vsol/vsol_point_3d_sptr.h>
@@ -25,10 +23,10 @@ class bsol_point_index_3d
 {
  public:
   bsol_point_index_3d();
-  bsol_point_index_3d(int nrows, int ncols, int nslabs, 
+  bsol_point_index_3d(int nrows, int ncols, int nslabs,
                       vsol_box_3d_sptr const& bb);
   bsol_point_index_3d(int nrows, int ncols, int nslabs,
-                   vcl_vector<vsol_point_3d_sptr> const& points);
+                      vcl_vector<vsol_point_3d_sptr> const& points);
   ~bsol_point_index_3d();
   //:accessors
   int ncols(){return ncols_;}
@@ -67,19 +65,20 @@ class bsol_point_index_3d
 
   //:mark as not in index, but point remains. Useful for matching
   bool mark_point(vsol_point_3d_sptr&  p);
-  //:clear mark 
+  //:clear mark
   bool unmark_point(vsol_point_3d_sptr& p);
 
   //:Is a point marked
   bool marked(vsol_point_3d_sptr const& p);
 
-  //:spatial queries
+  //spatial queries
+
   //:find a point in the index, based on pointer equivalence
   bool find_point(vsol_point_3d_sptr const& p);
 
   //:find the points within a specified box
   bool in_box(vsol_box_3d_sptr const& box,
-                 vcl_vector<vsol_point_3d_sptr>& points);
+              vcl_vector<vsol_point_3d_sptr>& points);
 
   //:find the points within a radius of a point, possibly none
   bool in_radius(const double radius, vsol_point_3d_sptr const& p,
@@ -95,7 +94,7 @@ class bsol_point_index_3d
   void clear_marks();
  private:
   //transform to index coords
-  bool trans(const double x, const double y, const double z, 
+  bool trans(const double x, const double y, const double z,
              int& row, int& col, int& slab);
 
   int nrows_;
