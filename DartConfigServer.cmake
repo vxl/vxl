@@ -1,6 +1,9 @@
 #
 # Server configuration
 #
+
+CMAKE_MINIMUM_REQUIRED( VERSION 2.0 )
+
 SET (CVS_WEB_URL "http://cvs.sourceforge.net/cgi-bin/viewcvs.cgi/vxl/vxl/")
 SET (USE_GNATS "OFF")
 
