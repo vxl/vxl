@@ -66,8 +66,9 @@ class rrel_ran_sam_search
   // ----------------------------------------
 
   //: \brief Estimation for an "ordinary" estimation problem.
-  bool estimate( const rrel_estimation_problem* problem,
-                 const rrel_objective* obj_fcn );
+  virtual bool 
+  estimate( const rrel_estimation_problem* problem,
+            const rrel_objective* obj_fcn );
 
   // -----------------------------------------
   // Access to results and computed parameters
@@ -96,18 +97,20 @@ class rrel_ran_sam_search
 
   void set_trace_level( int level ) { trace_level_ = level; }
 
- private:
+ protected:
   // ------------------------------------------------------------
   //  Random sampling functions.  Don't call directly.  These are
   //  public for test purposes.
   // ------------------------------------------------------------
 
   //: Calculate number of samples --- non-unique matching estimation problems
-  void calc_num_samples( const rrel_estimation_problem* problem );
+  virtual void 
+  calc_num_samples( const rrel_estimation_problem* problem );
 
   //: Determine the next random sample, filling in the "sample" vector.
-  void next_sample( unsigned int taken, unsigned int num_points, vcl_vector<int>& sample,
-                    unsigned int points_per_sample );
+  virtual void 
+  next_sample( unsigned int taken, unsigned int num_points, vcl_vector<int>& sample,
+               unsigned int points_per_sample );
 
  private:
 

@@ -135,6 +135,14 @@ class rrel_estimation_problem
   //  Side effect: set scale_type() = NONE.
   virtual void set_no_prior_scale( );
 
+  //: Set similarity weights
+  //  Currently it is only used in wgted random sampling search
+  void set_similarity_weights( const vcl_vector<double>& wgts )
+  { similarity_weights_ = wgts; }
+  
+  //: Get similarity weights
+  const vcl_vector<double>& similarity_weights() const 
+  { return similarity_weights_; }
 
   //: Compute the parameter vector and the normalised covariance matrix.
   //  (Multiplying this matrix by the variance in the measurements
@@ -167,6 +175,7 @@ class rrel_estimation_problem
   scale_t scale_type_;
   double single_scale_;
   vcl_vector<double>* multiple_scales_;
+  vcl_vector<double>  similarity_weights_;
 };
 
 #endif
