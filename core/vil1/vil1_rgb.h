@@ -53,11 +53,11 @@ struct vil_rgb
   //:Create grey (v,v,v) vil_rgb cell from value v.  This provides a conversion
   // from T to vil_rgb<T>, needed by e.g. two constructors in vil_filter.h.
 
-  vil_rgb(T v):
+  inline vil_rgb(T v):
     r(v), g(v), b(v) {}
 
   //:Construct an vil_rgb value.
-  vil_rgb(T red, T green, T blue):
+  inline vil_rgb(T red, T green, T blue):
     r(red), g(green), b(blue) {}
 
   // The rgb values
@@ -67,28 +67,28 @@ struct vil_rgb
   inline T B() const { return b; }
 
   //:Convert vil_rgb to gray using standard (.299, .587, .114) weighting.
-  T grey() const { return T(r*0.299+0.587*g+0.114*b); }
+  inline T grey() const { return T(r*0.299+0.587*g+0.114*b); }
 
   // Who wants this? It's a pain in the ass.
   // ImageProcessing/IIFOperators use this a lot!
   // Why can we not use .gray()?  This adds ambiguities.
 #if 0
-  operator T() const { return T(0.5+r*0.299+0.587*g+0.114*b); }
+  inline operator T() const { return T(0.5+r*0.299+0.587*g+0.114*b); }
 #endif
 
   //:equality
   inline bool operator== (vil_rgb<T> const&) const;
 
   // operators
-  vil_rgb<T>  operator+  (vil_rgb<T> const& A) const { return vil_rgb<T>(r+A.r,g+A.g,b+A.b); }
-  vil_rgb<T>  operator-  (vil_rgb<T> const& A) const { return vil_rgb<T>(r-A.r,g-A.g,b-A.b); }
-  vil_rgb<T>  operator/  (vil_rgb<T> const& A) const { return vil_rgb<T>(r/A.r,g/A.g,b/A.b);}
-  vil_rgb<T>& operator+= (vil_rgb<T> const& A) { r+=A.r,g+=A.g,b+=A.b; return *this; }
-  vil_rgb<T>& operator-= (vil_rgb<T> const& A) { r-=A.r,g-=A.g,b-=A.b; return *this; }
-  vil_rgb<T>  operator*  (T A) const { return vil_rgb<T>(r*A,g*A,b*A); }
-  vil_rgb<T>  operator/  (T A) const { return vil_rgb<T>(r/A,g/A,b/A); }
-  vil_rgb<T>& operator*= (T A) { r*=A,g*=A,b*=A; return *this; }
-  vil_rgb<T>& operator/= (T A) { r/=A,g/=A,b/=A; return *this; }
+  inline vil_rgb<T>  operator+  (vil_rgb<T> const& A) const { return vil_rgb<T>(r+A.r,g+A.g,b+A.b); }
+  inline vil_rgb<T>  operator-  (vil_rgb<T> const& A) const { return vil_rgb<T>(r-A.r,g-A.g,b-A.b); }
+  inline vil_rgb<T>  operator/  (vil_rgb<T> const& A) const { return vil_rgb<T>(r/A.r,g/A.g,b/A.b);}
+  inline vil_rgb<T>& operator+= (vil_rgb<T> const& A) { r+=A.r,g+=A.g,b+=A.b; return *this; }
+  inline vil_rgb<T>& operator-= (vil_rgb<T> const& A) { r-=A.r,g-=A.g,b-=A.b; return *this; }
+  inline vil_rgb<T>  operator*  (T A) const { return vil_rgb<T>(r*A,g*A,b*A); }
+  inline vil_rgb<T>  operator/  (T A) const { return vil_rgb<T>(r/A,g/A,b/A); }
+  inline vil_rgb<T>& operator*= (T A) { r*=A,g*=A,b*=A; return *this; }
+  inline vil_rgb<T>& operator/= (T A) { r/=A,g/=A,b/=A; return *this; }
 
 #define vil_rgb_call(m) \
 m(unsigned char) \
@@ -98,12 +98,12 @@ m(double)
 
 // VC50 bombs with INTERNAL COMPILER ERROR on template member functions.
 #if VCL_HAS_MEMBER_TEMPLATES
-  template <class S>
+  template <class S> inline
   vil_rgb(vil_rgb<S> const& that):
     r(T(that.r)),
     g(T(that.g)),
     b(T(that.b)) { }
-  template <class S>
+  template <class S> inline
   vil_rgb<T>& operator=(vil_rgb<S> const& that) {
     r=T(that.r);
     g=T(that.g);
@@ -113,7 +113,7 @@ m(double)
 #else
   // For dumb compilers, just special-case the commonly used types.
 # define macro(S) \
-  vil_rgb(vil_rgb<S > const& that) : \
+  inline vil_rgb(vil_rgb<S > const& that) : \
   r(T(that.r)), \
   g(T(that.g)), \
   b(T(that.b)) {}
@@ -132,7 +132,7 @@ vil_rgb_call(macro)
 #else
 # define macro(S) \
 vil_rgb<S > vil_rgb_gcc_272_pump_prime(S const *); \
-template <class T> \
+template <class T> inline \
 vil_rgb<T>& vil_rgb<T>::operator=(vil_rgb<S > const& that) { \
   r=T(that.r); \
   g=T(that.g); \
