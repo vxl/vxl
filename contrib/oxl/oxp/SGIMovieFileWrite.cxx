@@ -19,7 +19,7 @@ extern "C" {
 
 #include <vil/vil_memory_image_of.h>
 #include <vil/vil_byte.h>
-#include <vil/vil_rgb_byte.h>
+#include <vil/vil_rgb.h>
 
 const int align = 4;
 inline int ROUNDUP(int x)
@@ -84,7 +84,7 @@ public:
   
   bool interlaced;
 
-  vil_memory_image_of<vil_rgb_byte> buffer;
+  vil_memory_image_of<vil_rgb<unsigned char> > buffer;
   vcl_vector<JSAMPLE*> rows;
   FILE *fp;
   int directory_pos;

@@ -23,7 +23,7 @@
 
 #include <vil/vil_memory_image_of.h>
 #include <vil/vil_byte.h>
-#include <vil/vil_rgb_byte.h>
+#include <vil/vil_rgb.h>
 
 struct MovieFileInterface;
 
@@ -45,9 +45,9 @@ public:
   vil_image GetImage(int frame_index);
 
   bool HasFrame(int frame_index);
-  void GetFrame(int frame_index, vil_rgb_byte * frame);
+  void GetFrame(int frame_index, vil_rgb<unsigned char> * frame);
   void GetFrame(int frame_index, vil_byte* frame);
-  void GetFrame(int frame_index, vil_memory_image_of<vil_rgb_byte >& frame);
+  void GetFrame(int frame_index, vil_memory_image_of<vil_rgb<unsigned char> >& frame);
   void GetFrame(int frame_index, vil_memory_image_of<vil_byte>& frame);
   void GetFrameRGB(int frame_index, vil_byte* frame);
 
@@ -57,7 +57,7 @@ protected:
   vcl_string filename_;
   int start_, step_, end_;
   MovieFileInterface* qt;
-  vil_memory_image_of<vil_rgb_byte >* tmp_buf_;
+  vil_memory_image_of<vil_rgb<unsigned char> >* tmp_buf_;
 
   int index(int);
 };
