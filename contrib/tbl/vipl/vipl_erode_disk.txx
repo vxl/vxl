@@ -1,6 +1,8 @@
 #ifndef vipl_erode_disk_txx_
 #define vipl_erode_disk_txx_
 
+#include <vcl_algorithm.h>
+
 #include "vipl_erode_disk.h"
 
 template <class ImgIn,class ImgOut,class DataIn,class DataOut,class PixelItr>

@@ -1,6 +1,8 @@
 #ifndef vipl_dilate_disk_txx_
 #define vipl_dilate_disk_txx_
 
+#include <vcl_algorithm.h>
+
 #include "vipl_dilate_disk.h"
 
 template <class ImgIn,class ImgOut,class DataIn,class DataOut,class PixelItr>
