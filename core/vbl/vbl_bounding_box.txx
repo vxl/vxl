@@ -17,13 +17,18 @@
 template <class T, class DIM_>
 vcl_ostream& vbl_bounding_box_base<T, DIM_>::print(vcl_ostream& s) const
 {
-  s << "<bbox(";
-  for (int i = 0; i < DIM_::value; ++i)
-    s << min()[i] << " ";
-  s << ") to (";
-  for (int i = 0; i < DIM_::value; ++i)
-    s << max()[i] << " ";
-  s << ")>";
+  if (empty()) {
+    s << "<bbox(empty, " << DIM_::value << " dimensions)>";
+  }
+  else {
+    s << "<bbox(";
+    for (int i = 0; i < DIM_::value; ++i)
+      s << min()[i] << " ";
+    s << ") to (";
+    for (int i = 0; i < DIM_::value; ++i)
+      s << max()[i] << " ";
+    s << ")>";
+  }
   return s;
 }
 
