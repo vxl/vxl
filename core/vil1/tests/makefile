@@ -1,5 +1,6 @@
 USES += core
 include ../config.mk
+include ${IUEROOT}/core/vil/config.mk # only for test_vil.cxx
 include ${IUEROOT}/core/vul/config.mk
 include ${IUEROOT}/core/vpl/config.mk
 include ${IUEROOT}/core/testlib/config.mk

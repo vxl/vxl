@@ -45,8 +45,10 @@ SOURCES += vil1_clamp_image.cxx # Helper specializations for vil1_clamp_image_im
 SOURCES += vil1_scale_intensities_image_impl.cxx
 SOURCES += vil1_scale_intensities_image.cxx # Helper specializations for vil1_scale_intensities_image_impl.cxx
 
+# Wrapper classes for vil/vil1 conversion
+MANPAGE_SOURCES += vil1_vil.h
+
 # file format readers/writers.
-SOURCES += vil1_vil.cxx
 SOURCES += file_formats/vil1_gen.cxx
 SOURCES += file_formats/vil1_pnm.cxx
 SOURCES += file_formats/vil1_viff.cxx
