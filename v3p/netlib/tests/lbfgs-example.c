@@ -4,7 +4,8 @@
 */
 
 #include "../f2c.h"
-
+#include "../netlib.h"
+#include <stdio.h>
 /* Common Block Declarations */
 
 Extern struct {
@@ -85,7 +86,7 @@ L20:
 /* L30: */
     }
     lbfgs_(&n, &m, x, &f, g, &diagco, diag, iprint, &eps, &xtol, w, &iflag);
-    lbp1f_("f = %g\n", &f, 7L);
+    printf("f = %7g\n", &f, 7L);
     if (iflag <= 0) {
         goto L50;
     }
@@ -96,8 +97,8 @@ L20:
     }
     goto L20;
 L50:
-    lbp1f_("f = %g\n", &f, 7L);
-    lbp1d_("iterations = %d\n", &icall, 16L);
+    printf("f = %7g\n", &f);
+    printf("iterations = %16d\n", &icall);
 
     return 0;
 } /* main */
