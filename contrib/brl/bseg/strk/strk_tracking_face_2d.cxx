@@ -127,7 +127,7 @@ static void strk_2d_gaussian(const double sigma,
 //
 template <class T>
 strk_hist<T>::strk_hist(const T range, const unsigned int nbins)
-  : area_valid_(false), area_(0), nbins_(nbins), delta_(0), range_(range)
+  : area_valid_(false), area_(0), nbins_(nbins), range_(range), delta_(0)
 {
   if (nbins>0)
   {
@@ -186,10 +186,10 @@ void strk_hist<T>::parzen(const T sigma)
     return;
   double sd = (double)sigma;
   vcl_vector<double> in(nbins_), out(nbins_);
-  for (int i=0; i<nbins_; i++)
+  for (unsigned int i=0; i<nbins_; i++)
     in[i]=counts_[i];
   strk_1d_gaussian(sd, in, out);
-  for (int i=0; i<nbins_; i++)
+  for (unsigned int i=0; i<nbins_; i++)
     counts_[i]=(T)out[i];
 }
 
@@ -204,7 +204,7 @@ void strk_hist<T>::print() const
 template <class T>
 strk_joint_hist<T>::strk_joint_hist(const T range,
                                     const unsigned int nbins)
-  : volume_valid_(false), volume_(0), nbins_(nbins), delta_(0), range_(range)
+  : volume_valid_(false), volume_(0), nbins_(nbins), range_(range), delta_(0)
 {
   if (nbins>0)
   {
@@ -280,14 +280,14 @@ void strk_joint_hist<T>::parzen(const T sigma)
     return;
   double sd = (double)sigma;
   vbl_array_2d<double> in(nbins_, nbins_), out;
-  for (int row = 0; row<nbins_; row++)
-    for (int col = 0; col<nbins_; col++)
+  for (unsigned int row = 0; row<nbins_; row++)
+    for (unsigned int col = 0; col<nbins_; col++)
       in[row][col] = (double)counts_[row][col];
 
   strk_2d_gaussian(sd, in, out);
 
-  for (int row = 0; row<nbins_; row++)
-    for (int col = 0; col<nbins_; col++)
+  for (unsigned int row = 0; row<nbins_; row++)
+    for (unsigned int col = 0; col<nbins_; col++)
       counts_[row][col] = (T)out[row][col];
 }
 
