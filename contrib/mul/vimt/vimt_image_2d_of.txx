@@ -2,15 +2,15 @@
 #define vimt_image_2d_of_txx_
 //:
 //  \file
-//  \brief Container for vil2_image_view<T> + transform
+//  \brief Container for vil_image_view<T> + transform
 //  \author Tim Cootes
 
 #include <vcl_string.h>
 #include <vsl/vsl_indent.h>
 #include <vimt/vimt_image_2d_of.h>
-#include <vil2/vil2_print.h>
+#include <vil/vil_print.h>
 #include <vsl/vsl_vector_io.h>
-#include <vil2/io/vil2_io_image_view.h>
+#include <vil/io/vil_io_image_view.h>
 
 //=======================================================================
 
@@ -84,7 +84,7 @@ template<class T>
 void vimt_image_2d_of<T>::print_all(vcl_ostream& os) const
 {
   os<<vsl_indent();
-  vil2_print_all(os,image_);
+  vil_print_all(os,image_);
   os<<'\n'<<vsl_indent() << "Transform: "<<world2im_<<'\n';
 }
 

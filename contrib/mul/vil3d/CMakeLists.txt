@@ -32,7 +32,7 @@ AUX_SOURCE_DIRECTORY(Templates vil3d_sources)
 
 ADD_LIBRARY(vil3d ${vil3d_sources})
 
-TARGET_LINK_LIBRARIES( vil3d vil2 vul vcl )
+TARGET_LINK_LIBRARIES( vil3d vil vul vcl )
 
 
 SUBDIRS(algo io)

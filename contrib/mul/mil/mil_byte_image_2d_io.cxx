@@ -4,7 +4,7 @@
 #endif
 //:
 // \file
-// \brief Load and save mil_image_2d_of<vil_byte> from named files.
+// \brief Load and save mil_image_2d_of<vil1_byte> from named files.
 // \author Tim Cootes
 
 #include "mil_byte_image_2d_io.h"
@@ -14,10 +14,10 @@
 #include <vcl_string.h>
 #include <vcl_cassert.h>
 
-#include <vil/vil_load.h>
-#include <vil/vil_save.h>
-#include <vil/vil_memory_image_of.h>
-#include <vil/vil_rgb_byte.h>
+#include <vil1/vil1_load.h>
+#include <vil1/vil1_save.h>
+#include <vil1/vil1_memory_image_of.h>
+#include <vil1/vil1_rgb_byte.h>
 #include <mil/mil_convert_vil.h>
 
 //=======================================================================
@@ -129,8 +129,8 @@ bool mil_byte_image_2d_io::saveImage(const mil_image& image,
                                      const vcl_string& path,
                                      const vcl_string& filetype) const
 {
-  assert(image.is_class("mil_image_2d_of<vil_byte>"));
-  return saveTheImage((const mil_image_2d_of<vil_byte>&) image,path,filetype);
+  assert(image.is_class("mil_image_2d_of<vil1_byte>"));
+  return saveTheImage((const mil_image_2d_of<vil1_byte>&) image,path,filetype);
 }
 
 
@@ -166,7 +166,7 @@ vcl_string mil_byte_image_2d_io::guessFileType(const vcl_string& path)
 // \return true if successful
 // \retval image The loaded image. The object also stores the image
 // which can be found by subsequent calls to image()
-bool mil_byte_image_2d_io::loadTheImage(mil_image_2d_of<vil_byte>& image,
+bool mil_byte_image_2d_io::loadTheImage(mil_image_2d_of<vil1_byte>& image,
               const vcl_string& path,
               const vcl_string& f_type)
 {
@@ -176,7 +176,7 @@ bool mil_byte_image_2d_io::loadTheImage(mil_image_2d_of<vil_byte>& image,
     return true;
   }
 
-  vil_image img = vil_load(path.c_str());  // ie f_type is ignored here !!
+  vil1_image img = vil1_load(path.c_str());  // ie f_type is ignored here !!
   int nx = img.width();
   int ny = img.height();
   if (nx==0 || ny==0)
@@ -194,13 +194,13 @@ bool mil_byte_image_2d_io::loadTheImage(mil_image_2d_of<vil_byte>& image,
     if (img_is_grey)
     {
       // convert grey to grey
-      vil_memory_image_of<vil_byte> buf(img);
+      vil1_memory_image_of<vil1_byte> buf(img);
       mil_convert_vil_gv2gm(image_,buf);
     }
     else
     {
       // convert colour image to grey
-      vil_memory_image_of<vil_rgb_byte> buf(img);
+      vil1_memory_image_of<vil1_rgb_byte> buf(img);
       mil_convert_vil_cv2gm(image_,buf);
     }
   }
@@ -218,7 +218,7 @@ bool mil_byte_image_2d_io::loadTheImage(mil_image_2d_of<vil_byte>& image,
     else
     {
       //i.e. copy colour image as colour
-      vil_memory_image_of<vil_rgb_byte> buf(img);
+      vil1_memory_image_of<vil1_rgb_byte> buf(img);
       mil_convert_vil_cv2cm(image_,buf);
     }
   }
@@ -228,13 +228,13 @@ bool mil_byte_image_2d_io::loadTheImage(mil_image_2d_of<vil_byte>& image,
     if (img_is_grey)
     {
       //copy grey image as grey
-      vil_memory_image_of<vil_byte> buf(img);
+      vil1_memory_image_of<vil1_byte> buf(img);
       mil_convert_vil_gv2gm(image_,buf);
     }
     else
     {
       //i.e. copy colour image as colour
-      vil_memory_image_of<vil_rgb_byte> buf(img);
+      vil1_memory_image_of<vil1_rgb_byte> buf(img);
       mil_convert_vil_cv2cm(image_,buf);
     }
   }
@@ -252,7 +252,7 @@ bool mil_byte_image_2d_io::loadTheImage(mil_image_2d_of<vil_byte>& image,
 
 //: Attempt to save image to named file
 // \param filetype  String defining what format to save in
-bool mil_byte_image_2d_io::saveTheImage(const mil_image_2d_of<vil_byte>& image,
+bool mil_byte_image_2d_io::saveTheImage(const mil_image_2d_of<vil1_byte>& image,
             const vcl_string& path,
             const vcl_string& f_type)
 {
@@ -266,10 +266,10 @@ bool mil_byte_image_2d_io::saveTheImage(const mil_image_2d_of<vil_byte>& image,
     return false;
   }
 
-  //convert mil_image to vil_image
-  //if colour=>vil_memory_image_of<vil_rgb_byte>
-  //if grey=>vil_memory_image_of<vil_byte>
-  //then use vil_save with appropriate "filetype"
+  //convert mil_image to vil1_image
+  //if colour=>vil1_memory_image_of<vil1_rgb_byte>
+  //if grey=>vil1_memory_image_of<vil1_byte>
+  //then use vil1_save with appropriate "filetype"
 
   bool image_is_grey=false,image_is_colour=false;
   if (image.n_planes()==1)
@@ -284,17 +284,17 @@ bool mil_byte_image_2d_io::saveTheImage(const mil_image_2d_of<vil_byte>& image,
 
   if (image_is_grey)
   {
-    vil_memory_image_of<vil_byte> buf;
+    vil1_memory_image_of<vil1_byte> buf;
     mil_convert_vil_gm2gv(buf,image);
-    vil_save(buf,path.c_str(),filetype.c_str());
+    vil1_save(buf,path.c_str(),filetype.c_str());
     return true;
   }
 
   else if (image_is_colour)
   {
-    vil_memory_image_of<vil_rgb_byte> buf;
+    vil1_memory_image_of<vil1_rgb_byte> buf;
     mil_convert_vil_cm2cv(buf,image);
-    vil_save(buf,path.c_str(),filetype.c_str());
+    vil1_save(buf,path.c_str(),filetype.c_str());
     return true;
   }
   else

@@ -25,11 +25,11 @@ class vil3d_memory_image : public vil3d_image_resource
   // The pixel type must be scalar.
   vil3d_memory_image(unsigned ni, unsigned nj,
                      unsigned nk, unsigned nplanes,
-                     vil2_pixel_format format);
+                     vil_pixel_format format);
 
   friend vil3d_image_resource_sptr vil3d_new_image_resource(
     unsigned ni, unsigned nj, unsigned nk, unsigned nplanes,
-    vil2_pixel_format format);
+    vil_pixel_format format);
 
  public:
 
@@ -42,7 +42,7 @@ class vil3d_memory_image : public vil3d_image_resource
   virtual unsigned nj() const { return view_->nj(); }
   virtual unsigned nk() const { return view_->nk(); }
 
-  virtual enum vil2_pixel_format pixel_format() const { return view_->pixel_format(); }
+  virtual enum vil_pixel_format pixel_format() const { return view_->pixel_format(); }
 
   //: Create a read/write view of a copy of this data.
   // \return 0 if unable to get view of correct size.

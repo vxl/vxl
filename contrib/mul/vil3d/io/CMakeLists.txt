@@ -10,7 +10,7 @@ SET(vil3d_io_sources
 AUX_SOURCE_DIRECTORY(Templates vil3d_io_sources)
 
 ADD_LIBRARY(vil3d_io ${vil3d_io_sources})
-TARGET_LINK_LIBRARIES( vil3d_io vil3d vil2_io vil2 vsl )
+TARGET_LINK_LIBRARIES( vil3d_io vil3d vil_io vil vsl )
 
 IF( BUILD_TESTING)
   SUBDIRS(tests)

@@ -9,8 +9,8 @@
 
 #include "vil3d_gipl_format.h"
 #include <vcl_cstdlib.h>
-#include <vil2/vil2_stream_read.h>
-#include <vil2/vil2_stream_fstream.h>
+#include <vil/vil_stream_read.h>
+#include <vil/vil_stream_fstream.h>
 #include <vil3d/vil3d_image_view.h>
 #include <vil3d/vil3d_new.h>
 
@@ -84,11 +84,11 @@ vil3d_gipl_format::~vil3d_gipl_format()
 
 vil3d_image_resource_sptr vil3d_gipl_format::make_input_image(const char *filename) const
 {
-  vil2_smart_ptr<vil2_stream> is = new vil2_stream_fstream(filename,"r");
+  vil_smart_ptr<vil_stream> is = new vil_stream_fstream(filename,"r");
   if (!is->ok()) return 0;
 
   is->seek(252);
-  unsigned magic_number = vil2_stream_read_big_endian_uint_32(is.as_pointer());
+  unsigned magic_number = vil_stream_read_big_endian_uint_32(is.as_pointer());
   if (magic_number!=GIPL_MAGIC) return 0;
 
   return new vil3d_gipl_image(is.as_pointer());
@@ -101,7 +101,7 @@ vil3d_image_resource_sptr vil3d_gipl_format::make_input_image(const char *filena
 // know what they need to do...
 vil3d_image_resource_sptr vil3d_gipl_format::make_output_image
                    (const char* filename, unsigned ni, unsigned nj,
-                    unsigned nk, unsigned nplanes, enum vil2_pixel_format) const
+                    unsigned nk, unsigned nplanes, enum vil_pixel_format) const
 {
   vcl_cerr <<"vil3d_gipl_format::make_output_image() NYI\n";
   vcl_abort();
@@ -109,7 +109,7 @@ vil3d_image_resource_sptr vil3d_gipl_format::make_output_image
 }
 
 
-vil3d_gipl_image::vil3d_gipl_image(vil2_stream *is): is_(is)
+vil3d_gipl_image::vil3d_gipl_image(vil_stream *is): is_(is)
 {
   read_header(is);
 }
@@ -142,49 +142,49 @@ unsigned vil3d_gipl_image::nk() const
 }
 
   //: Pixel Format.
-enum vil2_pixel_format vil3d_gipl_image::pixel_format() const
+enum vil_pixel_format vil3d_gipl_image::pixel_format() const
 {
   return pixel_format_;
 }
 
 
 //: Read header from given stream if possible
-bool vil3d_gipl_image::read_header(vil2_stream *is)
+bool vil3d_gipl_image::read_header(vil_stream *is)
 {
   // Return to start
   is->seek(0);
-  dim1_ = vil2_stream_read_big_endian_uint_16(is);
-  dim2_ = vil2_stream_read_big_endian_uint_16(is);
-  dim3_ = vil2_stream_read_big_endian_uint_16(is);
+  dim1_ = vil_stream_read_big_endian_uint_16(is);
+  dim2_ = vil_stream_read_big_endian_uint_16(is);
+  dim3_ = vil_stream_read_big_endian_uint_16(is);
 
   is->seek(8);
 
-  unsigned short gipl_pixel_type = vil2_stream_read_big_endian_uint_16(is);
+  unsigned short gipl_pixel_type = vil_stream_read_big_endian_uint_16(is);
 
   switch (gipl_pixel_type)
   {
-   case 1  : pixel_format_ = VIL2_PIXEL_FORMAT_BOOL;    break;
-   case 7  : pixel_format_ = VIL2_PIXEL_FORMAT_SBYTE;   break;
-   case 8  : pixel_format_ = VIL2_PIXEL_FORMAT_BYTE;    break;
-   case 15 : pixel_format_ = VIL2_PIXEL_FORMAT_UINT_16; break;
-   case 16 : pixel_format_ = VIL2_PIXEL_FORMAT_INT_16;  break;
-   case 31 : pixel_format_ = VIL2_PIXEL_FORMAT_UINT_32; break;
-   case 32 : pixel_format_ = VIL2_PIXEL_FORMAT_INT_16;  break;
-   case 64 : pixel_format_ = VIL2_PIXEL_FORMAT_FLOAT;   break;
-   case 65 : pixel_format_ = VIL2_PIXEL_FORMAT_DOUBLE;  break;
+   case 1  : pixel_format_ = VIL_PIXEL_FORMAT_BOOL;    break;
+   case 7  : pixel_format_ = VIL_PIXEL_FORMAT_SBYTE;   break;
+   case 8  : pixel_format_ = VIL_PIXEL_FORMAT_BYTE;    break;
+   case 15 : pixel_format_ = VIL_PIXEL_FORMAT_UINT_16; break;
+   case 16 : pixel_format_ = VIL_PIXEL_FORMAT_INT_16;  break;
+   case 31 : pixel_format_ = VIL_PIXEL_FORMAT_UINT_32; break;
+   case 32 : pixel_format_ = VIL_PIXEL_FORMAT_INT_16;  break;
+   case 64 : pixel_format_ = VIL_PIXEL_FORMAT_FLOAT;   break;
+   case 65 : pixel_format_ = VIL_PIXEL_FORMAT_DOUBLE;  break;
    case 144: // C.Short I don't want to support complex types.
    case 160: // C.Int   Could maybe reimplement them as a 2-plane image
    case 192: // C.Float
    case 193: // C.Double
-   default : pixel_format_ = VIL2_PIXEL_FORMAT_UNKNOWN;
+   default : pixel_format_ = VIL_PIXEL_FORMAT_UNKNOWN;
   }
 
-  vox_width1_ = vil2_stream_read_big_endian_float(is);
-  vox_width2_ = vil2_stream_read_big_endian_float(is);
-  vox_width3_ = vil2_stream_read_big_endian_float(is);
+  vox_width1_ = vil_stream_read_big_endian_float(is);
+  vox_width2_ = vil_stream_read_big_endian_float(is);
+  vox_width3_ = vil_stream_read_big_endian_float(is);
   // vcl_cout<<"Voxel widths: "<<vox_width1<<" x "<<vox_width2<<" x "<<vox_width3<<vcl_endl;
 
-  return pixel_format_ != VIL2_PIXEL_FORMAT_UNKNOWN;
+  return pixel_format_ != VIL_PIXEL_FORMAT_UNKNOWN;
 }
 
 
@@ -218,59 +218,59 @@ vil3d_image_view_base_sptr vil3d_gipl_image::get_copy_view(
 
   switch (pixel_format())
   {
-    case VIL2_PIXEL_FORMAT_SBYTE:
+    case VIL_PIXEL_FORMAT_SBYTE:
     {
       macro( vxl_sbyte );
       return new vil3d_image_view<vxl_sbyte>(im);
     }
-    case VIL2_PIXEL_FORMAT_BYTE:
+    case VIL_PIXEL_FORMAT_BYTE:
     {
       macro( vxl_byte );
       return new vil3d_image_view<vxl_byte>(im);
     }
-    case VIL2_PIXEL_FORMAT_INT_16:
+    case VIL_PIXEL_FORMAT_INT_16:
     {
       macro( vxl_int_16 );
       swap16_for_big_endian((char *)(im.origin_ptr()),
         ni*nj*nk);
       return new vil3d_image_view<vxl_int_16>(im);
     }
-    case VIL2_PIXEL_FORMAT_UINT_16:
+    case VIL_PIXEL_FORMAT_UINT_16:
     {
       macro( vxl_uint_16 );
       swap16_for_big_endian((char *)(im.origin_ptr()),
         ni*nj*nk);
       return new vil3d_image_view<vxl_uint_16>(im);
     }
-    case VIL2_PIXEL_FORMAT_UINT_32:
+    case VIL_PIXEL_FORMAT_UINT_32:
     {
       macro( vxl_uint_32 );
       swap32_for_big_endian((char *)(im.origin_ptr()),
         ni*nj*nk);
       return new vil3d_image_view<vxl_uint_32>(im);
     }
-    case VIL2_PIXEL_FORMAT_INT_32:
+    case VIL_PIXEL_FORMAT_INT_32:
     {
       macro( vxl_int_32 );
       swap32_for_big_endian((char *)(im.origin_ptr()),
         ni*nj*nk);
       return new vil3d_image_view<vxl_int_32>(im);
     }
-    case VIL2_PIXEL_FORMAT_FLOAT:
+    case VIL_PIXEL_FORMAT_FLOAT:
     {
       macro( float );
       swap32_for_big_endian((char *)(im.origin_ptr()),
         ni*nj*nk);
       return new vil3d_image_view<float>(im);
     }
-    case VIL2_PIXEL_FORMAT_DOUBLE:
+    case VIL_PIXEL_FORMAT_DOUBLE:
     {
       macro( double );
       swap64_for_big_endian((char *)(im.origin_ptr()),
         ni*nj*nk);
       return new vil3d_image_view<double>(im);
     }
-    case VIL2_PIXEL_FORMAT_BOOL:
+    case VIL_PIXEL_FORMAT_BOOL:
       vcl_cout<<"ERROR: vil3d_gipl_format::get_image_data()"
               <<pixel_format() << " pixel type not yet implemented\n";
       return 0;

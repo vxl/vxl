@@ -145,7 +145,7 @@ Copyright @copyright{} 2001 Victoria University of Manchester
 @menu
 * Introduction::
 * mbl::
-* vil2::
+* vil::
 * mil::
 * vpdfl::
 * clsfy::
@@ -254,16 +254,16 @@ conversion and the design of the rest.
 @include chapter_mbl.texi
 
 @comment ------------------------------------------------------------------
-@node    vil2, mil, mbl, Top
+@node    vil, mil, mbl, Top
 @comment node-name, next, previous,     up
-@chapter vil2: A replacement for vil
-@cindex vil2
+@chapter vil: A replacement for vil1
+@cindex vil
 
 
 @include chapter_vil2.texi
 
 @comment ------------------------------------------------------------------
-@node    mil, vpdfl, vil2, Top
+@node    mil, vpdfl, vil, Top
 @comment node-name, next, previous,     up
 @chapter mil and mil3d: Manchester Image library.
 @cindex mil

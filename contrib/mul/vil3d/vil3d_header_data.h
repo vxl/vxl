@@ -12,8 +12,8 @@
 #include <vcl_iosfwd.h>
 #include <vcl_string.h>
 #include <vcl_cassert.h>
-#include <vil2/vil2_pixel_format.h>
-#include <vil2/vil2_smart_ptr.h>
+#include <vil/vil_pixel_format.h>
+#include <vil/vil_smart_ptr.h>
 
 //: A base class for objects containing information from image headers.
 //  This base contains data likely to be present in all headers
@@ -43,7 +43,7 @@ class vil3d_header_data
   double voxel_width_k_;
 
   //: Type of data in image
-  vil2_pixel_format pixel_format_;
+  vil_pixel_format pixel_format_;
 
  public:
   vil3d_header_data();
@@ -90,10 +90,10 @@ class vil3d_header_data
   virtual vcl_string is_a() const;
 
   //: Return a description of the data pixel type.
-  vil2_pixel_format pixel_format() const { return pixel_format_; }
+  vil_pixel_format pixel_format() const { return pixel_format_; }
 
   //: Define pixel format
-  void set_pixel_format(vil2_pixel_format f);
+  void set_pixel_format(vil_pixel_format f);
 
   //: True if this is (or is derived from) class s
   virtual bool is_class(vcl_string const& s) const;
@@ -101,7 +101,7 @@ class vil3d_header_data
  private:
   // You probably should not use a vil3d_image_view in a vbl_smart_ptr, so the
   // ref functions are private
-  friend class vil2_smart_ptr<vil3d_header_data>;
+  friend class vil_smart_ptr<vil3d_header_data>;
   void ref() { ++reference_count_; }
   void unref() {
     assert(reference_count_>0);
@@ -109,7 +109,7 @@ class vil3d_header_data
   int reference_count_;
 };
 
-typedef vil2_smart_ptr<vil3d_header_data> vil3d_header_data_sptr;
+typedef vil_smart_ptr<vil3d_header_data> vil3d_header_data_sptr;
 
 //: Print a summary of contents
 inline

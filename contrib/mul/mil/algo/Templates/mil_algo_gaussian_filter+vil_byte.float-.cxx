@@ -1,4 +1,4 @@
 #include <mil/algo/mil_algo_gaussian_filter.txx>
-#include <vil/vil_byte.h>
+#include <vil1/vil1_byte.h>
 
-template class mil_algo_gaussian_filter<vil_byte,float>;
+template class mil_algo_gaussian_filter<vil1_byte,float>;

@@ -11,7 +11,7 @@
 #include <vcl_cassert.h>
 #include <vcl_string.h>
 #include <vcl_iostream.h>
-#include <vil2/algo/vil2_gauss_reduce.h>
+#include <vil/algo/vil_gauss_reduce.h>
 #include <vimt/vimt_image_pyramid.h>
 #include <vimt/vimt_crop.h>
 
@@ -41,7 +41,7 @@ vimt_gaussian_pyramid_builder_2d_general<T>::~vimt_gaussian_pyramid_builder_2d_g
 template <class T>
 void vimt_gaussian_pyramid_builder_2d_general<T>::set_scale_step(double scaleStep)
 {
-  scale_params_ = vil2_gauss_reduce_params(scaleStep);
+  scale_params_ = vil_gauss_reduce_params(scaleStep);
 }
 //=======================================================================
 
@@ -89,7 +89,7 @@ void vimt_gaussian_pyramid_builder_2d_general<T>::build(
     const vimt_image_2d_of<T>& src = static_cast<const vimt_image_2d_of<T>&>(im_pyr(i-1));
 
     s*=scale_step();
-    vil2_gauss_reduce_general(src.image(), dest.image(), worka_, workb_, scale_params_);
+    vil_gauss_reduce_general(src.image(), dest.image(), worka_, workb_, scale_params_);
 
     // Sort out world to image transformation for destination image
     vimt_transform_2d scaling;
@@ -121,7 +121,7 @@ void vimt_gaussian_pyramid_builder_2d_general<T>::build(
 template<class T>
 void vimt_gaussian_pyramid_builder_2d_general<T>::extend(vimt_image_pyramid& image_pyr) const
 {
-  //  Require image vil2_image_view<T>
+  //  Require image vil_image_view<T>
   assert(image_pyr(0).is_class(vimt_image_2d_of<T>().is_a()));
 
   assert(image_pyr.scale_step() == scale_step());
@@ -165,7 +165,7 @@ void vimt_gaussian_pyramid_builder_2d_general<T>::extend(vimt_image_pyramid& ima
         im_i1.image().nplanes());
 
       s*=scale_step();
-      vil2_gauss_reduce_general(im_i1.image(), im_i0.image(), worka_, workb_, scale_params_);
+      vil_gauss_reduce_general(im_i1.image(), im_i0.image(), worka_, workb_, scale_params_);
     }
   }
 }

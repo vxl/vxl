@@ -9,7 +9,7 @@
 
 #include "vil3d_file_format.h"
 #include <vcl_vector.h>
-#include <vil2/vil2_open.h>
+#include <vil/vil_open.h>
 #include <vil3d/file_formats/vil3d_gipl_format.h>
 #include <vil3d/file_formats/vil3d_slice_list.h>
 
@@ -20,7 +20,7 @@ bool vil3d_file_format::read_file(vil3d_header_data_sptr& header,
                                   vil3d_image_view_base_sptr& image,
                                   const vcl_string& filename)
 {
-  vil2_stream *is = vil2_open(filename.c_str(), "r");
+  vil_stream *is = vil_open(filename.c_str(), "r");
   if (is) return read_stream(header,image,is);
 
   vcl_cerr << __FILE__ ": Failed to load [" << filename << "]\n";
@@ -32,7 +32,7 @@ bool vil3d_file_format::write_file(vil3d_header_data_sptr& header,
                                    vil3d_image_view_base_sptr& image,
                                    const vcl_string& filename)
 {
-  vil2_stream* os = vil2_open(filename.c_str(), "w");
+  vil_stream* os = vil_open(filename.c_str(), "w");
   if (!os->ok()) {
     vcl_cerr << __FILE__ ": Invalid stream for \"" << filename << "\"\n";
     return false;

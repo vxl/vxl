@@ -12,7 +12,7 @@
 //  Vector v is filled with n*np elements, where np=image.nplanes()*image.ncomponents()
 //  v[0]..v[np-1] are the values from point (x0,y0,z0)
 //  Points outside image return zero.
-// \relates vil2_image_view
+// \relates vil_image_view
 template <class imType, class vecType>
 void vil3d_sample_profile_trilin(vecType* v,
                                  const vil3d_image_view<imType>& image,

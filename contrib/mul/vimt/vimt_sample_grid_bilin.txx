@@ -7,13 +7,13 @@
 //  \author Tim Cootes
 
 #include "vimt_sample_grid_bilin.h"
-#include <vil2/vil2_sample_grid_bilin.h>
-#include <vil2/vil2_bilin_interp.h>
+#include <vil/vil_sample_grid_bilin.h>
+#include <vil/vil_bilin_interp.h>
 #include <vnl/vnl_vector.h>
 #include <vgl/vgl_vector_2d.h>
 
 inline bool vimt_grid_corner_in_image(const vgl_point_2d<double>& p,
-                                      const vil2_image_view_base& image)
+                                      const vil_image_view_base& image)
 {
   if (p.x()<1) return false;
   if (p.x()<1) return false;
@@ -49,7 +49,7 @@ void vimt_sample_grid_bilin(vnl_vector<vecType>& vec,
     vgl_vector_2d<double> im_v(0,0);
     if (n2>1) im_v = (im_p2-im_p0)/(n2-1);
 
-    vil2_sample_grid_bilin(vec_data,image.image(),im_p0.x(),im_p0.y(),
+    vil_sample_grid_bilin(vec_data,image.image(),im_p0.x(),im_p0.y(),
                            im_u.x(),im_u.y(),im_v.x(),im_v.y(),n1,n2);
     return;
   }
@@ -83,7 +83,7 @@ void vimt_sample_grid_bilin(vnl_vector<vecType>& vec,
         for (int j=0;j<n2;++j,p+=v,++vec_data)
         {
           vgl_point_2d<double> im_p = w2i(p);
-          *vec_data = vil2_bilin_interp_raw(im_p.x(),im_p.y(),plane0,istep,jstep);
+          *vec_data = vil_bilin_interp_raw(im_p.x(),im_p.y(),plane0,istep,jstep);
         }
       }
     }
@@ -96,7 +96,7 @@ void vimt_sample_grid_bilin(vnl_vector<vecType>& vec,
         {
           vgl_point_2d<double> im_p = w2i(p);
           for (int k=0;k<np;++k,++vec_data)
-            *vec_data = vil2_bilin_interp_raw(im_p.x(),im_p.y(),plane0+k*pstep,istep,jstep);
+            *vec_data = vil_bilin_interp_raw(im_p.x(),im_p.y(),plane0+k*pstep,istep,jstep);
         }
       }
     }
@@ -112,7 +112,7 @@ void vimt_sample_grid_bilin(vnl_vector<vecType>& vec,
         for (int j=0;j<n2;++j,p+=v,++vec_data)
         {
           vgl_point_2d<double> im_p = w2i(p);
-          *vec_data = vil2_bilin_interp_safe(im_p.x(),im_p.y(),plane0,ni,nj,istep,jstep);
+          *vec_data = vil_bilin_interp_safe(im_p.x(),im_p.y(),plane0,ni,nj,istep,jstep);
         }
       }
     }
@@ -125,7 +125,7 @@ void vimt_sample_grid_bilin(vnl_vector<vecType>& vec,
         {
           vgl_point_2d<double> im_p = w2i(p);
           for (int k=0;k<np;++k,++vec_data)
-            *vec_data = vil2_bilin_interp_safe(im_p.x(),im_p.y(),plane0+k*pstep,ni,nj,istep,jstep);
+            *vec_data = vil_bilin_interp_safe(im_p.x(),im_p.y(),plane0+k*pstep,ni,nj,istep,jstep);
         }
       }
     }

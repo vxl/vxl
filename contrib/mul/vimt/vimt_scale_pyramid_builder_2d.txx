@@ -11,7 +11,7 @@
 #include <vcl_cassert.h>
 #include <vcl_string.h>
 #include <vcl_iostream.h>
-#include <vil2/vil2_bilin_interp.h>
+#include <vil/vil_bilin_interp.h>
 #include <vimt/vimt_image_2d_of.h>
 #include <vimt/vimt_image_pyramid.h>
 #include <vsl/vsl_indent.h>
@@ -133,7 +133,7 @@ void vimt_scale_pyramid_builder_2d<T>::scale_reduce(
     double x=init_x;
     for (int xi=0; xi<dest_ni; xi++)
     {
-      dest_row[xi] = l_round (vil2_bilin_interp_safe_extend(x, y,
+      dest_row[xi] = l_round (vil_bilin_interp_safe_extend(x, y,
                               src_im, src_ni, src_nj, src_istep, src_jstep), (T)0);
       x += scale_step_;
     }

@@ -12,7 +12,7 @@
 #include <vxl_config.h> // for vxl_uint_32 etc.
 #include <vil3d/vil3d_image_view.h>
 #include <vil3d/vil3d_copy.h>
-#include <vil2/vil2_pixel_format.h>
+#include <vil/vil_pixel_format.h>
 
 class vil3d_image_view_base;
 
@@ -20,24 +20,24 @@ vil3d_memory_image::vil3d_memory_image():
    view_(new vil3d_image_view<vxl_byte>()) {}
 
 vil3d_memory_image::vil3d_memory_image(unsigned ni, unsigned nj, unsigned nk,
-                                       unsigned nplanes, vil2_pixel_format format)
+                                       unsigned nplanes, vil_pixel_format format)
 {
   // format should be a scalar type
-  assert (vil2_pixel_format_num_components(format)==1);
+  assert (vil_pixel_format_num_components(format)==1);
 
   switch (format)
   {
 #define macro( F , T ) \
   case F :     view_ = new vil3d_image_view<T >(ni, nj, nk, nplanes); break;
-macro(VIL2_PIXEL_FORMAT_BYTE, vxl_byte )
-macro(VIL2_PIXEL_FORMAT_SBYTE , vxl_sbyte )
-macro(VIL2_PIXEL_FORMAT_UINT_32 , vxl_uint_32 )
-macro(VIL2_PIXEL_FORMAT_UINT_16 , vxl_uint_16 )
-macro(VIL2_PIXEL_FORMAT_INT_32 , vxl_int_32 )
-macro(VIL2_PIXEL_FORMAT_INT_16 , vxl_int_16 )
-macro(VIL2_PIXEL_FORMAT_BOOL , bool )
-macro(VIL2_PIXEL_FORMAT_FLOAT , float )
-macro(VIL2_PIXEL_FORMAT_DOUBLE , double )
+macro(VIL_PIXEL_FORMAT_BYTE, vxl_byte )
+macro(VIL_PIXEL_FORMAT_SBYTE , vxl_sbyte )
+macro(VIL_PIXEL_FORMAT_UINT_32 , vxl_uint_32 )
+macro(VIL_PIXEL_FORMAT_UINT_16 , vxl_uint_16 )
+macro(VIL_PIXEL_FORMAT_INT_32 , vxl_int_32 )
+macro(VIL_PIXEL_FORMAT_INT_16 , vxl_int_16 )
+macro(VIL_PIXEL_FORMAT_BOOL , bool )
+macro(VIL_PIXEL_FORMAT_FLOAT , float )
+macro(VIL_PIXEL_FORMAT_DOUBLE , double )
 #undef macro
   default:
     vcl_cerr << "ERROR: vil3d_memory_image::vil3d_memory_image\n"
@@ -67,15 +67,15 @@ vil3d_image_view_base_sptr vil3d_memory_image::get_copy_view(unsigned i0, unsign
                              ni, nj, nk, v.nplanes(), \
                              v.istep(), v.jstep(), v.kstep(), v.planestep()); \
       return new vil3d_image_view< T >(vil3d_copy_deep(w)); }
-macro(VIL2_PIXEL_FORMAT_BYTE, vxl_byte )
-macro(VIL2_PIXEL_FORMAT_SBYTE , vxl_sbyte )
-macro(VIL2_PIXEL_FORMAT_UINT_32 , vxl_uint_32 )
-macro(VIL2_PIXEL_FORMAT_UINT_16 , vxl_uint_16 )
-macro(VIL2_PIXEL_FORMAT_INT_32 , vxl_int_32 )
-macro(VIL2_PIXEL_FORMAT_INT_16 , vxl_int_16 )
-macro(VIL2_PIXEL_FORMAT_BOOL , bool )
-macro(VIL2_PIXEL_FORMAT_FLOAT , float )
-macro(VIL2_PIXEL_FORMAT_DOUBLE , double )
+macro(VIL_PIXEL_FORMAT_BYTE, vxl_byte )
+macro(VIL_PIXEL_FORMAT_SBYTE , vxl_sbyte )
+macro(VIL_PIXEL_FORMAT_UINT_32 , vxl_uint_32 )
+macro(VIL_PIXEL_FORMAT_UINT_16 , vxl_uint_16 )
+macro(VIL_PIXEL_FORMAT_INT_32 , vxl_int_32 )
+macro(VIL_PIXEL_FORMAT_INT_16 , vxl_int_16 )
+macro(VIL_PIXEL_FORMAT_BOOL , bool )
+macro(VIL_PIXEL_FORMAT_FLOAT , float )
+macro(VIL_PIXEL_FORMAT_DOUBLE , double )
 #undef macro
   default:
     return 0;
@@ -101,15 +101,15 @@ vil3d_image_view_base_sptr vil3d_memory_image::get_view(unsigned i0, unsigned ni
                                       ni, nj, nk, v.nplanes(), \
                                       v.istep(), v.jstep(), v.kstep(), \
                                       v.planestep()); }
-macro(VIL2_PIXEL_FORMAT_BYTE , vxl_byte )
-macro(VIL2_PIXEL_FORMAT_SBYTE , vxl_sbyte )
-macro(VIL2_PIXEL_FORMAT_UINT_32 , vxl_uint_32 )
-macro(VIL2_PIXEL_FORMAT_UINT_16 , vxl_uint_16 )
-macro(VIL2_PIXEL_FORMAT_INT_32 , vxl_int_32 )
-macro(VIL2_PIXEL_FORMAT_INT_16 , vxl_int_16 )
-macro(VIL2_PIXEL_FORMAT_BOOL , bool )
-macro(VIL2_PIXEL_FORMAT_FLOAT , float )
-macro(VIL2_PIXEL_FORMAT_DOUBLE , double )
+macro(VIL_PIXEL_FORMAT_BYTE , vxl_byte )
+macro(VIL_PIXEL_FORMAT_SBYTE , vxl_sbyte )
+macro(VIL_PIXEL_FORMAT_UINT_32 , vxl_uint_32 )
+macro(VIL_PIXEL_FORMAT_UINT_16 , vxl_uint_16 )
+macro(VIL_PIXEL_FORMAT_INT_32 , vxl_int_32 )
+macro(VIL_PIXEL_FORMAT_INT_16 , vxl_int_16 )
+macro(VIL_PIXEL_FORMAT_BOOL , bool )
+macro(VIL_PIXEL_FORMAT_FLOAT , float )
+macro(VIL_PIXEL_FORMAT_DOUBLE , double )
 #undef macro
   default:
     return 0;
@@ -144,15 +144,15 @@ bool vil3d_memory_image::put_view(const vil3d_image_view_base& im,
       vil3d_copy_to_window(w, v, i0, j0, k0); \
       return true; }
 
-macro(VIL2_PIXEL_FORMAT_BYTE , vxl_byte )
-macro(VIL2_PIXEL_FORMAT_SBYTE , vxl_sbyte )
-macro(VIL2_PIXEL_FORMAT_UINT_32 , vxl_uint_32 )
-macro(VIL2_PIXEL_FORMAT_UINT_16 , vxl_uint_16 )
-macro(VIL2_PIXEL_FORMAT_INT_32 , vxl_int_32 )
-macro(VIL2_PIXEL_FORMAT_INT_16 , vxl_int_16 )
-macro(VIL2_PIXEL_FORMAT_BOOL , bool )
-macro(VIL2_PIXEL_FORMAT_FLOAT , float )
-macro(VIL2_PIXEL_FORMAT_DOUBLE , double )
+macro(VIL_PIXEL_FORMAT_BYTE , vxl_byte )
+macro(VIL_PIXEL_FORMAT_SBYTE , vxl_sbyte )
+macro(VIL_PIXEL_FORMAT_UINT_32 , vxl_uint_32 )
+macro(VIL_PIXEL_FORMAT_UINT_16 , vxl_uint_16 )
+macro(VIL_PIXEL_FORMAT_INT_32 , vxl_int_32 )
+macro(VIL_PIXEL_FORMAT_INT_16 , vxl_int_16 )
+macro(VIL_PIXEL_FORMAT_BOOL , bool )
+macro(VIL_PIXEL_FORMAT_FLOAT , float )
+macro(VIL_PIXEL_FORMAT_DOUBLE , double )
 #undef macro
 
   default:

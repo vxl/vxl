@@ -13,8 +13,8 @@
 
 #include <vil3d/vil3d_image_view_base.h>
 #include <vcl_cassert.h>
-#include <vil2/vil2_smart_ptr.h>
-#include <vil2/vil2_pixel_format.h>
+#include <vil/vil_smart_ptr.h>
+#include <vil/vil_pixel_format.h>
 
 //:
 // Abstract representation of an image source or image destination.
@@ -45,8 +45,8 @@ class vil3d_image_resource
   virtual unsigned nk() const = 0;
 
   //: Pixel Format.
-  // pixel_format() == VIL2_PIXEL_FORMAT_BYTE
-  virtual enum vil2_pixel_format pixel_format() const = 0;
+  // pixel_format() == VIL_PIXEL_FORMAT_BYTE
+  virtual enum vil_pixel_format pixel_format() const = 0;
 
   //: Create a read/write view of the data.
   // Modifying this view might modify the actual data.
@@ -97,7 +97,7 @@ class vil3d_image_resource
  private:
   // You probably should not use a vil3d_image_resource in a vbl_smart_ptr, so the
   // ref functions are private
-  friend class vil2_smart_ptr<vil3d_image_resource>;
+  friend class vil_smart_ptr<vil3d_image_resource>;
   void ref() { ++reference_count_; }
   void unref() {
     assert(reference_count_>0);
@@ -105,6 +105,6 @@ class vil3d_image_resource
   int reference_count_;
 };
 
-typedef vil2_smart_ptr<vil3d_image_resource> vil3d_image_resource_sptr;
+typedef vil_smart_ptr<vil3d_image_resource> vil3d_image_resource_sptr;
 
 #endif // vil3d_image_resource_h_

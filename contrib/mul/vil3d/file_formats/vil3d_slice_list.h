@@ -11,7 +11,7 @@
 #include <vcl_vector.h>
 #include <vil3d/vil3d_file_format.h>
 #include <vil3d/vil3d_image_resource.h>
-#include <vil2/vil2_image_resource.h>
+#include <vil/vil_image_resource.h>
 
 //: Format class for a volume made up of a list of images.
 class vil3d_slice_list_format : public vil3d_file_format
@@ -29,7 +29,7 @@ class vil3d_slice_list_format : public vil3d_file_format
                                                       unsigned nj,
                                                       unsigned nk,
                                                       unsigned nplanes,
-                                                      enum vil2_pixel_format)const;
+                                                      enum vil_pixel_format)const;
 
   //: default filename tag for this image.
   virtual const char * tag() const {return "slice_list";}
@@ -40,7 +40,7 @@ class vil3d_slice_list_format : public vil3d_file_format
 // If the slices do not match (in size, type etc) a null ptr will
 // be returned.
 vil3d_image_resource_sptr
-vil3d_slice_list_to_volume(const vcl_vector<vil2_image_resource_sptr> &);
+vil3d_slice_list_to_volume(const vcl_vector<vil_image_resource_sptr> &);
 
 //: Format class for a volume made up of a list of images.
 // You can't create one of these yourself.
@@ -48,14 +48,14 @@ vil3d_slice_list_to_volume(const vcl_vector<vil2_image_resource_sptr> &);
 class vil3d_slice_list_image: public vil3d_image_resource
 {
   //: All the 2d image slice resources that make up this volume
-  vcl_vector<vil2_image_resource_sptr> slices_;
+  vcl_vector<vil_image_resource_sptr> slices_;
 
   friend vil3d_image_resource_sptr
-    vil3d_slice_list_to_volume(const vcl_vector<vil2_image_resource_sptr> &);
+    vil3d_slice_list_to_volume(const vcl_vector<vil_image_resource_sptr> &);
   friend class vil3d_slice_list_format;
 
  protected:
-  vil3d_slice_list_image(const vcl_vector<vil2_image_resource_sptr>&);
+  vil3d_slice_list_image(const vcl_vector<vil_image_resource_sptr>&);
 
  public:
   virtual ~vil3d_slice_list_image();
@@ -74,7 +74,7 @@ class vil3d_slice_list_image: public vil3d_image_resource
   virtual unsigned nk() const;
 
   //: Pixel Format.
-  virtual enum vil2_pixel_format pixel_format() const;
+  virtual enum vil_pixel_format pixel_format() const;
 
 
   //: Create a read/write view of a copy of this data.

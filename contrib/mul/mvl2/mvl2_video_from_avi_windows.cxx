@@ -4,8 +4,8 @@
 // \author Louise Butcher
 
 #include "mvl2_video_from_avi_windows.h"
-#include <vil2/vil2_flip.h>
-#include <vil2/vil2_convert.h>
+#include <vil/vil_flip.h>
+#include <vil/vil_convert.h>
 #include <vcl_cstdlib.h>
 
 mvl2_video_from_avi::mvl2_video_from_avi()
@@ -77,7 +77,7 @@ int mvl2_video_from_avi::seek(int frame_number)
   reset_frame();
   bool b;
   do {
-    vil2_image_view<vxl_byte> im;
+    vil_image_view<vxl_byte> im;
     b = get_frame(im);
     if (b) ++current_frame_;
   } while (b && frame_number--);
@@ -85,7 +85,7 @@ int mvl2_video_from_avi::seek(int frame_number)
   return current_frame_;
 }
 
-bool mvl2_video_from_avi::get_frame(vil2_image_view<vxl_byte>& image)
+bool mvl2_video_from_avi::get_frame(vil_image_view<vxl_byte>& image)
 {
   //nb doesn't allow you to load in colour videos as grey scale
   //only loads videos according to number of planes in each frame!
@@ -115,15 +115,15 @@ bool mvl2_video_from_avi::get_frame(vil2_image_view<vxl_byte>& image)
 
   unsigned char* data=(unsigned char*)(img_data)+img->
     bmiHeader.biSize+img->bmiHeader.biClrUsed*sizeof(RGBQUAD);
-  vil2_image_view<vxl_byte> temp_img;
+  vil_image_view<vxl_byte> temp_img;
   if (colour_vid)
     temp_img.set_to_memory(data+2,nx,ny,bplanes,xstep,ystep,-1);
   else
     temp_img.set_to_memory(data,nx,ny,bplanes,xstep,ystep,0);
 
 
-  vil2_image_view<vxl_byte> image_tmp_;
-  image_tmp_=vil2_flip_ud(temp_img);
+  vil_image_view<vxl_byte> image_tmp_;
+  image_tmp_=vil_flip_ud(temp_img);
 
   if ( colour_vid == use_colour_ )
   {
@@ -131,7 +131,7 @@ bool mvl2_video_from_avi::get_frame(vil2_image_view<vxl_byte>& image)
   }
   else if ( colour_vid && !use_colour_ )
   {
-    vil2_convert_planes_to_grey( image_tmp_, image );
+    vil_convert_planes_to_grey( image_tmp_, image );
   }
   else
   {

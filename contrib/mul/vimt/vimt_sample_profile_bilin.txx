@@ -7,14 +7,14 @@
 //  \author Tim Cootes
 
 #include "vimt_sample_profile_bilin.h"
-#include <vil2/vil2_sample_profile_bilin.h>
-#include <vil2/vil2_bilin_interp.h>
+#include <vil/vil_sample_profile_bilin.h>
+#include <vil/vil_bilin_interp.h>
 #include <vnl/vnl_vector.h>
 #include <vgl/vgl_vector_2d.h>
 
 inline bool vimt_profile_in_image(const vgl_point_2d<double>& p0,
                                   const vgl_point_2d<double>& p1,
-                                  const vil2_image_view_base& image)
+                                  const vil_image_view_base& image)
 {
   return p0.x()>=0 && p0.x()<=image.ni()-1 &&
          p0.y()>=0 && p0.y()<=image.nj()-1 &&
@@ -47,7 +47,7 @@ void vimt_sample_profile_bilin(vnl_vector<vecType>& vec,
     double dy = (im_p1.y()-im_p0.y())/(n-1);
 
     // Sample along profile between im_p0 and im_p1
-    vil2_sample_profile_bilin(v,image.image(),im_p0.x(),im_p0.y(),dx,dy,n);
+    vil_sample_profile_bilin(v,image.image(),im_p0.x(),im_p0.y(),dx,dy,n);
     return;
   }
 
@@ -63,7 +63,7 @@ void vimt_sample_profile_bilin(vnl_vector<vecType>& vec,
       for (int i=0;i<n;++i,p+=u)
       {
         im_p = w2i(p);
-        v[i] = vil2_bilin_interp(image.image(),im_p.x(),im_p.y());
+        v[i] = vil_bilin_interp(image.image(),im_p.x(),im_p.y());
       }
     }
     else
@@ -72,7 +72,7 @@ void vimt_sample_profile_bilin(vnl_vector<vecType>& vec,
       {
         im_p = w2i(p);
         for (int plane=0;plane<np;++plane,++v)
-          *v = vil2_bilin_interp(image.image(),im_p.x(),im_p.y(),plane);
+          *v = vil_bilin_interp(image.image(),im_p.x(),im_p.y(),plane);
       }
     }
   }
@@ -83,7 +83,7 @@ void vimt_sample_profile_bilin(vnl_vector<vecType>& vec,
       for (int i=0;i<n;++i,p+=u)
       {
         im_p = w2i(p);
-        v[i] = vil2_bilin_interp_safe(image.image(),im_p.x(),im_p.y());
+        v[i] = vil_bilin_interp_safe(image.image(),im_p.x(),im_p.y());
       }
     }
     else
@@ -92,7 +92,7 @@ void vimt_sample_profile_bilin(vnl_vector<vecType>& vec,
       {
         im_p = w2i(p);
         for (int plane=0;plane<np;++plane,++v)
-          *v = vil2_bilin_interp_safe(image.image(),im_p.x(),im_p.y(),plane);
+          *v = vil_bilin_interp_safe(image.image(),im_p.x(),im_p.y(),plane);
       }
     }
   }

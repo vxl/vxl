@@ -19,8 +19,8 @@
 #include <vul/vul_file.h>
 #include <mvl2/mvl2_video_from_avi.h>
 #include <mvl2/mvl2_video_from_sequence.h>
-#include <vil2/vil2_copy.h>
-#include <vil2/vil2_image_view.h>
+#include <vil/vil_copy.h>
+#include <vil/vil_image_view.h>
 
 //=======================================================================
 
@@ -92,7 +92,7 @@ bool mvl2_image_format_plugin::get_frame_number_and_filename(
 //=======================================================================
 
 bool mvl2_image_format_plugin::load_the_image (
-    vil2_image_view_base_sptr& image,
+    vil_image_view_base_sptr& image,
     const vcl_string & path, const vcl_string & filetype,
     const vcl_string & colour)
 {
@@ -151,13 +151,13 @@ bool mvl2_image_format_plugin::load_the_image (
   }
 
   (*mvl2_list_iterator).second->seek(frame_number);
-  vil2_image_view<vxl_byte> the_image;
+  vil_image_view<vxl_byte> the_image;
   bool ok=(*mvl2_list_iterator).second->get_frame(the_image);
 
   image->set_size((*mvl2_list_iterator).second->get_width(),
                   (*mvl2_list_iterator).second->get_height(),
   the_image.nplanes());
-  vil2_copy_deep(the_image,(vil2_image_view<vxl_byte>&)*image);
+  vil_copy_deep(the_image,(vil_image_view<vxl_byte>&)*image);
 
   return ok;
 }

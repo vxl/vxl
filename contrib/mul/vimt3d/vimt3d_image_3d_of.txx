@@ -2,7 +2,7 @@
 #define vimt3d_image_3d_of_txx_
 //:
 //  \file
-//  \brief Container for vil2_image_view<T> + transform
+//  \brief Container for vil_image_view<T> + transform
 //  \author Tim Cootes
 
 #include <vcl_string.h>

@@ -210,7 +210,7 @@ to save  that state to a @code{vsl_b_istream}.
 @subsection Move contents to VXL
 With a bit more development some of this code could be usefully moved into @VXL .
 e.g. @example
-mbl_chord -> vil_chord,
+mbl_chord -> vil1_chord,
 mbl_gamma.h -> vnl_gamma.h,
 mbl_priority_bounded_queue.h -> vbl_priority_bounded_queue,
 etc.

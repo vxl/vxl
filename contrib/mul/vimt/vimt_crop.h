@@ -8,7 +8,7 @@
 //  \author Tim Cootes, Ian Scott
 
 #include <vimt/vimt_image_2d_of.h>
-#include <vil2/vil2_crop.h>
+#include <vil/vil_crop.h>
 
 //: Create windowed view of given image
 //  The parameters should be in image co-ords.
@@ -22,7 +22,7 @@ vimt_image_2d_of<T> vimt_crop(const vimt_image_2d_of<T>& im,
 {
   vimt_transform_2d trans;
   trans.set_translation(-double(x0),-double(y0));
-  return vimt_image_2d_of<T>(vil2_crop(im.image(),x0,nx,y0,ny),trans*im.world2im());
+  return vimt_image_2d_of<T>(vil_crop(im.image(),x0,nx,y0,ny),trans*im.world2im());
 }
 
 

@@ -81,7 +81,7 @@ int mvl2_video_from_avi::next_frame()
   return current_frame_;
 }
 
-bool mvl2_video_from_avi::get_frame(vil2_image_view<vxl_byte>& image)
+bool mvl2_video_from_avi::get_frame(vil_image_view<vxl_byte>& image)
 {
   if (!is_initialized_) return false;
 

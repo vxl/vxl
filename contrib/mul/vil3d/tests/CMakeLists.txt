@@ -19,7 +19,7 @@ ADD_EXECUTABLE( vil3d_test_all
   test_algo_grad_1x3.cxx
 	test_algo_normalised_correlation_3d.cxx
 )
-TARGET_LINK_LIBRARIES( vil3d_test_all vil3d_algo vil3d vil2 vil2_algo vpl vul testlib vcl )
+TARGET_LINK_LIBRARIES( vil3d_test_all vil3d_algo vil3d vil vil_algo vpl vul testlib vcl )
 
 ADD_TEST( vil3d_test_file_format_read         vil3d_test_all test_file_format_read
   ${MUL_INCLUDE_DIR}/vil3d/tests/file_read_data)

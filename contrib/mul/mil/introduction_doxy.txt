@@ -1,8 +1,8 @@
 // The following text is included in the main documentation page by doxygen
-/*! \mainpage (mil : Manchester's Image Library) - Now replaced by vil2 and vimt
-* The functionality of this library is now completely replaced by vil2 and vimt
+/*! \mainpage (mil : Manchester's Image Library) - Now replaced by vil and vimt
+* The functionality of this library is now completely replaced by vil and vimt
 *
-* Please convert all your code to using vil2 and vimt instead.  mil will be 
+* Please convert all your code to using vil and vimt instead.  mil will be 
 * removed from the repository after a suitable grace period.
 *
 * Provides a set of image classes, derived from mil_image, which can be used
@@ -24,7 +24,7 @@
 *
 * \subsection CAVEAT User
 * mil will never enter core VXL in its current form. We hope to port some
-* of the mil functionality into vil, and then use mil just to provide
+* of the mil functionality into vil1, and then use mil just to provide
 * registration information, and interface similarity between 2, 3 and 4D images.
 *
 * \subsection pyr Image Pyramids
@@ -51,8 +51,8 @@
 * - mil_algo_line_filter<T> (Looks for line like structures)
 * - mil_algo_grad_filter_2d<srcT,destT> (Computes gradient images)
 *
-* These can be applied to vil_image objects by creating mil_image_2d_of<T> as
-* wrappers around the vil_image objects (though care should be taken to
+* These can be applied to vil1_image objects by creating mil_image_2d_of<T> as
+* wrappers around the vil1_image objects (though care should be taken to
 * ensure that the destination images are of the correct size, since the wrapper
 * cannot resize them - it will create new data space on the heap if the size is wrong).
 *

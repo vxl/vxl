@@ -140,37 +140,37 @@ void test_image_view_int()
   TEST("Plane view",image_plane(1,2,3),image5(1,2,3,1));
   TEST("Plane view",image_plane(0,0,0),image5(0,0,0,0));
 
-  vil2_image_view<vxl_int_32> image_ij = vil3d_slice_ij(image5,3);
+  vil_image_view<vxl_int_32> image_ij = vil3d_slice_ij(image5,3);
   TEST("slice_ij size",image_ij.ni()==image5.ni() &&
                        image_ij.nj()==image5.nj() &&
                        image_ij.nplanes()==image5.nplanes(), true);
   TEST("slice_ij value",image_ij(1,2,1),123);
 
-  vil2_image_view<vxl_int_32> image_ji = vil3d_slice_ji(image5,3);
+  vil_image_view<vxl_int_32> image_ji = vil3d_slice_ji(image5,3);
   TEST("slice_ji size",image_ji.nj()==image5.ni() &&
                        image_ji.ni()==image5.nj() &&
                        image_ji.nplanes()==image5.nplanes(), true);
   TEST("slice_ji value",image_ji(2,1,1),123);
 
-  vil2_image_view<vxl_int_32> image_ik = vil3d_slice_ik(image5,2);
+  vil_image_view<vxl_int_32> image_ik = vil3d_slice_ik(image5,2);
   TEST("image_ik size",image_ik.ni()==image5.ni() &&
                        image_ik.nj()==image5.nk() &&
                        image_ik.nplanes()==image5.nplanes(), true);
   TEST("image_ik value",image_ik(1,3,1),123);
 
-  vil2_image_view<vxl_int_32> image_ki = vil3d_slice_ki(image5,2);
+  vil_image_view<vxl_int_32> image_ki = vil3d_slice_ki(image5,2);
   TEST("image_ki size",image_ki.ni()==image5.nk() &&
                        image_ki.nj()==image5.ni() &&
                        image_ki.nplanes()==image5.nplanes(), true);
   TEST("image_ki value",image_ki(3,1,1),123);
 
-  vil2_image_view<vxl_int_32> image_jk = vil3d_slice_jk(image5,1);
+  vil_image_view<vxl_int_32> image_jk = vil3d_slice_jk(image5,1);
   TEST("image_jk size",image_jk.ni()==image5.nj() &&
                        image_jk.nj()==image5.nk() &&
                        image_jk.nplanes()==image5.nplanes(), true);
   TEST("image_jk value",image_jk(2,3,1),123);
 
-  vil2_image_view<vxl_int_32> image_kj = vil3d_slice_kj(image5,1);
+  vil_image_view<vxl_int_32> image_kj = vil3d_slice_kj(image5,1);
   TEST("image_kj size",image_kj.ni()==image5.nk() &&
                        image_kj.nj()==image5.nj() &&
                        image_kj.nplanes()==image5.nplanes(), true);
@@ -183,59 +183,59 @@ void test_image_view_int()
            << "************************************\n";
 
   image2.fill(0);
-  image_win = vil2_crop(image2,2,1,1,2);
+  image_win = vil_crop(image2,2,1,1,2);
   image5.set_size(1,2);
-  image5(0,0) = vil2_rgb<vxl_int_32>(25,35,45);
-  image5(0,1) = vil2_rgb<vxl_int_32>(25,35,45);
+  image5(0,0) = vil_rgb<vxl_int_32>(25,35,45);
+  image5(0,1) = vil_rgb<vxl_int_32>(25,35,45);
   image0 = image5;
 
-  vil2_copy_reformat(image0, image_win);
-  vil2_print_all(vcl_cout, image2);
+  vil_copy_reformat(image0, image_win);
+  vil_print_all(vcl_cout, image2);
   vil3d_image_view<vxl_int_32> test_image(5,4,3);
   test_image.fill(0);
   test_image(2,1,0) = test_image(2,2,0) = 25;
   test_image(2,1,1) = test_image(2,2,1) = 35;
   test_image(2,1,2) = test_image(2,2,2) = 45;
-  TEST("vil2_reformat_copy, vil2_window and vil2_deep_equality",
+  TEST("vil_reformat_copy, vil_window and vil_deep_equality",
        vil3d_image_view_deep_equality(test_image,image2), true);
   test_image(2,2,2) = 44;
-  TEST("!vil2_deep_equality", vil3d_image_view_deep_equality(test_image,image2), false);
+  TEST("!vil_deep_equality", vil3d_image_view_deep_equality(test_image,image2), false);
   test_image.set_size(5,4,4);
-  TEST("!vil2_deep_equality", vil3d_image_view_deep_equality(test_image,image2), false);
-  vil2_print_all(vcl_cout, image2);
+  TEST("!vil_deep_equality", vil3d_image_view_deep_equality(test_image,image2), false);
+  vil_print_all(vcl_cout, image2);
 
   vil3d_image_view<float> image7;
-  vil2_convert_cast(image2, image7);
-  vil2_print_all(vcl_cout, image7);
-  vil2_transform(image7, image7, vcl_bind2nd(vcl_plus<float>(),0.6f));
-  vil2_convert_cast(image7, image2);
-  vil2_print_all(vcl_cout, image2);
+  vil_convert_cast(image2, image7);
+  vil_print_all(vcl_cout, image7);
+  vil_transform(image7, image7, vcl_bind2nd(vcl_plus<float>(),0.6f));
+  vil_convert_cast(image7, image2);
+  vil_print_all(vcl_cout, image2);
   TEST("Rounding up", image2(0,0,0) == 1 && image2(2,2,1) == 36, true);
 
   image7.clear();
-  vil2_convert_rgb_to_grey(vil2_view_as_rgb(image2), image7);
-  vil2_print_all(vcl_cout, image7);
-  TEST("vil2_convert_rgb_to_grey(vil2_rgba)", image7, true);
+  vil_convert_rgb_to_grey(vil_view_as_rgb(image2), image7);
+  vil_print_all(vcl_cout, image7);
+  TEST("vil_convert_rgb_to_grey(vil_rgba)", image7, true);
   TEST_NEAR("Conversion rgb to grey", image7(0,0), 1.0, 1e-5);
   TEST_NEAR("Conversion rgb to grey", image7(2,1), 34.5960, 1e-5);
-  vil2_convert_grey_to_rgb(image7, image5);
-  TEST("vil2_convert_grey_to_rgb", image5, true);
-  vil2_print_all(vcl_cout, image5);
+  vil_convert_grey_to_rgb(image7, image5);
+  TEST("vil_convert_grey_to_rgb", image5, true);
+  vil_print_all(vcl_cout, image5);
 
-  vil2_convert_grey_to_rgba(image7, image6);
-  TEST("vil2_convert_grey_to_rgba", image6, true);
+  vil_convert_grey_to_rgba(image7, image6);
+  TEST("vil_convert_grey_to_rgba", image6, true);
 
-  image2 = vil2_plane(vil2_view_as_planes(image6),1);
-  vil2_transform(vil2_plane(vil2_view_as_planes(image6),1), image2,
+  image2 = vil_plane(vil_view_as_planes(image6),1);
+  vil_transform(vil_plane(vil_view_as_planes(image6),1), image2,
                  vcl_bind2nd(vcl_plus<vxl_int_32>(),1));
 
-  vil2_print_all(vcl_cout, image6);
+  vil_print_all(vcl_cout, image6);
   image7.clear();
-  vil2_convert_rgb_to_grey(image6, image7);
-  TEST("vil2_convert_rgb_to_grey(vil2_rgba)", image7, true);
+  vil_convert_rgb_to_grey(image6, image7);
+  TEST("vil_convert_rgb_to_grey(vil_rgba)", image7, true);
   TEST_NEAR("Conversion rgba to grey", image7(0,0),  1.71540, 1e-5);
   TEST_NEAR("Conversion rgba to grey", image7(2,1), 35.71540, 1e-5);
-  vil2_print_all(vcl_cout, image7);
+  vil_print_all(vcl_cout, image7);
 #endif // 0
 }
 

@@ -15,7 +15,7 @@ void test_correlate_2d_byte()
   image0.image().fill(10);
   image0.image()(3,7)=18;  // One peak
 
-  vil2_image_view<double> kernel(3,3,1);
+  vil_image_view<double> kernel(3,3,1);
   kernel.fill(1.0);
   kernel(1,1)=8.0;
   vgl_point_2d<double> kernel_ref_pt(1,1);

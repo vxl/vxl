@@ -17,7 +17,7 @@
 #include <vcl_string.h>
 #include <vcl_cassert.h>
 #include <vcl_ostream.h>
-#include <vil2/vil2_pixel_format.h>
+#include <vil/vil_pixel_format.h>
 
 //=======================================================================
 
@@ -47,7 +47,7 @@ vil3d_image_view<T>::vil3d_image_view(const T* top_left,
 //: Set this view to look at another view's data
 //  Need to pass the memory chunk to set up the internal smart ptr appropriately
 template<class T>
-vil3d_image_view<T>::vil3d_image_view(const vil2_memory_chunk_sptr& mem_chunk,
+vil3d_image_view<T>::vil3d_image_view(const vil_memory_chunk_sptr& mem_chunk,
                                       const T* top_left, unsigned n_i, unsigned n_j,
                                       unsigned n_k, unsigned n_planes,
                                       vcl_ptrdiff_t i_step, vcl_ptrdiff_t j_step,
@@ -205,8 +205,8 @@ void vil3d_image_view<T>::set_size(unsigned n_i, unsigned n_j, unsigned n_k, uns
 
   release_memory();
 
-  ptr_ = new vil2_memory_chunk(sizeof(T)*n_planes*n_k*n_j*n_i,
-    vil2_pixel_format_component_format(vil2_pixel_format_of(T())));
+  ptr_ = new vil_memory_chunk(sizeof(T)*n_planes*n_k*n_j*n_i,
+    vil_pixel_format_component_format(vil_pixel_format_of(T())));
 
   ni_ = n_i;
   nj_ = n_j;

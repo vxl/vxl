@@ -1,4 +1,4 @@
-// This is mul/vil2/tests/test_save_load_image.cxx
+// This is mul/vil/tests/test_save_load_image.cxx
 #include <testlib/testlib_test.h>
 //:
 // \file
@@ -7,18 +7,18 @@
 //
 // \verbatim
 // Modifications
-// 18 Jul 2000 - add vil_buffer, and mit bug fix.
+// 18 Jul 2000 - add vil1_buffer, and mit bug fix.
 // 10 Aug 2000 - Peter Vanroose - added non-exact match
 // 10 Aug 2000 - Peter Vanroose - added bmp and mit tests
 // 10 Aug 2000 - Peter Vanroose - test TIFF and JPEG presence
 // 26 Aug 2000 - .bmp loader works (again) on solaris + linux
 // 28 Aug 2000 - Peter Vanroose - bmp write of colour images fixed
-//  6 Dec 2000 - vil2_rgb<vxl_byte> deprecated
-// 21 Jan 2001 - deprecated vil_buffer<> - use vcl_vector<> instead
-//  1 May 2001 - Peter Vanroose - now using vil_test.h
+//  6 Dec 2000 - vil_rgb<vxl_byte> deprecated
+// 21 Jan 2001 - deprecated vil1_buffer<> - use vcl_vector<> instead
+//  1 May 2001 - Peter Vanroose - now using vil1_test.h
 // 7 June 2001 - Peter Vanroose - test added for pbm images
-// 14 Apr 2002 - Amitha Perera - switched from vil_test to testlib
-// 26 Aug 2002 - Ian Scott - Started conversion to vil2
+// 14 Apr 2002 - Amitha Perera - switched from vil1_test to testlib
+// 26 Aug 2002 - Ian Scott - Started conversion to vil
 //  2 Oct 2002 - Peter Vanroose - replaced image24 tests by image3p
 // \endverbatim
 
@@ -32,11 +32,11 @@
 #include <vul/vul_temp_filename.h>
 #include <vpl/vpl.h> // vpl_unlink()
 
-#include <vil2/vil2_save.h>
-#include <vil2/vil2_load.h>
-#include <vil2/vil2_print.h>
-#include <vil2/vil2_image_view.h>
-#include <vil2/vil2_pixel_format.h>
+#include <vil/vil_save.h>
+#include <vil/vil_load.h>
+#include <vil/vil_print.h>
+#include <vil/vil_image_view.h>
+#include <vil/vil_pixel_format.h>
 
 #ifndef LEAVE_IMAGES_BEHIND
 #define LEAVE_IMAGES_BEHIND 0
@@ -46,11 +46,11 @@
 //: Test to see if all the pixels in two images are equal
 template <class T>
 bool test_image_equal(char const* type_name,
-                      vil2_image_view<T> const & image,
-                      vil2_image_view_base_sptr const& pimage2,
+                      vil_image_view<T> const & image,
+                      vil_image_view_base_sptr const& pimage2,
                       bool exact = true)
 {
-  vil2_image_view<T> image2 = *pimage2;
+  vil_image_view<T> image2 = *pimage2;
 
   int sizex = image.ni();
   int sizey = image.nj();
@@ -103,9 +103,9 @@ bool test_image_equal(char const* type_name,
           if (++bad < 20)
           {
             vcl_cout << "pixel (" << i << "," << j << "," << p <<  ") differs:\t";
-            vil2_print_value(vcl_cout, image(i,j,p));
+            vil_print_value(vcl_cout, image(i,j,p));
             vcl_cout << "---> ";
-            vil2_print_value(vcl_cout,image2(i,j,p));
+            vil_print_value(vcl_cout,image2(i,j,p));
             vcl_cout << '\n';
           }
     #else
@@ -208,8 +208,8 @@ static bool create_grey_gif(const char* filename)
 
 
 template<class T>
-void vil2_test_image_type(char const* type_name, // type for image to read and write
-                         vil2_image_view<T> const & image, // test image to save and restore
+void vil_test_image_type(char const* type_name, // type for image to read and write
+                         vil_image_view<T> const & image, // test image to save and restore
                          bool exact = true,  // require read back image identical
                          bool fail_save = false) // expect fail on save if true
 {
@@ -222,12 +222,12 @@ void vil2_test_image_type(char const* type_name, // type for image to read and w
   fname += ".";
   if (type_name) fname += type_name;
 
-  vcl_cout << "vil2_test_image_type: Save " << image.is_a() <<
+  vcl_cout << "vil_test_image_type: Save " << image.is_a() <<
               " to [" << fname << "]\n" << vcl_flush;
 
   // Write image to disk
   if (vcl_strcmp(type_name, "gif") == 0 &&
-    vil2_pixel_format_num_components( image.pixel_format() ) == 3)
+    vil_pixel_format_num_components( image.pixel_format() ) == 3)
   {
     if (!create_colour_gif(fname.c_str()))
       return; // fatal error
@@ -239,14 +239,14 @@ void vil2_test_image_type(char const* type_name, // type for image to read and w
   }
   else
   {
-    bool tst = vil2_save(image, fname.c_str(), type_name);
+    bool tst = vil_save(image, fname.c_str(), type_name);
     TEST("write image to disk", tst, !fail_save);
     if (!tst) return;
   }
 
   // STEP 2) Read the image that was just saved to file
   {
-    vil2_image_view_base_sptr image2 = vil2_load(fname.c_str());
+    vil_image_view_base_sptr image2 = vil_load(fname.c_str());
     TEST("load image", !image2, false);
     if (!image2)
     {
@@ -263,9 +263,9 @@ void vil2_test_image_type(char const* type_name, // type for image to read and w
 
 
 // create a 1 bit test image
-vil2_image_view<bool> CreateTest1bitImage(int wd, int ht)
+vil_image_view<bool> CreateTest1bitImage(int wd, int ht)
 {
-  vil2_image_view<bool> image(wd, ht, 1);
+  vil_image_view<bool> image(wd, ht, 1);
   for (int j = 0; j < ht; ++j) {
     for (int i = 0; i < wd; i++)
       image(i,j) = (i*j)%2 ==1 ? true : false;
@@ -275,9 +275,9 @@ vil2_image_view<bool> CreateTest1bitImage(int wd, int ht)
 
 
 // create an 8 bit test image
-vil2_image_view<vxl_byte> CreateTest8bitImage(int wd, int ht)
+vil_image_view<vxl_byte> CreateTest8bitImage(int wd, int ht)
 {
-  vil2_image_view<vxl_byte> image(wd, ht);
+  vil_image_view<vxl_byte> image(wd, ht);
   for (int j = 0; j < ht; j++)
     for (int i = 0; i < wd; i++) {
       image(i,j) = ((i-wd/2)*(j-ht/2)) & 0xff;
@@ -286,9 +286,9 @@ vil2_image_view<vxl_byte> CreateTest8bitImage(int wd, int ht)
 }
 
 // create a 16 bit test image
-vil2_image_view<vxl_uint_16> CreateTest16bitImage(int wd, int ht)
+vil_image_view<vxl_uint_16> CreateTest16bitImage(int wd, int ht)
 {
-  vil2_image_view<vxl_uint_16> image(wd, ht);
+  vil_image_view<vxl_uint_16> image(wd, ht);
   for (int j = 0; j < ht; j++)
     for (int i = 0; i < wd; i++) {
       image(i,j) = ((i-wd/2)*(j-ht/2)/16) & 0xffff;
@@ -298,9 +298,9 @@ vil2_image_view<vxl_uint_16> CreateTest16bitImage(int wd, int ht)
 
 
 // create a 32 bit test image
-vil2_image_view<vxl_uint_32> CreateTest32bitImage(int wd, int ht)
+vil_image_view<vxl_uint_32> CreateTest32bitImage(int wd, int ht)
 {
-  vil2_image_view<vxl_uint_32> image(wd, ht);
+  vil_image_view<vxl_uint_32> image(wd, ht);
   for (int j = 0; j < ht; j++)
     for (int i = 0; i < wd; i++)
       image(i, j) = i + wd*j;
@@ -310,21 +310,21 @@ vil2_image_view<vxl_uint_32> CreateTest32bitImage(int wd, int ht)
 #if 0 // read back pixel type will not match: ppm is always read in as 3-plane image
 
 // create a 24 bit color test image
-vil2_image_view<vil2_rgb<vxl_byte> > CreateTest24bitImage(int wd, int ht)
+vil_image_view<vil_rgb<vxl_byte> > CreateTest24bitImage(int wd, int ht)
 {
-  vil2_image_view<vil2_rgb<vxl_byte> > image(wd, ht);
+  vil_image_view<vil_rgb<vxl_byte> > image(wd, ht);
   for (int i = 0; i < wd; i++)
     for (int j = 0; j < ht; j++)
-      image(i,j) = vil2_rgb<vxl_byte>(i%(1<<8), ((i-wd/2)*(j-ht/2)/16) % (1<<8), ((j/3)%(1<<8)));
+      image(i,j) = vil_rgb<vxl_byte>(i%(1<<8), ((i-wd/2)*(j-ht/2)/16) % (1<<8), ((j/3)%(1<<8)));
   return image;
 }
 
 #endif // 0
 
 // create a 24 bit color test image, with 3 planes
-vil2_image_view<vxl_byte> CreateTest3planeImage(int wd, int ht)
+vil_image_view<vxl_byte> CreateTest3planeImage(int wd, int ht)
 {
-  vil2_image_view<vxl_byte> image( wd, ht, 3);
+  vil_image_view<vxl_byte> image( wd, ht, 3);
   for (int i = 0; i < wd; i++)
     for (int j = 0; j < ht; j++) {
       image(i,j,0) = i%(1<<8);
@@ -336,9 +336,9 @@ vil2_image_view<vxl_byte> CreateTest3planeImage(int wd, int ht)
 
 
 // create a float-pixel test image
-vil2_image_view<float> CreateTestfloatImage(int wd, int ht)
+vil_image_view<float> CreateTestfloatImage(int wd, int ht)
 {
-  vil2_image_view<float> image(wd, ht);
+  vil_image_view<float> image(wd, ht);
   for (int i = 0; i < wd; i++)
     for (int j = 0; j < ht; j++)
       image(i,j) = 0.01f * ((i-wd/2)*(j-ht/2)/16);
@@ -351,59 +351,59 @@ MAIN( test_save_load_image )
   // create test images
   int sizex = 253;
   int sizey = 155;
-  vil2_image_view<bool>                image1 = CreateTest1bitImage(sizex, sizey);
-  vil2_image_view<vxl_byte>            image8 = CreateTest8bitImage(sizex, sizey);
-  vil2_image_view<vxl_uint_16>         image16 = CreateTest16bitImage(sizex, sizey);
+  vil_image_view<bool>                image1 = CreateTest1bitImage(sizex, sizey);
+  vil_image_view<vxl_byte>            image8 = CreateTest8bitImage(sizex, sizey);
+  vil_image_view<vxl_uint_16>         image16 = CreateTest16bitImage(sizex, sizey);
 #if 0 // read back pixel type will not match: ppm is always read in as 3-plane image
-  vil2_image_view<vil2_rgb<vxl_byte> >  image24 = CreateTest24bitImage(sizex, sizey);
+  vil_image_view<vil_rgb<vxl_byte> >  image24 = CreateTest24bitImage(sizex, sizey);
 #endif
-  vil2_image_view<vxl_uint_32>         image32 = CreateTest32bitImage(sizex, sizey);
-  vil2_image_view<vxl_byte>            image3p = CreateTest3planeImage(sizex, sizey);
+  vil_image_view<vxl_uint_32>         image32 = CreateTest32bitImage(sizex, sizey);
+  vil_image_view<vxl_byte>            image3p = CreateTest3planeImage(sizex, sizey);
 #if 1 // no float image support available yet
-  vil2_image_view<float>               imagefloat = CreateTestfloatImage(sizex, sizey);
+  vil_image_view<float>               imagefloat = CreateTestfloatImage(sizex, sizey);
 #endif
 
 
   // TIFF
-  vil2_test_image_type("tiff", image1, true, true); // Test that boolean doesn't work
+  vil_test_image_type("tiff", image1, true, true); // Test that boolean doesn't work
 #if 1
-  vil2_test_image_type("tiff", image8);
-  vil2_test_image_type("tiff", image16, true, true); // Test that boolean doesn't work
-  vil2_test_image_type("tiff", image32, true, true); // Test that boolean doesn't work
-  vil2_test_image_type("tiff", image3p);
-  vil2_test_image_type("tiff", imagefloat, true, true); // Test that boolean doesn't work
+  vil_test_image_type("tiff", image8);
+  vil_test_image_type("tiff", image16, true, true); // Test that boolean doesn't work
+  vil_test_image_type("tiff", image32, true, true); // Test that boolean doesn't work
+  vil_test_image_type("tiff", image3p);
+  vil_test_image_type("tiff", imagefloat, true, true); // Test that boolean doesn't work
 #endif
 
 
   // PNG
 #if 1
-  vil2_test_image_type("png", image8);
-  vil2_test_image_type("png", image16);
-  vil2_test_image_type("png", image3p);
+  vil_test_image_type("png", image8);
+  vil_test_image_type("png", image16);
+  vil_test_image_type("png", image3p);
 #endif
 
 
   // JPEG
 #if HAS_JPEG
   // lossy format ==> not guaranteed to be identical (hence arg. 3 set to false)
-  vil2_test_image_type("jpeg", image8, false);
+  vil_test_image_type("jpeg", image8, false);
 # if 0
-  vil2_test_image_type("jpeg", image16);
+  vil_test_image_type("jpeg", image16);
 # endif
-  vil2_test_image_type("jpeg", image3p, false);
+  vil_test_image_type("jpeg", image3p, false);
 
   // Test small image
   {
     unsigned ni =30, nj=29;
-    vil2_image_view<vxl_byte> small_greyscale_image(ni,nj);
+    vil_image_view<vxl_byte> small_greyscale_image(ni,nj);
     for (unsigned j=0;j<nj;++j)
       for (unsigned i=0;i<ni;++i) small_greyscale_image(i,j)=(i+j)*4;
-//    vil2_print_all(vcl_cout, small_greyscale_image);
-    vil2_test_image_type("jpeg", small_greyscale_image, false);
+//    vil_print_all(vcl_cout, small_greyscale_image);
+    vil_test_image_type("jpeg", small_greyscale_image, false);
     vcl_string out_path("test_save_load_jpeg.jpg");
-    TEST("Saving JPEG",vil2_save(small_greyscale_image, out_path.c_str()),true);
+    TEST("Saving JPEG",vil_save(small_greyscale_image, out_path.c_str()),true);
 
-    vil2_image_view<vxl_byte> new_image = vil2_load(out_path.c_str());
+    vil_image_view<vxl_byte> new_image = vil_load(out_path.c_str());
     TEST("JPEG Size correct",new_image.ni()==ni && new_image.nj()==nj, true);
     double sum2 = 0;
     for (unsigned i=0;i<ni;++i)
@@ -418,53 +418,53 @@ MAIN( test_save_load_image )
 
   // pnm ( = PBM / PGM / PPM )
 #if 1
-  vil2_test_image_type("pbm", image1);
-  vil2_test_image_type("pgm", image8);
-  vil2_test_image_type("pnm", image16);
-  vil2_test_image_type("pnm", image32);
-  vil2_test_image_type("ppm", image3p);
+  vil_test_image_type("pbm", image1);
+  vil_test_image_type("pgm", image8);
+  vil_test_image_type("pnm", image16);
+  vil_test_image_type("pnm", image32);
+  vil_test_image_type("ppm", image3p);
 #endif
 
 
   // bmp
 #if 1
-  vil2_test_image_type("bmp", image8);
-  vil2_test_image_type("bmp", image3p);
+  vil_test_image_type("bmp", image8);
+  vil_test_image_type("bmp", image3p);
 #endif
 
 
   // VIFF image (Khoros)
 #if 0
-//vil2_test_image_type("viff", image1);
-  vil2_test_image_type("viff", image8);
-  vil2_test_image_type("viff", image16);
-  vil2_test_image_type("viff", image32);
-  vil2_test_image_type("viff", image3p);
-  vil2_test_image_type("viff", imagefloat);
+//vil_test_image_type("viff", image1);
+  vil_test_image_type("viff", image8);
+  vil_test_image_type("viff", image16);
+  vil_test_image_type("viff", image32);
+  vil_test_image_type("viff", image3p);
+  vil_test_image_type("viff", imagefloat);
 #endif
 
 
   // GIF (read-only)
 #if 0
   // lossy format ==> not guaranteed to be identical (hence arg. 3 set to false)
-  vil2_test_image_type("gif", image8, false);
-  vil2_test_image_type("gif", image3p, false);
+  vil_test_image_type("gif", image8, false);
+  vil_test_image_type("gif", image3p, false);
 #endif
 
 
   // SGI "iris" rgb
 #if 0
-  vil2_test_image_type("iris", image8);
-//vil2_test_image_type("iris", image16); // not implemented yet
-  vil2_test_image_type("iris", image3p);
+  vil_test_image_type("iris", image8);
+//vil_test_image_type("iris", image16); // not implemented yet
+  vil_test_image_type("iris", image3p);
 #endif
 
 
   // mit
 #if 0
-  vil2_test_image_type("mit", image8);
-  vil2_test_image_type("mit", image16);
-  vil2_test_image_type("mit", image3p);
+  vil_test_image_type("mit", image8);
+  vil_test_image_type("mit", image16);
+  vil_test_image_type("mit", image3p);
 #endif
 
   SUMMARY();

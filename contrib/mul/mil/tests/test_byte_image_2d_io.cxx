@@ -1,6 +1,6 @@
 #include <vcl_iostream.h>
 #include <vcl_cstdlib.h> // for vcl_abs(int)
-#include <vil/vil_byte.h>
+#include <vil1/vil1_byte.h>
 #include <testlib/testlib_test.h>
 #include <mil/mil_byte_image_2d_io.h>
 #include <vpl/vpl.h>
@@ -14,7 +14,7 @@ void test_byte_image_2d_io()
 
   int nx=20;
   int ny=20;
-  mil_image_2d_of<vil_byte> orig_image(nx,ny),saved_image,loaded_image;
+  mil_image_2d_of<vil1_byte> orig_image(nx,ny),saved_image,loaded_image;
   // Fill image with shaded squares
   for (int y=0;y<ny;++y)
     for (int x=0;x<nx;++x)

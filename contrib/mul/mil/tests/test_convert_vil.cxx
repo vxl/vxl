@@ -1,8 +1,8 @@
 // This is mul/mil/tests/test_convert_vil.cxx
 #include <vcl_iostream.h>
 #include <vcl_cmath.h>
-#include <vil/vil_rgb_byte.h>
-#include <vil/vil_memory_image_of.h>
+#include <vil1/vil1_rgb_byte.h>
+#include <vil1/vil1_memory_image_of.h>
 #include <mil/mil_convert_vil.h>
 #include <testlib/testlib_test.h>
 
@@ -26,9 +26,9 @@ void test_convert_vil()
   //out_image.print_summary(vcl_cout);
 
   // Convert Image
-  vil_memory_image_of<float> vil_image;
-  mil_convert_vil_gm2gv(vil_image, in_image);
-  mil_convert_vil_gv2gm(out_image, vil_image);
+  vil1_memory_image_of<float> vil1_image;
+  mil_convert_vil_gm2gv(vil1_image, in_image);
+  mil_convert_vil_gv2gm(out_image, vil1_image);
 
 
   // Calc Total difference over all pixels
@@ -41,13 +41,13 @@ void test_convert_vil()
   double diff2=0;
   for (int y=0;y<ny;++y)
     for (int x=0;x<nx;++x)
-      diff2+=vcl_fabs( in_image(x,y)-vil_image(x,y) );
+      diff2+=vcl_fabs( in_image(x,y)-vil1_image(x,y) );
   TEST_NEAR("Diff grey input/temp",diff2,0,1e-6);
 
   double diff3=0;
   for (int y=0;y<ny;++y)
     for (int x=0;x<nx;++x)
-      diff3+=vcl_fabs( vil_image(x,y)-out_image(x,y) );
+      diff3+=vcl_fabs( vil1_image(x,y)-out_image(x,y) );
   TEST_NEAR("Diff grey temp/output",diff3,0,1e-6);
 
 
@@ -66,7 +66,7 @@ void test_convert_vil()
   //out_image.print_summary(vcl_cout);
 
   // Convert Image
-  vil_memory_image_of<vil_rgb_byte> c_vil_image;
+  vil1_memory_image_of<vil1_rgb_byte> c_vil_image;
   mil_convert_vil_cm2cv(c_vil_image, c_in_image);
   mil_convert_vil_cv2cm(c_out_image, c_vil_image);
 

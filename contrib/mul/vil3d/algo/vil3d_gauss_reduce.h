@@ -10,7 +10,7 @@
 //  - Let's not have too many templates.
 // \author Tim Cootes
 
-#include <vil2/algo/vil2_gauss_reduce.h>
+#include <vil/algo/vil_gauss_reduce.h>
 
 //: Smooth and subsample single plane src_im in i to produce dest_im
 //  Applies 1-5-8-5-1 filter in i, then samples
@@ -30,7 +30,7 @@ inline void vil3d_gauss_reduce_i(const T* src_im,
 {
   for (unsigned k=0;k<src_nk;++k)
   {
-    vil2_gauss_reduce(src_im, src_ni,src_nj, s_i_step,s_j_step,
+    vil_gauss_reduce(src_im, src_ni,src_nj, s_i_step,s_j_step,
                       dest_im,d_i_step, d_j_step);
     dest_im += d_k_step;
     src_im  += s_k_step;

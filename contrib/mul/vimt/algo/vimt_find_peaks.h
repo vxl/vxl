@@ -28,7 +28,7 @@ inline bool vimt_is_peak_3x3(const T* im, vcl_ptrdiff_t i_step, vcl_ptrdiff_t j_
 // \param clear_list: If true (the default) then empty list before adding new examples
 template <class T>
 inline void vimt_find_image_peaks_3x3(vcl_vector<vgl_point_2d<unsigned> >& peaks,
-                                      const vil2_image_view<T>& image,
+                                      const vil_image_view<T>& image,
                                       unsigned plane=0, bool clear_list=true)
 {
   if (clear_list) peaks.resize(0);
@@ -51,7 +51,7 @@ inline void vimt_find_world_peaks_3x3(vcl_vector<vgl_point_2d<double> >& peaks,
                                       unsigned plane=0, bool clear_list=true)
 {
   if (clear_list) peaks.resize(0);
-  const vil2_image_view<T>& im = image.image();
+  const vil_image_view<T>& im = image.image();
   vimt_transform_2d im2w = image.world2im().inverse();
   unsigned ni=im.ni(),nj=im.nj();
   vcl_ptrdiff_t istep = im.istep(),jstep=im.jstep();
@@ -75,7 +75,7 @@ inline void vimt_find_world_peaks_3x3(vcl_vector<vgl_point_2d<double> >& peak_po
                                       unsigned plane=0, bool clear_list=true)
 {
   if (clear_list) { peak_pos.resize(0); peak_value.resize(0); }
-  const vil2_image_view<T>& im = image.image();
+  const vil_image_view<T>& im = image.image();
   vimt_transform_2d im2w = image.world2im().inverse();
   unsigned ni=im.ni(),nj=im.nj();
   vcl_ptrdiff_t istep = im.istep(),jstep=im.jstep();
@@ -96,7 +96,7 @@ inline void vimt_find_world_peaks_3x3(vcl_vector<vgl_point_2d<double> >& peak_po
 //  (Or first one found if multiple equivalent maxima)
 template <class T>
 inline
-vgl_point_2d<unsigned> vimt_find_max(const vil2_image_view<T>& im, unsigned plane=0)
+vgl_point_2d<unsigned> vimt_find_max(const vil_image_view<T>& im, unsigned plane=0)
 {
   vgl_point_2d<unsigned> p(0,0);
   T max_val = im(0,0,plane);

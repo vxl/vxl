@@ -1,6 +1,6 @@
 #include <mvl2/mvl2_image_format_plugin.h>
-#include <vil2/vil2_load.h>
-#include <vil2/vil2_save.h>
+#include <vil/vil_load.h>
+#include <vil/vil_save.h>
 
 int main(int argc, char **argv)
 {
@@ -21,13 +21,13 @@ int main(int argc, char **argv)
     return -1;
     }
 
-  vil2_image_view_base_sptr img;
+  vil_image_view_base_sptr img;
 
-  vil2_image_resource_plugin::register_plugin(
+  vil_image_resource_plugin::register_plugin(
     new mvl2_image_format_plugin());
 
 
-  img=vil2_load(argv[1]);
+  img=vil_load(argv[1]);
  
   if (!img || img->size()==0)
     {
@@ -35,13 +35,13 @@ int main(int argc, char **argv)
     return -1;
     }
 
-  if (!vil2_save(*img,argv[2]))
+  if (!vil_save(*img,argv[2]))
     {
     vcl_cerr << "Unable to save result image to " << argv[2] << vcl_endl;
     return -1;
     }
   
-  vil2_image_resource_plugin::delete_all_plugins();
+  vil_image_resource_plugin::delete_all_plugins();
 
   return 0;
 }

@@ -3,7 +3,7 @@
 #include <vnl/vnl_vector.h>
 #include <mil/mil_image_2d_of.h>
 #include <mil/mil_sample_profile_2d.h>
-#include <vil/vil_byte.h>
+#include <vil1/vil1_byte.h>
 #include <testlib/testlib_test.h>
 
 void test_sample_profile_2d_byte()
@@ -13,7 +13,7 @@ void test_sample_profile_2d_byte()
   vcl_cout << "*******************************\n";
 
   vcl_cout<< "One plane image"<<vcl_endl;
-  mil_image_2d_of<vil_byte> image1;
+  mil_image_2d_of<vil1_byte> image1;
   image1.resize(10,10);
 
   for (int y=0;y<image1.ny();++y)

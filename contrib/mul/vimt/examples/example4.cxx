@@ -31,7 +31,7 @@ int main(int argc, char** argv)
   image0.print_all(vcl_cout);
 
   // Create simple kernel to detect isolated peaks
-  vil2_image_view<double> kernel(3,3,1);
+  vil_image_view<double> kernel(3,3,1);
   kernel.fill(1.0);
   kernel(1,1)=8.0;
   vgl_point_2d<double> kernel_ref_pt(1,1);

@@ -13,7 +13,7 @@
 
 #include <vcl_cassert.h>
 #include <vnl/vnl_math.h> // for sqrt2
-#include <vil2/algo/vil2_gauss_reduce.h>
+#include <vil/algo/vil_gauss_reduce.h>
 #include <vimt/vimt_image_pyramid.h>
 #include <vimt/vimt_crop.h>
 
@@ -89,10 +89,10 @@ void vimt_gaussian_pyramid_builder_2d<T>::gauss_reduce(const vimt_image_2d_of<T>
   switch (filter_width_)
   {
     case (3):
-      vil2_gauss_reduce_121(src_im.image(),dest_im.image());
+      vil_gauss_reduce_121(src_im.image(),dest_im.image());
       break;
     case (5):
-      vil2_gauss_reduce(src_im.image(),dest_im.image(),work_im_.image());
+      vil_gauss_reduce(src_im.image(),dest_im.image(),work_im_.image());
       break;
     default:
       vcl_cerr<<"vimt_gaussian_pyramid_builder_2d<T>::gauss_reduce() "

@@ -40,7 +40,7 @@ void vil3d_header_data::set_voxel_widths(double wi, double wj, double wk)
 }
 
 //: Define pixel format
-void vil3d_header_data::set_pixel_format(vil2_pixel_format f)
+void vil3d_header_data::set_pixel_format(vil_pixel_format f)
 {
   pixel_format_ = f;
 }

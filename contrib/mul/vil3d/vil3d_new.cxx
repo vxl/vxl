@@ -21,7 +21,7 @@
 //: Make a new image of given format.
 vil3d_image_resource_sptr vil3d_new_image_resource(unsigned ni, unsigned nj,
                                                    unsigned nk, unsigned nplanes,
-                                                   vil2_pixel_format format)
+                                                   vil_pixel_format format)
 {
   return new vil3d_memory_image(ni, nj, nk, nplanes, format);
 }
@@ -32,7 +32,7 @@ vil3d_image_resource_sptr vil3d_new_image_resource(const char* name,
                                                    unsigned nj,
                                                    unsigned nk,
                                                    unsigned nplanes,
-                                                   vil2_pixel_format format,
+                                                   vil_pixel_format format,
                                                    char const* file_type)
 {
   if (!file_type) // avoid segfault in strcmp()

@@ -5,11 +5,11 @@
 //  \brief Specialisations of is_a() function
 //  \author Tim Cootes
 
-#include <vil/vil_byte.h>
+#include <vil1/vil1_byte.h>
 
-// Specialise the is_a() for vil_byte
-template<> vcl_string mil_gaussian_pyramid_builder_2d_general<vil_byte>::is_a() const
-{  return vcl_string("mil_gaussian_pyramid_builder_2d_general<vil_byte>"); }
+// Specialise the is_a() for vil1_byte
+template<> vcl_string mil_gaussian_pyramid_builder_2d_general<vil1_byte>::is_a() const
+{  return vcl_string("mil_gaussian_pyramid_builder_2d_general<vil1_byte>"); }
 
 // Specialise the is_a() for int
 template<> vcl_string mil_gaussian_pyramid_builder_2d_general<int>::is_a() const

@@ -1,9 +1,9 @@
 @chapsummary
-Load images using @code{vil2_load}. Access them
- using a @code{vil2_image_view<T>}.
+Load images using @code{vil_load}. Access them
+ using a @code{vil_image_view<T>}.
 @endchapsummary
 
-vil2 will replace parts of the existing vil image library in the near future.
+vil will replace parts of the existing vil1 image library in the near future.
 
 The @vxl{} image library has evolved from the TargetJr and Manchester Image
 libraries.
@@ -34,26 +34,26 @@ optimisations that only a human can apply.
 @end itemize
 
 @section Loading and saving
-Let's look at an example of vil2 in use.  This program makes an image from a
+Let's look at an example of vil in use.  This program makes an image from a
 disk file, copies it into memory, and prints the pixel at
 100,100.
 
 @example
 #include <vcl_iostream.h>
 #include <vxl_config.h>
-#include <vil2/vil2_rgb.h>
-#include <vil2/vil2_load.h>
-#include <vil2/vil2_image_view.h>
+#include <vil/vil_rgb.h>
+#include <vil/vil_load.h>
+#include <vil/vil_image_view.h>
 
 int main()
 @{
-  vil2_image_view<vil2_rgb<vxl_byte> > img;
-  img = vil2_load("foo.ppm");
+  vil_image_view<vil_rgb<vxl_byte> > img;
+  img = vil_load("foo.ppm");
   vcl_cerr << "Pixel 100,100 = " << img(100,100) << vcl_endl;
 @}
 @end example
 
-The first interesting line declares img to be an image. vil2_image_view
+The first interesting line declares img to be an image. vil_image_view
 is the basic image type. It represents an image in memory about
 whose structure, size and pixel type we know everything.
 Hence we need to specify the pixel type at this point.
@@ -73,11 +73,11 @@ an image in from disk) it is assumed that the image origin is at the
 top left of the image.
 
 Finally lets look at the middle line. This consists of two parts.
-The @code{vil2_load} function does a lot of work behind the scenes
+The @code{vil_load} function does a lot of work behind the scenes
 to determine what the image type is, and then load that image into
 memory. The second part is the assignment which has several special properties.
 @itemize @bullet
-@item It does not copy the actual image data. A @code{vil2_image_view} object
+@item It does not copy the actual image data. A @code{vil_image_view} object
 is really a view of some underlying data. The view understands where the
 real image data is in memory and how to interpret it. When you copy
 a view, you merely copy this interpretation information, not the actual
@@ -87,8 +87,8 @@ so when the last view to the underlying data is destroyed, the image data
 will be too.
 
 @item It can do cheap conversions between different views of the same image.
-@code{vil2_load} by default loads the image as 3 planes, with the pixel
-type as @code{vxl_byte}. It is trivial to reconfigure a @code{vil2_image_view}
+@code{vil_load} by default loads the image as 3 planes, with the pixel
+type as @code{vxl_byte}. It is trivial to reconfigure a @code{vil_image_view}
 so that it views the same image data as one plane of rgb pixels. The
 assignment will automatically do any cheap conversion necessary. You may
 ask then, how is that we know that the pixel type can be viewed as RGB of bytes?
@@ -102,41 +102,41 @@ automatically.
 
 @subsection Loading and saving: The threshold program
 @cindex threshold example
-@cindex vil2_save
+@cindex vil_save
 Anyway, the usual next step in demonstrating an image handling library is
 to show thresholding, so let's have a look.  This program loads an image
 into memory, and creates a new image where all pixels greater than a
 threshold value are set to 0.
 @example
 #include <vxl_config.h>
-#include <vil2/vil2_rgb.h>
-#include <vil2/vil2_load.h>
-#include <vil2/vil2_save.h>
-#include <vil2/vil2_image_view.h>
+#include <vil/vil_rgb.h>
+#include <vil/vil_load.h>
+#include <vil/vil_save.h>
+#include <vil/vil_image_view.h>
 
 int main()
 @{
-  vil2_image_view<vil2_rgb<vxl_byte> > img;
-  img = vil2_load("foo.ppm");
+  vil_image_view<vil_rgb<vxl_byte> > img;
+  img = vil_load("foo.ppm");
 
   for (unsigned j = 0; j < img.height(); ++j)
     for (unsigned i = 0; i < img.width(); ++i)
       if (img(i,j).r < 200 && img(i,j).g < 200 && img(i,j).b < 200)
-        img(i,j) = vil2_rgb<vxl_byte>(0,0,0);
+        img(i,j) = vil_rgb<vxl_byte>(0,0,0);
 
-  vil2_save(img, "foothresh.ppm");
+  vil_save(img, "foothresh.ppm");
   return 0;
 @}
 @end example
 
-The call to @code{vil2_save} sends the modified image in @var{img} to disk.
+The call to @code{vil_save} sends the modified image in @var{img} to disk.
 The choice of file format is determined automatically from the extension of
 the filename.  In this case, the extension is "ppm", the Portable Pix Map
 format.  If one wants more control, a string can be appended to specify the
 format, e.g.
-@cindex vil2_save, choosing a specific file format
+@cindex vil_save, choosing a specific file format
 @example
-  vil2_save(buf, "foothresh.ppm", "jpeg");
+  vil_save(buf, "foothresh.ppm", "jpeg");
 @end example
 Of course, it's rarely sensible to have incompatible names and formats, but
 the user of your program may have chosen the name, so that you have no
@@ -144,37 +144,37 @@ other option.
 
 @section Copying an image
 @cindex images, copying
-You should know by now that copying @code{vil2_image_view} objects does not
+You should know by now that copying @code{vil_image_view} objects does not
 duplicate the data they point to.  This allows images to be passed into and
 out of functions efficiently.  It also means that modifying the data in one
-@code{vil2_image_view} might change that in another.  Take this example
+@code{vil_image_view} might change that in another.  Take this example
 @example
 ...
-vil2_image_view<float> a( vil2_load("x") );
-vil2_image_view<float> b = a;
+vil_image_view<float> a( vil_load("x") );
+vil_image_view<float> b = a;
 b(100,100) = 12;
 ...
 @end example
 After the assignment in line 3, both @var{a(100,100)} and @var{b(100,100)}
 are set to the value 12.  On the other hand, if we had used
-@code{vil2_copy_deep}, thus:
+@code{vil_copy_deep}, thus:
 @example
 ...
-vil2_image_view<float> a( vil2_load("x") );
-vil2_copy_deep(a, b);
+vil_image_view<float> a( vil_load("x") );
+vil_copy_deep(a, b);
 b(100,100) = 12;
 ...
 @end example
 or
 @example
 ...
-vil2_image_view<float> a( vil2_load("x") );
-vil2_image_view<float> b( vil2_copy_deep(a) );
+vil_image_view<float> a( vil_load("x") );
+vil_image_view<float> b( vil_copy_deep(a) );
 b(100,100) = 12;
 ...
 @end example
 then @var{a} is unchanged after the assignment to @var{b(100,100)}.
-Note again that the actual copying is done in @code{vil2_copy_deep}; when the
+Note again that the actual copying is done in @code{vil_copy_deep}; when the
 return value is assigned to @var{b}, there is an efficient view copy.
 
 @section Large images
@@ -183,51 +183,51 @@ Broadly there are two sorts of image one is interested in - images
 in memory (all parts of which can be accessed directly) and
 external images (eg in files) which can only be accessed
 indirectly. As we have seen those images in memory are represented
-by @code{vil2_image_view}. For some very large images it is not
+by @code{vil_image_view}. For some very large images it is not
 possible or desirable to load them into memory. In this case it is
 useful to be able to load in a sub-section of the image,
-manipulate it, and possible write it out again. vil2 supports this
-approach using @code{vil2_image_resource}. There are several types of
+manipulate it, and possible write it out again. vil supports this
+approach using @code{vil_image_resource}. There are several types of
 image resource, described below. You cannot create an image
 resource object directly, instead you use a creation function
 which returns a smart pointer to the base class
-@code{vil2_image_resource_sptr}.
+@code{vil_image_resource_sptr}.
 
 @itemize @bullet
-@item Representing an image in a file: e.g. @code{vil2_pnm_image},
-@code{vil2_jpeg_image}. These are created using
-@code{vil2_load_image_data()},
-and @code{vil2_new_image_resource()}.
+@item Representing an image in a file: e.g. @code{vil_pnm_image},
+@code{vil_jpeg_image}. These are created using
+@code{vil_load_image_data()},
+and @code{vil_new_image_resource()}.
 
-@item @code{vil2_memory_image}: Representing an image in memory
+@item @code{vil_memory_image}: Representing an image in memory
 (essentially a
 wrapper around a view.) This is created using
-@code{vil2_new_image_resource()}.
+@code{vil_new_image_resource()}.
 
 @item Representing a filtered version of an
 image in a file (without loading in memory): e.g.
-@code{vil2_crop_image_resource} and
-@code{vil2_decimate_image_resource}. These
-are created using the equivalent functions: @code{vil2_crop()},
-@code{vil2_decimate()}, etc.
+@code{vil_crop_image_resource} and
+@code{vil_decimate_image_resource}. These
+are created using the equivalent functions: @code{vil_crop()},
+@code{vil_decimate()}, etc.
 
 @item Representing the outcome of an image
 processing algorithm (see next section) e.g.
-@code{vil2_convolve_1d_resource}.
+@code{vil_convolve_1d_resource}.
 These are creates using the equivalent
-functions e.g. @code{vil2_convolve_1d()}.
+functions e.g. @code{vil_convolve_1d()}.
 
 @end itemize
 
 To actually get some image pixels you call the resource's
 @code{get_view(..)} or @code{get_copy_view(..)} method.
-The @code{vil2_load(..)} function works by creating
-a @code{vil2_image_resource}, and then calling @code{get_view(..)}
+The @code{vil_load(..)} function works by creating
+a @code{vil_image_resource}, and then calling @code{get_view(..)}
 for the whole image.
 @example
-vil2_image_view_base_sptr vil2_load(const char *file)
+vil_image_view_base_sptr vil_load(const char *file)
 @{
-  vil2_image_resource_sptr data = vil2_load_image_resource(file);
+  vil_image_resource_sptr data = vil_load_image_resource(file);
   if (!data) return 0;
   return data -> get_view(0, data->ni(), 0, data->nj());
 @}
@@ -238,7 +238,7 @@ vil2_image_view_base_sptr vil2_load(const char *file)
 @cindex planes
 @cindex components
 
-@code{vil2_image_view}
+@code{vil_image_view}
 uses a pointer arithmetic style of indexing.
 The image data is assumed to be a regularly arranged set of
 pixels in memory. The view keeps a pointer to the pixel
@@ -251,26 +251,26 @@ consists of multiple planes each containing multiple rasters (rows)
 each containing multiple pixels, and each pixel contains multiple
 components. The planes and the components are used for the same
 purpose, to represent different spectral or functional values (e.g. the
-red, green and blue channels of an RGB image.) In vil2 it is usually
+red, green and blue channels of an RGB image.) In vil it is usually
 assumed that an image cannot have both multiple planes and multiple
 components per pixel. This allows
-@code{vil2_image_view} to view the same a colour image data
+@code{vil_image_view} to view the same a colour image data
 as either a 3 plane image or a 1 plane RGB image. You can do this
-explicitly by calling @code{vil2_view_as_planes()} or @code{vil2_view_as_rgb()}.
+explicitly by calling @code{vil_view_as_planes()} or @code{vil_view_as_rgb()}.
 
 However the two representations are not equal. The
 multi-plane representation
 is more general than the RGB multi-component one. If
 the underlying data is actually stored RRRR..GGGG..BBBB..
 then it is not possible to view that image as a single
-plane of RGB pixels. For this reason, a lot of vil2 prefers
+plane of RGB pixels. For this reason, a lot of vil prefers
 to view an image as multi-plane single-component.
 
 @cindex view manipulations
 Similarly to the planes to components conversion
 it is possible to perform a whole range of other manipulations. These
-include @code{vil2_transpose()}, @code{vil2_flip_ud()},
-@code{vil2_decimate()}, @code{vil2_crop()}.
+include @code{vil_transpose()}, @code{vil_flip_ud()},
+@code{vil_decimate()}, @code{vil_crop()}.
 One further advantage of the arithmetic indexing scheme is that
 it becomes easy to create a 2d slice view of a 3d image.
 
@@ -278,22 +278,22 @@ it becomes easy to create a 2d slice view of a 3d image.
 @section Algorithms and Image Processing
 
 Several image processing functions can be found in the algo
-subdirectory of vil2. Lets look at an example of finding the image
+subdirectory of vil. Lets look at an example of finding the image
 gradient using a Sobel filter.
 
 @example
 #include <vcl_iostream.h>
 #include <vxl_config.h> // for vxl_byte
-#include <vil2/vil2_image_view.h>
-#include <vil2/vil2_print.h>
-#include <vil2/algo/vil2_sobel_3x3.h>
+#include <vil/vil_image_view.h>
+#include <vil/vil_print.h>
+#include <vil/algo/vil_sobel_3x3.h>
 
 int main()
 @{
   unsigned ni=8;
   unsigned nj=15;
   unsigned nplanes=1;
-  vil2_image_view<vxl_byte> image(ni,nj,nplanes);
+  vil_image_view<vxl_byte> image(ni,nj,nplanes);
 
   for (unsigned p=0;p<nplanes;++p)
     for (unsigned j=0;j<nj;++j)
@@ -301,20 +301,20 @@ int main()
         image(i,j,p) = vxl_byte(i+10*j+100*p);
 
   vcl_cout<<"Original image:"<<vcl_endl;
-  vil2_print_all(vcl_cout,image);
+  vil_print_all(vcl_cout,image);
 
     // Objects to hold gradients
-  vil2_image_view<float> grad_i,grad_j;
+  vil_image_view<float> grad_i,grad_j;
 
-  vil2_sobel_3x3(image,grad_i,grad_j);
+  vil_sobel_3x3(image,grad_i,grad_j);
 
   vcl_cout<<vcl_endl;
   vcl_cout<<"Sobel I Gradient:"<<vcl_endl;
-  vil2_print_all(vcl_cout,grad_i);
+  vil_print_all(vcl_cout,grad_i);
 
   vcl_cout<<vcl_endl;
   vcl_cout<<"Sobel J Gradient:"<<vcl_endl;
-  vil2_print_all(vcl_cout,grad_j);
+  vil_print_all(vcl_cout,grad_j);
 
   return 0;
 @}
@@ -325,65 +325,65 @@ smoothing, general 1D and 2D
 convolution, morphological operations, interpolation,
 and much more.
 
-@section Converting from using the old vil to vil2.
+@section Converting from using the old vil1 to vil.
 
-This section explores the major differences between using the old vil
-and using vil2, and some of the implications for converting existing code.
+This section explores the major differences between using the old vil1
+and using vil, and some of the implications for converting existing code.
 
 The first and most obvious difference is that whilst there is a broad equivalent to
-vil_image, and its descendants, this class tree has been split in two. The abstract
-@code{vil_image} is now replaced with a smart pointer to a @code{vil2_image_resource}.
-The concrete @code{vil_memory_image_of} is now a @code{vil2_image_view<>}
-Previously where as you might have written code in terms of vil_image, it now
+vil1_image, and its descendants, this class tree has been split in two. The abstract
+@code{vil1_image} is now replaced with a smart pointer to a @code{vil_image_resource}.
+The concrete @code{vil1_memory_image_of} is now a @code{vil_image_view<>}
+Previously where as you might have written code in terms of vil1_image, it now
 usually makes sense to have most image manipulations working on
-@code{vil2_image_view}s. This is because whilst with the old vil_image, you had to
-do a @code{get_section}, and operate on raw memory, in vil2, the @code{vil2_image_view}
+@code{vil_image_view}s. This is because whilst with the old vil1_image, you had to
+do a @code{get_section}, and operate on raw memory, in vil, the @code{vil_image_view}
 provides a powerful view onto your image in memory.
 
-The @code{vil2_image_view} provides such facilities
+The @code{vil_image_view} provides such facilities
 as compile-time type safety as switchable bounds checking. It also acts as a
 sort of canonicaliser. A wide range of actual memory layouts can all be treated
-identically and transparently while working through the @code{vil2_image_view}.
-Previously, in vil, the image loader often needed to have several filters placed
+identically and transparently while working through the @code{vil_image_view}.
+Previously, in vil1, the image loader often needed to have several filters placed
 on top of it to do such things as re-order the raster rows and re-order the
-component order. vil2 doesn't do this, but instead uses the vil2_image_view to provide
+component order. vil doesn't do this, but instead uses the vil_image_view to provide
 a canonical view of whatever deranged image format your loader finds most efficient to
 use.
 
-The second important change is that vil2 provides full support for planes. In many cases
+The second important change is that vil provides full support for planes. In many cases
 accessing different image planes is directly equivalent to accessing different rasters.
 Indeed, it is often preferable to view an image a multi-planar rather than multi-component.
 If your algorithms assume a single plane, it is however trivial to provide a wrapper function
 which takes a multi-planar image and passes one plane at a time to your algorithm. This
 can be done with virtually no loss in efficiency, and indeed is how some of the code in
-@code{vil2/algo} is written.
+@code{vil/algo} is written.
 
-To help convert existing code there is a script (@code{core/vil2/scripts/viltovil2.pl})
+To help convert existing code there is a script (@code{core/vil/scripts/viltovil2.pl})
 It converts as much code as it can. However, it can really only deal with file and identifier
-name changes. There are large structural differences between vil and vil2, with many of the
+name changes. There are large structural differences between vil1 and vil, with many of the
 equivalent functions taking different parameters. The output of the conversion script
 can best be seen as a hint on which types and classes to use and which functions to call.
 You will almost certainly need to make extensive further edits to your code to get it
 to compile again.
 
 If you do not want to convert any code, but would rather use an interface to convert
-between vil and vil2 types at runtime, then take a look at @code{<vil2/vil2_vil.h>}
-which has a function for converting between @code{vil_memory_image_of} and @code{vil2_image_view}, and
-a class that wraps a @code{vil_image}, and exports a @code{vil2_image_resource} interface.
+between vil1 and vil types at runtime, then take a look at @code{<vil/vil_vil.h>}
+which has a function for converting between @code{vil1_memory_image_of} and @code{vil_image_view}, and
+a class that wraps a @code{vil1_image}, and exports a @code{vil_image_resource} interface.
 
 
 @section Optimising Image Processing Algorithms (Advanced Topic)
 
-The design of vil2_image_view (being more flexible than the design of vil,)
+The design of vil_image_view (being more flexible than the design of vil1,)
 and the state of modern optimising compilers (no near as good as they
-could be,) means that naive use of vil2 images may not be as fast as it
+could be,) means that naive use of vil images may not be as fast as it
 should be.
 
 The following example shows the original implementation of
 the image fill method.
 @example
 template<class T>
-void vil2_image_view<T>::fill(T value)
+void vil_image_view<T>::fill(T value)
 @{
   for (unsigned p=0;p<nplanes_;++p)
     for (unsigned j=0;j<nj_;++j)
@@ -403,7 +403,7 @@ We can make this optimisation explicit.
 
 @example
 template<class T>
-void vil2_image_view<T>::fill(T value)
+void vil_image_view<T>::fill(T value)
 @{
   T* plane = top_left_;
   for (unsigned p=0; p<nplanes_; ++p, plane+=planestep_)
@@ -430,7 +430,7 @@ such a special case.
 
 @example
 template<class T>
-void vil2_image_view<T>::fill(T value)
+void vil_image_view<T>::fill(T value)
 @{
   T* plane = top_left_;
 
@@ -486,14 +486,14 @@ fill very very fast. This gives us our final implementation.
 
 @example
 template<class T>
-void vil2_image_view<T>::fill(T value)
+void vil_image_view<T>::fill(T value)
 @{
   T* plane = top_left_;
 
   if (is_contiguous())
   @{
-    vil2_image_view<T>::iterator it = begin();
-    vil2_image_view<T>::const_iterator end_it = end();
+    vil_image_view<T>::iterator it = begin();
+    vil_image_view<T>::const_iterator end_it = end();
     while (it!=end_it) {*it = value; ++it; }
     return;
   @}

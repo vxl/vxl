@@ -49,7 +49,7 @@ void mvl2_video_to_avi::set_frame_rate(double frame_rate)
 {
 }
  
-void mvl2_video_to_avi::write_frame(vil2_image_view<vxl_byte>& image)
+void mvl2_video_to_avi::write_frame(vil_image_view<vxl_byte>& image)
 {
 }
 

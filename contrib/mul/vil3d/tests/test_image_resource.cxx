@@ -8,7 +8,7 @@
 #include <vil3d/vil3d_print.h>
 
 template <class T>
-void test_image_resource(vcl_string type, vil2_pixel_format format, T dummy)
+void test_image_resource(vcl_string type, vil_pixel_format format, T dummy)
 {
   vcl_cout << "******************************************************************\n"
            << " Testing vil3d_image_resource objects with pixel type = " << type << "\n"
@@ -51,14 +51,14 @@ void test_image_resource(vcl_string type, vil2_pixel_format format, T dummy)
 MAIN( test_image_resource )
 {
   START( "vil3d_image_resource" );
-  test_image_resource("float", VIL2_PIXEL_FORMAT_FLOAT, float());
-  test_image_resource("double", VIL2_PIXEL_FORMAT_DOUBLE, double());
-  test_image_resource("vxl_byte", VIL2_PIXEL_FORMAT_BYTE, vxl_byte());
-  test_image_resource("vxl_sbyte", VIL2_PIXEL_FORMAT_SBYTE, vxl_sbyte());
-  test_image_resource("vxl_int_16", VIL2_PIXEL_FORMAT_INT_16, vxl_int_16());
-  test_image_resource("vxl_uint_16", VIL2_PIXEL_FORMAT_UINT_16, vxl_uint_16());
-  test_image_resource("vxl_int_32", VIL2_PIXEL_FORMAT_INT_32, vxl_int_32());
-  test_image_resource("vxl_uint_32", VIL2_PIXEL_FORMAT_UINT_32, vxl_uint_32());
+  test_image_resource("float", VIL_PIXEL_FORMAT_FLOAT, float());
+  test_image_resource("double", VIL_PIXEL_FORMAT_DOUBLE, double());
+  test_image_resource("vxl_byte", VIL_PIXEL_FORMAT_BYTE, vxl_byte());
+  test_image_resource("vxl_sbyte", VIL_PIXEL_FORMAT_SBYTE, vxl_sbyte());
+  test_image_resource("vxl_int_16", VIL_PIXEL_FORMAT_INT_16, vxl_int_16());
+  test_image_resource("vxl_uint_16", VIL_PIXEL_FORMAT_UINT_16, vxl_uint_16());
+  test_image_resource("vxl_int_32", VIL_PIXEL_FORMAT_INT_32, vxl_int_32());
+  test_image_resource("vxl_uint_32", VIL_PIXEL_FORMAT_UINT_32, vxl_uint_32());
 
   SUMMARY();
 }

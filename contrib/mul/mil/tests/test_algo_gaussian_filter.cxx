@@ -5,7 +5,7 @@
 #include <vcl_cmath.h> // for fabs()
 
 #include <mil/algo/mil_algo_gaussian_filter.h>
-#include <vil/vil_byte.h>
+#include <vil1/vil1_byte.h>
 #include <testlib/testlib_test.h>
 
 void test_algo_gaussian_filter_byte_float()
@@ -16,12 +16,12 @@ void test_algo_gaussian_filter_byte_float()
 
   int n = 10;
 
-  mil_image_2d_of<vil_byte> src(n,n);
+  mil_image_2d_of<vil1_byte> src(n,n);
   for (int i=0;i<n;++i)
     for (int j=0;j<n;++j)
       src(i,j)=j*10+i;
   mil_image_2d_of<float> dest;
-  mil_algo_gaussian_filter<vil_byte,float> filter;
+  mil_algo_gaussian_filter<vil1_byte,float> filter;
   filter.set_width(1.0);
   filter.filter(dest, src);
   vcl_cout << "Source\n";

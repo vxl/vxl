@@ -9,8 +9,8 @@
 #include "vil3d_slice_list.h"
 #include <vcl_cstdlib.h>
 #include <vul/vul_file.h>
-#include <vil2/vil2_load.h>
-#include <vil2/vil2_copy.h>
+#include <vil/vil_load.h>
+#include <vil/vil_copy.h>
 #include <vil3d/vil3d_image_view.h>
 #include <vil3d/vil3d_slice.h>
 #include <vil3d/file_formats/vil3d_slice_list.h>
@@ -52,11 +52,11 @@ vil3d_slice_list_format::make_input_image(const char * filename) const
   if (filenames.empty()) return 0;
 
   // load all the slices
-  vcl_vector<vil2_image_resource_sptr> images(filenames.size());
+  vcl_vector<vil_image_resource_sptr> images(filenames.size());
   for (unsigned i=0; i<filenames.size(); ++i)
   {
-    vil2_image_resource_sptr im  =
-      vil2_load_image_resource(filenames[i].c_str());
+    vil_image_resource_sptr im  =
+      vil_load_image_resource(filenames[i].c_str());
     images[i]=im;
     // make sure all slices are consistent,
     if (!im ||
@@ -74,7 +74,7 @@ vil3d_slice_list_format::make_input_image(const char * filename) const
 
 
 vil3d_image_resource_sptr
-vil3d_slice_list_to_volume(const vcl_vector<vil2_image_resource_sptr> & images)
+vil3d_slice_list_to_volume(const vcl_vector<vil_image_resource_sptr> & images)
 {
   if (!images.empty() && !images.front()) return 0;
   for (unsigned i=1; i<images.size(); ++i)
@@ -102,7 +102,7 @@ vil3d_image_resource_sptr
 vil3d_slice_list_format::make_output_image(const char* filename,
                                            unsigned ni, unsigned nj,
                                            unsigned nk, unsigned nplanes,
-                                           enum vil2_pixel_format) const
+                                           enum vil_pixel_format) const
 {
   vcl_cerr <<"vil3d_slice_list_format::make_output_image() NYI\n";
   vcl_abort();
@@ -110,7 +110,7 @@ vil3d_slice_list_format::make_output_image(const char* filename,
 }
 
 
-vil3d_slice_list_image::vil3d_slice_list_image(const vcl_vector<vil2_image_resource_sptr>& images):
+vil3d_slice_list_image::vil3d_slice_list_image(const vcl_vector<vil_image_resource_sptr>& images):
 slices_(images)
 {
 }
@@ -145,9 +145,9 @@ unsigned vil3d_slice_list_image::nk() const
 }
 
 //: Pixel Format.
-enum vil2_pixel_format vil3d_slice_list_image::pixel_format() const
+enum vil_pixel_format vil3d_slice_list_image::pixel_format() const
 {
-  return slices_.empty() ? VIL2_PIXEL_FORMAT_UNKNOWN :
+  return slices_.empty() ? VIL_PIXEL_FORMAT_UNKNOWN :
     slices_.front()->pixel_format();
 }
 
@@ -168,34 +168,34 @@ vil3d_slice_list_image::get_copy_view(unsigned i0, unsigned ni,
 #define macro( type ) { \
   vil3d_image_view< type > vv(ni, nj, nk, nplanes()); \
   for (unsigned k=0; k<nk; ++k)  { \
-    vil2_image_view< type > src(slices_[k+k0]->get_view(i0, ni, j0, nj)); \
-    vil2_image_view< type > dest(vil3d_slice_ij(vv, k)); \
-    vil2_copy_reformat(src, dest); } \
+    vil_image_view< type > src(slices_[k+k0]->get_view(i0, ni, j0, nj)); \
+    vil_image_view< type > dest(vil3d_slice_ij(vv, k)); \
+    vil_copy_reformat(src, dest); } \
   return new vil3d_image_view< type >(vv); \
 }
 
   switch (pixel_format())
   {
-  case VIL2_PIXEL_FORMAT_BYTE:
+  case VIL_PIXEL_FORMAT_BYTE:
     macro( vxl_byte );
-  case VIL2_PIXEL_FORMAT_SBYTE:
+  case VIL_PIXEL_FORMAT_SBYTE:
     macro( vxl_sbyte );
-  case VIL2_PIXEL_FORMAT_UINT_16:
+  case VIL_PIXEL_FORMAT_UINT_16:
     macro( vxl_uint_16 );
-  case VIL2_PIXEL_FORMAT_INT_16:
+  case VIL_PIXEL_FORMAT_INT_16:
     macro( vxl_int_16 );
-  case VIL2_PIXEL_FORMAT_UINT_32:
+  case VIL_PIXEL_FORMAT_UINT_32:
     macro( vxl_uint_32 );
-  case VIL2_PIXEL_FORMAT_INT_32:
+  case VIL_PIXEL_FORMAT_INT_32:
     macro( vxl_int_32 );
-  case VIL2_PIXEL_FORMAT_FLOAT:
+  case VIL_PIXEL_FORMAT_FLOAT:
     macro( float );
-  case VIL2_PIXEL_FORMAT_DOUBLE:
+  case VIL_PIXEL_FORMAT_DOUBLE:
     macro( double );
 #if 0 // Several missing templates needed before these can be used
-  case VIL2_PIXEL_FORMAT_COMPLEX_FLOAT:
+  case VIL_PIXEL_FORMAT_COMPLEX_FLOAT:
     macro( vcl_complex<float> );
-  case VIL2_PIXEL_FORMAT_COMPLEX_DOUBLE:
+  case VIL_PIXEL_FORMAT_COMPLEX_DOUBLE:
     macro( vcl_complex<double> );
 #endif
   default:

@@ -1,4 +1,4 @@
-// This is core/vil2/algo/vil3d_normalised_correlation_3d.h
+// This is core/vil/algo/vil3d_normalised_correlation_3d.h
 #ifndef vil3d_normalised_correlation_3d_h_
 #define vil3d_normalised_correlation_3d_h_
 //:
@@ -16,7 +16,7 @@
 // and unit variance
 // \relates vil3d_image_view
 template <class srcT, class kernelT, class accumT>
-inline accumT vil2_norm_corr_2d_at_pt(const srcT *src_im, vcl_ptrdiff_t s_istep,
+inline accumT vil_norm_corr_2d_at_pt(const srcT *src_im, vcl_ptrdiff_t s_istep,
                                       vcl_ptrdiff_t s_jstep, vcl_ptrdiff_t s_kstep,
                                       vcl_ptrdiff_t s_pstep,
                                       const vil3d_image_view<kernelT>& kernel,
@@ -107,7 +107,7 @@ inline void vil3d_normalised_correlation_3d(const vil3d_image_view<srcT>& src_im
       const srcT* sp = src_row;
       destT* dp = dest_row;
       for (unsigned i=0;i<ni;++i, sp += s_istep, dp += d_istep)
-        *dp =(destT)vil2_norm_corr_2d_at_pt(sp,s_istep,s_jstep,s_kstep,
+        *dp =(destT)vil_norm_corr_2d_at_pt(sp,s_istep,s_jstep,s_kstep,
                                             s_pstep,kernel,ac);
       // Convolve at src(i,j,k)
     }

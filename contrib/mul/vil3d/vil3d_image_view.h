@@ -14,8 +14,8 @@
 #include <vcl_cassert.h>
 #include <vcl_cstddef.h>
 #include <vil3d/vil3d_image_view_base.h>
-#include <vil2/vil2_memory_chunk.h>
-#include <vil2/vil2_pixel_format.h>
+#include <vil/vil_memory_chunk.h>
+#include <vil/vil_pixel_format.h>
 
 //: Concrete view of image data of type T held in memory
 //  Views nplanes() planes of data each of size ni() x nj() x nk().
@@ -47,7 +47,7 @@ class vil3d_image_view : public vil3d_image_view_base
   vcl_ptrdiff_t planestep_;
 
   //: Reference to actual image data.
-  vil2_memory_chunk_sptr ptr_;
+  vil_memory_chunk_sptr ptr_;
 
   //: Disconnect this view from the underlying data,
   void release_memory() { ptr_ = 0; }
@@ -73,7 +73,7 @@ class vil3d_image_view : public vil3d_image_view_base
   //  Typically used by functions which generate a manipulated view of
   //  another's image data.
   //  Need to pass the memory chunk to set up the internal smart ptr appropriately
-  vil3d_image_view(const vil2_memory_chunk_sptr& mem_chunk,
+  vil3d_image_view(const vil_memory_chunk_sptr& mem_chunk,
                    const T* top_left,
                    unsigned ni, unsigned nj, unsigned nk, unsigned nplanes,
                    vcl_ptrdiff_t i_step, vcl_ptrdiff_t j_step,
@@ -156,14 +156,14 @@ class vil3d_image_view : public vil3d_image_view_base
   // e.g. using set_to_memory.
   //
   // Typically used when creating new views of the data
-  inline const vil2_memory_chunk_sptr& memory_chunk() const { return ptr_; }
+  inline const vil_memory_chunk_sptr& memory_chunk() const { return ptr_; }
 
   //: Smart pointer to the object holding the data for this view
   // Will be a null pointer if this view looks at `third-party' data,
   // e.g. using set_to_memory
   //
   // Typically used when creating new views of the data
-  inline vil2_memory_chunk_sptr& memory_chunk() { return ptr_; }
+  inline vil_memory_chunk_sptr& memory_chunk() { return ptr_; }
 
   // Ordinary image indexing stuff.
 
@@ -229,7 +229,7 @@ class vil3d_image_view : public vil3d_image_view_base
 
   //: Return a description of the concrete data pixel type.
   // The value corresponds directly to pixel_type.
-  inline vil2_pixel_format pixel_format() const { return vil2_pixel_format_of(T()); }
+  inline vil_pixel_format pixel_format() const { return vil_pixel_format_of(T()); }
 
   //: True if they share same view of same image data.
   //  This does not do a deep equality on image data. If the images point

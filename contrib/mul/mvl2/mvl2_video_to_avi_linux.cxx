@@ -8,7 +8,7 @@
 
 #include "mvl2_video_to_avi_linux.h"
 #include <vcl_cstring.h>
-#include <vil2/vil2_resample_bilin.h>
+#include <vil/vil_resample_bilin.h>
 
 mvl2_video_to_avi::mvl2_video_to_avi()
 {
@@ -107,10 +107,10 @@ void mvl2_video_to_avi::set_frame_rate(double frame_rate)
   frame_rate_=frame_rate;
 }
 
-void mvl2_video_to_avi::write_frame(vil2_image_view<vxl_byte>& image)
+void mvl2_video_to_avi::write_frame(vil_image_view<vxl_byte>& image)
 {
   if (width_==image.ni() && height_==image.nj() &&
-      image.pixel_format()==VIL2_PIXEL_FORMAT_RGB_BYTE )
+      image.pixel_format()==VIL_PIXEL_FORMAT_RGB_BYTE )
   {
     BitmapInfo bi=BitmapInfo(width_,height_,24);
     CImage* im24;
@@ -123,8 +123,8 @@ void mvl2_video_to_avi::write_frame(vil2_image_view<vxl_byte>& image)
     double yratio=(double)height_/image.nj();
     double ratio=1.0/(yratio>xratio?yratio:xratio);
 
-    vil2_image_view<vxl_byte> resampled_image(width_,height_,image.nplanes());
-    vil2_resample_bilin(image,resampled_image,0.0,0.0,
+    vil_image_view<vxl_byte> resampled_image(width_,height_,image.nplanes());
+    vil_resample_bilin(image,resampled_image,0.0,0.0,
         ratio,0.0,0.0,ratio,width_,height_);
 
     vcl_cout << "write frame "<< current_frame_+1 << " ... "

@@ -5,7 +5,7 @@
 // \brief Sample grid of points in one image and place in another
 // \author Tim Cootes
 
-#include <vil2/vil2_resample_bilin.h>
+#include <vil/vil_resample_bilin.h>
 #include <vimt/vimt_image_2d_of.h>
 #include <vcl_cassert.h>
 
@@ -36,7 +36,7 @@ void vimt_resample_bilin(const vimt_image_2d_of<sType>& src_image,
   vgl_vector_2d<double> im_u = s_w2i(p+u)-im_p;
   vgl_vector_2d<double> im_v = s_w2i(p+v)-im_p;
 
-  vil2_resample_bilin(src_image.image(),dest_image.image(),
+  vil_resample_bilin(src_image.image(),dest_image.image(),
                       im_p.x(),im_p.y(),  im_u.x(),im_u.y(),
                       im_v.x(),im_v.y(), n1,n2);
 

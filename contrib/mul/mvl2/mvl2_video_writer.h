@@ -11,7 +11,7 @@
 
 #include <vcl_string.h>
 #include <vxl_config.h>
-#include <vil2/vil2_image_view.h>
+#include <vil/vil_image_view.h>
 
 //: A class for writing videos
 
@@ -58,7 +58,7 @@ class mvl2_video_writer
   virtual void set_quality(int qual)=0;
  
   //: Put frame data into the given image
-  virtual void write_frame(vil2_image_view<vxl_byte>& image)=0; 
+  virtual void write_frame(vil_image_view<vxl_byte>& image)=0; 
 
   //: Name of the class
   virtual vcl_string is_a() const;

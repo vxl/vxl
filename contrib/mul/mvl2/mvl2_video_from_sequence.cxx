@@ -4,8 +4,8 @@
 // \author Louise Butcher
 
 #include "mvl2_video_from_sequence.h"
-#include <vil2/vil2_load.h>
-#include <vil2/vil2_convert.h>
+#include <vil/vil_load.h>
+#include <vil/vil_convert.h>
 #include <vul/vul_file.h>
 #include <vul/vul_sprintf.h>
 #include <vcl_fstream.h>
@@ -91,7 +91,7 @@ bool mvl2_video_from_sequence::initialize( int width, int height,
 
   current_frame_=0;
   is_initialized_=true;
-  vil2_image_view<vxl_byte> loc_img;
+  vil_image_view<vxl_byte> loc_img;
   get_frame(loc_img);
   height_=loc_img.nj();
   width_=loc_img.ni();
@@ -109,7 +109,7 @@ int mvl2_video_from_sequence::next_frame()
   return ++current_frame_;
 }
 
-bool mvl2_video_from_sequence::get_frame(vil2_image_view<vxl_byte>& image)
+bool mvl2_video_from_sequence::get_frame(vil_image_view<vxl_byte>& image)
 {
   vcl_string curr_file;
 
@@ -130,8 +130,8 @@ bool mvl2_video_from_sequence::get_frame(vil2_image_view<vxl_byte>& image)
     curr_file=vul_sprintf("%s%d.jpg",file_stem_.c_str(),currno);
   }
 
-  vil2_image_view_base_sptr image_view_sptr;
-  if (!(image_view_sptr=vil2_load(curr_file.c_str())))
+  vil_image_view_base_sptr image_view_sptr;
+  if (!(image_view_sptr=vil_load(curr_file.c_str())))
   {
     vcl_cout<<"Unable to load : " << curr_file<<vcl_endl;
     return false;
@@ -142,7 +142,7 @@ bool mvl2_video_from_sequence::get_frame(vil2_image_view<vxl_byte>& image)
   }
   else
   {
-    image.deep_copy(vil2_convert_to_grey_using_rgb_weighting(
+    image.deep_copy(vil_convert_to_grey_using_rgb_weighting(
         image_view_sptr,(vxl_byte)0));
   }
   height_=image.ni();

@@ -8,7 +8,7 @@
 //  a) Each type tends to need a slightly different implementation
 //  b) Let's not have too many templates.
 
-#include <vil/vil_byte.h>
+#include <vil1/vil1_byte.h>
 
 //: Smooth and subsample single plane src_im in x to produce dest_im
 //  Applies 1-5-8-5-1 filter in x, then samples
@@ -19,9 +19,9 @@
 //
 //  By applying twice we can obtain a full Gaussian smoothed and
 //  sub-sampled 2D image (see mil_gauss_pyramid_builder)
-void mil_gauss_reduce_2d(vil_byte* dest_im,
+void mil_gauss_reduce_2d(vil1_byte* dest_im,
                          int d_x_step, int d_y_step,
-                         const vil_byte* src_im,
+                         const vil1_byte* src_im,
                          int src_nx, int src_ny,
                          int s_x_step, int s_y_step);
 
@@ -57,9 +57,9 @@ void mil_gauss_reduce_2d(int* dest_im,
 
 //: Smooth and subsample single plane src_im in x to produce dest_im using 121 filter in x and y
 //  Smoothes with a 3x3 filter and subsamples
-void mil_gauss_reduce_121_2d(vil_byte* dest_im,
+void mil_gauss_reduce_121_2d(vil1_byte* dest_im,
                          int d_x_step, int d_y_step,
-                         const vil_byte* src_im,
+                         const vil1_byte* src_im,
                          int src_nx, int src_ny,
                          int s_x_step, int s_y_step);
 

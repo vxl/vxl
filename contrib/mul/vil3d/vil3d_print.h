@@ -8,7 +8,7 @@
 // \file
 // \author Ian Scott, Tim Cootes.
 
-#include <vil2/vil2_print.h>
+#include <vil/vil_print.h>
 #include <vil3d/vil3d_image_view.h>
 #include <vcl_iostream.h>
 
@@ -38,7 +38,7 @@ inline void vil3d_print_all(vcl_ostream& os,const vil3d_image_view<T>& view)
     {
       for (unsigned int i=0;i<view.ni();++i)
       {
-        vil2_print_value(os,view(i,j,k,p));
+        vil_print_value(os,view(i,j,k,p));
         os<<" ";
       }
       os<<'\n' << vcl_flush;

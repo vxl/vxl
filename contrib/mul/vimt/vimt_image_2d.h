@@ -7,7 +7,7 @@
 
 #include <vimt/vimt_image.h>
 #include <vimt/vimt_transform_2d.h>
-#include <vil2/vil2_image_view_base.h>
+#include <vil/vil_image_view_base.h>
 
 class mil_transform_2d;
 
@@ -48,7 +48,7 @@ class vimt_image_2d : public vimt_image
   void set_world2im(const vimt_transform_2d& w2i) { world2im_ = w2i ;}
 
   //: Baseclass view of image
-  virtual const vil2_image_view_base& image_base() const = 0;
+  virtual const vil_image_view_base& image_base() const = 0;
 
   //: Name of the class
   virtual vcl_string is_a() const { return "vimt_image_2d"; }

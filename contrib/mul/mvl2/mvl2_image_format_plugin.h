@@ -12,15 +12,15 @@
 
 #include <vcl_string.h>
 #include <vcl_map.h>
-#include <vil2/vil2_image_view_base.h>
-#include <vil2/vil2_image_resource_plugin.h>
+#include <vil/vil_image_view_base.h>
+#include <vil/vil_image_resource_plugin.h>
 #include <mvl2/mvl2_video_reader.h>
 
 //=======================================================================
 
-//: A base class for vil2_image_view_base_sptr loading
+//: A base class for vil_image_view_base_sptr loading
 // This class provides an interface for loading images in new formats
-class mvl2_image_format_plugin : public vil2_image_resource_plugin
+class mvl2_image_format_plugin : public vil_image_resource_plugin
 {
  public:
 
@@ -38,7 +38,7 @@ class mvl2_image_format_plugin : public vil2_image_resource_plugin
   // \param colour define whether to load images as colour or grey-scale
   //        Options are '' (ie rely on image), 'Grey' or 'RGB'
   //!ret: true if successful
-  virtual bool load_the_image (vil2_image_view_base_sptr& image,
+  virtual bool load_the_image (vil_image_view_base_sptr& image,
                                const vcl_string & path, const vcl_string & filetype,
                                const vcl_string & colour);
 

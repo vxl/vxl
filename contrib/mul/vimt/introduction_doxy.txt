@@ -3,7 +3,7 @@
 * Provides a set of image classes, derived from vimt_image, which can be used
 * as `registered views' on actual image data.
 *
-* The vimt classes use vil2_image_view to provide that actual 2d images, and
+* The vimt classes use vil_image_view to provide that actual 2d images, and
 * a vimt_transform_2d object to provide the registration.
 *
 * The most commonly used classes are likely to be vimt_image_2d_of<T> and
@@ -23,7 +23,7 @@
 * \section Expansion Expansion
 * There is nothing to stop you using the basic vimt_image class to provide
 * your own 2d image class. Two possible reasons for this would be to use a
-* much more general transform type, or to use a vil2_image_resource as 
+* much more general transform type, or to use a vil_image_resource as 
 * the underlying image type.
 
 

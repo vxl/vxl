@@ -2,7 +2,7 @@
 #include <vcl_iostream.h>
 #include <mil/mil_image_2d_of.h>
 #include <mil/mil_gauss_reduce_2d.h>
-#include <vil/vil_byte.h>
+#include <vil1/vil1_byte.h>
 #include <testlib/testlib_test.h>
 
 void test_gauss_reduce_2d_byte(int nx)
@@ -11,9 +11,9 @@ void test_gauss_reduce_2d_byte(int nx)
   vcl_cout << " Testing mil_gauss_reduce_2d (byte)(nx="<<nx<<")\n";
   vcl_cout << "******************************************\n";
 
-  mil_image_2d_of<vil_byte> image0;
+  mil_image_2d_of<vil1_byte> image0;
   image0.resize(nx,3);
-  mil_image_2d_of<vil_byte> reduced_x;
+  mil_image_2d_of<vil1_byte> reduced_x;
   reduced_x.resize((nx+1)/2,3);
 
   for (int y=0;y<image0.ny();++y)
@@ -33,7 +33,7 @@ void test_gauss_reduce_2d_byte(int nx)
   TEST("Last element", reduced_x(L,1),image0(2*L,1));
 
 
-  mil_image_2d_of<vil_byte> test2;
+  mil_image_2d_of<vil1_byte> test2;
   test2.resize(nx,3);
   test2.fill(222);
   mil_gauss_reduce_2d(test2.plane(0),test2.xstep(),test2.ystep(),
@@ -43,9 +43,9 @@ void test_gauss_reduce_2d_byte(int nx)
 
 
   // Test it can be used to smooth in y by swapping ordinates
-  mil_image_2d_of<vil_byte> image1;
+  mil_image_2d_of<vil1_byte> image1;
   image1.resize(3,nx);
-  mil_image_2d_of<vil_byte> reduced_y;
+  mil_image_2d_of<vil1_byte> reduced_y;
   reduced_y.resize(3,(nx+1)/2);
 
   for (int y=0;y<image1.ny();++y)
@@ -107,9 +107,9 @@ void test_gauss_reduce_121_2d_byte(int nx, int ny)
   vcl_cout << " Testing mil_gauss_reduce_121_2d (byte)(nx="<<nx<<")\n";
   vcl_cout << "**********************************************\n";
 
-  mil_image_2d_of<vil_byte> image0;
+  mil_image_2d_of<vil1_byte> image0;
   image0.resize(nx,ny);
-  mil_image_2d_of<vil_byte> reduced_x;
+  mil_image_2d_of<vil1_byte> reduced_x;
   reduced_x.resize((nx+1)/2,(ny+1)/2);
 
   for (int y=0;y<image0.ny();++y)
@@ -130,7 +130,7 @@ void test_gauss_reduce_121_2d_byte(int nx, int ny)
   TEST("Last element in x",reduced_x(Lx-1,1),image0(2*(Lx-1),2));
   TEST("Last element in y",reduced_x(1,Ly-1),image0(2,2*(Ly-1)));
 
-  mil_image_2d_of<vil_byte> test2;
+  mil_image_2d_of<vil1_byte> test2;
   test2.resize(nx,ny);
   test2.fill(222);
   mil_gauss_reduce_121_2d(test2.plane(0),test2.xstep(),test2.ystep(),

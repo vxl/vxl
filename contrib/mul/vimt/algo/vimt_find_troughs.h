@@ -29,7 +29,7 @@ inline bool vimt_is_trough_3x3(const T* im, vcl_ptrdiff_t i_step, vcl_ptrdiff_t 
 // \param clear_list: If true (the default) then empty list before adding new examples
 template <class T>
 inline void vimt_find_image_troughs_3x3(vcl_vector<vgl_point_2d<unsigned> >& troughs,
-                                        const vil2_image_view<T>& image,
+                                        const vil_image_view<T>& image,
                                         unsigned plane=0, bool clear_list=true)
 {
   if (clear_list) troughs.resize(0);
@@ -53,7 +53,7 @@ inline void vimt_find_world_troughs_3x3(vcl_vector<vgl_point_2d<double> >& troug
                                         unsigned plane=0, bool clear_list=true)
 {
   if (clear_list) troughs.resize(0);
-  const vil2_image_view<T>& im = image.image();
+  const vil_image_view<T>& im = image.image();
   vimt_transform_2d im2w = image.world2im().inverse();
   unsigned ni=im.ni(),nj=im.nj();
   vcl_ptrdiff_t istep = im.istep(),jstep=im.jstep();

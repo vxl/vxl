@@ -10,7 +10,7 @@
 // \author Tim Cootes - Manchester
 
 #include <vil3d/vil3d_file_format.h>
-#include <vil2/vil2_stream.h>
+#include <vil/vil_stream.h>
 
 
 //: Reader/Writer for GIPL format images.
@@ -30,7 +30,7 @@ public:
                                                      unsigned nj,
                                                      unsigned nk,
                                                      unsigned nplanes,
-                                                     enum vil2_pixel_format)const;
+                                                     enum vil_pixel_format)const;
 
   //: default filename tag for this image.
   virtual const char * tag() const {return "gipl";}
@@ -41,19 +41,19 @@ public:
 // Use vil3d_gipl_format instead.
 class vil3d_gipl_image: public vil3d_image_resource
 {
-  vil2_smart_ptr<vil2_stream> is_;
+  vil_smart_ptr<vil_stream> is_;
   //: image dimensions
   unsigned dim1_, dim2_, dim3_;
   
   //: Physical Voxel dimensions ( in mm )
   float vox_width1_, vox_width2_, vox_width3_;
 
-  bool read_header(vil2_stream *is);
+  bool read_header(vil_stream *is);
 
   //: Expected pixel type.
-  enum vil2_pixel_format pixel_format_;
+  enum vil_pixel_format pixel_format_;
  public:
-  vil3d_gipl_image(vil2_stream *);
+  vil3d_gipl_image(vil_stream *);
   virtual ~vil3d_gipl_image();
 
   //: Dimensions:  nplanes x ni x nj x nk.
@@ -70,7 +70,7 @@ class vil3d_gipl_image: public vil3d_image_resource
   virtual unsigned nk() const;
 
   //: Pixel Format.
-  virtual enum vil2_pixel_format pixel_format() const;
+  virtual enum vil_pixel_format pixel_format() const;
 
 
   //: Create a read/write view of a copy of this data.

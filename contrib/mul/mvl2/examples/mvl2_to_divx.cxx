@@ -70,7 +70,7 @@ int main(int argc, char **argv)
     return -1;
     }
 
-  vil2_image_view<vxl_byte> image_;
+  vil_image_view<vxl_byte> image_;
 
   for (int i=0;i<vid_input_->length();i++)
     {

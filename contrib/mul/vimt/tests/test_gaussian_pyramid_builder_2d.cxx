@@ -42,7 +42,7 @@ void test_gaussian_pyramid_builder_2d_build(vimt_gaussian_pyramid_builder_2d<vxl
   unsigned ni2 = (ni+1)/2;
   unsigned nj2 = (nj+1)/2;
   const vimt_image_2d_of<vxl_byte>& v_image1 = static_cast<const vimt_image_2d_of<vxl_byte>&>( image_pyr(1));
-  const vil2_image_view<vxl_byte>& image1 = v_image1.image();
+  const vil_image_view<vxl_byte>& image1 = v_image1.image();
   TEST("Level 1 size x",image1.ni(),(ni+1)/2);
   TEST("Level 1 size y",image1.nj(),(nj+1)/2);
   TEST("Pixel (0,0)",image0.image()(0,0),image1(0,0));

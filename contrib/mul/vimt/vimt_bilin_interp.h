@@ -6,7 +6,7 @@
 //  \brief Bilinear interpolation functions for 2D images
 //  \author Tim Cootes
 
-#include <vil2/vil2_bilin_interp.h>
+#include <vil/vil_bilin_interp.h>
 #include <vimt/vimt_image_2d_of.h>
 
 //: Compute bilinear interpolation at (x,y) in world coordinates, no bound checks
@@ -17,8 +17,8 @@ inline double vimt_bilin_interp_safe(const vimt_image_2d_of<T>& image,
                                      int plane=0)
 {
   vgl_point_2d<double> im_p = image.world2im()(p);
-  const vil2_image_view<T>& im = image.image();
-  return vil2_bilin_interp_safe(im_p.x(),im_p.y(),
+  const vil_image_view<T>& im = image.image();
+  return vil_bilin_interp_safe(im_p.x(),im_p.y(),
                                 im.top_left_ptr()+plane*im.planestep(),
                                 im.ni(),im.nj(),  im.istep(),im.jstep());
 }

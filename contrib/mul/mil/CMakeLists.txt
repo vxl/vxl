@@ -35,7 +35,7 @@ SET(mil_sources
 AUX_SOURCE_DIRECTORY(Templates mil_sources)
 
 ADD_LIBRARY(mil ${mil_sources})
-TARGET_LINK_LIBRARIES(mil mbl vnl_algo vbl_io vgl vil)
+TARGET_LINK_LIBRARIES(mil mbl vnl_algo vbl_io vgl vil1)
 
 SUBDIRS(algo)
 

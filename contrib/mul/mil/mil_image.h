@@ -18,7 +18,7 @@
 //  attached to them, and to be able to act as `views' of
 //  external data.
 //
-//  The existing vil_image does not suffice in this respect.
+//  The existing vil1_image does not suffice in this respect.
 class mil_image
 {
  public:

@@ -14,7 +14,7 @@
 template<class T>
 inline void test_image_view_io_as(T value1, T value2)
 {
-  vcl_cout<<"Testing IO of images of type "<<vil2_pixel_format_of(T())<<vcl_endl;
+  vcl_cout<<"Testing IO of images of type "<<vil_pixel_format_of(T())<<vcl_endl;
   vil3d_image_view<T> image1(8,7,3,2);
   image1.fill(value1);
   image1(4,3,2,1) = value2;

@@ -37,7 +37,7 @@ class vil3d_file_format
                                                      unsigned nj,
                                                      unsigned nk,
                                                      unsigned nplanes,
-                                                     enum vil2_pixel_format)const =0;
+                                                     enum vil_pixel_format)const =0;
 
   //: default filename tag for this image.
   virtual const char *tag()const =0;

@@ -8,8 +8,8 @@
 //=======================================================================
 
 #include <vimt/vimt_gaussian_pyramid_builder_2d.h>
-#include <vil2/vil2_image_view.h>
-#include <vil2/algo/vil2_gauss_reduce.h>
+#include <vil/vil_image_view.h>
+#include <vil/algo/vil_gauss_reduce.h>
 #include <vcl_iosfwd.h>
 
 //: Build pyramids of vimt_image_2d_of<vxl_byte> at any scale step
@@ -19,12 +19,12 @@ class vimt_gaussian_pyramid_builder_2d_general : public vimt_gaussian_pyramid_bu
 {
  private:
     //: image workspace
-    mutable vil2_image_view<T> worka_;
+    mutable vil_image_view<T> worka_;
     //: image workspace
-    mutable vil2_image_view<T> workb_;
+    mutable vil_image_view<T> workb_;
 
     //: Pre-calculated scale parametesr and filter taps.
-    vil2_gauss_reduce_params scale_params_;
+    vil_gauss_reduce_params scale_params_;
 
 
  public:

@@ -8,8 +8,8 @@
 #include <vcl_cstddef.h>
 #include <vcl_iostream.h>
 #include <vil3d/vil3d_image_view.h>
-#include <vil2/io/vil2_io_memory_chunk.h>
-#include <vil2/io/vil2_io_smart_ptr.h>
+#include <vil/io/vil_io_memory_chunk.h>
+#include <vil/io/vil_io_smart_ptr.h>
 
 //: Binary save vil3d_image_view<T> to stream.
 template<class T>
@@ -43,7 +43,7 @@ inline void vsl_b_read(vsl_b_istream &is, vil3d_image_view<T>& image)
 
   unsigned ni,nj,nk,np;
   vcl_ptrdiff_t istep,jstep,kstep,pstep;
-  vil2_memory_chunk_sptr chunk;
+  vil_memory_chunk_sptr chunk;
   vcl_ptrdiff_t offset;
 
   short w;

@@ -5,14 +5,14 @@
 // \brief Apply exponential filter to 3D images
 // \author Tim Cootes
 
-#include <vil2/algo/vil2_exp_filter_1d.h>
+#include <vil/algo/vil_exp_filter_1d.h>
 #include <vil3d/vil3d_image_view.h>
 #include <vil3d/vil3d_switch_axes.h>
 
 //: Apply exponential filter along i to src_im to produce dest_im
 //  Symmetric exponential filter of the form exp(c*|i|) applied. c=log(kf)
 //  Uses fast recursive implementation.
-// \relates vil2_image_view
+// \relates vil_image_view
 template <class srcT, class destT, class accumT>
 inline void vil3d_exp_filter_i(const vil3d_image_view<srcT>& src_im,
                                vil3d_image_view<destT>& dest_im,
@@ -38,7 +38,7 @@ inline void vil3d_exp_filter_i(const vil3d_image_view<srcT>& src_im,
       destT* dest_row = dest_slice;
       // Filter each row
       for (unsigned j=0;j<nj;++j,src_row+=s_jstep,dest_row+=d_jstep)
-        vil2_exp_filter_1d(src_row,s_istep, dest_row,d_istep,   ni, kf);
+        vil_exp_filter_1d(src_row,s_istep, dest_row,d_istep,   ni, kf);
     }
   }
 }
@@ -46,7 +46,7 @@ inline void vil3d_exp_filter_i(const vil3d_image_view<srcT>& src_im,
 //: Apply exponential filter along each axis of src_im in turn
 //  Symmetric exponential filter of the form exp(c*|i|) applied. c=log(kf)
 //  Uses fast recursive implementation.
-// \relates vil2_image_view
+// \relates vil_image_view
 template <class srcT, class destT, class accumT>
 inline void vil3d_exp_filter(const vil3d_image_view<srcT>& src_im,
                              vil3d_image_view<destT>& dest_im,

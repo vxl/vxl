@@ -15,7 +15,7 @@
 //#include <avifile/avm_default.h>
 //#include <avifile/avm_fourcc.h>
 
-#include <vil2/vil2_image_view.h>
+#include <vil/vil_image_view.h>
 #include <mvl2/mvl2_video_reader.h>
 
 // Cannot forward declare these, since they are typedefs (defined in avifile.h)
@@ -62,7 +62,7 @@ class mvl2_video_from_avi: public mvl2_video_reader
   virtual void reset_frame();
  
   //: Put frame data into the given image
-  virtual bool get_frame(vil2_image_view<vxl_byte>& image);
+  virtual bool get_frame(vil_image_view<vxl_byte>& image);
  
   //: Name of the class
   virtual vcl_string is_a() const;

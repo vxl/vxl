@@ -10,7 +10,7 @@
 //   bool get_property(char const *tag, void *property_value = 0) const;
 // \endcode
 // which allow format extensions to be added without cluttering the
-// interface to vil2_image_resource. The idea is that properties can be
+// interface to vil_image_resource. The idea is that properties can be
 // identified by a "tag" (some name or other textual description)
 // through which clients can obtain or manipulate extra properties.
 //
@@ -29,7 +29,7 @@
 // not to clutter it. All property tags described in this file should
 // begin with "vil3d_property_" and that chunk of the namespace is reserved.
 //
-// \author Ian Scott - Copied from fsm's design in vil2.
+// \author Ian Scott - Copied from fsm's design in vil.
 
 //: Indicate whether this is an in-memory image or an on-disk image
 //  By default an image is not in-memory, and since this is a boolean property
@@ -70,4 +70,4 @@
 // Measured back from front - i.e. in k direction. Type is float.
 #define vil3d_property_offset_k "offset_k"
 
-#endif // vil2_property_h_
+#endif // vil_property_h_

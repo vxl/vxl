@@ -34,5 +34,5 @@ bool vil3d_image_resource::view_fits(const vil3d_image_view_base& im, unsigned i
 {
   return (i0 + im.ni() <= ni() && j0 + im.nj() <= nj() &&
     k0 + im.nk() <= nk() && im.nplanes() == nplanes() &&
-    vil2_pixel_format_num_components(im.pixel_format()) == 1);
+    vil_pixel_format_num_components(im.pixel_format()) == 1);
 }

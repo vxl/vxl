@@ -3,11 +3,11 @@
 #define vimt_image_2d_of_h_
 //:
 // \file
-// \brief Container for vil2_image_view<T> + transform
+// \brief Container for vil_image_view<T> + transform
 // \author Tim Cootes
 
 #include <vimt/vimt_image_2d.h>
-#include <vil2/vil2_image_view.h>
+#include <vil/vil_image_view.h>
 #include <vcl_iosfwd.h>
 
 //: Represent 2D image of type T together with a transform.
@@ -16,7 +16,7 @@
 template<class T>
 class vimt_image_2d_of : public vimt_image_2d
 {
-  vil2_image_view<T> image_;
+  vil_image_view<T> image_;
  public:
   //: Dflt ctor
   //  Creates an empty one-plane image.
@@ -26,20 +26,20 @@ class vimt_image_2d_of : public vimt_image_2d
   vimt_image_2d_of(unsigned nx, unsigned ny, unsigned n_planes=1);
 
   //: Construct from a view and a world-to-image transform (takes copies of both)
-  vimt_image_2d_of(const vil2_image_view<T>& view, const vimt_transform_2d& w2i)
+  vimt_image_2d_of(const vil_image_view<T>& view, const vimt_transform_2d& w2i)
     : vimt_image_2d(w2i),image_(view) {}
 
   //: Destructor
   virtual ~vimt_image_2d_of();
 
   //: Baseclass view of image
-  virtual const vil2_image_view_base& image_base() const { return image_; }
+  virtual const vil_image_view_base& image_base() const { return image_; }
 
   //: Image view
-  vil2_image_view<T>& image() { return image_; }
+  vil_image_view<T>& image() { return image_; }
 
   //: Image view
-  const vil2_image_view<T>& image() const { return image_; }
+  const vil_image_view<T>& image() const { return image_; }
 
   //: True if transforms are equal, and they share same image data.
   //  This does not do a deep equality on image data. If the images point
