@@ -18,5 +18,6 @@ mbl_stochastic_data_collector.h
 mbl_sum_1d.h
 mbl_priority_bounded_queue.h
 mbl_lda.h
+mbl_screen_counter.h
 )
 
