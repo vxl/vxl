@@ -1275,6 +1275,16 @@ SOURCE=.\Templates/vnl_matlab_print+uint-.cxx
 # End Source File
 # Begin Source File
 
+SOURCE=.\Templates/vnl_matrix_fixed+double.3.2.cxx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates/vnl_matrix_fixed_ref+double.3.2-.cxx
+
+# End Source File
+# Begin Source File
+
 SOURCE=.\vnl_gamma.cxx
 
 # End Source File
@@ -1793,11 +1803,6 @@ SOURCE=.\vnl_tag.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\vnl_vector_dereference.h
-
-# End Source File
-# Begin Source File
-
 SOURCE=.\vnl_finite.h
 
 # End Source File
@@ -1819,6 +1824,11 @@ SOURCE=.\vnl_real.h
 # Begin Source File
 
 SOURCE=.\vnl_gamma.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vnl_cross.h
 
 # End Source File
 # End Group

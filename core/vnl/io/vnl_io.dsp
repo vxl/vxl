@@ -265,6 +265,16 @@ SOURCE=.\Templates/vsl_vector_io+vnl_matrix+double--.cxx
 # End Source File
 # Begin Source File
 
+SOURCE=.\Templates/vnl_io_matrix_fixed+double.2.2-.cxx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates/vnl_io_vector_fixed+double.3-.cxx
+
+# End Source File
+# Begin Source File
+
 SOURCE=.\vnl_io_nonlinear_minimizer.cxx
 
 # End Source File
@@ -359,6 +369,26 @@ SOURCE=.\vnl_io_sym_matrix.h
 # Begin Source File
 
 SOURCE=.\vnl_io_sym_matrix.txx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vnl_io_matrix_fixed.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vnl_io_matrix_fixed.txx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vnl_io_vector_fixed.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vnl_io_vector_fixed.txx
 
 # End Source File
 # End Group
