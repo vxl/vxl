@@ -40,7 +40,7 @@ static void print_edgels(vtol_edge_2d_sptr const & e)
     return;
   int N = ec->size();
   for (int i = 0; i<N; i++)
-    vcl_cout << "egl(" << i << ")" << (*ec)[i] << "\n";
+    vcl_cout << "egl(" << i << ")=" << (*ec)[i] << '\n';
 }
 #endif
 
@@ -160,8 +160,8 @@ bgui_vtol2D_tableau::add_dotted_digital_curve(vdgl_digital_curve_sptr const& dc)
       obj->set_style(sty.ptr());
       if (highlight_)
         {
-		  int id = obj->get_id(); 
-          obj_map_[id]=dc->cast_to_topology_object();            
+          int id = obj->get_id();
+          obj_map_[id]=dc->cast_to_topology_object();
         }
     }
   return obj;
@@ -264,7 +264,7 @@ add_spatial_object(vsol_spatial_object_2d_sptr const& sos)
       vsol_point_2d_sptr p = sos->cast_to_point();
       this->add_vsol_point_2d(p);
     }
-  } 
+  }
   if (sos->cast_to_curve()) {
     if (sos->cast_to_curve()->cast_to_digital_curve())
       {

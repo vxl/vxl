@@ -32,14 +32,13 @@ class vvid_live_video_tableau : public vgui_image_tableau
 
   //:video camera properties
   void set_camera_params(const cmu_1394_camera_params& cp);
-  cmu_1394_camera_params get_camera_params(){return (cmu_1394_camera_params)cam_;}
-  bool video_capabilities(const int format, const int mode, const int frame_rate){return cam_.m_videoFlags[format][mode][frame_rate];}
-  
-  int get_current(){return cam_.get_current();}
-  void set_current(int current){cam_.set_current(current);}
-  vcl_string current_capability_desc(){return cam_.current_capability_desc();}
-  vcl_vector<vcl_string> get_capability_descriptions()
-    {return cam_.get_capability_descriptions();}
+  cmu_1394_camera_params get_camera_params() { return (cmu_1394_camera_params)cam_; }
+  bool video_capabilities(int format, int mode, int frame_rate) { return cam_.m_videoFlags[format][mode][frame_rate]; }
+
+  int get_current() { return cam_.get_current(); }
+  void set_current(int current) { cam_.set_current(current); }
+  vcl_string current_capability_desc() { return cam_.current_capability_desc(); }
+  vcl_vector<vcl_string> get_capability_descriptions() { return cam_.get_capability_descriptions(); }
 
   //:live video processing
   bool attach_live_video();
@@ -49,15 +48,13 @@ class vvid_live_video_tableau : public vgui_image_tableau
   void reset_camera_link();
 
   //:live capture methods
-  void start_capture(vcl_string const & video_file_name)
-    {cam_.start_capture(video_file_name);}
-  bool stop_capture(){return cam_.stop_capture();}
+  void start_capture(vcl_string const & video_file_name) { cam_.start_capture(video_file_name); }
+  bool stop_capture() { return cam_.stop_capture(); }
   //: collection state, i.e. is live and capturing frames
   bool get_video_live() const { return live_; }
 
   //: pixel sample interval for display
-  void set_pixel_sample_interval(int pix_sample_itvl)
-    {pixel_sample_interval_=pix_sample_itvl;}
+  void set_pixel_sample_interval(int pix_sample_itvl) { pixel_sample_interval_=pix_sample_itvl; }
   //: Access to next live camera frames. Causes the camera to take a new frame
   void get_camera_rgb_image(vil1_memory_image_of< vil1_rgb<unsigned char> >& im,
                             int pix_sample_interval = 1);
@@ -98,7 +95,7 @@ struct vvid_live_video_tableau_new : public vvid_live_video_tableau_sptr
 {
  public:
   vvid_live_video_tableau_new() :
-    vvid_live_video_tableau_sptr(new vvid_live_video_tableau()){}
+    vvid_live_video_tableau_sptr(new vvid_live_video_tableau()) {}
 
   vvid_live_video_tableau_new(int node, int pixel_sample_interval,
                               const cmu_1394_camera_params& cp) :
@@ -107,8 +104,7 @@ struct vvid_live_video_tableau_new : public vvid_live_video_tableau_sptr
                                                              cp))
   {}
 
-  operator vgui_image_tableau_sptr () const
-  { vgui_image_tableau_sptr tt; tt.vertical_cast(*this); return tt; }
+  operator vgui_image_tableau_sptr () const { vgui_image_tableau_sptr tt; tt.vertical_cast(*this); return tt; }
 };
 
 #endif // vvid_live_video_tableau_h_
