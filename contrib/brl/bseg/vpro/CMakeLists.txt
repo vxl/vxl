@@ -9,7 +9,6 @@ SET(vpro_sources
     vpro_video_process.cxx           vpro_video_process.h  vpro_video_process_sptr.h
     vpro_region_process.cxx          vpro_region_process.h
     vpro_capture_process.cxx         vpro_capture_process.h
-    vpro_curve_tracking_process.cxx  vpro_curve_tracking_process.h
     vpro_frame_diff_params.cxx       vpro_frame_diff_params.h
     vpro_frame_diff_process.cxx      vpro_frame_diff_process.h
     vpro_motion_params.cxx           vpro_motion_params.h
