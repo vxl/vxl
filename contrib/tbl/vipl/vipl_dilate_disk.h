@@ -23,14 +23,13 @@
 //   are not the same type.  It could even be argued that these types should
 //   always be the same!
 //
-//  updated by Tboult to use new codegen form and have valid (public argree) ctor
-//  and to use preop and postop to define/destroy the mask. 12/97
-//
 // \author Peter Vanroose, K.U.Leuven (ESAT/PSI)
 // \date   15 November 1997.
 //
 // \verbatim
-// Modifications:
+//  Modifications:
+//   12/97 updated by Tboult to use new codegen form and have valid (public
+//          agreed) ctor and to use preop and postop to define/destroy the mask.
 //   Peter Vanroose, Aug.2000 - adapted to vxl
 // \endverbatim
 //
@@ -40,25 +39,26 @@
 
 //: morphological dilation with circular element
 template <class ImgIn,class ImgOut,class DataIn,class DataOut,VCL_DFL_TYPE_PARAM_STLDECL(PixelItr, vipl_trivial_pixeliter) >
-class vipl_dilate_disk : public vipl_filter_2d<ImgIn,ImgOut,DataIn,DataOut,PixelItr> {
-// -+-+- data members: -+-+-
-private:
+class vipl_dilate_disk : public vipl_filter_2d<ImgIn,ImgOut,DataIn,DataOut,PixelItr>
+{
+  // -+-+- data members: -+-+-
+ private:
   float radius_;
-public:
+ public:
   float   radius() const     { return radius_;}
   float & ref_radius()       { return radius_;}
   void    put_radius(float v){ radius_ =   v;}
 
-private:
+ private:
   bool** mask_;
-public:
+ public:
   bool**  mask() const       { return mask_;}
-protected:
+ protected:
   bool**& ref_mask()         { return mask_;}
   void    put_mask(bool** v) { mask_ =   v;}
 
-// -+-+- constructors/destructors: -+-+-
-public:
+  // -+-+- constructors/destructors: -+-+-
+ public:
   inline vipl_dilate_disk(float r=1)
            : vipl_filter_2d<ImgIn,ImgOut,DataIn,DataOut,PixelItr>(), radius_(r), mask_(0) {}
   inline vipl_dilate_disk(vipl_dilate_disk const& A)
