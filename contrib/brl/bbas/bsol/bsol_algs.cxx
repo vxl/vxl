@@ -17,7 +17,7 @@
 #include <vsol/vsol_box_2d.h>
 #include <vsol/vsol_polygon_2d.h>
 #include <vgl/vgl_box_2d.h>
-
+#include <vgl/algo/vgl_convex_hull_2d.h>
 //: Destructor
 bsol_algs::~bsol_algs()
 {
@@ -141,7 +141,29 @@ bool bsol_algs::box_union(vsol_box_2d_sptr const & a,
   a_union_b->add_point(x_max, y_max);
   return true;
 }
-
+//-----------------------------------------------------------------------------
+// :Compute the convex hull of a set of polygons
+//-----------------------------------------------------------------------------
+bool bsol_algs::hull_of_poly_set(vcl_vector<vsol_polygon_2d_sptr> const& polys,
+                                 vsol_polygon_2d_sptr& hull)
+{
+  if(!polys.size())
+    return false;
+  vcl_vector<vgl_point_2d<double> > points;
+  for(vcl_vector<vsol_polygon_2d_sptr>::const_iterator pit = polys.begin();
+      pit != polys.end(); pit++)
+    {
+      if(!(*pit))
+        return false;
+      for(int i=0; i<(*pit)->size(); i++)
+        points.push_back(vgl_point_2d<double>((*pit)->vertex(i)->x(),
+                                              (*pit)->vertex(i)->y()));
+    }
+  vgl_convex_hull_2d<double> ch(points);
+  vgl_polygon<double> h = ch.hull();
+  hull = bsol_algs::poly_from_vgl(h);
+  return true;
+}
 //-----------------------------------------------------------------------------
 // :Determine if a point is inside a bounding box
 //-----------------------------------------------------------------------------

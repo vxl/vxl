@@ -58,7 +58,10 @@ class bsol_algs
   static bool box_union(vsol_box_2d_sptr const & a,
                         vsol_box_2d_sptr const & b,
                         vsol_box_2d_sptr& a_union_b);
-  
+
+  //:find the convex hull of a set of polygons
+  static bool hull_of_poly_set(vcl_vector<vsol_polygon_2d_sptr> const& polys,
+                               vsol_polygon_2d_sptr& hull);
   //: Is a point inside the box
   static bool in(vsol_box_3d_sptr const & a, const double x, const double y,
                  const double z);
