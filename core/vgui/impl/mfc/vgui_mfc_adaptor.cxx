@@ -486,6 +486,14 @@ void mfc_key(UINT nChar, UINT nFlags, int *the_key, int *the_ascii_char)
         *the_key = vgui_PAGE_UP;
         *the_ascii_char = vgui_PAGE_UP;
         return;
+      case VK_HOME:
+        *the_key = vgui_HOME;
+        *the_ascii_char = vgui_HOME;
+        return;
+      case VK_END:
+        *the_key = vgui_END;
+        *the_ascii_char = vgui_END;
+        return;
       case VK_LEFT:
         *the_key = vgui_CURSOR_LEFT;
         *the_ascii_char = vgui_CURSOR_LEFT;
