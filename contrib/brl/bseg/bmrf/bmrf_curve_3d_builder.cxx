@@ -61,6 +61,8 @@ bmrf_curve_3d_builder::init_cameras(const vnl_double_3x4& C0, double scale)
     return;
   vcl_set<int> frames = network_->frame_numbers();
   const vgl_point_2d<double>& ep = network_->epipole(1).location();
+  if(offsets_.empty())
+    compute_camera_offsets();
 
   vnl_double_3x3 M = C0.extract(3,3);
 
@@ -74,14 +76,68 @@ bmrf_curve_3d_builder::init_cameras(const vnl_double_3x4& C0, double scale)
   normalize(direction_);
 
   // compute the cameras
+  vcl_set<int>::const_iterator fitr = frames.begin();
+  if(fitr != frames.end()){
+    C_[*fitr] = C0;
+    double dt = scale;
+    vnl_double_3x4 Ef = C0;
+    for ( ++fitr;  fitr != frames.end();  ++fitr ) {
+      dt *= offsets_[*fitr];
+      Ef.set_column(3,Ef.get_column(3) - dt*e);
+      C_[*fitr] = Ef;
+    }
+  }
+}
 
-  vnl_double_3x4 Ef = C0;
+
+//: Compute the relative change in spacing between cameras
+void
+bmrf_curve_3d_builder::compute_camera_offsets()
+{
+  offsets_.clear();
+  vcl_set<int> frames = network_->frame_numbers();
+  
   for ( vcl_set<int>::const_iterator fitr = frames.begin();
         fitr != frames.end();  ++fitr ) {
-    double dt = -double(*fitr)*scale;
-    Ef.set_column(3,C0.get_column(3) + dt*e);
-    C_[*fitr] = Ef;
+    double cross_ratio_sum = 0.0;
+    double cr_moment2 = 0.0;
+    unsigned int count = 0;
+    for ( vcl_set<bmrf_curve_3d_sptr>::const_iterator itr1 = curves_.begin();
+          itr1 != curves_.end();  ++itr1)
+    {
+      for ( bmrf_curve_3d::const_iterator itr2 = (*itr1)->begin();
+            itr2 != (*itr1)->end();  ++itr2)
+      {
+        bmrf_curvel_3d_sptr curvel = *itr2;
+        double val = 0.0;
+        if(curvel->cross_ratio(*fitr,val)){
+          cross_ratio_sum += val;
+          cr_moment2 += val*val;
+          ++count;
+        }
+      }
+    }
+
+    double offset = 1.0;
+    if(fitr == frames.begin())
+      offset = 0.0;
+    if(count>0){
+      double avg_ratio = cross_ratio_sum/count;
+      double var = 0.0;
+      if(count>1)
+        var = (cr_moment2 - avg_ratio*avg_ratio*count)/(count-1);
+      vcl_cerr << "Frame "<< *fitr << ":\tmean = "<< avg_ratio << " \tstdev = " << vcl_sqrt(var) <<vcl_endl;
+      offset = avg_ratio/(1.0 - avg_ratio);
+    }
+    offsets_[*fitr] = offset;
   }
+  
+  vcl_cerr << "All offsets" << vcl_endl;
+  for ( vcl_set<int>::const_iterator fitr = frames.begin();
+        fitr != frames.end();  ++fitr ) {
+    vcl_cerr << offsets_[*fitr] << " ";
+  }
+  vcl_cerr << vcl_endl;
 }
 
 
@@ -167,6 +223,16 @@ bmrf_curve_3d_builder::compute_bounding_box(double inlier_fraction, bool align_e
     vnl_double_3x3 rot_z = vnl_rotation_matrix(rot_axis);
     
     rot = rot_z*rot_y;
+  }
+  // rotate only about the z-axis
+  else{
+    vnl_double_3 x_axis(1.0, 0.0, 0.0);
+    vnl_double_3 xy_proj(direction_.x(), direction_.y(), 0.0);
+    xy_proj.normalize();
+    double ang = angle(xy_proj, x_axis);
+    vcl_cerr << "bbox rotation angle: " <<ang << vcl_endl;
+    vnl_double_3 rot_axis(0.0, 0.0, ang);
+    rot = vnl_rotation_matrix(rot_axis);
   }
 
   vcl_vector<vnl_double_3> pts_x;

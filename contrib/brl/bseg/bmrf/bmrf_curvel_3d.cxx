@@ -133,6 +133,27 @@ bmrf_curvel_3d::pos_in_frame(unsigned int frame, vnl_double_2& pos) const
 }
 
 
+//: Returns the invariant cross ratio
+bool
+bmrf_curvel_3d::cross_ratio(unsigned int frame, double& ratio) const
+{
+  if ( frame >= projs_2d_.size() || frame < 2 )
+    return false;
+    
+  double s[3];
+  for(unsigned int i=0; i<3; ++i){
+    double alpha = projs_2d_[frame+i-2].first;
+    bmrf_node_sptr node = projs_2d_[frame+i-2].second;
+    if ( node && node->epi_seg()){
+      s[i] = node->epi_seg()->s(alpha);
+    }else
+      return false;
+  }   
+  ratio = s[0]*(s[1]-s[2])/(s[1]*(s[0]-s[2]));
+  return true;
+}
+
+
 //: Returns the smart pointer to the node at the projection into \p frame
 bmrf_node_sptr
 bmrf_curvel_3d::node_at_frame(unsigned int frame) const

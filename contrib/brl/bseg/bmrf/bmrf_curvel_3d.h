@@ -55,6 +55,12 @@ class bmrf_curvel_3d : public bugl_gaussian_point_3d<double>, public vbl_ref_cou
   // \retval false if no correspondence exists at this frame
   bool pos_in_frame(unsigned int frame, vnl_double_2& pos) const;
 
+  //: Returns the invariant cross ratio
+  //  computed with the epipole and points from frame-1 to frame+1
+  // \retval true if all required points exist (ratio returned by reference)
+  // \retval false if one or more required points do not exist
+  bool cross_ratio(unsigned int frame, double& ratio) const;
+
   //: Returns the smart pointer to the node at the projection into \p frame
   bmrf_node_sptr node_at_frame(unsigned int frame) const;
 

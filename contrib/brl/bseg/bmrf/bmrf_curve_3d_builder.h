@@ -45,7 +45,7 @@ class bmrf_curve_3d_builder
   //: Initialize the camera matrices (using a specified camera)
   // \param scale determines the separation between cameras
   void init_cameras(const vnl_double_3x4& C0, double scale = 1.0);
-
+  
   //: Build The curves
   //  Curves with less than \p min_prj projections are removed
   bool build(int min_prj = 3, int min_len = 10);
@@ -69,6 +69,9 @@ class bmrf_curve_3d_builder
   vnl_double_4x4 bb_xform() const;
 
  protected:
+  //: Compute the relative change in spacing between cameras
+  void compute_camera_offsets();
+  
   //: Determine the alpha bounds from the network
   void find_alpha_bounds();
   
@@ -107,6 +110,9 @@ class bmrf_curve_3d_builder
 
   //: Map from frame numbers to cameras
   vcl_map<int,vnl_double_3x4> C_;
+
+  //: Map from frame numbers to camera offsets
+  vcl_map<int,double> offsets_;
   
   //: 3D direction unit vector
   vgl_vector_3d<double> direction_;
