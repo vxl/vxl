@@ -21,6 +21,9 @@ SOURCES += vpdfl_pc_gaussian_sampler.cxx
 SOURCES += vpdfl_axis_gaussian.cxx
 SOURCES += vpdfl_axis_gaussian_builder.cxx
 SOURCES += vpdfl_axis_gaussian_sampler.cxx
+SOURCES += vpdfl_mixture.cxx
+SOURCES += vpdfl_mixture_builder.cxx
+SOURCES += vpdfl_mixture_sampler.cxx
 
 # Additional files to document: (none for the moment)
 MANPAGE_SOURCES += 
