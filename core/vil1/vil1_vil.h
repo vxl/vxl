@@ -12,7 +12,7 @@
 #include <vcl_iostream.h>
 
 //: Create a view of a vil_memory_image_of<T>
-// Warning, the created view doesn't not share ownership of the underlying image. The
+// Warning, the created view does not share ownership of the underlying image. The
 // vil_memory_image_of<T> should not be destroyed while the view is in use.
 // The function assumes that the addressing increments to the next column, row or plane
 // are constant throughout the image.
