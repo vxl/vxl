@@ -1,4 +1,4 @@
-USES = vxl oxl v3p Oxford
+USES = vxl oxl v3p
 
 ifeq ($(OS),win32)
 PROGRAM = VPLAYER
