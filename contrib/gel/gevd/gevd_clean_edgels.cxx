@@ -497,7 +497,7 @@ void gevd_clean_edgels::DeleteShortEdges()
       int x1 = int(fx1), y1 = int(fy1);
       int x2 = int(fx2), y2 = int(fy2);
       //First, are the vertices too close?
-      if((vcl_fabs(x2-x1)<d_remove)&&(vcl_fabs(y2-y1)<d_remove))
+      if((vcl_abs(x2-x1)<d_remove)&&(vcl_abs(y2-y1)<d_remove))
         {
           N_close++;
 	  //If so, then check if all edgels in the EdgelChain are
@@ -510,8 +510,8 @@ void gevd_clean_edgels::DeleteShortEdges()
 	    {
             int xe = int ( chain->edgel(t).x() );
             int ye = int ( chain->edgel(t).y() );
-            bool far_from_v1 = (vcl_fabs(xe-x1)>d_close||vcl_fabs(ye-y1)>d_close);
-            bool far_from_v2 = (vcl_fabs(xe-x2)>d_close||vcl_fabs(ye-y2)>d_close);
+            bool far_from_v1 = (vcl_abs(xe-x1)>d_close||vcl_abs(ye-y1)>d_close);
+            bool far_from_v2 = (vcl_abs(xe-x2)>d_close||vcl_abs(ye-y2)>d_close);
             if(far_from_v1&&far_from_v2)
               {
               all_close = false;
