@@ -39,6 +39,7 @@
 //*****************************************************************************
 #include <vsol/vsol_spatial_object_3d_sptr.h>
 
+#include <vcl_string.h>
 #include <vcl_iostream.h>
 #include <vul/vul_timestamp.h>
 #include <vbl/vbl_ref_count.h>
@@ -52,7 +53,6 @@ class vsol_volume_3d;
 class vtol_topology_object;
 class vsol_spatial_object_3d;
 extern void iu_delete(vsol_spatial_object_3d *);
-
 
 #ifndef vsol_spatial_object_flags_
 #define vsol_spatial_object_flags_
@@ -74,7 +74,6 @@ const unsigned int VSOL_FLAG_BITS      = 0xFF000000;
 
 #endif // vsol_spatial_object_flags_
 
-//: base class for spatial object
 
 class vsol_spatial_object_3d : public vul_timestamp, public vbl_ref_count
 {
@@ -87,7 +86,6 @@ class vsol_spatial_object_3d : public vul_timestamp, public vbl_ref_count
   static int    tagcount_;    // global count of all spatial objects.
 
  public:
-
   enum vsol_spatial_object_3d_type
   {
     SPATIAL_NO_TYPE=0,
@@ -102,38 +100,38 @@ class vsol_spatial_object_3d : public vul_timestamp, public vbl_ref_count
   static const char *SpatialTypes[];
   static const float eps;
 
+  // Constructors/Destructors--------------------------------------------------
+
  protected:
-
-  // Constructors/Destructors
-
   virtual ~vsol_spatial_object_3d();
   inline vsol_spatial_object_3d(void);
   inline vsol_spatial_object_3d(vsol_spatial_object_3d const& s);
-  inline void not_applicable(const char *message) const
-    { vcl_cerr << message << "() function call not applicable"
-               << "\tfor spatial object " << get_name() << " !\n";
-    }
- public:
+  void not_applicable(vcl_string const& message) const
+  { vcl_cerr<<message<<"() function call not applicable\tfor spatial object "
+            <<get_name()<<" !\n";
+  }
 
+ public:
   // Data Access---------------------------------------------------------------
 
-  //: data description
-  virtual vsol_spatial_object_3d_type spatial_type(void) const=0;
-  const char *get_name(void) const;
+  //: get the spatial type
+  virtual vsol_spatial_object_3d_type spatial_type() const=0;
 
-  //: bounding box stuff
+  const char *get_name() const; // derived from spatial_type()
+
+  //: compute bounding box, do nothing in this case except touching the box
   inline virtual void compute_bounding_box(void) const
   { if (!bounding_box_) bounding_box_=new vsol_box_3d();bounding_box_->touch();}
 
   vsol_box_3d_sptr get_bounding_box(void) const { check_update_bounding_box(); return bounding_box_; }
 
-  //: get id of objects
-  inline int get_id(void) const { return id_; }
-  //: set id of objects
-  inline void set_id(int i) { id_ = i; }
+  //: get id of object
+  int get_id() const { return id_; }
+  //: set id of object
+  void set_id(int i) { id_ = i; }
 
   //: unprotect the object
-  inline void un_protect(void) { ref_count--; iu_delete(this); }
+  void un_protect() { ref_count--; iu_delete(this); }
 
   //---------------------------------------------------------------------------
   //: Clone `this': creation of a new object and initialization
@@ -157,9 +155,9 @@ class vsol_spatial_object_3d : public vul_timestamp, public vbl_ref_count
 
  public:
 
-  void protected_destroy(void);
+  void protected_destroy();
 
-  //: bounding box accessors
+  // bounding box accessors
 
   inline void check_update_bounding_box(void) const;  // Test consistency of bound
   //: grow to the largest dim. of this and comp_box, i.e., take the convex union
@@ -186,37 +184,35 @@ class vsol_spatial_object_3d : public vul_timestamp, public vbl_ref_count
 
   // Operators
 
-  virtual bool operator==(vsol_spatial_object_3d const& obj) const
-  {
-    return this==&obj;
-  }
+  virtual bool operator==(vsol_spatial_object_3d const& obj) const { return this==&obj; }
+  bool operator!=(vsol_spatial_object_3d const& obj) { return !(*this==obj); }
 
   //-------------------------------------------------------------------------
 
   //---------------------------------------------------------------------------
   //: The same behavior than dynamic_cast<>.
-  // Needed because VXL is not always compiled with -frtti :-(
+  // Needed because VXL is not necessarily compiled with -frtti
   //---------------------------------------------------------------------------
   vsol_spatial_object_3d* cast_to_spatial_object() { return this; }
-  const vsol_spatial_object_3d* cast_to_spatial_object() const { return this; }
+  vsol_spatial_object_3d const* cast_to_spatial_object() const { return this; }
   virtual vtol_topology_object* cast_to_topology_object() {return 0;}
-  virtual const vtol_topology_object* cast_to_topology_object()const{return 0;}
-  virtual vsol_group_3d *cast_to_group(void) {return 0;}
-  virtual const vsol_group_3d *cast_to_group(void) const {return 0;}
-  virtual vsol_curve_3d *cast_to_curve(void) {return 0;}
-  virtual const vsol_curve_3d *cast_to_curve(void) const {return 0;}
-  virtual vsol_region_3d* cast_to_region(void) { return 0; }
-  virtual const vsol_region_3d * cast_to_region(void) const { return 0; }
-  virtual vsol_volume_3d* cast_to_volume(void) { return 0;}
-  virtual const vsol_volume_3d * cast_to_volume() const { return 0;}
-  virtual vsol_point_3d* cast_to_point(void) { return 0;}
-  virtual const vsol_point_3d* cast_to_point(void) const { return 0;}
+  virtual vtol_topology_object const* cast_to_topology_object()const{return 0;}
+  virtual vsol_point_3d* cast_to_point() { return 0;}
+  virtual vsol_point_3d const* cast_to_point() const { return 0;}
+  virtual vsol_curve_3d *cast_to_curve() {return 0;}
+  virtual vsol_curve_3d const* cast_to_curve() const {return 0;}
+  virtual vsol_region_3d* cast_to_region() { return 0; }
+  virtual vsol_region_3d const* cast_to_region() const { return 0; }
+  virtual vsol_volume_3d* cast_to_volume() { return 0;}
+  virtual vsol_volume_3d const* cast_to_volume() const { return 0;}
+  virtual vsol_group_3d *cast_to_group() {return 0;}
+  virtual vsol_group_3d const* cast_to_group() const {return 0;}
 
-  inline virtual void print(vcl_ostream &strm=vcl_cout) const {describe(strm);}
-  inline virtual void describe(vcl_ostream& =vcl_cout, int /*blanking*/=0) const { not_applicable("describe"); }
+  virtual void print(vcl_ostream &strm=vcl_cout) const {describe(strm);}
+  virtual void describe(vcl_ostream& =vcl_cout, int /*blanking*/=0) const { not_applicable("describe"); }
 
-  friend inline vcl_ostream &operator<<(vcl_ostream &,const vsol_spatial_object_3d &);
-  friend inline vcl_ostream &operator<<(vcl_ostream &,const vsol_spatial_object_3d *);
+  friend inline vcl_ostream &operator<<(vcl_ostream &,vsol_spatial_object_3d const&);
+  friend inline vcl_ostream &operator<<(vcl_ostream &,vsol_spatial_object_3d const*);
 };
 
 // inline member functions
@@ -287,36 +283,34 @@ inline void vsol_spatial_object_3d::set_tagged_union_flag()
 }
 
 //: check if the flag used by TAGGED_UNION is set.
-inline bool vsol_spatial_object_3d::get_tagged_union_flag(void)
+inline bool vsol_spatial_object_3d::get_tagged_union_flag()
 {
   return get_user_flag(VSOL_UNIONBIT);
 }
 
 //: un-set the flag used by TAGGED_UNION.
-inline void vsol_spatial_object_3d::unset_tagged_union_flag(void)
+inline void vsol_spatial_object_3d::unset_tagged_union_flag()
 {
   unset_user_flag(VSOL_UNIONBIT);
 }
 
-inline int vsol_spatial_object_3d::get_tag_id(void)
+inline int vsol_spatial_object_3d::get_tag_id()
 {
   return tag_ & VSOL_DEXID_BITS;
 }
 
-inline vcl_ostream &operator<<(vcl_ostream &strm,
-                               const vsol_spatial_object_3d &so)
+inline vcl_ostream &operator<<(vcl_ostream &strm, vsol_spatial_object_3d const& so)
 {
   ((vsol_spatial_object_3d const *)&so)->print(strm);
   return strm;
 }
 
-inline vcl_ostream &operator<<(vcl_ostream &strm,
-                               const vsol_spatial_object_3d *so)
+inline vcl_ostream &operator<<(vcl_ostream &strm, vsol_spatial_object_3d const* so)
 {
   if (so)
     ((vsol_spatial_object_3d const *)so)->print(strm);
   else
-    strm << " NULL Spatial Object. ";
+    strm << "NULL Spatial Object.\n";
   return strm;
 }
 
