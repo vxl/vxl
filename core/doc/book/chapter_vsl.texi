@@ -1487,8 +1487,8 @@ private:
 public:
   void print(vcl_ostream& os) const
   {
-     os<<vsl_indent(os)<<fred_<<vcl_endl;
-     os<<vsl_indent(os)<<"Jim's other data";
+     os<<vsl_indent()<<fred_<<vcl_endl;
+     os<<vsl_indent()<<"Jim's other data";
   }
 };
 
