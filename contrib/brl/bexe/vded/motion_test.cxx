@@ -3,12 +3,17 @@
 #include <vcl_sstream.h>
 #include <vul/vul_arg.h>
 #include <vidl/vidl_movie.h>
+#include <vidl/vidl_clip.h>
 #include <vidl/vidl_io.h>
 #include <vidl/vidl_frame.h>
 #include <vil/vil_image_view.h>
 #include <vil/vil_convert.h>
 #include <vil/vil_math.h>
+#include <vil/vil_new.h>
+#include <vil/algo/vil_gauss_filter.h>
+#include <vil/vil_image_resource.h>
 #include <vidl/vidl_image_list_codec.h>
+#include <brip/brip_vil_ops.h>
 
 #ifdef HAS_MPEG2
 # include <vidl/vidl_mpegcodec.h>
@@ -25,6 +30,12 @@ VIL_THRESHOLD_INSTANTIATE(float);
 bool print_xml_params( vcl_string output_file,
                        vul_arg_info_list& arg_list,
                        vcl_string param_block_name );
+
+bool print_xml_performance( vcl_string output_file,
+                            vcl_string video_file,
+                            const vcl_vector< double >& scores );
+
+void write_status(vcl_string output_file, int iframe, int nframes);
                        
 
 int main(int argc, char** argv)
@@ -42,6 +53,9 @@ int main(int argc, char** argv)
 
   // Arguments
   vul_arg_info_list arg_list;
+  vul_arg<double> sigma(arg_list,"-sigma","sigma for Gaussian smoothing",1.0);
+  vul_arg<float> thresh1(arg_list,"-t1","Threshold for truncating motion",0.001);
+  vul_arg<float> thresh2(arg_list,"-t2","Threshold for detecting motion",0.0001);
   vul_arg<vcl_string> parameter_output_file(arg_list,"-X","parameter output file","");
   vul_arg<vcl_string> input_video_file(arg_list,"-V","video input file","");
   vul_arg<vcl_string> status_block_file(arg_list,"-S","status block file","");
@@ -75,7 +89,7 @@ int main(int argc, char** argv)
   vcl_vector< vil_image_view<float> > images;
   for ( vidl_movie::frame_iterator f_itr = video->first();
         f_itr != video->end();  ++f_itr ){
-    vil_image_view<float> input_image, grey_image;
+    vil_image_view<float> input_image, grey_image, smooth_image;
     input_image = vil_convert_stretch_range((float)0.0, f_itr->get_view());
     if( input_image.nplanes() == 3 ) {
       vil_convert_planes_to_grey( input_image , grey_image );
@@ -88,28 +102,112 @@ int main(int argc, char** argv)
                << input_image.nplanes() << " planes."<< vcl_endl;
       return -1;
     }
-    images.push_back(grey_image);
+    vil_gauss_filter_5tap_params gauss_params(sigma());
+    vil_gauss_filter_5tap(grey_image, smooth_image, gauss_params);
+    images.push_back(smooth_image);
   }
 
+  vcl_vector< double > scores;
+  vcl_vector< vil_image_resource_sptr > results;
   for ( vcl_vector< vil_image_view<float> >::iterator itr = images.begin()+1;
         itr != images.end();  ++itr ){
+          
+    vil_image_view<float> sing_img;
+    brip_sqrt_grad_singular_values(*itr, sing_img, 1);
+    
     vil_image_view<float> diff_img;
     vil_math_image_abs_difference(*itr, *(itr-1), diff_img);
+
+    vil_image_view<float> motion_img;
+    vil_math_image_product(diff_img, sing_img, motion_img);
+    float min_val, max_val;
+    vil_math_value_range(motion_img, min_val, max_val);
+    vil_math_scale_values(motion_img, 1.0/max_val);
+    vcl_cout << "min: " << min_val << " max: "<< max_val<<vcl_endl;
+    
     vil_image_view<bool> bool_img;
-    vil_threshold_above<float>( diff_img, bool_img, 0.5);
+    vil_threshold_above<float>( motion_img, bool_img, thresh2());
+    vil_math_truncate_range( motion_img, 0.0f, thresh1());
+    
     int sum = 0;
     vil_math_sum(sum, bool_img, 0);
     int total = bool_img.ni()*bool_img.nj();
     vcl_cout << "Sum: "<<sum<<" total: "<< total << " ratio: "<< double(sum)/total << vcl_endl;
+    scores.push_back(double(sum)/total);
+
+    vil_image_view<vxl_byte> byte_img;
+    vil_convert_stretch_range(motion_img, byte_img);
+    vil_image_resource_sptr img_sptr = vil_new_image_resource(byte_img.ni(), byte_img.nj(),
+                                                              byte_img.nplanes(), byte_img.pixel_format());
+    img_sptr->put_view(byte_img);
+    results.push_back(img_sptr);
+
+    if(status_block_file() != "")
+      write_status(status_block_file(), results.size(), images.size()-1);
   }
-  vcl_cout << "DONE!!!" << vcl_endl;
+  if(performance_output_file() != "")
+    print_xml_performance( performance_output_file(), input_video_file(), scores );
+ 
+  vidl_movie_sptr result_movie = new vidl_movie(new vidl_clip(results, 0, results.size()));
+  vidl_io::save(result_movie.ptr(), output_directory().c_str(), "ImageList");
+     
+  vcl_cout << "done!" << vcl_endl;
 
   return 0;
 }
 
 
 
-// print the parameters to an XML file
+//: print the performance to an XML file
+bool print_xml_performance( vcl_string output_file,
+                            vcl_string video_file,
+                            const vcl_vector< double >& scores )
+{
+  vcl_ofstream outstream(output_file.c_str());
+  if (!outstream)
+  {
+    vcl_cerr << "error: could not create performance output file ["<<output_file<<"]\n";
+    return false;
+  }
+  outstream << "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
+            << "<performance>\n"
+            << "  <description>Video Frame Scores</description>\n"
+            << "  <frames>\n"
+            << "    <video name=\""<< video_file <<"\" totalframes=\""<<scores.size()<<"\">\n"
+            << "      <category type=\"car\">\n";
+  for (unsigned int i=0; i<scores.size(); ++i){
+    outstream << "        <frame index=\""<<i<<"\" score=\""<<scores[i]<<"\"/>\n";
+  }
+          
+  outstream << "      </category>\n"
+            << "    </video>\n"
+            << "  </frames>\n"
+            << "</performance>" <<vcl_endl;
+  
+  return true;
+}
+
+void write_status(vcl_string output_file, int iframe, int nframes)
+{
+  float percent_done = float(iframe)/float(nframes);
+
+  vcl_ofstream outstream(output_file.c_str());
+  outstream << "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
+            << "<status>\n"
+            << "  <basic>\n"
+            << "    <info percent_completed=\""<<percent_done<<"\"/>\n"
+            << "  </basic>\n"
+            << "  <optional>\n"
+            << "    <info number_of_frames_processed=\""<<iframe<<"\"/>\n"
+            << "    <info total_number_of_frames=\""<<nframes<<"\"/>\n"
+            << "  </optional>\n"
+            << "</status>\n";
+
+  outstream.close();
+}
+
+
+//: print the parameters to an XML file
 bool print_xml_params( vcl_string output_file,
                        vul_arg_info_list& arg_list,
                        vcl_string param_block_name )
