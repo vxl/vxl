@@ -117,11 +117,18 @@ bgui_vtol2D_tableau::add_vsol_point_2d(vsol_point_2d_sptr const& p)
 bgui_vtol_soview2D_digital_curve*
 bgui_vtol2D_tableau::add_digital_curve(vdgl_digital_curve_sptr const& dc)
 {
-  this->set_line_width(3.0);
-  this->set_foreground(0.0,0.0,1.0);
   bgui_vtol_soview2D_digital_curve* obj =
     new bgui_vtol_soview2D_digital_curve(dc);
+  //set the default style
+  bgui_style_sptr sty = style_map_[obj->type_name()];
   add(obj);
+  if (obj)
+    {
+      sty->clone_style(obj->get_style());
+      int id = obj->get_id();
+      if (highlight_)
+      obj_map_[id]=dc->cast_to_topology_object();
+    }
   return obj;
 }
 
