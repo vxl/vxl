@@ -1,6 +1,5 @@
 .git*            export-ignore
 
-*.dsp           -crlf
 *.dsptemplate   -crlf
 *.pl             crlf=input
 *.sh             crlf=input
