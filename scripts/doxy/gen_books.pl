@@ -118,7 +118,7 @@ if (! $vxlsrc)
   exit(1);
 }
 
-$bookbasedir = "$doxydir/books";
+$bookbasedir = "$doxydir/html/books";
 if (! -e $bookbasedir)
 {
   print "Creating $bookbasedir\n";
