@@ -14,13 +14,13 @@ void test_vector_fixed_double_3_io()
 
   vnl_vector_fixed<double,3> m_out(1.2,3.4,5.6), m_in;
 
-  vsl_b_ofstream bfs_out("vnl_vector_fixed_io.tmp");
-  TEST ("vnl_vector_fixed_io.tmp for writing", (!bfs_out), false);
+  vsl_b_ofstream bfs_out("vnl_vector_fixed_io.bvl.tmp");
+  TEST ("vnl_vector_fixed_io.bvl.tmp for writing", (!bfs_out), false);
   vsl_b_write(bfs_out, m_out);
   bfs_out.close();
 
-  vsl_b_ifstream bfs_in("vnl_vector_fixed_io.tmp");
-  TEST ("vnl_vector_fixed_io.tmp for reading", (!bfs_in), false);
+  vsl_b_ifstream bfs_in("vnl_vector_fixed_io.bvl.tmp");
+  TEST ("vnl_vector_fixed_io.bvl.tmp for reading", (!bfs_in), false);
   vsl_b_read(bfs_in, m_in);
   bfs_in.close();
 
