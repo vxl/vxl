@@ -219,7 +219,7 @@ vgl_homg_operators_2d<T>::angle_between_oriented_lines(
   return diff;
 }
 
-// @{ JOINS/INTERSECTIONS @}
+//  JOINS/INTERSECTIONS 
 
 //-----------------------------------------------------------------------------
 //
@@ -375,7 +375,7 @@ vgl_homg_operators_2d<T>::lines_to_point(const vcl_list<vgl_homg_line_2d<T> >& l
   return vgl_homg_point_2d<T>(mov[0], mov[1], mov[2]);
 }
 
-// @{ MISCELLANEOUS @}
+//  MISCELLANEOUS 
 
 
 template <class T>
