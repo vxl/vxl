@@ -23,7 +23,7 @@ SUBDIRS += vil
 SUBDIRS += vipl
 
 # video
-SUBDIRS += vvl
+SUBDIRS += vidl
 
 # spatial objects
 SUBDIRS += vsol
