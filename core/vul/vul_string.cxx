@@ -19,7 +19,7 @@
 char* vul_string_c_upcase (char* s) {      // Convert entire string to upper case
   char* p = s;                  // Point to beginning of string
   while (*p) {                  // While there are still valid characters
-    if (islower (*p))           // if this is lower case
+    if (vcl_islower (*p))       // if this is lower case
       *p = TO_UPPER (*p);       // convert to uppercase
     p++;                        // Advance pointer
   }
@@ -30,7 +30,7 @@ char* vul_string_c_upcase (char* s) {      // Convert entire string to upper cas
 char* vul_string_c_downcase (char* s) {    // Convert entire string to lower case
   char* p = s;                  // Point to beginning of string
   while (*p) {                  // While there are still valid characters
-    if (isupper (*p))           // if this is upper case
+    if (vcl_isupper (*p))       // if this is upper case
       *p = TO_LOWER (*p);       // convert to lowercase
     p++;                        // Advance pointer
   }
@@ -42,11 +42,11 @@ char* vul_string_c_downcase (char* s) {    // Convert entire string to lower cas
 char* vul_string_c_capitalize (char* s) {          // Capitalize each word in string
   char* p = s;                          // Point to beginning of string
   while (true) {                        // Infinite loop
-    for (; *p && !isalnum(*p); p++);    // Skip to first alphanumeric
+    for (; *p && !vcl_isalnum(*p); p++);// Skip to first alphanumeric
     if (*p == END_OF_STRING)            // If end of string
       return s;                         // Return string
     *p = TO_UPPER(*p);                  // Convert character
-    while(*++p && isalnum (*p));        // Search for next word
+    while(*++p && vcl_isalnum (*p));    // Search for next word
   }
 }
 
@@ -113,10 +113,6 @@ void vul_string_c_reverse (char* c) {                // Reverse the order of cha
     c[j] = temp;                        // Copy new rear character
   }
 }
-
-
-
-
 
 // Converts all alphabetical characters in string s to uppercase.
 vcl_string& vul_string_upcase(vcl_string& s)

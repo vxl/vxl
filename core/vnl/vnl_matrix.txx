@@ -1157,7 +1157,7 @@ bool vnl_matrix<T>::read_ascii(vcl_istream& s)
       c = s.get();
       if (c == EOF)
         goto loademup;
-      if (!isspace(c)) {
+      if (!vcl_isspace(c)) {
         if (!s.putback(c).good())
           vcl_cerr << "vnl_matrix<T>::read_ascii: Could not push back '" << c << "'\n";
 
