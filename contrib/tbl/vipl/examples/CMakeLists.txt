@@ -14,6 +14,8 @@
 #                  vipl_with_vbl_array_2d vbl   (for group C)
 #                  vipl_with_section            (for group D)
 
+ADD_DEFINITIONS(-DINSTANTIATE_TEMPLATES)
+
 # A. using vil_image as 2D storage class:
 ADD_EXECUTABLE(vipl_example_convert example_convert.cxx)
 TARGET_LINK_LIBRARIES( vipl_example_convert vipl vil )
@@ -31,7 +33,6 @@ ADD_EXECUTABLE(vipl_example4_threshold example4_threshold.cxx)
 TARGET_LINK_LIBRARIES( vipl_example4_threshold vipl vil )
 
 
-
 # B. using vnl_matrix<T> as 2D storage class:
 ADD_EXECUTABLE(vipl_example3_threshold example3_threshold.cxx)
 TARGET_LINK_LIBRARIES( vipl_example3_threshold vipl vnl )
@@ -43,13 +44,13 @@ ADD_EXECUTABLE(vipl_example_gaussian_convolution example_gaussian_convolution.cx
 TARGET_LINK_LIBRARIES( vipl_example_gaussian_convolution vipl vnl )
 
 
-
 # C. using vbl_array_2d<T> as 2D storage class:
 ADD_EXECUTABLE(vipl_example_gradient_mag example_gradient_mag.cxx)
 TARGET_LINK_LIBRARIES( vipl_example_gradient_mag vipl vbl )
 
 ADD_EXECUTABLE(vipl_example_sobel example_sobel.cxx)
 TARGET_LINK_LIBRARIES( vipl_example_sobel vipl vbl )
+
 
 # D. using section<T,2> as 2D storage class:
 ADD_EXECUTABLE(vipl_example_dilate_disk example_dilate_disk.cxx)

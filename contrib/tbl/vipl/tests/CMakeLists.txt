@@ -1,5 +1,7 @@
 # ./tbl/vipl/tests/CMakeLists.txt
 
+ADD_DEFINITIONS(-DINSTANTIATE_TEMPLATES)
+
 ADD_EXECUTABLE( vipl_test_driver
   test_driver.cxx        test_driver.h
 

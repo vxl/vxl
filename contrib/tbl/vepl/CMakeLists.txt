@@ -22,6 +22,8 @@ SET(vepl_sources
 
 AUX_SOURCE_DIRECTORY(Templates vepl_sources)
 
+ADD_DEFINITIONS(-DINSTANTIATE_TEMPLATES)
+
 ADD_LIBRARY(vepl ${vepl_sources})
 TARGET_LINK_LIBRARIES(vepl vipl)
 

@@ -12,6 +12,8 @@
 
 LINK_LIBRARIES( vepl )
 
+ADD_DEFINITIONS(-DINSTANTIATE_TEMPLATES)
+
 ADD_EXECUTABLE(vepl_example_convert          example_convert.cxx)
 ADD_EXECUTABLE(vepl_example_add_random_noise example_add_random_noise.cxx)
 ADD_EXECUTABLE(vepl_example_std_dev          example_std_dev.cxx)
