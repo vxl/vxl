@@ -13,10 +13,10 @@ vcl_ostream &operator<<(vcl_ostream &s, mymap::value_type const &x)
 int main()
 {
   mymap m;
-  m.insert(mymap::value_type(0, 2.71828182845905));
-  m.insert(mymap::value_type(2, 3.14159265358979));
-  m.insert(mymap::value_type(2, 1.41421356237310));
-  m.insert(mymap::value_type(3, 1.61803398874989));
+  m.insert(mymap::value_type(0, 2.718281828459045)); // e
+  m.insert(mymap::value_type(1, 3.141592653589793)); // pi
+  m.insert(mymap::value_type(2, 1.414213562373095)); // sqrt(2)
+  m.insert(mymap::value_type(3, 1.61803398874989)); // golden number
 
   mymap::iterator b = m.begin();
   mymap::iterator e = m.end();
