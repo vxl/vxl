@@ -158,7 +158,7 @@ inline bool convert_components_from_planes(vil2_image_view<T> &lhs,
   }
   else
     return false;
-} 
+}
 
 
 VCL_DEFINE_SPECIALIZATION
@@ -169,42 +169,42 @@ inline bool convert_components_from_planes(vil2_image_view<float> &lhs,
 VCL_DEFINE_SPECIALIZATION
 inline bool convert_components_from_planes(vil2_image_view<double> &lhs,
                                            const vil2_image_view_base &rhs_base)
-{return false;} 
+{return false;}
 
 VCL_DEFINE_SPECIALIZATION
 inline bool convert_components_from_planes(vil2_image_view<bool> &lhs,
                                            const vil2_image_view_base &rhs_base)
-{return false;} 
+{return false;}
 
 VCL_DEFINE_SPECIALIZATION
 inline bool convert_components_from_planes(vil2_image_view<vxl_sbyte> &lhs,
                                            const vil2_image_view_base &rhs_base)
-{return false;} 
+{return false;}
 
 VCL_DEFINE_SPECIALIZATION
 inline bool convert_components_from_planes(vil2_image_view<vxl_byte> &lhs,
                                            const vil2_image_view_base &rhs_base)
-{return false;} 
+{return false;}
 
 VCL_DEFINE_SPECIALIZATION
 inline bool convert_components_from_planes(vil2_image_view<vxl_int_16> &lhs,
                                            const vil2_image_view_base &rhs_base)
-{return false;} 
+{return false;}
 
 VCL_DEFINE_SPECIALIZATION
 inline bool convert_components_from_planes(vil2_image_view<vxl_uint_16> &lhs,
                                            const vil2_image_view_base &rhs_base)
-{return false;} 
+{return false;}
 
 VCL_DEFINE_SPECIALIZATION
 inline bool convert_components_from_planes(vil2_image_view<vxl_int_32> &lhs,
                                            const vil2_image_view_base &rhs_base)
-{return false;} 
+{return false;}
 
 VCL_DEFINE_SPECIALIZATION
 inline bool convert_components_from_planes(vil2_image_view<vxl_uint_32> &lhs,
                                            const vil2_image_view_base &rhs_base)
-{return false;} 
+{return false;}
 
 
 //: Convert components to planes from planes, or do nothing if types are wrong.
@@ -235,7 +235,7 @@ inline bool convert_planes_from_components(vil2_image_view<vxl_byte> &lhs,
   }
   else
     return false;
-} 
+}
 
 VCL_DEFINE_SPECIALIZATION
 inline bool convert_planes_from_components(vil2_image_view<vxl_sbyte> &lhs,
@@ -259,7 +259,7 @@ inline bool convert_planes_from_components(vil2_image_view<vxl_sbyte> &lhs,
   }
   else
     return false;
-} 
+}
 
 VCL_DEFINE_SPECIALIZATION
 inline bool convert_planes_from_components(vil2_image_view<vxl_uint_16> &lhs,
@@ -283,7 +283,7 @@ inline bool convert_planes_from_components(vil2_image_view<vxl_uint_16> &lhs,
   }
   else
     return false;
-} 
+}
 
 VCL_DEFINE_SPECIALIZATION
 inline bool convert_planes_from_components(vil2_image_view<vxl_int_16> &lhs,
@@ -307,7 +307,7 @@ inline bool convert_planes_from_components(vil2_image_view<vxl_int_16> &lhs,
   }
   else
     return false;
-} 
+}
 
 VCL_DEFINE_SPECIALIZATION
 inline bool convert_planes_from_components(vil2_image_view<vxl_uint_32> &lhs,
@@ -331,7 +331,7 @@ inline bool convert_planes_from_components(vil2_image_view<vxl_uint_32> &lhs,
   }
   else
     return false;
-} 
+}
 
 VCL_DEFINE_SPECIALIZATION
 inline bool convert_planes_from_components(vil2_image_view<vxl_int_32> &lhs,
@@ -355,7 +355,7 @@ inline bool convert_planes_from_components(vil2_image_view<vxl_int_32> &lhs,
   }
   else
     return false;
-} 
+}
 
 VCL_DEFINE_SPECIALIZATION
 inline bool convert_planes_from_components(vil2_image_view<float> &lhs,
@@ -379,7 +379,7 @@ inline bool convert_planes_from_components(vil2_image_view<float> &lhs,
   }
   else
     return false;
-} 
+}
 
 VCL_DEFINE_SPECIALIZATION
 inline bool convert_planes_from_components(vil2_image_view<double> &lhs,
@@ -403,7 +403,7 @@ inline bool convert_planes_from_components(vil2_image_view<double> &lhs,
   }
   else
     return false;
-} 
+}
 
 
 //: Create a copy of the data viewed by this, and return a view of copy.
@@ -603,19 +603,18 @@ bool vil2_image_view<T>::operator==(const vil2_image_view<T> &other) const
     ni_        == other.ni_ &&
     nj_        == other.nj_ &&
     planestep_ == other.planestep_ &&
-    istep_      == other.istep_ &&
+    istep_     == other.istep_ &&
     jstep_     == other.jstep_;
 }
 
 //=======================================================================
-//: Provides a ordering.
+//: Provides an ordering.
 //  Useful for ordered containers.
-//  There is no guaranteed meaning to the less than operator, except
-//  that  !(a<b) && !(b<a) is equivalent to a==b
+//  There is no guaranteed meaning to the less than operator, except that
+//  (a<b && b<a)  is false and  !(a<b) && !(b<a)  is equivalent to  a==b
 template<class T>
 bool vil2_image_view<T>::operator<(const vil2_image_view<T>& other) const
 {
-  
   if (ptr_ != other.ptr_) return ptr_<other.ptr_;
   if ((bool) *this && (bool)other) return false;
   if (nplanes_ != other.nplanes_) return nplanes_ < other.nplanes_;
@@ -650,23 +649,9 @@ bool vil2_image_view_deep_equality(const vil2_image_view<T> &lhs,
   return true;
 }
 
-//=======================================================================
-//: True if they do not share same view of same image data.
-//  This does not do a deep inequality on image data. If the images point
-//  to different image data objects that contain identical images, then
-//  the result will still be true.
-template<class T>
-bool operator!=(const vil2_image_view<T>& lhs, const vil2_image_view<T>& rhs)
-{
-  return !(lhs.operator==(rhs));
-}
-
-
 #define VIL2_IMAGE_VIEW_INSTANTIATE(T) \
 template class vil2_image_view<T >; \
-template bool vil2_image_view_deep_equality(const vil2_image_view<T > &, \
-                                            const vil2_image_view<T > &); \
-template bool operator!=(const vil2_image_view<T >& , \
-                         const vil2_image_view<T >& );
+template bool vil2_image_view_deep_equality(const vil2_image_view<T >&, \
+                                            const vil2_image_view<T >&)
 
 #endif // vil2_image_view_txx_

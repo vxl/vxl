@@ -121,20 +121,20 @@ class vil2_image_view : public vil2_image_view_base
 
   //: Pointer to the first (top left in plane 0) pixel.
   //  Note that this is not necessarily the lowest data memory address.
-  T * top_left_ptr() { return top_left_; }  // Make origin explicit
+  inline T * top_left_ptr() { return top_left_; }  // Make origin explicit
   //: Pointer to the first (top left in plane 0) pixel.
   //  Note that this is not necessarily the lowest data memory address.
-  const T * top_left_ptr() const { return top_left_; }
+  inline const T * top_left_ptr() const { return top_left_; }
 
   //: Add this to your pixel pointer to get next i pixel.
   //  Note that istep() may well be negative; see e.g. vil2_flip_lr
-  int istep() const { return istep_; }
+  inline int istep() const { return istep_; }
   //: Add this to your pixel pointer to get next j pixel.
   //  Note that jstep() may well be negative; see e.g. vil2_flip_ud
-  int jstep() const { return jstep_; }
+  inline int jstep() const { return jstep_; }
   //: Add this to your pixel pointer to get pixel on next plane.
   //  Note that planestep() may well be negative, e.g. with BMP file images
-  int planestep() const { return planestep_; }
+  inline int planestep() const { return planestep_; }
 
   //: Cast to bool is true if pointing at some data.
   operator bool () const { return top_left_ != (T*)0; }
@@ -147,34 +147,34 @@ class vil2_image_view : public vil2_image_view_base
   // eg using set_to_memory.
   //
   // Typically used when creating new views of the data
-  const vil2_memory_chunk_sptr& memory_chunk() const { return ptr_; }
+  inline const vil2_memory_chunk_sptr& memory_chunk() const { return ptr_; }
 
   //: Smart pointer to the object holding the data for this view
   // Will be a null pointer if this view looks at `third-party' data,
   // eg using set_to_memory
   //
   // Typically used when creating new views of the data
-  vil2_memory_chunk_sptr& memory_chunk() { return ptr_; }
+  inline vil2_memory_chunk_sptr& memory_chunk() { return ptr_; }
 
   // Ordinary image indexing stuff.
 
   //: Return read-only reference to pixel at (i,j) in plane 0.
-  const T& operator()(unsigned i, unsigned j) const {
+  inline const T& operator()(unsigned i, unsigned j) const {
     assert(i<ni_); assert(j<nj_);
     return top_left_[jstep_*j+i*istep_]; }
 
   //: Return read/write reference to pixel at (i,j) in plane 0.
-  T&       operator()(unsigned i, unsigned j) {
+  inline T&       operator()(unsigned i, unsigned j) {
     assert(i<ni_); assert(j<nj_);
     return top_left_[istep_*i+j*jstep_]; }
 
   //: Return read-only reference to pixel at (i,j) in plane p.
-  const T& operator()(unsigned i, unsigned j, unsigned p) const {
+  inline const T& operator()(unsigned i, unsigned j, unsigned p) const {
     assert(i<ni_); assert(j<nj_); assert(p<nplanes_);
     return top_left_[p*planestep_ + j*jstep_ + i*istep_]; }
 
   //: Return read-only reference to pixel at (i,j) in plane p.
-  T&       operator()(unsigned i, unsigned j, unsigned p) {
+  inline T&       operator()(unsigned i, unsigned j, unsigned p) {
     assert(i<ni_); assert(j<nj_); assert(p<nplanes_);
     return top_left_[p*planestep_ + j*jstep_ + i*istep_]; }
 
@@ -194,12 +194,7 @@ class vil2_image_view : public vil2_image_view_base
 
   //: Make empty.
   // Disconnects view from underlying data.
-  void clear()
-  {
-    release_memory();
-    ni_=nj_=nplanes_=0;
-    top_left_=0;
-  }
+  inline void clear() { release_memory(); ni_=nj_=nplanes_=0; top_left_=0; }
 
   //: Set this view to look at someone else's memory data.
   //  If the data goes out of scope then this view could be invalid, and
@@ -234,8 +229,7 @@ class vil2_image_view : public vil2_image_view_base
 
   //: Return a description of the concrete data pixel type.
   // The value corresponds directly to pixel_type.
-  virtual enum vil2_pixel_format pixel_format() const
-  { return vil2_pixel_format_of(T()); }
+  inline vil2_pixel_format pixel_format() const { return vil2_pixel_format_of(T()); }
 
   //: True if they share same view of same image data.
   //  This does not do a deep equality on image data. If the images point
@@ -243,11 +237,26 @@ class vil2_image_view : public vil2_image_view_base
   //  the result will still be false.
   bool operator==(const vil2_image_view<T>& other) const;
 
-  //: Provides a ordering.
+  //: True if they do not share same view of same image data.
+  //  This does not do a deep inequality on image data. If the images point
+  //  to different image data objects that contain identical images, then
+  //  the result will still be true.
+  inline bool operator!=(const vil2_image_view<T>& rhs) const { return !operator==(rhs); }
+
+  //: Provides an ordering.
   //  Useful for ordered containers.
-  //  There is no guaranteed meaning to the less than operator, except
-  //  that  !(a<b) && !(b<a) is equivalent to a==b
+  //  There is no guaranteed meaning to the less than operator, except that
+  //  (a<b && b<a)  is false and  !(a<b) && !(b<a)  is equivalent to  a==b
   bool operator<(const vil2_image_view<T>& other) const;
+
+  //: Provides an ordering.
+  inline bool operator>=(const vil2_image_view<T>& other) const { return !operator<(other); }
+
+  //: Provides an ordering.
+  inline bool operator>(const vil2_image_view<T>& other) const { return other<(*this); }
+
+  //: Provides an ordering.
+  inline bool operator<=(const vil2_image_view<T>& other) const { return !operator>(other); }
 
   //: Copy a view. The rhs and lhs will point to the same image data.
   // You can assign a vil2_image_view<compound_type<T>> to a vil2_image_view<T>
@@ -256,7 +265,7 @@ class vil2_image_view : public vil2_image_view_base
   // when the underlying data is formatted appropriately and the lhs has
   // as many components as the rhs has planes. O(1).
   // If the view types are not compatible this object will be set to empty.
-  const vil2_image_view<T>& operator= (const vil2_image_view_base & rhs);
+  const vil2_image_view<T>& operator=(const vil2_image_view_base & rhs);
 
   //: Copy a view. The rhs and lhs will point to the same image data.
   // You can assign a vil2_image_view<compound_type<T>> to a vil2_image_view<T>
@@ -266,7 +275,7 @@ class vil2_image_view : public vil2_image_view_base
   // as many components as the rhs has planes. O(1).
   // If the view types are not compatible this object will be set to empty.
   // If the pointer is null, this object will be set to empty.
-  const vil2_image_view<T> & operator = (const vil2_image_view_base_sptr & rhs)
+  inline const vil2_image_view<T>& operator=(const vil2_image_view_base_sptr& rhs)
   {
     if (!rhs) clear();
     else *this = *rhs;
@@ -277,8 +286,10 @@ class vil2_image_view : public vil2_image_view_base
 //: Print a 1-line summary of contents
 template <class T>
 inline
-vcl_ostream& operator<<(vcl_ostream& s, vil2_image_view<T> const& im) {
-  im.print(s); return s; }
+vcl_ostream& operator<<(vcl_ostream& s, vil2_image_view<T> const& im)
+{
+  im.print(s); return s;
+}
 
 
 //: True if the actual images are identical.
@@ -288,13 +299,5 @@ vcl_ostream& operator<<(vcl_ostream& s, vil2_image_view<T> const& im) {
 // \relates vil2_image_view
 template<class T>
 bool vil2_image_view_deep_equality(const vil2_image_view<T> &lhs, const vil2_image_view<T> &rhs);
-
-
-//: True if they do not share same view of same image data.
-//  This does not do a deep inequality on image data. If the images point
-//  to different image data objects that contain identical images, then
-//  the result will still be true.
-template<class T>
-bool operator!=(const vil2_image_view<T>& lhs, const vil2_image_view<T>& rhs);
 
 #endif // vil2_image_view_h_
