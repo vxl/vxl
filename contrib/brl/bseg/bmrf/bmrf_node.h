@@ -53,7 +53,7 @@ class bmrf_node : public vbl_ref_count
   typedef vbl_smart_ptr<bmrf_arc> bmrf_arc_sptr;
 
   //: iterator over neighboring nodes
-  typedef vcl_list<bmrf_arc_sptr>::iterator neighbor_iterator;
+  typedef vcl_list<bmrf_arc_sptr>::iterator arc_iterator;
 
   //: The values of this enum categorize the neighbors
   // \note ALL is a special type and should be kept last
@@ -69,6 +69,11 @@ class bmrf_node : public vbl_ref_count
   // This also removes arcs to and from this node in neighboring nodes
   void strip();
 
+  //: Remove any arcs to or from NULL nodes
+  // \retval true if any arcs were removed
+  // \retval false of all arcs are valid
+  bool purge();
+
   //: Calculate the conditional probability that this node is correct give its neighbors
   double probability();
 
@@ -80,15 +85,15 @@ class bmrf_node : public vbl_ref_count
   //: Remove \param node from the neighborhood
   // \return true if the node is removed successfully
   // \return false if the node was not a neighbor
-  bool remove_neighbor( bmrf_node *node, neighbor_type type );
+  bool remove_neighbor( bmrf_node *node, neighbor_type type = ALL);
 
   //: Returns an iterator to the beginning of the type \param type neighbors
   // \note if \param type is ALL then iteration is over all types
-  neighbor_iterator begin(neighbor_type type = ALL);
+  arc_iterator begin(neighbor_type type = ALL);
 
   //: Returns an iterator to the end of the type \param type neighbors
   // \note if \param type is ALL then iteration is over all types
-  neighbor_iterator end(neighbor_type type = ALL);
+  arc_iterator end(neighbor_type type = ALL);
 
   //: Return the frame number at which this node is found
   bmrf_epi_seg_sptr epi_seg() const { return segment_; }
@@ -129,7 +134,7 @@ class bmrf_node : public vbl_ref_count
   vcl_list<bmrf_arc_sptr> in_arcs_;
 
   //: The the iterators into neighbors_ that represent the boundary between types
-  vcl_vector<neighbor_iterator> boundaries_;
+  vcl_vector<arc_iterator> boundaries_;
 
   //: The number of neighbors for each type
   vcl_vector<int> sizes_;

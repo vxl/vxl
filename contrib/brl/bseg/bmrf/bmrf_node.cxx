@@ -5,6 +5,7 @@
 #include "bmrf_node.h"
 #include <vsl/vsl_binary_io.h>
 #include <vbl/io/vbl_io_smart_ptr.h>
+#include <vcl_algorithm.h>
 
 
 //: Constructor
@@ -18,11 +19,11 @@ bmrf_node::bmrf_node( const bmrf_epi_seg_sptr& epi_seg, int frame_num, double pr
 void
 bmrf_node::strip()
 {
-  neighbor_iterator itr = out_arcs_.begin();
+  arc_iterator itr = out_arcs_.begin();
   for(; itr != out_arcs_.end(); ++itr){
     if((*itr)->to){
       bmrf_node_sptr other = (*itr)->to;
-      neighbor_iterator itr2 = other->in_arcs_.begin();
+      arc_iterator itr2 = other->in_arcs_.begin();
       for(; itr2 != other->in_arcs_.end(); ++itr2)
         other->in_arcs_.erase(itr2);  
     }
@@ -37,6 +38,37 @@ bmrf_node::strip()
       (*itr)->from->remove_neighbor(this, ALL);
     }
   } 
+}
+
+
+//: Remove any arcs to or from NULL nodes
+bool
+bmrf_node::purge()
+{
+  bool retval = false;
+  for(int t = 0; t<ALL; ++t){
+    arc_iterator itr = boundaries_[t];
+    for(; itr != boundaries_[t+1]; ++itr){
+      if(!(*itr)->to){
+        // adjust boundaries if necessary
+        for(int t2=t; t2>=0 && (boundaries_[t2] == itr); --t2)
+          ++boundaries_[t2];
+        out_arcs_.erase(itr--); // remove the arc
+        --sizes_[t]; // decrease count
+        retval = true;
+      }
+    }
+  }
+
+  arc_iterator itr = in_arcs_.begin();
+  for(; itr != in_arcs_.end(); ++itr){
+    if(!(*itr)->from){
+      in_arcs_.erase(itr--);
+      retval = true;
+    }
+  }
+  
+  return retval;
 }
   
 
@@ -57,7 +89,7 @@ bmrf_node::add_neighbor( bmrf_node *node, neighbor_type type )
     return false;
     
   // verify that this arc is not already present
-  neighbor_iterator itr = boundaries_[type];
+  arc_iterator itr = boundaries_[type];
   for(; itr != boundaries_[type+1]; ++itr)
     if((*itr)->to == node) return false;
     
@@ -87,12 +119,17 @@ bmrf_node::remove_neighbor( bmrf_node *node, neighbor_type type )
   if(type == ALL) init_t=0;
 
   for(int t = init_t; t<ALL; ++t){
-    neighbor_iterator itr = boundaries_[t];
+    arc_iterator itr = boundaries_[t];
     for(; itr != boundaries_[t+1]; ++itr){
       if((*itr)->to == node){
-        out_arcs_.erase(itr);
-        --itr;          // back up
-        --sizes_[type]; // decrease count
+        // adjust boundaries if necessary
+        for(int t2=t; t2>=0 && (boundaries_[t2] == itr); --t2)
+          ++boundaries_[t2];
+        arc_iterator back_itr = vcl_find((*itr)->to->in_arcs_.begin(), (*itr)->to->in_arcs_.end(), *itr);
+        if(back_itr != (*itr)->to->in_arcs_.end())
+          (*itr)->to->in_arcs_.erase(back_itr); // erase the pointer back from the other node
+        out_arcs_.erase(itr--); // erase the arc
+        --sizes_[t]; // decrease count
         if (type != ALL) return true;
         removed = true;
       }
@@ -103,7 +140,7 @@ bmrf_node::remove_neighbor( bmrf_node *node, neighbor_type type )
 
 
 //: Returns an iterator to the beginning of the type \param type neighbors
-bmrf_node::neighbor_iterator
+bmrf_node::arc_iterator
 bmrf_node::begin( neighbor_type type )
 {
   if (type == ALL) return out_arcs_.begin();
@@ -112,7 +149,7 @@ bmrf_node::begin( neighbor_type type )
 
   
 //: Returns an iterator to the end of the type \param type neighbors
-bmrf_node::neighbor_iterator
+bmrf_node::arc_iterator
 bmrf_node::end( neighbor_type type )
 {
   if (type == ALL) return out_arcs_.end();
@@ -205,7 +242,7 @@ bmrf_node::b_read( vsl_b_istream& is )
         bmrf_arc_sptr arc_ptr;
         vsl_b_read(is, arc_ptr);
         arc_ptr->to = this;
-        out_arcs_.push_back(arc_ptr);
+        in_arcs_.push_back(arc_ptr);
       }
     }   
     break;
