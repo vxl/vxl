@@ -55,6 +55,8 @@
 # include "sunpro/vcl_cmath.h"
 #elif defined(VCL_METRO_WERKS)
 # include "mwerks/vcl_cmath.h"
+#elif defined(VCL_BORLAND_55)
+# include "borland55/vcl_cmath.h"
 #else
 # include "iso/vcl_cmath.h"
 #endif
