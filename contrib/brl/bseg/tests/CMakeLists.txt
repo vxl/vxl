@@ -20,3 +20,6 @@ ADD_TEST(sdet_test_region_proc  bseg_test_all sdet_test_region_proc ${CMAKE_CURR
 ADD_TEST(brip_test_lucas_kanade bseg_test_all brip_test_lucas_kanade)
 ADD_TEST(brip_test_fourier      bseg_test_all brip_test_fourier)
 ADD_TEST(brip_test_homography   bseg_test_all brip_test_homography)
+
+ADD_EXECUTABLE( bseg_test_include test_include.cxx)
+TARGET_LINK_LIBRARIES( bseg_test_include bseg)
