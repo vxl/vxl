@@ -18,7 +18,8 @@
 //   2001/06/30 Peter Vanroose  Added constructor from vgl_point_2d
 //   2001/07/03 Peter Vanroose  Replaced vnl_double_2 by vgl_vector_2d
 //   2001/07/03 Peter Vanroose  Replaced new/delete by vgl_point_2d as member
-//   2004/06/04 Josph Mundy     Added Binary I/O
+//   2004/04/06 Josph Mundy     Added Binary I/O
+//   2004/05/14 Peter Vanroose  Added describe()
 // \endverbatim
 //*****************************************************************************
 
@@ -48,7 +49,7 @@ class vsol_point_2d : public vsol_spatial_object_2d
   //***************************************************************************
   // Initialization
   //***************************************************************************
-  
+
    //---------------------------------------------------------------------------
   //: Default Constructor
   //---------------------------------------------------------------------------
@@ -199,17 +200,26 @@ class vsol_point_2d : public vsol_spatial_object_2d
   //: Return true if the argument matches the string identifying the class or any parent class
   bool is_class(const vcl_string& cls) const;
 
+  //---------------------------------------------------------------------------
+  //: output description to stream
+  //---------------------------------------------------------------------------
+  inline void describe(vcl_ostream &strm, int blanking=0) const
+  {
+    if (blanking < 0) blanking = 0; while (blanking--) strm << ' ';
+    strm << '(' << x() << ' ' << y() << ')' << vcl_endl;
+  }
 };
-//: Stream operator
 
-vcl_ostream&  operator<<(vcl_ostream& s, vsol_point_2d const& p);
+//: Stream output operator
+inline vcl_ostream&  operator<<(vcl_ostream& s, vsol_point_2d const& p)
+{
+  return s << '(' << p.x() << ' ' << p.y() << ')';
+}
 
 //: Binary save vsol_point_2d* to stream.
 void vsl_b_write(vsl_b_ostream &os, const vsol_point_2d* p);
 
 //: Binary load vsol_point_2d* from stream.
 void vsl_b_read(vsl_b_istream &is, vsol_point_2d* &p);
-
-
 
 #endif // vsol_point_2d_h_

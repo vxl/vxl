@@ -8,6 +8,7 @@
 //*****************************************************************************
 #include <vcl_cassert.h>
 #include <vcl_cmath.h>
+#include <vcl_iostream.h>
 #include <vnl/vnl_math.h>
 #include <vbl/io/vbl_io_smart_ptr.h>
 #include <vsol/vsol_point_2d.h>
@@ -333,18 +334,16 @@ void vsol_line_2d::b_write(vsl_b_ostream &os) const
 //: Binary load self from stream. (not typically used)
 void vsol_line_2d::b_read(vsl_b_istream &is)
 {
-  if(!is)
+  if (!is)
     return;
   short ver;
   vsl_b_read(is, ver);
   switch(ver)
   {
-  case 1:
-    {
-      vsol_spatial_object_2d::b_read(is);
-      vsl_b_read(is, p0_);
-      vsl_b_read(is, p1_);
-    }
+   case 1:
+    vsol_spatial_object_2d::b_read(is);
+    vsl_b_read(is, p0_);
+    vsl_b_read(is, p1_);
   }
 }
 //: Return IO version number;
@@ -370,15 +369,6 @@ bool vsol_line_2d::is_class(const vcl_string& cls) const
 {
   return cls==vsol_line_2d::is_a();
 }
-
-//external functions
-vcl_ostream& operator<<(vcl_ostream& s, vsol_line_2d const& l)
-{
-  s << '[' << *(l.p0()) << ' ' << *(l.p1()) << ']';
-  return s;
-}
-
-
 
 //: Binary save vsol_line_2d to stream.
 void
@@ -407,4 +397,10 @@ vsl_b_read(vsl_b_istream &is, vsol_line_2d* &p)
   }
   else
     p = 0;
+}
+
+void vsol_line_2d::describe(vcl_ostream &strm, int blanking) const
+{
+  if (blanking < 0) blanking = 0; while (blanking--) strm << ' ';
+  strm << '[' << *(p0()) << ' ' << *(p1()) << ']' << vcl_endl;
 }

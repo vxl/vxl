@@ -201,3 +201,12 @@ vsol_rectangle_3d::normal_at_point(const vsol_point_3d_sptr &p) const
 
   return normalized(cross_product(v1,v2));
 }
+
+inline void vsol_rectangle_3d::describe(vcl_ostream &strm, int blanking) const
+{
+  if (blanking < 0) blanking = 0; while (blanking--) strm << ' ';
+  strm << "<vsol_rectangle_3d with corners";
+  for (unsigned int i=0; i<size(); ++i)
+    strm << ' ' << *(vertex(i));
+  strm << '>' << vcl_endl;
+}

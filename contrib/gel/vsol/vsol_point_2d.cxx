@@ -158,29 +158,29 @@ void vsol_point_2d::b_write(vsl_b_ostream &os) const
 //: Binary load self from stream (not typically used)
 void vsol_point_2d::b_read(vsl_b_istream &is)
 {
-  if(!is)
+  if (!is)
     return;
   short ver;
   vsl_b_read(is, ver);
   switch(ver)
   {
-  case 1:
-    {
-      vsol_spatial_object_2d::b_read(is);
-      double x=0, y=0;
+   case 1:
+    vsol_spatial_object_2d::b_read(is);
+    { double x=0, y=0;
       vsl_b_read(is, x);
       vsl_b_read(is, y);
       this->p_.set(x, y);
-    }   
+    }
     break;
 
-  default:
+   default:
     vcl_cerr << "I/O ERROR: vsol_point_2d::b_read(vsl_b_istream&)\n"
              << "           Unknown version number "<< ver << '\n';
     is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
     return;
   }
 }
+
 //: Return IO version number;
 short vsol_point_2d::version() const
 {
@@ -204,14 +204,6 @@ bool vsol_point_2d::is_class(const vcl_string& cls) const
 {
   return cls==vsol_point_2d::is_a();
 }
-
-//external functions
-vcl_ostream& operator<<(vcl_ostream& s, vsol_point_2d const& p)
-{
-  s << '(' << p.x() << ' ' << p.y() << ')';
-  return s;
-}
-
 
 //: Binary save vsol_point_2d to stream.
 void

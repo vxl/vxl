@@ -10,9 +10,12 @@
 //
 // \author Peter Vanroose
 // \date   5 July 2000.
+//
+// \verbatim
+//  Modifications
+//   2004/05/14 Peter Vanroose  Added describe()
+// \endverbatim
 //*****************************************************************************
-
-class vsol_tetrahedron;
 
 //*****************************************************************************
 // External declarations for values
@@ -129,6 +132,11 @@ class vsol_tetrahedron : public vsol_polyhedron
   //: Is `p' in `this' ?
   //---------------------------------------------------------------------------
   virtual bool in(vsol_point_3d const &p) const;
+
+  //---------------------------------------------------------------------------
+  //: output description to stream
+  //---------------------------------------------------------------------------
+  void describe(vcl_ostream &strm, int blanking=0) const;
 };
 
 #endif // vsol_tetrahedron_h_

@@ -17,7 +17,8 @@
 //   2000/06/17 Peter Vanroose  Implemented all operator==()s and type info
 //   2001/07/03 Peter Vanroose  Corrected the implementation of is_convex()
 //   2003/11/05 Amir Tamrakar   Added Safe casting methods
-//   2004/05/00 Joseph Mundy    Added binary I/O
+//   2004/05/01 Joseph Mundy    Added binary I/O
+//   2004/05/14 Peter Vanroose  Added describe()
 // \endverbatim
 //*****************************************************************************
 
@@ -121,7 +122,7 @@ class vsol_polygon_2d : public vsol_region_2d
   //---------------------------------------------------------------------------
   //: Return the number of vertices
   //---------------------------------------------------------------------------
-  int size(void) const;
+  unsigned int size(void) const { return storage_->size(); }
 
   //---------------------------------------------------------------------------
   //: Return the area of `this'
@@ -165,11 +166,11 @@ class vsol_polygon_2d : public vsol_region_2d
   //: Return true if the argument matches the string identifying the class or any parent class
   bool is_class(const vcl_string& cls) const;
 
+  //---------------------------------------------------------------------------
+  //: output description to stream
+  //---------------------------------------------------------------------------
+  void describe(vcl_ostream &strm, int blanking=0) const;
 };
-
-//: Stream operator
-vcl_ostream&  operator<<(vcl_ostream& s, vsol_polygon_2d const& p);
-
 
 //: Binary save vsol_polygon_2d* to stream.
 void vsl_b_write(vsl_b_ostream &os, const vsol_polygon_2d* p);

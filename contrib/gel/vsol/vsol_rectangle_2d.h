@@ -17,6 +17,7 @@
 //   2000/05/08 François BERTEL Creation
 //   2000/06/17 Peter Vanroose  Implemented all operator==()s and type info
 //   2001/07/03 Peter Vanroose  Replaced vnl_double_2 by vgl_vector_2d
+//   2004/05/14 Peter Vanroose  Added describe()
 // \endverbatim
 //*****************************************************************************
 
@@ -117,6 +118,11 @@ class vsol_rectangle_2d : public vsol_polygon_2d
   //: Are `new_vertices' valid to build a rectangle ?
   //---------------------------------------------------------------------------
   virtual bool valid_vertices(const vcl_vector<vsol_point_2d_sptr> new_vertices) const;
+
+  //---------------------------------------------------------------------------
+  //: output description to stream
+  //---------------------------------------------------------------------------
+  void describe(vcl_ostream &strm, int blanking=0) const;
 };
 
 #endif // vsol_rectangle_2d_h_

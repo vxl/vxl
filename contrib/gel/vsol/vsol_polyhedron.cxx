@@ -31,8 +31,7 @@ vsol_polyhedron::vsol_polyhedron(vcl_vector<vsol_point_3d_sptr> const& new_verti
 //---------------------------------------------------------------------------
 vsol_polyhedron::vsol_polyhedron(vsol_polyhedron const &other)
 {
-  storage_.clear(); // storage_.reserve(other.storage_.size());
-                    // DO NOT DO THIS!  calls unimplemented default constructor of vsol_point_3d; causes memory fault on Alpha
+  storage_.clear();
   for (unsigned int i=0;i<other.storage_.size();++i)
     storage_.push_back(other.storage_[i]); // smart pointers do refcounting
 }
@@ -139,4 +138,13 @@ vsol_point_3d_sptr vsol_polyhedron::vertex(int i) const
 {
   assert(valid_index(i));
   return storage_[i];
+}
+
+void vsol_polyhedron::describe(vcl_ostream &strm, int blanking) const
+{
+  if (blanking < 0) blanking = 0; while (blanking--) strm << ' ';
+  strm << "[vsol_polyhedron";
+  for (unsigned int i=0; i<size(); ++i)
+    strm << ' ' << *(vertex(i));
+  strm << ']' << vcl_endl;
 }

@@ -1,8 +1,9 @@
 // This is gel/vsol/vsol_polygon_2d.cxx
-#include <vsl/vsl_vector_io.h>
 #include "vsol_polygon_2d.h"
 //:
 // \file
+#include <vsl/vsl_vector_io.h>
+#include <vcl_iostream.h>
 
 //*****************************************************************************
 // External declarations for implementation
@@ -95,7 +96,7 @@ bool vsol_polygon_2d::operator==(const vsol_polygon_2d &other) const
         result = (*p==*(*other.storage_)[i]);
       if (result)
       {
-        for (int j=1;j<size()&&result;++i,++j)
+        for (unsigned int j=1;j<size()&&result;++i,++j)
         {
           if (i>=storage_->size()) i=0;
           result = ((*storage_)[i]==(*storage_)[j]);
@@ -126,14 +127,6 @@ void vsol_polygon_2d::compute_bounding_box(void) const
   set_bounding_box((*storage_)[0]->x(), (*storage_)[0]->y());
   for (unsigned int i=1;i<storage_->size();++i)
     add_to_bounding_box((*storage_)[i]->x(), (*storage_)[i]->y());
-}
-
-//---------------------------------------------------------------------------
-//: Return the number of vertices
-//---------------------------------------------------------------------------
-int vsol_polygon_2d::size(void) const
-{
-  return storage_->size();
 }
 
 //---------------------------------------------------------------------------
@@ -204,7 +197,7 @@ void vsol_polygon_2d::b_write(vsl_b_ostream &os) const
 {
   vsl_b_write(os, version());
   vsol_spatial_object_2d::b_write(os);
-  if(!storage_)
+  if (!storage_)
     vsl_b_write(os, false); // Indicate null pointer stored
   else
     {
@@ -215,7 +208,6 @@ void vsol_polygon_2d::b_write(vsl_b_ostream &os) const
 //: Binary load self from stream (not typically used)
 void vsol_polygon_2d::b_read(vsl_b_istream &is)
 {
-
   short ver;
   vsl_b_read(is, ver);
   switch(ver)
@@ -228,7 +220,7 @@ void vsol_polygon_2d::b_read(vsl_b_istream &is)
       storage_ = new vcl_vector<vsol_point_2d_sptr>();
       bool null_ptr;
       vsl_b_read(is, null_ptr);
-      if(!null_ptr)
+      if (!null_ptr)
         return;
       vsl_b_read(is, *storage_);
     }
@@ -258,20 +250,6 @@ bool vsol_polygon_2d::is_class(const vcl_string& cls) const
   return cls==vsol_polygon_2d::is_a();
 }
 
-//external functions
-vcl_ostream& operator<<(vcl_ostream& s, vsol_polygon_2d const& p)
-{
-  if(p.size())
-    {
-      s << "[Nverts:" << p.size()  << " p0:" << *(p.vertex(0)) << ']';
-      return s;
-    }
-  s << "[null]";
-  return s;
-}
-
-
-
 //***************************************************************************
 // Implementation
 //***************************************************************************
@@ -288,8 +266,6 @@ bool vsol_polygon_2d::valid_vertices(const vcl_vector<vsol_point_2d_sptr> ) cons
 {
   return true;
 }
-
-
 
 
 //: Binary save vsol_polygon_2d to stream.
@@ -321,3 +297,17 @@ vsl_b_read(vsl_b_istream &is, vsol_polygon_2d* &p)
     p = 0;
 }
 
+
+inline void vsol_polygon_2d::describe(vcl_ostream &strm, int blanking) const
+{
+  if (blanking < 0) blanking = 0; while (blanking--) strm << ' ';
+  if (size() == 0)
+    strm << "[null]";
+  else {
+    strm << "[Nverts=" << size();
+    for (unsigned int i=0; i<size(); ++i)
+      strm << " p" << i << ':' << *(vertex(i));
+    strm << ']';
+  }
+  strm << vcl_endl;
+}

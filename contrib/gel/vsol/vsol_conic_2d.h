@@ -362,7 +362,8 @@ class vsol_conic_2d : public vsol_curve_2d, public vgl_conic<double>
   inline void describe(vcl_ostream &strm, int blanking=0) const
   {
     if (blanking < 0) blanking = 0; while (blanking--) strm << ' ';
-    strm << static_cast<vgl_conic<double> >(*this) << '\n';
+    strm << "vsol_conic_2d<" << static_cast<vgl_conic<double> >(*this)
+         << '>' << vcl_endl;
   }
 };
 

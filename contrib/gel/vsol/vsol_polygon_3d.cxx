@@ -85,26 +85,26 @@ bool vsol_polygon_3d::operator==(const vsol_polygon_3d &other) const
   bool result = (this==&other);
 
   if (!result)
+  {
+    result = (storage_->size()==other.storage_->size());
+
+    if (result)
     {
-      result = (storage_->size()==other.storage_->size());
+      vsol_point_3d_sptr p=(*storage_)[0];
 
+      unsigned int i=0;
+      for (result=false;i<storage_->size()&&!result;++i)
+        result = (*p==*(*other.storage_)[i]);
       if (result)
+      {
+        for (unsigned int j=1;j<size()&&result;++i,++j)
         {
-          vsol_point_3d_sptr p=(*storage_)[0];
-
-          unsigned int i=0;
-          for (result=false;i<storage_->size()&&!result;++i)
-            result = (*p==*(*other.storage_)[i]);
-          if (result)
-            {
-              for (int j=1;j<size()&&result;++i,++j)
-                {
-                  if (i>=storage_->size()) i=0;
-                  result = ((*storage_)[i]==(*storage_)[j]);
-                }
-            }
+          if (i>=storage_->size()) i=0;
+          result = ((*storage_)[i]==(*storage_)[j]);
         }
+      }
     }
+  }
   return result;
 }
 
@@ -132,14 +132,6 @@ void vsol_polygon_3d::compute_bounding_box(void) const
     add_to_bounding_box((*storage_)[i]->x(),
                         (*storage_)[i]->y(),
                         (*storage_)[i]->z());
-}
-
-//---------------------------------------------------------------------------
-//: Return the number of vertices
-//---------------------------------------------------------------------------
-int vsol_polygon_3d::size(void) const
-{
-  return storage_->size();
 }
 
 //---------------------------------------------------------------------------
@@ -289,4 +281,13 @@ vsol_polygon_3d::normal_at_point(const vsol_point_3d_sptr &p) const
 //---------------------------------------------------------------------------
 vsol_polygon_3d::vsol_polygon_3d(void)
 {
+}
+
+inline void vsol_polygon_3d::describe(vcl_ostream &strm, int blanking) const
+{
+  if (blanking < 0) blanking = 0; while (blanking--) strm << ' ';
+  strm << "[vsol_polyline_3d";
+  for (unsigned int i=0; i<size(); ++i)
+    strm << ' ' << *(vertex(i));
+  strm << ']' << vcl_endl;
 }

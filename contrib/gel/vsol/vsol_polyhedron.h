@@ -14,6 +14,11 @@
 //
 // \author Peter Vanroose
 // \date   5 July 2000.
+//
+// \verbatim
+//  Modifications
+//   2004/05/14 Peter Vanroose  Added describe()
+// \endverbatim
 //*****************************************************************************
 
 class vsol_polyhedron;
@@ -110,7 +115,8 @@ class vsol_polyhedron : public vsol_volume_3d
   //---------------------------------------------------------------------------
   //: Return the number of vertices
   //---------------------------------------------------------------------------
-  int num_vertices(void) const { return storage_.size(); }
+  unsigned int size(void) const { return storage_.size(); }
+  unsigned int num_vertices(void) const { return storage_.size(); }
 
   //---------------------------------------------------------------------------
   //: Return the volume of `this'
@@ -135,6 +141,11 @@ class vsol_polyhedron : public vsol_volume_3d
   //: Is `p' in `this' ?
   //---------------------------------------------------------------------------
   virtual bool in(vsol_point_3d const& p) const;
+
+  //---------------------------------------------------------------------------
+  //: output description to stream
+  //---------------------------------------------------------------------------
+  void describe(vcl_ostream &strm, int blanking=0) const;
 
  protected:
   //---------------------------------------------------------------------------

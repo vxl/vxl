@@ -5,6 +5,7 @@
 // \file
 
 #include <vsol/vsol_point_2d.h>
+#include <vcl_iostream.h>
 
 //*****************************************************************************
 // External declarations for implementation
@@ -33,12 +34,12 @@ vsol_polyline_2d::vsol_polyline_2d(const vcl_vector<vsol_point_2d_sptr> &new_ver
 {
   storage_=new vcl_vector<vsol_point_2d_sptr>(new_vertices);
   int n = storage_->size();
-  if(n<2)
-    {
-      p0_ = 0;
-      p1_ = 0;
-      return;
-    }
+  if (n<2)
+  {
+    p0_ = 0;
+    p1_ = 0;
+    return;
+  }
   p0_ = (*storage_)[0];
   p1_ = (*storage_)[n-1];
 }
@@ -126,7 +127,7 @@ bool vsol_polyline_2d::operator==(const vsol_polyline_2d &other) const
         result = (*p==*(*other.storage_)[i]);
       if (result)
       {
-        for (int j=1;j<size()&&result;++i,++j)
+        for (unsigned int j=1;j<size()&&result;++i,++j)
         {
           if (i>=storage_->size()) i=0;
           result = ((*storage_)[i]==(*storage_)[j]);
@@ -181,15 +182,6 @@ void vsol_polyline_2d::compute_bounding_box(void) const
     add_to_bounding_box((*storage_)[i]->x(), (*storage_)[i]->y());
 }
 
-//---------------------------------------------------------------------------
-//: Return the number of vertices
-//---------------------------------------------------------------------------
-int vsol_polyline_2d::size(void) const
-{
-  return storage_->size();
-}
-
-
 //***************************************************************************
 // Status setting
 //***************************************************************************
@@ -229,19 +221,19 @@ void vsol_polyline_2d::add_vertex(const vsol_point_2d_sptr &new_p)
 //: Binary save self to stream.
 void vsol_polyline_2d::b_write(vsl_b_ostream &os) const
 {
-  if(!storage_)
+  if (!storage_)
     vsl_b_write(os, false); // Indicate null pointer stored
   else
-    {
-      vsl_b_write(os, true); // Indicate non-null pointer stored
-      vsl_b_write(os, version());
-      vsl_b_write(os, *storage_);
-    }
+  {
+    vsl_b_write(os, true); // Indicate non-null pointer stored
+    vsl_b_write(os, version());
+    vsl_b_write(os, *storage_);
+  }
 }
 //: Binary load self from stream (not typically used)
 void vsol_polyline_2d::b_read(vsl_b_istream &is)
 {
-  if(!is)
+  if (!is)
     return;
   delete storage_;
   storage_ = new vcl_vector<vsol_point_2d_sptr>();
@@ -249,7 +241,7 @@ void vsol_polyline_2d::b_read(vsl_b_istream &is)
   p1_=0;
   bool null_ptr;
   vsl_b_read(is, null_ptr);
-  if(!null_ptr)
+  if (!null_ptr)
     return;
   short ver;
   vsl_b_read(is, ver);
@@ -259,7 +251,7 @@ void vsol_polyline_2d::b_read(vsl_b_istream &is)
     {
       vsl_b_read(is, *storage_);
       int n = storage_->size();
-      if(n<2)
+      if (n<2)
         break;
       p0_=(*storage_)[0];
       p1_=(*storage_)[n-1];
@@ -278,42 +270,17 @@ void vsol_polyline_2d::print_summary(vcl_ostream &os) const
   os << *this;
 }
 
-  //: Return a platform independent string identifying the class
+//: Return a platform independent string identifying the class
 vcl_string vsol_polyline_2d::is_a() const
 {
   return vcl_string("vsol_polyline_2d");
 }
 
-  //: Return true if the argument matches the string identifying the class or any parent class
+//: Return true if the argument matches the string identifying the class or any parent class
 bool vsol_polyline_2d::is_class(const vcl_string& cls) const
 {
   return cls==vsol_polyline_2d::is_a();
 }
-
-
-//---------------------------------------------------------------------------
-//: output description to stream
-//---------------------------------------------------------------------------
-void vsol_polyline_2d::describe(vcl_ostream &strm, int blanking) const
-{
-  if (blanking < 0) blanking = 0; while (blanking--) strm << ' ';
-
-  if(!p0_||!p1_)
-    {
-      strm << "[null]";
-      return;      
-    }
-  strm << '[' << *(p0_) << " ... " << *(p1_) << ']';
-}
-
-//external functions
-//just print the endpoints 
-vcl_ostream& operator<<(vcl_ostream& s, vsol_polyline_2d const& p)
-{
-  p.describe(s);
-  return s;
-}
-
 
 
 //: Binary save vsol_polyline_2d to stream.
@@ -323,7 +290,7 @@ vsl_b_write(vsl_b_ostream &os, const vsol_polyline_2d* p)
   if (p==0) {
     vsl_b_write(os, false); // Indicate null pointer stored
   }
-  else{
+  else {
     vsl_b_write(os,true); // Indicate non-null pointer stored
     p->b_write(os);
   }
@@ -345,4 +312,11 @@ vsl_b_read(vsl_b_istream &is, vsol_polyline_2d* &p)
     p = 0;
 }
 
-
+void vsol_polyline_2d::describe(vcl_ostream &strm, int blanking) const
+{
+  if (blanking < 0) blanking = 0; while (blanking--) strm << ' ';
+  strm << "[vsol_polyline_2d";
+  for (unsigned int i=0; i<size(); ++i)
+    strm << ' ' << *(vertex(i));
+  strm << ']' << vcl_endl;
+}

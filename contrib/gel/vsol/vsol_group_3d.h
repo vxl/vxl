@@ -13,6 +13,7 @@
 //  Modifications
 //   2000/05/03 François BERTEL Creation
 //   2000/06/17 Peter Vanroose  Implemented all operator==()s and type info
+//   2004/05/14 Peter Vanroose  Added describe()
 // \endverbatim
 //*****************************************************************************
 
@@ -21,6 +22,7 @@
 //*****************************************************************************
 #include <vsol/vsol_spatial_object_3d.h>
 #include <vcl_list.h>
+#include <vcl_iostream.h>
 
 class vsol_group_3d : public vsol_spatial_object_3d
 {
@@ -126,6 +128,18 @@ class vsol_group_3d : public vsol_spatial_object_3d
   //---------------------------------------------------------------------------
   virtual const vsol_group_3d *cast_to_group(void) const { return this; }
   virtual vsol_group_3d *cast_to_group(void) { return this; }
+
+  //---------------------------------------------------------------------------
+  //: output description to stream
+  //---------------------------------------------------------------------------
+  inline void describe(vcl_ostream &strm, int blanking=0) const
+  {
+    if (blanking < 0) blanking = 0; while (blanking--) strm << ' ';
+    strm << "vsol_group_3d of size " << this->size() << ":\n";
+    for (vcl_list<vsol_spatial_object_3d_sptr>::const_iterator it = storage_->begin();
+         it != storage_->end(); ++it)
+      (*it)->describe(strm,blanking+2);
+  }
 };
 
 #endif // vsol_group_3d_h_

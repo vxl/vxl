@@ -17,6 +17,7 @@
 //   2000/06/17 Peter Vanroose  Implemented all operator==()s and type info
 //   2001/07/03 Peter Vanroose  Added constructor from vgl_line_segment_2d
 //   2001/07/03 Peter Vanroose  Replaced vnl_double_2 by vgl_vector_2d
+//   2004/05/14 Peter Vanroose  Added describe()
 // \endverbatim
 //*****************************************************************************
 
@@ -29,6 +30,7 @@
 #include <vgl/vgl_fwd.h> // vgl_line_segment_2d, vgl_homg_line_2d, vgl_point_2d
 #include <vgl/vgl_homg_line_2d.h>
 #include <vgl/vgl_line_segment_2d.h>
+
 class vsol_line_2d : public vsol_curve_2d
 {
   //***************************************************************************
@@ -49,12 +51,12 @@ class vsol_line_2d : public vsol_curve_2d
   //***************************************************************************
   // Initialization
   //***************************************************************************
-  
+
   //---------------------------------------------------------------------------
   //: Default Constructor
   //---------------------------------------------------------------------------
   vsol_line_2d();
- 
+
   //---------------------------------------------------------------------------
   //: Constructor from the direction and the middle point
   //---------------------------------------------------------------------------
@@ -239,17 +241,17 @@ class vsol_line_2d : public vsol_curve_2d
 
   //: Return true if the argument matches the string identifying the class or any parent class
   bool is_class(const vcl_string& cls) const;
+
+  //---------------------------------------------------------------------------
+  //: output description to stream
+  //---------------------------------------------------------------------------
+  void describe(vcl_ostream &strm, int blanking=0) const;
 };
-//: Stream operator
-
-vcl_ostream&  operator<<(vcl_ostream& s, vsol_line_2d const& p);
-
 
 //: Binary save vsol_line_2d* to stream.
 void vsl_b_write(vsl_b_ostream &os, const vsol_line_2d* p);
 
 //: Binary load vsol_line_2d* from stream.
 void vsl_b_read(vsl_b_istream &is, vsol_line_2d* &p);
-
 
 #endif // vsol_line_2d_h_

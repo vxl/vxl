@@ -7,6 +7,7 @@
 // External declarations for implementation
 //*****************************************************************************
 #include <vcl_cmath.h> // for vcl_abs(double)
+#include <vcl_iostream.h>
 #include "vsol_point_3d.h"
 
 //***************************************************************************
@@ -21,7 +22,6 @@ vsol_tetrahedron::vsol_tetrahedron(const vsol_point_3d_sptr &new_p0,
                                    const vsol_point_3d_sptr &new_p2,
                                    const vsol_point_3d_sptr &new_p3)
 {
-//storage_.reserve(4); // DO NOT DO THIS!  calls unimplemented default constructor of vsol_point_3d; causes memory fault on Alpha
   storage_.push_back(new_p0);
   storage_.push_back(new_p1);
   storage_.push_back(new_p2);
@@ -174,4 +174,11 @@ bool vsol_tetrahedron::in(vsol_point_3d const& ) const
   // TODO
   vcl_cerr << "Warning: vsol_tetrahedron::in() has not been implemented yet\n";
   return true;
+}
+
+void vsol_tetrahedron::describe(vcl_ostream &strm, int blanking) const
+{
+  if (blanking < 0) blanking = 0; while (blanking--) strm << ' ';
+  strm << "[vsol_tetrahedron " << p0() << ' ' << p1() << ' '
+       << p2() << ' ' << p3() << ']' << vcl_endl;
 }

@@ -238,3 +238,9 @@ vsol_line_3d::tangent_at_point(const vsol_point_3d_sptr &p) const
 
   return result;
 }
+
+void vsol_line_3d::describe(vcl_ostream &strm, int blanking) const
+{
+  if (blanking < 0) blanking = 0; while (blanking--) strm << ' ';
+  strm << '[' << *(p0()) << ' ' << *(p1()) << ']' << vcl_endl;
+}

@@ -26,7 +26,6 @@
 #include <vsol/vsol_curve_2d.h>
 #include <vsol/vsol_point_2d_sptr.h>
 #include <vcl_vector.h>
-#include <vcl_iostream.h>
 
 //: General Polyline class, part of the vsol_curve_2d hierarchy
 
@@ -174,7 +173,7 @@ class vsol_polyline_2d : public vsol_curve_2d
   //---------------------------------------------------------------------------
   //: Return the number of vertices
   //---------------------------------------------------------------------------
-  int size(void) const;
+  unsigned int size(void) const { return storage_->size(); }
 
   //---------------------------------------------------------------------------
   //: Is `i' a valid index for the list of vertices ?
@@ -210,9 +209,6 @@ class vsol_polyline_2d : public vsol_curve_2d
   //: Return true if the argument matches the string identifying the class or any parent class
   bool is_class(const vcl_string& cls) const;
 };
-
-//: Stream operator
-vcl_ostream&  operator<<(vcl_ostream& s, vsol_polyline_2d const& p);
 
 //: Binary save vsol_polyline_2d* to stream.
 void vsl_b_write(vsl_b_ostream &os, const vsol_polyline_2d* p);

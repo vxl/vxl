@@ -7,6 +7,7 @@
 // External declarations for implementation
 //*****************************************************************************
 #include <vcl_cassert.h>
+#include <vcl_iostream.h>
 #include <vgl/vgl_vector_2d.h>
 #include <vsol/vsol_point_2d.h>
 
@@ -164,4 +165,13 @@ bool vsol_rectangle_2d::valid_vertices(const vcl_vector<vsol_point_2d_sptr> new_
   vgl_vector_2d<double> b=new_vertices[1]->to_vector(*(new_vertices[2]));
   // the two vectors should be orthogonal:
   return dot_product(a,b)==0;
+}
+
+inline void vsol_rectangle_2d::describe(vcl_ostream &strm, int blanking) const
+{
+  if (blanking < 0) blanking = 0; while (blanking--) strm << ' ';
+  strm << "<vsol_rectangle_2d with corners";
+  for (unsigned int i=0; i<size(); ++i)
+    strm << ' ' << *(vertex(i));
+  strm << '>' << vcl_endl;
 }

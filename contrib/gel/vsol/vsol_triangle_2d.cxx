@@ -7,6 +7,7 @@
 // External declarations for implementation
 //*****************************************************************************
 #include <vsol/vsol_point_2d.h>
+#include <vcl_iostream.h>
 
 //***************************************************************************
 // Initialization
@@ -150,4 +151,13 @@ void vsol_triangle_2d::set_p1(const vsol_point_2d_sptr &new_p1)
 void vsol_triangle_2d::set_p2(const vsol_point_2d_sptr &new_p2)
 {
   (*storage_)[2]=new_p2;
+}
+
+inline void vsol_triangle_2d::describe(vcl_ostream &strm, int blanking) const
+{
+  if (blanking < 0) blanking = 0; while (blanking--) strm << ' ';
+  strm << "<vsol_triangle_2d with corners";
+  for (unsigned int i=0; i<size(); ++i)
+    strm << ' ' << *(vertex(i));
+  strm << '>' << vcl_endl;
 }

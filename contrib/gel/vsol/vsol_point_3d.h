@@ -18,6 +18,7 @@
 //   2001/06/30 Peter Vanroose  Added constructor from vgl_point_3d
 //   2001/07/03 Peter Vanroose  Replaced vnl_double_3 by vgl_vector_3d
 //   2001/07/03 Peter Vanroose  Replaced new/delete by vgl_point_3d as member
+//   2004/05/14 Peter Vanroose  Added describe() and operator<<(ostream)
 // \endverbatim
 //*****************************************************************************
 
@@ -31,6 +32,7 @@ class vsol_point_3d;
 #include <vgl/vgl_vector_3d.h>
 #include <vgl/vgl_point_3d.h>
 #include <vgl/vgl_homg_point_3d.h>
+#include <vcl_iostream.h>
 
 class vsol_point_3d : public vsol_spatial_object_3d
 {
@@ -182,5 +184,21 @@ class vsol_point_3d : public vsol_spatial_object_3d
   //---------------------------------------------------------------------------
  inline vgl_homg_point_3d<double> homg_point()
   {return vgl_homg_point_3d<double>(p_);}
+
+  //---------------------------------------------------------------------------
+  //: output description to stream
+  //---------------------------------------------------------------------------
+  inline void describe(vcl_ostream &strm, int blanking=0) const
+  {
+    if (blanking < 0) blanking = 0; while (blanking--) strm << ' ';
+    strm << '(' << x() << ' ' << y() << ' ' << z() << ')' << vcl_endl;
+  }
 };
+
+//: Stream output operator
+inline vcl_ostream&  operator<<(vcl_ostream& s, vsol_point_3d const& p)
+{
+  return s << '(' << p.x() << ' ' << p.y() << ' ' << p.z() << ')';
+}
+
 #endif // vsol_point_3d_h_

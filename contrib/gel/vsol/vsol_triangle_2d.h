@@ -13,6 +13,7 @@
 //  Modifications
 //   2000/05/02 François BERTEL Creation
 //   2000/06/17 Peter Vanroose  Implemented all operator==()s and type info
+//   2004/05/14 Peter Vanroose  Added describe()
 // \endverbatim
 //*****************************************************************************
 
@@ -109,6 +110,11 @@ class vsol_triangle_2d : public vsol_polygon_2d
   //: Set the last vertex
   //---------------------------------------------------------------------------
   void set_p2(const vsol_point_2d_sptr &new_p2);
+
+  //---------------------------------------------------------------------------
+  //: output description to stream
+  //---------------------------------------------------------------------------
+  void describe(vcl_ostream &strm, int blanking=0) const;
 };
 
 #endif // vsol_triangle_2d_h_

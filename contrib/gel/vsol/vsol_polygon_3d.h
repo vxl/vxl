@@ -17,6 +17,7 @@
 //   2000/06/17 Peter Vanroose  Implemented all operator==()s and type info
 //   2001/07/03 Peter Vanroose  Replaced vnl_double_3 by vgl_vector_3d
 //   2001/07/03 Peter Vanroose  Corrected the implementation of is_convex()
+//   2004/05/14 Peter Vanroose  Added describe()
 // \endverbatim
 //*****************************************************************************
 
@@ -115,7 +116,7 @@ class vsol_polygon_3d : public vsol_region_3d
   //---------------------------------------------------------------------------
   //: Return the number of vertices
   //---------------------------------------------------------------------------
-  int size(void) const;
+  unsigned int size(void) const { return storage_->size(); }
 
   //---------------------------------------------------------------------------
   //: Return the area of `this'
@@ -152,6 +153,11 @@ class vsol_polygon_3d : public vsol_region_3d
   //  REQUIRE: in(p)
   //---------------------------------------------------------------------------
   virtual vgl_vector_3d<double> normal_at_point(const vsol_point_3d_sptr &p) const;
+
+  //---------------------------------------------------------------------------
+  //: output description to stream
+  //---------------------------------------------------------------------------
+  void describe(vcl_ostream &strm, int blanking=0) const;
 
  protected:
   //---------------------------------------------------------------------------
