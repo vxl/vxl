@@ -37,18 +37,25 @@ void testlib_test_assert_near(const vcl_string& msg, double expr,
 
 //: TEST function, s is message, test to see if p==v
 #define TEST(s,p,v) \
- { \
+do { \
   testlib_test_begin(s); \
   testlib_test_perform((p)==(v)); \
- }
+} while (0)
+
+//: TEST function, s is message, test to see if p is close to v, tolerence t
+#define TEST_NEAR(s,p,v,t) \
+do { \
+  testlib_test_begin(s); \
+  testlib_test_assert_near(s,p,v,t); \
+} while (0)
 
 //: run x, s is message, then test to see if p==v
 #define TEST_RUN(s,x,p,v) \
- { \
+do { \
   testlib_test_begin(s); \
   x; \
   testlib_test_perform((p)==(v)); \
- }
+} while (0)
 
 //: summarise test
 #define SUMMARY() return testlib_test_summary();
