@@ -18,8 +18,9 @@ MAIN( test_config )
 {
   START("config");
 
-  // This test does not actually test anything.  Instead, it prints
-  // configuration macros so they can be viewed through Dart.
+  // This test does not test much.  Mostly, it prints configuration
+  // macros so they can be viewed through Dart. Some sanity checks are
+  // at the end.
 
   vcl_cout << "All macro definitions are shown inside parenthesis\n";
 
@@ -1598,5 +1599,81 @@ MAIN( test_config )
   vcl_cout << "sizeof(long) is " << sizeof(long) << vcl_endl;
   vcl_cout << "sizeof(float) is " << sizeof(float) << vcl_endl;
   vcl_cout << "sizeof(double) is " << sizeof(double) << vcl_endl;
+
+
+  // These are types that we expect every machine to have
+
+  testlib_test_begin( "Size of vxl_byte" );  
+#if VXL_HAS_BYTE
+  testlib_test_perform( sizeof( vxl_byte ) == 1 );
+#else
+  vcl_cout << "(no byte)";
+  testlib_test_perform( 0 );
+#endif
+
+  testlib_test_begin( "Size of vxl_uint_8" );  
+#if VXL_HAS_INT_8
+  testlib_test_perform( sizeof( vxl_uint_8 ) == 1 );
+#else
+  vcl_cout << "(no uint_8)";
+  testlib_test_perform( 0 );
+#endif
+
+  testlib_test_begin( "Size of vxl_uint_16" );
+#if VXL_HAS_INT_16
+  testlib_test_perform( sizeof( vxl_uint_16 ) == 2 );
+#else
+  vcl_cout << "(no uint_16)";
+  testlib_test_perform( 0 );
+#endif
+
+  testlib_test_begin( "Size of vxl_uint_32" );
+#if VXL_HAS_INT_32
+  testlib_test_perform( sizeof( vxl_uint_32 ) == 4 );
+#else
+  vcl_cout << "(no uint_32)";
+  testlib_test_perform( 0 );
+#endif
+
+  testlib_test_begin( "Size of vxl_ieee_32" );
+#if VXL_HAS_IEEE_32
+  testlib_test_perform( sizeof( vxl_ieee_32 ) == 4 );
+#else
+  vcl_cout << "(no ieee_32)";
+  testlib_test_perform( 0 );
+#endif
+
+  testlib_test_begin( "Size of vxl_ieee_64" );
+#if VXL_HAS_IEEE_64
+  testlib_test_perform( sizeof( vxl_ieee_64 ) == 8 );
+#else
+  vcl_cout << "(no ieee_64)";
+  testlib_test_perform( 0 );
+#endif
+
+  // These may not exist on some platforms. If they exist, they should
+  // be of the correct size.
+
+#if VXL_HAS_INT_64
+  testlib_test_begin( "Size of vxl_uint_64" );
+  testlib_test_perform( sizeof( vxl_uint_64 ) == 8 );
+#else
+  vcl_cout << "(no uint_64)" << vcl_endl;
+#endif
+
+#if VXL_HAS_IEEE_96
+  testlib_test_begin( "Size of vxl_ieee_96" );
+  testlib_test_perform( sizeof( vxl_ieee_96 ) == 12 );
+#else
+  vcl_cout << "(no ieee_96)" << vcl_endl;
+#endif
+
+#if VXL_HAS_IEEE_128
+  testlib_test_begin( "Size of vxl_ieee_128" );
+  testlib_test_perform( sizeof( vxl_ieee_128 ) == 16 );
+#else
+  vcl_cout << "(no ieee_128)" << vcl_endl;
+#endif
+
   SUMMARY();
 }
