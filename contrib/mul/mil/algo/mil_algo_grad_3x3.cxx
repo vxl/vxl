@@ -9,11 +9,37 @@
 void mil_algo_grad_3x3(float* gx, int gx_xstep, int gx_ystep,
                        float* gy, int gy_xstep, int gy_ystep,
                        const unsigned char* src,
-                       int s_xstep, int s_ystep, int nx, int ny)
+                       int s_xstep, int s_ystep, unsigned nx, unsigned ny)
 {
   const unsigned char* s_data = src;
   float *gx_data = gx;
   float *gy_data = gy;
+
+  if (nx==0 || ny==0) return;
+  if (nx==1)
+  {
+      // Zero the elements in the column
+    for (unsigned y=0;y<ny;++y)
+    {
+      *gx_data = 0;
+      *gy_data = 0;
+      gx_data += gx_ystep;
+      gy_data += gy_ystep;
+    }
+    return;
+  }
+  if (ny==1)
+  {
+      // Zero the elements in the column
+    for (unsigned x=0;x<nx;++x)
+    {
+      *gx_data = 0;
+      *gy_data = 0;
+      gx_data += gx_xstep;
+      gy_data += gy_xstep;
+    }
+    return;
+  }
 
   // Compute relative grid positions
   //  o1 o2 o3
@@ -28,14 +54,14 @@ void mil_algo_grad_3x3(float* gx, int gx_xstep, int gx_ystep,
   const int o7 = -s_ystep;
   const int o8 = s_xstep - s_ystep;
 
-  const int nx1 = nx-1;
-  const int ny1 = ny-1;
+  const unsigned nx1 = nx-1;
+  const unsigned ny1 = ny-1;
 
   s_data += s_xstep + s_ystep;
   gx_data += gx_ystep;
   gy_data += gy_ystep;
 
-  for (int y=1;y<ny1;++y)
+  for (unsigned y=1;y<ny1;++y)
   {
     const unsigned char* s = s_data;
     float* pgx = gx_data;
@@ -45,7 +71,7 @@ void mil_algo_grad_3x3(float* gx, int gx_xstep, int gx_ystep,
     *pgx = 0; pgx+=gx_xstep;
     *pgy = 0; pgy+=gy_xstep;
 
-    for (int x=1;x<nx1;++x)
+    for (unsigned x=1;x<nx1;++x)
     {
       // Compute gradient in x
       // Note: Multiply each element individually
@@ -72,7 +98,7 @@ void mil_algo_grad_3x3(float* gx, int gx_xstep, int gx_ystep,
   }
 
   // Zero the first and last rows
-  for (int x=0;x<nx;++x)
+  for (unsigned x=0;x<nx;++x)
   {
     *gx=0; gx+=gx_xstep;
     *gy=0; gy+=gy_xstep;
@@ -86,11 +112,37 @@ void mil_algo_grad_3x3(float* gx, int gx_xstep, int gx_ystep,
 void mil_algo_grad_3x3(float* gx, int gx_xstep, int gx_ystep,
                        float* gy, int gy_xstep, int gy_ystep,
                        const float* src,
-                       int s_xstep, int s_ystep, int nx, int ny)
+                       int s_xstep, int s_ystep, unsigned nx, unsigned ny)
 {
   const float* s_data = src;
   float *gx_data = gx;
   float *gy_data = gy;
+
+  if (nx==0 || ny==0) return;
+  if (nx==1)
+  {
+      // Zero the elements in the column
+    for (unsigned y=0;y<ny;++y)
+    {
+      *gx_data = 0;
+      *gy_data = 0;
+      gx_data += gx_ystep;
+      gy_data += gy_ystep;
+    }
+    return;
+  }
+  if (ny==1)
+  {
+      // Zero the elements in the column
+    for (unsigned x=0;x<nx;++x)
+    {
+      *gx_data = 0;
+      *gy_data = 0;
+      gx_data += gx_xstep;
+      gy_data += gy_xstep;
+    }
+    return;
+  }
 
   // Compute relative grid positions
   //  o1 o2 o3
@@ -105,47 +157,47 @@ void mil_algo_grad_3x3(float* gx, int gx_xstep, int gx_ystep,
   const int o7 = -s_ystep;
   const int o8 = s_xstep - s_ystep;
 
-  const int nx1 = nx-1;
-  const int ny1 = ny-1;
+  const unsigned nx1 = nx-1;
+  const unsigned ny1 = ny-1;
 
   s_data += s_xstep + s_ystep;
   gx_data += gx_ystep;
   gy_data += gy_ystep;
 
-  for (int y=1;y<ny1;++y)
+  for (unsigned y=1;y<ny1;++y)
   {
     const float* s = s_data;
-  float* pgx = gx_data;
-  float* pgy = gy_data;
+    float* pgx = gx_data;
+    float* pgy = gy_data;
 
-  // Zero the first elements in the rows
-  *pgx = 0; pgx+=gx_xstep;
-  *pgy = 0; pgy+=gy_xstep;
+    // Zero the first elements in the rows
+    *pgx = 0; pgx+=gx_xstep;
+    *pgy = 0; pgy+=gy_xstep;
 
-  for (int x=1;x<nx1;++x)
-  {
-  // Compute gradient in x
-    *pgx = 0.25f*(s[o3]+s[o8] - (s[o1]+s[o6])) + 0.5f*(s[o5]-s[o4]);
-  // Compute gradient in y
-    *pgy = 0.25f*(s[o1]+s[o3] - (s[o6]+s[o8])) + 0.5f*(s[o2]-s[o7]);
+    for (unsigned x=1;x<nx1;++x)
+    {
+    // Compute gradient in x
+      *pgx = 0.25f*(s[o3]+s[o8] - (s[o1]+s[o6])) + 0.5f*(s[o5]-s[o4]);
+    // Compute gradient in y
+      *pgy = 0.25f*(s[o1]+s[o3] - (s[o6]+s[o8])) + 0.5f*(s[o2]-s[o7]);
 
-    s+=s_xstep;
-    pgx += gx_xstep;
-    pgy += gy_xstep;
-  }
+      s+=s_xstep;
+      pgx += gx_xstep;
+      pgy += gy_xstep;
+    }
 
-  // Zero the last elements in the rows
-  *pgx = 0;
-  *pgy = 0;
+    // Zero the last elements in the rows
+    *pgx = 0;
+    *pgy = 0;
 
-  // Move to next row
-  s_data  += s_ystep;
-  gx_data += gx_ystep;
-  gy_data += gy_ystep;
+    // Move to next row
+    s_data  += s_ystep;
+    gx_data += gx_ystep;
+    gy_data += gy_ystep;
   }
 
   // Zero the first and last rows
-  for (int x=0;x<nx;++x)
+  for (unsigned x=0;x<nx;++x)
   {
     *gx=0; gx+=gx_xstep;
     *gy=0; gy+=gy_xstep;
