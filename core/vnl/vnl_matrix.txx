@@ -41,7 +41,8 @@
 // that it must overload the following operators: +, -,  *,  and /. Thus, it
 // will be possible to have a vnl_matrix over vcl_complex<T>. The vnl_matrix<T>
 // class is static in size, that is once a vnl_matrix<T> of a particular size
-// has been created, there is no dynamic growth or resize method available.
+// has been created, there is no dynamic growth method available. You can
+// resize the matrix, with the loss of any existing data using set_size().
 //
 // Each matrix contains  a protected  data section  that has a T** slot that
 // points to the  physical memory allocated  for the two  dimensional array. In
@@ -346,11 +347,12 @@ void vnl_matrix<T>::clear()
   }
 }
 
-// resize // Resizes the data arrays of THIS matrix to (rows x cols). O(m*n).
-// Elements are not initialized. Returns true if size is changed.
+// Resizes the data arrays of THIS matrix to (rows x cols). O(m*n).
+// Elements are not initialized, existing data is not preserved.
+// Returns true if size is changed.
 
 template<class T>
-bool vnl_matrix<T>::make_size (unsigned rowz, unsigned colz)
+bool vnl_matrix<T>::set_size (unsigned rowz, unsigned colz)
 {
   if (this->data) {
     // if no change in size, do not reallocate.
@@ -410,7 +412,7 @@ template<class T>
 vnl_matrix<T>& vnl_matrix<T>::operator= (vnl_matrix<T> const& rhs) {
   if (this != &rhs) { // make sure *this != m
     if (rhs.data) {
-      this->make_size(rhs.num_rows, rhs.num_cols);
+      this->set_size(rhs.num_rows, rhs.num_cols);
       for (unsigned int i = 0; i < this->num_rows; i++)
         for (unsigned int j = 0; j < this->num_cols; j++)
           this->data[i][j] = rhs.data[i][j];
@@ -1252,7 +1254,7 @@ bool vnl_matrix<T>::read_ascii(vcl_istream& s)
   if (debug)
     vcl_cerr << rowz << " rows.\n";
 
-  resize(rowz, colz);
+  set_size(rowz, colz);
 
   T* p = this->data[0];
   for (unsigned int i = 0; i < rowz; ++i) {

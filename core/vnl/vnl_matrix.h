@@ -67,7 +67,7 @@ enum vnl_matrix_type
 // class is row-based with addresses of rows being cached,  and
 // elements accessed as m[row][col].
 //
-// Note: The matrix can, however, be resized using the resize(nr,nc) function.
+// Note: The matrix can, however, be resized using the set_size(nr,nc) function.
 //
 // Note: Indexing of the matrix is zero-based, so the top-left element is M(0,0).
 //
@@ -513,16 +513,16 @@ class vnl_matrix
 
  private:
   //: Resize to r rows by c columns. Old data lost.
-  // \deprecated Use set_size() instead.
-  bool resize (unsigned r, unsigned c) { return make_size(r,c); }
+  // \deprecated in favour of set_size()
+   bool resize (unsigned r, unsigned c) { return false; }
 
   //: Resize to r rows by c columns. Old data lost.
   // \deprecated in favour of set_size()
-  bool make_size (unsigned r, unsigned c);
+   bool make_size (unsigned r, unsigned c) { return false; };
  public:
   //: Resize to r rows by c columns. Old data lost.
   // Returns true if size changed.
-  bool set_size (unsigned r, unsigned c) {return make_size(r,c);}
+  bool set_size (unsigned r, unsigned c);
 
 //--------------------------------------------------------------------------------
 

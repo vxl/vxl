@@ -12,7 +12,7 @@
 // be possible to have a vnl_vector over vcl_complex<T>.  The vnl_vector<T>
 // class is static in size, that is once a vnl_vector<T> of a particular
 // size has been declared, elements cannot be added or removed. Using the
-// make_size() method causes the vector to resize, but the contents will be
+// set_size() method causes the vector to resize, but the contents will be
 // lost.
 //
 // Each vector contains  a protected  data section  that has a  T* slot that
@@ -300,7 +300,7 @@ void vnl_vector<T>::clear()
 }
 
 template<class T>
-bool vnl_vector<T>::make_size(unsigned n)
+bool vnl_vector<T>::set_size(unsigned n)
 {
   if (this->data) {
     // if no change in size, do not reallocate.
@@ -347,7 +347,7 @@ bool vnl_vector<T>::read_ascii(vcl_istream& s)
     allvals.push_back(value);
     ++n;
   }
-  this->make_size(n); //*this = vnl_vector<T>(n);
+  this->set_size(n); //*this = vnl_vector<T>(n);
   for (unsigned i = 0; i < n; ++i)
     (*this)[i] = allvals[i];
   return true;
@@ -393,7 +393,7 @@ vnl_vector<T>& vnl_vector<T>::operator= (vnl_vector<T> const& rhs) {
   if (this != &rhs) { // make sure *this != m
     if (rhs.data) {
       if (this->num_elmts != rhs.num_elmts)
-        this->make_size(rhs.size());
+        this->set_size(rhs.size());
       for (unsigned i = 0; i < this->num_elmts; i++)
         this->data[i] = rhs.data[i];
     }
