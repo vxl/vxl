@@ -16,30 +16,28 @@
 //======================== HISTOGRAM IMPLEMENTATION =================
 //
 
-strk_histf::strk_histf(double range, int nbins)
+template <class T>
+strk_histf<T>::strk_histf(T range, unsigned int nbins)
+  : area_valid_(false), area_(0), nbins_(nbins), range_(range), delta_(0)
 {
-  if (!nbins||nbins<0||range<=0)
+  if (nbins==0||range<=0)
   {
     nbins_=0;
-    range_ = 0;
-    delta_=0;
-    area_valid_ = false;
-    area_=0;
-    return;
+    range_=0;
   }
-  nbins_ = nbins;
-  range_ = range;
-  delta_ = range/nbins;
-  counts_.resize(nbins, 0.0);
-  area_valid_ = false;
-  area_ = 0;
+  else
+  {
+    delta_ = range/nbins;
+    counts_.resize(nbins, T(0));
+  }
 }
 
-void strk_histf::upcount(const double x)
+template <class T>
+void strk_histf<T>::upcount(T x)
 {
   if (x<0||x>range_)
     return;
-  for (int i = 0; i<nbins_;i++)
+  for (unsigned int i = 0; i<nbins_;i++)
     if ((i+1)*delta_>=x)
     {
       counts_[i] += 1.0;
@@ -48,51 +46,50 @@ void strk_histf::upcount(const double x)
   area_valid_ = false;
 }
 
-void strk_histf::compute_area()
+template <class T>
+void strk_histf<T>::compute_area() const
 {
-  area_ =0;
-  for (int i = 0; i<nbins_; i++)
+  area_ = T(0);
+  for (unsigned int i = 0; i<nbins_; i++)
     area_ += counts_[i];
   area_valid_ = true;
 }
 
-double strk_histf::p(const int bin)
+template <class T>
+T strk_histf<T>::p(unsigned int bin) const
 {
-  if (bin<0||bin>=nbins_)
+  if (bin>=nbins_)
     return 0;
   if (!area_valid_)
     compute_area();
-  if (!area_)
+  if (area_ == T(0))
     return 0;
-  return counts_[bin]/area_;
+  else
+    return counts_[bin]/area_;
 }
 
-void strk_histf::print()
+template <class T>
+void strk_histf<T>::print() const
 {
-  for (int i=0; i<nbins_; i++)
-    if (p(i))
-      vcl_cout << "p[" << i << "]=" << p(i) << "\n";
+  for (unsigned int i=0; i<nbins_; i++)
+    if (p(i) > 0)
+      vcl_cout << "p[" << i << "]=" << p(i) << '\n';
 }
 
-strk_joint_histf::strk_joint_histf(int nbins)
+template <class T>
+strk_joint_histf<T>::strk_joint_histf(unsigned int nbins)
+  : volume_valid_(false), volume_(0), nbins_(nbins), delta_(0)
 {
-  if (!nbins||nbins<0)
+  if (nbins>0)
   {
-    nbins_=0;
-    delta_=0;
-    volume_valid_ = false;
-    volume_=0;
-    return;
+    delta_ = 256/nbins;
+    counts_.resize(nbins, nbins);
+    counts_.fill(T(0));
   }
-  nbins_ = nbins;
-  delta_ = 256/nbins;
-  counts_.resize(nbins, nbins);
-  counts_.fill(0.0);
-  volume_valid_ = false;
-  volume_ = 0;
 }
 
-void strk_joint_histf::upcount(const double a, const double b)
+template <class T>
+void strk_joint_histf<T>::upcount(T a, T b)
 {
   if (a<0||a>255)
     return;
@@ -100,75 +97,74 @@ void strk_joint_histf::upcount(const double a, const double b)
     return;
   int bin_a =0, bin_b = 0;
 
-  for (int i = 0; i<nbins_;i++)
+  for (unsigned int i = 0; i<nbins_;i++)
     if ((i+1)*delta_>=a)
     {
       bin_a = i;
       break;
     }
-  for (int i = 0; i<nbins_;i++)
+  for (unsigned int i = 0; i<nbins_;i++)
     if ((i+1)*delta_>=b)
     {
       bin_b = i;
       break;
     }
-  double v = counts_[bin_a][bin_b]+1.0;
+  T v = counts_[bin_a][bin_b] + 1;
   counts_.put(bin_a, bin_b, v);
   volume_valid_ = false;
 }
 
-void strk_joint_histf::compute_volume()
+template <class T>
+void strk_joint_histf<T>::compute_volume() const
 {
   volume_=0;
-  for (int a = 0; a<nbins_; a++)
-    for (int b =0; b<nbins_; b++)
+  for (unsigned int a = 0; a<nbins_; a++)
+    for (unsigned int b =0; b<nbins_; b++)
       volume_ += counts_[a][b];
   volume_valid_ = true;
 }
 
-double strk_joint_histf::p(const int a, const int b)
+template <class T>
+T strk_joint_histf<T>::p(unsigned int a, unsigned int b) const
 {
-  if (a<0||a>=nbins_)
+  if (a>=nbins_)
     return 0;
-  if (b<0||b>=nbins_)
+  if (b>=nbins_)
     return 0;
   if (!volume_valid_)
     compute_volume();
-  if (!volume_)
+  if (volume_ == T(0))
     return 0;
-  return counts_[a][b]/volume_;
+  else
+    return counts_[a][b]/volume_;
 }
 
-void strk_joint_histf::print()
+template <class T>
+void strk_joint_histf<T>::print() const
 {
-  for (int a = 0; a<nbins_; a++)
-    for (int b = 0; b<nbins_; b++)
-      if (p(a,b))
-        vcl_cout << "p[" << a << "][" << b << "]=" << p(a,b) << "\n";
+  for (unsigned int a = 0; a<nbins_; a++)
+    for (unsigned int b = 0; b<nbins_; b++)
+      if (p(a,b) > 0)
+        vcl_cout << "p[" << a << "][" << b << "]=" << p(a,b) << '\n';
 }
 
-strk_double_histf::strk_double_histf(int nbins)
+template <class T>
+strk_double_histf<T>::strk_double_histf(unsigned int nbins)
+  : area_valid_(false), area_(0), nbins_(nbins), delta_(0)
 {
-  if (!nbins||nbins<0)
+  if (nbins>0)
   {
-    nbins_=0;
-    delta_=0;
-    area_valid_ = false;
-    area_=0;
-    return;
+    delta_ = 360/nbins;
+    counts_.resize(nbins, T(0));
   }
-  nbins_ = nbins;
-  delta_ = 360/nbins;
-  counts_.resize(nbins, 0.0);
-  area_valid_ = false;
-  area_ = 0;
 }
 
-void strk_double_histf::upcount(const double x, const double mag)
+template <class T>
+void strk_double_histf<T>::upcount(T x, T mag)
 {
   if (x<0||x>360)
     return;
-  for (int i = 0; i<nbins_;i++)
+  for (unsigned int i = 0; i<nbins_;i++)
     if ((i+1)*delta_>=x)
     {
       counts_[i] += mag;
@@ -177,109 +173,112 @@ void strk_double_histf::upcount(const double x, const double mag)
   area_valid_ = false;
 }
 
-void strk_double_histf::compute_area()
+template <class T>
+void strk_double_histf<T>::compute_area() const
 {
   area_ =0;
-  for (int i = 0; i<nbins_; i++)
+  for (unsigned int i = 0; i<nbins_; i++)
     area_ += counts_[i];
   area_valid_ = true;
 }
 
-double strk_double_histf::p(const int bin)
+template <class T>
+T strk_double_histf<T>::p(unsigned int bin) const
 {
-  if (bin<0||bin>=nbins_)
+  if (bin>=nbins_)
     return 0;
   if (!area_valid_)
     compute_area();
-  if (!area_)
+  if (area_ == T(0))
     return 0;
-  return counts_[bin]/area_;
+  else
+    return counts_[bin]/area_;
 }
 
-void strk_double_histf::print()
+template <class T>
+void strk_double_histf<T>::print() const
 {
-  for (int i=0; i<nbins_; i++)
-    if (p(i))
-      vcl_cout << "p[" << i << "]=" << p(i) << "\n";
+  for (unsigned int i=0; i<nbins_; i++)
+    if (p(i) > 0)
+      vcl_cout << "p[" << i << "]=" << p(i) << '\n';
 }
 
-strk_double_joint_histf::strk_double_joint_histf(int nbins)
+template <class T>
+strk_double_joint_histf<T>::strk_double_joint_histf(unsigned int nbins)
+  : volume_valid_(false), volume_(0), nbins_(nbins), delta_(0)
 {
-  if (!nbins||nbins<0)
+  if (nbins>0)
   {
-    nbins_=0;
-    delta_=0;
-    volume_valid_ = false;
-    volume_=0;
-    return;
+    delta_ = 360/nbins;
+    counts_.resize(nbins, nbins);
+    counts_.fill(T(0));
   }
-  nbins_ = nbins;
-  delta_ = 360/nbins;
-  counts_.resize(nbins, nbins);
-  counts_.fill(0.0);
-  volume_valid_ = false;
-  volume_ = 0;
 }
 
-void strk_double_joint_histf::upcount(const double a, const double mag_a,
-                                      const double b, const double mag_b)
+template <class T>
+void strk_double_joint_histf<T>::upcount(T a, T mag_a,
+                                         T b, T mag_b)
 {
   if (a<0||a>360)
     return;
   if (b<0||b>360)
     return;
   int bin_a =0, bin_b = 0;
-  for (int i = 0; i<nbins_;i++)
+  for (unsigned int i = 0; i<nbins_;i++)
     if ((i+1)*delta_>=a)
     {
       bin_a = i;
       break;
     }
-  for (int i = 0; i<nbins_;i++)
+  for (unsigned int i = 0; i<nbins_;i++)
     if ((i+1)*delta_>=b)
     {
       bin_b = i;
       break;
     }
-  double v = counts_[bin_a][bin_b]+ mag_a + mag_b;
+  T v = counts_[bin_a][bin_b]+ mag_a + mag_b;
   counts_.put(bin_a, bin_b, v);
   volume_valid_ = false;
 }
 
-void strk_double_joint_histf::compute_volume()
+template <class T>
+void strk_double_joint_histf<T>::compute_volume() const
 {
   volume_=0;
-  for (int a = 0; a<nbins_; a++)
-    for (int b =0; b<nbins_; b++)
+  for (unsigned int a = 0; a<nbins_; a++)
+    for (unsigned int b =0; b<nbins_; b++)
       volume_ += counts_[a][b];
   volume_valid_ = true;
 }
 
-double strk_double_joint_histf::p(const int a, const int b)
+template <class T>
+T strk_double_joint_histf<T>::p(unsigned int a, unsigned int b) const
 {
-  if (a<0||a>=nbins_)
+  if (a>=nbins_)
     return 0;
-  if (b<0||b>=nbins_)
+  if (b>=nbins_)
     return 0;
   if (!volume_valid_)
     compute_volume();
-  if (!volume_)
+  if (volume_ == T(0))
     return 0;
-  return counts_[a][b]/volume_;
+  else
+    return counts_[a][b]/volume_;
 }
 
-void strk_double_joint_histf::print()
+template <class T>
+void strk_double_joint_histf<T>::print() const
 {
-  for (int a = 0; a<nbins_; a++)
-    for (int b = 0; b<nbins_; b++)
-      if (p(a,b))
-        vcl_cout << "p[" << a << "][" << b << "]=" << p(a,b) << "\n";
+  for (unsigned int a = 0; a<nbins_; a++)
+    for (unsigned int b = 0; b<nbins_; b++)
+      if (p(a,b) > 0)
+        vcl_cout << "p[" << a << "][" << b << "]=" << p(a,b) << '\n';
 }
 
 //
 //======================== TRACKING FACE IMPLEMENTATION =============
 //
-void strk_tracking_face_2d::centroid(double& x, double& y)
+void strk_tracking_face_2d::centroid(double& x, double& y) const
 {
   if (!intf_)
   {
@@ -407,12 +406,11 @@ strk_tracking_face_2d::init_face_info(vil1_memory_image_of<float> const& image,
     }
   intf_->InitPixelArrays();
 
-  strk_histf model_intensity_hist;
+  strk_histf<float> model_intensity_hist;
   intensity_hist_bins_ = model_intensity_hist.nbins();
 
-  strk_double_histf model_gradient_dir_hist;
+  strk_double_histf<float> model_gradient_dir_hist;
   gradient_dir_hist_bins_ = model_gradient_dir_hist.nbins();
-
 
   double deg_rad = 180.0/vnl_math::pi;
   //Got through the pixels again to actually set the face arrays X(), Y() etc
@@ -433,11 +431,17 @@ strk_tracking_face_2d::init_face_info(vil1_memory_image_of<float> const& image,
         model_gradient_dir_hist.upcount(ang, mag);
       }
     }
+#ifdef DEBUG
+  vcl_cout << "Model Hist\n";
+  model_intensity_hist.print();
+  vcl_cout << "Model Dir Hist\n";
+  model_gradient_dir_hist.print();
+#endif
   //compute the model entropy
   double ent = 0;
-  for (int m = 0; m<intensity_hist_bins_; m++)
+  for (unsigned int m = 0; m<intensity_hist_bins_; m++)
   {
-    double pm = model_intensity_hist.p(m);
+    float pm = model_intensity_hist.p(m);
     if (!pm)
       continue;
     ent -= pm*vcl_log(pm);
@@ -447,9 +451,9 @@ strk_tracking_face_2d::init_face_info(vil1_memory_image_of<float> const& image,
   //compute the gradient direction entropy
   ent = 0;
   if (use_grad)
-    for (int m = 0; m<gradient_dir_hist_bins_; m++)
+    for (unsigned int m = 0; m<gradient_dir_hist_bins_; m++)
     {
-      double pm = model_gradient_dir_hist.p(m);
+      float pm = model_gradient_dir_hist.p(m);
       if (!pm)
         continue;
       ent -= pm*vcl_log(pm);
@@ -491,20 +495,20 @@ init(vtol_face_2d_sptr const& face, vil1_memory_image_of<float> const& image,
   this->set_gradient(Ix, Iy);
 }
 
-void strk_tracking_face_2d::set_int_mutual_info(const float mi)
+void strk_tracking_face_2d::set_int_mutual_info(float mi)
 {
   intensity_mi_ = mi;
   total_info_= mi + gradient_dir_mi_;
 }
 
-void strk_tracking_face_2d::set_grad_mutual_info(const float mi)
+void strk_tracking_face_2d::set_grad_mutual_info(float mi)
 {
   gradient_dir_mi_ = mi;
   total_info_= mi + intensity_mi_;
 }
 
-void strk_tracking_face_2d::transform(const double tx, const double ty,
-                                      const double theta, const double scale)
+void strk_tracking_face_2d::transform(double tx, double ty,
+                                      double theta, double scale)
 {
   double xo = 0, yo =0;
   this->centroid(xo, yo);
@@ -539,8 +543,8 @@ compute_intensity_mutual_information(vil1_memory_image_of<float> const& image)
 
   int width = image.width(), height = image.height();
   float mi = 0;
-  strk_histf image_hist;
-  strk_joint_histf joint_hist;
+  strk_histf<float> image_hist;
+  strk_joint_histf<float> joint_hist;
   int npix = intf_->Npix();
   if (!npix)
     return 0;
@@ -561,8 +565,6 @@ compute_intensity_mutual_information(vil1_memory_image_of<float> const& image)
   if (frac<0.9)
     return 0;
 #ifdef DEBUG
-  vcl_cout << "Model Hist\n";
-  model_intensity_hist_->print();
   vcl_cout << "Image Hist\n";
   image_hist.print();
   vcl_cout << "Joint Hist\n";
@@ -601,8 +603,8 @@ compute_gradient_mutual_information(vil1_memory_image_of<float> const& Ix,
     return 0;
   int width = Ix.width(), height = Iy.height();
   float mi = 0;
-  strk_double_histf image_dir_hist;
-  strk_double_joint_histf joint_dir_hist;
+  strk_double_histf<float> image_dir_hist;
+  strk_double_joint_histf<float> joint_dir_hist;
 
   int npix = intf_->Npix();
   if (!npix)
@@ -621,9 +623,9 @@ compute_gradient_mutual_information(vil1_memory_image_of<float> const& Ix,
     double angi = (deg_rad*vcl_atan2(Iyi, Ixi))+180.0;
     double magi = vcl_fabs(Ixi)+vcl_fabs(Iyi); // was: vcl_sqrt(Ixi*Ixi + Iyi*Iyi);
 #ifdef DEBUG
-    vcl_cout << "ang0, mag0 " << ang0 << " " << mag0 << "\n"
-             << "Ixi, Iyi " << Ixi << " " << Iyi << "\n"
-             << "angi, magi " << angi << " " << magi << "\n";
+    vcl_cout << "ang0, mag0 " << ang0 << ' ' << mag0 << '\n'
+             << "Ixi, Iyi " << Ixi << ' ' << Iyi << '\n'
+             << "angi, magi " << angi << ' ' << magi << '\n';
 #endif
     image_dir_hist.upcount(angi, magi);
     joint_dir_hist.upcount(ang0,mag0,angi,magi);
@@ -634,8 +636,6 @@ compute_gradient_mutual_information(vil1_memory_image_of<float> const& Ix,
   if (frac<0.9)
     return 0;
 #ifdef DEBUG
-  vcl_cout << "Model Dir Hist\n";
-  model_gradient_dir_hist_->print();
   vcl_cout << "Image Dir Hist\n";
   image_dir_hist.print();
   vcl_cout << "Joint Dir Hist\n";
@@ -685,3 +685,8 @@ compute_mutual_information(vil1_memory_image_of<float> const& image,
     this->set_grad_mutual_info(this->compute_gradient_mutual_information(Ix,Iy));
   return true;
 }
+
+template class strk_histf<float>;
+template class strk_joint_histf<float>;
+template class strk_double_histf<float>;
+template class strk_double_joint_histf<float>;
