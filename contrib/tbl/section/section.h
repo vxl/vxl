@@ -85,6 +85,8 @@ public:
   static uint   Dimensionality() { return N; }
   uint   const* Size()    const { return size; }
   uint   Size(uint i)     const { assert(i<N); return size[i]; }
+  uint   width()          const { return size[0]; }
+  uint   height()         const { return size[1]; }
   vcl_size_t Offset(uint i)   const { assert(i<=N); return offset[i]; }
   vcl_size_t GetSize()        const { return offset[N]; }
   T      Value(const uint pos[N]) const { return buffer[Position(pos)]; }
