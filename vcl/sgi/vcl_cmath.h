@@ -94,7 +94,7 @@ inline long double vcl_sinh(long double x) { return ::sinh(x); }
 
 # undef  vcl_sqrt
 # define vcl_sqrt vcl_sqrt
-inline float       vcl_sqrt(float  x) { return ::sqrt(x); }
+inline float       vcl_sqrt(float  x) { return ::sqrtf(x); }
 inline double      vcl_sqrt(double x) { return ::sqrt(x); }
 inline long double vcl_sqrt(long double x) { return ::sqrt(x); } // ?
 
