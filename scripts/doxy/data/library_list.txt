@@ -20,12 +20,12 @@ book: contrib/tbl : The Image Processing Library
 
 package: :pserver:anonymous@cvs.sourceforge.net:/cvsroot/vxl core Core Vision Libraries
 core vsl     vsl_     build
-core vnl     vnl_     build
-core vbl     vbl_     build
-core vgl     vgl_     build
-core vil     vil_     build
-core vil1    vil1_    build
-core vul     vul_     build
+core vnl     vnl_     build core/vsl
+core vbl     vbl_     build core/vsl
+core vgl     vgl_     build core/vsl core/vnl
+core vil     vil_     build core/vsl core/vnl
+core vil1    vil1_    build core/vsl
+core vul     vul_     build core/vsl
 core vpl     vpl_     build
 
 package: :pserver:anonymous@cvs.sourceforge.net:/cvsroot/vxl core Level-2 Vision Libraries
@@ -33,15 +33,6 @@ core vidl      vidl_     build core/vbl core/vul core/vil
 core vidl_vil1 vidl_vil1 build core/vbl core/vul core/vil1
 core vcsl      vcsl_     build core/vnl core/vbl
 core vgui      vgui_     build core/vgl core/vpl core/vbl core/vul core/vnl core/vil core/vil1
-core/vil algo  vil_      build core/vil core/vnl
-core/vnl algo  vnl_      build core/vnl
-core/vgl algo  vgl_      build core/vgl core/vnl
-core/vbl  io  vbl_io_    build core/vbl core/vsl
-core/vil1 io  vil1_io_   build core/vil1 core/vsl
-core/vgl  io  vgl_io_    build core/vgl core/vsl
-core/vnl  io  vnl_io_    build core/vnl core/vsl
-core/vil  io  vil_io_    build core/vil core/vsl
-core/vul  io  vul_io_    build core/vul core/vsl
 
 package: :pserver:anonymous@cvs.sourceforge.net:/cvsroot/vxl core Test Framework
 core testlib testlib_ build
