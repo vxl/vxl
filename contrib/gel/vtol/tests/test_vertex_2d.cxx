@@ -159,23 +159,23 @@ int main(int, char **)
   vcl_cout << "Testing superiors_list" << vcl_endl;
   vcl_cout << "ve before "<< vcl_endl;
   bool found = false;
-  const vcl_list<vtol_topology_object*>* sups = 
+  const vcl_list<vtol_topology_object*>* sups =
     ve->cast_to_topology_object()->superiors_list();
-  for(vcl_list<vtol_topology_object*>::const_iterator sit = sups->begin();
-      sit !=sups->end(); sit++)
+  for (vcl_list<vtol_topology_object*>::const_iterator sit = sups->begin();
+       sit !=sups->end(); sit++)
     {
       vtol_zero_chain_sptr zc = (*sit)->cast_to_zero_chain();
-	  Assert(zc);
+      Assert(zc);
       vertex_list* verts = zc->vertices();
-      for(vertex_list::iterator vit = verts->begin();
-          vit!=verts->end(); vit++)
+      for (vertex_list::iterator vit = verts->begin();
+           vit!=verts->end(); vit++)
         {
           vcl_cout << **vit << vcl_endl;
-		  found = ve==*vit;
+          found = ve==*vit;
         }
-	  }
-  
-  vcl_cout << "ve after " << *ve << vcl_endl;	
+      }
+
+  vcl_cout << "ve after " << *ve << vcl_endl;
   Assert(found);
   vcl_cout << "finished testing vertex 2d" << vcl_endl;
   vcl_cout << "Test Summary: " << success << " tests succeeded, "
