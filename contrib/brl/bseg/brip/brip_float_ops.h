@@ -47,7 +47,7 @@ class brip_float_ops
                                       vcl_vector<float>& value);
 
   //:downsamples the input using the Bert-Adelson algorithm
-  static vil1_memory_image_of<float> 
+  static vil1_memory_image_of<float>
   half_resolution(vil1_memory_image_of<float> const & input,
                   float filter_coef=0.359375);
 
@@ -139,31 +139,32 @@ class brip_float_ops
   static vil1_memory_image_of<float>
     convert_to_float(vil1_memory_image_of<vil1_rgb<unsigned char> > const& image);
   //: converts a generic image to greyscale (RGB<unsigned char>)
-  static vil1_memory_image_of<unsigned char> 
+  static vil1_memory_image_of<unsigned char>
     convert_to_grey(vil1_image const& img);
 
   //: loads a 2n+1 x 2n+1 convolution kernel (see .cxx for file format)
   static vbl_array_2d<float> load_kernel(vcl_string const & file);
 
   //:compute basis images for a set of input images
-  static 
-    void basis_images(vcl_vector<vil1_memory_image_of<float> > const & input_images, vcl_vector<vil1_memory_image_of<float> > & basis);
+  static
+    void basis_images(vcl_vector<vil1_memory_image_of<float> > const & input_images,
+                      vcl_vector<vil1_memory_image_of<float> > & basis);
  private:
 
-  //:find if the center pixel of a neighborhood is the maximum value
+  //: find if the center pixel of a neighborhood is the maximum value
   static bool local_maximum(vbl_array_2d<float> const & nighborhood,
-                     int n, float& value);
+                            int n, float& value);
 
-  //:find the sub-pixel offset to the maximum using a 3x3 quad interpolation
+  //: find the sub-pixel offset to the maximum using a 3x3 quad interpolation
   static void interpolate_center(vbl_array_2d<float> const & neighborhood,
-                          float& dx, float& dy);
+                                 float& dx, float& dy);
 
-  //:sub-sample a 1-d array using the Bert-Adelson algorithm
-  static void half_resolution_1d(const float* input, int n, 
+  //: sub-sample a 1-d array using the Bert-Adelson algorithm
+  static void half_resolution_1d(const float* input, int n,
                                  const float k0, const float k1,
                                  const float k2, float* output);
-  
-  
+
+  //: Default constructor is private
   brip_float_ops() {}
 };
 
