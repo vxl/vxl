@@ -17,14 +17,20 @@
 #include <vil/vil_fwd.h>
 
 //: Warp an image under a 2D map.
-// The size of the output map and the mapper defines the reqgion of the input image to be scanned.
-// \param mapper, is a mapping such that out() = in(mapper(x,y)).
-// It should be a functor with a signature
+// The size of the output map and the mapper defines the region of
+// the input image to be scanned.
+// \param mapper, is the inverse of the mapping from the input image's
+// co-ordinate frame to the output image's frame.
+// i.e. out() = in(mapper(x,y)). It should be a functor with a signature
 // \verbatim
 // void mapper(double x_in, double y_in, double* x_out, double* y_out);
 // \endverbatim
-// \param interp, is an interpolator, with a signature similar
-// to double vil_bilin_interp_safe(const vil_image_view<T> &, double, double, unsigned)
+// \param interp, is an interpolator, with a signature similar to
+// double vil_bilin_interp_safe(const vil_image_view<T> &, double, double, unsigned)
+// \par
+// Note that if you want to store a warp with an image to create a registered image,
+// the vimt library (in contrib\mul\vimt) provides efficient registered images
+// with transforms upto projective.
 template <class sType, class dType, class MapFunctor, class InterpFunctor>
 void vil_warp(const vil_image_view<sType> &in,
               vil_image_view<dType>&out,
