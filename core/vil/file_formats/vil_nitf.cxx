@@ -17,7 +17,6 @@
 #include <vcl_ctime.h>  // for CLOCKS_PER_SEC
 #include <vxl_config.h> // for VXL_BIG_ENDIAN and vxl_byte
 #include <vcl_cassert.h>
-#include <vcl_sys/times.h>
 
 #include <vcl_cstring.h>
 #include <vcl_iostream.h>
@@ -54,6 +53,28 @@ static bool xxproblem(char const* linefile, char const* msg)
 #define yxproblem(x, l) xproblem(x, l)
 #define problem(x) yxproblem(x, __LINE__)
 #endif
+
+
+////////////////////////////////////////////////////////////////////
+/// Calculate and display elapsed time given start and end time.
+///
+/// \param start structure containing start time
+/// \param end structure containing end time
+/// \param msg string message to be displayed
+////////////////////////////////////////////////////////////////////
+static
+void display_elapsed_time(
+    vcl_clock_t start,
+    vcl_clock_t end,
+    const vcl_string &msg)
+{
+    long elapsed = (end - start) * 1000 / CLOCKS_PER_SEC;
+    if (msg.length() > 0) {
+      vcl_cout << msg << " - ";
+    }
+    vcl_cout << "elapsed milli-seconds = " << elapsed << vcl_endl;
+}
+
 
 // Probe file associated with input stream.
 //
@@ -735,8 +756,7 @@ vil_memory_chunk_sptr vil_nitf_image::read_single_band_data(
     // ITERATE OVER BLOCKS LEFT TO RIGHT, TOP TO BOTTOM, READING IMAGE BYTES.
     // INSERT BYTES INTO ONE UNIFORM GRID
 
-    tms start;
-    times(&start);
+    vcl_clock_t start = vcl_clock();
 
     for (unsigned int block_row = start_block_y; block_row < max_block_y; ++block_row)
     {
@@ -895,10 +915,9 @@ vil_memory_chunk_sptr vil_nitf_image::read_single_band_data(
 
     vcl_cout << "##### " << method_name << "finish read loops\n";
 
-    tms finish;
-    times(&finish);
+    vcl_clock_t finish = vcl_clock();
 
-    vcl_cout << "finish reading input = " << finish.tms_utime << vcl_endl;
+    vcl_cout << "finish reading input = " << finish << vcl_endl;
     display_elapsed_time(start, finish, "read image bytes");
 
     vcl_cout << method_name << "start_block_x = " << start_block_x
@@ -1036,13 +1055,11 @@ bool vil_nitf_image::construct_pyramid_images(
         vcl_cout << "ext = <" << ext << ">  file name = <"
                  << out_file_name << ">\n";
 #if 1
-        tms start;
-        times(&start);
+        vcl_clock_t start = vcl_clock();
 
         bool write_success = vil_save(*save_view, out_file_name.c_str(), "png");
 
-        tms finish;
-        times(&finish);
+        vcl_clock_t finish = vcl_clock();
         display_elapsed_time(start, finish, "save 2-byte PNG file");
 
         vcl_cout << "Saved image as 2-byte PNG to file <" << out_file_name
@@ -1577,7 +1594,7 @@ void vil_nitf_image::reverse_bytes(
                << buf_len << " not multiple of bytes per value = " << bytes_per_value
                << ".\n";
     }
-    unsigned char temp_buf[bytes_per_value];
+    vcl_vector<unsigned char> temp_buf( bytes_per_value );
 
     unsigned long curr_pos = 0;
 
@@ -1913,24 +1930,6 @@ void vil_nitf_image::display_block_attributes(vcl_string caller)
              << "bottom pad = " << get_bottom_pad() << vcl_endl;
 }
 
-////////////////////////////////////////////////////////////////////
-/// Calculate and display elapsed time given start and end time.
-///
-/// \param start structure containing start time
-/// \param end structure containing end time
-/// \param msg string message to be displayed
-////////////////////////////////////////////////////////////////////
-void vil_nitf_image::display_elapsed_time(
-    const tms &start,
-    const tms &end,
-    const vcl_string &msg)
-{
-    long elapsed = (end.tms_utime - start.tms_utime) * (1000 / CLOCKS_PER_SEC);
-    if (msg.length() > 0) {
-      vcl_cout << msg << " - ";
-    }
-    vcl_cout << "elapsed milli-seconds = " << elapsed << vcl_endl;
-}
 
 ////////////////////////////////////////////////////////////////////
 ///

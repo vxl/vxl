@@ -13,8 +13,6 @@
 //  Modifications
 // \endverbatim
 
-#include <vcl_sys/times.h>  // for struct tms
-
 #include <vcl_vector.h>
 #include <vil/vil_file_format.h>
 #include <vil/vil_image_resource.h>
@@ -221,7 +219,6 @@ class vil_nitf_image : public vil_image_resource
   void display_message_attributes(vcl_string caller);
   void display_image_attributes(vcl_string caller);
   void display_block_attributes(vcl_string caller);
-  static void display_elapsed_time(struct tms const& start, struct tms const& end, const vcl_string &msg);
 
  protected:
   virtual StatusCode set_image_data();
