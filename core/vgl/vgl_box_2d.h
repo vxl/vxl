@@ -232,6 +232,11 @@ vcl_istream&  operator>>(vcl_istream& is,  vgl_box_2d<Type>& p);
 template <class Type>
 vgl_box_2d<Type> intersect(vgl_box_2d<Type> const& in1, vgl_box_2d<Type> const& in2);
 
+//: Return box which bounds p1 and p2 (ie p1,p2 are any two of the corners)
+template <class Type>
+vgl_box_2d<Type> vgl_bounding_box_2d(const vgl_point_2d<Type>& p1,
+                                     const vgl_point_2d<Type>& p2);
+
 #define VGL_BOX_2D_INSTANTIATE(T) extern "please include vgl/vgl_box_2d.txx first"
 
 #endif // vgl_box_2d_h

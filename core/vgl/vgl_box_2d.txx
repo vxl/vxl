@@ -302,11 +302,22 @@ vcl_istream&  operator>>(vcl_istream& is,  vgl_box_2d<Type>& p) {
   return p.read(is);
 }
 
+//: Return box which bounds p1 and p2 (ie p1,p2 are any two of the corners)
+template <class Type>
+vgl_box_2d<Type> vgl_bounding_box_2d(const vgl_point_2d<Type>& p1,
+                                     const vgl_point_2d<Type>& p2)
+{
+  return vgl_box_2d<Type>(vcl_min(p1.x(),p2.x()), vcl_max(p1.x(),p2.x()),
+	                        vcl_min(p1.y(),p2.y()), vcl_max(p1.y(),p2.y()) );
+}
+
 #undef VGL_BOX_2D_INSTANTIATE
 #define VGL_BOX_2D_INSTANTIATE(Type) \
 template class vgl_box_2d<Type >;\
 template vcl_istream& operator>>(vcl_istream&, vgl_box_2d<Type >&);\
 template vcl_ostream& operator<<(vcl_ostream&, vgl_box_2d<Type > const&);\
-template vgl_box_2d<Type > intersect(vgl_box_2d<Type > const&, vgl_box_2d<Type > const&)
+template vgl_box_2d<Type > intersect(vgl_box_2d<Type > const&, vgl_box_2d<Type > const&);\
+template vgl_box_2d<Type > vgl_bounding_box_2d(const vgl_point_2d<Type>& p1,\
+                                               const vgl_point_2d<Type>& p2)
 
 #endif // vgl_box_2d_txx_
