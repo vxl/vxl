@@ -136,6 +136,27 @@ void test_determinant() {
     vnl_matrix_fixed<double,5,5> n_5 = n5;
     testlib_test_assert_near("vnl_determinant(vnl_matrix_fixed<double,5,5>)", vnl_determinant(n_5), d5, eps);
   }
+
+  {
+    int M6[3][3] = {
+      { 2, 0, 0 },
+      { 0, 1, 0 },
+      { 0, 0, 5 } };
+    vnl_matrix<int> m6(&M6[0][0],3,3);
+    testlib_test_assert_near("3x3 vnl_determinant(vnl_matix<int>)", vnl_determinant(m6), 10, eps);
+  }
+
+  {
+    int M7[6][6] = {
+      { 2, 0, 0, 0, 0, 0 },
+      { 0, 1, 0, 0, 0, 0 },
+      { 0, 0, 5, 0, 0, 0 },
+      { 0, 0, 0, 4, 0, 0 },
+      { 0, 0, 0, 0, 2, 0 },
+      { 0, 0, 0, 0, 0, 6 } };
+    vnl_matrix<int> m7(&M7[0][0],6,6);
+    testlib_test_assert_near("3x3 vnl_determinant(vnl_matix<int>)", vnl_determinant(m7), 2*1*5*4*2*6, eps);
+  }
 }
 
 TESTMAIN(test_determinant);

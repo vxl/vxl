@@ -68,7 +68,7 @@ IF(NETLIB_FOUND)
 
     # stuff
     vnl_convolve.txx vnl_convolve.h
-    vnl_determinant.txx vnl_determinant.h
+    vnl_determinant.cxx vnl_determinant.txx vnl_determinant.h
     vnl_chi_squared.cxx vnl_chi_squared.h
     vnl_gaussian_kernel_1d.cxx vnl_gaussian_kernel_1d.h
     vnl_adjugate.txx vnl_adjugate.h
