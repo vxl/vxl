@@ -216,8 +216,10 @@ vnl_matrix<T>::vnl_matrix (vnl_matrix<T> const& from)
 template<class T>
 vnl_matrix<T>::vnl_matrix (vnl_matrix<T> const &A, vnl_matrix<T> const &B, vnl_tag_add)
 {
+#if VNL_CONFIG_CHECK_BOUNDS  && (!defined NDEBUG)
   if (A.num_rows != B.num_rows || A.num_cols != B.num_cols)
     vnl_error_matrix_dimension ("vnl_tag_add", A.num_rows, A.num_cols, B.num_rows, B.num_cols);
+#endif
 
   vnl_matrix_alloc_blah(A.num_rows, A.num_cols);
 
@@ -233,8 +235,10 @@ vnl_matrix<T>::vnl_matrix (vnl_matrix<T> const &A, vnl_matrix<T> const &B, vnl_t
 template<class T>
 vnl_matrix<T>::vnl_matrix (vnl_matrix<T> const &A, vnl_matrix<T> const &B, vnl_tag_sub)
 {
+#if VNL_CONFIG_CHECK_BOUNDS  && (!defined NDEBUG)
   if (A.num_rows != B.num_rows || A.num_cols != B.num_cols)
     vnl_error_matrix_dimension ("vnl_tag_sub", A.num_rows, A.num_cols, B.num_rows, B.num_cols);
+#endif
 
   vnl_matrix_alloc_blah(A.num_rows, A.num_cols);
 
@@ -302,8 +306,10 @@ vnl_matrix<T>::vnl_matrix (vnl_matrix<T> const &M, T s, vnl_tag_sub)
 template<class T>
 vnl_matrix<T>::vnl_matrix (vnl_matrix<T> const &A, vnl_matrix<T> const &B, vnl_tag_mul)
 {
+#if VNL_CONFIG_CHECK_BOUNDS  && (!defined NDEBUG)
   if (A.num_cols != B.num_rows)
     vnl_error_matrix_dimension("vnl_tag_mul", A.num_rows, A.num_cols, B.num_rows, B.num_cols);
+#endif
 
   unsigned int l = A.num_rows;
   unsigned int m = A.num_cols; // == B.num_rows
@@ -496,11 +502,13 @@ vnl_matrix<T>& vnl_matrix<T>::operator/= (T value) {
 
 template<class T>
 vnl_matrix<T>& vnl_matrix<T>::operator+= (vnl_matrix<T> const& rhs) {
+#if VNL_CONFIG_CHECK_BOUNDS  && (!defined NDEBUG)
   if (this->num_rows != rhs.num_rows ||
       this->num_cols != rhs.num_cols)           // Size match?
     vnl_error_matrix_dimension ("operator+=",
                                 this->num_rows, this->num_cols,
                                 rhs.num_rows, rhs.num_cols);
+#endif
   for (unsigned int i = 0; i < this->num_rows; i++)    // For each row
     for (unsigned int j = 0; j < this->num_cols; j++)  // For each element in column
       this->data[i][j] += rhs.data[i][j];       // Add elements
@@ -514,11 +522,13 @@ vnl_matrix<T>& vnl_matrix<T>::operator+= (vnl_matrix<T> const& rhs) {
 
 template<class T>
 vnl_matrix<T>& vnl_matrix<T>::operator-= (vnl_matrix<T> const& rhs) {
+#if VNL_CONFIG_CHECK_BOUNDS  && (!defined NDEBUG)
   if (this->num_rows != rhs.num_rows ||
       this->num_cols != rhs.num_cols) // Size?
     vnl_error_matrix_dimension ("operator-=",
                                 this->num_rows, this->num_cols,
                                 rhs.num_rows, rhs.num_cols);
+#endif
   for (unsigned int i = 0; i < this->num_rows; i++)
     for (unsigned int j = 0; j < this->num_cols; j++)
       this->data[i][j] -= rhs.data[i][j];
@@ -543,10 +553,12 @@ vnl_matrix<T> operator- (T const& value, vnl_matrix<T> const& m) {
 
 template<class T>
 vnl_matrix<T> vnl_matrix<T>::operator* (vnl_matrix<T> const& rhs) const {
+#if VNL_CONFIG_CHECK_BOUNDS  && (!defined NDEBUG)
   if (this->num_cols != rhs.num_rows)           // dimensions do not match?
     vnl_error_matrix_dimension("operator*",
                                this->num_rows, this->num_cols,
                                rhs.num_rows, rhs.num_cols);
+#endif
   vnl_matrix<T> result(this->num_rows, rhs.num_cols); // Temp to store product
   for (unsigned i = 0; i < this->num_rows; i++) {  // For each row
     for (unsigned j = 0; j < rhs.num_cols; j++) {  // For each element in column
@@ -659,9 +671,11 @@ vnl_matrix<T>& vnl_matrix<T>::update (vnl_matrix<T> const& m,
                                       unsigned top, unsigned left) {
   unsigned int bottom = top + m.num_rows;
   unsigned int right = left + m.num_cols;
+#if VNL_CONFIG_CHECK_BOUNDS  && (!defined NDEBUG)
   if (this->num_rows < bottom || this->num_cols < right)
     vnl_error_matrix_dimension ("update",
                                 bottom, right, m.num_rows, m.num_cols);
+#endif
   for (unsigned int i = top; i < bottom; i++)
     for (unsigned int j = left; j < right; j++)
       this->data[i][j] = m.data[i-top][j-left];
@@ -677,9 +691,11 @@ vnl_matrix<T> vnl_matrix<T>::extract (unsigned rowz, unsigned colz,
                                       unsigned top, unsigned left) const{
   unsigned int bottom = top + rowz;
   unsigned int right = left + colz;
+#if VNL_CONFIG_CHECK_BOUNDS  && (!defined NDEBUG)
   if ((this->num_rows < bottom) || (this->num_cols < right))
     vnl_error_matrix_dimension ("extract",
                                 this->num_rows, this->num_cols, bottom, right);
+#endif
   vnl_matrix<T> result(rowz, colz);
   for (unsigned int i = 0; i < rowz; i++)      // actual copy of all elements
     for (unsigned int j = 0; j < colz; j++)    // in submatrix
@@ -692,10 +708,12 @@ vnl_matrix<T> vnl_matrix<T>::extract (unsigned rowz, unsigned colz,
 
 template<class T>
 T dot_product (vnl_matrix<T> const& m1, vnl_matrix<T> const& m2) {
+#if VNL_CONFIG_CHECK_BOUNDS  && (!defined NDEBUG)
   if (m1.rows() != m2.rows() || m1.columns() != m2.columns()) // Size?
     vnl_error_matrix_dimension ("dot_product",
                                 m1.rows(), m1.columns(),
                                 m2.rows(), m2.columns());
+#endif
   return vnl_c_vector<T>::dot_product(m1.begin(), m2.begin(), m1.rows()*m1.cols());
 }
 
@@ -704,10 +722,12 @@ T dot_product (vnl_matrix<T> const& m1, vnl_matrix<T> const& m2) {
 
 template<class T>
 T inner_product (vnl_matrix<T> const& m1, vnl_matrix<T> const& m2) {
+#if VNL_CONFIG_CHECK_BOUNDS  && (!defined NDEBUG)
   if (m1.rows() != m2.rows() || m1.columns() != m2.columns()) // Size?
     vnl_error_matrix_dimension ("inner_product",
                                 m1.rows(), m1.columns(),
                                 m2.rows(), m2.columns());
+#endif
   return vnl_c_vector<T>::inner_product(m1.begin(), m2.begin(), m1.rows()*m1.cols());
 }
 
@@ -731,9 +751,11 @@ T cos_angle (vnl_matrix<T> const& a, vnl_matrix<T> const& b) {
 template<class T>
 vnl_matrix<T> element_product (vnl_matrix<T> const& m1,
                                vnl_matrix<T> const& m2) {
+#if VNL_CONFIG_CHECK_BOUNDS  && (!defined NDEBUG)
   if (m1.rows() != m2.rows() || m1.columns() != m2.columns()) // Size?
     vnl_error_matrix_dimension ("element_product",
                                 m1.rows(), m1.columns(), m2.rows(), m2.columns());
+#endif
   vnl_matrix<T> result(m1.rows(), m1.columns());
   for (unsigned int i = 0; i < m1.rows(); i++)
     for (unsigned int j = 0; j < m1.columns(); j++)
@@ -747,9 +769,11 @@ vnl_matrix<T> element_product (vnl_matrix<T> const& m1,
 template<class T>
 vnl_matrix<T> element_quotient (vnl_matrix<T> const& m1,
                                 vnl_matrix<T> const& m2) {
+#if VNL_CONFIG_CHECK_BOUNDS  && (!defined NDEBUG)
   if (m1.rows() != m2.rows() || m1.columns() != m2.columns()) // Size?
     vnl_error_matrix_dimension("element_quotient",
                                m1.rows(), m1.columns(), m2.rows(), m2.columns());
+#endif
   vnl_matrix<T> result(m1.rows(), m1.columns());
   for (unsigned int i = 0; i < m1.rows(); i++)
     for (unsigned int j = 0; j < m1.columns(); j++)
@@ -783,8 +807,10 @@ void vnl_matrix<T>::copy_out(T *p) const
 template<class T>
 void vnl_matrix<T>::set_identity()
 {
+#if VNL_CONFIG_CHECK_BOUNDS  && (!defined NDEBUG)
   if (this->num_rows != this->num_cols) // Size?
     vnl_error_matrix_nonsquare ("set_identity");
+#endif
   for (unsigned int i = 0; i < this->num_rows; i++)    // For each row in the Matrix
     for (unsigned int j = 0; j < this->num_cols; j++)  // For each element in column
       if (i == j)
@@ -843,8 +869,10 @@ void vnl_matrix<T>::normalize_columns()
 template<class T>
 void vnl_matrix<T>::scale_row(unsigned row_index, T value)
 {
+#if VNL_CONFIG_CHECK_BOUNDS  && (!defined NDEBUG)
   if (row_index >= this->num_rows)
     vnl_error_matrix_row_index("scale_row", row_index);
+#endif
   for (unsigned int j = 0; j < this->num_cols; j++)    // For each element in row
     this->data[row_index][j] *= value;
 }
@@ -853,8 +881,10 @@ void vnl_matrix<T>::scale_row(unsigned row_index, T value)
 template<class T>
 void vnl_matrix<T>::scale_column(unsigned column_index, T value)
 {
+#if VNL_CONFIG_CHECK_BOUNDS  && (!defined NDEBUG)
   if (column_index >= this->num_cols)
     vnl_error_matrix_col_index("scale_column", column_index);
+#endif
   for (unsigned int j = 0; j < this->num_rows; j++)    // For each element in column
     this->data[j][column_index] *= value;
 }
@@ -862,8 +892,10 @@ void vnl_matrix<T>::scale_column(unsigned column_index, T value)
 //: Returns a copy of n rows, starting from "row"
 template<class T>
 vnl_matrix<T> vnl_matrix<T>::get_n_rows (unsigned row, unsigned n) const {
+#if VNL_CONFIG_CHECK_BOUNDS  && (!defined NDEBUG)
   if (row + n > this->num_rows)
     vnl_error_matrix_row_index ("get_n_rows", row);
+#endif
 
   // Extract data rowwise.
   return vnl_matrix<T>(data[row], n, this->num_cols);
@@ -872,8 +904,10 @@ vnl_matrix<T> vnl_matrix<T>::get_n_rows (unsigned row, unsigned n) const {
 //: Returns a copy of n columns, starting from "column".
 template<class T>
 vnl_matrix<T> vnl_matrix<T>::get_n_columns (unsigned column, unsigned n) const {
+#if VNL_CONFIG_CHECK_BOUNDS  && (!defined NDEBUG)
   if (column + n > this->num_cols)
     vnl_error_matrix_col_index ("get_n_columns", column);
+#endif
 
   vnl_matrix<T> result(this->num_rows, n);
   for (unsigned int c = 0; c < n; ++c)
@@ -967,11 +1001,13 @@ void vnl_matrix<T>::set_column(unsigned column_index, T v)
 template<class T>
 void vnl_matrix<T>::set_columns(unsigned starting_column, vnl_matrix<T> const& m)
 {
+#if VNL_CONFIG_CHECK_BOUNDS  && (!defined NDEBUG)
   if (this->num_rows != m.num_rows ||
       this->num_cols < m.num_cols + starting_column)           // Size match?
     vnl_error_matrix_dimension ("set_columns",
                                 this->num_rows, this->num_cols,
                                 m.num_rows, m.num_cols);
+#endif
 
   for (unsigned int j = 0; j < m.num_cols; ++j)
     for (unsigned int i = 0; i < this->num_rows; i++)    // For each element in row

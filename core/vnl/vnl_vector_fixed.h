@@ -46,8 +46,10 @@ public:
   //: Construct an n-vector copy of rhs.
   //  Does not check that rhs is the right size.
   vnl_vector_fixed(vnl_vector<T> const& rhs):Base(space) {
+#if VNL_CONFIG_CHECK_BOUNDS  && (!defined NDEBUG)
     if (rhs.size() != n)
       vnl_error_vector_dimension ("vnl_vector_fixed(const vnl_vector&) ", n, rhs.size());
+#endif
     vcl_memcpy(space, rhs.data_block(), sizeof space);
   }
 
@@ -65,7 +67,9 @@ public:
 
   //: Constructs 3D vector(px, py, pz )
   vnl_vector_fixed (T const& px, T const& py, T const& pz): Base(space) {
+#if VNL_CONFIG_CHECK_BOUNDS  && (!defined NDEBUG)
     if (n != 3) vnl_error_vector_dimension ("constructor (x,y,z): n != 3", n, 3);
+#endif
     data[0] = px;
     data[1] = py;
     data[2] = pz;
@@ -73,7 +77,9 @@ public:
 
   //: Constructs 2D vector  (px, py)
   vnl_vector_fixed (T const& px, T const& py): Base(space) {
+#if VNL_CONFIG_CHECK_BOUNDS  && (!defined NDEBUG)
     if (n != 2) vnl_error_vector_dimension ("constructor (x,y): n != 2", n, 2);
+#endif
     data[0] = px;
     data[1] = py;
   }
@@ -84,8 +90,10 @@ public:
   }
 
   vnl_vector_fixed<T,n>& operator=(vnl_vector<T> const& rhs) {
+#if VNL_CONFIG_CHECK_BOUNDS  && (!defined NDEBUG)
     if (rhs.size() != n)
       vnl_error_vector_dimension ("operator=", n, rhs.size());
+#endif
     vcl_memcpy(space, rhs.data_block(), sizeof space);
     return *this;
   }
