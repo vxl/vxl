@@ -8,8 +8,6 @@ USES += mul
 LIBRARY := vbl-io
 VERSION := 1.0
 
-SOURCES += vbl_io_user_info.cxx
-
 # Additional files to document:
 MANPAGE_SOURCES += vbl_io_array_1d.txx
 MANPAGE_SOURCES += vbl_io_array_2d.txx
