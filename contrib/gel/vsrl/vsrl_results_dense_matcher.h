@@ -17,7 +17,7 @@ class vsrl_results_dense_matcher : public vsrl_dense_matcher
 {
  protected:
 
-  vil_memory_image_of<int> disparity_; //!< memory images of the disparities
+  vil_memory_image_of<unsigned char> disparity_; //!< memory images of the disparities
 
  public:
 
