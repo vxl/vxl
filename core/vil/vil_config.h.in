@@ -1,6 +1,6 @@
 // This is core/vil/vil_config.h.in
-#ifndef vil_config_h_
-#define vil_config_h_
+#ifndef vil_config_h_in_
+#define vil_config_h_in_
 
 //:
 // \file
@@ -28,4 +28,4 @@
 #define HAS_TIFF  @HAS_TIFF@
 #define HAS_DCMTK @HAS_DCMTK@
 
-#endif // vil_config_h_
+#endif // vil_config_h_in_
