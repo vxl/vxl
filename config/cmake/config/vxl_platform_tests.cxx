@@ -840,10 +840,14 @@ int main()
 // CHAR_BIT is the number of bits per char.
 #include <limits.h>
 
+#include "config.h"
+
+#if INTEGRAL_TYPE
 double cast( unsigned THE_TYPE a, signed THE_TYPE b )
 {
   return double( a ) + double( b );
 }
+#endif // INTEGRAL_TYPE
 
 int main()
 {

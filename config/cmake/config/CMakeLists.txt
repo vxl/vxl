@@ -213,14 +213,27 @@ ENDMACRO(CHECK_FUNCTION_EXISTS_ZERO FUNCTION VARIABLE)
 # Determine which C++ type matches the given size
 #
 
-MACRO( DETERMINE_TYPE VAR SIZE TYPE_LIST )
+MACRO( DETERMINE_TYPE VAR INTEGRAL_TYPE SIZE TYPE_LIST )
   # If we've tested this before, use the cached result and don't re-run
   IF( NOT VXL_${VAR} )
+
+    # We can't have IF commands on a macro parameter. For example,
+    # IF( INTEGRAL_TYPE ) doesn't seem to work. I think the
+    # expansion is done at the wrong time. A macro is not a procedure
+    # call. This is a workaround.
+    SET( MSG1 "Looking for ${SIZE}-bit int." )
+    SET( MSG0 "Looking for ${SIZE}-bit float." )
+    SET( MSG ${MSG${INTEGRAL_TYPE}} )
+
     SET( VXL_${VAR} "void" )
     SET( VXL_HAS_${VAR} 0 )
     FOREACH( TYPE ${TYPE_LIST} )
-      SET( MACRO_DETERMINE_TYPE_FLAGS "-DVXL_HAS_TYPE_OF_SIZE \"-DTHE_TYPE=${TYPE}\" -DTHE_SIZE=${SIZE}")
-      MESSAGE( STATUS "Looking for ${SIZE}-bit type. [Checking ${TYPE}...]" )
+      # Write the config to a file instead of passing on the command
+      # line to avoid issues with spaces. (In "long double", for
+      # example)
+      WRITE_FILE( ${CMAKE_BINARY_DIR}/CMakeTmp/config.h "#define THE_TYPE ${TYPE}\n#define THE_SIZE ${SIZE}\n#define INTEGRAL_TYPE ${INTEGRAL_TYPE}" )
+      SET( MACRO_DETERMINE_TYPE_FLAGS "-DVXL_HAS_TYPE_OF_SIZE -I${CMAKE_BINARY_DIR}/CMakeTmp" )
+      MESSAGE( STATUS "${MSG} [Checking ${TYPE}...]" )
       TRY_RUN( RUN_RESULT COMPILE_RESULT
             ${CMAKE_BINARY_DIR}
             ${vxl_config_SOURCE_DIR}/vxl_platform_tests.cxx
@@ -234,18 +247,18 @@ MACRO( DETERMINE_TYPE VAR SIZE TYPE_LIST )
         ENDIF( NOT RUN_RESULT )
       ELSE( COMPILE_RESULT )
         WRITE_FILE( ${CMAKE_BINARY_DIR}/CMakeError.log 
-          "Checking ${SIZE}-bit with ${TYPE} failed with the following output:\n${OUTPUT}\n"
+          "${MSG} Failed with the following output:\n(FLAGS=${MACRO_DETERMINE_TYPE_FLAGS})\n${OUTPUT}\n"
           APPEND )
       ENDIF( COMPILE_RESULT )
     ENDFOREACH( TYPE )
     IF( VXL_HAS_${VAR} )
-      MESSAGE( STATUS "Looking for ${SIZE}-bit type. Found ${VXL_${VAR}}." )
+      MESSAGE( STATUS "${MSG} Found ${VXL_${VAR}}." )
     ELSE( VXL_HAS_${VAR} )
-      MESSAGE( STATUS "Looking for ${SIZE}-bit type. Not found." )
+      MESSAGE( STATUS "${MSG} Not found." )
     ENDIF( VXL_HAS_${VAR} )
     # Cache the value to prevent a second run of the test
-    SET(VXL_${VAR} ${VXL_${VAR}} CACHE INTERNAL "VXL test result")
-    SET(VXL_HAS_${VAR} ${VXL_HAS_${VAR}} CACHE INTERNAL "VXL test result")
+    SET( VXL_${VAR} ${VXL_${VAR}} CACHE INTERNAL "VXL test result" )
+    SET( VXL_HAS_${VAR} ${VXL_HAS_${VAR}} CACHE INTERNAL "VXL test result" )
   ENDIF( NOT VXL_${VAR} )
 ENDMACRO( DETERMINE_TYPE VAR SIZE TYPE_LIST )
 
@@ -419,15 +432,15 @@ SET(CMAKE_REQUIRED_FLAGS ${CMAKE_ANSI_CFLAGS})
 # The types are listed in reverse order of preference. That is, the
 # last type is should be the most preferred type name.
 #
-DETERMINE_TYPE(BYTE     8   "char")
-DETERMINE_TYPE(INT_8    8   "short;char")
-DETERMINE_TYPE(INT_16   16  "char;int;short")
-DETERMINE_TYPE(INT_32   32  "short;long;int")
-DETERMINE_TYPE(INT_64   64  "__int64;long long;long")
-DETERMINE_TYPE(IEEE_32  32  "long double;double;float")
-DETERMINE_TYPE(IEEE_64  64  "float;long double;double")
-DETERMINE_TYPE(IEEE_96  96  "float;double;long double")
-DETERMINE_TYPE(IEEE_128 128 "float;double;long double")
+DETERMINE_TYPE(BYTE     1 8   "char")
+DETERMINE_TYPE(INT_8    1 8   "short;char")
+DETERMINE_TYPE(INT_16   1 16  "char;int;short")
+DETERMINE_TYPE(INT_32   1 32  "short;long;int")
+DETERMINE_TYPE(INT_64   1 64  "__int64;long long;long")
+DETERMINE_TYPE(IEEE_32  0 32  "long double;double;float")
+DETERMINE_TYPE(IEEE_64  0 64  "float;long double;double")
+DETERMINE_TYPE(IEEE_96  0 96  "float;double;long double")
+DETERMINE_TYPE(IEEE_128 0 128 "float;double;long double")
 
 #
 # Check unistd stuff
