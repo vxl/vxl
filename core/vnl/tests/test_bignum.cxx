@@ -3,10 +3,13 @@
 // converted from COOL/test/test_BigNum.C by Peter Vanroose, 25 April 2002.
 
 #include <vcl_iostream.h>
+#ifndef __alpha__ // On Alpha, compiler runs out of memory
 #include <vcl_sstream.h>
 #include <vcl_iomanip.h>
+#endif
 #include <vnl/vnl_bignum.h>
-#include <vnl/vnl_math.h> // for vnl_math::maxdouble and vnl_math::maxfloat
+#include <vnl/vnl_bignum_traits.h>
+#include <vnl/vnl_numeric_traits.h> // for vnl_numeric_traits<double>::maxval
 
 #include <testlib/testlib_test.h>
 
@@ -27,10 +30,10 @@ static void run_constructor_tests() {
   {vnl_bignum b(0.0); TEST("vnl_bignum b(0.0);", (double)b, 0.0);}
   {vnl_bignum b(1.0); TEST("vnl_bignum b(1.0);", (double)b, 1.0);}
   {vnl_bignum b(-1.0); TEST("vnl_bignum b(-1.0);", (double)b, -1.0);}
-  {vnl_bignum b(vnl_math::maxdouble);
-   TEST("vnl_bignum b(vnl_math::maxdouble);", (double)b, vnl_math::maxdouble);}
-  {vnl_bignum b(-vnl_math::maxdouble);
-   TEST("vnl_bignum b(-vnl_math::maxdouble);", (double)b, -vnl_math::maxdouble);}
+  {vnl_bignum b(vnl_numeric_traits<double>::maxval);
+   TEST("vnl_bignum b(vnl_numeric_traits<double>::maxval);", (double)b, vnl_numeric_traits<double>::maxval);}
+  {vnl_bignum b(-vnl_numeric_traits<double>::maxval);
+   TEST("vnl_bignum b(-vnl_numeric_traits<double>::maxval);", (double)b, -vnl_numeric_traits<double>::maxval);}
   {vnl_bignum b(1234567.0); TEST("vnl_bignum b(1234567.0);", (double)b, 1234567.0);}
   {vnl_bignum b(-1234567.0); TEST("vnl_bignum b(-1234567.0);", (double)b, -1234567.0);}
   {vnl_bignum b(1234567e3); TEST("vnl_bignum b(1234567e3);", (double)b, 1234567e3);}
@@ -55,11 +58,13 @@ static void run_constructor_tests() {
   {vnl_bignum b("123e5"); TEST("vnl_bignum b(\"123e5\");", b, 12300000L);}
   {vnl_bignum b("123e+4"); TEST("vnl_bignum b(\"123e+4\");", b, 1230000L);}
   {vnl_bignum b("123e12"); TEST("vnl_bignum b(\"123e12\");", (double)b, 123e12);}
+#ifndef __alpha__ // On Alpha, compiler runs out of memory
   {vnl_bignum b("-1e120"); vcl_stringstream s; s << b;
    // verify that b outputs as  "-1000...00" (120 zeros)
    bool t = s.str()[0] == '-' && s.str()[1] == '1' && s.str()[122] == '\0'; 
    for (int i=0; i<120; ++i) t = t && s.str()[i+2] == '0';
    TEST("vnl_bignum b(\"-1e120\") outputs as \"-10000...00\"", t, true);}
+#endif
   {vnl_bignum b("0x0"); TEST("vnl_bignum b(\"0x0\");", b, 0x0);}
   {vnl_bignum b("0x9"); TEST("vnl_bignum b(\"0x9\");", b, 0x9);}
   {vnl_bignum b("0xa"); TEST("vnl_bignum b(\"0xa\");", b, 0xa);}
@@ -72,7 +77,12 @@ static void run_constructor_tests() {
   {vnl_bignum b("012334567"); TEST("vnl_bignum b(\"012334567\");", b, 012334567);}
   {vnl_bignum b("9"); TEST("vnl_bignum b(\"9\");", b, 9);}
   {vnl_bignum b(" 9"); TEST("vnl_bignum b(\" 9\");", b, 9);}
+  // infinity:
+  {vnl_bignum b("+Inf"); TEST("vnl_bignum b(\"+Inf\");", b.is_plus_infinity(), true);}
+  {vnl_bignum b("Infinity"); TEST("vnl_bignum b(\"Infinity\");", b.is_plus_infinity(), true);}
+  {vnl_bignum b("-Infin"); TEST("vnl_bignum b(\"-Infin\");", b.is_minus_infinity(), true);}
 
+#ifndef __alpha__ // On Alpha, compiler runs out of memory
   vcl_cout << "reading from istream:\n";
   {vcl_stringstream is(vcl_ios_in | vcl_ios_out); vnl_bignum b;
    is << "+1"; is >> b; TEST("\"+1\" >> b;", b, 1L);}
@@ -108,6 +118,7 @@ static void run_constructor_tests() {
    is << "9"; is >> b; TEST("\"9\" >> b;", b, 9L);}
   {vcl_stringstream is(vcl_ios_in | vcl_ios_out); vnl_bignum b;
    is << " 9"; is >> b; TEST("\" 9\" >> b;", b, 9L);}
+#endif
 
   vcl_cout << "vnl_bignum& constructor:\n";
   {vnl_bignum b50(vnl_bignum(0L));
@@ -148,32 +159,40 @@ static void run_conversion_operator_tests() {
   TEST("vnl_bignum b(0x7fffffffL); ++b; b=-b; long(b) == -0x7fffffffL-0x1L", long(b), -0x7fffffffL-0x1L);
 
   vcl_cout << "float conversion operator:\n";
-  TEST("float(vnl_bignum(0.0)) == 0.0", ((float) vnl_bignum(0.0)), 0.0);
+  TEST("float(vnl_bignum(0.0)) == 0.0", (float) vnl_bignum(0.0), 0.0);
   TEST("float(vnl_bignum(99999.0)) == 99999.0",
        ((float) vnl_bignum(99999.0)), 99999.0);
-  TEST("float(vnl_bignum(vnl_math::maxfloat)) == vnl_math::maxfloat",
-       (vnl_math::maxfloat), (float) vnl_bignum(vnl_math::maxfloat));
-  TEST("float(vnl_bignum(-vnl_math::maxfloat)) == -vnl_math::maxfloat",
-       (-vnl_math::maxfloat), float(vnl_bignum(-vnl_math::maxfloat)));
-  b = vnl_math::maxdouble;
+  TEST("float(vnl_bignum(vnl_numeric_traits<float>::maxval)) == vnl_numeric_traits<float>::maxval",
+       (vnl_numeric_traits<float>::maxval), (float) vnl_bignum(vnl_numeric_traits<float>::maxval));
+  TEST("float(vnl_bignum(-vnl_numeric_traits<float>::maxval)) == -vnl_numeric_traits<float>::maxval",
+       (-vnl_numeric_traits<float>::maxval), float(vnl_bignum(-vnl_numeric_traits<float>::maxval)));
+#ifndef __alpha__ // On Alpha, compiler runs out of memory
+  TEST("float(vnl_bignum(\"+Inf\")) == +Inf", (float) vnl_bignum("+Inf"), 1.0f/0.0f);
+#endif
+
+  b = vnl_numeric_traits<double>::maxval;
   ++b;
+  TEST("vnl_numeric_traits<double>::maxval + 1 is valid", b.is_infinity(), false);
 
   vcl_cout << "double conversion operator:\n";
-  TEST("double(vnl_bignum(0.0)) == 0.0", ((double) vnl_bignum(0.0)), 0.0);
+  TEST("double(vnl_bignum(0.0)) == 0.0", (double) vnl_bignum(0.0), 0.0);
   TEST("double(vnl_bignum(99999.0)) == 99999.0",
        (double) vnl_bignum(99999.0), 99999.0);
   TEST("double(vnl_bignum(1e300)) == 1e300",
        double(vnl_bignum(1e300)), 1e300);
   TEST("double(vnl_bignum(-1e300)) == -1e300",
        double(vnl_bignum(-1e300)), -1e300);
-  TEST("double(vnl_bignum(vnl_math::maxfloat)) == vnl_math::maxfloat",
-       (vnl_math::maxfloat), (double) vnl_bignum(vnl_math::maxfloat));
-  TEST("double(vnl_bignum(-vnl_math::maxfloat)) == -vnl_math::maxfloat",
-       (-vnl_math::maxfloat), double(vnl_bignum(-vnl_math::maxfloat)));
-  TEST("double(vnl_bignum(vnl_math::maxdouble)) == vnl_math::maxdouble",
-       (double) vnl_bignum(vnl_math::maxdouble), vnl_math::maxdouble);
-  TEST("double(vnl_bignum(-vnl_math::maxdouble)) == -vnl_math::maxdouble",
-       (double) vnl_bignum(-vnl_math::maxdouble), -vnl_math::maxdouble);
+  TEST("double(vnl_bignum(vnl_numeric_traits<float>::maxval)) == vnl_numeric_traits<float>::maxval",
+       (vnl_numeric_traits<float>::maxval), (double) vnl_bignum(vnl_numeric_traits<float>::maxval));
+  TEST("double(vnl_bignum(-vnl_numeric_traits<float>::maxval)) == -vnl_numeric_traits<float>::maxval",
+       (-vnl_numeric_traits<float>::maxval), double(vnl_bignum(-vnl_numeric_traits<float>::maxval)));
+  TEST("double(vnl_bignum(vnl_numeric_traits<double>::maxval)) == vnl_numeric_traits<double>::maxval",
+       (double) vnl_bignum(vnl_numeric_traits<double>::maxval), vnl_numeric_traits<double>::maxval);
+  TEST("double(vnl_bignum(-vnl_numeric_traits<double>::maxval)) == -vnl_numeric_traits<double>::maxval",
+       (double) vnl_bignum(-vnl_numeric_traits<double>::maxval), -vnl_numeric_traits<double>::maxval);
+#ifndef __alpha__ // On Alpha, compiler runs out of memory
+  TEST("double(vnl_bignum(\"+Inf\")) == +Inf", (double) vnl_bignum("+Inf"), 1.0/0.0);
+#endif
 }
 
 static void run_assignment_tests() {
@@ -204,38 +223,87 @@ static void run_logical_comparison_tests() {
   vnl_bignum b1(1L);
   vnl_bignum b2(0x7fffL);
   vnl_bignum b3(-0x7fffL);
+  vnl_bignum p_inf("+Inf");
+  vnl_bignum m_inf("-Inf");
 
   TEST("b0 == b0", b0 == b0, true);
   TEST("b0 == b1", b0 == b1, false);
   TEST("b0 == b2", b0 == b2, false);
   TEST("b0 == b3", b0 == b3, false);
+  TEST("b1 == b1", b1 == b1, true);
   TEST("b1 == b2", b1 == b2, false);
   TEST("b1 == b3", b1 == b3, false);
+  TEST("b2 == b2", b2 == b2, true);
   TEST("b2 == b3", b2 == b3, false);
+  TEST("b3 == b3", b3 == b3, true);
+  TEST("p_inf == p_inf", p_inf == p_inf, true);
+  TEST("p_inf == m_inf", p_inf == m_inf, false);
+  TEST("m_inf == m_inf", m_inf == m_inf, true);
+  TEST("b0 == p_inf", b0 == p_inf, false);
+  TEST("b1 == p_inf", b1 == p_inf, false);
+  TEST("b2 == p_inf", b2 == p_inf, false);
+  TEST("b3 == p_inf", b3 == p_inf, false);
+  TEST("b0 == m_inf", b0 == m_inf, false);
+  TEST("b1 == m_inf", b1 == m_inf, false);
+  TEST("b2 == m_inf", b2 == m_inf, false);
+  TEST("b3 == m_inf", b3 == m_inf, false);
 
   TEST("b0 != b0", b0 != b0, false);
   TEST("b0 != b1", b0 != b1, true);
   TEST("b0 != b2", b0 != b2, true);
   TEST("b0 != b3", b0 != b3, true);
+  TEST("b1 != b1", b1 != b1, false);
   TEST("b1 != b2", b1 != b2, true);
   TEST("b1 != b3", b1 != b3, true);
+  TEST("b2 != b2", b2 != b2, false);
   TEST("b2 != b3", b2 != b3, true);
+  TEST("b3 != b3", b3 != b3, false);
 
   TEST("b0 < b0", b0 < b0, false);
   TEST("b0 < b1", b0 < b1, true);
   TEST("b0 < b2", b0 < b2, true);
   TEST("b0 < b3", b0 < b3, false);
+  TEST("b1 < b1", b1 < b1, false);
   TEST("b1 < b2", b1 < b2, true);
   TEST("b1 < b3", b1 < b3, false);
+  TEST("b2 < b2", b2 < b2, false);
   TEST("b2 < b3", b2 < b3, false);
+  TEST("b3 < b3", b3 < b3, false);
+  TEST("p_inf < p_inf", p_inf < p_inf, false);
+  TEST("p_inf < m_inf", p_inf < m_inf, false);
+  TEST("m_inf < p_inf", m_inf < p_inf, true);
+  TEST("m_inf < m_inf", m_inf < m_inf, false);
+  TEST("b0 < p_inf", b0 < p_inf, true);
+  TEST("b1 < p_inf", b1 < p_inf, true);
+  TEST("b2 < p_inf", b2 < p_inf, true);
+  TEST("b3 < p_inf", b3 < p_inf, true);
+  TEST("b0 < m_inf", b0 < m_inf, false);
+  TEST("b1 < m_inf", b1 < m_inf, false);
+  TEST("b2 < m_inf", b2 < m_inf, false);
+  TEST("b3 < m_inf", b3 < m_inf, false);
 
   TEST("b0 > b0", b0 > b0, false);
   TEST("b0 > b1", b0 > b1, false);
   TEST("b0 > b2", b0 > b2, false);
   TEST("b0 > b3", b0 > b3, true);
+  TEST("b1 > b1", b1 > b1, false);
   TEST("b1 > b2", b1 > b2, false);
   TEST("b1 > b3", b1 > b3, true);
+  TEST("b2 > b2", b2 > b2, false);
   TEST("b2 > b3", b2 > b3, true);
+  TEST("b3 > b3", b3 > b3, false);
+  TEST("p_inf > p_inf", p_inf > p_inf, false);
+  TEST("p_inf > m_inf", p_inf > m_inf, true);
+  TEST("m_inf > p_inf", m_inf > p_inf, false);
+  TEST("m_inf > m_inf", m_inf > m_inf, false);
+  TEST("b0 > p_inf", b0 > p_inf, false);
+  TEST("b1 > p_inf", b1 > p_inf, false);
+  TEST("b2 > p_inf", b2 > p_inf, false);
+  TEST("b3 > p_inf", b3 > p_inf, false);
+  TEST("b0 > m_inf", b0 > m_inf, true);
+  TEST("b1 > m_inf", b1 > m_inf, true);
+  TEST("b2 > m_inf", b2 > m_inf, true);
+  TEST("b3 > m_inf", b3 > m_inf, true);
 
   TEST("b3 != b2", b3 != b2, true);
   TEST("b3 != b3", b3 != b3, false);
@@ -254,36 +322,45 @@ static void run_logical_comparison_tests() {
 static void run_division_tests() {
   vcl_cout << "\nStarting division tests:\n";
 
-  TEST("long(vnl_bignum(0L)/vnl_bignum(1L))", long(vnl_bignum(0L)/vnl_bignum(1L)), 0);
-  TEST("long(vnl_bignum(-1L)/vnl_bignum(1L))", long(vnl_bignum(-1L)/vnl_bignum(1L)), -1);
+  TEST("long(vnl_bignum(0L)/vnl_bignum(1L))", long(vnl_bignum(0L)/vnl_bignum(1L)), 0L);
+  TEST("long(vnl_bignum(-1L)/vnl_bignum(1L))", long(vnl_bignum(-1L)/vnl_bignum(1L)), -1L);
+  TEST("long(vnl_bignum(-1L)/vnl_bignum(\"+Inf\"))", long(vnl_bignum(-1L)/vnl_bignum("+Inf")), 0L);
+  TEST("vnl_bignum(\"+Inf\")/(-1L)", vnl_bignum("+Inf")/(-1L), vnl_bignum("-Inf"));
+  TEST("vnl_bignum(-1L)/0L", vnl_bignum(-1L)/0L, vnl_bignum("-Inf"));
 
   vnl_bignum b1,b2,b3;
   long i,j,k,l;
   long div_errors = 0;
   long mod_errors = 0;
 
-  vcl_cout << " for (i = 0xffffff; i > 0; i /= 0x10) \n";
-  vcl_cout << "   for (j = 0x7ffffff; j > 0; j /= 0x10) \n";
-  vcl_cout << "     for (k = 1; k < 17; ++k) \n";
-  vcl_cout << "       for (l = 1; l < 17; ++l) \n         ";
+  vcl_cout << " for (i = 0xffffff; i > 0; i /= 0x10) \n"
+           << "   for (j = 0x7ffffff; j > 0; j /= 0x10) \n"
+           << "     for (k = 1; k < 17; ++k) \n"
+           << "       for (l = 1; l < 17; ++l) \n         ";
   for (i = 0xffffff; i > 0; i /= 0x10) {
     vcl_cout.put('.');
     vcl_cout.flush();
     for (j = 0x7ffffff; j > 0; j /= 0x10) {
       for (k = 1; k < 17; ++k) {
         for (l = 1; l < 17; ++l) {
-          b1 = vnl_bignum(i+k);
-          b2 = vnl_bignum(j+l);
-          b3 = vnl_bignum(long((i+k)/(j+l)));
+          vnl_bignum b1(i+k);
+          vnl_bignum b2(j+l);
+          vnl_bignum b3(long((i+k)/(j+l)));
           if (b1/b2 != b3) {
             TEST("(vnl_bignum(i+k)/vnl_bignum(j+l)) == vnl_bignum(long((i+k)/(j+l)))", false, true);
-            vcl_cout<<vcl_hex<< "i="<<i<<", j="<<j<<", k="<<k<<", l="<<l<<"\n";
+#ifndef __alpha__ // On Alpha, compiler runs out of memory
+            vcl_cout<<vcl_hex<< "i=0x"<<i<<", j=0x"<<j<<", k=0x"<<k<<", l="<<l
+                    <<vcl_dec<<", b1="<<b1<<", b2="<<b2<<", b3="<<b3<<'\n';
+#endif
             ++div_errors;
           }
           b3 = vnl_bignum(long((i+k)%(j+l)));
           if (b1%b2 != b3) {
             TEST("(vnl_bignum(i+k)%vnl_bignum(j+l)) == vnl_bignum(long((i+k)%(j+l)))", false, true);
-            vcl_cout<<vcl_hex<< "i="<<i<<", j="<<j<<", k="<<k<<", l="<<l<<"\n";
+#ifndef __alpha__ // On Alpha, compiler runs out of memory
+            vcl_cout<<vcl_hex<< "i=0x"<<i<<", j=0x"<<j<<", k=0x"<<k<<", l="<<l
+                    <<vcl_dec<<", b1="<<b1<<", b2="<<b2<<", b3="<<b3<<'\n';
+#endif
             ++mod_errors;
           }
         }
@@ -369,8 +446,11 @@ static void run_addition_subtraction_tests() {
   vnl_bignum b0(0L);
   vnl_bignum zillion("1000000000000000000");
   vnl_bignum b1000(1000L), b1000000(1000000L);
+  vnl_bignum p_inf("+Inf"), m_inf("-Inf");
 
   TEST("-b0 == b0", -b0, b0);
+  TEST("-p_inf == m_inf", -p_inf, m_inf);
+  TEST("-m_inf == p_inf", -m_inf, p_inf);
   TEST("-b1000 == vnl_bignum(-1L)*b1000", -b1000, vnl_bignum(-1L)*b1000);
   TEST("-(-b1000000) == b1000000", -(-b1000000), b1000000);
   TEST("b0 + b1000 == b1000", b0 + b1000, b1000);
@@ -387,10 +467,10 @@ static void run_addition_subtraction_tests() {
   TEST("zillion + (-zillion) == b0", zillion + (-zillion), b0);
   TEST("zillion + b1000 == b1000000*b1000000*b1000000 + b1000",
         zillion + b1000,   b1000000*b1000000*b1000000 + b1000);
-
-  TEST("-b0 == b0", -b0, b0);
-  TEST("-b1000 == vnl_bignum(-1L)*b1000", -b1000, vnl_bignum(-1L)*b1000);
-  TEST("-(-b1000000) == b1000000", -(-b1000000), b1000000);
+  TEST("zillion + p_inf == p_inf", zillion + p_inf, p_inf);
+  TEST("zillion + m_inf == m_inf", zillion + m_inf, m_inf);
+  TEST("p_inf + zillion == p_inf", p_inf + zillion, p_inf);
+  TEST("m_inf + zillion == m_inf", m_inf + zillion, m_inf);
 
   TEST("b0 - b1000 == -b1000", b0 - b1000, -b1000);
   TEST("b0 - b1000000 == -b1000000", b0 -b1000000, -b1000000);
@@ -412,6 +492,10 @@ static void run_addition_subtraction_tests() {
         zillion - b1000,   b1000000*b1000000*b1000000 - b1000);
   TEST("-zillion - b1000 == -b1000000*b1000000*b1000000 - b1000",
         -zillion - b1000,   -b1000000*b1000000*b1000000 - b1000);
+  TEST("zillion - p_inf == m_inf", zillion - p_inf, m_inf);
+  TEST("zillion - m_inf == p_inf", zillion - m_inf, p_inf);
+  TEST("p_inf - zillion == p_inf", p_inf - zillion, p_inf);
+  TEST("m_inf - zillion == m_inf", m_inf - zillion, m_inf);
 
   // example in book
   vnl_bignum b2 = "0xffffffff";                 // Create vnl_bignum object
@@ -427,6 +511,7 @@ static void run_multiplication_tests() {
 
   vnl_bignum b0(0L), b1000(1000L), b1000000(1000000L),
   zillion("1000000000000000000");
+  vnl_bignum p_inf("+Inf"), m_inf("-Inf");
 
   TEST("b0*b0 == b0", b0*b0, b0);
   TEST("b0*b1000 == b0", b0*b1000, b0);
@@ -435,14 +520,14 @@ static void run_multiplication_tests() {
   TEST("b1000*b1000000 == b1000000*b1000", b1000*b1000000, b1000000*b1000);
   TEST("-b1000000*b1000000*b1000000 == -zillion", -b1000000*b1000000*b1000000, -zillion);
   TEST("zillion*-b1000 == b1000*-zillion", zillion*-b1000, b1000*-zillion);
-
-  TEST("sqrt(b1000000) == 1000", vcl_sqrt(b1000000), b1000);
-  TEST("sqrt(zillion) == b1000*b1000000", vcl_sqrt(zillion), b1000*b1000000);
+  TEST("p_inf*b1000 == p_inf", p_inf*b1000, p_inf);
+  TEST("m_inf*b1000 == m_inf", m_inf*b1000, m_inf);
 }
 
-static void run_left_shift_tests() {
-
+static void run_left_shift_tests()
+{
   vnl_bignum b1(1L);
+  vnl_bignum p_inf("+Inf"), m_inf("-Inf");
 
   // left shift
   TEST("int(b1) == 1",int(b1), 1);
@@ -464,6 +549,8 @@ static void run_left_shift_tests() {
   TEST("long(b1 << 16) == 65536",long(b1 << 16), 65536);
   TEST("(b1 << 32) == vnl_bignum(\"4294967296\")",
        (b1 << 32), vnl_bignum("4294967296"));
+  TEST("p_inf << 16 == p_inf",p_inf << 16, p_inf);
+
   TEST("long(-b1 << 1) == -2",long(-b1 << 1), -2);
   TEST("long(-b1 << 2) == -4",long(-b1 << 2), -4);
   TEST("long(-b1 << 3) == -8",long(-b1 << 3), -8);
@@ -482,13 +569,18 @@ static void run_left_shift_tests() {
   TEST("long(-b1 << 16) == -65536",long(-b1 << 16), -65536);
   TEST("(-b1 << 32) == vnl_bignum(\"-4294967296\")",
        (-b1 << 32), vnl_bignum("-4294967296"));
+  TEST("m_inf << 16 == m_inf",m_inf << 16, m_inf);
+
   TEST("long(b1 << -16) == 0",long(b1 << -16), 0);
   TEST("long(-b1 << -16) == 0",long(-b1 << -16), 0);
 }
 
-static void run_right_shift_tests() {
-  // right shift
+static void run_right_shift_tests()
+{
   vnl_bignum b2("4294967296");
+  vnl_bignum p_inf("+Inf"), m_inf("-Inf");
+
+  // right shift
   TEST("b2 == vnl_bignum(\"4294967296\")",b2, vnl_bignum("4294967296"));
   TEST("(b2 >> 1) == vnl_bignum(\"2147483648\")", (b2 >> 1), vnl_bignum("2147483648"));
   TEST("long(b2 >> 2) == 1073741824",long(b2 >> 2), 1073741824L);
@@ -509,6 +601,8 @@ static void run_right_shift_tests() {
   TEST("long(b2 >> 32) == 1",long(b2 >> 32), 1L);
   TEST("long(b2 >> 33) == 0",long(b2 >> 33), 0L);
   TEST("long(b2 >> 67) == 0",long(b2 >> 67), 0L);
+  TEST("p_inf >> 16 == p_inf",p_inf >> 16, p_inf);
+
   TEST("(-b2 >> 1) == vnl_bignum(\"-2147483648\")", (-b2 >> 1), vnl_bignum("-2147483648"));
   TEST("long(-b2 >> 2) == -1073741824",long(-b2 >> 2), -1073741824L);
   TEST("long(-b2 >> 3) == -536870912",long(-b2 >> 3), -536870912L);
@@ -528,6 +622,7 @@ static void run_right_shift_tests() {
   TEST("long(-b2 >> 32) == -1",long(-b2 >> 32), -1);
   TEST("long(-b2 >> 33) == -0",long(-b2 >> 33), 0);
   TEST("long(-b2 >> 67) == -0",long(-b2 >> 67), 0);
+  TEST("m_inf >> 16 == m_inf",m_inf >> 16, m_inf);
 }
 
 static void run_shift_tests() {
