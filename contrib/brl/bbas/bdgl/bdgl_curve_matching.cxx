@@ -1,3 +1,5 @@
+#include "bdgl_curve_matching.h"
+
 #include <vcl_cmath.h>
 #include <vnl/vnl_math.h>
 #include <vcl_vector.h>
@@ -5,11 +7,9 @@
 #include <vcl_algorithm.h>
 #include <vcl_iostream.h>
 
-#include <bdgl/bdgl_curve_matching.h>
 #include <bdgl/bdgl_tracker_curve_sptr.h>
 #include <bdgl/bdgl_tracker_curve.h>
-
-#include "curveMatch.h"
+#include <bdgl/curveMatch.h>
 
 bdgl_curve_matching ::bdgl_curve_matching()
 {
@@ -121,7 +121,6 @@ double bdgl_curve_matching :: coarse_match_DP(bdgl_curve_description * desc1,
 {
   vcl_vector<vcl_pair<double,double> > v1,v2;
 
-  vcl_map<int,int>::iterator iter;
   for (unsigned int i=0;i<desc1->points_.size(); i+=5)
   {
     vcl_pair<double,double> coordinate;
