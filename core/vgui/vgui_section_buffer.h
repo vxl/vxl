@@ -25,6 +25,8 @@
 #include <vgui/vgui_gl.h>
 class vil_image;
 
+class vgui_accelerate_cached_image;
+
 // The 'format' and 'type' arguments describe the image format in
 // OpenGL terms. They are those passed to glDrawPixels(), so that
 // 'format' may be one of
@@ -73,6 +75,8 @@ struct vgui_section_buffer
   bool texture_end() const;
 
 public:
+  vgui_accelerate_cached_image* cache_;
+  
   // fsm: I want these to be GLenums as gcc 2.95 will not implicitly
   // cast ints to enums. Please don't make them ints.
   GLenum format;
