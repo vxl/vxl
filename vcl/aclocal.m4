@@ -99,6 +99,46 @@ export VCL_HAS_TYPENAME
 
 
 
+### Check whether the compiler supports "export"
+AC_DEFUN(AC_CXX_HAS_EXPORT,[
+AC_CACHE_CHECK([whether the C++ compiler accepts the keyword 'export'],ac_cxx_has_export,[
+AC_LANG_SAVE
+AC_LANG_CPLUSPLUS
+
+VCL_COMPILE_CXX
+
+AC_TRY_COMPILE(
+[
+export
+template <class T, int N>
+struct plither
+{
+  plither();
+  ~plither();
+  void f(T *, int);
+};
+
+void g()
+{
+  double x;
+  int y;
+  plither<double, 3> obj;
+  obj.f(&x, y);
+}
+],,ac_cxx_has_export=yes,ac_cxx_has_export=no)
+AC_LANG_RESTORE
+ ])
+if test "$ac_cxx_has_export" = "yes" ; then
+  VCL_HAS_EXPORT=1;
+else
+  VCL_HAS_EXPORT=0;
+fi;
+export VCL_HAS_EXPORT
+])
+
+
+
+
 ### Check whether the compiler supports "mutable"
 AC_DEFUN(AC_CXX_HAS_MUTABLE,[
 AC_CACHE_CHECK([whether the C++ compiler supports the keyword 'mutable'],ac_cxx_has_mutable,[
