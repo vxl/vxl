@@ -205,7 +205,7 @@ bool vtol_vertex::is_connected(const vtol_vertex &v2)
 //: This method returns true if the Edge, edg, is on the superior list of the vertex.
 bool vtol_vertex::is_endpoint(const vtol_edge &edg)
 {
-  vtol_edge_sptr e=(vtol_edge*)(&edg);
+  vtol_edge_sptr e=(vtol_edge*)(&edg); // const violation
   const edge_list *edge_list=edges();
   bool result=vcl_find(edge_list->begin(),edge_list->end(),e)!=edge_list->end();
   delete edge_list;

@@ -143,16 +143,12 @@ int vsol_group_2d::size(void) const
 //---------------------------------------------------------------------------
 int vsol_group_2d::deep_size(void) const
 {
-  int result;
-  vsol_group_2d *g;
+  int result = 0;
   vcl_list<vsol_spatial_object_2d_sptr>::iterator i;
-
-  result=0;
-
   for(i=storage_->begin();i!=storage_->end();++i)
     {
       // g=dynamic_cast<vsol_group_2d const *>((*i).ptr());   // GOOD VERSION
-      g=(vsol_group_2d *)((*i).ptr()->cast_to_group()); // BAD HACK
+      vsol_group_2d const* g=(vsol_group_2d const*)((*i).ptr()->cast_to_group()); // BAD HACK
       if(g!=0)
         result+=g->deep_size();
       else

@@ -94,7 +94,7 @@ vtol_two_chain::vtol_two_chain(vtol_two_chain const &other)
   const chain_list *hierarchy_infs;
   chain_list::const_iterator hhi;
 
-  fl=(vtol_two_chain *)(&other);
+  fl=(vtol_two_chain *)(&other); // const violation
 
   edges=fl->edges();
   verts=fl->vertices();

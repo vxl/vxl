@@ -85,7 +85,7 @@ vtol_one_chain::vtol_one_chain(vtol_one_chain const& other)
   const chain_list *hierarchy_infs;
   chain_list::const_iterator h;
 
-  el=(vtol_one_chain *)(&other);
+  el=(vtol_one_chain *)(&other); // const violation
   verts=el->vertices();
   len=verts->size();
   vcl_vector<vtol_topology_object_sptr> newverts(len);

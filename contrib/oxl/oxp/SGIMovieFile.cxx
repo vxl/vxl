@@ -409,7 +409,7 @@ int SGIMV_Variables::get_int(vcl_string const& s)
   const vcl_string& v = data[s];
   if (v.size() == 0)
     return -1;
-  vcl_istrstream vs((char*)v.data(), v.size());
+  vcl_istrstream vs((const char*)v.data(), v.size());
   int x;
   vs >> x;
   return x;
