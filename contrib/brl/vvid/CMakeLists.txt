@@ -2,6 +2,7 @@
 
 INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR} )
 INCLUDE_DIRECTORIES( ${GEL_INCLUDE_DIR} )
+INCLUDE_DIRECTORIES( ${MUL_INCLUDE_DIR} )
 INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bbas )
 INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bseg )
 # find the path to the cmu camera libraries and includes
@@ -43,7 +44,9 @@ ELSE(HAS_CMU1394CAMERA)
  ADD_LIBRARY(vvid ${vvid_sources})
 ENDIF(HAS_CMU1394CAMERA)
 
-LINK_LIBRARIES( vvid vpro sdet gevd bgui vtol vgui bdgl brip vidl vbl vul vil1 )
+
+LINK_LIBRARIES( vvid vpro sdet gevd vtol brip bgui vgui vidl vbl vul vil1 bdgl mbl)
+
 
 # the main executables
 SUBDIRS(bin)
