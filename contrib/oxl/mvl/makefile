@@ -95,6 +95,12 @@ SOURCES += ClosestImagePointFinder.cxx
 
 SOURCES += FMatrixCompute.cxx
 SOURCES += FMatrixComputeLinear.cxx
+SOURCES += FMatrixCompute7Point.cxx
+SOURCES += FMatrixComputeLMedSq.cxx
+SOURCES += FMatrixComputeMLESAC.cxx
+SOURCES += FMatrixComputeNonLinear.cxx
+SOURCES += FMatrixComputeRANSAC.cxx
+SOURCES += FMatrixComputeRobust.cxx
 SOURCES += FMPlanarComputeNonLinear.cxx
 SOURCES += FMPlanarNonLinFun.cxx
 SOURCES += FDesignMatrix.cxx
@@ -109,12 +115,19 @@ SOURCES += HMatrix2DCompute.cxx
 SOURCES += HMatrix2DCompute4Line.cxx
 SOURCES += HMatrix2DCompute4Point.cxx
 SOURCES += HMatrix2DComputeLinear.cxx
+SOURCES += HMatrix2DComputeMLESAC.cxx
+SOURCES += HMatrix2DComputeRobust.cxx
 SOURCES += HMatrix2DAffineCompute.cxx
 SOURCES += HMatrix2DSimilarityCompute.cxx
 SOURCES += HMatrix2DEuclideanCompute.cxx
 
 SOURCES += PMatrixCompute.cxx
 SOURCES += PMatrixComputeLinear.cxx
+
+# 7. Misc utility functions
+
+SOURCES += ComputeGRIC.cxx
+SOURCES += Probability.cxx
 
 #######################################
 include ${IUEROOT}/config/top-params.mk
