@@ -175,7 +175,7 @@ void vidl_player_manager::pause_video()
 void vidl_player_manager::go_to_frame()
 {
   if(play_video_) return;
-  static unsigned frame_num = 0;
+  static int frame_num = 0;
   vgui_dialog go_to_frame_dlg("Go to Frame");
   go_to_frame_dlg.field("Frame Number", frame_num);
   if (!go_to_frame_dlg.ask())
