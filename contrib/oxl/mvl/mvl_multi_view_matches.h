@@ -20,8 +20,7 @@
 //     David Capel, Oxford RRG, 16 April 2000
 //-----------------------------------------------------------------------------
 
-//#include <vcl_memory.h>
-#include <vcl_functional.h> //vxl_filter
+#include <vcl_functional.h>
 #include <vcl_utility.h>
 #include <vcl_vector.h>
 #include <vcl_iosfwd.h>
