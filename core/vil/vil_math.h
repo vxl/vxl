@@ -7,11 +7,13 @@
 // \author Tim Cootes
 
 #include <vcl_cassert.h>
+#include <vcl_vector.h>
 #include <vcl_cmath.h>
 #include <vil/vil_image_view.h>
 #include <vil/vil_view_as.h>
 #include <vil/vil_plane.h>
 #include <vil/vil_transform.h>
+
 
 //: Compute minimum and maximum values over view
 template<class T>
@@ -68,25 +70,23 @@ inline void vil_math_value_range(const vil_image_view<vil_rgb<float> >& rgb_view
 }
 
 
-//: Compute values corresponding to a pair of percentiles of the range of im.
-// Lower and higher percentiles expressed as fractions, e.g. 0.05 and 0.95.
+//: Compute value corresponding to a percentile of the range of im.
+// Percentiles expressed as fraction, e.g. 0.05, or 0.95.
+// \param im The image to examine.
+// \param fraction The fraction of the data range (from the lower end).
+// \retval value The image data value corresponding to the specified percentile.
 // \relates vil_image_view
 // \note This function requires the sorting of large parts of the image data
 // and can be very expensive in terms of both processing and memory.
 template <class T>
 inline void vil_math_value_range_percentile(const vil_image_view<T>& im,
-											                      const double frac_lo, 
-                                            const double frac_hi,
-											                      T& value_lo, 
-                                            T& value_hi)
+                                            const double fraction,
+                                            T& value)
 {
   // Test for invalid inputs
-  if (im.size()==0 || 
-      frac_lo<0.0 || frac_hi<=0.0 || frac_lo>=1.0 || frac_hi>1.0 ||
-      frac_lo>=frac_hi)
+  if (im.size()==0 || fraction<0.0 || fraction>=1.0)
   {
-    value_lo = 0;
-    value_hi = 0;
+    value = 0;
     return;
   }
   
@@ -95,19 +95,19 @@ inline void vil_math_value_range_percentile(const vil_image_view<T>& im,
   unsigned nj = im.nj();
   unsigned np = im.nplanes();
   vcl_ptrdiff_t istep = im.istep(); 
-  vcl_ptrdiff_t jstep=im.jstep();
+  vcl_ptrdiff_t jstep = im.jstep();
   vcl_ptrdiff_t pstep = im.planestep();
   vcl_vector<T> data(ni*nj*np);
   
   typename vcl_vector<T>::iterator it = data.begin();
-  const T* plane = im.top_left_ptr();
-  for (unsigned int p=0;p<np;++p, plane += pstep)
+  const T* plane = im.origin_ptr();
+  for (unsigned int p=0; p<np; ++p, plane+=pstep)
   {
     const T* row = plane;
-    for (unsigned int j=0;j<nj;++j, row += jstep)
+    for (unsigned int j=0; j<nj; ++j, row+=jstep)
     {
       const T* pixel = row;
-      for (unsigned int i=0;i<ni;++i, pixel+=istep)
+      for (unsigned int i=0; i<ni; ++i, pixel+=istep)
       {
         *it = *pixel;
         it++;
@@ -115,16 +115,12 @@ inline void vil_math_value_range_percentile(const vil_image_view<T>& im,
     }
   }
   unsigned npix = data.size();
-
-  // Sort the list up to the higher fraction
-  int index_hi = int (frac_hi*npix - 0.5);
-  typename vcl_vector<T>::iterator index_hi_it = data.begin() + index_hi;
-  vcl_nth_element(data.begin(), index_hi_it, data.end(), vcl_less<T>());
-  int index_lo = int (frac_lo*npix - 0.5);
-
-  // Get the values corresponding to the lower and higher fraction
-  value_hi = *index_hi_it;
-  value_lo = *(data.begin() + index_lo);
+  
+  // Get the nth_element corresponding to the specified fraction
+  int index = int (fraction*npix - 0.5);
+  typename vcl_vector<T>::iterator index_it = data.begin() + index;
+  vcl_nth_element(data.begin(), index_it, data.end());
+  value = *index_it;
 }
 
 
