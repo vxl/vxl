@@ -2,12 +2,6 @@
 #ifndef vgl_homg_point_2d_txx_
 #define vgl_homg_point_2d_txx_
 
-//:
-// \file
-// \brief Represents a homogeneous 2D point.
-// \author Don Hamilton, Peter Tu
-// \date   Feb 15 2000
-
 #include "vgl_homg_point_2d.h"
 #include <vgl/vgl_homg_line_2d.h>
 #include <vcl_iostream.h>
@@ -31,17 +25,19 @@ bool vgl_homg_point_2d<Type>::operator==(vgl_homg_point_2d<Type> const& other) c
 }
 
 template <class Type>
-vcl_ostream&  operator<<(vcl_ostream& s, const vgl_homg_point_2d<Type>& p) {
+vcl_ostream& operator<<(vcl_ostream& s, vgl_homg_point_2d<Type> const& p)
+{
   return s << " <vgl_homg_point_2d ("
            << p.x() << "," << p.y() << "," << p.w() << ") >";
 }
 
 template <class Type>
-vcl_istream&  operator>>(vcl_istream& is,  vgl_homg_point_2d<Type>& p) {
+vcl_istream& operator>>(vcl_istream& s, vgl_homg_point_2d<Type>& p)
+{
   Type x, y, w;
-  is >> x >> y >> w;
+  s >> x >> y >> w;
   p.set(x,y,w);
-  return is;
+  return s;
 }
 
 #define VGL_HOMG_POINT_2D_INSTANTIATE(T) \

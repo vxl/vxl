@@ -23,7 +23,7 @@ vgl_homg_point_3d<Type>::vgl_homg_point_3d (vgl_homg_plane_3d<Type> const& l1,
 }
 
 template <class Type>
-bool vgl_homg_point_3d<Type>::operator==(const vgl_homg_point_3d<Type> &other) const
+bool vgl_homg_point_3d<Type>::operator==(vgl_homg_point_3d<Type> const& other) const
 {
   return (this==&other) ||
          (   this->x()*other.w() == this->w()*other.x()
@@ -32,8 +32,7 @@ bool vgl_homg_point_3d<Type>::operator==(const vgl_homg_point_3d<Type> &other) c
 }
 
 template <class Type>
-vcl_ostream &operator<<(vcl_ostream &s,
-                    const vgl_homg_point_3d<Type> &p)
+vcl_ostream& operator<<(vcl_ostream& s, vgl_homg_point_3d<Type> const& p)
 {
   return s << " <vgl_homg_point_3d ("
            << p.x() << "," << p.y() << ","
@@ -41,13 +40,12 @@ vcl_ostream &operator<<(vcl_ostream &s,
 }
 
 template <class Type>
-vcl_istream &operator>>(vcl_istream &is,
-                    vgl_homg_point_3d<Type> &p)
+vcl_istream& operator>>(vcl_istream& s, vgl_homg_point_3d<Type>& p)
 {
   Type x, y, z, w;
-  is >> x >> y >> z >> w;
+  s >> x >> y >> z >> w;
   p.set(x,y,z,w);
-  return is;
+  return s;
 }
 
 #define VGL_HOMG_POINT_3D_INSTANTIATE(T) \
