@@ -299,6 +299,12 @@ SOURCE=.\vil2_fft.h
 # Begin Source File
 SOURCE=.\vil2_fft.txx
 # End Source File
+# Begin Source File
+SOURCE=.\vil2_exp_filter_2d.h
+# End Source File
+# Begin Source File
+SOURCE=.\vil2_suppress_non_max.h
+# End Source File
 # End Group
 # PROP Default_Filter "ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe"
 # End Group
