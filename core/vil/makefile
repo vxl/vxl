@@ -20,6 +20,9 @@ SOURCES += vil_memory_image.cxx
 # file format readers/writers
 SOURCES += file_formats/vil_pnm.cxx
 SOURCES += file_formats/vil_ras.cxx
+SOURCES += file_formats/vil_viff.cxx
+SOURCES += file_formats/vil_viff_support.c
+MANPAGE_SOURCES += file_formats/vil_viffheader.h
 SOURCES += file_formats/vil_dicom.cxx
 SOURCES += file_formats/vil_dicom_header.cxx
 ifeq ($(HAS_PNG),1)
