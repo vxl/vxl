@@ -645,7 +645,7 @@ scan_right(double a,double s, vcl_vector<bmrf_epi_seg_sptr> const& right_cand,
 //==================================================================
 bool bmrf_network_builder::fill_intensity_values(bmrf_epi_seg_sptr& seg)
 {
-  vcl_cout << "\n\nStarting new Seg\n";
+  //vcl_cout << "\n\nStarting new Seg\n";
   //the potential bounding segments
   vcl_vector<bmrf_epi_seg_sptr> left_cand, right_cand;
   this->intensity_candidates(seg, left_cand, right_cand);
@@ -669,12 +669,12 @@ bool bmrf_network_builder::set_intensity_info()
   //the min and max caches hold the same segments, just sorted
   //differently
   vcl_vector<bmrf_epi_seg_sptr>& segs = min_epi_segs_;
-  vcl_cout << "Intensity data for Frame " << frame_ << '\n';
+  //vcl_cout << "Intensity data for Frame " << frame_ << '\n';
   for (vcl_vector<bmrf_epi_seg_sptr>::iterator sit = segs.begin();
        sit != segs.end(); sit++)
   {
     this->fill_intensity_values(*sit);
-    vcl_cout << *(*sit) << '\n'<< vcl_flush;
+    //vcl_cout << *(*sit) << '\n'<< vcl_flush;
   }
 return true;
 }
@@ -726,7 +726,7 @@ time_neighbors(bmrf_node_sptr const& node,
   for (bmrf_network::seg_node_map::const_iterator nit = network_->begin(frame-1);
        nit != network_->end(frame-1); ++nit)
     if ((nit->first->min_s() <= s_max) &&
-        (nit->first->max_s() < (s_min - s_range_)))
+        (nit->first->max_s() > (s_min - s_range_)))
       temp.push_back(nit->second);
 
   //filter out nodes that do not lie within the alpha range of the node
