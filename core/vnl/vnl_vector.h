@@ -1,4 +1,4 @@
-// This is vxl/vnl/vnl_vector.h
+// This is core/vnl/vnl_vector.h
 #ifndef vnl_vector_h_
 #define vnl_vector_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
@@ -87,10 +87,10 @@ class vnl_vector
 
   //: Creates a vector of specified length and initialize first n elements with values. O(n).
   vnl_vector (unsigned len, int n, T const values[]);
-
+ private: // deprecated!
   //: Creates a vector of length 3 and initializes with the arguments, x,y,z.
   vnl_vector (T const&, T const&, T const&);
-
+ public:
   //: Create n element vector and copy data from data_block
   vnl_vector (T const* data_block,unsigned int n);
 
