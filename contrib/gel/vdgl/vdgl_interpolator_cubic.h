@@ -8,11 +8,11 @@
 // \file
 // \brief Represents a 2D interpolator_cubic for a vdgl_edgel_chain
 // \author
-//    Geoff Cross
+//  Geoff Cross
 //
 // \verbatim
-// Modifications
-//  4-Dec-2002  Peter Vanroose  Implemented get_tangent_angle
+//  Modifications
+//   4-Dec-2002  Peter Vanroose  Implemented get_tangent_angle
 // \endverbatim
 
 #include <vdgl/vdgl_interpolator.h>
@@ -29,7 +29,8 @@ class vdgl_interpolator_cubic : public vdgl_interpolator
   ~vdgl_interpolator_cubic();
 
   // Operators----------------------------------------------------------------
-  //: order of interpolation 1=linear, 2 = quadratic, 3 = cubic, ..etc. 
+
+  //: order of interpolation 1=linear, 2 = quadratic, 3 = cubic, ..etc.
   virtual short order() const {return 3;}
 
   //: interpolation 0th degree
