@@ -1,7 +1,7 @@
 #ifndef vcl_gcc_cmath_h_
 #define vcl_gcc_cmath_h_
 
-#include <iso/vcl_cmath.h>
+#include "../iso/vcl_cmath.h"
 
 // 1.5 fix system header.
 #if defined (linux) && defined (__OPTIMIZE__)

@@ -2,7 +2,7 @@
 #define vcl_sunpro_cmath_h_
 
 // include system header
-#include <iso/vcl_cmath.h>
+#include "../iso/vcl_cmath.h"
 
 //fix system header.
 #if defined(VCL_SUNPRO_CC_50)

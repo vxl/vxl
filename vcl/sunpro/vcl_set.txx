@@ -3,7 +3,6 @@
 #define vcl_sunpro_set_txx_
 
 #include <vcl_set.h>
-// #include <vcl_compiler.h> // not necessary since the current file should only be included through ../vcl_set.txx
 
 #if 0 // has member templates
 #define VCL_SET_INSTANTIATE_MT_InputIterator(settype, T, Comp, InputIterator)\

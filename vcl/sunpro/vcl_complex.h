@@ -1,7 +1,7 @@
 #ifndef vcl_sunpro_complex_h_
 #define vcl_sunpro_complex_h_
 
-#include <iso/vcl_complex.h>
+#include "../iso/vcl_complex.h"
 
 // Override these, as the SunPro compiler doesn't declare them as
 // partial specializations.

@@ -1,4 +1,3 @@
-// #include <vcl_compiler.h> // not necessary since the current file should only be included through ../vcl_set.txx
 #include "vcl_set.h"
 #include "vcl_multiset.h"
 #include "vcl_rbtree.txx"

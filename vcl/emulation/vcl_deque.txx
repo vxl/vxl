@@ -1,4 +1,3 @@
-// #include <vcl_compiler.h> // not necessary since the current file should only be included through ../vcl_deque.txx
 #include "vcl_deque.h"
 #include "vcl_algorithm.txx"
 #include "vcl_iterator.txx"

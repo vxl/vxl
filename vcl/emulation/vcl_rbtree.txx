@@ -1,4 +1,3 @@
-// #include <vcl_compiler.h> // not necessary since the current file should only be included through vcl_map.txx and vcl_set.txx
 #include "vcl_algorithm.txx"
 #include "vcl_iterator.txx"
 #include "vcl_utility.txx"

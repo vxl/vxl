@@ -4,6 +4,6 @@
 // .INCLUDE vcl_cstdlib.h
 // .FILE vcl_cstdlib.cxx
 
-#include <iso/vcl_cstdlib.h>
+#include "../iso/vcl_cstdlib.h"
 
 #endif // vcl_cstdlib_h_

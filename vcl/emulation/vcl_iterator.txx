@@ -1,5 +1,4 @@
 //-*- c++ -*-
-// #include <vcl_compiler.h> // not necessary since the current file should only be included through ../vcl_iterator.txx
 #include "vcl_iterator.h"
 #include "vcl_algorithm.txx"
 

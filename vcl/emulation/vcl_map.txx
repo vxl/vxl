@@ -1,7 +1,6 @@
 #ifndef vcl_emulation_map_txx_
 #define vcl_emulation_map_txx_
 
-// #include <vcl_compiler.h> // not necessary since the current file should only be included through ../vcl_map.txx
 #include "vcl_map.h"
 #include "vcl_multimap.h"
 
