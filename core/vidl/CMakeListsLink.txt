@@ -3,6 +3,3 @@ LINK_LIBRARIES( vidl )
 # Immediate dependencies
 INCLUDE( ${allvxl_SOURCE_DIR}/vcl/CMakeListsLink.txt )
 
-IF(WIN32)
-  LINK_LIBRARIES( -lvfw32 -lgdi32 -luser32 )
-ENDIF(WIN32)
