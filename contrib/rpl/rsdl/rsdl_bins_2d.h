@@ -84,6 +84,8 @@ public:
 
   void change_value( const VALUE_T& old_val, const VALUE_T& new_val );
 
+  vnl_vector_fixed<COORD_T, 2> max_pt() {return max_pt_ ;}
+
 private:
   void point_to_bin( COORD_T x, COORD_T y, int& bin_x, int& bin_y ) const;
   COORD_T min_sq_distance_to_bin( COORD_T x, COORD_T y, int bin_x, int bin_y ) const;
