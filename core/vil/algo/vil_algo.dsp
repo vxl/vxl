@@ -350,6 +350,12 @@ SOURCE=.\vil_trace_8con_boundary.h
 # Begin Source File
 SOURCE=.\vil_corners.h
 # End Source File
+# Begin Source File
+SOURCE=.\vil_region_finder.txx
+# End Source File
+# Begin Source File
+SOURCE=.\vil_region_finder.h
+# End Source File
 # End Group
 # PROP Default_Filter "ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe"
 # End Group
