@@ -57,9 +57,10 @@ class vil2_pnm_image : public vil2_image_data
  public:
 
   vil2_pnm_image(vil_stream* is);
-  vil2_pnm_image(vil_stream* is, unsigned nplanes,
+  vil2_pnm_image(vil_stream* is,
                  unsigned nx,
                  unsigned ny,
+                 unsigned nplanes,
                  unsigned bits_per_component,
                  vil_component_format format);
   ~vil2_pnm_image();
