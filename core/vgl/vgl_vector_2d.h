@@ -93,10 +93,10 @@ template <class T> inline v      operator*(v const& a, T s) { return v(a.x()*s, 
 template <class T> inline v      operator/(v const& a, double s) { return v(a.x()/s, a.y()/s); }
 
 //: a*=f: scale the vector.
-template <class T> inline v&     operator*=(v& a, T s) { a.x()*=s; a.y()*=s; return a; }
+template <class T> inline v&     operator*=(v& a, T s) { a.set(a.x()*s, a.y()*s); return a; }
 
 //: a/=f: inversely scale the vector (scale must be nonzero).
-template <class T> inline v&     operator/=(v& a, double s) { a.x()/=s; a.y()/=s; return a; }
+template <class T> inline v&     operator/=(v& a, double s) { a.set(a.x()/s, a.y()/s); return a; }
 
 //: dot product or inner product of two vectors.
 template <class T> inline T      dot_product(v const& a, v const& b) { return a.x()*b.x()+a.y()*b.y(); }
