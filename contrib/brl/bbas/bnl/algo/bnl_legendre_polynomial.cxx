@@ -1,14 +1,6 @@
-//: 
-//\file
-//\brief Evalue a real Legendre polynomail by recursive equation
-//\author Kongbin Kang, Brown University
-//\date Dec. 21th, 2004.
-//
-
 #include <vnl/vnl_real_polynomial.h>
 #include "bnl_legendre_polynomial.h"
 
-//: generate a n-th degree legendre polynomail
 vnl_real_polynomial bnl_legendre_polynomial(int n)
 {
   if(n == 0 )

@@ -1,5 +1,5 @@
 # segmentation detection library
-# brl/bbas/bvnl/CMakeLists.txt
+# brl/bbas/bnl/CMakeLists.txt
 INCLUDE_DIRECTORIES(${BRL_INCLUDE_DIR}/bbas)
 
 SET(bnl_sources
