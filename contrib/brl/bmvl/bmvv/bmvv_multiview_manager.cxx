@@ -230,7 +230,7 @@ void bmvv_multiview_manager::draw_regions(vcl_vector<vdgl_intensity_face_sptr>& 
 //========================================================================
 void bmvv_multiview_manager::vd_edges()
 {
-  this->clear_display();
+  
   static bool agr = true;
   static sdet_detector_params dp;
   vgui_dialog* vd_dialog = new vgui_dialog("VD Edges");
@@ -246,12 +246,23 @@ void bmvv_multiview_manager::vd_edges()
   else
     dp.aggressive_junction_closure=0;
   sdet_detector det(dp);
+
+  bgui_vtol2D_tableau_sptr btab = this->get_selected_vtol2D_tableau();
+  if (btab)
+    {
+      vgui_image_tableau_sptr itab = btab->get_image_tableau();
+      img_ = itab->get_image();
+    }
+  else
+    {
+      vcl_cout << "In bmvv_multiview_manager::vd_edges() - null tableau\n";
+      return;
+    }
   det.SetImage(img_);
   det.DoContour();
   vcl_vector<vtol_edge_2d_sptr>* edges = det.GetEdges();
 
   //display the edges
-  bgui_vtol2D_tableau_sptr btab = this->get_selected_vtol2D_tableau();
   if (btab)
     btab->add_edges(*edges, true);
   else
