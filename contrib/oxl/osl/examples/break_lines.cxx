@@ -1,0 +1,50 @@
+/*
+  fsm@robots.ox.ac.uk
+*/
+#include <vbl/vbl_arg.h>
+
+#include <osl/osl_edge.h>
+#include <osl/osl_break_edge.h>
+#include <osl/osl_load_topology.h>
+#include <osl/osl_save_topology.h>
+
+int main(int argc, char **argv)
+{
+  vbl_arg<vcl_string> in ("-in", "input file (default is stdin)", "");
+  vbl_arg<vcl_string> out("-out", "output file (default is stdout)", "");
+  vbl_arg<double> thresh ("-thresh", "threshold", 0.2);
+  vbl_arg_parse(argc, argv);
+    
+  //
+  vcl_cerr << "loading topology" << vcl_endl;
+  vcl_list<osl_edge*> edges;
+  vcl_list<osl_vertex*> vertices;
+  if (in() == "")
+    osl_load_topology(vcl_cin, edges, vertices);
+  else
+    osl_load_topology(in().c_str(), edges, vertices);
+
+  //
+  osl_topology_ref(edges);
+  osl_topology_ref(vertices);
+  
+  //
+  vcl_list<osl_edge*> broken;
+  for (vcl_list<osl_edge*>::iterator i=edges.begin(); i!=edges.end(); ++i)
+    osl_break_edge(*i, &broken);
+  osl_topology_ref(broken);
+  
+  //
+  vcl_cerr << "saving topology" << vcl_endl;
+  if (out() == "")
+    osl_save_topology(vcl_cout, broken);
+  else
+    osl_save_topology(out().c_str(), broken);
+
+  //
+  osl_topology_unref(edges);
+  osl_topology_unref(vertices);
+  osl_topology_unref(broken);
+
+  return 0;
+}
