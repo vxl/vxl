@@ -1,4 +1,3 @@
-
 #include <vcl/vcl_iostream.h>
 
 #include <vcl/vcl_list.h>
@@ -13,8 +12,6 @@
 #include <vgl/vgl_homg_plane_3d.h>
 #include <vgl/vgl_homg_line_3d_2_points.h>
 #include <vgl/algo/vgl_homg_operators_3d.h>
-
-#include <vnl/vnl_matrix_fixed.h>
 
 //-----------------------------------------------------------------------------
 //
