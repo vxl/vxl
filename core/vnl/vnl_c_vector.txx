@@ -92,9 +92,32 @@ void vnl_c_vector<T>::scale(T const *x, T *y, unsigned n, T const &a_) {
     for (unsigned i=0; i<n; ++i) \
       z[i] = x[i] op y[i];
 
+#define impl_elmt_wise_commutative_a(op) \
+  if (z == x) \
+    for (unsigned i=0; i<n; ++i) \
+      z[i] op##= y; \
+\
+  else \
+    for (unsigned i=0; i<n; ++i) \
+      z[i] = x[i] op y;
+
+#define impl_elmt_wise_non_commutative_a(op) \
+  if (z == x) \
+    for (unsigned i=0; i<n; ++i) \
+      z[i] op##= y; \
+\
+  else \
+    for (unsigned i=0; i<n; ++i) \
+      z[i] = x[i] op y;
+
 template <class T>
 void vnl_c_vector<T>::add(T const *x, T const *y, T *z, unsigned n) {
   impl_elmt_wise_commutative(+);
+}
+
+template <class T>
+void vnl_c_vector<T>::add(T const *x, T const& y, T *z, unsigned n) {
+  impl_elmt_wise_commutative_a(+);
 }
 
 template <class T>
@@ -103,13 +126,28 @@ void vnl_c_vector<T>::subtract(T const *x, T const *y, T *z, unsigned n) {
 }
 
 template <class T>
+void vnl_c_vector<T>::subtract(T const *x, T const& y, T *z, unsigned n) {
+  impl_elmt_wise_commutative_a(-);
+}
+
+template <class T>
 void vnl_c_vector<T>::multiply(T const *x, T const *y, T *z, unsigned n) {
   impl_elmt_wise_commutative(*);
 }
 
 template <class T>
+void vnl_c_vector<T>::multiply(T const *x, T const& y, T *z, unsigned n) {
+  impl_elmt_wise_commutative_a(*);
+}
+
+template <class T>
 void vnl_c_vector<T>::divide(T const *x, T const *y, T *z, unsigned n) {
   impl_elmt_wise_non_commutative(/);
+}
+
+template <class T>
+void vnl_c_vector<T>::divide(T const *x, T const& y, T *z, unsigned n) {
+  impl_elmt_wise_commutative_a(/);
 }
 
 #undef impl_elmt_wise_commutative
@@ -384,6 +422,15 @@ void vnl_c_vector<T>::deallocate(T* p, int n)
 {
   vnl_c_vector_destruct(p, n);
   vnl_c_vector_dealloc(p, n, sizeof (T));
+}
+
+template<class T>
+vcl_ostream& print_vector(vcl_ostream& s, T const* v, unsigned size)
+{
+  for (unsigned i = 0; i+1 < size; ++i)   // For each index in vector
+    s << v[i] << " ";                              // Output data element
+  if (size > 0)  s << v[size-1];
+  return s;
 }
 
 //---------------------------------------------------------------------------

@@ -21,6 +21,7 @@
 //
 //-----------------------------------------------------------------------------
 
+#include <vcl_iosfwd.h>
 #include <vnl/vnl_numeric_traits.h>
 
 // avoid messing about with aux_* functions for gcc 2.7 -- fsm
@@ -53,14 +54,26 @@ public:
 //: z[i]  = x[i] + y[i];
   static void add     (T const *x, T const *y, T *z, unsigned);
 
+//: z[i]  = x[i] + y;
+  static void add     (T const *x, T const& y, T *z, unsigned);
+
 //: z[i]  = x[i] - y[i]
   static void subtract(T const *x, T const *y, T *z, unsigned);
+
+//: z[i]  = x[i] - y[i]
+  static void subtract(T const *x, T const& y, T *z, unsigned);
 
 //: z[i]  = x[i] * y[i]
   static void multiply(T const *x, T const *y, T *z, unsigned);
 
+//: z[i]  = x[i] * y[i]
+  static void multiply(T const *x, T const& y, T *z, unsigned);
+
 //: z[i]  = x[i] / y[i]
   static void divide  (T const *x, T const *y, T *z, unsigned);
+
+//: z[i]  = x[i] / y[i]
+  static void divide  (T const *x, T const& y, T *z, unsigned);
 
 //: y[i]  = -x[i]
 // Note that this is a no-op when T is an unsigned type.
@@ -116,6 +129,9 @@ public:
   static T*  allocate_T(int n);
   static void deallocate(T**, int n_when_allocated);
   static void deallocate(T*, int n_when_allocated);
+
+  //: Input & output
+  static vcl_ostream& print_vector(vcl_ostream&, T const*, unsigned);
 };
 
 #endif // vnl_c_vector_h_
