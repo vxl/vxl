@@ -31,6 +31,8 @@ IF( NOT BUILDING_IN_VXL_TREE )
         TRIGGER_SITE
         NIGHTLY_START_TIME
         DROP_METHOD
+        CMAKE_C_FLAGS
+        CMAKE_CXX_FLAGS
       INCLUDE_INTERNALS
         allvxl_SOURCE_DIR
         allvxl_BINARY_DIR
