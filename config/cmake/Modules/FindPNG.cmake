@@ -37,18 +37,20 @@ ELSE(PNG_FOUND)
 
     IF(EXISTS ${vxl_SOURCE_DIR}/v3p/png/png.h)
 
+      # We can't use FIND_LIBRARY here because the first time through,
+      # libpng.a hasn't been built, and therefore cannot be found. We
+      # don't need to set a path because this is a CMake target, and
+      # so CMake knows where to find it.
+
+      # No need to add zlib to the png libraries, since this is the
+      # CMake built PNG, and it will have a TARGET_LINK_LIBRARIES to
+      # automatically pull in zlib
+
       SET( PNG_PNG_INCLUDE_DIR ${vxl_SOURCE_DIR}/v3p/png CACHE PATH "What is the path where the file png.h can be found" FORCE )
       SET( PNG_INCLUDE_DIR ${PNG_PNG_INCLUDE_DIR} ${ZLIB_INCLUDE_DIR} )
-      FIND_LIBRARY( PNG_LIBRARY png ${LIBRARY_OUTPUT_PATH} ${vxl_BINARY_DIR}/v3p/png )
-      IF (PNG_LIBRARY)
-        SET( PNG_LIBRARY ${PNG_LIBRARY} CACHE FILEPATH "Where can the png library be found" FORCE )
-        IF (ZLIB_LIBRARY)
-          SET( PNG_LIBRARIES ${PNG_LIBRARY} ${ZLIB_LIBRARY} )
-        ELSE (ZLIB_LIBRARY)
-          SET( PNG_LIBRARIES ${PNG_LIBRARY} )
-        ENDIF (ZLIB_LIBRARY)
-        SET( PNG_FOUND "YES" )
-      ENDIF (PNG_LIBRARY)
+
+      SET( PNG_LIBRARIES png )
+      SET( PNG_FOUND "YES" )
 
       IF (CYGWIN)
         IF(BUILD_SHARED_LIBS)
