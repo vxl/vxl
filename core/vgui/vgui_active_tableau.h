@@ -1,25 +1,25 @@
-// This is oxl/vgui/vgui_active_visible.h
+// This is oxl/vgui/vgui_active_tableau.h
+#ifndef vgui_active_tableau_h_
+#define vgui_active_tableau_h_
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
+#pragma interface
+#endif
 //:
 // \file
 // \author Philip C. Pritchett, Robotics Research Group, University of Oxford
 // \date   25 Jan 00
-// \brief Tableau which can toggle between visible/invisible and active/inactive
+// \brief  Tableau which toggles between visible/invisible and active/inactive.
 //
-//  Contains classes:  vgui_active_visible  vgui_active_visible_new
+//  Contains classes:  vgui_active_tableau  vgui_active_tableau_new
 //
 // \verbatim
 //  Modifications:
 //    25-JAN-2000 P.Pritchett - Initial version.
 //    07-AUG-2002 K.Y.McGaul - Changed to and added Doxygen style comments.
+//    01-OCT-2002 K.Y.McGaul - Moved vgui_active_visible to vgui_active_tableau.
 // \endverbatim
 
-#ifndef vgui_active_visible_h_
-#define vgui_active_visible_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
-
-#include "vgui_active_visible_sptr.h"
+#include "vgui_active_tableau_sptr.h"
 #include "vgui_wrapper_tableau.h"
 
 //: Tableau which can toggle between visible/invisible and active/inactive.
@@ -30,18 +30,18 @@
 //
 //  Functions to toggle these can appear on the popup menu for the tableau.
 //
-//  When the tableau is invisible, all vgui_DRAW, vgui_CLEAR and
-//  vgui_DRAW_OVERLAY events are passed to the child tableau.
+//  When the tableau is invisible, all vgui_DRAW and vgui_DRAW_OVERLAY 
+//  mevents are passed to the child tableau.
 //
 //  When the tableau is inactive, all events apart from draw events
 //  are passed directly to the child tableau.
-class vgui_active_visible : public vgui_wrapper_tableau
+class vgui_active_tableau : public vgui_wrapper_tableau
 {
  public:
-  //: Constructor - don't use this, use vgui_active_visible_new.
-  vgui_active_visible(vgui_tableau_sptr const &, bool name_in_menu = false);
+  //: Constructor - don't use this, use vgui_active_tableau_new.
+  vgui_active_tableau(vgui_tableau_sptr const &, bool name_in_menu = false);
 
-  //: Return the name of this tableau ('vgui_active_visible').
+  //: Return the name of this tableau ('vgui_active_tableau').
   vcl_string type_name() const;
 
   //: Handle all events sent to this tableau.
@@ -71,18 +71,20 @@ class vgui_active_visible : public vgui_wrapper_tableau
   void set_visible(bool v) { visible_ = v; }
 
  protected:
- ~vgui_active_visible();
+ ~vgui_active_tableau();
   bool active_;
   bool visible_;
   bool name_in_menu_;
 };
 
-//: Create a smart-pointer to a vgui_active_visible tableau.
-struct vgui_active_visible_new : public vgui_active_visible_sptr
+//: Create a smart-pointer to a vgui_active_tableau tableau.
+struct vgui_active_tableau_new : public vgui_active_tableau_sptr
 {
-  typedef vgui_active_visible_sptr base;
-  vgui_active_visible_new(vgui_tableau_sptr const &a, bool name=false)
-    : base(new vgui_active_visible(a,name)) { }
+  typedef vgui_active_tableau_sptr base;
+
+  //: Constructor - make a tableau with the given child and name.
+  vgui_active_tableau_new(vgui_tableau_sptr const &a, bool name=false)
+    : base(new vgui_active_tableau(a,name)) { }
 };
 
-#endif // vgui_active_visible_h_
+#endif // vgui_active_tableau_h_
