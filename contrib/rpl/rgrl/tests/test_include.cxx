@@ -12,6 +12,7 @@
 #include <rgrl/rgrl_data_manager_sptr.h>
 #include <rgrl/rgrl_debug_util.h>
 #include <rgrl/rgrl_est_affine.h>
+#include <rgrl/rgrl_est_homography2d.h>
 #include <rgrl/rgrl_est_quadratic.h>
 #include <rgrl/rgrl_est_reduced_quad2d.h>
 #include <rgrl/rgrl_est_rigid.h>
@@ -67,6 +68,7 @@
 #include <rgrl/rgrl_spline.h>
 #include <rgrl/rgrl_spline_sptr.h>
 #include <rgrl/rgrl_trans_affine.h>
+#include <rgrl/rgrl_trans_homography2d.h>
 #include <rgrl/rgrl_trans_mixed_spline.h>
 #include <rgrl/rgrl_trans_quadratic.h>
 #include <rgrl/rgrl_trans_reader.h>
