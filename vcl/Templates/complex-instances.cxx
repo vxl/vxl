@@ -15,7 +15,7 @@
 // #elif compiler_n
 // ..
 // #else // ISO
-// 
+//
 // #endif
 //
 // "Many sections style" is better than complex conditional logic.
@@ -24,8 +24,8 @@
 // try to avoid breaking the shared builds by removing instantiations
 // it needs. With gcc, using #pragma weak may be an option.
 
-#include <vcl_iostream.h> 
-#include <vcl_complex.txx> 
+#include <vcl_iostream.h>
+#include <vcl_complex.txx>
 
 // this function will tickle implicit templates for
 // some compilers and detect missing instances for others.
@@ -70,9 +70,9 @@ template ostream& operator<<(ostream &, complex<FLOAT > const &); \
 template complex<FLOAT > sqrt (complex<FLOAT >const& x); \
 template complex<FLOAT > operator / (complex<FLOAT >const&,complex<FLOAT >const&); \
 template complex<FLOAT > operator / (complex<FLOAT >const&,FLOAT); \
-implement_rsh(FLOAT);
+implement_rsh(FLOAT)
 
-do_inlines(float); 
+do_inlines(float);
 do_inlines(double);
 do_inlines(long double);
 # endif
@@ -83,10 +83,10 @@ do_inlines(long double);
 # define VCL_COMPLEX_INSTANTIATE_INLINE(x) template x
 # define do_inlines(FLOAT) \
 VCL_COMPLEX_INSTANTIATE_INLINE(bool operator==(complex<FLOAT >const&,complex<FLOAT >const&));\
-VCL_COMPLEX_INSTANTIATE_INLINE(bool operator==(FLOAT,complex<FLOAT >const&));	\
-VCL_COMPLEX_INSTANTIATE_INLINE(bool operator==(complex<FLOAT >const&,FLOAT));	\
-VCL_COMPLEX_INSTANTIATE_INLINE(FLOAT imag(complex<FLOAT >const&));		\
-VCL_COMPLEX_INSTANTIATE_INLINE(FLOAT real(complex<FLOAT >const&));		\
+VCL_COMPLEX_INSTANTIATE_INLINE(bool operator==(FLOAT,complex<FLOAT >const&));\
+VCL_COMPLEX_INSTANTIATE_INLINE(bool operator==(complex<FLOAT >const&,FLOAT));\
+VCL_COMPLEX_INSTANTIATE_INLINE(FLOAT imag(complex<FLOAT >const&));\
+VCL_COMPLEX_INSTANTIATE_INLINE(FLOAT real(complex<FLOAT >const&));\
 VCL_COMPLEX_INSTANTIATE_INLINE(complex<FLOAT > sqrt (complex<FLOAT >const& x));\
 VCL_COMPLEX_INSTANTIATE_INLINE(complex<FLOAT > operator + (complex<FLOAT >const&,complex<FLOAT >const&));\
 VCL_COMPLEX_INSTANTIATE_INLINE(complex<FLOAT > operator + (complex<FLOAT >const&,FLOAT));\
@@ -100,19 +100,19 @@ VCL_COMPLEX_INSTANTIATE_INLINE(complex<FLOAT > operator * (FLOAT,complex<FLOAT >
 VCL_COMPLEX_INSTANTIATE_INLINE(complex<FLOAT > operator / (complex<FLOAT >const&,complex<FLOAT >const&));\
 VCL_COMPLEX_INSTANTIATE_INLINE(complex<FLOAT > operator / (complex<FLOAT >const&,FLOAT));\
 VCL_COMPLEX_INSTANTIATE_INLINE(complex<FLOAT > operator / (FLOAT,complex<FLOAT >const&));\
-VCL_COMPLEX_INSTANTIATE_INLINE(complex<FLOAT > polar (FLOAT,FLOAT));		\
+VCL_COMPLEX_INSTANTIATE_INLINE(complex<FLOAT > polar (FLOAT,FLOAT));\
 VCL_COMPLEX_INSTANTIATE_INLINE(complex<FLOAT > pow (complex<FLOAT >const&,complex<FLOAT >const&));\
 VCL_COMPLEX_INSTANTIATE_INLINE(complex<FLOAT > pow (complex<FLOAT >const&,FLOAT));\
 VCL_COMPLEX_INSTANTIATE_INLINE(complex<FLOAT > pow (complex<FLOAT >const&,int));\
 VCL_COMPLEX_INSTANTIATE_INLINE(complex<FLOAT > pow (FLOAT,complex<FLOAT >const&));\
-VCL_COMPLEX_INSTANTIATE_INLINE(complex<FLOAT > exp (complex<FLOAT >const&));	\
-VCL_COMPLEX_INSTANTIATE_INLINE(complex<FLOAT > log (complex<FLOAT >const&));	\
-VCL_COMPLEX_INSTANTIATE_INLINE(FLOAT arg (complex<FLOAT >const&));		\
-VCL_COMPLEX_INSTANTIATE_INLINE(FLOAT abs (complex<FLOAT >const&));		\
-VCL_COMPLEX_INSTANTIATE_INLINE(FLOAT norm (complex<FLOAT >const&)); \
-VCL_COMPLEX_INSTANTIATE_INLINE(complex<FLOAT>& __doadv (complex<FLOAT>* ths, const complex<FLOAT>& y)); \
-template ostream& operator<<(ostream &, complex<FLOAT > const &); \
-implement_rsh(FLOAT);
+VCL_COMPLEX_INSTANTIATE_INLINE(complex<FLOAT > exp (complex<FLOAT >const&));\
+VCL_COMPLEX_INSTANTIATE_INLINE(complex<FLOAT > log (complex<FLOAT >const&));\
+VCL_COMPLEX_INSTANTIATE_INLINE(FLOAT arg (complex<FLOAT >const&));\
+VCL_COMPLEX_INSTANTIATE_INLINE(FLOAT abs (complex<FLOAT >const&));\
+VCL_COMPLEX_INSTANTIATE_INLINE(FLOAT norm (complex<FLOAT >const&));\
+VCL_COMPLEX_INSTANTIATE_INLINE(complex<FLOAT>& __doadv (complex<FLOAT>* ths, const complex<FLOAT>& y));\
+template ostream& operator<<(ostream &, complex<FLOAT > const &);\
+implement_rsh(FLOAT)
 
 do_inlines(float);
 do_inlines(double);
@@ -122,7 +122,7 @@ do_inlines(long double);
 // ---------- sunpro
 #elif defined(VCL_SUNPRO_CC)
 # define do_inlines(FLOAT) \
-template std::complex<FLOAT > std::conj<FLOAT >(std::complex<FLOAT > const &);
+template std::complex<FLOAT > std::conj<FLOAT >(std::complex<FLOAT > const &)
 
 do_inlines(float);
 do_inlines(double);
