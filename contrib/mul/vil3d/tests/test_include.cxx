@@ -21,3 +21,5 @@
 #include <vil3d/vil3d_switch_axes.h>
 
 #include <vil3d/vil3d_trilin_interp.h>
+
+int main() { return 0; }
