@@ -35,7 +35,7 @@ vgui_roi_tableau::vgui_roi_tableau(vil_image const &I,char const *name,
                                    float x,float y,float w,float h)
   : vgui_tableau(),name_(name)
 {
-  cropped_image_ = vil_crop(I,x,y,w,h);
+  cropped_image_ = vil_crop(I,int(x+0.5),int(y+0.5),int(w+0.5),int(h+0.5));
   roi_.sx = x;
   roi_.sy = y;
   roi_.width = w;
@@ -73,8 +73,8 @@ vil_image vgui_roi_tableau::get_image() const {
 void vgui_roi_tableau::set_image(vil_image const &I) {
   //  // use the name of the image as the name of the tableau :
   //  name_ = __FILE__rem_dir(I.name().c_str());
-  cropped_image_ = vil_crop( I,roi_.sx,roi_.sy,
-                             roi_.width,roi_.height);
+  cropped_image_ = vil_crop( I,int(roi_.sx), int(roi_.sy),
+                               int(roi_.width), int(roi_.height));
 }
 
 // derived :
