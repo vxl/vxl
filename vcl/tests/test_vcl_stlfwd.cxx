@@ -33,6 +33,7 @@ void f(vcl_map<int, vcl_string,vcl_less<int> >*,
 }
 
 
-main()
+int main()
 {
+  return 0;
 }
