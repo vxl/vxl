@@ -1598,3 +1598,106 @@ text unless you have compiled with GLUT.
 @item @code{wrapper_tableau} @tab A base class tableau which insures only a single child. Useful as a base class for managers.
 
 @end multitable
+@section Advanced Topic: Image Display Range
+Prior to Jan 2005, image display in @code{vgui_iamge_tableau} was
+limited to 256 (@code{vxl_byte}) levels per pixel component. Images
+with pixel data types having a larger dynamic range were clamped to
+the range of [0 255]. The @code{vgui_iamge_tableau} interface now has the method,
+@example
+@cartouche void set_mapping(vgui_range_map_params_sptr const& rmp)@end cartouche
+@end example
+which defines how images with a dynamic range larger than one byte are
+to be displayed. If the pointer @code{rmp} is null, then the previous vgui display process is carried out as the default, otherwise range mapping is invoked.
+
+For example if the image has @code{unsigned short} pixels, the
+intensity can be anything in the range [0 65535]. To generate a
+meaningful display, a range, [min max], is specified such that all
+pixel intensities less or equal to min are mapped to 0 and all pixel
+intensities greater or equal to max are mapped to 255.  Intensities
+inside the range are mapped to the [1 254] remaining display levels according
+to a gamma or inversion function, as will be described below.
+
+The parameters of the mapping are:
+@multitable @columnfractions 0.33 0.67
+
+@item @code{n_components_} @tab The number of components in the image.  A grey level image has one component, a typical RGB image has 3 components.  
+
+@item @code{min_L_} @tab The minimum range value (luminance) for a grey level image.
+@item @code{max_L_} @tab The maximum range value for a grey level image.
+@item @code{gamma_L_} @tab The gamma factor in the exponential mapping of image intensity.
+@item @code{invert_} @tab If true, then the image display is inverted to form a negative image.
+@item @code{min_R_} @tab The minimum range value for the red channel in a color image.
+@item @code{max_R_} @tab The maximum range value for the red channel in a color image.
+@item @code{gamma_R_} @tab The gamma for red channel mapping.
+@item @code{min_G_} @tab The minimum range value for the green channel in a color image.
+@item @code{max_G_} @tab The maximum range value for the green channel in a color image.
+@item @code{gamma_G_} @tab The gamma for green channel mapping.
+@item @code{min_B_} @tab The minimum range value for the blue channel in a color image.
+@item @code{max_B_} @tab The maximum range value for the blue channel in a color image.
+@item @code{gamma_B_} @tab The gamma for green channel mapping.
+@item @code{use_glPixelMap_} @tab If @code{true} the range map is processed by hardware when available.
+@item @code{cache_mapped_pix_} @tab Under panning and zooming operations, it is not necessary to re-map the pixel intensities.  The range mapped display can be cached to avoid mapping computation by setting @code{cache_mapped_pix_} to @code{true}.
+@end multitable                
+
+The @code{gamma} function is defined as 
+@example
+                          1
+        Ig         I     ---
+       -----  =  (----) gamma
+       Imax       Imax
+@end example
+Assume that the pixel intensity has been mapped to the range [0 1.0],
+e.g., I/Imax.  The normalized intensity is raised to the power
+1/gamma. The rationale for this definition is that a typical CRT
+display monitor has a non-linear response with exponential factor
+gamma.  This correction compensates for the monitor response and
+achieves an overall linear intensity display.
+
+In typical operation, the user will interactively adjust the min max
+values in a loop that displays the mapped image until a satisfactory
+display is produced.  The loop should reinstantiate the parameter block
+on each iteration since the update is triggered by a change in the
+value of the @code{rmp} pointer.  For example, 
+@example
+@cartouche
+vgui_image_tableau_stpr itab = vgui_image_tableau_new();
+...
+//set an image on itab
+...
+//set up a mapping parameter block
+unsigned short min_val = 10000, max_val = 40000;
+float gamma = 1.0;
+bool invert = false;
+bool use_glPixelMap = true;
+bool cache_buffer = true;
+
+vgui_range_map_params_sptr rmp = 
+   new vgui_range_map_params(min_val,max_val, gamma,
+                             invert, use_glPixelMap, cache_buffer);
+//start range mapping
+itab->set_mapping(rmp)
+itab->post_redraw();
+
+//change the range
+rmp->min_val_ = 15000;
+itab->post_redraw();
+
+//the image display will be updated with the new range min value
+@end cartouche
+@end example
+
+An example of mapping is shown in Figure 13. An example of the inversion mapping for a color image is shown in Figure 14.
+@figure
+@image{range-display,,2in}
+@caption{13}
+A display of an x-ray image with 16 bit unsigned short pixels. An inline tableauis used to adjust the range by moving the bars via mouse interaction.  The image contrast is displayed simulatanously with the mouse motion.  A histogram is also displayed to guide the user.  Note the mouse position / image intensity display at the lower left indicates the pixel value in the proper units and range.
+@endcaption
+@endfigure
+
+@figure
+@image{lena,,2in}
+@caption{14}
+The use of range maping to invert the image color channels. Note again that the mouse position /pixel intensity display provides the appropriate values corresponding to the original image, not the displayed image.
+@endcaption
+@endfigure
+
