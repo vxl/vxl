@@ -75,11 +75,7 @@ int vnl_lsqr::aprod_(int* mode, int* m, int* n, double* x, double* y, int* leniw
     active->ls_->transpose_multiply(y_ref, tmp);
     x_ref += tmp;
   }
-#ifdef __GNUC__
-# warning "no return value"
-#else
-  return 0;
-#endif
+  return 0; // return value not used
 }
 
 int vnl_lsqr::minimize(vnl_vector<double>& result)
@@ -130,11 +126,7 @@ int vnl_lsqr::minimize(vnl_vector<double>& result)
   cerr << "x norm estimate          = " << xnorm << endl;
 #endif
 
-#ifdef __GNUC__
-# warning "no return value"
-#else
-  return 0;
-#endif
+  return 0; // return value not used
 }
 
 void vnl_lsqr::diagnose_outcome(ostream& os) const
