@@ -27,7 +27,7 @@ bool gst_polygon_2d::check_validity() const
       // next edge
       bool found= false;
 
-      for( int i=0; ((i< edges_.size()) && !found); i++)
+      for( unsigned int i=0; i < edges_.size() && !found; i++)
         {
           if( edges_[i]->get_start().ptr()== end.ptr())
             {

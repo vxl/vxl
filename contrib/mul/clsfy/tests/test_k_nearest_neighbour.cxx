@@ -88,7 +88,7 @@ void test_k_nearest_neighbour()
   vcl_vector<unsigned> labelcount(4);
   vcl_fill(labelcount.begin(), labelcount.end(), 0u);
 
-  for (int i=0; i<nSamples; i++)
+  for (unsigned int i=0; i<nSamples; i++)
   {
     int c = rng.lrand32(0, 3);
     labels[i] = c/2;

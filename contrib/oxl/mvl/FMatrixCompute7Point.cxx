@@ -71,7 +71,7 @@ bool FMatrixCompute7Point::compute (vcl_vector<HomgPoint2D>& points1,
       return false;
 
     // De-condition F
-    for (int i = 0; i < F.size(); i++) {
+    for (unsigned int i = 0; i < F.size(); i++) {
       F[i] = new FMatrix(HomgMetric::homg_to_image_F(*F[i], &conditioned1,
                                                             &conditioned2));
     }

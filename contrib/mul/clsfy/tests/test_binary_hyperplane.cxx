@@ -58,7 +58,7 @@ void test_binary_hyperplane()
   vnl_vector<double> s;
 
   vcl_cout << "Generating test data" << vcl_endl;
-  for (int i=0; i<nSamples; i++)
+  for (unsigned int i=0; i<nSamples; i++)
   {
     int c = rng.lrand32(0,1);
     labels[i] = c;

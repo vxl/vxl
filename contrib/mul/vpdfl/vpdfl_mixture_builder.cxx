@@ -61,9 +61,9 @@ vpdfl_mixture_builder& vpdfl_mixture_builder::operator=(const vpdfl_mixture_buil
 
   delete_stuff();
 
-  int n = b.builder_.size();
+  unsigned int n = b.builder_.size();
   builder_.resize(n);
-  for (int i=0;i<n;++i)
+  for (unsigned int i=0;i<n;++i)
     builder_[i] = b.builder_[i]->clone();
 
   min_var_ = b.min_var_;
@@ -77,8 +77,8 @@ vpdfl_mixture_builder& vpdfl_mixture_builder::operator=(const vpdfl_mixture_buil
 
 void vpdfl_mixture_builder::delete_stuff()
 {
-  int n = builder_.size();
-  for (int i=0;i<n;++i)
+  unsigned int n = builder_.size();
+  for (unsigned int i=0;i<n;++i)
     delete builder_[i];
   builder_.resize(0);
 }
@@ -168,7 +168,7 @@ void vpdfl_mixture_builder::weighted_build(vpdfl_pdf_base& base_model,
   assert(base_model.is_class("vpdfl_mixture"));
   vpdfl_mixture& model = (vpdfl_mixture&) base_model;
 
-  int n = builder_.size();
+  unsigned int n = builder_.size();
 
   bool model_setup = (model.n_components()==n);
 
@@ -178,7 +178,7 @@ void vpdfl_mixture_builder::weighted_build(vpdfl_pdf_base& base_model,
     model.clear();
     model.components().resize(n);
     model.weights().resize(n);
-    for (int i=0;i<n;++i)
+    for (unsigned int i=0;i<n;++i)
     {
       builder_[i]->set_min_var(min_var_);
       model.components()[i] = builder_[i]->new_model();
@@ -191,10 +191,10 @@ void vpdfl_mixture_builder::weighted_build(vpdfl_pdf_base& base_model,
   vcl_vector<vnl_vector<double> > data_array;
 
   {
-    int n=data.size();
+    unsigned int n=data.size();
     data.reset();
     data_array.resize(n);
-    for (int i=0;i<n;++i)
+    for (unsigned int i=0;i<n;++i)
     {
       data_array[i] = data.current();
       data.next();
@@ -223,8 +223,8 @@ void vpdfl_mixture_builder::weighted_build(vpdfl_pdf_base& base_model,
 
 static void UpdateRange(vnl_vector<double>& min_vec, vnl_vector<double>& max_vec, const vnl_vector<double>& vec)
 {
-  unsigned n=vec.size();
-  for (unsigned i=0;i<n;++i)
+  unsigned int n=vec.size();
+  for (unsigned int i=0;i<n;++i)
   {
     if (vec(i)<min_vec(i))
       min_vec(i)=vec(i);
@@ -293,7 +293,9 @@ void vpdfl_mixture_builder::initialise_diagonal(vpdfl_mixture& model,
   for (int i=1;i<n_samples;++i)
     UpdateRange(min_v,max_v,data[i]);
 
+#if 0 // unused variable
   double mean_sep = vnl_vector_ssd(max_v,min_v)/n_samples;
+#endif
 
   // Create means along diagonal of bounding box
   vcl_vector<vnl_vector<double> > mean(n_comp);
@@ -494,19 +496,18 @@ static inline void incXbyYplusXXv(vnl_vector<double> *X, const vnl_vector<double
 //: Calculate and set the mixture's mean and variance.
 void vpdfl_mixture_builder::calc_mean_and_variance(vpdfl_mixture& model)
 {
-  unsigned n = model.component(0).mean().size();
+  unsigned int n = model.component(0).mean().size();
   vnl_vector<double> mean(n, 0.0);
   vnl_vector<double> var(n, 0.0);
 
-  unsigned i;
-  for (i=0; i<model.n_components(); ++i)
+  for (unsigned int i=0; i<model.n_components(); ++i)
   {
     incXbyYv(&mean, model.component(i).mean(), model.weight(i));
     incXbyYplusXXv(&var, model.component(i).variance(),
     model.component(i).mean(), model.weight(i));
   }
 
-  for (i=0; i<n; ++i)
+  for (unsigned int i=0; i<n; ++i)
     var(i) -= vnl_math_sqr(mean(i));
 
   model.set_mean_and_variance(mean, var);

@@ -294,7 +294,7 @@ n_nearest( const vnl_vector_fixed< COORD_T, 2 > & query_pt,
 
   do {
     still_testing = false;
-    for ( int i=0; i<bin_xs.size(); ++ i ) {
+    for ( unsigned int i=0; i<bin_xs.size(); ++ i ) {
       if ( num_found < n ||
            this->min_sq_distance_to_bin( query_pt.x(), query_pt.y(), bin_xs[i], bin_ys[i] )
              < sq_distances[ num_found - 1 ] ) {

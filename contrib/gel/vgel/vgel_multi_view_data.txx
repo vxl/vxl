@@ -210,7 +210,7 @@ void vgel_multi_view_data<T>::remove(int view_num, T match)
 template <class T>
 vcl_ostream& vgel_multi_view_data<T>::print(vcl_ostream& str)
 {
-  for(int j=0;j<MVM.size();j++)
+  for(unsigned int j=0;j<MVM.size();j++)
   {
     for(int i=0;i<_nbviews;i++)
       if (MVM[j][i]<0)

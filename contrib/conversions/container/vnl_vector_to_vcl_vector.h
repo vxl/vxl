@@ -9,7 +9,7 @@ inline
 vcl_vector<T> vnl_vector_to_vcl_vector(vnl_vector<T> const& cl)
 {
   vcl_vector<T> l;
-  for (int i=0; i < cl.size(); ++i)
+  for (unsigned int i=0; i < cl.size(); ++i)
     l.push_back(cl[i]);
   return l;
 }

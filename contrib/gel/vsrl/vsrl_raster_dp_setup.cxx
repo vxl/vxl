@@ -42,7 +42,7 @@ int vsrl_raster_dp_setup::get_image2_width()
 int vsrl_raster_dp_setup::get_assignment(int x)
 {
 
-  if(x<0 || x>=tok_list1.size())
+  if(x<0 || (unsigned int)x >= tok_list1.size())
   {
     return -1;
   }

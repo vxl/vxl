@@ -51,7 +51,7 @@ void vmal_track_lines::track_lines(const vcl_vector<vcl_vector<vtol_edge_2d_sptr
     vtol_edge_2d_sptr cur_fl;
     vtol_edge_2d_sptr cur_tl;
 
-    for(int i=0;i<(*transformed_lines)[0]->size();i++)
+    for(unsigned int i=0;i<(*transformed_lines)[0]->size();i++)
     {
       found=true;
       match_line=i;

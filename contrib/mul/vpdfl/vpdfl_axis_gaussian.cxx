@@ -100,7 +100,7 @@ void vpdfl_axis_gaussian::gradient(vnl_vector<double>& g,
                                    const vnl_vector<double>& x,
                                    double& p) const
 {
-  int n = n_dims();
+  unsigned int n = n_dims();
   assert(x.size() == n);
 
   if (g.size()!=n) g.resize(n);
@@ -112,7 +112,7 @@ void vpdfl_axis_gaussian::gradient(vnl_vector<double>& g,
 
   double sum=0.0;
 
-  for (int i=0;i<n;++i)
+  for (unsigned int i=0;i<n;++i)
   {
     double dx=x_data[i]-m_data[i];
     sum+=(dx*dx)/v_data[i];

@@ -104,25 +104,25 @@ void vpdfl_gaussian_builder::updateCovar(vnl_matrix<double>& S,
                                          const vnl_vector<double>& vec,
                                          double w) const
 {
-  int n = vec.size();
+  unsigned int n = vec.size();
   const double *v = vec.data_block();
   if (S.rows()!=n)
   {
     S.resize(n,n);
     double **S_data = S.data_array();
-    for (int i=0; i<n; ++i)
-      for (int j=0; j<n; ++j)
+    for (unsigned int i=0; i<n; ++i)
+      for (unsigned int j=0; j<n; ++j)
         S_data[j][i] = w*v[i]*v[j];
   }
   else
   {
     double **S_data = S.data_array();
     double * S_row;
-    for (int i=0; i<n; ++i)
+    for (unsigned int i=0; i<n; ++i)
     {
       S_row = S_data[i];
       double vw = w*v[i];
-      for (int j=0; j<n; ++j)
+      for (unsigned int j=0; j<n; ++j)
         S_row[j] += vw*v[j];
     }
   }
@@ -134,7 +134,7 @@ void vpdfl_gaussian_builder::buildFromCovar(vpdfl_gaussian& g,
                                             const vnl_vector<double>& mean,
                                             const vnl_matrix<double>& S) const
 {
-  int n = mean.size();
+  unsigned int n = mean.size();
   vnl_matrix<double> evecs(S.rows(), S.rows());
   vnl_vector<double> evals(S.rows());
 
@@ -147,7 +147,7 @@ void vpdfl_gaussian_builder::buildFromCovar(vpdfl_gaussian& g,
 
   // Apply threshold to variance
   double *ev = evals.data_block();
-  for (int i=0;i<n;++i)
+  for (unsigned int i=0;i<n;++i)
     if (ev[i]<min_var_) ev[i]=min_var_;
 
   g.set(mean,evecs,evals);

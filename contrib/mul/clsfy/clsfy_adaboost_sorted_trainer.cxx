@@ -62,9 +62,9 @@ void clsfy_adaboost_sorted_trainer::build_strong_classifier(
 
   // initialize weights
   vnl_vector<double> wts(n);
-  for (int j=0; j<n0; ++j)
+  for (unsigned int j=0; j<n0; ++j)
     wts(j)=0.5/n0;
-  for (int j=0; j<n1; ++j)
+  for (unsigned int j=0; j<n1; ++j)
     wts(j+n0)=0.5/n1;
 
   //vcl_cout<<"wts= "<<wts<<vcl_endl;

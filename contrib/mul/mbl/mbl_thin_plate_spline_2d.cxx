@@ -65,23 +65,19 @@ inline double r2lnr(double x, double y)
 static void build_K_part(vnl_matrix<double>& L,
       const vcl_vector<vgl_point_2d<double> >& pts)
 {
-  int i,j;
-  double v;
-  int n = pts.size();
+  unsigned int n = pts.size();
   if ( (L.rows()!=n+3) | (L.columns()!=n+3) ) L.resize(n+3,n+3);
 
   const vgl_point_2d<double> * pts_data = &pts[0];
   double** K_data = L.data_array();
 
     // Zero the diagonal
-  for (i=0;i<n;i++) K_data[i][i] = 0;
+  for (unsigned int i=0;i<n;i++) K_data[i][i] = 0;
     // Now fill upper & lower triangles
-  for (i=1;i<n;i++)
-    for (j=0;j<i;j++)
+  for (unsigned int i=1;i<n;i++)
+    for (unsigned int j=0;j<i;j++)
     {
-      v = r2lnr(pts_data[i]-pts_data[j]);
-      K_data[i][j] = v;
-      K_data[j][i] = v;
+      K_data[i][j] = K_data[j][i] = r2lnr(pts_data[i]-pts_data[j]);
     }
 }
 

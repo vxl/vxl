@@ -42,7 +42,7 @@ double clsfy_smo_base::learned_func(int k)
 {
   double s = -b_;
   const unsigned long N = data_->size();
-  for (int i=0; i<N; i++)
+  for (unsigned int i=0; i<N; i++)
     if (alph_[i] > 0)
       s += alph_[i]*target_[i]*kernel(i,k);
 

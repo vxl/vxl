@@ -122,14 +122,14 @@ void clsfy_rbf_svm::set( const vcl_vector<vnl_vector<double> > &supportVectors,
                          const vcl_vector<unsigned> &labels,
                          double RBFWidth, double bias)
 {
-  int n = supportVectors.size();
+  unsigned int n = supportVectors.size();
   assert(n == lagrangianAlphas.size());
   assert(n == labels.size());
   supports_ = supportVectors;
 
   // premultiply lagrangians with output labels.
   lagrangians_ = lagrangianAlphas;
-  for (int i=0; i<n; i++)
+  for (unsigned int i=0; i<n; i++)
     lagrangians_[i] *= (labels[i]?1:-1);
 
   gamma_ = -0.5/(RBFWidth*RBFWidth);

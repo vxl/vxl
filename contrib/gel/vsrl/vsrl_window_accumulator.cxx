@@ -95,7 +95,7 @@ void vsrl_window_accumulator::initial_column_sums(vnl_vector<double> &vec)
 
   // find out how far to accumulate;
 
-  int sum_length=_win_height;
+  unsigned int sum_length=_win_height;
 
   if(sum_length >= _in_mat->rows()){
     sum_length=_in_mat->rows()-1;

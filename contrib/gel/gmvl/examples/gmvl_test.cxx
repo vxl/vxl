@@ -128,7 +128,7 @@ int main( int argc, char **argv)
 
   vcl_cerr << vcl_endl << vcl_endl;
 
-  for( int i=0; i< nn.size(); i++) vcl_cerr << *nn[i] << vcl_endl;
+  for( unsigned int i=0; i< nn.size(); i++) vcl_cerr << *nn[i] << vcl_endl;
 
   return 0;
 }

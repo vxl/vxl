@@ -229,7 +229,7 @@ gevd_contour::FindNetwork(gevd_bufferxy& edgels,
     edges2.value()->set_id(i);
 #endif
 
-  for ( int i= 0; i< edges2.size(); i++)
+  for ( unsigned int i= 0; i< edges2.size(); i++)
     edges2[i]->set_id(i);
 
   // 4. Split/Merge chains from touching end points

@@ -13,7 +13,7 @@ HMatrix2DComputeMLESAC::~HMatrix2DComputeMLESAC() {}
 double HMatrix2DComputeMLESAC::calculate_term(vcl_vector<double>& residuals, vcl_vector<bool>& inlier_list, int& count) {
   double inthresh = 5.99*std_*std_;
   double sse = 0.0;
-  for(int i = 0; i < residuals.size(); i++) {
+  for(unsigned int i = 0; i < residuals.size(); i++) {
     if(residuals[i] < inthresh) {
       inlier_list[i] = true;
       sse += residuals[i];

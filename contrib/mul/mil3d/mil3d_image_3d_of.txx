@@ -99,7 +99,7 @@ void mil3d_image_3d_of<T>::resize2(int nx, int ny, int nz)
     data_->resize(n_planes()*nx*ny*nz);
 
     planes_[0]= (T*) data_->data();
-    for (int i=1;i<planes_.size();++i)
+    for (unsigned int i=1;i<planes_.size();++i)
     {
         planes_[i] = planes_[i-1] + (nx*ny*nz);
     }

@@ -66,7 +66,7 @@ void mil_image_data<T>::unref()
 template<class T>
 void mil_image_data<T>::resize(int n)
 {
-  if (size_==n) return;
+  if (size_==(unsigned int)n) return;
   delete [] data_;
   data_ = 0;
   if (n>0)

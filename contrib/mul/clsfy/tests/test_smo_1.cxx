@@ -83,7 +83,7 @@ void test_smo()
 #if 0
   vcl_ofstream svmtest("C:\\svmtest.txt");
 #endif
-  for (int i=0; i<nSamples; i++)
+  for (unsigned int i=0; i<nSamples; i++)
   {
     int c = rng.lrand32(3);
     labels[i] = c/2;

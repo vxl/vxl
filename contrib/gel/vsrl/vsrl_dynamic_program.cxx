@@ -86,13 +86,10 @@ void vsrl_dynamic_program::set_tokens(token_list &l1,
 
 void vsrl_dynamic_program::define_search_range()
 {
-  int low,high;
-  int i;
-
-  for(i=0;i<_list1.size();i++)
+  for(unsigned int i=0;i<_list1.size();i++)
   {
-    low=i*2+1 - 2*_search_range;
-    high=i*2+1 + 2*_search_range;
+    int low=i*2+1 - 2*_search_range;
+    int high=i*2+1 + 2*_search_range;
 
     if(low<0)
     {

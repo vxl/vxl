@@ -92,21 +92,15 @@ bool vsol_polygon_3d::operator==(const vsol_polygon_3d &other) const
         {
           vsol_point_3d_sptr p=(*storage_)[0];
 
-          result=false;
           unsigned int i=0;
-          for(;i<storage_->size()&&!result;++i)
+          for(result=false;i<storage_->size()&&!result;++i)
             result = (*p==*(*other.storage_)[i]);
           if(result)
             {
-              unsigned int j=i;
-              i=1;
-              while(i<size()&&result)
+              for(unsigned int j=1;j<size()&&result;++i,++j)
                 {
+                  if(i>=storage_->size()) i=0;
                   result = ((*storage_)[i]==(*storage_)[j]);
-                  ++i;
-                  ++j;
-                  if(j>=storage_->size())
-                    j=0;
                 }
             }
         }

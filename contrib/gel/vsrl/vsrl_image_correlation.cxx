@@ -109,8 +109,8 @@ void vsrl_image_correlation::compute_local_stats(vnl_matrix<double> &im, vnl_mat
   ac_std.set_window_height(this->_window_height);
   ac_std.execute();
 
-  for (int r=0;r<std.rows();r++)
-    for (int c=0;c<std.cols();c++)
+  for (unsigned int r=0;r<std.rows();r++)
+    for (unsigned int c=0;c<std.cols();c++)
     {
       double xx=std(r,c);
       double m=mean(r,c);

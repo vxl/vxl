@@ -19,7 +19,7 @@ vcl_vector<gst_polygon_2d_sptr> gst_make_polygons_2d( const vcl_vector<gst_edge_
 
   // start a polygon with each edge, and look for a closed cycle
   //  hopefully using a NEW edge
-  for( int i=0; i< edges.size(); i++)
+  for( unsigned int i=0; i< edges.size(); i++)
     {
       bool newface= false;
       bool closed= false;

@@ -22,7 +22,7 @@ mil_image_pyramid::mil_image_pyramid()
 
 void mil_image_pyramid::deleteImages()
 {
-    for (int i=0;i<image_.size();++i)
+    for (unsigned int i=0;i<image_.size();++i)
         delete image_[i];
     image_.resize(0);
 }

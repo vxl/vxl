@@ -22,7 +22,7 @@ bool vdgl_digital_region::add_point( const vgl_point_2d<double> &p)
 vcl_ostream& operator<<(vcl_ostream& s, const vdgl_digital_region& d)
 {
   s << "<vdgl_digital_region (";
-  for( int i=0; i< d.ps_.size(); i++)
+  for( unsigned int i=0; i< d.ps_.size(); i++)
     {
       s << "( " << d.ps_[i].x() << ", " << d.ps_[i].y() << ")";
       if( i!= (d.ps_.size()-1))

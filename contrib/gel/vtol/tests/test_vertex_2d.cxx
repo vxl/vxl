@@ -124,7 +124,7 @@ int main(int, char **)
 
   v1->explore_vertex(v_list);
   vcl_cout << "List size: " << v_list.size() << vcl_endl;
-  for (int i=0; i<v_list.size(); ++i)
+  for (unsigned int i=0; i<v_list.size(); ++i)
     vcl_cout << *(v_list[i]) << vcl_endl;
   Assert(v_list.size()==2);
 

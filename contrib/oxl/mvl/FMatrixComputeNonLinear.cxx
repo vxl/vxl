@@ -359,11 +359,11 @@ FMatrix FMatrixComputeNonLinear::params_to_fmatrix(const vnl_vector<double>& par
     if(!computor->compute(new_points1, basis2_, ref))
       vcl_cout << "FMatrixCompute7Point Failure" << vcl_endl;
     double final = 0.0;
-    int num = 0;
-    for(int l = 0; l < ref.size(); l++) {
+    unsigned int num = 0;
+    for (unsigned int l = 0; l < ref.size(); l++) {
       vnl_vector<double> res = calculate_residuals(ref[l]);
       double so_far = 0.0;
-      for(int m = 0; m < res.size(); m++)
+      for (unsigned int m = 0; m < res.size(); m++)
         so_far += res[m];
 //      vcl_cout << "so_far : " << so_far << vcl_endl;
       if(so_far < final) {

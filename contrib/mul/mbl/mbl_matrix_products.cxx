@@ -87,8 +87,8 @@ void mbl_matrix_product_a_bt(vnl_matrix<double>& ABt,
   unsigned int nr1 = A.rows();
   unsigned int nr2 = B.rows();
 
-  assert(A.columns()>=nc);
-  assert(B.columns()>=nc);
+  assert(A.columns()>=(unsigned int)nc);
+  assert(B.columns()>=(unsigned int)nc);
 
   if ( (ABt.rows()!=nr1) || (ABt.columns()!= nr2) )
     ABt.resize( nr1, nr2 ) ;

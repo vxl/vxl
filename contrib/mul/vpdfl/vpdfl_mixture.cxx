@@ -109,13 +109,13 @@ void vpdfl_mixture::add_component(const vpdfl_pdf_base& comp)
 {
   vcl_vector<vpdfl_pdf_base*> old_comps = component_;
   vcl_vector<double> old_wts = weight_;
-  int n = component_.size();
+  unsigned int n = component_.size();
   assert(n == weight_.size());
 
   component_.resize(n+1);
   weight_.resize(n+1);
 
-  for (int i=0;i<n;++i)
+  for (unsigned int i=0;i<n;++i)
   {
     component_[i] = old_comps[i];
     weight_[i] = old_wts[i];
@@ -273,11 +273,11 @@ double vpdfl_mixture::log_p(const vnl_vector<double>& x) const
   vnl_vector<double>& log_ps = ws_;
   log_ps.resize(n);
 
-  double max_log_p;
+  double max_log_p = 0.0; // initialise just to make the compiler happy
   for (int i=0;i<n;++i)
   {
     if (weight_[i]>0.0)
-  {
+    {
       log_ps[i] = component_[i]->log_p(x);
       if (i==0 || log_ps[i]>max_log_p) max_log_p = log_ps[i];
     }

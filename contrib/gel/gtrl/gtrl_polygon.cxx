@@ -18,7 +18,7 @@ bool gtrl_polygon::inside( const gtrl_vertex_sptr point) const
 {
     bool c = false;
 
-    for (int i = 0, j = ps_.size()-1; i < ps_.size(); j = i++)
+    for (unsigned int i = 0, j = ps_.size()-1; i < ps_.size(); j = i++)
       {
         if ((((ps_[i]->y()<=point->y()) && (point->y()<ps_[j]->y())) ||
              ((ps_[j]->y()<=point->y()) && (point->y()<ps_[i]->y()))) &&

@@ -176,7 +176,7 @@ public:
     //: Access to (x,y) pixel in plane i.
     T& operator()(int x, int y, int i)
     { assert(x>=0); assert(x<nx_); assert(y>=0); assert(y<ny_);
-      assert(i>=0); assert(i<planes_.size());
+      assert(i>=0); assert((unsigned int)i<planes_.size());
       return planes_[i][ystep_*y+x*xstep_]; }
 
     //: Access to (x,y) pixel in plane i.

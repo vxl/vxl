@@ -194,7 +194,7 @@ template<class T>
 void mil_gaussian_pyramid_builder_2d<T>::checkPyr(mil_image_pyramid& im_pyr,  int n_levels) const
 {
   const unsigned got_levels = im_pyr.n_levels();
-  if (got_levels >= n_levels && im_pyr(0).is_a()==work_im_.is_a())
+  if (got_levels >= (unsigned int)n_levels && im_pyr(0).is_a()==work_im_.is_a())
   {
     if (im_pyr.n_levels()==n_levels) return;
     else

@@ -64,7 +64,7 @@ bool oxp_bunch_of_files::open(char const* fmt)
     filenames.push_back(fmt);
   }
 
-  int n = filenames.size();
+  unsigned int n = filenames.size();
 
   if (n == 0) {
     vcl_fprintf(stderr, "ERROR: Could not turn [%s] into a list of files\n", fmt);
@@ -74,7 +74,7 @@ bool oxp_bunch_of_files::open(char const* fmt)
   // Fill in sizes if not done already
   if (filesizes.size() < n) {
     filesizes.resize(n);
-    for (int i = 0; i < n; ++i) {
+    for (unsigned int i = 0; i < n; ++i) {
       int s = vul_file::size(filenames[i].c_str());
       if (s <= 0) {
         vcl_fprintf(stderr, "WARNING: Zero size file [%s]\n", filenames[i].c_str());
@@ -106,7 +106,7 @@ bool oxp_bunch_of_files::open(char const* fmt)
 
   // Summarize:
   vcl_fprintf(stderr, "files: sizeof offset_t = %ld\n", sizeof(offset_t));
-  for (int i = 0; i < n; ++i)
+  for (unsigned int i = 0; i < n; ++i)
     vcl_fprintf(stderr, "   %s  %g\n", filenames[i].c_str(), (double)start_byte[i]);
   vcl_fprintf(stderr, "\n");
 

@@ -51,7 +51,7 @@ clsfy_simple_adaboost& clsfy_simple_adaboost::operator=(const clsfy_simple_adabo
 //: Delete objects on heap
 void clsfy_simple_adaboost::delete_stuff()
 {
-  for (int i=0;i<classifier_1d_.size();++i)
+  for (unsigned int i=0;i<classifier_1d_.size();++i)
     delete classifier_1d_[i];
 
   classifier_1d_.resize(0);

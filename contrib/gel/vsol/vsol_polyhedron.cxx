@@ -33,7 +33,7 @@ vsol_polyhedron::vsol_polyhedron(vsol_polyhedron const &other)
 {
   storage_.clear(); // storage_.reserve(other.storage_.size());
                     // DO NOT DO THIS!  calls unimplemented default constructor of vsol_point_3d; causes memory fault on Alpha
-  for (int i=0;i<other.storage_.size();++i)
+  for (unsigned int i=0;i<other.storage_.size();++i)
     storage_.push_back(other.storage_[i]); // smart pointers do refcounting
 }
 

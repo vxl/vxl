@@ -48,11 +48,11 @@ vpdfl_pc_gaussian::~vpdfl_pc_gaussian()
 // so saving considerable time.
 double vpdfl_pc_gaussian::log_p(const vnl_vector<double>& x) const
 {
-  int m = n_principal_components();
-  int n = n_dims();
+  unsigned int m = n_principal_components();
+  unsigned int n = n_dims();
   assert(x.size() == n);
 
-  if (m>=n-1) // it is probably not worth the speed up unless we avoid calculating more than one basis vector.
+  if (m+1>=n) // it is probably not worth the speed up unless we avoid calculating more than one basis vector.
     return vpdfl_gaussian::log_p(x);
 
   double mahalDIFS, euclidDFFS;

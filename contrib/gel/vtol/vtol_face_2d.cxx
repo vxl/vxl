@@ -32,7 +32,7 @@ vtol_face_2d::vtol_face_2d(void)
 vtol_face_2d::vtol_face_2d(const vtol_face_2d &other)
   : _surface(0)
 {
-  vtol_face_2d *oldf=(vtol_face_2d *)(&other);
+  vtol_face_2d *oldf=(vtol_face_2d *)(&other); // const violation
   edge_list *edgs=oldf->edges();
   vertex_list *verts=oldf->vertices();
 
@@ -263,7 +263,7 @@ vtol_face_2d::vtol_face_2d(one_chain_list &onechs)
 
   if(onech!=0)
     {
-      for(int i = 1; i < onechs.size(); ++i)
+      for(unsigned int i = 1; i < onechs.size(); ++i)
         onech->link_chain_inferior(*(onechs[i]));
     }
 }

@@ -67,8 +67,8 @@ void vpdfl_gaussian::set(const vnl_vector<double>& mean,
                          const vnl_matrix<double>& evecs,
                          const vnl_vector<double>& evals)
 {
-  const int m = evecs.rows();
-  const int n = evecs.cols();
+  const unsigned int m = evecs.rows();
+  const unsigned int n = evecs.cols();
   assert(evals.size() == m);
   assert(mean.size() == m);
 

@@ -61,15 +61,16 @@ int vsrl_token_saliency::get_saliency(int x, int y)
 {
   // we want to report the saliency of x and y
 
-  if(!_saliency_matrix){
+  if (!_saliency_matrix){
     this->compute_saliency_matrix();
   }
 
-  if(x>=0 && x <_saliency_matrix->rows() && y >=0 && y <_saliency_matrix->cols()){
+  if (x>=0 && (unsigned)x <_saliency_matrix->rows() &&
+      y>=0 && (unsigned)y <_saliency_matrix->cols()){
     return (*_saliency_matrix)(x,y);
   }
-
-  return 0;
+  else
+    return 0;
 }
 
 // determine the first salient point on the left

@@ -57,7 +57,7 @@ void clsfy_smo_1_lin::set_data(const mbl_data_wrapper<vnl_vecd> &data, const vcl
   target_ = targets;
 
   precomputed_self_dot_product_.resize(N);
-  for (int i=0; i<N; i++)
+  for (unsigned int i=0; i<N; i++)
       precomputed_self_dot_product_[i] = dot_product(data_point(i),data_point(i));
 }
 

@@ -338,7 +338,7 @@ bool vtol_face::operator==(const vsol_spatial_object_3d& obj) const
 
 vtol_one_chain *vtol_face::get_one_chain(int which)
 {
-  if (which < _inferiors.size())
+  if ((unsigned int)which < _inferiors.size())
     return (_inferiors[which])->cast_to_one_chain();
   else
     {

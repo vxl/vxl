@@ -152,9 +152,9 @@ void test_adaboost()
   // nb egs0 are the positive training examples
   vcl_vector<unsigned> outputs;
   int tp=0, fp=0;
-  double tpr, fpr, adab_te, te;
+  double tpr=0.0, fpr=1.0, adab_te=0.0, te; // initialise to make compiler happy
 
-  for (int k=1; k<=pClassifier->alphas().size(); ++k)
+  for (unsigned int k=1; k<=pClassifier->alphas().size(); ++k)
   {
     tp=0;
     fp=0;

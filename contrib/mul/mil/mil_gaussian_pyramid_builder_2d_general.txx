@@ -316,7 +316,8 @@ void mil_gaussian_pyramid_builder_2d_general<T>::build(
   // than minXSize_ x minYSize_
   double s = scale_step();
   int max_levels = 1;
-  while (((int)(nx/s+0.5)>=min_x_size()) && ((int)(ny/s+0.5)>=min_y_size()))
+  while (((unsigned int)(nx/s+0.5)>=min_x_size()) &&
+         ((unsigned int)(ny/s+0.5)>=min_y_size()))
   {
     max_levels++;
     s *= scale_step();

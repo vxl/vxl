@@ -156,7 +156,7 @@ public:
     assert(x>=0); assert(x<nx_);
     assert(y>=0); assert(y<ny_);
     assert(z>=0); assert(z<nz_);
-    assert(i>=0); assert(i<planes_.size());
+    assert(i>=0); assert((unsigned int)i<planes_.size());
     return planes_[i][ystep_*y+x*xstep_+z*zstep_];
   }
 

@@ -332,7 +332,7 @@ int main(int argc, char ** argv)
         {
           (*fout) << "c" << vcl_endl;
 
-          for( int i=0; i< voxels.size(); i++)
+          for(unsigned int i=0; i< voxels.size(); i++)
             (*fout) << "a" << voxels[i] << vcl_endl;
         }
 

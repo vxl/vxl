@@ -162,10 +162,10 @@ bool vpdfl_pdf_base::is_class(vcl_string const& s) const
 
 static void ShowStartVec(vcl_ostream& os, const vnl_vector<double>& v)
 {
-  int n = 3;
+  unsigned int n = 3;
   if (n>v.size()) n=v.size();
   os<<"(";
-  for (int i=0;i<n;++i) os<<v(i)<<" ";
+  for (unsigned int i=0;i<n;++i) os<<v(i)<<" ";
   if (v.size()>n) os<<"...";
   os<<")";
 }

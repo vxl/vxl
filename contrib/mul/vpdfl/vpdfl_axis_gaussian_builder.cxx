@@ -67,7 +67,7 @@ void vpdfl_axis_gaussian_builder::build(vpdfl_pdf_base& model,
   vpdfl_axis_gaussian& g = gaussian(model);
 
   vnl_vector<double> var(mean.size());
-  for (int i=0;i<mean.size();i++) var(i)=min_var_;
+  for (unsigned int i=0;i<mean.size();i++) var(i)=min_var_;
 
   g.set(mean,var);
 }

@@ -38,7 +38,6 @@ vtol_block::vtol_block(vtol_two_chain &faceloop)
 //---------------------------------------------------------------------------
 vtol_block::vtol_block(two_chain_list &faceloops)
 {
-  int i;
   if(faceloops.size()>0)
   {
     vtol_two_chain_sptr tc = *((faceloops).begin());
@@ -49,7 +48,7 @@ vtol_block::vtol_block(two_chain_list &faceloops)
   vtol_two_chain *twoch=get_boundary_cycle();
 
   if(twoch!=0)
-    for(i=1;i<faceloops.size();++i)
+    for(unsigned int i=1;i<faceloops.size();++i)
       twoch->link_chain_inferior(*(faceloops[i]));
 }
 
@@ -68,7 +67,7 @@ vtol_block::vtol_block(face_list &new_face_list)
 //---------------------------------------------------------------------------
 vtol_block::vtol_block(const vtol_block &other)
 {
-  vtol_block_sptr oldblock=(vtol_block*)(&other);
+  vtol_block_sptr oldblock=(vtol_block*)(&other); // const violation
   edge_list *edgs=oldblock->edges();
   vertex_list *verts=oldblock->vertices();
 

@@ -72,7 +72,7 @@ bool RawPMatrixStore::check_index(int i)
   if (i < 0)
     return false;
 
-  if (i >= pmatrix_.size())
+  if ((unsigned int)i >= pmatrix_.size())
     pmatrix_.resize(i + 10);
 
   return true;

@@ -63,7 +63,7 @@ public:
   void add_classifier(clsfy_classifier_1d* c1d, double alpha, int index);
 
   //: Set number of classifiers used (when applying strong classifier)
-  void set_n_clfrs_used(int x) {if (x <= alphas_.size()) n_clfrs_used_ = x;}
+  void set_n_clfrs_used(unsigned int x) {if (x <= alphas_.size()) n_clfrs_used_ = x;}
 
   //: Access 
   int n_clfrs_used() const {return n_clfrs_used_; }

@@ -81,7 +81,7 @@ void vpdfl_kernel_pdf::set_centres(const vnl_vector<double>* x, int n, double wi
 void vpdfl_kernel_pdf::set_centres(const vnl_vector<double>* x, int n,
                    const vnl_vector<double>& width)
 {
-  assert(n==width.size());
+  assert((unsigned int)n==width.size());
   x_.resize(n);
   for (int i=0;i<n;++i) x_[i] = x[i];
   width_= width;
