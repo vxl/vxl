@@ -3,13 +3,12 @@
 // \brief A class for reading video files on windows platform
 // \author Louise Butcher
 
-#include <mvl2/mvl2_video_from_sequence.h>
+#include "mvl2_video_from_sequence.h"
 #include <vil2/vil2_load.h>
 #include <vil2/vil2_convert.h>
 #include <vul/vul_file.h>
 #include <vul/vul_sprintf.h>
 #include <vcl_fstream.h>
-#include <vcl_cstdio.h>
 #include <vcl_cassert.h>
 
 mvl2_video_from_sequence::mvl2_video_from_sequence()
@@ -37,7 +36,7 @@ mvl2_video_reader* mvl2_video_from_sequence::clone() const
 }
 
 // possible options : Grey
-bool mvl2_video_from_sequence::initialize( int width, int height, 
+bool mvl2_video_from_sequence::initialize( int width, int height,
                                            vcl_string format, vcl_string file_name)
 {
   use_colour_=true;
@@ -54,13 +53,13 @@ bool mvl2_video_from_sequence::initialize( int width, int height,
     char buffer[201];
     vcl_ifstream ifile(file_name.c_str());
     use_seq_file_=true;
-   
-    while(!ifile.eof())
+
+    while (!ifile.eof())
     {
       ifile.getline(buffer,200);
       vcl_string filename(buffer);
       if (filename.length()>0) list_files_.push_back(filename);
-    } 
+    }
     current_frame_=0;
     is_initialized_=true;
   }
@@ -139,12 +138,12 @@ bool mvl2_video_from_sequence::get_frame(vimt_image_2d_of<vxl_byte>& image)
   }
   if (use_colour_)
   {
-    image.image().deep_copy(image_view_sptr); 
+    image.image().deep_copy(image_view_sptr);
   }
   else
   {
     image.image().deep_copy(vil2_convert_to_grey_using_rgb_weighting(
-        image_view_sptr,(vxl_byte)0)); 
+        image_view_sptr,(vxl_byte)0));
   }
   height_=image.image().ni();
   width_=image.image().nj();
@@ -155,21 +154,21 @@ void mvl2_video_from_sequence::reset_frame()
 {
   current_frame_=0;
 }
- 
+
 void mvl2_video_from_sequence::set_frame_rate(double frame_rate)
 {
 }
- 
+
 double mvl2_video_from_sequence::get_frame_rate()
 {
   return frame_rate_;
 }
- 
+
 int mvl2_video_from_sequence::get_width()
 {
   return width_;
 }
- 
+
 int mvl2_video_from_sequence::get_height()
 {
   return height_;
@@ -178,7 +177,7 @@ int mvl2_video_from_sequence::get_height()
 void mvl2_video_from_sequence::set_capture_size(int width,int height)
 {
 }
- 
+
 int mvl2_video_from_sequence::length()
 {
   if (!is_initialized_) return -1;
@@ -190,4 +189,4 @@ int mvl2_video_from_sequence::seek(int frame_number)
   assert (frame_number >= 0);
   current_frame_=frame_number;
   return current_frame_;
-} 
+}
