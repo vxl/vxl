@@ -18,12 +18,13 @@ bool vil_save(const vil_image_view_base &, char const* filename);
 // \relates vil_image_view
 bool vil_save(const vil_image_view_base &, char const* filename, char const* file_format);
 
-
-//: Send vil_image to disk.
+//: Send vil_image_resource to disk.
+// \relates vil_image_resource
 bool vil_save_image_resource(const vil_image_resource_sptr &ir, char const* filename,
-  char const* file_format);
+                             char const* file_format);
 
-//: save to file, deducing format from filename.
+//: Save vil_image_resource to file, deducing format from filename.
+// \relates vil_image_resource
 bool vil_save_image_resource(const vil_image_resource_sptr &ir, char const* filename);
 
 #endif // vil_save_h_
