@@ -12,6 +12,7 @@
 
 #include <vcl_cmath.h>
 #include <vcl_iostream.h>
+#include <vcl_cstdlib.h>
 
 #include <vgl/vgl_distance.h>
 #include <vnl/vnl_math.h>
@@ -20,6 +21,9 @@
 #include <vgui/vgui_style.h>
 #include <vgui/vgui_projection_inspector.h>
 #include <vgui/internals/vgui_draw_line.h>
+#include <vil1/vil1_memory_image_of.h>
+#include <vil1/vil1_save.h>
+#include <vil1/vil1_rgb.h>
 
 vgui_soview2D::vgui_soview2D() {}
 
@@ -450,3 +454,62 @@ void vgui_soview2D_polygon::set_size(unsigned nn)
   delete [] x; x = nx;
   delete [] y; y = ny;
 }
+
+
+//-----------------------------------------------------------
+void vgui_soview2D_image::set_image(float x, float y, float w, float h, char *data)
+{
+  x_ = x;
+  y_ = y;
+  width_ = w;
+  height_ = h;
+
+  img_ = data; 
+
+  //defaults
+  img_format_ = GL_RGB;
+  img_type_ = GL_UNSIGNED_BYTE;
+
+  glPixelStorei(GL_UNPACK_ALIGNMENT,1);
+}
+
+vgui_soview2D_image::~vgui_soview2D_image()
+{
+}
+
+void vgui_soview2D_image::draw() const
+{
+  glEnable(GL_BLEND);
+  glRasterPos2i(x_,y_);
+  glDrawPixels(width_,height_,img_format_,img_type_,img_);
+  glFlush();
+  //vil1_memory_image_of< vil1_rgb< unsigned char > > test;
+  //test.resize(width_,height_);
+  //test.put_section(img_,0,0,width_,height_);
+  //vil1_save(test,"shouldwork.jpg","jpeg");
+}
+
+vcl_ostream& vgui_soview2D_image::print(vcl_ostream&s) const { return s << "[a image. FIXME]"; }
+
+float vgui_soview2D_image::distance_squared(float x, float y) const
+{
+  float dx = (x_ + (width_ / 2)) - x;
+  float dy = (y_ + (height_ / 2)) - y;
+  return dx*dx + dy*dy;
+}
+
+void vgui_soview2D_image::get_centroid(float* x, float* y) const
+{
+  float x1 = x_ + (width_ / 2);
+  float y1 = y_ + (height_ / 2);
+
+  *x = x1;
+  *y = y1;
+}
+
+void vgui_soview2D_image::translate(float tx, float ty)
+{
+    x_ += tx;
+    y_ += ty;
+}
+
