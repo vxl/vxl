@@ -339,8 +339,9 @@ void bgui_vtol2D_tableau::clear_all()
   this->post_redraw();
 }
 
-void bgui_vtol2D_tableau::set_vsol_point_2d(const float r, const float g,
-                                            const float b, const point_radius)
+void bgui_vtol2D_tableau::set_vsol_point_2d_style(const float r, const float g,
+                                                  const float b, 
+                                                  const float point_radius)
 {
   bgui_style_sptr sty = new bgui_style(r, g, b, point_radius, 0.0f);
   bgui_vtol_soview2D_point p;
@@ -349,7 +350,7 @@ void bgui_vtol2D_tableau::set_vsol_point_2d(const float r, const float g,
 
 void bgui_vtol2D_tableau::set_digital_curve_style(const float r, const float g,
                                                   const float b, 
-                                                  const line_width)
+                                                  const float line_width)
 {
   bgui_style_sptr sty = new bgui_style(r, g, b, 0.0f, line_width);
   bgui_vtol_soview2D_digital_curve dc;
@@ -357,14 +358,15 @@ void bgui_vtol2D_tableau::set_digital_curve_style(const float r, const float g,
 }
 
 void bgui_vtol2D_tableau::set_vertex_style(const float r, const float g,
-                                           const float b, const point_radius)
+                                           const float b, 
+                                           const float point_radius)
 {
   bgui_style_sptr sty = new bgui_style(r, g, b, point_radius, 0.0f);
   bgui_vtol_soview2D_vertex sv;
   style_map_[sv.type_name()]=sty;
 }
 void bgui_vtol2D_tableau::set_edge_style(const float r, const float g,
-                                         const float b, const line_width)
+                                         const float b, const float line_width)
 {
   bgui_style_sptr sty = new bgui_style(r, g, b, 0.0f, line_width);
   bgui_vtol_soview2D_edge se;
@@ -372,7 +374,7 @@ void bgui_vtol2D_tableau::set_edge_style(const float r, const float g,
 }
 
 void bgui_vtol2D_tableau::set_face_style(const float r, const float g, 
-                                         const float b, const line_width)
+                                         const float b, const float line_width)
 {
   bgui_style_sptr sty = new bgui_style(r, g, b, 0.0f, line_width);
   bgui_vtol_soview2D_face sf;

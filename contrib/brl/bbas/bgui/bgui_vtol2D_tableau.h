@@ -91,16 +91,16 @@ class bgui_vtol2D_tableau : public vgui_easy2D_tableau
   vtol_edge_2d_sptr get_mapped_edge(const int id);
 
   //: Methods for changing the default style of displayable objects
-  void set_vsol_point_2d(const float r, const float g, const float b,
-                               const point_radius);
+  void set_vsol_point_2d_style(const float r, const float g, const float b,
+                               const float point_radius);
   void set_digital_curve_style(const float r, const float g, const float b,
-                               const line_width);
+                               const float line_width);
   void set_vertex_style(const float r, const float g, const float b,
-                               const point_radius);
+                               const float point_radius);
   void set_edge_style(const float r, const float g, const float b,
-                      const line_width);
+                      const float line_width);
   void set_face_style(const float r, const float g, const float b,
-                      const line_width);
+                      const float line_width);
  protected:
   bool highlight_;
   void init();
