@@ -1,13 +1,14 @@
+// This is core/vil2/vil2_resample_bicub.h
 #ifndef vil2_resample_bicub_h_
 #define vil2_resample_bicub_h_
 //:
-//  \file
-//  \brief Sample grid of points with bicubic interpolation in one image and place in another
-
+// \file
+// \brief Sample grid of points with bicubic interpolation in one image and place in another
+//
 // The vil2 bicub source files were derived from the corresponding
 // vil2 bilin files, thus the vil2 bilin/bicub source files are very
 // similar.  If you modify something in this file, there is a
-// corresponding bilin/bicub file that would likely also benefit from
+// corresponding bilin file that would likely also benefit from
 // the same change.
 
 #include <vil2/vil2_image_view.h>

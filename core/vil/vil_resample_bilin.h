@@ -1,14 +1,15 @@
+// This is core/vil2/vil2_resample_bilin.h
 #ifndef vil2_resample_bilin_h_
 #define vil2_resample_bilin_h_
 //:
-//  \file
-//  \brief Sample grid of points with bilinear interpolation in one image and place in another
-//  \author Tim Cootes
-
+// \file
+// \brief Sample grid of points with bilinear interpolation in one image and place in another
+// \author Tim Cootes
+//
 // The vil2 bicub source files were derived from the corresponding
 // vil2 bilin files, thus the vil2 bilin/bicub source files are very
 // similar.  If you modify something in this file, there is a
-// corresponding bilin/bicub file that would likely also benefit from
+// corresponding bicub file that would likely also benefit from
 // the same change.
 
 #include <vil2/vil2_image_view.h>

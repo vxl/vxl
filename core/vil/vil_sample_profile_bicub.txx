@@ -4,11 +4,11 @@
 //:
 // \file
 // \brief Bicubic profile sampling functions for 2D images
-
+//
 // The vil2 bicub source files were derived from the corresponding
 // vil2 bilin files, thus the vil2 bilin/bicub source files are very
 // similar.  If you modify something in this file, there is a
-// corresponding bilin/bicub file that would likely also benefit from
+// corresponding bilin file that would likely also benefit from
 // the same change.
 
 #include "vil2_sample_profile_bicub.h"
@@ -95,4 +95,4 @@ template void vil2_sample_profile_bicub(vecType* v, \
                                         double dx, double dy, \
                                         int n)
 
-#endif // vil2_sample_profile_bicub
+#endif // vil2_sample_profile_bicub_txx_

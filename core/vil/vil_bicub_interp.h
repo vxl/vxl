@@ -4,11 +4,11 @@
 //:
 // \file
 // \brief Bicubic interpolation functions for 2D images
-
+//
 // The vil2 bicub source files were derived from the corresponding
 // vil2 bilin files, thus the vil2 bilin/bicub source files are very
 // similar.  If you modify something in this file, there is a
-// corresponding bilin/bicub file that would likely also benefit from
+// corresponding bilin file that would likely also benefit from
 // the same change.
 
 #include <vcl_cassert.h>
@@ -123,7 +123,7 @@ inline double vil2_bicub_interp_safe(double x, double y, const T* data,
 //  The safe interpolatable region is [1,view.ni()-2]*[1,view.nj()-2].
 // \relates vil2_image_view
 template<class T>
-inline double vil2_bicub_interp_safe(const vil2_image_view<T> &view, 
+inline double vil2_bicub_interp_safe(const vil2_image_view<T> &view,
                                      double x, double y, unsigned p=0)
 {
     return vil2_bicub_interp_safe(x, y, &view(0,0,p),
@@ -154,7 +154,7 @@ inline double vil2_bicub_interp(double x, double y, const T* data,
 //  The safe interpolatable region is [1,view.ni()-2]*[1,view.nj()-2].
 // \relates vil2_image_view
 template<class T>
-inline double vil2_bicub_interp(const vil2_image_view<T> &view, 
+inline double vil2_bicub_interp(const vil2_image_view<T> &view,
                                 double x, double y, unsigned p=0)
 {
     return vil2_bicub_interp(x, y, &view(0,0,p),

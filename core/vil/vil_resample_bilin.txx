@@ -2,14 +2,14 @@
 #ifndef vil2_resample_bilin_txx_
 #define vil2_resample_bilin_txx_
 //:
-//  \file
-//  \brief Sample grid of points with bilinear interpolation in one image and place in another
-//  \author Tim Cootes
-
+// \file
+// \brief Sample grid of points with bilinear interpolation in one image and place in another
+// \author Tim Cootes
+//
 // The vil2 bicub source files were derived from the corresponding
 // vil2 bilin files, thus the vil2 bilin/bicub source files are very
 // similar.  If you modify something in this file, there is a
-// corresponding bilin/bicub file that would likely also benefit from
+// corresponding bicub file that would likely also benefit from
 // the same change.
 
 #include "vil2_resample_bilin.h"
@@ -127,4 +127,4 @@ template void vil2_resample_bilin(const vil2_image_view<sType >& src_image, \
                          double x0, double y0, double dx1, double dy1, \
                          double dx2, double dy2, int n1, int n2)
 
-#endif // vil2_resample_bilin
+#endif // vil2_resample_bilin_txx_
