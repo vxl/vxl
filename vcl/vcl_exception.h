@@ -25,7 +25,7 @@
 #else
 //
 
-#include <vcl_iostream.h>
+#include "vcl_iostream.h"
 struct vcl_throw_handler {
   vcl_throw_handler(int line, char const* file) {
     cerr << file << ":" << line << ": EXCEPTION: ";

@@ -8,7 +8,7 @@
 // conforming implementations and to fix the non-conforming 
 // ones.
 
-#include <vcl_iostream.h> // to get vcl_ios_*
+#include "vcl_iostream.h" // to get vcl_ios_*
 
 #ifdef VCL_WIN32
 # include <streambuf>

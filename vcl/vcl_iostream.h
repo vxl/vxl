@@ -26,7 +26,7 @@
 //
 
 // Include this to ensure the two are consistent.
-#include <vcl_iosfwd.h>
+#include "vcl_iosfwd.h"
 
 // Notes to maintainers.
 //   The purpose of this file is to repair broken iostream

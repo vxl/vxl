@@ -10,7 +10,7 @@
 //      operator>       ...  (y <  x)
 //      operator<=      ... !(y <  x)
 //      operator>=      ... !(x <  y)
-// For ISO compilers, these live in namespace std::rel_op.
+// For ISO compilers, these live in namespace std::rel_ops.
 
 #include "vcl_compiler.h"
 
@@ -19,10 +19,10 @@
 
 #elif defined(VCL_GCC) && !defined(GNU_LIBSTDCXX_V3)
 // this header is wrong. v2 of the GNU library is wrong wrong wrong.
-# include <vcl_functional.h>
+# include "vcl_functional.h"
 
 #else // -------------------- ISO
-# include <vcl_utility.h>
+# include "vcl_utility.h"
 using std::rel_ops::operator!=;
 using std::rel_ops::operator> ;
 using std::rel_ops::operator<=;

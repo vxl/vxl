@@ -19,7 +19,7 @@
 //
 // If you just want to forward declare the vcl complex types, use 
 // vcl_complex_fwd.h instead.
-#include <vcl_complex_fwd.h>
+#include "vcl_complex_fwd.h"
 
 // ---------- all emulation
 #if !VCL_USE_NATIVE_COMPLEX 

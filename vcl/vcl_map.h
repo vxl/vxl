@@ -5,7 +5,7 @@
 
 // vcl_less<> is a default argument to vcl_map<> and vcl_multimap<>
 // so we need this for compilers where vcl_less is a macro.
-#include <vcl_functional.h>
+#include "vcl_functional.h"
 
 // -------------------- emulation
 #if !VCL_USE_NATIVE_STL

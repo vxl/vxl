@@ -11,18 +11,18 @@
 //
 // NB: size_t is declared in <cstddef>, not <cstdlib>
 
-#include <vcl_compiler.h>
+#include "vcl_compiler.h"
 
 #if defined(VCL_GCC)
-# include <gcc/vcl_cstdlib.h>
+# include "gcc/vcl_cstdlib.h"
 #elif defined(VCL_SGI_CC)
-# include <sgi/vcl_cstdlib.h>
+# include "sgi/vcl_cstdlib.h"
 #elif defined(VCL_SUNPRO_CC)
-# include <sunpro/vcl_cstdlib.h>
+# include "sunpro/vcl_cstdlib.h"
 #elif defined(VCL_VC)
-# include <win32/vcl_cstdlib.h> // VC++
+# include "win32/vcl_cstdlib.h" // VC++
 #else
-# include <iso/vcl_cstdlib.h>
+# include "iso/vcl_cstdlib.h"
 #endif
 
 #endif // vcl_cstdlib_h_

@@ -5,7 +5,7 @@
 */
 
 // this is to get the vcl_ios_* macros.
-#include <vcl_iostream.h>
+#include "vcl_iostream.h"
 
 #include "iso/vcl_sstream.h"
 

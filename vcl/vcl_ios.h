@@ -10,6 +10,6 @@
 #include "vcl_compiler.h"
 
 // FIXME
-#include <vcl_iostream.h>
+#include "vcl_iostream.h"
 
 #endif // vcl_ios_h_
