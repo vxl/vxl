@@ -8,7 +8,7 @@
 // .FILE internals/osl_reorder_chain.cxx
 // \author fsm@robots.ox.ac.uk
 
-class osl_edgel_chain;
+struct osl_edgel_chain;
 
 void osl_reorder_chain(osl_edgel_chain *);
 
