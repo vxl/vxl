@@ -28,7 +28,7 @@ typedef double gdouble;
 typedef unsigned int guint;
 
 //: Provides support for menus.
-class vgui_mfc_utils {
+class vgui_mfc_util {
 public:
   static vgui_button translate_button(int button);
   static vgui_key translate_key(GdkEventKey const *gev);
@@ -41,4 +41,4 @@ public:
   static GtkAccelGroup *accel_group;
 };
 
-#endif // vgui_mfc_utils_h_
+#endif // vgui_mfc_util_h_
