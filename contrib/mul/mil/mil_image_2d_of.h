@@ -58,6 +58,8 @@ private:
 
 public:
 
+    typedef T pixel_type;
+
     //: Dflt ctor
     //  Creates an empty one plane image.
     mil_image_2d_of();
