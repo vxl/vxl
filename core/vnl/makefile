@@ -129,6 +129,7 @@ MANPAGE_SOURCES += vnl_identity_3x3.h
 
 # special functions
 MANPAGE_SOURCES += vnl_cross.h
+SOURCES += vnl_erf.cxx
 SOURCES += vnl_gamma.cxx
 SOURCES += vnl_sample.cxx
 MANPAGE_SOURCES += vnl_unary_function.h
