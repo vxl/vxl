@@ -55,7 +55,7 @@ class vnl_vector_ref : public vnl_vector<T>
   // \code
   //   void mutator( vnl_vector<double>& );
   //   ...
-  //   vnl_vector_fixed<double,5> my_v;
+  //   vnl_vector_fixed<double,4> my_v;
   //   mutator( v );          // Both these fail because the temporary vnl_vector_ref
   //   mutator( v.as_ref() ); // cannot be bound to the non-const reference
   //   mutator( v.as_ref().non_const() ); // works
