@@ -23,8 +23,8 @@
 //   if (x != y) { ...
 //
 // but if one reflects on it dispassionately, it should be clear
-// that this solution is much more verbose than than the obvious
-// one, which is to just write
+// that this solution is much more verbose than the obvious one,
+// which is to just write
 //   if (!(x == y)) { ...
 //
 // instead. If you find you need operator!= a lot, it is better
@@ -33,6 +33,7 @@
 // a `using' statement.
 //
 // See also http://gcc.gnu.org/ml/libstdc++/2001-01/msg00247.html
+#include <vcl_deprecated_header.h> 
 
 #include "vcl_compiler.h"
 
