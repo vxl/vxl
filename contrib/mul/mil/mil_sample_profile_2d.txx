@@ -90,6 +90,7 @@ void mil_sample_profile_2d_safe(vnl_vector<vecType>& vec,
   else
   {
     for (int i=0;i<n;++i)
+	{
       for (int j=0;j<np;++j)
       {
         vgl_point_2d<double> im_p = image.world2im()(p);
@@ -97,6 +98,7 @@ void mil_sample_profile_2d_safe(vnl_vector<vecType>& vec,
         v++;
       }
       p+=u;
+    }
   }
 }
 
@@ -135,6 +137,7 @@ void mil_sample_profile_2d_no_checks(vnl_vector<vecType>& vec,
   else
   {
     for (int i=0;i<n;++i)
+	{
       for (int j=0;j<np;++j)
       {
         vgl_point_2d<double> im_p = image.world2im()(p);
@@ -142,6 +145,7 @@ void mil_sample_profile_2d_no_checks(vnl_vector<vecType>& vec,
         v++;
       }
       p+=u;
+    }
   }
 }
 
@@ -183,12 +187,14 @@ void mil_sample_profile_2d_ic_safe(vnl_vector<vecType>& vec,
   else
   {
     for (int i=0;i<n;++i)
+	{
       for (int j=0;j<np;++j)
       {
         *v = mil_safe_bilin_interp_2d(p.x(),p.y(),image.plane(j),nx,ny,xstep,ystep);
         v++;
       }
       p+=u;
+    }
   }
 }
 
@@ -235,12 +241,14 @@ void mil_sample_profile_2d_ic(vnl_vector<vecType>& vec,
   else
   {
     for (int i=0;i<n;++i)
+	{
       for (int j=0;j<np;++j)
       {
         *v = mil_bilin_interp_2d(p.x(),p.y(),image.plane(j),xstep,ystep);
         v++;
       }
       p+=u;
+    }
   }
 }
 
