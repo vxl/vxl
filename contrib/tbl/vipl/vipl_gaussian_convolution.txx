@@ -5,7 +5,8 @@
 #include <vcl_cmath.h> // for vcl_sqrt(), vcl_exp(), vcl_log()
 
 template <class ImgIn,class ImgOut,class DataIn,class DataOut,class PixelItr>
-bool vipl_gaussian_convolution <ImgIn,ImgOut,DataIn,DataOut,PixelItr> :: section_applyop(){
+bool vipl_gaussian_convolution <ImgIn,ImgOut,DataIn,DataOut,PixelItr> :: section_applyop()
+{
   const ImgIn &in = in_data(0);
   ImgOut &out = *out_data_ptr();
   int size = masksize();
@@ -17,24 +18,26 @@ bool vipl_gaussian_convolution <ImgIn,ImgOut,DataIn,DataOut,PixelItr> :: section
   if (!buf) return false; // memory allocation failed
 
   // 1-D mask was generated in preop(), we just use it here:
-  const DataIn dummy = DataIn(0);
+
   // horizontal convolution:
   int starty = start(Y_Axis());
   int stopy = stop(Y_Axis());
-  for (int j = starty; j < stopy; ++j) {
+  for (int j = starty; j < stopy; ++j)
+  {
     int buf_j = j - starty;
     int startx = start(X_Axis(),j);
     int stopx = stop(X_Axis(),j);
     for (int i = startx; i < stopx; ++i) {
       int buf_i = i - startx;
-      double result = mask()[0] * fgetpixel(in, i, j, dummy);
+      double result = mask()[0] * fgetpixel(in, i, j, DataIn(0));
       for (int x=1; x<size; ++x)
-        result += mask()[x] * (getpixel(in, i+x, j, dummy) + getpixel(in, i-x, j, dummy));
+        result += mask()[x] * (getpixel(in, i+x, j, DataIn(0)) + getpixel(in, i-x, j, DataIn(0)));
       buf[buf_i+width*buf_j] = result;
     }
   }
   // vertical convolution:
-  for (int j = starty; j < stopy; ++j) {
+  for (int j = starty; j < stopy; ++j)
+  {
     int buf_j = j - starty;
     int startx = start(X_Axis(),j);
     int stopx = stop(X_Axis(),j);
@@ -45,7 +48,7 @@ bool vipl_gaussian_convolution <ImgIn,ImgOut,DataIn,DataOut,PixelItr> :: section
         if (buf_j+y < height) result += mask()[y] * buf[buf_i+width*(buf_j+y)];
         if (buf_j >= y) result += mask()[y] * buf[buf_i+width*(buf_j-y)];
       }
-      fsetpixel(out, i, j, (DataOut)result);
+      fsetpixel(out, i, j, DataOut(result));
     }
   }
   delete[] buf;
@@ -55,7 +58,8 @@ bool vipl_gaussian_convolution <ImgIn,ImgOut,DataIn,DataOut,PixelItr> :: section
 // it is important that the mask be computed in preop, if it was done in
 // section_applyop then on a large image it would be computed many times.
 template <class ImgIn,class ImgOut,class DataIn,class DataOut,class PixelItr>
-bool vipl_gaussian_convolution <ImgIn,ImgOut,DataIn,DataOut,PixelItr> :: preop() {
+bool vipl_gaussian_convolution <ImgIn,ImgOut,DataIn,DataOut,PixelItr> :: preop()
+{
   // create 1-D mask:
   double lc = -2 * vcl_log(cutoff()); // cutoff guaranteed > 0
   int radius = (lc<=0) ? 0 : 1 + int(vcl_sqrt(lc)*sigma()); // sigma guaranteed >= 0
@@ -78,7 +82,8 @@ bool vipl_gaussian_convolution <ImgIn,ImgOut,DataIn,DataOut,PixelItr> :: preop()
 
 // We destroy the mask in postop, after we are all done filtering
 template <class ImgIn,class ImgOut,class DataIn,class DataOut,class PixelItr>
-bool vipl_gaussian_convolution <ImgIn,ImgOut,DataIn,DataOut,PixelItr> :: postop(){
+bool vipl_gaussian_convolution <ImgIn,ImgOut,DataIn,DataOut,PixelItr> :: postop()
+{
   delete[] ref_mask(); ref_mask()=0;
   return true;
 }

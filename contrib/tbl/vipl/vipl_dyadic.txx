@@ -4,11 +4,10 @@
 #include "vipl_dyadic.h"
 
 template <class ImgIn,class ImgOut,class DataIn,class DataOut,class PixelItr>
-bool vipl_dyadic <ImgIn,ImgOut,DataIn,DataOut,PixelItr> :: section_applyop(){
+bool vipl_dyadic <ImgIn,ImgOut,DataIn,DataOut,PixelItr> :: section_applyop()
+{
   const ImgIn &in = in_data();
   ImgOut &out = out_data();
-  const DataIn d_in = DataIn(0); // dummy initialization to avoid compiler warning
-  const DataOut d_out = DataOut(0);
 
   int startx = start(X_Axis());
   int starty = start(Y_Axis());
@@ -16,8 +15,8 @@ bool vipl_dyadic <ImgIn,ImgOut,DataIn,DataOut,PixelItr> :: section_applyop(){
   int stopy = stop(Y_Axis());
   for (int j = starty; j < stopy; ++j)
     for (int i = startx; i < stopx; ++i) {
-      DataIn p = fgetpixel(in, i, j, d_in);
-      DataOut q = fgetpixel(out, i, j, d_out);
+      DataIn p = fgetpixel(in, i, j, DataIn(0));
+      DataOut q = fgetpixel(out, i, j, DataOut(0));
       func()(q,p);
       fsetpixel(out, i, j, q);
     }

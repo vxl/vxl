@@ -5,7 +5,8 @@
 #include <vcl_algorithm.h>
 
 template <class ImgIn,class ImgOut,class DataIn,class DataOut,class PixelItr>
-bool vipl_dilate_disk <ImgIn,ImgOut,DataIn,DataOut,PixelItr> :: section_applyop(){
+bool vipl_dilate_disk <ImgIn,ImgOut,DataIn,DataOut,PixelItr> :: section_applyop()
+{
   const ImgIn &in = in_data(0);
   ImgOut &out = out_data();
   int size = (radius() < 0) ? 0 : int(radius());
@@ -15,20 +16,19 @@ bool vipl_dilate_disk <ImgIn,ImgOut,DataIn,DataOut,PixelItr> :: section_applyop(
   int starty = start(Y_Axis());
   int stopx = stop(X_Axis());
   int stopy = stop(Y_Axis());
-  const DataIn dummy = DataIn(0); // dummy initialisation to avoid compiler warning
   for (register int j = starty, ej =  stopy; j < ej  ; ++j)
     for (register int i = startx, ei = stopx; i < ei ; ++i)
     {
-      DataIn v = fgetpixel(in, i, j, dummy); // set v to max of surrounding pixels:
+      DataIn v = fgetpixel(in, i, j, DataIn(0)); // set v to max of surrounding pixels:
       for (register int x=0; x<=size; ++x)
       for (register int y=0; y<=size; ++y)
         if (mask()[x][y]) {
-          v = vcl_max(v, getpixel(in, i+x, j+y, dummy));
-          v = vcl_max(v, getpixel(in, i-x, j+y, dummy));
-          v = vcl_max(v, getpixel(in, i+x, j-y, dummy));
-          v = vcl_max(v, getpixel(in, i-x, j-y, dummy));
+          v = vcl_max(v, getpixel(in, i+x, j+y, DataIn(0)));
+          v = vcl_max(v, getpixel(in, i-x, j+y, DataIn(0)));
+          v = vcl_max(v, getpixel(in, i+x, j-y, DataIn(0)));
+          v = vcl_max(v, getpixel(in, i-x, j-y, DataIn(0)));
         }
-      fsetpixel(out, i, j, (DataOut)v);
+      fsetpixel(out, i, j, DataOut(v));
     }
   return true;
 }
@@ -36,7 +36,8 @@ bool vipl_dilate_disk <ImgIn,ImgOut,DataIn,DataOut,PixelItr> :: section_applyop(
 // it is important that the mask be computed in preop, if it was done in
 // section_applyop then on a large image it would be computed many times.
 template <class ImgIn,class ImgOut,class DataIn,class DataOut,class PixelItr>
-bool vipl_dilate_disk <ImgIn,ImgOut,DataIn,DataOut,PixelItr> :: preop(){
+bool vipl_dilate_disk <ImgIn,ImgOut,DataIn,DataOut,PixelItr> :: preop()
+{
   // create circular mask:
   int size = (radius() < 0) ? 0 : int(radius());
   float rs = (radius() < 0) ? 0 : radius() * radius();
