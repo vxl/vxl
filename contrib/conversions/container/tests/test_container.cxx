@@ -5,7 +5,7 @@
 void test_container_conversions()
 {
   int data[] = { 1, 2, 3, 2, 1, 0, -1 };
-  vcl_vector<int> l(data, data+7); 
+  vcl_vector<int> l(data, data+7);
   vcl_list<int>   a = vcl_vector_to_vcl_list(l);
   TEST("container conversions", *(a.begin()), 1);
   vcl_vector<int> b = vcl_list_to_vcl_vector(a);

@@ -1,5 +1,5 @@
 USES := conversions vxl
-IULIBS := -lvnl
+IULIBS := -lvnl # for vnl_test.h
 
 TESTS += test_container.cxx
 

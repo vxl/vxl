@@ -13,7 +13,7 @@
 void test_container_conversions()
 {
   int data[] = { 1, 2, 3, 2, 1, 0, -1 };
-  vcl_vector<int> l(data, data+7); 
+  vcl_vector<int> l(data, data+7);
   CoolArray<int>  a = vcl_vector_to_CoolArray(l);
   TEST("container conversions", a[0]==1 && a[1]==2 && a[2]==3 && a[3]==2 && a[4]==1 && a[5]==0 && a[6]==-1, true);
   CoolList<int>   b = CoolArray_to_CoolList(a);
