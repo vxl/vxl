@@ -369,6 +369,15 @@ SOURCE=.\Templates/vil2_sample_profile_bicub+byte.double-.cxx
 SOURCE=.\Templates/vil2_sample_profile_bicub+float.double-.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\Templates/vil2_bicub_interp+byte-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vil2_bicub_interp+double-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vil2_bicub_interp+float-.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\vil2_open.cxx
 # End Source File
 # Begin Source File
@@ -547,6 +556,9 @@ SOURCE=.\vil2_sample_profile_bicub.h
 # End Source File
 # Begin Source File
 SOURCE=.\vil2_sample_profile_bicub.txx
+# End Source File
+# Begin Source File
+SOURCE=.\vil2_bicub_interp.txx
 # End Source File
 # Begin Source File
 SOURCE=.\vil2_vil1.h

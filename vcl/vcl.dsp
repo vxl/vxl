@@ -582,6 +582,9 @@ SOURCE=.\emulation/vcl_vector.txx
 SOURCE=.\gcc-295/vcl_algorithm.txx
 # End Source File
 # Begin Source File
+SOURCE=.\gcc-295/vcl_complex.h
+# End Source File
+# Begin Source File
 SOURCE=.\gcc-295/vcl_complex.txx
 # End Source File
 # Begin Source File
