@@ -38,7 +38,7 @@ void mbl_histogram::clear()
   n_obs_ = 0;
   n_below_ = 0;
   n_above_ = 0;
-  for (int i=0;i<freq_.size();++i) freq_[i]=0;
+  for (unsigned int i=0;i<freq_.size();++i) freq_[i]=0;
 }
 
 void mbl_histogram::obs(double v)
@@ -47,7 +47,7 @@ void mbl_histogram::obs(double v)
   if (v<bins_[0])
   {
     n_below_++;
-	return;
+    return;
   }
 
   int n = freq_.size();
@@ -55,9 +55,9 @@ void mbl_histogram::obs(double v)
   for (int i=1;i<=n;++i)
   {
     if (v<bins_[i])
-	{
-	  freq_[i-1]++;
-	  return;
+    {
+      freq_[i-1]++;
+      return;
     }
   }
 
@@ -136,11 +136,11 @@ void mbl_histogram::print_summary(vcl_ostream& os) const
     os << "No samples.";
   else
   {
-    os << n_obs_ << " observations."<<vcl_endl;
-	os << "    < "<<bins_[0]<<"   "<<n_below_<<vcl_endl;
+    os << n_obs_ << " observations.\n"
+       << "    < "<<bins_[0]<<"   "<<n_below_<<vcl_endl;
     for (int i=0;i<n;++i)
-	  os<<"  ["<<bins_[i]<<","<<bins_[i+1]<<")  "<<freq_[i]<<vcl_endl;
-	os << "   >= "<<bins_[n]<<"   "<<n_above_<<vcl_endl;
+      os<<"  ["<<bins_[i]<<","<<bins_[i+1]<<")  "<<freq_[i]<<vcl_endl;
+    os << "   >= "<<bins_[n]<<"   "<<n_above_<<vcl_endl;
   }
 }
 
