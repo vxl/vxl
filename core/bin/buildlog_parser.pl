@@ -130,7 +130,7 @@ $htmlerrorlink= 0;
 @buildchildrenwarnings = [];
 @buildchildrenerrors   = [];
 @buildlogs= [];
-$fullbuildlog="<a href=\"\#ERRORLINK$htmlerrorlink\">Jump to next error</a><br>\n";
+$fullbuildlog="<a href=\"\#ERRORLINK$htmlerrorlink\">Jump to first error</a><br>\n";
 #%buildtime = ();
 
 ########################
@@ -205,7 +205,7 @@ while( $in=<INFO>)
     elsif( m/$gmake_errorintest/ || m/$gmake_errortestfail/)
       {
         $builderrors[$index]++;
-	$currentlineweb="<a name=\"ERRORLINK$htmlerrorlink\">";
+	$currentlineweb="<a name=\"ERRORLINK$htmlerrorlink\">" .$currentlineweb;
         $currentlineweb.="<font color=red>$currentlineweb</font>";
 	$htmlerrorlink++;
 	$currentlineweb.="<a href=\"\#ERRORLINK$htmlerrorlink\">Jump to next error</a><br>\n";
@@ -218,7 +218,7 @@ while( $in=<INFO>)
     elsif( m/$gmake_error_segfault/ || m/$gmake_error/)
       {
         $builderrors[$index]++;
-	$currentlineweb="<a name=\"ERRORLINK$htmlerrorlink\">";
+	$currentlineweb="<a name=\"ERRORLINK$htmlerrorlink\">" .$currentlineweb;
         $currentlineweb.="<font color=red>$currentlineweb</font>";
 	$htmlerrorlink++;
 	$currentlineweb.="<a href=\"\#ERRORLINK$htmlerrorlink\">Jump to next error</a><br>\n";
@@ -234,7 +234,6 @@ while( $in=<INFO>)
         $f = $1; $f =~ s/ ?DST / /;
         @thisdate= ParseDate( $f);
         $endtime= UnixDate( @thisdate, "%a %b %e %H:%M:%S %z %Y");
-	$currentlineweb="<a name=\"ERRORLINK$htmlerrorlink\">";
       }
 
     if( $index)
