@@ -1,6 +1,10 @@
 # ./oxl/vgui/CMakeLists.txt
 
-INCLUDE(${CMAKE_SOURCE_DIR}/config.cmake/Modules/FindOpenGL.cmake)
+INCLUDE(${allvxl_SOURCE_DIR}/config.cmake/Modules/FindOpenGL.cmake)
+INCLUDE(${allvxl_SOURCE_DIR}/config.cmake/Modules/FindGLUT.cmake)
+INCLUDE(${allvxl_SOURCE_DIR}/config.cmake/Modules/FindX11.cmake)
+# Qv needed by vrml only
+INCLUDE(${allvxl_SOURCE_DIR}/config.cmake/Modules/FindQv.cmake)
 
 # Build here only if OpenGL is available:
 IF(HAS_OPENGL)
@@ -111,12 +115,6 @@ SOURCE_FILES(vgui_sources
   vrml/vgui_vrml_tableau.cxx
   vrml/vgui_vrml_texture_map.cxx
 )
-
-INCLUDE( ${CMAKE_SOURCE_DIR}/config.cmake/Modules/FindGLUT.cmake )
-INCLUDE( ${CMAKE_SOURCE_DIR}/config.cmake/Modules/FindOpenGL.cmake )
-INCLUDE( ${CMAKE_SOURCE_DIR}/config.cmake/Modules/FindX11.cmake )
-# Qv needed by vrml
-INCLUDE( ${CMAKE_SOURCE_DIR}/config.cmake/Modules/FindQv.cmake )
 
 IF(WIN32)
   SOURCE_FILES(vgui_sources
