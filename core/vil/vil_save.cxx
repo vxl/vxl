@@ -2,7 +2,8 @@
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
-
+//:
+// \file
 
 #include "vil2_save.h"
 
@@ -10,8 +11,6 @@
 #include <vcl_iostream.h>
 
 #include <vil/vil_open.h>
-#include <vil/vil_rgb.h>
-#include <vil/vil_property.h>
 #include <vil2/vil2_new.h>
 #include <vil2/vil2_image_data.h>
 #include <vil2/vil2_image_view_functions.h>
@@ -64,7 +63,6 @@ bool vil2_save(const vil2_image_view_base &im, char const* filename, char const*
     im = vil2_flip_components(i);
 #endif
 }
-
 
 
 static

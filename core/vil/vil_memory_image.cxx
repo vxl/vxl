@@ -8,7 +8,6 @@
 
 #include "vil2_memory_image.h"
 #include <vil2/vil2_byte.h>
-#include <vil/vil_rgb.h>
 #include <vil2/vil2_image_view.h>
 #include <vil2/vil2_pixel_format.h>
 #include <vcl_cassert.h>
