@@ -85,11 +85,11 @@ void brct_windows_frame::init()
 
   // initialize the easy 2d grid
   vgui_image_tableau_sptr tab_img = vgui_image_tableau_new();
-  vgui_easy2D_tableau_sptr easy2d = vgui_easy2D_tableau_new();
-  vgui_composite_tableau_sptr tab2d = vgui_composite_tableau_new(easy2d, tab_img);
+  vgui_easy2D_tableau_sptr tab2d = vgui_easy2D_tableau_new(tab_img);
+//  vgui_composite_tableau_sptr tab2d = vgui_composite_tableau_new(easy2d, tab_img);
 
-  tab_cps_ = tab2d;
-  tab_2d_ = easy2d;
+  //tab_cps_ = tab2d;
+  tab_2d_ = tab2d;
   img_2d_ = tab_img;
   tab_2d_->set_foreground(0, 0, 1);
 
@@ -100,7 +100,7 @@ void brct_windows_frame::init()
   this->add_child(shell);
 
   // set a kalman filter
-  kalman_ = new kalman_filter();
+  kalman_ = new kalman_filter("data/curves.txt");
 }
 
 //=========================================================================
@@ -198,10 +198,8 @@ void brct_windows_frame::init_kalman()
   if (kalman_ == 0)
     vcl_cout<<"brct_windows_frame::kalman_ not created yet\n";
   else {
-
-    kalman_->read_data("data/curves.txt");
     kalman_->init();
-}
+  }
 
    // add the curve in the first view
    c2d = kalman_->get_pre_observes();
@@ -318,9 +316,23 @@ void brct_windows_frame::load_image()
   if (img_2d_)
   {
       img_2d_->set_image(img_);
+      img_2d_->post_redraw();
       return;
   }
 
-  tab_cps_->post_redraw();
   vcl_cout << "In brct_windows_frame::load_image() - null tableau\n";
+}
+
+void brct_windows_frame::show_epipole()
+{
+  vgl_point_2d<double> e = kalman_->get_cur_epipole();
+  instance_->tab_2d_->set_foreground(1, 0, 0);
+
+  double x = 0, y = 0;
+  x = e.x();
+  y = e.y();
+  vgui_soview2D_point* p = instance_->tab_2d_->add_point(x, y);
+  vcl_cout<<"\n epipole ("<<x <<"\t"<<y<<")\n";
+  instance_->post_redraw();
+
 }

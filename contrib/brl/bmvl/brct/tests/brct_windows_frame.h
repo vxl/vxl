@@ -31,6 +31,8 @@ class vgui_window;
 class brct_windows_frame : public vgui_wrapper_tableau
 {
  public:
+  //: methods for debug menu callbacks
+  void show_epipole();
 	void load_image();
   void show_back_projection();
   void show_next_observes();
@@ -41,7 +43,7 @@ class brct_windows_frame : public vgui_wrapper_tableau
   ~brct_windows_frame();
   static brct_windows_frame *instance();
 
-  //:methods for menu callbacks
+  //:methods for run menu callbacks
   void quit();
   void add_curve2d(vcl_vector<vgl_point_2d<double> > &pts);
   void remove_curve2d();

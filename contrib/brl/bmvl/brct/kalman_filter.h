@@ -30,7 +30,8 @@ class kalman_filter
  public:
 
    //: get backprojection for debugging
-   vcl_vector<vnl_matrix<double> > get_back_projection();
+	 vgl_point_2d<double> get_cur_epipole() const;
+   vcl_vector<vnl_matrix<double> > kalman_filter::get_back_projection() const;
 
   //: predict next curve.
   vnl_matrix<double> get_predicted_curve();
@@ -65,7 +66,7 @@ class kalman_filter
   vnl_matrix_fixed<double, 2, 6> get_H_matrix(vnl_double_3x4 &P, vnl_double_3 &Y);
 
   //: computer projective matrix from predicted position
-  vnl_double_3x4 get_projective_matrix(vnl_double_3 &v);
+  vnl_double_3x4 get_projective_matrix(const vnl_double_3 &v) const;
 
   void init_covariant_matrix();
   void init_cam_intrinsic();

@@ -266,7 +266,7 @@ void kalman_filter::prediction()
   // TODO
 }
 
-vnl_double_3x4 kalman_filter::get_projective_matrix(vnl_double_3& v )
+vnl_double_3x4 kalman_filter::get_projective_matrix(const vnl_double_3& v ) const
 {
   vnl_double_3x4 M_ex;
 
@@ -689,7 +689,7 @@ vnl_matrix<double> kalman_filter::get_predicted_curve()
   return t;
 }
 
-vcl_vector<vnl_matrix<double> > kalman_filter::get_back_projection()
+vcl_vector<vnl_matrix<double> > kalman_filter::get_back_projection() const
 {
  vcl_vector<vnl_matrix<double> > res(memory_size_);
  for(int f=0; f<memory_size_; f++)
@@ -708,5 +708,27 @@ vcl_vector<vnl_matrix<double> > kalman_filter::get_back_projection()
     res[f] = t;
   }
 
+  return res;
+}
+
+vgl_point_2d<double> kalman_filter::get_cur_epipole() const
+{
+  vnl_double_3 T(motions_[cur_pos_%queue_size_]);
+
+  // compute camera calibration matrix
+  vnl_double_3x4 E1, E2;
+  E1[0][0] = 1;       E1[0][1] = 0;        E1[0][2] = 0;          E1[0][3] = 0;
+  E1[1][0] = 0;       E1[1][1] = 1;        E1[1][2] = 0;          E1[1][3] = 0;
+  E1[2][0] = 0;       E1[2][1] = 0;        E1[2][2] = 1;          E1[2][3] = 0;
+
+  E2[0][0] = 1;       E2[0][1] = 0;        E2[0][2] = 0;          E2[0][3] = T[0];
+  E2[1][0] = 0;       E2[1][1] = 1;        E2[1][2] = 0;          E2[1][3] = T[1];
+  E2[2][0] = 0;       E2[2][1] = 0;        E2[2][2] = 1;          E2[2][3] = T[2];
+
+  vnl_double_3x4 P1 = K_*E1, P2 = K_*E2;
+
+  // compute epipole from velocity
+  vnl_double_3 e = K_*T;
+  vgl_homg_point_2d<double> res(e[0], e[1], e[2]);
   return res;
 }

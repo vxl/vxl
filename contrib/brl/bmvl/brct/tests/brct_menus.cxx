@@ -35,6 +35,7 @@ vgui_menu brct_menus::get_menu()
   debug_menu.add("show back projection", show_back_projection, (vgui_key)'b', vgui_CTRL);
   debug_menu.add("remove debug info", remove_debug_info, (vgui_key)'r', vgui_CTRL);
   debug_menu.add("load image", load_image, (vgui_key)'l', vgui_CTRL);
+  debug_menu.add("show epipole", show_epipole, (vgui_key)'e', vgui_CTRL);
 
   menu_bar.add("file", file_menu);
   menu_bar.add("action", action_menu);
@@ -72,4 +73,9 @@ void brct_menus::show_back_projection()
 void brct_menus::load_image()
 {
   brct_windows_frame::instance()->load_image();
+}
+
+void brct_menus::show_epipole()
+{
+  brct_windows_frame::instance()->show_epipole();
 }
