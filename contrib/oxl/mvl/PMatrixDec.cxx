@@ -29,7 +29,7 @@ PMatrixDec::~PMatrixDec() {}
 
 
 //--------------------------------------------------------------
-//: Auxiliar Constructor
+//: Auxiliary Constructor
 
 void PMatrixDec::Init()
 {
@@ -115,8 +115,7 @@ void PMatrixDec::Test()
   matrix1(0,2)= 552.506; matrix1(1,2)= 194.806; matrix1(2,2)= 0.960472;
   matrix1(0,3)= -596.353;matrix1(1,3)= 92.4159; matrix1(2,3)= 0.228363;
 
-  vcl_cerr << "Correct Matrix: \n";
-  vcl_cerr << matrix1 << vcl_endl;
+  vcl_cerr << "Correct Matrix: \n" << matrix1 << vcl_endl;
   PMatrixDec pmat1(matrix1);
   vcl_cerr << pmat1;
   vnl_matrix<double> J(3,4);
@@ -125,11 +124,11 @@ void PMatrixDec::Test()
   J(1,3) = 0.0;
   J(2,3) = 0.0;
   vcl_cerr << "P = [J O_3]*D = [\n"
-           << J * pmat1.ExtrinsicParameters() << "]\n";
-  vcl_cerr << "AlphaU=" << pmat1.GetAlphaU() << vcl_endl;
-  vcl_cerr << "AlphaV=" << pmat1.GetAlphaV() << vcl_endl;
-  vcl_cerr << "U0=" << pmat1.GetU0() << vcl_endl;
-  vcl_cerr << "V0=" << pmat1.GetV0() << vcl_endl;
+           << J * pmat1.ExtrinsicParameters() << "]\n"
+           << "AlphaU=" << pmat1.GetAlphaU() << vcl_endl
+           << "AlphaV=" << pmat1.GetAlphaV() << vcl_endl
+           << "U0=" << pmat1.GetU0() << vcl_endl
+           << "V0=" << pmat1.GetV0() << vcl_endl;
 
   vnl_matrix<double> matrix2(4, 4);
   int i,j;
@@ -137,8 +136,8 @@ void PMatrixDec::Test()
     for (i=0; i<4; i++)
       matrix2(i,j)= 1.0;
 
-  vcl_cerr << "Another Incorrect Matrix: \n";
-  vcl_cerr << matrix2 << vcl_endl;
+  vcl_cerr << "Another Incorrect Matrix: \n"
+           << matrix2 << vcl_endl;
   PMatrixDec pmat2(matrix2);
   vcl_cerr << pmat2;
 
@@ -147,8 +146,8 @@ void PMatrixDec::Test()
     for (i=0; i<2; i++)
       matrix3(i,j)= 2.0;
 
-  vcl_cerr << "Incorrect Matrix: \n";
-  vcl_cerr << matrix3 << vcl_endl;
+  vcl_cerr << "Incorrect Matrix: \n"
+           << matrix3 << vcl_endl;
   PMatrixDec pmat3(matrix3);
   vcl_cerr << pmat3;
 }
