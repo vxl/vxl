@@ -3,7 +3,7 @@
 #define vsrl_token_h
 //:
 // \file
-// In a dynamic progamming problem we are given the task of
+// In a dynamic programming problem we are given the task of
 // assigning one set of tokens to another set of tokens.
 // This class represents the abstract token.
 
