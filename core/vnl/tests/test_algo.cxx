@@ -1,4 +1,4 @@
-// This is vnl/tests/test_algo.cxx
+// This is core/vnl/tests/test_algo.cxx
 #include <testlib/testlib_test.h>
 //:
 // \file
@@ -111,12 +111,12 @@ void test_algo()
 
     F f;
     double h = 0.1;
-    vnl_vector<double> x(2);
+    vnl_vector<double> x(2); x[0]=5.0; x[1]=9.0;
     vnl_matrix<double> J(2,2);
     vnl_discrete_diff_fwd(&f, h, x, J);
-    TEST_NEAR("vnl_discrete_diff_fwd", x[0], 5, 1e-6);
+    TEST_NEAR("vnl_discrete_diff_fwd", J(0,1), -18.1, 1e-6);
     vnl_discrete_diff_sym(&f, h, x, J);
-    TEST_NEAR("vnl_discrete_diff_sym", x[1], 9, 1e-6);
+    TEST_NEAR("vnl_discrete_diff_sym", J(0,1), -18, 1e-6);
   }
   {
     vnl_matrix<float> A(4,4), B(4,4), L(4,4), R(4,4);
