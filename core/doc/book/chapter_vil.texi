@@ -31,7 +31,7 @@ changing quickly.  On the other hand, release builds need the kind of
 optimisations that only a human can apply.
 @end itemize
 
-This vil library is the second VXL image library, and is sometimes refered
+This vil library is the second VXL image library, and is sometimes referred
 to as vil2. The original  @vxl{} image library vil1 is deprecated.
 
 @section Loading and saving
@@ -339,7 +339,7 @@ Previously where as you might have written code in terms of vil1_image, it now
 usually makes sense to have most image manipulations working on
 @code{vil_image_view}s. This is because whilst with the old vil1_image, you had to
 do a @code{get_section}, and operate on raw memory, in vil, the @code{vil_image_view}
-provides a powerful view onto your image in memory.
+provides a powerful view directly onto your image in memory.
 
 The @code{vil_image_view} provides such facilities
 as compile-time type safety as switchable bounds checking. It also acts as a
@@ -352,8 +352,8 @@ a canonical view of whatever deranged image format your loader finds most effici
 use.
 
 The second important change is that vil provides full support for planes. In many cases
-accessing different image planes is directly equivalent to accessing different rasters.
-Indeed, it is often preferable to view an image a multi-planar rather than multi-component.
+accessing different image planes is directly equivalent to accessing different components.
+Indeed, it is often preferable to view an image as a multi-planar rather than multi-component.
 If your algorithms assume a single plane, it is however trivial to provide a wrapper function
 which takes a multi-planar image and passes one plane at a time to your algorithm. This
 can be done with virtually no loss in efficiency, and indeed is how some of the code in
@@ -368,7 +368,7 @@ You will almost certainly need to make extensive further edits to your code to g
 to compile again.
 
 If you do not want to convert any code, but would rather use an interface to convert
-between vil1 and vil types at runtime, then take a look at @code{<vil/vil_vil.h>}
+between vil1 and vil types at runtime, then take a look at @code{<vil1/vil1_vil.h>}
 which has a function for converting between @code{vil1_memory_image_of} and @code{vil_image_view}, and
 a class that wraps a @code{vil1_image}, and exports a @code{vil_image_resource} interface.
 
@@ -420,7 +420,7 @@ void vil_image_view<T>::fill(T value)
 @end example
 This can halve the run time on some compilers.
 
-One important approach in code optimisation is to observe how the code
+The most important rule in code optimisation is to observe how the code
 behaves in real life, and concentrate your efforts on where the code
 spends most of its time. In our example, this means the inner most loop
 Now, it turns out that in many cases, @code{istep_==1}, because of the
