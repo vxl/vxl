@@ -8,7 +8,7 @@ LIBRARY := vgui-glut
 
 IMMEDIATE_LIBS += -lvgui
 
-SOURCES += vgui_glut.cxx
+SOURCES += vgui_glut_impl.cxx
 SOURCES += vgui_glut_tag.cxx
 SOURCES += vgui_glut_window.cxx
 SOURCES += vgui_glut_adaptor.cxx
