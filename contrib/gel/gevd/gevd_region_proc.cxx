@@ -9,7 +9,6 @@
 #include <gevd/gevd_edgel_regions.h>
 #include <vtol/vtol_intensity_face.h>
 
-#define ushortPixel(buf,x,y)  (*((unsigned short*)buf->GetElementAddr(x,y)))
 //---------------------------------------------------------------
 // Constructors
 //
@@ -259,5 +258,3 @@ void gevd_region_proc::clear()
 {
   regions_.clear();
 }
-
-
