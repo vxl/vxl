@@ -63,7 +63,7 @@ SET (EXPECTED_BUILDS "\\
   {crd.ge.com MinGW-3.5_gcc-3.3.3_-Wall_-O2_static} \\
   {esat.kuleuven.ac.be OSF1-V5.1-gcc-3.4} \\
   {crd.ge.com Playstation2-Linux-2.2.1_gcc-2.95.2_-Wall_static} \\
-  {crd.ge.com Solaris-2.8_gcc-3.0.4_static} \\
+  {crd.ge.com Solaris-2.8_gcc-3.4.3_static} \\
   {esat.kuleuven.ac.be SunOS-5.8-gcc-3.4-O2} \\
   {crd.ge.com Win2k_bcc-5.5.1_Release} \\
   {crd.ge.com Win2k_msvc-6.0sp5_Release} \\
