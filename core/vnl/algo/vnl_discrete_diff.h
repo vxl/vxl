@@ -58,4 +58,6 @@ bool vnl_discrete_diff_sym(vnl_least_squares_function *lsf,
                            vnl_vector<double> const &x,
                            vnl_matrix<double>       &J);
 
+void vnl_discrete_diff_test_lsf(vnl_least_squares_function *lsf, vnl_vector<double> const &x);
+
 #endif // vnl_discrete_diff_h_
