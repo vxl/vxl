@@ -3,7 +3,7 @@
 exec perl -w -x $0 ${1+"$@"}
 #!perl
 #line 6
-# If Windows barfs at line 3 here, you will need to run perl -x vxl_doxy.pl
+# If Windows barfs at line 3 here, you will need to run perl -x this_file.pl
 # You can set up as a permanent file association using the following commands
 #  >assoc .pl-PerlScript
 #  >ftype PerlScript=Perl=C:\Perl\bin\Perl.exe -x "%1" %* 
