@@ -6,10 +6,10 @@ ADD_EXECUTABLE ( bsta_test_driver
   test_driver.cxx
   test_bsta_histogram.cxx
 )
-TARGET_LINK_LIBRARIES( bsta_test_driver bsta vnl testlib )
+TARGET_LINK_LIBRARIES( bsta_test_driver bsta testlib )
 
-ADD_TEST( bsta_test_histogram   bsta_test_driver test_bsta_histogram)
+ADD_TEST( bsta_test_histogram   bsta_test_driver test_bsta_histogram )
 
 #this is for test_includes
-ADD_EXECUTABLE( bsta_test_include test_bsta_include.cxx)
+ADD_EXECUTABLE( bsta_test_include test_include.cxx)
 TARGET_LINK_LIBRARIES( bsta_test_include bsta)
