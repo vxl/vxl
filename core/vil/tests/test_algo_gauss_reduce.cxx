@@ -1,4 +1,4 @@
-// This is mul/vil2/tests/test_algo_gauss_reduce.cxx
+// This is core/vil2/tests/test_algo_gauss_reduce.cxx
 #include <testlib/testlib_test.h>
 #include <vcl_iostream.h>
 #include <vxl_config.h> // for vxl_byte
@@ -65,9 +65,9 @@ void test_algo_gauss_reduce_byte(unsigned nx)
 
 void test_algo_gauss_reduce_int_32(unsigned nx)
 {
-  vcl_cout << "*********************************************\n"
+  vcl_cout << "***********************************************\n"
            << " Testing vil2_algo_gauss_reduce (int_32)(nx="<<nx<<")\n"
-           << "*********************************************\n";
+           << "***********************************************\n";
 
   vil2_image_view<vxl_int_32> image0;
   image0.set_size(nx,3);
@@ -122,9 +122,9 @@ void test_algo_gauss_reduce_int_32(unsigned nx)
 
 void test_algo_gauss_reduce_float(unsigned int nx)
 {
-  vcl_cout << "**********************************************\n"
+  vcl_cout << "***********************************************\n"
            << " Testing vil2_algo_gauss_reduce (float)(nx="<<nx<<")\n"
-           << "**********************************************\n";
+           << "***********************************************\n";
 
   vil2_image_view<float> image0;
   image0.set_size(nx,3);
@@ -159,9 +159,9 @@ void test_algo_gauss_reduce_float(unsigned int nx)
 
 void test_algo_gauss_reduce_121_byte(unsigned nx, unsigned ny)
 {
-  vcl_cout << "*******************************************************\n"
+  vcl_cout << "********************************************************\n"
            << " Testing vil2_algo_gauss_reduce_121 (byte)(nx="<<nx<<", ny="<<ny<<")\n"
-           << "*******************************************************\n";
+           << "********************************************************\n";
 
   vil2_image_view<vxl_byte> image0;
   image0.set_size(nx,ny);
@@ -206,9 +206,9 @@ void test_algo_gauss_reduce_121_byte(unsigned nx, unsigned ny)
 
 void test_algo_gauss_reduce_121_int_32(unsigned nx, unsigned ny)
 {
-  vcl_cout << "*******************************************************\n"
+  vcl_cout << "********************************************************\n"
            << " Testing vil2_algo_gauss_reduce_121 (int32)(nx="<<nx<<", ny="<<ny<<")\n"
-           << "*******************************************************\n";
+           << "********************************************************\n";
 
   vil2_image_view<vxl_int_32> image0;
   image0.set_size(nx,ny);
@@ -253,9 +253,9 @@ void test_algo_gauss_reduce_121_int_32(unsigned nx, unsigned ny)
 
 void test_algo_gauss_reduce_121_float(unsigned nx, unsigned ny)
 {
-  vcl_cout << "********************************************************\n"
+  vcl_cout << "*********************************************************\n"
            << " Testing vil2_algo_gauss_reduce_121 (float)(nx="<<nx<<", ny="<<ny<<")\n"
-           << "********************************************************\n";
+           << "*********************************************************\n";
 
   vil2_image_view<float> image0;
   image0.set_size(nx,ny);

@@ -1,4 +1,4 @@
-// This is mul/mil/tests/test_algo_gaussian_filter.cxx
+// This is core/vil2/tests/test_algo_gauss_filter.cxx
 #include <vcl_iostream.h>
 #include <vcl_algorithm.h>
 #include <vcl_cstdlib.h> // for abs(int)
@@ -12,9 +12,9 @@
 
 void test_algo_gaussian_filter_byte_float()
 {
-  vcl_cout << "*********************************************" << vcl_endl;
-  vcl_cout << " Testing vil2_gauss_filter_5tap byte float" << vcl_endl;
-  vcl_cout << "*********************************************" << vcl_endl;
+  vcl_cout << "*******************************************\n"
+           << " Testing vil2_gauss_filter_5tap byte float\n"
+           << "*******************************************\n";
 
   int n = 10;
 
@@ -68,7 +68,6 @@ void test_algo_gaussian_filter_byte_float()
   TEST("response is centre maximum", fail2, false);
   TEST_NEAR("impulse response sums to input", sum, 255.0f, 1e-3);
 }
-
 
 
 MAIN( test_algo_gauss_filter )

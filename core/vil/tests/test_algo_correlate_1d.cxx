@@ -1,4 +1,4 @@
-// This is mul/vil2/tests/test_algo_correlate_1d.cxx
+// This is core/vil2/tests/test_algo_correlate_1d.cxx
 #include <testlib/testlib_test.h>
 #include <vcl_vector.h>
 #include <vcl_iostream.h>
@@ -9,9 +9,9 @@
 
 void test_algo_correlate_1d_double()
 {
-  vcl_cout << "**************************\n"
+  vcl_cout << "***************************\n"
            << " Testing vil2_correlate_1d\n"
-           << "**************************\n";
+           << "***************************\n";
 
   int n = 10;
   vcl_vector<double> src(n),dest(n+2),kernel(3);

@@ -1,4 +1,4 @@
-// This is mul/vil2/tests/test_algo_correlate_2d.cxx
+// This is core/vil2/tests/test_algo_correlate_2d.cxx
 #include <testlib/testlib_test.h>
 #include <vcl_iostream.h>
 #include <vxl_config.h> // for vxl_byte
@@ -6,9 +6,9 @@
 
 void test_algo_correlate_2d_byte()
 {
-  vcl_cout << "*******************************\n"
+  vcl_cout << "********************************\n"
            << " Testing vil2_algo_correlate_2d\n"
-           << "*******************************\n";
+           << "********************************\n";
 
   unsigned n=10, m=5;
 

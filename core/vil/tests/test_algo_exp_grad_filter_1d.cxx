@@ -1,4 +1,4 @@
-// This is mul/vil2/tests/test_algo_exp_grad_filter_1d.cxx
+// This is core/vil2/tests/test_algo_exp_grad_filter_1d.cxx
 #include <testlib/testlib_test.h>
 #include <vcl_vector.h>
 #include <vcl_iostream.h>
@@ -8,9 +8,9 @@
 
 void test_algo_exp_grad_filter_1d_byte_float()
 {
-  vcl_cout << "********************************************\n"
+  vcl_cout << "*************************************************\n"
            << " Testing vil2_algo_exp_grad_filter_1d byte-float\n"
-           << "********************************************\n";
+           << "*************************************************\n";
 
   int n = 100;
   vcl_vector<vxl_byte> src(n);
