@@ -267,7 +267,7 @@ double grid_profile_matcher::calculate_grid_offset(int n_grid_lines, double spac
     {
       for (int offset = -max_offset; offset < max_offset; offset++)
         {
-          grid_profile[i*spacing+offset] = ((double)(max_offset - 
+          grid_profile[int(i*spacing)+offset] = ((double)(max_offset - 
                                                      vcl_abs(double(offset))))/(max_offset);
         }
     }
@@ -1059,9 +1059,9 @@ bool sdet_grid_finder::compute_manual_homography(vsol_point_2d_sptr ul,
   image_pts.push_back(im_lr);
   image_pts.push_back(im_ll);
   // grid corners
-  float min_x = 0, min_y = 0;
-  float max_x = (n_lines_x_ - 1) * spacing_;
-  float max_y = (n_lines_y_ - 1) * spacing_;
+  double min_x = 0, min_y = 0;
+  double max_x = (n_lines_x_ - 1) * spacing_;
+  double max_y = (n_lines_y_ - 1) * spacing_;
   vgl_homg_point_2d<double> gr_ul(min_x, min_y);
   vgl_homg_point_2d<double> gr_ur(max_x, min_y);
   vgl_homg_point_2d<double> gr_lr(max_x, max_y);
@@ -1471,11 +1471,13 @@ bool sdet_grid_finder::get_square_pixel_stats(vil1_image img,
   int min_y = vnl_math_rnd(vnl_math_max(ul.y(),ur.y()));
   int max_y = vnl_math_rnd(vnl_math_min(lr.y(),ll.y()));
   int n_scan_rows = max_y - min_y + 1;
-  int scan_rows[n_scan_rows][2];
+
+  vnl_matrix<int> scan_rows(n_scan_rows,2);
+
   for (int i = 0; i < n_scan_rows; i++)
     {
-      scan_rows[i][0] =  vnl_numeric_traits<int>::maxval;
-      scan_rows[i][1] =  -vnl_numeric_traits<int>::maxval;
+      scan_rows[i][0] = vnl_numeric_traits<int>::maxval;
+      scan_rows[i][1] = -vnl_numeric_traits<int>::maxval;
     }
   // upper line
   int start_t = vnl_math_rnd(ul.x());
