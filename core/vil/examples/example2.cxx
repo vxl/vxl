@@ -12,7 +12,7 @@
 #include <vil/vil_plane.h>
 #include <vil/vil_print.h>
 
-int main(int argc, char** argv)
+int main()
 {
   unsigned ni=8;
   unsigned nj=8;
@@ -29,12 +29,11 @@ int main(int argc, char** argv)
   vil_print_all(vcl_cout,image);
 
 
-  vcl_cout<<"\nView central square of image\n";
+  vcl_cout << "\nView central square of image\n";
   vil_image_view<vxl_byte> win1 = vil_crop(image,2,4,2,4);
   vil_print_all(vcl_cout,win1);
 
-  vcl_cout<<vcl_endl;
-  vcl_cout<<"Manipulate central square of image through the window\n";
+  vcl_cout << "\nManipulate central square of image through the window\n";
   win1.fill(0);
 
   vcl_cout<<"Original image:\n";

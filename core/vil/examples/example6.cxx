@@ -35,7 +35,7 @@ vil_image_view<vil_rgb<vxl_byte> > view_as_rgb(const vil_image_view<vxl_byte>& v
                                             v.istep()/3,v.jstep()/3,1);
 }
 
-int main(int argc, char** argv)
+int main()
 {
   unsigned ni=6;
   unsigned nj=6;

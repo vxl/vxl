@@ -8,7 +8,7 @@
 #include <vil/vil_image_view.h>
 #include <vil/vil_print.h>
 
-int main(int argc, char** argv)
+int main()
 {
   unsigned ni=10;
   unsigned nj=10;
@@ -21,7 +21,7 @@ int main(int argc, char** argv)
       for (unsigned i=0;i<ni;++i)
         image(i,j,p) = vxl_byte(i+10*j+100*p);
 
-  vcl_cout<<"Slow fill image"<<vcl_endl;
+  vcl_cout<<"Slow fill image\n";
   vil_print_all(vcl_cout,image);
 
   // Fast fill
@@ -37,7 +37,7 @@ int main(int argc, char** argv)
     }
   }
 
-  vcl_cout<<"Fast fill image"<<vcl_endl;
+  vcl_cout<<"Fast fill image\n";
   vil_print_all(vcl_cout,image);
 
   return 0;

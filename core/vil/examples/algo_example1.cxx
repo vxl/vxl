@@ -9,7 +9,7 @@
 #include <vil/vil_print.h>
 #include <vil/algo/vil_sobel_3x3.h>
 
-int main(int argc, char** argv)
+int main()
 {
   unsigned ni=8;
   unsigned nj=15;
@@ -21,7 +21,7 @@ int main(int argc, char** argv)
       for (unsigned i=0;i<ni;++i)
         image(i,j,p) = vxl_byte(i+10*j+100*p);
 
-  vcl_cout<<"Original image:"<<vcl_endl;
+  vcl_cout<<"Original image:\n";
   vil_print_all(vcl_cout,image);
 
     // Objects to hold gradients
@@ -29,12 +29,10 @@ int main(int argc, char** argv)
 
   vil_sobel_3x3(image,grad_i,grad_j);
 
-  vcl_cout<<vcl_endl;
-  vcl_cout<<"Sobel I Gradient:"<<vcl_endl;
+  vcl_cout<<"\nSobel I Gradient:\n";
   vil_print_all(vcl_cout,grad_i);
 
-  vcl_cout<<vcl_endl;
-  vcl_cout<<"Sobel J Gradient:"<<vcl_endl;
+  vcl_cout<<"\nSobel J Gradient:\n";
   vil_print_all(vcl_cout,grad_j);
 
   return 0;

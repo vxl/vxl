@@ -18,7 +18,7 @@ vil_image_view<vxl_byte> transpose_view(const vil_image_view<vxl_byte>& v)
                                   v.jstep(),v.istep(),v.planestep());
 }
 
-int main(int argc, char** argv)
+int main()
 {
   unsigned ni=9;
   unsigned nj=8;

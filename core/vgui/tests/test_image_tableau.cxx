@@ -11,12 +11,13 @@ static void test_image_tableau(int argc, char* argv[])
   // results in the vil1_image being loaded, since this is expected by
   // older code.
   //
-  vil1_image img = vil1_load( argv[1] );
+  const char* input_file = argc>1 ? argv[1] : "Please give it as command line parameter";
+  vil1_image img = vil1_load( input_file );
   if ( !img ) {
-    vcl_cout << "Couldn't load test image \"" << argv[1] << "\"\n";
+    vcl_cout << "Couldn't load test image \"" << input_file << "\"\n";
   } else {
     testlib_test_begin( "Construct with filename" );
-    vgui_image_tableau_new img_tab( argv[1] );
+    vgui_image_tableau_new img_tab( input_file );
     vil1_image img2 = img_tab->get_image();
     testlib_test_perform( img2 );
 

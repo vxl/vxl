@@ -14,8 +14,7 @@
 #include <vil/vil_resample_bilin.h>
 #include <vil/vil_resample_bicub.h>
 
-int
-main (int argc, char** argv)
+int main (int argc, char**)
 {
   if (argc != 1) {
     vcl_cerr << "No arguments needed\n";

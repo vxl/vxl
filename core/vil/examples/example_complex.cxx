@@ -13,8 +13,7 @@
 #include <vil/vil_save.h>
 #include <vil/algo/vil_fft.h>
 
-int
-main (int argc, char** argv)
+int main()
 {
   vil_image_view<vcl_complex<double> > img (4, 2, 3);
 
@@ -26,7 +25,7 @@ main (int argc, char** argv)
           vcl_complex<double> (111+i+10*j+100*p+0.1, 111+i+10*j+100*p+0.2);
 
   // print the complex image view
-  vcl_cout << "original complex image" << vcl_endl;
+  vcl_cout << "original complex image\n";
   vil_print_all (vcl_cout, img);
   vcl_cout << vcl_endl;
 
@@ -35,7 +34,7 @@ main (int argc, char** argv)
   vil_image_view<double> img_p = vil_view_as_planes (img);
 
   // print the plane image view
-  vcl_cout << "complex image viewed as planes" << vcl_endl;
+  vcl_cout << "complex image viewed as planes\n";
   vil_print_all (vcl_cout, img_p);
   vcl_cout << vcl_endl;
 
@@ -43,7 +42,7 @@ main (int argc, char** argv)
   vil_image_view<vcl_complex<double> > img_c = vil_view_as_complex (img_p);
 
   // print the plane-complex image view
-  vcl_cout << "plane view converted back to complex view" << vcl_endl;
+  vcl_cout << "plane view converted back to complex view\n";
   vil_print_all (vcl_cout, img_c);
   vcl_cout << vcl_endl;
 
@@ -52,10 +51,9 @@ main (int argc, char** argv)
   vil_image_view<double> img_i = vil_view_imag_part (img);
 
   // print the separate views of the real and imaginary parts
-  vcl_cout << "view of real part" << vcl_endl;
+  vcl_cout << "view of real part\n";
   vil_print_all (vcl_cout, img_r);
-  vcl_cout << vcl_endl;
-  vcl_cout << "view of imag part" << vcl_endl;
+  vcl_cout << "\nview of imag part\n";
   vil_print_all (vcl_cout, img_i);
   vcl_cout << vcl_endl;
 
@@ -64,7 +62,7 @@ main (int argc, char** argv)
   img_i(1,1,0) = 999.9;
 
   // print the complex image view again to see the change
-  vcl_cout << "complex image changed via real/imag parts" << vcl_endl;
+  vcl_cout << "complex image changed via real/imag parts\n";
   vil_print_all (vcl_cout, img);
   vcl_cout << vcl_endl;
 
@@ -76,7 +74,7 @@ main (int argc, char** argv)
   vil_fft_2d_fwd (img2);
 
   // print the complex image view again to see the change
-  vcl_cout << "FFT of complex image" << vcl_endl;
+  vcl_cout << "FFT of complex image\n";
   vil_print_all (vcl_cout, img2);
   vcl_cout << vcl_endl;
 
@@ -84,7 +82,7 @@ main (int argc, char** argv)
   vil_fft_2d_bwd (img2);
 
   // print the complex image view again to see the change
-  vcl_cout << "inverse FFT of FFT of complex image" << vcl_endl;
+  vcl_cout << "inverse FFT of FFT of complex image\n";
   vil_print_all (vcl_cout, img2);
   vcl_cout << vcl_endl;
 
@@ -92,7 +90,7 @@ main (int argc, char** argv)
   vil_image_view<vxl_uint_16> img_ri = img_r;
   vil_convert_cast (img_r, img_ri);
 
-  vcl_cout << "cast real part to an integer image" << vcl_endl;
+  vcl_cout << "cast real part to an integer image\n";
   vil_print_all (vcl_cout, img_ri);
   vcl_cout << vcl_endl;
 

@@ -9,7 +9,7 @@
 #include <vil/vil_image_view.h>
 #include <vil/vil_print.h>
 
-int main(int argc, char** argv)
+int main()
 {
   // Create some data in memory
   vcl_vector<vxl_byte> vec_data(64);
