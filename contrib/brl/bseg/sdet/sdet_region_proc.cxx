@@ -60,9 +60,9 @@ void sdet_region_proc::extract_regions()
   if (regions_valid_)
     return;
   // Check the image
-  if (!image_||!clip_)
+  if (!image_ && !clip_)
   {
-    vcl_cout << "In sdet_region_proc::extract_regions() - no image\n";
+    vcl_cout << "In sdet_region_proc::extract_regions() - no image nor clip\n";
     return;
   }
   vil1_image temp = image_;
