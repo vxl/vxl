@@ -1,11 +1,10 @@
-//--*-c++-*--
 // This is brl/bmvl/bmvv/bmvv_recon_manager.h
 #ifndef bmvv_recon_manager_h_
 #define bmvv_recon_manager_h_
 //----------------------------------------------------------------------------
 //:
 // \file
-// \brief Manager for 3-d reconstruction 
+// \brief Manager for 3-d reconstruction
 // \author
 //   J.L. Mundy
 //
@@ -17,9 +16,7 @@
 #include <vcl_vector.h>
 #include <vcl_map.h>
 #include <vil1/vil1_image.h>
-#include <vtol/vtol_edge_2d_sptr.h>
 #include <vtol/vtol_intensity_face_sptr.h>
-#include <vdgl/vdgl_digital_curve_sptr.h>
 #include <vgui/vgui_wrapper_tableau.h>
 #include <vgui/vgui_easy2D_tableau_sptr.h>
 #include <vgui/vgui_grid_tableau.h>
