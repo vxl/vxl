@@ -33,7 +33,7 @@ double vdgl_interpolator_cubic::get_x(double index)
 {
   const int N = chain_->size();
   int a= int(index)-1;
-  if (index == N-2) --a; // take previous interval if we are on edgel N-2
+  if (index == N-2) --a; // take previous interval if we are exactly on edgel N-2
   int b= a+1;
   int c= b+1;
   int d= c+1;
@@ -66,7 +66,7 @@ double vdgl_interpolator_cubic::get_y(double index)
 {
   const int N = chain_->size();
   int a= int(index)-1;
-  if (index == N-2) --a; // take previous interval if we are on edgel N-2
+  if (index == N-2) --a; // take previous interval if we are exactly on edgel N-2
   int b= a+1;
   int c= b+1;
   int d= c+1;
@@ -323,21 +323,21 @@ void vdgl_interpolator_cubic::recompute_bbox()
 vsol_point_2d_sptr vdgl_interpolator_cubic::
 closest_point_on_curve ( vsol_point_2d_sptr p )
 {
-  int n = chain_->size();
-  if(!n)
+  unsigned int n = chain_->size();
+  if (n==0)
     return 0;
   double px = p->x(), py = p->y(), dmin = vnl_numeric_traits<double>::maxval;
   int imin = 0;
-  for(int i = 0; i<n; i++)
+  for(unsigned int i = 0; i<n; i++)
+  {
+    double x = (*chain_)[i].x(), y = (*chain_)[i].y();
+    double d = vcl_sqrt((x-px)*(x-px) + (y-py)*(y-py));
+    if (d<dmin)
     {
-      double x = (*chain_)[i].x(), y = (*chain_)[i].y();
-      double d = vcl_sqrt((x-px)*(x-px) + (y-py)*(y-py));
-      if(d<dmin)
-        {
-          dmin = d;
-          imin = i;
-        }
+      dmin = d;
+      imin = i;
     }
+  }
   //This is approximate.  Should really differentiate the cubic expression
   //on the interval around imin.
   px = this->get_x(imin);
