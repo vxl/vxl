@@ -6,6 +6,7 @@
 
 #include "vgl_line_3d_2_points.h"
 #include <vcl_iostream.h>
+#include <vcl_cassert.h>
 
 //***************************************************************************
 // Initialization
