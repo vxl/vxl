@@ -13,14 +13,6 @@
 #include <vcl_iostream.h>
 #include <vcl_vector.h>
 
-#include <vtol/vtol_vertex_3d_sptr.h>
-#include <vtol/vtol_zero_chain_3d_sptr.h>
-#include <vtol/vtol_edge_3d_sptr.h>
-#include <vtol/vtol_one_chain_3d_sptr.h>
-#include <vtol/vtol_face_3d_sptr.h>
-#include <vtol/vtol_two_chain_3d_sptr.h>
-#include <vtol/vtol_block_3d_sptr.h>
-
 #include <vtol/vtol_vertex_3d.h>
 #include <vtol/vtol_zero_chain_3d.h>
 #include <vtol/vtol_edge_3d.h>
