@@ -1,9 +1,9 @@
+// This is rpl/rrel/rrel_estimation_problem.cxx
 #include "rrel_estimation_problem.h"
 
 #include <rrel/rrel_wls_obj.h>
 
 #include <vcl_vector.h>
-#include <vcl_cstdlib.h>
 #include <vcl_cassert.h>
 
 rrel_estimation_problem::rrel_estimation_problem( unsigned int dof,
