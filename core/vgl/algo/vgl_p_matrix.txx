@@ -11,6 +11,7 @@
 #include <vcl_cmath.h>
 
 #include <vnl/vnl_matrix.h>
+#include <vnl/vnl_inverse.h>
 #include <vnl/algo/vnl_svd.h>
 #include <vnl/algo/vnl_qr.h>
 #include <vgl/vgl_homg_plane_3d.h>
