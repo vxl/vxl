@@ -207,6 +207,9 @@ SOURCE=.\Templates/vnl_io_vector_fixed+double.2-.cxx
 SOURCE=.\Templates/vnl_io_vector_fixed+double.3-.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\Templates/vnl_io_matrix_fixed+double.3.3-.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\vnl_io_nonlinear_minimizer.cxx
 # End Source File
 # Begin Source File
