@@ -18,7 +18,7 @@
 // Workaround for a "bug" in GL/glut.h, where the signature of glutAddMenuEntry
 // and some others is (char*,int) instead of (const char*,long).
 // GLUT on Win32 does not have this problem. So make it specific based on platforms.
-#ifdef VCL_WIN32
+#if defined(VCL_WIN32)
 inline void glutAddMenuEntry(const char* label, long value) { glutAddMenuEntry(label,int(value)); }
 inline void glutAddSubMenu(const char* label, long sub) { glutAddSubMenu(label,int(sub)); }
 inline void glutChangeToMenuEntry(long item, const char* label, long value) {
