@@ -127,7 +127,7 @@ shortPixel(const gevd_bufferxy& buf, int x, int y)
 
 //: Get reference to pixel as an unsigned short, at indices (x, y).
 
-inline const short&
+inline const unsigned short&
 ushortPixel(const gevd_bufferxy& buf, int x, int y)
 {
   return (*((const unsigned short*)buf.GetElementAddr(x,y)));
