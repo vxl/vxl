@@ -186,7 +186,8 @@ bool vdgl_edgel_chain::line_gen(float xs, float ys, float xe, float ye,
       //Check if we have advanced by more than .5 pixels
       x = (unsigned int)(xi/pix_edge);
       y = (unsigned int)(yi/pix_edge);
-      if (vcl_abs(int(x)-xp)>(.5*pix_edge)||vcl_abs(int(y)-yp)>(.5*pix_edge))
+      float dx1 = (float)(int(x)-xp), dy1 = (float)(int(y)-yp);
+      if (vcl_abs(dx1)>(.5*pix_edge)||vcl_abs(dy1)>(.5*pix_edge))
         return true;
     }
   vcl_cout << "in vdgl_edgel_chain::line_gen(..) - shouldn't happen\n";

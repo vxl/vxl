@@ -7,8 +7,11 @@
 #include <vdgl/vdgl_edgel.h>
 #include <vdgl/vdgl_edgel_chain.h>
 #include <vsol/vsol_point_2d.h>
+#include <math.h>
 #include <vnl/vnl_numeric_traits.h>
+#include <vnl/vnl_math.h>
 #include <vcl_cassert.h>
+
 
 
 vdgl_interpolator_linear::vdgl_interpolator_linear( vdgl_edgel_chain_sptr chain)
@@ -69,8 +72,8 @@ double vdgl_interpolator_linear::get_y( const double index)
 
   return be*d+ae*(1-d);
 }
-
-
+//
+//: linearly interpolate the gradient direction
 double vdgl_interpolator_linear::get_theta( const double index)
 {
   assert(index >= 0 && index < chain_->size());
@@ -84,7 +87,56 @@ double vdgl_interpolator_linear::get_theta( const double index)
   return be*d+ae*(1-d);
 }
 
+//: Compute the angle using two adjacent edgels
+//  (TargetJr used different computations at internal points and at endpoints
+//  For endpoints the geometric tangent was used, but image gradient directions
+//  were used for internal points on the chain.)
+//  Here we use direct geometric angle computation for all points
+//  The image-based directions are likely less accurate
+//
+double vdgl_interpolator_linear::get_tangent_angle( const double index)
+{
+  int N = chain_->size();
+  assert(index >= 0 && index < chain_->size());
+  if(N==1)
+    {
+      vcl_cout << " vdgl_interpolator_linear::get_theta(..) - can't compute angle"
+               << " for a chain with one edgel" << vcl_cout;
+      return 0;
+    }
+  int a= int( index); // round down
+  double d = index - a;
+  //cases to consider:
+  // Case I, N=2 or index == 0
+  if(N==2||a==0)
+    {
+      double x0 = (*chain_)[0].x(), y0 = (*chain_)[0].y();
+      double x1 = (*chain_)[1].x(), y1 = (*chain_)[1].y();
+      double angle = 180.0*vnl_math::one_over_pi*atan2((y1-y0), (x1-x0));
+      return angle;
+    }
+  // Case II - index is at n = N-1
+  if(a==(N-1))
+    {
+      double xi = (*chain_)[N-2].x(), yi = (*chain_)[N-2].y();
+      double xn = (*chain_)[N-1].x(), yn = (*chain_)[N-1].y();
+      double angle = 180.0*vnl_math::one_over_pi*atan2((yn-yi), (xn-xi));
+      return angle;
+    }
+  // Case III - index is in general position
+  if(a>0&&a<(N-1))
+    {
+      double xi = (*chain_)[a].x(), yi = (*chain_)[a].y();
+      double xip = (*chain_)[a+1].x(), yip = (*chain_)[a+1].y();
+      double angle = 180.0*vnl_math::one_over_pi*atan2((yip-yi), (xip-xi));
+      return angle;
+    } 
 
+  vcl_cout << " vdgl_interpolator_linear::get_theta(..) - shouldn't happen"
+           << vcl_cout;
+  return 0;
+}
+  
 double vdgl_interpolator_linear::get_curvature( const double index)
 {
   int a= int( index); // round down

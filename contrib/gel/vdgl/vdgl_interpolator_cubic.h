@@ -35,6 +35,7 @@ class vdgl_interpolator_cubic : public vdgl_interpolator
 
   // interpolation 1st degree
   double get_theta( const double index);
+  double get_tangent_angle( const double index);
 
   // interpolation 2nd degree
   double get_curvature( const double index);

@@ -99,28 +99,11 @@ bool vdgl_digital_curve::split(vsol_point_2d_sptr const& v,
 }
 
 //: scan all the points on the curve and compute the bounds
+//  calling routine must insure that the box exists
 void vdgl_digital_curve::compute_bounding_box(void)
 {
-  //initalize maxv, minv
-  double maxv = vnl_numeric_traits<double>::maxval;
-  double minv = -maxv;
-  double xmin = maxv, ymin = maxv, xmax = minv, ymax = minv;
-
-  vdgl_edgel_chain_sptr ec = interpolator_->get_edgel_chain();
-  int N = ec->size();
-  for (int i=0; i<N; i++)
-    {
-      vdgl_edgel ed = (*ec)[i];
-      double x = ed.x(), y = ed.y();
-      if (x < xmin) xmin = x;
-      if (y < ymin) ymin = y;
-      if (x > xmax) xmax = x;
-      if (y > ymax) ymax = y;
-    }
-  if (bounding_box_==0)
-    bounding_box_=new vsol_box_2d;
-  bounding_box_->set_min_x(xmin);
-  bounding_box_->set_max_x(xmax);
-  bounding_box_->set_min_y(ymin);
-  bounding_box_->set_max_y(ymax);
+  bounding_box_->set_min_x(interpolator_->get_min_x());
+  bounding_box_->set_max_x(interpolator_->get_max_x());
+  bounding_box_->set_min_y(interpolator_->get_min_y());
+  bounding_box_->set_max_y(interpolator_->get_max_y());
 }

@@ -90,7 +90,6 @@ double vdgl_interpolator_cubic::get_y( const double index)
   return P(0,0) * index * index * index  + P(1,0) *  index * index + P(2,0) * index  + P(3,0);
 }
 
-
 double vdgl_interpolator_cubic::get_theta( const double index)
 {
   int a= int( index);
@@ -118,6 +117,12 @@ double vdgl_interpolator_cubic::get_theta( const double index)
   vnl_matrix<double> P = svd.solve(A);
 
   return P(0,0) * index * index * index  + P(1,0) *  index * index + P(2,0) * index  + P(3,0);
+}
+
+double vdgl_interpolator_cubic::get_tangent_angle( const double index)
+{
+  //not implemented
+  return 0;
 }
 
 
