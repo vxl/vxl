@@ -608,6 +608,7 @@ LogLuvEncodeTile(TIFF* tif, tidata_t bp, tsize_t cc, tsample_t s)
 #else
 #define LOGOF2          0.69314718055994530942
 #endif
+#undef log2
 #define log2(x)         ((1./LOGOF2)*log(x))
 #define exp2(x)         exp(LOGOF2*(x))
 
