@@ -1,11 +1,11 @@
-// This is oxl/vgui/impl/Fl/vgui_Fl_statusbar.cxx
+// This is oxl/ogui/impl/Fl/vgui_Fl_statusbar.cxx
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
-//
-// Author: Philip C. Pritchett, RRG, University of Oxford
-// Created: 19 Nov 99
-//
+//:
+// \file
+// \author Philip C. Pritchett, RRG, University of Oxford
+// \date   19 Nov 99
 //-----------------------------------------------------------------------------
 
 #include "vgui_Fl_statusbar.h"

@@ -1,11 +1,11 @@
-// This is oxl/vgui/impl/Xm/vgui_Xm_dialog_impl.cxx
+// This is oxl/ogui/impl/Xm/vgui_Xm_dialog_impl.cxx
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
-//
-// Author: Philip C. Pritchett, RRG, University of Oxford
-// Created: 25 Oct 99
-//
+//:
+// \file
+// \author Philip C. Pritchett, RRG, University of Oxford
+// \date   25 Oct 99
 //-----------------------------------------------------------------------------
 
 #include "vgui_Xm_dialog_impl.h"

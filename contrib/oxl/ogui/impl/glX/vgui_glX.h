@@ -1,27 +1,14 @@
-// This is oxl/vgui/impl/glX/vgui_glX.h
+// This is oxl/ogui/impl/glX/vgui_glX.h
 #ifndef vgui_glX_h_
 #define vgui_glX_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
-//
-// .NAME vgui_glX - Undocumented class FIXME
-// .LIBRARY vgui-glX
-// .HEADER vxl Package
-// .INCLUDE vgui/impl/glX/vgui_glX.h
-// .FILE vgui_glX.cxx
-//
-// .SECTION Description:
-//
-// vgui_glX is a class that Phil hasnt documented properly. FIXME
-//
-// .SECTION Author:
+//:
+// \file
+// \author
 //              Philip C. Pritchett, 16 Sep 99
 //              Robotics Research Group, University of Oxford
-//
-// .SECTION Modifications:
-//     <none yet>
-//
 //-----------------------------------------------------------------------------
 
 #include <vcl_vector.h>
@@ -45,10 +32,10 @@ class vgui_glX : public vgui_toolkit
   virtual void add_event(const vgui_event&);
 
   virtual vgui_window* produce_window(int width, int height, const vgui_menu& menubar,
-                                           const char* title="vgui X window");
+                                      const char* title="vgui X window");
 
   virtual vgui_window* produce_window(int width, int height,
-                                           const char* title="vgui X popup");
+                                      const char* title="vgui X popup");
 
   virtual vgui_dialog_impl* produce_dialog(const char* name);
 

@@ -1,11 +1,11 @@
-// This is oxl/vgui/impl/glX/vgui_glX_window.cxx
+// This is oxl/ogui/impl/glX/vgui_glX_window.cxx
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
-//
-// Author: Philip C. Pritchett, RRG, University of Oxford
-// Created: 05 Oct 99
-//
+//:
+// \file
+// \author Philip C. Pritchett, RRG, University of Oxford
+// \date   05 Oct 99
 //-----------------------------------------------------------------------------
 
 #include "vgui_glX_window.h"

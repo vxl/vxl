@@ -1,27 +1,14 @@
-// This is oxl/vgui/impl/glX/vgui_glX_window.h
+// This is oxl/ogui/impl/glX/vgui_glX_window.h
 #ifndef vgui_glX_window_h_
 #define vgui_glX_window_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
-//
-// .NAME vgui_glX_window - Undocumented class FIXME
-// .LIBRARY vgui-glX
-// .HEADER vxl Package
-// .INCLUDE vgui/impl/glX/vgui_glX_window.h
-// .FILE vgui_glX_window.cxx
-//
-// .SECTION Description:
-//
-// vgui_glX_window is a class that Phil hasnt documented properly. FIXME
-//
-// .SECTION Author:
+//:
+// \file
+// \author
 //              Philip C. Pritchett, 05 Oct 99
 //              Robotics Research Group, University of Oxford
-//
-// .SECTION Modifications:
-//     <none yet>
-//
 //-----------------------------------------------------------------------------
 
 #include <vgui/vgui_window.h>

@@ -1,27 +1,14 @@
-// This is oxl/vgui/impl/Xm/vgui_Xm_window.h
+// This is oxl/ogui/impl/Xm/vgui_Xm_window.h
 #ifndef vgui_Xm_window_h_
 #define vgui_Xm_window_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
-//
-// .NAME vgui_Xm_window - Undocumented class FIXME
-// .LIBRARY vgui-Xm
-// .HEADER vxl Package
-// .INCLUDE vgui/impl/Xm/vgui_Xm_window.h
-// .FILE vgui_Xm_window.cxx
-//
-// .SECTION Description:
-//
-// vgui_Xm_window is a class that Phil hasnt documented properly. FIXME
-//
-// .SECTION Author:
+//:
+// \file
+// \author
 //              Philip C. Pritchett, 05 Oct 99
 //              Robotics Research Group, University of Oxford
-//
-// .SECTION Modifications:
-//     <none yet>
-//
 //-----------------------------------------------------------------------------
 
 #include <vgui/vgui_window.h>
