@@ -625,14 +625,14 @@ foreach $f (@FILES)
       $file_s =~ m/\b([_A-Z0-9]*)_INSTANTIATE\s*\((.*)\)/)
   {
     $class=$1; $class =~ tr/A-Z/a-z/; $class="$class<$2>";
-    $class =~ s/\bvcl_swap\s*\</vcl_algorithm\</g;
+    $class =~ s/\bvcl_(swap|containable)\s*\</vcl_algorithm\</g;
     $class =~ s/\bvcl_sort\s*\<[^,]+\,/vcl_algorithm\</g;
-    $class =~ s/\bvcl_find(_if)?\s*\<\s*vcl_vector\s*\<([^\005]+)\005\s*iterator.+/vcl_algorithm\<$2/g;
+    $class =~ s/\bvcl_find(_if)?\s*\<\s*vcl_(vector|list)\s*\<([^\005]+)\005\s*(const_)?iterator.+/vcl_algorithm\<$3/g;
     while ($file_s =~ s/\btypedef\s+([^;]*)\s(\S+)\s*\;//)
     { $A=$1; $B=$2; $B =~ s!([][{}()|*+/\\])!\\$1!g; $class =~ s/\b$B\b/$A/g; }
 #   $class =~ s/\bconst\b//g;
     $class =~ s/\s//g;
-    $class =~ s/\bconstchar/const_char/g; $class =~ s/(\w)const/$1_const/g;
+    $class =~ s/\bconstchar/const_char/g; $class =~ s/(\w)const([^r])/$1_const$2/g;
     $class =~ s/\,vcl_less\<[^<>]+\<[^<>]+\>[^<>]*\>//g;
     $class =~ s/\,vcl_less\<[^<>]+\>//g;
     $class =~ s/\,(.*)_sptr\,\1\005compare//g;
