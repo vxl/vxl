@@ -42,6 +42,7 @@ SOURCES += vil_scale_intensities_image_impl.cxx
 SOURCES += vil_scale_intensities_image.cxx # Helper specializations for vil_scale_intensities_image_impl.cxx
 
 # file format readers/writers.
+SOURCES += file_formats/vil_gen.cxx
 SOURCES += file_formats/vil_pnm.cxx
 SOURCES += file_formats/vil_viff.cxx
 SOURCES += file_formats/vil_viff_support.c
