@@ -22,8 +22,9 @@
 //
 //-----------------------------------------------------------------------------
 
-#include <vnl/vnl_double_3.h>
 #include <mvl/Homg.h>
+#include <vnl/vnl_double_3.h>
+#include <vcl_cassert.h>
 
 class Homg2D : public vnl_double_3, public Homg
 {
@@ -32,22 +33,22 @@ class Homg2D : public vnl_double_3, public Homg
   // Constructors/Initializers/Destructors-----------------------------------
 
   //: Default constructor
-  Homg2D () {}
+  Homg2D() {}
 
   //: Copy constructor
-  Homg2D (const Homg2D& that) { *this = that; }
+  Homg2D(const Homg2D& that) { *this = that; }
 
   //: Construct a Homg2D from three doubles.
-  Homg2D (double px, double py, double pw) { set(px,py,pw); }
+  Homg2D(double px, double py, double pw) { set(px,py,pw); }
 
   //: Construct from 3-vector.
-  Homg2D (const vnl_vector_fixed<double,3>& v) { set(v); }
+  Homg2D(const vnl_vector_fixed<double,3>& v) { set(v); }
 
   //: Construct from 3-vector.
-  Homg2D (const vnl_vector<double>& v) { set(v); }
+  Homg2D(const vnl_vector<double>& v) { set(v); }
 
   //: Destructor
- ~Homg2D () {}
+ ~Homg2D() {}
 
   //: Assignment
   Homg2D& operator=(const Homg2D& that) {
@@ -57,60 +58,56 @@ class Homg2D : public vnl_double_3, public Homg
 
   // Data Access-------------------------------------------------------------
 
-  const vnl_double_3& get_vector() const { return *this; }
+  vnl_double_3 get_vector() const { return vnl_double_3(x(),y(),w()); }
+  vnl_double_3& asVector() { return *this; }
 
-  //: Retrieve components.
-  void get (double *x_ptr, double *y_ptr, double *w_ptr) const {
-    *x_ptr = (*this)[0];
-    *y_ptr = (*this)[0];
-    *w_ptr = (*this)[0];
+  //: Retrieve components.  Do not attempt to write into null pointers.
+  void get(double *x_ptr, double *y_ptr, double *w_ptr) const
+  {
+    if (x_ptr) *x_ptr = x();
+    if (y_ptr) *y_ptr = y();
+    if (w_ptr) *w_ptr = z();
   }
 
+// @{ ACCESS TO COMPONENTS: @}
+
   //: Return x
-  double get_x () const { return (*this)[0]; }
+  inline double x() const { return (*this)[0]; }
+  //: Return reference to x
+  inline double& x() { return (*this)[0]; }
+  //: deprecated
+  double get_x() const { return (*this)[0]; }
 
   //: Return y
-  double get_y () const { return (*this)[1]; }
+  inline double y() const { return (*this)[1]; }
+  //: Return reference to y
+  inline double& y() { return (*this)[1]; }
+  //: deprecated
+  double get_y() const { return (*this)[1]; }
 
   //: Return w
-  double get_w () const { return (*this)[2]; }
+  inline double w() const { return (*this)[2]; }
+  //: Return reference to w
+  inline double& w() { return (*this)[2]; }
+  //: deprecated
+  double get_w() const { return (*this)[2]; }
 
   //: Set x,y,w.
-  void set (double px, double py, double pw) {
+  void set(double px, double py, double pw)
+  {
     (*this)[0] = px;
     (*this)[1] = py;
     (*this)[2] = pw;
   }
 
   //: Set from vector
-  void set (const vnl_vector_fixed<double,3>& v) { vnl_double_3::operator = (v); }
+  void set(const vnl_vector_fixed<double,3>& v) { set(v[0],v[1],v[2]); }
 
   //: Set from vector
-  void set (const vnl_vector<double>& v) { vnl_double_3::operator = (v); }
+  void set(const vnl_vector<double>& v) { set(v[0],v[1],v[2]); }
 
   //: Set element.
-  void set (unsigned int element_index, double element) {
-    (*this)[element_index] = element;
-  }
-
-  // Data Control------------------------------------------------------------
-
-// @{ ACCESS TO COMPONENTS: @}
-
-  //:
-  double& x() { return (*this)[0]; }
-  //:
-  double  x() const { return (*this)[0]; }
-
-  //:
-  double& y() { return (*this)[1]; }
-  //:
-  double  y() const { return (*this)[1]; }
-
-  //:
-  double& w() { return (*this)[2]; }
-  //:
-  double  w() const { return (*this)[2]; }
+  void set(unsigned int index, double v) {assert(index<=2); (*this)[index]=v;}
 };
 
 #endif // _Homg2D_h
