@@ -7,12 +7,15 @@
 //:
 // \file
 // \author fsm@robots.ox.ac.uk
+// This class is best accessed through the external function vil_resample().
 
 #include <vil/vil_image_impl.h>
 #include <vil/vil_image.h>
 #include <vcl_string.h>
 
 //: Adaptor which produces an image by resampling.
+// Note that the actual subsampling only takes place at the moment when the
+// get_section() method is called.
 class vil_resample_image_impl : public vil_image_impl
 {
  public:
