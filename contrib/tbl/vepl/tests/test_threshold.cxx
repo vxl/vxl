@@ -12,6 +12,7 @@
 #include <vepl/vepl_threshold.h>
 #include <vcl_iostream.h>
 #include <vcl_cmath.h>
+#include <vcl_cstdlib.h>
 typedef unsigned char ubyte;
 
 // create an 8 bit test image
