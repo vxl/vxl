@@ -154,7 +154,8 @@ class brip_float_ops
 
   //:compute basis images for a set of input images
   static 
-    void basis_images(vcl_vector<vil1_memory_image_of<float> > const & input_images, vcl_vector<vil1_memory_image_of<float> > & basis);
+    void basis_images(vcl_vector<vil1_memory_image_of<float> > const & input_images,
+                      vcl_vector<vil1_memory_image_of<float> > & basis);
 
   //:compute the Fourier transform using the vnl FFT algorithm
   static bool fourier_transform(vil1_memory_image_of<float> const & input, 
