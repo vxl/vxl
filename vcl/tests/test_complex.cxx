@@ -47,12 +47,13 @@ int test_complex_main(int /*argc*/,char* /*argv*/[])
   bool success = true;
 
   const vcl_complex<double> neg1(-1.0, 0.0);
+  const vcl_complex<double> i(0.0,1.0);
   vcl_complex<double> sqrt_neg1 = vcl_pow(neg1, 0.5);
   vcl_cout << "pow("<<neg1<<",0.5) = "<<sqrt_neg1<<
     " and should be (0,1)"<<vcl_endl;
-  if ( -vcl_abs(sqrt_neg1-vcl_complex<double>(0.0,1.0)) > -1e-6)
-  {} // Deal with NaN case
-  else
+  double error = vcl_abs(sqrt_neg1-i);
+// need to be careful of quiet NANs
+  if ( error < 0.0  || 1e-6 < error)
   {
     vcl_cout << "** FAILURE **\n";
     success = false;
@@ -62,9 +63,8 @@ int test_complex_main(int /*argc*/,char* /*argv*/[])
   sqrt_neg1 = vcl_pow(neg1, half);
   vcl_cout << "pow("<<neg1<<","<<half<<") = "<<sqrt_neg1<<
     " and should be (0,1)"<<vcl_endl;
-  if ( -vcl_abs(sqrt_neg1-vcl_complex<double>(0.0,1.0)) > -1e-6)
-  {} // Deal with NaN case
-  else
+  error = vcl_abs(sqrt_neg1-i);
+  if ( error < 0.0  || 1e-6 < error)
   {
     vcl_cout << "** FAILURE **\n";
     success = false;
