@@ -17,6 +17,7 @@
 #include <vcl_new.h>
 #include <vcl_cassert.h>
 #include <vcl_iosfwd.h>
+#include <vcl_cstddef.h> // for ptrdiff_t
 
 //: A simple container.
 // This container stores its elements in contiguous
@@ -36,7 +37,7 @@ struct vbl_array_1d
   vbl_array_1d() : begin_(0), end_(0), alloc_(0) { }
 
   vbl_array_1d(const_iterator b, const_iterator e) {
-    unsigned long n = e - b;
+    vcl_ptrdiff_t n = e - b;
     begin_ = (T*) new char [n * sizeof(T)]; // FIXME alignment
     end_   = begin_ + n;
     alloc_ = begin_ + n;
@@ -80,7 +81,7 @@ struct vbl_array_1d
   }
 
   void reserve(unsigned new_n) {
-    unsigned long n = end_ - begin_;
+    vcl_ptrdiff_t n = end_ - begin_;
     if (new_n <= n)
       return;
 
@@ -131,8 +132,8 @@ struct vbl_array_1d
   const_iterator end() const { return end_; }
 
   bool empty() const { return begin_ == end_; }
-  unsigned long size() const { return end_ - begin_; }
-  unsigned long capacity() const { return alloc_ - begin_; }
+  size_t size() const { return end_ - begin_; }
+  size_t capacity() const { return alloc_ - begin_; }
 
   //: Get the ith element.
   // #define NDEBUG to turn bounds checking off.
