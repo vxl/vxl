@@ -12,26 +12,36 @@
 #include <vil/vil_memory_image_of.h>
 
 #include <vil/file_formats/vil_iris.h>
-//#include <vil/file_formats/vil_jpeg.h>
+#ifdef HAS_JPEG
+#include <vil/file_formats/vil_jpeg.h>
+#endif
+#ifdef HAS_PNG
 #include <vil/file_formats/vil_png.h>
+#endif
+#ifdef HAS_TIFF
+#include <vil/file_formats/vil_tiff.h>
+#endif
 #include <vil/file_formats/vil_pnm.h>
 #include <vil/file_formats/vil_viff.h>
+#include <vil/file_formats/vil_bmp.h>
+#include <vil/file_formats/vil_mit.h>
 
 #define DEBUG 1
 #define LEAVE_IMAGES_BEHIND 0
 
-int all_passed = 0;
+int nr_failures = 0;
 
 static bool blather = false;
 #define ww (blather ? cout << "reached " __FILE__ ":" << __LINE__ << endl : cout)
 
 // -- this function tests to see if all the pixels in two images are equal
-void test_image_equal(char const* test,
+bool test_image_equal(char const* test,
 		      char const* type_name,
 		      vil_image const & image,
-		      vil_image const & image2)
+		      vil_image const & image2,
+		      bool exact = true)
 {
-  ww;
+//ww;
   int sizex = image.width();
   int sizey = image.height();
   int components = image.components();
@@ -44,98 +54,108 @@ void test_image_equal(char const* test,
   int planes2 = image2.planes();
   int cell_bits2 = image2.bits_per_component();
   int num_bits2 = sizex2 * sizey2 * components2 * planes2 * cell_bits2;
-  ww;
+//ww;
 
   if (sizex != sizex2 || sizey != sizey2)
   {
-    cout << "FAILED: test <" << test << "> for " << type_name
+    cout << "\nFAILED: test <" << test << "> for " << type_name
          << " -- Image dimensions differ: "
          << sizex2 << " x " << sizey2 << endl;
-    return;
+    return false;
   }
-  ww;
+//ww;
 
   if (cell_bits != cell_bits2)
   {
-    cout << "FAILED: test <" << test << "> for " << type_name
+    cout << "\nFAILED: test <" << test << "> for " << type_name
          << " -- Image pixel sizes differ: "
          << cell_bits2 << " instead of " << cell_bits << endl;
-    return;
+    return false;
   }
-  ww;
+//ww;
 
   if (image.component_format() != image2.component_format())
   {
-    cout << "FAILED: test <" << test << "> for " << type_name
+    cout << "\nFAILED: test <" << test << "> for " << type_name
          << " -- Image formats differ: "
 	 << image2.component_format() << " instead of "
 	 << image.component_format() << endl;
-    return;
+    return false;
   }
-  ww;
+//ww;
 
   if (image.get_size_bytes() != num_bits/8 ||
       image2.get_size_bytes() != num_bits2/8 )
   {
-    cout << "FAILED: test <" << test << "> for " << type_name
+    cout << "\nFAILED: test <" << test << "> for " << type_name
          << " -- Image sizes differ: "
 	 << num_bits2 << "bits, " << image2.get_size_bytes() << endl;
-    return;
+    return false;
   }
-  ww;
+//ww;
 
   vcl_vector<unsigned char> image_buf(image.get_size_bytes());
   if (!image.get_section(image_buf.begin(), 0, 0, sizex, sizey))
   {
-    cout << "FAILED: test <" << test << "> for " << type_name
+    cout << "\nFAILED: test <" << test << "> for " << type_name
          << " -- image::do_get_section() on first image returned false!" << endl;
-    return;
+    return false;
   }
-  ww;
+//ww;
 
   vcl_vector<unsigned char> image_buf2(image2.get_size_bytes());
   if (!image2.get_section(image_buf2.begin(), 0, 0, sizex2, sizey2))
   {
-    cout << "FAILED: test <" << test << "> for " << type_name
+    cout << "\nFAILED: test <" << test << "> for " << type_name
          << " -- image::do_get_section() on second image returned false!" << endl;
-    return;
+    return false;
   }
-  ww;
+//ww;
+  if (!exact) // no exact pixel match wanted
+  {
+    cout << "\nPASSED: test <" << test << "> for " << type_name
+         <<  " -- image headers are identical" << endl;
+    return true;
+  }
 
   int bad = 0;
   for (int i=0; i < image.get_size_bytes(); ++i)
   {
     if(image_buf[i] != image_buf2[i])
     {
+      if (++bad < 20)
 #if DEBUG
-      cerr << " pixel " << i <<  " differs: " << (int)image_buf[i] << " --> "
-           << (int) image_buf2[i] << endl;
+        cout << "\n pixel " << i <<  " differs: " << (int)image_buf[i] << " --> "
+             << (int) image_buf2[i];
+#else
+        cout << ".";
 #endif
-      bad++;
-    }
-    if (bad > 100) {
-      cerr << "100 or more pixels differ - ignoring rest" << endl;
-      break;
     }
   }
 
   if (bad)
-    {
-      cout << "FAILED: test <" << test << "> for " << type_name
-           << " -- number of unequal pixels: "  << bad << endl;
-      ++all_passed;
-    }
+  {
+    cout << "\nFAILED: test <" << test << "> for " << type_name
+         << " -- number of unequal pixels: "  << bad << endl;
+    return false;
+  }
   else
-    cout << "PASSED: test <" << test << "> for " << type_name
-         <<  " -- images are the same" << endl;
+  {
+    cout << "\nPASSED: test <" << test << "> for " << type_name
+         <<  " -- images are identical" << endl;
+    return true;
+  }
 }
 
 // -- this function tests the read and write for the given image into the
 //    image type specified in type.
 
 void vil_test_image_type(char const* type_name, // type for image to read and write
-			 vil_image const & image) // test image to save and restore
+			 vil_image const & image, // test image to save and restore
+                         bool exact = true) // require read back image identical
 {
+  bool passed = true; // let's be optimistic :-)
+
   // Step 1) Write the image out to disk
 
   // create a file name
@@ -150,26 +170,37 @@ void vil_test_image_type(char const* type_name, // type for image to read and wr
   // Write image to disk
   if (!vil_save(image, fname.data(), type_name))
   {
-    ++all_passed;
-    cout << "vil_save() FAILED\n";
-    return;
+    ++nr_failures;
+    cout << "\nvil_save() FAILED ***\n";
+    return; // fatal error
   }
 
   // STEP 2) Read the image that was just saved to file
   cout << "load, ";
   vil_image image2 = vil_load(fname.data());
+  if (!image2)
+  {
+    ++nr_failures;
+    cout << "\nvil_load() FAILED ***\n";
+    return; // fatal error
+  }
 
   // make sure saved image has the same pixels as the original image
   cout << "compare, ";
   if(strcmp(type_name,image2.file_format()))
-    cout << "WARNING: read back image type is " << image2.file_format()
+  {
+    cout << "\n***FAILED***: read back image type is " << image2.file_format()
          << " instead of written " << type_name << endl;
+    passed = false; // non-fatal error
+  }
   else
-    test_image_equal("original equal to saved", type_name, image, image2);
+    passed = test_image_equal("original equal to saved", type_name, image, image2, exact);
 
   // if we have made it this far then report save as a success
-  if (all_passed == 0)
+  if (passed)
     cout << "PASSED: vil_save() for " << type_name << endl;
+  else
+    ++nr_failures;
 
 #if !LEAVE_IMAGES_BEHIND
   vcl_unlink(fname.data());
@@ -266,7 +297,6 @@ int main() {
   vil_image image3p = CreateTest3planeImage(sizex, sizey);
   vil_image imagefloat = CreateTestfloatImage(sizex, sizey);
 
-#if 0
   // pnm
   vil_test_image_type("pnm", image8);
   vil_test_image_type("pnm", image16);
@@ -283,16 +313,19 @@ int main() {
   //vil_test_image_type("viff", image3p);
   vil_test_image_type("viff", imagefloat);
 
+#ifdef HAS_TIFF
   // TIFF
   vil_test_image_type("tiff", image8);
   vil_test_image_type("tiff", image24);
-
-#if 0 // lossy format
-  // JPEG
-  vil_test_image_type("jpeg", image8);
-  vil_test_image_type("jpeg", image24);
 #endif
 
+#ifdef HAS_JPEG // lossy format ==> not guaranteed to be identical
+  // JPEG
+  vil_test_image_type("jpeg", image8, false);
+  vil_test_image_type("jpeg", image24, false);
+#endif
+
+#ifdef HAS_PNG
   // PNG
   vil_test_image_type("png", image8);
   vil_test_image_type("png", image24);
@@ -301,8 +334,25 @@ int main() {
   // sgi
   blather = true;
   vil_test_image_type("iris", image8);
-  vil_test_image_type("iris", image16);
+//vil_test_image_type("iris", image16); // not implemented yet
   vil_test_image_type("iris", image24);
 
-  return 0;
+  // bmp
+  vil_test_image_type("bmp", image8);
+  vil_test_image_type("bmp", image24);
+
+  // mit
+  vil_test_image_type("mit", image8);
+  vil_test_image_type("mit", image16);
+  vil_test_image_type("mit", image24);
+
+  cout << "Summary: ";
+  if (nr_failures > 1)
+    cout << "*** " << nr_failures << " failures\n";
+  else if (nr_failures > 0)
+    cout << "*** " << nr_failures << " failure\n";
+  else
+    cout << "all tests passed\n";
+
+  return nr_failures;
 }
