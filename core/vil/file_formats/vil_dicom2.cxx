@@ -39,13 +39,13 @@ vil_image_resource_sptr vil_dicom2_file_format::make_input_image(vil_stream* vs)
 
   char magic[ DCM_MagicLen ];
   vs->seek( DCM_PreambleLen );
-  if( vs->read( magic, DCM_MagicLen ) == DCM_MagicLen ) {
-    if( vcl_strncmp( magic, DCM_Magic, DCM_MagicLen ) == 0 ) {
+  if ( vs->read( magic, DCM_MagicLen ) == DCM_MagicLen ) {
+    if ( vcl_strncmp( magic, DCM_Magic, DCM_MagicLen ) == 0 ) {
       is_dicom = true;
     }
   }
 
-  if( is_dicom ) {
+  if ( is_dicom ) {
     return new vil_dicom2_image( vs );
   } else {
     return 0;
@@ -53,10 +53,10 @@ vil_image_resource_sptr vil_dicom2_file_format::make_input_image(vil_stream* vs)
 }
 
 vil_image_resource_sptr vil_dicom2_file_format::make_output_image(vil_stream* /*vs*/,
-                                                                 unsigned /*ni*/,
-                                                                 unsigned /*nj*/,
-                                                                 unsigned /*nplanes*/,
-                                                                 vil_pixel_format )
+                                                                  unsigned /*ni*/,
+                                                                  unsigned /*nj*/,
+                                                                  unsigned /*nplanes*/,
+                                                                  vil_pixel_format )
 {
   vcl_cerr << "ERROR: vil_dicom2_file doesn't support output yet\n";
   return 0;
@@ -87,7 +87,6 @@ void
 read_header( DcmObject* dataset, vil_dicom_header_info& i );
 
 
-
 vil_dicom2_image::vil_dicom2_image(vil_stream* vs)
   : pixels_( 0 )
 {
@@ -95,12 +94,12 @@ vil_dicom2_image::vil_dicom2_image(vil_stream* vs)
 
   vil_dicom2_stream_input dcis( vs );
   DcmFileFormat ffmt;
-  
+
   ffmt.transferInit();
   OFCondition cond = ffmt.read( dcis );
   ffmt.transferEnd();
 
-  if( cond != EC_Normal ) {
+  if ( cond != EC_Normal ) {
     vcl_cerr << "vil_dicom2 ERROR: could not read file\n";
     return;
   }
@@ -109,9 +108,9 @@ vil_dicom2_image::vil_dicom2_image(vil_stream* vs)
 
   DicomImage img( &ffmt, EXS_Unknown );
 
-  if( img.getStatus() != EIS_Normal ) {
+  if ( img.getStatus() != EIS_Normal ) {
     vcl_cerr << "vil_dicom2 ERROR: could not form image. status="
-             << img.getStatus() << "\n";
+             << img.getStatus() << '\n';
     return;
   }
 
@@ -122,10 +121,9 @@ vil_dicom2_image::vil_dicom2_image(vil_stream* vs)
     break;
   default:
     vcl_cerr << "vil_dicom2 ERROR: can't handle photometric interpretation="
-             << img.getPhotometricInterpretation() << "\n";
+             << img.getPhotometricInterpretation() << '\n';
     return;
   }
-
 
   // Create a buffer and get DCMTK to render the pixels into it.
   //
@@ -136,7 +134,7 @@ vil_dicom2_image::vil_dicom2_image(vil_stream* vs)
 
   // this will write the pixels into the buffer. Non-monochrome images
   // are written in component order.
-  if( !img.getOutputData( buf->data(), buf->size() ) ) {
+  if ( !img.getOutputData( buf->data(), buf->size() ) ) {
     vcl_cerr << "vil_dicom2 ERROR: failed to put output in "
              << buf->size() << " byte buffer\n";
     return;
@@ -193,7 +191,7 @@ char const* vil_dicom2_image::file_format() const
 }
 
 vil_dicom2_image::vil_dicom2_image(vil_stream* vs, unsigned ni, unsigned nj,
-                                 unsigned nplanes, vil_pixel_format format)
+                                   unsigned nplanes, vil_pixel_format format)
 {
   assert(!"vil_dicom2_image doesn't yet support output");
 
@@ -263,7 +261,7 @@ vil_image_view_base_sptr vil_dicom2_image::get_view(
 
 
 bool vil_dicom2_image::put_view(const vil_image_view_base& view,
-                               unsigned x0, unsigned y0)
+                                unsigned x0, unsigned y0)
 {
   assert(!"vil_dicom2_image doesn't yet support output yet");
 
@@ -288,12 +286,12 @@ find_element( DcmObject* dset, vxl_uint_16 group, vxl_uint_16 element )
   DcmElement* result = 0;
   DcmTagKey key( group, element );
   DcmStack stack;
-  if( dset->search( key, stack, ESM_fromHere, true ) == EC_Normal ) {
-    if( stack.card() == 0 ) {
-      vcl_cerr << "vil_dicom2 ERROR: no results on stack" << vcl_endl;
+  if ( dset->search( key, stack, ESM_fromHere, true ) == EC_Normal ) {
+    if ( stack.card() == 0 ) {
+      vcl_cerr << "vil_dicom2 ERROR: no results on stack\n";
     } else {
       result = static_cast<DcmElement*>(stack.top());
-      if( result->getVM() == 0 ) {
+      if ( result->getVM() == 0 ) {
         // header present, but has no value == header not present
         result = 0;
       }
@@ -304,12 +302,11 @@ find_element( DcmObject* dset, vxl_uint_16 group, vxl_uint_16 element )
 }
 
 
-
 // Specializations of this template contains code to convert from the
 // given VR type (template parameter) to the given C++ type (4th
 // parameter of the function "proc").
 //
-template<vil_dicom_header_vr_type >
+template <int T /*vil_dicom_header_vr_type*/>
 struct try_set;
 
 // A general proc implementation that returns a string representation
@@ -319,10 +316,10 @@ struct try_set_to_string
 {
   static void proc( DcmObject* dset, vxl_uint_16 group, vxl_uint_16 element, vcl_string& value ) {
     DcmElement* e = find_element( dset, group, element );
-    if( e ) {
+    if ( e ) {
       OFString str;
-      if( e->getOFString( str, 0 ) != EC_Normal ) {
-        vcl_cerr << "vil_dicom2 ERROR: value of ("<<group<<","<<element<<") is not string\n";
+      if ( e->getOFString( str, 0 ) != EC_Normal ) {
+        vcl_cerr << "vil_dicom2 ERROR: value of ("<<group<<','<<element<<") is not string\n";
       } else {
         value = str.c_str();
       }
@@ -364,10 +361,10 @@ struct try_set< vil_dicom_header_DA >
 {
   static void proc( DcmObject* dset, vxl_uint_16 group, vxl_uint_16 element, long& value ) {
     DcmElement* e = find_element( dset, group, element );
-    if( e ) {
+    if ( e ) {
       OFString str;
-      if( e->getOFString( str, 0 ) != EC_Normal ) {
-        vcl_cerr << "ERROR: value of ("<<group<<","<<element<<") is not string\n";
+      if ( e->getOFString( str, 0 ) != EC_Normal ) {
+        vcl_cerr << "ERROR: value of ("<<group<<','<<element<<") is not string\n";
       } else {
         value = vcl_atol( str.c_str() );
       }
@@ -381,10 +378,10 @@ struct try_set< vil_dicom_header_DS >
 {
   static void proc( DcmObject* dset, vxl_uint_16 group, vxl_uint_16 element, float& value ) {
     DcmElement* e = find_element( dset, group, element );
-    if( e ) {
+    if ( e ) {
       OFString str;
-      if( e->getOFString( str, 0 ) != EC_Normal ) {
-        vcl_cerr << "vil_dicom2 ERROR: value of ("<<group<<","<<element<<") is not string\n";
+      if ( e->getOFString( str, 0 ) != EC_Normal ) {
+        vcl_cerr << "vil_dicom2 ERROR: value of ("<<group<<','<<element<<") is not string\n";
       } else {
         value = static_cast<float>( vcl_atof( str.c_str() ) );
       }
@@ -393,11 +390,11 @@ struct try_set< vil_dicom_header_DS >
 
   static void proc( DcmObject* dset, vxl_uint_16 group, vxl_uint_16 element, vcl_vector<float>& value ) {
     DcmElement* e = find_element( dset, group, element );
-    if( e ) {
-      for( unsigned pos = 0; pos < e->getVM(); ++pos ) {
+    if ( e ) {
+      for ( unsigned pos = 0; pos < e->getVM(); ++pos ) {
         OFString str;
-        if( e->getOFString( str, pos ) != EC_Normal ) {
-          vcl_cerr << "ERROR: value of ("<<group<<","<<element<<") at " << pos << " is not string\n";
+        if ( e->getOFString( str, pos ) != EC_Normal ) {
+          vcl_cerr << "ERROR: value of ("<<group<<','<<element<<") at " << pos << " is not string\n";
         } else {
           value.push_back( static_cast<float>( vcl_atof( str.c_str() ) ) );
         }
@@ -407,15 +404,14 @@ struct try_set< vil_dicom_header_DS >
 };
 
 
-
 VCL_DEFINE_SPECIALIZATION
 struct try_set< vil_dicom_header_FD >
 {
   static void proc( DcmObject* dset, vxl_uint_16 group, vxl_uint_16 element, vxl_ieee_64& value ) {
     DcmElement* e = find_element( dset, group, element );
-    if( e ) {
-      if( e->getFloat64( value ) != EC_Normal ) {
-        vcl_cerr << "ERROR: value of ("<<group<<","<<element<<") is not Float64\n";
+    if ( e ) {
+      if ( e->getFloat64( value ) != EC_Normal ) {
+        vcl_cerr << "ERROR: value of ("<<group<<','<<element<<") is not Float64\n";
       }
     }
   }
@@ -426,9 +422,9 @@ struct try_set< vil_dicom_header_FL >
 {
   static void proc( DcmObject* dset, vxl_uint_16 group, vxl_uint_16 element, vxl_ieee_32& value ) {
     DcmElement* e = find_element( dset, group, element );
-    if( e ) {
-      if( e->getFloat32( value ) != EC_Normal ) {
-        vcl_cerr << "ERROR: value of ("<<group<<","<<element<<") is not Float32\n";
+    if ( e ) {
+      if ( e->getFloat32( value ) != EC_Normal ) {
+        vcl_cerr << "ERROR: value of ("<<group<<','<<element<<") is not Float32\n";
       }
     }
   }
@@ -440,16 +436,17 @@ struct try_set< vil_dicom_header_IS >
 {
   static void proc( DcmObject* dset, vxl_uint_16 group, vxl_uint_16 element, long& value ) {
     DcmElement* e = find_element( dset, group, element );
-    if( e ) {
+    if ( e ) {
       OFString str;
-      if( e->getOFString( str, 0 ) != EC_Normal ) {
-        vcl_cerr << "vil_dicom2 ERROR: value of ("<<group<<","<<element<<") is not string\n";
+      if ( e->getOFString( str, 0 ) != EC_Normal ) {
+        vcl_cerr << "vil_dicom2 ERROR: value of ("<<group<<','<<element<<") is not string\n";
       } else {
         value = vcl_atol( str.c_str() );
       }
     }
   }
 };
+
 
 VCL_DEFINE_SPECIALIZATION
 struct try_set< vil_dicom_header_LO >
@@ -498,13 +495,14 @@ struct try_set< vil_dicom_header_SL >
 {
   static void proc( DcmObject* dset, vxl_uint_16 group, vxl_uint_16 element, vxl_sint_32& value ) {
     DcmElement* e = find_element( dset, group, element );
-    if( e ) {
-      if( e->getSint32( reinterpret_cast<Sint32&>(value) ) != EC_Normal ) {
-        vcl_cerr << "vil_dicom2 ERROR: value of ("<<group<<","<<element<<") is not Sint32\n";
+    if ( e ) {
+      if ( e->getSint32( reinterpret_cast<Sint32&>(value) ) != EC_Normal ) {
+        vcl_cerr << "vil_dicom2 ERROR: value of ("<<group<<','<<element<<") is not Sint32\n";
       }
     }
   }
 };
+
 
 VCL_DEFINE_SPECIALIZATION
 struct try_set< vil_dicom_header_SQ >
@@ -518,9 +516,9 @@ struct try_set< vil_dicom_header_SS >
 {
   static void proc( DcmObject* dset, vxl_uint_16 group, vxl_uint_16 element, vxl_sint_16& value ) {
     DcmElement* e = find_element( dset, group, element );
-    if( e ) {
-      if( e->getSint16( reinterpret_cast<Sint16&>(value) ) != EC_Normal ) {
-        vcl_cerr << "vil_dicom2 ERROR: value of ("<<group<<","<<element<<") is not Sint16\n";
+    if ( e ) {
+      if ( e->getSint16( reinterpret_cast<Sint16&>(value) ) != EC_Normal ) {
+        vcl_cerr << "vil_dicom2 ERROR: value of ("<<group<<','<<element<<") is not Sint16\n";
       }
     }
   }
@@ -533,15 +531,16 @@ struct try_set< vil_dicom_header_ST >
 {
 };
 
+
 VCL_DEFINE_SPECIALIZATION
 struct try_set< vil_dicom_header_TM >
 {
   static void proc( DcmObject* dset, vxl_uint_16 group, vxl_uint_16 element, float& value ) {
     DcmElement* e = find_element( dset, group, element );
-    if( e ) {
+    if ( e ) {
       OFString str;
-      if( e->getOFString( str, 0 ) != EC_Normal ) {
-        vcl_cerr << "vil_dicom2 ERROR: value of ("<<group<<","<<element<<") is not string\n";
+      if ( e->getOFString( str, 0 ) != EC_Normal ) {
+        vcl_cerr << "vil_dicom2 ERROR: value of ("<<group<<','<<element<<") is not string\n";
       } else {
         value = static_cast<float>( vcl_atof( str.c_str() ) );
       }
@@ -549,20 +548,22 @@ struct try_set< vil_dicom_header_TM >
   }
 };
 
+
 VCL_DEFINE_SPECIALIZATION
 struct try_set< vil_dicom_header_UI >
   : public try_set_to_string
 {
 };
 
+
 VCL_DEFINE_SPECIALIZATION
 struct try_set< vil_dicom_header_UL >
 {
   static void proc( DcmObject* dset, vxl_uint_16 group, vxl_uint_16 element, vxl_uint_32& value ) {
     DcmElement* e = find_element( dset, group, element );
-    if( e ) {
-      if( e->getUint32( reinterpret_cast<Uint32&>(value) ) != EC_Normal ) {
-        vcl_cerr << "vil_dicom2 ERROR: value of ("<<group<<","<<element<<") is not Uint32\n";
+    if ( e ) {
+      if ( e->getUint32( reinterpret_cast<Uint32&>(value) ) != EC_Normal ) {
+        vcl_cerr << "vil_dicom2 ERROR: value of ("<<group<<','<<element<<") is not Uint32\n";
       }
     }
   }
@@ -581,9 +582,9 @@ struct try_set< vil_dicom_header_US >
 {
   static void proc( DcmObject* dset, vxl_uint_16 group, vxl_uint_16 element, vxl_uint_16& value ) {
     DcmElement* e = find_element( dset, group, element );
-    if( e ) {
-      if( e->getUint16( value ) != EC_Normal ) {
-        vcl_cerr << "vil_dicom2 ERROR: value of ("<<group<<","<<element<<") is not Uint16\n";
+    if ( e ) {
+      if ( e->getUint16( value ) != EC_Normal ) {
+        vcl_cerr << "vil_dicom2 ERROR: value of ("<<group<<','<<element<<") is not Uint16\n";
       }
     }
   }
@@ -595,13 +596,6 @@ struct try_set< vil_dicom_header_UT >
   : public try_set_to_string
 {
 };
-
-
-
-
-
-
-
 
 
 static
@@ -635,10 +629,10 @@ read_header( DcmObject* f, vil_dicom_header_info& i )
   try_set< ap_type(SH) >::proc( f, group, ap_el(IDSTATIONNAME),       i.station_name_ ); // It's the imaging station name
   try_set< ap_type(LO) >::proc( f, group, ap_el(IDSTUDYDESCRIPTION),  i.study_desc_ ); // It's the study description
   try_set< ap_type(LO) >::proc( f, group, ap_el(IDSERIESDESCRIPTION), i.series_desc_ ); // It's the series description
-  try_set< ap_type(PN) >::proc( f, group, ap_el(IDATTENDINGPHYSICIAN),i.att_phys_name_ ); // It's the name of the attending physician
+  try_set< ap_type(PN) >::proc( f, group, ap_el(IDATTENDINGPHYSICIAN),i.att_phys_name_); // It's the name of the attending physician
   try_set< ap_type(PN) >::proc( f, group, ap_el(IDOPERATORNAME),      i.operator_name_ ); // It's the name of the scanner operator
   try_set< ap_type(LO) >::proc( f, group, ap_el(IDMANUFACTURERMODEL), i.model_name_ ); // It's the scanner model
- 
+
   group = VIL_DICOM_HEADER_PATIENTINFOGROUP;
   try_set< ap_type(PN) >::proc( f, group, ap_el(PIPATIENTNAME),     i.patient_name_ ); // It's the patient's name
   try_set< ap_type(LO) >::proc( f, group, ap_el(PIPATIENTID),       i.patient_id_ ); // It's the patient's id
@@ -661,7 +655,7 @@ read_header( DcmObject* f, vil_dicom_header_info& i )
   try_set< ap_type(DS) >::proc( f, group, ap_el(AQINVERSIONTIME),         i.inversion_time_ ); // It's the inversion time
   try_set< ap_type(DS) >::proc( f, group, ap_el(AQNUMBEROFAVERAGES),      i.number_of_averages_ ); // It's the number of averages
   try_set< ap_type(IS) >::proc( f, group, ap_el(AQECHONUMBERS),           i.echo_numbers_ ); // It's the echo numbers
-  try_set< ap_type(DS) >::proc( f, group, ap_el(AQMAGNETICFIELDSTRENGTH), i.mag_field_strength_ ); // It's the magnetic field strength
+  try_set< ap_type(DS) >::proc( f, group, ap_el(AQMAGNETICFIELDSTRENGTH), i.mag_field_strength_);// It's the magnetic field strength
   try_set< ap_type(DS) >::proc( f, group, ap_el(AQSLICESPACING),          i.spacing_slice_ ); // It's the slice spacing
   try_set< ap_type(DS) >::proc( f, group, ap_el(AQECHOTRAINLENGTH),       i.echo_train_length_ ); // It's the echo train length
   try_set< ap_type(DS) >::proc( f, group, ap_el(AQPIXELBANDWIDTH),        i.pixel_bandwidth_ ); // It's the pixel bandwidth
@@ -688,10 +682,9 @@ read_header( DcmObject* f, vil_dicom_header_info& i )
   try_set< ap_type(DS) >::proc( f, group, ap_el(RSIMAGEPOSITION),      i.image_pos_ ); // It's the image position
   try_set< ap_type(DS) >::proc( f, group, ap_el(RSIMAGEORIENTATION),   i.image_orient_ ); // It's the image orientation
   try_set< ap_type(UI) >::proc( f, group, ap_el(RSFRAMEOFREFERENCEUID),i.frame_of_ref_ ); // It's the frame of reference uid
-  try_set< ap_type(IS) >::proc( f, group, ap_el(RSIMAGESINACQUISITION),i.images_in_acq_ ); // It's the number of images in the acquisition
+  try_set< ap_type(IS) >::proc( f, group, ap_el(RSIMAGESINACQUISITION),i.images_in_acq_); // the number of images in the acquisition
   try_set< ap_type(LO) >::proc( f, group, ap_el(RSPOSITIONREFERENCE),  i.pos_ref_ind_ ); // It's the position reference
   try_set< ap_type(DS) >::proc( f, group, ap_el(RSSLICELOCATION),      i.slice_location_ ); // It's the slice location
-
 
   group = VIL_DICOM_HEADER_IMAGEGROUP;
   try_set< ap_type(US) >::proc( f, group, ap_el(IMSAMPLESPERPIXEL),    i.pix_samps_ ); // It's the samples per pixel
@@ -714,11 +707,11 @@ read_header( DcmObject* f, vil_dicom_header_info& i )
   typedef vil_dicom_header_type_of<vil_dicom_header_DS>::type DS_type;
   vcl_vector<DS_type> ps;
   try_set< ap_type(DS) >::proc( f, group, ap_el(IMPIXELSPACING), ps );
-  if( ps.size() > 0 )
+  if ( ps.size() > 0 )
     i.spacing_x_ = ps[0];
   else
     i.spacing_x_ = 0;
-  if( ps.size() > 1 )
+  if ( ps.size() > 1 )
     i.spacing_y_ = ps[1];
   else
     i.spacing_y_ = i.spacing_x_;
