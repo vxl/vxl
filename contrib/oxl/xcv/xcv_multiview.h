@@ -41,23 +41,15 @@ public:
   static void toggle_h_matrix();
   static void display_corner_matches();
   static void display_corner_tracks();
-#ifdef HAS_MVOX
-  static void compute_two_view_relation(bool is_f_matrix);
-  static void compute_f_matrix();
-  static void compute_h_matrix2d();
-#endif
 
   static void load_tri_tensor();
   static void save_tri_tensor();
   static void toggle_tri_tensor();
   static void transfer_point();
   static void transfer_line();
-#ifdef HAS_MVOX
-  static void compute_tri_tensor();
-#endif
   static vgui_menu create_multiview_menu();
 
-private:
+protected:
   static xcv_twoview_manager* get_twoview_manager(vcl_vector<int>& cols, vcl_vector<int>& rows);
   static vcl_vector<vgui_rubberbander_ref> twoview_rubber0, twoview_rubber1;
   static vcl_vector<xcv_twoview_manager*> twoview_mgrs;

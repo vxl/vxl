@@ -39,14 +39,11 @@
 #include "xcv_image_tableau.h"
 
 #include <vgui/vgui_linker_hack.h>
-#ifdef WIN32
-# include <vgui/impl/mfc/vgui_mfc_app_init.h>
-vgui_mfc_app_init theAppinit;
-#endif
 
 class xcv_tableau : public vgui_grid_tableau
 {
 public:
+
   //xcv_tableau(int nb_images) : vgui_grid_tableau(nb_images, 1) { }
   xcv_tableau(int rows, int cols) : vgui_grid_tableau(cols, rows) { }
  
@@ -133,6 +130,17 @@ bool get_twoviews(vcl_vector<int>* col_pos, vcl_vector<int>* row_pos)
 {
   vcl_vector<int> cols, rows, times; 
   int nb_views = xcv_tab->get_selected_positions(&cols, &rows, &times);
+  // if not selected,  pick top left pair.
+  if (nb_views != 2) {
+    for(int i = 0; i < xcv_tab->rows(); ++i)
+      for(int j = 0; j < xcv_tab->cols(); ++j)
+        xcv_tab->set_selected(i,j, false);
+    xcv_tab->set_selected(0,0, true);
+    xcv_tab->set_selected(0,1, true);
+    nb_views = xcv_tab->get_selected_positions(&cols, &rows, &times);
+  }
+
+  // If still not selected, may be a funny layout or summat.
   if (nb_views != 2)
   {
     vgui_dialog two_dl("Error");
@@ -143,6 +151,7 @@ bool get_twoviews(vcl_vector<int>* col_pos, vcl_vector<int>* row_pos)
     vgui_macro_warning << "You must select exactly two views, not the current " << nb_views << vcl_endl;
     return false;
   }
+
   // Sort the views into time order:
   if (times[0] < times[1])
   {
