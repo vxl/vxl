@@ -155,7 +155,7 @@ void strk_tracker::fill_face(vtol_intensity_face_sptr const& face,
   vgl_polygon_scan_iterator psi(p, true);
 
   //go throught the pixels once to gather statistics for the face Npix etc.
-  for (psi.reset(); psi.next();)
+  for (psi.reset(); psi.next(); )
     for (int x = psi.startx(); x<=psi.endx(); x++)
     {
       int y = psi.scany();
