@@ -157,6 +157,9 @@ SOURCE=.\vgl_h_matrix_2d_compute_4point.cxx
 # Begin Source File
 SOURCE=.\vgl_h_matrix_2d_compute_linear.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\vgl_h_matrix_2d_optimize_lmq.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter ""
@@ -219,6 +222,12 @@ SOURCE=.\vgl_h_matrix_2d_compute_4point.h
 # End Source File
 # Begin Source File
 SOURCE=.\vgl_h_matrix_2d_compute_linear.h
+# End Source File
+# Begin Source File
+SOURCE=.\vgl_h_matrix_2d_optimize.h
+# End Source File
+# Begin Source File
+SOURCE=.\vgl_h_matrix_2d_optimize_lmq.h
 # End Source File
 # Begin Source File
 SOURCE=.\vgl_h_matrix_3d.h
