@@ -136,10 +136,10 @@ private:
   int numverts;           // total number of vertices comprising face
 
   // Returns x coord of vertex v
-  float get_x( vertind v ) {return (poly_[v.chainnum][v.vertnum]).x();}
+  float get_x( vertind v ) const {return (poly_[v.chainnum][v.vertnum]).x();}
 
   // Returns y coord of vertex v
-  float get_y( vertind v ) {return (poly_[v.chainnum][v.vertnum]).y();}
+  float get_y( vertind v ) const {return (poly_[v.chainnum][v.vertnum]).y();}
 
   // Returns vertex v
   Point2 get_pt( vertind v ) {return (poly_[v.chainnum][v.vertnum]);}
