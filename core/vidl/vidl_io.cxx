@@ -5,10 +5,12 @@
 #include <vidl/vidl_movie.h>
 #include <vidl/vidl_clip.h>
 #include <vidl/vidl_image_list_codec.h>
-#include <vidl/vidl_mpegcodec.h>
+#ifdef HAS_MPEG
+# include <vidl/vidl_mpegcodec.h>
+#endif
 
 #ifdef _MSC_VER // Microsoft compiler
-//#include <vidl/vidl_avicodec.h>
+# include <vidl/vidl_avicodec.h>
 #endif // _MSC_VER
 
 #if 0 // TODO
@@ -167,6 +169,8 @@ vidl_clip_sptr  vidl_io::load_clip(
         vidl_codec_sptr codec = (*i)->load(fname, mode);
         if (!codec)
           return 0;
+
+#ifdef HAS_MPEG
 	
 	/////////////////////////////////////////////////////
 	//this is just hard coded for now to test.
@@ -182,6 +186,8 @@ vidl_clip_sptr  vidl_io::load_clip(
 	vcl_cout << "vidl_io::load_movie. just did init." << vcl_endl;
 
 	///////////////////////////////////////////////////////////
+
+#endif
 
         vidl_clip_sptr clip = new vidl_clip(codec, start, end, increment);
 	vcl_cout << "vidl_io::load_move. just got a new clip." << vcl_endl;
