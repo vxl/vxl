@@ -14,10 +14,7 @@
 // \endverbatim
 
 #include "vgui_event.h"
-
-#include <vcl_functional.h>
 #include <vcl_iostream.h>
-
 #include <vul/vul_get_timestamp.h>
 
 void vgui_event::init() {

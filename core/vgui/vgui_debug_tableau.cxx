@@ -9,10 +9,7 @@
 // \brief  See vgui_debug_tableau.cxx for a description of this file.
 
 #include "vgui_debug_tableau.h"
-
 #include <vcl_iostream.h>
-#include <vcl_functional.h>
-
 #include <vgui/vgui_event.h>
 
 //-----------------------------------------------------------------------------
