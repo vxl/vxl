@@ -18,4 +18,4 @@ vil2_image_view<T> vil2_view_as_planes(const vil2_image_view<vil_rgb<T> >& rgb_v
 template<class T>
 vil2_image_view<vil_rgb<T> > vil2_view_as_rgb(const vil2_image_view<T>& plane_view);
 
-#endif
+#endif // vil2_image_view_fns_h_
