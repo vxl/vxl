@@ -237,6 +237,12 @@ SOURCE=.\Templates/vsl_vector_io+vgl_vector_2d+double--.cxx
 SOURCE=.\Templates/vsl_vector_io+vcl_vector+vgl_point_2d+int---.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\Templates/vsl_vector_io+vcl_vector+vgl_point_3d+double---.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vsl_vector_io+vgl_vector_3d+double--.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\vgl_io_polygon.cxx
 # End Source File
 # End Group
