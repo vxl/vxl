@@ -132,7 +132,8 @@ foreach $f (@FILES)
 #   Unnecessary includes are in principle anything which is not
 #   used or directly referred to in the current file.
 #   Missing includes is currently only vcl_cassert.h
-  $includes = "\004\n$file\003";
+  $fl = $file; $fl =~ s!//.*!!g;
+  $includes = "\004\n$fl\003";
   $includes =~ s/\n\s*\#\s*include\s\<([^>]+)\>[^\n]*/\003$1\004/g;
   $includes =~ s/^[^\003]*\003/\003/; $includes =~ s/\004[^\004]*$/\004/;
   $includes =~ s/\004[^\003]*\003/\n/g; $includes =~ s/[\004\003]//g;
@@ -158,7 +159,7 @@ foreach $f (@FILES)
           $f !~ m/\/v.l\/io\/tests\/golden_test_v.l_io\.cxx$/ &&
           $j !~ m/^(stdlib|varargs|sys\/types|stdio|windows|GL\/glu?t?)\.h$/);
     $jj = $j; $i = $j;
-    next unless ($i =~ s/^(vnl|vil|vsl|vul|vpl|vgl|vbl|vtol|vsol|vipl\/vipl_with_[a-z_]+|vipl|vepl|mbl|mil)\/(algo\/|io\/|internals\/|filter\/|section\/|vrml\/|impl\/(X|glut|gtk|mfc)\/|)(.*)\.h/$4/ || $i =~ s/^(vcl_[a-z]+)\.h$/$1/);
+    next unless ($i =~ s/^(vnl|vil|vsl|vul|vpl|vgl|vbl|vtol|vsol|vipl\/vipl_with_[a-z_]+|vipl|vepl|mbl|mil)\/(algo\/|io\/|internals\/|filter\/|section\/|vrml\/|impl\/(X|glut|gtk|mfc)\/|)(.*)\.h/$4/ || $i =~ s/^(v[cx]l_[a-z]+)\.h$/$1/);
     next if ($j eq "vcl_compiler.h" || $j eq "vcl_new.h");
     next if ($j eq "vcl_cstdio.h" && $f =~ m/\/StdAfx\.h$/);
     next if ($j eq "vcl_cmath.h" && $f =~ m/\bvcl\/vcl_cfloat\.h$/);
@@ -174,6 +175,7 @@ foreach $f (@FILES)
     $i =~ s/^(vgui.*)/$1\(\|_sptr\|_new\)/;
     $i =~ s/^(v[st]ol.*)/$1\(\|_sptr\)/ unless ($f =~ m/\.h$/);
     if ($j eq "vcl_algorithm.h") { $i="vcl_(adjacent_find|and|binary|binary_search|copy|copy_|count|count_if|equal|equal_range|fill|fill_n|find|find_end|find_first_of|find_if|for_each|generate|generate_n|generators_|heap|includes|inplace_merge|iter_swap|lexicographical_compare|lower_bound|make_heap|max|min|max_element|merge|merge_|min_element|mismatch|next_permutation|nth_element|partial_sort|partial_sort_copy|partition|partitions_|pop_heap|prev_permutation|push_heap|random_shuffle|remove|remove_copy|remove_copy_if|remove_if|replace|replace_copy|replace_copy_if|replace_if|reverse|reverse_copy|rotate|rotate_copy|search|search_n|set_difference|set_intersection|set_symmetric_difference|set_union|sort|sort_|sort_heap|stable_sort|swap|swap_|swap_ranges|transform|unique|unique_copy|upper_bound)"; }
+    elsif ($j eq "vxl_config.h") { $i="(VXL_[A-Z_0-9]+|vxl_([su]?(int|ieee)_(8|16|32|64)|s?byte))"; }
     elsif ($j eq "vcl_cassert.h") { $i="assert"; }
     elsif ($j eq "vcl_cctype.h") { $i="(vcl_|)(isalnum|isdigit|isprint|isupper|tolower|isalpha|isgraph|ispunct|isxdigit|toupper|iscntrl|islower|isspace)"; }
     elsif ($j eq "vcl_cerrno.h") { $i="(errno|EBUSY|EEXIST)"; }
@@ -185,8 +187,8 @@ foreach $f (@FILES)
     elsif ($j eq "vcl_csetjmp.h") { $i="(setjmp|vcl_(jmp_buf|longjmp))"; }
     elsif ($j eq "vcl_csignal.h") { $i="vcl_(sig_atomic_t|raise|signal)"; }
     elsif ($j eq "vcl_cstdarg.h") { $i="(vcl_|)va_list"; }
-    elsif ($j eq "vcl_cstddef.h") { next if ($f =~ m/\b(vxl\/vil|mul\/vil2)\/vil2?_jpeglib\.h$/); $i="vcl_(ptrdiff_t|size_t)"; }
-    elsif ($j eq "vcl_cstdio.h") { next if ($f =~ m/\b(vcl\/vcl_cassert|vxl\/vil\/vil_jpeglib)\.h$/); $i="vcl_(FILE|fpos_t|fopen|fclose|feof|ferror|fflush|fgetc|fgetpos|fgets|fwrite|fread|fseek|ftell|perror|clearerr|rename|fputc|fputs|freopen|fsetpos|getc|getchar|gets|putc|putchar|puts|remove|rewind|setbuf|setvbuf|tmpfile|tmpnam|ungetc|printf|sprintf|fprintf|vprintf|vsprintf|vfprintf|scanf|sscanf|fscanf|vscanf|vsscanf|vfscanf)"; }
+    elsif ($j eq "vcl_cstddef.h") { next if ($f =~ m/\b(vxl\/vil|mul\/vil2)(\/file_formats)?\/vil2?_jpeglib\.h$/); $i="vcl_(ptrdiff_t|size_t)"; }
+    elsif ($j eq "vcl_cstdio.h") { next if ($f =~ m/\b(vcl\/vcl_cassert|vxl\/vil\/vil_jpeglib|mul\/vil2\/file_formats\/vil2_jpeglib)\.h$/); $i="vcl_(FILE|fpos_t|fopen|fclose|feof|ferror|fflush|fgetc|fgetpos|fgets|fwrite|fread|fseek|ftell|perror|clearerr|rename|fputc|fputs|freopen|fsetpos|getc|getchar|gets|putc|putchar|puts|remove|rewind|setbuf|setvbuf|tmpfile|tmpnam|ungetc|printf|sprintf|fprintf|vprintf|vsprintf|vfprintf|scanf|sscanf|fscanf|vscanf|vsscanf|vfscanf)"; }
     elsif ($j eq "vcl_cstdlib.h") { next if ($f =~ m/\bvcl\/vcl_cassert\.h$/); $i="(vcl_(abs|div|labs|ldiv|srand|rand|atexit|getenv|system|exit|abort|qsort|calloc|malloc|free|realloc|atol|atof|atoi|mblen|mbstowcs|mbtowc|strtod|strtol|strtoul|wctomb|wcstombs)|[sd]rand48)"; }
     elsif ($j eq "vcl_cstring.h") { $i="vcl_(memchr|memcmp|memcpy|memmove|memset|strcat|strchr|strcmp|strcoll|strcpy|strcspn|strerror|strlen|strncat|strncmp|strncpy|strpbrk|strrchr|strspn|strstr|strtok|strxfrm)"; }
     elsif ($j eq "vcl_ctime.h") { $i="vcl_(clock_t|time_t|tm|asctime|clock|difftime|localtime|strftime|ctime|gmtime|mktime|time)"; }
@@ -224,12 +226,14 @@ foreach $f (@FILES)
     elsif ($j eq "vcl_valarray.h") { $i="vcl_(valarray|slice|slice_array|gslice|gslice_array|mask_array|indirect_array|abs|acos|asin|atan|atan2|cos|cosh|exp|log|log10|pow|sin|sinh|sqrt|tan|tanh)"; }
     elsif ($j eq "vcl_vector.h") { $i="vcl_(vector|swap)"; }
     elsif ($j eq "mbl/mbl_cloneable_ptr.h") { $i="($i|MBL_CLONEABLE_PTR_INSTANTIATE)"; }
+    elsif ($j eq "mbl/mbl_combination.h") { $i="$i(_begin|_next)"; }
     elsif ($j eq "mbl/mbl_gamma.h") { $i="mbl_(gamma_[pq]|erf)"; }
     elsif ($j eq "mbl/mbl_matrix_products.h") { $i="mbl_matrix_product(|_a_bt|_at_b|_adb)"; }
     elsif ($j eq "mbl/mbl_matxvec.h") { $i="($i)_(prod|add)_[a-z_]+"; }
     elsif ($j eq "mil/mil_bilin_interp_2d.h") { $i="mil(_safe(_extend)?)?_bilin_interp_2d"; }
     elsif ($j eq "mil/mil_convert_vil.h") { $i="($i)_[gc][mv]2[gc][mv]"; }
     elsif ($j eq "vbl/vbl_basic_optional.h") { $i="$i(|_traits)"; }
+    elsif ($j eq "vbl/vbl_bounding_box.h") { $i="$i(|_base)"; }
     elsif ($j eq "vbl/vbl_br_default.h") { $i="$i(|_iter|_wild_iter|_factory)"; }
     elsif ($j eq "vbl/vbl_qsort.h") { $i="($i)_[a-z_]+"; }
     elsif ($j eq "vbl/vbl_sort.h") { $i="($i)_[a-z_]+"; }
@@ -275,10 +279,13 @@ foreach $f (@FILES)
     elsif ($j eq "vnl/vnl_bignum_traits.h") { $i="vnl_bignum"; }
     elsif ($j eq "vnl/vnl_rational_traits.h") { $i="vnl_rational"; }
     elsif ($j eq "vnl/vnl_complex.h") { $i="vcl_complex"; }
+    elsif ($j eq "vnl/vnl_cross.h") { $i="vnl_cross_[23]d"; }
     elsif ($j eq "vnl/vnl_error.h") { $i="$i(|_[a-z_]+)"; }
     elsif ($j eq "vnl/vnl_finite.h") { $i="($i)_int(|_poly)"; }
+    elsif ($j eq "vnl/vnl_gamma.h") { $i="vnl_((log_)?gamma(_[pq])?|erf|cum_prob_chi2)"; }
     elsif ($j eq "vnl/vnl_math.h") { $i="vnl_(math(|_[a-z_]+)|huge_val)"; }
     elsif ($j eq "vnl/vnl_matlab_print.h") { $i="($i|MATLABPRINT)"; }
+    elsif ($j eq "vnl/vnl_matlab_read.h") { $i="$i(|hdr)"; }
     elsif ($j eq "vnl/vnl_sparse_matrix.h") { $i="$i(|_pair)"; }
     elsif ($j eq "vnl/vnl_T_n.h") { $i="($i)_[a-z_]*"; }
     elsif ($j eq "vnl/vnl_sample.h") { $i="$i(|_[a-z_]+)"; }
@@ -291,6 +298,9 @@ foreach $f (@FILES)
     elsif ($j eq "vsl/vsl_complex_io.h") { $i="(VNL_IO_[A-Z]+_INSTANTIATE.vcl_complex|vsl_b_(read|write))"; }
     elsif ($j eq "vsl/vsl_indent.h") { $i="$i(|_inc|_dec|_set_tab|_tab|_clear)"; }
     elsif ($j =~ m/(vsl\/vsl_[a-z]+_io|v[bginu]l\/io\/v[bginu]l_io_[a-z123_]+).h/) { $i="vsl_(b_(read|write)|print_summary)"; }
+    elsif ($j eq "vtol/vtol_vertex_2d.h") { $i="$i|cast_to_vertex_2d\(\)"; }
+    elsif ($j eq "vtol/vtol_edge_2d.h") { $i="$i|cast_to_edge_2d\(\)"; }
+    elsif ($j eq "vtol/vtol_face_2d.h") { $i="$i|cast_to_face_2d\(\)"; }
     elsif ($j eq "vtol/vtol_dtd.h") { $i="$i([0123])"; }
     elsif ($j eq "vtol/vtol_list_functions.h") { $i="(tagged_union|(SEL|COPY)_(SUP|INF))"; }
     elsif ($j eq "vtol/vtol_macros.h") { $i="(SEL|COPY)_(SUP|INF)"; }
@@ -305,7 +315,7 @@ foreach $f (@FILES)
     next if ($j eq "vsol/vsol_point_2d.h" && $f =~ m!Templates/vbl_smart_ptr\+vtol_edge_2d-\.cxx$!);
     next if ($j eq "vsol/vsol_region_2d.h" && $f =~ m!Templates/vbl_smart_ptr\+vtol_face_2d-\.cxx$!);
     print "$f\t\# should not have #include <$j>\n"
-      unless ($file =~ m/$j\>[^\003]*\b$i\b/ || $f =~ m/\/$ii\./ || $f =~ m/vcl\/tests\/test_headers\.cxx$/);
+      unless ($fl =~ m/$j\>[^\003]*\b$i\b/ || $f =~ m/\/$ii\./ || $f =~ m/vcl\/tests\/test_headers\.cxx$/);
   }
   print "$f\t\# should have #include <vcl_cassert.h>\n" if (! $found_cassert && $file =~ m/\n\s*assert\s*\(/);
  #  if ($j eq "vcl_algorithm.h") { $i="vcl_(adjacent_find|and|binary|binary_search|copy|copy_|count|count_if|equal|equal_range|fill|fill_n|find|find_end|find_first_of|find_if|for_each|generate|generate_n|generators_|heap|includes|inplace_merge|iter_swap|lexicographical_compare|lower_bound|make_heap|max|min|max_element|merge|merge_|min_element|mismatch|next_permutation|nth_element|partial_sort|partial_sort_copy|partition|partitions_|pop_heap|prev_permutation|push_heap|random_shuffle|remove|remove_copy|remove_copy_if|remove_if|replace|replace_copy|replace_copy_if|replace_if|reverse|reverse_copy|rotate|rotate_copy|search|search_n|set_difference|set_intersection|set_symmetric_difference|set_union|sort|sort_|sort_heap|stable_sort|swap|swap_|swap_ranges|transform|unique|unique_copy|upper_bound)"; }
