@@ -8,7 +8,7 @@ include ${IUEROOT}/config/top-params.mk
 #######################################
 
 # basic things
-MANPAGE_SOURCES += vil_config.h.in
+MANPAGE_SOURCES += vil_config.h.in vil_config.h
 
 SOURCES += vil_image_resource.cxx
 MANPAGE_SOURCES += vil_image_resource_sptr.h
@@ -122,8 +122,6 @@ SOURCES += vil_stream_url.cxx
 SOURCES += vil_stream_read.cxx
 SOURCES += vil_stream_write.cxx
 SOURCES += vil_open.cxx
-
-SUBDIRS += algo
 
 ifndef NOTEST
  SUBDIRS += tests examples
