@@ -6,7 +6,7 @@
 
 //: Compute gradients of single plane of 2D data using 3x3 Sobel filters
 //  Computes both x and y gradients of an nx x ny plane of data
-void vil2_algo_sobel_3x3(float* gx, int gx_xstep, int gx_ystep,
+void vil2_algo_sobel_3x3_1plane(float* gx, int gx_xstep, int gx_ystep,
                        float* gy, int gy_xstep, int gy_ystep,
                        const unsigned char* src,
                        int s_xstep, int s_ystep, unsigned nx, unsigned ny)
@@ -109,7 +109,7 @@ void vil2_algo_sobel_3x3(float* gx, int gx_xstep, int gx_ystep,
 
 //: Compute gradients of single plane of 2D data using 3x3 Sobel filters
 //  Computes both x and y gradients of an nx x ny plane of data
-void vil2_algo_sobel_3x3(float* gx, int gx_xstep, int gx_ystep,
+void vil2_algo_sobel_3x3_1plane(float* gx, int gx_xstep, int gx_ystep,
                        float* gy, int gy_xstep, int gy_ystep,
                        const float* src,
                        int s_xstep, int s_ystep, unsigned nx, unsigned ny)
