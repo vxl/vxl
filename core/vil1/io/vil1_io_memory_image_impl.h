@@ -15,7 +15,7 @@
 #include <vsl/vsl_binary_io.h>
 #include <vil/io/vil_io_image_impl.h>
 
-class vil_io_memory_image_impl;
+class vil_memory_image_impl;
 
 //: Provide IO for vil_memory_image
 class vil_io_memory_image_impl : public vil_io_image_impl
