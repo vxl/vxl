@@ -55,7 +55,7 @@ void vsl_b_write(vsl_b_ostream& os, const vcl_string& str )
 void vsl_b_read(vsl_b_istream &is, vcl_string& str )
 {
     vcl_string::iterator                it;
-    short                           length;
+    vcl_string::size_type               length;
 
     vsl_b_read(is,length);
     str.resize( length );
