@@ -21,7 +21,7 @@ class QvPList {
     void **     ptrs;
     int         nPtrs;
     int         ptrsSize;
-    void        setSize(int size) {if(size>ptrsSize) expand(size); nPtrs=size;}
+    void        setSize(int size) {if (size>ptrsSize) expand(size); nPtrs=size;}
     void        expand(int size);
 };
 

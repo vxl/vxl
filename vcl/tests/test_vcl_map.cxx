@@ -20,7 +20,7 @@ int test_vcl_map_main()
   i = m.find(2);
   okay = okay && (i != m.end()) && ((*i).second == 3141);
 
-  if( okay )
+  if ( okay )
     return 0;
   else
     return 1;

@@ -39,7 +39,7 @@ void testname( char* testname )
 void testresult( int testresult )
 {
   result |= testresult;
-  if( testresult==0 ) {
+  if ( testresult==0 ) {
     vcl_cout << "    PASSED" << vcl_endl;
   } else {
     vcl_cout << "  **FAILED**" << vcl_endl;
@@ -108,7 +108,7 @@ int main( int argc, char* argv[] )
   testresult( test_vcl_vector_main() );
 
   testname( "test_vcl_cstdio" );
-  if( argc < 2 ) {
+  if ( argc < 2 ) {
     vcl_cout << "No input file given for test_vcl_cstdio" << vcl_endl;
     testresult( 1 );
   } else {
