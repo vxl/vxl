@@ -180,7 +180,7 @@ protected:
 
   //: Detect nearby vertices by searching in a spiral pattern
   vtol_vertex_2d_sptr
-    DetectTouch(const vtol_vertex_2d_sptr const& end, const int maxSpiral);
+    DetectTouch(vtol_vertex_2d_sptr const& end, const int maxSpiral);
 
   //:Connect an isolated endpoint to a nearby single vertex on a different edge
  void  MergeEndPtTouchingEndPt(vtol_vertex_2d_sptr const& end1,
