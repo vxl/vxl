@@ -15,11 +15,10 @@
 
 
 #include <vcl_iosfwd.h>
-#include <vcl_string.h>
+#include <vcl_cassert.h>
 #include <vnl/vnl_tag.h>
 #include <vnl/vnl_error.h>
 #include <vnl/vnl_c_vector.h>
-#include <vcl_cassert.h>
 
 export template <class T> class vnl_vector;
 export template <class T> class vnl_matrix;

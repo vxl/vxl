@@ -16,6 +16,7 @@
 //  22/03/2001  dac - added binary io and tidied documentation
 // \endverbatim
 
+#include <vcl_string.h>
 #include <vnl/vnl_matrix.h>
 
 
