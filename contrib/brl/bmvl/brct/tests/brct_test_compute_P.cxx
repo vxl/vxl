@@ -119,7 +119,6 @@ static void brct_test_compute_P()
     vgl_point_3d<double>& wp = world_points[i];
     vgl_point_2d<double>& pi = image_points[i];
     vnl_double_3 wv(wp.x(), wp.y(), wp.z());
-    vnl_double_2 iv(pi.x(), pi.y());
     vnl_double_2 riv = brct_algos::target_project(T, wv);
     vcl_cout << "pw[" << i << "]=(" << wp.x() << ' ' << wp.y()<< ' '
              << wp.z() << ")\n"
