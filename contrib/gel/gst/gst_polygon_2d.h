@@ -22,7 +22,7 @@ public:
   // getters and setters
   int size() const { return edges_.size(); }
   gst_edge_2d_ref operator[]( const int i) const { return edges_[i]; }
-  void add_edge( const gst_edge_2d_ref edge) { edges_.push_back( edge); }
+  void add( const gst_edge_2d_ref edge) { edges_.push_back( edge); }
 
   // check closure of edges
   //   returns false if the edges are not closed or
@@ -35,5 +35,6 @@ protected:
   vcl_vector<gst_edge_2d_ref> edges_;
 
 };
+
 
 #endif

@@ -14,20 +14,23 @@ face class
 */
 
 #include <vcl/vcl_vector.h>
-#include <gst/gst_edge_2d_ref.h>
+#include <gst/gst_polygon_2d_ref.h>
 
 class gst_face_2d
 {
 public:
 
-
+  gst_face_2d( gst_polygon_2d_ref polygon);
+  gst_face_2d( gst_polygon_2d_ref polygon, const vcl_vector<gst_polygon_2d_ref> &holes);
+  ~gst_face_2d();
 
 protected:
 
-  // ordered list of OUTSIDE edges
-  vcl_vector<gst_edge_2d_ref> edges_;
+  // outside edge list
+  gst_polygon_2d_ref outside_;
 
-  // list of holes (only one depth of hole is allowed
+  // list of holes
+  vcl_vector<gst_polygon_2d_ref> holes_;
 };
 
 
