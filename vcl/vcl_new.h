@@ -1,13 +1,33 @@
 #ifndef vcl_new_h_
 #define vcl_new_h_
-#ifdef __GNUC__
-#pragma interface
-#endif
 /*
   fsm@robots.ox.ac.uk
 */
 
-// until it breaks....
-#include <new.h>
+#include <vcl/vcl_compiler.h>
+
+// -------------------- emulation
+#if !VCL_USE_NATIVE_STL
+# include <vcl/emulation/vcl_new.h>
+
+// -------------------- gcc with old library
+#elif defined(VCL_GCC) && !defined(GNU_LIBSTDCXX_V3)
+# include <new.h>
+
+// -------------------- iso
+#else
+# include <new>
+#endif
+
+// Provide vcl_destroy() and vcl_construct() :
+#if VCL_USE_NATIVE_STL
+template <class T>
+inline
+void vcl_destroy(T *p) { p->~T(); }
+
+template <class U, class V>
+inline
+void vcl_construct(U * p, V const & value) { new (p) U(value); }
+#endif
 
 #endif
