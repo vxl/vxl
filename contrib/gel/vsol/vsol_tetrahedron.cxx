@@ -3,9 +3,6 @@
 //:
 //  \file
 
-//*****************************************************************************
-// External declarations for implementation
-//*****************************************************************************
 #include <vcl_cmath.h> // for vcl_abs(double)
 #include <vcl_iostream.h>
 #include "vsol_point_3d.h"
@@ -169,7 +166,7 @@ void vsol_tetrahedron::set_p3(vsol_point_3d_sptr new_p3)
 //---------------------------------------------------------------------------
 //: Is `p' in `this' ?
 //---------------------------------------------------------------------------
-bool vsol_tetrahedron::in(vsol_point_3d const& ) const
+bool vsol_tetrahedron::in(vsol_point_3d_sptr const& ) const
 {
   // TODO
   vcl_cerr << "Warning: vsol_tetrahedron::in() has not been implemented yet\n";

@@ -17,9 +17,6 @@
 // \endverbatim
 //*****************************************************************************
 
-//*****************************************************************************
-// External declarations for values
-//*****************************************************************************
 #include <vsol/vsol_polyhedron.h>
 #include <vsol/vsol_point_3d.h>
 #include <vcl_iosfwd.h>
@@ -34,15 +31,15 @@ class vsol_tetrahedron : public vsol_polyhedron
   //---------------------------------------------------------------------------
   //: Constructor from 4 points
   //---------------------------------------------------------------------------
-  vsol_tetrahedron(const vsol_point_3d_sptr &new_p0,
-                   const vsol_point_3d_sptr &new_p1,
-                   const vsol_point_3d_sptr &new_p2,
-                   const vsol_point_3d_sptr &new_p3);
+  vsol_tetrahedron(vsol_point_3d_sptr const& new_p0,
+                   vsol_point_3d_sptr const& new_p1,
+                   vsol_point_3d_sptr const& new_p2,
+                   vsol_point_3d_sptr const& new_p3);
 
   //---------------------------------------------------------------------------
   //: Copy constructor
   //---------------------------------------------------------------------------
-  vsol_tetrahedron(const vsol_tetrahedron &other);
+  vsol_tetrahedron(vsol_tetrahedron const& other);
 
   //---------------------------------------------------------------------------
   //: Destructor
@@ -53,7 +50,7 @@ class vsol_tetrahedron : public vsol_polyhedron
   //: Clone `this': creation of a new object and initialization
   //  See Prototype pattern
   //---------------------------------------------------------------------------
-  virtual vsol_spatial_object_3d_sptr clone(void) const { return new vsol_tetrahedron(*this); }
+  virtual vsol_spatial_object_3d* clone(void) const { return new vsol_tetrahedron(*this); }
 
   //***************************************************************************
   // Access
@@ -86,10 +83,10 @@ class vsol_tetrahedron : public vsol_polyhedron
   //---------------------------------------------------------------------------
   //: Has `this' the same points than `other' and the same orientation ?
   //---------------------------------------------------------------------------
-  virtual bool operator==(const vsol_tetrahedron &other) const;
-  inline bool operator!=(const vsol_tetrahedron &other)const{return !operator==(other);}
-  virtual bool operator==(const vsol_polyhedron &other) const; // virtual of vsol_polyhedron
-  virtual bool operator==(const vsol_spatial_object_3d& obj) const; // virtual of vsol_spatial_object_3d
+  virtual bool operator==(vsol_tetrahedron const& other) const;
+  inline bool operator!=(vsol_tetrahedron const& other)const{return !operator==(other);}
+  virtual bool operator==(vsol_polyhedron const& other) const; // virtual of vsol_polyhedron
+  virtual bool operator==(vsol_spatial_object_3d const& obj) const; // virtual of vsol_spatial_object_3d
 
   //***************************************************************************
   // Status report
@@ -131,7 +128,7 @@ class vsol_tetrahedron : public vsol_polyhedron
   //---------------------------------------------------------------------------
   //: Is `p' in `this' ?
   //---------------------------------------------------------------------------
-  virtual bool in(vsol_point_3d const &p) const;
+  virtual bool in(vsol_point_3d_sptr const &p) const;
 
   //---------------------------------------------------------------------------
   //: output description to stream

@@ -9,8 +9,8 @@
 // Peter Vanroose
 //
 // \verbatim
-// Modifications
-// 2000/06/28 Peter Vanroose  First version
+//  Modifications
+//   2000/06/28 Peter Vanroose  First version
 // \endverbatim
 //*****************************************************************************
 
@@ -21,10 +21,9 @@ class vsol_volume_3d;
 
 #include "vsol_point_3d_sptr.h"
 
-class vsol_volume_3d
-  :public vsol_spatial_object_3d
+class vsol_volume_3d : public vsol_spatial_object_3d
 {
-public:
+ public:
   enum vsol_volume_3d_type
   { VOLUME_NO_TYPE=0,
     POLYHEDRON,
@@ -45,7 +44,7 @@ public:
   //---------------------------------------------------------------------------
   //: Is the point `p' inside `this' volume ?
   //---------------------------------------------------------------------------
-  virtual bool in(vsol_point_3d const& p) const=0;
+  virtual bool in(vsol_point_3d_sptr const& p) const=0;
 
   //---------------------------------------------------------------------------
   //: Return the spatial type of `this'
