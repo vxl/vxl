@@ -1,7 +1,10 @@
 #ifndef mbl_exception_h_
 #define mbl_exception_h_
-
+//:
+// \file
 #include <vcl_string.h>
+#include <vcl_cstdlib.h>
+#include <vcl_iostream.h>
 #if VCL_HAS_EXCEPTIONS
 # include <vcl_stdexcept.h>
 #endif
@@ -37,27 +40,25 @@ vcl_cerr << "WARNING: " << exception.what() << vcl_endl;
   //: Indicates that mbl_cloneables_factory has not heard of value name.
   class mbl_exception_no_name_in_factory
   {
-    vcl_string msg;
-  public:
+    vcl_string msg_;
+   public:
     mbl_exception_no_name_in_factory(const vcl_string&  msg): msg_(msg) {}
-    const char * what() const {return msg.c_str();}
+    const char * what() const {return msg_.c_str();}
   };
 
-#else 
-;
+#else
+
   //: Indicates that mbl_cloneables_factory has not heard of value name.
   class mbl_exception_no_name_in_factory : public vcl_logic_error
   {
-  public:
+   public:
     vcl_string failed_value, valid_values;
     mbl_exception_no_name_in_factory(const vcl_string& failed_name, const vcl_string& valid_names):
       vcl_logic_error(vcl_string("No such value: ") +failed_name + "\nValid values are: ["+valid_names+"]"),
         failed_value(failed_name), valid_values(valid_names) {}
     virtual ~mbl_exception_no_name_in_factory() throw() {};
   };
-
 #endif
-
 
 
 #endif // mbl_exception_h_
