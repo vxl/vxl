@@ -13,19 +13,33 @@
 #pragma implementation
 #endif
 
+#include "vpdfl_pc_gaussian.h"
 #include <vcl_string.h>
+#include <vpdfl/vpdfl_pc_gaussian_builder.h>
+#include <vsl/vsl_binary_loader.h>
 #include <vcl_cassert.h>
 #include <vsl/vsl_indent.h>
 #include <vpdfl/vpdfl_gaussian_sampler.h>
 #include <vpdfl/vpdfl_gaussian.h>
-#include "vpdfl_pc_gaussian.h"
 #include "vpdfl_pc_gaussian_builder.h"
 #include <vnl/vnl_math.h>
 #include <mbl/mbl_matxvec.h>
 
-
 //=======================================================================
-// Method: log_p
+
+//: Dflt ctor
+vpdfl_pc_gaussian::vpdfl_pc_gaussian(): partition_chooser_(0),
+partition_(0), log_k_principal_(0.0)
+{
+}
+//=======================================================================
+
+//: Destructor
+vpdfl_pc_gaussian::~vpdfl_pc_gaussian()
+{
+  delete partition_chooser_;
+}
+
 //=======================================================================
 
 //: Calculate the log probability density at position x.
@@ -49,8 +63,7 @@ double vpdfl_pc_gaussian::log_p(const vnl_vector<double>& x) const
 }
 
 //=======================================================================
-// method: getDistances()
-//=======================================================================
+
 //: Return Mahalanobis and Euclidean distances from centroid to input.
 // Strictly it is the normalised Mahalanobis distance (-log_p()) from the input projected into the
 // principal space to the centroid, and the Euclidean distance from the input
@@ -89,20 +102,26 @@ void vpdfl_pc_gaussian::get_distances(double &mahalDIFS, double &euclidDFFS, con
   }
 
   mahalDIFS = - log_k_principal() + 0.5*sum;
-  i=n;
-  const double* dx_data = dx_.data_block() ;
-  double ddx, sumDxSq=0.0;
-  while (i--)
+  if ( n!=m)
   {
-    ddx = dx_data[i];
-    sumDxSq+=(ddx*ddx);
-  }
+    i=n;
+    const double* dx_data = dx_.data_block() ;
+    double ddx, sumDxSq=0.0;
+    while (i--)
+    {
+      ddx = dx_data[i];
+      sumDxSq+=(ddx*ddx);
+    }
 
-  //By pythagoras sum(squares(b_i)) + sum(squares(c_i)) = sum(squares(b_i)),
-  // where b_ is d_ projected into the principal component space
-  // and c_ is d_ projected into the complementary component space
-  // because b_ and C_ are perpendicular.
-  euclidDFFS = sumDxSq - sumBSq;
+    //By pythagoras sum(squares(b_i)) + sum(squares(c_i)) = sum(squares(d_i)),
+    // where b_ is d_ projected into the principal component space
+    // and c_ is d_ projected into the complementary component space
+    // because b_ and c_ are perpendicular.
+    euclidDFFS = sumDxSq - sumBSq;
+    if (euclidDFFS < 0) euclidDFFS = 0;
+  }
+  else
+    euclidDFFS = 0.0;
 }
 
 
@@ -154,13 +173,26 @@ void vpdfl_pc_gaussian::set(const vnl_vector<double>& mean,
   calcPartLogK();
 }
 
+//=======================================================================
+
 //: Initialise safely as you would a vpdfl_gaussian.
 // Calculates the variance, and checks that
 // the Eigenvalues are ordered and the Eigenvectors are unit normal
 // Turn off assertions to remove error checking.
 void vpdfl_pc_gaussian::set(const vnl_vector<double>& mean,  const vnl_matrix<double>& evecs, const vnl_vector<double>& evals)
 {
-  int n_principal_components = vpdfl_pc_gaussian_builder::fixed_partition();
+
+#ifndef NDEBUG
+  if (!partition_chooser_)
+  {
+    vcl_cerr << "ERROR: vpdfl_pc_gaussian::set()\n"<<
+      "Using this function requires partition_chooser_ to be set to a real builder\n"
+      << vcl_endl;
+    abort();
+  }
+#endif
+
+  int n_principal_components = partition_chooser_->decide_partition(evals);
   int n = mean.size();
   vnl_vector<double> principalEVals(n_principal_components);
 
@@ -178,6 +210,7 @@ void vpdfl_pc_gaussian::set(const vnl_vector<double>& mean,  const vnl_matrix<do
   set(mean, evecs, principalEVals, complementaryEVals);
 }
 
+//=======================================================================
 
 //: Return instance of this PDF
 vpdfl_sampler_base* vpdfl_pc_gaussian::sampler() const
@@ -188,8 +221,7 @@ vpdfl_sampler_base* vpdfl_pc_gaussian::sampler() const
 }
 
 
-//=======================================================================
-// Method: is_a
+
 //=======================================================================
 
 vcl_string vpdfl_pc_gaussian::is_a() const
@@ -198,8 +230,6 @@ vcl_string vpdfl_pc_gaussian::is_a() const
 }
 
 //=======================================================================
-// Method: is_class
-//=======================================================================
 
 bool vpdfl_pc_gaussian::is_class(vcl_string const& s) const
 {
@@ -207,16 +237,12 @@ bool vpdfl_pc_gaussian::is_class(vcl_string const& s) const
 }
 
 //=======================================================================
-// Method: version_no
-//=======================================================================
 
 short vpdfl_pc_gaussian::version_no() const
 {
-  return 1;
+  return 2;
 }
 
-//=======================================================================
-// Method: clone
 //=======================================================================
 
 vpdfl_pdf_base* vpdfl_pc_gaussian::clone() const
@@ -225,19 +251,18 @@ vpdfl_pdf_base* vpdfl_pc_gaussian::clone() const
 }
 
 //=======================================================================
-// Method: print
-//=======================================================================
 
 void vpdfl_pc_gaussian::print_summary(vcl_ostream& os) const
 {
-  os << "Partition at: " << partition_;
-  os << "  Log(k) for principal space: "<< log_k_principal_ << vcl_endl;
+  os << "\n" << vsl_indent() << "Partition at: " << partition_;
+  os << "  Log(k) for principal space: "<< log_k_principal_ << "\n";
+  os << vsl_indent() <<  "Partition Chooser: " ;
+  if (partition_chooser_) os << *partition_chooser_ << "\n";
+  else os << "NULL\n";
   os << vsl_indent();
   vpdfl_gaussian::print_summary(os);
 }
 
-//=======================================================================
-// Method: save
 //=======================================================================
 
 void vpdfl_pc_gaussian::b_write(vsl_b_ostream& bfs) const
@@ -247,10 +272,9 @@ void vpdfl_pc_gaussian::b_write(vsl_b_ostream& bfs) const
   vpdfl_gaussian::b_write(bfs);
   vsl_b_write(bfs,partition_);
   vsl_b_write(bfs,log_k_principal_);
+  vsl_b_write(bfs,static_cast<vpdfl_builder_base *>(partition_chooser_));
 }
 
-//=======================================================================
-// Method: load
 //=======================================================================
 
 void vpdfl_pc_gaussian::b_read(vsl_b_istream& bfs)
@@ -259,7 +283,7 @@ void vpdfl_pc_gaussian::b_read(vsl_b_istream& bfs)
   vsl_b_read(bfs,name);
   if (name != is_a())
   {
-    vcl_cerr << "vpdfl_pc_gaussian::load() : ";
+    vcl_cerr << "vpdfl_pc_gaussian::b_read() : ";
     vcl_cerr << "Attempted to load object of type ";
     vcl_cerr << name <<" into object of type " << is_a() << vcl_endl;
     vcl_abort();
@@ -273,6 +297,18 @@ void vpdfl_pc_gaussian::b_read(vsl_b_istream& bfs)
       vpdfl_gaussian::b_read(bfs);
       vsl_b_read(bfs,partition_);
       vsl_b_read(bfs,log_k_principal_);
+      partition_chooser_ = 0;
+      break;
+    case (2):
+      vpdfl_gaussian::b_read(bfs);
+      vsl_b_read(bfs,partition_);
+      vsl_b_read(bfs,log_k_principal_);
+      {
+        vpdfl_builder_base * c = 0;
+        vsl_b_read(bfs,c);
+        assert(!c || c->is_a() == "vpdfl_pc_gaussian_builder");
+        partition_chooser_ = static_cast<vpdfl_pc_gaussian_builder *>(c);
+      }
       break;
     default:
       vcl_cerr << "vpdfl_pc_gaussian::b_read() ";
@@ -281,3 +317,20 @@ void vpdfl_pc_gaussian::b_read(vsl_b_istream& bfs)
   }
 }
 
+//=======================================================================
+
+const vpdfl_pc_gaussian_builder * vpdfl_pc_gaussian::partition_chooser() const
+{
+  return partition_chooser_;
+}
+
+//=======================================================================
+
+void vpdfl_pc_gaussian::set_partition_chooser(
+  const vpdfl_pc_gaussian_builder * partition_chooser)
+{
+  if (partition_chooser)
+    partition_chooser_ = static_cast<vpdfl_pc_gaussian_builder *>(partition_chooser->clone());
+  else
+    partition_chooser_ = 0;
+}

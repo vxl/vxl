@@ -112,4 +112,10 @@ void vsl_print_summary(vcl_ostream& os,const vpdfl_builder_base& b);
   //: Stream output operator for class pointer
 void vsl_print_summary(vcl_ostream& os,const vpdfl_builder_base* b);
 
+  //: Stream output operator for class reference
+vcl_ostream& operator<<(vcl_ostream& os,const vpdfl_builder_base& b);
+
+  //: Stream output operator for class pointer
+vcl_ostream& operator<<(vcl_ostream& os,const vpdfl_builder_base* b);
+
 #endif // vpdfl_builder_base_h

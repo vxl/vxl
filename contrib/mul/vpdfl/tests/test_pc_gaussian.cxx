@@ -110,14 +110,16 @@ void test_pc_gaussian()
   vsl_b_ofstream bfs_out("test_pc_gaussian.bvl.tmp");
   TEST ("Created test_pc_gaussian.bvl.tmp for writing",
              (!bfs_out), false);
-
   vsl_b_write(bfs_out,pdf);
   vsl_b_write(bfs_out,builder);
   vsl_b_write(bfs_out,p_pdf);
   vsl_b_write(bfs_out,p_builder);
+  pdf.set_partition_chooser(&builder);
+  vsl_b_write(bfs_out,pdf);
   bfs_out.close();
+  pdf.set_partition_chooser(0);
 
-  vpdfl_pc_gaussian          pdf_in;
+  vpdfl_pc_gaussian          pdf_in, pdf_in2;
   vpdfl_pc_gaussian_builder  builder_in;
   vpdfl_pdf_base*            p_base_pdf_in = NULL;
   vpdfl_builder_base*        p_base_builder_in = NULL;
@@ -130,6 +132,7 @@ void test_pc_gaussian()
   vsl_b_read(bfs_in, builder_in);
   vsl_b_read(bfs_in, p_base_pdf_in);
   vsl_b_read(bfs_in, p_base_builder_in);
+  vsl_b_read(bfs_in, pdf_in2);
   bfs_in.close();
 
   vcl_cout<<"Original PDF: "; vsl_print_summary(vcl_cout, pdf); vcl_cout<<vcl_endl;
@@ -148,7 +151,8 @@ void test_pc_gaussian()
     pdf.eigenvecs() == pdf_in.eigenvecs() &&
     pdf.log_k() == pdf_in.log_k() &&
     pdf.log_k_principal() == pdf_in.log_k_principal() &&
-    pdf.n_principal_components() == pdf_in.n_principal_components(),
+    pdf.n_principal_components() == pdf_in.n_principal_components() &&
+    !pdf_in.partition_chooser(),
     true);
   TEST("Original Model == model loaded by base ptr",
     pdf.mean()==p_base_pdf_in->mean() &&
@@ -157,11 +161,26 @@ void test_pc_gaussian()
     true);
   TEST("Original Builder == Loaded builder",
     builder.min_var()==builder_in.min_var() &&
-    builder.fixed_partition()==builder_in.fixed_partition(),
+    builder.partition_method() == builder_in.partition_method() &&
+    builder.fixed_partition()==builder_in.fixed_partition() &&
+    builder.partition_method() == builder_in.partition_method(),
     true);
   TEST("Original Builder == Builder loaded by base ptr",
     builder.min_var()==p_base_builder_in->min_var() &&
     builder.is_a()==p_base_builder_in->is_a(),
+    true);
+
+  const vpdfl_pc_gaussian_builder *chooser =
+    dynamic_cast<const vpdfl_pc_gaussian_builder *>(pdf_in2.partition_chooser());
+
+
+  //vcl_cout << "Chooser " << *chooser <<vcl_endl;
+
+  TEST("Loaded Model partition chooser == Original Builder",
+    chooser &&
+    builder.min_var()==chooser->min_var() &&
+    builder.fixed_partition()==chooser->fixed_partition() &&
+    builder.partition_method() == chooser->partition_method(),
     true);
 
 

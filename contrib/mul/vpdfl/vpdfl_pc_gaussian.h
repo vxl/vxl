@@ -21,6 +21,8 @@
 
 //=======================================================================
 
+class vpdfl_pc_gaussian_builder;
+
 //: Multi-variate principal Component gaussian PDF.
 // The principal components can have general covariance.
 // The complemenary compenents (least significant eigenvalues) have a
@@ -38,12 +40,17 @@ private:
     // Should only be called after setting all other data values.
   void calcPartLogK();
 
+    //: How the inherited set() function chooses the partition.
+    // If NULL, set(const vnl_vector<double>&,const vnl_matrix<double>& evecs,const vnl_vector<double>&)
+    // will fail.
+  vpdfl_pc_gaussian_builder * partition_chooser_;
+
 public:
     //: Dflt ctor
-  vpdfl_pc_gaussian() {};
+  vpdfl_pc_gaussian();
 
     //: Destructor
-  virtual ~vpdfl_pc_gaussian() {};
+  virtual ~vpdfl_pc_gaussian();
 
   //: Number of principal components
     // i.e. the number of dimensions to have full Covariance (i.e. elliptical shape)
@@ -55,6 +62,12 @@ public:
     // There is no vpdfl_pc_gaussian_sampler.
   virtual vpdfl_sampler_base* sampler() const;
 
+    //: how the inherited set() function chooses the partition
+  const vpdfl_pc_gaussian_builder * partition_chooser() const;
+
+    //: Set the how the inherited set() function chooses the partition
+    // If not NULL, a local copy of the builder will be taken.
+  void set_partition_chooser(const vpdfl_pc_gaussian_builder *);
 
     //: Initialise safely
     // The partition between principal components space and complementary space is
@@ -72,11 +85,10 @@ public:
     // the Eigenvalues are ordered and the Eigenvectors are unit normal
     // Turn off assertions to remove error checking.
     // This function takes a fully specified set of Eigenvectors and Eigenvalues, and truncates
-    // the principal space as defined in IS_PCAGaussianBuilder::fixedPartition().
+    // the principal space as defined in partition_chooser() which must not be null.
   virtual void set(const vnl_vector<double>& mean,
                    const vnl_matrix<double>& evecs,
                    const vnl_vector<double>& evals);
-
 
     //: log of normalisation constant for gaussian
   double log_k_principal() const { return log_k_principal_; }

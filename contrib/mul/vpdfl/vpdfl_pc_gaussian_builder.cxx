@@ -17,6 +17,7 @@
 // inclusions
 //=======================================================================
 
+#include "vpdfl_pc_gaussian_builder.h"
 #include <vcl_string.h>
 #include <vcl_cassert.h>
 #include <vsl/vsl_indent.h>
@@ -26,7 +27,6 @@
 #include <vnl/algo/vnl_symmetric_eigensystem.h>
 #include <vnl/vnl_math.h>
 #include <vnl/vnl_c_vector.h>
-#include "vpdfl_pc_gaussian_builder.h"
 #include "vpdfl_pc_gaussian.h"
 //#include <vcl_algorithm.h>
 #ifdef _MSC_VER
@@ -34,21 +34,19 @@
 #endif
 
 //=======================================================================
-// Dflt ctor
-//=======================================================================
 
-vpdfl_pc_gaussian_builder::vpdfl_pc_gaussian_builder(): partitionMethod_(fixed)
+vpdfl_pc_gaussian_builder::vpdfl_pc_gaussian_builder(): partitionMethod_(fixed),
+proportionOfVariance_(0)
 {
 }
 
-//=======================================================================
-// Destructor
 //=======================================================================
 
 vpdfl_pc_gaussian_builder::~vpdfl_pc_gaussian_builder()
 {
 }
 
+//=======================================================================
 
 //: Use proportion of variance to decide on the number of principle components.
 // Specify the proportion (between 0 and 1).
@@ -62,9 +60,16 @@ void vpdfl_pc_gaussian_builder::set_proportion_partition( double proportion)
   partitionMethod_ = proportionate;
 }
 
-
 //=======================================================================
-// gaussian
+
+//: Set the number of principle components when using fixed partition.
+void vpdfl_pc_gaussian_builder::set_fixed_partition(int n_principle_components)
+{
+  assert(n_principle_components >=0);
+  fixed_partition_ = n_principle_components;
+  partitionMethod_ = fixed;
+}
+
 //=======================================================================
 
 vpdfl_pc_gaussian& vpdfl_pc_gaussian_builder::gaussian(vpdfl_pdf_base& model) const
@@ -74,11 +79,14 @@ vpdfl_pc_gaussian& vpdfl_pc_gaussian_builder::gaussian(vpdfl_pdf_base& model) co
   return (vpdfl_pc_gaussian&) model;
 }
 
+//=======================================================================
+
 vpdfl_pdf_base* vpdfl_pc_gaussian_builder::new_model() const
 {
   return new vpdfl_pc_gaussian();
 }
 
+//=======================================================================
 
 void vpdfl_pc_gaussian_builder::build(vpdfl_pdf_base& model,
                                       const vnl_vector<double>& mean) const
@@ -136,7 +144,7 @@ static void eValsFloorZero(vnl_vector<double> &v)
 {
   int n = v.size();
   double *v_data = v.data_block();
-  int i=n;
+  int i=n-1;
   while (i && v_data[i] < 0.0)
   {
     v_data[i]=0.0;
@@ -267,15 +275,21 @@ void vpdfl_pc_gaussian_builder::weighted_build(vpdfl_pdf_base& model,
   // now sum = weighted mean
   // and S = weighted covariance corrected for unbiased rather than ML result.
 
+
   vnl_symmetric_eigensystem_compute(S, evecs, evals);
   // eigenvalues are lowest first here
   evals.flip();
   evecs.fliplr();
   // eigenvalues are highest first now
 
+  
+  //vcl_cerr << "S" << S <<vcl_endl;
+  //vcl_cerr << "evals" << evals <<vcl_endl;
+  //vcl_cerr << "evecs" << evecs <<vcl_endl;
+
   eValsFloorZero(evals);
 
-  int n_principle_components = vnl_math_min((int)fixed_partition(), n);
+  int n_principle_components = decide_partition(evals, n);
 
   vnl_vector<double> principleEVals(n_principle_components);
 
@@ -315,7 +329,7 @@ unsigned vpdfl_pc_gaussian_builder::decide_partition(const vnl_vector<double>& e
   assert (eVals.size() > 0);
   if (partitionMethod_ == fixed)
   {
-    return vnl_math_min(eVals.size(), fixed_partition()+1);;
+    return vnl_math_min(eVals.size(), (unsigned)fixed_partition()+1);;
   }
   else if (partitionMethod_ == proportionate)
   {
@@ -364,7 +378,7 @@ bool vpdfl_pc_gaussian_builder::is_class(vcl_string const& s) const
 
 short vpdfl_pc_gaussian_builder::version_no() const
 {
-  return 1;
+  return 2;
 }
 
 //=======================================================================
@@ -391,11 +405,12 @@ void vpdfl_pc_gaussian_builder::print_summary(vcl_ostream& os) const
 
 void vpdfl_pc_gaussian_builder::b_write(vsl_b_ostream& bfs) const
 {
-  vsl_b_write(bfs,is_a());
-  vsl_b_write(bfs,version_no());
+  vsl_b_write(bfs, is_a());
+  vsl_b_write(bfs, version_no());
   vpdfl_gaussian_builder::b_write(bfs);
   vsl_b_write(bfs,(short)partitionMethod_);
-  vsl_b_write(bfs,proportionOfVariance_);
+  vsl_b_write(bfs, proportionOfVariance_);
+  vsl_b_write(bfs, fixed_partition_);
 }
 
 //=======================================================================
@@ -414,16 +429,24 @@ void vpdfl_pc_gaussian_builder::b_read(vsl_b_istream& bfs)
     vcl_abort();
   }
 
+  short temp;
   short version;
   vsl_b_read(bfs,version);
   switch (version)
   {
-    case (1):
+    case 1:
       vpdfl_gaussian_builder::b_read(bfs);
-      short temp;
-      vsl_b_read(bfs,temp);
+      vsl_b_read(bfs, temp);
       partitionMethod_ = partitionMethods(temp);
-      vsl_b_read(bfs,proportionOfVariance_);
+      vsl_b_read(bfs, proportionOfVariance_);
+      fixed_partition_ = 75;
+      break;
+    case 2:
+      vpdfl_gaussian_builder::b_read(bfs);
+      vsl_b_read(bfs, temp);
+      partitionMethod_ = partitionMethods(temp);
+      vsl_b_read(bfs, proportionOfVariance_);
+      vsl_b_read(bfs, fixed_partition_);
       break;
     default:
       vcl_cerr << "vpdfl_pc_gaussian_builder::b_read() ";

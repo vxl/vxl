@@ -43,6 +43,10 @@ private:
     //: The proportion of variance that should be encoded with the principle components..
     // Isn't used by default..
   double proportionOfVariance_;
+
+    //: The number of components to represent in the prinicple space.
+  unsigned fixed_partition_;
+
 protected:
 
 public:
@@ -85,8 +89,14 @@ public:
                                     unsigned nSamples=0, double noise=0.0) const;
 
     //: Return the number of principle compoents when using fixed partition.
-    // This method is static so that it can be uased as a default in vpdfl_pc_gaussian.
-  static unsigned fixed_partition() {return 75;}
+  int fixed_partition() const
+  {
+    if (partitionMethod_ == fixed) return fixed_partition_;
+    else return -1;
+  }
+
+    //: Set the number of principle components when using fixed partition.
+  void set_fixed_partition(int n_principle_components);
 
     //: Use proportion of variance to decide on the number of principle components.
     // Specify the proportion (between 0 and 1).
@@ -95,19 +105,15 @@ public:
 
     //: Find the proportion of variance to decide on the number of principle components.
     // returns a negative value if not using proportion of variance method.
-  double proportionPartition() const
+  double proportion_partition() const
   {
     if (partitionMethod_ == proportionate) return proportionOfVariance_;
     else return -1.0;
   }
 
-    //: Use a fixed number of principle components for building.
-    // This is the default setting.
-  void set_fixed_parition()
-  {
-    partitionMethod_ = fixed;
-  }
-
+    //: How is the partition between principle and complementary spaces
+  partitionMethods partition_method() const
+  {return partitionMethod_;}
 
     //: Version number for I/O
   short version_no() const;

@@ -18,15 +18,11 @@
 #include <vpdfl/vpdfl_sampler_base.h>
 
 //=======================================================================
-// Dflt ctor
-//=======================================================================
 
 vpdfl_pdf_base::vpdfl_pdf_base()
 {
 }
 
-//=======================================================================
-// Destructor
 //=======================================================================
 
 vpdfl_pdf_base::~vpdfl_pdf_base()
@@ -34,8 +30,7 @@ vpdfl_pdf_base::~vpdfl_pdf_base()
 }
 
 //=======================================================================
-//: Probability density at x
-//=======================================================================
+
 double vpdfl_pdf_base::operator()(const vnl_vector<double>& x) const
 {
   return vcl_exp(log_p(x));
@@ -142,16 +137,12 @@ short vpdfl_pdf_base::version_no() const
 }
 
 //=======================================================================
-// Method: vxl_add_to_binary_loader
-//=======================================================================
 
 void vsl_add_to_binary_loader(const vpdfl_pdf_base& b)
 {
   vsl_binary_loader<vpdfl_pdf_base>::instance().add(b);
 }
 
-//=======================================================================
-// Method: is_a
 //=======================================================================
 
 vcl_string vpdfl_pdf_base::is_a() const
@@ -160,8 +151,6 @@ vcl_string vpdfl_pdf_base::is_a() const
   return class_name_;
 }
 
-//=======================================================================
-// Method: is_class
 //=======================================================================
 
 bool vpdfl_pdf_base::is_class(vcl_string const& s) const
@@ -248,6 +237,7 @@ void vsl_b_read(vsl_b_istream& bfs, vpdfl_pdf_base& b)
   b.b_read(bfs);
 }
 
+//=======================================================================
 
 void vsl_print_summary(vcl_ostream& os,const vpdfl_pdf_base& b)
 {
@@ -257,6 +247,7 @@ void vsl_print_summary(vcl_ostream& os,const vpdfl_pdf_base& b)
   vsl_indent_dec(os);
 }
 
+//=======================================================================
 
 void vsl_print_summary(vcl_ostream& os,const vpdfl_pdf_base* b)
 {
@@ -266,14 +257,18 @@ void vsl_print_summary(vcl_ostream& os,const vpdfl_pdf_base* b)
     os << "No vpdfl_pdf_base defined.";
 }
 
-  //: Stream output operator for class reference
+//=======================================================================
+
+//: Stream output operator for class reference
 vcl_ostream& operator<<(vcl_ostream& os,const vpdfl_pdf_base& b)
 {
   vsl_print_summary(os,b);
   return os;
 }
 
-  //: Stream output operator for class pointer
+//=======================================================================
+
+//: Stream output operator for class pointer
 vcl_ostream& operator<<(vcl_ostream& os,const vpdfl_pdf_base* b)
 {
   vsl_print_summary(os,b);
