@@ -14,7 +14,6 @@
 
 #include <vcl_string.h>
 #include <vcl_vector.h>
-#include <vcl_cstdio.h>
 #include <vcl_iostream.h>
 #include <vul/vul_sprintf.h>
 
@@ -67,8 +66,9 @@ struct vgui_gtk_dialog_impl_choice {
 //--------------------------------------------------------------------------------
 //: Make a choice widget
 void* vgui_gtk_dialog_impl::choice_field_widget(const char* /*txt*/,
-                                          const vcl_vector<vcl_string>& labels, int& val) {
-
+                                                const vcl_vector<vcl_string>& labels,
+                                                int& val)
+{
   vgui_gtk_dialog_impl_choice *ch = new vgui_gtk_dialog_impl_choice;
   ch->names = labels;
   ch->index = val;
