@@ -416,8 +416,16 @@ are moderately well behaved.
 @item @code{vnl_conjugate_gradient}: Fletcher-Reeves form of the conjugate
 gradient algorithm.
 
+@item @code {vnl_lbfgs): Limited memory Broyden Fletcher Goldfarb Shannon
+minimisation. Requires 1st derivatives. Considered to be the best
+general optimisation algorithm for functions which are well behaved
+(i.e. locally smooth without too many local minima.)
+
 @item @code{vnl_levenberg_marquardt}: The Levenberg-Marquardt algorithm for
-least-squares problems.
+least-squares problems. This is usually the best method for any function
+which can be expressed as
+$f(x) = (f_{1}(x))^{2} + (f_{2}(x))^{2} + (f_{3}(x))^{2} + \ldots$
+
 @end enumerate
 
 As an example of the use of the optimization routines, we'll use a common
