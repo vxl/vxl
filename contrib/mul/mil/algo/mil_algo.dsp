@@ -105,17 +105,27 @@ SOURCE=.\mil_algo_exp_filter_1d.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=.\Templates/mil_algo_exp_filter_2d+float-+float-.cxx
+SOURCE=.\Templates/mil_algo_exp_filter_2d+float.float-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=.\Templates/mil_algo_exp_filter_2d+uchar-+float-.cxx
+SOURCE=.\Templates/mil_algo_exp_filter_2d+uchar.float-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=.\Templates/mil_algo_exp_filter_2d+uchar-+uchar-.cxx
+SOURCE=.\Templates/mil_algo_exp_filter_2d+uchar.uchar-.cxx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates/mil_algo_line_filter+float-.cxx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates/mil_algo_line_filter+uchar-.cxx
 
 # End Source File
 # End Group
@@ -134,6 +144,16 @@ SOURCE=.\mil_algo_exp_filter_2d.h
 # Begin Source File
 
 SOURCE=.\mil_algo_exp_filter_2d.txx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\mil_algo_line_filter.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\mil_algo_line_filter.txx
 
 # End Source File
 # End Group
