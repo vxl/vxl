@@ -562,11 +562,11 @@ inline vil_image_view_base_sptr vil_convert_to_component_order(
       vil_memory_chunk_sptr chunk = \
         new vil_memory_chunk(ni*nj*nplanes*sizeof(T  ), \
           vil_pixel_format_component_format(F)); \
-      dest = new vil_image_view<T  >(chunk, \
-        reinterpret_cast<T   *>(chunk->data()), ni, nj, nplanes, nplanes*nj, \
-        nplanes, 1); \
-      vil_image_view<T  > & dest_ref =  \
-        static_cast<vil_image_view<T  > &>(*dest); \
+      dest = new vil_image_view<T >(chunk, \
+        reinterpret_cast<T *>(chunk->data()), ni, nj, nplanes, nplanes, \
+        nplanes*ni, 1); \
+      vil_image_view<T > & dest_ref =  \
+        static_cast<vil_image_view<T > &>(*dest); \
       vil_copy_reformat(src_ref, dest_ref); \
       break; }
 macro(VIL_PIXEL_FORMAT_BYTE, vxl_byte )
@@ -925,6 +925,7 @@ macro(VIL_PIXEL_FORMAT_INT_32 , vxl_int_32 )
 macro(VIL_PIXEL_FORMAT_INT_16 , vxl_int_16 )
 macro(VIL_PIXEL_FORMAT_FLOAT , float )
 macro(VIL_PIXEL_FORMAT_DOUBLE , double )
+#undef macro
     default:
       dest_ref.clear();
   }
