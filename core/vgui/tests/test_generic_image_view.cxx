@@ -3,15 +3,14 @@
 #include <testlib/testlib_test.h>
 #include <vil/vil_image_view.h>
 #include <vil/vil_rgb.h>
+#include <vil/vil_rgba.h>
 
 #include <vxl_config.h>
 
-#define TestWith( T )                                                   \
+#define TestSingleWith( T , w , h , p , c )                             \
 {                                                                       \
-  vcl_cout << "Testing pixel type " << #T << '\n';                      \
   {                                                                     \
-    vcl_cout << "  from constructor " << #T << '\n';                    \
-    vil_image_view< T > img( 5, 6, 7 );                                 \
+    vil_image_view< T > img( w, h, p , c );                             \
     vgui_generic_vil_image_view generic( img );                         \
     TEST( "top left", img.top_left_ptr(), (T const*)generic.top_left_ptr() ); \
     TEST( "istep", img.istep(), generic.istep() );                      \
@@ -22,7 +21,7 @@
   }                                                                     \
   {                                                                     \
     vcl_cout << "  from operator== " << #T << '\n';                     \
-    vil_image_view< T > img( 5, 6, 7 );                                 \
+    vil_image_view< T > img( w, h, p , c );                             \
     vgui_generic_vil_image_view generic;                                \
     generic = img;                                                      \
     TEST( "top left", img.top_left_ptr(), (T const*)generic.top_left_ptr() ); \
@@ -32,6 +31,19 @@
     TEST( "memory ptr", img.memory_chunk(), generic.memory_chunk() );   \
     TEST( "image view", img, *generic.make_view() );                    \
   }                                                                     \
+}
+
+#define TestWith( T )                                                   \
+{                                                                       \
+  vcl_cout << "Testing pixel type " << #T << '\n';                      \
+  vcl_cout << "  from \"grey\" constructor " << #T << '\n';             \
+  TestSingleWith( T , 5 , 6 , 7 , 1 );                                  \
+  vcl_cout << "  from \"RGB\" constructor " << #T << '\n';              \
+  TestSingleWith( T , 5 , 6 , 1 , 3 );                                  \
+  vcl_cout << "  from constructor vil_rgb<" << #T << ">\n";             \
+  TestSingleWith( vil_rgb<T > , 5 , 6 , 1 , 1 );                        \
+  vcl_cout << "  from constructor vil_rgba<" << #T << ">\n";            \
+  TestSingleWith( vil_rgba<T > , 5 , 6 , 1 , 1 );                       \
 }
 
 void
@@ -48,26 +60,8 @@ test_generic_image_view()
   TestWith( vxl_sbyte );
   TestWith( double );
   TestWith( float );
-  TestWith( bool );
-
-  TestWith( vil_rgb<vxl_uint_32> );
-  TestWith( vil_rgb<vxl_int_32> );
-  TestWith( vil_rgb<vxl_uint_16> );
-  TestWith( vil_rgb<vxl_int_16> );
-  TestWith( vil_rgb<vxl_byte> );
-  TestWith( vil_rgb<vxl_sbyte> );
-  TestWith( vil_rgb<double> );
-  TestWith( vil_rgb<float> );
-
-  TestWith( vil_rgba<vxl_uint_32> );
-  TestWith( vil_rgba<vxl_int_32> );
-  TestWith( vil_rgba<vxl_uint_16> );
-  TestWith( vil_rgba<vxl_int_16> );
-  TestWith( vil_rgba<vxl_byte> );
-  TestWith( vil_rgba<vxl_sbyte> );
-  TestWith( vil_rgba<double> );
-  TestWith( vil_rgba<float> );
+  vcl_cout << "Testing pixel type bool\n  from \"grey\" constructor bool\n";
+  TestSingleWith( bool , 5 , 6 , 7 , 1);
 }
 
 TESTMAIN(test_generic_image_view);
-
