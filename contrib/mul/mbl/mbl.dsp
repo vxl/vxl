@@ -254,6 +254,18 @@ SOURCE=.\mbl_stats_nd.cxx
 # Begin Source File
 SOURCE=.\mbl_table.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\mbl_progress.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\mbl_progress_composite.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\mbl_progress_null.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\mbl_progress_text.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter ""
@@ -436,6 +448,18 @@ SOURCE=.\mbl_stats_nd.h
 # End Source File
 # Begin Source File
 SOURCE=.\mbl_table.h
+# End Source File
+# Begin Source File
+SOURCE=.\mbl_progress.h
+# End Source File
+# Begin Source File
+SOURCE=.\mbl_progress_composite.h
+# End Source File
+# Begin Source File
+SOURCE=.\mbl_progress_null.h
+# End Source File
+# Begin Source File
+SOURCE=.\mbl_progress_text.h
 # End Source File
 # End Group
 # PROP Default_Filter "ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe"

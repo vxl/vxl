@@ -398,6 +398,15 @@ SOURCE=.\rgrl_feature_reader.cxx
 # Begin Source File
 SOURCE=.\rgrl_initializer_reader.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\rgrl_est_dis_homo2d_lm.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\rgrl_trans_rad_dis_homo2d.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\rgrl_trans_couple.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter ""
@@ -721,6 +730,15 @@ SOURCE=.\rgrl_feature_reader.h
 # End Source File
 # Begin Source File
 SOURCE=.\rgrl_initializer_reader.h
+# End Source File
+# Begin Source File
+SOURCE=.\rgrl_est_dis_homo2d_lm.h
+# End Source File
+# Begin Source File
+SOURCE=.\rgrl_trans_rad_dis_homo2d.h
+# End Source File
+# Begin Source File
+SOURCE=.\rgrl_trans_couple.h
 # End Source File
 # End Group
 # End Target
