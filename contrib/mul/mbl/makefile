@@ -15,7 +15,8 @@ SOURCES += mbl_matxvec.cxx
 SOURCES += mbl_matrix_products.cxx
 
 # Additional files to document:
-# MANPAGE_SOURCES += yyyyyyyyyyy.txx
+MANPAGE_SOURCES += mbl_data_array_wrapper.txx
+MANPAGE_SOURCES += mbl_data_wrapper.txx
 
 ifndef NOTEST
  SUBDIRS += tests
