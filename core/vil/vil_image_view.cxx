@@ -7,7 +7,6 @@
 #include <vil2/vil2_byte.h>
 #include <vil/vil_rgb.h>
 #include <vcl_config_compiler.h>
-#include <vxl_config.h>
 
 // Specialise the is_a() method for all possible types
 #define macro(T) \
