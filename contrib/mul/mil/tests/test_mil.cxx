@@ -10,6 +10,7 @@
 #include "test_transform_2d.cxx"
 #include "test_image_2d_of.cxx"
 #include "test_bilin_interp_2d.cxx"
+#include "test_sample_grid_2d.cxx"
 #include "test_sample_profile_2d.cxx"
 #include "test_gauss_reduce_2d.cxx"
 #include "test_gaussian_pyramid_builder_2d.cxx"
@@ -31,6 +32,7 @@ void run_test_mil()
   test_convert_vil();
   test_byte_image_2d_io();
   test_sample_profile_2d();
+  test_sample_grid_2d();
   test_transform_2d();
   test_image_2d_of();
   test_bilin_interp_2d();
