@@ -46,7 +46,7 @@ logical *fail;
     integer i__1;
 
     /* Local variables */
-    static real base;
+    static doublereal base;
     static doublereal temp[101];
     static real cosr, sinr;
     static integer i, j, l;
@@ -91,7 +91,7 @@ logical *fail;
 /*         WHICH CAN BE DESCRIBED AS THE SMALLEST       */
 /*         POSITIVE FLOATING POINT NUMBER SUCH THAT     */
 /*         1.D0+ETA IS GREATER THAN 1.                  */
-/* INFINY  THE LARGEST FLOATING-POINT NUMBER.           */
+/* INFIN   THE LARGEST FLOATING-POINT NUMBER.           */
 /* SMALNO  THE SMALLEST POSITIVE FLOATING-POINT NUMBER  */
 /*         IF THE EXPONENT RANGE DIFFERS IN SINGLE AND  */
 /*         DOUBLE PRECISION THEN SMALNO AND INFIN       */
@@ -101,15 +101,10 @@ logical *fail;
 /* THE VALUES BELOW CORRESPOND TO THE BURROUGHS B6700   */
 /* changed for sparc, but these seem better -- awf */
 
-    base = 2.0f;
+    base = 2.0;
     global_1.eta = 2.23e-16f;
-    /* the sun compiler will not compile with the number too large for float */
-#ifdef __SUNPRO_C
     infin = 3.40282346638528860e+38f;
-#else
-    infin = (float)1e50; /* on purpose too large to fit in `float' type */
-#endif
-    smalno = 1e-33;
+    smalno = 1e-33f;
 /* ARE AND MRE REFER TO THE UNIT ERROR IN + AND * */
 /* RESPECTIVELY. THEY ARE ASSUMED TO BE THE SAME AS */
 /* ETA. */
@@ -194,8 +189,8 @@ L80:
         goto L110;
     }
 L90:
-    l = (int)(log((doublereal)sc) / log((doublereal)base) + 0.5);
-    factor = (doublereal)base;
+    l = (int)(log((doublereal)sc) / log(base) + 0.5);
+    factor = base;
     factor = pow_di(&factor, &l);
     if (factor == 1.) {
         goto L110;
