@@ -39,6 +39,10 @@ struct vnl_amoebaFit : public vnl_amoeba {
     cnt = 0;
   }
 
+	  //: Initialise the simplex given one corner, x
+	void set_up_simplex(vcl_vector<vnl_amoeba_SimplexCorner>& simplex,
+	                    const vnl_vector<double>& x);
+
   void amoeba(vnl_vector<double>& x);
 
   double f(const vnl_vector<double>& x) {
@@ -177,11 +181,11 @@ bool operator==(const vnl_amoeba_SimplexCorner& a, const vnl_amoeba_SimplexCorne
 //  Environments: Microcomputers in Large-Scale Computing,
 //  edited by A. Wouk, SIAM, 1987, pp. 116-122.
 
-void vnl_amoebaFit::amoeba(vnl_vector<double>& x)
+//: Initialise the simplex given one corner, x
+void vnl_amoebaFit::set_up_simplex(vcl_vector<vnl_amoeba_SimplexCorner>& simplex,
+	                    const vnl_vector<double>& x)
 {
-// Set up a simplex near the initial guess.
   int n = x.size();
-  vcl_vector<vnl_amoeba_SimplexCorner> simplex(n+1, vnl_amoeba_SimplexCorner(n));
 
   simplex[0].v = x;
   simplex[0].fv = f(x);
@@ -205,6 +209,15 @@ void vnl_amoebaFit::amoeba(vnl_vector<double>& x)
     ++cnt;
     s->fv = f(s->v);
   }
+}
+
+void vnl_amoebaFit::amoeba(vnl_vector<double>& x)
+{
+// Set up a simplex near the initial guess.
+  int n = x.size();
+  vcl_vector<vnl_amoeba_SimplexCorner> simplex(n+1, vnl_amoeba_SimplexCorner(n));
+
+	set_up_simplex(simplex,x);
   sort_simplex(simplex);
 
   if (verbose > 1) {
