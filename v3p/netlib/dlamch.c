@@ -2,13 +2,13 @@
 #include "netlib.h"
 #include <stdio.h>
 
-static void dlamc1_(integer *beta, integer *t, logical *rnd, logical *ieee1);
-static void dlamc2_(integer *beta, integer *t, logical *rnd, doublereal *eps,
-                    integer *emin, doublereal *rmin, integer *emax, doublereal *rmax);
-static doublereal dlamc3_(doublereal *a, doublereal *b);
-static void dlamc4_(integer *emin, doublereal *start, integer *base);
-static void dlamc5_(integer *beta, integer *p, integer *emin, logical *ieee, integer *emax, doublereal *rmax);
-static doublereal dlamc33_(doublereal *a, doublereal *b);
+void dlamc1_(integer *beta, integer *t, logical *rnd, logical *ieee1);
+void dlamc2_(integer *beta, integer *t, logical *rnd, doublereal *eps,
+             integer *emin, doublereal *rmin, integer *emax, doublereal *rmax);
+doublereal dlamc3_(doublereal *a, doublereal *b);
+void dlamc4_(integer *emin, doublereal *start, integer *base);
+void dlamc5_(integer *beta, integer *p, integer *emin, logical *ieee, integer *emax, doublereal *rmax);
+doublereal dlamc33_(doublereal *a, doublereal *b);
 
 doublereal dlamch_(const char *cmach)
 {
@@ -124,7 +124,7 @@ doublereal dlamch_(const char *cmach)
 } /* dlamch_ */
 
 /* Subroutine */
-static void dlamc1_(integer *beta, integer *t, logical *rnd, logical *ieee1)
+void dlamc1_(integer *beta, integer *t, logical *rnd, logical *ieee1)
 {
 /*  -- LAPACK auxiliary routine (version 2.0) --
        Univ. of Tennessee, Univ. of California Berkeley, NAG Ltd.,
@@ -293,9 +293,9 @@ static void dlamc1_(integer *beta, integer *t, logical *rnd, logical *ieee1)
 } /* dlamc1_ */
 
 /* Subroutine */
-static void dlamc2_(integer *beta, integer *t, logical *rnd,
-                    doublereal *eps, integer *emin, doublereal *rmin,
-                    integer *emax, doublereal *rmax)
+void dlamc2_(integer *beta, integer *t, logical *rnd,
+             doublereal *eps, integer *emin, doublereal *rmin,
+             integer *emax, doublereal *rmax)
 {
 /*  -- LAPACK auxiliary routine (version 2.0) --
        Univ. of Tennessee, Univ. of California Berkeley, NAG Ltd.,
@@ -535,7 +535,7 @@ static void dlamc2_(integer *beta, integer *t, logical *rnd,
     *rmax = lrmax;
 } /* dlamc2_ */
 
-static doublereal dlamc3_(doublereal *a, doublereal *b)
+doublereal dlamc3_(doublereal *a, doublereal *b)
 {
 /*  -- LAPACK auxiliary routine (version 2.0) --
        Univ. of Tennessee, Univ. of California Berkeley, NAG Ltd.,
@@ -561,7 +561,7 @@ static doublereal dlamc3_(doublereal *a, doublereal *b)
     return *a + *b;
 } /* dlamc3_ */
 
-static doublereal dlamc33_(doublereal *a, doublereal *b)
+doublereal dlamc33_(doublereal *a, doublereal *b)
 {
 /*  Purpose
     =======
@@ -581,7 +581,7 @@ static doublereal dlamc33_(doublereal *a, doublereal *b)
 } /* dlamc33_ */
 
 /* Subroutine */
-static void dlamc4_(integer *emin, doublereal *start, integer *base)
+void dlamc4_(integer *emin, doublereal *start, integer *base)
 {
 /*  -- LAPACK auxiliary routine (version 2.0) --
        Univ. of Tennessee, Univ. of California Berkeley, NAG Ltd.,
@@ -646,8 +646,8 @@ static void dlamc4_(integer *emin, doublereal *start, integer *base)
 } /* dlamc4_ */
 
 /* Subroutine */
-static void dlamc5_(integer *beta, integer *p, integer *emin,
-                    logical *ieee, integer *emax, doublereal *rmax)
+void dlamc5_(integer *beta, integer *p, integer *emin,
+             logical *ieee, integer *emax, doublereal *rmax)
 {
 /*  -- LAPACK auxiliary routine (version 2.0) --
        Univ. of Tennessee, Univ. of California Berkeley, NAG Ltd.,

@@ -2,21 +2,12 @@
 #include "netlib.h"
 #include <stdio.h>
 
-/* There are too many problems in this file created by the MSVC
-   optimizer.  Just disable it.  If this becomes a performance
-   bottleneck for someone then they can try finding work-arounds for
-   all the problems.  The most recent problem is that slamc1_ sets its
-   lbeta variable to zero and gets in an infinite loop.  */
-#if defined(_MSC_VER)
-# pragma optimize("", off)
-#endif
-
-static void slamc1_(integer *beta, integer *t, logical *rnd, logical *ieee1);
-static void slamc2_(integer *beta, integer *t, logical *rnd, real *eps,
-                    integer *emin, real *rmin, integer *emax, real *rmax);
-static real slamc3_(real *a, real *b);
-static void slamc4_(integer *emin, real *start, integer *base);
-static void slamc5_(integer *beta, integer *p, integer *emin, logical *ieee, integer *emax, real *rmax);
+void slamc1_(integer *beta, integer *t, logical *rnd, logical *ieee1);
+void slamc2_(integer *beta, integer *t, logical *rnd, real *eps,
+             integer *emin, real *rmin, integer *emax, real *rmax);
+real slamc3_(real *a, real *b);
+void slamc4_(integer *emin, real *start, integer *base);
+void slamc5_(integer *beta, integer *p, integer *emin, logical *ieee, integer *emax, real *rmax);
 
 real slamch_(const char *cmach)
 {
@@ -117,7 +108,7 @@ real slamch_(const char *cmach)
 } /* slamch_ */
 
 /* Subroutine */
-static void slamc1_(integer *beta, integer *t, logical *rnd, logical *ieee1)
+void slamc1_(integer *beta, integer *t, logical *rnd, logical *ieee1)
 {
 /*  -- LAPACK auxiliary routine (version 2.0) --
        Univ. of Tennessee, Univ. of California Berkeley, NAG Ltd.,
@@ -291,9 +282,9 @@ static void slamc1_(integer *beta, integer *t, logical *rnd, logical *ieee1)
 } /* slamc1_ */
 
 /* Subroutine */
-static void slamc2_(integer *beta, integer *t, logical *rnd,
-                    real *eps, integer *emin, real *rmin,
-                    integer *emax, real *rmax)
+void slamc2_(integer *beta, integer *t, logical *rnd,
+             real *eps, integer *emin, real *rmin,
+             integer *emax, real *rmax)
 {
 /*  -- LAPACK auxiliary routine (version 2.0) --
        Univ. of Tennessee, Univ. of California Berkeley, NAG Ltd.,
@@ -545,7 +536,7 @@ static void slamc2_(integer *beta, integer *t, logical *rnd,
 #endif
 #endif
 
-static real slamc3_(real *a, real *b)
+real slamc3_(real *a, real *b)
 {
 /*  -- LAPACK auxiliary routine (version 2.0) --
        Univ. of Tennessee, Univ. of California Berkeley, NAG Ltd.,
@@ -579,7 +570,7 @@ static real slamc3_(real *a, real *b)
 #endif
 
 /* Subroutine */
-static void slamc4_(integer *emin, real *start, integer *base)
+void slamc4_(integer *emin, real *start, integer *base)
 {
 /*  -- LAPACK auxiliary routine (version 2.0) --
        Univ. of Tennessee, Univ. of California Berkeley, NAG Ltd.,
@@ -645,8 +636,8 @@ static void slamc4_(integer *emin, real *start, integer *base)
 } /* slamc4_ */
 
 /* Subroutine */
-static void slamc5_(integer *beta, integer *p, integer *emin,
-                    logical *ieee, integer *emax, real *rmax)
+void slamc5_(integer *beta, integer *p, integer *emin,
+             logical *ieee, integer *emax, real *rmax)
 {
 /*  -- LAPACK auxiliary routine (version 2.0) --
        Univ. of Tennessee, Univ. of California Berkeley, NAG Ltd.,
