@@ -17,9 +17,9 @@ test_basic_iteration()
 {
   Polygon_type poly;
   poly.new_sheet();
-  poly.push_back( Point_type(-0.7,-0.4) );
-  poly.push_back( Point_type( 2.3, 2.6) );
-  poly.push_back( Point_type( 2.3,-0.4) );
+  poly.push_back( Point_type(-0.7f,-0.4f) );
+  poly.push_back( Point_type( 2.3f, 2.6f) );
+  poly.push_back( Point_type( 2.3f,-0.4f) );
 
   vgl_test_begin("iteration");
   unsigned int count=0;
