@@ -239,6 +239,9 @@ SOURCE=.\mbl_random_n_from_m.cxx
 # Begin Source File
 SOURCE=.\mbl_select_n_from_m.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\mbl_parse_block.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter ""
@@ -394,6 +397,9 @@ SOURCE=.\mbl_random_n_from_m.h
 # End Source File
 # Begin Source File
 SOURCE=.\mbl_select_n_from_m.h
+# End Source File
+# Begin Source File
+SOURCE=.\mbl_parse_block.h
 # End Source File
 # End Group
 # PROP Default_Filter "ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe"
