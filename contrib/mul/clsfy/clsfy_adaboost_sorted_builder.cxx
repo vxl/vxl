@@ -14,9 +14,6 @@
 //  classifiers one at a time, choosing the best at each step.
 //  The classifiers are trained to distinguish the examples mis-classified
 //  by the currently selected classifiers.
-// \verbatim
-// Modifications
-// \endverbatim
 
 #include "clsfy_adaboost_sorted_builder.h"
 #include "clsfy_simple_adaboost.h"
@@ -25,8 +22,7 @@
 #include <vcl_iostream.h>
 #include <vcl_cstdlib.h> // for vcl_abort()
 #include <vcl_cmath.h>
-#include <vnl/vnl_math.h>
-#include <vcl_ctime.h>
+#include <vcl_ctime.h> // for clock()
 #include <vcl_algorithm.h>
 #include <vcl_cassert.h>
 #include <vbl/vbl_triple.h>
@@ -86,7 +82,7 @@ double clsfy_adaboost_sorted_builder::build(clsfy_classifier_base& model,
   }
   else
   {
-    vcl_cout<<"Maximum number of classifiers to be found by Adaboost ="
+    vcl_cout<<"Maximum number of classifiers to be found by Adaboost = "
             <<max_n_clfrs_<<'\n';
   }
 
@@ -100,7 +96,7 @@ double clsfy_adaboost_sorted_builder::build(clsfy_classifier_base& model,
   }
   else
   {
-    vcl_cout<<"Weak learner used by AdaBoost ="
+    vcl_cout<<"Weak learner used by AdaBoost = "
             <<weak_builder_->is_a()<<'\n';
   }
 
@@ -276,26 +272,13 @@ double clsfy_adaboost_sorted_builder::build(clsfy_classifier_base& model,
   clsfy_classifier_1d* c1d = weak_builder_->new_classifier();
   clsfy_classifier_1d* best_c1d= weak_builder_->new_classifier();
 
-
   double beta, alpha;
-  long new_time, old_time;
+  long old_time = vcl_clock();
   double tot_time=0;
 
   for (unsigned int r=0;r<(unsigned)max_n_clfrs_;++r)
   {
     vcl_cout<<"adaboost training round = "<<r<<'\n';
-
-    new_time = vcl_clock();
-
-    if (r>0)
-    {
-      double dt = (1.0*(new_time-old_time))/CLOCKS_PER_SEC;
-      vcl_cout<<"Time for AdaBoost round: "<<vnl_math_rnd(dt)<<"secs\n";
-      tot_time+=dt;
-      vcl_cout<<"Total time for rounds so far: "<<vnl_math_rnd(tot_time)<<"secs\n";
-    }
-
-    old_time = new_time;
 
     //vcl_cout<<"wts0= "<<wts0<<"\nwts1= "<<wts1<<'\n';
 
@@ -367,6 +350,15 @@ double clsfy_adaboost_sorted_builder::build(clsfy_classifier_base& model,
 
     double w_sum= wts.mean()*n;
     wts/=w_sum;
+
+    long new_time = vcl_clock();
+
+    double dt = (1.0*(new_time-old_time))/CLOCKS_PER_SEC;
+    vcl_cout<<"Time for AdaBoost round:      "<<dt<<" secs\n";
+    tot_time+=dt;
+    vcl_cout<<"Total time for rounds so far: "<<tot_time<<" secs\n";
+
+    old_time = new_time;
   }
 
   delete c1d;
