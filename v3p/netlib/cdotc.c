@@ -1,11 +1,11 @@
-/*  -- translated by f2c (version of 23 April 1993  18:34:30).
+/* cdotc.f -- translated by f2c (version of 23 April 1993  18:34:30).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
 
-/* Complex */ void cdotc_( ret_val, n, cx, incx, cy, incy)
+/* Complex */ int cdotc_( ret_val, n, cx, incx, cy, incy)
 complex * ret_val;
 integer *n;
 complex *cx;

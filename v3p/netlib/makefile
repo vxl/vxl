@@ -7,8 +7,11 @@ IULIBS = # automatically added: -lnetlib
 LIBRARY := netlib
 VERSION := 1.0
 
-# remove this if you know where to get z_sqrt.f
+# remove these if you know better
+SOURCES += c_sqrt.c 
 SOURCES += z_sqrt.c 
+SOURCES += cdabs.c
+SOURCES += cdsqrt.c
 
 #*********************
 # Std Fortran Library 
@@ -65,6 +68,7 @@ SOURCES += sgemv.c
 SOURCES += sger.c
 
 SOURCES += caxpy.c
+SOURCES += ccopy.c
 SOURCES += cdotc.c
 SOURCES += csrot.c
 SOURCES += scnrm2.c
@@ -82,13 +86,19 @@ SOURCES += ztrmv.c
 SOURCES += ztrsv.c
 
 # LINPACK 
-SOURCES += ssvdc.c
+SOURCES += ssvdc.c # xSVD
 SOURCES += dsvdc.c
 SOURCES += csvdc.c
 SOURCES += zsvdc.c
+SOURCES += sqrdc.c # xQRDC
 SOURCES += dqrdc.c
+SOURCES += cqrdc.c
+SOURCES += zqrdc.c
+SOURCES += sqrsl.c # xQRSL
 SOURCES += dqrsl.c
-SOURCES += dpofa.c
+SOURCES += zqrsl.c
+SOURCES += cqrsl.c
+SOURCES += dpofa.c #
 SOURCES += dpoco.c
 SOURCES += dposl.c
 SOURCES += dpodi.c
