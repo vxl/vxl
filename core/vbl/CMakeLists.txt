@@ -1,9 +1,4 @@
-#
-# ./vxl/vbl/CMakeLists.txt
-#
-#   geoff.cross@crd.ge.com
-#
-
+# vxl/vbl/CMakeLists.txt
 
 ADD_LIBRARY(vbl vbl_sources)
 
@@ -14,6 +9,7 @@ vbl_sort
 vbl_test
 vbl_qsort
 vbl_shared_pointer
+vbl_bit_array_3d
 )
 
 AUX_SOURCE_DIRECTORY(Templates vbl_sources)
