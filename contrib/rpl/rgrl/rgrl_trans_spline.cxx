@@ -163,6 +163,9 @@ write( vcl_ostream& os ) const
   assert( splines_.size() == dim );
   for (unsigned int i=0; i<splines_.size(); ++i)
     os << *splines_[i] << vcl_endl;
+
+  // parent
+  rgrl_transformation::write( os );
 }
 
 void
@@ -177,7 +180,7 @@ read( vcl_istream& is )
 
   // The token should appear at the beginning of line
   if ( str.find( "BSPLINE" ) != 0 ) {
-    WarningMacro( "The tag is not AFFINE. reading is aborted.\n" );
+    WarningMacro( "The tag is not BSPLINE. reading is aborted.\n" );
     vcl_exit(10);
   }
 
@@ -202,6 +205,9 @@ read( vcl_istream& is )
     splines_[i] = new rgrl_spline;
     is >> *splines_[i];
   }
+
+  // parent
+  rgrl_transformation::read( is );
 }
 
 void

@@ -145,10 +145,10 @@ class rgrl_transformation
   virtual rgrl_transformation_sptr scale_by( double scale ) const = 0;
 
   //: output transformation
-  virtual void write( vcl_ostream& os ) const = 0;
+  virtual void write( vcl_ostream& os ) const;
 
   //: input transformation
-  virtual void read( vcl_istream& is ) = 0;
+  virtual void read( vcl_istream& is );
 
   //: set scaling factors
   //  Unless the transformation is not estimated using estimators in rgrl,

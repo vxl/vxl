@@ -262,6 +262,9 @@ write( vcl_ostream& os ) const
   // parameters
      << trans_.size() << vcl_endl
      << R_ << trans_ << vcl_endl;
+
+  // parent
+  rgrl_transformation::write( os );
 }
 
 void
@@ -290,4 +293,7 @@ read( vcl_istream& is )
     trans_.set_size( dim );
     is >> R_ >> trans_;
   }
+
+  // parent
+  rgrl_transformation::read( is );
 }

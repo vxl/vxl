@@ -331,6 +331,9 @@ write( vcl_ostream& os ) const
   // parameters
      << t().size() << vcl_endl
      << Q_<< A_ << trans_ << ' ' << origin << vcl_endl;
+
+  // parent
+  rgrl_transformation::write( os );
 }
 
 void
@@ -359,6 +362,9 @@ read( vcl_istream& is )
     from_centre_.set_size( dim );
     is >> Q_ >> A_ >> trans_ >> from_centre_;
   }
+
+  // parent
+  rgrl_transformation::read( is );
 }
 
 void

@@ -264,3 +264,87 @@ operator<< (vcl_ostream& os, rgrl_transformation const& xform )
   return os;
 }
 
+//: output transformation
+void 
+rgrl_transformation::
+write( vcl_ostream& os ) const
+{
+  if( is_covar_set() ) {
+    
+    // write covariance
+    os << "COVARIANCE" << vcl_endl;
+    os << covar_.rows() << ' ' << covar_.cols() << vcl_endl;
+    os << covar_ << vcl_endl;
+  }
+  
+  if( scaling_factors_.size() ) {
+    
+    // write scaling factors
+    os << "SCALING_FACTORS" << vcl_endl;
+    os << scaling_factors_.size() << vcl_endl;
+    os << scaling_factors_ << vcl_endl;
+  }
+    
+}
+
+//: input transformation
+void 
+rgrl_transformation::
+read( vcl_istream& is )
+{
+  vcl_string tag_str;
+  vcl_streampos pos;
+
+  // skip any empty lines
+  rgrl_util_skip_empty_lines( is );
+  if( is.eof() ) 
+    return;   // reach the end of stream
+  
+  tag_str="";
+  vcl_getline( is, tag_str );
+
+  if( tag_str.find("COVARIANCE") == 0 ) {
+  
+    // read in covariance matrix
+    int m=-1, n=-1;
+    vnl_matrix<double> cov;
+    
+    // get dimension
+    is >> m >> n;
+    if( !is || m<=0 || n<=0 )
+      return;   // cannot get the dimension
+    
+    cov.set_size(m, n);
+    cov.fill(0.0);
+    is >> cov;
+    
+    if( !is )
+      return;  // cannot read the covariance matrix
+    
+    this->set_covar( cov );
+    
+    // read in the next tag
+    // skip any empty lines
+    rgrl_util_skip_empty_lines( is );
+    if( is.eof() ) 
+      return;   // reach the end of stream
+    
+    tag_str="";
+    vcl_getline( is, tag_str );
+  } 
+  
+  if( tag_str.find("SCALING_FACTORS") == 0 ) {
+    
+    // read in scaling factors
+    int m=-1;
+    
+    // get dimension
+    is >> m;
+    
+    if( !is || m<=0 )
+      return;  // cannot get dimension
+    
+    scaling_factors_.set_size( m );
+    is >> scaling_factors_;
+  }
+}

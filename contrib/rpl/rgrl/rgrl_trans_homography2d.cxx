@@ -254,6 +254,9 @@ write(vcl_ostream& os ) const
   // parameters
      << 2 << vcl_endl
      << H_<< origin << vcl_endl;
+
+  // parent
+  rgrl_transformation::write( os );
 }
 
 // for input
@@ -281,6 +284,9 @@ read(vcl_istream& is )
   if ( dim > 0 ) {
     is >> H_ >> from_centre_;
   }
+
+  // parent
+  rgrl_transformation::read( is );
 }
 
 void
