@@ -7,10 +7,7 @@
 
 #include "FMatrixComputeNonLinear.h"
 
-#include <vcl_cstdlib.h> // for abort()
 #include <vcl_iostream.h>
-#include <vcl_cmath.h>
-#include <vcl_iomanip.h>
 
 #include <vnl/vnl_matrix.h>
 #include <vnl/algo/vnl_levenberg_marquardt.h>

@@ -1,9 +1,9 @@
+// This is oxl/mvl/FMatrixComputeRANSAC.cxx
 #include "FMatrixComputeRANSAC.h"
 #include <mvl/FManifoldProject.h>
 #include <mvl/HomgOperator2D.h>
 #include <vnl/vnl_matrix.h>
 #include <vnl/vnl_double_2.h>
-#include <vcl_cmath.h>
 
 FMatrixComputeRANSAC::FMatrixComputeRANSAC(bool rank2_truncate, double std)
 {

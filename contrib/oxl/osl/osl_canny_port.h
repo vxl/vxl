@@ -8,7 +8,6 @@
 // \file
 // \author fsm@robots.ox.ac.uk
 
-#include <vcl_cmath.h>
 #include <osl/osl_topology.h>
 #include <osl/osl_vertex.h>
 #include <osl/osl_edge.h>

@@ -9,7 +9,6 @@
 
 #include "osl_canny_smooth.h"
 #include <vcl_cstdlib.h> // vcl_abort()
-#include <vcl_cmath.h>
 #include <vcl_iostream.h>
 #include <vil/vil_rgb.h>
 #include <vil/vil_byte.h>
