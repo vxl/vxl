@@ -1,4 +1,6 @@
-//-*-c++-*--------------------------------------------------------------
+// This is oul/oufgl/frame_grabber_pxc200.h
+#ifndef OTAGO_frame_grabber_pxc__h_INCLUDED
+#define OTAGO_frame_grabber_pxc__h_INCLUDED
 //:
 // \file
 // \brief frame_grabber_pxc.h: Classes for the pxc200 frame grabber
@@ -8,16 +10,11 @@
 // Reproduction rights limited as described in the COPYRIGHT file.
 //----------------------------------------------------------------------
 
-#ifndef OTAGO_frame_grabber_pxc__h_INCLUDED
-#define OTAGO_frame_grabber_pxc__h_INCLUDED
-
 #include <vil/vil_memory_image.h>
 #include <vil/vil_memory_image_of.h>
 #include <vil/vil_rgb.h>
 #include <vil/vil_byte.h>
 #include "pxc200.h"
-#include <vcl_cstdio.h>
-#include <vcl_cstdlib.h>
 #include "asyncio.h"
 #include "frame_grabber.h"
 
