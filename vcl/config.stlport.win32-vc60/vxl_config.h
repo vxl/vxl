@@ -4,6 +4,8 @@
 /* This file was *not* generated from vxl_config.h.in */
 /* It is maintained manually. */
 
+/* -------------------- machine word characteristics */
+
 /* these are 0 or 1, never empty. */
 #define VXL_LITTLE_ENDIAN 1
 #define VXL_BIG_ENDIAN    0
@@ -13,6 +15,7 @@
 /* order to catch illegitimate uses. However, typedefs are superior */
 /* to #defines, especially for the two keyword types, so we use     */
 /* typedefs for the valid cases.                                    */
+
 #define VXL_HAS_BYTE 1
 #define VXL_BYTE_STRING "char"
 #if 1
@@ -102,7 +105,6 @@
 #else
 # define vxl_ieee_128 void
 #endif
-
 
 /* -------------------- operating system services */
 
