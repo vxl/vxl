@@ -33,6 +33,10 @@ SOURCES += vtol_topology_io.cxx
 include ${IUEROOT}/config/top-params.mk
 #######################################
 
+ifeq "$(TJ_GCC30)" "1"
+FLAGS_vtol_two_chain.cxx += -O1 # otherwise gcc 3.0 needs too much virtual memory
+endif
+
 ifndef NOTEST
 SUBDIRS += tests
 SUBDIRS += examples
