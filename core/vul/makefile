@@ -32,6 +32,8 @@ SOURCES += vul_sequence_filename_map.cxx
 SOURCES += vul_url.cxx
 SOURCES += vul_temp_filename.cxx
 
+MANPAGE_SOURCES += vul_lru_helper.txx
+
 # debugging
 SOURCES += vul_trace.cxx
 

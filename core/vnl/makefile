@@ -33,6 +33,10 @@ MANPAGE_SOURCES += vnl_det.txx
 MANPAGE_SOURCES += vnl_quaternion.txx
 MANPAGE_SOURCES += vnl_scalar_join_iterator.txx
 
+MANPAGE_SOURCES += vnl_complexify.h
+MANPAGE_SOURCES += vnl_imag.h
+MANPAGE_SOURCES += vnl_real.h
+
 #
 SOURCES += vnl_alloc.cxx
 SOURCES += vnl_block.cxx
