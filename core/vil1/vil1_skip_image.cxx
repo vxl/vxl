@@ -8,7 +8,7 @@
 #include <vcl/vcl_climits.h> // for CHAR_BIT
 #include <vcl/vcl_iostream.h>
 #include <vcl/vcl_vector.h>
-#include <assert.h>
+#include <vcl/vcl_cassert.h>
 
 vil_skip_image::vil_skip_image(vil_image const &underlying, unsigned sx, unsigned sy)
   : base(underlying)
