@@ -16,6 +16,8 @@ SET(sdet_sources
     sdet_region_proc.cxx         sdet_region_proc.h
     sdet_harris_detector_params.cxx sdet_harris_detector_params.h
     sdet_harris_detector.cxx     sdet_harris_detector.h
+    sdet_fit_lines.cxx           sdet_fit_lines.h
+    sdet_fit_lines_params.cxx    sdet_fit_lines_params.h
     # although not ready for use:
     sdet_champher.h
 )
