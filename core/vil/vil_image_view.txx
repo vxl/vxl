@@ -28,34 +28,39 @@ vil2_image_view<T>::vil2_image_view()
 {}
 
 template<class T>
-vil2_image_view<T>::vil2_image_view(unsigned ni, unsigned nj, unsigned nplanes)
+vil2_image_view<T>::vil2_image_view(unsigned n_i, unsigned n_j, unsigned n_planes)
 : top_left_(0),istep_(1),jstep_(0)
 {
-  resize(ni,nj,nplanes);
+  resize(n_i,n_j,n_planes);
 }
 
 //: Set this view to look at someone else's memory data.
 template<class T>
-vil2_image_view<T>::vil2_image_view(const T* top_left, unsigned ni, unsigned nj, unsigned nplanes,
-                                    int istep, int jstep, int planestep)
+vil2_image_view<T>::vil2_image_view(const T* top_left, unsigned n_i, unsigned n_j, unsigned n_planes,
+                                    int i_step, int j_step, int plane_step)
 {
-  set_to_memory(top_left,ni,nj,nplanes,istep,jstep,planestep);
+  set_to_memory(top_left,n_i,n_j,n_planes,i_step,j_step,plane_step);
 }
 
 //: Set this view to look at another view's data
 //  Need to pass the memory chunk to set up the internal smart ptr appropriately
 template<class T>
 vil2_image_view<T>::vil2_image_view(const vil2_smart_ptr<vil2_memory_chunk>& mem_chunk,
-                                    const T* top_left, unsigned ni, unsigned nj, unsigned nplanes,
-                                    int istep, int jstep, int planestep)
- : vil2_image_view_base(ni, nj, nplanes)
+                                    const T* top_left, unsigned n_i, unsigned n_j, unsigned n_planes,
+                                    int i_step, int j_step, int plane_step)
+ : vil2_image_view_base(n_i, n_j, n_planes)
  , top_left_(const_cast<T*>( top_left))
- , istep_(istep), jstep_(jstep)
- , planestep_(planestep)
+ , istep_(i_step), jstep_(j_step)
+ , planestep_(plane_step)
  , ptr_(mem_chunk)
 {
   // check view and chunk are in rough agreement
-  assert(mem_chunk->size() >= nplanes*ni*nj*sizeof(T));
+  assert(mem_chunk->size() >= n_planes*n_i*n_j*sizeof(T));
+  if (top_left < (const T*)mem_chunk->data() ||
+      top_left >= (const T*)mem_chunk->data() + mem_chunk->size())
+    vcl_cerr << "top_left at " << (void*)top_left << ", memory_chunk at "
+             << (void*)mem_chunk->data() << ", size " << mem_chunk->size()
+             << ", size of data type " << sizeof(T) << '\n';
   assert(top_left >= (const T*)mem_chunk->data() &&
          top_left  < (const T*)mem_chunk->data() + mem_chunk->size());
 }
@@ -224,8 +229,8 @@ inline bool convert_planes_from_components(vil2_image_view<vxl_byte> &lhs,
     const vil2_image_view<vxl_byte> &rhs = static_cast<const vil2_image_view<vxl_byte>&>(rhs_base);
 
     lhs = vil2_image_view<vxl_byte>(rhs.memory_chunk(), rhs.top_left_ptr(),
-                                      rhs.ni(),rhs.nj(),ncomp,
-                                      rhs.istep()*ncomp,rhs.jstep()*ncomp,1);
+                                    rhs.ni(),rhs.nj(),ncomp,
+                                    rhs.istep()*ncomp,rhs.jstep()*ncomp,1);
     return true;
   }
   else
@@ -248,8 +253,8 @@ inline bool convert_planes_from_components(vil2_image_view<vxl_sbyte> &lhs,
     const vil2_image_view<vxl_sbyte> &rhs = static_cast<const vil2_image_view<vxl_sbyte>&>(rhs_base);
 
     lhs = vil2_image_view<vxl_sbyte>(rhs.memory_chunk(), rhs.top_left_ptr(),
-                                      rhs.ni(),rhs.nj(),ncomp,
-                                      rhs.istep()*ncomp,rhs.jstep()*ncomp,1);
+                                     rhs.ni(),rhs.nj(),ncomp,
+                                     rhs.istep()*ncomp,rhs.jstep()*ncomp,1);
     return true;
   }
   else
@@ -272,8 +277,8 @@ inline bool convert_planes_from_components(vil2_image_view<vxl_uint_16> &lhs,
     const vil2_image_view<vxl_uint_16> &rhs = static_cast<const vil2_image_view<vxl_uint_16>&>(rhs_base);
 
     lhs = vil2_image_view<vxl_uint_16>(rhs.memory_chunk(), rhs.top_left_ptr(),
-                                      rhs.ni(),rhs.nj(),ncomp,
-                                      rhs.istep()*ncomp,rhs.jstep()*ncomp,1);
+                                       rhs.ni(),rhs.nj(),ncomp,
+                                       rhs.istep()*ncomp,rhs.jstep()*ncomp,1);
     return true;
   }
   else
@@ -320,8 +325,8 @@ inline bool convert_planes_from_components(vil2_image_view<vxl_uint_32> &lhs,
     const vil2_image_view<vxl_uint_32> &rhs = static_cast<const vil2_image_view<vxl_uint_32>&>(rhs_base);
 
     lhs = vil2_image_view<vxl_uint_32>(rhs.memory_chunk(), rhs.top_left_ptr(),
-                                      rhs.ni(),rhs.nj(),ncomp,
-                                      rhs.istep()*ncomp,rhs.jstep()*ncomp,1);
+                                       rhs.ni(),rhs.nj(),ncomp,
+                                       rhs.istep()*ncomp,rhs.jstep()*ncomp,1);
     return true;
   }
   else
@@ -368,8 +373,8 @@ inline bool convert_planes_from_components(vil2_image_view<float> &lhs,
     const vil2_image_view<float> &rhs = static_cast<const vil2_image_view<float>&>(rhs_base);
 
     lhs = vil2_image_view<float>(rhs.memory_chunk(), rhs.top_left_ptr(),
-                                      rhs.ni(),rhs.nj(),ncomp,
-                                      rhs.istep()*ncomp,rhs.jstep()*ncomp,1);
+                                 rhs.ni(),rhs.nj(),ncomp,
+                                 rhs.istep()*ncomp,rhs.jstep()*ncomp,1);
     return true;
   }
   else
@@ -392,8 +397,8 @@ inline bool convert_planes_from_components(vil2_image_view<double> &lhs,
     const vil2_image_view<double> &rhs = static_cast<const vil2_image_view<double>&>(rhs_base);
 
     lhs = vil2_image_view<double>(rhs.memory_chunk(), rhs.top_left_ptr(),
-                                      rhs.ni(),rhs.nj(),ncomp,
-                                      rhs.istep()*ncomp,rhs.jstep()*ncomp,1);
+                                  rhs.ni(),rhs.nj(),ncomp,
+                                  rhs.istep()*ncomp,rhs.jstep()*ncomp,1);
     return true;
   }
   else
@@ -445,12 +450,12 @@ template<class T> vil2_image_view<T>::~vil2_image_view()
 
 
 template<class T>
-void vil2_image_view<T>::resize(unsigned ni, unsigned nj)
+void vil2_image_view<T>::resize(unsigned n_i, unsigned n_j)
 {
-  resize(ni,nj, nplanes_);
+  resize(n_i,n_j, nplanes_);
 }
 
-//: True if data all in one unbroken block
+//: True if data all in one unbroken block and top_left_ptr() is lowest data address
 template<class T>
 bool vil2_image_view<T>::is_contiguous() const
 {
@@ -475,21 +480,21 @@ bool vil2_image_view<T>::is_contiguous() const
 //=======================================================================
 
 template<class T>
-void vil2_image_view<T>::resize(unsigned ni, unsigned nj, unsigned nplanes)
+void vil2_image_view<T>::resize(unsigned n_i, unsigned n_j, unsigned n_planes)
 {
-  if (ni==ni_ && nj==nj_ && nplanes==nplanes_) return;
+  if (n_i==ni_ && n_j==nj_ && n_planes==nplanes_) return;
 
   release_memory();
 
-  ptr_ = new vil2_memory_chunk(sizeof(T)*nplanes*nj*ni,
+  ptr_ = new vil2_memory_chunk(sizeof(T)*n_planes*n_j*n_i,
     vil2_pixel_format_component_format(vil2_pixel_format_of(T())));
 
-  ni_ = ni;
-  nj_ = nj;
-  nplanes_ = nplanes;
+  ni_ = n_i;
+  nj_ = n_j;
+  nplanes_ = n_planes;
   istep_ = 1;
-  jstep_ = ni;
-  planestep_ = ni*nj;
+  jstep_ = n_i;
+  planestep_ = n_i*n_j;
 
   top_left_ = (T*) ptr_->data();
 }
@@ -498,18 +503,18 @@ void vil2_image_view<T>::resize(unsigned ni, unsigned nj, unsigned nplanes)
 //: Set this view to look at someone else's memory.
 template<class T>
 void vil2_image_view<T>::set_to_memory(const T* top_left,
-                                       unsigned ni, unsigned nj, unsigned nplanes,
-                                       int istep, int jstep, int planestep)
+                                       unsigned n_i, unsigned n_j, unsigned n_planes,
+                                       int i_step, int j_step, int plane_step)
 {
   release_memory();
   top_left_ = (T*) top_left;  // Remove const, as view may end up manipulating data
 
-  ni_ = ni;
-  nj_ = nj;
-  nplanes_ = nplanes;
-  istep = istep;
-  jstep_ = jstep;
-  planestep_ = planestep;
+  ni_ = n_i;
+  nj_ = n_j;
+  nplanes_ = n_planes;
+  istep_ = i_step;
+  jstep_ = j_step;
+  planestep_ = plane_step;
 }
 
 
@@ -517,23 +522,24 @@ void vil2_image_view<T>::set_to_memory(const T* top_left,
 //: Arrange that this is window on given image.
 template<class T>
 void vil2_image_view<T>::set_to_window(const vil2_image_view& im,
-                                       unsigned i0, unsigned ni, unsigned j0,
-                                       unsigned nj, unsigned p0, unsigned np)
+                                       unsigned i0, unsigned n_i,
+                                       unsigned j0, unsigned n_j,
+                                       unsigned p0, unsigned n_p)
 {
   assert(this!=&im);
 
-  assert(i0<im.ni()); assert(i0+ni<=im.ni());
-  assert(j0<im.nj()); assert(j0+nj<=im.nj());
-  assert(p0<im.nplanes()); assert(p0+np<=im.nplanes());
+  assert(i0<im.ni()); assert(i0+n_i<=im.ni());
+  assert(j0<im.nj()); assert(j0+n_j<=im.nj());
+  assert(p0<im.nplanes()); assert(p0+n_p<=im.nplanes());
 
   release_memory();
 
   // Take smart pointer to im's data to keep it in scope
   ptr_ = im.ptr_;
 
-  ni_ = ni;
-  nj_ = nj;
-  nplanes_ = np;
+  ni_ = n_i;
+  nj_ = n_j;
+  nplanes_ = n_p;
   istep_ = im.istep();
   jstep_ = im.jstep();
   planestep_ = im.planestep();
@@ -545,9 +551,9 @@ void vil2_image_view<T>::set_to_window(const vil2_image_view& im,
 //: Arrange that this is window on all planes of given image.
 template<class T>
 void vil2_image_view<T>::set_to_window(const vil2_image_view& im,
-                                       unsigned i0, unsigned ni, unsigned j0, unsigned nj)
+                                       unsigned i0, unsigned n_i, unsigned j0, unsigned n_j)
 {
-  set_to_window(im,i0,nj,j0,nj,0,im.nplanes());
+  set_to_window(im,i0,n_i,j0,n_j,0,im.nplanes());
 }
 
 //: Fill view with given value
@@ -611,13 +617,15 @@ bool vil2_image_view_deep_equality(const vil2_image_view<T> &lhs,
   const vil2_image_view<T> &rhs)
 {
   if (lhs.nplanes() != rhs.nplanes() ||
-    lhs.nj() != rhs.nj() ||
-    lhs.ni() != rhs.ni()) return false;
+      lhs.nj() != rhs.nj() ||
+      lhs.ni() != rhs.ni())
+    return false;
 
   for (unsigned p = 0; p < rhs.nplanes(); ++p)
     for (unsigned j = 0; j < rhs.nj(); ++j)
       for (unsigned i = 0; i < rhs.ni(); ++i)
-        if (!(rhs(i,j,p) == lhs(i,j,p))) return false;
+        if (!(rhs(i,j,p) == lhs(i,j,p)))
+          return false;
   return true;
 }
 
