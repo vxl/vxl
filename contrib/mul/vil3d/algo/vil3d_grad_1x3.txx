@@ -34,7 +34,9 @@ void vil3d_grad_1x3_1dir(const srcT *src,
         // Compute gradient
         // Note: Multiply each element individually
         //      to ensure conversion to float before subtraction
-        *g = (static_cast<accumT>(s[delta_step]) - static_cast<accumT>(s[-delta_step])) / static_cast<accumT>(2);
+        *g = static_cast<gradT>(
+             (static_cast<accumT>(s[delta_step]) - static_cast<accumT>(s[-delta_step]))
+              / static_cast<accumT>(2));
 
         s += isrc;
         g += igrad;
