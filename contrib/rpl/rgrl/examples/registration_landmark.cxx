@@ -104,7 +104,7 @@ read_feature_file( const char* filename,
     vec_vec_type directions;
     for ( unsigned int di = 0; di < num_directions; di++ ) {
       istr >> direction[0] >> direction[1];
-      directions.push_back( direction );
+      directions.push_back( direction.as_ref() );
     }
     landmarks.push_back( new rgrl_feature_landmark(location, directions) );
   }
