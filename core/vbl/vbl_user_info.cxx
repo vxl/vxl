@@ -13,7 +13,10 @@
 
 #include "vbl_user_info.h"
 
-#ifndef WIN32
+
+#ifdef WIN32
+#include <direct.h>
+#else
 #include <unistd.h>
 #include <pwd.h>
 #endif
