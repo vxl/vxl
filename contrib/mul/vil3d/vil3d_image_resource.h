@@ -65,6 +65,11 @@ class vil3d_image_resource
                                               unsigned k0, unsigned nk) const
   { return get_copy_view (i0, ni, j0, nj, k0, nk); }
 
+  //: Create a read/write view of all the data.
+  vil3d_image_view_base_sptr get_view() const
+  { return get_view (0, ni(), 0, nj(), 0, nk()); }
+
+
   //: Create a read/write view of a copy of this data.
   // This function will always return a
   // multi-plane scalar-pixel view of the data.
