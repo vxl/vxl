@@ -31,9 +31,13 @@
 //-----------------------------------------------------------------------------
 //: Constructor - don't use this, use vgui_blender_tableau_new.
 //  Creates a blender with the given image and alpha_ value.
-vgui_blender_tableau::vgui_blender_tableau(char const* file, float a)
+vgui_blender_tableau::
+vgui_blender_tableau(char const* file, 
+		     vgui_range_map_params_sptr const& rmp, 
+		     float a)
   : renderer_(0),
     vil_renderer_(0),
+    rmp_(rmp),
     alpha_(a)
 {
   vil_renderer_ = new vgui_vil_image_renderer;
@@ -44,9 +48,13 @@ vgui_blender_tableau::vgui_blender_tableau(char const* file, float a)
 //-----------------------------------------------------------------------------
 //: Constructor - don't use this, use vgui_blender_tableau_new.
 //  Creates a blender with the given image and alpha_ value.
-vgui_blender_tableau::vgui_blender_tableau(vil1_image const& img, float a)
+vgui_blender_tableau::
+vgui_blender_tableau(vil1_image const& img, 
+		     vgui_range_map_params_sptr const& rmp, 
+		     float a)
   : renderer_(0),
     vil_renderer_(0),
+    rmp_(rmp),
     alpha_(a)
 {
   renderer_ = new vgui_image_renderer;
@@ -57,9 +65,13 @@ vgui_blender_tableau::vgui_blender_tableau(vil1_image const& img, float a)
 //-----------------------------------------------------------------------------
 //: Constructor - don't use this, use vgui_blender_tableau_new.
 //  Creates a blender with the given image and alpha_ value.
-vgui_blender_tableau::vgui_blender_tableau(vil_image_resource_sptr const& img, float a)
+vgui_blender_tableau::
+vgui_blender_tableau(vil_image_resource_sptr const& img, 
+		     vgui_range_map_params_sptr const& rmp,
+		     float a)
   : renderer_(0),
     vil_renderer_(0),
+    rmp_(rmp),
     alpha_(a)
 {
   vil_renderer_ = new vgui_vil_image_renderer;
@@ -70,9 +82,13 @@ vgui_blender_tableau::vgui_blender_tableau(vil_image_resource_sptr const& img, f
 //-----------------------------------------------------------------------------
 //: Constructor - don't use this, use vgui_blender_tableau_new.
 //  Creates a blender with the given image and alpha_ value.
-vgui_blender_tableau::vgui_blender_tableau(vil_image_view_base const& img, float a)
+vgui_blender_tableau::
+vgui_blender_tableau(vil_image_view_base const& img, 
+		     vgui_range_map_params_sptr const& rmp,
+		     float a)
   : renderer_(0),
     vil_renderer_(0),
+    rmp_(rmp),
     alpha_(a)
 {
   vil_renderer_ = new vgui_vil_image_renderer;
@@ -138,8 +154,8 @@ bool vgui_blender_tableau::handle(vgui_event const &e)
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     glPixelTransferf(GL_ALPHA_SCALE, alpha_);
 
-    if ( renderer_ )     renderer_->render();
-    if ( vil_renderer_ ) vil_renderer_->render();
+    if ( renderer_ )     renderer_->render(rmp_);
+    if ( vil_renderer_ ) vil_renderer_->render(rmp_);
 
     glPixelTransferf(GL_ALPHA_SCALE, 1.0);
     glBlendFunc(GL_ONE, GL_ZERO);
