@@ -126,11 +126,13 @@ static double mbl_gamma_cf(double a, double x)
 
 double mbl_gamma_p(double a, double x)
 {
+#ifndef NDEBUG
   if ((x < 0.0) || (a <= 0.0))
   {
     vcl_cerr<<"mbl_gamma_p : Invalid arguments."<<vcl_endl;
     vcl_abort();
   }
+#endif
 
   if (x < (a+1.0))
   {
@@ -144,11 +146,13 @@ double mbl_gamma_p(double a, double x)
 
 double mbl_gamma_q(double a, double x)
 {
+#ifndef NDEBUG
   if ((x < 0.0) || (a <= 0.0))
   {
     vcl_cerr<<"mbl_gamma_q : Invalid arguments."<<vcl_endl;
     vcl_abort();
   }
+#endif
 
   if (x < (a+1.0))
   {
@@ -162,11 +166,13 @@ double mbl_gamma_q(double a, double x)
 
 double mbl_log_gamma_q(double a, double x)
 {
+#ifndef NDEBUG
   if ((x < 0.0) || (a <= 0.0))
   {
     vcl_cerr<<"mbl_log_gamma_q : Invalid arguments."<<vcl_endl;
     vcl_abort();
   }
+#endif
 
   if (x < (a+1.0))
   {
