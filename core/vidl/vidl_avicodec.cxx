@@ -236,7 +236,9 @@ vidl_codec_sptr vidl_avicodec::load(const char* fname, char mode)
   AVIFileOpen(&avi_file_, fname, modenum, 0L);
 
   // only support first video stream
-  AVIFileGetStream(avi_file_, &avi_stream_, videostreamcode, 0);
+  if (AVIFileGetStream(avi_file_, &avi_stream_, videostreamcode, 0) != AVIERR_OK) {
+    vcl_cerr << "[vidl_avicodec: no stream 0]";
+  }
 
   if (!avi_file_ || !avi_stream_)
     {
