@@ -88,7 +88,7 @@ void vpdfl_gaussian_kernel_pdf::gradient(vnl_vector<double>& /*g*/,
 
 void vpdfl_gaussian_kernel_pdf::nearest_plausible(vnl_vector<double>& /*x*/, double /*log_p_min*/) const
 {
-  vcl_cerr<<"pdf1d_gaussian_kernel_pdf::nearest_plausible() Not yet implemented.\n";
+  vcl_cerr<<"vpdfl_gaussian_kernel_pdf::nearest_plausible() Not yet implemented.\n";
   vcl_abort();
 }
 
