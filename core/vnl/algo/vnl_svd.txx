@@ -24,7 +24,7 @@ static bool test_heavily = false;
 // awf : REMEMBER TO CHANGE DOC COMMENT IN vnl_svd.h if you change anything
 // fsm : errh... which one of them ?
 template <class T>
-vnl_svd<T>::vnl_svd(const vnl_matrix<T>& M, double zero_out_tol):
+vnl_svd<T>::vnl_svd(vnl_matrix<T> const& M, double zero_out_tol):
   m_(M.rows()),
   n_(M.columns()),
   U_(m_, n_),
@@ -127,7 +127,7 @@ vnl_svd<T>::vnl_svd(const vnl_matrix<T>& M, double zero_out_tol):
 
 // Copy ctor
 template <class T>
-vnl_svd<T>::vnl_svd(const vnl_svd<T>& that)
+vnl_svd<T>::vnl_svd(vnl_svd<T> const& that)
 {
   operator= (that);
 }
