@@ -13,6 +13,8 @@ SOURCES += sdet_region_edge.cxx
 SOURCES += sdet_region_proc.cxx
 SOURCES += sdet_region_proc_params.cxx
 SOURCES += sdet_edgel_regions.cxx
+SOURCES += sdet_fit_lines.cxx
+SOURCES += sdet_fit_lines_params.cxx
 
 MANPAGE_SOURCES += sdet_region_edge_sptr.h
 MANPAGE_SOURCES += sdet_champher.h # although not ready for use ...
