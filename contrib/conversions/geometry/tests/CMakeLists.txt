@@ -9,12 +9,10 @@ IF(BUILD_OXL)
   LINK_LIBRARIES( osl )
 ENDIF(BUILD_OXL)
 
-SET(test_DigitalCurve_to_vdgl_sources )
-SET(test_osl_to_vdgl_sources )
 IF(BUILD_GEL)
-  SET(test_DigitalCurve_to_vdgl_sources test_DigitalCurve_to_vdgl.cxx)
+  ADD_DEFINITIONS(-DHAS_VDGL=1)
   IF(BUILD_OXL)
-    SET(test_osl_to_vdgl_sources test_osl_to_vdgl.cxx)
+    ADD_DEFINITIONS(-DHAS_OSL=1)
   ENDIF(BUILD_OXL)
 ENDIF(BUILD_GEL)
 
@@ -36,9 +34,8 @@ ENDIF(HAS_SPATIALOBJECTS)
 
 ADD_EXECUTABLE( conversions_geometry_test_all
   test_driver.cxx
-
-  ${test_osl_to_vdgl_sources}
-  ${test_DigitalCurve_to_vdgl_sources}
+  test_osl_to_vdgl.cxx
+  test_DigitalCurve_to_vdgl.cxx
 )
 
 ADD_TEST( conversions_test_osl_to_vdgl conversions_geometry_test_all test_osl_to_vdgl )

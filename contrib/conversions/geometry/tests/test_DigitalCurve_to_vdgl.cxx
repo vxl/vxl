@@ -1,14 +1,8 @@
 #include <testlib/testlib_test.h>
 
-#ifdef HAS_NO_SPATIALOBJECTS
-
-#include <vcl_iostream.h>
-void test_DigitalCurve_to_vdgl()
-{
-  vcl_cerr << "test not run since you do not have the TargetJr SpatialObjects package\n";
-}
-
-#else
+#if !defined(HAS_VDGL)
+void test_DigitalCurve_to_vdgl() { TEST("vdgl was not built",true,true); }
+#elif !defined(HAS_NO_SPATIALOBJECTS)
 #include <geometry/DigitalCurve_to_vdgl.h>
 #include <DigitalGeometry/DigitalCurve.h>
 #include <vdgl/vdgl_digital_curve.h>
@@ -28,7 +22,11 @@ void test_DigitalCurve_to_vdgl()
   TEST("p1()", p1->x()==-1 && p1->y()==-1, true);
   TEST("midpt", vdc.get_x(0.5)==2 && vdc.get_y(0.5)==2, true);
 }
-
-#endif // HAS_NO_SPATIALOBJECTS
+#else
+void test_DigitalCurve_to_vdgl()
+{
+  TEST("You do not have the TargetJr SpatialObjects package",true,true);
+}
+#endif
 
 TESTMAIN(test_DigitalCurve_to_vdgl);
