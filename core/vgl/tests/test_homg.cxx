@@ -325,6 +325,17 @@ static void test_homg_line_2d()
   TEST("ideal", ll.ideal(), false);
   ll.set(0,0,-7);
   TEST("ideal", ll.ideal(), true);
+
+  vgl_homg_point_2d<double> pp = vgl_homg_operators_2d<double>::closest_point(l3,p1);
+  TEST("closest_point to horizontal line", pp, vgl_homg_point_2d<double>(1,-8));
+  p = vgl_homg_point_2d<double>(1,2,0);
+  pp = vgl_homg_operators_2d<double>::closest_point(ll,p);
+  TEST("closest_point to line at infinity", pp, p);
+  pp = vgl_homg_operators_2d<double>::closest_point(li,p3);
+  TEST("closest_point to finite line", pp, vgl_homg_point_2d<double>(-1,2));
+  p = pp;
+  pp = vgl_homg_operators_2d<double>::closest_point(li,p);
+  TEST("closest_point to point on line", pp, p);
 }
 
 static void test_homg_line_3d()
