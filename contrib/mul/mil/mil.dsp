@@ -192,19 +192,7 @@ SOURCE=.\mil_convert_image_2d.cxx
 SOURCE=.\mil_gauss_reduce_2d.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\mil_gaussian_pyramid_builder_2d.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\mil_gaussian_pyramid_builder_2d_general.cxx
-# End Source File
-# Begin Source File
 SOURCE=.\mil_image.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\mil_image_2d_of.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\mil_image_data.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\mil_image_io.cxx
@@ -273,7 +261,16 @@ SOURCE=.\Templates/mil_sample_grid_2d+uchar.double-.cxx
 SOURCE=.\Templates/vbl_io_array_2d+mil_transform_2d-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\mil_scale_pyramid_builder_2d.cxx
+SOURCE=.\Templates/mil_gaussian_pyramid_builder_2d+int-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/mil_gaussian_pyramid_builder_2d+vil1_byte-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/mil_gaussian_pyramid_builder_2d_general+int-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/mil_scale_pyramid_builder_2d+int-.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\mil_normalise_image_2d.cxx
@@ -377,8 +374,6 @@ SOURCE=.\mil_scale_pyramid_builder_2d.h
 # Begin Source File
 SOURCE=.\mil_wrappers.h
 # End Source File
-# End Group
-# PROP Default_Filter "ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe"
 # End Group
 # End Target
 # End Project

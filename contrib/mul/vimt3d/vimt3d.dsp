@@ -132,9 +132,6 @@ SOURCE=.\Templates/vimt3d_sample_grid_trilin+int.double-.cxx
 SOURCE=.\Templates/vimt3d_sample_grid_trilin+uchar.double-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\vimt3d_gaussian_pyramid_builder_3d.cxx
-# End Source File
-# Begin Source File
 SOURCE=.\vimt3d_transform_3d.cxx
 # End Source File
 # Begin Source File

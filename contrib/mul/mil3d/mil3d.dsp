@@ -99,161 +99,92 @@ LIB32=link.exe -lib
 # Begin Group "Source Files"
 # PROP Default_Filter ""
 # Begin Source File
-
 SOURCE=.\Templates/mil3d_sample_profile_3d+float.double-.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\Templates/mil3d_sample_profile_3d+uchar.double-.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\Templates/mil3d_image_3d_of+float-.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\Templates/mil3d_image_3d_of+int-.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\Templates/mil3d_image_3d_of+long-.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\Templates/mil3d_image_3d_of+short-.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\Templates/mil3d_image_3d_of+vil_byte-.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\Templates/mil3d_gaussian_pyramid_builder_3d+float-.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\Templates/mil3d_gaussian_pyramid_builder_3d+vil_byte-.cxx
-
 # End Source File
 # Begin Source File
-
-SOURCE=.\mil3d_image_3d_of.cxx
-
-# End Source File
-# Begin Source File
-
 SOURCE=.\mil3d_transform_3d.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\mil3d_gauss_reduce_3d.cxx
-
 # End Source File
 # Begin Source File
-
-SOURCE=.\mil3d_gaussian_pyramid_builder_3d.cxx
-
-# End Source File
-# Begin Source File
-
 SOURCE=.\Templates/mil3d_sample_grid_3d+float.double-.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\Templates/mil3d_sample_grid_3d+int.double-.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\Templates/mil3d_sample_grid_3d+uchar.double-.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\Templates/mil3d_sample_profile_3d+int.double-.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\Templates/mil3d_gaussian_pyramid_builder_3d+int-.cxx
-
 # End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter ""
 # Begin Source File
-
 SOURCE=.\mil3d_image_3d.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\mil3d_trilin_interp_3d.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\mil3d_sample_profile_3d.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\mil3d_sample_profile_3d.txx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\mil3d_image_3d_of.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\mil3d_image_3d_of.txx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\mil3d_transform_3d.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\mil3d_gauss_reduce_3d.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\mil3d_gaussian_pyramid_builder_3d.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\mil3d_gaussian_pyramid_builder_3d.txx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\mil3d_sample_grid_3d.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\mil3d_sample_grid_3d.txx
-
 # End Source File
-# End Group
-# PROP Default_Filter "ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe"
 # End Group
 # End Target
 # End Project
-
