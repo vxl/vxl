@@ -42,9 +42,9 @@ void brct_plane_calibrator::init_corrs()
   for (int i = 0; i<=Z_FRONT; i++)
   {
     int n_pts = pts_3d_[i].size();
-    vcl_vector<brct_corr_sptr> corrs(n_pts);
+    vcl_vector<brct_plane_corr_sptr> corrs(n_pts);
     for (int j =0; j<n_pts; j++)
-      corrs[j] = new brct_corr(n_cams, i, j);
+      corrs[j] = new brct_plane_corr(n_cams, i, j);
     corrs_[i]=corrs;
   }
 }
@@ -255,7 +255,7 @@ bool brct_plane_calibrator::write_corrs(vcl_string const& corrs_file)
     os << "NCORRS: " << n_corrs << '\n';
     for (int c = 0; c<n_corrs; c++)
     {
-      brct_corr_sptr corr = corrs_[plane][c];
+      brct_plane_corr_sptr corr = corrs_[plane][c];
       os << *corr << '\n';
     }
   }
@@ -271,7 +271,7 @@ bool brct_plane_calibrator::read_corrs(vcl_string const& corrs_file)
              << " could not open file " << corrs_file << '\n';
     return false;
   }
-  vcl_vector<vcl_vector<brct_corr_sptr> > corrs(Z_FRONT+1);
+  vcl_vector<vcl_vector<brct_plane_corr_sptr> > corrs(Z_FRONT+1);
   for (int p = 0; p<=Z_FRONT; p++)
   {
   vcl_string s;
@@ -302,7 +302,7 @@ bool brct_plane_calibrator::read_corrs(vcl_string const& corrs_file)
     if (!(s=="I:"))
       return false;
     is >> index;
-    brct_corr_sptr corr = new brct_corr(n_cams, plane, index);
+    brct_plane_corr_sptr corr = new brct_plane_corr(n_cams, plane, index);
     for (int cam = 0; cam<n_cams; cam++)
     {
       double x = 0, y = 0;
@@ -329,10 +329,10 @@ bool brct_plane_calibrator::compute_homographies()
     for (int cam = 0; cam<=RIGHT; cam++)
     {
       //get the corrs
-      vcl_vector<brct_corr_sptr>& corrs = corrs_[plane];
+      vcl_vector<brct_plane_corr_sptr>& corrs = corrs_[plane];
       //collect the corresponding points
       vcl_vector<vgl_homg_point_2d<double> > image_pts, pts_3d;
-      for (vcl_vector<brct_corr_sptr>::iterator cit = corrs.begin();
+      for (vcl_vector<brct_plane_corr_sptr>::iterator cit = corrs.begin();
            cit != corrs.end(); cit++)
         if ((*cit)->valid(cam))
         {

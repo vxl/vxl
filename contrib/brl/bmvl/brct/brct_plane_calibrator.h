@@ -15,7 +15,7 @@
 #include <vcl_string.h>
 #include <vgl/vgl_homg_point_2d.h>
 #include <vgl/algo/vgl_h_matrix_2d.h>
-#include <brct/brct_corr_sptr.h>
+#include <brct/brct_plane_corr_sptr.h>
 
 class brct_plane_calibrator
 {
@@ -32,7 +32,7 @@ class brct_plane_calibrator
     points_3d(int plane){return pts_3d_[plane];}
   vgl_homg_point_2d<double> p3d(const int plane, const int i)
     {return pts_3d_[plane][i];}
-  brct_corr_sptr corr(const int plane, const int i){return corrs_[plane][i];}
+  brct_plane_corr_sptr corr(const int plane, const int i){return corrs_[plane][i];}
 
   //Mutators
 
@@ -68,7 +68,7 @@ class brct_plane_calibrator
 
   //: correspondence data
   //world plane  image correspondences
-  vcl_vector<vcl_vector<brct_corr_sptr> > corrs_;
+  vcl_vector<vcl_vector<brct_plane_corr_sptr> > corrs_;
 
   //: 3-d loaded flag
   bool points_3d_valid_;

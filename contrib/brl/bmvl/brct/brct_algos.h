@@ -17,10 +17,14 @@
 #include <vcl_fstream.h>
 #include <vgl/vgl_point_3d.h>
 #include <vgl/vgl_point_2d.h>
+#include <vgl/algo/vgl_h_matrix_2d.h>
+#include <vgl/algo/vgl_p_matrix.h>
 #include <vnl/vnl_double_2.h>
 #include <vnl/vnl_double_3.h>
+#include <vnl/vnl_double_4.h>
 #include <vnl/vnl_double_3x3.h>
 #include <vnl/vnl_double_3x4.h>
+#include <vnl/vnl_double_4x4.h>
 #include <vsol/vsol_box_3d_sptr.h>
 #include <vsol/vsol_point_3d_sptr.h>
 #include <vdgl/vdgl_digital_curve_sptr.h>
@@ -65,6 +69,54 @@ public:
   //: pointwise reconstruction
   static vgl_point_3d<double> triangulate_3d_point(const vgl_point_2d<double>& x1, const vnl_double_3x4& P1,
                                                    const vgl_point_2d<double>& x2, const vnl_double_3x4& P2);
+
+  //: solve a general projective P matrix
+static  bool solve_p_matrix(vcl_vector<vgl_homg_point_2d<double> >const& image_points,
+                      vcl_vector<vgl_homg_point_3d<double> >const& world_points,
+                      vnl_double_3x4& P);
+
+  //: compute the Euclidean camera from 3d-2d correspondences given K
+ static  bool compute_euclidean_camera(vcl_vector<vgl_point_2d<double> > const& image_points,
+                                vcl_vector<vgl_point_3d<double> > const& world_points,
+                                vnl_double_3x3 const & K,
+                                vnl_double_3x4& P);
+
+ //: compute a world to image homography from Euclidean Points
+ static bool homography(vcl_vector<vgl_point_3d<double> > const& world_points,
+                        vcl_vector<vgl_point_2d<double> > const& image_points,
+                        vgl_h_matrix_2d<double> & H);
+
+ //:form a 3x4 projection matrix from a planar homography
+ static vgl_p_matrix<double> p_from_h(vgl_h_matrix_2d<double> const& H);
+
+ //: change the world coordinates to be at image scale and position
+ static void scale_and_translate_world(vcl_vector<vgl_point_3d<double> > const& world_points, const double magnification, vgl_h_matrix_2d<double> & H);
+
+ //: change the world coordinates to be at image scale and position
+ static void scale_and_translate_world( const double world_x_min, 
+                                        const double world_y_min, 
+                                        const double magnification,
+                                        vgl_h_matrix_2d<double> & H);
+
+
+ //: project world points into an image using a homography
+ static void project(vcl_vector<vgl_point_3d<double> > const& world_points, 
+                     vgl_h_matrix_2d<double> const& H,
+                     vcl_vector<vgl_point_2d<double> > & image_points);
+
+
+ //: project world points into an image using a projection matrix
+ static void project(vcl_vector<vgl_point_3d<double> > const& world_points, 
+                     vgl_p_matrix<double> const& P,
+                     vcl_vector<vgl_point_2d<double> > & image_points);
+
+
+ //: compute a TargetJr style 4x4 projection matrix from a 3x4 matrix
+ static vnl_double_4x4 convert_to_target(vnl_double_3x4 const& P);
+
+ //: TargetJr CoolTransform Projection Method
+static  vnl_double_2 target_project(vnl_double_4x4 const& T,
+                                    vnl_double_3 const& v);
   //: filter outliers for camera translation
   static void filter_outliers(const vnl_double_3x3& K,
                               const vnl_double_3& trans,
@@ -109,6 +161,12 @@ public:
                              const float r = 1.0, const float g = 1.0,
                              const float b = 1.0, 
                              const float transparency = 0.0);
+  static bool read_target_corrs(vcl_ifstream& str,
+                                vcl_vector<vgl_point_2d<double> >& image_points,
+                                vcl_vector<vgl_point_3d<double> >& world_points);
+
+  static void write_target_camera(vcl_ofstream& str, vnl_double_3x4 const& P);
+
 };
 
 
