@@ -36,7 +36,7 @@ of the mbl_mz_random::normal(), so I ran some tests.
 @item i.e. plot i vs @math{0.5*(1+erf(x/sqrt(2))}
 @end itemize
 
-@image{mbl_mz_random_graph1}
+@image{mbl_mz_random_graph1,,}
 
 This seems normal.
 
@@ -63,8 +63,8 @@ I counted the separations (number of samples) between outliers (those that excee
 The first graph is for a seed of 123456, and the second for a seed of 9667566.
 (Note: The key on the following two graphs is reversed.)
 
-@image{mbl_mz_random_graph2}
-@image{mbl_mz_random_graph3}
+@image{mbl_mz_random_graph2,,}
+@image{mbl_mz_random_graph3,,}
 
 @subsubsection Conclusions
 
