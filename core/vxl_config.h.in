@@ -13,20 +13,20 @@
 // no 64bit integers we have to #define VXL_INT64 to `void' in
 // order to catch illegitimate uses (e.g. defining it to `char'
 // would be idiotic).
-#define vxl_int8  @VXL_INT8@ 
-#define vxl_int16 @VXL_INT16@
-#define vxl_int32 @VXL_INT32@
-#define vxl_int64 @VXL_INT64@
+#define vxl_int_8  @VXL_INT_8@ 
+#define vxl_int_16 @VXL_INT_16@
+#define vxl_int_32 @VXL_INT_32@
+#define vxl_int_64 @VXL_INT_64@
 
-#define vxl_sint8  signed @VXL_INT8@   
-#define vxl_sint16 signed @VXL_INT16@  
-#define vxl_sint32 signed @VXL_INT32@  
-#define vxl_sint64 signed @VXL_INT64@  
+#define vxl_sint_8  signed @VXL_INT_8@
+#define vxl_sint_16 signed @VXL_INT_16@
+#define vxl_sint_32 signed @VXL_INT_32@
+#define vxl_sint_64 signed @VXL_INT_64@
 
-#define vxl_uint8  unsigned @VXL_INT8@   
-#define vxl_uint16 unsigned @VXL_INT16@  
-#define vxl_uint32 unsigned @VXL_INT32@  
-#define vxl_uint64 unsigned @VXL_INT64@  
+#define vxl_uint_8  unsigned @VXL_INT_8@
+#define vxl_uint_16 unsigned @VXL_INT_16@
+#define vxl_uint_32 unsigned @VXL_INT_32@
+#define vxl_uint_64 unsigned @VXL_INT_64@
 
 // -------------------- library quirks
 

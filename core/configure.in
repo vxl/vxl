@@ -76,10 +76,10 @@ AC_SUBST(VXL_HAS_IEEEFP_H)
 # architecture
 AC_SUBST(VXL_BIG_ENDIAN)
 AC_SUBST(VXL_LITTLE_ENDIAN)
-AC_SUBST(VXL_INT8)
-AC_SUBST(VXL_INT16)
-AC_SUBST(VXL_INT32)
-AC_SUBST(VXL_INT64)
+AC_SUBST(VXL_INT_8)
+AC_SUBST(VXL_INT_16)
+AC_SUBST(VXL_INT_32)
+AC_SUBST(VXL_INT_64)
 
 #--------------------------------------------------------------------------------
 # output section:
