@@ -50,10 +50,9 @@ public:
   bool compute_preconditioned(vcl_vector<HomgPoint2D>&, vcl_vector<HomgPoint2D>&, vcl_vector<FMatrix*>&);
 
 protected:
-  bool GetCoef(FMatrix* F1, FMatrix* F2, vnl_vector<double> *a);
-  int solve_quadratic(double a, double b, double c, double *x1, double *x2);
-  double cbrt(double x);
-  int solve_cubic(double a, double b, double c, double d, double *x1, double *x2, double *x3);
+  static vcl_vector<double> GetCoef(FMatrix const& F1, FMatrix const& F2);
+  static vcl_vector<double> solve_quadratic(vcl_vector<double> v);
+  static vcl_vector<double> solve_cubic(vcl_vector<double> v);
 
   bool precondition_;
   bool rank2_truncate_;
