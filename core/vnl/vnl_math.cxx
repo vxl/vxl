@@ -31,6 +31,10 @@ bool finite(double x)
 }
 #endif
 
+#ifdef VCL_SUNPRO_CC_50
+# include <math.h> // no HUGE_VAL or isnan() in <cmath>
+#endif
+
 //--------------------------------------------------------------------------------
 
 // constants
@@ -104,3 +108,25 @@ bool vnl_math_isinf(double x)
   return !finite(x) && !isnan(x);
 }
 
+//----------------------------------------------------------------------
+
+#ifdef _INT_64BIT_
+// Type-accessible infinities for use in templates.
+template <class T> T vnl_huge_val(T);
+double   vnl_huge_val(double) { return HUGE_VAL; }
+float    vnl_huge_val(float)  { return HUGE_VAL; }
+long int vnl_huge_val(long int) { return 0x7fffffffffffffff; }
+int      vnl_huge_val(int)    { return 0x7fffffffffffffff; }
+short    vnl_huge_val(short)  { return 0x7fff; }
+char     vnl_huge_val(char)   { return 0x7f; }
+#else
+// -- Type-accessible infinities for use in templates.
+template <class T> T vnl_huge_val(T);
+double vnl_huge_val(double) { return HUGE_VAL; }
+float  vnl_huge_val(float)  { return (float)HUGE_VAL; }
+int    vnl_huge_val(int)    { return 0x7fffffff; }
+short  vnl_huge_val(short)  { return 0x7fff; }
+char   vnl_huge_val(char)   { return 0x7f; }
+#endif
+
+//----------------------------------------------------------------------

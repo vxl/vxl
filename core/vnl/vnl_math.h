@@ -37,24 +37,14 @@
 #include <vcl/vcl_cmath.h>
 #include "dll.h"
 
-#ifdef _INT_64BIT_
 // Type-accessible infinities for use in templates.
 template <class T> T vnl_huge_val(T);
-inline double   vnl_huge_val(double) { return HUGE_VAL; }
-inline float    vnl_huge_val(float)  { return HUGE_VAL; }
-inline long int vnl_huge_val(long int) { return 0x7fffffffffffffff; }
-inline int      vnl_huge_val(int)    { return 0x7fffffffffffffff; }
-inline short    vnl_huge_val(short)  { return 0x7fff; }
-inline char     vnl_huge_val(char)   { return 0x7f; }
-#else
-// -- Type-accessible infinities for use in templates.
-template <class T> T vnl_huge_val(T);
-inline double vnl_huge_val(double) { return HUGE_VAL; }
-inline float  vnl_huge_val(float)  { return (float)HUGE_VAL; }
-inline int    vnl_huge_val(int)    { return 0x7fffffff; }
-inline short  vnl_huge_val(short)  { return 0x7fff; }
-inline char   vnl_huge_val(char)   { return 0x7f; }
-#endif
+double   vnl_huge_val(double);
+float    vnl_huge_val(float);
+long int vnl_huge_val(long int);
+int      vnl_huge_val(int);
+short    vnl_huge_val(short);
+char     vnl_huge_val(char);
 
 //: real numerical constants
 class vnl_math {
@@ -153,16 +143,16 @@ inline float    vnl_math_squared_magnitude(float x) { return x*x; }
 inline double   vnl_math_squared_magnitude(double x) { return x*x; }
 
 // squareroot
-inline float  vnl_math_sqrt(float x) { return float( sqrt(double(x))); }
-inline double vnl_math_sqrt(double x) { return       sqrt(double(x)) ; }
+inline float  vnl_math_sqrt(float x) { return float( vcl_sqrt(double(x))); }
+inline double vnl_math_sqrt(double x) { return       vcl_sqrt(double(x)) ; }
 
 // cuberoot
-inline float  vnl_math_cuberoot(float a) { return float((a<0) ? -exp(log(-a)/3) : exp(log(a)/3)); }
-inline double vnl_math_cuberoot(double a) { return (a<0) ? -exp(log(-a)/3) : exp(log(a)/3); }
+inline float  vnl_math_cuberoot(float a) { return float((a<0) ? -vcl_exp(vcl_log(-a)/3) : vcl_exp(vcl_log(a)/3)); }
+inline double vnl_math_cuberoot(double a) { return (a<0) ? -vcl_exp(vcl_log(-a)/3) : vcl_exp(vcl_log(a)/3); }
 
 // hypotenuse
-inline double vnl_math_hypot(int x, int y) { return sqrt(double(x*x + y*y)); }
-inline float  vnl_math_hypot(float x, float y) { return float( sqrt(double(x*x + y*y)) ); }
-inline double vnl_math_hypot(double x, double y) { return sqrt(x*x + y*y); }
+inline double vnl_math_hypot(int x, int y) { return vcl_sqrt(double(x*x + y*y)); }
+inline float  vnl_math_hypot(float x, float y) { return float( vcl_sqrt(double(x*x + y*y)) ); }
+inline double vnl_math_hypot(double x, double y) { return vcl_sqrt(x*x + y*y); }
 
 #endif // vnl_math_h_
