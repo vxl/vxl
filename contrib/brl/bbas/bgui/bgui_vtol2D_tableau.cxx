@@ -272,6 +272,14 @@ add_spatial_object(vsol_spatial_object_2d_sptr const& sos)
   return;
 }
 
+void bgui_vtol2D_tableau::
+add_lines(vcl_vector<vsol_line_2d_sptr> const& lines)
+{
+  for (vcl_vector<vsol_line_2d_sptr>::const_iterator lit = lines.begin();
+       lit != lines.end(); lit++)
+    add_vsol_line_2d(*lit);
+}
+
 //--------------------------------------------------------------
 // Add a list of generic topology objects
 //
