@@ -1,11 +1,13 @@
 #include "vnl_determinant.h"
+#include <vcl_cassert.h>
 
 int vnl_determinant(vnl_matrix<int> const &M, bool balance )
 {
   unsigned n = M.rows();
   assert(M.cols() == n);
 
-  switch (n) {
+  switch (n)
+  {
    case 1: return M[0][0];
    case 2: return vnl_determinant(M[0], M[1]);
    case 3: return vnl_determinant(M[0], M[1], M[2]);
