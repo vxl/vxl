@@ -45,8 +45,6 @@ void vsl_b_read(vsl_b_istream &is, vnl_real_polynomial & p)
 //: Output a human readable summary to the stream
 void vsl_print_summary(vcl_ostream & os,const vnl_real_polynomial & p)
 {
-  os<<"Coefficients: ";
-  vsl_print_summary(os, p.coefficients());
+  p.print(os);
 }
-
 
