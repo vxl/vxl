@@ -4,9 +4,9 @@
 
 int test_exception_main(int /*argc*/,char* /*argv*/[])
 {
-  const char *ex = "\"const char* exception\"";
 #if VCL_HAS_EXCEPTIONS
-  int result = 0;
+  const char *ex = "\"const char* exception\"";
+  int result;
   vcl_try {
     vcl_cout << "throw " << ex << vcl_endl;
     vcl_throw ex;
