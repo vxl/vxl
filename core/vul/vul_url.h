@@ -23,5 +23,11 @@ public:
 //: Is that a file
 // i.e. is it a downloadable URL, or a file on disk that isn't a directory.
   static bool is_file(const char * url);
+
+//: Encode a string of chars into base64 format
+  static vcl_string encode_base64(const vcl_string& in);
+
+//: Decode a string of chars from base64 format
+  static vcl_string decode_base64(const vcl_string& in);
 };
 #endif

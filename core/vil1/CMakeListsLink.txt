@@ -7,3 +7,8 @@ INCLUDE( ${allvxl_SOURCE_DIR}/vxl/vpl/CMakeListsLink.txt )
 INCLUDE( ${allvxl_SOURCE_DIR}/config.cmake/Modules/FindJPEG.cmake )
 INCLUDE( ${allvxl_SOURCE_DIR}/config.cmake/Modules/FindPNG.cmake )
 INCLUDE( ${allvxl_SOURCE_DIR}/config.cmake/Modules/FindTIFF.cmake ) 
+
+IF (WIN32)
+  LINK_LIBRARIES(ws2_32.lib)
+ENDIF (WIN32)
+

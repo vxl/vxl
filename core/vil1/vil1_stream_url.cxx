@@ -27,6 +27,93 @@
 # include <winsock2.h>
 #endif
 
+
+
+static const
+int base64_encoding[]=
+{
+  'A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P',
+  'Q','R','S','T','U','V','W','X','Y','Z','a','b','c','d','e','f',
+  'g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v',
+  'w','x','y','z','0','1','2','3','4','5','6','7','8','9','+','/'
+};
+
+static char out_buf[4];
+
+static const char * encode_triplet(char data[3], unsigned n)
+{
+
+  assert (n>0 && n <4);
+  out_buf[0] = base64_encoding[(data[0] & 0xFC) >> 2];
+
+  if (n==1)
+  {
+    out_buf[2] = out_buf[3] = '=';
+    return out_buf;
+  }
+
+  out_buf[1] = base64_encoding[
+    ((data[0] & 0x3) << 4) + ((data[1] & 0xf0)>>4)];
+  out_buf[2] = base64_encoding[
+    ((data[1] & 0xf) << 2) + ((data[2] & 0xc0)>>6)];
+
+  if (n==2)
+  {
+    out_buf[3] = '=';
+    return out_buf;
+  }
+
+  out_buf[3] = base64_encoding[ (data[2] & 0x3f) ];
+  return out_buf;
+}
+
+//=======================================================================
+
+static vcl_string encode_base64(const vcl_string& in)
+{
+  vcl_string out;
+    unsigned i = 0, line_octets = 0;
+  const unsigned l = in.size();
+  char data[3];
+    while(i < l)
+    {
+    data[0] = in[i++];
+    data[1] = data[2] = 0;
+
+        if(i == l)
+        {
+      out.append(encode_triplet(data,1),4);
+      return out;
+    }
+
+    data[1] = in[i++];
+
+        if(i == l)
+        {
+      out.append(encode_triplet(data,2),4);
+      return out;
+        }
+
+        data[2] = in[i++];
+
+    out.append(encode_triplet(data,3),4);
+
+        if(line_octets >= 68/4) // print carriage return
+        {
+            out.append("\r\n",2);
+        line_octets = 0;
+        }
+        else
+            ++line_octets;
+    }
+
+    return out;
+
+}
+
+
+
+
 vil_stream_url::vil_stream_url(char const *url)
   : underlying(0)
 {
@@ -49,19 +136,20 @@ vil_stream_url::vil_stream_url(char const *url)
   else
     path = "";
 
-  // port?
-  for (unsigned int i=0; i<host.size(); ++i)
-    if (host[i] == ':') {
-      port = vcl_atoi(host.c_str() + i + 1);
-      host = vcl_string(host.c_str(), host.c_str() + i);
-      break;
-    }
 
   //authentification
   for (unsigned int i=0; i<host.size(); ++i)
     if (host[i] == '@') {
       auth = vcl_string(host.c_str(), host.c_str()+i);
       host = vcl_string(host.c_str()+i+1, host.c_str() + host.size());
+      break;
+    }
+
+  // port?
+  for (unsigned int i=host.size()-1; i>0; --i)
+    if (host[i] == ':') {
+      port = vcl_atoi(host.c_str() + i + 1);
+      host = vcl_string(host.c_str(), host.c_str() + i);
       break;
     }
 
@@ -133,10 +221,11 @@ vil_stream_url::vil_stream_url(char const *url)
   // buffer for data transfers over socket.
   char buffer[4096];
 
-  // send HTTP 1.0 request.
-  vcl_sprintf(buffer, "GET http://%s/%s\n", host.c_str(), path.c_str());
+  // send HTTP 1.1 request.
+  vcl_sprintf(buffer, "GET /%s / HTTP/1.1\n", path.c_str());
   if (auth != "")
-    vcl_sprintf(buffer+vcl_strlen(buffer), "Authorization:  user %s\n", auth.c_str());
+    vcl_sprintf(buffer+vcl_strlen(buffer), "Authorization:  Basic %s\n", encode_base64(auth).c_str());
+//    vcl_sprintf(buffer+vcl_strlen(buffer), "Authorization:  user  testuser:testuser\n");
 
 #ifdef VCL_WIN32
   if (send(tcp_socket, buffer, vcl_strlen(buffer), 0) < 0)
@@ -159,6 +248,7 @@ vil_stream_url::vil_stream_url(char const *url)
   underlying = new vil_stream_core;
   underlying->ref();
   {
+    unsigned entity_marker = 0; // count end of header CR and LFs
     int n;
 #ifdef VCL_WIN32
     while ((n = recv(tcp_socket, buffer, sizeof buffer,0 )) > 0)
@@ -166,8 +256,26 @@ vil_stream_url::vil_stream_url(char const *url)
     while ((n = ::read(tcp_socket, buffer, sizeof buffer)) > 0)
 #endif
     {
-      underlying->write(buffer, n);
-      //vcl_cerr << n << " bytes" << vcl_endl;
+      // search for the CRLFCRLF sequence that marks the end
+      // of the http response header
+      assert (entity_marker < 5);
+      if (entity_marker==4)
+        underlying->write(buffer, n);
+      else
+      {
+        for (unsigned i=0; i<n; ++i)
+        {
+          if ((entity_marker==2||entity_marker==0) && buffer[i]=='\r') entity_marker++;
+          else if (entity_marker==1 && buffer[i]=='\n') entity_marker++;
+          else if (entity_marker==3 && buffer[i]=='\n')
+          {
+            entity_marker++;
+            underlying->write(buffer+i+1, n-i-1);
+            break;
+          }
+          else entity_marker=0;
+        }
+      }
     }
   }
 

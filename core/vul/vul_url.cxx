@@ -1,13 +1,13 @@
 #ifdef __GNUC__
 #pragma implementation
 #endif
-#include "vul_url.h"
 
 //:
 // \file
 // \author Ian Scott
 // Based on vil_stream_url by fsm
 
+#include "vul_url.h"
 #include <vcl_cstdio.h>  // sprintf()
 #include <vcl_cstring.h>
 #include <vcl_cstdlib.h>
@@ -48,7 +48,9 @@ vcl_istream * vul_http_open(char const *url)
   vcl_string path;
   vcl_string auth;
   int port = 80; // default
-  assert (vcl_strncmp(url, "http://", 7) == 0);// doesn't look like an http URL to me.
+
+  // check it is an http URL.
+  assert (vcl_strncmp(url, "http://", 7) == 0);
 
   char const *p = url + 7;
   while (*p && *p!='/')
@@ -61,14 +63,6 @@ vcl_istream * vul_http_open(char const *url)
   else
     path = "";
 
-  // port?
-  for (unsigned int i=0; i<host.size(); ++i)
-    if (host[i] == ':') {
-      port = vcl_atoi(host.c_str() + i + 1);
-      host = vcl_string(host.c_str(), host.c_str() + i);
-      break;
-    }
-
   //authentification
   for (unsigned int i=0; i<host.size(); ++i)
     if (host[i] == '@') {
@@ -76,6 +70,15 @@ vcl_istream * vul_http_open(char const *url)
       host = vcl_string(host.c_str()+i+1, host.c_str() + host.size());
       break;
     }
+
+  // port?
+  for (unsigned int i=host.size()-1; i>0; --i)
+    if (host[i] == ':') {
+      port = vcl_atoi(host.c_str() + i + 1);
+      host = vcl_string(host.c_str(), host.c_str() + i);
+      break;
+    }
+
 
 
   // so far so good.
@@ -101,7 +104,8 @@ vcl_istream * vul_http_open(char const *url)
 
   // create socket endpoint.
   SOCKET tcp_socket = socket(PF_INET,      // IPv4 protocols.
-                          SOCK_STREAM,  // two-way, reliable, connection-based stream socket.
+                          SOCK_STREAM,  // two-way, reliable,
+                                 // connection-based stream socket.
                           PF_UNSPEC);   // protocol number.
 #ifdef VCL_WIN32
   if (tcp_socket == INVALID_SOCKET) {
@@ -129,7 +133,8 @@ vcl_istream * vul_http_open(char const *url)
   // make socket address.
   sockaddr_in my_addr;
   my_addr.sin_family = AF_INET;
-  my_addr.sin_port = htons(port);  // convert port number to network byte order..
+  // convert port number to network byte order..
+  my_addr.sin_port = htons(port);  
   vcl_memcpy(&my_addr.sin_addr, hp->h_addr_list[0], hp->h_length);
 
   // connect to server.
@@ -142,10 +147,13 @@ vcl_istream * vul_http_open(char const *url)
   // buffer for data transfers over socket.
   char buffer[4096];
 
-  // send HTTP 1.0 request.
-  vcl_sprintf(buffer, "GET http://%s/%s\n", host.c_str(), path.c_str());
+  // send HTTP 1.1 request.
+  vcl_sprintf(buffer, "GET /%s / HTTP/1.1\n", path.c_str());
+
   if (auth != "")
-    vcl_sprintf(buffer+vcl_strlen(buffer), "Authorization:  user %s\n", auth.c_str());
+    vcl_sprintf(buffer+vcl_strlen(buffer),
+     "Authorization: Basic %s\n",
+     vul_url::encode_base64(auth).c_str());
 
 #ifdef VCL_WIN32
   if (send(tcp_socket, buffer, vcl_strlen(buffer), 0) < 0) {
@@ -184,6 +192,17 @@ vcl_istream * vul_http_open(char const *url)
   close(tcp_socket);
 #endif
 
+  if ( (contents.find("HTTP/1.1 200")) == contents.npos)
+  {
+    return 0;
+  }
+  unsigned n;
+  if ( (n = contents.find("\r\n\r\n")) == contents.npos)
+  {
+    return 0;
+  }
+
+  contents.erase(0,n+4);
   return new vcl_istringstream(contents);
 }
 
@@ -196,7 +215,7 @@ bool vul_http_exists(char const *url)
   vcl_string path;
   vcl_string auth;
   int port = 80; // default
-  assert (vcl_strncmp(url, "http://", 7) == 0);// doesn't look like an http URL to me.
+  assert (vcl_strncmp(url, "http://", 7) == 0);
 
   char const *p = url + 7;
   while (*p && *p!='/')
@@ -209,19 +228,19 @@ bool vul_http_exists(char const *url)
   else
     path = "";
 
-  // port?
-  for (unsigned int i=0; i<host.size(); ++i)
-    if (host[i] == ':') {
-      port = vcl_atoi(host.c_str() + i + 1);
-      host = vcl_string(host.c_str(), host.c_str() + i);
-      break;
-    }
-
   //authentification
   for (unsigned int i=0; i<host.size(); ++i)
     if (host[i] == '@') {
       auth = vcl_string(host.c_str(), host.c_str()+i);
       host = vcl_string(host.c_str()+i+1, host.c_str() + host.size());
+      break;
+    }
+
+  // port?
+  for (unsigned int i=0; i<host.size(); ++i)
+    if (host[i] == ':') {
+      port = vcl_atoi(host.c_str() + i + 1);
+      host = vcl_string(host.c_str(), host.c_str() + i);
       break;
     }
 
@@ -249,7 +268,8 @@ bool vul_http_exists(char const *url)
 
   // create socket endpoint.
   SOCKET tcp_socket = socket(PF_INET,      // IPv4 protocols.
-                          SOCK_STREAM,  // two-way, reliable, connection-based stream socket.
+                          SOCK_STREAM,  // two-way, reliable,
+                              // connection-based stream socket.
                           PF_UNSPEC);   // protocol number.
 
 #ifdef VCL_WIN32
@@ -278,11 +298,13 @@ bool vul_http_exists(char const *url)
   // make socket address.
   sockaddr_in my_addr;
   my_addr.sin_family = AF_INET;
-  my_addr.sin_port = htons(port);  // convert port number to network byte order..
+    // convert port number to network byte order..
+  my_addr.sin_port = htons(port);
   vcl_memcpy(&my_addr.sin_addr, hp->h_addr_list[0], hp->h_length);
 
   // connect to server.
-  if (connect(tcp_socket , (sockaddr *) &my_addr, sizeof my_addr) < 0) {
+  if (connect(tcp_socket , (sockaddr *) &my_addr, sizeof my_addr) < 0)
+  {
     vcl_cerr << __FILE__ ": failed to connect to host" << vcl_endl;
     //perror(__FILE__);
     return false;
@@ -291,10 +313,12 @@ bool vul_http_exists(char const *url)
   // buffer for data transfers over socket.
   char buffer[4096];
 
-  // send HTTP 1.0 request.
-  vcl_sprintf(buffer, "GET http://%s/%s\n", host.c_str(), path.c_str());
+  // send HTTP 1.1 request.
+  vcl_sprintf(buffer, "HEAD /%s / HTTP/1.1\n", path.c_str());
   if (auth != "")
-    vcl_sprintf(buffer+vcl_strlen(buffer), "Authorization:  user %s\n", auth.c_str());
+    vcl_sprintf(buffer+vcl_strlen(buffer),
+      "Authorization: Basic %s\n",
+      vul_url::encode_base64(auth).c_str());
 
 #ifdef VCL_WIN32
   if (send(tcp_socket, buffer, vcl_strlen(buffer), 0) < 0) {
@@ -347,9 +371,9 @@ bool vul_http_exists(char const *url)
 #else
   close(tcp_socket);
 #endif
+
   vcl_string::size_type  n;
-  if ( ((n = contents.find("<HTML>")) != contents.npos)
-    && (contents.find("404 Not Found",n) != contents.npos) )
+  if ( (contents.find("HTTP/1.1 200")) == contents.npos)
   {
     return false;
   }
@@ -449,3 +473,199 @@ bool vul_url::is_file(const char * fn)
      vul_file::exists(fn) &&
      ! vul_file::is_directory(fn) );
 }
+
+//=======================================================================
+
+static const
+int base64_encoding[]=
+{
+  'A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P',
+  'Q','R','S','T','U','V','W','X','Y','Z','a','b','c','d','e','f',
+  'g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v',
+  'w','x','y','z','0','1','2','3','4','5','6','7','8','9','+','/'
+};
+
+static char out_buf[4];
+
+static const char * encode_triplet(char data[3], unsigned n)
+{
+
+  assert (n>0 && n <4);
+  out_buf[0] = base64_encoding[(data[0] & 0xFC) >> 2];
+
+  if (n==1)
+  {
+    out_buf[2] = out_buf[3] = '=';
+    return out_buf;
+  }
+
+  out_buf[1] = base64_encoding[
+    ((data[0] & 0x3) << 4) + ((data[1] & 0xf0)>>4)];
+  out_buf[2] = base64_encoding[
+    ((data[1] & 0xf) << 2) + ((data[2] & 0xc0)>>6)];
+
+  if (n==2)
+  {
+    out_buf[3] = '=';
+    return out_buf;
+  }
+
+  out_buf[3] = base64_encoding[ (data[2] & 0x3f) ];
+  return out_buf;
+}
+
+//=======================================================================
+
+vcl_string vul_url::encode_base64(const vcl_string& in)
+{
+  vcl_string out;
+	unsigned i = 0, line_octets = 0;
+  const unsigned l = in.size();
+  char data[3];
+	while(i < l)
+	{
+    data[0] = in[i++];
+    data[1] = data[2] = 0;
+
+		if(i == l)
+		{
+      out.append(encode_triplet(data,1),4);
+      return out;
+    }
+
+    data[1] = in[i++];
+
+		if(i == l)
+		{
+      out.append(encode_triplet(data,2),4);
+      return out;
+		}
+
+		data[2] = in[i++];
+
+    out.append(encode_triplet(data,3),4);
+
+		if(line_octets >= 68/4) // print carriage return
+		{
+			out.append("\r\n",2);
+  		line_octets = 0;
+		}
+		else
+			++line_octets;
+	}
+
+	return out;
+
+}
+
+//=======================================================================
+
+static int get_next_char(const vcl_string &in, unsigned int *i)
+{
+  vcl_string out;
+  while (*i < in.size())
+  {
+    char c;
+    c = in[(*i)++];
+
+    if(c == '+')
+			return 62;
+
+		if(c == '/')
+			return 63;
+
+		if(c >= 'A' && c <= 'Z')
+      return 0 + (int)c - (int)'A';
+
+		if(c >= 'a' && c <= 'z')
+      return 26 + (int)c - (int)'a';
+
+		if(c >= '0' && c <= '9')
+      return 52 + (int)c - (int)'0';
+
+		if(c == '=')
+			return 64;
+  }
+  return -1;
+}
+
+//=======================================================================
+
+vcl_string vul_url::decode_base64(const vcl_string& in)
+
+{
+	int c;
+  char data[3];
+
+  unsigned i=0;
+  const unsigned l = in.size();
+  vcl_string out;
+	while(i < l)
+	{
+    data[0] = data[1] = data[2] = 0;
+
+		// -- 0 --
+		// Search next valid char... 
+    c = get_next_char(in , &i);
+
+    // treat '=' as end of message
+    if(c == 64)
+      return out;  
+    if(c==-1)
+      return "";
+
+    data[0] = ((c & 0x3f) << 2) | (0x3 & data[0]);
+
+		// -- 1 --
+		// Search next valid char... 
+    c = get_next_char(in , &i);
+
+			// Error! Second character in octet can't be '='
+		if(c == 64 || c==-1)
+      return "";
+
+		data[0] = ((c & 0x30) >> 4) | (0xfc & data[0]);
+		data[1] = ((c & 0xf) << 4) | (0xf & data[1]);
+
+
+		// -- 2 --
+		// Search next valid char... 
+
+    c = get_next_char(in , &i);
+
+		if(c==-1)
+      return "";
+		if(c == 64)
+    {
+      // should really read next char and check it is '='
+      out.append(data,1);  // write 1 byte to output
+      return out;
+    }
+
+    data[1] = ((c & 0x3C) >> 2) | (0xf0 & data[1]);
+		data[2] = ((c & 0x3) << 6) | (0x3f & data[2]);
+
+
+		// -- 3 --
+		// Search next valid char... 
+    c = get_next_char(in , &i);
+
+		if(c==-1)
+      return "";
+
+		if(c == 64)
+		{
+      out.append(data,2);  // write 2 bytes to output
+      return out;
+		}
+
+		data[2] = (c & 0x3f) | (0xc0 & data[2]);
+
+    out.append(data,3);  // write 3 bytes to output
+
+	}
+
+	return out;
+}
+
+
