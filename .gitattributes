@@ -3,6 +3,7 @@
 *.bmp           -crlf
 *.dsp           -crlf
 *.dsptemplate   -crlf
+*.ico           -crlf
 *.pl             crlf=input
 *.png           -crlf
 *.sh             crlf=input
