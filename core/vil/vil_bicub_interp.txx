@@ -62,7 +62,7 @@ double vil_bicub_interp_unsafe(double x, double y, const T* data,
 }
 
 // see the comments where this variable is used below
-#if VCL_VC60
+#ifdef VCL_VC60
 static double vil_bicub_interp_raw_temp_hack = 0.0;
 #endif
 
@@ -109,7 +109,7 @@ double vil_bicub_interp_raw(double x, double y, const T* data,
         val += s1*vil_I(+0,+0);
         val += s2*vil_I(+1,+0);
 
-#if VCL_VC60
+#ifdef VCL_VC60
         // On some hardware platforms, with optimization, MSVC 6.0
         // miscompiles the computation of 'val' in this section of
         // code.  It appears that the computation of 'val' is lumped
@@ -132,6 +132,9 @@ double vil_bicub_interp_raw(double x, double y, const T* data,
     }
 
     if (normx == 0.0) {
+        // The computation of 'val' in this section seems to compile
+        // fine, even when the very similar computation just above has
+        // trouble.
         double val = t0*vil_I(+0,-1) + t1*vil_I(+0,+0) + t2*vil_I(+0,+1) + t3*vil_I(+0,+2);
         val *= 0.5;
         return val;
