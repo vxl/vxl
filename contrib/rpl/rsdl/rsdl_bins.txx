@@ -606,8 +606,8 @@ template<unsigned N, typename C, typename V>
 rsdl_bins<N,C,V>::point_dist_entry::
 point_dist_entry( point_type const& query_pt,
                   bin_entry_type const* entry )
-  : entry_( entry ),
-    dist_( vnl_vector_ssd( query_pt, entry->point_ ) )
+ : entry_( entry ),
+   dist_( vnl_vector_ssd( query_pt, entry->point_ ) )
 {
 }
 
