@@ -17,7 +17,7 @@ vcl_complex_fwd.h
   old vcl_complex<T>, so we do need a forward declaration header.
 
 vcl_rel_ops.h
-  This is the vcl form of the ISO incantation
+  This is the (deprecated) vcl form of the ISO incantation
   #include <utility>
   using std::rel_ops::operator!=;
   using std::rel_ops::operator> ;
