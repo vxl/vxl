@@ -6,7 +6,6 @@
 
 #include <vcl_vector.h>
 #include <vcl_iostream.h>
-#include <vcl_sstream.h>
 #include <vcl_cstdlib.h>
 #include <vul/vul_timer.h>
 #include <vil1/vil1_load.h>
@@ -15,6 +14,7 @@
 #include <vidl_vil1/vidl_vil1_movie.h>
 #include <vidl_vil1/vidl_vil1_clip.h>
 #include <vidl_vil1/vidl_vil1_io.h>
+#include <vidl_vil1/vidl_vil1_frame.h>
 #include <vgui/vgui.h>
 #include <vgui/vgui_find.h>
 #include <vgui/vgui_error_dialog.h>
@@ -42,8 +42,6 @@
 #include <strk/strk_art_info_model.h>
 #include <bdgl/bdgl_curve_tracking.h>
 
-#include <vidl_vil1/vidl_vil1_io.h>
-#include <vidl_vil1/vidl_vil1_frame.h>
 #include <vpro/vpro_frame_diff_process.h>
 #include <vpro/vpro_motion_process.h>
 #include <vpro/vpro_lucas_kanade_process.h>
@@ -60,6 +58,7 @@
 #include <vpro/vpro_fourier_process.h>
 #include <vpro/vpro_spatial_filter_process.h>
 #include <strk/strk_art_model_display_process.h>
+
 //static manager instance
 vvid_file_manager *vvid_file_manager::instance_ = 0;
 
@@ -67,10 +66,10 @@ vvid_file_manager *vvid_file_manager::instance_ = 0;
 vvid_file_manager *vvid_file_manager::instance()
 {
   if (!instance_)
-    {
-      instance_ = new vvid_file_manager();
-      instance_->init();
-    }
+  {
+    instance_ = new vvid_file_manager();
+    instance_->init();
+  }
   return vvid_file_manager::instance_;
 }
 
@@ -130,6 +129,7 @@ vvid_file_manager::vvid_file_manager(): vgui_wrapper_tableau()
   video_process_ = 0;
   art_model_ = 0;
 }
+
 vvid_file_manager::~vvid_file_manager()
 {
 }
@@ -190,12 +190,12 @@ void vvid_file_manager::display_spatial_objects()
     } else {
       //If tracking is on then we maintain a queue of points
       if (track_)
-        {
-          frame_trail_.add_spatial_objects(sos);
-          vcl_vector<vsol_spatial_object_2d_sptr> temp;
-          frame_trail_.get_spatial_objects(temp);
-          easy0_->add_spatial_objects(temp);
-        }
+      {
+        frame_trail_.add_spatial_objects(sos);
+        vcl_vector<vsol_spatial_object_2d_sptr> temp;
+        frame_trail_.get_spatial_objects(temp);
+        easy0_->add_spatial_objects(temp);
+      }
       else
         easy0_->add_spatial_objects(sos);
     }
@@ -236,7 +236,7 @@ void vvid_file_manager::display_topology()
 {
   if (!easy0_)
     return;
- vul_timer t;
+  vul_timer t;
   vcl_vector<vtol_topology_object_sptr> const & topos =
     video_process_->get_output_topology();
   easy0_->clear_all();
@@ -250,9 +250,10 @@ void vvid_file_manager::display_topology()
   }
   else
     easy0_->add_topology_objects(topos);
-
-//   vcl_cout << "display " << topos.size()
-//            << " topology objs in " << t.real() << " msecs.\n";
+#ifdef DEBUG
+  vcl_cout << "display " << topos.size()
+           << " topology objs in " << t.real() << " msecs.\n";
+#endif
 }
 
 //-----------------------------------------------------------------------------
@@ -288,7 +289,7 @@ void vvid_file_manager::load_video_file()
   height_ = img.height();
   width_ = img.width();
   vcl_cout << "Video Height " << height_ << vcl_endl
-           << " Video Width " << width_ << vcl_endl;
+           << "Video Width  " << width_ << vcl_endl;
   if (win_)
     win_->reshape(2*width_, height_);
   int i = 0;
@@ -309,11 +310,11 @@ void vvid_file_manager::load_video_file()
     itab1_->set_image(tabs_[0]->get_image_tableau()->get_image());
   }
   else
-    {
-      itab0_->set_image(second);
-      //v2D0_->child.assign(easy0_);
-      itab1_->set_image(second);
-    }
+  {
+    itab0_->set_image(second);
+    //v2D0_->child.assign(easy0_);
+    itab1_->set_image(second);
+  }
   grid_->post_redraw();
   vgui::run_till_idle();
 }
@@ -340,7 +341,7 @@ void vvid_file_manager::cached_play()
         }
         vit--;
       }
-      
+
       v2D0_->child.assign(*vit);
         //Here we can put some stuff to control the frame rate. Hard coded to
         //a delay of 10 for now
@@ -404,8 +405,8 @@ void vvid_file_manager::un_cached_play()
     this->save_display(frame_index);
   }
 
-  if(video_process_)
-	  video_process_->finish();
+  if (video_process_)
+    video_process_->finish();
   save_display_ = false;
 }
 
@@ -425,8 +426,8 @@ void vvid_file_manager::play_video()
   else
   {
     this->un_cached_play();
-	if(!my_movie_)
-	 return;
+    if (!my_movie_)
+      return;
     vil1_image img =my_movie_->get_image(0);
     itab1_->set_image(img);
   }
@@ -712,9 +713,7 @@ void vvid_file_manager::compute_curve_tracking()
     }
   }
   else
-  {
     video_process_  = new vpro_curve_tracking_process(tp,dp);
-  }
 
   if (track_)
   {
@@ -722,16 +721,17 @@ void vvid_file_manager::compute_curve_tracking()
     frame_trail_.set_window(track_window);
   }
 }
+
 void vvid_file_manager::compute_corr_tracking()
 {
-  static strk_tracker_params tp;  
+  static strk_tracker_params tp;
   vgui_dialog tracker_dialog("Correlation Tracker ");
   tracker_dialog.field("Number of Samples", tp.n_samples_);
   tracker_dialog.field("Search Radius", tp.search_radius_);
   tracker_dialog.field("Smooth Sigma", tp.sigma_);
   if (!tracker_dialog.ask())
     return;
-  vcl_cout << tp << "\n";
+  vcl_cout << tp << '\n';
   vtol_topology_object_sptr to = easy0_->get_temp();
   if (!to)
     vcl_cout << "In vvid_file_manager::compute_info_tracking() - no model\n";
@@ -745,7 +745,7 @@ void vvid_file_manager::compute_corr_tracking()
 void vvid_file_manager::compute_info_tracking()
 {
   static bool output_track = false;
-  static strk_info_tracker_params tp;  
+  static strk_info_tracker_params tp;
   vgui_dialog tracker_dialog("Mutual Information Tracker V1.4");
   tracker_dialog.field("Number of Samples", tp.n_samples_);
   tracker_dialog.field("Fraction of Samples Refreshed", tp.frac_time_samples_);
@@ -781,16 +781,17 @@ void vvid_file_manager::compute_info_tracking()
         return;
   }
 }
+
 void vvid_file_manager::save_display(int frame)
 {
-  if(!save_display_)
+  if (!save_display_)
     return;
-  if(!overlay_pane_)
-    {
-      vil1_image image = itab1_->get_image();
-      display_output_frames_.push_back(image);
-      return;
-    }
+  if (!overlay_pane_)
+  {
+    vil1_image image = itab1_->get_image();
+    display_output_frames_.push_back(image);
+    return;
+  }
   vcl_string temp = display_output_file_;
   vcl_string ps = temp + ".temp.ps ";
   vcl_string tif = temp + ".temp.tif ";
@@ -798,7 +799,6 @@ void vvid_file_manager::save_display(int frame)
   vcl_string command = "mconvert ";
   command += ps;
   command += tif;
-  //vcl_cout << command << "\n";
   vcl_system(command.c_str());
   vil1_image image = vil1_load(tif.c_str());
   //load into memory
@@ -844,14 +844,14 @@ void vvid_file_manager::compute_fourier_transform()
 }
 
 void vvid_file_manager::spatial_filter()
-{ 
+{
   static vpro_spatial_filter_params vsfp;
   vgui_dialog spatial_filter_dialog("Spatial_Filter Params");
   spatial_filter_dialog.field("X Dir", vsfp.dir_fx_);
   spatial_filter_dialog.field("Y Dir", vsfp.dir_fy_);
   spatial_filter_dialog.field("Center Freq", vsfp.f0_);
   spatial_filter_dialog.field("Filter Radius", vsfp.radius_);
-  spatial_filter_dialog.checkbox("Show Filtered Fourier Magnitude", 
+  spatial_filter_dialog.checkbox("Show Filtered Fourier Magnitude",
                                  vsfp.show_filtered_fft_);
   if (!spatial_filter_dialog.ask())
     return;
@@ -862,6 +862,7 @@ void vvid_file_manager::create_box()
 {
   rubber0_->rubberband_box();
 }
+
 void vvid_file_manager::create_polygon()
 {
   rubber0_->rubberband_polygon();
@@ -881,71 +882,71 @@ void vvid_file_manager::start_save_display()
 
 void vvid_file_manager::end_save_display()
 {
-   if(!save_display_||!display_output_frames_.size())
-     return;
+  if (!save_display_||!display_output_frames_.size())
+    return;
   save_display_ = false;
   vidl_vil1_clip_sptr clip = new vidl_vil1_clip(display_output_frames_);
   vidl_vil1_movie_sptr mov= new vidl_vil1_movie();
   mov->add_clip(clip);
   vidl_vil1_io::save(mov.ptr(), display_output_file_.c_str(), "AVI");
 }
+
 void vvid_file_manager::create_stem()
-{  
- vcl_cout << "Make the stem ..." <<"\n";
- art_model_ = 0;
+{
+  vcl_cout << "Make the stem ...\n";
+  art_model_ = 0;
   vtol_topology_object_sptr to = easy0_->get_temp();
-  if(!to)
-    {
-      vcl_cout << "Failed" <<"\n";
-      return;
-    }
+  if (!to)
+  {
+    vcl_cout << "Failed\n";
+    return;
+  }
   else
-    vcl_cout << "Stem complete" <<"\n";
+    vcl_cout << "Stem complete\n";
   stem_ = to->cast_to_face()->cast_to_face_2d();
 }
 
 void vvid_file_manager::create_long_arm_tip()
-{  
- vcl_cout << "Make the long_arm_tip ..." <<"\n";
- art_model_ = 0;
+{
+  vcl_cout << "Make the long_arm_tip ...\n";
+  art_model_ = 0;
   vtol_topology_object_sptr to = easy0_->get_temp();
-  if(!to)
-    {
-      vcl_cout << "Failed" <<"\n";
-      return;
-    }
+  if (!to)
+  {
+    vcl_cout << "Failed\n";
+    return;
+  }
   else
-    vcl_cout << "long_arm_tip complete" <<"\n";
+    vcl_cout << "long_arm_tip complete\n";
   long_tip_ = to->cast_to_face()->cast_to_face_2d();
 }
 
 void vvid_file_manager::create_short_arm_tip()
-{  
- vcl_cout << "Make the short_arm_tip ..." <<"\n";
- art_model_ = 0;
- vtol_topology_object_sptr to = easy0_->get_temp();
-  if(!to)
-    {
-      vcl_cout << "Failed" <<"\n";
-      return;
-    }
+{
+  vcl_cout << "Make the short_arm_tip ...\n";
+  art_model_ = 0;
+  vtol_topology_object_sptr to = easy0_->get_temp();
+  if (!to)
+  {
+    vcl_cout << "Failed\n";
+    return;
+  }
   else
-    vcl_cout << "short_arm_tip complete" <<"\n";
+    vcl_cout << "short_arm_tip complete\n";
   short_tip_ = to->cast_to_face()->cast_to_face_2d();
 }
- 
 
 void vvid_file_manager::exercise_art_model()
 {
-  if(!stem_||!long_tip_||!short_tip_)
-    {
-      vcl_cout << "Not enough components to make the art model" <<"\n";
-      return;
-    }
+  if (!stem_||!long_tip_||!short_tip_)
+  {
+    vcl_cout << "Not enough components to make the art model\n";
+    return;
+  }
 
   static bool refresh_model = false;
   static double stem_tx =0, stem_ty =0, stem_angle =0;
-  static double long_arm_pivot_angle = 0, short_arm_pivot_angle =0; 
+  static double long_arm_pivot_angle = 0, short_arm_pivot_angle =0;
   static double long_tip_angle = 0, short_tip_angle = 0;
 
   vgui_dialog trans_art_dialog("Transform Art Model");
@@ -960,22 +961,22 @@ void vvid_file_manager::exercise_art_model()
   if (!trans_art_dialog.ask())
     return;
 
-  if(refresh_model || !art_model_)
-    {
-      vcl_vector<vtol_face_2d_sptr> faces;
-      vsol_point_2d_sptr pivot = btol_face_algs::centroid(stem_);
-      faces.push_back(stem_);
-      faces.push_back(long_tip_);
-      faces.push_back(short_tip_);
-      vil1_image img = itab0_->get_image();
-      vil1_memory_image_of<float> image = 
-        brip_float_ops::convert_to_float(img);
-      art_model_ = new strk_art_info_model(faces, pivot, image);
-      
-      vcl_vector<vtol_face_2d_sptr> vtol_faces = art_model_->vtol_faces();
-      easy0_->clear();
-      easy0_->add_faces(vtol_faces);
-    }
+  if (refresh_model || !art_model_)
+  {
+    vcl_vector<vtol_face_2d_sptr> faces;
+    vsol_point_2d_sptr pivot = btol_face_algs::centroid(stem_);
+    faces.push_back(stem_);
+    faces.push_back(long_tip_);
+    faces.push_back(short_tip_);
+    vil1_image img = itab0_->get_image();
+    vil1_memory_image_of<float> image =
+      brip_float_ops::convert_to_float(img);
+    art_model_ = new strk_art_info_model(faces, pivot, image);
+
+    vcl_vector<vtol_face_2d_sptr> vtol_faces = art_model_->vtol_faces();
+    easy0_->clear();
+    easy0_->add_faces(vtol_faces);
+  }
 
   art_model_ = new strk_art_info_model(art_model_);//to simulate generation
   art_model_->transform(stem_tx, stem_ty, stem_angle, long_arm_pivot_angle,
@@ -990,11 +991,11 @@ void vvid_file_manager::exercise_art_model()
 
 void vvid_file_manager::track_art_model()
 {
-  if(!stem_||!long_tip_||!short_tip_)
-    {
-      vcl_cout << "Not enough components to construct model\n";
-      return;
-    }
+  if (!stem_||!long_tip_||!short_tip_)
+  {
+    vcl_cout << "Not enough components to construct model\n";
+    return;
+  }
   vcl_vector<vtol_topology_object_sptr> faces;
   faces.push_back(stem_->cast_to_face());
   faces.push_back(long_tip_->cast_to_face());
@@ -1007,7 +1008,6 @@ void vvid_file_manager::track_art_model()
   trans_art_dialog.field(" Stem Translation Radius ", imtp.stem_trans_radius_);
   trans_art_dialog.field(" Stem Angle Range", imtp.stem_angle_range_);
   trans_art_dialog.field("Long Arm Pivot Angle Range",
-
                          imtp.long_arm_angle_range_);
   trans_art_dialog.field("Short Arm Pivot Angle Range",
                          imtp.short_arm_angle_range_);
@@ -1021,24 +1021,24 @@ void vvid_file_manager::track_art_model()
   if (!trans_art_dialog.ask())
     return;
   static vcl_string track_file;
-  if(output_track)
+  if (output_track)
   {
-  vgui_dialog output_dialog("Track Data File");
-  static vcl_string ext = "*.*";
-  output_dialog.file("Track File:", ext, track_file);
-  if (!output_dialog.ask())
-    return;
+    vgui_dialog output_dialog("Track Data File");
+    static vcl_string ext = "*.*";
+    output_dialog.file("Track File:", ext, track_file);
+    if (!output_dialog.ask())
+      return;
   }
-  vcl_cout << imtp << "\n";
-  strk_info_model_tracker_process* imitp = 
+  vcl_cout << imtp << '\n';
+  strk_info_model_tracker_process* imitp =
     new strk_info_model_tracker_process(imtp);
   video_process_ = imitp;
   video_process_->add_input_topology(faces);
-  if(output_track)
-    if(!imitp->set_output_file(track_file))
+  if (output_track)
+    if (!imitp->set_output_file(track_file))
       return;
 }
-  
+
 void vvid_file_manager::display_art_model_track()
 {
   vgui_dialog output_dialog("Track Data File");
