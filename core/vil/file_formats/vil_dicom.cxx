@@ -192,6 +192,7 @@ vil_dicom_image::vil_dicom_image(vil_stream* vs)
                              pixel_buf, pixel_format );
   }
 
+#if 0 // plane_step, i_step and j_step are not being used
   // Determine the plane order
   //
   Uint16 planar_config;
@@ -206,6 +207,7 @@ vil_dicom_image::vil_dicom_image(vil_stream* vs)
     j_step = ni() * nplanes();
     plane_step = 1;
   }
+#endif // 0
 
   // Create an image resource to manage the pixel buffer
   //
