@@ -199,6 +199,10 @@ void vil_test_image_type_raw(char const* type_name, // type for image to read an
 // create a colour gif image
 static bool create_colour_gif(const char* filename)
 {
+#ifdef VCL_VC
+#pragma warning ( push )
+#pragma warning ( disable : 4305 4309)
+#endif
   char a[] = { 253, 0, 155, 0, 247, 0, 0 };
   char b[] = { 44, 0, 0, 0, 0, 253, 0, 155, 0, 0, 8, 254, 0, 1, 164, 74, 150, 45, 87, 162, 76, 121, 14, 80, 168, 224, 226, 5, 140,
     24, 98, 198, 144, 41, 99, 230, 12, 154, 52, 202, 150, 49, 107, 230, 236, 25, 180, 104, 210, 166, 81, 171, 102, 237, 26, 182,
@@ -224,6 +228,9 @@ static bool create_colour_gif(const char* filename)
     182, 220, 118, 235, 237, 183, 224, 134, 43, 238, 184, 228, 150, 107, 238, 185, 232, 166, 171, 238, 186, 236, 182, 235, 238,
     187, 240, 198, 43, 239, 188, 244, 214, 107, 239, 189, 248, 230, 171, 239, 190, 252, 246, 235, 239, 191, 0, 7, 44, 240, 192, 4,
     23, 108, 240, 193, 8, 39, 172, 240, 194, 168, 6, 4, 0, 59 };
+#ifdef VCL_VC
+#pragma warning ( pop )
+#endif
   vcl_ofstream f(filename);
   if (!f) return false;
   f << "GIF87a";
@@ -237,6 +244,10 @@ static bool create_colour_gif(const char* filename)
 // create a grey gif image
 static bool create_grey_gif(const char* filename)
 {
+#ifdef VCL_VC
+#pragma warning ( push )
+#pragma warning ( disable : 4305 4309)
+#endif
   char a[] = { 253, 0, 155, 0, 247, 0, 0 };
   char b[] = { 44, 0, 0, 0, 0, 253, 0, 155, 0, 0, 8, 254, 0, 1, 8, 28, 72, 176, 160, 193, 131, 8, 19, 42, 92, 200, 176, 161, 195,
     135, 16, 35, 74, 156, 72, 177, 162, 197, 139, 24, 51, 106, 220, 200, 177, 163, 199, 143, 32, 67, 138, 28, 73, 178, 164, 201,
@@ -251,6 +262,9 @@ static bool create_grey_gif(const char* filename)
     195, 67, 139, 31, 79, 190, 188, 249, 243, 232, 211, 171, 95, 207, 190, 189, 251, 247, 240, 227, 203, 159, 79, 191, 190, 253,
     251, 248, 243, 235, 223, 207, 191, 191, 255, 255, 0, 6, 40, 224, 128, 4, 22, 104, 224, 129, 8, 38, 168, 224, 130, 12, 54, 232,
     224, 131, 16, 70, 40, 225, 132, 20, 86, 104, 225, 133, 155, 5, 4, 0, 59 };
+#ifdef VCL_VC
+#pragma warning ( pop )
+#endif
   vcl_ofstream f(filename);
   if (!f) return false;
   f << "GIF87a";
