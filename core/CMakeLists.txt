@@ -4,6 +4,7 @@ PROJECT( vxlcore )
 
 SET(global_sources
  vxl_copyright.h
+ vxl_version.h
  vxl_config.h.in
 )
 
