@@ -1,25 +1,23 @@
-
 # You'll need texi2html version 1.64 from
 # http://www.mathematik.uni-kl.de/~obachman/Texi2html/
 
-
 ifeq ($(OS),Windows_NT)
-GS = gswin32c
-PNGTOPNM = pngtopnm.exe
-PNMCROP = pnmcrop.exe
-PNMTOPNG = pnmtopng.exe
-MAKEINFO= makeinfo.exe # exe to avoid conflict with cygnus makeinfo sh script
-TEXI2HTML= T2H_HOME=/pkg/Texi2html perl /pkg/texi2html/texi2html.pl
-TEX = tex --c-style-errors --quiet
+ GS = gswin32c
+ PNGTOPNM = pngtopnm.exe
+ PNMCROP = pnmcrop.exe
+ PNMTOPNG = pnmtopng.exe
+ MAKEINFO= makeinfo.exe # exe to avoid conflict with cygnus makeinfo sh script
+ TEXI2HTML= T2H_HOME=/pkg/Texi2html perl /pkg/texi2html/texi2html.pl
+ TEX = tex --c-style-errors --quiet
 else
-GS = gs
-PNGTOPNM = pngtopnm
-PNMCROP = pnmcrop
-PNMTOPNG = pnmtopng
-MAKEINFO = makeinfo
-T2H_HOME = false
-TEXI2HTML = texi2html
-TEX = tex
+ GS = gs
+ PNGTOPNM = pngtopnm
+ PNMCROP = pnmcrop
+ PNMTOPNG = pnmtopng
+ MAKEINFO = makeinfo
+ T2H_HOME = false
+ TEXI2HTML = texi2html
+ TEX = tex
 endif
 
 MAKEINFOFLAGS=-Dmakeinfo
@@ -84,3 +82,4 @@ publish:
 ## for debugging makefile
 echo-%:
 	echo '$(@:echo-%=%)=$($(@:echo-%=%))'
+
