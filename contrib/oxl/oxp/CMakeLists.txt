@@ -42,8 +42,8 @@ IF (MPEG2_FOUND)
   INCLUDE_DIRECTORIES(${MPEG2_INCLUDE_DIR})
   ADD_DEFINITIONS(-DHAS_MPEG2)
   SET(oxp_sources ${oxp_sources}
-   oxp_mpeg_codec.cxx      oxp_mpeg_codec.h
-   oxp_vidl_mpeg_codec.cxx oxp_vidl_mpeg_codec.h
+      oxp_mpeg_codec.cxx      oxp_mpeg_codec.h
+      oxp_vidl_mpeg_codec.cxx oxp_vidl_mpeg_codec.h
   )
 ENDIF (MPEG2_FOUND)
 
@@ -51,7 +51,7 @@ ENDIF (MPEG2_FOUND)
 AUX_SOURCE_DIRECTORY(Templates oxp_sources)
 
 ADD_LIBRARY(oxp ${oxp_sources})
-TARGET_LINK_LIBRARIES(oxp vidl vnl vil vul vbl ${CMAKE_THREAD_LIBS})
+TARGET_LINK_LIBRARIES(oxp vidl vnl vil vul vbl vpl ${CMAKE_THREAD_LIBS})
 IF (MPEG2_FOUND)
   TARGET_LINK_LIBRARIES(oxp ${MPEG2_LIBRARIES})
 ENDIF (MPEG2_FOUND)
