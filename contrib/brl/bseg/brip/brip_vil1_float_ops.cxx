@@ -24,8 +24,8 @@ vil1_memory_image_of<float>
 brip_vil1_float_ops::convolve(vil1_memory_image_of<float> const & input,
                               vbl_array_2d<float> const & kernel)
 {
-  int w = input.width(), h = input.height();
-  int kw = kernel.cols(); // kh = kernel.rows();
+  const int w = input.width(), h = input.height();
+  const int kw = kernel.cols(); // kh = kernel.rows();
   // add a check for kernels that are not equal dimensions of odd size JLM
   int n = (kw-1)/2;
   vil1_memory_image_of<float> output;
@@ -51,7 +51,7 @@ brip_vil1_float_ops::convolve(vil1_memory_image_of<float> const & input,
 static void fill_1d_array(vil1_memory_image_of<float> const & input,
                           const int y, float* output)
 {
-  int w = input.width();
+  const int w = input.width();
   for (int x = 0; x<w; x++)
     output[x] = input(x,y);
 }
@@ -92,7 +92,7 @@ brip_vil1_float_ops::half_resolution(vil1_memory_image_of<float> const & input,
 {
   vul_timer t;
   float k0 = filter_coef, k1 = 0.25f*filter_coef, k2 = 0.5f*(0.5f-filter_coef);
-  int w = input.width(), h = input.height();
+  const int w = input.width(), h = input.height();
   int half_w =(w+1)/2, half_h = (h+1)/2;
   vil1_memory_image_of<float> output;
   output.resize(half_w, half_h);
@@ -255,8 +255,8 @@ non_maximum_suppression(vil1_memory_image_of<float> const & input,
                         vcl_vector<float>& value)
 {
   vul_timer t;
-  int N = 2*n+1;
-  int w = input.width(), h = input.height();
+  const int N = 2*n+1;
+  const int w = input.width(), h = input.height();
   x_pos.clear();  x_pos.clear();   value.clear();
   vbl_array_2d<float> neighborhood(N,N);
   for (int y =n; y<h-n; y++)
@@ -292,8 +292,8 @@ vil1_memory_image_of<float>
 brip_vil1_float_ops::difference(vil1_memory_image_of<float> const & image_1,
                                 vil1_memory_image_of<float> const & image_2)
 {
-  int w1 = image_1.width(), h1 = image_1.height();
-  int w2 = image_2.width(), h2 = image_2.height();
+  const int w1 = image_1.width(), h1 = image_1.height();
+  const int w2 = image_2.width(), h2 = image_2.height();
   vil1_memory_image_of<float> temp(w1, h1);
   if (w1!=w2||h1!=h2)
   {
@@ -313,7 +313,7 @@ brip_vil1_float_ops::abs_clip_to_level(vil1_memory_image_of<float> const & image
                                        const float thresh, const float level)
 {
   vil1_memory_image_of<float> out;
-  int w = image.width(), h = image.height();
+  const int w = image.width(), h = image.height();
   out.resize(w, h);
   for (int y = 0; y<h; y++)
     for (int x = 0; x<w; x++)
@@ -340,7 +340,7 @@ void brip_vil1_float_ops::gradient_3x3(vil1_memory_image_of<float> const & input
                                        vil1_memory_image_of<float>& grad_y)
 {
   vul_timer t;
-  int w = input.width(), h = input.height();
+  const int w = input.width(), h = input.height();
   float scale = 1.0f/6.0f;
   for (int y = 1; y<h-1; y++)
     for (int x = 1; x<w-1; x++)
@@ -376,7 +376,7 @@ void brip_vil1_float_ops::hessian_3x3(vil1_memory_image_of<float> const & input,
                                       vil1_memory_image_of<float>& Iyy)
 {
   vul_timer t;
-  int w = input.width(), h = input.height();
+  const int w = input.width(), h = input.height();
   for (int y = 1; y<h-1; y++)
     for (int x = 1; x<w-1; x++)
     {
@@ -409,7 +409,7 @@ brip_vil1_float_ops::beaudet(vil1_memory_image_of<float> const & Ixx,
                              vil1_memory_image_of<float> const & Ixy,
                              vil1_memory_image_of<float> const & Iyy)
 {
-  int w = Ixx.width(), h = Ixx.height();
+  const int w = Ixx.width(), h = Ixx.height();
   vil1_memory_image_of<float> output;
   output.resize(w, h);
   for (int y = 0; y<h; y++)
@@ -451,8 +451,8 @@ brip_vil1_float_ops::grad_matrix_NxN(vil1_memory_image_of<float> const & input,
                                      vil1_memory_image_of<float>& IxIy,
                                      vil1_memory_image_of<float>& IyIy)
 {
-  int w = input.width(), h = input.height();
-  int N = (2*n+1)*(2*n+1);
+  const int w = input.width(), h = input.height();
+  const int N = (2*n+1)*(2*n+1);
   vil1_memory_image_of<float> grad_x, grad_y, output;
   grad_x.resize(w,h);
   grad_y.resize(w,h);
@@ -490,7 +490,7 @@ brip_vil1_float_ops::harris(vil1_memory_image_of<float> const & IxIx,
                             vil1_memory_image_of<float> const & IyIy,
                             const double scale)
 {
-  int w = IxIx.width(), h = IxIx.height();
+  const int w = IxIx.width(), h = IxIx.height();
   float norm = 1e-3f; // Scale the output to values in the 10->1000 range
   vil1_memory_image_of<float> output;
   output.resize(w, h);
@@ -522,8 +522,8 @@ vil1_memory_image_of<float>
 brip_vil1_float_ops::sqrt_grad_singular_values(vil1_memory_image_of<float> & input,
                                                int n)
 {
-  int N = (2*n+1)*(2*n+1);
-  int w = input.width(), h = input.height();
+  const int N = (2*n+1)*(2*n+1);
+  const int w = input.width(), h = input.height();
   vil1_memory_image_of<float> grad_x, grad_y, output;
   grad_x.resize(w,h);
   grad_y.resize(w,h);
@@ -566,8 +566,8 @@ brip_vil1_float_ops::Lucas_KanadeMotion(vil1_memory_image_of<float> & current_fr
                                         vil1_memory_image_of<float>& vx,
                                         vil1_memory_image_of<float>& vy)
 {
-  int N = (2*n+1)*(2*n+1);
-  int w = current_frame.width(), h = current_frame.height();
+  const int N = (2*n+1)*(2*n+1);
+  const int w = current_frame.width(), h = current_frame.height();
   vil1_memory_image_of<float> grad_x, grad_y, diff;
   grad_x.resize(w,h);
   grad_y.resize(w,h);
@@ -617,7 +617,7 @@ brip_vil1_float_ops::Lucas_KanadeMotion(vil1_memory_image_of<float> & current_fr
 void brip_vil1_float_ops::fill_x_border(vil1_memory_image_of<float> & image,
                                         int w, float value)
 {
-  int width = image.width(), height = image.height();
+  const int width = image.width(), height = image.height();
   if (2*w>width)
   {
     vcl_cout << "In brip_vil1_float_ops::fill_x_border(..) - 2xborder exceeds image width\n";
@@ -635,7 +635,7 @@ void brip_vil1_float_ops::fill_x_border(vil1_memory_image_of<float> & image,
 void brip_vil1_float_ops::fill_y_border(vil1_memory_image_of<float> & image,
                                         int h, float value)
 {
-  int width = image.width(), height = image.height();
+  const int width = image.width(), height = image.height();
   if (2*h>height)
   {
     vcl_cout << "In brip_vil1_float_ops::fill_y_border(..) - 2xborder exceeds image height\n";
@@ -656,7 +656,7 @@ brip_vil1_float_ops::convert_to_byte(vil1_memory_image_of<float> const & image)
   //determine the max min values
   float min_val = vnl_numeric_traits<float>::maxval;
   float max_val = -min_val;
-  int w = image.width(), h = image.height();
+  const int w = image.width(), h = image.height();
   vil1_memory_image_of<unsigned char> output;
   output.resize(w,h);
   for (int y = 0; y<h; y++)
@@ -672,10 +672,7 @@ brip_vil1_float_ops::convert_to_byte(vil1_memory_image_of<float> const & image)
     range = 255.f/range;
   for (int y = 0; y<h; y++)
     for (int x = 0; x<w; x++)
-    {
-      float v = (image(x,y)-min_val)*range;
-      output(x,y) = (unsigned char)v;
-    }
+      output(x,y) = (unsigned char)((image(x,y)-min_val)*range);
   return output;
 }
 
@@ -685,7 +682,7 @@ vil1_memory_image_of<unsigned char>
 brip_vil1_float_ops::convert_to_byte(vil1_memory_image_of<float> const & image,
                                      const float min_val, const float max_val)
 {
-  int w = image.width(), h = image.height();
+  const int w = image.width(), h = image.height();
   vil1_memory_image_of<unsigned char> output;
   output.resize(w,h);
   float range = max_val-min_val;
@@ -710,7 +707,7 @@ vil1_memory_image_of<unsigned short>
 brip_vil1_float_ops::convert_to_short(vil1_memory_image_of<float> const & image,
                                       const float min_val, const float max_val)
 {
-  int w = image.width(), h = image.height();
+  const int w = image.width(), h = image.height();
   float max_short = 65355.f;
   vil1_memory_image_of<unsigned short> output;
   output.resize(w,h);
@@ -731,20 +728,17 @@ brip_vil1_float_ops::convert_to_short(vil1_memory_image_of<float> const & image,
     }
   return output;
 }
+
 vil1_memory_image_of<vil1_rgb<unsigned char> >
 brip_vil1_float_ops::convert_to_rgb(vil1_memory_image_of<float> const & image,
                                     const float min_val, const float max_val)
 {
-  vil1_memory_image_of<unsigned char> temp = 
-    brip_vil1_float_ops::convert_to_byte(image);
-  int w = temp.width(), h = temp.height();
+  vil1_memory_image_of<unsigned char> temp = brip_vil1_float_ops::convert_to_byte(image);
+  const int w = temp.width(), h = temp.height();
   vil1_memory_image_of<vil1_rgb<unsigned char> > out(w, h);
-  for(int r = 0; r<h; r++)
-    for(int c = 0; c<w; c++)
-      {
-        unsigned char v = temp(c,r);
-        out(c,r).r = v; out(c,r).g = v; out(c,r).b = v;
-      }
+  for (int r = 0; r<h; r++)
+    for (int c = 0; c<w; c++)
+      out(c,r).r = out(c,r).g = out(c,r).b = temp(c,r);
   return out;
 }
 
@@ -753,7 +747,7 @@ vil1_memory_image_of<float>
 brip_vil1_float_ops::convert_to_float(vil1_memory_image_of<unsigned char> const & image)
 {
   vil1_memory_image_of<float> output;
-  int w = image.width(), h = image.height();
+  const int w = image.width(), h = image.height();
   output.resize(w,h);
   for (int y = 0; y<h; y++)
     for (int x = 0; x<w; x++)
@@ -765,14 +759,11 @@ vil1_memory_image_of<float>
 brip_vil1_float_ops::convert_to_float(vil1_memory_image_of<vil1_rgb<unsigned char> > const & image)
 {
   vil1_memory_image_of<float> output;
-  int w = image.width(), h = image.height();
+  const int w = image.width(), h = image.height();
   output.resize(w,h);
   for (int y = 0; y<h; y++)
     for (int x = 0; x<w; x++)
-    {
-      vil1_rgb<unsigned char> rgb = image(x,y);
-      output(x,y) = (float)rgb.grey();
-    }
+      output(x,y) = (float)image(x,y).grey();
   return output;
 }
 
@@ -842,7 +833,7 @@ convert_to_IHS(vil1_memory_image_of<vil1_rgb<unsigned char> >const& image,
                vil1_memory_image_of<float>& H,
                vil1_memory_image_of<float>& S)
 {
-  int w = image.width(), h = image.height();
+  const int w = image.width(), h = image.height();
   I.resize(w,h);
   H.resize(w,h);
   S.resize(w,h);
@@ -864,7 +855,7 @@ display_IHS_as_RGB(vil1_memory_image_of<float> const& I,
                    vil1_memory_image_of<float> const& S,
                    vil1_memory_image_of<vil1_rgb<unsigned char> >& image)
 {
-  int w = I.width(), h = I.height();
+  const int w = I.width(), h = I.height();
   image.resize(w,h);
   float s = 255.0f/360.0f;
   for (int r = 0; r < h; r++)
@@ -887,10 +878,8 @@ display_IHS_as_RGB(vil1_memory_image_of<float> const& I,
         hue = 255;
       if (sat>255)
         sat = 255;
-      unsigned char vi = (unsigned char)in, vh = (unsigned char)hue,
-        vs = (unsigned char)sat;
-      vil1_rgb<unsigned char> v(vi, vh, vs);
-      image(c,r)=v;
+      unsigned char vi = (unsigned char)in, vh = (unsigned char)hue, vs = (unsigned char)sat;
+      image(c,r) = vil1_rgb<unsigned char>(vi, vh, vs);
     }
 }
 #endif // 0
@@ -902,7 +891,7 @@ display_IHS_as_RGB(vil1_memory_image_of<float> const& I,
                    vil1_memory_image_of<float> const& S,
                    vil1_memory_image_of<vil1_rgb<unsigned char> >& image)
 {
-  int w = I.width(), h = I.height();
+  const int w = I.width(), h = I.height();
   image.resize(w,h);
 
   const float deg_to_rad = float(vnl_math::pi/180);
@@ -941,12 +930,12 @@ brip_vil1_float_ops::convert_to_float(vil1_image const & image)
   vil1_memory_image_of<float> fimg;
   if (image.components()==1)
   {
-    if(image.component_format()==VIL1_COMPONENT_FORMAT_IEEE_FLOAT)
-      //already a float image
-      {
-        fimg = vil1_memory_image_of<float>(image);
-        return fimg;
-      }
+    if (image.component_format()==VIL1_COMPONENT_FORMAT_IEEE_FLOAT)
+    //already a float image
+    {
+      fimg = vil1_memory_image_of<float>(image);
+      return fimg;
+    }
     vil1_memory_image_of<unsigned char> temp(image);
     fimg = brip_vil1_float_ops::convert_to_float(temp);
   }
@@ -984,7 +973,7 @@ brip_vil1_float_ops::convert_to_grey(vil1_image const& image)
   // the image is color so we should convert it to greyscale
   // Here we assume the color elements are unsigned char.
   vil1_memory_image_of<vil1_rgb<unsigned char> > color_image(image);
-  int width = color_image.width(), height = color_image.height();
+  const int width = color_image.width(), height = color_image.height();
   // the output image
   vil1_memory_image_of<unsigned char> grey_image;
   grey_image.resize(width, height);
@@ -1038,9 +1027,9 @@ vbl_array_2d<float> brip_vil1_float_ops::load_kernel(vcl_string const & file)
 static void insert_image(vil1_memory_image_of<float> const& image, int col,
                          vnl_matrix<float> & I)
 {
-  int width = image.width(), height = image.height(), row=0;
-  for (int y =0; y<height; y++)
-    for (int x = 0; x<width; x++, row++)
+  const int width = image.width(), height = image.height();
+  for (int y = 0, row = 0; y<height; ++y)
+    for (int x = 0; x<width; x++, ++row) // row runs from 0 to width*height-1
       I.put(row, col, image(x,y));
 }
 
@@ -1055,8 +1044,8 @@ basis_images(vcl_vector<vil1_memory_image_of<float> > const & input_images,
     vcl_cout << "In brip_vil1_float_ops::basis_images(.) - no input images\n";
     return;
   }
-  int width = input_images[0].width(), height = input_images[0].height();
-  int npix = width*height;
+  const int width = input_images[0].width(), height = input_images[0].height();
+  const int npix = width*height;
 
   //Insert the images into matrix I
   vnl_matrix<float> I(npix, n_images, 0.f);
@@ -1289,7 +1278,7 @@ fourier_transform(vil1_memory_image_of<float> const & input,
                   vil1_memory_image_of<float>& mag,
                   vil1_memory_image_of<float>& phase)
 {
-  int w = input.width(), h = input.height();
+  const int w = input.width(), h = input.height();
   vnl_fft_prime_factors<float> pfx (w);
   vnl_fft_prime_factors<float> pfy (h);
   if (!pfx.pqr()[0]||!pfy.pqr()[0])
@@ -1333,7 +1322,7 @@ inverse_fourier_transform(vil1_memory_image_of<float> const& mag,
                           vil1_memory_image_of<float> const& phase,
                           vil1_memory_image_of<float>& output)
 {
-  int w = mag.width(), h = mag.height();
+  const int w = mag.width(), h = mag.height();
   vnl_matrix<vcl_complex<double> > fft_matrix(h, w), fourier_matrix(h, w);
   for (int y = 0; y<h; y++)
     for (int x =0; x<w; x++)
@@ -1359,7 +1348,7 @@ void brip_vil1_float_ops::resize(vil1_memory_image_of<float> const & input,
                                  const int width, const int height,
                                  vil1_memory_image_of<float>& output)
 {
-  int w = input.width(), h = input.height();
+  const int w = input.width(), h = input.height();
   output.resize(width, height);
   for (int y = 0; y<height; y++)
     for (int x = 0; x<width; x++)
@@ -1374,8 +1363,8 @@ bool brip_vil1_float_ops::
 resize_to_power_of_two(vil1_memory_image_of<float> const & input,
                        vil1_memory_image_of<float>& output)
 {
-  int max_exp = 13; //we wouldn't want to have such large images in memory
-  int w = input.width(), h = input.height();
+  const int max_exp = 13; //we wouldn't want to have such large images in memory
+  const int w = input.width(), h = input.height();
   int prodw = 1, prodh = 1;
   //Find power of two width
   int nw, nh;
@@ -1444,7 +1433,7 @@ spatial_frequency_filter(vil1_memory_image_of<float> const & input,
   //Compute the fourier transform of the image.
   vil1_memory_image_of<float> pow_two, mag, bmag, phase, pow_two_filt;
   brip_vil1_float_ops::resize_to_power_of_two(input, pow_two);
-  int Nfx = pow_two.width(), Nfy = pow_two.height();
+  const int Nfx = pow_two.width(), Nfy = pow_two.height();
 
   if (!brip_vil1_float_ops::fourier_transform(pow_two, mag, phase))
     return false;
@@ -1485,7 +1474,7 @@ bilinear_interpolation(vil1_memory_image_of<float> const & input,
                        const double x, const double y)
 {
   //check bounds
-  int w = input.width(), h = input.height();
+  const int w = input.width(), h = input.height();
   //the pixel containing the interpolated point
   int xr = (int)x, yr = (int)y;
   double fx = x-xr, fy = y-yr;
@@ -1523,7 +1512,7 @@ bool brip_vil1_float_ops::homography(vil1_memory_image_of<float> const & input,
   vsol_polygon_2d_sptr input_poly, output_poly;
   vgl_h_matrix_2d<double> Hinv;
   // set up the roi and poly for the input image
-  int win = input.width(), hin = input.height();
+  const int win = input.width(), hin = input.height();
   int wout = 0, hout = 0;
   input_roi = new vsol_box_2d();
   input_roi->add_point(0, 0);
@@ -1681,7 +1670,7 @@ bool brip_vil1_float_ops::chip(vil1_memory_image_of<float> const & input,
 {
   if (!input||!roi)
     return false;
-  int w = input.width(), h = input.height();
+  const int w = input.width(), h = input.height();
   int x_min = (int)roi->get_min_x(), y_min = (int)roi->get_min_y();
   int x_max = (int)roi->get_max_x(), y_max = (int)roi->get_max_y();
   if (x_min<0)
@@ -1707,10 +1696,10 @@ bool brip_vil1_float_ops::chip(vil1_image const & input,
           brip_roi_sptr const& roi,
           vil1_image& chip)
 {
-  if(!chip||!roi)
+  if (!chip||!roi)
     return false;
-  
-  int Nc = input.width(), Nr = input.height();
+
+  const int Nc = input.width(), Nr = input.height();
   int c_min = roi->cmin(0), r_min = roi->rmin(0);
   int c_max = roi->cmax(0), r_max = roi->rmax(0);
   if (c_min<0)
@@ -1724,7 +1713,7 @@ bool brip_vil1_float_ops::chip(vil1_image const & input,
   int CNc = c_max-c_min, CNr = r_max-r_min;
   if (CNc<=0||CNr<=0)
     return false;
-  
+
   if (input.components()==3)
   {
     vil1_memory_image_of<vil1_rgb<unsigned char> > timage(input);
@@ -1735,39 +1724,39 @@ bool brip_vil1_float_ops::chip(vil1_image const & input,
     chip = tchip;
     return true;
   }
-  
-  if(input.component_format()==VIL1_COMPONENT_FORMAT_IEEE_FLOAT)
-    {
-      vil1_memory_image_of<float> timage(input);
-      vil1_memory_image_of<float> tchip(CNc, CNr);
-      for (int r = r_min; r<r_max; r++)
-        for (int c =c_min; c<c_max; c++)
-          tchip(c-c_min, r-r_min) = timage(c, r);
-      chip = tchip;
-      return true;
-    }
-  
-  if(input.get_size_bytes() ==1)
-    {
-      vil1_memory_image_of<unsigned char> timage(input);
-      vil1_memory_image_of<unsigned char> tchip(CNc, CNr);
-      for (int r = r_min; r<r_max; r++)
-        for (int c =c_min; c<c_max; c++)
-          tchip(c-c_min, r-r_min) = timage(c, r);
-      chip = tchip;
-      return true;
-    }
 
-  if(input.get_size_bytes() ==2)
-    {
-      vil1_memory_image_of<unsigned short> timage(input);
-      vil1_memory_image_of<unsigned short> tchip(CNc, CNr);
-      for (int r = r_min; r<r_max; r++)
-        for (int c =c_min; c<c_max; c++)
-          tchip(c-c_min, r-r_min) = timage(c, r);
-      chip = tchip;
-      return true;
-    }
+  if (input.component_format()==VIL1_COMPONENT_FORMAT_IEEE_FLOAT)
+  {
+    vil1_memory_image_of<float> timage(input);
+    vil1_memory_image_of<float> tchip(CNc, CNr);
+    for (int r = r_min; r<r_max; r++)
+      for (int c =c_min; c<c_max; c++)
+        tchip(c-c_min, r-r_min) = timage(c, r);
+    chip = tchip;
+    return true;
+  }
+
+  if (input.get_size_bytes() ==1)
+  {
+    vil1_memory_image_of<unsigned char> timage(input);
+    vil1_memory_image_of<unsigned char> tchip(CNc, CNr);
+    for (int r = r_min; r<r_max; r++)
+      for (int c =c_min; c<c_max; c++)
+        tchip(c-c_min, r-r_min) = timage(c, r);
+    chip = tchip;
+    return true;
+  }
+
+  if (input.get_size_bytes() ==2)
+  {
+    vil1_memory_image_of<unsigned short> timage(input);
+    vil1_memory_image_of<unsigned short> tchip(CNc, CNr);
+    for (int r = r_min; r<r_max; r++)
+      for (int c =c_min; c<c_max; c++)
+        tchip(c-c_min, r-r_min) = timage(c, r);
+    chip = tchip;
+    return true;
+  }
   return false;
 }
 
@@ -1777,22 +1766,21 @@ vil1_image brip_vil1_float_ops::insert_chip_in_image(vil1_image const & image,
                                                      vil1_image const & chip,
                                                      brip_roi_sptr const& roi)
 {
-  if(!chip||!roi)
+  if (!chip||!roi)
     return image;
   //copy the input
   vil1_image temp(image);
-  int chip_cols = chip.width(), chip_rows = chip.height();
-  int imgc = 0, imgr = 0;
+  const int chip_cols = chip.width(), chip_rows = chip.height();
   //need to do cases
   //but just color now
   if (image.components()==3)
   {
     vil1_memory_image_of<vil1_rgb<unsigned char> > timage(image);
     vil1_memory_image_of<vil1_rgb<unsigned char> > tchip(chip);
-    for(int cr = 0; cr<chip_rows; cr++)
-    for(int cc = 0; cc<chip_cols; cc++)
+    for (int cr = 0; cr<chip_rows; cr++)
+      for (int cc = 0; cc<chip_cols; cc++)
       {
-        imgc = roi->ic(cc); imgr = roi->ir(cr);
+        int imgc = roi->ic(cc), imgr = roi->ir(cr);
         timage(imgc, imgr) = tchip(cc, cr);
       }
   return timage;
@@ -1834,8 +1822,8 @@ cross_correlate(vil1_memory_image_of<float> const & image1,
                 const int radius,
                 const float intensity_thresh)
 {
-  int w1 = image1.width(), h1 = image1.height();
-  int w2 = image1.width(), h2 = image1.height();
+  const int w1 = image1.width(), h1 = image1.height();
+  const int w2 = image1.width(), h2 = image1.height();
   //bounds checks
   if (w1!=w2||h1!=h2)
     return -1;
@@ -1844,17 +1832,13 @@ cross_correlate(vil1_memory_image_of<float> const & image1,
 
   //accumulate correlation sums,
   //bi-linear interpolate the values
-  int s = 2*radius+1;
-  double area = s*s;
   double sI1=0, sI2=0, sI1I1=0, sI2I2=0, sI1I2=0;
   for (int y0 = -10*radius; y0<=10*radius; ++y0)
     for (int x0 = -10*radius; x0<=10*radius; ++x0)
     {
       float xp = x+0.1f*x0, yp = y+0.1f*y0;
-      double v1 =
-        brip_vil1_float_ops::bilinear_interpolation(image1, xp, yp);
-      double v2 =
-        brip_vil1_float_ops::bilinear_interpolation(image2, xp, yp);
+      double v1 = brip_vil1_float_ops::bilinear_interpolation(image1, xp, yp);
+      double v2 = brip_vil1_float_ops::bilinear_interpolation(image2, xp, yp);
       sI1 += v1;
       sI2 += v2;
       sI1I1 += v1*v1;
@@ -1862,8 +1846,9 @@ cross_correlate(vil1_memory_image_of<float> const & image1,
       sI1I2 += v1*v2;
     }
   //:compute correlation.
-  float cc = cross_corr(area, sI1, sI2, sI1I1, sI2I2, sI1I2, intensity_thresh);
-  return cc;
+  int s = 2*radius+1;
+  double area = s*s;
+  return cross_corr(area, sI1, sI2, sI1I1, sI2I2, sI1I2, intensity_thresh);
 }
 
 //: r0 is the image from from which to read the new intensity values
@@ -1878,10 +1863,8 @@ static bool update_row(vil1_memory_image_of<float> const& image1,
                        vbl_array_2d<double>& SI2I2,
                        vbl_array_2d<double>& SI1I2)
 {
-  int w1 = image1.width();
-  int w2 = image2.width();
-  int h1 = image1.height();
-  int h2 = image2.height();
+  const int w1 = image1.width(), h1 = image1.height();
+  const int w2 = image2.width(), h2 = image2.height();
   if (w1!=w2||h1!=h2||r<0||r>=h1)
     return false;
   double i10 = image1(0,r0), i20 = image2(0,r0);
@@ -1994,7 +1977,7 @@ static void advance_rows(vbl_array_2d<double>& S)
 static bool output_cc_row(const int r0,  vbl_array_1d<float> const& cc,
                           vil1_memory_image_of<float>& out)
 {
-  int n = cc.size(), w = out.width();
+  const int n = cc.size(), w = out.width();
   if (n!=w)
     return false;
   for (int c = 0; c<w; c++)
@@ -2011,8 +1994,8 @@ cross_correlate(vil1_memory_image_of<float> const & image1,
                 const float intensity_thresh)
 {
   vul_timer t;
-  int w = image1.width(), h = image1.height();
-  int w2 = image2.width(), h2 = image2.height();
+  const int w = image1.width(), h = image1.height();
+  const int w2 = image2.width(), h2 = image2.height();
   //sizes must match
   if (w!=w2||h!=h2)
   {
