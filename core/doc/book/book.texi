@@ -140,7 +140,7 @@ Copyright @copyright{} 2000 Andrew Fitzgibbon
 * vnl::
 * vil::
 * vgl::
-* viol::
+* vsl::
 * vgui::
 * Conclusion::
 * Concept Index::
@@ -244,7 +244,7 @@ here that is useful, and the library is quite large enough already.  The
 @code{vgl_algo} library contains the higher-level code, which is allowed
 to depend on @code{vnl} (and if necessary even on @code{vbl}).
 
-@subsection viol: Binary I/O
+@subsection vsl: Binary I/O
 This section describes how to save and restore objects using a binary stream.
 It details how to add the appropriate functions to each class to make use
 of this facility.
@@ -475,7 +475,7 @@ Level:   0         1         2          3
          vcl       vbl       vnl_algo   v**l
                    vnl       vil_algo
                    vil       vgl_algo
-                   vgl       viol
+                   vgl       vsl
 @end example
 @quotation
 Library layers: libraries in one layer may not call their
@@ -2022,7 +2022,7 @@ The parallel @code{vil_image} and @code{vil_image_impl} class hierarchies.
 @ejectallfigures
 
 @comment ------------------------------------------------------------------
-@node    vgl, viol , vil, top
+@node    vgl, vsl , vil, top
 @comment node-name, next,  previous, up
 @chapter vgl: Geometry
 @cindex vgl
@@ -2034,10 +2034,10 @@ simple.
 @endchapsummary
 
 @comment ------------------------------------------------------------------
-@node    viol ,        vgui,    vgl,      top
+@node    vsl ,        vgui,    vgl,      top
 @comment node-name,   next,    previous, up
-@chapter viol: Binary I/O
-@cindex viol
+@chapter vsl: Binary I/O
+@cindex vsl
 @cindex Binary I/O
 @cindex Binary save and restore
 @cindex Saving objects
@@ -2047,7 +2047,7 @@ simple.
 @include chapter_vsl.texi
 
 @comment ------------------------------------------------------------------
-@node    vgui,      Conclusion,     viol,      top
+@node    vgui,      Conclusion,     vsl,      top
 @comment node-name, next,    previous, up
 @chapter vgui: cross-platform user interface
 @cindex vgui
@@ -2071,7 +2071,7 @@ The directory structure of VXL is below
               /vbl
               /vil
               /vgl
-              /viol
+              /vsl
           /config
           /Scripts
 @end example
@@ -2105,9 +2105,9 @@ File: vgl/vgl_point_2d.txx:
 template class vgl_point_2d<T>; \
 template vcl_ostream& operator<<(vcl_ostream&, const vgl_point_2d<T>&); \
 template vcl_istream& operator>>(vcl_istream&, vgl_point_2d<T>&); \
-template void viol_print_summary(vcl_ostream &, const vgl_point_2d<T> &); \
-template void viol_b_read(vcl_istream &, vgl_point_2d<T> &); \
-template void viol_b_write(vcl_ostream &, const vgl_point_2d<T> &); \
+template void vsl_print_summary(vcl_ostream &, const vgl_point_2d<T> &); \
+template void vsl_b_read(vcl_istream &, vgl_point_2d<T> &); \
+template void vsl_b_write(vcl_ostream &, const vgl_point_2d<T> &); \
 ;
 @end example
 

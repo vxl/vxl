@@ -18,6 +18,9 @@ However, it is recommended that I/O for other libraries be provided by writing
 @code{b_write(os);} and @code{b_read(is);} functions in each class.  See the
 `Design Notes' section below.
 
+NOTE: The vsl library, and the io/v?l libraries currently live in the Manchester
+University package - mul.  They will be moved to the core vxl once they've been
+tested at more than one site.
 
 @section Using Binary I/O
 
