@@ -41,8 +41,7 @@
 
 #include "vectors.h"
 
-#include <vcl_cfloat.h> // for MAXFLOAT
-// MAXFLOAT is now guaranteed to be defined in <vcl_cfloat.h>
+#include <vcl_cfloat.h> // for FLT_MAX
 #include <vcl_ostream.h>
 
 #ifdef VCL_VC
@@ -185,8 +184,8 @@ void multiplyRotations (
 
 inline void emptyBoundingbox (point3D& min, point3D& max)
 { // set an empty boundingbox (such that any point extends it)
-  min.x = min.y = min.z = MAXFLOAT;
-  max.x = max.y = max.z = -MAXFLOAT;
+  min.x = min.y = min.z = FLT_MAX;
+  max.x = max.y = max.z = -FLT_MAX;
 }
 
 
