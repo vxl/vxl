@@ -16,7 +16,7 @@
 
 //: Represent images of one or more planes of type T.
 //  Each plane is nx() x ny() Ts, with the (x,y) element
-//  of the i'th plane accessable using plane(i)[y*nx()+x]
+//  of the i'th plane accessable using im.plane(i)[x*im.xstep() + y*im.ystep()]
 //  The actual image data is either allocated by the class
 //  (using resize), in which case it is deleted by the
 //  destructor, or is allocated outside (and is not deleted on
@@ -30,7 +30,7 @@
 //  Formats currently include:
 //  "GreyByte" : an nx() x ny() greyscale image of Ts plane(0)[x+y*ystep()]
 //  "RGBPlaneByte" : an nx() x ny() colour image with three separate
-//                   planes of data, plane(i)[x+y*ystep()] i=0,1,2 for r,g,b
+//                   planes of data, plane(i)[x*im.xstep() + y*imystep()] i=0,1,2 for r,g,b
 //  It is safest to examine the number of planes, xstep() and ystep() to
 //  determine the format.
 template<class T>
