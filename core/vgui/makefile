@@ -127,9 +127,9 @@ include ${IUEROOT}/config/top-params.mk
 
 # capes - Mesa-X11 accelerated functions using Hermes
 SOURCES += internals/vgui_accelerate.cxx
+SOURCES += internals/vgui_accelerate_tag.cxx
 ifeq (1,$(HAS_X11))
 SOURCES += internals/vgui_accelerate_x11.cxx
-SOURCES += internals/vgui_accelerate_tag.cxx
 else
 SOURCES += internals/vgui_accelerate_mfc.cxx
 endif
