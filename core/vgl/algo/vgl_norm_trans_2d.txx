@@ -99,9 +99,9 @@ compute_from_points(vcl_vector<vgl_homg_point_2d<T> > const& points)
 //  The normalizing transform for lines is computed from the 
 //  set of points defined by the intersection of the perpendicular from
 //  the origin with the line.  Each such point is given by:
-//    p = [-a*c/sqrt(a^2+b^2), -b*c/sqrt(a^2+b^2), 1]^t
+//    $p = [-a*c/\sqrt(a^2+b^2), -b*c/\sqrt(a^2+b^2), 1]^T$
 //  If we assume the line is normalized then:
-//    p = [-a*c, -b*c, 1]^t
+//    $p = [-a*c, -b*c, 1]^T$
 //
 template <class T>
 bool vgl_norm_trans_2d<T>::
