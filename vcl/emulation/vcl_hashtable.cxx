@@ -1,3 +1,6 @@
+#include <vcl/vcl_compiler.h>
+#if !VCL_USE_NATIVE_STL
+
 #include "vcl_hashtable.h"
 
 #if ( __STL_STATIC_TEMPLATE_DATA > 0 ) && ! defined (WIN32)
@@ -13,5 +16,7 @@ const unsigned long VCL_prime<false>::list_[] =
   50331653,   100663319,  201326611, 402653189, 805306457, 
   1610612741, 3221225473U, 4294967291U
 };
+
+#endif
 
 #endif

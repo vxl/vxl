@@ -24,13 +24,11 @@ SOURCES += $(wildcard vcl_chkr.cxx)
 include ${IUEROOT}/config/top-params.mk
 #######################################
 
-ifndef USE_NATIVE_STL
 SOURCES += emulation/vcl_straits.cxx
 SOURCES += emulation/vcl_hashtable.cxx
 SOURCES += emulation/vcl_string_instances.cxx
 SOURCES += emulation/vcl_alloc.cxx
 SOURCES += emulation/vcl_rbtree_instances.cxx
-endif
 
 DEFINES += -DBUILDING_VCL_DLL
 

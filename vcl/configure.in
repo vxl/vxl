@@ -1,17 +1,12 @@
-dnl Suggested order for calling autoconf macros, from the man pages :
-dnl AC_INIT(file)
-dnl checks for programs
-dnl checks for libraries
-dnl checks for header files
-dnl checks for typedefs
-dnl checks for structures
-dnl checks for compiler characteristics
-dnl checks for library functions
-dnl checks for system services
-dnl AC_OUTPUT([file...])
-
 # initialize autoconf
 AC_INIT(configure.in)
+
+# blurb
+echo "CC=$CC"
+echo "CCFLAGS=$CCFLAGS"
+echo "CXX=$CXX"
+echo "CXXFLAGS=$CXXFLAGS"
+echo "TXXFLAGS=$TXXFLAGS"
 
 ## we need to use the scripts in ./shell
 #no_we_dont AC_CONFIG_AUX_DIR(shell)

@@ -1,3 +1,6 @@
+#include <vcl/vcl_compiler.h>
+#if !VCL_USE_NATIVE_STL
+
 #include <vcl/vcl_iostream.h>
 #include <vcl/vcl_string.h>
 #include <vcl/vcl_string.txx>
@@ -10,3 +13,5 @@ const size_t basic_string <charT, traits>::npos = (size_t)(-1);
 
 //template class vcl_basic_string<char, vcl_char_traits<char> >;
 //VCL_BASIC_STRING_INSTANTIATE(char, vcl_char_traits<char>);
+
+#endif
