@@ -25,12 +25,12 @@
 #include <vcl_iosfwd.h>
 
 template <class T> // scalar
-bool vnl_matlab_write(vcl_ostream &, T const &, char const *);
+bool vnl_matlab_write(vcl_ostream &, T const &, char const *variable_name);
 
 template <class T> // 1D array
-bool vnl_matlab_write(vcl_ostream &, T const *, unsigned, char const *);
+bool vnl_matlab_write(vcl_ostream &, T const *, unsigned size, char const *variable_name);
 
 template <class T> // 2D array
-bool vnl_matlab_write(vcl_ostream &, T const * const *, unsigned, unsigned, char const *);
+bool vnl_matlab_write(vcl_ostream &, T const * const *, unsigned rows, unsigned cols, char const *variable_name);
 
 #endif // vnl_matlab_write_h_
