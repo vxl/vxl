@@ -64,9 +64,7 @@ void test_int ()
          sm5(1,0)==5 && sm5(1,1)==5 && sm5(1,2)==2 && 
          sm5(2,0)==0 && sm5(2,1)==2 && sm5(2,2)==3), true);
   vcl_cout << "sm5 \n" << sm5 << vcl_endl << vcl_endl;
-
 }
-
 
 
 static

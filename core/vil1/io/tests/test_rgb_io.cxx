@@ -28,17 +28,13 @@ void test_rgb_double_io()
   TEST ("Finished reading file successfully", (!bfs_in), false);
   bfs_in.close();
 
-
-
   TEST ("p_out == p_in", 
     p_out.R()==p_in.R() && 
     p_out.G()==p_in.G() && 
     p_out.B()==p_in.B() , true);
 
-
   vsl_print_summary(vcl_cout, p_out);
   vcl_cout << vcl_endl;
-
 }
 
 

@@ -29,7 +29,6 @@ inst(vil_byte, float);
 inst(int, float);
 
 
-
 vil_image vil_smooth_gaussian(vil_image const & in, double sigma)
 {
   // Create 1-D mask:

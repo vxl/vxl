@@ -10,7 +10,6 @@
 
 void test_file_matrix()
 {
-
   vnl_file_matrix<double> H((testlib_root_dir()+
     "/vxl/vnl/tests/data_3x3_matrix").c_str());
 

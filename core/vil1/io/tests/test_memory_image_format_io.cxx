@@ -30,8 +30,6 @@ void test_memory_image_format_double_io()
   TEST ("Finished reading file successfully", (!bfs_in), false);
   bfs_in.close();
 
-
-
   TEST ("p_out == p_in", p_out.components==p_in.components &&
     p_out.bits_per_component==p_in.bits_per_component &&
     p_out.component_format==p_in.component_format , true);

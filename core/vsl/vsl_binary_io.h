@@ -109,7 +109,6 @@ protected:
 
   //: The version number of the IO scheme.
   static const unsigned short version_no_;
-
 };
 
 

@@ -14,7 +14,6 @@ Need:
  vil_memory_image_of<T>
 
 
-
 file_format: string vs. char const*
 block copies of memory_images
 blocking hints on generic

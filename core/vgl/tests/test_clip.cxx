@@ -124,8 +124,6 @@ test_intersection( )
     testlib_test_perform( num_cont(result) == 0 &&
                       num_vert(result) == 0 );
   }
-
-
 }
 
 
