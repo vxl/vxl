@@ -170,6 +170,7 @@ const vxl_uint_16 VIL_DICOM_HEADER_RSFRAMEOFREFERENCEUID    =0x0052; // UI
 const vxl_uint_16 VIL_DICOM_HEADER_RSIMAGESINACQUISITION    =0x1002; // IS
 const vxl_uint_16 VIL_DICOM_HEADER_RSPOSITIONREFERENCE      =0x1040; // LO
 const vxl_uint_16 VIL_DICOM_HEADER_RSSLICELOCATION          =0x1041; // DS
+const vxl_uint_16 VIL_DICOM_HEADER_RSIMAGECOMMENTS          =0x4000; // LT
 
 // Useful elements from the Image group
 const vxl_uint_16 VIL_DICOM_HEADER_IMSAMPLESPERPIXEL        =0x0002; // US
@@ -413,6 +414,7 @@ struct vil_dicom_header_info
   vil_dicom_header_type_of<vil_dicom_header_IS>::type images_in_acq_;        /*< Then number ot images in the acquisition */
   vil_dicom_header_type_of<vil_dicom_header_LO>::type pos_ref_ind_;   /*< The position reference indicator */
   vil_dicom_header_type_of<vil_dicom_header_DS>::type slice_location_;     /*< The location of the slice */
+  vil_dicom_header_type_of<vil_dicom_header_LT>::type image_comments_;  /*< The image comments */
 
   // Image info
   vil_dicom_header_type_of<vil_dicom_header_US>::type pix_samps_; /*< The number of samples per pixel */
