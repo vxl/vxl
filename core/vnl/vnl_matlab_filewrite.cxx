@@ -26,7 +26,7 @@ vcl_string vnl_matlab_filewrite::make_var_name(char const* variable_name)
   if (variable_name)
     return vcl_string(variable_name);
   else {
-    ostrstream ss;
+    vcl_ostrstream ss;
     ss << variable_int_++;    
     return basename_ + vcl_string(ss.str());
   }
