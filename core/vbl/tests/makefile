@@ -9,6 +9,7 @@ orl: xall tests
 USES = vxl
 IULIBS := -lvbl-test
 include ${IUEROOT}/vxl/vbl/config.mk
+include ${IUEROOT}/vxl/testlib/config.mk
 
 LIBRARY := vbl-test
 SOURCES += vbl_test_classes.cxx

@@ -8,7 +8,6 @@ LIBRARY := vbl
 VERSION := 1.0
 
 MANPAGE_SOURCES += vbl_fwd.h
-SOURCES += vbl_test.cxx
 
 SOURCES += vbl_bool_ostream.cxx
 SOURCES += vbl_ref_count.cxx
