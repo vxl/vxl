@@ -1,39 +1,43 @@
 #
 # Find a TIFF library
 #
+# This file is used to manage using either a natively provided TIFF library or the one in v3p if provided.
+#
+#
+# As per the standard scheme the following definitions are used
+# TIFF_INCLUDE_DIR - where to find tiff.h
+# TIFF_LIBRARIES   - the set of libraries to include to use TIFF.
+# TIFF_FOUND       - TRUE, if available someone one the system.
 
-IF(NOT HAS_TIFF)
+# Additionally
+# VXL_USING_NATIVE_TIFF  - True if we are using a TIFF library provided outside vxl (or v3p)
 
 
-  INCLUDE( ${MODULE_PATH}/FindNativeTIFF.cmake )
+INCLUDE( ${MODULE_PATH}/NewCMake/FindTIFF.cmake )
   
-  IF(NOT HAS_NATIVE_TIFF)
+IF(NOT TIFF_FOUND)
+
+  #
+  # At some point, in a "release" version, it is possible that someone
+  # will not have the v3p tiff library, so make sure the headers
+  # exist.
+  #
   
-    #
-    # At some point, in a "release" version, it is possible that someone
-    # will not have the v3p tiff library, so make sure the headers
-    # exist.
-    #
+  IF(EXISTS ${allvxl_SOURCE_DIR}/v3p/tiff/tiff.h)
+
+    SET( TIFF_FOUND "YES" )
+    SET( TIFF_INCLUDE_DIR ${allvxl_SOURCE_DIR}/v3p/tiff)  
+    SET( TIFF_LIBRARIES tiff )
   
-    FIND_PATH( TIFF_INCLUDE_PATH tiff.h
-      ${allvxl_SOURCE_DIR}/v3p/tiff
-    )
+  ENDIF(EXISTS ${allvxl_SOURCE_DIR}/v3p/tiff/tiff.h)
   
-    IF(TIFF_INCLUDE_PATH)
+ENDIF(NOT TIFF_FOUND)
   
-      SET( HAS_TIFF "YES" )
-      ADD_DEFINITIONS( -DHAS_TIFF )
-  
-      SET( TIFF_LIBRARIES tiff )
-  
-    ENDIF(TIFF_INCLUDE_PATH)
-  
-  ELSE(NOT HAS_NATIVE_TIFF)
-  
-    SET( HAS_TIFF "YES" )
-    ADD_DEFINITIONS( -DHAS_TIFF )
-    SET( TIFF_INCLUDE_PATH ${NATIVE_TIFF_INCLUDE_PATH} )
-    SET( TIFF_LIBRARIES ${NATIVE_TIFF_LIBRARIES} )
-  
-  ENDIF(NOT HAS_NATIVE_TIFF)
-ENDIF(NOT HAS_TIFF)
+
+IF(TIFF_LIBRARY)
+  SET(VXL_USING_NATIVE_TIFF "YES")
+ENDIF(TIFF_LIBRARY)
+
+IF(TIFF_FOUND)
+  SET (TIFF_DEFINITIONS ${JPEG_DEFINITIONS} -DHAS_TIFF)
+ENDIF(TIFF_FOUND)

@@ -23,10 +23,6 @@ IF(NOT JPEG_FOUND)
   # will not have the v3p jpeg library
   #
 
-  FIND_PATH( JPEG_INCLUDE_PATH jpeglib.h
-    ${allvxl_SOURCE_DIR}/v3p/jpeg
-  )
-
   IF(EXISTS ${allvxl_SOURCE_DIR}/v3p/jpeg/jpeglib.h)
 
     SET( JPEG_FOUND "YES" )
@@ -38,7 +34,7 @@ IF(NOT JPEG_FOUND)
 ENDIF(NOT JPEG_FOUND)
 
 IF(JPEG_LIBRARY)
-  SET(VXL_USING_NATIVE_JPEG)
+  SET(VXL_USING_NATIVE_JPEG "YES")
 ENDIF(JPEG_LIBRARY)
 
 IF(JPEG_FOUND)
