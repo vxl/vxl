@@ -1,12 +1,11 @@
-// This is vxl/vnl/vnl_c_vector.txx
+// This is ./vxl/vnl/vnl_c_vector.txx
 #ifndef vnl_c_vector_txx_
 #define vnl_c_vector_txx_
 
-//-*- c++ -*-------------------------------------------------------------------
-//
-// This is vnl_c_vector
-// Author: Andrew W. Fitzgibbon, Oxford RRG
-// Created: 12 Feb 98
+//:
+// \file
+// \author Andrew W. Fitzgibbon, Oxford RRG
+// \date   12 Feb 98
 //
 //-----------------------------------------------------------------------------
 
@@ -227,15 +226,15 @@ T vnl_c_vector<T>::euclid_dist_sq(T const *a, T const *b, unsigned n)
 }
 
 
-
 //------------------------------------------------------------
 
 template <class T, class S>
 void vnl_c_vector_two_norm_squared(T const *p, unsigned n, S *out)
 {
-#ifdef VCL_VC
+#if 1
 // IMS: MSVC's optimiser does much better with this
 // consistently about 30% better over vectors from 4 to 20000 dimensions.
+// PVr: with gcc 3.0 on alpha this is even a factor 3 faster!
   S val =0;
   T const* end = p+n;
   while (p != end)
@@ -254,7 +253,7 @@ void vnl_c_vector_rms_norm(T const *p, unsigned n, S *out)
   vnl_c_vector_two_norm_squared(p, n, out);
   *out /= n;
   typedef typename vnl_numeric_traits<S>::real_t real_t;
-  *out = (S)(vcl_sqrt(real_t(*out)));
+  *out = S(vcl_sqrt(real_t(*out)));
 }
 
 template <class T, class S>
@@ -283,7 +282,6 @@ void vnl_c_vector_inf_norm(T const *p, unsigned n, S *out)
       *out = v;
   }
 }
-
 
 
 //---------------------------------------------------------------------------
