@@ -6,7 +6,7 @@
 #include <vbl/vbl_array_2d.h>
 #include <vnl/vnl_math.h>
 
-#include <vcl_assert.h>
+#include <vcl_cassert.h>
 
 template <class T>
 rsdl_borgefors<T>::rsdl_borgefors()
