@@ -1,55 +1,53 @@
-#ifndef vcsl_angle_h
-#define vcsl_angle_h
-
+#ifndef vcsl_angle_h_
+#define vcsl_angle_h_
 //:
 // \file
 // \brief Angle dimension
 // \author François BERTEL
 //
 // \verbatim
-// Modifications
-// 2000/06/28 François BERTEL Creation. Adapted from IUE
+//  Modifications
+//   2000/06/28 François BERTEL Creation. Adapted from IUE
+//   2004/09/17 Peter Vanroose  do not pass vcsl_unit objects; use vcsl_unit_sptr instead
 // \endverbatim
 
-#include <vcsl/vcsl_angle_sptr.h>
-
 #include <vcsl/vcsl_dimension.h>
+#include <vcsl/vcsl_angle_sptr.h>
+#include <vcsl/vcsl_unit_sptr.h>
 
 //: Angle dimension
 class vcsl_angle
   : public vcsl_dimension
 {
-public:
   //***************************************************************************
   // Constructors/Destructor
   //***************************************************************************
 
-  //: Destructor
-  virtual ~vcsl_angle();
+  // Default constructor
+  vcsl_angle() {}
+
+ public:
+  // Destructor
+  virtual ~vcsl_angle() {}
 
   //***************************************************************************
   // Status report
   //***************************************************************************
 
   //: Is `new_unit' a compatible unit for the dimension ?
-  virtual bool compatible_unit(const vcsl_unit &new_unit) const;
+  // Pure virtual function of vcsl_dimension
+  virtual bool compatible_unit(vcsl_unit_sptr const& new_unit) const;
 
   //: Return the standard unit associated to the dimension
-  virtual vcsl_unit_sptr standard_unit(void) const;
+  // Pure virtual function of vcsl_dimension
+  virtual vcsl_unit_sptr standard_unit() const;
 
   //***************************************************************************
   // Singleton pattern
   //***************************************************************************
 
   //: Return the reference to the unique vcsl_angle object
-  static vcsl_angle_sptr instance(void);
-
-protected:
-  //: Default constructor
-  explicit vcsl_angle(void);
-
-  //: Reference to the unique vcsl_angle object
-  static vcsl_angle_sptr instance_;
+  static vcsl_angle_sptr instance();
 };
 
-#endif // vcsl_angle_h
+#endif // vcsl_angle_h_
