@@ -1,5 +1,5 @@
-#ifndef VSOL_CURVE_3D_H
-#define VSOL_CURVE_3D_H
+#ifndef vsol_curve_3d_h_
+#define vsol_curve_3d_h_
 //*****************************************************************************
 //:
 // \file
@@ -12,8 +12,8 @@
 //  Modifications
 //   2000/05/03 François BERTEL Creation
 //   2000/06/17 Peter Vanroose  Implemented all operator==()s and type info
-//   2004/10/09 Peter Vanroose  Inlined all 1-line methods in class decl
-//   2004/09/17 MingChing Chang  Add cast_to stuffs
+//   2004/09/10 Peter Vanroose  Inlined all 1-line methods in class decl
+//   2004/09/17 MingChing Chang Add cast_to stuffs and endpoints_equal()
 // \endverbatim
 //*****************************************************************************
 
@@ -45,7 +45,11 @@ class vsol_curve_3d : public vsol_spatial_object_3d
   //---------------------------------------------------------------------------
   //: Destructor
   //---------------------------------------------------------------------------
-  virtual ~vsol_curve_3d();
+  virtual ~vsol_curve_3d() {}
+
+  //***************************************************************************
+  // Access
+  //***************************************************************************
 
   //---------------------------------------------------------------------------
   //: Return the spatial type
@@ -56,10 +60,6 @@ class vsol_curve_3d : public vsol_spatial_object_3d
   //: Return the curve type
   //---------------------------------------------------------------------------
   virtual vsol_curve_3d_type curve_type(void) const { return vsol_curve_3d::CURVE_NO_TYPE; }
-
-  //***************************************************************************
-  // Access
-  //***************************************************************************
 
   //---------------------------------------------------------------------------
   //: Return the first point of `this'
@@ -80,7 +80,7 @@ class vsol_curve_3d : public vsol_spatial_object_3d
   //---------------------------------------------------------------------------
   virtual vsol_curve_3d *cast_to_curve(void) {return this;}
   virtual const vsol_curve_3d *cast_to_curve(void) const {return this;}
-  
+
   //---------------------------------------------------------------------------
   //: Return `this' if `this' is an line, 0 otherwise
   //---------------------------------------------------------------------------
@@ -128,8 +128,10 @@ class vsol_curve_3d : public vsol_spatial_object_3d
   //---------------------------------------------------------------------------
   virtual void set_p1(const vsol_point_3d_sptr &new_p1)=0;
 
-protected:
+ protected:
+  //: Helper function to determine if curve endpoints are equal (in any order).
+  // Useful for curve equality tests.
   bool endpoints_equal(const vsol_curve_3d &other) const;
 };
 
-#endif // VSOL_CURVE_3D_H
+#endif // vsol_curve_3d_h_

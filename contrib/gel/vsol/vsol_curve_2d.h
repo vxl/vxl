@@ -1,5 +1,5 @@
-#ifndef VSOL_CURVE_2D_H
-#define VSOL_CURVE_2D_H
+#ifndef vsol_curve_2d_h_
+#define vsol_curve_2d_h_
 //*****************************************************************************
 //:
 //  \file
@@ -9,11 +9,12 @@
 // François BERTEL
 //
 // \verbatim
-// Modifications
-//  2000/06/17 Peter Vanroose  Implemented all operator==()s and type info
-//  2000/04/27 François BERTEL Creation
-//  2002/04/22 Amir Tamrakar   Added POLYLINE type 
-//  2004/09/23 Ming-Ching Chang fix name of cast_to functions.
+//  Modifications
+//   2000/06/17 Peter Vanroose  Implemented all operator==()s and type info
+//   2000/04/27 François BERTEL Creation
+//   2002/04/22 Amir Tamrakar   Added POLYLINE type
+//   2004/09/10 Peter Vanroose  Inlined all 1-line methods in class decl
+//   2004/09/23 MingChing Chang fix name of cast_to functions and added endpoints_equal
 // \endverbatim
 //*****************************************************************************
 
@@ -30,7 +31,7 @@ class vsol_digital_curve_2d;
 
 class vsol_curve_2d : public vsol_spatial_object_2d
 {
-public:
+ public:
   enum vsol_curve_2d_type
   { CURVE_NO_TYPE=0,
     LINE,
@@ -48,7 +49,11 @@ public:
   //---------------------------------------------------------------------------
   //: Destructor
   //---------------------------------------------------------------------------
-  virtual ~vsol_curve_2d();
+  virtual ~vsol_curve_2d() {}
+
+  //***************************************************************************
+  // Access
+  //***************************************************************************
 
   //---------------------------------------------------------------------------
   //: return the spatial type
@@ -60,9 +65,15 @@ public:
   //---------------------------------------------------------------------------
   virtual vsol_curve_2d_type curve_type(void) const { return vsol_curve_2d::CURVE_NO_TYPE; }
 
-  //***************************************************************************
-  // Access
-  //***************************************************************************
+  //---------------------------------------------------------------------------
+  //: Return the first point of `this'
+  //---------------------------------------------------------------------------
+  virtual vsol_point_2d_sptr p0(void) const=0;
+
+  //---------------------------------------------------------------------------
+  //: Return the last point of `this'
+  //---------------------------------------------------------------------------
+  virtual vsol_point_2d_sptr p1(void) const=0;
 
   //***************************************************************************
   // Replaces dynamic_cast<T>
@@ -73,7 +84,7 @@ public:
   //---------------------------------------------------------------------------
   virtual vsol_curve_2d *cast_to_curve(void) {return this;}
   virtual const vsol_curve_2d *cast_to_curve(void) const {return this;}
-  
+
   //---------------------------------------------------------------------------
   //: Return `this' if `this' is an line, 0 otherwise
   //---------------------------------------------------------------------------
@@ -104,16 +115,6 @@ public:
   virtual vdgl_digital_curve const*cast_to_vdgl_digital_curve(void)const{return 0;}
   virtual vdgl_digital_curve *cast_to_vdgl_digital_curve(void) {return 0;}
 
-  //---------------------------------------------------------------------------
-  //: Return the first point of `this'
-  //---------------------------------------------------------------------------
-  virtual vsol_point_2d_sptr p0(void) const=0;
-
-  //---------------------------------------------------------------------------
-  //: Return the last point of `this'
-  //---------------------------------------------------------------------------
-  virtual vsol_point_2d_sptr p1(void) const=0;
-
   //***************************************************************************
   // Status report
   //***************************************************************************
@@ -138,7 +139,9 @@ public:
   virtual void set_p1(const vsol_point_2d_sptr &new_p1)=0;
 
  protected:
+  //: Helper function to determine if curve endpoints are equal (in any order).
+  // Useful for curve equality tests.
   bool endpoints_equal(const vsol_curve_2d &other) const;
 };
 
-#endif // #ifndef VSOL_CURVE_2D_H
+#endif // vsol_curve_2d_h_
