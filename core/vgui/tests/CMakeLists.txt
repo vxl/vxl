@@ -18,6 +18,10 @@ IF(HAS_X11)
  ADD_EXECUTABLE( vgui_test_acceleration test_acceleration.cxx )
 #ADD_TEST( vgui_test_acceleration vgui_test_acceleration )
 ENDIF(HAS_X11)
+IF(HAS_SDL)
+ ADD_EXECUTABLE( test_SDL ../impl/SDL/test-SDL.cxx )
+#ADD_TEST( test_SDL test_SDL )
+ENDIF(HAS_SDL)
 
 # Don't compile these by default.
 IF(EXTRA_TESTS)
