@@ -3,7 +3,6 @@
 //:
 // \file
 #include <vcl_cmath.h> // for vcl_fabs(double)
-#include <vcl_algorithm.h>
 #include <vnl/vnl_math.h>
 #include <vnl/vnl_numeric_traits.h>
 #include <vgl/vgl_line_2d.h>
@@ -316,7 +315,7 @@ bool bmrf_network_builder::image_coords(const double a, const double s,
 // x_s_min < s_max
 //
 // Candidates for the right scan also must satisfy
-// x_s_min < s_max 
+// x_s_min < s_max
 // x_s_max > s_min + r
 //==============================================================
 bool bmrf_network_builder::
@@ -325,17 +324,17 @@ intensity_candidates(bmrf_epi_seg_sptr const& seg,
                      vcl_set<bmrf_epi_seg_sptr>& right_cand) const
 {
   if (!seg)
-    return false; 
+    return false;
   int n = epi_segs_.size();
   if (n<2)
     return false;//can't get bounds with only one seg
-  
+
   double a_min = seg->min_alpha(), a_max = seg->max_alpha();
   double s_min = seg->min_s(), s_max = seg->max_s();
   double r = radius(s_min);//scaled region radius
 
   // define the bounds for the search
-  const vcl_multimap<double,bmrf_node_sptr>::const_iterator 
+  const vcl_multimap<double,bmrf_node_sptr>::const_iterator
     bound1 = s_node_map_.lower_bound(s_min-r),
     bound2 = s_node_map_.lower_bound(s_min),
     bound3 = s_node_map_.upper_bound(s_max),
@@ -561,7 +560,7 @@ bool bmrf_network_builder::add_frame_nodes()
     double max_s = seg->max_s();
     for (double s = min_s; s<max_s; s=1.0/(1.0/s - max_delta_recip_s_/2.0))
       s_node_map_.insert(vcl_pair<double,bmrf_node_sptr>(s, nit->second));
-  
+
     s_node_map_.insert(vcl_pair<double,bmrf_node_sptr>(max_s, nit->second));
   }
   return true;
@@ -579,18 +578,18 @@ time_neighbors(bmrf_node_sptr const& node,
     return false;
 
   //Get the s bounds information for the epi_seg in node
-  double s_min = node->epi_seg()->min_s(), 
+  double s_min = node->epi_seg()->min_s(),
          s_max = node->epi_seg()->max_s();
   //Get the alpha bounds information for the epi_seg in node
   double a_min = node->epi_seg()->min_alpha(),
          a_max = node->epi_seg()->max_alpha();
 
   bmrf_node_sptr last = NULL;
-  for ( vcl_multimap<double,bmrf_node_sptr>::const_iterator 
+  for ( vcl_multimap<double,bmrf_node_sptr>::const_iterator
         itr = prev_s_node_map_.lower_bound(1.0/(1.0/s_min + max_delta_recip_s_));
         itr != prev_s_node_map_.upper_bound(s_max);  ++itr)
   {
-    if(itr->second == last)
+    if (itr->second == last)
       continue;
     bmrf_epi_seg_sptr seg = itr->second->epi_seg();
     if ( (seg->min_alpha() < a_max) &&
@@ -630,9 +629,9 @@ bool bmrf_network_builder::assign_neighbors()
     {
       const double int_var = 0.001; // intensity variance
       bmrf_arc_sptr temp_arc = new bmrf_arc(nit->second, *nnit);
-      double total_error = temp_arc->induced_match_error()/2.0 
+      double total_error = temp_arc->induced_match_error()/2.0
                           +temp_arc->avg_intensity_error()/(2.0*int_var);
-      if(total_error < 10.0){   
+      if (total_error < 10.0){
         network_->add_arc(temp_arc,            bmrf_node::TIME);
         network_->add_arc(temp_arc->reverse(), bmrf_node::TIME);
       }
@@ -647,20 +646,20 @@ bool bmrf_network_builder::assign_neighbors()
 //=============================================================
 bool bmrf_network_builder::build()
 {
-  vul_timer t;   
-  if (!this->compute_segments())    if (!this->compute_segments()) 
+  vul_timer t;
+  if (!this->compute_segments())    if (!this->compute_segments())
     return false;
-  vcl_cout << "compute time = " << t.user() << vcl_endl; t.mark(); 
+  vcl_cout << "compute time = " << t.user() << vcl_endl; t.mark();
   if (!this->add_frame_nodes())
     return false;
-  if (!this->set_intensity_info())    if (!this->set_intensity_info()) 
+  if (!this->set_intensity_info())    if (!this->set_intensity_info())
     return false;
-  vcl_cout << "stats time = " << t.user() << vcl_endl; t.mark();   
+  vcl_cout << "stats time = " << t.user() << vcl_endl; t.mark();
   if (!this->assign_neighbors())
     return false;
   network_valid_ = true;
-  vcl_cout << "build time = " << t.user() << vcl_endl; t.mark();   
-  return true; 
+  vcl_cout << "build time = " << t.user() << vcl_endl; t.mark();
+  return true;
 }
 
 //: return the network if valid, otherwise a null network
