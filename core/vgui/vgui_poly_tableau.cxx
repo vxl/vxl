@@ -1,5 +1,5 @@
 //:
-//  \file
+// \file
 //
 // Class vgui_poly_tableau is a tableau which renders its children into sub-rectangles
 // of its given viewport. The subrectangles are given as relative coordinates
@@ -38,8 +38,9 @@
 //-----------------------------------------------------------------------------
 //: The constructor takes a snapshot of the current viewport and scissor areas.
 //  The destructor restores that state.
-class vgui_poly_tableau_vp_sc_snapshot {
-public:
+class vgui_poly_tableau_vp_sc_snapshot
+{
+ public:
   GLint vp[4];
   GLint sc[4];
   bool sc_was_enabled;
@@ -78,7 +79,8 @@ vgui_poly_tableau::item::item(vgui_tableau* p, vgui_tableau_sptr const&c,
 }
 
 //-----------------------------------------------------------------------------
-void vgui_poly_tableau::item::set_vp(GLint const vp[4]) {
+void vgui_poly_tableau::item::set_vp(GLint const vp[4])
+{
   int region[4]={
     int(vp[0] + x*vp[2]), // x
     int(vp[1] + y*vp[3]), // y
@@ -92,15 +94,15 @@ void vgui_poly_tableau::item::set_vp(GLint const vp[4]) {
 
 //-----------------------------------------------------------------------------
 //: Returns true if the given position is inside the boundaries of this item.
-bool vgui_poly_tableau::item::inside(GLint const vp[4],int vx, int vy) const {
+bool vgui_poly_tableau::item::inside(GLint const vp[4],int vx, int vy) const
+{
   float rx = float(vx-vp[0])/vp[2];
   float ry = float(vy-vp[1])/vp[3];
 
   bool ans = (x<=rx && rx<x+w) && (y<=ry && ry<y+h);
 
   if (ans)
-    debug << "Point " << vx << " " << vy << " inside sub-window: " << id 
-    << vcl_endl;
+    debug << "Point " << vx << " " << vy << " inside sub-window: " << id << vcl_endl;
 
   return ans;
 }
@@ -116,12 +118,14 @@ vgui_poly_tableau::vgui_poly_tableau()
 
 //-----------------------------------------------------------------------------
 //: Destructor - called by vgui_poly_tableau_sptr.
-vgui_poly_tableau::~vgui_poly_tableau() {
+vgui_poly_tableau::~vgui_poly_tableau()
+{
 }
 
 //-----------------------------------------------------------------------------
 //: Erase the item at the given postion from the list of items. 
-void vgui_poly_tableau::erase(iterator i) {
+void vgui_poly_tableau::erase(iterator i)
+{
   assert(sub.begin()<=i && i<sub.end()); // wrong iterator for this container.
 
   if (current == i-sub.begin())
@@ -132,7 +136,8 @@ void vgui_poly_tableau::erase(iterator i) {
 
 //-----------------------------------------------------------------------------
 //: Remove subtableau, referred to by handle.
-void vgui_poly_tableau::remove(int id) {
+void vgui_poly_tableau::remove(int id)
+{
   for (iterator i=begin(); i!=end(); ++i)
     if (i->id == id) {
       erase(i);
@@ -143,7 +148,8 @@ void vgui_poly_tableau::remove(int id) {
 
 //-----------------------------------------------------------------------------
 //:  Move subtableau to a new location.
-void vgui_poly_tableau::move(int id, float x, float y, float w, float h) {
+void vgui_poly_tableau::move(int id, float x, float y, float w, float h)
+{
   for (iterator i=begin(); i!=end(); ++i)
     if (i->id == id) {
       i->x = x;
@@ -159,7 +165,8 @@ void vgui_poly_tableau::move(int id, float x, float y, float w, float h) {
 //-----------------------------------------------------------------------------
 //: Replace the tableau with the given ID by the given tableau.
 //  Keep the same ID and do not change the value of 'current'.
-void vgui_poly_tableau::replace(int id, vgui_tableau_sptr const& tab) {
+void vgui_poly_tableau::replace(int id, vgui_tableau_sptr const& tab)
+{
   for (iterator i=begin(); i!=end(); ++i)
     if (i->id == id) {
       i->tab.assign(tab);
@@ -174,7 +181,8 @@ void vgui_poly_tableau::replace(int id, vgui_tableau_sptr const& tab) {
 
 //-----------------------------------------------------------------------------
 //: Returns the tableau with the given ID.
-vgui_tableau_sptr vgui_poly_tableau::get(int id) const {
+vgui_tableau_sptr vgui_poly_tableau::get(int id) const
+{
   for (const_iterator i=begin(); i!=end(); ++i)
     if (i->id == id)
       return i->tab;
@@ -217,7 +225,8 @@ int vgui_poly_tableau::add(vgui_tableau_sptr const& t, float x, float y,
 
 //-----------------------------------------------------------------------------
 //: Misnomer - gets index of the child currently under the pointer's position.
-int vgui_poly_tableau::get_active(GLint const vp[4], int wx, int wy) const {
+int vgui_poly_tableau::get_active(GLint const vp[4], int wx, int wy) const
+{
   int act = -1;
   for (unsigned i=0; i<sub.size(); ++i)
     if (sub[i].inside(vp, wx, wy) )
@@ -227,13 +236,15 @@ int vgui_poly_tableau::get_active(GLint const vp[4], int wx, int wy) const {
 
 //-----------------------------------------------------------------------------
 //: Returns the ID of the current child.
-int vgui_poly_tableau::get_current_id() {
+int vgui_poly_tableau::get_current_id()
+{
   return (current != -1) ? sub[current].id : -1;
 }
 
 //-----------------------------------------------------------------------------
 //: Sets the child under the pointer to current.
-void vgui_poly_tableau::set_current(GLint const vp[4], int index) {
+void vgui_poly_tableau::set_current(GLint const vp[4], int index)
+{
   if (current == index)
     return;
 
@@ -329,7 +340,8 @@ bool vgui_poly_tableau::handle(GLint const vp[4], vgui_event const &e)
 
 //-----------------------------------------------------------------------------
 //: Returns the type of this tableau ('vgui_poly_tableau').
-vcl_string vgui_poly_tableau::type_name() const {
+vcl_string vgui_poly_tableau::type_name() const
+{
   return "vgui_poly_tableau";
 }
 
@@ -383,7 +395,8 @@ bool vgui_poly_tableau::handle(vgui_event const &e)
 }
 
 //-----------------------------------------------------------------------------
-void vgui_poly_tableau::get_popup(vgui_popup_params const &params, vgui_menu &menu) {
+void vgui_poly_tableau::get_popup(vgui_popup_params const &params, vgui_menu &menu)
+{
   if (params.recurse) {
     int index = get_current();
     if (index >=0)

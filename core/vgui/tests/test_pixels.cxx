@@ -1,6 +1,5 @@
-/*
-  fsm
-*/
+// \author fsm
+
 #include <vcl_cstdio.h>
 #include <vcl_iostream.h>
 #include <vgui/vgui_gl.h>
@@ -8,7 +7,8 @@
 
 #include <testlib/testlib_test.h>
 
-void print_byte(GLubyte w) {
+void print_byte(GLubyte w)
+{
   for (int i=7; i>=0; --i)
     if ( (w & (0x1 << i)) )
       vcl_cerr << '1';
@@ -17,7 +17,8 @@ void print_byte(GLubyte w) {
 }
 
 #if 0
-void print_word(GLuint w) {
+void print_word(GLuint w)
+{
   for (int i=31; i>=0; --i)
     if ( (w & (0x1 << i)) )
       vcl_cerr << '1';
@@ -26,7 +27,8 @@ void print_word(GLuint w) {
 }
 #endif
 
-void print_binary(char const *fmt, void const *addr, unsigned bytes) {
+void print_binary(char const *fmt, void const *addr, unsigned bytes)
+{
   if (fmt)
     vcl_cerr << fmt << " : ";
   GLubyte const *ptr = (GLubyte const*)addr;
@@ -34,7 +36,8 @@ void print_binary(char const *fmt, void const *addr, unsigned bytes) {
   for (int i=bytes; i<4; ++i)
     vcl_cerr << "--------" << ' ';
 
-  for (int i=bytes-1; i>=0; --i) {
+  for (int i=bytes-1; i>=0; --i)
+  {
     GLubyte b = ptr[i];
     for (int j=7; j>=0; --j)
       if ( (b & (0x1 << j)) )
@@ -46,7 +49,8 @@ void print_binary(char const *fmt, void const *addr, unsigned bytes) {
 
   vcl_cerr << "| ";
 
-  for (unsigned int i=0; i<bytes; ++i) {
+  for (unsigned int i=0; i<bytes; ++i)
+  {
     GLubyte b = ptr[i];
     for (int j=7; j>=0; --j)
       if ( (b & (0x1 << j)) )
@@ -67,23 +71,22 @@ int main(int, char **)
   START( "vgui test pixels" );
 
 #if VXL_LITTLE_ENDIAN
-  vcl_cerr << "this machine is little-endian" << vcl_endl;
+  vcl_cerr << "this machine is little-endian\n";
 #endif
 #if VXL_BIG_ENDIAN
-  vcl_cerr << "this machine is big-endian" << vcl_endl;
+  vcl_cerr << "this machine is big-endian\n";
 #endif
 
-  vcl_cerr << "                        little-endian                         big-endian" << vcl_endl;
-  vcl_cerr << "               p[3]     p[2]     p[1]     p[0] |     p[0]     p[1]     p[2]     p[3]" << vcl_endl;
+  vcl_cerr << "                        little-endian                         big-endian\n"
+           << "               p[3]     p[2]     p[1]     p[0] |     p[0]     p[1]     p[2]     p[3]\n";
 
-  for (int i=0; i<32; ++i) {
+  for (int i=0; i<32; ++i)
+  {
     char buf[64]; vcl_sprintf(buf, "0x1<<%3d", i);
     GLuint  w = (0x1 << i);
     print_binary(buf, &w, sizeof(w));
   }
-  vcl_cerr << vcl_endl
-       << "r=1, g=0, b=1, a=0" << vcl_endl
-       << vcl_endl;
+  vcl_cerr << "\nr=1, g=0, b=1, a=0\n\n";
 
   // rgb
   { vgui_pixel_rgb<5,6,5> pix; pix.R=255; pix.G= 0; pix.B=255; print_binary("  rgb565", &pix, sizeof(pix)); }

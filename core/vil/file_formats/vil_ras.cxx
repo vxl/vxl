@@ -25,7 +25,8 @@ char const* vil2_ras_format_tag = "ras";
 //                                                             helper routines
 
 
-namespace {
+namespace
+{
   //: Change the byte order on a little endian machine.
   // Do nothing on a big endian machine.
   inline
@@ -165,7 +166,7 @@ vil2_ras_image( vil2_stream* vs,
   height_ = nj;
 
   components_ = nplanes * vil2_pixel_format_num_components( format );
-  if( components_ != 1 && components_ != 3 ) {
+  if ( components_ != 1 && components_ != 3 ) {
     vcl_cerr << __FILE__ << ": can't handle "
              << nplanes << " x "
              << vil2_pixel_format_num_components( format ) << " components\n";
@@ -181,11 +182,10 @@ vil2_ras_image( vil2_stream* vs,
 
   depth_ = components_ * bits_per_component_;
 
-  if (components_ == 3) {
+  if (components_ == 3)
     type_ = RT_FORMAT_RGB;
-  } else {
+  else
     type_ = RT_STANDARD;
-  }
   map_type_ = RMT_NONE;
   map_length_ = 0;
   length_ = compute_length( width_, height_, depth_ );
@@ -212,22 +212,20 @@ read_header( )
   vs_->seek(0);
 
   vxl_uint_8 buf[4];
-  if( vs_->read(buf, 4) < 4 ) // at end-of-file?
+  if ( vs_->read(buf, 4) < 4 ) // at end-of-file?
     return false;
-  if(! ( buf[0] == RAS_MAGIC[0] && buf[1] == RAS_MAGIC[1] &&
-         buf[2] == RAS_MAGIC[2] && buf[3] == RAS_MAGIC[3]  ) ) {
+  if (! ( buf[0] == RAS_MAGIC[0] && buf[1] == RAS_MAGIC[1] &&
+          buf[2] == RAS_MAGIC[2] && buf[3] == RAS_MAGIC[3]  ) )
     return false; // magic number isn't correct
-  }
 
-  if( !( read_uint_32( vs_, width_ ) &&
-         read_uint_32( vs_, height_ ) &&
-         read_uint_32( vs_, depth_ ) &&
-         read_uint_32( vs_, length_ ) &&
-         read_uint_32( vs_, type_ ) &&
-         read_uint_32( vs_, map_type_ ) &&
-         read_uint_32( vs_, map_length_ ) ) ) {
+  if ( !( read_uint_32( vs_, width_ ) &&
+          read_uint_32( vs_, height_ ) &&
+          read_uint_32( vs_, depth_ ) &&
+          read_uint_32( vs_, length_ ) &&
+          read_uint_32( vs_, type_ ) &&
+          read_uint_32( vs_, map_type_ ) &&
+          read_uint_32( vs_, map_length_ ) ) )
     return false;
-  }
 
   // Do consistency checks of the header
 
@@ -263,12 +261,12 @@ read_header( )
              << compute_length( width_, height_, depth_ ) << vcl_endl;
     return false;
   }
-  if( map_length_ % 3 != 0 ) {
+  if ( map_length_ % 3 != 0 ) {
     vcl_cerr << __FILE__ << ": color map length is not a multiple of 3\n";
     return false;
   }
 
-  if( map_length_ ) {
+  if ( map_length_ ) {
     col_map_ = new vxl_uint_8[ map_length_ ];
     vs_->read( col_map_, (vil2_streampos)map_length_ );
   } else {
@@ -277,7 +275,7 @@ read_header( )
 
   start_of_data_ = vs_->tell();
 
-  if( map_type_ != RMT_NONE || depth_ == 24 ) {
+  if ( map_type_ != RMT_NONE || depth_ == 24 ) {
     components_ = 3;
   } else {
     components_ = 1;
@@ -346,14 +344,12 @@ pixel_format() const
 }
 
 
-
-
 vil2_image_view_base_sptr
 vil2_ras_image::
 get_copy_view( unsigned i0, unsigned ni,
                unsigned j0, unsigned nj ) const
 {
-  if( type_ == RT_BYTE_ENCODED )
+  if ( type_ == RT_BYTE_ENCODED )
     return 0; // not yet implemented
 
   unsigned file_bytes_per_pixel = (depth_+7)/8;
@@ -366,16 +362,16 @@ get_copy_view( unsigned i0, unsigned ni,
   vil2_memory_chunk_sptr buf = new vil2_memory_chunk(ni * nj * components_, VIL2_PIXEL_FORMAT_BYTE );
   vxl_uint_8* ib = reinterpret_cast<vxl_uint_8*>( buf->data() );
 
-  if( !col_map_ ) {
+  if ( !col_map_ ) {
     // No colourmap, so just read in the bytes.
     // Make the component order RGB to avoid surprising the user.
-    for( unsigned j = 0; j < nj; ++j ) {
+    for ( unsigned j = 0; j < nj; ++j ) {
       vs_->seek( file_byte_start + j * file_byte_width );
       vs_->read( ib + j * buff_byte_width, buff_byte_width );
 
-      if( type_ != RT_FORMAT_RGB && components_ == 3 ) {
+      if ( type_ != RT_FORMAT_RGB && components_ == 3 ) {
         vxl_uint_8* pixel = ib + j * buff_byte_width;
-        for( unsigned i = 0; i < ni; ++i ) {
+        for ( unsigned i = 0; i < ni; ++i ) {
           vxl_uint_8* rp = pixel+2;
           vxl_uint_8 t = *pixel;
           *pixel = *rp;
@@ -389,12 +385,12 @@ get_copy_view( unsigned i0, unsigned ni,
     unsigned col_len = map_length_ / 3;
     // Read a line, and map every index into an RGB triple
     vcl_vector<vxl_uint_8> line( ni );
-    for( unsigned j = 0; j < nj; ++j ) {
+    for ( unsigned j = 0; j < nj; ++j ) {
       vs_->seek( file_byte_start + j * file_byte_width );
       vs_->read( &line[0], line.size() );
       vxl_uint_8* in_p = &line[0];
       vxl_uint_8* out_p = ib + j * buff_byte_width;
-      for( unsigned i=0; i < ni; ++i ) {
+      for ( unsigned i=0; i < ni; ++i ) {
         assert( *in_p < col_len );
         *(out_p++) = col_map_[ *in_p ];
         *(out_p++) = col_map_[ *in_p + col_len ];
@@ -410,7 +406,6 @@ get_copy_view( unsigned i0, unsigned ni,
 }
 
 
-
 bool
 vil2_ras_image::
 put_view( const vil2_image_view_base& view, unsigned i0, unsigned j0 )
@@ -418,25 +413,25 @@ put_view( const vil2_image_view_base& view, unsigned i0, unsigned j0 )
   // Get a 3-plane view of the section
   vil2_image_view<vxl_uint_8> section( view );
 
-  if( ! this->view_fits( section, i0, j0 ) ) {
+  if ( ! this->view_fits( section, i0, j0 ) ) {
     vcl_cerr << "ERROR: " << __FILE__ << ": view does not fit\n";
     return false;
   }
 
-  if( section.nplanes() != components_ ) {
+  if ( section.nplanes() != components_ ) {
     vcl_cerr << "ERROR: " << __FILE__ << ": data parameters of view don't match\n";
-    return false;    
+    return false;
   }
 
-  if( col_map_ ) {
+  if ( col_map_ ) {
     vcl_cerr << __FILE__ << ": writing to file with a colour map is not implemented\n";
     return false;
   }
-  if( type_ == RT_BYTE_ENCODED ) {
+  if ( type_ == RT_BYTE_ENCODED ) {
     vcl_cerr << __FILE__ << ": writing to a run-length encoded file is not implemented\n";
     return false;
   }
-  if( components_ == 3 && type_ != RT_FORMAT_RGB ) {
+  if ( components_ == 3 && type_ != RT_FORMAT_RGB ) {
     vcl_cerr << __FILE__ << ": writing BGR format is not implemented\n";
     return false;
   }
@@ -458,14 +453,14 @@ put_view( const vil2_image_view_base& view, unsigned i0, unsigned j0 )
   // valid, and therefore that the padding byte is already zero.
   //
   vcl_vector<vxl_uint_8> data_buffer;
-  if( file_byte_width == buff_byte_width+1 ) {
+  if ( file_byte_width == buff_byte_width+1 ) {
     data_buffer.resize( file_byte_width );
     data_buffer[ file_byte_width-1 ] = 0;
   } else {
     data_buffer.resize( buff_byte_width );
   }
 
-  for( unsigned j = 0; j < section.nj(); ++j ) {
+  for ( unsigned j = 0; j < section.nj(); ++j ) {
 
     // Copy a line of the image into a contiguous buffer. No need to
     // optimize for the case with section is also appropriately
@@ -473,8 +468,8 @@ put_view( const vil2_image_view_base& view, unsigned i0, unsigned j0 )
     // bottleneck.
     //
     vxl_uint_8* ptr = &data_buffer[0];
-    for( unsigned i = i0; i < section.ni(); ++i ) {
-      for( unsigned p = 0; p < section.nplanes(); ++p ) {
+    for ( unsigned i = i0; i < section.ni(); ++i ) {
+      for ( unsigned p = 0; p < section.nplanes(); ++p ) {
         *ptr = section(i,j,p);
         ++ptr;
       }

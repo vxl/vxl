@@ -13,6 +13,7 @@ DECLARE( test_clip );
 DECLARE( test_h_matrix_2d );
 DECLARE( test_h_matrix_3d );
 DECLARE( test_fit_lines_2d );
+
 void
 register_tests()
 {
@@ -41,7 +42,7 @@ new_polygon_impl( float points[], unsigned int n )
   vgl_polygon poly;
 
   poly.new_sheet();
-  for( unsigned int i=0; i < n; i += 2 ) {
+  for ( unsigned int i=0; i < n; i += 2 ) {
     poly.push_back( points[i], points[i+1] );
   }
 
@@ -52,7 +53,7 @@ void
 add_contour_impl( vgl_polygon& poly, float points[], unsigned int n )
 {
   poly.new_sheet();
-  for( unsigned int i=0; i < n; i += 2 ) {
+  for ( unsigned int i=0; i < n; i += 2 ) {
     poly.push_back( points[i], points[i+1] );
   }
 }

@@ -15,11 +15,11 @@ int main(int argc, char** argv)
 {
   if (argc < 2)
   {
-    vcl_cerr << "Specify an image filename" <<vcl_endl;
+    vcl_cerr << "Specify an image filename\n";
     return 3;
   }
-  
-  vcl_cout<<"Load " << argv[1] << " into an image data object" << vcl_endl;
+
+  vcl_cout<<"Load " << argv[1] << " into an image data object\n";
 
 
   // This is how we quickly load an image view.
@@ -31,9 +31,6 @@ int main(int argc, char** argv)
     vcl_cerr << "Couldn't load " << argv[1] <<vcl_endl;
     return 3;
   }
-
-  
-  
 
   vil2_print_all(vcl_cout, b_im);
 

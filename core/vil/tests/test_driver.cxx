@@ -41,7 +41,6 @@ DECLARE( test_suppress_non_max );
 void
 register_tests()
 {
-
   REGISTER( test_image_view_maths );
   REGISTER( test_vil1 );
   REGISTER( test_convert );
@@ -79,7 +78,6 @@ register_tests()
   REGISTER( test_algo_find_4con_boundary );
   REGISTER( test_algo_fft );
   REGISTER( test_suppress_non_max );
-
 }
 
 DEFINE_MAIN;

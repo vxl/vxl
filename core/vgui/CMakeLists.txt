@@ -14,7 +14,7 @@ INCLUDE(${MODULE_PATH}/NewCMake/FindOpenGL.cmake)
 
 # Build here only if OpenGL is available:
 IF (OPENGL_FOUND)
-IF (OPENGL_GLU_FOUND)
+ IF (OPENGL_GLU_FOUND)
 
   # For (not) reporting an error below
   SET( CAN_BUILD_VGUI "YES" )
@@ -67,7 +67,7 @@ SET(vgui_sources
   vgui_message.cxx              vgui_message.h
   vgui_observer.cxx             vgui_observer.h
   vgui_observable.cxx           vgui_observable.h
-  vgui_satellite_tableau.txx vgui_satellite_tableau.h 
+  vgui_satellite_tableau.txx vgui_satellite_tableau.h
 
   # utility
   vgui_find.cxx                 vgui_find.h
@@ -385,7 +385,7 @@ IF (GTK2_FOUND)
        MESSAGE(SEND_ERROR "You cannot build against both GTK1 and"
                            "GTK2 at the same time")
     ENDIF(VGUI_USE_GTK)
-    
+
 
     ADD_DEFINITIONS( "-DVGUI_USE_GTK2" )
 

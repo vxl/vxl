@@ -39,11 +39,13 @@ vgui_gtk_dialog_impl::vgui_gtk_dialog_impl(const char* name)
 
 //--------------------------------------------------------------------------------
 //: Destructor
-vgui_gtk_dialog_impl::~vgui_gtk_dialog_impl() {
+vgui_gtk_dialog_impl::~vgui_gtk_dialog_impl()
+{
 }
 
 
-struct vgui_gtk_dialog_impl_choice {
+struct vgui_gtk_dialog_impl_choice
+{
   vcl_vector<vcl_string> names;
   int index;
 };
@@ -83,7 +85,8 @@ extern "C" {
 
 static
 void accept_cb(GtkWidget* /*widget*/,
-               gpointer   data) {
+               gpointer   data)
+{
   if (debug) vcl_cerr << "accept\n";
   vgui_gtk_dialog_impl::status_type* d = static_cast<vgui_gtk_dialog_impl::status_type*>(data);
   *d = vgui_gtk_dialog_impl::OK;
@@ -91,7 +94,8 @@ void accept_cb(GtkWidget* /*widget*/,
 
 static
 void cancel_cb(GtkWidget* /*widget*/,
-               gpointer data) {
+               gpointer data)
+{
   if (debug) vcl_cerr << "cancel\n";
   vgui_gtk_dialog_impl::status_type* d = static_cast<vgui_gtk_dialog_impl::status_type*>(data);
   *d = vgui_gtk_dialog_impl::CANCEL;
@@ -100,21 +104,24 @@ void cancel_cb(GtkWidget* /*widget*/,
 static
 gint close_window_cb(GtkWidget* /*widget*/,
                      GdkEvent* /*event*/,
-                     gpointer data) {
+                     gpointer data)
+{
   if (debug) vcl_cerr << "close window\n";
   vgui_gtk_dialog_impl::status_type* d = static_cast<vgui_gtk_dialog_impl::status_type*>(data);
   *d = vgui_gtk_dialog_impl::CLOSE;
   return FALSE; // propagate as necessary
 }
 
-struct vgui_gtk_dialog_impl_int_pair {
+struct vgui_gtk_dialog_impl_int_pair
+{
   int* val;
   int tmp;
 };
 
 
 void choose_cb(GtkWidget* /*widget*/,
-               gpointer data) {
+               gpointer data)
+{
 
   vgui_gtk_dialog_impl_int_pair *ip = (vgui_gtk_dialog_impl_int_pair*) data;
   *(ip->val) = ip->tmp;
@@ -149,7 +156,6 @@ void vgui_gtk_dialog_impl::set_cancel_button(const char* txt)
 }
 
 extern "C" {
-
 
 struct file_ok_data
 {
@@ -202,7 +208,8 @@ void browse_files(GtkWidget* /*w*/, GtkEntry* file_entry)
 //-------------------------------------------------------------------------------
 //: Handles a change of color.
 // Done by passing the value back to the (hidden) text entry in the dialog box.
-void color_changed_cb(GtkColorSelection *colorsel, GtkEntry* color_entry) {
+void color_changed_cb(GtkColorSelection *colorsel, GtkEntry* color_entry)
+{
   // Get the color from the color chooser (r,g,b,a):
   gdouble color[4];
   gtk_color_selection_get_color(colorsel, color);
@@ -224,7 +231,8 @@ struct cancel_color_data
 //-------------------------------------------------------------------------------
 //: Handles OK button on color chooser.
 // by closing the dialog window and releasing memory.
-void ok_color_chooser(cancel_color_data* data) {
+void ok_color_chooser(cancel_color_data* data)
+{
   gtk_widget_destroy(GTK_WIDGET(data->colord));
   delete data->orig_color;
   delete data;
@@ -234,7 +242,8 @@ void ok_color_chooser(cancel_color_data* data) {
 //: Handles cancel button on color chooser.
 // by resetting the color to its original value, shutting down the color
 // chooser and passing control back to the dialog.
-void cancel_color_chooser(cancel_color_data* data) { 
+void cancel_color_chooser(cancel_color_data* data)
+{
   gtk_entry_set_text(GTK_ENTRY(data->color_entry), data->orig_color->c_str());
 
   gtk_widget_destroy(GTK_WIDGET(data->colord));
@@ -269,7 +278,8 @@ void choose_color(GtkWidget* /*w*/, GtkEntry* color_entry)
 
 //-------------------------------------------------------------------------------
 //: Display the dialog box.
-bool vgui_gtk_dialog_impl::ask() {
+bool vgui_gtk_dialog_impl::ask()
+{
   GtkWidget* dialog = gtk_dialog_new();
 
   gtk_window_set_title(GTK_WINDOW(dialog), title.c_str());
@@ -440,7 +450,7 @@ bool vgui_gtk_dialog_impl::ask() {
       gtk_widget_hide(GTK_FILE_SELECTION(filew)->cancel_button);
 
       GtkWidget* file_main_vbox = GTK_FILE_SELECTION(filew)->main_vbox;
-      
+
       gtk_widget_ref( file_main_vbox );
       gtk_container_remove( GTK_CONTAINER(filew), file_main_vbox);
       gtk_box_pack_start(GTK_BOX(GTK_DIALOG(dialog)->vbox), file_main_vbox, TRUE, TRUE, 0);
@@ -510,7 +520,7 @@ bool vgui_gtk_dialog_impl::ask() {
 
   dialog_status_ = BUSY;
 
-  while( dialog_status_ == BUSY ) {
+  while ( dialog_status_ == BUSY ) {
     gtk_main_iteration();
   }
 
@@ -519,11 +529,11 @@ bool vgui_gtk_dialog_impl::ask() {
   // the associated glarea should be destroyed by the time this
   // function call ends. That is, by the time further iterations of
   // the gtk main loop occur.
-  for( vcl_vector<vgui_gtk_adaptor*>::iterator iter = adaptor_list.begin();
-       iter != adaptor_list.end(); ++iter ) {
+  for ( vcl_vector<vgui_gtk_adaptor*>::iterator iter = adaptor_list.begin();
+        iter != adaptor_list.end(); ++iter ) {
     delete *iter;
   }
-  
+
   //gtk_signal_disconnect(GTK_OBJECT(dialog), destroy_handler_id);
 
   bool ret_value = false;
@@ -574,7 +584,7 @@ bool vgui_gtk_dialog_impl::ask() {
   }
 
   // Destroy widgets that weren't inserted into this dialog
-  for( vcl_vector<GtkWidget*>::iterator iter = delete_wlist.begin();
+  for ( vcl_vector<GtkWidget*>::iterator iter = delete_wlist.begin();
        iter != delete_wlist.end(); ++iter ) {
     gtk_widget_destroy( *iter );
   }

@@ -155,21 +155,21 @@ $machine =~ s/\..*//;
 ############
 # main loop
 
-while( <INFO>)
+while ( <INFO>)
   {
     # patch together multi-lines
-    $_ .= <INFO> while( s/\\\s*$//);
-    s/$iueroot\/?/\//g if( $iueroot);
+    $_ .= <INFO> while ( s/\\\s*$//);
+    s/$iueroot\/?/\//g if ( $iueroot);
 
     $currentlineweb= webify_string($_);
 
-    if( m/$gmake_enteringdirectory/)
+    if ( m/$gmake_enteringdirectory/)
       {
         $currentlineweb="<font color=\"555500\">$currentlineweb</font>";
 
         push( @current, $1);
 
-        if( !exists( $allbuilds{$1}))
+        if ( !exists( $allbuilds{$1}))
           {
             $nextindex=$nextindex+1;
             $allbuilds{$1}= $nextindex;
@@ -181,27 +181,27 @@ while( <INFO>)
             $index= $allbuilds{$1};
           }
       }
-    elsif( m/$gmake_leavingdirectory/)
+    elsif ( m/$gmake_leavingdirectory/)
       {
         $currentlineweb="<font color=\"555500\">$currentlineweb</font>";
         pop( @current);
         $index= $allbuilds{$current[$#current]};
       }
-    elsif( m/$compilingcpp/)
+    elsif ( m/$compilingcpp/)
       {
         $buildfilenumber[$index]++;
         $currentlineweb="<font color=blue>$currentlineweb</font>";
       }
-    elsif( m/$compilingc/)
+    elsif ( m/$compilingc/)
       {
         $buildfilenumber[$index]++;
         $currentlineweb="<font color=blue>$currentlineweb</font>";
       }
-    elsif( m/$linkingso/)
+    elsif ( m/$linkingso/)
       {
 #       print "so file: $1\n";
       }
-    elsif( m/$compilewarning/ || m/$linkwarning/)
+    elsif ( m/$compilewarning/ || m/$linkwarning/)
       {
         $buildwarnings[$index]++;
         $currentlineweb="<a name=\"WARNINGLINK$htmlwarninglink\">" .$currentlineweb;
@@ -221,7 +221,7 @@ while( <INFO>)
         $currentlineweb.="$t_100link\">-$fnt 100$efnt" if ($htmlwarninglink > 100);
         $currentlineweb.="<br>\n";
       }
-    elsif( m/$gmake_errorintest/ || m/$gmake_errortestfail/)
+    elsif ( m/$gmake_errorintest/ || m/$gmake_errortestfail/)
       {
         $builderrors[$index]++;
         $currentlineweb="<a name=\"ERRORLINK$htmlerrorlink\">" .$currentlineweb;
@@ -229,12 +229,12 @@ while( <INFO>)
         $htmlerrorlink++;
         $currentlineweb.="<a href=\"\#ERRORLINK$htmlerrorlink\"><font size=-1 color=\"CC3333\">Jump to next error</font></a><br>\n";
       }
-    elsif( m/$gmake_errorindirectory/)
+    elsif ( m/$gmake_errorindirectory/)
       {
         $buildwarnings[$index]++;
         $currentlineweb="<font color=\"AA0000\">$currentlineweb</font>";
       }
-    elsif( m/$gmake_error_segfault/ || m/$gmake_error_assert/ || m/$gmake_error/)
+    elsif ( m/$gmake_error_segfault/ || m/$gmake_error_assert/ || m/$gmake_error/)
       {
         $builderrors[$index]++;
         $currentlineweb="<a name=\"ERRORLINK$htmlerrorlink\">" .$currentlineweb;
@@ -242,11 +242,11 @@ while( <INFO>)
         $htmlerrorlink++;
         $currentlineweb.="<a href=\"\#ERRORLINK$htmlerrorlink\"><font size=-1 color=\"CC3333\">Jump to next error</font></a><br>\n";
       }
-    elsif( m/$testsummary/)
+    elsif ( m/$testsummary/)
       {
         $currentlineweb="<font color=\"00AA00\">$currentlineweb</font>";
       }
-    elsif( m/Beginning TargetJr make:\s*(.*)$/)
+    elsif ( m/Beginning TargetJr make:\s*(.*)$/)
       {
         $f = $1; $f =~ s/( ?DST )/ /;
         if ($1) {
@@ -256,7 +256,7 @@ while( <INFO>)
         @thisdate= ParseDate( $f);
         $starttime= UnixDate( @thisdate, "%a %b %e %H:%M:%S %z %Y") unless ($starttime);
       }
-    elsif( m/Done TargetJr make:\s*(.*)$/)
+    elsif ( m/Done TargetJr make:\s*(.*)$/)
       {
         $f = $1; $f =~ s/( ?DST )/ /;
         if ($1) {
@@ -267,7 +267,7 @@ while( <INFO>)
         $endtime= UnixDate( @thisdate, "%a %b %e %H:%M:%S %z %Y");
       }
 
-    if( $index)
+    if ( $index)
       {
         $buildlogs[$index].= $currentlineweb;
       }
@@ -295,7 +295,7 @@ $subdir=-1;
 
 for $build ( keys %allbuilds )
   {
-    if( $subdir== -1)
+    if ( $subdir== -1)
       {
         $subdir= $build;
       }
@@ -333,7 +333,7 @@ for $buildit1 ( keys %allbuilds )
 
     for $buildit2 ( keys %allbuilds )
       {
-        if( $buildit1 eq $buildit2)
+        if ( $buildit1 eq $buildit2)
           {
             $buildparent[$index]= $allbuilds{$buildit2};
           }
@@ -390,7 +390,7 @@ $tottime= int(($ae-$as)/60);
 #StartFrost( "icehouse", "vxl", "vxluser", "");
 
 
-if( $compress ne "")
+if ( $compress ne "")
   {
     FrostAPI::StartFrost( "FILE", $tmpfilename1);
   }
@@ -407,7 +407,7 @@ FrostAPI::RunMeasurement( "TimeStarted", $totstarttime);
 FrostAPI::RunMeasurement( "TimeElapsed", $tottime);
 FrostAPI::RunMeasurementBase64( "BuildLog", $fullbuildlog);
 
-if( $toterrors>0)
+if ( $toterrors>0)
   {
     FrostAPI::EndRunTest( "f");
   }
@@ -423,12 +423,12 @@ FrostAPI::EndRunTestGroup();
 $headindex= $allbuilds{""};
 @roots= get_children( $headindex);
 
-for( $i=0; $i<= $#roots; $i++)
+for ( $i=0; $i<= $#roots; $i++)
   {
     XMLruntestgroup( $roots[$i]);
   }
 
-if( $compress ne "")
+if ( $compress ne "")
   {
     FrostAPI::EndFrost();
 
@@ -438,7 +438,7 @@ if( $compress ne "")
 
     $buffer= "";
 
-    while( read( CP, $c, 1))
+    while ( read( CP, $c, 1))
       {
         $buffer.= $c;
       }
@@ -468,7 +468,7 @@ sub webify_string
     my $n= "";
     my $c;
 
-    for( $i= 0; $i<= length($string); $i++)
+    for ( $i= 0; $i<= length($string); $i++)
       {
         $c= substr($string,$i,1);
 
@@ -480,19 +480,19 @@ sub webify_string
           {
             $c= "<br>\n";
           }
-#        elsif( $c eq  "\"")
+#        elsif ( $c eq  "\"")
 #          {
 #            $c= "&quot;";
 #          }
-        elsif( $c eq  "&")
+        elsif ( $c eq  "&")
           {
             $c= "&amp;";
           }
-        elsif( $c eq  "<")
+        elsif ( $c eq  "<")
           {
             $c= "&lt;";
           }
-        elsif( $c eq  ">")
+        elsif ( $c eq  ">")
           {
             $c= "&gt;";
           }
@@ -510,7 +510,7 @@ sub get_depth
     my $i= 0;
 
 
-    while( $buildparent[$index]!= $index)
+    while ( $buildparent[$index]!= $index)
       {
         $i++;
         $index= $buildparent[$index];
@@ -529,9 +529,9 @@ sub get_children
 
     @pr= @buildparent;
 
-    for( $i= 0; $i<= $#pr; $i++)
+    for ( $i= 0; $i<= $#pr; $i++)
       {
-        if(( $pr[$i]== $index) &
+        if (( $pr[$i]== $index) &
            ( $i!= $index))
           {
             push( @children, $i);
@@ -559,7 +559,7 @@ sub display
 
         @children= get_children( $allbuilds{$i});
         print "Children = ";
-        for( $j= 0; $j<= $#children; $j++)
+        for ( $j= 0; $j<= $#children; $j++)
           {
             print $children[$j]." ";
           }
@@ -581,7 +581,7 @@ sub XMLruntestgroup
     FrostAPI::StartRunTestGroup( $name, $date);
 
       {
-        if( $name=~ /\//)
+        if ( $name=~ /\//)
           {
             FrostAPI::StartRunTest( "BuildDirectory", $date);
           }
@@ -608,7 +608,7 @@ sub XMLruntestgroup
         # start time
 #       RunMeasurement( "BuildStartTime", $starttime);
 
-        if( $builderrors[$index]== 0)
+        if ( $builderrors[$index]== 0)
           {
             FrostAPI::EndRunTest("t");
           }
@@ -620,7 +620,7 @@ sub XMLruntestgroup
 
     @children= get_children( $index);
 
-    for( $i=0; $i<=$#children; $i++)
+    for ( $i=0; $i<=$#children; $i++)
       {
         XMLruntestgroup( $children[$i]);
       }

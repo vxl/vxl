@@ -16,9 +16,9 @@
 
 void print_usage()
 {
-  vcl_cout<<"vil2_correlate_grad_tool  -i src_image -k kernel_image -o dest_image [-s]\n";
-  vcl_cout<<"Correlates gradient of kernel_image with gradient of"<<vcl_endl;
-  vcl_cout<<"src_image, saves to dest_image\n";
+  vcl_cout<<"vil2_correlate_grad_tool  -i src_image -k kernel_image -o dest_image [-s]\n"
+          <<"Correlates gradient of kernel_image with gradient of\n"
+          <<"src_image, saves to dest_image\n";
 }
 
 int main(int argc, char** argv)
@@ -29,7 +29,7 @@ int main(int argc, char** argv)
   vul_arg<bool> suppress_non_max("-s","Suppress non-peaks",false);
   vul_arg_parse(argc, argv);
 
-  if(in_path() == "" || kernel_path()=="")
+  if (in_path() == "" || kernel_path()=="")
   {
     print_usage();
     vul_arg_display_usage_and_exit();

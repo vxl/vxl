@@ -107,8 +107,8 @@ int main()
 
   vil_memory_image_of<unsigned char> buf(img);
 
-  for(int y = 0; y < buf.height(); ++y)
-    for(int x = 0; x < buf.width(); ++x)
+  for (int y = 0; y < buf.height(); ++y)
+    for (int x = 0; x < buf.width(); ++x)
       if (buf(x,y) < 200)
         buf(x,y) = 0;
 
@@ -154,8 +154,8 @@ int main()
 
   vil_memory_image_of<vil_rgb_byte> buf(img_rgb);
 
-  for(int y = 0; y < buf.height(); ++y)
-    for(int x = 0; x < buf.width(); ++x)
+  for (int y = 0; y < buf.height(); ++y)
+    for (int x = 0; x < buf.width(); ++x)
       if (buf(x,y).r < 200 && buf(x,y).g < 200 && buf(x,y).b < 200)
         buf(x,y) = vil_rgb_byte(0,0,0);
 

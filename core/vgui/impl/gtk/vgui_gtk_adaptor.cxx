@@ -104,7 +104,8 @@ vgui_gtk_adaptor::vgui_gtk_adaptor(vgui_gtk_window* win)
 }
 
 //: Destructor
-vgui_gtk_adaptor::~vgui_gtk_adaptor() {
+vgui_gtk_adaptor::~vgui_gtk_adaptor()
+{
   if (ovl_helper)
     delete ovl_helper;
   ovl_helper = 0;
@@ -115,34 +116,40 @@ vgui_gtk_adaptor::~vgui_gtk_adaptor() {
 }
 
 
-vgui_window* vgui_gtk_adaptor::get_window() const {
+vgui_window* vgui_gtk_adaptor::get_window() const
+{
   return win_;
 }
 
-void vgui_gtk_adaptor::swap_buffers() {
+void vgui_gtk_adaptor::swap_buffers()
+{
   make_current();
   gtk_gl_area_swapbuffers(GTK_GL_AREA(widget));
 }
 
-void vgui_gtk_adaptor::make_current() {
+void vgui_gtk_adaptor::make_current()
+{
   assert(gtk_gl_area_make_current(GTK_GL_AREA(widget)));
 }
 
-void vgui_gtk_adaptor::post_redraw() {
+void vgui_gtk_adaptor::post_redraw()
+{
   if (!redraw_requested) {
     redraw_requested = true;
     gtk_idle_add(idle_callback_for_redraw, this);
   }
 }
 
-void vgui_gtk_adaptor::post_overlay_redraw() {
+void vgui_gtk_adaptor::post_overlay_redraw()
+{
   if (!ovl_helper)
     ovl_helper = new vgui_overlay_helper(this);
   ovl_helper->post_overlay_redraw();
 }
 
 //: gtk will pass this structure to the timer callback.
-typedef struct {
+typedef struct
+{
   vgui_gtk_adaptor *adapt;
   int name;
 } vgui_gtk_adaptor_callback_data;
@@ -157,26 +164,29 @@ void vgui_gtk_adaptor::post_timer(float timeout, int name) {
                   cd);
 }
 
-void vgui_gtk_adaptor::post_destroy() {
+void vgui_gtk_adaptor::post_destroy()
+{
   if (!destroy_requested) {
     destroy_requested = true;
     gtk_idle_add(idle_callback_for_destroy, this);
   }
 }
 
-void vgui_gtk_adaptor::set_default_popup(vgui_menu) {
+void vgui_gtk_adaptor::set_default_popup(vgui_menu)
+{
   vcl_cerr << "vgui_gtk_adaptor::set_default_popup\n";
 }
 
-vgui_menu vgui_gtk_adaptor::get_popup() {
+vgui_menu vgui_gtk_adaptor::get_popup()
+{
   vcl_cerr << "vgui_gtk_adaptor::get_popup\n";
   return vgui_menu();
 }
 
 gint vgui_gtk_adaptor::handle(GtkWidget *widget,
                               GdkEvent *gev,
-                              gpointer context) {
-
+                              gpointer context)
+{
   vgui_gtk_adaptor* adaptor = (vgui_gtk_adaptor*) context;
 
   bool ret_value = TRUE;
@@ -283,28 +293,28 @@ gint vgui_gtk_adaptor::handle(GtkWidget *widget,
   if (debug) vcl_cerr << "vgui_event " << event << vcl_endl;
   // Only send events to the tableau if the widget is mapped; that is,
   // only when an OpenGL context exists.
-  if( GTK_WIDGET_MAPPED(widget) ) {
+  if ( GTK_WIDGET_MAPPED(widget) ) {
     if (adaptor->ovl_helper)
       adaptor->ovl_helper->dispatch(event);
     else
       adaptor->dispatch_to_tableau(event);
   } else {
     vcl_cerr << __FILE__ << ": error: event " << event
-             << " while GL area was not mapped" << vcl_endl;
+             << " while GL area was not mapped\n";
   }
 
   return ret_value;
 }
 
 
-void vgui_gtk_adaptor::reshape() {
-
+void vgui_gtk_adaptor::reshape()
+{
   width = widget->allocation.width;
   height = widget->allocation.height;
 
   // Only send events to the tableau if the widget is mapped; that is,
   // only when an OpenGL context exists.
-  if( GTK_WIDGET_MAPPED(widget) ) {
+  if ( GTK_WIDGET_MAPPED(widget) ) {
     make_current();
     if (ovl_helper)
       ovl_helper->dispatch(vgui_RESHAPE);
@@ -316,9 +326,10 @@ void vgui_gtk_adaptor::reshape() {
 
 //--------------------------------------------------------------------------------
 //: This is overriding the gtk draw() method.
-void vgui_gtk_adaptor::draw() {
+void vgui_gtk_adaptor::draw()
+{
   if (debug) vcl_cerr << "vgui_gtk_adaptor::draw\n";
-  if( GTK_WIDGET_MAPPED(widget) ) {
+  if ( GTK_WIDGET_MAPPED(widget) ) {
     make_current();
     glDrawBuffer(GL_BACK);
     if (ovl_helper)
@@ -331,8 +342,8 @@ void vgui_gtk_adaptor::draw() {
 }
 
 
-
-gint vgui_gtk_adaptor::idle_callback_for_redraw(gpointer data) {
+gint vgui_gtk_adaptor::idle_callback_for_redraw(gpointer data)
+{
   vgui_gtk_adaptor *adaptor = static_cast<vgui_gtk_adaptor*>(data);
 
   adaptor->draw();
@@ -345,7 +356,8 @@ gint vgui_gtk_adaptor::idle_callback_for_redraw(gpointer data) {
 
 // Callback setup by post_destroy. First notifies tableau of the impending
 // destruction. Then deletes the adaptor and its associated window.
-gint vgui_gtk_adaptor::idle_callback_for_destroy(gpointer data) {
+gint vgui_gtk_adaptor::idle_callback_for_destroy(gpointer data)
+{
   vgui_gtk_adaptor *adaptor = static_cast<vgui_gtk_adaptor*>(data);
 
   adaptor->dispatch_to_tableau(vgui_DESTROY);

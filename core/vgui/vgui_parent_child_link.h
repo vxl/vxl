@@ -4,12 +4,12 @@
 // \file
 // \author fsm
 // \brief  Describes the relationship between a parent and child tableau.
-// 
+//
 //  Contains classes:  vgui_parent_child_link
-//  
+//
 // \verbatim
 //  Modifications:
-//    17-Sep-2002 K.Y.McGaul - Added doxygen style comments.
+//   17-Sep-2002 K.Y.McGaul - Added doxygen style comments.
 // \endverbatim
 
 #include <vcl_iosfwd.h>
@@ -26,7 +26,7 @@ struct vgui_parent_child_link_impl;   // implementation class.
 // A: These are essentially specialized smart pointers. A parent_child_link
 // refers to an edge in the tableau [di]graph. A tableau acquires
 // a child by creating a parent_child_link with itself as parent and the child
-// as, er, child. The parent_child_links are responsible for storing this 
+// as, er, child. The parent_child_links are responsible for storing this
 // relation behind the scenes so that it can be queried and used for, say,
 // propagating redraw requests.
 //
@@ -75,14 +75,14 @@ struct vgui_parent_child_link
 
   //: Constructor - takes the parent tableau.
   //  The 'parent' parameter is the self pointer ('this') of the tableau
-  //  which intends to hold the parent_child_link. It may *not* be a null 
+  //  which intends to hold the parent_child_link. It may *not* be a null
   //  pointer.
   //  To make an uninitialized parent_child_link, use the default constructor.
   vgui_parent_child_link(vgui_tableau * parent /* child is zero */);
 
   //: Constructor - takes the parent and child tableaux.
   //  The 'parent' parameter is the self pointer ('this') of the tableau
-  //  which intends to hold the parent_child_link. It may *not* be a null 
+  //  which intends to hold the parent_child_link. It may *not* be a null
   //  pointer.
   //  To make an uninitialized parent_child_link, use the default constructor.
   vgui_parent_child_link(vgui_tableau * parent, vgui_tableau_sptr const &child);
@@ -109,8 +109,8 @@ struct vgui_parent_child_link
 
   //: Return true if both parent and child tableaux exist.
   operator bool () const;
- 
-  //: Return a pointer to the child tableau. 
+
+  //: Return a pointer to the child tableau.
   //  A parent_child_link behaves more like its child than its parent.
   operator vgui_tableau_sptr () const;
 
@@ -125,25 +125,25 @@ struct vgui_parent_child_link
   //: Make the given tableau the child tableau in this relationship.
   //  A parent_child_link's parent pointer cannot be changed because there is no
   //  legitimate use for that.
-  //  Attempting to set the child to be the same tableau as the parent will 
+  //  Attempting to set the child to be the same tableau as the parent will
   //  cause an abort().
   void assign(vgui_tableau_sptr const &); // sets child only
 
   // ---------- statics ----------
 
   //: Push all children of 'tab' onto the vector.
-  static void get_children_of(vgui_tableau_sptr const &tab, 
-    vcl_vector<vgui_tableau_sptr> *);
+  static void get_children_of(vgui_tableau_sptr const &tab,
+                              vcl_vector<vgui_tableau_sptr> *);
 
   //: Push all parents of 'tab' onto the vector.
-  static void get_parents_of (vgui_tableau_sptr const &tab, 
-    vcl_vector<vgui_tableau_sptr> *);
+  static void get_parents_of (vgui_tableau_sptr const &tab,
+                              vcl_vector<vgui_tableau_sptr> *);
 
   //: In all parent_child_links, replace old_child with new_child.
   static void replace_child_everywhere (vgui_tableau_sptr const &old_child,
                                         vgui_tableau_sptr const &new_child);
 
-private:
+ private:
   friend class vgui_tableau;
   // Pointer to implementation
   vgui_parent_child_link_impl *pimpl;

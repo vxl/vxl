@@ -29,17 +29,16 @@ static void
 system_information_print_file (const char * name, vcl_ostream & os,
                                bool note = false )
 {
-  if ( ! note) {
-      os << "================================\n";
-  }
+  if ( ! note)
+    os << "================================\n";
 
   vcl_ifstream fin (name, vcl_ios::in);
 
-  if (fin) {
-      if ( ! note) {
-          os << "Contents of \"" << name << "\":\n";
-          os << "--------------------------------\n";
-      }
+  if (fin)
+  {
+      if ( ! note)
+          os << "Contents of \"" << name << "\":\n"
+             << "--------------------------------\n";
 
       const int bufferSize = 4096;
       char buffer[bufferSize];
@@ -50,15 +49,16 @@ system_information_print_file (const char * name, vcl_ostream & os,
       // before using the data, but the fin.gcount() will be zero if an
       // error occurred.  Therefore, the loop should be safe everywhere.
 
-      while(fin) {
+      while (fin)
+      {
           fin.read (buffer, bufferSize);
-          if (fin.gcount()) {
-              os.write (buffer, fin.gcount());
-          }
+          if (fin.gcount())
+              os.write(buffer, fin.gcount());
       }
       os.flush();
   }
-  else {
+  else
+  {
       os << "Could not open \"" << name << "\" for reading.\n";
   }
 }
@@ -83,38 +83,41 @@ MAIN( test_build_info )
     };
 
   const char** f;
-  for(f = files; *f; f++) {
+  for (f = files; *f; f++)
+  {
       system_information_print_file (*f, vcl_cout);
   }
 
   vcl_ofstream outf (vxl_BUILD_INFO_NOTES, vcl_ios::out);
-  if (outf) {
+  if (outf)
+  {
       vcl_cout << "Also writing this information to file "
                << vxl_BUILD_INFO_NOTES << "\n";
 
-      outf << "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" << vcl_endl;
+      outf << "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
+           << "<Site BuildName=\"" << vxl_BUILD_NAME
+           << "\"  Name=\"" << vxl_SITE << "\">\n"
+           << "<BuildNameNotes>\n";
 
-      outf << "<Site BuildName=\"" << vxl_BUILD_NAME
-           << "\"  Name=\"" << vxl_SITE << "\">" << vcl_endl;
-      outf << "<BuildNameNotes>" << vcl_endl;
-
-      for (f = files; *f; ++f) {
-          outf << "<Note Name=\"" << *f << "\">" << vcl_endl;
-          outf << "<DateTime>"
+      for (f = files; *f; ++f)
+      {
+          outf << "<Note Name=\"" << *f << "\">\n"
+               << "<DateTime>"
                << get_current_date_time ("%a %b %d %Y %H:%M:%S %Z")
-               << "</DateTime>" << vcl_endl;
-          outf << "<Text>" << vcl_endl;
+               << "</DateTime>\n"
+               << "<Text>\n";
 
           system_information_print_file (*f, outf, true);
 
-          outf << "</Text>" << vcl_endl;
-          outf << "</Note>" << vcl_endl;
+          outf << "</Text>\n"
+               << "</Note>\n";
       }
 
-      outf << "</BuildNameNotes>" << vcl_endl;
-      outf << "</Site>" << vcl_endl;
+      outf << "</BuildNameNotes>\n"
+           << "</Site>\n";
   }
-  else {
+  else
+  {
       vcl_cerr << "Error writing this information to file "
                << vxl_BUILD_INFO_NOTES << "\n";
       return 1;

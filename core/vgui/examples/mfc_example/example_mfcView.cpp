@@ -1,5 +1,4 @@
 // example_mfcView.cpp : implementation of the example_CExample_mfcView class
-//
 
 #include "StdAfx.h"
 #include "example_mfc.h"
@@ -33,7 +32,6 @@ END_MESSAGE_MAP()
 example_CExample_mfcView::example_CExample_mfcView()
 {
         // TODO: add construction code here
-
 }
 
 example_CExample_mfcView::~example_CExample_mfcView()

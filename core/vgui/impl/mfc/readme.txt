@@ -14,7 +14,8 @@ A program (e.g. xcv) does the following:
    The vgui_mfc_app_init call makes a new vgui_mfc_app, which
    contains the whole application's gui
 
-    vgui_mfc::init() {
+    vgui_mfc::init()
+    {
       AfxWinInit -- initialize mfc
       AfxGetApp.InitInstance
     }
@@ -22,13 +23,16 @@ A program (e.g. xcv) does the following:
      vgui_mfc_app_init contains
        p: vgui_mfc_app contains
             base: CWinApp
-            method: InitInstance {
+            method: InitInstance
+            {
               make document from vgui_mfc_doc
               make frame vgui_mfc_mainfrm
               show window
             }
-            method: Run {
-              while(true) {
+            method: Run
+            {
+              while (true)
+              {
                 get event
                 dispatch event to (ultimately) methods on vgui_mfc_view.
               }
@@ -52,7 +56,6 @@ A program (e.g. xcv) does the following:
          base: CView, vgui_adaptor, vgui_adaptor_mixin
          pDC: CDC
          method: On/*Events*/
-
 
 
 -----------------------------------------------------------------------------

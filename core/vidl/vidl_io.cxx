@@ -51,7 +51,7 @@ static vidl_clip_sptr load_from_directory(char const* fname)
   // Call load_images and return the result
   return vidl_io::load_images(filenames, 'r');
 }
-  
+
 #if 0
 // Constructor does nothing.
 vidl_io::vidl_io()

@@ -41,7 +41,7 @@ MAIN( test_config )
   // This test does not actually test anything.  Instead, it prints
   // configuration macros so they can be viewed through Dart.
 
-  vcl_cout << "All macro definitions are shown inside parenthesis" << vcl_endl;
+  vcl_cout << "All macro definitions are shown inside parenthesis\n";
 
 EOF
 
@@ -267,7 +267,6 @@ print <<EOF;
   vcl_cout << vcl_endl;
 
 EOF
-
 }
 
 ############################################################################

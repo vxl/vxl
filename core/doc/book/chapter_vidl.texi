@@ -26,7 +26,7 @@ There are plans to extend to DVD with a read-only capability
 @endchapsummary
 
 @section The vidl_movie structure
-The main interface class in @code{vidl} is @code{vidl_movie} it contains a 
+The main interface class in @code{vidl} is @code{vidl_movie} it contains a
 list of clips.  The class is meant to reflect a movie structure which is
 typically segmented into short independent frame sequences, i.e. clips. The
 movie structure hides the clip segments from the user by providing an iterator
@@ -44,8 +44,8 @@ as illustrated in the following example:
 vidl_movie_sptr  my_movie = vidl_io::load_movie("video.avi");
 
 //loop through the frames
-vidl_movie::frame_iterator fit(my_movie); 
-for(fit = my_movie->first(); fit != my_movie->last(); ++fit)
+vidl_movie::frame_iterator fit(my_movie);
+for (fit = my_movie->first(); fit != my_movie->last(); ++fit)
   @{
      vil_image image = fit->get_image();
      // do something with the image
@@ -63,7 +63,7 @@ called the @emph{codec}, which stands for coder/decoder.  The key tasks of the
 codec are to load, save and probe a video file.  The probe detects if the format
 of a given file corresponds to any of the available codecs.
 
-In order to access a given file format it is necessary to register the 
+In order to access a given file format it is necessary to register the
 corresponding codec.  The codecs are registered in the user's main program
 as in the following example:
 @example
@@ -85,19 +85,19 @@ int main(int argc, char** argv)
 #ifdef HAS_MPEG
   vidl_io::register_codec(new vidl_mpegcodec);
 #endif
- 
+
 // rest of main program
    ...
 @}
 @end example
-The ugly conditional compilation illustrates the current state of affairs in 
-dealing with video across platforms.  It is difficult to find portable codecs 
-that are open source code for the popular video formats. We are working on 
+The ugly conditional compilation illustrates the current state of affairs in
+dealing with video across platforms.  It is difficult to find portable codecs
+that are open source code for the popular video formats. We are working on
 an MPEG codec (the current implementation doesn't read the header information)
-that will work on both unix and windows.   
+that will work on both unix and windows.
 
 @section File I/O
-As we have already seen the @code{vidl} library supports reading and writing 
+As we have already seen the @code{vidl} library supports reading and writing
 video files.  These functions are handled by the class @code{vidl_io}.
 The key methods are illustrated by the following example:
 
@@ -114,7 +114,7 @@ The key methods are illustrated by the following example:
 
 //later we save the avi movie as a set of images in the indicated directory
 
- if(!vidl_io::save(avi_movie, "image_directory" , "ImageList"))
+ if (!vidl_io::save(avi_movie, "image_directory" , "ImageList"))
   @{
     vgui_error_dialog("Failed to save movie");
     return;
@@ -124,6 +124,6 @@ The key methods are illustrated by the following example:
 @end example
 
 @section Conclusion
-The @code{vidl} interface is simple and hides most of the difficult aspects of 
+The @code{vidl} interface is simple and hides most of the difficult aspects of
 dealing with video files. Getting MPEG to work at least in read mode across
 platforms is an important next step.

@@ -23,7 +23,6 @@ ADD_TEST( vxl_test_build_info vxl_test_all test_build_info )
 IF( COMMAND WRITE_FILE )
   WRITE_FILE(
     "${vxl_BINARY_DIR}/Testing/HTML/TestingResults/Sites/${SITE}/${BUILDNAME}/BuildNameNotes.xml"
-  
     "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
     "<Site BuildName=\"${BUILDNAME}\" Name=\"${SITE}\">\n"
     "<BuildNameNotes>\n"
@@ -47,9 +46,7 @@ IF( COMMAND WRITE_FILE )
   )
 ENDIF( COMMAND WRITE_FILE )
 
-ADD_EXECUTABLE( vxl_echo
-  vxl_echo.cxx
-)
+ADD_EXECUTABLE( vxl_echo vxl_echo.cxx )
 
 ADD_TEST( cmake_config vxl_echo
           MAKECOMMAND: ${MAKECOMMAND} nl

@@ -8,8 +8,8 @@
 static
 void p(vil_image const& m)
 {
-  for(int y = 0; y < m.height(); ++y) {
-    for(int x = 0; x < m.width(); ++x) {
+  for (int y = 0; y < m.height(); ++y) {
+    for (int x = 0; x < m.width(); ++x) {
       unsigned char val = 0;
       m.get_section(&val, x, y, 1, 1);
       vcl_cout << "\t" << (int)val;

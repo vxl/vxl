@@ -8,13 +8,12 @@ CONTENTS  --  CONTENTS  --  CONTENTS  --  CONTENTS  --  CONTENTS
    Known Problems
    Bugs Reports
    Future Plans
- 
+
 =========================================================================
 REQUIREMENTS  --  REQUIREMENTS  --  REQUIREMENTS  --  REQUIREMENTS
 =========================================================================
- 
-  - Stuff required for TargetJr other than Fresco.
 
+  - Stuff required for TargetJr other than Fresco.
 
   - OpenGL [or Mesa]
     You will need to configure for OpenGL, with something like
@@ -22,26 +21,25 @@ REQUIREMENTS  --  REQUIREMENTS  --  REQUIREMENTS  --  REQUIREMENTS
     and, if the libraries are in a funny place, also :
        --with-opengllibs=/path/to/OpenGL/libraries
 
-
-  - A GUI toolkit. 
+  - A GUI toolkit.
 
   Currently supported GUI toolkits:
   ---------------------------------
- 
+
   - GTK (GIMP Toolkit).  For this you will need:
        GTK (gtk+-1.2.5 or later) from http://www.gtk.org/
        GtkGLarea (gtkglearea-1.2.1 or later)
        glib
-   
+
     When you run configure in TargetJr you will need to add these
     config flags:
        --with-gtk-prefix=/path/to/gtkinstallation
-       --with-gtkglarea=/path/to/gtkglareainstallation 
-       --with-gtkglarealibs=/path/to/gtkglareaincludes  
+       --with-gtkglarea=/path/to/gtkglareainstallation
+       --with-gtkglarealibs=/path/to/gtkglareaincludes
 
   - FLTK  (Fast Light Toolkit)
        FLTK (fltk-1.0.2 or later) available from http://fltk.easysw.com/
-  
+
     You will need to add these config flags:
       --with-fltk=/path/to/fltk
 
@@ -59,7 +57,7 @@ REQUIREMENTS  --  REQUIREMENTS  --  REQUIREMENTS  --  REQUIREMENTS
       --with-glutlibs=/path/to/glut/libraries
     and, if the library is called something funny like libfsm-glut.so, possibly :
       --with-glutname=fsm-glut
-      
+
 =========================================================================
 DOWNLOADING  --  DOWNLOADING  --  DOWNLOADING  --  DOWNLOADING
 =========================================================================
@@ -71,7 +69,7 @@ DOWNLOADING  --  DOWNLOADING  --  DOWNLOADING  --  DOWNLOADING
 
     http://www.opengl.org
          The starting point for any question about OpenGL.
-                        
+
     http://trant.sgi.com/opengl/docs/man_pages/hardcopy/GL/html/
          The OpenGL man pages in HTML. Appears to have been generated
          directly from the SGI insight books.
@@ -82,7 +80,7 @@ DOWNLOADING  --  DOWNLOADING  --  DOWNLOADING  --  DOWNLOADING
 
     http://www.opengl.org/Documentation/GLUT.html
          Information about GLUT, including the API documentation.
-       
+
     http://www.fltk.org/
          The FLTK home page.
 
@@ -102,7 +100,7 @@ DOCUMENTATION  --  DOCUMENTATION  --  DOCUMENTATION  --  DOCUMENTATION
 Documentation will be available in the $IUEROOT/vxl/vgui/doc directory.
 This includes:
 
-  - Reference manual 
+  - Reference manual
     This is aimed at developers.
 
   - vgui User's Guide
@@ -112,7 +110,7 @@ This includes:
     To generate this type :
     make htmlpages
     in the top vgui directory. The index will be called HTML/classes.html
-  
+
 =========================================================================
 KNOWN PROBLEMS  --  KNOWN PROBLEMS  --  KNOWN PROBLEMS
 =========================================================================
@@ -122,9 +120,9 @@ BUG REPORTS  --  BUG REPORTS  --  BUG REPORTS  --  BUG REPORTS
 =========================================================================
 
   - Please send all bug reports to vxl@robots.ox.ac.uk, placing only
-    the words "vgui bug report" in the title field. While we cannot 
-    guarantee a response, you may well get one; we do want to know about 
-    bugs so that we can fix them or better document things that may look 
+    the words "vgui bug report" in the title field. While we cannot
+    guarantee a response, you may well get one; we do want to know about
+    bugs so that we can fix them or better document things that may look
     like bugs but aren't.
     It would be helpful to know which platform (eg. solaris, WinNT, SGI)
     you are using, the toolkits you use with vgui, the vgui release
@@ -133,6 +131,6 @@ BUG REPORTS  --  BUG REPORTS  --  BUG REPORTS  --  BUG REPORTS
 =========================================================================
 FUTURE PLANS
 =========================================================================
- 
+
   - Support for other GUI toolkits, in particular Qt, Microsoft
     Foundation Classes (MFC) and SDL.

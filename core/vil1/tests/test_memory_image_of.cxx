@@ -19,11 +19,11 @@ MAIN( test_memory_image_of )
   vcl_string tmp_nam = vul_temp_filename() + ".pgm";
   char const *file_name_2 = tmp_nam!="" ? tmp_nam.c_str() : "vil_test_memory_image_of.pgm";
   {
-    vcl_cout << "unsigned char" << vcl_endl;
+    vcl_cout << "unsigned char\n";
     vil_memory_image_of<unsigned char> image(W,H);
 
-    for(int y = 0; y < image.height(); ++y)
-      for(int x = 0; x < image.width(); ++x) {
+    for (int y = 0; y < image.height(); ++y)
+      for (int x = 0; x < image.width(); ++x) {
         image(x,y) = ((x - W/2) * (y - H/2) / 16) % 256;
       }
     vil_save(image, file_name_2);
@@ -43,11 +43,11 @@ MAIN( test_memory_image_of )
   char const* file_name_1 = tmp_nam!="" ? tmp_nam.c_str() : "vil_test_memory_image_of.ppm";
 
   {
-    vcl_cout << "vil_rgb_byte" << vcl_endl;
+    vcl_cout << "vil_rgb_byte\n";
     vil_memory_image_of<vil_rgb<unsigned char> > image(W,H);
 
-    for(int y = 0; y < image.height(); ++y)
-      for(int x = 0; x < image.width(); ++x) {
+    for (int y = 0; y < image.height(); ++y)
+      for (int x = 0; x < image.width(); ++x) {
         vil_rgb<unsigned char>& p = image(x,y);
         p.r = x;
         p.g = ((x - W/2) * (y - H/2) / 16) % 256;
@@ -66,7 +66,7 @@ MAIN( test_memory_image_of )
 #endif
 
   {
-    vcl_cout << "bool" << vcl_endl;
+    vcl_cout << "bool\n";
     vil_memory_image_of<bool> map(451, 349);
     for (int x=0; x<map.width(); ++x)
       for (int y=0; y<map.height(); ++y)
@@ -74,7 +74,7 @@ MAIN( test_memory_image_of )
   }
 
   {
-    vcl_cout << "external_buffer" << vcl_endl;
+    vcl_cout << "external_buffer\n";
     unsigned char buf[] = { 1, 2, 3, 4, 5, 6 };
     vil_memory_image_of<unsigned char> image(buf,3,2);
 

@@ -1,5 +1,5 @@
 //Microsoft Developer Studio generated resource script.
-//
+
 #include "resource.h"
 
 #define APSTUDIO_READONLY_SYMBOLS
@@ -142,7 +142,6 @@ END
 
 #endif    // English (U.K.) resources
 /////////////////////////////////////////////////////////////////////////////
-
 
 
 #ifndef APSTUDIO_INVOKED

@@ -391,8 +391,8 @@ main() @{
   int npts = pts.rows();
   int dim = pts.columns();
   vnl_matrix<double> D(npts, dim+1);
-  for(int i = 0; i < npts; ++i) @{
-    for(int j = 0; j < dim; ++j)
+  for (int i = 0; i < npts; ++i) @{
+    for (int j = 0; j < dim; ++j)
       D(i,j) = pts(i,j);
     D(i,dim) = 1;
   @}
@@ -450,7 +450,7 @@ Having prepared the polynomial, we compute the roots:
 Now, @code{roots} contains the roots, which can be made use of, or simply
 admired.  To facilitate the latter, we shall print them to the console:
 @example
-     for(int k = 0; k < 3; ++k) // Cubic polynomial ==> 3 roots
+     for (int k = 0; k < 3; ++k) // Cubic polynomial ==> 3 roots
        vcl_cerr << roots[k] << vcl_endl;
 @end example
 
@@ -458,7 +458,7 @@ To get just the real or imaginary parts of the (generally complex) roots,
 convenience methods @code{real(int)} and @code{imag(int)} are provided.  So
 to print only the real roots, one might use
 @example
-     for(int k = 0; k < 3; ++k)
+     for (int k = 0; k < 3; ++k)
        if (roots.imag(k) < 1e-8)
          vcl_cerr << roots.real(k) << vcl_endl;
 @end example

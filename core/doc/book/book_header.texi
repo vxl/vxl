@@ -153,6 +153,4 @@ inputclass \name\
 @end macro
 @end ifnottex
 
-
-
 @c %**end of header

@@ -16,7 +16,7 @@ num_vert( const vgl_polygon& poly )
 {
   unsigned int count = 0;
 
-  for( int i=0; i < poly.num_sheets(); ++i ) {
+  for ( int i=0; i < poly.num_sheets(); ++i ) {
     count += poly[i].size();
   }
 
@@ -27,9 +27,9 @@ num_vert( const vgl_polygon& poly )
 bool
 is_vertex( const vgl_polygon& poly, float x, float y )
 {
-  for( int i=0; i < poly.num_sheets(); ++i ) {
-    for( unsigned int p=0; p < poly[i].size(); ++p ) {
-      if( close( x, poly[i][p].x() ) && close( y, poly[i][p].y() ) )
+  for ( int i=0; i < poly.num_sheets(); ++i ) {
+    for ( unsigned int p=0; p < poly[i].size(); ++p ) {
+      if ( close( x, poly[i][p].x() ) && close( y, poly[i][p].y() ) )
         return true;
     }
   }

@@ -86,7 +86,7 @@ sub EndRunTest
   {
     my ($success)= @_;
 
-    if( !$success)
+    if ( !$success)
       {
         $success= "t";
       }
@@ -127,7 +127,7 @@ sub StartFrost
   {
     my ($host,$database,$username,$password)= @_;
 
-    if( $host eq "FILE")
+    if ( $host eq "FILE")
       {
         $frostsocket= "";
         open( $frostsocket, ">$database");
@@ -148,7 +148,7 @@ sub StartFrost
 
 sub EndFrost
   {
-    if( $frosttype eq "FILE")
+    if ( $frosttype eq "FILE")
       {
         close( $frostsocket);
       }
@@ -197,7 +197,7 @@ sub DefineTest
     print $frostsocket "<Test Name=\"$name\">\n";
     print $frostsocket "   <Description>$description</Description>\n";
 
-    for( $i=0; $i<= $#gauges; $i++)
+    for ($i=0; $i<= $#gauges; $i++)
       {
         print $frostsocket "   <Gauge Name=\"$gauges[$i]\"/>\n";
       }

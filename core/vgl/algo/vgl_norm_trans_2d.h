@@ -13,10 +13,10 @@
 // \verbatim
 //  Modifications
 //   Created March 24, 2003 - J.L. Mundy
-//   May 15, 2003 - Added normalization computation for lines based on 
+//   May 15, 2003 - Added normalization computation for lines based on
 //                  the point set defined by the intersection of each line
 //                  with the perpendicular line from the origin.
-//                  
+//
 // \endverbatim
 
 #include <vnl/vnl_matrix_fixed.h>

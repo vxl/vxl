@@ -7,7 +7,7 @@
 
 MAIN( test_triangle_scan_iterator )
 {
-  vcl_cout << "Test triangle scan iterator" << vcl_endl;
+  vcl_cout << "Test triangle scan iterator\n";
 
   float x[3] = { 10.23f, 20.12f, 30.73f };
   float y[3] = { 20.54f, 10.39f, 30.11f };
@@ -25,18 +25,18 @@ MAIN( test_triangle_scan_iterator )
   pi.reset();
   bool ti_more = ti.next();
   bool pi_more = pi.next();
-  while( ti_more && pi_more && !failed ) {
+  while ( ti_more && pi_more && !failed )
+  {
     failed = failed || ti.scany() != pi.scany() || ti.startx() != pi.startx() || ti.endx() != pi.endx();
     ti_more = ti.next();
     pi_more = pi.next();
   }
-  if( ti_more != pi.next() ) failed = true;
+  if ( ti_more != pi.next() ) failed = true;
 
-  if( failed ) {
+  if ( failed )
     vcl_cout << "Triangle scan iterator != polygon scan iterator -> **FAILED**\n";
-  } else {
+  else
     vcl_cout << "Triangle scan iterator = polygon scan iterator  -> PASSED\n";
-  }
 
   return failed;
 }
