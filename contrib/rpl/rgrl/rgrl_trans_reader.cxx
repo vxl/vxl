@@ -10,6 +10,7 @@
 #include <rgrl/rgrl_trans_affine.h>
 #include <rgrl/rgrl_trans_reduced_quad.h>
 #include <rgrl/rgrl_trans_quadratic.h>
+#include <rgrl/rgrl_trans_homography2d.h>
 #include <rgrl/rgrl_trans_rigid.h>
 #include <rgrl/rgrl_trans_spline.h>
 #include <rgrl/rgrl_trans_homography2d.h>
@@ -60,7 +61,13 @@ rgrl_trans_reader( vcl_istream& is )
   READ_THIS_TRANSFORMATION("RIGID", rgrl_trans_rigid)
   READ_THIS_TRANSFORMATION("QUADRATIC", rgrl_trans_quadratic)
   READ_THIS_TRANSFORMATION("BSPLINE", rgrl_trans_spline)
-  READ_THIS_TRANSFORMATION("HOMOGRAPHY2D", rgrl_trans_spline)
+  // Read homography, macro cannot be used, because there is no constructor for rgrl_trans_homography2d,
+  // that would take one argument (dimension). The dimension is fixed.
+  if ( tag_str.find("HOMOGRAPHY2D") == 0 ){
+    rgrl_trans_homography2d* trans_ptr = new rgrl_trans_homography2d();
+    trans_ptr->read(is);
+    sptr = trans_ptr;
+  }
 
   // default, should never reach here
   vcl_cout<< "WARNING: " << RGRL_HERE << " ( line "
