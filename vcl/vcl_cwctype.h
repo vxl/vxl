@@ -1,15 +1,12 @@
 #ifndef vcl_cwctype_h_
 #define vcl_cwctype_h_
-#ifdef __GNUC__
-#pragma interface
-#endif
 /*
   fsm@robots.ox.ac.uk
 */
 
 #include "vcl_compiler.h"
 
-#ifdef VCL_SGI_CC_720
+#if !VCL_CXX_HAS_HEADER_CWCTYPE
 # include <wctype.h>
 #elif defined(hpux)
 // PVr: HP does not have /usr/include/wctype.h
