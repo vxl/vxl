@@ -11,6 +11,8 @@ SOURCES += bsol_hough_line_index.cxx
 MANPAGE_SOURCES += bsol_hough_line_index_sptr.h
 SOURCES += bsol_intrinsic_curve_2d.cxx
 MANPAGE_SOURCES += bsol_intrinsic_curve_2d_sptr.h
+SOURCES += bsol_intrinsic_curve_3d.cxx
+MANPAGE_SOURCES += bsol_intrinsic_curve_3d_sptr.h
 
 #######################################
 include ${IUEROOT}/config/top-params.mk
