@@ -21,6 +21,8 @@ SET(mbl_sources
  mbl_histogram.cxx                 mbl_histogram.h
  mbl_clamped_plate_spline_2d.cxx   mbl_clamped_plate_spline_2d.h
 
+ mbl_ar_process.txx                mbl_ar_process.h
+
  mbl_selected_data_wrapper.txx     mbl_selected_data_wrapper.h
  mbl_data_array_ptr_wrapper.txx    mbl_data_array_ptr_wrapper.h
 
