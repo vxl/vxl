@@ -1,5 +1,3 @@
-INCLUDE_DIRECTORIES(${BRL_INCLUDE_DIR}/b3p)
-
 SET( bnl_algo_sources
     bnl_legendre_polynomial.cxx       bnl_legendre_polynomial.h
    )
