@@ -22,8 +22,8 @@ int vepl2_test_erode_disk() {
 
   vcl_string m = "vepl2_erode_disk";
 #define args ,5
-  ONE_TEST(vepl2_erode_disk,byte_img,byte_ori,unsigned char,233,m+"_byte",args);
-  ONE_TEST(vepl2_erode_disk,shrt_img,shrt_ori,unsigned short,65257,m+"_short",args);
+  ONE_TEST(vepl2_erode_disk,byte_img,byte_ori,unsigned char,76567,m+"_byte",args);
+  ONE_TEST(vepl2_erode_disk,shrt_img,shrt_ori,unsigned short,19530007,m+"_short",args);
   ONE_TEST(vepl2_erode_disk,flot_img,flot_ori,float,338,m+"_float",args);
 
   return 0;

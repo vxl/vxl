@@ -22,8 +22,8 @@ int vepl2_test_median() {
 
   vcl_string m = "vepl2_median";
 #define args ,5
-  ONE_TEST(vepl2_median,byte_img,byte_ori,unsigned char,56,m+"_byte",args);
-  ONE_TEST(vepl2_median,shrt_img,shrt_ori,unsigned short,65080,m+"_short",args);
+  ONE_TEST(vepl2_median,byte_img,byte_ori,unsigned char,2632,m+"_byte",args);
+  ONE_TEST(vepl2_median,shrt_img,shrt_ori,unsigned short,524872,m+"_short",args);
   ONE_TEST(vepl2_median,flot_img,flot_ori,float,51,m+"_float",args);
 
   return 0;

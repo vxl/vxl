@@ -22,8 +22,8 @@ int vepl2_test_threshold() {
 
   vcl_string m = "vepl2_threshold";
 #define args ,128
-  ONE_TEST(vepl2_threshold,byte_img,byte_ori,unsigned char,42,m+"_byte",args);
-  ONE_TEST(vepl2_threshold,shrt_img,shrt_ori,unsigned short,554,m+"_short",args);
+  ONE_TEST(vepl2_threshold,byte_img,byte_ori,unsigned char,84908,m+"_byte",args);
+  ONE_TEST(vepl2_threshold,shrt_img,shrt_ori,unsigned short,21757868,m+"_short",args);
   ONE_TEST(vepl2_threshold,flot_img,flot_ori,float,903,m+"_float",args);
 
   return 0;

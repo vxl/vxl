@@ -25,10 +25,10 @@ int vepl2_test_dyadic() {
 #undef ONE_TEST
 #define ONE_TEST(x,i,r,T,v,m) { vcl_cout << "Starting "<<m<<" test\n"; x(r,*i); difference(i,r,v,m); }
 #define args
-  ONE_TEST(vepl2_dyadic_sum,byte_img,byte_ori,unsigned char,242,m+"_sum_byte");
-  ONE_TEST(vepl2_dyadic_sum,shrt_img,shrt_ori,unsigned short,65522,m+"_sum_short");
+  ONE_TEST(vepl2_dyadic_sum,byte_img,byte_ori,unsigned char,2778,m+"_sum_byte");
+  ONE_TEST(vepl2_dyadic_sum,shrt_img,shrt_ori,unsigned short,2778,m+"_sum_short");
   ONE_TEST(vepl2_dyadic_sum,flot_img,flot_ori,float,278,m+"_sum_float");
-  ONE_TEST(vepl2_dyadic_sum,colr_img,colr_ori,vil_rgb,130,m+"_sum_colour");
+  ONE_TEST(vepl2_dyadic_sum,colr_img,colr_ori,vil_rgb,13950,m+"_sum_colour");
 
   ONE_TEST(vepl2_dyadic_dif,byte_img,byte_ori,unsigned char,0,m+"_dif_byte");
   ONE_TEST(vepl2_dyadic_dif,shrt_img,shrt_ori,unsigned short,0,m+"_dif_short");

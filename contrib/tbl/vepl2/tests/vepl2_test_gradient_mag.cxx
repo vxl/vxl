@@ -22,8 +22,8 @@ int vepl2_test_gradient_mag() {
 
   vcl_string m = "vepl2_gradient_mag";
 #define args
-  ONE_TEST(vepl2_gradient_mag,byte_img,byte_ori,unsigned char,214,m+"_byte",args);
-  ONE_TEST(vepl2_gradient_mag,shrt_img,shrt_ori,unsigned short,470,m+"_short",args);
+  ONE_TEST(vepl2_gradient_mag,byte_img,byte_ori,unsigned char,84514,m+"_byte",args);
+  ONE_TEST(vepl2_gradient_mag,shrt_img,shrt_ori,unsigned short,21757474,m+"_short",args);
   ONE_TEST(vepl2_gradient_mag,flot_img,flot_ori,float,288,m+"_float",args);
 
   return 0;

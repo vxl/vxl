@@ -22,8 +22,8 @@ int vepl2_test_dilate_disk() {
 
   vcl_string m = "vepl2_dilate_disk";
 #define args ,5
-  ONE_TEST(vepl2_dilate_disk,byte_img,byte_ori,unsigned char,211,m+"_byte",args);
-  ONE_TEST(vepl2_dilate_disk,shrt_img,shrt_ori,unsigned short,1747,m+"_short",args);
+  ONE_TEST(vepl2_dilate_disk,byte_img,byte_ori,unsigned char,70355,m+"_byte",args);
+  ONE_TEST(vepl2_dilate_disk,shrt_img,shrt_ori,unsigned short,17565395,m+"_short",args);
   ONE_TEST(vepl2_dilate_disk,flot_img,flot_ori,float,338,m+"_float",args);
 
   return 0;

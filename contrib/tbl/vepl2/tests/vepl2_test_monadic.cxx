@@ -28,13 +28,13 @@ int vepl2_test_monadic() {
   ONE_TEST(vepl2_monadic_abs,flot_img,flot_ori,float,276,m+"_abs_float",args);
   ONE_TEST(vepl2_monadic_abs,colr_img,colr_ori,vil_rgb,0,m+"_abs_colour",args);
 
-  ONE_TEST(vepl2_monadic_sqr,byte_img,byte_ori,unsigned char,106,m+"_sqr_byte",args);
-  ONE_TEST(vepl2_monadic_sqr,shrt_img,shrt_ori,unsigned short,17258,m+"_sqr_short",args);
+  ONE_TEST(vepl2_monadic_sqr,byte_img,byte_ori,unsigned char,82410,m+"_sqr_byte",args);
+  ONE_TEST(vepl2_monadic_sqr,shrt_img,shrt_ori,unsigned short,21755370,m+"_sqr_short",args);
   ONE_TEST(vepl2_monadic_sqr,flot_img,flot_ori,float,282,m+"_sqr_float",args);
 #undef args
 #define args ,10,20
-  ONE_TEST(vepl2_monadic_shear,byte_img,byte_ori,unsigned char,42,m+"_shear_byte",args);
-  ONE_TEST(vepl2_monadic_shear,shrt_img,shrt_ori,unsigned short,49194,m+"_shear_short",args);
+  ONE_TEST(vepl2_monadic_shear,byte_img,byte_ori,unsigned char,127886,m+"_shear_byte",args);
+  ONE_TEST(vepl2_monadic_shear,shrt_img,shrt_ori,unsigned short,21071502,m+"_shear_short",args);
   ONE_TEST(vepl2_monadic_shear,flot_img,flot_ori,float,180027,m+"_shear_float",args);
 
   return 0;

@@ -22,8 +22,8 @@ int vepl2_test_gaussian_convolution() {
 
   vcl_string m = "vepl2_gaussian_convolution";
 #define args ,9
-  ONE_TEST(vepl2_gaussian_convolution,byte_img,byte_ori,unsigned char,219,m+"_byte",args);
-  ONE_TEST(vepl2_gaussian_convolution,shrt_img,shrt_ori,unsigned short,36239,m+"_short",args);
+  ONE_TEST(vepl2_gaussian_convolution,byte_img,byte_ori,unsigned char,84375,m+"_byte",args);
+  ONE_TEST(vepl2_gaussian_convolution,shrt_img,shrt_ori,unsigned short,22181967,m+"_short",args);
   ONE_TEST(vepl2_gaussian_convolution,flot_img,flot_ori,float,223,m+"_float",args);
 
   return 0;

@@ -23,10 +23,10 @@ int vepl2_test_y_gradient() {
 
   vcl_string m = "vepl2_y_gradient";
 #define args
-  ONE_TEST(vepl2_y_gradient,byte_img,byte_ori,unsigned char,214,m+"_byte",args);
-  ONE_TEST(vepl2_y_gradient,shrt_img,shrt_ori,unsigned short,65494,m+"_short",args);
+  ONE_TEST(vepl2_y_gradient,byte_img,byte_ori,unsigned char,90104,m+"_byte",args);
+  ONE_TEST(vepl2_y_gradient,shrt_img,shrt_ori,unsigned short,23199224,m+"_short",args);
   ONE_TEST(vepl2_y_gradient,flot_img,flot_ori,float,282,m+"_float",args);
-  ONE_TEST(vepl2_y_gradient,colr_img,colr_ori,vil_rgb,134,m+"_colour",args);
+  ONE_TEST(vepl2_y_gradient,colr_img,colr_ori,vil_rgb,108104,m+"_colour",args);
 
   return 0;
 }

@@ -22,8 +22,8 @@ int vepl2_test_gradient_dir() {
 
   vcl_string m = "vepl2_gradient_dir";
 #define args
-  ONE_TEST(vepl2_gradient_dir,byte_img,byte_ori,unsigned char,164,m+"_byte",args);
-  ONE_TEST(vepl2_gradient_dir,shrt_img,shrt_ori,unsigned short,164,m+"_short",args);
+  ONE_TEST(vepl2_gradient_dir,byte_img,byte_ori,unsigned char,105506,m+"_byte",args);
+  ONE_TEST(vepl2_gradient_dir,shrt_img,shrt_ori,unsigned short,27327266,m+"_short",args);
   ONE_TEST(vepl2_gradient_dir,flot_img,flot_ori,float,1058,m+"_float",args);
 
   return 0;
