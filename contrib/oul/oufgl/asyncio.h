@@ -57,7 +57,7 @@
 
 class AsyncIO_Shared_State
 {
-protected:
+ protected:
   static volatile vcl_sig_atomic_t complete;   // 0 - in progress, 1 - complete
 
   // Set complete flag when completion signal arrives. Currently ignores
@@ -69,14 +69,14 @@ class AsyncIO : protected AsyncIO_Shared_State
 {
   struct aiocb cb;                         // Control block
 
-public:
+ public:
 
   // Constructor - perform I/O on file descriptor fd, using sig as completion
   // signal. Note that SIGUSR1,2 may be used by the linuxthreads library.
   AsyncIO(int fd, int sig = SIGIO);
 
   // Destructor - disconnect signal handler
-  AsyncIO::~AsyncIO();
+ ~AsyncIO();
 
   // NB: All methods returning int return zero on success, or an errno value
   // on failure
@@ -94,9 +94,9 @@ public:
   int write(volatile void *buf, vcl_size_t nbytes, off_t pos);
 
   // Wait for I/O to complete, then return status. If suspend is true, block
-  // the calling process while waiting, otherwise continously poll for
+  // the calling process while waiting, otherwise continuously poll for
   // completion (not recommended, but may be more reliable).
-  int AsyncIO::wait_for_completion(bool suspend = true);
+  int wait_for_completion(bool suspend = true);
 
   // Test if operation complete. You still need to call wait_for_completion()
   // to tidy up and get final status
